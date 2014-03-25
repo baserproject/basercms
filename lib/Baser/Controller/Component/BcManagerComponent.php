@@ -26,7 +26,22 @@ App::uses('Component', 'Controller');
 App::uses('ConnectionManager', 'Model');
 
 class BcManagerComponent extends Component {
-
+/**
+ * Controller
+ * 
+ * @var Controller 
+ */
+	public $Controller = null;
+	
+/**
+ * 
+ * @param Controller $controller
+ */
+	public function startup(Controller $controller) {
+		parent::startup($controller);
+		$this->Controller = $controller;
+	}
+	
 /**
  * baserCMSのインストール
  * 
@@ -305,11 +320,13 @@ class BcManagerComponent extends Component {
 		CakePlugin::load('Blog');
 		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
+		$BlogPost->contentSaving = false;
 		$datas = $BlogPost->find('all', array('recursive' => -1));
 		if ($datas) {
 			$ret = true;
 			foreach ($datas as $data) {
 				$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
+				unset($data['BlogPost']['eye_catch']);
 				$BlogPost->set($data);
 				if (!$BlogPost->save($data)) {
 					$ret = false;
@@ -752,7 +769,7 @@ class BcManagerComponent extends Component {
 				);
 			} else {
 				$paths = array(
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . $pattern . DS . $plugin,
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default'
@@ -832,7 +849,7 @@ class BcManagerComponent extends Component {
 					}
 				}
 				// 存在しなかった場合は、コアのファイルを読み込む
-				if (!$loaded) {
+				if (!$loaded && $corePath) {
 					if (!$db->loadCsv(array('path' => $corePath . DS . $targetTable . '.csv', 'encoding' => 'SJIS'))) {
 						$this->log($corePath . DS . $targetTable . ' の読み込みに失敗。');
 						$result = false;
@@ -1038,6 +1055,7 @@ class BcManagerComponent extends Component {
 	public function resetTables($dbConfigKeyName = 'baser', $dbConfig = null, $plugin = 'core', $excludes = array()) {
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$dbConfig = $db->config;
+		$db->reconnect();
 		$sources = $db->listSources();
 		$result = true;
 		
@@ -1051,7 +1069,9 @@ class BcManagerComponent extends Component {
 				return true;
 			}
 			foreach($files[1] as $file) {
-				$pluginTables[] = preg_replace('/\.php/', '', $file);
+				if(preg_match('/\.php$/', $file)) {
+					$pluginTables[] = preg_replace('/\.php/', '', $file);
+				}
 			}
 		}
 				
@@ -1220,7 +1240,7 @@ class BcManagerComponent extends Component {
 				$result = false;
 			}
 		}
-
+		$Folder = null;
 		return $result;
 	}
 
@@ -1821,4 +1841,77 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
+	
+/**
+ * プラグインをインストールする
+ * 
+ * @param string $name
+ * @return boolean
+ */
+	public function installPlugin($name) {
+		
+		$paths = App::path('Plugin');
+		$this->Plugin = ClassRegistry::init('Plugin');
+		$data = $this->Plugin->find('first', array('conditions' => array('name' => $name)));
+		$title = '';
+		
+		if (empty($data['Plugin']['db_inited'])) {
+			foreach($paths as $path) {
+				$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
+				if (file_exists($initPath)) {
+					try {
+						include $initPath;
+					} catch (Exception $e) {
+						$this->log($e->getMessage());
+					}
+					$configPath = $path .= $name . DS . 'config.php';
+					if(file_exists($configPath)) {
+						include $configPath;
+					}
+					break;
+				}
+				
+			}
+		}
+
+		if(!$title) {
+			if(!empty($data['Plugin']['title'])) {
+				$title = $data['Plugin']['title'];
+			}
+		}
+		
+		if ($data) {
+			// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
+			$data = array_merge($data['Plugin'], array(
+				'name'		=> $name,
+				'title'		=> $title,
+				'status'	=> true,
+				'db_inited'	=> true
+			));
+			$this->Plugin->set($data);
+		} else {
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if (in_array($name, $corePlugins)) {
+				$version = getVersion();
+			} else {
+				$version = getVersion($name);
+			}
+			$data = array('Plugin' => array(
+				'name'		=> $name,
+				'title'		=> $title,
+				'status'	=> true,
+				'db_inited'	=> true,
+				'version'	=> $version
+			));
+			$this->Plugin->create($data);
+		}
+
+		// データを保存
+		if ($this->Plugin->save()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 }

@@ -173,8 +173,31 @@ class BcAuthComponent extends AuthComponent {
 		$this->Session->write(BcAuthComponent::$sessionKey . '.userModel', $userModel);
 	}
 
+/**
+ * 認証されているモデル名を取得
+ * 
+ * @return string
+ */
 	public function authenticatedUserModel() {
 		$this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
 	}
 
+/**
+ * 再ログインを実行する
+ * 
+ * return boolean
+ */
+	public function relogin () {
+		
+		$UserModel = ClassRegistry::init($this->authenticate['Form']['userModel']);
+		$user = $this->user();
+		$Db = $UserModel->getDataSource();
+		$Db->flushMethodCache();
+		$UserModel->schema(true);
+		$user = $UserModel->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
+		$this->request->data = $user;
+		return $this->login();
+	
+	}
+	
 }

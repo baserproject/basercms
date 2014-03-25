@@ -61,4 +61,22 @@ class BcUtil extends Object {
 		}
 	}
 
+/**
+ * テーマ梱包プラグインのリストを取得する
+ * 
+ * @return array
+ */
+	public static function getCurrentThemesPlugins() {
+		$theme = Configure::read('BcSite.theme');
+		$path = BASER_THEMES . $theme . DS . 'Plugin';
+		if(is_dir($path)) {
+			$Folder = new Folder($path);
+			$files = $Folder->read(true, true, false);
+			if(!empty($files[0])) {
+				return $files[0];
+			}
+		}
+		return array();
+	}
+	
 }

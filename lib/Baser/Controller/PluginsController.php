@@ -326,34 +326,8 @@ class PluginsController extends AppController {
 				$dbInited = $data['Plugin']['db_inited'];
 			}
 		} else {
-
-			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
-
-			if (empty($data['Plugin']['db_inited'])) {
-				foreach($paths as $path) {
-					$path .= $name . DS . 'Config' . DS . 'init.php';
-					if (file_exists($path)) {
-						include $path;
-						break;
-					}
-				}
-			}
-
-			if ($data) {
-				// 既にインストールデータが存在する場合は、DBのバージョンは変更しない
-				$data['Plugin']['name'] = $this->request->data['Plugin']['name'];
-				$data['Plugin']['title'] = $this->request->data['Plugin']['title'];
-				$data['Plugin']['status'] = $this->request->data['Plugin']['status'];
-				$data['Plugin']['db_inited'] = true;
-				$this->Plugin->set($data);
-			} else {
-				$this->request->data['Plugin']['db_inited'] = true;
-				$this->Plugin->create($this->request->data);
-			}
-
-			// データを保存
-			if ($this->Plugin->save()) {
-
+			// プラグインをインストール
+			if ($this->BcManager->installPlugin($this->request->data['Plugin']['name'])) {
 				clearAllCache();
 				$this->setMessage('新規プラグイン「' . $name . '」を baserCMS に登録しました。', false, true);
 				$this->redirect(array('action' => 'index'));
@@ -387,6 +361,7 @@ class PluginsController extends AppController {
 			// データを保存
 			if ($this->Plugin->save()) {
 				clearAllCache();
+				$this->BcAuth->relogin();
 				$this->setMessage($data['Plugin']['title'] . ' プラグインのデータを初期化しました。', false, true);
 				$this->redirect(array('action' => 'add', $data['Plugin']['name']));
 			} else {

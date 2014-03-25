@@ -338,6 +338,32 @@ class InstallationsController extends AppController {
 			$secritySalt = $this->Session->read('Installation.salt');
 			$secrityCipherSeed = $this->Session->read('Installation.cipherSeed');
 			$this->BcManager->createInstallFile($secritySalt, $secrityCipherSeed);
+			
+			//==================================================================
+			// BcManagerComponent::createPageTemplates() を実行する際、
+			// 固定ページでプラグインを利用している場合あり、プラグインがロードされていないとエラーになる為、
+			// リダイレクト前にコアプラグインの有効化とテーマ保有のプラグインのインストールを完了させておく
+			// =================================================================
+			// データベースのデータを初期設定に更新
+			$this->BcManager->executeDefaultUpdates($this->_readDbSetting(Cache::read('Installation', 'default')));
+			
+			// テーマを配置する
+			$this->BcManager->deployTheme();
+		
+			$dbDataPattern = $this->Session->read('Installation.dbDataPattern');
+			list($theme, $pattern) = explode('.', $dbDataPattern);
+			loadSiteConfig();
+			App::build(array('Plugin' => array_merge(array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS), App::path('Plugin'))));
+			$themesPlugins = BcUtil::getCurrentThemesPlugins();
+			if($themesPlugins) {
+				foreach($themesPlugins as $plugin) {
+					$this->BcManager->installPlugin($plugin);
+					CakePlugin::load($plugin);
+					$this->BcManager->resetTables('plugin', $dbConfig = null, $plugin);
+					$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin);
+				}
+			}
+
 			clearAllCache();
 			if (function_exists('opcache_reset')) {
 				opcache_reset();
@@ -350,14 +376,8 @@ class InstallationsController extends AppController {
 			}
 		}
 
-		// データベースのデータを初期設定に更新
-		$this->BcManager->executeDefaultUpdates($this->_readDbSetting(Cache::read('Installation', 'default')));
-
 		// ログイン
 		$this->_login();
-
-		// テーマを配置する
-		$this->BcManager->deployTheme();
 		
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
 		$this->BcManager->deleteDeployedAdminAssets();
@@ -368,7 +388,7 @@ class InstallationsController extends AppController {
 
 		// エディタテンプレート用の画像を配置
 		$this->BcManager->deployEditorTemplateImage();
-
+		
 		// Pagesファイルを生成する
 		$this->BcManager->createPageTemplates();
 
