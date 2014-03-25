@@ -869,3 +869,40 @@ function mb_basename($str, $suffix=null){
   }
   return $res;
 }
+
+/**
+ * プラグインを読み込む
+ * 
+ * @param string $plugin
+ * @return type
+ */
+function loadPlugin($plugin) {
+	if(CakePlugin::loaded($plugin)) {
+		return true;
+	}
+	try {
+		CakePlugin::load($plugin);
+	} catch (Exception $e) {
+		return false;
+	}
+	$pluginPath = CakePlugin::path($plugin);
+	$config = array(
+		'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
+		'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
+	);
+	CakePlugin::load($plugin, $config);
+	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+		Configure::load($plugin . '.setting');
+	}
+	// プラグインイベント登録
+	$eventTargets = array('Controller', 'Model', 'View', 'Helper');
+	foreach ($eventTargets as $eventTarget) {
+		$eventClass = $plugin . $eventTarget . 'EventListener';
+		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
+			App::uses($eventClass, $plugin . '.Event');
+			$CakeEvent = CakeEventManager::instance();
+			$CakeEvent->attach(new $eventClass());
+		}
+	}
+	return true;
+}

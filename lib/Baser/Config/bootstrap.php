@@ -264,31 +264,8 @@ if (BC_INSTALLED) {
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
 	$plugins = getEnablePlugins();
-	$CakeEvent = CakeEventManager::instance();
 	foreach ($plugins as $plugin) {
-		try {
-			CakePlugin::load($plugin);
-		} catch (Exception $e) {
-			continue;
-		}
-		$pluginPath = CakePlugin::path($plugin);
-		$config = array(
-			'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
-			'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
-		);
-		CakePlugin::load($plugin, $config);
-		if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
-			Configure::load($plugin . '.setting');
-		}
-		// プラグインイベント登録
-		$eventTargets = array('Controller', 'Model', 'View', 'Helper');
-		foreach ($eventTargets as $eventTarget) {
-			$eventClass = $plugin . $eventTarget . 'EventListener';
-			if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
-				App::uses($eventClass, $plugin . '.Event');
-				$CakeEvent->attach(new $eventClass());
-			}
-		}
+		loadPlugin($plugin);
 	}
 	Configure::write('BcStatus.enablePlugins', $plugins);
 
@@ -298,6 +275,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::uses('BcControllerEventDispatcher', 'Event');
 	App::uses('BcModelEventDispatcher', 'Event');
 	App::uses('BcViewEventDispatcher', 'Event');
+	$CakeEvent = CakeEventManager::instance();
 	$CakeEvent->attach(new BcControllerEventDispatcher());
 	$CakeEvent->attach(new BcModelEventDispatcher());
 	$CakeEvent->attach(new BcViewEventDispatcher());
