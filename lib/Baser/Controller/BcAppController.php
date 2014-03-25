@@ -240,11 +240,19 @@ class BcAppController extends Controller {
 			}
 			$this->request->here = preg_replace('/\.html$/', '', $this->request->here);
 		} else {
-			if($this->request->action == 'index' && !preg_match('/\/index$/', $this->request->here)) {
-				$this->request->here .= 'index';
+			if($this->request->action == 'index') {
+				list($here,) = explode('?', $this->request->here);
+				if(!empty($this->request->params['pass'])) {
+					foreach ($this->request->params['pass'] as $pass) {
+						$here = preg_replace('/\/' . $pass . '$/', '', $here);
+					}
+				}
+				if(!preg_match('/\/index$/', $here)) {
+					$this->request->here .= 'index';
+				}
 			}
 		}
-		
+
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
