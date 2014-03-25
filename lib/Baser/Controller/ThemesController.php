@@ -159,9 +159,6 @@ class ThemesController extends AppController {
 				$this->setMessage('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。', true);
 			}
 		}
-
-		// Filesをデプロイする
-		$this->BcManager->deployFilesAll($dbDataPattern);
 		
 		clearAllCache();
 		

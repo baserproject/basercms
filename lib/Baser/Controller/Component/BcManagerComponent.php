@@ -865,55 +865,6 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
-
-/**
- * files を全てデプロイする
- */
-	public function deployFilesAll($dataPattern) {
-		
-		if (!$dataPattern) {
-			$dataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-		}
-
-		if (strpos($dataPattern, '.') === false) {
-			$this->log("データパターンの形式が不正です。");
-			return false;
-		}
-		list($theme, $pattern) = explode('.', $dataPattern);
-		
-		$this->deployFiles($pattern, 'core', $theme);
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach ($corePlugins as $corePlugin) {
-			$this->deployFiles($pattern, $corePlugin, $theme);
-		}	
-		
-	}
-	
-/**
- * files をデプロイする
- */
-	public function deployFiles($pattern, $plugin, $theme) {
-		
-		$paths = array(
-			$this->getDefaultDataPath($pattern, $plugin, $theme),
-			$this->getDefaultDataPath('', $plugin, 'core')
-		);
-		$webrootFiles = WWW_ROOT . 'files';
-		foreach($paths as $path) {
-			$path .= DS . 'files';
-			if(is_dir($path)) {
-				$Folder = new Folder();
-				$Folder->copy(array(
-					'to'	=> $webrootFiles,
-					'from'	=> $path,
-					'mode'	=> 0777,
-					'scheme'=> Folder::MERGE
-				));
-				break;
-			}
-		}
-			
-	}
 	
 /**
  * システムデータを初期化する

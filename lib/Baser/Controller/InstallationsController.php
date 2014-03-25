@@ -229,7 +229,6 @@ class InstallationsController extends AppController {
 				}
 				$this->deleteAllTables();
 				if ($this->_constructionDb($dbDataPattern)) {
-					$this->BcManager->deployFilesAll($dbDataPattern);
 					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				} else {
@@ -359,9 +358,6 @@ class InstallationsController extends AppController {
 
 		// テーマを配置する
 		$this->BcManager->deployTheme();
-
-		// Filesを配置する
-		$this->BcManager->deployFiles();
 		
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
 		$this->BcManager->deleteDeployedAdminAssets();
