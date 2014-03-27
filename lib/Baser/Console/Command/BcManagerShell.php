@@ -64,7 +64,7 @@ class BcManagerShell extends BcAppShell {
 			'default' => '/'
 		))->addOption('data', array(
 			'help' => '初期データパターン',
-			'default' => 'core.nada-icons'
+			'default' => 'core.m-single'
 		));
 
 		return $parser;
