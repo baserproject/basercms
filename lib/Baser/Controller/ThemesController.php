@@ -468,8 +468,10 @@ class ThemesController extends AppController {
 			}
 		}
 		
+		Configure::write('BcSite.theme', $theme);
 		$plugins = BcUtil::getCurrentThemesPlugins();
 		
+		App::build(array('Plugin' => array_merge(array(BASER_THEMES . $theme . DS . 'Plugin' . DS), App::path('Plugin'))));
 		// テーマ梱包のプラグインをインストール
 		foreach($plugins as $plugin) {
 			$this->BcManager->installPlugin($plugin);
@@ -567,8 +569,7 @@ class ThemesController extends AppController {
 		
 		$pluginTables = array();
 		if($plugin != 'core') {
-			$pluginPath = CakePlugin::path($plugin);
-			$pluginPath .= 'Config' . DS . 'sql';
+			$pluginPath = BcUtil::getSchemaPath($plugin);
 			$Folder = new Folder($pluginPath);
 			$files = $Folder->read(true, true, false);
 			$pluginTables = $files[1];

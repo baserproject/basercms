@@ -283,7 +283,7 @@ class BcAppModel extends Model {
 	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 		// 初期データフォルダを走査
 		if (!$pluginName) {
-			$path = BASER_CONFIGS . 'sql';
+			$path = BASER_CONFIGS . 'Schema';
 		} else {
 			$path = BcUtil::getSchemaPath($pluginName);
 			if (!$path) {

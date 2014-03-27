@@ -971,6 +971,9 @@ class BcManagerComponent extends Component {
 /**
  * プラグインも含めて全てのテーブルをリセットする
  * 
+ * プラグインは有効となっているもののみ
+ * 現在のテーマでないテーマの梱包プラグインを検出できない為
+ * 
  * @param array $dbConfig 
  * @return boolean
  */
@@ -984,7 +987,7 @@ class BcManagerComponent extends Component {
 		}
 
 		$Plugin = ClassRegistry::init('Plugin');
-		$plugins = $Plugin->find('all');
+		$plugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true)));
 		$plugins = Set::extract('/Plugin/name', $plugins);
 		foreach ($plugins as $plugin) {
 			if (!$this->resetTables('plugin', $dbConfig, $plugin, $excludes)) {
@@ -1011,8 +1014,7 @@ class BcManagerComponent extends Component {
 		
 		$pluginTables = array();
 		if($plugin != 'core') {
-			$path = CakePlugin::path($plugin);
-			$path .= 'Config' . DS . 'sql';
+			$path = BcUtil::getSchemaPath($plugin);
 			$Folder = new Folder($path);
 			$files = $Folder->read(true, true, false);
 			if(empty($files[1])) {

@@ -167,9 +167,9 @@ class Plugin extends AppModel {
 					$File->write($data);
 
 					if ($conType == 'baser') {
-						$schemaPath = BASER_CONFIGS . 'sql' . DS;
+						$schemaPath = BcUtil::getSchemaPath() . DS;
 					} else {
-						$schemaPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
+						$schemaPath = BcUtil::getSchemaPath($pluginName) . DS;
 					}
 				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
 					$type = 'create';

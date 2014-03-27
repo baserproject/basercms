@@ -248,8 +248,7 @@ class PluginsController extends AppController {
 		$paths = App::path('Plugin');
 		foreach($paths as $path) {
 			$pluginPath = $path . $pluginName;
-			$path .= $pluginName . DS . 'Config' . DS . 'sql' . DS;
-			if(is_dir($path)) {
+			if(is_dir($pluginPath)) {
 				break;
 			}
 		}
@@ -260,6 +259,7 @@ class PluginsController extends AppController {
 		$folder->create($tmpPath);
 
 		// インストール用スキーマをdropスキーマとして一時フォルダに移動
+		$path = BcUtil::getSchemaPath($pluginName);
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
 		if (is_array($files[1])) {

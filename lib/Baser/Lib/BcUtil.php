@@ -85,7 +85,7 @@ class BcUtil extends Object {
  * @param string $plugin
  * @return string Or false
  */
-	public static function getSchemaPath($plugin) {
+	public static function getSchemaPath($plugin = null) {
 		
 		if(!$plugin) {
 			$plugin = 'Core';
