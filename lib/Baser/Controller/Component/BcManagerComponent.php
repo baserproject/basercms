@@ -1864,4 +1864,24 @@ class BcManagerComponent extends Component {
 		}
 	}
 	
+/**
+ * プラグインをアンインストールする
+ * 
+ * @param string $name
+ * @return boolean
+ */
+	public function uninstallPlugin($name) {
+		
+		$Plugin = ClassRegistry::init('Plugin');
+		$data = $Plugin->find('first', array('conditions' => array('Plugin.name' => $name), 'recursive' => -1));
+		$data['Plugin']['status'] = false;
+		if ($Plugin->save($data)) {
+			clearAllCache();
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
 }

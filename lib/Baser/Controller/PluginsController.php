@@ -371,54 +371,21 @@ class PluginsController extends AppController {
 	}
 
 /**
- * [ADMIN] 削除処理
- *
- * @param int ID
- * @return void
- * @access public
- * @deprecated admin_ajax_delete に移行
- */
-	public function admin_delete($id = null) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		$data = $this->Plugin->read(null, $id);
-		$data['Plugin']['status'] = false;
-
-		/* 削除処理 */
-		if ($this->Plugin->save($data)) {
-			clearAllCache();
-			$this->setMessage('プラグイン「' . $data['Plugin']['title'] . '」 を 無効化しました。', false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-
-		$this->redirect(array('action' => 'index'));
-	}
-
-/**
  * [ADMIN] 削除処理　(ajax)
  *
  * @param int ID
  * @return void
  * @access public
  */
-	public function admin_ajax_delete($id = null) {
+	public function admin_ajax_delete($name = null) {
 		/* 除外処理 */
-		if (!$id) {
+		if (!$name) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 
-		$data = $this->Plugin->read(null, $id);
-		$data['Plugin']['status'] = false;
-		$this->Plugin->set($data);
-		/* 削除処理 */
-		if ($this->Plugin->save()) {
+		if ($this->BcManager->uninstallPlugin($name)) {
 			clearAllCache();
-			$this->Plugin->saveDbLog('プラグイン「' . $data['Plugin']['title'] . '」 を 無効化しました。');
+			$this->Plugin->saveDbLog('プラグイン「' . $name . '」 を 無効化しました。');
 			exit(true);
 		}
 
@@ -436,9 +403,7 @@ class PluginsController extends AppController {
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->Plugin->read(null, $id);
-				$data['Plugin']['status'] = false;
-				$this->Plugin->set($data);
-				if ($this->Plugin->save()) {
+				if ($this->BcManager->uninstallPlugin($data['Plugin']['name'])) {
 					$this->Plugin->saveDbLog('プラグイン「' . $data['Plugin']['title'] . '」 を 無効化しました。');
 				}
 			}

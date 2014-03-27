@@ -37,7 +37,7 @@ if (!$data['Plugin']['status']) {
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), $data['Plugin']['admin_link'], array('title' => '管理')) ?>
 		<?php endif; ?>
 		<?php if ($data['Plugin']['status']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_disable.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Plugin']['id']), array('title' => '無効', 'class' => 'btn-delete')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_disable.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Plugin']['name']), array('title' => '無効', 'class' => 'btn-delete')) ?>
 		<?php elseif (!$data['Plugin']['status'] && !$data['Plugin']['update'] && !$data['Plugin']['old_version']): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_install.png', array('width' => 24, 'height' => 24, 'alt' => 'インストール', 'class' => 'btn')), array('action' => 'add', $data['Plugin']['name']), array('title' => 'インストール')) ?>
 		<?php endif ?>

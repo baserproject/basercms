@@ -440,6 +440,13 @@ class ThemesController extends AppController {
 		if (!$theme) {
 			$this->notFound();
 		}
+		
+		$plugins = BcUtil::getCurrentThemesPlugins();
+		// テーマ梱包のプラグインをアンインストール
+		foreach($plugins as $plugin) {
+			$this->BcManager->uninstallPlugin($plugin);
+		}
+		
 		$this->BcManager->deleteDeployedAdminAssets();
 		$siteConfig['SiteConfig']['theme'] = $theme;
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
@@ -454,23 +461,28 @@ class ThemesController extends AppController {
 		$files = $Folder->read(true, true, false);
 		if(!empty($files[0])) {
 			$info = array_merge($info, array(
-				'このテーマはプラグインを同梱しています。',
-				'テーマを正常に動作させる為には、初期データ読込の実行前に、下記のプラグインを有効化してください。'
+				'このテーマは下記のプラグインを同梱しています。'
 			));
 			foreach($files[0] as $file) {
 				$info[] = '	・' . $file;
 			}
 		}
 		
-		$Folder = new Folder($themePath . 'Config' . DS . 'data');
-		$files = $Folder->read(true, true, false);
-		if(!empty($files[0])) {
+		$plugins = BcUtil::getCurrentThemesPlugins();
+		
+		// テーマ梱包のプラグインをインストール
+		foreach($plugins as $plugin) {
+			$this->BcManager->installPlugin($plugin);
+		}
+		
+		$path = BcUtil::getDefaultDataPath('Core', $theme);
+		if(strpos($path, '/theme/' . $theme . '/') !== false) {
 			if($info) {
 				$info = array_merge($info, array(''));
 			}
 			$info = array_merge($info, array(
 				'このテーマは初期データを保有しています。',
-				'テーマにあったデータを適用するには、初期データ読込を実行してください。',
+				'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。',
 			));
 
 		}
