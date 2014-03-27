@@ -79,4 +79,106 @@ class BcUtil extends Object {
 		return array();
 	}
 	
+/**
+ * スキーマ情報のパスを取得する
+ * 
+ * @param string $plugin
+ * @return string Or false
+ */
+	public static function getSchemaPath($plugin) {
+		
+		if(!$plugin) {
+			$plugin = 'Core';
+		} else {
+			$plugin = Inflector::camelize($plugin);
+		}
+		
+		if($plugin == 'Core') {
+			return BASER_CONFIGS . 'Schema';
+		}
+		
+		$paths = App::path('Plugin');
+		// @deprecated since 3.0.2
+		// sql ディレクトリは非推奨
+		$folders = array('Schema', 'sql');
+		foreach ($paths as $path) {
+			foreach($folders as $folder) {
+				$_path = $path . $plugin . DS . 'Config' . DS . $folder;
+				if (is_dir($_path)) {
+					return $_path;
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	
+/**
+ * 初期データのパスを取得する
+ * 
+ * @param string $plugin
+ * @return string Or false
+ */
+	public static function getDefaultDataPath($plugin = null, $theme = null, $pattern = null) {
+		
+		if(!$plugin) {
+			$plugin = 'core';
+		} else {
+			$plugin = Inflector::camelize($plugin);
+		}
+		
+		if(!$theme) {
+			$theme = 'core';
+		}
+		
+		if(!$pattern) {
+			$pattern = 'Default';
+		}
+		
+		if($plugin == 'Core') {
+			$paths = array(BASER_CONFIGS . 'Data' . DS . $pattern);
+			if($theme != 'core') {
+				$paths = array_merge(array(
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
+				), $paths);
+			}
+		} else {
+			$pluginPaths = App::path('Plugin');
+			foreach($pluginPaths as $pluginPath) {
+				$pluginPath .= $plugin;
+				if(is_dir($pluginPath)) {
+					break;
+				}
+				$pluginPath = null;
+			}
+			if(!$pluginPath) {
+				return false;
+			}
+			$paths = array(
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
+				$pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
+				$pluginPath . DS . 'sql',
+			);
+			if($theme != 'core') {
+				$paths = array_merge(array(
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
+				), $paths);
+			}
+		}
+		
+		foreach ($paths as $path) {
+			if (is_dir($path)) {
+				return $path;
+			}
+		}
+		return false;
+		
+	}
+	
 }

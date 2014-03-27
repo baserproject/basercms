@@ -576,14 +576,14 @@ class BcManagerComponent extends Component {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
 
-		if (!$this->constructionTable(BASER_CONFIGS, 'baser', $dbConfig)) {
+		if (!$this->constructionTable('Core', 'baser', $dbConfig)) {
 			$this->log("コアテーブルの構築に失敗しました。");
 			return false;
 		}
 		$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach ($corePlugins as $corePlugin) {
-			if (!$this->constructionTable(BASER_PLUGINS . $corePlugin . DS . 'Config' . DS, 'plugin', $dbConfig, $dbDataPattern)) {
+			if (!$this->constructionTable($corePlugin, 'plugin', $dbConfig, $dbDataPattern)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
@@ -736,58 +736,6 @@ class BcManagerComponent extends Component {
 	}
 
 /**
- * 初期データのパスを取得する
- * 
- * @param string $theme テーマ名
- * @param string $plugin プラグイン名
- * @param string $pattern データパターン名
- * @return boolean
- */
-	public function getDefaultDataPath($pattern, $plugin, $theme) {
-		
-		if(!$pattern) {
-			$pattern = 'default';
-		}
-		
-		if ($theme == 'core') {
-			if ($plugin == 'core') {
-				$paths = array(
-					BASER_CONFIGS . 'data' . DS . $pattern,
-					BASER_CONFIGS . 'data' . DS . 'default',
-				);
-			} else {
-				$paths = array(
-					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . $pattern,
-					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default'
-				);
-			}
-		} else {
-			if ($plugin == 'core') {
-				$paths = array(
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern
-				);
-			} else {
-				$paths = array(
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . $pattern,
-					BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'data' . DS . 'default'
-				);
-			}
-		}
-
-		foreach ($paths as $path) {
-			if (is_dir($path)) {
-				return $path;
-				break;
-			}
-		}
-		
-		return false;
-		
-	}
-/**
  * 初期データを読み込む
  * 
  * @param string $dbConfigKeyName
@@ -805,14 +753,14 @@ class BcManagerComponent extends Component {
 			$db->reconnect();
 		}
 
-		$path = $this->getDefaultDataPath($pattern, $plugin, $theme);
+		$path = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
 
 		if (!$path) {
 			$this->log("初期データフォルダが見つかりません。");
 			return false;
 		}
 
-		$corePath = $this->getDefaultDataPath('', $plugin, 'core');
+		$corePath = BcUtil::getDefaultDataPath($plugin, 'core', 'Default');
 		
 		$targetTables = array();
 		if($corePath) {
@@ -964,7 +912,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  * @access public
  */
-	public function constructionTable($path, $dbConfigKeyName = 'baser', $dbConfig = null) {
+	public function constructionTable($plugin, $dbConfigKeyName = 'baser', $dbConfig = null) {
 
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 		$datasource = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
@@ -979,8 +927,10 @@ class BcManagerComponent extends Component {
 			chmod($db->config['database'], 0666);
 		}
 
+		$path = BcUtil::getSchemaPath($plugin);
+		
 		// DB構築
-		$Folder = new Folder($path . 'sql');
+		$Folder = new Folder($path);
 		$files = $Folder->read(true, true, true);
 		if (isset($files[1])) {
 			foreach ($files[1] as $file) {

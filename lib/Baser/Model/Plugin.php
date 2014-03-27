@@ -95,16 +95,8 @@ class Plugin extends AppModel {
  * @return boolean 
  */
 	public function resetDb($plugin) {
-		
-		$paths = App::path('Plugin');
 
-		foreach ($paths as $path) {
-			$path .= $plugin . DS . 'Config' . DS . 'sql';
-			if (is_dir($path)) {
-				break;
-			}
-			$path = null;
-		}
+		$path = BcUtil::getSchemaPath($plugin);
 
 		if (!$path) {
 			return true;

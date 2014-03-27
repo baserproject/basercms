@@ -281,34 +281,23 @@ class BcAppModel extends Model {
  * @return 	boolean
  */
 	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
-		
-		$paths = App::path('Plugin');
-		
 		// 初期データフォルダを走査
 		if (!$pluginName) {
 			$path = BASER_CONFIGS . 'sql';
 		} else {
-			foreach ($paths as $path) {
-				$path .=  $pluginName . DS . 'Config' . DS . 'sql';
-				if (is_dir($path)) {
-					break;
-				}
-			}
+			$path = BcUtil::getSchemaPath($pluginName);
 			if (!$path) {
 				return true;
 			}
 		}
-
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
-			foreach ($paths as $_path) {
-				$_path .=  $pluginName . DS . 'Config' . DS . 'data' . DS . 'default';
-				if (is_dir($_path)) {
-					$path = $_path;
-					break;
-				}
-			}
 			if ($loadCsv) {
-				return $this->loadCsv($dbConfigName, $path);
+				$path = BcUtil::getDefaultDataPath($pluginName);
+				if($path) {
+					return $this->loadCsv($dbConfigName, $path);
+				} else {
+					return true;
+				}
 			} else {
 				return true;
 			}
