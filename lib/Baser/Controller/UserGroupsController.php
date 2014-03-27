@@ -89,13 +89,11 @@ class UserGroupsController extends AppController {
  */
 	public function admin_index() {
 		/* データ取得 */
-		$this->paginate = array('conditions' => array(),
+		$datas = $this->UserGroup->find('all',array(
+			'conditions' => array(),
 			'fields' => array(),
-			'order' => 'UserGroup.id',
-			'limit' => 10
-		);
-		$datas = $this->paginate('UserGroup');
-
+			'order' => 'UserGroup.id'
+		));
 		/* 表示設定 */
 		$this->set('datas', $datas);
 		$this->pageTitle = 'ユーザーグループ一覧';
