@@ -3368,7 +3368,13 @@ class DboSource extends DataSource {
 
 		switch ($type) {
 			case 'create':
-				return $this->createTableBySchema(array('path' => $path . $file));
+				try {
+					$result = $this->createTableBySchema(array('path' => $path . $file));
+				} catch(Exception $e) {
+					$this->log($e->getMessage());
+					$result = false;
+				}
+				return $result;
 				break;
 			case 'alter':
 				if (!$oldSchemaPath) {
@@ -3393,7 +3399,13 @@ class DboSource extends DataSource {
 
 				break;
 			case 'drop':
-				return $this->dropTableBySchema(array('path' => $path . $file));
+				try {
+					$result = $this->dropTableBySchema(array('path' => $path . $file));
+				} catch(Exception $e) {
+					$this->log($e->getMessage());
+					$result = false;
+				}
+				return $result;
 				break;
 		}
 
@@ -3994,6 +4006,7 @@ class DboSource extends DataSource {
 						return false;
 					}
 				} catch (Exception $e) {
+					$this->log($e->getMessage());
 					return false;
 				}
 				
