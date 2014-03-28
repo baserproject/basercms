@@ -56,20 +56,43 @@ class ThemeConfig extends AppModel {
 		return $data;
 	}
 
+/**
+ * テーマカラー設定を保存する
+ * 
+ * @param array $data
+ * @return boolean
+ */
 	public function updateColorConfig($data) {
+		
 		$configPath = getViewPath() . 'css' . DS . 'config.css';
 		if (!file_exists($configPath)) {
 			return false;
 		}
 		$File = new File($configPath);
 		$config = $File->read();
-		$config = str_replace('MAIN', '#' . $data['ThemeConfig']['color_main'], $config);
-		$config = str_replace('SUB', '#' . $data['ThemeConfig']['color_sub'], $config);
-		$config = str_replace('LINK', '#' . $data['ThemeConfig']['color_link'], $config);
-		$config = str_replace('HOVER', '#' . $data['ThemeConfig']['color_hover'], $config);
+		$settings = array(
+			'MAIN'	=> 'color_main',
+			'SUB'	=> 'color_sub',
+			'LINK'	=> 'color_link',
+			'HOVER'	=> 'color_hover'
+		);
+		$settingExists = false;
+		foreach($settings as $key => $setting) {
+			if(empty($data['ThemeConfig'][$setting])) {
+				$config = preg_replace("/\n.+?" . $key . ".+?\n/", "\n", $config);
+			} else {
+				$config = str_replace($key, '#' . $data['ThemeConfig'][$setting], $config);
+				$settingExists = true;
+			}
+		}
 		$File = new File(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css', true, 0666);
 		$File->write($config);
 		$File->close();
+		if(!$settingExists) {
+			unlink($configPath);
+		}
+		return true;
+		
 	}
 
 }
