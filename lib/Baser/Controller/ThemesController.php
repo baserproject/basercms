@@ -83,7 +83,6 @@ class ThemesController extends AppController {
 				}
 			}
 		}
-
 		$this->set('datas', $datas);
 		$this->set('currentTheme', $currentTheme);
 		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));
@@ -122,18 +121,20 @@ class ThemesController extends AppController {
 
 		/* プラグインデータ */
 		$corePlugins = Configure::read('BcApp.corePlugins');
-		$path = BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern;
+		$path = BcUtil::getDefaultDataPath('Core', $theme, $pattern);
+		
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true, false);
 		$plugins = array();
 		if($files[0]) {
 			foreach($files[0] as $file) {
-				if(!in_array($file, $corePlugins) && $file != 'files') {
+				if(!in_array($file, $corePlugins)) {
 					$plugins[] = $file;
 				}
 			}
 		}
 		$plugins = array_merge($corePlugins, $plugins);
+		
 		foreach ($plugins as $plugin) {
 			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
 				$result = false;

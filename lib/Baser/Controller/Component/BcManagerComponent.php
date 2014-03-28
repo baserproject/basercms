@@ -694,16 +694,16 @@ class BcManagerComponent extends Component {
 		extract($options);
 
 		$themePath = $dataPath = $title = '';
-		if ($theme == 'core') {
-			$dataPath = BASER_CONFIGS . 'data';
-		} elseif (is_dir(BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data')) {
-			$themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
-			$dataPath = $themePath . 'Config' . DS . 'data';
-		} elseif (is_dir(BASER_THEMES . $theme . DS . 'Config' . DS . 'data')) {
-			$themePath = BASER_THEMES . $theme . DS;
-			$dataPath = $themePath . 'Config' . DS . 'data';
-		} else {
+		$dataPath = dirname(BcUtil::getDefaultDataPath('Core', $theme));
+
+		if($theme != 'core' && $dataPath == dirname(BcUtil::getDefaultDataPath('Core'))) {
 			return array();
+		}
+		
+		if (is_dir(BASER_THEMES . $theme)) {
+			$themePath = BASER_THEMES . $theme . DS;
+		} elseif (is_dir(BASER_CONFIGS . 'theme' . DS . $theme)) {
+			$themePath = BASER_CONFIGS . 'theme' . DS . $theme . DS;
 		}
 
 		if ($themePath) {
@@ -731,7 +731,6 @@ class BcManagerComponent extends Component {
 				$patterns[$theme . '.' . $pattern] = $patternName;
 			}
 		}
-
 		return $patterns;
 	}
 
@@ -842,7 +841,7 @@ class BcManagerComponent extends Component {
 		$options = array_merge(array('excludeUsers' => false), $options);
 		
 		$db = $this->_getDataSource('baser', $dbConfig);
-		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
+		$corePath = BASER_CONFIGS . 'Data' . DS . 'Default';
 		$result = true;
 
 		/* page_categories の初期データをチェック＆設定 */
