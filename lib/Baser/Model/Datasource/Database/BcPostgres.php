@@ -194,13 +194,14 @@ class BcPostgres extends Postgres {
 		$table = $this->fullTableName($model, false, false);
 
 		// CUSTOMIZE MODIFY 2013/08/16 ryuring
+		// CUSTOMIZE MODIFY 2014/03/28 ryuring
+		// 関連シーケンスを正常に取得できない仕様対策
 		// >>>
 		//$fields = parent::describe($table);
+		//$this->_sequenceMap[$table] = array();
 		// ---
 		$fields = $this->__describe($table);
 		// <<<
-
-		$this->_sequenceMap[$table] = array();
 		$cols = null;
 
 		if ($fields === null) {
@@ -304,7 +305,17 @@ class BcPostgres extends Postgres {
 					$fields[$c->name]['default'] = constant($fields[$c->name]['default']);
 				}
 			}
+			
+			// CUSTOMIZE MODIFY 2014/03/28 ryuring
+			// 関連シーケンスを正常に取得できない仕様対策
+			// >>>
+			//$this->_cacheDescription($table, $fields);
+			// ---
+			$fields['sequence'] = $this->_sequenceMap;
 			$this->_cacheDescription($table, $fields);
+			unset($fields['sequence']);
+			// <<<
+			
 		}
 		// @codingStandardsIgnoreEnd
 
@@ -336,6 +347,16 @@ class BcPostgres extends Postgres {
 		$cache = $this->_cacheDescription($table);
 
 		if ($cache !== null) {
+			
+			// CUSTOMIZE ADD 2014/03/28 ryuring
+			// 関連シーケンスを正常に取得できない仕様対策
+			// >>>
+			if(!empty($cache['sequence'][$table])) {
+				$this->_sequenceMap[$table] = $cache['sequence'][$table];
+			}
+			unset($cache['sequence']);
+			// <<<
+			
 			$this->__descriptions[$table] = $cache;
 			return $cache;
 		}
