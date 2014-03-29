@@ -1,2 +1,4 @@
-"id","no","sort","status","name","link","menu_type","created","modified"
-"","1","1","1","ホーム","/","default","",""
+"id","no","name","link","menu_type","sort","status","created","modified"
+"","1","ホーム","/","default","1","1","",""
+"","2","新着情報","/news/index","default","2","1","",""
+"","3","お問い合わせ","/contact/index","default","3","1","",""
