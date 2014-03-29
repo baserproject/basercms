@@ -120,7 +120,8 @@ class ThemesController extends AppController {
 		}
 
 		/* プラグインデータ */
-		$plugins = array_merge(Configure::read('BcApp.corePlugins'), BcUtil::getCurrentThemesPlugins());
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		$plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
 		
 		foreach ($plugins as $plugin) {
 			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
