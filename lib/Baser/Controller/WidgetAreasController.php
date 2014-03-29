@@ -400,7 +400,7 @@ class WidgetAreasController extends AppController {
  */
 	public function get_widgets($id) {
 		$widgetArea = $this->WidgetArea->read(null, $id);
-		if ($widgetArea['WidgetArea']['widgets']) {
+		if (!empty($widgetArea['WidgetArea']['widgets'])) {
 			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
 			usort($widgets, 'widgetSort');
 			return $widgets;
