@@ -120,20 +120,7 @@ class ThemesController extends AppController {
 		}
 
 		/* プラグインデータ */
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		$path = BcUtil::getDefaultDataPath('Core', $theme, $pattern);
-		
-		$Folder = new Folder($path);
-		$files = $Folder->read(true, true, false);
-		$plugins = array();
-		if($files[0]) {
-			foreach($files[0] as $file) {
-				if(!in_array($file, $corePlugins)) {
-					$plugins[] = $file;
-				}
-			}
-		}
-		$plugins = array_merge($corePlugins, $plugins);
+		$plugins = array_merge(Configure::read('BcApp.corePlugins'), BcUtil::getCurrentThemesPlugins());
 		
 		foreach ($plugins as $plugin) {
 			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
