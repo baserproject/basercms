@@ -86,10 +86,15 @@ class ThemeConfigsController extends AppController {
 				$this->ThemeConfig->updateColorConfig($this->request->data);
 				$data = $this->ThemeConfig->saveImage($this->request->data);
 				$data = $this->ThemeConfig->deleteImage($data);
+				foreach($data['ThemeConfig'] as $key => $value) {
+					if(preg_match('/main_image_[0-9]_delete/', $key)) {
+						unset($data['ThemeConfig'][$key]);
+					}
+				}
 				if ($this->ThemeConfig->saveKeyValue($data)) {
 					clearViewCache();
 					$this->setMessage('システム設定を保存しました。');
-					$this->redirect('form');
+					$this->redirect(array('action' => 'form'));
 				} else {
 					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
