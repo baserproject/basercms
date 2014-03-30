@@ -926,7 +926,6 @@ class BcAppModel extends Model {
 		/* $dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'); */
 		// ---
 		$dateFields = array('W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
-		$dateFields = array('D' => 'date', 'T' => 'time');
 		// <<<
 		$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
 		$date = array();

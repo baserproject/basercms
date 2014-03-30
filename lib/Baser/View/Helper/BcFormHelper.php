@@ -216,7 +216,7 @@ class BcFormHelper extends FormHelper {
 			switch ($char) {
 				// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
 				case 'W':
-					$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty) . "年";
+					$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $attributes, $attributes['empty']) . "年";
 					break;
 				// <<<
 				case 'Y':
@@ -330,11 +330,12 @@ class BcFormHelper extends FormHelper {
 			}
 		}
 		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
-
+		$attributes = array_merge($attributes, array(
+			'selected' => $selected,
+			'empty'=> $showEmpty
+		));
 		return $this->hidden($fieldName . ".wareki", array('value' => true)) .
-			$this->select(
-				$fieldName . ".year", $this->__generateOptions('wyear', $yearOptions), $selected, $attributes, $showEmpty
-		);
+			$this->select($fieldName . ".year", $this->_generateOptions('wyear', $yearOptions), $attributes);
 	}
 
 /**

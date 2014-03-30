@@ -151,7 +151,7 @@ class BcTimeHelper extends TimeHelper {
 			if (empty($date['year']) || empty($date['month']) || empty($date['day'])) {
 				return '';
 			}
-			$date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
+			$date = $this->convertToSeirekiYear($date['year']) . '-' . $date['month'] . '-' . $date['day'];
 		}
 
 		$time = strtotime($date);

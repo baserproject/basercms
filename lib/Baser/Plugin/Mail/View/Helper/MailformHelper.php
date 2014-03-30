@@ -148,7 +148,7 @@ class MailformHelper extends BcFreezeHelper {
 				if (isset($attributes['maxYear']) && $attributes['maxYear'] == 'today') {
 					$attributes['maxYear'] = intval(date('Y'));
 				}
-				$out = $this->dateTime($fieldName, 'WMD', null, null, $attributes);
+				$out = $this->dateTime($fieldName, 'WMD', null, $attributes);
 				break;
 
 			case 'textarea':
