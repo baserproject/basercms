@@ -61,6 +61,39 @@ class ThemesController extends AppController {
 		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
 	);
 
+	public function admin_add() {
+		
+		$this->pageTitle = 'テーマアップロード';
+		$this->subMenuElements = array('themes');
+		
+		if($this->request->data) {
+			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
+				$this->setMessage('ファイルのアップロードに失敗しました。', true);
+				$this->redirect(array('action' => 'add'));
+			} else {
+				$name = $this->request->data['Theme']['file']['name'];
+				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
+				exec('unzip -o ' . TMP . $name . ' -d ' . BASER_THEMES, $return);
+				if(!empty($return[2])) {
+					$theme = str_replace('  inflating: ' . BASER_THEMES, '', $return[2]);
+					$theme = explode(DS, $theme);
+					$theme = $theme[0];
+					$themePath = BASER_THEMES . $theme[0];
+					$Folder = new Folder();
+					$Folder->chmod($themePath, 0777);
+					unlink(TMP . $name);
+					$this->_applyTheme($theme);
+					$this->redirect(array('action' => 'index'));
+				} else {
+					$this->setMessage('アップロードしたZIPファイルの展開に失敗しました。', true);
+					$this->redirect(array('action' => 'add'));
+				}
+				
+			}
+		}
+		
+	}
+	
 /**
  * テーマ一覧
  *
@@ -477,6 +510,13 @@ class ThemesController extends AppController {
 			$this->notFound();
 		}
 		
+		$this->_applyTheme($theme);
+		$this->redirect(array('action' => 'index'));
+		
+	}
+
+	protected function _applyTheme($theme) {
+		
 		$plugins = BcUtil::getCurrentThemesPlugins();
 		// テーマ梱包のプラグインをアンインストール
 		foreach($plugins as $plugin) {
@@ -543,11 +583,9 @@ class ThemesController extends AppController {
 			
 			$this->setMessage(implode('<br />', $message));
 		}
-		
-		$this->redirect(array('action' => 'index'));
+		return true;
 		
 	}
-
 /**
  * 初期データセットをダウンロードする 
  */
