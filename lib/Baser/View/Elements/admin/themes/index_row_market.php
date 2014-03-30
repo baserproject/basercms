@@ -39,7 +39,7 @@ if(empty($data['authorUrl'])) {
 		</a>
 	</p>
 	<p class="row-tools">
-		<?php $this->BcBaser->link('ダウンロード', $data['link'], array('target' => '_blank')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down_on.png', array('title' => 'ダウンロード', 'alt' => 'ダウンロード')), $data['link'], array('target' => '_blank')) ?>
 	</p>
 <p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
 <p class="theme-author">制作者：
