@@ -61,6 +61,9 @@ class ThemesController extends AppController {
 		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
 	);
 
+/**
+ * テーマをアップロードして適用する
+ */
 	public function admin_add() {
 		
 		$this->pageTitle = 'テーマアップロード';
@@ -69,7 +72,6 @@ class ThemesController extends AppController {
 		if($this->request->data) {
 			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
 				$this->setMessage('ファイルのアップロードに失敗しました。', true);
-				$this->redirect(array('action' => 'add'));
 			} else {
 				$name = $this->request->data['Theme']['file']['name'];
 				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
@@ -78,7 +80,7 @@ class ThemesController extends AppController {
 					$theme = str_replace('  inflating: ' . BASER_THEMES, '', $return[2]);
 					$theme = explode(DS, $theme);
 					$theme = $theme[0];
-					$themePath = BASER_THEMES . $theme[0];
+					$themePath = BASER_THEMES . $theme;
 					$Folder = new Folder();
 					$Folder->chmod($themePath, 0777);
 					unlink(TMP . $name);
@@ -86,9 +88,7 @@ class ThemesController extends AppController {
 					$this->redirect(array('action' => 'index'));
 				} else {
 					$this->setMessage('アップロードしたZIPファイルの展開に失敗しました。', true);
-					$this->redirect(array('action' => 'add'));
 				}
-				
 			}
 		}
 		

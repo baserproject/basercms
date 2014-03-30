@@ -78,6 +78,53 @@ class PluginsController extends AppController {
 	);
 
 /**
+ * プラグインをアップロードしてインストールする
+ */
+	public function admin_add() {
+		
+		$this->pageTitle = 'プラグインアップロード';
+		$this->subMenuElements = array('plugins');
+		
+		if($this->request->data) {
+			if(empty($this->request->data['Plugin']['file']['tmp_name'])) {
+				$this->setMessage('ファイルのアップロードに失敗しました。', true);
+			} else {
+				$name = $this->request->data['Plugin']['file']['name'];
+				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $name);
+				exec('unzip -o ' . TMP . $name . ' -d ' . BASER_PLUGINS, $return);
+				if(!empty($return[2])) {
+					$plugin = str_replace('  inflating: ' . BASER_PLUGINS, '', $return[2]);
+					$plugin = explode(DS, $plugin);
+					$plugin = $plugin[0];
+					$pluginPath = BASER_THEMES . $plugin;
+					$Folder = new Folder();
+					$Folder->chmod($pluginPath, 0777);
+					$plugin = Inflector::camelize($plugin);
+					$Folder->move(array(
+						'to' => BASER_THEMES . $plugin, 
+						'from' => $pluginPath, 
+						'mode' => 0777
+					));
+					unlink(TMP . $name);
+					// プラグインをインストール
+					if ($this->BcManager->installPlugin($plugin)) {
+						clearAllCache();
+						$this->setMessage('新規プラグイン「' . $plugin . '」を baserCMS に登録しました。', false, true);
+						$this->redirect(array('action' => 'index'));
+					} else {
+						$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
+					}				
+					
+				} else {
+					$this->setMessage('アップロードしたZIPファイルの展開に失敗しました。', true);
+					$this->redirect(array('action' => 'add'));
+				}
+			}
+		}
+		
+	}
+	
+/**
  * プラグインの一覧を表示する
  *
  * @return void
@@ -290,7 +337,7 @@ class PluginsController extends AppController {
  * @return  void
  * @access  public
  */
-	public function admin_add($name) {
+	public function admin_install($name) {
 		$name = urldecode($name);
 		$dbInited = false;
 		$installMessage = '';
