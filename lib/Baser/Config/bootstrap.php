@@ -264,9 +264,12 @@ if (BC_INSTALLED) {
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
 	$plugins = getEnablePlugins();
+	$priority = count($plugins);
 	foreach ($plugins as $plugin) {
-		loadPlugin($plugin);
+		loadPlugin($plugin['Plugin']['name'], $priority);
+		$priority--;
 	}
+	$plugins = Set::extract('/Plugin/name', $plugins);
 	Configure::write('BcStatus.enablePlugins', $plugins);
 
 /**

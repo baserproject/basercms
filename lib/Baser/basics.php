@@ -681,7 +681,7 @@ function getEnablePlugins() {
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
+			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
 			ClassRegistry::removeObject('Plugin');
 			if ($plugins) {
 				$enablePlugins = Set::extract('/Plugin/name', $plugins);
@@ -692,7 +692,7 @@ function getEnablePlugins() {
 			}
 		}
 	}
-	return $enablePlugins;
+	return $plugins;
 }
 
 /**
@@ -876,7 +876,7 @@ function mb_basename($str, $suffix=null){
  * @param string $plugin
  * @return type
  */
-function loadPlugin($plugin) {
+function loadPlugin($plugin, $priority) {
 	if(CakePlugin::loaded($plugin)) {
 		return true;
 	}
@@ -901,7 +901,7 @@ function loadPlugin($plugin) {
 		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 			App::uses($eventClass, $plugin . '.Event');
 			$CakeEvent = CakeEventManager::instance();
-			$CakeEvent->attach(new $eventClass());
+			$CakeEvent->attach(new $eventClass(), null, array('priority' => $priority));
 		}
 	}
 	return true;
