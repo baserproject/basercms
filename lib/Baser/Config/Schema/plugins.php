@@ -25,6 +25,7 @@ class PluginsSchema extends CakeSchema {
 		'version' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
 		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'db_inited' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'priority' => array('type' => 'integer', 'null' => true, 'default' => 0, 'length' => 8),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
