@@ -687,10 +687,12 @@ function getEnablePlugins() {
 				$enablePlugins = Set::extract('/Plugin/name', $plugins);
 
 				if (!Configure::read('Cache.disable')) {
-					Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
+					Cache::write('enable_plugins', $plugins, '_cake_env_');
 				}
 			}
 		}
+	} else {
+		$plugins = $enablePlugins;
 	}
 	return $plugins;
 }
