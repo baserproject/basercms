@@ -21,6 +21,7 @@
 /**
  * Include files
  */
+App::uses('BlogAppModel', 'Blog.Model');
 
 /**
  * ブログ設定モデル

@@ -30,6 +30,15 @@
  */
 
 /**
+ * plugins テーブル変更
+ */
+	if($this->loadSchema('3.0.2', '', 'plugins', $filterType = 'alter')) {
+		$this->setUpdateLog('plugins テーブルの構造変更に成功しました。');
+	} else {
+		$this->setUpdateLog('plugins テーブルの構造変更に失敗しました。', true);
+	}
+	
+/**
  * シリアライズされたデータを更新
  * 
  * UserGroup.default_favorites
