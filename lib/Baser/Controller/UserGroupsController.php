@@ -241,7 +241,7 @@ class UserGroupsController extends AppController {
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;
 		$data = $this->UserGroup->read();
-		$data['UserGroup']['default_favorites'] = serialize($this->request->data);
+		$data['UserGroup']['default_favorites'] = BcUtil::serialize($this->request->data);
 		$this->UserGroup->set($data);
 		if ($this->UserGroup->save()) {
 			echo true;

@@ -317,7 +317,7 @@ class User extends AppModel {
 			'UserGroup.id' => $userGroupId
 		));
 		if ($defaultFavorites) {
-			$defaultFavorites = unserialize($defaultFavorites);
+			$defaultFavorites = BcUtil::unserialize($defaultFavorites);
 			if ($defaultFavorites) {
 				$this->deleteFavorites($userId);	
 				foreach ($defaultFavorites as $favorites) {

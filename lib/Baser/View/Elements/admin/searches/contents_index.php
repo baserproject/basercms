@@ -19,8 +19,8 @@
  */
 $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
 	'0.6' => '0.6', '0.7' => '0.7', '0.8' => '0.8', '0.9' => '0.9', '1.0' => '1.0');
-$categories = am(array('none' => 'カテゴリなし'), unserialize($this->BcBaser->siteConfig['content_categories']));
-$types = unserialize($this->BcBaser->siteConfig['content_types']);
+$categories = am(array('none' => 'カテゴリなし'), BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']));
+$types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 ?>
 
 <?php echo $this->BcForm->create('Content', array('url' => array('action' => 'index'))) ?>
