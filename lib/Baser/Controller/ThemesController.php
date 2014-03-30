@@ -116,6 +116,14 @@ class ThemesController extends AppController {
 				}
 			}
 		}
+		
+		
+		
+		$Xml = new Xml();
+		$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
+		$this->set('baserThemes', $baserThemes->channel->item);
+		
+		
 		$this->set('datas', $datas);
 		$this->set('currentTheme', $currentTheme);
 		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));

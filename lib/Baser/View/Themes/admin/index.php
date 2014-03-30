@@ -63,11 +63,19 @@ $this->BcBaser->js(array(
 			}
 			return false;
 		});
+		
+		$( "#tabs" ).tabs();
 	});
 </script>
-
-
+  
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'themes', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
-<div id="DataList"><?php $this->BcBaser->element('themes/index_list') ?></div>
 
+<div id="tabs">
+	<ul>
+		<li><a href="#DataList">所有テーマ</a></li>
+		<li><a href="#BaserMarket">baserマーケット</a></li>
+	</ul>
+	<div id="DataList"><?php $this->BcBaser->element('themes/index_list') ?></div>
+	<div id="BaserMarket"><?php $this->BcBaser->element('themes/index_list_market') ?></div>
+</div>

@@ -63,7 +63,9 @@ $config['BcApp'] = array(
 	'editors' => array(
 		'none' => 'なし',
 		'BcCkeditor' => 'CKEditor'
-	)
+	),
+	'marketThemeRss' => 'http://barket.jp/themes.rss',
+	'marketPluginRss' => 'http://barket.jp/plugins.rss'
 );
 /**
  * システム要件 
