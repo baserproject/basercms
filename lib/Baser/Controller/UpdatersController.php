@@ -541,7 +541,12 @@ class UpdatersController extends AppController {
 			return false;
 		}
 
-		include $__path;
+		try {
+			include $__path;
+		} catch (Exception $e) {
+			$this->log($e->getMessage());
+			return false;
+		}
 
 		return true;
 	}

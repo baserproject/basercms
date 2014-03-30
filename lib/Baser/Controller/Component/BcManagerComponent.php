@@ -1808,21 +1808,22 @@ class BcManagerComponent extends Component {
 		
 		if (empty($data['Plugin']['db_inited'])) {
 			foreach($paths as $path) {
-				$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
-				if (file_exists($initPath)) {
-					try {
-						include $initPath;
-					} catch (Exception $e) {
-						$this->log($e->getMessage());
-					}
-					$configPath = $path .= $name . DS . 'config.php';
-					if(file_exists($configPath)) {
-						include $configPath;
-					}
+				if (file_exists($path . $name)) {
 					break;
 				}
-				
 			}
+		}
+		$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
+		if (file_exists($initPath)) {
+			try {
+				include $initPath;
+			} catch (Exception $e) {
+				$this->log($e->getMessage());
+			}
+		}
+		$configPath = $path . $name . DS . 'config.php';
+		if(file_exists($configPath)) {
+			include $configPath;
 		}
 
 		if(!$title) {
