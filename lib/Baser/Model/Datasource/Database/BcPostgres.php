@@ -363,4 +363,19 @@ class BcPostgres extends Postgres {
 		return null;
 	}
 
+/**
+ * シーケンスを更新する
+ */
+	public function updateSequence() {
+		$tables = $this->listSources();
+		$result = true;
+		foreach($tables as $table) {
+			$sql = 'select setval(\'' . $this->getSequence($table) . '\', (select max(id) from ' . $table . '));';
+			if(!$this->execute($sql)) {
+				$result = false;
+			}
+		}
+		return $result;
+	}
+	
 }

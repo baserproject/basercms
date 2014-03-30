@@ -1203,7 +1203,7 @@ background: #888;
 /* ==================================================================== */
 .list-panel li{
 	padding:15px;
-	margin:20px;
+	margin:12px;
 	background: none;
 	background-color:#efefef;
 	width:244px;
@@ -1346,4 +1346,14 @@ background: #888;
 	display: block;
 	line-height:1em;
 	margin-bottom: 10px;
+}
+
+.ui-widget-content {
+	border:1px solid #CCC;
+}
+.ui-widget-header {
+	background:#DFDFDF;
+}
+.ui-tabs .ui-tabs-nav li {
+	font-weight: bold;
 }

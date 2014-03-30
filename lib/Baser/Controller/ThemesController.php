@@ -102,6 +102,43 @@ class ThemesController extends AppController {
 			$this->redirect('index');
 		}
 
+		$result = $this->_load_default_data_pattern($this->request->data['Theme']['default_data_pattern']);
+
+		if ($result) {
+			$this->setMessage('初期データの読み込みが完了しました。');
+		} else {
+			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
+		}
+
+		$this->redirect('index');
+	}
+
+/**
+ * コアの初期データを読み込む
+ * 
+ * @return void
+ */
+	public function admin_reset_data() {
+
+		$result = $this->_load_default_data_pattern('core.Default', $this->siteConfigs['theme']);
+
+		if ($result) {
+			$this->setMessage('初期データの読み込みが完了しました。');
+		} else {
+			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
+		}
+
+		$this->redirect('index');
+		
+	}
+	
+/**
+ * 初期データを読み込む
+ * 
+ * @param string $dbDataPattern
+ */
+	protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '') {
+		
 		$excludes = array('plugins', 'dblogs', 'users');
 
 		$User = ClassRegistry::init('User');
@@ -109,7 +146,6 @@ class ThemesController extends AppController {
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
 
-		$dbDataPattern = $this->request->data['Theme']['default_data_pattern'];
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 		$result = true;
 
@@ -118,7 +154,7 @@ class ThemesController extends AppController {
 			$result = false;
 			$this->log($dbDataPattern . " の初期データのロードに失敗しました。");
 		}
-
+		
 		/* プラグインデータ */
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		$plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
@@ -161,6 +197,12 @@ class ThemesController extends AppController {
 
 		clearAllCache();
 
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		if($currentTheme) {
+			$siteConfigs = array('SiteConfig' => array('theme' => $currentTheme));
+			$SiteConfig->saveKeyValue($siteConfigs);
+		}
+		
 		if (!$this->Page->createAllPageTemplate()) {
 			$result = false;
 			$this->log(
@@ -196,6 +238,15 @@ class ThemesController extends AppController {
 			}
 		}
 
+		$Db = ConnectionManager::getDataSource('baser');
+		if($Db->config['datasource'] == 'Database/BcPostgres') {
+			$Db->updateSequence();
+		}
+		$Db = ConnectionManager::getDataSource('plugin');
+		if($Db->config['datasource'] == 'Database/BcPostgres') {
+			$Db->updateSequence();
+		}
+		
 		// システム基本設定の更新
 		$siteConfigs = array('SiteConfig' => array(
 				'email' => $this->siteConfigs['email'],
@@ -203,18 +254,14 @@ class ThemesController extends AppController {
 				'first_access' => null,
 				'version' => $this->siteConfigs['version']
 		));
-		$SiteConfig = ClassRegistry::init('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfigs);
+		
 
-		if ($result) {
-			$this->setMessage('初期データの読み込みが完了しました。');
-		} else {
-			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
-		}
-
-		$this->redirect('index');
+		
+		return $result;
+		
 	}
-
+	
 /**
  * テーマ情報を読み込む
  * 
