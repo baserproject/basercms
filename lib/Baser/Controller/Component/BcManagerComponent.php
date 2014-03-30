@@ -1806,19 +1806,20 @@ class BcManagerComponent extends Component {
 		$data = $this->Plugin->find('first', array('conditions' => array('name' => $name)));
 		$title = '';
 		
-		if (empty($data['Plugin']['db_inited'])) {
-			foreach($paths as $path) {
-				if (file_exists($path . $name)) {
-					break;
-				}
+		foreach($paths as $path) {
+			if (file_exists($path . $name)) {
+				break;
 			}
 		}
-		$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
-		if (file_exists($initPath)) {
-			try {
-				include $initPath;
-			} catch (Exception $e) {
-				$this->log($e->getMessage());
+		
+		if (empty($data['Plugin']['db_inited'])) {
+			$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
+			if (file_exists($initPath)) {
+				try {
+					include $initPath;
+				} catch (Exception $e) {
+					$this->log($e->getMessage());
+				}
 			}
 		}
 		$configPath = $path . $name . DS . 'config.php';

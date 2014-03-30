@@ -131,7 +131,7 @@ class PluginsController extends AppController {
  * @access public
  */
 	public function admin_index() {
-		$datas = $this->Plugin->find('all', array('order' => 'Plugin.name'));
+		$datas = $this->Plugin->find('all', array('order' => 'Plugin.priority'));
 		if (!$datas) {
 			$datas = array();
 		}
@@ -430,7 +430,7 @@ class PluginsController extends AppController {
 				clearAllCache();
 				$this->BcAuth->relogin();
 				$this->setMessage($data['Plugin']['title'] . ' プラグインのデータを初期化しました。', false, true);
-				$this->redirect(array('action' => 'add', $data['Plugin']['name']));
+				$this->redirect(array('action' => 'install', $data['Plugin']['name']));
 			} else {
 				$this->setMessage('処理中にエラーが発生しました。プラグインの開発者に確認してください。', true);
 			}

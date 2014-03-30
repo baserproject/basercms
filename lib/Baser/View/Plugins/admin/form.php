@@ -23,7 +23,7 @@
 $(function(){
   $("#BtnReset").click(function(){
     if(confirm('プラグインのデータを初期化します。よろしいですか？')) {
-      $("#PluginAdminAddForm").attr('action', $("#ResetDbUrl").val());
+      $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
     } else {
       return false;
     }
