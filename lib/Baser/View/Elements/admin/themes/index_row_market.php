@@ -17,56 +17,54 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$Xml = new Xml();
-$enclosure = $Xml->toArray($data->enclosure);
 // ↓一時対応
-if(empty($data->version)) {
-	$data->version = '';
+if(empty($data['version'])) {
+	$data['version'] = '';
 }
-if(!$data->authorUrl) {
-	$data->authorUrl = '';
+if(empty($data['authorUrl'])) {
+	$data['authorUrl'] = '';
 }
 ?>
 
 
 <li>
-	<p class="theme-name"><strong><?php echo $data->title ?></strong></p>
+	<p class="theme-name"><strong><?php echo $data['title'] ?></strong></p>
 	<p class="theme-screenshot">
 		<a class="theme-popup" href="<?php echo '#Contents' . $key ?>">
-			<?php if ($enclosure['enclosure']['@url']): ?>
-				<?php $this->BcBaser->img($enclosure['enclosure']['@url'], array('alt' => $data->title, 'height' => 194)) ?>
+			<?php if ($data['enclosure']['@url']): ?>
+				<?php $this->BcBaser->img($data['enclosure']['@url'], array('alt' => $data['title'], 'height' => 194)) ?>
 			<?php else: ?>
-				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt' => $data->title)) ?>
+				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt' => $data['title'])) ?>
 			<?php endif ?>
 		</a>
 	</p>
 	<p class="row-tools">
-		<?php $this->BcBaser->link('ダウンロード', $data->link, array('target' => '_blank')) ?>
+		<?php $this->BcBaser->link('ダウンロード', $data['link'], array('target' => '_blank')) ?>
 	</p>
-<p class="theme-version">バージョン：<?php echo $data->version ?></p>
+<p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
 <p class="theme-author">制作者：
-	<?php if (!empty($data->authorLink) && !empty($data->author)): ?>
-		<?php $this->BcBaser->link($data->author, $data->authorLink, array('target' => '_blank')) ?>
+	<?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
+		<?php $this->BcBaser->link($data['author'], $data['authorLink'], array('target' => '_blank')) ?>
 	<?php else: ?>
-		<?php echo $data->author ?>
+		<?php echo $data['author'] ?>
 	<?php endif ?>
 </p>
 <div style='display:none'>
 	<div id="<?php echo 'Contents' . $key ?>" class="theme-popup-contents clearfix">
 		<div class="theme-screenshot">
-			<?php if ($enclosure['enclosure']['@url']): ?>
-				<?php $this->BcBaser->img($enclosure['enclosure']['@url'], array('alt' => $data->title, 'width' => 300)) ?>
+			<?php if ($data['enclosure']['@url']): ?>
+				<?php $this->BcBaser->img($data['enclosure']['@url'], array('alt' => $data['title'], 'width' => 300)) ?>
 			<?php else: ?>
-				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt' => $data->title)) ?>
+				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt' => $data['title'])) ?>
 			<?php endif ?>
 		</div>
-		<div class="theme-name"><strong><?php echo $data->title ?></strong></div>
-		<div class="theme-version">バージョン：<?php echo $data->version ?></div>
+		<div class="theme-name"><strong><?php echo $data['title'] ?></strong></div>
+		<div class="theme-version">バージョン：<?php echo $data['version'] ?></div>
 		<div class="theme-author">制作者：
-	<?php if (!empty($data->authorLink) && !empty($data->author)): ?>
-		<?php $this->BcBaser->link($data->author, $data->authorLink, array('target' => '_blank')) ?>
+	<?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
+		<?php $this->BcBaser->link($data['author'], $data['authorLink'], array('target' => '_blank')) ?>
 	<?php else: ?>
-		<?php echo $data->author ?>
+		<?php echo $data['author'] ?>
 	<?php endif ?>
 		</div>
 		<div class="theme-description"><?php echo nl2br($data->description) ?></div>
