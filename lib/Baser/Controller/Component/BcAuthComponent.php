@@ -159,15 +159,11 @@ class BcAuthComponent extends AuthComponent {
  * userModel
  */
 	public function setSessionAuthAddition() {
-		$authPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
-		$userModel = '';
-		if (!$authPrefix) {
-			$userModel = $this->authenticate['Form']['userModel'];
-			$User = ClassRegistry::init($userModel);
-			$authPrefix = $User->getAuthPrefix($this->user('name'));
-			if (empty($authPrefix)) {
-				$authPrefix = 'front';
-			}
+		$userModel = $this->authenticate['Form']['userModel'];
+		$User = ClassRegistry::init($userModel);
+		$authPrefix = $User->getAuthPrefix($this->user('name'));
+		if (empty($authPrefix)) {
+			$authPrefix = 'front';
 		}
 		$this->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);
 		$this->Session->write(BcAuthComponent::$sessionKey . '.userModel', $userModel);
@@ -196,7 +192,11 @@ class BcAuthComponent extends AuthComponent {
 		$UserModel->schema(true);
 		$user = $UserModel->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
 		$this->request->data = $user;
-		return $this->login();
+		$result = $this->login();
+		if($result) {
+			$this->setSessionAuthAddition();
+		}
+		return $result;
 	
 	}
 	
