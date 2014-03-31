@@ -368,7 +368,9 @@ class BcCkeditorHelper extends AppHelper {
 				$jscode .= "editor_{$field}.draftReadOnlyPublish = true;";
 			}
 		}
+
 		$jscode .= " });";
+
 		if ($editorUseDraft) {
 			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
 			if ($editorDisableDraft) {
@@ -379,6 +381,19 @@ class BcCkeditorHelper extends AppHelper {
 				$jscode .= "editor_{$field}.execCommand('changeDraft');";
 				$jscode .= "editor_{$field}.execCommand('disablePublish');";
 			}
+			
+// ツールバーの表示を切り替え
+$jscode .= <<< EOM
+editor_{$field}.getCommand('maximize').on( 'state' , function( e )
+    {
+        if(this.state == 1) {
+			$("#ToolBar").hide();
+		} else {
+			$("#ToolBar").show();
+		}
+    });
+EOM;
+			
 			$jscode .= " });";
 		}
 		$jscode .= "});";
