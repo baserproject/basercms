@@ -207,7 +207,13 @@ class BcUtil extends Object {
  * @return mixed
  */
 	public static function unserialize($value) {
-		return unserialize(base64_decode($value));
+		$_value = $value;
+		$value = @unserialize(base64_decode($value));
+		// 下位互換の為、しばらくの間、失敗した場合の再変換を行う v.3.0.2
+		if($value === false) {
+			$value = unserialize($_value);
+		}
+		return $value;
 	}
 
 }
