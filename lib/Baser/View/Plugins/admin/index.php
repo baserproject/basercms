@@ -50,7 +50,7 @@ $(function(){
 
 <div id="tabs">
 	<ul>
-		<li><a href="#DataList">所有テーマ</a></li>
+		<li><a href="#DataList">所有プラグイン</a></li>
 		<li><a href="#BaserMarket">baserマーケット</a></li>
 	</ul>
 	<div id="DataList"><?php $this->BcBaser->element('plugins/index_list') ?></div>
