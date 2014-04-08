@@ -733,12 +733,14 @@ class BcAppController extends Controller {
 			$port = ($this->siteConfigs['smtp_port']) ? $this->siteConfigs['smtp_port'] : 25;
 			$username = ($this->siteConfigs['smtp_user']) ? $this->siteConfigs['smtp_user'] : null;
 			$password = ($this->siteConfigs['smtp_password']) ? $this->siteConfigs['smtp_password'] : null;
+			$tls = $this->siteConfigs['smtp_tls'] && ($this->siteConfigs['smtp_tls'] == 1);
 		} else {
 			$transport = 'Mail';
 			$host = 'localhost';
 			$port = 25;
 			$username = null;
 			$password = null;
+			$tls = null;
 		}
 
 		$config = array(
@@ -746,7 +748,8 @@ class BcAppController extends Controller {
 			'host' => $host,
 			'port' => $port,
 			'username' => $username,
-			'password' => $password
+			'password' => $password,
+			'tls' => $tls
 		);
 
 		$cakeEmail = new CakeEmail($config);

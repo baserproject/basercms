@@ -449,6 +449,15 @@ h2 {}
 				<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
 			</td>
 		</tr>
+		<tr>
+			<th><?php echo $this->BcForm->label('SiteConfig.smtp_tls', 'SMTP TLS暗号化') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.smtp_tls', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('TLS暗号化を利用'))) ?>
+				<?php echo $this->BcForm->error('SiteConfig.smtp_tls') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpTls', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div id="helptextSmtpTls" class="helptext">SMTPサーバーがTLS暗号化を利用する場合指定します。</div>
+			</td>
+		</tr>
 	</table>
 </div>
 
