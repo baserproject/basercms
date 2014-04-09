@@ -40,6 +40,7 @@ App::build(array(
 	'Model/Datasource' => array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
 	'Model/Datasource/Database' => array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
 	'Controller/Component' => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
+	'Controller/Component/Auth' => array_merge(App::path('Controller/Component/Auth'), array(BASER_COMPONENTS . 'Auth' . DS)),
 	'View' => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
 	'View/Helper' => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
 	'Plugin' => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
