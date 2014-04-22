@@ -67,7 +67,7 @@ if(empty($data['authorUrl'])) {
 		<?php echo $data['author'] ?>
 	<?php endif ?>
 		</div>
-		<div class="theme-description"><?php echo nl2br($data->description) ?></div>
+		<div class="theme-description"><?php echo nl2br($data['description']) ?></div>
 	</div>
 </div>
 </li>
