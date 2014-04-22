@@ -214,10 +214,7 @@ class ThemesController extends AppController {
 		$plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
 		
 		foreach ($plugins as $plugin) {
-			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
-				$result = false;
-				$this->log($dbDataPattern . " のプラグインの初期データのロードに失敗しました。");
-			}
+			$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes);
 		}
 
 		if (!$result) {
