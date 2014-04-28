@@ -39,10 +39,10 @@ class BcTextHelper extends TextHelper {
 	public $helpers = array('BcTime', 'BcForm', 'Html');
 
 /**
- * boolean型を○―マークで出力
+ * boolean型を ○ または ― マークで出力
  *
- * @param boolean
- * @return string ○―マーク
+ * @param boolean $value
+ * @return string ○ または ― 
  * @access public
  */
 	public function booleanMark($value) {
