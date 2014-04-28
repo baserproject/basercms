@@ -36,7 +36,6 @@ class BcBaserHelper extends AppHelper {
  * View
  *
  * @var View
- * @access protected
  */
 	protected $_View = null;
 
@@ -44,7 +43,6 @@ class BcBaserHelper extends AppHelper {
  * サイト基本設定
  *
  * @var array
- * @access public
  */
 	public $siteConfig = array();
 
@@ -52,7 +50,6 @@ class BcBaserHelper extends AppHelper {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray');
 
@@ -60,7 +57,6 @@ class BcBaserHelper extends AppHelper {
  * コンテンツ
  *
  * @var string
- * @access protected
  */
 	protected $_content = null;
 
@@ -68,7 +64,6 @@ class BcBaserHelper extends AppHelper {
  * カテゴリタイトル設定
  *
  * @var mixed
- * @access protected
  */
 	protected $_categoryTitleOn = true;
 
@@ -76,7 +71,6 @@ class BcBaserHelper extends AppHelper {
  * カテゴリタイトル
  *
  * @var mixed boolean Or string
- * @access protected
  */
 	protected $_categoryTitle = true;
 
@@ -84,7 +78,6 @@ class BcBaserHelper extends AppHelper {
  * ページモデル
  *
  * @var Page
- * @access public
  */
 	public $Page = null;
 
@@ -92,7 +85,6 @@ class BcBaserHelper extends AppHelper {
  * アクセス制限設定モデル
  *
  * @var Permission
- * @access public
  */
 	public $Permission = null;
 
@@ -100,7 +92,6 @@ class BcBaserHelper extends AppHelper {
  * Plugin Basers
  *
  * @var array
- * @access public
  */
 	public $pluginBasers = array();
 
@@ -692,7 +683,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $key 出力するメッセージのキー
  * @return void
- * @access public
  * @manual
  */
 	public function flash($key = 'flash') {
@@ -804,7 +794,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $type 出力ドキュメントタイプの文字列 オプションのパラメータ、初期値は 'xhtml-trans'
  * @return void
- * @access public
  */
 	public function docType($type = 'xhtml-trans') {
 
