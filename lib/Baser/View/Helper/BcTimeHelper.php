@@ -57,7 +57,7 @@ class BcTimeHelper extends TimeHelper {
  * 和暦を取得（アルファベット）
  *
  * @param string $date 和暦を表す日付文字列（s-48/5/10）
- * @return mixid string / false
+ * @return mixid 和暦　or false
  * @access public
  */
 	public function wareki($date) {
