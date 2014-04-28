@@ -482,6 +482,12 @@ table.sub-menu{
 	cursor: pointer;
 }
 
+/* edit form
+----------------------------------------------- */
+.editor-area {
+	text-align: center;
+}
+
 /* button
 ----------------------------------------------- */
 

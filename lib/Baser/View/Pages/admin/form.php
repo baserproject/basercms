@@ -447,7 +447,7 @@ function pageTypeChengeHandler() {
 	</table>
 </div>
 
-<div class="section" style="text-align:center">
+<div class="section editor-area">
 	<?php echo $this->BcForm->editor('Page.contents', array_merge(array(
 		'editor' => @$siteConfig['editor'],
 		'editorUseDraft' => true,
