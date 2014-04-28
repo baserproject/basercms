@@ -41,7 +41,7 @@ class BcTimeHelper extends TimeHelper {
 /**
  * 年号を取得
  *
- * @param string $w
+ * @param string $w 年号のローマ字表記の頭文字 m (明治） / t（大正) / s（昭和） / h（平成）
  * @return string 年号をあらわすアルファベット
  * @access public
  */
