@@ -17,7 +17,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
-  /**
+/**
  * Include files
  */
 App::uses('TextHelper', 'View/Helper');
@@ -64,9 +64,9 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * boolean型用のリストを有無で出力
+ * boolean型用のリストを「有」「無」で出力
  *
- * @return array 有無リスト
+ * @return array 「有」「無」リスト
  * @access public
  */
 	public function booleanExistsList() {
