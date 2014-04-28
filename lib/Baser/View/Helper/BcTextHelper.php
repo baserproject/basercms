@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ App::uses('BcTimeHelper', 'View/Helper');
 /**
  * Textヘルパー拡張
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcTextHelper extends TextHelper {
 
@@ -54,9 +54,9 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * boolean型用のリストを○―マークで出力
+ * boolean型用のリストを ○ ― マークで出力
  *
- * @return array ○―マークリスト
+ * @return array マークリスト（ - ○ ）
  * @access public
  */
 	public function booleanMarkList() {
