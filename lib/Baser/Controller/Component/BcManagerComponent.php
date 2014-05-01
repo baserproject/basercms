@@ -1443,23 +1443,30 @@ class BcManagerComponent extends Component {
 		// 内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
 
-		$rewritePatterns = array("/\n[^\n#]*RewriteEngine.+/i",
+		$rewritePatterns = array(
+			"/\n[^\n#]*RewriteEngine.+/i",
 			"/\n[^\n#]*RewriteBase.+/i",
 			"/\n[^\n#]*RewriteCond.+/i",
-			"/\n[^\n#]*RewriteRule.+/i");
+			"/\n[^\n#]*RewriteRule.+/i"
+		);
+		if (!$smartUrl) {
+			$rewritePatterns[] = "/\n\z/";
+		}
 		switch ($type) {
 			case 'root':
 				$rewriteSettings = array('RewriteEngine on',
 					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
 					'RewriteRule ^$ ' . APP_DIR . '/webroot/ [L]',
-					'RewriteRule (.*) ' . APP_DIR . '/webroot/$1 [L]');
+					'RewriteRule (.*) ' . APP_DIR . '/webroot/$1 [L]',
+					'');
 				break;
 			case 'webroot':
 				$rewriteSettings = array('RewriteEngine on',
 					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
 					'RewriteCond %{REQUEST_FILENAME} !-d',
 					'RewriteCond %{REQUEST_FILENAME} !-f',
-					'RewriteRule ^(.*)$ index.php [QSA,L]');
+					'RewriteRule ^(.*)$ index.php [QSA,L]',
+					'');
 				break;
 		}
 
