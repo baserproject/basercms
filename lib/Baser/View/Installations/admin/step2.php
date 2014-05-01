@@ -161,7 +161,7 @@ $(function(){
 							書き込み可
 <?php else: ?>
 							書き込み不可<br />
-							<small>SQLite を利用するには、/app/db/sqlite フォルダに書き込み権限が必要です</small>
+							<small>SQLite を利用するには、/app/db/ フォルダに書き込み権限が必要です</small>
 <?php endif ?>
 					</div>
 				</li>
