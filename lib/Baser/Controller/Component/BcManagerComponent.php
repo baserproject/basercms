@@ -1565,12 +1565,14 @@ class BcManagerComponent extends Component {
 			'phpActualVersion'	=> preg_replace('/[a-z-]/', '', phpversion()),
 			'phpGd'				=> extension_loaded('gd'),
 			'phpPdo'			=> extension_loaded('pdo'),
+			'phpXml'			=> extension_loaded('xml'),
 			'apacheRewrite'		=> $rewriteInstalled,
 		);
 		$check = array(
 			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),
 			'gdOk'			=> $status['phpGd'],
 			'pdoOk'			=> $status['phpPdo'],
+			'xmlOk'			=> $status['phpXml'],
 			'phpVersionOk'	=> version_compare(preg_replace('/[a-z-]/', '', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
 			'phpMemoryOk'	=> ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === true)
 		);

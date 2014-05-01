@@ -141,6 +141,19 @@ $(function(){
 <?php endif ?>
 					</div>
 				</li>
+				<li class='<?php if ($xmlOk) echo 'check'; else echo'failed'; ?>'>
+					DOMDocumentの利用
+					<div class="check-result">
+						<?php if ($xmlOk): ?>
+							利用可
+<?php else: ?>
+							利用不可<br />
+							<small>phpのxmlモジュールでDOMDocumentが使える必要があります</small>
+							<br />
+							<small>xmlモジュールをインストールするか有効にしてください</small>
+<?php endif ?>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</div>
