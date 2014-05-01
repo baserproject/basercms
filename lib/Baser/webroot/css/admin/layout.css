@@ -119,7 +119,9 @@ body > #Page {
 
 /* FavoriteMenu
 ----------------------------------------------- */
-
+#FavoriteArea {
+	margin-bottom: 14px;
+}
 #FavoriteMenu h2{
 	color: #FFF;
 	background: url(../../img/admin/bg_side_bar_title.png) repeat-x;
@@ -168,6 +170,16 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	border:3px dotted #CCC;
 	background: none;
 }
+
+
+/* BannerArea
+----------------------------------------------- */
+#BannerArea li {
+	margin-bottom: 2px;
+	padding-left:1px;
+	padding-right:1px;
+}
+
 
 /* ==================================================================== */
 /*    Contents

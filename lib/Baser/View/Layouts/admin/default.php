@@ -79,17 +79,7 @@
 			<div id="Wrap" class="clearfix" style="display:none">
 
 <?php if (!empty($user)): ?>
-					<div id="SideBar">
-
-						<div id="BtnSideBarOpener"></div>
-
-						<div class="cbb clearfix">
-
-					<?php $this->BcBaser->element('favorite_menu') ?>
-					<?php $this->BcBaser->element('permission') ?>
-
-							<!-- / .cbb .clearfix --></div>
-						<!-- / #SideBar --></div>
+			<?php $this->BcBaser->element('sidebar') ?>
 <?php endif ?>
 
 				<div id="Contents" class="clearfix">

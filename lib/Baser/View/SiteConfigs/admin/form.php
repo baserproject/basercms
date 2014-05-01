@@ -191,7 +191,16 @@ $(function(){
 				<?php echo $this->BcForm->input('SiteConfig.login_credit', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'))) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">ログインページに表示されているクレジット表示を利用するかどうか設定します。</div>
-<?php echo $this->BcForm->error('SiteConfig.login_credit') ?>
+				<?php echo $this->BcForm->error('SiteConfig.login_credit') ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.admin_side_banner', '管理システムサイドバーの<br />バナー表示') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.admin_side_banner', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('利用'))) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">管理システムのサイド部分にバナーを表示するかどうか設定します。</div>
+				<?php echo $this->BcForm->error('SiteConfig.admin_side_banner') ?>
 			</td>
 		</tr>
 		<tr>
