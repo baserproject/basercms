@@ -21,6 +21,7 @@
 /**
  * Include files
  */
+App::uses('FeedAppModel', 'Feed.Model');
 
 /**
  * フィード設定モデル

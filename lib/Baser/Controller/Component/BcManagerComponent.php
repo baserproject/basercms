@@ -275,6 +275,10 @@ class BcManagerComponent extends Component {
 			$this->log('ブログ記事の投稿日更新に失敗しました。');
 			$result = false;
 		}
+		if (!$this->_updateBaserNewsFeedUrl($dbConfig)) {
+			$this->log('baserCMS公式新着情報のフィードURLの更新に失敗しました。');
+			$result = false;
+		}
 		return $result;
 	}
 
@@ -338,6 +342,35 @@ class BcManagerComponent extends Component {
 		}
 	}
 
+/**
+ * baserCMS公式サイトのフィードURLを更新
+ * 
+ * @param array $dbConfig
+ * @return boolean
+ */
+	protected function _updateBaserNewsFeedUrl($dbConfig) {
+		$this->connectDb($dbConfig, 'plugin');
+		CakePlugin::load('Feed');
+		App::uses('FeedDetail', 'Feed.Model');
+		App::uses('FeedAppModel', 'Feed.Model');
+		$FeedDetail = new FeedDetail();
+		$datas = $FeedDetail->find('all', array('recursive' => -1));
+		if($datas) {
+			$ret = true;
+			foreach($datas as $data) {
+				if($data['FeedDetail']['url'] == 'http://basercms.net/news/index.rss') {
+					$data['FeedDetail']['url'] .= '?site=' . siteUrl();
+				}
+				$FeedDetail->set($data);
+				if (!$FeedDetail->save($data)) {
+					$ret = false;
+				}
+			}
+			return $ret;
+		} else {
+			return false;
+		}
+	}
 /**
  * サイト基本設定に管理用メールアドレスを登録する
  * 
