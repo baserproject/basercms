@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -25,7 +25,7 @@ App::uses('BcFormHelper', 'View/Helper');
 App::uses('BcUploadHelper', 'View/Helper');
 
 /**
- * @package baser.view.helpers
+ * @package Baser.View.Helper
  */
 class BcFreezeHelper extends BcFormHelper {
 

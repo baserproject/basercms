@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.models
+ * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ App::uses('EmailComponent', 'Controller/Component');
 /**
  * Email 拡張モデル
  *
- * @package baser.plugins.feed.controller.components
+ * @package Baser.Controller.Component
  */
 class BcEmailComponent extends EmailComponent {
 

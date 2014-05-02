@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.views.helpers
+ * @package			Baser.Plugin.Feed.View.Helper
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -22,7 +22,7 @@
 /**
  * フィードBaserヘルパー
  *
- * @package baser.plugins.feed.views.helpers
+ * @package Baser.Plugin.Feed.View.Helper
  *
  */
 class FeedBaserHelper extends AppHelper {

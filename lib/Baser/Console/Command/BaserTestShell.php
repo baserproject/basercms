@@ -10,6 +10,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Console.Command
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  * 

@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Baser.Plugin.Blog.Controller
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -25,7 +25,7 @@
 /**
  * ブログタグコントローラー
  *
- * @package baser.plugins.blog.controllers
+ * @package Baser.Plugin.Blog.Controller
  */
 class BlogTagsController extends BlogAppController {
 

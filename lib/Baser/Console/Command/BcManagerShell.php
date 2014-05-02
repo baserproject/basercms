@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.vendors.shells
+ * @package			Baser.Console.Command
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -27,7 +27,7 @@ App::uses('BcManagerComponent', 'Controller/Component');
 /**
  * インストール用シェルスクリプト
  * 
- * @package baser.vendors.shells
+ * @package Baser.Console.Command
  */
 class BcManagerShell extends BcAppShell {
 

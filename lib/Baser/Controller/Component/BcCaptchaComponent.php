@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.models
+ * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -20,6 +20,11 @@
  */
 App::import('Vendor', 'kcaptcha/kcaptcha');
 
+/**
+ * キャプチャコンポーネント
+ *
+ * @package Baser.Controller.Component
+ */
 class BcCaptchaComponent extends Component {
 
 /**

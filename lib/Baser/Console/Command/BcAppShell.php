@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.vendors.shells
+ * @package			Baser.Console.Command
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -34,7 +34,7 @@
  * [phpにパスが通っていない場合]
  * /absolute/path/to/php /absolute/path/to/cake/console/cake.php -app /absolute/path/to/myapp bc_manager install
  * 
- * @package baser.vendors.shells
+ * @package Baser.Console.Command
  */
 class BcAppShell extends AppShell {
 

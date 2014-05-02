@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.controllers
+ * @package			Baser.Plugin.Mail.Controller
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -22,7 +22,7 @@
 /**
  * 受信メールコントローラー
  *
- * @package baser.plugins.mail.controllers
+ * @package Baser.Plugin.Mail.Controller
  */
 class MailMessagesController extends MailAppController {
 

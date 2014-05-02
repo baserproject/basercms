@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views.helpers
+ * @package			Baser.Plugin.Mail.View.Helper
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -27,7 +27,7 @@ App::uses('BcFreezeHelper', 'Mail.View/Helper');
 /**
  * メールフォームヘルパー
  *
- * @package baser.plugins.mail.views.helpers
+ * @package Baser.Plugin.Mail.View.Helper
  *
  */
 class MailformHelper extends BcFreezeHelper {

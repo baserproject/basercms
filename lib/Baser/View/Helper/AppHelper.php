@@ -16,7 +16,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -31,7 +31,7 @@ App::uses('BcAppHelper', 'View/Helper');
 /**
  * Helper 拡張クラス
  *
- * @package baser.view.helpers
+ * @package Baser.View.Helper
  */
 class AppHelper extends BcAppHelper {
 	

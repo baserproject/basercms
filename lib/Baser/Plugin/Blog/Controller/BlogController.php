@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Baser.Plugin.Blog.Controller
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ App::uses('BlogAppController', 'Blog.Controller');
 /**
  * ブログ記事コントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package			Baser.Plugin.Blog.Controller
  */
 class BlogController extends BlogAppController {
 

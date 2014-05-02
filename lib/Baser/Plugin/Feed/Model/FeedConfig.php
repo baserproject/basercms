@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.models
+ * @package			Baser.Plugin.Feed.Model
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ App::uses('FeedAppModel', 'Feed.Model');
 /**
  * フィード設定モデル
  *
- * @package baser.plugins.feed.models
+ * @package Baser.Plugin.Feed.Model
  */
 class FeedConfig extends FeedAppModel {
 
