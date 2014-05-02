@@ -25,7 +25,7 @@
 /**
  * ブログ設定コントローラー
  *
- * @package Baser.Plugin.Blog.Controller
+ * @package Blog.Controller
  */
 class BlogConfigsController extends BlogAppController {
 

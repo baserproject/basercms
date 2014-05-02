@@ -26,7 +26,7 @@ App::uses('Xml', 'Utility');
 /**
  * 記事コントローラー
  *
- * @package Baser.Plugin.Blog.Controller
+ * @package Blog.Controller
  */
 class BlogPostsController extends BlogAppController {
 

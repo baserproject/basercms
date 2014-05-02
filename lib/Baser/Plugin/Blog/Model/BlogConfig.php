@@ -26,7 +26,7 @@ App::uses('BlogAppModel', 'Blog.Model');
 /**
  * ブログ設定モデル
  *
- * @package Baser.Plugin.Blog.Model
+ * @package Blog.Model
  */
 class BlogConfig extends BlogAppModel {
 

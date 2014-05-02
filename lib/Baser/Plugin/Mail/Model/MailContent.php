@@ -22,7 +22,7 @@
 /**
  * メールコンテンツモデル
  *
- * @package Baser.Plugin.Mail.Model
+ * @package Mail.Model
  *
  */
 class MailContent extends MailAppModel {

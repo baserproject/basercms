@@ -22,7 +22,7 @@
 /**
  * フィードBaserヘルパー
  *
- * @package Baser.Plugin.Feed.View.Helper
+ * @package Feed.View.Helper
  *
  */
 class FeedBaserHelper extends AppHelper {

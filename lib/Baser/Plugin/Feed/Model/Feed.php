@@ -24,7 +24,7 @@ App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . 
 /**
  * フィード読込モデル
  *
- * @package Baser.Plugin.Feed.Model
+ * @package Feed.Model
  */
 class Feed extends FeedAppModel {
 	

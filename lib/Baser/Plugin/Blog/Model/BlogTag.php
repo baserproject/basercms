@@ -26,7 +26,7 @@ App::uses('BlogAppModel', 'Blog.Model');
 /**
  * ブログタグモデル
  *
- * @package Baser.Plugin.Blog.Model
+ * @package Blog.Model
  */
 class BlogTag extends BlogAppModel {
 

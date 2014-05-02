@@ -22,7 +22,7 @@
 /**
  * メール設定モデル
  *
- * @package Baser.Plugin.Mail.Model
+ * @package Mail.Model
  *
  */
 class MailConfig extends MailAppModel {

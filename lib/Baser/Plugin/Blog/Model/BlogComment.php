@@ -26,7 +26,7 @@ App::uses('BlogAppModel', 'Blog.Model');
 /**
  * ブログコメントモデル
  *
- * @package Baser.Plugin.Blog.Model
+ * @package Blog.Model
  */
 class BlogComment extends BlogAppModel {
 

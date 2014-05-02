@@ -25,7 +25,7 @@
 /**
  * メールフィールドコントローラー
  *
- * @package Baser.Plugin.Mail.Controller
+ * @package Mail.Controller
  */
 class MailFieldsController extends MailAppController {
 

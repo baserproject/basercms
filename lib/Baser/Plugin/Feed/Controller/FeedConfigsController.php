@@ -25,7 +25,7 @@
 /**
  * フィード設定コントローラー
  *
- * @package Baser.Plugin.Feed.Controller
+ * @package Feed.Controller
  */
 class FeedConfigsController extends FeedAppController {
 

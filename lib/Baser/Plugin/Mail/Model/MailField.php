@@ -22,7 +22,7 @@
 /**
  * メールフィールドモデル
  *
- * @package Baser.Plugin.Mail.Model
+ * @package Mail.Model
  *
  */
 class MailField extends MailAppModel {

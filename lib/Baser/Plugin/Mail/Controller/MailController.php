@@ -25,7 +25,7 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * @package Baser.Plugin.Mail.Controller
+ * @package Mail.Controller
  */
 class MailController extends MailAppController {
 

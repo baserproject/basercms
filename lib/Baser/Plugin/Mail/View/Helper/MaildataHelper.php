@@ -26,7 +26,7 @@ App::uses('BcTextHelper', 'View/Helper');
 /**
  * メールデータヘルパー
  *
- * @package Baser.Plugin.Mail.View.Helper
+ * @package Mail.View.Helper
  *
  */
 class MaildataHelper extends BcTextHelper {

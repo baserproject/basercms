@@ -28,7 +28,7 @@ App::uses('MailContent', 'Mail.Model');
 /**
  * メッセージモデル
  *
- * @package Baser.Plugin.Mail.Model
+ * @package Mail.Model
  *
  */
 class Message extends MailAppModel {

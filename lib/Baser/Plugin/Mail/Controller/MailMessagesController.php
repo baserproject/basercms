@@ -22,7 +22,7 @@
 /**
  * 受信メールコントローラー
  *
- * @package Baser.Plugin.Mail.Controller
+ * @package Mail.Controller
  */
 class MailMessagesController extends MailAppController {
 

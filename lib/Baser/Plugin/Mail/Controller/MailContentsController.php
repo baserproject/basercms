@@ -25,7 +25,7 @@
 /**
  * メールコンテンツコントローラー
  *
- * @package Baser.Plugin.Mail.Controller
+ * @package Mail.Controller
  */
 class MailContentsController extends MailAppController {
 

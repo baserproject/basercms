@@ -27,7 +27,7 @@ App::uses('BcFreezeHelper', 'Mail.View/Helper');
 /**
  * メールフォームヘルパー
  *
- * @package Baser.Plugin.Mail.View.Helper
+ * @package Mail.View.Helper
  *
  */
 class MailformHelper extends BcFreezeHelper {

@@ -22,7 +22,7 @@
 /**
  * BlogBaserヘルパー
  *
- * @package Baser.Plugin.Blog.View.Helper
+ * @package Blog.View.Helper
  *
  */
 class BlogBaserHelper extends AppHelper {

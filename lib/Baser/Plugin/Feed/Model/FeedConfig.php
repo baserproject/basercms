@@ -26,7 +26,7 @@ App::uses('FeedAppModel', 'Feed.Model');
 /**
  * フィード設定モデル
  *
- * @package Baser.Plugin.Feed.Model
+ * @package Feed.Model
  */
 class FeedConfig extends FeedAppModel {
 

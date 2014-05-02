@@ -25,7 +25,7 @@
 /**
  * フィードヘルパー
  *
- * @package Baser.Plugin.Feed.View.Helper
+ * @package Feed.View.Helper
  *
  */
 class FeedHelper extends BcTextHelper {

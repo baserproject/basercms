@@ -25,7 +25,7 @@
 /**
  * ブログコメントコントローラー
  *
- * @package Baser.Plugin.Blog.Controller
+ * @package Blog.Controller
  */
 class BlogCommentsController extends BlogAppController {
 

@@ -25,7 +25,7 @@
 /**
  * メールフィールドヘルパー
  *
- * @package Baser.Plugin.Mail.View.Helper
+ * @package Mail.View.Helper
  *
  */
 class MailfieldHelper extends AppHelper {
