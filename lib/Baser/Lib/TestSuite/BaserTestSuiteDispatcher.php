@@ -17,7 +17,7 @@ require_once CAKE . 'TestSuite' . DS . 'CakeTestSuiteDispatcher.php';
 App::uses('BaserTestSuiteCommand', 'TestSuite');
 
 /**
- * @package Baser.TestSuite
+ * @package Baser.Lib.TestSuite
  */
 class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 

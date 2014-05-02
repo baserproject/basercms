@@ -17,7 +17,7 @@ App::uses('CakeTestSuiteCommand', 'TestSuite');
 App::uses('BaserTestLoader', 'TestSuite');
 
 /**
- * @package Baser.TestSuite
+ * @package Baser.Lib.TestSuite
  */
 class BaserTestSuiteCommand extends CakeTestSuiteCommand {
 

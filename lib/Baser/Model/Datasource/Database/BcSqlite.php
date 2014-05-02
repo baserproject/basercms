@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model.datasources.dbo
+ * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -28,7 +28,7 @@ App::uses('CakeSchema', 'Model');
 /**
  * SQLite DBO拡張
  *
- * @package Baser.Model.datasources.dbo
+ * @package Baser.Model.Datasource.Database
  */
 class BcSqlite extends Sqlite {
 

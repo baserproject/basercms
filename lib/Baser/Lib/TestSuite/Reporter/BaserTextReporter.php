@@ -16,7 +16,7 @@
 App::uses('CakeTextReporter', 'TestSuite/Reporter');
 
 /**
- * @package Baser.TestSuite.Reporter
+ * @package Baser.Lib.TestSuite.Reporter
  */
 class BaserTextReporter extends CakeTextReporter {
 

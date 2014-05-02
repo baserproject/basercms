@@ -21,7 +21,7 @@
  *
  * @copyright	  Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link		  http://cakephp.org CakePHP(tm) Project
- * @package		  Cake.Routing
+ * @package		  Baser.Routing.Filter
  * @since		  CakePHP(tm) v 2.2
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -31,7 +31,7 @@ App::uses('DispatcherFilter', 'Routing');
  * Filters a request and tests whether it is a file in the webroot folder or not and
  * serves the file to the client if appropriate.
  *
- * @package Cake.Routing.Filter
+ * @package Baser.Routing.Filter
  */
 class BcAssetDispatcher extends DispatcherFilter {
 

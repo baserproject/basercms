@@ -25,7 +25,7 @@
 /**
  * XMLヘルパー拡張
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcXmlHelper extends AppHelper {
 

@@ -26,7 +26,7 @@ App::uses('Form', 'View/Helper');
 /**
  * ArrayHelper
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcArrayHelper extends AppHelper {
 

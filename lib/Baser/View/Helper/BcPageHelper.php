@@ -23,7 +23,7 @@ App::uses('Helper', 'View');
 /**
  * ページヘルパー
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcPageHelper extends Helper {
 

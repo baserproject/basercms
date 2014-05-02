@@ -14,7 +14,7 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Cake.Model.Datasource
+ * @package       Baser.Model.Datasource
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -29,7 +29,7 @@ App::uses('CakeSchema', 'Model'); // CUSTOMIZE ADD 2012/11/04 itm_kiyo
  *
  * Creates DBO-descendant objects from a given db connection configuration
  *
- * @package       Cake.Model.Datasource
+ * @package       Baser.Model.Datasource
  */
 
 class DboSource extends DataSource {

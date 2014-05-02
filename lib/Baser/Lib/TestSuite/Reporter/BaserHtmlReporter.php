@@ -16,7 +16,7 @@
 App::uses('CakeHtmlReporter', 'TestSuite/Reporter');
 
 /**
- * @package Baser.TestSuite.Reporter
+ * @package Baser.Lib.TestSuite.Reporter
  */
 class BaserHtmlReporter extends CakeHtmlReporter {
 

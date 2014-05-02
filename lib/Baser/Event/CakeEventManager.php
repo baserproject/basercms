@@ -11,7 +11,7 @@
  *
  * @copyright	  Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link		  http://cakephp.org CakePHP(tm) Project
- * @package		  Cake.Event
+ * @package		  Baser.Event
  * @since		  CakePHP(tm) v 2.1
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -24,7 +24,7 @@ App::uses('CakeEventListener', 'Event');
  * can create multiple instances of this object to manage local events or keep a single instance
  * and pass it around to manage all events in your app.
  *
- * @package Cake.Event
+ * @package Baser.Event
  */
 class CakeEventManager {
 

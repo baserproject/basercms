@@ -11,7 +11,7 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Cake.Model
+ * @package       Baser.Model
  * @since         CakePHP(tm) v 1.2.0.5550
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -24,7 +24,7 @@ App::uses('File', 'Utility');
 /**
  * Base Class for Schema management
  *
- * @package       Cake.Model
+ * @package       Baser.Model
  */
 class CakeSchema extends Object {
 

@@ -22,7 +22,7 @@
 /**
  * モバイルヘルパー
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcMobileHelper extends Helper {
 

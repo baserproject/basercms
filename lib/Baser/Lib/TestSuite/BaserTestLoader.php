@@ -16,7 +16,7 @@
 App::uses('CakeTestLoader', 'TestSuite');
 
 /**
- * @package Baser.TestSuite
+ * @package Baser.Lib.TestSuite
  */
 class BaserTestLoader extends CakeTestLoader {
 

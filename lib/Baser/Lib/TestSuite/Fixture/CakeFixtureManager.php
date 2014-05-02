@@ -13,7 +13,7 @@
  *
  * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Cake.TestSuite.Fixture
+ * @package       Baser.Lib.TestSuite.Fixture
  * @since         CakePHP(tm) v 2.0
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
@@ -23,7 +23,7 @@ App::uses('ClassRegistry', 'Utility');
 /**
  * A factory class to manage the life cycle of test fixtures
  *
- * @package       Cake.TestSuite.Fixture
+ * @package       Baser.Lib.TestSuite.Fixture
  */
 class CakeFixtureManager {
 
