@@ -180,7 +180,8 @@ class UserGroup extends AppModel {
 			$result['UserGroup']['id'] = $this->getInsertID();
 			if ($recursive) {
 				$permissions = $this->Permission->find('all', array(
-					'conditions' => array('Permission.user_group_id' => $id),
+					'conditions'=> array('Permission.user_group_id' => $id),
+					'order'		=> array('Permission.sort'),
 					'recursive' => -1
 				));
 				if ($permissions) {
