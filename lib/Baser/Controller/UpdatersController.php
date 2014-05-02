@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * アップデーターコントローラー
  *
@@ -109,20 +107,15 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		Baser.Controller
+ * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * アップデーターコントローラー
+ * 
+ * @package	Baser.Controller
  */
 class UpdatersController extends AppController {
 

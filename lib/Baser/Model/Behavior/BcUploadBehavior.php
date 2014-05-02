@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * ファイルアップロードビヘイビア
  *
@@ -13,10 +11,10 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ */
+/**
+ * Include files
  */
 App::uses('Imageresizer', 'Vendor');
 
@@ -49,7 +47,7 @@ App::uses('Imageresizer', 'Vendor');
  *   )
  * );
  *  
- * @subpackage Baser.Model.Behavior
+ * @package Baser.Model.Behavior
  */
 class BcUploadBehavior extends ModelBehavior {
 

@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * 起動スクリプト
  *
@@ -11,11 +9,8 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.config
+ * @package			Baser.Config
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**

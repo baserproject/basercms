@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * コンテンツコントローラー
  *
@@ -13,9 +11,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('HttpSocket', 'Core.Network/Http');
@@ -23,8 +18,7 @@ App::uses('HttpSocket', 'Core.Network/Http');
 /**
  * コンテンツコントローラー
  *
- * @package cake
- * @subpackage cake.Baser.Controller
+ * @package	Baser.Controller
  */
 class ContentsController extends AppController {
 

@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * Baserヘルパー
  *
@@ -11,12 +9,8 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		baser.app.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -27,8 +21,7 @@ App::uses('AppHelper', 'View/Helper');
 /**
  * Baserヘルパー
  *
- * @package cake
- * @subpackage Baser.View.Helper
+ * @package Baser.View.Helper
  */
 class BcBaserHelper extends AppHelper {
 

@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * 固定ページコントローラー
  *
@@ -13,17 +11,13 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * 固定ページコントローラー
  *
- * @package cake
- * @subpackage cake.Baser.Controller
+ * @package Baser.Controller
  */
 class PagesController extends AppController {
 
