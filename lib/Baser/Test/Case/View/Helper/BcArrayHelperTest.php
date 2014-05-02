@@ -22,7 +22,7 @@ App::uses('AppHelper', 'View/Helper');
  *
  * 管理画面用のヘルパー
  *
- * @package       Baser.Test.Case
+ * @package       Baser.Test.Case.View.Helper
  * @property      BcAdminHelper $Helper
  */
 class BcArrayHelperTest extends CakeTestCase {

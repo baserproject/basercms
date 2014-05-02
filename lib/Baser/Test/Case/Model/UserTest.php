@@ -15,13 +15,17 @@
  */
 App::uses('User', 'Model');
 
-//class NonAssosiationUser extends User {
-//	public $name = 'User';
-//
-//	public $belongsTo = array();
-//	public $hasMany = array();
-//}
-
+/**
+ * UserTest class
+ * 
+ * class NonAssosiationUser extends User {
+ *	public $name = 'User';
+ *	public $belongsTo = array();
+ *	public $hasMany = array();
+ * }
+ * 
+ * @package Baser.Test.Case.Model
+ */
 class UserTest extends CakeTestCase {
 
 	public $fixtures = array(

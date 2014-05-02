@@ -23,7 +23,8 @@ App::uses('EditorTemplate', 'Model');
 
 /**
  * TestController class
- *
+ * 
+ * @package Baser.Test.Case.View.Helper
  */
 class TestController extends BcAppController {
 

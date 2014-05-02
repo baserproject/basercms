@@ -22,7 +22,7 @@ App::uses('AppHelper', 'View/Helper');
 /**
  * text helper library.
  *
- * @package Baser.Test.Case
+ * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
  */
 class BcTextHelperTest extends CakeTestCase {

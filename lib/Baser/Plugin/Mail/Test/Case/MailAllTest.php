@@ -15,7 +15,7 @@
  */
 
 /**
- * @package Baser.Test.Case
+ * @package Baser.Plugin.Mail.Test.Case
  */
 class MailAllTest extends PHPUnit_Framework_TestSuite {
 
