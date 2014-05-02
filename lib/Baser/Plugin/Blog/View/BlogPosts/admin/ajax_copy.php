@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Plugin.Blog.View
+ * @package			Blog.View
  * @since			baserCMS v 2.0.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$

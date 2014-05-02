@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Plugin.Mail.Model
+ * @package			Mail.Model
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ App::uses('BcPluginAppModel', 'Model');
 /**
  * メールプラグインモデル根底クラス
  *
- * @package			Baser.Plugin.Mail.Model
+ * @package			Mail.Model
  */
 class MailAppModel extends BcPluginAppModel {
 

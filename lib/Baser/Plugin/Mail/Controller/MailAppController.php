@@ -11,7 +11,7 @@
  *
  * @copyright		Copyright 2008 - 2013, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Plugin.Mail.Controller
+ * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
  * @version			$Revision$
  * @modifiedby		$LastChangedBy$
@@ -26,7 +26,7 @@ App::uses('BcPluginAppController', 'Controller');
 /**
  * メールプラグインコントローラー根底クラス
  *
- * @package			Baser.Plugin.Mail.Controller
+ * @package			Mail.Controller
  */
 class MailAppController extends BcPluginAppController {
 }
