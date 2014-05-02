@@ -7,7 +7,7 @@
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- * @package         Baser.Plugin.Mail.Test.Case
+ * @package         Mail.Test.Case
  * @copyright       Copyright 2008 - 2013, baserCMS Users Community
  * @link            http://basercms.net baserCMS Project
  * @since           baserCMS v 3.0.0-beta
