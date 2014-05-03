@@ -32,7 +32,13 @@
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>
-	<td><?php $this->BcBaser->link($data['UserGroup']['name'], array('action' => 'edit', $data['UserGroup']['id'])) ?></td>
+	<td><?php $this->BcBaser->link($data['UserGroup']['name'], array('action' => 'edit', $data['UserGroup']['id'])) ?>
+		<?php if ($data['User']): ?><br />
+			<?php foreach ($data['User'] as $user): ?>
+				<span class="tag"><?php $this->BcBaser->link($user['name'], array('controller' => 'users', 'action' => 'edit', $user['id'])) ?></span>
+			<?php endforeach ?>
+		<?php endif ?>
+	</td>
 	<td><?php echo $data['UserGroup']['title'] ?></td>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['modified']) ?></td>
