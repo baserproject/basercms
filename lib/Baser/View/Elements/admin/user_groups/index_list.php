@@ -18,6 +18,11 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+$(function () {
+	$('.tag a').css({'text-decoration': 'none'})
+});
+</script>
 
 <!-- pagination -->
 <?php $this->BcBaser->element('pagination') ?>
