@@ -1869,9 +1869,11 @@ class BcManagerComponent extends Component {
 			include $configPath;
 		}
 
-		if(!$title) {
+		if(empty($title)) {
 			if(!empty($data['Plugin']['title'])) {
 				$title = $data['Plugin']['title'];
+			} else {
+				$title = $name;
 			}
 		}
 		
