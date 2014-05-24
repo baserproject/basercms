@@ -1984,4 +1984,81 @@ END_FLASH;
 		echo $this->getBaseUrl();
 	}
 	
+/**
+ * サブメニューを出力する
+ * 
+ * @return void
+ */
+	public function subMenu() {
+		if (!$this->_View->getVar('subMenuElements')) {
+			return;
+		}
+		$this->element('sub_menu');
+	}
+	
+/**
+ * コンテンツナビを出力する
+ * 
+ * @return void
+ */
+	public function contentsNavi() {
+		if (!isset($this->_View->BcPage) || !$this->_View->BcPage->contensNaviAvailable()) {
+			return;
+		}
+		$this->element('contents_navi');
+	}
+	
+/**
+ * パンくずリストを出力する
+ * 
+ * @return void
+ */
+	public function crumbsList() {
+		$this->element('contents_navi');
+	}
+
+/**
+ * グローバルメニューを出力する
+ * 
+ * @return void
+ */
+	public function globalMenu() {
+		$this->element('global_menu');
+	}
+	
+/**
+ * Google Analytics のトラッキングコードを出力する
+ * 
+ * @return void
+ */
+	public function googleAnalytics() {
+		$this->element('google_analytics');
+	}
+	
+/**
+ * Google Maps を出力する
+ * 
+ * @return void
+ */
+	public function googleMaps() {
+		$this->element('google_maps');
+	}
+	
+/**
+ * 表示件数設定機能を出力する
+ * 
+ * @return void
+ */
+	public function listNum() {
+		$this->element('list_num');
+	}
+	
+/**
+ * サイト内検索フォームを出力
+ * 
+ * @return void
+ */
+	public function siteSearchForm() {
+		$this->element('site_search_form');
+	}
 }

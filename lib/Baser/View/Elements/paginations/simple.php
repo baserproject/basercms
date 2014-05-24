@@ -17,6 +17,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->patination() で呼び出す
+ */
+
 if (empty($this->Paginator)) {
 	return;
 }
@@ -24,6 +29,8 @@ if (!isset($modules)) {
 	$modules = 8;
 }
 ?>
+
+
 <?php if ((int) $this->Paginator->counter(array('format' => '%pages%')) > 1): ?>
 	<div class="pagination">
 		<?php echo $this->Paginator->prev('< 前へ', array('class' => 'prev'), null, array('class' => 'disabled')) ?>

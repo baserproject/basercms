@@ -18,4 +18,9 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->listNum() で呼び出す
+ */
+
 include BASER_VIEWS . 'Elements' . DS . 'admin' . DS . 'list_num' . $this->ext;

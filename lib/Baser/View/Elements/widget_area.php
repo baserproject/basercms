@@ -3,10 +3,6 @@
 /**
  * [PUBLISH] ウィジェットエリア
  *
- * no を引き数で渡して利用する
- * <?php $this->BcBaser->element('widget_areas',array('no'=>1)) ?>
- *
- *
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -21,6 +17,12 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
+ * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
+ */
+
 if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
@@ -56,4 +58,3 @@ if (!empty($no)) {
 		<?php
 	}
 }
-?>

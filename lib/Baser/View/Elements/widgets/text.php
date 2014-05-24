@@ -17,7 +17,14 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
+ * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
+ */
 ?>
+
+
 <div class="widget widget-text widget-text-<?php echo $id ?>">
 	<?php if ($name && $use_title): ?>
 		<h2><?php echo $name ?></h2>

@@ -17,6 +17,11 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * エレメント：local_navi より呼び出す
+ */
+
 $pages = $this->BcBaser->getPageList($categoryId);
 $current = str_replace($this->request->base, '', $this->request->here);
 ?>

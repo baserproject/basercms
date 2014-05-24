@@ -18,9 +18,11 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<div class="side-navi">
+
+
+<div class="sub-menu-contents">
 	<h2>ログインメニュー</h2>
 	<ul>
-		<li><?php $this->BcBaser->link('管理者ログイン', array('plugin' => null, 'controller' => 'users', 'action' => 'login'), array('target' => '_blank')) ?></li>
+		<li><?php $this->BcBaser->link('管理者ログイン', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login'), array('target' => '_blank')) ?></li>
 	</ul>
 </div>

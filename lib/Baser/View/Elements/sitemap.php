@@ -3,9 +3,6 @@
 /**
  * [PUBLISH] サイトマップ
  * 
- * カテゴリの階層構造を表現する為、再帰呼び出しを行う
- * $this->BcBaser->sitemap() で呼び出す
- * 
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -20,6 +17,12 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * カテゴリの階層構造を表現する為、再帰呼び出しを行う
+ * $this->BcBaser->sitemap() で呼び出す
+ */
+		 
 if (!isset($recursive)) {
 	$recursive = 1;
 }

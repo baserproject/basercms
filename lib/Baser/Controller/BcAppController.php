@@ -336,7 +336,7 @@ class BcAppController extends Controller {
 			// ユーザーの存在チェック
 			$user = $this->BcAuth->user();
 
-			if ($user) {
+		if (!empty($user['id'])) {
 				$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 				if ($userModel) {
 					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(

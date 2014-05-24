@@ -1,5 +1,4 @@
 <?php
-
 /* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ナビゲーション
@@ -20,6 +19,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 if ($this->BcBaser->isHome()) {
 	echo '<strong>ホーム</strong>';
 } else {

@@ -16,7 +16,11 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ * @deprecated since version 3.0.3
  */
+
+deprecated('テンプレート：search.php', '3.0.3', '3.1.0', '$this->BcBaser->siteSearchForm() を利用してください。');
+
 if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }

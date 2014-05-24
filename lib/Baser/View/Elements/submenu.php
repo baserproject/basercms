@@ -1,8 +1,7 @@
 <?php
-
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] サイドメニュー
+ * [PUBLISH] サブメニュー
  * 
  * PHP versions 5
  *
@@ -17,7 +16,11 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ * @deprecated since version 3.0.3
  */
+
+deprecated('テンプレート：submenu.php', '3.0.3', '3.1.0', '$this->BcBaser->subMenu() を利用してください。');
+
 $elementPath = 'submenus' . DS;
 if (!empty($subMenuElements)) {
 	foreach ($subMenuElements as $subMenuElement) {

@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] Google Analytics
+ * [PUBLISH] Google Analytics トラッキングコード
  *
  * PHP versions 5
  *
@@ -17,7 +17,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->googleAnalytics() で呼び出す
+ */
 ?>
+
+
 <?php if (!empty($siteConfig['google_analytics_id'])): ?>
 <script type="text/javascript">
 

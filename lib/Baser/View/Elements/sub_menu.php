@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] サイドバー
+ * [PUBLISH] サブメニュー
  * 
  * PHP versions 5
  *
@@ -17,9 +17,13 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->subMenu() 経由で呼び出す
+ */
 ?>
 
 
-<div id="beta">
-	<?php //$this->BcBaser->widgetArea() ?>
-</div>
+<?php foreach ($subMenuElements as $subMenuElement): ?>
+	<?php $this->BcBaser->element('submenus' . DS . $subMenuElement) ?>
+<?php endforeach ?>

@@ -17,11 +17,7 @@
  * @modifiedby		$LastChangedBy$
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- * @deprecated since version 3.0.3
  */
-
-deprecated('テンプレート：googlemaps.php', '3.0.3', '3.1.0', '$this->BcBaser->googleMaps() を利用してください。');
-
 $_width = 600;
 $_height = 400;
 $_zoom = 16;

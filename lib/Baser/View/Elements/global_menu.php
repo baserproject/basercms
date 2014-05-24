@@ -17,6 +17,7 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
 if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }

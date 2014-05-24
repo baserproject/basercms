@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] ページカテゴリリスト
+ * [PUBLISH] 固定ページローカルナビゲーション
  *
  * PHP versions 5
  *
@@ -17,11 +17,19 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+if (!isset($this->BcPage)) {
+	return;
+}
 $pageCategory = $this->BcPage->getCategory();
+if(!$pageCategory) {
+	return;
+}
 ?>
-<?php if ($pageCategory): ?>
-	<div id="local-navi">
-		<h2><?php echo $pageCategory['title'] ?></h2>
-		<?php $this->BcBaser->element('page_list', array('categoryId' => $pageCategory['id'])) ?>
-	</div>
-<?php endif; ?>
+
+
+<div class="local-navi">
+	<h2><?php echo $pageCategory['title'] ?></h2>
+	<?php $this->BcBaser->element('page_list', array('categoryId' => $pageCategory['id'])) ?>
+</div>
+

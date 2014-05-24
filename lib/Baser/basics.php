@@ -908,3 +908,28 @@ function loadPlugin($plugin, $priority) {
 	}
 	return true;
 }
+
+/**
+ * 後方互換の為の非推奨メッセージをWarningとして表示する
+ * 
+ * @param string $target 非推奨の対象
+ * @param string $since 非推奨となったバージョン
+ * @param string $remove 削除予定のバージョン
+ * @param string $note その他特記事項
+ * @return void
+ */
+function deprecated($target, $since, $remove = null, $note = null) {
+
+	if(Configure::read('debug') == 0) {
+		return;
+	}
+	$message = $target . 'は、バージョン ' . $since . ' より被推奨となりました。';
+	if($remove) {
+		$message .= 'バージョン ' . $remove . ' で削除される予定です。';
+	}
+	if($note) {
+		$message .= $note;
+	}
+	trigger_error($message, E_USER_WARNING);
+
+}

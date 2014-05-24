@@ -1,7 +1,7 @@
 <?php
 /* SVN FILE: $Id$ */
 /**
- * [PUBLISH] ページナビゲーション
+ * [PUBLISH] 固定ページコンテンツナビゲーション
  *
  * PHP versions 5
  *
@@ -17,9 +17,10 @@
  * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if (!isset($this->BcPage) || !$this->BcPage->contensNaviAvailable()) {
-	return;
-}
+
+/**
+ * $this->BcBaser->contentsNavi() で呼び出す
+ */
 ?>
 
 <div id="ContentsNavi">
