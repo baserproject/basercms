@@ -274,6 +274,17 @@ class BcUploadBehavior extends ModelBehavior {
 							}
 						}
 
+						// ファイルをリサイズ
+						if (!empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
+							if (!empty($field['imageresize']['thumb'])) {
+								$thumb = $field['imageresize']['thumb'];
+							} else {
+								$thumb = false;
+							}
+							$filePath = $this->savePath[$Model->alias] . $fileName;
+							$this->resizeImage($filePath, $filePath, $field['imageresize']['width'], $field['imageresize']['height'], $thumb);
+						}
+
 						// 一時ファイルを削除
 						@unlink($Model->data[$Model->name][$field['name']]['tmp_name']);
 						// フィールドの値をファイル名に更新
@@ -384,19 +395,8 @@ class BcUploadBehavior extends ModelBehavior {
 		$filePath = $this->savePath[$Model->alias] . $fileName;
 
 		if (!$this->tmpId) {
-
 			if (copy($file['tmp_name'], $filePath)) {
-
 				chmod($filePath, 0666);
-				// ファイルをリサイズ
-				if (!empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
-					if (!empty($field['imageresize']['thumb'])) {
-						$thumb = $field['imageresize']['thumb'];
-					} else {
-						$thumb = false;
-					}
-					$this->resizeImage($filePath, $filePath, $field['imageresize']['width'], $field['imageresize']['height'], $thumb);
-				}
 				$ret = $fileName;
 			} else {
 				$ret = false;
