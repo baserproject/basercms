@@ -229,4 +229,23 @@ class MailHelper extends AppHelper {
 		}
 	}
 
+/**
+ * メールフォームへのリンクを生成する
+ * 
+ * @param string $title リンクのタイトル
+ * @param string $contentsName メールフォームのコンテンツ名
+ * @param array $datas メールフォームに引き継ぐデータ
+ * @param array $options a タグのオプション設定
+ */
+	public function link($title, $contentsName, $datas, $options) {
+		
+		if($datas && is_array($datas)) {
+			foreach($datas as $key => $data) {
+				$datas[$key] = str_replace('/', '{slash}', $data);
+			}
+		}
+		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
+		$this->BcBaser->link($title, $link, $options);
+		
+	}
 }
