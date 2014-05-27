@@ -289,7 +289,7 @@ class BcUploadHelper extends FormHelper {
 			}
 		}
 
-		if ($noimage) {
+		if ($fileName == $noimage) {
 			$mostSizeUrl = $fileName;
 		} elseif ($tmp) {
 			$mostSizeUrl = $fileUrl . $fileName;
@@ -349,7 +349,7 @@ class BcUploadHelper extends FormHelper {
 			}
 		}
 
-		if ($link && !$noimage) {
+		if ($link && !($noimage == $fileName)) {
 			return $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, am($options, $linkOptions));
 		} else {
 			return $this->Html->image($mostSizeUrl, am($options, $imgOptions));
