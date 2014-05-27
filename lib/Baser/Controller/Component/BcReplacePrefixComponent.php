@@ -116,7 +116,11 @@ class BcReplacePrefixComponent extends Component {
 		if (!in_array($this->replacedPrefix . '_' . $pureAction, $this->_methods)) {
 			return;
 		}
-
+		if($requestedPrefix) {
+			$Controller->request->params['prefix'] = $requestedPrefix;
+		} else {
+			$Controller->request->params['prefix'] = 'front';
+		}
 		$Controller->action = $this->replacedPrefix . '_' . $pureAction;
 		$Controller->layoutPath = $this->replacedPrefix;	// Baserに依存
 		$Controller->subDir = $this->replacedPrefix;		// Baserに依存
@@ -144,7 +148,13 @@ class BcReplacePrefixComponent extends Component {
 			}
 		}
 	}
-
+	
+	public function beforeRender(Controller $controller) {
+		parent::beforeRender($controller);
+		if($controller->request->params['prefix'] == 'front') {
+			$controller->request->params['prefix'] = '';
+		}
+	}
 /**
  * Return all possible paths to find view files in order
  *

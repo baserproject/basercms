@@ -168,13 +168,9 @@ class UsersController extends AppController {
 				$this->redirect($this->referer());
 			}
 		}
-
+		
 		$pageTitle = 'ログイン';
-		if (!empty($this->request->params['prefix'])) {
-			$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
-		} else {
-			$prefixAuth = Configure::read('BcAuthPrefix.front');
-		}
+		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
 		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
 			$pageTitle = $prefixAuth['loginTitle'];
 		}
