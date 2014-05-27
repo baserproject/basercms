@@ -212,7 +212,7 @@ class MailController extends MailAppController {
 		if (!isset($this->request->data['Message'])) {
 			if(!empty($this->request->params['named'])) {
 				foreach($this->request->params['named'] as $key => $value) {
-				$this->request->params['named'][$key] = urldecode(str_replace('{slash}', '/', $value));
+					$this->request->params['named'][$key] = base64_decode($value);
 				}
 			}
 			$this->request->data = $this->Message->getDefaultValue($this->request->params['named']);

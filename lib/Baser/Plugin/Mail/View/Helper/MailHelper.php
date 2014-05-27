@@ -241,7 +241,7 @@ class MailHelper extends AppHelper {
 		
 		if($datas && is_array($datas)) {
 			foreach($datas as $key => $data) {
-				$datas[$key] = str_replace('/', '{slash}', $data);
+				$datas[$key] = base64_encode($data);
 			}
 		}
 		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
