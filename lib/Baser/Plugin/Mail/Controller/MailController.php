@@ -210,6 +210,11 @@ class MailController extends MailAppController {
 
 		// 初期値を取得
 		if (!isset($this->request->data['Message'])) {
+			if(!empty($this->request->params['named'])) {
+				foreach($this->request->params['named'] as $key => $value) {
+				$this->request->params['named'][$key] = urldecode(str_replace('{slash}', '/', $value));
+				}
+			}
 			$this->request->data = $this->Message->getDefaultValue($this->request->params['named']);
 		} else {
 			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);

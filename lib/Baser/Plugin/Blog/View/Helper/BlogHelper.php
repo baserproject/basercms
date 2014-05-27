@@ -897,5 +897,19 @@ class BlogHelper extends AppHelper {
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
 	}
+	
+/**
+ * メールフォームプラグインのフォームへのリンクを生成する
+ * 
+ * @param string $title リンクのタイトル
+ * @param string $contentsName メールフォームのコンテンツ名
+ * @param array $datas メールフォームに引き継ぐデータ
+ * @param array $options a タグのオプション設定
+ */
+	public function mailFormLink($title, $contentsName, $datas, $options) {
+		App::uses('MailHelper', 'Mail.View/Helper');
+		$MailHelper = new MailHelper($this->_View);
+		$MailHelper->link($title, $contentsName, $datas, $options);
+	}
 
 }
