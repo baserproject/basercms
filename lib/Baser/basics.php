@@ -933,3 +933,32 @@ function deprecated($target, $since, $remove = null, $note = null) {
 	trigger_error($message, E_USER_WARNING);
 
 }
+
+/**
+ * パーセントエンコーディングされないURLセーフなbase64エンコード
+ * 
+ * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール) 
+ * このbase64エンコードした値をさらにURLのパラメータで使うためにURLエンコードすると
+ * パーセントエンコーディングされてしまいます。
+ * その為、このメソッドではパーセントエンコーディングされないURLセーフな
+ * base64エンコードを行います。
+ * 
+ * @param string $val 対象文字列
+ * @return string
+ */
+function base64UrlsafeEncode($val) {
+	$val = base64_encode($val);
+	return str_replace(array('+', '/', '='), array('_', '-', '.'), $val);
+}
+ 
+/**
+ * パーセントエンコーディングされないURLセーフなbase64デコード
+ * 
+ * @param string $val 対象文字列
+ * @return string
+ */
+function base64UrlsafeDecode($val) {
+	$val = str_replace(array('_','-', '.'), array('+', '/', '='), $val);
+	return base64_decode($val);
+}
+
