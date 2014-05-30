@@ -445,7 +445,7 @@ class BcManagerComponent extends Component {
 		$datasource = $this->getDatasourceName($datasource);
 
 		$dbfilename = APP . 'Config' . DS . 'database.php';
-		$file = & new File($dbfilename);
+		$file = new File($dbfilename);
 
 		if ($file !== false) {
 
