@@ -20,7 +20,7 @@
  * @deprecated since version 3.0.3
  */
 
-deprecated('テンプレート：googlemaps.php', '3.0.3', '3.1.0', '$this->BcBaser->googleMaps() を利用してください。');
+trigger_error(deprecatedMessage('テンプレート：googlemaps.php', '3.0.3', '3.1.0', '$this->BcBaser->googleMaps() を利用してください。'), E_USER_DEPRECATED);
 
 $_width = 600;
 $_height = 400;

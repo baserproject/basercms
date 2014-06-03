@@ -19,7 +19,7 @@
  * @deprecated since version 3.0.3
  */
 
-deprecated('テンプレート：search.php', '3.0.3', '3.1.0', '$this->BcBaser->siteSearchForm() を利用してください。');
+trigger_error(deprecatedMessage('テンプレート：search.php', '3.0.3', '3.1.0', '$this->BcBaser->siteSearchForm() を利用してください。'), E_USER_DEPRECATED);
 
 if (Configure::read('BcRequest.isMaintenance')) {
 	return;
