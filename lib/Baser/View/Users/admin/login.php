@@ -73,55 +73,6 @@ $(function(){
 		}
 	});
 
-	$("#BtnLogin").click(function(e){
-
-		$("#"+$("#UserModel").html()+"AjaxLoginForm").ajaxSubmit({
-			beforeSend: function() {
-				$("#Waiting").show();
-			},
-			url: $("#"+$("#UserModel").html()+"AjaxLoginForm").attr('action'),
-			success: function(response, status) {
-				if(response) {
-					$("#Login").fadeOut(500);
-					if($("#Credit").size()) {
-						if($("#Credit").css('display') == 'none') {
-							document.location = response;
-						} else {
-							openCredit(function(){
-								document.location = response;
-							});
-						}
-					} else {
-						document.location = response;
-					}
-				} else {
-					$("#AlertMessage").html('ログインに失敗しました。アカウント名、パスワードを確認してください。');
-					$("#AlertMessage").fadeIn(500);
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				var errorMessage = '';
-				if(XMLHttpRequest.status == 404) {
-					errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
-				} else {
-					if(XMLHttpRequest.responseText) {
-						errorMessage = '<br />'+XMLHttpRequest.responseText;
-					} else {
-						errorMessage = '<br />'+errorThrown;
-					}
-				}
-				$("#AlertMessage").html('ログイン処理に失敗しました。'+errorMessage);
-				$("#AlertMessage").fadeIn(500);
-			},
-			complete: function(){
-				$("#Waiting").hide();
-			}
-		});
-
-		return false;
-
-	});
-
 	if($("#LoginCredit").html() == 1) {
 		changeView($("#LoginCredit").html());
 	}
@@ -180,13 +131,13 @@ function openCredit(completeHandler) {
 <div id="Login">
 
 	<div id="LoginInner">
-
+		<?php $this->BcBaser->flash() ?>
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
 		<?php if ($currentPrefix == 'front'): ?>
-			<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => $userController))) ?>
+			<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array('controller' => $userController))) ?>
 		<?php else: ?>
-			<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->request->params['prefix'] => true, 'controller' => $userController))) ?>
+			<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array($this->request->params['prefix'] => true, 'controller' => $userController))) ?>
 		<?php endif ?>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
@@ -200,7 +151,7 @@ function openCredit(completeHandler) {
 			<?php echo $this->BcForm->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin', 'tabindex' => 4)) ?>
 		</div>
 		<div class="clear login-etc">
-			<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'label' => '保存する', 'tabindex' => 3)) ?>　
+			<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'label' => 'ログイン状態を保存する', 'tabindex' => 3)) ?>　
 			<?php if ($currentPrefix == 'front'): ?>
 				<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
 			<?php else: ?>
