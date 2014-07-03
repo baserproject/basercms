@@ -1,10 +1,6 @@
 <?php
-
-/* SVN FILE: $Id: blog_posts_controller.php 42 2011-08-23 19:20:59Z ryuring $ */
 /**
  * 記事コントローラー
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -13,9 +9,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision: 42 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2011-08-24 04:20:59 +0900 (水, 24 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Xml', 'Utility');
@@ -236,7 +229,7 @@ class BlogPostsController extends BlogAppController {
 			if (!empty($data['BlogPost']['blog_tag_id'])) {
 				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
 				if ($blogTags) {
-					$conditions['BlogPost.id'] = Set::extract('/BlogPost/id', $blogTags);
+					$conditions['BlogPost.id'] = Hash::extract($blogTags, '{n}.BlogPost.id');
 				}
 			}
 		}
@@ -543,6 +536,7 @@ class BlogPostsController extends BlogAppController {
  *
  * @return void
  * @access public
+ * @todo 未実装
  */
 	public function admin_import() {
 		// 入力チェック
@@ -568,7 +562,7 @@ class BlogPostsController extends BlogAppController {
 			// XMLデータを読み込む
 			$xml = new Xml($this->request->data['Import']['file']['tmp_name']);
 
-			$_posts = Set::reverse($xml);
+			$_posts = Xml::toArray($xml);
 
 			if (!isset($_posts['Rss']['Channel']['Item'])) {
 				$message .= 'XMLデータが不正です<br />';

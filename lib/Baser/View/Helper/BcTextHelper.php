@@ -1,25 +1,18 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * Textヘルパー拡張
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
-/**
- * Include files
  */
+
 App::uses('TextHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
 
@@ -31,13 +24,19 @@ App::uses('BcTimeHelper', 'View/Helper');
 class BcTextHelper extends TextHelper {
 
 /**
- * ヘルパー
+ * helpers
  *
  * @var array
- * @access public
  */
+	// CUSTOMIZE MODIFY 2014/07/03 ryuring
+	// >>>
+	//public $helpers = array('Html');
+	// ---
 	public $helpers = array('BcTime', 'BcForm', 'Html');
+	// <<<
 
+// CUSTOMIZE ADD 2014/07/03 ryuring
+// >>>
 /**
  * boolean型を ○ または ― マークで出力
  *
@@ -423,5 +422,5 @@ class BcTextHelper extends TextHelper {
 		$list = $this->booleanStatusList();
 		return $list[(int) $value];
 	}
-
+// <<<
 }

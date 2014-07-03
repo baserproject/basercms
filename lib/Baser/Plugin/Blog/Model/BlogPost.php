@@ -1,10 +1,7 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * 記事モデル
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -13,9 +10,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -309,7 +303,7 @@ class BlogPost extends BlogAppModel {
 			'recursive' => -1,
 			'cache' => false
 		));
-		$entryDates = Set::extract('/BlogPost/posts_date', $entryDates);
+		$entryDates = Hash::extract($entryDates, '{n}.BlogPost.posts_date');
 		foreach ($entryDates as $key => $entryDate) {
 			$entryDates[$key] = date('Y-m-d', strtotime($entryDate));
 		}

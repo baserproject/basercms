@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* EditorTemplates schema generated on: 2013-03-04 16:03:29 : 1362383729 */
 
 class EditorTemplatesSchema extends CakeSchema {

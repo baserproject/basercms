@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 
 /**
  * リプレースプレフィックスコンポーネント
@@ -20,8 +19,6 @@
  * ・リクエストしたプレフィックスに適応したアクションが存在する場合は、ビューの置き換えは行われない。
  * ・Authと併用する場合は、コンポーネントの宣言で、Authより前に宣言しないと認証処理が動作しない。
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -29,9 +26,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 class BcReplacePrefixComponent extends Component {

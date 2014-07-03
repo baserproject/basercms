@@ -67,7 +67,7 @@ class TreeBehavior extends ModelBehavior {
 			$config['type'] = $config[0];
 			unset($config[0]);
 		}
-		$settings = array_merge($this->_defaults, $config);
+		$settings = $config + $this->_defaults;
 
 		if (in_array($settings['scope'], $Model->getAssociated('belongsTo'))) {
 			$data = $Model->getAssociated($settings['scope']);
@@ -228,7 +228,8 @@ class TreeBehavior extends ModelBehavior {
 
 				if (($node[$left] < $parentNode[$left]) && ($parentNode[$right] < $node[$right])) {
 					return false;
-				} elseif ($node[$Model->primaryKey] == $parentNode[$Model->primaryKey]) {
+				}
+				if ($node[$Model->primaryKey] === $parentNode[$Model->primaryKey]) {
 					return false;
 				}
 			}
@@ -743,7 +744,7 @@ class TreeBehavior extends ModelBehavior {
  * @link http://book.cakephp.org/2.0/en/core-libraries/behaviors/tree.html#TreeBehavior::reorder
  */
 	public function reorder(Model $Model, $options = array()) {
-		$options = array_merge(array('id' => null, 'field' => $Model->displayField, 'order' => 'ASC', 'verify' => true), $options);
+		$options += array('id' => null, 'field' => $Model->displayField, 'order' => 'ASC', 'verify' => true);
 		extract($options);
 		if ($verify && !$this->verify($Model)) {
 			return false;
@@ -951,7 +952,7 @@ class TreeBehavior extends ModelBehavior {
 			}
 			$parentNode = $parentNode[0];
 
-			if (($Model->id == $parentId)) {
+			if (($Model->id === $parentId)) {
 				return false;
 			} elseif (($node[$left] < $parentNode[$left]) && ($parentNode[$right] < $node[$right])) {
 				return false;

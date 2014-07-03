@@ -2,12 +2,10 @@
 /**
  * Baserヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -1351,7 +1349,7 @@ class BcBaserHelper extends AppHelper {
 			$pages = $this->Page->find('all', array('conditions' => $conditions,
 				'fields' => array('title', 'url'),
 				'order' => 'Page.sort'));
-			return Set::extract('/Page/.', $pages);
+			return Hash::extract($pages, '{n}.Page');
 		} else {
 			return false;
 		}
@@ -1546,7 +1544,7 @@ class BcBaserHelper extends AppHelper {
 			$path = $this->getUrl($path);
 		} elseif (strpos($path, '://') === false) {
 			if ($path[0] !== '/') {
-				$path = IMAGES_URL . $path;
+				$path = Configure::read('App.imageBaseUrl') . $path;
 			}
 			$path = $this->webroot($path);
 		}
@@ -1989,11 +1987,11 @@ END_FLASH;
  * 
  * @return void
  */
-	public function subMenu() {
+	public function subMenu($data = array(), $options = array()) {
 		if (!$this->_View->getVar('subMenuElements')) {
 			return;
 		}
-		$this->element('sub_menu');
+		$this->element('sub_menu', $data, $options);
 	}
 	
 /**
@@ -2001,11 +1999,11 @@ END_FLASH;
  * 
  * @return void
  */
-	public function contentsNavi() {
+	public function contentsNavi($data = array(), $options = array()) {
 		if (!isset($this->_View->BcPage) || !$this->_View->BcPage->contensNaviAvailable()) {
 			return;
 		}
-		$this->element('contents_navi');
+		$this->element('contents_navi', $data, $options);
 	}
 	
 /**
@@ -2013,8 +2011,8 @@ END_FLASH;
  * 
  * @return void
  */
-	public function crumbsList() {
-		$this->element('contents_navi');
+	public function crumbsList($data = array(), $options = array()) {
+		$this->element('contents_navi', $data, $options);
 	}
 
 /**
@@ -2022,8 +2020,8 @@ END_FLASH;
  * 
  * @return void
  */
-	public function globalMenu() {
-		$this->element('global_menu');
+	public function globalMenu($data = array(), $options = array()) {
+		$this->element('global_menu', $data, $options);
 	}
 	
 /**
@@ -2031,8 +2029,8 @@ END_FLASH;
  * 
  * @return void
  */
-	public function googleAnalytics() {
-		$this->element('google_analytics');
+	public function googleAnalytics($data = array(), $options = array()) {
+		$this->element('google_analytics', $data, $options);
 	}
 	
 /**
@@ -2040,8 +2038,8 @@ END_FLASH;
  * 
  * @return void
  */
-	public function googleMaps() {
-		$this->element('google_maps');
+	public function googleMaps($data = array(), $options = array()) {
+		$this->element('google_maps', $data, $options);
 	}
 	
 /**
@@ -2049,8 +2047,8 @@ END_FLASH;
  * 
  * @return void
  */
-	public function listNum() {
-		$this->element('list_num');
+	public function listNum($data = array(), $options = array()) {
+		$this->element('list_num', $data, $options);
 	}
 	
 /**
@@ -2058,7 +2056,7 @@ END_FLASH;
  * 
  * @return void
  */
-	public function siteSearchForm() {
-		$this->element('site_search_form');
+	public function siteSearchForm($data = array(), $options = array()) {
+		$this->element('site_search_form', $data, $options);
 	}
 }

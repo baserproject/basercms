@@ -311,7 +311,7 @@ class ShellDispatcher {
 			$params = str_replace('/', '\\', $params);
 		}
 
-		$this->params = array_merge($this->params, $params);
+		$this->params = $params + $this->params;
 	}
 
 /**
@@ -323,6 +323,7 @@ class ShellDispatcher {
 	protected function _parsePaths($args) {
 		$parsed = array();
 		$keys = array('-working', '--working', '-app', '--app', '-root', '--root');
+		$args = (array)$args;
 		foreach ($keys as $key) {
 			while (($index = array_search($key, $args)) !== false) {
 				$keyname = str_replace('-', '', $key);

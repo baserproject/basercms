@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* FeedConfigs schema generated on: 2010-11-04 18:11:12 : 1288863012 */
 
 class FeedConfigsSchema extends CakeSchema {

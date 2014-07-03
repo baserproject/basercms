@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * [モバイル] 固定ページデフォルトテンプレート
  * 
@@ -11,11 +10,8 @@
  *
  * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views
+ * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->includeCore('Pages/mobile/templates/default');

@@ -1,22 +1,24 @@
 <?php
 
 /**
- * Custom TestSuite Command
- *
- * PHP versions 5
+ * BaserTextReporter
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
  * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.0-beta
+ * @package			Baser.Lib.TestSuite.Reporter
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('CakeTextReporter', 'TestSuite/Reporter');
 
 /**
- * @package Baser.Lib.TestSuite.Reporter
+ * CakeTextReporter contains reporting features used for plain text based output
+ *
+ * @package       Baser.Lib.TestSuite.Reporter
  */
 class BaserTextReporter extends CakeTextReporter {
 
@@ -28,30 +30,37 @@ class BaserTextReporter extends CakeTextReporter {
  * @return void
  */
 	public function testCaseList() {
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		//$testCases = parent::testCaseList();
+		// ---
 		$testCases = BaserTestLoader::generateTestList($this->params);
-		$app = $this->params['app'];
 		$baser = $this->params['baser'];
+		// <<<
+		$app = $this->params['app'];
 		$plugin = $this->params['plugin'];
 
 		$buffer = "Core Test Cases:\n";
-		$urlExtra = '';
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		//if ($app) {
+		// ---
 		if ($baser) {
 			$buffer = "Baser Test Cases:\n";
 			$urlExtra = '&baser=true';
 		} elseif ($app) {
+		// <<<
 			$buffer = "App Test Cases:\n";
-			$urlExtra = '&app=true';
 		} elseif ($plugin) {
 			$buffer = Inflector::humanize($plugin) . " Test Cases:\n";
-			$urlExtra = '&plugin=' . $plugin;
 		}
 
-		if (1 > count($testCases)) {
-			$buffer .= "EMPTY";
+		if (count($testCases) < 1) {
+			$buffer .= 'EMPTY';
 			echo $buffer;
 		}
 
-		foreach ($testCases as $testCaseFile => $testCase) {
+		foreach ($testCases as $testCase) {
 			$buffer .= $_SERVER['SERVER_NAME'] . $this->baseUrl() . "?case=" . $testCase . "&output=text\n";
 		}
 

@@ -874,6 +874,7 @@ class Controller extends Object implements CakeEventListener {
  * Returns number of errors in a submitted FORM.
  *
  * @return integer Number of errors
+ * @deprecated This method will be removed in 3.0
  */
 	public function validate() {
 		$args = func_get_args();
@@ -892,6 +893,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param mixed A list of models as a variable argument
  * @return array Validation errors, or false if none
+ * @deprecated This method will be removed in 3.0
  */
 	public function validateErrors() {
 		$objects = func_get_args();
@@ -968,7 +970,7 @@ class Controller extends Object implements CakeEventListener {
 
 		$referer = $this->request->referer($local);
 		if ($referer === '/' && $default) {
-			return Router::url($default, true);
+			return Router::url($default, !$local);
 		}
 		return $referer;
 	}
@@ -1073,7 +1075,6 @@ class Controller extends Object implements CakeEventListener {
  * @param array $whitelist List of allowed options for paging
  * @return array Model query results
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::paginate
- * @deprecated Will be removed in 3.0. Use PaginatorComponent instead.
  */
 	public function paginate($object = null, $scope = array(), $whitelist = array()) {
 		return $this->Components->load('Paginator', $this->paginate)->paginate($object, $scope, $whitelist);

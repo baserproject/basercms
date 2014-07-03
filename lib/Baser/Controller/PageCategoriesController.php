@@ -2,8 +2,6 @@
 /**
  * 固定ページカテゴリーコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -93,14 +91,14 @@ class PageCategoriesController extends AppController {
 		if ($this->request->data['PageCategory']['type'] == '1') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')), $this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			$ids = am(array($mobileId, $smartphoneId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
 		} elseif ($this->request->data['PageCategory']['type'] == '2') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			if ($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
@@ -108,7 +106,7 @@ class PageCategoriesController extends AppController {
 		} elseif ($this->request->data['PageCategory']['type'] == '3') {
 			$children = am($this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			if ($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));

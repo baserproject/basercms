@@ -1,10 +1,12 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * SQLite DBO拡張
- *
- * PHP versions 5
+ * 
+ * TODO
+ * 2014/07/04 ryuring
+ * CakePHPの標準のものを移植しようとしたが全く使い物にならなかったので、
+ * 一旦、スルーして現行のものをそのまま利用する事にした。
+ * listSourcesの取得で何故かエラーとなっていた。
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -13,9 +15,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -1098,5 +1097,5 @@ class BcSqlite extends Sqlite {
 		}
 		return null;
 	}
-
+	
 }

@@ -1,10 +1,6 @@
 <?php
-
-/* SVN FILE: $Id: mail_input.ctp 250 2011-12-08 10:15:44Z arata $ */
 /**
  * [MOBILE] メールフィールド
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -13,9 +9,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 if (!isset($blockStart)) {

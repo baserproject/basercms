@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* SiteConfigs schema generated on: 2010-11-04 18:11:10 : 1288863010 */
 
 class SiteConfigsSchema extends CakeSchema {

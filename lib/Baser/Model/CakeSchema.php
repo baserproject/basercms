@@ -11,7 +11,7 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Baser.Model
+ * @package       Cake.Model
  * @since         CakePHP(tm) v 1.2.0.5550
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -24,7 +24,7 @@ App::uses('File', 'Utility');
 /**
  * Base Class for Schema management
  *
- * @package       Baser.Model
+ * @package       Cake.Model
  */
 class CakeSchema extends Object {
 
@@ -230,7 +230,7 @@ class CakeSchema extends Object {
 				}
 
 				if (isset($this->plugin)) {
-					if ($model == $this->plugin . 'AppModel') {
+					if ($model === $this->plugin . 'AppModel') {
 						continue;
 					}
 					$importModel = $model;
@@ -614,7 +614,7 @@ class CakeSchema extends Object {
 
 		$columns = array();
 		foreach ($fields as $name => $value) {
-			if ($Obj->primaryKey == $name) {
+			if ($Obj->primaryKey === $name) {
 				$value['key'] = 'primary';
 			}
 			if (!isset($db->columns[$value['type']])) {

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -60,7 +54,7 @@ class MailHelper extends AppHelper {
 		if ($mailContentId) {
 			$MailContent = ClassRegistry::getObject('MailContent');
 			$MailContent->expects(array());
-			$this->mailContent = Set::extract('MailContent', $MailContent->read(null, $mailContentId));
+			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
 			$this->mailContent = $this->_View->viewVars['mailContent']['MailContent'];
 		}
@@ -149,7 +143,7 @@ class MailHelper extends AppHelper {
 		}
 
 		$excludes = Configure::read('BcAgent');
-		$excludes = Set::extract('{.+?}.prefix', $excludes);
+		$excludes = Hash::extract($excludes, '{s}.prefix');
 		$templates = array();
 		foreach ($_templates as $template) {
 			if (!in_array($template, $excludes)) {

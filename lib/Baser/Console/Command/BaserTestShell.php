@@ -3,8 +3,6 @@
 /**
  * Custom TestShell Command
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *

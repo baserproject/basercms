@@ -2,8 +2,6 @@
 /**
  * ファイルアップロードビヘイビア
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -99,7 +97,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	public function setup(Model $Model, $settings = array()) {
-		$this->settings[$Model->alias] = Set::merge(array(
+		$this->settings[$Model->alias] = Hash::merge(array(
 				'saveDir' => '',
 				'fields' => array()
 				), $settings);

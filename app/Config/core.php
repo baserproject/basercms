@@ -31,7 +31,13 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
+	// CUSTOMIZE MODIFY 2014/07/03
+	// >>>
+	Configure::write('debug', 2);
+	// ---
 	Configure::write('debug', -1);
+	// <<<
+
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
@@ -104,7 +110,12 @@
  * included primarily as a development convenience - and
  * thus not recommended for production applications.
  */
+	// CUSTOMIZE MODIFY 2014/07/03 ryuring
+	// >>>
+	////Configure::write('App.baseUrl', env('SCRIPT_NAME'));
+	// ---
 	Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
+	// <<<
 
 /**
  * To configure CakePHP to use a particular domain URL
@@ -149,13 +160,23 @@
  *	`manager_index()` and `/manager/controller/index`
  *
  */
+	// CUSTOMIZE MODIFY 2014/07/03 ryuring
+	// >>>
+	////Configure::write('Routing.prefixes', array('admin'));
+	// ---
 	Configure::write('Routing.prefixes', array('admin'));
+	// <<<
 
 /**
  * Turn off all caching application-wide.
  *
  */
+	// CUSTOMIZE MODIFY 2014/07/03 ryuring
+	// >>>
+	////Configure::write('Cache.disable', true);
+	// ---
 	Configure::write('Cache.disable', true);
+	// <<<
 
 /**
  * Enable cache checking.
@@ -315,18 +336,20 @@
  *		'password' => 'password', //plaintext password (xcache.admin.pass)
  *	));
  *
- * Memcache (http://www.danga.com/memcached/)
+ * Memcached (http://www.danga.com/memcached/)
+ *
+ * Uses the memcached extension. See http://php.net/memcached
  *
  * 	 Cache::config('default', array(
- *		'engine' => 'Memcache', //[required]
+ *		'engine' => 'Memcached', //[required]
  *		'duration' => 3600, //[optional]
  *		'probability' => 100, //[optional]
  * 		'prefix' => Inflector::slug(APP_DIR) . '_', //[optional]  prefix every cache file with this string
  * 		'servers' => array(
  * 			'127.0.0.1:11211' // localhost, default port 11211
  * 		), //[optional]
- * 		'persistent' => true, // [optional] set this to false for non-persistent connections
- * 		'compress' => false, // [optional] compress data in Memcache (slower, but uses less memory)
+ * 		'persistent' => 'my_connection', // [optional] The name of the persistent connection.
+ * 		'compress' => false, // [optional] compress data in Memcached (slower, but uses less memory)
  *	));
  *
  *  Wincache (http://php.net/wincache)
@@ -364,6 +387,8 @@ $prefix = 'myapp_';
  * Configure the cache used for general framework caching. Path information,
  * object listings, and translation cache files are stored with this configuration.
  */
+// CUSTOMIZE DELETE 2014/07/03 ryuring
+// >>>
 /*Cache::config('_cake_core_', array(
 	'engine' => $engine,
 	'prefix' => $prefix . 'cake_core_',
@@ -371,11 +396,14 @@ $prefix = 'myapp_';
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));*/
+// <<<
 
 /**
  * Configure the cache for model and datasource caches. This cache configuration
  * is used to store schema descriptions, and table listings in connections.
  */
+// CUSTOMIZE DELETE 2014/07/03 ryuring
+// >>>
 /*Cache::config('_cake_model_', array(
 	'engine' => $engine,
 	'prefix' => $prefix . 'cake_model_',
@@ -383,7 +411,10 @@ $prefix = 'myapp_';
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));*/
+// <<<
 
+// CUSTOMIZE ADD 2014/07/03 ryuring
+// >>>
 /**
  * キャッシュ設定をConfigureに設定
  */
@@ -399,3 +430,4 @@ Configure::write('BcCache', array(
 if (file_exists(APP . 'Config' . DS . 'install.php')) {
 	include_once APP . 'Config' . DS . 'install.php';
 }
+// <<<

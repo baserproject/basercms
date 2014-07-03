@@ -2,8 +2,6 @@
 /**
  * コンテンツコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -266,10 +264,10 @@ class ContentsController extends AppController {
 					$pageCategories[$key]['children'] = $children;
 				}
 				if (isset($children['pages'])) {
-					$paths = Set::extract('/Page/name', $children['pages']);
+					$paths = Hash::extract($children['pages'], '{n}.Page.name');
 					if (in_array('index', $paths)) {
 						$cats = $this->Page->PageCategory->getPath($pageCategory['PageCategory']['id'], array('name'), -1);
-						$cats = Set::extract('/PageCategory/name', $cats);
+						$cats = Hash::extract($cats, '{n}.PageCategory.name');
 						if ($cats) {
 							$parentCategoryPath = '/' . implode('/', $cats) . '/';
 						} else {

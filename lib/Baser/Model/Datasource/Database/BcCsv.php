@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * CSV DBO Driver
  *
@@ -16,8 +15,6 @@
  * ・カンマは[\,]でエスケープする
  * ・ダブルコーテーションは、[""]でエスケープする（Cassavaは自動でエスケープしてくれる）
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -25,9 +22,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**

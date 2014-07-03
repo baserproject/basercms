@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * Controller 拡張クラス
  *
@@ -18,9 +17,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**

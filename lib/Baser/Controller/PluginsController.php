@@ -1,10 +1,7 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * Plugin 拡張クラス
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -13,9 +10,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -147,9 +141,9 @@ class PluginsController extends AppController {
 			}
 		}
 		
-		$pluginInfos = array_values($pluginInfos); // Set::sortの為、一旦キーを初期化
-		$pluginInfos = array_reverse($pluginInfos); // Set::sortの為、逆順に変更
-		$pluginInfos = Set::sort($pluginInfos, '{n}.Plugin.status', 'desc');
+		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
+		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
+		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.status', 'desc');
 
 		$baserPlugins = array();
 		if(strtotime('2014-03-31 17:00:00') <= time()) {

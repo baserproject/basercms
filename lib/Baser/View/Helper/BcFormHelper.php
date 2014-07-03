@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * FormHelper 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -33,15 +27,20 @@ App::uses('BcCkeditorHelper', 'View/Helper');
  * @package Baser.View.Helper
  */
 class BcFormHelper extends FormHelper {
-
 /**
- * ヘルパー
+ * Other helpers used by FormHelper
  *
  * @var array
- * @access public
  */
+	// CUSTOMIZE MODIFY 2014/07/02 ryuring
+	// >>>
+	//public $helpers = array('Html');
+	// ---
 	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcCkeditor');
+	// <<<
 
+// CUSTOMIZE ADD 2014/07/02 ryuring
+// >>>
 /**
  * sizeCounter用の関数読み込み可否
  * 
@@ -57,24 +56,8 @@ class BcFormHelper extends FormHelper {
  * @access private
  */
 	private $__id = null;
-
-/**
- * 都道府県用のSELECTタグを表示する
- *
- * @param string $fieldName Name attribute of the SELECT
- * @param mixed $selected Selected option
- * @param array $attributes Array of HTML options for the opening SELECT element
- * @return string 都道府県用のSELECTタグ
- * @access public
- */
-	public function prefTag($fieldName, $selected = null, $attributes = array()) {
-
-		$options = $this->BcText->prefList();
-		$attributes['value'] = $selected;
-		$attributes['empty'] = false;
-		return $this->select($fieldName, $options, $attributes);
-	}
-
+// <<<
+	
 /**
  * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
  *
@@ -95,7 +78,7 @@ class BcFormHelper extends FormHelper {
  * @param string $fieldName Prefix name for the SELECT element
  * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
  * @param string $timeFormat 12, 24, or null to not generate time inputs.
- * @param array|string $attributes array of Attributes
+ * @param array $attributes Array of Attributes
  * @return string Generated set of select boxes for the date and time formats chosen.
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::dateTime
  */
@@ -282,264 +265,6 @@ class BcFormHelper extends FormHelper {
 	}
 
 /**
- * 和暦年
- *
- * @param string $fieldName Prefix name for the SELECT element
- * @param integer $minYear First year in sequence
- * @param integer $maxYear Last year in sequence
- * @param string $selected Option which is selected.
- * @param array $attributes Attribute array for the select elements.
- * @param boolean $showEmpty Show/hide the empty select option
- * @return string
- */
-	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
-
-		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
-			if (is_array($value)) {
-				extract($value);
-				$selected = $year;
-			} else {
-				if (empty($value)) {
-					if (!$showEmpty && !$maxYear) {
-						$selected = 'now';
-					} elseif (!$showEmpty && $maxYear && !$selected) {
-						$selected = $maxYear;
-					}
-				} else {
-					$selected = $value;
-				}
-			}
-		}
-
-		if (strlen($selected) > 4 || $selected === 'now') {
-			$wareki = $this->BcTime->convertToWareki(date('Y-m-d', strtotime($selected)));
-			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
-			$w = $this->BcTime->wareki($wareki);
-			$wyear = $this->BcTime->wyear($wareki);
-			$selected = $w . '-' . $wyear;
-		} elseif ($selected === false) {
-			$selected = null;
-		} elseif (strpos($selected, '-') === false) {
-			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
-			if ($wareki) {
-				$w = $this->BcTime->wareki($wareki);
-				$wyear = $this->BcTime->wyear($wareki);
-				$selected = $w . '-' . $wyear;
-			} else {
-				$selected = null;
-			}
-		}
-		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
-		$attributes = array_merge($attributes, array(
-			'selected' => $selected,
-			'empty'=> $showEmpty
-		));
-		return $this->hidden($fieldName . ".wareki", array('value' => true)) .
-			$this->select($fieldName . ".year", $this->_generateOptions('wyear', $yearOptions), $attributes);
-	}
-
-/**
- * コントロールソースを取得する
- * Model側でメソッドを用意しておく必要がある
- *
- * @param string $field フィールド名
- * @param array $options
- * @return array コントロールソース
- * @access public
- */
-	public function getControlSource($field, $options = array()) {
-
-		$count = preg_match_all('/\./is', $field, $matches);
-		if ($count == 1) {
-			list($modelName, $field) = explode('.', $field);
-		} elseif ($count == 2) {
-			list($plugin, $modelName, $field) = explode('.', $field);
-			$modelName = $plugin . '.' . $modelName;
-		}
-		if (empty($modelName)) {
-			$modelName = $this->model();
-		}
-		if (ClassRegistry::isKeySet($modelName)) {
-			$model = ClassRegistry::getObject($modelName);
-		} else {
-			$model = ClassRegistry::init($modelName);
-		}
-		if ($model) {
-			return $model->getControlSource($field, $options);
-		} else {
-			return false;
-		}
-	}
-
-/**
- * モデルよりリストを生成する
- *
- * @param string $modelName
- * @param mixed $conditions
- * @param mixed $fields
- * @param mixed $order
- * @return mixed リストまたは、false
- * @access public
- */
-	public function generateList($modelName, $conditions = array(), $fields = array(), $order = array()) {
-
-		$model = ClassRegistry::getObject($modelName);
-
-		if ($fields) {
-			list($idField, $displayField) = $fields;
-		} else {
-			$idField = 'id';
-			$displayField = $model->getDisplayField();
-			$fields = array($idField, $displayField);
-		}
-
-		$list = $model->find('all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));
-
-		if ($list) {
-			return Set::combine($list, "{n}." . $modelName . "." . $idField, "{n}." . $modelName . "." . $displayField);
-		} else {
-			return null;
-		}
-	}
-
-/**
- * JsonList
- *
- * @param string $field フィールド文字列
- * @param string $attributes
- * @return array 属性
- * @access public
- */
-	public function jsonList($field, $attributes) {
-
-		am(array("imgSrc" => "", "ajaxAddAction" => "", "ajaxDelAction" => ""), $attributes);
-		// JsonDb用Hiddenタグ
-		$out = $this->hidden('Json.' . $field . '.db');
-		// 追加テキストボックス
-		$out .= $this->text('Json.' . $field . '.name');
-		// 追加ボタン
-		$out .= $this->button('追加', array('id' => 'btnAdd' . $field));
-		// リスト表示用ビュー
-		$out .= '<div id="Json' . $field . 'View"></div>';
-
-		// javascript
-		$out .= '<script type="text/javascript"><!--' . "\n" .
-			'jQuery(function(){' . "\n" .
-			'var json_List = new JsonList({"dbId":"Json' . $field . 'Db","viewId":"JsonTagView","addButtonId":"btnAdd' . $field . '",' . "\n" .
-			'"deleteButtonType":"img","deleteButtonSrc":"' . $attributes['imgSrc'] . '","deleteButtonRollOver":true,' . "\n" .
-			'"ajaxAddAction":"' . $attributes['ajaxAddAction'] . '",' . "\n" .
-			'"ajaxDelAction":"' . $attributes['ajaxDelAction'] . '"});' . "\n" .
-			'json_List.loadData();' . "\n" .
-			'});' . "\n" .
-			'//--></script>';
-
-		return $out;
-	}
-
-/**
- * カレンダーコントロール付きのテキストフィールド
- * jquery-ui-1.7.2 必須
- *
- * @param string フィールド文字列
- * @param array HTML属性
- * @return string html
- * @access public
- */
-	public function datepicker($fieldName, $attributes = array()) {
-
-		if (!isset($attributes['value'])) {
-			$value = $this->value($fieldName);
-		} else {
-			$value = $attributes['value'];
-		}
-
-		if ($value) {
-			$value = $this->BcTime->format('Y/m/d', $value);
-			if ($value) {
-				$attributes['value'] = date('Y/m/d', strtotime($value));
-			} else {
-				$attributes['value'] = '';
-			}
-		} else {
-			unset($attributes['value']);
-		}
-
-		$this->setEntity($fieldName);
-		$id = $this->domId($fieldName);
-
-		// テキストボックス
-		$input = $this->text($fieldName, $attributes);
-
-		// javascript
-		$script = <<< DOC_END
-<script type="text/javascript">
-<!--
-jQuery(function($){
-	$("#{$id}").datepicker();
-});
-//-->
-</script>
-DOC_END;
-
-		$out = $input . "\n" . $script;
-		return $out;
-	}
-
-/**
- * 日付カレンダーと時間フィールド
- * 
- * @param string $fieldName
- * @param array $attributes
- * @return string
- * @access public
- */
-	public function dateTimePicker($fieldName, $attributes = array()) {
-
-		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
-		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
-		$timeAttributes = array('size' => 8, 'maxlength' => 8);
-		if (!isset($attributes['value'])) {
-			$value = $this->value($fieldName);
-		} else {
-			$value = $attributes['value'];
-			unset($attributes['value']);
-		}
-		if ($value && $value != '0000-00-00 00:00:00') {
-			$dateValue = date('Y/m/d', strtotime($value));
-			$timeValue = date('H:i:s', strtotime($value));
-			$attributes['value'] = $dateValue;
-			$timeAttributes['value'] = $timeValue;
-		}
-		$dateTag = $this->datepicker($fieldName . '_date', $attributes);
-		$timeTag = $this->text($fieldName . '_time', $timeAttributes);
-		$hiddenTag = $this->hidden($fieldName, array('value' => $value));
-		$domId = $this->domId();
-		$_script = <<< DOC_END
-<script type="text/javascript">
-$(function(){
-   $("#{$domId}Time").timepicker({ 'timeFormat': 'H:i' });
-   $("#{$domId}Date").change({$domId}ChangeResultHandler);
-   $("#{$domId}Time").change({$domId}ChangeResultHandler);
-   function {$domId}ChangeResultHandler(){
-		var value = $("#{$domId}Date").val().replace(/\//g, '-');
-		if($("#{$domId}Time").val()) {
-			value += ' '+$("#{$domId}Time").val();
-		}
-        $("#{$domId}").val(value);
-		if(this.id.replace('{$domId}','') == 'Date') {
-			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
-				$("#{$domId}Time").val('00:00:00');
-			}
-		}
-   }
-});
-</script>
-DOC_END;
-		$script = $this->_View->addScript($_script);
-		return $dateTag . $timeTag . $hiddenTag;
-	}
-
-/**
  * Generates option lists for common <select /> menus
  *
  * @param string $name
@@ -681,14 +406,21 @@ DOC_END;
  * MODIFIED 2008/10/24 egashira
  *          hiddenタグを出力しないオプションを追加
  *
- * @param string $fieldNamem Name of a field, like this "Modelname.fieldname"
+ * ### Options:
+ *
+ * - `value` - the value of the checkbox
+ * - `checked` - boolean indicate that this checkbox is checked.
+ * - `hiddenField` - boolean to indicate if you want the results of checkbox() to include
+ *    a hidden input with a value of ''.
+ * - `disabled` - create a disabled input.
+ * - `default` - Set the default value for the checkbox. This allows you to start checkboxes
+ *    as checked, without having to check the POST data. A matching POST data value, will overwrite
+ *    the default value.
+ *
+ * @param string $fieldName Name of a field, like this "Modelname.fieldname"
  * @param array $options Array of HTML attributes.
- * 		'value' - the value of the checkbox
- * 		'checked' - boolean indicate that this checkbox is checked.
- * @todo Right now, automatically setting the 'checked' value is dependent on whether or not the
- * 		 checkbox is bound to a model.  This should probably be re-evaluated in future versions.
- * @return string An HTML text input element
- * @access public
+ * @return string An HTML text input element.
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function checkbox($fieldName, $options = array()) {
 
@@ -705,14 +437,11 @@ DOC_END;
 			unset($options['default']);
 		}
 
-		$options += array('required' => false);
+		$options += array('value' => 1, 'required' => false);
 		$options = $this->_initInputField($fieldName, $options) + array('hiddenField' => true);
 		$value = current($this->value($valueOptions));
 		$output = '';
-		
-		if (empty($options['value'])) {
-			$options['value'] = 1;
-		}
+
 		if (
 			(!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
 			!empty($options['checked'])
@@ -731,7 +460,8 @@ DOC_END;
 				'id' => $options['id'] . '_',
 				'name' => $options['name'],
 				'value' => ($options['hiddenField'] !== true ? $options['hiddenField'] : '0'),
-				'secure' => false
+				'form' => isset($options['form']) ? $options['form'] : null,
+				'secure' => false,
 			);
 			if (isset($options['disabled']) && $options['disabled']) {
 				$hiddenOptions['disabled'] = 'disabled';
@@ -884,70 +614,18 @@ DOC_END;
 	}
 
 /**
- * 文字列保存用複数選択コントロール
- * 
- * @param string $fieldName
- * @param array $options
- * @param mixed $selected
- * @param array $attributes
- * @param mixed $showEmpty
- * @return string
- * @access public
- */
-	public function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
-
-		$_attributes = array('separator' => '<br />', 'quotes' => true);
-		$attributes = Set::merge($_attributes, $attributes);
-
-		$quotes = $attributes['quotes'];
-		unset($attributes['quotes']);
-
-		$_options = $this->_initInputField($fieldName, $options);
-		if (empty($attributes['multiple']))
-			$attributes['multiple'] = 'checkbox';
-		$id = $_options['id'];
-		$_id = $_options['id'] . '_';
-		$name = $_options['name'];
-		$out = '<div id="' . $_id . '">' . $this->select($fieldName . '_', $options, $selected, $attributes, $showEmpty) . '</div>';
-		$out .= $this->hidden($fieldName);
-		$script = <<< DOC_END
-$(document).ready(function() {
-    aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
-    for(key in aryValue){
-        var value = aryValue[key];
-        $("#"+camelize("{$id}_"+value)).attr('checked',true);
-    }
-    $("#{$_id} input[type=checkbox]").change(function(){
-        var aryValue = [];
-        $("#{$_id} input[type=checkbox]").each(function(key,value){
-            if($(this).attr('checked')){
-                aryValue.push("'"+$(this).val()+"'");
-            }
-        });
-        $("#{$id}").val(aryValue.join(','));
-    });
-});
-DOC_END;
-		$out .= $this->Js->buffer($script);
-		return $out;
-	}
-
-/**
  * Creates a hidden input field.
  *
- * @param string $fieldName Name of a field, in the form"Modelname.fieldname"
+ * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
  * @param array $options Array of HTML attributes.
- * @return string
- * @access public
+ * @return string A generated hidden input
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
  */
 	public function hidden($fieldName, $options = array()) {
+		$options += array('required' => false, 'secure' => true);
 
-		$secure = true;
-
-		if (isset($options['secure'])) {
-			$secure = $options['secure'];
-			unset($options['secure']);
-		}
+		$secure = $options['secure'];
+		unset($options['secure']);
 
 		// 2010/07/24 ryuring
 		// セキュリティコンポーネントのトークン生成の仕様として、
@@ -966,10 +644,10 @@ DOC_END;
 		// <<<
 
 		$options = $this->_initInputField($fieldName, array_merge(
-				$options, array('secure' => self::SECURE_SKIP)
+			$options, array('secure' => self::SECURE_SKIP)
 		));
 
-		if ($secure && $secure !== self::SECURE_SKIP) {
+		if ($secure === true) {
 			$this->_secure(true, null, '' . $options['value']);
 		}
 
@@ -1013,22 +691,6 @@ DOC_END;
 	}
 
 /**
- * CKEditorを出力する
- *
- * @param	string	$fieldName
- * @param	array	$options
- * @param	array	$editorOptions
- * @param	array	$styles
- * @return	string
- * @access	public
- */
-	public function ckeditor($fieldName, $options = array()) {
-
-		$options = array_merge(array('type' => 'textarea'), $options);
-		return $this->BcCkeditor->editor($fieldName, $options);
-	}
-
-/**
  * create
  * フック用にラッピング
  * 
@@ -1039,6 +701,8 @@ DOC_END;
  */
 	public function create($model = null, $options = array()) {
 
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
 		$options = array_merge(array(
 			'novalidate' => true
 			), $options);
@@ -1053,8 +717,12 @@ DOC_END;
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
+		// <<<
+		
 		$out = parent::create($model, $options);
 
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
 		/*** afterCreate ***/
 		$event = $this->dispatchEvent('afterCreate', array(
 			'id' => $this->__id,
@@ -1065,6 +733,8 @@ DOC_END;
 		}
 
 		return $out;
+		// <<<
+		
 	}
 
 /**
@@ -1075,8 +745,10 @@ DOC_END;
  * @return	string
  * @access	public
  */
-	public function end($options = null) {
+	public function end($options = null, $secureAttributes = array()) {
 
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
 		$id = $this->__id;
 		$this->__id = null;
 
@@ -1088,9 +760,12 @@ DOC_END;
 		if ($event !== false) {
 			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
-
+		// <<<
+		
 		$out = parent::end($options);
 
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
 		/*** afterEnd ***/
 		$event = $this->dispatchEvent('afterEnd', array(
 			'id' => $id,
@@ -1101,6 +776,7 @@ DOC_END;
 		}
 
 		return $out;
+		// <<<
 	}
 
 /**
@@ -1121,6 +797,8 @@ DOC_END;
  */
 	public function input($fieldName, $options = array()) {
 
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
 		/*** beforeInput ***/
 		$event = $this->dispatchEvent('beforeInput', array(
 			'fieldName' => $fieldName,
@@ -1159,9 +837,12 @@ DOC_END;
 				}
 				break;
 		}
-
+		// <<<
+		
 		$out = parent::input($fieldName, $options);
 
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
 		/* カウンター */
 		if (!empty($options['counter'])) {
 			$domId = $this->domId($fieldName, $options);
@@ -1194,8 +875,10 @@ DOC_END;
 		}
 
 		return $out;
+		// <<<
 	}
 
+// CUSTOMIZE ADD 2014/07/02 ryuring
 /**
  * フォームのIDを取得する
  * BcForm::create より呼出される事が前提
@@ -1218,7 +901,23 @@ DOC_END;
 
 		return $id;
 	}
+	
+/**
+ * CKEditorを出力する
+ *
+ * @param	string	$fieldName
+ * @param	array	$options
+ * @param	array	$editorOptions
+ * @param	array	$styles
+ * @return	string
+ * @access	public
+ */
+	public function ckeditor($fieldName, $options = array()) {
 
+		$options = array_merge(array('type' => 'textarea'), $options);
+		return $this->BcCkeditor->editor($fieldName, $options);
+	}
+	
 /**
  * エディタを表示する
  * 
@@ -1249,6 +948,331 @@ DOC_END;
 	}
 
 /**
+ * 都道府県用のSELECTタグを表示する
+ *
+ * @param string $fieldName Name attribute of the SELECT
+ * @param mixed $selected Selected option
+ * @param array $attributes Array of HTML options for the opening SELECT element
+ * @return string 都道府県用のSELECTタグ
+ * @access public
+ */
+	public function prefTag($fieldName, $selected = null, $attributes = array()) {
+
+		$options = $this->BcText->prefList();
+		$attributes['value'] = $selected;
+		$attributes['empty'] = false;
+		return $this->select($fieldName, $options, $attributes);
+	}
+	
+/**
+ * 和暦年
+ *
+ * @param string $fieldName Prefix name for the SELECT element
+ * @param integer $minYear First year in sequence
+ * @param integer $maxYear Last year in sequence
+ * @param string $selected Option which is selected.
+ * @param array $attributes Attribute array for the select elements.
+ * @param boolean $showEmpty Show/hide the empty select option
+ * @return string
+ */
+	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
+
+		if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
+			if (is_array($value)) {
+				extract($value);
+				$selected = $year;
+			} else {
+				if (empty($value)) {
+					if (!$showEmpty && !$maxYear) {
+						$selected = 'now';
+					} elseif (!$showEmpty && $maxYear && !$selected) {
+						$selected = $maxYear;
+					}
+				} else {
+					$selected = $value;
+				}
+			}
+		}
+
+		if (strlen($selected) > 4 || $selected === 'now') {
+			$wareki = $this->BcTime->convertToWareki(date('Y-m-d', strtotime($selected)));
+			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+			$w = $this->BcTime->wareki($wareki);
+			$wyear = $this->BcTime->wyear($wareki);
+			$selected = $w . '-' . $wyear;
+		} elseif ($selected === false) {
+			$selected = null;
+		} elseif (strpos($selected, '-') === false) {
+			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+			if ($wareki) {
+				$w = $this->BcTime->wareki($wareki);
+				$wyear = $this->BcTime->wyear($wareki);
+				$selected = $w . '-' . $wyear;
+			} else {
+				$selected = null;
+			}
+		}
+		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
+		$attributes = array_merge($attributes, array(
+			'selected' => $selected,
+			'empty'=> $showEmpty
+		));
+		return $this->hidden($fieldName . ".wareki", array('value' => true)) .
+			$this->select($fieldName . ".year", $this->_generateOptions('wyear', $yearOptions), $attributes);
+	}
+	
+/**
+ * コントロールソースを取得する
+ * Model側でメソッドを用意しておく必要がある
+ *
+ * @param string $field フィールド名
+ * @param array $options
+ * @return array コントロールソース
+ * @access public
+ */
+	public function getControlSource($field, $options = array()) {
+
+		$count = preg_match_all('/\./is', $field, $matches);
+		if ($count == 1) {
+			list($modelName, $field) = explode('.', $field);
+		} elseif ($count == 2) {
+			list($plugin, $modelName, $field) = explode('.', $field);
+			$modelName = $plugin . '.' . $modelName;
+		}
+		if (empty($modelName)) {
+			$modelName = $this->model();
+		}
+		if (ClassRegistry::isKeySet($modelName)) {
+			$model = ClassRegistry::getObject($modelName);
+		} else {
+			$model = ClassRegistry::init($modelName);
+		}
+		if ($model) {
+			return $model->getControlSource($field, $options);
+		} else {
+			return false;
+		}
+	}
+	
+/**
+ * モデルよりリストを生成する
+ *
+ * @param string $modelName
+ * @param mixed $conditions
+ * @param mixed $fields
+ * @param mixed $order
+ * @return mixed リストまたは、false
+ * @access public
+ */
+	public function generateList($modelName, $conditions = array(), $fields = array(), $order = array()) {
+
+		$model = ClassRegistry::getObject($modelName);
+
+		if ($fields) {
+			list($idField, $displayField) = $fields;
+		} else {
+			$idField = 'id';
+			$displayField = $model->getDisplayField();
+			$fields = array($idField, $displayField);
+		}
+
+		$list = $model->find('all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));
+
+		if ($list) {
+			return Hash::combine($list, "{n}." . $modelName . "." . $idField, "{n}." . $modelName . "." . $displayField);
+		} else {
+			return null;
+		}
+	}
+	
+/**
+ * JsonList
+ *
+ * @param string $field フィールド文字列
+ * @param string $attributes
+ * @return array 属性
+ * @access public
+ */
+	public function jsonList($field, $attributes) {
+
+		am(array("imgSrc" => "", "ajaxAddAction" => "", "ajaxDelAction" => ""), $attributes);
+		// JsonDb用Hiddenタグ
+		$out = $this->hidden('Json.' . $field . '.db');
+		// 追加テキストボックス
+		$out .= $this->text('Json.' . $field . '.name');
+		// 追加ボタン
+		$out .= $this->button('追加', array('id' => 'btnAdd' . $field));
+		// リスト表示用ビュー
+		$out .= '<div id="Json' . $field . 'View"></div>';
+
+		// javascript
+		$out .= '<script type="text/javascript"><!--' . "\n" .
+			'jQuery(function(){' . "\n" .
+			'var json_List = new JsonList({"dbId":"Json' . $field . 'Db","viewId":"JsonTagView","addButtonId":"btnAdd' . $field . '",' . "\n" .
+			'"deleteButtonType":"img","deleteButtonSrc":"' . $attributes['imgSrc'] . '","deleteButtonRollOver":true,' . "\n" .
+			'"ajaxAddAction":"' . $attributes['ajaxAddAction'] . '",' . "\n" .
+			'"ajaxDelAction":"' . $attributes['ajaxDelAction'] . '"});' . "\n" .
+			'json_List.loadData();' . "\n" .
+			'});' . "\n" .
+			'//--></script>';
+
+		return $out;
+	}
+
+/**
+ * カレンダーコントロール付きのテキストフィールド
+ * jquery-ui-1.7.2 必須
+ *
+ * @param string フィールド文字列
+ * @param array HTML属性
+ * @return string html
+ * @access public
+ */
+	public function datepicker($fieldName, $attributes = array()) {
+
+		if (!isset($attributes['value'])) {
+			$value = $this->value($fieldName);
+		} else {
+			$value = $attributes['value'];
+		}
+
+		if ($value) {
+			$value = $this->BcTime->format('Y/m/d', $value);
+			if ($value) {
+				$attributes['value'] = date('Y/m/d', strtotime($value));
+			} else {
+				$attributes['value'] = '';
+			}
+		} else {
+			unset($attributes['value']);
+		}
+
+		$this->setEntity($fieldName);
+		$id = $this->domId($fieldName);
+
+		// テキストボックス
+		$input = $this->text($fieldName, $attributes);
+
+		// javascript
+		$script = <<< DOC_END
+<script type="text/javascript">
+<!--
+jQuery(function($){
+	$("#{$id}").datepicker();
+});
+//-->
+</script>
+DOC_END;
+
+		$out = $input . "\n" . $script;
+		return $out;
+	}
+
+/**
+ * 日付カレンダーと時間フィールド
+ * 
+ * @param string $fieldName
+ * @param array $attributes
+ * @return string
+ * @access public
+ */
+	public function dateTimePicker($fieldName, $attributes = array()) {
+
+		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
+		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
+		$timeAttributes = array('size' => 8, 'maxlength' => 8);
+		if (!isset($attributes['value'])) {
+			$value = $this->value($fieldName);
+		} else {
+			$value = $attributes['value'];
+			unset($attributes['value']);
+		}
+		if ($value && $value != '0000-00-00 00:00:00') {
+			$dateValue = date('Y/m/d', strtotime($value));
+			$timeValue = date('H:i:s', strtotime($value));
+			$attributes['value'] = $dateValue;
+			$timeAttributes['value'] = $timeValue;
+		}
+		$dateTag = $this->datepicker($fieldName . '_date', $attributes);
+		$timeTag = $this->text($fieldName . '_time', $timeAttributes);
+		$hiddenTag = $this->hidden($fieldName, array('value' => $value));
+		$domId = $this->domId();
+		$_script = <<< DOC_END
+<script type="text/javascript">
+$(function(){
+   $("#{$domId}Time").timepicker({ 'timeFormat': 'H:i' });
+   $("#{$domId}Date").change({$domId}ChangeResultHandler);
+   $("#{$domId}Time").change({$domId}ChangeResultHandler);
+   function {$domId}ChangeResultHandler(){
+		var value = $("#{$domId}Date").val().replace(/\//g, '-');
+		if($("#{$domId}Time").val()) {
+			value += ' '+$("#{$domId}Time").val();
+		}
+        $("#{$domId}").val(value);
+		if(this.id.replace('{$domId}','') == 'Date') {
+			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
+				$("#{$domId}Time").val('00:00:00');
+			}
+		}
+   }
+});
+</script>
+DOC_END;
+		$script = $this->_View->addScript($_script);
+		return $dateTag . $timeTag . $hiddenTag;
+	}
+	
+/**
+ * 文字列保存用複数選択コントロール
+ * 
+ * @param string $fieldName
+ * @param array $options
+ * @param mixed $selected
+ * @param array $attributes
+ * @param mixed $showEmpty
+ * @return string
+ * @access public
+ */
+	public function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
+
+		$_attributes = array('separator' => '<br />', 'quotes' => true);
+		$attributes = Hash::merge($_attributes, $attributes);
+
+		$quotes = $attributes['quotes'];
+		unset($attributes['quotes']);
+
+		$_options = $this->_initInputField($fieldName, $options);
+		if (empty($attributes['multiple']))
+			$attributes['multiple'] = 'checkbox';
+		$id = $_options['id'];
+		$_id = $_options['id'] . '_';
+		$name = $_options['name'];
+		$out = '<div id="' . $_id . '">' . $this->select($fieldName . '_', $options, $selected, $attributes, $showEmpty) . '</div>';
+		$out .= $this->hidden($fieldName);
+		$script = <<< DOC_END
+$(document).ready(function() {
+    aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
+    for(key in aryValue){
+        var value = aryValue[key];
+        $("#"+camelize("{$id}_"+value)).attr('checked',true);
+    }
+    $("#{$_id} input[type=checkbox]").change(function(){
+        var aryValue = [];
+        $("#{$_id} input[type=checkbox]").each(function(key,value){
+            if($(this).attr('checked')){
+                aryValue.push("'"+$(this).val()+"'");
+            }
+        });
+        $("#{$id}").val(aryValue.join(','));
+    });
+});
+DOC_END;
+		$out .= $this->Js->buffer($script);
+		return $out;
+	}
+	
+// <<<
+/**
  * 日付タグ
  * 和暦実装
  * TODO 未実装
@@ -1265,4 +1289,5 @@ DOC_END;
 	  return parent::dateTime($fieldName, $dateFormat, $timeFormat, $selected, $attributes, $showEmpty);
 
 	  } */
+
 }

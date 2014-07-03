@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* Dblogs schema generated on: 2011-06-12 11:06:13 : 1307847253 */
 
 class DblogsSchema extends CakeSchema {

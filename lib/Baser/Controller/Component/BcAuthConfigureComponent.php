@@ -1,11 +1,8 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * 認証設定コンポーネント
  * (注）BaserのDB設計に依存している
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -14,9 +11,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Component', 'Controller');

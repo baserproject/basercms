@@ -1,10 +1,7 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ページモデル
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -13,9 +10,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -802,7 +796,7 @@ class Page extends AppModel {
 				$this->_publishes = array();
 				return false;
 			}
-			$this->_publishes = Set::extract('/Page/url', $pages);
+			$this->_publishes = Hash::extract($pages, '{n}.Page.url');
 		}
 		return in_array($url, $this->_publishes);
 	}
@@ -1052,7 +1046,7 @@ class Page extends AppModel {
 				$this->_pages = array();
 				return false;
 			}
-			$this->_pages = Set::extract('/Page/url', $pages);
+			$this->_pages = Hash::extract($pages, '{n}.Page.url');
 		}
 		return in_array($url, $this->_pages);
 	}

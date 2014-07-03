@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ブログ投稿者一覧
  * 

@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ブログコメント単記事
  * 
@@ -14,9 +13,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->includeCore('Blog.Elements/smartphone/blog_comment', array('dbData' => $dbData));

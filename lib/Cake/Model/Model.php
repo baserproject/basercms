@@ -952,9 +952,11 @@ class Model extends Object implements CakeEventListener {
  * Example: Turn off the associated Model Support request,
  * to temporarily lighten the User model:
  *
- * `$this->User->unbindModel(array('hasMany' => array('Supportrequest')));`
+ * `$this->User->unbindModel(array('hasMany' => array('SupportRequest')));`
+ * Or alternatively:
+ * `$this->User->unbindModel(array('hasMany' => 'SupportRequest'));`
  *
- * unbound models that are not made permanent will reset with the next call to Model::find()
+ * Unbound models that are not made permanent will reset with the next call to Model::find()
  *
  * @param array $params Set of bindings to unbind (indexed by binding type)
  * @param boolean $reset Set to false to make the unbinding permanent
@@ -966,7 +968,7 @@ class Model extends Object implements CakeEventListener {
 			if ($reset === true && !isset($this->__backAssociation[$assoc])) {
 				$this->__backAssociation[$assoc] = $this->{$assoc};
 			}
-
+			$models = Hash::normalize((array)$models, false);
 			foreach ($models as $model) {
 				if ($reset === false && isset($this->__backAssociation[$assoc][$model])) {
 					unset($this->__backAssociation[$assoc][$model]);
@@ -1486,7 +1488,7 @@ class Model extends Object implements CakeEventListener {
 
 		if (strpos($field, '.') !== false) {
 			list($model, $field) = explode('.', $field);
-			if ($model == $this->alias && isset($this->virtualFields[$field])) {
+			if ($model === $this->alias && isset($this->virtualFields[$field])) {
 				return true;
 			}
 		}
@@ -1661,7 +1663,7 @@ class Model extends Object implements CakeEventListener {
 
 		$options = array('validate' => $validate, 'fieldList' => array($name));
 		if (is_array($validate)) {
-			$options = array_merge(array('validate' => false, 'fieldList' => array($name)), $validate);
+			$options = $validate + array('validate' => false, 'fieldList' => array($name));
 		}
 
 		return $this->save(array($this->alias => array($this->primaryKey => $id, $name => $value)), $options);
@@ -1695,9 +1697,9 @@ class Model extends Object implements CakeEventListener {
 		$fields = array();
 
 		if (!is_array($validate)) {
-			$options = array_merge($defaults, compact('validate', 'fieldList'));
+			$options = compact('validate', 'fieldList') + $defaults;
 		} else {
-			$options = array_merge($defaults, $validate);
+			$options = $validate + $defaults;
 		}
 
 		if (!empty($options['fieldList'])) {
@@ -1865,9 +1867,9 @@ class Model extends Object implements CakeEventListener {
 				$success = $this->data;
 			}
 
-			$this->data = false;
 			$this->_clearCache();
 			$this->validationErrors = array();
+			$this->data = false;
 		}
 
 		$this->whitelist = $_whitelist;
@@ -1930,7 +1932,7 @@ class Model extends Object implements CakeEventListener {
 			}
 
 			foreach ((array)$data as $row) {
-				if ((is_string($row) && (strlen($row) == 36 || strlen($row) == 16)) || is_numeric($row)) {
+				if ((is_string($row) && (strlen($row) === 36 || strlen($row) === 16)) || is_numeric($row)) {
 					$newJoins[] = $row;
 					$values = array($id, $row);
 
@@ -2106,7 +2108,7 @@ class Model extends Object implements CakeEventListener {
 	protected function _prepareUpdateFields($data) {
 		$foreignKeys = array();
 		foreach ($this->belongsTo as $assoc => $info) {
-			if ($info['counterCache']) {
+			if (isset($info['counterCache']) && $info['counterCache']) {
 				$foreignKeys[$assoc] = $info['foreignKey'];
 			}
 		}
@@ -2162,7 +2164,7 @@ class Model extends Object implements CakeEventListener {
  * @link http://book.cakephp.org/2.0/en/models/saving-your-data.html#model-saveall-array-data-null-array-options-array
  */
 	public function saveAll($data = array(), $options = array()) {
-		$options = array_merge(array('validate' => 'first'), $options);
+		$options += array('validate' => 'first');
 		if (Hash::numeric(array_keys($data))) {
 			if ($options['validate'] === 'only') {
 				return $this->validateMany($data, $options);
@@ -2204,7 +2206,7 @@ class Model extends Object implements CakeEventListener {
 			$data = $this->data;
 		}
 
-		$options = array_merge(array('validate' => 'first', 'atomic' => true, 'deep' => false), $options);
+		$options += array('validate' => 'first', 'atomic' => true, 'deep' => false);
 		$this->validationErrors = $validationErrors = array();
 
 		if (empty($data) && $options['validate'] !== false) {
@@ -2326,7 +2328,7 @@ class Model extends Object implements CakeEventListener {
 			$data = $this->data;
 		}
 
-		$options = array_merge(array('validate' => 'first', 'atomic' => true, 'deep' => false), $options);
+		$options += array('validate' => 'first', 'atomic' => true, 'deep' => false);
 		$this->validationErrors = $validationErrors = array();
 
 		if (empty($data) && $options['validate'] !== false) {
@@ -2367,9 +2369,9 @@ class Model extends Object implements CakeEventListener {
 			$saved = false;
 			if ($validates) {
 				if ($options['deep']) {
-					$saved = $Model->saveAssociated($values, array_merge($options, array('atomic' => false)));
+					$saved = $Model->saveAssociated($values, array('atomic' => false) + $options);
 				} else {
-					$saved = $Model->save($values, array_merge($options, array('atomic' => false)));
+					$saved = $Model->save($values, array('atomic' => false) + $options);
 				}
 				$validates = ($saved === true || (is_array($saved) && !in_array(false, $saved, true)));
 			}
@@ -2423,7 +2425,7 @@ class Model extends Object implements CakeEventListener {
 					if ($validates) {
 						$options = $Model->_addToWhiteList($key, $options);
 						if ($options['deep']) {
-							$saved = $Model->saveAssociated($values, array_merge($options, array('atomic' => false)));
+							$saved = $Model->saveAssociated($values, array('atomic' => false) + $options);
 						} else {
 							$saved = $Model->save($values, $options);
 						}
@@ -2446,7 +2448,7 @@ class Model extends Object implements CakeEventListener {
 					}
 
 					$options = $Model->_addToWhiteList($key, $options);
-					$_return = $Model->saveMany($values, array_merge($options, array('atomic' => false)));
+					$_return = $Model->saveMany($values, array('atomic' => false) + $options);
 					if (in_array(false, $_return, true)) {
 						$validationErrors[$association] = $Model->validationErrors;
 						$validates = false;
@@ -3478,14 +3480,14 @@ class Model extends Object implements CakeEventListener {
 		if (!empty($oldConfig) && isset($db->config['prefix'])) {
 			$oldDb = ConnectionManager::getDataSource($oldConfig);
 
-			if (!isset($this->tablePrefix) || (!isset($oldDb->config['prefix']) || $this->tablePrefix == $oldDb->config['prefix'])) {
+			if (!isset($this->tablePrefix) || (!isset($oldDb->config['prefix']) || $this->tablePrefix === $oldDb->config['prefix'])) {
 				$this->tablePrefix = $db->config['prefix'];
 			}
 		} elseif (isset($db->config['prefix'])) {
 			$this->tablePrefix = $db->config['prefix'];
 		}
 
-		$this->schemaName = $db->getSchemaName();
+		$this->schemaName = (empty($this->schemaName) ? $db->getSchemaName() : $this->schemaName);
 	}
 
 /**

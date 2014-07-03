@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* GlobalMenus schema generated on: 2010-11-04 18:11:08 : 1288863008 */
 
 class MenusSchema extends CakeSchema {

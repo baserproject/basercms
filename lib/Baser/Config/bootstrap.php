@@ -2,8 +2,6 @@
 /**
  * 起動スクリプト
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -264,7 +262,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		loadPlugin($plugin['Plugin']['name'], $priority);
 		$priority--;
 	}
-	$plugins = Set::extract('/Plugin/name', $plugins);
+	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);
 
 /**

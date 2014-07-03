@@ -612,6 +612,8 @@ class CakeRequestTest extends CakeTestCase {
 
 /**
  * Test that files in the 0th index work.
+ *
+ * @return void
  */
 	public function testFilesZeroithIndex() {
 		$_FILES = array(
@@ -1042,6 +1044,13 @@ class CakeRequestTest extends CakeTestCase {
 
 		$request->return = false;
 		$this->assertFalse($request->isCallMe());
+
+		$request->addDetector('extension', array('param' => 'ext', 'options' => array('pdf', 'png', 'txt')));
+		$request->params['ext'] = 'pdf';
+		$this->assertTrue($request->is('extension'));
+
+		$request->params['ext'] = 'exe';
+		$this->assertFalse($request->isExtension());
 	}
 
 /**
@@ -1296,6 +1305,7 @@ class CakeRequestTest extends CakeTestCase {
  * - index.php/bananas/eat/tasty_banana
  *
  * @link https://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/3318
+ * @return void
  */
 	public function testBaseUrlWithModRewriteAndIndexPhp() {
 		$_SERVER['REQUEST_URI'] = '/cakephp/app/webroot/index.php';
@@ -2214,38 +2224,44 @@ XML;
 	}
 
 /**
- * Test onlyAllow method
+ * Test allowMethod method
  *
  * @return void
  */
-	public function testOnlyAllow() {
+	public function testAllowMethod() {
 		$_SERVER['REQUEST_METHOD'] = 'PUT';
 		$request = new CakeRequest('/posts/edit/1');
 
+		$this->assertTrue($request->allowMethod(array('put')));
+
+		// BC check
 		$this->assertTrue($request->onlyAllow(array('put')));
 
 		$_SERVER['REQUEST_METHOD'] = 'DELETE';
+		$this->assertTrue($request->allowMethod('post', 'delete'));
+
+		// BC check
 		$this->assertTrue($request->onlyAllow('post', 'delete'));
 	}
 
 /**
- * Test onlyAllow throwing exception
+ * Test allowMethod throwing exception
  *
  * @return void
  */
-	public function testOnlyAllowException() {
+	public function testAllowMethodException() {
 		$_SERVER['REQUEST_METHOD'] = 'PUT';
 		$request = new CakeRequest('/posts/edit/1');
 
 		try {
-			$request->onlyAllow('POST', 'DELETE');
+			$request->allowMethod('POST', 'DELETE');
 			$this->fail('An expected exception has not been raised.');
 		} catch (MethodNotAllowedException $e) {
 			$this->assertEquals(array('Allow' => 'POST, DELETE'), $e->responseHeader());
 		}
 
 		$this->setExpectedException('MethodNotAllowedException');
-		$request->onlyAllow('POST');
+		$request->allowMethod('POST');
 	}
 
 /**

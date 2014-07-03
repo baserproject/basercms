@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * BcManagerコンポーネント
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
  * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.components
+ * @package			Baser.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Page', 'Model');
@@ -1020,7 +1014,7 @@ class BcManagerComponent extends Component {
 
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true)));
-		$plugins = Set::extract('/Plugin/name', $plugins);
+		$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 		foreach ($plugins as $plugin) {
 			if (!$this->resetTables('plugin', $dbConfig, $plugin, $excludes)) {
 				$result = false;
@@ -1139,7 +1133,7 @@ class BcManagerComponent extends Component {
 				} catch (Exception $e) {
 				}
 				if ($sequences) {
-					$sequences = Set::extract('/0/sequence_name', $sequences);
+					$sequences = Hash::extract($sequences, '0.sequence_name');
 					foreach ($sequences as $sequence) {
 						if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $sequence)) {
 							$sql = 'DROP SEQUENCE ' . $sequence;

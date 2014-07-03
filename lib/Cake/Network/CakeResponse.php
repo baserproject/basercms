@@ -379,6 +379,7 @@ class CakeResponse {
  *
  * @param array $options list of parameters to setup the response. Possible values are:
  *	- body: the response text that should be sent to the client
+ *	- statusCodes: additional allowable response codes
  *	- status: the HTTP status code to respond with
  *	- type: a complete mime-type string or an extension mapped in this class
  *	- charset: the charset for the response body
@@ -386,6 +387,9 @@ class CakeResponse {
 	public function __construct(array $options = array()) {
 		if (isset($options['body'])) {
 			$this->body($options['body']);
+		}
+		if (isset($options['statusCodes'])) {
+			$this->httpCodes($options['statusCodes']);
 		}
 		if (isset($options['status'])) {
 			$this->statusCode($options['status']);
@@ -1147,7 +1151,7 @@ class CakeResponse {
 			$etagMatches = in_array('*', $etags) || in_array($responseTag, $etags);
 		}
 		if ($modifiedSince) {
-			$timeMatches = strtotime($this->modified()) == strtotime($modifiedSince);
+			$timeMatches = strtotime($this->modified()) === strtotime($modifiedSince);
 		}
 		$checks = compact('etagMatches', 'timeMatches');
 		if (empty($checks)) {
@@ -1237,6 +1241,75 @@ class CakeResponse {
 	}
 
 /**
+ * Setup access for origin and methods on cross origin requests
+ *
+ * This method allow multiple ways to setup the domains, see the examples
+ *
+ * ### Full URI
+ * e.g `cors($request, 'http://www.cakephp.org');`
+ *
+ * ### URI with wildcard
+ * e.g `cors($request, 'http://*.cakephp.org');`
+ *
+ * ### Ignoring the requested protocol
+ * e.g `cors($request, 'www.cakephp.org');`
+ *
+ * ### Any URI
+ * e.g `cors($request, '*');`
+ *
+ * ### Whitelist of URIs
+ * e.g `cors($request, array('http://www.cakephp.org', '*.google.com', 'https://myproject.github.io'));`
+ *
+ * @param CakeRequest $request Request object
+ * @param string|array $allowedDomains List of allowed domains, see method description for more details
+ * @param string|array $allowedMethods List of HTTP verbs allowed
+ * @param string|array $allowedHeaders List of HTTP headers allowed
+ * @return void
+ */
+	public function cors(CakeRequest $request, $allowedDomains, $allowedMethods = array(), $allowedHeaders = array()) {
+		$origin = $request->header('Origin');
+		if (!$origin) {
+			return;
+		}
+
+		$allowedDomains = $this->_normalizeCorsDomains((array)$allowedDomains, $request->is('ssl'));
+		foreach ($allowedDomains as $domain) {
+			if (!preg_match($domain['preg'], $origin)) {
+				continue;
+			}
+			$this->header('Access-Control-Allow-Origin', $domain['original'] === '*' ? '*' : $origin);
+			$allowedMethods && $this->header('Access-Control-Allow-Methods', implode(', ', (array)$allowedMethods));
+			$allowedHeaders && $this->header('Access-Control-Allow-Headers', implode(', ', (array)$allowedHeaders));
+			break;
+		}
+	}
+
+/**
+ * Normalize the origin to regular expressions and put in an array format
+ *
+ * @param array $domains
+ * @param boolean $requestIsSSL
+ * @return array
+ */
+	protected function _normalizeCorsDomains($domains, $requestIsSSL = false) {
+		$result = array();
+		foreach ($domains as $domain) {
+			if ($domain === '*') {
+				$result[] = array('preg' => '@.@', 'original' => '*');
+				continue;
+			}
+
+			$original = $preg = $domain;
+			if (strpos($domain, '://') === false) {
+				$preg = ($requestIsSSL ? 'https://' : 'http://') . $domain;
+			}
+			$preg = '@' . str_replace('*', '.*', $domain) . '@';
+			$result[] = compact('original', 'preg');
+		}
+		return $result;
+	}
+
+/**
  * Setup for display or download the given file.
  *
  * If $_SERVER['HTTP_RANGE'] is set a slice of the file will be
@@ -1247,7 +1320,8 @@ class CakeResponse {
  * - name: Alternate download name
  * - download: If `true` sets download header and forces file to be downloaded rather than displayed in browser
  *
- * @param string $path Path to file
+ * @param string $path Path to file. If the path is not an absolute path that resolves
+ *   to a file, `APP` will be prepended to the path.
  * @param array $options Options See above.
  * @return void
  * @throws NotFoundException
@@ -1257,6 +1331,13 @@ class CakeResponse {
 			'name' => null,
 			'download' => null
 		);
+
+		if (strpos($path, '..') !== false) {
+			throw new NotFoundException(__d(
+				'cake_dev',
+				'The requested file contains `..` and will not be read.'
+			));
+		}
 
 		if (!is_file($path)) {
 			$path = APP . $path;

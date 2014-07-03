@@ -1,23 +1,17 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * baserCMS共通関数
  *
  * baser/config/bootstrapより呼び出される
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('EmailComponent', 'Controller/Component');
@@ -684,7 +678,7 @@ function getEnablePlugins() {
 			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
 			ClassRegistry::removeObject('Plugin');
 			if ($plugins) {
-				$enablePlugins = Set::extract('/Plugin/name', $plugins);
+				$enablePlugins = Hash::extract($plugins, '{n}.Plugin.name');
 
 				if (!Configure::read('Cache.disable')) {
 					Cache::write('enable_plugins', $plugins, '_cake_env_');

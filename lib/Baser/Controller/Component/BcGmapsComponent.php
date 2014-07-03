@@ -2,8 +2,6 @@
 /**
  * GoogleMap コンポーネント
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -129,36 +127,22 @@ class BcGmapsComponent extends Component {
 		$xmlArray = Xml::toArray(Xml::build($requestUrl));
 		$xml = $xmlArray['GeocodeResponse'];
 
-		if (!empty($xml['result'])) {
-			if (!isset($xml['result']['geometry']['location'])) {
+		$result = null;
+		if (!empty($xml['result']['geometry'])) {
+			$result = $xml['result'];
+		} elseif(!empty($xml['result'][0])) {
+			$result = $xml['result'][0];
+		}
+
+		if ($result) {
+			if (!isset($result['geometry']['location'])) {
 				return false;
 			}
-
-			$point = $xml['result']['geometry']['location'];
+			$point = $result['geometry']['location'];
 			if (!empty($point)) {
 				$this->_latitude = $point['lat'];
 				$this->_longitude = $point['lng'];
 			}
-
-			/*
-			  $this->_address= $xml['Response']['Placemark']['address'];
-
-			  if(isset($xml['Response']['Placemark']['AddressDetails'])) {
-			  $this->_countryName= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryName'];
-			  $this->_countryNameCode= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryNameCode'];
-			  if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'])) {
-			  $this->_administrativeAreaName= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'];
-			  }
-			  if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'])) {
-			  $administrativeArea= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'];
-			  }
-			  }
-
-			  if (!empty($administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'])) {
-			  $this->_postalCode= $administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'];
-			  } elseif (!empty($administrativeArea['Locality']['PostalCode']['PostalCodeNumber'])) {
-			  $this->_postalCode= $administrativeArea['Locality']['PostalCode']['PostalCodeNumber'];
-			  } */
 			return true;
 		} else {
 			return false;

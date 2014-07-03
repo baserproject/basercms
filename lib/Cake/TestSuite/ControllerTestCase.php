@@ -94,6 +94,7 @@ class InterceptContentHelper extends Helper {
  * Intercepts and stores the contents of the view before the layout is rendered
  *
  * @param string $viewFile The view file
+ * @return void
  */
 	public function afterRender($viewFile) {
 		$this->_View->assign('__view_no_layout__', $this->_View->fetch('content'));
@@ -214,11 +215,11 @@ abstract class ControllerTestCase extends CakeTestCase {
 	protected function _testAction($url = '', $options = array()) {
 		$this->vars = $this->result = $this->view = $this->contents = $this->headers = null;
 
-		$options = array_merge(array(
+		$options += array(
 			'data' => array(),
 			'method' => 'POST',
 			'return' => 'result'
-		), $options);
+		);
 
 		$restore = array('get' => $_GET, 'post' => $_POST);
 

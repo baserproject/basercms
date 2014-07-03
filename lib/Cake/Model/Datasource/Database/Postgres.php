@@ -45,7 +45,8 @@ class Postgres extends DboSource {
 		'database' => 'cake',
 		'schema' => 'public',
 		'port' => 5432,
-		'encoding' => ''
+		'encoding' => '',
+		'flags' => array()
 	);
 
 /**
@@ -60,6 +61,7 @@ class Postgres extends DboSource {
 		'integer' => array('name' => 'integer', 'formatter' => 'intval'),
 		'biginteger' => array('name' => 'bigint', 'limit' => '20'),
 		'float' => array('name' => 'float', 'formatter' => 'floatval'),
+		'decimal' => array('name' => 'decimal', 'formatter' => 'floatval'),
 		'datetime' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
 		'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
 		'time' => array('name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'),
@@ -109,7 +111,7 @@ class Postgres extends DboSource {
 		$config = $this->config;
 		$this->connected = false;
 
-		$flags = array(
+		$flags = $config['flags'] + array(
 			PDO::ATTR_PERSISTENT => $config['persistent'],
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 		);
@@ -238,7 +240,7 @@ class Postgres extends DboSource {
 					'length' => $length
 				);
 				if ($model instanceof Model) {
-					if ($c->name == $model->primaryKey) {
+					if ($c->name === $model->primaryKey) {
 						$fields[$c->name]['key'] = 'primary';
 						if ($fields[$c->name]['type'] !== 'string') {
 							$fields[$c->name]['length'] = 11;
@@ -507,7 +509,7 @@ class Postgres extends DboSource {
 		$colList = array();
 		foreach ($compare as $curTable => $types) {
 			$indexes = $colList = array();
-			if (!$table || $table == $curTable) {
+			if (!$table || $table === $curTable) {
 				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
 				foreach ($types as $type => $column) {
 					if (isset($column['indexes'])) {
@@ -538,7 +540,7 @@ class Postgres extends DboSource {
 
 								$default = isset($col['default']) ? $col['default'] : null;
 								$nullable = isset($col['null']) ? $col['null'] : null;
-								$boolToInt = $original['type'] == 'boolean' && $col['type'] == 'integer';
+								$boolToInt = $original['type'] === 'boolean' && $col['type'] === 'integer';
 								unset($col['default'], $col['null']);
 								if ($field !== $col['name']) {
 									$newName = $this->name($col['name']);
@@ -675,7 +677,7 @@ class Postgres extends DboSource {
 		}
 
 		$floats = array(
-			'float', 'float4', 'float8', 'double', 'double precision', 'decimal', 'real', 'numeric'
+			'float', 'float4', 'float8', 'double', 'double precision', 'real'
 		);
 
 		switch (true) {
@@ -695,6 +697,8 @@ class Postgres extends DboSource {
 				return 'text';
 			case (strpos($col, 'bytea') !== false):
 				return 'binary';
+			case ($col === 'decimal' || $col === 'numeric'):
+				return 'decimal';
 			case (in_array($col, $floats)):
 				return 'float';
 			default:

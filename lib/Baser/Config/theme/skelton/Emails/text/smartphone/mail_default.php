@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * [SMARTPHONE] 送信メール
  * 
@@ -13,9 +12,6 @@
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->includeCore('Mail.Emails/text/smartphone/mail_default');

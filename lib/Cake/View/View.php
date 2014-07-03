@@ -252,6 +252,13 @@ class View extends Object {
 	protected $_paths = array();
 
 /**
+ * Holds an array of plugin paths.
+ *
+ * @var array
+ */
+	protected $_pathsForPlugin = array();
+
+/**
  * The names of views and their parents used with View::extend();
  *
  * @var array
@@ -381,13 +388,12 @@ class View extends Object {
  *   If an array, the following keys can be used:
  *   - `config` - Used to store the cached element in a custom cache configuration.
  *   - `key` - Used to define the key used in the Cache::write(). It will be prefixed with `element_`
- * - `plugin` - Load an element from a specific plugin. This option is deprecated, see below.
+ * - `plugin` - (deprecated!) Load an element from a specific plugin. This option is deprecated, and
+ *              will be removed in CakePHP 3.0. Use `Plugin.element_name` instead.
  * - `callbacks` - Set to true to fire beforeRender and afterRender helper callbacks for this element.
  *   Defaults to false.
  * - `ignoreMissing` - Used to allow missing elements. Set to true to not trigger notices.
  * @return string Rendered Element
- * @deprecated The `$options['plugin']` is deprecated and will be removed in CakePHP 3.0. Use
- *   `Plugin.element_name` instead.
  */
 	public function element($name, $data = array(), $options = array()) {
 		$file = $plugin = null;
@@ -458,7 +464,6 @@ class View extends Object {
 		if ($this->hasRendered) {
 			return;
 		}
-		$this->Blocks->set('content', '');
 
 		if ($view !== false && $viewFileName = $this->_getViewFileName($view)) {
 			$this->_currentType = self::TYPE_VIEW;
@@ -491,7 +496,8 @@ class View extends Object {
  * - `$scripts_for_layout` is deprecated and will be removed in CakePHP 3.0.
  *   Use the block features instead. `meta`, `css` and `script` will be populated
  *   by the matching methods on HtmlHelper.
- * - `$title_for_layout` is deprecated and will be removed in CakePHP 3.0
+ * - `$title_for_layout` is deprecated and will be removed in CakePHP 3.0.
+ *   Use the `title` block instead.
  * - `$content_for_layout` is deprecated and will be removed in CakePHP 3.0.
  *   Use the `content` block instead.
  *
@@ -521,9 +527,16 @@ class View extends Object {
 			'scripts_for_layout' => $scripts,
 		));
 
-		if (!isset($this->viewVars['title_for_layout'])) {
-			$this->viewVars['title_for_layout'] = Inflector::humanize($this->viewPath);
+		$title = $this->Blocks->get('title');
+		if ($title === '') {
+			if (isset($this->viewVars['title_for_layout'])) {
+				$title = $this->viewVars['title_for_layout'];
+			} else {
+				$title = Inflector::humanize($this->viewPath);
+			}
 		}
+		$this->viewVars['title_for_layout'] = $title;
+		$this->Blocks->set('title', $title);
 
 		$this->_currentType = self::TYPE_LAYOUT;
 		$this->Blocks->set('content', $this->_render($layoutFileName));
@@ -584,15 +597,15 @@ class View extends Object {
 	}
 
 /**
- * Returns the contents of the given View variable or a block.
- * Blocks are checked before view variables.
+ * Returns the contents of the given View variable.
  *
  * @param string $var The view var you want the contents of.
- * @return mixed The content of the named var if its set, otherwise null.
+ * @param mixed $default The default/fallback content of $var.
+ * @return mixed The content of the named var if its set, otherwise $default.
  */
-	public function get($var) {
+	public function get($var, $default = null) {
 		if (!isset($this->viewVars[$var])) {
-			return null;
+			return $default;
 		}
 		return $this->viewVars[$var];
 	}
@@ -1104,8 +1117,13 @@ class View extends Object {
  * @return array paths
  */
 	protected function _paths($plugin = null, $cached = true) {
-		if ($plugin === null && $cached === true && !empty($this->_paths)) {
-			return $this->_paths;
+		if ($cached === true) {
+			if ($plugin === null && !empty($this->_paths)) {
+				return $this->_paths;
+			}
+			if ($plugin !== null && isset($this->_pathsForPlugin[$plugin])) {
+				return $this->_pathsForPlugin[$plugin];
+			}
 		}
 		$paths = array();
 		$viewPaths = App::path('View');
@@ -1137,7 +1155,7 @@ class View extends Object {
 		}
 		$paths = array_merge($paths, $corePaths);
 		if ($plugin !== null) {
-			return $paths;
+			return $this->_pathsForPlugin[$plugin] = $paths;
 		}
 		return $this->_paths = $paths;
 	}

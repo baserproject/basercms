@@ -74,10 +74,12 @@ class TextHelperTest extends CakeTestCase {
 
 /**
  * test String class methods are called correctly
+ *
+ * @return void
  */
 	public function testTextHelperProxyMethodCalls() {
 		$methods = array(
-			'highlight', 'stripLinks', 'truncate', 'excerpt', 'toList',
+			'highlight', 'stripLinks', 'truncate', 'tail', 'excerpt', 'toList',
 			);
 		$String = $this->getMock('StringMock', $methods);
 		$Text = new TextHelperTestObject($this->View, array('engine' => 'StringMock'));
@@ -90,6 +92,8 @@ class TextHelperTest extends CakeTestCase {
 
 /**
  * test engine override
+ *
+ * @return void
  */
 	public function testEngineOverride() {
 		App::build(array(
@@ -204,6 +208,8 @@ class TextHelperTest extends CakeTestCase {
 
 /**
  * Data provider for autoLinking
+ *
+ * @return array
  */
 	public static function autoLinkProvider() {
 		return array(
@@ -258,6 +264,10 @@ class TextHelperTest extends CakeTestCase {
 			array(
 				'Text with a url http://www.not--work.com and more',
 				'Text with a url <a href="http://www.not--work.com">http://www.not--work.com</a> and more',
+			),
+			array(
+				'Text with a url http://www.sub_domain.domain.pl and more',
+				'Text with a url <a href="http://www.sub_domain.domain.pl">http://www.sub_domain.domain.pl</a> and more',
 			),
 			array(
 				'Text with a partial www.küchenschöhn-not-working.de URL',
