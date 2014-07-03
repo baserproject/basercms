@@ -90,6 +90,7 @@ $(function(){
 		}
 		$("#PageMode").val('save');
 		$("#PageForm").submit();
+		return false;
 	});
 /**
  * カテゴリ変更時イベント
