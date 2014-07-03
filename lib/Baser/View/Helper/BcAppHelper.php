@@ -113,11 +113,10 @@ class BcAppHelper extends Helper {
 						$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 					}
 				} else {
+					
 					// フロントのWebページを表示する際に、管理システム用のアセットファイルを参照する為のURLを生成する
 					if (property_exists($this->_View, 'adminTheme') && $this->_View->adminTheme) {
-						$themePath = App::themePath($this->_View->adminTheme);
-						$path = $themePath . 'webroot' . DS . $file;
-						if (file_exists($path)) {
+						if (file_exists($themePath = Configure::read('App.www_root') . 'theme' . DS . $this->_View->adminTheme . DS . $file)) {
 							$adminTheme = $this->_View->adminTheme . '/';
 							if ($baseUrl) {
 								// スマートURLオフ
