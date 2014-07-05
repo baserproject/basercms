@@ -23,6 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
+  # config.vm.network :public_network, :ip => "192.168.0.230", :netmask => "255.255.255.0", :bridge => 'en1: Wi-Fi (AirPort)' # 同一ネットワークからのアクセス対応（設定値は書き換え要）
   config.vm.network :private_network, ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
@@ -39,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
+  config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> "apache", :group=> "apache", :mount_options => ['dmode=777','fmode=777']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
