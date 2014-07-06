@@ -40,7 +40,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> "apache", :group=> "apache", :mount_options => ['dmode=777','fmode=777']
+  #
+  # 2014/07/07 ryuring
+  # セッションファイルの生成に失敗していたので、下の行の設定に変更していたが、
+  # その場合、共有フォルダの設定に失敗し、起動する事すらできなくなってしまった為、
+  # 一旦元にもどした
+  # config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> "apache", :group=> "apache", :mount_options => ['dmode=777','fmode=777']
+  config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
