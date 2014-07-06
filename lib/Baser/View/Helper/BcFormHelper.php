@@ -267,8 +267,8 @@ class BcFormHelper extends FormHelper {
 /**
  * Generates option lists for common <select /> menus
  *
- * @param string $name
- * @param array $options
+ * @param string $name List type name.
+ * @param array $options Options list.
  * @return array
  */
 	protected function _generateOptions($name, $options = array()) {
@@ -304,17 +304,7 @@ class BcFormHelper extends FormHelper {
 				$data = array('am' => 'am', 'pm' => 'pm');
 				break;
 			case 'day':
-				$min = 1;
-				$max = 31;
-
-				if (isset($options['min'])) {
-					$min = $options['min'];
-				}
-				if (isset($options['max'])) {
-					$max = $options['max'];
-				}
-
-				for ($i = $min; $i <= $max; $i++) {
+				for ($i = 1; $i <= 31; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
 				break;

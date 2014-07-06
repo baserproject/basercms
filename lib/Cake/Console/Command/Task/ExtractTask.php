@@ -127,7 +127,7 @@ class ExtractTask extends AppShell {
 			);
 			$response = $this->in($message, null, $defaultPath);
 			if (strtoupper($response) === 'Q') {
-				$this->out(__d('cake_console', 'Extract Aborted'));
+				$this->err(__d('cake_console', 'Extract Aborted'));
 				return $this->_stop();
 			} elseif (strtoupper($response) === 'D' && count($this->_paths)) {
 				$this->out();
@@ -204,7 +204,7 @@ class ExtractTask extends AppShell {
 			while (true) {
 				$response = $this->in($message, null, rtrim($this->_paths[0], DS) . DS . 'Locale');
 				if (strtoupper($response) === 'Q') {
-					$this->out(__d('cake_console', 'Extract Aborted'));
+					$this->err(__d('cake_console', 'Extract Aborted'));
 					return $this->_stop();
 				} elseif ($this->_isPathUsable($response)) {
 					$this->_output = $response . DS;
@@ -242,10 +242,10 @@ class ExtractTask extends AppShell {
  *
  * Takes care of duplicate translations
  *
- * @param string $category
- * @param string $domain
- * @param string $msgid
- * @param array $details
+ * @param string $category The category
+ * @param string $domain The domain
+ * @param string $msgid The message string
+ * @param array $details The file and line references
  * @return void
  */
 	protected function _addTranslation($category, $domain, $msgid, $details = array()) {
@@ -582,10 +582,10 @@ class ExtractTask extends AppShell {
 /**
  * Prepare a file to be stored
  *
- * @param string $category
- * @param string $domain
- * @param string $header
- * @param string $sentence
+ * @param string $category The category
+ * @param string $domain The domain
+ * @param string $header The header content.
+ * @param string $sentence The sentence to store.
  * @return void
  */
 	protected function _store($category, $domain, $header, $sentence) {
@@ -678,7 +678,7 @@ class ExtractTask extends AppShell {
 /**
  * Get the strings from the position forward
  *
- * @param integer $position Actual position on tokens array
+ * @param integer &$position Actual position on tokens array
  * @param integer $target Number of strings to extract
  * @return array Strings extracted
  */
@@ -734,16 +734,16 @@ class ExtractTask extends AppShell {
  * @return void
  */
 	protected function _markerError($file, $line, $marker, $count) {
-		$this->out(__d('cake_console', "Invalid marker content in %s:%s\n* %s(", $file, $line, $marker));
+		$this->err(__d('cake_console', "Invalid marker content in %s:%s\n* %s(", $file, $line, $marker));
 		$count += 2;
 		$tokenCount = count($this->_tokens);
 		$parenthesis = 1;
 
 		while ((($tokenCount - $count) > 0) && $parenthesis) {
 			if (is_array($this->_tokens[$count])) {
-				$this->out($this->_tokens[$count][1], false);
+				$this->err($this->_tokens[$count][1], false);
 			} else {
-				$this->out($this->_tokens[$count], false);
+				$this->err($this->_tokens[$count], false);
 				if ($this->_tokens[$count] === '(') {
 					$parenthesis++;
 				}
@@ -754,7 +754,7 @@ class ExtractTask extends AppShell {
 			}
 			$count++;
 		}
-		$this->out("\n", true);
+		$this->err("\n", true);
 	}
 
 /**

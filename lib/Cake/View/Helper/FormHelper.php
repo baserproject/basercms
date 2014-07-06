@@ -140,7 +140,7 @@ class FormHelper extends AppHelper {
  * Guess the location for a model based on its name and tries to create a new instance
  * or get an already created instance of the model
  *
- * @param string $model
+ * @param string $model Model name.
  * @return Model model instance
  */
 	protected function _getModel($model) {
@@ -254,7 +254,7 @@ class FormHelper extends AppHelper {
 /**
  * Returns if a field is required to be filled based on validation properties from the validating object.
  *
- * @param CakeValidationSet $validationRules
+ * @param CakeValidationSet $validationRules Validation rules set.
  * @return boolean true if field is required to be filled, false otherwise
  */
 	protected function _isRequiredField($validationRules) {
@@ -436,6 +436,7 @@ class FormHelper extends AppHelper {
 		$this->requestType = strtolower($options['type']);
 
 		$action = $this->url($options['action']);
+		$this->_lastAction($options['action']);
 		unset($options['type'], $options['action']);
 
 		if (!$options['default']) {
@@ -465,13 +466,6 @@ class FormHelper extends AppHelper {
 		if ($model !== false) {
 			$this->setEntity($model, true);
 			$this->_introspectModel($model, 'fields');
-		}
-
-		$this->_lastAction = $action;
-		if (strpos($action, '://')) {
-			$query = parse_url($action, PHP_URL_QUERY);
-			$query = $query ? '?' . $query : '';
-			$this->_lastAction = parse_url($action, PHP_URL_PATH) . $query;
 		}
 
 		return $this->Html->useTag('form', $action, $htmlAttributes) . $append;
@@ -1113,7 +1107,7 @@ class FormHelper extends AppHelper {
 /**
  * Generates input options array
  *
- * @param array $options
+ * @param array $options Options list.
  * @return array Options
  */
 	protected function _parseOptions($options) {
@@ -1144,7 +1138,7 @@ class FormHelper extends AppHelper {
 /**
  * Generates list of options for multiple select
  *
- * @param array $options
+ * @param array $options Options list.
  * @return array
  */
 	protected function _optionsOptions($options) {
@@ -1168,7 +1162,7 @@ class FormHelper extends AppHelper {
 /**
  * Magically set option type and corresponding options
  *
- * @param array $options
+ * @param array $options Options list.
  * @return array
  */
 	protected function _magicOptions($options) {
@@ -1241,7 +1235,7 @@ class FormHelper extends AppHelper {
 /**
  * Generate format options
  *
- * @param array $options
+ * @param array $options Options list.
  * @return array
  */
 	protected function _getFormat($options) {
@@ -1260,8 +1254,8 @@ class FormHelper extends AppHelper {
 /**
  * Generate label for input
  *
- * @param string $fieldName
- * @param array $options
+ * @param string $fieldName Field name.
+ * @param array $options Options list.
  * @return boolean|string false or Generated label element
  */
 	protected function _getLabel($fieldName, $options) {
@@ -1283,7 +1277,7 @@ class FormHelper extends AppHelper {
 /**
  * Calculates maxlength option
  *
- * @param array $options
+ * @param array $options Options list.
  * @return array
  */
 	protected function _maxLength($options) {
@@ -1305,7 +1299,7 @@ class FormHelper extends AppHelper {
 /**
  * Generate div options for input
  *
- * @param array $options
+ * @param array $options Options list.
  * @return array
  */
 	protected function _divOptions($options) {
@@ -1357,9 +1351,10 @@ class FormHelper extends AppHelper {
  * $options can contain a hash of id overrides. These overrides will be
  * used instead of the generated values if present.
  *
- * @param string $fieldName
- * @param string $label
- * @param array $options Options for the label element. 'NONE' option is deprecated and will be removed in 3.0
+ * @param string $fieldName Field name.
+ * @param string|array $label Label text or array with text and options.
+ * @param array $options Options for the label element. 'NONE' option is
+ *   deprecated and will be removed in 3.0
  * @return string Generated label element
  */
 	protected function _inputLabel($fieldName, $label, $options) {
@@ -1828,7 +1823,7 @@ class FormHelper extends AppHelper {
 			unset($options['target']);
 		}
 
-		$this->_lastAction = $formUrl;
+		$this->_lastAction($url);
 
 		$out = $this->Html->useTag('form', $formUrl, $formOptions);
 		$out .= $this->Html->useTag('hidden', '_method', array(
@@ -2097,7 +2092,11 @@ class FormHelper extends AppHelper {
 			) {
 				$this->_secure(true, $this->_secureFieldName($attributes));
 			}
-			$select[] = $this->Html->useTag($tag, $attributes['name'], array_diff_key($attributes, array('name' => null, 'value' => null)));
+			$filter = array('name' => null, 'value' => null);
+			if (is_array($attributes['disabled'])) {
+				$filter['disabled'] = null;
+			}
+			$select[] = $this->Html->useTag($tag, $attributes['name'], array_diff_key($attributes, $filter));
 		}
 		$emptyMulti = (
 			$showEmpty !== null && $showEmpty !== false && !(
@@ -2670,9 +2669,9 @@ class FormHelper extends AppHelper {
 /**
  * Gets the input field name for the current tag
  *
- * @param array $options
- * @param string $field
- * @param string $key
+ * @param array $options Options list.
+ * @param string $field Field name.
+ * @param string $key Key name.
  * @return array
  */
 	protected function _name($options = array(), $field = null, $key = 'name') {
@@ -2712,10 +2711,10 @@ class FormHelper extends AppHelper {
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
  *
- * @param array $elements
- * @param array $parents
- * @param boolean $showParents
- * @param array $attributes
+ * @param array $elements Elements to format.
+ * @param array $parents Parents for OPTGROUP.
+ * @param boolean $showParents Whether to show parents.
+ * @param array $attributes HTML attributes.
  * @return array
  */
 	protected function _selectOptions($elements = array(), $parents = array(), $showParents = null, $attributes = array()) {
@@ -2830,8 +2829,8 @@ class FormHelper extends AppHelper {
 /**
  * Generates option lists for common <select /> menus
  *
- * @param string $name
- * @param array $options
+ * @param string $name List type name.
+ * @param array $options Options list.
  * @return array
  */
 	protected function _generateOptions($name, $options = array()) {
@@ -2867,17 +2866,7 @@ class FormHelper extends AppHelper {
 				$data = array('am' => 'am', 'pm' => 'pm');
 				break;
 			case 'day':
-				$min = 1;
-				$max = 31;
-
-				if (isset($options['min'])) {
-					$min = $options['min'];
-				}
-				if (isset($options['max'])) {
-					$max = $options['max'];
-				}
-
-				for ($i = $min; $i <= $max; $i++) {
+				for ($i = 1; $i <= 31; $i++) {
 					$data[sprintf('%02d', $i)] = $i;
 				}
 				break;
@@ -3008,10 +2997,23 @@ class FormHelper extends AppHelper {
 	}
 
 /**
+ * Sets the last created form action.
+ *
+ * @param string|array $url URL.
+ * @return void
+ */
+	protected function _lastAction($url) {
+		$action = Router::url($url, true);
+		$query = parse_url($action, PHP_URL_QUERY);
+		$query = $query ? '?' . $query : '';
+		$this->_lastAction = parse_url($action, PHP_URL_PATH) . $query;
+	}
+
+/**
  * Set/Get inputDefaults for form elements
  *
  * @param array $defaults New default values
- * @param boolean Merge with current defaults
+ * @param boolean $merge Merge with current defaults
  * @return array inputDefaults
  */
 	public function inputDefaults($defaults = null, $merge = false) {

@@ -208,7 +208,10 @@ class Hash {
 			if (isset($data[$attr])) {
 				$prop = $data[$attr];
 			}
-			if ($prop === true || $prop === false) {
+			$isBool = is_bool($prop);
+			if ($isBool && is_numeric($val)) {
+				$prop = $prop ? '1' : '0';
+			} elseif ($isBool) {
 				$prop = $prop ? 'true' : 'false';
 			}
 
@@ -671,7 +674,7 @@ class Hash {
 /**
  * Checks to see if all the values in the array are numeric
  *
- * @param array $array The array to check.
+ * @param array $data The array to check.
  * @return boolean true if values are numeric, false otherwise
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::numeric
  */
@@ -689,7 +692,7 @@ class Hash {
  * If you have an un-even or heterogenous array, consider using Hash::maxDimensions()
  * to get the dimensions of the array.
  *
- * @param array $array Array to count dimensions on
+ * @param array $data Array to count dimensions on
  * @return integer The number of dimensions in $data
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::dimensions
  */
@@ -800,12 +803,12 @@ class Hash {
  *
  * @param array $data An array of data to sort
  * @param string $path A Set-compatible path to the array value
- * @param string $dir See directions above.
+ * @param string $dir See directions above. Defaults to 'asc'.
  * @param string $type See direction types above. Defaults to 'regular'.
  * @return array Sorted array of data
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::sort
  */
-	public static function sort(array $data, $path, $dir, $type = 'regular') {
+	public static function sort(array $data, $path, $dir = 'asc', $type = 'regular') {
 		if (empty($data)) {
 			return array();
 		}

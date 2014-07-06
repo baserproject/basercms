@@ -277,7 +277,7 @@ class CakeSession {
 /**
  * Used to write new data to _SESSION, since PHP doesn't like us setting the _SESSION var itself.
  *
- * @param array $old Set of old variables => values
+ * @param array &$old Set of old variables => values
  * @param array $new New set of variable => value
  * @return void
  */
@@ -547,6 +547,7 @@ class CakeSession {
 
 /**
  * Returns whether a session exists
+ *
  * @return boolean
  */
 	protected static function _hasSession() {
@@ -556,7 +557,7 @@ class CakeSession {
 /**
  * Find the handler class and make sure it implements the correct interface.
  *
- * @param string $handler
+ * @param string $handler Handler name.
  * @return void
  * @throws CakeSessionException
  */
@@ -576,7 +577,7 @@ class CakeSession {
 /**
  * Get one of the prebaked default session configurations.
  *
- * @param string $name
+ * @param string $name Config name.
  * @return boolean|array
  */
 	protected static function _defaultConfig($name) {
@@ -713,12 +714,14 @@ class CakeSession {
  * @return void
  */
 	public static function renew() {
-		if (session_id()) {
-			if (session_id() || isset($_COOKIE[session_name()])) {
-				setcookie(Configure::read('Session.cookie'), '', time() - 42000, self::$path);
-			}
-			session_regenerate_id(true);
+		$id = session_id();
+		if (!$id) {
+			return;
 		}
+		if ($id || isset($_COOKIE[session_name()])) {
+			setcookie(Configure::read('Session.cookie'), '', time() - 42000, self::$path);
+		}
+		session_regenerate_id(true);
 	}
 
 /**
