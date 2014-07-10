@@ -239,8 +239,10 @@ class BlogController extends BlogAppController {
 
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
-					'BlogCategory.blog_content_id' => $this->contentId,
-					'BlogCategory.name' => $category
+					'BlogCategory.blog_content_id'	=> $this->contentId,
+					'BlogCategory.name'				=> array(
+						$category, urlencode($category)
+					)
 				));
 
 				if (!$categoryId) {
