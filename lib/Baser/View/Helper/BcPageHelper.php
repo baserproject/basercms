@@ -66,15 +66,20 @@ class BcPageHelper extends Helper {
  * @return void
  */
 	public function beforeRender($viewFile) {
-		if ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display' && isset($this->request->params['pass'][0])) {
+		//if ($this->request->params['controller'] == 'pages' && ($this->request->params['action'] == 'display' || $this->request->params['action'] == 'smartphone_display') && isset($this->request->params['pass'][0])) {
+		if ($this->request->params['controller'] == 'pages' && preg_match('/_display$/', $this->request->params['action']) && isset($this->request->params['pass'][0])) {
 			// @TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
 			$param = Configure::read('BcRequest.pureUrl');
 			if ($param && preg_match('/\/$/is', $param)) {
 				$param .= 'index';
 			}
+			
 			if (Configure::read('BcRequest.agent')) {
-				$param = Configure::read('BcRequest.agentPrefix') . '/' . $param;
+				$agentPrefix = Configure::read('BcRequest.agentPrefix');
+				if(empty($this->BcBaser->siteConfig['linked_pages_' . $agentPrefix])) {
+					$param = $agentPrefix . '/' . $param;
+				}
 			}
 			$param = preg_replace("/\.html$/", '', $param);
 			$this->request->data = $this->Page->findByUrl('/' . $param);
