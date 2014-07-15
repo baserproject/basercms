@@ -141,10 +141,6 @@ class UsersController extends AppController {
 
 		if ($user) {
 			$this->redirect($this->BcAuth->redirect());
-		} else {
-			if ($this->request->data) {
-				$this->redirect($this->referer());
-			}
 		}
 		
 		$pageTitle = 'ログイン';
