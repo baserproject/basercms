@@ -393,6 +393,7 @@ class BlogPostsController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$editable = false;
 		$blogCategoryId = '';
+		$currentCatOwner = '';
 
 		if (isset($this->request->data['BlogPost']['blog_category_id'])) {
 			$blogCategoryId = $this->request->data['BlogPost']['blog_category_id'];
@@ -402,8 +403,8 @@ class BlogPostsController extends BlogAppController {
 		} else {
 			if (empty($this->request->data['BlogCategory']['owner_id'])) {
 				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
+				$currentCatOwner = $data['BlogCategory']['owner_id'];
 			}
-			$currentCatOwner = $data['BlogCategory']['owner_id'];
 		}
 
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
