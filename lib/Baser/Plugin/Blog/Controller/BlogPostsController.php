@@ -403,8 +403,6 @@ class BlogPostsController extends BlogAppController {
 		} else {
 			if (empty($this->request->data['BlogCategory']['owner_id'])) {
 				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
-			}
-			if (!empty($data)) {
 				$currentCatOwner = $data['BlogCategory']['owner_id'];
 			}
 		}
