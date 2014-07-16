@@ -160,6 +160,7 @@ $(function(){
 				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
 			}
 		});
+		return false;
 	});
 });
 </script>
