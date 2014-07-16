@@ -74,6 +74,8 @@ $config['BcRequire'] = array(
 $config['BcEnv'] = array(
 	// プラグインDBプレフィックス
 	'pluginDbPrefix' => 'pg_',
+	// テストDBプレフィックス
+	'testDbPrefix' => 'test_',
 );
 /**
  * 文字コード設定
