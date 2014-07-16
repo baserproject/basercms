@@ -489,7 +489,7 @@ class BcManagerComponent extends Component {
 			$file->write("\t'password' => '" . $password . "',\n");
 			$file->write("\t'database' => '" . $database . "',\n");
 			$file->write("\t'schema' => '" . $schema . "',\n");
-			$file->write("\t'prefix' => 'test_',\n");
+			$file->write("\t'prefix' => '" . $prefix . Configure::read('BcEnv.testDbPrefix') . "',\n");
 			$file->write("\t'encoding' => '" . $encoding . "'\n");
 			$file->write(");\n");
 			$file->write("}\n");
