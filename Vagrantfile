@@ -23,7 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network :public_network, :ip => "192.168.0.230", :netmask => "255.255.255.0", :bridge => 'en1: Wi-Fi (AirPort)' # 同一ネットワークからのアクセス対応（設定値は書き換え要）
   config.vm.network :private_network, ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
@@ -41,11 +40,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
   #
-  # 2014/07/07 ryuring
-  # セッションファイルの生成に失敗していたので、下の行の設定に変更していたが、
-  # その場合、共有フォルダの設定に失敗し、起動する事すらできなくなってしまった為、
-  # 一旦元にもどした
-  # config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> "apache", :group=> "apache", :mount_options => ['dmode=777','fmode=777']
   config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
 
   # Provider-specific configuration so you can fine-tune various
@@ -141,7 +135,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :root => '/vagrant', 
         :webroot => '/vagrant/app/webroot', 
         :timeout => '60', 
-        :listen => '80'
+        :listen => '80',
+        :user => 'vagrant',
+        :group => 'vagrant'
       }, 
       :php => {
         :max_execution_time => '30',

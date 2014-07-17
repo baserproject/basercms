@@ -38,3 +38,9 @@
 #	http://basercms.net/manuals/introductions/2.html
 #
 Allow from all
+
+RewriteEngine on
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [QSA,L]

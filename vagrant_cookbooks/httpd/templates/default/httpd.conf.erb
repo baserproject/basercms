@@ -247,8 +247,8 @@ Include conf.d/*.conf
 #  when the value of (unsigned)Group is above 60000; 
 #  don't use Group #-1 on these systems!
 #
-User apache
-Group apache
+User <%= node[:httpd][:user] %>
+Group <%= node[:httpd][:group] %>
 
 ### Section 2: 'Main' server configuration
 #
