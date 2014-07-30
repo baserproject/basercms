@@ -325,15 +325,30 @@ class BcAppController extends Controller {
 				$config = array();
 			}
 
+			// 認証設定
 			$this->BcAuthConfigure->setting($config);
+			
+			// =================================================================
 			// ユーザーの存在チェック
+			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
+			// =================================================================
 			$user = $this->BcAuth->user();
-
-		if (!empty($user['id'])) {
-				$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-				if ($userModel) {
-					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(
-							'conditions' => array($userModel . '.id' => $user['id'], $userModel . '.name' => $user['name']),
+			if ($user) {
+				$userModel = $this->Session->read('Auth.User.userModel');
+				if(strpos($userModel, '.') !== false) {
+					list($plugin, $userModel) = explode('.', $userModel);
+				}
+				if ($userModel && !empty($this->{$userModel})) {
+					$authPrefix = $this->Session->read('Auth.User.authPrefix');
+					$UserGroup = ClassRegistry::init('UserGroup');
+					$userGroupId = $UserGroup->field('id', array('UserGroup.auth_prefix' => $authPrefix));
+					$conditions = array(
+						$userModel . '.id'				=> $user['id'], 
+						$userModel . '.name'			=> $user['name'],
+						$userModel . '.user_group_id'	=> $userGroupId
+					);
+					if (!$this->{$userModel}->find('count', array(
+							'conditions' => $conditions,
 							'recursive' => -1))) {
 						$this->Session->delete(BcAuthComponent::$sessionKey);
 					}
