@@ -390,6 +390,24 @@ EOM;
 			
 			$jscode .= " });";
 		}
+		
+		if ($editorToolType == 'simple') {
+			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
+// ツールバーの表示を切り替え
+$jscode .= <<< EOM
+editor_{$field}.getCommand('maximize').on( 'state' , function( e )
+    {
+        if(this.state == 1) {
+			$("#ToolBar").hide();
+		} else {
+			$("#ToolBar").show();
+		}
+    });
+EOM;
+			
+			$jscode .= " });";
+		}
+		
 		$jscode .= "});";
 
 		return $this->BcHtml->scriptBlock($jscode);
