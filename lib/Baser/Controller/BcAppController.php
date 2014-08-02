@@ -341,11 +341,12 @@ class BcAppController extends Controller {
 				if ($userModel && !empty($this->{$userModel})) {
 					$authPrefix = $this->Session->read('Auth.User.authPrefix');
 					$UserGroup = ClassRegistry::init('UserGroup');
-					$userGroupId = $UserGroup->field('id', array('UserGroup.auth_prefix' => $authPrefix));
+					$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix' => $authPrefix), 'recursive' => -1));
+					$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
 					$conditions = array(
 						$userModel . '.id'				=> $user['id'], 
 						$userModel . '.name'			=> $user['name'],
-						$userModel . '.user_group_id'	=> $userGroupId
+						$userModel . '.user_group_id'	=> $userGroupIds
 					);
 					if (!$this->{$userModel}->find('count', array(
 							'conditions' => $conditions,
