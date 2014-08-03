@@ -1,66 +1,53 @@
 <?php
+/**
+ * test for BcUploadHelper
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
+ */
+
+App::uses('BcUploadHelper', 'View/Helper');
 
 /**
  * test for BcUploadHelper
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- *
- * @copyright       Copyright 2008 - 2014, baserCMS Users Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.0.0-beta
- * @license         http://basercms.net/license/index.html
+ * @package			Baser.Test.Case.View.Helper
  */
-App::uses('View', 'View');
-App::uses('Model', 'Model');
-App::uses('Controller', 'Controller');
-App::uses('BcAppController', 'Controller');
-App::uses('BcUploadHelper', 'View/Helper');
-App::uses('AppHelper', 'View/Helper');
-App::uses('EditorTemplate', 'Model');
-
-/**
- * TestController class
- * 
- * @package Baser.Test.Case.View.Helper
- */
-class TestController extends BcAppController {
-
-	public $name = 'Test';
-	public $uses = null;
-
-}
-
 class BcUploadHelperTest extends CakeTestCase {
-
+	
+/**
+ * Fixtures
+ * @var array 
+ */
 	public $fixtures = array(
-		'baser.SiteConfig',
-		'baser.EditorTemplate',
+		'baser.PluginContent'
 	);
 
+/**
+ * setUp
+ */
 	public function setUp() {
 		parent::setUp();
-		Configure::write('App.base', '');
-		$this->Controller = new TestController();
-		$this->View = new View($this->Controller);
-
-		$this->BcUpload = new BcUploadHelper($this->View);
+		$this->BcUpload = new BcUploadHelper(new View);
 		$this->BcUpload->request = new CakeRequest('/', false);
-		$this->BcUpload->request->here = '/';
-		$this->BcUpload->request->webroot = '/';
-		$this->BcUpload->request->base = '/';
-
-		ClassRegistry::addObject('EditorTemplTate', new EditorTemplate());
 	}
 
+/**
+ * tearDown
+ */
 	public function tearDown() {
 		unset($this->BcUpload);
 		parent::tearDown();
 	}
 
 /**
- * [test_file description]
- * @return [type] [description]
+ * ファイルタグを出力する
  */
 	public function test_file() {
 		$result = $this->BcUpload->file('EditorTemplate.image');
@@ -69,8 +56,7 @@ class BcUploadHelperTest extends CakeTestCase {
 	}
 
 /**
- * [test_fileLink description]
- * @return [type] [description]
+ * ファイルへのリンクタグを出力する
  */
 	public function test_fileLink() {
 		$this->BcUpload->request->data = array(
@@ -87,8 +73,8 @@ class BcUploadHelperTest extends CakeTestCase {
 	}
 
 /**
- * [test_uploadImage description]
- * @return [type] [description]
+ * アップロードした画像のタグを出力する
+ * サイズ指定なし
  */
 	public function test_uploadImage1() {
 		$options = array(
@@ -107,8 +93,8 @@ class BcUploadHelperTest extends CakeTestCase {
 	}
 
 /**
- * [test_uploadImage description]
- * @return [type] [description]
+ * アップロードした画像のタグを出力する
+ * サイズ指定あり
  */
 	public function test_uploadImage2() {
 		$options = array(
