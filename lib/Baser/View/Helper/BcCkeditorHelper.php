@@ -375,9 +375,14 @@ class BcCkeditorHelper extends AppHelper {
 				$jscode .= "editor_{$field}.execCommand('changeDraft');";
 				$jscode .= "editor_{$field}.execCommand('disablePublish');";
 			}
-			
-// ツールバーの表示を切り替え
-$jscode .= <<< EOM
+			$jscode .= " });";
+		}
+
+		$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
+		$jscode .= "if(editor_{$field}.getCommand('maximize').uiItems.length > 0) {";
+		
+		// ツールバーの表示を切り替え
+		$jscode .= <<< EOL
 editor_{$field}.getCommand('maximize').on( 'state' , function( e )
     {
         if(this.state == 1) {
@@ -386,12 +391,12 @@ editor_{$field}.getCommand('maximize').on( 'state' , function( e )
 			$("#ToolBar").show();
 		}
     });
-EOM;
-			
-			$jscode .= " });";
-		}
-		$jscode .= "});";
+EOL;
 
+		$jscode .= "}";
+		$jscode .= " });";
+		$jscode .= "});";
+		
 		return $this->BcHtml->scriptBlock($jscode);
 	}
 
