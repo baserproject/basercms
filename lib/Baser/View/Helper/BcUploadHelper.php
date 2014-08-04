@@ -124,7 +124,7 @@ class BcUploadHelper extends FormHelper {
 		$model = ClassRegistry::init($modelName);
 
 		if (empty($model->Behaviors->BcUpload)) {
-			throw new BaserException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
+			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
 		}
 
 		$settings = $model->Behaviors->BcUpload->settings[$modelName];
@@ -257,7 +257,7 @@ class BcUploadHelper extends FormHelper {
 		}
 
 		if (strpos($fieldName, '.') === false) {
-			trigger_error('フィールド名は、 modelName.fieldName で指定してください。', E_USER_WARNING);
+			trigger_error('フィールド名は、 ModelName.field_name で指定してください。', E_USER_WARNING);
 			return false;
 		}
 

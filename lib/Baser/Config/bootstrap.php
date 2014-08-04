@@ -26,31 +26,33 @@ define('BC_INSTALLED', isInstalled());
  * Baserパス追加
  */
 App::build(array(
-	'Controller' => array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
-	'Model' => array_merge(App::path('Model'), array(BASER_MODELS)),
-	'Model/Behavior' => array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
-	'Model/Datasource' => array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
+	'Controller'				=> array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
+	'Model'						=> array_merge(App::path('Model'), array(BASER_MODELS)),
+	'Model/Behavior'			=> array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
+	'Model/Datasource'			=> array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
 	'Model/Datasource/Database' => array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
-	'Controller/Component' => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
+	'Controller/Component'		=> array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
 	'Controller/Component/Auth' => array_merge(App::path('Controller/Component/Auth'), array(BASER_COMPONENTS . 'Auth' . DS)),
-	'View' => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
-	'View/Helper' => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
-	'Plugin' => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
-	'Vendor' => array_merge(App::path('Vendor'), array(BASER_VENDORS)),
-	'Locale' => array_merge(App::path('Locale'), array(BASER_LOCALES)),
-	'Lib' => array_merge(App::path('Lib'), array(BASER_LIBS)),
-	'Console' => array_merge(App::path('Console'), array(BASER_CONSOLES)),
-	'Console/Command' => array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
-	'Routing/Filter' => array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
+	'View'						=> array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
+	'View/Helper'				=> array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
+	'Plugin'					=> array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
+	'Vendor'					=> array_merge(App::path('Vendor'), array(BASER_VENDORS)),
+	'Locale'					=> array_merge(App::path('Locale'), array(BASER_LOCALES)),
+	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
+	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
+	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
+	'Routing/Filter'			=> array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
 ));
+
 App::build(array(
-	'Event' => array(APP . 'Event', BASER_EVENTS),
-	'Routing/Filter' => array(BASER . 'Routing' . DS . 'Filter' . DS),
-	'TestSuite' => array(BASER_TEST_SUITE),
-	'TestSuite/Reporter' => array(BASER_TEST_SUITE . 'Reporter' . DS),
+	'Event'				=> array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter'	=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'TestSuite'			=> array(BASER_TEST_SUITE),
+	'TestSuite/Reporter'=> array(BASER_TEST_SUITE . 'Reporter' . DS),
 	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network' => array(BASER . 'Network' . DS)
-	), App::REGISTER);
+	'Network'			=> array(BASER . 'Network' . DS),
+	'Error'				=> array(BASER . 'Error' . DS)
+), App::REGISTER);
 
 /**
  * 配置パターン
@@ -104,6 +106,7 @@ App::uses('BcPluginAppController', 'Controller');
 App::uses('BcPluginAppModel', 'Model');
 App::uses('BcManagerShell', 'Console/Command');
 App::uses('CakeRequest', 'Network');
+App::uses('BcException', 'Error');
 
 /**
  * 設定ファイル読み込み
