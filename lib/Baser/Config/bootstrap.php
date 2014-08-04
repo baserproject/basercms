@@ -16,6 +16,7 @@
  */
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
+require BASER . 'Error' . DS . 'exceptions.php';
 
 /**
  * インストール状態
@@ -50,8 +51,7 @@ App::build(array(
 	'TestSuite'			=> array(BASER_TEST_SUITE),
 	'TestSuite/Reporter'=> array(BASER_TEST_SUITE . 'Reporter' . DS),
 	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network'			=> array(BASER . 'Network' . DS),
-	'Error'				=> array(BASER . 'Error' . DS)
+	'Network'			=> array(BASER . 'Network' . DS)
 ), App::REGISTER);
 
 /**
@@ -106,7 +106,6 @@ App::uses('BcPluginAppController', 'Controller');
 App::uses('BcPluginAppModel', 'Model');
 App::uses('BcManagerShell', 'Console/Command');
 App::uses('CakeRequest', 'Network');
-App::uses('BcException', 'Error');
 
 /**
  * 設定ファイル読み込み

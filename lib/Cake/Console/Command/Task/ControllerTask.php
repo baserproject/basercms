@@ -188,6 +188,7 @@ class ControllerTask extends BakeTask {
 				if (strtolower($wannaUseSession) === 'y') {
 					array_push($components, 'Session');
 				}
+				array_unique($components);
 			}
 		} else {
 			list($wannaBakeCrud, $wannaBakeAdminCrud) = $this->_askAboutMethods();
@@ -285,7 +286,7 @@ class ControllerTask extends BakeTask {
  *
  * @param string $controllerName Controller name
  * @param string $admin Admin route to use
- * @param boolean $wannaUseSession Set to true to use sessions, false otherwise
+ * @param bool $wannaUseSession Set to true to use sessions, false otherwise
  * @return string Baked actions
  */
 	public function bakeActions($controllerName, $admin = null, $wannaUseSession = true) {

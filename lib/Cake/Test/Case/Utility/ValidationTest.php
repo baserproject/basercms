@@ -29,7 +29,7 @@ class CustomValidator {
  * Makes sure that a given $email address is valid and unique
  *
  * @param string $email
- * @return boolean
+ * @return bool
  */
 	public static function customValidate($check) {
 		return (bool)preg_match('/^[0-9]{3}$/', $check);
@@ -1766,7 +1766,6 @@ class ValidationTest extends CakeTestCase {
 
 		$this->assertTrue(Validation::email('abc.efg@cakephp.org', true));
 		$this->assertFalse(Validation::email('abc.efg@caphpkeinvalid.com', true));
-		$this->assertFalse(Validation::email('abc@example.abcd', true));
 	}
 
 /**
@@ -1978,6 +1977,10 @@ class ValidationTest extends CakeTestCase {
 		$this->assertFalse(Validation::inList('2x', array(1, 2, 3)));
 		$this->assertFalse(Validation::inList(2, array('1', '2x', '3')));
 		$this->assertFalse(Validation::inList('One', array('one', 'two')));
+
+		// No hexadecimal for numbers.
+		$this->assertFalse(Validation::inList('0x7B', array('ABC', '123')));
+		$this->assertFalse(Validation::inList('0x7B', array('ABC', 123)));
 
 		// case insensitive
 		$this->assertTrue(Validation::inList('one', array('One', 'Two'), true));

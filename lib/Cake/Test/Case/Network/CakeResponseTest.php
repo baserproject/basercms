@@ -751,7 +751,7 @@ class CakeResponseTest extends CakeTestCase {
 		$response = new CakeResponse;
 		$response->sharable(true, 3600);
 		$headers = $response->header();
-		$this->assertEquals('public, s-maxage=3600', $headers['Cache-Control']);
+		$this->assertEquals('public, max-age=3600', $headers['Cache-Control']);
 
 		$response = new CakeResponse;
 		$response->sharable(false, 3600);
@@ -1088,9 +1088,9 @@ class CakeResponseTest extends CakeTestCase {
  * @param string|array $domains
  * @param string|array $methods
  * @param string|array $headers
- * @param string|boolean $expectedOrigin
- * @param string|boolean $expectedMethods
- * @param string|boolean $expectedHeaders
+ * @param string|bool $expectedOrigin
+ * @param string|bool $expectedMethods
+ * @param string|bool $expectedHeaders
  * @return void
  */
 	public function testCors($request, $origin, $domains, $methods, $headers, $expectedOrigin, $expectedMethods = false, $expectedHeaders = false) {

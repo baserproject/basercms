@@ -56,7 +56,16 @@ class Inflector {
 			'/$/' => 's',
 		),
 		'uninflected' => array(
-			'.*[nrlm]ese', '.*deer', '.*fish', '.*measles', '.*ois', '.*pox', '.*sheep', 'people', 'feedback'
+			'.*[nrlm]ese',
+			'.*deer',
+			'.*fish',
+			'.*measles',
+			'.*ois',
+			'.*pox',
+			'.*sheep',
+			'people',
+			'feedback',
+			'stadia'
 		),
 		'irregular' => array(
 			'atlas' => 'atlases',
@@ -164,7 +173,7 @@ class Inflector {
 		'jackanapes', 'Kiplingese', 'Kongoese', 'Lucchese', 'mackerel', 'Maltese', '.*?media',
 		'metadata', 'mews', 'moose', 'mumps', 'Nankingese', 'news', 'nexus', 'Niasese',
 		'Pekingese', 'Piedmontese', 'pincers', 'Pistoiese', 'pliers', 'Portuguese',
-		'proceedings', 'rabies', 'rice', 'rhinoceros', 'salmon', 'Sarawakese', 'scissors',
+		'proceedings', 'rabies', 'research', 'rice', 'rhinoceros', 'salmon', 'Sarawakese', 'scissors',
 		'sea[- ]bass', 'series', 'Shavese', 'shears', 'siemens', 'species', 'swine', 'testes',
 		'trousers', 'trout', 'tuna', 'Vermontese', 'Wenchowese', 'whiting', 'wildebeest',
 		'Yengeese'
@@ -305,7 +314,7 @@ class Inflector {
  *
  * @param string $type The type of inflection, either 'plural', 'singular' or 'transliteration'
  * @param array $rules Array of rules to be added.
- * @param boolean $reset If true, will unset default inflections for all
+ * @param bool $reset If true, will unset default inflections for all
  *        new rules that are being defined in $rules.
  * @return void
  */

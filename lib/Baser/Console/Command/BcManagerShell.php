@@ -23,7 +23,7 @@ App::uses('BcManagerComponent', 'Controller/Component');
  * 
  * @package Baser.Console.Command
  */
-class BcManagerShell extends BcAppShell {
+class BcManagerShell extends AppShell {
 
 /**
  * get the option parser

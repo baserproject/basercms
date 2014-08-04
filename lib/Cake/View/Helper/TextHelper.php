@@ -190,7 +190,7 @@ class TextHelper extends AppHelper {
 
 		$atom = '[\p{L}0-9!#$%&\'*+\/=?^_`{|}~-]';
 		$text = preg_replace_callback(
-			'/(?<=\s|^|\()(' . $atom . '*(?:\.' . $atom . '+)*@[\p{L}0-9-]+(?:\.[\p{L}0-9-]+)+)/ui',
+			'/(?<=\s|^|\(|\>|\;)(' . $atom . '*(?:\.' . $atom . '+)*@[\p{L}0-9-]+(?:\.[\p{L}0-9-]+)+)/ui',
 			array(&$this, '_insertPlaceholder'),
 			$text
 		);
@@ -280,7 +280,7 @@ class TextHelper extends AppHelper {
  * - `html` If true, HTML tags would be handled correctly
  *
  * @param string $text String to truncate.
- * @param integer $length Length of returned string, including ellipsis.
+ * @param int $length Length of returned string, including ellipsis.
  * @param array $options An array of html attributes and options.
  * @return string Trimmed string.
  * @see String::truncate()
@@ -302,7 +302,7 @@ class TextHelper extends AppHelper {
  * - `exact` If false, $text will not be cut mid-word
  *
  * @param string $text String to truncate.
- * @param integer $length Length of returned string, including ellipsis.
+ * @param int $length Length of returned string, including ellipsis.
  * @param array $options An array of html attributes and options.
  * @return string Trimmed string.
  * @see String::tail()
@@ -318,7 +318,7 @@ class TextHelper extends AppHelper {
  *
  * @param string $text String to search the phrase in
  * @param string $phrase Phrase that will be searched for
- * @param integer $radius The amount of characters that will be returned on each side of the founded phrase
+ * @param int $radius The amount of characters that will be returned on each side of the founded phrase
  * @param string $ending Ending that will be appended
  * @return string Modified string
  * @see String::excerpt()

@@ -249,13 +249,17 @@ class CakeEmailTest extends CakeTestCase {
 		$this->assertSame($this->CakeEmail->to(), $expected);
 
 		$list = array(
-			'cake@cakephp.org' => 'Cake PHP',
+			'root@localhost' => 'root',
+			'bjørn@hammeröath.com' => 'Bjorn',
+			'cake.php@cakephp.org' => 'Cake PHP',
 			'cake-php@googlegroups.com' => 'Cake Groups',
 			'root@cakephp.org'
 		);
 		$this->CakeEmail->to($list);
 		$expected = array(
-			'cake@cakephp.org' => 'Cake PHP',
+			'root@localhost' => 'root',
+			'bjørn@hammeröath.com' => 'Bjorn',
+			'cake.php@cakephp.org' => 'Cake PHP',
 			'cake-php@googlegroups.com' => 'Cake Groups',
 			'root@cakephp.org' => 'root@cakephp.org'
 		);
@@ -265,7 +269,9 @@ class CakeEmailTest extends CakeTestCase {
 		$this->CakeEmail->addTo('mark_story@cakephp.org', 'Mark Story');
 		$result = $this->CakeEmail->addTo(array('phpnut@cakephp.org' => 'PhpNut', 'jose_zap@cakephp.org'));
 		$expected = array(
-			'cake@cakephp.org' => 'Cake PHP',
+			'root@localhost' => 'root',
+			'bjørn@hammeröath.com' => 'Bjorn',
+			'cake.php@cakephp.org' => 'Cake PHP',
 			'cake-php@googlegroups.com' => 'Cake Groups',
 			'root@cakephp.org' => 'root@cakephp.org',
 			'jrbasso@cakephp.org' => 'jrbasso@cakephp.org',
@@ -275,9 +281,6 @@ class CakeEmailTest extends CakeTestCase {
 		);
 		$this->assertSame($this->CakeEmail->to(), $expected);
 		$this->assertSame($this->CakeEmail, $result);
-
-		$this->setExpectedException('SocketException');
-		$this->CakeEmail->to(array('cake@localhost', 'CakePHP'));
 	}
 
 /**
@@ -291,8 +294,6 @@ class CakeEmailTest extends CakeTestCase {
 			array(''),
 			array('string'),
 			array('<tag>'),
-			array('some@one-whereis'),
-			array('wrong@key' => 'Name'),
 			array(array('ok@cakephp.org', 1.0, '', 'string'))
 		);
 	}
@@ -326,7 +327,6 @@ class CakeEmailTest extends CakeTestCase {
  */
 	public function testEmailPattern() {
 		$regex = '/.+@.+\..+/i';
-		$this->assertNull($this->CakeEmail->emailPattern());
 		$this->assertSame($regex, $this->CakeEmail->emailPattern($regex)->emailPattern());
 	}
 

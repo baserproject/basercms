@@ -18,8 +18,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('Scaffold', 'View');
-
 /**
  * Scaffolding is a set of automatic actions for starting web development work faster.
  *
@@ -78,7 +76,7 @@ class Scaffold {
 /**
  * Valid session.
  *
- * @var boolean
+ * @var bool
  */
 	protected $_validSession = null;
 

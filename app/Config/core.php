@@ -33,7 +33,7 @@
  */
 	// CUSTOMIZE MODIFY 2014/07/03
 	// >>>
-	Configure::write('debug', 2);
+	//Configure::write('debug', 2);
 	// ---
 	Configure::write('debug', -1);
 	// <<<
@@ -162,7 +162,7 @@
  */
 	// CUSTOMIZE MODIFY 2014/07/03 ryuring
 	// >>>
-	////Configure::write('Routing.prefixes', array('admin'));
+	//Configure::write('Routing.prefixes', array('admin'));
 	// ---
 	Configure::write('Routing.prefixes', array('admin'));
 	// <<<
@@ -299,7 +299,6 @@
 	//Configure::write('Config.timezone', 'Europe/Paris');
 
 /**
- *
  * Cache Engine Configuration
  * Default settings provided below
  *
