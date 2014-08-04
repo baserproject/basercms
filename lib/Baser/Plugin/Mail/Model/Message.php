@@ -755,7 +755,7 @@ class Message extends MailAppModel {
 		$mailFieldClass = new MailField();
 
 		// フィールドの一覧を取得する
-		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $id)));
+		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'sort'));
 
 		// フィールド名とデータの変換に必要なヘルパーを読み込む
 		App::uses('MaildataHelper', 'Mail.View/Helper');
@@ -764,15 +764,16 @@ class Message extends MailAppModel {
 		$Mailfield = new MailfieldHelper(new View());
 
 		foreach ($messages as $key => $message) {
-
 			$inData = array();
+			$inData['NO'] = $message[$this->alias]['id'];
 			foreach ($mailFields as $mailField) {
-				$inData[$mailField['MailField']['field_name']] = $Maildata->control(
+				$inData[$mailField['MailField']['name']] = $Maildata->control(
 					$mailField['MailField']['type'], $message[$this->alias][$mailField['MailField']['field_name']], $Mailfield->getOptions($mailField['MailField'])
 				);
 			}
-			$convertData = array_merge($message[$this->alias], $inData);
-			$messages[$key][$this->alias] = $convertData;
+			$inData['作成日'] = $message[$this->alias]['created'];
+			$inData['更新日'] = $message[$this->alias]['modified'];
+			$messages[$key][$this->alias] = $inData;
 		}
 
 		return $messages;
