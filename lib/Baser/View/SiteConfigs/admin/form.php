@@ -48,6 +48,39 @@ $(function(){
 		return result;
 	});
 	
+	// SMTP送信テスト
+	$("#BtnCheckSendmail").click(function(){
+		if(!confirm('テストメールを送信します。いいですか？')) {
+			return false;
+		}
+		$.ajax({
+			type: 'POST',
+			url: '<?php $this->BcBaser->url(array('controller' => 'site_configs', 'action' => 'check_sendmail')) ?>',
+			data: $("#SiteConfigFormForm").serialize(),
+			beforeSend: function() {
+				$("#ResultCheckSendmail").hide();
+				$("#AjaxLoaderCheckSendmail").show();
+			},
+			success: function(result){
+				$("#ResultCheckSendmail").html("テストメールを送信しました。");
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				var errorMessage = '';
+				if(XMLHttpRequest.responseText) {
+					errorMessage = XMLHttpRequest.responseText;
+				} else {
+					errorMessage = errorThrown;
+				}
+				$("#ResultCheckSendmail").html("テストメールを送信に失敗しました。" + errorMessage);
+			},
+			complete: function() {
+				$("#ResultCheckSendmail").show();
+				$("#AjaxLoaderCheckSendmail").hide();
+			}
+		});
+		return false;
+	});
+	
 	$("#SiteConfigMobile").click(function(){
 		if($("#SiteConfigMobile").attr('checked')) {
 			$("#SpanLinkedPagesMobile").show();
@@ -419,48 +452,47 @@ h2 {}
 			</td>
 		</tr>
 		<tr>
-			<th><?php echo $this->BcForm->label('SiteConfig.smtp_host', 'SMTPホスト') ?></th>
+			<th><?php echo $this->BcForm->label('SiteConfig.smtp_host', 'SMTP設定') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_host', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
-<?php echo $this->BcForm->error('SiteConfig.smtp_host') ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpHost', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<p>
+				<?php echo $this->BcForm->label('SiteConfig.smtp_host', 'ホスト') ?>
+				<?php echo $this->BcForm->input('SiteConfig.smtp_host', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.smtp_host') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpHost', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpHost" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
-			</td>
-		</tr>
-		<tr>
-			<th><?php echo $this->BcForm->label('SiteConfig.smtp_port', 'SMTPポート') ?></th>
-			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_port', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
-<?php echo $this->BcForm->error('SiteConfig.smtp_port') ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				</p>
+				<p>
+				<?php echo $this->BcForm->label('SiteConfig.smtp_port', 'ポート') ?>
+				<?php echo $this->BcForm->input('SiteConfig.smtp_port', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.smtp_port') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。入力を省略した場合、25番ポートを利用します。</div>
-			</td>
-		</tr>
-		<tr>
-			<th><?php echo $this->BcForm->label('SiteConfig.smtp_user', 'SMTPユーザー') ?></th>
-			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_user', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
-<?php echo $this->BcForm->error('SiteConfig.smtp_user') ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpUsername', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				</p>
+				<p>
+				<?php echo $this->BcForm->label('SiteConfig.smtp_user', 'ユーザー') ?>
+				<?php echo $this->BcForm->input('SiteConfig.smtp_user', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.smtp_user') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpUsername', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
-			</td>
-		</tr>
-		<tr>
-			<th><?php echo $this->BcForm->label('SiteConfig.smtp_password', 'SMTPパスワード') ?></th>
-			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
-<?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				</p>
+				<p>
+				<?php echo $this->BcForm->label('SiteConfig.smtp_password', 'パスワード') ?>
+				<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpPassword" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
-			</td>
-		</tr>
-		<tr>
-			<th><?php echo $this->BcForm->label('SiteConfig.smtp_tls', 'SMTP TLS暗号化') ?></th>
-			<td class="col-input">
+				</p>
+				<p>
+				<?php echo $this->BcForm->label('SiteConfig.smtp_tls', 'TLS暗号化') ?>
 				<?php echo $this->BcForm->input('SiteConfig.smtp_tls', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('TLS暗号化を利用'))) ?>
 				<?php echo $this->BcForm->error('SiteConfig.smtp_tls') ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmtpTls', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextSmtpTls" class="helptext">SMTPサーバーがTLS暗号化を利用する場合指定します。</div>
+				</p>
+				<p>
+					<?php echo $this->BcForm->button('メール送信テスト', array('type' => 'button', 'class' => 'button-small', 'id' => 'BtnCheckSendmail')) ?>　<span id=ResultCheckSendmail></span>
+					<?php echo $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'AjaxLoaderCheckSendmail', 'style' => 'display:none')) ?>
+				</p>
 			</td>
 		</tr>
 	</table>
