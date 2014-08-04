@@ -15,6 +15,7 @@
 /**
  * Include files
  */
+App::uses('Shell', 'Console');
 
 /**
  * baserCMSシェル
@@ -30,7 +31,7 @@
  * 
  * @package Baser.Console.Command
  */
-class BcAppShell extends AppShell {
+class BcAppShell extends Shell {
 
 /**
  * startup

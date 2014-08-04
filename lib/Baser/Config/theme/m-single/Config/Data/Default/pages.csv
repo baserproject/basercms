@@ -13,7 +13,7 @@
 
 <section class=""news2"">
 <h2>BaserCMS NEWS</h2>
-<?php echo $this->requestAction('/feed/index/1'); ?>
+<?php echo $this->BcBaser->js('/feed/ajax/1'); ?>
 </section>
 </div><!-- /information -->","","1","/index","","1","","","","","","","",""
 "","2","company","‰ïĞˆÄ“à","baserCMS inc.‚Ì‰ïĞˆÄ“àƒy[ƒW","<div class=""articleArea"" id=""company"">

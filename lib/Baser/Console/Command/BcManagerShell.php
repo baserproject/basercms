@@ -15,7 +15,7 @@
 /**
  * Include files
  */
-App::uses('BcAppShell', 'Console/Command');
+App::uses('AppShell', 'Console/Command');
 App::uses('BcManagerComponent', 'Controller/Component');
 
 /**
@@ -83,7 +83,7 @@ class BcManagerShell extends AppShell {
 			return;
 		}
 		if (Configure::read('debug') != -1) {
-			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
+			$this->err('baserCMSのインストールを行うには、debug を -1 に設定する必要があります。');
 			return false;
 		}
 		if (!$this->_install()) {
@@ -95,6 +95,7 @@ class BcManagerShell extends AppShell {
 		$Folder->delete(TMP . 'logs');
 		$Folder->delete(TMP . 'schemas');
 		$Folder->delete(TMP . 'sessions');
+		$this->out("baserCMSのインストールが完了しました。");
 	}
 
 /**
@@ -110,6 +111,7 @@ class BcManagerShell extends AppShell {
 		if (!$this->_reset()) {
 			$this->err("baserCMSのリセットに失敗しました。ログファイルを確認してください。");
 		}
+		$this->out("baserCMSのリセットが完了しました。");
 	}
 
 /**

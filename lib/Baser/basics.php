@@ -527,6 +527,9 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
+	if (isConsole()) {
+		return false;
+	}
 	$protocol = 'http://';
 	if (!empty($_SERVER['HTTPS'])) {
 		$protocol = 'https://';
