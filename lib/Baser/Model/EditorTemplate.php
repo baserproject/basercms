@@ -50,4 +50,17 @@ class EditorTemplate extends AppModel {
 		)
 	);
 
+/**
+ * バリデーション
+ *
+ * @var array
+ * @access public
+ */
+	public $validate = array(
+		'name' => array(
+			array('rule' => array('notEmpty'),
+				'message' => 'テンプレート名を入力してください。')
+		)
+	);
+	
 }
