@@ -74,43 +74,30 @@ class BcUploadHelperTest extends CakeTestCase {
 
 /**
  * アップロードした画像のタグを出力する
- * サイズ指定なし
  */
-	public function test_uploadImage1() {
+	public function test_uploadImage() {
+		
+		// オプションなし
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');
+		$this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
+		
+		// サイズ指定あり
 		$options = array(
-			'imgsize' => 'midium',
-			'link' => false,
-			'escape' => false,
-			'mobile' => false,
-			'alt' => '',
-			'width' => '',
-			'height' => '',
-			'noimage' => '',
-			'tmp' => false
-		);
-		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-		$this->assertRegExp('/^<img src=\"\/files\/editor\/template1\.jpg/', $result);
-	}
-
-/**
- * アップロードした画像のタグを出力する
- * サイズ指定あり
- */
-	public function test_uploadImage2() {
-		$options = array(
-			'imgsize' => 'midium',
-			'link' => false,
-			'escape' => false,
-			'mobile' => true,
-			'alt' => '',
 			'width' => '100',
 			'height' => '80',
-			'noimage' => '',
-			'tmp' => true
 		);
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$expects = '<img src="/uploads/tmp/midium/template1.jpg" alt="" width="100" height="80" />';
+		$this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
+
+		// 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
+		$options = array(
+			'tmp' => true
+		);
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+		$expects = '<img src="/uploads/tmp/midium/template1.jpg" alt="" />';
 		$this->assertEqual($expects, $result);
+
 	}
 
 }
