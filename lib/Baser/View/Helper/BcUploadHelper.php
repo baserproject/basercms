@@ -72,8 +72,15 @@ class BcUploadHelper extends FormHelper {
 		$field = $this->field();
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName, $options);
+		
+		if (empty($options['value'])) {
+			$value = $this->value($fieldName);
+		} else {
+			$value = $options['value'];
+		}
+		
 		$delCheckTag = '';
-		if ($linkOptions['delCheck']) {
+		if ($linkOptions['delCheck'] && empty($value['session_key'])) {
 			$delCheckTag = parent::checkbox($modelName . '.' . $field . '_delete') . parent::label($modelName . '.' . $field . '_delete', '削除する');
 		}
 		$hiddenValue = $this->value($fieldName . '_');
@@ -313,11 +320,13 @@ class BcUploadHelper extends FormHelper {
 					$imgPrefix = '';
 					$imgSuffix = '';
 
-					if (isset($copySetting['suffix']))
+					if (isset($copySetting['suffix'])) {
 						$imgSuffix = $copySetting['suffix'];
-					if (isset($copySetting['prefix']))
+					}
+					if (isset($copySetting['prefix'])) {
 						$imgPrefix = $copySetting['prefix'];
-
+					}
+					
 					$pathinfo = pathinfo($fileName);
 					$ext = $pathinfo['extension'];
 					$basename = basename($fileName, '.' . $ext);
