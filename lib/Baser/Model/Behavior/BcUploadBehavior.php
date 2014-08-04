@@ -273,7 +273,7 @@ class BcUploadBehavior extends ModelBehavior {
 						}
 
 						// ファイルをリサイズ
-						if (!empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
+						if (!$this->tmpId && !empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
 							if (!empty($field['imageresize']['thumb'])) {
 								$thumb = $field['imageresize']['thumb'];
 							} else {
@@ -450,7 +450,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像ファイルをコピーする
  * リサイズ可能
  * 
- * @param Model	$Model
  * @param string コピー元のパス
  * @param string コピー先のパス
  * @param int 横幅
