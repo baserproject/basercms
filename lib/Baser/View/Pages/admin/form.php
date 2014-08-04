@@ -347,6 +347,12 @@ function pageTypeChengeHandler() {
 		<?php else: ?>
 			<strong>このページのURL：<?php echo $this->BcBaser->getUri($url) ?></strong>
 		<?php endif ?>
+		<br />
+		<strong>プレビュー用URL：<?php $this->BcBaser->link(
+				$this->BcBaser->getUri(array('action'=>'preview', $this->data['Page']['id'])),
+				$this->BcBaser->getUri(array('action'=>'preview', $this->data['Page']['id'])),
+				array('target' => '_blank')
+		); ?></strong>
 	</div>
 <?php endif ?>
 

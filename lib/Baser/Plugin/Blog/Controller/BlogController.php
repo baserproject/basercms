@@ -779,6 +779,15 @@ class BlogController extends BlogAppController {
 	protected function _viewPreview($blogContentsId, $id) {
 		$data = Cache::read('blog_posts_preview_' . $id, '_cake_core_');
 		Cache::delete('blog_posts_preview_' . $id, '_cake_core_');
+		// createせず直接プレビューURLを叩いた場合
+		if (empty($data)) {
+			$data = $this->BlogPost->find('first', array(
+				'conditions' => array(
+					'BlogPost.id' => $id,
+					'BlogContent.id' => $blogContentsId
+				)
+			));
+		}
 		$this->request->data = $this->request->params['data'] = $data;
 		$this->preview = true;
 		$this->layoutPath = '';
