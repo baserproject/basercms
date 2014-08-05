@@ -318,16 +318,24 @@ class SiteConfigsController extends AppController {
 		if($specialThanks) {
 			$json = $specialThanks;
 		} else {
-			$json = file_get_contents(Configure::read('BcApp.specialThanks'), true);
-			if (!Configure::read('Cache.disable')) {
-				Cache::write('special_thanks', $json, '_cake_env_');
+			try {
+				$json = file_get_contents(Configure::read('BcApp.specialThanks'), true);
+			} catch (Exception $ex) {}
+			if($json) {
+				if (!Configure::read('Cache.disable')) {
+					Cache::write('special_thanks', $json, '_cake_env_');
+				}
+				$json = json_decode($json);
+			} else {
+				$json = null;
 			}
+
 		}
 		
 		if ($json == false) {
 			$this->ajaxError(500, 'スペシャルサンクスデータが取得できませんでした。');
 		}
-		$this->set('credits', json_decode($json));
+		$this->set('credits', $json);
 		
 	}
 	

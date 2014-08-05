@@ -13,6 +13,9 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+if(!$credits) {
+	return;
+}
 $types = array('designers', 'deveroppers', 'supporters', 'publishers');
 ?>
 

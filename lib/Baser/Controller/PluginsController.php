@@ -148,17 +148,23 @@ class PluginsController extends AppController {
 		$baserPlugins = array();
 		if(strtotime('2014-03-31 17:00:00') <= time()) {
 			$cachePath = 'views' . DS . 'baser_market_plugins.rss';
-			if (Configure::read('Cache.check') == false || Configure::read('debug') > 0) {
+			if (Configure::read('debug') > 0) {
 				clearCache('baser_market_plugins', 'views', '.rss');
 			}
 			$baserPlugins = cache($cachePath);
 			if(!$baserPlugins) {
 				$Xml = new Xml();
-				$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-				$baserPlugins = $Xml->toArray($baserPlugins->channel);
-				$baserPlugins = $baserPlugins['channel']['item'];
-				cache($cachePath, BcUtil::serialize($baserPlugins));
-				chmod(CACHE . $cachePath, 0666);
+				try {
+					$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
+				} catch (Exception $ex) {}
+				if($baserPlugins) {
+					$baserPlugins = $Xml->toArray($baserPlugins->channel);
+					$baserPlugins = $baserPlugins['channel']['item'];
+					cache($cachePath, BcUtil::serialize($baserPlugins));
+					chmod(CACHE . $cachePath, 0666);
+				} else {
+					$baserPlugins = array();
+				}
 			} else {
 				$baserPlugins = BcUtil::unserialize($baserPlugins);
 			}

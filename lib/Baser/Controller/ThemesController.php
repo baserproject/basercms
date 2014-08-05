@@ -114,17 +114,25 @@ class ThemesController extends AppController {
 		$baserThemes = array();
 		if(strtotime('2014-03-31 17:00:00') <= time()) {
 			$cachePath = 'views' . DS . 'baser_market_themes.rss';
-			if (Configure::read('Cache.check') == false || Configure::read('debug') > 0) {
+			if (Configure::read('debug') > 0) {
 				clearCache('baser_market_themes', 'views', '.rss');
 			}
 			$baserThemes = cache($cachePath);
 			if(!$baserThemes) {
 				$Xml = new Xml();
-				$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
-				$baserThemes = $Xml->toArray($baserThemes->channel);
-				$baserThemes = $baserThemes['channel']['item'];
-				cache($cachePath, BcUtil::serialize($baserThemes));
-				chmod(CACHE . $cachePath, 0666);
+				try {
+					$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
+				} catch (Exception $ex) {}
+				
+				if($baserThemes) {
+					$baserThemes = $Xml->toArray($baserThemes->channel);
+					$baserThemes = $baserThemes['channel']['item'];
+					cache($cachePath, BcUtil::serialize($baserThemes));
+					chmod(CACHE . $cachePath, 0666);
+				} else {
+					$baserThemes = array();
+				}
+				
 			} else {
 				$baserThemes = BcUtil::unserialize($baserThemes);
 			}
