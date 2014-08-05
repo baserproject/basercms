@@ -41,6 +41,8 @@
 			'admin/jquery.validate.min',
 			'admin/jquery.colorbox-min-1.4.5',
 			'admin/jquery.mScroll',
+			'admin/jquery.baseUrl',
+			'admin/credit',
 			'admin/validate_messages_ja',
 			'admin/functions',
 			'admin/startup',
@@ -53,6 +55,7 @@
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
 
 		<div id="Page">
+			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 			<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
@@ -130,8 +133,6 @@
 <?php $this->BcBaser->footer() ?>
 
 			<!-- / #Page --></div>
-
-<?php $this->BcBaser->element('credit') ?>
 
 <?php $this->BcBaser->func() ?>
 	</body>

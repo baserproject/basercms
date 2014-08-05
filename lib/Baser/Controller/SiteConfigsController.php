@@ -68,6 +68,7 @@ class SiteConfigsController extends AppController {
  * beforeFilter
  */
 	public function beforeFilter() {
+		$this->BcAuth->allow('admin_ajax_credit', 'jquery_base_url');
 		parent::beforeFilter();
 	}
 
@@ -298,6 +299,35 @@ class SiteConfigsController extends AppController {
 		} else {
 			$this->ajaxError(500, 'ログを確認してください。');
 		}
+		
+	}
+	
+/**
+ * クレジット表示用データをレンダリング
+ */
+	public function admin_ajax_credit() {
+
+		$this->layout = 'ajax';
+		Configure::write('debug', 0);
+		
+		$specialThanks = array();
+		if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
+			$specialThanks = Cache::read('special_thanks', '_cake_env_');
+		}
+	
+		if($specialThanks) {
+			$json = $specialThanks;
+		} else {
+			$json = file_get_contents(Configure::read('BcApp.specialThanks'), true);
+			if (!Configure::read('Cache.disable')) {
+				Cache::write('special_thanks', $json, '_cake_env_');
+			}
+		}
+		
+		if ($json == false) {
+			$this->ajaxError(500, 'スペシャルサンクスデータが取得できませんでした。');
+		}
+		$this->set('credits', json_decode($json));
 		
 	}
 	

@@ -149,12 +149,6 @@ if (BC_INSTALLED) {
 }
 
 /**
- * クレジット読込 
- */
-$config = array();
-include BASER_CONFIGS . 'credit.php';
-Configure::write($config);
-/**
  * パラメーター取得
  */
 $url = getUrlFromEnv(); // 環境変数からパラメータを取得
