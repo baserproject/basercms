@@ -231,7 +231,6 @@ class FeedController extends FeedAppController {
 			$id = str_replace('.js', '', $id);
 		}
 
-		Configure::write('debug', 1);
 		$this->cacheAction = Configure::read('BcCache.duration');
 		$this->layout = "ajax";
 
