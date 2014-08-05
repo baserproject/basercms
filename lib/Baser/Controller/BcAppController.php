@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * Controller 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -332,15 +325,31 @@ class BcAppController extends Controller {
 				$config = array();
 			}
 
+			// 認証設定
 			$this->BcAuthConfigure->setting($config);
+			
+			// =================================================================
 			// ユーザーの存在チェック
+			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
+			// =================================================================
 			$user = $this->BcAuth->user();
-
 			if ($user) {
-				$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-				if ($userModel) {
-					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(
-							'conditions' => array($userModel . '.id' => $user['id'], $userModel . '.name' => $user['name']),
+				$userModel = $this->Session->read('Auth.User.userModel');
+				if(strpos($userModel, '.') !== false) {
+					list($plugin, $userModel) = explode('.', $userModel);
+				}
+				if ($userModel && !empty($this->{$userModel})) {
+					$authPrefix = $this->Session->read('Auth.User.authPrefix');
+					$UserGroup = ClassRegistry::init('UserGroup');
+					$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix' => $authPrefix), 'recursive' => -1));
+					$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
+					$conditions = array(
+						$userModel . '.id'				=> $user['id'], 
+						$userModel . '.name'			=> $user['name'],
+						$userModel . '.user_group_id'	=> $userGroupIds
+					);
+					if (!$this->{$userModel}->find('count', array(
+							'conditions' => $conditions,
 							'recursive' => -1))) {
 						$this->Session->delete(BcAuthComponent::$sessionKey);
 					}
@@ -733,12 +742,14 @@ class BcAppController extends Controller {
 			$port = ($this->siteConfigs['smtp_port']) ? $this->siteConfigs['smtp_port'] : 25;
 			$username = ($this->siteConfigs['smtp_user']) ? $this->siteConfigs['smtp_user'] : null;
 			$password = ($this->siteConfigs['smtp_password']) ? $this->siteConfigs['smtp_password'] : null;
+			$tls = $this->siteConfigs['smtp_tls'] && ($this->siteConfigs['smtp_tls'] == 1);
 		} else {
 			$transport = 'Mail';
 			$host = 'localhost';
 			$port = 25;
 			$username = null;
 			$password = null;
+			$tls = null;
 		}
 
 		$config = array(
@@ -746,7 +757,8 @@ class BcAppController extends Controller {
 			'host' => $host,
 			'port' => $port,
 			'username' => $username,
-			'password' => $password
+			'password' => $password,
+			'tls' => $tls
 		);
 
 		$cakeEmail = new CakeEmail($config);

@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* BlogTags schema generated on: 2011-04-24 03:04:44 : 1303583084 */
 
 class BlogTagsSchema extends CakeSchema {

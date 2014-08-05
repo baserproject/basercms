@@ -1,29 +1,21 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * 固定ページカテゴリーコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * 固定ページカテゴリーコントローラー
  *
- * @package cake
- * @subpackage cake.Baser.Controller
+ * @package Baser.Controller
  */
 class PageCategoriesController extends AppController {
 
@@ -99,14 +91,14 @@ class PageCategoriesController extends AppController {
 		if ($this->request->data['PageCategory']['type'] == '1') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')), $this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			$ids = am(array($mobileId, $smartphoneId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
 		} elseif ($this->request->data['PageCategory']['type'] == '2') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			if ($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
@@ -114,7 +106,7 @@ class PageCategoriesController extends AppController {
 		} elseif ($this->request->data['PageCategory']['type'] == '3') {
 			$children = am($this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			if ($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));

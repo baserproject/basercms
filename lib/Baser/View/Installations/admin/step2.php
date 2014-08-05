@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] インストーラー Step2
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -141,6 +135,19 @@ $(function(){
 <?php endif ?>
 					</div>
 				</li>
+				<li class='<?php if ($xmlOk) echo 'check'; else echo'failed'; ?>'>
+					DOMDocumentの利用
+					<div class="check-result">
+						<?php if ($xmlOk): ?>
+							利用可
+<?php else: ?>
+							利用不可<br />
+							<small>phpのxmlモジュールでDOMDocumentが使える必要があります</small>
+							<br />
+							<small>xmlモジュールをインストールするか有効にしてください</small>
+<?php endif ?>
+					</div>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -161,7 +168,7 @@ $(function(){
 							書き込み可
 <?php else: ?>
 							書き込み不可<br />
-							<small>SQLite を利用するには、/app/db/sqlite フォルダに書き込み権限が必要です</small>
+							<small>SQLite を利用するには、/app/db/ フォルダに書き込み権限が必要です</small>
 <?php endif ?>
 					</div>
 				</li>

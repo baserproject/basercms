@@ -56,7 +56,16 @@ class Inflector {
 			'/$/' => 's',
 		),
 		'uninflected' => array(
-			'.*[nrlm]ese', '.*deer', '.*fish', '.*measles', '.*ois', '.*pox', '.*sheep', 'people'
+			'.*[nrlm]ese',
+			'.*deer',
+			'.*fish',
+			'.*measles',
+			'.*ois',
+			'.*pox',
+			'.*sheep',
+			'people',
+			'feedback',
+			'stadia'
 		),
 		'irregular' => array(
 			'atlas' => 'atlases',
@@ -143,7 +152,7 @@ class Inflector {
 			'/s$/i' => ''
 		),
 		'uninflected' => array(
-			'.*[nrlm]ese', '.*deer', '.*fish', '.*measles', '.*ois', '.*pox', '.*sheep', '.*ss'
+			'.*[nrlm]ese', '.*deer', '.*fish', '.*measles', '.*ois', '.*pox', '.*sheep', '.*ss', 'feedback'
 		),
 		'irregular' => array(
 			'foes' => 'foe',
@@ -164,7 +173,7 @@ class Inflector {
 		'jackanapes', 'Kiplingese', 'Kongoese', 'Lucchese', 'mackerel', 'Maltese', '.*?media',
 		'metadata', 'mews', 'moose', 'mumps', 'Nankingese', 'news', 'nexus', 'Niasese',
 		'Pekingese', 'Piedmontese', 'pincers', 'Pistoiese', 'pliers', 'Portuguese',
-		'proceedings', 'rabies', 'rice', 'rhinoceros', 'salmon', 'Sarawakese', 'scissors',
+		'proceedings', 'rabies', 'research', 'rice', 'rhinoceros', 'salmon', 'Sarawakese', 'scissors',
 		'sea[- ]bass', 'series', 'Shavese', 'shears', 'siemens', 'species', 'swine', 'testes',
 		'trousers', 'trout', 'tuna', 'Vermontese', 'Wenchowese', 'whiting', 'wildebeest',
 		'Yengeese'
@@ -176,56 +185,63 @@ class Inflector {
  * @var array
  */
 	protected static $_transliteration = array(
-		'/ä|æ|ǽ/' => 'ae',
-		'/ö|œ/' => 'oe',
-		'/ü/' => 'ue',
-		'/Ä/' => 'Ae',
-		'/Ü/' => 'Ue',
-		'/Ö/' => 'Oe',
 		'/À|Á|Â|Ã|Å|Ǻ|Ā|Ă|Ą|Ǎ/' => 'A',
-		'/à|á|â|ã|å|ǻ|ā|ă|ą|ǎ|ª/' => 'a',
-		'/Ç|Ć|Ĉ|Ċ|Č/' => 'C',
-		'/ç|ć|ĉ|ċ|č/' => 'c',
-		'/Ð|Ď|Đ/' => 'D',
-		'/ð|ď|đ/' => 'd',
-		'/È|É|Ê|Ë|Ē|Ĕ|Ė|Ę|Ě/' => 'E',
-		'/è|é|ê|ë|ē|ĕ|ė|ę|ě/' => 'e',
-		'/Ĝ|Ğ|Ġ|Ģ/' => 'G',
-		'/ĝ|ğ|ġ|ģ/' => 'g',
-		'/Ĥ|Ħ/' => 'H',
-		'/ĥ|ħ/' => 'h',
-		'/Ì|Í|Î|Ï|Ĩ|Ī|Ĭ|Ǐ|Į|İ/' => 'I',
-		'/ì|í|î|ï|ĩ|ī|ĭ|ǐ|į|ı/' => 'i',
-		'/Ĵ/' => 'J',
-		'/ĵ/' => 'j',
-		'/Ķ/' => 'K',
-		'/ķ/' => 'k',
-		'/Ĺ|Ļ|Ľ|Ŀ|Ł/' => 'L',
-		'/ĺ|ļ|ľ|ŀ|ł/' => 'l',
-		'/Ñ|Ń|Ņ|Ň/' => 'N',
-		'/ñ|ń|ņ|ň|ŉ/' => 'n',
-		'/Ò|Ó|Ô|Õ|Ō|Ŏ|Ǒ|Ő|Ơ|Ø|Ǿ/' => 'O',
-		'/ò|ó|ô|õ|ō|ŏ|ǒ|ő|ơ|ø|ǿ|º/' => 'o',
-		'/Ŕ|Ŗ|Ř/' => 'R',
-		'/ŕ|ŗ|ř/' => 'r',
-		'/Ś|Ŝ|Ş|Ș|Š/' => 'S',
-		'/ś|ŝ|ş|ș|š|ſ/' => 's',
-		'/Ţ|Ț|Ť|Ŧ/' => 'T',
-		'/ţ|ț|ť|ŧ/' => 't',
-		'/Ù|Ú|Û|Ũ|Ū|Ŭ|Ů|Ű|Ų|Ư|Ǔ|Ǖ|Ǘ|Ǚ|Ǜ/' => 'U',
-		'/ù|ú|û|ũ|ū|ŭ|ů|ű|ų|ư|ǔ|ǖ|ǘ|ǚ|ǜ/' => 'u',
-		'/Ý|Ÿ|Ŷ/' => 'Y',
-		'/ý|ÿ|ŷ/' => 'y',
-		'/Ŵ/' => 'W',
-		'/ŵ/' => 'w',
-		'/Ź|Ż|Ž/' => 'Z',
-		'/ź|ż|ž/' => 'z',
 		'/Æ|Ǽ/' => 'AE',
-		'/ß/' => 'ss',
+		'/Ä/' => 'Ae',
+		'/Ç|Ć|Ĉ|Ċ|Č/' => 'C',
+		'/Ð|Ď|Đ/' => 'D',
+		'/È|É|Ê|Ë|Ē|Ĕ|Ė|Ę|Ě/' => 'E',
+		'/Ĝ|Ğ|Ġ|Ģ|Ґ/' => 'G',
+		'/Ĥ|Ħ/' => 'H',
+		'/Ì|Í|Î|Ï|Ĩ|Ī|Ĭ|Ǐ|Į|İ|І/' => 'I',
 		'/Ĳ/' => 'IJ',
-		'/ĳ/' => 'ij',
+		'/Ĵ/' => 'J',
+		'/Ķ/' => 'K',
+		'/Ĺ|Ļ|Ľ|Ŀ|Ł/' => 'L',
+		'/Ñ|Ń|Ņ|Ň/' => 'N',
+		'/Ò|Ó|Ô|Õ|Ō|Ŏ|Ǒ|Ő|Ơ|Ø|Ǿ/' => 'O',
 		'/Œ/' => 'OE',
-		'/ƒ/' => 'f'
+		'/Ö/' => 'Oe',
+		'/Ŕ|Ŗ|Ř/' => 'R',
+		'/Ś|Ŝ|Ş|Ș|Š/' => 'S',
+		'/ẞ/' => 'SS',
+		'/Ţ|Ț|Ť|Ŧ/' => 'T',
+		'/Þ/' => 'TH',
+		'/Ù|Ú|Û|Ũ|Ū|Ŭ|Ů|Ű|Ų|Ư|Ǔ|Ǖ|Ǘ|Ǚ|Ǜ/' => 'U',
+		'/Ü/' => 'Ue',
+		'/Ŵ/' => 'W',
+		'/Ý|Ÿ|Ŷ/' => 'Y',
+		'/Є/' => 'Ye',
+		'/Ї/' => 'Yi',
+		'/Ź|Ż|Ž/' => 'Z',
+		'/à|á|â|ã|å|ǻ|ā|ă|ą|ǎ|ª/' => 'a',
+		'/ä|æ|ǽ/' => 'ae',
+		'/ç|ć|ĉ|ċ|č/' => 'c',
+		'/ð|ď|đ/' => 'd',
+		'/è|é|ê|ë|ē|ĕ|ė|ę|ě/' => 'e',
+		'/ƒ/' => 'f',
+		'/ĝ|ğ|ġ|ģ|ґ/' => 'g',
+		'/ĥ|ħ/' => 'h',
+		'/ì|í|î|ï|ĩ|ī|ĭ|ǐ|į|ı|і/' => 'i',
+		'/ĳ/' => 'ij',
+		'/ĵ/' => 'j',
+		'/ķ/' => 'k',
+		'/ĺ|ļ|ľ|ŀ|ł/' => 'l',
+		'/ñ|ń|ņ|ň|ŉ/' => 'n',
+		'/ò|ó|ô|õ|ō|ŏ|ǒ|ő|ơ|ø|ǿ|º/' => 'o',
+		'/ö|œ/' => 'oe',
+		'/ŕ|ŗ|ř/' => 'r',
+		'/ś|ŝ|ş|ș|š|ſ/' => 's',
+		'/ß/' => 'ss',
+		'/ţ|ț|ť|ŧ/' => 't',
+		'/þ/' => 'th',
+		'/ù|ú|û|ũ|ū|ŭ|ů|ű|ų|ư|ǔ|ǖ|ǘ|ǚ|ǜ/' => 'u',
+		'/ü/' => 'ue',
+		'/ŵ/' => 'w',
+		'/ý|ÿ|ŷ/' => 'y',
+		'/є/' => 'ye',
+		'/ї/' => 'yi',
+		'/ź|ż|ž/' => 'z',
 	);
 
 /**
@@ -298,7 +314,7 @@ class Inflector {
  *
  * @param string $type The type of inflection, either 'plural', 'singular' or 'transliteration'
  * @param array $rules Array of rules to be added.
- * @param boolean $reset If true, will unset default inflections for all
+ * @param bool $reset If true, will unset default inflections for all
  *        new rules that are being defined in $rules.
  * @return void
  */
@@ -514,7 +530,7 @@ class Inflector {
 /**
  * Returns camelBacked version of an underscored string.
  *
- * @param string $string
+ * @param string $string String to convert.
  * @return string in variable form
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::variable
  */

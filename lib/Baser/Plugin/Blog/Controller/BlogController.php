@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ブログ記事コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -26,7 +20,7 @@ App::uses('BlogAppController', 'Blog.Controller');
 /**
  * ブログ記事コントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  */
 class BlogController extends BlogAppController {
 
@@ -364,7 +358,7 @@ class BlogController extends BlogAppController {
 							'recursive' => -1
 						));
 						if ($tags) {
-							$tags = Set::extract('/BlogTag/.', $tags);
+							$tags = Hash::extract($tags, '{n}.BlogTag');
 							$post['BlogTag'] = $tags;
 						}
 					}
@@ -562,7 +556,7 @@ class BlogController extends BlogAppController {
 				// 指定したカテゴリ名にぶら下がる子カテゴリを取得
 				$catChildren = $this->BlogCategory->children($categoryId);
 				if ($catChildren) {
-					$catChildren = Set::extract('/BlogCategory/id', $catChildren);
+					$catChildren = Hash::extract($catChildren, '{n}.BlogCategory.id');
 					$categoryIds = am($categoryIds, $catChildren);
 				}
 			}
@@ -586,7 +580,7 @@ class BlogController extends BlogAppController {
 				'recursive' => 1
 			));
 			if (isset($tags[0]['BlogPost'][0]['id'])) {
-				$ids = Set::extract('/BlogPost/id', $tags);
+				$ids = Hash::extract($tags, '{n}.BlogPost.id');
 				$conditions['BlogPost.id'] = $ids;
 			} else {
 				return array();
@@ -785,6 +779,15 @@ class BlogController extends BlogAppController {
 	protected function _viewPreview($blogContentsId, $id) {
 		$data = Cache::read('blog_posts_preview_' . $id, '_cake_core_');
 		Cache::delete('blog_posts_preview_' . $id, '_cake_core_');
+		// createせず直接プレビューURLを叩いた場合
+		if (empty($data)) {
+			$data = $this->BlogPost->find('first', array(
+				'conditions' => array(
+					'BlogPost.id' => $id,
+					'BlogContent.id' => $blogContentsId
+				)
+			));
+		}
 		$this->request->data = $this->request->params['data'] = $data;
 		$this->preview = true;
 		$this->layoutPath = '';

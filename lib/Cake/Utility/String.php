@@ -19,7 +19,6 @@
 /**
  * String handling methods.
  *
- *
  * @package       Cake.Utility
  */
 class String {
@@ -99,17 +98,17 @@ class String {
 
 /**
  * Tokenizes a string using $separator, ignoring any instance of $separator that appears between
- * $leftBound and $rightBound
+ * $leftBound and $rightBound.
  *
- * @param string $data The data to tokenize
+ * @param string $data The data to tokenize.
  * @param string $separator The token to split the data on.
  * @param string $leftBound The left boundary to ignore separators in.
  * @param string $rightBound The right boundary to ignore separators in.
  * @return mixed Array of tokens in $data or original input if empty.
  */
 	public static function tokenize($data, $separator = ',', $leftBound = '(', $rightBound = ')') {
-		if (empty($data) || is_array($data)) {
-			return $data;
+		if (empty($data)) {
+			return array();
 		}
 
 		$depth = 0;
@@ -253,8 +252,8 @@ class String {
  * is to replace all whitespace and unneeded markup around placeholders that did not get replaced
  * by String::insert().
  *
- * @param string $str
- * @param array $options
+ * @param string $str String to clean.
+ * @param array $options Options list.
  * @return string
  * @see String::insert()
  */
@@ -323,7 +322,7 @@ class String {
  * - `indentAt` 0 based index to start indenting at. Defaults to 0.
  *
  * @param string $text The text to format.
- * @param array|integer $options Array of options to use, or an integer to wrap the text to.
+ * @param array|int $options Array of options to use, or an integer to wrap the text to.
  * @return string Formatted text.
  */
 	public static function wrap($text, $options = array()) {
@@ -350,9 +349,9 @@ class String {
  * Unicode aware version of wordwrap.
  *
  * @param string $text The text to format.
- * @param integer $width The width to wrap to. Defaults to 72.
+ * @param int $width The width to wrap to. Defaults to 72.
  * @param string $break The line is broken using the optional break parameter. Defaults to '\n'.
- * @param boolean $cut If the cut is set to true, the string is always wrapped at the specified width.
+ * @param bool $cut If the cut is set to true, the string is always wrapped at the specified width.
  * @return string Formatted text.
  */
 	public static function wordWrap($text, $width = 72, $break = "\n", $cut = false) {
@@ -405,8 +404,8 @@ class String {
  * - `html` If true, will ignore any HTML tags, ensuring that only the correct text is highlighted
  * - `regex` a custom regex rule that is used to match words, default is '|$tag|iu'
  *
- * @param string $text Text to search the phrase in
- * @param string $phrase The phrase that will be searched
+ * @param string $text Text to search the phrase in.
+ * @param string|array $phrase The phrase or phrases that will be searched.
  * @param array $options An array of html attributes and options.
  * @return string The highlighted text
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/text.html#TextHelper::highlight
@@ -416,12 +415,12 @@ class String {
 			return $text;
 		}
 
-		$default = array(
+		$defaults = array(
 			'format' => '<span class="highlight">\1</span>',
 			'html' => false,
 			'regex' => "|%s|iu"
 		);
-		$options = array_merge($default, $options);
+		$options += $defaults;
 		extract($options);
 
 		if (is_array($phrase)) {
@@ -450,7 +449,7 @@ class String {
 	}
 
 /**
- * Strips given text of all links (<a href=....)
+ * Strips given text of all links (<a href=....).
  *
  * @param string $text Text
  * @return string The text without links
@@ -472,15 +471,15 @@ class String {
  * - `exact` If false, $text will not be cut mid-word
  *
  * @param string $text String to truncate.
- * @param integer $length Length of returned string, including ellipsis.
+ * @param int $length Length of returned string, including ellipsis.
  * @param array $options An array of options.
  * @return string Trimmed string.
  */
 	public static function tail($text, $length = 100, $options = array()) {
-		$default = array(
+		$defaults = array(
 			'ellipsis' => '...', 'exact' => true
 		);
-		$options = array_merge($default, $options);
+		$options += $defaults;
 		extract($options);
 
 		if (!function_exists('mb_strlen')) {
@@ -513,21 +512,21 @@ class String {
  * - `html` If true, HTML tags would be handled correctly
  *
  * @param string $text String to truncate.
- * @param integer $length Length of returned string, including ellipsis.
+ * @param int $length Length of returned string, including ellipsis.
  * @param array $options An array of html attributes and options.
  * @return string Trimmed string.
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/text.html#TextHelper::truncate
  */
 	public static function truncate($text, $length = 100, $options = array()) {
-		$default = array(
+		$defaults = array(
 			'ellipsis' => '...', 'exact' => true, 'html' => false
 		);
 		if (isset($options['ending'])) {
-			$default['ellipsis'] = $options['ending'];
+			$defaults['ellipsis'] = $options['ending'];
 		} elseif (!empty($options['html']) && Configure::read('App.encoding') === 'UTF-8') {
-			$default['ellipsis'] = "\xe2\x80\xa6";
+			$defaults['ellipsis'] = "\xe2\x80\xa6";
 		}
-		$options = array_merge($default, $options);
+		$options += $defaults;
 		extract($options);
 
 		if (!function_exists('mb_strlen')) {
@@ -633,7 +632,7 @@ class String {
  *
  * @param string $text String to search the phrase in
  * @param string $phrase Phrase that will be searched for
- * @param integer $radius The amount of characters that will be returned on each side of the founded phrase
+ * @param int $radius The amount of characters that will be returned on each side of the founded phrase
  * @param string $ellipsis Ending that will be appended
  * @return string Modified string
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/text.html#TextHelper::excerpt

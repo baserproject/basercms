@@ -1,22 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * Baserヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		baser.app.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -27,8 +19,7 @@ App::uses('AppHelper', 'View/Helper');
 /**
  * Baserヘルパー
  *
- * @package cake
- * @subpackage Baser.View.Helper
+ * @package Baser.View.Helper
  */
 class BcBaserHelper extends AppHelper {
 
@@ -36,7 +27,6 @@ class BcBaserHelper extends AppHelper {
  * View
  *
  * @var View
- * @access protected
  */
 	protected $_View = null;
 
@@ -44,7 +34,6 @@ class BcBaserHelper extends AppHelper {
  * サイト基本設定
  *
  * @var array
- * @access public
  */
 	public $siteConfig = array();
 
@@ -52,7 +41,6 @@ class BcBaserHelper extends AppHelper {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray');
 
@@ -60,7 +48,6 @@ class BcBaserHelper extends AppHelper {
  * コンテンツ
  *
  * @var string
- * @access protected
  */
 	protected $_content = null;
 
@@ -68,7 +55,6 @@ class BcBaserHelper extends AppHelper {
  * カテゴリタイトル設定
  *
  * @var mixed
- * @access protected
  */
 	protected $_categoryTitleOn = true;
 
@@ -76,7 +62,6 @@ class BcBaserHelper extends AppHelper {
  * カテゴリタイトル
  *
  * @var mixed boolean Or string
- * @access protected
  */
 	protected $_categoryTitle = true;
 
@@ -84,7 +69,6 @@ class BcBaserHelper extends AppHelper {
  * ページモデル
  *
  * @var Page
- * @access public
  */
 	public $Page = null;
 
@@ -92,7 +76,6 @@ class BcBaserHelper extends AppHelper {
  * アクセス制限設定モデル
  *
  * @var Permission
- * @access public
  */
 	public $Permission = null;
 
@@ -100,16 +83,15 @@ class BcBaserHelper extends AppHelper {
  * Plugin Basers
  *
  * @var array
- * @access public
  */
 	public $pluginBasers = array();
 
 /**
  * コンストラクタ
  *
+ * @param object $View 
+ * @param array $settings 
  * @return void
- * @access public
- * @manual
  */
 	public function __construct(View $View, $settings = array()) {
 
@@ -151,10 +133,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * グローバルメニューを取得する
  *
- * @param string $menuType
  * @return array $globalMenus
- * @access public
- * @manual
  */
 	public function getMenus() {
 
@@ -186,8 +165,7 @@ class BcBaserHelper extends AppHelper {
  * タイトルを設定する
  *
  * @param string $title
- * @access public
- * @manual
+ * @return void
  */
 	public function setTitle($title, $categoryTitleOn = null) {
 
@@ -201,8 +179,7 @@ class BcBaserHelper extends AppHelper {
  * キーワードを設定する
  *
  * @param string $title
- * @access public
- * @manual
+ * @return void
  */
 	public function setKeywords($keywords) {
 
@@ -213,8 +190,7 @@ class BcBaserHelper extends AppHelper {
  * 説明文を設定する
  *
  * @param string $title
- * @access public
- * @manual
+ * @return void
  */
 	public function setDescription($description) {
 
@@ -228,8 +204,6 @@ class BcBaserHelper extends AppHelper {
  * @param string $title
  * @param mixed $value
  * @return void
- * @access public
- * @manual
  */
 	public function set($key, $value) {
 
@@ -242,8 +216,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param mixed $on boolean / 文字列（カテゴリ名として出力した文字を指定する）
  * @return void
- * @access public
- * @manual
  */
 	public function setCategoryTitle($on = true) {
 
@@ -253,10 +225,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * キーワードを取得する
  *
- * @return string $keyword
- * @return string
- * @access public
- * @manual
+ * @return string メタタグ用のkeywordを返す
  */
 	public function getKeywords() {
 
@@ -272,10 +241,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * ページ説明文を取得する
  *
- * @return string $description
- * @return string
- * @access public
- * @manual
+ * @return string メタタグ用のディスクリプションを返す
  */
 	public function getDescription() {
 
@@ -294,9 +260,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $separator
  * @param string $categoryTitleOn
- * @return string $description
- * @access public
- * @manual
+ * @return string メタタグ用のタイトルを返す
  */
 	public function getTitle($separator = '｜', $categoryTitleOn = null) {
 
@@ -334,10 +298,8 @@ class BcBaserHelper extends AppHelper {
  * 事前に setCategoryTitle メソッドで出力内容をカスタマイズする事ができる
  *
  * @param mixid $categoryTitleOn
- * @return array
- * @access public
+ * @return array 
  * @todo 処理内容がわかりにくいので変数名のリファクタリング要
- * @manual
  */
 	public function getCrumbs($categoryTitleOn = null) {
 
@@ -369,9 +331,8 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * コンテンツタイトルを取得する
- * @return string $description
- * @access public
- * @manual
+ * 
+ * @return string コンテンツのタイトルを返す
  */
 	public function getContentsTitle() {
 
@@ -388,8 +349,6 @@ class BcBaserHelper extends AppHelper {
  * コンテンツのタイトルを出力する
  *
  * @return void
- * @access public
- * @manual
  */
 	public function contentsTitle() {
 
@@ -402,8 +361,6 @@ class BcBaserHelper extends AppHelper {
  * @param string $separator
  * @param string $categoryTitleOn
  * @return void
- * @access public
- * @manual
  */
 	public function title($separator = '｜', $categoryTitleOn = null) {
 
@@ -414,8 +371,6 @@ class BcBaserHelper extends AppHelper {
  * キーワード用のメタタグを出力する
  *
  * @return void
- * @access public
- * @manual
  */
 	public function metaKeywords() {
 
@@ -426,8 +381,6 @@ class BcBaserHelper extends AppHelper {
  * ページ説明文用のメタタグを出力する
  *
  * @return void
- * @access public
- * @manual
  */
 	public function metaDescription() {
 
@@ -440,8 +393,6 @@ class BcBaserHelper extends AppHelper {
  * @param string $title
  * @param string $link
  * @return void
- * @access public
- * @manual
  */
 	public function rss($title, $link) {
 
@@ -452,9 +403,7 @@ class BcBaserHelper extends AppHelper {
  * トップページかどうか判断する
  *
  * @return boolean
- * @access public
  * @deprecated isHomeに統合する
- * @manual
  */
 	public function isTop() {
 
@@ -465,8 +414,6 @@ class BcBaserHelper extends AppHelper {
  * 現在のページがトップページかどうかを判定する
  *
  * @return boolean
- * @access public
- * @manual
  */
 	public function isHome() {
 
@@ -481,11 +428,9 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * BaserCMSが設置されているパスを出力する
+ * baserCMSが設置されているパスを出力する
  *
  * @return void
- * @access public
- * @manual
  */
 	public function root() {
 
@@ -493,11 +438,9 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * BaserCMSが設置されているパスを取得する
+ * baserCMSが設置されているパスを取得する
  *
  * @return string
- * @access public
- * @manual
  */
 	public function getRoot() {
 
@@ -507,11 +450,10 @@ class BcBaserHelper extends AppHelper {
 /**
  * ベースを考慮したURLを出力
  *
- * @param string $url
- * @param boolean $full
+ * @param string $url オプションのパラメータ、初期値は null
+ * @param boolean $full オプションのパラメータ、初期値は false
+ * @param boolean $sessionId オプションのパラメータ、初期値は true
  * @return void
- * @access public
- * @manual
  */
 	public function url($url = null, $full = false, $sessionId = true) {
 
@@ -521,8 +463,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * 相対パスから実際のパスを取得する
  *
- * @param string $url
- * @param boolean $full
+ * @param string $url 
+ * @param boolean $full オプションのパラメータ、初期値は false
+ * @param boolean $sessionId オプションのパラメータ、初期値は true
  * @manual
  */
 	public function getUrl($url, $full = false, $sessionId = true) {
@@ -535,12 +478,9 @@ class BcBaserHelper extends AppHelper {
  * View::elementを取得するだけのラッパー
  *
  * @param string $name
- * @param array $params
- * @param boolean $loadHelpers
- * @param boolean $subDir
+ * @param array $data オプションのパラメータ、初期値は arrau()
+ * @param array $options オプションのパラメータ、初期値は arrau()
  * @return string
- * @access public
- * @manual
  */
 	public function getElement($name, $data = array(), $options = array()) {
 
@@ -614,11 +554,9 @@ class BcBaserHelper extends AppHelper {
  * View::elementを出力するだけのラッパー
  *
  * @param string $name
- * @param array $params
- * @param boolean $loadHelpers
+ * @param array $data オプションのパラメータ、初期値は array()
+ * @param boolean $options オプションのパラメータ、初期値は array()
  * @return void
- * @access public
- * @manual
  */
 	public function element($name, $data = array(), $options = array()) {
 		if(!$data) {
@@ -634,10 +572,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * ヘッダーテンプレートを出力する
  *
- * @param array $params
- * @param mixed $loadHelpers
- * @param boolean $subDir
- * @manual
+ * @param array $data オプションのパラメータ、初期値は array()
+ * @param array $options オプションのパラメータ、初期値は array()
+ * @return void
  */
 	public function header($data = array(), $options = array()) {
 
@@ -668,12 +605,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * フッターテンプレートを出力する
  *
- * @param array $params
- * @param mixed $loadHelpers
- * @param boolean $subDir
+ * @param array $data オプションのパラメータ、初期値は array()
+ * @param array $options オプションのパラメータ、初期値は array()
  * @return void
- * @access public
- * @manual
  */
 	public function footer($data = array(), $options = array()) {
 
@@ -705,12 +639,10 @@ class BcBaserHelper extends AppHelper {
  * ページネーションを出力する
  * [非推奨]
  * @param string $name
- * @param array $params
- * @param boolean $loadHelpers
+ * @param array $params オプションのパラメータ、初期値は array()
+ * @param array $options オプションのパラメータ、初期値は array()
  * @return void
- * @access public
  * @deprecated
- * @manual
  */
 	public function pagination($name = 'default', $data = array(), $options = array()) {
 
@@ -732,8 +664,6 @@ class BcBaserHelper extends AppHelper {
  * $content_for_layout を出力するだけのラッパー
  *
  * @return void
- * @access public
- * @manual
  */
 	public function content() {
 		echo $this->_View->fetch('content');
@@ -742,9 +672,8 @@ class BcBaserHelper extends AppHelper {
 /**
  * セッションメッセージを出力する
  *
- * @param array $key
+ * @param string $key 出力するメッセージのキー
  * @return void
- * @access public
  * @manual
  */
 	public function flash($key = 'flash') {
@@ -761,8 +690,6 @@ class BcBaserHelper extends AppHelper {
  * $scripts_for_layout を出力する
  *
  * @return void
- * @access public
- * @manual
  */
 	public function scripts() {
 
@@ -793,8 +720,6 @@ class BcBaserHelper extends AppHelper {
  * ツールバーやCakeのデバッグ出力を表示
  *
  * @return void
- * @access public
- * @manual
  */
 	public function func() {
 
@@ -825,8 +750,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param array $submenus
  * @return void
- * @access public
- * @manual
  */
 	public function setSubMenus($submenus) {
 
@@ -838,8 +761,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param array $attrib
  * @return void
- * @access public
- * @manual
  */
 	public function xmlHeader($attrib = array()) {
 
@@ -853,8 +774,6 @@ class BcBaserHelper extends AppHelper {
  * アイコン（favicon）タグを出力する
  *
  * @return void
- * @access public
- * @manual
  */
 	public function icon() {
 
@@ -864,10 +783,8 @@ class BcBaserHelper extends AppHelper {
 /**
  * ドキュメントタイプを指定するタグを出力する
  *
- * @param type $type
+ * @param string $type 出力ドキュメントタイプの文字列 オプションのパラメータ、初期値は 'xhtml-trans'
  * @return void
- * @access public
- * @manual
  */
 	public function docType($type = 'xhtml-trans') {
 
@@ -879,12 +796,9 @@ class BcBaserHelper extends AppHelper {
  * CSSの読み込みタグを出力する
  *
  * @param string $path
- * @param string $rel
- * @param array $options
+ * @param array $options オプションのパラメータ、初期値は array()
  * @param boolean $inline
  * @return void
- * @access public
- * @manual
  */
 	public function css($path, $options = array()) {
 
@@ -905,11 +819,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * javascriptの読み込みタグを出力する
  *
- * @param boolean $url
+ * @param string|array $url String or array of javascript files to include
  * @param boolean $inline
  * @return void
- * @access public
- * @manual
  */
 	public function js($url, $inline = true) {
 
@@ -925,8 +837,6 @@ class BcBaserHelper extends AppHelper {
  * @param array $path
  * @param array $options
  * @return void
- * @access pub
- * @manual
  */
 	public function img($path, $options = array()) {
 
@@ -936,11 +846,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * 画像タグを取得する
  *
- * @param array $path
- * @param array $options
- * @return array
- * @access public
- * @manual
+ * @param string $path Path to the image file, relative to the app/webroot/img/ directory.
+ * @param array $options Array of HTML attributes. See above for special options.
+ * @return string completed img tag
  */
 	public function getImg($path, $options = array()) {
 
@@ -951,12 +859,10 @@ class BcBaserHelper extends AppHelper {
  * アンカータグを出力する
  *
  * @param string $title
- * @param string $url
- * @param array $htmlAttributes
- * @param boolean $confirmMessage
+ * @param string $url オプションのパラメータ、初期値は null
+ * @param array $htmlAttributes オプションのパラメータ、初期値は array()
+ * @param boolean $confirmMessage オプションのパラメータ、初期値は false
  * @return void
- * @access public
- * @manual
  */
 	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false) {
 
@@ -971,13 +877,10 @@ class BcBaserHelper extends AppHelper {
  * アンカータグを取得する
  *
  * @param string $title
- * @param string $url
- * @param array $htmlAttributes
- * @param boolean $confirmMessage
- * @param boolean $escapeTitle
+ * @param string $url オプションのパラメータ、初期値は null
+ * @param array $htmlAttributes オプションのパラメータ、初期値は array()
+ * @param boolean $confirmMessage オプションのパラメータ、初期値は false
  * @return string
- * @access public
- * @manual
  */
 	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
 
@@ -1098,8 +1001,6 @@ class BcBaserHelper extends AppHelper {
  * SSL通信かどうか確認する
  *
  * @return boolean
- * @access public
- * @manual
  */
 	public function isSSL() {
 
@@ -1113,10 +1014,8 @@ class BcBaserHelper extends AppHelper {
 /**
  * charsetメタタグを出力する
  *
- * @param string $charset
+ * @param string $charset オプションのパラメータ、初期値は null
  * @return void
- * @access public
- * @manual
  */
 	public function charset($charset = null) {
 
@@ -1129,10 +1028,8 @@ class BcBaserHelper extends AppHelper {
 /**
  * コピーライト用の年を出力する
  *
- * @param string 開始年
+ * @param integer $begin 開始年
  * @return void
- * @access public
- * @manual
  */
 	public function copyYear($begin) {
 
@@ -1149,7 +1046,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $id
  * @return void
- * @access public
  */
 	public function setPageEditLink($id) {
 
@@ -1162,7 +1058,6 @@ class BcBaserHelper extends AppHelper {
  * 編集リンクを出力する
  *
  * @return void
- * @access public
  */
 	public function editLink() {
 
@@ -1175,7 +1070,6 @@ class BcBaserHelper extends AppHelper {
  * 編集リンクが存在するかチェックする
  *
  * @return boolean
- * @access public
  */
 	public function existsEditLink() {
 
@@ -1186,7 +1080,6 @@ class BcBaserHelper extends AppHelper {
  * 公開ページへのリンクを出力する
  *
  * @return void
- * @access public
  */
 	public function publishLink() {
 
@@ -1199,7 +1092,6 @@ class BcBaserHelper extends AppHelper {
  * 公開ページへのリンクが存在するかチェックする
  *
  * @return boolean
- * @access public
  */
 	public function existsPublishLink() {
 
@@ -1208,9 +1100,9 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * アップデート処理が必要かチェックする
- * TODO 別のヘルパに移動する
+ * 
  * @return boolean
- * @access public
+ * @todo 別のヘルパに移動する
  */
 	public function checkUpdate() {
 
@@ -1230,9 +1122,9 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * アップデート用のメッセージを出力する
- * TODO 別のヘルパーに移動する
+ * 
  * @return void
- * @access public
+ * @todo 別のヘルパに移動する
  */
 	public function updateMessage() {
 		$adminPrefix = Configure::read('Routing.prefixes.0');
@@ -1245,10 +1137,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * コンテンツを特定するIDを出力する
  *
- * @param boolean $detail
+ * @param boolean $detail オプションのパラメータ、初期値は false 
+ * @param array $options オプションのパラメータ、初期値は array()
  * @return void
- * @access public
- * @manual
  */
 	public function contentsName($detail = false, $options = array()) {
 
@@ -1262,10 +1153,9 @@ class BcBaserHelper extends AppHelper {
  * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
  * ・トップページは、Home
  *
- * @param boolean $detail
- * @return string
- * @access public
- * @manual
+ * @param boolean $detail オプションのパラメータ、初期値は false
+ * @param array $options オプションのパラメータ、初期値は array()
+ * @return string 
  */
 	public function getContentsName($detail = false, $options = array()) {
 
@@ -1401,8 +1291,6 @@ class BcBaserHelper extends AppHelper {
  * @param string $separator Text to separate crumbs.
  * @param string $startText This will be the first crumb, if false it defaults to first crumb in array
  * @return string
- * @access public
- * @manual
  */
 	public function crumbs($separator = '&raquo;', $startText = false) {
 
@@ -1432,8 +1320,6 @@ class BcBaserHelper extends AppHelper {
  * @param string $link URL for link (if empty it won't be a link)
  * @param mixed $options Link attributes e.g. array('id'=>'selected')
  * @return void
- * @access public
- * @manual
  */
 	public function addCrumb($name, $link = null, $options = null) {
 
@@ -1449,10 +1335,8 @@ class BcBaserHelper extends AppHelper {
 /**
  * ページ機能で作成したページの一覧データを取得する
  *
- * @param string $categoryId
+ * @param string $categoryId オプションのパラメータ、初期値は null
  * @return mixed boolean / array
- * @access public
- * @manual
  */
 	public function getPageList($categoryId = null) {
 
@@ -1465,7 +1349,7 @@ class BcBaserHelper extends AppHelper {
 			$pages = $this->Page->find('all', array('conditions' => $conditions,
 				'fields' => array('title', 'url'),
 				'order' => 'Page.sort'));
-			return Set::extract('/Page/.', $pages);
+			return Hash::extract($pages, '{n}.Page');
 		} else {
 			return false;
 		}
@@ -1478,11 +1362,9 @@ class BcBaserHelper extends AppHelper {
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
- * @param type $expire
- * @param array $type
+ * @param numeric $expire キャッシュの有効時間
+ * @param string $type どのタイプ(拡張子)に対してのキャッシュか オプションのパラメータ、初期値は 'html'
  * @return void
- * @access public
- * @manual
  */
 	public function cacheHeader($expire = null, $type = 'html') {
 
@@ -1514,9 +1396,8 @@ class BcBaserHelper extends AppHelper {
  * httpから始まるURLを取得する
  *
  * @param string $url
+ * @param boolean $sessionId オプションのパラメータ、初期値は true 
  * @return string
- * @access public
- * @manual
  */
 	public function getUri($url, $sessionId = true) {
 		if (preg_match('/^http/is', $url)) {
@@ -1544,7 +1425,6 @@ class BcBaserHelper extends AppHelper {
  * （呼びだし方）$this->BcBaser->feed(1);
  *
  * @return void
- * @access public
  */
 	protected function _initPluginBasers() {
 
@@ -1583,8 +1463,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $method
  * @param array $params
- * @return ixed
- * @access protected
+ * @return mixed
  */
 	public function __call($method, $params) {
 
@@ -1604,8 +1483,6 @@ class BcBaserHelper extends AppHelper {
  * @param array $attributes タグの属性
  * @param boolean $escape エスケープ有無
  * @return string $text 変換後文字列
- * @access public
- * @manual
  */
 	public function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
 
@@ -1624,8 +1501,6 @@ class BcBaserHelper extends AppHelper {
  * @param mixid $pageCategoryId / '' / 0
  * @param string $recursive
  * @return void
- * @access public
- * @manual
  */
 	public function sitemap($pageCategoryId = null, $recursive = null) {
 
@@ -1649,9 +1524,8 @@ class BcBaserHelper extends AppHelper {
  * @param string $id
  * @param int $width
  * @param int $height
- * @param array $options
+ * @param array $options オプションのパラメータ、初期値は array()
  * @return string
- * @manual
  */
 	public function swf($path, $id, $width, $height, $options = array()) {
 
@@ -1670,7 +1544,7 @@ class BcBaserHelper extends AppHelper {
 			$path = $this->getUrl($path);
 		} elseif (strpos($path, '://') === false) {
 			if ($path[0] !== '/') {
-				$path = IMAGES_URL . $path;
+				$path = Configure::read('App.imageBaseUrl') . $path;
 			}
 			$path = $this->webroot($path);
 		}
@@ -1704,8 +1578,6 @@ END_FLASH;
  * 現在のログインユーザーが管理者グループかどうかチェックする
  *
  * @return boolean
- * @access public
- * @manual
  */
 	public function isAdminUser($id = null) {
 		if (!$id && !empty($this->_View->viewVars['user']['user_group_id'])) {
@@ -1722,8 +1594,6 @@ END_FLASH;
  * 現在のページが固定ページかどうかを判定する
  *
  * @return boolean
- * @access public
- * @manual
  */
 	public function isPage() {
 		return $this->Page->isPageUrl($this->getHere());
@@ -1734,8 +1604,6 @@ END_FLASH;
  * スマートURLかどうか、サブフォルダかどうかに依存しないスラッシュから始まるURL
  *
  * @return string
- * @access public
- * @manual
  */
 	public function getHere() {
 		return '/' . preg_replace('/^\//', '', $this->request->url);
@@ -1745,7 +1613,6 @@ END_FLASH;
  * 現在のページがページカテゴリのトップかどうかを判定する
  *
  * @return boolean
- * @access public
  * @manual
  */
 	public function isCategoryTop() {
@@ -1769,9 +1636,9 @@ END_FLASH;
  *
  * ※ レイアウトは読み込まない
  * @param string $url
- * @param array $params
- * @param array $options
- * @manual
+ * @param array $params オプションのパラメータ、初期値は array()
+ * @param array $options オプションのパラメータ、初期値は array()
+ * @return void
  */
 	public function page($url, $params = array(), $options = array()) {
 
@@ -1820,7 +1687,6 @@ END_FLASH;
  * 
  * @param int $no
  * @param array $options
- * @access public
  */
 	public function widgetArea($no = null, $options = array()) {
 
@@ -1844,7 +1710,6 @@ END_FLASH;
  * 
  * @param string $url
  * @return boolean 
- * @access public
  */
 	public function isCurrentUrl($url) {
 
@@ -1880,9 +1745,9 @@ END_FLASH;
 /**
  * コアテンプレートを読み込む
  * 
- * @param type $name
- * @param type $data
- * @param type $options
+ * @param string $name
+ * @param array $data オプションのパラメータ、初期値は array()
+ * @param array $options オプションのパラメータ、初期値は array()
  */
 	public function includeCore($name, $data = array(), $options = array()) {
 
@@ -1905,7 +1770,8 @@ END_FLASH;
  * 《options》
  * _getThemeImage() を参照
  * 
- * @param type $options
+ * @param array $options オプションのパラメータ、初期値は array()
+ * @return void
  */
 	public function logo($options = array()) {
 		echo $this->_getThemeImage('logo', $options);
@@ -1919,7 +1785,8 @@ END_FLASH;
  * - `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
  * - `id` : all を true とした場合、UL タグの id 属性を指定できる。
  * 
- * @param type $options
+ * @param array $options
+ * @return void
  */
 	public function mainImage($options = array()) {
 
@@ -1960,8 +1827,8 @@ END_FLASH;
  * - `maxHeight: 最大高さ
  * 
  * @param string $name
- * @param type $options
- * @return type
+ * @param array $options オプションのパラメータ、初期値は array()
+ * @return string $tag
  */
 	public function _getThemeImage($name, $options = array()) {
 
@@ -2079,6 +1946,7 @@ END_FLASH;
 	
 /**
  * テーマのURLを取得する
+ * 
  * @return string
  */
 	public function getThemeUrl() {
@@ -2087,6 +1955,8 @@ END_FLASH;
 	
 /**
  * テーマのURLを出力する
+ * 
+ * @return void
  */
 	public function themeUrl() {
 		echo $this->getThemeUrl();
@@ -2095,6 +1965,7 @@ END_FLASH;
 /**
  * ベースとなるURLを取得する
  * サブフォルダやスマートURLについて考慮されている事が前提
+ * 
  * @return string
  */
 	public function getBaseUrl() {
@@ -2104,9 +1975,88 @@ END_FLASH;
 /**
  * ベースとなるURLを出力する
  * サブフォルダやスマートURLについて考慮されている事が前提
+ * 
+ * @return void
  */
 	public function baseUrl() {
 		echo $this->getBaseUrl();
 	}
 	
+/**
+ * サブメニューを出力する
+ * 
+ * @return void
+ */
+	public function subMenu($data = array(), $options = array()) {
+		if (!$this->_View->getVar('subMenuElements')) {
+			return;
+		}
+		$this->element('sub_menu', $data, $options);
+	}
+	
+/**
+ * コンテンツナビを出力する
+ * 
+ * @return void
+ */
+	public function contentsNavi($data = array(), $options = array()) {
+		if (!isset($this->_View->BcPage) || !$this->_View->BcPage->contensNaviAvailable()) {
+			return;
+		}
+		$this->element('contents_navi', $data, $options);
+	}
+	
+/**
+ * パンくずリストを出力する
+ * 
+ * @return void
+ */
+	public function crumbsList($data = array(), $options = array()) {
+		$this->element('contents_navi', $data, $options);
+	}
+
+/**
+ * グローバルメニューを出力する
+ * 
+ * @return void
+ */
+	public function globalMenu($data = array(), $options = array()) {
+		$this->element('global_menu', $data, $options);
+	}
+	
+/**
+ * Google Analytics のトラッキングコードを出力する
+ * 
+ * @return void
+ */
+	public function googleAnalytics($data = array(), $options = array()) {
+		$this->element('google_analytics', $data, $options);
+	}
+	
+/**
+ * Google Maps を出力する
+ * 
+ * @return void
+ */
+	public function googleMaps($data = array(), $options = array()) {
+		$this->element('google_maps', $data, $options);
+	}
+	
+/**
+ * 表示件数設定機能を出力する
+ * 
+ * @return void
+ */
+	public function listNum($data = array(), $options = array()) {
+		$this->element('list_num', $data, $options);
+	}
+	
+/**
+ * サイト内検索フォームを出力
+ * 
+ * @return void
+ */
+	public function siteSearchForm($data = array(), $options = array()) {
+		$this->element('site_search_form', $data, $options);
+	}
 }

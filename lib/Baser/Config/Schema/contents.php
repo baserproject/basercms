@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* Contents schema generated on: 2011-08-20 02:08:53 : 1313774093 */
 
 class ContentsSchema extends CakeSchema {

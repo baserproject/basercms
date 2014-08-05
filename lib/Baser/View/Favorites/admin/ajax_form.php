@@ -1,23 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] よく使う項目追加　結果
  *
- * PHP versions 4 and 5
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * Baser :  Basic Creating Support Project <http://basercms.net>
- * Copyright 2008 - 2013, Catchup, Inc.
- * 								1-19-4 ikinomatsubara, fukuoka-shi
- * 								fukuoka, Japan 819-0055
- *
- * @copyright		Copyright 2008 - 2013, Catchup, Inc.
- * @link			http://basercms.net BaserCMS Project
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			Baser v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->element('favorite_menu_row');

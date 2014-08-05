@@ -1,30 +1,21 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * インストーラーコントローラー
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		Baser.Controller
+ * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * インストーラーコントローラー
+ * 
+ * @package Baser.Controller
  */
 class InstallationsController extends AppController {
 
@@ -189,7 +180,7 @@ class InstallationsController extends AppController {
 
 		extract($checkResult);
 
-		$this->set('blRequirementsMet', ($phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable));
+		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 	}
 

@@ -3,17 +3,16 @@
 /**
  * Timeヘルパー拡張
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('TimeHelper', 'View/Helper');
 
 /**
@@ -23,6 +22,8 @@ App::uses('TimeHelper', 'View/Helper');
  */
 class BcTimeHelper extends TimeHelper {
 
+// CUSTOMIZE ADD 2014/07/03 ryuring
+// >>>
 /**
  * 年号リスト
  *
@@ -41,7 +42,7 @@ class BcTimeHelper extends TimeHelper {
 /**
  * 年号を取得
  *
- * @param string $w
+ * @param string $w 年号のローマ字表記の頭文字 m (明治） / t（大正) / s（昭和） / h（平成）
  * @return string 年号をあらわすアルファベット
  * @access public
  */
@@ -57,7 +58,7 @@ class BcTimeHelper extends TimeHelper {
  * 和暦を取得（アルファベット）
  *
  * @param string $date 和暦を表す日付文字列（s-48/5/10）
- * @return mixid string / false
+ * @return mixid 和暦　or false
  * @access public
  */
 	public function wareki($date) {
@@ -279,5 +280,5 @@ class BcTimeHelper extends TimeHelper {
 		}
 		return false;
 	}
-
+// <<<
 }

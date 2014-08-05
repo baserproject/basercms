@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* Permissions schema generated on: 2010-11-04 18:11:09 : 1288863009 */
 
 class PermissionsSchema extends CakeSchema {

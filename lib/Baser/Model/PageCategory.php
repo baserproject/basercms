@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ページカテゴリーモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -145,7 +139,7 @@ class PageCategory extends AppModel {
 					foreach ($options['excludeParentId'] as $excludeParentId) {
 						$children = $this->children($excludeParentId);
 						if ($children) {
-							$excludeIds = am($excludeIds, Set::extract('/PageCategory/id', $children));
+							$excludeIds = am($excludeIds, Hash::extract($children, '{n}.PageCategory.id'));
 						}
 						$excludeIds[] = $excludeParentId;
 					}
@@ -160,7 +154,7 @@ class PageCategory extends AppModel {
 					foreach ($options['parentId'] as $parentId) {
 						$children = $this->children($parentId);
 						if ($children) {
-							$parentIds = am($parentIds, Set::extract('/PageCategory/id', $children));
+							$parentIds = am($parentIds, Hash::extract($children, '{n}.PageCategory.id'));
 						} else {
 							return array();
 						}
@@ -497,7 +491,7 @@ class PageCategory extends AppModel {
 		}
 		$children = $this->children($agentId, false, array('PageCategory.id'), array('PageCategory.id'));
 		if ($children) {
-			$children = Set::extract('/PageCategory/id', $children);
+			$children = Hash::extract($children, '{n}.PageCategory.id');
 			$ids = am($ids, $children);
 		}
 		return $ids;
@@ -533,7 +527,7 @@ class PageCategory extends AppModel {
 			return $this->getAgentId($type);
 		} else {
 			$path = $this->getPath($id, array('name'), -1);
-			$path = Set::extract('/PageCategory/name', $path);
+			$path = Hash::extract($path, '{n}.PageCategory.name');
 			$path = implode(DS, $path);
 			$path = getViewPath() . 'Pages' . DS . $type . DS . $path;
 		}

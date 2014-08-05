@@ -97,7 +97,7 @@ class CakeRoute {
 /**
  * Check if a Route has been compiled into a regular expression.
  *
- * @return boolean
+ * @return bool
  */
 	public function compiled() {
 		return !empty($this->_compiledRoute);
@@ -334,7 +334,7 @@ class CakeRoute {
  * @param string $val The value of the named parameter
  * @param array $rule The rule(s) to apply, can also be a match string
  * @param string $context An array with additional context information (controller / action)
- * @return boolean
+ * @return bool
  */
 	protected function _matchNamed($val, $rule, $context) {
 		if ($rule === true || $rule === false) {
@@ -536,7 +536,10 @@ class CakeRoute {
 			$out = str_replace($search, $replace, $out);
 		}
 
-		if (strpos($this->template, '*')) {
+		if (strpos($this->template, '**') !== false) {
+			$out = str_replace('**', $params['pass'], $out);
+			$out = str_replace('%2F', '/', $out);
+		} elseif (strpos($this->template, '*') !== false) {
 			$out = str_replace('*', $params['pass'], $out);
 		}
 		$out = str_replace('//', '/', $out);

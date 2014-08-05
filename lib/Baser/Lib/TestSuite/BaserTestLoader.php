@@ -1,25 +1,47 @@
 <?php
-
 /**
- * Custom Test Loader
- *
- * PHP versions 5
+ * BaserTestLoader
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.0-beta
+ * @package			Baser.Lib.TestSuite
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('CakeTestLoader', 'TestSuite');
 
 /**
- * @package Baser.TestSuite
+ * TestLoader for CakePHP Test suite.
+ *
+ * Turns partial paths used on the testsuite console and web UI into full file paths.
+ *
+ * @package Baser.Lib.TestSuite
  */
 class BaserTestLoader extends CakeTestLoader {
 
+/**
+ * Get the list of files for the test listing.
+ *
+ * @param string $params Path parameters
+ * @return array
+ */
+	public static function generateTestList($params) {
+		$directory = self::_basePath($params);
+		$fileList = self::_getRecursiveFileList($directory);
+		$testCases = array();
+		foreach ($fileList as $testCaseFile) {
+			$case = str_replace($directory . DS, '', $testCaseFile);
+			$case = str_replace('Test.php', '', $case);
+			$testCases[$testCaseFile] = $case;
+		}
+		sort($testCases);
+		return $testCases;
+	}
+	
 /**
  * Generates the base path to a set of tests based on the parameters.
  *
@@ -30,8 +52,11 @@ class BaserTestLoader extends CakeTestLoader {
 		$result = null;
 		if (!empty($params['core'])) {
 			$result = CORE_TEST_CASES;
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		} elseif ($params['baser']) {
 			$result = BASER_TEST_CASES;
+		// <<<
 		} elseif (!empty($params['plugin'])) {
 			if (!CakePlugin::loaded($params['plugin'])) {
 				try {
@@ -46,25 +71,6 @@ class BaserTestLoader extends CakeTestLoader {
 			$result = APP_TEST_CASES;
 		}
 		return $result;
-	}
-
-/**
- * Get the list of files for the test listing.
- *
- * @return void
- */
-	public static function generateTestList($params) {
-		$directory = self::_basePath($params);
-		$fileList = self::_getRecursiveFileList($directory);
-
-		$testCases = array();
-		foreach ($fileList as $testCaseFile) {
-			$case = str_replace($directory . DS, '', $testCaseFile);
-			$case = str_replace('Test.php', '', $case);
-			$testCases[$testCaseFile] = $case;
-		}
-		sort($testCases);
-		return $testCases;
 	}
 
 }

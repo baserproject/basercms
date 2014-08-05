@@ -92,7 +92,8 @@ class ExceptionRenderer {
 		$this->controller = $this->_getController($exception);
 
 		if (method_exists($this->controller, 'appError')) {
-			return $this->controller->appError($exception);
+			$this->controller->appError($exception);
+			return;
 		}
 		$method = $template = Inflector::variable(str_replace('Exception', '', get_class($exception)));
 		$code = $exception->getCode();
@@ -179,7 +180,7 @@ class ExceptionRenderer {
 /**
  * Generic handler for the internal framework errors CakePHP can generate.
  *
- * @param CakeException $error
+ * @param CakeException $error The exception to render.
  * @return void
  */
 	protected function _cakeError(CakeException $error) {
@@ -188,10 +189,11 @@ class ExceptionRenderer {
 		$this->controller->response->statusCode($code);
 		$this->controller->set(array(
 			'code' => $code,
-			'url' => h($url),
 			'name' => h($error->getMessage()),
+			'message' => h($error->getMessage()),
+			'url' => h($url),
 			'error' => $error,
-			'_serialize' => array('code', 'url', 'name')
+			'_serialize' => array('code', 'name', 'message', 'url')
 		));
 		$this->controller->set($error->getAttributes());
 		$this->_outputMessage($this->template);
@@ -200,7 +202,7 @@ class ExceptionRenderer {
 /**
  * Convenience method to display a 400 series page.
  *
- * @param Exception $error
+ * @param Exception $error The exception to render.
  * @return void
  */
 	public function error400($error) {
@@ -212,9 +214,10 @@ class ExceptionRenderer {
 		$this->controller->response->statusCode($error->getCode());
 		$this->controller->set(array(
 			'name' => h($message),
+			'message' => h($message),
 			'url' => h($url),
 			'error' => $error,
-			'_serialize' => array('name', 'url')
+			'_serialize' => array('name', 'message', 'url')
 		));
 		$this->_outputMessage('error400');
 	}
@@ -222,7 +225,7 @@ class ExceptionRenderer {
 /**
  * Convenience method to display a 500 page.
  *
- * @param Exception $error
+ * @param Exception $error The exception to render.
  * @return void
  */
 	public function error500($error) {
@@ -235,9 +238,10 @@ class ExceptionRenderer {
 		$this->controller->response->statusCode($code);
 		$this->controller->set(array(
 			'name' => h($message),
-			'message' => h($url),
+			'message' => h($message),
+			'url' => h($url),
 			'error' => $error,
-			'_serialize' => array('name', 'message')
+			'_serialize' => array('name', 'message', 'url')
 		));
 		$this->_outputMessage('error500');
 	}
@@ -245,7 +249,7 @@ class ExceptionRenderer {
 /**
  * Convenience method to display a PDOException.
  *
- * @param PDOException $error
+ * @param PDOException $error The exception to render.
  * @return void
  */
 	public function pdoError(PDOException $error) {
@@ -254,10 +258,11 @@ class ExceptionRenderer {
 		$this->controller->response->statusCode($code);
 		$this->controller->set(array(
 			'code' => $code,
-			'url' => h($url),
 			'name' => h($error->getMessage()),
+			'message' => h($error->getMessage()),
+			'url' => h($url),
 			'error' => $error,
-			'_serialize' => array('code', 'url', 'name', 'error')
+			'_serialize' => array('code', 'name', 'message', 'url', 'error')
 		));
 		$this->_outputMessage($this->template);
 	}
@@ -280,6 +285,12 @@ class ExceptionRenderer {
 			} else {
 				$this->_outputMessage('error500');
 			}
+		} catch (MissingPluginException $e) {
+			$attributes = $e->getAttributes();
+			if (isset($attributes['plugin']) && $attributes['plugin'] === $this->controller->plugin) {
+				$this->controller->plugin = null;
+			}
+			$this->_outputMessageSafe('error500');
 		} catch (Exception $e) {
 			$this->_outputMessageSafe('error500');
 		}

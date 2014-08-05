@@ -39,6 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  #
   config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
 
   # Provider-specific configuration so you can fine-tune various
@@ -134,7 +135,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :root => '/vagrant', 
         :webroot => '/vagrant/app/webroot', 
         :timeout => '60', 
-        :listen => '80'
+        :listen => '80',
+        :user => 'vagrant',
+        :group => 'vagrant'
       }, 
       :php => {
         :max_execution_time => '30',

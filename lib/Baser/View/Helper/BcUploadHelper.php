@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * アップロードヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -26,7 +20,7 @@ App::uses('FormHelper', 'View/Helper');
 /**
  * アップロードヘルパー
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcUploadHelper extends FormHelper {
 
@@ -78,8 +72,15 @@ class BcUploadHelper extends FormHelper {
 		$field = $this->field();
 		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName, $options);
+		
+		if (empty($options['value'])) {
+			$value = $this->value($fieldName);
+		} else {
+			$value = $options['value'];
+		}
+		
 		$delCheckTag = '';
-		if ($linkOptions['delCheck']) {
+		if ($linkOptions['delCheck'] && empty($value['session_key'])) {
 			$delCheckTag = parent::checkbox($modelName . '.' . $field . '_delete') . parent::label($modelName . '.' . $field . '_delete', '削除する');
 		}
 		$hiddenValue = $this->value($fieldName . '_');
@@ -130,7 +131,7 @@ class BcUploadHelper extends FormHelper {
 		$model = ClassRegistry::init($modelName);
 
 		if (empty($model->Behaviors->BcUpload)) {
-			throw new BaserException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
+			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
 		}
 
 		$settings = $model->Behaviors->BcUpload->settings[$modelName];
@@ -263,7 +264,7 @@ class BcUploadHelper extends FormHelper {
 		}
 
 		if (strpos($fieldName, '.') === false) {
-			trigger_error('フィールド名は、 modelName.fieldName で指定してください。', E_USER_WARNING);
+			trigger_error('フィールド名は、 ModelName.field_name で指定してください。', E_USER_WARNING);
 			return false;
 		}
 
@@ -289,7 +290,7 @@ class BcUploadHelper extends FormHelper {
 			}
 		}
 
-		if ($noimage) {
+		if ($fileName == $noimage) {
 			$mostSizeUrl = $fileName;
 		} elseif ($tmp) {
 			$mostSizeUrl = $fileUrl . $fileName;
@@ -319,11 +320,13 @@ class BcUploadHelper extends FormHelper {
 					$imgPrefix = '';
 					$imgSuffix = '';
 
-					if (isset($copySetting['suffix']))
+					if (isset($copySetting['suffix'])) {
 						$imgSuffix = $copySetting['suffix'];
-					if (isset($copySetting['prefix']))
+					}
+					if (isset($copySetting['prefix'])) {
 						$imgPrefix = $copySetting['prefix'];
-
+					}
+					
 					$pathinfo = pathinfo($fileName);
 					$ext = $pathinfo['extension'];
 					$basename = basename($fileName, '.' . $ext);
@@ -349,7 +352,7 @@ class BcUploadHelper extends FormHelper {
 			}
 		}
 
-		if ($link && !$noimage) {
+		if ($link && !($noimage == $fileName)) {
 			return $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, am($options, $linkOptions));
 		} else {
 			return $this->Html->image($mostSizeUrl, am($options, $imgOptions));

@@ -1,22 +1,16 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * 認証設定コンポーネント
  * (注）BaserのDB設計に依存している
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Component', 'Controller');
@@ -145,9 +139,21 @@ class BcAuthConfigureComponent extends Component {
 
 			// クッキーがある場合にはクッキーで認証
 			if (!empty($controller->Cookie)) {
-				$cookie = $controller->Cookie->read(BcAuthComponent::$sessionKey);
-				if (!empty($cookie)) {
-					if ($auth->login($cookie)) {
+				$cookie = $controller->Cookie->read(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
+				
+				// ===================================================================================
+				// 2014/06/19 ryuring
+				// PHPの仕様として、ある条件にてクッキーを削除した際、クッキーの値に deleted が設定されてしまうので、
+				// deleted が設定されている場合は、クッキーを無視する仕様に変更した
+				// 《参考情報》
+				// http://siguniang.wordpress.com/2009/08/19/phpcookieを削除すると値をdeletedに設定/
+				// 上記参考情報には、「クライアントPCの時刻を1年以上昔に設定」とあるが、そうしない場合も再現できた
+				// その原因までは追っていない
+				// ===================================================================================
+				
+				if (!empty($cookie) && $cookie != 'deleted') {
+					$controller->request->data[$userModel] = $cookie;
+					if ($auth->login()) {
 						return true;
 					}
 				}

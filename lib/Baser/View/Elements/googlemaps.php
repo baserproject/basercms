@@ -1,23 +1,21 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] グールグルマップ
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ * @deprecated since version 3.0.3
  */
+
+trigger_error(deprecatedMessage('テンプレート：googlemaps.php', '3.0.3', '3.1.0', '$this->BcBaser->googleMaps() を利用してください。'), E_USER_DEPRECATED);
+
 $_width = 600;
 $_height = 400;
 $_zoom = 16;

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.controller
+ * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@
 /**
  * お問い合わせメールフォーム用コントローラー
  *
- * @package baser.plugins.mail.controller
+ * @package Mail.Controller
  */
 class MailController extends MailAppController {
 
@@ -210,6 +204,11 @@ class MailController extends MailAppController {
 
 		// 初期値を取得
 		if (!isset($this->request->data['Message'])) {
+			if(!empty($this->request->params['named'])) {
+				foreach($this->request->params['named'] as $key => $value) {
+					$this->request->params['named'][$key] = base64UrlsafeDecode($value);
+				}
+			}
 			$this->request->data = $this->Message->getDefaultValue($this->request->params['named']);
 		} else {
 			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);

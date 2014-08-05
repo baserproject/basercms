@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id: blog_posts_controller.php 42 2011-08-23 19:20:59Z ryuring $ */
 /**
  * 記事コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision: 42 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2011-08-24 04:20:59 +0900 (水, 24 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Xml', 'Utility');
@@ -26,7 +19,7 @@ App::uses('Xml', 'Utility');
 /**
  * 記事コントローラー
  *
- * @package baser.plugins.blog.controllers
+ * @package Blog.Controller
  */
 class BlogPostsController extends BlogAppController {
 
@@ -236,7 +229,7 @@ class BlogPostsController extends BlogAppController {
 			if (!empty($data['BlogPost']['blog_tag_id'])) {
 				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
 				if ($blogTags) {
-					$conditions['BlogPost.id'] = Set::extract('/BlogPost/id', $blogTags);
+					$conditions['BlogPost.id'] = Hash::extract($blogTags, '{n}.BlogPost.id');
 				}
 			}
 		}
@@ -400,6 +393,7 @@ class BlogPostsController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$editable = false;
 		$blogCategoryId = '';
+		$currentCatOwner = '';
 
 		if (isset($this->request->data['BlogPost']['blog_category_id'])) {
 			$blogCategoryId = $this->request->data['BlogPost']['blog_category_id'];
@@ -409,8 +403,8 @@ class BlogPostsController extends BlogAppController {
 		} else {
 			if (empty($this->request->data['BlogCategory']['owner_id'])) {
 				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
+				$currentCatOwner = $data['BlogCategory']['owner_id'];
 			}
-			$currentCatOwner = $data['BlogCategory']['owner_id'];
 		}
 
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
@@ -543,6 +537,7 @@ class BlogPostsController extends BlogAppController {
  *
  * @return void
  * @access public
+ * @todo 未実装
  */
 	public function admin_import() {
 		// 入力チェック
@@ -568,7 +563,7 @@ class BlogPostsController extends BlogAppController {
 			// XMLデータを読み込む
 			$xml = new Xml($this->request->data['Import']['file']['tmp_name']);
 
-			$_posts = Set::reverse($xml);
+			$_posts = Xml::toArray($xml);
 
 			if (!isset($_posts['Rss']['Channel']['Item'])) {
 				$message .= 'XMLデータが不正です<br />';

@@ -31,14 +31,14 @@ class TestAuthComponent extends AuthComponent {
 /**
  * testStop property
  *
- * @var boolean
+ * @var bool
  */
 	public $testStop = false;
 
 /**
  * Helper method to add/set an authenticate object instance
  *
- * @param integer $index The index at which to add/set the object
+ * @param int $index The index at which to add/set the object
  * @param Object $object The object to add/set
  * @return void
  */
@@ -49,7 +49,7 @@ class TestAuthComponent extends AuthComponent {
 /**
  * Helper method to add/set an authorize object instance
  *
- * @param integer $index The index at which to add/set the object
+ * @param int $index The index at which to add/set the object
  * @param Object $object The object to add/set
  * @return void
  */
@@ -112,7 +112,7 @@ class AuthTestController extends Controller {
 /**
  * testUrl property
  *
- * @var mixed null
+ * @var mixed
  */
 	public $testUrl = null;
 
@@ -225,7 +225,7 @@ class AjaxAuthController extends Controller {
 /**
  * testUrl property
  *
- * @var mixed null
+ * @var mixed
  */
 	public $testUrl = null;
 
@@ -290,7 +290,7 @@ class AuthComponentTest extends CakeTestCase {
 /**
  * initialized property
  *
- * @var boolean
+ * @var bool
  */
 	public $initialized = false;
 
@@ -588,6 +588,27 @@ class AuthComponentTest extends CakeTestCase {
 		$objects = $this->Controller->Auth->constructAuthenticate();
 		$result = $objects[0];
 		$this->assertEquals('AuthUser', $result->settings['userModel']);
+	}
+
+/**
+ * test defining the same Authenticate object but with different password hashers
+ *
+ * @return void
+ */
+	public function testSameAuthenticateWithDifferentHashers() {
+		$this->Controller->Auth->authenticate = array(
+			'FormSimple' => array('className' => 'Form', 'passwordHasher' => 'Simple'),
+			'FormBlowfish' => array('className' => 'Form', 'passwordHasher' => 'Blowfish'),
+		);
+
+		$objects = $this->Controller->Auth->constructAuthenticate();
+		$this->assertEquals(2, count($objects));
+
+		$this->assertInstanceOf('FormAuthenticate', $objects[0]);
+		$this->assertInstanceOf('FormAuthenticate', $objects[1]);
+
+		$this->assertInstanceOf('SimplePasswordHasher', $objects[0]->passwordHasher());
+		$this->assertInstanceOf('BlowfishPasswordHasher', $objects[1]->passwordHasher());
 	}
 
 /**
@@ -938,7 +959,7 @@ class AuthComponentTest extends CakeTestCase {
 			array($CakeRequest, $CakeResponse)
 		);
 
-		$expected = Router::url($this->Auth->loginRedirect, true);
+		$expected = Router::url($this->Auth->loginRedirect);
 		$Controller->expects($this->once())
 			->method('redirect')
 			->with($this->equalTo($expected));
@@ -1123,11 +1144,13 @@ class AuthComponentTest extends CakeTestCase {
 
 		App::uses('Dispatcher', 'Routing');
 
+		$Response = new CakeResponse();
 		ob_start();
 		$Dispatcher = new Dispatcher();
-		$Dispatcher->dispatch(new CakeRequest('/ajax_auth/add'), new CakeResponse(), array('return' => 1));
+		$Dispatcher->dispatch(new CakeRequest('/ajax_auth/add'), $Response, array('return' => 1));
 		$result = ob_get_clean();
 
+		$this->assertEquals(403, $Response->statusCode());
 		$this->assertEquals("Ajax!\nthis is the test element", str_replace("\r\n", "\n", $result));
 		unset($_SERVER['HTTP_X_REQUESTED_WITH']);
 	}

@@ -92,7 +92,7 @@ class Xml {
 			'return' => 'simplexml',
 			'loadEntities' => false,
 		);
-		$options = array_merge($defaults, $options);
+		$options += $defaults;
 
 		if (is_array($input) || is_object($input)) {
 			return self::fromArray((array)$input, $options);
@@ -208,7 +208,7 @@ class Xml {
 			'return' => 'simplexml',
 			'pretty' => false
 		);
-		$options = array_merge($defaults, $options);
+		$options += $defaults;
 
 		$dom = new DOMDocument($options['version'], $options['encoding']);
 		if ($options['pretty']) {
@@ -228,7 +228,7 @@ class Xml {
  *
  * @param DOMDocument $dom Handler to DOMDocument
  * @param DOMElement $node Handler to DOMElement (child)
- * @param array $data Array of data to append to the $node.
+ * @param array &$data Array of data to append to the $node.
  * @param string $format Either 'attribute' or 'tags'. This determines where nested keys go.
  * @return void
  * @throws XmlException
@@ -348,7 +348,7 @@ class Xml {
  * Recursive method to toArray
  *
  * @param SimpleXMLElement $xml SimpleXMLElement object
- * @param array $parentData Parent array with data
+ * @param array &$parentData Parent array with data
  * @param string $ns Namespace of current child
  * @param array $namespaces List of namespaces in XML
  * @return void

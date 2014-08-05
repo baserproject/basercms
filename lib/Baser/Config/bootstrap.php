@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * 起動スクリプト
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.config
+ * @package			Baser.Config
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -34,44 +27,48 @@ define('BC_INSTALLED', isInstalled());
  * Baserパス追加
  */
 App::build(array(
-	'Controller' => array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
-	'Model' => array_merge(App::path('Model'), array(BASER_MODELS)),
-	'Model/Behavior' => array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
-	'Model/Datasource' => array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
+	'Controller'				=> array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
+	'Model'						=> array_merge(App::path('Model'), array(BASER_MODELS)),
+	'Model/Behavior'			=> array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
+	'Model/Datasource'			=> array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
 	'Model/Datasource/Database' => array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
-	'Controller/Component' => array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
-	'View' => array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
-	'View/Helper' => array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
-	'Plugin' => array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
-	'Vendor' => array_merge(App::path('Vendor'), array(BASER_VENDORS)),
-	'Locale' => array_merge(App::path('Locale'), array(BASER_LOCALES)),
-	'Lib' => array_merge(App::path('Lib'), array(BASER_LIBS)),
-	'Console' => array_merge(App::path('Console'), array(BASER_CONSOLES)),
-	'Console/Command' => array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
-	'Routing/Filter' => array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
+	'Controller/Component'		=> array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
+	'Controller/Component/Auth' => array_merge(App::path('Controller/Component/Auth'), array(BASER_COMPONENTS . 'Auth' . DS)),
+	'View'						=> array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
+	'View/Helper'				=> array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
+	'Plugin'					=> array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
+	'Vendor'					=> array_merge(App::path('Vendor'), array(BASER_VENDORS)),
+	'Locale'					=> array_merge(App::path('Locale'), array(BASER_LOCALES)),
+	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
+	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
+	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
+	'Routing/Filter'			=> array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
 ));
+
 App::build(array(
-	'Event' => array(APP . 'Event', BASER_EVENTS),
-	'Routing/Filter' => array(BASER . 'Routing' . DS . 'Filter' . DS),
-	'TestSuite' => array(BASER_TEST_SUITE),
-	'TestSuite/Reporter' => array(BASER_TEST_SUITE . 'Reporter' . DS),
+	'Event'				=> array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter'	=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'TestSuite'			=> array(BASER_TEST_SUITE),
+	'TestSuite/Reporter'=> array(BASER_TEST_SUITE . 'Reporter' . DS),
 	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network' => array(BASER . 'Network' . DS)
-	), App::REGISTER);
+	'Network'			=> array(BASER . 'Network' . DS)
+), App::REGISTER);
 
 /**
  * 配置パターン
  * Windows対策として、「\」を「/」へ変換してチェックする
  */
-if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
-	// CakePHP標準の配置
-	define('BC_DEPLOY_PATTERN', 3);
-} elseif (ROOT . DS == WWW_ROOT) {
-	// webrootをドキュメントルートにして、その中に app / baser / cake を配置
-	define('BC_DEPLOY_PATTERN', 2);
-} else {
-	// baserCMS配布時の配置
-	define('BC_DEPLOY_PATTERN', 1);
+if (!defined('BC_DEPLOY_PATTERN')) {
+	if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
+		// CakePHP標準の配置
+		define('BC_DEPLOY_PATTERN', 3);
+	} elseif (ROOT . DS == WWW_ROOT) {
+		// webrootをドキュメントルートにして、その中に app / baser / cake を配置
+		define('BC_DEPLOY_PATTERN', 2);
+	} else {
+		// baserCMS配布時の配置
+		define('BC_DEPLOY_PATTERN', 1);
+	}
 }
 
 /**
@@ -151,12 +148,6 @@ if (BC_INSTALLED) {
 	require APP . 'Config' . DS . 'session.php';
 }
 
-/**
- * クレジット読込 
- */
-$config = array();
-include BASER_CONFIGS . 'credit.php';
-Configure::write($config);
 /**
  * パラメーター取得
  */
@@ -269,7 +260,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		loadPlugin($plugin['Plugin']['name'], $priority);
 		$priority--;
 	}
-	$plugins = Set::extract('/Plugin/name', $plugins);
+	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);
 
 /**
@@ -402,7 +393,7 @@ if ($agentOn) {
  * Viewのキャッシュ設定・ログの設定
  */
 if (Configure::read('debug') == 0) {
-	if (Configure::read('Session.start')) {
+	if (isset($_SESSION) && session_id()) {
 		// 管理ユーザーでログインしている場合、ページ機能の編集ページへのリンクを表示する為、キャッシュをオフにする。
 		// ただし、現在の仕様としては、セッションでチェックしているので、ブラウザを閉じてしまった場合、一度管理画面を表示する必要がある。
 		// TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、

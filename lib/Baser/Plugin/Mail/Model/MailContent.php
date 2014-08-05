@@ -1,28 +1,22 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールコンテンツモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.models
+ * @package			Mail.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * メールコンテンツモデル
  *
- * @package baser.plugins.mail.models
+ * @package Mail.Model
  *
  */
 class MailContent extends MailAppModel {
@@ -78,7 +72,9 @@ class MailContent extends MailAppModel {
 				'message' => '入力されたメールフォームアカウント名は既に使用されています。'),
 			'maxLength' => array(
 				'rule' => array('maxLength', 100),
-				'message' => 'メールフォームアカウント名は100文字以内で入力してください。')
+				'message' => 'メールフォームアカウント名は100文字以内で入力してください。'),
+			'notEmpty' => array('rule' => array('notEmpty'),
+				'message' => "メールフォームアカウント名を入力してください。")
 		),
 		'title' => array(
 			array('rule' => array('notEmpty'),

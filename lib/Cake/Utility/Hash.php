@@ -37,12 +37,13 @@ class Hash {
  * @param array $data Array of data to operate on.
  * @param string|array $path The path being searched for. Either a dot
  *   separated string, or an array of path segments.
+ * @param mixed $default The return value when the path does not exist
  * @return mixed The value fetched from the array, or null.
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::get
  */
-	public static function get(array $data, $path) {
+	public static function get(array $data, $path, $default = null) {
 		if (empty($data)) {
-			return null;
+			return $default;
 		}
 		if (is_string($path) || is_numeric($path)) {
 			$parts = explode('.', $path);
@@ -53,7 +54,7 @@ class Hash {
 			if (is_array($data) && isset($data[$key])) {
 				$data =& $data[$key];
 			} else {
-				return null;
+				return $default;
 			}
 		}
 		return $data;
@@ -111,12 +112,7 @@ class Hash {
 		foreach ($tokens as $token) {
 			$next = array();
 
-			$conditions = false;
-			$position = strpos($token, '[');
-			if ($position !== false) {
-				$conditions = substr($token, $position);
-				$token = substr($token, 0, $position);
-			}
+			list($token, $conditions) = self::_splitConditions($token);
 
 			foreach ($context[$_key] as $item) {
 				foreach ((array)$item as $k => $v) {
@@ -141,13 +137,29 @@ class Hash {
 		}
 		return $context[$_key];
 	}
+/**
+ * Split token conditions
+ *
+ * @param string $token the token being splitted.
+ * @return array array(token, conditions) with token splitted
+ */
+	protected static function _splitConditions($token) {
+		$conditions = false;
+		$position = strpos($token, '[');
+		if ($position !== false) {
+			$conditions = substr($token, $position);
+			$token = substr($token, 0, $position);
+		}
+
+		return array($token, $conditions);
+	}
 
 /**
  * Check a key against a token.
  *
  * @param string $key The key in the array being searched.
  * @param string $token The token being matched.
- * @return boolean
+ * @return bool
  */
 	protected static function _matchToken($key, $token) {
 		if ($token === '{n}') {
@@ -167,7 +179,7 @@ class Hash {
  *
  * @param array $data Array of data to match.
  * @param string $selector The patterns to match.
- * @return boolean Fitness of expression.
+ * @return bool Fitness of expression.
  */
 	protected static function _matches(array $data, $selector) {
 		preg_match_all(
@@ -192,7 +204,16 @@ class Hash {
 				return false;
 			}
 
-			$prop = isset($data[$attr]) ? $data[$attr] : null;
+			$prop = null;
+			if (isset($data[$attr])) {
+				$prop = $data[$attr];
+			}
+			$isBool = is_bool($prop);
+			if ($isBool && is_numeric($val)) {
+				$prop = $prop ? '1' : '0';
+			} elseif ($isBool) {
+				$prop = $prop ? 'true' : 'false';
+			}
 
 			// Pattern matches and other operators.
 			if ($op === '=' && $val && $val[0] === '/') {
@@ -225,16 +246,30 @@ class Hash {
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::insert
  */
 	public static function insert(array $data, $path, $values = null) {
-		$tokens = explode('.', $path);
-		if (strpos($path, '{') === false) {
+		if (strpos($path, '[') === false) {
+			$tokens = explode('.', $path);
+		} else {
+			$tokens = String::tokenize($path, '.', '[', ']');
+		}
+
+		if (strpos($path, '{') === false && strpos($path, '[') === false) {
 			return self::_simpleOp('insert', $data, $tokens, $values);
 		}
 
 		$token = array_shift($tokens);
 		$nextPath = implode('.', $tokens);
+
+		list($token, $conditions) = self::_splitConditions($token);
+
 		foreach ($data as $k => $v) {
 			if (self::_matchToken($k, $token)) {
-				$data[$k] = self::insert($v, $nextPath, $values);
+				if ($conditions && self::_matches($v, $conditions)) {
+					$data[$k] = array_merge($v, $values);
+					continue;
+				}
+				if (!$conditions) {
+					$data[$k] = self::insert($v, $nextPath, $values);
+				}
 			}
 		}
 		return $data;
@@ -247,7 +282,7 @@ class Hash {
  * @param array $data The data to operate on.
  * @param array $path The path to work on.
  * @param mixed $values The values to insert when doing inserts.
- * @return array $data.
+ * @return array data.
  */
 	protected static function _simpleOp($op, $data, $path, $values = null) {
 		$_list =& $data;
@@ -294,17 +329,32 @@ class Hash {
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::remove
  */
 	public static function remove(array $data, $path) {
-		$tokens = explode('.', $path);
-		if (strpos($path, '{') === false) {
+		if (strpos($path, '[') === false) {
+			$tokens = explode('.', $path);
+		} else {
+			$tokens = String::tokenize($path, '.', '[', ']');
+		}
+
+		if (strpos($path, '{') === false && strpos($path, '[') === false) {
 			return self::_simpleOp('remove', $data, $tokens);
 		}
 
 		$token = array_shift($tokens);
 		$nextPath = implode('.', $tokens);
+
+		list($token, $conditions) = self::_splitConditions($token);
+
 		foreach ($data as $k => $v) {
 			$match = self::_matchToken($k, $token);
 			if ($match && is_array($v)) {
+				if ($conditions && self::_matches($v, $conditions)) {
+					unset($data[$k]);
+					continue;
+				}
 				$data[$k] = self::remove($v, $nextPath);
+				if (empty($data[$k])) {
+					unset($data[$k]);
+				}
 			} elseif ($match) {
 				unset($data[$k]);
 			}
@@ -434,7 +484,7 @@ class Hash {
  *
  * @param array $data The data to search through.
  * @param array $needle The values to file in $data
- * @return boolean true if $data contains $needle, false otherwise
+ * @return bool true if $data contains $needle, false otherwise
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::contains
  */
 	public static function contains(array $data, array $needle) {
@@ -475,7 +525,7 @@ class Hash {
  *
  * @param array $data The data to check.
  * @param string $path The path to check for.
- * @return boolean Existence of path.
+ * @return bool Existence of path.
  * @see Hash::extract()
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::check
  */
@@ -509,7 +559,7 @@ class Hash {
  * Callback function for filtering.
  *
  * @param array $var Array to filter.
- * @return boolean
+ * @return bool
  */
 	protected static function _filter($var) {
 		if ($var === 0 || $var === '0' || !empty($var)) {
@@ -624,8 +674,8 @@ class Hash {
 /**
  * Checks to see if all the values in the array are numeric
  *
- * @param array $array The array to check.
- * @return boolean true if values are numeric, false otherwise
+ * @param array $data The array to check.
+ * @return bool true if values are numeric, false otherwise
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::numeric
  */
 	public static function numeric(array $data) {
@@ -642,8 +692,8 @@ class Hash {
  * If you have an un-even or heterogenous array, consider using Hash::maxDimensions()
  * to get the dimensions of the array.
  *
- * @param array $array Array to count dimensions on
- * @return integer The number of dimensions in $data
+ * @param array $data Array to count dimensions on
+ * @return int The number of dimensions in $data
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::dimensions
  */
 	public static function dimensions(array $data) {
@@ -668,7 +718,7 @@ class Hash {
  * number of dimensions in a mixed array.
  *
  * @param array $data Array to count dimensions on
- * @return integer The maximum number of dimensions in $data
+ * @return int The maximum number of dimensions in $data
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::maxDimensions
  */
 	public static function maxDimensions(array $data) {
@@ -753,12 +803,12 @@ class Hash {
  *
  * @param array $data An array of data to sort
  * @param string $path A Set-compatible path to the array value
- * @param string $dir See directions above.
+ * @param string $dir See directions above. Defaults to 'asc'.
  * @param string $type See direction types above. Defaults to 'regular'.
  * @return array Sorted array of data
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::sort
  */
-	public static function sort(array $data, $path, $dir, $type = 'regular') {
+	public static function sort(array $data, $path, $dir = 'asc', $type = 'regular') {
 		if (empty($data)) {
 			return array();
 		}
@@ -899,7 +949,7 @@ class Hash {
  * Normalizes an array, and converts it to a standard format.
  *
  * @param array $data List to normalize
- * @param boolean $assoc If true, $data will be converted to an associative array.
+ * @param bool $assoc If true, $data will be converted to an associative array.
  * @return array
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/hash.html#Hash::normalize
  */
@@ -990,6 +1040,8 @@ class Hash {
 
 		if ($options['root']) {
 			$root = $options['root'];
+		} elseif (!$return) {
+			return array();
 		} else {
 			$root = self::get($return[0], $parentKeys);
 		}

@@ -1,25 +1,28 @@
 <?php
-
 /**
- * Custom TestSuite Command
- *
- * PHP versions 5
+ * BaserHtmlReporter
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.0-beta
+ * @package			Baser.Lib.TestSuite.Reporter
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('CakeHtmlReporter', 'TestSuite/Reporter');
 
 /**
- * @package Baser.TestSuite.Reporter
+ * CakeHtmlReporter Reports Results of TestSuites and Test Cases
+ * in an HTML format / context.
+ *
+ * @package       Baser.Lib.TestSuite.Reporter
  */
 class BaserHtmlReporter extends CakeHtmlReporter {
-
+// CUSTOMIZE ADD 2014/07/02 ryuring
+// >>>
 /**
  * Get the baseUrl if one is available.
  *
@@ -28,7 +31,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 	public function baseUrl() {
 		return baseUrl() . 'test.php';
 	}
-
+// <<<
 /**
  * Paints the document start content contained in header.php
  *
@@ -36,8 +39,14 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  */
 	public function paintDocumentStart() {
 		ob_start();
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		/*$baseDir = $this->params['baseDir'];
+		include CAKE . 'TestSuite' . DS . 'templates' . DS . 'header.php';*/
+		// ---
 		$baseDir = baseUrl();
 		include BASER_LIBS . 'TestSuite' . DS . 'templates' . DS . 'header.php';
+		// <<<
 	}
 
 /**
@@ -50,7 +59,11 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		$cases = $this->baseUrl() . '?show=cases';
 		$plugins = App::objects('plugin', null, false);
 		sort($plugins);
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		//include CAKE . 'TestSuite' . DS . 'templates' . DS . 'menu.php';
+		// ---
 		include BASER_LIBS . 'TestSuite' . DS . 'templates' . DS . 'menu.php';
+		// <<<
 	}
 
 /**
@@ -59,9 +72,14 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  * @return void
  */
 	public function testCaseList() {
+		// CUSTOMIZE MODIFY 2014/07/02
+		// >>>
+		//$testCases = parent::testCaseList();
+		// ---
 		$testCases = BaserTestLoader::generateTestList($this->params);
-		$core = $this->params['core'];
 		$baser = $this->params['baser'];
+		// <<<
+		$core = $this->params['core'];
 		$plugin = $this->params['plugin'];
 
 		$buffer = "<h3>App Test Cases:</h3>\n<ul>";
@@ -69,19 +87,22 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		if ($core) {
 			$buffer = "<h3>Core Test Cases:</h3>\n<ul>";
 			$urlExtra = '&core=true';
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		} elseif ($baser) {
 			$buffer = "<h3>Baser Test Cases:</h3>\n<ul>";
 			$urlExtra = '&baser=true';
+		// <<<
 		} elseif ($plugin) {
 			$buffer = "<h3>" . Inflector::humanize($plugin) . " Test Cases:</h3>\n<ul>";
 			$urlExtra = '&plugin=' . $plugin;
 		}
 
-		if (1 > count($testCases)) {
+		if (count($testCases) < 1) {
 			$buffer .= "<strong>EMPTY</strong>";
 		}
 
-		foreach ($testCases as $testCaseFile => $testCase) {
+		foreach ($testCases as $testCase) {
 			$title = explode(DS, str_replace('.test.php', '', $testCase));
 			$title[count($title) - 1] = Inflector::camelize($title[count($title) - 1]);
 			$title = implode(' / ', $title);
@@ -105,9 +126,12 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		if (!empty($this->params['core'])) {
 			$show['core'] = $query['core'] = 'true';
 		}
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		if (!empty($this->params['baser'])) {
 			$show['baser'] = $query['baser'] = 'true';
 		}
+		// <<<
 		if (!empty($this->params['plugin'])) {
 			$show['plugin'] = $query['plugin'] = $this->params['plugin'];
 		}
@@ -128,8 +152,15 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  * @return void
  */
 	public function paintDocumentEnd() {
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		/*$baseDir = $this->params['baseDir'];
+		include CAKE . 'TestSuite' . DS . 'templates' . DS . 'footer.php';*/
+		// ---
 		$baseDir = baseUrl();
 		include BASER_LIBS . 'TestSuite' . DS . 'templates' . DS . 'footer.php';
+		// <<<
+		
 		if (ob_get_length()) {
 			ob_end_flush();
 		}

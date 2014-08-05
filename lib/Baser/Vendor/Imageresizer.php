@@ -1,14 +1,10 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * 画像のリサイズを行う
  *
  * @filesource
  * @copyright		Copyright (c) 2007, Catchup
  * @link				http://basercms.net
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			MIT License
  */
 class Imageresizer {

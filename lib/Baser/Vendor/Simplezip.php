@@ -1,22 +1,22 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
- * ZIPクラス
- *
- * PHP versions 4 and 5
+ * Simplezip
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, Catchup, Inc.
- *								1-19-4 ikinomatsubara, fukuoka-shi
- *								fukuoka, Japan 819-0055
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2011 - 2011, Catchup, Inc.
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
- * @license			MIT Lisense
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Vendor
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * シンプルなZIP利用クラス
  */
 class Simplezip {
+	
 /**
  * 圧縮データ
  *
@@ -24,6 +24,7 @@ class Simplezip {
  * @access	public
  */
 	var $compressedData = array();
+	
 /**
  * Central Directory
  *
@@ -31,6 +32,7 @@ class Simplezip {
  * @access	public
  */
 	var $centralDirectory = array();
+	
 /**
  * End Of Central Directory Record
  *
@@ -38,6 +40,7 @@ class Simplezip {
  * @access	public
  */
 	var $endOfCentralDirectory = "\x50\x4b\x05\x06\x00\x00\x00\x00";
+	
 /**
  * オフセット
  *
@@ -45,6 +48,7 @@ class Simplezip {
  * @access	public
  */
 	var $oldOffset = 0;
+	
 /**
  * エントリ（解凍用）
  * 
@@ -52,6 +56,7 @@ class Simplezip {
  * @access	public
  */
 	var $entries = array();
+	
 /**
  * Get Hexd Time
  *
@@ -73,6 +78,7 @@ class Simplezip {
 		eval('$mtime = "'.$mtime.'";');
 		return $mtime;
 	}
+	
 /**
  * フォルダを追加する
  *
@@ -98,6 +104,7 @@ class Simplezip {
 		closedir($handle);
 
 	}
+	
 /**
  * 圧縮対象データを追加
  *
@@ -158,15 +165,16 @@ class Simplezip {
 		$this -> centralDirectory[] = $addCentralRecord;
 
 	}
-    /**
-     * Adds "file" to archive
-     *
-     * @param  string   file contents
-     * @param  string   name of the file in the archive (may contains the path)
-     * @param  integer  the current timestamp
-     *
-     * @access public
-     */
+	
+/**
+ * Adds "file" to archive
+ *
+ * @param  string   file contents
+ * @param  string   name of the file in the archive (may contains the path)
+ * @param  integer  the current timestamp
+ *
+ * @access public
+ */
     function unix2DosTime($unixtime = 0) {
         $timearray = ($unixtime == 0) ? getdate() : getdate($unixtime);
 
@@ -182,6 +190,14 @@ class Simplezip {
         return (($timearray['year'] - 1980) << 25) | ($timearray['mon'] << 21) | ($timearray['mday'] << 16) |
                 ($timearray['hours'] << 11) | ($timearray['minutes'] << 5) | ($timearray['seconds'] >> 1);
     } // end of the 'unix2DosTime()' method
+	
+/**
+ * addFile2
+ * 
+ * @param mixed $data
+ * @param string $name
+ * @param int $time
+ */
     function addFile2($data, $name, $time = 0)
     {
         $name     = str_replace('\\', '/', $name);
@@ -252,6 +268,7 @@ class Simplezip {
         // save to central directory
         $this -> centralDirectory[] = $cdrec;
     } // end of the 'addFile()' method
+	
 /**
  * 圧縮されたデータを取得する
  *
@@ -272,6 +289,7 @@ class Simplezip {
 				pack("V", strlen($controlDirectory)).
 				pack("V", strlen($data))."\x00\x00";
 	}
+	
 /**
  * 圧縮ファイルをダウンロードする
  *
@@ -308,6 +326,7 @@ class Simplezip {
 		echo $zippedData;
 
 	}
+	
 /**
  * 解凍したファイルを出力する
  *
@@ -337,6 +356,7 @@ class Simplezip {
 		return $result;
 
 	}
+	
 /**
  * ZIPファイルを読み込む
  *
@@ -345,7 +365,7 @@ class Simplezip {
  * @access	protected
  */
 	function _readFile($path) {
-ini_set('mbstring.func_overload', '0');
+		ini_set('mbstring.func_overload', '0');
 		$this->entries = array();
 
 		$oF = fopen($path, 'rb');

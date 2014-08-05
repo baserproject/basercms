@@ -1,29 +1,21 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * 固定ページコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * 固定ページコントローラー
  *
- * @package cake
- * @subpackage cake.Baser.Controller
+ * @package Baser.Controller
  */
 class PagesController extends AppController {
 
@@ -42,7 +34,8 @@ class PagesController extends AppController {
  * @access public
  */
 	public $helpers = array(
-		'Html', 'BcGooglemaps', 'BcXml', 'BcText',
+		'Html', 'Session', 'BcGooglemaps', 
+		'BcXml', 'BcText',
 		'BcFreeze', 'BcPage'
 	);
 
@@ -141,7 +134,7 @@ class PagesController extends AppController {
 			foreach ($datas as $key => $data) {
 				$path = $this->Page->PageCategory->getPath($data['Page']['page_category_id'], array('PageCategory.name', 'PageCategory.title'));
 				if ($path) {
-					$titlePath = Set::extract('/PageCategory/title', $path);
+					$titlePath = Hash::extract($path, '{n}.PageCategory.title');
 					$datas[$key]['PageCategory']['title'] = implode(' > ', $titlePath);
 				}
 			}
@@ -552,6 +545,9 @@ class PagesController extends AppController {
  */
 	public function display() {
 		$path = func_get_args();
+
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		if (is_array($path) && count($path) == 1) {
 			$path = explode('/', $path[0]);
 		}
@@ -562,12 +558,13 @@ class PagesController extends AppController {
 		if (isset($path[0]) && ($path[0] == Configure::read('BcAgent.mobile.prefix') || $path[0] == Configure::read('BcAgent.smartphone.prefix'))) {
 			$this->notFound();
 		}
-
+		// <<<
+		
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
-		$page = $subpage = $title = null;
+		$page = $subpage = $titleForLayout = null;
 
 		if (!empty($path[0])) {
 			$page = $path[0];
@@ -576,9 +573,11 @@ class PagesController extends AppController {
 			$subpage = $path[1];
 		}
 		if (!empty($path[$count - 1])) {
-			$title = Inflector::humanize($path[$count - 1]);
+			$titleForLayout = Inflector::humanize($path[$count - 1]);
 		}
 
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		$agentAlias = Configure::read('BcRequest.agentAlias');
 		if ($agentAlias) {
 			$checkUrl = '/' . $agentAlias . $url;
@@ -599,8 +598,16 @@ class PagesController extends AppController {
 		$this->crumbs = $this->_getCrumbs($url);
 
 		$this->subMenuElements = array('default');
-		$this->set(compact('page', 'subpage', 'title'));
+		// <<<
+		
+		$this->set(array(
+			'page' => $page,
+			'subpage' => $subpage,
+			'title_for_layout' => $titleForLayout
+		));
 
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		$data = $this->Page->findByUrl($checkUrl);
 
 		$template = $layout = $agent = '';
@@ -634,10 +641,24 @@ class PagesController extends AppController {
 		}
 
 		if ($template) {
-			$this->set('pagePath', join('/', $path));
-			$this->render($template);
+			$this->set('pagePath', implode('/', $path));
 		} else {
-			$this->render(join('/', $path));
+			$template = implode('/', $path);
+		}
+		// <<<
+		
+		try {
+			// CUSTOMIZE MODIFY 2014/07/02 ryuring
+			// >>>
+			//$this->render(implode('/', $path));
+			// ---
+			$this->render($template);
+			// <<<
+		} catch (MissingViewException $e) {
+			if (Configure::read('debug')) {
+				throw $e;
+			}
+			throw new NotFoundException();
 		}
 	}
 
@@ -773,6 +794,18 @@ class PagesController extends AppController {
  */
 	public function admin_preview($id) {
 		$page = Cache::read('page_preview_' . $id, '_cake_core_');
+		
+		// 直接previewにアクセスした場合
+		if (empty($page) || !file_exists(TMP . 'pages_preview_' . $id . $this->ext)) {
+			$page = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
+			$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'], $page['Page']['description'], $page['Page']['code']);
+			$path = TMP . 'pages_preview_' . $id . $this->ext;
+			$file = new File($path);
+			$file->open('w');
+			$file->append($contents);
+			$file->close();
+			unset($file);
+		}
 
 		$settings = Configure::read('BcAgent');
 		foreach ($settings as $key => $setting) {

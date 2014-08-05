@@ -3,19 +3,17 @@
 /**
  * run all baser mail tests
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- * @package         Mail Plugin
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * @package         Mail.Test.Case
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
 
 /**
- * @package Baser.Test.Case
+ * @package Mail.Test.Case
  */
 class MailAllTest extends PHPUnit_Framework_TestSuite {
 

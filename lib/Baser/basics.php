@@ -1,23 +1,17 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * baserCMS共通関数
  *
  * baser/config/bootstrapより呼び出される
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser
+ * @package			Baser
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('EmailComponent', 'Controller/Component');
@@ -533,6 +527,9 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
+	if (isConsole()) {
+		return false;
+	}
 	$protocol = 'http://';
 	if (!empty($_SERVER['HTTPS'])) {
 		$protocol = 'https://';
@@ -684,7 +681,7 @@ function getEnablePlugins() {
 			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
 			ClassRegistry::removeObject('Plugin');
 			if ($plugins) {
-				$enablePlugins = Set::extract('/Plugin/name', $plugins);
+				$enablePlugins = Hash::extract($plugins, '{n}.Plugin.name');
 
 				if (!Configure::read('Cache.disable')) {
 					Cache::write('enable_plugins', $plugins, '_cake_env_');
@@ -908,3 +905,57 @@ function loadPlugin($plugin, $priority) {
 	}
 	return true;
 }
+
+/**
+ * 後方互換の為の非推奨メッセージを生成する
+ * 
+ * @param string $target 非推奨の対象
+ * @param string $since 非推奨となったバージョン
+ * @param string $remove 削除予定のバージョン
+ * @param string $note その他特記事項
+ * @return string 非推奨メッセージ
+ */
+function deprecatedMessage($target, $since, $remove = null, $note = null) {
+
+	if(Configure::read('debug') == 0) {
+		return;
+	}
+	$message = $target . 'は、バージョン ' . $since . ' より被推奨となりました。';
+	if($remove) {
+		$message .= 'バージョン ' . $remove . ' で削除される予定です。';
+	}
+	if($note) {
+		$message .= $note;
+	}
+	return $message;
+
+}
+
+/**
+ * パーセントエンコーディングされないURLセーフなbase64エンコード
+ * 
+ * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール) 
+ * このbase64エンコードした値をさらにURLのパラメータで使うためにURLエンコードすると
+ * パーセントエンコーディングされてしまいます。
+ * その為、このメソッドではパーセントエンコーディングされないURLセーフな
+ * base64エンコードを行います。
+ * 
+ * @param string $val 対象文字列
+ * @return string
+ */
+function base64UrlsafeEncode($val) {
+	$val = base64_encode($val);
+	return str_replace(array('+', '/', '='), array('_', '-', '.'), $val);
+}
+ 
+/**
+ * パーセントエンコーディングされないURLセーフなbase64デコード
+ * 
+ * @param string $val 対象文字列
+ * @return string
+ */
+function base64UrlsafeDecode($val) {
+	$val = str_replace(array('_','-', '.'), array('+', '/', '='), $val);
+	return base64_decode($val);
+}
+

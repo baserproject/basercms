@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * コンテンツコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('HttpSocket', 'Core.Network/Http');
@@ -23,8 +16,7 @@ App::uses('HttpSocket', 'Core.Network/Http');
 /**
  * コンテンツコントローラー
  *
- * @package cake
- * @subpackage cake.Baser.Controller
+ * @package	Baser.Controller
  */
 class ContentsController extends AppController {
 
@@ -272,10 +264,10 @@ class ContentsController extends AppController {
 					$pageCategories[$key]['children'] = $children;
 				}
 				if (isset($children['pages'])) {
-					$paths = Set::extract('/Page/name', $children['pages']);
+					$paths = Hash::extract($children['pages'], '{n}.Page.name');
 					if (in_array('index', $paths)) {
 						$cats = $this->Page->PageCategory->getPath($pageCategory['PageCategory']['id'], array('name'), -1);
-						$cats = Set::extract('/PageCategory/name', $cats);
+						$cats = Hash::extract($cats, '{n}.PageCategory.name');
 						if ($cats) {
 							$parentCategoryPath = '/' . implode('/', $cats) . '/';
 						} else {

@@ -3,12 +3,10 @@
 /**
  * test for BcTextHelper
  *
- * PHP versions 5
- *
  * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
@@ -22,7 +20,7 @@ App::uses('AppHelper', 'View/Helper');
 /**
  * text helper library.
  *
- * @package Baser.Test.Case
+ * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
  */
 class BcTextHelperTest extends CakeTestCase {

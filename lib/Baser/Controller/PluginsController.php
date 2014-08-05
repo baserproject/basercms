@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * Plugin 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -147,24 +141,30 @@ class PluginsController extends AppController {
 			}
 		}
 		
-		$pluginInfos = array_values($pluginInfos); // Set::sortの為、一旦キーを初期化
-		$pluginInfos = array_reverse($pluginInfos); // Set::sortの為、逆順に変更
-		$pluginInfos = Set::sort($pluginInfos, '{n}.Plugin.status', 'desc');
+		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
+		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
+		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.status', 'desc');
 
 		$baserPlugins = array();
 		if(strtotime('2014-03-31 17:00:00') <= time()) {
 			$cachePath = 'views' . DS . 'baser_market_plugins.rss';
-			if (Configure::read('Cache.check') == false || Configure::read('debug') > 0) {
+			if (Configure::read('debug') > 0) {
 				clearCache('baser_market_plugins', 'views', '.rss');
 			}
 			$baserPlugins = cache($cachePath);
 			if(!$baserPlugins) {
 				$Xml = new Xml();
-				$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-				$baserPlugins = $Xml->toArray($baserPlugins->channel);
-				$baserPlugins = $baserPlugins['channel']['item'];
-				cache($cachePath, BcUtil::serialize($baserPlugins));
-				chmod(CACHE . $cachePath, 0666);
+				try {
+					$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
+				} catch (Exception $ex) {}
+				if($baserPlugins) {
+					$baserPlugins = $Xml->toArray($baserPlugins->channel);
+					$baserPlugins = $baserPlugins['channel']['item'];
+					cache($cachePath, BcUtil::serialize($baserPlugins));
+					chmod(CACHE . $cachePath, 0666);
+				} else {
+					$baserPlugins = array();
+				}
 			} else {
 				$baserPlugins = BcUtil::unserialize($baserPlugins);
 			}

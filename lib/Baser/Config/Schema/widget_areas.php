@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* WidgetAreas schema generated on: 2010-11-04 18:11:11 : 1288863011 */
 
 class WidgetAreasSchema extends CakeSchema {

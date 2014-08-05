@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 
 /**
  * リプレースプレフィックスコンポーネント
@@ -20,18 +19,13 @@
  * ・リクエストしたプレフィックスに適応したアクションが存在する場合は、ビューの置き換えは行われない。
  * ・Authと併用する場合は、コンポーネントの宣言で、Authより前に宣言しないと認証処理が動作しない。
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 class BcReplacePrefixComponent extends Component {
@@ -116,7 +110,11 @@ class BcReplacePrefixComponent extends Component {
 		if (!in_array($this->replacedPrefix . '_' . $pureAction, $this->_methods)) {
 			return;
 		}
-
+		if($requestedPrefix) {
+			$Controller->request->params['prefix'] = $requestedPrefix;
+		} else {
+			$Controller->request->params['prefix'] = 'front';
+		}
 		$Controller->action = $this->replacedPrefix . '_' . $pureAction;
 		$Controller->layoutPath = $this->replacedPrefix;	// Baserに依存
 		$Controller->subDir = $this->replacedPrefix;		// Baserに依存
@@ -144,7 +142,13 @@ class BcReplacePrefixComponent extends Component {
 			}
 		}
 	}
-
+	
+	public function beforeRender(Controller $controller) {
+		parent::beforeRender($controller);
+		if($controller->request->params['prefix'] == 'front') {
+			$controller->request->params['prefix'] = '';
+		}
+	}
 /**
  * Return all possible paths to find view files in order
  *

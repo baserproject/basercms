@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * baserCMS設定ファイル
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.config
+ * @package			Baser.Config
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -65,7 +59,8 @@ $config['BcApp'] = array(
 		'BcCkeditor' => 'CKEditor'
 	),
 	'marketThemeRss' => 'http://barket.jp/themes.rss',
-	'marketPluginRss' => 'http://barket.jp/plugins.rss'
+	'marketPluginRss' => 'http://barket.jp/plugins.rss',
+	'specialThanks'	=> 'http://basercms.net/special_thanks/special_thanks/ajax_users'
 );
 /**
  * システム要件 
@@ -80,6 +75,8 @@ $config['BcRequire'] = array(
 $config['BcEnv'] = array(
 	// プラグインDBプレフィックス
 	'pluginDbPrefix' => 'pg_',
+	// テストDBプレフィックス
+	'testDbPrefix' => 'test_',
 );
 /**
  * 文字コード設定

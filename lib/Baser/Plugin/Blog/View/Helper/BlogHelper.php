@@ -1,27 +1,20 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * ブログヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.views.helpers
+ * @package			Blog.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * ブログヘルパー
- * @package baser.plugins.blog.views.helpers
+ * @package Blog.View.Helper
  */
 class BlogHelper extends AppHelper {
 
@@ -66,7 +59,7 @@ class BlogHelper extends AppHelper {
 		if ($blogContentId) {
 			$BlogContent = ClassRegistry::getObject('BlogContent');
 			$BlogContent->expects(array());
-			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
+			$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
 		} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
@@ -597,8 +590,9 @@ class BlogHelper extends AppHelper {
 		}
 
 		$excludes = Configure::read('BcAgent');
-		$excludes = Set::extract('{.+?}.prefix', $excludes);
-		$excludes[] = 'rss';
+		$excludes = Hash::extract($excludes, '{s}.prefix');
+
+	$excludes[] = 'rss';
 		$templates = array();
 		foreach ($_templates as $template) {
 			if (!in_array($template, $excludes)) {
@@ -748,7 +742,7 @@ class BlogHelper extends AppHelper {
 			return array();
 		}
 
-		$ids = Set::extract('/BlogPost/id', $tags);
+		$ids = Hash::extract($tags, '{n}.BlogPost.id');
 
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
@@ -896,6 +890,20 @@ class BlogHelper extends AppHelper {
 		), $options);
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
+	}
+	
+/**
+ * メールフォームプラグインのフォームへのリンクを生成する
+ * 
+ * @param string $title リンクのタイトル
+ * @param string $contentsName メールフォームのコンテンツ名
+ * @param array $datas メールフォームに引き継ぐデータ
+ * @param array $options a タグのオプション設定
+ */
+	public function mailFormLink($title, $contentsName, $datas, $options) {
+		App::uses('MailHelper', 'Mail.View/Helper');
+		$MailHelper = new MailHelper($this->_View);
+		$MailHelper->link($title, $contentsName, $datas, $options);
 	}
 
 }

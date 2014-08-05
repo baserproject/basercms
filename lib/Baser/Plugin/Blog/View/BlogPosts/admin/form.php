@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ブログ記事 フォーム
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.views
+ * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
@@ -166,6 +160,7 @@ $(function(){
 				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
 			}
 		});
+		return false;
 	});
 });
 </script>
@@ -174,13 +169,19 @@ $(function(){
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
 		<?php if ($this->BcForm->value('BlogPost.status') && $blogContent['BlogContent']['status']): ?>
-			この記事のURL：<?php
+			この記事のURL　：<?php
 			$this->BcBaser->link(
 				$this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no')), '/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no'))
 			?>
 		<?php else: ?>
-			この記事のURL：<?php echo $this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
+			この記事のURL　：<?php echo $this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
 		<?php endif ?>
+			<br />
+			プレビュー用URL：<?php $this->BcBaser->link(
+				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
+				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
+				array('target' => '_blank')
+			); ?>
 	</div>
 <?php endif ?>
 

@@ -1,6 +1,5 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /* PageCategories schema generated on: 2013-03-22 16:03:48 : 1363938348 */
 
 class PageCategoriesSchema extends CakeSchema {

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * BcManagerコンポーネント
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.components
+ * @package			Baser.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Page', 'Model');
@@ -275,6 +269,10 @@ class BcManagerComponent extends Component {
 			$this->log('ブログ記事の投稿日更新に失敗しました。');
 			$result = false;
 		}
+		if (!$this->_updateBaserNewsFeedUrl($dbConfig)) {
+			$this->log('baserCMS公式新着情報のフィードURLの更新に失敗しました。');
+			$result = false;
+		}
 		return $result;
 	}
 
@@ -338,6 +336,35 @@ class BcManagerComponent extends Component {
 		}
 	}
 
+/**
+ * baserCMS公式サイトのフィードURLを更新
+ * 
+ * @param array $dbConfig
+ * @return boolean
+ */
+	protected function _updateBaserNewsFeedUrl($dbConfig) {
+		$this->connectDb($dbConfig, 'plugin');
+		CakePlugin::load('Feed');
+		App::uses('FeedDetail', 'Feed.Model');
+		App::uses('FeedAppModel', 'Feed.Model');
+		$FeedDetail = new FeedDetail();
+		$datas = $FeedDetail->find('all', array('recursive' => -1));
+		if($datas) {
+			$ret = true;
+			foreach($datas as $data) {
+				if($data['FeedDetail']['url'] == 'http://basercms.net/news/index.rss') {
+					$data['FeedDetail']['url'] .= '?site=' . siteUrl();
+				}
+				$FeedDetail->set($data);
+				if (!$FeedDetail->save($data)) {
+					$ret = false;
+				}
+			}
+			return $ret;
+		} else {
+			return false;
+		}
+	}
 /**
  * サイト基本設定に管理用メールアドレスを登録する
  * 
@@ -412,7 +439,7 @@ class BcManagerComponent extends Component {
 		$datasource = $this->getDatasourceName($datasource);
 
 		$dbfilename = APP . 'Config' . DS . 'database.php';
-		$file = & new File($dbfilename);
+		$file = new File($dbfilename);
 
 		if ($file !== false) {
 
@@ -462,7 +489,7 @@ class BcManagerComponent extends Component {
 			$file->write("\t'password' => '" . $password . "',\n");
 			$file->write("\t'database' => '" . $database . "',\n");
 			$file->write("\t'schema' => '" . $schema . "',\n");
-			$file->write("\t'prefix' => 'test_',\n");
+			$file->write("\t'prefix' => '" . $prefix . Configure::read('BcEnv.testDbPrefix') . "',\n");
 			$file->write("\t'encoding' => '" . $encoding . "'\n");
 			$file->write(");\n");
 			$file->write("}\n");
@@ -987,7 +1014,7 @@ class BcManagerComponent extends Component {
 
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true)));
-		$plugins = Set::extract('/Plugin/name', $plugins);
+		$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 		foreach ($plugins as $plugin) {
 			if (!$this->resetTables('plugin', $dbConfig, $plugin, $excludes)) {
 				$result = false;
@@ -1106,7 +1133,7 @@ class BcManagerComponent extends Component {
 				} catch (Exception $e) {
 				}
 				if ($sequences) {
-					$sequences = Set::extract('/0/sequence_name', $sequences);
+					$sequences = Hash::extract($sequences, '0.sequence_name');
 					foreach ($sequences as $sequence) {
 						if (preg_match("/^" . $dbConfig['prefix'] . "([^_].+)$/", $sequence)) {
 							$sql = 'DROP SEQUENCE ' . $sequence;
@@ -1443,23 +1470,30 @@ class BcManagerComponent extends Component {
 		// 内容をリセットし、ファイルポインタを先頭に戻している。
 		//======================================================================
 
-		$rewritePatterns = array("/\n[^\n#]*RewriteEngine.+/i",
+		$rewritePatterns = array(
+			"/\n[^\n#]*RewriteEngine.+/i",
 			"/\n[^\n#]*RewriteBase.+/i",
 			"/\n[^\n#]*RewriteCond.+/i",
-			"/\n[^\n#]*RewriteRule.+/i");
+			"/\n[^\n#]*RewriteRule.+/i"
+		);
+		if (!$smartUrl) {
+			$rewritePatterns[] = "/\n\z/";
+		}
 		switch ($type) {
 			case 'root':
 				$rewriteSettings = array('RewriteEngine on',
 					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
 					'RewriteRule ^$ ' . APP_DIR . '/webroot/ [L]',
-					'RewriteRule (.*) ' . APP_DIR . '/webroot/$1 [L]');
+					'RewriteRule (.*) ' . APP_DIR . '/webroot/$1 [L]',
+					'');
 				break;
 			case 'webroot':
 				$rewriteSettings = array('RewriteEngine on',
 					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
 					'RewriteCond %{REQUEST_FILENAME} !-d',
 					'RewriteCond %{REQUEST_FILENAME} !-f',
-					'RewriteRule ^(.*)$ index.php [QSA,L]');
+					'RewriteRule ^(.*)$ index.php [QSA,L]',
+					'');
 				break;
 		}
 
@@ -1558,12 +1592,14 @@ class BcManagerComponent extends Component {
 			'phpActualVersion'	=> preg_replace('/[a-z-]/', '', phpversion()),
 			'phpGd'				=> extension_loaded('gd'),
 			'phpPdo'			=> extension_loaded('pdo'),
+			'phpXml'			=> extension_loaded('xml'),
 			'apacheRewrite'		=> $rewriteInstalled,
 		);
 		$check = array(
 			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),
 			'gdOk'			=> $status['phpGd'],
 			'pdoOk'			=> $status['phpPdo'],
+			'xmlOk'			=> $status['phpXml'],
 			'phpVersionOk'	=> version_compare(preg_replace('/[a-z-]/', '', $status['phpVersion']), Configure::read('BcRequire.phpVersion'), '>='),
 			'phpMemoryOk'	=> ((($status['phpMemory'] >= Configure::read('BcRequire.phpMemory')) || $status['phpMemory'] == -1) === true)
 		);
@@ -1827,9 +1863,11 @@ class BcManagerComponent extends Component {
 			include $configPath;
 		}
 
-		if(!$title) {
+		if(empty($title)) {
 			if(!empty($data['Plugin']['title'])) {
 				$title = $data['Plugin']['title'];
+			} else {
+				$title = $name;
 			}
 		}
 		

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * テーマコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Simplezip', 'Vendor');
@@ -120,17 +114,25 @@ class ThemesController extends AppController {
 		$baserThemes = array();
 		if(strtotime('2014-03-31 17:00:00') <= time()) {
 			$cachePath = 'views' . DS . 'baser_market_themes.rss';
-			if (Configure::read('Cache.check') == false || Configure::read('debug') > 0) {
+			if (Configure::read('debug') > 0) {
 				clearCache('baser_market_themes', 'views', '.rss');
 			}
 			$baserThemes = cache($cachePath);
 			if(!$baserThemes) {
 				$Xml = new Xml();
-				$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
-				$baserThemes = $Xml->toArray($baserThemes->channel);
-				$baserThemes = $baserThemes['channel']['item'];
-				cache($cachePath, BcUtil::serialize($baserThemes));
-				chmod(CACHE . $cachePath, 0666);
+				try {
+					$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
+				} catch (Exception $ex) {}
+				
+				if($baserThemes) {
+					$baserThemes = $Xml->toArray($baserThemes->channel);
+					$baserThemes = $baserThemes['channel']['item'];
+					cache($cachePath, BcUtil::serialize($baserThemes));
+					chmod(CACHE . $cachePath, 0666);
+				} else {
+					$baserThemes = array();
+				}
+				
 			} else {
 				$baserThemes = BcUtil::unserialize($baserThemes);
 			}
@@ -214,10 +216,7 @@ class ThemesController extends AppController {
 		$plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
 		
 		foreach ($plugins as $plugin) {
-			if (!$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes)) {
-				$result = false;
-				$this->log($dbDataPattern . " のプラグインの初期データのロードに失敗しました。");
-			}
+			$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes);
 		}
 
 		if (!$result) {

@@ -47,6 +47,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the request object constructor
  *
+ * @return void
  */
 	public function testConstruct() {
 		$response = new CakeResponse();
@@ -66,11 +67,27 @@ class CakeResponseTest extends CakeTestCase {
 		$this->assertEquals('my-custom-charset', $response->charset());
 		$this->assertEquals('audio/mpeg', $response->type());
 		$this->assertEquals(203, $response->statusCode());
+
+		$options = array(
+			'body' => 'This is the body',
+			'charset' => 'my-custom-charset',
+			'type' => 'mp3',
+			'status' => '422',
+			'statusCodes' => array(
+				422 => 'Unprocessable Entity'
+			)
+		);
+		$response = new CakeResponse($options);
+		$this->assertEquals($options['body'], $response->body());
+		$this->assertEquals($options['charset'], $response->charset());
+		$this->assertEquals($response->getMimeType($options['type']), $response->type());
+		$this->assertEquals($options['status'], $response->statusCode());
 	}
 
 /**
  * Tests the body method
  *
+ * @return void
  */
 	public function testBody() {
 		$response = new CakeResponse();
@@ -83,6 +100,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the charset method
  *
+ * @return void
  */
 	public function testCharset() {
 		$response = new CakeResponse();
@@ -96,6 +114,7 @@ class CakeResponseTest extends CakeTestCase {
  * Tests the statusCode method
  *
  * @expectedException CakeException
+ * @return void
  */
 	public function testStatusCode() {
 		$response = new CakeResponse();
@@ -111,6 +130,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the type method
  *
+ * @return void
  */
 	public function testType() {
 		$response = new CakeResponse();
@@ -133,6 +153,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the header method
  *
+ * @return void
  */
 	public function testHeader() {
 		$response = new CakeResponse();
@@ -181,6 +202,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the send method
  *
+ * @return void
  */
 	public function testSend() {
 		$response = $this->getMock('CakeResponse', array('_sendHeader', '_sendContent', '_setCookies'));
@@ -226,7 +248,9 @@ class CakeResponseTest extends CakeTestCase {
 
 /**
  * Tests the send method and changing the content type
+ *
  * @dataProvider charsetTypeProvider
+ * @return void
  */
 	public function testSendChangingContentType($original, $expected) {
 		$response = $this->getMock('CakeResponse', array('_sendHeader', '_sendContent', '_setCookies'));
@@ -246,6 +270,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the send method and changing the content type to JS without adding the charset
  *
+ * @return void
  */
 	public function testSendChangingContentTypeWithoutCharset() {
 		$response = $this->getMock('CakeResponse', array('_sendHeader', '_sendContent', '_setCookies'));
@@ -267,6 +292,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the send method and changing the content type
  *
+ * @return void
  */
 	public function testSendWithLocation() {
 		$response = $this->getMock('CakeResponse', array('_sendHeader', '_sendContent', '_setCookies'));
@@ -284,6 +310,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the disableCache method
  *
+ * @return void
  */
 	public function testDisableCache() {
 		$response = new CakeResponse();
@@ -299,6 +326,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the cache method
  *
+ * @return void
  */
 	public function testCache() {
 		$response = new CakeResponse();
@@ -371,6 +399,7 @@ class CakeResponseTest extends CakeTestCase {
  * Tests the httpCodes method
  *
  * @expectedException CakeException
+ * @return void
  */
 	public function testHttpCodes() {
 		$response = new CakeResponse();
@@ -415,6 +444,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the download method
  *
+ * @return void
  */
 	public function testDownload() {
 		$response = new CakeResponse();
@@ -428,6 +458,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the mapType method
  *
+ * @return void
  */
 	public function testMapType() {
 		$response = new CakeResponse();
@@ -444,6 +475,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the outputCompressed method
  *
+ * @return void
  */
 	public function testOutputCompressed() {
 		$response = new CakeResponse();
@@ -481,6 +513,7 @@ class CakeResponseTest extends CakeTestCase {
 /**
  * Tests the send and setting of Content-Length
  *
+ * @return void
  */
 	public function testSendContentLength() {
 		$response = $this->getMock('CakeResponse', array('_sendHeader', '_sendContent'));
@@ -718,7 +751,7 @@ class CakeResponseTest extends CakeTestCase {
 		$response = new CakeResponse;
 		$response->sharable(true, 3600);
 		$headers = $response->header();
-		$this->assertEquals('public, s-maxage=3600', $headers['Cache-Control']);
+		$this->assertEquals('public, max-age=3600', $headers['Cache-Control']);
 
 		$response = new CakeResponse;
 		$response->sharable(false, 3600);
@@ -1047,6 +1080,82 @@ class CakeResponseTest extends CakeTestCase {
 	}
 
 /**
+ * Test CORS
+ *
+ * @dataProvider corsData
+ * @param CakeRequest $request
+ * @param string $origin
+ * @param string|array $domains
+ * @param string|array $methods
+ * @param string|array $headers
+ * @param string|bool $expectedOrigin
+ * @param string|bool $expectedMethods
+ * @param string|bool $expectedHeaders
+ * @return void
+ */
+	public function testCors($request, $origin, $domains, $methods, $headers, $expectedOrigin, $expectedMethods = false, $expectedHeaders = false) {
+		$_SERVER['HTTP_ORIGIN'] = $origin;
+
+		$response = $this->getMock('CakeResponse', array('header'));
+
+		$method = $response->expects(!$expectedOrigin ? $this->never() : $this->at(0))->method('header');
+		$expectedOrigin && $method->with('Access-Control-Allow-Origin', $expectedOrigin ? $expectedOrigin : $this->anything());
+
+		$i = 1;
+		if ($expectedMethods) {
+			$response->expects($this->at($i++))
+				->method('header')
+				->with('Access-Control-Allow-Methods', $expectedMethods ? $expectedMethods : $this->anything());
+		}
+		if ($expectedHeaders) {
+			$response->expects($this->at($i++))
+				->method('header')
+				->with('Access-Control-Allow-Headers', $expectedHeaders ? $expectedHeaders : $this->anything());
+		}
+
+		$response->cors($request, $domains, $methods, $headers);
+		unset($_SERVER['HTTP_ORIGIN']);
+	}
+
+/**
+ * Feed for testCors
+ *
+ * @return array
+ */
+	public function corsData() {
+		$fooRequest = new CakeRequest();
+
+		$secureRequest = $this->getMock('CakeRequest', array('is'));
+		$secureRequest->expects($this->any())
+			->method('is')
+			->with('ssl')
+			->will($this->returnValue(true));
+
+		return array(
+			array($fooRequest, null, '*', '', '', false, false),
+			array($fooRequest, 'http://www.foo.com', '*', '', '', '*', false),
+			array($fooRequest, 'http://www.foo.com', 'www.foo.com', '', '', 'http://www.foo.com', false),
+			array($fooRequest, 'http://www.foo.com', '*.foo.com', '', '', 'http://www.foo.com', false),
+			array($fooRequest, 'http://www.foo.com', 'http://*.foo.com', '', '', 'http://www.foo.com', false),
+			array($fooRequest, 'http://www.foo.com', 'https://www.foo.com', '', '', false, false),
+			array($fooRequest, 'http://www.foo.com', 'https://*.foo.com', '', '', false, false),
+			array($fooRequest, 'http://www.foo.com', array('*.bar.com', '*.foo.com'), '', '', 'http://www.foo.com', false),
+
+			array($secureRequest, 'https://www.bar.com', 'www.bar.com', '', '', 'https://www.bar.com', false),
+			array($secureRequest, 'https://www.bar.com', 'http://www.bar.com', '', '', false, false),
+			array($secureRequest, 'https://www.bar.com', '*.bar.com', '', '', 'https://www.bar.com', false),
+
+			array($fooRequest, 'http://www.foo.com', '*', 'GET', '', '*', 'GET'),
+			array($fooRequest, 'http://www.foo.com', '*.foo.com', 'GET', '', 'http://www.foo.com', 'GET'),
+			array($fooRequest, 'http://www.foo.com', '*.foo.com', array('GET', 'POST'), '', 'http://www.foo.com', 'GET, POST'),
+
+			array($fooRequest, 'http://www.foo.com', '*', '', 'X-CakePHP', '*', false, 'X-CakePHP'),
+			array($fooRequest, 'http://www.foo.com', '*', '', array('X-CakePHP', 'X-MyApp'), '*', false, 'X-CakePHP, X-MyApp'),
+			array($fooRequest, 'http://www.foo.com', '*', array('GET', 'OPTIONS'), array('X-CakePHP', 'X-MyApp'), '*', 'GET, OPTIONS', 'X-CakePHP, X-MyApp'),
+		);
+	}
+
+/**
  * testFileNotFound
  *
  * @expectedException NotFoundException
@@ -1055,6 +1164,17 @@ class CakeResponseTest extends CakeTestCase {
 	public function testFileNotFound() {
 		$response = new CakeResponse();
 		$response->file('/some/missing/folder/file.jpg');
+	}
+
+/**
+ * test file with ..
+ *
+ * @expectedException NotFoundException
+ * @return void
+ */
+	public function testFileWithPathTraversal() {
+		$response = new CakeResponse();
+		$response->file('my/../cat.gif');
 	}
 
 /**

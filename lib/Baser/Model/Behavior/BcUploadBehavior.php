@@ -1,22 +1,18 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * ファイルアップロードビヘイビア
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
+ */
+/**
+ * Include files
  */
 App::uses('Imageresizer', 'Vendor');
 
@@ -49,7 +45,7 @@ App::uses('Imageresizer', 'Vendor');
  *   )
  * );
  *  
- * @subpackage Baser.Model.Behavior
+ * @package Baser.Model.Behavior
  */
 class BcUploadBehavior extends ModelBehavior {
 
@@ -101,7 +97,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	public function setup(Model $Model, $settings = array()) {
-		$this->settings[$Model->alias] = Set::merge(array(
+		$this->settings[$Model->alias] = Hash::merge(array(
 				'saveDir' => '',
 				'fields' => array()
 				), $settings);
@@ -276,6 +272,17 @@ class BcUploadBehavior extends ModelBehavior {
 							}
 						}
 
+						// ファイルをリサイズ
+						if (!$this->tmpId && !empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
+							if (!empty($field['imageresize']['thumb'])) {
+								$thumb = $field['imageresize']['thumb'];
+							} else {
+								$thumb = false;
+							}
+							$filePath = $this->savePath[$Model->alias] . $fileName;
+							$this->resizeImage($filePath, $filePath, $field['imageresize']['width'], $field['imageresize']['height'], $thumb);
+						}
+
 						// 一時ファイルを削除
 						@unlink($Model->data[$Model->name][$field['name']]['tmp_name']);
 						// フィールドの値をファイル名に更新
@@ -386,19 +393,8 @@ class BcUploadBehavior extends ModelBehavior {
 		$filePath = $this->savePath[$Model->alias] . $fileName;
 
 		if (!$this->tmpId) {
-
 			if (copy($file['tmp_name'], $filePath)) {
-
 				chmod($filePath, 0666);
-				// ファイルをリサイズ
-				if (!empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
-					if (!empty($field['imageresize']['thumb'])) {
-						$thumb = $field['imageresize']['thumb'];
-					} else {
-						$thumb = false;
-					}
-					$this->resizeImage($filePath, $filePath, $field['imageresize']['width'], $field['imageresize']['height'], $thumb);
-				}
 				$ret = $fileName;
 			} else {
 				$ret = false;
@@ -454,7 +450,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像ファイルをコピーする
  * リサイズ可能
  * 
- * @param Model	$Model
  * @param string コピー元のパス
  * @param string コピー先のパス
  * @param int 横幅

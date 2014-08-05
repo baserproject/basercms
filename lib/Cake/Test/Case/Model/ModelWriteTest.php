@@ -40,6 +40,7 @@ class TestAuthor extends Author {
  * Helper method to set a datasource object
  *
  * @param Object $object The datasource object
+ * @return void
  */
 	public function setDataSourceObject($object) {
 		$this->_dataSourceObject = $object;
@@ -77,6 +78,7 @@ class TestPost extends Post {
  * Helper method to set a datasource object
  *
  * @param Object $object The datasource object
+ * @return void
  */
 	public function setDataSourceObject($object) {
 		$this->_dataSourceObject = $object;
@@ -365,6 +367,8 @@ class ModelWriteTest extends BaseModelTest {
 
 /**
  * test that save() resets whitelist on failed save
+ *
+ * @return void
  */
 	public function testSaveFieldListResetsWhitelistOnFailedSave() {
 		$this->loadFixtures('Bidding');
@@ -6367,6 +6371,11 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertEquals(array(6, 4, 5, 2), $result);
 	}
 
+/**
+ * testToggleBoolFields method
+ *
+ * @return void
+ */
 	public function testToggleBoolFields() {
 		$this->loadFixtures('CounterCacheUser', 'CounterCachePost');
 		$Post = new CounterCachePost();
@@ -6784,7 +6793,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testSaveAllFieldListHasMany method
  *
- * return @void
+ * @return void
  */
 	public function testSaveAllFieldListHasMany() {
 		$this->loadFixtures('Article', 'Comment');
@@ -6971,7 +6980,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testSaveAllDeepFieldListHasMany method
  *
- * return @void
+ * @return void
  */
 	public function testSaveAllDeepFieldListHasMany() {
 		$this->loadFixtures('Article', 'Comment', 'User');
@@ -7014,7 +7023,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testSaveAllDeepHasManyBelongsTo method
  *
- * return @void
+ * @return void
  */
 	public function testSaveAllDeepHasManyBelongsTo() {
 		$this->loadFixtures('Article', 'Comment', 'User');
@@ -7066,7 +7075,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testSaveAllDeepHasManyhasMany method
  *
- * return @void
+ * @return void
  */
 	public function testSaveAllDeepHasManyHasMany() {
 		$this->loadFixtures('Article', 'Comment', 'User', 'Attachment');
@@ -7122,7 +7131,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testSaveAllDeepOrderHasManyHasMany method
  *
- * return @void
+ * @return void
  */
 	public function testSaveAllDeepOrderHasManyHasMany() {
 		$this->loadFixtures('Article', 'Comment', 'User', 'Attachment');
@@ -7159,7 +7168,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testSaveAllDeepEmptyHasManyHasMany method
  *
- * return @void
+ * @return void
  */
 	public function testSaveAllDeepEmptyHasManyHasMany() {
 		$this->skipIf(!$this->db instanceof Mysql, 'This test is only compatible with Mysql.');
@@ -7197,7 +7206,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testUpdateAllBoolean
  *
- * return @void
+ * @return void
  */
 	public function testUpdateAllBoolean() {
 		$this->loadFixtures('Item', 'Syfile', 'Portfolio', 'Image', 'ItemsPortfolio');
@@ -7212,7 +7221,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testUpdateAllBooleanConditions
  *
- * return @void
+ * @return void
  */
 	public function testUpdateAllBooleanConditions() {
 		$this->loadFixtures('Item', 'Syfile', 'Portfolio', 'Image', 'ItemsPortfolio');
@@ -7229,7 +7238,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * testUpdateBoolean
  *
- * return @void
+ * @return void
  */
 	public function testUpdateBoolean() {
 		$this->loadFixtures('Item', 'Syfile', 'Portfolio', 'Image', 'ItemsPortfolio');
@@ -7256,5 +7265,54 @@ class ModelWriteTest extends BaseModelTest {
 		$this->assertTrue($model->clear());
 		$this->assertFalse(isset($model->data['Bid']['name']));
 		$this->assertFalse(isset($model->data['Bid']['message_id']));
+	}
+
+/**
+ * Test that Model::save() doesn't generate a query with WHERE 1 = 1 on race condition.
+ *
+ * @link https://github.com/cakephp/cakephp/issues/3857
+ * @return void
+ */
+	public function testSafeUpdateMode() {
+		$this->loadFixtures('User');
+
+		$User = ClassRegistry::init('User');
+		$this->assertFalse($User->__safeUpdateMode);
+
+		$User->getEventManager()->attach(array($this, 'deleteMe'), 'Model.beforeSave');
+
+		$User->id = 1;
+		$User->set(array('user' => 'nobody'));
+		$User->save();
+
+		$users = $User->find('list', array('fields' => 'User.user'));
+
+		$expected = array(
+			2 => 'nate',
+			3 => 'larry',
+			4 => 'garrett',
+		);
+		$this->assertEquals($expected, $users);
+		$this->assertFalse($User->__safeUpdateMode);
+
+		$User->id = 2;
+		$User->set(array('user' => $User->getDataSource()->expression('PDO_EXCEPTION()')));
+		try {
+			$User->save(null, false);
+			$this->fail('No exception thrown');
+		} catch (PDOException $e) {
+			$this->assertFalse($User->__safeUpdateMode);
+		}
+	}
+
+/**
+ * Emulates race condition
+ *
+ * @param CakeEvent $event containing the Model
+ * @return void
+ */
+	public function deleteMe($event) {
+		$Model = $event->subject;
+		$Model->getDataSource()->delete($Model, array($Model->alias . '.' . $Model->primaryKey => $Model->id));
 	}
 }

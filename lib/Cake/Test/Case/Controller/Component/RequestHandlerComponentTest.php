@@ -33,7 +33,7 @@ class RequestHandlerTestController extends Controller {
 /**
  * uses property
  *
- * @var mixed null
+ * @var mixed
  */
 	public $uses = null;
 
@@ -350,19 +350,6 @@ class RequestHandlerComponentTest extends CakeTestCase {
 		$this->Controller->beforeFilter();
 		$this->RequestHandler->startup($this->Controller);
 		$this->assertEquals(true, $this->Controller->params['isAjax']);
-	}
-
-/**
- * testAutoResponseType method
- *
- * @return void
- */
-	public function testAutoResponseType() {
-		$this->Controller->ext = '.thtml';
-		$this->Controller->request->params['ext'] = 'rss';
-		$this->RequestHandler->initialize($this->Controller);
-		$this->RequestHandler->startup($this->Controller);
-		$this->assertEquals('.ctp', $this->Controller->ext);
 	}
 
 /**

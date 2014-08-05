@@ -1,35 +1,29 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * インストール用シェルスクリプト
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.vendors.shells
+ * @package			Baser.Console.Command
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
  * Include files
  */
-App::uses('BcAppShell', 'Console/Command');
+App::uses('AppShell', 'Console/Command');
 App::uses('BcManagerComponent', 'Controller/Component');
 
 /**
  * インストール用シェルスクリプト
  * 
- * @package baser.vendors.shells
+ * @package Baser.Console.Command
  */
-class BcManagerShell extends BcAppShell {
+class BcManagerShell extends AppShell {
 
 /**
  * get the option parser
@@ -89,7 +83,7 @@ class BcManagerShell extends BcAppShell {
 			return;
 		}
 		if (Configure::read('debug') != -1) {
-			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
+			$this->err('baserCMSのインストールを行うには、debug を -1 に設定する必要があります。');
 			return false;
 		}
 		if (!$this->_install()) {
@@ -101,6 +95,7 @@ class BcManagerShell extends BcAppShell {
 		$Folder->delete(TMP . 'logs');
 		$Folder->delete(TMP . 'schemas');
 		$Folder->delete(TMP . 'sessions');
+		$this->out("baserCMSのインストールが完了しました。");
 	}
 
 /**
@@ -116,6 +111,7 @@ class BcManagerShell extends BcAppShell {
 		if (!$this->_reset()) {
 			$this->err("baserCMSのリセットに失敗しました。ログファイルを確認してください。");
 		}
+		$this->out("baserCMSのリセットが完了しました。");
 	}
 
 /**

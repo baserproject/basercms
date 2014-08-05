@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ユーザーコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -83,30 +77,14 @@ class UsersController extends AppController {
 			/* 認証設定 */
 			// parent::beforeFilterの前に記述する必要あり
 			$this->BcAuth->allow(
-				'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password', 'admin_ajax_login'
+				'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password'
 			);
 			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
-
-			// =====================================================================
-			// Ajaxによるログインの場合、loginAction が、表示URLと違う為、
-			// BcAuthコンポーネントよりコントローラーのisAuthorized を呼びだせない。
-			// 正常な動作となるように書き換える。
-			// =====================================================================
-			if (!empty($this->request->params['prefix'])) {
-				$prefix = $this->request->params['prefix'];
-				if ($this->RequestHandler->isAjax() && $this->request->action == $prefix . '_ajax_login') {
-					Configure::write('BcAuthPrefix.' . $prefix . '.loginAction', '/' . $prefix . '/' . $this->request->params['controller'] . '/ajax_login');
-				}
-			} else {
-				if ($this->RequestHandler->isAjax() && $this->request->action == 'ajax_login') {
-					Configure::write('BcAuthPrefix.front.loginAction', '/' . $this->request->params['controller'] . '/ajax_login');
-				}
-			}
 		}
 
 		parent::beforeFilter();
 
-		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password', 'ajax_login');
+		$this->BcReplacePrefix->allow('login', 'logout', 'login_exec', 'reset_password');
 	}
 
 /**
@@ -163,18 +141,10 @@ class UsersController extends AppController {
 
 		if ($user) {
 			$this->redirect($this->BcAuth->redirect());
-		} else {
-			if ($this->request->data) {
-				$this->redirect($this->referer());
-			}
 		}
-
+		
 		$pageTitle = 'ログイン';
-		if (!empty($this->request->params['prefix'])) {
-			$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
-		} else {
-			$prefixAuth = Configure::read('BcAuthPrefix.front');
-		}
+		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
 		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
 			$pageTitle = $prefixAuth['loginTitle'];
 		}
@@ -242,47 +212,6 @@ class UsersController extends AppController {
 	}
 
 /**
- * [ADMIN] 管理者ログイン画面（Ajax）
- * 
- * ログインが成功した場合には、リダイレクト先のURLを出力する
- *
- * @return void
- */
-	public function admin_ajax_login() {
-		if (!$this->BcAuth->login()) {
-			$this->ajaxError(500, 'アカウント名、パスワードが間違っています。');
-		}
-
-		$user = $this->BcAuth->user();
-		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-
-		if ($this->request->data) {
-			if ($user) {
-				if (!empty($this->request->data[$userModel]['saved'])) {
-					if (Configure::read('BcRequest.agentAlias') != 'mobile') {
-						$this->setAuthCookie($this->request->data);
-					} else {
-						$this->BcAuth->saveSerial();
-					}
-					unset($this->request->data[$userModel]['save']);
-				} else {
-					$this->Cookie->destroy();
-				}
-				App::uses('BcBaserHelper', 'View/Helper');
-				$BcBaser = new BcBaserHelper(new View());
-				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
-			}
-		}
-		Configure::write('debug', 0);
-
-		if ($user) {
-			exit(Router::url($this->BcAuth->redirect()));
-		}
-
-		exit();
-	}
-
-/**
  * 認証クッキーをセットする
  *
  * @param array $data
@@ -293,7 +222,7 @@ class UsersController extends AppController {
 		$cookie = array();
 		$cookie['name'] = $data[$userModel]['name'];
 		$cookie['password'] = $data[$userModel]['password'];							// ハッシュ化されている
-		$this->Cookie->write(BcAuthComponent::$sessionKey, $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
+		$this->Cookie->write(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)), $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 	}
 
 /**
@@ -303,7 +232,7 @@ class UsersController extends AppController {
  */
 	public function admin_logout() {
 		$logoutRedirect = $this->BcAuth->logout();
-		$this->Cookie->delete(BcAuthComponent::$sessionKey);
+		$this->Cookie->delete(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
 		$this->setMessage('ログアウトしました');
 		$this->redirect($logoutRedirect);
 	}
