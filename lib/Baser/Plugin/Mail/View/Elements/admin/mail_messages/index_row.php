@@ -30,9 +30,9 @@
 		<?php foreach ($mailFields as $mailField): ?>
 			<?php if (!$mailField['MailField']['no_send'] && $mailField['MailField']['use_field']): ?>
 				<?php
-				$inData[] = $this->Maildata->control(
+				$inData[] = h($this->Maildata->control(
 					$mailField['MailField']['type'], $data['Message'][$mailField['MailField']['field_name']], $this->Mailfield->getOptions($mailField['MailField'])
-					)
+					))
 				?>
 			<?php endif ?>
 		<?php endforeach ?>
