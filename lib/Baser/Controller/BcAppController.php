@@ -267,6 +267,12 @@ class BcAppController extends Controller {
 		// テーマを設定
 		$this->setTheme();
 
+		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
+		if (!empty($this->request->params['admin']) || Configure::read('BcRequest.isUpdater')) {
+			$this->Security->validatePost = false;
+			$this->Security->csrfCheck = false;
+		}
+		
 		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
 			return;
 		}
@@ -416,11 +422,6 @@ class BcAppController extends Controller {
 			}
 		}
 
-		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if (!empty($this->request->params['admin'])) {
-			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
-		}
 	}
 
 /**
