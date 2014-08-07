@@ -349,8 +349,8 @@ function pageTypeChengeHandler() {
 		<?php endif ?>
 		<br />
 		<strong>プレビュー用URL：<?php $this->BcBaser->link(
-				$this->BcBaser->getUri(array('action'=>'preview', $this->data['Page']['id'])),
-				$this->BcBaser->getUri(array('action'=>'preview', $this->data['Page']['id'])),
+				$this->BcBaser->getUri($this->BcBaser->getUrl(array('action'=>'preview', $this->data['Page']['id']))),
+				$this->BcBaser->getUri($this->BcBaser->getUrl(array('action'=>'preview', $this->data['Page']['id']))),
 				array('target' => '_blank')
 		); ?></strong>
 	</div>

@@ -178,8 +178,8 @@ $(function(){
 		<?php endif ?>
 			<br />
 			プレビュー用URL：<?php $this->BcBaser->link(
-				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
-				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
+				$this->BcBaser->getUri($this->BcBaser->getUrl(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view'))),
+				$this->BcBaser->getUri($this->BcBaser->getUrl(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view'))),
 				array('target' => '_blank')
 			); ?>
 	</div>
