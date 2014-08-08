@@ -580,7 +580,7 @@ class BlogController extends BlogAppController {
 				'recursive' => 1
 			));
 			if (isset($tags[0]['BlogPost'][0]['id'])) {
-				$ids = Hash::extract($tags, '{n}.BlogPost.id');
+				$ids = Hash::extract($tags, '{n}.BlogPost.{n}.id');
 				$conditions['BlogPost.id'] = $ids;
 			} else {
 				return array();
