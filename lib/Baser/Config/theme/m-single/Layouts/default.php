@@ -174,7 +174,7 @@ $(function(){
 	});
 });
 </script>
-<div id="BaseUrl" style="display:none"><?php echo $this->base ?></div>
+
 <div id="MailForm"></div>
 </article>
 </div><!-- /articleArea -->

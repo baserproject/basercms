@@ -1395,12 +1395,12 @@ class BcBaserHelper extends AppHelper {
 /**
  * httpから始まるURLを取得する
  *
- * @param string $url
+ * @param mixed $url
  * @param boolean $sessionId オプションのパラメータ、初期値は true 
  * @return string
  */
 	public function getUri($url, $sessionId = true) {
-		if (preg_match('/^http/is', $url)) {
+		if (is_string($url) && preg_match('/^http/is', $url)) {
 			return $url;
 		} else {
 			if (empty($_SERVER['HTTPS'])) {
