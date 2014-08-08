@@ -2012,7 +2012,7 @@ END_FLASH;
  * @return void
  */
 	public function crumbsList($data = array(), $options = array()) {
-		$this->element('contents_navi', $data, $options);
+		$this->element('crumbs', $data, $options);
 	}
 
 /**
