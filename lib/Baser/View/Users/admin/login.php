@@ -43,7 +43,9 @@ CSS_END
 	
 $(function(){
 
-	$("body").hide();
+	if($("#LoginCredit").html() == 1) {
+		$("body").hide();
+	}
 	$("body").prepend($("#Login"));
 	$("#"+$("#UserModel").html()+"Name").focus();
 	changeNavi("#"+$("#UserModel").html()+"Name");
