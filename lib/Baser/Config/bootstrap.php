@@ -79,7 +79,7 @@ define('BC_BASE_URL', baseUrl());
 /**
  * アセットフィルターを追加
  */
-Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher')));
+Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher', 'BcCacheDispatcher')));
 
 /**
  * クラスローダー設定

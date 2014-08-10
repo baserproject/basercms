@@ -590,7 +590,7 @@ class PagesController extends AppController {
 		// Consoleから requestAction で呼出された場合、getCacheTimeがうまくいかない
 		// Consoleの場合は実行しない
 		if (!isset($_SESSION['Auth']['User']) && !isConsole()) {
-			$this->helpers[] = 'Cache';
+			$this->helpers[] = 'BcCache';
 			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
 
