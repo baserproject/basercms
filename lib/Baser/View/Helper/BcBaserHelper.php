@@ -2000,7 +2000,7 @@ END_FLASH;
  * @return void
  */
 	public function contentsNavi($data = array(), $options = array()) {
-		if (!isset($this->_View->BcPage) || !$this->_View->BcPage->contensNaviAvailable()) {
+		if (!isset($this->_View->BcPage) || !$this->_View->BcPage->contentsNaviAvailable()) {
 			return;
 		}
 		$this->element('contents_navi', $data, $options);

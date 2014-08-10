@@ -196,7 +196,7 @@ class BcPageHelper extends Helper {
  */
 	public function nextLink($title = '', $attributes = array()) {
 
-		if (!$this->contensNaviAvailable()) {
+		if (!$this->contentsNaviAvailable()) {
 			return '';
 		}
 
@@ -241,7 +241,7 @@ class BcPageHelper extends Helper {
  */
 	public function prevLink($title = '', $attributes = array()) {
 
-		if (!$this->contensNaviAvailable()) {
+		if (!$this->contentsNaviAvailable()) {
 			return '';
 		}
 
@@ -281,7 +281,7 @@ class BcPageHelper extends Helper {
  *
  * @return boolean
  */
-	public function contensNaviAvailable() {
+	public function contentsNaviAvailable() {
 
 		if (empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
 			return false;

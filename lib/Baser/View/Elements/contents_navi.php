@@ -15,7 +15,7 @@
 /**
  * $this->BcBaser->contentsNavi() で呼び出す
  */
-if (!isset($this->BcPage) || !$this->BcPage->contensNaviAvailable()) {
+if (!isset($this->BcPage) || !$this->BcPage->contentsNaviAvailable()) {
 	return;
 }
 ?>
