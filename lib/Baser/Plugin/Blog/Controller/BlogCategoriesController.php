@@ -291,8 +291,7 @@ class BlogCategoriesController extends BlogAppController {
 		// メッセージ用にデータを取得
 		$data = $this->BlogCategory->read(null, $id);
 		/* 削除処理 */
-		if ($this->BlogCategory->delete($id)) {
-
+		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
 			$this->BlogCategory->saveDbLog('カテゴリー「' . $data['BlogCategory']['name'] . '」を削除しました。');
 			return true;
 		} else {
@@ -319,7 +318,7 @@ class BlogCategoriesController extends BlogAppController {
 		$post = $this->BlogCategory->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->BlogCategory->delete($id)) {
+		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
 			$this->setMessage($post['BlogCategory']['name'] . ' を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);

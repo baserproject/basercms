@@ -361,7 +361,7 @@ class PageCategoriesController extends AppController {
 		$page = $this->PageCategory->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->PageCategory->delete($id)) {
+		if ($this->PageCategory->removeFromTreeRecursive($id)) {
 			$this->setMessage('固定ページカテゴリー: ' . $page['PageCategory']['name'] . ' を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -384,7 +384,7 @@ class PageCategoriesController extends AppController {
 
 		$data = $this->PageCategory->read(null, $id);
 
-		if ($this->PageCategory->delete($id)) {
+		if ($this->PageCategory->removeFromTreeRecursive($id)) {
 			$this->PageCategory->saveDbLog('固定ページ: ' . $data['PageCategory']['name'] . ' を削除しました。');
 			echo true;
 		}
@@ -436,7 +436,7 @@ class PageCategoriesController extends AppController {
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->PageCategory->read(null, $id);
-				if ($this->PageCategory->delete($id)) {
+				if ($this->PageCategory->removeFromTreeRecursive($id)) {
 					$this->PageCategory->saveDbLog('固定ページカテゴリー: ' . $data['PageCategory']['name'] . ' を削除しました。');
 				}
 			}
