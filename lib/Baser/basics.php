@@ -672,7 +672,12 @@ function getEnablePlugins() {
 		$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 	}
 	if (!$enablePlugins) {
-		$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+		try {
+			$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+		} catch (Exception $ex) {
+			return array();
+		}
 		$db = ConnectionManager::getDataSource('baser');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
@@ -700,8 +705,12 @@ function getEnablePlugins() {
  * @return void
  */
 function loadSiteConfig() {
-
-	$SiteConfig = ClassRegistry::init('SiteConfig');
+	// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+	try {
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+	} catch (Exception $ex) {
+		return false;
+	}
 	Configure::write('BcSite', $SiteConfig->findExpanded());
 	ClassRegistry::removeObject('SiteConfig');
 }
@@ -891,7 +900,11 @@ function loadPlugin($plugin, $priority) {
 	);
 	CakePlugin::load($plugin, $config);
 	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
-		Configure::load($plugin . '.setting');
+		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+		// ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
+		try {
+			Configure::load($plugin . '.setting');
+		} catch (Exception $ex) {}
 	}
 	// プラグインイベント登録
 	$eventTargets = array('Controller', 'Model', 'View', 'Helper');

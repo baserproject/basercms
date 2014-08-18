@@ -1,6 +1,6 @@
 <?php
 /**
- * Baserヘルパー
+ * BcBaserHelper
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -17,21 +17,16 @@
 App::uses('AppHelper', 'View/Helper');
 
 /**
- * Baserヘルパー
+ * BcBaserHelper
+ * 
+ * テーマより利用される事を前提としたヘルパーで、テーマで必要となる機能をひと通り提供する。
  *
  * @package Baser.View.Helper
  */
 class BcBaserHelper extends AppHelper {
 
 /**
- * View
- *
- * @var View
- */
-	protected $_View = null;
-
-/**
- * サイト基本設定
+ * サイト基本設定データ
  *
  * @var array
  */
@@ -45,89 +40,80 @@ class BcBaserHelper extends AppHelper {
 	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray');
 
 /**
- * コンテンツ
+ * ページモデル
+ * 
+ * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
  *
- * @var string
+ * @var Page
  */
-	protected $_content = null;
-
+	protected $_Page = null;
+	
+/**
+ * アクセス制限設定モデル
+ * 
+ * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
+ *
+ * @var Permission
+ */
+	protected $_Permission = null;
+	
 /**
  * カテゴリタイトル設定
+ * 
+ * パンくず用の配列を取得する際、カテゴリのタイトルを取得するかどうかの判定を保持
  *
- * @var mixed
+ * @var mixed boolean or null
  */
 	protected $_categoryTitleOn = true;
 
 /**
  * カテゴリタイトル
  *
- * @var mixed boolean Or string
+ * @var mixed boolean or string
  */
 	protected $_categoryTitle = true;
 
 /**
- * ページモデル
- *
- * @var Page
- */
-	public $Page = null;
-
-/**
- * アクセス制限設定モデル
- *
- * @var Permission
- */
-	public $Permission = null;
-
-/**
- * Plugin Basers
+ * BcBaserHelper を拡張するプラグインのヘルパ
+ * 
+ * BcBaserHelper::_initPluginBasers() で自動的に初期化される。
  *
  * @var array
  */
-	public $pluginBasers = array();
+	protected $_pluginBasers = array();
 
 /**
  * コンストラクタ
  *
- * @param object $View 
- * @param array $settings 
- * @return void
+ * @param View $View ビュークラス
+ * @param array $settings ヘルパ設定値（BcBaserHelper では利用していない）
  */
 	public function __construct(View $View, $settings = array()) {
 
 		parent::__construct($View, $settings);
 
+		// モデルクラスをセット
+		// 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットしておく
 		if ($this->_View && BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
-
-			if (ClassRegistry::isKeySet('Permission')) {
-				$this->Permission = ClassRegistry::getObject('Permission');
-			} else {
-				$this->Permission = ClassRegistry::init('Permission');
-			}
-
-			if (ClassRegistry::isKeySet('Page')) {
-				$this->Page = ClassRegistry::getObject('Page');
-			} else {
-				$this->Page = ClassRegistry::init('Page');
-			}
-
-			if (ClassRegistry::isKeySet('PageCategory')) {
-				$this->PageCategory = ClassRegistry::getObject('PageCategory');
-			} else {
-				$this->PageCategory = ClassRegistry::init('PageCategory');
-			}
+			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+			try {
+				$this->_Permission = ClassRegistry::init('Permission');
+				$this->_Page = ClassRegistry::init('Page');
+			} catch (Exception $ex) {}
 		}
 
+		// サイト基本設定データをセット
 		if (BC_INSTALLED || isConsole()) {
 			if (isset($this->_View->viewVars['siteConfig'])) {
 				$this->siteConfig = $this->_View->viewVars['siteConfig'];
 			}
 		}
 
+		// プラグインのBaserヘルパを初期化
 		if (BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
-			// プラグインのBaserヘルパを初期化
 			$this->_initPluginBasers();
 		}
+
 	}
 
 /**
@@ -136,7 +122,7 @@ class BcBaserHelper extends AppHelper {
  * @return array $globalMenus
  */
 	public function getMenus() {
-
+		
 		if (ClassRegistry::init('Menu')) {
 			if (!file_exists(APP . 'Config' . DS . 'database.php')) {
 				return '';
@@ -870,10 +856,6 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- *
- */
-
-/**
  * アンカータグを取得する
  *
  * @param string $title
@@ -935,18 +917,18 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 認証チェック
-		if (isset($this->Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
+		if (isset($this->_Permission) && !empty($this->_View->viewVars['user']['user_group_id'])) {
 			$userGroupId = $this->_View->viewVars['user']['user_group_id'];
-			if (!$this->Permission->check($_url, $userGroupId)) {
+			if (!$this->_Permission->check($_url, $userGroupId)) {
 				$enabled = false;
 			}
 		}
 
 		// ページ公開チェック
-		if (isset($this->Page) && empty($this->request->params['admin'])) {
+		if (isset($this->_Page) && empty($this->request->params['admin'])) {
 			$adminPrefix = Configure::read('Routing.prefixes.0');
-			if (isset($this->Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
-				if ($this->Page->isPageUrl($_url) && !$this->Page->checkPublish($_url)) {
+			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
+				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
 					$enabled = false;
 				}
 			}
@@ -1340,13 +1322,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getPageList($categoryId = null) {
 
-		if ($this->Page) {
+		if ($this->_Page) {
 			$conditions = array('Page.status' => 1);
 			if ($categoryId) {
 				$conditions['Page.page_category_id'] = $categoryId;
 			}
-			$this->Page->unbindModel(array('belongsTo' => array('PageCategory')));
-			$pages = $this->Page->find('all', array('conditions' => $conditions,
+			$this->_Page->unbindModel(array('belongsTo' => array('PageCategory')));
+			$pages = $this->_Page->find('all', array('conditions' => $conditions,
 				'fields' => array('title', 'url'),
 				'order' => 'Page.sort'));
 			return Hash::extract($pages, '{n}.Page');
@@ -1414,6 +1396,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * プラグインのBaserヘルパを初期化する
+ * 
  * BaserHelperに定義されていないメソッドをプラグイン内のヘルパに定義する事で
  * BaserHelperから呼び出せるようになる仕組みを提供する。
  * コアからプラグインのヘルパメソッドをBaserHelper経由で直接呼び出せる為、
@@ -1447,10 +1430,10 @@ class BcBaserHelper extends AppHelper {
 		);
 		$c = count($vars);
 		foreach ($pluginBasers as $key => $pluginBaser) {
-			$this->pluginBasers[$key] = new $pluginBaser($view);
+			$this->_pluginBasers[$key] = new $pluginBaser($view);
 			for ($j = 0; $j < $c; $j++) {
 				if (isset($view->{$vars[$j]})) {
-					$this->pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
+					$this->_pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
 				}
 			}
 		}
@@ -1467,7 +1450,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function __call($method, $params) {
 
-		foreach ($this->pluginBasers as $pluginBaser) {
+		foreach ($this->_pluginBasers as $pluginBaser) {
 			if (method_exists($pluginBaser, $method)) {
 				return call_user_func_array(array($pluginBaser, $method), $params);
 			}
@@ -1596,7 +1579,7 @@ END_FLASH;
  * @return boolean
  */
 	public function isPage() {
-		return $this->Page->isPageUrl($this->getHere());
+		return $this->_Page->isPageUrl($this->getHere());
 	}
 
 /**

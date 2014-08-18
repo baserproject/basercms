@@ -179,13 +179,18 @@ class BcAppController extends Controller {
 		if (BC_INSTALLED || isConsole()) {
 
 			// サイト基本設定の読み込み
-			$SiteConfig = ClassRegistry::init('SiteConfig');
-			$this->siteConfigs = $SiteConfig->findExpanded();
-
-			if (empty($this->siteConfigs['version'])) {
-				$this->siteConfigs['version'] = $this->getBaserVersion();
-				$SiteConfig->saveKeyValue($this->siteConfigs);
+			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+			try {
+				$SiteConfig = ClassRegistry::init('SiteConfig');
+				$this->siteConfigs = $SiteConfig->findExpanded();
+				if (empty($this->siteConfigs['version'])) {
+					$this->siteConfigs['version'] = $this->getBaserVersion();
+					$SiteConfig->saveKeyValue($this->siteConfigs);
+				}
+			} catch (Exception $ex) {
+				$this->siteConfigs = array();
 			}
+
 		} else {
 			if ($this->name != 'Installations') {
 				if ($this->name == 'CakeError' && $request->params['controller'] != 'installations') {
