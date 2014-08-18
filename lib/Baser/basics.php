@@ -933,7 +933,7 @@ function deprecatedMessage($target, $since, $remove = null, $note = null) {
 	if(Configure::read('debug') == 0) {
 		return;
 	}
-	$message = $target . 'は、バージョン ' . $since . ' より被推奨となりました。';
+	$message = $target . 'は、バージョン ' . $since . ' より非推奨となりました。';
 	if($remove) {
 		$message .= 'バージョン ' . $remove . ' で削除される予定です。';
 	}
