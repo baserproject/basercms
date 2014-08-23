@@ -322,6 +322,7 @@ class BcAppController extends Controller {
 			$user = $this->BcAuth->user();
 			if ($user) {
 				$userModel = $this->Session->read('Auth.User.userModel');
+				$User = ClassRegistry::init($userModel);
 				if(strpos($userModel, '.') !== false) {
 					list($plugin, $userModel) = explode('.', $userModel);
 				}
@@ -335,7 +336,7 @@ class BcAppController extends Controller {
 						$userModel . '.name'			=> $user['name'],
 						$userModel . '.user_group_id'	=> $userGroupIds
 					);
-					if (!$this->{$userModel}->find('count', array(
+					if (!$User->find('count', array(
 							'conditions' => $conditions,
 							'recursive' => -1))) {
 						$this->Session->delete(BcAuthComponent::$sessionKey);

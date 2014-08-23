@@ -39,6 +39,8 @@
 			'admin/jquery.validate.min',
 			'admin/jquery.colorbox-min-1.4.5',
 			'admin/jquery.mScroll',
+			'admin/jquery.baseUrl',
+			'admin/credit',
 			'admin/validate_messages_ja',
 			'admin/functions',
 			'admin/startup',
@@ -46,6 +48,7 @@
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>
+	<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
 		<!-- Waiting -->
 		<div id="Waiting" class="waiting-box" style="display:none">
