@@ -147,7 +147,7 @@ class BcUtil extends Object {
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern,
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 				), $paths);
 			}
 		} else {
