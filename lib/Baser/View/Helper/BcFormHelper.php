@@ -705,7 +705,7 @@ class BcFormHelper extends FormHelper {
 			'options' => $options
 			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 		// <<<
 		
@@ -719,7 +719,7 @@ class BcFormHelper extends FormHelper {
 			'out' => $out
 			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		return $out;
@@ -748,7 +748,7 @@ class BcFormHelper extends FormHelper {
 			'options' => $options
 			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 		// <<<
 		
@@ -762,7 +762,7 @@ class BcFormHelper extends FormHelper {
 			'out' => $out
 			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		return $out;
@@ -795,7 +795,7 @@ class BcFormHelper extends FormHelper {
 			'options' => $options
 			), array('class' => 'Form', 'plugin' => ''));
 		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 
 		$type = '';
@@ -861,7 +861,7 @@ DOC_END;
 			), array('class' => 'Form', 'plugin' => ''));
 
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		return $out;

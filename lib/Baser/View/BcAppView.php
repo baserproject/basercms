@@ -175,11 +175,11 @@ class BcAppView extends View {
 		// >>>
 		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
 		// CUSTOMIZE ADD 2012/10/11 ryuring
@@ -269,11 +269,11 @@ class BcAppView extends View {
 		// >>>
 		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
 		
@@ -336,11 +336,11 @@ class BcAppView extends View {
 		// >>>
 		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
 

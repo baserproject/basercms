@@ -485,7 +485,7 @@ class BcBaserHelper extends AppHelper {
 			'options' => $options
 			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 
 		/*** Controller.beforeElement ***/
@@ -495,7 +495,7 @@ class BcBaserHelper extends AppHelper {
 			'options' => $options
 			), array('layer' => 'View', 'class' => $this->_View->name));
 		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 
 		extract($options);
@@ -520,7 +520,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		/*** Controller.afterElement ***/
@@ -529,7 +529,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('layer' => 'View', 'class' => $this->_View->name));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		return $out;
@@ -575,7 +575,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		/*** Controller.header ***/
@@ -583,7 +583,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('layer' => 'View', 'class' => $this->_View->name));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 		echo $out;
 	}
@@ -608,7 +608,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('layer' => 'View', 'class' => '', 'plugin' => ''));
 		if ($event) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		/*** Controller.footer ***/
@@ -616,7 +616,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('layer' => 'View', 'class' => $this->_View->name));
 		if ($event) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 		echo $out;
 	}
@@ -652,7 +652,29 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function content() {
-		echo $this->_View->fetch('content');
+		
+		/*** beforeContent ***/
+		$this->dispatchEvent('beforeContent', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
+
+		/*** Controller.beforeContent ***/
+		$this->dispatchEvent('beforeContent', null, array('layer' => 'View', 'class' => $this->_View->name));
+		
+		$out = $this->_View->fetch('content');
+		
+		/*** afterContent ***/
+		$event = $this->dispatchEvent('afterContent', array('out' => $out), array('layer' => 'View', 'class' => '', 'plugin' => ''));
+		if ($event !== false) {
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+
+		/*** Controller.afterContent ***/
+		$event = $this->dispatchEvent('afterContent', array('out' => $out), array('layer' => 'View', 'class' => $this->_View->name));
+		if ($event !== false) {
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+		
+		echo $out;
+		
 	}
 
 /**
@@ -885,7 +907,7 @@ class BcBaserHelper extends AppHelper {
 			'confirmMessage' => $confirmMessage
 			), array('class' => 'Html', 'plugin' => ''));
 		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 
 		if ($options['prefix']) {
@@ -973,7 +995,7 @@ class BcBaserHelper extends AppHelper {
 			'out' => $out
 			), array('class' => 'Html', 'plugin' => ''));
 		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
 		return $out;
