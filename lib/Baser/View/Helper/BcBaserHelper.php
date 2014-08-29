@@ -654,26 +654,18 @@ class BcBaserHelper extends AppHelper {
 	public function content() {
 		
 		/*** beforeContent ***/
-		$this->dispatchEvent('beforeContent', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
+		$this->dispatchEvent('contentHeader', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
 
 		/*** Controller.beforeContent ***/
-		$this->dispatchEvent('beforeContent', null, array('layer' => 'View', 'class' => $this->_View->name));
+		$this->dispatchEvent('contentHeader', null, array('layer' => 'View', 'class' => $this->_View->name));
 		
-		$out = $this->_View->fetch('content');
+		echo $this->_View->fetch('content');
 		
 		/*** afterContent ***/
-		$event = $this->dispatchEvent('afterContent', array('out' => $out), array('layer' => 'View', 'class' => '', 'plugin' => ''));
-		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
-		}
+		$event = $this->dispatchEvent('contentFooter', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
 
 		/*** Controller.afterContent ***/
-		$event = $this->dispatchEvent('afterContent', array('out' => $out), array('layer' => 'View', 'class' => $this->_View->name));
-		if ($event !== false) {
-			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
-		}
-		
-		echo $out;
+		$event = $this->dispatchEvent('contentFooter', null, array('layer' => 'View', 'class' => $this->_View->name));
 		
 	}
 
