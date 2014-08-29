@@ -868,7 +868,7 @@ class BcManagerComponent extends Component {
 		$options = array_merge(array('excludeUsers' => false), $options);
 		
 		$db = $this->_getDataSource('baser', $dbConfig);
-		$corePath = BASER_CONFIGS . 'Data' . DS . 'Default';
+		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		$result = true;
 
 		/* page_categories の初期データをチェック＆設定 */
