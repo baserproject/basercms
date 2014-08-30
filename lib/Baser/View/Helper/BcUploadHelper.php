@@ -118,7 +118,9 @@ class BcUploadHelper extends FormHelper {
 			'rel' => '', // rel属性
 			'title' => '', // タイトル属性
 			'link' => true, // 大きいサイズの画像へのリンク有無
-			'force' => false
+			'force' => false,
+			'width' => '', // 横幅
+			'height' => '', // 高さ
 			), $options);
 
 		extract($options);
@@ -154,7 +156,7 @@ class BcUploadHelper extends FormHelper {
 			} else {
 				if (isset($value['session_key'])) {
 					$tmp = true;
-					$value = $value['session_key'];
+					$value = str_replace('/', '_', $value['session_key']);;
 					$basePath = '/uploads/tmp/';
 				} else {
 					return false;
@@ -169,7 +171,15 @@ class BcUploadHelper extends FormHelper {
 				$uploadSettings = $settings['fields'][$field];
 				$ext = decodeContent('', $value);
 				if ($uploadSettings['type'] == 'image' || in_array($ext, $model->Behaviors->BcUpload->imgExts)) {
-					$options = array('imgsize' => $imgsize, 'rel' => $rel, 'title' => $title, 'link' => $link, 'force' => $force);
+					$options = array(
+						'imgsize' => $imgsize, 
+						'rel' => $rel, 
+						'title' => $title, 
+						'link' => $link, 
+						'force' => $force,
+						'width' => $width, // 横幅
+						'height' => $height // 高さ
+					);
 					if ($tmp) {
 						$options['tmp'] = true;
 					}
@@ -284,7 +294,7 @@ class BcUploadHelper extends FormHelper {
 
 		if ($tmp) {
 			$link = false;
-			$fileUrl = $this->base . '/uploads/tmp/';
+			$fileUrl = '/uploads/tmp/';
 			if ($imgsize) {
 				$fileUrl .= $imgsize . '/';
 			}

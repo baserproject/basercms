@@ -189,7 +189,6 @@ class MailFieldsController extends MailAppController {
 
 		$this->subMenuElements = array('mail_fields', 'mail_common');
 		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] 新規メールフィールド登録';
-		$this->set('controlSource', $this->MailField->getControlSource());
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -236,7 +235,6 @@ class MailFieldsController extends MailAppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_fields', 'mail_common');
-		$this->set('controlSource', $this->MailField->getControlSource());
 		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] メールフィールド編集：　' . $this->request->data['MailField']['name'];
 		$this->help = 'mail_fields_form';
 		$this->render('form');

@@ -50,7 +50,7 @@ class UploadsController extends AppController {
 		} else {
 			$name = $args[0];
 		}
-		$sessioName = str_replace('.', '_', $name);
+		$sessioName = str_replace(array('.', '/'), array('_', '_'), $name);;
 		$sessionData = $this->Session->read('Upload.' . $sessioName);
 
 		Configure::write('debug', 0);
@@ -99,7 +99,6 @@ class UploadsController extends AppController {
 		}
 		Header("Content-type: " . $type . "; name=" . $name);
 		echo $data;
-		$this->Session->delete('Upload.' . $sessioName);
 		exit();
 	}
 

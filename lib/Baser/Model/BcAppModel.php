@@ -1408,5 +1408,18 @@ class BcAppModel extends Model {
 		}
 		return $this->removeFromTree($id, true);
 	}
+
+/**
+ * ファイルが送信されたかチェックするバリデーション
+ * 
+ * @param array $check
+ * @return boolean
+ */
+	public function notFileEmpty($check) {
+		if (empty($check[key($check)]) || (is_array($check[key($check)]) && $check[key($check)]['size'] === 0)) {
+			return false;
+		}
+		return true;
+	}
 	
 }

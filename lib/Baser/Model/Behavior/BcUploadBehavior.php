@@ -311,12 +311,12 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	public function moveFileSessionToTmp(Model $Model, $fieldName) {
-		$sessionKey = $Model->data[$Model->alias][$fieldName . '_tmp'];
+		$fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
+		$sessionKey = str_replace(array('.', '/'), array('_', '_'), $fileName);
 		$tmpName = $this->savePath[$Model->alias] . $sessionKey;
-		$fileData = $this->Session->read('Upload.' . $sessionKey);
-		$fileType = $this->Session->read('Upload.' . $sessionKey . '_type');
+		$fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
+		$fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
 		$this->Session->delete('Upload.' . $sessionKey);
-		$this->Session->delete('Upload.' . $sessionKey . '_type');
 
 		// サイズを取得
 		if (ini_get('mbstring.func_overload') & 2 && function_exists('mb_strlen')) {
@@ -335,8 +335,8 @@ class BcUploadBehavior extends ModelBehavior {
 		$file->close();
 
 		// 元の名前を取得
-		$pos = strpos($sessionKey, '_');
-		$fileName = substr($sessionKey, $pos + 1, strlen($sessionKey));
+		/*$pos = strpos($sessionKey, '_');
+		$fileName = substr($sessionKey, $pos + 1, strlen($sessionKey));*/
 
 		// アップロードされたデータとしてデータを復元する
 		$uploadInfo['error'] = 0;
@@ -400,7 +400,7 @@ class BcUploadBehavior extends ModelBehavior {
 				$ret = false;
 			}
 		} else {
-			$_fileName = str_replace('.', '_', $fileName);
+			$_fileName = str_replace(array('.', '/'), array('_', '_'), $fileName);
 			$this->Session->write('Upload.' . $_fileName, $field);
 			$this->Session->write('Upload.' . $_fileName . '.type', $file['type']);
 			$this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($file['tmp_name']));

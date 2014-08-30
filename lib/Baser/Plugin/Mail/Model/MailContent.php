@@ -45,7 +45,7 @@ class MailContent extends MailAppModel {
  */
 	public $hasMany = array('MailField' =>
 		array('className' => 'Mail.MailField',
-			'order' => 'id',
+			'order' => 'sort',
 			'limit' => 100,
 			'foreignKey' => 'mail_content_id',
 			'dependent' => true,
@@ -292,7 +292,8 @@ class MailContent extends MailAppModel {
 					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 				}
 				App::uses('Message', 'Mail.Model');
-				$Message = new Message(false, null, null, $result['MailContent']['name'] . '_');
+				$Message = new Message();
+				$Message->setup($result['MailContent']['id']);
 				$Message->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 				$Message->createTable($result['MailContent']['name']);
 				$Message->construction($result['MailContent']['id']);

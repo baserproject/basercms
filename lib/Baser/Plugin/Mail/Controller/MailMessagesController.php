@@ -90,9 +90,9 @@ class MailMessagesController extends MailAppController {
 		$this->MailContent->recursive = -1;
 		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
 		if ($this->mailContent['MailContent']['name'] != 'message') {
-			$prefix = $this->mailContent['MailContent']['name'] . "_";
 			App::uses('Message', 'Mail.Model');
-			$this->Message = new Message(false, null, null, $prefix);
+			$this->Message = new Message();
+			$this->Message->setup($this->mailContent['MailContent']['id']);
 		}
 		$this->crumbs[] = array('name' => $this->mailContent['MailContent']['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
 	}
@@ -236,4 +236,25 @@ class MailMessagesController extends MailAppController {
 		$this->redirect(array('action' => 'index', $mailContentId));
 	}
 
+/**
+ * メールフォームに添付したファイルを開く
+ */
+	public function admin_attachment() {
+		$args = func_get_args();
+		unset($args[0]);
+		$file = implode('/', $args);
+		$settings = $this->Message->Behaviors->BcUpload->settings['Message'];
+		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
+		$ext = decodeContent(null, $file);
+		$mineType = 'application/octet-stream';
+		if ($ext != 'gif' && $ext != 'jpg' && $ext != 'png') {
+			Header("Content-disposition: attachment; filename=" . $file);
+		} else {
+			$mineType = 'image/' . $ext;
+		}
+		Header("Content-type: " . $mineType . "; name=" . $file);
+		echo file_get_contents($filePath);
+		exit();
+	}
+	
 }

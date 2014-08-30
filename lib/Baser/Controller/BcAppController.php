@@ -909,16 +909,8 @@ class BcAppController extends Controller {
 			$content = $body;
 		}
 
-		// TODO $attachments tmp file path
-		// filePaths と attachments のどっちが本当の分か確認すること
-		$attachments = null;
-		if (!empty($options['filePaths'])) {
-			if (!is_array($options['filePaths'])) {
-				$attachments = array($options['filePaths']);
-			} else {
-				$attachments = $options['filePaths'];
-			}
-		}
+		// $attachments tmp file path
+		$attachments = array();
 		if (!empty($options['attachments'])) {
 			if (!is_array($options['attachments'])) {
 				$attachments = array($options['attachments']);
