@@ -838,11 +838,15 @@ class Message extends MailAppModel {
 			$inData = array();
 			$inData['NO'] = $message[$this->alias]['id'];
 			foreach ($mailFields as $mailField) {
-				$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->control(
-					$mailField['MailField']['type'],
-					$message[$this->alias][$mailField['MailField']['field_name']],
-					$Mailfield->getOptions($mailField['MailField'])
-				);
+				if($mailField['MailField']['type'] == 'file') {
+					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $message[$this->alias][$mailField['MailField']['field_name']];
+				} else {
+					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->control(
+						$mailField['MailField']['type'],
+						$message[$this->alias][$mailField['MailField']['field_name']],
+						$Mailfield->getOptions($mailField['MailField'])
+					);
+				}
 			}
 			$inData['作成日'] = $message[$this->alias]['created'];
 			$inData['更新日'] = $message[$this->alias]['modified'];
