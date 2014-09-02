@@ -18,7 +18,7 @@ App::uses('BcTimeHelper', 'View/Helper');
  * @package Baser.Test.Case.View.Helper
  * @property BcTimeHelper $Helper
  */
-class BcTimeHelperTest extends CakeTestCase {
+class BcTimeHelperTest extends BaserTestCase {
 
 	public function setUp() {
 		parent::setUp();

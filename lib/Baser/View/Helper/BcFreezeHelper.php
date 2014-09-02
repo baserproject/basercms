@@ -32,14 +32,6 @@ class BcFreezeHelper extends BcFormHelper {
 	public $freezed = false;
 
 /**
- * ヘルパー
- * 
- * @var array
- * @access public
- */
-	public $helpers = array('Html', 'BcForm', 'BcUpload', 'BcText', 'BcTime', 'Js');
-
-/**
  * フォームを凍結させる
  * 
  * @return void
@@ -395,7 +387,7 @@ class BcFreezeHelper extends BcFormHelper {
 				}
 			}
 		} else {
-			return $this->BcUpload->file($fieldName, $options);
+			return parent::file($fieldName, $options);
 		}
 	}
 

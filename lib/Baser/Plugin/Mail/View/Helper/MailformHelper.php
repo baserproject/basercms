@@ -17,7 +17,6 @@
  */
 App::uses('BcHtmlHelper', 'View/Helper');
 App::uses('BcFreezeHelper', 'View/Helper');
-App::uses('BcUploadHelper', 'View/Helper');
 
 /**
  * メールフォームヘルパー
@@ -27,13 +26,6 @@ App::uses('BcUploadHelper', 'View/Helper');
  */
 class MailformHelper extends BcFreezeHelper {
 
-/**
- * ヘルパー
- * 
- * @var array
- */
-	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcCkeditor', 'BcUpload');
-	
 /**
  * メールフィールドのデータよりコントロールを生成する
  *

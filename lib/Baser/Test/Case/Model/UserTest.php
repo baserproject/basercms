@@ -24,7 +24,7 @@ App::uses('User', 'Model');
  * 
  * @package Baser.Test.Case.Model
  */
-class UserTest extends CakeTestCase {
+class UserTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.User',

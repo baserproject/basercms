@@ -15,95 +15,46 @@
 /**
  * Include files
  */
-App::uses('FormHelper', 'View/Helper');
+App::uses('BcAppHelper', 'View/Helper');
 
 /**
  * アップロードヘルパー
  *
  * @package Baser.View.Helper
  */
-class BcUploadHelper extends FormHelper {
+class BcUploadHelper extends BcAppHelper {
 
 /**
+ * ヘルパ
+ * 
+ * @var array
+ */
+	public $helpers = array('Html', 'BcForm');
+	
+/**
  * ファイルインプットボックス出力
+ * 
  * 画像の場合は画像タグ、その他の場合はファイルへのリンク
  * そして削除用のチェックボックスを表示する
- * [カスタムオプション]
- * imgsize・・・画像のサイズを指定する
- *
+ * 
+ * 《オプション》
+ * imgsize	画像のサイズを指定する
+ * rel		A タグの rel 属性を指定
+ * title	A タグの title 属性を指定
+ * link		大きいサイズへの画像へのリンク有無
+ * delCheck	削除用チェックボックスの利用可否
+ * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
+ * 
  * @param string $fieldName
  * @param array $options
  * @return string
- * @access public
+ * @deprecated since version 3.0.6
  */
 	public function file($fieldName, $options = array()) {
-
-		$options = array_merge(array(
-			'imgsize' => 'midium', // 画像サイズ
-			'rel' => '', // rel属性
-			'title' => '', // タイトル属性
-			'link' => true, // 大きいサイズの画像へのリンク有無
-			'delCheck' => true,
-			'force' => false
-			), $options);
-
-		extract($options);
-
-		unset($options['imgsize']);
-		unset($options['rel']);
-		unset($options['title']);
-		unset($options['link']);
-		unset($options['delCheck']);
-		unset($options['force']);
-
-		$linkOptions = array(
-			'imgsize' => $imgsize,
-			'rel' => $rel,
-			'title' => $title,
-			'link' => $link,
-			'delCheck' => $delCheck,
-			'force' => $force
-		);
-
-		$options = $this->_initInputField($fieldName, $options);
-
-		$entity = $this->entity();
-		$modelName = array_shift($entity);
-		$field = $this->field();
-		$fileLinkTag = $this->fileLink($fieldName, $linkOptions);
-		$fileTag = parent::file($fieldName, $options);
-		
-		if (empty($options['value'])) {
-			$value = $this->value($fieldName);
-		} else {
-			$value = $options['value'];
-		}
-		
-		$delCheckTag = '';
-		if ($linkOptions['delCheck'] && empty($value['session_key'])) {
-			$delCheckTag = parent::checkbox($modelName . '.' . $field . '_delete') . parent::label($modelName . '.' . $field . '_delete', '削除する');
-		}
-		$hiddenValue = $this->value($fieldName . '_');
-		$fileValue = $this->value($fieldName);
-
-		if (is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
-			$hiddenTag = parent::hidden($modelName . '.' . $field . '_', array('value' => $hiddenValue));
-		} else {
-			if (is_array($fileValue)) {
-				$fileValue = null;
-			}
-			$hiddenTag = parent::hidden($modelName . '.' . $field . '_', array('value' => $fileValue));
-		}
-
-		$out = $fileTag;
-
-		if ($fileLinkTag) {
-			$out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
-		}
-
-		return '<div class="upload-file">' . $out . '</div>';
+		trigger_error(deprecatedMessage('メソッド：BcUploadHelper::file()', '3.0.6', '3.1.0', 'BcFormHelper::file() を利用してください。'), E_USER_DEPRECATED);
+		return $this->BcForm->file($fieldName, $options);
 	}
-
+	
 /**
  * ファイルへのリンクを取得する
  *
@@ -125,18 +76,20 @@ class BcUploadHelper extends FormHelper {
 
 		extract($options);
 
-		$options = $this->_initInputField($fieldName, $options);
+		if(strpos($fieldName, '.') === false) {
+			throw new BcException('BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。');
+		}
+		list($modelName, $field) = explode('.', $fieldName);
+		
 		$tmp = false;
 		$entity = $this->entity();
-		$modelName = array_shift($entity);
-		$field = $this->field();
-		$model = ClassRegistry::init($modelName);
+		$Model = ClassRegistry::init($modelName);
 
-		if (empty($model->Behaviors->BcUpload)) {
+		if (empty($Model->Behaviors->BcUpload)) {
 			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
 		}
 
-		$settings = $model->Behaviors->BcUpload->settings[$modelName];
+		$settings = $Model->Behaviors->BcUpload->settings[$modelName];
 		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
 		if (empty($options['value'])) {
@@ -147,9 +100,9 @@ class BcUploadHelper extends FormHelper {
 
 		if (is_array($value)) {
 			if (empty($value['session_key']) && empty($value['name'])) {
-				$data = $model->findById($model->id);
-				if (!empty($data[$model->alias][$field])) {
-					$value = $data[$model->alias][$field];
+				$data = $Model->findById($Model->id);
+				if (!empty($data[$Model->alias][$field])) {
+					$value = $data[$Model->alias][$field];
 				} else {
 					$value = '';
 				}
@@ -170,7 +123,7 @@ class BcUploadHelper extends FormHelper {
 			if ($value && !is_array($value)) {
 				$uploadSettings = $settings['fields'][$field];
 				$ext = decodeContent('', $value);
-				if ($uploadSettings['type'] == 'image' || in_array($ext, $model->Behaviors->BcUpload->imgExts)) {
+				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
 					$options = array(
 						'imgsize' => $imgsize, 
 						'rel' => $rel, 
@@ -279,9 +232,9 @@ class BcUploadHelper extends FormHelper {
 		}
 
 		list($modelName, $field) = explode('.', $fieldName);
-		$model = ClassRegistry::init($modelName);
+		$Model = ClassRegistry::init($modelName);
 
-		$settings = $model->Behaviors->BcUpload->settings[$modelName];
+		$settings = $Model->Behaviors->BcUpload->settings[$modelName];
 
 		$fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;

@@ -58,13 +58,6 @@ class EditorTemplatesController extends AppController {
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
 /**
- * ヘルパ
- * 
- * @var array
- */
-	public $helpers = array('BcUpload');
-
-/**
  * beforeFilter
  *
  * @return void

@@ -23,7 +23,7 @@ App::uses('AppHelper', 'View/Helper');
  * @package       Baser.Test.Case.View.Helper
  * @property      BcAdminHelper $Helper
  */
-class BcArrayHelperTest extends CakeTestCase {
+class BcArrayHelperTest extends BaserTestCase {
 
 	private $data;
 

@@ -38,7 +38,7 @@
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('EditorTemplate.image', 'アイコン画像') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcUpload->file('EditorTemplate.image') ?>
+				<?php echo $this->BcForm->file('EditorTemplate.image') ?>
 				<?php echo $this->BcForm->error('EditorTemplate.image') ?>
 			</td>
 		</tr>

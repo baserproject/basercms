@@ -19,7 +19,7 @@ App::uses('BcUploadHelper', 'View/Helper');
  *
  * @package			Baser.Test.Case.View.Helper
  */
-class BcUploadHelperTest extends CakeTestCase {
+class BcUploadHelperTest extends BaserTestCase {
 	
 /**
  * Fixtures
@@ -44,15 +44,6 @@ class BcUploadHelperTest extends CakeTestCase {
 	public function tearDown() {
 		unset($this->BcUpload);
 		parent::tearDown();
-	}
-
-/**
- * ファイルタグを出力する
- */
-	public function test_file() {
-		$result = $this->BcUpload->file('EditorTemplate.image');
-		$expects = '<div class="upload-file"><input type="file" name="data[EditorTemplate][image]"  id="EditorTemplateImage"/></div>';
-		$this->assertEqual($expects, $result);
 	}
 
 /**

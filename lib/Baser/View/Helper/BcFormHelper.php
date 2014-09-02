@@ -20,6 +20,7 @@ App::uses('FormHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
 App::uses('BcTextHelper', 'View/Helper');
 App::uses('BcCkeditorHelper', 'View/Helper');
+App::uses('BcUploadHelper', 'View/Helper');
 
 /**
  * FormHelper 拡張クラス
@@ -36,7 +37,7 @@ class BcFormHelper extends FormHelper {
 	// >>>
 	//public $helpers = array('Html');
 	// ---
-	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcCkeditor');
+	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor');
 	// <<<
 
 // CUSTOMIZE ADD 2014/07/02 ryuring
@@ -1262,6 +1263,91 @@ DOC_END;
 		return $out;
 	}
 	
+/**
+ * ファイルインプットボックス出力
+ * 
+ * 画像の場合は画像タグ、その他の場合はファイルへのリンク
+ * そして削除用のチェックボックスを表示する
+ * 
+ * 《オプション》
+ * imgsize	画像のサイズを指定する
+ * rel		A タグの rel 属性を指定
+ * title	A タグの title 属性を指定
+ * link		大きいサイズへの画像へのリンク有無
+ * delCheck	削除用チェックボックスの利用可否
+ * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
+ * 
+ * @param string $fieldName
+ * @param array $options
+ * @return string
+ */
+	public function file($fieldName, $options = array()) {
+
+		$options = array_merge(array(
+			'imgsize' => 'midium', // 画像サイズ
+			'rel' => '', // rel属性
+			'title' => '', // タイトル属性
+			'link' => true, // 大きいサイズの画像へのリンク有無
+			'delCheck' => true,
+			'force' => false
+			), $options);
+
+		extract($options);
+
+		unset($options['imgsize']);
+		unset($options['rel']);
+		unset($options['title']);
+		unset($options['link']);
+		unset($options['delCheck']);
+		unset($options['force']);
+
+		$linkOptions = array(
+			'imgsize' => $imgsize,
+			'rel' => $rel,
+			'title' => $title,
+			'link' => $link,
+			'delCheck' => $delCheck,
+			'force' => $force
+		);
+
+		$entity = $this->entity();
+		$modelName = array_shift($entity);
+		$field = $this->field();
+		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
+		$fileTag = parent::file($fieldName, $options);
+		
+		if (empty($options['value'])) {
+			$value = $this->value($fieldName);
+		} else {
+			$value = $options['value'];
+		}
+		
+		$delCheckTag = '';
+		if ($fileLinkTag && $linkOptions['delCheck'] && empty($value['session_key'])) {
+			$delCheckTag = $this->checkbox($modelName . '.' . $field . '_delete') . $this->label($modelName . '.' . $field . '_delete', '削除する');
+		}
+		$hiddenValue = $this->value($fieldName . '_');
+		$fileValue = $this->value($fieldName);
+
+		if($fileLinkTag) {
+			if (is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
+				$hiddenTag = $this->hidden($modelName . '.' . $field . '_', array('value' => $hiddenValue));
+			} else {
+				if (is_array($fileValue)) {
+					$fileValue = null;
+				}
+				$hiddenTag = $this->hidden($modelName . '.' . $field . '_', array('value' => $fileValue));
+			}
+		}
+		
+		$out = $fileTag;
+
+		if ($fileLinkTag) {
+			$out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
+		}
+
+		return '<div class="upload-file">' . $out . '</div>';
+	}
 // <<<
 /**
  * 日付タグ

@@ -13,6 +13,41 @@
 
 App::uses('BcFormHelper', 'View/Helper');
 
+/**
+ * Contact class
+ *
+ * @package       Cake.Test.Case.View.Helper
+ */
+class Contact extends CakeTestModel {
+
+/**
+ * useTable property
+ *
+ * @var bool
+ */
+	public $useTable = false;
+	
+/**
+ * ビヘイビア
+ *
+ * @var array
+ * @access public
+ */
+	public $actsAs = array(
+		'BcContentsManager',
+		'BcCache',
+		'BcUpload' => array(
+			'subdirDateFormat' => 'Y/m/',
+			'fields' => array(
+				'eye_catch' => array(
+					'type' => 'image',
+					'namefield' => 'no',
+					'nameformat' => '%08d'
+				)
+			)
+		)
+	);
+}
 
 /**
  * FormHelperTest class
@@ -20,7 +55,7 @@ App::uses('BcFormHelper', 'View/Helper');
  * @package Cake.Test.Case.View.Helper
  * @property BcFormHelper $Form
  */
-class BcFormHelperTest extends CakeTestCase {
+class BcFormHelperTest extends BaserTestCase {
 
 /**
  * setUp method
@@ -38,7 +73,6 @@ class BcFormHelperTest extends CakeTestCase {
 		$this->BcForm->request['action'] = 'add';
 		$this->BcForm->request->webroot = '';
 		$this->BcForm->request->base = '';
-
 	}
 
 /**
@@ -78,7 +112,29 @@ class BcFormHelperTest extends CakeTestCase {
 		$result = $this->BcForm->create('Contact', array('url' => '/contacts/add', 'id' => 'MyForm'));
 		$expected['form']['id'] = 'MyForm';
 		$this->assertTags($result, $expected);
-
 	}
 
+/**
+ * testFileUploadField method
+ *
+ * @return void
+ */
+	public function testFileUploadField() {
+		// モデルがBcUploadBehavior を利用していない場合は、BcExceptionを期待
+		$this->setExpectedException('BcException');
+		$this->BcForm->file('Model.upload');
+
+		// 通常
+		$result = $this->BcForm->file('Contact.upload');
+		$expected = array(
+			'div'	=> array('class' => 'upload-file'),
+			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload')), 
+			'/div'
+		);
+		$this->assertTags($result, $expected);
+
+		// TODO データと画像が既に存在する場合についてテストを記述する
+		
+	}
+	
 }

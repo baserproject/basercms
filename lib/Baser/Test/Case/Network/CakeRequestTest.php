@@ -17,7 +17,7 @@ App::uses('CakeRequest', 'Network');
  * 
  * @package Baser.Test.Case.Network
  */
-class CakeRequestTest extends CakeTestCase {
+class CakeRequestTest extends BaserTestCase {
 	
 	public function testNormalizedHere() {
 		

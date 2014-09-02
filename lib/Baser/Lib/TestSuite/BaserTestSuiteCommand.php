@@ -15,6 +15,7 @@
 
 App::uses('CakeTestSuiteCommand', 'TestSuite');
 App::uses('BaserTestLoader', 'TestSuite');
+App::uses('BaserTestCase', 'TestSuite');
 
 /**
  * Class to customize loading of test suites from CLI
