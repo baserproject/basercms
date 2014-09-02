@@ -447,7 +447,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'mysite_';
 			$data['Installation']['dbName'] = 'basercms';
-			$data['Installation']['dbDataPattern'] = $defaultTheme . '.Default';
+			$data['Installation']['dbDataPattern'] = $defaultTheme . '.default';
 		}
 
 		return $data;
