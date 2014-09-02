@@ -692,6 +692,7 @@ class BcFormHelper extends FormHelper {
 	public function create($model = null, $options = array()) {
 
 		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// ブラウザの妥当性のチェックを除外する
 		// >>>
 		$options = array_merge(array(
 			'novalidate' => true
