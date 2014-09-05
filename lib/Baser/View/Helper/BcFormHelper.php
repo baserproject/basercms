@@ -1283,6 +1283,13 @@ DOC_END;
  */
 	public function file($fieldName, $options = array()) {
 
+		$entity = $this->entity();
+		$modelName = array_shift($entity);
+		$field = $this->field();
+		if (empty($Model->Behaviors->BcUpload)) {
+			return parent::file($fieldName, $options);
+		}
+		
 		$options = array_merge(array(
 			'imgsize' => 'midium', // 画像サイズ
 			'rel' => '', // rel属性
@@ -1310,9 +1317,6 @@ DOC_END;
 			'force' => $force
 		);
 
-		$entity = $this->entity();
-		$modelName = array_shift($entity);
-		$field = $this->field();
 		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName, $options);
 		
