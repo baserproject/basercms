@@ -51,7 +51,12 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 			
-			echo $this->Mailform->control($field['type'], "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			if (!$field['no_send'] || !$freezed) {
+				echo $this->Mailform->control($field['type'], "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			}
+			if ($field['no_send'] && $freezed) {
+				echo $this->Mailform->control('hidden', "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			}
 			
 			if (!$freezed || $this->Mailform->value("Message." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
