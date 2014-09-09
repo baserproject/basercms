@@ -49,7 +49,7 @@ class BcUploadHelperTest extends BaserTestCase {
 /**
  * ファイルへのリンクタグを出力する
  */
-	public function test_fileLink() {
+	public function testFileLink() {
 		$this->BcUpload->request->data = array(
 			'EditorTemplate' => array(
 				'id' => '1',
@@ -66,7 +66,7 @@ class BcUploadHelperTest extends BaserTestCase {
 /**
  * アップロードした画像のタグを出力する
  */
-	public function test_uploadImage() {
+	public function testUploadImage() {
 		
 		// オプションなし
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');
