@@ -117,34 +117,19 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * グローバルメニューを取得する
+ * グローバルメニューのデータを取得する
+ * 
+ * 配列で全件取得する
  *
- * @return array $globalMenus
+ * @return array グローバルメニューデータ Or false
  */
 	public function getMenus() {
-		
-		if (ClassRegistry::init('Menu')) {
-			if (!file_exists(APP . 'Config' . DS . 'database.php')) {
-				return '';
-			}
-			$dbConfig = new DATABASE_CONFIG();
-			if (!$dbConfig->baser) {
-				return '';
-			}
-			$Menu = ClassRegistry::getObject('Menu');
-			// エラーの際も呼び出される事があるので、テーブルが実際に存在するかチェックする
-			$db = ConnectionManager::getDataSource('baser');
-			$sources = $db->listSources();
-			if (!is_array($sources) || in_array(strtolower($db->config['prefix'] . 'menus'), array_map('strtolower', $sources))) {
-				if (empty($this->request->params['prefix'])) {
-					$prefix = 'publish';
-				} else {
-					$prefix = $this->request->params['prefix'];
-				}
-				return $Menu->find('all', array('order' => 'sort'));
-			}
+		$Menu = ClassRegistry::init('Menu');
+		if($Menu) {
+			return $Menu->find('all', array('order' => 'sort'));
+		} else {
+			return false;
 		}
-		return '';
 	}
 
 /**
