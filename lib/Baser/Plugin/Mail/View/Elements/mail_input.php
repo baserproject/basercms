@@ -51,11 +51,11 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 			
-			if (!$field['no_send'] || !$freezed) {
-				echo $this->Mailform->control($field['type'], "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
-			}
 			if ($field['no_send'] && $freezed) {
+				// メール送信しないフィールドの場合、確認画面では、hidden タグを表示する
 				echo $this->Mailform->control('hidden', "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			} else {
+				echo $this->Mailform->control($field['type'], "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 			}
 			
 			if (!$freezed || $this->Mailform->value("Message." . $field['field_name']) !== '') {
