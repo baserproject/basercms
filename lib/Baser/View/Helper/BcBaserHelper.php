@@ -117,11 +117,11 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * グローバルメニューのデータを取得する
+ * メニューのデータを取得する
  * 
  * 配列で全件取得する
  *
- * @return array グローバルメニューデータ Or false
+ * @return array メニューデータ Or false
  */
 	public function getMenus() {
 		$Menu = ClassRegistry::init('Menu');
