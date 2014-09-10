@@ -305,7 +305,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 		if ($this->freezed) {
 			$label = '';
-			if (isset($attributes['lable'])) {
+			if (isset($attributes['label'])) {
 				$label = $attributes['label'];
 			}
 			$options = array(0 => '', 1 => $label);
