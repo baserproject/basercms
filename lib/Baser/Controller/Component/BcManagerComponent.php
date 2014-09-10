@@ -786,7 +786,7 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 
-		$corePath = BcUtil::getDefaultDataPath($plugin, 'core', 'Default');
+		$corePath = BcUtil::getDefaultDataPath($plugin, 'core', 'default');
 		
 		$targetTables = array();
 		if($corePath) {
