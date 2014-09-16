@@ -120,10 +120,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testFileUploadField() {
-		// モデルがBcUploadBehavior を利用していない場合は、BcExceptionを期待
-		$this->setExpectedException('BcException');
-		$this->BcForm->file('Model.upload');
-
 		// 通常
 		$result = $this->BcForm->file('Contact.upload');
 		$expected = array(

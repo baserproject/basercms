@@ -1283,9 +1283,11 @@ DOC_END;
  */
 	public function file($fieldName, $options = array()) {
 
+		$options = $this->_initInputField($fieldName, $options);
 		$entity = $this->entity();
 		$modelName = array_shift($entity);
 		$field = $this->field();
+		$Model = ClassRegistry::init($modelName);
 		if (empty($Model->Behaviors->BcUpload)) {
 			return parent::file($fieldName, $options);
 		}
