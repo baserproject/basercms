@@ -731,8 +731,8 @@ class BcUploadBehavior extends ModelBehavior {
 
 		$pathinfo = pathinfo($fileName);
 		$basename = preg_replace("/\.".$pathinfo['extension']."$/is",'',$fileName);
-
 		$ext = $setting['ext'];
+		
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions[$model->name.'.'.$fieldName.' LIKE'] = $basename.'%'.$ext;
 		if(!empty($model->data[$model->name]['id'])) {
