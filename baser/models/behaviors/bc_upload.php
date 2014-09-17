@@ -730,31 +730,41 @@ class BcUploadBehavior extends ModelBehavior {
 	function getUniqueFileName($model, $fieldName, $fileName, $setting = null) {
 
 		$pathinfo = pathinfo($fileName);
-		$basename = preg_replace("/\.".$pathinfo['extension']."$/is",'',$fileName);
+		$basename = preg_replace("/\.".$pathinfo['extension']."$/is",'',$fileName);	
 		$ext = $setting['ext'];
 		
-		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-		$conditions[$model->name.'.'.$fieldName.' LIKE'] = $basename.'%'.$ext;
+		// 重複ファイル確認
+		$conditions = array();
+		$conditions[$model->name.'.'.$fieldName] = $basename . '.' . $ext;
 		if(!empty($model->data[$model->name]['id'])) {
 			$conditions[$model->name.'.id <>'] = $model->data[$model->name]['id'];
 		}
-		$datas = $model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName)));
+		$datas = $model->find('first', array('conditions' => $conditions, 'fields' => array($fieldName)));
 
-		if($datas) {
-			$prefixNo = 1;
-			foreach($datas as $data) {
-				$_basename = preg_replace("/\.".$ext."$/is",'',$data[$model->name][$fieldName]);
-				$lastPrefix = str_replace($basename,'',$_basename);
-				if(preg_match("/^__([0-9]+)$/s",$lastPrefix,$matches)) {
-					$no = (int)$matches[1];
-					if($no > $prefixNo) $prefixNo = $no;
-				}
-
-			}
-			return $basename.'__'.($prefixNo+1).'.'.$ext;
-
-		}else {
+		if (empty($datas)){
 			return $basename.'.'.$ext;
+		}
+		
+		// 既に連番が付いているファイルの場合は除外してユニーク名を調査
+		preg_match("/^(.*)__([0-9]+)$/s",$basename, $matches);
+		$_basename = empty($matches[1]) ? $basename : $matches[1];
+		$maxNum = 1;
+		if (!empty($matches[2])){
+			$maxNum = intval($matches[2]) + 1;
+		}
+		
+		// ユニークになるまでDBを検索
+		$conditions = array();
+		if(!empty($model->data[$model->name]['id'])) {
+			$conditions[$model->name.'.id <>'] = $model->data[$model->name]['id'];
+		}
+		while(1) {
+			$conditions[$model->name.'.'.$fieldName] = $_basename. '__' . $maxNum . '.' . $ext;
+			$datas = $model->find('first', array('conditions' => $conditions, 'fields' => array($fieldName)));
+			if (empty($datas)){
+				return $_basename. '__' . $maxNum . '.' . $ext;
+			}
+			$maxNum++;
 		}
 
 	}
