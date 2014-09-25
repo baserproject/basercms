@@ -215,8 +215,13 @@ class PagesController extends AppController {
 		} else {
 
 			/* 登録処理 */
+			if ($this->request->data['Page']['page_type'] == 2 && !$this->request->data['Page']['page_category_id']) {
+				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
+			} elseif ($this->request->data['Page']['page_type'] == 3 && !$this->request->data['Page']['page_category_id']) {
+				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
+			}
 			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
-
+			
 			/*			 * * Pages.beforeAdd ** */
 			$event = $this->dispatchEvent('beforeAdd', array(
 				'data' => $this->request->data
@@ -226,11 +231,6 @@ class PagesController extends AppController {
 			}
 
 			$this->Page->create($this->request->data);
-			if ($this->request->data['Page']['page_type'] == 2 && !$this->request->data['Page']['page_category_id']) {
-				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
-			} elseif ($this->request->data['Page']['page_type'] == 3 && !$this->request->data['Page']['page_category_id']) {
-				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
-			}
 			if ($this->Page->validates()) {
 
 				if ($data = $this->Page->save($this->request->data, false)) {
