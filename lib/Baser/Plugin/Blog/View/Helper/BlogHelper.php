@@ -150,21 +150,6 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
- * 記事へのリンクを取得する
- *
- * @param array $post
- * @param string $title
- * @param array $options
- * @return string
- * @access public
- */
-	public function getPostLink($post, $title, $options = array()) {
-		$this->setContent($post['BlogPost']['blog_content_id']);
-		$url = array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']);
-		return $this->BcBaser->getLink($title, $url, $options);
-	}
-
-/**
  * 記事へのリンクを出力する
  *
  * @param array $post
@@ -904,6 +889,27 @@ class BlogHelper extends AppHelper {
 		App::uses('MailHelper', 'Mail.View/Helper');
 		$MailHelper = new MailHelper($this->_View);
 		$MailHelper->link($title, $contentsName, $datas, $options);
+	}
+
+/**
+ * ブログ記事のURLを生成して返す
+ * 
+ * @param type $post
+ * @param type $options
+ * @return string
+ */
+    public function getPostLinkUrl($post, $title = '', $options = array()) {
+		
+		$blogContent = $this->blogContent;
+		$url = array('admin'=>false, 'plugin'=>'', 'controller'=>$blogContent['name'], 'action'=>'archives', $post['BlogPost']['no']);
+		if(!empty($title)){
+			return $this->BcBaser->getLink($title, $url, $options);
+		}else{
+			return $this->BcBaser->url($url);
+		}
+		
+        return;
+    
 	}
 	
 }
