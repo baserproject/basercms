@@ -69,7 +69,6 @@ class BcPluginAppController extends AppController {
 
 		$contentName = '';
 		$url = preg_replace('/^\//', '', $this->request->url);
-		$url = explode('/', $url);
 
 		if (!$url) {
 			return null;
