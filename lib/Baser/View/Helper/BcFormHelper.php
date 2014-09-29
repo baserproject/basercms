@@ -445,7 +445,7 @@ class BcFormHelper extends FormHelper {
 		// 2014/03/23 ryuring CakePHP側が実装していたが互換性の為に残す
 		//if ($options['hiddenField']) {
 		// ---
-		if ($hidden || $options['hiddenField']) {
+		if ($hidden !== false && $options['hiddenField'] !== false) {
 		// <<<
 			$hiddenOptions = array(
 				'id' => $options['id'] . '_',
