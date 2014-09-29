@@ -36,3 +36,8 @@
 # 【動作確認済レンタルサーバー】
 #	http://basercms.net/manuals/introductions/2.html
 #
+
+RewriteEngine on
+RewriteBase /
+RewriteRule ^$ app/webroot/ [L]
+RewriteRule (.*) app/webroot/$1 [L]
