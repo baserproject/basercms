@@ -898,26 +898,6 @@ class BlogHelper extends AppHelper {
  * @param type $options
  * @return string
  */
-    public function getPostLinkUrl($post, $options = array()) {
-        $blogContentId = $post['BlogPost']['blog_content_id'];
-        if($blogContentId) {
-            $BlogContent = ClassRegistry::getObject('BlogContent');
-            $blogContent = $BlogContent->read(null, $blogContentId);
-            $url = array('admin'=>false, 'plugin'=>'', 'controller'=>$blogContent['BlogContent']['name'], 'action'=>'archives', $post['BlogPost']['no']);
-            return $this->BcBaser->url($url);
-        }
-
-        return;
-    }
-	
-
-/**
- * ブログ記事のURLを生成して返す
- * 
- * @param type $post
- * @param type $options
- * @return string
- */
     public function getPostLinkUrl($post, $title = '', $options = array()) {
 		
 		$blogContent = $this->blogContent;
