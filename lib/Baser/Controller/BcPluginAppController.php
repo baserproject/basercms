@@ -74,22 +74,10 @@ class BcPluginAppController extends AppController {
 		if (!$url) {
 			return null;
 		}
-
-		if ($url[0] != Configure::read('BcRequest.agentAlias')) {
-			if (!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
-				if (isset($url[1])) {
-					$contentName = $url[1];
-				}
-			} else {
-				$contentName = $url[0];
-			}
-		} else {
-			if (!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
-				$contentName = $url[2];
-			} elseif (isset($url[1])) {
-				$contentName = $url[1];
-			}
-		}
+		
+		$pureUrl = Configure::read('BcRequest.pureUrl');
+		$aryPureUrl = explode('/', $pureUrl);
+		$contentName = $aryPureUrl[0];
 
 		// プラグインと同じ名前のコンテンツ名の場合に正常に動作しないので
 		// とりあえずコメントアウト
