@@ -143,7 +143,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostTitle($post, $link = true) {
 		if ($link) {
-			return $this->getPostLink($post, $post['BlogPost']['name']);
+			return $this->getPostLinkUrl($post, $post['BlogPost']['name']);
 		} else {
 			return $post['BlogPost']['name'];
 		}
@@ -158,7 +158,7 @@ class BlogHelper extends AppHelper {
  * @access public
  */
 	public function postLink($post, $title, $options = array()) {
-		echo $this->getPostLink($post, $title, $options);
+		echo $this->getPostLinkUrl($post, $title, $options);
 	}
 
 /**
