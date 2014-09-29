@@ -75,7 +75,9 @@ class BcPluginAppController extends AppController {
 			return null;
 		}
 		
-		$pureUrl = Configure::read('BcRequest.pureUrl');
+		// コンテンツ名取得
+		$request = new CakeRequest($url);
+		$pureUrl = getPureUrl($request);
 		$aryPureUrl = explode('/', $pureUrl);
 		$contentName = $aryPureUrl[0];
 
