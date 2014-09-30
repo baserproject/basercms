@@ -445,7 +445,7 @@ class BcFormHelper extends FormHelper {
 		// 2014/03/23 ryuring CakePHP側が実装していたが互換性の為に残す
 		//if ($options['hiddenField']) {
 		// ---
-		if ($hidden || $options['hiddenField']) {
+		if ($hidden !== false && $options['hiddenField'] !== false) {
 		// <<<
 			$hiddenOptions = array(
 				'id' => $options['id'] . '_',
@@ -1283,9 +1283,11 @@ DOC_END;
  */
 	public function file($fieldName, $options = array()) {
 
+		$options = $this->_initInputField($fieldName, $options);
 		$entity = $this->entity();
 		$modelName = array_shift($entity);
 		$field = $this->field();
+		$Model = ClassRegistry::init($modelName);
 		if (empty($Model->Behaviors->BcUpload)) {
 			return parent::file($fieldName, $options);
 		}

@@ -145,7 +145,10 @@ class SiteConfigsController extends AppController {
 
 					// キャッシュをクリア
 					if ($this->request->data['SiteConfig']['maintenance'] ||
-						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id'])) {
+						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id']) ||
+						(!$smartphone && Configure::read('BcApp.smartphone')) || 
+						(!$mobile && Configure::read('BcApp.mobile'))
+					) {
 						clearViewCache();
 					}
 

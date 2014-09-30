@@ -351,7 +351,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
+		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogComment->find('first', array('conditions' => array('BlogComment.id' => $id), 'recursive' => -1));
 		$data['BlogComment']['status'] = $status;
 		$this->BlogComment->set($data);
