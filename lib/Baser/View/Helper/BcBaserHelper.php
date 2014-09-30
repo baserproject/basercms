@@ -131,7 +131,7 @@ class BcBaserHelper extends AppHelper {
 			return false;
 		}
 	}
-
+//------------------------------------------------------------------------------ ここまで完了
 /**
  * タイトルを設定する
  *
@@ -265,12 +265,17 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * パンくず用の配列を取得する
+ * 
  * 基本的には、コントローラーの crumbs プロパティで設定した値を取得する仕様だが
  * 事前に setCategoryTitle メソッドで出力内容をカスタマイズする事ができる
  *
- * @param mixid $categoryTitleOn
- * @return array 
- * @todo 処理内容がわかりにくいので変数名のリファクタリング要
+ * @param mixid $categoryTitleOn 親カテゴリの階層を表示するかどうか
+ * @return array パンくず用の配列
+ * @todo 
+ * HTMLレンダリングも含めた状態で取得できる、HtmlHelper::getCrumbs() とメソッド名が
+ * 同じで、 処理内容がわかりにくいので変数名のリファクタリング要。
+ * ただし、BcBaserHelper::getCrumbs() は、テーマで利用されている可能性が高いので、
+ * 後方互換を考慮する必要がある。
  */
 	public function getCrumbs($categoryTitleOn = null) {
 
@@ -279,19 +284,24 @@ class BcBaserHelper extends AppHelper {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
 
+		// 親となるパンくずを取得
 		$crumbs = array();
-		if ($this->_categoryTitleOn && $this->_categoryTitle) {
-			if ($this->_categoryTitle === true) {
-				$crumbs = $this->_View->getVar('crumbs');
+		if ($this->_categoryTitleOn) {
+			// true の場合は、コントローラーで設定された crumbs を取得
+			if($this->_categoryTitle === true) {
+				if( $this->_View->getVar('crumbs')) {
+					$crumbs = $this->_View->getVar('crumbs');
+				}
 			} else {
 				if (is_array($this->_categoryTitle)) {
 					$crumbs = $this->_categoryTitle;
 				} else {
-					$crumbs = array($this->_categoryTitle => '');
+					$crumbs = array('name' => $this->_categoryTitle, 'url' => '');
 				}
 			}
 		}
 
+		// カレントのページを追加
 		$contentsTitle = $this->getContentsTitle();
 		if ($contentsTitle) {
 			$crumbs[] = array('name' => $contentsTitle, 'url' => '');
@@ -1294,23 +1304,22 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * パンくずリストの要素を追加する
- * アクセス制限がかかっているリンクの場合でもタイトルを表示できるオプションを付加
- * $options に forceTitle を指定する事で表示しない設定も可能
+ * 
+ * デフォルトでアクセス制限がかかっているリンクの場合でもタイトルを表示する
+ * $options の forceTitle キー に false を指定する事で表示しない設定も可能
  *
- * @param string $name Text for link
- * @param string $link URL for link (if empty it won't be a link)
- * @param mixed $options Link attributes e.g. array('id'=>'selected')
+ * @param string $name パンくず用のテキスト
+ * @param string $link パンくず用のリンク（指定しない場合はリンクは設定しない）
+ * @param mixed $options リンクタグ用の属性
  * @return void
  */
-	public function addCrumb($name, $link = null, $options = null) {
+	public function addCrumb($name, $link = null, $options = array()) {
 
-		$_options = array('forceTitle' => true);
-		if ($options) {
-			$options = am($_options, $options);
-		} else {
-			$options = $_options;
-		}
+		$options = array_merge(array(
+			'forceTitle' => true
+		), $options);
 		$this->BcHtml->addCrumb($name, $link, $options);
+		
 	}
 
 /**

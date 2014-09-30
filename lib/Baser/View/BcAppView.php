@@ -24,6 +24,13 @@
 class BcAppView extends View {
 
 /**
+ * ページタイトル
+ * 
+ * @var string
+ */
+	public $pageTitle = null;
+	
+/**
  * List of variables to collect from the associated controller
  *
  * @var array

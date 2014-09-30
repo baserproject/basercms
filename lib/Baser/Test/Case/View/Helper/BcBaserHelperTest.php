@@ -12,7 +12,7 @@
  * @since			baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
-App::uses('View', 'View');
+App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 
 /**
@@ -35,7 +35,7 @@ class BcBaserHelperTest extends CakeTestCase {
  * setUp
  */
 	public function setUp() {
-		$this->BcBaser = new BcBaserHelper(new View());
+		$this->BcBaser = new BcBaserHelper(new BcAppView());
 	}
 	
 /**
@@ -53,6 +53,52 @@ class BcBaserHelperTest extends CakeTestCase {
 		$result = $this->BcBaser->getMenus();
 		$this->assertEqual(count($result), 7);
 		$this->assertEqual(isset($result[0]['Menu']['id']), true);
+	}
+	
+/**
+ * パンくずリストの配列を取得する
+ */
+	public function testGetCrumbs() {
+		
+		// パンくずが設定されてない場合
+		$result = $this->BcBaser->getCrumbs(true);
+		$this->assertEmpty($result);
+		
+		// パンくずが設定されている場合
+		$this->BcBaser->_View->set('crumbs', array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data')
+		));
+		$this->BcBaser->setTitle('会社沿革');
+		$result = $this->BcBaser->getCrumbs(true);
+		$expected = array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data'),
+			array('name' => '会社沿革', 'url' => '')
+		);
+		$this->assertEqual($result, $expected);
+		
+		// パンくずは設定されているが、オプションでカテゴリをオフにした場合
+		$result = $this->BcBaser->getCrumbs(false);
+		$expected = array(
+			array('name' => '会社沿革', 'url' => '')
+		);
+		$this->assertEqual($result, $expected);
+		
+	}
+	
+/**
+ * パンくずリストのHTMLレンダリング結果を取得する
+ */
+	public function testCrumbs() {
+		
+	}
+
+/**
+ * パンくずを追加する
+ */
+	public function testAddCrumbs() {
+		
 	}
 	
 }
