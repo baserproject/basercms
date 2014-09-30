@@ -131,15 +131,14 @@ class BcBaserHelper extends AppHelper {
 			return false;
 		}
 	}
-//------------------------------------------------------------------------------ ここまで完了
+	
 /**
  * タイトルを設定する
  *
- * @param string $title
+ * @param string $title タイトル
  * @return void
  */
 	public function setTitle($title, $categoryTitleOn = null) {
-
 		if (!is_null($categoryTitleOn)) {
 			$this->_categoryTitleOn = $categoryTitleOn;
 		}
@@ -147,52 +146,54 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * キーワードを設定する
+ * meta タグのキーワードを設定する
  *
- * @param string $title
+ * @param string $keywords キーワード（複数の場合はカンマで区切る）
  * @return void
  */
 	public function setKeywords($keywords) {
-
 		$this->_View->set('keywords', $keywords);
 	}
 
 /**
- * 説明文を設定する
+ * meta タグの説明文を設定する
  *
- * @param string $title
+ * @param string $description 説明文
  * @return void
  */
 	public function setDescription($description) {
-
 		$this->_View->set('description', $description);
 	}
 
 /**
  * レイアウトで利用する為の変数を設定する
- * $view->set のラッパー
+ * 
+ * View::set() のラッパー
  *
- * @param string $title
- * @param mixed $value
+ * @param string $key 変数名
+ * @param mixed $value 値
  * @return void
  */
 	public function set($key, $value) {
-
 		$this->_View->set($key, $value);
 	}
 
 /**
  * タイトルへのカテゴリタイトルの出力有無を設定する
- * コンテンツごとの個別設定
+ * 
+ * コンテンツごとに個別設定をする為に利用する。
+ * パンくずにも影響する。
  *
- * @param mixed $on boolean / 文字列（カテゴリ名として出力した文字を指定する）
+ * @param boolean|string|array $on true を指定した場合は、コントローラーで指定した crumbs を参照し、
+ *		文字列を指定した場合には、その文字列をカテゴリとして利用する。
+ *		パンくずにリンクをつける場合には、配列で指定する。 
+ *		（例） array('name' => '会社案内', 'url' => '/company/index')
  * @return void
  */
 	public function setCategoryTitle($on = true) {
-
 		$this->_categoryTitle = $on;
 	}
-
+//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * キーワードを取得する
  *
@@ -235,7 +236,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function getTitle($separator = '｜', $categoryTitleOn = null) {
 
-		$title = '';
+		$title = array();
 		$crumbs = $this->getCrumbs($categoryTitleOn);
 		if ($crumbs) {
 			$crumbs = array_reverse($crumbs);
@@ -245,22 +246,17 @@ class BcBaserHelper extends AppHelper {
 						continue;
 					}
 				}
-				if ($title) {
-					$title .= $separator;
-				}
-				$title .= $crumb['name'];
+				$title[] = $crumb['name'];
 			}
 		}
 
 		// サイトタイトルを追加
-		if ($title && !empty($this->siteConfig['name'])) {
-			$title .= $separator;
-		}
 		if (!empty($this->siteConfig['name'])) {
-			$title .= $this->siteConfig['name'];
+			$title[] = $this->siteConfig['name'];
 		}
 
-		return $title;
+		return implode($separator, $title);
+		
 	}
 
 /**
@@ -294,9 +290,9 @@ class BcBaserHelper extends AppHelper {
 				}
 			} else {
 				if (is_array($this->_categoryTitle)) {
-					$crumbs = $this->_categoryTitle;
-				} else {
-					$crumbs = array('name' => $this->_categoryTitle, 'url' => '');
+					$crumbs[] = $this->_categoryTitle;
+				} elseif($this->_categoryTitle) {
+					$crumbs[] = array('name' => $this->_categoryTitle, 'url' => '');
 				}
 			}
 		}
@@ -308,6 +304,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		return $crumbs;
+		
 	}
 
 /**
@@ -1277,10 +1274,12 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * パンくずリストを出力する
- * アクセス制限がかかっているリンクはテキストのみ表示する
+ * 
+ * 事前に BcBaserHelper::addCrumb() にて、パンくず情報を追加しておく必要がある。
+ * また、アクセス制限がかかっているリンクはテキストのみ表示する
  *
- * @param string $separator Text to separate crumbs.
- * @param string $startText This will be the first crumb, if false it defaults to first crumb in array
+ * @param string $separator パンくずの区切り文字
+ * @param string $startText トップページを先頭に追加する場合にはトップページのテキストを指定する
  */
 	public function crumbs($separator = '&raquo;', $startText = false) {
 

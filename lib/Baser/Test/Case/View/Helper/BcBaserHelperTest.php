@@ -48,12 +48,117 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 	
 /**
+ * コンストラクタ
+ */
+	public function testConstruct() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
  * メニューを取得する
  */
 	public function testGetMenus() {
 		$result = $this->BcBaser->getMenus();
 		$this->assertEqual(count($result), 7);
 		$this->assertEqual(isset($result[0]['Menu']['id']), true);
+	}
+	
+/**
+ * タイトルを設定する
+ */
+	public function testSetTitle() {
+		
+		// カテゴリがない場合
+		$this->BcBaser->setTitle('会社案内');
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社案内');
+		
+		// カテゴリがある場合
+		$this->BcBaser->_View->set('crumbs', array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data')
+		));
+		$this->BcBaser->setTitle('会社沿革');
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		
+		// カテゴリは存在するが、カテゴリの表示をオフにした場合
+		$this->BcBaser->setTitle('会社沿革', false);
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社沿革');
+		
+	}
+	
+/**
+ * meta タグのキーワードを設定する
+ */
+	public function testSetKeywords() {
+		$this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
+		$result = $this->BcBaser->getKeywords();
+		$this->assertEqual($result, 'baserCMS,国産,オープンソース');
+	}
+	
+/**
+ * meta タグの説明文を設定する
+ */
+	public function testSetDescription() {
+		$this->BcBaser->setDescription('国産オープンソースのホームページです');
+		$result = $this->BcBaser->getDescription();
+		$this->assertEqual($result, '国産オープンソースのホームページです');
+	}
+	
+/**
+ * レイアウトで利用する為の変数を設定する
+ */
+	public function testSet() {
+		$this->BcBaser->set('keywords', 'baserCMS,国産,オープンソース');
+		$result = $this->BcBaser->getKeywords();
+		$this->assertEqual($result, 'baserCMS,国産,オープンソース');
+	}
+	
+/**
+ * タイトルへのカテゴリタイトルの出力有無を設定する
+ */
+	public function testSetCategoryTitle() {
+		
+		$this->BcBaser->_View->set('crumbs', array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data')
+		));
+		$this->BcBaser->setTitle('会社沿革');
+		
+		// カテゴリをオフにした場合
+		$this->BcBaser->setCategoryTitle(false);
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社沿革');
+		
+		// カテゴリをオンにした場合
+		$this->BcBaser->setCategoryTitle(true);
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		
+		// カテゴリを指定した場合
+		$this->BcBaser->setCategoryTitle('店舗案内');
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社沿革｜店舗案内');
+		
+		// パンくず用にリンクも指定した場合
+		$this->BcBaser->setCategoryTitle(array(
+			'name' => '店舗案内', 
+			'url' => '/shop/index'
+		));
+		$result = $this->BcBaser->getCrumbs();
+		$this->assertEqual($result, array(
+			array(
+				'name'	=> '店舗案内',
+				'url'	=> '/shop/index'
+			),
+			array(
+				'name'	=> '会社沿革',
+				'url'	=> ''
+			)
+		));
+
 	}
 	
 /**
