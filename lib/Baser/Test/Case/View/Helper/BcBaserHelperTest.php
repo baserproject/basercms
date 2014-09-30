@@ -121,12 +121,43 @@ class BcBaserHelperTest extends BaserTestCase {
 		);
 		$this->assertTags($result, $expected);
 		
+		// 区切り文字を変更、先頭にホームを追加
+		ob_start();
+		$this->BcBaser->crumbs(' | ', 'ホーム');
+		$result = ob_get_clean();
+		$expected = array(
+			array('a' => array('href' => '/')),
+			'ホーム',
+			'/a',
+			' | ',
+			array('a' => array('href' => '/company/index')),
+			'会社案内',
+			'/a',
+			' | ',
+			array('a' => array('href' => '/company/data')),
+			'会社データ',
+			'/a',
+			' | 会社沿革'	
+		);
+		$this->assertTags($result, $expected);
+		
 	}
 
 /**
  * パンくずを追加する
  */
 	public function testAddCrumbs() {
+		
+		$this->BcBaser->addCrumb('会社案内', '/company/index');
+		ob_start();
+		$this->BcBaser->crumbs();
+		$result = ob_get_clean();
+		$expected = array(
+			array('a' => array('href' => '/company/index')),
+			'会社案内',
+			'/a'
+		);
+		$this->assertTags($result, $expected);
 		
 	}
 	

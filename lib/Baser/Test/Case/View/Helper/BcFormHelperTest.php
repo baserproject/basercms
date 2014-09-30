@@ -120,6 +120,7 @@ class BcFormHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testFileUploadField() {
+		
 		// 通常
 		$result = $this->BcForm->file('Contact.upload');
 		$expected = array(
@@ -130,6 +131,7 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 
 		// TODO データと画像が既に存在する場合についてテストを記述する
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		
 	}
 	
