@@ -15,11 +15,11 @@
 class BaserTestCase extends CakeTestCase {
 	
 /**
- * setUp method
+ * construct
  *
  * @return void
  */
-	public function run(PHPUnit_Framework_TestResult $result = null) {
+	public function __construct($name = NULL, array $data = array(), $dataName = '') {
 		// =====================================================================
 		// Router::url() を内部的に利用するテストを実施した場合、Baser/Config/routes.php 
 		// が呼び出され、そこで利用されている PluginContent モデルを利用する事になる。
@@ -30,6 +30,6 @@ class BaserTestCase extends CakeTestCase {
 		if(!isset($this->fixtures) || !in_array('baser.PluginContent', $this->fixtures)) {
 			$this->fixtures[] = 'baser.PluginContent';
 		}
-		parent::run($result);
+		parent::__construct($name, $data, $dataName);
 	}
 }

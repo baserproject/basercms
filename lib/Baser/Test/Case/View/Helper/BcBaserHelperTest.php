@@ -2,16 +2,16 @@
 /**
  * test for BcBaserHelper
  *
- * PHP versions 5
- *
- * baserCMS : Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.6
+ * @package			Baser.Test.Case.View.Helper
+ * @since           baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 
@@ -21,14 +21,15 @@ App::uses('BcBaserHelper', 'View/Helper');
  * @package       Baser.Test.Case
  * @property      BcBaserHelper $BcBaser
  */
-class BcBaserHelperTest extends CakeTestCase {
+class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * Fixtures
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Menu'
+		'baser.Menu',
+		'baser.Page'
 	);
 	
 /**
@@ -88,9 +89,37 @@ class BcBaserHelperTest extends CakeTestCase {
 	}
 	
 /**
- * パンくずリストのHTMLレンダリング結果を取得する
+ * パンくずリストのHTMLレンダリング結果を表示する
  */
 	public function testCrumbs() {
+		
+		// パンくずが設定されてない場合
+		$result = $this->BcBaser->crumbs();
+		$this->assertEmpty($result);
+		
+		// パンくずが設定されている場合
+		$crumbs = array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data'),
+			array('name' => '会社沿革', 'url' => '')
+		);
+		foreach($crumbs as $crumb) {
+			$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
+		}
+		ob_start();
+		$this->BcBaser->crumbs();
+		$result = ob_get_clean();
+		$expected = array(
+			array('a' => array('href' => '/company/index')),
+			'会社案内',
+			'/a',
+			'&raquo;',
+			array('a' => array('href' => '/company/data')),
+			'会社データ',
+			'/a',
+			'&raquo;会社沿革'		
+		);
+		$this->assertTags($result, $expected);
 		
 	}
 

@@ -1281,7 +1281,6 @@ class BcBaserHelper extends AppHelper {
  *
  * @param string $separator Text to separate crumbs.
  * @param string $startText This will be the first crumb, if false it defaults to first crumb in array
- * @return string
  */
 	public function crumbs($separator = '&raquo;', $startText = false) {
 
