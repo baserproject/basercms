@@ -162,6 +162,67 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 	
 /**
+ * meta タグ用のキーワードを取得する
+ */
+	public function testGetKeywords() {
+		
+		// 設定なし
+		$result = $this->BcBaser->getKeywords();
+		$this->assertEmpty($result);
+		
+		// 設定あり
+		$this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
+		$result = $this->BcBaser->getKeywords();
+		$this->assertEqual($result, 'baserCMS,国産,オープンソース');
+		
+	}
+	
+/**
+ * meta タグ用のページ説明文を取得する
+ */
+	public function getDescription() {
+		
+		// 設定なし
+		$result = $this->BcBaser->getDescription();
+		$this->assertEmpty($result);
+		
+		// 設定あり
+		$this->BcBaser->setDescription('国産オープンソースのホームページです');
+		$result = $this->BcBaser->getDescription();
+		$this->assertEqual($result, '国産オープンソースのホームページです');
+		
+	}
+	
+/**
+ * タイトルタグを取得する
+ */
+	public function testGetTitle() {
+		
+		// 通常
+		$this->BcBaser->_View->set('crumbs', array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data')
+		));
+		$this->BcBaser->setTitle('会社沿革');
+		$result = $this->BcBaser->getTitle();
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		
+		// 区切り文字を ≫ に変更
+		$result = $this->BcBaser->getTitle('≫');
+		$this->assertEqual($result, '会社沿革≫会社データ≫会社案内');
+		
+		// カテゴリタイトルを除外
+		$result = $this->BcBaser->getTitle('｜', false);
+		$this->assertEqual($result, '会社沿革');
+		
+		// カテゴリが対象ページと同じ場合に省略する
+		$this->BcBaser->setTitle('会社データ');
+		$result = $this->BcBaser->getTitle('｜', true);
+		$this->assertEqual($result, '会社データ｜会社案内');
+				
+	}
+	
+/**
  * パンくずリストの配列を取得する
  */
 	public function testGetCrumbs() {
@@ -191,6 +252,94 @@ class BcBaserHelperTest extends BaserTestCase {
 		);
 		$this->assertEqual($result, $expected);
 		
+	}
+	
+/**
+ * コンテンツタイトルを取得する
+ */
+	public function testGetContensTitlte() {
+		// 設定なし
+		$result = $this->BcBaser->getContentsTitle();
+		$this->assertEmpty($result);
+		
+		// 設定あり
+		$this->BcBaser->setTitle('会社データ');
+		$result = $this->BcBaser->getContentsTitle();
+		$this->assertEqual($result, '会社データ');
+	}
+
+/**
+ * コンテンツタイトルを出力する
+ */
+	public function testContentsTitle() {
+		$this->BcBaser->setTitle('会社データ');
+		ob_start();
+		$this->BcBaser->contentsTitle();
+		$result = ob_get_clean();
+		$this->assertEqual($result, '会社データ');
+	}
+	
+/**
+ * タイトルタグを出力する
+ */
+	public function testTitle() {
+		$this->BcBaser->setTitle('会社データ');
+		ob_start();
+		$this->BcBaser->title();
+		$result = ob_get_clean();
+		$this->assertEqual($result, "<title>会社データ</title>\n");
+	}
+	
+/**
+ * キーワード用のメタタグを出力する
+ */
+	public function testMetaKeywords() {
+		$this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
+		ob_start();
+		$this->BcBaser->metaKeywords();
+		$result = ob_get_clean();
+		$excepted = array(
+			'meta' => array(
+				'name'		=> 'keywords',
+				'content'	=> 'baserCMS,国産,オープンソース'
+			)
+		);
+		$this->assertTags($result, $excepted);
+	}
+	
+/**
+ * ページ説明文用のメタタグを出力する
+ */
+	public function testMetaDescription() {
+		$this->BcBaser->setDescription('国産オープンソースのホームページです');
+		ob_start();
+		$this->BcBaser->metaDescription();
+		$result = ob_get_clean();
+		$excepted = array(
+			'meta' => array(
+				'name'		=> 'description',
+				'content'	=> '国産オープンソースのホームページです'
+			)
+		);
+		$this->assertTags($result, $excepted);
+	}
+	
+/**
+ * RSSフィードのリンクタグを出力する
+ */
+	public function testRss() {
+		ob_start();
+		$this->BcBaser->rss('ブログ', 'http://localhost/blog/');
+		$result = ob_get_clean();
+		$excepted = array(
+			'link' => array(
+				'href'	=> 'http://localhost/blog/',
+				'type'	=> 'application/rss+xml',
+				'rel'	=> 'alternate',
+				'title'	=> 'ブログ'
+			)
+		);
+		$this->assertTags($result, $excepted);
 	}
 	
 /**

@@ -193,11 +193,11 @@ class BcBaserHelper extends AppHelper {
 	public function setCategoryTitle($on = true) {
 		$this->_categoryTitle = $on;
 	}
-//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
+
 /**
- * キーワードを取得する
+ * meta タグ用のキーワードを取得する
  *
- * @return string メタタグ用のkeywordを返す
+ * @return string meta タグ用のキーワード
  */
 	public function getKeywords() {
 
@@ -208,12 +208,13 @@ class BcBaserHelper extends AppHelper {
 			$keywords = $this->siteConfig['keyword'];
 		}
 		return $keywords;
+		
 	}
 
 /**
- * ページ説明文を取得する
+ * meta タグ用のページ説明文を取得する
  *
- * @return string メタタグ用のディスクリプションを返す
+ * @return string meta タグ用の説明文
  */
 	public function getDescription() {
 
@@ -224,14 +225,16 @@ class BcBaserHelper extends AppHelper {
 			$description = $this->siteConfig['description'];
 		}
 		return $description;
+		
 	}
 
 /**
  * タイトルタグを取得する
+ * 
  * ページタイトルと直属のカテゴリ名が同じ場合は、ページ名を省略する
  *
- * @param string $separator
- * @param string $categoryTitleOn
+ * @param string $separator 区切り文字
+ * @param string $categoryTitleOn カテゴリタイトルを表示するかどうか boolean で指定
  * @return string メタタグ用のタイトルを返す
  */
 	public function getTitle($separator = '｜', $categoryTitleOn = null) {
@@ -310,7 +313,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * コンテンツタイトルを取得する
  * 
- * @return string コンテンツのタイトルを返す
+ * @return string コンテンツタイトル
  */
 	public function getContentsTitle() {
 
@@ -318,9 +321,12 @@ class BcBaserHelper extends AppHelper {
 		if ($this->_View->pageTitle) {
 			$contentsTitle = $this->_View->pageTitle;
 		}
-		if ($this->_View->name != 'CakeError' && !empty($contentsTitle)) {
+		if ($this->_View->name != 'CakeError') {
 			return $contentsTitle;
+		} else {
+			return '';
 		}
+		
 	}
 
 /**
@@ -329,19 +335,17 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function contentsTitle() {
-
 		echo $this->getContentsTitle();
 	}
 
 /**
  * タイトルタグを出力する
  *
- * @param string $separator
- * @param string $categoryTitleOn
+ * @param string $separator 区切り文字
+ * @param string $categoryTitleOn カテゴリを表示するかどうか boolean で指定
  * @return void
  */
 	public function title($separator = '｜', $categoryTitleOn = null) {
-
 		echo '<title>' . strip_tags($this->getTitle($separator, $categoryTitleOn)) . "</title>\n";
 	}
 
@@ -351,7 +355,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function metaKeywords() {
-
 		echo $this->BcHtml->meta('keywords', $this->getkeywords()) . "\n";
 	}
 
@@ -361,22 +364,20 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function metaDescription() {
-
 		echo $this->BcHtml->meta('description', strip_tags($this->getDescription())) . "\n";
 	}
 
 /**
  * RSSフィードのリンクタグを出力する
  *
- * @param string $title
- * @param string $link
+ * @param string $title RSSのタイトル
+ * @param string $link RSSのURL
  * @return void
  */
 	public function rss($title, $link) {
-
 		echo $this->BcHtml->meta($title, $link, array('type' => 'rss')) . "\n";
 	}
-
+//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * トップページかどうか判断する
  *
