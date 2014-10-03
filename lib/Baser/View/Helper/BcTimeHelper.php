@@ -284,7 +284,7 @@ class BcTimeHelper extends TimeHelper {
  * 
  * @param string　(null|string) 日付文字列 "+1 day" / "YYYY/MM/DD"など
  * @param type $suffix 接尾語(曜日 など)
- * @return string 曜日頭文字 | 空白
+ * @return string 曜日 | 空白
  */
 	public function getJpWeek($dateStr = null, $suffix = '') {
 		// nullの場合本日の曜日を取得
