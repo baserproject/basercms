@@ -282,7 +282,7 @@ class BcTimeHelper extends TimeHelper {
  * - 引数により、指定しない場合は本日の曜日
  * - 文字列で、strtotime関数で解析可能な場合は解析された日付の曜日
  * 
- * @param string　(null|string) 日付文字列 "+1 day" / "YYYY/MM/DD"など
+ * @param string $dataStr (null|string) 日付文字列 "+1 day" / "YYYY/MM/DD"など
  * @param type $suffix 接尾語(曜日 など)
  * @return string 曜日 | 空白
  */
