@@ -1702,8 +1702,10 @@ END_FLASH;
  * @return boolean 
  */
 	public function isCurrentUrl($url) {
-
-		return ($this->getUrl($url) == $this->here);
+		$pattern = '/\/$|\/index$/';
+		$shortenedUrl = preg_replace($pattern, '', $this->getUrl($url));
+		$shortenedHere = preg_replace($pattern, '', $this->request->here);
+		return ($shortenedUrl === $shortenedHere);
 	}
 
 /**
