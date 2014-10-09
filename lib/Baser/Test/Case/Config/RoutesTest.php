@@ -20,7 +20,7 @@ App::uses('Router', 'Routing');
  * @package Baser.Test.Case.Config
  *
  */
-class BaserRoutesTest extends BaserTestCase {
+class RoutesTest extends BaserTestCase {
 
 /**
  * Fixtures
@@ -145,7 +145,6 @@ class BaserRoutesTest extends BaserTestCase {
  * @return array
  *
  * @todo ページカテゴリを含むテスト追加。PageCategoryのフィクスチャを変更してテスト専用のデータにするべきか
- * @todo モバイル・スマホ向けのテスト追加。bootstrap.phpのにおける処理が関わっているので後回し
  */
 	public function pageDisplayDataProvider() {
 		return array(
@@ -155,6 +154,101 @@ class BaserRoutesTest extends BaserTestCase {
 			array('/recruit', array('recruit'))
 		);
 	}
+
+/**
+ * ユーザーエージェント判定に利用される値をConfigureに設定
+ * bootstrap.phpで行われている処理の代替
+ *
+ * @param string $key エージェントを表す文字列キー
+ * @return void
+ */
+    protected function _setAgent($key) {
+        $agent = Configure::read("BcAgent.{$key}");
+        if(empty($agent)) {
+            return;
+        }
+        Configure::write('BcRequest.agent', $key);
+        Configure::write('BcRequest.agentPrefix', $agent['prefix']);
+        Configure::write('BcRequest.agentAlias', $agent['alias']);
+    }
+
+/**
+ * [モバイル]固定ページのルーティングテスト
+ *
+ * @param string $url URL
+ * @param string $pass pass
+ * @return void
+ *
+ * @dataProvider mobilePageDisplayDataProvider
+ */
+    public function testMobilePageDisplay($url, $pass) {
+        $this->_setAgent('mobile');
+        $params = $this->_getParams($url);
+        $expects = array(
+            'controller' => 'pages',
+            'action' => 'mobile_display',
+            'plugin' => null,
+            'prefix' => 'mobile',
+            'named' => array(),
+            'pass' => $pass,
+        );
+        $this->assertEquals($expects, $params);
+    }
+
+/**
+ * [モバイル]固定ページ用データプロバイダ
+ *
+ * @return array
+ *
+ * @todo ページカテゴリを含むテスト追加。
+ */
+    public function mobilePageDisplayDataProvider() {
+        return array(
+            array('/m/', array('index')),
+            array('/m/company', array('company')),
+            array('/m/service', array('service')),
+            array('/m/recruit', array('recruit'))
+        );
+    }
+
+/**
+ * [スマートフォン]固定ページのルーティングテスト
+ *
+ * @param string $url URL
+ * @param string $pass pass
+ * @return void
+ *
+ * @dataProvider smartphonePageDisplayDataProvider
+ */
+    public function testSmartphonePageDisplay($url, $pass) {
+        $this->_setAgent('smartphone');
+        $params = $this->_getParams($url);
+        $expects = array(
+            'controller' => 'pages',
+            'action' => 'smartphone_display',
+            'plugin' => null,
+            'prefix' => 'smartphone',
+            'named' => array(),
+            'pass' => $pass,
+        );
+        $this->assertEquals($expects, $params);
+    }
+
+/**
+ * [スマートフォン]固定ページ用データプロバイダ
+ *
+ * @return array
+ *
+ * @todo ページカテゴリを含むテスト追加。
+ */
+    public function smartphonePageDisplayDataProvider() {
+        return array(
+            array('/s/', array('index')),
+            array('/s/company', array('company')),
+            array('/s/service', array('service')),
+            array('/s/recruit', array('recruit'))
+        );
+    }
 
 /**
  * プラグインコンテンツのルーティングテスト
