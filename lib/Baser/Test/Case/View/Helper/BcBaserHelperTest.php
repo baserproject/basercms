@@ -29,13 +29,15 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.Menu',
-		'baser.Page'
+		'baser.Page',
+		'baser.PluginContent'
 	);
 	
 /**
  * setUp
  */
 	public function setUp() {
+		parent::setUp();
 		$this->BcBaser = new BcBaserHelper(new BcAppView());
 	}
 	
@@ -414,5 +416,62 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 		
 	}
-	
+
+/**
+ * 指定されたURLに対応しRouterパース済のCakeRequestのインスタンスを返す
+ *
+ * @param string $url URL
+ * @return CakeRequest
+ */
+	protected function _getRequest($url) {
+		$request = new CakeRequest($url);
+		Router::setRequestInfo($request);
+		$params = Router::parse($request->url);
+		$request->addParams($params);
+		return $request;
+	}
+
+/**
+ * 指定したURLが現在のURLかどうか判定する
+ *
+ * @param string $currentUrl 現在のURL
+ * @param string $url 引数として与えられるURL
+ * @param bool $expects　メソッドの返り値
+ *
+ * @dataProvider isCurrentUrlDataProvider
+ */
+	public function testIsCurrentUrl($currentUrl, $url, $expects) {
+		$this->BcBaser->request = $this->_getRequest($currentUrl);
+		Debugger::dump($this->BcBaser->request);
+		$this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
+	}
+/**
+ * isCurrentUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function isCurrentUrlDataProvider() {
+		return array(
+			array('/', '/', true),
+			array('/index', '/', true),
+			array('/', '/index', true),
+			array('/company', '/company', true),
+			array('/news', '/news', true),
+			array('/news/', '/news', true),
+			array('/news/index', '/news', true),
+			array('/news', '/news/', true),
+			array('/news/', '/news/', true),
+			array('/news/index', '/news/', true),
+			array('/news', '/news/index', true),
+			array('/news/', '/news/index', true),
+			array('/news/index', '/news/index', true),
+			array('/', '/company', false),
+			array('/company', '/', false),
+			array('/news', '/', false)
+		);
+	}
+
+/**
+ *
+ */
 }
