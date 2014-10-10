@@ -533,7 +533,7 @@ class BcAppController extends Controller {
             'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
         );
 
-        $message = "Securityコンポーネントにより不正なリクエストと判断されました。";
+        $message = "不正なリクエストと判断されました。";
 
         if(array_key_exists($err, $errorMessages)) {
             $message .= "(type:{$err})" . $errorMessages[$err];
