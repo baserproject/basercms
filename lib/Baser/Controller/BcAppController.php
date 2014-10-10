@@ -395,11 +395,13 @@ class BcAppController extends Controller {
 			}
 		}
 
+        //Securityコンポーネント設定
+        $this->Security->blackHoleCallback = '_blackHoleCallback';
+
 		// SSLリダイレクト設定
 		if (Configure::read('BcApp.adminSsl') && !empty($this->request->params['admin'])) {
 			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
 			if ($adminSslMethods) {
-				$this->Security->blackHoleCallback = '_sslFail';
 				$this->Security->requireSecure = $adminSslMethods;
 			}
 		}
@@ -504,6 +506,41 @@ class BcAppController extends Controller {
 			$SiteConfig->saveKeyValue($data);
 		}
 	}
+
+/**
+ * Securityコンポーネントのブラックホールからのコールバック
+ *
+ * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
+ * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
+ *
+ * @param	string	$err エラーの種類
+ * @throws BadRequestException
+ */
+    public function _blackHoleCallback($err) {
+
+        //SSL制限違反は別処理
+        if($err === 'secure') {
+            $this->_sslFail($err);
+            return;
+        }
+
+        $errorMessages = array(
+            'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
+            'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
+            'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
+            'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+            'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+            'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
+        );
+
+        $message = "Securityコンポーネントにより不正なリクエストと判断されました。";
+
+        if(array_key_exists($err, $errorMessages)) {
+            $message .= "(type:{$err})" . $errorMessages[$err];
+        }
+
+        throw new BadRequestException($message);
+    }
 
 /**
  * SSLエラー処理
