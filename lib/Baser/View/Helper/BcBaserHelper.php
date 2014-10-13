@@ -471,21 +471,22 @@ class BcBaserHelper extends AppHelper {
 	public function getUrl($url = null, $full = false, $sessionId = true) {
 		return parent::url($url, $full, $sessionId);
 	}
-//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
+
 /**
- * エレメント（部品）テンプレートを取得する
- * View::elementを取得するだけのラッパー
+ * エレメントテンプレートのレンダリング結果を取得する
  *
- * @param string $name
- * @param array $data オプションのパラメータ、初期値は arrau()
- * @param array $options オプションのパラメータ、初期値は arrau()
- * @return string
+ * @param string $name エレメント名
+ * @param array $data エレメントで参照するデータ
+ * @param array $options オプションのパラメータ
+ *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ * ※ その他のパラメータについては、View::element() を参照
+ * @return string エレメントのレンダリング結果
  */
 	public function getElement($name, $data = array(), $options = array()) {
 
 		$options = array_merge(array(
 			'subDir' => true
-			), $options);
+		), $options);
 
 		if (isset($options['plugin']) && !$options['plugin']) {
 			unset($options['plugin']);
@@ -511,10 +512,7 @@ class BcBaserHelper extends AppHelper {
 			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 
-		extract($options);
-
-
-		if ($subDir === false) {
+		if ($options['subDir'] === false) {
 			if (!$this->_subDir && $this->_View->subDir) {
 				$this->_subDir = $this->_View->subDir;
 			}
@@ -547,7 +545,7 @@ class BcBaserHelper extends AppHelper {
 
 		return $out;
 	}
-
+//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * エレメント（部品）テンプレートを出力する
  * View::elementを出力するだけのラッパー
@@ -1289,7 +1287,7 @@ class BcBaserHelper extends AppHelper {
 		} else {
 			$contentsName = Inflector::camelize($contentsName);
 		}
-
+var_dump($contentsName);
 		return $contentsName;
 	}
 

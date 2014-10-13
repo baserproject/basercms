@@ -349,35 +349,35 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testIsHome() {
 		// PCページ
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		$this->assertEqual($this->BcBaser->isHome() , true);
-		$this->BcBaser->request = new CakeRequest('/index');
+		$this->BcBaser->request = $this->_getRequest('/index');
 		$this->assertEqual($this->BcBaser->isHome() , true);
-		$this->BcBaser->request = new CakeRequest('/news/index');
+		$this->BcBaser->request = $this->_getRequest('/news/index');
 		$this->assertEqual($this->BcBaser->isHome() , false);
 		// モバイルページ
-		Configure::write('BcRequest.agentAlias', 'm');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->_setAgent('mobile');
+		$this->BcBaser->request = $this->_getRequest('/');
 		$this->assertEqual($this->BcBaser->isHome() , false);
-		$this->BcBaser->request = new CakeRequest('/s/');
+		$this->BcBaser->request = $this->_getRequest('/s/');
 		$this->assertEqual($this->BcBaser->isHome() , false);
-		$this->BcBaser->request = new CakeRequest('/m/');
+		$this->BcBaser->request = $this->_getRequest('/m/');
 		$this->assertEqual($this->BcBaser->isHome() , true);
-		$this->BcBaser->request = new CakeRequest('/m/index');
+		$this->BcBaser->request = $this->_getRequest('/m/index');
 		$this->assertEqual($this->BcBaser->isHome() , true);
-		$this->BcBaser->request = new CakeRequest('/m/news/index');
+		$this->BcBaser->request = $this->_getRequest('/m/news/index');
 		$this->assertEqual($this->BcBaser->isHome() , false);
 		// スマートフォンページ
-		Configure::write('BcRequest.agentAlias', 's');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->_setAgent('smartphone');
+		$this->BcBaser->request = $this->_getRequest('/');
 		$this->assertEqual($this->BcBaser->isHome() , false);
-		$this->BcBaser->request = new CakeRequest('/m/');
+		$this->BcBaser->request = $this->_getRequest('/m/');
 		$this->assertEqual($this->BcBaser->isHome() , false);
-		$this->BcBaser->request = new CakeRequest('/s/');
+		$this->BcBaser->request = $this->_getRequest('/s/');
 		$this->assertEqual($this->BcBaser->isHome() , true);
-		$this->BcBaser->request = new CakeRequest('/s/index');
+		$this->BcBaser->request = $this->_getRequest('/s/index');
 		$this->assertEqual($this->BcBaser->isHome() , true);
-		$this->BcBaser->request = new CakeRequest('/s/news/index');
+		$this->BcBaser->request = $this->_getRequest('/s/news/index');
 		$this->assertEqual($this->BcBaser->isHome() , false);
 		Configure::write('BcRequest.agentAlias', '');
 	}
@@ -388,21 +388,21 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testRoot() {
 		// ノーマル
 		Configure::write('App.baseUrl', '');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		ob_start();
 		$this->BcBaser->root();
 		$result = ob_get_clean();
 		$this->assertEqual($result, '/');
 		// スマートURLオフ
 		Configure::write('App.baseUrl', 'index.php');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		ob_start();
 		$this->BcBaser->root();
 		$result = ob_get_clean();
 		$this->assertEqual($result, '/index.php/');
 		// サブフォルダ+スマートURLオフ
 		Configure::write('App.baseUrl', '/basercms/index.php');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		ob_start();
 		$this->BcBaser->root();
 		$result = ob_get_clean();
@@ -415,17 +415,17 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function getRoot() {
 		// ノーマル
 		Configure::write('App.baseUrl', '');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		$result = $this->BcBaser->getRoot();
 		$this->assertEqual($result, '/');
 		// スマートURLオフ
 		Configure::write('App.baseUrl', 'index.php');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		$this->BcBaser->getRoot();
 		$this->assertEqual($result, '/index.php/');
 		// サブフォルダ+スマートURLオフ
 		Configure::write('App.baseUrl', '/basercms/index.php');
-		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->request = $this->_getRequest('/');
 		$this->BcBaser->getRoot();
 		$this->assertEqual($result, '/basercms/index.php/');
 	}
@@ -438,7 +438,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testUrl() {
 		ob_start();
 		Configure::write('App.baseUrl', '/basercms/index.php');
-		Router::setRequestInfo(new CakeRequest('/'));
+		$this->BcBaser->request = $this->_getRequest('/');
 		$this->BcBaser->url('/about');
 		$result = ob_get_clean();
 		$this->assertEqual($result, '/basercms/index.php/about');
@@ -480,7 +480,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		
 		// --- サブフォルダ+スマートURLオフ ---
 		Configure::write('App.baseUrl', '/basercms/index.php');
-		Router::setRequestInfo(new CakeRequest('/'));
+		$this->BcBaser->request = $this->_getRequest('/');
 		
 		// ノーマル
 		$result = $this->BcBaser->getUrl('/about');
@@ -504,6 +504,29 @@ class BcBaserHelperTest extends BaserTestCase {
 			1
 		));
 		$this->assertEqual($result, '/basercms/index.php/admin/blog/blog_posts/edit/1');
+		
+	}
+	
+/**
+ * エレメントテンプレートのレンダリング結果を取得する
+ */
+	public function testGetElement() {
+		
+		// フロント
+		$result = $this->BcBaser->getElement(('global_menu'));
+		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+		
+		// ### 管理画面
+		$View = new BcAppView();
+		$View->subDir = 'admin';
+		$this->BcBaser = new BcBaserHelper($View);
+		// 管理画面用のテンプレートがなくフロントのテンプレートがある場合
+		$result = $this->BcBaser->getElement(('global_menu'));
+		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+		
+		// フロントのテンプレートに切り替えた場合
+		$result = $this->BcBaser->getElement(('crumbs'), array(), array('subDir' => false));
+		$this->assertEqual($result, '');
 		
 	}
 	
@@ -591,7 +614,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		Router::setRequestInfo($request);
 		$params = Router::parse($request->url);
 		$request->addParams($params);
-		var_dump($request);
 		return $request;
 	}
 
