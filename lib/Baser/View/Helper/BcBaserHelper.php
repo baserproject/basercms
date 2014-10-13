@@ -377,7 +377,7 @@ class BcBaserHelper extends AppHelper {
 	public function rss($title, $link) {
 		echo $this->BcHtml->meta($title, $link, array('type' => 'rss')) . "\n";
 	}
-//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
+
 /**
  * トップページかどうか判断する
  *
@@ -395,63 +395,83 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  */
 	public function isHome() {
-
-		// TODO 2013/07/29 ryuring
-		// CakeRequestの仕様として、トップページの場合は、url には、false が設定される。
-		// here に変更したいところだが、スマートURLオフの場合、index.php も含まれていたような気がする。
-		// スマートURLオフでの動作が確認できるまで見送り。
-		return ($this->request->url == false ||
-			$this->request->url == 'index' ||
-			$this->request->url == Configure::read('BcRequest.agentAlias') . '/' ||
-			$this->request->url == Configure::read('BcRequest.agentAlias') . '/index');
+		if(!Configure::read('BcRequest.agentAlias')) {
+			return (
+				$this->request->url == false ||
+				$this->request->url == 'index'
+			);
+		} else {
+			return (
+				$this->request->url == Configure::read('BcRequest.agentAlias') . '/' ||
+				$this->request->url == Configure::read('BcRequest.agentAlias') . '/index'
+			);
+		}		
 	}
 
 /**
  * baserCMSが設置されているパスを出力する
+ * 
+ * BcBaserHelper::getRoot() をラッピングして出力するだけの処理
  *
  * @return void
  */
 	public function root() {
-
 		echo $this->getRoot();
 	}
 
 /**
  * baserCMSが設置されているパスを取得する
+ * 
+ * 画像タグやリンクタグを出力する際に、baserCMSの設置フォルダに
+ * 依存せずパスを出力する為に利用する。
+ * 
+ * 《利用例》
+ * <img src="<?php echo $this->BcBaser->root() ?>img/test.png" />
+ * 
+ * 《basercmsというフォルダに設置している場合の取得例》
+ * /basercms/
+ * 
+ * 《basercmsというフォルダに設置し、スマートURLオフの場合の取得例》
+ * /basercms/index.php/
  *
  * @return string
  */
 	public function getRoot() {
-
 		return $this->request->base . '/';
 	}
 
 /**
- * ベースを考慮したURLを出力
+ * baserCMSの設置フォルダを考慮したURLを出力する
+ * 
+ * 《利用例》
+ * <a href="<?php $this->BcBaser->getUrl('/about') ?>">会社概要</a>
  *
- * @param string $url オプションのパラメータ、初期値は null
- * @param boolean $full オプションのパラメータ、初期値は false
- * @param boolean $sessionId オプションのパラメータ、初期値は true
+ * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
+ *		省略した場合には、PC用のトップページのURLを出力する
+ * @param boolean $full httpから始まるURLを取得するかどうか
+ * @param boolean $sessionId セションIDを付加するかどうか
  * @return void
  */
 	public function url($url = null, $full = false, $sessionId = true) {
-
 		echo $this->getUrl($url, $full, $sessionId);
 	}
 
 /**
- * 相対パスから実際のパスを取得する
+ * baserCMSの設置フォルダを考慮したURLを取得する
+ * 
+ * 《利用例》
+ * <a href="<?php echo $this->BcBaser->getUrl('/about') ?>">会社概要</a>
  *
- * @param string $url 
- * @param boolean $full オプションのパラメータ、初期値は false
- * @param boolean $sessionId オプションのパラメータ、初期値は true
- * @manual
+ * @param mixed $url baserCMS設置フォルダからの絶対URL、もしくは配列形式のURL情報
+ *		省略した場合には、PC用のトップページのURLを取得する
+ * @param boolean $full httpから始まるURLを取得するかどうか
+ * @param boolean $sessionId セションIDを付加するかどうか
+ * @return string URL
  */
-	public function getUrl($url, $full = false, $sessionId = true) {
-
+	public function getUrl($url = null, $full = false, $sessionId = true) {
 		return parent::url($url, $full, $sessionId);
 	}
-
+//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * エレメント（部品）テンプレートを取得する
  * View::elementを取得するだけのラッパー

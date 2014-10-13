@@ -44,6 +44,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function tearDown() {
 		unset($this->BcBaser);
+		Router::reload();
 		parent::tearDown();
 	}
 	
@@ -340,6 +341,169 @@ class BcBaserHelperTest extends BaserTestCase {
 			)
 		);
 		$this->assertTags($result, $excepted);
+	}
+	
+/**
+ * 現在のページがトップページかどうかを判定する
+ */
+	public function testIsHome() {
+		// PCページ
+		$this->BcBaser->request = new CakeRequest('/');
+		$this->assertEqual($this->BcBaser->isHome() , true);
+		$this->BcBaser->request = new CakeRequest('/index');
+		$this->assertEqual($this->BcBaser->isHome() , true);
+		$this->BcBaser->request = new CakeRequest('/news/index');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		// モバイルページ
+		Configure::write('BcRequest.agentAlias', 'm');
+		$this->BcBaser->request = new CakeRequest('/');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		$this->BcBaser->request = new CakeRequest('/s/');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		$this->BcBaser->request = new CakeRequest('/m/');
+		$this->assertEqual($this->BcBaser->isHome() , true);
+		$this->BcBaser->request = new CakeRequest('/m/index');
+		$this->assertEqual($this->BcBaser->isHome() , true);
+		$this->BcBaser->request = new CakeRequest('/m/news/index');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		// スマートフォンページ
+		Configure::write('BcRequest.agentAlias', 's');
+		$this->BcBaser->request = new CakeRequest('/');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		$this->BcBaser->request = new CakeRequest('/m/');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		$this->BcBaser->request = new CakeRequest('/s/');
+		$this->assertEqual($this->BcBaser->isHome() , true);
+		$this->BcBaser->request = new CakeRequest('/s/index');
+		$this->assertEqual($this->BcBaser->isHome() , true);
+		$this->BcBaser->request = new CakeRequest('/s/news/index');
+		$this->assertEqual($this->BcBaser->isHome() , false);
+		Configure::write('BcRequest.agentAlias', '');
+	}
+	
+/**
+ * baserCMSが設置されているパスを出力する
+ */
+	public function testRoot() {
+		// ノーマル
+		Configure::write('App.baseUrl', '');
+		$this->BcBaser->request = new CakeRequest('/');
+		ob_start();
+		$this->BcBaser->root();
+		$result = ob_get_clean();
+		$this->assertEqual($result, '/');
+		// スマートURLオフ
+		Configure::write('App.baseUrl', 'index.php');
+		$this->BcBaser->request = new CakeRequest('/');
+		ob_start();
+		$this->BcBaser->root();
+		$result = ob_get_clean();
+		$this->assertEqual($result, '/index.php/');
+		// サブフォルダ+スマートURLオフ
+		Configure::write('App.baseUrl', '/basercms/index.php');
+		$this->BcBaser->request = new CakeRequest('/');
+		ob_start();
+		$this->BcBaser->root();
+		$result = ob_get_clean();
+		$this->assertEqual($result, '/basercms/index.php/');
+	}
+	
+/**
+ * baserCMSが設置されているパスを取得する
+ */
+	public function getRoot() {
+		// ノーマル
+		Configure::write('App.baseUrl', '');
+		$this->BcBaser->request = new CakeRequest('/');
+		$result = $this->BcBaser->getRoot();
+		$this->assertEqual($result, '/');
+		// スマートURLオフ
+		Configure::write('App.baseUrl', 'index.php');
+		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->getRoot();
+		$this->assertEqual($result, '/index.php/');
+		// サブフォルダ+スマートURLオフ
+		Configure::write('App.baseUrl', '/basercms/index.php');
+		$this->BcBaser->request = new CakeRequest('/');
+		$this->BcBaser->getRoot();
+		$this->assertEqual($result, '/basercms/index.php/');
+	}
+	
+/**
+ * baserCMSの設置フォルダを考慮したURLを出力する
+ * 
+ * BcBaserHelper::getUrl() をラッピングしているだけなので、最低限のテストのみ
+ */
+	public function testUrl() {
+		ob_start();
+		Configure::write('App.baseUrl', '/basercms/index.php');
+		Router::setRequestInfo(new CakeRequest('/'));
+		$this->BcBaser->url('/about');
+		$result = ob_get_clean();
+		$this->assertEqual($result, '/basercms/index.php/about');
+	}
+	
+/**
+ * baserCMSの設置フォルダを考慮したURLを取得する
+ */
+	public function testGetUrl() {
+		
+		// ノーマル
+		$result = $this->BcBaser->getUrl('/about');
+		$this->assertEqual($result, '/about');
+		
+		// 省略した場合
+		$result = $this->BcBaser->getUrl();
+		$this->assertEqual($result, '/');
+		
+		// フルURL
+		$result = $this->BcBaser->getUrl('/about', true);
+		$this->assertEqual($result, 'http://' . $_SERVER["HTTP_HOST"] . '/about');
+		
+		// 配列URL
+		$result = $this->BcBaser->getUrl(array(
+			'admin'			=> true,
+			'plugin'		=> 'blog',
+			'controller'	=> 'blog_posts',
+			'action'		=> 'edit',
+			1
+		));
+		$this->assertEqual($result, '/admin/blog/blog_posts/edit/1');
+
+		// セッションIDを付加する場合
+		// TODO セッションIDを付加する場合、session.use_trans_sid の値が0である必要が
+		// があるが、上記の値はセッションがスタートした後では書込不可の為見送り
+		/*Configure::write('BcRequest.agent', 'mobile');
+		Configure::write('BcAgent.mobile.sessionId', true);
+		ini_set('session.use_trans_sid', 0);*/
+		
+		// --- サブフォルダ+スマートURLオフ ---
+		Configure::write('App.baseUrl', '/basercms/index.php');
+		Router::setRequestInfo(new CakeRequest('/'));
+		
+		// ノーマル
+		$result = $this->BcBaser->getUrl('/about');
+		$this->assertEqual($result, '/basercms/index.php/about');
+		
+		// 省略した場合
+		$result = $this->BcBaser->getUrl();
+		
+		$this->assertEqual($result, '/basercms/index.php/');
+		
+		// フルURL
+		$result = $this->BcBaser->getUrl('/about', true);
+		$this->assertEqual($result, 'http://' . $_SERVER["HTTP_HOST"] . '/basercms/index.php/about');
+		
+		// 配列URL
+		$result = $this->BcBaser->getUrl(array(
+			'admin'			=> true,
+			'plugin'		=> 'blog',
+			'controller'	=> 'blog_posts',
+			'action'		=> 'edit',
+			1
+		));
+		$this->assertEqual($result, '/basercms/index.php/admin/blog/blog_posts/edit/1');
+		
 	}
 	
 /**
