@@ -36,6 +36,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * setUp
  */
 	public function setUp() {
+		parent::setUp();
 		$this->BcBaser = new BcBaserHelper(new BcAppView());
 	}
 	
@@ -578,5 +579,79 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 		
 	}
-	
+
+/**
+ * 指定されたURLに対応しRouterパース済のCakeRequestのインスタンスを返す
+ *
+ * @param string $url URL
+ * @return CakeRequest
+ */
+	protected function _getRequest($url) {
+		$request = new CakeRequest($url);
+		Router::setRequestInfo($request);
+		$params = Router::parse($request->url);
+		$request->addParams($params);
+		var_dump($request);
+		return $request;
+	}
+
+/**
+ * ユーザーエージェント判定に利用される値をConfigureに設定
+ * bootstrap.phpで行われている処理の代替
+ *
+ * @param string $key エージェントを表す文字列キー
+ * @return void
+ */
+	protected function _setAgent($key) {
+		$agent = Configure::read("BcAgent.{$key}");
+		if(empty($agent)) {
+			return;
+		}
+		Configure::write('BcRequest.agent', $key);
+		Configure::write('BcRequest.agentPrefix', $agent['prefix']);
+		Configure::write('BcRequest.agentAlias', $agent['alias']);
+	}
+
+/**
+ * コンテンツを特定するIDを取得する
+ * ・キャメルケースで取得
+ * ・URLのコントローラー名までを取得
+ * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
+ * ・トップページは、Home
+ *
+ * @param string $agent エージェント
+ * @param string $url URL
+ * @param string $expects コンテンツ名
+ *
+ * @dataProvider getContentsNameDataProvider
+ */
+	public function testGetContensName($agent = null, $url, $expects) {
+		if(!empty($agent)) {
+			$this->_setAgent($agent);
+		}
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expects, $this->BcBaser->getContentsName());
+	}
+
+/**
+ * getContentsName用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function getContentsNameDataProvider() {
+		return array(
+			array(null, '/', 'Home'),
+			array('mobile', '/m/', 'Home'),
+			array('smartphone', '/s/', 'Home'),
+			array(null, '/news', 'News'),
+			array('mobile', '/m/news', 'News'),
+			array('smartphone', '/s/news', 'News'),
+			array(null, '/contact', 'Contact'),
+			array('mobile', '/m/contact', 'Contact'),
+			array('smartphone', '/s/contact', 'Contact'),
+			array(null, '/company', 'Default'),
+			array('mobile', '/m/company', 'Default'),
+			array('smartphone', '/s/company', 'Default')
+		);
+	}
 }

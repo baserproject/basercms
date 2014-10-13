@@ -1241,7 +1241,7 @@ class BcBaserHelper extends AppHelper {
 		} else {
 
 			// プラグインルーティングの場合
-			if ((($url1 == '' && $action == 'index') || ($url1 == $action)) && $url2 != $action && $plugin) {
+			if ((($url1 == '' && in_array($action, array('index', 'mobile_index', 'smartphone_index'))) || ($url1 == $action)) && $url2 != $action && $plugin) {
 				$plugin = '';
 				$controller = $url0;
 			}
