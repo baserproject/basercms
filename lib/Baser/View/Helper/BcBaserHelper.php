@@ -545,27 +545,24 @@ class BcBaserHelper extends AppHelper {
 
 		return $out;
 	}
-//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
+
 /**
- * エレメント（部品）テンプレートを出力する
- * View::elementを出力するだけのラッパー
+ * エレメントテンプレートを出力する
  *
- * @param string $name
- * @param array $data オプションのパラメータ、初期値は array()
- * @param boolean $options オプションのパラメータ、初期値は array()
+ * @param string $name エレメント名
+ * @param array $data エレメントで参照するデータ
+ * @param array $options オプションのパラメータ
+ *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ * ※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function element($name, $data = array(), $options = array()) {
-		if(!$data) {
-			$data = array();
-		}
 		$options = array_merge(array(
 			'subDir' => true
-			), $options);
-
+		), $options);
 		echo $this->getElement($name, $data, $options);
 	}
-
+//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * ヘッダーテンプレートを出力する
  *

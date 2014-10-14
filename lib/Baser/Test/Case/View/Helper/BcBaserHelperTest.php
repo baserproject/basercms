@@ -521,13 +521,25 @@ class BcBaserHelperTest extends BaserTestCase {
 		$View->subDir = 'admin';
 		$this->BcBaser = new BcBaserHelper($View);
 		// 管理画面用のテンプレートがなくフロントのテンプレートがある場合
+		// ※ フロントが存在する場合にはフロントのテンプレートを利用する
 		$result = $this->BcBaser->getElement(('global_menu'));
 		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
-		
-		// フロントのテンプレートに切り替えた場合
+		// 強制的にフロントのテンプレートに切り替えた場合
 		$result = $this->BcBaser->getElement(('crumbs'), array(), array('subDir' => false));
 		$this->assertEqual($result, '');
 		
+	}
+	
+/**
+ * エレメントテンプレートを出力する
+ * 
+ * BcBaserHelper::getElement() をラッピングしているだけなので、最低限のテストのみ
+ */
+	public function testElement() {
+		ob_start();
+		$this->BcBaser->element(('global_menu'));
+		$result = ob_get_clean();
+		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
 	}
 	
 /**
