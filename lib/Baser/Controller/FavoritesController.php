@@ -119,8 +119,7 @@ class FavoritesController extends AppController {
 /**
  * [ADMIN] 並び替えを更新する
  *
- * @access public
- * @return boolean
+ * @return bool
  */
 	public function admin_update_sort() {
 		$user = $this->BcAuth->user();
@@ -130,6 +129,7 @@ class FavoritesController extends AppController {
 				exit(true);
 			}
 		}
+		$this->ajaxError(400, '無効な処理です。');
 		exit();
 	}
 
