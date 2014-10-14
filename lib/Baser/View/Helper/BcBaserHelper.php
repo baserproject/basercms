@@ -1287,8 +1287,9 @@ class BcBaserHelper extends AppHelper {
 		} else {
 			$contentsName = Inflector::camelize($contentsName);
 		}
-var_dump($contentsName);
+		
 		return $contentsName;
+		
 	}
 
 /**
@@ -1714,14 +1715,21 @@ END_FLASH;
 	}
 
 /**
- * 指定したURLが現在のURLかどうか判定する
+ * 指定したURLが現在のURLと同じかどうか判定する
  * 
- * @param string $url
+ * 《比較例》
+ * /news/ | /news/ ・・・○
+ * /news | /news/ ・・・×
+ * /news/ | /news/index ・・・○
+ * 
+ * @param string $url 対象URL
  * @return boolean 
  */
 	public function isCurrentUrl($url) {
-
-		return ($this->getUrl($url) == $this->here);
+		$pattern = '/\/$/';
+		$shortenedUrl = preg_replace($pattern, '/index', $this->getUrl($url));
+		$shortenedHere = preg_replace($pattern, '/index', $this->request->here);
+		return ($shortenedUrl === $shortenedHere);
 	}
 
 /**

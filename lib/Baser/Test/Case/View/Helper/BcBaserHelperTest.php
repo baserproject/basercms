@@ -676,4 +676,50 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('smartphone', '/s/company', 'Default')
 		);
 	}
+	
+/**
+ * 指定したURLが現在のURLかどうか判定する
+ *
+ * @param string $currentUrl 現在のURL
+ * @param string $url 引数として与えられるURL
+ * @param bool $expects　メソッドの返り値
+ *
+ * @dataProvider isCurrentUrlDataProvider
+ */
+	public function testIsCurrentUrl($currentUrl, $url, $expects) {
+		$this->BcBaser->request = $this->_getRequest($currentUrl);
+		$this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
+		// --- サブフォルダ+スマートURLオフ ---
+		Configure::write('App.baseUrl', '/basercms/index.php');
+		$this->BcBaser->request = $this->_getRequest($currentUrl);
+		$this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
+	}
+	
+/**
+ * isCurrentUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function isCurrentUrlDataProvider() {
+		return array(
+			array('/', '/', true),
+			array('/index', '/', true),
+			array('/', '/index', true),
+			array('/company', '/company', true),
+			array('/news', '/news', true),
+			array('/news/', '/news', false),
+			array('/news/index', '/news', false),
+			array('/news', '/news/', false),
+			array('/news/', '/news/', true),
+			array('/news/index', '/news/', true),
+			array('/news', '/news/index', false),
+			array('/news/', '/news/index', true),
+			array('/news/index', '/news/index', true),
+			array('/', '/company', false),
+			array('/company', '/', false),
+			array('/news', '/', false)
+		);
+	}
+
+	
 }
