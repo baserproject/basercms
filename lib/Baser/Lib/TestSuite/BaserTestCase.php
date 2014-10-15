@@ -32,4 +32,36 @@ class BaserTestCase extends CakeTestCase {
 		}
 		parent::__construct($name, $data, $dataName);
 	}
+	
+/**
+ * 指定されたURLに対応しRouterパース済のCakeRequestのインスタンスを返す
+ *
+ * @param string $url URL
+ * @return CakeRequest
+ */
+	protected function _getRequest($url) {
+		$request = new CakeRequest($url);
+		Router::setRequestInfo($request);
+		$params = Router::parse($request->url);
+		$request->addParams($params);
+		return $request;
+	}
+
+/**
+ * ユーザーエージェント判定に利用される値をConfigureに設定
+ * bootstrap.phpで行われている処理の代替
+ *
+ * @param string $key エージェントを表す文字列キー
+ * @return void
+ */
+	protected function _setAgent($key) {
+		$agent = Configure::read("BcAgent.{$key}");
+		if(empty($agent)) {
+			return;
+		}
+		Configure::write('BcRequest.agent', $key);
+		Configure::write('BcRequest.agentPrefix', $agent['prefix']);
+		Configure::write('BcRequest.agentAlias', $agent['alias']);
+	}
+	
 }
