@@ -562,19 +562,20 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 		echo $this->getElement($name, $data, $options);
 	}
-//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
+
 /**
  * ヘッダーテンプレートを出力する
  *
- * @param array $data オプションのパラメータ、初期値は array()
- * @param array $options オプションのパラメータ、初期値は array()
+ * @param array $data エレメントで参照するデータ
+ * @param array $options オプションのパラメータ
+ *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ * ※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function header($data = array(), $options = array()) {
-
 		$options = array_merge(array(
 			'subDir' => true
-			), $options);
+		), $options);
 
 		$out = $this->getElement('header', $data, $options);
 
@@ -599,15 +600,17 @@ class BcBaserHelper extends AppHelper {
 /**
  * フッターテンプレートを出力する
  *
- * @param array $data オプションのパラメータ、初期値は array()
- * @param array $options オプションのパラメータ、初期値は array()
+ * @param array $data エレメントで参照するデータ
+ * @param array $options オプションのパラメータ
+ *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ * ※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function footer($data = array(), $options = array()) {
 
 		$options = array_merge(array(
 			'subDir' => true
-			), $options);
+		), $options);
 
 		$out = $this->getElement('footer', $data, $options);
 
@@ -628,7 +631,7 @@ class BcBaserHelper extends AppHelper {
 		}
 		echo $out;
 	}
-
+//------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * ページネーションを出力する
  * [非推奨]

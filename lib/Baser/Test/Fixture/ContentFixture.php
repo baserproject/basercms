@@ -1,5 +1,10 @@
 <?php
-class PluginContentFixture extends CakeTestFixture {
+
+/**
+ * FavoriteFixture
+ *
+ */
+class ContentFixture extends CakeTestFixture {
 
 /**
 * Import
@@ -7,7 +12,7 @@ class PluginContentFixture extends CakeTestFixture {
 * @var array
 */
 	public $import = array( 
-		'model'			=> 'PluginContent',
+		'model'			=> 'Content',
 		'connection'	=> 'baser',
 		'records'		=> true
 	);

@@ -17,7 +17,7 @@
 
 <div id="Header">
 
-	<?php $this->BcBaser->element('search') ?>
+	<?php $this->BcBaser->siteSearchForm() ?>
 
 	<h1><?php $this->BcBaser->link(@$this->BcBaser->siteConfig['name'], '/') ?></h1>
 

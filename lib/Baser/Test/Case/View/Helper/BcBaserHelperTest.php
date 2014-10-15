@@ -29,7 +29,9 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.Menu',
-		'baser.Page'
+		'baser.Page',
+		'baser.Content',
+		'baser.SiteConfig'
 	);
 	
 /**
@@ -37,7 +39,10 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->BcBaser = new BcBaserHelper(new BcAppView());
+		$this->_View = new BcAppView();
+		$this->_View->helpers = array('BcBaser');
+		$this->_View->loadHelpers();
+		$this->BcBaser = new BcBaserHelper($this->_View);
 	}
 	
 /**
@@ -540,6 +545,28 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->element(('global_menu'));
 		$result = ob_get_clean();
 		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+	}
+	
+/**
+ * ヘッダーテンプレートを出力する
+ */
+	public function testHeader() {
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
+		ob_start();
+		$this->BcBaser->header();
+		$result = ob_get_clean();
+		$this->assertTextContains('<div id="Header">', $result);
+	}
+	
+/**
+ * フッターテンプレートを出力する
+ */
+	public function testFooter() {
+		ob_start();
+		$this->BcBaser->footer();
+		$result = ob_get_clean();
+		$this->assertTextContains('<div id="Footer">', $result);
 	}
 	
 /**
