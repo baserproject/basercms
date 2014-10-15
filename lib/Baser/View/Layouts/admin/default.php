@@ -72,7 +72,7 @@
 
 				<?php $this->BcBaser->header() ?>
 
-			<div id="Wrap" class="clearfix" style="display:none">
+			<div id="Wrap" class="clearfix">
 
 <?php if (!empty($user)): ?>
 			<?php $this->BcBaser->element('sidebar') ?>

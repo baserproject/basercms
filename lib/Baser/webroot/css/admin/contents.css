@@ -1359,3 +1359,7 @@ background: #888;
 .ui-tabs .ui-tabs-nav li {
 	font-weight: bold;
 }
+
+.helptext {
+	display:none;
+}

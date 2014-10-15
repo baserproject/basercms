@@ -94,6 +94,7 @@ body > #Page {
 	width: 208px;
 	float: left;
 	position:relative;
+	left:-180px;
 }
 
 #BtnSideBarOpener {

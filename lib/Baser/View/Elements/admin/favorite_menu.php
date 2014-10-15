@@ -44,7 +44,7 @@ $this->BcBaser->js('admin/baser_favorite');
 
 </div>
 
-<div id="FavoriteDialog" title="よく使う項目" class="display-none">
+<div id="FavoriteDialog" title="よく使う項目" style="display:none">
 	<?php echo $this->BcForm->create('Favorite', array('action' => 'ajax', 'url' => array('plugin' => null))) ?>
 	<?php echo $this->BcForm->input('Favorite.id', array('type' => 'hidden')) ?>
 	<dl>
