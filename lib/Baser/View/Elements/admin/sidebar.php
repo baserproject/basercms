@@ -1,7 +1,7 @@
 <?php
 /**
  * [ADMIN] サイドバー
- * 
+ *
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -16,12 +16,12 @@
 ?>
 
 <div id="SideBar">
-	<div id="BtnSideBarOpener"></div>
-	<div id="FavoriteArea" class="cbb clearfix">
+	<div id="BtnSideBarOpener">＜</div>
+	<div id="FavoriteArea">
 		<?php $this->BcBaser->element('favorite_menu') ?>
 		<?php $this->BcBaser->element('permission') ?>
 	<!-- / .cbb .clearfix --></div>
-	
+
 <?php if(!empty($this->BcBaser->siteConfig['admin_side_banner'])): ?>
 	<div id="BannerArea">
 		<ul>
@@ -30,5 +30,5 @@
 		</ul>
 	</div>
 <?php endif ?>
-	
+
 <!-- / #SideBar --></div>

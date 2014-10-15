@@ -35,7 +35,6 @@
 			'admin/i18n/ui.datepicker-ja',
 			'admin/jquery.corner-2.12',
 			'admin/jquery.bt.min',
-			'admin/cb',
 			'admin/jquery.contextMenu-1.0/jquery.contextMenu',
 			'admin/jquery.form-2.94',
 			'admin/jquery.validate.min',

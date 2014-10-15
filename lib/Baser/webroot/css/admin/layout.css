@@ -11,7 +11,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
- 
+
 /* ==================================================================== */
 /*    Page
 /* ==================================================================== */
@@ -94,7 +94,6 @@ body > #Page {
 	width: 208px;
 	float: left;
 	position:relative;
-	display: none;
 }
 
 #BtnSideBarOpener {
@@ -102,7 +101,7 @@ body > #Page {
 	height:30px;
 	position:absolute;
 	z-index:1;
-	top:4px;
+	top:13px;
 	left:174px;
 	cursor:pointer;
 	line-height:30px;
@@ -117,12 +116,27 @@ body > #Page {
 ----------------------------------------------- */
 #FavoriteArea {
 	margin-bottom: 14px;
+    float: left;
+    width: 100%;
+    padding: 0 4px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
+#FavoriteMenu {
+    width: 100%;
+}
+
 #FavoriteMenu h2{
 	color: #FFF;
-	background: url(../../img/admin/bg_side_bar_title.png) repeat-x;
-	padding: 0 10px;
+    background: #333333;
+	padding: 6px 10px 0;
 }
+
+#FavoriteMenu h2 img {
+    margin: 0 0 -9px;
+}
+
 ul.favorite-menu-list a{
 	color: #333;
 	text-decoration: none;
@@ -186,8 +200,7 @@ ul.favorite-menu-list li.ui-sortable-helper {
 ----------------------------------------------- */
 
 #Contents{
-	/*margin-left: 210px;*/
-
+	margin-left: 210px;
 }
 
 /* contents background
@@ -196,6 +209,9 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	margin:1em 0;
 	border:1px solid #CCC;
 	background:#fff;
+    float: right;
+    overflow: hidden;
+    width: 100%;
 }
 .cb {
 	float: left;
@@ -259,10 +275,10 @@ ul.favorite-menu-list li.ui-sortable-helper {
 	background-color: #FFF;
 }
 .i3:after {
-	content: "."; 
-	display: block; 
-	height: 0; 
-	clear: both; 
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
 	visibility: hidden;
 }
 .i3 {display: inline-block;}
