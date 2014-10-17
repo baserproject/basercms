@@ -31,9 +31,18 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Menu',
 		'baser.Page',
 		'baser.Content',
-		'baser.SiteConfig'
+		'baser.SiteConfig',
+		'baser.User',
+		'baser.UserGroup',
+		'baser.Favorite',
+		'baser.Permission'
 	);
 	
+/**
+ * View
+ */
+	protected $_View;
+
 /**
  * setUp
  */
@@ -43,6 +52,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
 		$this->BcBaser = new BcBaserHelper($this->_View);
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
 	}
 	
 /**
@@ -55,6 +66,23 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 	
 /**
+ * ログイン状態にする
+ */
+	protected function _login() {
+		$User = ClassRegistry::init('User');
+		$user = $User->find('first', array('conditions' => array('User.id' => 1), 'recursive' => -1));
+		unset($user['User']['password']);
+		$this->BcBaser->set('user', $user['User']);
+	}
+	
+/**
+ * ログイン状態を解除する
+ */
+	protected function _logout() {
+		$this->BcBaser->set('user', '');
+	}
+
+	/**
  * コンストラクタ
  */
 	public function testConstruct() {
@@ -551,8 +579,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * ヘッダーテンプレートを出力する
  */
 	public function testHeader() {
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
 		ob_start();
 		$this->BcBaser->header();
 		$result = ob_get_clean();
@@ -567,6 +593,128 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->footer();
 		$result = ob_get_clean();
 		$this->assertTextContains('<div id="Footer">', $result);
+	}
+	
+/**
+ * ページネーションを出力する
+ */
+	public function testPagination() {
+		ob_start();
+		$this->BcBaser->request->params['paging']['Model'] = array(
+			'count'		=> 100,
+			'pageCount'	=> 3,
+			'page'		=> 2,
+			'limit'		=> 10,
+			'current'	=> null,
+			'prevPage'	=> 1,
+			'nextPage'	=> 3,
+			'options'	=> array(),
+			'paramType'	=> 'named'
+		);
+		$this->BcBaser->pagination();
+		$result = ob_get_clean();
+		$this->assertTextContains('<div class="pagination">', $result);
+	}
+	
+/**
+ * コンテンツ本体を出力する
+ */
+	public function testContent() {
+		ob_start();
+		$this->_View->assign('content', 'コンテンツ本体');
+		$this->BcBaser->content();
+		$result = ob_get_clean();
+		$this->assertEqual($result, 'コンテンツ本体');
+	}
+	
+/**
+ * セッションメッセージを出力する
+ */
+	public function testFlash() {
+		$messsage = 'エラーが発生しました。';
+		App::uses('SessionComponent', 'Controller/Component');
+		App::uses('ComponentCollection', 'Controller/Component');
+		$Session = new SessionComponent(new ComponentCollection());
+		$Session->setFlash($messsage);
+		ob_start();
+		$this->BcBaser->flash();
+		$result = ob_get_clean();
+		$this->assertEqual($result, '<div id="MessageBox"><div id="flashMessage" class="message">' . $messsage. '</div></div>');
+	}
+	
+/**
+ * コンテンツ内で設定した CSS や javascript をレイアウトテンプレートに出力する
+ */
+	public function testScripts() {
+		
+		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
+		// CSS
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css" />';
+		$this->BcBaser->css('admin/layout', array('inline' => false));
+		ob_start();
+		$this->BcBaser->scripts();
+		$result = ob_get_clean();
+		$result = str_replace($themeConfigTag, '', $result);
+		$this->assertEqual($result, $expected);
+		$this->_View->assign('css', '');
+		// Javascript
+		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
+		$this->BcBaser->js('admin/startup', false);
+		ob_start();
+		$this->BcBaser->scripts();
+		$result = ob_get_clean();
+		$result = str_replace($themeConfigTag, '', $result);
+		$this->assertEqual($result, $expected);
+		$this->_View->assign('script', '');
+		// meta
+		$expected = '<meta name="description" content="説明文" />';
+		App::uses('BcHtmlHelper', 'View/Helper');
+		$BcHtml = new BcHtmlHelper($this->_View);
+		$result = $BcHtml->meta('description', '説明文', array('inline' => false));
+		ob_start();
+		$this->BcBaser->scripts();
+		$result = ob_get_clean();
+		$result = str_replace($themeConfigTag, '', $result);
+		$this->assertEqual($result, $expected);
+		$this->_View->assign('meta', '');
+		// ツールバー
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css" />';
+		$this->BcBaser->set('user', array('User'));
+		ob_start();
+		$this->BcBaser->scripts();
+		$result = ob_get_clean();
+		$result = str_replace($themeConfigTag, '', $result);
+		$this->assertEqual($result, $expected);
+		
+	}
+	
+/**
+ * ツールバーエレメントや CakePHP のデバッグ出力を表示
+ */
+	public function testFunc() {
+		// 未ログイン
+		ob_start();
+		$this->BcBaser->func();
+		$result = ob_get_clean();
+		$this->assertEqual($result, '');
+		// ログイン中
+		$expects = '<div id="ToolBar">';
+		$this->_login();
+		$this->BcBaser->set('currentPrefix', 'admin');
+		$this->BcBaser->set('authPrefix', 'admin');
+		ob_start();
+		$this->BcBaser->func();
+		$result = ob_get_clean();
+		$this->assertTextContains($expects, $result);
+		$this->_logout();
+		// デバッグモード２
+		$expects = '<table class="cake-sql-log"';
+		$debug = Configure::read('debug');
+		Configure::write('debug', 2);
+		ob_start();
+		$this->BcBaser->func();
+		$result = ob_get_clean();
+		$this->assertTextContains($expects, $result);
 	}
 	
 /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FavoriteFixture
+ * ContentFixture
  *
  */
 class ContentFixture extends CakeTestFixture {

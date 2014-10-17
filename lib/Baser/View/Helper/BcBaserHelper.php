@@ -385,7 +385,7 @@ class BcBaserHelper extends AppHelper {
  * @deprecated isHomeに統合する
  */
 	public function isTop() {
-
+		trigger_error(deprecatedMessage('ヘルパーメソッド：BcBaserHelper::isTop()', '3.0.6', '3.1.0', '$this->BcBaser->isHome() を利用してください。'), E_USER_DEPRECATED);
 		return $this->isHome();
 	}
 
@@ -634,18 +634,19 @@ class BcBaserHelper extends AppHelper {
 //------------------------------------------------------------------------------ テストケース作成　ここまで完了 ryuring
 /**
  * ページネーションを出力する
- * [非推奨]
+ *
  * @param string $name
- * @param array $params オプションのパラメータ、初期値は array()
- * @param array $options オプションのパラメータ、初期値は array()
+ * @param array $data ページネーションで参照するデータ
+ * @param array $options オプションのパラメータ
+ *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ * ※ その他のパラメータについては、View::element() を参照
  * @return void
- * @deprecated
  */
 	public function pagination($name = 'default', $data = array(), $options = array()) {
-
+		
 		$options = array_merge(array(
 			'subDir' => true
-			), $options);
+		), $options);
 
 		if (!$name) {
 			$name = 'default';
@@ -654,11 +655,13 @@ class BcBaserHelper extends AppHelper {
 		$file = 'paginations' . DS . $name;
 
 		echo $this->getElement($file, $data, $options);
+		
 	}
 
 /**
- * コンテンツを出力する
- * $content_for_layout を出力するだけのラッパー
+ * コンテンツ本体を出力する
+ * 
+ * レイアウトテンプレートで利用する
  *
  * @return void
  */
@@ -681,14 +684,14 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * セッションメッセージを出力する
+ * セッションに保存したメッセージを出力する
+ * 
+ * メールフォームのエラーメッセージ等を出力します。
  *
- * @param string $key 出力するメッセージのキー
+ * @param string $key 出力するメッセージのキー（初期状態では省略してよいです）
  * @return void
- * @manual
  */
 	public function flash($key = 'flash') {
-
 		if ($this->Session->check('Message.' . $key)) {
 			echo '<div id="MessageBox">';
 			echo $this->Session->flash($key);
@@ -697,8 +700,15 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * コンテンツ内で設定したCSSやjavascriptをレイアウトテンプレートに出力
- * $scripts_for_layout を出力する
+ * コンテンツ内で設定した CSS や javascript をレイアウトテンプレートに出力し、ログイン中の場合、ツールバー用のCSSも出力する
+ * また、テーマ用のCSSが存在する場合には出力する
+ * 
+ * 利用する際は、</head>タグの直前あたりに記述する。
+ * コンテンツ内で、レイアウトテンプレートへの出力を設定する場合には、inline オプションを false にする
+ *
+ * 《設定例》
+ * $this->BcBaser->css('admin/layout', array('inline' => false));
+ * $this->BcBaser->js('admin/startup', false);
  *
  * @return void
  */
@@ -712,9 +722,18 @@ class BcBaserHelper extends AppHelper {
 			$toolbar = $authPrefixes['toolbar'];
 		}
 
-		echo $this->_View->viewVars['scripts_for_layout'];
+		echo $this->_View->fetch('meta');
+		echo $this->_View->fetch('css');
+		echo $this->_View->fetch('script');
 
-		// ツールバー設定
+		// ### ツールバー用CSS出力
+		// 《表示条件》
+		// - プレビューでない
+		// - auth prefix の設定で、利用するように定義されている
+		// - モバイルでない
+		// - Query String で、toolbar=false に定義されていない
+		// - 管理画面でない
+		// - ログインしている
 		if (empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
@@ -722,14 +741,22 @@ class BcBaserHelper extends AppHelper {
 				}
 			}
 		}
+		
+		// ### テーマ用CSS出力
+		// 《表示条件》
+		// - インストーラーではない
+		// - /files/theme_configs/config.css が存在する
 		if (!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
 			$this->css('/files/theme_configs/config');
 		}
+		
 	}
 
 /**
- * ツールバーやCakeのデバッグ出力を表示
+ * ツールバーエレメントや CakePHP のデバッグ出力を表示
  *
+ * 利用する際は、</body> タグの直前あたりに記述する。
+ * 
  * @return void
  */
 	public function func() {
@@ -741,7 +768,14 @@ class BcBaserHelper extends AppHelper {
 			$toolbar = $authPrefixes['toolbar'];
 		}
 
-		// ツールバー表示
+		// ### ツールバーエレメント出力
+		// 《表示条件》
+		// - プレビューでない
+		// - auth prefix の設定で、利用するように定義されている
+		// - モバイルでない
+		// - Query String で、toolbar=false に定義されていない
+		// - 管理画面でない
+		// - ログインしている
 		if (empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
@@ -754,6 +788,7 @@ class BcBaserHelper extends AppHelper {
 		if (Configure::read('debug') >= 2) {
 			$this->element('sql_dump', array(), array('subDir' => false));
 		}
+		
 	}
 
 /**
@@ -763,7 +798,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function setSubMenus($submenus) {
-
 		$this->_View->set('subMenuElements', $submenus);
 	}
 

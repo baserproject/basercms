@@ -25,7 +25,7 @@
 		<?php $this->BcBaser->element('global_menu') ?>
 	</div>
 
-	<?php if (!$this->BcBaser->isTop()): ?>
+	<?php if (!$this->BcBaser->isHome()): ?>
 		<div id="Navigation">
 			<?php $this->BcBaser->element('crumbs'); ?>
 		</div>
