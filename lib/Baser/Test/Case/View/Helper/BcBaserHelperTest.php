@@ -1,6 +1,9 @@
 <?php
 /**
  * test for BcBaserHelper
+ * 
+ * ユニットテスト記述の進行状況
+ * 2014/10/17 上から順に docType まで完了 ryuring
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -715,6 +718,97 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->func();
 		$result = ob_get_clean();
 		$this->assertTextContains($expects, $result);
+	}
+	
+/**
+ * サブメニューを設定する
+ * 
+ * @param array $elements サブメニューエレメント名を配列で指定
+ * @param array $expects サブメニュータイトル
+ * @dataProvider setSubMenusDataProvider
+ */
+	public function testSetSubMenus($elements, $expects) {
+		$this->_View->subDir = 'admin';
+		$this->BcBaser->setSubMenus($elements);
+		ob_start();
+		$this->BcBaser->subMenu();
+		$result = ob_get_clean();
+		foreach($expects as $expect) {
+			$this->assertTextContains($expect, $result);
+		}
+	}
+	
+/**
+ * setSubMenus 用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function setSubMenusDataProvider() {
+		return array(
+			array(array('contents'), array('<th>検索インデックスメニュー</th>')),
+			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定共通メニュー</th>')),
+			array(array('menus', 'tools'), array('<th>メニュー管理メニュー</th>', '<th>ツールメニュー</th>')),
+			array(array('plugins', 'themes'), array('<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>')),
+			array(array('users'), array('<th>ユーザー管理メニュー</th>')),
+			array(array('widget_areas'), array('<th>ウィジェットエリア管理メニュー</th>')),
+		);
+	}
+	
+/**
+ * XMLヘッダタグを出力する
+ */
+	public function testXmlHeader() {
+		// PC
+		$expects = '<?xml version="1.0" encoding="UTF-8" ?>' . "\n";
+		ob_start();
+		$this->BcBaser->xmlHeader();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expects);
+		Configure::write('BcRequest.agent', 'mobile');
+		// モバイル
+		$expects = '<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n";
+		ob_start();
+		$this->BcBaser->xmlHeader();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expects);
+	}
+	
+/**
+ * アイコン（favicon）タグを出力する
+ */
+	public function testIcon() {
+		$expects = '<link href="/favicon.ico" type="image/x-icon" rel="icon" /><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon" />' . "\n";
+		ob_start();
+		$this->BcBaser->icon();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expects);
+	}
+	
+/**
+ * ドキュメントタイプを指定するタグを出力する
+ * 
+ * @param string $docType ドキュメントタイプ
+ * @param string $expects ドキュメントタイプを指定するタグ
+ * @dataProvider docTypeDataProvider
+ */
+	public function testDocType($docType, $expects) {
+		$expects .= "\n";
+		ob_start();
+		$this->BcBaser->docType($docType);
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expects);
+	}
+	
+/**
+ * docType 用のデータプロバイダ
+ * 
+ * @return array
+ */
+	public function docTypeDataProvider() {
+		return array(
+			array('xhtml-trans', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'),
+			array('html5', '<!DOCTYPE html>')
+		);
 	}
 	
 /**

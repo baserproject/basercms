@@ -792,9 +792,9 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * サブメニューを設定する
+ * サブメニューを設定する（管理画面用）
  *
- * @param array $submenus
+ * @param array $submenus サブメニューエレメント名を配列で指定
  * @return void
  */
 	public function setSubMenus($submenus) {
@@ -804,11 +804,10 @@ class BcBaserHelper extends AppHelper {
 /**
  * XMLヘッダタグを出力する
  *
- * @param array $attrib
+ * @param array $attrib 属性
  * @return void
  */
 	public function xmlHeader($attrib = array()) {
-
 		if (empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile') {
 			$attrib['encoding'] = 'Shift-JIS';
 		}
@@ -821,18 +820,16 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function icon() {
-
 		echo $this->BcHtml->meta('icon') . "\n";
 	}
 
 /**
  * ドキュメントタイプを指定するタグを出力する
  *
- * @param string $type 出力ドキュメントタイプの文字列 オプションのパラメータ、初期値は 'xhtml-trans'
+ * @param string $type 出力ドキュメントタイプの文字列 初期値は 'xhtml-trans'
  * @return void
  */
 	public function docType($type = 'xhtml-trans') {
-
 		echo $this->BcHtml->docType($type) . "\n";
 	}
 
@@ -846,7 +843,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function css($path, $options = array()) {
-
 		$options = array_merge(array(
 			'rel' => 'stylesheet',
 			'inline' => true
