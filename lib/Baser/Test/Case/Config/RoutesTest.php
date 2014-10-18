@@ -60,11 +60,8 @@ class RoutesTest extends BaserTestCase {
  * @return array
  */
 	protected function _getParams($url) {
-		$request = new CakeRequest($url);
-		Router::setRequestInfo($request);
-		$params = Router::parse($request->url);
-		//Debugger::dump($params);
-		return $params;
+		$request = $this->_getRequest($url);
+		return $request->params;
 	}
 
 /**
@@ -156,23 +153,6 @@ class RoutesTest extends BaserTestCase {
 	}
 
 /**
- * ユーザーエージェント判定に利用される値をConfigureに設定
- * bootstrap.phpで行われている処理の代替
- *
- * @param string $key エージェントを表す文字列キー
- * @return void
- */
-    protected function _setAgent($key) {
-        $agent = Configure::read("BcAgent.{$key}");
-        if(empty($agent)) {
-            return;
-        }
-        Configure::write('BcRequest.agent', $key);
-        Configure::write('BcRequest.agentPrefix', $agent['prefix']);
-        Configure::write('BcRequest.agentAlias', $agent['alias']);
-    }
-
-/**
  * [モバイル]固定ページのルーティングテスト
  *
  * @param string $url URL
@@ -181,35 +161,36 @@ class RoutesTest extends BaserTestCase {
  *
  * @dataProvider mobilePageDisplayDataProvider
  */
-    public function testMobilePageDisplay($url, $pass) {
-        $this->_setAgent('mobile');
-        $params = $this->_getParams($url);
-        $expects = array(
-            'controller' => 'pages',
-            'action' => 'mobile_display',
-            'plugin' => null,
-            'prefix' => 'mobile',
-            'named' => array(),
-            'pass' => $pass,
-        );
-        $this->assertEquals($expects, $params);
-    }
+	public function testMobilePageDisplay($url, $pass) {
+		$this->_setAgent('mobile');
+		$this->_setAgentLink('mobile');
+		$params = $this->_getParams($url);
+		$expects = array(
+			'controller' => 'pages',
+			'action' => 'mobile_display',
+			'plugin' => null,
+			'prefix' => 'mobile',
+			'named' => array(),
+			'pass' => $pass,
+		);
+		$this->assertEquals($expects, $params);
+	}
 
 /**
  * [モバイル]固定ページ用データプロバイダ
  *
  * @return array
  *
- * @todo ページカテゴリを含むテスト追加。
+ * @todo ページカテゴリを含むテスト及びエージェント対応・連動設定を考慮したテストを追加。
  */
-    public function mobilePageDisplayDataProvider() {
-        return array(
-            array('/m/', array('index')),
-            array('/m/company', array('company')),
-            array('/m/service', array('service')),
-            array('/m/recruit', array('recruit'))
-        );
-    }
+	public function mobilePageDisplayDataProvider() {
+		return array(
+			array('/m/', array('index')),
+			array('/m/company', array('company')),
+			array('/m/service', array('service')),
+			array('/m/recruit', array('recruit'))
+		);
+	}
 
 /**
  * [スマートフォン]固定ページのルーティングテスト
@@ -220,35 +201,36 @@ class RoutesTest extends BaserTestCase {
  *
  * @dataProvider smartphonePageDisplayDataProvider
  */
-    public function testSmartphonePageDisplay($url, $pass) {
-        $this->_setAgent('smartphone');
-        $params = $this->_getParams($url);
-        $expects = array(
-            'controller' => 'pages',
-            'action' => 'smartphone_display',
-            'plugin' => null,
-            'prefix' => 'smartphone',
-            'named' => array(),
-            'pass' => $pass,
-        );
-        $this->assertEquals($expects, $params);
-    }
+	public function testSmartphonePageDisplay($url, $pass) {
+		$this->_setAgent('smartphone');
+		$this->_setAgentLink('smartphone');
+		$params = $this->_getParams($url);
+		$expects = array(
+			'controller' => 'pages',
+			'action' => 'smartphone_display',
+			'plugin' => null,
+			'prefix' => 'smartphone',
+			'named' => array(),
+			'pass' => $pass,
+		);
+		$this->assertEquals($expects, $params);
+	}
 
 /**
  * [スマートフォン]固定ページ用データプロバイダ
  *
  * @return array
  *
- * @todo ページカテゴリを含むテスト追加。
+ * @todo ページカテゴリを含むテスト及びエージェント対応・連動設定を考慮したテストを追加。
  */
-    public function smartphonePageDisplayDataProvider() {
-        return array(
-            array('/s/', array('index')),
-            array('/s/company', array('company')),
-            array('/s/service', array('service')),
-            array('/s/recruit', array('recruit'))
-        );
-    }
+	public function smartphonePageDisplayDataProvider() {
+		return array(
+			array('/s/', array('index')),
+			array('/s/company', array('company')),
+			array('/s/service', array('service')),
+			array('/s/recruit', array('recruit'))
+		);
+	}
 
 /**
  * プラグインコンテンツのルーティングテスト

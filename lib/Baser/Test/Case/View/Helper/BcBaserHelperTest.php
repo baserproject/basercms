@@ -891,16 +891,28 @@ class BcBaserHelperTest extends BaserTestCase {
  * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
  * ・トップページは、Home
  *
- * @param string $agent エージェント
  * @param string $url URL
  * @param string $expects コンテンツ名
+ * @param string $ua リクエストのユーザーエージェント
+ * @param array $agents 対応する設定のエージェントのリスト
+ * @param array $linkedAgents 連動する設定のエージェントのリスト
  *
  * @dataProvider getContentsNameDataProvider
  */
-	public function testGetContensName($agent = null, $url, $expects) {
-		if(!empty($agent)) {
-			$this->_setAgent($agent);
+	public function testGetContentsName($url, $expects, $ua = null, array $agents = array(), array $linkedAgents = array()) {
+		//Configure周りの設定を全てOFF状態に
+		$this->_unsetAgent();
+		$this->_unsetAgentLinks();
+
+		if (!empty($ua) && !empty($agents) && in_array($ua, $agents)) {
+			   $this->_setAgent($ua);
 		}
+
+		//連携を設定
+		foreach ($linkedAgents as $linked) {
+			$this->_setAgentLink($linked);
+		}
+
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expects, $this->BcBaser->getContentsName());
 	}
@@ -912,18 +924,39 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function getContentsNameDataProvider() {
 		return array(
-			array(null, '/', 'Home'),
-			array('mobile', '/m/', 'Home'),
-			array('smartphone', '/s/', 'Home'),
-			array(null, '/news', 'News'),
-			array('mobile', '/m/news', 'News'),
-			array('smartphone', '/s/news', 'News'),
-			array(null, '/contact', 'Contact'),
-			array('mobile', '/m/contact', 'Contact'),
-			array('smartphone', '/s/contact', 'Contact'),
-			array(null, '/company', 'Default'),
-			array('mobile', '/m/company', 'Default'),
-			array('smartphone', '/s/company', 'Default')
+			//PC
+			array('/', 'Home'),
+			array('/news', 'News'),
+			array('/contact', 'Contact'),
+			array('/company', 'Default'),
+
+			//モバイル　対応OFF 連動OFF
+
+			//スマートフォン 対応OFF　連動OFF
+
+			//モバイル　対応ON 連動OFF
+			array('/m/', 'Home', 'mobile', array('mobile')),
+			array('/m/news', 'News', 'mobile', array('mobile')),
+			array('/m/contact', 'Contact', 'mobile', array('mobile')),
+			array('/m/company', 'M', 'mobile', array('mobile')),
+
+			//スマートフォン 対応ON　連動OFF
+			array('/s/', 'Home', 'smartphone', array('smartphone')),
+			array('/s/news', 'News', 'smartphone', array('smartphone')),
+			array('/s/contact', 'Contact', 'smartphone', array('smartphone')),
+			array('/s/company', 'S', 'smartphone', array('smartphone')),
+
+			//モバイル　対応ON 連動ON
+			array('/m/', 'Home', 'mobile', array('mobile'), array('mobile')),
+			array('/m/news', 'News', 'mobile', array('mobile'), array('mobile')),
+			array('/m/contact', 'Contact', 'mobile', array('mobile'), array('mobile')),
+			array('/m/company', 'Default', 'mobile', array('mobile'), array('mobile')),
+
+			//スマートフォン 対応ON　連動ON
+			array('/s/', 'Home', 'smartphone', array('smartphone'), array('smartphone')),
+			array('/s/news', 'News', 'smartphone', array('smartphone'), array('smartphone')),
+			array('/s/contact', 'Contact', 'smartphone', array('smartphone'), array('smartphone')),
+			array('/s/company', 'Default', 'smartphone', array('smartphone'), array('smartphone'))
 		);
 	}
 	
