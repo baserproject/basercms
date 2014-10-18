@@ -254,7 +254,7 @@ class BlogController extends BlogAppController {
 				if (count($blogCategories) > 1) {
 					foreach ($blogCategories as $key => $blogCategory) {
 						if ($key < count($blogCategories) - 1) {
-							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
