@@ -322,6 +322,10 @@ class BlogPostsController extends BlogAppController {
 			'empty' => '指定しない'
 		));
 
+		$Permission = ClassRegistry::init('Permission');
+		$blogCategoryAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId)));
+		$categoryAddable = $Permission->check($blogCategoryAddUrl, $user['user_group_id']);
+
 		$editorOptions = array('editorDisableDraft' => true);
 		if (!empty($this->siteConfigs['editor_styles'])) {
 			App::uses('CKEditorStyleParser', 'Vendor');
@@ -335,6 +339,7 @@ class BlogPostsController extends BlogAppController {
 
 		$this->set('editable', true);
 		$this->set('categories', $categories);
+		$this->set('categoryAddable', $categoryAddable);
 		$this->set('previewId', 'add_' . mt_rand(0, 99999999));
 		$this->set('editorOptions', $editorOptions);
 		$this->set('users', $this->BlogPost->User->getUserList(array('User.id' => $user['id'])));
@@ -418,6 +423,10 @@ class BlogPostsController extends BlogAppController {
 			'empty' => '指定しない'
 		));
 
+		$Permission = ClassRegistry::init('Permission');
+		$blogCategoryAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId)));
+		$categoryAddable = $Permission->check($blogCategoryAddUrl, $user['user_group_id']);
+
 		if ($this->request->data['BlogPost']['status']) {
 			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->request->data['BlogPost']['no']);
 		}
@@ -436,6 +445,7 @@ class BlogPostsController extends BlogAppController {
 		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
 		$this->set('categories', $categories);
+		$this->set('categoryAddable', $categoryAddable);
 		$this->set('previewId', $this->request->data['BlogPost']['id']);
 		$this->set('users', $this->BlogPost->User->getUserList());
 		$this->set('editorOptions', $editorOptions);
