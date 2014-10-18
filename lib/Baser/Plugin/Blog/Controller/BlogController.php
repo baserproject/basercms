@@ -395,7 +395,7 @@ class BlogController extends BlogAppController {
 					$blogCategories = $this->BlogCategory->getPath($post['BlogPost']['blog_category_id'], array('name', 'title'));
 					if ($blogCategories) {
 						foreach ($blogCategories as $blogCategory) {
-							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -409,7 +409,7 @@ class BlogController extends BlogAppController {
 		}
 
 		// 表示設定
-		$this->crumbs += $crumbs;
+		$this->crumbs = array_merge($this->crumbs, $crumbs);
 		$this->set('single', $single);
 		$this->set('posts', $posts);
 		$this->set('year', $year);
