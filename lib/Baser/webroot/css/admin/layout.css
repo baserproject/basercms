@@ -93,7 +93,7 @@ body > #Page {
 #SideBar{
 	width: 208px;
 	float: left;
-	position:relative;
+	position: absolute;
 	left:-180px;
 }
 
