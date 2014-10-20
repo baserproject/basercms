@@ -245,5 +245,15 @@ class Feed extends FeedAppModel {
 
 		return md5($hashSource) . $ext;
 	}
-	
+
+/**
+ * URL文字列に対しキャッシュファイルのハッシュを生成して返す
+ *
+ * @param string $ext 拡張子
+ * @param string $url URL文字列
+ * @return string
+ */
+	public function createCacheHash($ext = '', $url) {
+		return $this->_createCacheHash($ext, $url);
+	}
 }

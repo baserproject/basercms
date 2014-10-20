@@ -20,6 +20,9 @@
  * フィード詳細コントローラー
  *
  * @package Feed.Controller
+ * @property Feed $Feed
+ * @property FeedConfig $FeedConfig
+ * @property FeedDetail $FeedDetail
  */
 class FeedDetailsController extends FeedAppController {
 
@@ -37,7 +40,7 @@ class FeedDetailsController extends FeedAppController {
  * @var array
  * @access public
  */
-	public $uses = array('Feed.FeedDetail', 'Feed.FeedConfig', 'Feed.RssEx');
+	public $uses = array('Feed.FeedDetail', 'Feed.FeedConfig', 'Feed.Feed');
 
 /**
  * ヘルパー
@@ -190,10 +193,10 @@ class FeedDetailsController extends FeedAppController {
 		clearViewCache('/feed/cachetime/' . $feedConfigId);
 		if (strpos($url, 'http') === false) {
 			// 実際のキャッシュではSSLを利用しているかどうかわからないので、両方削除する
-			clearCache($this->RssEx->__createCacheHash('', 'http://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
-			clearCache($this->RssEx->__createCacheHash('', 'https://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+			clearCache($this->Feed->createCacheHash('', 'http://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+			clearCache($this->Feed->createCacheHash('', 'https://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
 		} else {
-			clearCache($this->RssEx->__createCacheHash('', $url), 'views', '.rss');
+			clearCache($this->Feed->createCacheHash('', $url), 'views', '.rss');
 		}
 	}
 
