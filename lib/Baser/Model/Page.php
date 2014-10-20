@@ -1025,11 +1025,13 @@ class Page extends AppModel {
 	}
 
 /**
- * ページで管理されているURLかチェックする
+ * 固定ページとして管理されているURLかチェックする
  * 
- * @param string $url
+ * $this->_pages をキャッシュとして利用する
+ * URL に、拡張子 .html がついている場合も存在するとみなす
+ * 
+ * @param string $url URL
  * @return boolean
- * @access public
  */
 	public function isPageUrl($url) {
 		if (preg_match('/\/$/', $url)) {
@@ -1039,7 +1041,7 @@ class Page extends AppModel {
 
 		if ($this->_pages == -1) {
 			$pages = $this->find('all', array(
-				'fields' => 'url',
+				'fields'	=> 'url',
 				'recursive' => -1
 			));
 			if (!$pages) {
@@ -1048,7 +1050,16 @@ class Page extends AppModel {
 			}
 			$this->_pages = Hash::extract($pages, '{n}.Page.url');
 		}
-		return in_array($url, $this->_pages);
+		if(in_array($url, $this->_pages)) {
+			return true;
+		}
+		if(preg_match('/\.html$/', $url)) {
+			$url = preg_replace('/\.html$/', '', $url);
+			if(in_array($url, $this->_pages)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 /**

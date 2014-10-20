@@ -970,25 +970,25 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('/m/', 'Home', 'mobile', array('mobile')),
 			array('/m/news', 'News', 'mobile', array('mobile')),
 			array('/m/contact', 'Contact', 'mobile', array('mobile')),
-			array('/m/company', 'M', 'mobile', array('mobile')),
+			array('/m/company', 'M', 'mobile', array('mobile')),	// 存在しないページ
 
 			//スマートフォン 対応ON　連動OFF
 			array('/s/', 'Home', 'smartphone', array('smartphone')),
 			array('/s/news', 'News', 'smartphone', array('smartphone')),
 			array('/s/contact', 'Contact', 'smartphone', array('smartphone')),
-			array('/s/company', 'S', 'smartphone', array('smartphone')),
+			array('/s/company', 'S', 'smartphone', array('smartphone')),	// 存在しないページ
 
 			//モバイル　対応ON 連動ON
 			array('/m/', 'Home', 'mobile', array('mobile'), array('mobile')),
 			array('/m/news', 'News', 'mobile', array('mobile'), array('mobile')),
 			array('/m/contact', 'Contact', 'mobile', array('mobile'), array('mobile')),
-			array('/m/company', 'Default', 'mobile', array('mobile'), array('mobile')),
+			array('/m/company', 'Default', 'mobile', array('mobile'), array('mobile')),	// 存在しないページ
 
 			//スマートフォン 対応ON　連動ON
 			array('/s/', 'Home', 'smartphone', array('smartphone'), array('smartphone')),
 			array('/s/news', 'News', 'smartphone', array('smartphone'), array('smartphone')),
 			array('/s/contact', 'Contact', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/company', 'Default', 'smartphone', array('smartphone'), array('smartphone'))
+			array('/s/company', 'Default', 'smartphone', array('smartphone'), array('smartphone'))	// 存在しないページ
 		);
 	}
 	

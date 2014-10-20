@@ -62,6 +62,7 @@ class BaserTestCase extends CakeTestCase {
 		if (empty($agent)) {
 			return;
 		}
+		Configure::write('BcApp.' . $prefix, true);
 		Configure::write('BcRequest.agent', $prefix);
 		Configure::write('BcRequest.agentPrefix', $agent['prefix']);
 		Configure::write('BcRequest.agentAlias', $agent['alias']);
