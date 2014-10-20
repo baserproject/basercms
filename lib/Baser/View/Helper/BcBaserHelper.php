@@ -719,6 +719,8 @@ class BcBaserHelper extends AppHelper {
 		echo $this->_View->fetch('meta');
 		echo $this->_View->fetch('css');
 		echo $this->_View->fetch('script');
+		// TODO CakePHP では、 scripts_for_layout は deprecated となっているが後方互換の為残しておく
+		// baserCMS 4系で除外予定
 		echo $this->_View->get('scripts_for_layout');
 		
 		// ### ツールバー用CSS出力

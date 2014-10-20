@@ -20,7 +20,7 @@ if (!$userModel) {
 }
 list(, $userModel) = pluginSplit($userModel);
 $userController = Inflector::tableize($userModel);
-$this->addScript(<<< CSS_END
+$this->append('script', <<< CSS_END
 <style type="text/css">
 #Contents {
 	display: none;

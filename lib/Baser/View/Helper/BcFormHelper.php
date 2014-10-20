@@ -1210,7 +1210,7 @@ $(function(){
 });
 </script>
 DOC_END;
-		$script = $this->_View->addScript($_script);
+		$script = $this->_View->append('script', $_script);
 		return $dateTag . $timeTag . $hiddenTag;
 	}
 	
