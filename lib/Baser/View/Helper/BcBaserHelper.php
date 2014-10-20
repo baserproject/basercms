@@ -719,7 +719,8 @@ class BcBaserHelper extends AppHelper {
 		echo $this->_View->fetch('meta');
 		echo $this->_View->fetch('css');
 		echo $this->_View->fetch('script');
-
+		echo $this->_View->get('scripts_for_layout');
+		
 		// ### ツールバー用CSS出力
 		// 《表示条件》
 		// - プレビューでない
