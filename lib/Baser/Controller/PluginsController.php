@@ -144,39 +144,46 @@ class PluginsController extends AppController {
 		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
 		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.status', 'desc');
-
-		$baserPlugins = array();
-		if(strtotime('2014-03-31 17:00:00') <= time()) {
-			$cachePath = 'views' . DS . 'baser_market_plugins.rss';
-			if (Configure::read('debug') > 0) {
-				clearCache('baser_market_plugins', 'views', '.rss');
-			}
-			$baserPlugins = cache($cachePath);
-			if(!$baserPlugins) {
-				$Xml = new Xml();
-				try {
-					$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-				} catch (Exception $ex) {}
-				if($baserPlugins) {
-					$baserPlugins = $Xml->toArray($baserPlugins->channel);
-					$baserPlugins = $baserPlugins['channel']['item'];
-					cache($cachePath, BcUtil::serialize($baserPlugins));
-					chmod(CACHE . $cachePath, 0666);
-				} else {
-					$baserPlugins = array();
-				}
-			} else {
-				$baserPlugins = BcUtil::unserialize($baserPlugins);
-			}
-		}
 		
 		// 表示設定
-		$this->set('baserPlugins', $baserPlugins);
 		$this->set('datas', $pluginInfos);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';
+	}
+
+/**
+ * baserマーケットのプラグインデータを取得する
+ */
+	public function admin_ajax_get_market_plugins() {
+		
+		$baserPlugins = array();
+		
+		$cachePath = 'views' . DS . 'baser_market_plugins.rss';
+		if (Configure::read('debug') > 0) {
+			clearCache('baser_market_plugins', 'views', '.rss');
+		}
+		$baserPlugins = cache($cachePath);
+		if(!$baserPlugins) {
+			$Xml = new Xml();
+			try {
+				$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
+			} catch (Exception $ex) {}
+			if($baserPlugins) {
+				$baserPlugins = $Xml->toArray($baserPlugins->channel);
+				$baserPlugins = $baserPlugins['channel']['item'];
+				cache($cachePath, BcUtil::serialize($baserPlugins));
+				chmod(CACHE . $cachePath, 0666);
+			} else {
+				$baserPlugins = array();
+			}
+		} else {
+			$baserPlugins = BcUtil::unserialize($baserPlugins);
+		}
+		
+		$this->set('baserPlugins', $baserPlugins);
+		
 	}
 
 /**

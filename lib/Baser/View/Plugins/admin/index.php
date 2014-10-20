@@ -34,7 +34,20 @@ $(function(){
 	$.baserAjaxBatch.config.methods.del.result = null;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
+	
+/**
+ * マーケットのデータを取得
+ */
+	$.ajax({
+		url: $.baseUrl + '/admin/plugins/ajax_get_market_plugins',
+		type: "GET",
+		success: function(result) {
+			$("#BaserMarket").html(result);
+		}
+	});
+	
 	$( "#tabs" ).tabs();
+	
 });
 </script>
 
@@ -48,5 +61,5 @@ $(function(){
 		<li><a href="#BaserMarket">baserマーケット</a></li>
 	</ul>
 	<div id="DataList"><?php $this->BcBaser->element('plugins/index_list') ?></div>
-	<div id="BaserMarket"><?php $this->BcBaser->element('plugins/index_list_market') ?></div>
+	<div id="BaserMarket"><div style="padding:20px;text-align:center;"><?php $this->BcBaser->img('admin/ajax-loader.gif', array('alt' => 'Loading...')) ?></div></div>
 </div>
