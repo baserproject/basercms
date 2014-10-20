@@ -138,26 +138,7 @@ class InstallationsController extends AppController {
  */
 	public function index() {
 		$this->pageTitle = 'baserCMSのインストール';
-
-		// 一時ファイルを削除する（再インストール用）
-		if (is_writable(TMP)) {
-			$folder = new Folder(TMP);
-			$files = $folder->read(true, true, true);
-			if (isset($files[0])) { // check directory
-				foreach ($files[0] as $file) {
-					if (basename($file) != 'logs') {
-						$folder->delete($file);
-					}
-				}
-			}
-			if (isset($files[1])) { // check file
-				foreach ($files[1] as $file) {
-					if (basename($file) != 'empty') {
-						$folder->delete($file);
-					}
-				}
-			}
-		}
+		clearAllCache();
 	}
 
 /**
