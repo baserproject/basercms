@@ -835,7 +835,7 @@ class BcBaserHelper extends AppHelper {
  * CSSの読み込みタグを出力する
  *
  * @param string $path
- * @param array $options オプションのパラメータ、初期値は array()
+ * @param array $options オプションのパラメータ
  * @param boolean $inline
  * @return void
  */
@@ -1032,7 +1032,7 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * SSL通信かどうか確認する
+ * SSL通信かどうか判定する
  *
  * @return boolean
  */
@@ -1046,7 +1046,7 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * charsetメタタグを出力する
+ * charset メタタグを出力する
  *
  * @param string $charset オプションのパラメータ、初期値は null
  * @return void
@@ -1076,7 +1076,7 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * ページ編集へのリンクを出力する
+ * 編集画面へのリンクを設定する
  *
  * @param string $id
  * @return void
@@ -1089,7 +1089,7 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * 編集リンクを出力する
+ * 編集画面へのリンクを出力する
  *
  * @return void
  */
@@ -1101,7 +1101,7 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * 編集リンクが存在するかチェックする
+ * 編集画面へのリンクが存在するかチェックする
  *
  * @return boolean
  */
@@ -1597,6 +1597,7 @@ END_FLASH;
 
 /**
  * URLをリンクとして利用可能なURLに変換する
+ * 
  * ページの確認用URL取得に利用する
  * /smartphone/about → /s/about
  *
@@ -1637,6 +1638,7 @@ END_FLASH;
 
 /**
  * 現在のページの純粋なURLを取得する
+ * 
  * スマートURLかどうか、サブフォルダかどうかに依存しないスラッシュから始まるURL
  *
  * @return string
@@ -2007,6 +2009,7 @@ END_FLASH;
 
 /**
  * ベースとなるURLを取得する
+ * 
  * サブフォルダやスマートURLについて考慮されている事が前提
  * 
  * @return string
@@ -2017,6 +2020,7 @@ END_FLASH;
 	
 /**
  * ベースとなるURLを出力する
+ * 
  * サブフォルダやスマートURLについて考慮されている事が前提
  * 
  * @return void
@@ -2102,4 +2106,5 @@ END_FLASH;
 	public function siteSearchForm($data = array(), $options = array()) {
 		$this->element('site_search_form', $data, $options);
 	}
+	
 }

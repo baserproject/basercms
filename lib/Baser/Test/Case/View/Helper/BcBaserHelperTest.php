@@ -85,7 +85,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->set('user', '');
 	}
 
-	/**
+/**
  * コンストラクタ
  */
 	public function testConstruct() {
@@ -812,78 +812,110 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 	
 /**
- * パンくずリストのHTMLレンダリング結果を表示する
+ * CSSの読み込みタグを出力する
  */
-	public function testCrumbs() {
-		
-		// パンくずが設定されてない場合
-		$result = $this->BcBaser->crumbs();
-		$this->assertEmpty($result);
-		
-		// パンくずが設定されている場合
-		$crumbs = array(
-			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data'),
-			array('name' => '会社沿革', 'url' => '')
-		);
-		foreach($crumbs as $crumb) {
-			$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
-		}
-		ob_start();
-		$this->BcBaser->crumbs();
-		$result = ob_get_clean();
-		$expected = array(
-			array('a' => array('href' => '/company/index')),
-			'会社案内',
-			'/a',
-			'&raquo;',
-			array('a' => array('href' => '/company/data')),
-			'会社データ',
-			'/a',
-			'&raquo;会社沿革'		
-		);
-		$this->assertTags($result, $expected);
-		
-		// 区切り文字を変更、先頭にホームを追加
-		ob_start();
-		$this->BcBaser->crumbs(' | ', 'ホーム');
-		$result = ob_get_clean();
-		$expected = array(
-			array('a' => array('href' => '/')),
-			'ホーム',
-			'/a',
-			' | ',
-			array('a' => array('href' => '/company/index')),
-			'会社案内',
-			'/a',
-			' | ',
-			array('a' => array('href' => '/company/data')),
-			'会社データ',
-			'/a',
-			' | 会社沿革'	
-		);
-		$this->assertTags($result, $expected);
-		
+	public function testCss() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * JSの読み込みタグを出力する
+ */
+	public function testJs() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 画像読み込みタグを出力する
+ */
+	public function testImg() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 画像タグを取得する
+ */
+	public function testGetImg() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * アンカータグを出力する
+ */
+	public function testLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * アンカータグを取得する
+ */
+	public function testGetLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * コピーライト用の年を出力する
+ */
+	public function testCopyYear() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 編集画面へのリンクを設定する
+ */
+	public function testSetPageEditLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 編集画面へのリンクを出力する
+ */
+	public function testEditLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 編集画面へのリンクが存在するかチェックする
+ */
+	public function testExistsEditLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 公開ページへのリンクを出力する
+ */
+	public function testPublishLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * パンくずを追加する
+ * 公開ページへのリンクが存在するかチェックする
  */
-	public function testAddCrumbs() {
-		
-		$this->BcBaser->addCrumb('会社案内', '/company/index');
-		ob_start();
-		$this->BcBaser->crumbs();
-		$result = ob_get_clean();
-		$expected = array(
-			array('a' => array('href' => '/company/index')),
-			'会社案内',
-			'/a'
-		);
-		$this->assertTags($result, $expected);
-		
+	public function testExistsPublishLink() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * アップデート処理が必要かチェックする
+ */
+	public function testCheckUpdate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * アップデート用のメッセージを出力する
+ */
+	public function testUpdateMessage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
+/**
+ * コンテンツを特定するIDを出力する
+ */
+	public function testContentsName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
 /**
  * コンテンツを特定するIDを取得する
  * ・キャメルケースで取得
@@ -961,6 +993,170 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 	
 /**
+ * パンくずリストのHTMLレンダリング結果を表示する
+ */
+	public function testCrumbs() {
+		
+		// パンくずが設定されてない場合
+		$result = $this->BcBaser->crumbs();
+		$this->assertEmpty($result);
+		
+		// パンくずが設定されている場合
+		$crumbs = array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data'),
+			array('name' => '会社沿革', 'url' => '')
+		);
+		foreach($crumbs as $crumb) {
+			$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
+		}
+		ob_start();
+		$this->BcBaser->crumbs();
+		$result = ob_get_clean();
+		$expected = array(
+			array('a' => array('href' => '/company/index')),
+			'会社案内',
+			'/a',
+			'&raquo;',
+			array('a' => array('href' => '/company/data')),
+			'会社データ',
+			'/a',
+			'&raquo;会社沿革'		
+		);
+		$this->assertTags($result, $expected);
+		
+		// 区切り文字を変更、先頭にホームを追加
+		ob_start();
+		$this->BcBaser->crumbs(' | ', 'ホーム');
+		$result = ob_get_clean();
+		$expected = array(
+			array('a' => array('href' => '/')),
+			'ホーム',
+			'/a',
+			' | ',
+			array('a' => array('href' => '/company/index')),
+			'会社案内',
+			'/a',
+			' | ',
+			array('a' => array('href' => '/company/data')),
+			'会社データ',
+			'/a',
+			' | 会社沿革'	
+		);
+		$this->assertTags($result, $expected);
+		
+	}
+
+/**
+ * パンくずリストの要素を追加する
+ */
+	public function testAddCrumbs() {
+		
+		$this->BcBaser->addCrumb('会社案内', '/company/index');
+		ob_start();
+		$this->BcBaser->crumbs();
+		$result = ob_get_clean();
+		$expected = array(
+			array('a' => array('href' => '/company/index')),
+			'会社案内',
+			'/a'
+		);
+		$this->assertTags($result, $expected);
+		
+	}
+	
+/**
+ * ページ機能で作成したページの一覧データを取得する
+ */
+	public function testGetPageList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * ブラウザにキャッシュさせる為のヘッダーを出力する
+ */
+	public function testCacheHeader() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * httpから始まるURLを取得する
+ */
+	public function testGetUri() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 文字列を検索しマークとしてタグをつける
+ */
+	public function testMark() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * サイトマップを出力する
+ */
+	public function testSitemap() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * Flashを表示する
+ */
+	public function testSwf() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * URLをリンクとして利用可能なURLに変換する
+ */
+	public function testChangePrefixToAlias() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 現在のログインユーザーが管理者グループかどうかチェックする
+ */
+	public function testIsAdminUser() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 現在のページが固定ページかどうかを判定する
+ */
+	public function testIsPage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 現在のページの純粋なURLを取得する
+ */
+	public function testGetHere() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 現在のページがページカテゴリのトップかどうかを判定する
+ */
+	public function testIsCategoryTop() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * ページをエレメントとして読み込む
+ */
+	public function testPage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * ウィジェットエリアを出力する
+ */
+	public function testWidgetArea() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
  * 指定したURLが現在のURLかどうか判定する
  *
  * @param string $currentUrl 現在のURL
@@ -1003,6 +1199,117 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('/news', '/', false)
 		);
 	}
-
+	
+/**
+ * ユーザー名を整形して表示する
+ */
+	public function testGetUserName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * コアテンプレートを読み込む
+ */
+	public function testIncludeCore() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * ロゴを出力する
+ */
+	public function testLogo() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * メインイメージを出力する
+ */
+	public function testMainImage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * テーマのURLを取得する
+ */
+	public function testGetThemeUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * テーマのURLを出力する
+ */
+	public function testThemeUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * ベースとなるURLを取得する
+ */
+	public function testGetBaseUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * ベースとなるURLを出力する
+ */
+	public function testBaseUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * サブメニューを出力する
+ */
+	public function testSubMenu() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * コンテンツナビを出力する
+ */
+	public function testContentsNavi() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * パンくずリストを出力する
+ */
+	public function testCrumbsList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * グローバルメニューを出力する
+ */
+	public function testGlobalMenu() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * Google Analytics のトラッキングコードを出力する
+ */
+	public function testGoogleAnalytics() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * Google Maps を出力する
+ */
+	public function testGoogleMaps() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * 表示件数設定機能を出力する
+ */
+	public function testListNum() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+	
+/**
+ * サイト内検索フォームを出力
+ */
+	public function testSiteSearchForm() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 	
 }
