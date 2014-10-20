@@ -319,7 +319,7 @@ class SiteConfigsController extends AppController {
 		}
 	
 		if($specialThanks) {
-			$json = $specialThanks;
+			$json = json_decode($specialThanks);
 		} else {
 			try {
 				$json = file_get_contents(Configure::read('BcApp.specialThanks'), true);
