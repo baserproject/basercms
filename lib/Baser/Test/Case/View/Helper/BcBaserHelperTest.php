@@ -38,7 +38,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.User',
 		'baser.UserGroup',
 		'baser.Favorite',
-		'baser.Permission'
+		'baser.Permission',
+		'baser.PageCategory'
 	);
 	
 /**
@@ -937,7 +938,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_unsetAgentLinks();
 
 		if (!empty($ua) && !empty($agents) && in_array($ua, $agents)) {
-			   $this->_setAgent($ua);
+			$this->_setAgentSetting($ua, true);
+			$this->_setAgent($ua);
 		}
 
 		//連携を設定
@@ -1067,11 +1069,44 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * ページ機能で作成したページの一覧データを取得する
+ * 
+ * @param int $pageCategoryId 固定ページカテゴリ
+ * @param array $options オプション
+ * @param array $expected ページリストデータ
+ * @dataProvider getPageListDataProvider
  */
-	public function testGetPageList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetPageList($pageCategoryId, $options, $expected) {
+		$this->_setAgentSetting('mobile', true);
+		$this->_setAgentSetting('smartphone', true);
+		$result = $this->BcBaser->getPageList($pageCategoryId, $options);
+		$this->assertEqual($result, $expected);
 	}
 	
+/**
+ * getPageList 用のデータプロバイダ
+ * @return array
+ */
+	public function getPageListDataProvider() {
+		return array(
+			array(null, array(), array(
+				array('title' => 'PCトップページ', 'url' => '/'), 
+				array('title' => 'サービス', 'url' => '/service'), 
+				array('title' => '会社案内', 'url' => '/company'),
+				array('title' => 'モバイルトップページ', 'url' => '/m/'),
+				array('title' => 'スマートフォントップページ', 'url' => '/s/')
+			)),
+			array(1, null, array(
+				array('title' => 'モバイルトップページ', 'url' => '/m/')
+			)),
+			array(null, array('order' => 'Page.sort DESC'), array(
+				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
+				array('title' => 'モバイルトップページ', 'url' => '/m/'),
+				array('title' => '会社案内', 'url' => '/company'),
+				array('title' => 'サービス', 'url' => '/service'), 
+				array('title' => 'PCトップページ', 'url' => '/')
+			))
+		);
+	}
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  */

@@ -37,7 +37,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray');
+	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage');
 
 /**
  * ページモデル
@@ -1373,18 +1373,29 @@ class BcBaserHelper extends AppHelper {
  * @param string $categoryId オプションのパラメータ、初期値は null
  * @return mixed boolean / array
  */
-	public function getPageList($categoryId = null) {
-
+	public function getPageList($categoryId = null, $options = array()) {
 		if ($this->_Page) {
-			$conditions = array('Page.status' => 1);
+			if(!$options) {
+				$options = array();	
+			}
+			$options = array_merge(array(
+				'conditions'=> array('Page.status' => 1),
+				'fields'	=> array('title', 'url'),
+				'order'		=> 'Page.sort'
+			), $options);
 			if ($categoryId) {
-				$conditions['Page.page_category_id'] = $categoryId;
+				$options['conditions']['Page.page_category_id'] = $categoryId;
 			}
 			$this->_Page->unbindModel(array('belongsTo' => array('PageCategory')));
-			$pages = $this->_Page->find('all', array('conditions' => $conditions,
-				'fields' => array('title', 'url'),
-				'order' => 'Page.sort'));
-			return Hash::extract($pages, '{n}.Page');
+			$pages = $this->_Page->find('all', $options);
+			if($pages) {
+				foreach($pages as $key => $page) {
+					$pages[$key]['Page']['url'] = $this->BcPage->getUrl($page);
+				}
+				return Hash::extract($pages, '{n}.Page');
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

@@ -62,12 +62,21 @@ class BaserTestCase extends CakeTestCase {
 		if (empty($agent)) {
 			return;
 		}
-		Configure::write('BcApp.' . $prefix, true);
 		Configure::write('BcRequest.agent', $prefix);
 		Configure::write('BcRequest.agentPrefix', $agent['prefix']);
 		Configure::write('BcRequest.agentAlias', $agent['alias']);
 	}
 
+/**
+ * ユーザーエージェント設定
+ * 
+ * @param string $agent エージェントのタイプ
+ * @param boolean $enabled true:有効 / false:無効
+ */
+	protected function _setAgentSetting($agentType, $enabled) {
+		Configure::write('BcApp.' . $agentType, $enabled);
+	}
+	
 /**
  * エージェント判定に利用される値を消去する
  *

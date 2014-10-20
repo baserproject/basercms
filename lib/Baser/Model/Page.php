@@ -594,6 +594,8 @@ class Page extends AppModel {
 				foreach ($categoryPath as $key => $category) {
 					if ($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.mobile.prefix')) {
 						$url .= Configure::read('BcAgent.mobile.prefix') . '/';
+					} elseif ($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.smartphone.prefix')) {
+						$url .= Configure::read('BcAgent.smartphone.prefix') . '/';
 					} else {
 						$url .= $category['PageCategory']['name'] . '/';
 					}
@@ -601,6 +603,25 @@ class Page extends AppModel {
 			}
 		}
 		return $url . $data['name'];
+	}
+	
+/**
+ * 固定ページのURLを表示用のURLに変換する
+ * 
+ * 《変換例》
+ * /mobile/index → /m/
+ * 
+ * @param string $url 変換対象のURL
+ * @return string 表示の用のURL
+ */
+	public function convertViewUrl($url) {
+		$url = preg_replace('/\/index$/', '/', $url);
+		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', $url)) {
+			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
+		} elseif (preg_match('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', $url)) {
+			$url = preg_replace('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
+		}
+		return $url;
 	}
 
 /**

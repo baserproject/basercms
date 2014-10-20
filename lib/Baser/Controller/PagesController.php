@@ -401,7 +401,7 @@ class PagesController extends AppController {
 			'empty' => '指定しない'
 		));
 
-		$url = $this->convertViewUrl($this->request->data['Page']['url']);
+		$url = $this->Page->convertViewUrl($this->request->data['Page']['url']);
 
 		if ($this->request->data['Page']['url']) {
 			$this->set('publishLink', $url);

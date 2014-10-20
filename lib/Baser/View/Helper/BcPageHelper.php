@@ -89,12 +89,17 @@ class BcPageHelper extends Helper {
 /**
  * ページ機能用URLを取得する
  * 
- * @param array $page 
- * @return string
+ * @param array $page 固定ページデータ
+ * @return string URL
  */
 	public function getUrl($page) {
-
-		return $this->Page->getPageUrl($page);
+		if(isset($page['Page'])) {
+			$page = $page['Page'];
+		}
+		if(!isset($page['url'])) {
+			return '';
+		}
+		return $this->Page->convertViewUrl($page['url']);
 	}
 
 /**
