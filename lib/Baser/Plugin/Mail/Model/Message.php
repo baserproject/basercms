@@ -261,14 +261,15 @@ class Message extends MailAppModel {
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
 			if (!empty($mailField['use_field'])) {
+				$valids = explode(',', $mailField['valid_ex']);
 				// マルチチェックボックスのチェックなしチェック
-				if ($mailField['valid_ex'] == 'VALID_NOT_UNCHECKED') {
+				if (in_array('VALID_NOT_UNCHECKED', $valids)) {
 					if (empty($data['Message'][$mailField['field_name']])) {
 						$this->invalidate($mailField['field_name'], '必須項目です。');
 					}
 					$dists[$mailField['field_name']][] = @$data['Message'][$mailField['field_name']];
 					// datetimeの空チェック
-				} elseif ($mailField['valid_ex'] == 'VALID_DATETIME') {
+				} elseif (in_array('VALID_DATETIME', $valids)) {
 					if (empty($data['Message'][$mailField['field_name']]['year']) ||
 						empty($data['Message'][$mailField['field_name']]['month']) ||
 						empty($data['Message'][$mailField['field_name']]['day'])) {
@@ -321,7 +322,8 @@ class Message extends MailAppModel {
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
-			if ($mailField['valid_ex'] == 'VALID_GROUP_COMPLATE' && !empty($mailField['use_field'])) {
+			$valids = explode(',', $mailField['valid_ex']);
+			if (in_array('VALID_GROUP_COMPLATE', $valids) && !empty($mailField['use_field'])) {
 				$dists[$mailField['group_valid']][] = $data['Message'][$mailField['field_name']];
 			}
 		}
@@ -358,8 +360,9 @@ class Message extends MailAppModel {
 		// 対象フィールドを取得
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
+			$valids = explode(',', $mailField['valid_ex']);
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
-			if ($mailField['valid_ex'] == 'VALID_EMAIL_CONFIRM') {
+			if (in_array('VALID_EMAIL_CONFIRM', $valids)) {
 				if (isset($data['Message'][$mailField['field_name']])) {
 					$dists[$mailField['group_valid']][] = $data['Message'][$mailField['field_name']];
 				}
