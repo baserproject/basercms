@@ -19,6 +19,8 @@ App::uses('CakeRequest', 'Network');
  */
 class CakeRequestTest extends BaserTestCase {
 	
+	public $fixtures = array('baser.Page');
+	
 	public function testNormalizedHere() {
 		
 		$CakeRequest = new CakeRequest('/');
