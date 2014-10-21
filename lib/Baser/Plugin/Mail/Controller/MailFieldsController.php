@@ -166,15 +166,17 @@ class MailFieldsController extends MailAppController {
 		} else {
 
 			/* 登録処理 */
-			$this->request->data['MailField']['mail_content_id'] = $mailContentId;
-			$this->request->data['MailField']['no'] = $this->MailField->getMax('no', array('MailField.mail_content_id' => $mailContentId)) + 1;
-			$this->request->data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
-			$this->MailField->create($this->request->data);
+			$data = $this->request->data;
+			$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
+			$data['MailField']['mail_content_id'] = $mailContentId;
+			$data['MailField']['no'] = $this->MailField->getMax('no', array('MailField.mail_content_id' => $mailContentId)) + 1;
+			$data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
+			$this->MailField->create($data);
 			if ($this->MailField->validates()) {
-				if ($this->Message->addMessageField($this->mailContent['MailContent']['name'], $this->request->data['MailField']['field_name'])) {
+				if ($this->Message->addMessageField($this->mailContent['MailContent']['name'], $data['MailField']['field_name'])) {
 					// データを保存
 					if ($this->MailField->save(null, false)) {
-						$this->setMessage('新規メールフィールド「' . $this->request->data['MailField']['name'] . '」を追加しました。', false, true);
+						$this->setMessage('新規メールフィールド「' . $data['MailField']['name'] . '」を追加しました。', false, true);
 						$this->redirect(array('controller' => 'mail_fields', 'action' => 'index', $mailContentId));
 					} else {
 						$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -208,19 +210,23 @@ class MailFieldsController extends MailAppController {
 		}
 
 		if (empty($this->request->data)) {
-			$this->request->data = $this->MailField->read(null, $id);
+			$data = $this->MailField->read(null, $id);
+			$data['MailField']['valid_ex'] = explode(',', $data['MailField']['valid_ex']);
+			$this->request->data = $data;
 		} else {
 			$old = $this->MailField->read(null, $id);
-			$this->MailField->set($this->request->data);
+			$data = $this->request->data;
+			$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
+			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
 				$ret = true;
-				if ($old['MailField']['field_name'] != $this->request->data['MailField']['field_name']) {
-					$ret = $this->Message->renameMessageField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'], $this->request->data['MailField']['field_name']);
+				if ($old['MailField']['field_name'] != $data['MailField']['field_name']) {
+					$ret = $this->Message->renameMessageField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'], $data['MailField']['field_name']);
 				}
 				if ($ret) {
 					/* 更新処理 */
 					if ($this->MailField->save(null, false)) {
-						$this->setMessage('メールフィールド「' . $this->request->data['MailField']['name'] . '」を更新しました。', false, true);
+						$this->setMessage('メールフィールド「' . $data['MailField']['name'] . '」を更新しました。', false, true);
 						$this->redirect(array('action' => 'index', $mailContentId));
 					} else {
 						$this->setMessage('データベース処理中にエラーが発生しました。', true);

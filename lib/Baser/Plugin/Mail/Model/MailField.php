@@ -143,8 +143,10 @@ class MailField extends MailAppModel {
 		$source['valid_ex'] = array(
 			'VALID_EMAIL_CONFIRM'	=> 'Eメール比較チェック',
 			'VALID_GROUP_COMPLATE'	=> 'グループチェック',
-			'VALID_NOT_UNCHECKED'	=> 'チェックなしチェック',
-			'VALID_DATETIME'		=> '日付チェック'
+			'VALID_NOT_UNCHECKED'	=> 'チェックボックス未入力チェック',
+			'VALID_DATETIME'		=> '日付チェック',
+			'VALID_MAX_FILE_SIZE'	=> 'ファイルアップロードサイズ制限',
+			'VALID_FILE_EXT'		=> 'ファイル拡張子チェック'
 		);
 
 		$source['auto_convert'] = array('CONVERT_HANKAKU' => '半角変換');

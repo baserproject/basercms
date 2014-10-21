@@ -130,7 +130,13 @@ class MailformHelper extends BcFreezeHelper {
 					$attributes['width'] = 400;
 				}
 				$attributes['delCheck'] = false;
-				$out = $this->file($fieldName, $attributes);
+				if(!empty($attributes['maxFileSize'])) {
+					$out = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $attributes['maxFileSize'] * 1000 * 1000 . '" />';
+				}
+				unset($attributes['maxFileSize']);
+				unset($attributes['fileExt']);
+				$out .= $this->file($fieldName, $attributes);
+
 				break;
 			
 			case 'date_time_calender':

@@ -176,8 +176,6 @@ class Message extends MailAppModel {
 		$this->_validExtends($data);
 		// バリデートグループエラーチェック
 		$this->_validGroupErrorCheck();
-		// エラー内容変換
-		$this->_validSingeErrorCheck();
 	}
 
 /**
@@ -220,6 +218,32 @@ class Message extends MailAppModel {
 					$this->validate[$mailField['field_name']] = $mailField['valid'];
 				}
 			}
+			// ### 拡張バリデーション
+			if($mailField['valid_ex'] && !empty($mailField['use_field'])) {
+				$valids = explode(',', $mailField['valid_ex']);
+				foreach($valids as $valid) {
+					$options = explode('|', $mailField['options']);
+					$options = call_user_func_array('aa', $options);
+					switch ($valid) {
+						case 'VALID_MAX_FILE_SIZE':
+							if(!empty($options['maxFileSize'])) {
+								$this->validate[$mailField['field_name']]['fileSize'] = array(
+									'rule'	=> array('fileSize', $options['maxFileSize'] * 1000 * 1000),
+									'message'	=> 'ファイルサイズがオーバーしています。' . $options['maxFileSize'] . 'MB以内のファイルをご利用ください。'
+								);
+							}
+							break;
+						case 'VALID_FILE_EXT':
+							if(!empty($options['fileExt'])) {
+								$this->validate[$mailField['field_name']]['fileExt'] = array(
+									'rule'	=> array('fileExt', $options['fileExt']),
+									'message'	=> 'ファイル形式が不正です。'
+								);
+							}
+							break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -240,34 +264,16 @@ class Message extends MailAppModel {
 				// マルチチェックボックスのチェックなしチェック
 				if ($mailField['valid_ex'] == 'VALID_NOT_UNCHECKED') {
 					if (empty($data['Message'][$mailField['field_name']])) {
-						$this->invalidate($mailField['field_name']);
+						$this->invalidate($mailField['field_name'], '必須項目です。');
 					}
 					$dists[$mailField['field_name']][] = @$data['Message'][$mailField['field_name']];
-
 					// datetimeの空チェック
 				} elseif ($mailField['valid_ex'] == 'VALID_DATETIME') {
 					if (empty($data['Message'][$mailField['field_name']]['year']) ||
 						empty($data['Message'][$mailField['field_name']]['month']) ||
 						empty($data['Message'][$mailField['field_name']]['day'])) {
-						$this->invalidate($mailField['field_name']);
+						$this->invalidate($mailField['field_name'], '日付の形式が不正です。');
 					}
-				}
-			}
-		}
-	}
-
-/**
- * エラー内容変換
- *
- * @return void
- * @access protected
- */
-	protected function _validSingeErrorCheck() {
-		foreach ($this->validate as $key => $data) {
-			// VALID_NOT_EMPTY以外は形式エラーとする
-			if (is_array($data) && key($data) != 'notEmpty') {
-				if (isset($this->validationErrors[$key])) {
-					$this->invalidate($key . '_format');
 				}
 			}
 		}
@@ -295,13 +301,7 @@ class Message extends MailAppModel {
 		foreach ($dists as $key => $dist) {
 			foreach ($dist as $data) {
 				if (isset($this->validationErrors[$data]) && isset($this->validate[$data])) {
-					// VALID_NOT_EMPTY以外は形式エラーとする
-					if (key($this->validate[$data]) != 'notEmpty') {
-						$this->invalidate($key);
-						$this->invalidate($key . '_format');
-					} else {
-						$this->invalidate($key);
-					}
+					$this->invalidate($key);
 				}
 			}
 		}
@@ -321,7 +321,7 @@ class Message extends MailAppModel {
 		foreach ($this->mailFields as $mailField) {
 			$mailField = $mailField['MailField'];
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
-			if ($mailField['valid_ex'] == 'VALID_GROUP_COMPLATE') {
+			if ($mailField['valid_ex'] == 'VALID_GROUP_COMPLATE' && !empty($mailField['use_field'])) {
 				$dists[$mailField['group_valid']][] = $data['Message'][$mailField['field_name']];
 			}
 		}
