@@ -388,11 +388,11 @@ class InstallationsController extends AppController {
 /**
  * データベースを構築する
  * 
- * @param type $nonDemoData
+ * @param type $dbDataPattern データパターン
  * @return boolean
  * @access protected
  */
-	protected function _constructionDb($dbDataPattern = false) {
+	protected function _constructionDb($dbDataPattern = null) {
 		$dbConfig = $this->_readDbSetting();
 		if (!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
 			return false;

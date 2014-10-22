@@ -397,14 +397,15 @@ class UsersController extends AppController {
 		/* 表示設定 */
 		$userGroups = $this->User->getControlSource('user_group_id');
 		$editable = true;
+		$deletable = true;
 
 		if (@$user['user_group_id'] != Configure::read('BcApp.adminGroupId') && Configure::read('debug') !== -1) {
 			$editable = false;
 		} elseif ($selfUpdate && @$user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
-			$editable = false;
+			$deletable = false;
 		}
 
-		$this->set(compact('userGroups', 'editable', 'selfUpdate'));
+		$this->set(compact('userGroups', 'editable', 'selfUpdate', 'deletable'));
 		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';

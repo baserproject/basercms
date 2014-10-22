@@ -610,7 +610,7 @@ class BcManagerComponent extends Component {
 		$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach ($corePlugins as $corePlugin) {
-			if (!$this->constructionTable($corePlugin, 'plugin', $dbConfig, $dbDataPattern)) {
+			if (!$this->constructionTable($corePlugin, 'plugin', $dbConfig)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
