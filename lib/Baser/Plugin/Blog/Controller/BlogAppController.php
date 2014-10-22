@@ -21,6 +21,8 @@ App::uses('BcPluginAppController', 'Controller');
  * ブログコントローラー基底クラス
  *
  * @package			Blog.Controller
+ * @property BlogPost $BlogPost
+ * @property BlogCategory $BlogCategory
  */
 class BlogAppController extends BcPluginAppController {
 

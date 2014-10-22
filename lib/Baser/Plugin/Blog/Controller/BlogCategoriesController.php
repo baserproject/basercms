@@ -20,6 +20,8 @@
  * カテゴリコントローラー
  *
  * @package Blog.Controller
+ * @property BlogContent $BlogContent
+ * @property BlogCategory $BlogCategory
  */
 class BlogCategoriesController extends BlogAppController {
 
