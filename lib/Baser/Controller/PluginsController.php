@@ -148,6 +148,11 @@ class PluginsController extends AppController {
 		// 表示設定
 		$this->set('datas', $pluginInfos);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
+		
+		if($this->request->is('ajax')) {
+			$this->render('ajax_index');
+		}
+		
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';

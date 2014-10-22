@@ -74,7 +74,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<?php echo $this->BcForm->input('MailField.head', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpHead', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.head') ?>
-				<div id="helptextHead" class="helptext"> グループの場合、２番目以降のフィールドは不要です。 </div>
+				<div id="helptextHead" class="helptext"> グループとして設定する場合、同グループの２番目以降のフィールドについてこの項目の入力は不要です。 </div>
 			</td>
 		</tr>
 		<tr id="RowNotEmpty">
@@ -167,8 +167,18 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 		<tr id="RowValidEx">
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.valid_ex', '拡張入力チェック') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.valid_ex', array('type' => 'select', 'options' => $this->BcForm->getControlSource('valid_ex'), 'empty' => 'なし')) ?>
+				<?php echo $this->BcForm->input('MailField.valid_ex', array('type' => 'select', 'multiple' => 'checkbox', 'options' => $this->BcForm->getControlSource('valid_ex'))) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpValidEx', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.valid_ex') ?>
+				<div id="helptextValidEx" class="helptext">
+					<ul>
+						<li>Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、グループ入力チェックに任意の同じ値を入力します。</li>
+						<li>グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入力します。</li>
+						<li>日付チェック：日付形式かどうかのチェックです。</li>
+						<li>ファイルアップロードサイズ制限：利用するには、「ファイル」タイプを選択し、オプション項目に、上限となるサイズを次の形式のように | 区切りで入力します。「maxFileSize|10（単位：MB）」</li>
+						<li>ファイル拡張子チェック：利用するには、「ファイル」タイプを選択し、オプション項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。「fileExt|jpg,pdf」</li>
+					</ul>
+				</div>
 			</td>
 		</tr>
 		<tr id="RowGroupField">

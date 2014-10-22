@@ -184,16 +184,12 @@ $(function(){
 </div>
 
 <div class="submit section">
+<?php if ($editable): ?>
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php if ($this->request->action == 'admin_edit'): ?>
-		<?php if (isset($this->BcBaser->siteConfig['demo_on']) && $this->BcBaser->siteConfig['demo_on']): ?>
-			<p class="message">デモサイトで管理ユーザーの編集、削除はできません</p>
-		<?php else: ?>
-			<?php if ($editable): ?>
-				<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('User.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('User.name')), false); ?>
-			<?php endif; ?>
-		<?php endif; ?>
+	<?php if ($this->request->action == 'admin_edit' && $deletable): ?>
+			<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('User.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('User.name')), false); ?>
 	<?php endif; ?>
+<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

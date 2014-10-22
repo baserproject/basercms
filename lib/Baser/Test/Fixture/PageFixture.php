@@ -78,6 +78,27 @@ class PageFixture extends CakeTestFixture {
 		array(
 			'id'			=> 4,
 			'sort'			=> 4,
+			'name'			=> 'recruit',
+			'title'			=> '採用情報',
+			'description'	=> '',
+			'contents'		=> '',
+			'page_category_id'	=> '',
+			'status'			=> 1,
+			'url'				=> '/recruit',
+			'draft'				=> '',
+			'author_id'			=> 1,
+			'publish_begin'		=> '',
+			'publish_end'		=> '',
+			'exclude_search'	=> false,
+			'code'				=> '',
+			'unlinked_mobile'	=> false,
+			'unlinked_smartphone'	=> false,
+			'modified'			=> '',
+			'created'			=> '2014-10-20'
+		),
+		array(
+			'id'			=> 5,
+			'sort'			=> 5,
 			'name'			=> 'index',
 			'title'			=> 'モバイルトップページ',
 			'description'	=> '',
@@ -97,8 +118,8 @@ class PageFixture extends CakeTestFixture {
 			'created'			=> '2014-10-20'
 		),
 		array(
-			'id'			=> 5,
-			'sort'			=> 5,
+			'id'			=> 6,
+			'sort'			=> 6,
 			'name'			=> 'index',
 			'title'			=> 'スマートフォントップページ',
 			'description'	=> '',
@@ -116,7 +137,28 @@ class PageFixture extends CakeTestFixture {
 			'unlinked_smartphone'	=> false,
 			'modified'			=> '',
 			'created'			=> '2014-10-20'
-		)
+		),
+		array(
+			'id'			=> 7,
+			'sort'			=> 7,
+			'name'			=> 'recruit',
+			'title'			=> 'スマートフォン採用情報',
+			'description'	=> '',
+			'contents'		=> '',
+			'page_category_id'	=> '2',
+			'status'			=> 1,
+			'url'				=> '/smartphone/recruit',
+			'draft'				=> '',
+			'author_id'			=> 1,
+			'publish_begin'		=> '',
+			'publish_end'		=> '',
+			'exclude_search'	=> false,
+			'code'				=> '',
+			'unlinked_mobile'	=> false,
+			'unlinked_smartphone'	=> false,
+			'modified'			=> '',
+			'created'			=> '2014-10-20'
+		),
 	);
 	
 }

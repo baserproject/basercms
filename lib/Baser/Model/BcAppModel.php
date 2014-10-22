@@ -665,6 +665,7 @@ class BcAppModel extends Model {
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
+			// だが、post_max_size を超えた場合は、ここまで処理がこない可能性がある
 			if (!$file['size']) {
 				return false;
 			}
@@ -675,6 +676,25 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * ファイルの拡張子チェック
+ * 
+ * @param array $check チェック対象データ
+ * @param string $ext 許可する拡張子
+ */
+	public function fileExt($check, $ext) {
+		$file = $check[key($check)];
+		if (!empty($file['name'])) {
+			$exts = explode(',', $ext);
+			$ext = decodeContent($file['type'], $file['name']);
+			if(in_array($ext, $exts)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
 /**
  * 半角チェック
  * @param array $check

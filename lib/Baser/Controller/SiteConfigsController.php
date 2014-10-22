@@ -232,10 +232,7 @@ class SiteConfigsController extends AppController {
  * [ADMIN] PHPINFOを表示する
  */
 	public function admin_info() {
-		if (!empty($this->siteConfigs['demo_on'])) {
-			$this->notFound();
-		}
-
+		
 		$this->pageTitle = '環境情報';
 
 		$smartUrl = 'ON';
@@ -252,6 +249,7 @@ class SiteConfigsController extends AppController {
 		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
 		$this->subMenuElements = array('site_configs');
+		
 	}
 
 /**

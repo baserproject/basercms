@@ -253,6 +253,13 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function confirm($id = null) {
+
+		if ($this->request->is('post')) {
+			if ($_SERVER['CONTENT_LENGTH'] > (8*1024*1024)) {
+				$this->Session->setFlash('ファイルのアップロードサイズが上限を超えています。');
+			}
+		}
+		
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;

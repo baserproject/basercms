@@ -186,8 +186,6 @@ class RoutesTest extends BaserTestCase {
 	public function mobilePageDisplayDataProvider() {
 		return array(
 			array('/m/', array('index')),
-			array('/m/company', array('company')),
-			array('/m/service', array('service')),
 			array('/m/recruit', array('recruit'))
 		);
 	}
@@ -226,8 +224,6 @@ class RoutesTest extends BaserTestCase {
 	public function smartphonePageDisplayDataProvider() {
 		return array(
 			array('/s/', array('index')),
-			array('/s/company', array('company')),
-			array('/s/service', array('service')),
 			array('/s/recruit', array('recruit'))
 		);
 	}

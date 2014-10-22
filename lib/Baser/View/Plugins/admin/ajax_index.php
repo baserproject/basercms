@@ -11,4 +11,4 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->element('pages/index_list');
+$this->BcBaser->element('plugins/index_list');

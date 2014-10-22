@@ -371,10 +371,7 @@ class BlogController extends BlogAppController {
 					}
 					// コメント送信
 					if (isset($this->request->data['BlogComment'])) {
-						// TODO 《暫定対応》モバイルの場合画像認証が効かないのでデモサイトではコメントを受け付けない仕様とした
-						if (empty($this->siteConfigs['demo']) || Configure::read('BcRequest.agent') != 'mobile') {
-							$this->add_comment($id);
-						}
+						$this->add_comment($id);
 					}
 
 					$_posts = $this->_getBlogPosts(array('conditions' => array('id' => $id)));
