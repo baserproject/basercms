@@ -1838,15 +1838,23 @@ class BcManagerComponent extends Component {
 	public function installPlugin($name) {
 		
 		$paths = App::path('Plugin');
+		$exists = false;
+		foreach($paths as $path) {
+			if (file_exists($path . $name)) {
+				$exists = true;
+				break;
+			}
+		}
+		
+		if(!$exists) {
+			return false;
+		}
+		
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$data = $this->Plugin->find('first', array('conditions' => array('name' => $name)));
 		$title = '';
 		
-		foreach($paths as $path) {
-			if (file_exists($path . $name)) {
-				break;
-			}
-		}
+
 		
 		if (empty($data['Plugin']['db_inited'])) {
 			$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
