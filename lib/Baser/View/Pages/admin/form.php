@@ -492,6 +492,7 @@ function pageTypeChengeHandler() {
 				<?php endif; ?>
 			</td>
 		</tr>
+		<?php $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -572,6 +573,7 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 <div class="submit">

@@ -1354,6 +1354,53 @@ DOC_END;
 
 		return '<div class="upload-file">' . $out . '</div>';
 	}
+	
+/**
+ * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
+ * 
+ * ### 発動側
+ * フォームの</table>の直前に記述して利用する
+ * 
+ * ### コールバック処理
+ * プラグインのコールバック処理で CakeEvent::data['fields'] に 
+ * 配列で行データを追加する事でフォームの最後に行を追加する事ができる。
+ * 
+ * ### イベント名
+ * コントローラー名.Form.afterForm Or コントローラー名.Form.afterOptionForm
+ *
+ * ### 行データのキー（配列）
+ * - title：見出欄
+ * - input：入力欄
+ * 
+ * ### 行データの追加例
+ * $View = $event->subject();	// $event は、CakeEvent
+ * $input = $View->BcForm->input('Page.add_field', array('type' => 'input'));
+ * $event->data['fields'][] = array(
+ *		'title'	=> '追加フィールド',
+ *		'input'	=> $input
+ * );
+ * 
+ * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
+ */
+	public function dispatchAfterForm($type = '') {
+		if($type) {
+			$type = Inflector::camelize($type);
+		}
+		$event = $this->dispatchEvent('after' . $type . 'Form', array('fields' => array()), array('class' => $this->_View->name . '.Form', 'plugin' => ''));
+		$out = '';
+		if ($event !== false) {
+			if(!empty($event->data['fields'])) {
+				foreach($event->data['fields'] as $field) {
+					$out .= "<tr>";
+					$out .= "<th class=\"col-head\">" . $field['title'] . "</th>\n";
+					$out .= "<td class=\"col-input\">" . $field['input'] . "</td>\n";
+					$out .= "</tr>";
+				}
+			}
+		}
+		echo $out;
+	}
+	
 // <<<
 /**
  * 日付タグ
