@@ -683,20 +683,17 @@ function getEnablePlugins() {
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
+			$enablePlugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
 			ClassRegistry::removeObject('Plugin');
-			if ($plugins) {
-				$enablePlugins = Hash::extract($plugins, '{n}.Plugin.name');
-
+			if ($enablePlugins) {
 				if (!Configure::read('Cache.disable')) {
-					Cache::write('enable_plugins', $plugins, '_cake_env_');
+					Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
 				}
 			}
 		}
-	} else {
-		$plugins = $enablePlugins;
 	}
-	return $plugins;
+	return $enablePlugins;
+	
 }
 
 /**

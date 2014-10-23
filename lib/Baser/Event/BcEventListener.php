@@ -46,17 +46,30 @@ class BcEventListener extends Object implements CakeEventListener {
  * @var string
  */
 	public $layer = '';
-
+/**
+ * プラグイン名
+ * 
+ * @var string 
+ */
+	public $plugin = '';
+/**
+ * コンストラクタ
+ */
+	public function __construct() {
+		parent::__construct();
+		$class = get_class($this);
+		$this->plugin = str_replace($this->layer . 'EventListener', '', $class);
+	}
 /**
  * implementedEvents
  * 
  * @return array
  */
 	public function implementedEvents() {
+		
 		$events = array();
 		if ($this->events) {
 			foreach ($this->events as $registerEvent) {
-
 				$eventName = $this->layer . '.' . $registerEvent;
 				if (strpos($registerEvent, '.') !== false) {
 					$aryRegisterEvent = explode('.', $registerEvent);
@@ -67,6 +80,7 @@ class BcEventListener extends Object implements CakeEventListener {
 		}
 
 		return $events;
+		
 	}
 
 }
