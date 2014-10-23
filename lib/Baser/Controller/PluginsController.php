@@ -18,6 +18,10 @@
  * プラグインのコントローラーより継承して利用する
  *
  * @package Baser.Controller
+ * @property Menu $Menu
+ * @property Plugin $Plugin
+ * @property PluginContent $PluginContent
+ * @property BcManagerComponent $BcManager
  */
 class PluginsController extends AppController {
 
@@ -73,20 +77,21 @@ class PluginsController extends AppController {
 
 /**
  * プラグインをアップロードしてインストールする
+ *
+ * @return void
  */
 	public function admin_add() {
-		
 		$this->pageTitle = 'プラグインアップロード';
 		$this->subMenuElements = array('plugins');
-		
-		if($this->request->data) {
-			if(empty($this->request->data['Plugin']['file']['tmp_name'])) {
+
+		if ($this->request->data) {
+			if (empty($this->request->data['Plugin']['file']['tmp_name'])) {
 				$this->setMessage('ファイルのアップロードに失敗しました。', true);
 			} else {
 				$name = $this->request->data['Plugin']['file']['name'];
 				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $name);
 				exec('unzip -o ' . TMP . $name . ' -d ' . BASER_PLUGINS, $return);
-				if(!empty($return[2])) {
+				if (!empty($return[2])) {
 					$plugin = str_replace('  inflating: ' . BASER_PLUGINS, '', $return[2]);
 					$plugin = explode(DS, $plugin);
 					$plugin = $plugin[0];
@@ -95,8 +100,8 @@ class PluginsController extends AppController {
 					$Folder->chmod($pluginPath, 0777);
 					$plugin = Inflector::camelize($plugin);
 					$Folder->move(array(
-						'to' => BASER_THEMES . $plugin, 
-						'from' => $pluginPath, 
+						'to' => BASER_THEMES . $plugin,
+						'from' => $pluginPath,
 						'mode' => 0777
 					));
 					unlink(TMP . $name);
@@ -107,17 +112,16 @@ class PluginsController extends AppController {
 						$this->redirect(array('action' => 'index'));
 					} else {
 						$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
-					}				
-					
+					}
+
 				} else {
 					$this->setMessage('アップロードしたZIPファイルの展開に失敗しました。', true);
 					$this->redirect(array('action' => 'add'));
 				}
 			}
 		}
-		
 	}
-	
+
 /**
  * プラグインの一覧を表示する
  *
@@ -133,26 +137,26 @@ class PluginsController extends AppController {
 		// プラグインフォルダーのチェックを行う。
 		$pluginInfos = array();
 		$paths = App::path('Plugin');
-		foreach($paths as $path) {
+		foreach ($paths as $path) {
 			$Folder = new Folder($path);
 			$files = $Folder->read(true, true, true);
 			foreach ($files[0] as $file) {
 				$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file);
 			}
 		}
-		
+
 		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
 		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.status', 'desc');
-		
+
 		// 表示設定
 		$this->set('datas', $pluginInfos);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
-		
-		if($this->request->is('ajax')) {
+
+		if ($this->request->is('ajax')) {
 			$this->render('ajax_index');
 		}
-		
+
 		$this->subMenuElements = array('plugins');
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';
@@ -160,22 +164,25 @@ class PluginsController extends AppController {
 
 /**
  * baserマーケットのプラグインデータを取得する
+ *
+ * @return void
  */
 	public function admin_ajax_get_market_plugins() {
-		
 		$baserPlugins = array();
-		
+
 		$cachePath = 'views' . DS . 'baser_market_plugins.rss';
 		if (Configure::read('debug') > 0) {
 			clearCache('baser_market_plugins', 'views', '.rss');
 		}
 		$baserPlugins = cache($cachePath);
-		if(!$baserPlugins) {
+		if (!$baserPlugins) {
 			$Xml = new Xml();
 			try {
 				$baserPlugins = $Xml->build(Configure::read('BcApp.marketPluginRss'));
-			} catch (Exception $ex) {}
-			if($baserPlugins) {
+			} catch (Exception $ex) {
+
+			}
+			if ($baserPlugins) {
 				$baserPlugins = $Xml->toArray($baserPlugins->channel);
 				$baserPlugins = $baserPlugins['channel']['item'];
 				cache($cachePath, BcUtil::serialize($baserPlugins));
@@ -186,15 +193,14 @@ class PluginsController extends AppController {
 		} else {
 			$baserPlugins = BcUtil::unserialize($baserPlugins);
 		}
-		
+
 		$this->set('baserPlugins', $baserPlugins);
-		
 	}
 
 /**
  * プラグイン情報を取得する
  * 
- * @param array $pluginDatas
+ * @param array $datas
  * @param string $file
  * @return array 
  */
@@ -287,9 +293,9 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] ファイル削除
  *
- * @param string プライグイン名
+ * @param string $pluginName プラグイン名
  * @return void
- * @access public
+ *
  * @deprecated admin_ajax_delete_file に移行
  */
 	public function admin_delete_file($pluginName) {
@@ -301,9 +307,8 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] ファイル削除
  *
- * @param string プライグイン名
+ * @param string $pluginName プラグイン名
  * @return void
- * @access public
  */
 	public function admin_ajax_delete_file($pluginName) {
 		if (!$pluginName) {
@@ -319,19 +324,18 @@ class PluginsController extends AppController {
 /**
  * プラグインファイルを削除する
  *
- * @param string $pluginName
+ * @param string $pluginName プラグイン名
  * @return void
- * @access private
  */
 	private function __deletePluginFile($pluginName) {
 		$paths = App::path('Plugin');
-		foreach($paths as $path) {
+		foreach ($paths as $path) {
 			$pluginPath = $path . $pluginName;
-			if(is_dir($pluginPath)) {
+			if (is_dir($pluginPath)) {
 				break;
 			}
 		}
-		
+
 		$tmpPath = TMP . 'schemas' . DS . 'uninstall' . DS;
 		$folder = new Folder();
 		$folder->delete($tmpPath);
@@ -365,20 +369,19 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] 登録処理
  *
- * @param string 	$name
- * @return  void
- * @access  public
+ * @param string $name プラグイン名
+ * @return void
  */
 	public function admin_install($name) {
 		$name = urldecode($name);
 		$dbInited = false;
 		$installMessage = '';
-		
+
 		$paths = App::path('Plugin');
 
 		if (!$this->request->data) {
 
-			foreach($paths as $path) {
+			foreach ($paths as $path) {
 				$path .= $name . DS . 'config.php';
 				if (file_exists($path)) {
 					include $path;
@@ -425,7 +428,9 @@ class PluginsController extends AppController {
 	}
 
 /**
- * データベースをリセットする 
+ * データベースをリセットする
+ *
+ * @return void
  */
 	public function admin_reset_db() {
 		if (!$this->request->data) {
@@ -452,9 +457,8 @@ class PluginsController extends AppController {
 /**
  * [ADMIN] 削除処理　(ajax)
  *
- * @param int ID
+ * @param string $name プラグイン名
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($name = null) {
 		/* 除外処理 */
@@ -474,9 +478,8 @@ class PluginsController extends AppController {
 /**
  * 一括無効
  * 
- * @param array $ids
- * @return boolean
- * @access protected
+ * @param array $ids プラグインIDの配列
+ * @return bool
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
