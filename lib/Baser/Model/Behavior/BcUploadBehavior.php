@@ -744,27 +744,39 @@ class BcUploadBehavior extends ModelBehavior {
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions[$Model->name . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
-		if (!empty($Model->data[$Model->name]['id'])) {
-			$conditions[$Model->name . '.id <>'] = $Model->data[$Model->name]['id'];
-		}
-		$datas = $Model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName)));
-
+		$datas = $Model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName), 'order' => $Model->name . '.name'));
+		$datas = Hash::extract($datas, '{n}.UploaderFile.name');
+		
 		if ($datas) {
-			$prefixNo = 1;
-			foreach ($datas as $data) {
-				$_basename = preg_replace("/\." . $ext . "$/is", '', $data[$Model->name][$fieldName]);
-				$lastPrefix = str_replace($basename, '', $_basename);
-				if (preg_match("/^__([0-9]+)$/s", $lastPrefix, $matches)) {
-					$no = (int)$matches[1];
-					if ($no > $prefixNo) {
-						$prefixNo = $no;
-					}
+			foreach($datas as $data) {
+				$_basename = preg_replace("/\." . $ext . "$/is", '', $data);
+				$lastPrefix = preg_replace('/^' . preg_quote($basename, '/') . '/', '', $_basename);
+				if(!$lastPrefix) {
+					$numbers[1] = 1;
+				} elseif (preg_match("/^__([0-9]+)$/s", $lastPrefix, $matches)) {
+					$numbers[$matches[1]] = true;
 				}
 			}
-			return $basename . '__' . ($prefixNo + 1) . '.' . $ext;
+			if($numbers) {
+				$prefixNo = 1;
+				while(true) { 
+					if(!isset($numbers[$prefixNo])) {
+						break;
+					}
+					$prefixNo++;
+				}
+				if($prefixNo == 1) {
+					return $basename . '.' . $ext;
+				} else {
+					return $basename . '__' . ($prefixNo) . '.' . $ext;
+				}
+			} else {
+				return $basename . '.' . $ext;
+			}
 		} else {
 			return $basename . '.' . $ext;
 		}
+		
 	}
 
 }
