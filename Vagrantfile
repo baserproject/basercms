@@ -40,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
   #
-  config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
+  config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> "apache", :group=> "apache", :mount_options => ['dmode=777','fmode=777']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -161,6 +161,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "mysql"
     chef.add_recipe "postgres"
     chef.add_recipe "httpd"
+    chef.add_recipe "php-pear"
     chef.add_recipe "basercms"
   end
 
