@@ -1895,12 +1895,15 @@ class BcManagerComponent extends Component {
 			} else {
 				$version = getVersion($name);
 			}
+
+			$priority = intval($this->Plugin->getMax('priority')) + 1;
 			$data = array('Plugin' => array(
 				'name'		=> $name,
 				'title'		=> $title,
 				'status'	=> true,
 				'db_inited'	=> true,
-				'version'	=> $version
+				'version'	=> $version,
+				'priority' => $priority
 			));
 			$this->Plugin->create($data);
 		}

@@ -129,6 +129,7 @@ class PluginsController extends AppController {
  * @access public
  */
 	public function admin_index() {
+		$this->Plugin->cacheQueries = false;
 		$datas = $this->Plugin->find('all', array('order' => 'Plugin.priority'));
 		if (!$datas) {
 			$datas = array();
@@ -147,11 +148,19 @@ class PluginsController extends AppController {
 
 		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
-		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.status', 'desc');
+
+		//並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
+		if ($this->passedArgs['sortmode']) {
+			$pluginInfos = array_filter($pluginInfos, function ($data){
+				return isset($data['Plugin']['priority']);
+			});
+		}
+		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.priority', 'asc', 'numeric');
 
 		// 表示設定
 		$this->set('datas', $pluginInfos);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
+		$this->set('sortmode', $this->passedArgs['sortmode']);
 
 		if ($this->request->is('ajax')) {
 			$this->render('ajax_index');
@@ -304,6 +313,25 @@ class PluginsController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
+/**
+ * 並び替えを更新する [AJAX]
+ *
+ * @return bool
+ */
+	public function admin_ajax_update_sort() {
+		if ($this->request->data) {
+			if ($this->Plugin->changePriority($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'])) {
+				clearViewCache();
+				clearDataCache();
+				echo true;
+			} else {
+				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
+			}
+		} else {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		exit();
+	}
 /**
  * [ADMIN] ファイル削除
  *
