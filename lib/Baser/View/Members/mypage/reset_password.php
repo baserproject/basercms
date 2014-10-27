@@ -12,4 +12,4 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS . 'users' . DS . 'admin' . DS . 'reset_password.php';
+include BASER_VIEWS . 'Users' . DS . 'admin' . DS . 'reset_password.php';

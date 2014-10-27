@@ -12,4 +12,4 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-include BASER_VIEWS . 'users' . DS . 'admin' . DS . 'login.php';
+include BASER_VIEWS . 'Users' . DS . 'admin' . DS . 'login.php';
