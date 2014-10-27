@@ -13,7 +13,7 @@
  */
 $classies = array('sortable');
 if (!$data['Plugin']['status']) {
-	$classies[] = array('disablerow');
+	$classies[] = 'disablerow';
 }
 $class = ' class="' . implode(' ', $classies) . '"';
 ?>
