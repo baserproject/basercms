@@ -427,19 +427,23 @@ class PluginsController extends AppController {
 				}
 			}
 
-			$this->request->data['Plugin']['name'] = $name;
-			if (isset($title)) {
-				$this->request->data['Plugin']['title'] = $title;
-			} else {
+			if (!isset($title)) {
 				$this->request->data['Plugin']['title'] = $name;
 			}
-			$this->request->data['Plugin']['status'] = true;
 			$corePlugins = Configure::read('BcApp.corePlugins');
 			if (in_array($name, $corePlugins)) {
-				$this->request->data['Plugin']['version'] = $this->getBaserVersion();
+				$version = $this->getBaserVersion();
 			} else {
-				$this->request->data['Plugin']['version'] = $this->getBaserVersion($name);
+				$version = $this->getBaserVersion($name);
 			}
+			
+			$this->request->data = array('Plugin' => array(
+				'name'	=> $name,
+				'title'	=> $title,
+				'status'=> true,
+				'version'	=> $version,
+				'permission'=> 1
+			));
 
 			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
 			if ($data) {
@@ -476,6 +480,8 @@ class PluginsController extends AppController {
 					}
 				}
 				
+				$this->_addPermission($this->request->data);
+				
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
@@ -489,6 +495,51 @@ class PluginsController extends AppController {
 		$this->pageTitle = '新規プラグイン登録';
 		$this->help = 'plugins_form';
 		$this->render('form');
+	}
+	
+/**
+ * アクセス制限設定を追加する
+ * 
+ * @param array $data リクエストデータ
+ */
+	public function _addPermission($data) {
+		
+		if (ClassRegistry::isKeySet('Permission')) {
+			$Permission = ClassRegistry::getObject('Permission');
+		} else {
+			$Permission = ClassRegistry::init('Permission');
+		}
+		
+		$userGroups = $Permission->UserGroup->find('all', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId')), 'recursive' => -1));
+		if($userGroups) {
+			foreach($userGroups as $userGroup) {
+				$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+				$url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
+				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
+				switch ($data['Plugin']['permission']) {
+					case 1:
+						if($permission) {
+							$Permission->delete($permission['Permission']['id']);
+						}
+						break;
+					case 2:
+						if(!$permission) {
+							$Permission->create(array(
+								'name'			=> $data['Plugin']['title'] . '管理',
+								'user_group_id'	=> $userGroup['UserGroup']['id'],
+								'auth'			=> true,
+								'status'		=> true,
+								'url'			=> $url,
+								'no'			=> $Permission->getMax('no', array('user_group_id' => $userGroup['UserGroup']['id'])) + 1,
+								'sort'			=> $Permission->getMax('sort', array('user_group_id' => $userGroup['UserGroup']['id'])) + 1
+							));
+							$Permission->save();
+						}
+						break;
+				}
+			}
+		}
+		
 	}
 
 /**
