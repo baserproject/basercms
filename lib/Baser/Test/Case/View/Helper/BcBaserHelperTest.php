@@ -1095,12 +1095,15 @@ class BcBaserHelperTest extends BaserTestCase {
 				array('title' => '採用情報', 'url' => '/recruit'),
 				array('title' => 'モバイルトップページ', 'url' => '/m/'),
 				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
-				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit')
+				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
+				array('title' => 'モバイルサービス', 'url' => '/m/service')
 			)),
 			array(1, null, array(
-				array('title' => 'モバイルトップページ', 'url' => '/m/')
+				array('title' => 'モバイルトップページ', 'url' => '/m/'),
+				array('title' => 'モバイルサービス', 'url' => '/m/service')
 			)),
 			array(null, array('order' => 'Page.sort DESC'), array(
+				array('title' => 'モバイルサービス', 'url' => '/m/service'),
 				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
 				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
 				array('title' => 'モバイルトップページ', 'url' => '/m/'),

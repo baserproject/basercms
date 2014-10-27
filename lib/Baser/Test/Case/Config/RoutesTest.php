@@ -186,7 +186,7 @@ class RoutesTest extends BaserTestCase {
 	public function mobilePageDisplayDataProvider() {
 		return array(
 			array('/m/', array('index')),
-			array('/m/recruit', array('recruit'))
+			array('/m/service', array('service'))
 		);
 	}
 

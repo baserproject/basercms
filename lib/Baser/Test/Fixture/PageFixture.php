@@ -159,6 +159,27 @@ class PageFixture extends CakeTestFixture {
 			'modified'			=> '',
 			'created'			=> '2014-10-20'
 		),
+		array(
+			'id'			=> 8,
+			'sort'			=> 8,
+			'name'			=> 'service',
+			'title'			=> 'モバイルサービス',
+			'description'	=> '',
+			'contents'		=> '',
+			'page_category_id'	=> '1',
+			'status'			=> 1,
+			'url'				=> '/mobile/service',
+			'draft'				=> '',
+			'author_id'			=> 1,
+			'publish_begin'		=> '',
+			'publish_end'		=> '',
+			'exclude_search'	=> false,
+			'code'				=> '',
+			'unlinked_mobile'	=> false,
+			'unlinked_smartphone'	=> false,
+			'modified'			=> '',
+			'created'			=> '2014-10-20'
+		)
 	);
 	
 }
