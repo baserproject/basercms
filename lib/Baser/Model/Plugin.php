@@ -313,4 +313,22 @@ class Plugin extends AppModel {
 		return true;
 	}
 
+ * プラグインのディレクトリパスを取得
+ *
+ * @param string $pluginName プラグイン名
+ * @return string|null
+ */
+	public function getDirectoryPath($pluginName) {
+		$paths = App::path('Plugin');
+		foreach ($paths as $path) {
+			$Folder = new Folder($path);
+			$files = $Folder->read(true, true, true);
+			foreach ($files[0] as $dir) {
+				if (basename($dir) === $pluginName) {
+					return $dir;
+				}
+			};
+		}
+		return null;
+	}
 }
