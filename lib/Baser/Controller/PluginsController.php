@@ -448,6 +448,30 @@ class PluginsController extends AppController {
 			if ($this->BcManager->installPlugin($this->request->data['Plugin']['name'])) {
 				clearAllCache();
 				$this->setMessage('新規プラグイン「' . $name . '」を baserCMS に登録しました。', false, true);
+
+				$plugin = $this->Plugin->findByName($name);
+				$dirPath = $this->Plugin->getDirectoryPath($name);
+				$pluginInfo = $this->_getPluginInfo(array($plugin), $dirPath);
+
+				if (ClassRegistry::isKeySet('Favorite')) {
+					$Favorite = ClassRegistry::getObject('Favorite');
+				} else {
+					$Favorite = ClassRegistry::init('Favorite');
+				}
+				$user = $this->BcAuth->user();
+				$adminLinkUrl = preg_replace('|^/index.php|', '', Router::url($pluginInfo['Plugin']['admin_link']));
+				$favorite = array(
+					'name' => $pluginInfo['Plugin']['title'] . '管理',
+					'url' => $adminLinkUrl,
+					'sort' => $Favorite->getMax('sort') + 1,
+					'user_id' => $user['id'],
+				);
+
+				if(!$Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'recirsive' => -1)))) {
+					$Favorite->create($favorite);
+					$Favorite->save();
+				}
+				
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
