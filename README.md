@@ -1,6 +1,7 @@
 baserCMS
 ==========
 ![baserCMS](http://basercms.net/img/basercms_logo.png)
+
 Based Website Development Project  
 Copyright 2008 - 2014, baserCMS Users Community  
 
