@@ -149,15 +149,21 @@ class PluginsController extends AppController {
 		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
 
+		$availables = $unavailables = array();
+		foreach($pluginInfos as $pluginInfo) {
+			if(isset($pluginInfo['Plugin']['priority'])) {
+				$availables[] = $pluginInfo;
+			} else {
+				$unavailables[] = $pluginInfo;
+			}
+		}		
+		
 		//並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
 		if ($this->passedArgs['sortmode']) {
-			foreach($pluginInfos as $key => $pluginInfo) {
-				if(!isset($pluginInfo['Plugin']['priority'])) {
-					unset($pluginInfos[$key]);
-				}
-			}
+			$pluginInfo = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
+		} else {
+			$pluginInfo = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric') + $unavailables;
 		}
-		$pluginInfos = Hash::sort($pluginInfos, '{n}.Plugin.priority', 'asc', 'numeric');
 
 		// 表示設定
 		$this->set('datas', $pluginInfos);
