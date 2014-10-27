@@ -455,23 +455,25 @@ class PluginsController extends AppController {
 				$dirPath = $this->Plugin->getDirectoryPath($name);
 				$pluginInfo = $this->_getPluginInfo(array($plugin), $dirPath);
 
-				if (ClassRegistry::isKeySet('Favorite')) {
-					$Favorite = ClassRegistry::getObject('Favorite');
-				} else {
-					$Favorite = ClassRegistry::init('Favorite');
-				}
-				$user = $this->BcAuth->user();
-				$adminLinkUrl = preg_replace('|^/index.php|', '', Router::url($pluginInfo['Plugin']['admin_link']));
-				$favorite = array(
-					'name' => $pluginInfo['Plugin']['title'] . '管理',
-					'url' => $adminLinkUrl,
-					'sort' => $Favorite->getMax('sort') + 1,
-					'user_id' => $user['id'],
-				);
+				if(!empty($pluginInfo['Plugin']['admin_link'])) {
+					if (ClassRegistry::isKeySet('Favorite')) {
+						$Favorite = ClassRegistry::getObject('Favorite');
+					} else {
+						$Favorite = ClassRegistry::init('Favorite');
+					}
+					$user = $this->BcAuth->user();
+					$adminLinkUrl = preg_replace('|^/index.php|', '', Router::url($pluginInfo['Plugin']['admin_link']));
+					$favorite = array(
+						'name' => $pluginInfo['Plugin']['title'] . '管理',
+						'url' => $adminLinkUrl,
+						'sort' => $Favorite->getMax('sort') + 1,
+						'user_id' => $user['id'],
+					);
 
-				if(!$Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'recirsive' => -1)))) {
-					$Favorite->create($favorite);
-					$Favorite->save();
+					if(!$Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'recirsive' => -1)))) {
+						$Favorite->create($favorite);
+						$Favorite->save();
+					}
 				}
 				
 				$this->redirect(array('action' => 'index'));
