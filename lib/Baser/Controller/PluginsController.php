@@ -159,16 +159,18 @@ class PluginsController extends AppController {
 		}		
 		
 		//並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
-		if ($this->passedArgs['sortmode']) {
+		if (!empty($this->passedArgs['sortmode'])) {
+			$sortmode = true;
 			$pluginInfo = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
 		} else {
+			$sortmode = false;
 			$pluginInfo = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric') + $unavailables;
 		}
 
 		// 表示設定
 		$this->set('datas', $pluginInfos);
 		$this->set('corePlugins', Configure::read('BcApp.corePlugins'));
-		$this->set('sortmode', $this->passedArgs['sortmode']);
+		$this->set('sortmode', $sortmode);
 
 		if ($this->request->is('ajax')) {
 			$this->render('ajax_index');

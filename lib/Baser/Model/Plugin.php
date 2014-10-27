@@ -312,7 +312,8 @@ class Plugin extends AppModel {
 
 		return true;
 	}
-
+	
+/**
  * プラグインのディレクトリパスを取得
  *
  * @param string $pluginName プラグイン名
@@ -331,4 +332,5 @@ class Plugin extends AppModel {
 		}
 		return null;
 	}
+	
 }
