@@ -10,6 +10,9 @@ Documentation
 
 - See [baserCMS Official](http://basercms.net/)
 - See [baserCMS Users Community](http://basercms.net/community)
+- See [baserCMS Users Manual](http://doc.basercms.net/)
+- See [baserCMS Creaters Manual](http://basercms.net/manuals/3/index)
+- See [baserCMS Customize Guideline](http://basercms.net/manuals/customize_guideline)
 - See [baserCMS Users Forum](http://forum.basercms.net/)
 - See [baserCMS Core Development Project](http://project.e-catchup.jp/projects/basercms) 
 - See [CakePHP - the rapid development PHP framework](http://cakephp.jp)
