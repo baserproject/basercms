@@ -29,7 +29,7 @@ class BcCacheDispatcher extends DispatcherFilter {
  *
  * @var int
  */
-	public $priority = 8;
+	public $priority = 10;
 
 /**
  * Checks whether the response was cached and set the body accordingly.
