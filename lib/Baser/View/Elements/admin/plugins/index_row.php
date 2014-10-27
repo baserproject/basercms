@@ -11,16 +11,19 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+$classies = array('sortable');
 if (!$data['Plugin']['status']) {
-	$class = ' class="disablerow"';
-} else {
-	$class = '';
+	$classies[] = array('disablerow');
 }
+$class = ' class="' . implode(' ', $classies) . '"';
 ?>
-
 
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
+		<?php if ($sortmode): ?>
+			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
+			<?php echo $this->BcForm->input('Sort.id' . $data['Plugin']['id'], array('type' => 'hidden', 'class' => 'id', 'value' => $data['Plugin']['id'])) ?>
+		<?php endif ?>
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Plugin']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id'])) ?>
 		<?php endif ?>
