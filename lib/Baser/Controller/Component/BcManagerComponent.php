@@ -123,7 +123,6 @@ class BcManagerComponent extends Component {
 		}
 
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		$this->deleteDeployedAdminAssets();
 		if (!$this->deployAdminAssets()) {
 			$this->log('管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
 		}
@@ -1587,6 +1586,12 @@ class BcManagerComponent extends Component {
 			'configDirWritable'	=> is_writable(APP . 'Config' . DS),
 			'themeDirWritable'	=> is_writable(WWW_ROOT . 'theme'),
 			'filesDirWritable'	=> is_writable(WWW_ROOT . 'files'),
+			'imgDirWritable'	=> is_writable(WWW_ROOT . 'img'),
+			'jsDirWritable'	=> is_writable(WWW_ROOT . 'js'),
+			'cssDirWritable'	=> is_writable(WWW_ROOT . 'css'),
+			'imgAdminDirExists'	=> is_dir(WWW_ROOT . 'img' . DS . 'admin'),
+			'jsAdminDirExists'	=> is_dir(WWW_ROOT . 'js' . DS . 'admin'),
+			'cssAdminDirExists'	=> is_dir(WWW_ROOT . 'css' . DS . 'admin'),
 			'tmpDirWritable'	=> is_writable(TMP),
 			'dbDirWritable'		=> is_writable(APP . 'db'),
 			'phpActualVersion'	=> preg_replace('/[a-z-]/', '', phpversion()),
@@ -1615,6 +1620,18 @@ class BcManagerComponent extends Component {
 		if (!$status['filesDirWritable']) {
 			@chmod(WWW_ROOT . 'files', 0777);
 			$status['filesDirWritable'] = is_writable(WWW_ROOT . 'files');
+		}
+		if (!$status['imgDirWritable']) {
+			@chmod(WWW_ROOT . 'img', 0777);
+			$status['imgDirWritable'] = is_writable(WWW_ROOT . 'img');
+		}
+		if (!$status['cssDirWritable']) {
+			@chmod(WWW_ROOT . 'css', 0777);
+			$status['cssDirWritable'] = is_writable(WWW_ROOT . 'css');
+		}
+		if (!$status['jsDirWritable']) {
+			@chmod(WWW_ROOT . 'js', 0777);
+			$status['jsDirWritable'] = is_writable(WWW_ROOT . 'js');
 		}
 		if (!$status['tmpDirWritable']) {
 			@chmod(TMP, 0777);
@@ -1765,30 +1782,6 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
-
-/**
- * テーマに配置された管理システム用アセットを削除する
- * 
- * @return boolean
- */
-	public function deleteDeployedAdminAssets() {
-		$viewPath = getViewPath();
-		$css = $viewPath . 'css' . DS . 'admin';
-		$js = $viewPath . 'js' . DS . 'admin';
-		$img = $viewPath . 'img' . DS . 'admin';
-		$result = true;
-		$Folder = new Folder();
-		if(!$Folder->delete($css)) {
-			$result = false;
-		}
-		if(!$Folder->delete($js)) {
-			$result = false;
-		}
-		if(!$Folder->delete($img)) {
-			$result = false;
-		}
-		return $result;
-	}
 	
 /**
  * テーマに管理システム用アセットを配置する
@@ -1796,7 +1789,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function deployAdminAssets() {
-		$viewPath = getViewPath();
+		$viewPath = WWW_ROOT;
 		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
 		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
 		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';

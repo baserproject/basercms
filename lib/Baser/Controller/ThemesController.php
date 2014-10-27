@@ -550,12 +550,10 @@ class ThemesController extends AppController {
 			$this->BcManager->uninstallPlugin($plugin);
 		}
 		
-		$this->BcManager->deleteDeployedAdminAssets();
 		$siteConfig['SiteConfig']['theme'] = $theme;
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
-		$this->BcManager->deployAdminAssets();
 		
 		$info = array();
 		$themePath = BASER_THEMES . $theme . DS;

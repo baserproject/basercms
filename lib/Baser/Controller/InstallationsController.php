@@ -16,6 +16,7 @@
  * インストーラーコントローラー
  * 
  * @package Baser.Controller
+ * @property BcManagerComponent $BcManager
  */
 class InstallationsController extends AppController {
 
@@ -161,7 +162,7 @@ class InstallationsController extends AppController {
 
 		extract($checkResult);
 
-		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable));
+		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable && $imgDirWritable && $jsDirWritable && $cssDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 	}
 
@@ -352,7 +353,6 @@ class InstallationsController extends AppController {
 		$this->_login();
 		
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		$this->BcManager->deleteDeployedAdminAssets();
 		$this->BcManager->deployAdminAssets();
 
 		// アップロード用初期フォルダを作成する

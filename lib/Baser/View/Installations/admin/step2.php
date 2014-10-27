@@ -54,9 +54,9 @@ $(function(){
 				<li class='<?php if ($configDirWritable) echo 'check'; else echo'failed'; ?>'>
 					/app/Config フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<div class="check-result">
-						<?php if ($configDirWritable): ?>
+<?php if ($configDirWritable): ?>
 							書き込み可
-						<?php else: ?>
+<?php else: ?>
 							書き込み不可<br />
 							<small>/app/Config フォルダに書き込み権限が必要です</small>
 <?php endif ?>
@@ -67,48 +67,105 @@ $(function(){
 					<div class="check-result">
 <?php if ($tmpDirWritable): ?>
 							書き込み可
-						<?php else: ?>
+<?php else: ?>
 							書き込み不可<br />
 							<small>/app/tmp フォルダに書き込み権限が必要です。</small>
-					<?php endif ?>
+<?php endif ?>
 					</div>
 				</li>
 				<li class='<?php if ($filesDirWritable) echo 'check'; else echo'failed'; ?>'>
-					<?php if (ROOT . DS != WWW_ROOT): ?>
-						/app/webroot/files フォルダの書き込み権限
-						<?php else: ?>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/files フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php else: ?>
 						/files フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
-						<?php endif ?>
+<?php endif ?>
 					<div class="check-result">
-						<?php if ($filesDirWritable): ?>
+<?php if ($filesDirWritable): ?>
 							書き込み可
-						<?php else: ?>
+<?php else: ?>
 							書き込み不可<br />
-							<?php if (ROOT . DS != WWW_ROOT): ?>
+	<?php if (ROOT . DS != WWW_ROOT): ?>
 								<small>/app/webroot/files フォルダに書き込み権限が必要です</small>
 	<?php else: ?>
 								<small>/files フォルダに書き込み権限が必要です</small>
-						<?php endif ?>
-					<?php endif ?>
+	<?php endif ?>
+<?php endif ?>
 					</div>
 				</li>
 				<li class='<?php if ($themeDirWritable) echo 'check'; else echo'failed'; ?>'>
-						<?php if (ROOT . DS != WWW_ROOT): ?>
-						/app/webroot/theme フォルダの書き込み権限
-						<?php else: ?>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/theme フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php else: ?>
 						/theme フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
-						<?php endif ?>
+<?php endif ?>
 					<div class="check-result">
-						<?php if ($themeDirWritable): ?>
+<?php if ($themeDirWritable): ?>
 							書き込み可
-						<?php else: ?>
+<?php else: ?>
 							書き込み不可<br />
-							<?php if (ROOT . DS != WWW_ROOT): ?>
+	<?php if (ROOT . DS != WWW_ROOT): ?>
 								<small>/app/webroot/theme フォルダに書き込み権限が必要です</small>
 	<?php else: ?>
 								<small>/theme フォルダに書き込み権限が必要です</small>
 	<?php endif ?>
-						<?php endif ?>
+<?php endif ?>
+					</div>
+				</li>
+				<li class='<?php if ($imgDirWritable) echo 'check'; else echo'failed'; ?>'>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/img フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php else: ?>
+						/img フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php endif ?>
+					<div class="check-result">
+<?php if ($imgDirWritable): ?>
+							書き込み可
+<?php else: ?>
+							書き込み不可<br />
+	<?php if (ROOT . DS != WWW_ROOT): ?>
+								<small>/app/webroot/img フォルダに書き込み権限が必要です</small>
+	<?php else: ?>
+								<small>/img フォルダに書き込み権限が必要です</small>
+	<?php endif ?>
+<?php endif ?>
+					</div>
+				</li>
+				<li class='<?php if ($cssDirWritable) echo 'check'; else echo'failed'; ?>'>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/css フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php else: ?>
+						/css フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php endif ?>
+					<div class="check-result">
+<?php if ($cssDirWritable): ?>
+							書き込み可
+<?php else: ?>
+							書き込み不可<br />
+	<?php if (ROOT . DS != WWW_ROOT): ?>
+								<small>/app/webroot/css フォルダに書き込み権限が必要です</small>
+	<?php else: ?>
+								<small>/css フォルダに書き込み権限が必要です</small>
+	<?php endif ?>
+<?php endif ?>
+					</div>
+				</li>
+				<li class='<?php if ($jsDirWritable) echo 'check'; else echo'failed'; ?>'>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/js フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php else: ?>
+						/js フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+<?php endif ?>
+					<div class="check-result">
+<?php if ($jsDirWritable): ?>
+							書き込み可
+<?php else: ?>
+							書き込み不可<br />
+	<?php if (ROOT . DS != WWW_ROOT): ?>
+								<small>/app/webroot/js フォルダに書き込み権限が必要です</small>
+	<?php else: ?>
+								<small>/js フォルダに書き込み権限が必要です</small>
+	<?php endif ?>
+<?php endif ?>
 					</div>
 				</li>
 				<li class='<?php if ($encodingOk) echo 'check'; else echo'failed'; ?>'>
@@ -119,13 +176,13 @@ $(function(){
 							<small>phpの内部文字エンコーディングがUTF-8である必要があります</small>
 							<br />
 							<small>php.iniで「mbstring.internal_encoding」をUTF-8に設定してください</small>
-						<?php endif ?>
+<?php endif ?>
 					</div>
 				</li>
 				<li class='<?php if ($gdOk) echo 'check'; else echo'failed'; ?>'>
 					GDの利用
 					<div class="check-result">
-						<?php if ($gdOk): ?>
+<?php if ($gdOk): ?>
 							利用可
 <?php else: ?>
 							利用不可<br />
@@ -138,7 +195,7 @@ $(function(){
 				<li class='<?php if ($xmlOk) echo 'check'; else echo'failed'; ?>'>
 					DOMDocumentの利用
 					<div class="check-result">
-						<?php if ($xmlOk): ?>
+<?php if ($xmlOk): ?>
 							利用可
 <?php else: ?>
 							利用不可<br />
@@ -176,6 +233,70 @@ $(function(){
 		</div>
 
 		<div class="panel-box corner10">
+			<h3>管理システムの参照ファイル配置</h3>
+			<div class="section">baserCMSでは、インストール時に、管理システムより参照する、画像ファイル、CSSフィアル、Javascriptファイルを、下記のパスに自動配置します。既に存在する場合には上書きされてしまいますのでご注意ください。</div>
+			<ul class="section">
+				<li class='<?php if (!$imgAdminDirExists) echo 'check'; else echo'failed'; ?>'>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/img/admin の存在
+<?php else: ?>
+						/img/admin の存在
+<?php endif ?>
+					<div class="check-result">
+<?php if (!$imgAdminDirExists): ?>
+							存在しない
+<?php else: ?>
+							存在する<br />
+	<?php if (ROOT . DS != WWW_ROOT): ?>
+								<small>/app/webroot/img/admin フォルダが上書きされますのでご注意ください。</small>
+	<?php else: ?>
+								<small>/img/admin フォルダが上書きされますのでご注意ください。</small>
+	<?php endif ?>
+<?php endif ?>
+					</div>
+				</li>
+				<li class='<?php if (!$cssAdminDirExists) echo 'check'; else echo'failed'; ?>'>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/css/admin の存在
+<?php else: ?>
+						/css/admin の存在
+<?php endif ?>
+					<div class="check-result">
+<?php if (!$cssAdminDirExists): ?>
+							存在しない
+<?php else: ?>
+							存在する<br />
+	<?php if (ROOT . DS != WWW_ROOT): ?>
+								<small>/app/webroot/css/admin フォルダが上書きされますのでご注意ください。</small>
+	<?php else: ?>
+								<small>/css/admin フォルダが上書きされますのでご注意ください。</small>
+	<?php endif ?>
+<?php endif ?>
+					</div>
+				</li>
+				<li class='<?php if (!$jsAdminDirExists) echo 'check'; else echo'failed'; ?>'>
+<?php if (ROOT . DS != WWW_ROOT): ?>
+						/app/webroot/js/admin の存在
+<?php else: ?>
+						/js/admin の存在
+<?php endif ?>
+					<div class="check-result">
+<?php if (!$jsAdminDirExists): ?>
+							存在しない
+<?php else: ?>
+							存在する<br />
+	<?php if (ROOT . DS != WWW_ROOT): ?>
+								<small>/app/webroot/js/admin フォルダが上書きされますのでご注意ください。</small>
+	<?php else: ?>
+								<small>/js/admin フォルダが上書きされますのでご注意ください。</small>
+	<?php endif ?>
+<?php endif ?>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="panel-box corner10">
 			<h3>PHPのメモリ</h3>
 			<div class="section">PHPのメモリが <?php echo Configure::read('BcRequire.phpMemory') . " MB"; ?> より低い場合、baserCMSの全ての機能が正常に動作しない可能性があります。<br />
 				<small>サーバー環境によってはPHPのメモリ上限が取得できず「0MB」となっている場合もあります。その場合、サーバー業者等へサーバースペックを直接確認してください。</small> </div>
@@ -205,7 +326,7 @@ $(function(){
 							Off
 <?php else: ?>
 							On
-				<?php endif ?>
+<?php endif ?>
 					</div>
 				</li>
 			</ul>
@@ -230,18 +351,18 @@ $(function(){
 					<li>/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite を利用する場合）</li>
 					<li>/baser/config/theme/ 内の全て　→　/app/webroot/theme/</li>
 				</ul>
-			<?php endif ?>
+<?php endif ?>
 		</div>
 	</div>
 
 	<form action="<?php echo $this->request->base ?>/installations/step2" method="post" id="checkenv">
-<?php echo $this->BcForm->hidden('clicked') ?>
+		<?php echo $this->BcForm->hidden('clicked') ?>
 		<div class="submit">
-<?php echo $this->BcForm->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
+			<?php echo $this->BcForm->button('再チェック', array('class' => 'btn-orange button', 'id' => 'btncheckagain')) ?>
 <?php if (!$blRequirementsMet): ?>
-	<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
+			<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext', 'style' => 'display:none')) ?>
 <?php else: ?>
-	<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
+			<?php echo $this->BcForm->button('次のステップへ', array('class' => 'btn-red button', 'id' => 'btnnext')) ?>
 <?php endif ?>
 		</div>
 	</form>
