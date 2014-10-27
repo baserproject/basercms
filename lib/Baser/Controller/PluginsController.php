@@ -470,7 +470,7 @@ class PluginsController extends AppController {
 						'user_id' => $user['id'],
 					);
 
-					if(!$Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'recirsive' => -1)))) {
+					if(!$Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl), 'recirsive' => -1))) {
 						$Favorite->create($favorite);
 						$Favorite->save();
 					}
