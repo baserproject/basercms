@@ -91,10 +91,6 @@
 								<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 							</div>
 
-							<?php if ($this->request->params['controller'] != 'installations' && $this->request->params['action'] != 'update'): ?>
-								<?php $this->BcBaser->updateMessage() ?>
-							<?php endif ?>
-
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
 								<div id="FirstMessage" class="em-box" style="text-align:left">
 									baserCMSへようこそ。<br />

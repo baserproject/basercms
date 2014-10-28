@@ -1,9 +1,6 @@
 <?php
 /**
  * test for BcBaserHelper
- * 
- * ユニットテスト記述の進行状況
- * 2014/10/17 上から順に docType まで完了 ryuring
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -44,6 +41,8 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * View
+ * 
+ * @var View
  */
 	protected $_View;
 
@@ -816,98 +815,284 @@ class BcBaserHelperTest extends BaserTestCase {
  * CSSの読み込みタグを出力する
  */
 	public function testCss() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// ノーマル
+		ob_start();
+		$this->BcBaser->css('admin/import');
+		$result = ob_get_clean();
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$this->assertEqual($result, $expected);
+		// 拡張子あり
+		ob_start();
+		$this->BcBaser->css('admin/import.css');
+		$result = ob_get_clean();
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$this->assertEqual($result, $expected);
+		// インラインオフ（array）
+		$this->BcBaser->css('admin/import.css', array('inline' => false));
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$result = $this->_View->Blocks->get('css');
+		$this->assertEqual($result, $expected);
+		$this->_View->Blocks->end();
+		// インラインオフ（boolean）
+		$this->BcBaser->css('admin/import.css', false);
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$this->_View->assign('css', '');
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * JSの読み込みタグを出力する
  */
 	public function testJs() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// ノーマル
+		ob_start();
+		$this->BcBaser->js('admin/startup');
+		$result = ob_get_clean();
+		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
+		$this->assertEqual($result, $expected);
+		// 拡張子あり
+		ob_start();
+		$this->BcBaser->js('admin/startup.js');
+		$result = ob_get_clean();
+		$expected = '<script type="text/javascript" src="/js/admin/startup.js"></script>';
+		$this->assertEqual($result, $expected);
+		// インラインオフ（boolean）
+		$this->BcBaser->js('admin/function', false);
+		$expected = '<script type="text/javascript" src="/js/admin/function.js"></script>';
+		$result = $this->_View->fetch('script');
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * 画像読み込みタグを出力する
  */
 	public function testImg() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$expected = '<img src="/img/baser.power.gif" alt="" />';
+		ob_start();
+		$this->BcBaser->img('baser.power.gif');
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * 画像タグを取得する
+ * 
+ * @param type $path 画像のパス
+ * @param type $options オプション
+ * @param type $expected 結果
+ * @dataProvider getImgDataProvider
  */
-	public function testGetImg() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetImg($path, $options, $expected) {
+		$result = $this->BcBaser->getImg($path, $options);
+		$this->assertEqual($result, $expected);
+	}
+
+/**
+ * getImg 用データプロバイダ
+ * 
+ * @return array
+ */
+	public function getImgDataProvider() {
+		return array(
+			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ" />'),
+			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt="" />')
+		);
 	}
 	
 /**
  * アンカータグを出力する
  */
 	public function testLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$expected = '<a href="/about">会社案内</a>';
+		ob_start();
+		$this->BcBaser->link('会社案内', '/about');
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * アンカータグを取得する
+ * 
+ * @param type $title タイトル
+ * @param type $url URL
+ * @param type $option オプション
+ * @param type $expected 結果
+ * @dataProvider getLinkDataProvider
  */
-	public function testGetLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetLink($title, $url, $option, $expected) {
+		if(!empty($option['prefix'])) {
+			$this->_getRequest('/admin');
+		}
+		if(!empty($option['forceTitle'])) {
+			$this->_View->viewVars['user']['user_group_id'] = 2;
+		}
+		if(!empty($option['ssl'])) {
+			Configure::write('BcEnv.sslUrl', 'https://localhost/');
+		}
+		$result = $this->BcBaser->getLink($title, $url, $option);
+		$this->assertEqual($result, $expected);
+		Configure::write('BcEnv.sslUrl', '');
+	}
+	
+/**
+ * getLink 用の データプロバイダ
+ * 
+ * @return array
+ */
+	public function getLinkDataProvider() {
+		return array(
+			array('', '/', array(), '<a href="/"></a>'),
+			array('会社案内', '/about', array(), '<a href="/about">会社案内</a>'),
+			array('会社案内 & 会社データ', '/about', array('escape' => true), '<a href="/about">会社案内 &amp; 会社データ</a>'),	// エスケープ
+			array('固定ページ管理', array('controller' => 'pages', 'action' => 'index'), array('prefix' => true), '<a href="/admin/pages/index">固定ページ管理</a>'),	// プレフィックス
+			array('システム設定', array('admin' => true, 'controller' => 'site_configs', 'action' => 'form'), array('forceTitle' => true), '<span>システム設定</span>'),	// 強制タイトル
+			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>') // SSL
+		);
+	}
+	
+/**
+ * SSL通信かどうか判定する
+ */
+	public function testIsSSL() {
+		$_SERVER['HTTPS'] = true;
+		$this->BcBaser->request = $this->_getRequest('https://localhost/');
+		$this->assertEqual($this->BcBaser->isSSL(), true);
+	}
+	
+/**
+ * charset メタタグを出力する
+ */
+	public function testCharset() {
+		// PC
+		$expected = '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
+		ob_start();
+		$this->BcBaser->charset('UTF-8');
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
+		// モバイル
+		$expected = '<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />';
+		$this->_setAgentSetting('mobile', true);
+		$this->_setAgent('mobile');
+		ob_start();
+		$this->BcBaser->charset();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * コピーライト用の年を出力する
  */
 	public function testCopyYear() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-	
-/**
- * 編集画面へのリンクを設定する
- */
-	public function testSetPageEditLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// 正常系
+		$expected = '2000 - 2014';
+		ob_start();
+		$this->BcBaser->copyYear(2000);
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
+		// 異常系
+		$expected = '2014';
+		ob_start();
+		$this->BcBaser->copyYear('はーい');
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * 編集画面へのリンクを出力する
+ * 
+ * setPageEditLink のテストも兼ねる
  */
 	public function testEditLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// リンクなし
+		$expected = '';
+		$this->BcBaser->setPageEditLink(1);
+		ob_start();
+		$this->BcBaser->editLink();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
+		// リンクあり
+		$expected = '<a href="/admin/pages/edit/1" class="tool-menu">編集する</a>';
+		$this->_View->viewVars['user'] = array('User' => array('id' => 1));
+		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->BcBaser->setPageEditLink(1);
+		ob_start();
+		$this->BcBaser->editLink();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);
 	}
 	
 /**
  * 編集画面へのリンクが存在するかチェックする
  */
 	public function testExistsEditLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// 存在しない
+		$this->BcBaser->setPageEditLink(1);
+		$this->assertEqual($this->BcBaser->existsEditLink(), false);
+		// 存在する
+		$this->_View->viewVars['user'] = array('User' => array('id' => 1));
+		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->BcBaser->setPageEditLink(1);
+		$this->assertEqual($this->BcBaser->existsEditLink(), true);
 	}
 	
 /**
  * 公開ページへのリンクを出力する
  */
 	public function testPublishLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// リンクなし
+		$expected = '';
+		ob_start();
+		$this->BcBaser->publishLink();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);	
+		// リンクあり
+		$expected = '<a href="/" class="tool-menu">公開ページ</a>';
+		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->_View->viewVars['publishLink'] = '/';
+		ob_start();
+		$this->BcBaser->publishLink();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expected);	
 	}
 
 /**
  * 公開ページへのリンクが存在するかチェックする
  */
 	public function testExistsPublishLink() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// 存在しない
+		$this->assertEqual($this->BcBaser->existsPublishLink(), false);
+		// 存在する
+		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->_View->viewVars['publishLink'] = '/';
+		$this->assertEqual($this->BcBaser->existsPublishLink(), true);
 	}
 	
 /**
  * アップデート処理が必要かチェックする
+ * 
+ * @param type $baserVersion baserCMSのバージョン
+ * @param type $dbVersion データベースのバージョン
+ * @param type $expected 結果
+ * @dataProvider checkUpdateDataProvider
  */
-	public function testCheckUpdate() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testCheckUpdate($baserVersion, $dbVersion, $expected) {
+		$this->BcBaser->siteConfig['version'] = $dbVersion;
+		$this->_View->viewVars['baserVersion'] = $baserVersion;
+		$this->assertEqual($this->BcBaser->checkUpdate(), $expected);
 	}
 	
 /**
- * アップデート用のメッセージを出力する
+ * checkUpdate のデータプロバイダ
+ * 
+ * @return array
  */
-	public function testUpdateMessage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function checkUpdateDataProvider() {
+		return array(
+			array('1.0.0', '1.0.0', false),
+			array('1.0.1', '1.0.0', true),
+			array('1.0.1-beta', '1.0.0', false),
+			array('1.0.1', '1.0.0-beta', false)
+		);
 	}
 
 /**

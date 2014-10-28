@@ -22,6 +22,7 @@ App::uses('AppHelper', 'View/Helper');
  * テーマより利用される事を前提としたヘルパーで、テーマで必要となる機能をひと通り提供する。
  *
  * @package Baser.View.Helper
+ * @property BcHtmlHelper $BcHtml BcHtmlヘルパ
  */
 class BcBaserHelper extends AppHelper {
 
@@ -823,7 +824,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * ドキュメントタイプを指定するタグを出力する
  *
- * @param string $type 出力ドキュメントタイプの文字列 初期値は 'xhtml-trans'
+ * @param string $type 出力ドキュメントタイプの文字列（初期値 : 'xhtml-trans'）
  * @return void
  */
 	public function docType($type = 'xhtml-trans') {
@@ -831,89 +832,105 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
+ * CSS タグを出力する
  *
- * CSSの読み込みタグを出力する
- *
- * @param string $path
- * @param array $options オプションのパラメータ
- * @param boolean $inline
+ * （例）$this->BcBaser->css('admin/import')
+ * 
+ * @param string $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
+ * @param mixed $options オプション
+ *	（配列の場合）
+ *	- `rel` : rel属性（初期値 : 'stylesheet'）
+ *	- `inline` : コンテンツ内にCSSを出力するかどうか（初期値 : true）
+ *  ※ その他のパラメータについては、HtmlHelper::css() を参照。
+ *	※ false を指定した場合、inline が false となる。
  * @return void
  */
 	public function css($path, $options = array()) {
+		if($options === false) {
+			$options['inline'] = false;
+		}
 		$options = array_merge(array(
 			'rel' => 'stylesheet',
 			'inline' => true
-			), $options);
-
+		), $options);
 		$rel = $options['rel'];
 		unset($options['rel']);
-
-		$ret = $this->BcHtml->css($path, $rel, $options);
+		$result = $this->BcHtml->css($path, $rel, $options);
 		if ($options['inline']) {
-			echo $ret;
+			echo $result;
 		}
 	}
 
 /**
- * javascriptの読み込みタグを出力する
+ * Javascript タグを出力する
  *
- * @param string|array $url String or array of javascript files to include
- * @param boolean $inline
+ * @param string|array $url Javascriptのパス（js フォルダからの相対パス）拡張子は省略可
+ * @param boolean $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
  * @return void
  */
 	public function js($url, $inline = true) {
-
-		$ret = $this->BcHtml->script($url, array('inline' => $inline));
+		$result = $this->BcHtml->script($url, array('inline' => $inline));
 		if ($inline) {
-			echo $ret;
+			echo $result;
 		}
 	}
 
 /**
- * 画像読み込みタグを出力する
+ * 画像タグを出力する
  *
- * @param array $path
- * @param array $options
+ * @param array $path 画像のパス（img フォルダからの相対パス）
+ * @param array $options オプション（主にHTML属性）
+ *	※ パラメータについては、HtmlHelper::image() を参照。
  * @return void
  */
 	public function img($path, $options = array()) {
-
 		echo $this->getImg($path, $options);
 	}
 
 /**
  * 画像タグを取得する
  *
- * @param string $path Path to the image file, relative to the app/webroot/img/ directory.
- * @param array $options Array of HTML attributes. See above for special options.
- * @return string completed img tag
+ * @param string $path 画像のパス（img フォルダからの相対パス）
+ * @param array $options オプション（主にHTML属性）
+ * ※ パラメータについては、HtmlHelper::image() を参照。
+ * @return string 画像タグ
  */
 	public function getImg($path, $options = array()) {
-
 		return $this->BcHtml->image($path, $options);
 	}
 
 /**
  * アンカータグを出力する
  *
- * @param string $title
- * @param string $url オプションのパラメータ、初期値は null
- * @param array $htmlAttributes オプションのパラメータ、初期値は array()
- * @param boolean $confirmMessage オプションのパラメータ、初期値は false
+ * @param string $title タイトル
+ * @param mixed $url オプション（初期値 : null）
+ * @param array $htmlAttributes オプション（初期値 : array()）
+ *	- `escape` : タイトルをエスケープするかどうか（初期値 : false）
+ *  - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
+ *	- `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
+ *	- `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+ *	 ※ その他のパラメータについては、HtmlHelper::image() を参照。
+ * @param boolean $confirmMessage 確認メッセージ（初期値 : false）
+ *	リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
  * @return void
  */
 	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false) {
-
 		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage);
 	}
 
 /**
  * アンカータグを取得する
  *
- * @param string $title
- * @param string $url オプションのパラメータ、初期値は null
- * @param array $htmlAttributes オプションのパラメータ、初期値は array()
- * @param boolean $confirmMessage オプションのパラメータ、初期値は false
+ * @param string $title タイトル
+ * @param mixed $url オプション（初期値 : null）
+ * @param array $htmlAttributes オプション（初期値 : array()）
+ *	- `escape` : タイトルをエスケープするかどうか（初期値 : false）
+ *  - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
+ *	- `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
+ *	- `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+ *	 ※ その他のパラメータについては、HtmlHelper::image() を参照。
+ * @param boolean $confirmMessage 確認メッセージ（初期値 : false）
+ *	リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
  * @return string
  */
 	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
@@ -1037,18 +1054,15 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  */
 	public function isSSL() {
-
-		if (!empty($this->_View->viewVars['isSSL'])) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->request->is('ssl');
 	}
 
 /**
  * charset メタタグを出力する
- *
- * @param string $charset オプションのパラメータ、初期値は null
+ * 
+ * モバイルの場合は、強制的に文字コードを Shift-JIS に設定
+ * 
+ * @param string $charset 文字コード（初期値 : null）
  * @return void
  */
 	public function charset($charset = null) {
@@ -1066,12 +1080,15 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function copyYear($begin) {
-
 		$year = date('Y');
 		if ($begin == $year) {
 			echo $year;
 		} else {
-			echo $begin . ' - ' . $year;
+			if(is_numeric($begin)) {
+				echo $begin . ' - ' . $year;
+			} else {
+				echo $year;
+			}
 		}
 	}
 
@@ -1082,7 +1099,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function setPageEditLink($id) {
-
 		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$this->_View->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
@@ -1094,7 +1110,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function editLink() {
-
 		if ($this->existsEditLink()) {
 			$this->link('編集する', $this->_View->viewVars['editLink'], array('class' => 'tool-menu'));
 		}
@@ -1106,8 +1121,7 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  */
 	public function existsEditLink() {
-
-		return ($this->_View->viewVars['authPrefix'] == 'admin' && !empty($this->_View->viewVars['editLink']));
+		return (!empty($this->_View->viewVars['authPrefix']) && $this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['editLink']));
 	}
 
 /**
@@ -1116,7 +1130,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function publishLink() {
-
 		if ($this->existsPublishLink()) {
 			$this->link('公開ページ', $this->_View->viewVars['publishLink'], array('class' => 'tool-menu'));
 		}
@@ -1128,8 +1141,7 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  */
 	public function existsPublishLink() {
-
-		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['publishLink']));
+		return (!empty($this->_View->viewVars['authPrefix']) && $this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['publishLink']));
 	}
 
 /**
@@ -1139,7 +1151,6 @@ class BcBaserHelper extends AppHelper {
  * @todo 別のヘルパに移動する
  */
 	public function checkUpdate() {
-
 		$baserVerpoint = verpoint($this->_View->viewVars['baserVersion']);
 		if (isset($this->siteConfig['version'])) {
 			$siteVerpoint = verpoint($this->siteConfig['version']);
@@ -1147,24 +1158,10 @@ class BcBaserHelper extends AppHelper {
 			$siteVerpoint = 0;
 		}
 
-		if (!$baserVerpoint === false || $siteVerpoint === false) {
+		if ($baserVerpoint === false || $siteVerpoint === false) {
 			return false;
 		} else {
 			return ($baserVerpoint > $siteVerpoint);
-		}
-	}
-
-/**
- * アップデート用のメッセージを出力する
- * 
- * @return void
- * @todo 別のヘルパに移動する
- */
-	public function updateMessage() {
-		$adminPrefix = Configure::read('Routing.prefixes.0');
-		if ($this->checkUpdate() && $this->request->params['controller'] != 'updaters') {
-			$updateLink = $this->BcHtml->link('ここ', "/{$adminPrefix}/updaters");
-			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。' . $updateLink . ' からアップデートを完了させてください。</div>';
 		}
 	}
 
@@ -1176,10 +1173,9 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function contentsName($detail = false, $options = array()) {
-
 		echo $this->getContentsName($detail, $options);
 	}
-
+	
 /**
  * コンテンツを特定するIDを取得する
  * ・キャメルケースで取得
