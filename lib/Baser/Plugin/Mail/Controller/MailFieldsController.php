@@ -167,7 +167,9 @@ class MailFieldsController extends MailAppController {
 
 			/* 登録処理 */
 			$data = $this->request->data;
-			$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
+			if (is_array($data['MailField']['valid_ex'])) {
+				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
+			}
 			$data['MailField']['mail_content_id'] = $mailContentId;
 			$data['MailField']['no'] = $this->MailField->getMax('no', array('MailField.mail_content_id' => $mailContentId)) + 1;
 			$data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
@@ -216,7 +218,9 @@ class MailFieldsController extends MailAppController {
 		} else {
 			$old = $this->MailField->read(null, $id);
 			$data = $this->request->data;
-			$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
+			if (is_array($data['MailField']['valid_ex'])) {
+				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
+			}
 			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
 				$ret = true;
