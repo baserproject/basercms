@@ -326,6 +326,7 @@ $(function(){
 				<?php echo $this->BcForm->error('BlogPost.posts_date') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 

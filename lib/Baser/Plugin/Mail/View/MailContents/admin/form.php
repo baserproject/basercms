@@ -197,6 +197,7 @@ function mailContentSender1ClickHandler(){
 <?php echo $this->BcForm->error('MailContent.publish_end') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>	
 </div>
 
@@ -308,6 +309,7 @@ function mailContentSender1ClickHandler(){
 				</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 

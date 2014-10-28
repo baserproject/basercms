@@ -83,6 +83,7 @@ $(window).load(function() {
 				<?php echo $this->BcForm->error('Permission.status') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 <div class="submit">

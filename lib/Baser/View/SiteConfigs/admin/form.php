@@ -208,6 +208,7 @@ $(function(){
 <?php echo $this->BcForm->error('SiteConfig.admin_list_num') ?>
 		</td>
 	</tr>
+	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
 
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
@@ -495,6 +496,7 @@ h2 {}
 				</p>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 

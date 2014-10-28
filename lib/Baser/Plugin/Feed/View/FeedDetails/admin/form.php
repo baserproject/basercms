@@ -55,6 +55,7 @@ $(window).load(function() {
 				<?php echo $this->BcForm->error('FeedDetail.url') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -88,6 +89,7 @@ $(window).load(function() {
 				</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 

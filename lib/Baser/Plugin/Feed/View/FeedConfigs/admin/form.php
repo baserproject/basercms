@@ -65,6 +65,7 @@ $(function(){
 				<?php echo $this->BcForm->error('FeedConfig.display_number') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -119,6 +120,7 @@ $(function(){
 				</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 

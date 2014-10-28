@@ -57,6 +57,7 @@
 				<?php echo $this->BcForm->error('EditorTemplate.html') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 

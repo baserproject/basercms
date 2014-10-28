@@ -106,6 +106,7 @@ $(window).load(function() {
 				</td>
 			</tr>
 		<?php endif ?>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 <div class="submit align-center section">
