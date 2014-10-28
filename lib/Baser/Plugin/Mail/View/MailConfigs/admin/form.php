@@ -77,6 +77,7 @@ $(window).load(function() {
 				<div id="helptextSiteFax" class="helptext">自動送信メールの署名に挿入されます。</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 <div class="submit"><?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?></div>

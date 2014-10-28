@@ -157,6 +157,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<?php echo $this->BcForm->error('MailField.maxlength') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -259,6 +260,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 				<?php echo $this->BcForm->error('MailField.no_send') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 

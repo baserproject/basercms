@@ -112,6 +112,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 				</td>
 			</tr>
 		<?php endif ?>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 

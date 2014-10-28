@@ -65,6 +65,7 @@ $(window).load(function() {
 				<?php echo $this->BcForm->error('Menu.status') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 <div class="submit">

@@ -180,6 +180,7 @@ $(function(){
 				</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 

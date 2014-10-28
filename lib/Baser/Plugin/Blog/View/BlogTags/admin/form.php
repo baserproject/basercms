@@ -41,6 +41,8 @@ $(window).load(function() {
 				<?php echo $this->BcForm->error('BlogTag.name') ?>
 			</td>
 		</tr>
+		
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 <!-- button -->
