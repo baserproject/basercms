@@ -94,7 +94,7 @@ class SiteConfigsController extends AppController {
 				$siteUrl = $sslUrl = '';
 				if (isset($this->request->data['SiteConfig']['mode'])) {
 					$mode = $this->request->data['SiteConfig']['mode'];
-					if(mode > 0) {
+					if($mode > 0) {
 						clearAllCache();
 					}
 				}
