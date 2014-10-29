@@ -203,8 +203,10 @@ class UpdatersController extends AppController {
 		$targets = am(array(''), $targets);
 
 		$scriptNum = 0;
+		$scriptMessages = array();
 		foreach ($targets as $target) {
-			$scriptNum += $this->_getScriptNum($target);
+			$scriptNum += count($this->_getUpdaters($target));
+			$scriptMessages += $this->_getScriptMessages($target);
 		}
 
 		$updateLogFile = TMP . 'logs' . DS . 'update.log';
@@ -264,9 +266,10 @@ class UpdatersController extends AppController {
 		$this->set('updateTarget', 'baserCMSコア');
 		$this->set('siteVer', $sourceVersion);
 		$this->set('baserVer', $targetVersion);
-		$this->set('siteVerPoint', verpoint($sourceVersion));
-		$this->set('baserVerPoint', verpoint($targetVersion));
+		$this->set('siteVerPoint', verpoint(preg_replace('/-beta$/', '', $sourceVersion)));
+		$this->set('baserVerPoint', verpoint(preg_replace('/-beta$/', '', $targetVersion)));
 		$this->set('scriptNum', $scriptNum);
+		$this->set('scriptMessages', $scriptMessages);
 		$this->set('plugin', false);
 		$this->render('update');
 	}
@@ -322,7 +325,7 @@ class UpdatersController extends AppController {
 		clearAllCache();
 
 		/* スクリプトの有無を確認 */
-		$scriptNum = $this->_getScriptNum($name);
+		$scriptNum = count($this->_getUpdaters($name));
 
 		/* スクリプト実行 */
 		if ($this->request->data) {
@@ -349,29 +352,12 @@ class UpdatersController extends AppController {
 		$this->set('updateTarget', $title);
 		$this->set('siteVer', $sourceVersion);
 		$this->set('baserVer', $targetVersion);
-		$this->set('siteVerPoint', verpoint($sourceVersion));
-		$this->set('baserVerPoint', verpoint($targetVersion));
+		$this->set('siteVerPoint', verpoint(preg_replace('/-beta$/', '', $sourceVersion)));
+		$this->set('baserVerPoint', verpoint(preg_replace('/-beta$/', '', $targetVersion)));
 		$this->set('scriptNum', $scriptNum);
 		$this->set('plugin', $name);
 		$this->set('log', $updateLog);
 		$this->render('update');
-	}
-
-/**
- * 処理対象のスクリプト数を取得する
- *
- * @param string $plugin
- * @return int
- * @access protected
- */
-	protected function _getScriptNum($plugin = '') {
-		/* バージョンアップ対象のバージョンを取得 */
-		$targetVersion = $this->getBaserVersion($plugin);
-		$sourceVersion = $this->getSiteVersion($plugin);
-
-		/* スクリプトの有無を確認 */
-		$scriptNum = count($this->_getUpdaters($sourceVersion, $targetVersion, $plugin));
-		return $scriptNum;
 	}
 
 /**
@@ -383,9 +369,10 @@ class UpdatersController extends AppController {
  * @return array $updates
  * @access protected
  */
-	protected function _getUpdaters($sourceVersion, $targetVersion, $plugin = '') {
-		$sourceVerPoint = verpoint($sourceVersion);
-		$targetVerPoint = verpoint($targetVersion);
+	protected function _getUpdaters($plugin = '') {
+		
+		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
+		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
 		if ($sourceVerPoint === false || $targetVerPoint === false) {
 			return array();
@@ -432,6 +419,67 @@ class UpdatersController extends AppController {
 	}
 
 /**
+ * アップデータのパスを取得する
+ *
+ * @param string $sourceVersion
+ * @param string $targetVersion
+ * @param string $plugin
+ * @return array $updates
+ * @access protected
+ */
+	protected function _getScriptMessages($plugin = '') {
+		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
+		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
+
+		if ($sourceVerPoint === false || $targetVerPoint === false) {
+			return array();
+		}
+
+		if (!$plugin) {
+			$path = BASER_CONFIGS . 'update' . DS;
+			if (!is_dir($path)) {
+				return array();
+			}
+		} else {
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+				if (is_dir($path)) {
+					break;
+				}
+				$path = null;
+			}
+			if(!$path) {
+				return array();
+			}
+		}
+
+		$folder = new Folder($path);
+		$files = $folder->read(true, true);
+		$messages = array();
+		$updateVerPoints = array();
+		if (!empty($files[0])) {
+			foreach ($files[0] as $folder) {
+				$updateVersion = $folder;
+				$updateVerPoints[$updateVersion] = verpoint($updateVersion);
+			}
+			asort($updateVerPoints);
+			foreach ($updateVerPoints as $key => $updateVerPoint) {
+				$updateMessage = '';
+				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key == 'test') {
+					if (file_exists($path . DS . $key . DS . 'config.php')) {
+						include $path . DS . $key . DS . 'config.php';
+						if($updateMessage) {
+							$messages[$key] = $updateMessage;
+						}
+					}
+				}
+			}
+		}
+		return $messages;
+	}
+	
+/**
  * アップデートフォルダのパスを取得する
  *
  * @param string $plugin
@@ -472,7 +520,7 @@ class UpdatersController extends AppController {
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
 		$path = $this->_getUpdateFolder($plugin);
-		$updaters = $this->_getUpdaters($sourceVersion, $targetVersion, $plugin);
+		$updaters = $this->_getUpdaters($plugin);
 
 		if (!$plugin) {
 			$name = 'baserCMSコア';

@@ -175,7 +175,12 @@ if (BC_INSTALLED) {
 		'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 		'file' => 'error',
 	));
-
+	CakeLog::config('update', array(
+		'engine' => 'FileLog',
+		'types' => array('update'),
+		'file' => 'update',
+	));
+	
 /**
  * キャッシュ設定
  */
