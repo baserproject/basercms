@@ -246,7 +246,7 @@ class Plugin extends AppModel {
 
 		$count = count($datas);
 		for ($i = 0; $i < $count; $i++) {
-			$datas[$i]['Plugin']['priority'] = $i;
+			$datas[$i]['Plugin']['priority'] = $i + 1;
 		}
 
 		if (!$this->saveMany($datas)) {
