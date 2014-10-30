@@ -290,6 +290,7 @@ class BcManagerComponent extends Component {
 		$corePlugins = Configure::read('BcApp.corePlugins');
 
 		$result = true;
+		$priority = intval($Plugin->getMax('priority')) + 1;
 		foreach ($corePlugins as $corePlugin) {
 			$data = array();
 			include BASER_PLUGINS . $corePlugin . DS . 'config.php';
@@ -298,10 +299,12 @@ class BcManagerComponent extends Component {
 			$data['Plugin']['version'] = $version;
 			$data['Plugin']['status'] = true;
 			$data['Plugin']['db_inited'] = true;
+			$data['Plugin']['priority'] = $priority;
 			$Plugin->create($data);
 			if (!$Plugin->save()) {
 				$result = false;
 			}
+			$priority++;
 		}
 		return $result;
 	}
