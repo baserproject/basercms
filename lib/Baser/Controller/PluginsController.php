@@ -161,10 +161,10 @@ class PluginsController extends AppController {
 		//並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
 		if (!empty($this->passedArgs['sortmode'])) {
 			$sortmode = true;
-			$pluginInfo = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
+			$pluginInfos = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
 		} else {
 			$sortmode = false;
-			$pluginInfo = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric') + $unavailables;
+			$pluginInfos = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric') + $unavailables;
 		}
 
 		// 表示設定
