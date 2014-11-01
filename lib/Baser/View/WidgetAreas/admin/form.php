@@ -134,7 +134,7 @@ function renameWidget(baseId){
 
 	var settingId = 'Setting'+baseId;
 	$("#"+settingId+' .form').attr('id','WidgetUpdateWidgetForm'+baseId);
-	$("#WidgetUpdateWidgetForm"+baseId).children().each(function(){
+	$("#WidgetUpdateWidgetForm"+baseId).find('input, select, textarea').each(function(){
 		if($(this).attr('id')){
 			$(this).attr('id',$(this).attr('id')+baseId);
 		}
@@ -395,7 +395,7 @@ function updateWidget(id) {
 								<?php echo $this->BcForm->input('Widget.element', array('type' => 'hidden', 'value' => $widget['name'])) ?>
 								<?php echo $this->BcForm->input('Widget.plugin', array('type' => 'hidden', 'value' => $widgetInfo['plugin'])) ?>
 								<?php echo $this->BcForm->input('Widget.sort', array('type' => 'hidden')) ?>
-										<?php echo $this->BcForm->label('Widget.name', 'タイトル') ?>&nbsp;
+								<?php echo $this->BcForm->label('Widget.name', 'タイトル') ?>&nbsp;
 								<?php echo $this->BcForm->input('Widget.name', array('type' => 'text', 'class' => 'name')) ?><br />
 								<?php echo $widget['setting'] ?><br />
 								<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetUpdateWidgetLoader', 'class' => 'loader')) ?>
