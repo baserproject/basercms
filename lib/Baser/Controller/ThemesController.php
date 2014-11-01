@@ -183,7 +183,7 @@ class ThemesController extends AppController {
  */
 	public function admin_reset_data() {
 
-		$result = $this->_load_default_data_pattern('core.Default', $this->siteConfigs['theme']);
+		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
 
 		if ($result) {
 			$this->setMessage('初期データの読み込みが完了しました。');
