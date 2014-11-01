@@ -889,6 +889,7 @@ class BlogHelper extends AppHelper {
  * @return string 
  */
 	public function getEyeCatch($post, $options = array()) {
+		$this->_setBlogContent($post['BlogPost']['blog_content_id']);
 		$options = array_merge(array(
 			'imgsize' => 'thumb', // 画像サイズ
 			'link' => true, // 大きいサイズの画像へのリンク有無
