@@ -1,9 +1,9 @@
 <?php
 /**
- * Application model for CakePHP.
+ * Application level Controller
  *
- * This file is application-wide model file. You can put all
- * application-wide model-related methods here.
+ * This file is application-wide controller file. You can put all
+ * application-wide controller-related methods here.
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -14,20 +14,21 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Model
+ * @package       app.Controller
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('BcAppModel', 'Model');
+App::uses('BcAppController', 'Controller');
 
 /**
- * Application model for Cake.
+ * Application Controller
  *
- * Add your application-wide methods in the class below, your models
+ * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @package       app.Model
+ * @package		app.Controller
+ * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppModel extends BcAppModel {
+class AppController extends BcAppController {
 }
