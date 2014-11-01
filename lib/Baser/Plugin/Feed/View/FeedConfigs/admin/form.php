@@ -136,4 +136,5 @@ $(function(){
 
 
 <div id="AlertMessage" class="message" style="display:none"></div>
+<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="DataList"><?php $this->BcBaser->element('feed_details/index_list') ?></div>
