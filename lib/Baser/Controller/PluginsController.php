@@ -167,7 +167,7 @@ class PluginsController extends AppController {
 			$pluginInfos = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric');
 		} else {
 			$sortmode = false;
-			$pluginInfos = Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric') + $unavailables;
+			$pluginInfos = array_merge(Hash::sort($availables, '{n}.Plugin.priority', 'asc', 'numeric'), $unavailables);
 		}
 
 		// 表示設定
