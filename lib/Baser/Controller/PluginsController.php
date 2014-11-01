@@ -115,7 +115,10 @@ class PluginsController extends AppController {
 					}
 
 				} else {
-					$this->setMessage('アップロードしたZIPファイルの展開に失敗しました。', true);
+                    $msg = 'アップロードしたZIPファイルの展開に失敗しました。';
+                    exec('unzip 2>&1', $errs);
+                    $msg .= '<br />'.implode('<br />', $errs);
+					$this->setMessage($msg, true);
 					$this->redirect(array('action' => 'add'));
 				}
 			}
