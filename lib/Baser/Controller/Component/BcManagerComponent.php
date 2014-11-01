@@ -1587,6 +1587,7 @@ class BcManagerComponent extends Component {
 			'phpMemory'			=> intval(ini_get('memory_limit')),
 			'safeModeOff'		=> !ini_get('safe_mode'),
 			'configDirWritable'	=> is_writable(APP . 'Config' . DS),
+			'pluginDirWritable'	=> is_writable(APP . 'Plugin' . DS),
 			'themeDirWritable'	=> is_writable(WWW_ROOT . 'theme'),
 			'filesDirWritable'	=> is_writable(WWW_ROOT . 'files'),
 			'imgDirWritable'	=> is_writable(WWW_ROOT . 'img'),
@@ -1615,6 +1616,10 @@ class BcManagerComponent extends Component {
 		if (!$status['configDirWritable']) {
 			@chmod(APP . 'Config' . DS, 0777);
 			$status['configDirWritable'] = is_writable(APP . 'Config' . DS);
+		}
+		if (!$status['pluginDirWritable']) {
+			@chmod(APP . 'Plugin' . DS, 0777);
+			$status['pluginDirWritable'] = is_writable(APP . 'Plugin' . DS);
 		}
 		if (!$status['themeDirWritable']) {
 			@chmod(WWW_ROOT . 'theme', 0777);
