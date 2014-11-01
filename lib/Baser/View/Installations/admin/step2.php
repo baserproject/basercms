@@ -62,6 +62,17 @@ $(function(){
 <?php endif ?>
 					</div>
 				</li>
+				<li class='<?php if ($pluginDirWritable) echo 'check'; else echo'failed'; ?>'>
+					/app/Plugin フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+					<div class="check-result">
+<?php if ($pluginDirWritable): ?>
+							書き込み可
+<?php else: ?>
+							書き込み不可<br />
+							<small>/app/Plugin フォルダに書き込み権限が必要です</small>
+<?php endif ?>
+					</div>
+				</li>
 				<li class='<?php if ($tmpDirWritable) echo 'check'; else echo'failed'; ?>'>
 					/app/tmp フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
 					<div class="check-result">
