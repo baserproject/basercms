@@ -31,3 +31,4 @@ lib/Cake/Console/Templates/skel/tmp/sessions/*
 lib/Cake/Console/Templates/skel/tmp/tests/*
 !lib/Cake/Console/Templates/skel/tmp/tests/empty
 .vagrant/*
+Vagrant
