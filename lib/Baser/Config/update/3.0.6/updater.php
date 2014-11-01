@@ -40,3 +40,20 @@
 		$Plugin = ClassRegistry::init('Plugin');
 	}
 	$Plugin->rearrangePriorities();
+	
+/**
+ * テーマ内の管理画面用のアセットファイルを削除する
+ */
+	$path = getViewPath();
+	$paths = array(
+		$path . 'css' . DS . 'admin',
+		$path . 'js' . DS . 'admin',
+		$path . 'img' . DS . 'admin'
+	);
+	$Folder = new Folder();
+	foreach($paths as $path) {
+		if(is_dir($path)) {
+			$Folder->delete($path);
+		}
+	}
+	
