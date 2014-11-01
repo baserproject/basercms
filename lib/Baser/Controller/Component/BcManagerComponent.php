@@ -1751,40 +1751,6 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
-
-/**
- * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成する
- * これにより、表示速度の改善を行う事ができる
- * 
- * @return boolean
- * @deprecated since version 3.0.1
- */
-	public function createAdminAssetsSymlink() {
-		$viewPath = getViewPath();
-		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
-		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
-		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
-		$css = $viewPath . 'css' . DS . 'admin';
-		$js = $viewPath . 'js' . DS . 'admin';
-		$img = $viewPath . 'img' . DS . 'admin';
-		$result = true;
-		if (!is_dir($css) && !is_link($css)) {
-			if (!@symlink($adminCss, $css)) {
-				$result = false;
-			}
-		}
-		if (!is_dir($js) && !is_link($js)) {
-			if (!@symlink($adminJs, $js)) {
-				$result = false;
-			}
-		}
-		if (!is_dir($img) && !is_link($img)) {
-			if (!@symlink($adminImg, $img)) {
-				$result = false;
-			}
-		}
-		return $result;
-	}
 	
 /**
  * テーマに管理システム用アセットを配置する
