@@ -60,6 +60,7 @@ $(function(){
 
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'contents', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
+<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="AjaxChangePriorityUrl" class="display-none"><?php echo $this->BcBaser->url(array('action' => 'ajax_change_priority')) ?></div>
 <div id="ContentOpen" class="display-none"><?php echo $this->BcForm->value('Content.open') ?></div>
 <div id="DataList"><?php $this->BcBaser->element('contents/index_list') ?></div>

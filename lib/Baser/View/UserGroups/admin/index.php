@@ -30,5 +30,6 @@ $this->BcBaser->js(array(
 
 
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'user_groups', 'action' => 'ajax_batch')) ?></div>
-<div id="AlertMessage" class="message" style="display:none"></div>	
+<div id="AlertMessage" class="message" style="display:none"></div>
+<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="DataList"><?php $this->BcBaser->element('user_groups/index_list') ?></div>

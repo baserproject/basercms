@@ -76,6 +76,7 @@ $(function(){
   
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'themes', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
+<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 
 <div id="tabs">
 	<ul>

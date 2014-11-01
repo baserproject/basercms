@@ -33,5 +33,6 @@ $(function(){
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_batch', $mailContent['MailContent']['id'])) ?></div>
 <div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'mail_fields', 'action' => 'ajax_update_sort', $mailContent['MailContent']['id'])) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
+<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 
 <div id="DataList"><?php $this->BcBaser->element('mail_fields/index_list') ?></div>
