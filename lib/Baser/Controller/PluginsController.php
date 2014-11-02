@@ -431,7 +431,7 @@ class PluginsController extends AppController {
 			}
 
 			if (!isset($title)) {
-				$this->request->data['Plugin']['title'] = $name;
+				$title = $name;
 			}
 			$corePlugins = Configure::read('BcApp.corePlugins');
 			if (in_array($name, $corePlugins)) {
