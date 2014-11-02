@@ -1468,7 +1468,8 @@ DOC_END;
 		if($type) {
 			$type = Inflector::camelize($type);
 		}
-		$event = $this->dispatchEvent('after' . $type . 'Form', array('fields' => array()), array('class' => $this->_View->name . '.Form', 'plugin' => ''));
+		
+		$event = $this->dispatchEvent('after' . $type . 'Form', array('fields' => array(), 'id' => $this->__id), array('class' => 'Form', 'plugin' => ''));
 		$out = '';
 		if ($event !== false) {
 			if(!empty($event->data['fields'])) {
