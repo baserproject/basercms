@@ -463,13 +463,7 @@ function emptyFolder($path) {
  * @return string
  */
 function getViewPath() {
-
-	if (ClassRegistry::isKeySet('SiteConfig')) {
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-	} else {
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-	}
-	$siteConfig = $SiteConfig->findExpanded();
+	$siteConfig = Configure::read('BcSite');
 	$theme = $siteConfig['theme'];
 	if ($theme) {
 		return WWW_ROOT . 'theme' . DS . $theme . DS;
