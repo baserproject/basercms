@@ -138,11 +138,18 @@ class CakeFixtureManager {
 					TESTS . 'Fixture' . $fixtureParsedPath['additionalPath']
 				);
 			// CUSTOMIZE ADD 2014/07/02 ryuring
+			// baserCMSのフィクスチャーを読み込むように変更
+			// CUSTOMIZE ADD 2014/11/04 ryuring
+			// サブフォルダに対応
 			// >>>
 			} elseif (strpos($fixture, 'baser.') === 0) {
-				// baserCMSのフィクスチャーを読み込む
-				$fixture = substr($fixture, strlen('baser.'));
+				$parts = explode('.', $fixture);
+				$fixture = $parts[count($parts) - 1];
+				array_shift($parts);
+				array_pop($parts);
+				$path = implode(DS, $parts);
 				$fixturePaths = array(
+					BASER . 'Test' . DS . 'Fixture' . DS . $path,
 					BASER . 'Test' . DS . 'Fixture'
 				);
 			// <<<

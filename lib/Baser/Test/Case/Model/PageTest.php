@@ -21,7 +21,7 @@ App::uses('Page', 'Model');
 class UserTest extends BaserTestCase {
 	
 	public $fixtures = array(
-		'baser.Page'
+		'baser.Page.Page'
 	);
 	
 /**
