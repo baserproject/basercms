@@ -15,12 +15,12 @@
 
 
 <tr>
-	<th>固定ページカテゴリー管理メニュー</th>
+	<th>カテゴリー管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('一覧を表示する', array('controller' => 'page_categories', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link('カテゴリ一覧', array('controller' => 'page_categories', 'action' => 'index')) ?></li>
 			<?php if ($newCatAddable): ?>
-				<li><?php $this->BcBaser->link('新規に登録する', array('controller' => 'page_categories', 'action' => 'add')) ?></li>
+				<li><?php $this->BcBaser->link('カテゴリ新規追加', array('controller' => 'page_categories', 'action' => 'add')) ?></li>
 			<?php endif; ?>
 		</ul>
 	</td>

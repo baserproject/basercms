@@ -88,9 +88,9 @@ class ThemeFilesController extends AppController {
 		}
 
 		// タイトル設定
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		if ($plugin) {
-			$pageTitle .= '：' . Inflector::camelize($plugin);
+			$pageTitle .= '：' . $plugin;
 		}
 		$this->pageTitle = '[' . $pageTitle . '] ';
 		if (!empty($this->_tempalteTypes[$type])) {
@@ -476,9 +476,9 @@ class ThemeFilesController extends AppController {
 		$this->request->data['ThemeFile']['contents'] = $file->read();
 		$this->request->data['ThemeFile']['type'] = $this->_getFileType($file->name);
 
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		if ($plugin) {
-			$pageTitle .= '：' . Inflector::camelize($plugin);
+			$pageTitle .= '：' . $plugin;
 		}
 		$this->pageTitle = '[' . $pageTitle . '] ' . $this->_tempalteTypes[$type] . ' 表示：　' . basename($path);
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));
@@ -660,7 +660,7 @@ class ThemeFilesController extends AppController {
 			}
 		}
 
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		$this->pageTitle = '[' . $pageTitle . '] フォルダ表示：　' . basename($path);
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));
 		$this->subMenuElements = array('theme_files');
@@ -690,9 +690,9 @@ class ThemeFilesController extends AppController {
 		$this->request->data['ThemeFolder']['parent'] = dirname($fullpath);
 		$this->request->data['ThemeFolder']['pastname'] = basename($path);
 
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		if ($plugin) {
-			$pageTitle .= '：' . Inflector::camelize($plugin);
+			$pageTitle .= '：' . $plugin;
 		}
 		$this->pageTitle = '[' . $pageTitle . '] フォルダ表示：　' . basename($path);
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));

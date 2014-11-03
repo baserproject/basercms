@@ -26,7 +26,7 @@ if ($theme == 'core') {
 	$plugins = $Plugin->find('all', array('fields' => array('name', 'title')));
 	$themeFiles = am($themeFiles, Hash::extract($plugins, '{n}.Plugin'));
 } else {
-	$themeFiles = array(0 => array('name' => '', 'title' => Inflector::camelize($theme)));
+	$themeFiles = array(0 => array('name' => '', 'title' => $theme));
 }
 ?>
 

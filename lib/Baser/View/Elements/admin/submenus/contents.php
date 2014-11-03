@@ -18,8 +18,8 @@
 	<th>検索インデックスメニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('コンテンツ一覧', array('controller' => 'contents', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('コンテンツ登録', array('controller' => 'contents', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('検索インデックス一覧', array('controller' => 'contents', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link('検索インデックス新規追加', array('controller' => 'contents', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

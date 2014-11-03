@@ -142,7 +142,7 @@ class PageCategoriesController extends AppController {
 		$this->help = 'page_categories_index';
 		$this->search = 'page_categories_index';
 		$this->subMenuElements = array('pages', 'page_categories');
-		$this->pageTitle = '固定ページカテゴリー一覧';
+		$this->pageTitle = 'カテゴリー一覧';
 	}
 
 /**
@@ -239,7 +239,7 @@ class PageCategoriesController extends AppController {
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages', 'page_categories');
-		$this->pageTitle = '新規固定ページカテゴリー登録';
+		$this->pageTitle = '新規カテゴリー登録';
 		$this->help = 'page_categories_form';
 		$this->render('form');
 	}
@@ -338,7 +338,7 @@ class PageCategoriesController extends AppController {
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages', 'page_categories');
-		$this->pageTitle = '固定ページカテゴリー情報編集：' . $this->request->data['PageCategory']['title'];
+		$this->pageTitle = 'カテゴリー情報編集：' . $this->request->data['PageCategory']['title'];
 		$this->help = 'page_categories_form';
 		$this->render('form');
 	}

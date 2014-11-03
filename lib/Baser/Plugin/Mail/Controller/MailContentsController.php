@@ -62,7 +62,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);
 

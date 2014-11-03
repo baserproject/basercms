@@ -264,7 +264,7 @@ class UsersController extends AppController {
 			return;
 		}
 
-		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
+		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー一覧';
 		$this->search = 'users_index';
 		$this->help = 'users_index';
@@ -326,7 +326,7 @@ class UsersController extends AppController {
 		$this->set('userGroups', $userGroups);
 		$this->set('editable', true);
 		$this->set('selfUpdate', false);
-		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
+		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = '新規ユーザー登録';
 		$this->help = 'users_form';
 		$this->render('form');
@@ -406,7 +406,7 @@ class UsersController extends AppController {
 		}
 
 		$this->set(compact('userGroups', 'editable', 'selfUpdate', 'deletable'));
-		$this->subMenuElements = array('site_configs', 'users', 'user_groups');
+		$this->subMenuElements = array('users', 'user_groups');
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';
 		$this->render('form');

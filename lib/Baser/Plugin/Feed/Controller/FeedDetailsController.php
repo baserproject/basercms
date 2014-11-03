@@ -65,7 +65,6 @@ class FeedDetailsController extends FeedAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
 	);
 

@@ -66,7 +66,7 @@ class MailMessagesController extends MailAppController {
  * @var array
  * @access public
  */
-	public $subMenuElements = array('mail_fields', 'mail_common');
+	public $subMenuElements = array('mail_fields');
 
 /**
  * ぱんくずナビ
@@ -75,7 +75,6 @@ class MailMessagesController extends MailAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);
 

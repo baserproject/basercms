@@ -62,7 +62,6 @@ class MailFieldsController extends MailAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);
 
@@ -123,7 +122,7 @@ class MailFieldsController extends MailAppController {
 		}
 
 		$this->set('publishLink', '/' . $this->mailContent['MailContent']['name'] . '/index');
-		$this->subMenuElements = array('mail_fields', 'mail_common');
+		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] メールフィールド一覧';
 		$this->help = 'mail_fields_index';
 	}
@@ -191,7 +190,7 @@ class MailFieldsController extends MailAppController {
 			}
 		}
 
-		$this->subMenuElements = array('mail_fields', 'mail_common');
+		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] 新規メールフィールド登録';
 		$this->help = 'mail_fields_form';
 		$this->render('form');
@@ -244,7 +243,7 @@ class MailFieldsController extends MailAppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('mail_fields', 'mail_common');
+		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] メールフィールド編集：　' . $this->request->data['MailField']['name'];
 		$this->help = 'mail_fields_form';
 		$this->render('form');
