@@ -15,6 +15,11 @@
 
 /**
  * フィードBaserヘルパー
+ * 
+ * BcBaserHelper より透過的に呼び出される
+ * 
+ * 《利用例》
+ * $this->BcBaser->feed(1)
  *
  * @package Feed.View.Helper
  *
@@ -24,10 +29,13 @@ class FeedBaserHelper extends AppHelper {
 /**
  * フィード出力
  * 
- * @param int $id
- * @param mixid $mobile '' / boolean
+ * @param int $id フィードID
+ * @param mixid $mobile	
+ *	- '' : 現在のリクエストについて自動取得
+ *	- true : モバイル用
+ *	- false : PC用
  * @return void
- * @access public
+ * @todo スマホ対応
  */
 	public function feed($id, $mobile = '') {
 		$url = array('mobile' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');

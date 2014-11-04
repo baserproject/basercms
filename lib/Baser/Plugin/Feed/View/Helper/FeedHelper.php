@@ -28,7 +28,6 @@ class FeedHelper extends BcTextHelper {
  * ヘルパー
  * 
  * @var array
- * @access public
  */
 	public $helpers = array('BcBaser');
 
@@ -36,8 +35,7 @@ class FeedHelper extends BcTextHelper {
  * レイアウトテンプレートを取得
  * コンボボックスのソースとして利用
  * 
- * @return array
- * @access public
+ * @return array レイアウトの一覧データ
  */
 	public function getTemplates() {
 		$templatesPathes = array();
@@ -72,10 +70,10 @@ class FeedHelper extends BcTextHelper {
 
 /**
  * フィードのキャッシュタイムをキャッシュファイルに保存
+ * 
  * <!--nocache--><!--/nocache-->でキャッシュタイムを参照できるようにする
  *
  * @return void
- * @access public
  */
 	public function saveCachetime() {
 		$feedId = $this->params['pass'][0];
@@ -87,13 +85,13 @@ class FeedHelper extends BcTextHelper {
 
 /**
  * フィードリストのキャッシュヘッダーを出力する
+ * 
  * キャッシュ時間は管理画面で設定した値
  * ヘッダーを出力するには<cake:nocache>を利用する
  * <!--nocache--><!--/nocache-->内では動的変数を利用できないのでキャッシュファイルを利用する
  * 事前に $this->Feed->saveCachetime() でキャッシュタイムを保存しておく
  *
  * @return void
- * @access public
  */
 	public function cacheHeader() {
 		$feedId = $this->params['pass'][0];
