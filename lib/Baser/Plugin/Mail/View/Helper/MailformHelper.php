@@ -32,9 +32,8 @@ class MailformHelper extends BcFreezeHelper {
  * @param string $type コントロールタイプ
  * @param string $fieldName フィールド文字列
  * @param array $options コントロールソース
- * @param array $attributes html属性
- * @return string htmlタグ
- * @access public
+ * @param array $attributes HTML属性
+ * @return string フォームコントロールのHTMLタグ
  */
 	public function control($type, $fieldName, $options, $attributes = array()) {
 		$attributes['escape'] = false;

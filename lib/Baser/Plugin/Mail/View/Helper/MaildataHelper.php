@@ -30,11 +30,10 @@ class MaildataHelper extends BcTextHelper {
 /**
  * メール表示用のデータを出力する
  * 
- * @param string コントロールタイプ
- * @param mixed 変換前の値
- * @param array コントロールソース
+ * @param string $type コントロールタイプ
+ * @param mixed $value 変換前の値
+ * @param array $options コントロールソース
  * @return string メール用データ
- * @access public
  */
 	public function control($type, $value, $options = "") {
 		// コントロールソースの配列変換

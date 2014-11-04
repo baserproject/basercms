@@ -27,9 +27,8 @@ class MailfieldHelper extends AppHelper {
 /**
  * htmlの属性を取得する
  *
- * @param array メールフィールド
- * @return array html属性
- * @access public
+ * @param array $data メールフィールドデータ
+ * @return array HTML属性
  */
 	public function getAttributes($data) {
 		if (isset($data['MailField'])) {
@@ -53,9 +52,8 @@ class MailfieldHelper extends AppHelper {
 /**
  * コントロールのソースを取得する
  *
- * @param array メールフィールド
+ * @param array $data メールフィールドデータ
  * @return array コントロールソース
- * @access public
  */
 	public function getOptions($data) {
 		if (isset($data['MailField'])) {
