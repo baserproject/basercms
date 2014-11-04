@@ -64,6 +64,7 @@
 
 
 <body>
+<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 <?php echo $this->BcBaser->element('header') ?>
 
 

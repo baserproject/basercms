@@ -20,7 +20,7 @@
 <p class="error">
 	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
 	<?php printf(
-		__d('cake', 'The requested address %s was not found on this server.'),
+		__d('cake', 'The request sent to the address %s was invalid.'),
 		"<strong>'{$url}'</strong>"
 	); ?>
 </p>

@@ -94,6 +94,9 @@ class SiteConfigsController extends AppController {
 				$siteUrl = $sslUrl = '';
 				if (isset($this->request->data['SiteConfig']['mode'])) {
 					$mode = $this->request->data['SiteConfig']['mode'];
+					if($mode > 0) {
+						clearAllCache();
+					}
 				}
 				if (isset($this->request->data['SiteConfig']['smart_url'])) {
 					$smartUrl = $this->request->data['SiteConfig']['smart_url'];
@@ -145,7 +148,10 @@ class SiteConfigsController extends AppController {
 
 					// キャッシュをクリア
 					if ($this->request->data['SiteConfig']['maintenance'] ||
-						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id'])) {
+						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id']) ||
+						(!$smartphone && Configure::read('BcApp.smartphone')) || 
+						(!$mobile && Configure::read('BcApp.mobile'))
+					) {
 						clearViewCache();
 					}
 
@@ -229,10 +235,7 @@ class SiteConfigsController extends AppController {
  * [ADMIN] PHPINFOを表示する
  */
 	public function admin_info() {
-		if (!empty($this->siteConfigs['demo_on'])) {
-			$this->notFound();
-		}
-
+		
 		$this->pageTitle = '環境情報';
 
 		$smartUrl = 'ON';
@@ -249,6 +252,7 @@ class SiteConfigsController extends AppController {
 		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
 		$this->subMenuElements = array('site_configs');
+		
 	}
 
 /**
@@ -316,7 +320,7 @@ class SiteConfigsController extends AppController {
 		}
 	
 		if($specialThanks) {
-			$json = $specialThanks;
+			$json = json_decode($specialThanks);
 		} else {
 			try {
 				$json = file_get_contents(Configure::read('BcApp.specialThanks'), true);

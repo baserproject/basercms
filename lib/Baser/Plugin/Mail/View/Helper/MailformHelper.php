@@ -15,8 +15,8 @@
 /**
  * Include files
  */
-App::uses('BcHtmlHelper', 'Mail.View/Helper');
-App::uses('BcFreezeHelper', 'Mail.View/Helper');
+App::uses('BcHtmlHelper', 'View/Helper');
+App::uses('BcFreezeHelper', 'View/Helper');
 
 /**
  * メールフォームヘルパー
@@ -32,13 +32,12 @@ class MailformHelper extends BcFreezeHelper {
  * @param string $type コントロールタイプ
  * @param string $fieldName フィールド文字列
  * @param array $options コントロールソース
- * @param array $attributes html属性
- * @return string htmlタグ
- * @access public
+ * @param array $attributes HTML属性
+ * @return string フォームコントロールのHTMLタグ
  */
 	public function control($type, $fieldName, $options, $attributes = array()) {
 		$attributes['escape'] = false;
-
+		$out = '';
 		switch ($type) {
 
 			case 'text':
@@ -120,7 +119,25 @@ class MailformHelper extends BcFreezeHelper {
 				$attributes['empty'] = false;
 				$out = $this->select($fieldName, $options, $attributes);
 				break;
+			case 'file':
+				unset($attributes['size']);
+				unset($attributes['rows']);
+				unset($attributes['maxlength']);
+				unset($attributes['separator']);
+				unset($attributes['escape']);
+				if(empty($attributes['width'])) {
+					$attributes['width'] = 400;
+				}
+				$attributes['delCheck'] = false;
+				if(!empty($attributes['maxFileSize'])) {
+					$out = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $attributes['maxFileSize'] * 1000 * 1000 . '" />';
+				}
+				unset($attributes['maxFileSize']);
+				unset($attributes['fileExt']);
+				$out .= $this->file($fieldName, $attributes);
 
+				break;
+			
 			case 'date_time_calender':
 				unset($attributes['size']);
 				unset($attributes['rows']);

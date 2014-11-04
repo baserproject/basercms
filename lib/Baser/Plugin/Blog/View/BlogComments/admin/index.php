@@ -34,4 +34,5 @@ $(function(){
 	<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'blog_comments', 'action' => 'ajax_batch', $blogContent['BlogContent']['id'], 0)) ?></div>
 <?php endif ?>
 <div id="AlertMessage" class="message" style="display:none"></div>
+<div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="DataList"><?php $this->BcBaser->element('blog_comments/index_list') ?></div>

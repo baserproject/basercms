@@ -79,7 +79,7 @@ define('BC_BASE_URL', baseUrl());
 /**
  * アセットフィルターを追加
  */
-Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher')));
+Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher', 'BcCacheDispatcher')));
 
 /**
  * クラスローダー設定
@@ -175,7 +175,12 @@ if (BC_INSTALLED) {
 		'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 		'file' => 'error',
 	));
-
+	CakeLog::config('update', array(
+		'engine' => 'FileLog',
+		'types' => array('update'),
+		'file' => 'update',
+	));
+	
 /**
  * キャッシュ設定
  */
@@ -255,10 +260,8 @@ if (BC_INSTALLED) {
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
 	$plugins = getEnablePlugins();
-	$priority = count($plugins);
 	foreach ($plugins as $plugin) {
-		loadPlugin($plugin['Plugin']['name'], $priority);
-		$priority--;
+		loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
 	}
 	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);

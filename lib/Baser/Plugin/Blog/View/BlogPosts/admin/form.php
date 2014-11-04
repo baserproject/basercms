@@ -219,7 +219,9 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>&nbsp;
-				<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
+				<?php if($newCatAddable): ?>
+					<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
+				<?php endif ?>
 				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
 				<?php echo $this->BcForm->error('BlogPost.blog_category_id') ?>
 			</td>
@@ -235,7 +237,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.eye_catch', 'アイキャッチ画像') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcUpload->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
+				<?php echo $this->BcForm->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
 				<?php echo $this->BcForm->error('BlogPost.eye_catch') ?>
 			</td>
 		</tr>
@@ -324,6 +326,7 @@ $(function(){
 				<?php echo $this->BcForm->error('BlogPost.posts_date') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 

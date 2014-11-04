@@ -16,7 +16,7 @@
 if(!$credits) {
 	return;
 }
-$types = array('designers', 'deveroppers', 'supporters', 'publishers');
+$types = array('designers', 'developers', 'supporters', 'publishers');
 ?>
 
 <div id="Credit">

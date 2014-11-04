@@ -179,13 +179,17 @@ class BcAppController extends Controller {
 		if (BC_INSTALLED || isConsole()) {
 
 			// サイト基本設定の読み込み
-			$SiteConfig = ClassRegistry::init('SiteConfig');
-			$this->siteConfigs = $SiteConfig->findExpanded();
-
-			if (empty($this->siteConfigs['version'])) {
-				$this->siteConfigs['version'] = $this->getBaserVersion();
-				$SiteConfig->saveKeyValue($this->siteConfigs);
+			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+			try {
+				$this->siteConfigs = Configure::read('BcSite');
+				if (empty($this->siteConfigs['version'])) {
+					$this->siteConfigs['version'] = $this->getBaserVersion();
+					$SiteConfig->saveKeyValue($this->siteConfigs);
+				}
+			} catch (Exception $ex) {
+				$this->siteConfigs = array();
 			}
+
 		} else {
 			if ($this->name != 'Installations') {
 				if ($this->name == 'CakeError' && $request->params['controller'] != 'installations') {
@@ -222,30 +226,6 @@ class BcAppController extends Controller {
 			}
 		}
 		
-		// $this->request->here の調整
-		// index 省略時の場合は、indexを追加
-		// .html がある場合は削除
-		// $this->request->here は、ビューキャッシュの命名規則に影響する為、
-		// 同一ページによる複数キャッシュの生成を防ぐ
-		if(!BcUtil::isAdminSystem() && $this->name == 'Pages') {
-			if($this->request->params['pass'][count($this->request->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $this->request->here)) {
-				$this->request->here .= 'index';
-			}
-			$this->request->here = preg_replace('/\.html$/', '', $this->request->here);
-		} else {
-			if($this->request->action == 'index') {
-				list($here,) = explode('?', $this->request->here);
-				if(!empty($this->request->params['pass'])) {
-					foreach ($this->request->params['pass'] as $pass) {
-						$here = preg_replace('/\/' . $pass . '$/', '', $here);
-					}
-				}
-				if(!preg_match('/\/index$/', $here)) {
-					$this->request->here .= 'index';
-				}
-			}
-		}
-
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
@@ -268,7 +248,7 @@ class BcAppController extends Controller {
 		$this->setTheme();
 
 		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if (!empty($this->request->params['admin']) || Configure::read('BcRequest.isUpdater')) {
+		if (!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
 			$this->Security->csrfCheck = false;
 		}
@@ -341,6 +321,7 @@ class BcAppController extends Controller {
 			$user = $this->BcAuth->user();
 			if ($user) {
 				$userModel = $this->Session->read('Auth.User.userModel');
+				$User = ClassRegistry::init($userModel);
 				if(strpos($userModel, '.') !== false) {
 					list($plugin, $userModel) = explode('.', $userModel);
 				}
@@ -354,7 +335,7 @@ class BcAppController extends Controller {
 						$userModel . '.name'			=> $user['name'],
 						$userModel . '.user_group_id'	=> $userGroupIds
 					);
-					if (!$this->{$userModel}->find('count', array(
+					if (!$User->find('count', array(
 							'conditions' => $conditions,
 							'recursive' => -1))) {
 						$this->Session->delete(BcAuthComponent::$sessionKey);
@@ -413,11 +394,13 @@ class BcAppController extends Controller {
 			}
 		}
 
+        //Securityコンポーネント設定
+        $this->Security->blackHoleCallback = '_blackHoleCallback';
+
 		// SSLリダイレクト設定
 		if (Configure::read('BcApp.adminSsl') && !empty($this->request->params['admin'])) {
 			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
 			if ($adminSslMethods) {
-				$this->Security->blackHoleCallback = '_sslFail';
 				$this->Security->requireSecure = $adminSslMethods;
 			}
 		}
@@ -522,6 +505,41 @@ class BcAppController extends Controller {
 			$SiteConfig->saveKeyValue($data);
 		}
 	}
+
+/**
+ * Securityコンポーネントのブラックホールからのコールバック
+ *
+ * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
+ * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
+ *
+ * @param	string	$err エラーの種類
+ * @throws BadRequestException
+ */
+    public function _blackHoleCallback($err) {
+
+        //SSL制限違反は別処理
+        if($err === 'secure') {
+            $this->_sslFail($err);
+            return;
+        }
+
+        $errorMessages = array(
+            'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
+            'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
+            'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
+            'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+            'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+            'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
+        );
+
+        $message = "不正なリクエストと判断されました。";
+
+        if(array_key_exists($err, $errorMessages)) {
+            $message .= "(type:{$err})" . $errorMessages[$err];
+        }
+
+        throw new BadRequestException($message);
+    }
 
 /**
  * SSLエラー処理
@@ -927,16 +945,8 @@ class BcAppController extends Controller {
 			$content = $body;
 		}
 
-		// TODO $attachments tmp file path
-		// filePaths と attachments のどっちが本当の分か確認すること
-		$attachments = null;
-		if (!empty($options['filePaths'])) {
-			if (!is_array($options['filePaths'])) {
-				$attachments = array($options['filePaths']);
-			} else {
-				$attachments = $options['filePaths'];
-			}
-		}
+		// $attachments tmp file path
+		$attachments = array();
 		if (!empty($options['attachments'])) {
 			if (!is_array($options['attachments'])) {
 				$attachments = array($options['attachments']);

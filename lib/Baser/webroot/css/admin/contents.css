@@ -50,7 +50,7 @@
 	color: #CCC;
 	vertical-align: middle;
 	background-color: #333;
-	padding: 0 10px 5px;
+	padding: 5px 10px;
 	vertical-align:middle;
 	font-size:11px;
 	line-height:15px;
@@ -663,8 +663,8 @@ table.sub-menu{
 ----------------------------------------------- */
 
 #authMessage,
-#flashMessage, 
-#AlertMessage, 
+#flashMessage,
+#AlertMessage,
 #UpdateMessage {
 	padding:10px 10px 10px 36px;
 	margin:20px 0;
@@ -1258,7 +1258,7 @@ background: #888;
 }
 #CurrentTheme {
 	border:5px solid #e2e2e2;
-	padding:20px;	
+	padding:20px;
 	margin-bottom: 20px;
 }
 #CurrentTheme .theme-screenshot {
@@ -1343,7 +1343,7 @@ background: #888;
 }
 .filetree span.folder,
 .filetree span.file
-{ 
+{
 	padding: 1px 0 1px 18px!important;
 	display: block;
 	line-height:1em;
@@ -1358,4 +1358,8 @@ background: #888;
 }
 .ui-tabs .ui-tabs-nav li {
 	font-weight: bold;
+}
+
+.helptext {
+	display:none;
 }

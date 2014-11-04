@@ -1047,4 +1047,47 @@ class CakeRequest implements ArrayAccess {
 		unset($this->params[$name]);
 	}
 
+/**
+ * 現在のURLを正規化して取得する
+ * 
+ * $this->request->here は、ビューキャッシュの命名規則に影響する為、
+ * CacheHelper 等で、このメソッドを利用する事で、同一ページによる複数キャッシュの生成を防ぐ
+ * 
+ * （例）
+ * /news/ → /news/index
+ * /company/ → /company/index
+ * 
+ * @return string
+ */
+	public function normalizedHere() {
+		$here = $this->here;
+		if(!BcUtil::isAdminSystem() && $this->params['controller'] == 'pages') {
+			if($this->params['pass'][count($this->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $here)) {
+				if(preg_match('/\/$/', $here)) {
+					$here .= 'index';
+				} else {
+					$here .= '/index';
+				}
+			}
+			$here = preg_replace('/\.html$/', '', $here);
+		} else {
+			if($this->action == 'index') {
+				list($here,) = explode('?', $here);
+				if(!empty($this->params['pass'])) {
+					foreach ($this->params['pass'] as $pass) {
+						$here = preg_replace('/\/' . $pass . '$/', '', $here);
+					}
+				}
+				if(!preg_match('/\/index$/', $here)) {
+					if(preg_match('/\/$/', $here)) {
+						$here .= 'index';
+					} else {
+						$here .= '/index';
+					}
+				}
+			}
+		}
+		return $here;
+	}
+	
 }

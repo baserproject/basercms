@@ -107,6 +107,7 @@ $(function(){
 <?php echo $this->BcForm->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
@@ -280,6 +281,7 @@ $(function(){
 	<?php echo $this->BcForm->error('BlogContent.tag_use') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 <!-- button -->

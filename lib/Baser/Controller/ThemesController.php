@@ -81,7 +81,10 @@ class ThemesController extends AppController {
 					$this->_applyTheme($theme);
 					$this->redirect(array('action' => 'index'));
 				} else {
-					$this->setMessage('アップロードしたZIPファイルの展開に失敗しました。', true);
+                    $msg = 'アップロードしたZIPファイルの展開に失敗しました。';
+                    exec('unzip 2>&1', $errs);
+                    $msg .= '<br />'.implode('<br />', $errs);
+					$this->setMessage($msg, true);
 				}
 			}
 		}
@@ -111,40 +114,47 @@ class ThemesController extends AppController {
 			}
 		}
 		
-		$baserThemes = array();
-		if(strtotime('2014-03-31 17:00:00') <= time()) {
-			$cachePath = 'views' . DS . 'baser_market_themes.rss';
-			if (Configure::read('debug') > 0) {
-				clearCache('baser_market_themes', 'views', '.rss');
-			}
-			$baserThemes = cache($cachePath);
-			if(!$baserThemes) {
-				$Xml = new Xml();
-				try {
-					$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
-				} catch (Exception $ex) {}
-				
-				if($baserThemes) {
-					$baserThemes = $Xml->toArray($baserThemes->channel);
-					$baserThemes = $baserThemes['channel']['item'];
-					cache($cachePath, BcUtil::serialize($baserThemes));
-					chmod(CACHE . $cachePath, 0666);
-				} else {
-					$baserThemes = array();
-				}
-				
-			} else {
-				$baserThemes = BcUtil::unserialize($baserThemes);
-			}
-		}
-		
-		$this->set('baserThemes', $baserThemes);
 		$this->set('datas', $datas);
 		$this->set('currentTheme', $currentTheme);
 		$this->set('defaultDataPatterns', $this->BcManager->getDefaultDataPatterns($this->siteConfigs['theme'], array('useTitle' => false)));
 
 		$this->subMenuElements = array('themes');
 		$this->help = 'themes_index';
+	}
+	
+/**
+ * baserマーケットのテーマデータを取得する
+ */
+	public function admin_ajax_get_market_themes() {
+		
+		$baserThemes = array();
+		
+		$cachePath = 'views' . DS . 'baser_market_themes.rss';
+		if (Configure::read('debug') > 0) {
+			clearCache('baser_market_themes', 'views', '.rss');
+		}
+		$baserThemes = cache($cachePath);
+		if(!$baserThemes) {
+			$Xml = new Xml();
+			try {
+				$baserThemes = $Xml->build(Configure::read('BcApp.marketThemeRss'));
+			} catch (Exception $ex) {}
+
+			if($baserThemes) {
+				$baserThemes = $Xml->toArray($baserThemes->channel);
+				$baserThemes = $baserThemes['channel']['item'];
+				cache($cachePath, BcUtil::serialize($baserThemes));
+				chmod(CACHE . $cachePath, 0666);
+			} else {
+				$baserThemes = array();
+			}
+
+		} else {
+			$baserThemes = BcUtil::unserialize($baserThemes);
+		}
+		
+		$this->set('baserThemes', $baserThemes);
+		
 	}
 
 /**
@@ -176,7 +186,7 @@ class ThemesController extends AppController {
  */
 	public function admin_reset_data() {
 
-		$result = $this->_load_default_data_pattern('core.Default', $this->siteConfigs['theme']);
+		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
 
 		if ($result) {
 			$this->setMessage('初期データの読み込みが完了しました。');
@@ -543,12 +553,10 @@ class ThemesController extends AppController {
 			$this->BcManager->uninstallPlugin($plugin);
 		}
 		
-		$this->BcManager->deleteDeployedAdminAssets();
 		$siteConfig['SiteConfig']['theme'] = $theme;
 		$SiteConfig = ClassRegistry::getObject('SiteConfig');
 		$SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
-		$this->BcManager->deployAdminAssets();
 		
 		$info = array();
 		$themePath = BASER_THEMES . $theme . DS;

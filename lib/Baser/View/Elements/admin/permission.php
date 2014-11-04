@@ -84,7 +84,7 @@ $(function(){
 </script>
 
 
-<div id="PermissionDialog" title="アクセス制限登録">
+<div id="PermissionDialog" title="アクセス制限登録" style="display:none">
 	<?php echo $this->BcForm->create('Permission', array('action' => 'ajax_add', 'url' => array('plugin' => null))) ?>
 	<?php echo $this->BcForm->input('Permission.id') ?>
 	<dl>

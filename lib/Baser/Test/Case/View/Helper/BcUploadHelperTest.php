@@ -19,14 +19,14 @@ App::uses('BcUploadHelper', 'View/Helper');
  *
  * @package			Baser.Test.Case.View.Helper
  */
-class BcUploadHelperTest extends CakeTestCase {
+class BcUploadHelperTest extends BaserTestCase {
 	
 /**
  * Fixtures
  * @var array 
  */
 	public $fixtures = array(
-		'baser.PluginContent'
+		'baser.PluginContent.PluginContent'
 	);
 
 /**
@@ -47,18 +47,9 @@ class BcUploadHelperTest extends CakeTestCase {
 	}
 
 /**
- * ファイルタグを出力する
- */
-	public function test_file() {
-		$result = $this->BcUpload->file('EditorTemplate.image');
-		$expects = '<div class="upload-file"><input type="file" name="data[EditorTemplate][image]"  id="EditorTemplateImage"/></div>';
-		$this->assertEqual($expects, $result);
-	}
-
-/**
  * ファイルへのリンクタグを出力する
  */
-	public function test_fileLink() {
+	public function testFileLink() {
 		$this->BcUpload->request->data = array(
 			'EditorTemplate' => array(
 				'id' => '1',
@@ -75,7 +66,7 @@ class BcUploadHelperTest extends CakeTestCase {
 /**
  * アップロードした画像のタグを出力する
  */
-	public function test_uploadImage() {
+	public function testUploadImage() {
 		
 		// オプションなし
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg');

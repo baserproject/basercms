@@ -34,9 +34,19 @@
 				echo $field['before_attachment'];
 			}
 			if (!$field['no_send']) {
-				echo nl2br($this->BcText->autoLink($this->Maildata->control(
-							$mailField['MailField']['type'], $message['Message'][$mailField['MailField']['field_name']], $this->Mailfield->getOptions($mailField['MailField'])
-				)));
+				if($field['type'] == 'file') {
+					echo $this->Maildata->control(
+						$mailField['MailField']['type'], 
+						$message['Message'][$mailField['MailField']['field_name']], 
+						$this->Mailfield->getOptions($mailField['MailField'])
+					);
+				} else {
+					echo nl2br($this->BcText->autoLink($this->Maildata->control(
+						$mailField['MailField']['type'], 
+						$message['Message'][$mailField['MailField']['field_name']], 
+						$this->Mailfield->getOptions($mailField['MailField'])
+					)));
+				}
 			}
 			if (!empty($message['Message'][$mailField['MailField']['field_name']])) {
 				echo $field['after_attachment'];

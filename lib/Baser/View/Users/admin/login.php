@@ -20,7 +20,7 @@ if (!$userModel) {
 }
 list(, $userModel) = pluginSplit($userModel);
 $userController = Inflector::tableize($userModel);
-$this->addScript(<<< CSS_END
+$this->append('script', <<< CSS_END
 <style type="text/css">
 #Contents {
 	display: none;
@@ -129,11 +129,7 @@ function openCredit(completeHandler) {
 		<?php $this->BcBaser->flash() ?>
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
-		<?php if ($currentPrefix == 'front'): ?>
-			<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array('controller' => $userController))) ?>
-		<?php else: ?>
-			<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array($this->request->params['prefix'] => true, 'controller' => $userController))) ?>
-		<?php endif ?>
+		<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array())) ?>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
 			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1)) ?>

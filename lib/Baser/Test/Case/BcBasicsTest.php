@@ -26,99 +26,99 @@ class BcBasicsTest extends CakeTestCase {
 	}
 
 	public function testBaseUrl() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testDocRoot() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testRevision() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testVerpoint() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testDecodeContent() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testGetUrlParamFromEnv() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testGetUrlFromEnv() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testClearViewCache() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testClearDataCache() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testClearAllCache() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testIsInstalled() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testGetDbConfig() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testCheckTmpFolders() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testEmptyFolder() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testGetViewPath() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testFgetcsvReg() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testFullUrl() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testSiteUrl() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testAmr() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testAddSessionId() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testGetEnablePlugins() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testLoadSiteConfig() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testGetVersion() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 	public function testSendUpdateMail() {
-		$this->markTestIncomplete();
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

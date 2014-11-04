@@ -83,7 +83,7 @@ class BlogTagsController extends BlogAppController {
 		);
 		$this->set('datas', $this->paginate('BlogTag'));
 
-		$this->pageTitle = 'ブログタグ一覧';
+		$this->pageTitle = 'タグ一覧';
 	}
 
 /**
@@ -104,7 +104,7 @@ class BlogTagsController extends BlogAppController {
 			}
 		}
 
-		$this->pageTitle = '新規ブログタグ登録';
+		$this->pageTitle = '新規タグ登録';
 		$this->render('form');
 	}
 
@@ -134,7 +134,7 @@ class BlogTagsController extends BlogAppController {
 			}
 		}
 
-		$this->pageTitle = 'ブログタグ編集： ' . $this->request->data['BlogTag']['name'];
+		$this->pageTitle = 'タグ編集： ' . $this->request->data['BlogTag']['name'];
 		$this->render('form');
 	}
 

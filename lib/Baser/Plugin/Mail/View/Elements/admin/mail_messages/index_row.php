@@ -15,7 +15,7 @@
 
 
 <tr id="Row<?php echo $count + 1 ?>">
-	<td class="row-tools">
+	<td class="row-tools" style="width:180px;">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Message']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Message']['id'])) ?>
 		<?php endif ?>		
@@ -26,16 +26,32 @@
 	<td><?php echo date('Y/m/d', strtotime($data['Message']['created'])) ?></td>
 	<td><?php echo date('H:i', strtotime($data['Message']['created'])) ?></td>
 	<td>
-		<?php $inData = array() ?>
+		<?php 
+			$inData = array();
+			$fileExists = false;
+		?>
 		<?php foreach ($mailFields as $mailField): ?>
 			<?php if (!$mailField['MailField']['no_send'] && $mailField['MailField']['use_field']): ?>
 				<?php
-				$inData[] = h($this->Maildata->control(
-					$mailField['MailField']['type'], $data['Message'][$mailField['MailField']['field_name']], $this->Mailfield->getOptions($mailField['MailField'])
-					))
+				if($mailField['MailField']['type'] != 'file') {
+					$inData[] = h($this->Maildata->control(
+						$mailField['MailField']['type'], 
+						$data['Message'][$mailField['MailField']['field_name']], 
+						$this->Mailfield->getOptions($mailField['MailField'])
+					));
+				} else {
+					if(!empty($data['Message'][$mailField['MailField']['field_name']])) {
+						$fileExists = true;
+					}
+				}
 				?>
 			<?php endif ?>
 		<?php endforeach ?>
 		<?php echo $this->Text->truncate(implode(',', $inData), 170) ?>
+	</td>
+	<td>
+		<?php if($fileExists): ?>
+			○
+		<?php endif ?>
 	</td>
 </tr>

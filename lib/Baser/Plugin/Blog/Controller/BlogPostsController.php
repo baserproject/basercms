@@ -45,8 +45,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	//public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
-	public $helpers = array('Blog.Blog', 'BcUpload');
+	public $helpers = array('Blog.Blog');
 
 /**
  * コンポーネント
@@ -63,7 +62,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
 
@@ -99,7 +97,7 @@ class BlogPostsController extends BlogAppController {
 			$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->request->params['pass'][0]));
 			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 			if ($this->request->params['prefix'] == 'admin') {
-				$this->subMenuElements = array('blog_posts', 'blog_categories', 'blog_common');
+				$this->subMenuElements = array('blog_posts', 'blog_categories');
 			}
 			if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
 				$this->helpers[] = $this->siteConfigs['editor'];

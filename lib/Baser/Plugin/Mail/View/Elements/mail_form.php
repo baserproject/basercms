@@ -30,7 +30,7 @@ $(function(){
 
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/confirm')) ?>
+	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/confirm', 'type' => 'file')) ?>
 <?php else: ?>
 	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/submit')) ?>
 <?php endif; ?>

@@ -123,7 +123,6 @@ class BcManagerComponent extends Component {
 		}
 
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		$this->deleteDeployedAdminAssets();
 		if (!$this->deployAdminAssets()) {
 			$this->log('管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。');
 		}
@@ -291,6 +290,7 @@ class BcManagerComponent extends Component {
 		$corePlugins = Configure::read('BcApp.corePlugins');
 
 		$result = true;
+		$priority = intval($Plugin->getMax('priority')) + 1;
 		foreach ($corePlugins as $corePlugin) {
 			$data = array();
 			include BASER_PLUGINS . $corePlugin . DS . 'config.php';
@@ -299,10 +299,12 @@ class BcManagerComponent extends Component {
 			$data['Plugin']['version'] = $version;
 			$data['Plugin']['status'] = true;
 			$data['Plugin']['db_inited'] = true;
+			$data['Plugin']['priority'] = $priority;
 			$Plugin->create($data);
 			if (!$Plugin->save()) {
 				$result = false;
 			}
+			$priority++;
 		}
 		return $result;
 	}
@@ -522,8 +524,8 @@ class BcManagerComponent extends Component {
 			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
 			"Configure::write('BcEnv.sslUrl', '');",
 			"Configure::write('BcApp.adminSsl', false);",
-			"Configure::write('BcApp.mobile', true);",
-			"Configure::write('BcApp.smartphone', true);",
+			"Configure::write('BcApp.mobile', false);",
+			"Configure::write('BcApp.smartphone', false);",
 			"Cache::config('default', array('engine' => 'File'));",
 			"Configure::write('debug', 0);"
 		);
@@ -610,7 +612,7 @@ class BcManagerComponent extends Component {
 		$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
 		$corePlugins = Configure::read('BcApp.corePlugins');
 		foreach ($corePlugins as $corePlugin) {
-			if (!$this->constructionTable($corePlugin, 'plugin', $dbConfig, $dbDataPattern)) {
+			if (!$this->constructionTable($corePlugin, 'plugin', $dbConfig)) {
 				$this->log("プラグインテーブルの構築に失敗しました。");
 				return false;
 			}
@@ -786,7 +788,7 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 
-		$corePath = BcUtil::getDefaultDataPath($plugin, 'core', 'Default');
+		$corePath = BcUtil::getDefaultDataPath($plugin, 'core', 'default');
 		
 		$targetTables = array();
 		if($corePath) {
@@ -868,7 +870,7 @@ class BcManagerComponent extends Component {
 		$options = array_merge(array('excludeUsers' => false), $options);
 		
 		$db = $this->_getDataSource('baser', $dbConfig);
-		$corePath = BASER_CONFIGS . 'Data' . DS . 'Default';
+		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		$result = true;
 
 		/* page_categories の初期データをチェック＆設定 */
@@ -1585,8 +1587,15 @@ class BcManagerComponent extends Component {
 			'phpMemory'			=> intval(ini_get('memory_limit')),
 			'safeModeOff'		=> !ini_get('safe_mode'),
 			'configDirWritable'	=> is_writable(APP . 'Config' . DS),
+			'pluginDirWritable'	=> is_writable(APP . 'Plugin' . DS),
 			'themeDirWritable'	=> is_writable(WWW_ROOT . 'theme'),
 			'filesDirWritable'	=> is_writable(WWW_ROOT . 'files'),
+			'imgDirWritable'	=> is_writable(WWW_ROOT . 'img'),
+			'jsDirWritable'	=> is_writable(WWW_ROOT . 'js'),
+			'cssDirWritable'	=> is_writable(WWW_ROOT . 'css'),
+			'imgAdminDirExists'	=> is_dir(WWW_ROOT . 'img' . DS . 'admin'),
+			'jsAdminDirExists'	=> is_dir(WWW_ROOT . 'js' . DS . 'admin'),
+			'cssAdminDirExists'	=> is_dir(WWW_ROOT . 'css' . DS . 'admin'),
 			'tmpDirWritable'	=> is_writable(TMP),
 			'dbDirWritable'		=> is_writable(APP . 'db'),
 			'phpActualVersion'	=> preg_replace('/[a-z-]/', '', phpversion()),
@@ -1608,6 +1617,10 @@ class BcManagerComponent extends Component {
 			@chmod(APP . 'Config' . DS, 0777);
 			$status['configDirWritable'] = is_writable(APP . 'Config' . DS);
 		}
+		if (!$status['pluginDirWritable']) {
+			@chmod(APP . 'Plugin' . DS, 0777);
+			$status['pluginDirWritable'] = is_writable(APP . 'Plugin' . DS);
+		}
 		if (!$status['themeDirWritable']) {
 			@chmod(WWW_ROOT . 'theme', 0777);
 			$status['themeDirWritable'] = is_writable(WWW_ROOT . 'theme');
@@ -1615,6 +1628,18 @@ class BcManagerComponent extends Component {
 		if (!$status['filesDirWritable']) {
 			@chmod(WWW_ROOT . 'files', 0777);
 			$status['filesDirWritable'] = is_writable(WWW_ROOT . 'files');
+		}
+		if (!$status['imgDirWritable']) {
+			@chmod(WWW_ROOT . 'img', 0777);
+			$status['imgDirWritable'] = is_writable(WWW_ROOT . 'img');
+		}
+		if (!$status['cssDirWritable']) {
+			@chmod(WWW_ROOT . 'css', 0777);
+			$status['cssDirWritable'] = is_writable(WWW_ROOT . 'css');
+		}
+		if (!$status['jsDirWritable']) {
+			@chmod(WWW_ROOT . 'js', 0777);
+			$status['jsDirWritable'] = is_writable(WWW_ROOT . 'js');
 		}
 		if (!$status['tmpDirWritable']) {
 			@chmod(TMP, 0777);
@@ -1731,64 +1756,6 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
-
-/**
- * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成する
- * これにより、表示速度の改善を行う事ができる
- * 
- * @return boolean
- * @deprecated since version 3.0.1
- */
-	public function createAdminAssetsSymlink() {
-		$viewPath = getViewPath();
-		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
-		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
-		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
-		$css = $viewPath . 'css' . DS . 'admin';
-		$js = $viewPath . 'js' . DS . 'admin';
-		$img = $viewPath . 'img' . DS . 'admin';
-		$result = true;
-		if (!is_dir($css) && !is_link($css)) {
-			if (!@symlink($adminCss, $css)) {
-				$result = false;
-			}
-		}
-		if (!is_dir($js) && !is_link($js)) {
-			if (!@symlink($adminJs, $js)) {
-				$result = false;
-			}
-		}
-		if (!is_dir($img) && !is_link($img)) {
-			if (!@symlink($adminImg, $img)) {
-				$result = false;
-			}
-		}
-		return $result;
-	}
-
-/**
- * テーマに配置された管理システム用アセットを削除する
- * 
- * @return boolean
- */
-	public function deleteDeployedAdminAssets() {
-		$viewPath = getViewPath();
-		$css = $viewPath . 'css' . DS . 'admin';
-		$js = $viewPath . 'js' . DS . 'admin';
-		$img = $viewPath . 'img' . DS . 'admin';
-		$result = true;
-		$Folder = new Folder();
-		if(!$Folder->delete($css)) {
-			$result = false;
-		}
-		if(!$Folder->delete($js)) {
-			$result = false;
-		}
-		if(!$Folder->delete($img)) {
-			$result = false;
-		}
-		return $result;
-	}
 	
 /**
  * テーマに管理システム用アセットを配置する
@@ -1796,7 +1763,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function deployAdminAssets() {
-		$viewPath = getViewPath();
+		$viewPath = WWW_ROOT;
 		$adminCss = BASER_WEBROOT . 'css' . DS . 'admin';
 		$adminJs = BASER_WEBROOT . 'js' . DS . 'admin';
 		$adminImg = BASER_WEBROOT . 'img' . DS . 'admin';
@@ -1838,15 +1805,23 @@ class BcManagerComponent extends Component {
 	public function installPlugin($name) {
 		
 		$paths = App::path('Plugin');
+		$exists = false;
+		foreach($paths as $path) {
+			if (file_exists($path . $name)) {
+				$exists = true;
+				break;
+			}
+		}
+		
+		if(!$exists) {
+			return false;
+		}
+		
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$data = $this->Plugin->find('first', array('conditions' => array('name' => $name)));
 		$title = '';
 		
-		foreach($paths as $path) {
-			if (file_exists($path . $name)) {
-				break;
-			}
-		}
+
 		
 		if (empty($data['Plugin']['db_inited'])) {
 			$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
@@ -1887,12 +1862,15 @@ class BcManagerComponent extends Component {
 			} else {
 				$version = getVersion($name);
 			}
+
+			$priority = intval($this->Plugin->getMax('priority')) + 1;
 			$data = array('Plugin' => array(
 				'name'		=> $name,
 				'title'		=> $title,
 				'status'	=> true,
 				'db_inited'	=> true,
-				'version'	=> $version
+				'version'	=> $version,
+				'priority' => $priority
 			));
 			$this->Plugin->create($data);
 		}

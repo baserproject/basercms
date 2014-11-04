@@ -37,7 +37,7 @@ class EditorTemplatesController extends AppController {
  * 
  * @var array
  */
-	public $subMenuElements = array('site_configs', 'editor_templates');
+	public $subMenuElements = array('editor_templates');
 
 /**
  * パンくず設定
@@ -56,13 +56,6 @@ class EditorTemplatesController extends AppController {
  * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ヘルパ
- * 
- * @var array
- */
-	public $helpers = array('BcUpload');
 
 /**
  * beforeFilter

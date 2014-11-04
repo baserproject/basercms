@@ -24,12 +24,12 @@ App::uses('User', 'Model');
  * 
  * @package Baser.Test.Case.Model
  */
-class UserTest extends CakeTestCase {
+class UserTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.User',
-		'baser.UserGroup',
-		'baser.Favorite',
+		'baser.User.User',
+		'baser.UserGroup.UserGroup',
+		'baser.Favorite.Favorite',
 	);
 
 	public function setUp() {

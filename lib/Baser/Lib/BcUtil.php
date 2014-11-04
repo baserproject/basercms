@@ -117,6 +117,8 @@ class BcUtil extends Object {
 /**
  * 初期データのパスを取得する
  * 
+ * 初期データのフォルダは アンダースコア区切り推奨
+ * 
  * @param string $plugin
  * @return string Or false
  */
@@ -133,11 +135,11 @@ class BcUtil extends Object {
 		}
 		
 		if(!$pattern) {
-			$pattern = 'Default';
+			$pattern = 'default';
 		}
 		
 		if($plugin == 'Core') {
-			$paths = array(BASER_CONFIGS . 'Data' . DS . $pattern);
+			$paths = array(BASER_CONFIGS . 'data' . DS . $pattern);
 			if($theme != 'core') {
 				$paths = array_merge(array(
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
@@ -145,7 +147,7 @@ class BcUtil extends Object {
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 				), $paths);
 			}
 		} else {
@@ -175,7 +177,7 @@ class BcUtil extends Object {
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
-					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
 				), $paths);
 			}
 		}

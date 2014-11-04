@@ -65,7 +65,7 @@ class ContentsController extends AppController {
 		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search', 'get_page_list_recursive');
 
 		if (!empty($this->request->params['admin'])) {
-			$this->subMenuElements = array('site_configs', 'contents');
+			$this->subMenuElements = array('contents');
 			$this->crumbs = array(
 				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
 				array('name' => '検索インデックス管理', 'url' => array('controller' => 'contents', 'action' => 'index'))
@@ -298,7 +298,7 @@ class ContentsController extends AppController {
  * @access public
  */
 	public function admin_index() {
-		$this->pageTitle = '検索インデックス コンテンツ一覧';
+		$this->pageTitle = '検索インデックス一覧';
 
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
@@ -334,7 +334,7 @@ class ContentsController extends AppController {
  * @access 	public
  */
 	public function admin_add() {
-		$this->pageTitle = '検索インデックス コンテンツ登録';
+		$this->pageTitle = '検索インデックス登録';
 
 		if ($this->request->data) {
 			$url = $this->request->data['Content']['url'];

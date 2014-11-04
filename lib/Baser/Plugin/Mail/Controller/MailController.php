@@ -127,10 +127,11 @@ class MailController extends MailAppController {
 			$id = 1;
 		}
 
-		$this->dbDatas['mailContent'] = $this->MailContent->find('first', array('conditions' => array("MailContent.id" => $id)));
+		$this->Message->setup($id);
+		$this->dbDatas['mailContent'] = $this->Message->mailContent;
+		$this->dbDatas['mailFields'] = $this->Message->mailFields;
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
-		$this->Message->mailFields = $this->dbDatas['mailFields'] = $this->MailField->find('all', array('conditions' => array("mail_content_id" => $id), 'order' => 'MailField.sort'));
-
+		
 		// ページタイトルをセット
 		$this->pageTitle = $this->dbDatas['mailContent']['MailContent']['title'];
 		// レイアウトをセット
@@ -163,13 +164,6 @@ class MailController extends MailAppController {
 			}
 		}
 
-		// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
-		// ※ nameフィールドの名称を[message]以外にする
-		if ($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
-			$prefix = $this->dbDatas['mailContent']['MailContent']['name'] . "_";
-			$this->Message->setTablePrefix($prefix);
-			$this->Message->mailFields = $this->dbDatas['mailFields'];
-		}
 	}
 
 /**
@@ -259,6 +253,13 @@ class MailController extends MailAppController {
  * @access public
  */
 	public function confirm($id = null) {
+
+		if ($this->request->is('post')) {
+			if ($_SERVER['CONTENT_LENGTH'] > (8*1024*1024)) {
+				$this->Session->setFlash('ファイルのアップロードサイズが上限を超えています。');
+			}
+		}
+		
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
@@ -283,6 +284,7 @@ class MailController extends MailAppController {
 
 			// データの入力チェックを行う
 			if ($this->Message->validates()) {
+				$this->request->data = $this->Message->saveTmpFiles($this->data, mt_rand(0, 99999999));
 				$this->set('freezed', true);
 			} else {
 				$this->set('freezed', false);
@@ -367,9 +369,13 @@ class MailController extends MailAppController {
 			if ($this->Message->validates()) {
 
 				// validation OK
-				if ($this->Message->save(null, false)) {
-
-					/*					 * * Mail.beforeSendEmail ** */
+				$result = $this->Message->save(null, false);
+				
+				if ($result) {
+					
+					$this->request->data = $result;
+					
+					/*** Mail.beforeSendEmail ***/
 					$event = $this->dispatchEvent('beforeSendEmail', array(
 						'data' => $this->request->data
 					));
@@ -380,7 +386,7 @@ class MailController extends MailAppController {
 					// メール送信
 					$this->_sendEmail();
 
-					/*					 * * Mail.afterSendEmail ** */
+					/*** Mail.afterSendEmail ***/
 					$this->dispatchEvent('afterSendEmail', array(
 						'data' => $this->request->data
 					));
@@ -492,6 +498,8 @@ class MailController extends MailAppController {
 			$fromAdmin = $adminMail;
 		}
 
+		$attachments = array();
+		$settings = $this->Message->Behaviors->BcUpload->settings['Message'];
 		foreach ($this->dbDatas['mailFields'] as $mailField) {
 			$field = $mailField['MailField']['field_name'];
 			if (!isset($data['message'][$field])) {
@@ -508,6 +516,9 @@ class MailController extends MailAppController {
 				$mailContent['subject_user'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_user']);
 				$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_admin']);
 			}
+			if($mailField['MailField']['type'] == 'file' && $value) {
+				$attachments[] = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $value;
+			}
 		}
 
 		// 前バージョンとの互換性の為 type が email じゃない場合にも取得できるようにしておく
@@ -523,10 +534,11 @@ class MailController extends MailAppController {
 		if (!empty($userMail)) {
 			$data['other']['mode'] = 'user';
 			$options = array(
-				'fromName' => $mailContent['sender_name'],
-				'reply' => $fromAdmin,
-				'template' => 'Mail.' . $mailContent['mail_template'],
-				'reply' => $fromAdmin,
+				'fromName'	=> $mailContent['sender_name'],
+				'reply'		=> $fromAdmin,
+				'template'	=> 'Mail.' . $mailContent['mail_template'],
+				'reply'		=> $fromAdmin,
+				'attachments'	=> $attachments
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
@@ -540,7 +552,8 @@ class MailController extends MailAppController {
 				'from' => $fromAdmin,
 				'template' => 'Mail.' . $mailContent['mail_template'],
 				'bcc' => $mailContent['sender_2'],
-				'agentTemplate' => false
+				'agentTemplate' => false,
+				'attachments'	=> $attachments
 			);
 			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
 		}

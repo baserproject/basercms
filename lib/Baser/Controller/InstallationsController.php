@@ -16,6 +16,7 @@
  * インストーラーコントローラー
  * 
  * @package Baser.Controller
+ * @property BcManagerComponent $BcManager
  */
 class InstallationsController extends AppController {
 
@@ -138,26 +139,7 @@ class InstallationsController extends AppController {
  */
 	public function index() {
 		$this->pageTitle = 'baserCMSのインストール';
-
-		// 一時ファイルを削除する（再インストール用）
-		if (is_writable(TMP)) {
-			$folder = new Folder(TMP);
-			$files = $folder->read(true, true, true);
-			if (isset($files[0])) { // check directory
-				foreach ($files[0] as $file) {
-					if (basename($file) != 'logs') {
-						$folder->delete($file);
-					}
-				}
-			}
-			if (isset($files[1])) { // check file
-				foreach ($files[1] as $file) {
-					if (basename($file) != 'empty') {
-						$folder->delete($file);
-					}
-				}
-			}
-		}
+		clearAllCache();
 	}
 
 /**
@@ -180,7 +162,7 @@ class InstallationsController extends AppController {
 
 		extract($checkResult);
 
-		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable));
+		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable && $imgDirWritable && $jsDirWritable && $cssDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 	}
 
@@ -371,7 +353,6 @@ class InstallationsController extends AppController {
 		$this->_login();
 		
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		$this->BcManager->deleteDeployedAdminAssets();
 		$this->BcManager->deployAdminAssets();
 
 		// アップロード用初期フォルダを作成する
@@ -407,11 +388,11 @@ class InstallationsController extends AppController {
 /**
  * データベースを構築する
  * 
- * @param type $nonDemoData
+ * @param type $dbDataPattern データパターン
  * @return boolean
  * @access protected
  */
-	protected function _constructionDb($dbDataPattern = false) {
+	protected function _constructionDb($dbDataPattern = null) {
 		$dbConfig = $this->_readDbSetting();
 		if (!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
 			return false;
@@ -447,7 +428,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbPort'] = '3306';
 			$data['Installation']['dbPrefix'] = 'mysite_';
 			$data['Installation']['dbName'] = 'basercms';
-			$data['Installation']['dbDataPattern'] = $defaultTheme . '.Default';
+			$data['Installation']['dbDataPattern'] = $defaultTheme . '.default';
 		}
 
 		return $data;

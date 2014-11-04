@@ -104,6 +104,7 @@ $(function(){
 			<?php echo $this->BcForm->input('main_image_link_5', array('type' => 'text', 'size' => 50)) ?> <small>[リンク先URL]</small>
 		</td>
 	</tr>
+	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
 
 <div class="submit">

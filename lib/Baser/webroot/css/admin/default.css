@@ -187,7 +187,7 @@ input[type=button] {
 	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif;
 }
 input[type=text], textarea, input[type=password] {
-	font-size: 1.4em;
+	font-size: 1.3em;
 	padding: 3px 3px;
 }
 input[type=text], input[type=password] {

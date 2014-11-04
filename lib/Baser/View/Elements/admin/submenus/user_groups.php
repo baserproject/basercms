@@ -17,8 +17,8 @@
 		<th>ユーザーグループ管理メニュー</th>
 		<td>
 			<ul class="cleafix">
-				<li><?php $this->BcBaser->link('一覧を表示する', array('controller' => 'user_groups', 'action' => 'index')) ?></li>
-				<li><?php $this->BcBaser->link('新規に登録する', array('controller' => 'user_groups', 'action' => 'add')) ?></li>
+				<li><?php $this->BcBaser->link('ユーザーグループ一覧', array('controller' => 'user_groups', 'action' => 'index')) ?></li>
+				<li><?php $this->BcBaser->link('ユーザーグループ新規登録', array('controller' => 'user_groups', 'action' => 'add')) ?></li>
 			</ul>
 		</td>
 	</tr>

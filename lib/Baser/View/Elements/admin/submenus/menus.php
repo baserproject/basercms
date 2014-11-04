@@ -19,7 +19,7 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('メニュー一覧', array('controller' => 'menus', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('新規メニューを登録', array('controller' => 'menus', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('メニュー新規追加', array('controller' => 'menus', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

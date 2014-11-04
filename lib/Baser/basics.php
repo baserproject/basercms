@@ -463,13 +463,7 @@ function emptyFolder($path) {
  * @return string
  */
 function getViewPath() {
-
-	if (ClassRegistry::isKeySet('SiteConfig')) {
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-	} else {
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-	}
-	$siteConfig = $SiteConfig->findExpanded();
+	$siteConfig = Configure::read('BcSite');
 	$theme = $siteConfig['theme'];
 	if ($theme) {
 		return WWW_ROOT . 'theme' . DS . $theme . DS;
@@ -672,26 +666,28 @@ function getEnablePlugins() {
 		$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 	}
 	if (!$enablePlugins) {
-		$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+		try {
+			$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+		} catch (Exception $ex) {
+			return array();
+		}
 		$db = ConnectionManager::getDataSource('baser');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
+			$enablePlugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
 			ClassRegistry::removeObject('Plugin');
-			if ($plugins) {
-				$enablePlugins = Hash::extract($plugins, '{n}.Plugin.name');
-
+			if ($enablePlugins) {
 				if (!Configure::read('Cache.disable')) {
-					Cache::write('enable_plugins', $plugins, '_cake_env_');
+					Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
 				}
 			}
 		}
-	} else {
-		$plugins = $enablePlugins;
 	}
-	return $plugins;
+	return $enablePlugins;
+	
 }
 
 /**
@@ -700,8 +696,12 @@ function getEnablePlugins() {
  * @return void
  */
 function loadSiteConfig() {
-
-	$SiteConfig = ClassRegistry::init('SiteConfig');
+	// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+	try {
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+	} catch (Exception $ex) {
+		return false;
+	}
 	Configure::write('BcSite', $SiteConfig->findExpanded());
 	ClassRegistry::removeObject('SiteConfig');
 }
@@ -891,7 +891,11 @@ function loadPlugin($plugin, $priority) {
 	);
 	CakePlugin::load($plugin, $config);
 	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
-		Configure::load($plugin . '.setting');
+		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+		// ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
+		try {
+			Configure::load($plugin . '.setting');
+		} catch (Exception $ex) {}
 	}
 	// プラグインイベント登録
 	$eventTargets = array('Controller', 'Model', 'View', 'Helper');
@@ -920,7 +924,7 @@ function deprecatedMessage($target, $since, $remove = null, $note = null) {
 	if(Configure::read('debug') == 0) {
 		return;
 	}
-	$message = $target . 'は、バージョン ' . $since . ' より被推奨となりました。';
+	$message = $target . 'は、バージョン ' . $since . ' より非推奨となりました。';
 	if($remove) {
 		$message .= 'バージョン ' . $remove . ' で削除される予定です。';
 	}

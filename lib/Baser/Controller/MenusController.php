@@ -108,7 +108,7 @@ class MenusController extends AppController {
 		}
 
 		// 表示設定
-		$this->subMenuElements = array('site_configs', 'menus');
+		$this->subMenuElements = array('menus');
 		$this->pageTitle = 'メニュー一覧';
 		$this->search = 'menus_index';
 		$this->help = 'menus_index';
@@ -144,7 +144,7 @@ class MenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('site_configs', 'menus');
+		$this->subMenuElements = array('menus');
 		$this->pageTitle = '新規メニュー登録';
 		$this->help = 'menus_form';
 		$this->render('form');
@@ -183,7 +183,7 @@ class MenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('site_configs', 'menus');
+		$this->subMenuElements = array('menus');
 		$this->pageTitle = 'メニュー編集：' . $this->request->data['Menu']['name'];
 		$this->help = 'menus_form';
 		$this->render('form');

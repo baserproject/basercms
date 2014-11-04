@@ -665,6 +665,7 @@ class BcAppModel extends Model {
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
+			// だが、post_max_size を超えた場合は、ここまで処理がこない可能性がある
 			if (!$file['size']) {
 				return false;
 			}
@@ -675,6 +676,25 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * ファイルの拡張子チェック
+ * 
+ * @param array $check チェック対象データ
+ * @param string $ext 許可する拡張子
+ */
+	public function fileExt($check, $ext) {
+		$file = $check[key($check)];
+		if (!empty($file['name'])) {
+			$exts = explode(',', $ext);
+			$ext = decodeContent($file['type'], $file['name']);
+			if(in_array($ext, $exts)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
 /**
  * 半角チェック
  * @param array $check
@@ -1392,4 +1412,34 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * ツリーより再帰的に削除する
+ * 
+ * @param int $id
+ * @return boolean
+ */
+	public function removeFromTreeRecursive($id) {
+		if(!$this->Behaviors->enabled('Tree')) {
+			return false;
+		}
+		$children = $this->children($id);
+		foreach($children as $child) {
+			$this->removeFromTree($child[$this->alias]['id'], true);
+		}
+		return $this->removeFromTree($id, true);
+	}
+
+/**
+ * ファイルが送信されたかチェックするバリデーション
+ * 
+ * @param array $check
+ * @return boolean
+ */
+	public function notFileEmpty($check) {
+		if (empty($check[key($check)]) || (is_array($check[key($check)]) && $check[key($check)]['size'] === 0)) {
+			return false;
+		}
+		return true;
+	}
+	
 }

@@ -215,8 +215,13 @@ class PagesController extends AppController {
 		} else {
 
 			/* 登録処理 */
+			if ($this->request->data['Page']['page_type'] == 2 && !$this->request->data['Page']['page_category_id']) {
+				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
+			} elseif ($this->request->data['Page']['page_type'] == 3 && !$this->request->data['Page']['page_category_id']) {
+				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
+			}
 			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
-
+			
 			/*			 * * Pages.beforeAdd ** */
 			$event = $this->dispatchEvent('beforeAdd', array(
 				'data' => $this->request->data
@@ -226,11 +231,6 @@ class PagesController extends AppController {
 			}
 
 			$this->Page->create($this->request->data);
-			if ($this->request->data['Page']['page_type'] == 2 && !$this->request->data['Page']['page_category_id']) {
-				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('mobile');
-			} elseif ($this->request->data['Page']['page_type'] == 3 && !$this->request->data['Page']['page_category_id']) {
-				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
-			}
 			if ($this->Page->validates()) {
 
 				if ($data = $this->Page->save($this->request->data, false)) {
@@ -401,7 +401,7 @@ class PagesController extends AppController {
 			'empty' => '指定しない'
 		));
 
-		$url = $this->convertViewUrl($this->request->data['Page']['url']);
+		$url = $this->Page->convertViewUrl($this->request->data['Page']['url']);
 
 		if ($this->request->data['Page']['url']) {
 			$this->set('publishLink', $url);
@@ -590,7 +590,7 @@ class PagesController extends AppController {
 		// Consoleから requestAction で呼出された場合、getCacheTimeがうまくいかない
 		// Consoleの場合は実行しない
 		if (!isset($_SESSION['Auth']['User']) && !isConsole()) {
-			$this->helpers[] = 'Cache';
+			$this->helpers[] = 'BcCache';
 			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
 

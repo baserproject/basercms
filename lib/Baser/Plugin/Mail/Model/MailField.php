@@ -117,32 +117,36 @@ class MailField extends MailAppModel {
  * @access public
  */
 	public function getControlSource($field = null) {
+		
 		$source['type'] = array(
-			'text' => 'テキスト',
-			'textarea' => 'テキストエリア',
-			'radio' => 'ラジオボタン',
-			'select' => 'セレクトボックス',
-			'email' => 'Eメール',
-			'multi_check' => 'マルチチェックボックス',
-			'autozip' => '自動補完郵便番号',
-			'pref' => '都道府県リスト',
-			'date_time_wareki' => '和暦日付',
-			'date_time_calender' => 'カレンダー',
-			'hidden' => '隠しフィールド'
+			'text'				=> 'テキスト',
+			'textarea'			=> 'テキストエリア',
+			'radio'				=> 'ラジオボタン',
+			'select'			=> 'セレクトボックス',
+			'email'				=> 'Eメール',
+			'multi_check'		=> 'マルチチェックボックス',
+			'file'				=> 'ファイル',
+			'autozip'			=> '自動補完郵便番号',
+			'pref'				=> '都道府県リスト',
+			'date_time_wareki'	=> '和暦日付',
+			'date_time_calender'=> 'カレンダー',
+			'hidden'			=> '隠しフィールド'
 		);
 
 		$source['valid'] = array(
-			'VALID_NOT_EMPTY' => '入力必須',
-			'VALID_EMAIL' => 'Eメールチェック',
-			'/^(|[0-9]+)$/' => '数値チェック',
-			'/^([0-9]+)$/' => '数値チェック（入力必須）'
+			'VALID_NOT_EMPTY'	=> '入力必須',
+			'VALID_EMAIL'		=> 'Eメールチェック',
+			'/^(|[0-9]+)$/'		=> '数値チェック',
+			'/^([0-9]+)$/'		=> '数値チェック（入力必須）'
 		);
 
 		$source['valid_ex'] = array(
-			'VALID_EMAIL_CONFIRM' => 'Eメール比較チェック',
-			'VALID_GROUP_COMPLATE' => 'グループチェック',
-			'VALID_NOT_UNCHECKED' => 'チェックなしチェック',
-			'VALID_DATETIME' => '日付チェック'
+			'VALID_EMAIL_CONFIRM'	=> 'Eメール比較チェック',
+			'VALID_GROUP_COMPLATE'	=> 'グループチェック',
+			'VALID_NOT_UNCHECKED'	=> 'チェックボックス未入力チェック',
+			'VALID_DATETIME'		=> '日付チェック',
+			'VALID_MAX_FILE_SIZE'	=> 'ファイルアップロードサイズ制限',
+			'VALID_FILE_EXT'		=> 'ファイル拡張子チェック'
 		);
 
 		$source['auto_convert'] = array('CONVERT_HANKAKU' => '半角変換');

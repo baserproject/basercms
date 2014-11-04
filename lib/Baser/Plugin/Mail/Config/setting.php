@@ -20,7 +20,7 @@ $config['BcApp.adminNavi.mail'] = array(
 	'contents' => array(
 		array('name' => 'メールフォーム一覧', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index')),
 		array('name' => 'メールフォーム登録', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'add')),
-		array('name' => 'メールフォーム基本設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
+		array('name' => 'メールプラグイン基本設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
 	)
 );
 $MailContent = ClassRegistry::init('Mail.MailContent');

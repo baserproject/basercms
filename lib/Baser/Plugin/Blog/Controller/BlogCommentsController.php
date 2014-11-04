@@ -62,7 +62,6 @@ class BlogCommentsController extends BlogAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
 
@@ -108,7 +107,7 @@ class BlogCommentsController extends BlogAppController {
 
 		$this->crumbs = am($this->crumbs, $crumbs);
 		if (!empty($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_posts', 'blog_categories', 'blog_common');
+			$this->subMenuElements = array('blog_posts', 'blog_categories');
 		}
 
 		if (empty($this->params['admin'])) {
@@ -145,10 +144,10 @@ class BlogCommentsController extends BlogAppController {
 		/* 検索条件 */
 		if ($blogPostId) {
 			$conditions['BlogComment.blog_post_id'] = $blogPostId;
-			$this->pageTitle = '記事 [' . $this->blogPost['BlogPost']['name'] . '] のコメント一覧';
+			$this->pageTitle = '[' . $this->blogPost['BlogPost']['name'] . '] コメント一覧';
 		} else {
 			$conditions['BlogComment.blog_content_id'] = $blogContentId;
-			$this->pageTitle = 'ブログ [' . $this->blogContent['BlogContent']['title'] . '] のコメント一覧';
+			$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] コメント一覧';
 		}
 
 		/* 画面情報設定 */
@@ -351,7 +350,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = array(0 => '公開状態', 1 => '非公開状態');
+		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
 		$data = $this->BlogComment->find('first', array('conditions' => array('BlogComment.id' => $id), 'recursive' => -1));
 		$data['BlogComment']['status'] = $status;
 		$this->BlogComment->set($data);

@@ -74,8 +74,15 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
  * Router::connectの引数として値を与えると、$this->Html->linkなどで、
  * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
+ * 
+ * DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
  */
-	$PluginContent = ClassRegistry::init('PluginContent');
+	try {
+		$PluginContent = ClassRegistry::init('PluginContent');
+	} catch (Exception $ex) {
+		$PluginContent = null;
+	}
+	
 	if ($PluginContent) {
 		$pluginContent = $PluginContent->currentPluginContent($parameter);
 		if ($pluginContent) {
@@ -124,7 +131,7 @@ if (BC_INSTALLED || isConsole()) {
 	if (!preg_match("/^{$adminPrefix}/", $parameter)) {
 		/* 1.5.10 以降 */
 		App::uses('Page', 'Model');
-		$Page = new Page(null, null, 'baser');
+		$Page = ClassRegistry::init('Page');
 		if ($Page) {
 
 			$parameter = urldecode($parameter);

@@ -371,10 +371,7 @@ class BlogController extends BlogAppController {
 					}
 					// コメント送信
 					if (isset($this->request->data['BlogComment'])) {
-						// TODO 《暫定対応》モバイルの場合画像認証が効かないのでデモサイトではコメントを受け付けない仕様とした
-						if (empty($this->siteConfigs['demo']) || Configure::read('BcRequest.agent') != 'mobile') {
-							$this->add_comment($id);
-						}
+						$this->add_comment($id);
 					}
 
 					$_posts = $this->_getBlogPosts(array('conditions' => array('id' => $id)));
@@ -395,7 +392,7 @@ class BlogController extends BlogAppController {
 					$blogCategories = $this->BlogCategory->getPath($post['BlogPost']['blog_category_id'], array('name', 'title'));
 					if ($blogCategories) {
 						foreach ($blogCategories as $blogCategory) {
-							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -409,7 +406,7 @@ class BlogController extends BlogAppController {
 		}
 
 		// 表示設定
-		$this->crumbs += $crumbs;
+		$this->crumbs = array_merge($this->crumbs, $crumbs);
 		$this->set('single', $single);
 		$this->set('posts', $posts);
 		$this->set('year', $year);

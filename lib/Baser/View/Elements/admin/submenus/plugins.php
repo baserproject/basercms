@@ -19,7 +19,7 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('プラグイン一覧', array('plugin' => null, 'controller' => 'plugins', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('新規追加', array('plugin' => null, 'controller' => 'plugins', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('プラグイン新規追加', array('plugin' => null, 'controller' => 'plugins', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

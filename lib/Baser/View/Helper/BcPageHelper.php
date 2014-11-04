@@ -67,7 +67,7 @@ class BcPageHelper extends Helper {
  */
 	public function beforeRender($viewFile) {
 		//if ($this->request->params['controller'] == 'pages' && ($this->request->params['action'] == 'display' || $this->request->params['action'] == 'smartphone_display') && isset($this->request->params['pass'][0])) {
-		if ($this->request->params['controller'] == 'pages' && preg_match('/_display$/', $this->request->params['action']) && isset($this->request->params['pass'][0])) {
+		if ($this->request->params['controller'] == 'pages' && preg_match('/(^|_)display$/', $this->request->params['action']) && isset($this->request->params['pass'][0])) {
 			// @TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
 			$param = Configure::read('BcRequest.pureUrl');
@@ -89,12 +89,17 @@ class BcPageHelper extends Helper {
 /**
  * ページ機能用URLを取得する
  * 
- * @param array $page 
- * @return string
+ * @param array $page 固定ページデータ
+ * @return string URL
  */
 	public function getUrl($page) {
-
-		return $this->Page->getPageUrl($page);
+		if(isset($page['Page'])) {
+			$page = $page['Page'];
+		}
+		if(!isset($page['url'])) {
+			return '';
+		}
+		return $this->Page->convertViewUrl($page['url']);
 	}
 
 /**
@@ -196,7 +201,7 @@ class BcPageHelper extends Helper {
  */
 	public function nextLink($title = '', $attributes = array()) {
 
-		if (!$this->contensNaviAvailable()) {
+		if (!$this->contentsNaviAvailable()) {
 			return '';
 		}
 
@@ -241,7 +246,7 @@ class BcPageHelper extends Helper {
  */
 	public function prevLink($title = '', $attributes = array()) {
 
-		if (!$this->contensNaviAvailable()) {
+		if (!$this->contentsNaviAvailable()) {
 			return '';
 		}
 
@@ -281,7 +286,7 @@ class BcPageHelper extends Helper {
  *
  * @return boolean
  */
-	public function contensNaviAvailable() {
+	public function contentsNaviAvailable() {
 
 		if (empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
 			return false;

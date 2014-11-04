@@ -25,16 +25,15 @@ App::uses('BcTextHelper', 'View/Helper');
  */
 class MaildataHelper extends BcTextHelper {
 
-	public $helpers = array('BcTime');
+	public $helpers = array('BcTime', 'BcBaser');
 
 /**
  * メール表示用のデータを出力する
  * 
- * @param string コントロールタイプ
- * @param mixed 変換前の値
- * @param array コントロールソース
+ * @param string $type コントロールタイプ
+ * @param mixed $value 変換前の値
+ * @param array $options コントロールソース
  * @return string メール用データ
- * @access public
  */
 	public function control($type, $value, $options = "") {
 		// コントロールソースの配列変換
@@ -102,7 +101,23 @@ class MaildataHelper extends BcTextHelper {
 					}
 				}
 				break;
-
+			
+			case 'file':
+				$out = '';
+				if($value) {
+					$mailContent = $this->_View->get('mailContent');
+					$aryFile = explode('/', $value);
+					$file = $aryFile[count($aryFile) - 1];
+					$ext = decodeContent(null, $file);
+					$link = array_merge(array('admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']), $aryFile);
+					if(in_array($ext, array('gif', 'jpg', 'png'))) {
+						$out = " " . $this->BcBaser->getLink($this->BcBaser->getImg($link, array('width' => 400)), $link, array('target' => '_blank'));
+					} else {
+						$out = " " . $this->BcBaser->getLink($file, $link);
+					}
+				}
+				break;
+				
 			case 'date_time_calender':
 				if (is_array($value)) {
 					$value = $this->dateTime($value);
