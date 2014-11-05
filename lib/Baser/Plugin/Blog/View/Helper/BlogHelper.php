@@ -52,7 +52,7 @@ class BlogHelper extends AppHelper {
  * @param int $blogContentId ブログコンテンツID
  * @return void
  */
-	public function setContent($blogContentId) {
+	public function setContent($blogContentId = null) {
 		if (isset($this->blogContent) && !$blogContentId) {
 			return;
 		}
