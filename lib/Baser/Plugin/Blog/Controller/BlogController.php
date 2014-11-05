@@ -99,6 +99,7 @@ class BlogController extends BlogAppController {
 			$this->blogContent = $this->BlogContent->read(null, $this->contentId);
 		} else {
 			$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
+			$this->contentId = $this->params['pass'][0];
 		}
 
 		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
