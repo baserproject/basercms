@@ -14,6 +14,12 @@
  */
 App::uses('Simplezip', 'Vendor');
 
+/**
+ * Class ThemesController
+ * @property Page $Page
+ * @property Theme $Theme
+ * @property SiteConfig $SiteConfig
+ */
 class ThemesController extends AppController {
 
 /**
@@ -28,7 +34,7 @@ class ThemesController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('Theme', 'Page');
+	public $uses = array('Theme', 'Page', 'SiteConfig');
 
 /**
  * コンポーネント
@@ -201,7 +207,9 @@ class ThemesController extends AppController {
 /**
  * 初期データを読み込む
  * 
- * @param string $dbDataPattern
+ * @param string $dbDataPattern 初期データのパターン
+ * @param string $currentTheme テーマ名
+ * @return bool
  */
 	protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '') {
 		
@@ -260,10 +268,10 @@ class ThemesController extends AppController {
 
 		clearAllCache();
 
-		$SiteConfig = ClassRegistry::init('SiteConfig');
+
 		if($currentTheme) {
 			$siteConfigs = array('SiteConfig' => array('theme' => $currentTheme));
-			$SiteConfig->saveKeyValue($siteConfigs);
+			$this->SiteConfig->saveKeyValue($siteConfigs);
 		}
 		
 		if (!$this->Page->createAllPageTemplate()) {
@@ -317,7 +325,7 @@ class ThemesController extends AppController {
 				'first_access' => null,
 				'version' => $this->siteConfigs['version']
 		));
-		$SiteConfig->saveKeyValue($siteConfigs);
+		$this->SiteConfig->saveKeyValue($siteConfigs);
 		
 
 		
@@ -328,9 +336,8 @@ class ThemesController extends AppController {
 /**
  * テーマ情報を読み込む
  * 
- * @param string $theme 
+ * @param string $themename テーマ名
  * @return array
- * @access protected
  */
 	protected function _loadThemeInfo($themename) {
 		$path = WWW_ROOT . 'theme';
@@ -483,9 +490,8 @@ class ThemesController extends AppController {
 /**
  * データを削除する
  * 
- * @param int $id
- * @return boolean 
- * @access protected
+ * @param string $theme テーマ名
+ * @return bool
  */
 	protected function _del($theme) {
 		$path = WWW_ROOT . 'theme' . DS . $theme;
@@ -494,8 +500,7 @@ class ThemesController extends AppController {
 			$siteConfig = array('SiteConfig' => $this->siteConfigs);
 			if ($theme == $siteConfig['SiteConfig']['theme']) {
 				$siteConfig['SiteConfig']['theme'] = '';
-				$SiteConfig = ClassRegistry::getObject('SiteConfig');
-				$SiteConfig->saveKeyValue($siteConfig);
+				$this->SiteConfig->saveKeyValue($siteConfig);
 			}
 			return true;
 		} else {
@@ -520,8 +525,7 @@ class ThemesController extends AppController {
 		$folder->delete($path);
 		if ($theme == $siteConfig['SiteConfig']['theme']) {
 			$siteConfig['SiteConfig']['theme'] = '';
-			$SiteConfig = ClassRegistry::getObject('SiteConfig');
-			$SiteConfig->saveKeyValue($siteConfig);
+			$this->SiteConfig->saveKeyValue($siteConfig);
 		}
 		clearViewCache();
 		$this->setMessage('テーマ「' . $theme . '」を削除しました。');
@@ -533,7 +537,6 @@ class ThemesController extends AppController {
  *
  * @param string $theme
  * @return void
- * @access public
  */
 	public function admin_apply($theme) {
 		if (!$theme) {
@@ -554,8 +557,7 @@ class ThemesController extends AppController {
 		}
 		
 		$siteConfig['SiteConfig']['theme'] = $theme;
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-		$SiteConfig->saveKeyValue($siteConfig);
+		$this->SiteConfig->saveKeyValue($siteConfig);
 		clearViewCache();
 		
 		$info = array();
