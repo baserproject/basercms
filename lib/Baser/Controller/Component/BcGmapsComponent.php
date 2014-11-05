@@ -124,8 +124,14 @@ class BcGmapsComponent extends Component {
 		$requestUrl = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
 
 		App::uses('Xml', 'Utility');
-		$xmlArray = Xml::toArray(Xml::build($requestUrl));
-		$xml = $xmlArray['GeocodeResponse'];
+
+		try {
+			$xmlArray = Xml::toArray(Xml::build($requestUrl));
+		} catch(XmlException $e) {
+			return false;
+		}
+
+        $xml = $xmlArray['GeocodeResponse'];
 
 		$result = null;
 		if (!empty($xml['result']['geometry'])) {
