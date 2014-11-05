@@ -184,6 +184,7 @@ class BcAppController extends Controller {
 				$this->siteConfigs = Configure::read('BcSite');
 				if (empty($this->siteConfigs['version'])) {
 					$this->siteConfigs['version'] = $this->getBaserVersion();
+					$SiteConfig = ClassRegistry::init('SiteConfig');
 					$SiteConfig->saveKeyValue($this->siteConfigs);
 				}
 			} catch (Exception $ex) {
