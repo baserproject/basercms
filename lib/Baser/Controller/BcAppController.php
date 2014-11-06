@@ -181,6 +181,7 @@ class BcAppController extends Controller {
 			// サイト基本設定の読み込み
 			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
 			try {
+				$SiteConfig = ClassRegistry::init('SiteConfig');
 				$this->siteConfigs = Configure::read('BcSite');
 				if (empty($this->siteConfigs['version'])) {
 					$this->siteConfigs['version'] = $this->getBaserVersion();
@@ -1271,7 +1272,7 @@ class BcAppController extends Controller {
 			return false;
 		}
 		if (@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
-			!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		} else {
 			return false;

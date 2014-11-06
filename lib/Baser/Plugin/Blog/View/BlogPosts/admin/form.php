@@ -219,7 +219,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>&nbsp;
-				<?php if($newCatAddable): ?>
+				<?php if($newCatAddable && $hasNewCategoryAddablePermission): ?>
 					<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
 				<?php endif ?>
 				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
