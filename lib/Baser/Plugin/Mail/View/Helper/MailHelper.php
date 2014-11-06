@@ -47,8 +47,8 @@ class MailHelper extends AppHelper {
  * @param int $mailContentId メールコンテンツID
  * @return void
  */
-	public function setMailContent() {
-		if (isset($this->mailContent) && !$mailContentId) {
+	public function setMailContent($mailContentId = null) {
+		if (isset($this->mailContent)) {
 			return;
 		}
 		if ($mailContentId) {
