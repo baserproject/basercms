@@ -283,13 +283,15 @@ class BlogCategory extends BlogAppModel {
 	}
 
 /**
- * 新しいカテゴリが追加できる状態かチェックする
+ * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
  * 
  * @param int $userGroupId ユーザーグループID
  * @param bool $rootEditable ドキュメントルートの書き込み権限の有無
  * @return bool
  */
 	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
+		
+		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(
 			'conditions' => array(
 				'OR' => array(
@@ -298,20 +300,33 @@ class BlogCategory extends BlogAppModel {
 				)
 		)));
 
+		if ($ownerCats || $rootEditable) {
+			$newCatAddable = true;
+		}
+
+		return $newCatAddable;
+
+	}
+	
+/**
+ * アクセス制限としてカテゴリの新規追加ができるか確認する
+ * 
+ * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
+ * 
+ * @param int $userGroupId ユーザーグループID
+ * @param int $blogContentId ブログコンテンツID
+ */
+	public function hasNewCategoryAddablePermission($userGroupId, $blogContentId) {
+		
 		if (ClassRegistry::isKeySet('Permission')) {
 			$Permission = ClassRegistry::getObject('Permission');
 		} else {
 			$Permission = ClassRegistry::init('Permission');
 		}
 
-		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add')));
-		$hasUrlPermission = $Permission->check($ajaxAddUrl, $userGroupId);
-
-		if (($ownerCats || $rootEditable) && $hasUrlPermission) {
-			return true;
-		}
-
-		return false;
+		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId)));
+		return $Permission->check($ajaxAddUrl, $userGroupId);
+		
 	}
 
 }

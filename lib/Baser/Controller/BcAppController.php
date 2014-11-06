@@ -1272,7 +1272,7 @@ class BcAppController extends Controller {
 			return false;
 		}
 		if (@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
-			!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		} else {
 			return false;
