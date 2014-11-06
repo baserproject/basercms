@@ -181,10 +181,10 @@ class BcAppController extends Controller {
 			// サイト基本設定の読み込み
 			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
 			try {
+				$SiteConfig = ClassRegistry::init('SiteConfig');
 				$this->siteConfigs = Configure::read('BcSite');
 				if (empty($this->siteConfigs['version'])) {
 					$this->siteConfigs['version'] = $this->getBaserVersion();
-					$SiteConfig = ClassRegistry::init('SiteConfig');
 					$SiteConfig->saveKeyValue($this->siteConfigs);
 				}
 			} catch (Exception $ex) {
