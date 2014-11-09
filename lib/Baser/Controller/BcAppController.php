@@ -20,6 +20,7 @@ App::uses('BcAuthConfigureComponent', 'Controller/Component');
 App::uses('File', 'Core.Utility');
 App::uses('ErrorHandler', 'Core.Error');
 App::uses('CakeEmail', 'Network/Email');
+App::uses('Controller', 'Controller');
 
 /**
  * Controller 拡張クラス
