@@ -940,7 +940,7 @@ DOC_END;
 		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
 			'fieldName' => $fieldName,
-			'out' => $out
+			'out' => $output
 			), array('class' => 'Form', 'plugin' => ''));
 
 		if ($event !== false) {
