@@ -749,7 +749,6 @@ class BcAppController extends Controller {
  * @param	mixed	$body	本文
  * @options	array
  * @return	boolean			送信結果
- * @access	public
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 		$options = array_merge(array(
@@ -892,10 +891,23 @@ class BcAppController extends Controller {
 				$formalName = Configure::read('BcApp.title');
 			}
 		}
-
 		$cakeEmail->from($from, $fromName);
-		$cakeEmail->replyTo($from);
-		$cakeEmail->returnPath($from);
+
+		//Reply-To
+		if (!empty($options['replyTo'])) {
+			$replyTo = $options['replyTo'];
+		} else {
+			$replyTo = $from;
+		}
+		$cakeEmail->replyTo($replyTo);
+
+		//Return-Path
+		if (!empty($options['returnPath'])) {
+			$returnPath = $options['returnPath'];
+		} else {
+			$returnPath = $from;
+		}
+		$cakeEmail->returnPath($returnPath);
 
 		//$sender
 		if (!empty($options['sender'])) {
