@@ -1758,14 +1758,48 @@ END_FLASH;
 		}
 
 		// urlを取得
-		if (empty($this->_View->subDir)) {
-			$url = '/../Pages' . $url;
-		} else {
-			$dirArr = explode('/', $this->_View->subDir);
-			$url = str_repeat('/..', count($dirArr)) . '/../Pages' . $url;
+		try {
+			$PluginContent = ClassRegistry::init('PluginContent');
+		} catch (Exception $ex) {
+			$PluginContent = null;
 		}
+		$isPlugin = false;
+		if ($PluginContent) {
+			$currPluginContent = $PluginContent->currentPluginContent($url);
+			if ($currPluginContent) {
+				$action = 'index';
+				$content = $PluginContent->find('first', array(
+					'fields' => array('content_id'),
+					'conditions' => array('PluginContent.plugin' => $currPluginContent['PluginContent']['plugin'],
+						'PluginContent.name' => $currPluginContent['PluginContent']['name'])
+				));
+				if (count($content) > 0) {
+					$url = preg_replace('/^\//', '', $url);
+					if (strpos($url, '/') !== false) {
+						list($name, $func) = explode('/', $url);
+						if (isset($func)) {
+							$action = $func;
+						}
+					}
+					$html = $this->requestAction(
+						$currPluginContent['PluginContent']['plugin'].DS.$currPluginContent['PluginContent']['plugin'].DS.$action.DS.$content['PluginContent']['content_id']
+					);
+					echo $html;
+					$isPlugin = true;
+				}
+			}
+		}
+		if (!$isPlugin) {
+			// urlを取得
+			if (empty($this->_View->subDir)) {
+				$url = '/../Pages' . $url;
+			} else {
+				$dirArr = explode('/', $this->_View->subDir);
+				$url = str_repeat('/..', count($dirArr)) . '/../Pages' . $url;
+			}
 
-		$this->element($url, $params, array('subDir' => $subDir));
+			$this->element($url, $params, array('subDir' => $subDir));
+		}
 
 		// 現在のページの情報に戻す
 		$this->setDescription($description);

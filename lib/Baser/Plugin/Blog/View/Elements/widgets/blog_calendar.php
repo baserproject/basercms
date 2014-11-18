@@ -141,7 +141,7 @@ $entryDates = $data['entryDates'];
 				print "<td>&nbsp;</td>";
 			}
 
-			$data = check($i, $w, $year, $month, $day, $entryDates, $this->BcBaser, $blogContent);
+			$data = $this->Blog->check($i, $w, $year, $month, $day, $entryDates, $this->BcBaser, $blogContent);
 			print "$data";
 			if ($w == 6) {
 				print "</tr>";
@@ -151,7 +151,7 @@ $entryDates = $data['entryDates'];
 			if ($w == 0) {
 				print "<tr>";
 			}
-			$data = check($i, $w, $year, $month, $day, $entryDates, $this->BcBaser, $blogContent);
+			$data = $this->Blog->check($i, $w, $year, $month, $day, $entryDates, $this->BcBaser, $blogContent);
 			print "$data";
 			if ($w == 6) {
 				print "</tr>";
@@ -159,30 +159,5 @@ $entryDates = $data['entryDates'];
 		}
 	}
 	print "</table>";
-
-/**
- * 特定の日付の場合の処理
- */
-	function check($i, $w, $year, $month, $day, $entryDates, $BcBaser, $blogContent) {
-		if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
-			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
-				$change = '<td class="today">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
-			} elseif ($w == 0) {
-				$change = '<td class="sunday">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
-			} elseif ($w == 6) {
-				$change = '<td class="saturday">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
-			} else {
-				$change = '<td>' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
-			}
-		} else {
-			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
-				$change = '<td class="today">' . $i . '</td>';
-			} else {
-				$change = '<td>' . $i . '</td>';
-			}
-		}
-		return $change;
-	}
-
 	?>
 </div>
