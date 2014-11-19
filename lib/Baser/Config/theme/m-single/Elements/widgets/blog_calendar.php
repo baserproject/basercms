@@ -143,7 +143,7 @@ $entryDates = $data['entryDates'];
 				print "<td>&nbsp;</td>";
 			}
 
-			$data = $this->Blog->check($i, $w, $year, $month, $day, $entryDates, $this->BcBaser, $blogContent);
+			$data = $this->Blog->calenderCheck($i, $w, $year, $month, $entryDates, $blogContent);
 			print "$data";
 			if ($w == 6) {
 				print "</tr>";
@@ -153,7 +153,7 @@ $entryDates = $data['entryDates'];
 			if ($w == 0) {
 				print "<tr>";
 			}
-			$data = $this->Blog->check($i, $w, $year, $month, $day, $entryDates, $this->BcBaser, $blogContent);
+			$data = $this->Blog->calenderCheck($i, $w, $year, $month, $entryDates, $blogContent);
 			print "$data";
 			if ($w == 6) {
 				print "</tr>";

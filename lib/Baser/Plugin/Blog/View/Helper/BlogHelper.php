@@ -981,21 +981,19 @@ class BlogHelper extends AppHelper {
  * @param string $w 曜日
  * @param array $year 表示年
  * @param array $month 表示月
- * @param array $day 表示日
  * @param array $entryDates エントリー日
- * @param array $BcBaser BcBaserヘルパー
  * @param array $blogContent Blogデータ
  */
-	public function check($i, $w, $year, $month, $day, $entryDates, $BcBaser, $blogContent) {
+	public function calenderCheck($i, $w, $year, $month, $entryDates, $blogContent) {
 		if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
-				$change = '<td class="today">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+				$change = '<td class="today">' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
 			} elseif ($w == 0) {
-				$change = '<td class="sunday">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+				$change = '<td class="sunday">' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
 			} elseif ($w == 6) {
-				$change = '<td class="saturday">' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+				$change = '<td class="saturday">' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
 			} else {
-				$change = '<td>' . $BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+				$change = '<td>' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
 			}
 		} else {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
