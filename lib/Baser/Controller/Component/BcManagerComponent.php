@@ -145,6 +145,9 @@ class BcManagerComponent extends Component {
 			}
 		}
 
+		//SiteConfigを再設定
+		loadSiteConfig();
+
 		// ページファイルを生成
 		$this->createPageTemplates();
 
