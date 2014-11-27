@@ -840,6 +840,47 @@ class PagesController extends AppController {
 		$this->request->params['controller'] = 'pages';
 		$this->request->params['action'] = 'display';
 
+		// displayから移植
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
+		$data = $this->Page->findByUrl('/' . $url);
+		$template = $layout = $agent = '';
+
+		if (Configure::read('BcRequest.agent')) {
+			$agent = '_' . Configure::read('BcRequest.agent');
+		}
+
+		if (empty($data['PageCategory']['id'])) {
+			if (!empty($this->siteConfigs['root_layout_template' . $agent])) {
+				$layout = $this->siteConfigs['root_layout_template' . $agent];
+			}
+			if (!empty($this->siteConfigs['root_content_template' . $agent])) {
+				$template = 'templates/' . $this->siteConfigs['root_content_template' . $agent];
+			} else {
+				$template = join('/', $path);
+			}
+		} else {
+			if (!empty($data['PageCategory']['layout_template'])) {
+				$layout = $data['PageCategory']['layout_template'];
+			}
+			if (!empty($data['PageCategory']['content_template'])) {
+				$template = 'templates/' . $data['PageCategory']['content_template'];
+			} else {
+				$template = join('/', $path);
+			}
+		}
+
+		if ($layout) {
+			$this->layout = $layout;
+		}
+
+		if ($template) {
+			$this->set('pagePath', implode('/', $path));
+		} else {
+			$template = implode('/', $path);
+		}
+		// <<<
+
 		$this->request->url = $url;
 		Configure::write('BcRequest.pureUrl', $url);
 		$this->here = $this->base . '/' . $url;
