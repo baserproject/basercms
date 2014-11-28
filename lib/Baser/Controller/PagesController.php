@@ -797,7 +797,7 @@ class PagesController extends AppController {
 		
 		// 直接previewにアクセスした場合
 		if (empty($page) || !file_exists(TMP . 'pages_preview_' . $id . $this->ext)) {
-			$page = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
+			$page = $this->Page->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
 			$contents = $this->Page->addBaserPageTag(null, $page['Page']['contents'], $page['Page']['title'], $page['Page']['description'], $page['Page']['code']);
 			$path = TMP . 'pages_preview_' . $id . $this->ext;
 			$file = new File($path);
@@ -845,6 +845,9 @@ class PagesController extends AppController {
 		$this->here = $this->base . '/' . $url;
 		$this->crumbs = $this->_getCrumbs('/' . $url);
 		$this->theme = $this->siteConfigs['theme'];
+		if(!empty($page['Page']['page_category_id'])) {
+			$this->layout = $this->Page->PageCategory->field('layout_template', array('PageCategory.id' => $page['Page']['page_category_id']));
+		}
 		$this->render(TMP . 'pages_preview_' . $id . $this->ext);
 		@unlink(TMP . 'pages_preview_' . $id . $this->ext);
 		Cache::delete('page_preview_' . $id, '_cake_core_');
