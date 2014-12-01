@@ -41,8 +41,13 @@ class BcSmartphoneHelper extends Helper {
 				// 一旦プレフィックスを除外
 				$reg = '/a(.*?)href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
 				$this->_View->output = preg_replace_callback($reg, array($this, '_removePrefix'), $this->_View->output);
+				
+				$BcBaseUrl = BC_BASE_URL;
+				if ($this->_View->BcBaser->isSSL()) {
+					$BcBaseUrl = Configure::read('BcEnv.siteUrl');
+				}
 				// プレフィックス追加
-				$reg = '/a(.*?)href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
+				$reg = '/a(.*?)href=\"' . preg_quote($BcBaseUrl, '/') . '([^\"]*?)\"/';
 				$this->_View->output = preg_replace_callback($reg, array($this, '_addPrefix'), $this->_View->output);
 			}
 		}
