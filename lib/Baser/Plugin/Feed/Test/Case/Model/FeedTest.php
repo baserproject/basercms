@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * test for FeedModel
+ *
+ * baserCMS : Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * @package         Mail.Test.Case.Model
+ * @copyright       Copyright 2008 - 2014, baserCMS Users Community
+ * @link            http://basercms.net baserCMS Project
+ * @since           baserCMS v 3.0.0-beta
+ * @license         http://basercms.net/license/index.html
+ */
+App::uses('Feed', 'Feed.Model');
+
+class FeedTest extends BaserTestCase {
+
+/**
+ * 文字列から<img>タグとURLを抽出する
+ *
+ * @param string $string 元の文字列
+ * @param array $img <img>タグとURLの配列の期待値
+ * @return void
+ *
+ * @dataProvider extractImgDataProvider
+ */
+	public function testExtractImg($string, $img) {
+		$Feed = ClassRegistry::init('Feed.Feed');
+		$this->assertEquals($img, $Feed->extractImg($string));
+	}
+
+/**
+ * extractImg用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function extractImgDataProvider() {
+		return array(
+			array(
+				'<p><a href="http://example.com" target="_blank"><img align="" alt="osc2014_fukuoka_logo.png" src="http://basercms.net/files/uploads/osc2014_fukuoka_logo.png"></a></p><p>baserCMSユーザー会の',
+				array(
+					'tag' => '<img align="" alt="osc2014_fukuoka_logo.png" src="http://basercms.net/files/uploads/osc2014_fukuoka_logo.png">',
+					'url' => 'http://basercms.net/files/uploads/osc2014_fukuoka_logo.png'
+				)
+			),
+			array(
+				'<p><a href="http://example.com/" rel="colorbox" target="_blank" title="logo.jpg"><img align="" alt="logo.jpg" src = "http://basercms.net/files/uploads/logo.jpg" /></a></p>',
+				array(
+					'tag' => '<img align="" alt="logo.jpg" src = "http://basercms.net/files/uploads/logo.jpg" />',
+					'url' => 'http://basercms.net/files/uploads/logo.jpg'
+				)
+			),
+			array(
+				'<p>imgタグがない場合</p>',
+				array(
+					'tag' => ''
+				)
+			)
+		);
+	}
+
+}
