@@ -155,6 +155,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :database => 'basercms'
       }
     }
+    chef.add_recipe "common"
     chef.add_recipe "iptables"
     chef.add_recipe "yum::epel"
     chef.add_recipe "yum::remi"
