@@ -143,7 +143,7 @@ class BlogHelper extends AppHelper {
 			return $post['BlogPost']['name'];
 		}
 	}
-	
+
 /**
  * 記事へのリンクを取得する
  *
@@ -159,9 +159,9 @@ class BlogHelper extends AppHelper {
 		return $this->BcBaser->getLink($title, $url, $options);
 	}
 
-/*
+/**
  * ブログ記事のURLを取得する
- *
+ * 
  * @param array $post ブログ記事データ
  * @return string ブログ記事のURL
  */
@@ -559,7 +559,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getLayoutTemplates() {
 		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
-		
+
 		if ($this->BcBaser->siteConfig['theme']) {
 			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
@@ -875,13 +875,13 @@ class BlogHelper extends AppHelper {
 			return false;
 		}
 		$agentPrefix = Configure::read('BcRequest.agentPrefix');
-		if($agentPrefix) {
+		if ($agentPrefix) {
 			$agentPrefix .= '_';
 		}
 		return (
-			$this->request->params['plugin'] == 'blog' && 
-			$this->request->params['controller'] == 'blog' && 
-			$this->request->params['action'] == $agentPrefix . 'archives' && 
+			$this->request->params['plugin'] == 'blog' &&
+			$this->request->params['controller'] == 'blog' &&
+			$this->request->params['action'] == $agentPrefix . 'archives' &&
 			!$this->getBlogArchiveType()
 		);
 	}
@@ -957,7 +957,7 @@ class BlogHelper extends AppHelper {
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
 	}
-	
+
 /**
  * メールフォームプラグインのフォームへのリンクを生成する
  * 
@@ -973,5 +973,36 @@ class BlogHelper extends AppHelper {
 		$MailHelper = new MailHelper($this->_View);
 		$MailHelper->link($title, $contentsName, $datas, $options);
 	}
-	
+
+/**
+ * カレンダーでの特定の日付の場合の処理
+ * 
+ * @param string $i カレンダー日付
+ * @param string $w 曜日
+ * @param array $year 表示年
+ * @param array $month 表示月
+ * @param array $entryDates エントリー日
+ * @param array $blogContent Blogデータ
+ */
+	public function calenderCheck($i, $w, $year, $month, $entryDates, $blogContent) {
+		if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
+			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
+				$change = '<td class="today">' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+			} elseif ($w == 0) {
+				$change = '<td class="sunday">' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+			} elseif ($w == 6) {
+				$change = '<td class="saturday">' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+			} else {
+				$change = '<td>' . $this->BcBaser->getLink($i, array('admin' => false, 'blog' => false, 'plugin' => '', 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $year, $month, $i), null, false) . '</td>';
+			}
+		} else {
+			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
+				$change = '<td class="today">' . $i . '</td>';
+			} else {
+				$change = '<td>' . $i . '</td>';
+			}
+		}
+		return $change;
+	}
+
 }
