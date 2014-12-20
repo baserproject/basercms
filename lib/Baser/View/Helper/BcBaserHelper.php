@@ -2201,4 +2201,166 @@ END_FLASH;
 		$this->element('site_search_form', $data, $options);
 	}
 	
+/**
+ * コンテンツを特定する文字列を取得する
+ * URLを元に、階層構造やカテゴリ名を保持した文字列を取得する
+ * 
+ * @param array $options オプション（初期値 : array()）
+ *  - `underscore` : ハイフン区切りではなく、アンダースコア区切りで出力する（初期値 : false）
+ *	- `category_hierarchy` : カテゴリ階層の接頭語を出力する文字列（初期値 : ctcLv）
+ * @return string 
+ */
+	public function getContentNameWpStyle($options = array()) {
+		$options = array_merge(
+			array(
+				'detail' => false,
+				'underscore' => true,
+				'category_hierarchy' => 'ctcLv',
+			), $options);
+
+		$bodyClass = '';
+		// ビューにセットされている値を取得
+		$viewVars = $this->_View->viewVars;
+		
+		if ($this->isHome()) {
+			// トップページのとき
+			$bodyClass .= 'home';
+			$bodyClass .= ' page';
+			$bodyClass .= ' page-home';
+		} else {
+			$other = true;
+			if ($this->isPage()) {
+				$other = false;
+				// 固定ページのとき
+				$bodyClass .= 'page';
+				if (isset($this->request->data['Page'])) {
+					$bodyClass .= ' page-'. $this->request->data['Page']['id'];
+					$bodyClass .= ' page-'. $this->request->data['Page']['name'];
+				}
+				
+				foreach ($this->request->params['pass'] as $categoryKey => $categoryValue) {
+					$categoryKey = $categoryKey + 1;
+					$bodyClass .= ' '. $options['category_hierarchy'] . $categoryKey .'-'. $categoryValue;
+				}
+
+				$categoryCount = count($this->request->params['pass']) - 1;
+				$bodyClass .= ' '. $options['category_hierarchy'] . $categoryCount;
+			} else {
+				// HomeControllerのとき
+				if ($this->request->params['controller'] == 'home') {
+					$other = false;
+					$bodyClass .= 'home';
+					if (!empty($this->request->params['action'])) {
+						$bodyClass .= ' '. $this->request->params['action'];
+					}
+					if (!empty($this->request->params['pass'])) {
+						foreach ($this->request->params['pass'] as $passKey => $passValue) {
+							$passKey = $passKey + 1;
+							$bodyClass .= ' '. $options['category_hierarchy'] . $passKey .'-'. $passValue;
+						}
+					}
+				}
+				// ブログのとき
+				if (!empty($viewVars['blogContent'])) {
+					$other = false;
+					$blogContent = $viewVars['blogContent'];
+					$bodyClass .= $this->request->params['plugin'];
+					//$bodyClass .= 'blog';
+					$bodyClass .= ' '. $this->request->params['plugin'] .'-'. $blogContent['BlogContent']['id'];
+					$bodyClass .= ' '. $this->request->params['plugin'] .'-'. $blogContent['BlogContent']['name'];
+					if ($this->isBlogHome()) {
+						$bodyClass .= ' '. $this->request->params['plugin'] .'-'. $this->request->params['action'];
+					} elseif ($this->isBlogSingle()) {
+						$bodyClass .= ' single';
+						$bodyClass .= ' post-'. $viewVars['post']['BlogPost']['id'];
+						if (!empty($viewVars['post']['BlogCategory'])) {
+							$bodyClass .= ' category-'. $viewVars['post']['BlogCategory']['name'];
+						}
+					} elseif ($this->_View->Blog->isCategory()) {
+						$bodyClass .= ' '. $this->request->params['action'];
+						$bodyClass .= ' '. $this->request->params['pass'][0];
+						$bodyClass .= ' category-'. $this->request->params['pass'][1];
+					} elseif ($this->_View->Blog->isYear()) {
+						$bodyClass .= ' '. $this->request->params['action'];
+						$bodyClass .= ' '. $this->request->params['pass'][0];
+						$bodyClass .= ' archives-'. $viewVars['year'];
+					} elseif ($this->_View->Blog->isMonth()) {
+						$bodyClass .= ' '. $this->request->params['action'];
+						$bodyClass .= ' '. $this->request->params['pass'][0];
+						$bodyClass .= ' archives-'. $viewVars['year'] .'-'. $viewVars['month'];
+					} elseif ($this->_View->Blog->isDate()) {
+						$bodyClass .= ' '. $this->request->params['action'];
+						$bodyClass .= ' '. $this->request->params['pass'][0];
+						// TODO BlogControllerの日付アーカイブで日付がsetされたら改修する
+						if (isset($viewVars['day'])) {
+							$bodyClass .= ' archives-'. $viewVars['year'] .'-'. $viewVars['month'] .'-'. $viewVars['day'];
+						} else {
+							$bodyClass .= ' archives-'. $viewVars['year'] .'-'. $viewVars['month'] .'-'. $this->request->params['pass'][3];
+						}
+					} elseif ($this->_View->Blog->isTag()) {
+						$bodyClass .= ' '. $this->request->params['action'];
+						$bodyClass .= ' '. $this->request->params['pass'][0];
+						$bodyClass .= ' tag-'. $this->request->params['pass'][1];
+					} elseif ($this->_View->Blog->getBlogArchiveType() == 'author') {
+						$bodyClass .= ' '. $this->request->params['action'];
+						$bodyClass .= ' '. $this->request->params['pass'][0];
+						$bodyClass .= ' author-'. $this->request->params['pass'][1];
+					}
+				}
+				// フォームのとき
+				if (!empty($viewVars['mailContent'])) {
+					$other = false;
+					$mailContent = $viewVars['mailContent'];
+					$bodyClass .= $this->request->params['plugin'];
+					//$bodyClass .= 'mail';
+					$bodyClass .= ' '. $this->request->params['plugin'] .'-'. $mailContent['MailContent']['id'];
+					$bodyClass .= ' '. $this->request->params['plugin'] .'-'. $mailContent['MailContent']['name'];
+					
+					$freezed = $viewVars['freezed'];
+					// フォーム表示
+					if ($this->request->params['action'] == 'index') {
+						$bodyClass .= ' mail-'. $this->request->params['action'];
+					}
+					// 確認画面
+					if ($this->request->params['action'] == 'confirm') {
+						$bodyClass .= ' mail-'. $this->request->params['action'];
+						if (!$freezed) {
+							$bodyClass .= ' mail-error';
+						}
+						if ($freezed) {
+							$bodyClass .= ' mail-novalidate';
+						}
+					}
+					// 送信完了
+					if ($this->request->params['action'] == 'submit') {
+						$bodyClass .= ' mail-'. $this->request->params['action'];
+					}
+				}
+				// 固定ページ、ブログ、メール以外のコンテンツの場合
+				if ($other) {
+					$bodyClass .= $this->getContentsName($options['detail'], $options);
+					if (!empty($this->request->params['plugin'])) {
+						$bodyClass .= ' '. $this->request->params['plugin'] .'-'. $this->request->params['action'];
+					}
+					if (!empty($this->request->params['controller'])) {
+						$bodyClass .= ' '. $this->request->params['controller'];
+					}
+					if (!empty($this->request->params['action'])) {
+						$bodyClass .= ' '. $this->request->params['action'];
+					}
+					if (!empty($this->request->params['pass'])) {
+						foreach ($this->request->params['pass'] as $passKey => $passValue) {
+							$passKey = $passKey + 1;
+							$bodyClass .= ' '. $options['category_hierarchy'] . $passKey .'-'. $passValue;
+						}
+					}
+				}
+			}
+		}
+		if (!$options['underscore']) {
+			$bodyClass = str_replace('-', '_', $bodyClass);
+		}
+		return $bodyClass;
+	}
+	
 }
