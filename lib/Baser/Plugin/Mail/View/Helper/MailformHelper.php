@@ -181,4 +181,21 @@ class MailformHelper extends BcFreezeHelper {
 		return $out;
 	}
 
+
+/**
+ * create
+ * ファイル添付の対応のためにデフォルト値を変更
+ *
+ * @param array $model
+ * @param array $options
+ * @return string
+ */
+	public function create($model = null, $options = array()) {
+		if (!isset($options['type'])) {
+			$options['type'] = 'file';
+		}
+
+		return parent::create($model, $options);
+	}
+
 }
