@@ -744,8 +744,8 @@ class BcUploadBehavior extends ModelBehavior {
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions[$Model->name . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
-		$datas = $Model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName), 'order' => $Model->name . '.name'));
-		$datas = Hash::extract($datas, '{n}.UploaderFile.name');
+		$datas = $Model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName), 'order' => "{$Model->name}.{$fieldName}"));
+		$datas = Hash::extract($datas, "{n}.{$Model->name}.{$fieldName}");
 		
 		if ($datas) {
 			foreach($datas as $data) {
