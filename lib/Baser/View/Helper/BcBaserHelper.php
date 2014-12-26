@@ -935,7 +935,8 @@ class BcBaserHelper extends AppHelper {
  * @return string
  */
 	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
-
+		$adminAlias = Configure::read('BcAuthPrefix.admin.alias');
+		
 		if (!is_array($options)) {
 			$options = array($options);
 		}
@@ -975,7 +976,7 @@ class BcBaserHelper extends AppHelper {
 		// TODO メニューが廃止になったら削除
 		if (!is_array($url)) {
 			$prefixes = Configure::read('Routing.prefixes');
-			$url = preg_replace('/^\/admin\//', '/' . $prefixes[0] . '/', $url);
+			$url = preg_replace('/^\/' . $adminAlias . '\//', '/' . $prefixes[0] . '/', $url);
 		}
 
 		$_url = $this->getUrl($url);
@@ -1003,6 +1004,17 @@ class BcBaserHelper extends AppHelper {
 				}
 			}
 		}
+		
+		// ページ公開チェック
+        if (isset($this->_Page) && empty($this->request->params['admin'])) {
+            $adminPrefix = Configure::read('Routing.prefixes.0');
+            if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
+                if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
+                    $enabled = false;
+                }
+            }
+        }
+		
 
 		if (!$enabled) {
 			if ($forceTitle) {
@@ -1016,7 +1028,7 @@ class BcBaserHelper extends AppHelper {
 		if (($this->isSSL() || $ssl) && !preg_match('/^javascript:/', $_url) && !preg_match('/^http/', $_url)) {
 
 			$_url = preg_replace("/^\//", "", $_url);
-			if (preg_match('/^admin\//', $_url)) {
+			if (preg_match('/^'. $adminAlias . '\//', $_url)) {
 				$admin = true;
 			} else {
 				$admin = false;
