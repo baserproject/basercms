@@ -16,6 +16,7 @@
  * Include files
  */
 
+app::uses('BcConfigString', 'Lib');
 /**
  * テーマモデル
  *
@@ -27,7 +28,6 @@ class Theme extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Theme';
 
@@ -35,7 +35,6 @@ class Theme extends AppModel {
  * テーブル
  *
  * @var string
- * @access public
  */
 	public $useTable = false;
 
@@ -43,14 +42,13 @@ class Theme extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
 			array('rule' => array('notEmpty'),
 				'message' => 'テーマ名を入力してください。'),
-			array('rule' => 'halfText',
-				'message' => 'テーマ名は半角英数字のみで入力してください。'),
+			array('rule' => 'alphaNumericPlus',
+				'message' => 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。'),
 			array('rule' => 'themeDuplicate',
 				'message' => '既に存在するテーマ名です。')
 		),
@@ -63,11 +61,10 @@ class Theme extends AppModel {
 	);
 
 /**
- * 重複チェック
+ * テーマ名の重複チェック
  *
- * @param string
- * @return boolean
- * @access public
+ * @param string $check チェックする文字列
+ * @return bool
  */
 	public function themeDuplicate($check) {
 		$value = $check[key($check)];
@@ -87,9 +84,10 @@ class Theme extends AppModel {
 /**
  * 保存
  *
- * @param string
- * @return boolean
- * @access public
+ * @param array $data テーマのデータ
+ * @param bool $validate バリデーションを行うかどうか
+ * @param array $fieldList
+ * @return bool
  */
 	public function save($data = null, $validate = true, $fieldList = array()) {
 		if (!$data) {
@@ -108,44 +106,37 @@ class Theme extends AppModel {
 			$data = $data['Theme'];
 		}
 
-		$path = WWW_ROOT . 'theme' . DS;
-		if ($path . $data['old_name'] != $path . $data['name']) {
-			if (!rename($path . $data['old_name'], $path . $data['name'])) {
+		if ($data['old_name'] !== $data['name'] &&
+			!rename($this->getDirpath($data['old_name']), $this->getDirPath($data['name']))) {
 				return false;
-			}
 		}
 
-		$keys = array('title', 'description', 'author', 'url');
-		foreach ($keys as $key) {
-			if (isset($data[$key])) {
-				$this->setConfig($data['name'], $key, $data[$key]);
-			}
-		}
+		$configData = array(
+			'title' => $data['title'],
+			'description' => $data['description'],
+			'author' => $data['author'],
+			'url' => $data['url']
+		);
+
+		$file = $this->getConfigFile($data['name']);
+		$configString = new BcConfigString($file->read());
+		$configString->upsertMany($configData);
+		$file->write($configString->content, 'w');
+		$file->close();
 
 		return true;
 	}
 
-/**
- * テーマ設定ファイルに値を設定する
- *
- * @param string $key
- * @param string $value
- * @param string $contents
- * @return string
- * @access public
- */
-	public function setConfig($theme, $key, $value) {
-		$path = WWW_ROOT . 'theme' . DS;
-		$contents = file_get_contents($path . $theme . DS . 'config.php');
-		$reg = '/\$' . $key . '[\s]*?=[\s]*?\'.*?\';/is';
-		if (preg_match($reg, $contents)) {
-			$contents = preg_replace($reg, '$' . $key . ' = \'' . $value . '\';', $contents);
-		} else {
-			$contents = str_replace("?>", "\$" . $key . " = '" . $value . "';\n?>", $contents);
-		}
-		$file = new File($path . $theme . DS . 'config.php');
-		$file->write($contents, 'w');
-		$file->close();
+	public function getDirPath($name) {
+		return WWW_ROOT . 'theme' . DS . $name;
+	}
+
+	public function getConfigFilePath($name) {
+		return $this->getDirPath($name) . DS . 'config.php';
+	}
+
+	public function getConfigFile($name) {
+		return new File($this->getConfigFilePath($name));
 	}
 
 }
