@@ -22,6 +22,7 @@ App::uses('AppHelper', 'View/Helper');
  * テーマより利用される事を前提としたヘルパーで、テーマで必要となる機能をひと通り提供する。
  *
  * @package Baser.View.Helper
+ * @property BcHtmlHelper $BcHtml BcHtmlヘルパ
  */
 class BcBaserHelper extends AppHelper {
 
@@ -121,7 +122,7 @@ class BcBaserHelper extends AppHelper {
  * 
  * 配列で全件取得する
  *
- * @return array メニューデータ Or false
+ * @return array メニューデータ、または、false
  */
 	public function getMenus() {
 		$Menu = ClassRegistry::init('Menu');
@@ -700,7 +701,7 @@ class BcBaserHelper extends AppHelper {
  * 利用する際は、</head>タグの直前あたりに記述する。
  * コンテンツ内で、レイアウトテンプレートへの出力を設定する場合には、inline オプションを false にする
  *
- * 《設定例》
+ * 《利用例》
  * $this->BcBaser->css('admin/layout', array('inline' => false));
  * $this->BcBaser->js('admin/startup', false);
  *
@@ -823,7 +824,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * ドキュメントタイプを指定するタグを出力する
  *
- * @param string $type 出力ドキュメントタイプの文字列 初期値は 'xhtml-trans'
+ * @param string $type 出力ドキュメントタイプの文字列（初期値 : 'xhtml-trans'）
  * @return void
  */
 	public function docType($type = 'xhtml-trans') {
@@ -831,93 +832,111 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
+ * CSS タグを出力する
  *
- * CSSの読み込みタグを出力する
- *
- * @param string $path
- * @param array $options オプションのパラメータ
- * @param boolean $inline
+ * 《利用例》
+ * $this->BcBaser->css('admin/import')
+ * 
+ * @param string $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
+ * @param mixed $options オプション
+ *	（配列の場合）
+ *	- `rel` : rel属性（初期値 : 'stylesheet'）
+ *	- `inline` : コンテンツ内にCSSを出力するかどうか（初期値 : true）
+ *  ※ その他のパラメータについては、HtmlHelper::css() を参照。
+ *	※ false を指定した場合、inline が false となる。
  * @return void
  */
 	public function css($path, $options = array()) {
+		if($options === false) {
+			$options['inline'] = false;
+		}
 		$options = array_merge(array(
 			'rel' => 'stylesheet',
 			'inline' => true
-			), $options);
-
+		), $options);
 		$rel = $options['rel'];
 		unset($options['rel']);
-
-		$ret = $this->BcHtml->css($path, $rel, $options);
+		$result = $this->BcHtml->css($path, $rel, $options);
 		if ($options['inline']) {
-			echo $ret;
+			echo $result;
 		}
 	}
 
 /**
- * javascriptの読み込みタグを出力する
+ * Javascript タグを出力する
  *
- * @param string|array $url String or array of javascript files to include
- * @param boolean $inline
+ * @param string|array $url Javascriptのパス（js フォルダからの相対パス）拡張子は省略可
+ * @param boolean $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
  * @return void
  */
 	public function js($url, $inline = true) {
-
-		$ret = $this->BcHtml->script($url, array('inline' => $inline));
+		$result = $this->BcHtml->script($url, array('inline' => $inline));
 		if ($inline) {
-			echo $ret;
+			echo $result;
 		}
 	}
 
 /**
- * 画像読み込みタグを出力する
+ * 画像タグを出力する
  *
- * @param array $path
- * @param array $options
+ * @param array $path 画像のパス（img フォルダからの相対パス）
+ * @param array $options オプション（主にHTML属性）
+ *	※ パラメータについては、HtmlHelper::image() を参照。
  * @return void
  */
 	public function img($path, $options = array()) {
-
 		echo $this->getImg($path, $options);
 	}
 
 /**
  * 画像タグを取得する
  *
- * @param string $path Path to the image file, relative to the app/webroot/img/ directory.
- * @param array $options Array of HTML attributes. See above for special options.
- * @return string completed img tag
+ * @param string $path 画像のパス（img フォルダからの相対パス）
+ * @param array $options オプション（主にHTML属性）
+ * ※ パラメータについては、HtmlHelper::image() を参照。
+ * @return string 画像タグ
  */
 	public function getImg($path, $options = array()) {
-
 		return $this->BcHtml->image($path, $options);
 	}
 
 /**
  * アンカータグを出力する
  *
- * @param string $title
- * @param string $url オプションのパラメータ、初期値は null
- * @param array $htmlAttributes オプションのパラメータ、初期値は array()
- * @param boolean $confirmMessage オプションのパラメータ、初期値は false
+ * @param string $title タイトル
+ * @param mixed $url オプション（初期値 : null）
+ * @param array $htmlAttributes オプション（初期値 : array()）
+ *	- `escape` : タイトルをエスケープするかどうか（初期値 : false）
+ *  - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
+ *	- `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
+ *	- `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+ *	 ※ その他のパラメータについては、HtmlHelper::link() を参照。
+ * @param boolean $confirmMessage 確認メッセージ（初期値 : false）
+ *	リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
  * @return void
  */
 	public function link($title, $url = null, $htmlAttributes = array(), $confirmMessage = false) {
-
 		echo $this->getLink($title, $url, $htmlAttributes, $confirmMessage);
 	}
 
 /**
  * アンカータグを取得する
  *
- * @param string $title
- * @param string $url オプションのパラメータ、初期値は null
- * @param array $htmlAttributes オプションのパラメータ、初期値は array()
- * @param boolean $confirmMessage オプションのパラメータ、初期値は false
+ * @param string $title タイトル
+ * @param mixed $url オプション（初期値 : null）
+ * @param array $htmlAttributes オプション（初期値 : array()）
+ *	- `escape` : タイトルをエスケープするかどうか（初期値 : false）
+ *  - `prefix` : URLにプレフィックスをつけるかどうか（初期値 : false）
+ *	- `forceTitle` : 許可されていないURLの際にタイトルを強制的に出力するかどうか（初期値 : false）
+ *	- `ssl` : SSL用のURLをして出力するかどうか（初期値 : false）
+ *	 ※ その他のパラメータについては、HtmlHelper::image() を参照。
+ * @param boolean $confirmMessage 確認メッセージ（初期値 : false）
+ *	リンクをクリックした際に確認メッセージが表示され、はいをクリックした場合のみ遷移する
  * @return string
  */
 	public function getLink($title, $url = null, $options = array(), $confirmMessage = false) {
-
+		$adminAlias = Configure::read('BcAuthPrefix.admin.alias');
+		
 		if (!is_array($options)) {
 			$options = array($options);
 		}
@@ -957,7 +976,7 @@ class BcBaserHelper extends AppHelper {
 		// TODO メニューが廃止になったら削除
 		if (!is_array($url)) {
 			$prefixes = Configure::read('Routing.prefixes');
-			$url = preg_replace('/^\/admin\//', '/' . $prefixes[0] . '/', $url);
+			$url = preg_replace('/^\/' . $adminAlias . '\//', '/' . $prefixes[0] . '/', $url);
 		}
 
 		$_url = $this->getUrl($url);
@@ -985,6 +1004,17 @@ class BcBaserHelper extends AppHelper {
 				}
 			}
 		}
+		
+		// ページ公開チェック
+        if (isset($this->_Page) && empty($this->request->params['admin'])) {
+            $adminPrefix = Configure::read('Routing.prefixes.0');
+            if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
+                if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
+                    $enabled = false;
+                }
+            }
+        }
+		
 
 		if (!$enabled) {
 			if ($forceTitle) {
@@ -998,7 +1028,7 @@ class BcBaserHelper extends AppHelper {
 		if (($this->isSSL() || $ssl) && !preg_match('/^javascript:/', $_url) && !preg_match('/^http/', $_url)) {
 
 			$_url = preg_replace("/^\//", "", $_url);
-			if (preg_match('/^admin\//', $_url)) {
+			if (preg_match('/^'. $adminAlias . '\//', $_url)) {
 				$admin = true;
 			} else {
 				$admin = false;
@@ -1037,22 +1067,18 @@ class BcBaserHelper extends AppHelper {
  * @return boolean
  */
 	public function isSSL() {
-
-		if (!empty($this->_View->viewVars['isSSL'])) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->request->is('ssl');
 	}
 
 /**
  * charset メタタグを出力する
- *
- * @param string $charset オプションのパラメータ、初期値は null
+ * 
+ * モバイルの場合は、強制的に文字コードを Shift-JIS に設定
+ * 
+ * @param string $charset 文字コード（初期値 : null）
  * @return void
  */
 	public function charset($charset = null) {
-
 		if (!$charset && Configure::read('BcRequest.agent') == 'mobile') {
 			$charset = 'Shift-JIS';
 		}
@@ -1061,28 +1087,36 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * コピーライト用の年を出力する
+ * 
+ * 《利用例》
+ * $this->BcBaser->copyYear(2012)
+ * 
+ * 《出力例》
+ * 2012 - 2014
  *
  * @param integer $begin 開始年
  * @return void
  */
 	public function copyYear($begin) {
-
 		$year = date('Y');
 		if ($begin == $year) {
 			echo $year;
 		} else {
-			echo $begin . ' - ' . $year;
+			if(is_numeric($begin)) {
+				echo $begin . ' - ' . $year;
+			} else {
+				echo $year;
+			}
 		}
 	}
 
 /**
  * 編集画面へのリンクを設定する
  *
- * @param string $id
+ * @param string $id 固定ページID
  * @return void
  */
 	public function setPageEditLink($id) {
-
 		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
 			$this->_View->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
@@ -1094,7 +1128,6 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function editLink() {
-
 		if ($this->existsEditLink()) {
 			$this->link('編集する', $this->_View->viewVars['editLink'], array('class' => 'tool-menu'));
 		}
@@ -1103,20 +1136,20 @@ class BcBaserHelper extends AppHelper {
 /**
  * 編集画面へのリンクが存在するかチェックする
  *
- * @return boolean
+ * @return boolean 存在する場合は true を返す
  */
 	public function existsEditLink() {
-
-		return ($this->_View->viewVars['authPrefix'] == 'admin' && !empty($this->_View->viewVars['editLink']));
+		return (!empty($this->_View->viewVars['authPrefix']) && $this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['editLink']));
 	}
 
 /**
  * 公開ページへのリンクを出力する
+ * 
+ * 管理システムで利用する
  *
  * @return void
  */
 	public function publishLink() {
-
 		if ($this->existsPublishLink()) {
 			$this->link('公開ページ', $this->_View->viewVars['publishLink'], array('class' => 'tool-menu'));
 		}
@@ -1125,21 +1158,19 @@ class BcBaserHelper extends AppHelper {
 /**
  * 公開ページへのリンクが存在するかチェックする
  *
- * @return boolean
+ * @return boolean リンクが存在する場合は true を返す
  */
 	public function existsPublishLink() {
-
-		return ($this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['publishLink']));
+		return (!empty($this->_View->viewVars['authPrefix']) && $this->_View->viewVars['authPrefix'] == Configure::read('Routing.prefixes.0') && !empty($this->_View->viewVars['publishLink']));
 	}
 
 /**
  * アップデート処理が必要かチェックする
  * 
- * @return boolean
+ * @return boolean アップデートが必要な場合は true を返す
  * @todo 別のヘルパに移動する
  */
 	public function checkUpdate() {
-
 		$baserVerpoint = verpoint($this->_View->viewVars['baserVersion']);
 		if (isset($this->siteConfig['version'])) {
 			$siteVerpoint = verpoint($this->siteConfig['version']);
@@ -1147,7 +1178,7 @@ class BcBaserHelper extends AppHelper {
 			$siteVerpoint = 0;
 		}
 
-		if (!$baserVerpoint === false || $siteVerpoint === false) {
+		if ($baserVerpoint === false || $siteVerpoint === false) {
 			return false;
 		} else {
 			return ($baserVerpoint > $siteVerpoint);
@@ -1155,40 +1186,38 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * アップデート用のメッセージを出力する
- * 
- * @return void
- * @todo 別のヘルパに移動する
- */
-	public function updateMessage() {
-		$adminPrefix = Configure::read('Routing.prefixes.0');
-		if ($this->checkUpdate() && $this->request->params['controller'] != 'updaters') {
-			$updateLink = $this->BcHtml->link('ここ', "/{$adminPrefix}/updaters");
-			echo '<div id="UpdateMessage">WEBサイトのアップデートが完了していません。' . $updateLink . ' からアップデートを完了させてください。</div>';
-		}
-	}
-
-/**
- * コンテンツを特定するIDを出力する
+ * コンテンツを特定する文字列を出力する
  *
- * @param boolean $detail オプションのパラメータ、初期値は false 
- * @param array $options オプションのパラメータ、初期値は array()
+ * URL を元に、第一階層までの文字列をキャメルケースで取得する
+ * ※ 利用例、出力例については BcBaserHelper::getContentsName() を参照
+ * 
+ * @param boolean $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで出力する（初期値 : false）
+ * @param array $options オプション（初期値 : array()）
+ *	※ オプションの詳細については、BcBaserHelper::getContentsName() を参照
  * @return void
  */
 	public function contentsName($detail = false, $options = array()) {
-
 		echo $this->getContentsName($detail, $options);
 	}
-
+	
 /**
- * コンテンツを特定するIDを取得する
- * ・キャメルケースで取得
- * ・URLのコントローラー名までを取得
- * ・ページの場合は、カテゴリ名（カテゴリがない場合は Default）
- * ・トップページは、Home
- *
- * @param boolean $detail オプションのパラメータ、初期値は false
- * @param array $options オプションのパラメータ、初期値は array()
+ * コンテンツを特定する文字列を取得する
+ * 
+ * URL を元に、第一階層までの文字列をキャメルケースで取得する
+ * 
+ * 《利用例》
+ * $this->BcBaser->contentsName()
+ * 
+ * 《出力例》
+ * - トップページの場合 : Home
+ * - about ページの場合 : About
+ * 
+ * @param boolean $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで取得する（初期値 : false）
+ * @param array $options オプション（初期値 : array()）
+ *	- `home` : トップページの場合に出力する文字列（初期値 : Home）
+ *	- `default` : ルート直下の下層ページの場合に出力する文字列（初期値 : Default）
+ *	- `error` : エラーページの場合に出力する文字列（初期値 : Error）
+ *  - `underscore` : キャメルケースではなく、アンダースコア区切りで出力する（初期値 : false）
  * @return string 
  */
 	public function getContentsName($detail = false, $options = array()) {
@@ -1325,8 +1354,9 @@ class BcBaserHelper extends AppHelper {
  * 事前に BcBaserHelper::addCrumb() にて、パンくず情報を追加しておく必要がある。
  * また、アクセス制限がかかっているリンクはテキストのみ表示する
  *
- * @param string $separator パンくずの区切り文字
- * @param string $startText トップページを先頭に追加する場合にはトップページのテキストを指定する
+ * @param string $separator パンくずの区切り文字（初期値 : &raquo;）
+ * @param string $startText トップページを先頭に追加する場合にはトップページのテキストを指定する（初期値 : false）
+ * @return void
  */
 	public function crumbs($separator = '&raquo;', $startText = false) {
 
@@ -1354,8 +1384,9 @@ class BcBaserHelper extends AppHelper {
  * $options の forceTitle キー に false を指定する事で表示しない設定も可能
  *
  * @param string $name パンくず用のテキスト
- * @param string $link パンくず用のリンク（指定しない場合はリンクは設定しない）
- * @param mixed $options リンクタグ用の属性
+ * @param string $link パンくず用のリンク（初期値 : null）※ 指定しない場合はリンクは設定しない
+ * @param mixed $options リンクタグ用の属性（初期値 : array()）
+ * ※ パラメータについては、HtmlHelper::link() を参照。
  * @return void
  */
 	public function addCrumb($name, $link = null, $options = array()) {
@@ -1368,10 +1399,14 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * ページ機能で作成したページの一覧データを取得する
+ * 固定ページ機能で作成したページの一覧データを取得する
  *
- * @param string $categoryId オプションのパラメータ、初期値は null
- * @return mixed boolean / array
+ * @param string $categoryId 固定ページカテゴリID（初期値 : null）※ 指定しない場合は全ページを取得
+ * @param array オプション（初期値 : array()）
+ *	- `conditions` : 検索条件（初期値 : array('Page.status' => 1)）
+ *	- `fields` : 取得フィールド（初期値 : array('title', 'url')）
+ *	- `order` : 並び順（初期値 : array('Page.sort')）
+ * @return mixed ページ一覧、または、false
  */
 	public function getPageList($categoryId = null, $options = array()) {
 		if ($this->_Page) {
@@ -1402,14 +1437,10 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- *
- */
-
-/**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
- * @param numeric $expire キャッシュの有効時間
- * @param string $type どのタイプ(拡張子)に対してのキャッシュか オプションのパラメータ、初期値は 'html'
+ * @param numeric $expire キャッシュの有効期間（初期値 : null） ※ 指定しない場合は、baserCMSコアのキャッシュ設定値
+ * @param string $type どのタイプ(拡張子)に対してのキャッシュか（初期値 : 'html'）
  * @return void
  */
 	public function cacheHeader($expire = null, $type = 'html') {
@@ -1439,11 +1470,17 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * httpから始まるURLを取得する
+ * プロトコルから始まるURLを取得する
  *
- * @param mixed $url
- * @param boolean $sessionId オプションのパラメータ、初期値は true 
- * @return string
+ * 《利用例》
+ * $this->BcBaser->getUri('/about')
+ * 
+ * 《出力例》
+ * http://localhost/about
+ * 
+ * @param mixed $url 文字列のURL、または、配列形式のURL
+ * @param boolean $sessionId セッションIDを付加するかどうか（初期値 : true）
+ * @return string プロトコルから始まるURL
  */
 	public function getUri($url, $sessionId = true) {
 		if (is_string($url) && preg_match('/^http/is', $url)) {
@@ -1459,17 +1496,21 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * プラグインのBaserヘルパを初期化する
+ * PluginBaserHelper を初期化する
  * 
- * BaserHelperに定義されていないメソッドをプラグイン内のヘルパに定義する事で
- * BaserHelperから呼び出せるようになる仕組みを提供する。
- * コアからプラグインのヘルパメソッドをBaserHelper経由で直接呼び出せる為、
+ * BcBaserHelperに定義されていないメソッドをプラグイン内のヘルパに定義する事で
+ * BcBaserHelperから呼び出せるようになる仕組みを提供する。
+ * プラグインのヘルパメソッドを BcBaserHelper 経由で直接呼び出せる為、
  * コア側のコントローラーでいちいちヘルパの定義をしなくてよくなり、
- * プラグインを導入しただけでテンプレート上でプラグインのメソッドが呼び出せるようになる。
- * 例えばページ機能のWISIWIG内でプラグインのメソッドを書き込む事ができる。
+ * プラグインを導入するだけでテンプレート上でプラグインのメソッドが呼び出せるようになる。
+ * 例えば固定ページ機能のWISIWIG内にプラグインのメソッドを書き込む事ができる。
  *
- * プラグインのBaserヘルパの命名規則：{プラグイン名}BaserHelper
- * （呼びだし方）$this->BcBaser->feed(1);
+ * 《PluginBaserHelper の命名規則》
+ * {プラグイン名}BaserHelper
+ * 
+ * 《利用例》
+ * - Feedプラグインに FeedBaserHelper::feed() が定義されている場合
+ *		$this->BcBaser->feed(1);
  *
  * @return void
  */
@@ -1504,16 +1545,16 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * プラグインBaserヘルパ用マジックメソッド
- * Baserヘルパに存在しないメソッドが呼ばれた際プラグインのBaserヘルパを呼び出す
- * call__ から __call へメソット名を変更、Helper.php の __call をオーバーライト
+ * PluginBaserHelper 用マジックメソッド
+ * 
+ * BcBaserHelper に存在しないメソッドが呼ばれた際、プラグインで定義された PluginBaserHelper のメソッドを呼び出す
+ * call__ から __call へメソット名を変更、Helper の __call をオーバーライド
  *
- * @param string $method
- * @param array $params
- * @return mixed
+ * @param string $method メソッド名
+ * @param array $params 引数
+ * @return mixed PluginBaserHelper の戻り値
  */
 	public function __call($method, $params) {
-
 		foreach ($this->_pluginBasers as $pluginBaser) {
 			if (method_exists($pluginBaser, $method)) {
 				return call_user_func_array(array($pluginBaser, $method), $params);
@@ -1524,15 +1565,21 @@ class BcBaserHelper extends AppHelper {
 /**
  * 文字列を検索しマークとしてタグをつける
  *
+ * 《利用例》
+ * $this->BcBaser->mark('強調', '強調します強調します強調します')
+ * 
+ * 《取得例》
+ * <strong>強調</strong>します<strong>強調</strong>します<strong>強調</strong>します
+ * 
  * @param string $search 検索文字列
  * @param string $text 検索対象文字列
- * @param string $name マーク用タグ
- * @param array $attributes タグの属性
- * @param boolean $escape エスケープ有無
+ * @param string $name マーク用タグ（初期値 : strong）
+ * @param array $attributes タグの属性（初期値 : array()）
+ * @param boolean $escape エスケープ有無（初期値 : false）
  * @return string $text 変換後文字列
+ * @todo TextHelperに移行を検討
  */
 	public function mark($search, $text, $name = 'strong', $attributes = array(), $escape = false) {
-
 		if (!is_array($search)) {
 			$search = array($search);
 		}
@@ -1544,13 +1591,17 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * サイトマップを出力する
+ * 
+ * ログインしていない場合はキャッシュする
+ * sitemap エレメントで、HTMLカスタマイズ可能
  *
- * @param mixid $pageCategoryId / '' / 0
- * @param string $recursive
- * @return void
+ * @param mixid $pageCategoryId 固定ページカテゴリID（初期値 : null）
+ *	- 0 : 仕様確認要
+ *	- null : 仕様確認要
+ * @param string $recursive 取得する階層
+ * @return void ページ一覧
  */
 	public function sitemap($pageCategoryId = null, $recursive = null) {
-
 		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 		$params = array('pageList' => $pageList);
 		if (empty($_SESSION['Auth']['User'])) {
@@ -1560,22 +1611,23 @@ class BcBaserHelper extends AppHelper {
 					'key' => $pageCategoryId))
 			);
 		}
-
 		$this->element('sitemap', $params);
 	}
 
 /**
  * Flashを表示する
  *
- * @param string $path
- * @param string $id
- * @param int $width
- * @param int $height
- * @param array $options オプションのパラメータ、初期値は array()
- * @return string
+ * @param string $path Flashのパス
+ * @param string $id 任意のID（divにも埋め込まれる）
+ * @param int $width 横幅
+ * @param int $height 高さ
+ * @param array $options オプション（初期値 : array()）
+ *	- `version` : Flashのバージョン（初期値 : 7）
+ *	- `script` : Flashを読み込むJavascriptのパス（初期値 : admin/swfobject-2.2）
+ *	- `noflash` : Flashがインストールされてない場合に表示する文字列
+ * @return string Flash表示タグ
  */
 	public function swf($path, $id, $width, $height, $options = array()) {
-
 		$options = array_merge(array(
 			'version' => 7,
 			'script' => 'admin/swfobject-2.2',
@@ -1607,14 +1659,14 @@ END_FLASH;
 	}
 
 /**
- * URLをリンクとして利用可能なURLに変換する
+ * スマートフォンURLをリンクとして利用可能なURLに変換する
  * 
  * ページの確認用URL取得に利用する
  * /smartphone/about → /s/about
  *
- * @param string $url
- * @param string $type mobile / smartphone
- * @return string URL
+ * @param string $url 元となるURL
+ * @param string $type mobile、または、smartphone
+ * @return string 変換後のURL
  */
 	public function changePrefixToAlias($url, $type) {
 		$alias = Configure::read("BcAgent.{$type}.alias");
@@ -1623,15 +1675,16 @@ END_FLASH;
 	}
 
 /**
- * 現在のログインユーザーが管理者グループかどうかチェックする
+ * 管理者グループかどうかチェックする
  *
- * @return boolean
+ * @param int $userGroupId ユーザーグループID（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
+ * @return boolean 管理者グループの場合は true を返す
  */
-	public function isAdminUser($id = null) {
-		if (!$id && !empty($this->_View->viewVars['user']['user_group_id'])) {
-			$id = $this->_View->viewVars['user']['user_group_id'];
+	public function isAdminUser($userGroupId = null) {
+		if (!$userGroupId) {
+			return BcUtil::isAdminUser();
 		}
-		if ($id == 1) {
+		if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		} else {
 			return false;
@@ -1641,7 +1694,7 @@ END_FLASH;
 /**
  * 現在のページが固定ページかどうかを判定する
  *
- * @return boolean
+ * @return boolean 固定ページの場合は true を返す
  */
 	public function isPage() {
 		return $this->_Page->isPageUrl($this->getHere());
@@ -1650,9 +1703,9 @@ END_FLASH;
 /**
  * 現在のページの純粋なURLを取得する
  * 
- * スマートURLかどうか、サブフォルダかどうかに依存しないスラッシュから始まるURL
+ * スマートURL、サブフォルダかどうかに依存しない、スラッシュから始まるURLを取得
  *
- * @return string
+ * @return string URL
  */
 	public function getHere() {
 		return '/' . preg_replace('/^\//', '', $this->request->url);
@@ -1661,8 +1714,7 @@ END_FLASH;
 /**
  * 現在のページがページカテゴリのトップかどうかを判定する
  *
- * @return boolean
- * @manual
+ * @return boolean カテゴリトップの場合は、 true を返す
  */
 	public function isCategoryTop() {
 
@@ -1681,12 +1733,16 @@ END_FLASH;
 	}
 
 /**
- * ページをエレメントとして読み込む
+ * 固定ページをエレメントとして読み込む
  *
- * ※ レイアウトは読み込まない
- * @param string $url
- * @param array $params オプションのパラメータ、初期値は array()
- * @param array $options オプションのパラメータ、初期値は array()
+ * ※ レイアウトは読み込まずコンテンツ本体のみを読み込む
+ * 
+ * @param string $url 固定ページのURL
+ * @param array $params 固定ページに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	- `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
+ *	- `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
+ *	- `recursive` : 固定ページ読み込みを再帰的に読み込むかどうか（初期値 : true）
  * @return void
  */
 	public function page($url, $params = array(), $options = array()) {
@@ -1699,7 +1755,7 @@ END_FLASH;
 			'loadHelpers' => false,
 			'subDir' => true,
 			'recursive' => true
-			), $options);
+		), $options);
 
 		extract($options);
 
@@ -1734,15 +1790,17 @@ END_FLASH;
 /**
  * ウィジェットエリアを出力する
  * 
- * @param int $no
- * @param array $options
+ * @param int $no ウィジェットエリアNO（初期値 : null）※ 省略した場合は、コンテンツごとに管理システムにて設定されているウィジェットエリアを出力する
+ * @param array $options オプション（初期値 : array()）
+ *	- `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
+ *	- `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
+ * @return void
  */
 	public function widgetArea($no = null, $options = array()) {
-
 		$options = array_merge(array(
-			'loadHelpers' => false,
-			'subDir' => true,
-			), $options);
+			'loadHelpers'	=> false,
+			'subDir'		=> true,
+		), $options);
 
 		extract($options);
 
@@ -1762,8 +1820,8 @@ END_FLASH;
  * /news | /news/ ・・・×
  * /news/ | /news/index ・・・○
  * 
- * @param string $url 対象URL
- * @return boolean 
+ * @param string $url 比較対象URL
+ * @return boolean 同じ場合には true を返す
  */
 	public function isCurrentUrl($url) {
 		$pattern = '/\/$/';
@@ -1773,10 +1831,13 @@ END_FLASH;
 	}
 
 /**
- * ユーザー名を整形して表示する
+ * ユーザー名を整形して取得する
  * 
- * @param array $user
- * @return string $userName
+ * 姓と名を結合して取得
+ * ニックネームがある場合にはニックネームを優先する
+ * 
+ * @param array $user ユーザーデータ
+ * @return string $userName ユーザー名
  */
 	public function getUserName($user) {
 		if (isset($user['User'])) {
@@ -1799,14 +1860,24 @@ END_FLASH;
 	}
 
 /**
- * コアテンプレートを読み込む
+ * baserCMSのコアテンプレートを読み込む
  * 
- * @param string $name
- * @param array $data オプションのパラメータ、初期値は array()
- * @param array $options オプションのパラメータ、初期値は array()
+ * コントローラー名より指定が必要
+ * 
+ * 《利用例》
+ * $this->BcBaser->includeCore('Users/admin/form')
+ * $this->BcBaser->includeCore('Mail.MailFields/admin/form')
+ * 
+ * @param string $name テンプレート名
+ * @param array $params 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	- `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
+ *	※ その他のパラメータについては、View::element() を参照
  */
 	public function includeCore($name, $data = array(), $options = array()) {
-
+		$options = array_merge($options, array(
+			'subDir' => false
+		));
 		$plugin = '';
 		if (strpos($name, '.') !== false) {
 			list($plugin, $name) = explode('.', $name);
@@ -1816,17 +1887,15 @@ END_FLASH;
 			$name = '../../../lib/Baser/View/' . $name;
 		}
 
-		$options = array_merge($options, array('subDir' => false));
+
 		$this->element($name, $data, $options);
 	}
 
 /**
  * ロゴを出力する
  * 
- * 《options》
- * _getThemeImage() を参照
- * 
- * @param array $options オプションのパラメータ、初期値は array()
+ * @param array $options オプション（初期値 : array()）
+ *	※ パラメーターは、 BcBaserHelper->_getThemeImage() を参照
  * @return void
  */
 	public function logo($options = array()) {
@@ -1836,12 +1905,13 @@ END_FLASH;
 /**
  * メインイメージを出力する
  * 
- * 《options》
- * - `all`: 全ての画像を出力する。
- * - `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
- * - `id` : all を true とした場合、UL タグの id 属性を指定できる。
+ * メインイメージは管理画面のテーマ設定にて指定
  * 
  * @param array $options
+ *	- `all`: 全ての画像を出力する。
+ *	- `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
+ *	- `id` : all を true とした場合、UL タグの id 属性を指定できる。
+ *	※ その他の、パラメーターは、 BcBaserHelper->_getThemeImage() を参照
  * @return void
  */
 	public function mainImage($options = array()) {
@@ -1873,20 +1943,21 @@ END_FLASH;
 /**
  * テーマ画像を取得する
  * 
- * 《options》
- * - `thumb`: サムネイルを取得する
- * - `class`: 画像に設定する class 属性
- * - `popup`: ポップアップリンクを指定
- * - `alt`	: 画像に設定する alt 属性。リンクの title 属性にも設定される。
- * - `link`	: リンク先URL。popup を true とした場合、オリジナルの画像へのリンクとなる。
- * - `maxWidth : 最大横幅
- * - `maxHeight: 最大高さ
- * 
- * @param string $name
- * @param array $options オプションのパラメータ、初期値は array()
- * @return string $tag
+ * @param string $name テーマ画像名（ log or main_image ）
+ * @param array $options オプション（初期値 :array()）
+ *	- `num` : main_imageの場合の番号指定（初期値 : ''）
+ *	- `thumb`: サムネイルを取得する（初期値 : false）
+ *	- `class`: 画像に設定する class 属性（初期値 : ''）
+ *	- `popup`: ポップアップリンクを指定（初期値 : false）
+ *	- `alt`	: 画像に設定する alt 属性。リンクの title 属性にも設定される。（初期値 : テーマ設定で設定された値）
+ *	- `link`	: リンク先URL。popup を true とした場合、オリジナルの画像へのリンクとなる。（初期値 : テーマ設定で設定された値）
+ *	- `maxWidth : 最大横幅（初期値 : ''）
+ *	- `maxHeight: 最大高さ（初期値 : ''）
+ *	- `width : 最大横幅（初期値 : ''）
+ *	- `height: 最大高さ（初期値 : ''）
+ * @return string $tag テーマ画像のHTMLタグ
  */
-	public function _getThemeImage($name, $options = array()) {
+	protected function _getThemeImage($name, $options = array()) {
 
 		$ThemeConfig = ClassRegistry::init('ThemeConfig');
 		$data = $ThemeConfig->findExpanded();
@@ -2001,16 +2072,16 @@ END_FLASH;
 	}
 	
 /**
- * テーマのURLを取得する
+ * 現在のテーマのURLを取得する
  * 
- * @return string
+ * @return string テーマのURL
  */
 	public function getThemeUrl() {
 		return $this->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
 	}
 	
 /**
- * テーマのURLを出力する
+ * 現在のテーマのURLを出力する
  * 
  * @return void
  */
@@ -2023,7 +2094,7 @@ END_FLASH;
  * 
  * サブフォルダやスマートURLについて考慮されている事が前提
  * 
- * @return string
+ * @return string ベースURL
  */
 	public function getBaseUrl() {
 		return $this->base . '/';
@@ -2043,6 +2114,9 @@ END_FLASH;
 /**
  * サブメニューを出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function subMenu($data = array(), $options = array()) {
@@ -2055,6 +2129,9 @@ END_FLASH;
 /**
  * コンテンツナビを出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function contentsNavi($data = array(), $options = array()) {
@@ -2067,6 +2144,9 @@ END_FLASH;
 /**
  * パンくずリストを出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function crumbsList($data = array(), $options = array()) {
@@ -2076,6 +2156,9 @@ END_FLASH;
 /**
  * グローバルメニューを出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function globalMenu($data = array(), $options = array()) {
@@ -2085,6 +2168,9 @@ END_FLASH;
 /**
  * Google Analytics のトラッキングコードを出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function googleAnalytics($data = array(), $options = array()) {
@@ -2094,6 +2180,9 @@ END_FLASH;
 /**
  * Google Maps を出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function googleMaps($data = array(), $options = array()) {
@@ -2103,6 +2192,9 @@ END_FLASH;
 /**
  * 表示件数設定機能を出力する
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function listNum($data = array(), $options = array()) {
@@ -2112,6 +2204,9 @@ END_FLASH;
 /**
  * サイト内検索フォームを出力
  * 
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function siteSearchForm($data = array(), $options = array()) {
