@@ -981,22 +981,28 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * コピーライト用の年を出力する
+ *
+ * @dataProvider copyYearDataProvider
  */
-	public function testCopyYear() {
-		// 正常系
-		$expected = '2000 - 2014';
+	public function testCopyYear($begin, $expected) {
 		ob_start();
-		$this->BcBaser->copyYear(2000);
+		$this->BcBaser->copyYear($begin);
 		$result = ob_get_clean();
-		$this->assertEqual($result, $expected);
-		// 異常系
-		$expected = '2014';
-		ob_start();
-		$this->BcBaser->copyYear('はーい');
-		$result = ob_get_clean();
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($result, $expected);
 	}
-	
+
+/**
+ * copyYear用データプロバイダ
+ *
+ * @return array
+ */
+	public function copyYearDataProvider() {
+		return array(
+			array(2000, '2000 - 2015'),
+			array(2015, '2015'),
+			array('はーい', '2015')
+		);
+	}
 /**
  * 編集画面へのリンクを出力する
  * 
