@@ -109,7 +109,7 @@ class BcUploadHelper extends BcAppHelper {
 			} else {
 				if (isset($value['session_key'])) {
 					$tmp = true;
-					$value = str_replace('/', '_', $value['session_key']);;
+					$value = str_replace('/', '_', $value['session_key']);
 					$basePath = '/uploads/tmp/';
 				} else {
 					return false;
