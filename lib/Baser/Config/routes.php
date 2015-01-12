@@ -192,10 +192,7 @@ if (BC_INSTALLED || isConsole()) {
 		// 携帯ノーマル
 		Router::connect("/{$agentAlias}/:controller/:action/*", array('prefix' => $agentPrefix));
 	}
-/**
- * ユニットテスト
- */
-	Router::connect('/tests', array('controller' => 'tests', 'action' => 'index'));
+
 /**
  * フィード出力
  * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
