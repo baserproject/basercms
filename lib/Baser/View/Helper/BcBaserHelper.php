@@ -996,14 +996,14 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// ページ公開チェック
-        if (isset($this->_Page) && empty($this->request->params['admin'])) {
-            $adminPrefix = Configure::read('Routing.prefixes.0');
-            if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
-                if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
-                    $enabled = false;
-                }
-            }
-        }
+		if (isset($this->_Page) && empty($this->request->params['admin'])) {
+			$adminPrefix = Configure::read('Routing.prefixes.0');
+			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
+				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
+				$enabled = false;
+				}
+			}
+		}
 		
 
 		if (!$enabled) {
