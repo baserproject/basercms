@@ -50,7 +50,7 @@ class UploadsController extends AppController {
 		} else {
 			$name = $args[0];
 		}
-		$sessioName = str_replace(array('.', '/'), array('_', '_'), $name);;
+		$sessioName = str_replace(array('.', '/'), array('_', '_'), $name);
 		$sessionData = $this->Session->read('Upload.' . $sessioName);
 
 		Configure::write('debug', 0);
