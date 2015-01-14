@@ -984,13 +984,14 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testCopyYear() {
 		// 正常系
-		$expected = '2000 - 2014';
+		$year = date('Y');
+		$expected = '2000 - ' . $year;
 		ob_start();
 		$this->BcBaser->copyYear(2000);
 		$result = ob_get_clean();
 		$this->assertEqual($result, $expected);
 		// 異常系
-		$expected = '2014';
+		$expected = $year;
 		ob_start();
 		$this->BcBaser->copyYear('はーい');
 		$result = ob_get_clean();
