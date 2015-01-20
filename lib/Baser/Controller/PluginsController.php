@@ -92,7 +92,7 @@ class PluginsController extends AppController {
 				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $name);
 				exec('unzip -o ' . TMP . $name . ' -d ' . APP.'Plugin'.DS, $return);
 				if (!empty($return[2])) {
-					$plugin = str_replace('  inflating: ' . BASER_PLUGINS, '', $return[2]);
+					$plugin = preg_replace('/^\s*?inflating:\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
 					$plugin = explode(DS, $plugin);
 					$plugin = $plugin[0];
 					$pluginPath = BASER_THEMES . $plugin;
