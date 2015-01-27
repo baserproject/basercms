@@ -124,4 +124,13 @@ require CORE_PATH.'Baser'.DS.'Config'.DS.'bootstrap.php';
  * app の設定ファイルを読み込む
  */
 Configure::load('setting');
+
+// <<<
+
+// CUSTOMIZE ADD 2015/01/27 MASA-P
+// >>>
+/**
+ * composerを使うためのautoloadを読み込む
+ */
+App::import('Vendor', 'autoload');
 // <<<
