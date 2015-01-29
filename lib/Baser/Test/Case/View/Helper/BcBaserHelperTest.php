@@ -30,13 +30,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Menu.Menu',
 		'baser.Page.Page',
-		'baser.Content.Content',
-		'baser.SiteConfig.SiteConfig',
+		'baser.default.Content',
+		'baser.default.SiteConfig',
 		'baser.User.User',
 		'baser.UserGroup.UserGroup',
 		'baser.Favorite.Favorite',
-		'baser.Permission.Permission',
-		'baser.PageCategory.PageCategory'
+		'baser.default.Permission',
+		'baser.default.PageCategory'
 	);
 	
 /**
@@ -695,11 +695,14 @@ class BcBaserHelperTest extends BaserTestCase {
  * ツールバーエレメントや CakePHP のデバッグ出力を表示
  */
 	public function testFunc() {
+		Configure::write('debug', 0);
+
 		// 未ログイン
 		ob_start();
 		$this->BcBaser->func();
 		$result = ob_get_clean();
 		$this->assertEqual($result, '');
+
 		// ログイン中
 		$expects = '<div id="ToolBar">';
 		$this->_login();
@@ -710,6 +713,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = ob_get_clean();
 		$this->assertTextContains($expects, $result);
 		$this->_logout();
+
 		// デバッグモード２
 		$expects = '<table class="cake-sql-log"';
 		$debug = Configure::read('debug');
