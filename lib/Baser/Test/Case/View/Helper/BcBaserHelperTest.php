@@ -30,13 +30,14 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Menu.Menu',
 		'baser.Page.Page',
-		'baser.Content.Content',
-		'baser.SiteConfig.SiteConfig',
+		'baser.default.Content',
+		'baser.default.SiteConfig',
 		'baser.User.User',
 		'baser.UserGroup.UserGroup',
 		'baser.Favorite.Favorite',
-		'baser.Permission.Permission',
-		'baser.PageCategory.PageCategory'
+		'baser.default.Permission',
+		'baser.default.PageCategory',
+		'baser.default.ThemeConfig',
 	);
 	
 /**
@@ -54,9 +55,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_View = new BcAppView();
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
-		$this->BcBaser = new BcBaserHelper($this->_View);
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
+		$this->BcBaser = new BcBaserHelper($this->_View);
+		$this->BcBaser = $this->_View->BcBaser;
 	}
 	
 /**
@@ -105,11 +107,12 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルを設定する
  */
 	public function testSetTitle() {
-		
+		$topTitle = '｜baserCMS inc. [デモ]';
+
 		// カテゴリがない場合
 		$this->BcBaser->setTitle('会社案内');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社案内');
+		$this->assertEqual($result, '会社案内' . $topTitle);
 		
 		// カテゴリがある場合
 		$this->BcBaser->_View->set('crumbs', array(
@@ -118,12 +121,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		));
 		$this->BcBaser->setTitle('会社沿革');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内' . $topTitle);
 		
 		// カテゴリは存在するが、カテゴリの表示をオフにした場合
 		$this->BcBaser->setTitle('会社沿革', false);
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革');
+		$this->assertEqual($result, '会社沿革' . $topTitle);
 		
 	}
 	
@@ -158,7 +161,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルへのカテゴリタイトルの出力有無を設定する
  */
 	public function testSetCategoryTitle() {
-		
+		$topTitle = '｜baserCMS inc. [デモ]';
+
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
 			array('name' => '会社データ', 'url' => '/company/data')
@@ -168,17 +172,17 @@ class BcBaserHelperTest extends BaserTestCase {
 		// カテゴリをオフにした場合
 		$this->BcBaser->setCategoryTitle(false);
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革');
+		$this->assertEqual($result, '会社沿革' . $topTitle);
 		
 		// カテゴリをオンにした場合
 		$this->BcBaser->setCategoryTitle(true);
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内' . $topTitle);
 		
 		// カテゴリを指定した場合
 		$this->BcBaser->setCategoryTitle('店舗案内');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜店舗案内');
+		$this->assertEqual($result, '会社沿革｜店舗案内' . $topTitle);
 		
 		// パンくず用にリンクも指定した場合
 		$this->BcBaser->setCategoryTitle(array(
@@ -205,13 +209,15 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testGetKeywords() {
 		
 		// 設定なし
+		$expect = 'baser,CMS,コンテンツマネジメントシステム,開発支援';
 		$result = $this->BcBaser->getKeywords();
-		$this->assertEmpty($result);
+		$this->assertEqual($result, $expect);
 		
 		// 設定あり
-		$this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
+		$expect = 'baserCMS,国産,オープンソース';
+		$this->BcBaser->setKeywords($expect);
 		$result = $this->BcBaser->getKeywords();
-		$this->assertEqual($result, 'baserCMS,国産,オープンソース');
+		$this->assertEqual($result, $expect);
 		
 	}
 	
@@ -235,7 +241,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルタグを取得する
  */
 	public function testGetTitle() {
-		
+		$topTitle = 'baserCMS inc. [デモ]';
+
 		// 通常
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
@@ -243,21 +250,20 @@ class BcBaserHelperTest extends BaserTestCase {
 		));
 		$this->BcBaser->setTitle('会社沿革');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内｜' . $topTitle);
 		
 		// 区切り文字を ≫ に変更
 		$result = $this->BcBaser->getTitle('≫');
-		$this->assertEqual($result, '会社沿革≫会社データ≫会社案内');
+		$this->assertEqual($result, '会社沿革≫会社データ≫会社案内≫' . $topTitle);
 		
 		// カテゴリタイトルを除外
 		$result = $this->BcBaser->getTitle('｜', false);
-		$this->assertEqual($result, '会社沿革');
+		$this->assertEqual($result, '会社沿革｜' . $topTitle);
 		
 		// カテゴリが対象ページと同じ場合に省略する
 		$this->BcBaser->setTitle('会社データ');
 		$result = $this->BcBaser->getTitle('｜', true);
-		$this->assertEqual($result, '会社データ｜会社案内');
-				
+		$this->assertEqual($result, '会社データ｜会社案内｜' . $topTitle);
 	}
 	
 /**
@@ -321,11 +327,14 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルタグを出力する
  */
 	public function testTitle() {
-		$this->BcBaser->setTitle('会社データ');
+		$topTitle = 'baserCMS inc. [デモ]';
+		$title = '会社データ';
+
+		$this->BcBaser->setTitle($title);
 		ob_start();
 		$this->BcBaser->title();
 		$result = ob_get_clean();
-		$this->assertEqual($result, "<title>会社データ</title>\n");
+		$this->assertEqual($result, "<title>". $title . '｜' . $topTitle . "</title>\n");
 	}
 	
 /**
@@ -695,11 +704,14 @@ class BcBaserHelperTest extends BaserTestCase {
  * ツールバーエレメントや CakePHP のデバッグ出力を表示
  */
 	public function testFunc() {
+		Configure::write('debug', 0);
+
 		// 未ログイン
 		ob_start();
 		$this->BcBaser->func();
 		$result = ob_get_clean();
 		$this->assertEqual($result, '');
+
 		// ログイン中
 		$expects = '<div id="ToolBar">';
 		$this->_login();
@@ -710,6 +722,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = ob_get_clean();
 		$this->assertTextContains($expects, $result);
 		$this->_logout();
+
 		// デバッグモード２
 		$expects = '<table class="cake-sql-log"';
 		$debug = Configure::read('debug');
