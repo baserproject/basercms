@@ -1468,7 +1468,45 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testMainImage() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-	
+
+/**
+ * メインイメージの取得でidやclassを指定するオプション
+ */
+	public function testMainImageIdClass()
+	{
+		$num = 2;
+		$idName = 'testIdName';
+		$className = 'testClassName';
+
+		//getMainImageを叩いてULを入手(default)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul id="MainImage">|', $tags) === 1;
+		$this->assertTrue($check);
+
+
+		//getMainImageを叩いてULを入手(id指定)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => $idName));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul id="' . $idName . '">|', $tags) === 1;
+		$this->assertTrue($check);
+
+		//getMainImageを叩いてULを入手(class指定・id非表示)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => false, 'class' => $className));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul class="' . $className . '">|', $tags) === 1;
+		$this->assertTrue($check);
+		//getMainImageを叩いてULを入手(全てなし)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => false, 'class' => false));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul>|', $tags) === 1;
+		$this->assertTrue($check);
+	}
+
 /**
  * テーマのURLを取得する
  */

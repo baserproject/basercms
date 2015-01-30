@@ -1899,6 +1899,7 @@ END_FLASH;
  *	- `all`: 全ての画像を出力する。
  *	- `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
  *	- `id` : all を true とした場合、UL タグの id 属性を指定できる。
+ *	- `class` : all を true とした場合、UL タグの class 属性を指定できる。
  *	※ その他の、パラメーターは、 BcBaserHelper->_getThemeImage() を参照
  * @return void
  */
@@ -1907,13 +1908,16 @@ END_FLASH;
 		$options = array_merge(array(
 			'num' => 1,
 			'all' => false,
-			'id' => 'MainImage'
+			'id' => 'MainImage',
+			'class' => false
 			), $options);
 		if ($options['all']) {
 			$id = $options['id'];
+			$class = $options['class'];
 			$num = $options['num'];
 			unset($options['all']);
 			unset($options['id']);
+			unset($options['class']);
 			$tag = '';
 			for ($i = 1; $i <= $num; $i++) {
 				$options['num'] = $i;
@@ -1922,7 +1926,14 @@ END_FLASH;
 					$tag .= '<li>' . $themeImage . '</li>' . "\n";
 				}
 			}
-			echo '<ul id="' . $id . '">' . "\n" . $tag . "\n" . '</ul>';
+			$ulAttr = '';
+			if ($id !== false) {
+				$ulAttr .= ' id="' . $id . '"';
+			}
+			if ($class !== false) {
+				$ulAttr .= ' class="' . $class . '"';
+			}
+			echo '<ul' . $ulAttr. '>' . "\n" . $tag . "\n" . '</ul>';
 		} else {
 			echo $this->_getThemeImage('main_image', $options);
 		}
@@ -2058,7 +2069,8 @@ END_FLASH;
 		}
 		return $tag;
 	}
-	
+
+
 /**
  * 現在のテーマのURLを取得する
  * 
