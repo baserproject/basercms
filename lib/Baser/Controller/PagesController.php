@@ -847,6 +847,9 @@ class PagesController extends AppController {
 		$this->theme = $this->siteConfigs['theme'];
 		if(!empty($page['Page']['page_category_id'])) {
 			$this->layout = $this->Page->PageCategory->field('layout_template', array('PageCategory.id' => $page['Page']['page_category_id']));
+			if (!$this->layout) {
+				$this->layout = $this->siteConfigs['root_layout_template'];
+			}
 		}
 		$this->render(TMP . 'pages_preview_' . $id . $this->ext);
 		@unlink(TMP . 'pages_preview_' . $id . $this->ext);
