@@ -177,8 +177,16 @@ class BlogContent extends BlogAppModel {
 		// 検索用テーブルへの登録・削除
 		if (!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status']) {
 			$this->saveContent($this->createContent($this->data));
+			clearDataCache();
+			$datas = $this->BlogPost->find('all', array(
+				'conditions' => array('BlogPost.blog_content_id' => $this->data['BlogContent']['id']),
+				'recursive' => -1
+			));
+			foreach($datas as $data) {
+				$this->BlogPost->set($data);
+				$this->BlogPost->afterSave(true);
+			}
 		} else {
-
 			$this->deleteContent($this->data['BlogContent']['id']);
 		}
 	}
