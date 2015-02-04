@@ -474,14 +474,20 @@ class BcBaserHelper extends AppHelper {
  * @param array $data エレメントで参照するデータ
  * @param array $options オプションのパラメータ
  *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ *  `ext` (string) 読み込むエレメントファイルの拡張子を初期設定(基本は.php)以外の任意のものに変更する
  * ※ その他のパラメータについては、View::element() を参照
  * @return string エレメントのレンダリング結果
  */
 	public function getElement($name, $data = array(), $options = array()) {
 
+		$currentExt = Configure::read('BcApp.templateExt');
+
 		$options = array_merge(array(
-			'subDir' => true
+			'subDir' => true,
+			'ext' => $currentExt
 		), $options);
+
+		Configure::write('BcApp.templateExt', $options['ext']);
 
 		if (isset($options['plugin']) && !$options['plugin']) {
 			unset($options['plugin']);
@@ -538,6 +544,8 @@ class BcBaserHelper extends AppHelper {
 			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
 		}
 
+		Configure::write('BcApp.templateExt', $currentExt);
+
 		return $out;
 	}
 
@@ -548,12 +556,14 @@ class BcBaserHelper extends AppHelper {
  * @param array $data エレメントで参照するデータ
  * @param array $options オプションのパラメータ
  *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
+ *  `ext` (string) 読み込むエレメントファイルの拡張子を初期設定(基本は.php)以外の任意のものに変更する
  * ※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function element($name, $data = array(), $options = array()) {
 		$options = array_merge(array(
-			'subDir' => true
+			'subDir' => true,
+			'ext' => $currentExt
 		), $options);
 		echo $this->getElement($name, $data, $options);
 	}
