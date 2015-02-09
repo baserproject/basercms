@@ -504,7 +504,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		
 		// フルURL
 		$result = $this->BcBaser->getUrl('/about', true);
-		$this->assertEqual($result, 'http://' . $_SERVER["HTTP_HOST"] . '/about');
+		$this->assertEqual($result, Configure::read('App.fullBaseUrl') . '/about');
 		
 		// 配列URL
 		$result = $this->BcBaser->getUrl(array(
@@ -538,7 +538,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		
 		// フルURL
 		$result = $this->BcBaser->getUrl('/about', true);
-		$this->assertEqual($result, 'http://' . $_SERVER["HTTP_HOST"] . '/basercms/index.php/about');
+		$this->assertEqual($result, Configure::read('App.fullBaseUrl') . '/basercms/index.php/about');
 		
 		// 配列URL
 		$result = $this->BcBaser->getUrl(array(
@@ -570,8 +570,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = $this->BcBaser->getElement(('global_menu'));
 		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
 		// 強制的にフロントのテンプレートに切り替えた場合
-		$result = $this->BcBaser->getElement(('crumbs'), array(), array('subDir' => false));
-		$this->assertEqual($result, '');
+		$result = $this->BcBaser->getElement('crumbs', array(), array('subDir' => false));
+		$this->assertEqual($result, '<strong>ホーム</strong>');
 		
 	}
 	
@@ -643,6 +643,10 @@ class BcBaserHelperTest extends BaserTestCase {
  * セッションメッセージを出力する
  */
 	public function testFlash() {
+		// TODO コンソールからのセッションのテストをどうするか？そもそもするか？ ryuring
+		if(isConsole()) {
+			return;
+		}
 		$messsage = 'エラーが発生しました。';
 		App::uses('SessionComponent', 'Controller/Component');
 		App::uses('ComponentCollection', 'Controller/Component');
@@ -1130,6 +1134,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param array $linkedAgents 連動する設定のエージェントのリスト
  *
  * @dataProvider getContentsNameDataProvider
+ * 
+ * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
 	public function testGetContentsName($url, $expects, $ua = null, array $agents = array(), array $linkedAgents = array()) {
 		//Configure周りの設定を全てOFF状態に
