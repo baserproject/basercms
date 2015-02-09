@@ -19,7 +19,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
-app::uses('BcAgent', 'Model');
+app::uses('BcAgent', 'Lib');
 app::uses('DispatcherFilter', 'Routing');
 
 /**
@@ -99,16 +99,15 @@ class BcRequestFilter extends DispatcherFilter {
 
 		$configs['admin'] = array('callback' => array($this, 'isAdmin'));
 		$configs['asset'] = array('callback' => array($this, 'isAsset'));
-		$configs['console'] = array('callback' => array($this, 'isConsole'));
 		$configs['install'] = array('callback' => array($this, 'isInstall'));
 		$configs['maintenance'] = array('callback' => array($this, 'isMaintenance'));
 		$configs['update'] = array('callback' => array($this, 'isUpdate'));
-		$configs['page_display'] = array('callback' => array($this, 'isPageDisplay'));
+		$configs['page'] = array('callback' => array($this, 'isPage'));
 
 		$agents = BcAgent::findAll();
 		foreach ($agents as $agent) {
-			$configs[$agent->name] = array('callback' => array($agent, 'urlMatches'));
-			$configs["from_{$agent->name}"] = array('env' => 'HTTP_USER_AGENT', 'pattern' => $agent->getUserAgentRegex());
+			$configs[$agent->name] = array('env' => 'HTTP_USER_AGENT', 'pattern' => $agent->getUserAgentRegex());
+			$configs["{$agent->name}url"] = array('callback' => array($agent, 'urlMatches'));
 		}
 
 		return $configs;
@@ -159,24 +158,14 @@ class BcRequestFilter extends DispatcherFilter {
 	}
 
 /**
- * コンソールからの実行かどうかを判定
- *
- * @param CakeRequest $request リクエスト
- * @return bool
- */
-	public function isConsole(CakeRequest $request) {
-		return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
-	}
-
-/**
  * インストール用のURLかどうかを判定
+ * [注]ルーターによるURLパース後のみ
  *
  * @param CakeRequest $request リクエスト
  * @return bool
  */
 	public function isInstall(CakeRequest $request) {
-		$slug = 'install';
-		return $request->url === $slug;
+		return $request->params['controller'] === 'installations';
 	}
 
 /**
@@ -208,7 +197,7 @@ class BcRequestFilter extends DispatcherFilter {
  * @param CakeRequest $request リクエスト
  * @return bool
  */
-	public function isPageDisplay(CakeRequest $request) {
+	public function isPage(CakeRequest $request) {
 		$params = explode('/', $request->url);
 
 		$agent = BcAgent::findByAlias($params[0]);

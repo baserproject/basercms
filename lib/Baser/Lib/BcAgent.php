@@ -9,7 +9,7 @@
  *
  * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model
+ * @package			Baser.Lib
  * @since			baserCMS v 3.1.0-beta
  * @license			http://basercms.net/license/index.html
  */
@@ -18,12 +18,6 @@
  * Class BcAgent
  */
 class BcAgent {
-
-/**
- * キャッシュ用
- * @var static[]
- */
-	protected static $_agents = array();
 
 /**
  * 名前
@@ -75,7 +69,7 @@ class BcAgent {
  */
 	public static function find($name) {
 		$key = "BcAgent.{$name}";
-		if (Configure::check($key)) {
+		if (!Configure::check($key)) {
 			return null;
 		}
 		return new static($name, Configure::read($key));
@@ -87,17 +81,13 @@ class BcAgent {
  * @return BcAgent[]
  */
 	public static function findAll() {
-		if (!empty(static::$_agents)) {
-			return static::$_agents;
-		}
-
 		$configs = Configure::read("BcAgent");
-
+		$agents = array();
 		foreach ($configs as $name => $config) {
-			static::$_agents[] = new static($name, $config);
+			$agents[] = new static($name, $config);
 		}
 
-		return static::$_agents;
+		return $agents;
 	}
 
 /**

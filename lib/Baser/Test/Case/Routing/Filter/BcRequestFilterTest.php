@@ -120,7 +120,7 @@ class BcRequestFilterTest extends BaserTestCase {
  * @dataProvider isInstallDataProvider
  */
 	public function testIsInstall($expect, $url) {
-		$request = new CakeRequest($url);
+		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isInstall($request));
 	}
 
@@ -132,8 +132,9 @@ class BcRequestFilterTest extends BaserTestCase {
 	public function isInstallDataProvider() {
 		return array(
 			array(true, '/install'),
-			array(false, '/install/'),
+			array(true, '/install/'),
 			array(false, '/install/index'),
+			array(true, '/installations/step2'),
 			array(false, '/'),
 			array(false, '/service')
 		);
@@ -205,19 +206,19 @@ class BcRequestFilterTest extends BaserTestCase {
  * @param bool $expect 期待値
  * @param string $url URL文字列
  * @return void
- * @dataProvider isPageDisplayDataProvider
+ * @dataProvider isPageDataProvider
  */
-	public function testIsPageDisplay($expect, $url) {
+	public function testIsPage($expect, $url) {
 		$request = $this->_getRequest($url);
-		$this->assertEquals($expect, $this->requestFilter->isPageDisplay($request));
+		$this->assertEquals($expect, $this->requestFilter->isPage($request));
 	}
 
 /**
- * isPageDisplay用データプロバイダ
+ * isPage用データプロバイダ
  *
  * @return array
  */
-	public function isPageDisplayDataProvider() {
+	public function isPageDataProvider() {
 		return array(
 			array(false, '/admin/'),
 			array(false, '/news/index'),

@@ -18,12 +18,12 @@ App::uses('Page', 'Model');
  * 
  * @package Baser.Test.Case.Model
  */
-class UserTest extends BaserTestCase {
-	
+class PageTest extends BaserTestCase {
+
 	public $fixtures = array(
 		'baser.Page.Page'
 	);
-	
+
 /**
  * Page
  * 
@@ -33,6 +33,8 @@ class UserTest extends BaserTestCase {
 
 /**
  * setUp
+ *
+ * @return void
  */
 	public function setUp() {
 		parent::setUp();
@@ -41,26 +43,31 @@ class UserTest extends BaserTestCase {
 
 /**
  * tearDown
+ *
+ * @return void
  */
 	public function tearDown() {
 		unset($this->Page);
 		parent::tearDown();
 	}
-	
+
 /**
  * 固定ページとして管理されているURLかチェックする
  * 
  * @param string $url URL
- * @param boolean $expects true Or false
+ * @param bool $expects true Or false
+ * @return void
  * @dataProvider isPageUrlDataProvider
  */
 	public function testIsPageUrl($url, $expects) {
 		$result = $this->Page->isPageUrl($url);
-		$this->assertEqual($result, $expects);
+		$this->assertEquals($result, $expects);
 	}
-	
+
 /**
  * testIsPageUrl 用データプロバイダ
+ *
+ * @return array
  */
 	public function isPageUrlDataProvider() {
 		return array(
@@ -71,5 +78,4 @@ class UserTest extends BaserTestCase {
 			array('/hoge', false)
 		);
 	}
-	
 }

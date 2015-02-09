@@ -11,14 +11,21 @@
  * @since			baserCMS v 3.1.0-beta
  * @license			http://basercms.net/license/index.html
  */
-App::uses('BcAgent', 'Model');
+App::uses('BcAgent', 'Lib');
 
 /**
  * BcAgentTest class
  * 
- * @package Baser.Test.Case.Model
+ * @package Baser.Test.Case.Lib
  */
 class BcAgentTest extends BaserTestCase {
+/**
+ * Fixtures
+ * @var array
+ */
+	public $fixtures = array(
+		'baser.Page.Page'
+	);
 
 /**
  * @var BcAgent
