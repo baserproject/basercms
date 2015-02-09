@@ -29,3 +29,4 @@ License
 
 Lincensed under the MIT lincense since version 2.0
 
+[![Build Status](https://travis-ci.org/baserproject/basercms.svg?branch=dev-3)](https://travis-ci.org/baserproject/basercms)
