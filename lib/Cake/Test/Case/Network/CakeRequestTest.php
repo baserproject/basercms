@@ -31,7 +31,7 @@ class TestCakeRequest extends CakeRequest {
  * reConstruct method
  *
  * @param string $url
- * @param boolean $parseEnvironment
+ * @param bool $parseEnvironment
  * @return void
  */
 	public function reConstruct($url = 'some/path', $parseEnvironment = true) {
@@ -612,6 +612,8 @@ class CakeRequestTest extends CakeTestCase {
 
 /**
  * Test that files in the 0th index work.
+ *
+ * @return void
  */
 	public function testFilesZeroithIndex() {
 		$_FILES = array(
@@ -698,10 +700,6 @@ class CakeRequestTest extends CakeTestCase {
 		$_SERVER['HTTP_REFERER'] = Configure::read('App.fullBaseUrl') . '/recipes/add';
 		$result = $request->referer(true);
 		$this->assertSame($result, '/recipes/add');
-
-		$_SERVER['HTTP_X_FORWARDED_HOST'] = 'cakephp.org';
-		$result = $request->referer();
-		$this->assertSame($result, 'cakephp.org');
 	}
 
 /**
@@ -804,9 +802,11 @@ class CakeRequestTest extends CakeTestCase {
  */
 	public function testHost() {
 		$_SERVER['HTTP_HOST'] = 'localhost';
+		$_SERVER['HTTP_X_FORWARDED_HOST'] = 'cakephp.org';
 		$request = new CakeRequest('some/path');
 
 		$this->assertEquals('localhost', $request->host());
+		$this->assertEquals('cakephp.org', $request->host(true));
 	}
 
 /**
@@ -1044,13 +1044,20 @@ class CakeRequestTest extends CakeTestCase {
 
 		$request->return = false;
 		$this->assertFalse($request->isCallMe());
+
+		$request->addDetector('extension', array('param' => 'ext', 'options' => array('pdf', 'png', 'txt')));
+		$request->params['ext'] = 'pdf';
+		$this->assertTrue($request->is('extension'));
+
+		$request->params['ext'] = 'exe';
+		$this->assertFalse($request->isExtension());
 	}
 
 /**
  * Helper function for testing callbacks.
  *
  * @param $request
- * @return boolean
+ * @return bool
  */
 	public function detectCallback($request) {
 		return (bool)$request->return;
@@ -1298,6 +1305,7 @@ class CakeRequestTest extends CakeTestCase {
  * - index.php/bananas/eat/tasty_banana
  *
  * @link https://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/3318
+ * @return void
  */
 	public function testBaseUrlWithModRewriteAndIndexPhp() {
 		$_SERVER['REQUEST_URI'] = '/cakephp/app/webroot/index.php';
@@ -1486,10 +1494,18 @@ class CakeRequestTest extends CakeTestCase {
 	public function testGetParamsWithDot() {
 		$_GET = array();
 		$_GET['/posts/index/add_add'] = '';
+		$_SERVER['PHP_SELF'] = '/app/webroot/index.php';
+		$_SERVER['REQUEST_URI'] = '/posts/index/add.add';
+		$request = new CakeRequest();
+		$this->assertEquals('', $request->base);
+		$this->assertEquals(array(), $request->query);
+
+		$_GET = array();
+		$_GET['/cake_dev/posts/index/add_add'] = '';
 		$_SERVER['PHP_SELF'] = '/cake_dev/app/webroot/index.php';
 		$_SERVER['REQUEST_URI'] = '/cake_dev/posts/index/add.add';
-
 		$request = new CakeRequest();
+		$this->assertEquals('/cake_dev', $request->base);
 		$this->assertEquals(array(), $request->query);
 	}
 
@@ -1501,10 +1517,18 @@ class CakeRequestTest extends CakeTestCase {
 	public function testGetParamWithUrlencodedElement() {
 		$_GET = array();
 		$_GET['/posts/add/∂∂'] = '';
+		$_SERVER['PHP_SELF'] = '/app/webroot/index.php';
+		$_SERVER['REQUEST_URI'] = '/posts/add/%E2%88%82%E2%88%82';
+		$request = new CakeRequest();
+		$this->assertEquals('', $request->base);
+		$this->assertEquals(array(), $request->query);
+
+		$_GET = array();
+		$_GET['/cake_dev/posts/add/∂∂'] = '';
 		$_SERVER['PHP_SELF'] = '/cake_dev/app/webroot/index.php';
 		$_SERVER['REQUEST_URI'] = '/cake_dev/posts/add/%E2%88%82%E2%88%82';
-
 		$request = new CakeRequest();
+		$this->assertEquals('/cake_dev', $request->base);
 		$this->assertEquals(array(), $request->query);
 	}
 
@@ -1879,6 +1903,34 @@ class CakeRequestTest extends CakeTestCase {
 					'urlParams' => array()
 				),
 			),
+			array(
+				'Nginx - w/rewrite, document root set above top level cake dir, request root, no PATH_INFO, base parameter set',
+				array(
+					'App' => array(
+						'base' => false,
+						'baseUrl' => false,
+						'dir' => 'app',
+						'webroot' => 'webroot'
+					),
+					'GET' => array('/site/posts/add' => ''),
+					'SERVER' => array(
+						'SERVER_NAME' => 'localhost',
+						'DOCUMENT_ROOT' => '/Library/WebServer/Documents',
+						'SCRIPT_FILENAME' => '/Library/WebServer/Documents/site/app/webroot/index.php',
+						'SCRIPT_NAME' => '/site/app/webroot/index.php',
+						'QUERY_STRING' => '/site/posts/add&',
+						'PHP_SELF' => '/site/app/webroot/index.php',
+						'PATH_INFO' => null,
+						'REQUEST_URI' => '/site/posts/add',
+					),
+				),
+				array(
+					'url' => 'posts/add',
+					'base' => '/site',
+					'webroot' => '/site/',
+					'urlParams' => array()
+				),
+			),
 		);
 	}
 
@@ -2172,38 +2224,44 @@ XML;
 	}
 
 /**
- * Test onlyAllow method
+ * Test allowMethod method
  *
  * @return void
  */
-	public function testOnlyAllow() {
+	public function testAllowMethod() {
 		$_SERVER['REQUEST_METHOD'] = 'PUT';
 		$request = new CakeRequest('/posts/edit/1');
 
+		$this->assertTrue($request->allowMethod(array('put')));
+
+		// BC check
 		$this->assertTrue($request->onlyAllow(array('put')));
 
 		$_SERVER['REQUEST_METHOD'] = 'DELETE';
+		$this->assertTrue($request->allowMethod('post', 'delete'));
+
+		// BC check
 		$this->assertTrue($request->onlyAllow('post', 'delete'));
 	}
 
 /**
- * Test onlyAllow throwing exception
+ * Test allowMethod throwing exception
  *
  * @return void
  */
-	public function testOnlyAllowException() {
+	public function testAllowMethodException() {
 		$_SERVER['REQUEST_METHOD'] = 'PUT';
 		$request = new CakeRequest('/posts/edit/1');
 
 		try {
-			$request->onlyAllow('POST', 'DELETE');
+			$request->allowMethod('POST', 'DELETE');
 			$this->fail('An expected exception has not been raised.');
 		} catch (MethodNotAllowedException $e) {
 			$this->assertEquals(array('Allow' => 'POST, DELETE'), $e->responseHeader());
 		}
 
 		$this->setExpectedException('MethodNotAllowedException');
-		$request->onlyAllow('POST');
+		$request->allowMethod('POST');
 	}
 
 /**

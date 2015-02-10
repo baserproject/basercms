@@ -1,23 +1,23 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
- * [PUBLISH] Google Analytics
- *
- * PHP versions 5
+ * [PUBLISH] Google Analytics トラッキングコード
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->googleAnalytics() で呼び出す
+ */
 ?>
+
+
 <?php if (!empty($siteConfig['google_analytics_id'])): ?>
 <script type="text/javascript">
 

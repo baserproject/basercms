@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * テーマ設定コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -86,10 +80,15 @@ class ThemeConfigsController extends AppController {
 				$this->ThemeConfig->updateColorConfig($this->request->data);
 				$data = $this->ThemeConfig->saveImage($this->request->data);
 				$data = $this->ThemeConfig->deleteImage($data);
+				foreach($data['ThemeConfig'] as $key => $value) {
+					if(preg_match('/main_image_[0-9]_delete/', $key)) {
+						unset($data['ThemeConfig'][$key]);
+					}
+				}
 				if ($this->ThemeConfig->saveKeyValue($data)) {
 					clearViewCache();
 					$this->setMessage('システム設定を保存しました。');
-					$this->redirect('form');
+					$this->redirect(array('action' => 'form'));
 				} else {
 					$this->setMessage('保存中にエラーが発生しました。', true);
 				}

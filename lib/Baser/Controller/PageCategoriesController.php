@@ -1,29 +1,21 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * 固定ページカテゴリーコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * 固定ページカテゴリーコントローラー
  *
- * @package cake
- * @subpackage cake.Baser.Controller
+ * @package Baser.Controller
  */
 class PageCategoriesController extends AppController {
 
@@ -99,14 +91,14 @@ class PageCategoriesController extends AppController {
 		if ($this->request->data['PageCategory']['type'] == '1') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')), $this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			$ids = am(array($mobileId, $smartphoneId), $ids);
 			$conditions = array('NOT' => array('PageCategory.id' => $ids));
 		} elseif ($this->request->data['PageCategory']['type'] == '2') {
 			$children = am($this->PageCategory->children($mobileId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			if ($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
@@ -114,7 +106,7 @@ class PageCategoriesController extends AppController {
 		} elseif ($this->request->data['PageCategory']['type'] == '3') {
 			$children = am($this->PageCategory->children($smartphoneId, false, array('PageCategory.id')));
 			if ($children) {
-				$ids = am($ids, Set::extract('/PageCategory/id', $children));
+				$ids = am($ids, Hash::extract($children, '{n}.PageCategory.id'));
 			}
 			if ($ids) {
 				$conditions = array(array('PageCategory.id' => $ids));
@@ -150,7 +142,7 @@ class PageCategoriesController extends AppController {
 		$this->help = 'page_categories_index';
 		$this->search = 'page_categories_index';
 		$this->subMenuElements = array('pages', 'page_categories');
-		$this->pageTitle = '固定ページカテゴリー一覧';
+		$this->pageTitle = 'カテゴリー一覧';
 	}
 
 /**
@@ -247,7 +239,7 @@ class PageCategoriesController extends AppController {
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages', 'page_categories');
-		$this->pageTitle = '新規固定ページカテゴリー登録';
+		$this->pageTitle = '新規カテゴリー登録';
 		$this->help = 'page_categories_form';
 		$this->render('form');
 	}
@@ -346,7 +338,7 @@ class PageCategoriesController extends AppController {
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('parents', $parents);
 		$this->subMenuElements = array('pages', 'page_categories');
-		$this->pageTitle = '固定ページカテゴリー情報編集：' . $this->request->data['PageCategory']['title'];
+		$this->pageTitle = 'カテゴリー情報編集：' . $this->request->data['PageCategory']['title'];
 		$this->help = 'page_categories_form';
 		$this->render('form');
 	}
@@ -369,7 +361,7 @@ class PageCategoriesController extends AppController {
 		$page = $this->PageCategory->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->PageCategory->delete($id)) {
+		if ($this->PageCategory->removeFromTreeRecursive($id)) {
 			$this->setMessage('固定ページカテゴリー: ' . $page['PageCategory']['name'] . ' を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -392,7 +384,7 @@ class PageCategoriesController extends AppController {
 
 		$data = $this->PageCategory->read(null, $id);
 
-		if ($this->PageCategory->delete($id)) {
+		if ($this->PageCategory->removeFromTreeRecursive($id)) {
 			$this->PageCategory->saveDbLog('固定ページ: ' . $data['PageCategory']['name'] . ' を削除しました。');
 			echo true;
 		}
@@ -444,7 +436,7 @@ class PageCategoriesController extends AppController {
 		if ($ids) {
 			foreach ($ids as $id) {
 				$data = $this->PageCategory->read(null, $id);
-				if ($this->PageCategory->delete($id)) {
+				if ($this->PageCategory->removeFromTreeRecursive($id)) {
 					$this->PageCategory->saveDbLog('固定ページカテゴリー: ' . $data['PageCategory']['name'] . ' を削除しました。');
 				}
 			}

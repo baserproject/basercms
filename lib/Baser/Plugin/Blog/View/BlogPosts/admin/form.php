@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ブログ記事 フォーム
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.views
+ * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
@@ -33,143 +27,161 @@ $this->BcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'previe
 		$("#BlogPostName").focus();
 	});
 $(function(){
-		/**
-		 * プレビューボタンクリック時イベント
-		 */
-		var useContent = Number($("#UseContent").val());
-	$("#BtnPreview").click(function(){
 
-			var detail = $("#BlogPostDetail").val();
-		if(typeof editor_detail_tmp != "undefined") {
-				$("#BlogPostDetail").val(editor_detail_tmp.getData());
-			}
-
-			$.ajax({
-				type: "POST",
-				url: $("#CreatePreviewUrl").html(),
-				data: $("#BlogPostForm").serialize(),
-			success: function(result){
-				if(result) {
-						$("#LinkPreview").trigger("click");
-					} else {
-						alert('プレビューの読み込みに失敗しました。');
-					}
-				}
-			});
-
-			$("#BlogPostDetail").val(detail);
-
-			return false;
-
-		});
-	$("#LinkPreview").colorbox({width:"90%", height:"90%", iframe:true});
-		/**
-		 * フォーム送信時イベント
-		 */
-	$("#BtnSave").click(function(){
-		if(typeof editor_detail_tmp != "undefined") {
-				editor_detail_tmp.execCommand('synchronize');
-			}
-
-			$("#BlogPostMode").val('save');
-			$("#BlogPostForm").submit();
-
-		});
-		/**
-		 * ブログタグ追加
-		 */
-		$("#BlogTagName").keypress(function(ev) {
-			if ((ev.which && ev.which === 13) || (ev.keyCode && ev.keyCode === 13)) {
-				$("#BtnAddBlogTag").click();
-				return false;
-			} else {
-				return true;
-			}
-		});
-	$("#BtnAddBlogTag").click(function(){
-		if(!$("#BlogTagName").val()) {
-				return;
-			}
-			$.ajax({
-				type: "POST",
-				url: $("#AddTagUrl").html(),
-				data: {'data[BlogTag][name]': $("#BlogTagName").val()},
-				dataType: 'html',
-				beforeSend: function() {
-					$("#BtnAddBlogTag").attr('disabled', 'disabled');
-					$("#TagLoader").show();
-				},
-			success: function(result){
-				if(result) {
-						$("#BlogTags").append(result);
-						$("#BlogTagName").val('');
-					} else {
-						alert('ブログタグの追加に失敗しました。既に登録されていないか確認してください。');
-					}
-				},
-			error: function(){
-					alert('ブログタグの追加に失敗しました。');
-				},
-				complete: function(xhr, textStatus) {
-					$("#BtnAddBlogTag").removeAttr('disabled');
-					$("#TagLoader").hide();
-				$("#BlogTags").effect("highlight",{},1500);
-				}
-			});
-		});
-		/**
-		 * ブログカテゴリ追加
-		 */
-	$("#BtnAddBlogCategory").click(function(){
-			var category = prompt("新しいブログカテゴリを入力してください。");
-		if(!category) {
+	$("input[type=text]").each(function(){
+		$(this).keypress(function(e){
+			if(e.which && e.which === 13) {
 				return false;
 			}
-			$.ajax({
-				type: "POST",
-				url: $("#AddBlogCategoryUrl").html(),
-				data: {'data[BlogCategory][name]': category},
-				dataType: 'script',
-				beforeSend: function() {
-					$("#BtnAddBlogCategory").attr('disabled', 'disabled');
-					$("#BlogCategoryLoader").show();
-				},
-			success: function(result){
-				if(result) {
-						$("#BlogPostBlogCategoryId").append($('<option />').val(result).html(category));
-						$("#BlogPostBlogCategoryId").val(result);
-					} else {
-						alert('ブログカテゴリの追加に失敗しました。既に登録されていないか確認してください。');
-					}
-				},
-			error: function(XMLHttpRequest, textStatus){
-				if(XMLHttpRequest.responseText) {
-						alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.responseText);
-					} else {
-						alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.statusText);
-					}
-				},
-				complete: function(xhr, textStatus) {
-					$("#BtnAddBlogCategory").removeAttr('disabled');
-					$("#BlogCategoryLoader").hide();
-				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
-				}
-			});
+			return true;
 		});
 	});
+	
+/**
+ * プレビューボタンクリック時イベント
+ */
+	var useContent = Number($("#UseContent").val());
+	$("#BtnPreview").click(function(){
+
+		var detail = $("#BlogPostDetail").val();
+		if(typeof editor_detail_tmp != "undefined") {
+			$("#BlogPostDetail").val(editor_detail_tmp.getData());
+		}
+
+		$.ajax({
+			type: "POST",
+			url: $("#CreatePreviewUrl").html(),
+			data: $("#BlogPostForm").serialize(),
+			success: function(result){
+				if(result) {
+					$("#LinkPreview").trigger("click");
+				} else {
+					alert('プレビューの読み込みに失敗しました。');
+				}
+			}
+		});
+
+		$("#BlogPostDetail").val(detail);
+
+		return false;
+
+	});
+	
+	$("#LinkPreview").colorbox({width:"90%", height:"90%", iframe:true});
+/**
+ * フォーム送信時イベント
+ */
+	$("#BtnSave").click(function(){
+		if(typeof editor_detail_tmp != "undefined") {
+			editor_detail_tmp.execCommand('synchronize');
+		}
+		$("#BlogPostMode").val('save');
+		$("#BlogPostForm").submit();
+		return false;
+	});
+/**
+ * ブログタグ追加
+ */
+	$("#BlogTagName").keypress(function(ev) {
+		if ((ev.which && ev.which === 13) || (ev.keyCode && ev.keyCode === 13)) {
+			$("#BtnAddBlogTag").click();
+			return false;
+		} else {
+			return true;
+		}
+	});
+	$("#BtnAddBlogTag").click(function(){
+		if(!$("#BlogTagName").val()) {
+			return false;
+		}
+		$.ajax({
+			type: "POST",
+			url: $("#AddTagUrl").html(),
+			data: {'data[BlogTag][name]': $("#BlogTagName").val()},
+			dataType: 'html',
+			beforeSend: function() {
+				$("#BtnAddBlogTag").attr('disabled', 'disabled');
+				$("#TagLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#BlogTags").append(result);
+					$("#BlogTagName").val('');
+				} else {
+					alert('ブログタグの追加に失敗しました。既に登録されていないか確認してください。');
+				}
+			},
+			error: function(){
+				alert('ブログタグの追加に失敗しました。');
+			},
+			complete: function(xhr, textStatus) {
+				$("#BtnAddBlogTag").removeAttr('disabled');
+				$("#TagLoader").hide();
+				$("#BlogTags").effect("highlight",{},1500);
+			}
+		});
+		return false;
+	});
+/**
+ * ブログカテゴリ追加
+ */
+	$("#BtnAddBlogCategory").click(function(){
+		var category = prompt("新しいブログカテゴリを入力してください。");
+		if(!category) {
+			return false;
+		}
+		$.ajax({
+			type: "POST",
+			url: $("#AddBlogCategoryUrl").html(),
+			data: {'data[BlogCategory][name]': category},
+			dataType: 'script',
+			beforeSend: function() {
+				$("#BtnAddBlogCategory").attr('disabled', 'disabled');
+				$("#BlogCategoryLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#BlogPostBlogCategoryId").append($('<option />').val(result).html(category));
+					$("#BlogPostBlogCategoryId").val(result);
+				} else {
+					alert('ブログカテゴリの追加に失敗しました。既に登録されていないか確認してください。');
+				}
+			},
+			error: function(XMLHttpRequest, textStatus){
+				if(XMLHttpRequest.responseText) {
+					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.responseText);
+				} else {
+					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.statusText);
+				}
+			},
+			complete: function(xhr, textStatus) {
+				$("#BtnAddBlogCategory").removeAttr('disabled');
+				$("#BlogCategoryLoader").hide();
+				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
+			}
+		});
+		return false;
+	});
+});
 </script>
 
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
 		<?php if ($this->BcForm->value('BlogPost.status') && $blogContent['BlogContent']['status']): ?>
-			この記事のURL：<?php
+			この記事のURL　：<?php
 			$this->BcBaser->link(
 				$this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no')), '/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no'))
 			?>
 		<?php else: ?>
-			この記事のURL：<?php echo $this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
+			この記事のURL　：<?php echo $this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
 		<?php endif ?>
+			<br />
+			プレビュー用URL：<?php $this->BcBaser->link(
+				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
+				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
+				array('target' => '_blank')
+			); ?>
 	</div>
 <?php endif ?>
 
@@ -207,7 +219,9 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogPost.blog_category_id', array('type' => 'select', 'options' => $categories, 'escape' => false)) ?>&nbsp;
-				<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
+				<?php if($newCatAddable && $hasNewCategoryAddablePermission): ?>
+					<?php echo $this->BcForm->button('新しいカテゴリを追加', array('id' => 'BtnAddBlogCategory')) ?>
+				<?php endif ?>
 				<?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'BlogCategoryLoader', 'class' => 'loader')) ?>
 				<?php echo $this->BcForm->error('BlogPost.blog_category_id') ?>
 			</td>
@@ -223,7 +237,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.eye_catch', 'アイキャッチ画像') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcUpload->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
+				<?php echo $this->BcForm->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
 				<?php echo $this->BcForm->error('BlogPost.eye_catch') ?>
 			</td>
 		</tr>
@@ -312,6 +326,7 @@ $(function(){
 				<?php echo $this->BcForm->error('BlogPost.posts_date') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 

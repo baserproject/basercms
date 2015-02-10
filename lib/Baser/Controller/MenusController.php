@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メニューコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -114,7 +108,7 @@ class MenusController extends AppController {
 		}
 
 		// 表示設定
-		$this->subMenuElements = array('site_configs', 'menus');
+		$this->subMenuElements = array('menus');
 		$this->pageTitle = 'メニュー一覧';
 		$this->search = 'menus_index';
 		$this->help = 'menus_index';
@@ -150,7 +144,7 @@ class MenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('site_configs', 'menus');
+		$this->subMenuElements = array('menus');
 		$this->pageTitle = '新規メニュー登録';
 		$this->help = 'menus_form';
 		$this->render('form');
@@ -189,7 +183,7 @@ class MenusController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('site_configs', 'menus');
+		$this->subMenuElements = array('menus');
 		$this->pageTitle = 'メニュー編集：' . $this->request->data['Menu']['name'];
 		$this->help = 'menus_form';
 		$this->render('form');

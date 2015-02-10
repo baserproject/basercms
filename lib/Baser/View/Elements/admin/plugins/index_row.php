@@ -1,32 +1,29 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] プラグイン一覧　行
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+$classies = array('sortable');
 if (!$data['Plugin']['status']) {
-	$class = ' class="disablerow"';
-} else {
-	$class = '';
+	$classies[] = 'disablerow';
 }
+$class = ' class="' . implode(' ', $classies) . '"';
 ?>
-
 
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
+		<?php if ($sortmode): ?>
+			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
+			<?php echo $this->BcForm->input('Sort.id' . $data['Plugin']['id'], array('type' => 'hidden', 'class' => 'id', 'value' => $data['Plugin']['id'])) ?>
+		<?php endif ?>
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Plugin']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id'])) ?>
 		<?php endif ?>
@@ -37,9 +34,9 @@ if (!$data['Plugin']['status']) {
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), $data['Plugin']['admin_link'], array('title' => '管理')) ?>
 		<?php endif; ?>
 		<?php if ($data['Plugin']['status']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_disable.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Plugin']['id']), array('title' => '無効', 'class' => 'btn-delete')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_disable.png', array('width' => 24, 'height' => 24, 'alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Plugin']['name']), array('title' => '無効', 'class' => 'btn-delete')) ?>
 		<?php elseif (!$data['Plugin']['status'] && !$data['Plugin']['update'] && !$data['Plugin']['old_version']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_install.png', array('width' => 24, 'height' => 24, 'alt' => 'インストール', 'class' => 'btn')), array('action' => 'add', $data['Plugin']['name']), array('title' => 'インストール')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_install.png', array('width' => 24, 'height' => 24, 'alt' => 'インストール', 'class' => 'btn')), array('action' => 'install', $data['Plugin']['name']), array('title' => 'インストール')) ?>
 		<?php endif ?>
 		<?php if (!$data['Plugin']['status']): ?>
 			<?php if (!in_array($data['Plugin']['name'], $corePlugins)): ?>

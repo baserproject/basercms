@@ -1,22 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * GoogleMap コンポーネント
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		Baser.Controller.Component
+ * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -27,8 +19,7 @@ define('MAPS_HOST', 'maps.googleapis.com');
 /**
  * GoogleMap コンポーネント
  *
- * @package cake
- * @subpackage Baser.Controller.Component
+ * @package Baser.Controller.Component
  */
 class BcGmapsComponent extends Component {
 
@@ -133,39 +124,31 @@ class BcGmapsComponent extends Component {
 		$requestUrl = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
 
 		App::uses('Xml', 'Utility');
-		$xmlArray = Xml::toArray(Xml::build($requestUrl));
-		$xml = $xmlArray['GeocodeResponse'];
 
-		if (!empty($xml['result'])) {
-			if (!isset($xml['result']['geometry']['location'])) {
+		try {
+			$xmlArray = Xml::toArray(Xml::build($requestUrl));
+		} catch(XmlException $e) {
+			return false;
+		}
+
+        $xml = $xmlArray['GeocodeResponse'];
+
+		$result = null;
+		if (!empty($xml['result']['geometry'])) {
+			$result = $xml['result'];
+		} elseif(!empty($xml['result'][0])) {
+			$result = $xml['result'][0];
+		}
+
+		if ($result) {
+			if (!isset($result['geometry']['location'])) {
 				return false;
 			}
-
-			$point = $xml['result']['geometry']['location'];
+			$point = $result['geometry']['location'];
 			if (!empty($point)) {
 				$this->_latitude = $point['lat'];
 				$this->_longitude = $point['lng'];
 			}
-
-			/*
-			  $this->_address= $xml['Response']['Placemark']['address'];
-
-			  if(isset($xml['Response']['Placemark']['AddressDetails'])) {
-			  $this->_countryName= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryName'];
-			  $this->_countryNameCode= $xml['Response']['Placemark']['AddressDetails']['Country']['CountryNameCode'];
-			  if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'])) {
-			  $this->_administrativeAreaName= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea']['AdministrativeAreaName'];
-			  }
-			  if(!empty($xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'])) {
-			  $administrativeArea= $xml['Response']['Placemark']['AddressDetails']['Country']['AdministrativeArea'];
-			  }
-			  }
-
-			  if (!empty($administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'])) {
-			  $this->_postalCode= $administrativeArea['SubAdministrativeArea']['Locality']['PostalCode']['PostalCodeNumber'];
-			  } elseif (!empty($administrativeArea['Locality']['PostalCode']['PostalCodeNumber'])) {
-			  $this->_postalCode= $administrativeArea['Locality']['PostalCode']['PostalCodeNumber'];
-			  } */
 			return true;
 		} else {
 			return false;

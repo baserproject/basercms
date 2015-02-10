@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id: baser_app_helper.php 143 2011-08-26 06:11:39Z ryuring $ */
 /**
  * Helper 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision: 143 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2011-08-26 15:11:39 +0900 (金, 26 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Helper', 'View');
@@ -23,7 +16,7 @@ App::uses('Helper', 'View');
 /**
  * Helper 拡張クラス
  *
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  */
 class BcAppHelper extends Helper {
 
@@ -120,11 +113,10 @@ class BcAppHelper extends Helper {
 						$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
 					}
 				} else {
+					
 					// フロントのWebページを表示する際に、管理システム用のアセットファイルを参照する為のURLを生成する
-					if (property_exists($this->_View, 'adminTheme')) {
-						$themePath = App::themePath($this->_View->adminTheme);
-						$path = $themePath . 'webroot' . DS . $file;
-						if (file_exists($path)) {
+					if (property_exists($this->_View, 'adminTheme') && $this->_View->adminTheme) {
+						if (file_exists($themePath = Configure::read('App.www_root') . 'theme' . DS . $this->_View->adminTheme . DS . $file)) {
 							$adminTheme = $this->_View->adminTheme . '/';
 							if ($baseUrl) {
 								// スマートURLオフ

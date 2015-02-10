@@ -1,27 +1,21 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] フィード
  * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.views
+ * @package			Feed.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->Feed->saveCachetime();
 ?>
-<cake:nocache>
+<!--nocache-->
 	<?php $this->Feed->cacheHeader() ?>
-</cake:nocache>
+<!--/nocache-->
 
 <?php if (!empty($items)): ?>
 	<ul>
@@ -39,5 +33,5 @@ $this->Feed->saveCachetime();
 		<?php endforeach; ?>
 	</ul>
 <?php else: ?>
-	<p style="text-align:center">ー</p>
+	<p style="text-align:center">－</p>
 <?php endif; ?>

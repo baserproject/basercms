@@ -1,26 +1,22 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ウィジェットエリア
  *
- * no を引き数で渡して利用する
- * <?php $this->BcBaser->element('widget_areas',array('no'=>1)) ?>
- *
- *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Plugins.Blog.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
+ * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
+ */
+
 if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
@@ -56,4 +52,3 @@ if (!empty($no)) {
 		<?php
 	}
 }
-?>

@@ -1,9 +1,6 @@
 <?php
-
 /**
  * CakeRequest
- *
- * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -17,6 +14,7 @@
  * @since         CakePHP(tm) v 2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('Hash', 'Utility');
 
 /**
@@ -108,11 +106,11 @@ class CakeRequest implements ArrayAccess {
 		'ajax' => array('env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'),
 		'flash' => array('env' => 'HTTP_USER_AGENT', 'pattern' => '/^(Shockwave|Adobe) Flash/'),
 		'mobile' => array('env' => 'HTTP_USER_AGENT', 'options' => array(
-				'Android', 'AvantGo', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
-				'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
-				'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
-				'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
-			)),
+			'Android', 'AvantGo', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
+			'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
+			'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
+			'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
+		)),
 		'requested' => array('param' => 'requested', 'value' => 1)
 	);
 
@@ -168,8 +166,8 @@ class CakeRequest implements ArrayAccess {
 			($this->is('put') || $this->is('delete')) &&
 			strpos(env('CONTENT_TYPE'), 'application/x-www-form-urlencoded') === 0
 		) {
-			$data = $this->_readInput();
-			parse_str($data, $this->data);
+				$data = $this->_readInput();
+				parse_str($data, $this->data);
 		}
 		if (ini_get('magic_quotes_gpc') === '1') {
 			$this->data = stripslashes_deep($this->data);
@@ -209,7 +207,9 @@ class CakeRequest implements ArrayAccess {
 			$query = $_GET;
 		}
 
-		unset($query['/' . str_replace('.', '_', urldecode($this->url))]);
+		$unsetUrl = '/' . str_replace('.', '_', urldecode($this->url));
+		unset($query[$unsetUrl]);
+		unset($query[$this->base . $unsetUrl]);
 		if (strpos($this->url, '?') !== false) {
 			list(, $querystr) = explode('?', $this->url);
 			parse_str($querystr, $queryArgs);
@@ -266,7 +266,7 @@ class CakeRequest implements ArrayAccess {
 		// ---
 		$base = str_replace('/index.php', '', $this->base);
 		// <<<
-		
+
 		if (strlen($base) > 0 && strpos($uri, $base) === 0) {
 			$uri = substr($uri, strlen($base));
 		}
@@ -345,21 +345,13 @@ class CakeRequest implements ArrayAccess {
 		$docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
 
 		// CUSTOMIZE MODIFY 2013/11/25 ryuring
+		// BC_DEPLOY_PATTERN が 2 の場合は、上位階層に、app/webroot/ という階層を持たない為、
+		// $this->webroot に、 app/webroot/ を付加しない
 		// >>>
 		//if (!empty($base) || !$docRootContainsWebroot) {
 		// ---
-
-		if (!$docRootContainsWebroot) {
-			// サブフォルダに対応
-			$docRootContainsWebroot = (strpos(WWW_ROOT, $dir . DS . $webroot));
-		}
-		if (!$docRootContainsWebroot) {
-			// BC_DEPLOY_PATTERN 2 に対応
-			$docRootContainsWebroot = (strpos(WWW_ROOT, $webroot));
-		}
-
-		if (!empty($base) && !$docRootContainsWebroot) {
-			// <<<
+		if ((!empty($base) || !$docRootContainsWebroot) && BC_DEPLOY_PATTERN != 2) {
+		// <<<
 			if (strpos($this->webroot, '/' . $dir . '/') === false) {
 				$this->webroot .= $dir . '/';
 			}
@@ -419,7 +411,7 @@ class CakeRequest implements ArrayAccess {
  * Get the IP the client is using, or says they are using.
  *
  * @param boolean $safe Use safe = false when you think the user might manipulate their HTTP_CLIENT_IP
- *   header. Setting $safe = false will will also look at HTTP_X_FORWARDED_FOR
+ *   header. Setting $safe = false will also look at HTTP_X_FORWARDED_FOR
  * @return string The client IP.
  */
 	public function clientIp($safe = true) {
@@ -451,10 +443,6 @@ class CakeRequest implements ArrayAccess {
  */
 	public function referer($local = false) {
 		$ref = env('HTTP_REFERER');
-		$forwarded = env('HTTP_X_FORWARDED_HOST');
-		if ($forwarded) {
-			$ref = $forwarded;
-		}
 
 		$base = Configure::read('App.fullBaseUrl') . $this->webroot;
 		if (!empty($ref) && !empty($base)) {
@@ -548,8 +536,13 @@ class CakeRequest implements ArrayAccess {
 		}
 		if (isset($detect['param'])) {
 			$key = $detect['param'];
-			$value = $detect['value'];
-			return isset($this->params[$key]) ? $this->params[$key] == $value : false;
+			if (isset($detect['value'])) {
+				$value = $detect['value'];
+				return isset($this->params[$key]) ? $this->params[$key] == $value : false;
+			}
+			if (isset($detect['options'])) {
+				return isset($this->params[$key]) ? in_array($this->params[$key], $detect['options']) : false;
+			}
 		}
 		if (isset($detect['callback']) && is_callable($detect['callback'])) {
 			return call_user_func($detect['callback'], $this);
@@ -608,7 +601,13 @@ class CakeRequest implements ArrayAccess {
  *
  * Allows for custom detectors on the request parameters.
  *
- * e.g `addDetector('post', array('param' => 'requested', 'value' => 1)`
+ * e.g `addDetector('requested', array('param' => 'requested', 'value' => 1)`
+ *
+ * You can also make parameter detectors that accept multiple values
+ * using the `options` key. This is useful when you want to check
+ * if a request parameter is in a list of options.
+ *
+ * `addDetector('extension', array('param' => 'ext', 'options' => array('pdf', 'csv'))`
  *
  * @param string $name The name of the detector.
  * @param array $options The options for the detector definition. See above.
@@ -701,9 +700,13 @@ class CakeRequest implements ArrayAccess {
 /**
  * Get the host that the request was handled on.
  *
+ * @param boolean $trustProxy Whether or not to trust the proxy host.
  * @return string
  */
-	public function host() {
+	public function host($trustProxy = false) {
+		if ($trustProxy) {
+			return env('HTTP_X_FORWARDED_HOST');
+		}
 		return env('HTTP_HOST');
 	}
 
@@ -788,7 +791,7 @@ class CakeRequest implements ArrayAccess {
  * {{{ CakeRequest::acceptLanguage('es-es'); }}}
  *
  * @param string $language The language to test.
- * @return If a $language is provided, a boolean. Otherwise the array of accepted languages.
+ * @return mixed If a $language is provided, a boolean. Otherwise the array of accepted languages.
  */
 	public static function acceptLanguage($language = null) {
 		$raw = self::_parseAcceptWithQualifier(self::header('Accept-Language'));
@@ -880,7 +883,7 @@ class CakeRequest implements ArrayAccess {
  */
 	public function data($name) {
 		$args = func_get_args();
-		if (count($args) == 2) {
+		if (count($args) === 2) {
 			$this->data = Hash::insert($this->data, $name, $args[1]);
 			return $this;
 		}
@@ -932,23 +935,23 @@ class CakeRequest implements ArrayAccess {
 	}
 
 /**
- * Only allow certain HTTP request methods, if the request method does not match
+ * Allow only certain HTTP request methods. If the request method does not match
  * a 405 error will be shown and the required "Allow" response header will be set.
  *
  * Example:
  *
- * $this->request->onlyAllow('post', 'delete');
+ * $this->request->allowMethod('post', 'delete');
  * or
- * $this->request->onlyAllow(array('post', 'delete'));
+ * $this->request->allowMethod(array('post', 'delete'));
  *
  * If the request would be GET, response header "Allow: POST, DELETE" will be set
- * and a 405 error will be returned
+ * and a 405 error will be returned.
  *
- * @param string|array $methods Allowed HTTP request methods
+ * @param string|array $methods Allowed HTTP request methods.
  * @return boolean true
  * @throws MethodNotAllowedException
  */
-	public function onlyAllow($methods) {
+	public function allowMethod($methods) {
 		if (!is_array($methods)) {
 			$methods = func_get_args();
 		}
@@ -961,6 +964,22 @@ class CakeRequest implements ArrayAccess {
 		$e = new MethodNotAllowedException();
 		$e->responseHeader('Allow', $allowed);
 		throw $e;
+	}
+
+/**
+ * Alias of CakeRequest::allowMethod() for backwards compatibility.
+ *
+ * @see CakeRequest::allowMethod()
+ * @deprecated 2.5 Use CakeRequest::allowMethod() instead.
+ * @param string|array $methods Allowed HTTP request methods.
+ * @return boolean true
+ * @throws MethodNotAllowedException
+ */
+	public function onlyAllow($methods) {
+		if (!is_array($methods)) {
+			$methods = func_get_args();
+		}
+		return $this->allowMethod($methods);
 	}
 
 /**
@@ -1028,4 +1047,47 @@ class CakeRequest implements ArrayAccess {
 		unset($this->params[$name]);
 	}
 
+/**
+ * 現在のURLを正規化して取得する
+ * 
+ * $this->request->here は、ビューキャッシュの命名規則に影響する為、
+ * CacheHelper 等で、このメソッドを利用する事で、同一ページによる複数キャッシュの生成を防ぐ
+ * 
+ * （例）
+ * /news/ → /news/index
+ * /company/ → /company/index
+ * 
+ * @return string
+ */
+	public function normalizedHere() {
+		$here = $this->here;
+		if(!BcUtil::isAdminSystem() && $this->params['controller'] == 'pages') {
+			if($this->params['pass'][count($this->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $here)) {
+				if(preg_match('/\/$/', $here)) {
+					$here .= 'index';
+				} else {
+					$here .= '/index';
+				}
+			}
+			$here = preg_replace('/\.html$/', '', $here);
+		} else {
+			if($this->action == 'index') {
+				list($here,) = explode('?', $here);
+				if(!empty($this->params['pass'])) {
+					foreach ($this->params['pass'] as $pass) {
+						$here = preg_replace('/\/' . $pass . '$/', '', $here);
+					}
+				}
+				if(!preg_match('/\/index$/', $here)) {
+					if(preg_match('/\/$/', $here)) {
+						$here .= 'index';
+					} else {
+						$here .= '/index';
+					}
+				}
+			}
+		}
+		return $here;
+	}
+	
 }

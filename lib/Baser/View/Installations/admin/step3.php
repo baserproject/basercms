@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] インストーラー Step3
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -200,7 +194,7 @@ $(document).ready( function() {
 				<li><label>初期データ</label><br />
 					<?php echo $this->BcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?><br /><br />
 					<small>※ コアパッケージや、テーマが保有するデモンストレーション用データを選択します。<br />
-						※ 初めてインストールされる方は、「nada icons（ default ）」を選択してください。</small>
+						※ 初めてインストールされる方は、「M-SinglePage（ default ）」を選択してください。</small>
 				</li>
 			</ul>
 		</div>

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views.helpers
+ * @package			Mail.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@
 /**
  * メールヘルパー
  *
- * @package baser.plugins.mail.views.helpers
+ * @package Mail.View.Helper
  *
  */
 class MailHelper extends AppHelper {
@@ -33,15 +27,14 @@ class MailHelper extends AppHelper {
 /**
  * ヘルパー
  * @var array
- * @access public
  */
 	public $helpers = array('BcBaser');
 
 /**
  * コンストラクタ
  *
+ * @param View $View Viewオブジェクト
  * @return void
- * @access public
  */
 	public function __construct(View $View) {
 		parent::__construct($View);
@@ -51,16 +44,17 @@ class MailHelper extends AppHelper {
 /**
  * メールコンテンツデータをセットする
  *
- * @param int $mailContentId
+ * @param int $mailContentId メールコンテンツID
+ * @return void
  */
 	public function setMailContent($mailContentId = null) {
-		if (isset($this->mailContent) && !$mailContentId) {
+		if (isset($this->mailContent)) {
 			return;
 		}
 		if ($mailContentId) {
 			$MailContent = ClassRegistry::getObject('MailContent');
 			$MailContent->expects(array());
-			$this->mailContent = Set::extract('MailContent', $MailContent->read(null, $mailContentId));
+			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
 			$this->mailContent = $this->_View->viewVars['mailContent']['MailContent'];
 		}
@@ -69,10 +63,10 @@ class MailHelper extends AppHelper {
 /**
  * 管理画面のメールフィールド一覧ページへのリンクを出力する
  *
- * @param string $mailContentId
+ * @param string $mailContentId メールコンテンツID
  * @return void
- * @access public
- * @deprecated ツールバーに移行
+ * @todo ツールバーに移行
+ * @deprecated
  */
 	public function indexFields($mailContentId) {
 		if (!empty($this->BcBaser->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
@@ -82,24 +76,21 @@ class MailHelper extends AppHelper {
 
 /**
  * レイアウトテンプレートを取得
+ * 
  * コンボボックスのソースとして利用
- * TODO 他のヘルパーに移動する
- * @return array
- * @access public
+ * 
+ * @return array レイアウトテンプレート一覧データ
+ * @todo 他のヘルパーに移動する
  */
 	public function getLayoutTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS,
-			APP . 'View' . DS . 'Layouts' . DS,
-			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS,
-			BASER_VIEWS . 'Layouts' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
+			$templatesPath .= 'Layouts' . DS;
 			$folder = new Folder($templatesPath);
 			$files = $folder->read(true, true);
 			$foler = null;
@@ -126,23 +117,21 @@ class MailHelper extends AppHelper {
 
 /**
  * フォームテンプレートを取得
+ * 
  * コンボボックスのソースとして利用
- * TODO 他のヘルパーに移動する
- * @return array
- * @access public
+ * 
+ * @return array フォームテンプレート一覧データ
+ * @todo 他のヘルパーに移動する
  */
 	public function getFormTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Mail' . DS,
-			APP . 'View' . DS . 'Mail' . DS,
-			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Mail' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Mail' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatePath) {
+			$templatePath .= 'Mail' . DS;
 			$folder = new Folder($templatePath);
 			$files = $folder->read(true, true);
 			$foler = null;
@@ -156,7 +145,7 @@ class MailHelper extends AppHelper {
 		}
 
 		$excludes = Configure::read('BcAgent');
-		$excludes = Set::extract('{.+?}.prefix', $excludes);
+		$excludes = Hash::extract($excludes, '{s}.prefix');
 		$templates = array();
 		foreach ($_templates as $template) {
 			if (!in_array($template, $excludes)) {
@@ -167,28 +156,25 @@ class MailHelper extends AppHelper {
 	}
 
 /**
- * レイアウトテンプレートを取得
+ * メールテンプレートを取得
+ * 
  * コンボボックスのソースとして利用
- * TODO 他のヘルパに移動する
- * @return array
- * @access public
+ * 
+ * @return array メールテンプレート一覧データ
+ * @todo 他のヘルパに移動する
  */
 	public function getMailTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
-			APP . 'View' . DS . 'Emails' . DS . 'text' . DS,
-			BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Emails' . DS . 'text' . DS,
-			BASER_VIEWS . 'Emails' . DS . 'text' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Emails' . DS . 'text' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
-			$folder = new Folder($templatesPath);
-			$files = $folder->read(true, true);
-			$foler = null;
+			$templatesPath .= 'Emails' . DS . 'text' . DS;
+			$Folder = new Folder($templatesPath);
+			$files = $Folder->read(true, true);
+			$Folder = null;
 			if ($files[1]) {
 				if ($_templates) {
 					$_templates = am($_templates, $files[1]);
@@ -211,15 +197,17 @@ class MailHelper extends AppHelper {
 	}
 
 /**
- * メールの説明文を取得する
- * @return string
+ * メールフォームの説明文を取得する
+ * 
+ * @return string メールフォームの説明文
  */
 	public function getDescription() {
 		return $this->mailContent['description'];
 	}
 
 /**
- * メールの説明文を表示する
+ * メールの説明文を出力する
+ * 
  * @return void
  */
 	public function description() {
@@ -227,10 +215,9 @@ class MailHelper extends AppHelper {
 	}
 
 /**
- * メールの説明文が指定されているかどうかを判定する
+ * メールの説明文が設定されているかどうかを判定する
  *
- * @return boolean
- * @access public
+ * @return boolean 設定されている場合 true を返す
  */
 	public function descriptionExists() {
 		if (!empty($this->mailContent['description'])) {
@@ -240,4 +227,24 @@ class MailHelper extends AppHelper {
 		}
 	}
 
+/**
+ * メールフォームへのリンクを生成する
+ * 
+ * @param string $title リンクのタイトル
+ * @param string $contentsName メールフォームのコンテンツ名
+ * @param array $datas メールフォームに引き継ぐデータ（初期値 : array()）
+ * @param array $options a タグの属性（初期値 : array()）
+ *	※ オプションについては、HtmlHelper::link() を参照
+ * @return void
+ */
+	public function link($title, $contentsName, $datas = array(), $options = array()) {
+		if($datas && is_array($datas)) {
+			foreach($datas as $key => $data) {
+				$datas[$key] = base64UrlsafeEncode($data);
+			}
+		}
+		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
+		$this->BcBaser->link($title, $link, $options);
+	}
+	
 }

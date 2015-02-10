@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] プラグイン　フォーム
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -23,7 +17,7 @@
 $(function(){
   $("#BtnReset").click(function(){
     if(confirm('プラグインのデータを初期化します。よろしいですか？')) {
-      $("#PluginAdminAddForm").attr('action', $("#ResetDbUrl").val());
+      $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
     } else {
       return false;
     }
@@ -32,7 +26,7 @@ $(function(){
 </script>
 
 <?php if ($installMessage): ?>
-	<div id="UpdateMessage"><?php echo $installMessage ?></div>
+<div id="UpdateMessage"><?php echo $installMessage ?></div>
 <?php endif ?> 
 
 <?php echo $this->BcForm->create('Plugin', array('url' => array($this->request->data['Plugin']['name']))) ?>
@@ -48,19 +42,23 @@ $(function(){
 	<?php endif ?>
 </div>
 
+<div class="align-center">
+	<?php echo $this->BcForm->input('Plugin.permission', array('type' => 'radio', 'options' => array('1' => '管理ユーザーのみ利用', '2' => '全てのユーザーで利用'))) ?>
+</div>
+
 <div>
 	<?php echo $this->BcForm->error('Plugin.name') ?>
 	<?php echo $this->BcForm->error('Plugin.title') ?>
 </div>
+	
 
 <div class="submit">
-
-	<?php if ($dbInited): ?>
+<?php if ($dbInited): ?>
 		<?php echo $this->BcForm->submit('プラグインのデータを初期化する', array('div' => false, 'class' => 'button', 'id' => 'BtnReset')) ?>
 		<?php echo $this->BcForm->submit('有効化', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php else: ?> 
+<?php else: ?> 
 		<?php echo $this->BcForm->submit('インストール', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php endif; ?>
+<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ブログタグコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@
 /**
  * ブログタグコントローラー
  *
- * @package baser.plugins.blog.controllers
+ * @package Blog.Controller
  */
 class BlogTagsController extends BlogAppController {
 
@@ -89,7 +83,7 @@ class BlogTagsController extends BlogAppController {
 		);
 		$this->set('datas', $this->paginate('BlogTag'));
 
-		$this->pageTitle = 'ブログタグ一覧';
+		$this->pageTitle = 'タグ一覧';
 	}
 
 /**
@@ -110,7 +104,7 @@ class BlogTagsController extends BlogAppController {
 			}
 		}
 
-		$this->pageTitle = '新規ブログタグ登録';
+		$this->pageTitle = '新規タグ登録';
 		$this->render('form');
 	}
 
@@ -140,7 +134,7 @@ class BlogTagsController extends BlogAppController {
 			}
 		}
 
-		$this->pageTitle = 'ブログタグ編集： ' . $this->request->data['BlogTag']['name'];
+		$this->pageTitle = 'タグ編集： ' . $this->request->data['BlogTag']['name'];
 		$this->render('form');
 	}
 

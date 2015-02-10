@@ -1,23 +1,24 @@
 <?php
-
 /**
- * Custom TestSuite Dispatcher
- *
- * PHP versions 5
+ * BaserTestSuiteDispatcher
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.0-beta
+ * @package			Baser.TestSuite
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 require_once CAKE . 'TestSuite' . DS . 'CakeTestSuiteDispatcher.php';
 App::uses('BaserTestSuiteCommand', 'TestSuite');
 
 /**
- * @package Baser.TestSuite
+ * CakeTestSuiteDispatcher handles web requests to the test suite and runs the correct action.
+ *
+ * @package Baser.Lib.TestSuite
  */
 class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 
@@ -30,7 +31,10 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		'codeCoverage' => false,
 		'case' => null,
 		'core' => false,
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		'baser' => false,
+		// <<<
 		'app' => true,
 		'plugin' => null,
 		'output' => 'html',
@@ -46,7 +50,12 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
  * @return void
  */
 	public static function run() {
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		//$dispatcher = new CakeTestSuiteDispatcher();
+		// ---
 		$dispatcher = new BaserTestSuiteDispatcher();
+		// <<<
 		$dispatcher->dispatch();
 	}
 
@@ -56,7 +65,12 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
  * @return void
  */
 	protected function _testCaseList() {
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		//$command = new CakeTestSuiteCommand('', $this->params);
+		// ---
 		$command = new BaserTestSuiteCommand('', $this->params);
+		// <<<
 		$Reporter = $command->handleReporter($this->params['output']);
 		$Reporter->paintDocumentStart();
 		$Reporter->paintTestMenu();
@@ -73,7 +87,10 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		$commandArgs = array(
 			'case' => $this->params['case'],
 			'core' => $this->params['core'],
+			// CUSTOMIZE ADD 2014/07/02 ryuring
+			// >>>
 			'baser' => $this->params['baser'],
+			// <<<
 			'app' => $this->params['app'],
 			'plugin' => $this->params['plugin'],
 			'codeCoverage' => $this->params['codeCoverage'],
@@ -91,8 +108,14 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 
 		try {
 			self::time();
+			// CUSTOMIZE MODIFY 2014/07/02 ryuring
+			// >>>
+			/*$command = new CakeTestSuiteCommand('CakeTestLoader', $commandArgs);
+			$command->run($options);*/
+			// ---
 			$command = new BaserTestSuiteCommand('BaserTestLoader', $commandArgs);
 			$result = $command->run($options);
+			// <<<
 		} catch (MissingConnectionException $exception) {
 			ob_end_clean();
 			$baseDir = $this->_baseDir;
@@ -102,7 +125,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 	}
 
 /**
- * Parse url params into a 'request'
+ * Parse URL params into a 'request'
  *
  * @return void
  */
@@ -121,7 +144,12 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 				$this->_checkXdebug();
 			}
 		}
+		// CUSTOMIZE MODIFY 2014/07/02 ryuirng
+		// >>>
+		//if (empty($this->params['plugin']) && empty($this->params['core'])) {
+		// ---
 		if (empty($this->params['plugin']) && empty($this->params['core']) && empty($this->params['baser'])) {
+		// <<<
 			$this->params['app'] = true;
 		}
 		$this->params['baseUrl'] = $this->_baseUrl;

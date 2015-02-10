@@ -3,31 +3,33 @@
 /**
  * ユーザモデルのテスト
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
 App::uses('User', 'Model');
 
-//class NonAssosiationUser extends User {
-//	public $name = 'User';
-//
-//	public $belongsTo = array();
-//	public $hasMany = array();
-//}
-
-class UserTest extends CakeTestCase {
+/**
+ * UserTest class
+ * 
+ * class NonAssosiationUser extends User {
+ *	public $name = 'User';
+ *	public $belongsTo = array();
+ *	public $hasMany = array();
+ * }
+ * 
+ * @package Baser.Test.Case.Model
+ */
+class UserTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.User',
-		'baser.UserGroup',
-		'baser.Favorite',
+		'baser.User.User',
+		'baser.UserGroup.UserGroup',
+		'baser.Favorite.Favorite',
 	);
 
 	public function setUp() {

@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ログイン
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 if ($this->Session->check('Message.auth')) {
@@ -24,8 +18,9 @@ $userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
 if (!$userModel) {
 	$userModel = 'User';
 }
+list(, $userModel) = pluginSplit($userModel);
 $userController = Inflector::tableize($userModel);
-$this->addScript(<<< CSS_END
+$this->append('script', <<< CSS_END
 <style type="text/css">
 #Contents {
 	display: none;
@@ -45,8 +40,12 @@ CSS_END
 ?>
 
 <script type="text/javascript">
+	
 $(function(){
 
+	if($("#LoginCredit").html() == 1) {
+		$("body").hide();
+	}
 	$("body").prepend($("#Login"));
 	$("#"+$("#UserModel").html()+"Name").focus();
 	changeNavi("#"+$("#UserModel").html()+"Name");
@@ -72,57 +71,15 @@ $(function(){
 		}
 	});
 
-	$("#BtnLogin").click(function(e){
-
-		$("#"+$("#UserModel").html()+"AjaxLoginForm").ajaxSubmit({
-			beforeSend: function() {
-				$("#Waiting").show();
-			},
-			url: $("#"+$("#UserModel").html()+"AjaxLoginForm").attr('action'),
-			success: function(response, status) {
-				if(response) {
-					$("#Login").fadeOut(500);
-					if($("#Credit").size()) {
-						if($("#Credit").css('display') == 'none') {
-							document.location = response;
-						} else {
-							openCredit(function(){
-								document.location = response;
-							});
-						}
-					} else {
-						document.location = response;
-					}
-				} else {
-					$("#AlertMessage").html('ログインに失敗しました。アカウント名、パスワードを確認してください。');
-					$("#AlertMessage").fadeIn(500);
-				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				var errorMessage = '';
-				if(XMLHttpRequest.status == 404) {
-					errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
-				} else {
-					if(XMLHttpRequest.responseText) {
-						errorMessage = '<br />'+XMLHttpRequest.responseText;
-					} else {
-						errorMessage = '<br />'+errorThrown;
-					}
-				}
-				$("#AlertMessage").html('ログイン処理に失敗しました。'+errorMessage);
-				$("#AlertMessage").fadeIn(500);
-			},
-			complete: function(){
-				$("#Waiting").hide();
-			}
-		});
-
-		return false;
-
-	});
-
 	if($("#LoginCredit").html() == 1) {
+		$("body").append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
+		$("#LoginInner").css('color', '#FFF');
+		$("#HeaderInner").css('height', '70px');
+		$("#Logo").css('position', 'absolute');
+		$("#Logo").css('z-index', '10000');
 		changeView($("#LoginCredit").html());
+		// 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
+		$("body").fadeIn(50);
 	}
 
 });
@@ -134,21 +91,11 @@ function changeNavi(target){
 	}
 }
 function changeView(creditOn) {
-
-	if(!$("#Credit").size()) {
-		return;
-	}
-
 	if(creditOn) {
 		credit();
-		$("#LoginInner").css('color', '#FFF');
-		$("#HeaderInner").css('height', '70px');
-		$("#Logo").css('position', 'absolute');
-		$("#Logo").css('z-index', '10000');
 	} else {
 		openCredit();
 	}
-
 }
 function openCredit(completeHandler) {
 	
@@ -179,14 +126,10 @@ function openCredit(completeHandler) {
 <div id="Login">
 
 	<div id="LoginInner">
-
+		<?php $this->BcBaser->flash() ?>
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
-		<?php if ($currentPrefix == 'front'): ?>
-			<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array('controller' => $userController))) ?>
-		<?php else: ?>
-			<?php echo $this->BcForm->create($userModel, array('action' => 'ajax_login', 'url' => array($this->request->params['prefix'] => true, 'controller' => $userController))) ?>
-		<?php endif ?>
+		<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array())) ?>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
 			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1)) ?>
@@ -199,7 +142,7 @@ function openCredit(completeHandler) {
 			<?php echo $this->BcForm->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin', 'tabindex' => 4)) ?>
 		</div>
 		<div class="clear login-etc">
-			<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'label' => '保存する', 'tabindex' => 3)) ?>　
+			<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'label' => 'ログイン状態を保存する', 'tabindex' => 3)) ?>　
 			<?php if ($currentPrefix == 'front'): ?>
 				<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
 			<?php else: ?>

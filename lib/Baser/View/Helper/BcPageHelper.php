@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ページヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Helper', 'View');
@@ -23,7 +17,7 @@ App::uses('Helper', 'View');
 /**
  * ページヘルパー
  *
- * @packa	ge Web.helpers
+ * @package Baser.View.Helper
  */
 class BcPageHelper extends Helper {
 
@@ -46,15 +40,14 @@ class BcPageHelper extends Helper {
  * ヘルパー
  * 
  * @var array
- * @access public
  */
 	public $helpers = array('BcBaser');
 
 /**
  * construct
  * 
+ * @param object $View
  * @return void
- * @access public
  */
 	public function __construct(View $View) {
 
@@ -69,21 +62,26 @@ class BcPageHelper extends Helper {
 /**
  * beforeRender
  * 
+ * @param string $viewFile (継承もとで利用中) The view file that is going to be rendered
  * @return void
- * @access public
  */
 	public function beforeRender($viewFile) {
-
-		if ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display' && isset($this->request->params['pass'][0])) {
-			// TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
+		//if ($this->request->params['controller'] == 'pages' && ($this->request->params['action'] == 'display' || $this->request->params['action'] == 'smartphone_display') && isset($this->request->params['pass'][0])) {
+		if ($this->request->params['controller'] == 'pages' && preg_match('/(^|_)display$/', $this->request->params['action']) && isset($this->request->params['pass'][0])) {
+			// @TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
 			$param = Configure::read('BcRequest.pureUrl');
 			if ($param && preg_match('/\/$/is', $param)) {
 				$param .= 'index';
 			}
+			
 			if (Configure::read('BcRequest.agent')) {
-				$param = Configure::read('BcRequest.agentPrefix') . '/' . $param;
+				$agentPrefix = Configure::read('BcRequest.agentPrefix');
+				if(empty($this->BcBaser->siteConfig['linked_pages_' . $agentPrefix])) {
+					$param = $agentPrefix . '/' . $param;
+				}
 			}
+			$param = preg_replace("/\.html$/", '', $param);
 			$this->request->data = $this->Page->findByUrl('/' . $param);
 		}
 	}
@@ -91,19 +89,23 @@ class BcPageHelper extends Helper {
 /**
  * ページ機能用URLを取得する
  * 
- * @param array $page
- * @return string
+ * @param array $page 固定ページデータ
+ * @return string URL
  */
 	public function getUrl($page) {
-
-		return $this->Page->getPageUrl($page);
+		if(isset($page['Page'])) {
+			$page = $page['Page'];
+		}
+		if(!isset($page['url'])) {
+			return '';
+		}
+		return $this->Page->convertViewUrl($page['url']);
 	}
 
 /**
  * 現在のページが所属するカテゴリデータを取得する
  * 
- * @return array
- * @access public
+ * @return array 失敗すると getCategory() は FALSE を返します。
  */
 	public function getCategory() {
 
@@ -117,9 +119,8 @@ class BcPageHelper extends Helper {
 /**
  * 現在のページが所属する親のカテゴリを取得する
  *
- * @param boolean $top
+ * @param boolean $top 親カテゴリが存在するかどうか、 オプションのパラメータ、初期値はオプションのパラメータ、初期値は false
  * @return array
- * @access public
  */
 	public function getParentCategory($top = false) {
 
@@ -146,7 +147,6 @@ class BcPageHelper extends Helper {
  * @param int $pageCategoryId
  * @param int $recursive
  * @return array
- * @access public
  */
 	public function getPageList($pageCategoryId, $recursive = null) {
 
@@ -157,7 +157,6 @@ class BcPageHelper extends Helper {
  * カテゴリ名を取得する
  * 
  * @return mixed string / false
- * @access public
  */
 	public function getCategoryName() {
 
@@ -174,7 +173,6 @@ class BcPageHelper extends Helper {
  *
  * @param array データリスト
  * @return boolean 公開状態
- * @access public
  */
 	public function allowPublish($data) {
 
@@ -199,10 +197,11 @@ class BcPageHelper extends Helper {
  * @param array $post
  * @param string $title
  * @param array $attributes
+ * @return void コンテンツナビが無効の場合のみ、空文字を返す
  */
 	public function nextLink($title = '', $attributes = array()) {
 
-		if (!$this->contensNaviAvailable()) {
+		if (!$this->contentsNaviAvailable()) {
 			return '';
 		}
 
@@ -244,11 +243,10 @@ class BcPageHelper extends Helper {
  * @param string $title
  * @param array $attributes
  * @return void
- * @access public
  */
 	public function prevLink($title = '', $attributes = array()) {
 
-		if (!$this->contensNaviAvailable()) {
+		if (!$this->contentsNaviAvailable()) {
 			return '';
 		}
 
@@ -286,10 +284,9 @@ class BcPageHelper extends Helper {
 /**
  * コンテンツナビ有効チェック
  *
- * @return	boolean
- * @access	public
+ * @return boolean
  */
-	public function contensNaviAvailable() {
+	public function contentsNaviAvailable() {
 
 		if (empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
 			return false;
@@ -302,7 +299,6 @@ class BcPageHelper extends Helper {
  * 固定ページのコンテンツを出力する
  * 
  * @return void
- * @access public 
  */
 	public function content() {
 
@@ -327,10 +323,9 @@ class BcPageHelper extends Helper {
  * テンプレートを取得
  * セレクトボックスのソースとして利用
  * 
- * @param string $type layout Or content
- * @param string $agent '' Or mobile Or smartphone
+ * @param string $type layout or content
+ * @param string $agent '' or mobile or smartphone
  * @return array
- * @access public
  */
 	public function getTemplates($type = 'layout', $agent = '') {
 

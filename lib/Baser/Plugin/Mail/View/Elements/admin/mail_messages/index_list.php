@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] 受信メール一覧　テーブル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.views
+ * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -38,6 +32,7 @@
 		<th style="white-space: nowrap"><?php echo $this->Paginator->sort('id', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' NO'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
 		<th style="white-space: nowrap" colspan="2"><?php echo $this->Paginator->sort('created', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 受信日時', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 受信日時'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
 		<th style="white-space: nowrap">受信内容</th>
+		<th style="white-space: nowrap">添付</th>
 	</tr>
 </thead>
 <tbody>
@@ -48,7 +43,7 @@
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>
-		<tr><td colspan="5"><p class="no-data">データが見つかりませんでした。</p></td></tr>
+		<tr><td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td></tr>
 <?php endif ?>
 </tbody>
 </table>

@@ -1,0 +1,155 @@
+@charset "utf-8";
+
+@import "import";
+
+a {
+	color:LINK !important;
+	
+	&:hover {
+		color:HOVER !important;
+	}
+	&:active {
+		color:LINK !important;
+	}
+	&:visited {
+		color:LINK !important;
+	}
+}
+
+
+
+.headerNav {
+	background:MAIN !important;
+	border-bottom:10px solid SUB !important;
+}
+.headerNav h2 {
+	background:MAIN !important;
+}
+.headerNav ul li a, .footerNav ul li a {
+	color:SUB !important;
+}
+.headerNav ul li a:link, .footerNav ul li a:link {
+	color:SUB !important;
+}
+.headerNav ul li a:visited, .footerNav ul li a:visited {
+	color:SUB !important;
+}
+.headerNav ul li a:hover, .footerNav ul li a:hover {
+	color:HOVER !important;
+}
+
+
+
+.articleArea h2 {
+	color:MAIN !important;
+	border-bottom:4px solid MAIN !important;
+	
+	@include tablet2 {
+	border-bottom:3px solid MAIN !important;
+	}
+	
+	@include sp {
+		border-left:8px solid MAIN !important;
+	}
+}
+
+
+/*.bgGray {
+	background:SUB !important;
+}*/
+
+
+.archiveTitle h3 {
+	background:MAIN !important;
+}
+
+
+.entry h3 a {
+	color:LINK !important;
+}
+.entry h3 a:hover {
+	color:SUB !important;
+}
+
+
+.button:hover {
+	background:MAIN !important;
+}
+
+
+.news h2 {
+	color:MAIN !important;
+}
+
+.companyArea h3 span {
+	background:MAIN !important;
+}
+
+
+.blogCalendar .today {
+	background:MAIN !important;
+}
+
+.blogWidgetCalender h3 {
+	color:MAIN !important;
+}
+
+
+.widget-blog-categories-archives h3,
+.widget-blog-monthly-archives h3,
+.widget-blog-recent-entries h3 {
+	background:MAIN !important;
+}
+
+.blogWidget [class*="depth-"] li:before,
+.blogWidget ul [class*="fontawesome-"]:before {
+	color:HOVER !important;
+}
+
+.footerNav {
+	background:MAIN !important;
+}
+.footerNav ul li a:hover {
+	background:MAIN !important;
+}
+
+
+.pagetop {
+	background:SUB !important;
+	
+	a {
+		color:MAIN !important;
+	}
+} //pagetop
+
+
+
+/*
+#Header {
+	border-top-color:MAIN;
+}
+a {
+	color:LINK;
+}
+a:link {
+	color:LINK;
+}
+a:visited {
+	color:LINK;
+}
+a:hover {
+	color:HOVER;
+}
+#top-main-telfax-title{
+	background-color:MAIN;
+}
+#Footer {
+	background-color:MAIN;
+}
+#ContentsBody h2{
+    background-color:MAIN;
+}
+table.blog-calendar td.today{
+	color:MAIN;
+}
+*/

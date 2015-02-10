@@ -1,28 +1,22 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * モバイルヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * モバイルヘルパー
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcMobileHelper extends Helper {
 
@@ -63,10 +57,10 @@ class BcMobileHelper extends Helper {
 				$View->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $View->output);
 			}
 
-			// 変換した上キャッシュを再保存しないとキャッシュ利用時に文字化けしてしまう
-			$caching = (
+			if (!(
 				isset($View->Cache) &&
 				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
+<<<<<<< HEAD
 			);
 			if ($caching) {
 				$this->Cache = new CacheHelper();
@@ -79,10 +73,13 @@ class BcMobileHelper extends Helper {
 				$this->Cache->cacheAction = $View->cacheAction;
 				$this->Cache->cache($___viewFn, $View->output, true);
 			} else {
+=======
+			)) {
+>>>>>>> e6a5f7b53d697278407d80bb52f493020b30218d
 				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
 				// nocache タグが残ってしまってエラーになるので除去する
-				$View->output = str_replace('<cake:nocache>', '', $View->output);
-				$View->output = str_replace('</cake:nocache>', '', $View->output);
+				$View->output = str_replace('<!--nocache-->', '', $View->output);
+				$View->output = str_replace('<!--/nocache-->', '', $View->output);
 			}
 			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
 			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ
@@ -98,6 +95,7 @@ class BcMobileHelper extends Helper {
  */
 	public function header() {
 		if (Configure::read('BcRequest.agent') == 'mobile') {
+			$this->_View->response->charset('Shift-JIS');
 			header("Content-type: application/xhtml+xml");
 		}
 	}

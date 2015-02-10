@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ページネーションシンプル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 if (empty($this->Paginator)) {
@@ -23,8 +17,7 @@ if (empty($this->Paginator)) {
 if (!isset($modules)) {
 	$modules = 8;
 }
-$this->passedArgs['action'] = str_replace('smartphone_', '', $this->passedArgs['action']);
-$this->passedArgs['plugin'] = '';
+$this->request->params['action'] = str_replace('smartphone_', '', $this->request->params['action']);
 ?>
 <?php if ((int) $this->Paginator->counter(array('format' => '%pages%')) > 1): ?>
 	<div class="pagination clearfix">
@@ -33,3 +26,4 @@ $this->passedArgs['plugin'] = '';
 		<?php echo $this->Paginator->next('次へ >', array('class' => 'next'), null, array('class' => 'disabled')) ?>
 	</div>
 <?php endif; ?>
+<?php $this->request->params['action'] = 'smartphone_' . $this->request->params['action'] ?>

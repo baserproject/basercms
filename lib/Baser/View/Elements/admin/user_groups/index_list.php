@@ -1,24 +1,25 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ユーザーグループ一覧　テーブル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
+<script type="text/javascript">
+$(function () {
+	$('.tag a').css({'text-decoration': 'none'})
+});
+</script>
 
+<!-- pagination -->
+<?php $this->BcBaser->element('pagination') ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 <thead>
@@ -47,3 +48,6 @@
 	<?php endif; ?>
 </tbody>
 </table>
+
+<!-- list-num -->
+<?php $this->BcBaser->element('list_num') ?>

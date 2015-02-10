@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ユーザーグループコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -59,7 +53,7 @@ class UserGroupsController extends AppController {
  *
  * @var array
  */
-	public $subMenuElements = array('site_configs', 'users', 'user_groups');
+	public $subMenuElements = array('users', 'user_groups');
 
 /**
  * ぱんくずナビ
@@ -88,16 +82,14 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		/* データ取得 */
-		$this->paginate = array('conditions' => array(),
-			'fields' => array(),
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('UserGroup', array('default' => $default));
+		$this->paginate = array(
 			'order' => 'UserGroup.id',
-			'limit' => 10
+			'limit' => $this->passedArgs['num']
 		);
-		$datas = $this->paginate('UserGroup');
-
 		/* 表示設定 */
-		$this->set('datas', $datas);
+		$this->set('datas', $this->paginate());
 		$this->pageTitle = 'ユーザーグループ一覧';
 		$this->help = 'user_groups_index';
 	}
@@ -243,7 +235,7 @@ class UserGroupsController extends AppController {
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;
 		$data = $this->UserGroup->read();
-		$data['UserGroup']['default_favorites'] = serialize($this->request->data);
+		$data['UserGroup']['default_favorites'] = BcUtil::serialize($this->request->data);
 		$this->UserGroup->set($data);
 		if ($this->UserGroup->save()) {
 			echo true;

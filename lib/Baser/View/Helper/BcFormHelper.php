@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * FormHelper 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -26,22 +20,28 @@ App::uses('FormHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
 App::uses('BcTextHelper', 'View/Helper');
 App::uses('BcCkeditorHelper', 'View/Helper');
+App::uses('BcUploadHelper', 'View/Helper');
 
 /**
  * FormHelper 拡張クラス
  *
- * @package Web.helpers
+ * @package Baser.View.Helper
  */
 class BcFormHelper extends FormHelper {
-
 /**
- * ヘルパー
+ * Other helpers used by FormHelper
  *
  * @var array
- * @access public
  */
-	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcCkeditor');
+	// CUSTOMIZE MODIFY 2014/07/02 ryuring
+	// >>>
+	//public $helpers = array('Html');
+	// ---
+	public $helpers = array('Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor');
+	// <<<
 
+// CUSTOMIZE ADD 2014/07/02 ryuring
+// >>>
 /**
  * sizeCounter用の関数読み込み可否
  * 
@@ -57,40 +57,31 @@ class BcFormHelper extends FormHelper {
  * @access private
  */
 	private $__id = null;
-
+// <<<
+	
 /**
- * 都道府県用のSELECTタグを表示する
+ * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
  *
- * @param string $fieldName Name attribute of the SELECT
- * @param mixed $selected Selected option
- * @param array $attributes Array of HTML options for the opening SELECT element
- * @return string 都道府県用のSELECTタグ
- * @access public
- */
-	public function prefTag($fieldName, $selected = null, $attributes = array()) {
-
-		$options = $this->BcText->prefList();
-		$attributes['value'] = $selected;
-		$attributes['empty'] = false;
-		return $this->select($fieldName, $options, $attributes);
-	}
-
-/**
- * dateTime 拡張
+ * ### Attributes:
+ *
+ * - `monthNames` If false, 2 digit numbers will be used instead of text.
+ *   If a array, the given array will be used.
+ * - `minYear` The lowest year to use in the year select
+ * - `maxYear` The maximum year to use in the year select
+ * - `interval` The interval for the minutes select. Defaults to 1
+ * - `separator` The contents of the string between select elements. Defaults to '-'
+ * - `empty` - If true, the empty select option is shown. If a string,
+ *   that string is displayed as the empty element.
+ * - `round` - Set to `up` or `down` if you want to force rounding in either direction. Defaults to null.
+ * - `value` | `default` The default value to be used by the input. A value in `$this->data`
+ *   matching the field name will override this value. If no default is provided `time()` will be used.
  *
  * @param string $fieldName Prefix name for the SELECT element
- * @param string $dateFormat DMY, MDY, YMD or NONE.
- * @param string $timeFormat 12, 24, NONE
- * @param string $selected Option which is selected.
- * @param string $attributes array of Attributes
- * 						'monthNames' If set and false numbers will be used for month select instead of text.
- * 						'minYear' The lowest year to use in the year select
- * 						'maxYear' The maximum year to use in the year select
- * 						'interval' The interval for the minutes select. Defaults to 1
- * 						'separator' The contents of the string between select elements. Defaults to '-'
- * @param boolean $showEmpty Whether or not to show an empty default value.
- * @return string The HTML formatted OPTION element
- * @access public
+ * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
+ * @param string $timeFormat 12, 24, or null to not generate time inputs.
+ * @param array $attributes Array of Attributes
+ * @return string Generated set of select boxes for the date and time formats chosen.
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::dateTime
  */
 	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
 		$attributes += array('empty' => true, 'value' => null);
@@ -109,15 +100,16 @@ class BcFormHelper extends FormHelper {
 
 		if (!empty($attributes['value'])) {
 			list($year, $month, $day, $hour, $min, $meridian) = $this->_getDateTimeValue(
-				$attributes['value'], $timeFormat
+				$attributes['value'],
+				$timeFormat
 			);
 		}
 
 		// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 		/* $defaults = array(
-		  'minYear' => null, 'maxYear' => null, 'separator' => '-',
-		  'interval' => 1, 'monthNames' => true, 'round' => null
-		  ); */
+			'minYear' => null, 'maxYear' => null, 'separator' => '-',
+			'interval' => 1, 'monthNames' => true, 'round' => null
+		); */
 		// ---
 		$defaults = array(
 			'minYear' => null, 'maxYear' => null, 'separator' => ' ',
@@ -125,7 +117,7 @@ class BcFormHelper extends FormHelper {
 		);
 		// <<<
 
-		$attributes = array_merge($defaults, (array) $attributes);
+		$attributes = array_merge($defaults, (array)$attributes);
 		if (isset($attributes['minuteInterval'])) {
 			$attributes['interval'] = $attributes['minuteInterval'];
 			unset($attributes['minuteInterval']);
@@ -137,10 +129,6 @@ class BcFormHelper extends FormHelper {
 		$monthNames = $attributes['monthNames'];
 		$round = $attributes['round'];
 		$attributes = array_diff_key($attributes, $defaults);
-
-		if ($timeFormat == 12 && $hour == 12) {
-			$hour = 0;
-		}
 
 		if (!empty($interval) && $interval > 1 && !empty($min)) {
 			$current = new DateTime();
@@ -212,40 +200,46 @@ class BcFormHelper extends FormHelper {
 			switch ($char) {
 				// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
 				case 'W':
-					$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty) . "年";
+					$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $attributes, $attributes['empty']) . "年";
 					break;
 				// <<<
 				case 'Y':
 					$attrs['Year']['value'] = $year;
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->year(
-					  $fieldName, $minYear, $maxYear, $attrs['Year']
-					  ); */
+						$fieldName, $minYear, $maxYear, $attrs['Year']
+					); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '年' : '';
 					$selects[] = $this->year(
 							$fieldName, $minYear, $maxYear, $attrs['Year']
 						) . $suffix;
 					// <<<
+
 					break;
 				case 'M':
 					$attrs['Month']['value'] = $month;
 					$attrs['Month']['monthNames'] = $monthNames;
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->month($fieldName, $attrs['Month']); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
 					$selects[] = $this->month($fieldName, $attrs['Month']) . $suffix;
 					// <<<
+					
 					break;
 				case 'D':
 					$attrs['Day']['value'] = $day;
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->day($fieldName, $attrs['Day']); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '日' : '';
 					$selects[] = $this->day($fieldName, $attrs['Day']) . $suffix;
 					// <<<
+
 					break;
 			}
 		}
@@ -257,20 +251,792 @@ class BcFormHelper extends FormHelper {
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$opt .= $this->hour($fieldName, true, $attrs['Hour']) . ':' .
-					$this->minute($fieldName, $attrs['Minute']);
+				$this->minute($fieldName, $attrs['Minute']);
 				break;
 			case '12':
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$attrs['Meridian']['value'] = $meridian;
 				$opt .= $this->hour($fieldName, false, $attrs['Hour']) . ':' .
-					$this->minute($fieldName, $attrs['Minute']) . ' ' .
-					$this->meridian($fieldName, $attrs['Meridian']);
+				$this->minute($fieldName, $attrs['Minute']) . ' ' .
+				$this->meridian($fieldName, $attrs['Meridian']);
 				break;
 		}
 		return $opt;
 	}
 
+/**
+ * Generates option lists for common <select /> menus
+ *
+ * @param string $name List type name.
+ * @param array $options Options list.
+ * @return array
+ */
+	protected function _generateOptions($name, $options = array()) {
+		if (!empty($this->options[$name])) {
+			return $this->options[$name];
+		}
+		$data = array();
+
+		switch ($name) {
+			case 'minute':
+				if (isset($options['interval'])) {
+					$interval = $options['interval'];
+				} else {
+					$interval = 1;
+				}
+				$i = 0;
+				while ($i < 60) {
+					$data[sprintf('%02d', $i)] = sprintf('%02d', $i);
+					$i += $interval;
+				}
+				break;
+			case 'hour':
+				for ($i = 1; $i <= 12; $i++) {
+					$data[sprintf('%02d', $i)] = $i;
+				}
+				break;
+			case 'hour24':
+				for ($i = 0; $i <= 23; $i++) {
+					$data[sprintf('%02d', $i)] = $i;
+				}
+				break;
+			case 'meridian':
+				$data = array('am' => 'am', 'pm' => 'pm');
+				break;
+			case 'day':
+				for ($i = 1; $i <= 31; $i++) {
+					$data[sprintf('%02d', $i)] = $i;
+				}
+				break;
+			case 'month':
+				if ($options['monthNames'] === true) {
+					$data['01'] = __d('cake', 'January');
+					$data['02'] = __d('cake', 'February');
+					$data['03'] = __d('cake', 'March');
+					$data['04'] = __d('cake', 'April');
+					$data['05'] = __d('cake', 'May');
+					$data['06'] = __d('cake', 'June');
+					$data['07'] = __d('cake', 'July');
+					$data['08'] = __d('cake', 'August');
+					$data['09'] = __d('cake', 'September');
+					$data['10'] = __d('cake', 'October');
+					$data['11'] = __d('cake', 'November');
+					$data['12'] = __d('cake', 'December');
+				} elseif (is_array($options['monthNames'])) {
+					$data = $options['monthNames'];
+				} else {
+					for ($m = 1; $m <= 12; $m++) {
+						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));
+					}
+				}
+				break;
+			case 'year':
+				$current = intval(date('Y'));
+
+				$min = !isset($options['min']) ? $current - 20 : (int)$options['min'];
+				$max = !isset($options['max']) ? $current + 20 : (int)$options['max'];
+
+				if ($min > $max) {
+					list($min, $max) = array($max, $min);
+				}
+				if (
+					!empty($options['value']) &&
+					(int)$options['value'] < $min &&
+					(int)$options['value'] > 0
+				) {
+					$min = (int)$options['value'];
+				} elseif (!empty($options['value']) && (int)$options['value'] > $max) {
+					$max = (int)$options['value'];
+				}
+
+				for ($i = $min; $i <= $max; $i++) {
+					$data[$i] = $i;
+				}
+				if ($options['order'] !== 'asc') {
+					$data = array_reverse($data, true);
+				}
+				break;
+			// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
+			case 'wyear':
+				$current = intval(date('Y'));
+
+				if (!isset($options['min'])) {
+					$min = $current - 20;
+				} else {
+					$min = $options['min'];
+				}
+
+				if (!isset($options['max'])) {
+					$max = $current + 20;
+				} else {
+					$max = $options['max'];
+				}
+				if ($min > $max) {
+					list($min, $max) = array($max, $min);
+				}
+				for ($i = $min; $i <= $max; $i++) {
+					$wyears = $this->BcTime->convertToWarekiYear($i);
+					if ($wyears) {
+						foreach ($wyears as $value) {
+							list($w, $year) = explode('-', $value);
+							$data[$value] = $this->BcTime->nengo($w) . ' ' . $year;
+						}
+					}
+				}
+				$data = array_reverse($data, true);
+				break;
+			// <<<
+		}
+		$this->_options[$name] = $data;
+		return $this->_options[$name];
+	}
+
+/**
+ * Creates a checkbox input widget.
+ * MODIFIED 2008/10/24 egashira
+ *          hiddenタグを出力しないオプションを追加
+ *
+ * ### Options:
+ *
+ * - `value` - the value of the checkbox
+ * - `checked` - boolean indicate that this checkbox is checked.
+ * - `hiddenField` - boolean to indicate if you want the results of checkbox() to include
+ *    a hidden input with a value of ''.
+ * - `disabled` - create a disabled input.
+ * - `default` - Set the default value for the checkbox. This allows you to start checkboxes
+ *    as checked, without having to check the POST data. A matching POST data value, will overwrite
+ *    the default value.
+ *
+ * @param string $fieldName Name of a field, like this "Modelname.fieldname"
+ * @param array $options Array of HTML attributes.
+ * @return string An HTML text input element.
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ */
+	public function checkbox($fieldName, $options = array()) {
+
+		// CUSTOMIZE ADD 2011/05/07 ryuring
+		// >>> hiddenをデフォルトオプションに追加
+		$options = array_merge(array('hidden' => true), $options);
+		$hidden = $options['hidden'];
+		unset($options['hidden']);
+		// <<<
+
+		$valueOptions = array();
+		if (isset($options['default'])) {
+			$valueOptions['default'] = $options['default'];
+			unset($options['default']);
+		}
+
+		$options += array('value' => 1, 'required' => false);
+		$options = $this->_initInputField($fieldName, $options) + array('hiddenField' => true);
+		$value = current($this->value($valueOptions));
+		$output = '';
+
+		if (
+			(!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
+			!empty($options['checked'])
+		) {
+			$options['checked'] = 'checked';
+		}
+
+		// CUSTOMIZE MODIFY 2011/05/07 ryuring
+		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
+		// 2014/03/23 ryuring CakePHP側が実装していたが互換性の為に残す
+		//if ($options['hiddenField']) {
+		// ---
+		if ($hidden !== false && $options['hiddenField'] !== false) {
+		// <<<
+			$hiddenOptions = array(
+				'id' => $options['id'] . '_',
+				'name' => $options['name'],
+				'value' => ($options['hiddenField'] !== true ? $options['hiddenField'] : '0'),
+				'form' => isset($options['form']) ? $options['form'] : null,
+				'secure' => false,
+			);
+			if (isset($options['disabled']) && $options['disabled']) {
+				$hiddenOptions['disabled'] = 'disabled';
+			}
+			$output = $this->hidden($fieldName, $hiddenOptions);
+		}
+		unset($options['hiddenField']);
+		
+		// CUSTOMIZE MODIFY 2011/05/07 ryuring
+		// label を追加
+		// CUSTOMIZE MODIRY 2014/10/27 ryuring
+		// チェックボックスをラベルで囲う仕様に変更
+		// >>> 
+		//return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
+		// ---
+		if (!empty($options['label'])) {
+			return $output . parent::label($fieldName, $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null))) . $options['label']);
+		} else {
+			return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
+		}
+		// <<<
+	}
+
+/**
+ * Returns an array of formatted OPTION/OPTGROUP elements
+ *
+ * @param array $elements
+ * @param array $parents
+ * @param boolean $showParents
+ * @param array $attributes
+ * @return array
+ */
+	protected function _selectOptions($elements = array(), $parents = array(), $showParents = null, $attributes = array()) {
+		$select = array();
+		$attributes = array_merge(
+			array('escape' => true, 'style' => null, 'value' => null, 'class' => null),
+			$attributes
+		);
+		$selectedIsEmpty = ($attributes['value'] === '' || $attributes['value'] === null);
+		$selectedIsArray = is_array($attributes['value']);
+
+		$this->_domIdSuffixes = array();
+		foreach ($elements as $name => $title) {
+			$htmlOptions = array();
+			if (is_array($title) && (!isset($title['name']) || !isset($title['value']))) {
+				if (!empty($name)) {
+					if ($attributes['style'] === 'checkbox') {
+						$select[] = $this->Html->useTag('fieldsetend');
+					} else {
+						$select[] = $this->Html->useTag('optiongroupend');
+					}
+					$parents[] = $name;
+				}
+				$select = array_merge($select, $this->_selectOptions(
+					$title, $parents, $showParents, $attributes
+				));
+
+				if (!empty($name)) {
+					$name = $attributes['escape'] ? h($name) : $name;
+					if ($attributes['style'] === 'checkbox') {
+						$select[] = $this->Html->useTag('fieldsetstart', $name);
+					} else {
+						$select[] = $this->Html->useTag('optiongroup', $name, '');
+					}
+				}
+				$name = null;
+			} elseif (is_array($title)) {
+				$htmlOptions = $title;
+				$name = $title['value'];
+				$title = $title['name'];
+				unset($htmlOptions['name'], $htmlOptions['value']);
+			}
+
+			if ($name !== null) {
+				$isNumeric = is_numeric($name);
+				if (
+					(!$selectedIsArray && !$selectedIsEmpty && (string)$attributes['value'] == (string)$name) ||
+					($selectedIsArray && in_array((string)$name, $attributes['value'], !$isNumeric))
+				) {
+					if ($attributes['style'] === 'checkbox') {
+						$htmlOptions['checked'] = true;
+					} else {
+						$htmlOptions['selected'] = 'selected';
+					}
+				}
+
+				if ($showParents || (!in_array($title, $parents))) {
+					$title = ($attributes['escape']) ? h($title) : $title;
+
+					$hasDisabled = !empty($attributes['disabled']);
+					if ($hasDisabled) {
+						$disabledIsArray = is_array($attributes['disabled']);
+						if ($disabledIsArray) {
+							$disabledIsNumeric = is_numeric($name);
+						}
+					}
+					if (
+						$hasDisabled &&
+						$disabledIsArray &&
+						in_array((string)$name, $attributes['disabled'], !$disabledIsNumeric)
+					) {
+						$htmlOptions['disabled'] = 'disabled';
+					}
+					if ($hasDisabled && !$disabledIsArray && $attributes['style'] === 'checkbox') {
+						$htmlOptions['disabled'] = $attributes['disabled'] === true ? 'disabled' : $attributes['disabled'];
+					}
+
+					if ($attributes['style'] === 'checkbox') {
+						$htmlOptions['value'] = $name;
+
+						$tagName = $attributes['id'] . $this->domIdSuffix($name);
+						$htmlOptions['id'] = $tagName;
+						$label = array('for' => $tagName);
+
+						if (isset($htmlOptions['checked']) && $htmlOptions['checked'] === true) {
+							$label['class'] = 'selected';
+						}
+
+						$name = $attributes['name'];
+
+						if (empty($attributes['class'])) {
+							$attributes['class'] = 'checkbox';
+						} elseif ($attributes['class'] === 'form-error') {
+							$attributes['class'] = 'checkbox ' . $attributes['class'];
+						}
+						
+						// CUSTOMIZE MODIFY 2014/02/24 ryuring
+						// checkboxのdivを外せるオプションを追加
+						// CUSTOMIZE MODIFY 2014/10/27 ryuring
+						// チェックボックスをラベルタグで囲う仕様に変更した
+						// >>>
+						// $label = $this->label(null, $title, $label);
+						// $item = $this->Html->useTag('checkboxmultiple', $name, $htmlOptions);
+						// $select[] = $this->Html->div($attributes['class'], $item . $label);
+						// ---
+						$item = $this->label(null, $this->Html->useTag('checkboxmultiple', $name, $htmlOptions) . $title, $label);
+						if (isset($attributes['div']) && $attributes['div'] === false) {
+							$select[] = $item;
+						} else {
+							$select[] = $this->Html->div($attributes['class'], $item);
+						}
+						// <<<
+						
+					} else {
+						if ($attributes['escape']) {
+							$name = h($name);
+						}
+						$select[] = $this->Html->useTag('selectoption', $name, $htmlOptions, $title);
+					}
+				}
+			}
+		}
+
+		return array_reverse($select, true);
+	}
+
+/**
+ * Creates a hidden input field.
+ *
+ * @param string $fieldName Name of a field, in the form of "Modelname.fieldname"
+ * @param array $options Array of HTML attributes.
+ * @return string A generated hidden input
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::hidden
+ */
+	public function hidden($fieldName, $options = array()) {
+		$options += array('required' => false, 'secure' => true);
+
+		$secure = $options['secure'];
+		unset($options['secure']);
+
+		// 2010/07/24 ryuring
+		// セキュリティコンポーネントのトークン生成の仕様として、
+		// ・hiddenタグ以外はフィールド情報のみ
+		// ・hiddenタグはフィールド情報と値
+		// をキーとして生成するようになっている。
+		// その場合、生成の元のなる値は、multipleを想定されておらず、先頭の値のみとなるが
+		// multiple な hiddenタグの場合、送信される値は配列で送信されるので値違いで認証がとおらない。
+		// という事で、multiple の場合は、あくまでhiddenタグ以外のようにフィールド情報のみを
+		// トークンのキーとする事で認証を通すようにする。
+		// >>> ADD
+		if (!empty($options['multiple'])) {
+			$secure = false;
+			$this->_secure(true); //lock
+		}
+		// <<<
+
+		$options = $this->_initInputField($fieldName, array_merge(
+			$options, array('secure' => self::SECURE_SKIP)
+		));
+
+		if ($secure === true) {
+			$this->_secure(true, null, '' . $options['value']);
+		}
+
+		// CUSTOMIZE 2010/07/24 ryuring
+		// 配列用のhiddenタグを出力できるオプションを追加
+		// CUSTOMIZE 2010/08/01 ryuring
+		// class属性を指定できるようにした
+		// CUSTOMIZE 2011/03/11 ryuring
+		// multiple で送信する値が配列の添字となっていたので配列の値に変更した
+		// >>> ADD
+		$multiple = false;
+		$value = '';
+		if (!empty($options['multiple'])) {
+			$multiple = true;
+			$options['id'] = null;
+			if (!isset($options['value'])) {
+				$value = $this->value($fieldName);
+			} else {
+				$value = $options['value'];
+			}
+			if (is_array($value) && !$value) {
+				unset($options['value']);
+			}
+			unset($options['multiple']);
+		}
+		// <<<
+		// >>> MODIFY
+		// return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
+		// ---
+		if ($multiple && is_array($value)) {
+			$out = array();
+			foreach ($value as $_value) {
+				$options['value'] = $_value;
+				$out[] = $this->Html->useTag('hiddenmultiple', $options['name'], array_diff_key($options, array('name' => '')));
+			}
+			return implode("\n", $out);
+		} else {
+			return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
+		}
+		// <<<
+	}
+
+/**
+ * create
+ * フック用にラッピング
+ * 
+ * @param array $model
+ * @param array $options
+ * @return string
+ * @access public
+ */
+	public function create($model = null, $options = array()) {
+
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// ブラウザの妥当性のチェックを除外する
+		// >>>
+		$options = array_merge(array(
+			'novalidate' => true
+			), $options);
+
+		$this->__id = $this->_getId($model, $options);
+
+		/*** beforeCreate ***/
+		$event = $this->dispatchEvent('beforeCreate', array(
+			'id' => $this->__id,
+			'options' => $options
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+		// <<<
+		
+		$out = parent::create($model, $options);
+
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
+		/*** afterCreate ***/
+		$event = $this->dispatchEvent('afterCreate', array(
+			'id' => $this->__id,
+			'out' => $out
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+
+		return $out;
+		// <<<
+		
+	}
+
+/**
+ * end
+ * フック用にラッピング
+ *
+ * @param	array	$options
+ * @return	string
+ * @access	public
+ */
+	public function end($options = null, $secureAttributes = array()) {
+
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
+		$id = $this->__id;
+		$this->__id = null;
+
+		/*** beforeEnd ***/
+		$event = $this->dispatchEvent('beforeEnd', array(
+			'id' => $id,
+			'options' => $options
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+		// <<<
+		
+		$out = parent::end($options);
+
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
+		/*** afterEnd ***/
+		$event = $this->dispatchEvent('afterEnd', array(
+			'id' => $id,
+			'out' => $out
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+
+		return $out;
+		// <<<
+	}
+
+/**
+ * Generates a form input element complete with label and wrapper div
+ *
+ * Options - See each field type method for more information. Any options that are part of
+ * $attributes or $options for the different type methods can be included in $options for input().
+ *
+ * - 'type' - Force the type of widget you want. e.g. ```type => 'select'```
+ * - 'label' - control the label
+ * - 'div' - control the wrapping div element
+ * - 'options' - for widgets that take options e.g. radio, select
+ * - 'error' - control the error message that is produced
+ *
+ * @param string $fieldName This should be "Modelname.fieldname"
+ * @param array $options Each type of input takes different options.
+ * @return string Completed form widget
+ */
+	public function input($fieldName, $options = array()) {
+
+		// CUSTOMIZE ADD 2014/07/03 ryuring
+		// >>>
+		/*** beforeInput ***/
+		$event = $this->dispatchEvent('beforeInput', array(
+			'fieldName' => $fieldName,
+			'options' => $options
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$type = '';
+		if (isset($options['type'])) {
+			$type = $options['type'];
+		}
+
+		if (!isset($options['div'])) {
+			$options['div'] = false;
+		}
+
+		if (!isset($options['error'])) {
+			$options['error'] = false;
+		}
+
+		switch ($type) {
+			case 'text':
+			default :
+				if (!isset($options['label'])) {
+					$options['label'] = false;
+				}
+				break;
+			case 'radio':
+				if (!isset($options['legend'])) {
+					$options['legend'] = false;
+				}
+				if (!isset($options['separator'])) {
+					$options['separator'] = '　';
+				}
+				break;
+		}
+		// <<<
+		
+		$this->setEntity($fieldName);
+		$options = $this->_parseOptions($options);
+
+		$divOptions = $this->_divOptions($options);
+		unset($options['div']);
+
+		if ($options['type'] === 'radio' && isset($options['options'])) {
+			$radioOptions = (array)$options['options'];
+			unset($options['options']);
+		}
+
+		// CUSTOMIZE MODIFY 2014/10/27 ryuring
+		// >>>
+		//if ($options['type'] !== 'radio') {
+		// ---
+		if ($options['type'] === 'checkbox') {
+			$label = '';
+		} else {
+			$label = $this->_getLabel($fieldName, $options);
+		}
+		if ($options['type'] !== 'radio' && $options['type'] !== 'checkbox') {
+		// <<<
+			unset($options['label']);
+		}
+
+		$error = $this->_extractOption('error', $options, null);
+		unset($options['error']);
+
+		$errorMessage = $this->_extractOption('errorMessage', $options, true);
+		unset($options['errorMessage']);
+
+		$selected = $this->_extractOption('selected', $options, null);
+		unset($options['selected']);
+
+		if ($options['type'] === 'datetime' || $options['type'] === 'date' || $options['type'] === 'time') {
+			$dateFormat = $this->_extractOption('dateFormat', $options, 'MDY');
+			$timeFormat = $this->_extractOption('timeFormat', $options, 12);
+			unset($options['dateFormat'], $options['timeFormat']);
+		}
+
+		$type = $options['type'];
+		$out = array('before' => $options['before'], 'label' => $label, 'between' => $options['between'], 'after' => $options['after']);
+		$format = $this->_getFormat($options);
+
+		unset($options['type'], $options['before'], $options['between'], $options['after'], $options['format']);
+
+		$out['error'] = null;
+		if ($type !== 'hidden' && $error !== false) {
+			$errMsg = $this->error($fieldName, $error);
+			if ($errMsg) {
+				$divOptions = $this->addClass($divOptions, 'error');
+				if ($errorMessage) {
+					$out['error'] = $errMsg;
+				}
+			}
+		}
+
+		if ($type === 'radio' && isset($out['between'])) {
+			$options['between'] = $out['between'];
+			$out['between'] = null;
+		}
+		
+		$out['input'] = $this->_getInput(compact('type', 'fieldName', 'options', 'radioOptions', 'selected', 'dateFormat', 'timeFormat'));
+
+		$output = '';
+		foreach ($format as $element) {
+			$output .= $out[$element];
+		}
+
+		if (!empty($divOptions['tag'])) {
+			$tag = $divOptions['tag'];
+			unset($divOptions['tag']);
+			$output = $this->Html->tag($tag, $output, $divOptions);
+		}
+
+		// CUSTOMIZE MODIFY 2014/07/03 ryuring
+		// >>>
+		// return $output;
+		// ---
+		
+		/* カウンター */
+		if (!empty($options['counter'])) {
+			$domId = $this->domId($fieldName, $options);
+			$counter = '<span id="' . $domId . 'Counter' . '" class="size-counter"></span>';
+			$script = '$("#' . $domId . '").keyup(countSize);$("#' . $domId . '").keyup();';
+			if (!$this->sizeCounterFunctionLoaded) {
+				$script .= <<< DOC_END
+function countSize() {
+	var len = $(this).val().length;
+	var maxlen = $(this).attr('maxlength');
+	if(!maxlen || maxlen == -1){
+		maxlen = '-';
+	}
+	$("#"+$(this).attr('id')+'Counter').html(len+'/<small>'+maxlen+'</small>');
+}
+DOC_END;
+				$this->sizeCounterFunctionLoaded = true;
+			}
+			$output = $output . $counter . $this->Html->scriptblock($script);
+		}
+
+		/*** afterInput ***/
+		$event = $this->dispatchEvent('afterInput', array(
+			'fieldName' => $fieldName,
+			'out' => $output
+			), array('class' => 'Form', 'plugin' => ''));
+
+		if ($event !== false) {
+			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+
+		return $output;
+		// <<<
+	}
+
+// CUSTOMIZE ADD 2014/07/02 ryuring
+/**
+ * フォームのIDを取得する
+ * BcForm::create より呼出される事が前提
+ * 
+ * @param string $model
+ * @param array $options
+ * @return string
+ */
+	protected function _getId($model = null, $options = array()) {
+
+		if (!isset($options['id'])) {
+			if ($model !== false) {
+				$this->setEntity($model, true);
+			}
+			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
+			$id = $this->domId($domId . 'Form');
+		} else {
+			$id = $options['id'];
+		}
+
+		return $id;
+	}
+	
+/**
+ * CKEditorを出力する
+ *
+ * @param	string	$fieldName
+ * @param	array	$options
+ * @param	array	$editorOptions
+ * @param	array	$styles
+ * @return	string
+ * @access	public
+ */
+	public function ckeditor($fieldName, $options = array()) {
+
+		$options = array_merge(array('type' => 'textarea'), $options);
+		return $this->BcCkeditor->editor($fieldName, $options);
+	}
+	
+/**
+ * エディタを表示する
+ * 
+ * @param string $fieldName
+ * @param array $options
+ * @return string
+ */
+	public function editor($fieldName, $options = array()) {
+
+		$options = array_merge(array(
+			'editor' => 'BcCkeditor',
+			'style' => 'width:99%;height:540px'
+			), $options);
+		list($plugin, $editor) = pluginSplit($options['editor']);
+		if (!empty($this->_View->{$editor})) {
+			return $this->_View->{$editor}->editor($fieldName, $options);
+		} elseif ($editor == 'none') {
+			$_options = array();
+			foreach ($options as $key => $value) {
+				if (!preg_match('/^editor/', $key)) {
+					$_options[$key] = $value;
+				}
+			}
+			return $this->input($fieldName, array_merge(array('type' => 'textarea'), $_options));
+		} else {
+			return $this->_View->BcCkeditor->editor($fieldName, $options);
+		}
+	}
+
+/**
+ * 都道府県用のSELECTタグを表示する
+ *
+ * @param string $fieldName Name attribute of the SELECT
+ * @param mixed $selected Selected option
+ * @param array $attributes Array of HTML options for the opening SELECT element
+ * @return string 都道府県用のSELECTタグ
+ * @access public
+ */
+	public function prefTag($fieldName, $selected = null, $attributes = array()) {
+
+		$options = $this->BcText->prefList();
+		$attributes['value'] = $selected;
+		$attributes['empty'] = false;
+		return $this->select($fieldName, $options, $attributes);
+	}
+	
 /**
  * 和暦年
  *
@@ -320,13 +1086,14 @@ class BcFormHelper extends FormHelper {
 			}
 		}
 		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
-
+		$attributes = array_merge($attributes, array(
+			'selected' => $selected,
+			'empty'=> $showEmpty
+		));
 		return $this->hidden($fieldName . ".wareki", array('value' => true)) .
-			$this->select(
-				$fieldName . ".year", $this->__generateOptions('wyear', $yearOptions), $selected, $attributes, $showEmpty
-		);
+			$this->select($fieldName . ".year", $this->_generateOptions('wyear', $yearOptions), $attributes);
 	}
-
+	
 /**
  * コントロールソースを取得する
  * Model側でメソッドを用意しておく必要がある
@@ -359,7 +1126,7 @@ class BcFormHelper extends FormHelper {
 			return false;
 		}
 	}
-
+	
 /**
  * モデルよりリストを生成する
  *
@@ -385,12 +1152,12 @@ class BcFormHelper extends FormHelper {
 		$list = $model->find('all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));
 
 		if ($list) {
-			return Set::combine($list, "{n}." . $modelName . "." . $idField, "{n}." . $modelName . "." . $displayField);
+			return Hash::combine($list, "{n}." . $modelName . "." . $idField, "{n}." . $modelName . "." . $displayField);
 		} else {
 			return null;
 		}
 	}
-
+	
 /**
  * JsonList
  *
@@ -484,6 +1251,8 @@ DOC_END;
  */
 	public function dateTimePicker($fieldName, $attributes = array()) {
 
+		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
+		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
 		$timeAttributes = array('size' => 8, 'maxlength' => 8);
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
@@ -504,6 +1273,7 @@ DOC_END;
 		$_script = <<< DOC_END
 <script type="text/javascript">
 $(function(){
+   $("#{$domId}Time").timepicker({ 'timeFormat': 'H:i' });
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
@@ -521,316 +1291,10 @@ $(function(){
 });
 </script>
 DOC_END;
-		$script = $this->_View->addScript($_script);
+		$script = $this->_View->append('script', $_script);
 		return $dateTag . $timeTag . $hiddenTag;
 	}
-
-/**
- * Generates option lists for common <select /> menus
- *
- * @param string $name
- * @param array $options
- * @return array option lists
- * @access private
- */
-	private function __generateOptions($name, $options = array()) {
-
-		if (!empty($this->options[$name])) {
-			return $this->options[$name];
-		}
-		$data = array();
-
-		switch ($name) {
-			case 'minute':
-				if (isset($options['interval'])) {
-					$interval = $options['interval'];
-				} else {
-					$interval = 1;
-				}
-				$i = 0;
-				while ($i < 60) {
-					$data[$i] = sprintf('%02d', $i);
-					$i += $interval;
-				}
-				break;
-			case 'hour':
-				for ($i = 1; $i <= 12; $i++) {
-					$data[sprintf('%02d', $i)] = $i;
-				}
-				break;
-			case 'hour24':
-				for ($i = 0; $i <= 23; $i++) {
-					$data[sprintf('%02d', $i)] = $i;
-				}
-				break;
-			case 'meridian':
-				$data = array('am' => 'am', 'pm' => 'pm');
-				break;
-			case 'day':
-				$min = 1;
-				$max = 31;
-
-				if (isset($options['min'])) {
-					$min = $options['min'];
-				}
-				if (isset($options['max'])) {
-					$max = $options['max'];
-				}
-
-				for ($i = $min; $i <= $max; $i++) {
-					$data[sprintf('%02d', $i)] = $i;
-				}
-				break;
-			case 'month':
-				if ($options['monthNames']) {
-					$data['01'] = __('January');
-					$data['02'] = __('February');
-					$data['03'] = __('March');
-					$data['04'] = __('April');
-					$data['05'] = __('May');
-					$data['06'] = __('June');
-					$data['07'] = __('July');
-					$data['08'] = __('August');
-					$data['09'] = __('September');
-					$data['10'] = __('October');
-					$data['11'] = __('November');
-					$data['12'] = __('December');
-				} else {
-					for ($m = 1; $m <= 12; $m++) {
-						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));
-					}
-				}
-				break;
-			case 'year':
-				$current = intval(date('Y'));
-
-				if (!isset($options['min'])) {
-					$min = $current - 20;
-				} else {
-					$min = $options['min'];
-				}
-
-				if (!isset($options['max'])) {
-					$max = $current + 20;
-				} else {
-					$max = $options['max'];
-				}
-				if ($min > $max) {
-					list($min, $max) = array($max, $min);
-				}
-				for ($i = $min; $i <= $max; $i++) {
-					$data[$i] = $i;
-				}
-				$data = array_reverse($data, true);
-				break;
-			// >>> CUSTOMIZE ADD 2011/01/11 ryuring	和暦対応
-			case 'wyear':
-				$current = intval(date('Y'));
-
-				if (!isset($options['min'])) {
-					$min = $current - 20;
-				} else {
-					$min = $options['min'];
-				}
-
-				if (!isset($options['max'])) {
-					$max = $current + 20;
-				} else {
-					$max = $options['max'];
-				}
-				if ($min > $max) {
-					list($min, $max) = array($max, $min);
-				}
-				for ($i = $min; $i <= $max; $i++) {
-					$wyears = $this->BcTime->convertToWarekiYear($i);
-					if ($wyears) {
-						foreach ($wyears as $value) {
-							list($w, $year) = explode('-', $value);
-							$data[$value] = $this->BcTime->nengo($w) . ' ' . $year;
-						}
-					}
-				}
-				$data = array_reverse($data, true);
-				break;
-			// <<<
-		}
-		$this->__options[$name] = $data;
-		return $this->__options[$name];
-	}
-
-/**
- * Creates a checkbox input widget.
- * MODIFIED 2008/10/24 egashira
- *          hiddenタグを出力しないオプションを追加
- *
- * @param string $fieldNamem Name of a field, like this "Modelname.fieldname"
- * @param array $options Array of HTML attributes.
- * 		'value' - the value of the checkbox
- * 		'checked' - boolean indicate that this checkbox is checked.
- * @todo Right now, automatically setting the 'checked' value is dependent on whether or not the
- * 		 checkbox is bound to a model.  This should probably be re-evaluated in future versions.
- * @return string An HTML text input element
- * @access public
- */
-	public function checkbox($fieldName, $options = array()) {
-
-		// CUSTOMIZE ADD 2011/05/07 ryuring
-		// >>> hiddenをデフォルトオプションに追加
-		$options = array_merge(array('hidden' => true), $options);
-		$hidden = $options['hidden'];
-		unset($options['hidden']);
-		// <<<
-
-		$options = $this->_initInputField($fieldName, $options);
-		$value = current($this->value());
-
-		if (!isset($options['value']) || empty($options['value'])) {
-			$options['value'] = 1;
-		} elseif (
-			(!isset($options['checked']) && !empty($value) && $value === $options['value']) ||
-			!empty($options['checked'])
-		) {
-			$options['checked'] = 'checked';
-		}
-
-		// CUSTOMIZE MODIFY 2011/05/07 ryuring
-		// >>> hiddenオプションがある場合のみ、hiddenタグを出力
-		/* $hiddenOptions = array(
-		  'id' => $options['id'] . '_', 'name' => $options['name'],
-		  'value' => '0', 'secure' => false
-		  );
-		  if (isset($options['disabled']) && $options['disabled'] == true) {
-		  $hiddenOptions['disabled'] = 'disabled';
-		  }
-		  $output = $this->hidden($fieldName, $hiddenOptions); */
-		// ---
-		if ($hidden) {
-			$hiddenOptions = array(
-				'id' => $options['id'] . '_', 'name' => $options['name'],
-				'value' => '0', 'secure' => false
-			);
-			if (isset($options['disabled']) && $options['disabled'] == true) {
-				$hiddenOptions['disabled'] = 'disabled';
-			}
-			$output = $this->hidden($fieldName, $hiddenOptions);
-		} else {
-			$output = '';
-		}
-		// <<<
-		// CUSTOMIZE MODIFY 2011/05/07 ryuring
-		// >>> label を追加
-		/* return $this->output($output . sprintf(
-		  $this->Html->_tags['checkbox'],
-		  $options['name'],
-		  $this->_parseAttributes($options, array('name'), null, ' ')
-		  )); */
-		// ---
-		if (!empty($options['label'])) {
-			$label = '&nbsp;' . parent::label($fieldName, $options['label']);
-		} else {
-			$label = '';
-		}
-		return $this->output($output . sprintf(
-					$this->Html->_tags['checkbox'], $options['name'], $this->_parseAttributes($options, array('name'), null, ' ')
-			)) . $label;
-		// <<<
-	}
-
-/**
- * Returns an array of formatted OPTION/OPTGROUP elements
- * 
- * @return array
- * @access private
- */
-	private function __selectOptions($elements = array(), $selected = null, $parents = array(), $showParents = null, $attributes = array()) {
-
-		$select = array();
-		$attributes = array_merge(array('escape' => true, 'style' => null), $attributes);
-		$selectedIsEmpty = ($selected === '' || $selected === null);
-		$selectedIsArray = is_array($selected);
-
-		foreach ($elements as $name => $title) {
-			$htmlOptions = array();
-			if (is_array($title) && (!isset($title['name']) || !isset($title['value']))) {
-				if (!empty($name)) {
-					if ($attributes['style'] === 'checkbox') {
-						$select[] = $this->Html->_tags['fieldsetend'];
-					} else {
-						$select[] = $this->Html->_tags['optiongroupend'];
-					}
-					$parents[] = $name;
-				}
-				$select = array_merge($select, $this->__selectOptions(
-						$title, $selected, $parents, $showParents, $attributes
-				));
-
-				if (!empty($name)) {
-					if ($attributes['style'] === 'checkbox') {
-						$select[] = sprintf($this->Html->_tags['fieldsetstart'], $name);
-					} else {
-						$select[] = sprintf($this->Html->_tags['optiongroup'], $name, '');
-					}
-				}
-				$name = null;
-			} elseif (is_array($title)) {
-				$htmlOptions = $title;
-				$name = $title['value'];
-				$title = $title['name'];
-				unset($htmlOptions['name'], $htmlOptions['value']);
-			}
-
-			if ($name !== null) {
-				if ((!$selectedIsEmpty && $selected == $name) || ($selectedIsArray && in_array($name, $selected))) {
-					if ($attributes['style'] === 'checkbox') {
-						$htmlOptions['checked'] = true;
-					} else {
-						$htmlOptions['selected'] = 'selected';
-					}
-				}
-
-				if ($showParents || (!in_array($title, $parents))) {
-					$title = ($attributes['escape']) ? h($title) : $title;
-
-					if ($attributes['style'] === 'checkbox') {
-						$htmlOptions['value'] = $name;
-
-						$tagName = Inflector::camelize(
-								$this->model() . '_' . $this->field() . '_' . Inflector::underscore($name)
-						);
-						$htmlOptions['id'] = $tagName;
-						$label = array('for' => $tagName);
-
-						if (isset($htmlOptions['checked']) && $htmlOptions['checked'] === true) {
-							$label['class'] = 'selected';
-						}
-
-						list($name) = array_values($this->__name());
-
-						if (empty($attributes['class'])) {
-							$attributes['class'] = 'checkbox';
-						}
-						$label = $this->label(null, $title, $label);
-						$item = sprintf(
-							$this->Html->_tags['checkboxmultiple'], $name, $this->Html->_parseAttributes($htmlOptions)
-						);
-						// checkboxのdivを外せるオプションを追加
-						if (isset($attributes['div']) && $attributes['div'] === false) {
-							$select[] = $item . $label;
-						} else {
-							$select[] = $this->Html->div($attributes['class'], $item . $label);
-						}
-					} else {
-						$select[] = sprintf(
-							$this->Html->_tags['selectoption'], $name, $this->Html->_parseAttributes($htmlOptions), $title
-						);
-					}
-				}
-			}
-		}
-
-		return array_reverse($select, true);
-	}
-
+	
 /**
  * 文字列保存用複数選択コントロール
  * 
@@ -845,7 +1309,7 @@ DOC_END;
 	public function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 
 		$_attributes = array('separator' => '<br />', 'quotes' => true);
-		$attributes = Set::merge($_attributes, $attributes);
+		$attributes = Hash::merge($_attributes, $attributes);
 
 		$quotes = $attributes['quotes'];
 		unset($attributes['quotes']);
@@ -879,323 +1343,299 @@ DOC_END;
 		$out .= $this->Js->buffer($script);
 		return $out;
 	}
-
+	
 /**
- * Creates a hidden input field.
- *
- * @param string $fieldName Name of a field, in the form"Modelname.fieldname"
- * @param array $options Array of HTML attributes.
- * @return string
- * @access public
- */
-	public function hidden($fieldName, $options = array()) {
-
-		$secure = true;
-
-		if (isset($options['secure'])) {
-			$secure = $options['secure'];
-			unset($options['secure']);
-		}
-
-		// 2010/07/24 ryuring
-		// セキュリティコンポーネントのトークン生成の仕様として、
-		// ・hiddenタグ以外はフィールド情報のみ
-		// ・hiddenタグはフィールド情報と値
-		// をキーとして生成するようになっている。
-		// その場合、生成の元のなる値は、multipleを想定されておらず、先頭の値のみとなるが
-		// multiple な hiddenタグの場合、送信される値は配列で送信されるので値違いで認証がとおらない。
-		// という事で、multiple の場合は、あくまでhiddenタグ以外のようにフィールド情報のみを
-		// トークンのキーとする事で認証を通すようにする。
-		// >>> ADD
-		if (!empty($options['multiple'])) {
-			$secure = false;
-			$this->_secure(true); //lock
-		}
-		// <<<
-
-		$options = $this->_initInputField($fieldName, array_merge(
-				$options, array('secure' => self::SECURE_SKIP)
-		));
-
-		if ($secure && $secure !== self::SECURE_SKIP) {
-			$this->_secure(true, null, '' . $options['value']);
-		}
-
-		// CUSTOMIZE 2010/07/24 ryuring
-		// 配列用のhiddenタグを出力できるオプションを追加
-		// CUSTOMIZE 2010/08/01 ryuring
-		// class属性を指定できるようにした
-		// CUSTOMIZE 2011/03/11 ryuring
-		// multiple で送信する値が配列の添字となっていたので配列の値に変更した
-		// >>> ADD
-		$multiple = false;
-		$value = '';
-		if (!empty($options['multiple'])) {
-			$multiple = true;
-			$options['id'] = null;
-			if (!isset($options['value'])) {
-				$value = $this->value($fieldName);
-			} else {
-				$value = $options['value'];
-			}
-			if (is_array($value) && !$value) {
-				unset($options['value']);
-			}
-			unset($options['multiple']);
-		}
-		// <<<
-		// >>> MODIFY
-		// return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
-		// ---
-		if ($multiple && is_array($value)) {
-			$out = array();
-			foreach ($value as $_value) {
-				$options['value'] = $_value;
-				$out[] = $this->Html->useTag('hiddenmultiple', $options['name'], array_diff_key($options, array('name' => '')));
-			}
-			return implode("\n", $out);
-		} else {
-			return $this->Html->useTag('hidden', $options['name'], array_diff_key($options, array('name' => '')));
-		}
-		// <<<
-	}
-
-/**
- * CKEditorを出力する
- *
- * @param	string	$fieldName
- * @param	array	$options
- * @param	array	$editorOptions
- * @param	array	$styles
- * @return	string
- * @access	public
- */
-	public function ckeditor($fieldName, $options = array()) {
-
-		$options = array_merge(array('type' => 'textarea'), $options);
-		return $this->BcCkeditor->editor($fieldName, $options);
-	}
-
-/**
- * create
- * フック用にラッピング
+ * ファイルインプットボックス出力
  * 
- * @param array $model
- * @param array $options
- * @return string
- * @access public
- */
-	public function create($model = null, $options = array()) {
-
-		$options = array_merge(array(
-			'novalidate' => true
-			), $options);
-
-		$this->__id = $this->_getId($model, $options);
-
-		/*		 * * beforeCreate ** */
-		$event = $this->dispatchEvent('beforeCreate', array(
-			'id' => $this->__id,
-			'options' => $options
-			), array('class' => 'Form'));
-		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
-		}
-		$out = parent::create($model, $options);
-
-		/*		 * * afterCreate ** */
-		$event = $this->dispatchEvent('afterCreate', array(
-			'id' => $this->__id,
-			'out' => $out
-			), array('class' => 'Form'));
-		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
-		}
-
-		return $out;
-	}
-
-/**
- * end
- * フック用にラッピング
- *
- * @param	array	$options
- * @return	string
- * @access	public
- */
-	public function end($options = null) {
-
-		$id = $this->__id;
-		$this->__id = null;
-
-		/*		 * * beforeEnd ** */
-		$event = $this->dispatchEvent('beforeEnd', array(
-			'id' => $id,
-			'options' => $options
-			), array('class' => 'Form'));
-		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
-		}
-
-		$out = parent::end($options);
-
-		/*		 * * afterEnd ** */
-		$event = $this->dispatchEvent('afterEnd', array(
-			'id' => $id,
-			'out' => $out
-			), array('class' => 'Form'));
-		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
-		}
-
-		return $out;
-	}
-
-/**
- * Generates a form input element complete with label and wrapper div
- *
- * Options - See each field type method for more information. Any options that are part of
- * $attributes or $options for the different type methods can be included in $options for input().
- *
- * - 'type' - Force the type of widget you want. e.g. ```type => 'select'```
- * - 'label' - control the label
- * - 'div' - control the wrapping div element
- * - 'options' - for widgets that take options e.g. radio, select
- * - 'error' - control the error message that is produced
- *
- * @param string $fieldName This should be "Modelname.fieldname"
- * @param array $options Each type of input takes different options.
- * @return string Completed form widget
- */
-	public function input($fieldName, $options = array()) {
-
-		/*		 * * beforeInput ** */
-		$event = $this->dispatchEvent('beforeInput', array(
-			'fieldName' => $fieldName,
-			'options' => $options
-			), array('class' => 'Form'));
-		if ($event !== false) {
-			$options = $event->result === true ? $event->data['options'] : $event->result;
-		}
-
-		$type = '';
-		if (isset($options['type'])) {
-			$type = $options['type'];
-		}
-
-		if (!isset($options['div'])) {
-			$options['div'] = false;
-		}
-
-		if (!isset($options['error'])) {
-			$options['error'] = false;
-		}
-
-		switch ($type) {
-			case 'text':
-			default :
-				if (!isset($options['label'])) {
-					$options['label'] = false;
-				}
-				break;
-			case 'radio':
-				if (!isset($options['legend'])) {
-					$options['legend'] = false;
-				}
-				if (!isset($options['separator'])) {
-					$options['separator'] = '　';
-				}
-				break;
-		}
-
-		$out = parent::input($fieldName, $options);
-
-		/* カウンター */
-		if (!empty($options['counter'])) {
-			$domId = $this->domId($fieldName, $options);
-			$counter = '<span id="' . $domId . 'Counter' . '" class="size-counter"></span>';
-			$script = '$("#' . $domId . '").keyup(countSize);$("#' . $domId . '").keyup();';
-			if (!$this->sizeCounterFunctionLoaded) {
-				$script .= <<< DOC_END
-function countSize() {
-	var len = $(this).val().length;
-	var maxlen = $(this).attr('maxlength');
-	if(!maxlen || maxlen == -1){
-		maxlen = '-';
-	}
-	$("#"+$(this).attr('id')+'Counter').html(len+'/<small>'+maxlen+'</small>');
-}
-DOC_END;
-				$this->sizeCounterFunctionLoaded = true;
-			}
-			$out = $out . $counter . $this->Js->buffer($script);
-		}
-
-		/*		 * * afterInput ** */
-		$event = $this->dispatchEvent('afterInput', array(
-			'fieldName' => $fieldName,
-			'out' => $out
-			), array('class' => 'Form'));
-
-		if ($event !== false) {
-			$out = $event->result === true ? $event->data['out'] : $event->result;
-		}
-
-		return $out;
-	}
-
-/**
- * フォームのIDを取得する
- * BcForm::create より呼出される事が前提
+ * 画像の場合は画像タグ、その他の場合はファイルへのリンク
+ * そして削除用のチェックボックスを表示する
  * 
- * @param string $model
- * @param array $options
- * @return string
- */
-	protected function _getId($model = null, $options = array()) {
-
-		if (!isset($options['id'])) {
-			if ($model !== false) {
-				$this->setEntity($model, true);
-			}
-			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
-			$id = $this->domId($domId . 'Form');
-		} else {
-			$id = $options['id'];
-		}
-
-		return $id;
-	}
-
-/**
- * エディタを表示する
+ * 《オプション》
+ * imgsize	画像のサイズを指定する
+ * rel		A タグの rel 属性を指定
+ * title	A タグの title 属性を指定
+ * link		大きいサイズへの画像へのリンク有無
+ * delCheck	削除用チェックボックスの利用可否
+ * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
  * 
  * @param string $fieldName
  * @param array $options
  * @return string
  */
-	public function editor($fieldName, $options = array()) {
-
+	public function file($fieldName, $options = array()) {
+		$entity = $this->entity();
+		$modelName = array_shift($entity);
+		$field = $this->field();
+		$Model = ClassRegistry::init($modelName);
+		if (empty($Model->Behaviors->BcUpload)) {
+			return parent::file($fieldName, $options);
+		}
+		
 		$options = array_merge(array(
-			'editor' => 'BcCkeditor',
-			'style' => 'width:99%;height:540px'
+			'imgsize' => 'midium', // 画像サイズ
+			'rel' => '', // rel属性
+			'title' => '', // タイトル属性
+			'link' => true, // 大きいサイズの画像へのリンク有無
+			'delCheck' => true,
+			'force' => false
 			), $options);
-		list($plugin, $editor) = pluginSplit($options['editor']);
-		if (!empty($this->_View->{$editor})) {
-			return $this->_View->{$editor}->editor($fieldName, $options);
-		} elseif ($editor == 'none') {
-			$_options = array();
-			foreach ($options as $key => $value) {
-				if (!preg_match('/^editor/', $key)) {
-					$_options[$key] = $value;
+
+		extract($options);
+
+		unset($options['imgsize']);
+		unset($options['rel']);
+		unset($options['title']);
+		unset($options['link']);
+		unset($options['delCheck']);
+		unset($options['force']);
+
+		$linkOptions = array(
+			'imgsize' => $imgsize,
+			'rel' => $rel,
+			'title' => $title,
+			'link' => $link,
+			'delCheck' => $delCheck,
+			'force' => $force
+		);
+
+		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
+		$fileTag = parent::file($fieldName, $options);
+		
+		if (empty($options['value'])) {
+			$value = $this->value($fieldName);
+		} else {
+			$value = $options['value'];
+		}
+		
+		$delCheckTag = '';
+		if ($fileLinkTag && $linkOptions['delCheck'] && empty($value['session_key'])) {
+			$delCheckTag = $this->checkbox($modelName . '.' . $field . '_delete') . $this->label($modelName . '.' . $field . '_delete', '削除する');
+		}
+		$hiddenValue = $this->value($fieldName . '_');
+		$fileValue = $this->value($fieldName);
+
+		if($fileLinkTag) {
+			if (is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
+				$hiddenTag = $this->hidden($modelName . '.' . $field . '_', array('value' => $hiddenValue));
+			} else {
+				if (is_array($fileValue)) {
+					$fileValue = null;
+				}
+				$hiddenTag = $this->hidden($modelName . '.' . $field . '_', array('value' => $fileValue));
+			}
+		}
+		
+		$out = $fileTag;
+
+		if ($fileLinkTag) {
+			$out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
+		}
+
+		return '<div class="upload-file">' . $out . '</div>';
+	}
+	
+/**
+ * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
+ * 
+ * ### 発動側
+ * フォームの</table>の直前に記述して利用する
+ * 
+ * ### コールバック処理
+ * プラグインのコールバック処理で CakeEvent::data['fields'] に 
+ * 配列で行データを追加する事でフォームの最後に行を追加する事ができる。
+ * 
+ * ### イベント名
+ * コントローラー名.Form.afterForm Or コントローラー名.Form.afterOptionForm
+ *
+ * ### 行データのキー（配列）
+ * - title：見出欄
+ * - input：入力欄
+ * 
+ * ### 行データの追加例
+ * $View = $event->subject();	// $event は、CakeEvent
+ * $input = $View->BcForm->input('Page.add_field', array('type' => 'input'));
+ * $event->data['fields'][] = array(
+ *		'title'	=> '追加フィールド',
+ *		'input'	=> $input
+ * );
+ * 
+ * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
+ * @return string 行データ
+ */
+	public function dispatchAfterForm($type = '') {
+		if($type) {
+			$type = Inflector::camelize($type);
+		}
+		
+		$event = $this->dispatchEvent('after' . $type . 'Form', array('fields' => array(), 'id' => $this->__id), array('class' => 'Form', 'plugin' => ''));
+		$out = '';
+		if ($event !== false) {
+			if(!empty($event->data['fields'])) {
+				foreach($event->data['fields'] as $field) {
+					$out .= "<tr>";
+					$out .= "<th class=\"col-head\">" . $field['title'] . "</th>\n";
+					$out .= "<td class=\"col-input\">" . $field['input'] . "</td>\n";
+					$out .= "</tr>";
 				}
 			}
-			return $this->input($fieldName, array_merge(array('type' => 'textarea'), $_options));
-		} else {
-			return $this->_View->BcCkeditor->editor($fieldName, $options);
 		}
+		return $out;
 	}
+	
+/**
+ * Creates a set of radio widgets. Will create a legend and fieldset
+ * by default. Use $options to control this
+ *
+ * ### Attributes:
+ *
+ * - `separator` - define the string in between the radio buttons
+ * - `between` - the string between legend and input set or array of strings to insert
+ *    strings between each input block
+ * - `legend` - control whether or not the widget set has a fieldset & legend
+ * - `value` - indicate a value that is should be checked
+ * - `label` - boolean to indicate whether or not labels for widgets show be displayed
+ * - `hiddenField` - boolean to indicate if you want the results of radio() to include
+ *    a hidden input with a value of ''. This is useful for creating radio sets that non-continuous
+ * - `disabled` - Set to `true` or `disabled` to disable all the radio buttons.
+ * - `empty` - Set to `true` to create a input with the value '' as the first option. When `true`
+ *   the radio label will be 'empty'. Set this option to a string to control the label value.
+ *
+ * @param string $fieldName Name of a field, like this "Modelname.fieldname"
+ * @param array $options Radio button options array.
+ * @param array $attributes Array of HTML attributes, and special attributes above.
+ * @return string Completed radio widget set.
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
+ */
+	public function radio($fieldName, $options = array(), $attributes = array()) {
+		$attributes = $this->_initInputField($fieldName, $attributes);
 
+		$showEmpty = $this->_extractOption('empty', $attributes);
+		if ($showEmpty) {
+			$showEmpty = ($showEmpty === true) ? __d('cake', 'empty') : $showEmpty;
+			$options = array('' => $showEmpty) + $options;
+		}
+		unset($attributes['empty']);
+
+		$legend = false;
+		if (isset($attributes['legend'])) {
+			$legend = $attributes['legend'];
+			unset($attributes['legend']);
+		} elseif (count($options) > 1) {
+			$legend = __(Inflector::humanize($this->field()));
+		}
+
+		$label = true;
+		if (isset($attributes['label'])) {
+			$label = $attributes['label'];
+			unset($attributes['label']);
+		}
+
+		$separator = null;
+		if (isset($attributes['separator'])) {
+			$separator = $attributes['separator'];
+			unset($attributes['separator']);
+		}
+
+		$between = null;
+		if (isset($attributes['between'])) {
+			$between = $attributes['between'];
+			unset($attributes['between']);
+		}
+
+		$value = null;
+		if (isset($attributes['value'])) {
+			$value = $attributes['value'];
+		} else {
+			$value = $this->value($fieldName);
+		}
+
+		$disabled = array();
+		if (isset($attributes['disabled'])) {
+			$disabled = $attributes['disabled'];
+		}
+
+		$out = array();
+
+		$hiddenField = isset($attributes['hiddenField']) ? $attributes['hiddenField'] : true;
+		unset($attributes['hiddenField']);
+
+		if (isset($value) && is_bool($value)) {
+			$value = $value ? 1 : 0;
+		}
+
+		$this->_domIdSuffixes = array();
+		foreach ($options as $optValue => $optTitle) {
+			$optionsHere = array('value' => $optValue, 'disabled' => false);
+
+			if (isset($value) && strval($optValue) === strval($value)) {
+				$optionsHere['checked'] = 'checked';
+			}
+			$isNumeric = is_numeric($optValue);
+			if ($disabled && (!is_array($disabled) || in_array((string)$optValue, $disabled, !$isNumeric))) {
+				$optionsHere['disabled'] = true;
+			}
+			$tagName = $attributes['id'] . $this->domIdSuffix($optValue);
+
+			// CUSTOMIZE MODIFY 2014/10/27 ryuring
+			// >>>
+			/*if ($label) {
+				$labelOpts = is_array($label) ? $label : array();
+				$labelOpts += array('for' => $tagName);
+				$optTitle = $this->label($tagName, $optTitle, $labelOpts);
+			}
+
+			if (is_array($between)) {
+				$optTitle .= array_shift($between);
+			}
+			$allOptions = array_merge($attributes, $optionsHere);
+			$out[] = $this->Html->useTag('radio', $attributes['name'], $tagName,
+				array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
+				$optTitle
+			);*/
+			// ---
+			if (is_array($between)) {
+				$optTitle .= array_shift($between);
+			}
+			$allOptions = array_merge($attributes, $optionsHere);
+			if ($label) {
+				$labelOpts = is_array($label) ? $label : array();
+				$labelOpts += array('for' => $tagName);
+				$out[] = $this->label($tagName, $this->Html->useTag('radio', $attributes['name'], $tagName,
+					array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
+					$optTitle
+				), $labelOpts);
+			} else {
+				$out[] = $this->Html->useTag('radio', $attributes['name'], $tagName,
+					array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
+					$between
+				);
+			}
+			// <<<
+		}
+		$hidden = null;
+
+		if ($hiddenField) {
+			if (!isset($value) || $value === '') {
+				$hidden = $this->hidden($fieldName, array(
+					'form' => isset($attributes['form']) ? $attributes['form'] : null,
+					'id' => $attributes['id'] . '_',
+					'value' => '',
+					'name' => $attributes['name']
+				));
+			}
+		}
+		$out = $hidden . implode($separator, $out);
+
+		if (is_array($between)) {
+			$between = '';
+		}
+		if ($legend) {
+			$out = $this->Html->useTag('fieldset', '', $this->Html->useTag('legend', $legend) . $between . $out);
+		}
+		return $out;
+	}
+	
+// <<<
 /**
  * 日付タグ
  * 和暦実装
@@ -1213,4 +1653,5 @@ DOC_END;
 	  return parent::dateTime($fieldName, $dateFormat, $timeFormat, $selected, $attributes, $showEmpty);
 
 	  } */
+
 }

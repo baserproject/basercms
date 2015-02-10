@@ -1,28 +1,27 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * フィードBaserヘルパー
  * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.views.helpers
+ * @package			Feed.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * フィードBaserヘルパー
+ * 
+ * BcBaserHelper より透過的に呼び出される
+ * 
+ * 《利用例》
+ * $this->BcBaser->feed(1)
  *
- * @package baser.plugins.feed.views.helpers
+ * @package Feed.View.Helper
  *
  */
 class FeedBaserHelper extends AppHelper {
@@ -30,18 +29,21 @@ class FeedBaserHelper extends AppHelper {
 /**
  * フィード出力
  * 
- * @param int $id
- * @param mixid $mobile '' / boolean
+ * @param int $id フィードID
+ * @param mixid $mobile	
+ *	- '' : 現在のリクエストについて自動取得
+ *	- true : モバイル用
+ *	- false : PC用
  * @return void
- * @access public
+ * @todo スマホ対応
  */
 	public function feed($id, $mobile = '') {
-		$url = array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
+		$url = array('mobile' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
 		if ($mobile === '') {
 			$mobile = (Configure::read('BcRequest.agent') == 'mobile');
 		}
 		if ($mobile) {
-			$url['prefix'] = Configure::read('BcAgent.mobile.prefix');
+			$url = array_merge($url, array(Configure::read('BcAgent.mobile.prefix') => true));
 		}
 		echo $this->requestAction($url, array('pass' => array($id)));
 	}

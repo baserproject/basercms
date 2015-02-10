@@ -1,31 +1,26 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ブログ設定モデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.models
+ * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
  * Include files
  */
+App::uses('BlogAppModel', 'Blog.Model');
 
 /**
  * ブログ設定モデル
  *
- * @package baser.plugins.blog.models
+ * @package Blog.Model
  */
 class BlogConfig extends BlogAppModel {
 

@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ダッシュボードメニュー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -24,8 +18,8 @@
 	<th>検索インデックスメニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('コンテンツ一覧', array('controller' => 'contents', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('コンテンツ登録', array('controller' => 'contents', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('検索インデックス一覧', array('controller' => 'contents', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link('検索インデックス新規追加', array('controller' => 'contents', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>

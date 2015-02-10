@@ -1,27 +1,20 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * ブログヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.views.helpers
+ * @package			Blog.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 /**
  * ブログヘルパー
- * @package baser.plugins.blog.views.helpers
+ * @package Blog.View.Helper
  */
 class BlogHelper extends AppHelper {
 
@@ -29,7 +22,6 @@ class BlogHelper extends AppHelper {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('Html', 'BcTime', 'BcBaser', 'BcUpload');
 
@@ -37,15 +29,15 @@ class BlogHelper extends AppHelper {
  * ブログカテゴリモデル
  *
  * @var BlogCategory
- * @access public
  */
 	public $BlogCategory = null;
 
 /**
  * コンストラクタ
  *
+ * @param View $View Viewオブジェクト
+ * @param array $settings 設定
  * @return void
- * @access public
  */
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
@@ -54,10 +46,11 @@ class BlogHelper extends AppHelper {
 
 /**
  * ブログコンテンツデータをセットする
+ * 
+ * アイキャッチを利用する場合に必ず設定が必要
  *
- * @param int $blogContentId
+ * @param int $blogContentId ブログコンテンツID
  * @return void
- * @access protected
  */
 	public function setContent($blogContentId = null) {
 		if (isset($this->blogContent) && !$blogContentId) {
@@ -66,7 +59,7 @@ class BlogHelper extends AppHelper {
 		if ($blogContentId) {
 			$BlogContent = ClassRegistry::getObject('BlogContent');
 			$BlogContent->expects(array());
-			$this->blogContent = Set::extract('BlogContent', $BlogContent->read(null, $blogContentId));
+			$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
 		} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
@@ -80,7 +73,6 @@ class BlogHelper extends AppHelper {
  * ブログタイトルを出力する
  *
  * @return void
- * @access public
  */
 	public function title() {
 		echo $this->getTitle();
@@ -90,7 +82,6 @@ class BlogHelper extends AppHelper {
  * タイトルを取得する
  *
  * @return string
- * @access public
  */
 	public function getTitle() {
 		return $this->blogContent['title'];
@@ -100,7 +91,6 @@ class BlogHelper extends AppHelper {
  * ブログの説明文を取得する
  *
  * @return string
- * @access public
  */
 	public function getDescription() {
 		return $this->blogContent['description'];
@@ -110,7 +100,6 @@ class BlogHelper extends AppHelper {
  * ブログの説明文を出力する
  *
  * @return void
- * @access public
  */
 	public function description() {
 		echo $this->getDescription();
@@ -120,7 +109,6 @@ class BlogHelper extends AppHelper {
  * ブログの説明文が指定されているかどうかを判定する
  *
  * @return boolean
- * @access public
  */
 	public function descriptionExists() {
 		if (!empty($this->blogContent['description'])) {
@@ -133,7 +121,8 @@ class BlogHelper extends AppHelper {
 /**
  * 記事のタイトルを出力する
  *
- * @param array $post
+ * @param array $post ブログ記事データ
+ * @param boolean $link 詳細ページへのリンクをつける場合には、true を指定する（初期値 : true）
  * @return void
  */
 	public function postTitle($post, $link = true) {
@@ -143,10 +132,9 @@ class BlogHelper extends AppHelper {
 /**
  * 記事タイトルを取得する
  *
- * @param array $post
- * @param boolean $link
- * @return string
- * @access public
+ * @param array $post ブログ記事データ
+ * @param boolean $link 詳細ページへのリンクをつける場合には、true を指定する（初期値 : true）
+ * @return string 記事タイトル
  */
 	public function getPostTitle($post, $link = true) {
 		if ($link) {
@@ -155,15 +143,15 @@ class BlogHelper extends AppHelper {
 			return $post['BlogPost']['name'];
 		}
 	}
-
+	
 /**
  * 記事へのリンクを取得する
  *
- * @param array $post
- * @param string $title
- * @param array $options
- * @return string
- * @access public
+ * @param array $post ブログ記事データ
+ * @param string $title タイトル
+ * @param array $options オプション（初期値 : array()）
+ *	※ オプションについては、 HtmlHelper::link() を参照
+ * @return string 記事へのリンク
  */
 	public function getPostLink($post, $title, $options = array()) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
@@ -171,13 +159,25 @@ class BlogHelper extends AppHelper {
 		return $this->BcBaser->getLink($title, $url, $options);
 	}
 
+/*
+ * ブログ記事のURLを取得する
+ *
+ * @param array $post ブログ記事データ
+ * @return string ブログ記事のURL
+ */
+	public function getPostLinkUrl($post) {
+		$this->setContent($post['BlogPost']['blog_content_id']);
+		return $this->url(array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']));
+	}
+
 /**
  * 記事へのリンクを出力する
  *
- * @param array $post
- * @param string $title
+ * @param array $post ブログ記事データ
+ * @param string $title タイトル
+ * @param array $options オプション（初期値 : array()）
+ *	※ オプションについては、 HtmlHelper::link() を参照
  * @return void
- * @access public
  */
 	public function postLink($post, $title, $options = array()) {
 		echo $this->getPostLink($post, $title, $options);
@@ -186,10 +186,13 @@ class BlogHelper extends AppHelper {
 /**
  * 記事の本文を表示する
  *
- * @param array $post
- * @param mixied boolean / string $moreLink
+ * @param array $post ブログ記事データ
+ * @param boolean $moreText 詳細データを表示するかどうか（初期値 : true）
+ * @param mixied $moreLink 詳細ページへのリンクを表示するかどうか。true に指定した場合、
+ *	「≫ 続きを読む」という文字列がリンクとして表示される。（初期値 : false）
+ * また、文字列を指定するとその文字列がリンクとなる
+ * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
  * @return void
- * @access public
  */
 	public function postContent($post, $moreText = true, $moreLink = false, $cut = false) {
 		echo $this->getPostContent($post, $moreText, $moreLink, $cut);
@@ -198,10 +201,13 @@ class BlogHelper extends AppHelper {
 /**
  * 記事の本文を取得する
  *
- * @param array $post
- * @param mixied boolean / string $moreLink
- * @return string
- * @access public
+ * @param array $post ブログ記事データ
+ * @param boolean $moreText 詳細データを表示するかどうか（初期値 : true）
+ * @param mixied $moreLink 詳細ページへのリンクを表示するかどうか。true に指定した場合、
+ *	「≫ 続きを読む」という文字列がリンクとして表示される。（初期値 : false）
+ * また、文字列を指定するとその文字列がリンクとなる
+ * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
+ * @return string 記事本文
  */
 	public function getPostContent($post, $moreText = true, $moreLink = false, $cut = false) {
 		if ($moreLink === true) {
@@ -226,19 +232,24 @@ class BlogHelper extends AppHelper {
 /**
  * 記事が属するカテゴリ名を出力する
  * 
- * @param array $post
+ * @param array $post 記事データ
+ * @param array $options オプション（初期値 : array()）
+ *	- `link` : リンクをつけるかどうか（初期値 : true）
+ *	※ その他のオプションは、HtmlHelper::link() を参照
  * @return void
- * @access puublic
  */
 	public function category($post, $options = array()) {
 		echo $this->getCategory($post, $options);
 	}
 
 /**
- * 記事が属するカテゴリ名の一覧を取得する
+ * 記事が属するカテゴリ名を取得する
  *
- * @param array $post
- * @return string
+ * @param array $post 記事データ
+ * @param array $options オプション（初期値 : array()）
+ *	- `link` : リンクをつけるかどうか（初期値 : true）
+ *	※ その他のオプションは、HtmlHelper::link() を参照
+ * @return string カテゴリ名
  */
 	public function getCategory($post, $options = array()) {
 		if (!empty($post['BlogCategory']['name'])) {
@@ -267,11 +278,12 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグを出力する
+ * 
+ * 復数所属する場合は復数出力する
  *
- * @param array $post
- * @param string $separator
+ * @param array $post 記事データ
+ * @param string $separator 区切り文字（初期値 :  , ）
  * @return void
- * @access public
  */
 	public function tag($post, $separator = ' , ') {
 		echo $this->getTag($post, $separator);
@@ -279,11 +291,12 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグを取得する
+ * 
+ * 復数所属する場合は復数取得する
  *
- * @param array $post
- * @param string $separator
+ * @param array $post 記事データ
+ * @param string $separator 区切り文字（初期値 :  , ）
  * @return void
- * @access public
  */
 	public function getTag($post, $separator = ' , ') {
 		$tagLinks = array();
@@ -307,15 +320,18 @@ class BlogHelper extends AppHelper {
 
 /**
  * カテゴリ一覧へのURLを取得する
+ * 
  * [注意] リンク関数でラップする前提の為、ベースURLは考慮されない
  *
- * @param string $blogCategoyId
- * @return void
+ * @param string $blogCategoyId ブログカテゴリID
+ * @param array $options オプション（初期値 : array()）
+ *	`named` : URLの名前付きパラメーター
+ * @return string カテゴリ一覧へのURL
  */
 	public function getCategoryUrl($blogCategoryId, $options = array()) {
 		$options = array_merge(array(
 			'named' => array()
-			), $options);
+		), $options);
 		extract($options);
 
 		if (!isset($this->BlogCategory)) {
@@ -329,7 +345,7 @@ class BlogHelper extends AppHelper {
 		$path = array('category');
 		if ($categoryPath) {
 			foreach ($categoryPath as $category) {
-				$path[] = $category['BlogCategory']['name'];
+				$path[] = urldecode($category['BlogCategory']['name']);
 			}
 		}
 
@@ -345,10 +361,9 @@ class BlogHelper extends AppHelper {
 /**
  * 記事の登録日を出力する
  *
- * @param array $post
- * @param string $format
+ * @param array $post ブログ記事
+ * @param string $format 日付フォーマット（初期値 : Y/m/d）
  * @return void
- * @access public
  */
 	public function postDate($post, $format = 'Y/m/d') {
 		echo $this->getPostDate($post, $format);
@@ -357,10 +372,9 @@ class BlogHelper extends AppHelper {
 /**
  * 登録日
  *
- * @param array $post
- * @param string $format
- * @return void
- * @access public
+ * @param array $post ブログ記事
+ * @param string $format 日付フォーマット（初期値 : Y/m/d）
+ * @return string 登録日
  */
 	public function getPostDate($post, $format = 'Y/m/d') {
 		if (!isset($this->BcTime)) {
@@ -372,9 +386,8 @@ class BlogHelper extends AppHelper {
 /**
  * 記事の投稿者を出力する
  *
- * @param array $post
+ * @param array $post ブログ記事
  * @return void
- * @access public
  */
 	public function author($post) {
 		echo $this->BcBaser->getUserName($post['User']);
@@ -383,10 +396,12 @@ class BlogHelper extends AppHelper {
 /**
  * カテゴリーの一覧をリストタグで取得する
  *
- * @param $categories
- * @param $depth
- * @return string
- * @access public
+ * @param array $categories カテゴリ一覧データ
+ * @param int $depth 階層（初期値 : 3）
+ * @param boolean $count 件数を表示するかどうか（初期値 : false）
+ * @param array $options オプション（初期値 : array()）
+ *	 ※ オプションは、HtmlHelper::link() を参照
+ * @return string HTMLのカテゴリ一覧
  */
 	public function getCategoryList($categories, $depth = 3, $count = false, $options = array()) {
 		return $this->_getCategoryList($categories, $depth, 1, $count, $options);
@@ -395,10 +410,13 @@ class BlogHelper extends AppHelper {
 /**
  * カテゴリーリストを取得する
  *
- * @param $categories
- * @param $depth
- * @return string
- * @access public
+ * @param array $categories カテゴリ一覧データ
+ * @param int $depth 階層（初期値 : 3）
+ * @param int $current 現在の階層（初期値 : 1）
+ * @param boolean $count 件数を表示するかどうか（初期値 : false）
+ * @param array $options オプション（初期値 : array()）
+ *	 ※ オプションは、HtmlHelper::link() を参照
+ * @return string HTMLのカテゴリ一覧
  */
 	protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = array()) {
 		if ($depth < $current) {
@@ -436,11 +454,11 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
- * ブログ編集ページへのリンクを出力【非推奨】
+ * ブログ編集ページへのリンクを出力
  *
- * @param string $id
+ * @param int $blogContentId ブログコンテンツID
+ * @param int $blogPostId ブログ記事ID
  * @return void
- * @access public
  * @deprecated ツールバーに移行
  */
 	public function editPost($blogContentId, $blogPostId) {
@@ -452,11 +470,11 @@ class BlogHelper extends AppHelper {
 /**
  * 前の記事へのリンクを出力する
  *
- * @param array $post
- * @param string $title
- * @param array $htmlAttributes
+ * @param array $post ブログ記事
+ * @param string $title タイトル
+ * @param array $htmlAttributes HTML属性
+ *	※ HTML属性は、HtmlHelper::link() 参照
  * @return void
- * @access pulic
  */
 	public function prevLink($post, $title = '', $htmlAttributes = array()) {
 		if (ClassRegistry::isKeySet('BlogPost')) {
@@ -493,9 +511,11 @@ class BlogHelper extends AppHelper {
 /**
  * 次の記事へのリンクを出力する
  *
- * @param array $post
+ * @param array $post ブログ記事
+ * @param string $title タイトル
+ * @param array $htmlAttributes HTML属性
+ *	※ HTML属性は、HtmlHelper::link() 参照
  * @return void
- * @access public
  */
 	public function nextLink($post, $title = '', $htmlAttributes = array()) {
 		if (ClassRegistry::isKeySet('BlogPost')) {
@@ -531,24 +551,22 @@ class BlogHelper extends AppHelper {
 
 /**
  * レイアウトテンプレートを取得
+ * 
  * コンボボックスのソースとして利用
- * TODO 別のヘルパに移動
- * @return array
- * @access public
+ * 
+ * @return array レイアウトテンプレート一覧
+ * @todo 別のヘルパに移動
  */
 	public function getLayoutTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Blog' . DS . 'View' . DS . 'Layouts' . DS,
-			APP . 'View' . DS . 'Layouts' . DS,
-			BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Layouts' . DS,
-			BASER_VIEWS . 'Layouts' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
+		
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Layouts' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
+			$templatesPath .= 'Layouts' . DS;
 			$folder = new Folder($templatesPath);
 			$files = $folder->read(true, true);
 			$foler = null;
@@ -573,23 +591,21 @@ class BlogHelper extends AppHelper {
 
 /**
  * ブログテンプレートを取得
+ * 
  * コンボボックスのソースとして利用
- * TODO 別のヘルパに移動
- * @return array
- * @access public
+ * 
+ * @return array ブログテンプレート一覧
+ * @todo 別のヘルパに移動
  */
 	public function getBlogTemplates() {
-		$templatesPathes = array(
-			APP . 'Plugin' . DS . 'Blog' . DS . 'View' . DS . 'Blog' . DS,
-			APP . 'View' . DS . 'Blog' . DS,
-			BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Blog' . DS
-		);
+		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
 		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Blog' . DS);
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
 
 		$_templates = array();
 		foreach ($templatesPathes as $templatePath) {
+			$templatePath .= 'Blog' . DS;
 			$folder = new Folder($templatePath);
 			$files = $folder->read(true, true);
 			$foler = null;
@@ -603,7 +619,8 @@ class BlogHelper extends AppHelper {
 		}
 
 		$excludes = Configure::read('BcAgent');
-		$excludes = Set::extract('{.+?}.prefix', $excludes);
+		$excludes = Hash::extract($excludes, '{s}.prefix');
+
 		$excludes[] = 'rss';
 		$templates = array();
 		foreach ($_templates as $template) {
@@ -618,9 +635,8 @@ class BlogHelper extends AppHelper {
 /**
  * 公開状態を取得する
  *
- * @param array $data データリスト
+ * @param array $data ブログ記事
  * @return boolean 公開状態
- * @access	public
  */
 	public function allowPublish($data) {
 		if (ClassRegistry::isKeySet('BlogPost')) {
@@ -634,10 +650,12 @@ class BlogHelper extends AppHelper {
 /**
  * 記事中の画像を出力する
  *
- * @param array $post
- * @param array $options
+ * @param array $post ブログ記事
+ * @param array $options オプション（初期値 : array()）
+ *	- `num` : 何枚目の画像か順番を指定（初期値 : 1）
+ *	- `link` : 詳細ページへのリンクをつけるかどうか（初期値 : true）
+ *	- `alt` : ALT属性（初期値 : ブログ記事のタイトル）
  * @return void
- * @access public
  */
 	public function postImg($post, $options = array()) {
 		echo $this->getPostImg($post, $options);
@@ -646,10 +664,12 @@ class BlogHelper extends AppHelper {
 /**
  * 記事中の画像を取得する
  *
- * @param array $post
- * @param array $options
+ * @param array $post ブログ記事
+ * @param array $options オプション（初期値 : array()）
+ *	- `num` : 何枚目の画像か順番を指定（初期値 : 1）
+ *	- `link` : 詳細ページへのリンクをつけるかどうか（初期値 : true）
+ *	- `alt` : ALT属性（初期値 : ブログ記事のタイトル）
  * @return void
- * @access public
  */
 	public function getPostImg($post, $options = array()) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
@@ -687,10 +707,9 @@ class BlogHelper extends AppHelper {
 /**
  * 記事中のタグで指定したIDの内容を取得する
  *
- * @param array $post
- * @param string $id
- * @return string
- * @access public
+ * @param array $post ブログ記事
+ * @param string $id 取得したいデータが属しているタグのID属性
+ * @return string 指定したIDの内容
  */
 	public function getHtmlById($post, $id) {
 		$content = $post['BlogPost']['content'] . $post['BlogPost']['detail'];
@@ -707,9 +726,8 @@ class BlogHelper extends AppHelper {
 /**
  * 親カテゴリを取得する
  *
- * @param array $post
- * @return array $parentCategory
- * @access public
+ * @param array $post ブログ記事
+ * @return array $parentCategory 親カテゴリ
  */
 	public function getParentCategory($post) {
 		if (empty($post['BlogCategory']['id'])) {
@@ -723,9 +741,12 @@ class BlogHelper extends AppHelper {
 /**
  * 同じタグの関連投稿を取得する
  *
- * @param array $post
+ * @param array $post ブログ記事
+ * @param array $options オプション（初期値 : array()）
+ *	- `recursive` : 関連データを取得する場合の階層（初期値 : -1）
+ *	- `limit` : 件数（初期値 : 5）
+ *	- `order` : 並び順指定（初期値 : BlogPost.posts_date DESC）
  * @return array
- * @access public
  */
 	public function getRelatedPosts($post, $options = array()) {
 		if (empty($post['BlogTag'])) {
@@ -754,7 +775,7 @@ class BlogHelper extends AppHelper {
 			return array();
 		}
 
-		$ids = Set::extract('/BlogPost/id', $tags);
+		$ids = Hash::extract($tags, '{n}.BlogPost.id');
 
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
@@ -780,8 +801,7 @@ class BlogHelper extends AppHelper {
 /**
  * ブログのアーカイブタイプを取得する
  *
- * @return string
- * @access public
+ * @return string ブログのアーカイブタイプ
  */
 	public function getBlogArchiveType() {
 		if (!empty($this->_View->viewVars['blogArchiveType'])) {
@@ -793,7 +813,8 @@ class BlogHelper extends AppHelper {
 
 /**
  * アーカイブページ判定
- * @return boolean 
+ * 
+ * @return boolean 現在のページがアーカイブページの場合は true を返す
  */
 	public function isArchive() {
 		return ($this->getBlogArchiveType());
@@ -801,7 +822,8 @@ class BlogHelper extends AppHelper {
 
 /**
  * カテゴリー別記事一覧ページ判定
- * @return boolean
+ * 
+ * @return boolean 現在のページがカテゴリー別記事一覧ページの場合は true を返す
  */
 	public function isCategory() {
 		return ($this->getBlogArchiveType() == 'category');
@@ -809,7 +831,8 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグ別記事一覧ページ判定
- * @return boolean
+ * 
+ * @return boolean 現在のページがタグ別記事一覧ページの場合は true を返す
  */
 	public function isTag() {
 		return ($this->getBlogArchiveType() == 'tag');
@@ -817,7 +840,8 @@ class BlogHelper extends AppHelper {
 
 /**
  * 日別記事一覧ページ判定
- * @return boolean
+ * 
+ * @return boolean 現在のページが日別記事一覧ページの場合は true を返す
  */
 	public function isDate() {
 		return ($this->getBlogArchiveType() == 'daily');
@@ -825,7 +849,8 @@ class BlogHelper extends AppHelper {
 
 /**
  * 月別記事一覧ページ判定
- * @return boolean 
+ *
+ * @return boolean 現在のページが月別記事一覧ページの場合は true を返す
  */
 	public function isMonth() {
 		return ($this->getBlogArchiveType() == 'monthly');
@@ -833,7 +858,8 @@ class BlogHelper extends AppHelper {
 
 /**
  * 年別記事一覧ページ判定
- * @return boolean
+ * 
+ * @return boolean 現在のページが年別記事一覧ページの場合は true を返す
  */
 	public function isYear() {
 		return ($this->getBlogArchiveType() == 'yearly');
@@ -841,18 +867,29 @@ class BlogHelper extends AppHelper {
 
 /**
  * 個別ページ判定
- * @return boolean
+ * 
+ * @return boolean 現在のページが個別ページの場合は true を返す
  */
 	public function isSingle() {
 		if (empty($this->request->params['plugin'])) {
 			return false;
 		}
-		return ($this->request->params['plugin'] == 'blog' && $this->request->params['controller'] == 'blog' && $this->request->params['action'] == 'archives' && !$this->getBlogArchiveType());
+		$agentPrefix = Configure::read('BcRequest.agentPrefix');
+		if($agentPrefix) {
+			$agentPrefix .= '_';
+		}
+		return (
+			$this->request->params['plugin'] == 'blog' && 
+			$this->request->params['controller'] == 'blog' && 
+			$this->request->params['action'] == $agentPrefix . 'archives' && 
+			!$this->getBlogArchiveType()
+		);
 	}
 
 /**
  * インデックスページ判定
- * @return boolean
+ * 
+ * @return boolean 現在のページがインデックスページの場合は true を返す
  */
 	public function isHome() {
 		if (empty($this->request->params['plugin'])) {
@@ -864,8 +901,21 @@ class BlogHelper extends AppHelper {
 /**
  * アイキャッチ画像を出力する
  * 
- * @param array $post
- * @param array $options 
+ * @param array $post ブログ記事
+ * @param array $options オプション（初期値 : array()）
+ *	- `imgsize` : 画像サイズ[thumb|small|medium|large]（初期値 : thumb）
+ *  - `link` : 大きいサイズの画像へのリンク有無（初期値 : true）
+ *  - `escape` : タイトルについてエスケープする場合に true を指定（初期値 : false）
+ *	- `mobile` : モバイルの画像を表示する場合に true を指定（初期値 : false）
+ *	- `alt` : alt属性（初期値 : ''）
+ *	- `width` : 横幅（初期値 : ''）
+ *	- `height` : 高さ（初期値 : ''）
+ *	- `noimage` : 画像が存在しない場合に表示する画像（初期値 : ''）
+ *	- `tmp` : 一時保存データの場合に true を指定（初期値 : false）
+ *	- `class` : タグの class を指定（初期値 : img-eye-catch）
+ *	- `force` : 画像が存在しない場合でも強制的に出力する場合に true を指定する（初期値 : false）
+ *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
+ * @return void
  */
 	public function eyeCatch($post, $options = array()) {
 		echo $this->getEyeCatch($post, $options);
@@ -874,13 +924,26 @@ class BlogHelper extends AppHelper {
 /**
  * アイキャッチ画像を取得する
  * 
- * @param array $post
- * @param array $options
- * @return string 
+ * @param array $post ブログ記事
+ * @param array $options オプション（初期値 : array()）
+ *	- `imgsize` : 画像サイズ[thumb|small|medium|large]（初期値 : thumb）
+ *  - `link` : 大きいサイズの画像へのリンク有無（初期値 : true）
+ *  - `escape` : タイトルについてエスケープする場合に true を指定（初期値 : false）
+ *	- `mobile` : モバイルの画像を表示する場合に true を指定（初期値 : false）
+ *	- `alt` : alt属性（初期値 : ''）
+ *	- `width` : 横幅（初期値 : ''）
+ *	- `height` : 高さ（初期値 : ''）
+ *	- `noimage` : 画像が存在しない場合に表示する画像（初期値 : ''）
+ *	- `tmp` : 一時保存データの場合に true を指定（初期値 : false）
+ *	- `class` : タグの class を指定（初期値 : img-eye-catch）
+ *	- `force` : 画像が存在しない場合でも強制的に出力する場合に true を指定する（初期値 : false）
+ *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
+ * @return string アイキャッチ画像のHTML
  */
 	public function getEyeCatch($post, $options = array()) {
+		$this->setContent($post['BlogPost']['blog_content_id']);
 		$options = array_merge(array(
-			'imgsize' => 'thumb', // 画像サイズ
+			'imgsize' => 'thumb',
 			'link' => true, // 大きいサイズの画像へのリンク有無
 			'escape' => false, // エスケープ
 			'mobile' => false, // モバイル
@@ -894,5 +957,21 @@ class BlogHelper extends AppHelper {
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
 	}
-
+	
+/**
+ * メールフォームプラグインのフォームへのリンクを生成する
+ * 
+ * @param string $title リンクのタイトル
+ * @param string $contentsName メールフォームのコンテンツ名
+ * @param array $datas メールフォームに引き継ぐデータ（初期値 : array()）
+ * @param array $options a タグの属性（初期値 : array()）
+ *	※ オプションについては、HtmlHelper::link() を参照
+ * @return void
+ */
+	public function mailFormLink($title, $contentsName, $datas = array(), $options = array()) {
+		App::uses('MailHelper', 'Mail.View/Helper');
+		$MailHelper = new MailHelper($this->_View);
+		$MailHelper->link($title, $contentsName, $datas, $options);
+	}
+	
 }

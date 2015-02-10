@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * フィードコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.controllers
+ * @package			Feed.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@
 /**
  * フィードコントローラー
  *
- * @package baser.plugins.feed.controllers
+ * @package Feed.Controller
  */
 class FeedController extends FeedAppController {
 
@@ -50,7 +44,7 @@ class FeedController extends FeedAppController {
  * @var array
  * @access public
  */
-	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.RssEx");
+	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
 
 /**
  * ヘルパー
@@ -58,7 +52,7 @@ class FeedController extends FeedAppController {
  * @var array
  * @access public
  */
-	public $helpers = array('Cache', 'BcText', 'Feed.Feed', 'BcArray');
+	public $helpers = array('BcText', 'Feed.Feed', 'BcArray');
 
 /**
  * beforeFilter
@@ -80,8 +74,9 @@ class FeedController extends FeedAppController {
  * @access public
  */
 	public function index($id) {
+		
 		$this->navis = array();
-
+		
 		// IDの指定がなかった場合はエラーとする
 		if (!$id) {
 			$this->render('error');
@@ -122,7 +117,7 @@ class FeedController extends FeedAppController {
 				}
 			}
 
-			$feed = $this->RssEx->findAll($url, null, $feedDetail['FeedDetail']['cache_time'], $categoryFilter);
+			$feed = $this->Feed->getFeed($url, null, $feedDetail['FeedDetail']['cache_time'], $categoryFilter);
 			$feeds[] = $feed;
 
 			if ($cachetime < (strtotime($feedDetail['FeedDetail']['cache_time']) - time())) {
@@ -188,7 +183,13 @@ class FeedController extends FeedAppController {
 
 		/* キャッシュを設定 */
 		if (!isset($_SESSION['Auth']['User'])) {
+			// モバイルの場合、BcMobileHelper より CacheHelper が先に読み込まれた場合、
+			// nocacheが正常に動作しなくなる為、ここでヘルパの設定を行う
+			// ※ Shift-JISでキャッシュを保存する為先にBcMobileHelperのイベントを実行する必要がある為
+			$this->helpers[] = 'Cache';
 			$this->cacheAction = $cachetime;
+			// Ajaxのcacheをオフにした場合のクエリ文字列がキャッシュファイル名に影響を与えるので除去
+			unset($this->request->query['_']);
 		}
 
 		$this->set('cachetime', $cachetime);
@@ -230,7 +231,6 @@ class FeedController extends FeedAppController {
 			$id = str_replace('.js', '', $id);
 		}
 
-		Configure::write('debug', 1);
 		$this->cacheAction = Configure::read('BcCache.duration');
 		$this->layout = "ajax";
 

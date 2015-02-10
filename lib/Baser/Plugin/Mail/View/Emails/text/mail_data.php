@@ -1,27 +1,21 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [EMAIL] メール送信データ
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views
+ * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
 $group_field = null;
 foreach ($mailFields as $field) {
 	$field = $field['MailField'];
-	if ($field['use_field'] && isset($message[$field['field_name']]) && ($group_field != $field['group_field'] || (!$group_field && !$field['group_field']))) {
+	if ($field['use_field'] && $field['type'] != 'file' && isset($message[$field['field_name']]) && ($group_field != $field['group_field'] || (!$group_field && !$field['group_field']))) {
 ?>
 
 
@@ -29,13 +23,13 @@ foreach ($mailFields as $field) {
 ----------------------------------------
 <?php
 	}
-	if (!empty($field['before_attachment']) && isset($message[$field['field_name']])) {
+	if ($field['type'] != 'file' && !empty($field['before_attachment']) && isset($message[$field['field_name']])) {
 		echo " " . $field['before_attachment'];
 	}
-	if (isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']) {
+	if ($field['type'] != 'file' && isset($message[$field['field_name']]) && !$field['no_send'] && $field['use_field']) {
 		echo $this->Maildata->control($field['type'], $message[$field['field_name']], $this->Mailfield->getOptions($field));
 	}
-	if (!empty($field['after_attachment']) && isset($message[$field['field_name']])) {
+	if ($field['type'] != 'file' && !empty($field['after_attachment']) && isset($message[$field['field_name']])) {
 		echo " " . $field['after_attachment'];
 	}
 	$group_field = $field['group_field'];

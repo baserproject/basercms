@@ -8,6 +8,9 @@ app/Plugin/*
 !app/Plugin/empty
 app/webroot/files/*
 !app/webroot/files/empty
+app/webroot/css/admin
+app/webroot/img/admin
+app/webroot/js/admin
 app/tmp/*
 !app/tmp/empty
 app/View/pages/
@@ -28,3 +31,7 @@ lib/Cake/Console/Templates/skel/tmp/sessions/*
 lib/Cake/Console/Templates/skel/tmp/tests/*
 !lib/Cake/Console/Templates/skel/tmp/tests/empty
 .vagrant/*
+Vagrantfile
+vendors
+Plugin
+composer.lock

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールフィールドヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views.helpers
+ * @package			Mail.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@
 /**
  * メールフィールドヘルパー
  *
- * @package baser.plugins.mail.views.helpers
+ * @package Mail.View.Helper
  *
  */
 class MailfieldHelper extends AppHelper {
@@ -33,9 +27,8 @@ class MailfieldHelper extends AppHelper {
 /**
  * htmlの属性を取得する
  *
- * @param array メールフィールド
- * @return array html属性
- * @access public
+ * @param array $data メールフィールドデータ
+ * @return array HTML属性
  */
 	public function getAttributes($data) {
 		if (isset($data['MailField'])) {
@@ -59,9 +52,8 @@ class MailfieldHelper extends AppHelper {
 /**
  * コントロールのソースを取得する
  *
- * @param array メールフィールド
+ * @param array $data メールフィールドデータ
  * @return array コントロールソース
- * @access public
  */
 	public function getOptions($data) {
 		if (isset($data['MailField'])) {

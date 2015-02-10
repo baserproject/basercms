@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * Model 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -283,42 +277,21 @@ class BcAppModel extends Model {
 	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 		// 初期データフォルダを走査
 		if (!$pluginName) {
-			$path = BASER_CONFIGS . 'sql';
+			$path = BASER_CONFIGS . 'Schema';
 		} else {
-			$schemaPaths = array(
-				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
-				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql'
-			);
-			$path = '';
-			foreach ($schemaPaths as $schemaPath) {
-				if (is_dir($schemaPath)) {
-					$path = $schemaPath;
-					break;
-				}
-			}
+			$path = BcUtil::getSchemaPath($pluginName);
 			if (!$path) {
 				return true;
 			}
 		}
-
 		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
-			$dataPaths = array(
-				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default',
-				APP . 'Plugin' . DS . $pluginName . DS . 'Config' . DS . 'sql',
-				BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'data' . DS . 'default'
-			);
-			$path = '';
-			foreach ($dataPaths as $dataPath) {
-				if (is_dir($dataPath)) {
-					$path = $dataPath;
-					break;
-				}
-			}
-			if (!$path) {
-				return true;
-			}
 			if ($loadCsv) {
-				return $this->loadCsv($dbConfigName, $path);
+				$path = BcUtil::getDefaultDataPath($pluginName);
+				if($path) {
+					return $this->loadCsv($dbConfigName, $path);
+				} else {
+					return true;
+				}
 			} else {
 				return true;
 			}
@@ -692,6 +665,7 @@ class BcAppModel extends Model {
 		$file = $check[key($check)];
 		if (!empty($file['name'])) {
 			// サイズが空の場合は、HTMLのMAX_FILE_SIZEの制限によりサイズオーバー
+			// だが、post_max_size を超えた場合は、ここまで処理がこない可能性がある
 			if (!$file['size']) {
 				return false;
 			}
@@ -702,6 +676,25 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * ファイルの拡張子チェック
+ * 
+ * @param array $check チェック対象データ
+ * @param string $ext 許可する拡張子
+ */
+	public function fileExt($check, $ext) {
+		$file = $check[key($check)];
+		if (!empty($file['name'])) {
+			$exts = explode(',', $ext);
+			$ext = decodeContent($file['type'], $file['name']);
+			if(in_array($ext, $exts)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
 /**
  * 半角チェック
  * @param array $check
@@ -947,7 +940,6 @@ class BcAppModel extends Model {
 		/* $dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'); */
 		// ---
 		$dateFields = array('W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
-		$dateFields = array('D' => 'date', 'T' => 'time');
 		// <<<
 		$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
 		$date = array();
@@ -1420,4 +1412,34 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * ツリーより再帰的に削除する
+ * 
+ * @param int $id
+ * @return boolean
+ */
+	public function removeFromTreeRecursive($id) {
+		if(!$this->Behaviors->enabled('Tree')) {
+			return false;
+		}
+		$children = $this->children($id);
+		foreach($children as $child) {
+			$this->removeFromTree($child[$this->alias]['id'], true);
+		}
+		return $this->removeFromTree($id, true);
+	}
+
+/**
+ * ファイルが送信されたかチェックするバリデーション
+ * 
+ * @param array $check
+ * @return boolean
+ */
+	public function notFileEmpty($check) {
+		if (empty($check[key($check)]) || (is_array($check[key($check)]) && $check[key($check)]['size'] === 0)) {
+			return false;
+		}
+		return true;
+	}
+	
 }

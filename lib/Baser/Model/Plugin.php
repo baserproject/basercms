@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * プラグインモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -63,7 +57,7 @@ class Plugin extends AppModel {
 		'name' => array(
 			array('rule' => array('alphaNumericPlus'),
 				'message' => 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。',
-				'reqquired' => true),
+				'required' => true),
 			array('rule' => array('isUnique'),
 				'on' => 'create',
 				'message' => '指定のプラグインは既に使用されています。'),
@@ -80,9 +74,12 @@ class Plugin extends AppModel {
  * データベースを初期化する
  * 既存のテーブルは上書きしない
  *
- * @param string $plugin
- * @return boolean
- * @access public
+ * @param string $dbConfigName データベース設定名
+ * @param string $pluginName プラグイン名
+ * @param bool $loadCsv CSVファイル読込するかどうか
+ * @param string $filterTable テーブル指定
+ * @param string $filterType 更新タイプ指定
+ * @return bool
  */
 	public function initDb($dbConfigName = 'plugin', $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
 		return parent::initDb($dbConfigName, $pluginName, true, $filterTable, 'create');
@@ -91,22 +88,11 @@ class Plugin extends AppModel {
 /**
  * データベースをプラグインインストール前の状態に戻す
  * 
- * @param string $plugin
- * @return boolean 
+ * @param string $plugin プラグイン名
+ * @return bool
  */
 	public function resetDb($plugin) {
-		$schemaPaths = array(
-			APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'sql',
-			BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'sql'
-		);
-
-		$path = '';
-		foreach ($schemaPaths as $schemaPath) {
-			if (is_dir($schemaPath)) {
-				$path = $schemaPath;
-				break;
-			}
-		}
+		$path = BcUtil::getSchemaPath($plugin);
 
 		if (!$path) {
 			return true;
@@ -141,8 +127,8 @@ class Plugin extends AppModel {
 				$table = $matches[1];
 				$File = new File($path . DS . $file);
 				$data = $File->read();
-				if (preg_match('/var\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
-					$conType = $matches[1];
+				if (preg_match('/(public|var)\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
+					$conType = $matches[2];
 					$listSources = ${$conType . 'ListSources'};
 					$prefix = ${$conType . 'Prefix'};
 				} else {
@@ -165,7 +151,7 @@ class Plugin extends AppModel {
 					}
 
 					$corePlugins = implode('|', Configure::read('BcApp.corePlugins'));
-					if (preg_match('/^(' . $corePlugins . ')/', $table, $matches)) {
+					if (preg_match('/^(' . $corePlugins . ')/', Inflector::camelize($table), $matches)) {
 						$pluginName = $matches[1];
 					}
 
@@ -177,9 +163,9 @@ class Plugin extends AppModel {
 					$File->write($data);
 
 					if ($conType == 'baser') {
-						$schemaPath = BASER_CONFIGS . 'sql' . DS;
+						$schemaPath = BcUtil::getSchemaPath() . DS;
 					} else {
-						$schemaPath = BASER_PLUGINS . $pluginName . DS . 'Config' . DS . 'sql' . DS;
+						$schemaPath = BcUtil::getSchemaPath($pluginName) . DS;
 					}
 				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
 					$type = 'create';
@@ -217,12 +203,134 @@ class Plugin extends AppModel {
 /**
  * データベースの構造を変更する
  * 
- * @param string $plugin
- * @return boolean
- * @access public
+ * @param string $plugin プラグイン名
+ * @param string $dbConfigName データベース設定名
+ * @param string $filterTable テーブル指定
+ * @return bool
  */
 	public function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
 		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
 	}
 
+/**
+ * 指定したフィールドに重複値があるかチェック
+ *
+ * @param string $fieldName チェックするフィールド名
+ * @return bool
+ */
+	public function hasDuplicateValue($fieldName) {
+		$this->cacheQueries = false;
+
+		$duplication = $this->find('all', array(
+			'fields' => array(
+				"{$this->alias}.{$fieldName}"
+			),
+			'group' => array(
+				"{$this->alias}.{$fieldName} HAVING COUNT({$this->alias}.id) > 1"
+			)
+		));
+
+		return !empty($duplication);
+	}
+	
+/**
+ * 優先順位を連番で振り直す
+ *
+ * @return bool
+ */
+	public function rearrangePriorities() {
+		$this->cacheQueries = false;
+		$datas = $this->find('all', array(
+			'order' => 'Plugin.priority'
+		));
+
+		$count = count($datas);
+		for ($i = 0; $i < $count; $i++) {
+			$datas[$i]['Plugin']['priority'] = $i + 1;
+		}
+
+		if (!$this->saveMany($datas)) {
+			return false;
+		}
+		return true;
+	}
+
+/**
+ * 優先順位を変更する
+ *
+ * @param string|int $id 起点となるプラグインのID
+ * @param string|int $offset 変更する範囲の相対位置
+ * @param array $conditions find条件
+ * @return bool
+ */
+	public function changePriority($id, $offset, $conditions = array()) {
+		$offset = intval($offset);
+		if ($offset === 0) {
+			return true;
+		}
+
+		$field = 'priority';
+		$alias = $this->alias;
+
+		// 一時的にキャッシュをOFFする
+		$this->cacheQueries = false;
+
+		$current = $this->findById($id, array("{$alias}.id", "{$alias}.{$field}"));
+
+		// currentを含め変更するデータを取得
+		if ($offset > 0) { // DOWN
+			$order = array("{$alias}.{$field}");
+			$conditions["{$alias}.{$field} >="] = $current[$alias][$field];
+		} else { // UP
+			$order = array("{$alias}.{$field} DESC");
+			$conditions["{$alias}.{$field} <="] = $current[$alias][$field];
+		}
+
+		$datas = $this->find('all', array(
+			'conditions' => $conditions,
+			'fields' => array("{$alias}.id", "{$alias}.{$field}", "{$alias}.name"),
+			'order' => $order,
+			'limit' => abs($offset) + 1,
+			'recursive' => -1
+		));
+
+		if (empty($datas)) {
+			return false;
+		}
+
+		//データをローテーション
+		$count = count($datas);
+		$currentNewValue = $datas[$count - 1][$alias][$field];
+		for ($i = $count - 1; $i > 0; $i--) {
+			$datas[$i][$alias][$field] = $datas[$i - 1][$alias][$field];
+		}
+		$datas[0][$alias][$field] = $currentNewValue;
+
+		if (!$this->saveMany($datas)) {
+			return false;
+		};
+
+		return true;
+	}
+	
+/**
+ * プラグインのディレクトリパスを取得
+ *
+ * @param string $pluginName プラグイン名
+ * @return string|null
+ */
+	public function getDirectoryPath($pluginName) {
+		$paths = App::path('Plugin');
+		foreach ($paths as $path) {
+			$Folder = new Folder($path);
+			$files = $Folder->read(true, true, true);
+			foreach ($files[0] as $dir) {
+				if (basename($dir) === $pluginName) {
+					return $dir;
+				}
+			};
+		}
+		return null;
+	}
+	
 }

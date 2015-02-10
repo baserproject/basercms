@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+/* © baserCMS inc. */
+
+// web font
+@font-face {
+  font-family: 'FontAwesome';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fontawesome/fontawesome-webfont.eot');
+  src: url('fontawesome/fontawesome-webfont.eot?#iefix') format('eot'), 
+  url('fontawesome/fontawesome-webfont.woff') format('woff'), 
+  url('fontawesome/fontawesome-webfont.ttf') format('truetype'), 
+  url('fontawesome/fontawesome-webfont.svg#FontAwesomeRegular') format('svg');
+}
+@import "fontawesome/fontawesome.css";
+
+[class*="fontawesome-"]:before {
+	margin-right:5px;
+	font-family:'FontAwesome', sans-serif;
+}
+
+// config
+@import "config.css";
+
+
+
+// ============================================================
+// 共通部分
+// ============================================================
+
+/*----------------------------------------
+	body
+----------------------------------------*/
+body {
+	font-family:$fontFamily;
+	@include fs(16);
+	text-align:center;
+	line-height:$lineHeight;
+	
+	// transition使用時のChromeでの1pxズレを回避
+	// -webkit-backface-visibility:hidden;
+	// backface-visibility:hidden;
+	
+	@include sp {
+		@include fs(14);
+	}
+} //body
+
+a {
+	color: $linkColor;
+	outline:none;
+	text-decoration:underline;
+	
+	&:hover {
+		color: $linkColor_hover;
+	}
+	&:active {
+		color: $linkColor_active;
+	}
+}
+
+@include clearfixBase;
+
+
+/*----------------------------------------
+	container
+----------------------------------------*/
+.container {
+	margin:0 auto;
+	width:$baseWidth;
+	text-align:left;
+	@extend %clear;
+	
+	@include tablet {
+		width:auto !important;
+	} //tablet
+	
+	@include sp {
+		width:auto !important;
+	} //sp
+} //container
+
+
+
+/*----------------------------------------
+	IE6 Upgrade Warning
+----------------------------------------*/
+#ieError {
+	color:#FFF;
+	background:#FF9B57;
+	padding:20px;
+	text-align:center;
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:1000;
+	width:100%;
+	@include opacity(0.8);
+ 
+ strong {
+  color:#FFF;
+ }
+ 
+	a {
+		color:#FFF;
+		text-decoration:underline;
+	}
+}
+
+
+
+
+

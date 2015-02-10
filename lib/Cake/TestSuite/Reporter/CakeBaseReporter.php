@@ -27,7 +27,7 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * Headers sent
  *
- * @var boolean
+ * @var bool
  */
 	protected $_headerSent = false;
 
@@ -121,7 +121,8 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * Print result
  *
- * @param PHPUnit_Framework_TestResult $result
+ * @param PHPUnit_Framework_TestResult $result The result object
+ * @return void
  */
 	public function printResult(PHPUnit_Framework_TestResult $result) {
 		$this->paintFooter($result);
@@ -130,7 +131,8 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * Paint result
  *
- * @param PHPUnit_Framework_TestResult $result
+ * @param PHPUnit_Framework_TestResult $result The result object
+ * @return void
  */
 	public function paintResult(PHPUnit_Framework_TestResult $result) {
 		$this->paintFooter($result);
@@ -139,9 +141,10 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * An error occurred.
  *
- * @param  PHPUnit_Framework_Test $test
- * @param  Exception              $e
- * @param  float                  $time
+ * @param PHPUnit_Framework_Test $test The test to add an error for.
+ * @param Exception $e The exception object to add.
+ * @param float $time The current time.
+ * @return void
  */
 	public function addError(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		$this->paintException($e, $test);
@@ -150,9 +153,10 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * A failure occurred.
  *
- * @param  PHPUnit_Framework_Test $test
- * @param  PHPUnit_Framework_AssertionFailedError $e
- * @param  float $time
+ * @param PHPUnit_Framework_Test $test The test that failed
+ * @param PHPUnit_Framework_AssertionFailedError $e The assertion that failed.
+ * @param float $time The current time.
+ * @return void
  */
 	public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time) {
 		$this->paintFail($e, $test);
@@ -161,9 +165,10 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * Incomplete test.
  *
- * @param  PHPUnit_Framework_Test $test
- * @param  Exception $e
- * @param  float $time
+ * @param PHPUnit_Framework_Test $test The test that was incomplete.
+ * @param Exception $e The incomplete exception
+ * @param float $time The current time.
+ * @return void
  */
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		$this->paintSkip($e, $test);
@@ -172,9 +177,10 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * Skipped test.
  *
- * @param  PHPUnit_Framework_Test $test
- * @param  Exception $e
- * @param  float $time
+ * @param PHPUnit_Framework_Test $test The test that failed.
+ * @param Exception $e The skip object.
+ * @param float $time The current time.
+ * @return void
  */
 	public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		$this->paintSkip($e, $test);
@@ -183,7 +189,8 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * A test suite started.
  *
- * @param  PHPUnit_Framework_TestSuite $suite
+ * @param PHPUnit_Framework_TestSuite $suite The suite to start
+ * @return void
  */
 	public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
 		if (!$this->_headerSent) {
@@ -195,7 +202,8 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * A test suite ended.
  *
- * @param  PHPUnit_Framework_TestSuite $suite
+ * @param PHPUnit_Framework_TestSuite $suite The suite that ended.
+ * @return void
  */
 	public function endTestSuite(PHPUnit_Framework_TestSuite $suite) {
 	}
@@ -203,7 +211,8 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * A test started.
  *
- * @param  PHPUnit_Framework_Test $test
+ * @param PHPUnit_Framework_Test $test The test that started.
+ * @return void
  */
 	public function startTest(PHPUnit_Framework_Test $test) {
 	}
@@ -211,8 +220,9 @@ class CakeBaseReporter extends PHPUnit_TextUI_ResultPrinter {
 /**
  * A test ended.
  *
- * @param  PHPUnit_Framework_Test $test
- * @param  float $time
+ * @param PHPUnit_Framework_Test $test The test that ended
+ * @param float $time The current time.
+ * @return void
  */
 	public function endTest(PHPUnit_Framework_Test $test, $time) {
 		$this->numAssertions += $test->getNumAssertions();

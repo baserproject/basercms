@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] アクセス制限管理（ポップアップ）
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -90,7 +84,7 @@ $(function(){
 </script>
 
 
-<div id="PermissionDialog" title="アクセス制限登録">
+<div id="PermissionDialog" title="アクセス制限登録" style="display:none">
 	<?php echo $this->BcForm->create('Permission', array('action' => 'ajax_add', 'url' => array('plugin' => null))) ?>
 	<?php echo $this->BcForm->input('Permission.id') ?>
 	<dl>

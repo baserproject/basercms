@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールプラグインモデル根底クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail
+ * @package			Mail.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -26,7 +20,7 @@ App::uses('BcPluginAppModel', 'Model');
 /**
  * メールプラグインモデル根底クラス
  *
- * @package			baser.plugins.mail
+ * @package			Mail.Model
  */
 class MailAppModel extends BcPluginAppModel {
 
@@ -58,6 +52,7 @@ class MailAppModel extends BcPluginAppModel {
 		foreach ($datas as $key => $data) {
 			if (!is_array($data)) {
 				$data = str_replace("<br />", "", $data);
+				$data = str_replace("<br>", "", $data);
 				$data = str_replace('&lt;', '<', $data);
 				$data = str_replace('&gt;', '>', $data);
 				$data = str_replace('&amp;', '&', $data);

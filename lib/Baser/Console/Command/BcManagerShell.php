@@ -1,35 +1,29 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * インストール用シェルスクリプト
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.vendors.shells
+ * @package			Baser.Console.Command
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
  * Include files
  */
-App::uses('BcAppShell', 'Console/Command');
+App::uses('AppShell', 'Console/Command');
 App::uses('BcManagerComponent', 'Controller/Component');
 
 /**
  * インストール用シェルスクリプト
  * 
- * @package baser.vendors.shells
+ * @package Baser.Console.Command
  */
-class BcManagerShell extends BcAppShell {
+class BcManagerShell extends AppShell {
 
 /**
  * get the option parser
@@ -64,7 +58,7 @@ class BcManagerShell extends BcAppShell {
 			'default' => '/'
 		))->addOption('data', array(
 			'help' => '初期データパターン',
-			'default' => 'core.nada-icons'
+			'default' => 'core.m-single'
 		));
 
 		return $parser;
@@ -89,7 +83,7 @@ class BcManagerShell extends BcAppShell {
 			return;
 		}
 		if (Configure::read('debug') != -1) {
-			$this->err('baserCMSの初期化を行うには、debug を -1 に設定する必要があります。');
+			$this->err('baserCMSのインストールを行うには、debug を -1 に設定する必要があります。');
 			return false;
 		}
 		if (!$this->_install()) {
@@ -101,6 +95,7 @@ class BcManagerShell extends BcAppShell {
 		$Folder->delete(TMP . 'logs');
 		$Folder->delete(TMP . 'schemas');
 		$Folder->delete(TMP . 'sessions');
+		$this->out("baserCMSのインストールが完了しました。");
 	}
 
 /**
@@ -116,6 +111,7 @@ class BcManagerShell extends BcAppShell {
 		if (!$this->_reset()) {
 			$this->err("baserCMSのリセットに失敗しました。ログファイルを確認してください。");
 		}
+		$this->out("baserCMSのリセットが完了しました。");
 	}
 
 /**
@@ -213,124 +209,6 @@ class BcManagerShell extends BcAppShell {
 			$this->out('　Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。');
 		}
 		$this->hr();
-	}
-
-/**
- * デモ用のCSVデータを初期化する
- */
-	public function initdemo() {
-		$dbConfig = getDbConfig();
-
-		// データベース初期化
-		if (!$this->BcManager->initDb($dbConfig)) {
-			$message = "データベースの初期化に失敗しました";
-			$this->log($message);
-			$this->err($message);
-			return;
-		}
-
-		// キャッシュ削除
-		clearAllCache();
-
-		// ユーザー作成
-		if (!$this->_initDemoUsers()) {
-			$message = "ユーザー「operator」の作成に失敗しました";
-			$this->log($message);
-			$this->err($message);
-			return;
-		}
-
-		// サイト設定
-		if (!$this->_initDemoSiteConfigs()) {
-			$message = "システム設定の更新に失敗しました";
-			$this->log($message);
-			$this->err($message);
-			return;
-		}
-
-		// DBデータの初期更新
-		if (!$this->BcManager->executeDefaultUpdates($dbConfig)) {
-			$message = "DBデータの初期更新に失敗しました。";
-			$this->log($message);
-			$this->err($message);
-			return;
-		}
-
-		// テーマの配置
-		if (!$this->BcManager->deployTheme()) {
-			$message = "テーマの配置に失敗しました。";
-			$this->log($message);
-			$this->err($message);
-			return;
-		}
-
-		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		$this->BcManager->deleteDeployedAdminAssets();
-		if (!$this->BcManager->deployAdminAssets()) {
-			$message = "管理システムのアセットファイルの配置に失敗しました。";
-			$this->log($message);
-			$this->err($message);
-		}
-
-		// ページ初期化
-		if (!$this->BcManager->createPageTemplates()) {
-			$message = "ページテンプレートの更新に失敗しました";
-			$this->log($message);
-			$this->err($message);
-			return;
-		}
-
-		clearAllCache();
-
-		$this->out("デモデータを初期化しました。");
-	}
-
-/**
- * サイト設定の初期化
- * 
- * @return boolean
- */
-	protected function _initDemoSiteConfigs() {
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$siteConfig = $SiteConfig->findExpanded();
-		$siteConfig['address'] = '福岡県福岡市博多区博多駅前';
-		$siteConfig['googlemaps_key'] = 'ABQIAAAAQMyp8zF7wiAa55GiH41tChRi112SkUmf5PlwRnh_fS51Rtf0jhTHomwxjCmm-iGR9GwA8zG7_kn6dg';
-		$siteConfig['demo_on'] = true;
-		return $SiteConfig->saveKeyValue($siteConfig);
-	}
-
-/**
- * 初期ユーザーの作成
- * 
- * @return boolean 
- */
-	protected function _initDemoUsers() {
-		$User = ClassRegistry::init('User');
-
-		$ret = true;
-		$user['User']['name'] = 'admin';
-		$user['User']['password'] = Security::hash('demodemo', null, true);
-		$user['User']['password_1'] = 'demodemo';
-		$user['User']['password_2'] = 'demodemo';
-		$user['User']['real_name_1'] = 'admin';
-		$user['User']['user_group_id'] = 1;
-		$User->create($user);
-		if (!$User->save()) {
-			$ret = false;
-		}
-
-		$user['User']['name'] = 'operator';
-		$user['User']['password'] = Security::hash('demodemo', null, true);
-		$user['User']['password_1'] = 'demodemo';
-		$user['User']['password_2'] = 'demodemo';
-		$user['User']['real_name_1'] = 'member';
-		$user['User']['user_group_id'] = 2;
-		$User->create($user);
-		if (!$User->save()) {
-			$ret = false;
-		}
-
-		return $ret;
 	}
 
 /**

@@ -1,0 +1,15 @@
+@mixin keyframes($name)
+  @if $experimental-support-for-webkit
+    @-webkit-keyframes #{$name}
+      @content
+  @if $experimental-support-for-mozilla
+    @-moz-keyframes #{$name}
+      @content
+  @if $experimental-support-for-opera
+    @-o-keyframes #{$name}
+      @content
+  @if $experimental-support-for-microsoft
+    @-ms-keyframes #{$name}
+      @content
+  @keyframes #{$name}
+    @content

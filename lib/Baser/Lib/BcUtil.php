@@ -61,4 +61,161 @@ class BcUtil extends Object {
 		}
 	}
 
+/**
+ * テーマ梱包プラグインのリストを取得する
+ * 
+ * @return array
+ */
+	public static function getCurrentThemesPlugins() {
+		$theme = Configure::read('BcSite.theme');
+		$path = BASER_THEMES . $theme . DS . 'Plugin';
+		if(is_dir($path)) {
+			$Folder = new Folder($path);
+			$files = $Folder->read(true, true, false);
+			if(!empty($files[0])) {
+				return $files[0];
+			}
+		}
+		return array();
+	}
+	
+/**
+ * スキーマ情報のパスを取得する
+ * 
+ * @param string $plugin
+ * @return string Or false
+ */
+	public static function getSchemaPath($plugin = null) {
+		
+		if(!$plugin) {
+			$plugin = 'Core';
+		} else {
+			$plugin = Inflector::camelize($plugin);
+		}
+		
+		if($plugin == 'Core') {
+			return BASER_CONFIGS . 'Schema';
+		}
+		
+		$paths = App::path('Plugin');
+		// @deprecated since 3.0.2
+		// sql ディレクトリは非推奨
+		$folders = array('Schema', 'sql');
+		foreach ($paths as $path) {
+			foreach($folders as $folder) {
+				$_path = $path . $plugin . DS . 'Config' . DS . $folder;
+				if (is_dir($_path)) {
+					return $_path;
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	
+/**
+ * 初期データのパスを取得する
+ * 
+ * 初期データのフォルダは アンダースコア区切り推奨
+ * 
+ * @param string $plugin
+ * @return string Or false
+ */
+	public static function getDefaultDataPath($plugin = null, $theme = null, $pattern = null) {
+		
+		if(!$plugin) {
+			$plugin = 'Core';
+		} else {
+			$plugin = Inflector::camelize($plugin);
+		}
+		
+		if(!$theme) {
+			$theme = 'core';
+		}
+		
+		if(!$pattern) {
+			$pattern = 'default';
+		}
+		
+		if($plugin == 'Core') {
+			$paths = array(BASER_CONFIGS . 'data' . DS . $pattern);
+			if($theme != 'core') {
+				$paths = array_merge(array(
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
+				), $paths);
+			}
+		} else {
+			$pluginPaths = App::path('Plugin');
+			foreach($pluginPaths as $pluginPath) {
+				$pluginPath .= $plugin;
+				if(is_dir($pluginPath)) {
+					break;
+				}
+				$pluginPath = null;
+			}
+			if(!$pluginPath) {
+				return false;
+			}
+			$paths = array(
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
+				$pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
+				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
+				$pluginPath . DS . 'sql',
+			);
+			if($theme != 'core') {
+				$paths = array_merge(array(
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
+					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+				), $paths);
+			}
+		}
+		
+		foreach ($paths as $path) {
+			if (is_dir($path)) {
+				return $path;
+			}
+		}
+		return false;
+		
+	}
+	
+/**
+ * シリアライズ
+ * 
+ * @param mixed $value
+ * @return string
+ */
+	public static function serialize($value) {
+		return base64_encode(serialize($value));
+	}
+
+/**
+ * アンシリアライズ
+ * base64_decode が前提
+ * 
+ * @param string $value
+ * @return mixed
+ */
+	public static function unserialize($value) {
+		$_value = $value;
+		$value = @unserialize(base64_decode($value));
+		// 下位互換の為、しばらくの間、失敗した場合の再変換を行う v.3.0.2
+		if($value === false) {
+			$value = unserialize($_value);
+		}
+		return $value;
+	}
+
 }

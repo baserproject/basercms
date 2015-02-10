@@ -1,23 +1,26 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ページカテゴリー フォーム
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$pageType = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
+$pageTypes = array();
+if($reflectMobile || $reflectSmartphone) {
+	$pageTypes = array('1' => 'PC');	
+}
+if($reflectMobile) {
+	$pageTypes['2'] = 'モバイル';
+}
+if($reflectSmartphone) {
+	$pageTypes['3'] = 'スマートフォン';
+}
 $owners = $this->BcForm->getControlSource('PageCategory.owner_id');
 ?>
 
@@ -95,18 +98,18 @@ function pageTypeChengeHandler() {
 <div id="AjaxControlSources" class="display-none"><?php $this->BcBaser->url(array('controller' => 'page_categories', 'action' => 'ajax_control_sources')) ?></div>
 
 <?php if ($this->request->action == 'admin_edit' && $indexPage): ?>
-	<div class="em-box align-left">1
+	<div class="em-box align-left">
 		<?php if ($indexPage['status']): ?>
-			<strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $indexPage['url']), '/' . $indexPage['url'], array('target' => '_blank')) ?></strong>
+			<strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri($indexPage['url']), $indexPage['url'], array('target' => '_blank')) ?></strong>
 		<?php else: ?>
-			<strong>このカテゴリのURL：<?php echo $this->BcBaser->getUri('/' . $indexPage['url']) ?></strong>
+			<strong>このカテゴリのURL：<?php echo $this->BcBaser->getUri($indexPage['url']) ?></strong>
 		<?php endif ?>
 	</div>
 <?php endif ?>
 
 
 <?php echo $this->BcForm->create('PageCategory') ?>
-<?php if (!$pageType): ?>
+<?php if (!$pageTypes): ?>
 	<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'hidden')) ?>
 <?php endif ?>
 <div class="section">
@@ -120,12 +123,12 @@ function pageTypeChengeHandler() {
 				</td>
 			</tr>
 		<?php endif; ?>
-		<?php if ($pageType): ?>
+		<?php if ($pageTypes): ?>
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('PageCategory.page_category_type', 'タイプ') ?></th>
 				<td class="col-input">
-					<?php if ($pageType): ?>
-						<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageType)) ?>　
+					<?php if ($pageTypes): ?>
+						<?php echo $this->BcForm->input('PageCategory.page_category_type', array('type' => 'radio', 'options' => $pageTypes)) ?>　
 					<?php endif ?>
 				</td>
 			</tr>
@@ -194,6 +197,7 @@ function pageTypeChengeHandler() {
 				</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -238,6 +242,7 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 <div class="submit">

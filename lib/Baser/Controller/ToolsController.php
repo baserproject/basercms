@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ツールコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Simplezip', 'Vendor');
@@ -94,7 +88,7 @@ class ToolsController extends AppController {
 					$messages[] = 'データの復元が完了しました。';
 					$error = false;
 				} else {
-					$messages[] = 'データの復元に失敗しました。';
+					$messages[] = 'データの復元に失敗しました。ログの確認を行なって下さい。';
 					$error = true;
 				}
 				if (!$error && !$this->Page->createAllPageTemplate()) {
@@ -119,6 +113,7 @@ class ToolsController extends AppController {
  * @access protected
  */
 	protected function _restoreDb($data) {
+		
 		if (empty($data['Tool']['backup']['tmp_name'])) {
 			return false;
 		}
@@ -137,17 +132,18 @@ class ToolsController extends AppController {
 		}
 		@unlink($targetPath);
 
+		$result = true;
 		if (!$this->_loadBackup($tmpPath . 'baser' . DS, 'baser')) {
-			return false;
+			$result = false;
 		}
 		if (!$this->_loadBackup($tmpPath . 'plugin' . DS, 'plugin')) {
-			return false;
+			$result = false;
 		}
 
 		$this->_resetTmpSchemaFolder();
 		clearAllCache();
-
-		return true;
+		
+		return $result;
 	}
 
 /**
@@ -166,11 +162,12 @@ class ToolsController extends AppController {
 		}
 
 		$db = ConnectionManager::getDataSource($configKeyName);
-
+		$result = true;
 		/* テーブルを削除する */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
 				if (!$db->loadSchema(array('type' => 'drop', 'path' => $path, 'file' => $file))) {
+					$result = false;
 					continue;
 				}
 			}
@@ -180,7 +177,8 @@ class ToolsController extends AppController {
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
 				if (!$db->loadSchema(array('type' => 'create', 'path' => $path, 'file' => $file))) {
-					return false;
+					$result = false;
+					continue;
 				}
 			}
 		}
@@ -189,12 +187,13 @@ class ToolsController extends AppController {
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.csv$/", $file)) {
 				if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => 'SJIS'))) {
-					return false;
+					$result = false;
+					continue;
 				}
 			}
 		}
 
-		return true;
+		return $result;
 	}
 
 /**

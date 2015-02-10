@@ -1,30 +1,22 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * インストーラーコントローラー
- *
- * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		Baser.Controller
+ * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * インストーラーコントローラー
+ * 
+ * @package Baser.Controller
+ * @property BcManagerComponent $BcManager
  */
 class InstallationsController extends AppController {
 
@@ -147,26 +139,7 @@ class InstallationsController extends AppController {
  */
 	public function index() {
 		$this->pageTitle = 'baserCMSのインストール';
-
-		// 一時ファイルを削除する（再インストール用）
-		if (is_writable(TMP)) {
-			$folder = new Folder(TMP);
-			$files = $folder->read(true, true, true);
-			if (isset($files[0])) { // check directory
-				foreach ($files[0] as $file) {
-					if (basename($file) != 'logs') {
-						$folder->delete($file);
-					}
-				}
-			}
-			if (isset($files[1])) { // check file
-				foreach ($files[1] as $file) {
-					if (basename($file) != 'empty') {
-						$folder->delete($file);
-					}
-				}
-			}
-		}
+		clearAllCache();
 	}
 
 /**
@@ -189,7 +162,7 @@ class InstallationsController extends AppController {
 
 		extract($checkResult);
 
-		$this->set('blRequirementsMet', ($phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable));
+		$this->set('blRequirementsMet', ($phpXml && $phpGd && $tmpDirWritable && $configDirWritable && $phpVersionOk && $themeDirWritable && $imgDirWritable && $jsDirWritable && $cssDirWritable));
 		$this->pageTitle = 'baserCMSのインストール [ステップ２]';
 	}
 
@@ -338,6 +311,32 @@ class InstallationsController extends AppController {
 			$secritySalt = $this->Session->read('Installation.salt');
 			$secrityCipherSeed = $this->Session->read('Installation.cipherSeed');
 			$this->BcManager->createInstallFile($secritySalt, $secrityCipherSeed);
+			
+			//==================================================================
+			// BcManagerComponent::createPageTemplates() を実行する際、
+			// 固定ページでプラグインを利用している場合あり、プラグインがロードされていないとエラーになる為、
+			// リダイレクト前にコアプラグインの有効化とテーマ保有のプラグインのインストールを完了させておく
+			// =================================================================
+			// データベースのデータを初期設定に更新
+			$this->BcManager->executeDefaultUpdates($this->_readDbSetting(Cache::read('Installation', 'default')));
+			
+			// テーマを配置する
+			$this->BcManager->deployTheme();
+		
+			$dbDataPattern = $this->Session->read('Installation.dbDataPattern');
+			list($theme, $pattern) = explode('.', $dbDataPattern);
+			loadSiteConfig();
+			App::build(array('Plugin' => array_merge(array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS), App::path('Plugin'))));
+			$themesPlugins = BcUtil::getCurrentThemesPlugins();
+			if($themesPlugins) {
+				foreach($themesPlugins as $plugin) {
+					$this->BcManager->installPlugin($plugin);
+					CakePlugin::load($plugin);
+					$this->BcManager->resetTables('plugin', $dbConfig = null, $plugin);
+					$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin);
+				}
+			}
+
 			clearAllCache();
 			if (function_exists('opcache_reset')) {
 				opcache_reset();
@@ -350,17 +349,10 @@ class InstallationsController extends AppController {
 			}
 		}
 
-		// データベースのデータを初期設定に更新
-		$this->BcManager->executeDefaultUpdates($this->_readDbSetting(Cache::read('Installation', 'default')));
-
 		// ログイン
 		$this->_login();
-
-		// テーマを配置する
-		$this->BcManager->deployTheme();
-
+		
 		// テーマに管理画面のアセットへのシンボリックリンクを作成する
-		$this->BcManager->deleteDeployedAdminAssets();
 		$this->BcManager->deployAdminAssets();
 
 		// アップロード用初期フォルダを作成する
@@ -368,7 +360,7 @@ class InstallationsController extends AppController {
 
 		// エディタテンプレート用の画像を配置
 		$this->BcManager->deployEditorTemplateImage();
-
+		
 		// Pagesファイルを生成する
 		$this->BcManager->createPageTemplates();
 
@@ -396,11 +388,11 @@ class InstallationsController extends AppController {
 /**
  * データベースを構築する
  * 
- * @param type $nonDemoData
+ * @param type $dbDataPattern データパターン
  * @return boolean
  * @access protected
  */
-	protected function _constructionDb($dbDataPattern = false) {
+	protected function _constructionDb($dbDataPattern = null) {
 		$dbConfig = $this->_readDbSetting();
 		if (!$this->BcManager->constructionDb($dbConfig, $dbDataPattern)) {
 			return false;
@@ -588,22 +580,21 @@ class InstallationsController extends AppController {
 		/* DBソース取得 */
 		$dbsource = array();
 		$folder = new Folder();
+		$pdoDrivers = PDO::getAvailableDrivers();
 
 		/* MySQL利用可否 */
-		if (function_exists('mysql_connect')) {
+		if (in_array('mysql', $pdoDrivers)) {
 			$dbsource['mysql'] = 'MySQL';
 		}
 
 		/* PostgreSQL利用可否 */
-		if (function_exists('pg_connect')) {
+		if (in_array('pgsql', $pdoDrivers)) {
 			$dbsource['postgres'] = 'PostgreSQL';
 		}
 
 		/* SQLite利用可否チェック */
 		// windowsは一旦非サポート
-		if (class_exists('PDO') && version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=') && (DS != '\\')) {
-
-			$pdoDrivers = PDO::getAvailableDrivers();
+		if (version_compare(preg_replace('/[a-z-]/', '', phpversion()), '5', '>=') && (DS != '\\')) {
 			if (in_array('sqlite', $pdoDrivers)) {
 				$dbFolderPath = APP . 'db' . DS . 'sqlite';
 				if (is_writable(dirname($dbFolderPath)) && $folder->create($dbFolderPath, 0777)) {

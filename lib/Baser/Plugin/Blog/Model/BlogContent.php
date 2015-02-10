@@ -1,31 +1,26 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ブログコンテンツモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.models
+ * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
  * Include files
  */
+App::uses('BlogAppModel', 'Blog.Model');
 
 /**
  * ブログコンテンツモデル
  *
- * @package baser.plugins.blog.models
+ * @package Blog.Model
  */
 class BlogContent extends BlogAppModel {
 
@@ -182,8 +177,16 @@ class BlogContent extends BlogAppModel {
 		// 検索用テーブルへの登録・削除
 		if (!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status']) {
 			$this->saveContent($this->createContent($this->data));
+			clearDataCache();
+			$datas = $this->BlogPost->find('all', array(
+				'conditions' => array('BlogPost.blog_content_id' => $this->data['BlogContent']['id']),
+				'recursive' => -1
+			));
+			foreach($datas as $data) {
+				$this->BlogPost->set($data);
+				$this->BlogPost->afterSave(true);
+			}
 		} else {
-
 			$this->deleteContent($this->data['BlogContent']['id']);
 		}
 	}
@@ -283,7 +286,7 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	public function deconstructEyeCatchSize($data) {
-		$data['BlogContent']['eye_catch_size'] = serialize(array(
+		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize(array(
 			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
 			'mobile_thumb_width' => $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
@@ -304,7 +307,7 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	public function constructEyeCatchSize($data) {
-		$eyeCatchSize = unserialize($data['BlogContent']['eye_catch_size']);
+		$eyeCatchSize = BcUtil::unserialize($data['BlogContent']['eye_catch_size']);
 		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
 		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = $eyeCatchSize['mobile_thumb_width'];

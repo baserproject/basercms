@@ -1,22 +1,16 @@
 <?php
 
-/* SVN FILE: $Id$ */
 
 /**
  * ユーザーモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 class User extends AppModel {
@@ -300,24 +294,48 @@ class User extends AppModel {
  */
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created);
-
 		if ($created && !empty($this->UserGroup)) {
-			$defaultFavorites = $this->UserGroup->field('default_favorites', array(
-				'UserGroup.id' => $this->data[$this->alias]['user_group_id']
-			));
+			$this->applyDefaultFavorites($this->getLastInsertID(), $this->data[$this->alias]['user_group_id']);
+		}
+	}
+
+/**
+ * よく使う項目の初期データをユーザーに適用する
+ * 
+ * @param type $userId
+ * @param type $userGroupId
+ */
+	public function applyDefaultFavorites($userId, $userGroupId) {
+		$result = true;
+		$defaultFavorites = $this->UserGroup->field('default_favorites', array(
+			'UserGroup.id' => $userGroupId
+		));
+		if ($defaultFavorites) {
+			$defaultFavorites = BcUtil::unserialize($defaultFavorites);
 			if ($defaultFavorites) {
-				$defaultFavorites = unserialize($defaultFavorites);
-				if ($defaultFavorites) {
-					$userId = $this->getLastInsertID();
-					foreach ($defaultFavorites as $favorites) {
-						$favorites['user_id'] = $userId;
-						$favorites['sort'] = $this->Favorite->getMax('sort', array('Favorite.user_id' => $userId)) + 1;
-						$this->Favorite->create($favorites);
-						$this->Favorite->save();
+				$this->deleteFavorites($userId);	
+				foreach ($defaultFavorites as $favorites) {
+					$favorites['user_id'] = $userId;
+					$favorites['sort'] = $this->Favorite->getMax('sort', array('Favorite.user_id' => $userId)) + 1;
+					$this->Favorite->create($favorites);
+					if(!$this->Favorite->save()) {
+						$result = false;
 					}
 				}
 			}
 		}
+		return $result;
 	}
-
+	
+/**
+ * ユーザーに関連するよく使う項目を削除する
+ * 
+ * @param int $userId
+ * @return boolean
+ */
+	public function deleteFavorites($userId) {
+		return $this->Favorite->deleteAll(array('Favorite.user_id' => $userId), false);
+	}
+			
+	
 }

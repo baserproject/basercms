@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * テーマファイルコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Imageresizer', 'Vendor');
@@ -51,12 +45,15 @@ class ThemeFilesController extends AppController {
  * @var array
  * @public protected
  */
-	protected $_tempalteTypes = array('Layouts' => 'レイアウトテンプレート',
-		'Elements' => 'エレメントテンプレート',
-		'etc' => 'コンテンツテンプレート',
-		'css' => 'スタイルシート',
-		'js' => 'Javascript',
-		'img' => 'イメージ');
+	protected $_tempalteTypes = array(
+		'Layouts'	=> 'レイアウトテンプレート',
+		'Elements'	=> 'エレメントテンプレート',
+		'Emails'	=> 'Eメールテンプレート',
+		'etc'		=> 'コンテンツテンプレート',
+		'css'		=> 'スタイルシート',
+		'js'		=> 'Javascript',
+		'img'		=> 'イメージ'
+	);
 
 /**
  * コンポーネント
@@ -91,9 +88,9 @@ class ThemeFilesController extends AppController {
 		}
 
 		// タイトル設定
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		if ($plugin) {
-			$pageTitle .= '：' . Inflector::camelize($plugin);
+			$pageTitle .= '：' . $plugin;
 		}
 		$this->pageTitle = '[' . $pageTitle . '] ';
 		if (!empty($this->_tempalteTypes[$type])) {
@@ -134,9 +131,21 @@ class ThemeFilesController extends AppController {
 			$themeFiles = array();
 			$folders = array();
 			$excludeFolderList = array();
-			$excludeFileList = array('screenshot.png', 'VERSION.txt', 'config.php');
+			$excludeFileList = array('screenshot.png', 'VERSION.txt', 'config.php', 'AppView.php', 'BcAppView.php');
 			if (!$path) {
-				$excludeFolderList = array('css', 'Elements', 'img', 'Layouts', 'Pages', '_notes', 'Helper', 'js');
+				$excludeFolderList = array(
+					'Layouts', 
+					'Elements', 
+					'Emails',
+					'Pages', 
+					'Helper', 
+					'Config',
+					'Plugin',					
+					'img', 
+					'css',
+					'js',
+					'_notes'
+				);
 			}
 			foreach ($files[0] as $file) {
 				if (!in_array($file, $excludeFolderList)) {
@@ -467,9 +476,9 @@ class ThemeFilesController extends AppController {
 		$this->request->data['ThemeFile']['contents'] = $file->read();
 		$this->request->data['ThemeFile']['type'] = $this->_getFileType($file->name);
 
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		if ($plugin) {
-			$pageTitle .= '：' . Inflector::camelize($plugin);
+			$pageTitle .= '：' . $plugin;
 		}
 		$this->pageTitle = '[' . $pageTitle . '] ' . $this->_tempalteTypes[$type] . ' 表示：　' . basename($path);
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));
@@ -651,7 +660,7 @@ class ThemeFilesController extends AppController {
 			}
 		}
 
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		$this->pageTitle = '[' . $pageTitle . '] フォルダ表示：　' . basename($path);
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));
 		$this->subMenuElements = array('theme_files');
@@ -681,9 +690,9 @@ class ThemeFilesController extends AppController {
 		$this->request->data['ThemeFolder']['parent'] = dirname($fullpath);
 		$this->request->data['ThemeFolder']['pastname'] = basename($path);
 
-		$pageTitle = Inflector::camelize($theme);
+		$pageTitle = $theme;
 		if ($plugin) {
-			$pageTitle .= '：' . Inflector::camelize($plugin);
+			$pageTitle .= '：' . $plugin;
 		}
 		$this->pageTitle = '[' . $pageTitle . '] フォルダ表示：　' . basename($path);
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));

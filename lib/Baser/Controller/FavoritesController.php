@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * よく使う項目　コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -125,8 +119,7 @@ class FavoritesController extends AppController {
 /**
  * [ADMIN] 並び替えを更新する
  *
- * @access public
- * @return boolean
+ * @return bool
  */
 	public function admin_update_sort() {
 		$user = $this->BcAuth->user();
@@ -136,6 +129,7 @@ class FavoritesController extends AppController {
 				exit(true);
 			}
 		}
+		$this->ajaxError(400, '無効な処理です。');
 		exit();
 	}
 

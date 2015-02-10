@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] メールフォーム共通メニュー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views
+ * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -27,8 +21,8 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('メールフォーム一覧', array('controller' => 'mail_contents', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('新規メールフォームを登録', array('controller' => 'mail_contents', 'action' => 'add')) ?></li>
-			<li><?php $this->BcBaser->link('プラグイン基本設定', array('controller' => 'mail_configs', 'action' => 'form')) ?></li>
+			<li><?php $this->BcBaser->link('メールフォーム新規追加', array('controller' => 'mail_contents', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('メールプラグイン基本設定', array('controller' => 'mail_configs', 'action' => 'form')) ?></li>
 		</ul>
 	</td>
 </tr>

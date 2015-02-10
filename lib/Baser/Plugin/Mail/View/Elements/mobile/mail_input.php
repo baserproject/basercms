@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id: mail_input.ctp 250 2011-12-08 10:15:44Z arata $ */
 /**
  * [MOBILE] メールフィールド
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views
+ * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -32,8 +26,8 @@ if (!isset($blockEnd)) {
 			<?php if (!$blockEnd || $iteration <= $blockEnd): ?>
 				<?php $next_key = $key + 1 ?>
 				<?php /* 項目名 */ ?>
+				<?php $description = $record['MailField']['description'] ?>
 				<?php if ($group_field != $record['MailField']['group_field'] || (!$group_field && !$record['MailField']['group_field'])): ?>
-					<?php $description = $record['MailField']['description'] ?>
 					<br />
 					<br />
 					<span style="color:#8ABE08">■</span> <?php echo $this->Mailform->label("Message." . $record['MailField']['field_name'] . "", $record['MailField']['head']) ?>
@@ -42,21 +36,22 @@ if (!isset($blockEnd)) {
 					<?php endif; ?>
 					<br />
 				<?php endif; ?>
+					
+				<?php if (!$freezed): ?>
+					<font size="1"><?php echo $description ?></font>
+				<?php endif; ?>
 				<?php /* 入力欄 */ ?>
 				<?php if (!$freezed || $this->Mailform->value("Message." . $record['MailField']['field_name'])): ?>
 					<font size="1"><?php echo $record['MailField']['before_attachment'] ?></font>
 				<?php endif; ?>
-				<?php if (!$record['MailField']['no_send'] || !$freezed): ?>
-					<?php echo $this->Mailform->control($record['MailField']['type'], "Message." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
-				<?php endif; ?>
-				<?php if ($record['MailField']['no_send'] && $freezed): ?>
-					<?php echo $this->Mailform->control('hidden', "Message." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
+				
+				<?php echo $this->Mailform->control($record['MailField']['type'], "Message." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
+					
+				<?php if (!$freezed || $this->Mailform->value("Message." . $record['MailField']['field_name'])): ?>
+					<font size="1"><?php echo $record['MailField']['after_attachment'] ?></font>
 				<?php endif; ?>
 				<?php if (!$freezed): ?>
 					<font size="1"><?php echo $record['MailField']['attention'] ?></font>
-				<?php endif; ?>
-				<?php if (!$freezed || $this->Mailform->value("Message." . $record['MailField']['field_name'])): ?>
-					<font size="1"><?php echo $record['MailField']['after_attachment'] ?></font>
 				<?php endif; ?>
 				<?php if (!$record['MailField']['group_valid']): ?>
 					<?php if ($this->Mailform->error("Message." . $record['MailField']['field_name'] . "_format", "check")): ?>
@@ -80,10 +75,6 @@ if (!isset($blockEnd)) {
 						<?php endif; ?>
 						<font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['group_field'] . "_not_same", "入力データが一致していません", array('wrap' => false)) ?></font> 
 						<font color="#FF0000"><?php echo $this->Mailform->error("Message." . $record['MailField']['group_field'] . "_not_complate", "入力データが不完全です", array('wrap' => false)) ?></font>
-					<?php endif; ?>
-					<?php if (!$freezed): ?>
-						<br />
-						<font size="1"><?php echo $description ?></font>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php $group_field = $record['MailField']['group_field'] ?>

@@ -1,128 +1,23 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * アップデーターコントローラー
  *
- * baserCMSのコアや、プラグインのアップデートを行えます。
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　アップデートファイルの配置場所
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * ■ コア
- * /baser/config/update/{バージョン番号}/
- * ■ baserフォルダ内プラグイン
- * /baser/plugins/{プラグイン名}/update/{バージョン番号}/
- * ■ appフォルダ内プラグイン
- * /app/plugins/{プラグイン名}/update/{バージョン番号}/
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　アップデートスクリプト
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * アップデート処理実行時に実行されるスクリプトです。
- * スキーマファイルやCSVファイルを読み込む関数が利用可能です。
- * 次のファイル名で対象バージョンのアップデートフォルダに設置します。
- *
- * ■ ファイル名： updater.php
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　スキーマファイル
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * データベースの構造変更にCakeSchemaを利用できます。
- * ブラウザより、次のURLにアクセスするとスキーマファイルの書き出しが行えますのでそれを利用します。
- * http://{baserCMSの設置URL}/admin/tools/write_schema
- * 更新タイプによって、ファイル名を変更し、アップデートフォルダに設置します。
- *
- * ■ テーブル追加： create_{テーブル名}.php
- * ■ テーブル更新： alter_{テーブル名}.php
- * ■ テーブル削除： drop_{テーブル名}.php
- * ※ ファイル名に更新タイプを含めない場合は、createとして処理されます。
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　CSVファイル
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CSVファイルによってデータのインポートが行えます。
- * CSVファイルはShift-JISで作成します。
- * 1行目には必ずフィールド名が必要です。
- * PRIMARYKEY のフィールドを自動採番するには、1行目のフィールド名は設定した上で値を空文字にします。
- * 次のファイル名で対象バージョンのアップデートフォルダに設置します。
- *
- * ■ ファイル名： {テーブル名}.php
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　アップデート用関数
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * アップデートプログラム上で利用できる関数は次のとおりです。
- *
- * ----------------------------------------
- * 　スキーマファイルを読み込む
- * ----------------------------------------
- * $this->loadSchema($version, $plugin = '', $filterTable = '', $filterType = '');
- *
- * $version			アップデート対象のバージョン番号を指定します。（例）'1.6.7'
- * $plugin			プラグイン内のスキーマを読み込むにはプラグイン名を指定します。（例）'mail
- * $filterTable		指定したテーブルのみを追加・更新する場合は、プレフィックスを除外したテーブル名を指定します。（例）'permissions'
- * 					指定しない場合は全てのスキーマファイルが対象となります。
- * $filterType		指定した更新タイプ（create / alter / drop）のみを対象とする場合は更新タイプを指定します。（例）'create'
- * 					指定しない場合はスキーマファイルが対象となります。
- *
- * ----------------------------------------
- * 　CSVファイルを読み込む
- * ----------------------------------------
- * $this->loadCsv($version, $plugin = '', $filterTable = '');
- * $version			アップデート対象のバージョン番号を指定します。（例）'1.6.7'
- * $plugin			プラグイン内のCSVを読み込むにはプラグイン名を指定します。（例）'mail'
- * $filterTable		指定したテーブルのみCSVを読み込む場合は、プレフィックスを除外したテーブル名を指定します。（例）'permissions'
- * 					指定しない場合は全てのテーブルが対象になります。
- *
- * ----------------------------------------
- * 　アップデートメッセージをセットする
- * ----------------------------------------
- * アップデート完了時に表示するメッセージを設定します。ログにも記録されます。
- * ログファイルの記録場所：/app/tmp/logs/update.log
- *
- * $this->setUpdateLog($message);
- *
- * $message			メッセージを指定します。
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　開発時のテストについて
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 次期バージョンのアップデートスクリプトを作成する際のテストを行うには、
- * アップデートフォルダの名称をバージョン番号ではなく、「test」とすると、
- * WEBサイトのバージョンが更新されず、何度もテストを行えます。
- * ※ アップデートによって変更された内容のリセットは手動で行う必要があります。
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 　スキーマの読み込みテストについて
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * 作成したスキーマファイルが正常に読み込めるかをテストする場合には、
- * ブラウザより次のURLにアクセスし、スキーマファイルをアップロードしてテストを行なえます。
- *
- * http://{baserCMSの設置フォルダ}/admin/tools/load_schema
- *
- *
- * PHP versions 5
+ * baserCMSのコアや、プラグインのアップデートを行います
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			cake
- * @subpackage		Baser.Controller
+ * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * アップデーターコントローラー
+ * 
+ * @package	Baser.Controller
  */
 class UpdatersController extends AppController {
 
@@ -212,8 +107,10 @@ class UpdatersController extends AppController {
 		$targets = am(array(''), $targets);
 
 		$scriptNum = 0;
+		$scriptMessages = array();
 		foreach ($targets as $target) {
-			$scriptNum += $this->_getScriptNum($target);
+			$scriptNum += count($this->_getUpdaters($target));
+			$scriptMessages += $this->_getScriptMessages($target);
 		}
 
 		$updateLogFile = TMP . 'logs' . DS . 'update.log';
@@ -273,9 +170,10 @@ class UpdatersController extends AppController {
 		$this->set('updateTarget', 'baserCMSコア');
 		$this->set('siteVer', $sourceVersion);
 		$this->set('baserVer', $targetVersion);
-		$this->set('siteVerPoint', verpoint($sourceVersion));
-		$this->set('baserVerPoint', verpoint($targetVersion));
+		$this->set('siteVerPoint', verpoint(preg_replace('/-beta$/', '', $sourceVersion)));
+		$this->set('baserVerPoint', verpoint(preg_replace('/-beta$/', '', $targetVersion)));
 		$this->set('scriptNum', $scriptNum);
+		$this->set('scriptMessages', $scriptMessages);
 		$this->set('plugin', false);
 		$this->render('update');
 	}
@@ -331,8 +229,9 @@ class UpdatersController extends AppController {
 		clearAllCache();
 
 		/* スクリプトの有無を確認 */
-		$scriptNum = $this->_getScriptNum($name);
-
+		$scriptNum = count($this->_getUpdaters($name));
+		$scriptMessages = $this->_getScriptMessages($name);
+		
 		/* スクリプト実行 */
 		if ($this->request->data) {
 			clearAllCache();
@@ -358,29 +257,13 @@ class UpdatersController extends AppController {
 		$this->set('updateTarget', $title);
 		$this->set('siteVer', $sourceVersion);
 		$this->set('baserVer', $targetVersion);
-		$this->set('siteVerPoint', verpoint($sourceVersion));
-		$this->set('baserVerPoint', verpoint($targetVersion));
+		$this->set('siteVerPoint', verpoint(preg_replace('/-beta$/', '', $sourceVersion)));
+		$this->set('baserVerPoint', verpoint(preg_replace('/-beta$/', '', $targetVersion)));
 		$this->set('scriptNum', $scriptNum);
+		$this->set('scriptMessages', $scriptMessages);
 		$this->set('plugin', $name);
 		$this->set('log', $updateLog);
 		$this->render('update');
-	}
-
-/**
- * 処理対象のスクリプト数を取得する
- *
- * @param string $plugin
- * @return int
- * @access protected
- */
-	protected function _getScriptNum($plugin = '') {
-		/* バージョンアップ対象のバージョンを取得 */
-		$targetVersion = $this->getBaserVersion($plugin);
-		$sourceVersion = $this->getSiteVersion($plugin);
-
-		/* スクリプトの有無を確認 */
-		$scriptNum = count($this->_getUpdaters($sourceVersion, $targetVersion, $plugin));
-		return $scriptNum;
 	}
 
 /**
@@ -392,9 +275,10 @@ class UpdatersController extends AppController {
  * @return array $updates
  * @access protected
  */
-	protected function _getUpdaters($sourceVersion, $targetVersion, $plugin = '') {
-		$sourceVerPoint = verpoint($sourceVersion);
-		$targetVerPoint = verpoint($targetVersion);
+	protected function _getUpdaters($plugin = '') {
+		
+		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
+		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
 		if ($sourceVerPoint === false || $targetVerPoint === false) {
 			return array();
@@ -406,13 +290,15 @@ class UpdatersController extends AppController {
 				return array();
 			}
 		} else {
-			$appPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			$baserPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			if (is_dir($appPath)) {
-				$path = $appPath;
-			} elseif (is_dir($baserPath)) {
-				$path = $baserPath;
-			} else {
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+				if (is_dir($path)) {
+					break;
+				}
+				$path = null;
+			}
+			if(!$path) {
 				return array();
 			}
 		}
@@ -439,6 +325,67 @@ class UpdatersController extends AppController {
 	}
 
 /**
+ * アップデータのパスを取得する
+ *
+ * @param string $sourceVersion
+ * @param string $targetVersion
+ * @param string $plugin
+ * @return array $updates
+ * @access protected
+ */
+	protected function _getScriptMessages($plugin = '') {
+		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
+		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
+
+		if ($sourceVerPoint === false || $targetVerPoint === false) {
+			return array();
+		}
+
+		if (!$plugin) {
+			$path = BASER_CONFIGS . 'update' . DS;
+			if (!is_dir($path)) {
+				return array();
+			}
+		} else {
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+				if (is_dir($path)) {
+					break;
+				}
+				$path = null;
+			}
+			if(!$path) {
+				return array();
+			}
+		}
+
+		$folder = new Folder($path);
+		$files = $folder->read(true, true);
+		$messages = array();
+		$updateVerPoints = array();
+		if (!empty($files[0])) {
+			foreach ($files[0] as $folder) {
+				$updateVersion = $folder;
+				$updateVerPoints[$updateVersion] = verpoint($updateVersion);
+			}
+			asort($updateVerPoints);
+			foreach ($updateVerPoints as $key => $updateVerPoint) {
+				$updateMessage = '';
+				if (($updateVerPoint > $sourceVerPoint && $updateVerPoint <= $targetVerPoint) || $key == 'test') {
+					if (file_exists($path . DS . $key . DS . 'config.php')) {
+						include $path . DS . $key . DS . 'config.php';
+						if($updateMessage) {
+							$messages[$key] = $updateMessage;
+						}
+					}
+				}
+			}
+		}
+		return $messages;
+	}
+	
+/**
  * アップデートフォルダのパスを取得する
  *
  * @param string $plugin
@@ -449,15 +396,16 @@ class UpdatersController extends AppController {
 		if (!$plugin) {
 			return BASER_CONFIGS . 'update' . DS;
 		} else {
-			$appPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			$baserPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS;
-			if (is_dir($appPath)) {
-				return $appPath;
-			} elseif (is_dir($baserPath)) {
-				return $baserPath;
-			} else {
-				return false;
+			
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS;
+				if(is_dir($path)) {
+					return $path;
+				}
 			}
+			return false;
+			
 		}
 	}
 
@@ -478,7 +426,7 @@ class UpdatersController extends AppController {
 		$targetVersion = $this->getBaserVersion($plugin);
 		$sourceVersion = $this->getSiteVersion($plugin);
 		$path = $this->_getUpdateFolder($plugin);
-		$updaters = $this->_getUpdaters($sourceVersion, $targetVersion, $plugin);
+		$updaters = $this->_getUpdaters($plugin);
 
 		if (!$plugin) {
 			$name = 'baserCMSコア';
@@ -538,7 +486,12 @@ class UpdatersController extends AppController {
 			return false;
 		}
 
-		include $__path;
+		try {
+			include $__path;
+		} catch (Exception $e) {
+			$this->log($e->getMessage());
+			return false;
+		}
 
 		return true;
 	}
@@ -612,26 +565,25 @@ class UpdatersController extends AppController {
  * @return string $path or ''
  */
 	protected function _getUpdatePath($version, $plugin = '') {
-		$path = '';
-		$appPluginPath = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
-		$baserPluginPath = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'update' . DS . $version;
-		$corePath = BASER_CONFIGS . 'update' . DS . $version;
+		
 		if ($plugin) {
-			if (is_dir($appPluginPath)) {
-				$path = $appPluginPath;
-			} elseif ($baserPluginPath) {
-				$path = $baserPluginPath;
-			} else {
-				return false;
+			$paths = App::path('Plugin');
+			foreach($paths as $path) {
+				$path .= $plugin . DS . 'Config' . DS . 'update' . DS . $version;
+				if(is_dir($path)) {
+					return $path;
+				}
 			}
+			return false;
 		} else {
+			$corePath = BASER_CONFIGS . 'update' . DS . $version;
 			if (is_dir($corePath)) {
-				$path = $corePath;
+				return $corePath;
 			} else {
 				return false;
 			}
 		}
-		return $path;
+		
 	}
 
 /**

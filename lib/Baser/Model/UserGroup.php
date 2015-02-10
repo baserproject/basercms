@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ユーザーグループモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -180,7 +174,8 @@ class UserGroup extends AppModel {
 			$result['UserGroup']['id'] = $this->getInsertID();
 			if ($recursive) {
 				$permissions = $this->Permission->find('all', array(
-					'conditions' => array('Permission.user_group_id' => $id),
+					'conditions'=> array('Permission.user_group_id' => $id),
+					'order'		=> array('Permission.sort'),
 					'recursive' => -1
 				));
 				if ($permissions) {
@@ -209,5 +204,5 @@ class UserGroup extends AppModel {
 	public function isAdminGlobalmenuUsed($id) {
 		return $this->field('use_admin_globalmenu', array('UserGroup.id' => $id));
 	}
-
+	
 }

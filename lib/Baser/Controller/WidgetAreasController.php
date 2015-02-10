@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ウィジェットエリアコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -93,7 +87,7 @@ class WidgetAreasController extends AppController {
 		$widgetAreas = $this->WidgetArea->find('all');
 		if ($widgetAreas) {
 			foreach ($widgetAreas as $key => $widgetArea) {
-				$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
+				$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 				if (!$widgets) {
 					$widgetAreas[$key]['WidgetArea']['count'] = 0;
 				} else {
@@ -138,7 +132,7 @@ class WidgetAreasController extends AppController {
 
 		$widgetArea = $this->WidgetArea->read(null, $id);
 		if ($widgetArea['WidgetArea']['widgets']) {
-			$widgetArea['WidgetArea']['widgets'] = $widgets = unserialize($widgetArea['WidgetArea']['widgets']);
+			$widgetArea['WidgetArea']['widgets'] = $widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 			usort($widgetArea['WidgetArea']['widgets'], 'widgetSort');
 			foreach ($widgets as $widget) {
 				$key = key($widget);
@@ -156,16 +150,17 @@ class WidgetAreasController extends AppController {
 
 		if ($plugins) {
 			$pluginWidgets = array();
+			$paths = App::path('Plugin');
 			foreach ($plugins as $plugin) {
-				$appPath = APP . 'Plugin' . DS . $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
-				$baserPath = BASER_PLUGINS . $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
+				
 				$pluginWidget['paths'] = array();
-				if (is_dir($appPath)) {
-					$pluginWidget['paths'][] = $appPath;
+				foreach($paths as $path) {
+					$path .= $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
+					if (is_dir($path)) {
+						$pluginWidget['paths'][] = $path;
+					}
 				}
-				if (is_dir($baserPath)) {
-					$pluginWidget['paths'][] = $baserPath;
-				}
+				
 				if (!$pluginWidget['paths']) {
 					continue;
 				} else {
@@ -294,7 +289,7 @@ class WidgetAreasController extends AppController {
 		$widgetArea = $this->WidgetArea->read(null, $widgetAreaId);
 		$update = false;
 		if ($widgetArea['WidgetArea']['widgets']) {
-			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
+			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 			foreach ($widgets as $key => $widget) {
 				if (isset($data[$dataKey]['id']) && isset($widget[$dataKey]['id']) && $widget[$dataKey]['id'] == $data[$dataKey]['id']) {
 					$widgets[$key] = $data;
@@ -309,7 +304,7 @@ class WidgetAreasController extends AppController {
 			$widgets[] = $data;
 		}
 
-		$widgetArea['WidgetArea']['widgets'] = serialize($widgets);
+		$widgetArea['WidgetArea']['widgets'] = BcUtil::serialize($widgets);
 
 		$this->WidgetArea->set($widgetArea);
 		if ($this->WidgetArea->save()) {
@@ -335,12 +330,12 @@ class WidgetAreasController extends AppController {
 		$ids = explode(',', $this->request->data['WidgetArea']['sorted_ids']);
 		$widgetArea = $this->WidgetArea->read(null, $widgetAreaId);
 		if ($widgetArea['WidgetArea']['widgets']) {
-			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
+			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 			foreach ($widgets as $key => $widget) {
 				$widgetKey = key($widget);
 				$widgets[$key][$widgetKey]['sort'] = array_search($widget[$widgetKey]['id'], $ids) + 1;
 			}
-			$widgetArea['WidgetArea']['widgets'] = serialize($widgets);
+			$widgetArea['WidgetArea']['widgets'] = BcUtil::serialize($widgets);
 			$this->WidgetArea->set($widgetArea);
 			if ($this->WidgetArea->save()) {
 				echo true;
@@ -367,7 +362,7 @@ class WidgetAreasController extends AppController {
 		if (!$widgetArea['WidgetArea']['widgets']) {
 			exit();
 		}
-		$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
+		$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 		foreach ($widgets as $key => $widget) {
 			$type = key($widget);
 			if ($id == $widget[$type]['id']) {
@@ -376,7 +371,7 @@ class WidgetAreasController extends AppController {
 			}
 		}
 		if ($widgets) {
-			$widgetArea['WidgetArea']['widgets'] = serialize($widgets);
+			$widgetArea['WidgetArea']['widgets'] = BcUtil::serialize($widgets);
 		} else {
 			$widgetArea['WidgetArea']['widgets'] = '';
 		}
@@ -399,8 +394,8 @@ class WidgetAreasController extends AppController {
  */
 	public function get_widgets($id) {
 		$widgetArea = $this->WidgetArea->read(null, $id);
-		if ($widgetArea['WidgetArea']['widgets']) {
-			$widgets = unserialize($widgetArea['WidgetArea']['widgets']);
+		if (!empty($widgetArea['WidgetArea']['widgets'])) {
+			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 			usort($widgets, 'widgetSort');
 			return $widgets;
 		}

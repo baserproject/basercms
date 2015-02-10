@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id: blog_posts_controller.php 42 2011-08-23 19:20:59Z ryuring $ */
 /**
  * 記事コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision: 42 $
- * @modifiedby		$LastChangedBy: ryuring $
- * @lastmodified	$Date: 2011-08-24 04:20:59 +0900 (水, 24 8 2011) $
  * @license			http://basercms.net/license/index.html
  */
 App::uses('Xml', 'Utility');
@@ -26,7 +19,7 @@ App::uses('Xml', 'Utility');
 /**
  * 記事コントローラー
  *
- * @package baser.plugins.blog.controllers
+ * @package Blog.Controller
  */
 class BlogPostsController extends BlogAppController {
 
@@ -52,8 +45,7 @@ class BlogPostsController extends BlogAppController {
  * @var array
  * @access public
  */
-	//public $helpers = array(BC_TEXT_HELPER, BC_TIME_HELPER, BC_FORM_HELPER, BC_CKEDITOR_HELPER, 'Blog.Blog', 'BcUpload');
-	public $helpers = array('Blog.Blog', 'BcUpload');
+	public $helpers = array('Blog.Blog');
 
 /**
  * コンポーネント
@@ -70,7 +62,6 @@ class BlogPostsController extends BlogAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
 
@@ -106,7 +97,7 @@ class BlogPostsController extends BlogAppController {
 			$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->request->params['pass'][0]));
 			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 			if ($this->request->params['prefix'] == 'admin') {
-				$this->subMenuElements = array('blog_posts', 'blog_categories', 'blog_common');
+				$this->subMenuElements = array('blog_posts', 'blog_categories');
 			}
 			if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
 				$this->helpers[] = $this->siteConfigs['editor'];
@@ -236,7 +227,7 @@ class BlogPostsController extends BlogAppController {
 			if (!empty($data['BlogPost']['blog_tag_id'])) {
 				$blogTags = $this->BlogPost->BlogTag->read(null, $data['BlogPost']['blog_tag_id']);
 				if ($blogTags) {
-					$conditions['BlogPost.id'] = Set::extract('/BlogPost/id', $blogTags);
+					$conditions['BlogPost.id'] = Hash::extract($blogTags, '{n}.BlogPost.id');
 				}
 			}
 		}
@@ -341,11 +332,13 @@ class BlogPostsController extends BlogAppController {
 			));
 		}
 
+		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
 		$this->set('editable', true);
 		$this->set('categories', $categories);
 		$this->set('previewId', 'add_' . mt_rand(0, 99999999));
 		$this->set('editorOptions', $editorOptions);
 		$this->set('users', $this->BlogPost->User->getUserList(array('User.id' => $user['id'])));
+		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規記事登録';
 		$this->help = 'blog_posts_form';
 		$this->render('form');
 	}
@@ -399,6 +392,7 @@ class BlogPostsController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$editable = false;
 		$blogCategoryId = '';
+		$currentCatOwner = '';
 
 		if (isset($this->request->data['BlogPost']['blog_category_id'])) {
 			$blogCategoryId = $this->request->data['BlogPost']['blog_category_id'];
@@ -408,8 +402,8 @@ class BlogPostsController extends BlogAppController {
 		} else {
 			if (empty($this->request->data['BlogCategory']['owner_id'])) {
 				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
+				$currentCatOwner = $data['BlogCategory']['owner_id'];
 			}
-			$currentCatOwner = $data['BlogCategory']['owner_id'];
 		}
 
 		$editable = ($currentCatOwner == $user['user_group_id'] ||
@@ -439,6 +433,7 @@ class BlogPostsController extends BlogAppController {
 			));
 		}
 
+		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
 		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
 		$this->set('categories', $categories);
@@ -542,6 +537,7 @@ class BlogPostsController extends BlogAppController {
  *
  * @return void
  * @access public
+ * @todo 未実装
  */
 	public function admin_import() {
 		// 入力チェック
@@ -567,7 +563,7 @@ class BlogPostsController extends BlogAppController {
 			// XMLデータを読み込む
 			$xml = new Xml($this->request->data['Import']['file']['tmp_name']);
 
-			$_posts = Set::reverse($xml);
+			$_posts = Xml::toArray($xml);
 
 			if (!isset($_posts['Rss']['Channel']['Item'])) {
 				$message .= 'XMLデータが不正です<br />';

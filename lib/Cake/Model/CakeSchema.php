@@ -132,7 +132,7 @@ class CakeSchema extends Object {
  * Before callback to be implemented in subclasses
  *
  * @param array $event schema object properties
- * @return boolean Should process continue
+ * @return bool Should process continue
  */
 	public function before($event = array()) {
 		return true;
@@ -230,7 +230,7 @@ class CakeSchema extends Object {
 				}
 
 				if (isset($this->plugin)) {
-					if ($model == $this->plugin . 'AppModel') {
+					if ($model === $this->plugin . 'AppModel') {
 						continue;
 					}
 					$importModel = $model;
@@ -599,7 +599,7 @@ class CakeSchema extends Object {
 /**
  * Formats Schema columns from Model Object
  *
- * @param array $Obj model object
+ * @param array &$Obj model object
  * @return array Formatted columns
  */
 	protected function _columns(&$Obj) {
@@ -608,7 +608,7 @@ class CakeSchema extends Object {
 
 		$columns = array();
 		foreach ($fields as $name => $value) {
-			if ($Obj->primaryKey == $name) {
+			if ($Obj->primaryKey === $name) {
 				$value['key'] = 'primary';
 			}
 			if (!isset($db->columns[$value['type']])) {

@@ -47,7 +47,7 @@
 
 			<footer>
 					<?php $this->BcBaser->element('global_menu') ?>
-				<address>Copyright(C) 2008 - 2011 <br />baserCMS All rights Reserved.</address>
+				<address>Copyright(C) <?php $this->BcBaser->copyYear(2008) ?> <br />baserCMS All rights Reserved.</address>
 				<div class="banner">
 					<?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project', 'border' => "0")), 'http://basercms.net') ?>
 					<?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework', 'border' => "0")), 'http://cakephp.jp') ?>

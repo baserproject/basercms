@@ -48,14 +48,14 @@ class CacheHelper extends AppHelper {
 /**
  * Counter used for counting nocache section tags.
  *
- * @var integer
+ * @var int
  */
 	protected $_counter = 0;
 
 /**
  * Is CacheHelper enabled? should files + output be parsed.
  *
- * @return boolean
+ * @return bool
  */
 	protected function _enabled() {
 		return $this->_View->cacheAction && (Configure::read('Cache.check') === true);
@@ -64,7 +64,7 @@ class CacheHelper extends AppHelper {
 /**
  * Parses the view file and stores content for cache file building.
  *
- * @param string $viewFile
+ * @param string $viewFile View file name.
  * @param string $output The output for the file.
  * @return string Updated content.
  */
@@ -77,7 +77,7 @@ class CacheHelper extends AppHelper {
 /**
  * Parses the layout file and stores content for cache file building.
  *
- * @param string $layoutFile
+ * @param string $layoutFile Layout file name.
  * @return void
  */
 	public function afterLayout($layoutFile) {
@@ -133,7 +133,7 @@ class CacheHelper extends AppHelper {
 			$options = $cacheAction;
 			if (isset($cacheAction[$index])) {
 				if (is_array($cacheAction[$index])) {
-					$options = array_merge(array('duration' => 0, 'callbacks' => false), $cacheAction[$index]);
+					$options = $cacheAction[$index] + array('duration' => 0, 'callbacks' => false);
 				} else {
 					$cacheTime = $cacheAction[$index];
 				}
@@ -266,8 +266,9 @@ class CacheHelper extends AppHelper {
  *
  * @param string $content view content to write to a cache file.
  * @param string $timestamp Duration to set for cache file.
- * @param boolean $useCallbacks
- * @return boolean success of caching view.
+ * @param bool $useCallbacks Whether to include statements in cached file which
+ *   run callbacks.
+ * @return bool success of caching view.
  */
 	protected function _writeFile($content, $timestamp, $useCallbacks = false) {
 		$now = time();

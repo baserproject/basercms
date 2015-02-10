@@ -1,0 +1,342 @@
+@charset "utf-8";
+// ============================================================
+// extension
+// ============================================================
+
+// ----------------------------------------------------------------------
+// compass reset
+// ----------------------------------------------------------------------
+// ブラウザサポート 記述順番をwebkitが一番上に来るように変更
+@mixin experimental($property, $value, $moz: $experimental-support-for-mozilla, $webkit: $experimental-support-for-webkit, $o: $experimental-support-for-opera, $ms: $experimental-support-for-microsoft, $khtml: $experimental-support-for-khtml, $official: true) {
+	@if $webkit and $experimental-support-for-webkit {
+		-webkit-#{$property}: $value;
+	}
+	@if $moz and $experimental-support-for-mozilla {
+		-moz-#{$property}: $value;
+	}
+	@if $o and $experimental-support-for-opera {
+		-o-#{$property}: $value;
+	}
+	@if $ms and $experimental-support-for-microsoft {
+		-ms-#{$property}: $value;
+	}
+	@if $khtml and $experimental-support-for-khtml {
+		-khtml-#{$property}: $value;
+	}
+	@if $official {
+		#{$property}: $value;
+	}
+}
+
+@mixin experimental-value($property, $value, $moz: $experimental-support-for-mozilla, $webkit: $experimental-support-for-webkit, $o: $experimental-support-for-opera, $ms: $experimental-support-for-microsoft, $khtml: $experimental-support-for-khtml, $official: true) {
+	@if $webkit and $experimental-support-for-webkit {
+		#{$property}: -webkit-#{$value};
+	}
+	@if $moz and $experimental-support-for-mozilla {
+		#{$property}: -moz-#{$value};
+	}
+	@if $o and $experimental-support-for-opera {
+		#{$property}: -o-#{$value};
+	}
+	@if $ms and $experimental-support-for-microsoft {
+		#{$property}: -ms-#{$value};
+	}
+	@if $khtml and $experimental-support-for-khtml {
+		#{$property}: -khtml-#{$value};
+	}
+	@if $official {
+		#{$property}: #{$value};
+	}
+}
+
+// transition-propertyにはベンダープレフィックスをつける用追加「experimental」
+@mixin experimental-prop-value($property, $value, $moz: $experimental-support-for-mozilla, $webkit: $experimental-support-for-webkit, $o: $experimental-support-for-opera, $ms: $experimental-support-for-microsoft, $khtml: $experimental-support-for-khtml, $official: true) {
+	@if $webkit and $experimental-support-for-webkit {
+		-webkit-#{$property}: -webkit-#{$value};
+	}
+	@if $moz and $experimental-support-for-mozilla {
+		-moz-#{$property}: -moz-#{$value};
+	}
+	@if $o and $experimental-support-for-opera {
+		-o-#{$property}: -o-#{$value};
+	}
+	@if $ms and $experimental-support-for-microsoft {
+		-ms-#{$property}: -ms-#{$value};
+	}
+	@if $khtml and $experimental-support-for-khtml {
+		-khtml-#{$property}: -khtml-#{$value};
+	}
+	@if $official {
+		#{$property}: $value;
+	}
+}
+
+
+// transition初期だとmsが吐き出されないように not になっているものを修正
+// transformにベンダープレフィックスをつけてくれない。ちょっと大幅変更?が必要なので考え中
+@mixin transition($transition-1: default, $transition-2: false, $transition-3: false, $transition-4: false, $transition-5: false, $transition-6: false, $transition-7: false, $transition-8: false, $transition-9: false, $transition-10: false) {
+	$legacy: type-of($transition-1) == string and type-of(if($transition-2, $transition-2, 0)) == number and type-of(if($transition-3, $transition-3, "")) == string and type-of(if($transition-4, $transition-4, 0)) == number and ($transition-2 or $transition-3 or $transition-4);
+	@if $legacy {
+		@warn "Passing separate arguments for a single transition to transition is deprecated. " + "Pass the values as a single space-separated list, or use the single-transition mixin.";
+		@include single-transition(if($transition-1, $transition-1, $default-transition-property), if($transition-2, $transition-2, $default-transition-duration), if($transition-3, $transition-3, $default-transition-function), if($transition-4, $transition-4, $default-transition-delay));
+	} @else {
+		@if $transition-1 == default {
+			$transition-1: -compass-space-list(compact($default-transition-property, $default-transition-duration, $default-transition-function, $default-transition-delay));
+		}
+		$transition: compact($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10);
+		@include experimental(transition, $transition, -moz, -webkit, -o, -ms, not -khtml, official);
+	}
+}
+
+
+// transition-propertyにはtransformにベンダープレフィックスをつけるように変更
+// transition-propertyなどには複数選択することができない
+// 特に動かしたい要素を限定しない場合はtransition-property : all;で良い気がします
+@mixin transition-property($properties: $default-transition-property) {
+	@if $properties == transform {
+		@include experimental-prop-value(transition-property, unquote($properties), -moz, -webkit, -o, -ms, not -khtml, official);
+	}	@else {
+		@include experimental(transition-property, unquote($properties), -moz, -webkit, -o, -ms, not -khtml, official);
+	}
+}
+
+
+// transition初期だとmsが吐き出されないように not になっているものを修正
+@mixin transition-duration($duration: $default-transition-duration) {
+	@if type-of($duration) == string {
+		$duration: unquote($duration);
+	}
+	@include experimental(transition-duration, $duration, -moz, -webkit, -o, -ms, not -khtml, official);
+}
+		
+@mixin transition-timing-function($function: $default-transition-function) {
+	@include experimental(transition-timing-function, unquote($function), -moz, -webkit, -o, -ms, not -khtml, official);
+}
+
+@mixin transition-delay($delay: $default-transition-delay) {
+	@if type-of($delay) == string {
+		$delay: unquote($delay);
+	}
+	@include experimental(transition-delay, $delay, -moz, -webkit, -o, -ms, not -khtml, official);
+}
+
+
+
+// ----------------------------------------------------------------------
+// css3
+// ----------------------------------------------------------------------
+// 最大高さ min-height
+@mixin min_height($value : 1%) {
+	min-height: $value;
+	@if $legacy-support-for-ie6 {
+	_height: $value;
+	}
+}
+
+// inline-block
+@mixin inline-block {
+	display: inline-block;
+	@if $legacy-support-for-ie6 or $legacy-support-for-ie7 {
+		*display: inline;
+		*zoom: 1;
+	}
+}
+
+// 同じテキストシャドウ 繰り返し
+$text-shadowList: ' ';
+@mixin text-shadow-repeat($value : 0 0 1px rgba(0,0,0,0.3),$num : 1) {
+	$text-shadowList : $value;
+	@for $i from 1 through $num - 1 {
+		$text-shadowList : unquote($text-shadowList + "," + $value);
+	}
+	text-shadow: $text-shadowList;
+}
+
+
+
+// ----------------------------------------------------------------------
+// html5
+// ----------------------------------------------------------------------
+@function s($value) {
+	@if $html5 {
+		@return $value
+	}
+	@else if $value == header or $value == footer {
+		@return unquote("div#" + $value)
+	}
+	@else {
+		@return unquote("div." + $value)
+	}
+}
+
+
+
+// ----------------------------------------------------------------------
+// font-size
+// ----------------------------------------------------------------------
+// font-size Comment
+@mixin fzComment() {
+/*----------------------------------------
+	font-size
+------------------------------------------
+Font-size list (base: 16px)
+ 51% =  8px
+ 57% =  9px
+ 64% = 10px
+ 70% = 11px        131% = 21px        193% = 31px
+ 76% = 12px        136% = 22px        200% = 32px
+ 82% = 13px        143% = 23px        207% = 33px
+ 88% = 14px        149% = 24px        213% = 34px
+ 94% = 15px        155% = 25px        219% = 35px
+100% = 16px        161% = 26px        226% = 36px
+106% = 17px        167% = 27px        231% = 37px
+112% = 18px        173% = 28px        234% = 38px
+118% = 19px        181% = 29px        244% = 39px
+124% = 20px        187% = 30px        250% = 40px
+*/
+}
+
+// base font-size 16x
+$fontSizeList: 51%, 57%, 64%, 70%, 76%, 82%, 88%, 94%, 100%, 106%, 112%, 118%, 124%, 131%, 136%, 143%, 149%, 155%, 161%, 167%, 173%, 181%, 187%, 193%, 200%, 207%, 213%, 219%, 226%, 231%, 234%, 244%, 250%;
+
+
+@function fz($size) {
+	@if $size < 8 {
+		$size: 8;
+	}
+	@if $size > 40 {
+		$size: 40;
+	}
+	@return nth($fontSizeList, $size - 7);
+}
+
+@function fs($size, $context, $unit:em){
+	@if $unit == '%' {
+		@return #{$size/$context*100}#{$unit};
+	} @else {
+		@return #{$size/$context}#{$unit};
+	}
+}
+
+
+
+// ----------------------------------------------------------------------
+// font-size rem
+// ----------------------------------------------------------------------
+
+@mixin fontsize($size: 24, $base: 16, $important: false) {
+ @if $important == 'important' or $important == true {
+     $important: ' !important';
+ } @else {
+     $important: '';
+ }
+ 
+  font-size: $size + px#{$important};
+  font-size: ($size / $base) * 1rem#{$important};
+}
+
+
+
+// ----------------------------------------------------------------------
+// clearfix
+// ----------------------------------------------------------------------
+
+/*----------------------------------------
+	clearfix
+----------------------------------------*/
+@mixin clear {
+	&:after {
+	content:"";
+	clear:both;
+	height:0;
+	display:block;
+	visibility:hidden;
+}
+}
+
+%clear{
+ @include clear;
+}
+
+
+
+@mixin clearfixBase {
+.clearfix {
+	@if $legacy-support-for-ie7 {
+	min-height: 1px;
+	}
+	@if $legacy-support-for-ie6 {
+	_height: 1%;
+	}
+	&:after {
+	content:"";
+	clear:both;
+	height:0;
+	display:block;
+	visibility:hidden;
+	}
+}
+}
+
+
+
+
+// ----------------------------------------------------------------------
+// opacity 透過
+// ----------------------------------------------------------------------
+
+@mixin opacity($opacity) {
+ opacity:$opacity;
+ $opacityIE:$opacity * 100;
+ filter:alpha(opacity=$opacityIE);
+}
+
+
+// ----------------------------------------------------------------------
+// text-overflow 文字数末尾に「...」
+// ----------------------------------------------------------------------
+
+@mixin textover($textover) {
+ width:$textover;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow: ellipsis;
+ -webkit-text-overflow: ellipsis;
+ -o-text-overflow:ellipsis;
+}
+
+
+// ----------------------------------------------------------------------
+// 画像置換（テキスト飛ばし）
+// ----------------------------------------------------------------------
+@mixin permute {
+	text-indent:100%;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
+@mixin permuteClear { //画像置換解除
+ text-indent:0;
+ white-space:normal;
+ overflow:visible;
+}
+
+
+// ----------------------------------------------------------------------
+// 縦方向2色のグラデーション
+// ----------------------------------------------------------------------
+@mixin bgGra($bg_color,$from,$to){
+ @include background($bg_color, linear-gradient(top, $from 0%, $to 100%));
+}
+
+
+// ----------------------------------------------------------------------
+// スマホ用のボールド
+// ----------------------------------------------------------------------
+@mixin bold($bcolor) {
+	//@include text-shadow(1px 0 1px $bcolor);
+ font-weight:bold;
+	-webkit-text-stroke-width:1px;
+	-webkit-text-stroke-color:$bcolor;
+	-webkit-text-fill-color:$bcolor;
+}

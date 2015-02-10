@@ -1,0 +1,7 @@
+"id","no","name","link","menu_type","sort","status","created","modified"
+"","1","ホーム","/","default","1","1","",""
+"","2","会社案内","/company","default","2","1","",""
+"","3","サービス","/service","default","3","1","",""
+"","4","新着情報","/news/index","default","4","1","",""
+"","5","お問い合わせ","/contact/index","default","5","1","",""
+"","6","採用情報","/recruit","default","7","1","",""

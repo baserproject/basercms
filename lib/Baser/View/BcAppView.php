@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * view 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser
+ * @package			Baser
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -29,6 +23,13 @@
  */
 class BcAppView extends View {
 
+/**
+ * ページタイトル
+ * 
+ * @var string
+ */
+	public $pageTitle = null;
+	
 /**
  * List of variables to collect from the associated controller
  *
@@ -179,13 +180,13 @@ class BcAppView extends View {
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// イベントを追加
 		// >>>
-		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => ''));
+		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
 		// CUSTOMIZE ADD 2012/10/11 ryuring
@@ -270,37 +271,57 @@ class BcAppView extends View {
  */
 	protected function _getElementFileName($name) {
 
+		// CUSTOMIZE ADD 2013/08/27 ryuring
+		// イベントを追加
+		// >>>
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
+		if ($event !== false) {
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
+		}
+		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
+		if ($event !== false) {
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
+		}
+		// <<<
+		
 		list($plugin, $name) = $this->pluginSplit($name);
 
 		// CUSTOMIZE ADD 2013/08/26 ryuring
 		// サブフォルダを追加
+		// 2014/02/24 追記
+		// サブフォルダ内にテンプレートが存在しない場合上位階層のテンプレートも検索する仕様に変更
 		// >>>
+		$names = array($name);
 		if ($this->subDir) {
-			$name = $this->subDir . DS . $name;
-		}
-		// <<<
-		// CUSTOMIZE ADD 2013/08/27 ryuring
-		// イベントを追加
-		// >>>
-		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => ''));
-		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
-		}
-		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
-		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			array_unshift($names, $this->subDir . DS . $name);
 		}
 		// <<<
 
 		$paths = $this->_paths($plugin);
 		$exts = $this->_getExtensions();
-		foreach ($exts as $ext) {
+		
+		// CUSTOMIZE MODIFY 2014/02/24 ryuring
+		// サブフォルダ内にテンプレートが存在しない場合上位階層のテンプレートも検索する仕様に変更
+		// >>>
+		/*foreach ($exts as $ext) {
 			foreach ($paths as $path) {
 				if (file_exists($path . 'Elements' . DS . $name . $ext)) {
 					return $path . 'Elements' . DS . $name . $ext;
 				}
 			}
+		}*/
+		// ---
+		foreach($names as $name) {
+			foreach ($exts as $ext) {
+				foreach ($paths as $path) {
+					if (file_exists($path . 'Elements' . DS . $name . $ext)) {
+						return $path . 'Elements' . DS . $name . $ext;
+					}
+				}
+			}
 		}
+		// <<<
+		
 		return false;
 	}
 
@@ -320,13 +341,13 @@ class BcAppView extends View {
 
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// >>>
-		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => ''));
+		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name));
 		if ($event !== false) {
-			$name = $event->result === true ? $event->data['name'] : $event->result;
+			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
 

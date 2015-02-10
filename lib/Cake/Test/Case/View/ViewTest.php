@@ -40,7 +40,7 @@ class ViewPostsController extends Controller {
 /**
  * uses property
  *
- * @var mixed null
+ * @var mixed
  */
 	public $uses = null;
 
@@ -163,7 +163,7 @@ class TestView extends View {
  * paths method
  *
  * @param string $plugin Optional plugin name to scan for view files.
- * @param boolean $cached Set to true to force a refresh of view paths.
+ * @param bool $cached Set to true to force a refresh of view paths.
  * @return array paths
  */
 	public function paths($plugin = null, $cached = true) {
@@ -706,17 +706,21 @@ class ViewTest extends CakeTestCase {
 
 /**
  * Test that elements can have callbacks
+ *
+ * @return void
  */
 	public function testElementCallbacks() {
-		$this->getMock('Helper', array(), array($this->View), 'ElementCallbackMockHtmlHelper');
+		$Helper = $this->getMock('Helper', array(), array($this->View), 'ElementCallbackMockHtmlHelper');
 		$this->View->helpers = array('ElementCallbackMockHtml');
 		$this->View->loadHelpers();
+
+		$this->View->Helpers->set('ElementCallbackMockHtml', $Helper);
+		$this->View->ElementCallbackMockHtml = $Helper;
 
 		$this->View->ElementCallbackMockHtml->expects($this->at(0))->method('beforeRender');
 		$this->View->ElementCallbackMockHtml->expects($this->at(1))->method('afterRender');
 
 		$this->View->element('test_element', array(), array('callbacks' => true));
-		$this->mockObjects[] = $this->View->ElementCallbackMockHtml;
 	}
 
 /**
@@ -1024,7 +1028,7 @@ class ViewTest extends CakeTestCase {
 		$this->assertRegExp("/<title>yo what up<\/title>/", $result);
 		$this->assertRegExp("/<p><a href=\"flash\">yo what up<\/a><\/p>/", $result);
 
-		$this->assertTrue($View->render(false, 'flash'));
+		$this->assertNull($View->render(false, 'flash'));
 
 		$this->PostsController->helpers = array('Session', 'Cache', 'Html');
 		$this->PostsController->constructClasses();
@@ -1627,19 +1631,6 @@ TEXT;
  *
  * @return void
  */
-	public function testPropertySetting() {
-		$this->assertFalse(isset($this->View->pageTitle));
-		$this->View->pageTitle = 'test';
-		$this->assertTrue(isset($this->View->pageTitle));
-		$this->assertTrue(!empty($this->View->pageTitle));
-		$this->assertEquals('test', $this->View->pageTitle);
-	}
-
-/**
- * Test that setting arbitrary properties still works.
- *
- * @return void
- */
 	public function testPropertySettingMagicGet() {
 		$this->assertFalse(isset($this->View->action));
 		$this->View->request->params['action'] = 'login';
@@ -1672,7 +1663,7 @@ TEXT;
 	}
 
 /**
- * Tests that a vew block uses default value when not assigned and uses assigned value when it is
+ * Tests that a view block uses default value when not assigned and uses assigned value when it is
  *
  * @return void
  */
@@ -1684,6 +1675,22 @@ TEXT;
 		$expected = 'My Title';
 		$this->View->assign('title', $expected);
 		$result = $this->View->fetch('title', $default);
+		$this->assertEquals($expected, $result);
+	}
+
+/**
+ * Tests that a view variable uses default value when not assigned and uses assigned value when it is
+ *
+ * @return void
+ */
+	public function testViewVarDefaultValue() {
+		$default = 'Default';
+		$result = $this->View->get('title', $default);
+		$this->assertEquals($default, $result);
+
+		$expected = 'Back to the Future';
+		$this->View->set('title', $expected);
+		$result = $this->View->get('title', $default);
 		$this->assertEquals($expected, $result);
 	}
 }

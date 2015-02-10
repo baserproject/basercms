@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールコンテンツコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.controllers
+ * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@
 /**
  * メールコンテンツコントローラー
  *
- * @package baser.plugins.mail.controllers
+ * @package Mail.Controller
  */
 class MailContentsController extends MailAppController {
 
@@ -68,7 +62,6 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
 	);
 
@@ -288,8 +281,8 @@ class MailContentsController extends MailAppController {
  * @access public
  */
 	public function redirectEditMail($template) {
-		$type = 'Elements';
-		$path = 'Emails' . DS . 'text' . DS . $template . $this->ext;
+		$type = 'Emails';
+		$path = 'text' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS . $path;
 		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $type . DS . $path);
 		if ($this->siteConfigs['theme']) {

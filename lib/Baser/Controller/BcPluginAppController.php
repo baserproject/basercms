@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * プラグイン拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('AppController', 'Controller');
@@ -75,27 +69,16 @@ class BcPluginAppController extends AppController {
 
 		$contentName = '';
 		$url = preg_replace('/^\//', '', $this->request->url);
-		$url = explode('/', $url);
 
 		if (!$url) {
 			return null;
 		}
-
-		if ($url[0] != Configure::read('BcRequest.agentAlias')) {
-			if (!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
-				if (isset($url[1])) {
-					$contentName = $url[1];
-				}
-			} else {
-				$contentName = $url[0];
-			}
-		} else {
-			if (!empty($this->request->params['prefix']) && $url[0] == $this->request->params['prefix']) {
-				$contentName = $url[2];
-			} elseif (isset($url[1])) {
-				$contentName = $url[1];
-			}
-		}
+		
+		// コンテンツ名取得
+		$request = new CakeRequest($url);
+		$pureUrl = getPureUrl($request);
+		$aryPureUrl = explode('/', $pureUrl);
+		$contentName = $aryPureUrl[0];
 
 		// プラグインと同じ名前のコンテンツ名の場合に正常に動作しないので
 		// とりあえずコメントアウト

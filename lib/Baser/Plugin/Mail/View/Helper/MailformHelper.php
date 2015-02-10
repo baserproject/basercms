@@ -1,33 +1,27 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * メールフォームヘルパー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views.helpers
+ * @package			Mail.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
  * Include files
  */
-App::uses('BcHtmlHelper', 'Mail.View/Helper');
-App::uses('BcFreezeHelper', 'Mail.View/Helper');
+App::uses('BcHtmlHelper', 'View/Helper');
+App::uses('BcFreezeHelper', 'View/Helper');
 
 /**
  * メールフォームヘルパー
  *
- * @package baser.plugins.mail.views.helpers
+ * @package Mail.View.Helper
  *
  */
 class MailformHelper extends BcFreezeHelper {
@@ -38,13 +32,12 @@ class MailformHelper extends BcFreezeHelper {
  * @param string $type コントロールタイプ
  * @param string $fieldName フィールド文字列
  * @param array $options コントロールソース
- * @param array $attributes html属性
- * @return string htmlタグ
- * @access public
+ * @param array $attributes HTML属性
+ * @return string フォームコントロールのHTMLタグ
  */
 	public function control($type, $fieldName, $options, $attributes = array()) {
 		$attributes['escape'] = false;
-
+		$out = '';
 		switch ($type) {
 
 			case 'text':
@@ -126,7 +119,25 @@ class MailformHelper extends BcFreezeHelper {
 				$attributes['empty'] = false;
 				$out = $this->select($fieldName, $options, $attributes);
 				break;
+			case 'file':
+				unset($attributes['size']);
+				unset($attributes['rows']);
+				unset($attributes['maxlength']);
+				unset($attributes['separator']);
+				unset($attributes['escape']);
+				if(empty($attributes['width'])) {
+					$attributes['width'] = 400;
+				}
+				$attributes['delCheck'] = false;
+				if(!empty($attributes['maxFileSize'])) {
+					$out = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $attributes['maxFileSize'] * 1000 * 1000 . '" />';
+				}
+				unset($attributes['maxFileSize']);
+				unset($attributes['fileExt']);
+				$out .= $this->file($fieldName, $attributes);
 
+				break;
+			
 			case 'date_time_calender':
 				unset($attributes['size']);
 				unset($attributes['rows']);
@@ -148,7 +159,7 @@ class MailformHelper extends BcFreezeHelper {
 				if (isset($attributes['maxYear']) && $attributes['maxYear'] == 'today') {
 					$attributes['maxYear'] = intval(date('Y'));
 				}
-				$out = $this->dateTime($fieldName, 'WMD', null, null, $attributes);
+				$out = $this->dateTime($fieldName, 'WMD', null, $attributes);
 				break;
 
 			case 'textarea':
@@ -168,6 +179,23 @@ class MailformHelper extends BcFreezeHelper {
 				$out = $this->hidden($fieldName, $attributes);
 		}
 		return $out;
+	}
+
+
+/**
+ * create
+ * ファイル添付の対応のためにデフォルト値を変更
+ *
+ * @param array $model
+ * @param array $options
+ * @return string
+ */
+	public function create($model = null, $options = array()) {
+		if (!isset($options['type'])) {
+			$options['type'] = 'file';
+		}
+
+		return parent::create($model, $options);
 	}
 
 }

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ページモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -600,6 +594,8 @@ class Page extends AppModel {
 				foreach ($categoryPath as $key => $category) {
 					if ($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.mobile.prefix')) {
 						$url .= Configure::read('BcAgent.mobile.prefix') . '/';
+					} elseif ($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.smartphone.prefix')) {
+						$url .= Configure::read('BcAgent.smartphone.prefix') . '/';
 					} else {
 						$url .= $category['PageCategory']['name'] . '/';
 					}
@@ -607,6 +603,25 @@ class Page extends AppModel {
 			}
 		}
 		return $url . $data['name'];
+	}
+	
+/**
+ * 固定ページのURLを表示用のURLに変換する
+ * 
+ * 《変換例》
+ * /mobile/index → /m/
+ * 
+ * @param string $url 変換対象のURL
+ * @return string 表示の用のURL
+ */
+	public function convertViewUrl($url) {
+		$url = preg_replace('/\/index$/', '/', $url);
+		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', $url)) {
+			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
+		} elseif (preg_match('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', $url)) {
+			$url = preg_replace('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
+		}
+		return $url;
 	}
 
 /**
@@ -622,6 +637,8 @@ class Page extends AppModel {
 	public function addBaserPageTag($id, $contents, $title, $description, $code) {
 		$tag = array();
 		$tag[] = '<!-- BaserPageTagBegin -->';
+		$title = str_replace("'", "\'", str_replace("\\", "\\\\'", $title));
+		$description = str_replace("'", "\'", str_replace("\\", "\\\\'", $description));
 		$tag[] = '<?php $this->BcBaser->setTitle(\'' . $title . '\') ?>';
 		$tag[] = '<?php $this->BcBaser->setDescription(\'' . $description . '\') ?>';
 
@@ -800,7 +817,7 @@ class Page extends AppModel {
 				$this->_publishes = array();
 				return false;
 			}
-			$this->_publishes = Set::extract('/Page/url', $pages);
+			$this->_publishes = Hash::extract($pages, '{n}.Page.url');
 		}
 		return in_array($url, $this->_publishes);
 	}
@@ -1029,11 +1046,13 @@ class Page extends AppModel {
 	}
 
 /**
- * ページで管理されているURLかチェックする
+ * 固定ページとして管理されているURLかチェックする
  * 
- * @param string $url
+ * $this->_pages をキャッシュとして利用する
+ * URL に、拡張子 .html がついている場合も存在するとみなす
+ * 
+ * @param string $url URL
  * @return boolean
- * @access public
  */
 	public function isPageUrl($url) {
 		if (preg_match('/\/$/', $url)) {
@@ -1043,16 +1062,25 @@ class Page extends AppModel {
 
 		if ($this->_pages == -1) {
 			$pages = $this->find('all', array(
-				'fields' => 'url',
+				'fields'	=> 'url',
 				'recursive' => -1
 			));
 			if (!$pages) {
 				$this->_pages = array();
 				return false;
 			}
-			$this->_pages = Set::extract('/Page/url', $pages);
+			$this->_pages = Hash::extract($pages, '{n}.Page.url');
 		}
-		return in_array($url, $this->_pages);
+		if(in_array($url, $this->_pages)) {
+			return true;
+		}
+		if(preg_match('/\.html$/', $url)) {
+			$url = preg_replace('/\.html$/', '', $url);
+			if(in_array($url, $this->_pages)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 /**

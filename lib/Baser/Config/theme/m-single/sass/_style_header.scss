@@ -1,0 +1,227 @@
+
+/*----------------------------------------
+	header
+----------------------------------------*/
+header {
+	padding-bottom:11px;
+	width:100%;
+	height:290px;
+	
+	h1 {
+		margin:0 auto;
+		padding:80px 0;
+		line-height:70px;
+		
+		img {
+			vertical-align:bottom;
+			width:auto;
+			max-height:70px;
+		}
+	} //h1
+	
+	@include tablet {
+		padding-bottom:0;
+		position:relative;
+		z-index:999;
+		
+		h1 {
+			padding:40px 0;
+			line-height:60px;
+			
+			img {
+				width:auto;
+				max-height:60px;
+			}
+		} //h1
+	} //tablet1
+	
+	@include tablet1 {
+		height:202px;
+	} //tablet1
+	
+	@include tablet2 {
+		height:182px;
+	} //tablet2
+	
+	@include sp {
+		padding-bottom:0;
+		height:128px;
+		
+		h1 {
+			padding:20px 0;
+			line-height:40px;
+			
+			img {
+				width:auto;
+				max-height:40px;
+				vertical-align:middle;
+			}
+		} //h1
+	} //sp
+} //header
+
+
+.headerNav {
+	width:100%;
+	border-top:1px solid #EEEEEE;
+	border-bottom:10px solid #E1EDD5;
+	background:$linkColor;
+	z-index:998;
+	clear:both;
+	
+	@include sp {
+		border-bottom:5px solid #E1EDD5;
+	}
+	
+	h2 {
+		margin:0;
+		width:auto;
+		height:40px;
+		background:$linkColor;
+		@include fs(14);
+		cursor:pointer;
+		display:none;
+		@extend %clear;
+		
+		span {
+			padding:0 10px 0 20px;
+			background:url(../img/common/ico_menu.gif) no-repeat left center;
+			display:block;
+			line-height:40px;
+			color:#FFF;
+			float:right;
+		}
+		
+		@include tablet2 {
+			display:block;
+		} //tablet2
+		
+		@include sp {
+			display:block;
+		} //sp
+	} //h2
+	
+	ul {
+		margin:0 auto;
+		padding:0;
+		width:$baseWidth;
+  	@extend %clear;
+		
+		@include desk {
+			display:block !important;
+		} //desk
+		
+		@include tablet1 {
+			width:100%;
+			display:block !important;
+		} //tablet1
+		
+		li {
+			width:16.66666%;
+			float:left;
+			line-height:60px;
+			list-style:none;
+			
+			a {
+				width:100%;
+				color:#FFF;
+				display:block;
+				@include transition-property((background-color,color));
+				@include transition-duration(0.5s);
+				@include transition-timing-function(ease);
+				text-decoration:none;
+				border-right:1px solid rgba(255,255,255,0.2);
+				
+				&:hover {
+					background-color:#FFF;
+					color:$linkColor;
+				}
+			} //a
+			
+			&:first-child a {
+				border-left:1px solid rgba(255,255,255,0.2);
+			}
+		} //li
+		
+		@include tablet2 {
+			display:none;
+			position:relative;
+			z-index:999;
+			width:auto;
+			
+			li {
+				width:100%;
+				float:none;
+				line-height:40px;
+				border-bottom:1px solid #DDD;
+				text-align:left;
+				text-indent:1%;
+				background:#FFF;
+				
+				a {
+					@include fs(16);
+					color:$textColor;
+					border-right:none;
+					
+					&:before {
+						content:" > ";
+					}
+					
+					&:hover {
+						background:$linkColor;
+						color:#FFF;
+					}
+				} //a
+				
+				&:first-child a {
+					border-left:none;
+				}
+			} //li
+		} //tablet2
+		
+		@include sp {
+			display:none;
+			position:relative;
+			z-index:999;
+			width:auto;
+			
+			li {
+				width:100%;
+				float:none;
+				line-height:40px;
+				border-bottom:1px solid #DDD;
+				text-align:left;
+				text-indent:1%;
+				background:#FFF;
+				
+				a {
+					@include fs(14);
+					color:$textColor;
+					border-right:none;
+					
+					&:before {
+						content:" > ";
+					}
+					
+					&:hover {
+						background:$linkColor;
+						color:#FFF;
+					}
+				} //a
+				
+				&:first-child a {
+					border-left:none;
+				}
+			} //li
+		} //sp
+	} //ul
+} //headerNav
+
+
+.fixed {
+	position:fixed;
+	top:0;
+	left:0;
+	border-top:none;
+} //fixed
+

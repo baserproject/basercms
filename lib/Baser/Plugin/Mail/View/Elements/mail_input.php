@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] メールフォーム本体
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views
+ * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $group_field = null;
@@ -56,12 +50,14 @@ if (!empty($mailFields)) {
 			if (!$freezed || $this->Mailform->value("Message." . $field['field_name']) !== '') {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
-			if (!$field['no_send'] || !$freezed) {
+			
+			if ($field['no_send'] && $freezed) {
+				// メール送信しないフィールドの場合、確認画面では、hidden タグを表示する
+				echo $this->Mailform->control('hidden', "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			} else {
 				echo $this->Mailform->control($field['type'], "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 			}
-			if ($field['no_send'] && $freezed) {
-				echo $this->Mailform->control('hidden', "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
-			}
+			
 			if (!$freezed || $this->Mailform->value("Message." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
 			}
@@ -69,11 +65,7 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
 			}
 			if (!$field['group_valid']) {
-				if ($this->Mailform->error("Message." . $field['field_name'] . "_format", "check")) {
-					echo $this->Mailform->error("Message." . $field['field_name'] . "_format", "形式が不正です。");
-				} else {
-					echo $this->Mailform->error("Message." . $field['field_name'], "必須項目です。");
-				}
+				echo $this->Mailform->error("Message." . $field['field_name']);
 			}
 
 			/* 説明欄 */
@@ -83,12 +75,8 @@ if (!empty($mailFields)) {
 				($field['group_field'] != $mailFields[$next_key]['MailField']['group_field'] && $this->BcArray->first($mailFields, $key))) {
 
 				if ($field['group_valid']) {
-					if ($this->Mailform->error("Message." . $field['group_field'] . "_format", "check")) {
-						echo $this->Mailform->error("Message." . $field['group_field'] . "_format", "形式が不正です。");
-					} else {
-						if ($field['valid']) {
-							echo $this->Mailform->error("Message." . $field['group_field'], "必須項目です。");
-						}
+					if ($field['valid']) {
+						echo $this->Mailform->error("Message." . $field['group_field'], "必須項目です。");
 					}
 					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_same", "入力データが一致していません。");
 					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_complate", "入力データが不完全です。");

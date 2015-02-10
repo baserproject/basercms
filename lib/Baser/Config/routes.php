@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ルーティング定義
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.config
+ * @package			Baser.Config
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -27,12 +21,6 @@ if (Configure::read('BcRequest.asset')) {
 if (BC_INSTALLED || isConsole()) {
 	$isMaintenance = Configure::read('BcRequest.isMaintenance');
 	$isUpdater = Configure::read('BcRequest.isUpdater');
-/**
- * テーマヘルパーのパスを追加する 
- */
-	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
-	App::build(array('View/Helper' => $helperPaths));
 }
 /**
  * Object::cakeError() の為、router.php が読み込まれた事をマークしておく
@@ -47,27 +35,6 @@ App::uses('BaserPluginAppModel', 'Model');
 $request = null;
 if (!empty(self::$_requests[0])) {
 	$request = self::$_requests[0];
-}
-// CakePHP1.2.6以降、Rewriteモジュールを利用せず、App.baseUrlを利用した場合、
-// Dispatcherでwebrootが正常に取得できなくなってしまったので、ここで再設定する
-$dir = Configure::read('App.dir');
-$webroot = Configure::read('App.webroot');
-$baseUrl = Configure::read('App.baseUrl');
-if ($baseUrl) {
-	switch (BC_DEPLOY_PATTERN) {
-		case 1:
-			if (strpos($request->webroot, $dir) === false) {
-				$request->webroot .= $dir . '/';
-			}
-			if (strpos($request->webroot, $webroot) === false) {
-				$request->webroot .= $webroot . '/';
-			}
-			break;
-		case 2:
-			$baseDir = str_replace('index.php', '', $baseUrl);
-			$request->webroot = $baseDir;
-			break;
-	}
 }
 // パラメータ取得
 $parameter = getPureUrl($request);
@@ -107,8 +74,15 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
  * Router::connectの引数として値を与えると、$this->Html->linkなどで、
  * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
+ * 
+ * DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
  */
-	$PluginContent = ClassRegistry::init('PluginContent');
+	try {
+		$PluginContent = ClassRegistry::init('PluginContent');
+	} catch (Exception $ex) {
+		$PluginContent = null;
+	}
+	
 	if ($PluginContent) {
 		$pluginContent = $PluginContent->currentPluginContent($parameter);
 		if ($pluginContent) {
@@ -157,7 +131,7 @@ if (BC_INSTALLED || isConsole()) {
 	if (!preg_match("/^{$adminPrefix}/", $parameter)) {
 		/* 1.5.10 以降 */
 		App::uses('Page', 'Model');
-		$Page = new Page(null, null, 'baser');
+		$Page = ClassRegistry::init('Page');
 		if ($Page) {
 
 			$parameter = urldecode($parameter);
@@ -212,15 +186,13 @@ if (BC_INSTALLED || isConsole()) {
  */
 	if ($agent) {
 		// プラグイン
+		Router::connect("/{$agentAlias}/:plugin/:controller", array('prefix' => $agentPrefix, 'action' => 'index'), $pluginMatch);
 		Router::connect("/{$agentAlias}/:plugin/:controller/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		Router::connect("/{$agentAlias}/:plugin/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
 		// 携帯ノーマル
 		Router::connect("/{$agentAlias}/:controller/:action/*", array('prefix' => $agentPrefix));
 	}
-/**
- * ユニットテスト
- */
-	Router::connect('/tests', array('controller' => 'tests', 'action' => 'index'));
+
 /**
  * フィード出力
  * 拡張子rssの場合は、rssディレクトリ内のビューを利用する

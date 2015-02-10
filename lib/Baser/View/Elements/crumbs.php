@@ -1,6 +1,4 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ナビゲーション
  *
@@ -9,18 +7,16 @@
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-if ($this->viewPath == 'home') {
+
+if ($this->BcBaser->isHome()) {
 	echo '<strong>ホーム</strong>';
 } else {
 	$crumbs = $this->BcBaser->getCrumbs();
@@ -34,12 +30,15 @@ if ($this->viewPath == 'home') {
 			if ($this->BcArray->last($crumbs, $key)) {
 				if ($this->viewPath != 'home' && $crumb['name']) {
 					$this->BcBaser->addCrumb('<strong>' . $crumb['name'] . '</strong>');
-				} elseif ($this->name == 'CakeError') {
-					$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 				}
 			} else {
 				$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
 			}
+		}
+	}
+	elseif (empty($crumbs)) {
+		if ($this->name == 'CakeError') {
+			$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 		}
 	}
 	$this->BcBaser->crumbs(' &gt; ', 'ホーム');

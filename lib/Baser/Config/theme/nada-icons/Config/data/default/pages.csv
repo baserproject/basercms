@@ -33,7 +33,7 @@ WEBシステム開発事業（ダミー）</td></tr>
 
 <h3 class=""contents-head"">アクセスマップ</h3>
 <div class=""section"">
-<?php $this->BcBaser->element(""googlemaps"", array(""width"" => 585)) ?>
+<?php $this->BcBaser->googleMaps(array(""width"" => 585)) ?>
 </div>","","1","/about","","1","","","0","","","","",""
 "","3","service","サービス","baserCMS inc.のサービス紹介ページ。","<h2 class=""contents-head"">サービス</h2>
 

@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] レイアウト
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -41,12 +35,13 @@
 			'admin/i18n/ui.datepicker-ja',
 			'admin/jquery.corner-2.12',
 			'admin/jquery.bt.min',
-			'admin/cb',
 			'admin/jquery.contextMenu-1.0/jquery.contextMenu',
 			'admin/jquery.form-2.94',
 			'admin/jquery.validate.min',
 			'admin/jquery.colorbox-min-1.4.5',
 			'admin/jquery.mScroll',
+			'admin/jquery.baseUrl',
+			'admin/credit',
 			'admin/validate_messages_ja',
 			'admin/functions',
 			'admin/startup',
@@ -59,6 +54,7 @@
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
 
 		<div id="Page">
+			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 			<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
@@ -76,20 +72,10 @@
 
 				<?php $this->BcBaser->header() ?>
 
-			<div id="Wrap" class="clearfix" style="display:none">
+			<div id="Wrap" class="clearfix">
 
 <?php if (!empty($user)): ?>
-					<div id="SideBar">
-
-						<div id="BtnSideBarOpener"></div>
-
-						<div class="cbb clearfix">
-
-					<?php $this->BcBaser->element('favorite_menu') ?>
-					<?php $this->BcBaser->element('permission') ?>
-
-							<!-- / .cbb .clearfix --></div>
-						<!-- / #SideBar --></div>
+			<?php $this->BcBaser->element('sidebar') ?>
 <?php endif ?>
 
 				<div id="Contents" class="clearfix">
@@ -104,10 +90,6 @@
 							<?php $this->BcBaser->element('contents_menu') ?>
 								<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 							</div>
-
-							<?php if ($this->request->params['controller'] != 'installations' && $this->request->params['action'] != 'update'): ?>
-								<?php $this->BcBaser->updateMessage() ?>
-							<?php endif ?>
 
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
 								<div id="FirstMessage" class="em-box" style="text-align:left">
@@ -146,8 +128,6 @@
 <?php $this->BcBaser->footer() ?>
 
 			<!-- / #Page --></div>
-
-<?php $this->BcBaser->element('credit') ?>
 
 <?php $this->BcBaser->func() ?>
 	</body>

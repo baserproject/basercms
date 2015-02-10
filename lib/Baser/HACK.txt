@@ -1,0 +1,27 @@
+CakePHP Hacking File List (Replace Or Override)
+-----------------------------------------------
+
+/app/Config/bootstrap.php
+/app/Config/core.php
+/app/Config/routes.php
+/app/webroot/index.php
+/app/webroot/test.php
+/lib/Baser/Controller/PagesController.php
+/lib/Baser/Event/CakeEventManager.php
+/lib/Baser/Lib/TestSuite/Fixture/CakeFixtureManager.php
+/lib/Baser/Lib/TestSuite/Reporter/BaserHtmlReporter.php
+/lib/Baser/Lib/TestSuite/Reporter/BaserTextReporter.php
+/lib/Baser/Lib/TestSuite/BaserTestLoader.php
+/lib/Baser/Lib/TestSuite/BaserTestSuiteCommand.php
+/lib/Baser/Lib/TestSuite/BaserTestSuiteDispatcher.php
+/lib/Baser/Model/Datasource/Database/DboSource.php
+/lib/Baser/Model/Datasource/Database/BcMysql.php
+/lib/Baser/Model/Datasource/Database/BcPostgres.php ---> 動作確認要
+/lib/Baser/Model/Datasource/Database/BcSqlite.php ---> 動作確認しながら再チェック要
+/lib/Baser/Model/CakeSchema.php
+/lib/Baser/Network/CakeRequest.php
+/lib/Baser/Routing/Filter/BcAssetDispatcher.php
+/lib/Baser/View/Helper/BcFormHelper.php
+/lib/Baser/View/Helper/BcHtmlHelper.php
+/lib/Baser/View/Helper/BcTextHelper.php
+/lib/Baser/View/Helper/BcTimeHelper.php

@@ -8,8 +8,6 @@
  * You should also use this file to include any files that provide global functions/constants
  * that your application uses.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -25,7 +23,10 @@
  */
 
 // Setup a 'default' cache configuration for use in the application.
+// CUSTOMIZE DELETE 2014/07/03 ryuring
+// >>>
 //Cache::config('default', array('engine' => 'File'));
+// <<<
 
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
@@ -54,7 +55,7 @@
  */
 
 /**
- * Custom Inflector rules, can be set to correctly pluralize or singularize table, model, controller names or whatever other
+ * Custom Inflector rules can be set to correctly pluralize or singularize table, model, controller names or whatever other
  * string is passed to the inflection functions
  *
  * Inflector::rules('singular', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
@@ -64,7 +65,7 @@
 
 /**
  * Plugins need to be loaded manually, you can either load them one by one or all of them in a single call
- * Uncomment one of the lines below, as you need. make sure you read the documentation on CakePlugin to use more
+ * Uncomment one of the lines below, as you need. Make sure you read the documentation on CakePlugin to use more
  * advanced ways of loading plugins
  *
  * CakePlugin::loadAll(); // Loads all plugins at once
@@ -73,7 +74,7 @@
  */
 
 /**
- * You can attach event listeners to the request lifecycle as Dispatcher Filter . By Default CakePHP bundles two filters:
+ * You can attach event listeners to the request lifecycle as Dispatcher Filter. By default CakePHP bundles two filters:
  *
  * - AssetDispatcher filter will serve your asset files (css, images, js, etc) from your themes and plugins
  * - CacheDispatcher filter will read the Cache.check configure variable and try to serve cached content generated from controllers
@@ -82,8 +83,9 @@
  *
  * Configure::write('Dispatcher.filters', array(
  *		'MyCacheFilter', //  will use MyCacheFilter class from the Routing/Filter package in your app.
+ *		'MyCacheFilter' => array('prefix' => 'my_cache_'), //  will use MyCacheFilter class from the Routing/Filter package in your app with settings array.
  *		'MyPlugin.MyFilter', // will use MyFilter class from the Routing/Filter package in MyPlugin plugin.
- * 		array('callable' => $aFunction, 'on' => 'before', 'priority' => 9), // A valid PHP callback type to be called on beforeDispatch
+ *		array('callable' => $aFunction, 'on' => 'before', 'priority' => 9), // A valid PHP callback type to be called on beforeDispatch
  *		array('callable' => $anotherMethod, 'on' => 'after'), // A valid PHP callback type to be called on afterDispatch
  *
  * ));
@@ -96,18 +98,23 @@ Configure::write('Dispatcher.filters', array(
 /**
  * Configures default file logging options
  */
+// CUSTOMIZE DELETE 2014/07/03 ryuring
+// >>>
 /*App::uses('CakeLog', 'Log');
 CakeLog::config('debug', array(
-	'engine' => 'FileLog',
+	'engine' => 'File',
 	'types' => array('notice', 'info', 'debug'),
 	'file' => 'debug',
 ));
 CakeLog::config('error', array(
-	'engine' => 'FileLog',
+	'engine' => 'File',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));*/
+// <<<
 
+// CUSTOMIZE ADD 2014/07/03 ryuring
+// >>>
 /**
  * baser の bootstrap を読み込む 
  */
@@ -117,3 +124,13 @@ require CORE_PATH.'Baser'.DS.'Config'.DS.'bootstrap.php';
  * app の設定ファイルを読み込む
  */
 Configure::load('setting');
+
+// <<<
+
+// CUSTOMIZE ADD 2015/01/27 MASA-P
+// >>>
+/**
+ * composerを使うためのautoloadを読み込む
+ */
+App::import('Vendor', 'autoload');
+// <<<

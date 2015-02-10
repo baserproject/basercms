@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * パス定義
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.config
+ * @package			Baser.Config
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -93,6 +87,10 @@ define('BASER_TEST_CASES', BASER . 'Test' . DS . 'Case');
  * Baser Console
  */
 define('BASER_CONSOLES', BASER . 'Console' . DS);
+/**
+ * Baser webroot
+ */
+define('BASER_WEBROOT', BASER . 'webroot' . DS);
 /**
  * Baserテーマ 
  */

@@ -247,8 +247,8 @@ Include conf.d/*.conf
 #  when the value of (unsigned)Group is above 60000; 
 #  don't use Group #-1 on these systems!
 #
-User apache
-Group apache
+User <%= node[:httpd][:user] %>
+Group <%= node[:httpd][:group] %>
 
 ### Section 2: 'Main' server configuration
 #
@@ -345,7 +345,7 @@ DocumentRoot "<%= node[:httpd][:webroot] %>"
 # It can be "All", "None", or any combination of the keywords:
 #   Options FileInfo AuthConfig Limit
 #
-    AllowOverride None
+    AllowOverride All
 
 #
 # Controls who can get stuff from this server.
@@ -473,7 +473,7 @@ HostnameLookups Off
 # filesystem) can improve performance; for details, please see
 # http://httpd.apache.org/docs/2.2/mod/core.html#enablemmap
 #
-#EnableMMAP off
+EnableMMAP off
 
 #
 # EnableSendfile: Control whether the sendfile kernel support is 
@@ -482,7 +482,7 @@ HostnameLookups Off
 # filesystems.  Please see
 # http://httpd.apache.org/docs/2.2/mod/core.html#enablesendfile
 #
-#EnableSendfile off
+EnableSendfile off
 
 #
 # ErrorLog: The location of the error log file.

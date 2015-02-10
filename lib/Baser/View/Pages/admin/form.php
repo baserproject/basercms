@@ -1,25 +1,30 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ページ登録・編集フォーム
  * 
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
-$pageTypes = array('1' => 'PC', '2' => 'モバイル', '3' => 'スマートフォン');
+$pageTypes = array();
+if($reflectMobile || $reflectSmartphone) {
+	$pageTypes = array('1' => 'PC');	
+}
+if($reflectMobile) {
+	$pageTypes['2'] = 'モバイル';
+}
+if($reflectSmartphone) {
+	$pageTypes['3'] = 'スマートフォン';
+}
 ?>
 
 
@@ -28,6 +33,16 @@ $(window).load(function() {
 	$("#PageName").focus();
 });
 $(function(){
+	
+	$("input[type=text]").each(function(){
+		$(this).keypress(function(e){
+			if(e.which && e.which === 13) {
+				return false;
+			}
+			return true;
+		});
+	});
+	
 	pageCategoryIdChangeHandler();
 /**
  * プレビューボタンクリック時イベント
@@ -75,6 +90,7 @@ $(function(){
 		}
 		$("#PageMode").val('save');
 		$("#PageForm").submit();
+		return false;
 	});
 /**
  * カテゴリ変更時イベント
@@ -331,6 +347,12 @@ function pageTypeChengeHandler() {
 		<?php else: ?>
 			<strong>このページのURL：<?php echo $this->BcBaser->getUri($url) ?></strong>
 		<?php endif ?>
+		<br />
+		<strong>プレビュー用URL：<?php $this->BcBaser->link(
+				$this->BcBaser->getUri(array('action'=>'preview', $this->data['Page']['id'])),
+				$this->BcBaser->getUri(array('action'=>'preview', $this->data['Page']['id'])),
+				array('target' => '_blank')
+		); ?></strong>
 	</div>
 <?php endif ?>
 
@@ -428,7 +450,7 @@ function pageTypeChengeHandler() {
 	</table>
 </div>
 
-<div class="section" style="text-align:center">
+<div class="section editor-area">
 	<?php echo $this->BcForm->editor('Page.contents', array_merge(array(
 		'editor' => @$siteConfig['editor'],
 		'editorUseDraft' => true,
@@ -470,6 +492,7 @@ function pageTypeChengeHandler() {
 				<?php endif; ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -550,6 +573,7 @@ function pageTypeChengeHandler() {
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 <div class="submit">

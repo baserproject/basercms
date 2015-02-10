@@ -1,37 +1,32 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] テーマファイル管理メニュー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $types = array(
-	'Layouts' => 'レイアウト',
-	'Elements' => 'エレメント',
-	'etc' => 'コンテンツ',
-	'css' => 'CSS',
-	'img' => 'イメージ',
-	'js' => 'Javascript'
+	'Layouts'	=> 'レイアウト',
+	'Elements'	=> 'エレメント',
+	'Emails'	=> 'Eメール',
+	'etc'		=> 'コンテンツ',
+	'css'		=> 'CSS',
+	'img'		=> 'イメージ',
+	'js'		=> 'Javascript'
 );
 if ($theme == 'core') {
 	$themeFiles = array(0 => array('name' => '', 'title' => 'コア'));
 	$Plugin = ClassRegistry::init('Plugin');
 	$plugins = $Plugin->find('all', array('fields' => array('name', 'title')));
-	$themeFiles = am($themeFiles, Set::extract('/Plugin/.', $plugins));
+	$themeFiles = am($themeFiles, Hash::extract($plugins, '{n}.Plugin'));
 } else {
-	$themeFiles = array(0 => array('name' => '', 'title' => Inflector::camelize($theme)));
+	$themeFiles = array(0 => array('name' => '', 'title' => $theme));
 }
 ?>
 

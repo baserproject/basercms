@@ -1,21 +1,14 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * Controller 拡張クラス
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -27,6 +20,7 @@ App::uses('BcAuthConfigureComponent', 'Controller/Component');
 App::uses('File', 'Core.Utility');
 App::uses('ErrorHandler', 'Core.Error');
 App::uses('CakeEmail', 'Network/Email');
+App::uses('Controller', 'Controller');
 
 /**
  * Controller 拡張クラス
@@ -186,13 +180,18 @@ class BcAppController extends Controller {
 		if (BC_INSTALLED || isConsole()) {
 
 			// サイト基本設定の読み込み
-			$SiteConfig = ClassRegistry::init('SiteConfig');
-			$this->siteConfigs = $SiteConfig->findExpanded();
-
-			if (empty($this->siteConfigs['version'])) {
-				$this->siteConfigs['version'] = $this->getBaserVersion();
-				$SiteConfig->saveKeyValue($this->siteConfigs);
+			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+			try {
+				$SiteConfig = ClassRegistry::init('SiteConfig');
+				$this->siteConfigs = Configure::read('BcSite');
+				if (empty($this->siteConfigs['version'])) {
+					$this->siteConfigs['version'] = $this->getBaserVersion();
+					$SiteConfig->saveKeyValue($this->siteConfigs);
+				}
+			} catch (Exception $ex) {
+				$this->siteConfigs = array();
 			}
+
 		} else {
 			if ($this->name != 'Installations') {
 				if ($this->name == 'CakeError' && $request->params['controller'] != 'installations') {
@@ -228,7 +227,7 @@ class BcAppController extends Controller {
 				$this->notFound();
 			}
 		}
-
+		
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
@@ -250,6 +249,12 @@ class BcAppController extends Controller {
 		// テーマを設定
 		$this->setTheme();
 
+		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
+		if (!empty($this->request->params['admin'])) {
+			$this->Security->validatePost = false;
+			$this->Security->csrfCheck = false;
+		}
+		
 		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
 			return;
 		}
@@ -308,15 +313,32 @@ class BcAppController extends Controller {
 				$config = array();
 			}
 
+			// 認証設定
 			$this->BcAuthConfigure->setting($config);
+			
+			// =================================================================
 			// ユーザーの存在チェック
+			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
+			// =================================================================
 			$user = $this->BcAuth->user();
-
 			if ($user) {
-				$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-				if ($userModel) {
-					if (!empty($this->{$userModel}) && !$this->{$userModel}->find('count', array(
-							'conditions' => array($userModel . '.id' => $user['id'], $userModel . '.name' => $user['name']),
+				$userModel = $this->Session->read('Auth.User.userModel');
+				$User = ClassRegistry::init($userModel);
+				if(strpos($userModel, '.') !== false) {
+					list($plugin, $userModel) = explode('.', $userModel);
+				}
+				if ($userModel && !empty($this->{$userModel})) {
+					$authPrefix = $this->Session->read('Auth.User.authPrefix');
+					$UserGroup = ClassRegistry::init('UserGroup');
+					$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix' => $authPrefix), 'recursive' => -1));
+					$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
+					$conditions = array(
+						$userModel . '.id'				=> $user['id'], 
+						$userModel . '.name'			=> $user['name'],
+						$userModel . '.user_group_id'	=> $userGroupIds
+					);
+					if (!$User->find('count', array(
+							'conditions' => $conditions,
 							'recursive' => -1))) {
 						$this->Session->delete(BcAuthComponent::$sessionKey);
 					}
@@ -374,20 +396,17 @@ class BcAppController extends Controller {
 			}
 		}
 
+        //Securityコンポーネント設定
+        $this->Security->blackHoleCallback = '_blackHoleCallback';
+
 		// SSLリダイレクト設定
 		if (Configure::read('BcApp.adminSsl') && !empty($this->request->params['admin'])) {
 			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
 			if ($adminSslMethods) {
-				$this->Security->blackHoleCallback = '_sslFail';
 				$this->Security->requireSecure = $adminSslMethods;
 			}
 		}
 
-		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if (!empty($this->request->params['admin'])) {
-			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
-		}
 	}
 
 /**
@@ -488,6 +507,41 @@ class BcAppController extends Controller {
 			$SiteConfig->saveKeyValue($data);
 		}
 	}
+
+/**
+ * Securityコンポーネントのブラックホールからのコールバック
+ *
+ * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
+ * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
+ *
+ * @param	string	$err エラーの種類
+ * @throws BadRequestException
+ */
+    public function _blackHoleCallback($err) {
+
+        //SSL制限違反は別処理
+        if($err === 'secure') {
+            $this->_sslFail($err);
+            return;
+        }
+
+        $errorMessages = array(
+            'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
+            'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
+            'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
+            'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+            'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+            'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
+        );
+
+        $message = "不正なリクエストと判断されました。";
+
+        if(array_key_exists($err, $errorMessages)) {
+            $message .= "(type:{$err})" . $errorMessages[$err];
+        }
+
+        throw new BadRequestException($message);
+    }
 
 /**
  * SSLエラー処理
@@ -695,7 +749,6 @@ class BcAppController extends Controller {
  * @param	mixed	$body	本文
  * @options	array
  * @return	boolean			送信結果
- * @access	public
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 		$options = array_merge(array(
@@ -709,12 +762,14 @@ class BcAppController extends Controller {
 			$port = ($this->siteConfigs['smtp_port']) ? $this->siteConfigs['smtp_port'] : 25;
 			$username = ($this->siteConfigs['smtp_user']) ? $this->siteConfigs['smtp_user'] : null;
 			$password = ($this->siteConfigs['smtp_password']) ? $this->siteConfigs['smtp_password'] : null;
+			$tls = $this->siteConfigs['smtp_tls'] && ($this->siteConfigs['smtp_tls'] == 1);
 		} else {
 			$transport = 'Mail';
 			$host = 'localhost';
 			$port = 25;
 			$username = null;
 			$password = null;
+			$tls = null;
 		}
 
 		$config = array(
@@ -722,7 +777,8 @@ class BcAppController extends Controller {
 			'host' => $host,
 			'port' => $port,
 			'username' => $username,
-			'password' => $password
+			'password' => $password,
+			'tls' => $tls
 		);
 
 		$cakeEmail = new CakeEmail($config);
@@ -835,10 +891,23 @@ class BcAppController extends Controller {
 				$formalName = Configure::read('BcApp.title');
 			}
 		}
-
 		$cakeEmail->from($from, $fromName);
-		$cakeEmail->replyTo($from);
-		$cakeEmail->returnPath($from);
+
+		//Reply-To
+		if (!empty($options['replyTo'])) {
+			$replyTo = $options['replyTo'];
+		} else {
+			$replyTo = $from;
+		}
+		$cakeEmail->replyTo($replyTo);
+
+		//Return-Path
+		if (!empty($options['returnPath'])) {
+			$returnPath = $options['returnPath'];
+		} else {
+			$returnPath = $from;
+		}
+		$cakeEmail->returnPath($returnPath);
 
 		//$sender
 		if (!empty($options['sender'])) {
@@ -890,16 +959,8 @@ class BcAppController extends Controller {
 			$content = $body;
 		}
 
-		// TODO $attachments tmp file path
-		// filePaths と attachments のどっちが本当の分か確認すること
-		$attachments = null;
-		if (!empty($options['filePaths'])) {
-			if (!is_array($options['filePaths'])) {
-				$attachments = array($options['filePaths']);
-			} else {
-				$attachments = $options['filePaths'];
-			}
-		}
+		// $attachments tmp file path
+		$attachments = array();
 		if (!empty($options['attachments'])) {
 			if (!is_array($options['attachments'])) {
 				$attachments = array($options['attachments']);
@@ -967,12 +1028,6 @@ class BcAppController extends Controller {
 			if (isset($this->request->data[$model])) {
 				$this->Session->write("{$contentsName}.filter.{$model}", $this->request->data[$model]);
 			}
-		}
-
-		// 表示件数の変更の場合は、ページ数を1にリセットする
-		// 表示件数が増えた際に、現在表示されているページ数が存在しない場合がある為
-		if (!empty($this->request->params['named']['num'])) {
-			$this->request->params['named']['page'] = 1;
 		}
 
 		if (!empty($this->request->params['named'])) {
@@ -1129,6 +1184,7 @@ class BcAppController extends Controller {
 		$requestedPrefix = '';
 
 		$userModel = $this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
+		list(, $userModel) = pluginSplit($userModel);
 		if (isset($this->{$userModel})) {
 			$UserClass = $this->{$userModel};
 		} else {
@@ -1229,7 +1285,7 @@ class BcAppController extends Controller {
 			return false;
 		}
 		if (@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
-			!@$this->siteConfigs['root_owner_id'] || $user[$userModel]['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
+			!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		} else {
 			return false;

@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * FreezeHelper
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.view.helpers
+ * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,7 @@ App::uses('BcFormHelper', 'View/Helper');
 App::uses('BcUploadHelper', 'View/Helper');
 
 /**
- * @package baser.view.helpers
+ * @package Baser.View.Helper
  */
 class BcFreezeHelper extends BcFormHelper {
 
@@ -36,14 +30,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @access public
  */
 	public $freezed = false;
-
-/**
- * ヘルパー
- * 
- * @var array
- * @access public
- */
-	public $helpers = array('Html', 'BcForm', 'BcUpload', 'BcText', 'BcTime', 'Js');
 
 /**
  * フォームを凍結させる
@@ -126,12 +112,18 @@ class BcFreezeHelper extends BcFormHelper {
  * @return string htmlタグ
  * @access public
  */
-	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $selected = null, $attributes = array(), $showEmpty = true) {
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
 
 		if ($this->freezed) {
-
-			$year = $month = $day = $hour = $min = $meridian = null;
-
+			
+			$year = $month = $day = $hour = $min = $meridian = $showEmpty = $selected = null;
+			if(isset($attributes['selected'])) {
+				$selected = $attributes['selected'];
+			}
+			if(isset($attributes['empty'])) {
+				$showEmpty = $attributes['empty'];
+			}
+			
 			if (empty($selected)) {
 				$selected = $this->value($fieldName);
 			}
@@ -229,7 +221,7 @@ class BcFreezeHelper extends BcFormHelper {
 			;
 		} else {
 
-			return parent::dateTime($fieldName, $dateFormat, $timeFormat, $selected, $attributes, $showEmpty);
+			return parent::dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
 		}
 	}
 
@@ -264,6 +256,7 @@ class BcFreezeHelper extends BcFormHelper {
 					}
 				}
 			}
+			$freezeText = '';
 			if (strlen($selected) > 4 || $selected === 'now') {
 				$wareki = $this->BcTime->convertToWareki(date('Y-m-d', strtotime($selected)));
 				$w = $this->BcTime->wareki($wareki);
@@ -272,7 +265,6 @@ class BcFreezeHelper extends BcFormHelper {
 				$freezeText = $this->BcTime->nengo($w) . ' ' . $wyear;
 			} elseif ($selected === false) {
 				$selected = null;
-				$freezeText = '';
 			} elseif (strpos($selected, '-') === false) {
 				$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
 				if ($wareki) {
@@ -282,7 +274,16 @@ class BcFreezeHelper extends BcFormHelper {
 					$freezeText = $this->BcTime->nengo($w) . ' ' . $wyear;
 				} else {
 					$selected = null;
-					$freezeText = '';
+				}
+			} else {
+				$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+				if ($wareki) {
+					$w = $this->BcTime->wareki($wareki);
+					$wyear = $this->BcTime->wyear($wareki);
+					$selected = $w . '-' . $wyear;
+					$freezeText = $this->BcTime->nengo($w) . ' ' . $wyear;
+				} else {
+					$selected = null;
 				}
 			}
 			return $freezeText . $this->hidden($fieldName . ".wareki", array('value' => true)) . $this->hidden($fieldName . ".year", array('value' => $selected));
@@ -304,7 +305,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 		if ($this->freezed) {
 			$label = '';
-			if (isset($attributes['lable'])) {
+			if (isset($attributes['label'])) {
 				$label = $attributes['label'];
 			}
 			$options = array(0 => '', 1 => $label);
@@ -386,7 +387,7 @@ class BcFreezeHelper extends BcFormHelper {
 				}
 			}
 		} else {
-			return $this->BcUpload->file($fieldName, $options);
+			return parent::file($fieldName, $options);
 		}
 	}
 
@@ -607,6 +608,11 @@ class BcFreezeHelper extends BcFormHelper {
 		}
 
 		return $out;
+	}
+	
+	public function upload($fieldName, $options = array()) {
+		return parent::upload($fieldName, $options);
+		echo 'test';
 	}
 
 }

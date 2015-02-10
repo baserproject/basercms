@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BcAssetDispatcher
  * 
@@ -9,45 +8,39 @@
  * （例）/css/style.css では、次のファイルを参照する事ができる
  * 		/app/View/webroot/css/style.css
  * 		/lib/Baser/View/webroot/css/style.css
- * 
- * PHP 5
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright	  Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link		  http://cakephp.org CakePHP(tm) Project
- * @package		  Cake.Routing
- * @since		  CakePHP(tm) v 2.2
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Routing.Filter
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
  */
-App::uses('DispatcherFilter', 'Routing');
+
+App::uses('AssetDispatcher', 'Routing/Filter');
 
 /**
- * Filters a request and tests whether it is a file in the webroot folder or not and
- * serves the file to the client if appropriate.
+ * BcAssetDispatcher class
  *
- * @package Cake.Routing.Filter
+ * @package Baser.Routing.Filter
  */
-class BcAssetDispatcher extends DispatcherFilter {
+class BcAssetDispatcher extends AssetDispatcher {
 
 /**
  * Default priority for all methods in this filter
  * This filter should run before the request gets parsed by router
- *
  * @var int
  */
-	public $priority = 9;
+	public $priority = 4;
 
 /**
  * Checks if a requested asset exists and sends it to the browser
  *
  * @param CakeEvent $event containing the request and response object
- * @return CakeResponse if the client is requesting a recognized asset, null otherwise
+ * @return mixed The resulting response.
+ * @throws NotFoundException When asset not found
  */
 	public function beforeDispatch(CakeEvent $event) {
 		$url = urldecode($event->data['request']->url);
@@ -55,11 +48,18 @@ class BcAssetDispatcher extends DispatcherFilter {
 			return;
 		}
 
+		// CUSTOMIZE DELETE 2014/07/02 ryuring
+		// >>>
+		/*if ($result = $this->_filterAsset($event)) {
+			$event->stopPropagation();
+			return $result;
+		}*/
+		// <<<
+
 		$assetFile = $this->_getAssetFile($url);
 		if ($assetFile === null || !file_exists($assetFile)) {
 			return null;
 		}
-
 		$response = $event->data['response'];
 		$event->stopPropagation();
 
@@ -70,6 +70,7 @@ class BcAssetDispatcher extends DispatcherFilter {
 
 		$pathSegments = explode('.', $url);
 		$ext = array_pop($pathSegments);
+
 		$this->_deliverAsset($response, $assetFile, $ext);
 		return $response;
 	}
@@ -82,51 +83,33 @@ class BcAssetDispatcher extends DispatcherFilter {
  */
 	protected function _getAssetFile($url) {
 		$parts = explode('/', $url);
+		// CUSTOMIZE MODIFY 2014/07/02 ryuring
+		// >>>
+		/*if ($parts[0] === 'theme') {
+			$themeName = $parts[1];
+			unset($parts[0], $parts[1]);
+			$fileFragment = implode(DS, $parts);
+			$path = App::themePath($themeName) . 'webroot' . DS;
+			return $path . $fileFragment;
+		}
+
+		$plugin = Inflector::camelize($parts[0]);
+		if ($plugin && CakePlugin::loaded($plugin)) {
+			unset($parts[0]);
+			$fileFragment = implode(DS, $parts);
+			$pluginWebroot = CakePlugin::path($plugin) . 'webroot' . DS;
+			return $pluginWebroot . $fileFragment;
+		}*/
+		// <<<
 		$fileFragment = implode(DS, $parts);
 		$path = APP . 'View' . DS . 'webroot' . DS;
 		if (file_exists($path . $fileFragment)) {
 			return $path . $fileFragment;
 		} else {
-			$path = BASER_VIEWS . 'webroot' . DS;
+			$path = BASER_WEBROOT;
 			if (file_exists($path . $fileFragment)) {
 				return $path . $fileFragment;
 			}
-		}
-	}
-
-/**
- * Sends an asset file to the client
- *
- * @param CakeResponse $response The response object to use.
- * @param string $assetFile Path to the asset file in the file system
- * @param string $ext The extension of the file to determine its mime type
- * @return void
- */
-	protected function _deliverAsset(CakeResponse $response, $assetFile, $ext) {
-		ob_start();
-		$compressionEnabled = Configure::read('Asset.compress') && $response->compress();
-		if ($response->type($ext) == $ext) {
-			$contentType = 'application/octet-stream';
-			$agent = env('HTTP_USER_AGENT');
-			if (preg_match('%Opera(/| )([0-9].[0-9]{1,2})%', $agent) || preg_match('/MSIE ([0-9].[0-9]{1,2})/', $agent)) {
-				$contentType = 'application/octetstream';
-			}
-			$response->type($contentType);
-		}
-		if (!$compressionEnabled) {
-			$response->header('Content-Length', filesize($assetFile));
-		}
-		$response->cache(filemtime($assetFile));
-		$response->send();
-		ob_clean();
-		if ($ext === 'css' || $ext === 'js') {
-			include $assetFile;
-		} else {
-			readfile($assetFile);
-		}
-
-		if ($compressionEnabled) {
-			ob_end_flush();
 		}
 	}
 

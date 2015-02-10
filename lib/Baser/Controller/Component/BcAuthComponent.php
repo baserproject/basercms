@@ -1,39 +1,24 @@
 <?php
-
-/* SVN FILE: $Id: auth.php 2 2011-07-06 16:11:32Z ryuring $ */
-
 /**
- * Authentication component
+ * Authentication component （baserCMS拡張）
  *
- * Manages user logins and permissions.
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * PHP versions 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake
- * @subpackage    cake.cake.libs.controller.components
- * @since         CakePHP(tm) v 0.10.0.1076
- * @version       $Revision: 2 $
- * @modifiedby    $LastChangedBy: ryuring $
- * @lastmodified  $Date: 2011-07-07 01:11:32 +0900 (木, 07 7 2011) $
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Controller.Component
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('AuthComponent', 'Controller/Component');
 
 /**
- * Authentication control component class
+ * Authentication control component class （baserCMS拡張）
  *
  * Binds access control with user authentication and session management.
  *
- * @package cake
- * @subpackage cake.cake.libs.controller.components
+ * @package Baser.Controller.Component
  */
 class BcAuthComponent extends AuthComponent {
 
@@ -159,21 +144,46 @@ class BcAuthComponent extends AuthComponent {
  * userModel
  */
 	public function setSessionAuthAddition() {
-		$authPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
-		if (!$authPrefix) {
-			$userModel = $this->authenticate['Form']['userModel'];
-			$User = ClassRegistry::init($userModel);
-			$authPrefix = $User->getAuthPrefix($this->user('name'));
-			if (empty($authPrefix)) {
-				$authPrefix = 'front';
-			}
+		$userModel = $this->authenticate['Form']['userModel'];
+		$User = ClassRegistry::init($userModel);
+		$authPrefix = $User->getAuthPrefix($this->user('name'));
+		if (empty($authPrefix)) {
+			$authPrefix = 'front';
 		}
 		$this->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);
 		$this->Session->write(BcAuthComponent::$sessionKey . '.userModel', $userModel);
 	}
 
+/**
+ * 認証されているモデル名を取得
+ * 
+ * @return string
+ */
 	public function authenticatedUserModel() {
 		$this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
 	}
 
+/**
+ * 再ログインを実行する
+ * 
+ * return boolean
+ */
+	public function relogin () {
+		
+		$UserModel = ClassRegistry::init($this->authenticate['Form']['userModel']);
+		$user = $this->user();
+		$Db = $UserModel->getDataSource();
+		$Db->flushMethodCache();
+		$UserModel->schema(true);
+		$user = $UserModel->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
+		$this->authenticate['Form']['passwordHasher'] = 'BcNo';
+		$this->request->data = $user;
+		$result = $this->login();
+		if($result) {
+			$this->setSessionAuthAddition();
+		}
+		return $result;
+	
+	}
+	
 }

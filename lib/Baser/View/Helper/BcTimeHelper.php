@@ -3,17 +3,16 @@
 /**
  * Timeヘルパー拡張
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('TimeHelper', 'View/Helper');
 
 /**
@@ -23,13 +22,21 @@ App::uses('TimeHelper', 'View/Helper');
  */
 class BcTimeHelper extends TimeHelper {
 
+// CUSTOMIZE ADD 2014/07/03 ryuring
+// >>>
 /**
  * 年号リスト
  *
  * @var array
- * @access public
  */
 	public $nengos = array("m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成");
+	
+/**
+ * 日本語曜日リスト
+ *
+ * @var array
+ */
+	public $jpWeekList = array(0 => '日', 1 => '月', 2 => '火', 3 => '水', 4 => '木', 5 => '金', 6 => '土', 7 => '日');
 
 /**
  * 和暦文字列の正規表現
@@ -41,9 +48,8 @@ class BcTimeHelper extends TimeHelper {
 /**
  * 年号を取得
  *
- * @param string $w
+ * @param string $w 年号のローマ字表記の頭文字 m (明治） / t（大正) / s（昭和） / h（平成）
  * @return string 年号をあらわすアルファベット
- * @access public
  */
 	public function nengo($w) {
 		if (isset($this->nengos[$w])) {
@@ -57,8 +63,7 @@ class BcTimeHelper extends TimeHelper {
  * 和暦を取得（アルファベット）
  *
  * @param string $date 和暦を表す日付文字列（s-48/5/10）
- * @return mixid string / false
- * @access public
+ * @return mixid 和暦　or false
  */
 	public function wareki($date) {
 		if (!preg_match($this->warekiRegex, $date, $matches)) {
@@ -72,7 +77,6 @@ class BcTimeHelper extends TimeHelper {
  *
  * @param string $date 和暦を表す日付文字列（s-48/5/10）
  * @return mixid int / false
- * @access public
  */
 	public function wyear($date) {
 		if (!preg_match($this->warekiRegex, $date, $matches)) {
@@ -87,7 +91,6 @@ class BcTimeHelper extends TimeHelper {
  * 
  * @param int $year
  * @return array
- * @access public
  */
 	public function convertToWarekiYear($year) {
 		if ($year >= 1868 && $year <= 1911) {
@@ -115,7 +118,6 @@ class BcTimeHelper extends TimeHelper {
  * 
  * @param string $year
  * @return int
- * @access public
  */
 	public function convertToSeirekiYear($year) {
 		if (strpos($year, '-') === false) {
@@ -141,7 +143,6 @@ class BcTimeHelper extends TimeHelper {
  *
  * @param string 日付
  * @return array 和暦データ
- * @access public
  */
 	public function convertToWarekiArray($date) {
 		if (!$date) {
@@ -151,7 +152,7 @@ class BcTimeHelper extends TimeHelper {
 			if (empty($date['year']) || empty($date['month']) || empty($date['day'])) {
 				return '';
 			}
-			$date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
+			$date = $this->convertToSeirekiYear($date['year']) . '-' . $date['month'] . '-' . $date['day'];
 		}
 
 		$time = strtotime($date);
@@ -193,7 +194,6 @@ class BcTimeHelper extends TimeHelper {
  *
  * @param string $date 日付
  * @return string 和暦データ
- * @access public
  */
 	public function convertToWareki($date) {
 
@@ -224,7 +224,6 @@ class BcTimeHelper extends TimeHelper {
  *
  * @param string $strDate 日時
  * @return mixed 分/null
- * @access	public
  */
 	public function minutes($strDate) {
 		$time = strtotime($strDate, 0);
@@ -244,7 +243,6 @@ class BcTimeHelper extends TimeHelper {
  * @param boolean $invalid flag to ignore results of fromString == false
  * @param int $userOffset User's offset from GMT (in hours)
  * @return string Formatted date string
- * @access public
  */
 	public function format($format = 'Y-m-d', $date = null, $invalid = false, $userOffset = null) {
 		if ($date !== "00:00:00" && (!$date || $date == '0000-00-00 00:00:00')) {
@@ -261,7 +259,6 @@ class BcTimeHelper extends TimeHelper {
  * @param string $date 日付
  * @param int $days 経過日数
  * @return boolean 経過有無
- * @access public
  */
 	public function pastDays($date, $days, $now = null) {
 		if (is_null($now)) {
@@ -279,5 +276,43 @@ class BcTimeHelper extends TimeHelper {
 		}
 		return false;
 	}
+	
+/**
+ * 日本の曜日名を1文字 + $suffixの形式で取得する
+ * - 引数により、指定しない場合は本日の曜日
+ * - 文字列で、strtotime関数で解析可能な場合は解析された日付の曜日
+ * 
+ * @param string $dataStr (null|string) 日付文字列 "+1 day" / "YYYY/MM/DD"など
+ * @param type $suffix 接尾語(曜日 など)
+ * @return string 曜日 | 空白
+ */
+	public function getJpWeek($dateStr = null, $suffix = '') {
+		// nullの場合本日の曜日を取得
+		if ($dateStr === null) {
+			return $this->jpWeekList[date('w')] . $suffix;
+		}
+		
+		// 日付として解析出来る場合
+		if (strtotime($dateStr)) {
+			return $this->jpWeekList[date('w', strtotime($dateStr))] . $suffix;
+		}
+		
+		// 解析できなかった場合
+		return '';
+	}
+	
+/**
+ * 曜日情報を出力する
+ * - 曜日情報が正しく取得できない場合は接尾辞も表示しない
+ * - ex) <?php $this->BcTime->jpWeek($post['posts_date'], '曜日'); ?>
+ * 
+ * @param string $dateStr getJpWeek参照
+ * @param string $suffix getJpWeek参照
+ */
+	public function jpWeek($dateStr = null, $suffix = '') {
+		echo $this->getJpWeek($dateStr, $suffix);
+	}
 
+
+// <<<
 }

@@ -1,23 +1,19 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [PUBLISH] ブログアーカイブ一覧
  * 
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.views
+ * @package			Blog.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => true));
+$this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
 $this->BcBaser->js('admin/jquery.colorbox-min-1.4.5', false);
 //$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');

@@ -1,26 +1,20 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] ユーザー一覧　検索ボックス
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
 	'0.6' => '0.6', '0.7' => '0.7', '0.8' => '0.8', '0.9' => '0.9', '1.0' => '1.0');
-$categories = am(array('none' => 'カテゴリなし'), unserialize($this->BcBaser->siteConfig['content_categories']));
-$types = unserialize($this->BcBaser->siteConfig['content_types']);
+$categories = am(array('none' => 'カテゴリなし'), BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']));
+$types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 ?>
 
 <?php echo $this->BcForm->create('Content', array('url' => array('action' => 'index'))) ?>

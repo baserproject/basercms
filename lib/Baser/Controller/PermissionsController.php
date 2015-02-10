@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * アクセス制限設定コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 
@@ -64,7 +58,7 @@ class PermissionsController extends AppController {
  * @var array
  * @access public
  */
-	public $subMenuElements = array('site_configs', 'users', 'user_groups', 'permissions');
+	public $subMenuElements = array('permissions');
 
 /**
  * ぱんくずナビ
@@ -74,8 +68,7 @@ class PermissionsController extends AppController {
  */
 	public $crumbs = array(
 		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
-		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index')),
-		array('name' => 'アクセス制限設定管理', 'url' => array('controller' => 'permissions', 'action' => 'index'))
+		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index'))
 	);
 
 /**
@@ -89,6 +82,7 @@ class PermissionsController extends AppController {
 		if ($this->request->params['prefix'] == 'admin') {
 			$this->set('usePermission', true);
 		}
+		$this->crumbs[] = array('name' => 'アクセス制限設定管理', 'url' => array('controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]));
 	}
 
 /**

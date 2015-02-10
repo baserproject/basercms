@@ -1,21 +1,20 @@
 <?php
-
-/* SVN FILE: $Id$ */
 /**
  * SQLite DBO拡張
- *
- * PHP versions 5
+ * 
+ * TODO
+ * 2014/07/04 ryuring
+ * CakePHPの標準のものを移植しようとしたが全く使い物にならなかったので、
+ * 一旦、スルーして現行のものをそのまま利用する事にした。
+ * listSourcesの取得で何故かエラーとなっていた。
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model.datasources.dbo
+ * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -28,7 +27,7 @@ App::uses('CakeSchema', 'Model');
 /**
  * SQLite DBO拡張
  *
- * @package Baser.Model.datasources.dbo
+ * @package Baser.Model.Datasource.Database
  */
 class BcSqlite extends Sqlite {
 
@@ -873,7 +872,14 @@ class BcSqlite extends Sqlite {
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
 		$schema = $Schema->read(array('models' => array($model)));
-		$schema = $schema['tables'][$_table];
+		if(!empty($schema['tables'][$_table])) {
+			$schema = $schema['tables'][$_table];
+		} else {
+			$schema = $schema['tables']['missing'][$_table];
+		}
+		if(!$schema) {
+			return false;
+		}
 
 		$this->execute('BEGIN TRANSACTION;');
 
@@ -1091,5 +1097,5 @@ class BcSqlite extends Sqlite {
 		}
 		return null;
 	}
-
+	
 }

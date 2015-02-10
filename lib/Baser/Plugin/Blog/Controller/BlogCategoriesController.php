@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * カテゴリコントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,9 @@
 /**
  * カテゴリコントローラー
  *
- * @package baser.plugins.blog.controllers
+ * @package Blog.Controller
+ * @property BlogContent $BlogContent
+ * @property BlogCategory $BlogCategory
  */
 class BlogCategoriesController extends BlogAppController {
 
@@ -68,7 +64,6 @@ class BlogCategoriesController extends BlogAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
 	);
 
@@ -94,7 +89,7 @@ class BlogCategoriesController extends BlogAppController {
 		$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 
 		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_posts', 'blog_categories', 'blog_common');
+			$this->subMenuElements = array('blog_posts', 'blog_categories');
 		}
 
 		// バリデーション設定
@@ -137,7 +132,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 表示設定 */
 		$this->set('owners', $this->BlogCategory->getControlSource('owner_id'));
 		$this->set('dbDatas', $dbDatas);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] ブログカテゴリ一覧';
+		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ一覧';
 		$this->help = 'blog_categories_index';
 	}
 
@@ -191,7 +186,7 @@ class BlogCategoriesController extends BlogAppController {
 			}
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規ブログカテゴリ登録';
+		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規カテゴリ登録';
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -242,7 +237,7 @@ class BlogCategoriesController extends BlogAppController {
 			}
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] ブログカテゴリ編集';
+		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ編集';
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -297,8 +292,7 @@ class BlogCategoriesController extends BlogAppController {
 		// メッセージ用にデータを取得
 		$data = $this->BlogCategory->read(null, $id);
 		/* 削除処理 */
-		if ($this->BlogCategory->delete($id)) {
-
+		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
 			$this->BlogCategory->saveDbLog('カテゴリー「' . $data['BlogCategory']['name'] . '」を削除しました。');
 			return true;
 		} else {
@@ -325,7 +319,7 @@ class BlogCategoriesController extends BlogAppController {
 		$post = $this->BlogCategory->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->BlogCategory->delete($id)) {
+		if ($this->BlogCategory->removeFromTreeRecursive($id)) {
 			$this->setMessage($post['BlogCategory']['name'] . ' を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);

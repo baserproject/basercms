@@ -1,31 +1,26 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ブログカテゴリモデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.models
+ * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
  * Include files
  */
+App::uses('BlogAppModel', 'Blog.Model');
 
 /**
  * ブログカテゴリモデル
  *
- * @package baser.plugins.blog.models
+ * @package Blog.Model
  */
 class BlogCategory extends BlogAppModel {
 
@@ -288,14 +283,14 @@ class BlogCategory extends BlogAppModel {
 	}
 
 /**
- * 新しいカテゴリが追加できる状態かチェックする
+ * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
  * 
- * @param int $userGroupId
- * @param boolean $rootEditable
- * @return boolean
- * @access public
+ * @param int $userGroupId ユーザーグループID
+ * @param bool $rootEditable ドキュメントルートの書き込み権限の有無
+ * @return bool
  */
 	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
+		
 		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(
 			'conditions' => array(
@@ -308,7 +303,30 @@ class BlogCategory extends BlogAppModel {
 		if ($ownerCats || $rootEditable) {
 			$newCatAddable = true;
 		}
+
 		return $newCatAddable;
+
+	}
+	
+/**
+ * アクセス制限としてカテゴリの新規追加ができるか確認する
+ * 
+ * Ajaxを利用する箇所にて BcBaserHelper::link() が利用できない場合に利用
+ * 
+ * @param int $userGroupId ユーザーグループID
+ * @param int $blogContentId ブログコンテンツID
+ */
+	public function hasNewCategoryAddablePermission($userGroupId, $blogContentId) {
+		
+		if (ClassRegistry::isKeySet('Permission')) {
+			$Permission = ClassRegistry::getObject('Permission');
+		} else {
+			$Permission = ClassRegistry::init('Permission');
+		}
+
+		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId)));
+		return $Permission->check($ajaxAddUrl, $userGroupId);
+		
 	}
 
 }

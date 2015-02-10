@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] 受信メール詳細
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.mail.views
+ * @package			Mail.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 ?>
@@ -40,9 +34,19 @@
 				echo $field['before_attachment'];
 			}
 			if (!$field['no_send']) {
-				echo $this->BcText->autoLink(nl2br($this->Maildata->control(
-							$mailField['MailField']['type'], $message['Message'][$mailField['MailField']['field_name']], $this->Mailfield->getOptions($mailField['MailField'])
-				)));
+				if($field['type'] == 'file') {
+					echo $this->Maildata->control(
+						$mailField['MailField']['type'], 
+						$message['Message'][$mailField['MailField']['field_name']], 
+						$this->Mailfield->getOptions($mailField['MailField'])
+					);
+				} else {
+					echo nl2br($this->BcText->autoLink($this->Maildata->control(
+						$mailField['MailField']['type'], 
+						$message['Message'][$mailField['MailField']['field_name']], 
+						$this->Mailfield->getOptions($mailField['MailField'])
+					)));
+				}
 			}
 			if (!empty($message['Message'][$mailField['MailField']['field_name']])) {
 				echo $field['after_attachment'];

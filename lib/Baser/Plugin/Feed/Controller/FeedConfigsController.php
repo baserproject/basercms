@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * フィード設定コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.feed.controllers
+ * @package			Feed.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -25,7 +19,10 @@
 /**
  * フィード設定コントローラー
  *
- * @package baser.plugins.feed.controllers
+ * @package Feed.Controller
+ * @property Feed $Feed
+ * @property FeedConfig $FeedConfig
+ * @property FeedDetail $FeedDetail
  */
 class FeedConfigsController extends FeedAppController {
 
@@ -43,7 +40,7 @@ class FeedConfigsController extends FeedAppController {
  * @var array
  * @access public
  */
-	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.RssEx");
+	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
 
 /**
  * ヘルパー
@@ -68,7 +65,6 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
 	);
 
@@ -101,11 +97,13 @@ class FeedConfigsController extends FeedAppController {
  * @access public
  */
 	public function admin_index() {
+		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$this->setViewConditions('FeedConfig', array('default' => $default));
 		// データを取得
 		$this->paginate = array('conditions' => array(),
 			'fields' => array(),
 			'order' => 'FeedConfig.id',
-			'limit' => 10
+			'limit' => $this->passedArgs['num']
 		);
 		$feedConfigs = $this->paginate('FeedConfig');
 
@@ -361,10 +359,10 @@ class FeedConfigsController extends FeedAppController {
 		if ($url) {
 			if (strpos($url, 'http') === false) {
 				// 実際のキャッシュではSSLを利用しているかどうかわからないので、両方削除する
-				clearCache($this->RssEx->__createCacheHash('', 'http://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
-				clearCache($this->RssEx->__createCacheHash('', 'https://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+				clearCache($this->Feed->createCacheHash('', 'http://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+				clearCache($this->Feed->createCacheHash('', 'https://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
 			} else {
-				clearCache($this->RssEx->__createCacheHash('', $url), 'views', '.rss');
+				clearCache($this->Feed->createCacheHash('', $url), 'views', '.rss');
 			}
 		} else {
 			clearViewCache(null, 'rss');

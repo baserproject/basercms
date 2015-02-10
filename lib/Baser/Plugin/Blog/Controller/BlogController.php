@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * ブログ記事コントローラー
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -26,7 +20,7 @@ App::uses('BlogAppController', 'Blog.Controller');
 /**
  * ブログ記事コントローラー
  *
- * @package			baser.plugins.blog.controllers
+ * @package			Blog.Controller
  */
 class BlogController extends BlogAppController {
 
@@ -97,7 +91,7 @@ class BlogController extends BlogAppController {
 
 		/* 認証設定 */
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives', 'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries'
+			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives', 'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries', 'get_authors'
 		);
 
 		$this->BlogContent->recursive = -1;
@@ -105,6 +99,7 @@ class BlogController extends BlogAppController {
 			$this->blogContent = $this->BlogContent->read(null, $this->contentId);
 		} else {
 			$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
+			$this->contentId = $this->params['pass'][0];
 		}
 
 		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
@@ -246,7 +241,7 @@ class BlogController extends BlogAppController {
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
 					'BlogCategory.blog_content_id' => $this->contentId,
-					'BlogCategory.name' => $category
+					'BlogCategory.name' => urlencode($category)
 				));
 
 				if (!$categoryId) {
@@ -254,7 +249,7 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
-				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
+				$posts = $this->_getBlogPosts(array('conditions' => array('category' => urlencode($category))));
 
 				$blogCategories = $this->BlogCategory->getPath($categoryId, array('name', 'title'));
 				if (count($blogCategories) > 1) {
@@ -364,7 +359,7 @@ class BlogController extends BlogAppController {
 							'recursive' => -1
 						));
 						if ($tags) {
-							$tags = Set::extract('/BlogTag/.', $tags);
+							$tags = Hash::extract($tags, '{n}.BlogTag');
 							$post['BlogTag'] = $tags;
 						}
 					}
@@ -377,10 +372,7 @@ class BlogController extends BlogAppController {
 					}
 					// コメント送信
 					if (isset($this->request->data['BlogComment'])) {
-						// TODO 《暫定対応》モバイルの場合画像認証が効かないのでデモサイトではコメントを受け付けない仕様とした
-						if (empty($this->siteConfigs['demo']) || Configure::read('BcRequest.agent') != 'mobile') {
-							$this->add_comment($id);
-						}
+						$this->add_comment($id);
 					}
 
 					$_posts = $this->_getBlogPosts(array('conditions' => array('id' => $id)));
@@ -401,7 +393,7 @@ class BlogController extends BlogAppController {
 					$blogCategories = $this->BlogCategory->getPath($post['BlogPost']['blog_category_id'], array('name', 'title'));
 					if ($blogCategories) {
 						foreach ($blogCategories as $blogCategory) {
-							$this->crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -415,7 +407,7 @@ class BlogController extends BlogAppController {
 		}
 
 		// 表示設定
-		$this->crumbs += $crumbs;
+		$this->crumbs = array_merge($this->crumbs, $crumbs);
 		$this->set('single', $single);
 		$this->set('posts', $posts);
 		$this->set('year', $year);
@@ -562,7 +554,7 @@ class BlogController extends BlogAppController {
 				// 指定したカテゴリ名にぶら下がる子カテゴリを取得
 				$catChildren = $this->BlogCategory->children($categoryId);
 				if ($catChildren) {
-					$catChildren = Set::extract('/BlogCategory/id', $catChildren);
+					$catChildren = Hash::extract($catChildren, '{n}.BlogCategory.id');
 					$categoryIds = am($categoryIds, $catChildren);
 				}
 			}
@@ -586,7 +578,7 @@ class BlogController extends BlogAppController {
 				'recursive' => 1
 			));
 			if (isset($tags[0]['BlogPost'][0]['id'])) {
-				$ids = Set::extract('/BlogPost/id', $tags);
+				$ids = Hash::extract($tags, '{n}.BlogPost.{n}.id');
 				$conditions['BlogPost.id'] = $ids;
 			} else {
 				return array();
@@ -785,6 +777,15 @@ class BlogController extends BlogAppController {
 	protected function _viewPreview($blogContentsId, $id) {
 		$data = Cache::read('blog_posts_preview_' . $id, '_cake_core_');
 		Cache::delete('blog_posts_preview_' . $id, '_cake_core_');
+		// createせず直接プレビューURLを叩いた場合
+		if (empty($data)) {
+			$data = $this->BlogPost->find('first', array(
+				'conditions' => array(
+					'BlogPost.id' => $id,
+					'BlogContent.id' => $blogContentsId
+				)
+			));
+		}
 		$this->request->data = $this->request->params['data'] = $data;
 		$this->preview = true;
 		$this->layoutPath = '';

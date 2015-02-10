@@ -1,23 +1,17 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * baserCMS共通関数
  *
  * baser/config/bootstrapより呼び出される
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2012, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2012, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser
+ * @package			Baser
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 App::uses('EmailComponent', 'Controller/Component');
@@ -43,21 +37,23 @@ function baseUrl() {
 	} else {
 		$script = $_SERVER['SCRIPT_FILENAME'];
 		$script = str_replace(docRoot(), '', $script);
-
 		if (BC_DEPLOY_PATTERN == 1) {
-			$baseUrl = preg_replace('/app\/webroot\/index\.php/', '', $script);
-			$baseUrl = preg_replace('/app\/webroot\/test\.php/', '', $baseUrl);
+			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
+			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
+			// ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
+			$baseUrl = preg_replace('/index\.php/', '', $baseUrl);
 		} elseif (BC_DEPLOY_PATTERN == 2) {
 			$baseUrl = preg_replace('/index\.php/', '', $script);
 		}
 		$baseUrl = preg_replace("/index$/", '', $baseUrl);
 	}
 
+	$baseUrl = str_replace(DS, '/', $baseUrl);
 	if (!$baseUrl) {
 		$baseUrl = '/';
 	}
-
 	return $baseUrl;
+	
 }
 
 /**
@@ -251,7 +247,6 @@ function getUrlFromEnv() {
 			$aryRequestUri = explode('?', $requestUri);
 			$requestUri = $aryRequestUri[0];
 		}
-
 		if (preg_match('/^' . str_replace('/', '\/', baseUrl()) . '/is', $requestUri)) {
 			$parameter = preg_replace('/^' . str_replace('/', '\/', baseUrl()) . '/is', '', $requestUri);
 		} else {
@@ -468,13 +463,7 @@ function emptyFolder($path) {
  * @return string
  */
 function getViewPath() {
-
-	if (ClassRegistry::isKeySet('SiteConfig')) {
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-	} else {
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-	}
-	$siteConfig = $SiteConfig->findExpanded();
+	$siteConfig = Configure::read('BcSite');
 	$theme = $siteConfig['theme'];
 	if ($theme) {
 		return WWW_ROOT . 'theme' . DS . $theme . DS;
@@ -532,6 +521,9 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
+	if (isConsole()) {
+		return false;
+	}
 	$protocol = 'http://';
 	if (!empty($_SERVER['HTTPS'])) {
 		$protocol = 'https://';
@@ -585,6 +577,7 @@ function amr($a, $b) {
  *
  * @param string $name
  * @return boolean
+ * @deprecated since version 3.0.2
  */
 function loadPluginConfig($name) {
 
@@ -592,10 +585,7 @@ function loadPluginConfig($name) {
 		return false;
 	}
 	list($plugin, $file) = explode('.', $name);
-	$pluginPaths = array(
-		APP . 'Plugin' . DS,
-		BASER_PLUGINS
-	);
+	$pluginPaths = App::path('Plugin');
 	$config = null;
 	foreach ($pluginPaths as $pluginPath) {
 		$configPath = $pluginPath . $plugin . DS . 'Config' . DS . $file . '.php';
@@ -676,17 +666,20 @@ function getEnablePlugins() {
 		$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 	}
 	if (!$enablePlugins) {
-		$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+		try {
+			$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
+		} catch (Exception $ex) {
+			return array();
+		}
 		$db = ConnectionManager::getDataSource('baser');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$plugins = $Plugin->find('all', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true)));
+			$enablePlugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
 			ClassRegistry::removeObject('Plugin');
-			if ($plugins) {
-				$enablePlugins = Set::extract('/Plugin/name', $plugins);
-
+			if ($enablePlugins) {
 				if (!Configure::read('Cache.disable')) {
 					Cache::write('enable_plugins', $enablePlugins, '_cake_env_');
 				}
@@ -694,6 +687,7 @@ function getEnablePlugins() {
 		}
 	}
 	return $enablePlugins;
+	
 }
 
 /**
@@ -702,8 +696,12 @@ function getEnablePlugins() {
  * @return void
  */
 function loadSiteConfig() {
-
-	$SiteConfig = ClassRegistry::init('SiteConfig');
+	// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+	try {
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+	} catch (Exception $ex) {
+		return false;
+	}
 	Configure::write('BcSite', $SiteConfig->findExpanded());
 	ClassRegistry::removeObject('SiteConfig');
 }
@@ -719,13 +717,16 @@ function getVersion($plugin = '') {
 	if (!$plugin || in_array($plugin, $corePlugins)) {
 		$path = BASER . 'VERSION.txt';
 	} else {
-		$appPath = APP . 'Plugin' . DS . $plugin . DS . 'VERSION.txt';
-		$baserPath = BASER_PLUGINS . $plugin . DS . 'VERSION.txt';
-		if (file_exists($appPath)) {
-			$path = $appPath;
-		} elseif (file_exists($baserPath)) {
-			$path = $baserPath;
-		} else {
+		$paths = App::path('Plugin');
+		$exists = false;
+		foreach($paths as $path) {
+			$path .=  $plugin . DS . 'VERSION.txt';
+			if (file_exists($path)) {
+				$exists = true;
+				break;
+			}
+		}
+		if(!$exists) {
 			return false;
 		}
 	}
@@ -815,12 +816,12 @@ function getDbDriver($dbConfigKeyName = 'baser') {
 }
 
 /**
- * コンソコールから実行されているかチェックする
+ * コンソールから実行されているかチェックする
  * 
- * @return boolean
+ * @return bool
  */
 function isConsole() {
-	return preg_match('/Console\/cake\.php$/', $_SERVER['SCRIPT_FILENAME']);
+	return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
 }
 
 /**
@@ -850,3 +851,115 @@ function aa() {
 	}
 	return $a;
 }
+
+/**
+ * 日本語ファイル名対応版basename
+ * 
+ * @param string $str
+ * @param string $suffix
+ * @return type
+ */
+function mb_basename($str, $suffix=null){
+  $tmp = preg_split('/[\/\\\\]/', $str);
+  $res = end($tmp);
+  if(strlen($suffix)){
+    $suffix = preg_quote($suffix);
+    $res = preg_replace("/({$suffix})$/u", "", $res);
+  }
+  return $res;
+}
+
+/**
+ * プラグインを読み込む
+ * 
+ * @param string $plugin
+ * @return type
+ */
+function loadPlugin($plugin, $priority) {
+	if(CakePlugin::loaded($plugin)) {
+		return true;
+	}
+	try {
+		CakePlugin::load($plugin);
+	} catch (Exception $e) {
+		return false;
+	}
+	$pluginPath = CakePlugin::path($plugin);
+	$config = array(
+		'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
+		'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
+	);
+	CakePlugin::load($plugin, $config);
+	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
+		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
+		// ※ プラグインの setting.php で、DBへの接続処理が書かれている可能性がある為
+		try {
+			Configure::load($plugin . '.setting');
+		} catch (Exception $ex) {}
+	}
+	// プラグインイベント登録
+	$eventTargets = array('Controller', 'Model', 'View', 'Helper');
+	foreach ($eventTargets as $eventTarget) {
+		$eventClass = $plugin . $eventTarget . 'EventListener';
+		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
+			App::uses($eventClass, $plugin . '.Event');
+			$CakeEvent = CakeEventManager::instance();
+			$CakeEvent->attach(new $eventClass(), null, array('priority' => $priority));
+		}
+	}
+	return true;
+}
+
+/**
+ * 後方互換の為の非推奨メッセージを生成する
+ * 
+ * @param string $target 非推奨の対象
+ * @param string $since 非推奨となったバージョン
+ * @param string $remove 削除予定のバージョン
+ * @param string $note その他特記事項
+ * @return string 非推奨メッセージ
+ */
+function deprecatedMessage($target, $since, $remove = null, $note = null) {
+
+	if(Configure::read('debug') == 0) {
+		return;
+	}
+	$message = $target . 'は、バージョン ' . $since . ' より非推奨となりました。';
+	if($remove) {
+		$message .= 'バージョン ' . $remove . ' で削除される予定です。';
+	}
+	if($note) {
+		$message .= $note;
+	}
+	return $message;
+
+}
+
+/**
+ * パーセントエンコーディングされないURLセーフなbase64エンコード
+ * 
+ * base64エンコード時でに出てくる記号 +(プラス) , /(スラッシュ) , =(イコール) 
+ * このbase64エンコードした値をさらにURLのパラメータで使うためにURLエンコードすると
+ * パーセントエンコーディングされてしまいます。
+ * その為、このメソッドではパーセントエンコーディングされないURLセーフな
+ * base64エンコードを行います。
+ * 
+ * @param string $val 対象文字列
+ * @return string
+ */
+function base64UrlsafeEncode($val) {
+	$val = base64_encode($val);
+	return str_replace(array('+', '/', '='), array('_', '-', '.'), $val);
+}
+ 
+/**
+ * パーセントエンコーディングされないURLセーフなbase64デコード
+ * 
+ * @param string $val 対象文字列
+ * @return string
+ */
+function base64UrlsafeDecode($val) {
+	$val = str_replace(array('_','-', '.'), array('+', '/', '='), $val);
+	return base64_decode($val);
+}
+

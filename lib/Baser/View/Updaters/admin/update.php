@@ -1,20 +1,14 @@
 <?php
-/* SVN FILE: $Id$ */
 /**
  * [ADMIN] アップデート
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)) {
@@ -23,6 +17,30 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	$requireUpdate = false;
 }
 ?>
+<?php $this->start('script') ?>
+<style type="text/css">
+.em-box {
+	margin-top:20px;
+	font-weight:normal;
+}
+.em-box h3 {
+	font-size:16px;
+	border:0;
+	color:#000;
+	margin-bottom:0;
+	line-height:24px;
+}
+.em-box table {
+	margin-top:10px;
+}
+.em-box th {
+	width:60px;
+}
+.em-box td {
+	text-align:left;
+}
+</style>
+<?php $this->end('script') ?>
 
 
 <div class="corner10 panel-box section">
@@ -30,16 +48,27 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	<ul class="version">
 		<li><?php echo $updateTarget ?> のバージョン： <strong><?php echo $baserVer ?></strong></li>
 		<li>現在のデータベースのバージョン： <strong><?php echo $siteVer ?></strong></li>
-		<?php if ($baserVerPoint === false || $siteVerPoint === false): ?>
-			<li>α版、β版の場合はアップデートサポート外です</li>
-		<?php elseif ($baserVer != $siteVer || $scriptNum): ?>
-			<?php if ($scriptNum): ?>
-				<li>アップデートプログラムが <strong><?php echo $scriptNum ?> 個</strong> あります。</li>
-			<?php endif ?>
-		<?php else: ?>
-			<li>データベースのバージョンは最新です。</li>
-		<?php endif ?>
 	</ul>
+<?php if ($scriptNum || $scriptMessages): ?>
+	<div class="em-box">
+	<?php if ($baserVerPoint === false || $siteVerPoint === false): ?>
+		<h3>α版の場合はアップデートサポート外です。</h3>
+	<?php elseif ($baserVer != $siteVer || $scriptNum): ?>
+		<?php if ($scriptNum): ?>
+		<h3>アップデートプログラムが <strong><?php echo $scriptNum ?> つ</strong> あります。</h3>
+		<?php endif ?>
+	<?php else: ?>
+		<h3>データベースのバージョンは最新です。</h3>
+	<?php endif ?>
+	<?php if($scriptMessages): ?>
+		<table>
+		<?php foreach($scriptMessages as $key => $scriptMessage): ?>
+			<tr><th><?php echo $key ?></th><td><?php echo $scriptMessage ?></td></tr>
+		<?php endforeach ?>
+		</table>
+	<?php endif ?>
+	</div>
+<?php endif ?>
 </div>
 
 <?php if ($scriptNum): ?>

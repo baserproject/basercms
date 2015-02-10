@@ -1,21 +1,15 @@
 <?php
 
-/* SVN FILE: $Id$ */
 /**
  * 記事モデル
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2013, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2013, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			baser.plugins.blog.models
+ * @package			Blog.Model
  * @since			baserCMS v 0.1.0
- * @version			$Revision$
- * @modifiedby		$LastChangedBy$
- * @lastmodified	$Date$
  * @license			http://basercms.net/license/index.html
  */
 /**
@@ -26,7 +20,7 @@ App::uses('BlogAppModel', 'Blog.Model');
 /**
  * 記事モデル
  *
- * @package baser.plugins.blog.models
+ * @package Blog.Model
  */
 class BlogPost extends BlogAppModel {
 
@@ -172,8 +166,8 @@ class BlogPost extends BlogAppModel {
 			$imagecopy[$size]['height'] = $data['eye_catch_size_' . $size . '_height'];
 		}
 
-		$settings = $this->Behaviors->BcUpload->settings;
-		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['name'], '/') . '/', $settings['saveDir'])) {
+		$settings = $this->Behaviors->BcUpload->settings['BlogPost'];
+		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['name'], '/') . '\//', $settings['saveDir'])) {
 			$settings['saveDir'] = "blog" . DS . $data['name'] . DS . "blog_posts";
 		}
 
@@ -309,7 +303,7 @@ class BlogPost extends BlogAppModel {
 			'recursive' => -1,
 			'cache' => false
 		));
-		$entryDates = Set::extract('/BlogPost/posts_date', $entryDates);
+		$entryDates = Hash::extract($entryDates, '{n}.BlogPost.posts_date');
 		foreach ($entryDates as $key => $entryDate) {
 			$entryDates[$key] = date('Y-m-d', strtotime($entryDate));
 		}
