@@ -245,7 +245,7 @@ $(function(){
 
 		<div class="panel-box corner10">
 			<h3>管理システムの参照ファイル配置</h3>
-			<div class="section">baserCMSでは、インストール時に、管理システムより参照する、画像ファイル、CSSフィアル、Javascriptファイルを、下記のパスに自動配置します。既に存在する場合には上書きされてしまいますのでご注意ください。</div>
+			<div class="section">baserCMSでは、インストール時に、管理システムより参照する、画像ファイル、CSSファイル、Javascriptファイルを、下記のパスに自動配置します。既に存在する場合には上書きされてしまいますのでご注意ください。</div>
 			<ul class="section">
 				<li class='<?php if (!$imgAdminDirExists) echo 'check'; else echo'failed'; ?>'>
 <?php if (ROOT . DS != WWW_ROOT): ?>
