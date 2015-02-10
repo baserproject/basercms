@@ -60,7 +60,22 @@ class BcMobileHelper extends Helper {
 			if (!(
 				isset($View->Cache) &&
 				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
+<<<<<<< HEAD
+			);
+			if ($caching) {
+				$this->Cache = new CacheHelper();
+				$this->Cache->base = $View->base;
+				$this->Cache->here = $View->here;
+				$this->Cache->helpers = $View->helpers;
+				$this->Cache->action = $View->action;
+				$this->Cache->controllerName = $View->name;
+				$this->Cache->layout = $View->layout;
+				$this->Cache->cacheAction = $View->cacheAction;
+				$this->Cache->cache($___viewFn, $View->output, true);
+			} else {
+=======
 			)) {
+>>>>>>> e6a5f7b53d697278407d80bb52f493020b30218d
 				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
 				// nocache タグが残ってしまってエラーになるので除去する
 				$View->output = str_replace('<!--nocache-->', '', $View->output);
