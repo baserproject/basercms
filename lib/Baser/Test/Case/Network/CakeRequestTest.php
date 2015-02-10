@@ -18,36 +18,33 @@ App::uses('CakeRequest', 'Network');
  * @package Baser.Test.Case.Network
  */
 class CakeRequestTest extends BaserTestCase {
-	
+
 	public $fixtures = array('baser.Page.Page');
-	
-	public function testNormalizedHere() {
-		
-		$CakeRequest = new CakeRequest('/');
-		Router::setRequestInfo($CakeRequest);
-		$params = Router::parse($CakeRequest->url);
-		$CakeRequest->addParams($params);
-		$this->assertEquals('/index', $CakeRequest->normalizedHere());
-		
-		// TODO Fixture の準備が必要
-		// TODO 固定ページのテストも必要
-		$CakeRequest = new CakeRequest('/news/index');
-		Router::setRequestInfo($CakeRequest);
-		$params = Router::parse($CakeRequest->url);
-		$CakeRequest->addParams($params);
-		$this->assertEquals('/news/index', $CakeRequest->normalizedHere());
-		
-		$CakeRequest = new CakeRequest('/news/');
-		Router::setRequestInfo($CakeRequest);
-		$params = Router::parse($CakeRequest->url);
-		$CakeRequest->addParams($params);
-		$this->assertEquals('/news/index', $CakeRequest->normalizedHere());
 
-		$CakeRequest = new CakeRequest('/news');
-		Router::setRequestInfo($CakeRequest);
-		$params = Router::parse($CakeRequest->url);
-		$CakeRequest->addParams($params);
-		$this->assertEquals('/news/index', $CakeRequest->normalizedHere());
+/**
+ * normalizedHere
+ *
+ * @param string $url URL
+ * @param string $expect 正規化されたURL
+ * @return void
+ * @dataProvider normalizedHereDataProvider
+ */
+	public function testNormalizedHere($url, $expect) {
+		$request = $this->_getRequest($url);
+		$this->assertEquals($expect, $request->normalizedHere());
+	}
 
+/**
+ * normalizedHere用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function normalizedHereDataProvider() {
+		return array(
+			array('/', '/index'),
+			array('/news/index', '/news/index'),
+			array('/news/', '/news/index'),
+			array('/news', '/news/index')
+		);
 	}
 }
