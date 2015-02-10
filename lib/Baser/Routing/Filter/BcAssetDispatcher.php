@@ -22,12 +22,18 @@
 App::uses('AssetDispatcher', 'Routing/Filter');
 
 /**
- * Default priority for all methods in this filter
- * This filter should run before the request gets parsed by router
+ * BcAssetDispatcher class
  *
  * @package Baser.Routing.Filter
  */
 class BcAssetDispatcher extends AssetDispatcher {
+
+/**
+ * Default priority for all methods in this filter
+ * This filter should run before the request gets parsed by router
+ * @var int
+ */
+	public $priority = 4;
 
 /**
  * Checks if a requested asset exists and sends it to the browser
