@@ -709,7 +709,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function scripts() {
 
-		$currentPrefix = $this->Session->read('Auth.User.authPrefix');
+		$currentPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
 		$authPrefixes = Configure::read('BcAuthPrefix.' . $currentPrefix);
 		$toolbar = true;
 
@@ -758,7 +758,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function func() {
 
-		$currentPrefix = $this->Session->read('Auth.User.authPrefix');
+		$currentPrefix = $this->Session->read(AuthComponent::$sessionKey . '.authPrefix');
 		$authPrefixes = Configure::read('BcAuthPrefix.' . $currentPrefix);
 		$toolbar = true;
 		if (isset($authPrefixes['toolbar'])) {

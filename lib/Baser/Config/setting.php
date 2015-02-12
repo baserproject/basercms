@@ -112,7 +112,9 @@ $config['BcAuthPrefix'] = array(
 		// ツールバー利用
 		'toolbar' => true,
 		// モデル
-		'userModel' => 'User'
+		'userModel' => 'User',
+		// セッションキー
+		'sessionKey' => 'User',
 	),
 	// フロント（例）
 /* 'front' => array(
@@ -120,8 +122,9 @@ $config['BcAuthPrefix'] = array(
 	  'loginRedirect'	=> '/',
 	  'userModel'		=> 'User',
 	  'loginAction'	=> '/users/login',
-	  'toolbar'		=> true
-	  ), */
+	  'toolbar'		=> true,
+	  'sessionKey'	=> 'Front',
+	), */
 	// マイページ（例）
 /* 'mypage' => array(
 	  'name'			=> 'マイページ',
@@ -130,8 +133,9 @@ $config['BcAuthPrefix'] = array(
 	  'loginTitle'	=> 'マイページログイン',
 	  'userModel'		=> 'Member',
 	  'loginAction'	=> '/mypage/members/login',
-	  'toolbar'		=> false
-	  ), */
+	  'toolbar'		=> false,
+	  'sessionKey'	=> 'Mypage',
+	), */
 	// モバイルマイページ（例）
 /* 'mobile_mypage' => array(
 	  'name'			=> 'ケータイマイページ',
@@ -141,8 +145,9 @@ $config['BcAuthPrefix'] = array(
 	  'userModel'		=> 'User',
 	  'loginAction'	=> '/m/mypage/users/login',
 	  'toolbar'		=> false,
-	  'userScope'		=> array()
-	  ) */
+	  'userScope'	=> array(),
+	  'sessionKey'	=> 'MobileMypage',
+	) */
 );
 /**
  * Eメール設定
