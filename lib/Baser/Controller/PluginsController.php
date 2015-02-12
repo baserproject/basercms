@@ -516,7 +516,9 @@ class PluginsController extends AppController {
 		$userGroups = $Permission->UserGroup->find('all', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId')), 'recursive' => -1));
 		if($userGroups) {
 			foreach($userGroups as $userGroup) {
-				$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+				//$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+				// TODO 現在 admin 固定、今後、mypage 等にも対応する
+				$permissionAuthPrefix = 'admin';
 				$url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
 				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
 				switch ($data['Plugin']['permission']) {
