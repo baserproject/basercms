@@ -963,7 +963,9 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('会社案内 & 会社データ', '/about', array('escape' => true), '<a href="/about">会社案内 &amp; 会社データ</a>'),	// エスケープ
 			array('固定ページ管理', array('controller' => 'pages', 'action' => 'index'), array('prefix' => true), '<a href="/admin/pages/index">固定ページ管理</a>'),	// プレフィックス
 			array('システム設定', array('admin' => true, 'controller' => 'site_configs', 'action' => 'form'), array('forceTitle' => true), '<span>システム設定</span>'),	// 強制タイトル
-			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>') // SSL
+			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>'), // SSL
+			array('テーマファイル管理', array('controller' => 'themes', 'action' => 'manage', 'jsa'), array('ssl' => true), '<a href="https://localhost/themes/manage/jsa">テーマファイル管理</a>'), // SSL
+			array('画像', '/img/test.jpg', array('ssl' => true), '<a href="https://localhost/img/test.jpg">画像</a>'), // SSL
 		);
 	}
 	

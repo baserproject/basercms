@@ -46,6 +46,14 @@ class BcAppHelper extends Helper {
  */
 	public function webroot($file) {
 
+		// CUSTOMIZE ADD 2015/02/15 ryuring
+		// >>>
+		// フルパスの場合はそのまま返す
+		if(preg_match('/^(http|https):\/\//', $file)) {
+			return $file;
+		}
+		// <<<
+				
 		$asset = explode('?', $file);
 		$asset[1] = isset($asset[1]) ? '?' . $asset[1] : null;
 
