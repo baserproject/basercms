@@ -15,6 +15,7 @@
 /**
  * Include files
  */
+app::uses('BcThemeConfigReader', 'Configure');
 
 /**
  * テーマモデル
@@ -27,7 +28,6 @@ class Theme extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Theme';
 
@@ -35,7 +35,6 @@ class Theme extends AppModel {
  * テーブル
  *
  * @var string
- * @access public
  */
 	public $useTable = false;
 
@@ -49,8 +48,8 @@ class Theme extends AppModel {
 		'name' => array(
 			array('rule' => array('notEmpty'),
 				'message' => 'テーマ名を入力してください。'),
-			array('rule' => 'halfText',
-				'message' => 'テーマ名は半角英数字のみで入力してください。'),
+			array('rule' => 'alphaNumericPlus',
+				'message' => 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。'),
 			array('rule' => 'themeDuplicate',
 				'message' => '既に存在するテーマ名です。')
 		),
@@ -63,11 +62,10 @@ class Theme extends AppModel {
 	);
 
 /**
- * 重複チェック
+ * テーマ名の重複チェック
  *
- * @param string
- * @return boolean
- * @access public
+ * @param string $check チェックするテーマ名
+ * @return bool
  */
 	public function themeDuplicate($check) {
 		$value = $check[key($check)];
@@ -87,9 +85,19 @@ class Theme extends AppModel {
 /**
  * 保存
  *
- * @param string
- * @return boolean
- * @access public
+ * @param array $data 保存するデータの配列
+ * @param bool|array $validate 真偽値または配列
+ *   真偽値の場合はバリデーションするかを示す
+ *   配列の場合は下記のキーを含むことが可能:
+ *
+ *   - validate: trueまたはfalseに設定してバリデーションを有効化・無効化する
+ *   - fieldList: 保存を許すフィールドの配列
+ *   - callbacks: falseに設定するとコールバックを無効にする. 'before' または 'after'
+ *      に設定するとそれぞれのコールバックだけが有効になる
+ *   - `counterCache`: Boolean to control updating of counter caches (if any)
+ *
+ * @param array $fieldList 保存を許すフィールドの配列
+ * @return bool
  */
 	public function save($data = null, $validate = true, $fieldList = array()) {
 		if (!$data) {
@@ -115,37 +123,10 @@ class Theme extends AppModel {
 			}
 		}
 
-		$keys = array('title', 'description', 'author', 'url');
-		foreach ($keys as $key) {
-			if (isset($data[$key])) {
-				$this->setConfig($data['name'], $key, $data[$key]);
-			}
-		}
+		$reader = new BcThemeConfigReader();
+		$reader->dump($data['name'], $data);
 
 		return true;
-	}
-
-/**
- * テーマ設定ファイルに値を設定する
- *
- * @param string $key
- * @param string $value
- * @param string $contents
- * @return string
- * @access public
- */
-	public function setConfig($theme, $key, $value) {
-		$path = WWW_ROOT . 'theme' . DS;
-		$contents = file_get_contents($path . $theme . DS . 'config.php');
-		$reg = '/\$' . $key . '[\s]*?=[\s]*?\'.*?\';/is';
-		if (preg_match($reg, $contents)) {
-			$contents = preg_replace($reg, '$' . $key . ' = \'' . $value . '\';', $contents);
-		} else {
-			$contents = str_replace("?>", "\$" . $key . " = '" . $value . "';\n?>", $contents);
-		}
-		$file = new File($path . $theme . DS . 'config.php');
-		$file->write($contents, 'w');
-		$file->close();
 	}
 
 }
