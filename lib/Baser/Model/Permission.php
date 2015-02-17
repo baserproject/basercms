@@ -135,10 +135,8 @@ class Permission extends AppModel {
  * @access public
  */
 	public function getAuthPrefix($id) {
-		// CSV の場合、他テーブルの fields を指定するとデータが取得できない
 		$data = $this->find('first', array(
 			'conditions' => array('Permission.id' => $id),
-			/* 'fields'=>array('UserGroup.auth_prefix'), */
 			'recursive' => 1
 		));
 		if (isset($data['UserGroup']['auth_prefix'])) {

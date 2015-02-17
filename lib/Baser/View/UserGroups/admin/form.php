@@ -21,6 +21,12 @@ foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 <script type="text/javascript">
 $(window).load(function() {
 	$("#UserGroupName").focus();
+<?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
+	$("#UserGroupAuthPrefixAdmin").attr('disabled', 'disabled');
+<?php endif ?>
+	$("#UserGroupAdminEditForm").submit(function(){
+		$("#UserGroupAuthPrefixAdmin").removeAttr('disabled');
+	});
 });
 </script>
 
@@ -91,12 +97,7 @@ $(window).load(function() {
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('UserGroup.auth_prefix', '認証プレフィックス設定') ?>&nbsp;<span class="required">*</span></th>
 				<td class="col-input">
-					<?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
-						<?php echo $this->BcForm->value('UserGroup.auth_prefix') ?>
-						<?php echo $this->BcForm->hidden('UserGroup.auth_prefix') ?>
-					<?php else: ?>
-						<?php echo $this->BcForm->input('UserGroup.auth_prefix', array('type' => 'select', 'options' => $authPrefixes)) ?>
-					<?php endif ?>
+					<?php echo $this->BcForm->input('UserGroup.auth_prefix', array('type' => 'select', 'multiple' => 'checkbox', 'options' => $authPrefixes, 'value' => explode(',', $this->BcForm->value('UserGroup.auth_prefix')))) ?>
 					<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAuthPrefix', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 					<?php echo $this->BcForm->error('UserGroup.auth_prefix') ?>
 					<div id="helptextAuthPrefix" class="helptext">
