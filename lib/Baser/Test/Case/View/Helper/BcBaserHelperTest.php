@@ -1379,9 +1379,42 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * 現在のページの純粋なURLを取得する
+ * 
+ * @param string $agent エージェント
+ * @param string $url 現在のURL
+ * @param string $expected 期待値
+ * 
+ * @dataProvider getHereDataProvider
  */
-	public function testGetHere() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetHere($agent, $url, $expected) {
+		$this->_setAgent($agent);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEqual($this->BcBaser->getHere() , $expected);
+	}
+	
+/**
+ * getHere用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function getHereDataProvider() {		
+		return array(
+			// PCページ
+			array('', '/', '/'),
+			array('', '/index', '/index'),
+			array('', '/contact/index', '/contact/index'),
+			array('', '/blog/blog/index', '/blog/blog/index'),
+			// モバイルページ
+			array('mobile', '/', '/'),
+			array('mobile', '/index', '/index'),
+			array('mobile', '/contact/index', '/contact/index'),
+			array('mobile', '/blog/blog/index', '/blog/blog/index'),
+			// スマートフォンページ
+			array('smartphone', '/', '/'),
+			array('smartphone', '/index', '/index'),
+			array('smartphone', '/contact/index', '/contact/index'),
+			array('smartphone', '/blog/blog/index', '/blog/blog/index')
+		);
 	}
 	
 /**
@@ -1531,17 +1564,95 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * ベースとなるURLを取得する
+ * @param string $smartUrl スマートURLのオン・オフ、サブディレクトリ配置のスマートURLのオン・オフ
+ * @param string $url アクセスした時のURL
+ * @param string $expects 期待値
+ * 
+ * @dataProvider getBaseUrlDataProvider
  */
-	public function testGetBaseUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetBaseUrl($smartUrl, $url, $expects) {
+
+		Configure::write('App.baseUrl', $smartUrl);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEqual($this->BcBaser->getBaseUrl(), $expects);
+	}
+
+/**
+ * testGetBaseUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function getBaseUrlDataProvider() {		
+		return array(
+			// ノーマル
+			array('', '/', '/'),
+			array('', '/index', '/'),
+			array('', '/contact/index', '/'),
+			array('', '/blog/blog/index', '/'),
+			// スマートURLオフ
+			array('index.php', '/', '/index.php/'),
+			array('index.php', '/index', '/index.php/'),
+			array('index.php', '/contact/index', '/index.php/'),
+			array('index.php', '/blog/blog/index', '/index.php/'),
+			// サブフォルダ+スマートURLオン
+			array('/basercms/', '/', '/basercms/'),
+			array('/basercms/', '/index', '/basercms/'),
+			array('/basercms/', '/contact/index', '/basercms/'),
+			array('/basercms/', '/blog/blog/index', '/basercms/'),
+			// サブフォルダ+スマートURLオフ
+			array('/basercms/index.php', '/', '/basercms/index.php/'),
+			array('/basercms/index.php', '/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/contact/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/blog/blog/index', '/basercms/index.php/')
+		);
 	}
 	
 /**
  * ベースとなるURLを出力する
+ * @param string $smartUrl スマートURLのオン・オフ、サブディレクトリ配置のスマートURLのオン・オフ
+ * @param string $url アクセスした時のURL
+ * @param string $expects 期待値
+ * 
+ * @dataProvider baseUrlDataProvider
  */
-	public function testBaseUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testBaseUrl($smartUrl, $url, $expects) {
+		Configure::write('App.baseUrl', $smartUrl);
+		$this->BcBaser->request = $this->_getRequest($url);
+		ob_start();
+		$this->BcBaser->baseUrl();
+		$result = ob_get_clean();
+		$this->assertEqual($result, $expects);
 	}
+
+/**
+ * testGetBaseUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function baseUrlDataProvider() {		
+		return array(
+			// ノーマル
+			array('', '/', '/'),
+			array('', '/index', '/'),
+			array('', '/contact/index', '/'),
+			array('', '/blog/blog/index', '/'),
+			// スマートURLオフ
+			array('index.php', '/', '/index.php/'),
+			array('index.php', '/index', '/index.php/'),
+			array('index.php', '/contact/index', '/index.php/'),
+			array('index.php', '/blog/blog/index', '/index.php/'),
+			// サブフォルダ+スマートURLオン
+			array('/basercms/', '/', '/basercms/'),
+			array('/basercms/', '/index', '/basercms/'),
+			array('/basercms/', '/contact/index', '/basercms/'),
+			array('/basercms/', '/blog/blog/index', '/basercms/'),
+			// サブフォルダ+スマートURLオフ
+			array('/basercms/index.php', '/', '/basercms/index.php/'),
+			array('/basercms/index.php', '/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/contact/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/blog/blog/index', '/basercms/index.php/')
+		);
+	}	
 	
 /**
  * サブメニューを出力する
