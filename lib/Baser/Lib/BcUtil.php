@@ -1,5 +1,6 @@
 <?php
 
+App::uses('BcAuthComponent', 'Controller/Component');
 class BcUtil extends Object {
 
 /**
