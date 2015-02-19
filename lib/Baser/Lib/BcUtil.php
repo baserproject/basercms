@@ -54,7 +54,7 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function getLoginUserSessionKey() {
-		list($dummy, $sessionKey) = explode('.', BcAuthComponent::$sessionKey);
+		list(, $sessionKey) = explode('.', BcAuthComponent::$sessionKey);
 		if (empty($sessionKey)) {
 			$sessionKey = 'User';
 		}

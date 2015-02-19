@@ -322,7 +322,7 @@ class BcAppController extends Controller {
 			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
 			// =================================================================
 			$user = $this->BcAuth->user();
-			if ($user) {
+			if ($user && $authPrefix) {
 				$userModel = $user['userModel'];
 				$User = ClassRegistry::init($userModel);
 				if(strpos($userModel, '.') !== false) {
@@ -1193,9 +1193,12 @@ class BcAppController extends Controller {
 		}
 
 		$authPrefix = $UserClass->getAuthPrefix($this->BcAuth->user('name'));
-		if (!$authPrefix) {
+		if (!$authPrefix || !$this->BcAuth->userScope) {
+			// 独自のユーザーモデルを利用する場合など
+			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
 			if ($user) {
+				$userModel = $this->Session->read('Auth.userModel');
 				$authPrefixSettings = Configure::read('BcAuthPrefix');
 				if (!empty($user['authPrefix']) && !empty($authPrefixSettings[$user['authPrefix']])) {
 					$authPrefix = explode(',', $user['authPrefix']);
@@ -1218,7 +1221,7 @@ class BcAppController extends Controller {
 				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 				$this->redirect($ref);
 			}
-		} else {
+		} elseif($authPrefix) {
 			$authPrefix = explode(',', $authPrefix);
 		}
 

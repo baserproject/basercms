@@ -114,8 +114,10 @@ $config['BcAuthPrefix'] = array(
 		// モデル
 		'userModel' => 'User',
 		// セッションキー
+		// TODO Adminとした方がわかりやすいが、アップデート時にセッションキーが変わってしまうと
+		// 予期せぬ事態が発生しかねない為、メジャーバージョンアップのタイミングで変更する
 		'sessionKey' => 'User',
-	),
+	)
 	// フロント（例）
 /* 'front' => array(
 	  'name'			=> 'フロント',

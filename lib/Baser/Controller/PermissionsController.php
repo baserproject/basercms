@@ -144,9 +144,8 @@ class PermissionsController extends AppController {
 		if (!$this->request->data) {
 			$this->request->data = $this->Permission->getDefaultValue();
 			$this->request->data['Permission']['user_group_id'] = $userGroupId;
-			//$permissionAuthPrefix = $this->Permission->UserGroup->getAuthPrefix($userGroupId);
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
-			$permissionAuthPrefix = 'admin';
+			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		} else {
 			/* 登録処理 */
 			if (isset($this->request->data['Permission']['user_group_id'])) {
@@ -154,9 +153,8 @@ class PermissionsController extends AppController {
 			} else {
 				$userGroupId = null;
 			}
-			//$permissionAuthPrefix = $this->Permission->UserGroup->getAuthPrefix($userGroupId);
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
-			$permissionAuthPrefix = 'admin';
+			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 			$this->request->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->request->data['Permission']['url'];
 			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', array('user_group_id' => $userGroupId)) + 1;
 			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', array('user_group_id' => $userGroupId)) + 1;
@@ -188,9 +186,8 @@ class PermissionsController extends AppController {
  */
 	public function admin_ajax_add() {
 		if ($this->request->data) {
-			//$authPrefix = $this->Permission->UserGroup->getAuthPrefix($this->request->data['Permission']['user_group_id']);
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
-			$authPrefix = 'admin';
+			$authPrefix = Configure::read('Routing.prefixes.0');
 			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
 			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', array('user_group_id' => $this->request->data['Permission']['user_group_id'])) + 1;
 			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', array('user_group_id' => $this->request->data['Permission']['user_group_id'])) + 1;
@@ -226,9 +223,8 @@ class PermissionsController extends AppController {
 			'fields' => array('id', 'title'),
 			'order' => 'UserGroup.id ASC', 'recursive' => -1));
 
-		$permissionAuthPrefix = $this->Permission->getAuthPrefix($id);
 		// TODO 現在 admin 固定、今後、mypage 等にも対応する
-		$permissionAuthPrefix = 'admin';
+		$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
 		if (empty($this->request->data)) {
 
 			$this->request->data = $this->Permission->read(null, $id);
