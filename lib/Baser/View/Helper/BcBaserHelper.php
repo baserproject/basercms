@@ -506,7 +506,7 @@ class BcBaserHelper extends AppHelper {
 				$this->_View->subDir = $this->_subDir;
 			}
 		}
-
+		
 		$out = $this->_View->element($name, $data, $options);
 
 		/*** afterElement ***/
@@ -1381,10 +1381,12 @@ class BcBaserHelper extends AppHelper {
 		if (!is_array($options)) {
 			$options = array();
 		}
+		$pageConditions = $this->_Page->getConditionAllowPublish();
 		$options = array_merge(array(
-			'conditions' => array('Page.status' => 1),
+			'conditions' => $pageConditions,
 			'fields' => array('title', 'url'),
-			'order' => 'Page.sort'
+			'order' => 'Page.sort', 
+			'cache' => false	// 毎秒抽出条件が違うのでキャッシュしない
 		), $options);
 
 		if ($categoryId) {
@@ -1718,6 +1720,11 @@ END_FLASH;
 		if (isset($this->_View->viewVars['pageRecursive']) && !$this->_View->viewVars['pageRecursive']) {
 			return;
 		}
+		
+		// 公開状態をチェック
+		if (!$this->_Page->checkPublish($url)) {
+			return;
+		}
 
 		$options = array_merge(array(
 			'loadHelpers' => false,
@@ -1737,7 +1744,7 @@ END_FLASH;
 		if (!empty($this->_View->viewVars['editLink'])) {
 			$editLink = $this->_View->viewVars['editLink'];
 		}
-
+		
 		// urlを取得
 		if (empty($this->_View->subDir)) {
 			$url = '/../Pages' . $url;
@@ -1745,7 +1752,7 @@ END_FLASH;
 			$dirArr = explode('/', $this->_View->subDir);
 			$url = str_repeat('/..', count($dirArr)) . '/../Pages' . $url;
 		}
-
+		
 		$this->element($url, $params, array('subDir' => $subDir));
 
 		// 現在のページの情報に戻す

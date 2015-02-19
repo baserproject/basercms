@@ -472,6 +472,7 @@ class Page extends AppModel {
  * @access public
  */
 	public function createPageTemplate($data) {
+		
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}

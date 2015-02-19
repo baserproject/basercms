@@ -405,7 +405,7 @@ class View extends Object {
 		if (!isset($options['callbacks'])) {
 			$options['callbacks'] = false;
 		}
-
+		
 		if (isset($options['cache'])) {
 			$contents = $this->_elementCache($name, $data, $options);
 			if ($contents !== false) {

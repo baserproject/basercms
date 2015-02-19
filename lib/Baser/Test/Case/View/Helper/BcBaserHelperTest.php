@@ -56,7 +56,9 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
 		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
+		$siteConfigData =  $SiteConfig->findExpanded();
+		$this->_View->BcBaser->siteConfig = $siteConfigData;
+		$this->_View->theme = $siteConfigData['theme'];
 		$this->BcBaser = new BcBaserHelper($this->_View);
 		$this->BcBaser = $this->_View->BcBaser;
 	}
@@ -1393,9 +1395,36 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * ページをエレメントとして読み込む
+ * 
  */
 	public function testPage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// リクエスト処理
+		$this->BcBaser->request = $this->_getRequest("/");
+		
+		// 固定ページ書き出し
+		$this->BcBaser->_Page->createAllPageTemplate();
+		
+		// トップページ
+		ob_start();
+		$this->BcBaser->page('/index');
+		$pageElm = ob_get_clean();
+		$this->assertNotEqual(strlen($pageElm), 0);
+		
+		// 非表示ページURL
+		ob_start();
+		$this->BcBaser->page('/hidden_page2');
+		$pageElm = ob_get_clean();
+		$this->assertEqual(strlen($pageElm), 0);
+		
+		ob_start();
+		$this->BcBaser->page('/hidden_page3');
+		$pageElm = ob_get_clean();
+		$this->assertEqual(strlen($pageElm), 0);
+		
+		ob_start();
+		$this->BcBaser->page('/hidden_page4');
+		$pageElm = ob_get_clean();
+		$this->assertEqual(strlen($pageElm), 0);
 	}
 	
 /**
