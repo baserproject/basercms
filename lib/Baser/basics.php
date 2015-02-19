@@ -816,12 +816,12 @@ function getDbDriver($dbConfigKeyName = 'baser') {
 }
 
 /**
- * コンソコールから実行されているかチェックする
+ * コンソールから実行されているかチェックする
  * 
- * @return boolean
+ * @return bool
  */
 function isConsole() {
-	return preg_match('/Console\/cake\.php$/', $_SERVER['SCRIPT_FILENAME']);
+	return defined('CAKEPHP_SHELL') && CAKEPHP_SHELL;
 }
 
 /**

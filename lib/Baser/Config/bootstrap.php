@@ -48,6 +48,7 @@ App::build(array(
 App::build(array(
 	'Event'				=> array(APP . 'Event', BASER_EVENTS),
 	'Routing/Filter'	=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'Configure'			=> array(BASER . 'Configure' . DS),
 	'TestSuite'			=> array(BASER_TEST_SUITE),
 	'TestSuite/Reporter'=> array(BASER_TEST_SUITE . 'Reporter' . DS),
 	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
@@ -79,7 +80,7 @@ define('BC_BASE_URL', baseUrl());
 /**
  * アセットフィルターを追加
  */
-Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher', 'BcCacheDispatcher')));
+Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher', 'BcCacheDispatcher', 'BcRequestFilter')));
 
 /**
  * クラスローダー設定
@@ -180,7 +181,7 @@ if (BC_INSTALLED) {
 		'types' => array('update'),
 		'file' => 'update',
 	));
-	
+
 /**
  * キャッシュ設定
  */
@@ -304,94 +305,7 @@ if (!isConsole()) {
 	$Session = new CakeSession();
 	$Session->start();
 }
-/**
- * パラメーター取得
- * モバイル判定・簡易リダイレクト
- */
-$agentSettings = Configure::read('BcAgent');
-if (!Configure::read('BcApp.mobile')) {
-	unset($agentSettings['mobile']);
-}
-if (!Configure::read('BcApp.smartphone')) {
-	unset($agentSettings['smartphone']);
-}
-$agentOn = false;
-if ($agentSettings) {
-	foreach ($agentSettings as $key => $setting) {
-		$agentOn = false;
-		if (!empty($url)) {
-			$parameters = explode('/', $url);
-			if ($parameters[0] == $setting['alias']) {
-				$agentOn = true;
-			}
-		}
-		if (!$agentOn && $setting['autoRedirect']) {
-			$agentAgents = $setting['agents'];
-			$agentAgents = implode('||', $agentAgents);
-			$agentAgents = preg_quote($agentAgents, '/');
-			$regex = '/' . str_replace('\|\|', '|', $agentAgents) . '/i';
-			if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($regex, $_SERVER['HTTP_USER_AGENT'])) {
-				$getParams = str_replace(BC_BASE_URL . $parameter, '', $_SERVER['REQUEST_URI']);
-				if ($getParams == '/' || $getParams == '/index.php') {
-					$getParams = '';
-				}
 
-				$redirect = true;
-
-				// URLによる AUTO REDIRECT 設定
-				if (isset($_GET[$setting['prefix'] . '_auto_redirect'])) {
-					if ($_GET[$setting['prefix'] . '_auto_redirect'] == 'on') {
-						$_SESSION[$setting['prefix'] . '_auto_redirect'] = 'on';
-					} elseif ($_GET[$setting['prefix'] . '_auto_redirect'] == 'off') {
-						$_SESSION[$setting['prefix'] . '_auto_redirect'] = 'off';
-					}
-				}
-
-				if (isset($_SESSION[$setting['prefix'] . '_auto_redirect'])) {
-					if ($_SESSION[$setting['prefix'] . '_auto_redirect'] == 'off') {
-						$redirect = false;
-					}
-				}
-
-				if (isset($_GET[$setting['prefix']])) {
-					if ($_GET[$setting['prefix']] == 'on') {
-						$redirect = true;
-					} elseif ($_GET[$setting['prefix']] == 'off') {
-						$redirect = false;
-					}
-				}
-
-				if ($redirect) {
-					$redirectUrl = FULL_BASE_URL . BC_BASE_URL . $setting['alias'] . '/' . $parameter . $getParams;
-					header("HTTP/1.1 301 Moved Permanently");
-					header("Location: " . $redirectUrl);
-					exit();
-				}
-			}
-		}
-		if ($agentOn) {
-			Configure::write('BcRequest.agent', $key);
-			Configure::write('BcRequest.agentPrefix', $setting['prefix']);
-			Configure::write('BcRequest.agentAlias', $setting['alias']);
-			break;
-		}
-	}
-}
-if ($agentOn) {
-	//======================================================================
-	// /m/files/... へのアクセスの場合、/files/... へ自動リダイレクト
-	// CMSで作成するページ内のリンクは、モバイルでアクセスすると、
-	// 自動的に、/m/ 付のリンクに書き換えられてしまう為、
-	// files内のファイルへのリンクがリンク切れになってしまうので暫定対策。
-	//======================================================================
-	$param = preg_replace('/^' . Configure::read('BcRequest.agentAlias') . '\//', '', $parameter);
-	if (preg_match('/^files/', $param)) {
-		$redirectUrl = FULL_BASE_URL . '/' . $param;
-		header("HTTP/1.1 301 Moved Permanently");
-		header("Location: " . $redirectUrl);
-		exit();
-	}
-}
 /**
  * Viewのキャッシュ設定・ログの設定
  */

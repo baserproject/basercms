@@ -114,9 +114,13 @@ class BcAuthConfigureComponent extends Component {
 
 		// 認証プレフィックスによるスコープ設定
 		if (!empty($config['auth_prefix']) && !isset($userScope)) {
-			$auth->authenticate['Form']['scope'] = array('UserGroup.auth_prefix' => $config['auth_prefix']);
+			$auth->authenticate['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%');
 		} elseif (isset($userScope)) {
 			$auth->authenticate['Form']['scope'] = $userScope;
+		}
+
+		if(empty($sessionKey)) {
+			$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
 		}
 
 		// セッション識別
@@ -124,7 +128,7 @@ class BcAuthConfigureComponent extends Component {
 		// 静的プロパティの書き換えが外部よりできなかったのでメソッドを作って無理矢理対応
 		// 現在のバージョン（3.0.0 beta）では、認証情報を複数持てる仕様となっていない
 		// 上記仕様に対応させる為には、ここの処理変更だけでなく全体的な認証の仕組みを見直す必要あり
-		$auth->setSessionKey('Auth.User');
+		$auth->setSessionKey('Auth.' . $sessionKey);
 
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
 		$redirect = $auth->Session->read('Auth.redirect');
@@ -156,7 +160,7 @@ class BcAuthConfigureComponent extends Component {
 					if ($auth->login()) {
 						return true;
 					} else {
-						$controller->request->data[$userModel] = null; 
+						$controller->request->data[$userModel] = null;
 					}
 				}
 			}

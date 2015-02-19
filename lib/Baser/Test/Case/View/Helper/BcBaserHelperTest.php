@@ -30,13 +30,14 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Menu.Menu',
 		'baser.Page.Page',
-		'baser.Content.Content',
-		'baser.SiteConfig.SiteConfig',
+		'baser.default.Content',
+		'baser.default.SiteConfig',
 		'baser.User.User',
 		'baser.UserGroup.UserGroup',
 		'baser.Favorite.Favorite',
-		'baser.Permission.Permission',
-		'baser.PageCategory.PageCategory'
+		'baser.default.Permission',
+		'baser.default.PageCategory',
+		'baser.default.ThemeConfig',
 	);
 	
 /**
@@ -54,9 +55,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_View = new BcAppView();
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
-		$this->BcBaser = new BcBaserHelper($this->_View);
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
+		$this->BcBaser = new BcBaserHelper($this->_View);
+		$this->BcBaser = $this->_View->BcBaser;
 	}
 	
 /**
@@ -105,11 +107,12 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルを設定する
  */
 	public function testSetTitle() {
-		
+		$topTitle = '｜baserCMS inc. [デモ]';
+
 		// カテゴリがない場合
 		$this->BcBaser->setTitle('会社案内');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社案内');
+		$this->assertEqual($result, '会社案内' . $topTitle);
 		
 		// カテゴリがある場合
 		$this->BcBaser->_View->set('crumbs', array(
@@ -118,12 +121,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		));
 		$this->BcBaser->setTitle('会社沿革');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内' . $topTitle);
 		
 		// カテゴリは存在するが、カテゴリの表示をオフにした場合
 		$this->BcBaser->setTitle('会社沿革', false);
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革');
+		$this->assertEqual($result, '会社沿革' . $topTitle);
 		
 	}
 	
@@ -158,7 +161,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルへのカテゴリタイトルの出力有無を設定する
  */
 	public function testSetCategoryTitle() {
-		
+		$topTitle = '｜baserCMS inc. [デモ]';
+
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
 			array('name' => '会社データ', 'url' => '/company/data')
@@ -168,17 +172,17 @@ class BcBaserHelperTest extends BaserTestCase {
 		// カテゴリをオフにした場合
 		$this->BcBaser->setCategoryTitle(false);
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革');
+		$this->assertEqual($result, '会社沿革' . $topTitle);
 		
 		// カテゴリをオンにした場合
 		$this->BcBaser->setCategoryTitle(true);
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内' . $topTitle);
 		
 		// カテゴリを指定した場合
 		$this->BcBaser->setCategoryTitle('店舗案内');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜店舗案内');
+		$this->assertEqual($result, '会社沿革｜店舗案内' . $topTitle);
 		
 		// パンくず用にリンクも指定した場合
 		$this->BcBaser->setCategoryTitle(array(
@@ -205,13 +209,15 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testGetKeywords() {
 		
 		// 設定なし
+		$expect = 'baser,CMS,コンテンツマネジメントシステム,開発支援';
 		$result = $this->BcBaser->getKeywords();
-		$this->assertEmpty($result);
+		$this->assertEqual($result, $expect);
 		
 		// 設定あり
-		$this->BcBaser->setKeywords('baserCMS,国産,オープンソース');
+		$expect = 'baserCMS,国産,オープンソース';
+		$this->BcBaser->setKeywords($expect);
 		$result = $this->BcBaser->getKeywords();
-		$this->assertEqual($result, 'baserCMS,国産,オープンソース');
+		$this->assertEqual($result, $expect);
 		
 	}
 	
@@ -235,7 +241,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルタグを取得する
  */
 	public function testGetTitle() {
-		
+		$topTitle = 'baserCMS inc. [デモ]';
+
 		// 通常
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
@@ -243,21 +250,20 @@ class BcBaserHelperTest extends BaserTestCase {
 		));
 		$this->BcBaser->setTitle('会社沿革');
 		$result = $this->BcBaser->getTitle();
-		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内');
+		$this->assertEqual($result, '会社沿革｜会社データ｜会社案内｜' . $topTitle);
 		
 		// 区切り文字を ≫ に変更
 		$result = $this->BcBaser->getTitle('≫');
-		$this->assertEqual($result, '会社沿革≫会社データ≫会社案内');
+		$this->assertEqual($result, '会社沿革≫会社データ≫会社案内≫' . $topTitle);
 		
 		// カテゴリタイトルを除外
 		$result = $this->BcBaser->getTitle('｜', false);
-		$this->assertEqual($result, '会社沿革');
+		$this->assertEqual($result, '会社沿革｜' . $topTitle);
 		
 		// カテゴリが対象ページと同じ場合に省略する
 		$this->BcBaser->setTitle('会社データ');
 		$result = $this->BcBaser->getTitle('｜', true);
-		$this->assertEqual($result, '会社データ｜会社案内');
-				
+		$this->assertEqual($result, '会社データ｜会社案内｜' . $topTitle);
 	}
 	
 /**
@@ -321,11 +327,14 @@ class BcBaserHelperTest extends BaserTestCase {
  * タイトルタグを出力する
  */
 	public function testTitle() {
-		$this->BcBaser->setTitle('会社データ');
+		$topTitle = 'baserCMS inc. [デモ]';
+		$title = '会社データ';
+
+		$this->BcBaser->setTitle($title);
 		ob_start();
 		$this->BcBaser->title();
 		$result = ob_get_clean();
-		$this->assertEqual($result, "<title>会社データ</title>\n");
+		$this->assertEqual($result, "<title>". $title . '｜' . $topTitle . "</title>\n");
 	}
 	
 /**
@@ -495,7 +504,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		
 		// フルURL
 		$result = $this->BcBaser->getUrl('/about', true);
-		$this->assertEqual($result, 'http://' . $_SERVER["HTTP_HOST"] . '/about');
+		$this->assertEqual($result, Configure::read('App.fullBaseUrl') . '/about');
 		
 		// 配列URL
 		$result = $this->BcBaser->getUrl(array(
@@ -529,7 +538,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		
 		// フルURL
 		$result = $this->BcBaser->getUrl('/about', true);
-		$this->assertEqual($result, 'http://' . $_SERVER["HTTP_HOST"] . '/basercms/index.php/about');
+		$this->assertEqual($result, Configure::read('App.fullBaseUrl') . '/basercms/index.php/about');
 		
 		// 配列URL
 		$result = $this->BcBaser->getUrl(array(
@@ -561,8 +570,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = $this->BcBaser->getElement(('global_menu'));
 		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
 		// 強制的にフロントのテンプレートに切り替えた場合
-		$result = $this->BcBaser->getElement(('crumbs'), array(), array('subDir' => false));
-		$this->assertEqual($result, '');
+		$result = $this->BcBaser->getElement('crumbs', array(), array('subDir' => false));
+		$this->assertEqual($result, '<strong>ホーム</strong>');
 		
 	}
 	
@@ -634,6 +643,10 @@ class BcBaserHelperTest extends BaserTestCase {
  * セッションメッセージを出力する
  */
 	public function testFlash() {
+		// TODO コンソールからのセッションのテストをどうするか？そもそもするか？ ryuring
+		if(isConsole()) {
+			return;
+		}
 		$messsage = 'エラーが発生しました。';
 		App::uses('SessionComponent', 'Controller/Component');
 		App::uses('ComponentCollection', 'Controller/Component');
@@ -695,11 +708,14 @@ class BcBaserHelperTest extends BaserTestCase {
  * ツールバーエレメントや CakePHP のデバッグ出力を表示
  */
 	public function testFunc() {
+		Configure::write('debug', 0);
+
 		// 未ログイン
 		ob_start();
 		$this->BcBaser->func();
 		$result = ob_get_clean();
 		$this->assertEqual($result, '');
+
 		// ログイン中
 		$expects = '<div id="ToolBar">';
 		$this->_login();
@@ -710,6 +726,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = ob_get_clean();
 		$this->assertTextContains($expects, $result);
 		$this->_logout();
+
 		// デバッグモード２
 		$expects = '<table class="cake-sql-log"';
 		$debug = Configure::read('debug');
@@ -946,7 +963,9 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('会社案内 & 会社データ', '/about', array('escape' => true), '<a href="/about">会社案内 &amp; 会社データ</a>'),	// エスケープ
 			array('固定ページ管理', array('controller' => 'pages', 'action' => 'index'), array('prefix' => true), '<a href="/admin/pages/index">固定ページ管理</a>'),	// プレフィックス
 			array('システム設定', array('admin' => true, 'controller' => 'site_configs', 'action' => 'form'), array('forceTitle' => true), '<span>システム設定</span>'),	// 強制タイトル
-			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>') // SSL
+			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>'), // SSL
+			array('テーマファイル管理', array('controller' => 'themes', 'action' => 'manage', 'jsa'), array('ssl' => true), '<a href="https://localhost/themes/manage/jsa">テーマファイル管理</a>'), // SSL
+			array('画像', '/img/test.jpg', array('ssl' => true), '<a href="https://localhost/img/test.jpg">画像</a>'), // SSL
 		);
 	}
 	
@@ -984,13 +1003,14 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testCopyYear() {
 		// 正常系
-		$expected = '2000 - 2014';
+		$year = date('Y');
+		$expected = '2000 - ' . $year;
 		ob_start();
 		$this->BcBaser->copyYear(2000);
 		$result = ob_get_clean();
 		$this->assertEqual($result, $expected);
 		// 異常系
-		$expected = '2014';
+		$expected = $year;
 		ob_start();
 		$this->BcBaser->copyYear('はーい');
 		$result = ob_get_clean();
@@ -1116,6 +1136,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param array $linkedAgents 連動する設定のエージェントのリスト
  *
  * @dataProvider getContentsNameDataProvider
+ * 
+ * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
 	public function testGetContentsName($url, $expects, $ua = null, array $agents = array(), array $linkedAgents = array()) {
 		//Configure周りの設定を全てOFF状態に
@@ -1454,7 +1476,45 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testMainImage() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-	
+
+/**
+ * メインイメージの取得でidやclassを指定するオプション
+ */
+	public function testMainImageIdClass()
+	{
+		$num = 2;
+		$idName = 'testIdName';
+		$className = 'testClassName';
+
+		//getMainImageを叩いてULを入手(default)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul id="MainImage">|', $tags) === 1;
+		$this->assertTrue($check);
+
+
+		//getMainImageを叩いてULを入手(id指定)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => $idName));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul id="' . $idName . '">|', $tags) === 1;
+		$this->assertTrue($check);
+
+		//getMainImageを叩いてULを入手(class指定・id非表示)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => false, 'class' => $className));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul class="' . $className . '">|', $tags) === 1;
+		$this->assertTrue($check);
+		//getMainImageを叩いてULを入手(全てなし)
+		ob_start();
+		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => false, 'class' => false));
+		$tags = ob_get_clean();
+		$check = preg_match('|<ul>|', $tags) === 1;
+		$this->assertTrue($check);
+	}
+
 /**
  * テーマのURLを取得する
  */

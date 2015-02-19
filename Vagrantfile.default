@@ -155,6 +155,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :database => 'basercms'
       }
     }
+    chef.add_recipe "centos"
     chef.add_recipe "iptables"
     chef.add_recipe "yum::epel"
     chef.add_recipe "yum::remi"
@@ -162,7 +163,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "mysql"
     chef.add_recipe "postgres"
     chef.add_recipe "httpd"
-    chef.add_recipe "php-pear"
+    chef.add_recipe "php-composer"
     chef.add_recipe "basercms"
   end
 

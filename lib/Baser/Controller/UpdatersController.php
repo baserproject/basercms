@@ -230,7 +230,8 @@ class UpdatersController extends AppController {
 
 		/* スクリプトの有無を確認 */
 		$scriptNum = count($this->_getUpdaters($name));
-
+		$scriptMessages = $this->_getScriptMessages($name);
+		
 		/* スクリプト実行 */
 		if ($this->request->data) {
 			clearAllCache();
@@ -259,6 +260,7 @@ class UpdatersController extends AppController {
 		$this->set('siteVerPoint', verpoint(preg_replace('/-beta$/', '', $sourceVersion)));
 		$this->set('baserVerPoint', verpoint(preg_replace('/-beta$/', '', $targetVersion)));
 		$this->set('scriptNum', $scriptNum);
+		$this->set('scriptMessages', $scriptMessages);
 		$this->set('plugin', $name);
 		$this->set('log', $updateLog);
 		$this->render('update');

@@ -58,6 +58,14 @@ class Contact extends CakeTestModel {
 class BcFormHelperTest extends BaserTestCase {
 
 /**
+ * Fixtures
+ * @var array 
+ */
+	public $fixtures = array(
+		'baser.Page.Page'
+	);
+	
+/**
  * setUp method
  *
  * @return void
@@ -121,8 +129,10 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testFileUploadField() {
 		
+		$fieldName = 'Contact.upload';
+		$this->BcForm->setEntity($fieldName);
 		// 通常
-		$result = $this->BcForm->file('Contact.upload');
+		$result = $this->BcForm->file($fieldName);
 		$expected = array(
 			'div'	=> array('class' => 'upload-file'),
 			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload')), 

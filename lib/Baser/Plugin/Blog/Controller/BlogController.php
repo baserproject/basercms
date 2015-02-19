@@ -241,7 +241,7 @@ class BlogController extends BlogAppController {
 				// ナビゲーションを設定
 				$categoryId = $this->BlogCategory->field('id', array(
 					'BlogCategory.blog_content_id' => $this->contentId,
-					'BlogCategory.name' => $category
+					'BlogCategory.name' => urlencode($category)
 				));
 
 				if (!$categoryId) {
@@ -249,7 +249,7 @@ class BlogController extends BlogAppController {
 				}
 
 				// 記事を取得
-				$posts = $this->_getBlogPosts(array('conditions' => array('category' => $category)));
+				$posts = $this->_getBlogPosts(array('conditions' => array('category' => urlencode($category))));
 
 				$blogCategories = $this->BlogCategory->getPath($categoryId, array('name', 'title'));
 				if (count($blogCategories) > 1) {

@@ -145,9 +145,9 @@ class BcAuthComponent extends AuthComponent {
  */
 	public function setSessionAuthAddition() {
 		$userModel = $this->authenticate['Form']['userModel'];
-		$User = ClassRegistry::init($userModel);
-		$authPrefix = $User->getAuthPrefix($this->user('name'));
-		if (empty($authPrefix)) {
+		if (!empty($this->request->params['prefix'])) {
+			$authPrefix = $this->request->params['prefix'];
+		} else {
 			$authPrefix = 'front';
 		}
 		$this->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);

@@ -49,24 +49,26 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 		<li><?php echo $updateTarget ?> のバージョン： <strong><?php echo $baserVer ?></strong></li>
 		<li>現在のデータベースのバージョン： <strong><?php echo $siteVer ?></strong></li>
 	</ul>
+<?php if ($scriptNum || $scriptMessages): ?>
 	<div class="em-box">
-<?php if ($baserVerPoint === false || $siteVerPoint === false): ?>
+	<?php if ($baserVerPoint === false || $siteVerPoint === false): ?>
 		<h3>α版の場合はアップデートサポート外です。</h3>
-<?php elseif ($baserVer != $siteVer || $scriptNum): ?>
-	<?php if ($scriptNum): ?>
+	<?php elseif ($baserVer != $siteVer || $scriptNum): ?>
+		<?php if ($scriptNum): ?>
 		<h3>アップデートプログラムが <strong><?php echo $scriptNum ?> つ</strong> あります。</h3>
-	<?php endif ?>
-<?php else: ?>
+		<?php endif ?>
+	<?php else: ?>
 		<h3>データベースのバージョンは最新です。</h3>
-<?php endif ?>
-<?php if($scriptMessages): ?>
+	<?php endif ?>
+	<?php if($scriptMessages): ?>
 		<table>
 		<?php foreach($scriptMessages as $key => $scriptMessage): ?>
 			<tr><th><?php echo $key ?></th><td><?php echo $scriptMessage ?></td></tr>
 		<?php endforeach ?>
 		</table>
-<?php endif ?>
+	<?php endif ?>
 	</div>
+<?php endif ?>
 </div>
 
 <?php if ($scriptNum): ?>

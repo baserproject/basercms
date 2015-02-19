@@ -30,10 +30,20 @@ class BaserTestCase extends CakeTestCase {
 		// missing table となってい、原因がつかみにくい為、利用していない場合は強制的に
 		// 利用する設定とした。
 		// =====================================================================
-		if (!isset($this->fixtures) || !in_array('baser.PluginContent.PluginContent', $this->fixtures)) {
-			$this->fixtures[] = 'baser.PluginContent.PluginContent';
+		if (!isset($this->fixtures) || (!in_array('baser.PluginContent.PluginContent', $this->fixtures) && !in_array('baser.default.PluginContent', $this->fixtures))) {
+			$this->fixtures[] = 'baser.default.PluginContent';
 		}
 		parent::__construct($name, $data, $dataName);
+	}
+	
+/**
+ * setUp
+ */
+	public function setUp() {
+		parent::setUp();
+		Configure::write('App.baseUrl', '');
+		// ブラウザと、コンソールでCakeRequestの内容が違うので一旦トップページとして初期化する
+		$this->_getRequest('/');
 	}
 	
 /**
@@ -43,7 +53,29 @@ class BaserTestCase extends CakeTestCase {
  * @return CakeRequest
  */
 	protected function _getRequest($url) {
+		Router::reload();
 		$request = new CakeRequest($url);
+		// コンソールからのテストの場合、requestのパラメーターが想定外のものとなってしまうので調整
+		if(isConsole()) {
+			$baseUrl = Configure::read('App.baseUrl');
+			if($request->url === false) {
+				$request->here = $baseUrl . '/';
+			} elseif(preg_match('/^' . preg_quote($request->webroot, DS) . '/', $request->here)) {
+				$request->here = $baseUrl . '/' . preg_replace('/^' . preg_quote($request->webroot, DS) . '/', '', $request->here);
+			}
+			if($baseUrl) {
+				if(preg_match('/^\//', $baseUrl)) {
+					$request->base = $baseUrl;
+				} else {
+					$request->base = '/' . $baseUrl;
+				}
+				$request->webroot = $baseUrl;
+			} else {
+				$request->base = '';
+				$request->webroot = '/';
+			}
+		}
+		
 		Router::setRequestInfo($request);
 		$params = Router::parse($request->url);
 		$request->addParams($params);

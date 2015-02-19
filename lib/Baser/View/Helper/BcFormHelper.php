@@ -940,7 +940,7 @@ DOC_END;
 		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
 			'fieldName' => $fieldName,
-			'out' => $out
+			'out' => $output
 			), array('class' => 'Form', 'plugin' => ''));
 
 		if ($event !== false) {
@@ -1363,8 +1363,6 @@ DOC_END;
  * @return string
  */
 	public function file($fieldName, $options = array()) {
-
-		$options = $this->_initInputField($fieldName, $options);
 		$entity = $this->entity();
 		$modelName = array_shift($entity);
 		$field = $this->field();

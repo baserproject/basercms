@@ -64,7 +64,7 @@ $(function(){
 					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['name'], '/') ?></li>	
 				<?php else: ?>
 					<?php if ($authPrefix == 'admin'): ?>
-						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'btn')), array('plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'), array('title' => 'baserCMS管理システム')) ?></li>
+						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'bc-btn')), array('plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'), array('title' => 'baserCMS管理システム')) ?></li>
 					<?php else: ?>
 						<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), array('title' => $authName)) ?></li>
 					<?php endif ?>
@@ -88,7 +88,7 @@ $(function(){
 			<ul class="clearfix">
 				<li>
 					<?php if (!empty($user)): ?>
-						<?php $this->BcBaser->link($this->BcBaser->getUserName($user) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+						<?php $this->BcBaser->link($this->BcBaser->getUserName($user) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<ul>
 							<?php if ($this->Session->check('AuthAgent')): ?>
 								<li><?php $this->BcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
@@ -107,7 +107,7 @@ $(function(){
 							<?php endif ?>
 						</ul>
 					<?php elseif ($this->name != 'Installations' && $this->request->url != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
-						<?php $this->BcBaser->link('ログインしていません ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+						<?php $this->BcBaser->link('ログインしていません ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<ul>
 							<?php if ($currentPrefix == 'front'): ?>
 								<li><?php $this->BcBaser->link('ログイン', array('plugin' => null, 'controller' => 'users', 'action' => 'login')) ?></li>
@@ -119,7 +119,7 @@ $(function(){
 				</li>
 				<?php if (!empty($user) && $authPrefix == 'admin'): ?>
 					<li>
-						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<div id="SystemMenu"><div>
 								<?php $adminSitemap = Configure::read('BcApp.adminNavi') ?>
 								<?php foreach ($adminSitemap as $key => $package): ?>

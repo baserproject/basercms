@@ -181,7 +181,6 @@ class Feed extends FeedAppModel {
  * @return array RSSデータ
  */
 	protected function _convertSimplePie($datas) {
-		
 		if (!$datas) {
 			return null;
 		}
@@ -214,17 +213,11 @@ class Feed extends FeedAppModel {
 			$tmp['wfw:commentRss']['value'] = $data->get_title();
 
 			$tmp['encoded']['value'] = $data->get_content();
-			if (preg_match("/(<img.*?src=\"(.*?)\".*?\/>)/s", $tmp['encoded']['value'], $matches)) {
-				$tmp['img']['tag'] = $matches[1];
-				$tmp['img']['url'] = $matches[2];
-			} else {
-				$tmp['img']['tag'] = '';
-			}
+			$tmp['img'] = $this->extractImg($tmp['encoded']['value']);
 
 			$feed['Items'][] = $tmp;
 		}
 		return $feed;
-		
 	}
 	
 /**
@@ -255,5 +248,23 @@ class Feed extends FeedAppModel {
  */
 	public function createCacheHash($ext = '', $url) {
 		return $this->_createCacheHash($ext, $url);
+	}
+
+/**
+ * <img>タグとURLを抜き出す
+ *
+ * @param string $string 文字列
+ * @return array img
+ */
+	public function extractImg($string) {
+		$pattern = '/(<img.+?src\s*=\s*[\"|\'](.*?)[\"|\'].*?\/?>)/s';
+		$img = array();
+		if (preg_match($pattern, $string, $matches)) {
+			$img['tag'] = $matches[1];
+			$img['url'] = $matches[2];
+		} else {
+			$img['tag'] = '';
+		}
+		return $img;
 	}
 }

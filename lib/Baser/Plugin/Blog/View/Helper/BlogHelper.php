@@ -345,7 +345,7 @@ class BlogHelper extends AppHelper {
 		$path = array('category');
 		if ($categoryPath) {
 			foreach ($categoryPath as $category) {
-				$path[] = $category['BlogCategory']['name'];
+				$path[] = urldecode($category['BlogCategory']['name']);
 			}
 		}
 

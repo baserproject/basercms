@@ -1,5 +1,6 @@
 <?php
 
+App::uses('BcAuthComponent', 'Controller/Component');
 class BcUtil extends Object {
 
 /**
@@ -38,15 +39,27 @@ class BcUtil extends Object {
  */
 	public static function loginUser() {
 		$Session = new CakeSession();
-		$user = $Session->read('Auth.User');
+		$sessionKey = BcUtil::getLoginUserSessionKey();
+		$user = $Session->read('Auth.' . $sessionKey);
 		if (!$user) {
-			if (!empty($_SESSION['Auth']['User'])) {
-				$user = $_SESSION['Auth']['User'];
+			if (!empty($_SESSION['Auth'][$sessionKey])) {
+				$user = $_SESSION['Auth'][$sessionKey];
 			}
 		}
 		return $user;
 	}
-
+/**
+ * ログインしているユーザーのセッションキーを取得
+ * 
+ * @return string
+ */
+	public static function getLoginUserSessionKey() {
+		list(, $sessionKey) = explode('.', BcAuthComponent::$sessionKey);
+		if (empty($sessionKey)) {
+			$sessionKey = 'User';
+		}
+		return $sessionKey;
+	}
 /**
  * ログインしているユーザー名を取得
  * 
