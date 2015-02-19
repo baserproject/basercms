@@ -299,15 +299,16 @@ class BcAppController extends Controller {
 		if ($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
 
 			$configs = Configure::read('BcAuthPrefix');
+			$authPrefix = '';
 			if (!empty($this->request->params['prefix']) && isset($configs[$this->request->params['prefix']])) {
 				$config = $configs[$this->request->params['prefix']];
 				if (count($configs) >= 2) {
-					$config['auth_prefix'] = $this->request->params['prefix'];
+					$config['auth_prefix'] = $authPrefix = $this->request->params['prefix'];
 				}
 			} elseif (isset($configs['front'])) {
 				$config = $configs['front'];
 				if (count($configs) >= 2) {
-					$config['auth_prefix'] = 'front';
+					$config['auth_prefix'] = $authPrefix = 'front';
 				}
 			} else {
 				$config = array();
@@ -321,16 +322,15 @@ class BcAppController extends Controller {
 			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
 			// =================================================================
 			$user = $this->BcAuth->user();
-			if ($user) {
-				$userModel = $this->Session->read('Auth.User.userModel');
+			if ($user && $authPrefix) {
+				$userModel = $user['userModel'];
 				$User = ClassRegistry::init($userModel);
 				if(strpos($userModel, '.') !== false) {
 					list($plugin, $userModel) = explode('.', $userModel);
 				}
 				if ($userModel && !empty($this->{$userModel})) {
-					$authPrefix = $this->Session->read('Auth.User.authPrefix');
 					$UserGroup = ClassRegistry::init('UserGroup');
-					$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix' => $authPrefix), 'recursive' => -1));
+					$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix LIKE' => '%' . $authPrefix . '%'), 'recursive' => -1));
 					$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
 					$conditions = array(
 						$userModel . '.id'				=> $user['id'], 
@@ -626,10 +626,11 @@ class BcAppController extends Controller {
 		$this->set('preview', $this->preview);
 
 		/* ログインユーザー */
-		if (BC_INSTALLED && isset($_SESSION['Auth']['User']) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
-			$this->set('user', $_SESSION['Auth']['User']);
+		$sessionKey = BcUtil::getLoginUserSessionKey();
+		if (BC_INSTALLED && isset($_SESSION['Auth'][$sessionKey]) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
+			$this->set('user', $_SESSION['Auth'][$sessionKey]);
 			if (!empty($this->request->params['admin'])) {
-				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth']['User']['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth'][$sessionKey]['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
 			}
 		}
 
@@ -639,7 +640,7 @@ class BcAppController extends Controller {
 			$currentPrefix = 'front';
 		}
 		$this->set('currentPrefix', $currentPrefix);
-		$this->set('authPrefix', $this->Session->read('Auth.User.authPrefix'));
+		$this->set('authPrefix', $this->Session->read('Auth.' . $sessionKey . '.authPrefix'));
 
 		/* 携帯用絵文字データの読込 */
 		// TODO 実装するかどうか検討する
@@ -1193,13 +1194,14 @@ class BcAppController extends Controller {
 
 		$authPrefix = $UserClass->getAuthPrefix($this->BcAuth->user('name'));
 		if (!$authPrefix || !$this->BcAuth->userScope) {
+			// 独自のユーザーモデルを利用する場合など
 			// ユーザーモデルがユーザーグループと関連していない場合
 			$user = $this->BcAuth->user();
 			if ($user) {
 				$userModel = $this->Session->read('Auth.userModel');
 				$authPrefixSettings = Configure::read('BcAuthPrefix');
 				if (!empty($user['authPrefix']) && !empty($authPrefixSettings[$user['authPrefix']])) {
-					$authPrefix = $user['authPrefix'];
+					$authPrefix = explode(',', $user['authPrefix']);
 				} else {
 					foreach ($authPrefixSettings as $key => $authPrefixSetting) {
 						if (!empty($authPrefixSetting['userModel'])) {
@@ -1208,7 +1210,7 @@ class BcAppController extends Controller {
 							$currentUserModel = 'User';
 						}
 						if ($currentUserModel == $userModel) {
-							$authPrefix = $key;
+							$authPrefix = array($key);
 							break;
 						}
 					}
@@ -1219,13 +1221,15 @@ class BcAppController extends Controller {
 				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 				$this->redirect($ref);
 			}
+		} elseif($authPrefix) {
+			$authPrefix = explode(',', $authPrefix);
 		}
 
 		if (!empty($this->request->params['prefix'])) {
 			$requestedPrefix = $this->request->params['prefix'];
 		}
 
-		if ($requestedPrefix && ($requestedPrefix != $authPrefix)) {
+		if ($requestedPrefix && (!in_array($requestedPrefix, $authPrefix))) {
 			$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
 			$this->redirect('/');
 			return;

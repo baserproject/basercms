@@ -92,7 +92,7 @@ class PluginsController extends AppController {
 				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $name);
 				exec('unzip -o ' . TMP . $name . ' -d ' . APP.'Plugin'.DS, $return);
 				if (!empty($return[2])) {
-					$plugin = preg_replace('/^\s*?inflating:\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
+					$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
 					$plugin = explode(DS, $plugin);
 					$plugin = $plugin[0];
 					$pluginPath = BASER_THEMES . $plugin;
@@ -516,7 +516,9 @@ class PluginsController extends AppController {
 		$userGroups = $Permission->UserGroup->find('all', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId')), 'recursive' => -1));
 		if($userGroups) {
 			foreach($userGroups as $userGroup) {
-				$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+				//$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
+				// TODO 現在 admin 固定、今後、mypage 等にも対応する
+				$permissionAuthPrefix = 'admin';
 				$url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
 				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
 				switch ($data['Plugin']['permission']) {
