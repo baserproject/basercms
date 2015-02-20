@@ -1389,7 +1389,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testGetHere($agent, $url, $expected) {
 		$this->_setAgent($agent);
 		$this->BcBaser->request = $this->_getRequest($url);
-		$this->assertEqual($this->BcBaser->getHere() , $expected);
+		$this->assertEquals($expected, $this->BcBaser->getHere());
 	}
 	
 /**
@@ -1552,14 +1552,25 @@ class BcBaserHelperTest extends BaserTestCase {
  * テーマのURLを取得する
  */
 	public function testGetThemeUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->BcBaser->request->webroot = '/';
+		$this->siteConfig['theme'] = 'm-single';
+		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+		$this->assertEquals($expects, $this->BcBaser->getThemeUrl());
 	}
 	
 /**
  * テーマのURLを出力する
  */
 	public function testThemeUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->BcBaser->request->webroot = '/';
+		$this->siteConfig['theme'] = 'm-single';
+		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+		ob_start();
+		$this->BcBaser->themeUrl();
+		$result = ob_get_clean();
+		$this->assertEquals($expects, $result);
 	}
 	
 /**
@@ -1574,7 +1585,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 		Configure::write('App.baseUrl', $smartUrl);
 		$this->BcBaser->request = $this->_getRequest($url);
-		$this->assertEqual($this->BcBaser->getBaseUrl(), $expects);
+		$this->assertEquals($expects, $this->BcBaser->getBaseUrl());
 	}
 
 /**
@@ -1595,10 +1606,10 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('index.php', '/contact/index', '/index.php/'),
 			array('index.php', '/blog/blog/index', '/index.php/'),
 			// サブフォルダ+スマートURLオン
-			array('/basercms/', '/', '/basercms/'),
-			array('/basercms/', '/index', '/basercms/'),
-			array('/basercms/', '/contact/index', '/basercms/'),
-			array('/basercms/', '/blog/blog/index', '/basercms/'),
+			array('/basercms', '/', '/basercms/'),
+			array('/basercms', '/index', '/basercms/'),
+			array('/basercms', '/contact/index', '/basercms/'),
+			array('/basercms', '/blog/blog/index', '/basercms/'),
 			// サブフォルダ+スマートURLオフ
 			array('/basercms/index.php', '/', '/basercms/index.php/'),
 			array('/basercms/index.php', '/index', '/basercms/index.php/'),
@@ -1621,7 +1632,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->baseUrl();
 		$result = ob_get_clean();
-		$this->assertEqual($result, $expects);
+		$this->assertEquals($expects, $result);
 	}
 
 /**
@@ -1642,10 +1653,10 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('index.php', '/contact/index', '/index.php/'),
 			array('index.php', '/blog/blog/index', '/index.php/'),
 			// サブフォルダ+スマートURLオン
-			array('/basercms/', '/', '/basercms/'),
-			array('/basercms/', '/index', '/basercms/'),
-			array('/basercms/', '/contact/index', '/basercms/'),
-			array('/basercms/', '/blog/blog/index', '/basercms/'),
+			array('/basercms', '/', '/basercms/'),
+			array('/basercms', '/index', '/basercms/'),
+			array('/basercms', '/contact/index', '/basercms/'),
+			array('/basercms', '/blog/blog/index', '/basercms/'),
 			// サブフォルダ+スマートURLオフ
 			array('/basercms/index.php', '/', '/basercms/index.php/'),
 			array('/basercms/index.php', '/index', '/basercms/index.php/'),
