@@ -1,9 +1,9 @@
 <?php
 /**
- * PgMailContentFixture
+ * MailContentFixture
  *
  */
-class PgMailContentFixture extends CakeTestFixture {
+class MailContentFixture extends CakeTestFixture {
 
 /**
  * Import

@@ -30,14 +30,14 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Menu.Menu',
 		'baser.Page.Page',
-		'baser.default.Content',
-		'baser.default.SiteConfig',
+		'baser.Content.Content',
+		'baser.SiteConfig.SiteConfig',
 		'baser.User.User',
 		'baser.UserGroup.UserGroup',
 		'baser.Favorite.Favorite',
-		'baser.default.Permission',
-		'baser.default.PageCategory',
-		'baser.default.ThemeConfig',
+		'baser.Permission.Permission',
+		'baser.PageCategory.PageCategory',
+		'baser.ThemeConfig.ThemeConfig',
 	);
 	
 /**

@@ -1,9 +1,9 @@
 <?php
 /**
- * PgBlogTagFixture
+ * BlogTagFixture
  *
  */
-class PgBlogTagFixture extends CakeTestFixture {
+class BlogTagFixture extends CakeTestFixture {
 
 /**
  * Import

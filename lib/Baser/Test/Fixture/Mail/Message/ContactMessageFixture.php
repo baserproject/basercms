@@ -1,9 +1,9 @@
 <?php
 /**
- * PgContactMessageFixture
+ * ContactMessageFixture
  *
  */
-class PgContactMessageFixture extends CakeTestFixture {
+class ContactMessageFixture extends CakeTestFixture {
 
 /**
  * Import

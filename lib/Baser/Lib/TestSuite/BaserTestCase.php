@@ -25,13 +25,16 @@ class BaserTestCase extends CakeTestCase {
 	public function __construct($name = null, array $data = array(), $dataName = '') {
 		// =====================================================================
 		// Router::url() を内部的に利用するテストを実施した場合、Baser/Config/routes.php
-		// が呼び出され、そこで利用されている PluginContent モデルを利用する事になる。
-		// その際、fixture で接続先を test に切り替えた PluginContent を利用しないと
+		// が呼び出され、そこで利用されている PluginContent / Page モデルを利用する事になる。
+		// その際、fixture で接続先を test に切り替えた PluginContent / Page を利用しないと
 		// missing table となってい、原因がつかみにくい為、利用していない場合は強制的に
 		// 利用する設定とした。
 		// =====================================================================
-		if (!isset($this->fixtures) || (!in_array('baser.PluginContent.PluginContent', $this->fixtures) && !in_array('baser.default.PluginContent', $this->fixtures))) {
-			$this->fixtures[] = 'baser.default.PluginContent';
+		if (!isset($this->fixtures) || !in_array('baser.PluginContent.PluginContent', $this->fixtures)) {
+			$this->fixtures[] = 'baser.PluginContent.PluginContent';
+		}
+		if (!isset($this->fixtures) || !in_array('baser.Page.Page', $this->fixtures)) {
+			$this->fixtures[] = 'baser.Page.Page';
 		}
 		parent::__construct($name, $data, $dataName);
 	}

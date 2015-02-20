@@ -1,5 +1,4 @@
 <?php
-
 /**
  * UserGroupFixture
  *
@@ -11,7 +10,7 @@ class UserGroupFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('connection' => 'baser');
+	public $import = array('records' => true, 'connection' => 'baser');
 
 /**
  * Fields
@@ -19,18 +18,18 @@ class UserGroupFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 11, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
-		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => false, 'default' => true),
-		'default_favorites' => array('type' => 'text', 'null' => true, 'length' => 1073741824),
-		'modified' => array('type' => 'datetime', 'null' => true),
-		'created' => array('type' => 'datetime', 'null' => true),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'unsigned' => false, 'key' => 'primary'),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
+		'default_favorites' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
-			'PRIMARY' => array('unique' => true, 'column' => 'id')
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
-		'tableParameters' => array()
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
 /**
@@ -40,54 +39,24 @@ class UserGroupFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
+			'id' => '1',
 			'name' => 'admins',
 			'title' => 'システム管理',
 			'auth_prefix' => 'admin',
 			'use_admin_globalmenu' => 1,
-			'default_favorites' => 'a:6:{i:0;a:2:{s:4:"name";s:21:"固定ページ管理";s:3:"url";s:18:"/admin/pages/index";}i:1;a:2:{s:4:"name";s:18:"新着情報管理";s:3:"url";s:30:"/admin/blog/blog_posts/index/1";}i:2;a:2:{s:4:"name";s:24:"お問い合わせ管理";s:3:"url";s:31:"/admin/mail/mail_fields/index/1";}i:3;a:2:{s:4:"name";s:21:"受信メール一覧";s:3:"url";s:33:"/admin/mail/mail_messages/index/1";}i:4;a:2:{s:4:"name";s:18:"コメント一覧";s:3:"url";s:33:"/admin/blog/blog_comments/index/1";}i:5;a:2:{s:4:"name";s:15:"クレジット";s:3:"url";s:20:"javascript:credit();";}}',
+			'default_favorites' => 'YTo2OntpOjA7YToyOntzOjQ6Im5hbWUiO3M6MjE6IuWbuuWumuODmuODvOOCuOeuoeeQhiI7czozOiJ1cmwiO3M6MTg6Ii9hZG1pbi9wYWdlcy9pbmRleCI7fWk6MTthOjI6e3M6NDoibmFtZSI7czoxODoi5paw552A5oOF5aCx566h55CGIjtzOjM6InVybCI7czozMDoiL2FkbWluL2Jsb2cvYmxvZ19wb3N0cy9pbmRleC8xIjt9aToyO2E6Mjp7czo0OiJuYW1lIjtzOjI0OiLjgYrllY/jgYTlkIjjgo/jgZvnrqHnkIYiO3M6MzoidXJsIjtzOjMxOiIvYWRtaW4vbWFpbC9tYWlsX2ZpZWxkcy9pbmRleC8xIjt9aTozO2E6Mjp7czo0OiJuYW1lIjtzOjIxOiLlj5fkv6Hjg6Hjg7zjg6vkuIDopqciO3M6MzoidXJsIjtzOjMzOiIvYWRtaW4vbWFpbC9tYWlsX21lc3NhZ2VzL2luZGV4LzEiO31pOjQ7YToyOntzOjQ6Im5hbWUiO3M6MTg6IuOCs+ODoeODs+ODiOS4gOimpyI7czozOiJ1cmwiO3M6MzM6Ii9hZG1pbi9ibG9nL2Jsb2dfY29tbWVudHMvaW5kZXgvMSI7fWk6NTthOjI6e3M6NDoibmFtZSI7czoxNToi44Kv44Os44K444OD44OIIjtzOjM6InVybCI7czoyMDoiamF2YXNjcmlwdDpjcmVkaXQoKTsiO319',
 			'modified' => null,
-			'created' => '2012-11-04 02:46:27'
+			'created' => '2015-01-27 12:56:53'
 		),
 		array(
-			'id' => 2,
+			'id' => '2',
 			'name' => 'operators',
 			'title' => 'サイト運営',
 			'auth_prefix' => 'admin',
 			'use_admin_globalmenu' => 0,
-			'default_favorites' => 'a:5:{i:0;a:2:{s:4:"name";s:21:"固定ページ管理";s:3:"url";s:18:"/admin/pages/index";}i:1;a:2:{s:4:"name";s:18:"新着情報管理";s:3:"url";s:30:"/admin/blog/blog_posts/index/1";}i:2;a:2:{s:4:"name";s:24:"お問い合わせ管理";s:3:"url";s:31:"/admin/mail/mail_fields/index/1";}i:3;a:2:{s:4:"name";s:21:"受信メール一覧";s:3:"url";s:33:"/admin/mail/mail_messages/index/1";}i:4;a:2:{s:4:"name";s:18:"コメント一覧";s:3:"url";s:33:"/admin/blog/blog_comments/index/1";}}',
+			'default_favorites' => 'YTo1OntpOjA7YToyOntzOjQ6Im5hbWUiO3M6MjE6IuWbuuWumuODmuODvOOCuOeuoeeQhiI7czozOiJ1cmwiO3M6MTg6Ii9hZG1pbi9wYWdlcy9pbmRleCI7fWk6MTthOjI6e3M6NDoibmFtZSI7czoxODoi5paw552A5oOF5aCx566h55CGIjtzOjM6InVybCI7czozMDoiL2FkbWluL2Jsb2cvYmxvZ19wb3N0cy9pbmRleC8xIjt9aToyO2E6Mjp7czo0OiJuYW1lIjtzOjI0OiLjgYrllY/jgYTlkIjjgo/jgZvnrqHnkIYiO3M6MzoidXJsIjtzOjMxOiIvYWRtaW4vbWFpbC9tYWlsX2ZpZWxkcy9pbmRleC8xIjt9aTozO2E6Mjp7czo0OiJuYW1lIjtzOjIxOiLlj5fkv6Hjg6Hjg7zjg6vkuIDopqciO3M6MzoidXJsIjtzOjMzOiIvYWRtaW4vbWFpbC9tYWlsX21lc3NhZ2VzL2luZGV4LzEiO31pOjQ7YToyOntzOjQ6Im5hbWUiO3M6MTg6IuOCs+ODoeODs+ODiOS4gOimpyI7czozOiJ1cmwiO3M6MzM6Ii9hZG1pbi9ibG9nL2Jsb2dfY29tbWVudHMvaW5kZXgvMSI7fX0=',
 			'modified' => null,
-			'created' => '2012-11-04 02:46:27'
-		),
-		array(
-			'id' => 3,
-			'name' => 'admins_copy',
-			'title' => 'システム管理_copy',
-			'auth_prefix' => 'admin',
-			'use_admin_globalmenu' => 1,
-			'default_favorites' => 'a:6:{i:0;a:2:{s:4:"name";s:21:"固定ページ管理";s:3:"url";s:18:"/admin/pages/index";}i:1;a:2:{s:4:"name";s:18:"新着情報管理";s:3:"url";s:30:"/admin/blog/blog_posts/index/1";}i:2;a:2:{s:4:"name";s:24:"お問い合わせ管理";s:3:"url";s:31:"/admin/mail/mail_fields/index/1";}i:3;a:2:{s:4:"name";s:21:"受信メール一覧";s:3:"url";s:33:"/admin/mail/mail_messages/index/1";}i:4;a:2:{s:4:"name";s:18:"コメント一覧";s:3:"url";s:33:"/admin/blog/blog_comments/index/1";}i:5;a:2:{s:4:"name";s:15:"クレジット";s:3:"url";s:20:"javascript:credit();";}}',
-			'modified' => '2012-11-04 03:53:47',
-			'created' => '2012-11-04 03:53:47'
-		),
-		array(
-			'id' => 4,
-			'name' => 'user_group_test',
-			'title' => 'ユーザグループテスト2',
-			'auth_prefix' => 'admin',
-			'use_admin_globalmenu' => 1,
-			'default_favorites' => null,
-			'modified' => '2012-11-04 06:02:23',
-			'created' => '2012-11-04 06:01:38'
-		),
-		array(
-			'id' => 5,
-			'name' => 'user_group_test_copy',
-			'title' => 'ユーザグループテスト2_copy',
-			'auth_prefix' => 'admin',
-			'use_admin_globalmenu' => 1,
-			'default_favorites' => null,
-			'modified' => '2012-11-04 06:02:30',
-			'created' => '2012-11-04 06:02:30'
+			'created' => '2015-01-27 12:56:53'
 		),
 	);
 
