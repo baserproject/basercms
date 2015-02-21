@@ -51,14 +51,23 @@ class BcRequestFilter extends DispatcherFilter {
 			return;
 		}
 
+		//$_SERVER['HTTP_USER_AGENT']からエージェントを取得
 		$agent = BcAgent::findCurrent();
 
-		if (!is_null($agent)) {
+		if (!is_null($agent) && $agent->isEnabled()) {
 			if (!$request->is('admin') && $agent->shouldRedirects($request)) {
 				$response->header('Location', $request->base . '/' . $agent->makeRedirectUrl($request));
 				$response->statusCode(302);
 				return $response;
 			}
+		}
+
+		//URLからエージェントを取得
+		$agentByUrl = BcAgent::findByUrl($request);
+		if (!is_null($agentByUrl) && $agentByUrl->isEnabled()) {
+			Configure::write('BcRequest.agent', $agentByUrl->name);
+			Configure::write('BcRequest.agentPrefix', $agentByUrl->prefix);
+			Configure::write('BcRequest.agentAlias', $agentByUrl->alias);
 
 			/*
 			 * =========================================================
@@ -70,17 +79,11 @@ class BcRequestFilter extends DispatcherFilter {
 			 * 2014/12/30 nakae bootstrap.phpから移行
 			 * =========================================================
 			 */
-			$param = preg_replace('/^' . $agent->alias . '\//', '', $request->url);
+			$param = preg_replace('/^' . $agentByUrl->alias . '\//', '', $request->url);
 			if (preg_match('/^files/', $param)) {
 				$response->statusCode(301);
 				$response->header('Location', "{$request->base}/{$param}");
 				return $response;
-			}
-
-			if ($agent->urlMatches($request)) {
-				Configure::write('BcRequest.agent', $agent->name);
-				Configure::write('BcRequest.agentPrefix', $agent->prefix);
-				Configure::write('BcRequest.agentAlias', $agent->alias);
 			}
 		}
 

@@ -108,6 +108,23 @@ class BcAgent {
 	}
 
 /**
+ * HTTPリクエストのURLのプレフィックスに合致するインスタンスを返す
+ *
+ * @param CakeRequest $request URLをチェックするリクエスト
+ * @return BcAgent|null
+ */
+	public static function findByUrl(CakeRequest $request) {
+		$agents = static::findAll();
+
+		foreach ($agents as $agent) {
+			if (preg_match('/^' . $agent->alias . '\//', $request->url)) {
+				return $agent;
+			}
+		}
+		return null;
+	}
+
+/**
  * 現在の環境のHTTP_USER_AGENTの値に合致するインスタンスを返す
  *
  * @return BcAgent|null
