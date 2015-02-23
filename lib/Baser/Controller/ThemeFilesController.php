@@ -762,14 +762,14 @@ class ThemeFilesController extends AppController {
 		if ($data['plugin']) {
 			if (in_array($data['type'], $assets)) {
 				$data['assets'] = true;
-				$viewPath = BASER_PLUGINS . $data['plugin'] . DS . 'Vendor' . DS;
+				$viewPath = BASER_PLUGINS . $data['plugin'] . DS . 'webroot' . DS;
 			} else {
 				$viewPath = BASER_PLUGINS . $data['plugin'] . DS . 'View' . DS;
 			}
 		} elseif ($data['theme'] == 'core') {
 			if (in_array($data['type'], $assets)) {
 				$data['assets'] = true;
-				$viewPath = BASER_VENDORS;
+				$viewPath = BASER_WEBROOT;
 			} else {
 				$viewPath = BASER_VIEWS;
 			}
