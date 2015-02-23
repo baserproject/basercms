@@ -500,7 +500,7 @@ class UsersController extends AppController {
 				return;
 			}
 			$password = $this->generatePassword();
-			$user['User']['password'] = $password;
+			$user[$userModel]['password'] = $password;
 			$this->{$userModel}->set($user);
 			if (!$this->{$userModel}->save()) {
 				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
