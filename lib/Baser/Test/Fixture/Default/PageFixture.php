@@ -10,7 +10,7 @@ class PageFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('records' => true, 'connection' => 'baser');
+	public $import = array('connection' => 'baser');
 
 /**
  * Fields
