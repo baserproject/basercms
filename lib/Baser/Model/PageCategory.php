@@ -165,28 +165,17 @@ class PageCategory extends AppModel {
 					$conditions['PageCategory.id'] = $parentIds;
 				}
 
-				if (isset($options['ownerId'])) {
-					$ownerIdConditions = array(
-						array('PageCategory.owner_id' => null),
-						array('PageCategory.owner_id' => $options['ownerId']),
-					);
-					if (isset($conditions['OR'])) {
-						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
-					} else {
-						$conditions['OR'] = $ownerIdConditions;
-					}
-				}
-
 				$parents = $this->generateTreeList($conditions);
 				$controlSources['parent_id'] = array();
 
 				$excludeIds = array();
 				if (!Configure::read('BcApp.mobile')) {
-					$excludeIds = $this->getAgentCategoryIds('mobile');
+					$excludeIds = array_merge($excludeIds, $this->getAgentCategoryIds('mobile'));
 				}
 				if (!Configure::read('BcApp.smartphone')) {
-					$excludeIds = $this->getAgentCategoryIds('smartphone');
+					$excludeIds = array_merge($excludeIds, $this->getAgentCategoryIds('smartphone'));
 				}
+
 				foreach ($parents as $key => $parent) {
 					if ($parent && !in_array($key, $excludeIds)) {
 						if (preg_match("/^([_]+)/i", $parent, $matches)) {
