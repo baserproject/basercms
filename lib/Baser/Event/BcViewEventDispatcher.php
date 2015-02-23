@@ -1,18 +1,15 @@
 <?php
-
 /**
+ * BcViewEventDispatcher
+ *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright		Copyright (c) baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Event
  * @since			baserCMS v 3.0.0
- * @license			http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license			http://basercms.net/license/index.html
  */
 
 /**
