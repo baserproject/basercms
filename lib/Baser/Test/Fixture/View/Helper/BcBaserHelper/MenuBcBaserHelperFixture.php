@@ -21,7 +21,7 @@ class MenuBcBaserHelperFixture extends CakeTestFixture {
 * @var array
 */
 	public $import = array( 
-		'connection'	=> 'test',
+		'connection'	=> 'baser',
 		'model'			=> 'Menu'
 	);
 /**
