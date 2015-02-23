@@ -29,11 +29,25 @@ class RoutesTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.Default.User',
-		'baser.Default.Page',
+		'baser.Config.Routes.PageRoutes',
 		'baser.Default.PageCategory',
 		'baser.Default.PluginContent'
 	);
 
+/**
+ * __construct
+ * 
+ * @param string $name
+ * @param array $data
+ * @param string $dataName
+ */
+	public function __construct($name = null, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
+		// スーパークラスで、自動的に fixtures に、baser.Default.Page を追加する為、
+		// そちらのフィクスチャを読み込ませないようにアンセット
+		unset($this->fixtures[array_search('baser.Default.Page', $this->fixtures)]);
+	}
+	
 /**
  * Set up
  *
