@@ -166,14 +166,16 @@ class PageCategory extends AppModel {
 				}
 
 				if (isset($options['ownerId'])) {
-					$ownerIdConditions = array(
-						array('PageCategory.owner_id' => null),
-						array('PageCategory.owner_id' => $options['ownerId']),
-					);
-					if (isset($conditions['OR'])) {
-						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
-					} else {
-						$conditions['OR'] = $ownerIdConditions;
+					if (!BcUtil::isAdminUser()) {
+						$ownerIdConditions = array(
+							array('PageCategory.owner_id' => null),
+							array('PageCategory.owner_id' => $options['ownerId']),
+						);
+						if (isset($conditions['OR'])) {
+							$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
+						} else {
+							$conditions['OR'] = $ownerIdConditions;
+						}
 					}
 				}
 
