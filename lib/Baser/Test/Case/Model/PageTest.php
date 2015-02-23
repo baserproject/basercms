@@ -21,7 +21,7 @@ App::uses('Page', 'Model');
 class PageTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Page.Page'
+		'baser.Default.Page'
 	);
 
 /**

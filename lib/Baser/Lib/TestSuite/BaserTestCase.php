@@ -30,11 +30,11 @@ class BaserTestCase extends CakeTestCase {
 		// missing table となってい、原因がつかみにくい為、利用していない場合は強制的に
 		// 利用する設定とした。
 		// =====================================================================
-		if (!isset($this->fixtures) || !in_array('baser.PluginContent.PluginContent', $this->fixtures)) {
-			$this->fixtures[] = 'baser.PluginContent.PluginContent';
+		if (!isset($this->fixtures) || !in_array('baser.Default.PluginContent', $this->fixtures)) {
+			$this->fixtures[] = 'baser.Default.PluginContent';
 		}
-		if (!isset($this->fixtures) || !in_array('baser.Page.Page', $this->fixtures)) {
-			$this->fixtures[] = 'baser.Page.Page';
+		if (!isset($this->fixtures) || !in_array('baser.Default.Page', $this->fixtures)) {
+			$this->fixtures[] = 'baser.Default.Page';
 		}
 		parent::__construct($name, $data, $dataName);
 	}

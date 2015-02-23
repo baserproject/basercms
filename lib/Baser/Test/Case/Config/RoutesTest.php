@@ -28,10 +28,10 @@ class RoutesTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'baser.User.User',
-		'baser.Page.Page',
-		'baser.PageCategory.PageCategory',
-		'baser.PluginContent.PluginContent'
+		'baser.Default.User',
+		'baser.Default.Page',
+		'baser.Default.PageCategory',
+		'baser.Default.PluginContent'
 	);
 
 /**

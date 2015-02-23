@@ -27,9 +27,9 @@ App::uses('User', 'Model');
 class UserTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.User.User',
-		'baser.UserGroup.UserGroup',
-		'baser.Favorite.Favorite',
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
 	);
 
 	public function setUp() {

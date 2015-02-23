@@ -62,7 +62,7 @@ class BcFormHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Page.Page'
+		'baser.Default.Page'
 	);
 	
 /**
