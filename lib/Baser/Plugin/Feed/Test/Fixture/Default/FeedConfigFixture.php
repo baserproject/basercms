@@ -3,7 +3,7 @@
  * PgFeedConfigFixture
  *
  */
-class PgFeedConfigFixture extends CakeTestFixture {
+class FeedConfigFixture extends CakeTestFixture {
 
 /**
  * Import
