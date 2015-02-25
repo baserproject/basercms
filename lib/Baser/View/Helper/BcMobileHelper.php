@@ -55,16 +55,6 @@ class BcMobileHelper extends Helper {
 				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
 				$View->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $View->output);
 			}
-
-			if (!(
-				isset($View->Cache) &&
-				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
-			)) {
-				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
-				// nocache タグが残ってしまってエラーになるので除去する
-				$View->output = str_replace('<!--nocache-->', '', $View->output);
-				$View->output = str_replace('<!--/nocache-->', '', $View->output);
-			}
 			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
 			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ
 			Configure::write('debug', 0);
