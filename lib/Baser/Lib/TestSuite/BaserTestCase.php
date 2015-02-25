@@ -44,6 +44,7 @@ class BaserTestCase extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
+		Configure::write('debug', 1);
 		Configure::write('App.baseUrl', '');
 		// ブラウザと、コンソールでCakeRequestの内容が違うので一旦トップページとして初期化する
 		$this->_getRequest('/');
