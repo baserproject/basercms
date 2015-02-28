@@ -152,13 +152,7 @@ DOC_END;
 			});
 INFO_END;
 		}
-		$protocol = 'http';
-		if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS'])){
-			$protocol = 'https';
-		}
-
-		$googleScript = '<script src="{$protocol}://maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
-
+		$googleScript = '<script src="//maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
 		return $googleScript . '<script type="text/javascript">' . $script . '</script>';
 	}
 
