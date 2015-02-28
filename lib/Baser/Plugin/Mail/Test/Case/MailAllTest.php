@@ -15,15 +15,15 @@
 /**
  * @package Mail.Test.Case
  */
-class MailAllTest extends PHPUnit_Framework_TestSuite {
+class MailAllTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
  *
- * @return void
+ * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new PHPUnit_Framework_TestSuite('Baser All Tests');
+		$suite = new CakeTestSuite('Baser All Tests');
 
 		$path = __DIR__ . DS;
 

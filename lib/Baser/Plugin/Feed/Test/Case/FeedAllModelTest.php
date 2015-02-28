@@ -11,7 +11,7 @@
  * @since           baserCMS v 3.1.0-beta
  * @license         http://basercms.net/license/index.html
  */
-class FeedAllModelTest extends PHPUnit_Framework_TestSuite {
+class FeedAllModelTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite

@@ -15,7 +15,7 @@
 /**
  * @package Mail.Test.Case
  */
-class FeedAllTest extends PHPUnit_Framework_TestSuite {
+class FeedAllTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
@@ -23,7 +23,7 @@ class FeedAllTest extends PHPUnit_Framework_TestSuite {
  * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new PHPUnit_Framework_TestSuite('Feed Plugin All Tests');
+		$suite = new CakeTestSuite('Feed Plugin All Tests');
 
 		$path = __DIR__ . DS;
 

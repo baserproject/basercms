@@ -15,7 +15,7 @@
 /**
  * @package Baser.Test.Case
  */
-class BcAllPluginTest extends PHPUnit_Framework_TestSuite {
+class BcAllPluginTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite

@@ -15,12 +15,12 @@
 /**
  * @package Baser.Test.Case
  */
-class BcAllConfigureTest extends PHPUnit_Framework_TestSuite {
+class BcAllConfigureTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
  *
- * @return void
+ * @return CakeTestSuite
  */
 	public static function suite() {
 		$suite = new CakeTestSuite('All Configure tests');

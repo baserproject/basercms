@@ -15,7 +15,7 @@
 /**
  * @package Baser.Test.Case
  */
-class BcBasicsTest extends CakeTestCase {
+class BcBasicsTest extends BaserTestCase {
 
 	public function setUp() {
 		parent::setUp();

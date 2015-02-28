@@ -11,12 +11,12 @@
  * @since           baserCMS v 3.0.0-beta
  * @license         http://basercms.net/license/index.html
  */
-class MailAllControllerTest extends PHPUnit_Framework_TestSuite {
+class MailAllControllerTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
  *
- * @return void
+ * @return CakeTestSuite
  */
 	public static function suite() {
 		$suite = new CakeTestSuite('All Helper tests');
