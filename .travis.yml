@@ -10,8 +10,6 @@ before_script:
   - mysql -u root -e "CREATE DATABASE basercms CHARACTER SET utf8;"
   - mysql -u root -e "GRANT ALL PRIVILEGES ON basercms.* TO basercms@localhost IDENTIFIED BY 'basercms'"
   - mysql -u basercms --password="basercms" -e "SHOW DATABASES;"
-  - pear upgrade PEAR
-  - pear config-set auto_discover 1
   - composer install --dev
   - cd app
   - php ./Console/cake.php bc_manager checkenv
