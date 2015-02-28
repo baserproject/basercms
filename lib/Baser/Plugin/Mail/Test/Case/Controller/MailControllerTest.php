@@ -14,13 +14,12 @@
 App::uses('MailController', 'Mail.Controller');
 App::uses('Message', 'Mail.Model');
 
-class MailControllerTest extends ControllerTestCase {
+class MailControllerTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.site_config',
-		'baser.page',
-		'plugin.blog.blog_content',
-		'plugin.mail.message',
+		'baser.Default.SiteConfig',
+		'baser.Default.Page',
+		'plugin.mail.Default/Message',
 	);
 
 	public function setUp() {

@@ -13,14 +13,14 @@
  */
 App::uses('Message', 'Mail.Model');
 
-class MessageTest extends CakeTestCase {
+class MessageTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.site_config',
-		'plugin.mail.message',
-		'plugin.mail.mail_config',
-		'plugin.mail.mail_content',
-		'plugin.mail.mail_field',
+		'baser.Default.SiteConfig',
+		'plugin.mail.Default/Message',
+		'plugin.mail.Default/MailConfig',
+		'plugin.mail.Default/MailContent',
+		'plugin.mail.Default/MailField',
 	);
 
 	public function setUp() {
