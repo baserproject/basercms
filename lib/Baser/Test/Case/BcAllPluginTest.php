@@ -25,7 +25,7 @@ class BcAllPluginTest extends CakeTestSuite {
 	public static function suite() {
 		$suite = new CakeTestSuite('Baser All Tests');
 
-		$plugins = array('Blog', 'Mail', 'Feed');
+		$plugins = Configure::read('BcApp.corePlugins');
 
 		foreach ($plugins as $plugin) {
 			$suite->addTestFile(BASER_PLUGINS . "{$plugin}/Test/Case/{$plugin}AllTest.php");
