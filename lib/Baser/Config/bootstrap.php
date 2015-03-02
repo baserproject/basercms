@@ -299,6 +299,11 @@ if ($memoryLimit < 32 && $memoryLimit != -1) {
 	ini_set('memory_limit', '32M');
 }
 /**
+ * ロケール設定
+ * 指定しないと 日本語入りの basename 等が失敗する
+ */
+setlocale(LC_ALL, 'ja_JP.UTF-8');
+/**
  * セッションスタート 
  */
 if (!isConsole()) {
