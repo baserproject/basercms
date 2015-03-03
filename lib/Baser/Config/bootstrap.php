@@ -3,9 +3,9 @@
  * 起動スクリプト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Config
  * @since			baserCMS v 0.1.0
@@ -298,6 +298,11 @@ $memoryLimit = (int)ini_get('memory_limit');
 if ($memoryLimit < 32 && $memoryLimit != -1) {
 	ini_set('memory_limit', '32M');
 }
+/**
+ * ロケール設定
+ * 指定しないと 日本語入りの basename 等が失敗する
+ */
+setlocale(LC_ALL, 'ja_JP.UTF-8');
 /**
  * セッションスタート 
  */

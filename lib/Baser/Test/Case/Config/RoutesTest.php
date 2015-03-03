@@ -3,9 +3,9 @@
  * test for routes.php
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright     Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright     Copyright 2008 - 2015, baserCMS Users Community
  * @link          http://basercms.net baserCMS Project
  * @package       Baser.Test.Case.Config
  * @since         baserCMS v 3.0.6
@@ -28,12 +28,26 @@ class RoutesTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'baser.User.User',
-		'baser.Page.Page',
-		'baser.default.PageCategory',
-		'baser.default.PluginContent'
+		'baser.Default.User',
+		'baser.Config.Routes.PageRoutes',
+		'baser.Default.PageCategory',
+		'baser.Default.PluginContent'
 	);
 
+/**
+ * __construct
+ * 
+ * @param string $name
+ * @param array $data
+ * @param string $dataName
+ */
+	public function __construct($name = null, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
+		// スーパークラスで、自動的に fixtures に、baser.Default.Page を追加する為、
+		// そちらのフィクスチャを読み込ませないようにアンセット
+		unset($this->fixtures[array_search('baser.Default.Page', $this->fixtures)]);
+	}
+	
 /**
  * Set up
  *

@@ -4,23 +4,23 @@
  * test for MailContent
  *
  * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  * @package         Mail.Test.Case.Model
- * @copyright       Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright       Copyright 2008 - 2015, baserCMS Users Community
  * @link            http://basercms.net baserCMS Project
  * @since           baserCMS v 3.0.0-beta
  * @license         http://basercms.net/license/index.html
  */
 App::uses('MailContent', 'Mail.Model');
 
-class MailContentTest extends CakeTestCase {
+class MailContentTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.site_config',
-		'plugin.mail.message',
-		'plugin.mail.mail_config',
-		'plugin.mail.mail_content',
-		'plugin.mail.mail_field',
+		'baser.Default.SiteConfig',
+		'plugin.mail.Default/Message',
+		'plugin.mail.Default/MailConfig',
+		'plugin.mail.Default/MailContent',
+		'plugin.mail.Default/MailField',
 	);
 
 	public function setUp() {

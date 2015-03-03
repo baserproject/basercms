@@ -4,9 +4,9 @@
  * run all baser tests
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
@@ -15,15 +15,15 @@
 /**
  * @package Baser.Test.Case
  */
-class BcAllTest extends PHPUnit_Framework_TestSuite {
+class BcAllTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
  *
- * @return void
+ * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new PHPUnit_Framework_TestSuite('Baser All Tests');
+		$suite = new CakeTestSuite('Baser All Tests');
 
 		$path = BASER_TEST_CASES . DS;
 
@@ -46,6 +46,7 @@ class BcAllTest extends PHPUnit_Framework_TestSuite {
 		$suite->addTestFile($path . 'BcAllModelTest.php');
 //		$suite->addTestFile($path . 'BcAllRoutingTest.php');
 		$suite->addTestFile($path . 'BcAllNetworkTest.php');
+		$suite->addTestFile($path . 'BcAllPluginTest.php');
 //		$suite->addTestFile($path . 'BcAllUtilityTest.php');
 //		$suite->addTestFile($path . 'BcAllViewTest.php');
 //		$suite->addTestFile($path . 'BcAllI18nTest.php');

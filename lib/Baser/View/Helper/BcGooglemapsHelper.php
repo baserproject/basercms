@@ -1,11 +1,11 @@
 <?php
 /**
  * GoogleMapヘルパー
- *
+ * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -152,9 +152,7 @@ DOC_END;
 			});
 INFO_END;
 		}
-
-		$googleScript = '<script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
-
+		$googleScript = '<script src="//maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
 		return $googleScript . '<script type="text/javascript">' . $script . '</script>';
 	}
 

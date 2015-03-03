@@ -4,9 +4,9 @@
  * ページカテゴリーモデル
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
@@ -165,28 +165,17 @@ class PageCategory extends AppModel {
 					$conditions['PageCategory.id'] = $parentIds;
 				}
 
-				if (isset($options['ownerId'])) {
-					$ownerIdConditions = array(
-						array('PageCategory.owner_id' => null),
-						array('PageCategory.owner_id' => $options['ownerId']),
-					);
-					if (isset($conditions['OR'])) {
-						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
-					} else {
-						$conditions['OR'] = $ownerIdConditions;
-					}
-				}
-
 				$parents = $this->generateTreeList($conditions);
 				$controlSources['parent_id'] = array();
 
 				$excludeIds = array();
 				if (!Configure::read('BcApp.mobile')) {
-					$excludeIds = $this->getAgentCategoryIds('mobile');
+					$excludeIds = array_merge($excludeIds, $this->getAgentCategoryIds('mobile'));
 				}
 				if (!Configure::read('BcApp.smartphone')) {
-					$excludeIds = $this->getAgentCategoryIds('smartphone');
+					$excludeIds = array_merge($excludeIds, $this->getAgentCategoryIds('smartphone'));
 				}
+
 				foreach ($parents as $key => $parent) {
 					if ($parent && !in_array($key, $excludeIds)) {
 						if (preg_match("/^([_]+)/i", $parent, $matches)) {

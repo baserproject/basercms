@@ -1,19 +1,15 @@
 <?php
 /**
- * CacheHelper helps create full page view caching.
+ * キャッシュヘルパー拡張
+ * 
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Cake.View.Helper
- * @since         CakePHP(tm) v 1.0.0.2277
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.View.Helper
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
  */
 
 App::uses('CacheHelper', 'View/Helper');

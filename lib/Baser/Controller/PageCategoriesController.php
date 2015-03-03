@@ -3,9 +3,9 @@
  * 固定ページカテゴリーコントローラー
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -203,10 +203,7 @@ class PageCategoriesController extends AppController {
 		}
 
 		/* 表示設定 */
-		$user = $this->BcAuth->user();
-		$parents = $this->PageCategory->getControlSource('parent_id', array(
-			'ownerId' => $user['user_group_id']
-		));
+		$parents = $this->PageCategory->getControlSource('parent_id');
 		if ($this->checkRootEditable()) {
 			if ($parents) {
 				$parents = array('' => '指定しない') + $parents;
@@ -310,8 +307,7 @@ class PageCategoriesController extends AppController {
 		$user = $this->BcAuth->user();
 		$mobileId = $this->PageCategory->getAgentId();
 		$parents = $this->PageCategory->getControlSource('parent_id', array(
-			'excludeParentId' => $this->request->data['PageCategory']['id'],
-			'ownerId' => $user['user_group_id']
+			'excludeParentId' => $this->request->data['PageCategory']['id']
 		));
 		if ($this->checkRootEditable()) {
 			if ($parents) {

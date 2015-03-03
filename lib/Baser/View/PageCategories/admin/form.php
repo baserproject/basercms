@@ -90,7 +90,7 @@ function pageTypeChengeHandler() {
 			$("#PageCategoryParentId").attr('disabled', false);
 		}
 	});
-	
+
 }
 </script>
 

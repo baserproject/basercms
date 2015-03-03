@@ -3,9 +3,9 @@
  * test for BcBaserHelper
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since           baserCMS v 3.0.6
@@ -28,16 +28,16 @@ class BcBaserHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Menu.Menu',
-		'baser.Page.Page',
-		'baser.default.Content',
-		'baser.default.SiteConfig',
-		'baser.User.User',
-		'baser.UserGroup.UserGroup',
-		'baser.Favorite.Favorite',
-		'baser.default.Permission',
-		'baser.default.PageCategory',
-		'baser.default.ThemeConfig',
+		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
+		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
+		'baser.Default.Content',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'baser.Default.Permission',
+		'baser.Default.PageCategory',
+		'baser.Default.ThemeConfig',
 	);
 	
 /**
@@ -47,6 +47,20 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	protected $_View;
 
+/**
+ * __construct
+ * 
+ * @param string $name
+ * @param array $data
+ * @param string $dataName
+ */
+	public function __construct($name = null, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
+		// スーパークラスで、自動的に fixtures に、baser.Default.Page を追加する為、
+		// そちらのフィクスチャを読み込ませないようにアンセット
+		unset($this->fixtures[array_search('baser.Default.Page', $this->fixtures)]);
+	}
+	
 /**
  * setUp
  */
@@ -1379,9 +1393,42 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * 現在のページの純粋なURLを取得する
+ * 
+ * @param string $agent エージェント
+ * @param string $url 現在のURL
+ * @param string $expected 期待値
+ * 
+ * @dataProvider getHereDataProvider
  */
-	public function testGetHere() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetHere($agent, $url, $expected) {
+		$this->_setAgent($agent);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->getHere());
+	}
+	
+/**
+ * getHere用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function getHereDataProvider() {		
+		return array(
+			// PCページ
+			array('', '/', '/'),
+			array('', '/index', '/index'),
+			array('', '/contact/index', '/contact/index'),
+			array('', '/blog/blog/index', '/blog/blog/index'),
+			// モバイルページ
+			array('mobile', '/', '/'),
+			array('mobile', '/index', '/index'),
+			array('mobile', '/contact/index', '/contact/index'),
+			array('mobile', '/blog/blog/index', '/blog/blog/index'),
+			// スマートフォンページ
+			array('smartphone', '/', '/'),
+			array('smartphone', '/index', '/index'),
+			array('smartphone', '/contact/index', '/contact/index'),
+			array('smartphone', '/blog/blog/index', '/blog/blog/index')
+		);
 	}
 	
 /**
@@ -1552,29 +1599,118 @@ class BcBaserHelperTest extends BaserTestCase {
  * テーマのURLを取得する
  */
 	public function testGetThemeUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->BcBaser->request->webroot = '/';
+		$this->siteConfig['theme'] = 'm-single';
+		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+		$this->assertEquals($expects, $this->BcBaser->getThemeUrl());
 	}
 	
 /**
  * テーマのURLを出力する
  */
 	public function testThemeUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->BcBaser->request->webroot = '/';
+		$this->siteConfig['theme'] = 'm-single';
+		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
+		ob_start();
+		$this->BcBaser->themeUrl();
+		$result = ob_get_clean();
+		$this->assertEquals($expects, $result);
 	}
 	
 /**
  * ベースとなるURLを取得する
+ * @param string $smartUrl スマートURLのオン・オフ、サブディレクトリ配置のスマートURLのオン・オフ
+ * @param string $url アクセスした時のURL
+ * @param string $expects 期待値
+ * 
+ * @dataProvider getBaseUrlDataProvider
  */
-	public function testGetBaseUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetBaseUrl($smartUrl, $url, $expects) {
+
+		Configure::write('App.baseUrl', $smartUrl);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expects, $this->BcBaser->getBaseUrl());
+	}
+
+/**
+ * testGetBaseUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function getBaseUrlDataProvider() {		
+		return array(
+			// ノーマル
+			array('', '/', '/'),
+			array('', '/index', '/'),
+			array('', '/contact/index', '/'),
+			array('', '/blog/blog/index', '/'),
+			// スマートURLオフ
+			array('index.php', '/', '/index.php/'),
+			array('index.php', '/index', '/index.php/'),
+			array('index.php', '/contact/index', '/index.php/'),
+			array('index.php', '/blog/blog/index', '/index.php/'),
+			// サブフォルダ+スマートURLオン
+			array('/basercms', '/', '/basercms/'),
+			array('/basercms', '/index', '/basercms/'),
+			array('/basercms', '/contact/index', '/basercms/'),
+			array('/basercms', '/blog/blog/index', '/basercms/'),
+			// サブフォルダ+スマートURLオフ
+			array('/basercms/index.php', '/', '/basercms/index.php/'),
+			array('/basercms/index.php', '/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/contact/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/blog/blog/index', '/basercms/index.php/')
+		);
 	}
 	
 /**
  * ベースとなるURLを出力する
+ * @param string $smartUrl スマートURLのオン・オフ、サブディレクトリ配置のスマートURLのオン・オフ
+ * @param string $url アクセスした時のURL
+ * @param string $expects 期待値
+ * 
+ * @dataProvider baseUrlDataProvider
  */
-	public function testBaseUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testBaseUrl($smartUrl, $url, $expects) {
+		Configure::write('App.baseUrl', $smartUrl);
+		$this->BcBaser->request = $this->_getRequest($url);
+		ob_start();
+		$this->BcBaser->baseUrl();
+		$result = ob_get_clean();
+		$this->assertEquals($expects, $result);
 	}
+
+/**
+ * testGetBaseUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function baseUrlDataProvider() {		
+		return array(
+			// ノーマル
+			array('', '/', '/'),
+			array('', '/index', '/'),
+			array('', '/contact/index', '/'),
+			array('', '/blog/blog/index', '/'),
+			// スマートURLオフ
+			array('index.php', '/', '/index.php/'),
+			array('index.php', '/index', '/index.php/'),
+			array('index.php', '/contact/index', '/index.php/'),
+			array('index.php', '/blog/blog/index', '/index.php/'),
+			// サブフォルダ+スマートURLオン
+			array('/basercms', '/', '/basercms/'),
+			array('/basercms', '/index', '/basercms/'),
+			array('/basercms', '/contact/index', '/basercms/'),
+			array('/basercms', '/blog/blog/index', '/basercms/'),
+			// サブフォルダ+スマートURLオフ
+			array('/basercms/index.php', '/', '/basercms/index.php/'),
+			array('/basercms/index.php', '/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/contact/index', '/basercms/index.php/'),
+			array('/basercms/index.php', '/blog/blog/index', '/basercms/index.php/')
+		);
+	}	
 	
 /**
  * サブメニューを出力する

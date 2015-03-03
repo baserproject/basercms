@@ -34,7 +34,13 @@ lib/Cake/Console/Templates/skel/tmp/tests/*
 !lib/Cake/Console/Templates/skel/tmp/tests/empty
 .vagrant/*
 Vagrantfile
+<<<<<<< HEAD
 vendors
 Plugin
 composer.lock
 
+=======
+vendors/*
+Plugin/*
+composer.lock
+>>>>>>> 20a0e8627e49c87f220a0efe185e8a2ccbcf661a

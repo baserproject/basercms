@@ -1,12 +1,11 @@
 <?php
-
 /**
  * モバイルヘルパー
- *
+ * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -55,16 +54,6 @@ class BcMobileHelper extends Helper {
 				// プレフィックス追加
 				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
 				$View->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $View->output);
-			}
-
-			if (!(
-				isset($View->Cache) &&
-				(($View->cacheAction != false)) && (Configure::read('Cache.check') === true)
-			)) {
-				// nocache で コンテンツヘッダを出力する場合、逆にキャッシュを利用しない場合に、
-				// nocache タグが残ってしまってエラーになるので除去する
-				$View->output = str_replace('<!--nocache-->', '', $View->output);
-				$View->output = str_replace('<!--/nocache-->', '', $View->output);
 			}
 			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
 			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ
