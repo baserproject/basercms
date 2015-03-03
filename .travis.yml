@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 5.2
   - 5.3
   - 5.4
   - 5.5
@@ -18,7 +19,7 @@ before_script:
   - mysql -u root -e "CREATE DATABASE basercms CHARACTER SET utf8;"
   - mysql -u root -e "GRANT ALL PRIVILEGES ON basercms.* TO basercms@localhost IDENTIFIED BY 'basercms'"
   - mysql -u basercms --password="basercms" -e "SHOW DATABASES;"
-  - composer install --dev
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "5.2" ]; then composer install --dev; fi;'
   - cd app
   - php ./Console/cake.php bc_manager checkenv
   - php ./Console/cake.php bc_manager install "http://localhost" "mysql" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_"  --port "3306"  --smarturl "true"  --data "nada-icons.default"
