@@ -20,8 +20,9 @@ class MailAllModelTest extends CakeTestSuite {
  */
 	public static function suite() {
 		$suite = new CakeTestSuite('All Helper tests');
-		$suite->addTestDirectory(__DIR__ . DS . 'Model' . DS);
-		$suite->addTestDirectory(__DIR__ . DS . 'Model' . DS . 'Behavior' . DS);
+		$path = dirname(__FILE__) . DS;
+		$suite->addTestDirectory($path . 'Model' . DS);
+		$suite->addTestDirectory($path . 'Model' . DS . 'Behavior' . DS);
 		return $suite;
 	}
 
