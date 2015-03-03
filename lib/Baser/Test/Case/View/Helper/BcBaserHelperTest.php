@@ -56,9 +56,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
 		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$siteConfigData =  $SiteConfig->findExpanded();
-		$this->_View->BcBaser->siteConfig = $siteConfigData;
-		$this->_View->theme = $siteConfigData['theme'];
+		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
 		$this->BcBaser = new BcBaserHelper($this->_View);
 		$this->BcBaser = $this->_View->BcBaser;
 	}
@@ -1399,10 +1397,14 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testPage() {
 		// リクエスト処理
-		$this->BcBaser->request = $this->_getRequest("/");
+//		$this->BcBaser->request = $this->_getRequest("/");
 		
+		// theme設定
+		$orgTheme = $this->_View->theme;
+		$this->_View->theme = $this->_View->BcBaser->siteConfig['theme'];
+		$this->_View->BlogContent = ClassRegistry::init('Blog.BlogContent');
 		// 固定ページ書き出し
-		$this->BcBaser->_Page->createAllPageTemplate();
+//		$this->BcBaser->_Page->createAllPageTemplate();
 		
 		// トップページ
 		ob_start();
@@ -1425,6 +1427,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->page('/hidden_page4');
 		$pageElm = ob_get_clean();
 		$this->assertEqual(strlen($pageElm), 0);
+		
+		$this->_View->theme = $orgTheme;
 	}
 	
 /**

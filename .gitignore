@@ -1,3 +1,4 @@
+.gitignore
 .DS_Store
 .idea
 app/Config/database.php
@@ -17,6 +18,7 @@ app/View/pages/
 app/webroot/theme/*
 !app/webroot/theme/empty
 app/webroot/sitemap.xml
+app/webroot/.htaccess
 nbproject/
 lib/Cake/Console/Templates/skel/tmp/cache/models/*
 !lib/Cake/Console/Templates/skel/tmp/cache/models/empty
@@ -35,3 +37,4 @@ Vagrantfile
 vendors
 Plugin
 composer.lock
+

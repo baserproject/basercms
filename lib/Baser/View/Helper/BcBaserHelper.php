@@ -1758,9 +1758,7 @@ END_FLASH;
 		// 現在のページの情報に戻す
 		$this->setDescription($description);
 		$this->setTitle($title);
-		if ($editLink) {
-			$this->_View->viewVars['editLink'] = $editLink;
-		}
+		$this->_View->viewVars['editLink'] = $editLink;
 	}
 
 /**
