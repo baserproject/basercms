@@ -72,7 +72,7 @@ class BcAgent {
 		if (!Configure::check($key)) {
 			return null;
 		}
-		return new static($name, Configure::read($key));
+		return new self($name, Configure::read($key));
 	}
 
 /**
@@ -84,7 +84,7 @@ class BcAgent {
 		$configs = Configure::read("BcAgent");
 		$agents = array();
 		foreach ($configs as $name => $config) {
-			$agents[] = new static($name, $config);
+			$agents[] = new self($name, $config);
 		}
 
 		return $agents;
@@ -97,7 +97,7 @@ class BcAgent {
  * @return BcAgent|null
  */
 	public static function findByAlias($alias) {
-		$agents = static::findAll();
+		$agents = self::findAll();
 
 		foreach ($agents as $agent) {
 			if ($agent->alias === $alias) {
@@ -114,7 +114,7 @@ class BcAgent {
  * @return BcAgent|null
  */
 	public static function findByUrl(CakeRequest $request) {
-		$agents = static::findAll();
+		$agents = self::findAll();
 
 		foreach ($agents as $agent) {
 			if (preg_match('/^' . $agent->alias . '\//', $request->url)) {
@@ -130,7 +130,7 @@ class BcAgent {
  * @return BcAgent|null
  */
 	public static function findCurrent() {
-		$agents = static::findAll();
+		$agents = self::findAll();
 
 		$userAgent = env('HTTP_USER_AGENT');
 		if (empty($userAgent)) {
@@ -157,7 +157,7 @@ class BcAgent {
 		}
 
 		$params = explode('/', $url);
-		$agent = static::findByAlias($params[0]);
+		$agent = self::findByAlias($params[0]);
 
 		if (is_null($agent)) {
 			return null;
@@ -292,7 +292,7 @@ class BcAgent {
  */
 	public function makeRedirectUrl(CakeRequest $request) {
 		$hereWithQuery = $request->here(false);
-		$alias = static::extractAlias($request->url);
+		$alias = self::extractAlias($request->url);
 
 		if (is_null($alias)) {
 			return "{$this->alias}{$hereWithQuery}";

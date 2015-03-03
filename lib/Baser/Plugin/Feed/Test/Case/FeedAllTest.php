@@ -25,7 +25,7 @@ class FeedAllTest extends CakeTestSuite {
 	public static function suite() {
 		$suite = new CakeTestSuite('Feed Plugin All Tests');
 
-		$path = __DIR__ . DS;
+		$path = dirname(__FILE__) . DS;
 
 		$suite->addTestFile($path . 'FeedAllModelTest.php');
 		return $suite;
