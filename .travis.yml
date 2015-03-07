@@ -11,6 +11,11 @@ php:
 
 sudo: false
 
+cache:
+  directories:
+    - vendors
+    - $HOME/.composer/cache
+
 matrix:
     allow_failures:
         - php: hhvm
