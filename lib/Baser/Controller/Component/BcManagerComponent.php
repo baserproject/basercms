@@ -1608,7 +1608,7 @@ class BcManagerComponent extends Component {
 			'apacheRewrite'		=> $rewriteInstalled,
 		);
 		$check = array(
-			'encodingOk'	=> (eregi('UTF-8', $status['encoding']) ? true : false),
+			'encodingOk'	=> (preg_match('/UTF-8/i', $status['encoding']) ? true : false),
 			'gdOk'			=> $status['phpGd'],
 			'pdoOk'			=> $status['phpPdo'],
 			'xmlOk'			=> $status['phpXml'],
