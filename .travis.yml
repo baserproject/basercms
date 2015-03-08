@@ -9,6 +9,13 @@ php:
   - hhvm
   - 7.0
 
+sudo: false
+
+cache:
+  directories:
+    - vendors
+    - $HOME/.composer/cache
+
 matrix:
     allow_failures:
         - php: hhvm
