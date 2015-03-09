@@ -996,7 +996,11 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 現在SSLのURLの場合、フルパスで取得（javascript:とhttpから始まるものは除外）
-		if (($this->isSSL() || $ssl) && !preg_match('/^javascript:/', $_url) && !preg_match('/^http/', $_url)) {
+		// //(スラッシュスラッシュ)から始まるSSL、非SSL共有URLも除外する
+		if (($this->isSSL() || $ssl) 
+			&& !(strpos($_url, 'javascript') === 0)
+			&& !(strpos($_url, 'http') === 0)
+			&& !(strpos($_url, '//') === 0)) {
 
 			$_url = preg_replace("/^\//", "", $_url);
 			if (preg_match('/^' . $adminAlias . '\//', $_url)) {
