@@ -16,7 +16,7 @@ App::uses('BcFormHelper', 'View/Helper');
 /**
  * Contact class
  *
- * @package       Cake.Test.Case.View.Helper
+ * @package		Baser.Test.Case.View.Helper
  */
 class Contact extends CakeTestModel {
 
@@ -52,8 +52,8 @@ class Contact extends CakeTestModel {
 /**
  * FormHelperTest class
  *
- * @package Cake.Test.Case.View.Helper
- * @property BcFormHelper $Form
+ * @package		Baser.Test.Case.View.Helper
+ * @property	BcFormHelper $Form
  */
 class BcFormHelperTest extends BaserTestCase {
 

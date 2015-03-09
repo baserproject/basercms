@@ -7,7 +7,7 @@
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Lib.Test.Case.View.Helper
+ * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */

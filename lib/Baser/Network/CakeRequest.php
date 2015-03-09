@@ -25,7 +25,7 @@ App::uses('Hash', 'Utility');
  *
  * `$request['controller']` or `$request->controller`.
  *
- * @package       Cake.Network
+ * @package       Baser.Network
  */
 class CakeRequest implements ArrayAccess {
 
