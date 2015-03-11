@@ -506,12 +506,6 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_entry_page_files() {
-		if (function_exists('ini_set')) {
-			ini_set('max_execution_time', 0);
-			ini_set('max_input_time', 0);
-			ini_set('memory_limit ', '256M');
-		}
-
 		// 現在のテーマの固定ページファイルのパスを取得
 		$pagesPath = getViewPath() . 'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);

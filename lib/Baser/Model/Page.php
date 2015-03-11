@@ -454,6 +454,11 @@ class Page extends AppModel {
  * @access public
  */
 	public function createAllPageTemplate() {
+		set_time_limit(0);
+		if (function_exists('ini_set')) {
+			ini_set('memory_limit ', '-1');
+		}
+
 		$pages = $this->find('all', array('recursive' => -1));
 		$result = true;
 		foreach ($pages as $page) {
@@ -472,6 +477,11 @@ class Page extends AppModel {
  * @access public
  */
 	public function createPageTemplate($data) {
+		set_time_limit(0);
+		if (function_exists('ini_set')) {
+			ini_set('memory_limit ', '-1');
+		}
+		
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
