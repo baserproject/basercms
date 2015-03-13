@@ -185,8 +185,8 @@ $(function(){
 </div>
 
 <div class="submit section">
-<?php if ($editable): ?>
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+<?php if ($editable): ?>
 	<?php if ($this->request->action == 'admin_edit' && $deletable): ?>
 			<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('User.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('User.name')), false); ?>
 	<?php endif; ?>
