@@ -59,7 +59,25 @@ if (empty($_SESSION)) {
 			'session.use_trans_sid'		=> $useTransSid,
 			'session.gc_maxlifetime'	=> $timeout,
 			'session.gc_divisor'		=> 100,
-			'session.gc_probability'	=> 1
+			'session.gc_probability'	=> 1,
+			'session.cookie_secure' => 0
 		)
 	)));
+/*
+ * 全てHTTPSでサイトが利用されていたらsession.cookie_secureを1とする
+ */
+	if (strpos(strtolower(Configure::read('BcEnv.siteUrl')), 'https') === 0) {
+		// URL設定がどちらとも同じドメインでかつ、HTTPSで設定されている
+		// 異なるサブドメインにてcookie共有を許容しているサイトは対象外
+		$siteUrlDomainMatches = null;
+		$sslUrlDomainMatches  = null;
+		preg_match("/^https:\/\/([a-zA-Z0-9\.-]+)(:\d+|)\//", Configure::read('BcEnv.siteUrl'), $siteUrlDomainMatches);
+		preg_match("/^https:\/\/([a-zA-Z0-9\.-]+)(:\d+|)\//", Configure::read('BcEnv.sslUrl'), $sslUrlDomainMatches);
+		if (isset($siteUrlDomainMatches[0]) && isset($sslUrlDomainMatches[0]) &&
+			$siteUrlDomainMatches[0] == $sslUrlDomainMatches[0]) {
+			Configure::write('Session.ini', array_merge(Configure::read('Session.ini'), array(
+				'session.cookie_secure' => 1
+			)));
+		}
+	}
 }
