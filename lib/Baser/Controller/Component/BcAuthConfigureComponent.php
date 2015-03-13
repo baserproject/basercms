@@ -2,7 +2,6 @@
 
 /**
  * 認証設定コンポーネント
- * (注）BaserのDB設計に依存している
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -26,19 +25,17 @@ class BcAuthConfigureComponent extends Component {
  * コントローラー
  * 
  * @var Controller
- * @access	public
  */
-	public $controller = null;
+	public $_Controller = null;
 
 /**
  * initialize
  *
- * @param object $controller
+ * @param object $Controller
  * @return void
- * @access public
  */
-	public function initialize(Controller $controller) {
-		$this->controller = $controller;
+	public function initialize(Controller $Controller) {
+		$this->_Controller = $Controller;
 	}
 
 /**
@@ -46,19 +43,18 @@ class BcAuthConfigureComponent extends Component {
  *
  * @param string $config
  * @return boolean
- * @access public
  */
 	public function setting($config) {
-		if (empty($this->controller->BcAuth)) {
+		if (empty($this->_Controller->BcAuth) || !$config) {
 			return false;
 		}
 
-		$controller = $this->controller;
-		$auth = $controller->BcAuth;
+		$Controller = $this->_Controller;
+		$BcAuth = $Controller->BcAuth;
 		$requestedPrefix = '';
 
-		if (isset($controller->params['prefix'])) {
-			$requestedPrefix = $controller->params['prefix'];
+		if (isset($Controller->params['prefix'])) {
+			$requestedPrefix = $Controller->params['prefix'];
 		}
 
 		$config = array_merge(array(
@@ -83,25 +79,25 @@ class BcAuthConfigureComponent extends Component {
 				$loginAction = array('controller' => 'users', 'action' => 'login');
 			}
 		}
-		$auth->loginAction = $loginAction;
+		$BcAuth->loginAction = $loginAction;
 
 		// ログアウト時のリダイレクト先
 		if (!empty($logoutRedirect)) {
-			$auth->logoutRedirect = $logoutRedirect;
+			$BcAuth->logoutRedirect = $logoutRedirect;
 		}
 
 		// オートリダイレクトをOFF
-		$auth->autoRedirect = false;
+		$BcAuth->autoRedirect = false;
 
 		// エラーメッセージ
-		$auth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力してください。';
+		$BcAuth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力してください。';
 
 		// 権限が無いactionを実行した際のエラーメッセージ
-		$auth->authError = '指定されたページを開くにはログインする必要があります。';
-		$auth->authorize = 'Controller';
+		$BcAuth->authError = '指定されたページを開くにはログインする必要があります。';
+		$BcAuth->authorize = 'Controller';
 
 		// フォームの認証設定
-		$auth->authenticate = array(
+		$BcAuth->authenticate = array(
 			'Form' => array(
 				'userModel' => $userModel,
 				'fields' => array(
@@ -114,9 +110,9 @@ class BcAuthConfigureComponent extends Component {
 
 		// 認証プレフィックスによるスコープ設定
 		if (!empty($config['auth_prefix']) && !isset($userScope)) {
-			$auth->authenticate['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%');
+			$BcAuth->authenticate['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%');
 		} elseif (isset($userScope)) {
-			$auth->authenticate['Form']['scope'] = $userScope;
+			$BcAuth->authenticate['Form']['scope'] = $userScope;
 		}
 
 		if(empty($sessionKey)) {
@@ -128,22 +124,22 @@ class BcAuthConfigureComponent extends Component {
 		// 静的プロパティの書き換えが外部よりできなかったのでメソッドを作って無理矢理対応
 		// 現在のバージョン（3.0.0 beta）では、認証情報を複数持てる仕様となっていない
 		// 上記仕様に対応させる為には、ここの処理変更だけでなく全体的な認証の仕組みを見直す必要あり
-		$auth->setSessionKey('Auth.' . $sessionKey);
+		$BcAuth->setSessionKey('Auth.' . $sessionKey);
 
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
-		$redirect = $auth->Session->read('Auth.redirect');
+		$redirect = $BcAuth->Session->read('Auth.redirect');
 		if ($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix) === false) {
-			$auth->Session->write('Auth.redirect', null);
+			$BcAuth->Session->write('Auth.redirect', null);
 		}
 
 		// ログイン後にリダイレクトするURL
-		$auth->loginRedirect = $loginRedirect;
+		$BcAuth->loginRedirect = $loginRedirect;
 
-		if (!$auth->user()) {
+		if (!$BcAuth->user()) {
 
 			// クッキーがある場合にはクッキーで認証
-			if (!empty($controller->Cookie)) {
-				$cookie = $controller->Cookie->read(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
+			if (!empty($Controller->Cookie)) {
+				$cookie = $Controller->Cookie->read(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
 				
 				// ===================================================================================
 				// 2014/06/19 ryuring
@@ -156,19 +152,19 @@ class BcAuthConfigureComponent extends Component {
 				// ===================================================================================
 				
 				if (!empty($cookie) && $cookie != 'deleted') {
-					$controller->request->data[$userModel] = $cookie;
-					if ($auth->login()) {
+					$Controller->request->data[$userModel] = $cookie;
+					if ($BcAuth->login()) {
 						return true;
 					} else {
-						$controller->request->data[$userModel] = null;
+						$Controller->request->data[$userModel] = null;
 					}
 				}
 			}
 
 			// インストールモードの場合は無条件に認証なし
 			if (Configure::read('debug') == -1) {
-				$controller->Session->delete('Message.auth');
-				$auth->allow();
+				$Controller->Session->delete('Message.auth');
+				$BcAuth->allow();
 			}
 		}
 
