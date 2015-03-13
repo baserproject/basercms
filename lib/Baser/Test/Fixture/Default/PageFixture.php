@@ -50,8 +50,8 @@ class PageFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => '1',
-			'sort' => '1',
+			'id' => 1,
+			'sort' => 1,
 			'name' => 'index',
 			'title' => '',
 			'description' => '',
@@ -76,7 +76,7 @@ class PageFixture extends CakeTestFixture {
 			'status' => 1,
 			'url' => '/index',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -87,8 +87,8 @@ class PageFixture extends CakeTestFixture {
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '2',
-			'sort' => '2',
+			'id' => 2,
+			'sort' => 2,
 			'name' => 'company',
 			'title' => '会社案内',
 			'description' => 'baserCMS inc.の会社案内ページ',
@@ -134,7 +134,7 @@ class PageFixture extends CakeTestFixture {
 			'status' => 1,
 			'url' => '/company',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -145,8 +145,8 @@ class PageFixture extends CakeTestFixture {
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '3',
-			'sort' => '3',
+			'id' => 3,
+			'sort' => 3,
 			'name' => 'service',
 			'title' => '事業案内',
 			'description' => 'baserCMS inc.の事業案内ページ。',
@@ -167,7 +167,7 @@ class PageFixture extends CakeTestFixture {
 			'status' => 1,
 			'url' => '/service',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -178,8 +178,8 @@ class PageFixture extends CakeTestFixture {
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '4',
-			'sort' => '4',
+			'id' => 4,
+			'sort' => 4,
 			'name' => 'recruit',
 			'title' => '採用情報',
 			'description' => 'baserCMS inc.の採用情報ページ',
@@ -233,7 +233,7 @@ class PageFixture extends CakeTestFixture {
 			'status' => 1,
 			'url' => '/recruit',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -244,8 +244,8 @@ class PageFixture extends CakeTestFixture {
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '5',
-			'sort' => '6',
+			'id' => 5,
+			'sort' => 6,
 			'name' => 'index',
 			'title' => '',
 			'description' => '',
@@ -265,11 +265,11 @@ class PageFixture extends CakeTestFixture {
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">baserCMS NEWS</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->BcBaser->feed(1) ?>',
-			'page_category_id' => '1',
+			'page_category_id' => 1,
 			'status' => 1,
 			'url' => '/mobile/index',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -280,8 +280,8 @@ class PageFixture extends CakeTestFixture {
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '6',
-			'sort' => '7',
+			'id' => 6,
+			'sort' => 7,
 			'name' => 'index',
 			'title' => '',
 			'description' => '',
@@ -299,11 +299,11 @@ class PageFixture extends CakeTestFixture {
 </div>
 </div>
 </div>',
-			'page_category_id' => '2',
+			'page_category_id' => 2,
 			'status' => 1,
 			'url' => '/smartphone/index',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -314,8 +314,8 @@ class PageFixture extends CakeTestFixture {
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '7',
-			'sort' => '8',
+			'id' => 7,
+			'sort' => 8,
 			'name' => 'about',
 			'title' => '会社案内',
 			'description' => 'baserCMS inc.の会社案内ページ',
@@ -335,11 +335,11 @@ WEBシステム開発事業（ダミー）</td></tr>
 <div class="section">
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
-			'page_category_id' => '2',
+			'page_category_id' => 2,
 			'status' => 1,
 			'url' => '/smartphone/about',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -350,8 +350,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '8',
-			'sort' => '9',
+			'id' => 8,
+			'sort' => 9,
 			'name' => 'service',
 			'title' => 'サービス',
 			'description' => 'baserCMS inc.のサービス紹介ページ。',
@@ -380,11 +380,11 @@ WEBシステム開発事業（ダミー）</td></tr>
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 </p>
 </div>',
-			'page_category_id' => '2',
+			'page_category_id' => 2,
 			'status' => 1,
 			'url' => '/smartphone/service',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -395,8 +395,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '9',
-			'sort' => '10',
+			'id' => 9,
+			'sort' => 10,
 			'name' => 'sitemap',
 			'title' => 'サイトマップ',
 			'description' => 'baserCMS inc.のサイトマップページ',
@@ -406,11 +406,11 @@ WEBシステム開発事業（ダミー）</td></tr>
 	<li><?php $this->BcBaser->link("新着情報","/s/news/index") ?></li>
 	<li><?php $this->BcBaser->link("お問い合わせ","/s/contact/index") ?>	</li>
 </ul>',
-			'page_category_id' => '2',
+			'page_category_id' => 2,
 			'status' => 1,
 			'url' => '/smartphone/sitemap',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
@@ -421,8 +421,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
-			'id' => '10',
-			'sort' => '11',
+			'id' => 10,
+			'sort' => 11,
 			'name' => 'icons',
 			'title' => 'アイコンの使い方',
 			'description' => '50種類のアイコンを自由にカスタマイズしよう。',
@@ -521,11 +521,11 @@ WEBシステム開発事業（ダミー）</td></tr>
 	&nbsp;</p>
 <p style="text-align: center;">
 	<?php $this->BcBaser->img(\'icons/about_007.png\', array(\'style\' => \'width: 656px; height: 278px;\')) ?></p>',
-			'page_category_id' => '2',
+			'page_category_id' => 2,
 			'status' => 1,
 			'url' => '/smartphone/icons',
 			'draft' => '',
-			'author_id' => '1',
+			'author_id' => 1,
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
