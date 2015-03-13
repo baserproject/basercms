@@ -12,9 +12,8 @@
  * @license       http://basercms.net/license/index.html
  */
 
-//App::uses('CakeSession', 'Datasource/Session');
+
 App::uses('Datasource/CakeSession', 'Model');
-//App::uses('CakeRequest', 'Network');
 
 /**
  * Test class for session.php
