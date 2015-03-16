@@ -88,23 +88,26 @@ class PluginsController extends AppController {
 			if (empty($this->request->data['Plugin']['file']['tmp_name'])) {
 				$this->setMessage('ファイルのアップロードに失敗しました。', true);
 			} else {
-				$name = $this->request->data['Plugin']['file']['name'];
-				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $name);
-				exec('unzip -o ' . TMP . $name . ' -d ' . APP.'Plugin'.DS, $return);
+				$zippedName = $this->request->data['Plugin']['file']['name'];
+				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
+				exec('unzip -o ' . TMP . $zippedName . ' -d ' . APP . 'Plugin' . DS, $return);
 				if (!empty($return[2])) {
+					// 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
 					$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
 					$plugin = explode(DS, $plugin);
 					$plugin = $plugin[0];
-					$pluginPath = BASER_THEMES . $plugin;
+					$srcPluginPath = APP . 'Plugin' . DS . $plugin;
 					$Folder = new Folder();
-					$Folder->chmod($pluginPath, 0777);
-					$plugin = Inflector::camelize($plugin);
-					$Folder->move(array(
-						'to' => BASER_THEMES . $plugin,
-						'from' => $pluginPath,
-						'mode' => 0777
-					));
-					unlink(TMP . $name);
+					$Folder->chmod($srcPluginPath, 0777);
+					$tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
+					if($srcPluginPath != $tgtPluginPath) {
+						$Folder->move(array(
+							'to' => $tgtPluginPath,
+							'from' => $srcPluginPath,
+							'mode' => 0777
+						));
+					}
+					unlink(TMP . $zippedName);
 					// プラグインをインストール
 					if ($this->BcManager->installPlugin($plugin)) {
 						clearAllCache();
@@ -469,7 +472,7 @@ class PluginsController extends AppController {
 						$Favorite = ClassRegistry::init('Favorite');
 					}
 					$user = $this->BcAuth->user();
-					$adminLinkUrl = preg_replace('|^/index.php|', '', Router::url($pluginInfo['Plugin']['admin_link']));
+					$adminLinkUrl = preg_replace('/^' . preg_quote(Configure::read('App.baseUrl'), '/') . '/', '', Router::url($pluginInfo['Plugin']['admin_link']));
 					$favorite = array(
 						'name' => $pluginInfo['Plugin']['title'] . '管理',
 						'url' => $adminLinkUrl,
