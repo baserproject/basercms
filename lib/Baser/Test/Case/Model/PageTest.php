@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ページモデルのテスト
  *
@@ -76,6 +75,30 @@ class PageTest extends BaserTestCase {
 			array('/servce.css', false),
 			array('/', true),
 			array('/hoge', false)
+		);
+	}
+
+/**
+ * PHP構文チェック
+ *
+ * @param array $code PHPのコード
+ * @param bool $expected 期待値
+ * @return void
+ * @dataProvider phpValidSyntaxDataProvider
+ */
+	public function testPhpValidSyntax($code, $expected) {
+		$this->assertEquals($expected, $this->Page->phpValidSyntax($code));
+	}
+
+/**
+ * testPhpValidSyntax用データプロバイダ
+ *
+ * @return array
+ */
+	public function phpValidSyntaxDataProvider() {
+		return array(
+			array(array('contents' => '<?php $this->BcBaser->setTitle(\'test\');'), true),
+			array(array('contents' => '<?php echo "test'), false)
 		);
 	}
 }

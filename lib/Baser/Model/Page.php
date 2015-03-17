@@ -136,6 +136,10 @@ class Page extends AppModel {
 		'description' => array(
 			array('rule' => array('maxLength', 255),
 				'message' => '説明文は255文字以内で入力してください。')
+		),
+		'contents' => array(
+			array('rule' => array('phpValidSyntax'),
+				'message' => 'PHPの構文エラーです')
 		)
 	);
 
@@ -1228,4 +1232,24 @@ class Page extends AppModel {
 		return $datas;
 	}
 
+/**
+ * PHP構文チェック
+ *
+ * @param array $check チェック対象文字列
+ * @return bool
+ */
+	public function phpValidSyntax($check) {
+		if(empty($check[key($check)])) {
+			return true;
+		}
+
+		$command = sprintf('echo %s | php -l 2> /dev/null', escapeshellarg($check[key($check)]));
+		exec($command, $output, $returnVar);
+
+		if($returnVar === 0) {
+			return true;
+		}
+
+		return false;
+	}
 }
