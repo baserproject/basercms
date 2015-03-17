@@ -49,7 +49,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	<td>
 		<?php echo $this->BcBaser->getUserName($data['User']) ?>
 	</td>
-	<td style="text-align:center"><?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?></td>
+	<td style="text-align:center" class="status"><?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?></td>
 	<?php if ($data['BlogContent']['comment_use']): ?>
 		<td>
 			<?php $comment = count($data['BlogComment']) ?>
