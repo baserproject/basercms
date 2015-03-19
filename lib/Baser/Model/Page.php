@@ -496,17 +496,17 @@ class Page extends AppModel {
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->_getPageFilePath($data);
 
+		// テーマやファイル名が変更された場合は元ファイルを削除する
+		if ($this->oldPath && ($newPath != $this->oldPath)) {
+			$oldFile = new File($this->oldPath);
+			$oldFile->delete();
+			unset($oldFile);
+		}
+
 		// ファイルに保存
 		$newFile = new File($newPath, true);
 		if ($newFile->open('w')) {
-			if ($newFile->append($contents)) {
-				// テーマやファイル名が変更された場合は元ファイルを削除する
-				if ($this->oldPath && ($newPath != $this->oldPath)) {
-					$oldFile = new File($this->oldPath);
-					$oldFile->delete();
-					unset($oldFile);
-				}
-			}
+			$newFile->append($contents);
 			$newFile->close();
 			unset($newFile);
 			@chmod($newPath, 0666);
