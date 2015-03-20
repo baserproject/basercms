@@ -79,8 +79,10 @@ class BcUploadHelper extends BcAppHelper {
 		if(strpos($fieldName, '.') === false) {
 			throw new BcException('BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。');
 		}
-		list($modelName, $field) = explode('.', $fieldName);
-		
+		$this->setEntity($fieldName);
+		$modelName = $this->model();
+		$field = $this->field();
+
 		$tmp = false;
 		$entity = $this->entity();
 		$Model = ClassRegistry::init($modelName);
@@ -231,7 +233,9 @@ class BcUploadHelper extends BcAppHelper {
 			return false;
 		}
 
-		list($modelName, $field) = explode('.', $fieldName);
+		$this->setEntity($fieldName);
+		$modelName = $this->model();
+		$field = $this->field();
 		$Model = ClassRegistry::init($modelName);
 
 		$settings = $Model->Behaviors->BcUpload->settings[$modelName];

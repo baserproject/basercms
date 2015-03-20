@@ -64,6 +64,25 @@ class BcUploadHelperTest extends BaserTestCase {
 	}
 
 /**
+ * ファイルへのリンクタグを出力する(hasMany対応)
+ */
+	public function testFileLinkHasManyField() {
+		$this->BcUpload->request->data = array(
+			'EditorTemplate' => array(
+				array(
+					'id' => '1',
+					'name' => '画像（左）とテキスト',
+					'image' => 'template1.jpg',
+					'description' => '説明文',
+					'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
+				),
+			)
+		);
+		$result = $this->BcUpload->fileLink('EditorTemplate.0.image');
+		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
+	}
+
+/**
  * アップロードした画像のタグを出力する
  */
 	public function testUploadImage() {

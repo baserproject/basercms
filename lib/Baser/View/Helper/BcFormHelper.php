@@ -1363,13 +1363,11 @@ DOC_END;
  */
 	public function file($fieldName, $options = array()) {
 		$entity = $this->entity();
-		$modelName = array_shift($entity);
+		$modelName = $this->model();
 		$field = $this->field();
 		$Model = ClassRegistry::init($modelName);
-		if (empty($Model->Behaviors->BcUpload)) {
-			return parent::file($fieldName, $options);
-		}
-		
+		$fieldName = implode('.', $entity);
+
 		$options = array_merge(array(
 			'imgsize' => 'midium', // 画像サイズ
 			'rel' => '', // rel属性
@@ -1399,28 +1397,28 @@ DOC_END;
 
 		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
 		$fileTag = parent::file($fieldName, $options);
-		
+
 		if (empty($options['value'])) {
 			$value = $this->value($fieldName);
 		} else {
 			$value = $options['value'];
 		}
-		
+
 		$delCheckTag = '';
 		if ($fileLinkTag && $linkOptions['delCheck'] && empty($value['session_key'])) {
-			$delCheckTag = $this->checkbox($modelName . '.' . $field . '_delete') . $this->label($modelName . '.' . $field . '_delete', '削除する');
+			$delCheckTag = $this->checkbox($fieldName . '_delete') . $this->label($fieldName . '_delete', '削除する');
 		}
 		$hiddenValue = $this->value($fieldName . '_');
 		$fileValue = $this->value($fieldName);
 
 		if($fileLinkTag) {
 			if (is_array($fileValue) && empty($fileValue['tmp_name']) && $hiddenValue) {
-				$hiddenTag = $this->hidden($modelName . '.' . $field . '_', array('value' => $hiddenValue));
+				$hiddenTag = $this->hidden($fieldName . '_', array('value' => $hiddenValue));
 			} else {
 				if (is_array($fileValue)) {
 					$fileValue = null;
 				}
-				$hiddenTag = $this->hidden($modelName . '.' . $field . '_', array('value' => $fileValue));
+				$hiddenTag = $this->hidden($fieldName . '_', array('value' => $fileValue));
 			}
 		}
 		
