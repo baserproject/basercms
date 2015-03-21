@@ -963,3 +963,11 @@ function base64UrlsafeDecode($val) {
 	return base64_decode($val);
 }
 
+/**
+ * 実行環境のOSがWindowsであるかどうかを返す
+ *
+ * @return bool
+ */
+function isWindows() {
+	return DIRECTORY_SEPARATOR == '\\';
+}

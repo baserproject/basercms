@@ -98,7 +98,7 @@ class PageTest extends BaserTestCase {
 	public function phpValidSyntaxDataProvider() {
 		return array(
 			array(array('contents' => '<?php $this->BcBaser->setTitle(\'test\');'), true),
-			array(array('contents' => '<?php echo "test'), false)
+			array(array('contents' => '<?php echo \'test'), false)
 		);
 	}
 }

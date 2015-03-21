@@ -64,8 +64,8 @@ class BaserTestCase extends CakeTestCase {
 			$baseUrl = Configure::read('App.baseUrl');
 			if($request->url === false) {
 				$request->here = $baseUrl . '/';
-			} elseif(preg_match('/^' . preg_quote($request->webroot, DS) . '/', $request->here)) {
-				$request->here = $baseUrl . '/' . preg_replace('/^' . preg_quote($request->webroot, DS) . '/', '', $request->here);
+			} elseif(preg_match('/^' . preg_quote($request->webroot, '/') . '/', $request->here)) {
+				$request->here = $baseUrl . '/' . preg_replace('/^' . preg_quote($request->webroot, '/') . '/', '', $request->here);
 			}
 			if($baseUrl) {
 				if(preg_match('/^\//', $baseUrl)) {
