@@ -53,7 +53,7 @@ class Contact extends CakeTestModel {
  * FormHelperTest class
  *
  * @package		Baser.Test.Case.View.Helper
- * @property	BcFormHelper $Form
+ * @property	BcFormHelper $BcForm
  */
 class BcFormHelperTest extends BaserTestCase {
 
@@ -140,9 +140,116 @@ class BcFormHelperTest extends BaserTestCase {
 		);
 		$this->assertTags($result, $expected);
 
-		// TODO データと画像が既に存在する場合についてテストを記述する
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		
 	}
-	
+
+/**
+ * ファイルアップロードフィールドのテスト
+ *
+ * データと画像が既に存在する場合について
+ *
+ * @return void
+ */
+	public function testFileUploadFieldWithImageFile() {
+		$fieldName = 'Contact.eye_catch';
+		$this->BcForm->setEntity($fieldName);
+		$this->BcForm->BcUpload->request->data = array(
+			'Contact' => array(
+				'id' => '1',
+				'eye_catch' => 'template1.jpg',
+				'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
+			)
+		);
+
+		$result = $this->BcForm->file($fieldName);
+
+		$expected = array(
+			'div'	=> array('class' => 'upload-file'),
+			array('input' => array('type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch')),
+			'&nbsp;',
+			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0')),
+			array('input' => array('type' => 'checkbox', 'name' => 'data[Contact][eye_catch_delete]', 'value' => '1', 'id' => 'ContactEyeCatchDelete')),
+			'label' => array('for' => 'ContactEyeCatchDelete'),
+			'削除する',
+			'/label',
+			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'id' => 'ContactEyeCatch')),
+			array('br' => true),
+			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
+			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
+			'/a',
+			array('br' => true),
+			'span' => array('class' => 'file-name'),
+			'template1.jpg',
+			'/span',
+			'/div'
+		);
+
+		$this->assertTags($result, $expected);
+	}
+
+/**
+ * ファイルアップロードフィールドのテスト（hasMany対応）
+ *
+ * @return void
+ */
+	public function testFileUploadFieldHasManyField() {
+		$fieldName = 'Contact.0.upload';
+		$this->BcForm->setEntity($fieldName);
+
+		// 通常
+		$result = $this->BcForm->file($fieldName);
+
+		$expected = array(
+			'div'	=> array('class' => 'upload-file'),
+			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][0][upload]', 'id' => 'Contact0Upload')),
+			'/div'
+		);
+		$this->assertTags($result, $expected);
+	}
+
+/**
+ * ファイルアップロードフィールドのテスト（hasMany対応）
+ *
+ * データと画像が既に存在する場合について
+ *
+ * @return void
+ */
+	public function testFileUploadFieldHasManyFieldWithImageFile() {
+		$fieldName = 'Contact.0.eye_catch';
+		$this->BcForm->setEntity($fieldName);
+		$this->BcForm->BcUpload->request->data = array(
+			'Contact' => array(
+				array(
+					'id' => '1',
+					'eye_catch' => 'template1.jpg',
+					'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
+				),
+			)
+		);
+
+		$result = $this->BcForm->file($fieldName);
+
+		$expected = array(
+			'div'	=> array('class' => 'upload-file'),
+			array('input' => array('type' => 'file', 'name' => 'data[Contact][0][eye_catch]', 'id' => 'Contact0EyeCatch')),
+			'&nbsp;',
+			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_delete]', 'id' => 'Contact0EyeCatchDelete_', 'value' => '0')),
+			array('input' => array('type' => 'checkbox', 'name' => 'data[Contact][0][eye_catch_delete]', 'value' => '1', 'id' => 'Contact0EyeCatchDelete')),
+			'label' => array('for' => 'Contact0EyeCatchDelete'),
+			'削除する',
+			'/label',
+			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'id' => 'Contact0EyeCatch')),
+			array('br' => true),
+			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
+			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
+			'/a',
+			array('br' => true),
+			'span' => array('class' => 'file-name'),
+			'template1.jpg',
+			'/span',
+			'/div'
+		);
+
+		$this->assertTags($result, $expected);
+	}
+
 }
