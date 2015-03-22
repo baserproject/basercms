@@ -1,19 +1,19 @@
 build: false
 shallow_clone: false
 platform: 'x86'
-clone_folder: c:\projects\basercms
+clone_folder: C:\projects\basercms
 
 environment:
   global:
-    PHP: c:\tools\php
-    ROOT: c:\projects\basercms
-    APP: c:\projects\basercms\app
+    PHP: C:\tools\php
     DB: 'sqlite'
 
-#cache:
-#  - C:\ProgramData\chocolatey\bin -> appveyor.yml
-#  - C:\ProgramData\chocolatey\lib -> appveyor.yml
-#  - C:\tools\php
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\tools\php -> appveyor.yml
+  - C:\projects\basercms\vendors -> composer.json
+  - C:\Users\appveyor\AppData\Local\Composer -> composer.json
 
 init:
   - SET PATH=%PHP%;%PATH%
@@ -32,10 +32,10 @@ install:
   - echo extension=php_gd2.dll >> php.ini
   - echo extension=php_sqlite3.dll >> php.ini
   - echo extension=php_pdo_sqlite.dll >> php.ini
-  - cd %ROOT%
+  - cd %APPVEYOR_BUILD_FOLDER%
   - php -r "readfile('https://getcomposer.org/installer');" | php
   - php composer.phar install --prefer-dist --no-interaction --dev
-  - cd %APP%
+  - cd app
   - php ./Console/cake.php bc_manager checkenv
   - php ./Console/cake.php bc_manager install "http://localhost" %DB% "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --smarturl "true"  --data "nada-icons.default"
 
