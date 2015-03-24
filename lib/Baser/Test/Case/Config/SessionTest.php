@@ -24,14 +24,6 @@ App::uses('Datasource/CakeSession', 'Model');
 class SessionTest extends BaserTestCase {
 
 /**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-	);
-
-/**
  * __construct
  * 
  * @param string $name

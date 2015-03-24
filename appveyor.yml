@@ -5,25 +5,25 @@ clone_folder: C:\projects\basercms
 
 environment:
   global:
-    PHP: C:\tools\php
+    PHP: C:\php
     DB: 'sqlite'
 
 cache:
-  - C:\ProgramData\chocolatey\bin -> appveyor.yml
-  - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - C:\tools\php -> appveyor.yml
   - C:\projects\basercms\vendors -> composer.json
   - C:\Users\appveyor\AppData\Local\Composer -> composer.json
+  - C:\php.zip ->appveyor.yml
 
 init:
   - SET PATH=%PHP%;%PATH%
   - git config --global core.autocrlf input
 
 install:
-  - cinst -y php
+  - cd C:\
+  - ps: If(-not(Test-Path 'C:\php.zip')) { Start-FileDownload 'http://windows.php.net/downloads/releases/php-5.6.7-nts-Win32-VC11-x86.zip' -FileName 'php.zip' }
+  - 7z x php.zip -o%PHP%
   - cd %PHP%
   - copy php.ini-production php.ini
-  - echo date.timezone="UTC" >> php.ini
+  - echo date.timezone="Asia/Tokyo" >> php.ini
   - echo extension_dir=ext >> php.ini
   - echo extension=php_openssl.dll >> php.ini
   - echo extension=php_intl.dll >> php.ini
