@@ -107,7 +107,7 @@ class BcThemeConfigReader implements ConfigReaderInterface {
  * @return string
  */
 	public function createContents(array $data) {
-		$contents = '<?php' . "\n";
+		$contents = '<?php' . PHP_EOL;
 
 		foreach (self::$variables as $var => $name) {
 			$value = empty($data[$var]) ? '': $data[$var];

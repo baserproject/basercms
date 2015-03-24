@@ -50,6 +50,8 @@ class BcThemeConfigReaderTest extends BaserTestCase {
 
 EOF;
 
+		$contents = preg_replace("/\r\n|\r|\n/", PHP_EOL, $contents);
+
 		$data[] = array(
 			array(
 				'title' => 'タイトル',

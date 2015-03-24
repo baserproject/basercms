@@ -1243,8 +1243,20 @@ class Page extends AppModel {
 			return true;
 		}
 
-		$command = sprintf('echo %s | php -l 2> /dev/null', escapeshellarg($check[key($check)]));
-		exec($command, $output, $returnVar);
+		if(isWindows()) {
+			$tmpName = tempnam(TMP, "syntax");
+			$tmp = new File($tmpName);
+			$tmp->open("w");
+			$tmp->write($check[key($check)]);
+			$tmp->close();
+			$command = sprintf("php -l %s 2> nul", escapeshellarg($tmpName));
+			exec($command, $output, $returnVar);
+			$tmp->delete();
+		} else {
+			$format = 'echo %s | php -l 2> /dev/null';
+			$command = sprintf($format, escapeshellarg($check[key($check)]));
+			exec($command, $output, $returnVar);
+		}
 
 		if($returnVar === 0) {
 			return true;
