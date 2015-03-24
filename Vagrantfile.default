@@ -5,6 +5,11 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
+# 利用するIPアドレスを設定します
+SERVER_IP_NETWORK = "192.168.33."
+SERVER_IP_ADDRESS = SERVER_IP_NETWORK + "10"
+SERVER_IP_SUBNETMASK = "255.255.255.0"
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -24,7 +29,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network :private_network, ip: "192.168.33.10"
+  config.vm.network :private_network, ip: SERVER_IP_ADDRESS
+
+  # スマートフォン等の実機で確認する場合は、上記設定をコメントアウトして下記のように設定することで同一ネットワーク上から確認できます
+  #config.vm.network :public_network, ip: SERVER_IP_ADDRESS
+  # ネットワークアダプタを毎回聞かれて面倒な場合は、選択肢の文字列をコピーして、bridgeに設定します
+  #config.vm.network :public_network, ip: SERVER_IP_ADDRESS, bridge: "en0: Wi-Fi (AirPort)"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -60,7 +70,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "768"]
   end
-  
+
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
   # You will need to create the manifests directory and a manifest in
@@ -124,7 +134,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"
-    chef.json = { 
+    chef.json = {
       :mysql => {
         :password => 'root'
       },
@@ -132,24 +142,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :password => 'postgres'
       },
       :httpd => {
-        :servername => 'localhost:80', 
-        :root => '/vagrant', 
-        :webroot => '/vagrant/app/webroot', 
-        :timeout => '60', 
+        :ip_address => SERVER_IP_ADDRESS,
+        :ip_network => SERVER_IP_NETWORK,
+        :ip_subnetmask => SERVER_IP_SUBNETMASK,
+        :servername => 'www.example.local:80',
+        :root => '/vagrant',
+        :webroot => '/vagrant/app/webroot',
+        :timeout => '60',
         :listen => '80',
         :user => 'vagrant',
         :group => 'vagrant'
-      }, 
+      },
       :php => {
         :max_execution_time => '30',
-        :memory_limit => '128M', 
-        :post_max_size => '32M', 
-        :default_charset => 'UTF-8', 
+        :memory_limit => '128M',
+        :post_max_size => '32M',
+        :default_charset => 'UTF-8',
         :upload_max_filesize => '16M'
       },
       :xdebug => {
-        :remote_host => '192.168.33.1',
-        :remote_port => '9000', 
+        :remote_host => SERVER_IP_NETWORK + '1',
+        :remote_port => '9000',
       },
       :basercms => {
         :database => 'basercms'
