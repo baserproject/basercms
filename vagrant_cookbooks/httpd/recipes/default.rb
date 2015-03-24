@@ -1,4 +1,4 @@
-packages = %w{httpd httpd-devel mod_ssl php php-cli php-pear php-pdo php-mysql php-pgsql php-sqlite php-curl php-gd php-mbstring php-xml php-xmlrpc php-dom php-pecl-xdebug phpMyAdmin phpPgAdmin}
+packages = %w{httpd httpd-devel mod_ssl php php-cli php-pear php-pdo php-mysql php-pgsql php-sqlite php-curl php-gd php-mbstring php-xml php-xmlrpc php-dom php-intl php-pecl-xdebug phpMyAdmin phpPgAdmin}
 packages.each do |packagename|
   package packagename do
     action :install
