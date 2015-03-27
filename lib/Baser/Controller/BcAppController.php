@@ -790,6 +790,20 @@ class BcAppController extends Controller {
 		} else {
 			$encode = 'ISO-2022-JP';
 		}
+		
+		// ISO-2022-JPの場合半角カナが文字化けしてしまうので全角に変換する
+		if ($encode == 'ISO-2022-JP'){
+			$title = mb_convert_kana($title, 'KV', "UTF-8");
+			if (is_array($body['message'])) {
+				foreach($body['message'] as $key => $val) {
+					if (is_string($val)) {
+						$body['message'][$key] = mb_convert_kana($val, 'KV', "UTF-8");
+					}
+				}
+			} elseif (is_string($body)) {
+				$body = mb_convert_kana($body, 'KV', "UTF-8");
+			}
+		}
 
 		//CakeEmailの内部処理のencodeを統一したいので先に値を渡しておく
 		$cakeEmail->headerCharset($encode);
