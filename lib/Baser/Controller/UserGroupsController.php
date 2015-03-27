@@ -113,6 +113,8 @@ class UserGroupsController extends AppController {
 			/* 登録処理 */
 			if (empty($this->request->data['UserGroup']['auth_prefix'])) {
 				$this->request->data['UserGroup']['auth_prefix'] = 'admin';
+			} else {
+				$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
 			}
 			$this->UserGroup->create($this->request->data);
 			$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
@@ -150,8 +152,9 @@ class UserGroupsController extends AppController {
 			/* 更新処理 */
 			if (empty($this->request->data['UserGroup']['auth_prefix'])) {
 				$this->request->data['UserGroup']['auth_prefix'] = 'admin';
+			} else {
+				$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
 			}
-			$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
 			if ($this->UserGroup->save($this->request->data)) {
 				$this->setMessage('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $id));
