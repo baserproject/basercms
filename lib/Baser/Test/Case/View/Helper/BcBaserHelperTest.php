@@ -22,7 +22,7 @@ App::uses('BcBaserHelper', 'View/Helper');
  * @property      BcBaserHelper $BcBaser
  */
 class BcBaserHelperTest extends BaserTestCase {
-	
+
 /**
  * Fixtures
  * @var array 
@@ -30,6 +30,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
+		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
@@ -56,9 +57,6 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function __construct($name = null, array $data = array(), $dataName = '') {
 		parent::__construct($name, $data, $dataName);
-		// スーパークラスで、自動的に fixtures に、baser.Default.Page を追加する為、
-		// そちらのフィクスチャを読み込ませないようにアンセット
-		unset($this->fixtures[array_search('baser.Default.Page', $this->fixtures)]);
 	}
 	
 /**
