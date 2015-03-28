@@ -45,7 +45,7 @@ before_script:
   - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "5.2" ]; then composer install --dev; fi;'
   - cd app
   - php ./Console/cake.php bc_manager checkenv
-  - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --smarturl "true"  --data "nada-icons.default"
+  - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "nada-icons.default"
 
 script:
   - php ./Console/cake.php baser_test baser BcAll
