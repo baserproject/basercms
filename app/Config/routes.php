@@ -32,7 +32,7 @@
 	require BASER_CONFIGS . 'routes.php';
 // <<<
 
-// CUSTOMIZE DELETE 2015/03/27 ryuring
+// CUSTOMIZE DELETE 2015/03/27 n1215
 // CakePHPのPagesコントローラーの挙動を無効
 // >>>
 ///**
