@@ -796,7 +796,7 @@ class BcAppController extends Controller {
 			$title = mb_convert_kana($title, 'KV', "UTF-8");
 			if (is_string($body)) {
 				$body = mb_convert_kana($body, 'KV', "UTF-8");
-			} elseif (is_array($body['message'])) {
+			} elseif (isset($body['message']) && is_array($body['message'])) {
 				foreach($body['message'] as $key => $val) {
 					if (is_string($val)) {
 						$body['message'][$key] = mb_convert_kana($val, 'KV', "UTF-8");
@@ -1319,7 +1319,11 @@ class BcAppController extends Controller {
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
-		return $this->BcAuth->authenticate['Form']['userModel'];
+		if(isset($this->BcAuth->authenticate['Form']['userModel'])) {
+			return $this->BcAuth->authenticate['Form']['userModel'];
+		} else {
+			return false;
+		}
 	}
 
 /**
