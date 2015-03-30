@@ -33,16 +33,48 @@ class BaserTestFixture extends CakeTestFixture {
  */
 	public function getSchema($name) {
 		$tableName = Inflector::tableize($name);
-		$schemaFile = BASER_CONFIGS . 'Schema' . DS . $tableName . '.php';
+		$plugins = array(null);
+		$plugins = array_merge($plugins, Configure::read('BcApp.corePlugins'));
 
-		if (!file_exists($schemaFile)) {
+		$schemaFile = null;
+
+		foreach ($plugins as $plugin) {
+			$schemaFile = $this->findSchemaFile($tableName, $plugin);
+			if ($schemaFile != null) {
+				break;
+			}
+		}
+
+		if ($schemaFile == null) {
 			throw new RuntimeException('Schemaファイルが見つかりません');
 		}
+
 		require_once $schemaFile;
 
 		$schemaClass = Inflector::camelize($tableName) . 'Schema';
 		$schema = new $schemaClass();
 		return $schema->tables[$tableName];
+	}
+
+/**
+ * スキーマファイルを探す
+ *
+ * @param string $tableName テーブル名
+ * @param string $plugin プラグイン名
+ * @return null|string
+ */
+	public function findSchemaFile($tableName, $plugin = null) {
+		if (empty($plugin)) {
+			$configDir = BASER_CONFIGS;
+		} else {
+			$configDir = BASER_PLUGINS . Inflector::camelize($plugin) . DS . 'Config' . DS;
+		}
+		$schemaFile = $configDir . 'Schema' . DS . $tableName . '.php';
+
+		if (file_exists($schemaFile)) {
+			return $schemaFile;
+		}
+		return null;
 	}
 
 }
