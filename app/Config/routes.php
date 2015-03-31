@@ -31,17 +31,21 @@
  */
 	require BASER_CONFIGS . 'routes.php';
 // <<<
-	
-/**
- * Here, we are connecting '/' (base path) to controller called 'Pages',
- * its action called 'display', and we pass a param to select the view file
- * to use (in this case, /app/View/Pages/home.ctp)...
- */
-	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
-/**
- * ...and connect the rest of 'Pages' controller's URLs.
- */
-	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+
+// CUSTOMIZE DELETE 2015/03/27 n1215
+// CakePHPのPagesコントローラーの挙動を無効
+// >>>
+///**
+// * Here, we are connecting '/' (base path) to controller called 'Pages',
+// * its action called 'display', and we pass a param to select the view file
+// * to use (in this case, /app/View/Pages/home.ctp)...
+// */
+//	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
+///**
+// * ...and connect the rest of 'Pages' controller's URLs.
+// */
+//	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+// <<<
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on
