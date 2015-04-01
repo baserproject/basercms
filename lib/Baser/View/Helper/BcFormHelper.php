@@ -1366,6 +1366,9 @@ DOC_END;
 		$modelName = $this->model();
 		$field = $this->field();
 		$Model = ClassRegistry::init($modelName);
+		if (empty($Model->Behaviors->BcUpload)) {
+			return parent::file($fieldName, $options);
+		}
 		$fieldName = implode('.', $entity);
 
 		$options = array_merge(array(
