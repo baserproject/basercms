@@ -206,11 +206,17 @@ class BcBaserHelper extends AppHelper {
  * @return string meta タグ用のキーワード
  */
 	public function getKeywords() {
-		$default = '';
-		if (!empty($this->siteConfig['keyword'])) {
-			$default = $this->siteConfig['keyword'];
+		$keywords = $this->_View->get('keywords');
+
+		if (!empty($keywords)) {
+			return $keywords;
 		}
-		return $this->_View->get('keywords', $default);
+
+		if(!empty($this->siteConfig['keyword'])) {
+			return $this->siteConfig['keyword'];
+		}
+
+		return '';
 	}
 
 /**
@@ -219,11 +225,17 @@ class BcBaserHelper extends AppHelper {
  * @return string meta タグ用の説明文
  */
 	public function getDescription() {
-		$default = '';
-		if (!empty($this->siteConfig['description'])) {
-			$default = $this->siteConfig['description'];
+		$description = $this->_View->get('description');
+
+		if (!empty($description)) {
+			return $description;
 		}
-		return $this->_View->get('description', $default);
+
+		if(!empty($this->siteConfig['description'])) {
+			return $this->siteConfig['description'];
+		}
+
+		return '';
 	}
 
 /**

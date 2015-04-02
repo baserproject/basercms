@@ -8,7 +8,7 @@
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
- * @since           baserCMS v 3.0.6
+ * @since	       baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
 
@@ -65,11 +65,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
+		$SiteConfig = ClassRegistry::init('SiteConfig');
+		$this->_View->set('siteConfig', $SiteConfig->findExpanded());
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$this->_View->BcBaser->siteConfig = $SiteConfig->findExpanded();
-		$this->BcBaser = new BcBaserHelper($this->_View);
 		$this->BcBaser = $this->_View->BcBaser;
 	}
 	
@@ -217,38 +216,60 @@ class BcBaserHelperTest extends BaserTestCase {
 	
 /**
  * meta タグ用のキーワードを取得する
+ *
+ * @param string $expect 期待値
+ * @param string|null $keyword 設定されるキーワードの文字列
+ * @return void
+ * @dataProvider getKeywordsDataProvider
  */
-	public function testGetKeywords() {
-		
-		// 設定なし
-		$expect = 'baser,CMS,コンテンツマネジメントシステム,開発支援';
-		$result = $this->BcBaser->getKeywords();
-		$this->assertEqual($result, $expect);
-		
-		// 設定あり
-		$expect = 'baserCMS,国産,オープンソース';
-		$this->BcBaser->setKeywords($expect);
-		$result = $this->BcBaser->getKeywords();
-		$this->assertEqual($result, $expect);
-		
+	public function testGetKeywords($expect, $keyword = null) {
+		if($keyword != null) {
+			$this->BcBaser->setKeywords($keyword);
+		}
+		$this->assertEquals($expect, $this->BcBaser->getKeywords());
+	}
+
+/**
+ * getKeywords用データプロバイダ
+ *
+ * @return array
+ */
+	public function getKeywordsDataProvider() {
+		return array(
+			array('baser,CMS,コンテンツマネジメントシステム,開発支援'),
+			array('baser,CMS,コンテンツマネジメントシステム,開発支援', ''),
+			array('baserCMS,国産,オープンソース', 'baserCMS,国産,オープンソース'),
+		);
 	}
 	
 /**
  * meta タグ用のページ説明文を取得する
+ *
+ * @param string $expect 期待値
+ * @param string|null $description 設定されるキーワードの文字列
+ * @return void
+ * @dataProvider getDescriptionDataProvider
  */
-	public function getDescription() {
-		
-		// 設定なし
-		$result = $this->BcBaser->getDescription();
-		$this->assertEmpty($result);
-		
-		// 設定あり
-		$this->BcBaser->setDescription('国産オープンソースのホームページです');
-		$result = $this->BcBaser->getDescription();
-		$this->assertEqual($result, '国産オープンソースのホームページです');
-		
+	public function testGetDescription($expect, $description = null) {
+		if($description != null) {
+			$this->BcBaser->setDescription($description);
+		}
+		$this->assertEquals($expect, $this->BcBaser->getDescription());
 	}
-	
+
+/**
+ * getDescription用データプロバイダ
+ *
+ * @return array
+ */
+	public function getDescriptionDataProvider() {
+		return array(
+			array('baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'),
+			array('baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''),
+			array('国産オープンソースのホームページです', '国産オープンソースのホームページです')
+		);
+	}
+
 /**
  * タイトルタグを取得する
  */
