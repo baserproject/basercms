@@ -706,12 +706,12 @@ class BcBaserHelper extends AppHelper {
  */
 	public function scripts() {
 
-		$currentPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
-		$authPrefixes = Configure::read('BcAuthPrefix.' . $currentPrefix);
+		$currentPrefix = $this->_View->get('currentPrefix');
+		$authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 		$toolbar = true;
 
-		if (isset($authPrefixes['toolbar'])) {
-			$toolbar = $authPrefixes['toolbar'];
+		if (isset($authPrefix['toolbar'])) {
+			$toolbar = $authPrefix['toolbar'];
 		}
 
 		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
@@ -754,11 +754,11 @@ class BcBaserHelper extends AppHelper {
  */
 	public function func() {
 
-		$currentPrefix = $this->Session->read(BcAuthComponent::$sessionKey . '.authPrefix');
-		$authPrefixes = Configure::read('BcAuthPrefix.' . $currentPrefix);
+		$currentPrefix = $this->_View->get('currentPrefix');
+		$authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 		$toolbar = true;
-		if (isset($authPrefixes['toolbar'])) {
-			$toolbar = $authPrefixes['toolbar'];
+		if (isset($authPrefix['toolbar'])) {
+			$toolbar = $authPrefix['toolbar'];
 		}
 
 		// ### ツールバーエレメント出力

@@ -753,7 +753,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$expects = '<div id="ToolBar">';
 		$this->_login();
 		$this->BcBaser->set('currentPrefix', 'admin');
-		$this->BcBaser->set('authPrefix', 'admin');
+		$this->BcBaser->set('currentUserAuthPrefixes', array('admin'));
 		ob_start();
 		$this->BcBaser->func();
 		$result = ob_get_clean();
