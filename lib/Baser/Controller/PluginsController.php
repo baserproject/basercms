@@ -84,47 +84,56 @@ class PluginsController extends AppController {
 		$this->pageTitle = 'プラグインアップロード';
 		$this->subMenuElements = array('plugins');
 
-		if ($this->request->data) {
-			if (empty($this->request->data['Plugin']['file']['tmp_name'])) {
-				$this->setMessage('ファイルのアップロードに失敗しました。', true);
-			} else {
-				$zippedName = $this->request->data['Plugin']['file']['name'];
-				move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
-				exec('unzip -o ' . TMP . $zippedName . ' -d ' . APP . 'Plugin' . DS, $return);
-				if (!empty($return[2])) {
-					// 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
-					$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
-					$plugin = explode(DS, $plugin);
-					$plugin = $plugin[0];
-					$srcPluginPath = APP . 'Plugin' . DS . $plugin;
-					$Folder = new Folder();
-					$Folder->chmod($srcPluginPath, 0777);
-					$tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
-					if($srcPluginPath != $tgtPluginPath) {
-						$Folder->move(array(
-							'to' => $tgtPluginPath,
-							'from' => $srcPluginPath,
-							'mode' => 0777
-						));
-					}
-					unlink(TMP . $zippedName);
-					// プラグインをインストール
-					if ($this->BcManager->installPlugin($plugin)) {
-						clearAllCache();
-						$this->setMessage('新規プラグイン「' . $plugin . '」を baserCMS に登録しました。', false, true);
-						$this->redirect(array('action' => 'index'));
-					} else {
-						$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
-					}
+		//データなし
+		if (empty($this->request->data)) {
+			return;
+		}
 
-				} else {
-                    $msg = 'アップロードしたZIPファイルの展開に失敗しました。';
-                    exec('unzip 2>&1', $errs);
-                    $msg .= '<br />'.implode('<br />', $errs);
-					$this->setMessage($msg, true);
-					$this->redirect(array('action' => 'add'));
-				}
-			}
+		//アップロード失敗
+		if (empty($this->request->data['Plugin']['file']['tmp_name'])) {
+			$this->setMessage('ファイルのアップロードに失敗しました。', true);
+			return;
+		}
+
+		$zippedName = $this->request->data['Plugin']['file']['name'];
+		move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
+		exec('unzip -o ' . TMP . $zippedName . ' -d ' . APP . 'Plugin' . DS, $return);
+
+		//ZIPファイル展開失敗
+		if (empty($return[2])) {
+			$msg = 'アップロードしたZIPファイルの展開に失敗しました。';
+			exec('unzip 2>&1', $errs);
+			$msg .= '<br />' . implode('<br />', $errs);
+			$this->setMessage($msg, true);
+			$this->redirect(array('action' => 'add'));
+			return;
+		}
+
+		// 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
+		$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
+		$plugin = explode(DS, $plugin);
+		$plugin = $plugin[0];
+		$srcPluginPath = APP . 'Plugin' . DS . $plugin;
+		$Folder = new Folder();
+		$Folder->chmod($srcPluginPath, 0777);
+		$tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
+		if ($srcPluginPath != $tgtPluginPath) {
+			$Folder->move(array(
+				'to' => $tgtPluginPath,
+				'from' => $srcPluginPath,
+				'mode' => 0777
+			));
+		}
+		unlink(TMP . $zippedName);
+
+		// プラグインをインストール
+		if ($this->BcManager->installPlugin($plugin)) {
+			clearAllCache();
+			$this->setMessage('新規プラグイン「' . $plugin . '」を baserCMS に登録しました。', false, true);
+			$this->Plugin->addFavoriteAdminLink($plugin, $this->BcAuth->user());
+			$this->redirect(array('action' => 'index'));
+		} else {
+			$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
 		}
 	}
 
@@ -148,7 +157,7 @@ class PluginsController extends AppController {
 			$Folder = new Folder($path);
 			$files = $Folder->read(true, true, true);
 			foreach ($files[0] as $file) {
-				$pluginInfos[basename($file)] = $this->_getPluginInfo($datas, $file);
+				$pluginInfos[basename($file)] = $this->Plugin->getPluginInfo($datas, $file);
 			}
 		}
 
@@ -156,14 +165,14 @@ class PluginsController extends AppController {
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
 
 		$availables = $unavailables = array();
-		foreach($pluginInfos as $pluginInfo) {
-			if(isset($pluginInfo['Plugin']['priority'])) {
+		foreach ($pluginInfos as $pluginInfo) {
+			if (isset($pluginInfo['Plugin']['priority'])) {
 				$availables[] = $pluginInfo;
 			} else {
 				$unavailables[] = $pluginInfo;
 			}
-		}		
-		
+		}
+
 		//並び替えモードの場合はDBにデータが登録されていないプラグインを表示しない
 		if (!empty($this->passedArgs['sortmode'])) {
 			$sortmode = true;
@@ -224,95 +233,13 @@ class PluginsController extends AppController {
 
 /**
  * プラグイン情報を取得する
- * 
- * @param array $datas
- * @param string $file
+ *
+ * @param array $datas プラグインデータの配列
+ * @param string $file プラグインファイルのパス
  * @return array 
  */
 	protected function _getPluginInfo($datas, $file) {
-		$plugin = basename($file);
-		$pluginData = array();
-		$exists = false;
-		foreach ($datas as $data) {
-			if ($plugin == $data['Plugin']['name']) {
-				$pluginData = $data;
-				$exists = true;
-				break;
-			}
-		}
-
-		// プラグインのバージョンを取得
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		$core = false;
-		if (in_array($plugin, $corePlugins)) {
-			$core = true;
-			$version = $this->getBaserVersion();
-		} else {
-			$version = $this->getBaserVersion($plugin);
-		}
-
-		// 設定ファイル読み込み
-		$title = $description = $author = $url = $adminLink = '';
-
-		// TODO 互換性のため古いパスも対応
-		$oldAppConfigPath = $file . DS . 'Config' . DS . 'config.php';
-		$appConfigPath = $file . DS . 'config.php';
-		if (!file_exists($appConfigPath)) {
-			$appConfigPath = $oldAppConfigPath;
-		}
-
-		if (file_exists($appConfigPath)) {
-			include $appConfigPath;
-		} elseif (file_exists($oldAppConfigPath)) {
-			include $oldAppConfigPath;
-		}
-
-		if (isset($title)) {
-			$pluginData['Plugin']['title'] = $title;
-		}
-		if (isset($description)) {
-			$pluginData['Plugin']['description'] = $description;
-		}
-		if (isset($author)) {
-			$pluginData['Plugin']['author'] = $author;
-		}
-		if (isset($url)) {
-			$pluginData['Plugin']['url'] = $url;
-		}
-
-		$pluginData['Plugin']['update'] = false;
-		$pluginData['Plugin']['old_version'] = false;
-		$pluginData['Plugin']['core'] = $core;
-
-		if ($exists) {
-
-			if (isset($adminLink)) {
-				$pluginData['Plugin']['admin_link'] = $adminLink;
-			}
-			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-			if (!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
-				$pluginData['Plugin']['version'] = $matches[1];
-				$pluginData['Plugin']['old_version'] = true;
-			} elseif (verpoint($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
-				$pluginData['Plugin']['update'] = true;
-			}
-			$pluginData['Plugin']['registered'] = true;
-		} else {
-			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
-			if (preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
-				$version = $matches[1];
-				$pluginData['Plugin']['old_version'] = true;
-			}
-			$pluginData['Plugin']['id'] = '';
-			$pluginData['Plugin']['name'] = $plugin;
-			$pluginData['Plugin']['created'] = '';
-			$pluginData['Plugin']['version'] = $version;
-			$pluginData['Plugin']['status'] = false;
-			$pluginData['Plugin']['modified'] = '';
-			$pluginData['Plugin']['admin_link'] = '';
-			$pluginData['Plugin']['registered'] = false;
-		}
-		return $pluginData;
+		return $this->Plugin->getPluginInfo($datas, $file);
 	}
 
 /**
@@ -442,13 +369,13 @@ class PluginsController extends AppController {
 			} else {
 				$version = $this->getBaserVersion($name);
 			}
-			
+
 			$this->request->data = array('Plugin' => array(
-				'name'	=> $name,
+				'name' => $name,
 				'title'	=> $title,
-				'status'=> true,
-				'version'	=> $version,
-				'permission'=> 1
+				'status' => true,
+				'version' => $version,
+				'permission' => 1
 			));
 
 			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
@@ -461,33 +388,9 @@ class PluginsController extends AppController {
 				clearAllCache();
 				$this->setMessage('新規プラグイン「' . $name . '」を baserCMS に登録しました。', false, true);
 
-				$plugin = $this->Plugin->findByName($name);
-				$dirPath = $this->Plugin->getDirectoryPath($name);
-				$pluginInfo = $this->_getPluginInfo(array($plugin), $dirPath);
-
-				if(!empty($pluginInfo['Plugin']['admin_link'])) {
-					if (ClassRegistry::isKeySet('Favorite')) {
-						$Favorite = ClassRegistry::getObject('Favorite');
-					} else {
-						$Favorite = ClassRegistry::init('Favorite');
-					}
-					$user = $this->BcAuth->user();
-					$adminLinkUrl = preg_replace('/^' . preg_quote(Configure::read('App.baseUrl'), '/') . '/', '', Router::url($pluginInfo['Plugin']['admin_link']));
-					$favorite = array(
-						'name' => $pluginInfo['Plugin']['title'] . '管理',
-						'url' => $adminLinkUrl,
-						'sort' => $Favorite->getMax('sort') + 1,
-						'user_id' => $user['id'],
-					);
-
-					if(!$Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl), 'recirsive' => -1))) {
-						$Favorite->create($favorite);
-						$Favorite->save();
-					}
-				}
-				
+				$this->Plugin->addFavoriteAdminLink($name, $this->BcAuth->user());
 				$this->_addPermission($this->request->data);
-				
+
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
@@ -502,23 +405,23 @@ class PluginsController extends AppController {
 		$this->help = 'plugins_form';
 		$this->render('form');
 	}
-	
+
 /**
  * アクセス制限設定を追加する
  * 
  * @param array $data リクエストデータ
+ * @return void
  */
 	public function _addPermission($data) {
-		
 		if (ClassRegistry::isKeySet('Permission')) {
 			$Permission = ClassRegistry::getObject('Permission');
 		} else {
 			$Permission = ClassRegistry::init('Permission');
 		}
-		
+
 		$userGroups = $Permission->UserGroup->find('all', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId')), 'recursive' => -1));
-		if($userGroups) {
-			foreach($userGroups as $userGroup) {
+		if ($userGroups) {
+			foreach ($userGroups as $userGroup) {
 				//$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
 				// TODO 現在 admin 固定、今後、mypage 等にも対応する
 				$permissionAuthPrefix = 'admin';
@@ -526,12 +429,12 @@ class PluginsController extends AppController {
 				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
 				switch ($data['Plugin']['permission']) {
 					case 1:
-						if($permission) {
+						if ($permission) {
 							$Permission->delete($permission['Permission']['id']);
 						}
 						break;
 					case 2:
-						if(!$permission) {
+						if (!$permission) {
 							$Permission->create(array(
 								'name'			=> $data['Plugin']['title'] . '管理',
 								'user_group_id'	=> $userGroup['UserGroup']['id'],
@@ -547,7 +450,6 @@ class PluginsController extends AppController {
 				}
 			}
 		}
-		
 	}
 
 /**
@@ -559,7 +461,6 @@ class PluginsController extends AppController {
 		if (!$this->request->data) {
 			$this->setMessage('無効な処理です。', true);
 		} else {
-
 			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
 			$this->Plugin->resetDb($this->request->data['Plugin']['name']);
 			$data['Plugin']['db_inited'] = false;
