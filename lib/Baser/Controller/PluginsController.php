@@ -22,6 +22,7 @@
  * @property Plugin $Plugin
  * @property PluginContent $PluginContent
  * @property BcManagerComponent $BcManager
+ * @property BcAuthComponent $BcAuth
  */
 class PluginsController extends AppController {
 
@@ -229,17 +230,6 @@ class PluginsController extends AppController {
 		}
 
 		$this->set('baserPlugins', $baserPlugins);
-	}
-
-/**
- * プラグイン情報を取得する
- *
- * @param array $datas プラグインデータの配列
- * @param string $file プラグインファイルのパス
- * @return array 
- */
-	protected function _getPluginInfo($datas, $file) {
-		return $this->Plugin->getPluginInfo($datas, $file);
 	}
 
 /**
