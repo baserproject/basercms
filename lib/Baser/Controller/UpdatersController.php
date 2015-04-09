@@ -510,12 +510,14 @@ class UpdatersController extends AppController {
 	}
 
 /**
- * DB構造を変更する
+ * スキーマファイルを読み込みデータベースのテーブル構造を変更する
  *
- * @param string $version
- * @param tring $plugin
- * @param string $filterTable
- * @param string $filterType
+ * @param string $version アップデート対象のバージョン番号を指定します。（例）'3.1.0'
+ * @param tring $plugin プラグイン内のスキーマを読み込むにはプラグイン名を指定します。（例）'Mail'
+ * @param string $filterTable 指定したテーブルのみを追加・更新する場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
+ *		指定しない場合は全てのスキーマファイルが対象となります。
+ * @param string $filterType 指定した更新タイプ（create / alter / drop）のみを対象とする場合は更新タイプを指定します。（例）'create'
+ *		指定しない場合は全てのスキーマファイルが対象となります。
  * @return boolean
  * @access	public
  */
