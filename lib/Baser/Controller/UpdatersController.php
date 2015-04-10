@@ -538,11 +538,12 @@ class UpdatersController extends AppController {
 	}
 
 /**
- * データを追加する
+ * CSVファイルで作成されたデータをインポートする
  *
- * @param string $version
- * @param string $plugin
- * @param string $filterTable
+ * @param string $version アップデート対象のバージョン番号を指定します。（例）'3.1.0'
+ * @param string $plugin プラグイン内のCSVを読み込むにはプラグイン名を指定します。（例）'Mail'
+ * @param string $filterTable 指定したテーブルのみCSVファイルを読み込む場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
+ *		指定しない場合は全てのテーブルが対象になります。
  * @return boolean
  * @access public
  */
