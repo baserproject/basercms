@@ -1,7 +1,8 @@
 <?php
+
 /**
  * FormHelper 拡張クラス
- * 
+ *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -1406,8 +1407,9 @@ DOC_END;
 			$value = $options['value'];
 		}
 		
+		// PHP5.3対応のため、is_string($value) 判別を実行
 		$delCheckTag = '';
-		if ($fileLinkTag && $linkOptions['delCheck'] && empty($value['session_key'])) {
+		if ($fileLinkTag && $linkOptions['delCheck'] && (is_string($value) || empty($value['session_key']))) {
 			$delCheckTag = $this->checkbox($modelName . '.' . $field . '_delete') . $this->label($modelName . '.' . $field . '_delete', '削除する');
 		}
 		$hiddenValue = $this->value($fieldName . '_');
