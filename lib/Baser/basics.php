@@ -9,7 +9,7 @@
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.Helper
+ * @package			Baser
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
