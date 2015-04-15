@@ -651,10 +651,9 @@ class BcAppController extends Controller {
 			$currentPrefix = 'front';
 		}
 		$this->set('currentPrefix', $currentPrefix);
-		$currentUserAuthPrefixes = '';
-		$currentUserAuthPrefixes = $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix');
-		if($currentUserAuthPrefixes) {
-			$currentUserAuthPrefixes = explode(',', $currentUserAuthPrefixes);
+		$currentUserAuthPrefixes = array();
+		if($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
+			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
 		}
 		$this->set('currentUserAuthPrefixes', $currentUserAuthPrefixes);
 
