@@ -1066,7 +1066,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		// リンクあり
 		$expected = '<a href="/admin/pages/edit/1" class="tool-menu">編集する</a>';
 		$this->_View->viewVars['user'] = array('User' => array('id' => 1));
-		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
 		$this->BcBaser->setPageEditLink(1);
 		ob_start();
 		$this->BcBaser->editLink();
@@ -1083,7 +1083,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEqual($this->BcBaser->existsEditLink(), false);
 		// 存在する
 		$this->_View->viewVars['user'] = array('User' => array('id' => 1));
-		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
 		$this->BcBaser->setPageEditLink(1);
 		$this->assertEqual($this->BcBaser->existsEditLink(), true);
 	}
@@ -1100,7 +1100,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEqual($result, $expected);	
 		// リンクあり
 		$expected = '<a href="/" class="tool-menu">公開ページ</a>';
-		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
 		$this->_View->viewVars['publishLink'] = '/';
 		ob_start();
 		$this->BcBaser->publishLink();
@@ -1115,7 +1115,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		// 存在しない
 		$this->assertEqual($this->BcBaser->existsPublishLink(), false);
 		// 存在する
-		$this->_View->viewVars['authPrefix'] = Configure::read('Routing.prefixes.0');
+		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
 		$this->_View->viewVars['publishLink'] = '/';
 		$this->assertEqual($this->BcBaser->existsPublishLink(), true);
 	}
