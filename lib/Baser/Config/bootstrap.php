@@ -266,14 +266,14 @@ if (BC_INSTALLED) {
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
+	App::build(array('Plugin' => array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS)), App::PREPEND);
 	$plugins = getEnablePlugins();
 	foreach ($plugins as $plugin) {
 		loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
 	}
 	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);
-
+	$dump = App::paths();
 /**
  * イベント登録
  */
@@ -346,7 +346,9 @@ if (Configure::read('debug') == 0) {
  * テーマヘルパーのパスを追加する 
  */
 if (BC_INSTALLED || isConsole()) {
-	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
-	App::build(array('View/Helper' => $helperPaths));
+	App::build(array(
+		'View/Helper' => array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS)
+	), App::PREPEND);
 }
+$dump = App::paths();
+$test = 7;
