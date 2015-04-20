@@ -1146,7 +1146,6 @@ class BcBaserHelper extends AppHelper {
  * @return bool リンクが存在する場合は true を返す
  */
 	public function existsPublishLink() {
-		$dump = Configure::read('Routing.prefixes.0');
 		return !empty($this->_View->viewVars['currentUserAuthPrefixes'])
 		&& in_array(Configure::read('Routing.prefixes.0'), $this->_View->viewVars['currentUserAuthPrefixes'])
 		&& !empty($this->_View->viewVars['publishLink']);
