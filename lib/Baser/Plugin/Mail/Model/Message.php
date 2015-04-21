@@ -844,7 +844,7 @@ class Message extends MailAppModel {
 				if($mailField['MailField']['type'] == 'file') {
 					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $message[$this->alias][$mailField['MailField']['field_name']];
 				} else {
-					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->control(
+					$inData[$mailField['MailField']['field_name'] . ' (' . $mailField['MailField']['name'] . ')'] = $Maildata->toDisplayString(
 						$mailField['MailField']['type'],
 						$message[$this->alias][$mailField['MailField']['field_name']],
 						$Mailfield->getOptions($mailField['MailField'])
