@@ -78,9 +78,22 @@ if (!defined('BC_DEPLOY_PATTERN')) {
 define('BC_BASE_URL', baseUrl());
 
 /**
- * アセットフィルターを追加
+ * ディスパッチャーフィルターを追加
  */
-Configure::write('Dispatcher.filters', array_merge(Configure::read('Dispatcher.filters'), array('BcAssetDispatcher', 'BcCacheDispatcher', 'BcRequestFilter')));
+$filters = Configure::read('Dispatcher.filters');
+if (!is_array($filters)) {
+	$filters = array();
+}
+Configure::write('Dispatcher.filters',
+	array_merge(
+		$filters,
+		array(
+			'BcAssetDispatcher',
+			'BcCacheDispatcher',
+			'BcRequestFilter'
+		)
+	)
+);
 
 /**
  * クラスローダー設定
