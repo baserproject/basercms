@@ -128,7 +128,7 @@ $config['BcAuthPrefix'] = array(
 	  'loginAction'	=> '/users/login',
 	  'logoutAction'=> '/users/logout',
 	  'toolbar'		=> true,
-	  'sessionKey'	=> 'Front',
+	  'sessionKey'	=> 'User',
 	), */
 	// マイページ（例）
 /* 'mypage' => array(
@@ -140,7 +140,7 @@ $config['BcAuthPrefix'] = array(
 	  'loginAction'	=> '/mypage/members/login',
 	  'logoutAction'=> '/mypage/members/logout',
 	  'toolbar'		=> false,
-	  'sessionKey'	=> 'Mypage',
+	  'sessionKey'	=> 'User',
 	), */
 	// モバイルマイページ（例）
 /* 'mobile_mypage' => array(
@@ -153,7 +153,7 @@ $config['BcAuthPrefix'] = array(
 	  'logoutAction'=> '/m/mypage/users/logout',
 	  'toolbar'		=> false,
 	  'userScope'	=> array(),
-	  'sessionKey'	=> 'MobileMypage',
+	  'sessionKey'	=> 'User',
 	) */
 );
 /**
