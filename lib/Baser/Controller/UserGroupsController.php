@@ -117,7 +117,6 @@ class UserGroupsController extends AppController {
 				$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
 			}
 			$this->UserGroup->create($this->request->data);
-			$this->request->data['UserGroup']['auth_prefix'] = implode(',', $this->request->data['UserGroup']['auth_prefix']);
 			if ($this->UserGroup->save()) {
 				$this->setMessage('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。', false, true);
 				$this->redirect(array('action' => 'index'));
