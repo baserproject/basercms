@@ -26,33 +26,40 @@ define('BC_INSTALLED', isInstalled());
 /**
  * Baserパス追加
  */
+//優先度高
 App::build(array(
-	'Controller'				=> array_merge(App::path('Controller'), array(BASER_CONTROLLERS)),
-	'Model'						=> array_merge(App::path('Model'), array(BASER_MODELS)),
-	'Model/Behavior'			=> array_merge(App::path('Model/Behavior'), array(BASER_BEHAVIORS)),
-	'Model/Datasource'			=> array_merge(App::path('Model/Datasource'), array(BASER_DATASOURCE)),
-	'Model/Datasource/Database' => array_merge(App::path('Model/Datasource/Database'), array(BASER_DATABASE)),
-	'Controller/Component'		=> array_merge(App::path('Controller/Component'), array(BASER_COMPONENTS)),
-	'Controller/Component/Auth' => array_merge(App::path('Controller/Component/Auth'), array(BASER_COMPONENTS . 'Auth' . DS)),
-	'View'						=> array_merge(array(WWW_ROOT), App::path('View'), array(BASER_VIEWS)),
-	'View/Helper'				=> array_merge(App::path('View/Helper'), array(BASER_HELPERS)),
-	'Plugin'					=> array_merge(App::path('Plugin'), array(BASER_PLUGINS)),
-	'Vendor'					=> array_merge(App::path('Vendor'), array(BASER_VENDORS)),
-	'Locale'					=> array_merge(App::path('Locale'), array(BASER_LOCALES)),
-	'Lib'						=> array_merge(App::path('Lib'), array(BASER_LIBS)),
-	'Console'					=> array_merge(App::path('Console'), array(BASER_CONSOLES)),
-	'Console/Command'			=> array_merge(App::path('Console/Command'), array(BASER_CONSOLES . 'Command' . DS)),
-	'Routing/Filter'			=> array_merge(App::path('Routing/Filter'), array(BASER . 'Routing' . DS . 'Filter' . DS))
-));
+	'View'						=> array(WWW_ROOT),
+), App::PREPEND);
 
+
+//優先度低
 App::build(array(
-	'Event'				=> array(APP . 'Event', BASER_EVENTS),
-	'Routing/Filter'	=> array(BASER . 'Routing' . DS . 'Filter' . DS),
-	'Configure'			=> array(BASER . 'Configure' . DS),
-	'TestSuite'			=> array(BASER_TEST_SUITE),
-	'TestSuite/Reporter'=> array(BASER_TEST_SUITE . 'Reporter' . DS),
-	'TestSuite/Fixture' => array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network'			=> array(BASER . 'Network' . DS)
+	'Controller'				=> array(BASER_CONTROLLERS),
+	'Model'						=> array(BASER_MODELS),
+	'Model/Behavior'			=> array(BASER_BEHAVIORS),
+	'Model/Datasource'			=> array(BASER_DATASOURCE),
+	'Model/Datasource/Database' => array(BASER_DATABASE),
+	'Controller/Component'		=> array(BASER_COMPONENTS),
+	'Controller/Component/Auth' => array(BASER_COMPONENTS . 'Auth' . DS),
+	'View'						=> array(BASER_VIEWS),
+	'View/Helper'				=> array(BASER_HELPERS),
+	'Plugin'					=> array(BASER_PLUGINS),
+	'Vendor'					=> array(BASER_VENDORS),
+	'Locale'					=> array(BASER_LOCALES),
+	'Lib'						=> array(BASER_LIBS),
+	'Console'					=> array(BASER_CONSOLES),
+	'Console/Command'			=> array(BASER_CONSOLES . 'Command' . DS),
+), App::APPEND);
+
+//新規登録
+App::build(array(
+	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'Configure'					=> array(BASER . 'Configure' . DS),
+	'TestSuite'					=> array(BASER_TEST_SUITE),
+	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),
+	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS),
+	'Network'					=> array(BASER . 'Network' . DS)
 ), App::REGISTER);
 
 /**
@@ -272,7 +279,7 @@ if (BC_INSTALLED) {
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-	App::build(array('Plugin' => array_merge(array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS), App::path('Plugin'))));
+	App::build(array('Plugin' => array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS)), App::PREPEND);
 	$plugins = getEnablePlugins();
 	foreach ($plugins as $plugin) {
 		loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
@@ -352,7 +359,7 @@ if (Configure::read('debug') == 0) {
  * テーマヘルパーのパスを追加する 
  */
 if (BC_INSTALLED || isConsole()) {
-	$helperPaths = App::path('View/Helper');
-	array_unshift($helperPaths, WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS . 'Helper' . DS);
-	App::build(array('View/Helper' => $helperPaths));
+	App::build(array(
+		'View/Helper' => array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS)
+	), App::PREPEND);
 }
