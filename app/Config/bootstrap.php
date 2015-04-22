@@ -91,14 +91,10 @@
  * ));
  */
 
-
-// CUSTOMIZE DELETE 2014/04/19 n1215
-// >>>
-/*Configure::write('Dispatcher.filters', array(
+Configure::write('Dispatcher.filters', array(
 	'AssetDispatcher',
 	'CacheDispatcher'
-));*/
-// <<<
+));
 
 /**
  * Configures default file logging options
