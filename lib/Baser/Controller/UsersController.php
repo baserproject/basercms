@@ -194,7 +194,8 @@ class UsersController extends AppController {
 			$this->Session->write(BcAuthComponent::$sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->setMessage('元のユーザーに戻りました。');
-			$authPrefix = $data['UserGroup']['auth_prefix'];
+			$authPrefix = explode(',', $data['UserGroup']['auth_prefix']);
+			$authPrefix = $authPrefix[0];
 		} else {
 			$this->setMessage('不正な操作です。', true);
 			if (!empty($this->request->params['prefix'])) {
