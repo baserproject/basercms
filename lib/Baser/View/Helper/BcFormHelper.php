@@ -1363,6 +1363,7 @@ DOC_END;
  * @return string
  */
 	public function file($fieldName, $options = array()) {
+		$options = $this->_initInputField($fieldName, $options);
 		$entity = $this->entity();
 		$modelName = $this->model();
 		$field = $this->field();
