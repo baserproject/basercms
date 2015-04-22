@@ -31,7 +31,7 @@ class BcAppController extends Controller {
 
 /**
  * view
- * 
+ *
  * @var string
  */
 	public $viewClass = 'App';
@@ -107,7 +107,7 @@ class BcAppController extends Controller {
 
 /**
  * 検索ボックス
- * 
+ *
  * @var string
  * @access public
  */
@@ -115,7 +115,7 @@ class BcAppController extends Controller {
 
 /**
  * ヘルプ
- * 
+ *
  * @var string
  * @access public
  */
@@ -139,7 +139,7 @@ class BcAppController extends Controller {
 
 /**
  * サイトコンフィグデータ
- * 
+ *
  * @var array
  * @access public
  */
@@ -147,15 +147,15 @@ class BcAppController extends Controller {
 
 /**
  * プレビューフラグ
- * 
- * @var boolean
+ *
+ * @var bool
  * @access public
  */
 	public $preview = false;
 
 /**
  * 管理画面テーマ
- * 
+ *
  * @var string
  */
 	public $adminTheme = null;
@@ -163,8 +163,9 @@ class BcAppController extends Controller {
 /**
  * コンストラクタ
  *
- * @return	void
- * @access	private
+ * @param CakeRequest $request リクエストオブジェクト
+ * @param CakeResponse $response レスポンスオブジェクト
+ * @access private
  */
 	public function __construct($request = null, $response = null) {
 		parent::__construct($request, $response);
@@ -227,7 +228,7 @@ class BcAppController extends Controller {
 				$this->notFound();
 			}
 		}
-		
+
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。
@@ -254,7 +255,7 @@ class BcAppController extends Controller {
 			$this->Security->validatePost = false;
 			$this->Security->csrfCheck = false;
 		}
-		
+
 		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
 			return;
 		}
@@ -288,7 +289,7 @@ class BcAppController extends Controller {
 				return;
 			} else {
 				$redirectUrl = '/maintenance';
-				if(Configure::read('BcRequest.agentAlias')) {
+				if (Configure::read('BcRequest.agentAlias')) {
 					$redirectUrl = '/' . Configure::read('BcRequest.agentAlias') . $redirectUrl;
 				}
 				$this->redirect($redirectUrl);
@@ -300,32 +301,32 @@ class BcAppController extends Controller {
 
 			$currentAuthPrefix = '';
 			$authConfig = array();
-			
-			if(!empty($this->request->params['prefix'])) {
+
+			if (!empty($this->request->params['prefix'])) {
 				$currentAuthPrefix = $this->request->params['prefix'];
 			} else {
 				$currentAuthPrefix = 'front';
 			}
-			
+
 			$authPrefixSettings = Configure::read('BcAuthPrefix');
-			foreach($authPrefixSettings as $key => $authPrefixSetting) {
-				if(isset($authPrefixSetting['alias']) && $authPrefixSetting['alias'] == $currentAuthPrefix) {
+			foreach ($authPrefixSettings as $key => $authPrefixSetting) {
+				if (isset($authPrefixSetting['alias']) && $authPrefixSetting['alias'] == $currentAuthPrefix) {
 					$authConfig = $authPrefixSetting;
 					$authConfig['auth_prefix'] = $authPrefixSetting['alias'];
 					break;
 				}
-				if($key == $currentAuthPrefix) {
+				if ($key == $currentAuthPrefix) {
 					$authConfig = $authPrefixSetting;
 					$authConfig['auth_prefix'] = $key;
 					break;
 				}
 			}
-			
-			if($authConfig) {
+
+			if ($authConfig) {
 				// 認証設定
-				$this->BcAuthConfigure->setting($authConfig);	
+				$this->BcAuthConfigure->setting($authConfig);
 			}
-			
+
 			// =================================================================
 			// ユーザーの存在チェック
 			// ログイン中のユーザーを管理側で削除した場合、ログイン状態を削除する必要がある為
@@ -334,12 +335,12 @@ class BcAppController extends Controller {
 			if ($user && $authConfig) {
 				$userModel = $authConfig['userModel'];
 				$User = ClassRegistry::init($userModel);
-				if(strpos($userModel, '.') !== false) {
+				if (strpos($userModel, '.') !== false) {
 					list($plugin, $userModel) = explode('.', $userModel);
 				}
 				if ($userModel && !empty($this->{$userModel})) {
 					$conditions = array(
-						$userModel . '.id'				=> $user['id'], 
+						$userModel . '.id'				=> $user['id'],
 						$userModel . '.name'			=> $user['name']
 					);
 					if (isset($UserModel->belongsTo['UserGroup'])) {
@@ -407,8 +408,8 @@ class BcAppController extends Controller {
 			}
 		}
 
-        //Securityコンポーネント設定
-        $this->Security->blackHoleCallback = '_blackHoleCallback';
+		//Securityコンポーネント設定
+		$this->Security->blackHoleCallback = '_blackHoleCallback';
 
 		// SSLリダイレクト設定
 		if (Configure::read('BcApp.adminSsl') && !empty($this->request->params['admin'])) {
@@ -417,12 +418,11 @@ class BcAppController extends Controller {
 				$this->Security->requireSecure = $adminSslMethods;
 			}
 		}
-
 	}
 
 /**
  * テーマをセットする
- * 
+ *
  * @return void
  * @access public
  */
@@ -446,9 +446,9 @@ class BcAppController extends Controller {
 /**
  * 管理画面用のメソッドを取得（コールバックメソッド）
  *
- * @param	string	$var
- * @return	boolean
- * @access	public
+ * @param string $var
+ * @return bool
+ * @access public
  */
 	protected function _adminSslMethods($var) {
 		return preg_match('/^admin_/', $var);
@@ -509,6 +509,9 @@ class BcAppController extends Controller {
 
 /**
  * 初回アクセスメッセージ用のフラグを更新する
+ *
+ * @return void
+ * @access private
  */
 	private function __updateFirstAccess() {
 		// 初回アクセスメッセージ表示設定
@@ -525,34 +528,34 @@ class BcAppController extends Controller {
  * フォーム改ざん対策・CSRF対策・SSL制限・HTTPメソッド制限などへの違反が原因で
  * Securityコンポーネントに"ブラックホールされた"場合の動作を指定する
  *
- * @param	string	$err エラーの種類
+ * @param string $err エラーの種類
+ * @return void
  * @throws BadRequestException
  */
-    public function _blackHoleCallback($err) {
+	public function _blackHoleCallback($err) {
+		//SSL制限違反は別処理
+		if ($err === 'secure') {
+			$this->_sslFail($err);
+			return;
+		}
 
-        //SSL制限違反は別処理
-        if($err === 'secure') {
-            $this->_sslFail($err);
-            return;
-        }
+		$errorMessages = array(
+			'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
+			'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
+			'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
+			'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+			'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
+			'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
+		);
 
-        $errorMessages = array(
-            'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
-            'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
-            'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
-            'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
-            'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
-            'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
-        );
+		$message = "不正なリクエストと判断されました。";
 
-        $message = "不正なリクエストと判断されました。";
+		if (array_key_exists($err, $errorMessages)) {
+			$message .= "(type:{$err})" . $errorMessages[$err];
+		}
 
-        if(array_key_exists($err, $errorMessages)) {
-            $message .= "(type:{$err})" . $errorMessages[$err];
-        }
-
-        throw new BadRequestException($message);
-    }
+		throw new BadRequestException($message);
+	}
 
 /**
  * SSLエラー処理
@@ -560,7 +563,7 @@ class BcAppController extends Controller {
  * SSL通信が必要なURLの際にSSLでない場合、
  * SSLのURLにリダイレクトさせる
  *
- * @param	string	$err
+ * @param string $err エラーの種類
  * @return	void
  * @access	protected
  */
@@ -592,10 +595,10 @@ class BcAppController extends Controller {
 /**
  * 配列の文字コードを変換する
  *
- * @param 	array	変換前データ
- * @param 	string	変換後の文字コード
- * @return 	array	変換後データ
- * @access	protected
+ * @param array $data 変換前データ
+ * @param string $outenc 変換後の文字コード
+ * @return array 変換後データ
+ * @access protected
  */
 	protected function _autoConvertEncodingByArray($data, $outenc) {
 		foreach ($data as $key => $value) {
@@ -652,14 +655,14 @@ class BcAppController extends Controller {
 		}
 		$this->set('currentPrefix', $currentPrefix);
 		$currentUserAuthPrefixes = array();
-		if($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
+		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
 		}
 		$this->set('currentUserAuthPrefixes', $currentUserAuthPrefixes);
 
 		/* 携帯用絵文字データの読込 */
 		// TODO 実装するかどうか検討する
-		/* if(isset($this->request->params['prefix']) && $this->request->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
+		/* if (isset($this->request->params['prefix']) && $this->request->params['prefix'] == 'mobile' && !empty($this->EmojiData)) {
 		  $emojiData = $this->EmojiData->find('all');
 		  $this->set('emoji',$this->Emoji->EmojiData($emojiData));
 		  } */
@@ -668,6 +671,7 @@ class BcAppController extends Controller {
 /**
  * baserCMSのバージョンを取得する
  *
+ * @param string $plugin プラグイン名
  * @return string Baserバージョン
  * @access public
  */
@@ -678,9 +682,9 @@ class BcAppController extends Controller {
 /**
  * テーマのバージョン番号を取得する
  *
- * @param	string	$theme
- * @return	string
- * @access	public
+ * @param string $theme テーマ名
+ * @return string
+ * @access public
  */
 	public function getThemeVersion($theme) {
 		$path = WWW_ROOT . 'theme' . DS . $theme . DS . 'VERSION.txt';
@@ -700,6 +704,7 @@ class BcAppController extends Controller {
 /**
  * DBのバージョンを取得する
  *
+ * @param string $plugin プラグイン名
  * @return string
  * @access public
  */
@@ -760,17 +765,17 @@ class BcAppController extends Controller {
 /**
  * メールを送信する
  *
- * @param	string	$to		送信先アドレス
- * @param	string	$title	タイトル
- * @param	mixed	$body	本文
- * @options	array
- * @return	boolean			送信結果
+ * @param string $to 送信先アドレス
+ * @param string $title タイトル
+ * @param mixed $body 本文
+ * @param array $options オプション
+ * @return bool 送信結果
  */
 	public function sendMail($to, $title = '', $body = '', $options = array()) {
 		$options = array_merge(array(
 			'agentTemplate' => true,
 			'template' => 'default'
-			), $options);
+		), $options);
 
 		if (!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';
@@ -805,14 +810,14 @@ class BcAppController extends Controller {
 		} else {
 			$encode = 'ISO-2022-JP';
 		}
-		
+
 		// ISO-2022-JPの場合半角カナが文字化けしてしまうので全角に変換する
-		if ($encode == 'ISO-2022-JP'){
+		if ($encode == 'ISO-2022-JP') {
 			$title = mb_convert_kana($title, 'KV', "UTF-8");
 			if (is_string($body)) {
 				$body = mb_convert_kana($body, 'KV', "UTF-8");
 			} elseif (isset($body['message']) && is_array($body['message'])) {
-				foreach($body['message'] as $key => $val) {
+				foreach ($body['message'] as $key => $val) {
 					if (is_string($val)) {
 						$body['message'][$key] = mb_convert_kana($val, 'KV', "UTF-8");
 					}
@@ -1012,8 +1017,8 @@ class BcAppController extends Controller {
 /**
  * 画面の情報をセットする
  *
- * @param	array	$filterModels
- * @param	string	$options
+ * @param array $filterModels
+ * @param array $options オプション
  * @return	void
  * @access	public
  */
@@ -1032,7 +1037,8 @@ class BcAppController extends Controller {
 /**
  * 画面の情報をセッションに保存する
  *
- * @param	string		$options
+ * @param array $filterModels
+ * @param array $options オプション
  * @return	void
  * @access	protected
  */
@@ -1070,7 +1076,7 @@ class BcAppController extends Controller {
  * 画面の情報をセッションから読み込む
  *
  * @param array $filterModels
- * @param array|string $options
+ * @param array|string $options オプション
  * @return void
  * @access	protected
  */
@@ -1141,9 +1147,9 @@ class BcAppController extends Controller {
 /**
  * Select Text 用の条件を生成する
  *
- * @param	string	$fieldName
- * @param	mixed	$values
- * @param	array	$options
+ * @param string $fieldName フィールド名
+ * @param mixed $values 値
+ * @param array $options オプション
  * @return	string
  * @access	public
  */
@@ -1167,10 +1173,10 @@ class BcAppController extends Controller {
 /**
  * BETWEEN 条件を生成
  *
- * @param	string	$fieldName
- * @param	mixed	$value
- * @return	array
- * @access	public
+ * @param string $fieldName フィールド名
+ * @param mixed $value 値
+ * @return array
+ * @access public
  */
 	public function convertBetweenCondition($fieldName, $value) {
 		if (strpos($value, '-') === false) {
@@ -1190,9 +1196,9 @@ class BcAppController extends Controller {
 /**
  * ランダムなパスワード文字列を生成する
  *
- * @param	int		$len
- * @return	string	$password
- * @access	public
+ * @param int $len 文字列の長さ
+ * @return string パスワード
+ * @access public
  */
 	public function generatePassword($len = 8) {
 		srand((double)microtime() * 1000000);
@@ -1208,7 +1214,7 @@ class BcAppController extends Controller {
 /**
  * 認証完了後処理
  *
- * @return	boolean
+ * @return	bool
  */
 	public function isAuthorized() {
 		return true;
@@ -1218,7 +1224,7 @@ class BcAppController extends Controller {
  * Returns the referring URL for this request.
  *
  * @param string $default Default URL to use if HTTP_REFERER cannot be read from headers
- * @param boolean $local If true, restrict referring URLs to local server
+ * @param bool $local If true, restrict referring URLs to local server
  * @return string Referring URL
  * @access public
  * @link http://book.cakephp.org/view/430/referer
@@ -1251,8 +1257,8 @@ class BcAppController extends Controller {
 
 /**
  * 現在のユーザーのドキュメントルートの書き込み権限確認
- * 
- * @return boolean
+ *
+ * @return bool
  * @access public
  */
 	public function checkRootEditable() {
@@ -1274,14 +1280,14 @@ class BcAppController extends Controller {
 
 /**
  * リクエストされた画面に対しての認証用ユーザーモデルを取得する
- * 
+ *
  * @return mixed string Or false
  */
 	public function getUserModel() {
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
-		if(isset($this->BcAuth->authenticate['Form']['userModel'])) {
+		if (isset($this->BcAuth->authenticate['Form']['userModel'])) {
 			return $this->BcAuth->authenticate['Form']['userModel'];
 		} else {
 			return false;
@@ -1293,8 +1299,8 @@ class BcAppController extends Controller {
  * Script execution is halted after the redirect.
  *
  * @param mixed $url A string or array-based URL pointing to another location within the app, or an absolute URL
- * @param integer $status Optional HTTP status code (eg: 404)
- * @param boolean $exit If true, exit() will be called after the redirect
+ * @param int $status Optional HTTP status code (eg: 404)
+ * @param bool $exit If true, exit() will be called after the redirect
  * @return mixed void if $exit = false. Terminates script if $exit = true
  * @access public
  */
@@ -1340,8 +1346,9 @@ class BcAppController extends Controller {
 
 /**
  * よく使う項目の表示状態を保存する
- * 
+ *
  * @param mixed $open 1 Or ''
+ * @return void
  */
 	public function admin_ajax_save_favorite_box($open = '') {
 		$this->Session->write('Baser.favorite_box_opened', $open);
@@ -1351,14 +1358,14 @@ class BcAppController extends Controller {
 
 /**
  * 一括処理
- * 
+ *
  * 一括処理としてコントローラーの次のメソッドを呼び出す
  * バッチ処理名は、バッチ処理指定用のコンボボックスで定義する
- * 
- * _batch{バッチ処理名} 
- * 
+ *
+ * _batch{バッチ処理名}
+ *
  * 処理結果として成功の場合は、バッチ処理名を出力する
- * 
+ *
  * @return void
  * @access public
  */
@@ -1385,8 +1392,10 @@ class BcAppController extends Controller {
 
 /**
  * 検索ボックスの表示状態を保存する
- * 
+ *
+ * @param string $key キー
  * @param mixed $open 1 Or ''
+ * @return void
  */
 	public function admin_ajax_save_search_box($key, $open = '') {
 		$this->Session->write('Baser.searchBoxOpened.' . $key, $open);
@@ -1401,8 +1410,6 @@ class BcAppController extends Controller {
  * setAction('action_with_parameters', $parameter1);
  *
  * @param string $action The new action to be redirected to
- * @param mixed  Any other parameters passed to this method will be passed as
- *               parameters to the new action.
  * @return mixed Returns the return value of the called action
  * @access public
  */
@@ -1429,7 +1436,7 @@ class BcAppController extends Controller {
 /**
  * テーマ用のヘルパーをセットする
  * 管理画面では読み込まない
- * 
+ *
  * @return void
  * @access public
  */
@@ -1451,9 +1458,9 @@ class BcAppController extends Controller {
 
 /**
  * Ajax用のエラーを出力する
- * 
- * @param int $errorNo
- * @param mixed $message 
+ *
+ * @param int $errorNo エラーのステータスコード
+ * @param mixed $message エラーメッセージ
  * @return void
  * @access public
  */
@@ -1478,10 +1485,10 @@ class BcAppController extends Controller {
 
 /**
  * メッセージをビューにセットする
- * 
- * @param string $message
- * @param boolean $alert
- * @param boolean $saveDblog
+ *
+ * @param string $message メッセージ
+ * @param bool $alert 警告かどうか
+ * @param bool $saveDblog Dblogに保存するか
  * @return void
  */
 	public function setMessage($message, $alert = false, $saveDblog = false) {
@@ -1504,9 +1511,10 @@ class BcAppController extends Controller {
 
 /**
  * イベントを発火
- * 
- * @param string $name
- * @param array $params
+ *
+ * @param string $name イベント名
+ * @param array $params パラメータ
+ * @param array $options オプション
  * @return mixed
  */
 	public function dispatchEvent($name, $params = array(), $options = array()) {
