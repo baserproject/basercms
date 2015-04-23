@@ -207,6 +207,16 @@ class Feed extends FeedAppModel {
 			} else {
 				$tmp['category']['value'] = '';
 			}
+			$categories = $data->get_categories();
+			$categoryArray = array();
+			if ($categories) {
+				foreach ($categories as $category) {
+					$categoryArray[] = $category->get_term();
+				}
+				$tmp['categories']['value'] = $categoryArray;
+			} else {
+				$tmp['categories']['value'] = '';
+			}
 			$tmp['guid']['value'] = $data->get_id();
 			$tmp['guid']['attributes']['isPermaLink'] = $data->get_permalink();
 			$tmp['description']['value'] = $data->get_description();
