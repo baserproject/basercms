@@ -1327,10 +1327,48 @@ class BcManagerComponent extends Component {
 
 /**
  * files フォルダを初期化する
+ * 
+ * @return boolean
  */
 	public function resetFiles() {
+		return $this->resetEmptyFolder(WWW_ROOT . 'files');
+	}
+	
+/**
+ * 管理画面用のアセットフォルダ（img / js / css）を初期化する
+ * 
+ * @return boolean
+ */
+	public function resetAdminAssets() {
+		$paths = array(
+			WWW_ROOT . 'img' . DS . 'admin',
+			WWW_ROOT . 'css' . DS . 'admin',
+			WWW_ROOT . 'js' . DS . 'admin'
+		);
 		$result = true;
-		$Folder = new Folder(WWW_ROOT . 'files');
+		foreach($paths as $path) {
+			if(is_dir($path)) {
+				$Folder = new Folder($path);
+				if(!$Folder->delete()) {
+					$result = false;
+				}
+				$Folder = null;
+			}
+		}
+		return $result;
+	}
+	
+/**
+ * empty ファイルを梱包したフォルダをリセットする
+ * 
+ * empty ファイルを残して内包するファイルとフォルダを全て削除する
+ * 
+ * @param string $path
+ * @return boolean
+ */
+	public function resetEmptyFolder($path) {
+		$result = true;
+		$Folder = new Folder($path);
 		$files = $Folder->read(true, true, true);
 		$Folder = null;
 		if(!empty($files[0])) {
@@ -1388,6 +1426,12 @@ class BcManagerComponent extends Component {
 		if (!$this->resetFiles()) {
 			$result = false;
 			$this->log('files フォルダを初期化できませんでした。');
+		}
+		
+		// files フォルダの初期化
+		if (!$this->resetAdminAssets()) {
+			$result = false;
+			$this->log('img / css / js フォルダを初期化できませんでした。');
 		}
 		
 		ClassRegistry::flush();
