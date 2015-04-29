@@ -18,6 +18,11 @@ $currentAuthPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 if (!empty($currentAuthPrefix['loginAction'])) {
 	$loginUrl = preg_replace('/^\//', '', $currentAuthPrefix['loginAction']);
 }
+if (in_array('admin', $currentUserAuthPrefixes)) {
+	$logoutAction = Configure::read('BcAuthPrefix.admin.logoutAction');
+} else {
+	$logoutAction = $currentAuthPrefix['logoutAction'];
+}
 if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 	$authName = $currentAuthPrefix['name'];
 } elseif (isset($this->BcBaser->siteConfig['name'])) {
@@ -93,13 +98,11 @@ $(function(){
 								<li><?php $this->BcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
 							<?php endif ?>
 							<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
-								<?php if ($currentPrefix == 'front'): ?>
-									<li><?php $this->BcBaser->link('アカウント設定', array('plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
-								<?php else: ?>
-									<li><?php $this->BcBaser->link('アカウント設定', array($currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
-								<?php endif ?>
+								<li><?php $this->BcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
+							<?php else: ?>
+								<li><?php $this->BcBaser->link('アカウント設定', array($currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 							<?php endif ?>
-								<li><?php $this->BcBaser->link('ログアウト', $currentAuthPrefix['logoutAction']) ?></li>
+							<li><?php $this->BcBaser->link('ログアウト', $logoutAction) ?></li>
 						</ul>
 					<?php elseif ($this->name != 'Installations' && $this->request->url != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
 						<?php $this->BcBaser->link('ログインしていません ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
