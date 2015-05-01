@@ -1067,9 +1067,10 @@ class BcAppModel extends Model {
 	}
 
 /**
- * Unbinds all relations from a model
+ * 指定したモデル以外のアソシエーションを除外する
  *
- * @param string unbinds all related models.
+ * @param array $auguments アソシエーションを除外しないモデル
+ * @param boolean $reset バインド時に１回の find でリセットするかどうか
  * @return void
  */
 	public function expects($arguments, $reset = true) {
