@@ -109,6 +109,8 @@ $config['BcAuthPrefix'] = array(
 		'loginTitle' => '管理システムログイン',
 		// ログインページURL
 		'loginAction' => '/' . $adminPrefix . '/users/login',
+		// ログアウトページURL
+		'logoutAction'=> '/' . $adminPrefix . '/users/logout',
 		// ツールバー利用
 		'toolbar' => true,
 		// モデル
@@ -124,8 +126,9 @@ $config['BcAuthPrefix'] = array(
 	  'loginRedirect'	=> '/',
 	  'userModel'		=> 'User',
 	  'loginAction'	=> '/users/login',
+	  'logoutAction'=> '/users/logout',
 	  'toolbar'		=> true,
-	  'sessionKey'	=> 'Front',
+	  'sessionKey'	=> 'User',
 	), */
 	// マイページ（例）
 /* 'mypage' => array(
@@ -135,8 +138,9 @@ $config['BcAuthPrefix'] = array(
 	  'loginTitle'	=> 'マイページログイン',
 	  'userModel'		=> 'Member',
 	  'loginAction'	=> '/mypage/members/login',
+	  'logoutAction'=> '/mypage/members/logout',
 	  'toolbar'		=> false,
-	  'sessionKey'	=> 'Mypage',
+	  'sessionKey'	=> 'User',
 	), */
 	// モバイルマイページ（例）
 /* 'mobile_mypage' => array(
@@ -146,9 +150,10 @@ $config['BcAuthPrefix'] = array(
 	  'loginTitle'	=> 'マイページログイン',
 	  'userModel'		=> 'User',
 	  'loginAction'	=> '/m/mypage/users/login',
+	  'logoutAction'=> '/m/mypage/users/logout',
 	  'toolbar'		=> false,
 	  'userScope'	=> array(),
-	  'sessionKey'	=> 'MobileMypage',
+	  'sessionKey'	=> 'User',
 	) */
 );
 /**

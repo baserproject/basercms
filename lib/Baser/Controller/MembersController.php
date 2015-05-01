@@ -44,8 +44,8 @@ class MembersController extends UsersController {
  * [MYPAGE] メンバー編集
  * 
  */
-	public function mypage_edit() {
-		$this->pageTitle = 'メンバーマイページ（デモ）';
+	public function mypage_index() {
+		$this->pageTitle = 'メンバーマイページ';
 	}
 
 }

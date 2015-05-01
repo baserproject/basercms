@@ -46,7 +46,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * ブログコンテンツデータをセットする
- * 
+ *
  * アイキャッチを利用する場合に必ず設定が必要
  *
  * @param int $blogContentId ブログコンテンツID
@@ -143,7 +143,7 @@ class BlogHelper extends AppHelper {
 			return $post['BlogPost']['name'];
 		}
 	}
-	
+
 /**
  * 記事へのリンクを取得する
  *
@@ -231,11 +231,12 @@ class BlogHelper extends AppHelper {
 
 /**
  * 記事が属するカテゴリ名を出力する
- * 
+ *
  * @param array $post 記事データ
  * @param array $options オプション（初期値 : array()）
  *	- `link` : リンクをつけるかどうか（初期値 : true）
- *	※ その他のオプションは、HtmlHelper::link() を参照
+ *	※ その他のオプションは、`link`オプションが`true`の場合に
+ *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return void
  */
 	public function category($post, $options = array()) {
@@ -248,7 +249,8 @@ class BlogHelper extends AppHelper {
  * @param array $post 記事データ
  * @param array $options オプション（初期値 : array()）
  *	- `link` : リンクをつけるかどうか（初期値 : true）
- *	※ その他のオプションは、HtmlHelper::link() を参照
+ *	※ その他のオプションは、`link`オプションが`true`の場合に
+ *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return string カテゴリ名
  */
 	public function getCategory($post, $options = array()) {
@@ -278,7 +280,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグを出力する
- * 
+ *
  * 復数所属する場合は復数出力する
  *
  * @param array $post 記事データ
@@ -291,7 +293,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグを取得する
- * 
+ *
  * 復数所属する場合は復数取得する
  *
  * @param array $post 記事データ
@@ -320,7 +322,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * カテゴリ一覧へのURLを取得する
- * 
+ *
  * [注意] リンク関数でラップする前提の為、ベースURLは考慮されない
  *
  * @param string $blogCategoyId ブログカテゴリID
@@ -400,7 +402,9 @@ class BlogHelper extends AppHelper {
  * @param int $depth 階層（初期値 : 3）
  * @param boolean $count 件数を表示するかどうか（初期値 : false）
  * @param array $options オプション（初期値 : array()）
- *	 ※ オプションは、HtmlHelper::link() を参照
+ *	- `link` : リンクをつけるかどうか（初期値 : true）
+ *	※ その他のオプションは、`link`オプションが`true`の場合に
+ *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return string HTMLのカテゴリ一覧
  */
 	public function getCategoryList($categories, $depth = 3, $count = false, $options = array()) {
@@ -415,7 +419,9 @@ class BlogHelper extends AppHelper {
  * @param int $current 現在の階層（初期値 : 1）
  * @param boolean $count 件数を表示するかどうか（初期値 : false）
  * @param array $options オプション（初期値 : array()）
- *	 ※ オプションは、HtmlHelper::link() を参照
+ *	- `link` : リンクをつけるかどうか（初期値 : true）
+ *	※ その他のオプションは、`link`オプションが`true`の場合に
+ *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return string HTMLのカテゴリ一覧
  */
 	protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = array()) {
@@ -551,15 +557,15 @@ class BlogHelper extends AppHelper {
 
 /**
  * レイアウトテンプレートを取得
- * 
+ *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array レイアウトテンプレート一覧
  * @todo 別のヘルパに移動
  */
 	public function getLayoutTemplates() {
 		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
-		
+
 		if ($this->BcBaser->siteConfig['theme']) {
 			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
 		}
@@ -591,9 +597,9 @@ class BlogHelper extends AppHelper {
 
 /**
  * ブログテンプレートを取得
- * 
+ *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array ブログテンプレート一覧
  * @todo 別のヘルパに移動
  */
@@ -813,7 +819,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * アーカイブページ判定
- * 
+ *
  * @return boolean 現在のページがアーカイブページの場合は true を返す
  */
 	public function isArchive() {
@@ -822,7 +828,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * カテゴリー別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページがカテゴリー別記事一覧ページの場合は true を返す
  */
 	public function isCategory() {
@@ -831,7 +837,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * タグ別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページがタグ別記事一覧ページの場合は true を返す
  */
 	public function isTag() {
@@ -840,7 +846,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 日別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページが日別記事一覧ページの場合は true を返す
  */
 	public function isDate() {
@@ -858,7 +864,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 年別記事一覧ページ判定
- * 
+ *
  * @return boolean 現在のページが年別記事一覧ページの場合は true を返す
  */
 	public function isYear() {
@@ -867,7 +873,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * 個別ページ判定
- * 
+ *
  * @return boolean 現在のページが個別ページの場合は true を返す
  */
 	public function isSingle() {
@@ -879,16 +885,16 @@ class BlogHelper extends AppHelper {
 			$agentPrefix .= '_';
 		}
 		return (
-			$this->request->params['plugin'] == 'blog' && 
-			$this->request->params['controller'] == 'blog' && 
-			$this->request->params['action'] == $agentPrefix . 'archives' && 
+			$this->request->params['plugin'] == 'blog' &&
+			$this->request->params['controller'] == 'blog' &&
+			$this->request->params['action'] == $agentPrefix . 'archives' &&
 			!$this->getBlogArchiveType()
 		);
 	}
 
 /**
  * インデックスページ判定
- * 
+ *
  * @return boolean 現在のページがインデックスページの場合は true を返す
  */
 	public function isHome() {
@@ -900,7 +906,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * アイキャッチ画像を出力する
- * 
+ *
  * @param array $post ブログ記事
  * @param array $options オプション（初期値 : array()）
  *	- `imgsize` : 画像サイズ[thumb|small|medium|large]（初期値 : thumb）
@@ -923,7 +929,7 @@ class BlogHelper extends AppHelper {
 
 /**
  * アイキャッチ画像を取得する
- * 
+ *
  * @param array $post ブログ記事
  * @param array $options オプション（初期値 : array()）
  *	- `imgsize` : 画像サイズ[thumb|small|medium|large]（初期値 : thumb）
@@ -957,10 +963,10 @@ class BlogHelper extends AppHelper {
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
 	}
-	
+
 /**
  * メールフォームプラグインのフォームへのリンクを生成する
- * 
+ *
  * @param string $title リンクのタイトル
  * @param string $contentsName メールフォームのコンテンツ名
  * @param array $datas メールフォームに引き継ぐデータ（初期値 : array()）
@@ -973,5 +979,5 @@ class BlogHelper extends AppHelper {
 		$MailHelper = new MailHelper($this->_View);
 		$MailHelper->link($title, $contentsName, $datas, $options);
 	}
-	
+
 }

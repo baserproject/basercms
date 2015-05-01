@@ -90,16 +90,12 @@ class SiteConfigsController extends AppController {
 			} else {
 
 				$mode = 0;
-				$smartUrl = false;
 				$siteUrl = $sslUrl = '';
 				if (isset($this->request->data['SiteConfig']['mode'])) {
 					$mode = $this->request->data['SiteConfig']['mode'];
 					if($mode > 0) {
 						clearAllCache();
 					}
-				}
-				if (isset($this->request->data['SiteConfig']['smart_url'])) {
-					$smartUrl = $this->request->data['SiteConfig']['smart_url'];
 				}
 				if (isset($this->request->data['SiteConfig']['ssl_url'])) {
 					$siteUrl = $this->request->data['SiteConfig']['site_url'];
@@ -120,7 +116,6 @@ class SiteConfigsController extends AppController {
 
 				unset($this->request->data['SiteConfig']['id']);
 				unset($this->request->data['SiteConfig']['mode']);
-				unset($this->request->data['SiteConfig']['smart_url']);
 				unset($this->request->data['SiteConfig']['site_url']);
 				unset($this->request->data['SiteConfig']['ssl_url']);
 				unset($this->request->data['SiteConfig']['admin_ssl']);
@@ -142,10 +137,6 @@ class SiteConfigsController extends AppController {
 						$this->BcManager->setInstallSetting('BcApp.smartphone', ($smartphone) ? 'true' : 'false');
 					}
 
-					if ($this->BcManager->smartUrl() != $smartUrl) {
-						$this->BcManager->setSmartUrl($smartUrl);
-					}
-
 					// キャッシュをクリア
 					if ($this->request->data['SiteConfig']['maintenance'] ||
 						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id']) ||
@@ -155,19 +146,7 @@ class SiteConfigsController extends AppController {
 						clearViewCache();
 					}
 
-					// リダイレクト
-					if ($this->BcManager->smartUrl() != $smartUrl) {
-						$adminPrefix = Configure::read('Routing.prefixes.0');
-						if ($smartUrl) {
-							$redirectUrl = $this->BcManager->getRewriteBase('/' . $adminPrefix . '/site_configs/form');
-						} else {
-							$redirectUrl = $this->BcManager->getRewriteBase('/index.php/' . $adminPrefix . '/site_configs/form');
-						}
-						header('Location: ' . FULL_BASE_URL . $redirectUrl);
-						exit();
-					} else {
-						$this->redirect(array('action' => 'form'));
-					}
+					$this->redirect(array('action' => 'form'));
 				}
 			}
 		}
@@ -195,26 +174,16 @@ class SiteConfigsController extends AppController {
 		}
 		$baseUrl = str_replace('/index.php', '', BC_BASE_URL);
 
-		if ($writableInstall && $writableHtaccess && $writableHtaccess2 && $rewriteInstalled !== false) {
-			$smartUrlChangeable = true;
-		} else {
-			$smartUrlChangeable = false;
-		}
-
 		$UserGroup = ClassRegistry::init('UserGroup');
 		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
 
-		$disableSettingSmartUrl = array();
 		$disableSettingInstallSetting = array();
-		if (!$smartUrlChangeable) {
-			$disableSettingSmartUrl = array('disabled' => 'disabled');
-		}
 		if (!$writableInstall) {
 			$disableSettingInstallSetting = array('disabled' => 'disabled');
 		}
 
 		$this->set(compact(
-				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'smartUrlChangeable', 'disableSettingSmartUrl', 'disableSettingInstallSetting'
+				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
 
 		$this->subMenuElements = array('site_configs');
@@ -237,18 +206,11 @@ class SiteConfigsController extends AppController {
 	public function admin_info() {
 		
 		$this->pageTitle = '環境情報';
-
-		$smartUrl = 'ON';
-		if (Configure::read('App.baseUrl')) {
-			$smartUrl = 'OFF';
-		}
-
 		$datasources = array('csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
 		$db = ConnectionManager::getDataSource('baser');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
 		$datasource = preg_replace('/^bc/', '', strtolower($name));
 		$this->set('datasource', @$datasources[$datasource]);
-		$this->set('smartUrl', $smartUrl);
 		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
 		$this->subMenuElements = array('site_configs');
@@ -268,7 +230,6 @@ class SiteConfigsController extends AppController {
 	protected function _getSiteConfigData() {
 		$data['SiteConfig'] = $this->siteConfigs;
 		$data['SiteConfig']['mode'] = Configure::read('debug');
-		$data['SiteConfig']['smart_url'] = $this->BcManager->smartUrl();
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
 		$data['SiteConfig']['admin_ssl'] = (int)Configure::read('BcApp.adminSsl');

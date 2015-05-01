@@ -21,6 +21,7 @@ App::uses('BcTextHelper', 'View/Helper');
  * メールデータヘルパー
  *
  * @package Mail.View.Helper
+ * @property BcBaserHelper $BcBaser
  *
  */
 class MaildataHelper extends BcTextHelper {
@@ -29,133 +30,118 @@ class MaildataHelper extends BcTextHelper {
 
 /**
  * メール表示用のデータを出力する
+ * ※互換性維持用
  * 
  * @param string $type コントロールタイプ
  * @param mixed $value 変換前の値
- * @param array $options コントロールソース
+ * @param array|string $options コントロールソース
  * @return string メール用データ
  */
 	public function control($type, $value, $options = "") {
+		return ' ' . $this->toDisplayString($type, $value, $options);
+	}
+
+/**
+ * メール表示用のデータを出力する
+ *
+ * @param string $type コントロールタイプ
+ * @param mixed $value 変換前の値
+ * @param array|string $options コントロールソース
+ * @return string メール用データ
+ */
+	public function toDisplayString($type, $value, $options = "") {
 		// コントロールソースの配列変換
 		if (!is_array($options)) {
 			$options = explode("|", $options);
 		}
 		$options = am(array(0 => ""), $options);
 
-		$out = "";
-
 		switch ($type) {
-
 			case 'text':
+			case 'textarea':
 			case 'email':
-				$out = " " . $value;
-				break;
+			case 'hidden':
+				return $value;
 
 			case 'radio':
-				if (isset($options[$value])) {
-					$out = " " . $options[$value];
-				} else {
-					$out = " ";
-				}
-				break;
-
 			case 'select':
 				if (isset($options[$value])) {
-					$out = " " . $options[$value];
-				} else {
-					$out = " ";
+					return $options[$value];
 				}
-				break;
+				return '';
 
 			case 'pref':
-				$options = $pref = $this->prefList();
+				$options = $this->prefList();
 				if (isset($options[$value])) {
-					$out = " " . $options[$value];
-				} else {
-					$out = " ";
+					return $options[$value];
 				}
-				break;
+				return '';
 
 			case 'check':
-				if ($options) {
-					if (isset($options[$value])) {
-						$out = $options[$value];
-					} else {
-						$out = " ";
-					}
-				} else {
-					$out = " " . $value;
+				if (!$options) {
+					return $value;
 				}
-				break;
+				if (isset($options[$value])) {
+					return $options[$value];
+				}
+				return '';
 
 			case 'multi_check':
-				$out = "";
-				if ($value) {
-					if (!is_array($value)) {
-						$value = explode("|", $value);
-					}
-					foreach ($value as $data) {
-						if (isset($options[$data])) {
-							$out .= "・" . $options[$data] . "\n";
-						}
-					}
+				if (empty($value)) {
+					return '';
 				}
-				break;
-			
-			case 'file':
+
+				if (!is_array($value)) {
+					$value = explode("|", $value);
+				}
+
 				$out = '';
-				if($value) {
-					$mailContent = $this->_View->get('mailContent');
-					$aryFile = explode('/', $value);
-					$file = $aryFile[count($aryFile) - 1];
-					$ext = decodeContent(null, $file);
-					$link = array_merge(array('admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']), $aryFile);
-					if(in_array($ext, array('gif', 'jpg', 'png'))) {
-						$out = " " . $this->BcBaser->getLink($this->BcBaser->getImg($link, array('width' => 400)), $link, array('target' => '_blank'));
-					} else {
-						$out = " " . $this->BcBaser->getLink($file, $link);
+				foreach ($value as $data) {
+					if (isset($options[$data])) {
+						$out .= "・" . $options[$data] . PHP_EOL;
 					}
 				}
-				break;
-				
+				return $out;
+
+			case 'file':
+				if (empty($value)) {
+					return '';
+				}
+
+				$mailContent = $this->_View->get('mailContent');
+				$aryFile = explode('/', $value);
+				$file = $aryFile[count($aryFile) - 1];
+				$ext = decodeContent(null, $file);
+				$link = array_merge(array('admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']), $aryFile);
+				if (in_array($ext, array('gif', 'jpg', 'png'))) {
+					return $this->BcBaser->getLink($this->BcBaser->getImg($link, array('width' => 400)), $link, array('target' => '_blank'));
+				}
+
+				return $this->BcBaser->getLink($file, $link);
+
 			case 'date_time_calender':
 				if (is_array($value)) {
 					$value = $this->dateTime($value);
 				}
 				if ($value) {
-					$out = " " . date('Y年 m月 d日', strtotime($value));
+					return date('Y年 m月 d日', strtotime($value));
 				}
-				break;
+				return '';
 
 			case 'date_time_wareki':
 				if (!is_array($value)) {
 					$value = $this->BcTime->convertToWarekiArray($value);
 				}
-				$out = " " . $this->dateTimeWareki($value);
-				break;
-
-			case 'textarea':
-				$out = " " . $value;
-				break;
+				return $this->dateTimeWareki($value);
 
 			case 'autozip':
 				if (strlen($value) == 7) {
-					$out = " " . substr($value, 0, 3) . '-' . substr($value, 3, 7);
-				} else {
-					$out = " " . $value;
+					return substr($value, 0, 3) . '-' . substr($value, 3, 7);
 				}
-				break;
-
-			case 'hidden':
-				$out = " " . $value;
-				break;
+				return $value;
 
 			default:
-				$out = " " . $value;
-				break;
+				return $value;
 		}
-
-		return $out;
 	}
-
 }

@@ -232,7 +232,7 @@ class Plugin extends AppModel {
 
 		return !empty($duplication);
 	}
-	
+
 /**
  * 優先順位を連番で振り直す
  *
@@ -312,7 +312,7 @@ class Plugin extends AppModel {
 
 		return true;
 	}
-	
+
 /**
  * プラグインのディレクトリパスを取得
  *
@@ -332,5 +332,138 @@ class Plugin extends AppModel {
 		}
 		return null;
 	}
-	
+
+/**
+ * プラグイン情報を取得する
+ *
+ * @param array $datas プラグインのデータ配列
+ * @param string $file プラグインファイルのパス
+ * @return array
+ */
+	public function getPluginInfo($datas, $file) {
+		$plugin = basename($file);
+		$pluginData = array();
+		$exists = false;
+		foreach ($datas as $data) {
+			if ($plugin == $data['Plugin']['name']) {
+				$pluginData = $data;
+				$exists = true;
+				break;
+			}
+		}
+
+		// プラグインのバージョンを取得
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		$core = false;
+		if (in_array($plugin, $corePlugins)) {
+			$core = true;
+			$version = getVersion();
+		} else {
+			$version = getVersion($plugin);
+		}
+
+		// 設定ファイル読み込み
+		$title = $description = $author = $url = $adminLink = '';
+
+		// TODO 互換性のため古いパスも対応
+		$oldAppConfigPath = $file . DS . 'Config' . DS . 'config.php';
+		$appConfigPath = $file . DS . 'config.php';
+		if (!file_exists($appConfigPath)) {
+			$appConfigPath = $oldAppConfigPath;
+		}
+
+		if (file_exists($appConfigPath)) {
+			include $appConfigPath;
+		} elseif (file_exists($oldAppConfigPath)) {
+			include $oldAppConfigPath;
+		}
+
+		if (isset($title)) {
+			$pluginData['Plugin']['title'] = $title;
+		}
+		if (isset($description)) {
+			$pluginData['Plugin']['description'] = $description;
+		}
+		if (isset($author)) {
+			$pluginData['Plugin']['author'] = $author;
+		}
+		if (isset($url)) {
+			$pluginData['Plugin']['url'] = $url;
+		}
+
+		$pluginData['Plugin']['update'] = false;
+		$pluginData['Plugin']['old_version'] = false;
+		$pluginData['Plugin']['core'] = $core;
+
+		if ($exists) {
+
+			if (isset($adminLink)) {
+				$pluginData['Plugin']['admin_link'] = $adminLink;
+			}
+			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
+			if (!$pluginData['Plugin']['version'] && preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
+				$pluginData['Plugin']['version'] = $matches[1];
+				$pluginData['Plugin']['old_version'] = true;
+			} elseif (verpoint($pluginData['Plugin']['version']) < verpoint($version) && !in_array($pluginData['Plugin']['name'], Configure::read('BcApp.corePlugins'))) {
+				$pluginData['Plugin']['update'] = true;
+			}
+			$pluginData['Plugin']['registered'] = true;
+		} else {
+			// バージョンにBaserから始まるプラグイン名が入っている場合は古いバージョン
+			if (preg_match('/^Baser[a-zA-Z]+\s([0-9\.]+)$/', $version, $matches)) {
+				$version = $matches[1];
+				$pluginData['Plugin']['old_version'] = true;
+			}
+			$pluginData['Plugin']['id'] = '';
+			$pluginData['Plugin']['name'] = $plugin;
+			$pluginData['Plugin']['created'] = '';
+			$pluginData['Plugin']['version'] = $version;
+			$pluginData['Plugin']['status'] = false;
+			$pluginData['Plugin']['modified'] = '';
+			$pluginData['Plugin']['admin_link'] = '';
+			$pluginData['Plugin']['registered'] = false;
+		}
+		return $pluginData;
+	}
+
+/**
+ * プラグイン管理のリンクを指定したユーザーのお気に入りに追加
+ *
+ * @param string $pluginName プラグイン名
+ * @param array $user ユーザーデータの配列
+ * @return void
+ */
+	public function addFavoriteAdminLink($pluginName, $user) {
+		$plugin = $this->findByName($pluginName);
+		$dirPath = $this->getDirectoryPath($pluginName);
+		$pluginInfo = $this->getPluginInfo(array($plugin), $dirPath);
+
+		//リンクが設定されていない
+		if (empty($pluginInfo['Plugin']['admin_link'])) {
+			return;
+		}
+
+		if (ClassRegistry::isKeySet('Favorite')) {
+			$Favorite = ClassRegistry::getObject('Favorite');
+		} else {
+			$Favorite = ClassRegistry::init('Favorite');
+		}
+
+		$adminLinkUrl = preg_replace('/^' . preg_quote(Configure::read('App.baseUrl'), '/') . '/', '', Router::url($pluginInfo['Plugin']['admin_link']));
+
+		//すでにお気に入りにリンクが含まれている場合
+		if ($Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'Favorite.user_id' => $user['id']))) > 0) {
+			return;
+		}
+
+		$favorite = array(
+			'name' => $pluginInfo['Plugin']['title'] . '管理',
+			'url' => $adminLinkUrl,
+			'sort' => $Favorite->getMax('sort') + 1,
+			'user_id' => $user['id'],
+		);
+
+		$Favorite->create($favorite);
+		$Favorite->save();
+	}
 }

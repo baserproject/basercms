@@ -55,9 +55,6 @@ class BcAuthComponent extends AuthComponent {
 		// ログイン時点でもモデルを保存しておく Session::user() のキーとして利用する
 		// >>>
 		$result = parent::login($user);
-		if ($result) {
-			$this->setSessionAuthAddition();
-		}
 		return $result;
 		// <<<
 	}
@@ -139,31 +136,6 @@ class BcAuthComponent extends AuthComponent {
 	}
 
 /**
- * 認証に関する付加情報を保存する
- * authPrefix
- * userModel
- */
-	public function setSessionAuthAddition() {
-		$userModel = $this->authenticate['Form']['userModel'];
-		if (!empty($this->request->params['prefix'])) {
-			$authPrefix = $this->request->params['prefix'];
-		} else {
-			$authPrefix = 'front';
-		}
-		$this->Session->write(BcAuthComponent::$sessionKey . '.authPrefix', $authPrefix);
-		$this->Session->write(BcAuthComponent::$sessionKey . '.userModel', $userModel);
-	}
-
-/**
- * 認証されているモデル名を取得
- * 
- * @return string
- */
-	public function authenticatedUserModel() {
-		$this->Session->read(BcAuthComponent::$sessionKey . '.userModel');
-	}
-
-/**
  * 再ログインを実行する
  * 
  * return boolean
@@ -179,9 +151,6 @@ class BcAuthComponent extends AuthComponent {
 		$this->authenticate['Form']['passwordHasher'] = 'BcNo';
 		$this->request->data = $user;
 		$result = $this->login();
-		if($result) {
-			$this->setSessionAuthAddition();
-		}
 		return $result;
 	
 	}

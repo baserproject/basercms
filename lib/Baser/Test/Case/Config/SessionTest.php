@@ -24,14 +24,6 @@ App::uses('Datasource/CakeSession', 'Model');
 class SessionTest extends BaserTestCase {
 
 /**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array(
-	);
-
-/**
  * __construct
  * 
  * @param string $name
@@ -82,7 +74,7 @@ class SessionTest extends BaserTestCase {
 		require APP . 'Config' . DS . 'session.php';
 		CakeSession::start();
 		
-		$this->assertEquals($expects, array(ini_get('session.use_cookies'), ini_get('session.use_trans_sid')));
+		$this->assertEquals($expects, array(intval(ini_get('session.use_cookies')), intval(ini_get('session.use_trans_sid'))));
 	}
 /**
  * Session設定用データプロバイダ
@@ -138,7 +130,7 @@ class SessionTest extends BaserTestCase {
 		require APP . 'Config' . DS . 'session.php';
 		CakeSession::start();
 		
-		$this->assertEquals($expects, ini_get('session.cookie_secure'));
+		$this->assertEquals($expects, intval(ini_get('session.cookie_secure')));
 	}
 
 /**

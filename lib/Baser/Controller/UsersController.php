@@ -79,7 +79,9 @@ class UsersController extends AppController {
 			$this->BcAuth->allow(
 				'admin_login', 'admin_logout', 'admin_login_exec', 'admin_reset_password'
 			);
-			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
+			if(isset($this->UserGroup)) {
+				$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
+			}
 		}
 
 		parent::beforeFilter();
@@ -176,7 +178,6 @@ class UsersController extends AppController {
 		if ($user) {
 			$this->Session->renew();
 			$this->Session->write(BcAuthComponent::$sessionKey, $user);
-			$this->BcAuth->setSessionAuthAddition();
 			exit(Router::url($this->BcAuth->redirect()));
 		}
 	}
@@ -193,7 +194,8 @@ class UsersController extends AppController {
 			$this->Session->write(BcAuthComponent::$sessionKey, $data);
 			$this->Session->delete('AuthAgent');
 			$this->setMessage('元のユーザーに戻りました。');
-			$authPrefix = $data['authPrefix'];
+			$authPrefix = explode(',', $data['UserGroup']['auth_prefix']);
+			$authPrefix = $authPrefix[0];
 		} else {
 			$this->setMessage('不正な操作です。', true);
 			if (!empty($this->request->params['prefix'])) {

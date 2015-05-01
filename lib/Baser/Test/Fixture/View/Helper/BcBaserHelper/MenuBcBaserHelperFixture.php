@@ -13,34 +13,15 @@
  * @license			http://basercms.net/license/index.html
  */
 
-class MenuBcBaserHelperFixture extends CakeTestFixture {
+class MenuBcBaserHelperFixture extends BaserTestFixture {
 
 /**
-* Import
-*
-* @var array
-*/
-	public $import = array( 
-		'connection'	=> 'baser',
-		'model'			=> 'Menu'
-	);
-/**
- * Fields
- * 
- * @var array
+ * Name of the object
+ *
+ * @var string
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 3, 'key' => 'primary'),
-		'no' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
-		'link' => array('type' => 'string', 'null' => true, 'default' => null),
-		'menu_type' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
-		'sort' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 3),
-		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-	);
+	public $name = 'Menu';
+
 /**
  * Records
  *
@@ -48,7 +29,7 @@ class MenuBcBaserHelperFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => '1', 
+			'id' => '1',
 			'no' => '1',
 			'name' => 'ホーム',
 			'link' => '/',
@@ -69,7 +50,7 @@ class MenuBcBaserHelperFixture extends CakeTestFixture {
 			'created' => '2014-09-02 14:10:21',
 			'modified' => null
 		),
-        array(
+		array(
 			'id' => '3',
 			'no' => '3',
 			'name' => 'サービス',
@@ -80,7 +61,7 @@ class MenuBcBaserHelperFixture extends CakeTestFixture {
 			'created' => '2014-09-02 14:10:21',
 			'modified' => null
 		),
-        array(
+		array(
 			'id' => '4',
 			'no' => '4',
 			'name' => '新着情報',
@@ -102,7 +83,7 @@ class MenuBcBaserHelperFixture extends CakeTestFixture {
 			'created' => '2014-09-02 14:10:21',
 			'modified' => null
 		),
-        array(
+		array(
 			'id' => '7',
 			'no' => '7',
 			'name' => 'アイコンの使い方',
@@ -113,16 +94,16 @@ class MenuBcBaserHelperFixture extends CakeTestFixture {
 			'created' => '2014-09-02 14:10:21',
 			'modified' => null
 		),
-        array(
-          'id' => '6',
-          'no' => '6',
-          'name' => 'サイトマップ',
-          'link' => '/sitemap',
-          'menu_type' => 'default',
-          'sort' => '7',
-          'status' => true,
-          'created' => '2014-09-02 14:10:21',
-          'modified' => null
+		array(
+			'id' => '6',
+			'no' => '6',
+			'name' => 'サイトマップ',
+			'link' => '/sitemap',
+			'menu_type' => 'default',
+			'sort' => '7',
+			'status' => true,
+			'created' => '2014-09-02 14:10:21',
+			'modified' => null
 		)
 	);
 }
