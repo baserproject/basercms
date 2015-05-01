@@ -227,12 +227,12 @@ class BlogContentsController extends BlogAppController {
  * @access public
  */
 	public function redirectEditBlog($template) {
-		$path = 'blog' . DS . $template;
+		$path = 'Blog' . DS . $template;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
-		$sorces = array(BASER_PLUGINS . 'blog' . DS . 'View' . DS . $path);
+		$sources = array(BASER_PLUGINS . 'Blog' . DS . 'View' . DS . $path);
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target . DS . 'index' . $this->ext)) {
-				foreach ($sorces as $source) {
+				foreach ($sources as $source) {
 					if (is_dir($source)) {
 						$folder = new Folder();
 						$folder->create(dirname($target), 0777);

@@ -45,7 +45,7 @@ class BcManagerComponent extends Component {
  * @param type $adminEmail
  * @return boolean 
  */
-	public function install($siteUrl, $dbConfig, $adminUser = array(), $smartUrl = false, $baseUrl = '', $dbDataPattern = '') {
+	public function install($siteUrl, $dbConfig, $adminUser = array(), $baseUrl = '', $dbDataPattern = '') {
 		if (!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
 		}
@@ -137,12 +137,6 @@ class BcManagerComponent extends Component {
 		if (!$this->deployEditorTemplateImage()) {
 			$this->log('エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。');
 			$result = false;
-		}
-
-		if ($smartUrl) {
-			if (!$this->setSmartUrl(true, $baseUrl)) {
-				$this->log('スマートURLの設定に失敗しました。.htaccessの書き込み権限を確認してください。');
-			}
 		}
 
 		//SiteConfigを再設定
@@ -1333,10 +1327,48 @@ class BcManagerComponent extends Component {
 
 /**
  * files フォルダを初期化する
+ * 
+ * @return boolean
  */
 	public function resetFiles() {
+		return $this->resetEmptyFolder(WWW_ROOT . 'files');
+	}
+	
+/**
+ * 管理画面用のアセットフォルダ（img / js / css）を初期化する
+ * 
+ * @return boolean
+ */
+	public function resetAdminAssets() {
+		$paths = array(
+			WWW_ROOT . 'img' . DS . 'admin',
+			WWW_ROOT . 'css' . DS . 'admin',
+			WWW_ROOT . 'js' . DS . 'admin'
+		);
 		$result = true;
-		$Folder = new Folder(WWW_ROOT . 'files');
+		foreach($paths as $path) {
+			if(is_dir($path)) {
+				$Folder = new Folder($path);
+				if(!$Folder->delete()) {
+					$result = false;
+				}
+				$Folder = null;
+			}
+		}
+		return $result;
+	}
+	
+/**
+ * empty ファイルを梱包したフォルダをリセットする
+ * 
+ * empty ファイルを残して内包するファイルとフォルダを全て削除する
+ * 
+ * @param string $path
+ * @return boolean
+ */
+	public function resetEmptyFolder($path) {
+		$result = true;
+		$Folder = new Folder($path);
 		$files = $Folder->read(true, true, true);
 		$Folder = null;
 		if(!empty($files[0])) {
@@ -1371,14 +1403,6 @@ class BcManagerComponent extends Component {
 	public function reset($dbConfig) {
 		$result = true;
 
-		// スマートURLをオフに設定
-		if ($this->smartUrl()) {
-			if (!$this->setSmartUrl(false)) {
-				$result = false;
-				$this->log('スマートURLの設定を正常に初期化できませんでした。');
-			}
-		}
-
 		if (BC_INSTALLED) {
 			// 設定ファイルを初期化
 			if (!$this->resetSetting()) {
@@ -1404,143 +1428,16 @@ class BcManagerComponent extends Component {
 			$this->log('files フォルダを初期化できませんでした。');
 		}
 		
+		// files フォルダの初期化
+		if (!$this->resetAdminAssets()) {
+			$result = false;
+			$this->log('img / css / js フォルダを初期化できませんでした。');
+		}
+		
 		ClassRegistry::flush();
 		clearAllCache();
 
 		return $result;
-	}
-
-/**
- * スマートURLの設定を取得
- *
- * @return	boolean
- * @access	public
- */
-	public function smartUrl() {
-		if (Configure::read('App.baseUrl')) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-/**
- * スマートURLの設定を行う
- *
- * @param	boolean	$smartUrl
- * @return	boolean
- * @access	public
- */
-	public function setSmartUrl($smartUrl, $baseUrl = '') {
-		/* install.php の編集 */
-		if ($smartUrl) {
-			if (!$this->setInstallSetting('App.baseUrl', "''")) {
-				return false;
-			}
-		} else {
-			if (!$this->setInstallSetting('App.baseUrl', '$_SERVER[\'SCRIPT_NAME\']')) {
-				return false;
-			}
-		}
-
-		if (BC_DEPLOY_PATTERN == 2 || BC_DEPLOY_PATTERN == 3) {
-			$webrootRewriteBase = '/';
-		} else {
-			$webrootRewriteBase = '/' . APP_DIR . '/webroot';
-		}
-
-		/* /app/webroot/.htaccess の編集 */
-		$this->_setSmartUrlToHtaccess(WWW_ROOT . '.htaccess', $smartUrl, 'webroot', $webrootRewriteBase, $baseUrl);
-
-		if (BC_DEPLOY_PATTERN == 1) {
-			/* /.htaccess の編集 */
-			$this->_setSmartUrlToHtaccess(ROOT . DS . '.htaccess', $smartUrl, 'root', '/', $baseUrl);
-		}
-
-		return true;
-	}
-
-/**
- * .htaccess にスマートURLの設定を書きこむ
- *
- * @param	string	$path
- * @param	array	$rewriteSettings
- * @return	boolean
- * @access	protected
- */
-	protected function _setSmartUrlToHtaccess($path, $smartUrl, $type, $rewriteBase = '/', $baseUrl = '') {
-		//======================================================================
-		// WindowsのXAMPP環境では、何故か .htaccess を書き込みモード「w」で開けなかったの
-		// で、追記モード「a」で開くことにした。そのため、実際の書き込み時は、 ftruncate で、
-		// 内容をリセットし、ファイルポインタを先頭に戻している。
-		//======================================================================
-
-		$rewritePatterns = array(
-			"/\n[^\n#]*RewriteEngine.+/i",
-			"/\n[^\n#]*RewriteBase.+/i",
-			"/\n[^\n#]*RewriteCond.+/i",
-			"/\n[^\n#]*RewriteRule.+/i"
-		);
-		if (!$smartUrl) {
-			$rewritePatterns[] = "/\n\z/";
-		}
-		switch ($type) {
-			case 'root':
-				$rewriteSettings = array('RewriteEngine on',
-					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
-					'RewriteRule ^$ ' . APP_DIR . '/webroot/ [L]',
-					'RewriteRule (.*) ' . APP_DIR . '/webroot/$1 [L]',
-					'');
-				break;
-			case 'webroot':
-				$rewriteSettings = array('RewriteEngine on',
-					'RewriteBase ' . $this->getRewriteBase($rewriteBase, $baseUrl),
-					'RewriteCond %{REQUEST_FILENAME} !-d',
-					'RewriteCond %{REQUEST_FILENAME} !-f',
-					'RewriteRule ^(.*)$ index.php [QSA,L]',
-					'');
-				break;
-		}
-
-		$file = new File($path);
-		$file->open('a+');
-		$data = $file->read();
-		foreach ($rewritePatterns as $rewritePattern) {
-			$data = preg_replace($rewritePattern, '', $data);
-		}
-		if ($smartUrl) {
-			$data .= "\n" . implode("\n", $rewriteSettings);
-		}
-		ftruncate($file->handle, 0);
-		if (!$file->write($data)) {
-			$file->close();
-			return false;
-		}
-		$file->close();
-	}
-
-/**
- * RewriteBase の設定を取得する
- *
- * @param	string	$base
- * @return	string
- */
-	public function getRewriteBase($url, $baseUrl = null) {
-		if (!$baseUrl) {
-			$baseUrl = BC_BASE_URL;
-		}
-
-		if (preg_match("/index\.php/", $baseUrl)) {
-			$baseUrl = str_replace('/index.php', '', $baseUrl);
-		}
-		$baseUrl = preg_replace("/\/$/", '', $baseUrl);
-		if ($url != '/' || !$baseUrl) {
-			$url = $baseUrl . $url;
-		} else {
-			$url = $baseUrl;
-		}
-
-		return $url;
 	}
 
 /**

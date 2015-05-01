@@ -110,12 +110,7 @@
  * included primarily as a development convenience - and
  * thus not recommended for production applications.
  */
-	// CUSTOMIZE MODIFY 2014/07/03 ryuring
-	// >>>
-	////Configure::write('App.baseUrl', env('SCRIPT_NAME'));
-	// ---
-	Configure::write('App.baseUrl', $_SERVER['SCRIPT_NAME']);
-	// <<<
+	//Configure::write('App.baseUrl', env('SCRIPT_NAME'));
 
 /**
  * To configure CakePHP to use a particular domain URL

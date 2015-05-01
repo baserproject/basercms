@@ -19,7 +19,6 @@
 <h2>baserCMS環境</h2>
 
 <ul class="section">
-	<li>スマートURL： <?php echo $smartUrl ?></li>
 	<li>設置フォルダ： <?php echo ROOT . DS ?></li>
 	<li>セーフモード：<?php if ($safeModeOn): ?>On<?php else: ?>Off<?php endif ?>
 	<li>データベース： <?php echo $datasource ?></li>

@@ -25,21 +25,10 @@ $(function(){
 	<?php else: ?>
 	var safeModeOn = 0;
 	<?php endif ?>
-	<?php if ($this->BcForm->value('SiteConfig.smart_url')): ?>
-	var smartUrl = 1;
-	<?php else: ?>
-	var smartUrl = 0;
-	<?php endif ?>
-	var smartUrlAlert = 'スマートURLの設定を変更されていますが、ヘルプメッセージは読まれましたか？\nサーバー環境によっては、設定変更後、.htaccessファイルを手動で調整しないとアクセスできない場合もありますのでご注意ください。';
 	var safemodeAlert = '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\n'+
 						'ページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。';
 	$("#BtnSubmit").click(function(){
 		var result = true;
-		if(smartUrl != $("#SiteConfigSmartUrl").val()) {
-			if(!confirm(smartUrlAlert)){
-				result = false;
-			}
-		}
 		if(safeModeOn && (theme != $("#SiteConfigTheme").val())) {
 			if(!confirm(safemodeAlert)) {
 				result = false;
@@ -310,32 +299,6 @@ $(function(){
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
 					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head">
-<?php echo $this->BcForm->label('SiteConfig.smart_url', 'スマートURL') ?><br />
-			</th>
-			<td class="col-input">
-				<span>Rewriteモジュール利用可否：<strong>
-				<?php if ($rewriteInstalled === -1): ?>不明<?php elseif ($rewriteInstalled): ?>可<?php else: ?>不可<?php endif ?></strong></span><br />
-				<?php echo $this->BcForm->input('SiteConfig.smart_url', array_merge(array('type' => 'select', 'options' => array('0' => 'オフ', '1' => 'オン')), $disableSettingSmartUrl)) ?>
-				<?php if ($disableSettingSmartUrl): ?>
-							<?php echo $this->BcForm->input('SiteConfig.smart_url', array('type' => 'hidden')) ?>
-<?php endif ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSmartUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?><br />
-				<div id="helptextSmartUrl" class="helptext">
-					<p>短くスマートなURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。<br />
-						・スマートURL無効例：<br />　　http://localhost/index.php/contact/form<br />
-						・スマートURL有効例：<br />　　http://localhost/contact/form<br />
-					</p><br />
-					<p>スマートURLの設定はサーバー環境に深く依存します。<br />
-						「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますので注意が必要です。<br />
-						スマートURLをオンに切り替えた場合、/ フォルダ、/app/webroot/ フォルダ内の「.htaccess」ファイルに、
-						RewriteBase設定を自動的に書き込みますが、うまく動作しない場合、この設定値を環境に合わせて調整する必要があります。<br />
-						詳細については、各.htaccessファイルのコメントを確認してください。</p>
-				</div>
-<?php if ($writableInstall): ?><p class="annotation-text"><small>設定を変更する場合は「？」マークのヘルプを必ずお読みください</small></p><?php endif ?>
 			</td>
 		</tr>
 		<tr>

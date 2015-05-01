@@ -19,8 +19,6 @@ App::uses('BcThemeConfigReader', 'Configure');
  */
 class BcThemeConfigReaderTest extends BaserTestCase {
 
-	public $fixtures = array('baser.Default.Page');
-
 /**
  * createContents
  *

@@ -3,14 +3,7 @@
  * MessageFixture
  *
  */
-class MessageFixture extends CakeTestFixture {
-
-/**
- * Import
- *
- * @var array
- */
-	public $import = array('connection' => 'baser');
+class MessageFixture extends BaserTestFixture {
 
 /**
  * Fields

@@ -264,7 +264,7 @@ class Permission extends AppModel {
 				$ret = $permission['Permission']['auth'];
 			}
 		}
-		return $ret;
+		return (boolean) $ret;
 	}
 
 /**

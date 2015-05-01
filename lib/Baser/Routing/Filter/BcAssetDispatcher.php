@@ -36,81 +36,26 @@ class BcAssetDispatcher extends AssetDispatcher {
 	public $priority = 4;
 
 /**
- * Checks if a requested asset exists and sends it to the browser
- *
- * @param CakeEvent $event containing the request and response object
- * @return mixed The resulting response.
- * @throws NotFoundException When asset not found
- */
-	public function beforeDispatch(CakeEvent $event) {
-		$url = urldecode($event->data['request']->url);
-		if (strpos($url, '..') !== false || strpos($url, '.') === false) {
-			return;
-		}
-
-		// CUSTOMIZE DELETE 2014/07/02 ryuring
-		// >>>
-		/*if ($result = $this->_filterAsset($event)) {
-			$event->stopPropagation();
-			return $result;
-		}*/
-		// <<<
-
-		$assetFile = $this->_getAssetFile($url);
-		if ($assetFile === null || !file_exists($assetFile)) {
-			return null;
-		}
-		$response = $event->data['response'];
-		$event->stopPropagation();
-
-		$response->modified(filemtime($assetFile));
-		if ($response->checkNotModified($event->data['request'])) {
-			return $response;
-		}
-
-		$pathSegments = explode('.', $url);
-		$ext = array_pop($pathSegments);
-
-		$this->_deliverAsset($response, $assetFile, $ext);
-		return $response;
-	}
-
-/**
  * Builds asset file path based off url
  *
- * @param string $url
- * @return string Absolute path for asset file
+ * @param string $url URL
+ * @return string|null Absolute path for asset file
  */
 	protected function _getAssetFile($url) {
+		$path = parent::_getAssetFile($url);
+		if (!empty($path)) {
+			return $path;
+		}
+
 		$parts = explode('/', $url);
-		// CUSTOMIZE MODIFY 2014/07/02 ryuring
-		// >>>
-		/*if ($parts[0] === 'theme') {
-			$themeName = $parts[1];
-			unset($parts[0], $parts[1]);
-			$fileFragment = implode(DS, $parts);
-			$path = App::themePath($themeName) . 'webroot' . DS;
+		$fileFragment = implode(DS, $parts);
+
+		$path = BASER_WEBROOT;
+		if (file_exists($path . $fileFragment)) {
 			return $path . $fileFragment;
 		}
 
-		$plugin = Inflector::camelize($parts[0]);
-		if ($plugin && CakePlugin::loaded($plugin)) {
-			unset($parts[0]);
-			$fileFragment = implode(DS, $parts);
-			$pluginWebroot = CakePlugin::path($plugin) . 'webroot' . DS;
-			return $pluginWebroot . $fileFragment;
-		}*/
-		// <<<
-		$fileFragment = implode(DS, $parts);
-		$path = APP . 'View' . DS . 'webroot' . DS;
-		if (file_exists($path . $fileFragment)) {
-			return $path . $fileFragment;
-		} else {
-			$path = BASER_WEBROOT;
-			if (file_exists($path . $fileFragment)) {
-				return $path . $fileFragment;
-			}
-		}
+		return null;
 	}
 
 }

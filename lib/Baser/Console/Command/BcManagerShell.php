@@ -50,9 +50,6 @@ class BcManagerShell extends AppShell {
 		))->addOption('port', array(
 			'help' => 'データベースポート番号',
 			'default' => ''
-		))->addOption('smarturl', array(
-			'help' => 'スマートURLの利用',
-			'default' => 'true'
 		))->addOption('baseurl', array(
 			'help' => 'ベースとなるURL',
 			'default' => '/'
@@ -75,7 +72,7 @@ class BcManagerShell extends AppShell {
 /**
  * インストール 
  * 
- * cake bc_manager install "サイト名" "データベースの種類" "管理者アカウント名" "管理者パスワード" "管理者Eメール" -host "DBホスト名" -database "DB名" -login "DBユーザー名" -password "DBパスワード" -prefix "DBプレフィックス" -port "DBポート" -smarturl "スマートURL（true / false）" -baseurl "RewriteBaseに設定するURL"
+ * cake bc_manager install "サイト名" "データベースの種類" "管理者アカウント名" "管理者パスワード" "管理者Eメール" -host "DBホスト名" -database "DB名" -login "DBユーザー名" -password "DBパスワード" -prefix "DBプレフィックス" -port "DBポート" -baseurl "RewriteBaseに設定するURL"
  */
 	public function install() {
 		if (BC_INSTALLED) {
@@ -233,12 +230,6 @@ class BcManagerShell extends AppShell {
 			'email' => $this->args[4],
 		);
 
-		if (isset($this->params['smarturl'])) {
-			$smartUrl = (boolean)$this->params['smarturl'];
-		} else {
-			$smartUrl = false;
-		}
-
 		if (isset($this->params['baseurl'])) {
 			$baseUrl = $this->params['baseurl'];
 		} else {
@@ -251,7 +242,7 @@ class BcManagerShell extends AppShell {
 			$dataPattern = 'core.demo';
 		}
 
-		return $this->BcManager->install($siteUrl, $dbConfig, $adminUser, $smartUrl, $baseUrl, $dataPattern);
+		return $this->BcManager->install($siteUrl, $dbConfig, $adminUser, $baseUrl, $dataPattern);
 	}
 
 /**
