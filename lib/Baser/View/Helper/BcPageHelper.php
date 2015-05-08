@@ -75,7 +75,7 @@ class BcPageHelper extends Helper {
 				$param = 'index';
 			} elseif ($param && preg_match('/\/$/is', $param)) {
 				$param .= 'index';
-			}			
+			}
 			
 			if (Configure::read('BcRequest.agent')) {
 				$agentPrefix = Configure::read('BcRequest.agentPrefix');
@@ -202,7 +202,7 @@ class BcPageHelper extends Helper {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
- * @return void コンテンツナビが無効の場合のみ、空文字を返す
+ * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function getNextLink($title = '', $options = array()) {
 		
@@ -214,7 +214,7 @@ class BcPageHelper extends Helper {
 		), $options);
 		
 		if (!$this->contentsNaviAvailable() && $options['overCategory'] !== true) {
-			return '';
+			return false;
 		}
 
 		if (ClassRegistry::isKeySet('Page')) {
@@ -233,7 +233,7 @@ class BcPageHelper extends Helper {
 		if ($overCategory === true) {
 			// ページ情報を持っていない場合はリンクを表示しない
 			if (!isset($this->request->data['Page']['sort'])) {
-				return '';
+				return false;
 			}
 			$pageUrlConditions = $this->getPageUrlConditions($prefix);
 			$conditions = am(array(
@@ -287,19 +287,19 @@ class BcPageHelper extends Helper {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
- * @return void コンテンツナビが無効の場合のみ、空文字を返す
+ * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function getPrevLink($title = '', $options = array()) {
 		
 		$options = array_merge(array(
 			'class'			=> 'prev-link',
-			'arrow'			=> ' ≪',
+			'arrow'			=> '≪ ',
 			'overCategory'	=> false,
 			'prefix'		=> null
 		), $options);
 
 		if (!$this->contentsNaviAvailable() && $options['overCategory'] !== true) {
-			return '';
+			return false;
 		}
 
 		if (ClassRegistry::isKeySet('Page')) {
@@ -318,7 +318,7 @@ class BcPageHelper extends Helper {
 		if ($overCategory === true) {
 			// ページ情報を持っていない場合はリンクを表示しない
 			if (!isset($this->request->data['Page']['sort'])) {
-				return '';
+				return false;
 			}
 			$pageUrlConditions = $this->getPageUrlConditions($prefix);
 			$conditions = am(array(
@@ -343,7 +343,8 @@ class BcPageHelper extends Helper {
 			if (!$title) {
 				$title = $arrow . $nextPost['Page']['title'];
 			}
-			$prefixes = Configure::read('BcAgent');			
+			$prefixes = Configure::read('BcAgent');
+			p($prefixes);exit;
 			return $this->BcBaser->getLink($title, preg_replace('/^\/' . $prefixes['mobile']['prefix'] . '/', '/' . $prefixes['mobile']['alias'], $nextPost['Page']['url']), $options);
 		}
 	}
@@ -360,7 +361,6 @@ class BcPageHelper extends Helper {
  * @return void
  */
 	public function prevLink($title = '', $options = array()) {
-		p($this->BcBaser->request);
 		echo $this->getPrevLink($title, $options);
 	}
 	
@@ -390,7 +390,7 @@ class BcPageHelper extends Helper {
  *
  * @return boolean
  */
-	public function dcontentsNaviAvailable() {
+	public function contentsNaviAvailable() {
 
 		if (empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
 			return false;

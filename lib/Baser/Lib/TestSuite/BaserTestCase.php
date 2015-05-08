@@ -23,6 +23,12 @@ class BaserTestCase extends CakeTestCase {
 		Configure::write('debug', 1);
 		Configure::write('App.baseUrl', '');
 		$this->_getRequest('/');
+		// =====================================================================
+		// 上記のBaserTestCase::_getRequest()実行時、 routes.php が呼び出され、
+		// Pageモデル等が、テストモードでない状態でインスタンス化されてしまうので一旦、
+		// ClassRegistry を初期化する
+		// =====================================================================
+		ClassRegistry::flush();
 	}
 
 /**
