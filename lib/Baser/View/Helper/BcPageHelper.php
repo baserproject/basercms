@@ -272,7 +272,7 @@ class BcPageHelper extends Helper {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
- * @return void コンテンツナビが無効の場合のみ、空文字を返す
+ * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
  */
 	public function nextLink($title = '', $options = array()) {
 		echo $this->getNextLink($title, $options);
@@ -344,7 +344,6 @@ class BcPageHelper extends Helper {
 				$title = $arrow . $nextPost['Page']['title'];
 			}
 			$prefixes = Configure::read('BcAgent');
-			p($prefixes);exit;
 			return $this->BcBaser->getLink($title, preg_replace('/^\/' . $prefixes['mobile']['prefix'] . '/', '/' . $prefixes['mobile']['alias'], $nextPost['Page']['url']), $options);
 		}
 	}
@@ -358,7 +357,7 @@ class BcPageHelper extends Helper {
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
- * @return void
+ * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function prevLink($title = '', $options = array()) {
 		echo $this->getPrevLink($title, $options);
