@@ -473,7 +473,7 @@ class BcPageHelper extends Helper {
 			$agent = Configure::read('BcRequest.agentPrefix');
 		}
 		$path = $this->_View->getVar('pagePath');
-		
+
 		if ($agent) {
 			$url = '/' . implode('/', $this->request->params['pass']);
 			$linked = $this->Page->isLinked($agent, $url);
