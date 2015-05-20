@@ -84,6 +84,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
+  # chefでのプロビジョニングにはvagrant-omnibusプラグインのインストールが必要です。
+  # vagrant upの前に、vagrant-omnibusプラグインを導入してください。
+  #   $ vagrant plugin install vagrant-omnibus
+  #
+  config.omnibus.chef_version = :latest
+
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"
     chef.json = {
