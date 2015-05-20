@@ -154,7 +154,7 @@ if (BC_INSTALLED || isConsole()) {
 					$url = "/{$agentPrefix}/{$param}";
 				}
 
-				if ($Page->isPageUrl($url) && $Page->checkPublish($url)) {
+				if ($Page->isPageUrl($url)) {
 					if (!$agent) {
 						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $param)));
 					} else {
