@@ -17,6 +17,14 @@ App::uses('Imageresizer', 'Vendor');
 class ThemeConfig extends AppModel {
 
 /**
+ * ビヘイビア
+ * 
+ * @var array
+ * @access public
+ */
+	public $actsAs = array('BcCache');
+	
+/**
  * 画像を保存する
  * 
  * @param array $data
