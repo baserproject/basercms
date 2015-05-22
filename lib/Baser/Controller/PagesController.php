@@ -579,6 +579,10 @@ class PagesController extends AppController {
 			$checkUrl = $url;
 		}
 
+		if(!$this->Page->checkPublish($url)) {
+			$this->notFound();
+		}
+		
 		// キャッシュ設定
 		// TODO 手法検討要
 		// Consoleから requestAction で呼出された場合、getCacheTimeがうまくいかない
