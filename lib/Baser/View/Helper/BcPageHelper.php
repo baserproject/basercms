@@ -360,25 +360,35 @@ class BcPageHelper extends Helper {
 			}
 			
 			$requestAgent = Configure::read('BcRequest.agent');
-			$agentUrlConditions = array();
-			$agentCategoryConditions = array();
 			$categoryIds = array();
 			
 			if ($requestAgent) {
+				// smartphone or mobileの場合
 				$agentId = $PageClass->PageCategory->getAgentId($requestAgent);
-				
+				$includeCategoryIdCond = array();
+
 				array_push($categoryIds, $agentId);
 				// Agentが持つページカテゴリIDを取得する
 				foreach ($PageClass->PageCategory->children($agentId) as $pageCategory) {
 					array_push($categoryIds, $pageCategory['PageCategory']['id']);
 				}				
 				// Agentが持つページカテゴリIDを配列に追加する
-				$agentUrlConditions += array('Page.page_category_id' => $categoryIds);
-				
+				$includeCategoryIdCond += array('Page.page_category_id' => $categoryIds);
+
+				// mobile or smartphone に属する固定ページを取得する条件を作成
+				$conditions = am(array(
+					'Page.sort <' => $this->request->data['Page']['sort'],
+					array(
+						'or' => array(array($includeCategoryIdCond),
+						)
+					),
+				),$PageClass->getConditionAllowPublish());
+
 			} else {
-				// 指定がなければagentが指定されたページを除外する
+				// PCの場合
 				$agents = Configure::read('BcAgent');
-				
+				$excludeCategoryIdCond = array();
+
 				foreach($agents as $agent) {
 					$agentId = $PageClass->PageCategory->getAgentId($agent['prefix']);
 					
@@ -389,19 +399,18 @@ class BcPageHelper extends Helper {
 					}
 				}
 				// Agentが持つページカテゴリIDを配列に追加する
-				$agentUrlConditions[] =	array('Page.page_category_id !=' => $categoryIds);
-				// PCの場合のみ、page_category_idにnull値も含める
-				$agentCategoryConditions = array('Page.page_category_id' => null);
+				$excludeCategoryIdCond[] =	array('Page.page_category_id !=' => $categoryIds);
+
+				// mobile, smartphoneに属する固定ページを除外する条件を作成
+				$conditions = am(array(
+					'Page.sort <' => $this->request->data['Page']['sort'],
+					array(
+						'or' => array(array($excludeCategoryIdCond),
+						array('Page.page_category_id' => null),
+						)
+					),
+				),$PageClass->getConditionAllowPublish());
 			}
-			
-			$conditions = am(array(
-				'Page.sort <' => $this->request->data['Page']['sort'],
-				array(
-					'or' => array(array($agentUrlConditions),
-					$agentCategoryConditions,
-					)
-				),
-			),$PageClass->getConditionAllowPublish());
 		} else {
 			$conditions = am(array(
 				'Page.sort <' => $this->request->data['Page']['sort'],
