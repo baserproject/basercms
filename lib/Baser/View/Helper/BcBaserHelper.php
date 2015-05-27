@@ -1687,7 +1687,17 @@ END_FLASH;
  * @return bool 固定ページの場合は true を返す
  */
 	public function isPage() {
-		return $this->_Page->isPageUrl($this->getHere());
+		$here = $this->getHere();
+		/**
+		 * ページ連携していた場合prefixを除外する
+		 */
+		$here = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $here);
+		if ($this->_View->name == 'Pages' && preg_match('/(.+)_display$/', $this->request->params['action'], $maches)) {
+			if ($this->_Page->isLinked($maches[1], $here)) {
+				$here = preg_replace('/^\/' . Configure::read('BcRequest.agentPrefix') . '\//', '/', $here);
+			}
+		}
+		return $this->_Page->isPageUrl($here);
 	}
 
 /**
