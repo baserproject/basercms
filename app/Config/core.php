@@ -369,7 +369,7 @@
 $engine = 'File';
 
 // In development mode, caches should expire quickly.
-$duration = '+999 days';
+$duration = '+5 min';
 if (Configure::read('debug') > 0) {
 	$duration = '+10 seconds';
 }
