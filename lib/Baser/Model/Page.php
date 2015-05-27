@@ -1106,12 +1106,12 @@ class Page extends AppModel {
  * @access public
  * @link http://book.cakephp.org/view/690/del
  */
-	public function del($id = null, $cascade = true) {
+	public function delete($id = null, $cascade = true) {
 		// メッセージ用にデータを取得
 		$page = $this->read(null, $id);
 
 		/* 削除処理 */
-		if (parent::del($id, $cascade)) {
+		if (parent::delete($id, $cascade)) {
 
 			// ページテンプレートを削除
 			$this->delFile($page);
