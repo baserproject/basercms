@@ -12,8 +12,9 @@
  * @license			http://basercms.net/license/index.html
  */
 $authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
-var_dump($authPrefix);
 ?>
+
+
 <h1><?php $this->BcBaser->contentsTitle() ?></h1>
 
 <p><?php $this->BcBaser->link('ログアウト', $authPrefix['logoutAction']) ?>
