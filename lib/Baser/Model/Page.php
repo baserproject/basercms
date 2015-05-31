@@ -138,8 +138,7 @@ class Page extends AppModel {
 				'message' => '説明文は255文字以内で入力してください。')
 		),
 		'contents' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーです')
+			array('rule' => array('phpValidSyntax'))
 		)
 	);
 
@@ -1249,19 +1248,19 @@ class Page extends AppModel {
 			$tmp->open("w");
 			$tmp->write($check[key($check)]);
 			$tmp->close();
-			$command = sprintf("php -l %s 2> nul", escapeshellarg($tmpName));
-			exec($command, $output, $returnVar);
+			$command = sprintf("php -l %s 2>&1", escapeshellarg($tmpName));
+			exec($command, $output, $exit);
 			$tmp->delete();
 		} else {
-			$format = 'echo %s | php -l 2> /dev/null';
+			$format = 'echo %s | php -l 2>&1';
 			$command = sprintf($format, escapeshellarg($check[key($check)]));
-			exec($command, $output, $returnVar);
+			exec($command, $output, $exit);
 		}
 
-		if($returnVar === 0) {
+		if($exit === 0) {
 			return true;
 		}
-
-		return false;
+		$message = 'PHPの構文エラーです： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
+		return $message;
 	}
 }
