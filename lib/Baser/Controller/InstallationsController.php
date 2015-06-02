@@ -647,14 +647,8 @@ class InstallationsController extends AppController {
 			} else {
 				$this->setMessage('baserCMSを初期化しました。');
 			}
+			$this->redirect('reset');
 
-			// スマートURLオンの際、アクション名でリダイレクトを指定した場合、
-			// 環境によっては正常にリダイレクトできないのでスマートURLオフのフルパスで記述
-			if (Configure::read('App.baseUrl')) {
-				$this->redirect('reset');
-			} else {
-				$this->redirect('/index.php/installations/reset');
-			}
 		} elseif (!BC_INSTALLED) {
 			$complete = true;
 		} else {
