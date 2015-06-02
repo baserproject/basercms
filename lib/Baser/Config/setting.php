@@ -118,7 +118,7 @@ $config['BcAuthPrefix'] = array(
 		// セッションキー
 		// TODO Adminとした方がわかりやすいが、アップデート時にセッションキーが変わってしまうと
 		// 予期せぬ事態が発生しかねない為、メジャーバージョンアップのタイミングで変更する
-		'sessionKey' => 'User',
+		'sessionKey' => 'User'
 	)
 	// フロント（例）
 /* 'front' => array(
@@ -128,32 +128,19 @@ $config['BcAuthPrefix'] = array(
 	  'loginAction'	=> '/users/login',
 	  'logoutAction'=> '/users/logout',
 	  'toolbar'		=> true,
-	  'sessionKey'	=> 'User',
+	  'sessionKey'	=> 'User'
 	), */
 	// マイページ（例）
 /* 'mypage' => array(
 	  'name'			=> 'マイページ',
 	  'alias'			=> 'mypage',
-	  'loginRedirect'	=> '/mypage/members/edit',
+	  'loginRedirect'	=> '/mypage/members/index',
 	  'loginTitle'	=> 'マイページログイン',
 	  'userModel'		=> 'Member',
 	  'loginAction'	=> '/mypage/members/login',
 	  'logoutAction'=> '/mypage/members/logout',
 	  'toolbar'		=> false,
-	  'sessionKey'	=> 'User',
-	), */
-	// モバイルマイページ（例）
-/* 'mobile_mypage' => array(
-	  'name'			=> 'ケータイマイページ',
-	  'alias'			=> 'mobile_mypage',
-	  'loginRedirect'	=> '/m/',
-	  'loginTitle'	=> 'マイページログイン',
-	  'userModel'		=> 'User',
-	  'loginAction'	=> '/m/mypage/users/login',
-	  'logoutAction'=> '/m/mypage/users/logout',
-	  'toolbar'		=> false,
-	  'userScope'	=> array(),
-	  'sessionKey'	=> 'User',
+	  'sessionKey'	=> 'User'
 	) */
 );
 /**

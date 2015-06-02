@@ -100,7 +100,9 @@ $(function(){
 							<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
 								<li><?php $this->BcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 							<?php else: ?>
+                                <?php if ($currentPrefix != 'front'): ?>
 								<li><?php $this->BcBaser->link('アカウント設定', array($currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
+								<?php endif ?>
 							<?php endif ?>
 							<li><?php $this->BcBaser->link('ログアウト', $logoutAction) ?></li>
 						</ul>

@@ -387,7 +387,7 @@ class BcAppController extends Controller {
 		}
 
 		// Ajax
-		if (isset($this->RequestHandler) && $this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
+		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
 			// キャッシュ対策
 			header("Cache-Control: no-cache, must-revalidate");
 			header("Cache-Control: post-check=0, pre-check=0", false);
@@ -498,7 +498,7 @@ class BcAppController extends Controller {
 
 		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->__loadDataToView();
-		$this->set('isSSL', $this->RequestHandler->isSSL());
+		$this->set('isSSL', $this->request->is('ssl'));
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('baserVersion', $this->getBaserVersion());
 		$this->set('siteConfig', $this->siteConfigs);
@@ -1088,10 +1088,10 @@ class BcAppController extends Controller {
 		extract($options);
 
 		if (!is_array($filterModels)) {
-			$model = $filterModels;
+			$model = (string) $filterModels;
 			$filterModels = array($filterModels);
 		} else {
-			$model = $filterModels[0];
+			$model = (string) $filterModels[0];
 		}
 
 		if (!$action) {
@@ -1214,10 +1214,22 @@ class BcAppController extends Controller {
 /**
  * 認証完了後処理
  *
+ * @param array $user 認証されたユーザー情報
  * @return	bool
  */
-	public function isAuthorized() {
-		return true;
+	public function isAuthorized($user) {
+
+		if(!isset($user['UserGroup']['auth_prefix'])) {
+			return true;
+		}
+		$authPrefix = explode(',', $user['UserGroup']['auth_prefix']);
+		if(!empty($this->request->params['prefix'])) {
+			$currentPrefix = $this->request->params['prefix'];
+		} else {
+			$currentPrefix = 'front';
+		}
+		return (in_array($currentPrefix, $authPrefix));
+		
 	}
 
 /**

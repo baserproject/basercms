@@ -95,7 +95,16 @@ class BcAuthConfigureComponent extends Component {
 		// 権限が無いactionを実行した際のエラーメッセージ
 		$BcAuth->authError = '指定されたページを開くにはログインする必要があります。';
 		$BcAuth->authorize = 'Controller';
-
+		// =====================================================================
+		// 権限判定失敗時のリダイレクト先
+		// 復数の認証プレフィックスに対してログインできる仕様で、片方のログインが完了している場合
+		// もう片方にアクセスした場合、権限判定に失敗し、loginRedirect にリダイレクトする仕様となっているが、
+		// リダイレクトせずに強制的にエラー表示とする。
+		// 理由は、loginRedirect にリダイレクトした場合、再度、判定に失敗し、
+		// 無限リダイレクトが発生してしまう為。
+		// =====================================================================
+		$BcAuth->unauthorizedRedirect = $BcAuth->loginAction;
+		
 		// フォームの認証設定
 		$BcAuth->authenticate = array(
 			'Form' => array(

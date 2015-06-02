@@ -22,7 +22,7 @@ if (!empty($this->request->params['prefix'])) {
 	<?php if ($this->name == 'Installations' || $this->request->url == $loginUrl || $this->BcAdmin->isAdminGlobalmenuUsed()): ?>
 		<div class="clearfix" id="HeaderInner">
 
-			<?php if (!empty($user)): ?>
+			<?php if (!empty($user) && in_array(Configure::read('Routing.prefixes.0'), $currentUserAuthPrefixes)): ?>
 				<div id="GlobalMenu">
 					<ul class="clearfix">
 						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_header_menu_1.png', array('width' => 118, 'height' => 26, 'alt' => '固定ページ管理', 'class' => 'btn', 'title' => '固定ページ管理')), array('plugin' => '', 'controller' => 'pages', 'action' => 'index')) ?></li>
