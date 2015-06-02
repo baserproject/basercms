@@ -19,10 +19,10 @@ if (!empty($this->request->params['prefix'])) {
 ?>
 <div id="Header" class="clearfix">
 	<?php $this->BcBaser->element('toolbar') ?>
-	<?php if ($this->name == 'Installations' || $this->request->url == $loginUrl || $this->BcAdmin->isAdminGlobalmenuUsed()): ?>
+	<?php if ($this->name == 'Installations' || ('/' . $this->request->url == Configure::read('BcAuthPrefix.admin.loginAction')) || ($this->request->params['prefix'] == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>
 		<div class="clearfix" id="HeaderInner">
 
-			<?php if (!empty($user) && in_array(Configure::read('Routing.prefixes.0'), $currentUserAuthPrefixes)): ?>
+			<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>
 				<div id="GlobalMenu">
 					<ul class="clearfix">
 						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_header_menu_1.png', array('width' => 118, 'height' => 26, 'alt' => '固定ページ管理', 'class' => 'btn', 'title' => '固定ページ管理')), array('plugin' => '', 'controller' => 'pages', 'action' => 'index')) ?></li>

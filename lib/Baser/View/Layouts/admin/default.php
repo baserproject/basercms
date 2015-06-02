@@ -74,7 +74,7 @@
 
 			<div id="Wrap" class="clearfix">
 
-<?php if (!empty($user) && in_array(Configure::read('Routing.prefixes.0'), $currentUserAuthPrefixes)): ?>
+<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>
 			<?php $this->BcBaser->element('sidebar') ?>
 <?php endif ?>
 
