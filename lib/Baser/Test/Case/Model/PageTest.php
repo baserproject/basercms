@@ -80,25 +80,50 @@ class PageTest extends BaserTestCase {
 
 /**
  * PHP構文チェック
+ * 成功時
  *
- * @param array $code PHPのコード
- * @param bool $expected 期待値
+ * @param string $code PHPのコード
  * @return void
  * @dataProvider phpValidSyntaxDataProvider
  */
-	public function testPhpValidSyntax($code, $expected) {
-		$this->assertEquals($expected, $this->Page->phpValidSyntax($code));
+	public function testPhpValidSyntax($code) {
+		$this->assertTrue($this->Page->phpValidSyntax(array('contents' => $code)));
 	}
 
 /**
- * testPhpValidSyntax用データプロバイダ
+ * testPhpValidSyntax 成功時 用データプロバイダ
  *
  * @return array
  */
 	public function phpValidSyntaxDataProvider() {
 		return array(
-			array(array('contents' => '<?php $this->BcBaser->setTitle(\'test\');'), true),
-			array(array('contents' => '<?php echo \'test'), false)
+			array('<?php $this->BcBaser->setTitle(\'test\');'),
 		);
 	}
+
+/**
+ * PHP構文チェック
+ * 失敗時
+ *
+ * @param string $line エラーが起こる行
+ * @param string $code PHPコード
+ * @return void
+ * @dataProvider phpValidSyntaxWithInvalidDataProvider
+ */
+	public function testPhpValidSyntaxWithInvalid($line, $code) {
+		$this->assertContains("on line {$line}", $this->Page->phpValidSyntax(array('contents' => $code)));
+	}
+
+/**
+ * testPhpValidSyntax 失敗時 用データプロバイダ
+ *
+ * @return array
+ */
+	public function phpValidSyntaxWithInvalidDataProvider() {
+		return array(
+			array(1, '<?php echo \'test'),
+			array(2, '<?php echo \'test\';' . PHP_EOL . 'echo \'hoge')
+		);
+	}
+
 }
