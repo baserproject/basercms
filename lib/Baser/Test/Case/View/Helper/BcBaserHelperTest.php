@@ -1504,10 +1504,28 @@ class BcBaserHelperTest extends BaserTestCase {
  * 現在のページが固定ページかどうかを判定する
  *
  * @return void
+ * @dataProvider getIsPageProvider
  */
-	public function testIsPage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testIsPage($expected, $requestUrl) {
+		$this->BcBaser->request = $this->_getRequest($requestUrl);
+		// TODO プリフィックス付きURLもテストが必要
+		$this->assertEquals($expected, $this->BcBaser->isPage());
 	}
+/**
+ * isPage用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function getIsPageProvider() {
+		return array(
+			// PCページ
+			array(true, '/'),
+			array(true, '/index'),
+			array(false, '/news/index'),
+			array(false, '/blog/blog/index'),
+		);
+	}
+	
 
 /**
  * 現在のページの純粋なURLを取得する
