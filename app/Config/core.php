@@ -369,7 +369,15 @@
 $engine = 'File';
 
 // In development mode, caches should expire quickly.
+// CUSTOMIZE MODIFY 2015/06/03 gondoh
+// $this->BcBaser->blogPost等を利用して表示した場合、
+// キャッシュを利用すると手動で更新等しない限りブログ記事の公開期限の反映が
+// 正しく反映されない可能性があるためデフォルトの時間を短縮。
+// >>>
+// $duration = '+999 days';
+// ---
 $duration = '+5 min';
+// <<<
 if (Configure::read('debug') > 0) {
 	$duration = '+10 seconds';
 }
