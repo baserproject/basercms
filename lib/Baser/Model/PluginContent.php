@@ -98,10 +98,23 @@ class PluginContent extends AppModel {
 			$name = $url;
 		}
 
-		return $pluginContent = $this->find('first', array(
-			'fields' => array('name', 'plugin'),
-			'conditions' => array('PluginContent.name' => $name)
-		));
+		$enablePlugins = Hash::extract(getEnablePlugins(), '{n}.Plugin.name');
+		foreach($enablePlugins as $key => $enablePlugin) {
+			// BcPluginContentBehavior::getPluginName() にて、
+			// 小文字にする処理が入っている為こちらでも変換しておく必要あり
+			$enablePlugins[$key] = strtolower($enablePlugin);
+		}
+		if($enablePlugins) {
+			return $pluginContent = $this->find('first', array(
+				'fields' => array('name', 'plugin'),
+				'conditions' => array(
+					'PluginContent.name' => $name,
+					'PluginContent.plugin' => $enablePlugins
+				)
+			));
+		} else {
+			return false;
+		}
 	}
 
 }
