@@ -23,7 +23,6 @@ class Page extends AppModel {
 /**
  * クラス名
  * @var string
- * @access public
  */
 	public $name = 'Page';
 
@@ -31,7 +30,6 @@ class Page extends AppModel {
  * データベース接続
  * 
  * @var string
- * @access public
  */
 	public $useDbConfig = 'baser';
 
@@ -39,7 +37,6 @@ class Page extends AppModel {
  * belongsTo
  * 
  * @var array
- * @access public
  */
 	public $belongsTo = array(
 		'PageCategory' => array('className' => 'PageCategory',
@@ -51,7 +48,6 @@ class Page extends AppModel {
  * ビヘイビア
  *
  * @var array
- * @access public
  */
 	public $actsAs = array('BcContentsManager', 'BcCache');
 
@@ -59,7 +55,6 @@ class Page extends AppModel {
  * 更新前のページファイルのパス
  * 
  * @var string
- * @access public
  */
 	public $oldPath = '';
 
@@ -69,7 +64,6 @@ class Page extends AppModel {
  * テンプレート読み込み時などはfalseにして保存しないようにする
  * 
  * @var boolean
- * @access public
  */
 	public $fileSave = true;
 
@@ -77,7 +71,6 @@ class Page extends AppModel {
  * 検索テーブルへの保存可否
  *
  * @var boolean
- * @access public
  */
 	public $contentSaving = true;
 
@@ -86,7 +79,6 @@ class Page extends AppModel {
  * キャッシュ用
  * 
  * @var mixed
- * @access protected
  */
 	protected $_publishes = -1;
 
@@ -95,7 +87,6 @@ class Page extends AppModel {
  * キャッシュ用
  * 
  * @var mixed
- * @access protected
  */
 	protected $_pages = -1;
 
@@ -105,7 +96,6 @@ class Page extends AppModel {
  * コントローラーからは正常なIDが取得できないのでモバイルページへのコピー以外の場合だけ保存する
  *
  * @var int
- * @access private
  */
 	private $__pageInsertID = null;
 
@@ -113,7 +103,6 @@ class Page extends AppModel {
  * バリデーション
  *
  * @var array
- * @access	public
  */
 	public $validate = array(
 		'name' => array(
@@ -154,7 +143,6 @@ class Page extends AppModel {
  * フォームの初期値を設定する
  * 
  * @return	array	初期値データ
- * @access	public
  */
 	public function getDefaultValue() {
 		if (!empty($_SESSION['Auth']['User'])) {
@@ -167,9 +155,9 @@ class Page extends AppModel {
 
 /**
  * beforeSave
- * 
+ *
+ * @param array $options
  * @return boolean
- * @access public
  */
 	public function beforeSave($options = array()) {
 		if (!$this->fileSave) {
@@ -216,10 +204,10 @@ class Page extends AppModel {
 	}
 
 /**
- * プレフィックスを取り除く
+ * URLよりモバイルやスマートフォン等のプレフィックスを取り除く
  * 
- * @param type $url
- * @return type 
+ * @param string $url 変換対象のURL
+ * @return string $url 変換後のURL
  */
 	public function removeAgentPrefixFromUrl($url) {
 		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//', $url)) {
@@ -234,7 +222,6 @@ class Page extends AppModel {
  * 最終登録IDを取得する
  *
  * @return	int
- * @access	public
  */
 	public function getInsertID() {
 		if (!$this->__pageInsertID) {
@@ -248,7 +235,6 @@ class Page extends AppModel {
  * 
  * @param	array	$data	ページデータ
  * @return	boolean
- * @access	public
  */
 	public function checkOpenPageFile($data) {
 		$path = $this->_getPageFilePath($data);
@@ -265,9 +251,9 @@ class Page extends AppModel {
 /**
  * afterSave
  * 
- * @param array $created
+ * @param boolean $created
+ * @param array $options
  * @return boolean
- * @access public
  */
 	public function afterSave($created, $options = array()) {
 		if (isset($this->data['Page'])) {
@@ -382,7 +368,6 @@ class Page extends AppModel {
  *
  * @param array $data
  * @return array
- * @access public
  */
 	public function createContent($data) {
 		if (isset($data['Page'])) {
@@ -442,9 +427,9 @@ class Page extends AppModel {
 
 /**
  * beforeDelete
- * 
+ *
+ * @param $cascade
  * @return boolean
- * @access public
  */
 	public function beforeDelete($cascade = true) {
 		return $this->deleteContent($this->id);
@@ -454,7 +439,6 @@ class Page extends AppModel {
  * DBデータを元にページテンプレートを全て生成する
  * 
  * @return boolean
- * @access public
  */
 	public function createAllPageTemplate() {
 		set_time_limit(0);
@@ -477,7 +461,6 @@ class Page extends AppModel {
  * 
  * @param array $data ページデータ
  * @return boolean
- * @access public
  */
 	public function createPageTemplate($data) {
 		set_time_limit(0);
@@ -520,7 +503,6 @@ class Page extends AppModel {
  * 
  * @param array $data
  * @return string
- * @access protected
  */
 	protected function _getPageFilePath($data) {
 		if (isset($data['Page'])) {
@@ -577,7 +559,8 @@ class Page extends AppModel {
 /**
  * ページファイルを削除する
  * 
- * @param array $data
+ * @param array $data 削除対象となるレコードデータ
+ * @return boolean
  */
 	public function delFile($data) {
 		$path = $this->_getPageFilePath($data);
@@ -592,7 +575,6 @@ class Page extends AppModel {
  * 
  * @param array $data
  * @return string
- * @access public
  */
 	public function getPageUrl($data) {
 		if (isset($data['Page'])) {
@@ -638,14 +620,14 @@ class Page extends AppModel {
 	}
 
 /**
- * Baserが管理するタグを追加する
+ * 本文にbaserが管理するタグを追加する
  * 
- * @param string $id
- * @param string $contents
- * @param string $title
- * @param string $description
- * @return string
- * @access public
+ * @param string $id ID
+ * @param string $contents 本文
+ * @param string $title タイトル
+ * @param string $description 説明文
+ * @param string $code コード
+ * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
  */
 	public function addBaserPageTag($id, $contents, $title, $description, $code) {
 		$tag = array();
@@ -670,7 +652,6 @@ class Page extends AppModel {
  *
  * @param string チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function pageExists($check) {
 		$conditions['Page.name'] = $this->data['Page']['name'];
@@ -702,7 +683,6 @@ class Page extends AppModel {
  * @param string $field フィールド名
  * @param array $options
  * @return mixed $controlSource コントロールソース
- * @access public
  */
 	public function getControlSource($field, $options = array()) {
 		switch ($field) {
@@ -809,7 +789,6 @@ class Page extends AppModel {
  * 
  * @param string $url
  * @return boolean
- * @access public
  */
 	public function checkPublish($url) {
 		if (preg_match('/\/$/', $url)) {
@@ -839,7 +818,6 @@ class Page extends AppModel {
  * 公開済の conditions を取得
  *
  * @return array
- * @access public
  */
 	public function getConditionAllowPublish() {
 		$conditions[$this->alias . '.status'] = true;
@@ -856,17 +834,16 @@ class Page extends AppModel {
  * ページファイルを登録する
  * ※ 再帰処理
  *
- * @param string $pagePath
+ * @param string $targetPath
  * @param string $parentCategoryId
  * @return array 処理結果 all / success
- * @access protected
  */
 	public function entryPageFiles($targetPath, $parentCategoryId = '') {
-		if ($this->Behaviors->attached('BcCache')) {
-			$this->Behaviors->detach('BcCache');
+		if ($this->Behaviors->loaded('BcCache')) {
+			$this->Behaviors->unload('BcCache');
 		}
-		if ($this->PageCategory->Behaviors->attached('BcCache')) {
-			$this->PageCategory->Behaviors->detach('BcCache');
+		if ($this->PageCategory->Behaviors->loaded('BcCache')) {
+			$this->PageCategory->Behaviors->unload('BcCache');
 		}
 
 		$this->fileSave = false;
@@ -1041,10 +1018,10 @@ class Page extends AppModel {
 /**
  * 関連ページの存在チェック
  * 存在する場合は、ページIDを返す
- * 
+ *
+ * @param string $type エージェントタイプ
  * @param array $data ページデータ
  * @return mixed ページID / false
- * @access public
  */
 	public function agentExists($type, $data) {
 		if (isset($data['Page'])) {
@@ -1097,13 +1074,11 @@ class Page extends AppModel {
 	}
 
 /**
- * Removes record for given ID. If no ID is given, the current ID is used. Returns true on success.
+ * delete
  *
  * @param mixed $id ID of record to delete
  * @param boolean $cascade Set to true to delete records that depend on this record
  * @return boolean True on success
- * @access public
- * @link http://book.cakephp.org/view/690/del
  */
 	public function delete($id = null, $cascade = true) {
 		// メッセージ用にデータを取得
