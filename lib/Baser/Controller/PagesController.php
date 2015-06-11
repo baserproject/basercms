@@ -579,7 +579,9 @@ class PagesController extends AppController {
 			$checkUrl = $url;
 		}
 
-		if(!$this->Page->checkPublish($url)) {
+		// 固定ページを保存する際、非公開の場合でも、検索用データを作成時に
+		// requestAction で呼ばれる為、requestAction時には無視する仕様とする
+		if(empty($this->request->params['requested']) && !$this->Page->checkPublish($url)) {
 			$this->notFound();
 		}
 		
