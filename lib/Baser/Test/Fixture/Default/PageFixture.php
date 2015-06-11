@@ -6,6 +6,13 @@
 class PageFixture extends BaserTestFixture {
 
 /**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'Page';
+	
+/**
  * Records
  *
  * @var array

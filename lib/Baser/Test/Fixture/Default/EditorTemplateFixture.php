@@ -6,6 +6,13 @@
 class EditorTemplateFixture extends BaserTestFixture {
 
 /**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'EditorTemplate';
+	
+/**
  * Records
  *
  * @var array

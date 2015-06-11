@@ -6,6 +6,13 @@
 class WidgetAreaFixture extends BaserTestFixture {
 
 /**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'WidgetArea';
+	
+/**
  * Records
  *
  * @var array

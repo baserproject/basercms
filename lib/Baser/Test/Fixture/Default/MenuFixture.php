@@ -6,6 +6,13 @@
 class MenuFixture extends BaserTestFixture {
 
 /**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'Menu';
+	
+/**
  * Records
  *
  * @var array

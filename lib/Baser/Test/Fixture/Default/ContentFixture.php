@@ -6,6 +6,13 @@
 class ContentFixture extends BaserTestFixture {
 
 /**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'Content';
+	
+/**
  * Records
  *
  * @var array

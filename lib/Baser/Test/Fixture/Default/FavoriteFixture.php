@@ -6,6 +6,13 @@
 class FavoriteFixture extends BaserTestFixture {
 
 /**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'Favorite';
+	
+/**
  * Records
  *
  * @var array
