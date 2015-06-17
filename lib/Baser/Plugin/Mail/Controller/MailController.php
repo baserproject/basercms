@@ -152,10 +152,15 @@ class MailController extends MailAppController {
 		} else {
 			// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 			// 詳細はコンポーネント設定のコメントを参照
+			$disabledFields = array('Message.mode', 'x', 'y', 'MAX_FILE_SIZE');
+			// type="file" を除外
+			foreach($this->Message->mailFields as $field) {
+				if (isset($field['MailField']['type']) && $field['MailField']['type'] == 'file') {
+					$disabledFields[] = $field['MailField']['field_name'];
+				}
+			}
 			$this->Security->requireAuth('confirm', 'submit');
-			$this->Security->disabledFields = array_merge($this->Security->disabledFields, array(
-				'Message.mode', 'x', 'y'
-			));
+			$this->Security->disabledFields = array_merge($this->Security->disabledFields, $disabledFields);
 
 			// SSL設定
 			if ($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
