@@ -42,9 +42,20 @@ class UploadsController extends AppController {
  * @access public
  */
 	public function tmp() {
+		$this->output(func_get_args(), func_num_args());
+	}
+
+	public function smartphone_tmp(){
+		$this->output(func_get_args(), func_num_args());
+	}
+	
+	public function mobile_tmp(){
+		$this->output(func_get_args(), func_num_args());
+	}
+	
+	protected function output($args, $funcNum) {
 		$size = '';
-		$args = func_get_args();
-		if (func_num_args() > 1) {
+		if ($funcNum > 1) {
 			$size = $args[0];
 			$name = $args[1];
 		} else {
@@ -101,5 +112,4 @@ class UploadsController extends AppController {
 		echo $data;
 		exit();
 	}
-
 }
