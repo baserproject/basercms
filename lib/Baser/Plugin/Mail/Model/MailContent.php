@@ -127,13 +127,16 @@ class MailContent extends MailAppModel {
 				'message' => 'リダイレクトURLは255文字以内で入力してください。')
 		),
 		'sender_1' => array(
-			array('rule' => array('email'),
+			array('rule' => array('emails'),
 				'allowEmpty' => true,
 				'message' => '送信先メールアドレスの形式が不正です。'),
 			array('rule' => array('maxLength', 255),
 				'message' => '送信先メールアドレスは255文字以内で入力してください。')
 		),
 		'sender_2' => array(
+			array('rule' => array('emails'),
+				'allowEmpty' => true,
+				'message' => '送信先メールアドレスの形式が不正です。'),
 			array('rule' => array('maxLength', 255),
 				'message' => 'CC用送信先メールアドレスは255文字以内で入力してください。')
 		),
@@ -142,22 +145,6 @@ class MailContent extends MailAppModel {
 			"message" => 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。'
 		)
 	);
-
-/**
- * beforeValidate
- *
- * @return boolean
- * @access public
- */
-	public function beforeValidate($options = array()) {
-		if ($this->data['MailContent']['sender_1']) {
-			$this->validate['sender_1'] = array(
-				array('rule' => 'email',
-					'message' => '送信先メールアドレスの形式が不正です。'));
-		}
-
-		return true;
-	}
 
 /**
  * SSL用のURLが設定されているかチェックする
