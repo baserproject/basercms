@@ -179,7 +179,8 @@ class User extends AppModel {
 	public function getUserList($conditions = array()) {
 		$users = $this->find("all", array(
 			'fields' => array('id', 'real_name_1', 'real_name_2', 'nickname'),
-			'conditions' => $conditions
+			'conditions' => $conditions,
+			'recursive' => -1
 		));
 		$list = array();
 		if ($users) {
