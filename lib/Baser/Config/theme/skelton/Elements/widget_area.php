@@ -1,11 +1,6 @@
 <?php
-
 /**
  * [PUBLISH] ウィジェットエリア
- *
- * no を引き数で渡して利用する
- * <?php $this->BcBaser->element('widget_areas',array('no'=>1)) ?>
- *
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
