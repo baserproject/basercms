@@ -391,6 +391,7 @@ class WidgetAreasController extends AppController {
  * @param int $id
  * @return array $widgets
  * @access public
+ * @deprecated BcWidgetAreaHelper::showWidgets() に移行
  */
 	public function get_widgets($id) {
 		$widgetArea = $this->WidgetArea->read(null, $id);
