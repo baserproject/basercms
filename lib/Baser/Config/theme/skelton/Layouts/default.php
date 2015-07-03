@@ -24,30 +24,30 @@
 
 		<div id="Page">
 
-<?php $this->BcBaser->header() ?>
+			<?php $this->BcBaser->header() ?>
 
 			<div id="Wrap" class="clearfix">
 
 				<div id="Alfa" >
 					<div id="ContentsBody" class="clearfix">
 						<?php $this->BcBaser->flash() ?>
-<?php $this->BcBaser->content() ?>
-<?php $this->BcBaser->element('contents_navi') ?>
+						<?php $this->BcBaser->content() ?>
+						<?php $this->BcBaser->element('contents_navi') ?>
 					</div>
 				</div>
 
 				<div id="Beta">
-<?php $this->BcBaser->widgetArea() ?>
+					<?php $this->BcBaser->widgetArea() ?>
 				</div>
 
 			</div>
 
 			<div class="to-top"> <a href="#Page">このページの先頭へ戻る</a> </div>
 
-<?php $this->BcBaser->footer() ?>
+			<?php $this->BcBaser->footer() ?>
 
 		</div>
 
-<?php $this->BcBaser->func() ?>
+		<?php $this->BcBaser->func() ?>
 	</body>
 </html>
