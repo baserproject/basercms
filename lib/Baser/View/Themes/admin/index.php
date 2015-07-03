@@ -46,15 +46,22 @@ $(function(){
 				$(config.alertBox).fadeIn(500);
 			}
 		}
-	}
+	};
 	$.baserAjaxDataList.init();
+	
+	/**
+	 * 初期データ読込ボタンを押下した際の動作
+	 */
 	$("#BtnLoadDefaultDataPattern").click(function() {
-		if(confirm(
-			'初期データを読み込みます。よろしいですか？\n\n'+
-			'※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。\n'+
-			'※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。')) {
-			return true;
-		}
+		$.bcConfirm.show({
+			'title': '初期データ読込',
+			'message':'<p><strong>初期データを読み込みます。よろしいですか？</strong></p><br />' +
+						'<p>※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。<br />' +
+						'※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。</p>',
+			'ok':function(){
+				$("#ThemeLoadDefaultDataPatternForm").submit();
+			}
+		});
 		return false;
 	});
 	

@@ -41,6 +41,7 @@
 			'admin/jquery.colorbox-min-1.4.5',
 			'admin/jquery.mScroll',
 			'admin/jquery.baseUrl',
+			'admin/jquery.bcConfirm',
 			'admin/credit',
 			'admin/validate_messages_ja',
 			'admin/functions',
