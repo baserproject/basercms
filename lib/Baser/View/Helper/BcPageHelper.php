@@ -67,11 +67,13 @@ class BcPageHelper extends Helper {
  */
 	public function beforeRender($viewFile) {
 		//if ($this->request->params['controller'] == 'pages' && ($this->request->params['action'] == 'display' || $this->request->params['action'] == 'smartphone_display') && isset($this->request->params['pass'][0])) {
-		if ($this->request->params['controller'] == 'pages' && preg_match('/(^|_)display$/', $this->request->params['action']) && isset($this->request->params['pass'][0])) {
+		if ($this->request->params['controller'] == 'pages' && preg_match('/(^|_)display$/', $this->request->params['action'])) {
 			// @TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
 			$param = Configure::read('BcRequest.pureUrl');
-			if ($param && preg_match('/\/$/is', $param)) {
+			if ($param === '') {
+				$param = 'index';
+			} elseif ($param && preg_match('/\/$/is', $param)) {
 				$param .= 'index';
 			}
 			
@@ -194,15 +196,25 @@ class BcPageHelper extends Helper {
 /**
  * ページカテゴリ間の次の記事へのリンクを取得する
  *
- * @param array $post
  * @param string $title
- * @param array $attributes
- * @return void コンテンツナビが無効の場合のみ、空文字を返す
+ * @param array $options オプション（初期値 : array()）
+ *	- `class` : CSSのクラス名（初期値 : 'next-link'）
+ *	- `arrow` : 表示文字列（初期値 : ' ≫'）
+ *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
+ * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
-	public function nextLink($title = '', $attributes = array()) {
-
-		if (!$this->contentsNaviAvailable()) {
-			return '';
+	public function getNextLink($title = '', $options = array()) {
+		
+		$options = array_merge(array(
+			'class'			=> 'next-link',
+			'arrow'			=> ' ≫',
+			'overCategory'	=> false,
+			'prefix'		=> null
+		), $options);
+		
+		if (!$this->contentsNaviAvailable() && $options['overCategory'] !== true) {
+			return false;
 		}
 
 		if (ClassRegistry::isKeySet('Page')) {
@@ -211,16 +223,30 @@ class BcPageHelper extends Helper {
 			$PageClass = ClassRegistry::init('Page');
 		}
 
-		$_attributes = array('class' => 'next-link', 'arrow' => ' ≫');
-		$attributes = am($_attributes, $attributes);
-
-		$arrow = $attributes['arrow'];
-		unset($attributes['arrow']);
-
-		$conditions = am(array(
-			'Page.sort >' => $this->request->data['Page']['sort'],
-			'Page.page_category_id' => $this->request->data['Page']['page_category_id']
+		$arrow = $options['arrow'];
+		unset($options['arrow']);
+		$overCategory = $options['overCategory'];
+		unset($options['overCategory']);
+		$prefix = $options['prefix'];
+		unset($options['prefix']);
+		
+		if ($overCategory === true) {
+			// ページ情報を持っていない場合はリンクを表示しない
+			if (!isset($this->request->data['Page']['sort'])) {
+				return false;
+			}
+			$pageUrlConditions = $this->getPageUrlConditions($prefix);
+			$conditions = am(array(
+				'Page.sort >' => $this->request->data['Page']['sort'],
+				'AND' => $pageUrlConditions,
+			),$PageClass->getConditionAllowPublish());
+		} else {
+			$conditions = am(array(
+				'Page.sort >' => $this->request->data['Page']['sort'],
+				'Page.page_category_id' => $this->request->data['Page']['page_category_id']
 			), $PageClass->getConditionAllowPublish());
+		}
+
 		$nextPost = $PageClass->find('first', array(
 			'conditions' => $conditions,
 			'fields' => array('title', 'url'),
@@ -232,22 +258,48 @@ class BcPageHelper extends Helper {
 			if (!$title) {
 				$title = $nextPost['Page']['title'] . $arrow;
 			}
-			$this->BcBaser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
+			$prefixes = Configure::read('BcAgent');	
+			return $this->BcBaser->getLink($title, preg_replace('/^\/' . $prefixes['mobile']['prefix'] . '/', '/' . $prefixes['mobile']['alias'], $nextPost['Page']['url']), $options);
 		}
+	}
+
+/**
+ * ページカテゴリ間の次の記事へのリンクを出力する
+ *
+ * @param string $title
+ * @param array $options オプション（初期値 : array()）
+ *	- `class` : CSSのクラス名（初期値 : 'next-link'）
+ *	- `arrow` : 表示文字列（初期値 : ' ≫'）
+ *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
+ * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
+ */
+	public function nextLink($title = '', $options = array()) {
+		echo $this->getNextLink($title, $options);
 	}
 
 /**
  * ページカテゴリ間の前の記事へのリンクを取得する
  *
- * @param array $post
  * @param string $title
- * @param array $attributes
- * @return void
+ * @param array $options オプション（初期値 : array()）
+ *	- `class` : CSSのクラス名（初期値 : 'prev-link'）
+ *	- `arrow` : 表示文字列（初期値 : ' ≫'）
+ *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
+ * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
-	public function prevLink($title = '', $attributes = array()) {
+	public function getPrevLink($title = '', $options = array()) {
+		
+		$options = array_merge(array(
+			'class'			=> 'prev-link',
+			'arrow'			=> '≪ ',
+			'overCategory'	=> false,
+			'prefix'		=> null
+		), $options);
 
-		if (!$this->contentsNaviAvailable()) {
-			return '';
+		if (!$this->contentsNaviAvailable() && $options['overCategory'] !== true) {
+			return false;
 		}
 
 		if (ClassRegistry::isKeySet('Page')) {
@@ -256,16 +308,30 @@ class BcPageHelper extends Helper {
 			$PageClass = ClassRegistry::init('Page');
 		}
 
-		$_attributes = array('class' => 'prev-link', 'arrow' => '≪ ');
-		$attributes = am($_attributes, $attributes);
-
-		$arrow = $attributes['arrow'];
-		unset($attributes['arrow']);
-
-		$conditions = am(array(
-			'Page.sort <' => $this->request->data['Page']['sort'],
-			'Page.page_category_id' => $this->request->data['Page']['page_category_id']
+		$arrow = $options['arrow'];
+		unset($options['arrow']);
+		$overCategory = $options['overCategory'];
+		unset($options['overCategory']);
+		$prefix = $options['prefix'];
+		unset($options['prefix']);
+		
+		if ($overCategory === true) {
+			// ページ情報を持っていない場合はリンクを表示しない
+			if (!isset($this->request->data['Page']['sort'])) {
+				return false;
+			}
+			$pageUrlConditions = $this->getPageUrlConditions($prefix);
+			$conditions = am(array(
+				'Page.sort <' => $this->request->data['Page']['sort'],
+				'AND' => $pageUrlConditions
 			), $PageClass->getConditionAllowPublish());
+		} else {
+			$conditions = am(array(
+				'Page.sort <' => $this->request->data['Page']['sort'],
+				'Page.page_category_id' => $this->request->data['Page']['page_category_id']
+			), $PageClass->getConditionAllowPublish());
+		}
+		
 		$nextPost = $PageClass->find('first', array(
 			'conditions' => $conditions,
 			'fields' => array('title', 'url'),
@@ -277,8 +343,45 @@ class BcPageHelper extends Helper {
 			if (!$title) {
 				$title = $arrow . $nextPost['Page']['title'];
 			}
-			$this->BcBaser->link($title, preg_replace('/^\/mobile/', '/m', $nextPost['Page']['url']), $attributes);
+			$prefixes = Configure::read('BcAgent');
+			return $this->BcBaser->getLink($title, preg_replace('/^\/' . $prefixes['mobile']['prefix'] . '/', '/' . $prefixes['mobile']['alias'], $nextPost['Page']['url']), $options);
 		}
+	}
+
+/**
+ * ページカテゴリ間の前の記事へのリンクを出力する
+ *
+ * @param string $title
+ * @param array $options オプション（初期値 : array()）
+ *	- `class` : CSSのクラス名（初期値 : 'prev-link'）
+ *	- `arrow` : 表示文字列（初期値 : ' ≫'）
+ *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ *  - `prefix` : PC（初期値 : null） or 'mobile' or 'smartphone'
+ * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+ */
+	public function prevLink($title = '', $options = array()) {
+		echo $this->getPrevLink($title, $options);
+	}
+	
+/**
+ * Page.urlのConditionを取得する
+ * 
+ * @param string $prefix 
+ * @return array 
+ */
+	protected function getPageUrlConditions($prefix = null) {
+		$pageUrlConditions = array();
+		
+		if ($prefix) {
+			$pageUrlConditions[] = array('Page.url LIKE' => '/' . $prefix . '/%');
+		} else {
+			// 指定がなければprefixが指定されたページを除外する
+			$prefixes = Configure::read('BcAgent');
+			foreach($prefixes as $prefix) {
+				$pageUrlConditions[] = array('Page.url NOT LIKE' => '/' . $prefix['prefix'] . '/%');
+			}
+		}
+		return $pageUrlConditions;
 	}
 
 /**
@@ -306,7 +409,7 @@ class BcPageHelper extends Helper {
 			$agent = Configure::read('BcRequest.agentPrefix');
 		}
 		$path = $this->_View->getVar('pagePath');
-
+		
 		if ($agent) {
 			$url = '/' . implode('/', $this->request->params['pass']);
 			$linked = $this->Page->isLinked($agent, $url);
