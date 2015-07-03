@@ -2150,7 +2150,7 @@ END_FLASH;
  * @return void
  */
 	public function contentsNavi($data = array(), $options = array()) {
-		if (!isset($this->helpers['BcPage']) || !$this->BcPage->contentsNaviAvailable()) {
+		if (!in_array('BcPage', $this->helpers) || !$this->BcPage->contentsNaviAvailable()) {
 			return;
 		}
 		$this->element('contents_navi', $data, $options);
