@@ -53,18 +53,13 @@ $(function(){
 	 * 初期データ読込ボタンを押下した際の動作
 	 */
 	$("#BtnLoadDefaultDataPattern").click(function() {
-		$('#ThemeLoadDefaultDataPatternFormDialog').dialog({
-			modal: true,
-			title: '初期データ読込',
-			width: 700,
-			buttons: {
-				"キャンセル": function() {
-					$(this).dialog("close");
-				},
-				"OK": function() {
-					$(this).dialog("close");
-					$("#ThemeLoadDefaultDataPatternForm").submit();
-				}
+		$.bcConfirm.show({
+			'title': '初期データ読込',
+			'message':'<p><strong>初期データを読み込みます。よろしいですか？</strong></p><br />' +
+						'<p>※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。<br />' +
+						'※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。</p>',
+			'ok':function(){
+				$("#ThemeLoadDefaultDataPatternForm").submit();
 			}
 		});
 		return false;
@@ -89,11 +84,6 @@ $(function(){
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'themes', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
-
-<div id="ThemeLoadDefaultDataPatternFormDialog" title="初期データ読込" class="display-none">
-	<p><strong>初期データを読み込みます。よろしいですか？</strong></p><br />
-	<p>※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。<br />※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。</p>
-</div>
 
 <div id="tabs">
 	<ul>
