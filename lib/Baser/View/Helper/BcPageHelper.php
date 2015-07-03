@@ -287,7 +287,6 @@ class BcPageHelper extends Helper {
  * @return boolean
  */
 	public function contentsNaviAvailable() {
-
 		if (empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
 			return false;
 		} else {
