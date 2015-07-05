@@ -201,10 +201,16 @@ class Feed extends FeedAppModel {
 			$tmp['link']['value'] = $data->get_link();
 			$tmp['pubDate']['value'] = date("r", strtotime($data->get_date('Y-m-d H:i:s')));
 			$tmp['dc:creator']['value'] = $data->get_author();
-			$cat = $data->get_category();
-			if ($cat) {
-				$tmp['category']['value'] = $cat->get_term();
+			$categories = $data->get_categories();
+			if ($categories) {
+				$categoryArray = array();
+				foreach ($categories as $category) {
+					$categoryArray[] = $category->get_term();
+				}
+				$tmp['categories']['value'] = $categoryArray;
+				$tmp['category']['value'] = $categoryArray[0];
 			} else {
+				$tmp['categories']['value'] = '';
 				$tmp['category']['value'] = '';
 			}
 			$tmp['guid']['value'] = $data->get_id();
