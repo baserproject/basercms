@@ -45,9 +45,8 @@ class BcPageHelper extends Helper {
 
 /**
  * construct
- * 
- * @param object $View
- * @return void
+ *
+ * @param View $View
  */
 	public function __construct(View $View) {
 
@@ -66,14 +65,13 @@ class BcPageHelper extends Helper {
  * @return void
  */
 	public function beforeRender($viewFile) {
-		//if ($this->request->params['controller'] == 'pages' && ($this->request->params['action'] == 'display' || $this->request->params['action'] == 'smartphone_display') && isset($this->request->params['pass'][0])) {
 		if ($this->request->params['controller'] == 'pages' && preg_match('/(^|_)display$/', $this->request->params['action'])) {
 			// @TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
 			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
 			$param = Configure::read('BcRequest.pureUrl');
 			if ($param === '') {
 				$param = 'index';
-			} elseif ($param && preg_match('/\/$/is', $param)) {
+			} elseif (preg_match('/\/$/is', $param)) {
 				$param .= 'index';
 			}
 			
@@ -201,7 +199,8 @@ class BcPageHelper extends Helper {
  *	- `class` : CSSのクラス名（初期値 : 'next-link'）
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
- * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+ * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
+ * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function getNextLink($title = '', $options = array()) {
 		
@@ -210,15 +209,9 @@ class BcPageHelper extends Helper {
 			'arrow'			=> ' ≫',
 			'overCategory'	=> false,
 		), $options);
-		
-		if (!$this->contentsNaviAvailable() && $options['overCategory'] !== true) {
-			return false;
-		}
 
-		if (ClassRegistry::isKeySet('Page')) {
-			$PageClass = ClassRegistry::getObject('Page');
-		} else {
-			$PageClass = ClassRegistry::init('Page');
+		if (!isset($this->request->data['Page']) || (!$this->contentsNaviAvailable() && $options['overCategory'] !== true)) {
+			return false;
 		}
 		
 		$arrow = $options['arrow'];
@@ -226,84 +219,22 @@ class BcPageHelper extends Helper {
 		$overCategory = $options['overCategory'];
 		unset($options['overCategory']);
 		
-		if ($overCategory === true) {
-			// ページ情報を持っていない場合はリンクを表示しない
-			if (!isset($this->request->data['Page']['sort'])) {
-				return false;
-			}
-			
-			$requestAgent = Configure::read('BcRequest.agent');
-			$agentUrlConditions = array();
-			$agentCategoryConditions = array();
-			$categoryIds = array();
-			
-			if ($requestAgent) {
-				$agentId = $PageClass->PageCategory->getAgentId($requestAgent);
-				
-				array_push($categoryIds, $agentId);
-				// Agentが持つページカテゴリIDを取得する
-				foreach ($PageClass->PageCategory->children($agentId) as $pageCategory) {
-					array_push($categoryIds, $pageCategory['PageCategory']['id']);
-				}				
-				// Agentが持つページカテゴリIDを配列に追加する
-				$agentUrlConditions += array('Page.page_category_id' => $categoryIds);
-				
-			} else {
-				// 指定がなければagentが指定されたページを除外する
-				$agents = Configure::read('BcAgent');
-				
-				foreach($agents as $agent) {
-					$agentId = $PageClass->PageCategory->getAgentId($agent['prefix']);
-					
-					array_push($categoryIds, $agentId);
-					// Agentが持つページカテゴリIDを取得する
-					foreach ($PageClass->PageCategory->children($agentId) as $pageCategory) {
-						array_push($categoryIds, $pageCategory['PageCategory']['id']);
-					}
-				}
-				// Agentが持つページカテゴリIDを配列に追加する
-				$agentUrlConditions[] =	array('Page.page_category_id !=' => $categoryIds);
-				// PCの場合のみ、page_category_idにnull値も含める
-				$agentCategoryConditions = array('Page.page_category_id' => null);
-			}
-			
-			$conditions = am(array(
-				'Page.sort >' => $this->request->data['Page']['sort'],
-				array(
-					'or' => array(array($agentUrlConditions),
-					$agentCategoryConditions,
-					)
-				),
-			),$PageClass->getConditionAllowPublish());
-		} else {
-			$conditions = am(array(
-				'Page.sort >' => $this->request->data['Page']['sort'],
-				'Page.page_category_id' => $this->request->data['Page']['page_category_id']
-			), $PageClass->getConditionAllowPublish());
-		}
+		$page = $this->_getPageByNextOrPrev('next', $this->request->data, $overCategory);
 
-		$nextPost = $PageClass->find('first', array(
-			'conditions' => $conditions,
-			'fields' => array('title', 'url'),
-			'order' => 'sort',
-			'recursive' => -1,
-			'cache' => false
-		));
-		
-		if ($nextPost) {
+		if ($page) {
 			if (!$title) {
-				$title = $nextPost['Page']['title'] . $arrow;
+				$title = $page['Page']['title'] . $arrow;
 			}
-			
-			$url = $nextPost['Page']['url'];
+			$url = $page['Page']['url'];
 			foreach (Configure::read('BcAgent') as $agent) {
-				if (preg_match('/^\/' . $agent['prefix'] . '/', $nextPost['Page']['url'])) {
-					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $nextPost['Page']['url']);
+				if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
+					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
 					break;
 				}
 			}
 			return $this->BcBaser->getLink($title, $url, $options);
 		}
+
 	}
 
 /**
@@ -314,6 +245,7 @@ class BcPageHelper extends Helper {
  *	- `class` : CSSのクラス名（初期値 : 'next-link'）
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
  * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
  */
 	public function nextLink($title = '', $options = array()) {
@@ -328,118 +260,42 @@ class BcPageHelper extends Helper {
  *	- `class` : CSSのクラス名（初期値 : 'prev-link'）
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
  * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function getPrevLink($title = '', $options = array()) {
-		
+
 		$options = array_merge(array(
 			'class'			=> 'prev-link',
 			'arrow'			=> '≪ ',
 			'overCategory'	=> false,
 		), $options);
 
-		if (!$this->contentsNaviAvailable() && $options['overCategory'] !== true) {
+		if (!isset($this->request->data['Page']) || (!$this->contentsNaviAvailable() && $options['overCategory'] !== true)) {
 			return false;
-		}
-
-		if (ClassRegistry::isKeySet('Page')) {
-			$PageClass = ClassRegistry::getObject('Page');
-		} else {
-			$PageClass = ClassRegistry::init('Page');
 		}
 
 		$arrow = $options['arrow'];
 		unset($options['arrow']);
 		$overCategory = $options['overCategory'];
 		unset($options['overCategory']);
-		
-		if ($overCategory === true) {
-			// ページ情報を持っていない場合はリンクを表示しない
-			if (!isset($this->request->data['Page']['sort'])) {
-				return false;
-			}
-			
-			$requestAgent = Configure::read('BcRequest.agent');
-			$categoryIds = array();
-			
-			if ($requestAgent) {
-				// smartphone or mobileの場合
-				$agentId = $PageClass->PageCategory->getAgentId($requestAgent);
-				$includeCategoryIdCond = array();
 
-				array_push($categoryIds, $agentId);
-				// Agentが持つページカテゴリIDを取得する
-				foreach ($PageClass->PageCategory->children($agentId) as $pageCategory) {
-					array_push($categoryIds, $pageCategory['PageCategory']['id']);
-				}				
-				// Agentが持つページカテゴリIDを配列に追加する
-				$includeCategoryIdCond += array('Page.page_category_id' => $categoryIds);
+		$page = $this->_getPageByNextOrPrev('prev', $this->request->data, $overCategory);
 
-				// mobile or smartphone に属する固定ページを取得する条件を作成
-				$conditions = am(array(
-					'Page.sort <' => $this->request->data['Page']['sort'],
-					array(
-						'or' => array(array($includeCategoryIdCond),
-						)
-					),
-				),$PageClass->getConditionAllowPublish());
-
-			} else {
-				// PCの場合
-				$agents = Configure::read('BcAgent');
-				$excludeCategoryIdCond = array();
-
-				foreach($agents as $agent) {
-					$agentId = $PageClass->PageCategory->getAgentId($agent['prefix']);
-					
-					array_push($categoryIds, $agentId);
-					// Agentが持つページカテゴリIDを取得する
-					foreach ($PageClass->PageCategory->children($agentId) as $pageCategory) {
-						array_push($categoryIds, $pageCategory['PageCategory']['id']);
-					}
-				}
-				// Agentが持つページカテゴリIDを配列に追加する
-				$excludeCategoryIdCond[] =	array('Page.page_category_id !=' => $categoryIds);
-
-				// mobile, smartphoneに属する固定ページを除外する条件を作成
-				$conditions = am(array(
-					'Page.sort <' => $this->request->data['Page']['sort'],
-					array(
-						'or' => array(array($excludeCategoryIdCond),
-						array('Page.page_category_id' => null),
-						)
-					),
-				),$PageClass->getConditionAllowPublish());
-			}
-		} else {
-			$conditions = am(array(
-				'Page.sort <' => $this->request->data['Page']['sort'],
-				'Page.page_category_id' => $this->request->data['Page']['page_category_id']
-			), $PageClass->getConditionAllowPublish());
-		}
-		
-		$nextPost = $PageClass->find('first', array(
-			'conditions' => $conditions,
-			'fields' => array('title', 'url'),
-			'order' => 'sort DESC',
-			'recursive' => -1,
-			'cache' => false
-		));
-		
-		if ($nextPost) {
+		if ($page) {
 			if (!$title) {
-				$title = $arrow . $nextPost['Page']['title'];
+				$title = $arrow . $page['Page']['title'];
 			}
-			
-			$url = $nextPost['Page']['url'];
+			$url = $page['Page']['url'];
 			foreach (Configure::read('BcAgent') as $agent) {
-				if (preg_match('/^\/' . $agent['prefix'] . '/', $nextPost['Page']['url'])) {
-					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $nextPost['Page']['url']);
+				if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
+					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
 					break;
 				}
 			}
 			return $this->BcBaser->getLink($title, $url, $options);
 		}
+
 	}
 
 /**
@@ -450,10 +306,75 @@ class BcPageHelper extends Helper {
  *	- `class` : CSSのクラス名（初期値 : 'prev-link'）
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
+ * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
  * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function prevLink($title = '', $options = array()) {
 		echo $this->getPrevLink($title, $options);
+	}
+
+	protected function _getPageByNextOrPrev($type, $page, $overCategory = false) {
+
+		switch ($type) {
+			case 'next':
+				$operator = '>';
+				$sort = 'sort';
+				break;
+			case 'prev':
+				$operator = '<';
+				$sort = 'sort DESC';
+				break;
+		}
+
+		if ($overCategory === true) {
+			$requestAgent = Configure::read('BcRequest.agent');
+			if ($requestAgent) {
+				$pageCategoryConditions = array('Page.page_category_id' => $this->_getAgentCategoryIds($requestAgent));
+			} else {
+				$pageCategoryConditions = array('or' => array(
+					array('Page.page_category_id !=' => $this->_getAllAgentCategoryIds()),
+					array('Page.page_category_id' => null)
+				));
+			}
+		} else {
+			$pageCategoryConditions = array(
+				'Page.sort ' . $operator => $page['Page']['sort'],
+				'Page.page_category_id' => $page['Page']['page_category_id']
+			);
+		}
+
+		return $this->Page->find('first', array(
+			'conditions' => array_merge(array(
+				array('Page.sort ' . $operator => $page['Page']['sort']),
+				$this->Page->getConditionAllowPublish(),
+				$pageCategoryConditions
+			)),
+			'fields' => array('title', 'url'),
+			'order' => $sort,
+			'recursive' => -1,
+			'cache' => false
+		));
+
+	}
+
+	protected function _getAllAgentCategoryIds() {
+		$categoryIds = array();
+		$agents = Configure::read('BcAgent');
+		foreach($agents as $agent) {
+			$categoryIds += $this->_getAgentCategoryIds($agent['prefix']);
+		}
+		return $categoryIds;
+	}
+
+	protected function _getAgentCategoryIds($prefix) {
+		$agentId = $this->Page->PageCategory->getAgentId($prefix);
+		$categoryIds[] = $agentId;
+		// Agentが持つページカテゴリIDを取得する
+		$children = $this->Page->PageCategory->children($agentId);
+		if($children) {
+			$categoryIds = array_merge($categoryIds, Hash::extract($children, '{n}.PageCategory.id'));
+		}
+		return $categoryIds;
 	}
 
 /**

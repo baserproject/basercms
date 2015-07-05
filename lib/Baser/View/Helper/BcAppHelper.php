@@ -170,7 +170,6 @@ class BcAppHelper extends Helper {
  * @return string  Full translated URL with base path.
  */
 	public function url($url = null, $full = false, $sessionId = true) {
-
 		if ($sessionId) {
 			$url = addSessionId($url);
 		}

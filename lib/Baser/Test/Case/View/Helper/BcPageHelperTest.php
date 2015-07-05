@@ -72,6 +72,7 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->_View->loadHelpers();
 		$this->BcBaser = $this->_View->BcBaser;
 		$this->BcPage  = $this->_View->BcPage;
+		$this->BcPage->BcBaser = $this->_View->BcBaser;
 	}
 
 /**
@@ -80,7 +81,6 @@ class BcPageHelperTest extends BaserTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->Helper);
 		Router::reload();
 		parent::tearDown();
 	}
@@ -98,8 +98,9 @@ class BcPageHelperTest extends BaserTestCase {
  * @dataProvider getNextLinkDataProvider
  */
 	public function testGetNextLink($url, $agent, $title, $options, $expected) {
-		$this->BcBaser->request = $this->getRequestData($url);
-		$this->BcBaser->request->params['prefix'] = $this->_setAgent($agent);
+		$this->BcPage->request = $this->_getRequest($url);
+		$this->BcPage->beforeRender(null);
+		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		$result = $this->BcPage->getNextLink($title, $options);
 		$this->assertEquals($expected, $result);
 	}
@@ -110,8 +111,9 @@ class BcPageHelperTest extends BaserTestCase {
  * @dataProvider getNextLinkDataProvider
  */
 	public function testNextLink($url, $agent, $title, $options, $expected) {
-		$this->BcBaser->request = $this->getRequestData($url);
-		$this->BcBaser->request->params['prefix'] = $this->_setAgent($agent);
+		$this->BcPage->request = $this->_getRequest($url);
+		$this->BcPage->beforeRender(null);
+		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		ob_start();
 		echo $this->BcPage->getNextLink($title, $options);
 		$result = ob_get_clean();
@@ -153,8 +155,9 @@ class BcPageHelperTest extends BaserTestCase {
  * @dataProvider getPrevLinkDataProvider
  */	
 	public function testGetPrevLink($url, $agent, $title, $options, $expected) {
-		$this->BcBaser->request = $this->getRequestData($url);
-		$this->BcBaser->request->params['prefix'] = $this->_setAgent($agent);
+		$this->BcPage->request = $this->_getRequest($url);
+		$this->BcPage->beforeRender(null);
+		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		$result = $this->BcPage->getPrevLink($title, $options);
 		$this->assertEquals($expected, $result);
 	}
@@ -165,8 +168,9 @@ class BcPageHelperTest extends BaserTestCase {
  * @dataProvider getPrevLinkDataProvider
  */
 	public function testPrevLink($url, $agent, $title, $options, $expected) {
-		$this->BcBaser->request = $this->getRequestData($url);
-		$this->BcBaser->request->params['prefix'] = $this->_setAgent($agent);
+		$this->BcPage->request = $this->_getRequest($url);
+		$this->BcPage->beforeRender(null);
+		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		ob_start();
 		echo $this->BcPage->getPrevLink($title, $options);
 		$result = ob_get_clean();
@@ -195,14 +199,4 @@ class BcPageHelperTest extends BaserTestCase {
 		);
 	}
 
-/**
- * リクエストデータを取得する
- */
-	protected function getRequestData($url) {
-		$_SERVER['REQUEST_URI'] = $url;
-		Configure::read('BcRequest.pureUrl', getUrlParamFromEnv());
-		$this->BcBaser->request = $this->BcPage->request = $this->_getRequest($url);
-		$this->BcPage->beforeRender(null);
-		return $this->BcBaser->request;
-	}
 }

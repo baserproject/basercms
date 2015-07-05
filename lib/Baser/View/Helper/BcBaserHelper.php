@@ -2150,9 +2150,6 @@ END_FLASH;
  * @return void
  */
 	public function contentsNavi($data = array(), $options = array()) {
-		if (!in_array('BcPage', $this->helpers) || !$this->BcPage->contentsNaviAvailable()) {
-			return;
-		}
 		$this->element('contents_navi', $data, $options);
 	}
 
