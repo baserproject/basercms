@@ -609,11 +609,14 @@ function loadPluginConfig($name) {
  * @return mixed
  */
 function addSessionId($url, $force = false) {
-
+	$sessionId = session_id();
+	if(!$sessionId) {
+		return $url;
+	}
 	// use_trans_sid が有効になっている場合、２重で付加されてしまう
 	if (Configure::read('BcRequest.agent') == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
 		if (is_array($url)) {
-			$url["?"][session_name()] = session_id();
+			$url["?"][session_name()] = $sessionId;
 		} else {
 			if (strpos($url, '?') !== false) {
 				$args = array();
@@ -634,7 +637,7 @@ function addSessionId($url, $force = false) {
 						}
 					}
 				}
-				$args[session_name()] = session_id();
+				$args[session_name()] = $sessionId;
 				$pass = '';
 				foreach ($args as $key => $value) {
 					if ($pass) {
@@ -644,7 +647,7 @@ function addSessionId($url, $force = false) {
 				}
 				$url = $_url[0] . '?' . $pass;
 			} else {
-				$url .= '?' . session_name() . '=' . session_id();
+				$url .= '?' . session_name() . '=' . $sessionId;
 			}
 		}
 	}
