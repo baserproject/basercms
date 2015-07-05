@@ -219,7 +219,7 @@ class BcPageHelper extends Helper {
 		$overCategory = $options['overCategory'];
 		unset($options['overCategory']);
 		
-		$page = $this->_getPageByNextOrPrev('next', $this->request->data, $overCategory);
+		$page = $this->_getPageByNextOrPrev($this->request->data, 'next', $overCategory);
 
 		if ($page) {
 			if (!$title) {
@@ -280,7 +280,7 @@ class BcPageHelper extends Helper {
 		$overCategory = $options['overCategory'];
 		unset($options['overCategory']);
 
-		$page = $this->_getPageByNextOrPrev('prev', $this->request->data, $overCategory);
+		$page = $this->_getPageByNextOrPrev($this->request->data, 'prev', $overCategory);
 
 		if ($page) {
 			if (!$title) {
@@ -313,7 +313,15 @@ class BcPageHelper extends Helper {
 		echo $this->getPrevLink($title, $options);
 	}
 
-	protected function _getPageByNextOrPrev($type, $page, $overCategory = false) {
+/**
+ * 指定した固定ページデータの次、または、前のデータを取得する
+ *
+ * @param array $page 固定ページデータ
+ * @param string $type next Or prev
+ * @param bool $overCategory カテゴリをまたがるかどうか
+ * @return array 次、または、前の固定ページデータ
+ */
+	protected function _getPageByNextOrPrev($page, $type, $overCategory = false) {
 
 		switch ($type) {
 			case 'next':
@@ -357,6 +365,12 @@ class BcPageHelper extends Helper {
 
 	}
 
+/**
+ * PC以外全てのエージェントのカテゴリIDを取得する
+ * エージェント自体を指すカテゴリIDも含む
+ *
+ * @return array カテゴリID
+ */
 	protected function _getAllAgentCategoryIds() {
 		$categoryIds = array();
 		$agents = Configure::read('BcAgent');
@@ -366,6 +380,13 @@ class BcPageHelper extends Helper {
 		return $categoryIds;
 	}
 
+/**
+ * PC以外全てのエージェントのカテゴリIDを取得する
+ * エージェント自体を指すカテゴリIDも含む
+ *
+ * @param string $prefix エージェントのプレフィックス（例）mobile / smartphone
+ * @return array
+ */
 	protected function _getAgentCategoryIds($prefix) {
 		$agentId = $this->Page->PageCategory->getAgentId($prefix);
 		$categoryIds[] = $agentId;
