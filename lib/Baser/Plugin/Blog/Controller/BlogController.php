@@ -947,7 +947,7 @@ class BlogController extends BlogAppController {
 		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
-			'fields' => array('no', 'name'),
+			'fields' => array('id', 'no', 'name', 'blog_category_id', 'user_id', 'posts_date'),
 			'conditions' => $conditions,
 			'limit' => $limit,
 			'order' => 'posts_date DESC',
