@@ -19,6 +19,7 @@ App::uses('Simplezip', 'Vendor');
  * @property Page $Page
  * @property Theme $Theme
  * @property SiteConfig $SiteConfig
+ * @property BcManagerComponent $BcManager
  */
 class ThemesController extends AppController {
 
