@@ -264,7 +264,7 @@ $(function(){
 				<div id="helptextGoogleAnalyticsId" class="helptext">
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />
-					テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser->element('google_analytics') ?&gt;</pre> で出力します。
+					テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser->googleAnalytics() ?&gt;</pre> で出力します。
 				</div>
 			</td>
 		</tr>
