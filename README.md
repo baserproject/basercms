@@ -14,7 +14,7 @@ Documentation
 - See [baserCMS Official Wiki](http://wiki.basercms.net/)
 - See [baserCMS Creators Manual](http://basercms.net/manuals/3/index)
 - See [baserCMS Customize Guideline](http://basercms.net/manuals/customize_guideline)
-- See [baserCMS Specifications](https://drive.google.com/folderview?id=0B4uQ2DbopKLeY0VZWjVpQ1ZrUlU&usp=sharing)
+- See [baserCMS Specifications](https://github.com/baserproject/basercms-docs)
 - See [baserCMS Users Forum](http://forum.basercms.net/)
 - See [baserCMS Core Development Project](http://project.e-catchup.jp/projects/basercms) 
 - See [CakePHP - the rapid development PHP framework](http://cakephp.jp)
