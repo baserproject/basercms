@@ -18,6 +18,21 @@ if (Configure::read('BcRequest.agent')) {
 	$prefix = '/' . Configure::read('BcRequest.agentAlias');
 }
 ?>
+<script type="text/javascript">
+$(window).unload(function(){});
+$(window).load(function(){
+	$.ajaxSetup({
+		cache: false
+	});
+	$.get(
+		'<?php $this->BcBaser->url($prefix . '/' . $mailContent['MailContent']['name'] . '/ajax_gettoken'); ?>',
+		function(data){
+			$('input[name="data[_Token][key]"]').val(data);
+		}
+	);
+});
+</script>
+
 <script>
 $(function(){
   $(".form-submit").click(function(){

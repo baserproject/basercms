@@ -19,12 +19,27 @@ if (Configure::read('BcRequest.agent')) {
 }
 ?>
 <script type="text/javascript">
+$(window).unload(function(){});
+$(window).load(function(){
+	$.ajaxSetup({
+		cache: false
+	});
+	$.get(
+		'<?php $this->BcBaser->url($prefix . '/' . $mailContent['MailContent']['name'] . '/ajax_gettoken'); ?>',
+		function(data){
+			$('input[name="data[_Token][key]"]').val(data);
+		}
+	);
+});
+</script>
+
+<script type="text/javascript">
 $(function(){
-  $(".form-submit").click(function(){
-    var mode = $(this).attr('id').replace('BtnMessage', '');
-    $("#MessageMode").val(mode);
-    return true;
-  });
+	$(".form-submit").click(function(){
+		var mode = $(this).attr('id').replace('BtnMessage', '');
+		$("#MessageMode").val(mode);
+		return true;
+	});
 });
 </script>
 
