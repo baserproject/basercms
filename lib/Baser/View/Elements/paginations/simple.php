@@ -13,7 +13,7 @@
  */
 
 /**
- * $this->BcBaser->patination() で呼び出す
+ * $this->BcBaser->pagination() で呼び出す
  */
 
 if (empty($this->Paginator)) {
