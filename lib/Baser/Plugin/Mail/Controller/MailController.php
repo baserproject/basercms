@@ -113,7 +113,7 @@ class MailController extends MailAppController {
 	public function beforeFilter() {
 		/* 認証設定 */
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_gettoken'
+			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_get_token'
 		);
 
 		parent::beforeFilter();
@@ -152,7 +152,7 @@ class MailController extends MailAppController {
 		} else {
 			// PHP4でセキュリティコンポーネントがうまくいかなかったので利用停止
 			// 詳細はコンポーネント設定のコメントを参照
-			$disabledFields = array('Message.mode', 'x', 'y', 'Mail.token', 'MAX_FILE_SIZE');
+			$disabledFields = array('Message.mode', 'x', 'y', 'MAX_FILE_SIZE');
 			// type="file" を除外
 			foreach($this->Message->mailFields as $field) {
 				if (isset($field['MailField']['type']) && $field['MailField']['type'] == 'file') {
@@ -200,6 +200,8 @@ class MailController extends MailAppController {
 		if (!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}
+
+		$this->Session->write('Mail.valid', true);
 
 		// 初期値を取得
 		if (!isset($this->request->data['Message'])) {
@@ -272,6 +274,9 @@ class MailController extends MailAppController {
 		if (!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}
+		if (!$this->Session->read('Mail.valid')) {
+			$this->notFound();
+		}
 
 		if (!$this->request->data) {
 			$this->redirect(array('action' => 'index', $id));
@@ -298,11 +303,6 @@ class MailController extends MailAppController {
 				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
 			}
 			$this->request->data['Message'] = $this->Message->sanitizeData($this->request->data['Message']);
-		}
-
-		$token = $this->Session->read($this->request->data['Mail']['token']);
-		if (empty($token)) {
-			$this->notFound();
 		}
 
 		if ($this->dbDatas['mailFields']) {
@@ -349,16 +349,15 @@ class MailController extends MailAppController {
 		if (!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}
+		if (!$this->Session->read('Mail.valid')) {
+			$this->notFound();
+		}
 
 		if (!$this->request->data) {
 			$this->redirect(array('action' => 'index', $id));
 		} elseif (isset($this->request->data['Message']['mode']) && $this->request->data['Message']['mode'] == 'Back') {
 			$this->_back($id);
 		} else {
-			$token = $this->Session->read($this->request->data['Mail']['token']);
-			if (empty($token)) {
-				$this->notFound();
-			}
 			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
 			// ※ nameフィールドの名称を[message]以外にする
 			if ($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
@@ -400,7 +399,7 @@ class MailController extends MailAppController {
 					// メール送信
 					$this->_sendEmail();
 
-					$this->Session->delete($this->request->data['Mail']['token']);
+					$this->Session->delete('Mail.valid');
 
 					/*** Mail.afterSendEmail ***/
 					$this->dispatchEvent('afterSendEmail', array(
@@ -603,7 +602,7 @@ class MailController extends MailAppController {
  * @return void
  * @access public
  */
-	public function ajax_gettoken() {
+	public function ajax_get_token() {
 		echo $this->request->params['_Token']['key'];
 		exit();
 	}
