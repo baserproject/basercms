@@ -113,7 +113,7 @@ class MailController extends MailAppController {
 	public function beforeFilter() {
 		/* 認証設定 */
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_get_token'
+			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_get_token', 'smartphone_ajax_get_token'
 		);
 
 		parent::beforeFilter();
@@ -605,6 +605,16 @@ class MailController extends MailAppController {
 	public function ajax_get_token() {
 		echo $this->request->params['_Token']['key'];
 		exit();
+	}
+
+	/**
+	 * [ajax] Tokenのkeyを取得
+	 *
+	 * @return void
+	 * @access public
+	 */
+	public function smartphone_ajax_get_token() {
+		$this->setAction('ajax_get_token');
 	}
 
 }

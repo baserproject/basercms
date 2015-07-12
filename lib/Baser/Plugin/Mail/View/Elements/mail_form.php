@@ -29,6 +29,8 @@ $(function(){
 		return true;
 	});
 });
+// Firefox対策
+$(window).unload(function(){});
 $(window).load(function(){
 	$.ajaxSetup({cache: false});
 	$.get($("#AjaxGetTokenUrl").val(), function(result) {
