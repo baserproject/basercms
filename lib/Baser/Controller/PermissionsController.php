@@ -73,7 +73,7 @@ class PermissionsController extends AppController {
 
 /**
  * beforeFilter
- * 
+ *
  * @return oid
  * @access public
  */
@@ -123,7 +123,7 @@ class PermissionsController extends AppController {
 
 /**
  * 一覧の表示用データをセットする
- * 
+ *
  * @return void
  * @access protected
  */
@@ -188,7 +188,7 @@ class PermissionsController extends AppController {
 		if ($this->request->data) {
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
 			$authPrefix = Configure::read('Routing.prefixes.0');
-			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
+			$this->request->data['Permission']['url'] = '/admin/' . $this->request->data['Permission']['url'];
 			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', array('user_group_id' => $this->request->data['Permission']['user_group_id'])) + 1;
 			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', array('user_group_id' => $this->request->data['Permission']['user_group_id'])) + 1;
 			$this->request->data['Permission']['status'] = true;
@@ -224,31 +224,28 @@ class PermissionsController extends AppController {
 			'order' => 'UserGroup.id ASC', 'recursive' => -1));
 
 		// TODO 現在 admin 固定、今後、mypage 等にも対応する
-		$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
+		$authPrefix = 'admin';
 		if (empty($this->request->data)) {
 
 			$this->request->data = $this->Permission->read(null, $id);
-			$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
+			$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
 		} else {
 
 			/* 更新処理 */
-			$this->request->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->request->data['Permission']['url'];
+			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
 
 			if ($this->Permission->save($this->request->data)) {
 				$this->setMessage('アクセス制限設定「' . $this->request->data['Permission']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'index', $userGroupId));
 			} else {
-				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
+				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
 		/* 表示設定 */
-		if ($permissionAuthPrefix == 'admin') {
-			$permissionAuthPrefix = Configure::read('Routing.prefixes.0');
-		}
 		$this->pageTitle = '[' . $userGroup['UserGroup']['title'] . '] アクセス制限設定編集：' . $this->request->data['Permission']['name'];
-		$this->set('permissionAuthPrefix', $permissionAuthPrefix);
+		$this->set('permissionAuthPrefix', Configure::read('Routing.prefixes.0'));
 		$this->help = 'permissions_form';
 		$this->render('form');
 	}
@@ -365,8 +362,8 @@ class PermissionsController extends AppController {
 
 /**
  * [ADMIN] データコピー（AJAX）
- * 
- * @param int $id 
+ *
+ * @param int $id
  * @return void
  * @access public
  */
@@ -392,7 +389,7 @@ class PermissionsController extends AppController {
 
 /**
  * [ADMIN] 無効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -413,7 +410,7 @@ class PermissionsController extends AppController {
 
 /**
  * [ADMIN] 有効状態にする（AJAX）
- * 
+ *
  * @param string $blogContentId
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
@@ -434,10 +431,10 @@ class PermissionsController extends AppController {
 
 /**
  * 一括公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_publish($ids) {
 		if ($ids) {
@@ -450,10 +447,10 @@ class PermissionsController extends AppController {
 
 /**
  * 一括非公開
- * 
+ *
  * @param array $ids
  * @return boolean
- * @access protected 
+ * @access protected
  */
 	protected function _batch_unpublish($ids) {
 		if ($ids) {
@@ -466,10 +463,10 @@ class PermissionsController extends AppController {
 
 /**
  * ステータスを変更する
- * 
+ *
  * @param int $id
  * @param boolean $status
- * @return boolean 
+ * @return boolean
  */
 	protected function _changeStatus($id, $status) {
 		$statusTexts = array(0 => '無効', 1 => '有効');
