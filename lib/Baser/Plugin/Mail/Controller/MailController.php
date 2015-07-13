@@ -113,7 +113,7 @@ class MailController extends MailAppController {
 	public function beforeFilter() {
 		/* 認証設定 */
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha'
+			'index', 'mobile_index', 'smartphone_index', 'confirm', 'mobile_confirm', 'smartphone_confirm', 'submit', 'mobile_submit', 'smartphone_submit', 'captcha', 'smartphone_captcha', 'ajax_get_token', 'smartphone_ajax_get_token'
 		);
 
 		parent::beforeFilter();
@@ -201,6 +201,8 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 
+		$this->Session->write('Mail.valid', true);
+
 		// 初期値を取得
 		if (!isset($this->request->data['Message'])) {
 			if(!empty($this->request->params['named'])) {
@@ -270,6 +272,9 @@ class MailController extends MailAppController {
 			return;
 		}
 		if (!$this->dbDatas['mailContent']['MailContent']['status']) {
+			$this->notFound();
+		}
+		if (!$this->Session->read('Mail.valid')) {
 			$this->notFound();
 		}
 
@@ -344,6 +349,9 @@ class MailController extends MailAppController {
 		if (!$this->dbDatas['mailContent']['MailContent']['status']) {
 			$this->notFound();
 		}
+		if (!$this->Session->read('Mail.valid')) {
+			$this->notFound();
+		}
 
 		if (!$this->request->data) {
 			$this->redirect(array('action' => 'index', $id));
@@ -390,6 +398,8 @@ class MailController extends MailAppController {
 
 					// メール送信
 					$this->_sendEmail();
+
+					$this->Session->delete('Mail.valid');
 
 					/*** Mail.afterSendEmail ***/
 					$this->dispatchEvent('afterSendEmail', array(
@@ -584,6 +594,27 @@ class MailController extends MailAppController {
 	public function smartphone_captcha() {
 		$this->BcCaptcha->render();
 		exit();
+	}
+
+/**
+ * [ajax] Tokenのkeyを取得
+ *
+ * @return void
+ * @access public
+ */
+	public function ajax_get_token() {
+		echo $this->request->params['_Token']['key'];
+		exit();
+	}
+
+	/**
+	 * [ajax] Tokenのkeyを取得
+	 *
+	 * @return void
+	 * @access public
+	 */
+	public function smartphone_ajax_get_token() {
+		$this->setAction('ajax_get_token');
 	}
 
 }

@@ -17,16 +17,28 @@ $prefix = '';
 if (Configure::read('BcRequest.agent')) {
 	$prefix = '/' . Configure::read('BcRequest.agentAlias');
 }
+echo $this->BcForm->hidden('AjaxGetTokenUrl', array('value' => $this->BcBaser->getUrl($prefix . '/' . $mailContent['MailContent']['name'] . '/ajax_get_token')));
 ?>
+
+
 <script type="text/javascript">
 $(function(){
-  $(".form-submit").click(function(){
-    var mode = $(this).attr('id').replace('BtnMessage', '');
-    $("#MessageMode").val(mode);
-    return true;
-  });
+	$(".form-submit").click(function(){
+		var mode = $(this).attr('id').replace('BtnMessage', '');
+		$("#MessageMode").val(mode);
+		return true;
+	});
+});
+// Firefox対策
+$(window).unload(function(){});
+$(window).load(function(){
+	$.ajaxSetup({cache: false});
+	$.get($("#AjaxGetTokenUrl").val(), function(result) {
+		$('input[name="data[_Token][key]"]').val(result);
+	});
 });
 </script>
+
 
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
