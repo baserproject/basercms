@@ -791,7 +791,6 @@ class BcAppModel extends Model {
 			$conditions[$this->alias . '.sort >='] = $targetSort;
 		}
 
-		$conditions = array_merge($conditions, $_conditions);
 		$datas = $this->find('all', array(
 			'conditions' => $conditions,
 			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
