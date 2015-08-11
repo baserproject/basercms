@@ -18,6 +18,10 @@ template "/etc/my.cnf" do
 end
 
 execute 'mysql-set-password' do
-  command "mysql -u root -e \"SET PASSWORD FOR root@localhost=PASSWORD('#{node['mysql']['password']}');\""
+  command <<-EOH
+    mysql -u root -e "GRANT ALL PRIVILEGES ON *.* to 'root'@'%' IDENTIFIED BY '#{node['mysql']['password']}' WITH GRANT OPTION;"
+    mysql -u root -e "FLUSH PRIVILEGES;"
+    mysql -u root -e "SET PASSWORD FOR 'root'@'localhost'=PASSWORD('#{node['mysql']['password']}');"
+  EOH
   action :nothing
 end

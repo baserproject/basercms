@@ -10,6 +10,14 @@ if not File.exists? "/var/lib/pgsql/data/" then
   end
 end
 
+template "/var/lib/pgsql/data/postgresql.conf" do
+  source "postgresql.conf.erb"
+  owner "postgres"
+  group "postgres"
+  mode 0600
+  notifies :restart, 'service[postgresql]'
+end
+
 template "/var/lib/pgsql/data/pg_hba.conf" do
   source "pg_hba.conf.erb"
   owner "postgres"
