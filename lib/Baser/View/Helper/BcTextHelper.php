@@ -243,7 +243,7 @@ class BcTextHelper extends TextHelper {
  * 通貨表示
  *
  * @param int $value
- * @param string $prefix
+ * @param string $prefix '¥'
  * @return string
  */
 	public function moneyFormat($value, $prefix = '¥') {

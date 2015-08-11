@@ -174,14 +174,164 @@ class BcTextHelperTest extends BaserTestCase {
 	}
 
 /**
- * 番号を都道府県に変換して出力
- *
+ * 番号を都道府県に変換して出力するヘルパーのテスト
  */
 	public function testPref() {
 		$this->assertEquals('', $this->Helper->pref(0));
 		$this->assertEquals('北海道', $this->Helper->pref(1));
 		$this->assertEquals('沖縄県', $this->Helper->pref(47));
 		$this->assertEquals('', $this->Helper->pref(48));
+	}
+
+/**
+ * データをチェックして空の場合に指定した値を返すヘルパーのテスト
+ */
+	public function testNoValue() {
+		// データあり
+		$this->assertEquals('x', $this->Helper->noValue('x', 1));
+		// データなし
+		$this->assertEquals(1, $this->Helper->noValue('', 1));
+	}
+
+/**
+ * boolean型用を可、不可で出力するヘルパーのテスト
+ */
+	public function testBooleanAllow() {
+
+	}
+
+
+/**
+ * form::dateTimeで取得した和暦データを文字列データに変換するヘルパーのテスト
+ */
+	public function testDateTimeWareki() {
+
+	}
+
+/**
+ * 通貨表示するヘルパーのテスト
+ */
+	public function testMoneyFormat() {
+
+		// 適当な数値を入力
+		$result = $this->Helper->moneyFormat('1234567');
+		$expect = '¥1,234,567';
+		$this->assertEquals($expect, $result);
+
+		//¥を適当なマークにする
+		$result = $this->Helper->moneyFormat('1234567', '(^ ^)!');
+		$expect = '(^ ^)!1,234,567';
+		$this->assertEquals($expect, $result);
+	}
+
+/**
+ * form::dateTimeで取得したデータを文字列データに変換するヘルパーのテスト
+ */
+	public function dateTime() {
+
+	}
+
+/**
+ * 文字をフォーマット形式で出力するヘルパーのテスト
+ */
+	public function testFormat() {
+
+		// $valueが1の場合
+		$result = $this->Helper->format('valueは%d', 1);
+		$expect = 'valueは1';
+		$this->assertEquals($expect, $result);
+		
+		// $valueが空の場合
+		$result = $this->Helper->format('valueは%d', '');
+		$expect = '';
+		$this->assertEquals($expect, $result);
+
+		// $valueがnullの場合
+		$result = $this->Helper->format('valueは%d', null);
+		$expect = '';
+		$this->assertEquals($expect, $result);
+
+		// $valueが空であり、返り値を変更する場合
+		$result = $this->Helper->format('valueは%d', '', 'データは空です');
+		$expect = 'データは空です';
+		$this->assertEquals($expect, $result);
+
+	}
+
+/**
+ * モデルのコントロールソースより表示用データを取得するヘルパーのテスト
+ */
+	public function listValue() {
+
+	}
+
+/**
+ * 区切り文字で区切られたテキストを配列に変換するヘルパーのテスト
+ */
+	public function testToArray() {
+
+		// $separatorが「,」の場合
+		$result = $this->Helper->toArray(",", "a,i,u,e,o");
+		$expect = array("a","i","u","e","o");
+		$this->assertEquals($expect, $result);
+
+		// $separatorが「"」の場合
+		$result = $this->Helper->toArray('"', 'a"i"u"e"o');
+		$expect = array("a","i","u","e","o");
+		$this->assertEquals($expect, $result);
+
+		// $separatorが「'」の場合
+		$result = $this->Helper->toArray("'", "a'i'u'e'o");
+		$expect = array("a","i","u","e","o");
+		$this->assertEquals($expect, $result);
+	}
+
+/**
+ * 配列とキーを指定して値を取得するヘルパーのテスト
+ */
+	public function testArrayValue() {
+
+		// 適当な配列
+		$array = array("a","i","u","e","o");
+
+		// $keyが2
+		$result = $this->Helper->arrayValue(2, $array);
+		$expect = "u";
+		$this->assertEquals($expect, $result);
+
+		// $keyが5(存在しない値)
+		$result = $this->Helper->arrayValue(5, $array);
+		$expect = "";
+		$this->assertEquals($expect, $result);	
+	}
+
+/**
+ * 連想配列とキーのリストより値のリストを取得し文字列で返すヘルパーのテスト
+ * 文字列に結合する際、指定した区切り文字を指定できる
+ */
+	public function arrayValues() {
+
+	}
+
+/**
+ * 日付より年齢を取得するヘルパーのテスト
+ */
+	public function age() {
+
+	}
+
+/**
+ * boolean型用のリストを有効、無効で出力するヘルパーのテスト
+ */
+	public function booleanStatusList() {
+
+	}
+
+/**
+ * boolean型用を無効・有効で出力するヘルパーのテスト
+ */
+	public function booleanStatus() {
+
 	}
 
 }
