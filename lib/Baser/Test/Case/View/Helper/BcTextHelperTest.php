@@ -197,7 +197,15 @@ class BcTextHelperTest extends BaserTestCase {
  * boolean型用を可、不可で出力するヘルパーのテスト
  */
 	public function testBooleanAllow() {
+		// キーが0の場合
+		$result = $this->Helper->booleanAllow(0);
+		$expect = "不可";
+		$this->assertEquals($expect, $result);
 
+		// キーが0の場合
+		$result = $this->Helper->booleanAllow(1);
+		$expect = "可";
+		$this->assertEquals($expect, $result);
 	}
 
 
@@ -205,7 +213,16 @@ class BcTextHelperTest extends BaserTestCase {
  * form::dateTimeで取得した和暦データを文字列データに変換するヘルパーのテスト
  */
 	public function testDateTimeWareki() {
+		// 適当な時間を設定
+		$arrDate = array(
+			'wareki'=> true,
+			'year' 	=> 'h-27',
+			'month' => 8,
+			'day'	=> 11);
 
+		$result = $this->Helper->dateTimeWareki($arrDate);
+		$expect = '平成 27年 8月 11日';
+		$this->assertEquals($expect, $result);
 	}
 
 /**
@@ -227,7 +244,17 @@ class BcTextHelperTest extends BaserTestCase {
 /**
  * form::dateTimeで取得したデータを文字列データに変換するヘルパーのテスト
  */
-	public function dateTime() {
+	public function testDateTime() {
+
+		// 適当な時間を設定
+		$arrDate = array(
+			'year' 	=> 2015,
+			'month' => 8,
+			'day'	=> 11);
+
+		$result = $this->Helper->dateTime($arrDate);
+		$expect = '2015/8/11';
+		$this->assertEquals($expect, $result);
 
 	}
 
@@ -261,8 +288,8 @@ class BcTextHelperTest extends BaserTestCase {
 /**
  * モデルのコントロールソースより表示用データを取得するヘルパーのテスト
  */
-	public function listValue() {
-
+	public function testListValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -309,29 +336,70 @@ class BcTextHelperTest extends BaserTestCase {
  * 連想配列とキーのリストより値のリストを取得し文字列で返すヘルパーのテスト
  * 文字列に結合する際、指定した区切り文字を指定できる
  */
-	public function arrayValues() {
+	public function testArrayValues() {
 
+		// 適当な連想配列とキーのリスト
+		$array = array( "key1" => "apple", "key2" => "lemon",  "key3" => "banana");
+		$keys = array("key1", "key2", "key3");
+
+		$result = $this->Helper->arrayValues(",", $keys, $array);
+		$expect = "apple,lemon,banana";
+		$this->assertEquals($expect, $result);
 	}
 
 /**
  * 日付より年齢を取得するヘルパーのテスト
+ * ※ 2016年4月以降失敗する。要変更
  */
-	public function age() {
+	public function testAge() {
+		// 適当な生年月日を入力	
+		$result = $this->Helper->age("1980-4-1");
+		$expect = "35歳";
+		$this->assertEquals($expect, $result);
 
+		// 歳を年生きたに変更する
+		$result = $this->Helper->age("1980-4-1", "年生きた");
+		$expect = "35年生きた";
+		$this->assertEquals($expect, $result);
+
+		// 年齢が指定されていない場合
+		$result = $this->Helper->age("");
+		$expect = "不明";
+		$this->assertEquals($expect, $result);
+
+		// 年齢が指定されていない場合
+		$result = $this->Helper->age("", "", "秘密");
+		$expect = "秘密";
+		$this->assertEquals($expect, $result);
+
+		$this->markTestIncomplete(
+			'このテストは、問題があります。
+			age()は年齢を取得する関数です。年が変わると失敗するテストが実装されています。'
+		);
 	}
 
 /**
  * boolean型用のリストを有効、無効で出力するヘルパーのテスト
  */
-	public function booleanStatusList() {
-
+	public function testBooleanStatusList() {
+		$result = $this->Helper->booleanStatusList();
+		$expect = array(0 => "無効", 1 => "有効");
+		$this->assertEquals($expect, $result);
 	}
 
 /**
  * boolean型用を無効・有効で出力するヘルパーのテスト
  */
-	public function booleanStatus() {
+	public function testBooleanStatus() {
+		// キーが0の場合
+		$result = $this->Helper->booleanStatus(0);
+		$expect = "無効";
+		$this->assertEquals($expect, $result);
 
+		// キーが1の場合
+		$result = $this->Helper->booleanStatus(1);
+		$expect = "有効";
+		$this->assertEquals($expect, $result);
 	}
 
 }

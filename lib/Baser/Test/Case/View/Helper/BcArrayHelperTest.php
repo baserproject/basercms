@@ -60,7 +60,7 @@ class BcArrayHelperTest extends BaserTestCase {
  * 配列にテキストを追加する
  *
  * */
-	public function testAddTest() {
+	public function testAddText() {
 		// prefixとsuffix両方指定
 		$result = $this->Helper->addText($this->data, 'baserCMS開発者:', 'さん');
 		$expect = array(

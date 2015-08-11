@@ -1642,10 +1642,37 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * ユーザー名を整形して表示する
  *
+ * @param string $nickname
+ * @param string $realName1
+ * @param string $realName2
+ * @param string $expect
  * @return void
+ *
+ * @dataProvider getUserNameDataProvider
  */
-	public function testGetUserName() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetUserName($nickname, $realName1, $realName2, $expect) {
+		$user = array( 'User' => array(
+				'nickname' => $nickname,
+				'real_name_1' => $realName1,
+				'real_name_2' => $realName2,
+			)
+		);
+		$result = $this->BcBaser->getUserName($user);
+		$this->assertEquals($expect, $result);
+	}
+
+/**
+ * getUserName用のデータプロバイダ
+ *
+ * @return array
+ */
+
+	public function getUserNameDataProvider() {
+		return array(
+			array('aiueo', 'yamada', 'tarou', 'aiueo'),
+			array('', 'yamada', 'tarou', 'yamada tarou'),
+			array('', '', '', ''),
+		);
 	}
 
 /**

@@ -86,6 +86,57 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 /**
+ * beforeRender
+ * 
+ */
+	public function testBeforeRender() {
+        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ページ機能用URLを取得する
+ */
+	public function testGetUrl() {
+		$this->markTestIncomplete('このテストは、まだ完成されていません。');
+	}
+
+/**
+ * 現在のページが所属するカテゴリデータを取得する
+ * 
+ * 現在のページを設定する方法がわからないのでスキップしています
+ */
+	public function testGetCategory() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 現在のページが所属する親のカテゴリを取得する
+ */
+	public function testGetParentCategory() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ページリストを取得する
+ */
+	public function testGetPageList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+/**
+ * カテゴリ名を取得する
+ */
+	public function testGetCategoryName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 公開状態を取得する
+ */
+	public function testAllowPublish() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * ページカテゴリ間の次の記事へのリンクを取得する
  * @param string $url
  * @param string $title
@@ -197,6 +248,32 @@ class BcPageHelperTest extends BaserTestCase {
 			array('/smartphone/service', 'smartphone', '', array('overCategory' => true), '<a href="/s/about" class="prev-link">≪ 会社案内</a>'), // smartphone
 			array('/smartphone/service', 'smartphone', '前のページへ', array('overCategory' => true), '<a href="/s/about" class="prev-link">前のページへ</a>'), // smartphone
 		);
+	}
+
+/**
+ * コンテンツナビ有効チェック
+ */
+	public function testContentsNaviAvailable() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 固定ページのコンテンツを出力する
+ */
+	public function testContent() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * テンプレートを取得
+ * セレクトボックスのソースとして利用
+ */
+	public function testGetTemplates() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testTreeList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

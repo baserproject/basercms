@@ -31,6 +31,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 年号を取得
+ *
  * @dataProvider nengoDataProvider
  */
 	public function testNengo($data, $expects) {
@@ -48,6 +50,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 和暦を取得（アルファベット）
+ *
  * @dataProvider warekiDataProvider
  */
 	public function testWareki($data, $expects) {
@@ -63,6 +67,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 和暦の年を取得
+ *
  * @dataProvider wyearDataProvider
  */
 	public function testWyear($data, $expects) {
@@ -77,6 +83,9 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 西暦を和暦の年に変換する
+ * 西暦をまたがる場合があるので配列で返す
+ * 
  * @dataProvider convertToWarekiYearDataProvider
  */
 	public function testConvertToWarekiYear($data, $expects, $message) {
@@ -98,6 +107,9 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 和暦の年を西暦に変換する
+ * 和暦のフォーマット例：s-48
+ * 
  * @dataProvider convertToSeirekiYearDataProvider
  */
 	public function testConvertToSeirekiYear($data, $expects, $message) {
@@ -121,6 +133,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 和暦変換(配列で返す)
+ *
  * @dataProvider convertToWarekiArrayDataProvider
  */
 	public function testConvertToWarekiArray($data, $expects, $message) {
@@ -142,6 +156,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 和暦変換
+ *
  * @dataProvider convertToWarekiDataProvider
  */
 	public function testConvertToWareki($data, $expects, $message) {
@@ -163,6 +179,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 文字列から時間（分）を取得
+ *
  * @dataProvider minutesDataProvider
  */
 	public function testMinutes($data, $expects, $message) {
@@ -179,6 +197,8 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * format 拡張
+ *
  * @dataProvider formatDataProvider
  */
 	public function testFormat($format, $date, $expects, $message) {
@@ -197,6 +217,10 @@ class BcTimeHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 指定した日数が経過しているか確認する
+ * 経過していない場合はtrueを返す
+ * 日付が確認できなかった場合もtrueを返す
+ *
  * @dataProvider pastDaysDataProvider
  */
 	public function testPastDays($date, $days, $nowDate, $expects, $message) {
@@ -214,4 +238,43 @@ class BcTimeHelperTest extends BaserTestCase {
 		);
 	}
 
+/**
+ * 日本の曜日名を1文字 + $suffixの形式で取得する
+ * - 引数により、指定しない場合は本日の曜日
+ * - 文字列で、strtotime関数で解析可能な場合は解析された日付の曜日
+ * 
+ * @dataProvider getJpWeekDataProvider
+ */
+	public function testGetJpWeek($dateStr, $suffix, $expects, $message) {
+		$result = $this->Helper->getJpWeek($dateStr, $suffix);
+		$this->assertSame($expects, $result, $message);
+	}
+
+	public function getJpWeekDataProvider() {
+		return array(
+			array('2015-8-11', 	'',		 '火', 		'火曜日'),
+			array('2015-8-11', 	'ようび', '火ようび', '$suffix変更'),
+			array('2015-8-111', '', 	 '', 		'日付として解析できなかった場合'),
+		);
+	}
+
+/**
+ * 曜日情報を出力する
+ * - 曜日情報が正しく取得できない場合は接尾辞も表示しない
+ * - ex) <?php $this->BcTime->jpWeek($post['posts_date'], '曜日'); ?>
+ * 
+ * @dataProvider jpWeekDataProvider
+ */
+	public function testJpWeek($dateStr, $suffix, $expects, $message) {
+		$this->expectOutputString($expects);
+		$this->Helper->jpWeek($dateStr, $suffix);
+	}
+
+	public function jpWeekDataProvider() {
+		return array(
+			array('2015-8-11', 	'',		 '火', 		'火曜日'),
+			array('2015-8-11', 	'ようび', '火ようび', '$suffix変更'),
+			array('2015-8-111', '', 	 '', 		'日付として解析できなかった場合'),
+		);
+	}
 }

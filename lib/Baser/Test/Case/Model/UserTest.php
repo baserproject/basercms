@@ -112,12 +112,73 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
-	public function test半角英数チェック() {
-		
+	public function test半角英数チェック異常系() {
+		$this->User->create(array(
+			'User' => array(
+				'name' => '１２３ａｂｃ',
+				'password' => '１２３ａｂｃ',
+			)
+		));
+		$this->assertFalse($this->User->validates());
+
+		$this->assertArrayHasKey('name', $this->User->validationErrors);
+		$this->assertEquals('アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。', current($this->User->validationErrors['name']));
+		$this->assertArrayHasKey('password', $this->User->validationErrors);
+		$this->assertEquals('パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。', current($this->User->validationErrors['password']));
+
 	}
 
-	public function test既存ユーザチェック() {
-		
+	public function test半角英数チェック正常系() {
+		$this->User->create(array(
+			'User' => array(
+				'name' => '123abc',
+				'password' => '123abc',
+			)
+		));
+		$this->assertTrue($this->User->validates());
+	}
+
+	public function test既存ユーザチェック異常系() {
+		$this->User->create(array(
+			'User' => array(
+				'name' => 'basertest',
+			)
+		));
+		$this->assertFalse($this->User->validates());
+
+		$this->assertArrayHasKey('name', $this->User->validationErrors);
+		$this->assertEquals('既に登録のあるアカウント名です。', current($this->User->validationErrors['name']));
+
+	}
+
+	public function test既存ユーザチェック正常系() {
+		$this->User->create(array(
+			'User' => array(
+				'name' => 'basertest2',
+			)
+		));
+		$this->assertTrue($this->User->validates());
+	}
+
+	public function testメールアドレス形式チェック異常系() {
+		$this->User->create(array(
+			'User' => array(
+				'email' => 'abc.co.jp',
+			)
+		));
+		$this->assertFalse($this->User->validates());
+
+		$this->assertArrayHasKey('email', $this->User->validationErrors);
+		$this->assertEquals('Eメールの形式が不正です。', current($this->User->validationErrors['email']));
+	}
+
+	public function testメールアドレス形式チェック正常系() {
+		$this->User->create(array(
+			'User' => array(
+				'email' => 'abc@co.jp',
+			)
+		));
+		$this->assertTrue($this->User->validates());
 	}
 
 }

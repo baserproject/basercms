@@ -140,7 +140,7 @@ class BcTimeHelper extends TimeHelper {
 /**
  * 和暦変換(配列で返す)
  *
- * @param string 日付
+ * @param string $date 日付
  * @return array 和暦データ
  */
 	public function convertToWarekiArray($date) {
