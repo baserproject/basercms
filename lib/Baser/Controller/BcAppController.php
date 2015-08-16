@@ -343,7 +343,7 @@ class BcAppController extends Controller {
 						$userModel . '.id'				=> $user['id'],
 						$userModel . '.name'			=> $user['name']
 					);
-					if (isset($UserModel->belongsTo['UserGroup'])) {
+					if (isset($User->belongsTo['UserGroup'])) {
 						$UserGroup = ClassRegistry::init('UserGroup');
 						$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix LIKE' => '%' . $authConfig['auth_prefix'] . '%'), 'recursive' => -1));
 						$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
@@ -395,7 +395,7 @@ class BcAppController extends Controller {
 		}
 
 		// 権限チェック
-		if (isset($UserModel->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
+		if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
 			if (!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
