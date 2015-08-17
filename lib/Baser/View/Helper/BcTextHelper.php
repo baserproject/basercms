@@ -184,8 +184,8 @@ class BcTextHelper extends TextHelper {
  * データをチェックして空の場合に指定した値を返す
  *
  * @param mixed $value
- * @param	mixed $noValue
- * @return mixed
+ * @param	mixed $noValue データが空の場合に返す値
+ * @return mixed そのままのデータ/空の場合のデータ
  * @access public
  */
 	public function noValue($value, $noValue) {
@@ -197,7 +197,10 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * boolean型用を可、不可で出力
+ * boolean型のデータを可、不可で出力
+ *
+ * 0 or 1 の int も許容する
+ * 文字列を与えた場合には、不可を出力
  *
  * @param boolean $value
  * @return	string	可/不可
@@ -221,10 +224,19 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * form::dateTimeで取得した和暦データを文字列データに変換する
+ * 配列形式の和暦データを文字列データに変換する
+ *
+ * FormHelper::dateTime() で取得した配列データを
+ * BcTimeHelper::convertToWarekiArray() で配列形式の和暦データに変換したものを利用する
  *
  * @param array $arrDate
- * @return string 和暦
+ * 	− `wareki`:和暦に変換する場合は、trueを設定、設定しない場合何も返さない
+ *	- `year` :和暦のキーを付与した年。
+ * 		h: 平成 / s: 昭和 / t: 大正 / m: 明治
+ * 		（例）h-27
+ * 	- `month` : 月
+ * 	- `day` : 日
+ * @return string 和暦（例）平成 27年 8月 11日
  * @access public
  */
 	public function dateTimeWareki($arrDate) {
@@ -242,11 +254,14 @@ class BcTextHelper extends TextHelper {
 /**
  * 通貨表示
  *
- * @param int $value
+ * @param int $value 通貨となる数値
  * @param string $prefix '¥'
  * @return string
  */
 	public function moneyFormat($value, $prefix = '¥') {
+		if(!is_numeric($value)) {
+			return false;
+		}
 		if ($value) {
 			return $prefix . number_format($value);
 		} else {
@@ -255,14 +270,19 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * form::dateTimeで取得したデータを文字列データに変換する
+ * 配列形式の日付データを文字列データに変換する
+ *
+ * 配列形式のデータは、FormHelper::dateTime()で取得できる
  *
  * @param array $arrDate
- * @return string 日付
+ * 	- `year` : 年
+ * 	- `month` : 月
+ * 	- `day` : 日
+ * @return string 日付（例）2015/8/11
  * @access public
  */
 	public function dateTime($arrDate) {
-		if (!$arrDate['year'] || !$arrDate['month'] || !$arrDate['day']) {
+		if (!isset($arrDate['year']) || !isset($arrDate['month']) || !isset($arrDate['day'])) {
 			return;
 		}
 
@@ -270,10 +290,10 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * 文字をフォーマット形式で出力する
+ * 文字をフォーマット形式で出力し、値が存在しない場合は初期値を出力する
  *
- * @param string $format フォーマット
- * @param mixed $value 値
+ * @param string $format フォーマット文字列（sprintfで利用できるもの）
+ * @param mixed $value フォーマット対象の値
  * @param	mixed $noValue データがなかった場合の初期値
  * @return	string	変換後の文字列
  * @access	public
@@ -310,14 +330,9 @@ class BcTextHelper extends TextHelper {
  * @param string $value
  * @return array
  * @access public
+ * @deprecated explode() と同じ仕様となってしまった為、非推奨
  */
 	public function toArray($separator, $value) {
-		if ($separator != '"') {
-			$value = str_replace('"', '', $value);
-		}
-		if ($separator != "'") {
-			$value = str_replace("'", '', $value);
-		}
 		if (strpos($value, $separator) === false) {
 			if ($value) {
 				return array($value);
@@ -333,11 +348,10 @@ class BcTextHelper extends TextHelper {
 /**
  * 配列とキーを指定して値を取得する
  * 
- * @param int $key
- * @param mixed $value
- * @param array $array
- * @param mixed type $noValue
- * @return mixied
+ * @param int $key 配列のキー
+ * @param array $array 配列
+ * @param mixed type $noValue 値がない場合に返す値
+ * @return mixed
  */
 	public function arrayValue($key, $array, $noValue = '') {
 		if (is_numeric($key)) {
@@ -351,11 +365,11 @@ class BcTextHelper extends TextHelper {
 
 /**
  * 連想配列とキーのリストより値のリストを取得し文字列で返す
- * 文字列に結合する際、指定した区切り文字を指定できる
+ * 文字列に結合する際、指定した結合文字を指定できる
  *
- * @param string $glue
- * @param array $keys
- * @param array $array
+ * @param string $glue 結合文字
+ * @param array $keys 結合対象のキーのリスト
+ * @param array $array リスト
  * @return string
  * @access public
  */

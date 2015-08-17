@@ -16,6 +16,7 @@ App::uses('BcTextHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
 App::uses('TextHelper', 'View/Helper');
 App::uses('AppHelper', 'View/Helper');
+App::uses('BcFormHelper', 'View/Helper');
 
 /**
  * text helper library.
@@ -25,9 +26,20 @@ App::uses('AppHelper', 'View/Helper');
  */
 class BcTextHelperTest extends BaserTestCase {
 
+/**
+ * Fixtures
+ * @var array
+ */
+	public $fixtures = array(
+		'baser.Default.UserGroup'
+	);
+
 	public function setUp() {
 		parent::setUp();
 		$this->Helper = new BcTextHelper(new View(null));
+		$this->Helper->BcForm = new BcFormHelper(new View());
+		$this->Helper->BcTime = new BcTimeHelper(new View());
+		$this->Helper->Html = new HtmlHelper(new View());
 	}
 
 	public function tearDown() {
@@ -206,6 +218,12 @@ class BcTextHelperTest extends BaserTestCase {
 		$result = $this->Helper->booleanAllow(1);
 		$expect = "可";
 		$this->assertEquals($expect, $result);
+
+		// キーが文字列の場合
+		$result = $this->Helper->booleanAllow('baser');
+		$expect = "不可";
+		$this->assertEquals($expect, $result);
+
 	}
 
 
@@ -218,11 +236,28 @@ class BcTextHelperTest extends BaserTestCase {
 			'wareki'=> true,
 			'year' 	=> 'h-27',
 			'month' => 8,
-			'day'	=> 11);
+			'day'	=> 11
+		);
 
 		$result = $this->Helper->dateTimeWareki($arrDate);
 		$expect = '平成 27年 8月 11日';
 		$this->assertEquals($expect, $result);
+
+		// 異常系
+		// 存在しない日時（現在は、そのまま出力する仕様となっているので見直し要）
+		$arrDate = array(
+			'wareki'=> true,
+			'year' 	=> 'g-27',
+			'month' => 14,
+			'day'	=> 35
+		);
+		$expect = ' 27年 14月 35日';
+		$result = $this->Helper->dateTimeWareki($arrDate);
+		$this->assertEquals($expect, $result);
+		// 文字列
+		$result = $this->Helper->dateTimeWareki('baser');
+		$this->assertEquals(NULL, $result);
+
 	}
 
 /**
@@ -239,6 +274,12 @@ class BcTextHelperTest extends BaserTestCase {
 		$result = $this->Helper->moneyFormat('1234567', '(^ ^)!');
 		$expect = '(^ ^)!1,234,567';
 		$this->assertEquals($expect, $result);
+
+		// 異常系
+		$result = $this->Helper->moneyFormat('aiueo');
+		$expect = false;
+		$this->assertEquals($expect, $result);
+
 	}
 
 /**
@@ -250,10 +291,27 @@ class BcTextHelperTest extends BaserTestCase {
 		$arrDate = array(
 			'year' 	=> 2015,
 			'month' => 8,
-			'day'	=> 11);
-
+			'day'	=> 11
+		);
 		$result = $this->Helper->dateTime($arrDate);
 		$expect = '2015/8/11';
+		$this->assertEquals($expect, $result);
+
+		// 異常系
+
+		// 文字列
+		$result = $this->Helper->dateTime('baser');
+		$expect = '';
+		$this->assertEquals($expect, $result);
+
+		// 不正な日付（現在はそのまま出力してしまう仕様となっている）
+		$arrDate = array(
+			'year' 	=> 2015,
+			'month' => 20,
+			'day'	=> 11
+		);
+		$result = $this->Helper->dateTime($arrDate);
+		$expect = '2015/20/11';
 		$this->assertEquals($expect, $result);
 
 	}
@@ -289,7 +347,21 @@ class BcTextHelperTest extends BaserTestCase {
  * モデルのコントロールソースより表示用データを取得するヘルパーのテスト
  */
 	public function testListValue() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+
+
+		// ユーザーモデル
+		$this->Helper->BcForm->setEntity('User', true);
+		$expect = 'システム管理';
+		$result = $this->Helper->listValue('user_group_id', 1);
+		$this->assertEquals($expect, $result);
+
+		// 存在しないモデル
+		$this->Helper->BcForm->setEntity('Baser', true);
+		$expect = false;
+		$result = $this->Helper->listValue('user_group_id', 1);
+		$this->assertEquals($expect, $result);
+
 	}
 
 /**
@@ -311,6 +383,12 @@ class BcTextHelperTest extends BaserTestCase {
 		$result = $this->Helper->toArray("'", "a'i'u'e'o");
 		$expect = array("a","i","u","e","o");
 		$this->assertEquals($expect, $result);
+
+		// $separatorが含まれていない場合
+		$result = $this->Helper->toArray(",", "aiueo");
+		$expect = array("aiueo");
+		$this->assertEquals($expect, $result);
+
 	}
 
 /**
@@ -329,7 +407,13 @@ class BcTextHelperTest extends BaserTestCase {
 		// $keyが5(存在しない値)
 		$result = $this->Helper->arrayValue(5, $array);
 		$expect = "";
-		$this->assertEquals($expect, $result);	
+		$this->assertEquals($expect, $result);
+
+		// キーが存在せず初期値が設定されている場合
+		$result = $this->Helper->arrayValue(5, $array, 'キーないです');
+		$expect = "キーないです";
+		$this->assertEquals($expect, $result);
+
 	}
 
 /**
@@ -340,11 +424,19 @@ class BcTextHelperTest extends BaserTestCase {
 
 		// 適当な連想配列とキーのリスト
 		$array = array( "key1" => "apple", "key2" => "lemon",  "key3" => "banana");
-		$keys = array("key1", "key2", "key3");
 
+		// キーを指定
+		$keys = array("key1", "key2", "key3");
 		$result = $this->Helper->arrayValues(",", $keys, $array);
 		$expect = "apple,lemon,banana";
 		$this->assertEquals($expect, $result);
+
+		// 指定したキーが空の場合
+		$keys = array();
+		$result = $this->Helper->arrayValues(",", $keys, $array);
+		$expect = "";
+		$this->assertEquals($expect, $result);
+
 	}
 
 /**
@@ -352,9 +444,11 @@ class BcTextHelperTest extends BaserTestCase {
  * ※ 2016年4月以降失敗する。要変更
  */
 	public function testAge() {
-		// 適当な生年月日を入力	
-		$result = $this->Helper->age("1980-4-1");
-		$expect = "35歳";
+		// 適当な生年月日を入力
+		$year = 1980;
+		$age = $year - 1965;
+		$result = $this->Helper->age($year . "-4-1");
+		$expect = $age . "歳";
 		$this->assertEquals($expect, $result);
 
 		// 歳を年生きたに変更する
