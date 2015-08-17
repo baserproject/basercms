@@ -118,10 +118,10 @@ class BcAppModel extends Model {
  *
  * TODO GLOBAL グローバルな関数として再配置する必要あり
  *
- * @param	array	変換前のデータ
- * @param	string	変換元の文字コード
- * @param	string 	変換後の文字コード
- * @return	array	変換後のデータ
+ * @param array $data 変換前のデータ
+ * @param string $outenc 変換後の文字コード
+ * @param string $inenc 変換元の文字コード
+ * @return array 変換後のデータ
  */
 	public function convertEncodingByArray($data, $outenc, $inenc) {
 		foreach ($data as $key => $value) {
@@ -626,8 +626,8 @@ class BcAppModel extends Model {
  *
  * ハイフンアンダースコアを許容
  *
- * @param	string	チェック対象文字列
- * @return	boolean
+ * @param array $check チェック対象文字列
+ * @return boolean
  */
 	public function alphaNumericPlus($check) {
 		if (!$check[key($check)]) {
@@ -660,6 +660,9 @@ class BcAppModel extends Model {
 
 /**
  * ファイルサイズチェック
+ * 
+ * @param array $check チェック対象データ
+ * @param int $size 最大のファイルサイズ
  */
 	public function fileSize($check, $size) {
 		$file = $check[key($check)];
@@ -903,7 +906,7 @@ class BcAppModel extends Model {
  * リストチェック
  * リストに含む場合はエラー
  *
- * @param string $check Value to check
+ * @param array $check Value to check
  * @param array $list List to check against
  * @return boolean Succcess
  */
@@ -1368,9 +1371,9 @@ class BcAppModel extends Model {
 /**
  * データが公開済みかどうかチェックする
  *
- * @param boolean $status
- * @param boolean $publishBegin
- * @param boolean $publishEnd
+ * @param boolean $status 			公開ステータス
+ * @param string $publishBegin 公開開始日時
+ * @param string $publishEnd		公開終了日時
  * @return	array
  * @access public
  */
