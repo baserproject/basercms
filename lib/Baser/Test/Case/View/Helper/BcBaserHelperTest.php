@@ -39,6 +39,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.PageCategory',
 		'baser.Default.ThemeConfig',
+		'baser.Default.WidgetArea',
+		'baser.Default.Plugin',
+		'baser.Default.PluginContent',
+		'baser.Default.BlogContent',
+		'baser.Default.BlogPost',
+		'baser.Default.BlogCategory',
 	);
 
 /**
@@ -92,9 +98,12 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	protected function _login() {
 		$User = ClassRegistry::init('User');
-		$user = $User->find('first', array('conditions' => array('User.id' => 1), 'recursive' => -1));
+		$user = $User->find('first', array('conditions' => array('User.id' => 1)));
 		unset($user['User']['password']);
 		$this->BcBaser->set('user', $user['User']);
+		$user['User']['UserGroup'] = $user['UserGroup'];
+		$sessionKey = BcUtil::getLoginUserSessionKey();
+		$_SESSION['Auth'][$sessionKey] = $user['User'];
 	}
 
 /**
@@ -1457,24 +1466,72 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 文字列を検索しマークとしてタグをつける
- *
- * @return void
+ * 
+ * @param string $search 検索文字列
+ * @param string $text 検索対象文字列
+ * @param string $name マーク用タグ
+ * @param array $attributes タグの属性
+ * @param bool $escape エスケープ有無
+ * @param boolean $expected 期待値
+ * @dataProvider markDataProvider
  */
-	public function testMark() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testMark($search, $text, $name, $attributes, $escape, $expected) {
+		$result = $this->BcBaser->mark($search, $text, $name, $attributes, $escape);
+		$this->assertEquals($expected, $result);
+	}
+
+/**
+ * mark用のデータプロバイダ
+ * 
+ * @return array
+ */
+	public function markDataProvider() {
+		return array(
+			array('大切', 'とても大切です', 'strong', array(), false, 'とても<strong>大切</strong>です'),
+			array(array('大切', '本当'), 'とても大切です本当です', 'strong', array(), false, 'とても<strong>大切</strong>です<strong>本当</strong>です'),
+			array('大切', 'とても大切です', 'b', array(), false, 'とても<b>大切</b>です'),
+			array('大切', 'とても大切です', 'b', array('class' => 'truth'), false, 'とても<b class="truth">大切</b>です'),
+			array('<<大切>>', 'とても<<大切>>です', 'b', array(), true, 'とても<b>&lt;&lt;大切&gt;&gt;</b>です'),
+		);
 	}
 
 /**
  * サイトマップを出力する
- *
- * @return void
+ * 
+ * TODO : 階層($recursive)を指定した場合のテスト
+ * このメソッドでフィクスチャを利用することができれば、テストを記述できます。
+ * 
+ * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
+ *	- 0 : 仕様確認要
+ *	- null : 仕様確認要
+ * @param string $recursive 取得する階層
+ * @param boolean $expected 期待値
+ * @dataProvider sitemapDataProvider
  */
-	public function testSitemap() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testSitemap($pageCategoryId, $recursive, $expected) {
+		$this->expectOutputRegex('/' . $expected . '/');
+		$this->BcBaser->sitemap($pageCategoryId, $recursive);
+	}
+
+/**
+ * sitemap用のデータプロバイダ
+ * 
+ * @return array
+ */
+	public function sitemapDataProvider() {
+		return array(
+			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内'),
+			array(2, null, '<a href="\/s\/service">サービス<\/a>'),
+			// array(null, 1, ''),
+		);
 	}
 
 /**
  * Flashを表示する
+ *
+ * MEMO : サンプルになるかもしれないswfファイルの場所
+ *　/lib/Cake/Test/test_app/Plugin/TestPlugin/webroot/flash/plugin_test.swf
+ *　/lib/Cake/Test/test_app/View/Themed/TestTheme/webroot/flash/theme_test.swf
  *
  * @return void
  */
@@ -1485,19 +1542,51 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * URLをリンクとして利用可能なURLに変換する
  *
- * @return void
+ * @param string $url 元となるURL
+ * @param string $type mobile、または、smartphone
+ * @param boolean $expected 期待値
+ * @dataProvider changePrefixToAliasDataProvider
  */
-	public function testChangePrefixToAlias() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testChangePrefixToAlias($url, $type, $expected) {
+		$result = $this->BcBaser->changePrefixToAlias($url, $type);
+		$this->assertEquals($expected, $result);
 	}
 
 /**
- * 現在のログインユーザーが管理者グループかどうかチェックする
- *
- * @return void
+ * changePrefixToAlias用のデータプロバイダ
+ * 
+ * @return array
  */
-	public function testIsAdminUser() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function changePrefixToAliasDataProvider() {
+		return array(
+			array("/index", "mobile", "/index"),
+			array("/mobile/index", "mobile", "/m/index"),
+			array("/smartphone/index", "smartphone", "/s/index"),
+			array("/test/index", "test", "/test/index"),
+		);
+	}
+	
+
+/**
+ * 現在のログインユーザーが管理者グループかどうかチェックする
+ * 
+ * @param int $userGroupId ユーザーグループID
+ * @param boolean $expected 期待値
+ * @dataProvider isAdminUserDataProvider
+ */
+	public function testIsAdminUser($userGroupId, $expected) {
+		$this->_login();
+		$result = $this->BcBaser->isAdminUser($userGroupId);
+		$this->assertEquals($expected, $result);
+		$this->_logout();
+	}
+
+	public function isAdminUserDataProvider() {
+		return array(
+			array(1, true),
+			array(2, false),
+			array(null, true),
+		);
 	}
 
 /**
@@ -1511,11 +1600,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		// TODO プリフィックス付きURLもテストが必要
 		$this->assertEquals($expected, $this->BcBaser->isPage());
 	}
-/**
- * isPage用のデータプロバイダ
- *
- * @return array
- */
+
 	public function getIsPageProvider() {
 		return array(
 			// PCページ
@@ -1570,11 +1655,43 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * 現在のページがページカテゴリのトップかどうかを判定する
  *
+ * @param string $url 現在のURL
+ * @param string $expected 期待値
  * @return void
+ * @dataProvider isCategoryTopDataProvider
  */
-	public function testIsCategoryTop() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testIsCategoryTop($agent, $url, $expected) {
+		$this->_setAgent($agent);
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->isCategoryTop());
 	}
+
+/**
+ * isCategoryTop用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function isCategoryTopDataProvider() {
+		return array(
+			// PCページ
+			array('', '/', false),
+			array('', '/index', false),
+			array('', '/contact/index', true),
+			array('', '/contact/test', false),
+			// モバイルページ
+			array('mobile', '/', false),
+			array('mobile', '/index', false),
+			array('mobile', '/mobile/', true),
+			array('mobile', '/mobile/test', false),
+			// スマートフォンページ
+			array('smartphone', '/', false),
+			array('smartphone', '/index', false),
+			array('smartphone', '/contact/index', true),
+			array('smartphone', '/blog/blog/index', true)
+		);
+	}
+
+
 
 /**
  * ページをエレメントとして読み込む
@@ -1587,11 +1704,34 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * ウィジェットエリアを出力する
- *
- * @return void
+ * 
+ * TODO: $noが指定されてない(null)場合のテストを記述する
+ * $noを指定していない場合、ウィジェットが出力されません。
+ * 
+ * @param string $agent エージェント
+ * @param string $url 現在のURL
+ * @param int $no 
+ * @param string $expected 期待値
+ * @dataProvider widgetAreaDataProvider
  */
-	public function testWidgetArea() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testWidgetArea($agent, $url, $no, $expected) {
+		$this->_setAgent($agent);
+		$this->BcBaser->request = $this->_getRequest($url);
+
+		$this->expectOutputRegex('/' . $expected . '/');
+		$this->BcBaser->WidgetArea($no);
+	}
+
+/**
+ * isCurrentUrl用のデータプロバイダ
+ *
+ * @return array
+ */
+	public function widgetAreaDataProvider() {
+		return array(
+			array('', '/company', 1, '<div class="widget-area widget-area-1">'),
+			array('', '/company', 2, '<div class="widget-area widget-area-2">'),
+		);
 	}
 
 /**
@@ -1690,16 +1830,52 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testLogo() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<img src="\/theme\/m-single\/img\/logo.png" alt="baserCMS" \/>/');
+		$this->BcBaser->logo();
 	}
 
 /**
  * メインイメージを出力する
- *
- * @return void
+ * 
+ * @param array $options 指定するオプション
+ * @param string $expect
+ * @dataProvider mainImageDataProvider
  */
-	public function testMainImage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testMainImage($options, $expect) {
+		$this->expectOutputRegex('/' . $expect . '/s');
+		$this->BcBaser->mainImage($options);
+	}
+
+/**
+ * mainImage用のデータプロバイダ
+ * 
+ * このテストは、_getThemeImage()のテストも併せて行っています。
+ * 1. $optionに指定なし
+ * 2. numに指定した番号の画像を表示
+ * 3. allをtrue、numに番号を入力し、画像を複数表示
+ * 4. 画像にidとclassを付与
+ * 5. 画像にpoplinkを付与
+ * 6. 画像にaltを付与
+ * 7. 画像のlink先を指定
+ * 8. 画像にmaxWidth、maxHeightを指定。テストに使う画像は横長なのでwidthが指定される。
+ * 9. 画像にwidth、heightを指定。
+ * 10. 適当な名前のパラメータを渡す
+ * @return array
+ */
+
+	public function mainImageDataProvider() {
+		return array(
+			array(array(), '<img src="\/theme\/m-single\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
+			array(array('num' => 2), 'main_image_2'),
+			array(array('all' => true, 'num' => 2), '^(.*main_image_1.*main_image_2)'),
+			array(array('all' => true, 'class' => 'test-class', 'id' => 'test-id'), '^(.*id="test-id".*class="test-class")'), 
+			array(array('popup' => true), 'href="\/theme\/m-single\/img\/main_image_1.jpg"'),
+			array(array('alt' => 'テスト'), 'alt="テスト"'),
+			array(array('link' => '/test'), 'href="\/test"'),
+			array(array('maxWidth' => '200', 'maxHeight' => '200'), 'width="200"'),
+			array(array('width' => '200', 'height' => '200'), '^(.*width="200".*height="200")'),
+			array(array('hoge' => 'hoge'), 'main_image_1'),
+		);
 	}
 
 /**
@@ -1860,7 +2036,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSubMenu() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->BcBaser->setSubMenus(array("default"));
+		$this->expectOutputRegex('/<div class="sub-menu-contents">/');
+		$this->BcBaser->subMenu();
 	}
 
 /**
@@ -1870,6 +2048,8 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testContentsNavi() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<div id="ContentsNavi">/');
+		$this->BcBaser->contentsNavis();
 	}
 
 /**
@@ -1878,7 +2058,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testCrumbsList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
+		$this->BcBaser->crumbsList();
 	}
 
 /**
@@ -1887,12 +2068,13 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGlobalMenu() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<ul class="global-menu clearfix">/');
+		$this->BcBaser->globalMenu();
 	}
 
 /**
  * Google Analytics のトラッキングコードを出力する
- *
+ *  
  * @return void
  */
 	public function testGoogleAnalytics() {
@@ -1906,6 +2088,8 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGoogleMaps() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<div id="map"/');
+		$this->BcBaser->googleMaps();
 	}
 
 /**
@@ -1914,7 +2098,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testListNum() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<div class="list-num">/');
+		$this->BcBaser->listNum();
 	}
 
 /**
@@ -1923,7 +2108,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSiteSearchForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<div class="section search-box">/');
+		$this->BcBaser->siteSearchForm();
 	}
 
 }

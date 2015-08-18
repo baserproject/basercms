@@ -907,10 +907,10 @@ class BcAppModel extends Model {
 
 /**
  * リストチェック
- * リストに含む場合はエラー
+ * 対象となる値がリストに含まれる場合はエラー
  *
- * @param array $check 確認する値
- * @param array $list 対象となるリスト
+ * @param array $check 対象となる値
+ * @param array $list リスト
  * @return boolean Succcess
  */
 	public function notInList($check, $list) {

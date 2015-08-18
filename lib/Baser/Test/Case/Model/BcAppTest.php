@@ -298,6 +298,7 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * テーブルの存在チェックを行う
+ * 
  * @param string $tableName
  * @param boolean $expect
  * @dataProvider tableExistsDataProvider
@@ -496,10 +497,10 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * リストチェック
- * リストに含む場合はエラー
+ * 対象となる値がリストに含まれる場合はエラー
  * 
- * @param string $check 確認する値
- * @param array $list 対象となるリスト
+ * @param string $check 対象となる値
+ * @param array $list リスト
  * @param boolean $expect
  * @dataProvider notInListDataProvider
  */

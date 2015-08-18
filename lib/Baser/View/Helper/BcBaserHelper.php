@@ -1574,8 +1574,18 @@ class BcBaserHelper extends AppHelper {
 		if (!is_array($search)) {
 			$search = array($search);
 		}
+
+		$options = array(
+			'escape' => $escape
+		);
+
+		if (!empty($attributes)) {
+			$options = array_merge($options, $attributes);
+		}
+
+
 		foreach ($search as $value) {
-			$text = str_replace($value, $this->BcHtml->tag($name, $value, $attributes, $escape), $text);
+			$text = str_replace($value, $this->BcHtml->tag($name, $value, $options), $text);
 		}
 		return $text;
 	}
@@ -1717,6 +1727,7 @@ END_FLASH;
 
 /**
  * 現在のページがページカテゴリのトップかどうかを判定する
+ * 判定は、URLからのみで行う
  *
  * @return bool カテゴリトップの場合は、 true を返す
  */
