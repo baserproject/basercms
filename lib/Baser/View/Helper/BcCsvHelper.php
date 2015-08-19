@@ -79,7 +79,6 @@ class BcCsvHelper extends AppHelper {
 			return false;
 
 		foreach ($datas as $data) {
-
 			$this->addModelData($modelName, $data);
 		}
 		return true;
@@ -173,6 +172,7 @@ class BcCsvHelper extends AppHelper {
 		} else {
 			$exportData = $this->csvBody;
 		}
+
 		$fp = fopen($fileName, "w");
 		fputs($fp, $exportData, 1024 * 1000 * 10);
 		fclose($fp);

@@ -116,15 +116,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * コンストラクタ
- *
- * @return void
- */
-	public function testConstruct() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
  * メニューを取得する
  *
  * @return void
@@ -1238,12 +1229,12 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * コンテンツを特定するIDを出力する
- *
- * @return void
  */
 	public function testContentsName() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、必要性がありません。');
 	}
+
+
 
 /**
  * コンテンツを特定するIDを取得する
@@ -1449,19 +1440,67 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
- * @return void
+ * MEMO : header()を用いるテストでエラーが出ます。
+ *  Cannot modify header information - headers already sent
+ * runInSeparateProcess アノテーションを使用して、テストケースだけを別プロセスで
+ * 実行しても別のエラーが出ます。
+ *
+ * @param boolean $expected 期待値
+ * @dataProvider cacheHeaderDataProvider
  */
-	public function testCacheHeader() {
+	public function testCacheHeader($expected) {
+
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$this->BcBaser->cacheHeader();
+		$result = xdebug_get_headers();
+		$this->assertEquals($expected, $result);
+
+	}
+
+
+/**
+ * cacheHeader用のデータプロバイダ
+ * 
+ * @return array
+ */
+	public function cacheHeaderDataProvider() {
+		return array(
+			array('test'),
+		);
 	}
 
 /**
  * httpから始まるURLを取得する
  *
- * @return void
+ * @param mixed $url 文字列のURL、または、配列形式のURL
+ * @param bool $sessionId セッションIDを付加するかどうか
+ * @param string $host $_SERVER['HTTP_HOST']の要素
+ * @param string $https $_SERVER['HTTPS']の要素
+ * @param boolean $expected 期待値
+ * @dataProvider getUriDataProvider
  */
-	public function testGetUri() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetUri($url, $sessionId, $host, $https, $expected) {
+		$_SERVER['HTTPS'] = $https;
+		$_SERVER['HTTP_HOST'] = $host;
+
+		$result = $this->BcBaser->getUri($url, $sessionId);
+		$this->assertEquals($expected, $result);
+	}
+
+/**
+ * getUri用のデータプロバイダ
+ * 
+ * @return array
+ */
+	public function getUriDataProvider() {
+		return array(
+			array('/', true, 'localhost', '', 'http://localhost/'),
+			array('/about', true, 'localhost', '', 'http://localhost/about'),
+			array('/about', true, 'test', '', 'http://test/about'),
+			array('/about', false, 'localhost', '', 'http://localhost/about'),
+			array('/about', false, 'localhost', 'on', 'https://localhost/about'),
+		);
 	}
 
 /**
@@ -1513,15 +1552,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->sitemap($pageCategoryId, $recursive);
 	}
 
-/**
- * sitemap用のデータプロバイダ
- * 
- * @return array
- */
 	public function sitemapDataProvider() {
 		return array(
 			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内'),
-			array(2, null, '<a href="\/s\/service">サービス<\/a>'),
+			array(2, null, '<a href="\/s\/index">スマートフォントップページ'),
 			// array(null, 1, ''),
 		);
 	}

@@ -158,6 +158,7 @@ INFO_END;
 
 /**
  * 位置情報を読み込む
+ * 読み込みに成功したら、trueを返す
  * 
  * @return boolean
  * @access public
@@ -179,6 +180,7 @@ INFO_END;
 
 /**
  * 位置情報を取得する
+ * 取得が成功したら、位置情報を返す
  *
  * @param string $address
  * @return boolean 

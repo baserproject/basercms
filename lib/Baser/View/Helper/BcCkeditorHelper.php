@@ -401,9 +401,8 @@ EOL;
 /**
  * CKEditorのテキストエリアを出力する
  *
- * @param string $fieldName
+ * @param string $fieldName エディタのid, nameなどの名前を指定
  * @param array $options
- * @param array $tinyoptions
  * @return string
  */
 	public function editor($fieldName, $options = array()) {
