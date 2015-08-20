@@ -46,6 +46,8 @@ class BcFreezeHelper extends BcFormHelper {
  * 
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
+ * - 凍結時に、$attributes["value"]が指定されている場合、その値がvalueになる。
+ * 　指定されてない場合、$this->request->data[$model][$field]がvalueになる。
  * @return	string	htmlタグ
  * @access	public
  */
@@ -75,6 +77,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @param	string $fieldName フィールド文字列
  * @param	array $options コントロールソース
  * @param	array $attributes html属性
+ * - $attributes['cols']が指定されている場合、値の文字の横幅を指定できる 
  * @param	array	空データの表示有無
  * @return	string $showEmpty htmlタグ
  * @access	public
@@ -105,9 +108,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @param	string $fieldName フィールド文字列
  * @param	string $dateFormat 日付フォーマット
  * @param	string $timeFormat 時間フォーマット
- * @param	mixed	$selected
  * @param	array	$attributes html属性
- * @param	array $showEmpty 空データの表示有無
  * @return string htmlタグ
  * @access public
  */
@@ -295,7 +296,6 @@ class BcFreezeHelper extends BcFormHelper {
  * チェックボックスを表示する
  * 
  * @param string $fieldName フィールド文字列
- * @param title $title タイトル
  * @param array $attributes html属性
  * @return string htmlタグ
  * @access public
@@ -396,18 +396,22 @@ class BcFreezeHelper extends BcFormHelper {
  * 
  * @param string $fieldName フィールド文字列
  * @param	array $attributes html属性
- * @param array $attributes 画像属性
+ * @param array $imageAttributes 画像属性
  * @return string htmlタグ
  * @access public
  */
 	public function image($fieldName, $attributes = array(), $imageAttributes = array()) {
 
-		if (!$attributes)
+		if (!$attributes) {
 			$attributes = array();
+		}
+
 		$output = "";
 		$imageAttributes = array_merge(array('ext' => 'jpg', 'alt' => '', 'dir' => '', 'id' => ''), $imageAttributes);
-		if (!empty($imageAttributes['subdir']))
-			$imageAttributes['subdir'].=DS;
+		
+		if (!empty($imageAttributes['subdir'])) {
+			$imageAttributes['subdir'] .= DS;
+		}
 
 		list($model, $field) = explode('.', $fieldName);
 
@@ -475,7 +479,7 @@ class BcFreezeHelper extends BcFormHelper {
  * カレンダーコントロール付きのテキストフィールド
  * jquery-ui-1.7.2 必須
  * 
- * @param 	string $fieldName フィールド文字列
+ * @param string $fieldName フィールド文字列
  * @param array $attributes HTML属性
  * @return string html
  * @access public

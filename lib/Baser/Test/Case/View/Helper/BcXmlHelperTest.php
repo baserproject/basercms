@@ -35,7 +35,7 @@ class BcXmlHelperTest extends BaserTestCase {
   }
 
   public function tearDown() {
-    unset($this->BcCkeditor);
+    unset($this->BcXml);
     parent::tearDown();
   }
 

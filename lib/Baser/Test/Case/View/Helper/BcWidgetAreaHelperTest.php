@@ -37,7 +37,7 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
   }
 
   public function tearDown() {
-    unset($this->BcCkeditor);
+    unset($this->BcWidgetArea);
     parent::tearDown();
   }
 
