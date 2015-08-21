@@ -109,6 +109,8 @@ class BcFreezeHelper extends BcFormHelper {
  * @param	string $dateFormat 日付フォーマット
  * @param	string $timeFormat 時間フォーマット
  * @param	array	$attributes html属性
+ * - 凍結時、$attributes['selected']に要素を格納することで日付を選択する
+ * (例) $attributes['selected'] = array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1'))
  * @return string htmlタグ
  * @access public
  */
@@ -506,11 +508,11 @@ class BcFreezeHelper extends BcFormHelper {
 
 /**
  * 凍結時用のコントロールを取得する
- * @param	string	フィールド文字列
- * @param	array	コントロールソース
- * @param	array	html属性
- * @return	string	htmlタグ
- * @access	public
+ * @param	string $fieldName フィールド文字列
+ * @param	array	$options コントロールソース
+ * @param	array	$attributes html属性
+ * @return string htmlタグ
+ * @access public
  */
 	public function freezeControll($fieldName, $options, $attributes = array()) {
 
@@ -528,7 +530,6 @@ class BcFreezeHelper extends BcFormHelper {
 		} else {
 			// HABTAM
 			if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') {
-
 				$value = $this->request->data[$model];
 			} else {
 				if (!empty($this->request->data[$model][$field])) {

@@ -131,20 +131,53 @@ class BcFreezeHelperTest extends BaserTestCase {
 /**
  * 日付タグを表示
  * 
+ * @param boolean $freezed フォームを凍結させる
  * @param	string $fieldName フィールド文字列
  * @param	string $dateFormat 日付フォーマット
  * @param	string $timeFormat 時間フォーマット
  * @param	array	$attributes html属性
+ * @param string $expexted 期待値
+ * @dataProvider dateTimeDataProvider
  */
-	public function dateTime($fieldName, $dateFormat, $timeFormat, $attributes) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testDateTime($freezed, $fieldName, $dateFormat, $timeFormat, $attributes, $expected) {
+		
+		// 凍結させる
+		if($freezed) {
+			$this->BcFreeze->freeze();
+
+		}
+
+		$result = $this->BcFreeze->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
+    $this->assertRegExp('/' . $expected . '/s', $result);
 	}
+
+/**
+ * wyear用のデータプロバイダ
+ *
+ * @return array
+ */
+  public function dateTimeDataProvider() {
+    return array(
+      array(false, 'test', 'YMD', '12', array(), 'id="testYear".*id="testMonth".*id="testDay".*id="testHour".*id="testMin".*id="testMeridian"'),
+      array(false, 'test', 'DMY', '12', array(), 'id="testDay".*id="testMonth".*id="testYear"'),
+      array(false, 'test', 'YMD', '24', array(), '59<\/option>.<\/select>$'),
+      array(false, 'test', 'YMD', '12', array('class' => 'bcclass'), 'class="bcclass"'),
+      array(false, 'test', 'YMD', '12', array('empty' => false), '^((?!value="").)*$'),
+      array(false, 'test', 'YMD', '12', array('empty' => array('day' => '選択されていません')), '<option value="">選択されていません'),
+      array(true, 'test', 'YMD', '12', array(), 'type="hidden"'),
+      array(true, 'test', 'YMD', '12', array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1')), '2010年.*4月.*1日'),
+      array(true, 'test', 'YMD', '12', array('selected' => '2010-4-1 11:22:33'), '2010年.*4月.*1日.*11時.*22分.*33秒'),
+      array(true, 'test', 'YMD', '12', array('selected' => array('day' => '100')), 'value="100"'),
+      array(true, 'test', 'YMD', '12', array('empty' => true), '^((?!value="").)*$'),
+    );
+  }
 
 /**
  * 和暦年
  *
  * MEMO : $selectedまわりの挙動に変更が必要と思われます
  *
+ * @param boolean $freezed フォームを凍結させる
  * @param string $fieldName Prefix name for the SELECT element
  * @param integer $minYear First year in sequence
  * @param integer $maxYear Last year in sequence
@@ -156,12 +189,13 @@ class BcFreezeHelperTest extends BaserTestCase {
  */
 	public function testWyear($freezed, $fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty, $expected) {
 		
-		$this->markTestIncomplete('このテストは、一部未完成です。');
-
-
+		if ($selected) {
+			$this->markTestIncomplete('このテストは、一部未完成です。');
+		}
 		// 凍結させる
 		if($freezed) {
 			$this->BcFreeze->freeze();
+
 		}
 
 		$result = $this->BcFreeze->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
@@ -178,11 +212,11 @@ class BcFreezeHelperTest extends BaserTestCase {
       array(false, 'test', null, null, null, array(), true, 'id="testWareki".*value="h-47".*<option value="h-7">平成 7<\/option>.<\/select>$'),
       array(false, 'test', 2010, null, null, array(), true, '<option value="h-22">平成 22<\/option>.<\/select>$'),
       array(false, 'test', null, 2010, null, array(), true, '<option value=""><\/option>.<option value="h-22">'),
-      // array(false, 'test', null, null, '平成 22', array(), true, '<fasd>'),
+      array(false, 'test', null, null, '平成 22', array(), true, '<fasd>'),
       array(false, 'test', null, null, null, array('type' => 'hidden'), true, 'type="hidden"'),
       array(false, 'test', null, null, null, array(), false, 'id="testYear">.<option value="h-47">'),
       array(true, 'test', null, null, null, array(), true, 'type="hidden"'),
-      // array(true, 'test', null, null, '平成 27', array(), true, 'gsfdd'),
+      array(true, 'test', null, null, '平成 27', array(), true, 'gsfdd'),
     );
   }
 
@@ -337,24 +371,29 @@ class BcFreezeHelperTest extends BaserTestCase {
  * TODO 確認画面には未チェック
  * 
  * @param boolean $freezed フォームを凍結させる
+ * @param string $name $this->request->data[$model][$field]['name']に格納する値
+ * @param string $exist フィールド文字列 $this->request->data[$model][$field . '_exists'] に格納する値
  * @param string $fieldName フィールド文字列
  * @param	array $attributes html属性
  * @param array $imageAttributes 画像属性
  * @param string $expexted 期待値
  * @dataProvider imageDataProvider
  */
-	public function testImage($freezed, $fieldName, $attributes, $imageAttributes, $expected) {
+	public function testImage($freezed, $name, $exist, $fieldName, $attributes, $imageAttributes, $expected) {
 		
-		$this->markTestIncomplete('このテストは、一部未完成です。');
 
+		list($model, $field) = explode('.', $fieldName);
+		$this->BcFreeze->request->data[$model][$field]['name'] = $name;
+		$this->BcFreeze->request->data[$model][$field . '_exists'] = $exist;
+		
 		// 凍結させる
 		if($freezed) {
+			// $this->markTestIncomplete('このテストは、一部未完成です。');
 			$this->BcFreeze->freeze();
-			list($model, $field) = explode('.', $fieldName);
-			$this->BcFreeze->request->data[$model][$field] = 'BaserCMS';
+
 		}
 
-		$result = $this->BcFreeze->file($fieldName, $attributes, $imageAttributes);
+		$result = $this->BcFreeze->image($fieldName, $attributes, $imageAttributes);
     $this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
@@ -365,8 +404,15 @@ class BcFreezeHelperTest extends BaserTestCase {
  */
   public function imageDataProvider() {
     return array(
-      array(false, 'test', array(), array(), '<input type="file" name="data\[test\]"  id="test"'),
-      // array(false, 'test', array('size' => 100), array(), 'size="100"'),
+      array(false, null, null, 'test.image', array(), array(), '<input type="file" name="data\[test\]\[image\]"  id="testImage"'),
+      array(false, null, null, 'test.image', array('size' => 100), array(), 'size="100"'),
+      array(false, null, 'testexist', 'test.image', array(), array(), 'src="\/\/tests.*label="削除する"'),
+      array(false, null, 'testexist', 'test.image', array(), array('dir'=>'testdir'), 'src="\/testdir\/tests'),
+      array(true, null, null, 'test.image', array(), array(), '&nbsp;'),
+      array(true, 'testname', null, 'test.image', array(), array(), 'id="testImageExists".*src="tmp\/test\/img'),
+      array(true, null, null, 'test.image', array(), array('alt' => 'testalt'), '&nbsp;'),
+      array(true, null, 'testexist', 'test.image', array(), array(), 'dir=""'),
+      array(true, null, 'testexist', 'test.image', array(), array('dir'=>'testdir'), 'dir="testdir"'),
     );
   }
 
@@ -459,27 +505,40 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * 凍結時用のコントロールを取得する
+ * 
+ * MEMO : freezeControlの547行目~559行目あたりのテストが実装されていません。
+ * if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') { ...
+ * 
  * @param	string	フィールド文字列
  * @param	array	コントロールソース
  * @param	array	html属性
+ * @param string $expexted 期待値
+ * @dataProvider freezeControllDataProvider
  */
-	public function freezeControll($freezed, $fieldName, $options, $attributes, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testFreezeControll($fieldName, $options, $attributes, $expected) {
+		$result = $this->BcFreeze->freezeControll($fieldName, $options, $attributes);
+    $this->assertRegExp('/' . $expected . '/s', $result);
 	}
 	
+/**
+ * freezeControll用のデータプロバイダ
+ *
+ * @return array
+ */
+  public function freezeControllDataProvider() {
+    return array(
+      array('baser.freezed', array(), array(), '<input type="hidden" name="data\[baser\]\[freezed\]" class="" id="baserFreezed"'), 
+      array('baser.freezed', array(), array('value' => 'BaserCMS'), 'value="BaserCMS"'),
+      array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'select'), 'value="BaserCMS"\/>BaserCMS'), 
+      // array('baser.freezed', array('1' => 'BaserCMS'), array('value' => array('id' => '1',),'multiple' => 'select',), 'value="1".*<li>BaserCMS'), 
+      array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'checkbox'), 'value="BaserCMS"\/>BaserCMS'), 
+      array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'), 
+    );
+  }
+
+
 	public function upload($freezed, $fieldName, $options, $expected) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 }

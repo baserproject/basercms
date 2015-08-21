@@ -78,6 +78,7 @@ class BcFormHelper extends FormHelper {
  *
  * @param string $fieldName Prefix name for the SELECT element
  * @param string $dateFormat DMY, MDY, YMD, or null to not generate date inputs.
+ * - W が入力された場合、和暦のselectと年月日の接尾辞が付与される
  * @param string $timeFormat 12, 24, or null to not generate time inputs.
  * @param array $attributes Array of Attributes
  * @return string Generated set of select boxes for the date and time formats chosen.
