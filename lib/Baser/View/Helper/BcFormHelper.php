@@ -1069,11 +1069,16 @@ DOC_END;
 		}
 
 		if (strlen($selected) > 4 || $selected === 'now') {
+
 			$wareki = $this->BcTime->convertToWareki(date('Y-m-d', strtotime($selected)));
-			$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+			if (!is_null($this->value($fieldName))) {
+				$wareki = $this->BcTime->convertToWareki($this->value($fieldName));
+			}
+
 			$w = $this->BcTime->wareki($wareki);
 			$wyear = $this->BcTime->wyear($wareki);
 			$selected = $w . '-' . $wyear;
+
 		} elseif ($selected === false) {
 			$selected = null;
 		} elseif (strpos($selected, '-') === false) {
@@ -1088,7 +1093,7 @@ DOC_END;
 		}
 		$yearOptions = array('min' => $minYear, 'max' => $maxYear);
 		$attributes = array_merge($attributes, array(
-			'selected' => $selected,
+			'value' => $selected,
 			'empty'=> $showEmpty
 		));
 		return $this->hidden($fieldName . ".wareki", array('value' => true)) .
@@ -1312,7 +1317,7 @@ DOC_END;
 		$_attributes = array('separator' => '<br />', 'quotes' => true);
 		$attributes = Hash::merge($_attributes, $attributes);
 
-		// $selected、$showEmptyをFormHelperのselectに対応
+		// $selected、$showEmptyをFormHelperのselect()に対応
 		$attributes += array(
 			'value' => $selected,
 			'empty' => $showEmpty

@@ -15,6 +15,7 @@
 App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 App::uses('BcPageHelper', 'View/Helper');
+
 /**
  * BcPage helper library.
  *
@@ -90,7 +91,7 @@ class BcPageHelperTest extends BaserTestCase {
  * 
  */
 	public function testBeforeRender() {
-        $this->markTestIncomplete('このテストは、まだ実装されていません。');
+	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -106,7 +107,7 @@ class BcPageHelperTest extends BaserTestCase {
  * 現在のページを設定する方法がわからないのでスキップしています
  */
 	public function testGetCategory() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+    	$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -131,9 +132,40 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * 公開状態を取得する
+ * 
+ * @param boolean $status 公開状態
+ * @param mixed $begin 公開開始日時
+ * @param mixed $end 公開終了日時
+ * @param string $expected 期待値
+ * @param string $message テスト失敗時、表示するメッセージ
+ * @dataProvider allowPublishDataProvider
  */
-	public function testAllowPublish() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testAllowPublish($status, $begin, $end, $expected, $message) {
+		$data = array(
+			'Page' => array(
+				'status' => $status,
+				'publish_begin' => $begin,
+				'publish_end' => $end,
+			)
+		);
+		$result = $this->BcPage->allowPublish($data);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * allowPublish用データプロバイダ
+ *
+ * @return array
+ */
+	public function allowPublishDataProvider() {
+		return array(
+			array(true, 0, 0, true, 'statusの値がそのままかえってきません'),
+			array(true, '2200-1-1', 0, false, '公開開始日時の前に公開されています'),
+			array(true, 0, '1999-1-1', false, '公開終了日時の後に公開されています'),
+			array(true, '2199-1-1', '2200-1-1', false, '公開開始日時の前に公開されています'),
+			array(true, '1999-1-1', '2000-1-1', false, '公開開始日時の後に公開されています'),
+			array(false, '1999-1-1', 0, false, '非公開になっていません'),
+		);
 	}
 
 /**
