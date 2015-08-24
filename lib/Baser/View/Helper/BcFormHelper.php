@@ -1299,11 +1299,11 @@ DOC_END;
 /**
  * 文字列保存用複数選択コントロール
  * 
- * @param string $fieldName
- * @param array $options
- * @param mixed $selected
- * @param array $attributes
- * @param mixed $showEmpty
+ * @param string $fieldName id,nameなどの名前
+ * @param array $options optionタグの値
+ * @param mixed $selected selectedを付与する要素	
+ * @param array $attributes htmlの属性
+ * @param mixed $showEmpty 空要素の表示/非表示、初期値
  * @return string
  * @access public
  */
@@ -1311,6 +1311,12 @@ DOC_END;
 
 		$_attributes = array('separator' => '<br />', 'quotes' => true);
 		$attributes = Hash::merge($_attributes, $attributes);
+
+		// $selected、$showEmptyをFormHelperのselectに対応
+		$attributes += array(
+			'value' => $selected,
+			'empty' => $showEmpty
+		);
 
 		$quotes = $attributes['quotes'];
 		unset($attributes['quotes']);
@@ -1321,7 +1327,7 @@ DOC_END;
 		$id = $_options['id'];
 		$_id = $_options['id'] . '_';
 		$name = $_options['name'];
-		$out = '<div id="' . $_id . '">' . $this->select($fieldName . '_', $options, $selected, $attributes, $showEmpty) . '</div>';
+		$out = '<div id="' . $_id . '">' . $this->select($fieldName . '_', $options, $attributes) . '</div>';
 		$out .= $this->hidden($fieldName);
 		$script = <<< DOC_END
 $(document).ready(function() {
