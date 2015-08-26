@@ -53,6 +53,8 @@ class MenuTest extends BaserTestCase {
     $this->assertFalse($this->Menu->validates());
     $this->assertArrayHasKey('name', $this->Menu->validationErrors);
     $this->assertEquals('メニュー名を入力してください。', current($this->Menu->validationErrors['name']));
+    $this->assertArrayHasKey('link', $this->Menu->validationErrors);
+    $this->assertEquals('リンクURLを入力してください。', current($this->Menu->validationErrors['link']));
   }
 
   public function test桁数チェック正常系() {
@@ -65,7 +67,7 @@ class MenuTest extends BaserTestCase {
     $this->assertTrue($this->Menu->validates());
   }
 
-  public function test半角英数チェック異常系() {
+  public function test桁数チェック異常系() {
     $this->Menu->create(array(
       'Menu' => array(
         'name' => '123456789012345678901',
