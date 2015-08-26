@@ -71,7 +71,7 @@ class Menu extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param string フィールド名
+ * @param string $field フィールド名
  * @return array コントロールソース
  * @access public
  */
