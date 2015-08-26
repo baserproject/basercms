@@ -1,6 +1,7 @@
 <?php
+
 /**
- * サイト内検索結果
+ * [ADMIN] 検索インデックス一覧　Ajax
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -11,4 +12,4 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->includeCore('Contents/search');
+$this->BcBaser->element('search_indices/index_list');

@@ -38,7 +38,7 @@ $config['BcApp'] = array(
 				array('name' => 'ユーザー登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'add')),
 				array('name' => 'ユーザーグループ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
 				array('name' => 'ユーザーグループ登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'add')),
-				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
+				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index')),
 				array('name' => 'メニュー一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'menus', 'action' => 'index')),
 				array('name' => 'メニュー登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'menus', 'action' => 'add')),
 				array('name' => 'エディタテンプレート一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),

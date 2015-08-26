@@ -38,7 +38,7 @@ class BlogContent extends BlogAppModel {
  * @var array
  * @access public
  */
-	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+	public $actsAs = array('BcSearchIndexManager', 'BcPluginContent', 'BcCache');
 
 /**
  * hasMany
@@ -176,7 +176,7 @@ class BlogContent extends BlogAppModel {
 
 		// 検索用テーブルへの登録・削除
 		if (!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status']) {
-			$this->saveContent($this->createContent($this->data));
+			$this->saveSearchIndex($this->createSearchIndex($this->data));
 			clearDataCache();
 			$datas = $this->BlogPost->find('all', array(
 				'conditions' => array('BlogPost.blog_content_id' => $this->data['BlogContent']['id']),
@@ -187,7 +187,7 @@ class BlogContent extends BlogAppModel {
 				$this->BlogPost->afterSave(true);
 			}
 		} else {
-			$this->deleteContent($this->data['BlogContent']['id']);
+			$this->deleteSearchIndex($this->data['BlogContent']['id']);
 		}
 	}
 
@@ -198,7 +198,7 @@ class BlogContent extends BlogAppModel {
  * @access	public
  */
 	public function beforeDelete($cascade = true) {
-		return $this->deleteContent($this->id);
+		return $this->deleteSearchIndex($this->id);
 	}
 
 /**
@@ -208,19 +208,19 @@ class BlogContent extends BlogAppModel {
  * @return array
  * @access public
  */
-	public function createContent($data) {
+	public function createSearchIndex($data) {
 		if (isset($data['BlogContent'])) {
 			$data = $data['BlogContent'];
 		}
 
 		$_data = array();
-		$_data['Content']['type'] = 'ブログ';
-		$_data['Content']['model_id'] = $this->id;
-		$_data['Content']['category'] = '';
-		$_data['Content']['title'] = $data['title'];
-		$_data['Content']['detail'] = $data['description'];
-		$_data['Content']['url'] = '/' . $data['name'] . '/index';
-		$_data['Content']['status'] = true;
+		$_data['SearchIndex']['type'] = 'ブログ';
+		$_data['SearchIndex']['model_id'] = $this->id;
+		$_data['SearchIndex']['category'] = '';
+		$_data['SearchIndex']['title'] = $data['title'];
+		$_data['SearchIndex']['detail'] = $data['description'];
+		$_data['SearchIndex']['url'] = '/' . $data['name'] . '/index';
+		$_data['SearchIndex']['status'] = true;
 
 		return $_data;
 	}

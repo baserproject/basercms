@@ -1593,7 +1593,7 @@ class BcBaserHelper extends AppHelper {
  * @return void ページ一覧
  */
 	public function sitemap($pageCategoryId = null, $recursive = null) {
-		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
+		$pageList = $this->requestAction('/search_indices/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 		$params = array('pageList' => $pageList);
 		if (empty($_SESSION['Auth']['User'])) {
 			$params = am($params, array(

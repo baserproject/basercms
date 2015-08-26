@@ -21,19 +21,19 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'contents', 'num' => $this->passedArgs['num']);
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'num' => $this->passedArgs['num']);
 } else {
-	$url = array('plugin' => null, 'controller' => 'contents');
+	$url = array('plugin' => null, 'controller' => 'search_indices');
 }
 ?>
 <div class="section search-box">
-	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
+	<?php echo $this->BcForm->create('SearchIndex', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
 	<!--カテゴリが必要な場合は使って下さい。
 	<?php if (!empty($this->BcBaser->siteConfig['content_categories'])) : ?>
-		<?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
+		<?php echo $this->BcForm->input('SearchIndex.c', array('type' => 'select', 'options' => BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
 	<?php endif ?>
 	-->
-	<?php echo $this->BcForm->input('Content.q') ?>
+	<?php echo $this->BcForm->input('SearchIndex.q') ?>
 	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
 	<?php echo $this->BcForm->end() ?>
 </div>

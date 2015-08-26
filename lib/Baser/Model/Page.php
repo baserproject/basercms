@@ -49,7 +49,7 @@ class Page extends AppModel {
  *
  * @var array
  */
-	public $actsAs = array('BcContentsManager', 'BcCache');
+	public $actsAs = array('BcSearchIndexManager', 'BcCache');
 
 /**
  * 更新前のページファイルのパス
@@ -72,7 +72,7 @@ class Page extends AppModel {
  *
  * @var boolean
  */
-	public $contentSaving = true;
+	public $searchIndexSaving = true;
 
 /**
  * 公開WebページURLリスト
@@ -271,11 +271,11 @@ class Page extends AppModel {
 		}
 
 		// 検索用テーブルに登録
-		if ($this->contentSaving) {
+		if ($this->searchIndexSaving) {
 			if (empty($data['exclude_search'])) {
-				$this->saveContent($this->createContent($data));
+				$this->saveSearchIndex($this->createSearchIndex($data));
 			} else {
-				$this->deleteContent($data['id']);
+				$this->deleteSearchIndex($data['id']);
 			}
 		}
 
@@ -369,7 +369,7 @@ class Page extends AppModel {
  * @param array $data
  * @return array
  */
-	public function createContent($data) {
+	public function createSearchIndex($data) {
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -398,29 +398,29 @@ class Page extends AppModel {
 		}
 
 		$_data = array();
-		$_data['Content']['type'] = 'ページ';
+		$_data['SearchIndex']['type'] = 'ページ';
 		// $this->idに値が入ってない場合もあるので
 		if (!empty($data['id'])) {
-			$_data['Content']['model_id'] = $data['id'];
+			$_data['SearchIndex']['model_id'] = $data['id'];
 		} else {
-			$_data['Content']['model_id'] = $this->id;
+			$_data['SearchIndex']['model_id'] = $this->id;
 		}
-		$_data['Content']['category'] = '';
+		$_data['SearchIndex']['category'] = '';
 		if (!empty($data['page_category_id'])) {
 			$categoryPath = $this->PageCategory->getPath($data['page_category_id'], array('title'));
 			if ($categoryPath) {
-				$_data['Content']['category'] = $categoryPath[0]['PageCategory']['title'];
+				$_data['SearchIndex']['category'] = $categoryPath[0]['PageCategory']['title'];
 			}
 		}
-		$_data['Content']['title'] = $data['title'];
+		$_data['SearchIndex']['title'] = $data['title'];
 		$parameters = explode('/', preg_replace("/^\//", '', $data['url']));
 
 		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
-		$_data['Content']['detail'] = $data['description'] . ' ' . $detail;
-		$_data['Content']['url'] = $data['url'];
-		$_data['Content']['status'] = $this->isPublish($data['status'], $data['publish_begin'], $data['publish_end']);
+		$_data['SearchIndex']['detail'] = $data['description'] . ' ' . $detail;
+		$_data['SearchIndex']['url'] = $data['url'];
+		$_data['SearchIndex']['status'] = $this->isPublish($data['status'], $data['publish_begin'], $data['publish_end']);
 
 		return $_data;
 	}
@@ -432,7 +432,7 @@ class Page extends AppModel {
  * @return boolean
  */
 	public function beforeDelete($cascade = true) {
-		return $this->deleteContent($this->id);
+		return $this->deleteSearchIndex($this->id);
 	}
 
 /**
