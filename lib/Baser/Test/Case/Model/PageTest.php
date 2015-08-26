@@ -20,7 +20,9 @@ App::uses('Page', 'Model');
 class PageTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Page'
+		'baser.Default.SiteConfig',
+		'baser.Default.Page',
+		'baser.Default.PageCategory',
 	);
 
 /**
@@ -49,6 +51,92 @@ class PageTest extends BaserTestCase {
 		unset($this->Page);
 		parent::tearDown();
 	}
+
+/**
+ * validate
+ */
+  public function test必須チェック() {
+    $this->Page->create(array(
+      'Page' => array(
+        'name' => '',
+      )
+    ));
+    $this->assertFalse($this->Page->validates());
+    $this->assertArrayHasKey('name', $this->Page->validationErrors);
+    $this->assertEquals('ページ名を入力してください。', current($this->Page->validationErrors['name']));
+  }
+
+  public function test桁数チェック正常系() {
+    $this->Page->create(array(
+      'Page' => array(
+        'name' => '12345678901234567890123456789012345678901234567890',
+        'title' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
+        'description' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
+      )
+    ));
+    $this->assertTrue($this->Page->validates());
+  }
+
+  public function test桁数チェック異常系() {
+    $this->Page->create(array(
+      'Page' => array(
+        'name' => '123456789012345678901234567890123456789012345678901',
+        'title' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
+        'description' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
+      )
+    ));
+    $this->assertFalse($this->Page->validates());
+    $this->assertArrayHasKey('name', $this->Page->validationErrors);
+    $this->assertEquals('ページ名は50文字以内で入力してください。', current($this->Page->validationErrors['name']));
+    $this->assertArrayHasKey('title', $this->Page->validationErrors);
+    $this->assertEquals('ページタイトルは255文字以内で入力してください。', current($this->Page->validationErrors['title']));
+    $this->assertArrayHasKey('description', $this->Page->validationErrors);
+    $this->assertEquals('説明文は255文字以内で入力してください。', current($this->Page->validationErrors['description']));
+  }
+
+  public function test既存ページチェック正常() {
+    $this->Page->create(array(
+      'Page' => array(
+        'name' => 'test',
+        'page_category_id' => '1',
+      )
+    ));
+    $this->assertTrue($this->Page->validates());
+  }
+
+  public function test既存ページチェック異常系() {
+    $this->Page->create(array(
+      'Page' => array(
+        'name' => 'index',
+        'page_category_id' => '1',
+      )
+    ));
+    $this->assertFalse($this->Page->validates());
+    $this->assertArrayHasKey('name', $this->Page->validationErrors);
+    $this->assertEquals('指定したページは既に存在します。ファイル名、またはカテゴリを変更してください。', current($this->Page->validationErrors['name']));
+  }
+
+  public function testPHP構文チェック正常系() {
+    $this->Page->create(array(
+      'Page' => array(
+      	'name' => 'test',
+        'contents' => '<?php echo "正しい"; ?>',
+      )
+    ));
+    $this->assertTrue($this->Page->validates());
+  }
+
+  public function testPHP構文チェック異常系() {
+    $this->Page->create(array(
+      'Page' => array(
+      	'name' => 'test',
+        'contents' => '<?php ??>',
+      )
+    ));
+    $this->assertFalse($this->Page->validates());
+    $this->assertArrayHasKey('contents', $this->Page->validationErrors);
+    $this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
+  }
 
 /**
  * 固定ページとして管理されているURLかチェックする
