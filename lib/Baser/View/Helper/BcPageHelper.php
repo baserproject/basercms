@@ -108,7 +108,6 @@ class BcPageHelper extends Helper {
  * @return array 失敗すると getCategory() は FALSE を返します。
  */
 	public function getCategory() {
-
 		if (!empty($this->request->data['PageCategory']['id'])) {
 			return $this->request->data['PageCategory'];
 		} else {
@@ -144,8 +143,8 @@ class BcPageHelper extends Helper {
 /**
  * ページリストを取得する
  * 
- * @param int $pageCategoryId
- * @param int $recursive
+ * @param int $pageCategoryId カテゴリID
+ * @param int $recursive 関連データの階層
  * @return array
  */
 	public function getPageList($pageCategoryId, $recursive = null) {

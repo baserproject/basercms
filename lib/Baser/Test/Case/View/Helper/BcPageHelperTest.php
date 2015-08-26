@@ -71,6 +71,7 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->_View = new BcAppView();
 		$this->_View->helpers = array('BcBaser', 'BcPage');
 		$this->_View->loadHelpers();
+		$this->Page = ClassRegistry::init('Page');
 		$this->BcBaser = $this->_View->BcBaser;
 		$this->BcPage  = $this->_View->BcPage;
 		$this->BcPage->BcBaser = $this->_View->BcBaser;
@@ -87,6 +88,25 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 /**
+ * テスト用に固定ページのデータを取得する
+ * 
+ * @return array 固定ページのデータ
+ */
+	public function getPageData($conditions = null, $fields = null) {
+		$options = array(
+  		'conditions' => $conditions,
+  		'fields' => $fields,
+  		'recursive' => 0
+		);
+		$pages = $this->Page->find('all', $options);
+		if (empty($pages)) {
+			return false;
+		} else {
+			return $pages[0];
+		}
+	}
+
+/**
  * beforeRender
  * 
  */
@@ -94,41 +114,259 @@ class BcPageHelperTest extends BaserTestCase {
 	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
+
+
 /**
  * ページ機能用URLを取得する
+ * 
+ * @param array $pageId 固定ページID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getUrlDataProvider
  */
-	public function testGetUrl() {
-		$this->markTestIncomplete('このテストは、まだ完成されていません。');
+	public function testGetUrl($pageId, $expected, $message = null) {
+		// 固定ページのデータ取得
+		$conditions = array('Page.id' => $pageId);
+		$fields = array('url');
+		$page = $this->getPageData($conditions, $fields);
+
+		$result = $this->BcPage->getUrl($page);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * getUrl用データプロバイダ
+ *
+ * @return array
+ */
+	public function getUrlDataProvider() {
+		return array(
+			array(1, '/'),
+			array(2, '/company'),
+			array(3, '/service'),
+			array(4, '/recruit'),
+			array(5, '/m/'),
+			array(6, '/s/'),
+		);
 	}
 
 /**
  * 現在のページが所属するカテゴリデータを取得する
  * 
- * 現在のページを設定する方法がわからないのでスキップしています
+ * MEMO : コンソールから実行すると失敗する
+ * 
+ * @param array $pageId 固定ページID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getCategoryDataProvider
  */
-	public function testGetCategory() {
-    	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetCategory($pageId, $expected, $message = null) {
+		// 固定ページのデータ取得
+		$conditions = array('Page.id' => $pageId);
+		$fields = array('PageCategory.id');
+		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
+
+		$result = $this->BcPage->getCategory();
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * getCategory用データプロバイダ
+ *
+ * @return array
+ */
+	public function getCategoryDataProvider() {
+		return array(
+			array(1, false),
+			array(2, false),
+			array(3, false),
+			array(4, false),
+			array(5, array('id' => '1'), 'カテゴリのデータを取得できません'),
+			array(6, array('id' => '2'), 'カテゴリのデータを取得できません'),
+			array(999, false),
+		);
 	}
 
 /**
  * 現在のページが所属する親のカテゴリを取得する
+ * 
+ * @param array $pageId 固定ページID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getParentCategoryDataProvider
  */
-	public function testGetParentCategory() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetParentCategory($pageId, $expected, $message = null) {
+		// 固定ページのデータ取得
+		$conditions = array('Page.id' => $pageId);
+		$fields = array('PageCategory.id');
+		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
+
+		$result = $this->BcPage->getParentCategory();
+		$this->assertEquals($expected, $result, $message);		
 	}
 
 /**
- * ページリストを取得する
+ *  getParentCategory用データプロバイダ
+ *
+ * @return array
  */
-	public function testGetPageList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function getParentCategoryDataProvider() {
+		return array(
+			array(1, false),
+			array(2, false),
+			array(5, array()),
+			array(6, array()),
+			array(12, array('PageCategory' => array(
+				'id' => '2',
+        'parent_id' => null,
+        'lft' => '3',
+        'rght' => '4',
+        'name' => 'smartphone',
+        'title' => 'スマートフォン',
+        'sort' => '1',
+        'contents_navi' => false,
+				'owner_id' => null,
+				'layout_template' => '',
+        'content_template' => '',
+        'modified' => null,
+        'created' => '2015-01-27 12:56:52'
+			)),
+			'親カテゴリを取得できません'),
+			array(999, false),
+
+		);
 	}
+
+
+/**
+ * ページリストを取得する
+ * 
+ * @param int $pageCategoryId カテゴリID
+ * @param int $recursive 関連データの階層	
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getPageListDataProvider
+ */
+	public function testGetPageList($pageCategoryId, $recursive, $expected, $message = null) {
+		$result = $this->BcPage->getPageList($pageCategoryId, $recursive);
+		$this->assertEquals($expected, $result, $message);		
+	}
+
+/**
+ * getPageList用データプロバイダ
+ *
+ * @return array
+ */
+	public function getPageListDataProvider() {
+		return array(
+			array(1, null, array(
+				'pages' => array(
+					array('Page'=>array('name' => 'index','title' => '','url' => '/m/index')),
+					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/m/about')),
+				)),
+			'カテゴリからページリストを取得できません'),
+			array(2, null, array(
+				'pages' => array(
+					array('Page'=>array('name' => 'index','title' => '', 'url' => '/s/index')),
+					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/s/about')),
+					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
+					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
+					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
+				),
+				'pageCategories' => array(
+					array(
+						'PageCategory' => array('id' => '3','title' => 'ガラホ'),
+						'children' => array('pages' =>array(
+								array(
+									'Page'=>array('name' => 'garaphone','title' => 'ガラホ','url' => '/gh/')
+								)
+							)
+						),
+					)
+				)),
+			'子カテゴリをもったカテゴリからページリストを取得できません'),
+			array(2, 0, array(
+				'pages' => array(
+					array('Page'=>array('name' => 'index','title' => '', 'url' => '/s/index')),
+					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/s/about')),
+					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
+					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
+					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
+				),
+				'pageCategories' => array(
+					array(
+						'PageCategory' => array('id' => '3','title' => 'ガラホ'),
+					)
+				)
+			),
+			'$recursive(関連データの階層)を指定できません'),
+			array(2, 2, array(
+				'pages' => array(
+					array('Page'=>array('name' => 'index','title' => '', 'url' => '/s/index')),
+					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/s/about')),
+					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
+					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
+					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
+				),
+				'pageCategories' => array(
+					array(
+						'PageCategory' => array('id' => '3','title' => 'ガラホ'),
+						'children' => array('pages' =>array(
+								array(
+									'Page'=>array('name' => 'garaphone','title' => 'ガラホ','url' => '/gh/')
+								)
+							)
+						),
+					)
+				)
+			),
+			'$recursive(関連データの階層)を指定できません'),
+			array(3, null, array('pages' => array(
+					array('Page'=>array(
+						'name' => 'garaphone',
+						'title' => 'ガラホ',
+						'url' => '/gh/',
+					)),
+			)),
+			'親カテゴリをもったカテゴリからページリストを取得できません'),
+			array(4, null, array(), '存在しないカテゴリに対してfalseが返ってきません'),
+		);
+	}
+
 /**
  * カテゴリ名を取得する
+ * 
+ * @param array $pageId 固定ページID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getCategoryNameDataProvider
  */
-	public function testGetCategoryName() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetCategoryName($pageId, $expected, $message = null) {
+		// 固定ページのデータ取得
+		$conditions = array('Page.id' => $pageId);
+		$fields = array('PageCategory.id','PageCategory.name');
+		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
+
+		$result = $this->BcPage->getCategoryName();
+		$this->assertEquals($expected, $result, $message);
 	}
+
+
+/**
+ * getCategoryName用データプロバイダ
+ *
+ * @return array
+ */
+	public function getCategoryNameDataProvider() {
+		return array(
+			array(0, false, 'IDが0のページは存在しません'),
+			array(1, false, 'IDが1のページはカテゴリを持っていません'),
+			array(5, 'mobile', 'カテゴリ名を取得できません'),
+			array(6, 'smartphone', 'カテゴリ名を取得できません'),
+			array(12, 'garaphone', 'カテゴリ名を取得できません'),
+		);
+	}
+
 
 /**
  * 公開状態を取得する
@@ -284,9 +522,34 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * コンテンツナビ有効チェック
+ *
+ * @param string $expected 期待値
+ * @param string $message テスト失敗時、表示するメッセージ
+ * @dataProvider contentsNaviAvailableDataProvider
  */
-	public function testContentsNaviAvailable() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testContentsNaviAvailable($pageId, $expected, $message = null) {
+		// 固定ページのデータ取得
+		$conditions = array('Page.id' => $pageId);
+		$fields = array('Page.page_category_id','PageCategory.id','PageCategory.contents_navi');
+		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
+
+		$result = $this->BcPage->contentsNaviAvailable();
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * contentsNaviAvailable 共通のデータプロバイダ
+ *
+ * @return array
+ */
+	public function contentsNaviAvailableDataProvider() {
+		return array(
+			array(0, false),
+			array(1, false),
+			array(5, false),
+			array(6, false),
+			array(12, true, 'コンテンツナビが有効になっていません'),
+		);
 	}
 
 /**
