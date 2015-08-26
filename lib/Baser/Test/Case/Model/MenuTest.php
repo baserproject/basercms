@@ -40,7 +40,7 @@ class MenuTest extends BaserTestCase {
     parent::tearDown();
   }
 
-  /**
+/**
  * validate
  */
   public function test必須チェック() {
