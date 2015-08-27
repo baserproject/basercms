@@ -48,7 +48,7 @@ class PageCategory extends AppModel {
  * hasMany
  * 
  * @var array
- * @access @public
+ * @access public
  */
 	public $hasMany = array('Page' => array('className' => 'Page',
 			'conditions' => '',
