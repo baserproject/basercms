@@ -66,12 +66,11 @@ class ThemeFolderTest extends BaserTestCase {
   }
 
   public function test重複チェック異常系() {
-    $rootdir = realpath('../../');
     $this->ThemeFolder->create(array(
       'ThemeFolder' => array(
         'name' => 'm-single',
         'pastname' => 'test',
-        'parent' => $rootdir . '/app/webroot/theme/',
+        'parent' => WWW_ROOT . 'theme/',
       )
     ));
     $this->assertFalse($this->ThemeFolder->validates());
