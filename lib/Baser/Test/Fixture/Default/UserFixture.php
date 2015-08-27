@@ -23,6 +23,18 @@ class UserFixture extends BaserTestFixture {
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
 		),
+		array(
+			'id' => '2',
+			'name' => 'basertest2',
+			'password' => '47281835ff5f903924455e855517cda7ae8d4523',
+			'real_name_1' => 'basertest2',
+			'real_name_2' => null,
+			'email' => 'basertest2@example.com',
+			'user_group_id' => '2',
+			'nickname' => null,
+			'created' => '2015-01-27 12:57:59',
+			'modified' => '2015-01-27 12:57:59'
+		),
 	);
 
 }
