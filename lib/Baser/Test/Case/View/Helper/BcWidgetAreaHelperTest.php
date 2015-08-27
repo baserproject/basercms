@@ -47,9 +47,8 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  * @param $no ウィジェットエリアNO
  * @param array $options オプション
  * @param string $expected 期待値
- * @dataProvider showDataProvider
  */
-  public function testShow ($no, $options, $expected) {
+  public function testShow () {
     $this->markTestIncomplete('このテストは、まだ実装されていません。');
   }
 

@@ -157,7 +157,7 @@ class UserTest extends BaserTestCase {
 	public function test既存ユーザチェック正常系() {
 		$this->User->create(array(
 			'User' => array(
-				'name' => 'basertest2',
+				'name' => 'hoge',
 			)
 		));
 		$this->assertTrue($this->User->validates());
