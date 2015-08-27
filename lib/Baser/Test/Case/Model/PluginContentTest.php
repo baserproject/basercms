@@ -43,17 +43,26 @@ class PluginContentTest extends BaserTestCase {
 /**
  * validate
  */
-  public function test必須チェック() {
+  public function testCreate必須チェック() {
     $this->PluginContent->create(array(
       'PluginContent' => array(
-        'content_id' => '',
         'plugin' => '',
       )
     ));
     $this->assertFalse($this->PluginContent->validates());
 
-    $this->assertArrayHasKey('content_id', $this->PluginContent->validationErrors);
-    $this->assertEquals('コンテンツIDを入力してください。', current($this->PluginContent->validationErrors['content_id']));
+    $this->assertArrayHasKey('plugin', $this->PluginContent->validationErrors);
+    $this->assertEquals('プラグイン名を入力してください。', current($this->PluginContent->validationErrors['plugin']));
+  }
+
+  public function testUpdate必須チェック() {
+    $this->PluginContent->save(array(
+        'content_id' => '',
+        'id' => '1'
+      )
+    );
+    $this->assertFalse($this->PluginContent->validates());
+
     $this->assertArrayHasKey('content_id', $this->PluginContent->validationErrors);
     $this->assertEquals('コンテンツIDを入力してください。', current($this->PluginContent->validationErrors['content_id']));
   }
@@ -82,5 +91,19 @@ class PluginContentTest extends BaserTestCase {
     $this->assertArrayHasKey('plugin', $this->PluginContent->validationErrors);
     $this->assertEquals('プラグイン名は20文字以内で入力してください。', current($this->PluginContent->validationErrors['plugin']));
   }
+
+  public function test重複チェック異常系() {
+    $this->PluginContent->create(array(
+      'PluginContent' => array(
+        'name' => 'news',
+      )
+    ));
+    $this->assertFalse($this->PluginContent->validates());
+
+    $this->assertArrayHasKey('name', $this->PluginContent->validationErrors);
+    $this->assertEquals('入力されたコンテンツ名は既に使用されています。', current($this->PluginContent->validationErrors['name']));
+  }
+
+
 
 }
