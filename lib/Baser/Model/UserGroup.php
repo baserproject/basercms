@@ -134,7 +134,7 @@ class UserGroup extends AppModel {
 /**
  * 認証プレフィックスを取得する
  *
- * @param	int	$id
+ * @param	int	$id ユーザーグループID
  * @return	string
  */
 	public function getAuthPrefix($id) {
@@ -153,8 +153,9 @@ class UserGroup extends AppModel {
 /**
  * ユーザーグループデータをコピーする
  * 
- * @param int $id
- * @param array $data
+ * @param int $id ユーザーグループID
+ * @param array $data DBに挿入するデータ
+ * @param boolean $recursive Permissionもcopyをするかしないか
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $recursive = true) {
@@ -198,7 +199,7 @@ class UserGroup extends AppModel {
 /**
  * グローバルメニューを利用可否確認
  * 
- * @param string $id
+ * @param string $id ユーザーグループID
  * @return boolean
  */
 	public function isAdminGlobalmenuUsed($id) {
