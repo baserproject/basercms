@@ -49,7 +49,7 @@ class ThemeFile extends AppModel {
 	);
 
 /**
- * フォルダの重複チェック
+ * ファイルの重複チェック
  * 
  * @param	array	$check
  * @return	boolean
@@ -60,7 +60,7 @@ class ThemeFile extends AppModel {
 			return true;
 		}
 		$targetPath = $this->data['ThemeFile']['parent'] . DS . $check[key($check)];
-		if (is_dir($targetPath)) {
+		if (is_file($targetPath)) {
 			return false;
 		} else {
 			return true;
