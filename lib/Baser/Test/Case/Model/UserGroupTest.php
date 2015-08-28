@@ -33,6 +33,7 @@ class UserGroupTest extends BaserTestCase {
     'baser.Default.Permission',
     'baser.Default.Page',
     'baser.Default.PluginContent',
+    'baser.Default.Favorite',
   );
 
   public function setUp() {
@@ -124,7 +125,20 @@ class UserGroupTest extends BaserTestCase {
  * @param boolean $cascade
  */
   public function testBeforeDelete() {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+    $this->UserGroup->data['UserGroup']['id'] = 2;
+    $this->UserGroup->delete(2);
+
+    // 削除したユーザグループに属していたユーザーを取得
+    $data = $this->UserGroup->User->find('all', array(
+      'conditions' => array('User.id' => 2),
+      'fields' => 'User.user_group_id',
+      'recursive' => 'User.user_group_id',
+      )
+    );
+    $result = $data[0]['User']['user_group_id'];
+    
+    $this->assertEquals(1, $result, '削除したユーザーグループに属するユーザーを、管理者グループに変更できません');
   } 
 
 /**
@@ -161,7 +175,90 @@ class UserGroupTest extends BaserTestCase {
     );
   }
 
+/**
+ * ユーザーグループデータをコピーする
+ * 
+ * @param int $id ユーザーグループID
+ * @param array $data DBに挿入するデータ
+ * @param boolean $recursive Permissionもcopyをするかしないか
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider copyDataProvider
+ */
+  public function testCopy($id, $data, $recursive, $expected, $message = null) {
 
+    $this->UserGroup->copy($id, $data, $recursive);
+
+    if (!$recursive) {
+
+      $copiedId = $this->UserGroup->getInsertID(); // コピーしたデータのID
+      $result = $this->UserGroup->find('all', array(
+          'conditions' => array(
+            'UserGroup.id' => $copiedId
+          ),
+          'recursive' => 0,
+          'fields' => array('name', 'title')
+
+        )
+      );
+    } else {
+      $copiedId = $this->UserGroup->Permission->getInsertID(); // コピーしたデータのID
+      $result = $this->UserGroup->Permission->find('all', array(
+          'conditions' => array(
+            'Permission.id' => $copiedId
+          ),
+          'recursive' => 0,
+          'fields' => array('Permission.name','Permission.user_group_id')
+        )
+      );
+    };
+    
+    $this->assertEquals($expected, $result);
+  }
+
+/**
+ * copy用データプロバイダ
+ *
+ * @return array
+ */
+  public function copyDataProvider() {
+    return array(
+      array(1, array(), false,
+        array(array('UserGroup' => array(
+            'name' => 'admins_copy',
+            'title' => 'システム管理_copy',
+            'id' => '3'
+          )
+        )
+      ), 'id指定でデータをコピーできません'),
+      array(null,
+        array('UserGroup' => array('name' => 'hogename', 'title' => 'hogetitle')),
+        false,
+        array(array('UserGroup' => array(
+            'name' => 'hogename_copy',
+            'title' => 'hogetitle_copy',
+            'id' => '3'
+          )
+        )
+      ), 'data指定でデータをコピーできません'),
+      array(2, array(), true,
+        array(array('Permission' => array(
+            'name' => 'エディタテンプレート呼出',
+            'user_group_id' => '3'
+          )
+        )
+      ), 'id指定でPermissionのデータをコピーできません'),
+      array(null,
+        array('UserGroup' => array('id' => 2, 'name' => 'hogename', 'title' => 'hogetitle')),
+        true,
+        array(array('Permission' => array(
+            'name' => 'エディタテンプレート呼出',
+            'user_group_id' => '3'
+          )
+        )
+      ), 'data指定でPermissionのデータをコピーできません'),
+    );
+  }
 
 /**
  * グローバルメニューを利用可否確認
