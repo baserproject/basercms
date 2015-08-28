@@ -155,12 +155,16 @@ class UserGroup extends AppModel {
  * 
  * @param int $id ユーザーグループID
  * @param array $data DBに挿入するデータ
- * @param boolean $recursive Permissionもcopyをするかしないか
+ * @param boolean $recursive 関連したPermissionもcopyをするかしないか
  * @return mixed UserGroup Or false
  */
 	public function copy($id, $data = array(), $recursive = true) {
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('UserGroup.id' => $id), 'recursive' => -1));
+		} else {
+			if (!empty($data['UserGroup']['id'])) {
+				$id = $data['UserGroup']['id'];
+			}
 		}
 		$data['UserGroup']['name'] .= '_copy';
 		$data['UserGroup']['title'] .= '_copy';
