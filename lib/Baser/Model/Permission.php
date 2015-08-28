@@ -94,9 +94,9 @@ class Permission extends AppModel {
 	);
 
 /**
- * 設定をチェックする
+ * 権限の必要なURLかチェックする
  *
- * @param array $check
+ * @param array $check チェックするURL
  * @return boolean True if the operation should continue, false if it should abort
  * @access public
  */
@@ -130,7 +130,7 @@ class Permission extends AppModel {
 /**
  * 認証プレフィックスを取得する
  *
- * @param int $id
+ * @param int $id PermissionのID
  * @return string
  * @access public
  */
@@ -176,6 +176,7 @@ class Permission extends AppModel {
 
 /**
  * beforeSave
+ * urlの先頭に / を付けて絶対パスにする
  * 
  * @param array $options
  * @return boolean
@@ -201,7 +202,6 @@ class Permission extends AppModel {
  * 
  * @param array $url
  * @param string $userGroupId
- * @param array $params
  * @return boolean
  * @access public
  */
@@ -277,6 +277,10 @@ class Permission extends AppModel {
 	public function copy($id, $data = array()) {
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
+		}
+
+		if (!isset($data['Permission']['user_group_id']) || !isset($data['Permission']['name'])) {
+			return false;
 		}
 
 		if ($this->find('count', array('conditions' => array('Permission.user_group_id' => $data['Permission']['user_group_id'], 'Permission.name' => $data['Permission']['name'])))) {
