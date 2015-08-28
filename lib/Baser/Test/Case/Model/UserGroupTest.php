@@ -121,8 +121,6 @@ class UserGroupTest extends BaserTestCase {
 
 /**
  * 関連するユーザーを管理者グループに変更し保存する
- * 
- * @param boolean $cascade
  */
   public function testBeforeDelete() {
 
