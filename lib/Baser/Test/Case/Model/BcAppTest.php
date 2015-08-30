@@ -322,7 +322,6 @@ class BcAppTest extends BaserTestCase {
 		);
 	}
 
-
 /**
  * 英数チェック
  *
@@ -440,7 +439,7 @@ class BcAppTest extends BaserTestCase {
 /**
  * halfText用データプロバイダ
  *
- * @return array
+ * @return array 確認する値を含む配列。先頭の要素のみチェックされる
  */
 	public function halfTextDataProvider() {
 		return array(
@@ -499,8 +498,8 @@ class BcAppTest extends BaserTestCase {
  * リストチェック
  * リストに含む場合はエラー
  * 
- * @param string $check Value to check
- * @param array $list List to check against
+ * @param string $check 確認する値
+ * @param array $list 対象となるリスト
  * @param boolean $expect
  * @dataProvider notInListDataProvider
  */
@@ -640,7 +639,7 @@ class BcAppTest extends BaserTestCase {
 /**
  * 日付の正当性チェック
  * 
- * @param array $check
+ * @param array $check 確認する値
  * @param boolean $expect
  * @dataProvider checkDateDataProvider
  */
@@ -675,28 +674,30 @@ class BcAppTest extends BaserTestCase {
 /**
  * ファイルが送信されたかチェックするバリデーション
  * 
- * @param array $check
- * @param boolean $expect
+ * @param array $check ファイルのデータ
+ * @param boolean $expect　
  * @dataProvider notFileEmptyDataProvider
  */
-	// public function testNotFileEmpty($check,$expect) {
-	// 	$file = array(
-
-	// 	);
-	// 	$result = $this->BcApp->notFileEmpty($file);
-	// 	$this->assertEquals($expect, $result);
-	// }
+	public function testNotFileEmpty($check,$expect) {
+		$file = array(
+			$check
+		);
+		$result = $this->BcApp->notFileEmpty($file);
+		$this->assertEquals($expect, $result);
+	}
 
 /**
  * checkDate用データプロバイダ
  *
  * @return array
  */
-	// public function notFileEmptyDataProvider() {
-	// 	return array(
-	// 		array(array(), false),
-	// 	);
-	// }
+	public function notFileEmptyDataProvider() {
+		return array(
+			array(array('size' => 0), false),
+			array(array('size' => 100), true),
+			array(array(), false),
+		);
+	}
 
 
 }

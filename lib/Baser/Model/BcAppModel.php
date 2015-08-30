@@ -405,9 +405,10 @@ class BcAppModel extends Model {
 
 /**
  * 最短の長さチェック
+ * - 対象となる値の長さが、指定した最短値より長い場合、trueを返す
  *
- * @param mixed	$check
- * @param int	$min
+ * @param mixed	$check 対象となる値
+ * @param int	$min 値の最短値
  * @return boolean
  */
 	public function minLength($check, $min) {
@@ -418,9 +419,10 @@ class BcAppModel extends Model {
 
 /**
  * 最長の長さチェック
+ * - 対象となる値の長さが、指定した最長値より短い場合、trueを返す
  *
- * @param mixed	$check
- * @param int	$max
+ * @param mixed	$check 対象となる値
+ * @param int	$max 値の最長値
  * @param boolean
  */
 	public function maxLength($check, $max) {
@@ -432,9 +434,9 @@ class BcAppModel extends Model {
 /**
  * 範囲を指定しての長さチェック
  *
- * @param mixed	$check
- * @param int	$min
- * @param int	$max
+ * @param mixed	$check 対象となる値
+ * @param int	$min 値の最短値
+ * @param int	$max 値の最長値
  * @param boolean
  */
 	public function between($check, $min, $max) {
@@ -700,7 +702,8 @@ class BcAppModel extends Model {
 	}
 /**
  * 半角チェック
- * @param array $check
+ * 
+ * @param array $check 確認する値を含む配列。先頭の要素のみチェックされる
  * @return boolean
  */
 	public function halfText($check) {
@@ -906,8 +909,8 @@ class BcAppModel extends Model {
  * リストチェック
  * リストに含む場合はエラー
  *
- * @param array $check Value to check
- * @param array $list List to check against
+ * @param array $check 確認する値
+ * @param array $list 対象となるリスト
  * @return boolean Succcess
  */
 	public function notInList($check, $list) {
@@ -1168,7 +1171,7 @@ class BcAppModel extends Model {
 /**
  * 複数のEメールチェック（カンマ区切り）
  * 
- * @param array $check
+ * @param array $check 複数のメールアドレス
  * @return boolean 
  */
 	public function emails($check) {
@@ -1400,7 +1403,7 @@ class BcAppModel extends Model {
 /**
  * 日付の正当性チェック
  * 
- * @param array $check
+ * @param array $check 確認する値
  * @return boolean
  */
 	public function checkDate($check) {

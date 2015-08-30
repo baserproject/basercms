@@ -252,9 +252,9 @@ class BcTimeHelperTest extends BaserTestCase {
 
 	public function getJpWeekDataProvider() {
 		return array(
-			array('2015-8-11', 	'',		 '火', 		'火曜日'),
-			array('2015-8-11', 	'ようび', '火ようび', '$suffix変更'),
-			array('2015-8-111', '', 	 '', 		'日付として解析できなかった場合'),
+			array('2015-8-11', '', '火', '火曜日'),
+			array('2015-8-11', 'ようび', '火ようび', '$suffix変更'),
+			array('2015-8-111', '', '', '日付として解析できなかった場合'),
 		);
 	}
 
@@ -272,9 +272,9 @@ class BcTimeHelperTest extends BaserTestCase {
 
 	public function jpWeekDataProvider() {
 		return array(
-			array('2015-8-11', 	'',		 '火', 		'火曜日'),
-			array('2015-8-11', 	'ようび', '火ようび', '$suffix変更'),
-			array('2015-8-111', '', 	 '', 		'日付として解析できなかった場合'),
+			array('2015-8-11', '', '火', '火曜日'),
+			array('2015-8-11', 'ようび', '火ようび', '$suffix変更'),
+			array('2015-8-111', '', '', '日付として解析できなかった場合'),
 		);
 	}
 }

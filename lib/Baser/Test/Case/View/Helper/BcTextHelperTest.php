@@ -348,8 +348,6 @@ class BcTextHelperTest extends BaserTestCase {
  */
 	public function testListValue() {
 
-
-
 		// ユーザーモデル
 		$this->Helper->BcForm->setEntity('User', true);
 		$expect = 'システム管理';
@@ -441,12 +439,11 @@ class BcTextHelperTest extends BaserTestCase {
 
 /**
  * 日付より年齢を取得するヘルパーのテスト
- * ※ 2016年4月以降失敗する。要変更
  */
 	public function testAge() {
 		// 適当な生年月日を入力
 		$year = 1980;
-		$age = $year - 1965;
+		$age = $year - 1945;
 		$result = $this->Helper->age($year . "-4-1");
 		$expect = $age . "歳";
 		$this->assertEquals($expect, $result);
@@ -466,10 +463,6 @@ class BcTextHelperTest extends BaserTestCase {
 		$expect = "秘密";
 		$this->assertEquals($expect, $result);
 
-		$this->markTestIncomplete(
-			'このテストは、問題があります。
-			age()は年齢を取得する関数です。年が変わると失敗するテストが実装されています。'
-		);
 	}
 
 /**
@@ -494,6 +487,12 @@ class BcTextHelperTest extends BaserTestCase {
 		$result = $this->Helper->booleanStatus(1);
 		$expect = "有効";
 		$this->assertEquals($expect, $result);
+
+		// キーが文字列の場合
+		$result = $this->Helper->booleanStatus('baser');
+		$expect = "無効";
+		$this->assertEquals($expect, $result);
+
 	}
 
 }
