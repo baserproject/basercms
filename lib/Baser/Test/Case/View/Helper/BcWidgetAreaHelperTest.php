@@ -44,11 +44,6 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 /**
  * ウィジェットエリアを表示する
  *
- * MEMO : エラーに対処できずスキップしています。
- * this->BcWidgetArea->show(1);
- * → Element Not Found: Elements/widgets/text.ctp
- *
- *
  * @param $no ウィジェットエリアNO
  * @param array $options オプション
  * @param string $expected 期待値
@@ -56,20 +51,6 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  */
   public function testShow ($no, $options, $expected) {
     $this->markTestIncomplete('このテストは、まだ実装されていません。');
-    
-    $this->expectOutputRegex($expected);
-    $this->BcWidgetArea->show($no);
-  }
-
-/**
- * download用のデータプロバイダ
- *
- * @return array
- */
-  public function showDataProvider() {
-    return array(
-      array("1", array(), "fas"),
-    );
   }
 
 }

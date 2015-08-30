@@ -175,8 +175,6 @@ class BcFreezeHelperTest extends BaserTestCase {
 /**
  * 和暦年
  *
- * MEMO : $selectedまわりの挙動に変更が必要と思われます
- *
  * @param boolean $freezed フォームを凍結させる
  * @param string $fieldName Prefix name for the SELECT element
  * @param integer $minYear First year in sequence
@@ -188,10 +186,7 @@ class BcFreezeHelperTest extends BaserTestCase {
  * @dataProvider wyearDataProvider
  */
 	public function testWyear($freezed, $fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty, $expected) {
-		
-		if ($selected) {
-			$this->markTestIncomplete('このテストは、一部未完成です。');
-		}
+
 		// 凍結させる
 		if($freezed) {
 			$this->BcFreeze->freeze();
@@ -212,11 +207,11 @@ class BcFreezeHelperTest extends BaserTestCase {
       array(false, 'test', null, null, null, array(), true, 'id="testWareki".*value="h-47".*<option value="h-7">平成 7<\/option>.<\/select>$'),
       array(false, 'test', 2010, null, null, array(), true, '<option value="h-22">平成 22<\/option>.<\/select>$'),
       array(false, 'test', null, 2010, null, array(), true, '<option value=""><\/option>.<option value="h-22">'),
-      array(false, 'test', null, null, '平成 22', array(), true, '<fasd>'),
+      array(false, 'test', null, null, 'h-47', array(), true, 'value="h-47" selected="selected"'),
       array(false, 'test', null, null, null, array('type' => 'hidden'), true, 'type="hidden"'),
       array(false, 'test', null, null, null, array(), false, 'id="testYear">.<option value="h-47">'),
       array(true, 'test', null, null, null, array(), true, 'type="hidden"'),
-      array(true, 'test', null, null, '平成 27', array(), true, 'gsfdd'),
+      array(true, 'test', null, null, '2035-1-1', array(), true, '平成 47'),
     );
   }
 
@@ -331,7 +326,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 /**
  * ファイルタグを出力
  * 
- * MEMO : 3番目のテストは、以下のエラーがでるためコメントアウトしています。
+ * MEMO : 3番目のテストは、以下のエラーに対応できなかったためスキップしています。
  * BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。
  * 
  * @param boolean $freezed フォームを凍結させる
@@ -388,7 +383,6 @@ class BcFreezeHelperTest extends BaserTestCase {
 		
 		// 凍結させる
 		if($freezed) {
-			// $this->markTestIncomplete('このテストは、一部未完成です。');
 			$this->BcFreeze->freeze();
 
 		}
@@ -519,7 +513,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 		$result = $this->BcFreeze->freezeControll($fieldName, $options, $attributes);
     $this->assertRegExp('/' . $expected . '/s', $result);
 	}
-	
+
 /**
  * freezeControll用のデータプロバイダ
  *

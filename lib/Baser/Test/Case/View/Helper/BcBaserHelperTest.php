@@ -1538,7 +1538,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * サイトマップを出力する
  * 
  * TODO : 階層($recursive)を指定した場合のテスト
- * このメソッドでフィクスチャを利用することができれば、テストを記述できます。
  * 
  * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
  *	- 0 : 仕様確認要
@@ -1548,6 +1547,11 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider sitemapDataProvider
  */
 	public function testSitemap($pageCategoryId, $recursive, $expected) {
+
+		if ($recursive) {
+			$this->markTestIncomplete('このテストは、一部末完成です。');
+		}
+
 		$this->expectOutputRegex('/' . $expected . '/');
 		$this->BcBaser->sitemap($pageCategoryId, $recursive);
 	}
@@ -1556,7 +1560,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		return array(
 			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内'),
 			array(2, null, '<a href="\/s\/index">スマートフォントップページ'),
-			// array(null, 1, ''),
+			array(null, 1, ''),
 		);
 	}
 
@@ -1603,7 +1607,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 現在のログインユーザーが管理者グループかどうかチェックする
- * 
+ *
  * @param int $userGroupId ユーザーグループID
  * @param boolean $expected 期待値
  * @dataProvider isAdminUserDataProvider
@@ -1619,7 +1623,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		return array(
 			array(1, true),
 			array(2, false),
-			array(null, true),
+			array(null, false),
 		);
 	}
 
@@ -2082,8 +2086,6 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testContentsNavi() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->expectOutputRegex('/<div id="ContentsNavi">/');
-		$this->BcBaser->contentsNavis();
 	}
 
 /**
@@ -2121,7 +2123,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleMaps() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->expectOutputRegex('/<div id="map"/');
 		$this->BcBaser->googleMaps();
 	}

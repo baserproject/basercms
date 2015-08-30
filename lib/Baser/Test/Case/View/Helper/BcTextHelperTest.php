@@ -442,15 +442,16 @@ class BcTextHelperTest extends BaserTestCase {
  */
 	public function testAge() {
 		// 適当な生年月日を入力
+		$now = date('Y');
 		$year = 1980;
-		$age = $year - 1945;
-		$result = $this->Helper->age($year . "-4-1");
+		$age = $now - $year;
+		$result = $this->Helper->age($year . "-1-1");
 		$expect = $age . "歳";
 		$this->assertEquals($expect, $result);
 
 		// 歳を年生きたに変更する
-		$result = $this->Helper->age("1980-4-1", "年生きた");
-		$expect = "35年生きた";
+		$result = $this->Helper->age($year . "-1-1", "年生きた");
+		$expect = $age . "年生きた";
 		$this->assertEquals($expect, $result);
 
 		// 年齢が指定されていない場合
