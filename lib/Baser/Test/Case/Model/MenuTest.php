@@ -90,7 +90,7 @@ class MenuTest extends BaserTestCase {
  * @dataProvider getControlSourceDataProvider
  */
   public function testGetControlSource($field, $expected, $message = null) {
-    $result = $this->Menu->getControlSource('menu_type');
+    $result = $this->Menu->getControlSource($field);
     $this->assertEquals($expected, $result, $message);
   }
 
@@ -102,6 +102,7 @@ class MenuTest extends BaserTestCase {
   public function getControlSourceDataProvider() {
     return array(
       array('menu_type', array('default' => '公開ページ','admin' => '管理画面'), 'コントロールソースを取得できません'),
+      array('hoge', false, '存在しないキーです'),
     );
   }
 

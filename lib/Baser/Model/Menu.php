@@ -77,7 +77,11 @@ class Menu extends AppModel {
  */
 	public function getControlSource($field = null) {
 		$controlSources['menu_type'] = array('default' => '公開ページ', 'admin' => '管理画面');
-		return $controlSources[$field];
+		if (isset($controlSources[$field])) {
+			return $controlSources[$field];
+		} else {
+			return false;
+		}
 	}
 
 }
