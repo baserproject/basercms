@@ -104,4 +104,19 @@ class ThemeTest extends BaserTestCase {
     $this->assertEquals('既に存在するテーマ名です。', current($this->Theme->validationErrors['name']));
   }
 
+/**
+ * 保存
+ */
+  public function testSaveOnRename() {
+    $path = WWW_ROOT . 'theme' . DS;
+    $data = array('Theme' => array(
+      'old_name' => 'm-single',
+      'name' => 'new-m-single',
+      )
+    );
+    $this->Theme->save($data);
+    $this->assertFileExists($path . 'new-m-single', 'ファイル名を変更できません');
+    rename($path . 'new-m-single', $path . 'm-single');
+  }
+
 }
