@@ -3,8 +3,13 @@
  * PermissionFixture
  *
  */
-class PermissionFixture extends BaserTestFixture {
-
+class PermissionModelFixture extends BaserTestFixture {
+/**
+ * Name of the object
+ *
+ * @var string
+ */
+  public $name = 'Permission';
 /**
  * Records
  *
