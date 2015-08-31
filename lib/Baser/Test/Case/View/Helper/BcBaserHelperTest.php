@@ -1623,7 +1623,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		return array(
 			array(1, true),
 			array(2, false),
-			array(null, false),
+			array(null, true)
 		);
 	}
 
