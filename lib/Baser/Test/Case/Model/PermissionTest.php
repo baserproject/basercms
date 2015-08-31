@@ -29,7 +29,7 @@ class PermissionTest extends BaserTestCase {
   public $fixtures = array(
     'baser.Default.Page',
     'baser.Default.PluginContent',
-    'baser.Model.Permission',
+    'baser.Model.PermissionModel',
     'baser.Default.UserGroup',
   );
 
