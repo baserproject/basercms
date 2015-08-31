@@ -105,7 +105,7 @@ class PluginContentTest extends BaserTestCase {
   }
 
 /**
- * PluginContentのデータをURLか取得
+ * PluginContentのデータをURLから取得
  * プラグイン名の書き換え
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
  * 
