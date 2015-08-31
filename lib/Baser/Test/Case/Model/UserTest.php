@@ -184,4 +184,183 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
+
+/**
+ * コントロールソースを取得する
+ *
+ * @param string $field フィールド名
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getControlSourceDataProvider
+ */
+	public function testGetControlSource($field, $expected, $message = null) {
+		$result = $this->User->getControlSource($field);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * isAdminGlobalmenuUsed用データプロバイダ
+ *
+ * @return array
+ */
+  public function getControlSourceDataProvider() {
+    return array(
+      array('user_group_id', array(1 => 'システム管理', 2 => 'サイト運営'), 'コントロールソースを取得する取得できません'),
+      array('hoge', false, '存在しないフィールド名です'),
+    );
+  }
+
+/**
+ * ユーザーリストを取得する
+ * 条件を指定する場合は引数を指定する
+ * 
+ * @param array $conditions 取得条件
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getUserListDataProvider
+ */
+	public function testGetUserList($conditions, $expected, $message = null) {
+		$result = $this->User->getUserList($conditions);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * getUserList用データプロバイダ
+ *
+ * @return array
+ */
+  public function getUserListDataProvider() {
+    return array(
+      array(array(), array(1 => 'basertest', 2 => 'basertest2'), 'コントロールソースを取得する取得できません'),
+      array(array('User.id' => 1), array(1 => 'basertest'), 'コントロールソースを取得する取得できません'),
+    );
+  }
+
+
+/**
+ * フォームの初期値を設定する
+ */
+	public function testGetDefaultValue() {
+		$result = $this->User->getDefaultValue();
+		$expected = array('User' => array('user_group_id' => 1));
+		$this->assertEquals($expected, $result, 'フォームの初期値が正しくありません');
+	}
+
+
+/**
+ * afterFind
+ *
+ * @param array 結果セット
+ * @param array $primary
+ */
+	public function testAfterFind() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		// $results = $this->User->find('all');
+		// $result = $this->User->afterFind($results, true);
+		// $this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * 取得結果を変換する
+ * HABTM対応
+ *
+ * @param array 結果セット
+ */
+	public function testConvertResults() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ユーザーが許可されている認証プレフィックスを取得する
+ *
+ * @param string $userName ユーザーの名前
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getAuthPrefixDataProvider
+ */
+	public function testGetAuthPrefix($userName, $expected, $message = null) {
+		$result = $this->User->getAuthPrefix($userName);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+/**
+ * getUserList用データプロバイダ
+ *
+ * @return array
+ */
+  public function getAuthPrefixDataProvider() {
+    return array(
+      array('basertest', 'admin', 'ユーザーの認証プレフィックスを正しく取得できません'),
+      array('basertest2', 'operator', 'ユーザーの認証プレフィックスを正しく取得できません'),
+    );
+  }
+
+/**
+ * beforeSave
+ * 
+ * @param type $options
+ * @return boolean
+ */
+	public function testBeforeSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterSave
+ * 
+ * @param boolean $created 
+ */
+	public function testAfterSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * よく使う項目の初期データをユーザーに適用する
+ * 
+ * @param type $userId ユーザーID
+ * @param type $userGroupId ユーザーグループID
+ * @param array $expected 期待値
+ * @param array $expectedLastData Favoriteに最後に挿入されたデータ
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider applyDefaultFavoritesDataProvider
+ */
+	public function testApplyDefaultFavorites($userId, $userGroupId, $expected, $expectedLastData, $message = null) {
+		$result = $this->User->applyDefaultFavorites($userId, $userGroupId);
+
+		$LastId = $this->User->Favorite->getLastInsertID();
+		$LastData = $this->User->Favorite->find('all',array(
+			'conditions' => array('Favorite.id' => $LastId),
+			'fields' => array('Favorite.name'),
+			'recursive' => 0,
+			)
+		);
+
+		$this->assertEquals($expected, $result, $message);
+		$this->assertEquals($expectedLastData, $LastData[0]['Favorite']['name'], $message);
+	}
+
+/**
+ * applyDefaultFavorites用データプロバイダ
+ *
+ * @return array
+ */
+  public function applyDefaultFavoritesDataProvider() {
+    return array(
+      array(1, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'),
+      array(2, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'),
+      array(1, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'),
+      array(2, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'),
+    );
+  }
+
+/**
+ * ユーザーに関連するよく使う項目を削除する
+ */
+	public function testDeleteFavorites() {
+		$this->User->Favorite->deleteAll(1);
+		$result = $this->User->Favorite->find('all');
+		$expected = array();
+		$this->assertEquals($expected, $result, 'ユーザーに関連するよく使う項目を削除できません');
+	}
 }

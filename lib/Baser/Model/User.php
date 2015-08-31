@@ -152,7 +152,7 @@ class User extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param string フィールド名
+ * @param string $field フィールド名
  * @return array コントロールソース
  */
 	public function getControlSource($field) {
@@ -173,7 +173,7 @@ class User extends AppModel {
  * ユーザーリストを取得する
  * 条件を指定する場合は引数を指定する
  * 
- * @param array $conditions
+ * @param array $conditions 取得条件
  * @return array
  */
 	public function getUserList($conditions = array()) {
@@ -258,7 +258,7 @@ class User extends AppModel {
 /**
  * ユーザーが許可されている認証プレフィックスを取得する
  *
- * @param string $userName
+ * @param string $userName ユーザーの名前
  * @return string
  */
 	public function getAuthPrefix($userName) {
@@ -303,8 +303,8 @@ class User extends AppModel {
 /**
  * よく使う項目の初期データをユーザーに適用する
  * 
- * @param type $userId
- * @param type $userGroupId
+ * @param type $userId ユーザーID
+ * @param type $userGroupId ユーザーグループID
  */
 	public function applyDefaultFavorites($userId, $userGroupId) {
 		$result = true;
@@ -327,16 +327,15 @@ class User extends AppModel {
 		}
 		return $result;
 	}
-	
+
 /**
  * ユーザーに関連するよく使う項目を削除する
  * 
- * @param int $userId
+ * @param int $userId ユーザーID
  * @return boolean
  */
 	public function deleteFavorites($userId) {
 		return $this->Favorite->deleteAll(array('Favorite.user_id' => $userId), false);
 	}
-			
-	
+
 }
