@@ -104,6 +104,46 @@ class PluginContentTest extends BaserTestCase {
     $this->assertEquals('入力されたコンテンツ名は既に使用されています。', current($this->PluginContent->validationErrors['name']));
   }
 
+/**
+ * PluginContentのデータをURLか取得
+ * プラグイン名の書き換え
+ * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
+ * 
+ * @param $url
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider currentPluginContentDataProvider
+ */
+  public function testCurrentPluginContent($url, $expected, $message = null) {
+    $result = $this->PluginContent->currentPluginContent($url);
+    $this->assertEquals($expected, $result);
+  }
 
+/**
+ * currentPluginContent用データプロバイダ
+ *
+ * @return array
+ */
+  public function currentPluginContentDataProvider() {
+    return array(
+      array('/news',
+            array('PluginContent' => array(
+                'name' => 'news',
+                'plugin' => 'blog'
+              )
+            ),
+            'PluginContentのデータを取得できません'),
+      array('/news/index',
+            array('PluginContent' => array(
+                'name' => 'news',
+                'plugin' => 'blog'
+              )
+            ),
+            'PluginContentのデータを取得できません'),
+      array('/index/news', array(), '正しくないURLでデータが取得できます'),
+      array('hoge', array(), '正しくないURLでデータが取得できます'),
+      array(null, false, 'URLの入力なしでデータが取得できます'),
+    );
+  }
 
 }

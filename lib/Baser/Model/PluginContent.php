@@ -79,6 +79,7 @@ class PluginContent extends AppModel {
 	);
 
 /**
+ * PluginContentのデータをURLか取得
  * プラグイン名の書き換え
  * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
  * 
