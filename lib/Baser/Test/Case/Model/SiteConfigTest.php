@@ -107,4 +107,48 @@ class SiteConfigTest extends BaserTestCase {
     $this->assertTrue($this->SiteConfig->validates());
   }
 
+/**
+ * テーマの一覧を取得する
+ */
+  public function testGetTheme() {
+    $result = $this->SiteConfig->getThemes();
+    $expected = array(
+      'm-single' => 'M-single',
+      'nada-icons' => 'Nada-icons',
+      'skelton' => 'Skelton'
+    );
+    $this->assertEquals($expected, $result);
+  }
+
+/**
+ * コントロールソースを取得する
+ * 
+ * @param string $field フィールド名
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getControlSourceDataProvider
+ */
+  public function testGetControlSource($field, $expected, $message = null) {
+    $result = $this->SiteConfig->getControlSource($field);
+    $this->assertEquals($expected, $result, $message);
+  }
+
+/**
+ * getControlSource用データプロバイダ
+ *
+ * @return array
+ */
+  public function getControlSourceDataProvider() {
+    return array(
+      array('mode', array(
+        -1 => 'インストールモード',
+        0 => 'ノーマルモード',
+        1 => 'デバッグモード１',
+        2 => 'デバッグモード２',
+        3 => 'デバッグモード３',
+        ), 'コントロールソースを取得できません'),
+      array('hoge', false, '存在しないキーです'),
+    );
+  }
+
 }
