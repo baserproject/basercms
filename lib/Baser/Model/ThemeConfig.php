@@ -59,6 +59,11 @@ class ThemeConfig extends AppModel {
 		return $data;
 	}
 
+/**
+ * 画像を削除する
+ * 
+ * @param array $data
+ */
 	public function deleteImage($data) {
 		$saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
 		$images = array('logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5');
