@@ -189,7 +189,7 @@ class ContentsController extends AppController {
  */
 	public function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
 		if (isConsole()) {
-			$this->Page = new Page(null, null, 'baser');
+			$this->Page = ClassRegistry::init('Page');
 		}
 		return $this->__getPageListRecursive($parentCategoryId, $recursive);
 	}

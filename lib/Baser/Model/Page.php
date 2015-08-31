@@ -131,11 +131,18 @@ class Page extends AppModel {
 		)
 	);
 
+/**
+ * コンストラクタ
+ *
+ * @param boolean $id
+ * @param string $table
+ * @param string $ds
+ */
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
-		if (isConsole()) {
+		if (isConsole() && !isInstalled()) {
 			App::uses('PageCategory', 'Model');
-			$this->PageCategory = new PageCategory(null, null, 'baser');
+			$this->PageCategory = new PageCategory(null, null, $ds);
 		}
 	}
 

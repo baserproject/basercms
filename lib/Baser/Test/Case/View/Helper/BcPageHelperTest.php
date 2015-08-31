@@ -32,6 +32,7 @@ class BcPageHelperTest extends BaserTestCase {
 		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
 		'baser.Default.Page',
+		'baser.Default.PageCategory',
 		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
@@ -39,7 +40,6 @@ class BcPageHelperTest extends BaserTestCase {
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
-		'baser.Default.PageCategory',
 		'baser.Default.ThemeConfig',
 	);
 
@@ -92,11 +92,11 @@ class BcPageHelperTest extends BaserTestCase {
  * 
  * @return array 固定ページのデータ
  */
-	public function getPageData($conditions = null, $fields = null) {
+	public function getPageData($conditions = array(), $fields = array()) {
 		$options = array(
-  		'conditions' => $conditions,
-  		'fields' => $fields,
-  		'recursive' => 0
+  			'conditions' => $conditions,
+  			'fields' => $fields,
+  			'recursive' => 0
 		);
 		$pages = $this->Page->find('all', $options);
 		if (empty($pages)) {
@@ -163,10 +163,14 @@ class BcPageHelperTest extends BaserTestCase {
 	public function testGetCategory($pageId, $expected, $message = null) {
 		// 固定ページのデータ取得
 		$conditions = array('Page.id' => $pageId);
-		$fields = array('PageCategory.id');
-		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
+		$this->BcPage->request->data = $this->getPageData($conditions);
 
 		$result = $this->BcPage->getCategory();
+		if($result) {
+			$result = array(
+				'id' => $result['id']
+			);
+		}
 		$this->assertEquals($expected, $result, $message);
 	}
 
@@ -198,9 +202,8 @@ class BcPageHelperTest extends BaserTestCase {
 	public function testGetParentCategory($pageId, $expected, $message = null) {
 		// 固定ページのデータ取得
 		$conditions = array('Page.id' => $pageId);
-		$fields = array('PageCategory.id');
+		$fields = array();
 		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
-
 		$result = $this->BcPage->getParentCategory();
 		$this->assertEquals($expected, $result, $message);		
 	}
