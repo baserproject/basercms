@@ -444,26 +444,26 @@ class Plugin extends AppModel {
 		}
 
 		if (ClassRegistry::isKeySet('Favorite')) {
-			$Favorite = ClassRegistry::getObject('Favorite');
+			$this->Favorite = ClassRegistry::getObject('Favorite');
 		} else {
-			$Favorite = ClassRegistry::init('Favorite');
+			$this->Favorite = ClassRegistry::init('Favorite');
 		}
 
 		$adminLinkUrl = preg_replace('/^' . preg_quote(Configure::read('App.baseUrl'), '/') . '/', '', Router::url($pluginInfo['Plugin']['admin_link']));
 
 		//すでにお気に入りにリンクが含まれている場合
-		if ($Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'Favorite.user_id' => $user['id']))) > 0) {
+		if ($this->Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'Favorite.user_id' => $user['id']))) > 0) {
 			return;
 		}
 
 		$favorite = array(
 			'name' => $pluginInfo['Plugin']['title'] . '管理',
 			'url' => $adminLinkUrl,
-			'sort' => $Favorite->getMax('sort') + 1,
+			'sort' => $this->Favorite->getMax('sort') + 1,
 			'user_id' => $user['id'],
 		);
 
-		$Favorite->create($favorite);
-		$Favorite->save();
+		$this->Favorite->create($favorite);
+		$this->Favorite->save();
 	}
 }
