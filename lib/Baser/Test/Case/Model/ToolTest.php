@@ -26,17 +26,17 @@ App::uses('Tool', 'Model');
  */
 class ToolTest extends BaserTestCase {
 
-  public $fixtures = array();
+	public $fixtures = array();
 
-  public function setUp() {
-    parent::setUp();
-    $this->Tool = ClassRegistry::init('Tool');
-  }
+	public function setUp() {
+		parent::setUp();
+		$this->Tool = ClassRegistry::init('Tool');
+	}
 
-  public function tearDown() {
-    unset($this->Tool);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->Tool);
+		parent::tearDown();
+	}
 
 /**
  * コントロールソース取得
@@ -46,22 +46,17 @@ class ToolTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider getControlSourceDataProvider
  */
-  public function testGetControlSource($field, $expected, $message = null) {
-    $result = $this->Tool->getControlSource($field);
-    $this->assertContains($expected, $result, $message);
-  }
+	public function testGetControlSource($field, $expected, $message = null) {
+		$result = $this->Tool->getControlSource($field);
+		$this->assertContains($expected, $result, $message);
+	}
 
-/**
- * getControlSource用データプロバイダ
- *
- * @return array
- */
-  public function getControlSourceDataProvider() {
-    return array(
-      array('baser', 'mysite_users', 'モデルリストを取得できません'),
-      array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
-    );
-  }
+	public function getControlSourceDataProvider() {
+		return array(
+			array('baser', 'mysite_users', 'モデルリストを取得できません'),
+			array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
+		);
+	}
 
 /**
  * データソースを指定してモデルリストを取得する
@@ -71,22 +66,17 @@ class ToolTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider getListModelsDataProvider
  */
-  public function testGetListModels($configKeyName, $expected, $message = null) {
-    $result = $this->Tool->getControlSource($configKeyName);
-    $this->assertContains($expected, $result, $message);
-  }
+	public function testGetListModels($configKeyName, $expected, $message = null) {
+		$result = $this->Tool->getControlSource($configKeyName);
+		$this->assertContains($expected, $result, $message);
+	}
 
-/**
- * getListModels用データプロバイダ
- *
- * @return array
- */
-  public function getListModelsDataProvider() {
-    return array(
-      array('baser', 'mysite_users', 'モデルリストを取得できません'),
-      array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
-    );
-  }
+	public function getListModelsDataProvider() {
+		return array(
+			array('baser', 'mysite_users', 'モデルリストを取得できません'),
+			array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
+		);
+	}
 
 /**
  * スキーマを書き出す
@@ -97,29 +87,24 @@ class ToolTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider writeSchemaDataProvider
  */
-  public function testWriteSchema($data, $path, $expected, $message = null) {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testWriteSchema($data, $path, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-    $data = array(
-      'Tool' => array(
-        'baser' => array(),
-        'plugin' => array(),
-      ),
-    );
-    $result = $this->Tool->writeSchema($data, $path);
-    $this->assertEquals($expected, $result, $message);
-  }
+		$data = array(
+			'Tool' => array(
+				'baser' => array(),
+				'plugin' => array(),
+			),
+		);
+		$result = $this->Tool->writeSchema($data, $path);
+		$this->assertEquals($expected, $result, $message);
+	}
 
-/**
- * writeSchema用データプロバイダ
- *
- * @return array
- */
-  public function writeSchemaDataProvider() {
-    return array(
-      array('baser', '/', 'mysite_users', 'モデルリストを取得できません'),
-    );
-  }
+	public function writeSchemaDataProvider() {
+		return array(
+			array('baser', '/', 'mysite_users', 'モデルリストを取得できません'),
+		);
+	}
 
 /**
  * スキーマファイルを読み込む
@@ -129,9 +114,9 @@ class ToolTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-  public function testLoadSchemaFile() {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
-  }
+	public function testLoadSchemaFile() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 
 }

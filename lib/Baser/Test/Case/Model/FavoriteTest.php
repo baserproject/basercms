@@ -3,12 +3,6 @@
 /**
  * Favoriteモデルのテスト
  *
- * コンソールから実行する場合、 --stderr フラグをつける必要があります。 
- * そうしないと、セッションが動作しない原因となります。 
- * PHPUnitはデフォルトでは標準出力にテストの進行状況を出力しますが、
- * これによってPHPはヘッダが送信されたと認識するため、セッションの開始が妨害されます。
- * PHPUnitの出力先を標準エラーに切り替えることで、この問題を避けることができます。 
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Favorites Community <http://sites.google.com/site/baserFavorites/>
  *
@@ -35,24 +29,24 @@ App::uses('CookieComponent', 'Controller/Component');
  */
 class FavoriteTest extends BaserTestCase {
 
-  public $fixtures = array(
-    'baser.Default.User',
-    'baser.Default.UserGroup',
-    'baser.Default.Favorite',
-    'baser.Default.Permission',
-  );
+	public $fixtures = array(
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'baser.Default.Permission',
+	);
 
-  public $components = array("Auth","Cookie","Session");
+	public $components = array("Auth","Cookie","Session");
 
-  public function setUp() {
-    parent::setUp();
-    $this->Favorite = ClassRegistry::init('Favorite');
-  }
+	public function setUp() {
+		parent::setUp();
+		$this->Favorite = ClassRegistry::init('Favorite');
+	}
 
-  public function tearDown() {
-    unset($this->Favorite);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->Favorite);
+		parent::tearDown();
+	}
 
 /**
  * 偽装ログイン処理
@@ -61,52 +55,52 @@ class FavoriteTest extends BaserTestCase {
  * - 1 システム管理者
  * - 2 サイト運営
  */
-  public function login($id) {
-    session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
-    $this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
-    $this->Favorite->_Session->write('Auth.User.id', $id);
-    $this->Favorite->_Session->write('Auth.User.user_group_id', $id);
-  }
+	public function login($id) {
+		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
+		$this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
+		$this->Favorite->_Session->write('Auth.User.id', $id);
+		$this->Favorite->_Session->write('Auth.User.user_group_id', $id);
+	}
 
 /**
  * validate
  */
-  public function test権限チェック異常系() {
-    $this->Favorite->create(array(
-      'Favorite' => array(
-        'url' => '/admin/hoge',
-      )
-    ));
+	public function test権限チェック異常系() {
+		$this->Favorite->create(array(
+			'Favorite' => array(
+				'url' => '/admin/hoge',
+			)
+		));
 
-    $this->login(2);
+		$this->login(2);
 
-    $this->assertFalse($this->Favorite->validates());
-    $this->assertArrayHasKey('url', $this->Favorite->validationErrors);
-    $this->assertEquals('このURLの登録は許可されていません。', current($this->Favorite->validationErrors['url']));
-  }
+		$this->assertFalse($this->Favorite->validates());
+		$this->assertArrayHasKey('url', $this->Favorite->validationErrors);
+		$this->assertEquals('このURLの登録は許可されていません。', current($this->Favorite->validationErrors['url']));
+	}
 
-  public function test権限チェックシステム管理者正常系() {
-    $this->Favorite->create(array(
-      'Favorite' => array(
-        'url' => '/admin/hoge',
-      )
-    ));
+	public function test権限チェックシステム管理者正常系() {
+		$this->Favorite->create(array(
+			'Favorite' => array(
+				'url' => '/admin/hoge',
+			)
+		));
 
-    $this->login(1);
+		$this->login(1);
 
-    $this->assertTrue($this->Favorite->validates());
-  }
+		$this->assertTrue($this->Favorite->validates());
+	}
 
-  public function test権限チェックサイト運営者正常系() {
-    $this->Favorite->create(array(
-      'Favorite' => array(
-        'url' => '/hoge',
-      )
-    ));
+	public function test権限チェックサイト運営者正常系() {
+		$this->Favorite->create(array(
+			'Favorite' => array(
+				'url' => '/hoge',
+			)
+		));
 
-    $this->login(2);
+		$this->login(2);
 
-    $this->assertTrue($this->Favorite->validates());
-  }
+		$this->assertTrue($this->Favorite->validates());
+	}
 
 }

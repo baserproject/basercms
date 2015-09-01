@@ -116,8 +116,8 @@ class PluginTest extends BaserTestCase {
  * @param string $filterType 更新タイプ指定
  * @return bool
  */
-	public function initDb($dbConfigName = 'plugin', $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
-
+	public function testInitDb() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -126,8 +126,8 @@ class PluginTest extends BaserTestCase {
  * @param string $plugin プラグイン名
  * @return bool
  */
-	public function resetDb($plugin) {
-
+	public function testResetDb() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -138,8 +138,8 @@ class PluginTest extends BaserTestCase {
  * @param string $filterTable テーブル指定
  * @return bool
  */
-	public function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
-
+	public function testAlterDb() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 

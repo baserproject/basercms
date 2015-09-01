@@ -110,22 +110,17 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testDateTime($fieldName, $dateFormat, $timeFormat, $attributes, $expected, $message) {
 		$result = $this->BcForm->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * dateTime用のデータプロバイダ
- *
- * @return array
- */
-  public function dateTimeDataProvider() {
-    return array(
-      array('test', 'W', '12', array('maxYear' => 2010), 'id="testWareki".*<option value="h-22">平成 22', 'datetime()を出力できません'),
-      array('test', 'WY', '12', array(), '年.*年', '年の接尾辞を出力できません'),
-      array('test', 'WM', '12', array(), '月', '月の接尾辞を出力できません'),
-      array('test', 'WD', '12', array(), '日', '日の接尾辞を出力できません'),
-    );
-  }
+	public function dateTimeDataProvider() {
+		return array(
+			array('test', 'W', '12', array('maxYear' => 2010), 'id="testWareki".*<option value="h-22">平成 22', 'datetime()を出力できません'),
+			array('test', 'WY', '12', array(), '年.*年', '年の接尾辞を出力できません'),
+			array('test', 'WM', '12', array(), '月', '月の接尾辞を出力できません'),
+			array('test', 'WD', '12', array(), '日', '日の接尾辞を出力できません'),
+		);
+	}
 
 /**
  * Creates a checkbox input widget.
@@ -138,20 +133,15 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testCheckbox($fieldName, $options, $expected, $message) {
 		$result = $this->BcForm->checkbox($fieldName, $options);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * checkbox用のデータプロバイダ
- *
- * @return array
- */
-  public function checkboxDataProvider() {
-    return array(
-      array('test', array(), '<input type="checkbox" name="data\[test\]"  value="1" id="test"', 'checkbox()を出力できません'),
-      array('test', array('label' => 'testLabel'), '<label for="test"><input type="checkbox".*label="testLabel"', '属性を付与できません'),
-    );
-  }
+	public function checkboxDataProvider() {
+		return array(
+			array('test', array(), '<input type="checkbox" name="data\[test\]"  value="1" id="test"', 'checkbox()を出力できません'),
+			array('test', array('label' => 'testLabel'), '<label for="test"><input type="checkbox".*label="testLabel"', '属性を付与できません'),
+		);
+	}
 
 /**
  * Creates a hidden input field.
@@ -164,22 +154,17 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testHidden($fieldName, $options, $expected, $message) {
 		$result = $this->BcForm->hidden($fieldName, $options);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * hidden用のデータプロバイダ
- *
- * @return array
- */
-  public function hiddenDataProvider() {
-    return array(
-      array('test', array(), '<input type="hidden" name="data\[test\]" id="test"', 'hidden()を出力できません'),
-      array('test', array('class' => 'bcclass'), 'class="bcclass"', '属性を付与できません'),
-      array('test', array('multiple' => 'checkbox'), 'name="data\[test\]"\/>$', 'セキュリティコンポーネントに対応していません'),
-      array('test', array('multiple' => 'checkbox', 'value' => array('value1','value2')), 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'),
-    );
-  }
+	public function hiddenDataProvider() {
+		return array(
+			array('test', array(), '<input type="hidden" name="data\[test\]" id="test"', 'hidden()を出力できません'),
+			array('test', array('class' => 'bcclass'), 'class="bcclass"', '属性を付与できません'),
+			array('test', array('multiple' => 'checkbox'), 'name="data\[test\]"\/>$', 'セキュリティコンポーネントに対応していません'),
+			array('test', array('multiple' => 'checkbox', 'value' => array('value1','value2')), 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'),
+		);
+	}
 
 
 /**
@@ -233,21 +218,16 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider ckeditorDataProvider
  */
 	public function testCkeditor($fieldName, $options, $expected, $message) {
-    $result = $this->BcForm->ckeditor($fieldName, $options);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->ckeditor($fieldName, $options);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * ckeditor用のデータプロバイダ
- *
- * @return array
- */
-  public function ckeditorDataProvider() {
-    return array(
-      array('test', array(), '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'),
-      array('test', array('editorLanguage' => 'en'), '"language":"en"', 'オプションを設定できません'),
-  	);
-  }	
+	public function ckeditorDataProvider() {
+		return array(
+			array('test', array(), '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'),
+			array('test', array('editorLanguage' => 'en'), '"language":"en"', 'オプションを設定できません'),
+		);
+	}	
 
 /**
  * エディタを表示する
@@ -259,21 +239,16 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider editorDataProvider
  */
 	public function testEditor($fieldName, $options, $expected, $message) {
-    $result = $this->BcForm->editor($fieldName, $options);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->editor($fieldName, $options);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * editor用のデータプロバイダ
- *
- * @return array
- */
-  public function editorDataProvider() {
-    return array(
-      array('test', array(), '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'),
-      array('test', array('editorLanguage' => 'en'), '"language":"en"', 'オプションを設定できません'),
-  	);
-  }
+	public function editorDataProvider() {
+		return array(
+			array('test', array(), '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'),
+			array('test', array('editorLanguage' => 'en'), '"language":"en"', 'オプションを設定できません'),
+		);
+	}
 
 
 /**
@@ -287,22 +262,17 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider prefTagDataProvider
  */
 	public function testPrefTag($fieldName, $selected, $attributes, $expected, $message) {
-    $result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->prefTag($fieldName, $selected, $attributes);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * prefTag用のデータプロバイダ
- *
- * @return array
- */
-  public function prefTagDataProvider() {
-    return array(
-      array('test', null, array(), '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'),
-      array('test', '40', array(), '<option value="40" selected="selected">', '要素を選択状態にできません'),
-      array('test', null, array('class' => 'testclass'), ' class="testclass"', '要素に属性を付与できません'),
-  	);
-  }
+	public function prefTagDataProvider() {
+		return array(
+			array('test', null, array(), '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'),
+			array('test', '40', array(), '<option value="40" selected="selected">', '要素を選択状態にできません'),
+			array('test', null, array('class' => 'testclass'), ' class="testclass"', '要素に属性を付与できません'),
+		);
+	}
 
 
 
@@ -320,27 +290,22 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider wyearDataProvider
  */
 	public function testWyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty, $expected, $message) {
-    $result = $this->BcForm->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * wyear用のデータプロバイダ
- *
- * @return array
- */
-  public function wyearDataProvider() {
-    return array(
-      array('test', null, null, null, array(), true, '<input type="hidden" name="data\[test\]\[wareki\].*<option value="h-', 'wyear()がされません	'),
-      array('test', 2010, null, null, array(), true, '<option value="h-22">平成 22<\/option>.<\/select>$', '最小の年を指定できません'),
-      array('test', null, 2010, null, array(), true, 'id="testYear">.<option value=""><\/option>.<option value="h-22">', '最大の年を指定できません'),
-      array('test', null, null, '2035-1-1', array(), true, 'value="h-47" selected', '要素を選択状態にできません(Y-m-d形式)'),
-      array('test', null, null, 'h-47', array(), true, 'value="h-47" selected', '要素を選択状態にできません(和暦形式)'),
-      array('test', null, null, null, array('class' => 'testclass'), true, 'class="testclass"', '属性を付与できません'),
-      array('test', null, null, null, array('class' => 'testclass', 'size' => '5'), true, 'size="5"', '属性を複数付与できません'),
-      array('test', null, null, null, array(), false, 'id="testYear">.<option value="h-', '空の要素を非表示にできません'),
-  	);
-  }
+	public function wyearDataProvider() {
+		return array(
+			array('test', null, null, null, array(), true, '<input type="hidden" name="data\[test\]\[wareki\].*<option value="h-', 'wyear()がされません	'),
+			array('test', 2010, null, null, array(), true, '<option value="h-22">平成 22<\/option>.<\/select>$', '最小の年を指定できません'),
+			array('test', null, 2010, null, array(), true, 'id="testYear">.<option value=""><\/option>.<option value="h-22">', '最大の年を指定できません'),
+			array('test', null, null, '2035-1-1', array(), true, 'value="h-47" selected', '要素を選択状態にできません(Y-m-d形式)'),
+			array('test', null, null, 'h-47', array(), true, 'value="h-47" selected', '要素を選択状態にできません(和暦形式)'),
+			array('test', null, null, null, array('class' => 'testclass'), true, 'class="testclass"', '属性を付与できません'),
+			array('test', null, null, null, array('class' => 'testclass', 'size' => '5'), true, 'size="5"', '属性を複数付与できません'),
+			array('test', null, null, null, array(), false, 'id="testYear">.<option value="h-', '空の要素を非表示にできません'),
+		);
+	}
 
 /**
  * 和暦年
@@ -349,13 +314,13 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testWyearNow() {
 		// 現在の和暦
-  	$wareki = $this->BcTime->convertToWareki(date('Y-m-d'));
+		$wareki = $this->BcTime->convertToWareki(date('Y-m-d'));
 		$w = $this->BcTime->wareki($wareki);
 		$wyear = $this->BcTime->wyear($wareki);
 		$now = $w . '-' . $wyear;
 
-    $result = $this->BcForm->wyear('test', null, null, 'now');
-    $this->assertRegExp('/' . $now . '" selected/s', $result, '今年を選択状態にできません');
+		$result = $this->BcForm->wyear('test', null, null, 'now');
+		$this->assertRegExp('/' . $now . '" selected/s', $result, '今年を選択状態にできません');
 	}
 
 /**
@@ -382,7 +347,7 @@ class BcFormHelperTest extends BaserTestCase {
  * @access public
  */
 	public function testGenerateList() {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -403,23 +368,18 @@ class BcFormHelperTest extends BaserTestCase {
 
 		$attributes = $attributes + $attributes_default;
 
-    $result = $this->BcForm->jsonList($field, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->jsonList($field, $attributes);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * jsonList用のデータプロバイダ
- *
- * @return array
- */
-  public function jsonListDataProvider() {
-    return array(
-      array('test', array(), 'id="JsonTestDb".*jQuery\(function\(\)', 'jsonList()を出力できません'), 
-      array('test', array('imgSrc' => 'test'), '"deleteButtonSrc":"test"', 'imgSrc属性を付与できません'), 
-      array('test', array('ajaxAddAction' => 'test'), '"ajaxAddAction":"test"', 'ajaxAddAction属性を付与できません'), 
-      array('test', array('ajaxDelAction' => 'test'), '"ajaxDelAction":"test"', 'ajaxDelAction属性を付与できません'), 
-  	);
-  }
+	public function jsonListDataProvider() {
+		return array(
+			array('test', array(), 'id="JsonTestDb".*jQuery\(function\(\)', 'jsonList()を出力できません'), 
+			array('test', array('imgSrc' => 'test'), '"deleteButtonSrc":"test"', 'imgSrc属性を付与できません'), 
+			array('test', array('ajaxAddAction' => 'test'), '"ajaxAddAction":"test"', 'ajaxAddAction属性を付与できません'), 
+			array('test', array('ajaxDelAction' => 'test'), '"ajaxDelAction":"test"', 'ajaxDelAction属性を付与できません'), 
+		);
+	}
 
 /**
  * カレンダーコントロール付きのテキストフィールド
@@ -432,22 +392,17 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider datepickerDataProvider
  */
 	public function testDatepicker($fieldName, $attributes, $expected, $message) {
-    $result = $this->BcForm->datepicker($fieldName, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->datepicker($fieldName, $attributes);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * datepicker用のデータプロバイダ
- *
- * @return array
- */
-  public function datepickerDataProvider() {
-    return array(
-      array('baser', array(), 'type="text".*id="baser".*("#baser")', 'datepicker()が出力できません'), 
-      array('baser', array('test1' => 'testValue1'), 'test1="testValue1"', '要素に属性を付与できません'),
-      array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01"', '時間を指定できません'),
-  	);
-  }
+	public function datepickerDataProvider() {
+		return array(
+			array('baser', array(), 'type="text".*id="baser".*("#baser")', 'datepicker()が出力できません'), 
+			array('baser', array('test1' => 'testValue1'), 'test1="testValue1"', '要素に属性を付与できません'),
+			array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01"', '時間を指定できません'),
+		);
+	}
 
 /**
  * 日付カレンダーと時間フィールド
@@ -459,23 +414,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider dateTimePickerDataProvider
  */
 	public function testDateTimePicker($fieldName, $attributes, $expected, $message) {
-    $result = $this->BcForm->dateTimePicker($fieldName, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->dateTimePicker($fieldName, $attributes);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * dateTimePicker用のデータプロバイダ
- *
- * @return array
- */
-  public function dateTimePickerDataProvider() {
-    return array(
-      array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'), 
-      array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/04\/01".* value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'), 
-      array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01".*value="00:00:00".* value="2010-4-1"', '時間を指定いない場合出力できません'), 
-      array('baser', array('value' => '2010-'), 'value="1970\/01\/01".*value="09:00:00".*value="2010-"', '時間指定が不適切でない場合出力できません'), 
-  	);
-  }
+	public function dateTimePickerDataProvider() {
+		return array(
+			array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'), 
+			array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/04\/01".* value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'), 
+			array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01".*value="00:00:00".* value="2010-4-1"', '時間を指定いない場合出力できません'), 
+			array('baser', array('value' => '2010-'), 'value="1970\/01\/01".*value="09:00:00".*value="2010-"', '時間指定が不適切でない場合出力できません'), 
+		);
+	}
 
 /**
  * 文字列保存用複数選択コントロール
@@ -490,28 +440,23 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider selectTextDataProvider
  */
 	public function testSelectText($fieldName, $options, $selected, $attributes, $showEmpty, $expected, $message) {
-    $result = $this->BcForm->selectText($fieldName, $options, $selected, $attributes, $showEmpty);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);
+		$result = $this->BcForm->selectText($fieldName, $options, $selected, $attributes, $showEmpty);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * selectText用のデータプロバイダ
- *
- * @return array
- */
-  public function selectTextDataProvider() {
-    return array(
-      array('baser', array(), null, array(), '', '<div id="baser_"><input type="hidden" name="data\[baser_\]" value="" id="baser_"', 'selectText()を出力できません'), 
-      array('baser', array('BaserCMS1'), null, array(), '', '<label for="Baser0">.*id="Baser0".*BaserCMS1', 'optionを出力できません'), 
-      array('baser', array('BaserCMS1', 'BaserCMS2'), null, array(), '', '<label for="Baser0">.*BaserCMS1.*<label for="Baser1">.*BaserCMS2', 'optionを複数出力できません'), 
-      array('baser', array('BaserCMS1', 'BaserCMS2'), '1', array(), '', 'for="Baser1" class="selected".*checked="checked".*BaserCMS2', 'checkboxを選択状態にできません'), 
-      array('baser', array('BaserCMS1'), '1', array('class'=>'bcclass'), '', 'div class="bcclass"', '要素に属性を付与できません'), 
-      array('baser', array('BaserCMS1'), '1', array('multiple'=>'select'), '', '<select', 'selectを出力できません'), 
-      array('baser', array('BaserCMS1'), '1', array(), true, '<label for="Baser">.*value="".*>&nbsp;<', '空要素を出力できません'), 
-      array('baser', array('BaserCMS1'), '1', array(), '選択してください', 'value="" id="Baser" \/>&nbsp;選択してください', '空要素のテキストを指定できません'), 
-      array('baser', array('BaserCMS1'), '1', array(), array('未選択' => '選択してください'), ' value="未選択" id="Baser未選択" \/>&nbsp;選択してください', '空要素のテキストと値を指定できません'), 
-  	);
-  }
+	public function selectTextDataProvider() {
+		return array(
+			array('baser', array(), null, array(), '', '<div id="baser_"><input type="hidden" name="data\[baser_\]" value="" id="baser_"', 'selectText()を出力できません'), 
+			array('baser', array('BaserCMS1'), null, array(), '', '<label for="Baser0">.*id="Baser0".*BaserCMS1', 'optionを出力できません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), null, array(), '', '<label for="Baser0">.*BaserCMS1.*<label for="Baser1">.*BaserCMS2', 'optionを複数出力できません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), '1', array(), '', 'for="Baser1" class="selected".*checked="checked".*BaserCMS2', 'checkboxを選択状態にできません'), 
+			array('baser', array('BaserCMS1'), '1', array('class'=>'bcclass'), '', 'div class="bcclass"', '要素に属性を付与できません'), 
+			array('baser', array('BaserCMS1'), '1', array('multiple'=>'select'), '', '<select', 'selectを出力できません'), 
+			array('baser', array('BaserCMS1'), '1', array(), true, '<label for="Baser">.*value="".*>&nbsp;<', '空要素を出力できません'), 
+			array('baser', array('BaserCMS1'), '1', array(), '選択してください', 'value="" id="Baser" \/>&nbsp;選択してください', '空要素のテキストを指定できません'), 
+			array('baser', array('BaserCMS1'), '1', array(), array('未選択' => '選択してください'), ' value="未選択" id="Baser未選択" \/>&nbsp;選択してください', '空要素のテキストと値を指定できません'), 
+		);
+	}
 
 /**
  * ファイルインプットボックス出力
@@ -531,7 +476,7 @@ class BcFormHelperTest extends BaserTestCase {
  * @return string 行データ
  */
 	public function testDispatchAfterForm() {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -546,25 +491,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider radioDataProvider
  */
 	public function testRadio($fieldName, $options, $attributes, $expected, $message) {
-	  $result = $this->BcForm->radio($fieldName, $options, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result, $message);	
+		$result = $this->BcForm->radio($fieldName, $options, $attributes);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);	
 	}
 
-/**
- * dateTimePicker用のデータプロバイダ
- *
- * @return array
- */
-  public function radioDataProvider() {
-    return array(
-      array('baser', array(), array(), '<input type="hidden" name="data\[baser\]" id="baser_" value=""', 'radio()を出力できません'), 
-      array('baser', array('BaserCMS1'), array(), '<label for="baser0">.*id="baser0" value="0" \/>BaserCMS1<', 'optionを出力できません'), 
-      array('baser', array('BaserCMS1', 'BaserCMS2'), array(), '<legend>Baser.*value="0".*BaserCMS1.*value="1".*BaserCMS2', 'optionを複数出力できません'), 
-      array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => 'test'), '<\/legend>test', ' legend と最初の要素の間に挿入されるコンテンツを出力できません'), 
-      array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => array('test1', 'test2')), 'BaserCMS1test1.*BaserCMS2test2', '要素の後に挿入されるコンテンツを出力できません'), 
-      array('baser', array('BaserCMS1'), array('label' => array('class'=>'bcclass')), 'class="bcclass"', 'labelに属性を付与できません'), 
-  	);
-  }
+	public function radioDataProvider() {
+		return array(
+			array('baser', array(), array(), '<input type="hidden" name="data\[baser\]" id="baser_" value=""', 'radio()を出力できません'), 
+			array('baser', array('BaserCMS1'), array(), '<label for="baser0">.*id="baser0" value="0" \/>BaserCMS1<', 'optionを出力できません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), array(), '<legend>Baser.*value="0".*BaserCMS1.*value="1".*BaserCMS2', 'optionを複数出力できません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => 'test'), '<\/legend>test', ' legend と最初の要素の間に挿入されるコンテンツを出力できません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => array('test1', 'test2')), 'BaserCMS1test1.*BaserCMS2test2', '要素の後に挿入されるコンテンツを出力できません'), 
+			array('baser', array('BaserCMS1'), array('label' => array('class'=>'bcclass')), 'class="bcclass"', 'labelに属性を付与できません'), 
+		);
+	}
 
 /**
  * testFormCreateWithSecurity method

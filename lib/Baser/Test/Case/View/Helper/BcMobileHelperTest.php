@@ -27,22 +27,22 @@ class BcMobileHelperTest extends CakeTestCase {
  *
  * @return void
  */
-  public function setUp() {
-    parent::setUp();
-    $View = new View();
-    $this->BcMobile = new BcMobileHelper($View);
-  }
+	public function setUp() {
+		parent::setUp();
+		$View = new View();
+		$this->BcMobile = new BcMobileHelper($View);
+	}
 
 /**
  * tearDown method
  *
  * @return void
  */
-  public function tearDown() {
-    unset($this->BcMobile);
+	public function tearDown() {
+		unset($this->BcMobile);
 
-    parent::tearDown();
-  }
+		parent::tearDown();
+	}
 
 /**
  * afterLayout
@@ -50,9 +50,9 @@ class BcMobileHelperTest extends CakeTestCase {
  * @return void
  * @access public
  */
-  public function testAfterLayout() {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
-  }
+	public function testAfterLayout() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 
 /**
@@ -61,8 +61,8 @@ class BcMobileHelperTest extends CakeTestCase {
  * @return void
  * @access public
  */
-  public function testHeader() {
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
-  }
+	public function testHeader() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 }

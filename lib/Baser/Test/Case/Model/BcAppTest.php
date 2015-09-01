@@ -84,11 +84,6 @@ class BcAppTest extends BaserTestCase {
 		}
 	}
 
-/**
- * convertEncodingByArray用データプロバイダ
- *
- * @return array
- */
 	public function convertEncodingByArrayDataProvider() {
 		return array(
 			array(array("テスト1"), "ASCII", "SJIS"),
@@ -116,11 +111,6 @@ class BcAppTest extends BaserTestCase {
 
 	}
 
-/**
- * convertEncodingByArray用データプロバイダ
- *
- * @return array
- */
 	public function saveDbLogDataProvider() {
 		return array(
 			array("テスト"),
@@ -159,11 +149,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * replaceText用データプロバイダ
- *
- * @return array
- */
 	public function replaceTextDataProvider() {
 		return array(
 			array("\xE2\x85\xA0", "I"),
@@ -207,11 +192,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * minLength用データプロバイダ
- *
- * @return array
- */
 	public function minLengthDataProvider() {
 		return array(
 			array("あいう", 4, false),
@@ -232,11 +212,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * maxLength用データプロバイダ
- *
- * @return array
- */
 	public function maxLengthDataProvider() {
 		return array(
 			array("あいう", 4, true),
@@ -261,11 +236,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * between用データプロバイダ
- *
- * @return array
- */
 	public function betweenDataProvider() {
 		return array(
 			array("あいう", 2, 4, true),
@@ -311,11 +281,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * tableExists用データプロバイダ
- *
- * @return array
- */
 	public function tableExistsDataProvider() {
 		return array(
 			array("users", true),
@@ -335,11 +300,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);		
 	}
 
-/**
- * alphaNumeric用データプロバイダ
- *
- * @return array
- */
 	public function alphaNumericDataProvider() {
 		return array(
 			array(array("aiueo"), true),
@@ -376,11 +336,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);		
 	}
 
-/**
- * fileSize用データプロバイダ
- *
- * @return array
- */
 	public function fileSizeDataProvider() {
 		return array(
 			array("test.jpg", 1000, true),
@@ -411,11 +366,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);		
 	}
 
-/**
- * fileExt用データプロバイダ
- *
- * @return array
- */
 	public function fileExtDataProvider() {
 		return array(
 			array("test.jpg", "image/jpeg", true),
@@ -437,11 +387,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * halfText用データプロバイダ
- *
- * @return array 確認する値を含む配列。先頭の要素のみチェックされる
- */
 	public function halfTextDataProvider() {
 		return array(
 			array(array("test"), true),
@@ -509,11 +454,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * notInList用データプロバイダ
- *
- * @return array
- */
 	public function notInListDataProvider() {
 		return array(
 			array(array("test1"), array("test1", "test2"), false),
@@ -554,11 +494,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * emails用データプロバイダ
- *
- * @return array
- */
 	public function emailsDataProvider() {
 		return array(
 			array(array("test1@co.jp"), true),
@@ -619,11 +554,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * isPublish用データプロバイダ
- *
- * @return array
- */
 	public function isPublishDataProvider() {
 		return array(
 			array(true, null, null, true),
@@ -649,11 +579,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);	
 	}
 
-/**
- * checkDate用データプロバイダ
- *
- * @return array
- */
 	public function checkDateDataProvider() {
 		return array(
 			array(array('2015-01-01'), true),
@@ -687,11 +612,6 @@ class BcAppTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-/**
- * checkDate用データプロバイダ
- *
- * @return array
- */
 	public function notFileEmptyDataProvider() {
 		return array(
 			array(array('size' => 0), false),

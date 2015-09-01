@@ -26,22 +26,22 @@ class BcCkeditorHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-  public $fixtures = array(
-    'baser.Default.SiteConfig',
-    'baser.Default.Page',
-    'baser.Default.PluginContent',
-  );
+	public $fixtures = array(
+		'baser.Default.SiteConfig',
+		'baser.Default.Page',
+		'baser.Default.PluginContent',
+	);
 
-  public function setUp() {
-    parent::setUp();
-    $View = new View();
-    $this->BcCkeditor = new BcCkeditorHelper($View);
-  }
+	public function setUp() {
+		parent::setUp();
+		$View = new View();
+		$this->BcCkeditor = new BcCkeditorHelper($View);
+	}
 
-  public function tearDown() {
-    unset($this->BcCkeditor);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->BcCkeditor);
+		parent::tearDown();
+	}
 
 /**
  * CKEditorのテキストエリアを出力する
@@ -51,26 +51,21 @@ class BcCkeditorHelperTest extends BaserTestCase {
  * @param boolean $expected 期待値
  * @dataProvider editorDataProvider
  */
-  public function testEditor($fieldName, $options, $expected) {
+	public function testEditor($fieldName, $options, $expected) {
 
-    $expected = '/' . $expected . '/';
-    $result = $this->BcCkeditor->editor($fieldName, $options);
+		$expected = '/' . $expected . '/';
+		$result = $this->BcCkeditor->editor($fieldName, $options);
 
-    $this->assertRegExp($expected, $result);
-  }
+		$this->assertRegExp($expected, $result);
+	}
 
-/**
- * editor用のデータプロバイダ
- * 
- * @return array
- */
-  public function editorDataProvider() {
-    return array(
-      array('test', array(), 'test'),
-      array('test', array('editorLanguage' => 'en'), '"language":"en"'),
-      array('test', array('editorSkin' => 'office2013'), '"skin":"office2013"'),
-      array('test', array('editorToolbar' => array('test' => '[Anchor]')), '"test":"\[Anchor\]"'),
-    );
-  }
+	public function editorDataProvider() {
+		return array(
+			array('test', array(), 'test'),
+			array('test', array('editorLanguage' => 'en'), '"language":"en"'),
+			array('test', array('editorSkin' => 'office2013'), '"skin":"office2013"'),
+			array('test', array('editorToolbar' => array('test' => '[Anchor]')), '"test":"\[Anchor\]"'),
+		);
+	}
 
 }

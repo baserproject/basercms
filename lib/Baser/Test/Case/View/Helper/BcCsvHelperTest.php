@@ -26,22 +26,22 @@ class BcCsvHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-  public $fixtures = array(
-    'baser.Default.SiteConfig',
-    'baser.Default.Page',
-    'baser.Default.PluginContent',
-  );
+	public $fixtures = array(
+		'baser.Default.SiteConfig',
+		'baser.Default.Page',
+		'baser.Default.PluginContent',
+	);
 
-  public function setUp() {
-    parent::setUp();
-    $View = new View();
-    $this->BcCsv = new BcCsvHelper($View);
-  }
+	public function setUp() {
+		parent::setUp();
+		$View = new View();
+		$this->BcCsv = new BcCsvHelper($View);
+	}
 
-  public function tearDown() {
-    unset($this->BcCsv);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->BcCsv);
+		parent::tearDown();
+	}
 
 
 /**
@@ -53,68 +53,63 @@ class BcCsvHelperTest extends BaserTestCase {
  * @param string $expectedBody csvBodyの期待値
  * @dataProvider addModelDataDataProvider
  */
-  public function testAddModelData($modelName, $data, $expectedHead, $expectedBody) {
+	public function testAddModelData($modelName, $data, $expectedHead, $expectedBody) {
 
-    $this->BcCsv->addModelData($modelName, $data);
-    $this->assertEquals($expectedHead, $this->BcCsv->csvHead);
-    $this->assertEquals($expectedBody, $this->BcCsv->csvBody);
+		$this->BcCsv->addModelData($modelName, $data);
+		$this->assertEquals($expectedHead, $this->BcCsv->csvHead);
+		$this->assertEquals($expectedBody, $this->BcCsv->csvBody);
 
-  }
+	}
 
-/**
- * addModelData用のデータプロバイダ
- *
- * @return array
- */
-  public function addModelDataDataProvider() {
-    return array(
+	public function addModelDataDataProvider() {
+		return array(
 
-      array(
-        'model1',
-        array('model1' => array(
-          'head' => 'BaserCMS'
-          )
-        ),
-        '"head"' . "\n",
-        '"BaserCMS"' . "\n"
-      ),
+			array(
+				'model1',
+				array('model1' => array(
+					'head' => 'BaserCMS'
+					)
+				),
+				'"head"' . "\n",
+				'"BaserCMS"' . "\n"
+			),
 
-      array(
-        'model1',
-        array('model100' => array(
-          'head' => 'BaserCMS'
-          )
-        ),
-        '',
-        ''
-      ),
+			array(
+				'model1',
+				array('model100' => array(
+					'head' => 'BaserCMS'
+					)
+				),
+				'',
+				''
+			),
 
-      array(
-        'model1',
-        array( 'model1' => array(
-          'head' => 'BaserCMS',
-          'BaserCMS2',
-          'BaserCMS3',
-          )
-        ),
-        '"head","0","1"' . "\n",
-        '"BaserCMS","BaserCMS2","BaserCMS3"' . "\n"
-      ),
+			array(
+				'model1',
+				array( 'model1' => array(
+					'head' => 'BaserCMS',
+					'BaserCMS2',
+					'BaserCMS3',
+					)
+				),
+				'"head","0","1"' . "\n",
+				'"BaserCMS","BaserCMS2","BaserCMS3"' . "\n"
+			),
 
-      array(
-        'model1',
-        array( 'model1' => array(
-          'head' => 'BaserCMS',
-          'test1' => 'BaserCMS2',
-          'test2' => 'BaserCMS3',
-          )
-        ),
-        '"head","test1","test2"' . "\n",
-        '"BaserCMS","BaserCMS2","BaserCMS3"' . "\n"
-      ),
+			array(
+				'model1',
+				array( 'model1' => array(
+					'head' => 'BaserCMS',
+					'test1' => 'BaserCMS2',
+					'test2' => 'BaserCMS3',
+					)
+				),
+				'"head","test1","test2"' . "\n",
+				'"BaserCMS","BaserCMS2","BaserCMS3"' . "\n"
+			),
 
-    );
-  }
+		);
+	}
 
 
 /**
@@ -126,51 +121,46 @@ class BcCsvHelperTest extends BaserTestCase {
  * @param string $expectedBody csvBodyの期待値
  * @dataProvider addModelDatasDataProvider
  */
-  public function testAddModelDatas($modelName, $datas, $expectedHead, $expectedBody) {
-    $datas = array($datas);
-    $this->BcCsv->addModelDatas($modelName, $datas);
-    $this->assertEquals($expectedHead, $this->BcCsv->csvHead);
-    $this->assertEquals($expectedBody, $this->BcCsv->csvBody);
-  }
+	public function testAddModelDatas($modelName, $datas, $expectedHead, $expectedBody) {
+		$datas = array($datas);
+		$this->BcCsv->addModelDatas($modelName, $datas);
+		$this->assertEquals($expectedHead, $this->BcCsv->csvHead);
+		$this->assertEquals($expectedBody, $this->BcCsv->csvBody);
+	}
 
-/**
- * addModelDatas用のデータプロバイダ
- *
- * @return array
- */
-  public function addModelDatasDataProvider() {
-    return array(
+	public function addModelDatasDataProvider() {
+		return array(
 
-      array(
-        'model1',
-        array(
-          'model1' => array(
-            'head1' => 'BaserCMS1'
-          ),
-          'model1' => array(
-            'head2' => 'BaserCMS2'
-          ),
-        ),
-        '"head2"' . "\n",
-        '"BaserCMS2"' . "\n"
-      ),
-      array(
-        'model1',
-        array(
-          'model1' => array(
-            'head1' => 'BaserCMS1'
-          ),
-          'model2' => array(
-            'head2' => 'BaserCMS2'
-          ),
-        ),
-        '"head1"' . "\n",
-        '"BaserCMS1"' . "\n"
-      ),
+			array(
+				'model1',
+				array(
+					'model1' => array(
+						'head1' => 'BaserCMS1'
+					),
+					'model1' => array(
+						'head2' => 'BaserCMS2'
+					),
+				),
+				'"head2"' . "\n",
+				'"BaserCMS2"' . "\n"
+			),
+			array(
+				'model1',
+				array(
+					'model1' => array(
+						'head1' => 'BaserCMS1'
+					),
+					'model2' => array(
+						'head2' => 'BaserCMS2'
+					),
+				),
+				'"head1"' . "\n",
+				'"BaserCMS1"' . "\n"
+			),
 
 
-    );
-  }
+		);
+	}
 
 /**
  * CSVファイルをダウンロードする
@@ -183,37 +173,32 @@ class BcCsvHelperTest extends BaserTestCase {
  * @param string $expected 期待値
  * @dataProvider downloadDataProvider
  */
-  public function testDownload($fileName, $debug, $expected) {
+	public function testDownload($fileName, $debug, $expected) {
 
-    // csvのデータを作成
-    $modelName = 'sample';
-    $data = array(
-      'sample' => array(
-          'head1' => 'BaserCMS1',
-          'head2' => 'BaserCMS2',
-          'head3' => 'BaserCMS3',
-      )
-    );
-    $this->BcCsv->addModelData($modelName, $data);
+		// csvのデータを作成
+		$modelName = 'sample';
+		$data = array(
+			'sample' => array(
+					'head1' => 'BaserCMS1',
+					'head2' => 'BaserCMS2',
+					'head3' => 'BaserCMS3',
+			)
+		);
+		$this->BcCsv->addModelData($modelName, $data);
 
 
-    $result = $this->BcCsv->download($fileName, $debug);
-    $this->assertEquals($expected, $result);
-  }
+		$result = $this->BcCsv->download($fileName, $debug);
+		$this->assertEquals($expected, $result);
+	}
 
-/**
- * download用のデータプロバイダ
- *
- * @return array
- */
-  public function downloadDataProvider() {
-    return array(
-      array('testcsv', true,
-        '"head1","head2","head3"' . "\n" .
-        '"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
-      ),
-    );
-  }
+	public function downloadDataProvider() {
+		return array(
+			array('testcsv', true,
+				'"head1","head2","head3"' . "\n" .
+				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
+			),
+		);
+	}
 
 
 /**
@@ -221,26 +206,26 @@ class BcCsvHelperTest extends BaserTestCase {
  *
  * @param $fileName
  */
-  public function testSave() {
+	public function testSave() {
 
-    // csvのデータを作成
-    $modelName = 'sample';
-    $data = array(
-      'sample' => array(
-          'head1' => 'BaserCMS1',
-          'head2' => 'BaserCMS2',
-          'head3' => 'BaserCMS3',
-      )
-    );
-    $this->BcCsv->addModelData($modelName, $data);
+		// csvのデータを作成
+		$modelName = 'sample';
+		$data = array(
+			'sample' => array(
+					'head1' => 'BaserCMS1',
+					'head2' => 'BaserCMS2',
+					'head3' => 'BaserCMS3',
+			)
+		);
+		$this->BcCsv->addModelData($modelName, $data);
 
-    $fileName = "test.csv";
-    $expected = '"head1","head2","head3"' . "\n" .
-        '"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n";
-    $this->BcCsv->save($fileName);
-    $this->assertStringEqualsFile($fileName, $expected);
+		$fileName = "test.csv";
+		$expected = '"head1","head2","head3"' . "\n" .
+				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n";
+		$this->BcCsv->save($fileName);
+		$this->assertStringEqualsFile($fileName, $expected);
 
-    unlink($fileName);
-  }
+		unlink($fileName);
+	}
 
 }

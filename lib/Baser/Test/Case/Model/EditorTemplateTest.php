@@ -26,34 +26,34 @@ App::uses('EditorTemplate', 'Model');
  */
 class EditorTemplateTest extends BaserTestCase {
 
-  public $fixtures = array(
-    'baser.Default.EditorTemplate',
-  );
+	public $fixtures = array(
+		'baser.Default.EditorTemplate',
+	);
 
-  public function setUp() {
-    parent::setUp();
-    $this->EditorTemplate = ClassRegistry::init('EditorTemplate');
-  }
+	public function setUp() {
+		parent::setUp();
+		$this->EditorTemplate = ClassRegistry::init('EditorTemplate');
+	}
 
-  public function tearDown() {
-    unset($this->EditorTemplate);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->EditorTemplate);
+		parent::tearDown();
+	}
 
-  /**
+/**
  * validate
  */
-  public function test必須チェック() {
-    $this->EditorTemplate->create(array(
-      'EditorTemplate' => array(
-        'name' => '',
-        'link' => '',
-      )
-    ));
-    $this->assertFalse($this->EditorTemplate->validates());
-    $this->assertArrayHasKey('name', $this->EditorTemplate->validationErrors);
-    $this->assertEquals('テンプレート名を入力してください。', current($this->EditorTemplate->validationErrors['name']));
-  }
+	public function test必須チェック() {
+		$this->EditorTemplate->create(array(
+			'EditorTemplate' => array(
+				'name' => '',
+				'link' => '',
+			)
+		));
+		$this->assertFalse($this->EditorTemplate->validates());
+		$this->assertArrayHasKey('name', $this->EditorTemplate->validationErrors);
+		$this->assertEquals('テンプレート名を入力してください。', current($this->EditorTemplate->validationErrors['name']));
+	}
 
 
 }

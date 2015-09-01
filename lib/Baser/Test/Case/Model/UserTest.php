@@ -198,11 +198,6 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * isAdminGlobalmenuUsed用データプロバイダ
- *
- * @return array
- */
   public function getControlSourceDataProvider() {
     return array(
       array('user_group_id', array(1 => 'システム管理', 2 => 'サイト運営'), 'コントロールソースを取得する取得できません'),
@@ -224,11 +219,6 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * getUserList用データプロバイダ
- *
- * @return array
- */
   public function getUserListDataProvider() {
     return array(
       array(array(), array(1 => 'basertest', 2 => 'basertest2'), 'コントロールソースを取得する取得できません'),
@@ -284,11 +274,6 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * getUserList用データプロバイダ
- *
- * @return array
- */
   public function getAuthPrefixDataProvider() {
     return array(
       array('basertest', 'admin', 'ユーザーの認証プレフィックスを正しく取得できません'),
@@ -340,11 +325,6 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expectedLastData, $LastData[0]['Favorite']['name'], $message);
 	}
 
-/**
- * applyDefaultFavorites用データプロバイダ
- *
- * @return array
- */
   public function applyDefaultFavoritesDataProvider() {
     return array(
       array(1, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'),

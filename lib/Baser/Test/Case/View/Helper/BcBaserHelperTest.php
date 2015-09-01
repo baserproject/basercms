@@ -240,11 +240,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $this->BcBaser->getKeywords());
 	}
 
-/**
- * getKeywords用データプロバイダ
- *
- * @return array
- */
 	public function getKeywordsDataProvider() {
 		return array(
 			array('baser,CMS,コンテンツマネジメントシステム,開発支援'),
@@ -268,11 +263,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $this->BcBaser->getDescription());
 	}
 
-/**
- * getDescription用データプロバイダ
- *
- * @return array
- */
 	public function getDescriptionDataProvider() {
 		return array(
 			array('baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'),
@@ -454,11 +444,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $this->BcBaser->isHome());
 	}
 
-/**
- * isHome用データプロバイダ
- *
- * @return array
- */
 	public function isHomeDataProvider() {
 		return array(
 			//PC
@@ -497,11 +482,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->root();
 	}
 
-/**
- * root用データプロバイダ
- *
- * @return array
- */
 	public function rootDataProvider() {
 		return array(
 			array('/', ''),
@@ -807,11 +787,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		}
 	}
 
-/**
- * setSubMenus 用のデータプロバイダ
- *
- * @return array
- */
 	public function setSubMenusDataProvider() {
 		return array(
 			array(array('contents'), array('<th>検索インデックスメニュー</th>')),
@@ -840,11 +815,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->xmlHeader();
 	}
 
-/**
- * xmlHeader用データプロバイダ
- *
- * @return array
- */
 	public function xmlDataProvider() {
 		return array(
 			array('<?xml version="1.0" encoding="UTF-8" ?>' . "\n"),
@@ -875,11 +845,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->docType($docType);
 	}
 
-/**
- * docType 用のデータプロバイダ
- * 
- * @return array
- */
 	public function docTypeDataProvider() {
 		return array(
 			array('xhtml-trans', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'),
@@ -931,11 +896,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->js($url);
 	}
 
-/**
- * js 用データプロバイダ
- *
- * @return array
- */
 	public function jsDataProvider() {
 		return array(
 			array('<script type="text/javascript" src="/js/admin/startup.js"></script>', 'admin/startup'),
@@ -980,11 +940,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * getImg 用データプロバイダ
- * 
- * @return array
- */
 	public function getImgDataProvider() {
 		return array(
 			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ" />'),
@@ -1027,11 +982,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		Configure::write('BcEnv.sslUrl', '');
 	}
 
-/**
- * getLink 用の データプロバイダ
- * 
- * @return array
- */
 	public function getLinkDataProvider() {
 		return array(
 			array('', '/', array(), '<a href="/"></a>'),
@@ -1082,11 +1032,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		}
 	}
 
-/**
- * charset用データプロバイダ
- *
- * @return array
- */
 	public function charsetDataProvider() {
 		return array(
 			array('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8'),
@@ -1107,11 +1052,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->copyYear($begin);
 	}
 
-/**
- * copyYear用データプロバイダ
- *
- * @return array
- */
 	public function copyYearDataProvider() {
 		$year = date('Y');
 		return array(
@@ -1213,11 +1153,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $this->BcBaser->checkUpdate());
 	}
 
-/**
- * checkUpdate のデータプロバイダ
- * 
- * @return array
- */
 	public function checkUpdateDataProvider() {
 		return array(
 			array('1.0.0', '1.0.0', false),
@@ -1272,11 +1207,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expects, $this->BcBaser->getContentsName());
 	}
 
-/**
- * getContentsName用のデータプロバイダ
- *
- * @return array
- */
 	public function getContentsNameDataProvider() {
 		return array(
 			//PC
@@ -1404,11 +1334,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * getPageList 用のデータプロバイダ
- *
- * @return array
- */
 	public function getPageListDataProvider() {
 		return array(
 			array(null, array(), array(
@@ -1458,12 +1383,6 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	}
 
-
-/**
- * cacheHeader用のデータプロバイダ
- * 
- * @return array
- */
 	public function cacheHeaderDataProvider() {
 		return array(
 			array('test'),
@@ -1488,11 +1407,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * getUri用のデータプロバイダ
- * 
- * @return array
- */
 	public function getUriDataProvider() {
 		return array(
 			array('/', true, 'localhost', '', 'http://localhost/'),
@@ -1519,11 +1433,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * mark用のデータプロバイダ
- * 
- * @return array
- */
 	public function markDataProvider() {
 		return array(
 			array('大切', 'とても大切です', 'strong', array(), false, 'とても<strong>大切</strong>です'),
@@ -1590,11 +1499,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * changePrefixToAlias用のデータプロバイダ
- * 
- * @return array
- */
 	public function changePrefixToAliasDataProvider() {
 		return array(
 			array("/index", "mobile", "/index"),
@@ -1665,11 +1569,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $this->BcBaser->getHere());
 	}
 
-/**
- * getHere用のデータプロバイダ
- *
- * @return array
- */
 	public function getHereDataProvider() {
 		return array(
 			// PCページ
@@ -1704,11 +1603,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $this->BcBaser->isCategoryTop());
 	}
 
-/**
- * isCategoryTop用のデータプロバイダ
- *
- * @return array
- */
 	public function isCategoryTopDataProvider() {
 		return array(
 			// PCページ
@@ -1760,11 +1654,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->WidgetArea($no);
 	}
 
-/**
- * isCurrentUrl用のデータプロバイダ
- *
- * @return array
- */
 	public function widgetAreaDataProvider() {
 		return array(
 			array('', '/company', 1, '<div class="widget-area widget-area-1">'),
@@ -1791,11 +1680,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expects, $this->BcBaser->isCurrentUrl($url));
 	}
 
-/**
- * isCurrentUrl用のデータプロバイダ
- *
- * @return array
- */
 	public function isCurrentUrlDataProvider() {
 		return array(
 			array('/', '/', true),
@@ -1838,12 +1722,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = $this->BcBaser->getUserName($user);
 		$this->assertEquals($expect, $result);
 	}
-
-/**
- * getUserName用のデータプロバイダ
- *
- * @return array
- */
 
 	public function getUserNameDataProvider() {
 		return array(
@@ -1900,7 +1778,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * 10. 適当な名前のパラメータを渡す
  * @return array
  */
-
 	public function mainImageDataProvider() {
 		return array(
 			array(array(), '<img src="\/theme\/m-single\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
@@ -1999,11 +1876,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expects, $this->BcBaser->getBaseUrl());
 	}
 
-/**
- * testGetBaseUrl用のデータプロバイダ
- *
- * @return array
- */
 	public function getBaseUrlDataProvider() {
 		return array(
 			// ノーマル
@@ -2038,11 +1910,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expects, $result);
 	}
 
-/**
- * testGetBaseUrl用のデータプロバイダ
- *
- * @return array
- */
 	public function baseUrlDataProvider() {
 		return array(
 			// ノーマル

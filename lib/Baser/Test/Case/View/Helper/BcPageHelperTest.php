@@ -134,11 +134,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * getUrl用データプロバイダ
- *
- * @return array
- */
 	public function getUrlDataProvider() {
 		return array(
 			array(1, '/'),
@@ -174,11 +169,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * getCategory用データプロバイダ
- *
- * @return array
- */
 	public function getCategoryDataProvider() {
 		return array(
 			array(1, false),
@@ -208,11 +198,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);		
 	}
 
-/**
- *  getParentCategory用データプロバイダ
- *
- * @return array
- */
 	public function getParentCategoryDataProvider() {
 		return array(
 			array(1, false),
@@ -255,11 +240,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);		
 	}
 
-/**
- * getPageList用データプロバイダ
- *
- * @return array
- */
 	public function getPageListDataProvider() {
 		return array(
 			array(1, null, array(
@@ -354,12 +334,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-
-/**
- * getCategoryName用データプロバイダ
- *
- * @return array
- */
 	public function getCategoryNameDataProvider() {
 		return array(
 			array(0, false, 'IDが0のページは存在しません'),
@@ -393,11 +367,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * allowPublish用データプロバイダ
- *
- * @return array
- */
 	public function allowPublishDataProvider() {
 		return array(
 			array(true, 0, 0, true, 'statusの値がそのままかえってきません'),
@@ -444,11 +413,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * getNextLink/nextLink 共通のデータプロバイダ
- *
- * @return array
- */
 	public function getNextLinkDataProvider() {
 		return array(
 			array('/', null, '', array('overCategory' => false), false), // PC
@@ -501,11 +465,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * getPrevLink/prevLink 共通のデータプロバイダ
- *
- * @return array
- */
 	public function getPrevLinkDataProvider() {
 		return array(
 			array('/company', null, '', array('overCategory' => false), false), // PC
@@ -540,11 +499,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * contentsNaviAvailable 共通のデータプロバイダ
- *
- * @return array
- */
 	public function contentsNaviAvailableDataProvider() {
 		return array(
 			array(0, false),

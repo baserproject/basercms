@@ -26,20 +26,20 @@ App::uses('ThemeConfig', 'Model');
  */
 class ThemeConfigTest extends BaserTestCase {
 
-  public $fixtures = array(
-    'baser.Default.Page',
-    'baser.Default.ThemeConfig',
-  );
+	public $fixtures = array(
+		'baser.Default.Page',
+		'baser.Default.ThemeConfig',
+	);
 
-  public function setUp() {
-    parent::setUp();
-    $this->ThemeConfig = ClassRegistry::init('ThemeConfig');
-  }
+	public function setUp() {
+		parent::setUp();
+		$this->ThemeConfig = ClassRegistry::init('ThemeConfig');
+	}
 
-  public function tearDown() {
-    unset($this->ThemeConfig);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->ThemeConfig);
+		parent::tearDown();
+	}
 
 /**
  * 画像を保存する
@@ -48,30 +48,30 @@ class ThemeConfigTest extends BaserTestCase {
  * 
  * @param array $data
  */
-  public function testSaveImage() {
+	public function testSaveImage() {
 
-    $this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-    // ダミーの画像を作成
-    $sourcePath = WWW_ROOT . 'theme' . DS . 'm-single' . DS . 'img' . DS . 'logo.png';
-    $dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
-    $dummyTmpPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo_tmp.png';
-    copy($sourcePath, $dummyPath);
-    copy($sourcePath, $dummyTmpPath);
+		// ダミーの画像を作成
+		$sourcePath = WWW_ROOT . 'theme' . DS . 'm-single' . DS . 'img' . DS . 'logo.png';
+		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
+		$dummyTmpPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo_tmp.png';
+		copy($sourcePath, $dummyPath);
+		copy($sourcePath, $dummyTmpPath);
 
-    $data = array('ThemeConfig' => array(
-      'logo' => array(
-        'name' => 'logo.png',
-        'tmp_name' => WWW_ROOT . 'files' . DS . 'theme_configs' . DS .'logo_tmp.png',
-        )
-      )
-    );
-    $this->ThemeConfig->saveImage($data);
+		$data = array('ThemeConfig' => array(
+			'logo' => array(
+				'name' => 'logo.png',
+				'tmp_name' => WWW_ROOT . 'files' . DS . 'theme_configs' . DS .'logo_tmp.png',
+				)
+			)
+		);
+		$this->ThemeConfig->saveImage($data);
 
-    // // ダミーの画像を削除
-    @unlink($dummyPath);
-    @unlink($dummyTmpPath);
-  }
+		// // ダミーの画像を削除
+		@unlink($dummyPath);
+		@unlink($dummyTmpPath);
+	}
 
 /**
  * 画像を削除する
@@ -81,40 +81,35 @@ class ThemeConfigTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider deleteImageDataProvider
  */
-  public function testDeleteImage($data, $expected, $message = null) {
-    
-    // ダミーの画像を作成
-    $sourcePath = WWW_ROOT . 'theme' . DS . 'm-single' . DS . 'img' . DS . 'logo.png';
-    $dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
-    copy($sourcePath, $dummyPath);
+	public function testDeleteImage($data, $expected, $message = null) {
+		
+		// ダミーの画像を作成
+		$sourcePath = WWW_ROOT . 'theme' . DS . 'm-single' . DS . 'img' . DS . 'logo.png';
+		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
+		copy($sourcePath, $dummyPath);
 
-    $data = array('ThemeConfig' => $data);
-    $this->ThemeConfig->deleteImage($data);
-    
-    // 画像の有無
-    if ($expected) {
-      $this->assertFileExists($dummyPath, $message);
-    } else {
-      $this->assertFileNotExists($dummyPath, $message);
-    }
+		$data = array('ThemeConfig' => $data);
+		$this->ThemeConfig->deleteImage($data);
+		
+		// 画像の有無
+		if ($expected) {
+			$this->assertFileExists($dummyPath, $message);
+		} else {
+			$this->assertFileNotExists($dummyPath, $message);
+		}
 
-    // ダミーの画像を削除
-    @unlink($dummyPath);
+		// ダミーの画像を削除
+		@unlink($dummyPath);
 
-  }
+	}
 
-/**
- * deleteImage用データプロバイダ
- *
- * @return array
- */
-  public function deleteImageDataProvider() {
-    return array(
-      array(array('logo_delete' => true), false, '画像を削除できません'),
-      array(array('logo' => true), true, '画像が削除されています'),
-      array(array(), true, '画像が削除されています'),
-    );
-  }
+	public function deleteImageDataProvider() {
+		return array(
+			array(array('logo_delete' => true), false, '画像を削除できません'),
+			array(array('logo' => true), true, '画像が削除されています'),
+			array(array(), true, '画像が削除されています'),
+		);
+	}
 
 /**
  * テーマカラー設定を保存する
@@ -124,46 +119,40 @@ class ThemeConfigTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider updateColorConfigDataProvider
  */
-  public function testUpdateColorConfig($data, $expected, $message = null) {
+	public function testUpdateColorConfig($data, $expected, $message = null) {
 
-    // 設定元のファイル(config.css)を取得($dataが設定されてない場合、元のファイルが削除されるので、再生成するため)
-    $configCssPathOriginal = getViewPath() . 'css' . DS . 'config.css';
-    $FileOriginal = new File($configCssPathOriginal);  
-    $configOriginal = $FileOriginal->read();
+		// 設定元のファイル(config.css)を取得($dataが設定されてない場合、元のファイルが削除されるので、再生成するため)
+		$configCssPathOriginal = getViewPath() . 'css' . DS . 'config.css';
+		$FileOriginal = new File($configCssPathOriginal);  
+		$configOriginal = $FileOriginal->read();
 
-    // 設定ファイルの取得
-    $configCssPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
-    $File = new File($configCssPath);
+		// 設定ファイルの取得
+		$configCssPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
+		$File = new File($configCssPath);
 
-    // テーマーカラーの設定を実行
-    $data = array('ThemeConfig' => $data);
-    $this->ThemeConfig->updateColorConfig($data);
+		// テーマーカラーの設定を実行
+		$data = array('ThemeConfig' => $data);
+		$this->ThemeConfig->updateColorConfig($data);
 
-    // 元のファイルを再生成
-    $FileOriginal->write($configOriginal);
-    $FileOriginal->close();    
+		// 元のファイルを再生成
+		$FileOriginal->write($configOriginal);
+		$FileOriginal->close();    
 
-    // 生成したconfig.cssをの内容を取得
-    $setting = $File->read();
-    $File->close();
-    unlink($configCssPath);
+		// 生成したconfig.cssをの内容を取得
+		$setting = $File->read();
+		$File->close();
+		unlink($configCssPath);
 
-    $this->assertRegExp('/' . $expected . '/s', $setting, $message);
+		$this->assertRegExp('/' . $expected . '/s', $setting, $message);
 
-  }
+	}
 
-
-/**
- * updateColorConfig用データプロバイダ
- *
- * @return array
- */
-  public function updateColorConfigDataProvider() {
-    return array(
-      array(array( 'color_main' => '000000' ), '#000000', 'テーマカラーを設定できません'),
-      array(array( 'color_main' => '000000', 'color_link' => '111111' ), '#000000.*#111111', 'テーマカラーを複数設定できません'),
-      array(array('hoge' => '000000'), '{.}', '$dataが適切でないのにcssの要素が空ではありません'),
-      array(array(), '{.}', '$dataがないのにcssの要素が空ではありません'),
-    );
-  }
+	public function updateColorConfigDataProvider() {
+		return array(
+			array(array( 'color_main' => '000000' ), '#000000', 'テーマカラーを設定できません'),
+			array(array( 'color_main' => '000000', 'color_link' => '111111' ), '#000000.*#111111', 'テーマカラーを複数設定できません'),
+			array(array('hoge' => '000000'), '{.}', '$dataが適切でないのにcssの要素が空ではありません'),
+			array(array(), '{.}', '$dataがないのにcssの要素が空ではありません'),
+		);
+	}
 }

@@ -26,53 +26,53 @@ App::uses('ThemeFile', 'Model');
  */
 class ThemeFileTest extends BaserTestCase {
 
-  public $fixtures = array(
-    'baser.Default.ThemeConfig',
-  );
+	public $fixtures = array(
+		'baser.Default.ThemeConfig',
+	);
 
-  public function setUp() {
-    parent::setUp();
-    $this->ThemeFile = ClassRegistry::init('ThemeFile');
-  }
+	public function setUp() {
+		parent::setUp();
+		$this->ThemeFile = ClassRegistry::init('ThemeFile');
+	}
 
-  public function tearDown() {
-    unset($this->ThemeFile);
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->ThemeFile);
+		parent::tearDown();
+	}
 
 /**
  * validate
  */
-  public function test必須チェック異常系() {
-    $this->ThemeFile->create(array(
-      'ThemeFile' => array(
-        'name' => '',
-      )
-    ));
-    $this->assertFalse($this->ThemeFile->validates());
-    $this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
-    $this->assertEquals('テーマファイル名を入力してください。', current($this->ThemeFile->validationErrors['name']));
-  }
+	public function test必須チェック異常系() {
+		$this->ThemeFile->create(array(
+			'ThemeFile' => array(
+				'name' => '',
+			)
+		));
+		$this->assertFalse($this->ThemeFile->validates());
+		$this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
+		$this->assertEquals('テーマファイル名を入力してください。', current($this->ThemeFile->validationErrors['name']));
+	}
 
-  public function test必須チェック正常系() {
-    $this->ThemeFile->create(array(
-      'ThemeFile' => array(
-        'name' => 'baser',
-        'parent' => 'hoge'
-      )
-    ));
-    $this->assertTrue($this->ThemeFile->validates());
-  }
+	public function test必須チェック正常系() {
+		$this->ThemeFile->create(array(
+			'ThemeFile' => array(
+				'name' => 'baser',
+				'parent' => 'hoge'
+			)
+		));
+		$this->assertTrue($this->ThemeFile->validates());
+	}
 
-  public function test重複チェック異常系() {
-    $this->ThemeFile->create(array(
-      'ThemeFile' => array(
-        'name' => 'config.php',
-        'parent' => WWW_ROOT . 'theme/m-single/',
-      )
-    ));
-    $this->assertFalse($this->ThemeFile->validates());
-    $this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
-    $this->assertEquals('入力されたテーマファイル名は、同一階層に既に存在します。', current($this->ThemeFile->validationErrors['name']));
-  }
+	public function test重複チェック異常系() {
+		$this->ThemeFile->create(array(
+			'ThemeFile' => array(
+				'name' => 'config.php',
+				'parent' => WWW_ROOT . 'theme/m-single/',
+			)
+		));
+		$this->assertFalse($this->ThemeFile->validates());
+		$this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
+		$this->assertEquals('入力されたテーマファイル名は、同一階層に既に存在します。', current($this->ThemeFile->validationErrors['name']));
+	}
 }
