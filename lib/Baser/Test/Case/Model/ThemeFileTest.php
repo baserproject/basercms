@@ -67,8 +67,8 @@ class ThemeFileTest extends BaserTestCase {
   public function test重複チェック異常系() {
     $this->ThemeFile->create(array(
       'ThemeFile' => array(
-        'name' => 'index.php',
-        'parent' => WWW_ROOT . 'theme/m-single/Company',
+        'name' => 'config.php',
+        'parent' => WWW_ROOT . 'theme/m-single/',
       )
     ));
     $this->assertFalse($this->ThemeFile->validates());
