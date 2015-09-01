@@ -439,10 +439,10 @@ class PageCategory extends AppModel {
 
 /**
  * カテゴリフォルダのパスから対象となるデータが存在するかチェックする
- * 存在する場合は id を返す
+ * 存在する場合は ページカテゴリーID を返す
  * 
- * @param string $path
- * @return mixed
+ * @param string $path カテゴリフォルダのパス
+ * @return int
  * @access public
  */
 	public function getIdByPath($path) {
@@ -455,6 +455,7 @@ class PageCategory extends AppModel {
 				}
 			}
 		}
+
 		if (in_array($path, $this->_pageCategoryPathes)) {
 			return array_search($path, $this->_pageCategoryPathes);
 		} else {
@@ -465,6 +466,7 @@ class PageCategory extends AppModel {
 /**
  * モバイル用のカテゴリIDをリストで取得する
  * 
+ * @param string $type ページカテゴリーのタイプ
  * @param boolean $top
  * @return array $ids
  * @access public
@@ -478,6 +480,7 @@ class PageCategory extends AppModel {
 		if ($top) {
 			$ids[] = $agentId;
 		}
+
 		$children = $this->children($agentId, false, array('PageCategory.id'), array('PageCategory.id'));
 		if ($children) {
 			$children = Hash::extract($children, '{n}.PageCategory.id');
@@ -508,8 +511,10 @@ class PageCategory extends AppModel {
 
 /**
  * PCのIDを元にモバイル・スマホの相対階層のIDを取得する
- * @param type $id
- * @return type 
+ * 
+ * @param string type ユーザーエージェントのタイプ
+ * @param int $id ページカテゴリーID	
+ * @return int 
  */
 	public function getAgentRelativeId($type, $id) {
 		if (!$id) {
@@ -528,8 +533,8 @@ class PageCategory extends AppModel {
 /**
  * ツリーリストを取得する
  * 
- * @param array $fields
- * @param int $id
+ * @param array $fields 出力するページカテゴリーのフィールド名
+ * @param int $id ページカテゴリーID
  * @return array
  * @access public 
  */
@@ -537,7 +542,7 @@ class PageCategory extends AppModel {
 		$this->recursive = -1;
 		$pageCategories = array();
 		$pageCategories[] = $pageCategory = $this->read($fields, $id);
-		if ($pageCategory['PageCategory']['parent_id']) {
+		if (!empty($pageCategory['PageCategory']['parent_id'])) {
 			$parents = $this->getTreeList($fields, $pageCategory['PageCategory']['parent_id']);
 			$pageCategories = am($parents, $pageCategories);
 		}
@@ -547,8 +552,8 @@ class PageCategory extends AppModel {
 /**
  * 新しいカテゴリが追加できる状態かチェックする
  * 
- * @param int $userGroupId
- * @param boolean $rootEditable
+ * @param int $userGroupId ユーザグループID	
+ * @param boolean $rootEditable 編集可/不可
  * @return boolean
  * @access public
  */
@@ -573,8 +578,8 @@ class PageCategory extends AppModel {
 /**
  * ページカテゴリーをコピーする
  * 
- * @param int $id
- * @param array $data
+ * @param int $id ページカテゴリーID
+ * @param array $data ページカテゴリーのデータ
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {

@@ -50,7 +50,7 @@ class PageCategoryFixture extends BaserTestFixture {
 			'title' => 'ガラホ',
 			'sort' => '1',
 			'contents_navi' => 1,
-			'owner_id' => null,
+			'owner_id' => 1,
 			'layout_template' => '',
 			'content_template' => '',
 			'modified' => null,
