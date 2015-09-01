@@ -128,49 +128,22 @@ class ThemeConfigTest extends BaserTestCase {
 
     // 設定元のファイル(config.css)を取得($dataが設定されてない場合、元のファイルが削除されるので、再生成するため)
     $configCssPathOriginal = getViewPath() . 'css' . DS . 'config.css';
-    $FileOriginal = new File($configCssPathOriginal);
-    $cssContent = "/*
-a {
-  color: MAIN !important;
-}
+    $FileOriginal = new File($configCssPathOriginal);  
+    $configOriginal = $FileOriginal->read();
 
-a:hover {
-  color: HOVER !important;
-}
-
-a:active {
-  color: LINK !important;
-}
-
-a:visited {
-  color: SUB !important;
-}
-*/";
-
-    if (!$FileOriginal->exists()) { // config.cssの存在チェック
-      $FileOriginal->write($cssContent);
-      $FileOriginal->close();    
-      $FileOriginal = new File($configCssPathOriginal);
-    }
-
-    $config = $FileOriginal->read();
-
-    // ファイルの内容が空の場合書き込む
-    if(empty($config)) {
-      $FileOriginal->write($cssContent);
-    }
+    // 設定ファイルの取得
+    $configCssPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
+    $File = new File($configCssPath);
 
     // テーマーカラーの設定を実行
     $data = array('ThemeConfig' => $data);
     $this->ThemeConfig->updateColorConfig($data);
 
     // 元のファイルを再生成
-    $FileOriginal->write($config);
+    $FileOriginal->write($configOriginal);
     $FileOriginal->close();    
 
     // 生成したconfig.cssをの内容を取得
-    $configCssPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css';
-    $File = new File($configCssPath);
     $setting = $File->read();
     $File->close();
     unlink($configCssPath);
@@ -188,7 +161,7 @@ a:visited {
   public function updateColorConfigDataProvider() {
     return array(
       array(array( 'color_main' => '000000' ), '#000000', 'テーマカラーを設定できません'),
-      array(array( 'color_main' => '000000', 'color_sub' => '111111' ), '#000000.*#111111', 'テーマカラーを複数設定できません'),
+      array(array( 'color_main' => '000000', 'color_link' => '111111' ), '#000000.*#111111', 'テーマカラーを複数設定できません'),
       array(array('hoge' => '000000'), '{.}', '$dataが適切でないのにcssの要素が空ではありません'),
       array(array(), '{.}', '$dataがないのにcssの要素が空ではありません'),
     );
