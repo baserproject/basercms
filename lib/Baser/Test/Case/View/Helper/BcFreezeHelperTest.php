@@ -148,7 +148,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 		}
 
 		$result = $this->BcFreeze->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
-    $this->assertRegExp('/' . $expected . '/s', $result);
+    	$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
 /**
@@ -166,7 +166,7 @@ class BcFreezeHelperTest extends BaserTestCase {
       array(false, 'test', 'YMD', '12', array('empty' => array('day' => '選択されていません')), '<option value="">選択されていません'),
       array(true, 'test', 'YMD', '12', array(), 'type="hidden"'),
       array(true, 'test', 'YMD', '12', array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1')), '2010年.*4月.*1日'),
-      array(true, 'test', 'YMD', '12', array('selected' => '2010-4-1 11:22:33'), '2010年.*4月.*1日.*11時.*22分.*33秒'),
+      array(true, 'test', 'YMD', '12', array('selected' => '2010-4-1 11:22:33'), '2010年.*4月.*1日.*11時.*22分'),
       array(true, 'test', 'YMD', '12', array('selected' => array('day' => '100')), 'value="100"'),
       array(true, 'test', 'YMD', '12', array('empty' => true), '^((?!value="").)*$'),
     );
