@@ -126,13 +126,42 @@ class ThemeConfigTest extends BaserTestCase {
  */
   public function testUpdateColorConfig($data, $expected, $message = null) {
 
-    // 元のファイルを取得($dataが設定されてない場合、元のファイルが削除されるため)
+    // 設定元のファイル(config.css)を取得($dataが設定されてない場合、元のファイルが削除されるので、再生成するため)
     $configCssPathOriginal = getViewPath() . 'css' . DS . 'config.css';
     $FileOriginal = new File($configCssPathOriginal);
+    $cssContent = "/*
+a {
+  color: MAIN !important;
+}
+
+a:hover {
+  color: HOVER !important;
+}
+
+a:active {
+  color: LINK !important;
+}
+
+a:visited {
+  color: SUB !important;
+}
+*/";
+
+    if (!$FileOriginal->exists()) { // config.cssの存在チェック
+      $FileOriginal->write($cssContent);
+      $FileOriginal->close();    
+      $FileOriginal = new File($configCssPathOriginal);
+    }
+
     $config = $FileOriginal->read();
 
+    // ファイルの内容が空の場合書き込む
+    if(empty($config)) {
+      $FileOriginal->write($cssContent);
+    }
+
     // テーマーカラーの設定を実行
-    $data = array('ThemeConfig' => $data );
+    $data = array('ThemeConfig' => $data);
     $this->ThemeConfig->updateColorConfig($data);
 
     // 元のファイルを再生成

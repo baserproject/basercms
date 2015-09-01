@@ -111,7 +111,13 @@ class SiteConfigTest extends BaserTestCase {
  * テーマの一覧を取得する
  */
   public function testGetTheme() {
-    $result = $this->SiteConfig->getThemes();
+    $results = $this->SiteConfig->getThemes();
+    $result = array();
+    foreach ($results as $key => $value) {
+      if(strstr($key, 'm-single') || strstr($key, 'nada-icons') || strstr($key, 'skelton')) {
+        $result[$key] = $value;
+      }
+    }
     $expected = array(
       'm-single' => 'M-single',
       'nada-icons' => 'Nada-icons',
