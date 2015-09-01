@@ -57,8 +57,7 @@ class Tool extends AppModel {
 /**
  * データソースを指定してモデルリストを取得する
  * 
- * @param string $configKeyName
- * @param string $ds
+ * @param string $configKeyName データソース名
  * @return array
  * @access public
  */
@@ -81,8 +80,8 @@ class Tool extends AppModel {
 /**
  * スキーマを書き出す
  * 
- * @param string $path
  * @param array $data
+ * @param string $path スキーマファイルの生成場所
  * @return boolean
  * @access public
  */
@@ -113,7 +112,7 @@ class Tool extends AppModel {
  * スキーマファイルを読み込む
  * 
  * @param array $data
- * @param string $tmpPath
+ * @param string $tmpPath 
  * @return boolean
  * @access public
  */
@@ -139,7 +138,7 @@ class Tool extends AppModel {
  *
  * @param string $field
  * @param array $values
- * @param string $path
+ * @param string $path スキーマファイルの生成場所
  * @return boolean
  * @access protected
  */
