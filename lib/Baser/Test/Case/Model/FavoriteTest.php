@@ -62,8 +62,8 @@ class FavoriteTest extends BaserTestCase {
  * - 2 サイト運営
  */
   public function login($id) {
-    $Session =  new SessionComponent(new ComponentCollection());
-    $this->Favorite->setSession($Session);
+    session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
+    $this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
     $this->Favorite->_Session->write('Auth.User.id', $id);
     $this->Favorite->_Session->write('Auth.User.user_group_id', $id);
   }
