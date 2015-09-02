@@ -258,10 +258,10 @@ class BcPageHelperTest extends BaserTestCase {
 				),
 				'pageCategories' => array(
 					array(
-						'PageCategory' => array('id' => '3','title' => 'ガラホ'),
+						'PageCategory' => array('id' => '3','title' => 'ガラホ', 'url' => '/garaphone/index'),
 						'children' => array('pages' =>array(
 								array(
-									'Page'=>array('name' => 'garaphone','title' => 'ガラホ','url' => '/gh/')
+									'Page'=>array('name' => 'index','title' => 'ガラホ', 'url' => '/garaphone/')
 								)
 							)
 						),
@@ -278,7 +278,7 @@ class BcPageHelperTest extends BaserTestCase {
 				),
 				'pageCategories' => array(
 					array(
-						'PageCategory' => array('id' => '3','title' => 'ガラホ'),
+						'PageCategory' => array('id' => '3','title' => 'ガラホ','url' => '/garaphone/index'),
 					)
 				)
 			),
@@ -293,10 +293,10 @@ class BcPageHelperTest extends BaserTestCase {
 				),
 				'pageCategories' => array(
 					array(
-						'PageCategory' => array('id' => '3','title' => 'ガラホ'),
+						'PageCategory' => array('id' => '3','title' => 'ガラホ', 'url' => '/garaphone/index'),
 						'children' => array('pages' =>array(
 								array(
-									'Page'=>array('name' => 'garaphone','title' => 'ガラホ','url' => '/gh/')
+									'Page'=>array('name' => 'index','title' => 'ガラホ','url' => '/garaphone/')
 								)
 							)
 						),
@@ -306,9 +306,9 @@ class BcPageHelperTest extends BaserTestCase {
 			'$recursive(関連データの階層)を指定できません'),
 			array(3, null, array('pages' => array(
 					array('Page'=>array(
-						'name' => 'garaphone',
+						'name' => 'index',
 						'title' => 'ガラホ',
-						'url' => '/gh/',
+						'url' => '/garaphone/',
 					)),
 			)),
 			'親カテゴリをもったカテゴリからページリストを取得できません'),
