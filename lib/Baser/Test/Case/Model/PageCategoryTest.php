@@ -27,8 +27,14 @@ App::uses('PageCategory', 'Model');
 class PageCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Page',
-		'baser.Default.PageCategory',
+		'baser.Model.PageModel',
+		// 'baser.Default.Page',
+		'baser.Model.PageCategoryModel',
+		// 'baser.Default.PageCategory',
+		'baser.Default.PluginContent',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
+		'baser.Default.UserGroup',
 	);
 
 	public function setUp() {
@@ -122,11 +128,32 @@ class PageCategoryTest extends BaserTestCase {
  * コントロールソースを取得する
  *
  * @param string フィールド名
- * @return array コントロールソース
- * @access public
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getControlSourceDataProvider
  */
-	public function getControlSource($field, $options = array()) {
+	public function testGetControlSource($fields, $options, $expected, $message = null) {
+		$result = $this->PageCategory->getControlSource($fields, $options);
+		$this->assertEquals($expected, $result, $message);
+	}
 
+	public function getControlSourceDataProvider() {
+		return array(
+			array('parent_id', array(), array(5 => 'タブレット'), 'コントロールソースを正しく取得できません'),
+			array('parent_id',
+						array(
+							'excludeParentId' => 5
+						), array(), 'コントロールソースを正しく取得できません'),
+			array('parent_id',
+						array(
+							'conditions' => array('id' => 5)
+						), array(5 => 'タブレット'), 'コントロールソースを正しく取得できません'),
+			array('parent_id',
+						array(
+							'conditions' => array('id' => 4)
+						), array(), 'コントロールソースを正しく取得できません'),
+			array('owner_id', array(), array(1 => 'システム管理', 2 => 'サイト運営'), 'コントロールソースを正しく取得できません'),
+		);
 	}
 
 /**
@@ -135,64 +162,128 @@ class PageCategoryTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function beforeSave($options = array()) {
+	public function testBeforeSave($options = array()) {
+		$this->markTestIncomplete('このテストは、まだ完成していません');
 
+		$this->PageCategory->data['PageCategory']['id'] = 1;
+		$result = $this->PageCategory->beforeSave();
+		$this->assertEquals($expected, $result, $message);
 	}
 
 /**
  * afterSave
- * 
- * @param boolean $created
- * @return void
- * @access public
  */
-	public function afterSave($created, $options = array()) {
+	public function testAfterSave() {
+
+		// 適用するページカテゴリID
+		$this->PageCategory->data['PageCategory']['id'] = $id = 2;
+		$result = $this->PageCategory->afterSave(false);
+
+		// 正しく更新できているか確認用データ取得
+		$Page = $this->PageCategory->Page->find('all', array(
+			'conditions' => array('Page.page_category_id' => $id),
+			'fields' => array('Page.url'),
+			'recursive' => -1,
+			)
+		);
+		$Url = $Page[0]['Page']['url'];
+
+		// 正しく更新できているか確認用データ取得(子カテゴリ)
+		$childPage = $this->PageCategory->Page->find('all', array(
+			'conditions' => array('Page.page_category_id' => $id + 1),
+			'fields' => array('Page.url'),
+			'recursive' => -1,
+			)
+		);
+		$childUrl = $childPage[0]['Page']['url'];
+
+		$this->assertEquals('/smartphone/index', $Url, '関連するページデータのURLを更新できていません');
+		$this->assertEquals('/smartphone/garaphone/index', $childUrl, '関連するページデータの子カテゴリのURLを更新できていません');
 
 	}
 
 /**
  * ページカテゴリのフォルダを生成してパスを返す
  * 
- * @param array $data ページカテゴリデータ
- * @return mixid カテゴリのパス / false
- * @access public
+ * @param array $data カテゴリ名
+ * @param array $data 親カテゴリID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider createPageCategoryFolderDataProvider
  */
-	public function createPageCategoryFolder($data) {
+	public function testCreatePageCategoryFolder($name, $parent_id, $expected, $message = null) {
+		$data = array(
+			'PageCategory' => array(
+				'name' => $name,
+				'parent_id' => $parent_id
+			)
+		);
+		$resultPath = $this->PageCategory->createPageCategoryFolder($data);
 
+		$this->assertFileExists($resultPath, 'ページカテゴリのフォルダを生成できません');
+		$expected = getViewPath() . 'Pages' . DS . $expected;
+		$this->assertEquals($expected, $resultPath, $message);
+
+		@rmdir($expected);
+
+	}
+
+	public function createPageCategoryFolderDataProvider() {
+		return array(
+			array('hoge', null, 'hoge', '生成したフォルダのパスが正しくありません'),
+			array('hoge', 1, 'mobile/hoge', '生成したフォルダのパスが正しくありません'),
+			array('', null, '', '生成したフォルダのパスが正しくありません'),
+			array('', 1, 'mobile/', '生成したフォルダのパスが正しくありません'),
+		);
 	}
 
 /**
  * カテゴリフォルダのパスを取得する
  * 
- * @param array $data ページカテゴリデータ
- * @return string $path
- * @access public
+ * @param array $data カテゴリ名
+ * @param array $data 親カテゴリID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getPageCategoryFolderPathDataProvider
  */
-	public function getPageCategoryFolderPath($data) {
-
+	public function testGetPageCategoryFolderPath($name, $parent_id, $expected, $message = null) {
+		$data = array(
+			'PageCategory' => array(
+				'name' => $name,
+				'parent_id' => $parent_id
+			)
+		);
+		$result = $this->PageCategory->getPageCategoryFolderPath($data);
+		$expected = getViewPath() . 'Pages' . DS . $expected;
+		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * 同一階層に同じニックネームのカテゴリがないかチェックする
- * 同じテーマが条件
- * 
- * @param array $check
- * @return boolean
- * @access public
- */
-	public function duplicatePageCategory($check) {
-
+	public function getPageCategoryFolderPathDataProvider() {
+		return array(
+			array('hoge', null, 'hoge', 'カテゴリフォルダのパスを取得できません'),
+			array('hoge', 1, 'mobile/hoge', 'カテゴリフォルダのパスを取得できません'),
+			array('', null, '', 'カテゴリフォルダのパスを取得できません'),
+			array('', 1, 'mobile/', 'カテゴリフォルダのパスを取得できません'),
+		);
 	}
 
 /**
  * 関連するページデータをカテゴリ無所属に変更し保存する
  * 
+ * MEMO:エラーがでるためスキップ
+ * include(/vagrant/app/webroot/theme/nada-icons/Pages/about.php): 
+ * failed to open stream: そのようなファイルやディレクトリはありません
+ * 
  * @param boolean $cascade
  * @return boolean
  * @access public
  */
-	public function beforeDelete($cascade = true) {
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ完成していません');
 
+		$this->PageCategory->data['PageCategory']['id'] = 1;
+		$result = $this->PageCategory->beforeDelete();
+		$this->assertEquals($expected, $result, $message);
 	}
 
 /**
@@ -202,41 +293,115 @@ class PageCategoryTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function releaseRelatedPagesRecursive($categoryId) {
-
+	public function testReleaseRelatedPagesRecursive() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
  * 関連するページのカテゴリを解除する
  * 
+ * MEMO:エラーがでるためスキップ
+ * include(/vagrant/app/webroot/theme/nada-icons/Pages/about.php): 
+ * failed to open stream: そのようなファイルやディレクトリはありません
+ * 
  * @param int $categoryId
- * @return boolean
- * @access public
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider releaseRelatedPagesDataProvider
  */
-	public function releaseRelatedPages($categoryId) {
+	public function testReleaseRelatedPages($categoryId, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
+		// 解除できるかテスト
+		$result = $this->PageCategory->releaseRelatedPages($categoryId);
+		$this->assertTrue($result, '関連するページのカテゴリを解除できません');
+
+		// 正しく更新できているか確認
+		$garaphonePage = $this->PageCategory->Page->find('all', array(
+			'conditions' => array('Page.page_category_id' => $categoryId),
+			'fields' => array('Page.url'),
+			'recursive' => -1,
+			)
+		);
+		$garaphoneUrl = $garaphonePage[0]['Page']['url'];
+		$this->assertEquals('/garaphone/index', $garaphoneUrl, '関連するページデータのURLを正しく更新できません');
+
+	}
+
+	public function releaseRelatedPagesDataProvider() {
+		return array(
+			array(2, '', 'カテゴリフォルダのパスからページカテゴリーIDを取得できません'),
+		);
 	}
 
 /**
  * 関連するページデータのURLを更新する
  * 
- * @param string $id
- * @return void
- * @access public
+ * @param string $id ページカテゴリーID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider updateRelatedPageUrlRecursiveDataProvider
  */
-	public function updateRelatedPageUrlRecursive($categoryId) {
+	public function testUpdateRelatedPageUrlRecursive($id, $expected, $message = null) {
 
+		// 更新できるかテスト
+		$result = $this->PageCategory->updateRelatedPageUrlRecursive($id);
+		$this->assertTrue($result, '関連するページデータのURLを更新できません');
+
+		// 正しく更新できているか確認
+		$childPage = $this->PageCategory->Page->find('all', array(
+			'conditions' => array('Page.page_category_id' => $id + 1),
+			'fields' => array('Page.url'),
+			'recursive' => -1,
+			)
+		);
+		$childUrl = $childPage[0]['Page']['url'];
+		$this->assertEquals($expected, $childUrl, $message);
+
+	}
+
+	public function updateRelatedPageUrlRecursiveDataProvider() {
+		return array(
+			array(1, '/smartphone/index', '関連するページデータのURLを正しく更新できません'),
+			array(2, '/smartphone/garaphone/index', '関連するページデータのURLを正しく更新できません'),
+			array(3, '/smartphone/garaphone/garaphone2/index', '関連するページデータのURLを正しく更新できません'),
+		);
 	}
 
 /**
  * 関連するページデータのURLを更新する
  * 
- * @param string $id
- * @return void
- * @access public
+ * @param string $id ページカテゴリーID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider updateRelatedPageUrlDataProvider
  */
-	public function updateRelatedPageUrl($id) {
+	public function testUpdateRelatedPageUrl($id, $expected, $message = null) {
+		
+		// 更新できるかテスト
+		$result = $this->PageCategory->updateRelatedPageUrl($id);
+		$this->assertTrue($result, '関連するページデータのURLを更新できません');
 
+		// 正しく更新できているか確認
+		$Page = $this->PageCategory->Page->find('all', array(
+			'conditions' => array('Page.page_category_id' => $id),
+			'fields' => array('Page.url'),
+			'recursive' => -1,
+			)
+		);
+		$Url = $Page[0]['Page']['url'];
+		$this->assertEquals($expected, $Url, $message);
+
+	}
+
+
+	public function updateRelatedPageUrlDataProvider() {
+		return array(
+			array(1, '/mobile/index', '関連するページデータのURLを正しく更新できません'),
+			array(2, '/smartphone/index', '関連するページデータのURLを正しく更新できません'),
+			array(3, '/smartphone/garaphone/index', '関連するページデータのURLを正しく更新できません'),
+			array(4, '/smartphone/garaphone/garaphone2/index', '関連するページデータのURLを正しく更新できません'),
+		);
 	}
 
 /**
@@ -279,10 +444,12 @@ class PageCategoryTest extends BaserTestCase {
 		return array(
 			array('mobile', true, array(1), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
 			array('mobile', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
-			array('smartphone', true, array(2, 3), 'モバイル用の子カテゴリをもったカテゴリIDをリストで正しく取得できません'),
-			array('smartphone', false, array(3), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
-			array('garaphone', true, array(3), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
-			array('garaphone', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('smartphone', true, array(2, 3, 4), 'モバイル用の子カテゴリをもったカテゴリIDをリストで正しく取得できません'),
+			array('smartphone', false, array(3, 4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone', true, array(3, 4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone', false, array(4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone2', true, array(4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone2', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
 		);
 	}
 
@@ -310,22 +477,25 @@ class PageCategoryTest extends BaserTestCase {
 /**
  * PCのIDを元にモバイル・スマホの相対階層のIDを取得する
  * 
- * @param type $id
+ * @param string type ユーザーエージェントのタイプ
+ * @param int $id ページカテゴリーID	
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider getAgentRelativeIdDataProvider
  */
 	public function testGetAgentRelativeId($type, $id, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		$result = $this->PageCategory->getAgentRelativeId($type, $id);
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function getAgentRelativeIdDataProvider() {
 		return array(
-			array('mobile', false, 1, 'モバイルの相対階層のIDを取得できません'),
-			array('smartphone', false, 2, 'スマートフォンの相対階層のIDを取得できません'),
-			array('garaphone', false, 3, 'ガラホの相対階層のIDを取得できません'),
-			array('smartphone', 3, 3, 'PCのIDを元にモバイルの相対階層のIDを取得できません'),
+			array('mobile', null, 1, 'モバイルの相対階層のIDを取得できません'),
+			array('smartphone', null, 2, 'スマートフォンの相対階層のIDを取得できません'),
+			array('garaphone', null, 3, 'ガラホの相対階層のIDを取得できません'),
+			array('smartphone', 4, 3, 'PCのIDを元にモバイルの相対階層のIDを取得できません'),
 		);
 	}
 
@@ -398,7 +568,15 @@ class PageCategoryTest extends BaserTestCase {
 	public function testCopy($id, $data, $expected, $message = null) {
 		$result = $this->PageCategory->copy($id, $data);
 		$this->assertEquals($expected, $result['PageCategory']['name'], $message);
+
+		// コピーされたフォルダを削除
 		@rmdir(BASER_THEMES . 'nada-icons/Pages/' . $expected);
+		if (isset($data['PageCategory']['parent_id'])) {
+			@rmdir(BASER_THEMES . 'nada-icons/Pages/mobile/' . $expected);
+		}
+		if ($id == 3) {
+			@rmdir(BASER_THEMES . 'nada-icons/Pages/smartphone/' . $expected);
+		}
 	}
 
 	public function copyDataProvider() {

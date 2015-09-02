@@ -117,7 +117,8 @@ class PageCategory extends AppModel {
 /**
  * コントロールソースを取得する
  *
- * @param string フィールド名
+ * @param string $field フィールド名
+ * @param array $options オプション
  * @return array コントロールソース
  * @access public
  */
@@ -177,6 +178,7 @@ class PageCategory extends AppModel {
 				}
 
 				foreach ($parents as $key => $parent) {
+					// var_dump($excludeIds, $key);
 					if ($parent && !in_array($key, $excludeIds)) {
 						if (preg_match("/^([_]+)/i", $parent, $matches)) {
 							$parent = preg_replace("/^[_]+/i", '', $parent);
@@ -207,11 +209,11 @@ class PageCategory extends AppModel {
  * @access public
  */
 	public function beforeSave($options = array()) {
+
 		// セーフモードの場合はフォルダの自動生成は行わない
 		if (ini_get('safe_mode')) {
 			return true;
 		}
-
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->createPageCategoryFolder($this->data);
 		if ($this->exists()) {
@@ -337,6 +339,7 @@ class PageCategory extends AppModel {
 		$id = $this->data['PageCategory']['id'];
 		if ($this->releaseRelatedPagesRecursive($id)) {
 			$path = $this->createPageCategoryFolder($this->find('first', array('conditions' => array('id' => $id))));
+			var_dump($path);
 			$folder = new Folder();
 			$folder->delete($path);
 			return true;
@@ -348,7 +351,7 @@ class PageCategory extends AppModel {
 /**
  * 関連するページのカテゴリを解除する（再帰的）
  * 
- * @param int $categoryId
+ * @param int $categoryId ページカテゴリーID
  * @return boolean
  * @access public
  */
@@ -369,7 +372,7 @@ class PageCategory extends AppModel {
 /**
  * 関連するページのカテゴリを解除する
  * 
- * @param int $categoryId
+ * @param int $categoryId ページカテゴリーID
  * @return boolean
  * @access public
  */
@@ -392,7 +395,7 @@ class PageCategory extends AppModel {
 /**
  * 関連するページデータのURLを更新する
  * 
- * @param string $id
+ * @param string $categoryId ページカテゴリーID
  * @return void
  * @access public
  */
@@ -401,6 +404,7 @@ class PageCategory extends AppModel {
 			return false;
 		}
 		$children = $this->children($categoryId);
+
 		$ret = true;
 		foreach ($children as $child) {
 			if (!$this->updateRelatedPageUrl($child['PageCategory']['id'])) {
@@ -413,7 +417,7 @@ class PageCategory extends AppModel {
 /**
  * 関連するページデータのURLを更新する
  * 
- * @param string $id
+ * @param string $id ページカテゴリーID
  * @return void
  * @access public
  */
@@ -467,7 +471,7 @@ class PageCategory extends AppModel {
  * モバイル用のカテゴリIDをリストで取得する
  * 
  * @param string $type ページカテゴリーのタイプ
- * @param boolean $top
+ * @param boolean $top 一番上の親カテゴリも取得するかどうか
  * @return array $ids
  * @access public
  */
@@ -481,7 +485,7 @@ class PageCategory extends AppModel {
 			$ids[] = $agentId;
 		}
 
-		$children = $this->children($agentId, true, array('PageCategory.id'), array('PageCategory.id'));
+		$children = $this->children($agentId, false, array('PageCategory.id'), array('PageCategory.id'));
 		if ($children) {
 			$children = Hash::extract($children, '{n}.PageCategory.id');
 			$ids = am($ids, $children);
