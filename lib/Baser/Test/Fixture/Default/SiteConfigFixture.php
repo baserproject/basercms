@@ -42,7 +42,7 @@ class SiteConfigFixture extends BaserTestFixture {
 		array(
 			'id' => '5',
 			'name' => 'theme',
-			'value' => 'm-single',
+			'value' => 'nada-icons',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 12:58:25'
 		),

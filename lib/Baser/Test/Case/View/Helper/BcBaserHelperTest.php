@@ -1746,7 +1746,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testLogo() {
-		$this->expectOutputRegex('/<img src="\/theme\/m-single\/img\/logo.png" alt="baserCMS" \/>/');
+		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS" \/>/');
 		$this->BcBaser->logo();
 	}
 
@@ -1780,11 +1780,11 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function mainImageDataProvider() {
 		return array(
-			array(array(), '<img src="\/theme\/m-single\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
+			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
 			array(array('num' => 2), 'main_image_2'),
 			array(array('all' => true, 'num' => 2), '^(.*main_image_1.*main_image_2)'),
 			array(array('all' => true, 'class' => 'test-class', 'id' => 'test-id'), '^(.*id="test-id".*class="test-class")'), 
-			array(array('popup' => true), 'href="\/theme\/m-single\/img\/main_image_1.jpg"'),
+			array(array('popup' => true), 'href="\/theme\/nada-icons\/img\/main_image_1.jpg"'),
 			array(array('alt' => 'テスト'), 'alt="テスト"'),
 			array(array('link' => '/test'), 'href="\/test"'),
 			array(array('maxWidth' => '200', 'maxHeight' => '200'), 'width="200"'),
@@ -1839,7 +1839,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testGetThemeUrl() {
 		$this->BcBaser->request = $this->_getRequest('/');
 		$this->BcBaser->request->webroot = '/';
-		$this->siteConfig['theme'] = 'm-single';
+		$this->siteConfig['theme'] = 'nada-icons';
 		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
 		$this->assertEquals($expects, $this->BcBaser->getThemeUrl());
 	}
@@ -1852,7 +1852,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testThemeUrl() {
 		$this->BcBaser->request = $this->_getRequest('/');
 		$this->BcBaser->request->webroot = '/';
-		$this->siteConfig['theme'] = 'm-single';
+		$this->siteConfig['theme'] = 'nada-icons';
 		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
 		ob_start();
 		$this->BcBaser->themeUrl();
