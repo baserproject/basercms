@@ -151,8 +151,8 @@ class ThemeConfigTest extends BaserTestCase {
 		return array(
 			array(array( 'color_main' => '000000' ), '#000000', 'テーマカラーを設定できません'),
 			array(array( 'color_main' => '000000', 'color_link' => '111111' ), '#000000.*#111111', 'テーマカラーを複数設定できません'),
-			array(array('hoge' => '000000'), "\{\n\}", '$dataが適切でないのにcssの要素が空ではありません'),
-			array(array(), "\{\n\}", '$dataがないのにcssの要素が空ではありません'),
+			array(array('hoge' => '000000'), "\{(\n|\r\n)}", '$dataが適切でないのにcssの要素が空ではありません'),
+			array(array(), "\{(\n|\r\n)\}", '$dataがないのにcssの要素が空ではありません'),
 		);
 	}
 }
