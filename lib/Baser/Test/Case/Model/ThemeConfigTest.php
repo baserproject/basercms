@@ -141,7 +141,7 @@ class ThemeConfigTest extends BaserTestCase {
 		// 生成したconfig.cssをの内容を取得
 		$setting = $File->read();
 		$File->close();
-		// unlink($configCssPath);
+		unlink($configCssPath);
 
 		$this->assertRegExp('/' . $expected . '/s', $setting, $message);
 
