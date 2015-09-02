@@ -536,8 +536,8 @@ class PageCategoryTest extends BaserTestCase {
 /**
  * 新しいカテゴリが追加できる状態かチェックする
  * 
- * @param int $userGroupId
- * @param boolean $rootEditable
+ * @param int $userGroupId ユーザグループID	
+ * @param boolean $rootEditable 編集可/不可
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider checkNewCategoryAddableDataProvider

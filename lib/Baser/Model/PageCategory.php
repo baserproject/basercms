@@ -178,7 +178,6 @@ class PageCategory extends AppModel {
 				}
 
 				foreach ($parents as $key => $parent) {
-					// var_dump($excludeIds, $key);
 					if ($parent && !in_array($key, $excludeIds)) {
 						if (preg_match("/^([_]+)/i", $parent, $matches)) {
 							$parent = preg_replace("/^[_]+/i", '', $parent);
@@ -339,7 +338,6 @@ class PageCategory extends AppModel {
 		$id = $this->data['PageCategory']['id'];
 		if ($this->releaseRelatedPagesRecursive($id)) {
 			$path = $this->createPageCategoryFolder($this->find('first', array('conditions' => array('id' => $id))));
-			var_dump($path);
 			$folder = new Folder();
 			$folder->delete($path);
 			return true;
