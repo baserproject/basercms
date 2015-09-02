@@ -20,9 +20,13 @@ App::uses('Page', 'Model');
 class PageTest extends BaserTestCase {
 
 	public $fixtures = array(
+		'baser.Default.Content',
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
-		'baser.Default.PageCategory',
+		// 'baser.Default.PageCategory',
+		'baser.Model.PageCategoryModel',
+		'baser.Default.PluginContent',
+		'baser.Default.User',
 	);
 
 /**
@@ -138,6 +142,264 @@ class PageTest extends BaserTestCase {
 		$this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
 	}
 
+
+/**
+ * フォームの初期値を設定する
+ * 
+ * @return	array	初期値データ
+ */
+	public function testGetDefaultValue() {
+	}
+
+/**
+ * beforeSave
+ *
+ * @param array $options
+ * @return boolean
+ */
+	public function beforeSave($options = array()) {
+
+	}
+
+
+/**
+ * URLよりモバイルやスマートフォン等のプレフィックスを取り除く
+ * 
+ * @param string $url 変換対象のURL
+ * @return string $url 変換後のURL
+ */
+	public function removeAgentPrefixFromUrl($url) {
+
+	}
+
+/**
+ * 最終登録IDを取得する
+ *
+ * @return	int
+ */
+	public function getInsertID() {
+	}
+
+
+/**
+ * ページテンプレートファイルが開けるかチェックする
+ * 
+ * @param	array	$data	ページデータ
+ * @return	boolean
+ */
+	public function checkOpenPageFile($data) {
+
+	}
+
+
+/**
+ * afterSave
+ * 
+ * @param boolean $created
+ * @param array $options
+ * @return boolean
+ */
+	public function afterSave($created, $options = array()) {
+
+	}
+
+/**
+ * 関連ページに反映する
+ * 
+ * @param string $type
+ * @param array $data
+ * @return boolean
+ */
+	public function refrect($type, $data) {
+
+	}
+
+
+/**
+ * 検索用データを生成する
+ *
+ * @param array $data
+ * @return array
+ */
+	public function createContent($data) {
+
+	}
+
+/**
+ * beforeDelete
+ *
+ * @param $cascade
+ * @return boolean
+ */
+	public function beforeDelete($cascade = true) {
+	}
+
+/**
+ * DBデータを元にページテンプレートを全て生成する
+ * 
+ * @return boolean
+ */
+	public function createAllPageTemplate() {
+
+	}
+
+
+/**
+ * ページテンプレートを生成する
+ * 
+ * @param array $data ページデータ
+ * @return boolean
+ */
+	public function createPageTemplate($data) {
+
+	}
+
+/**
+ * ページファイルのディレクトリを取得する
+ * 
+ * @param array $data
+ * @return string
+ */
+	protected function _getPageFilePath($data) {
+
+	}
+
+/**
+ * ページファイルを削除する
+ * 
+ * @param array $data 削除対象となるレコードデータ
+ * @return boolean
+ */
+	public function delFile($data) {
+
+	}
+
+/**
+ * ページのURLを取得する
+ * 
+ * @param array $data
+ * @return string
+ */
+	public function getPageUrl($data) {
+
+	}
+	
+/**
+ * 固定ページのURLを表示用のURLに変換する
+ * 
+ * 《変換例》
+ * /mobile/index → /m/
+ * 
+ * @param string $url 変換対象のURL
+ * @return string 表示の用のURL
+ */
+	public function convertViewUrl($url) {
+
+	}
+
+
+/**
+ * 本文にbaserが管理するタグを追加する
+ * 
+ * @param string $id ID
+ * @param string $contents 本文
+ * @param string $title タイトル
+ * @param string $description 説明文
+ * @param string $code コード
+ * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
+ */
+	public function addBaserPageTag($id, $contents, $title, $description, $code) {
+
+	}
+
+/**
+ * ページ存在チェック
+ *
+ * @param string チェック対象文字列
+ * @return boolean
+ */
+	public function pageExists($check) {
+
+	}
+
+/**
+ * コントロールソースを取得する
+ *
+ * @param string $field フィールド名
+ * @param array $options
+ * @return mixed $controlSource コントロールソース
+ */
+	public function getControlSource($field, $options = array()) {
+
+	}
+
+/**
+ * キャッシュ時間を取得する
+ * 
+ * @param string $url
+ * @return mixed int or false
+ */
+	public function getCacheTime($url) {
+
+	}
+
+/**
+ * 公開チェックを行う
+ * 
+ * @param string $url
+ * @return boolean
+ */
+	public function checkPublish($url) {
+
+	}
+
+
+/**
+ * 公開済の conditions を取得
+ *
+ * @return array
+ */
+	public function getConditionAllowPublish() {
+
+	}
+
+/**
+ * ページファイルを登録する
+ * ※ 再帰処理
+ *
+ * @param string $targetPath
+ * @param string $parentCategoryId
+ * @return array 処理結果 all / success
+ */
+	public function entryPageFiles($targetPath, $parentCategoryId = '') {
+
+	}
+
+/**
+ * 関連ページの存在チェック
+ * 存在する場合は、ページIDを返す
+ *
+ * @param string $type エージェントタイプ
+ * @param array $data ページデータ
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider agentExistsDataProvider
+ */
+	public function agentExists($type, $data, $expected, $message = null) {
+		$result = $this->Page->agentExists($type, $data);
+		$this->assertEquals($result, $expects);
+	}
+
+	public function agentExistsDataProvider() {
+		return array(
+			array('/service', true),
+			array('/service.html', true),
+			array('/servce.css', false),
+			array('/', true),
+			array('/hoge', false)
+		);
+	}
+
 /**
  * 固定ページとして管理されているURLかチェックする
  * 
@@ -158,6 +420,118 @@ class PageTest extends BaserTestCase {
 			array('/servce.css', false),
 			array('/', true),
 			array('/hoge', false)
+		);
+	}
+
+
+/**
+ * delete
+ *
+ * @param mixed $id ID of record to delete
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider deleteDataProvider
+ */
+	public function testDelete($id, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$result = $this->Page->delete($id);
+
+		// 削除できているか確認用にデータ取得
+		$Page = $this->Page->find('all', array(
+			'conditions' => array('Page.id' => $id),
+			'fields' => array('Page.id'),
+			'recursive' => -1,
+			)
+		);
+		var_dump($Page);
+
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function deleteDataProvider() {
+		return array(
+			array(1, 'dasdas', 'ページデータをコピーできません'),
+		);
+	}
+
+/**
+ * ページデータをコピーする
+ * 
+ * @param int $id ページID
+ * @param array $data コピーしたいデータ
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider copyDataProvider
+ */
+	public function testCopy($id, $data, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->Page->copy($id, $data);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function copyDataProvider() {
+		return array(
+			array(1, array(), 'dasdas', 'ページデータをコピーできません'),
+		);
+	}
+
+/**
+ * 連携チェック
+ * 
+ * @param string $agentPrefix
+ * @param string $url
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider isLinkedDataProvider
+ */
+	public function testIsLinked($agentPrefix, $url, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$result = $this->Page->isLinked($agentPrefix, $url);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function isLinkedDataProvider() {
+		return array(
+			array('mobile', '/mobile/index', 'dasdas', '関連するページデータのURLを正しく更新できません'),
+		);
+	}
+
+/**
+ * treeList
+ * 
+ * @param int $categoryId ページカテゴリーID
+ * @param string $expectedChildPageCategory 期待するページカテゴリー
+ * @param array $expectedPageIds 期待するページID
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider treeListDataProvider
+ */
+	public function testTreeList($categoryId, $expectedChildPageCategory, $expectedPageIds, $message = null) {
+		$result = $this->Page->treeList($categoryId);
+
+		// 子カテゴリを代入
+		$resultChildPageCategory = '';
+		if (isset($result['pageCategories'][0]['PageCategory']['name'])) {
+			$resultChildPageCategory = $result['pageCategories'][0]['PageCategory']['name'];
+		}
+
+		// 関連ページのIDを代入
+		$resultPageIds = array();
+		foreach ($result['pages'] as $key => $value) {
+			$resultPageIds[] = $value['Page']['id'];
+		}
+
+		$this->assertEquals($expectedChildPageCategory, $resultChildPageCategory, $message);
+		$this->assertEquals($expectedPageIds, $resultPageIds, $message);
+	}
+
+	public function treeListDataProvider() {
+		return array(
+			array(1, '', array(5, 11), 'ページカテゴリーに関連したデータを取得できません'),
+			array(2, 'garaphone', array(6, 7, 8, 9, 10), 'ページカテゴリーに関連したデータを取得できません'),
+			array(3, 'garaphone2', array(12), 'ページカテゴリーに関連したデータを取得できません'),
+			array(4, '', array(), 'ページカテゴリーに関連したデータを取得できません'),
 		);
 	}
 

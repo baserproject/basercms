@@ -1083,7 +1083,7 @@ class Page extends AppModel {
 /**
  * delete
  *
- * @param mixed $id ID of record to delete
+ * @param mixed $id ページID
  * @param boolean $cascade Set to true to delete records that depend on this record
  * @return boolean True on success
  */
@@ -1112,8 +1112,8 @@ class Page extends AppModel {
 /**
  * ページデータをコピーする
  * 
- * @param int $id
- * @param array $data
+ * @param int $id ページID
+ * @param array $data コピーしたいデータ
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {
@@ -1179,6 +1179,12 @@ class Page extends AppModel {
 		return $linked;
 	}
 
+/**
+ * treeList
+ * ページカテゴリーに関連したデータを取得する
+ * 
+ * @param int $categoryId ページカテゴリーID
+ */
 	public function treeList($categoryId) {
 		return $this->_treeList($categoryId);
 	}
