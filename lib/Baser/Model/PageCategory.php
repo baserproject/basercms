@@ -481,7 +481,7 @@ class PageCategory extends AppModel {
 			$ids[] = $agentId;
 		}
 
-		$children = $this->children($agentId, false, array('PageCategory.id'), array('PageCategory.id'));
+		$children = $this->children($agentId, true, array('PageCategory.id'), array('PageCategory.id'));
 		if ($children) {
 			$children = Hash::extract($children, '{n}.PageCategory.id');
 			$ids = am($ids, $children);

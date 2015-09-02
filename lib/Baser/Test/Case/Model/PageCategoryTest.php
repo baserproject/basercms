@@ -271,18 +271,18 @@ class PageCategoryTest extends BaserTestCase {
  * @dataProvider getAgentCategoryIdsDataProvider
  */
 	public function testGetAgentCategoryIds($type, $top, $expected, $message = null) {
-		$this->markTestIncomplete('children($agentId, true ~ の方だと理想的な動きをします');
-
 		$result = $this->PageCategory->getAgentCategoryIds($type, $top);
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function getAgentCategoryIdsDataProvider() {
 		return array(
-			array('mobile', true, array(1), 'モバイル用のカテゴリIDをリストで取得できません'),
-			array('mobile', false, array(), 'モバイル用のカテゴリIDをリストで取得できません'),
-			array('smartphone', true, array(2), 'モバイル用のカテゴリIDをリストで取得できません'),
-			array('garaphone', true, array(3), 'モバイル用のカテゴリIDをリストで取得できません'),
+			array('mobile', true, array(1), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('mobile', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('smartphone', true, array(2, 3), 'モバイル用の子カテゴリをもったカテゴリIDをリストで正しく取得できません'),
+			array('smartphone', false, array(3), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone', true, array(3), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
 		);
 	}
 
