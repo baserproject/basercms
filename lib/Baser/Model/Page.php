@@ -533,6 +533,7 @@ class Page extends AppModel {
 			$path = APP . 'View' . DS . 'Pages' . DS;
 		}
 
+
 		if (!is_dir($path)) {
 			mkdir($path);
 			chmod($path, 0777);
@@ -560,6 +561,7 @@ class Page extends AppModel {
 				}
 			}
 		}
+
 		return $path . $file . Configure::read('BcApp.templateExt');
 	}
 
@@ -657,10 +659,9 @@ class Page extends AppModel {
 /**
  * ページ存在チェック
  *
- * @param string チェック対象文字列
  * @return boolean
  */
-	public function pageExists($check) {
+	public function pageExists() {
 		$conditions['Page.name'] = $this->data['Page']['name'];
 		if ($this->exists()) {
 			$conditions['Page.id <>'] = $this->data['Page']['id'];
@@ -677,6 +678,7 @@ class Page extends AppModel {
 		} else {
 			$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
 		}
+
 		if (!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
 			return true;
 		} else {
@@ -822,7 +824,7 @@ class Page extends AppModel {
 	}
 
 /**
- * 公開済の conditions を取得
+ * 公開済を取得するための conditions を取得
  *
  * @return array
  */

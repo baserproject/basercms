@@ -20,11 +20,17 @@ App::uses('Page', 'Model');
 class PageTest extends BaserTestCase {
 
 	public $fixtures = array(
+		'baser.Default.BlogContent',
+		'baser.Default.BlogCategory',
+		'baser.Default.BlogPost',
+		'baser.Default.BlogPostsBlogTag',
+		'baser.Default.BlogTag',
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
-		'baser.Default.Page',
-		// 'baser.Default.PageCategory',
+		'baser.Model.PageModel',
 		'baser.Model.PageCategoryModel',
+		'baser.Default.Permission',
+		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
 		'baser.Default.User',
 	);
@@ -54,6 +60,29 @@ class PageTest extends BaserTestCase {
 	public function tearDown() {
 		unset($this->Page);
 		parent::tearDown();
+	}
+
+/**
+ * _getPageFilePath を呼び出す
+ * 
+ * 次のテストで使います
+ * testCreateAllPageTemplate()
+ * testCreatePageTemplate()
+ * testDelFile()
+ * 
+ * @param array $data ページデータ
+ * - $data['Page']['name'], $data['Page']['page_category_id'] が必要
+ * @return string
+ */
+	public function getPageFilePath($data) {
+
+		// リフレクションで _getPageFilePath を呼び出す
+		$reflec = new ReflectionMethod($this->Page, '_getPageFilePath');
+		$reflec->setAccessible(true);
+		$path = $reflec->invoke(new $this->Page(), $data);
+
+		return $path;
+
 	}
 
 /**
@@ -174,10 +203,20 @@ class PageTest extends BaserTestCase {
 
 /**
  * 最終登録IDを取得する
- *
- * @return	int
  */
-	public function getInsertID() {
+	public function testGetInsertID() {
+		$this->Page->save(array(
+			'Page' => array(
+				'name' => 'hoge',
+				'title' => 'hoge',
+				'url' => '/hoge',
+				'description' => 'hoge',
+				'status' => 1,
+				'page_category_id' => null,
+			)
+		));
+		$result = $this->Page->getInsertID();
+		$this->assertEquals(16, $result, '正しく最終登録IDを取得できません');
 	}
 
 
@@ -218,12 +257,82 @@ class PageTest extends BaserTestCase {
 /**
  * 検索用データを生成する
  *
- * @param array $data
- * @return array
+ * @param int $name ページID
+ * @param string $name ページ名
+ * @param id $categoryId ページカテゴリーID
+ * @param string $title ページタイトル
+ * @param string $url ページURL
+ * @param string $description ページ概要
+ * @param date $publish_begin 公開開始日時
+ * @param date $publish_end 公開終了日時
+ * @param date $detail 期待するページdescription
+ * @param int $status 公開状態
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider createContentDataProvider
  */
-	public function createContent($data) {
+	public function testCreateContent($id, $name, $categoryId, $title, $url, $description, $publish_begin, $publish_end, $status, $message = null) {
+		$data = array(
+			'Page' => array(
+				'id' => $id,
+				'name' => $name,
+				'page_category_id' => $categoryId,
+				'title' => $title,
+				'url' => $url,
+				'description' => $description,
+				'publish_begin' => $publish_begin,
+				'publish_end' => $publish_end,
+				'status' => $status,
+			)
+		);
 
+		$expected = array('Content' => array(
+				'model_id' => $id,
+				'type' => 'ページ',
+				'category' => '',
+				'title' => $title,
+				'detail' => ' 
+
+<section class="mainHeadline">
+<h2>シングルページデザインで<br />
+<span class="fcGreen">見やすくカッコいい</span>WEBサイトへ！</h2>
+</section>
+<!-- /mainHeadline -->
+
+<div class="mainWidth" id="information">
+<section class="news1">
+<h2>NEWS RELEASE</h2>
+	<ul class="post-list">
+																		<li class="clearfix post-1 first">
+				<span class="date">2015.08.10</span><br />
+				<span class="title"><a href="/news/archives/2">新商品を販売を開始しました。</a></span>
+			</li>
+																		<li class="clearfix post-2 last">
+				<span class="date">2015.08.10</span><br />
+				<span class="title"><a href="/news/archives/1">ホームページをオープンしました</a></span>
+			</li>
+			</ul>
+	</section>
+
+<section class="news2">
+<h2>BaserCMS NEWS</h2>
+<script type="text/javascript" src="/feed/ajax/1.js"></script></section>
+</div><!-- /information -->',
+				'url' => $url,
+				'status' => $status,
+			)
+		);
+		$result = $this->Page->createContent($data);
+		$this->assertEquals($expected, $result, $message);
 	}
+
+
+	public function createContentDataProvider() {
+		return array(
+			array(1, 'index', null, 'index', '/index', '', null, null, true, '検索用データを正しく生成できません'),
+			array(1, 'index', null, 'タイトル', '/index', '', null, null, true, '検索用データを正しく生成できません'),
+		);
+	}
+
 
 /**
  * beforeDelete
@@ -231,59 +340,169 @@ class PageTest extends BaserTestCase {
  * @param $cascade
  * @return boolean
  */
-	public function beforeDelete($cascade = true) {
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
  * DBデータを元にページテンプレートを全て生成する
- * 
- * @return boolean
  */
-	public function createAllPageTemplate() {
+	public function testCreateAllPageTemplate() {
 
+		$this->Page->createAllPageTemplate();
+
+		// ファイルが生成されているか確認
+		$result = true;
+		$pages = $this->Page->find('all', array('recursive' => -1));
+		foreach ($pages as $page) {
+			$data = array(
+				'Page' => array(
+					'name' => $page['Page']['name'],
+					'page_category_id' => $page['Page']['page_category_id'],
+				)
+			);
+			$path = $this->getPageFilePath($data);
+
+			if (!file_exists($path)) {
+				$result = false;
+			}
+
+			// デフォルトのPage情報にあわせて独自に追加したファイルを削除
+			if ($page['Page']['id'] > 12) {
+				@unlink($path);
+			}
+
+		}
+		
+		$this->assertEquals(true, $result, 'DBデータを元にページテンプレートを全て生成できません');
 	}
 
 
 /**
  * ページテンプレートを生成する
  * 
- * @param array $data ページデータ
- * @return boolean
+ * @param array $name ページ名
+ * @param array $categoryId ページカテゴリーID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider createPageTemplateDataProvider
  */
-	public function createPageTemplate($data) {
+	public function testCreatePageTemplate($name, $categoryId, $expected, $message = null) {
 
+		$data = array(
+			'Page' => array(
+				'name' => $name,
+				'page_category_id' => $categoryId,
+			)
+		);
+		$path = $this->getPageFilePath($data);
+
+		// ファイル生成
+		$this->Page->createPageTemplate($data);
+
+		// trueなら生成されている
+		$result = file_exists($path);
+		
+		// 生成されているファイル削除
+		@unlink($path);
+
+		$this->assertEquals($expected, $result, $message);
 	}
 
-/**
- * ページファイルのディレクトリを取得する
- * 
- * @param array $data
- * @return string
- */
-	protected function _getPageFilePath($data) {
-
+	public function createPageTemplateDataProvider() {
+		return array(
+			array('hoge.php', null, true, 'ページテンプレートを生成できません'),
+			array('hoge.php', 1, true, 'ページテンプレートを生成できません'),
+			array('hoge.php', 2, true, 'ページテンプレートを生成できません'),
+		);
 	}
 
 /**
  * ページファイルを削除する
  * 
- * @param array $data 削除対象となるレコードデータ
- * @return boolean
+ * @param array $name ページ名
+ * @param array $categoryId ページカテゴリーID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider delFileDataProvider
  */
-	public function delFile($data) {
+	public function testDelFile($name, $categoryId, $expected, $message = null) {
 
+		$data = array(
+			'Page' => array(
+				'name' => $name,
+				'page_category_id' => $categoryId,
+			)
+		);
+
+		$path = $this->getPageFilePath($data);
+
+		$File = new File($path);
+
+		// 存在するファイルパスか
+		if ($File->exists()) {
+
+			// 削除したファイルを再生成するため内容取得
+			$tmp_content = $File->read();
+
+			// ファイル削除
+			$this->Page->delFile($data);
+
+			// trueなら削除済み
+			$result = !file_exists($path);
+			
+			// 削除したファイルを再生成	
+			$File->write($tmp_content);
+
+		} else {
+			$result = $this->Page->delFile($data);
+
+		}
+
+		$File->close();
+		
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function delFileDataProvider() {
+		return array(
+			array('index', null, true, 'ページファイルを削除できません'),
+			array('index', 1, true, 'ページファイルを削除できません'),
+			array('index', 2, true, 'ページファイルを削除できません'),
+		);
 	}
 
 /**
  * ページのURLを取得する
  * 
- * @param array $data
- * @return string
+ * @param array $name ページ名
+ * @param array $categoryId ページカテゴリーID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getPageUrlDataProvider
  */
-	public function getPageUrl($data) {
-
+	public function testGetPageUrl($name, $categoryId, $expected, $message = null) {
+		$data = array(
+			'Page' => array(
+				'name' => $name,
+				'page_category_id' => $categoryId,
+			)
+		);
+		$result = $this->Page->getPageUrl($data);
+		$this->assertEquals($expected, $result, $message);
 	}
-	
+
+	public function getPageUrlDataProvider() {
+		return array(
+			array('index', null, '/index', 'ページのURLを取得できません'),
+			array('index', 1, '/mobile/index', 'ページのURLを取得できません'),
+			array('index', 2, '/smartphone/index', 'ページのURLを取得できません'),
+			array('hoge', 2, '/smartphone/hoge', 'ページのURLを取得できません'),
+			array('hoge', 3, '/smartphone/garaphone/hoge', 'ページのURLを取得できません'),
+			array('hoge', 4, '/smartphone/garaphone/garaphone2/hoge', 'ページのURLを取得できません'),
+		);
+	}
+
 /**
  * 固定ページのURLを表示用のURLに変換する
  * 
@@ -291,12 +510,24 @@ class PageTest extends BaserTestCase {
  * /mobile/index → /m/
  * 
  * @param string $url 変換対象のURL
- * @return string 表示の用のURL
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider convertViewUrlDataProvider
  */
-	public function convertViewUrl($url) {
-
+	public function testConvertViewUrl($url, $expected, $message = null) {
+		$result = $this->Page->convertViewUrl($url);
+		$this->assertEquals($expected, $result, $message);
 	}
 
+	public function convertViewUrlDataProvider() {
+		return array(
+			array('/index', '/', '固定ページのURLを表示用のURLに変換できません'),
+			array('/service', '/service', '固定ページのURLを表示用のURLに変換できません'),
+			array('/mobile/index', '/m/', '固定ページのURLを表示用のURLに変換できません'),
+			array('/smartphone/index', '/s/', '固定ページのURLを表示用のURLに変換できません'),
+			array('/smartphone/sitemap', '/s/sitemap', '固定ページのURLを表示用のURLに変換できません'),
+		);
+	}
 
 /**
  * 本文にbaserが管理するタグを追加する
@@ -306,62 +537,117 @@ class PageTest extends BaserTestCase {
  * @param string $title タイトル
  * @param string $description 説明文
  * @param string $code コード
- * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider addBaserPageTagDataProvider
  */
-	public function addBaserPageTag($id, $contents, $title, $description, $code) {
-
+	public function testAddBaserPageTag($id, $contents, $title, $description, $code, $expected, $message = null) {
+		$result = $this->Page->addBaserPageTag($id, $contents, $title, $description, $code);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
-/**
- * ページ存在チェック
- *
- * @param string チェック対象文字列
- * @return boolean
- */
-	public function pageExists($check) {
-
+	public function addBaserPageTagDataProvider() {
+		return array(
+			array(1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
+						"<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*codedayo.*contentdayo",
+						'本文にbaserが管理するタグを追加できません'),
+		);
 	}
 
 /**
  * コントロールソースを取得する
- *
+ * 
+ * MEMO: $optionのテストについては、UserTest, PageCategoryTestでテスト済み
+ * 
  * @param string $field フィールド名
  * @param array $options
- * @return mixed $controlSource コントロールソース
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getControlSourceDataProvider
  */
-	public function getControlSource($field, $options = array()) {
+	public function testGetControlSource($field, $expected, $message = null) {
+		$result = $this->Page->getControlSource($field);
+		$this->assertEquals($expected, $result, $message);
+	}
 
+	public function getControlSourceDataProvider() {
+		return array(
+			array('page_category_id', array(5 => 'タブレット'), 'コントロールソースを取得できません'),
+			array('author_id', array(1 => 'basertest', 2 => 'basertest2'), 'コントロールソースを取得できません'),
+		);
 	}
 
 /**
  * キャッシュ時間を取得する
  * 
  * @param string $url
- * @return mixed int or false
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getCacheTimeDataProvider
  */
-	public function getCacheTime($url) {
+	public function testGetCacheTime($url, $expected, $message = null) {
+		$result = $this->Page->getCacheTime($url);
+		$this->assertEquals($expected, $result, $message);
+	}
 
+	public function getCacheTimeDataProvider() {
+		return array(
+			array('/index', '+5 min', 'キャッシュ時間を取得できません'),
+			array('/service', '+5 min', 'キャッシュ時間を取得できません'),
+			array('/hidden_status', '+5 min', 'キャッシュ時間を取得できません'),
+			array('/company', '+5 min', 'キャッシュ時間を取得できません'),
+		);
 	}
 
 /**
  * 公開チェックを行う
  * 
  * @param string $url
- * @return boolean
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider checkPublishDataProvider
  */
-	public function checkPublish($url) {
-
+	public function testCheckPublish($url, $expected, $message = null) {
+		$result = $this->Page->checkPublish($url);
+		$this->assertEquals($expected, $result, $message);
 	}
 
+	public function checkPublishDataProvider() {
+		return array(
+			array('/index', true, '公開チェックが正しくありません'),
+			array('/service', true, '公開チェックが正しくありません'),
+			array('/hidden_status', false, '公開チェックが正しくありません'),
+			array('/hidden_publish_end', false, '公開チェックが正しくありません'),
+		);
+	}
 
 /**
  * 公開済の conditions を取得
- *
- * @return array
  */
-	public function getConditionAllowPublish() {
-
+	public function testGetConditionAllowPublish() {
+		$result = $this->Page->getConditionAllowPublish();
+		$now = date('Y-m-d H:i:s');
+		$expected = array(
+			'Page.status' => true,
+			0 => array(
+				'or' => array(
+					array('Page.publish_begin <=' => $now),
+					array('Page.publish_begin' => null),
+					array('Page.publish_begin' => '0000-00-00 00:00:00'),
+				),
+			),
+			1 => array(
+				'or' => array(
+					array('Page.publish_end >=' => $now),
+					array('Page.publish_end' => null),
+					array('Page.publish_end' => '0000-00-00 00:00:00'),
+				),
+			),
+		);
+		$this->assertEquals($expected, $result, '公開済を取得するための conditions を取得できません');
 	}
+
+
 
 /**
  * ページファイルを登録する
@@ -371,8 +657,8 @@ class PageTest extends BaserTestCase {
  * @param string $parentCategoryId
  * @return array 処理結果 all / success
  */
-	public function entryPageFiles($targetPath, $parentCategoryId = '') {
-
+	public function testEntryPageFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -531,7 +817,7 @@ class PageTest extends BaserTestCase {
 			array(1, '', array(5, 11), 'ページカテゴリーに関連したデータを取得できません'),
 			array(2, 'garaphone', array(6, 7, 8, 9, 10), 'ページカテゴリーに関連したデータを取得できません'),
 			array(3, 'garaphone2', array(12), 'ページカテゴリーに関連したデータを取得できません'),
-			array(4, '', array(), 'ページカテゴリーに関連したデータを取得できません'),
+			array(4, '', array(13), 'ページカテゴリーに関連したデータを取得できません'),
 		);
 	}
 
