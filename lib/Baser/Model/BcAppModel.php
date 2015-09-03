@@ -166,7 +166,7 @@ class BcAppModel extends Model {
  *
  * treeビヘイビア要
  *
- * @param	mixed	$id
+ * @param	mixed	$id ページカテゴリーID
  * @return 	array
  */
 	public function getChildIdsList($id) {
@@ -385,7 +385,6 @@ class BcAppModel extends Model {
 		$prefix = $db->config['prefix'];
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
-
 		foreach ($files[1] as $file) {
 			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
 				$table = $matches[1];
@@ -393,6 +392,7 @@ class BcAppModel extends Model {
 					if ($filterTable && $filterTable != $table) {
 						continue;
 					}
+
 					if (!$db->loadCsv(array('path' => $path . DS . $file, 'encoding' => 'SJIS'))) {
 						return false;
 					}
@@ -645,9 +645,9 @@ class BcAppModel extends Model {
 /**
  * データの重複チェックを行う
  * @param array $check
- * @return boolean
+ * @return boolean false 重複あり / true 重複なし
  */
-	public function duplicate($check, $field) {
+	public function duplicate($check) {
 		$conditions = array($this->alias . '.' . key($check) => $check[key($check)]);
 		if ($this->exists()) {
 			$conditions['NOT'] = array($this->alias . '.' . $this->primaryKey => $this->id);
@@ -738,7 +738,7 @@ class BcAppModel extends Model {
 
 /**
  * 並び順を変更する
- * @param string	$id
+ * @param string	$id 
  * @param int			$offset
  * @param array		$conditions
  * @return boolean
@@ -779,7 +779,7 @@ class BcAppModel extends Model {
 			'limit' => $limit,
 			'recursive' => -1
 		));
-
+var_dump($target);
 		if (!isset($target[count($target) - 1])) {
 			return false;
 		}

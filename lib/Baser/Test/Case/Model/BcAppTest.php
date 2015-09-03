@@ -24,6 +24,9 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.Page',
 		'baser.Default.Dblog',
 		'baser.Default.PageCategory',
+		'baser.Default.PluginContent',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
 	);
 
 /**
@@ -34,6 +37,8 @@ class BcAppTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->BcApp = ClassRegistry::init('BcApp');
+		$this->Page = ClassRegistry::init('Page');
+		$this->PageCategory = ClassRegistry::init('PageCategory');
 	}
 
 /**
@@ -42,7 +47,9 @@ class BcAppTest extends BaserTestCase {
  * @return void
  */
 	public function tearDown() {
+		unset($this->BcApp);
 		unset($this->Page);
+		unset($this->PageCategory);
 		parent::tearDown();
 	}
 
@@ -99,7 +106,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider saveDbLogDataProvider
  */
 	public function testSaveDbLog($message) {
-		$this->markTestIncomplete('このテストは、まだ完成されていません。フィクスチャが利用できないためスキップしています。');
+		$this->markTestIncomplete('このテストは、まだ完成されていません。');
 
 		$expect = array(
 			"Dblog" => array(
@@ -118,23 +125,13 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * コントロールソースを取得する
- *
- * 継承先でオーバーライドする事
- */
-	public function testGetControlSource() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
  * 子カテゴリのIDリストを取得する
- *
- * treeビヘイビア要
- *
- * @return 	array
  */
 	public function testGetChildIdsList() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$result = $this->Page->getChildIdsList(2);
+		var_dump($result);
 	}
 
 /**
@@ -163,6 +160,7 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testInitDb() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->Page->initDb('test');
 	}
 
 /**
@@ -177,6 +175,13 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$path = WWW_ROOT . 'files' . DS . 'pg_blog_tags.csv';
+		$Csv = new File($path);
+		$Csv->write("id,name,created,modified\n1,新製品,2015-09-03 12:39:29,NULL");
+
+		$this->BcApp->loadCsv('baser', WWW_ROOT . 'files');
+		// $this->assertEquals($expect, $result)
 	}
 
 /**
@@ -249,7 +254,11 @@ class BcAppTest extends BaserTestCase {
  * 指定フィールドのMAX値を取得する
  */
 	public function testGetMax() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->Page->getMax('page_category_id');
+		$this->assertEquals(3, $result, '指定フィールドのMAX値を取得できません');
+
+		$result = $this->Page->getMax('Page\.id');
+		$this->assertEquals(12, $result, '指定フィールドのMAX値を取得できません');
 	}
 
 /**
@@ -257,12 +266,46 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testAddField() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$options = array(
+			'field' => 'testField',
+			'column' => array(
+				'name' => 'testColumn',
+			),
+			'table' => 'pages',
+		);
+		$this->BcApp->addField($options);
+		$columns = $this->Page->getColumnTypes();
 	}
 
 /**
  * フィールド構造を変更する
  */
 	public function testEditField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$options = array(
+			'field' => 'testField',
+			'column' => array(
+				'name' => 'testColumn',
+			),
+			'table' => 'pages',
+		);
+		$this->BcApp->editField($options);
+		$columns = $this->Page->getColumnTypes();
+	}
+
+/**
+ * フィールド名を変更する
+ */
+	public function renameField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
+/**
+ * フィールドを削除する
+ */
+	public function testDelField() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
@@ -297,7 +340,7 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testAlphaNumeric($check, $expect) {
 		$result = $this->BcApp->alphaNumeric($check);
-		$this->assertEquals($expect, $result);		
+		$this->assertEquals($expect, $result);
 	}
 
 	public function alphaNumericDataProvider() {
@@ -312,7 +355,13 @@ class BcAppTest extends BaserTestCase {
  * データの重複チェックを行う
  */
 	public function testDuplicate() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$check = array('id' => 1);
+		$result = $this->Page->duplicate($check);
+		$this->assertEquals(false, $result);
+
+		$check = array('id' => 100);
+		$result = $this->Page->duplicate($check);
+		$this->assertEquals(true, $result);
 	}
 
 /**
@@ -400,15 +449,53 @@ class BcAppTest extends BaserTestCase {
  * 一つ位置を上げる
  */
 	public function testSortup() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->Page->data = array(
+			'Page' => array(
+				'name' => 'index',
+				'page_category_id' => null,
+				'title' => '',
+				'url' => '/index',
+				'description' => '',
+				'status' => 1,
+			)
+		);
+		$result = $this->Page->sortup(2, array('id' => 1));
 
+		$Page = $this->Page->find('first', array(
+				'conditions' => array('id' => 1),
+				'fields' => array('sort'),
+				'recursive' => -1,
+			)
+		);
+		$sort = $Page['Page']['sort'];
+		$this->assertEquals(2, $sort, 'sortを一つ位置を上げることができません');
 	}
 
 /**
  * 一つ位置を下げる
  */
 	public function testSortdown() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->Page->data = array(
+			'Page' => array(
+				'name' => 'company',
+				'page_category_id' => null,
+				'title' => '会社案内',
+				'url' => '/company',
+				'description' => '',
+				'status' => 1,
+			)
+		);
+		$result = $this->Page->sortdown(1, array('id' => 2));
+
+		$Page = $this->Page->find('first', array(
+				'conditions' => array('id' => 2),
+				'fields' => array('sort'),
+				'recursive' => -1,
+			)
+		);
+		$sort = $Page['Page']['sort'];
+		$this->assertEquals(1, $sort, 'sortを一つ位置を下げることができません');
+
 	}
 
 /**
@@ -422,7 +509,18 @@ class BcAppTest extends BaserTestCase {
  * Modelキャッシュを削除する
  */
 	public function testDeleteModelCache() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$path = CACHE . 'models' . DS . 'dummy';
+
+		// ダミーファイルをModelキャッシュフォルダに作成
+		if (touch($path)) {
+			$this->BcApp->deleteModelCache();
+			$result = !file_exists($path);
+			$this->assertTrue($result, 'Modelキャッシュを削除できません');
+
+		} else {
+			$this->markTestIncomplete('ダミーのキャッシュファイルの作成に失敗しました。');
+
+		}
 	}
 
 /**
@@ -477,9 +575,13 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 指定したモデル以外のアソシエーションを除外する
+ *
+ * @param array $auguments アソシエーションを除外しないモデル
+ * @param boolean $reset バインド時に１回の find でリセットするかどうか
  */
 	public function testExpects() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');		
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 	}
 
 /**
@@ -501,20 +603,6 @@ class BcAppTest extends BaserTestCase {
 			array(array("test1@cojp,test2@cp.jp"), false),
 			array(array("test1@co.jp,test2@cpjp"), false),
 		);
-	}
-
-/**
- * Deletes multiple model records based on a set of conditions.
- */
-	public function testDeleteAll() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * Updates multiple model records based on a set of conditions.
- */
-	public function testUpdateAll() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -605,9 +693,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider notFileEmptyDataProvider
  */
 	public function testNotFileEmpty($check,$expect) {
-		$file = array(
-			$check
-		);
+		$file = array($check);
 		$result = $this->BcApp->notFileEmpty($file);
 		$this->assertEquals($expect, $result);
 	}
