@@ -273,7 +273,7 @@ class PageTest extends BaserTestCase {
  * @param array $options
  * @return boolean
  */
-	public function testAfterSave($created, $options = array()) {
+	public function testAfterSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
@@ -326,33 +326,34 @@ class PageTest extends BaserTestCase {
 				'type' => 'ページ',
 				'category' => '',
 				'title' => $title,
-				'detail' => ' 
+				'detail' => ' ',
+// 				'detail' => ' 
 
-<section class="mainHeadline">
-<h2>シングルページデザインで<br />
-<span class="fcGreen">見やすくカッコいい</span>WEBサイトへ！</h2>
-</section>
-<!-- /mainHeadline -->
+// <section class="mainHeadline">
+// <h2>シングルページデザインで<br />
+// <span class="fcGreen">見やすくカッコいい</span>WEBサイトへ！</h2>
+// </section>
+// <!-- /mainHeadline -->
 
-<div class="mainWidth" id="information">
-<section class="news1">
-<h2>NEWS RELEASE</h2>
-	<ul class="post-list">
-																		<li class="clearfix post-1 first">
-				<span class="date">2015.08.10</span><br />
-				<span class="title"><a href="/news/archives/2">新商品を販売を開始しました。</a></span>
-			</li>
-																		<li class="clearfix post-2 last">
-				<span class="date">2015.08.10</span><br />
-				<span class="title"><a href="/news/archives/1">ホームページをオープンしました</a></span>
-			</li>
-			</ul>
-	</section>
+// <div class="mainWidth" id="information">
+// <section class="news1">
+// <h2>NEWS RELEASE</h2>
+// 	<ul class="post-list">
+// 																		<li class="clearfix post-1 first">
+// 				<span class="date">2015.08.10</span><br />
+// 				<span class="title"><a href="/news/archives/2">新商品を販売を開始しました。</a></span>
+// 			</li>
+// 																		<li class="clearfix post-2 last">
+// 				<span class="date">2015.08.10</span><br />
+// 				<span class="title"><a href="/news/archives/1">ホームページをオープンしました</a></span>
+// 			</li>
+// 			</ul>
+// 	</section>
 
-<section class="news2">
-<h2>BaserCMS NEWS</h2>
-<script type="text/javascript" src="/feed/ajax/1.js"></script></section>
-</div><!-- /information -->',
+// <section class="news2">
+// <h2>BaserCMS NEWS</h2>
+// <script type="text/javascript" src="/feed/ajax/1.js"></script></section>
+// </div><!-- /information -->',
 				'url' => $url,
 				'status' => $status,
 			)
