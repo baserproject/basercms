@@ -178,6 +178,7 @@ class PageTest extends BaserTestCase {
  * @return	array	初期値データ
  */
 	public function testGetDefaultValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -186,8 +187,8 @@ class PageTest extends BaserTestCase {
  * @param array $options
  * @return boolean
  */
-	public function beforeSave($options = array()) {
-
+	public function testBeforeSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 
@@ -195,10 +196,23 @@ class PageTest extends BaserTestCase {
  * URLよりモバイルやスマートフォン等のプレフィックスを取り除く
  * 
  * @param string $url 変換対象のURL
- * @return string $url 変換後のURL
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider removeAgentPrefixFromUrlDataProvider
  */
-	public function removeAgentPrefixFromUrl($url) {
+	public function testRemoveAgentPrefixFromUrl($url, $expected, $message = null) {
+		$result = $this->Page->removeAgentPrefixFromUrl($url);
+		$this->assertEquals($expected, $result, $message);
+	}
 
+	public function removeAgentPrefixFromUrlDataProvider() {
+		return array(
+			array('index', 'index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
+			array('/mobile/index', '/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
+			array('/smartphone/index', '/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
+			array('/m/index', '/m/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
+			array('/company/index', '/company/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
+		);
 	}
 
 /**
@@ -219,17 +233,38 @@ class PageTest extends BaserTestCase {
 		$this->assertEquals(16, $result, '正しく最終登録IDを取得できません');
 	}
 
-
 /**
  * ページテンプレートファイルが開けるかチェックする
  * 
- * @param	array	$data	ページデータ
- * @return	boolean
+ * @param array $name ページ名
+ * @param array $categoryId ページカテゴリーID
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider checkOpenPageFileDataProvider
  */
-	public function checkOpenPageFile($data) {
-
+	public function testCheckOpenPageFile($name, $categoryId, $expected, $message = null) {
+		$data = array(
+			'Page' => array(
+				'name' => $name,
+				'page_category_id' => $categoryId,
+			)
+		);
+		$result = $this->Page->checkOpenPageFile($data);
+		$this->assertEquals($expected, $result, $message);
 	}
 
+	public function checkOpenPageFileDataProvider() {
+		return array(
+			array('index', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array('company', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array('index', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array('index', 2, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array('hoge', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array(null, 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array('index', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+			array('hoge', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
+		);
+	}
 
 /**
  * afterSave
@@ -238,7 +273,8 @@ class PageTest extends BaserTestCase {
  * @param array $options
  * @return boolean
  */
-	public function afterSave($created, $options = array()) {
+	public function testAfterSave($created, $options = array()) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
@@ -249,8 +285,8 @@ class PageTest extends BaserTestCase {
  * @param array $data
  * @return boolean
  */
-	public function refrect($type, $data) {
-
+	public function testRefrect() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 
