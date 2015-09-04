@@ -15,6 +15,10 @@
 App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 
+// header()を使用するメソッドをテストする場合にでるエラー対策
+// Cannot modify header information - headers already sent by
+ob_start();
+
 /**
  * BcBaser helper library.
  *
@@ -1163,15 +1167,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * コンテンツを特定するIDを出力する
- */
-	public function testContentsName() {
-		$this->markTestIncomplete('このテストは、必要性がありません。');
-	}
-
-
-
-/**
  * コンテンツを特定するIDを取得する
  * ・キャメルケースで取得
  * ・URLのコントローラー名までを取得
@@ -1365,27 +1360,30 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
- * MEMO : header()を用いるテストでエラーが出ます。
- *  Cannot modify header information - headers already sent
- * runInSeparateProcess アノテーションを使用して、テストケースだけを別プロセスで
- * 実行しても別のエラーが出ます。
+ * MEMO: コマンドからテスト実行時、--stderrオプション必須(hedder()を使用するため)
  *
  * @param boolean $expected 期待値
  * @dataProvider cacheHeaderDataProvider
  */
-	public function testCacheHeader($expected) {
+	public function testCacheHeader($expire, $type, $expected) {
 
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$this->BcBaser->cacheHeader();
+		$this->BcBaser->cacheHeader($expire, $type);
 		$result = xdebug_get_headers();
-		$this->assertEquals($expected, $result);
 
+		$CacheControl = $result[4];
+		$this->assertRegExp('/' . $expected . '/', $CacheControl, 'ブラウザにキャッシュさせる為のヘッダーを出力できません');
+
+		$ContentType = $result[2];
+		$this->assertRegExp('/' . $type . '/', $ContentType, 'キャッシュの対象を指定できません');
 	}
 
 	public function cacheHeaderDataProvider() {
 		return array(
-			array('test'),
+			array(null, 'html', 'Cache-Control: max-age=14'),
+			array(null, 'css', 'Cache-Control: max-age=14'),
+			array(10, 'html', 'Cache-Control: max-age=10'),
 		);
 	}
 
@@ -1658,6 +1656,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		return array(
 			array('', '/company', 1, '<div class="widget-area widget-area-1">'),
 			array('', '/company', 2, '<div class="widget-area widget-area-2">'),
+			// array('', '/company', null, '<div class="widget-area widget-area-2">'),
 		);
 	}
 
@@ -1952,8 +1951,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testContentsNavi() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
+		$this->BcBaser->crumbsList();	}
 
 /**
  * パンくずリストを出力する
