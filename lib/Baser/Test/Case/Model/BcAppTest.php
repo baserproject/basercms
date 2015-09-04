@@ -125,12 +125,24 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 子カテゴリのIDリストを取得する
+ *
+ * @param id ページカテゴリーID
+ * @param boolean $expected 期待値
+ * @param boolean $message テストが失敗した場合に表示されるメッセージ
+ * @dataProvider getChildIdsListDataProvider
  */
-	public function testGetChildIdsList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetChildIdsList($id, $expected, $message = null) {
+		$result = $this->PageCategory->getChildIdsList($id);
+		$this->assertEquals($expected, $result, $message);
 
-		$result = $this->Page->getChildIdsList(2);
-		var_dump($result);
+	}
+
+	public function getChildIdsListDataProvider() {
+		return array(
+			array(1, array(), 'ページカテゴリーID 1は子カテゴリは存在しません'),
+			array(2, array(3, 4), '子カテゴリのIDリストを取得できません'),
+			array(3, array(4), '子カテゴリのIDリストを取得できません'),
+		);
 	}
 
 /**

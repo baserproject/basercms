@@ -171,7 +171,7 @@ class BcAppModel extends Model {
  */
 	public function getChildIdsList($id) {
 		$ids = array();
-		if ($this->childcount($id)) {
+		if ($this->childCount($id)) {
 			$children = $this->children($id);
 			foreach ($children as $child) {
 				$ids[] = (int)$child[$this->name]['id'];
