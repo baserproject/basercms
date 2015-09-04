@@ -63,8 +63,29 @@ class BcAppTest extends BaserTestCase {
  * @return	boolean
  * @access	public
  */
-	public function testBeforeSave($options = array()) {
+	public function testBeforeSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$this->Page->save(array(
+			'Page' => array(
+				'name' => 'test',
+				'page_category_id' => null,
+				'title' => '',
+				'url' => '',
+				'description' => '',
+				'status' => 1,
+				'modified' => '',
+			)
+		));
+
+		$LastID = $this->Page->getLastInsertID();
+		$result = $this->Page->find('first', array(
+				'conditions' => array('id' => $LastID),
+				'fields' => array('created'),
+				'recursive' => -1
+			)
+		);
+		var_dump($result);
 	}
 
 /**
@@ -76,7 +97,32 @@ class BcAppTest extends BaserTestCase {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
 	public function testSave($data = null, $validate = true, $fieldList = array()) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->Page->save(array(
+			'Page' => array(
+				'name' => 'test',
+				'page_category_id' => null,
+				'title' => '',
+				'url' => '',
+				'description' => '',
+				'status' => 1,
+				'modified' => '',
+			)
+		));
+		$now = date('Y-m-d H');
+
+		$LastID = $this->Page->getLastInsertID();
+		$result = $this->Page->find('first', array(
+				'conditions' => array('id' => $LastID),
+				'fields' => array('created','modified'),
+				'recursive' => -1
+			)
+		);
+		$created = date('Y-m-d H', strtotime($result['Page']['created']));
+		$modified = date('Y-m-d H', strtotime($result['Page']['modified']));
+
+		$message = 'created,modifiedを更新できません';
+		$this->assertEquals($now, $created, $message);
+		$this->assertEquals($now, $modified, $message);
 	}
 
 /**
@@ -171,7 +217,15 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testInitDb() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$result = $this->Page->initDb('test');
+		$this->PageCategory->deleteAll(array('id >' => 0));
+
+		$this->PageCategory->initDb('test');
+
+		$result = $this->PageCategory->find('all', array(
+				'recursive' => -1
+			)
+		);
+		var_dump($result);
 	}
 
 /**
@@ -179,6 +233,10 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadSchema() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$path = BASER_CONFIGS . 'Schema';
+		$this->BcApp->loadSchema('test', $path);
+		var_dump($result);
+		// $this->assertEquals($expect, $result);
 	}
 
 /**
@@ -186,12 +244,19 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// $this->PageCategory->deleteAll(array('id >' => 0));
 
-		$path = WWW_ROOT . 'files' . DS . 'pg_blog_tags.csv';
+		$path = WWW_ROOT . 'files' . DS . 'page_categories.csv';
 		$Csv = new File($path);
-		$Csv->write("id,name,created,modified\n1,新製品,2015-09-03 12:39:29,NULL");
+		$Csv->write("id,parent_id,lft,rght,name,title,sort,contents_navi,owner_id,layout_template,content_template,modified,created\n1,2,2,4,'asdfasd','',3,1,2,null,null,null,null");
 
-		$this->BcApp->loadCsv('baser', WWW_ROOT . 'files');
+		$this->PageCategory->loadCsv('baser', WWW_ROOT . 'files');
+
+		$result = $this->PageCategory->find('all', array(
+				'recursive' => -1
+			)
+		);
+		var_dump($result);
 		// $this->assertEquals($expect, $result)
 	}
 
@@ -285,8 +350,9 @@ class BcAppTest extends BaserTestCase {
 			),
 			'table' => 'pages',
 		);
-		$this->BcApp->addField($options);
+		$this->Page->addField($options);
 		$columns = $this->Page->getColumnTypes();
+		var_dump($columns);
 	}
 
 /**
@@ -299,7 +365,6 @@ class BcAppTest extends BaserTestCase {
 			'column' => array(
 				'name' => 'testColumn',
 			),
-			'table' => 'pages',
 		);
 		$this->BcApp->editField($options);
 		$columns = $this->Page->getColumnTypes();
@@ -308,7 +373,7 @@ class BcAppTest extends BaserTestCase {
 /**
  * フィールド名を変更する
  */
-	public function renameField() {
+	public function testRenameField() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
@@ -583,7 +648,19 @@ class BcAppTest extends BaserTestCase {
  * Deconstructs a complex data type (array or object) into a single field value.
  */
 	public function testDeconstruct() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$field = 'Page.name';
+		$data = array(
+			'wareki' => true,
+			'year' => 'h-27',
+		);
+		$result = $this->Page->deconstruct($field, $data);
+
+		$expected = array(
+			'wareki' => true,
+			'year' => 2015
+		);
+
+		$this->assertEquals($expected, $result, 'deconstruct が 和暦に対応していません');
 	}
 
 /**
@@ -597,10 +674,10 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider confirmDataProvider
  */
 	public function testConfirm($check, $fields, $data, $expected, $message = null) {
-
 		$this->BcApp->data['BcApp'] = $data;
 		$result = $this->BcApp->confirm($check, $fields);
 		$this->assertEquals($expected, $result, $message);
+
 	}
 
 	public function confirmDataProvider() {
@@ -616,11 +693,31 @@ class BcAppTest extends BaserTestCase {
  * 指定したモデル以外のアソシエーションを除外する
  *
  * @param array $auguments アソシエーションを除外しないモデル
- * @param boolean $reset バインド時に１回の find でリセットするかどうか
+ * @param array $expectedHasKey 期待する存在するキー
+ * @param array $expectedNotHasKey 期待する存在しないキー
+ * @dataProvider expectsDataProvider
  */
-	public function testExpects() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testExpects($arguments, $expectedHasKeys, $expectedNotHasKeys) {
+		$this->Page->expects($arguments);
 
+		$result = $this->Page->find('first');
+
+		// 存在するキー
+		foreach ($expectedHasKeys as $key) {
+			$this->assertArrayHasKey($key, $result, '指定したモデル以外のアソシエーションを除外できません');
+		}
+
+		// 存在しないキー
+		foreach ($expectedNotHasKeys as $key) {
+			$this->assertArrayNotHasKey($key, $result, '指定したモデル以外のアソシエーションを除外できません');
+		}
+	}
+
+	public function expectsDataProvider() {
+		return array(
+			array(array(), array('Page'), array('PageCategory', 'User')),
+			array(array('User'), array('Page', 'User'), array('PageCategory')),
+		);
 	}
 
 /**
