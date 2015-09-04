@@ -144,7 +144,7 @@ class BcAppModel extends Model {
  */
 	public function saveDbLog($message) {
 		// ログを記録する
-		$Dblog = new Dblog();
+		$Dblog = ClassRegistry::init('Dblog');
 		$logdata['Dblog']['name'] = $message;
 		$logdata['Dblog']['user_id'] = @$_SESSION['Auth']['User']['id'];
 		return $Dblog->save($logdata);

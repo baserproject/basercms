@@ -40,6 +40,7 @@ class BcAppTest extends BaserTestCase {
 		$this->Page = ClassRegistry::init('Page');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->PageCategory = ClassRegistry::init('PageCategory');
+		$this->Dblog = ClassRegistry::init('Dblog');
 	}
 
 /**
@@ -52,6 +53,7 @@ class BcAppTest extends BaserTestCase {
 		unset($this->Page);
 		unset($this->SiteConfig);
 		unset($this->PageCategory);
+		unset($this->Dblog);
 		parent::tearDown();
 	}
 
@@ -103,27 +105,22 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * データベースログを記録する
- *
- * @param  string $message
- * @dataProvider saveDbLogDataProvider
  */
-	public function testSaveDbLog($message) {
-		$this->markTestIncomplete('このテストは、まだ完成されていません。');
+	public function testSaveDbLog() {
 
-		$expect = array(
-			"Dblog" => array(
-				)
-			);
+		// Dblogにログを追加
+		$message = 'テストです';
+		$this->BcApp->saveDblog($message);
 
-		$result = $this->BcApp->saveDblog($message);
-		$this->assertEquals($expect, $result);
-
-	}
-
-	public function saveDbLogDataProvider() {
-		return array(
-			array("テスト"),
+		// 最後に追加したログを取得
+		$LastID = $this->Dblog->getLastInsertID();
+		$result = $this->Dblog->find('first', array(
+				'conditions' => array('Dblog.id' => $LastID),
+				'fields' => 'name',
+			)
 		);
+		$this->assertEquals($message, $result['Dblog']['name']);
+
 	}
 
 /**
