@@ -1,7 +1,7 @@
 <?php
 /**
  * BcBaserHelper
- * 
+ *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -20,7 +20,7 @@ App::uses('BcAuthComponent', 'Controller/Component');
 
 /**
  * BcBaserHelper
- * 
+ *
  * テーマより利用される事を前提としたヘルパーで、テーマで必要となる機能をひと通り提供する。
  *
  * @package Baser.View.Helper
@@ -49,7 +49,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * ページモデル
- * 
+ *
  * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
  *
  * @var Page
@@ -58,7 +58,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * アクセス制限設定モデル
- * 
+ *
  * 一度初期化した後に再利用し、処理速度を向上する為にコンストラクタでセットする。
  *
  * @var Permission
@@ -67,7 +67,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * カテゴリタイトル設定
- * 
+ *
  * パンくず用の配列を取得する際、カテゴリのタイトルを取得するかどうかの判定を保持
  *
  * @var mixed boolean or null
@@ -83,7 +83,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * BcBaserHelper を拡張するプラグインのヘルパ
- * 
+ *
  * BcBaserHelper::_initPluginBasers() で自動的に初期化される。
  *
  * @var array
@@ -124,7 +124,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * メニューのデータを取得する
- * 
+ *
  * 配列で全件取得する
  *
  * @return array|false メニューデータ、または、false
@@ -173,7 +173,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * レイアウトで利用する為の変数を設定する
- * 
+ *
  * View::set() のラッパー
  *
  * @param string $key 変数名
@@ -186,13 +186,13 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * タイトルへのカテゴリタイトルの出力有無を設定する
- * 
+ *
  * コンテンツごとに個別設定をする為に利用する。
  * パンくずにも影響する。
  *
  * @param bool|string|array $on true を指定した場合は、コントローラーで指定した crumbs を参照し、
  *		文字列を指定した場合には、その文字列をカテゴリとして利用する。
- *		パンくずにリンクをつける場合には、配列で指定する。 
+ *		パンくずにリンクをつける場合には、配列で指定する。
  *		（例） array('name' => '会社案内', 'url' => '/company/index')
  * @return void
  */
@@ -240,7 +240,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * タイトルタグを取得する
- * 
+ *
  * ページタイトルと直属のカテゴリ名が同じ場合は、ページ名を省略する
  *
  * @param string $separator 区切り文字
@@ -272,13 +272,13 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * パンくず用の配列を取得する
- * 
+ *
  * 基本的には、コントローラーの crumbs プロパティで設定した値を取得する仕様だが
  * 事前に setCategoryTitle メソッドで出力内容をカスタマイズする事ができる
  *
  * @param mixed $categoryTitleOn 親カテゴリの階層を表示するかどうか
  * @return array パンくず用の配列
- * @todo 
+ * @todo
  * HTMLレンダリングも含めた状態で取得できる、HtmlHelper::getCrumbs() とメソッド名が
  * 同じで、 処理内容がわかりにくいので変数名のリファクタリング要。
  * ただし、BcBaserHelper::getCrumbs() は、テーマで利用されている可能性が高いので、
@@ -316,7 +316,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * コンテンツタイトルを取得する
- * 
+ *
  * @return string コンテンツタイトル
  */
 	public function getContentsTitle() {
@@ -408,7 +408,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * baserCMSが設置されているパスを出力する
- * 
+ *
  * BcBaserHelper::getRoot() をラッピングして出力するだけの処理
  *
  * @return void
@@ -419,16 +419,16 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * baserCMSが設置されているパスを取得する
- * 
+ *
  * 画像タグやリンクタグを出力する際に、baserCMSの設置フォルダに
  * 依存せずパスを出力する為に利用する。
- * 
+ *
  * 《利用例》
  * <img src="<?php echo $this->BcBaser->root() ?>img/test.png" />
- * 
+ *
  * 《basercmsというフォルダに設置している場合の取得例》
  * /basercms/
- * 
+ *
  * 《basercmsというフォルダに設置し、スマートURLオフの場合の取得例》
  * /basercms/index.php/
  *
@@ -440,7 +440,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
- * 
+ *
  * 《利用例》
  * <a href="<?php $this->BcBaser->getUrl('/about') ?>">会社概要</a>
  *
@@ -456,7 +456,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * baserCMSの設置フォルダを考慮したURLを取得する
- * 
+ *
  * 《利用例》
  * <a href="<?php echo $this->BcBaser->getUrl('/about') ?>">会社概要</a>
  *
@@ -654,7 +654,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * コンテンツ本体を出力する
- * 
+ *
  * レイアウトテンプレートで利用する
  *
  * @return void
@@ -677,7 +677,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * セッションに保存したメッセージを出力する
- * 
+ *
  * メールフォームのエラーメッセージ等を出力します。
  *
  * @param string $key 出力するメッセージのキー（初期状態では省略してよいです）
@@ -694,7 +694,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * コンテンツ内で設定した CSS や javascript をレイアウトテンプレートに出力し、ログイン中の場合、ツールバー用のCSSも出力する
  * また、テーマ用のCSSが存在する場合には出力する
- * 
+ *
  * 利用する際は、</head>タグの直前あたりに記述する。
  * コンテンツ内で、レイアウトテンプレートへの出力を設定する場合には、inline オプションを false にする
  *
@@ -749,7 +749,7 @@ class BcBaserHelper extends AppHelper {
  * ツールバーエレメントや CakePHP のデバッグ出力を表示
  *
  * 利用する際は、</body> タグの直前あたりに記述する。
- * 
+ *
  * @return void
  */
 	public function func() {
@@ -830,7 +830,7 @@ class BcBaserHelper extends AppHelper {
  *
  * 《利用例》
  * $this->BcBaser->css('admin/import')
- * 
+ *
  * @param string $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
  * @param mixed $options オプション
  *	（配列の場合）
@@ -1009,7 +1009,7 @@ class BcBaserHelper extends AppHelper {
 
 		// 現在SSLのURLの場合、フルパスで取得（javascript:とhttpから始まるものは除外）
 		// //(スラッシュスラッシュ)から始まるSSL、非SSL共有URLも除外する
-		if (($this->isSSL() || $ssl) 
+		if (($this->isSSL() || $ssl)
 			&& !(strpos($_url, 'javascript') === 0)
 			&& !(strpos($_url, 'http') === 0)
 			&& !(strpos($_url, '//') === 0)) {
@@ -1059,9 +1059,9 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * charset メタタグを出力する
- * 
+ *
  * モバイルの場合は、強制的に文字コードを Shift-JIS に設定
- * 
+ *
  * @param string $charset 文字コード（初期値 : null）
  * @return void
  */
@@ -1074,10 +1074,10 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * コピーライト用の年を出力する
- * 
+ *
  * 《利用例》
  * $this->BcBaser->copyYear(2012)
- * 
+ *
  * 《出力例》
  * 2012 - 2014
  *
@@ -1133,7 +1133,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * 公開ページへのリンクを出力する
- * 
+ *
  * 管理システムで利用する
  *
  * @return void
@@ -1157,7 +1157,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * アップデート処理が必要かチェックする
- * 
+ *
  * @return bool アップデートが必要な場合は true を返す
  * @todo 別のヘルパに移動する
  */
@@ -1181,7 +1181,7 @@ class BcBaserHelper extends AppHelper {
  *
  * URL を元に、第一階層までの文字列をキャメルケースで取得する
  * ※ 利用例、出力例については BcBaserHelper::getContentsName() を参照
- * 
+ *
  * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで出力する（初期値 : false）
  * @param array $options オプション（初期値 : array()）
  *	※ オプションの詳細については、BcBaserHelper::getContentsName() を参照
@@ -1193,23 +1193,23 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * コンテンツを特定する文字列を取得する
- * 
+ *
  * URL を元に、第一階層までの文字列をキャメルケースで取得する
- * 
+ *
  * 《利用例》
  * $this->BcBaser->contentsName()
- * 
+ *
  * 《出力例》
  * - トップページの場合 : Home
  * - about ページの場合 : About
- * 
+ *
  * @param bool $detail 詳細モード true にした場合は、ページごとに一意となる文字列をキャメルケースで取得する（初期値 : false）
  * @param array $options オプション（初期値 : array()）
  *	- `home` : トップページの場合に出力する文字列（初期値 : Home）
  *	- `default` : ルート直下の下層ページの場合に出力する文字列（初期値 : Default）
  *	- `error` : エラーページの場合に出力する文字列（初期値 : Error）
  *  - `underscore` : キャメルケースではなく、アンダースコア区切りで出力する（初期値 : false）
- * @return string 
+ * @return string
  */
 	public function getContentsName($detail = false, $options = array()) {
 		$options = array_merge(array(
@@ -1342,7 +1342,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * パンくずリストを出力する
- * 
+ *
  * 事前に BcBaserHelper::addCrumb() にて、パンくず情報を追加しておく必要がある。
  * また、アクセス制限がかかっているリンクはテキストのみ表示する
  *
@@ -1371,7 +1371,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * パンくずリストの要素を追加する
- * 
+ *
  * デフォルトでアクセス制限がかかっているリンクの場合でもタイトルを表示する
  * $options の forceTitle キー に false を指定する事で表示しない設定も可能
  *
@@ -1467,10 +1467,10 @@ class BcBaserHelper extends AppHelper {
  *
  * 《利用例》
  * $this->BcBaser->getUri('/about')
- * 
+ *
  * 《出力例》
  * http://localhost/about
- * 
+ *
  * @param mixed $url 文字列のURL、または、配列形式のURL
  * @param bool $sessionId セッションIDを付加するかどうか（初期値 : true）
  * @return string プロトコルから始まるURL
@@ -1489,7 +1489,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * PluginBaserHelper を初期化する
- * 
+ *
  * BcBaserHelperに定義されていないメソッドをプラグイン内のヘルパに定義する事で
  * BcBaserHelperから呼び出せるようになる仕組みを提供する。
  * プラグインのヘルパメソッドを BcBaserHelper 経由で直接呼び出せる為、
@@ -1499,7 +1499,7 @@ class BcBaserHelper extends AppHelper {
  *
  * 《PluginBaserHelper の命名規則》
  * {プラグイン名}BaserHelper
- * 
+ *
  * 《利用例》
  * - Feedプラグインに FeedBaserHelper::feed() が定義されている場合
  *		$this->BcBaser->feed(1);
@@ -1537,7 +1537,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * PluginBaserHelper 用マジックメソッド
- * 
+ *
  * BcBaserHelper に存在しないメソッドが呼ばれた際、プラグインで定義された PluginBaserHelper のメソッドを呼び出す
  * call__ から __call へメソット名を変更、Helper の __call をオーバーライド
  *
@@ -1558,10 +1558,10 @@ class BcBaserHelper extends AppHelper {
  *
  * 《利用例》
  * $this->BcBaser->mark('強調', '強調します強調します強調します')
- * 
+ *
  * 《取得例》
  * <strong>強調</strong>します<strong>強調</strong>します<strong>強調</strong>します
- * 
+ *
  * @param string $search 検索文字列
  * @param string $text 検索対象文字列
  * @param string $name マーク用タグ（初期値 : strong）
@@ -1582,7 +1582,7 @@ class BcBaserHelper extends AppHelper {
 
 /**
  * サイトマップを出力する
- * 
+ *
  * ログインしていない場合はキャッシュする
  * sitemap エレメントで、HTMLカスタマイズ可能
  *
@@ -1654,7 +1654,7 @@ END_FLASH;
 
 /**
  * スマートフォンURLをリンクとして利用可能なURLに変換する
- * 
+ *
  * ページの確認用URL取得に利用する
  * /smartphone/about → /s/about
  *
@@ -1706,7 +1706,7 @@ END_FLASH;
 
 /**
  * 現在のページの純粋なURLを取得する
- * 
+ *
  * スマートURL、サブフォルダかどうかに依存しない、スラッシュから始まるURLを取得
  *
  * @return string URL
@@ -1739,7 +1739,7 @@ END_FLASH;
  * 固定ページをエレメントとして読み込む
  *
  * ※ レイアウトは読み込まずコンテンツ本体のみを読み込む
- * 
+ *
  * @param string $url 固定ページのURL
  * @param array $params 固定ページに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
@@ -1793,7 +1793,7 @@ END_FLASH;
 
 /**
  * ウィジェットエリアを出力する
- * 
+ *
  * @param int $no ウィジェットエリアNO（初期値 : null）※ 省略した場合は、コンテンツごとに管理システムにて設定されているウィジェットエリアを出力する
  * @param array $options オプション（初期値 : array()）
  *	- `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
@@ -1819,12 +1819,12 @@ END_FLASH;
 
 /**
  * 指定したURLが現在のURLと同じかどうか判定する
- * 
+ *
  * 《比較例》
  * /news/ | /news/ ・・・○
  * /news | /news/ ・・・×
  * /news/ | /news/index ・・・○
- * 
+ *
  * @param string $url 比較対象URL
  * @return bool 同じ場合には true を返す
  */
@@ -1837,10 +1837,10 @@ END_FLASH;
 
 /**
  * ユーザー名を整形して取得する
- * 
+ *
  * 姓と名を結合して取得
  * ニックネームがある場合にはニックネームを優先する
- * 
+ *
  * @param array $user ユーザーデータ
  * @return string $userName ユーザー名
  */
@@ -1867,13 +1867,13 @@ END_FLASH;
 
 /**
  * baserCMSのコアテンプレートを読み込む
- * 
+ *
  * コントローラー名より指定が必要
- * 
+ *
  * 《利用例》
  * $this->BcBaser->includeCore('Users/admin/form')
  * $this->BcBaser->includeCore('Mail.MailFields/admin/form')
- * 
+ *
  * @param string $name テンプレート名
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
@@ -1899,7 +1899,7 @@ END_FLASH;
 
 /**
  * ロゴを出力する
- * 
+ *
  * @param array $options オプション（初期値 : array()）
  *	※ パラメーターは、 BcBaserHelper->_getThemeImage() を参照
  * @return void
@@ -1910,9 +1910,9 @@ END_FLASH;
 
 /**
  * メインイメージを出力する
- * 
+ *
  * メインイメージは管理画面のテーマ設定にて指定
- * 
+ *
  * @param array $options オプション
  *	- `all`: 全ての画像を出力する。
  *	- `num`: 指定した番号の画像を出力する。all を true とした場合は、出力する枚数となる。
@@ -1956,9 +1956,71 @@ END_FLASH;
 		}
 	}
 
+
+/**
+ * コンテンツの最初の画像タグを出力する
+ *
+ * @param array $options オプション（主にHTML属性）
+ * ※ パラメータについては、HtmlHelper::image() を参照。
+ *	- `id    : id（初期値 : ''）
+ *	- `class : class（初期値 : ''）
+ *	- `style : style（初期値 : ''）
+ *	- `width : 最大横幅（初期値 : ''）
+ *	- `height: 最大高さ（初期値 : ''）
+ */
+	public function firstImage($options = array()) {
+		echo $this->getFirstImage($options);
+	}
+
+/**
+ * コンテンツの最初の画像タグを取得する
+ *
+ * @param array $options オプション（主にHTML属性）
+ * ※ パラメータについては、HtmlHelper::image() を参照。
+ */
+	public function getFirstImage($options = array()) {
+		return $this->BcHtml->image($this->getFirstImageUrl(), $options);
+	}
+
+/**
+ * コンテンツの最初の画像URLを取得する
+ */
+	public function getFirstImageUrl() {
+		return $this->getContentImage();
+	}
+
+/**
+ * コンテンツにて利用されている画像のURLを取得する
+ *
+ * @param string $type 取得件数の指定 (first|all)（初期値: first）
+ * @return mixed 取得できない場合はfalse。 取得した場合には$typeに応じてStringもしくはString[]
+ * @throws Exception 引数が指定されたものでない場合に発生
+ */
+	public function getContentImage($type = 'first') {
+		if ($type !== 'first' && $type !== 'all') throw new Exception(__METHOD__ . 'の引数が間違っています');
+		$content = $this->_View->fetch('content');
+		$imageList = array();
+		$matches = null;
+		if (preg_match_all("/<img\s.*?src=\"(.*?)\"/i", $content, $matches) && isset($matches[1])) {
+			foreach($matches[1] as $image) {
+				if ($image != '') $imageList[] = $image;
+			}
+		}
+		if (preg_match_all("/<img\s.*?src='(.*?)'/i", $content, $matches) && isset($matches[1])) {
+			foreach($matches[1] as $image) {
+				if ($image != '') $imageList[] = $image;
+			}
+		}
+		unset($content, $matches);
+
+		if (!$imageList) return false;
+		if ($type === 'first') return $imageList[0];
+		return $imageList;
+	}
+
 /**
  * テーマ画像を取得する
- * 
+ *
  * @param string $name テーマ画像名（ log or main_image ）
  * @param array $options オプション（初期値 :array()）
  *	- `num` : main_imageの場合の番号指定（初期値 : ''）
@@ -2088,7 +2150,7 @@ END_FLASH;
 
 /**
  * 現在のテーマのURLを取得する
- * 
+ *
  * @return string テーマのURL
  */
 	public function getThemeUrl() {
@@ -2097,7 +2159,7 @@ END_FLASH;
 
 /**
  * 現在のテーマのURLを出力する
- * 
+ *
  * @return void
  */
 	public function themeUrl() {
@@ -2106,9 +2168,9 @@ END_FLASH;
 
 /**
  * ベースとなるURLを取得する
- * 
+ *
  * サブフォルダやスマートURLについて考慮されている事が前提
- * 
+ *
  * @return string ベースURL
  */
 	public function getBaseUrl() {
@@ -2117,9 +2179,9 @@ END_FLASH;
 
 /**
  * ベースとなるURLを出力する
- * 
+ *
  * サブフォルダやスマートURLについて考慮されている事が前提
- * 
+ *
  * @return void
  */
 	public function baseUrl() {
@@ -2128,7 +2190,7 @@ END_FLASH;
 
 /**
  * サブメニューを出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2143,7 +2205,7 @@ END_FLASH;
 
 /**
  * コンテンツナビを出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2155,7 +2217,7 @@ END_FLASH;
 
 /**
  * パンくずリストを出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2167,7 +2229,7 @@ END_FLASH;
 
 /**
  * グローバルメニューを出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2179,7 +2241,7 @@ END_FLASH;
 
 /**
  * Google Analytics のトラッキングコードを出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2191,7 +2253,7 @@ END_FLASH;
 
 /**
  * Google Maps を出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2203,7 +2265,7 @@ END_FLASH;
 
 /**
  * 表示件数設定機能を出力する
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
@@ -2215,7 +2277,7 @@ END_FLASH;
 
 /**
  * サイト内検索フォームを出力
- * 
+ *
  * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照

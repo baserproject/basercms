@@ -1675,6 +1675,46 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
+
+/**
+ * コンテンツの最初の画像タグを出力
+ */
+	public function testFirstImage($options = array()) {
+		$this->BcBaser->_View->assign('content', '<div><img src="/test1.jpg" /><img src="/test2.jpg" /><img src="/test3.jpg" /><img src=\'/test4.jpg\' /></div>');
+
+		ob_start();
+		$this->BcBaser->firstImage();
+		$output = ob_get_clean();
+		$this->assertEquals(1, preg_match("/<img\s.*?src=\"\/test1.jpg\"/", $output));
+	}
+
+/**
+ * コンテンツの最初の画像タグを取得する
+ */
+	public function testGetFirstImage() {
+		$this->BcBaser->_View->assign('content', '<div><img src="/test1.jpg" /><img src="/test2.jpg" /><img src="/test3.jpg" /><img src=\'/test4.jpg\' /></div>');
+		$this->assertEquals(1, preg_match("/<img\s.*?src=\"\/test1.jpg\"/", $this->BcBaser->getFirstImage()));
+	}
+
+/**
+ * コンテンツの最初の画像URLを取得する
+ */
+	public function testGetFirstImageUrl() {
+		$this->BcBaser->_View->assign('content', '<div><img src="/test1.jpg" /><img src="/test2.jpg" /><img src="/test3.jpg" /><img src=\'/test4.jpg\' /></div>');
+		$this->assertEquals('/test1.jpg', $this->BcBaser->getFirstImageUrl());
+	}
+
+/**
+ * コンテンツにて利用されている画像のURLを取得する
+ */
+	public function testGetContentImage() {
+		$this->BcBaser->_View->assign('content', '<div><img src="/test1.jpg" /><img src="/test2.jpg" /><img src="/test3.jpg" /><img src=\'/test4.jpg\' /></div>');
+
+		$this->assertEquals('/test1.jpg', $this->BcBaser->getContentImage());
+		$this->assertCount(4, $this->BcBaser->getContentImage('all'));
+
+	}
+
 /**
  * メインイメージの取得でidやclassを指定するオプション
  *
