@@ -494,8 +494,8 @@ class PageCategoryTest extends BaserTestCase {
 		return array(
 			array('mobile', null, 1, 'モバイルの相対階層のIDを取得できません'),
 			array('smartphone', null, 2, 'スマートフォンの相対階層のIDを取得できません'),
-			array('garaphone', null, 3, 'ガラホの相対階層のIDを取得できません'),
-			array('smartphone', 4, 3, 'PCのIDを元にモバイルの相対階層のIDを取得できません'),
+			array('garaphone', null, false, 'ガラホの相対階層のIDを取得できません'),
+			array('smartphone', 4, false, 'PCのIDを元にモバイルの相対階層のIDを取得できません'),
 		);
 	}
 

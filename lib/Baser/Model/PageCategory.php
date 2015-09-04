@@ -500,9 +500,12 @@ class PageCategory extends AppModel {
  */
 	public function getAgentId($type = 'mobile') {
 		if (!isset($this->_agentId[$type])) {
-			$agentId = $this->field('id', array('PageCategory.name' => $type));
-			if ($agentId) {
-				$this->_agentId[$type] = $agentId;
+			$result = $this->find('first', array('fields' => 'PageCategory.id', 'conditions' => array(
+				'PageCategory.name' => $type,
+				'PageCategory.parent_id' => null
+			)));
+			if ($result) {
+				$this->_agentId[$type] = $result['PageCategory']['id'];
 			} else {
 				return false;
 			}
@@ -516,20 +519,32 @@ class PageCategory extends AppModel {
  * 
  * @param string type ユーザーエージェントのタイプ
  * @param int $id ページカテゴリーID	
- * @return int 
+ * @return mixed $categoryId Or false
  */
 	public function getAgentRelativeId($type, $id) {
 		if (!$id) {
-			return $this->getAgentId($type);
+			// ルート
+			$agentId = $this->getAgentId($type);
+			if($agentId) {
+				return (int) $agentId;
+			} else {
+				return false;
+			}
 		} else {
 			$path = $this->getPath($id, array('name'), -1);
+			if(!is_array($path)) {
+				return false;
+			}
 			$path = Hash::extract($path, '{n}.PageCategory.name');
+			if($path[0] == $type) {
+				return false;
+			}
 			$path = implode(DS, $path);
 			$path = getViewPath() . 'Pages' . DS . $type . DS . $path;
 		}
-		$agentId = $this->getIdByPath($path);
+		$categoryId = $this->getIdByPath($path);
 
-		return $agentId;
+		return $categoryId;
 	}
 
 /**
