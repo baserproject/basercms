@@ -779,7 +779,7 @@ class BcAppModel extends Model {
 			'limit' => $limit,
 			'recursive' => -1
 		));
-var_dump($target);
+
 		if (!isset($target[count($target) - 1])) {
 			return false;
 		}
@@ -1045,8 +1045,8 @@ var_dump($target);
 /**
  * ２つのフィールド値を確認する
  *
- * @param	array	$check
- * @param	mixed	$fields
+ * @param	array	$check 対象となる値
+ * @param	mixed	$fields フィールド名
  * @return	boolean
  */
 	public function confirm($check, $fields) {
@@ -1062,10 +1062,10 @@ var_dump($target);
 				$value1 = $check[key($check)];
 				$value2 = $this->data[$this->alias][$fields];
 			}
+
 		} else {
 			return false;
 		}
-
 		if ($value1 != $value2) {
 			return false;
 		}

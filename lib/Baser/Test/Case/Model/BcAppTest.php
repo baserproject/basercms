@@ -23,7 +23,7 @@ class BcAppTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.Dblog',
-		'baser.Default.PageCategory',
+		'baser.Model.PageCategoryModel',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
@@ -38,6 +38,7 @@ class BcAppTest extends BaserTestCase {
 		parent::setUp();
 		$this->BcApp = ClassRegistry::init('BcApp');
 		$this->Page = ClassRegistry::init('Page');
+		$this->SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->PageCategory = ClassRegistry::init('PageCategory');
 	}
 
@@ -49,6 +50,7 @@ class BcAppTest extends BaserTestCase {
 	public function tearDown() {
 		unset($this->BcApp);
 		unset($this->Page);
+		unset($this->SiteConfig);
 		unset($this->PageCategory);
 		parent::tearDown();
 	}
@@ -499,13 +501,6 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * 並び順を変更する
- */
-	public function testChangeSort() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
  * Modelキャッシュを削除する
  */
 	public function testDeleteModelCache() {
@@ -528,14 +523,30 @@ class BcAppTest extends BaserTestCase {
  * １レコードとしてデータを展開する
  */
 	public function testFindExpanded() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->SiteConfig->findExpanded();
+
+		$message = 'Key Value 形式のテーブルよりデータを取得して１レコードとしてデータを展開することができません';
+		$this->assertEquals('baserCMS inc. [デモ]', $result['name'], $message);
+		$this->assertEquals('baser,CMS,コンテンツマネジメントシステム,開発支援', $result['keyword'], $message);
 	}
 
 /**
  * Key Value 形式のテーブルにデータを保存する
  */
 	public function testSaveKeyValue() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = array(
+			'SiteConfig' => array(
+				'test1' => 'テストです1',
+				'test2' => 'テストです2',
+			)
+		);
+		$this->SiteConfig->saveKeyValue($data);
+		$result = $this->SiteConfig->findExpanded();
+
+		$message = 'Key Value 形式のテーブルにデータを保存することができません';
+		$this->assertEquals('テストです1', $result['test1'], $message);
+		$this->assertEquals('テストです2', $result['test2'], $message);
+
 	}
 
 /**
@@ -568,9 +579,28 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * ２つのフィールド値を確認する
+ * 
+ * @param mixed $check 対象となる値
+ * @param	mixed	$fields フィールド名
+ * @param	mixed	$data 値データ
+ * @param boolean $expected 期待値
+ * @param boolean $message テストが失敗した場合に表示されるメッセージ
+ * @dataProvider confirmDataProvider
  */
-	public function testConfirm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testConfirm($check, $fields, $data, $expected, $message = null) {
+
+		$this->BcApp->data['BcApp'] = $data;
+		$result = $this->BcApp->confirm($check, $fields);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function confirmDataProvider() {
+		return array(
+			array('', array('test1', 'test2'), array('test1' => 'value','test2' => 'value'), true, '2つのフィールドが同じ値の場合の判定が正しくありません'),
+			array('', array('test1', 'test2'), array('test1' => 'value','test2' => 'other_value'), false, '2つのフィールドが異なる値の場合の判定が正しくありません'),
+			array(array('value'=>'value'), 'test', array('test' => 'value'), true, 'フィールド名が一つで同じ値の場合の判定が正しくありません'),
+			array(array('value'=>'value'), 'test', array('test' => 'other_value'), false, 'フィールド名が一つで異なる値の場合の判定が正しくありません'),
+		);
 	}
 
 /**
@@ -592,8 +622,9 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider emailsDataProvider
  */
 	public function testEmails($check, $expect) {
+		$message = '複数のEメールのバリデーションチェックができません';
 		$result = $this->BcApp->emails($check);
-		$this->assertEquals($expect, $result);
+		$this->assertEquals($expect, $result, $message);
 	}
 
 	public function emailsDataProvider() {
@@ -682,7 +713,47 @@ class BcAppTest extends BaserTestCase {
  * ツリーより再帰的に削除する
  */
 	public function testRemoveFromTreeRecursive() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$this->PageCategory->data['PageCategory']['id'] = 2;
+		$this->PageCategory->removeFromTreeRecursive(2);
+		$result = $this->PageCategory->find('all', array(
+				'fields' => array('parent_id', 'lft', 'rght'),
+				'recursive' => '-1',
+			)
+		);
+		
+		// smartphoneカテゴリ
+		$expected = array(
+			'parent_id' => null,
+			'lft' => 0,
+			'rght' => 0,
+		);
+		$this->assertEquals($expected, $result[1]['PageCategory']);
+
+		// garaphone カテゴリ
+		$expected = array(
+			'parent_id' => null,
+			'lft' => 0,
+			'rght' => 0,
+		);
+		$this->assertEquals($expected, $result[2]['PageCategory']);
+
+		// garaphone2 カテゴリ
+		$expected = array(
+			'parent_id' => null,
+			'lft' => 3,
+			'rght' => 4,
+		);
+		$this->assertEquals($expected, $result[3]['PageCategory']);
+
+		// tablet カテゴリ
+		$expected = array(
+			'parent_id' => null,
+			'lft' => 5,
+			'rght' => 6,
+		);
+		$this->assertEquals($expected, $result[4]['PageCategory']);
+
 	}
 
 /**
