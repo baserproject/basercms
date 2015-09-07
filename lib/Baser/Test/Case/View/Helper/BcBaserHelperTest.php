@@ -1360,8 +1360,6 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
- * MEMO: コマンドからテスト実行時、--stderrオプション必須(hedder()を使用するため)
- *
  * @param boolean $expected 期待値
  * @dataProvider cacheHeaderDataProvider
  */

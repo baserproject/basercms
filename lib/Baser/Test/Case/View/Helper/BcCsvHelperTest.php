@@ -14,6 +14,10 @@
 App::uses('View', 'View');
 App::uses('BcCsvHelper', 'View/Helper');
 
+// header()を使用するメソッドをテストする場合にでるエラー対策
+// Cannot modify header information - headers already sent by
+ob_start();
+
 /**
  * text helper library.
  *
@@ -186,14 +190,19 @@ class BcCsvHelperTest extends BaserTestCase {
 		);
 		$this->BcCsv->addModelData($modelName, $data);
 
-
 		$result = $this->BcCsv->download($fileName, $debug);
+
 		$this->assertEquals($expected, $result);
+
 	}
 
 	public function downloadDataProvider() {
 		return array(
 			array('testcsv', true,
+				'"head1","head2","head3"' . "\n" .
+				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
+			),
+			array('testcsv', false,
 				'"head1","head2","head3"' . "\n" .
 				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
 			),
