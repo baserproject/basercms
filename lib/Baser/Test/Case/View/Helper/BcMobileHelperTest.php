@@ -27,6 +27,15 @@ ob_start();
 class BcMobileHelperTest extends BaserTestCase {
 
 /**
+ * Fixtures
+ * @var array 
+ */
+	public $fixtures = array(
+		'baser.Default.PluginContent',
+		'baser.Default.Page',
+	);
+
+/**
  * setUp method
  *
  * @return void
