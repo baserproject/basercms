@@ -1476,10 +1476,26 @@ class BcBaserHelperTest extends BaserTestCase {
  *　/lib/Cake/Test/test_app/Plugin/TestPlugin/webroot/flash/plugin_test.swf
  *　/lib/Cake/Test/test_app/View/Themed/TestTheme/webroot/flash/theme_test.swf
  *
- * @return void
+ * @param string $id 任意のID（divにも埋め込まれる）
+ * @param int $width 横幅
+ * @param int $height 高さ
+ * @param array $options オプション（初期値 : array()）
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した場合に表示されるメッセージ
+ * @dataProvider swfDataProvider
  */
-	public function testSwf() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testSwf($id, $width, $height, $options, $expected, $message = null) {
+		$path = ROOT . '/lib/Cake/Test/test_app/View/Themed/TestTheme/webroot/flash/theme_test.swf';
+		$this->expectOutputRegex('/' . $expected .'/s', $message);
+		$this->BcBaser->swf($path, $id, $width, $height, $options);
+	}
+
+	public function swfDataProvider() {
+		return array(
+			array('test', 300, 300, array(), 'id="test".*theme_test.swf.*"test", "300", "300", "7"', 'Flashを正しく表示できません'),
+			array('test', 300, 300, array('version' => '6'), '"test", "300", "300", "6"', 'Flashを正しく表示できません'),
+			array('test', 300, 300, array('script' => 'hoge'), 'src="\/js\/hoge\.js"', 'Flashを正しく表示できません'),
+		);
 	}
 
 /**
@@ -1730,12 +1746,47 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * コアテンプレートを読み込む
- *
- * @return void
+ * 
+ * @param boolean $selectPlugin ダミーのプラグインを作るかどうか
+ * @param string $name テンプレート名
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した場合に表示するメッセージ
+ * @dataProvider includeCoreDataProvider
  */
-	public function testIncludeCore() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testIncludeCore($selectPlugin, $name, $data, $options, $expected, $message = null) {
+		
+		// テスト用プラグインフォルダ作成
+		if ($selectPlugin) {
+			$path1 = ROOT . '/lib/Baser/Plugin/Test/';
+			mkdir($path1);
+			$path2 = ROOT . '/lib/Baser/Plugin/Test/View';
+			mkdir($path2);
+			$path3 = ROOT . '/lib/Baser/Plugin/Test/View/test.php';
+			$plugin = new File($path3);
+			$plugin->write('test');
+			$plugin->close();
+		}
+
+		$this->expectOutputRegex('/' . $expected . '/', $message);
+		$this->BcBaser->includeCore($name, $data, $options);
+
+		if ($selectPlugin) {
+			unlink($path3);
+			rmdir($path2);
+			rmdir($path1);
+		}
 	}
+
+	public function includeCoreDataProvider() {
+		return array(
+			array(false, 'Elements/footer', array(), array(), '<div id="Footer">', 'コアテンプレートを読み込めません'),
+			array(false, 'Elements/footer', array(), array(), '<div id="Footer">', 'コアテンプレートを読み込めません'),
+			array(true, 'Test.test', array(), array(), 'test', 'コアテンプレートを読み込めません'),
+		);
+	}
+
 
 /**
  * ロゴを出力する
