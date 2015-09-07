@@ -461,12 +461,24 @@ class BcFormHelperTest extends BaserTestCase {
 /**
  * ファイルインプットボックス出力
  * 
+ * MEMO: $optionsの link, delCheck, force のテストが未実装
+ * 
  * @param string $fieldName
  * @param array $options
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider fileDataProvider
  */
-	public function testFile() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testFile($fieldName, $options, $expected, $message = null) {
+		$result = $this->BcForm->file($fieldName, $options);
+		$this->assertRegExp('/' . $expected . '/s', $result, $message);
+	}
 
+	public function fileDataProvider() {
+		return array(
+			array('hoge', array(), '<input type="file" name="data\[hoge\]"  id="hoge"', 'ファイルインプットボックス出力できません'), 
+			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'), 
+		);
 	}
 
 /**
