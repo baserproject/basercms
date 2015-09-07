@@ -16,6 +16,7 @@ App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 App::uses('BcPageHelper', 'View/Helper');
 
+
 /**
  * BcPage helper library.
  *
@@ -511,19 +512,51 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * 固定ページのコンテンツを出力する
+ * 
+ * @param string $expected 期待値
+ * @param string $message テスト失敗時、表示するメッセージ
+ * @dataProvider contentDataProvider
  */
-	public function testContent() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testContent($agent, $expected, $message = null) {
+		$this->_setAgent($agent);
+		$this->BcPage->_View->viewVars['pagePath'] = 'service';
+
+		$this->expectOutputRegex('/' . $expected . '/', $message);
+		$this->BcPage->content();
+	}
+
+	public function contentDataProvider() {
+		return array(
+			array('', '<h2 class="fontawesome-circle-arrow-down">Service <span>事業案内<\/span><\/h2>', '固定ページのコンテンツを出力できません'),
+			array('smartphone', '<h2 class="contents-head">サービス<\/h2>', 'smartphoneで固定ページのコンテンツを出力できません'),
+		);
 	}
 
 /**
  * テンプレートを取得
  * セレクトボックスのソースとして利用
+ * 
+ * @param string $expected 期待値
+ * @param string $message テスト失敗時、表示するメッセージ
+ * @dataProvider getTemplatesDataProvider
  */
-	public function testGetTemplates() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetTemplates($type, $agent, $expected, $message = null) {
+		$result = $this->BcPage->getTemplates($type, $agent);
+		$this->assertEquals($expected, $result, $message);
 	}
 
+	public function getTemplatesDataProvider() {
+		return array(
+			array('layout', '', array('default' => 'default','ajax' => 'ajax','empty' => 'empty','error' => 'error'), 'テンプレートを正しく取得できません'),
+			array('content', '', array('default' => 'default'), 'テンプレートを正しく取得できません'),
+			array('layout', 'mobile', array('default' => 'default'), 'テンプレートを正しく取得できません'),
+			array('content', 'mobile', array('default' => 'default'), 'テンプレートを正しく取得できません'),
+		);
+	}
+
+/**
+ * treeList
+ */
 	public function testTreeList() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
