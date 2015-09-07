@@ -178,7 +178,29 @@ class PageTest extends BaserTestCase {
  * @return	array	初期値データ
  */
 	public function testGetDefaultValue() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$expected = array('Page' => array(
+				'author_id' => 1,
+				'sort' => 17,
+				'status' => false,
+			)
+		);
+		$result = $this->Page->getDefaultValue();
+		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
+	
+		//$_SESSION['Auth']['User']が存在する場合
+		$_SESSION['Auth']['User'] = array(
+			'id' => 2,
+		);
+		$expected = array('Page' => array(
+				'author_id' => 2,
+				'sort' => 17,
+				'status' => false,
+			)
+		);
+		$result = $this->Page->getDefaultValue();
+		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
+
 	}
 
 /**
@@ -375,10 +397,42 @@ class PageTest extends BaserTestCase {
  * beforeDelete
  *
  * @param $cascade
- * @return boolean
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider beforeDeleteDataProvider
  */
-	public function testBeforeDelete() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testBeforeDelete($id, $expected, $message = null) {
+		
+		// 削除したファイルを再生するため内容を取得
+		$Page = $this->Page->find('first', array(
+			'conditions' => array('Page.id' => $id),
+			'fields' => array('Page.url'),
+			'recursive' => -1,
+			)
+		);
+		$path = getViewPath() . 'Pages' . $Page['Page']['url'] . '.php';
+		$File = new File($path);  
+		$Content = $File->read();
+
+		// 削除実行
+		$this->Page->delete($id);
+
+		// 元のファイルを再生成
+		$File->write($Content);
+		$File->close();
+
+		// Contentも削除されているかチェック
+		$this->Content = ClassRegistry::init('Content');
+		$exists = $this->Content->exists($id - 1);
+		$this->assertFalse($exists, $message);
+		unset($this->Content);
+
+	}
+
+	public function beforeDeleteDataProvider() {
+		return array(
+			array(3, 'fasdfd', 'PageモデルのbeforeDeleteが機能していません'),
+		);
 	}
 
 /**
@@ -756,25 +810,34 @@ class PageTest extends BaserTestCase {
  * @dataProvider deleteDataProvider
  */
 	public function testDelete($id, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$result = $this->Page->delete($id);
-
-		// 削除できているか確認用にデータ取得
-		$Page = $this->Page->find('all', array(
+		// 削除したファイルを再生するため内容を取得
+		$Page = $this->Page->find('first', array(
 			'conditions' => array('Page.id' => $id),
-			'fields' => array('Page.id'),
+			'fields' => array('Page.url'),
 			'recursive' => -1,
 			)
 		);
-		var_dump($Page);
+		$path = getViewPath() . 'Pages' . $Page['Page']['url'] . '.php';
+		$File = new File($path);  
+		$Content = $File->read();
 
+		// 削除実行
+		$this->Page->delete($id);
+		$this->assertFileNotExists($path, $message);
+
+		// 元のファイルを再生成
+		$File->write($Content);
+		$File->close();
+
+		// 削除できているか確認用にデータ取得
+		$result = $this->Page->exists($id);
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function deleteDataProvider() {
 		return array(
-			array(1, 'dasdas', 'ページデータをコピーできません'),
+			array(1, false, 'ページデータを削除できません'),
 		);
 	}
 
@@ -788,14 +851,29 @@ class PageTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $data, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$data = array('Page' => $data);
+
 		$result = $this->Page->copy($id, $data);
-		$this->assertEquals($expected, $result, $message);
+
+		// コピーしたファイル存在チェック
+		$path = getViewPath() . 'Pages' . $result['Page']['url'] . '.php';
+		$this->assertFileExists($path, $message);
+		@unlink($path);
+
+		// DBに書き込まれているかチェック
+		$exists = $this->Page->exists($result['Page']['id']);
+		$this->assertTrue($exists);
+
 	}
 
 	public function copyDataProvider() {
 		return array(
-			array(1, array(), 'dasdas', 'ページデータをコピーできません'),
+			array(1, array(), array(), 'ページデータをコピーできません'),
+			array(null,
+						array('name' => 'hoge','title' => 'hoge','page_category_id' => null,'description' => 'hoge'),
+						array('Page' => array()),
+						'ページデータをコピーできません'),
 		);
 	}
 
@@ -809,7 +887,12 @@ class PageTest extends BaserTestCase {
  * @dataProvider isLinkedDataProvider
  */
 	public function testIsLinked($agentPrefix, $url, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		Configure::write('BcApp', array(
+			'mobile' => true,
+			'smartphone' => true,
+			)
+		);
 
 		$result = $this->Page->isLinked($agentPrefix, $url);
 		$this->assertEquals($expected, $result, $message);
@@ -817,7 +900,8 @@ class PageTest extends BaserTestCase {
 
 	public function isLinkedDataProvider() {
 		return array(
-			array('mobile', '/mobile/index', 'dasdas', '関連するページデータのURLを正しく更新できません'),
+			array('mobile', '/mobile/index', '0', '連携チェックが正しくありません'),
+			array('smartphone', '/smartphone', '0', '連携チェックが正しくありません'),
 		);
 	}
 
