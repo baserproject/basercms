@@ -3,8 +3,15 @@
  * PageCategoryFixture
  *
  */
-class PageCategoryFixture extends BaserTestFixture {
+class PageCategoryBcPageHelperFixture extends BaserTestFixture {
 
+/**
+ * Name of the object
+ *
+ * @var string
+ */
+	public $name = 'PageCategory';
+	
 /**
  * Records
  *
@@ -36,6 +43,21 @@ class PageCategoryFixture extends BaserTestFixture {
 			'sort' => '1',
 			'contents_navi' => 0,
 			'owner_id' => null,
+			'layout_template' => '',
+			'content_template' => '',
+			'modified' => null,
+			'created' => '2015-01-27 12:56:52'
+		),
+		array(
+			'id' => '3',
+			'parent_id' => 2,
+			'lft' => '5',
+			'rght' => '6',
+			'name' => 'garaphone',
+			'title' => 'ガラホ',
+			'sort' => '1',
+			'contents_navi' => 1,
+			'owner_id' => 1,
 			'layout_template' => '',
 			'content_template' => '',
 			'modified' => null,

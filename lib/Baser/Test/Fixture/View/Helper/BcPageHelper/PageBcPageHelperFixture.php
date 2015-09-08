@@ -3,7 +3,7 @@
  * PageFixture
  *
  */
-class PageFixture extends BaserTestFixture {
+class PageBcPageHelperFixture extends BaserTestFixture {
 
 /**
  * Name of the object
@@ -529,6 +529,27 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'page_category_id' => 1,
 			'status' => 1,
 			'url' => '/mobile/about',
+			'draft' => '',
+			'author_id' => 1,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'code' => '',
+			'unlinked_mobile' => 0,
+			'unlinked_smartphone' => 0,
+			'modified' => null,
+			'created' => '2015-01-27 12:56:52'
+		),
+		array(
+			'id' => 12,
+			'sort' => 13,
+			'name' => 'index',
+			'title' => 'ガラホ',
+			'description' => 'baserCMS inc.の会社案内ページ',
+			'contents' => '<h2 class="contents-head">会社案内</h2>',
+			'page_category_id' => 3,
+			'status' => 1,
+			'url' => '/garaphone/',
 			'draft' => '',
 			'author_id' => 1,
 			'publish_begin' => null,

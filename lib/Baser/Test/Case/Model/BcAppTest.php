@@ -27,6 +27,7 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
+		'baser.Default.Content',
 	);
 
 /**
@@ -331,10 +332,10 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testGetMax() {
 		$result = $this->Page->getMax('page_category_id');
-		$this->assertEquals(3, $result, '指定フィールドのMAX値を取得できません');
+		$this->assertEquals(2, $result, '指定フィールドのMAX値を取得できません');
 
 		$result = $this->Page->getMax('Page\.id');
-		$this->assertEquals(12, $result, '指定フィールドのMAX値を取得できません');
+		$this->assertEquals(11, $result, '指定フィールドのMAX値を取得できません');
 	}
 
 /**
