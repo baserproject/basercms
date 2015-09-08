@@ -46,7 +46,7 @@ class BcCacheBehavior extends ModelBehavior {
 		if (!defined('CACHE_DATA_PATH')) {
 			return;
 		}
-		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
+		$path = CACHE_DATA_PATH . $model->tablePrefix . $model->table;
 		if (!is_dir($path)) {
 			mkdir($path);
 			chmod($path, 0777);
@@ -87,6 +87,7 @@ class BcCacheBehavior extends ModelBehavior {
 
 		// サーバーキャッシュの場合
 		$results = Cache::read($cachekey, '_cake_data_');
+
 		if ($results !== false) {
 			if ($results == "{false}") {
 				$results = false;
@@ -113,7 +114,7 @@ class BcCacheBehavior extends ModelBehavior {
 			return;
 		}
 		$path = CACHE_DATA_PATH;
-		$path .= DS . $table . DS;
+		$path .= $table . DS;
 		Cache::config('_cake_data_', array('path' => $path));
 	}
 
@@ -128,7 +129,7 @@ class BcCacheBehavior extends ModelBehavior {
 		if (!defined('CACHE_DATA_PATH')) {
 			return;
 		}
-		$path = CACHE_DATA_PATH . DS . $model->tablePrefix . $model->table;
+		$path = CACHE_DATA_PATH . $model->tablePrefix . $model->table;
 		$Folder = new Folder();
 		$Folder->delete($path);
 		$this->createCacheFolder($model);
