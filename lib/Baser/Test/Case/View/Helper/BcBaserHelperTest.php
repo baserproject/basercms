@@ -78,7 +78,9 @@ class BcBaserHelperTest extends BaserTestCase {
 		parent::setUp();
 		$this->_View = new BcAppView();
 		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$this->_View->set('siteConfig', $SiteConfig->findExpanded());
+		$siteConfig = $SiteConfig->findExpanded();
+		$this->_View->set('widgetArea', $siteConfig['widget_area']);
+		$this->_View->set('siteConfig', $siteConfig);
 		$this->_View->helpers = array('BcBaser');
 		$this->_View->loadHelpers();
 		$this->BcBaser = $this->_View->BcBaser;
@@ -1670,7 +1672,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		return array(
 			array('', '/company', 1, '<div class="widget-area widget-area-1">'),
 			array('', '/company', 2, '<div class="widget-area widget-area-2">'),
-			// array('', '/company', null, '<div class="widget-area widget-area-2">'),
+			array('', '/company', null, '<div class="widget-area widget-area-1">'),
 		);
 	}
 
