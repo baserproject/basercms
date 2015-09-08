@@ -144,6 +144,8 @@ class BcContentsManagerTest extends BaserTestCase {
 /**
  * コンテンツメタ情報を更新する
  *
+ * testSaveContent()で、動作確認のテスト済み
+ *
  * @param string $contentCategory
  * @return boolean
  * @access public
