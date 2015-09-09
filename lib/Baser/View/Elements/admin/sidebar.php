@@ -25,8 +25,8 @@
 <?php if(!empty($this->BcBaser->siteConfig['admin_side_banner'])): ?>
 	<div id="BannerArea">
 		<ul>
-			<li><a href="http://barket.jp/" target="_blank"><img src="http://basercms.net/img/banner_baser_market.png" width="205" alt="baserマーケット" title="baserマーケット" /></a></li>
-			<li><a href="http://magazine.barket.jp/" target="_blank"><img src="http://basercms.net/img/banner_basers_magazine.png" width="205" alt="basersマガジン" title="baserマーケット" /></a></li>
+			<li><a href="https://market.basercms.net/" target="_blank"><img src="http://basercms.net/img/banner_baser_market.png" width="205" alt="baserマーケット" title="baserマーケット" /></a></li>
+			<li><a href="http://magazine.basercms.net/" target="_blank"><img src="http://basercms.net/img/banner_basers_magazine.png" width="205" alt="basersマガジン" title="baserマーケット" /></a></li>
 		</ul>
 	</div>
 <?php endif ?>
