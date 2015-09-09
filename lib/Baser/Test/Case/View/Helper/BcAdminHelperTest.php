@@ -20,7 +20,15 @@ App::uses('BcAdminHelper', 'View/Helper');
  * BcAdminHelper Test Case
  *
  */
-class BcAdminHelperTest extends CakeTestCase {
+class BcAdminHelperTest extends BaserTestCase {
+
+/**
+ * Fixtures
+ * @var array 
+ */
+	public $fixtures = array(
+		'baser.Default.UserGroup',
+	);
 
 /**
  * setUp method
@@ -40,26 +48,64 @@ class BcAdminHelperTest extends CakeTestCase {
  */
 	public function tearDown() {
 		unset($this->BcAdmin);
-
 		parent::tearDown();
 	}
 
 /**
- * testIsAdminGlobalmenuUsed method
+ * 管理システムグローバルメニューの利用可否確認
  *
- * @return void
+ * @param mixed $admin request->params['admin']の値
+ * @param int $groupId ユーザーグループID
+ * @param boolean $expected 期待値
+ * @param string $message テストが失敗した場合に表示されるメッセージ
+ * @dataProvider isAdminGlobalmenuUsedDataProvider
  */
-	public function testIsAdminGlobalmenuUsed() {
-		$this->markTestIncomplete('testIsAdminGlobalmenuUsed not implemented.');
+	public function testIsAdminGlobalmenuUsed($admin, $groupId, $expected, $message = null) {
+		$this->BcAdmin->request->params['admin'] = $admin;
+		$this->BcAdmin->_View->viewVars['user'] = array(
+			'user_group_id' => $groupId
+		);
+
+		$result = $this->BcAdmin->isAdminGlobalmenuUsed();
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function isAdminGlobalmenuUsedDataProvider() {
+		return array(
+			array('', null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
+			array(1, null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
+			array('', 1, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
+			array('1', 1, true, '管理ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'),
+			array('1', 2, false, '運営ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'),
+		);
 	}
 
 /**
  * testIsSystemAdmin method
  *
- * @return void
+ * @param mixed $admin request->params['admin']の値
+ * @param int $groupId ユーザーグループID
+ * @param boolean $expected 期待値
+ * @param string $message テストが失敗した場合に表示されるメッセージ
+ * @dataProvider isSystemAdminDataProvider
  */
-	public function testIsSystemAdmin() {
-		$this->markTestIncomplete('testIsSystemAdmin not implemented.');
+	public function testIsSystemAdmin($admin, $groupId, $expected, $message = null) {
+		$this->BcAdmin->request->params['admin'] = $admin;
+		$this->BcAdmin->_View->viewVars['user'] = array(
+			'user_group_id' => $groupId
+		);
+
+		$result = $this->BcAdmin->isSystemAdmin();
+		$this->assertEquals($expected, $result, $message);
 	}
 
+	public function isSystemAdminDataProvider() {
+		return array(
+			array('', null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'),
+			array(1, null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'),
+			array('', 1, false, 'ログインユーザーのシステム管理者チェックが正しくありません'),
+			array('1', 1, true, '管理ユーザーのシステム管理者チェックが正しくありません'),
+			array('1', 2, false, '運営ユーザーのシステム管理者チェックが正しくありません'),
+		);
+	}
 }
