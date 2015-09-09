@@ -450,10 +450,11 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像ファイルをコピーする
  * リサイズ可能
  * 
- * @param string コピー元のパス
- * @param string コピー先のパス
- * @param int 横幅
- * @param int 高さ
+ * @param string $source コピー元のパス
+ * @param string $distination コピー先のパス
+ * @param int $width 横幅
+ * @param int $height 高さ
+ * @param boolean $$thumb サムネイルとしてコピーするか
  * @return boolean
  * @access public
  */
@@ -474,8 +475,10 @@ class BcUploadBehavior extends ModelBehavior {
 
 /**
  * 画像のサイズを取得
- *
- * @param string $path
+ * 
+ * 指定したパスにある画像のサイズを配列(高さ、横幅)で返す
+ * 
+ * @param string $path 画像のパス
  * @return mixed array / false
  * @access public
  */
@@ -522,7 +525,11 @@ class BcUploadBehavior extends ModelBehavior {
  * ファイルを削除する
  * 
  * @param Model $Model
- * @param array 保存対象フィールドの設定
+ * @param array $field 保存対象フィールドの設定
+ * - ext 対象のファイル拡張子
+ * - prefix 対象のファイルの接頭辞
+ * - suffix 対象のファイルの接尾辞
+ * @param boolean $delImagecopy 
  * @return boolean
  * @access public
  */
@@ -550,7 +557,6 @@ class BcUploadBehavior extends ModelBehavior {
 		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file);
 		$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
 		$filePath = $this->savePath[$Model->alias] . $fileName;
-
 		if (!empty($field['imagecopy']) && $delImagecopy) {
 			foreach ($field['imagecopy'] as $copy) {
 				$copy['name'] = $field['name'];
@@ -720,7 +726,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	public function getBasename(Model $Model, $setting, $filename) {
-		$pattern = "/^" . $prefix . "(.*?)" . $suffix . "\.[a-zA-Z0-9]*$/is";
+		$pattern = "/^" . $setting['prefix'] . "(.*?)" . $setting['suffix'] . "\.[a-zA-Z0-9]*$/is";
 		if (preg_match($pattern, $filename, $maches)) {
 			return $maches[1];
 		} else {
@@ -731,8 +737,8 @@ class BcUploadBehavior extends ModelBehavior {
 /**
  * 一意のファイル名を取得する
  * 
- * @param string $fieldName
- * @param string $fileName
+ * @param string $fieldName 一意の名前を取得する元となるフィールド名
+ * @param string $fileName 対象のファイル名
  * @return string
  * @access public
  */
@@ -746,7 +752,8 @@ class BcUploadBehavior extends ModelBehavior {
 		$conditions[$Model->name . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
 		$datas = $Model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName), 'order' => "{$Model->name}.{$fieldName}"));
 		$datas = Hash::extract($datas, "{n}.{$Model->name}.{$fieldName}");
-		
+		$numbers = array();
+
 		if ($datas) {
 			foreach($datas as $data) {
 				$_basename = preg_replace("/\." . $ext . "$/is", '', $data);

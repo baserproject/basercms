@@ -19,19 +19,8 @@
 class BcUploadBehaviorTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.BlogContent',
-		'baser.Default.BlogCategory',
-		'baser.Default.BlogPost',
-		'baser.Default.BlogPostsBlogTag',
-		'baser.Default.BlogTag',
-		'baser.Default.Content',
-		'baser.Default.SiteConfig',
+		'baser.Default.EditorTemplate',
 		'baser.Default.Page',
-		'baser.Default.PageCategory',
-		'baser.Default.Permission',
-		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
-		'baser.Default.User',
 	);
 
 /**
@@ -55,7 +44,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		unset($this->BcUploadBehavior);
 		parent::tearDown();
 	}
-
 
 /**
  * セットアップ
@@ -105,8 +93,12 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function saveTmpFiles() {
+	public function testSaveTmpFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
+		$data = 'hoge';
+		$tmpId = 1;
+		$result = $this->EditorTemplate->saveTmpFiles($data, $tmpId);
 	}
 
 /**
@@ -152,37 +144,57 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function copyImage() {
+	public function testCopyImage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
+		$field = array(
+			'name' => 'image',
+			'prefix' => 'ho',
+			'suffix' => 'ge',
+		);
+		$this->EditorTemplate->copyImage($field);
 	}
 
 /**
  * 画像ファイルをコピーする
  * リサイズ可能
  * 
- * @param string コピー元のパス
- * @param string コピー先のパス
- * @param int 横幅
- * @param int 高さ
- * @return boolean
- * @access public
+ * @param int $width 横幅
+ * @param int $height 高さ
+ * @param boolean $$thumb サムネイルとしてコピーするか
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider resizeImageDataProvider
  */
-	public function testResizeImage() {
-		// $this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testResizeImage($width, $height, $thumb, $expected, $message = null) {
 
 		$imgPath = WWW_ROOT . 'img/admin' . DS;
 		$source = $imgPath . 'bg_install.png';
 		$distination = $imgPath . 'bg_install_copy.png';
 
-		// 通常コピー
-		$this->BcUploadBehavior->resizeImage($source, $distination);
-		$this->assertFileExists($distination, '画像ファイルをコピーできません');
-		@unlink($distination);
-
-		// リサイズコピー
-		$this->BcUploadBehavior->resizeImage($source, $distination, 100, 100);
-		$result = $this->BcUploadBehavior->getImageSize($distination);
+		// コピー実行
+		$this->BcUploadBehavior->resizeImage($source, $distination, $width, $height, $thumb);
+			
+		if (!$width && !$height) {
+			$this->assertFileExists($distination, $message);
 		
+		} else {
+			$result = $this->BcUploadBehavior->getImageSize($distination);
+			$this->assertEquals($expected, $result, $message);
+		
+		}
+		
+		// コピーした画像を削除
+		@unlink($distination);
+		
+	}
+
+	public function resizeImageDataProvider() {
+		return array(
+			array(false, false, false, null, '画像ファイルをコピーできません'),
+			array(100, 100, false, array('width' => 100, 'height' => 85), '画像ファイルを正しくリサイズしてコピーできません'),
+			array(100, 100, true, array('width' => 100, 'height' => 100), '画像ファイルをサムネイルとしてコピーできません'),
+		);
 	}
 
 /**
@@ -225,20 +237,66 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function delFiles() {
-
+	public function testDelFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
  * ファイルを削除する
  * 
- * @param Model $Model
- * @param array 保存対象フィールドの設定
- * @return boolean
- * @access public
+ * @param string $prefix 対象のファイルの接頭辞
+ * @param string $suffix 対象のファイルの接尾辞
+ * @param array $imagecopy 
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider delFileDataProvider
  */
-	public function delFile() {
+	public function testDelFile($prefix, $suffix, $imagecopy, $message) {
+		$savePath = '/vagrant/app/webroot/files/editor/';
+		$field = array(
+			'ext' => 'gif',
+			'prefix' => $prefix,
+			'suffix' => $suffix,
+			'imagecopy' => $imagecopy,
+		);
+		$fileName = 'dummy';
+		$targetPath = $savePath . $field['prefix'] . 'dummy'. $field['suffix'] . '.' . $field['ext'];
 
+		// ダミーのファイルを生成
+		touch($targetPath);
+
+		// copyのダミーファイルを生成
+		// if (is_array($field['imagecopy'])) {
+		// 	$field['name'] = $field['imagecopy'][0]['name'];
+		// 	$field['ext'] = $field['imagecopy'][0]['ext'];
+
+		// 	foreach ($field['imagecopy'] as $copy) {
+		// 		touch($savePath . $copy['name'] . '.' .  $copy['ext']);
+		// 	}
+		// }
+
+		// 削除を実行
+		$this->EditorTemplate->delFile($fileName, $field);
+
+		$this->assertFileNotExists($targetPath, $message);
+
+		@unlink($targetPath);
+
+	}
+
+	public function delFileDataProvider() {
+		return array(
+			array(null, null, null, 'ファイルを削除できません'),
+			array('pre', null, null, '接頭辞を指定した場合のファイル削除ができません'),
+			array(null, 'suf', null, '接尾辞を指定した場合のファイル削除ができません'),
+			array('pre', 'suf', null, '接頭辞と接尾辞を指定した場合のファイル削除ができません'),
+			// array(null, null, array(
+			// 			array('name' => 'dummy1', 'ext' => 'gif'),
+			// 			), 'ファイルを複数削除できません'),
+			// array(null, null, array(
+			// 			array('name' => 'dummy1', 'ext' => 'gif'),
+			// 			array('name' => 'dummy2', 'ext' => 'gif'),
+			// 			), 'ファイルを複数削除できません'),
+		);
 	}
 
 /**
@@ -248,60 +306,103 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function renameToFieldBasename() {
-
+	public function testRenameToFieldBasename() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
  * フィールドベースのファイル名を取得する
  *
- * @param Model $Model
- * @param array $setting
- * @param string $ext
- * @return mixed false / string
- * @access public
  */
-	public function getFieldBasename() {
+	public function testGetFieldBasename() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
+		$setting = array(
+			'namefield' => 'id'
+		);
+
+		$result = $this->EditorTemplate->getFieldBasename($setting, 'gif');
+		var_dump($result);
 	}
 
 /**
  * ベースファイル名からプレフィックス付のファイル名を取得する
  * 
- * @param Model $Model
- * @param array $setting
- * @param string $filename
- * @return string
- * @access public
+ * @param string $prefix 対象のファイルの接頭辞
+ * @param string $suffix 対象のファイルの接尾辞
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getFileNameDataProvider
  */
-	public function getFileName() {
+	public function testGetFileName($prefix, $suffix, $expected, $message = null) {
+		$setting = array(
+			'prefix' => $prefix,
+			'suffix' => $suffix,
+		);
+		$fileName = 'hoge.gif';
 
+		$result = $this->EditorTemplate->getFileName($setting, $fileName);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function getFileNameDataProvider() {
+		return array(
+			array(null, null, 'hoge.gif', 'ベースファイル名からファイル名を取得できません'),
+			array('pre-', null, 'pre-hoge.gif', 'ベースファイル名から接頭辞付きファイル名を取得できません'),
+			array(null, '-suf', 'hoge-suf.gif', 'ベースファイル名から接尾辞付きファイル名を取得できません'),
+			array('pre-', '-suf', 'pre-hoge-suf.gif', 'ベースファイル名からプレフィックス付のファイル名を取得できません'),
+		);
 	}
 
 /**
  * ファイル名からベースファイル名を取得する
  * 
- * @param Model $Model
- * @param array $setting
- * @param string $filename
- * @return string
- * @access public
+ * @param string $prefix 対象のファイルの接頭辞
+ * @param string $suffix 対象のファイルの接尾辞
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getBasenameDataProvider
  */
-	public function getBasename() {
+	public function testGetBasename($prefix, $suffix, $expected, $message = null) {
+		$setting = array(
+			'prefix' => $prefix,
+			'suffix' => $suffix,
+		);
+		$fileName = 'pre-hoge-suf.gif';
 
+		$result = $this->EditorTemplate->getBasename($setting, $fileName);
+		$this->assertEquals($expected, $result, $message);
+	}
+
+	public function getBasenameDataProvider() {
+		return array(
+			array(null, null, 'pre-hoge-suf', 'ファイル名からベースファイル名を正しく取得できません'),
+			array('pre-', null, 'hoge-suf', 'ファイル名からベースファイル名を正しく取得できません'),
+			array(null, '-suf', 'pre-hoge', 'ファイル名からベースファイル名を正しく取得できません'),
+			array('pre-', '-suf', 'hoge', 'ファイル名からベースファイル名を正しく取得できません'),
+		);
 	}
 
 /**
  * 一意のファイル名を取得する
  * 
- * @param string $fieldName
- * @param string $fileName
- * @return string
- * @access public
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getUniqueFileNameDataProvider
  */
-	public function getUniqueFileName() {
+	public function testGetUniqueFileName($fieldName, $fileName, $expected, $message = null) {
+		$setting = array('ext' => 'gif');
 
+		$result = $this->EditorTemplate->getUniqueFileName($fieldName, $fileName, $setting);
+		$this->assertEquals($expected, $result, $message);
 	}
 
+	public function getUniqueFileNameDataProvider() {
+		return array(
+			array('image', 'hoge.gif', 'hoge.gif', '一意のファイル名を正しく取得できません'),
+			array('image', 'template.gif', 'template.gif', '一意のファイル名を正しく取得できません'),
+			array('image', 'template1.gif', 'template1__2.gif', '一意のファイル名を正しく取得できません'),
+		);
+	}
 
 }
