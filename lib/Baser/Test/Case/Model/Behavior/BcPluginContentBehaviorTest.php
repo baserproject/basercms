@@ -21,18 +21,9 @@ class BcPluginContentBehaviorTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.BlogContent',
-		'baser.Default.BlogCategory',
-		'baser.Default.BlogPost',
-		'baser.Default.BlogPostsBlogTag',
-		'baser.Default.BlogTag',
+		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
-		'baser.Default.Page',
-		'baser.Default.PageCategory',
-		'baser.Default.Permission',
-		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
-		'baser.Default.User',
 	);
 
 /**
