@@ -16,10 +16,6 @@ App::uses('View', 'View');
 App::uses('Helper', 'View');
 App::uses('BcMobileHelper', 'View/Helper');
 
-// header()を使用するメソッドをテストする場合にでるエラー対策
-// Cannot modify header information - headers already sent by
-ob_start();
-
 /**
  * BcMobileHelper Test Case
  *
@@ -55,7 +51,6 @@ class BcMobileHelperTest extends BaserTestCase {
  */
 	public function tearDown() {
 		unset($this->BcMobile);
-
 		parent::tearDown();
 	}
 
@@ -77,6 +72,7 @@ class BcMobileHelperTest extends BaserTestCase {
  * @access public
  */
 	public function testHeader() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$this->BcMobile->header();
 		$result = xdebug_get_headers();
