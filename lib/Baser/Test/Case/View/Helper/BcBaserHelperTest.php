@@ -15,10 +15,6 @@
 App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 
-// header()を使用するメソッドをテストする場合にでるエラー対策
-// Cannot modify header information - headers already sent by
-ob_start();
-
 /**
  * BcBaser helper library.
  *
@@ -34,14 +30,14 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
+		'baser.View.Helper.BcBaserHelper.PageCategoryBcBaserHelper',
+		'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
 		'baser.Default.PluginContent',
 		'baser.Default.Content',
-		'baser.Default.SiteConfig',
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
-		'baser.Default.PageCategory',
 		'baser.Default.ThemeConfig',
 		'baser.Default.WidgetArea',
 		'baser.Default.Plugin',
@@ -236,7 +232,6 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param string $expected 期待値
  * @param string|null $keyword 設定されるキーワードの文字列
- * @return void
  * @dataProvider getKeywordsDataProvider
  */
 	public function testGetKeywords($expected, $keyword = null) {
@@ -618,7 +613,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testElement() {
-		$this->expectOutputRegex('/<ul class="global-menu clearfix">/');
+		$this->expectOutputRegex('/<ul class="global-menu clearfix">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
 		$this->BcBaser->element(('global_menu'));
 	}
 
@@ -628,7 +623,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testHeader() {
-		$this->expectOutputRegex('/<div id="Header">/');
+		$this->expectOutputRegex('/<div id="Header">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>.*<\/div>.*<\/div>/s');
 		$this->BcBaser->header();
 	}
 
@@ -638,7 +633,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testFooter() {
-		$this->expectOutputRegex('/<div id="Footer">/');
+		$this->expectOutputRegex('/<div id="Footer">.*<img src="\/img\/cake.power.gif".*<\/a>.*<\/p>.*<\/div>/s');
 		$this->BcBaser->footer();
 	}
 
@@ -1325,6 +1320,10 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider getPageListDataProvider
  */
 	public function testGetPageList($pageCategoryId, $options, $expected) {
+		$this->fixtures = array(
+			'baser.Default.Page',
+		);
+
 		$this->_setAgentSetting('mobile', true);
 		$this->_setAgentSetting('smartphone', true);
 		$result = $this->BcBaser->getPageList($pageCategoryId, $options);
@@ -1341,13 +1340,17 @@ class BcBaserHelperTest extends BaserTestCase {
 				array('title' => 'モバイルトップページ', 'url' => '/m/'),
 				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
 				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service')
+				array('title' => 'モバイルサービス', 'url' => '/m/service'),
+				array('title' => '親カテゴリ','url' => '/parent_category/'),
+				array('title' => '子カテゴリ','url' => '/parent_category/child_category/'),
 			)),
 			array(1, null, array(
 				array('title' => 'モバイルトップページ', 'url' => '/m/'),
 				array('title' => 'モバイルサービス', 'url' => '/m/service')
 			)),
 			array(null, array('order' => 'Page.sort DESC'), array(
+				array('title' => '子カテゴリ', 'url' => '/parent_category/child_category/'),
+				array('title' => '親カテゴリ', 'url' => '/parent_category/'),
 				array('title' => 'モバイルサービス', 'url' => '/m/service'),
 				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
 				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
@@ -1366,8 +1369,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider cacheHeaderDataProvider
  */
 	public function testCacheHeader($expire, $type, $expected) {
-
-		// $this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$this->BcBaser->cacheHeader($expire, $type);
 		$result = xdebug_get_headers();
@@ -1377,6 +1379,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 		$ContentType = $result[2];
 		$this->assertRegExp('/' . $type . '/', $ContentType, 'キャッシュの対象を指定できません');
+
+
 	}
 
 	public function cacheHeaderDataProvider() {
@@ -1455,19 +1459,18 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSitemap($pageCategoryId, $recursive, $expected) {
 
-		if ($recursive) {
-			$this->markTestIncomplete('このテストは、一部末完成です。');
-		}
-
-		$this->expectOutputRegex('/' . $expected . '/');
+		$message = 'サイトマップを正しく出力できません';
+		$this->expectOutputRegex('/' . $expected . '/s', $message);
 		$this->BcBaser->sitemap($pageCategoryId, $recursive);
+	
 	}
 
 	public function sitemapDataProvider() {
 		return array(
-			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内'),
-			array(2, null, '<a href="\/s\/index">スマートフォントップページ'),
-			array(null, 1, ''),
+			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内.*<\/li>.*<\/ul>.*<\/li>.*<\/ul'),
+			array(2, null, '<a href="\/s\/index">スマートフォントップページ.*<\/li>.*<\/ul>'),
+			array(3, 1, '<li class="sitemap-page li-level-1">.*<a href="\/parent_category\/child_category\/index">子カテゴリ<\/a>	.*<\/li>.*<\/ul>$'),
+			array(3, 2, '<ul class="sitemap section ul-level-2">.*<li class="sitemap-category li-level-2"><a href="\/parent_category\/child_category\/index">子カテゴリ<\/a><\/li>.*<\/ul>.*<\/li>.*<\/ul>'),
 		);
 	}
 
@@ -1497,6 +1500,7 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('test', 300, 300, array(), 'id="test".*theme_test.swf.*"test", "300", "300", "7"', 'Flashを正しく表示できません'),
 			array('test', 300, 300, array('version' => '6'), '"test", "300", "300", "6"', 'Flashを正しく表示できません'),
 			array('test', 300, 300, array('script' => 'hoge'), 'src="\/js\/hoge\.js"', 'Flashを正しく表示できません'),
+			array('test', 300, 300, array('noflash' => 'Flashがインストールされていません'), '<div id="test">Flashがインストールされていません<\/div>', 'Flashを正しく表示できません'),
 		);
 	}
 
@@ -1992,7 +1996,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSubMenu() {
 		$this->BcBaser->setSubMenus(array("default"));
-		$this->expectOutputRegex('/<div class="sub-menu-contents">/');
+		$this->expectOutputRegex('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s');
 		$this->BcBaser->subMenu();
 	}
 
@@ -2021,7 +2025,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGlobalMenu() {
-		$this->expectOutputRegex('/<ul class="global-menu clearfix">/');
+		$this->expectOutputRegex('/<ul class="global-menu clearfix">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
 		$this->BcBaser->globalMenu();
 	}
 
@@ -2031,7 +2035,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<script type="text\/javascript">.*var _gaq = _gaq.*_gaq.push\(\[\'_setAccount\', \'hoge\'\]\)/s');
+		$this->BcBaser->googleAnalytics();
 	}
 
 /**
@@ -2050,7 +2055,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testListNum() {
-		$this->expectOutputRegex('/<div class="list-num">/');
+		$this->expectOutputRegex('/<div class="list-num">.*<span><a href="\/index\/num:100">100<\/a><\/span><\/p>.*<\/div>/s');
 		$this->BcBaser->listNum();
 	}
 
@@ -2060,7 +2065,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">/');
+		$this->expectOutputRegex('/<div class="section search-box">.*<input  type="submit" value="検索"\/>.*<\/form><\/div>/s');
 		$this->BcBaser->siteSearchForm();
 	}
 
