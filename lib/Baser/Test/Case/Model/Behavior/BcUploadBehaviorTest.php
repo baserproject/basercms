@@ -47,14 +47,9 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 /**
  * セットアップ
- * 
- * @param Model	$Model
- * @param array	actsAsの設定
- * @return void
- * @access public
  */
-	public function testSetup() {
-
+	public function testSetupSetting() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 
@@ -145,14 +140,59 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @access public
  */
 	public function testCopyImage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$imgPath = WWW_ROOT . 'img/admin' . DS;
+		$savePath = WWW_ROOT . 'files/editor/';
+		$fileName = 'bg_install';
 
 		$field = array(
 			'name' => 'image',
-			'prefix' => 'ho',
-			'suffix' => 'ge',
+			'prefix' => '',
+			'suffix' => '',
+			'ext' => 'png',
+			'width' => 100,
+			'height' => 100,
 		);
+
+		// コピー先ファイルのパス
+		$targetPath1 = $savePath . $fileName . '_copy' . '.' . $field['ext'];
+
+		$this->EditorTemplate->data = array(
+			'EditorTemplate' => array(
+				'image' => array(
+					'name' => $fileName . '_copy' . '.' . $field['ext'],
+					'tmp_name' => $imgPath . $fileName . '.' . $field['ext'],
+				)
+			)
+		);
+
+		// コピー実行
 		$this->EditorTemplate->copyImage($field);
+		$this->assertFileExists($targetPath1, '画像ファイルをコピーできません');
+
+		// コピーしたファイルを削除
+		@unlink($targetPath1);
+
+
+		//-------------------------
+		// プレフィックスを設定する場合
+		//-------------------------
+		$field = array(
+			'name' => 'image',
+			'prefix' => 'pre-',
+			'suffix' => '-suf',
+			'ext' => 'png',
+			'width' => 100,
+			'height' => 100,
+		);
+		$targetPath2 = $savePath . $field['prefix'] . $fileName . '_copy' . $field['suffix'] . '.' . $field['ext'];
+		
+		// コピー実行
+		$this->EditorTemplate->copyImage($field);
+		$this->assertFileExists($targetPath2, '画像ファイルの名前にプレフィックスを付けてコピーできません');
+
+		// コピーしたファイルを削除
+		@unlink($targetPath2);
 	}
 
 /**
