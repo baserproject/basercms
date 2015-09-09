@@ -3,7 +3,7 @@
  * PermissionFixture
  *
  */
-class PermissionModelFixture extends BaserTestFixture {
+class PermissionFixture extends BaserTestFixture {
 /**
  * Name of the object
  *

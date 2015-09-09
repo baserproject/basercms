@@ -27,10 +27,10 @@ App::uses('PageCategory', 'Model');
 class PageCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Model.PageModel',
-		// 'baser.Default.Page',
-		'baser.Model.PageCategoryModel',
-		// 'baser.Default.PageCategory',
+		'baser.Default.Content',
+		'baser.Default.Permission',
+		'baser.Model.PageCategory.Page',
+		'baser.Model.PageCategory.PageCategory',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
@@ -330,7 +330,7 @@ class PageCategoryTest extends BaserTestCase {
 
 	public function releaseRelatedPagesDataProvider() {
 		return array(
-			array(2, '', 'カテゴリフォルダのパスからページカテゴリーIDを取得できません'),
+			array(3, '', 'カテゴリフォルダのパスからページカテゴリーIDを取得できません'),
 		);
 	}
 
@@ -446,9 +446,9 @@ class PageCategoryTest extends BaserTestCase {
 			array('mobile', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
 			array('smartphone', true, array(2, 3, 4), 'モバイル用の子カテゴリをもったカテゴリIDをリストで正しく取得できません'),
 			array('smartphone', false, array(3, 4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
-			array('garaphone', true, array(3, 4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
-			array('garaphone', false, array(4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
-			array('garaphone2', true, array(4), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone', true, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
+			array('garaphone2', true, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
 			array('garaphone2', false, array(), 'モバイル用のカテゴリIDをリストで正しく取得できません'),
 		);
 	}
@@ -470,7 +470,7 @@ class PageCategoryTest extends BaserTestCase {
 		return array(
 			array('mobile', 1, 'エージェントカテゴリのIDを正しく取得できません'),
 			array('smartphone', 2, 'エージェントカテゴリのIDを正しく取得できません'),
-			array('garaphone', 3, 'エージェントカテゴリのIDを正しく取得できません'),
+			array('garaphone', false, 'エージェントカテゴリのIDを正しく取得できません'),
 		);
 	}
 

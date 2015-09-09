@@ -26,8 +26,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		'baser.Default.BlogTag',
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
-		'baser.Model.PageModel',
-		'baser.Model.PageCategoryModel',
+		'baser.Default.Page',
+		'baser.Default.PageCategory',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
@@ -168,7 +168,20 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @access public
  */
 	public function testResizeImage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
+		$imgPath = WWW_ROOT . 'img/admin' . DS;
+		$source = $imgPath . 'bg_install.png';
+		$distination = $imgPath . 'bg_install_copy.png';
+
+		// 通常コピー
+		$this->BcUploadBehavior->resizeImage($source, $distination);
+		$this->assertFileExists($distination, '画像ファイルをコピーできません');
+		@unlink($distination);
+
+		// リサイズコピー
+		$this->BcUploadBehavior->resizeImage($source, $distination, 100, 100);
+		$result = $this->BcUploadBehavior->getImageSize($distination);
 		
 	}
 

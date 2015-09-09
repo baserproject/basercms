@@ -27,8 +27,8 @@ class PageTest extends BaserTestCase {
 		'baser.Default.BlogTag',
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
-		'baser.Model.PageModel',
-		'baser.Model.PageCategoryModel',
+		'baser.Model.Page.Page',
+		'baser.Model.Page.PageCategory',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
@@ -180,7 +180,6 @@ class PageTest extends BaserTestCase {
 	public function testGetDefaultValue() {
 
 		$expected = array('Page' => array(
-				'author_id' => 1,
 				'sort' => 17,
 				'status' => false,
 			)

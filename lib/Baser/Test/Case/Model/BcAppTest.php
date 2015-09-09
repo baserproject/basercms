@@ -23,7 +23,7 @@ class BcAppTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.Dblog',
-		'baser.Model.PageCategoryModel',
+		'baser.Model.BcApp.PageCategory',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',

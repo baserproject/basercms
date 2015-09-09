@@ -3,7 +3,7 @@
  * PageCategoryFixture
  *
  */
-class PageCategoryModelFixture extends BaserTestFixture {
+class PageCategoryFixture extends BaserTestFixture {
 /**
  * Name of the object
  *
