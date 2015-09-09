@@ -302,22 +302,29 @@ class BcFreezeHelperTest extends BaserTestCase {
  */
 	public function testFile($freezed, $fieldName, $options, $expected) {
 
-
 		// 凍結させる
 		if($freezed) {
-			$this->markTestIncomplete('このテストは、一部未完成です。');
+			// $this->markTestIncomplete('このテストは、一部未完成です。');
 			$this->BcFreeze->freeze();
+			$this->EditorTemplate = ClassRegistry::init('EditorTemplate');
+			$this->EditorTemplate->BcFreeze = new BcFreezeHelper(new View);
+			$result = $this->EditorTemplate->BcFreeze->file($fieldName, $options);
+			$this->assertRegExp('/' . $expected . '/s', $result);
+
+		
+		} else {
+			$result = $this->BcFreeze->file($fieldName, $options);
+			$this->assertRegExp('/' . $expected . '/s', $result);
+		
 		}
 
-		$result = $this->BcFreeze->file($fieldName, $options);
-		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
 	public function fileDataProvider() {
 		return array(
 			array(false, 'baser', array(), '<input type="file" name="data\[baser\]"  id="baser"'),
-			array(false, 'baser', array('size' => 100), ' size="100"'),
-			array(true, 'baser.freezed', array(), ' size="100"'),
+			array(false, 'baser', array('size' => 100), 'size="100"'),
+			array(true, 'baser.freezed', array(), '<input type="file" name="data\[baser\]\[freezed\]"  id="baserFreezed"\/>'),
 		);
 	}
 
