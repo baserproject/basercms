@@ -528,8 +528,15 @@ class MailController extends MailAppController {
 			// 件名にフィールドの値を埋め込む
 			// 和暦など配列の場合は無視
 			if (!is_array($value)) {
-				$mailContent['subject_user'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_user']);
-				$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_admin']);
+				if ($mailField['MailField']['type'] == 'radio' || 
+					  $mailField['MailField']['type'] == 'select') {
+					$source = explode('|', $mailField['MailField']['source']);
+					$mailContent['subject_user'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_user']);
+					$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_admin']);
+				} else {
+					$mailContent['subject_user'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_user']);
+					$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_admin']);
+				}
 			}
 			if($mailField['MailField']['type'] == 'file' && $value) {
 				$attachments[] = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $value;
