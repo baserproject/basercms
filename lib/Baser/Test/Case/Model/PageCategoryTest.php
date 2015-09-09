@@ -29,8 +29,8 @@ class PageCategoryTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Content',
 		'baser.Default.Permission',
-		'baser.Model.PageCategory.Page',
-		'baser.Model.PageCategory.PageCategory',
+		'baser.Model.PageCategory.PagePageCategoryModel',
+		'baser.Model.PageCategory.PageCategoryPageCategoryModel',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',

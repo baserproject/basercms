@@ -168,7 +168,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @access public
  */
 	public function testResizeImage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		// $this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$imgPath = WWW_ROOT . 'img/admin' . DS;
 		$source = $imgPath . 'bg_install.png';
