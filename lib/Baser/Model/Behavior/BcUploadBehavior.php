@@ -401,7 +401,6 @@ class BcUploadBehavior extends ModelBehavior {
 			}
 		} else {
 			$_fileName = str_replace(array('.', '/'), array('_', '_'), $fileName);
-			var_dump($_fileName);
 			$this->Session->write('Upload.' . $_fileName, $field);
 			$this->Session->write('Upload.' . $_fileName . '.type', $file['type']);
 			$this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($file['tmp_name']));

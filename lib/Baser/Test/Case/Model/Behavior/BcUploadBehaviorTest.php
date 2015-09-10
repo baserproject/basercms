@@ -197,8 +197,12 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		} else {
 			$this->assertEquals($targetPath, $result, $message);
-			$re = $this->BcUploadBehavior->Session->read('Upload'); // ここ
-			var_dump($re);
+
+			// セッションをチェック
+			$sessionField = $tmpId . '_' . $fieldName . '_' . $ext;
+			$expected[$sessionField] = array_merge($field, array('type' => 'basercms', 'data' => ''));
+			$resultSession = $this->BcUploadBehavior->Session->read('Upload');
+			$this->assertEquals($expected, $resultSession, $message);
 
 		}
 
@@ -408,9 +412,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			), 'ファイルを複数削除できません'),
 			array(null, null, array(
 			'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150'),
-			'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100')
-				'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150'),
-				'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100')
+			'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100'),
 			), 'ファイルを複数削除できません'),
 		);
 	}
