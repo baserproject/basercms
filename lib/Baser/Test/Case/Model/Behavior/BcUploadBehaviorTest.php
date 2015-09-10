@@ -134,12 +134,12 @@ class BcUploadBehaviorTest extends BaserTestCase {
 /**
  * 画像をコピーする
  * 
- * @param Model $Model
  * @param array 画像保存対象フィールドの設定
- * @return boolean
- * @access public
+ * @param array $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider copyImageDataProvider
  */
-	public function testCopyImage() {
+	public function testCopyImage($prefix, $suffix, $message = null) {
 
 		$imgPath = WWW_ROOT . 'img/admin' . DS;
 		$savePath = WWW_ROOT . 'files/editor/';
@@ -147,16 +147,13 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		$field = array(
 			'name' => 'image',
-			'prefix' => '',
-			'suffix' => '',
+			'prefix' => $prefix,
+			'suffix' => $suffix,
 			'ext' => 'png',
 			'width' => 100,
 			'height' => 100,
 		);
-
-		// コピー先ファイルのパス
-		$targetPath1 = $savePath . $fileName . '_copy' . '.' . $field['ext'];
-
+		
 		$this->EditorTemplate->data = array(
 			'EditorTemplate' => array(
 				'image' => array(
@@ -166,33 +163,22 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			)
 		);
 
+		// コピー先ファイルのパス
+		$targetPath = $savePath . $field['prefix'] . $fileName . '_copy' . $field['suffix'] . '.' . $field['ext'];
+
 		// コピー実行
 		$this->EditorTemplate->copyImage($field);
-		$this->assertFileExists($targetPath1, '画像ファイルをコピーできません');
+		$this->assertFileExists($targetPath, $message);
 
 		// コピーしたファイルを削除
-		@unlink($targetPath1);
+		@unlink($targetPath);
+	}
 
-
-		//-------------------------
-		// プレフィックスを設定する場合
-		//-------------------------
-		$field = array(
-			'name' => 'image',
-			'prefix' => 'pre-',
-			'suffix' => '-suf',
-			'ext' => 'png',
-			'width' => 100,
-			'height' => 100,
+	public function copyImageDataProvider() {
+		return array(
+			array('', '', '画像ファイルをコピーできません'),
+			array('pre-', '-suf', '画像ファイルの名前にプレフィックスを付けてコピーできません'),
 		);
-		$targetPath2 = $savePath . $field['prefix'] . $fileName . '_copy' . $field['suffix'] . '.' . $field['ext'];
-		
-		// コピー実行
-		$this->EditorTemplate->copyImage($field);
-		$this->assertFileExists($targetPath2, '画像ファイルの名前にプレフィックスを付けてコピーできません');
-
-		// コピーしたファイルを削除
-		@unlink($targetPath2);
 	}
 
 /**
@@ -353,17 +339,55 @@ class BcUploadBehaviorTest extends BaserTestCase {
 /**
  * フィールドベースのファイル名を取得する
  *
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider getFieldBasenameDataProvider
  */
-	public function testGetFieldBasename() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetFieldBasename($namefield, $basename, $modelId, $setting, $expected, $message = null) {
 
-		$setting = array(
-			'namefield' => 'id'
-		);
+		// 初期化
+		$this->EditorTemplate->data['EditorTemplate'][$namefield] = $basename;
+		$this->EditorTemplate->id = $modelId;
 
-		$result = $this->EditorTemplate->getFieldBasename($setting, 'gif');
-		var_dump($result);
+		$issetSubdirDataFormat = isset($setting['subdirDateFormat']);
+		if ($issetSubdirDataFormat) {
+			$this->EditorTemplate->settings = array();
+			$this->EditorTemplate->settings['EditorTemplate']['subdirDateFormat'] = $setting['subdirDateFormat'];
+		}
+
+		$setting['namefield'] = $namefield;
+
+
+		// テスト実行
+		$result = $this->EditorTemplate->getFieldBasename($setting, 'ext');
+		$this->assertEquals($expected, $result, $message);
+
+		if ($issetSubdirDataFormat) {
+
+		}
 	}
+
+	public function getFieldBasenameDataProvider() {
+		return array(
+			array('namefield', 'basename', 'modelId', array('name' => 'name'),
+						'basename_name.ext', 'フィールドベースのファイル名を正しく取得できません'),
+			array(null, 'basename', 'modelId', array(),
+						false, 'namefieldを指定しなかった場合にfalseが返ってきません'),	
+			array('id', null, 'modelId', array('name' => 'name'),
+						'modelId_name.ext', 'namefieldがidかつbasenameが指定されていない場合のファイル名を正しく取得できません'),
+			array('id', null, null, array(),
+						false, 'namefieldがidかつbasenameとModelIdが指定されていない場合にfalseが返ってきません'),
+			array('namefield', null, 'modelId', array(),
+						false, 'basenameが指定されていない場合にfalseが返ってきません'),
+			array('namefield', 'basename', 'modelId', array('name' => 'name', 'nameformat' => 'ho-%s-ge'),
+						'ho-basename-ge_name.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
+			array('namefield', 'basename', 'modelId', array('name' => 'name', 'nameadd' => false),
+						'basename.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
+			// array('namefield', 'basename', 'modelId', array('name' => 'name', 'subdirDateFormat' => 'test'),
+			// 			'basename_name.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
+		);
+	}
+
 
 /**
  * ベースファイル名からプレフィックス付のファイル名を取得する
