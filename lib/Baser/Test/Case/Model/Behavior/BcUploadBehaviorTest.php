@@ -278,27 +278,34 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testDelFile($prefix, $suffix, $imagecopy, $message) {
 		$savePath = '/vagrant/app/webroot/files/editor/';
+		$tmpPath = TMP;
+		$fileName = 'dummy';
 		$field = array(
 			'ext' => 'gif',
 			'prefix' => $prefix,
 			'suffix' => $suffix,
 			'imagecopy' => $imagecopy,
+			'name'	=> $fileName
 		);
-		$fileName = 'dummy';
-		$targetPath = $savePath . $field['prefix'] . 'dummy'. $field['suffix'] . '.' . $field['ext'];
+
+		$targetPath = $savePath . $field['prefix'] . $fileName . $field['suffix'] . '.' . $field['ext'];
 
 		// ダミーのファイルを生成
 		touch($targetPath);
 
 		// copyのダミーファイルを生成
-		// if (is_array($field['imagecopy'])) {
-		// 	$field['name'] = $field['imagecopy'][0]['name'];
-		// 	$field['ext'] = $field['imagecopy'][0]['ext'];
-
-		// 	foreach ($field['imagecopy'] as $copy) {
-		// 		touch($savePath . $copy['name'] . '.' .  $copy['ext']);
-		// 	}
-		// }
+		if (is_array($field['imagecopy'])) {
+			touch($tmpPath . $fileName . '.' . $field['ext']);
+			$this->EditorTemplate->data['EditorTemplate'][$fileName]['name'] = $fileName . '.' . $field['ext'];
+			$this->EditorTemplate->data['EditorTemplate'][$fileName]['tmp_name'] = $fileName . '.' . $field['ext'];
+			$this->EditorTemplate->copyImage($field);
+		}
+//		 if (is_array($field['imagecopy'])) {
+//		 	foreach ($field['imagecopy'] as $copy) {
+//				$this->EditorTemplate->copyImage($fileName, $field);
+//		 		touch($savePath . $fileName . '.' .  $field['ext']);
+//		 	}
+//		 }
 
 		// 削除を実行
 		$this->EditorTemplate->delFile($fileName, $field);
@@ -315,13 +322,13 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array('pre', null, null, '接頭辞を指定した場合のファイル削除ができません'),
 			array(null, 'suf', null, '接尾辞を指定した場合のファイル削除ができません'),
 			array('pre', 'suf', null, '接頭辞と接尾辞を指定した場合のファイル削除ができません'),
-			// array(null, null, array(
-			// 			array('name' => 'dummy1', 'ext' => 'gif'),
-			// 			), 'ファイルを複数削除できません'),
-			// array(null, null, array(
-			// 			array('name' => 'dummy1', 'ext' => 'gif'),
-			// 			array('name' => 'dummy2', 'ext' => 'gif'),
-			// 			), 'ファイルを複数削除できません'),
+			array(null, null, array(
+				'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150')
+			), 'ファイルを複数削除できません'),
+			array(null, null, array(
+				'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150'),
+				'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100')
+			), 'ファイルを複数削除できません'),
 		);
 	}
 
