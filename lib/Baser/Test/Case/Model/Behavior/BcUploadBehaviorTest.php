@@ -388,7 +388,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			$this->EditorTemplate->copyImage($field);
 		}
 
-
 		// 削除を実行
 		$this->EditorTemplate->delFile($fileName, $field);
 
@@ -410,6 +409,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array(null, null, array(
 			'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150'),
 			'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100')
+				'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150'),
+				'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100')
 			), 'ファイルを複数削除できません'),
 		);
 	}
