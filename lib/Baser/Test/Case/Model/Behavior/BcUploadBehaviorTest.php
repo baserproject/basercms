@@ -45,6 +45,31 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+
+/**
+ * ファイル等が内包されたディレクトリも削除する
+ * 
+ * testGetFieldBasename()で使用します
+ * 
+ * @param string $dir 対象のディレクトリのパス
+ * @return void
+ */
+	public function removeDir($dir) {
+		if ($handle = opendir("$dir")) {
+			while (false !== ($item = readdir($handle))) {
+				if ($item != "." && $item != "..") {
+					if (is_dir("$dir/$item")) {
+					 $this->removeDir("$dir/$item");
+					} else {
+						unlink("$dir/$item");
+					}
+				}
+			}
+			closedir($handle);
+			rmdir($dir);
+		}
+	}
+
 /**
  * セットアップ
  */
@@ -122,13 +147,75 @@ class BcUploadBehaviorTest extends BaserTestCase {
 /**
  * ファイルを保存する
  * 
- * @param Model $Model
- * @param array 画像保存対象フィールドの設定
- * @return ファイル名 Or false
- * @access public
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider saveFileDataProvider
  */
-	public function saveFile() {
+	public function testSaveFile($prefix, $suffix, $namefield, $tmpId, $message = null) {
 
+
+		$fieldName = 'fieldName';
+		$tmp_name  = 'tmp_file';
+		$basename = 'basename';
+		$ext = 'png';
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$tmpPath = $savePath . $tmp_name;
+
+		if (!$tmpId) {
+			$targetPath = $savePath . $prefix . $basename . $suffix . '.' . $ext;
+		} else {
+			$targetPath = $tmpId . '_' . $fieldName . '.' . $ext;
+		}
+
+		// 初期化
+		$field = array(
+			'name' => $fieldName,
+			'ext' => $ext,
+			'prefix' => $prefix,
+			'suffix' => $suffix,
+			'namefield' => $namefield,
+		);
+
+		$this->EditorTemplate->data['EditorTemplate'][$fieldName] = array(
+			'name' => $basename,
+			'tmp_name' => $tmpPath,
+			'type' => 'basercms',
+		);
+
+		$this->BcUploadBehavior->tmpId = $tmpId;
+
+		// ダミーファイルの作成
+		touch($tmpPath);
+
+
+		// ファイル保存を実行
+		$result = $this->EditorTemplate->saveFile($field);
+
+		if (!$tmpId) {
+			$this->assertFileExists($targetPath, $message);
+
+		} else {
+			$this->assertEquals($targetPath, $result, $message);
+			$re = $this->BcUploadBehavior->Session->read('Upload'); // ここ
+			var_dump($re);
+
+		}
+
+
+		// 生成されたファイルを削除
+		@unlink($tmpPath);
+		@unlink($targetPath);
+
+	}
+
+	public function saveFileDataProvider() {
+		return array(
+			array('', '', null, null, 'ファイルを保存できません'),
+			array('pre-', '-suf', null, null, 'プレフィックス付きのファイルを保存できません'),
+			array('', '', 'hoge', 1, 'tmpIdとnamefieldに指定がある場合にファイルを保存できません'),
+			array('', '', null, 1, 'tmpIdに指定がある場合にファイルを保存できません'),
+		);
 	}
 
 /**
@@ -142,7 +229,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	public function testCopyImage($prefix, $suffix, $message = null) {
 
 		$imgPath = WWW_ROOT . 'img/admin' . DS;
-		$savePath = WWW_ROOT . 'files/editor/';
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
 		$fileName = 'bg_install';
 
 		$field = array(
@@ -253,6 +340,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @access public
  */
 	public function beforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
 
@@ -277,28 +365,29 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @dataProvider delFileDataProvider
  */
 	public function testDelFile($prefix, $suffix, $imagecopy, $message) {
-		$savePath = '/vagrant/app/webroot/files/editor/';
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$tmpPath = TMP;
+		$fileName = 'dummy';
 		$field = array(
 			'ext' => 'gif',
 			'prefix' => $prefix,
 			'suffix' => $suffix,
 			'imagecopy' => $imagecopy,
+			'name'	=> $fileName
 		);
-		$fileName = 'dummy';
-		$targetPath = $savePath . $field['prefix'] . 'dummy'. $field['suffix'] . '.' . $field['ext'];
+		$targetPath = $savePath . $field['prefix'] . $fileName . $field['suffix'] . '.' . $field['ext'];
 
 		// ダミーのファイルを生成
 		touch($targetPath);
 
 		// copyのダミーファイルを生成
-		// if (is_array($field['imagecopy'])) {
-		// 	$field['name'] = $field['imagecopy'][0]['name'];
-		// 	$field['ext'] = $field['imagecopy'][0]['ext'];
+		if (is_array($field['imagecopy'])) {
+			touch($tmpPath . $fileName . '.' . $field['ext']);
+			$this->EditorTemplate->data['EditorTemplate'][$fileName]['name'] = $fileName . '.' . $field['ext'];
+			$this->EditorTemplate->data['EditorTemplate'][$fileName]['tmp_name'] = $fileName . '.' . $field['ext'];
+			$this->EditorTemplate->copyImage($field);
+		}
 
-		// 	foreach ($field['imagecopy'] as $copy) {
-		// 		touch($savePath . $copy['name'] . '.' .  $copy['ext']);
-		// 	}
-		// }
 
 		// 削除を実行
 		$this->EditorTemplate->delFile($fileName, $field);
@@ -315,30 +404,96 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array('pre', null, null, '接頭辞を指定した場合のファイル削除ができません'),
 			array(null, 'suf', null, '接尾辞を指定した場合のファイル削除ができません'),
 			array('pre', 'suf', null, '接頭辞と接尾辞を指定した場合のファイル削除ができません'),
-			// array(null, null, array(
-			// 			array('name' => 'dummy1', 'ext' => 'gif'),
-			// 			), 'ファイルを複数削除できません'),
-			// array(null, null, array(
-			// 			array('name' => 'dummy1', 'ext' => 'gif'),
-			// 			array('name' => 'dummy2', 'ext' => 'gif'),
-			// 			), 'ファイルを複数削除できません'),
+			array(null, null, array(
+				'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150')
+			), 'ファイルを複数削除できません'),
+			array(null, null, array(
+			'thumb'			=> array('suffix' => 'thumb', 'width' => '150', 'height' => '150'),
+			'thumb_mobile'	=> array('suffix' => 'thumb_mobile', 'width' => '100', 'height' => '100')
+			), 'ファイルを複数削除できません'),
 		);
 	}
 
 /**
  * ファイル名をフィールド値ベースのファイル名に変更する
  * 
- * @param Model $Model
- * @return boolean
- * @access public
+ * @param string $expected 期待値
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider renameToFieldBasenameDataProvider
  */
-	public function testRenameToFieldBasename() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testRenameToFieldBasename($oldName, $newName, $ext, $copy, $imagecopy, $message = null) {
+
+		// 初期化
+		$this->EditorTemplate->id = $newName;
+		$oldName = $oldName . '.' . $ext;
+		$this->EditorTemplate->data['EditorTemplate'] = array('image' => $oldName);
+		$setting = $this->BcUploadBehavior->settings['EditorTemplate']['fields']['image'];
+
+		if ($imagecopy) {
+			$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imagecopy'] = $imagecopy;
+		}
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$oldPath = $savePath . $oldName;
+		$newPath = $savePath . $setting['imageresize']['prefix'] . $newName . '.' . $ext;
+
+		// ダミーファイルの生成
+		touch($oldPath);
+		
+		if ($imagecopy) {
+			foreach ($imagecopy as $copysetting) {
+				$oldCopynames = $this->EditorTemplate->getFileName($copysetting, $oldName);
+				touch($savePath . $oldCopynames);
+			}
+		}
+
+
+		// テスト実行
+		$this->EditorTemplate->renameToFieldBasename($copy);
+		$this->assertFileExists($newPath, $message);
+
+
+		// 生成されたファイルを削除
+		@unlink($newPath);
+
+
+		// ファイルを複数生成する場合テスト
+		if ($copy) {
+			$this->assertFileExists($oldPath, $message);
+			@unlink($oldPath);
+		}
+
+		if ($imagecopy) {
+			$newName = $this->EditorTemplate->getFileName($setting['imageresize'], $newName . '.' . $ext);
+
+			foreach ($imagecopy as $copysetting) {
+				$newCopyname = $this->EditorTemplate->getFileName($copysetting, $newName);
+				$this->assertFileExists($savePath . $newCopyname, $message);
+				@unlink($savePath . $newCopyname);
+			}
+		}
+
+	}
+
+	public function renameToFieldBasenameDataProvider() {
+		return array(
+			array('oldName', 'newName', 'gif', false, false, 'ファイル名をフィールド値ベースのファイル名に変更できません'),
+			array('oldName', 'newName', 'gif', true, false, 'ファイル名をフィールド値ベースのファイル名に変更してコピーができません'),
+			array('oldName', 'newName', 'gif', false,array(
+						array('prefix' => 'pre-', 'suffix' => '-suf'),
+						array('prefix' => 'pre2-', 'suffix' => '-suf2'),
+						), '複数のファイルをフィールド値ベースのファイル名に変更できません'),
+		);
 	}
 
 /**
  * フィールドベースのファイル名を取得する
  *
+ * @param string $namefield namefieldパラメータの値
+ * @param string $basename basenameパラメータの値
+ * @param string $basename $Model->idの値
+ * @param array $setting 設定する値
  * @param string $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider getFieldBasenameDataProvider
@@ -351,8 +506,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		$issetSubdirDataFormat = isset($setting['subdirDateFormat']);
 		if ($issetSubdirDataFormat) {
-			$this->EditorTemplate->settings = array();
-			$this->EditorTemplate->settings['EditorTemplate']['subdirDateFormat'] = $setting['subdirDateFormat'];
+			$this->BcUploadBehavior->settings = array();
+			$this->BcUploadBehavior->settings['EditorTemplate']['subdirDateFormat'] = $setting['subdirDateFormat'];
 		}
 
 		$setting['namefield'] = $namefield;
@@ -360,11 +515,22 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// テスト実行
 		$result = $this->EditorTemplate->getFieldBasename($setting, 'ext');
-		$this->assertEquals($expected, $result, $message);
+		
 
-		if ($issetSubdirDataFormat) {
+		if (!$issetSubdirDataFormat) {
+			$this->assertEquals($expected, $result, $message);
 
+		} else {
+			$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+			$subDir = date($setting['subdirDateFormat']) . '/';
+
+			$expected = $subDir . $expected;
+
+			$this->assertEquals($expected, $result, $message);
+
+			@$this->removeDir($savePath . $subDir);
 		}
+
 	}
 
 	public function getFieldBasenameDataProvider() {
@@ -383,8 +549,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 						'ho-basename-ge_name.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
 			array('namefield', 'basename', 'modelId', array('name' => 'name', 'nameadd' => false),
 						'basename.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
-			// array('namefield', 'basename', 'modelId', array('name' => 'name', 'subdirDateFormat' => 'test'),
-			// 			'basename_name.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
+			array('namefield', 'basename', 'modelId', array('name' => 'name', 'subdirDateFormat' => 'Y-m'),
+						'basename_name.ext', 'formatを指定した場合に正しくファイル名を取得できません'),
 		);
 	}
 

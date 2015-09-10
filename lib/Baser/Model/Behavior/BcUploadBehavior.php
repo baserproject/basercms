@@ -401,6 +401,7 @@ class BcUploadBehavior extends ModelBehavior {
 			}
 		} else {
 			$_fileName = str_replace(array('.', '/'), array('_', '_'), $fileName);
+			var_dump($_fileName);
 			$this->Session->write('Upload.' . $_fileName, $field);
 			$this->Session->write('Upload.' . $_fileName . '.type', $file['type']);
 			$this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($file['tmp_name']));
@@ -587,7 +588,6 @@ class BcUploadBehavior extends ModelBehavior {
 			}
 
 			if (!empty($setting['namefield']) && !empty($Model->data[$Model->alias][$setting['name']])) {
-
 				$oldName = $Model->data[$Model->alias][$setting['name']];
 
 				if (file_exists($this->savePath[$Model->alias] . $oldName)) {
@@ -641,7 +641,11 @@ class BcUploadBehavior extends ModelBehavior {
  *
  * @param Model $Model
  * @param array $setting
- * @param string $ext
+ * - namefield 対象となるファイルのベースの名前が格納されたフィールド名
+ * - nameformat ファイル名のフォーマット
+ * - name ファイル名の後に追加する名前
+ * - nameadd nameを追加しないか
+ * @param string $ext ファイルの拡張子
  * @return mixed false / string
  * @access public
  */
