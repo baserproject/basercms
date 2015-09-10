@@ -115,10 +115,10 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testSaveTmpFiles() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$data = 'hoge';
 		$tmpId = 1;
 		$result = $this->EditorTemplate->saveTmpFiles($data, $tmpId);
+		var_dump($result);
 	}
 
 /**
@@ -300,15 +300,15 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testCopyImage($prefix, $suffix, $message = null) {
 
-		$imgPath = WWW_ROOT . 'img/admin' . DS;
+		$imgPath = ROOT . '/lib/Baser/webroot/img/';
 		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
-		$fileName = 'bg_install';
+		$fileName = 'baser.power';
 
 		$field = array(
 			'name' => 'image',
 			'prefix' => $prefix,
 			'suffix' => $suffix,
-			'ext' => 'png',
+			'ext' => 'gif',
 			'width' => 100,
 			'height' => 100,
 		);
