@@ -140,7 +140,75 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  * @access public
  */
-	public function moveFileSessionToTmp() {
+	public function testMoveFileSessionToTmp() {
+		
+		$tmpId = 1;
+		$fieldName = 'fieldName';
+		$tmp_name  = 'basercms_tmp';
+		$basename = 'basename';
+		$ext = 'png';
+		$namefield = 'hoge';
+
+		//—————————————————————————
+		// セッションを設定
+		//—————————————————————————
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$tmpPath = $savePath . $tmp_name;
+
+		// 初期化
+		$field = array(
+			'name' => $fieldName,
+			'ext' => $ext,
+			'namefield' => $namefield,
+		);
+		$this->BcUploadBehavior->tmpId = $tmpId;
+		
+		$this->EditorTemplate->data['EditorTemplate'][$fieldName] = array(
+			'name' => $basename,
+			'tmp_name' => $tmpPath,
+			'type' => 'basercms',
+		);
+
+		// ダミーファイルの作成
+		$file = new File($tmpPath);
+		$file->write('dummy');
+		$file->close();
+		
+		// セッションを設定
+		$this->EditorTemplate->saveFile($field);
+
+		//—————————————————————————
+		// 本題
+		//—————————————————————————
+
+		// パス情報
+		$targetName = $tmpId . '_' . $fieldName . '_' . $ext;
+		$targetPath = $savePath . $targetName;
+
+		// 初期化
+		$this->EditorTemplate->data['EditorTemplate'][$fieldName . '_tmp'] = $targetName;
+
+		// セッションからファイルを保存
+		$this->EditorTemplate->moveFileSessionToTmp($fieldName);
+
+		// 判定
+		$this->assertFileExists($targetPath, 'セッションに保存されたファイルデータをファイルとして保存できません');
+		
+		$result = $this->EditorTemplate->data['EditorTemplate'][$fieldName];
+		$expected = array(
+			'error' => 0,
+  		'name' => $targetName,
+  		'tmp_name' => $targetPath,
+  		'size' => 5,
+  		'type' => 'basercms',
+		);
+		$this->assertEquals($expected, $result, 'アップロードされたデータとしてデータを復元できません');
+
+		// 生成されたファイルを削除
+		@unlink($tmpPath);
+		@unlink($targetPath);
 
 	}
 
@@ -483,7 +551,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		return array(
 			array('oldName', 'newName', 'gif', false, false, 'ファイル名をフィールド値ベースのファイル名に変更できません'),
 			array('oldName', 'newName', 'gif', true, false, 'ファイル名をフィールド値ベースのファイル名に変更してコピーができません'),
-			array('oldName', 'newName', 'gif', false,array(
+			array('oldName', 'newName', 'gif', false, array(
 						array('prefix' => 'pre-', 'suffix' => '-suf'),
 						array('prefix' => 'pre2-', 'suffix' => '-suf2'),
 						), '複数のファイルをフィールド値ベースのファイル名に変更できません'),
