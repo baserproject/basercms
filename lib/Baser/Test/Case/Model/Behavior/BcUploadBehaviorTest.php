@@ -575,14 +575,15 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @dataProvider getImageSizeDataProvider
  */
 	public function testGetImageSize($imgName, $expected, $message = null) {
-		$imgPath = WWW_ROOT . 'img/admin' . DS . $imgName;
+		$imgPath = ROOT . '/lib/Baser/webroot/img/' . $imgName;
+
 		$result = $this->BcUploadBehavior->getImageSize($imgPath);
 		$this->assertEquals($expected, $result, '画像のサイズを正しく取得できません');
 	}
 
 	public function getImageSizeDataProvider() {
 		return array(
-			array('bg_install.png', array('width' => 240, 'height' => 205), '画像のサイズを正しく取得できません'),
+			array('baser.power.gif', array('width' => 98, 'height' => 13), '画像のサイズを正しく取得できません'),
 		);
 	}
 
@@ -877,9 +878,13 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testGetUniqueFileName($fieldName, $fileName, $expected, $message = null) {
 		$setting = array('ext' => 'gif');
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		touch($savePath . 'template1.gif');
 
 		$result = $this->EditorTemplate->getUniqueFileName($fieldName, $fileName, $setting);
 		$this->assertEquals($expected, $result, $message);
+
+		@unlink($savePath . 'template1.gif');
 	}
 
 	public function getUniqueFileNameDataProvider() {
