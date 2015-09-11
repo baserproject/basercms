@@ -125,7 +125,21 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @access public
  */
 	public function testAfterSave() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->EditorTemplate->data = array(
+			'EditorTemplate' => array(
+				'name' => '',
+				'link' => '',
+			)
+		);
+		$this->EditorTemplate->save(array(
+			'EditorTemplate' => array(
+				'name' => 'hoge',
+				'link' => 'hoge',
+			)
+		));
+		$data = $this->EditorTemplate->find('all');
+		var_dump($data);
+
 	}
 
 /**
