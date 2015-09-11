@@ -287,6 +287,8 @@ class BcTextHelperTest extends BaserTestCase {
  */
 	public function testDateTime() {
 
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		
 		// 適当な時間を設定
 		$arrDate = array(
 			'year' 	=> 2015,
