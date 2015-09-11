@@ -636,11 +636,13 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$tmpPath = TMP;
 		$fileName = 'dummy';
 		$field = array(
-			'ext' => 'gif',
-			'prefix' => $prefix,
-			'suffix' => $suffix,
+			'ext'		=> 'gif',
+			'prefix'	=> $prefix,
+			'suffix'	=> $suffix,
 			'imagecopy' => $imagecopy,
-			'name'	=> $fileName
+			'name'		=> $fileName,
+			'width'		=> 600,
+			'height'	=> 600
 		);
 		$targetPath = $savePath . $field['prefix'] . $fileName . $field['suffix'] . '.' . $field['ext'];
 
@@ -649,10 +651,17 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// copyのダミーファイルを生成
 		if (is_array($field['imagecopy'])) {
-			touch($tmpPath . $fileName . '.' . $field['ext']);
-			$this->EditorTemplate->data['EditorTemplate'][$fileName]['name'] = $fileName . '.' . $field['ext'];
-			$this->EditorTemplate->data['EditorTemplate'][$fileName]['tmp_name'] = $fileName . '.' . $field['ext'];
-			$this->EditorTemplate->copyImage($field);
+			copy(ROOT . '/lib/Baser/webroot/img/baser.power.gif', $tmpPath . $fileName . '.' . $field['ext']);
+			$this->EditorTemplate->data['EditorTemplate'][$fileName] = array(
+				'name' 		=> $fileName . '.' . $field['ext'],
+				'tmp_name'	=> $tmpPath . $fileName . '.' . $field['ext'],
+			);
+			foreach($field['imagecopy'] as $copy) {
+				$copy['name'] = $fileName;
+				$copy['ext'] = $field['ext'];
+				$this->EditorTemplate->copyImage($copy);
+			}
+
 		}
 
 		// 削除を実行
