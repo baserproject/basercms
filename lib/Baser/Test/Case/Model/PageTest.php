@@ -76,6 +76,7 @@ class PageTest extends BaserTestCase {
  */
 	public function getPageFilePath($data) {
 
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		// リフレクションで _getPageFilePath を呼び出す
 		$reflec = new ReflectionMethod($this->Page, '_getPageFilePath');
 		$reflec->setAccessible(true);
