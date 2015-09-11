@@ -138,7 +138,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			)
 		));
 		$data = $this->EditorTemplate->find('all');
-		var_dump($data);
 
 	}
 
