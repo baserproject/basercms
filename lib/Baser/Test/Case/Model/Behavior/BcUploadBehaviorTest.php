@@ -222,8 +222,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testSaveFilesCanDelete($id, $message) {
 
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->initTestSaveFiles($id);
 
 		// パス情報
@@ -261,8 +259,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @dataProvider saveFilesCanCopyDataProvider
  */
 	public function testSaveFilesCanCopy($imagecopy, $message) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$this->initTestSaveFiles(1, array('name' => 'copy.gif', 'type' => 'image'));
 
@@ -306,8 +302,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @dataProvider saveFilesCanResizeDataProvider
  */
 	public function testSaveFilesCanResize($imageresize, $message) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$this->initTestSaveFiles();
 
