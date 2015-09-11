@@ -160,6 +160,7 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function testPHP構文チェック異常系() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->Page->create(array(
 			'Page' => array(
 				'name' => 'test',

@@ -338,6 +338,7 @@ class UserTest extends BaserTestCase {
  * ユーザーに関連するよく使う項目を削除する
  */
 	public function testDeleteFavorites() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->User->Favorite->deleteAll(1);
 		$result = $this->User->Favorite->find('all');
 		$expected = array();

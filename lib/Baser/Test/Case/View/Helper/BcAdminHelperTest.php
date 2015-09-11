@@ -61,6 +61,7 @@ class BcAdminHelperTest extends BaserTestCase {
  * @dataProvider isAdminGlobalmenuUsedDataProvider
  */
 	public function testIsAdminGlobalmenuUsed($admin, $groupId, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->BcAdmin->request->params['admin'] = $admin;
 		$this->BcAdmin->_View->viewVars['user'] = array(
 			'user_group_id' => $groupId

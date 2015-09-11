@@ -57,7 +57,7 @@ class BcContentsManagerTest extends BaserTestCase {
  * @access public
  */
 	public function testSaveContent() {
-
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		// コンテンツデータを登録
 		$data = array(
 			'Content' => array(

@@ -98,6 +98,9 @@ class BcAppTest extends BaserTestCase {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
 	public function testSave($data = null, $validate = true, $fieldList = array()) {
+
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		$this->Page->save(array(
 			'Page' => array(
 				'name' => 'test',
@@ -820,7 +823,7 @@ class BcAppTest extends BaserTestCase {
  * ツリーより再帰的に削除する
  */
 	public function testRemoveFromTreeRecursive() {
-
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->PageCategory->data['PageCategory']['id'] = 2;
 		$this->PageCategory->removeFromTreeRecursive(2);
 		$result = $this->PageCategory->find('all', array(

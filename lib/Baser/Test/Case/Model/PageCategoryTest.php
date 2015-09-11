@@ -174,7 +174,7 @@ class PageCategoryTest extends BaserTestCase {
  * afterSave
  */
 	public function testAfterSave() {
-
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		// 適用するページカテゴリID
 		$this->PageCategory->data['PageCategory']['id'] = $id = 2;
 		$result = $this->PageCategory->afterSave(false);
@@ -344,6 +344,7 @@ class PageCategoryTest extends BaserTestCase {
  */
 	public function testUpdateRelatedPageUrlRecursive($id, $expected, $message = null) {
 
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		// 更新できるかテスト
 		$result = $this->PageCategory->updateRelatedPageUrlRecursive($id);
 		$this->assertTrue($result, '関連するページデータのURLを更新できません');
@@ -377,7 +378,7 @@ class PageCategoryTest extends BaserTestCase {
  * @dataProvider updateRelatedPageUrlDataProvider
  */
 	public function testUpdateRelatedPageUrl($id, $expected, $message = null) {
-		
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		// 更新できるかテスト
 		$result = $this->PageCategory->updateRelatedPageUrl($id);
 		$this->assertTrue($result, '関連するページデータのURLを更新できません');
