@@ -190,7 +190,6 @@ class BcUploadBehavior extends ModelBehavior {
 				}
 				continue;
 			}
-
 			if (empty($Model->data[$Model->name][$field['name']]['name']) && !empty($Model->data[$Model->name][$field['name'] . '_'])) {
 				// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
 				$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
@@ -247,9 +246,7 @@ class BcUploadBehavior extends ModelBehavior {
 					// 画像を保存
 					$fileName = $this->saveFile($Model, $field);
 					if ($fileName) {
-
 						if (!$this->tmpId && ($field['type'] == 'all' || $field['type'] == 'image') && !empty($field['imagecopy']) && in_array($field['ext'], $this->imgExts)) {
-
 							/* 画像をコピーする */
 							foreach ($field['imagecopy'] as $copy) {
 								// コピー画像が元画像より大きい場合はスキップして作成しない
@@ -257,11 +254,12 @@ class BcUploadBehavior extends ModelBehavior {
 								if ($size && $size['width'] < $copy['width'] && $size['height'] < $copy['height']) {
 									if (isset($copy['smallskip']) && $copy['smallskip'] === false) {
 										$copy['width'] = $size['width'];
-										$copy['height'] = $copy['height'];
+										$copy['height'] = $size['height'];
 									} else {
 										continue;
 									}
 								}
+
 								$copy['name'] = $field['name'];
 								$copy['ext'] = $field['ext'];
 								$ret = $this->copyImage($Model, $copy);
@@ -435,6 +433,7 @@ class BcUploadBehavior extends ModelBehavior {
 		// 保存ファイル名を生成
 		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file['name']);
 		$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
+
 		$filePath = $this->savePath[$Model->alias] . $fileName;
 
 		if (!empty($field['thumb'])) {

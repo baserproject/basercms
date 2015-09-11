@@ -71,24 +71,48 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	}
 
 /**
- * セットアップ
+ * testSaveFileの初期化を行う
  */
-	public function testSetupSetting() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function initTestSaveFiles($id = 1, $data = array()) {
+
+		$fieldName = 'image';
+		$tmp_name  = 'tmp_file.gif';
+		$data = array_merge(
+			array(
+				'name' => 'basename.gif',
+				'type' => 'basercms',
+				'image' => array('basercms'),
+				'size' => 5,
+			), $data
+		);
+
+		// パス
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$imgPath = ROOT . '/lib/Baser/webroot/img/';
+		$tmpSourcePath = $imgPath . 'baser.power.gif';
+		$tmpPath = $savePath . $tmp_name;
+
+		// 初期化
+		$this->EditorTemplate->id = $id;
+
+		$data['tmp_name'] = $tmpPath;
+		$this->EditorTemplate->data['EditorTemplate'][$fieldName] = $data;
+
+		// ダミーファイルを生成
+		copy($tmpSourcePath, $tmpPath);
+
 	}
 
 
-
 /**
- * Before save
- * 
- * @param Model $Model
- * @param Model $options
- * @return boolean
- * @access public
+ * testSaveFileで生成されたダミーファイルを削除する
  */
-	public function beforeSave() {
+	public function deleteDummyOnTestSaveFiles() {
+		$tmp_name  = 'tmp_file.gif';
 
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$tmpPath = $savePath . $tmp_name;
+		@unlink($tmpPath);
 	}
 
 /**
@@ -118,19 +142,177 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$data = 'hoge';
 		$tmpId = 1;
 		$result = $this->EditorTemplate->saveTmpFiles($data, $tmpId);
-		var_dump($result);
+	}
+
+
+/**
+ * saveFilesのテスト
+ * ファイルを保存する
+ * 
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider saveFilesCanSaveDataProvider
+ */
+	public function testSaveFilesCanSave($tmpId, $message) {
+
+		$this->initTestSaveFiles();
+
+		// tmpIdを設定
+		$this->BcUploadBehavior->tmpId = $tmpId;
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$targetPath = $savePath . 'basename.gif';
+
+		// 保存を実行
+		$this->EditorTemplate->saveFiles();
+
+		if (!$tmpId) {
+			$this->assertFileExists($targetPath, 'saveFiles()でファイルを保存できません');
+			$data = $this->EditorTemplate->data['EditorTemplate']['image'];
+			$this->assertEquals('basename.gif', $data, $message);
+
+		} else {
+			$this->assertFileNotExists($targetPath, 'saveFiles()でファイルを正しく保存できません');
+			$data = $this->EditorTemplate->data['EditorTemplate']['image']['session_key'];
+			$this->assertEquals('1.gif', $data, $message);
+
+		}
+
+		// 生成されたファイルを削除
+		@unlink($targetPath);
+		$this->deleteDummyOnTestSaveFiles();
+
+	}
+
+	public function saveFilesCanSaveDataProvider() {
+		return array(
+			array(null, 'saveFiles()でファイルを削除できません'),
+			array(1, 'saveFiles()でファイルを削除できません'),
+		);
 	}
 
 /**
- * ファイル群を保存する
+ * saveFilesのテスト
+ * ファイルを削除する
  * 
- * @param Model $Model
- * @return boolean
- * @access public
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider saveFilesCanDeleteDataProvider
  */
-	public function saveFiles() {
+	public function testSaveFilesCanDelete($id, $message) {
+
+		$this->initTestSaveFiles($id);
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+
+		// 初期化
+		$fieldName = 'image';
+		$this->EditorTemplate->data['EditorTemplate'][$fieldName . '_delete'] = true;
+
+		$templatePath = $savePath . 'template' . $id . '.gif';
+		touch($templatePath);
+
+		// 削除を実行
+		$this->EditorTemplate->saveFiles();
+
+		$this->assertFileNotExists($templatePath, $message);
+
+		// 生成されたファイルを削除
+		$this->deleteDummyOnTestSaveFiles();
 
 	}
+
+	public function saveFilesCanDeleteDataProvider() {
+		return array(
+			array(1, 'saveFiles()でファイルを削除できません'),
+			array(2, 'saveFiles()でファイルを削除できません'),
+		);
+	}
+
+/**
+ * saveFilesのテスト
+ * ファイルをコピーする
+ * 
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider saveFilesCanCopyDataProvider
+ */
+	public function testSaveFilesCanCopy($imagecopy, $message) {
+
+		$this->initTestSaveFiles(1, array('name' => 'copy.gif', 'type' => 'image'));
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$targetPath = $savePath . 'copy.gif';
+
+		// 初期化
+		$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imagecopy'] = $imagecopy;
+
+		// 保存を実行
+		$this->EditorTemplate->saveFiles();
+		$this->assertFileExists($targetPath, $message);
+
+		// 生成されたファイルを削除
+		@unlink($targetPath);
+		$this->deleteDummyOnTestSaveFiles();
+
+	}
+
+	public function saveFilesCanCopyDataProvider() {
+		return array(
+			array(
+				array(array('width' => 40, 'height' => 6)),
+				'saveFiles()でファイルをコピーできません'
+			),
+			array(
+				array(
+					array('width' => 40, 'height' => 6),
+					array('width' => 30, 'height' => 6)
+				),
+				'saveFiles()でファイルをコピーできません'
+			),
+		);
+	}
+/**
+ * saveFilesのテスト
+ * ファイルをリサイズする
+ * 
+ * @param string $message テストが失敗した時に表示されるメッセージ
+ * @dataProvider saveFilesCanResizeDataProvider
+ */
+	public function testSaveFilesCanResize($imageresize, $message) {
+
+		$this->initTestSaveFiles();
+
+		// パス情報
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+		$targetPath = $savePath . 'basename.gif';
+
+		// 初期化
+		$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imageresize'] = $imageresize;
+
+		// 保存を実行
+		$this->EditorTemplate->saveFiles();
+
+		$result = $this->BcUploadBehavior->getImageSize($targetPath);
+		$expected = array(
+			'width' => 7,
+			'height' => 1,
+		);
+		$this->assertEquals($expected, $result, $message);
+
+		// 生成されたファイルを削除
+		@unlink($targetPath);
+		$this->deleteDummyOnTestSaveFiles();
+
+	}
+
+	public function saveFilesCanResizeDataProvider() {
+		return array(
+			array(array('width' => 8, 'height' => 1), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 8, 'height' => 1, 'thub' => true), 'saveFiles()でファイルをリサイズできません'),
+		);
+	}
+
 
 /**
  * セッションに保存されたファイルデータをファイルとして保存する
@@ -220,7 +402,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testSaveFile($prefix, $suffix, $namefield, $tmpId, $message = null) {
 
-
 		$fieldName = 'fieldName';
 		$tmp_name  = 'tmp_file';
 		$basename = 'basename';
@@ -293,7 +474,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 /**
  * 画像をコピーする
  * 
- * @param array 画像保存対象フィールドの設定
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider copyImageDataProvider
@@ -331,6 +511,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// コピーしたファイルを削除
 		@unlink($targetPath);
+
 	}
 
 	public function copyImageDataProvider() {
@@ -353,9 +534,12 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testResizeImage($width, $height, $thumb, $expected, $message = null) {
 
-		$imgPath = WWW_ROOT . 'img/admin' . DS;
-		$source = $imgPath . 'bg_install.png';
-		$distination = $imgPath . 'bg_install_copy.png';
+		$imgPath = ROOT . '/lib/Baser/webroot/img/';
+		$source = $imgPath . 'baser.power.gif';
+		$distination = $imgPath . 'baser.power_copy.gif';
+
+		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
+
 
 		// コピー実行
 		$this->BcUploadBehavior->resizeImage($source, $distination, $width, $height, $thumb);
@@ -377,7 +561,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	public function resizeImageDataProvider() {
 		return array(
 			array(false, false, false, null, '画像ファイルをコピーできません'),
-			array(100, 100, false, array('width' => 100, 'height' => 85), '画像ファイルを正しくリサイズしてコピーできません'),
+			array(100, 100, false, array('width' => 98, 'height' => 13), '画像ファイルを正しくリサイズしてコピーできません'),
 			array(100, 100, true, array('width' => 100, 'height' => 100), '画像ファイルをサムネイルとしてコピーできません'),
 		);
 	}
