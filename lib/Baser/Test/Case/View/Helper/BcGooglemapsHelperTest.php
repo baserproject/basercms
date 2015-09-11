@@ -99,7 +99,7 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 
 	public function getLocationDataProvider() {
 		return array(
-			array('福岡', array('latitude' => '36.7083110', 'longitude' => '136.9316680')),
+			array('博多駅', array('latitude' => '33.5901520', 'longitude' => '130.4206010')),
 			array('fukuoka', array('latitude' => '33.5903547', 'longitude' => '130.4017155')),
 			array(8100042, array('latitude' => '33.5825552', 'longitude' => '130.3866644')),
 			array('', false)
