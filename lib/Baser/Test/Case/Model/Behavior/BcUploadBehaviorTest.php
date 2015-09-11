@@ -124,8 +124,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return boolean
  * @access public
  */
-	public function afterSave() {
-
+	public function testAfterSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -357,7 +357,9 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$file = new File($tmpPath);
 		$file->write('dummy');
 		$file->close();
-		
+			
+		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
+
 		// セッションを設定
 		$this->EditorTemplate->saveFile($field);
 
@@ -437,6 +439,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		// ダミーファイルの作成
 		touch($tmpPath);
 
+		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 
 		// ファイル保存を実行
 		$result = $this->EditorTemplate->saveFile($field);
@@ -588,7 +591,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	}
 
 /**
- * After delete
+ * Before delete
  * 画像ファイルの削除を行う
  * 削除に失敗してもデータの削除は行う
  * 
@@ -596,7 +599,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  * @access public
  */
-	public function beforeDelete() {
+	public function testBeforeDelete() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}

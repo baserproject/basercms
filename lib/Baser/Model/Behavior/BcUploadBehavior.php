@@ -490,7 +490,7 @@ class BcUploadBehavior extends ModelBehavior {
 	}
 
 /**
- * After delete
+ * Before delete
  * 画像ファイルの削除を行う
  * 削除に失敗してもデータの削除は行う
  * 
