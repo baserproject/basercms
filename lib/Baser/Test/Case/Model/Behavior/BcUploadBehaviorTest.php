@@ -176,8 +176,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testSaveFilesCanSave($tmpId, $message) {
 
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->initTestSaveFiles();
 
 		// tmpIdを設定
