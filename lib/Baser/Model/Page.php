@@ -573,57 +573,7 @@ class Page extends AppModel {
  * @return string
  */
 	protected function _getPageFilePath($data) {
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
-		}
-
-		$file = $data['name'];
-		$categoryId = $data['page_category_id'];
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-		if (!$SiteConfig) {
-			$SiteConfig = ClassRegistry::init('SiteConfig');
-		}
-		$SiteConfig->cacheQueries = false;
-		$siteConfig = $SiteConfig->findExpanded();
-		$theme = $siteConfig['theme'];
-
-		// Pagesディレクトリのパスを取得
-		if ($theme) {
-			$path = BASER_THEMES . $theme . DS . 'Pages' . DS;
-		} else {
-			$path = APP . 'View' . DS . 'Pages' . DS;
-		}
-
-
-		if (!is_dir($path)) {
-			mkdir($path);
-			chmod($path, 0777);
-		}
-
-		if ($categoryId) {
-			$this->PageCategory->cacheQueries = false;
-			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
-			// インストール時データの取得ができないので暫定対応
-			// TODO 検討
-			if (!$categoryPath) {
-				if ($categoryId == 1) {
-					$categoryPath = array(0 => array('PageCategory' => array('name' => 'mobile')));
-				} elseif ($categoryId == 2) {
-					$categoryPath = array(0 => array('PageCategory' => array('name' => 'smartphone')));
-				}
-			}
-			if ($categoryPath) {
-				foreach ($categoryPath as $category) {
-					$path .= $category['PageCategory']['name'] . DS;
-					if (!is_dir($path)) {
-						mkdir($path, 0777);
-						chmod($path, 0777);
-					}
-				}
-			}
-		}
-
-		return $path . $file . Configure::read('BcApp.templateExt');
+		$this->getPageFilePath($data);
 	}
 
 /**
