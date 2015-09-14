@@ -301,7 +301,7 @@ class BcTextHelperTest extends BaserTestCase {
 		$result = $this->Helper->dateTime('baser');
 
 		// PHPのバージョンによって結果が違うので分岐する
-		if (!isset($result)) {
+		if (empty($result)) {
 			$this->assertNull($result);
 		} else {
 			$expect = 'b/b/b';
