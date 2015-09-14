@@ -257,7 +257,6 @@ class UserGroupTest extends BaserTestCase {
  * @dataProvider isAdminGlobalmenuUsedDataProvider
  */
 	public function testIsAdminGlobalmenuUsed($id, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$result = $this->UserGroup->isAdminGlobalmenuUsed($id);
 		$this->assertEquals($expected, $result, $message);
 	}
