@@ -66,7 +66,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 		}
 		if ($before) {
 			$data['SearchIndex']['id'] = $before['SearchIndex']['id'];
-			$this->Content->set($data);
+			$this->SearchIndex->set($data);
 		} else {
 			if (empty($data['SearchIndex']['priority'])) {
 				$data['SearchIndex']['priority'] = '0.5';
@@ -92,7 +92,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 	public function deleteSearchIndex(Model $model, $id) {
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
 		if ($this->SearchIndex->deleteAll(array('SearchIndex.model' => $model->alias, 'SearchIndex.model_id' => $id))) {
-			return $this->updatSearchIndexMeta($model);
+			return $this->updateSearchIndexMeta($model);
 		}
 	}
 
