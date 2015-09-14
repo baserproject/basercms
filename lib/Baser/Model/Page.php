@@ -173,7 +173,7 @@ class Page extends AppModel {
 
 		// 保存前のページファイルのパスを取得
 		if ($this->exists()) {
-			$this->oldPath = $this->_getPageFilePath(
+			$this->oldPath = $this->getPageFilePath(
 				$this->find('first', array(
 					'conditions' => array('Page.id' => $this->data['Page']['id']),
 					'recursive' => -1)
@@ -244,7 +244,7 @@ class Page extends AppModel {
  * @return	boolean
  */
 	public function checkOpenPageFile($data) {
-		$path = $this->_getPageFilePath($data);
+		$path = $this->getPageFilePath($data);
 		$File = new File($path);
 		if ($File->open('w')) {
 			$File->close();
@@ -483,7 +483,7 @@ class Page extends AppModel {
 		$contents = $this->addBaserPageTag($data['id'], $data['contents'], $data['title'], $data['description'], $data['code']);
 
 		// 新しいページファイルのパスを取得する
-		$newPath = $this->_getPageFilePath($data);
+		$newPath = $this->getPageFilePath($data);
 
 		// テーマやファイル名が変更された場合は元ファイルを削除する
 		if ($this->oldPath && ($newPath != $this->oldPath)) {
@@ -511,7 +511,7 @@ class Page extends AppModel {
  * @param array $data
  * @return string
  */
-	protected function _getPageFilePath($data) {
+	protected function getPageFilePath($data) {
 		if (isset($data['Page'])) {
 			$data = $data['Page'];
 		}
@@ -566,13 +566,24 @@ class Page extends AppModel {
 	}
 
 /**
+ * ページファイルのディレクトリを取得する
+ * 
+ * @param array $data
+ * @deprecated publicのgetPageFilePath()がある為、非推奨
+ * @return string
+ */
+	protected function _getPageFilePath($data) {
+		$this->getPageFilePath($data);
+	}
+
+/**
  * ページファイルを削除する
  * 
  * @param array $data 削除対象となるレコードデータ
  * @return boolean
  */
 	public function delFile($data) {
-		$path = $this->_getPageFilePath($data);
+		$path = $this->getPageFilePath($data);
 		if ($path) {
 			return unlink($path);
 		}
@@ -682,7 +693,7 @@ class Page extends AppModel {
 		if (!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
 			return true;
 		} else {
-			return !file_exists($this->_getPageFilePath($this->data));
+			return !file_exists($this->getPageFilePath($this->data));
 		}
 	}
 
