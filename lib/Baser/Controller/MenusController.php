@@ -276,8 +276,7 @@ class MenusController extends AppController {
 	public function admin_ajax_update_sort() {
 		if ($this->request->data) {
 			$this->request->data = am($this->request->data, $this->_checkSession());
-			$conditions = $this->_createAdminIndexConditions($this->request->data);
-			if ($this->Menu->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
+			if ($this->Menu->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'])) {
 				echo true;
 			} else {
 				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');

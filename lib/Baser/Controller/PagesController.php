@@ -120,6 +120,19 @@ class PagesController extends AppController {
 		}
 
 		if ($this->request->data['ViewSetting']['view_type'] == 1) {
+
+			$this->search = 'pages_index';
+			$template = 'index';
+
+			// 並び替えモードの際は、ページタイプ以外の検索条件を除外する
+			if(!empty($this->passedArgs['sortmode'])) {
+				$this->request->data = array(
+					'ViewSetting' => $this->request->data['ViewSetting'],
+					'Page' => array('page_type' => $this->request->data['Page']['page_type'])
+				);
+				$this->search = null;
+			}
+
 			// 検索条件
 			$conditions = $this->_createAdminIndexConditions($this->request->data);
 
@@ -158,8 +171,6 @@ class PagesController extends AppController {
 			$this->set('search', 'pages_index');
 			$this->set('pageCategories', $pageCategories);
 
-			$this->search = 'pages_index';
-			$template = 'index';
 			
 		} else {
 			switch ($this->request->data['ViewSetting']['page_type']) {
@@ -901,8 +912,8 @@ class PagesController extends AppController {
 		if (isset($data['Page']['name'])) {
 			$name = $data['Page']['name'];
 		}
-		if (isset($data['Page']['page_type'])) {
-			$pageType = $data['Page']['page_type'];
+		if (isset($data['ViewSetting']['page_type'])) {
+			$pageType = $data['ViewSetting']['page_type'];
 		}
 
 		unset($data['_Token']);
@@ -924,13 +935,15 @@ class PagesController extends AppController {
 		}
 
 		// 条件指定のないフィールドを解除
-		foreach ($data['Page'] as $key => $value) {
-			if ($value === '') {
-				unset($data['Page'][$key]);
+		if(!empty($data['Page'])) {
+			foreach ($data['Page'] as $key => $value) {
+				if ($value === '') {
+					unset($data['Page'][$key]);
+				}
 			}
 		}
 
-		if ($data['Page']) {
+		if (!empty($data['Page'])) {
 			$conditions = $this->postConditions($data);
 		}
 
