@@ -75,7 +75,7 @@ $(function(){
 		<?php if(strtotime('2014-03-31 17:00:00') >= time()): ?>
 		<li class="no-data">変更できるテーマがありません。<br /><a href="http://basercms.net/themes/index" target="_blank">baserCMSの公式サイト</a>では無償のテーマが公開されています。</li>
 		<?php else: ?>
-		<li class="no-data">変更できるテーマがありません。<br /><a href="http://barket.jp" target="_blank">baserマーケット</a>でテーマをダウンロードしましょう。</li>
+		<li class="no-data">変更できるテーマがありません。<br /><a href="https://market.basercms.net/" target="_blank">baserマーケット</a>でテーマをダウンロードしましょう。</li>
 		<?php endif ?>
 	<?php endif; ?>
 </ul>
