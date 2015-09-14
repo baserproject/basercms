@@ -2045,6 +2045,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleMaps() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->expectOutputRegex('/<div id="map"/');
 		$this->BcBaser->googleMaps();
 	}
