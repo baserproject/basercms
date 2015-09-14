@@ -99,6 +99,7 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 			$result['latitude'] = round($result['latitude'], 2);
 			$result['longitude'] = round($result['longitude'], 2);
 		}
+		var_dump($result);
 		$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
 	}
 
