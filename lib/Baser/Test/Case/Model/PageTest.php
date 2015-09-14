@@ -215,7 +215,7 @@ class PageTest extends BaserTestCase {
 		));
 		$this->assertFalse($this->Page->validates());
 		$this->assertArrayHasKey('contents', $this->Page->validationErrors);
-		$this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \n \nParse error: syntax error, unexpected '?' in - on line 1 \n \nErrors parsing -", current($this->Page->validationErrors['contents']));
+		$this->assertRegExp("/PHPの構文エラーです/", current($this->Page->validationErrors['contents']));
 	}
 
 
