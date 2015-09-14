@@ -21,7 +21,7 @@ body {
 	background:url(../img/icons_bg.png);
 	font-family: "メイリオ", "ＭＳ Ｐゴシック", sans-serif; 
 }
-#ContentQ{
+#SearchIndexQ{
 	font-family: Arial, "ＭＳ Ｐゴシック", sans-serif; 
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
@@ -33,7 +33,7 @@ body {
 	border-radius: 17px 17px 17px 17px;
 	padding: 5px;
 }
-#ContentC{
+#SearchIndexC{
 	margin-right: 15px;
 }
 
@@ -613,7 +613,7 @@ table.blog-calendar td.today{
 	padding:0;
 	margin:0;
 }
-#top-main-serch #ContentSearchForm #ContentQ{
+#top-main-serch #SearchIndexSearchForm #SearchIndexQ{
 	width:245px;
 }
 #top-main-webcontact {
