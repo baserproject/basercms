@@ -246,5 +246,23 @@ class MailHelper extends AppHelper {
 		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
 		$this->BcBaser->link($title, $link, $options);
 	}
-	
+
+/**
+ * ブラウザの戻るボタン対応コードを作成
+ * 
+ * @return string
+ */
+	public function getToken() {
+		return $this->BcBaser->element('mail_token');
+	}
+
+/**
+ * ブラウザの戻るボタン対応コードを出力
+ * 
+ * @return void
+ */
+	public function token() {
+		echo $this->getToken();
+	}
+
 }
