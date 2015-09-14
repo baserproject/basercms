@@ -264,7 +264,7 @@ class UserGroupTest extends BaserTestCase {
 	public function isAdminGlobalmenuUsedDataProvider() {
 		return array(
 			array(1, true, 'システム管理者がグローバルメニューを利用できません'),
-			array(2, false, 'システム管理者以外のユーザーがグローバルメニューを利用できます'),
+			array(2, 0, 'システム管理者以外のユーザーがグローバルメニューを利用できます'),
 			array(99, false, '存在しないユーザーグループです'),
 		);
 	}
