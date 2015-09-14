@@ -297,6 +297,18 @@ class BcTextHelperTest extends BaserTestCase {
 		$expect = '2015/8/11';
 		$this->assertEquals($expect, $result);
 
+		// 異常系 文字列を入力
+		$result = $this->Helper->dateTime('baser');
+
+		// PHPのバージョンによって結果が違うので分岐する
+		if (!isset($result)) {
+			$this->assertNull($result);
+		} else {
+			$expect = 'b/b/b';
+			$this->assertEquals($expect, $result);
+		}
+
+
 		// 不正な日付（現在はそのまま出力してしまう仕様となっている）
 		$arrDate = array(
 			'year' 	=> 2015,
