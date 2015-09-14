@@ -153,13 +153,12 @@ class BcUploadBehaviorTest extends BaserTestCase {
  */
 	public function testSaveTmpFiles() {
 
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->initTestSaveFiles();
 
-		$data = $this->EditorTemplate->saveTmpFiles('hoge', 1);
+		$data = $this->EditorTemplate->saveTmpFiles(array('hoge'), 1);
 		$tmpId = $this->BcUploadBehavior->tmpId;
 
-		$this->assertEquals('hoge', $data, 'saveTmpFiles()の返り値が正しくありません');
+		$this->assertEquals(array('hoge'), $data, 'saveTmpFiles()の返り値が正しくありません');
 		$this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
 
 		$this->deleteDummyOnTestSaveFiles();
