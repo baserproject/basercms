@@ -50,6 +50,7 @@ class PageTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->Page = ClassRegistry::init('Page');
+		$this->PageCategory = ClassRegistry::init('PageCategory');
 	}
 
 /**
@@ -59,11 +60,12 @@ class PageTest extends BaserTestCase {
  */
 	public function tearDown() {
 		unset($this->Page);
+		unset($this->PageCategory);
 		parent::tearDown();
 	}
 
 /**
- * _getPageFilePath を呼び出す
+ * Page::_getPageFilePath() と同一の処理
  * 
  * 次のテストで使います
  * testCreateAllPageTemplate()
@@ -76,12 +78,57 @@ class PageTest extends BaserTestCase {
  */
 	public function getPageFilePath($data) {
 
-		// リフレクションで _getPageFilePath を呼び出す
-		$reflec = new ReflectionMethod($this->Page, '_getPageFilePath');
-		$reflec->setAccessible(true);
-		$path = $reflec->invoke(new $this->Page(), $data);
+		if (isset($data['Page'])) {
+			$data = $data['Page'];
+		}
 
-		return $path;
+		$file = $data['name'];
+		$categoryId = $data['page_category_id'];
+		$SiteConfig = ClassRegistry::getObject('SiteConfig');
+		if (!$SiteConfig) {
+			$SiteConfig = ClassRegistry::init('SiteConfig');
+		}
+		$SiteConfig->cacheQueries = false;
+		$siteConfig = $SiteConfig->findExpanded();
+		$theme = $siteConfig['theme'];
+
+		// Pagesディレクトリのパスを取得
+		if ($theme) {
+			$path = BASER_THEMES . $theme . DS . 'Pages' . DS;
+		} else {
+			$path = APP . 'View' . DS . 'Pages' . DS;
+		}
+
+
+		if (!is_dir($path)) {
+			mkdir($path);
+			chmod($path, 0777);
+		}
+
+		if ($categoryId) {
+			$this->PageCategory->cacheQueries = false;
+			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
+			// インストール時データの取得ができないので暫定対応
+			// TODO 検討
+			if (!$categoryPath) {
+				if ($categoryId == 1) {
+					$categoryPath = array(0 => array('PageCategory' => array('name' => 'mobile')));
+				} elseif ($categoryId == 2) {
+					$categoryPath = array(0 => array('PageCategory' => array('name' => 'smartphone')));
+				}
+			}
+			if ($categoryPath) {
+				foreach ($categoryPath as $category) {
+					$path .= $category['PageCategory']['name'] . DS;
+					if (!is_dir($path)) {
+						mkdir($path, 0777);
+						chmod($path, 0777);
+					}
+				}
+			}
+		}
+
+		return $path . $file . Configure::read('BcApp.templateExt');
 
 	}
 
@@ -168,7 +215,8 @@ class PageTest extends BaserTestCase {
 		));
 		$this->assertFalse($this->Page->validates());
 		$this->assertArrayHasKey('contents', $this->Page->validationErrors);
-		$this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
+		// $this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
+		$this->assertEquals("fasdfa", current($this->Page->validationErrors['contents']));
 	}
 
 
