@@ -286,8 +286,6 @@ class BcTextHelperTest extends BaserTestCase {
  * form::dateTimeで取得したデータを文字列データに変換するヘルパーのテスト
  */
 	public function testDateTime() {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		
 		// 適当な時間を設定
 		$arrDate = array(
@@ -299,12 +297,17 @@ class BcTextHelperTest extends BaserTestCase {
 		$expect = '2015/8/11';
 		$this->assertEquals($expect, $result);
 
-		// 異常系
-
-		// 文字列
+		// 異常系 文字列を入力
 		$result = $this->Helper->dateTime('baser');
-		$expect = '';
-		$this->assertEquals($expect, $result);
+
+		// PHPのバージョンによって結果が違うので分岐する
+		if (empty($result)) {
+			$this->assertNull($result);
+		} else {
+			$expect = 'b/b/b';
+			$this->assertEquals($expect, $result);
+		}
+
 
 		// 不正な日付（現在はそのまま出力してしまう仕様となっている）
 		$arrDate = array(
