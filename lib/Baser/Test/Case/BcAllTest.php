@@ -31,7 +31,7 @@ class BcAllTest extends CakeTestSuite {
 //		$suite->addTestFile($path . 'BcAllConsoleTest.php');
 		$suite->addTestFile($path . 'BcAllBehaviorsTest.php');
 //		$suite->addTestFile($path . 'BcAllCacheTest.php');
-//		$suite->addTestFile($path . 'BcAllComponentsTest.php');
+		$suite->addTestFile($path . 'BcAllComponentsTest.php');
 		$suite->addTestFile($path . 'BcAllConfigureTest.php');
 		$suite->addTestFile($path . 'BcAllConfigTest.php');
 //		$suite->addTestFile($path . 'BcAllCoreTest.php');
