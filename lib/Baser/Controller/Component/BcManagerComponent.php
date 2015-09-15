@@ -773,11 +773,6 @@ class BcManagerComponent extends Component {
 	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 
-		// CSVの場合ロックを解除しないとデータの投入に失敗する
-		if ($db->config['datasource'] == 'Database/BcCsv') {
-			$db->reconnect();
-		}
-
 		$path = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
 
 		if (!$path) {
