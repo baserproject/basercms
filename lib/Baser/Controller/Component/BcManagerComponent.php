@@ -261,7 +261,7 @@ class BcManagerComponent extends Component {
 			$this->log('プラグインの有効化に失敗しました。');
 			$result = false;
 		}
-		if (!$this->_updateBlogEntryDate($dbConfig)) {
+		if (!$this->updateBlogEntryDate($dbConfig)) {
 			$this->log('ブログ記事の投稿日更新に失敗しました。');
 			$result = false;
 		}
@@ -310,9 +310,8 @@ class BcManagerComponent extends Component {
  * 登録日を更新する
  *
  * @return boolean
- * @access	protected
  */
-	protected function _updateBlogEntryDate($dbConfig) {
+	public function updateBlogEntryDate($dbConfig) {
 		$this->connectDb($dbConfig, 'plugin');
 		CakePlugin::load('Blog');
 		App::uses('BlogPost', 'Blog.Model');
