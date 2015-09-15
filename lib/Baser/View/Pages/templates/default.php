@@ -15,3 +15,4 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcPage->content();
+$this->BcBaser->element('contents_navi');

@@ -17,8 +17,10 @@
  */
 ?>
 
+<?php if($this->BcPage->contentsNaviAvailable()): ?>
 <div id="ContentsNavi">
 	<?php $this->BcPage->prevLink() ?>
 	&nbsp;｜&nbsp;
 	<?php $this->BcPage->nextLink() ?>
 </div>
+<?php endif ?>

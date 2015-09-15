@@ -63,7 +63,6 @@
 						<div class="subpage">
 							<?php $this->BcBaser->flash() ?>
 							<?php $this->BcBaser->content() ?>
-							<?php $this->BcBaser->element('contents_navi') ?>
 							<div class="to-top"> <a href="#Page"><?php $this->BcBaser->img('icons_up.png'); ?>ページトップへ戻る</a></div>
 						</div>
 					<?php endif ?>
