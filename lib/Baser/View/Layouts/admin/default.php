@@ -27,6 +27,9 @@
 			'admin/colorbox/colorbox',
 			'admin/toolbar'))
 		?>
+		<?php if($favoriteBoxOpened): ?>
+			<?php $this->BcBaser->css('admin/sidebar_opened') ?>
+		<?php endif ?>
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
@@ -58,7 +61,6 @@
 			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
-			<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
 			<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.' . $this->BcBaser->getContentsName(true)) ?></div>
 			<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
 			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/admin/dashboard/index' : '/' . $this->request->url; ?></div>
