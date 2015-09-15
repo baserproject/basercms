@@ -120,7 +120,7 @@ CakeLog::config('error', array(
 // CUSTOMIZE ADD 2014/07/03 ryuring
 // >>>
 /**
- * baser の bootstrap を読み込む 
+ * baser の bootstrap を読み込む
  */
 require CORE_PATH.'Baser'.DS.'Config'.DS.'bootstrap.php';
 

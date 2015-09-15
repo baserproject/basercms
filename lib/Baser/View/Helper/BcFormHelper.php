@@ -333,7 +333,7 @@ class BcFormHelper extends FormHelper {
 				}
 				break;
 			case 'year':
-				$current = intval(date('Y'));
+				$current = (int)date('Y');
 
 				$min = !isset($options['min']) ? $current - 20 : (int)$options['min'];
 				$max = !isset($options['max']) ? $current + 20 : (int)$options['max'];
@@ -341,8 +341,7 @@ class BcFormHelper extends FormHelper {
 				if ($min > $max) {
 					list($min, $max) = array($max, $min);
 				}
-				if (
-					!empty($options['value']) &&
+				if (!empty($options['value']) &&
 					(int)$options['value'] < $min &&
 					(int)$options['value'] > 0
 				) {
@@ -434,8 +433,7 @@ class BcFormHelper extends FormHelper {
 		$value = current($this->value($valueOptions));
 		$output = '';
 
-		if (
-			(!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
+		if ((!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
 			!empty($options['checked'])
 		) {
 			$options['checked'] = 'checked';
@@ -529,8 +527,7 @@ class BcFormHelper extends FormHelper {
 
 			if ($name !== null) {
 				$isNumeric = is_numeric($name);
-				if (
-					(!$selectedIsArray && !$selectedIsEmpty && (string)$attributes['value'] == (string)$name) ||
+				if ((!$selectedIsArray && !$selectedIsEmpty && (string)$attributes['value'] == (string)$name) ||
 					($selectedIsArray && in_array((string)$name, $attributes['value'], !$isNumeric))
 				) {
 					if ($attributes['style'] === 'checkbox') {
@@ -550,8 +547,7 @@ class BcFormHelper extends FormHelper {
 							$disabledIsNumeric = is_numeric($name);
 						}
 					}
-					if (
-						$hasDisabled &&
+					if ($hasDisabled &&
 						$disabledIsArray &&
 						in_array((string)$name, $attributes['disabled'], !$disabledIsNumeric)
 					) {
@@ -624,7 +620,7 @@ class BcFormHelper extends FormHelper {
 		$secure = $options['secure'];
 		unset($options['secure']);
 
-		// 2010/07/24 ryuring
+		// CUSTOMIZE ADD 2010/07/24 ryuring
 		// セキュリティコンポーネントのトークン生成の仕様として、
 		// ・hiddenタグ以外はフィールド情報のみ
 		// ・hiddenタグはフィールド情報と値
@@ -633,7 +629,7 @@ class BcFormHelper extends FormHelper {
 		// multiple な hiddenタグの場合、送信される値は配列で送信されるので値違いで認証がとおらない。
 		// という事で、multiple の場合は、あくまでhiddenタグ以外のようにフィールド情報のみを
 		// トークンのキーとする事で認証を通すようにする。
-		// >>> ADD
+		// >>>
 		if (!empty($options['multiple'])) {
 			$secure = false;
 			$this->_secure(true); //lock
@@ -1512,7 +1508,7 @@ DOC_END;
  * - `hiddenField` - boolean to indicate if you want the results of radio() to include
  *    a hidden input with a value of ''. This is useful for creating radio sets that non-continuous
  * - `disabled` - Set to `true` or `disabled` to disable all the radio buttons.
- * - `empty` - Set to `true` to create a input with the value '' as the first option. When `true`
+ * - `empty` - Set to `true` to create an input with the value '' as the first option. When `true`
  *   the radio label will be 'empty'. Set this option to a string to control the label value.
  *
  * @param string $fieldName Name of a field, like this "Modelname.fieldname"

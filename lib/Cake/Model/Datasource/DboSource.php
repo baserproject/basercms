@@ -396,7 +396,7 @@ class DboSource extends DataSource {
  *
  * @param string $sql SQL statement
  * @param array $params Additional options for the query.
- * @return bool
+ * @return mixed Resource or object representing the result set, or false on failure
  */
 	public function rawQuery($sql, $params = array()) {
 		$this->took = $this->numRows = false;
@@ -776,7 +776,7 @@ class DboSource extends DataSource {
 			return $value;
 		}
 		if (!$this->_methodCacheChange && empty(self::$methodCache)) {
-			self::$methodCache = Cache::read('method_cache', '_cake_core_');
+			self::$methodCache = (array)Cache::read('method_cache', '_cake_core_');
 		}
 		if ($value === null) {
 			return (isset(self::$methodCache[$method][$key])) ? self::$methodCache[$method][$key] : null;
@@ -834,9 +834,7 @@ class DboSource extends DataSource {
 				$matches[1] . '(' . $this->name($matches[2]) . ')'
 			);
 		}
-		if (
-			preg_match('/^([\w-]+(\.[\w-]+|\(.*\))*)\s+' . preg_quote($this->alias) . '\s*([\w-]+)$/i', $data, $matches
-		)) {
+		if (preg_match('/^([\w-]+(\.[\w-]+|\(.*\))*)\s+' . preg_quote($this->alias) . '\s*([\w-]+)$/i', $data, $matches)) {
 			return $this->cacheMethod(
 				__FUNCTION__, $cacheKey,
 				preg_replace(
@@ -1113,11 +1111,6 @@ class DboSource extends DataSource {
 
 		$filtered = array();
 
-		// Filter hasOne and belongsTo associations
-		if ($queryData['callbacks'] === true || $queryData['callbacks'] === 'after') {
-			$filtered = $this->_filterResults($resultSet, $Model);
-		}
-
 		// Deep associations
 		if ($Model->recursive > -1) {
 			$joined = array();
@@ -1148,10 +1141,10 @@ class DboSource extends DataSource {
 					}
 				}
 			}
+		}
 
-			if ($queryData['callbacks'] === true || $queryData['callbacks'] === 'after') {
-				$this->_filterResults($resultSet, $Model, $filtered);
-			}
+		if ($queryData['callbacks'] === true || $queryData['callbacks'] === 'after') {
+			$this->_filterResults($resultSet, $Model, $filtered);
 		}
 
 		if ($recursive !== null) {
@@ -1316,9 +1309,9 @@ class DboSource extends DataSource {
 		foreach ($resultSet as &$row) {
 			if ($type === 'hasOne' || $type === 'belongsTo' || $type === 'hasMany') {
 				$assocResultSet = array();
+				$prefetched = false;
 
-				if (
-					($type === 'hasOne' || $type === 'belongsTo') &&
+				if (($type === 'hasOne' || $type === 'belongsTo') &&
 					isset($row[$LinkModel->alias], $joined[$Model->alias]) &&
 					in_array($LinkModel->alias, $joined[$Model->alias])
 				) {
@@ -1326,6 +1319,7 @@ class DboSource extends DataSource {
 					if (!empty($joinedData)) {
 						$assocResultSet[0] = array($LinkModel->alias => $row[$LinkModel->alias]);
 					}
+					$prefetched = true;
 				} else {
 					$query = $this->insertQueryData($queryTemplate, $row, $association, $Model, $stack);
 					if ($query !== false) {
@@ -1340,8 +1334,7 @@ class DboSource extends DataSource {
 						foreach ($LinkModel->{$type1} as $assoc1 => $assocData1) {
 							$DeepModel = $LinkModel->{$assoc1};
 
-							if (
-								$type1 === 'belongsTo' ||
+							if ($type1 === 'belongsTo' ||
 								($type === 'belongsTo' && $DeepModel->alias === $modelAlias) ||
 								($DeepModel->alias !== $modelAlias)
 							) {
@@ -1376,7 +1369,7 @@ class DboSource extends DataSource {
 					$this->_mergeAssociation($row, $assocResultSet, $association, $type, $selfJoin);
 				}
 
-				if ($type !== 'hasAndBelongsToMany' && isset($row[$association])) {
+				if ($type !== 'hasAndBelongsToMany' && isset($row[$association]) && !$prefetched) {
 					$row[$association] = $LinkModel->afterFind($row[$association], false);
 				}
 
@@ -1413,11 +1406,10 @@ class DboSource extends DataSource {
 	protected function _fetchHasMany(Model $Model, $query, $ids) {
 		$ids = array_unique($ids);
 
-		$query = str_replace('{$__cakeID__$}', implode(', ', $ids), $query);
 		if (count($ids) > 1) {
-			$query = str_replace('= (', 'IN (', $query);
+			$query = str_replace('= ({$__cakeID__$}', 'IN ({$__cakeID__$}', $query);
 		}
-
+		$query = str_replace('{$__cakeID__$}', implode(', ', $ids), $query);
 		return $this->fetchAll($query, $Model->cacheQueries);
 	}
 
@@ -1593,8 +1585,7 @@ class DboSource extends DataSource {
 			$assocFields = $this->fields($Model, null, "{$Model->alias}.{$Model->primaryKey}");
 			$passedFields = $queryData['fields'];
 
-			if (
-				count($passedFields) > 1 ||
+			if (count($passedFields) > 1 ||
 				(strpos($passedFields[0], $assocFields[0]) === false && !preg_match('/^[a-z]+\(/i', $passedFields[0]))
 			) {
 				$queryData['fields'] = array_merge($passedFields, $assocFields);
@@ -1863,7 +1854,7 @@ class DboSource extends DataSource {
 			'type' => null,
 			'alias' => null,
 			'table' => 'join_table',
-			'conditions' => array()
+			'conditions' => '',
 		), $join);
 
 		if (!empty($data['alias'])) {
@@ -1917,7 +1908,7 @@ class DboSource extends DataSource {
  * @return string
  */
 	public function renderJoinStatement($data) {
-		if (strtoupper($data['type']) === 'CROSS') {
+		if (strtoupper($data['type']) === 'CROSS' || empty($data['conditions'])) {
 			return "{$data['type']} JOIN {$data['table']} {$data['alias']}";
 		}
 		return trim("{$data['type']} JOIN {$data['table']} {$data['alias']} ON ({$data['conditions']})");
@@ -2746,10 +2737,11 @@ class DboSource extends DataSource {
 		$operatorMatch .= ')\\x20?)|<[>=]?(?![^>]+>)\\x20?|[>=!]{1,3}(?!<)\\x20?)/is';
 		$bound = (strpos($key, '?') !== false || (is_array($value) && strpos($key, ':') !== false));
 
+		$key = trim($key);
 		if (strpos($key, ' ') === false) {
 			$operator = '=';
 		} else {
-			list($key, $operator) = explode(' ', trim($key), 2);
+			list($key, $operator) = explode(' ', $key, 2);
 
 			if (!preg_match($operatorMatch, trim($operator)) && strpos($operator, ' ') !== false) {
 				$key = $key . ' ' . $operator;
@@ -3051,7 +3043,7 @@ class DboSource extends DataSource {
 				list($col, $limit) = explode('(', $col);
 			}
 			if ($limit !== null) {
-				return intval($limit);
+				return (int)$limit;
 			}
 			return null;
 		}
@@ -3092,7 +3084,7 @@ class DboSource extends DataSource {
 				}
 			}
 		}
-		return intval($length);
+		return (int)$length;
 	}
 
 /**
@@ -3246,7 +3238,7 @@ class DboSource extends DataSource {
 	}
 
 /**
- * Generate a alter syntax from CakeSchema::compare()
+ * Generate an alter syntax from CakeSchema::compare()
  *
  * @param mixed $compare The comparison data.
  * @param string $table The table name.
@@ -3459,10 +3451,10 @@ class DboSource extends DataSource {
 			if (is_bool($value)) {
 				return 'boolean';
 			}
-			if (is_float($value) && floatval($value) === $value) {
+			if (is_float($value) && (float)$value === $value) {
 				return 'float';
 			}
-			if (is_int($value) && intval($value) === $value) {
+			if (is_int($value) && (int)$value === $value) {
 				return 'integer';
 			}
 			if (is_string($value) && strlen($value) > 255) {

@@ -300,11 +300,16 @@ class Sqlite extends DboSource {
 		// PDO::getColumnMeta is experimental and does not work with sqlite3,
 		// so try to figure it out based on the querystring
 		$querystring = $results->queryString;
-		if (stripos($querystring, 'SELECT') === 0) {
-			$last = strripos($querystring, 'FROM');
-			if ($last !== false) {
-				$selectpart = substr($querystring, 7, $last - 8);
-				$selects = String::tokenize($selectpart, ',', '(', ')');
+		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
+			$selectpart = substr($querystring, 7);
+			$selects = array();
+			foreach (String::tokenize($selectpart, ',', '(', ')') as $part) {
+				$fromPos = stripos($part, ' FROM ');
+				if ($fromPos !== false) {
+					$selects[] = trim(substr($part, 0, $fromPos));
+					break;
+				}
+				$selects[] = $part;
 			}
 		} elseif (strpos($querystring, 'PRAGMA table_info') === 0) {
 			$selects = array('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk');
@@ -509,7 +514,7 @@ class Sqlite extends DboSource {
 							$key['name'] = 'PRIMARY';
 						}
 						$index[$key['name']]['column'] = $keyCol[0]['name'];
-						$index[$key['name']]['unique'] = intval($key['unique'] == 1);
+						$index[$key['name']]['unique'] = (int)$key['unique'] === 1;
 					} else {
 						if (!is_array($index[$key['name']]['column'])) {
 							$col[] = $index[$key['name']]['column'];

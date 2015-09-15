@@ -165,7 +165,7 @@ class FileEngine extends CacheEngine {
 
 		$this->_File->rewind();
 		$time = time();
-		$cachetime = intval($this->_File->current());
+		$cachetime = (int)$this->_File->current();
 
 		if ($cachetime !== false && ($cachetime < $time || ($time + $this->settings['duration']) < $cachetime)) {
 			if ($this->settings['lock']) {
@@ -271,11 +271,12 @@ class FileEngine extends CacheEngine {
 			if (substr($entry, 0, $prefixLength) !== $this->settings['prefix']) {
 				continue;
 			}
-			$filePath = $path . $entry;
-			if (!file_exists($filePath) || is_dir($filePath)) {
+
+			try {
+				$file = new SplFileObject($path . $entry, 'r');
+			} catch (Exception $e) {
 				continue;
 			}
-			$file = new SplFileObject($path . $entry, 'r');
 
 			if ($threshold) {
 				$mtime = $file->getMTime();

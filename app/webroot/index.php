@@ -52,14 +52,14 @@ if (!defined('ROOT')) {
 	// >>>
 	//define('ROOT', dirname(dirname(dirname(__FILE__))));
 	// ---
-	
+
 	/* 通常パターン */
 	if (@is_dir(dirname(dirname(dirname($fileName))) . DS . 'lib' . DS . 'Cake')) {
 		define('ROOT', dirname(dirname(dirname($fileName))));
 	// app内にcakeを配置
 	// チカッパでは、DocumentoRoot のひとつ上の階層にcake を配置していた為、
 	// そちらをターゲットとして ROOT を決定した為、うまく動作しなかった。
-	/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){		
+	/*}elseif(is_dir(dirname(dirname($fileName)).DS.'cake')){
 		define('ROOT', dirname(dirname($fileName)));*/
 
 	// WEBROOT配置

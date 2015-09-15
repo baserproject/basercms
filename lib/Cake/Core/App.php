@@ -33,7 +33,7 @@ App::uses('CakePlugin', 'Core');
  * CakePHP is organized around the idea of packages, each class belongs to a package or folder where other
  * classes reside. You can configure each package location in your application using `App::build('APackage/SubPackage', $paths)`
  * to inform the framework where should each class be loaded. Almost every class in the CakePHP framework can be swapped
- * by your own compatible implementation. If you wish to use you own class instead of the classes the framework provides,
+ * by your own compatible implementation. If you wish to use your own class instead of the classes the framework provides,
  * just add the class to your libs folder mocking the directory location of where CakePHP expects to find it.
  *
  * For instance if you'd like to use your own HttpSocket class, put it under
@@ -361,7 +361,7 @@ class App {
  * @param string $plugin CamelCased/lower_cased plugin name to find the path of.
  * @return string full path to the plugin.
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#App::pluginPath
- * @deprecated Use CakePlugin::path() instead.
+ * @deprecated 3.0.0 Use CakePlugin::path() instead.
  */
 	public static function pluginPath($plugin) {
 		return CakePlugin::path($plugin);
@@ -575,7 +575,7 @@ class App {
  * Returns the package name where a class was defined to be located at
  *
  * @param string $className name of the class to obtain the package name from
- * @return string package name or null if not declared
+ * @return string|null Package name, or null if not declared
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/app.html#App::location
  */
 	public static function location($className) {
@@ -590,7 +590,7 @@ class App {
  * not construct any classes contained in the files. It will only find and require() the file.
  *
  * @param string|array $type The type of Class if passed as a string, or all params can be passed as
- *   an single array to $type.
+ *   a single array to $type.
  * @param string $name Name of the Class or a unique name for the file
  * @param bool|array $parent boolean true if Class Parent should be searched, accepts key => value
  *   array('parent' => $parent, 'file' => $file, 'search' => $search, 'ext' => '$ext');

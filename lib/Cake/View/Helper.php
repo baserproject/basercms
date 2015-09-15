@@ -197,7 +197,7 @@ class Helper extends Object {
  *
  * @param string $name Name of the property being accessed.
  * @return mixed Helper or property found at $name
- * @deprecated Accessing request properties through this method is deprecated and will be removed in 3.0.
+ * @deprecated 3.0.0 Accessing request properties through this method is deprecated and will be removed in 3.0.
  */
 	public function __get($name) {
 		if (isset($this->_helperMap[$name]) && !isset($this->{$name})) {
@@ -226,7 +226,7 @@ class Helper extends Object {
  * @param string $name Name of the property being accessed.
  * @param mixed $value Value to set.
  * @return void
- * @deprecated This method will be removed in 3.0
+ * @deprecated 3.0.0 This method will be removed in 3.0
  */
 	public function __set($name, $value) {
 		switch ($name) {
@@ -320,8 +320,7 @@ class Helper extends Object {
 		if (!empty($options['pathPrefix']) && $path[0] !== '/') {
 			$path = $options['pathPrefix'] . $path;
 		}
-		if (
-			!empty($options['ext']) &&
+		if (!empty($options['ext']) &&
 			strpos($path, '?') === false &&
 			substr($path, -strlen($options['ext'])) !== $options['ext']
 		) {
@@ -406,8 +405,8 @@ class Helper extends Object {
  * content is the best way to prevent all possible attacks.
  *
  * @param string|array $output Either an array of strings to clean or a single string to clean.
- * @return string|array cleaned content for output
- * @deprecated This method will be removed in 3.0
+ * @return string|array|null Cleaned content for output
+ * @deprecated 3.0.0 This method will be removed in 3.0
  */
 	public function clean($output) {
 		$this->_reset();
@@ -449,7 +448,7 @@ class Helper extends Object {
  * @param string $insertBefore String to be inserted before options.
  * @param string $insertAfter String to be inserted after options.
  * @return string Composed attributes.
- * @deprecated This method will be moved to HtmlHelper in 3.0
+ * @deprecated 3.0.0 This method will be moved to HtmlHelper in 3.0
  */
 	protected function _parseAttributes($options, $exclude = null, $insertBefore = ' ', $insertAfter = null) {
 		if (!is_string($options)) {
@@ -483,7 +482,7 @@ class Helper extends Object {
  * @param string $value The value of the attribute to create.
  * @param bool $escape Define if the value must be escaped
  * @return string The composed attribute.
- * @deprecated This method will be moved to HtmlHelper in 3.0
+ * @deprecated 3.0.0 This method will be moved to HtmlHelper in 3.0
  */
 	protected function _formatAttribute($key, $value, $escape = true) {
 		if (is_array($value)) {
@@ -543,8 +542,7 @@ class Helper extends Object {
 		$lastPart = isset($parts[$count - 1]) ? $parts[$count - 1] : null;
 
 		// Either 'body' or 'date.month' type inputs.
-		if (
-			($count === 1 && $this->_modelScope && !$setScope) ||
+		if (($count === 1 && $this->_modelScope && !$setScope) ||
 			(
 				$count === 2 &&
 				in_array($lastPart, $this->_fieldSuffixes) &&
@@ -556,8 +554,7 @@ class Helper extends Object {
 		}
 
 		// 0.name, 0.created.month style inputs. Excludes inputs with the modelScope in them.
-		if (
-			$count >= 2 &&
+		if ($count >= 2 &&
 			is_numeric($parts[0]) &&
 			!is_numeric($parts[1]) &&
 			$this->_modelScope &&
@@ -801,7 +798,7 @@ class Helper extends Object {
  *
  * @param string $str String to be output.
  * @return string
- * @deprecated This method will be removed in future versions.
+ * @deprecated 3.0.0 This method will be removed in future versions.
  */
 	public function output($str) {
 		return $str;

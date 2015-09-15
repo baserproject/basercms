@@ -141,7 +141,7 @@ class FormHelper extends AppHelper {
  * or get an already created instance of the model
  *
  * @param string $model Model name.
- * @return Model model instance
+ * @return Model|null Model instance
  */
 	protected function _getModel($model) {
 		$object = null;
@@ -329,7 +329,7 @@ class FormHelper extends AppHelper {
  *   If an array is passed and $options argument is empty, the array will be used as options.
  *   If `false` no model is used.
  * @param array $options An array of html attributes and options.
- * @return string An formatted opening FORM tag.
+ * @return string A formatted opening FORM tag.
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-create
  */
 	public function create($model = null, $options = array()) {
@@ -534,8 +534,7 @@ class FormHelper extends AppHelper {
 			}
 			$out .= $this->submit($submit, $submitOptions);
 		}
-		if (
-			$this->requestType !== 'get' &&
+		if ($this->requestType !== 'get' &&
 			isset($this->request['_Token']) &&
 			!empty($this->request['_Token'])
 		) {
@@ -1199,8 +1198,7 @@ class FormHelper extends AppHelper {
 			if ($fieldKey === $primaryKey) {
 				$options['type'] = 'hidden';
 			}
-			if (
-				$options['type'] === 'number' &&
+			if ($options['type'] === 'number' &&
 				!isset($options['step'])
 			) {
 				if ($type === 'decimal') {
@@ -1318,8 +1316,7 @@ class FormHelper extends AppHelper {
 		} elseif (is_array($div)) {
 			$divOptions = array_merge($divOptions, $div);
 		}
-		if (
-			$this->_extractOption('required', $options) !== false &&
+		if ($this->_extractOption('required', $options) !== false &&
 			$this->_introspectModel($this->model(), 'validates', $this->field())
 		) {
 			$divOptions = $this->addClass($divOptions, 'required');
@@ -1362,8 +1359,7 @@ class FormHelper extends AppHelper {
 		$idKey = null;
 		if ($options['type'] === 'date' || $options['type'] === 'datetime') {
 			$firstInput = 'M';
-			if (
-				array_key_exists('dateFormat', $options) &&
+			if (array_key_exists('dateFormat', $options) &&
 				($options['dateFormat'] === null || $options['dateFormat'] === 'NONE')
 			) {
 				$firstInput = 'H';
@@ -1444,8 +1440,7 @@ class FormHelper extends AppHelper {
 		$value = current($this->value($valueOptions));
 		$output = '';
 
-		if (
-			(!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
+		if ((!isset($options['checked']) && !empty($value) && $value == $options['value']) ||
 			!empty($options['checked'])
 		) {
 			$options['checked'] = 'checked';
@@ -1483,7 +1478,7 @@ class FormHelper extends AppHelper {
  * - `hiddenField` - boolean to indicate if you want the results of radio() to include
  *    a hidden input with a value of ''. This is useful for creating radio sets that non-continuous
  * - `disabled` - Set to `true` or `disabled` to disable all the radio buttons.
- * - `empty` - Set to `true` to create a input with the value '' as the first option. When `true`
+ * - `empty` - Set to `true` to create an input with the value '' as the first option. When `true`
  *   the radio label will be 'empty'. Set this option to a string to control the label value.
  *
  * @param string $fieldName Name of a field, like this "Modelname.fieldname"
@@ -2069,7 +2064,8 @@ class FormHelper extends AppHelper {
 					'id' => $attributes['id'] . ($style ? '' : '_'),
 					'secure' => false,
 					'form' => isset($attributes['form']) ? $attributes['form'] : null,
-					'name' => $attributes['name']
+					'name' => $attributes['name'],
+					'disabled' => $attributes['disabled'] === true || $attributes['disabled'] === 'disabled'
 				);
 				$select[] = $this->hidden(null, $hiddenAttributes);
 			}
@@ -2085,8 +2081,7 @@ class FormHelper extends AppHelper {
 			$hasOptions = (count($options) > 0 || $showEmpty);
 			// Secure the field if there are options, or its a multi select.
 			// Single selects with no options don't submit, but multiselects do.
-			if (
-				(!isset($secure) || $secure) &&
+			if ((!isset($secure) || $secure) &&
 				empty($attributes['disabled']) &&
 				(!empty($attributes['multiple']) || $hasOptions)
 			) {
@@ -2257,7 +2252,7 @@ class FormHelper extends AppHelper {
  * ### Attributes:
  *
  * - `monthNames` - If false, 2 digit numbers will be used instead of text.
- *   If a array, the given array will be used.
+ *   If an array, the given array will be used.
  * - `empty` - If true, the empty select option is shown. If a string,
  *   that string is displayed as the empty element.
  * - `value` The selected value of the input.
@@ -2455,7 +2450,7 @@ class FormHelper extends AppHelper {
  * ### Attributes:
  *
  * - `monthNames` If false, 2 digit numbers will be used instead of text.
- *   If a array, the given array will be used.
+ *   If an array, the given array will be used.
  * - `minYear` The lowest year to use in the year select
  * - `maxYear` The maximum year to use in the year select
  * - `interval` The interval for the minutes select. Defaults to 1
@@ -2760,8 +2755,7 @@ class FormHelper extends AppHelper {
 
 			if ($name !== null) {
 				$isNumeric = is_numeric($name);
-				if (
-					(!$selectedIsArray && !$selectedIsEmpty && (string)$attributes['value'] == (string)$name) ||
+				if ((!$selectedIsArray && !$selectedIsEmpty && (string)$attributes['value'] == (string)$name) ||
 					($selectedIsArray && in_array((string)$name, $attributes['value'], !$isNumeric))
 				) {
 					if ($attributes['style'] === 'checkbox') {
@@ -2781,8 +2775,7 @@ class FormHelper extends AppHelper {
 							$disabledIsNumeric = is_numeric($name);
 						}
 					}
-					if (
-						$hasDisabled &&
+					if ($hasDisabled &&
 						$disabledIsArray &&
 						in_array((string)$name, $attributes['disabled'], !$disabledIsNumeric)
 					) {
@@ -2893,7 +2886,7 @@ class FormHelper extends AppHelper {
 				}
 				break;
 			case 'year':
-				$current = intval(date('Y'));
+				$current = (int)date('Y');
 
 				$min = !isset($options['min']) ? $current - 20 : (int)$options['min'];
 				$max = !isset($options['max']) ? $current + 20 : (int)$options['max'];
@@ -2901,8 +2894,7 @@ class FormHelper extends AppHelper {
 				if ($min > $max) {
 					list($min, $max) = array($max, $min);
 				}
-				if (
-					!empty($options['value']) &&
+				if (!empty($options['value']) &&
 					(int)$options['value'] < $min &&
 					(int)$options['value'] > 0
 				) {
@@ -2933,7 +2925,7 @@ class FormHelper extends AppHelper {
  *   Disabling the field using the `disabled` option, will also omit the field from being
  *   part of the hashed key.
  *
- * This method will convert a numerically indexed 'disabled' into a associative
+ * This method will convert a numerically indexed 'disabled' into an associative
  * value. FormHelper's internals expect associative options.
  *
  * @param string $field Name of the field to initialize options for.

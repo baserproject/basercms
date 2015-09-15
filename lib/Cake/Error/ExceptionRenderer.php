@@ -35,7 +35,7 @@ App::uses('Controller', 'Controller');
  *
  * You can implement application specific exception handling in one of a few ways:
  *
- * - Create a AppController::appError();
+ * - Create an AppController::appError();
  * - Create a subclass of ExceptionRenderer and configure it to be the `Exception.renderer`
  *
  * #### Using AppController::appError();
@@ -153,9 +153,20 @@ class ExceptionRenderer {
 			try {
 				$controller = new CakeErrorController($request, $response);
 				$controller->startupProcess();
+				$startup = true;
 			} catch (Exception $e) {
-				if (!empty($controller) && $controller->Components->enabled('RequestHandler')) {
+				$startup = false;
+			}
+			// Retry RequestHandler, as another aspect of startupProcess()
+			// could have failed. Ignore any exceptions out of startup, as
+			// there could be userland input data parsers.
+			if ($startup === false &&
+				!empty($controller) &&
+				$controller->Components->enabled('RequestHandler')
+			) {
+				try {
 					$controller->RequestHandler->startup($controller);
+				} catch (Exception $e) {
 				}
 			}
 		}

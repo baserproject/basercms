@@ -183,19 +183,12 @@ class BcSqlite extends Sqlite {
 		}
 
 		//echo "listsources:beforeresult ";
-		// >>> CUSTOMIZE MODIFY 2010/12/26 ryuring
-		//$result = $this->fetchAll("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", false);
-		// ---
 		$result = $this->fetchAll("SELECT name FROM sqlite_master WHERE type='table' AND name<>'sqlite_sequence' ORDER BY name;", false);
-		// <<<
-		//echo "listsources:result ";
 		//pr($result);
 
 		if (!$result || empty($result)) {
-			// >>> ADD 2010/03/19 egashira
 			// 接続をフルパスに戻す
 			$this->config['database'] = $db;
-			// <<<
 			return array();
 		} else {
 			$tables = array();
@@ -1033,37 +1026,26 @@ class BcSqlite extends Sqlite {
 				'type' => $this->column($column[0]['type']),
 				'null' => !$column[0]['notnull'],
 				'default' => $column[0]['dflt_value'],
-				// >>> CUSTOMIZE MODIFY 2010/11/24 ryuring
 				// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
-				//	'length'	=> $this->length($column[0]['type'])
-				// ---
 				'length' => ($column[0]['type']) ? $this->length($column[0]['type']) : ''
-				// <<<
 			);
-			// >>> CUSTOMIZE ADD 2010/10/27 ryuring
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
 			if ($fields[$column[0]['name']]['default'] == 'NULL') {
 				$fields[$column[0]['name']]['default'] = null;
 			}
-			// >>> CUSTOMIZE ADD 2011/08/22 ryuring
 			if ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
 				$fields[$column[0]['name']]['default'] = 1;
 			} elseif ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'0'") {
 				$fields[$column[0]['name']]['default'] = 0;
 			}
-			// >>>
 			if ($column[0]['pk'] == 1) {
 				$fields[$column[0]['name']] = array(
 					'type' => $fields[$column[0]['name']]['type'],
 					'null' => false,
 					'default' => $column[0]['dflt_value'],
 					'key' => $this->index['PRI'],
-					// >>> CUSTOMIZE MODIFY 2010/03/23 ryuring
 					// baserCMSのプライマリーキーの初期値は8バイトで統一
-					//'length'	=> 11
-					// ---
 					'length' => 8
-					// <<<
 				);
 			}
 		}

@@ -104,7 +104,11 @@ class MemcachedEngine extends CacheEngine {
 			return true;
 		}
 
-		$this->_Memcached = new Memcached($this->settings['persistent'] ? (string)$this->settings['persistent'] : null);
+		if (!$this->settings['persistent']) {
+			$this->_Memcached = new Memcached();
+		} else {
+			$this->_Memcached = new Memcached((string)$this->settings['persistent']);
+		}
 		$this->_setOptions();
 
 		if (count($this->_Memcached->getServerList())) {
@@ -126,6 +130,7 @@ class MemcachedEngine extends CacheEngine {
 					__d('cake_dev', 'Memcached extension is not build with SASL support')
 				);
 			}
+			$this->_Memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
 			$this->_Memcached->setSaslAuthData($this->settings['login'], $this->settings['password']);
 		}
 

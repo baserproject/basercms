@@ -530,8 +530,6 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->BcForm->request['_Token'] = array('key' => 'testKey');
 		$encoding = strtolower(Configure::read('App.encoding'));
 		$result = $this->BcForm->create('Contact', array('url' => '/contacts/add'));
-		// CUSTOMIZE 2014/09/02 ryuring
-		// ブラウザの妥当性のチェックを除外する為、novalidate 属性をデフォルトで追加するように変更した
 		$expected = array(
 			'form' => array('method' => 'post', 'action' => '/contacts/add', 'accept-charset' => $encoding, 'id' => 'ContactAddForm', 'novalidate' => 'novalidate'),
 			'div' => array('style' => 'display:none;'),

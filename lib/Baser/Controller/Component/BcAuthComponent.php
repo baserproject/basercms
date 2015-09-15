@@ -54,8 +54,7 @@ class BcAuthComponent extends AuthComponent {
 		// CUSTOMIZE ADD 2011/09/25 ryuring
 		// ログイン時点でもモデルを保存しておく Session::user() のキーとして利用する
 		// >>>
-		$result = parent::login($user);
-		return $result;
+		return parent::login($user);
 		// <<<
 	}
 

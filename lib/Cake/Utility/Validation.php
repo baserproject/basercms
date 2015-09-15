@@ -212,6 +212,10 @@ class Validation {
 		if (is_array($check1)) {
 			extract($check1, EXTR_OVERWRITE);
 		}
+
+		if ((float)$check1 != $check1) {
+			return false;
+		}
 		$operator = str_replace(array(' ', "\t", "\n", "\r", "\0", "\x0B"), '', strtolower($operator));
 
 		switch ($operator) {
@@ -278,7 +282,9 @@ class Validation {
 
 /**
  * Date validation, determines if the string passed is a valid date.
- * keys that expect full month, day and year will validate leap years
+ * keys that expect full month, day and year will validate leap years.
+ *
+ * Years are valid from 1800 to 2999.
  *
  * ### Formats:
  *
@@ -304,7 +310,7 @@ class Validation {
 		}
 		$month = '(0[123456789]|10|11|12)';
 		$separator = '([- /.])';
-		$fourDigitYear = '(([1][9][0-9][0-9])|([2][0-9][0-9][0-9]))';
+		$fourDigitYear = '(([1][8-9][0-9][0-9])|([2][0-9][0-9][0-9]))';
 		$twoDigitYear = '([0-9]{2})';
 		$year = '(?:' . $fourDigitYear . '|' . $twoDigitYear . ')';
 
@@ -723,6 +729,9 @@ class Validation {
  */
 	public static function range($check, $lower = null, $upper = null) {
 		if (!is_numeric($check)) {
+			return false;
+		}
+		if ((float)$check != $check) {
 			return false;
 		}
 		if (isset($lower) && isset($upper)) {

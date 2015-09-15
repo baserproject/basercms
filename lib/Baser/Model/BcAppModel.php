@@ -954,8 +954,7 @@ class BcAppModel extends Model {
 			return null;
 		}
 
-		if (
-			isset($data['hour']) &&
+		if (isset($data['hour']) &&
 			isset($data['meridian']) &&
 			!empty($data['hour']) &&
 			$data['hour'] != 12 &&
@@ -1254,55 +1253,70 @@ class BcAppModel extends Model {
 /**
  * Queries the datasource and returns a result set array.
  *
- * Also used to perform notation finds, where the first argument is type of find operation to perform
+ * Used to perform find operations, where the first argument is type of find operation to perform
  * (all / first / count / neighbors / list / threaded),
- * second parameter options for finding ( indexed array, including: 'conditions', 'limit',
- * 'recursive', 'page', 'fields', 'offset', 'order')
+ * second parameter options for finding (indexed array, including: 'conditions', 'limit',
+ * 'recursive', 'page', 'fields', 'offset', 'order', 'callbacks')
  *
  * Eg:
  * {{{
- * 	find('all', array(
- * 		'conditions' => array('name' => 'Thomas Anderson'),
- * 		'fields' => array('name', 'email'),
- * 		'order' => 'field3 DESC',
- * 		'recursive' => 2,
- * 		'group' => 'type'
+ * $model->find('all', array(
+ *   'conditions' => array('name' => 'Thomas Anderson'),
+ *   'fields' => array('name', 'email'),
+ *   'order' => 'field3 DESC',
+ *   'recursive' => 2,
+ *   'group' => 'type',
+ *   'callbacks' => false,
  * ));
  * }}}
  *
  * In addition to the standard query keys above, you can provide Datasource, and behavior specific
- * keys.  For example, when using a SQL based datasource you can use the joins key to specify additional
+ * keys. For example, when using a SQL based datasource you can use the joins key to specify additional
  * joins that should be part of the query.
  *
  * {{{
- * find('all', array(
- * 		'conditions' => array('name' => 'Thomas Anderson'),
- * 		'joins' => array(
- * 			array(
- * 				'alias' => 'Thought',
- * 				'table' => 'thoughts',
- * 				'type' => 'LEFT',
- * 				'conditions' => '`Thought`.`person_id` = `Person`.`id`'
- * 			)
- * 		)
+ * $model->find('all', array(
+ *   'conditions' => array('name' => 'Thomas Anderson'),
+ *   'joins' => array(
+ *     array(
+ *       'alias' => 'Thought',
+ *       'table' => 'thoughts',
+ *       'type' => 'LEFT',
+ *       'conditions' => '`Thought`.`person_id` = `Person`.`id`'
+ *     )
+ *   )
  * ));
  * }}}
  *
+ * ### Disabling callbacks
+ *
+ * The `callbacks` key allows you to disable or specify the callbacks that should be run. To
+ * disable beforeFind & afterFind callbacks set `'callbacks' => false` in your options. You can
+ * also set the callbacks option to 'before' or 'after' to enable only the specified callback.
+ *
+ * ### Adding new find types
+ *
  * Behaviors and find types can also define custom finder keys which are passed into find().
+ * See the documentation for custom find types
+ * (http://book.cakephp.org/2.0/en/models/retrieving-your-data.html#creating-custom-find-types)
+ * for how to implement custom find types.
  *
  * Specifying 'fields' for notation 'list':
  *
- *  - If no fields are specified, then 'id' is used for key and 'model->displayField' is used for value.
- *  - If a single field is specified, 'id' is used for key and specified field is used for value.
- *  - If three fields are specified, they are used (in order) for key, value and group.
- *  - Otherwise, first and second fields are used for key and value.
+ * - If no fields are specified, then 'id' is used for key and 'model->displayField' is used for value.
+ * - If a single field is specified, 'id' is used for key and specified field is used for value.
+ * - If three fields are specified, they are used (in order) for key, value and group.
+ * - Otherwise, first and second fields are used for key and value.
  *
- *  Note: find(list) + database views have issues with MySQL 5.0. Try upgrading to MySQL 5.1 if you
- *  have issues with database views.
+ * Note: find(list) + database views have issues with MySQL 5.0. Try upgrading to MySQL 5.1 if you
+ * have issues with database views.
+ *
+ * Note: find(count) has its own return values.
+ *
  * @param string $type Type of find operation (all / first / count / neighbors / list / threaded)
  * @param array $query Option fields (conditions / fields / joins / limit / offset / order / page / group / callbacks)
- * @return array Array of records
- * @link http://book.cakephp.org/2.0/en/models/deleting-data.html#deleteall
+ * @return array|null Array of records, or Null on failure.
+ * @link http://book.cakephp.org/2.0/en/models/retrieving-your-data.html
  */
 	public function find($type = 'first', $query = array()) {
 		$this->findQueryType = $type;

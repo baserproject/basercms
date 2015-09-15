@@ -757,7 +757,7 @@ class Model extends Object implements CakeEventListener {
 
 /**
  * Returns a list of all events that will fire in the model during it's lifecycle.
- * You can override this function to add you own listener callbacks
+ * You can override this function to add your own listener callbacks
  *
  * @return array
  */
@@ -1201,6 +1201,10 @@ class Model extends Object implements CakeEventListener {
 				continue;
 			}
 
+			if (!isset($this->data[$modelName])) {
+				$this->data[$modelName] = array();
+			}
+
 			foreach ($fieldSet as $fieldName => $fieldValue) {
 				unset($this->validationErrors[$fieldName]);
 
@@ -1289,8 +1293,7 @@ class Model extends Object implements CakeEventListener {
 			return null;
 		}
 
-		if (
-			isset($data['hour']) &&
+		if (isset($data['hour']) &&
 			isset($data['meridian']) &&
 			!empty($data['hour']) &&
 			$data['hour'] != 12 &&
@@ -1358,7 +1361,7 @@ class Model extends Object implements CakeEventListener {
  * $field => keys(type, null, default, key, length, extra)
  *
  * @param bool|string $field Set to true to reload schema, or a string to return a specific field
- * @return array Array of table metadata
+ * @return array|null Array of table metadata
  */
 	public function schema($field = false) {
 		if ($this->useTable !== false && (!is_array($this->_schema) || $field === true)) {
@@ -1661,7 +1664,7 @@ class Model extends Object implements CakeEventListener {
  *   If a boolean, indicates whether or not to validate before saving.
  *   If an array, allows control of 'validate', 'callbacks' and 'counterCache' options.
  *   See Model::save() for details of each options.
- * @return bool See Model::save()
+ * @return bool|array See Model::save() False on failure or an array of model data on success.
  * @see Model::save()
  * @link http://book.cakephp.org/2.0/en/models/saving-your-data.html#model-savefield-string-fieldname-string-fieldvalue-validate-false
  */
@@ -1695,6 +1698,8 @@ class Model extends Object implements CakeEventListener {
  * @param array $fieldList List of fields to allow to be saved
  * @return mixed On success Model::$data if its not empty or true, false on failure
  * @throws PDOException
+ * @triggers Model.beforeSave $this, array($options)
+ * @triggers Model.afterSave $this, array($created, $options)
  * @link http://book.cakephp.org/2.0/en/models/saving-your-data.html
  */
 	public function save($data = null, $validate = true, $fieldList = array()) {
@@ -2090,7 +2095,7 @@ class Model extends Object implements CakeEventListener {
 
 				if (isset($keys['old'][$foreignKey]) && $keys['old'][$foreignKey] != $keys[$foreignKey]) {
 					$conditions[$fkQuoted] = $keys['old'][$foreignKey];
-					$count = intval($this->find('count', compact('conditions', 'recursive')));
+					$count = (int)$this->find('count', compact('conditions', 'recursive'));
 
 					$Model->updateAll(
 						array($field => $count),
@@ -2104,7 +2109,7 @@ class Model extends Object implements CakeEventListener {
 					$conditions = array_merge($conditions, (array)$conditions);
 				}
 
-				$count = intval($this->find('count', compact('conditions', 'recursive')));
+				$count = (int)$this->find('count', compact('conditions', 'recursive'));
 
 				$Model->updateAll(
 					array($field => $count),
@@ -2215,6 +2220,7 @@ class Model extends Object implements CakeEventListener {
  * @return mixed If atomic: True on success, or false on failure.
  *    Otherwise: array similar to the $data array passed, but values are set to true/false
  *    depending on whether each record saved successfully.
+ * @throws PDOException
  * @link http://book.cakephp.org/2.0/en/models/saving-your-data.html#model-savemany-array-data-null-array-options-array
  */
 	public function saveMany($data = null, $options = array()) {
@@ -2242,50 +2248,60 @@ class Model extends Object implements CakeEventListener {
 			$options['validate'] = false;
 		}
 
+		$transactionBegun = false;
 		if ($options['atomic']) {
 			$db = $this->getDataSource();
 			$transactionBegun = $db->begin();
 		}
 
-		$return = array();
-		foreach ($data as $key => $record) {
-			$validates = $this->create(null) !== null;
-			$saved = false;
-			if ($validates) {
-				if ($options['deep']) {
-					$saved = $this->saveAssociated($record, array_merge($options, array('atomic' => false)));
-				} else {
-					$saved = $this->save($record, $options);
+		try {
+			$return = array();
+			foreach ($data as $key => $record) {
+				$validates = $this->create(null) !== null;
+				$saved = false;
+				if ($validates) {
+					if ($options['deep']) {
+						$saved = $this->saveAssociated($record, array_merge($options, array('atomic' => false)));
+					} else {
+						$saved = $this->save($record, $options);
+					}
+				}
+
+				$validates = ($validates && ($saved === true || (is_array($saved) && !in_array(false, $saved, true))));
+				if (!$validates) {
+					$validationErrors[$key] = $this->validationErrors;
+				}
+
+				if (!$options['atomic']) {
+					$return[$key] = $validates;
+				} elseif (!$validates) {
+					break;
 				}
 			}
 
-			$validates = ($validates && ($saved === true || (is_array($saved) && !in_array(false, $saved, true))));
-			if (!$validates) {
-				$validationErrors[$key] = $this->validationErrors;
-			}
+			$this->validationErrors = $validationErrors;
 
 			if (!$options['atomic']) {
-				$return[$key] = $validates;
-			} elseif (!$validates) {
-				break;
+				return $return;
 			}
-		}
 
-		$this->validationErrors = $validationErrors;
+			if ($validates) {
+				if ($transactionBegun) {
+					return $db->commit() !== false;
+				}
+				return true;
+			}
 
-		if (!$options['atomic']) {
-			return $return;
-		}
-
-		if ($validates) {
 			if ($transactionBegun) {
-				return $db->commit() !== false;
+				$db->rollback();
 			}
-			return true;
+			return false;
+		} catch (Exception $e) {
+			if ($transactionBegun) {
+				$db->rollback();
+			}
+			throw $e;
 		}
-
-		$db->rollback();
-		return false;
 	}
 
 /**
@@ -2337,6 +2353,7 @@ class Model extends Object implements CakeEventListener {
  * @return mixed If atomic: True on success, or false on failure.
  *    Otherwise: array similar to the $data array passed, but values are set to true/false
  *    depending on whether each record saved successfully.
+ * @throws PDOException
  * @link http://book.cakephp.org/2.0/en/models/saving-your-data.html#model-saveassociated-array-data-null-array-options-array
  */
 	public function saveAssociated($data = null, $options = array()) {
@@ -2365,136 +2382,146 @@ class Model extends Object implements CakeEventListener {
 			$options['validate'] = false;
 		}
 
+		$transactionBegun = false;
 		if ($options['atomic']) {
 			$db = $this->getDataSource();
 			$transactionBegun = $db->begin();
 		}
 
-		$associations = $this->getAssociated();
-		$return = array();
-		$validates = true;
-		foreach ($data as $association => $values) {
-			$isEmpty = empty($values) || (isset($values[$association]) && empty($values[$association]));
-			if ($isEmpty || !isset($associations[$association]) || $associations[$association] !== 'belongsTo') {
-				continue;
-			}
-
-			$Model = $this->{$association};
-
-			$validates = $Model->create(null) !== null;
-			$saved = false;
-			if ($validates) {
-				if ($options['deep']) {
-					$saved = $Model->saveAssociated($values, array('atomic' => false) + $options);
-				} else {
-					$saved = $Model->save($values, array('atomic' => false) + $options);
+		try {
+			$associations = $this->getAssociated();
+			$return = array();
+			$validates = true;
+			foreach ($data as $association => $values) {
+				$isEmpty = empty($values) || (isset($values[$association]) && empty($values[$association]));
+				if ($isEmpty || !isset($associations[$association]) || $associations[$association] !== 'belongsTo') {
+					continue;
 				}
-				$validates = ($saved === true || (is_array($saved) && !in_array(false, $saved, true)));
-			}
 
-			if ($validates) {
-				$key = $this->belongsTo[$association]['foreignKey'];
-				if (isset($data[$this->alias])) {
-					$data[$this->alias][$key] = $Model->id;
-				} else {
-					$data = array_merge(array($key => $Model->id), $data, array($key => $Model->id));
-				}
-				$options = $this->_addToWhiteList($key, $options);
-			} else {
-				$validationErrors[$association] = $Model->validationErrors;
-			}
+				$Model = $this->{$association};
 
-			$return[$association] = $validates;
-		}
-
-		if ($validates && !($this->create(null) !== null && $this->save($data, $options))) {
-			$validationErrors[$this->alias] = $this->validationErrors;
-			$validates = false;
-		}
-		$return[$this->alias] = $validates;
-
-		foreach ($data as $association => $values) {
-			if (!$validates) {
-				break;
-			}
-
-			$isEmpty = empty($values) || (isset($values[$association]) && empty($values[$association]));
-			if ($isEmpty || !isset($associations[$association])) {
-				continue;
-			}
-
-			$Model = $this->{$association};
-
-			$type = $associations[$association];
-			$key = $this->{$type}[$association]['foreignKey'];
-			switch ($type) {
-				case 'hasOne':
-					if (isset($values[$association])) {
-						$values[$association][$key] = $this->id;
+				$validates = $Model->create(null) !== null;
+				$saved = false;
+				if ($validates) {
+					if ($options['deep']) {
+						$saved = $Model->saveAssociated($values, array('atomic' => false) + $options);
 					} else {
-						$values = array_merge(array($key => $this->id), $values, array($key => $this->id));
+						$saved = $Model->save($values, array('atomic' => false) + $options);
 					}
+					$validates = ($saved === true || (is_array($saved) && !in_array(false, $saved, true)));
+				}
 
-					$validates = $Model->create(null) !== null;
-					$saved = false;
+				if ($validates) {
+					$key = $this->belongsTo[$association]['foreignKey'];
+					if (isset($data[$this->alias])) {
+						$data[$this->alias][$key] = $Model->id;
+					} else {
+						$data = array_merge(array($key => $Model->id), $data, array($key => $Model->id));
+					}
+					$options = $this->_addToWhiteList($key, $options);
+				} else {
+					$validationErrors[$association] = $Model->validationErrors;
+				}
 
-					if ($validates) {
+				$return[$association] = $validates;
+			}
+
+			if ($validates && !($this->create(null) !== null && $this->save($data, $options))) {
+				$validationErrors[$this->alias] = $this->validationErrors;
+				$validates = false;
+			}
+			$return[$this->alias] = $validates;
+
+			foreach ($data as $association => $values) {
+				if (!$validates) {
+					break;
+				}
+
+				$isEmpty = empty($values) || (isset($values[$association]) && empty($values[$association]));
+				if ($isEmpty || !isset($associations[$association])) {
+					continue;
+				}
+
+				$Model = $this->{$association};
+
+				$type = $associations[$association];
+				$key = $this->{$type}[$association]['foreignKey'];
+				switch ($type) {
+					case 'hasOne':
+						if (isset($values[$association])) {
+							$values[$association][$key] = $this->id;
+						} else {
+							$values = array_merge(array($key => $this->id), $values, array($key => $this->id));
+						}
+
+						$validates = $Model->create(null) !== null;
+						$saved = false;
+
+						if ($validates) {
+							$options = $Model->_addToWhiteList($key, $options);
+							if ($options['deep']) {
+								$saved = $Model->saveAssociated($values, array('atomic' => false) + $options);
+							} else {
+								$saved = $Model->save($values, $options);
+							}
+						}
+
+						$validates = ($validates && ($saved === true || (is_array($saved) && !in_array(false, $saved, true))));
+						if (!$validates) {
+							$validationErrors[$association] = $Model->validationErrors;
+						}
+
+						$return[$association] = $validates;
+						break;
+					case 'hasMany':
+						foreach ($values as $i => $value) {
+							if (isset($values[$i][$association])) {
+								$values[$i][$association][$key] = $this->id;
+							} else {
+								$values[$i] = array_merge(array($key => $this->id), $value, array($key => $this->id));
+							}
+						}
+
 						$options = $Model->_addToWhiteList($key, $options);
-						if ($options['deep']) {
-							$saved = $Model->saveAssociated($values, array('atomic' => false) + $options);
-						} else {
-							$saved = $Model->save($values, $options);
+						$_return = $Model->saveMany($values, array('atomic' => false) + $options);
+						if (in_array(false, $_return, true)) {
+							$validationErrors[$association] = $Model->validationErrors;
+							$validates = false;
 						}
-					}
 
-					$validates = ($validates && ($saved === true || (is_array($saved) && !in_array(false, $saved, true))));
-					if (!$validates) {
-						$validationErrors[$association] = $Model->validationErrors;
-					}
-
-					$return[$association] = $validates;
-					break;
-				case 'hasMany':
-					foreach ($values as $i => $value) {
-						if (isset($values[$i][$association])) {
-							$values[$i][$association][$key] = $this->id;
-						} else {
-							$values[$i] = array_merge(array($key => $this->id), $value, array($key => $this->id));
-						}
-					}
-
-					$options = $Model->_addToWhiteList($key, $options);
-					$_return = $Model->saveMany($values, array('atomic' => false) + $options);
-					if (in_array(false, $_return, true)) {
-						$validationErrors[$association] = $Model->validationErrors;
-						$validates = false;
-					}
-
-					$return[$association] = $_return;
-					break;
+						$return[$association] = $_return;
+						break;
+				}
 			}
-		}
-		$this->validationErrors = $validationErrors;
+			$this->validationErrors = $validationErrors;
 
-		if (isset($validationErrors[$this->alias])) {
-			$this->validationErrors = $validationErrors[$this->alias];
-			unset($validationErrors[$this->alias]);
-			$this->validationErrors = array_merge($this->validationErrors, $validationErrors);
-		}
+			if (isset($validationErrors[$this->alias])) {
+				$this->validationErrors = $validationErrors[$this->alias];
+				unset($validationErrors[$this->alias]);
+				$this->validationErrors = array_merge($this->validationErrors, $validationErrors);
+			}
 
-		if (!$options['atomic']) {
-			return $return;
-		}
-		if ($validates) {
+			if (!$options['atomic']) {
+				return $return;
+			}
+			if ($validates) {
+				if ($transactionBegun) {
+					return $db->commit() !== false;
+				}
+
+				return true;
+			}
+
 			if ($transactionBegun) {
-				return $db->commit() !== false;
+				$db->rollback();
 			}
-
-			return true;
+			return false;
+		} catch (Exception $e) {
+			if ($transactionBegun) {
+				$db->rollback();
+			}
+			throw $e;
 		}
-
-		$db->rollback();
-		return false;
 	}
 
 /**
@@ -2565,6 +2592,8 @@ class Model extends Object implements CakeEventListener {
  * @param int|string $id ID of record to delete
  * @param bool $cascade Set to true to delete records that depend on this record
  * @return bool True on success
+ * @triggers Model.beforeDelete $this, array($cascade)
+ * @triggers Model.afterDelete $this
  * @link http://book.cakephp.org/2.0/en/models/deleting-data.html
  */
 	public function delete($id = null, $cascade = true) {
@@ -2878,7 +2907,7 @@ class Model extends Object implements CakeEventListener {
  *
  * @param string $type Type of find operation (all / first / count / neighbors / list / threaded)
  * @param array $query Option fields (conditions / fields / joins / limit / offset / order / page / group / callbacks)
- * @return array Array of records, or Null on failure.
+ * @return array|null Array of records, or Null on failure.
  * @link http://book.cakephp.org/2.0/en/models/retrieving-your-data.html
  */
 	public function find($type = 'first', $query = array()) {
@@ -2937,7 +2966,8 @@ class Model extends Object implements CakeEventListener {
  *
  * @param string $type Type of find operation (all / first / count / neighbors / list / threaded)
  * @param array $query Option fields (conditions / fields / joins / limit / offset / order / page / group / callbacks)
- * @return array Query array or null if it could not be build for some reasons
+ * @return array|null Query array or null if it could not be build for some reasons
+ * @triggers Model.beforeFind $this, array($query)
  * @see Model::find()
  */
 	public function buildQuery($type = 'first', $query = array()) {
@@ -2953,7 +2983,7 @@ class Model extends Object implements CakeEventListener {
 			$query = $this->{'_find' . ucfirst($type)}('before', $query);
 		}
 
-		if (!is_numeric($query['page']) || intval($query['page']) < 1) {
+		if (!is_numeric($query['page']) || (int)$query['page'] < 1) {
 			$query['page'] = 1;
 		}
 
@@ -3066,7 +3096,7 @@ class Model extends Object implements CakeEventListener {
 					return count($results);
 				}
 
-				return intval($results[0][$key]['count']);
+				return (int)$results[0][$key]['count'];
 			}
 		}
 
@@ -3226,6 +3256,7 @@ class Model extends Object implements CakeEventListener {
  * @param array $results Results to filter
  * @param bool $primary If this is the primary model results (results from model where the find operation was performed)
  * @return array Set of filtered results
+ * @triggers Model.afterFind $this, array($results, $primary)
  */
 	protected function _filterResults($results, $primary = true) {
 		$event = new CakeEvent('Model.afterFind', $this, array($results, $primary));
@@ -3267,16 +3298,32 @@ class Model extends Object implements CakeEventListener {
 /**
  * Returns false if any fields passed match any (by default, all if $or = false) of their matching values.
  *
+ * Can be used as a validation method. When used as a validation method, the `$or` parameter
+ * contains an array of fields to be validated.
+ *
  * @param array $fields Field/value pairs to search (if no values specified, they are pulled from $this->data)
- * @param bool $or If false, all fields specified must match in order for a false return value
+ * @param bool|array $or If false, all fields specified must match in order for a false return value
  * @return bool False if any records matching any fields are found
  */
 	public function isUnique($fields, $or = true) {
+		if (is_array($or)) {
+			$isRule = (
+				array_key_exists('rule', $or) &&
+				array_key_exists('required', $or) &&
+				array_key_exists('message', $or)
+			);
+			if (!$isRule) {
+				$args = func_get_args();
+				$fields = $args[1];
+				$or = isset($args[2]) ? $args[2] : true;
+			}
+		}
 		if (!is_array($fields)) {
 			$fields = func_get_args();
-			if (is_bool($fields[count($fields) - 1])) {
-				$or = $fields[count($fields) - 1];
-				unset($fields[count($fields) - 1]);
+			$fieldCount = count($fields) - 1;
+			if (is_bool($fields[$fieldCount])) {
+				$or = $fields[$fieldCount];
+				unset($fields[$fieldCount]);
 			}
 		}
 
@@ -3541,7 +3588,7 @@ class Model extends Object implements CakeEventListener {
  * Gets all the models with which this model is associated.
  *
  * @param string $type Only result associations of this type
- * @return array Associations
+ * @return array|null Associations
  */
 	public function getAssociated($type = null) {
 		if (!$type) {

@@ -1201,6 +1201,11 @@ class DboSourceTest extends CakeTestCase {
 				'type' => 'LEFT',
 				'alias' => 'PostsTag',
 				'table' => 'posts_tags',
+			), 'LEFT JOIN cakephp.posts_tags AS PostsTag'),
+			array(array(
+				'type' => 'LEFT',
+				'alias' => 'PostsTag',
+				'table' => 'posts_tags',
 				'conditions' => array('PostsTag.post_id = Post.id')
 			), 'LEFT JOIN cakephp.posts_tags AS PostsTag ON (PostsTag.post_id = Post.id)'),
 			array(array(
@@ -1455,5 +1460,166 @@ class DboSourceTest extends CakeTestCase {
 		$Article->__safeUpdateMode = true;
 		$result = $db->defaultConditions($Article, null);
 		$this->assertFalse($result);
+	}
+
+/**
+ * Test that count how many times is afterFind called
+ *
+ * @return void
+ */
+	public function testCountAfterFindCalls() {
+		$this->loadFixtures('Article', 'User', 'Comment', 'Attachment', 'Tag', 'ArticlesTag');
+
+		// Use alias to make testing "primary = true" easy
+		$Primary = $this->getMock('Comment', array('afterFind'), array(array('alias' => 'Primary')), '', true);
+		$Primary->expects($this->any())->method('afterFind')->will($this->returnArgument(0));
+
+		$Article = $this->getMock('Article', array('afterFind'), array(), '', true);
+		$User = $this->getMock('User', array('afterFind'), array(), '', true);
+		$Comment = $this->getMock('Comment', array('afterFind'), array(), '', true);
+		$Tag = $this->getMock('Tag', array('afterFind'), array(), '', true);
+		$Attachment = $this->getMock('Attachment', array('afterFind'), array(), '', true);
+
+		$Primary->Article = $Article;
+		$Primary->Article->User = $User;
+		$Primary->Article->Tag = $Tag;
+		$Primary->Article->Comment = $Comment;
+		$Primary->Attachment = $Attachment;
+		$Primary->Attachment->Comment = $Comment;
+		$Primary->User = $User;
+
+		// primary = true
+		$Primary->expects($this->once())
+			->method('afterFind')->with($this->anything(), $this->isTrue())->will($this->returnArgument(0));
+
+		// primary = false
+		$Article->expects($this->once()) // Primary belongs to 1 Article
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+		$User->expects($this->exactly(2)) // Article belongs to 1 User and Primary belongs to 1 User
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+		$Tag->expects($this->exactly(2)) // Article has 2 Tags
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+		$Comment->expects($this->exactly(3)) // Article has 2 Comments and Attachment belongs to 1 Comment
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+		$Attachment->expects($this->once()) // Primary has 1 Attachment
+			->method('afterFind')->with($this->anything(), $this->isFalse())->will($this->returnArgument(0));
+
+		$result = $Primary->find('first', array('conditions' => array('Primary.id' => 5), 'recursive' => 2));
+		$this->assertCount(2, $result['Article']['Tag']);
+		$this->assertCount(2, $result['Article']['Comment']);
+	}
+
+/**
+ * Test that afterFind is called correctly for 'joins'
+ *
+ * @return void
+ */
+	public function testJoinsAfterFind() {
+		$this->loadFixtures('Article', 'User');
+
+		$User = new User();
+		$User->bindModel(array('hasOne' => array('Article')));
+
+		$Article = $this->getMock('Article', array('afterFind'), array(), '', true);
+		$Article->expects($this->once())
+			->method('afterFind')
+			->with(
+				array(
+					0 => array(
+						'Article' => array(
+							'id' => '1',
+							'user_id' => '1',
+							'title' => 'First Article',
+							'body' => 'First Article Body',
+							'published' => 'Y',
+							'created' => '2007-03-18 10:39:23',
+							'updated' => '2007-03-18 10:41:31'
+						)
+					)
+				),
+				$this->isFalse()
+			)
+			->will($this->returnArgument(0));
+
+		$User->Article = $Article;
+		$User->find('first', array(
+			'fields' => array(
+				'Article.id',
+				'Article.user_id',
+				'Article.title',
+				'Article.body',
+				'Article.published',
+				'Article.created',
+				'Article.updated'
+			),
+			'conditions' => array('User.id' => 1),
+			'recursive' => -1,
+			'joins' => array(
+				array(
+					'table' => 'articles',
+					'alias' => 'Article',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'Article.user_id = User.id'
+					),
+				)
+			),
+			'order' => array('Article.id')
+		));
+	}
+
+/**
+ * Test that afterFind is called correctly for 'hasOne' association.
+ *
+ * @return void
+ */
+	public function testHasOneAfterFind() {
+		$this->loadFixtures('Article', 'User', 'Comment');
+
+		$User = new User();
+		$User->bindModel(array('hasOne' => array('Article')));
+
+		$Article = $this->getMock('Article', array('afterFind'), array(), '', true);
+		$Article->unbindModel(array(
+			'belongsTo' => array('User'),
+			'hasMany' => array('Comment'),
+			'hasAndBelongsToMany' => array('Tag')
+		));
+		$Article->bindModel(array(
+			'hasOne' => array('Comment'),
+		));
+		$Article->expects($this->once())
+			->method('afterFind')
+			->with(
+				$this->equalTo(
+					array(
+						0 => array(
+							'Article' => array(
+								'id' => '1',
+								'user_id' => '1',
+								'title' => 'First Article',
+								'body' => 'First Article Body',
+								'published' => 'Y',
+								'created' => '2007-03-18 10:39:23',
+								'updated' => '2007-03-18 10:41:31',
+								'Comment' => array(
+									'id' => '1',
+									'article_id' => '1',
+									'user_id' => '2',
+									'comment' => 'First Comment for First Article',
+									'published' => 'Y',
+									'created' => '2007-03-18 10:45:23',
+									'updated' => '2007-03-18 10:47:31',
+								)
+							)
+						)
+					)
+				),
+				$this->isFalse()
+			)
+			->will($this->returnArgument(0));
+
+		$User->Article = $Article;
+		$User->find('first', array('conditions' => array('User.id' => 1), 'recursive' => 2));
 	}
 }

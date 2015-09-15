@@ -129,7 +129,7 @@ if (!function_exists('sortByKey')) {
  * @param string $sortBy Sort by this key
  * @param string $order Sort order asc/desc (ascending or descending).
  * @param int $type Type of sorting to perform
- * @return mixed Sorted array
+ * @return array|null Sorted array, or null if not an array.
  * @link http://book.cakephp.org/2.0/en/core-libraries/global-constants-and-functions.html#sortByKey
  */
 	function sortByKey(&$array, $sortBy, $order = 'asc', $type = SORT_NUMERIC) {
@@ -284,7 +284,7 @@ if (!function_exists('env')) {
  * environment information.
  *
  * @param string $key Environment variable name.
- * @return string Environment variable setting.
+ * @return string|bool|null Environment variable setting.
  * @link http://book.cakephp.org/2.0/en/core-libraries/global-constants-and-functions.html#env
  */
 	function env($key) {
@@ -389,7 +389,7 @@ if (!function_exists('cache')) {
  * @param mixed $expires A valid strtotime string when the data expires.
  * @param string $target The target of the cached data; either 'cache' or 'public'.
  * @return mixed The contents of the temporary file.
- * @deprecated Will be removed in 3.0. Please use Cache::write() instead.
+ * @deprecated 3.0.0 Will be removed in 3.0. Please use Cache::write() instead.
  */
 	function cache($path, $data = null, $expires = '+1 day', $target = 'cache') {
 		if (Configure::read('Cache.disable')) {
@@ -554,7 +554,7 @@ if (!function_exists('__')) {
 
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($singular);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 3) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 1);
@@ -586,7 +586,7 @@ if (!function_exists('__n')) {
 
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($singular, $plural, null, I18n::LC_MESSAGES, $count);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 5) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 3);
@@ -615,7 +615,7 @@ if (!function_exists('__d')) {
 		}
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($msg, null, $domain);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 4) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 2);
@@ -648,7 +648,7 @@ if (!function_exists('__dn')) {
 		}
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($singular, $plural, $domain, I18n::LC_MESSAGES, $count);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 6) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 4);
@@ -692,7 +692,7 @@ if (!function_exists('__dc')) {
 		}
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($msg, null, $domain, $category);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 5) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 3);
@@ -740,7 +740,7 @@ if (!function_exists('__dcn')) {
 		}
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($singular, $plural, $domain, $category, $count);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 7) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 5);
@@ -780,7 +780,7 @@ if (!function_exists('__c')) {
 		}
 		App::uses('I18n', 'I18n');
 		$translated = I18n::translate($msg, null, null, $category);
-		if ($args === null) {
+		if ($args === null && func_num_args() < 4) {
 			return $translated;
 		} elseif (!is_array($args)) {
 			$args = array_slice(func_get_args(), 2);

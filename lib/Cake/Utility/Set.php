@@ -23,7 +23,7 @@ App::uses('Hash', 'Utility');
  * Class used for manipulation of arrays.
  *
  * @package       Cake.Utility
- * @deprecated Will be removed in 3.0. Use Hash instead.
+ * @deprecated 3.0.0 Will be removed in 3.0. Use Hash instead.
  */
 class Set {
 
@@ -97,7 +97,7 @@ class Set {
  *
  * @param string $class A class name of the type of object to map to
  * @param string $tmp A temporary class name used as $class if $class is an array
- * @return object Hierarchical object
+ * @return object|null Hierarchical object
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/set.html#Set::map
  */
 	public static function map($class = 'stdClass', $tmp = 'stdClass') {
@@ -560,7 +560,7 @@ class Set {
 		}
 
 		foreach ($path as $i => $key) {
-			if (is_numeric($key) && intval($key) > 0 || $key === '0') {
+			if (is_numeric($key) && (int)$key > 0 || $key === '0') {
 				if (isset($data[$key])) {
 					$data = $data[$key];
 				} else {
@@ -657,8 +657,8 @@ class Set {
 		}
 
 		foreach ($path as $i => $key) {
-			if (is_numeric($key) && intval($key) > 0 || $key === '0') {
-				$key = intval($key);
+			if (is_numeric($key) && (int)$key > 0 || $key === '0') {
+				$key = (int)$key;
 			}
 			if ($i === count($path) - 1) {
 				return (is_array($data) && array_key_exists($key, $data));
@@ -910,7 +910,7 @@ class Set {
 	}
 
 /**
- * Expand/unflattens an string to an array
+ * Expand/unflattens a string to an array
  *
  * For example, unflattens an array that was collapsed with `Set::flatten()`
  * into a multi-dimensional array. So, `array('0.Foo.Bar' => 'Far')` becomes

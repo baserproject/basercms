@@ -458,6 +458,8 @@ class View extends Object {
  * @param string $view Name of view file to use
  * @param string $layout Layout to use.
  * @return string|null Rendered content or null if content already rendered and returned earlier.
+ * @triggers View.beforeRender $this, array($viewFileName)
+ * @triggers View.afterRender $this, array($viewFileName)
  * @throws CakeException If there is an error in the view.
  */
 	public function render($view = null, $layout = null) {
@@ -504,6 +506,8 @@ class View extends Object {
  * @param string $content Content to render in a view, wrapped by the surrounding layout.
  * @param string $layout Layout name
  * @return mixed Rendered output, or false on error
+ * @triggers View.beforeLayout $this, array($layoutFileName)
+ * @triggers View.afterLayout $this, array($layoutFileName)
  * @throws CakeException if there is an error in the view.
  */
 	public function renderLayout($content, $layout = null) {
@@ -590,7 +594,7 @@ class View extends Object {
  *
  * @param string $var The view var you want the contents of.
  * @return mixed The content of the named var if its set, otherwise null.
- * @deprecated Will be removed in 3.0. Use View::get() instead.
+ * @deprecated 3.0.0 Will be removed in 3.0. Use View::get() instead.
  */
 	public function getVar($var) {
 		return $this->get($var);
@@ -756,7 +760,7 @@ class View extends Object {
  *   update/replace a script element.
  * @param string $content The content of the script being added, optional.
  * @return void
- * @deprecated Will be removed in 3.0. Superseded by blocks functionality.
+ * @deprecated 3.0.0 Will be removed in 3.0. Superseded by blocks functionality.
  * @see View::start()
  */
 	public function addScript($name, $content = null) {
@@ -894,6 +898,8 @@ class View extends Object {
  * @param string $viewFile Filename of the view
  * @param array $data Data to include in rendered view. If empty the current View::$viewVars will be used.
  * @return string Rendered output
+ * @triggers View.beforeRenderFile $this, array($viewFile)
+ * @triggers View.afterRenderFile $this, array($viewFile, $content)
  * @throws CakeException when a block is left open.
  */
 	protected function _render($viewFile, $data = array()) {
@@ -1200,6 +1206,8 @@ class View extends Object {
  * @param array $data Data to render
  * @param array $options Element options
  * @return string
+ * @triggers View.beforeRender $this, array($file)
+ * @triggers View.afterRender $this, array($file, $element)
  */
 	protected function _renderElement($file, $data, $options) {
 		if ($options['callbacks']) {

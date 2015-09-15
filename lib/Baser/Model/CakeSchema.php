@@ -443,11 +443,11 @@ class CakeSchema extends Object {
 	}
 
 /**
- * Compares two sets of schemas
+ * Compares two sets of schemas.
  *
- * @param array|object $old Schema object or array
- * @param array|object $new Schema object or array
- * @return array Tables (that are added, dropped, or changed)
+ * @param array|object $old Schema object or array.
+ * @param array|object $new Schema object or array.
+ * @return array Tables (that are added, dropped, or changed.)
  */
 	public function compare($old, $new = null) {
 		if (empty($new)) {

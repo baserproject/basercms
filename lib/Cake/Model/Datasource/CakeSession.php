@@ -348,7 +348,7 @@ class CakeSession {
 		$config = self::read('Config');
 		$validAgent = (
 			Configure::read('Session.checkAgent') === false ||
-			self::$_userAgent == $config['userAgent']
+			isset($config['userAgent']) && self::$_userAgent === $config['userAgent']
 		);
 		return ($validAgent && self::$time <= $config['time']);
 	}
@@ -378,7 +378,7 @@ class CakeSession {
  */
 	public static function read($name = null) {
 		if (empty($name) && $name !== null) {
-			return false;
+			return null;
 		}
 		if (!self::_hasSession() || !self::start()) {
 			return null;

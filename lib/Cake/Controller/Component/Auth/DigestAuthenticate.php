@@ -154,7 +154,7 @@ class DigestAuthenticate extends BasicAuthenticate {
  * Parse the digest authentication headers and split them up.
  *
  * @param string $digest The raw digest authentication headers.
- * @return array An array of digest authentication headers
+ * @return array|null An array of digest authentication headers
  */
 	public function parseAuthData($digest) {
 		if (substr($digest, 0, 7) === 'Digest ') {
@@ -162,7 +162,7 @@ class DigestAuthenticate extends BasicAuthenticate {
 		}
 		$keys = $match = array();
 		$req = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1);
-		preg_match_all('/(\w+)=([\'"]?)([a-zA-Z0-9\:\#\%@=.\/_-]+)\2/', $digest, $match, PREG_SET_ORDER);
+		preg_match_all('/(\w+)=([\'"]?)([a-zA-Z0-9\:\#\%\?\&@=\.\/_-]+)\2/', $digest, $match, PREG_SET_ORDER);
 
 		foreach ($match as $i) {
 			$keys[$i[1]] = $i[3];

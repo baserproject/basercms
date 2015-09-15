@@ -47,7 +47,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a POST request is required
  *
  * @var array
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requirePost()
  */
 	public $requirePost = array();
@@ -56,7 +56,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a GET request is required
  *
  * @var array
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requireGet()
  */
 	public $requireGet = array();
@@ -65,7 +65,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a PUT request is required
  *
  * @var array
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requirePut()
  */
 	public $requirePut = array();
@@ -74,7 +74,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a DELETE request is required
  *
  * @var array
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requireDelete()
  */
 	public $requireDelete = array();
@@ -117,7 +117,7 @@ class SecurityComponent extends Component {
  * Deprecated property, superseded by unlockedFields.
  *
  * @var array
- * @deprecated
+ * @deprecated 3.0.0 Superseded by unlockedFields.
  * @see SecurityComponent::$unlockedFields
  */
 	public $disabledFields = array();
@@ -252,7 +252,7 @@ class SecurityComponent extends Component {
  * Sets the actions that require a POST request, or empty for all actions
  *
  * @return void
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/security-component.html#SecurityComponent::requirePost
  */
 	public function requirePost() {
@@ -263,7 +263,7 @@ class SecurityComponent extends Component {
 /**
  * Sets the actions that require a GET request, or empty for all actions
  *
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @return void
  */
 	public function requireGet() {
@@ -274,7 +274,7 @@ class SecurityComponent extends Component {
 /**
  * Sets the actions that require a PUT request, or empty for all actions
  *
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @return void
  */
 	public function requirePut() {
@@ -285,7 +285,7 @@ class SecurityComponent extends Component {
 /**
  * Sets the actions that require a DELETE request, or empty for all actions
  *
- * @deprecated Use CakeRequest::onlyAllow() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @return void
  */
 	public function requireDelete() {
@@ -355,7 +355,7 @@ class SecurityComponent extends Component {
  * Check if HTTP methods are required
  *
  * @param Controller $controller Instantiating controller
- * @return bool true if $method is required
+ * @return bool|null True if $method is required
  */
 	protected function _methodsRequired(Controller $controller) {
 		foreach (array('Post', 'Get', 'Put', 'Delete') as $method) {
@@ -378,7 +378,7 @@ class SecurityComponent extends Component {
  * Check if access requires secure connection
  *
  * @param Controller $controller Instantiating controller
- * @return bool true if secure connection required
+ * @return bool|null True if secure connection required
  */
 	protected function _secureRequired(Controller $controller) {
 		if (is_array($this->requireSecure) && !empty($this->requireSecure)) {
@@ -399,7 +399,7 @@ class SecurityComponent extends Component {
  * Check if authentication is required
  *
  * @param Controller $controller Instantiating controller
- * @return bool true if authentication required
+ * @return bool|null True if authentication required
  */
 	protected function _authRequired(Controller $controller) {
 		if (is_array($this->requireAuth) && !empty($this->requireAuth) && !empty($this->request->data)) {
@@ -415,8 +415,7 @@ class SecurityComponent extends Component {
 				if ($this->Session->check('_Token')) {
 					$tData = $this->Session->read('_Token');
 
-					if (
-						!empty($tData['allowedControllers']) &&
+					if (!empty($tData['allowedControllers']) &&
 						!in_array($this->request->params['controller'], $tData['allowedControllers']) ||
 						!empty($tData['allowedActions']) &&
 						!in_array($this->request->params['action'], $tData['allowedActions'])

@@ -38,7 +38,6 @@
 	Configure::write('debug', -1);
 	// <<<
 
-
 /**
  * Configure the Error handler used to handle errors for your application. By default
  * ErrorHandler::handleError() is used. It will display errors using Debugger, when debug > 0
@@ -427,7 +426,7 @@ Configure::write('BcCache', array(
 ));
 
 /**
- * baser の設定ファイルを読み込む 
+ * baser の設定ファイルを読み込む
  */
 if (file_exists(APP . 'Config' . DS . 'install.php')) {
 	include_once APP . 'Config' . DS . 'install.php';

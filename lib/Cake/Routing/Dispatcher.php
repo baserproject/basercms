@@ -97,7 +97,7 @@ class Dispatcher implements CakeEventListener {
 
 		foreach ($filters as $index => $filter) {
 			$settings = array();
-			if (is_array($filter) && !is_int($index)) {
+			if (is_array($filter) && !is_int($index) && class_exists($index)) {
 				$settings = $filter;
 				$filter = $index;
 			}
@@ -138,6 +138,8 @@ class Dispatcher implements CakeEventListener {
  * @param CakeResponse $response Response object to put the results of the dispatch into.
  * @param array $additionalParams Settings array ("bare", "return") which is melded with the GET and POST params
  * @return string|void if `$request['return']` is set then it returns response body, null otherwise
+ * @triggers Dispatcher.beforeDispatch $this, compact('request', 'response', 'additionalParams')
+ * @triggers Dispatcher.afterDispatch $this, compact('request', 'response')
  * @throws MissingControllerException When the controller is missing.
  */
 	public function dispatch(CakeRequest $request, CakeResponse $response, $additionalParams = array()) {

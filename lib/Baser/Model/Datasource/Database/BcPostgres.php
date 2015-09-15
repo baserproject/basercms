@@ -148,7 +148,7 @@ class BcPostgres extends Postgres {
 			return 36;
 		}
 		if ($limit) {
-			return intval($limit);
+			return (int)$limit;
 		}
 		return null;
 	}
@@ -211,10 +211,10 @@ class BcPostgres extends Postgres {
 					} elseif ($c->type === 'uuid') {
 						$length = 36;
 					} else {
-						$length = intval($c->oct_length);
+						$length = (int)$c->oct_length;
 					}
 				} elseif (!empty($c->char_length)) {
-					$length = intval($c->char_length);
+					$length = (int)$c->char_length;
 				} else {
 
 					// CUSTOMIZE MODIFY 2013/08/16 ryuring

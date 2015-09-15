@@ -171,6 +171,22 @@ class FolderTest extends CakeTestCase {
 	}
 
 /**
+ * Test that relative paths to create() are added to cwd.
+ *
+ * @return void
+ */
+	public function testCreateRelative() {
+		$folder = new Folder(TMP);
+		$path = TMP . 'tests' . DS . 'relative-test';
+		$result = $folder->create('tests' . DS . 'relative-test');
+		$this->assertTrue($result, 'should create');
+
+		$this->assertTrue(is_dir($path), 'Folder was not made');
+		$folder = new Folder($path);
+		$folder->delete();
+	}
+
+/**
  * test recursive directory create failure.
  *
  * @return void
@@ -971,6 +987,28 @@ class FolderTest extends CakeTestCase {
 
 		$Folder = new Folder($path);
 		$Folder->delete();
+	}
+
+/**
+ * Test that SKIP mode skips files too.
+ *
+ * @return void
+ */
+	public function testCopyWithSkipFileSkipped() {
+		$path = TMP . 'folder_test';
+		$folderOne = $path . DS . 'folder1';
+		$folderTwo = $path . DS . 'folder2';
+
+		new Folder($path, true);
+		new Folder($folderOne, true);
+		new Folder($folderTwo, true);
+		file_put_contents($folderOne . DS . 'fileA.txt', 'Folder One File');
+		file_put_contents($folderTwo . DS . 'fileA.txt', 'Folder Two File');
+
+		$Folder = new Folder($folderOne);
+		$result = $Folder->copy(array('to' => $folderTwo, 'scheme' => Folder::SKIP));
+		$this->assertTrue($result);
+		$this->assertEquals('Folder Two File', file_get_contents($folderTwo . DS . 'fileA.txt'));
 	}
 
 /**

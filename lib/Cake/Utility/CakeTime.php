@@ -321,9 +321,8 @@ class CakeTime {
 		}
 
 		if (is_int($dateString) || is_numeric($dateString)) {
-			$date = intval($dateString);
-		} elseif (
-			$dateString instanceof DateTime &&
+			$date = (int)$dateString;
+		} elseif ($dateString instanceof DateTime &&
 			$dateString->getTimezone()->getName() != date_default_timezone_get()
 		) {
 			$clone = clone $dateString;
@@ -357,7 +356,7 @@ class CakeTime {
  *
  * @param int|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
  * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
- * @param string $format The format to use. If null, `TimeHelper::$niceFormat` is used
+ * @param string $format The format to use. If null, `CakeTime::$niceFormat` is used
  * @return string Formatted date string
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#TimeHelper::nice
  */
@@ -994,12 +993,12 @@ class CakeTime {
 			$time = self::fromString($dateString);
 		}
 		return gmmktime(
-			intval(date('G', $time)),
-			intval(date('i', $time)),
-			intval(date('s', $time)),
-			intval(date('n', $time)),
-			intval(date('j', $time)),
-			intval(date('Y', $time))
+			(int)date('G', $time),
+			(int)date('i', $time),
+			(int)date('s', $time),
+			(int)date('n', $time),
+			(int)date('j', $time),
+			(int)date('Y', $time)
 		);
 	}
 
@@ -1052,6 +1051,9 @@ class CakeTime {
 		$date = self::fromString($date, $timezone);
 		if ($date === false && $default !== false) {
 			return $default;
+		}
+		if ($date === false) {
+			return '';
 		}
 		if (empty($format)) {
 			$format = '%x';

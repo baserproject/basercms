@@ -311,8 +311,7 @@ class HttpSocket extends CakeSocket {
 			if (isset($this->request['uri']['port'])) {
 				$port = $this->request['uri']['port'];
 			}
-			if (
-				($scheme === 'http' && $port != 80) ||
+			if (($scheme === 'http' && $port != 80) ||
 				($scheme === 'https' && $port != 443) ||
 				($port != 80 && $port != 443)
 			) {
@@ -326,8 +325,11 @@ class HttpSocket extends CakeSocket {
 		} elseif (isset($this->request['auth'], $this->request['auth']['method'], $this->request['auth']['user'], $this->request['auth']['pass'])) {
 			$this->configAuth($this->request['auth']['method'], $this->request['auth']['user'], $this->request['auth']['pass']);
 		}
-		$this->_setAuth();
-		$this->request['auth'] = $this->_auth;
+		$authHeader = Hash::get($this->request, 'header.Authorization');
+		if (empty($authHeader)) {
+			$this->_setAuth();
+			$this->request['auth'] = $this->_auth;
+		}
 
 		if (is_array($this->request['body'])) {
 			$this->request['body'] = http_build_query($this->request['body'], '', '&');
@@ -413,7 +415,8 @@ class HttpSocket extends CakeSocket {
 		}
 
 		if ($this->request['redirect'] && $this->response->isRedirect()) {
-			$request['uri'] = trim(urldecode($this->response->getHeader('Location')), '=');
+			$location = trim($this->response->getHeader('Location'), '=');
+			$request['uri'] = str_replace('%2F', '/', $location);
 			$request['redirect'] = is_int($this->request['redirect']) ? $this->request['redirect'] - 1 : $this->request['redirect'];
 			$this->response = $this->request($request);
 		}
@@ -873,11 +876,10 @@ class HttpSocket extends CakeSocket {
  * Builds a request line according to HTTP/1.1 specs. Activate quirks mode to work outside specs.
  *
  * @param array $request Needs to contain a 'uri' key. Should also contain a 'method' key, otherwise defaults to GET.
- * @param string $versionToken The version token to use, defaults to HTTP/1.1
  * @return string Request line
  * @throws SocketException
  */
-	protected function _buildRequestLine($request = array(), $versionToken = 'HTTP/1.1') {
+	protected function _buildRequestLine($request = array()) {
 		$asteriskMethods = array('OPTIONS');
 
 		if (is_string($request)) {
@@ -903,7 +905,8 @@ class HttpSocket extends CakeSocket {
 		if (!$this->quirksMode && $request['uri'] === '*' && !in_array($request['method'], $asteriskMethods)) {
 			throw new SocketException(__d('cake_dev', 'HttpSocket::_buildRequestLine - The "*" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs.', implode(',', $asteriskMethods)));
 		}
-		return $request['method'] . ' ' . $request['uri'] . ' ' . $versionToken . "\r\n";
+		$version = isset($request['version']) ? $request['version'] : '1.1';
+		return $request['method'] . ' ' . $request['uri'] . ' HTTP/' . $version . "\r\n";
 	}
 
 /**
