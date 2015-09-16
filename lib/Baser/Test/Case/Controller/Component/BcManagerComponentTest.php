@@ -875,10 +875,9 @@ class BcManagerComponentTest extends BaserTestCase {
  * checkDbConnection()の Exception 例外のテスト
  * 
  * PHPUnitのバージョンによって、Exceptionは派生クラスではないとエラーが出るのでスキップ
- * アノテーションにExceptionがあるだけでエラーになるので、一旦hoge_Exceptionに変更
  * 
- * @expectedException hoge_Exception
- * @expectedExceptionMessage ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)
+ * expectedException Exception
+ * expectedExceptionMessage ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)
  */
 
 	public function testCheckDbConnectionException() {
