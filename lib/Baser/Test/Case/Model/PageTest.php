@@ -349,7 +349,7 @@ class PageTest extends BaserTestCase {
 				'type' => 'ページ',
 				'category' => '',
 				'title' => $title,
-				'detail' => ' ',
+				'detail' => "\n",
 // 				'detail' => ' 
 
 // <section class="mainHeadline">
@@ -388,8 +388,8 @@ class PageTest extends BaserTestCase {
 
 	public function createContentDataProvider() {
 		return array(
-			array(1, 'index', null, 'index', '/index', "\n", null, null, true, '検索用データを正しく生成できません'),
-			array(1, 'index', null, 'タイトル', '/index', "\n", null, null, true, '検索用データを正しく生成できません'),
+			array(1, 'index', null, 'index', '/index', '', null, null, true, '検索用データを正しく生成できません'),
+			array(1, 'index', null, 'タイトル', '/index', '', null, null, true, '検索用データを正しく生成できません'),
 		);
 	}
 
