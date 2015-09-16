@@ -860,6 +860,7 @@ class BcManagerComponentTest extends BaserTestCase {
 				break;
 			default :
 		}
+		var_dump($datasource);
 
 		$config['datasource'] = $datasource;
 
@@ -1025,7 +1026,7 @@ class BcManagerComponentTest extends BaserTestCase {
 				'conditions' => array('id' => 4),
 			)
 		);
-		$this->assertFalse($data['Plugin']['status'], 'プラグインをアンインストールできません');
+		$this->assertEquals(0, $data['Plugin']['status'], 'プラグインをアンインストールできません');
 
 		unset($this->Plugin);
 	}
@@ -1044,7 +1045,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		// -- init.php --
 		mkdir($pluginPath . DS . 'Config');
 		$Init = new File($pluginPath . DS . 'Config' . DS . 'init.php');
-		$Init->write('<php ');
+		$Init->write('');
 		$Init->close();
 
 		// インストール実行
@@ -1058,7 +1059,7 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		// -- config.php --
 		$Config = new File($pluginPath . DS . 'config.php');
-		$Config->write('<php ');
+		$Config->write('');
 		$Config->close();
 
 		// インストール実行
