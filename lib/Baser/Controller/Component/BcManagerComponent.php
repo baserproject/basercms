@@ -1186,6 +1186,8 @@ class BcManagerComponent extends Component {
  * @access public
  */
 	public function deployTheme($theme = null) {
+		$Folder = new Folder(BASER_CONFIGS . 'theme');
+		
 		if ($theme) {
 			if (is_array($theme)) {
 				$sources = $theme;
@@ -1193,7 +1195,6 @@ class BcManagerComponent extends Component {
 				$sources = array($theme);
 			}
 		} else {
-			$Folder = new Folder(BASER_CONFIGS . 'theme');
 			$files = $Folder->read();
 			$sources = $files[0];
 		}
