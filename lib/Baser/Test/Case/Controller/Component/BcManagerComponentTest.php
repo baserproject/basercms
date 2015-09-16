@@ -860,9 +860,9 @@ class BcManagerComponentTest extends BaserTestCase {
 				break;
 			default :
 		}
-		var_dump($datasource);
 
 		$config['datasource'] = $datasource;
+
 
 		$result = $this->BcManager->checkDbConnection($config);
 		$this->assertTrue($result, 'DBに接続できません');
@@ -879,6 +879,7 @@ class BcManagerComponentTest extends BaserTestCase {
  */
 
 	public function testCheckDbConnectionException() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// でたらめな入力
 		$config = array(

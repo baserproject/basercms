@@ -1587,7 +1587,7 @@ class BcManagerComponent extends Component {
 					$dsn .= ";port={$port}";
 				}
 				$pdo = new PDO($dsn, $login, $password);
-			} elseif ($datasource == 'sqlte') {
+			} elseif ($datasource == 'sqlite') {
 				// すでにある場合
 				if (file_exists($database)) {
 					if (!is_writable($database)) {
