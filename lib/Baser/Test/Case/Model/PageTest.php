@@ -349,7 +349,7 @@ class PageTest extends BaserTestCase {
 				'type' => 'ページ',
 				'category' => '',
 				'title' => $title,
-				'detail' => '
+				'detail' => ' 
 ',
 // 				'detail' => ' 
 
