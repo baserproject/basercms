@@ -610,6 +610,7 @@ class BcManagerComponentTest extends BaserTestCase {
  * @dataProvider deployThemeDataProvider
  */
 	public function testDeployTheme($theme) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// nada-icons テーマフォルダを削除
 		$Folder = new Folder();
