@@ -1551,12 +1551,12 @@ class BcManagerComponent extends Component {
 /**
  * DB接続チェック
  * 
- * @param	string	$dbType 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
- * @param	string	$dbName データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
- * @param	string	$dbUsername 接続ユーザ名 テキストDBの場合は不要
- * @param	string	$dbPassword 接続パスワード テキストDBの場合は不要
- * @param	string	$dbPort 接続ポート テキストDBの場合は不要
- * @param	string	$dbHost テキストDB or localhostの場合は不要
+ * @param	string	$datasource 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
+ * @param	string	$database データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
+ * @param	string	$host テキストDB or localhostの場合は不要
+ * @param	string	$port 接続ポート テキストDBの場合は不要
+ * @param	string	$login 接続ユーザ名 テキストDBの場合は不要
+ * @param	string	$password 接続パスワード テキストDBの場合は不要
  * 
  * @throws Exception
  * @throws PDOException
@@ -1587,7 +1587,7 @@ class BcManagerComponent extends Component {
 					$dsn .= ";port={$port}";
 				}
 				$pdo = new PDO($dsn, $login, $password);
-			} elseif ($datasource == 'sqlte') {
+			} elseif ($datasource == 'sqlite') {
 				// すでにある場合
 				if (file_exists($database)) {
 					if (!is_writable($database)) {
@@ -1624,7 +1624,7 @@ class BcManagerComponent extends Component {
 
 /**
  * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックする
- * 作成してないものがひとつでもあると true を返す
+ * 作成してないものがひとつでもあると false を返す
  * 
  * @return boolean
  * @deprecated since version 3.0.1
