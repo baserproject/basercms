@@ -350,7 +350,7 @@ class MailController extends MailAppController {
 			$this->notFound();
 		}
 		if (!$this->Session->read('Mail.valid')) {
-			$this->notFound();
+			$this->redirect(array('action' => 'index', $id));
 		}
 
 		if (!$this->request->data) {
