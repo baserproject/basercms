@@ -51,9 +51,10 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  * @dataProvider loadDataProvider
  */
 	public function testLoad($address, $width, $height, $expexted) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		$this->expectOutputRegex('/' . $expexted . '/');
-		$this->BcGooglemaps->load($address, $width, $height);
+		$result = $this->BcGooglemaps->load($address, $width, $height);
+
 	}
 
 	public function loadDataProvider() {
@@ -74,10 +75,11 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  * @dataProvider loadLocationDataProvider
  */
 	public function testLoadLocation($address, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		$this->BcGooglemaps->address = $address;
 		$result = $this->BcGooglemaps->loadLocation();
 		$this->assertEquals($expected, $result);
+
 	}
 
 	public function loadLocationDataProvider() {
@@ -95,14 +97,23 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  * @dataProvider getLocationDataProvider
  */
 	public function testGetLocation($address, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$result = $this->BcGooglemaps->getLocation($address);
 
-		if (isset($result['latitude']) && isset($result['longitude'])) {
-			$result['latitude'] = round($result['latitude'], 1);
-			$result['longitude'] = round($result['longitude'], 1);
+		if (!empty($address)) {
+
+			if (isset($result['latitude']) && isset($result['longitude'])) {
+				$result['latitude'] = round($result['latitude'], 1);
+				$result['longitude'] = round($result['longitude'], 1);
+				$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
+			
+			} else {
+				$this->markTestIncomplete('GoogleMapの情報の取得に失敗したため、テストをスキップします');
+			}
+
+		} else {
+			$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
 		}
-		$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
+		
 	}
 
 	public function getLocationDataProvider() {
