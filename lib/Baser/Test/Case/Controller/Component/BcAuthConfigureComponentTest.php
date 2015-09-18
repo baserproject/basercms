@@ -93,6 +93,8 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  */
 	public function testSettingCheckValue($loginAction, $requestedPrefix, $userScope, $auth_prefix) {
 		
+		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
+
 		// 初期化
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
 
@@ -187,6 +189,8 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  * @dataProvider settingCheckLoginModeDataProvider
  */
 	public function testSettingCheckLogin($password) {
+		
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// 初期化
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
@@ -217,8 +221,6 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 
 		}
 
-		// $this->assertEquals(1, $result, '正しくログインできません');
-	
 	}
 
 	public function settingCheckLoginModeDataProvider() {
