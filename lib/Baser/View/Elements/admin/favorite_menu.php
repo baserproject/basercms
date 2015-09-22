@@ -23,7 +23,7 @@ $this->BcBaser->js('admin/baser_favorite');
 	<h2><?php $this->BcBaser->img('admin/head_favorite.png', array('alt' => 'よく使う項目')) ?></h2>
 
 	<ul class="favorite-menu-list">
-		<?php if ($favorites): ?>
+		<?php if (!empty($favorites)): ?>
 			<?php foreach ($favorites as $favorite): ?>
 				<?php $this->BcBaser->element('favorite_menu_row', array('favorite' => $favorite)) ?>
 			<?php endforeach ?>
