@@ -149,7 +149,8 @@ class BcAuthConfigureComponent extends Component {
 
 			// クッキーがある場合にはクッキーで認証
 			if (!empty($Controller->Cookie)) {
-				$cookie = $Controller->Cookie->read(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
+				$cookieKey = Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey));
+				$cookie = $Controller->Cookie->read($cookieKey);
 				
 				// ===================================================================================
 				// 2014/06/19 ryuring
@@ -162,11 +163,15 @@ class BcAuthConfigureComponent extends Component {
 				// ===================================================================================
 				
 				if (!empty($cookie) && $cookie != 'deleted') {
-					$Controller->request->data[$userModel] = $cookie;
-					if ($BcAuth->login()) {
-						return true;
+					if(is_array($cookie)) {
+						$Controller->request->data[$userModel] = $cookie;
+						if ($BcAuth->login()) {
+							return true;
+						} else {
+							$Controller->request->data[$userModel] = null;
+						}
 					} else {
-						$Controller->request->data[$userModel] = null;
+						$Controller->Cookie->write($cookieKey, null);
 					}
 				}
 			}

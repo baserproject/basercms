@@ -22,6 +22,7 @@ App::uses('BcManagerComponent', 'Controller/Component');
  * インストール用シェルスクリプト
  * 
  * @package Baser.Console.Command
+ * @property BcManagerComponent $BcManager
  */
 class BcManagerShell extends AppShell {
 
