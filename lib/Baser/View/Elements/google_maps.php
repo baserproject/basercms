@@ -1,7 +1,7 @@
 <?php
 
 /**
- * [PUBLISH] グールグルマップ
+ * [PUBLISH] グーグルマップ
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
