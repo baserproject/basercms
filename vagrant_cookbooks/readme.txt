@@ -24,6 +24,11 @@ baserCMSをテスト・開発することが出来ます。
 ----------------------------------------
 Vagrantfile.default ファイルを Vagrantfile にリネームします。
 
+また、実行には「vagrant-omnibus」プラグインが必要になります。
+vagrantにプラグインがインストールされていない場合は、次のコマンドを実行してください。
+
+$ vagrant plugin install vagrant-omnibus
+
 
 ----------------------------------------
 ■起動方法
@@ -186,7 +191,7 @@ Webルート：app/webroot
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   # config.vm.network :private_network, ip: "192.168.33.10"
-  config.vm.network :public_network, :ip => "192.168.0.230", :netmask => "255.255.255.0", :bridge => 'en1: Wi-Fi (AirPort)' 
+  config.vm.network :public_network, :ip => "192.168.0.230", :netmask => "255.255.255.0", :bridge => 'en1: Wi-Fi (AirPort)'
 
 
 ----------------------------------------
