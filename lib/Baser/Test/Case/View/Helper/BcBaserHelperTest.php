@@ -2035,7 +2035,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->expectOutputRegex('/<script type="text\/javascript">.*var _gaq = _gaq.*_gaq.push\(\[\'_setAccount\', \'hoge\'\]\)/s');
+		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s');
 		$this->BcBaser->googleAnalytics();
 	}
 

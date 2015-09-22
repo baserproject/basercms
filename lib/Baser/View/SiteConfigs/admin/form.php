@@ -256,11 +256,12 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.google_analytics_id', 'Google Analytics<br />ウェブプロパティID') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.google_analytics_id', 'Google Analytics<br />トラッキングID') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpGoogleAnalyticsId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpGoogleAnalyticsId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?><br />
+				ユニバーサルアナリティクスを <?php echo $this->BcForm->input('SiteConfig.use_universal_analytics', array('type' => 'radio', 'options' => array('0' => '利用していない', '1' => '利用している'))) ?>
 				<div id="helptextGoogleAnalyticsId" class="helptext">
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
 					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />

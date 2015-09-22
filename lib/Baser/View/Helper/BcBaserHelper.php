@@ -2197,7 +2197,11 @@ END_FLASH;
  * @return void
  */
 	public function googleAnalytics($data = array(), $options = array()) {
-		$this->element('google_analytics', $data, $options);
+		if(!empty($this->siteConfig['use_universal_analytics'])) {
+			$this->element('google_analytics', $data, $options);
+		} else {
+			$this->element('google_analytics_old', $data, $options);
+		}
 	}
 
 /**
