@@ -51,8 +51,8 @@ class MailField extends MailAppModel {
 				'message' => '項目名は255文字以内で入力してください。')
 		),
 		'field_name' => array(
-			array('rule' => array('halfText'),
-				'message' => 'フィールド名は半角のみで入力してください。',
+			array('rule' => array('halfTextMailField'),
+				'message' => 'フィールド名は半角英数字のみで入力してください。',
 				'allowEmpty' => false),
 			array('rule' => 'duplicateMailField',
 				'message' => '入力されたフィールド名は既に登録されています。'),
@@ -161,7 +161,7 @@ class MailField extends MailAppModel {
 /**
  * 同じ名称のフィールド名がないかチェックする
  * 同じメールコンテンツが条件
- * 
+ *
  * @param array $check
  * @return boolean
  * @access public
@@ -181,8 +181,22 @@ class MailField extends MailAppModel {
 	}
 
 /**
+ * メールフィールドの値として正しい文字列か検証する
+ * 半角英数-_\s
+ *
+ * @param array $check
+ * @return boolean
+ * @access public
+ */
+	public function halfTextMailField($check) {
+		$subject = $check[key($check)];
+		$pattern = "/^[a-zA-Z0-9-_\s]*$/";
+		return !!(preg_match($pattern, $subject) === 1);
+	}
+
+/**
  * フィールドデータをコピーする
- * 
+ *
  * @param int $id
  * @param array $data
  * @return mixed UserGroup Or false
