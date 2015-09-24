@@ -343,6 +343,7 @@ class UsersController extends AppController {
 		}
 
 		$selfUpdate = false;
+		$updatable = true;
 		$user = $this->BcAuth->user();
 
 		if (empty($this->request->data)) {
@@ -362,9 +363,21 @@ class UsersController extends AppController {
 				$this->request->data['User']['password'] = $this->request->data['User']['password_1'];
 			}
 
+			// 非特権ユーザは該当ユーザの編集権限があるか確認
+			if ($user['user_group_id'] !== Configure::read('BcApp.adminGroupId')) {
+				if (!$this->UserGroup->Permission->check('/admin/users/edit/' . $this->request->data['User']['id'], $user['user_group_id'])) {
+					$updatable = false;
+				}
+			}
+
+			// 権限確認
+			if (!$updatable) {
+				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+
 			// 自身のアカウントは変更出来ないようにチェック
-			if ($selfUpdate && $user['user_group_id'] != $this->request->data['User']['user_group_id']) {
+			} elseif ($selfUpdate && $user['user_group_id'] != $this->request->data['User']['user_group_id']) {
 				$this->setMessage('自分のアカウントのグループは変更できません。', true);
+
 			} else {
 
 				$this->User->set($this->request->data);
