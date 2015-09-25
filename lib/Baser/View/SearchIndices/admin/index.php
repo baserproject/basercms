@@ -20,14 +20,14 @@ $this->BcBaser->js(array(
 ?>
 <script type="text/javascript">
 $(function(){
-	if($("#ContentOpen").html()) {
-		$("#ContentFilterBody").show();
+	if($("#SearchIndexOpen").html()) {
+		$("#SearchIndexFilterBody").show();
 	}
 	$(".priority").change(function() {
-		var id = this.id.replace('ContentPriority', '');
+		var id = this.id.replace('SearchIndexPriority', '');
 		var data = {
-			'data[Content][id]':id,
-			'data[Content][priority]':$(this).val()
+			'data[SearchIndex][id]':id,
+			'data[SearchIndex][priority]':$(this).val()
 		};
 		$.ajax({
 			type: "POST",
@@ -58,9 +58,9 @@ $(function(){
 });
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'contents', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'search_indices', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="AjaxChangePriorityUrl" class="display-none"><?php echo $this->BcBaser->url(array('action' => 'ajax_change_priority')) ?></div>
-<div id="ContentOpen" class="display-none"><?php echo $this->BcForm->value('Content.open') ?></div>
-<div id="DataList"><?php $this->BcBaser->element('contents/index_list') ?></div>
+<div id="SearchIndexOpen" class="display-none"><?php echo $this->BcForm->value('SearchIndex.open') ?></div>
+<div id="DataList"><?php $this->BcBaser->element('search_indices/index_list') ?></div>

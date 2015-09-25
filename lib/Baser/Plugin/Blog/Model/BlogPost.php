@@ -38,7 +38,7 @@ class BlogPost extends BlogAppModel {
  * @var boolean
  * @access public
  */
-	public $contentSaving = true;
+	public $searchIndexSaving = true;
 
 /**
  * ビヘイビア
@@ -47,7 +47,7 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public $actsAs = array(
-		'BcContentsManager',
+		'BcSearchIndexManager',
 		'BcCache',
 		'BcUpload' => array(
 			'subdirDateFormat' => 'Y/m/',
@@ -567,14 +567,14 @@ class BlogPost extends BlogAppModel {
  */
 	public function afterSave($created, $options = array()) {
 		// 検索用テーブルへの登録・削除
-		if ($this->contentSaving && !$this->data['BlogPost']['exclude_search']) {
-			$this->saveContent($this->createContent($this->data));
+		if ($this->searchIndexSaving && !$this->data['BlogPost']['exclude_search']) {
+			$this->saveSearchIndex($this->createSearchIndex($this->data));
 		} else {
 
 			if (!empty($this->data['BlogPost']['id'])) {
-				$this->deleteContent($this->data['BlogPost']['id']);
+				$this->deleteSearchIndex($this->data['BlogPost']['id']);
 			} elseif (!empty($this->id)) {
-				$this->deleteContent($this->id);
+				$this->deleteSearchIndex($this->id);
 			} else {
 				$this->cakeError('Not found pk-value in BlogPost.');
 			}
@@ -588,27 +588,27 @@ class BlogPost extends BlogAppModel {
  * @return array
  * @access public
  */
-	public function createContent($data) {
+	public function createSearchIndex($data) {
 		if (isset($data['BlogPost'])) {
 			$data = $data['BlogPost'];
 		}
 
 		$_data = array();
-		$_data['Content']['type'] = 'ブログ';
-		$_data['Content']['model_id'] = $this->id;
-		$_data['Content']['category'] = '';
+		$_data['SearchIndex']['type'] = 'ブログ';
+		$_data['SearchIndex']['model_id'] = $this->id;
+		$_data['SearchIndex']['category'] = '';
 		if (!empty($data['blog_category_id'])) {
 			$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 			$categoryPath = $BlogCategory->getPath($data['blog_category_id'], array('title'));
 			if ($categoryPath) {
-				$_data['Content']['category'] = $categoryPath[0]['BlogCategory']['title'];
+				$_data['SearchIndex']['category'] = $categoryPath[0]['BlogCategory']['title'];
 			}
 		}
-		$_data['Content']['title'] = $data['name'];
-		$_data['Content']['detail'] = $data['content'] . ' ' . $data['detail'];
+		$_data['SearchIndex']['title'] = $data['name'];
+		$_data['SearchIndex']['detail'] = $data['SearchIndex'] . ' ' . $data['detail'];
 		$PluginContent = ClassRegistry::init('PluginContent');
-		$_data['Content']['url'] = '/' . $PluginContent->field('name', array('PluginContent.content_id' => $data['blog_content_id'], 'plugin' => 'blog')) . '/archives/' . $data['no'];
-		$_data['Content']['status'] = $this->allowPublish($data);
+		$_data['SearchIndex']['url'] = '/' . $PluginContent->field('name', array('PluginContent.content_id' => $data['blog_content_id'], 'plugin' => 'blog')) . '/archives/' . $data['no'];
+		$_data['SearchIndex']['status'] = $this->allowPublish($data);
 
 		return $_data;
 	}
@@ -620,7 +620,7 @@ class BlogPost extends BlogAppModel {
  * @access public
  */
 	public function beforeDelete($cascade = true) {
-		return $this->deleteContent($this->id);
+		return $this->deleteSearchIndex($this->id);
 	}
 
 /**

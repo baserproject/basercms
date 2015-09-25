@@ -1,12 +1,12 @@
 <?php
 
-/* Contents schema generated on: 2011-08-20 02:08:53 : 1313774093 */
+/* SearchIndices schema generated on: 2011-08-20 02:08:53 : 1313774093 */
 
-class ContentsSchema extends CakeSchema {
+class SearchIndicesSchema extends CakeSchema {
 
-	public $name = 'Contents';
+	public $name = 'SearchIndices';
 
-	public $file = 'contents.php';
+	public $file = 'search_indices.php';
 
 	public $connection = 'baser';
 
@@ -17,7 +17,7 @@ class ContentsSchema extends CakeSchema {
 	public function after($event = array()) {
 	}
 
-	public $contents = array(
+	public $search_indices = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
 		'type' => array('type' => 'string', 'null' => true, 'length' => 100),
 		'model' => array('type' => 'string', 'null' => false, 'length' => 50),

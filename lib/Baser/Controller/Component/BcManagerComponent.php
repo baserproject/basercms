@@ -316,7 +316,7 @@ class BcManagerComponent extends Component {
 		CakePlugin::load('Blog');
 		App::uses('BlogPost', 'Blog.Model');
 		$BlogPost = new BlogPost();
-		$BlogPost->contentSaving = false;
+		$BlogPost->searchIndexSaving = false;
 		$datas = $BlogPost->find('all', array('recursive' => -1));
 		if ($datas) {
 			$ret = true;
@@ -839,7 +839,7 @@ class BcManagerComponent extends Component {
 				foreach($pages as $page) {
 					$page['Page']['page_category_id'] = $agentId;
 					$Page->fileSave = false;
-					$Page->contentSaving = false;
+					$Page->searchIndexSaving = false;
 					$Page->set($page);
 					if(!$Page->save()) {
 						$result = false;

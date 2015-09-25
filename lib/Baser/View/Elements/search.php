@@ -21,9 +21,9 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'contents', 'num' => $this->passedArgs['num']);
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'num' => $this->passedArgs['num']);
 } else {
-	$url = array('plugin' => null, 'controller' => 'contents');
+	$url = array('plugin' => null, 'controller' => 'search_indices');
 }
 ?>
 <div class="section search-box">
