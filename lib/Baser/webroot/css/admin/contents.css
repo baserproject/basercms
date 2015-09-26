@@ -50,7 +50,7 @@
 	color: #CCC;
 	vertical-align: middle;
 	background-color: #333;
-	padding: 5px 10px;
+	padding: 8px 10px 7px;
 	vertical-align:middle;
 	font-size:11px;
 	line-height:15px;
@@ -168,17 +168,17 @@ table.sub-menu{
 }
 #SubMenu .sub-menu th{
 	text-align: left;
-	background-color:#DFDFDF;
+	background-color:#EFEFEF;
 	padding: 5px 10px;
 	font-weight: bold;
-	border: 1px solid #FFF;
+	border: 1px solid #DDD;
 	white-space:nowrap;
 	width:20%;
 }
 #SubMenu .sub-menu td{
-	background-color: #F3F3F3;
+	background-color: #FFF;
 	padding: 5px 10px;
-	border: 1px solid #FFF;
+	border: 1px solid #DDD;
 }
 .sub-menu li{
 	float: left;
@@ -189,7 +189,7 @@ table.sub-menu{
 	color: #669900;
 }
 .sub-menu a{
-	color:#333;
+	color:#535A62;
 }
 .sub-menu a:hover{
 	color:#AAA;
@@ -247,8 +247,13 @@ table.sub-menu{
 .pagination .current{
     padding: 3px 9px;
 }
-.pagination .next, .pagination .prev{
-    padding: 3px 9px;
+.pagination .next a, .pagination .prev a{
+	text-decoration: none;
+	display:block;
+	padding: 3px 9px;
+}
+.pagination .next a:hover, .pagination .prev a:hover{
+	color:#FFF;
 }
 .pagination .disabled,
 .pagination .disabled:hover{
@@ -286,7 +291,7 @@ table.sub-menu{
 /* list-table
 ----------------------------------------------- */
 .contents-body .list-table{
-	border: 1px solid #AFAFB1;
+	border: 1px solid #DDD;
 	border-collapse: collapse;
 	margin-bottom:15px;
 	width:100%;
@@ -294,12 +299,13 @@ table.sub-menu{
 .contents-body .list-table th{
 	vertical-align:middle;
 	text-align: left;
-	background-image: url(../../img/admin/bg_list.png);
+	/*background-image: url(../../img/admin/bg_list.png);*/
 	background-repeat: repeat-y;
-	background-color: #E8F1CF;
+	background-color: #EFEFEF;
 	padding:5px 10px;
-	border: 1px solid #CCC;
+	border: 1px solid #DDD;
 	white-space: nowrap;
+	color:#535A62;
 }
 .contents-body .list-table th a{
 	text-decoration:none;
@@ -314,13 +320,14 @@ table.sub-menu{
 }
 .contents-body .list-table th a {
 	line-height: 20px;
+	color:#690;
 }
 .contents-body .list-table td{
 	padding: 5px 10px;
-	border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-top: 1px dotted #CCC;
-	border-bottom: 1px dotted #CCC;
+	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+	border-top: 1px dotted #DDD;
+	border-bottom: 1px dotted #DDD;
 }
 .contents-body .list-table td a{
 	color:#333;
@@ -397,7 +404,7 @@ table.sub-menu{
 ----------------------------------------------- */
 
 .contents-body .form-table{
-	border: 1px solid #AFAFB1;
+	border: 1px solid #DDD;
 	border-collapse: collapse;
 	margin-bottom:30px;
 	width:100%;
@@ -405,13 +412,12 @@ table.sub-menu{
 .contents-body .form-table th{
 	vertical-align:middle;
 	text-align: left;
-	background-image: url(../../img/admin/bg_form.png);
 	background-repeat: repeat-x;
-	background-color: #E8F1CF;
+	background-color: #EFEFEF;
 	padding:5px 10px;
-	border: 1px solid #CCC;
 	white-space: nowrap;
 	width:20%;
+	border: 1px solid #DDD;
 }
 .contents-body .form-table th a{
 	text-decoration:none;
@@ -428,11 +434,12 @@ table.sub-menu{
 }
 .contents-body .form-table td{
 	padding: 5px 10px;
-	border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-top: 1px dotted #CCC;
-	border-bottom: 1px dotted #CCC;
+	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+	border-top: 1px dotted #DDD;
+	border-bottom: 1px dotted #DDD;
 	vertical-align: middle;
+	background-color:#FFF;
 }
 .contents-body .form-table td textarea {
 	width: 86%;
@@ -489,7 +496,7 @@ table.sub-menu{
 
 .submit .button,
 .ui-widget-content .button{
-	color:#333;
+	color:#535A62;
 	border:1px solid #CCC;
 	cursor:pointer;
 	text-shadow:rgba(255,255,255,0.4) 1px 1px 0;
@@ -629,15 +636,23 @@ table.sub-menu{
 ----------------------------------------------- */
 
 .em-box {
-	border:5px solid #CCC;
+	border:5px solid #DDD;
 	padding:15px;
-	color:#000;
+	color:#535A62;
 	font-size: 16px;
 	font-weight: bold;
 	margin: 0 auto 20px;
 	text-align: center;
 	line-height: 24px;
 }
+.em-box a{
+	color:#690;
+}
+.em-box a:hover{
+	color:#9C0;
+	text-decoration: none;
+}
+
 
 /* ToTop
 ----------------------------------------------- */
@@ -706,7 +721,7 @@ table.sub-menu{
 ----------------------------------------------- */
 
 .phpinfo {
-	border:1px solid #CCC;
+	border:1px solid #DDD;
 }
 
 /* ui-dialog
@@ -869,12 +884,12 @@ background: #888;
 ----------------------------------------------- */
 
 .panel-box {
-	border:5px solid #F3F3F3;
+	border:5px solid #DDD;
 	padding:20px;
-	margin:10px;
+	margin:10px 0;
 }
 .panel-box li .date {
-	font-weight: bold;
+	/*font-weight: bold;*/
 }
 
 /* ==================================================================== */
@@ -952,7 +967,7 @@ background: #888;
 	cursor:move;
 	margin:10px auto 5px;
 	font-weight: bold;
-	color:#000;
+	color:#535A62;
 	font-size:14px;
 	border-top:1px solid #DDD;
 	border-bottom:1px solid #EDEDED;
@@ -1022,24 +1037,21 @@ background: #888;
 	float:left;
 }
 #WidgetSetting #Source {
-	border: 5px solid #F3F3F3;
+	border: 5px solid #DDD;
 	padding:20px;
 	margin:10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
+	/*-webkit-border-radius: 10px;*/
+	/*-moz-border-radius: 10px;*/
+	/*border-radius: 10px;*/
 }
 #WidgetSetting #Target {
 	min-height:210px;
-	border: 5px solid #F3F3F3;
+	border: 5px solid #DDD;
 	padding:20px;
 	margin:10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
 }
 #WidgetSetting #Target .enabled .head{
-	color:#000000;
+	color:#535A62;
 }
 #WidgetSetting .topDrop {
 	background-color: #efefef;
@@ -1062,9 +1074,9 @@ background: #888;
 }
 #WidgetSetting #Source h3 {
 	border:none;
-	border-bottom: 3px solid #690;
+	border-bottom: 3px solid #535A62;
 	padding-left:0;
-	color:#690;
+	color:#535A62;
 }
 #ListAjaxLoader{
 	display:none;
@@ -1152,11 +1164,13 @@ background: #888;
 	padding:0!important;
 	/*position: absolute;*/
 	margin-top:-30px;
+	width:140px;
+	font-size:14px;
 }
 .btn-slide-form a{
-	color:#333;
+	color:#535A62;
 	display: block;
-	padding:10px 20px;
+	padding:5px 30px;
 	-webkit-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
 	-moz-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
 	-o-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
@@ -1193,9 +1207,12 @@ background: #888;
 #AdminDashboard .pagination .prev{
     padding: 1px 4px;
 }
+#AdminDashboard .panel-box {
+	margin:10px;
+}
 #AdminDashboard .panel-box li{
 	margin-bottom: 5px;
-	border-left:5px solid #DFDFDF;
+	border-left:5px solid #DDD;
 	padding:3px 10px;
 	background: none;
 }
@@ -1326,17 +1343,16 @@ background: #888;
 	padding:20px 20px;
 	border:1px solid #CCC;
 	margin-top:25px;
-	margin-left:5px;
-	margin-right:5px;
 }
 #TreeList {
 	font-size:14px;
 }
 #TreeList a {
-	color:#000;
+	color:#535A62;
 }
-#TreeList span:hover {
-	color:#000;
+#TreeList a:hover {
+	color:#AAA;
+	text-decoration: none;
 }
 #cboxContent button {
 	border:none;
@@ -1351,7 +1367,7 @@ background: #888;
 }
 
 .ui-widget-content {
-	border:1px solid #CCC;
+	border:1px solid #DDD;
 }
 .ui-widget-header {
 	background:#DFDFDF;
@@ -1359,7 +1375,12 @@ background: #888;
 .ui-tabs .ui-tabs-nav li {
 	font-weight: bold;
 }
-
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+	color:#535A62;
+}
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
+	color:#535A62;
+}
 .helptext {
 	display:none;
 }
