@@ -320,7 +320,7 @@ class BcBaserHelper extends AppHelper {
  * @return string コンテンツタイトル
  */
 	public function getContentsTitle() {
-		if ($this->_View->name === 'CakeError' || empty($this->_View->pageTitle)) {
+		if (empty($this->_View->pageTitle)) {
 			return '';
 		}
 
