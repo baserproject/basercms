@@ -442,6 +442,7 @@ table.sub-menu{
 }
 .contents-body .form-table td img {
 	vertical-align: baseline;
+	max-width: 100%;
 }
 .contents-body .form-table .checkbox {
 	float:left;
