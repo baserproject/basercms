@@ -852,7 +852,7 @@ class BcAppController extends Controller {
 			}
 			foreach ($bcc as $val) {
 				if (Validation::email(trim($val))) {
-					$cakeEmail->addBcc($val);
+					$cakeEmail->addBcc(trim($val));
 				}
 			}
 			unset($bcc);
