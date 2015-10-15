@@ -25,8 +25,8 @@ if (in_array('admin', $currentUserAuthPrefixes)) {
 }
 if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 	$authName = $currentAuthPrefix['name'];
-} elseif (isset($this->BcBaser->siteConfig['name'])) {
-	$authName = $this->BcBaser->siteConfig['name'];
+} elseif (isset($this->BcBaser->siteConfig['formal_name'])) {
+	$authName = $this->BcBaser->siteConfig['formal_name'];
 } else {
 	$authName = '';
 }
@@ -65,7 +65,7 @@ $(function(){
 				<?php elseif (Configure::read('BcRequest.isUpdater')): ?>
 					<li><?php $this->BcBaser->link('アップデートマニュアル', 'http://basercms.net/manuals/introductions/8.html', array('target' => '_blank')) ?></li>
 				<?php elseif (!empty($this->request->params['admin']) || ('/' . $this->request->url) == $loginUrl): ?>	
-					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['name'], '/') ?></li>	
+					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['formal_name'], '/') ?></li>
 				<?php else: ?>
 					<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
 						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', array('alt' => 'baserCMS管理システム', 'class' => 'bc-btn')), array('plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'), array('title' => 'baserCMS管理システム')) ?></li>
