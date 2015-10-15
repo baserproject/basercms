@@ -39,7 +39,7 @@ html, body {
 }
 #ToolbarInner li{
 	font-size: 12px;
-	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif;
+	font-family: Arial,Geneva,sans-serif,"メイリオ",Verdana,"Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック";
 	color: #EEE;
 }
 #ToolBar a, #ToolBar span{
@@ -139,7 +139,7 @@ span#DebugMode{
 }
 #UserMenu .active ul a {
 	box-shadow: 0 0 0 #CCC;
-	color:#000;
+	color:#535A62;
 	border:0;
 	width:100%;
 	padding:2px 10px 2px 10px;
@@ -180,7 +180,7 @@ span#DebugMode{
 #UserMenu .active div#SystemMenu div h2{
 	font-weight: bold;
 	font-size: 14px;
-	color:#000;
+	color:#535A62;
 	border-top:1px solid #DDD;
 	border-bottom:1px solid #EDEDED;
 	padding-left:20px;
