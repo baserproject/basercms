@@ -15,5 +15,5 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->request->params['action'] = str_replace('smartphone_', '', $this->request->params['action']);
-include BASER_VIEWS . 'Contents' . DS . 'search' . $this->ext;
+include BASER_VIEWS . 'SearchIndexes' . DS . 'search' . $this->ext;
 $this->request->params['action'] = 'smartphone_' . $this->request->params['action'];

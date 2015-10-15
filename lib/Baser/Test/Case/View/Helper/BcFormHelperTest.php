@@ -34,7 +34,7 @@ class Contact extends CakeTestModel {
  * @access public
  */
 	public $actsAs = array(
-		'BcContentsManager',
+		'BcSearchIndexManager',
 		'BcCache',
 		'BcUpload' => array(
 			'subdirDateFormat' => 'Y/m/',

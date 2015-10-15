@@ -45,7 +45,7 @@
 	<?php if (!empty($datas)): ?>
 		<?php $count = 0; ?>
 		<?php foreach ($datas as $data): ?>
-			<?php $this->BcBaser->element('contents/index_row', array('data' => $data, 'count' => $count)) ?>
+			<?php $this->BcBaser->element('search_indices/index_row', array('data' => $data, 'count' => $count)) ?>
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>

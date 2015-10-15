@@ -1,6 +1,6 @@
 <?php
 /**
- * コンテンツコントローラー
+ * 検索インデックスコントローラー
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
@@ -14,11 +14,11 @@
 App::uses('HttpSocket', 'Core.Network/Http');
 
 /**
- * コンテンツコントローラー
+ * 検索インデックスコントローラー
  *
  * @package	Baser.Controller
  */
-class ContentsController extends AppController {
+class SearchIndicesController extends AppController {
 
 /**
  * クラス名
@@ -26,7 +26,7 @@ class ContentsController extends AppController {
  * @var array
  * @access public
  */
-	public $name = 'Contents';
+	public $name = 'SearchIndices';
 
 /**
  * モデル
@@ -34,7 +34,7 @@ class ContentsController extends AppController {
  * @var array
  * @access public
  */
-	public $uses = array('Content', 'Page');
+	public $uses = array('SearchIndex', 'Page');
 
 /**
  * コンポーネント
@@ -65,10 +65,10 @@ class ContentsController extends AppController {
 		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search', 'get_page_list_recursive');
 
 		if (!empty($this->request->params['admin'])) {
-			$this->subMenuElements = array('contents');
+			$this->subMenuElements = array('search_indices');
 			$this->crumbs = array(
 				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-				array('name' => '検索インデックス管理', 'url' => array('controller' => 'contents', 'action' => 'index'))
+				array('name' => '検索インデックス管理', 'url' => array('controller' => 'search_indices', 'action' => 'index'))
 			);
 		}
 	}
@@ -84,21 +84,21 @@ class ContentsController extends AppController {
 		$query = array();
 
 		$default = array('named' => array('num' => 10));
-		$this->setViewConditions('Content', array('default' => $default, 'type' => 'get'));
+		$this->setViewConditions('SearchIndex', array('default' => $default, 'type' => 'get'));
 
-		if (!empty($this->request->data['Content'])) {
-			foreach ($this->request->data['Content'] as $key => $value) {
-				$this->request->data['Content'][$key] = h($value);
+		if (!empty($this->request->data['SearchIndex'])) {
+			foreach ($this->request->data['SearchIndex'] as $key => $value) {
+				$this->request->data['SearchIndex'][$key] = h($value);
 			}
 		}
 		if (!empty($this->request->query['q'])) {
 			$this->paginate = array(
 				'conditions' => $this->_createSearchConditions($this->request->data),
-				'order' => 'Content.priority DESC, Content.modified DESC, Content.id',
+				'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
 				'limit' => $this->passedArgs['num']
 			);
 
-			$datas = $this->paginate('Content');
+			$datas = $this->paginate('SearchIndex');
 			$query = $this->_parseQuery($this->request->query['q']);
 		}
 		$this->set('query', $query);
@@ -145,26 +145,26 @@ class ContentsController extends AppController {
  * @access	protected
  */
 	protected function _createSearchConditions($data) {
-		$conditions = array('Content.status' => true);
+		$conditions = array('SearchIndex.status' => true);
 		$query = '';
-		unset($data['Content']['key']);
-		unset($data['Content']['fields']);
-		unset($data['Content']['_Token']);
-		if (isset($data['Content']['q'])) {
-			$query = $data['Content']['q'];
-			unset($data['Content']['q']);
+		unset($data['SearchIndex']['key']);
+		unset($data['SearchIndex']['fields']);
+		unset($data['SearchIndex']['_Token']);
+		if (isset($data['SearchIndex']['q'])) {
+			$query = $data['SearchIndex']['q'];
+			unset($data['SearchIndex']['q']);
 		}
-		if (isset($data['Content']['c'])) {
-			if ($data['Content']['c']) {
-				$data['Content']['category'] = $data['Content']['c'];
+		if (isset($data['SearchIndex']['c'])) {
+			if ($data['SearchIndex']['c']) {
+				$data['SearchIndex']['category'] = $data['SearchIndex']['c'];
 			}
-			unset($data['Content']['c']);
+			unset($data['SearchIndex']['c']);
 		}
-		if (isset($data['Content']['m'])) {
-			if ($data['Content']['m']) {
-				$data['Content']['model'] = $data['Content']['m'];
+		if (isset($data['SearchIndex']['m'])) {
+			if ($data['SearchIndex']['m']) {
+				$data['SearchIndex']['model'] = $data['SearchIndex']['m'];
 			}
-			unset($data['Content']['m']);
+			unset($data['SearchIndex']['m']);
 		}
 
 		$conditions = am($conditions, $this->postConditions($data));
@@ -172,8 +172,8 @@ class ContentsController extends AppController {
 		if ($query) {
 			$query = $this->_parseQuery($query);
 			foreach ($query as $key => $value) {
-				$conditions['and'][$key]['or'][] = array('Content.title LIKE' => "%{$value}%");
-				$conditions['and'][$key]['or'][] = array('Content.detail LIKE' => "%{$value}%");
+				$conditions['and'][$key]['or'][] = array('SearchIndex.title LIKE' => "%{$value}%");
+				$conditions['and'][$key]['or'][] = array('SearchIndex.detail LIKE' => "%{$value}%");
 			}
 		}
 
@@ -302,23 +302,23 @@ class ContentsController extends AppController {
 
 		/* 画面情報設定 */
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Content', array('default' => $default));
+		$this->setViewConditions('SearchIndex', array('default' => $default));
 		$conditions = $this->_createAdminIndexConditions($this->request->data);
 		$this->paginate = array(
 			'conditions' => $conditions,
 			'fields' => array(),
-			'order' => 'Content.priority DESC, Content.modified DESC, Content.id',
+			'order' => 'SearchIndex.priority DESC, SearchIndex.modified DESC, SearchIndex.id',
 			'limit' => $this->passedArgs['num']
 		);
-		$this->set('datas', $this->paginate('Content'));
+		$this->set('datas', $this->paginate('SearchIndex'));
 
 		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
 
-		$this->search = 'contents_index';
-		$this->help = 'contents_index';
+		$this->search = 'search_indices_index';
+		$this->help = 'search_indices_index';
 	}
 
 /**
@@ -337,26 +337,26 @@ class ContentsController extends AppController {
 		$this->pageTitle = '検索インデックス登録';
 
 		if ($this->request->data) {
-			$url = $this->request->data['Content']['url'];
+			$url = $this->request->data['SearchIndex']['url'];
 			$url = str_replace(FULL_BASE_URL . $this->request->base, '', $url);
 
-			if (!$this->Content->find('count', array('conditions' => array('Content.url' => $url)))) {
+			if (!$this->SearchIndex->find('count', array('conditions' => array('SearchIndex.url' => $url)))) {
 
 				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
 				Router::reload();
 				// URLのデータを取得
 				try {
-					$content = $this->requestAction($url, array('return' => 1));
+					$searchIndex = $this->requestAction($url, array('return' => 1));
 				} catch (Exception $e) {
-					$content = $e;
+					$searchIndex = $e;
 				}
 
 				Router::reload();
 				// 元の設定を復元
 				Router::setRequestInfo($this->request);
 
-				if (!is_a($content, 'Exception')) {
-					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
+				if (!is_a($searchIndex, 'Exception')) {
+					$searchIndex = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $searchIndex);
 				} elseif (preg_match('/\.html/', $url)) {
 					App::uses('HttpSocket', 'Network/Http');
 					$socket = new HttpSocket();
@@ -364,46 +364,46 @@ class ContentsController extends AppController {
 					$HttpSocketResponse = $socket->get(siteUrl() . preg_replace('/^\//', '', $url));
 					$code = $HttpSocketResponse->code;
 					if ($code != 200) {
-						unset($content);
+						unset($searchIndex);
 					} else {
 						if (preg_match('/<body>(.*?)<\/body>/is', $HttpSocketResponse->body, $matches)) {
-							$content = $matches[1];
+							$searchIndex = $matches[1];
 						} else {
-							$content = '';
+							$searchIndex = '';
 						}
 					}
 				} else {
-					unset($content);
+					unset($searchIndex);
 				}
 
-				if (isset($content)) {
-					$content = Sanitize::stripAll($content);
-					$content = strip_tags($content);
-					$data = array('Content' => array(
-							'title'		=> $this->request->data['Content']['title'],
-							'detail'	=> $content,
+				if (isset($searchIndex)) {
+					$searchIndex = Sanitize::stripAll($searchIndex);
+					$searchIndex = strip_tags($searchIndex);
+					$data = array('SearchIndex' => array(
+							'title'		=> $this->request->data['SearchIndex']['title'],
+							'detail'	=> $searchIndex,
 							'url'		=> $url,
 							'type'		=> 'その他',
 							'status'	=> true,
 							'priority'	=> 0.5
 					));
-					$this->Content->create($data);
-					if ($this->Content->save()) {
+					$this->SearchIndex->create($data);
+					if ($this->SearchIndex->save()) {
 						$this->setMessage('検索インデックスに ' . $url . ' を追加しました。');
 						$this->redirect(array('action' => 'index'));
 					} else {
 						$this->setMessage('保存中にエラーが発生しました。', true);
 					}
 				} else {
-					$this->Content->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
+					$this->SearchIndex->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
 					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 			} else {
-				$this->Content->invalidate('url', '既に登録済のURLです。');
+				$this->SearchIndex->invalidate('url', '既に登録済のURLです。');
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
-		$this->help = 'contents_add';
+		$this->help = 'search_indices_add';
 	}
 
 /**
@@ -419,9 +419,9 @@ class ContentsController extends AppController {
 		}
 
 		/* 削除処理 */
-		if ($this->Content->delete($id)) {
+		if ($this->SearchIndex->delete($id)) {
 			$message = '検索インデックスより NO.' . $id . ' を削除しました。';
-			$this->Content->saveDbLog($message);
+			$this->SearchIndex->saveDbLog($message);
 			exit(true);
 		}
 		exit();
@@ -441,7 +441,7 @@ class ContentsController extends AppController {
 		}
 
 		/* 削除処理 */
-		if ($this->Content->delete($id)) {
+		if ($this->SearchIndex->delete($id)) {
 			$this->setMessage('検索インデックスより NO.' . $id . ' を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -463,9 +463,9 @@ class ContentsController extends AppController {
 			foreach ($ids as $id) {
 
 				/* 削除処理 */
-				if ($this->Content->delete($id)) {
+				if ($this->SearchIndex->delete($id)) {
 					$message = '検索インデックスより NO.' . $id . ' を削除しました。';
-					$this->Content->saveDbLog($message);
+					$this->SearchIndex->saveDbLog($message);
 				}
 			}
 		}
@@ -480,8 +480,8 @@ class ContentsController extends AppController {
  */
 	public function admin_ajax_change_priority() {
 		if ($this->request->data) {
-			$this->Content->set($this->request->data);
-			if ($this->Content->save()) {
+			$this->SearchIndex->set($this->request->data);
+			if ($this->SearchIndex->save()) {
 				echo true;
 			}
 		}
@@ -496,53 +496,53 @@ class ContentsController extends AppController {
  * @access	protected
  */
 	protected function _createAdminIndexConditions($data) {
-		if (empty($data['Content'])) {
+		if (empty($data['SearchIndex'])) {
 			return array();
 		}
 
 		/* 条件を生成 */
 		$conditions = array();
 
-		$type = $data['Content']['type'];
-		$category = $data['Content']['category'];
-		$status = $data['Content']['status'];
-		$keyword = $data['Content']['keyword'];
+		$type = $data['SearchIndex']['type'];
+		$category = $data['SearchIndex']['category'];
+		$status = $data['SearchIndex']['status'];
+		$keyword = $data['SearchIndex']['keyword'];
 
-		unset($data['Content']['type']);
-		unset($data['Content']['category']);
-		unset($data['Content']['status']);
-		unset($data['Content']['keyword']);
-		unset($data['Content']['open']);
-		if (!$data['Content']['priority']) {
-			unset($data['Content']['priority']);
+		unset($data['SearchIndex']['type']);
+		unset($data['SearchIndex']['category']);
+		unset($data['SearchIndex']['status']);
+		unset($data['SearchIndex']['keyword']);
+		unset($data['SearchIndex']['open']);
+		if (!$data['SearchIndex']['priority']) {
+			unset($data['SearchIndex']['priority']);
 		}
-		foreach ($data['Content'] as $key => $value) {
+		foreach ($data['SearchIndex'] as $key => $value) {
 			if (preg_match('/priority_[0-9]+$/', $key)) {
-				unset($data['Content'][$key]);
+				unset($data['SearchIndex'][$key]);
 			}
 		}
 
-		if ($data['Content']) {
+		if ($data['SearchIndex']) {
 			$conditions = $this->postConditions($data);
 		}
 
 		if ($type) {
-			$conditions['Content.type'] = $type;
+			$conditions['SearchIndex.type'] = $type;
 		}
 		if ($category) {
 			if ($category == 'none') {
-				$conditions['Content.category'] = '';
+				$conditions['SearchIndex.category'] = '';
 			} else {
-				$conditions['Content.category'] = $category;
+				$conditions['SearchIndex.category'] = $category;
 			}
 		}
 		if ($status != '') {
-			$conditions['Content.status'] = $status;
+			$conditions['SearchIndex.status'] = $status;
 		}
 		if ($keyword) {
 			$conditions['and']['or'] = array(
-				'Content.title LIKE' => '%' . $keyword . '%',
-				'Content.detail LIKE' => '%' . $keyword . '%'
+				'SearchIndex.title LIKE' => '%' . $keyword . '%',
+				'SearchIndex.detail LIKE' => '%' . $keyword . '%'
 			);
 		}
 
