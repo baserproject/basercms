@@ -64,6 +64,185 @@ class BcAgentTest extends BaserTestCase {
 		Configure::write("BcApp.smartphone", true);
 	}
 
+
+/**
+ * 名前をキーとしてインスタンスを探す
+ *
+ * @param string $name 名前
+ * @return BcAgent|null
+ * @dataProvider findDataProvider
+ */
+	public function testFind($name, $expect) {
+		$result = $this->agent->find($name);
+		if (!is_null($result)) {
+			$this->assertEquals($expect, $result->name, '設定を正しく読み込めません');
+		} else {
+			$this->assertNull($result, '存在しないユーザーエージェント名で設定が読み込まれています');
+		}
+	}
+
+	public function findDataProvider() {
+		return array(
+			array('mobile', 'mobile'),
+			array('smartphone', 'smartphone'),
+			array('hoge', null),
+		);
+	}
+
+/**
+ * 設定ファイルに存在する全てのインスタンスを返す
+ *
+ * @return BcAgent[]
+ */
+	public function testFindAll() {
+		$result = $this->agent->findAll();
+
+		$mobile = new BcAgent('mobile', array(
+			'alias' => 'm',
+			'prefix' => 'mobile',
+			'autoRedirect' => true,
+			'autoLink' => true,
+			'agents' => array(
+				'Googlebot-Mobile',
+				'Y!J-SRD',
+				'Y!J-MBS',
+				'DoCoMo',
+				'SoftBank',
+				'Vodafone',
+				'J-PHONE',
+				'UP.Browser'
+			),
+			'sessionId' => true
+		));
+
+		$expect = array(
+			$mobile,
+			$this->agent
+		);
+
+		$this->assertEquals($expect, $result, '設定ファイルに存在するすべてのインスタンスを正しく返すことができません');
+	}
+
+/**
+ * URL用aliasをキーとしてインスタンスを返す
+ *
+ * @param string $alias URL用エイリアス
+ * @return void
+ * @dataProvider findByAliasDataProvider
+ */
+	public function testFindByAlias($alias, $expect) {
+		$result = $this->agent->findByAlias($alias);
+
+		if (!is_null($result)) {
+			$this->assertEquals($expect, $result->name, '設定を正しく読み込めません');
+		} else {
+			$this->assertNull($result, '存在しないエイリアス名で設定が読み込まれています');
+		}
+	}
+
+	public function findByAliasDataProvider() {
+		return array(
+			array('m', 'mobile'),
+			array('s', 'smartphone'),
+			array('hoge', null),
+		);
+	}
+
+/**
+ * HTTPリクエストのURLのプレフィックスに合致するインスタンスを返す
+ *
+ * @param CakeRequest $request URLをチェックするリクエスト
+ * @return void
+ * @dataProvider findByUrlDataProvider
+ */
+	public function testFindByUrl($alias, $expect) {
+		$request = new CakeRequest($alias);
+		$result = $this->agent->findByUrl($request);
+		
+		if (!is_null($result)) {
+			$this->assertEquals($expect, $result->name, '設定を正しく読み込めません');
+		} else {
+			$this->assertNull($result, '存在しないエイリアス名で設定が読み込まれています');
+		}
+	}
+
+
+	public function findByUrlDataProvider() {
+		return array(
+			array('m/', 'mobile'),
+			array('s/', 'smartphone'),
+			array('hoge/', null),
+		);
+	}
+
+/**
+ * 現在の環境のHTTP_USER_AGENTの値に合致するインスタンスを返す
+ *
+ * @return void
+ * @dataProvider findCurrentDataProvider
+ */
+	public function testFindCurrent($agent, $expect) {
+		$_SERVER["HTTP_USER_AGENT"] = $agent;
+		$result = $this->agent->findCurrent();
+
+		if (!is_null($result)) {
+			$this->assertEquals($expect, $result->name, '設定を正しく読み込めません');
+		} else {
+			$this->assertNull($result, '存在しないユーザーエージェント名で設定が読み込まれています');
+		}
+	}
+
+	public function findCurrentDataProvider() {
+		return array(
+			array('Googlebot-Mobile', 'mobile'),
+			array('DoCoMo', 'mobile'),
+			array('iPhone', 'smartphone'),
+			array('hoge', null),
+		);
+	}
+
+/**
+ * URL文字列からエイリアス文字列を取得
+ *
+ * @param string $url URL文字列
+ * @return void
+ * @dataProvider extractAliasDataProvider
+ */
+	public function testExtractAlias($url, $expect) {
+		$result = $this->agent->extractAlias($url);
+		
+		if (!is_null($result)) {
+			$this->assertEquals($expect, $result, 'エイリアス名を正しく読み込めません');
+		} else {
+			$this->assertNull($result, '存在しないエイリアス名で設定が読み込まれています');
+		}
+
+	}
+
+	public function extractAliasDataProvider() {
+		return array(
+			array('m/', 'm'),
+			array('m/hoge', 'm'),
+			array('s/', 's'),
+			array('hoge/', null),
+		);
+	}
+
+
+/**
+ * エージェント用の設定が有効かどうかを判定
+ *
+ * @return bool
+ */
+	public function testIsEnabled() {
+		$result = $this->agent->isEnabled();
+		$this->assertTrue($result, 'エージェント用の設定が有効か正しく判定できません');
+
+		$agent_hoge = new BcAgent('hoge', array('agents' => array()));
+		$result = $agent_hoge->isEnabled();
+		$this->assertFalse($result, 'エージェント用の設定が有効か正しく判定できません');
+	}
+
 /**
  * URLがエージェント用かどうかを判定
  *
@@ -76,11 +255,6 @@ class BcAgentTest extends BaserTestCase {
 		$this->assertEquals($expect, $this->agent->urlMatches(new CakeRequest($url)));
 	}
 
-/**
- * urlMatches用データプロバイダ
- *
- * @return array
- */
 	public function urlMatchesDataProvider() {
 		return array(
 			array(false, '/'),
@@ -105,11 +279,6 @@ class BcAgentTest extends BaserTestCase {
 		$this->assertEquals($expect, $this->agent->userAgentMatches($userAgent));
 	}
 
-/**
- * userAgentMatches用データプロバイダ
- *
- * @return array
- */
 	public function userAgentMatchesDataProvider() {
 		return array(
 			array(true, 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4'),
@@ -135,11 +304,6 @@ class BcAgentTest extends BaserTestCase {
 		$this->assertEquals($expect, $this->agent->shouldRedirects($request));
 	}
 
-/**
- * shouldRedirects用データプロバイダ
- *
- * @return array
- */
 	public function shouldRedirectsDataProvider() {
 		return array(
 			array(false, '/s/'),
@@ -170,11 +334,6 @@ class BcAgentTest extends BaserTestCase {
 		$this->assertEquals($expect, $this->agent->makeRedirectUrl($request));
 	}
 
-/**
- * makeRedirectUrl用データプロバイダ
- *
- * @return array
- */
 	public function makeRedirectUrlDataProvider() {
 		return array(
 			array('s/', '/'),
