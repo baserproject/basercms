@@ -72,10 +72,10 @@ class BcAgentTest extends BaserTestCase {
  * @return BcAgent|null
  * @dataProvider findDataProvider
  */
-	public function testFind($name, $expect) {
+	public function testFind($name) {
 		$result = $this->agent->find($name);
 		if (!is_null($result)) {
-			$this->assertEquals($expect, $result->name, '設定を正しく読み込めません');
+			$this->assertEquals($name, $result->name, '設定を正しく読み込めません');
 		} else {
 			$this->assertNull($result, '存在しないユーザーエージェント名で設定が読み込まれています');
 		}
@@ -83,9 +83,9 @@ class BcAgentTest extends BaserTestCase {
 
 	public function findDataProvider() {
 		return array(
-			array('mobile', 'mobile'),
-			array('smartphone', 'smartphone'),
-			array('hoge', null),
+			array('mobile'),
+			array('smartphone'),
+			array('hoge'),
 		);
 	}
 
@@ -127,6 +127,7 @@ class BcAgentTest extends BaserTestCase {
  * URL用aliasをキーとしてインスタンスを返す
  *
  * @param string $alias URL用エイリアス
+ * @param string $expect 期待値
  * @return void
  * @dataProvider findByAliasDataProvider
  */
@@ -152,6 +153,7 @@ class BcAgentTest extends BaserTestCase {
  * HTTPリクエストのURLのプレフィックスに合致するインスタンスを返す
  *
  * @param CakeRequest $request URLをチェックするリクエスト
+ * @param string $expect 期待値
  * @return void
  * @dataProvider findByUrlDataProvider
  */
@@ -178,6 +180,8 @@ class BcAgentTest extends BaserTestCase {
 /**
  * 現在の環境のHTTP_USER_AGENTの値に合致するインスタンスを返す
  *
+ * @param string $agent ユーザーエージェント名
+ * @param string $expect 期待値
  * @return void
  * @dataProvider findCurrentDataProvider
  */
@@ -205,6 +209,7 @@ class BcAgentTest extends BaserTestCase {
  * URL文字列からエイリアス文字列を取得
  *
  * @param string $url URL文字列
+ * @param string $expect 期待値
  * @return void
  * @dataProvider extractAliasDataProvider
  */
