@@ -1246,6 +1246,10 @@ class Page extends AppModel {
 			return true;
 		}
 
+		if(!function_exists('exec')) {
+			return true;
+		}
+
 		if(isWindows()) {
 			$tmpName = tempnam(TMP, "syntax");
 			$tmp = new File($tmpName);
