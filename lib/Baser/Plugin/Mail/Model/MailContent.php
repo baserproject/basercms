@@ -197,6 +197,7 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['auth_captcha'] = false;
 		$data['MailContent']['ssl_on'] = false;
 		$data['MailContent']['status'] = false;
+		$data['MailContent']['save_info'] = true;
 
 		return $data;
 	}

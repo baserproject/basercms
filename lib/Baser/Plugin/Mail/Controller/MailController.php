@@ -381,9 +381,14 @@ class MailController extends MailAppController {
 			// データの入力チェックを行う
 			if ($this->Message->validates()) {
 
-				// validation OK
-				$result = $this->Message->save(null, false);
-				
+				// 送信データを保存するか確認
+				if ($this->dbDatas['mailContent']['MailContent']['save_info']) {
+					// validation OK
+					$result = $this->Message->save(null, false);
+				} else {
+					$result = $this->request->data;
+				}
+
 				if ($result) {
 					
 					$this->request->data = $result;
