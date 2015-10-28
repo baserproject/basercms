@@ -35,6 +35,7 @@ class MailContentsSchema extends CakeSchema {
 		'auth_captcha' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'widget_area' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 4),
 		'ssl_on' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'save_info' => array('type' => 'boolean', 'null' => true, 'default' => '1'),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null),
