@@ -35,7 +35,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		// >>>
 		'baser' => false,
 		// <<<
-		'app' => true,
+		'app' => false,
 		'plugin' => null,
 		'output' => 'html',
 		'show' => 'groups',
@@ -107,7 +107,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		restore_error_handler();
 
 		try {
-			self::time();
+			static::time();
 			// CUSTOMIZE MODIFY 2014/07/02 ryuring
 			// >>>
 			/*$command = new CakeTestSuiteCommand('CakeTestLoader', $commandArgs);

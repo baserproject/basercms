@@ -69,7 +69,7 @@ class User extends AppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => 'アカウント名を入力してください。'
 			),
 			'alphaNumericPlus' => array(
@@ -87,7 +87,7 @@ class User extends AppModel {
 		),
 		'real_name_1' => array(
 			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+				'rule' => array('notBlank'),
 				'message' => '名前[姓]を入力してください。'),
 			'maxLength' => array(
 				'rule' => array('maxLength', 50),
@@ -129,7 +129,7 @@ class User extends AppModel {
 				'message' => 'Eメールは255文字以内で入力してください。')
 		),
 		'user_group_id' => array(
-			'rule' => array('notEmpty'),
+			'rule' => array('notBlank'),
 			'message' => 'グループを選択してください。'
 		)
 	);

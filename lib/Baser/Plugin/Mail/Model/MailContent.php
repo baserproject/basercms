@@ -73,27 +73,27 @@ class MailContent extends MailAppModel {
 			'maxLength' => array(
 				'rule' => array('maxLength', 100),
 				'message' => 'メールフォームアカウント名は100文字以内で入力してください。'),
-			'notEmpty' => array('rule' => array('notEmpty'),
+			'notEmpty' => array('rule' => array('notBlank'),
 				'message' => "メールフォームアカウント名を入力してください。")
 		),
 		'title' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "メールフォームタイトルを入力してください。")
 		),
 		'sender_name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "送信先名を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '送信先名は50文字以内で入力してください。')
 		),
 		'subject_user' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "自動返信メール件名[ユーザー宛]を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')
 		),
 		'subject_admin' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "自動送信メール件名[管理者宛]を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。')

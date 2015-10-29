@@ -123,7 +123,7 @@ class BlogPost extends BlogAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'タイトルを入力してください。',
 				'required' => true),
 			array('rule' => array('maxLength', 255),
@@ -134,14 +134,14 @@ class BlogPost extends BlogAppModel {
 			'message' => '保存できるデータ量を超えています。')
 		),
 		'posts_date' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '投稿日を入力してください。',
 				'required' => true),
 			array('rule' => array('checkDate'),
 				'message' => '投稿日の形式が不正です。')
 		),
 		'user_id' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '投稿者を選択してください。')
 		)
 	);

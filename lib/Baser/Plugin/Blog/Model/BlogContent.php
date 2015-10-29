@@ -82,7 +82,7 @@ class BlogContent extends BlogAppModel {
 				'message' => 'ブログアカウント名は100文字以内で入力してください。')
 		),
 		'title' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'ブログタイトルを入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => 'ブログタイトルは255文字以内で入力してください。')
@@ -105,7 +105,7 @@ class BlogContent extends BlogAppModel {
 				'message' => "一覧表示件数は半角で入力してください。",
 				'allowEmpty' => false)
 		),
-		'list_direction' => array(array('rule' => array('notEmpty'),
+		'list_direction' => array(array('rule' => array('notBlank'),
 				'message' => "一覧に表示する順番を指定してください。")
 		),
 		'eye_catch_size' => array(array(

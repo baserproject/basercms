@@ -29,17 +29,17 @@ App::uses('Hash', 'Utility');
  * the default pagination behavior in general or for a specific model. General settings are used when there
  * are no specific model configuration, or the model you are paginating does not have specific settings.
  *
- * {{{
+ * ```
  *	$this->Paginator->settings = array(
  *		'limit' => 20,
  *		'maxLimit' => 100
  *	);
- * }}}
+ * ```
  *
  * The above settings will be used to paginate any model. You can configure model specific settings by
  * keying the settings with the model name.
  *
- * {{{
+ * ```
  *	$this->Paginator->settings = array(
  *		'Post' => array(
  *			'limit' => 20,
@@ -47,7 +47,7 @@ App::uses('Hash', 'Utility');
  *		),
  *		'Comment' => array( ... )
  *	);
- * }}}
+ * ```
  *
  * This would allow you to have different pagination settings for `Comment` and `Post` models.
  *
@@ -55,13 +55,13 @@ App::uses('Hash', 'Utility');
  *
  * You can paginate with any find type defined on your model using the `findType` option.
  *
- * {{{
+ * ```
  * $this->Paginator->settings = array(
  *		'Post' => array(
  *			'findType' => 'popular'
  *		)
  * );
- * }}}
+ * ```
  *
  * Would paginate using the `find('popular')` method.
  *
@@ -333,15 +333,13 @@ class PaginatorComponent extends Component {
 		if (isset($this->settings[$alias])) {
 			$defaults = $this->settings[$alias];
 		}
-		if (isset($defaults['limit']) &&
-			(empty($defaults['maxLimit']) || $defaults['limit'] > $defaults['maxLimit'])
-		) {
-			$defaults['maxLimit'] = $defaults['limit'];
-		}
-		return array_merge(
-			array('page' => 1, 'limit' => 20, 'maxLimit' => 100, 'paramType' => 'named'),
-			$defaults
+		$defaults += array(
+			'page' => 1,
+			'limit' => 20,
+			'maxLimit' => 100,
+			'paramType' => 'named'
 		);
+		return $defaults;
 	}
 
 /**
@@ -388,6 +386,10 @@ class PaginatorComponent extends Component {
 		if (!empty($options['order']) && is_array($options['order'])) {
 			$order = array();
 			foreach ($options['order'] as $key => $value) {
+				if (is_int($key)) {
+					$key = $value;
+					$value = 'asc';
+				}
 				$field = $key;
 				$alias = $object->alias;
 				if (strpos($key, '.') !== false) {

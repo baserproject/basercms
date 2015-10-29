@@ -218,7 +218,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 	public function checkboxDataProvider() {
 		return array(
-			array(false, 'baser', array(), "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"0\"\/><input type=\"checkbox\" name=\"data\[baser\]\"  value=\"1\" id=\"baser\""),
+			array(false, 'baser', array(), "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"0\"\/><input type=\"checkbox\" name=\"data\[baser\]\" value=\"1\" id=\"baser\""),
 			array(false, 'baser', array('class' => 'bcclass'), 'class="bcclass"'),
 			array(true, 'baser.freezed', array(), "name=\"data\[baser\]\[freezed\]\".*id=\"baserFreezed\""),
 			array(true, 'baser.freezed', array('label' => 'test'), 'label="test"'),
@@ -322,9 +322,9 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 	public function fileDataProvider() {
 		return array(
-			array(false, 'baser', array(), '<input type="file" name="data\[baser\]"  id="baser"'),
+			array(false, 'baser', array(), '<input type="file" name="data\[baser\]" id="baser"'),
 			array(false, 'baser', array('size' => 100), 'size="100"'),
-			array(true, 'baser.freezed', array(), '<input type="file" name="data\[baser\]\[freezed\]"  id="baserFreezed"\/>'),
+			array(true, 'baser.freezed', array(), '<input type="file" name="data\[baser\]\[freezed\]" id="baserFreezed"\/>'),
 		);
 	}
 
@@ -360,7 +360,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 	public function imageDataProvider() {
 		return array(
-			array(false, null, null, 'test.image', array(), array(), '<input type="file" name="data\[test\]\[image\]"  id="testImage"'),
+			array(false, null, null, 'test.image', array(), array(), '<input type="file" name="data\[test\]\[image\]" id="testImage"'),
 			array(false, null, null, 'test.image', array('size' => 100), array(), 'size="100"'),
 			array(false, null, 'testexist', 'test.image', array(), array(), 'src="\/\/tests.*label="削除する"'),
 			array(false, null, 'testexist', 'test.image', array(), array('dir'=>'testdir'), 'src="\/testdir\/tests'),

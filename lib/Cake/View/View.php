@@ -464,11 +464,11 @@ class View extends Object {
  */
 	public function render($view = null, $layout = null) {
 		if ($this->hasRendered) {
-			return;
+			return null;
 		}
 
 		if ($view !== false && $viewFileName = $this->_getViewFileName($view)) {
-			$this->_currentType = self::TYPE_VIEW;
+			$this->_currentType = static::TYPE_VIEW;
 			$this->getEventManager()->dispatch(new CakeEvent('View.beforeRender', $this, array($viewFileName)));
 			$this->Blocks->set('content', $this->_render($viewFileName));
 			$this->getEventManager()->dispatch(new CakeEvent('View.afterRender', $this, array($viewFileName)));
@@ -542,7 +542,7 @@ class View extends Object {
 		$this->viewVars['title_for_layout'] = $title;
 		$this->Blocks->set('title', $title);
 
-		$this->_currentType = self::TYPE_LAYOUT;
+		$this->_currentType = static::TYPE_LAYOUT;
 		$this->Blocks->set('content', $this->_render($layoutFileName));
 
 		$this->getEventManager()->dispatch(new CakeEvent('View.afterLayout', $this, array($layoutFileName)));
@@ -699,6 +699,16 @@ class View extends Object {
 	}
 
 /**
+ * Check if a block exists
+ *
+ * @param string $name Name of the block
+ * @return bool
+ */
+	public function exists($name) {
+		return $this->Blocks->exists($name);
+	}
+
+/**
  * End a capturing block. The compliment to View::start()
  *
  * @return void
@@ -718,11 +728,11 @@ class View extends Object {
  * @throws LogicException when you extend an element which doesn't exist
  */
 	public function extend($name) {
-		if ($name[0] === '/' || $this->_currentType === self::TYPE_VIEW) {
+		if ($name[0] === '/' || $this->_currentType === static::TYPE_VIEW) {
 			$parent = $this->_getViewFileName($name);
 		} else {
 			switch ($this->_currentType) {
-				case self::TYPE_ELEMENT:
+				case static::TYPE_ELEMENT:
 					$parent = $this->_getElementFileName($name);
 					if (!$parent) {
 						list($plugin, $name) = $this->pluginSplit($name);
@@ -735,7 +745,7 @@ class View extends Object {
 						));
 					}
 					break;
-				case self::TYPE_LAYOUT:
+				case static::TYPE_LAYOUT:
 					$parent = $this->_getLayoutFileName($name);
 					break;
 				default:
@@ -817,7 +827,14 @@ class View extends Object {
 		}
 		$this->viewVars = $data + $this->viewVars;
 	}
-
+/**
+ * Retrieve the current view type
+ *
+ * @return string
+ */
+	public function getCurrentType() {
+		return $this->_currentType;
+	}
 /**
  * Magic accessor for helpers. Provides access to attributes that were deprecated.
  *
@@ -1014,18 +1031,7 @@ class View extends Object {
 				}
 			}
 		}
-		$defaultPath = $paths[0];
-
-		if ($this->plugin) {
-			$pluginPaths = App::path('plugins');
-			foreach ($paths as $path) {
-				if (strpos($path, $pluginPaths[0]) === 0) {
-					$defaultPath = $path;
-					break;
-				}
-			}
-		}
-		throw new MissingViewException(array('file' => $defaultPath . $name . $this->ext));
+		throw new MissingViewException(array('file' => $name . $this->ext));
 	}
 
 /**
@@ -1078,7 +1084,7 @@ class View extends Object {
 				}
 			}
 		}
-		throw new MissingLayoutException(array('file' => $paths[0] . $file . $this->ext));
+		throw new MissingLayoutException(array('file' => $file . $this->ext));
 	}
 
 /**
@@ -1210,22 +1216,23 @@ class View extends Object {
  * @triggers View.afterRender $this, array($file, $element)
  */
 	protected function _renderElement($file, $data, $options) {
+		$current = $this->_current;
+		$restore = $this->_currentType;
+		$this->_currentType = static::TYPE_ELEMENT;
+
 		if ($options['callbacks']) {
 			$this->getEventManager()->dispatch(new CakeEvent('View.beforeRender', $this, array($file)));
 		}
 
-		$current = $this->_current;
-		$restore = $this->_currentType;
-
-		$this->_currentType = self::TYPE_ELEMENT;
 		$element = $this->_render($file, array_merge($this->viewVars, $data));
-
-		$this->_currentType = $restore;
-		$this->_current = $current;
 
 		if ($options['callbacks']) {
 			$this->getEventManager()->dispatch(new CakeEvent('View.afterRender', $this, array($file, $element)));
 		}
+
+		$this->_currentType = $restore;
+		$this->_current = $current;
+
 		if (isset($options['cache'])) {
 			Cache::write($this->elementCacheSettings['key'], $element, $this->elementCacheSettings['config']);
 		}

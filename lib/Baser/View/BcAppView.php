@@ -249,18 +249,7 @@ class BcAppView extends View {
 		}
 		// <<<
 
-		$defaultPath = $paths[0];
-
-		if ($this->plugin) {
-			$pluginPaths = App::path('plugins');
-			foreach ($paths as $path) {
-				if (strpos($path, $pluginPaths[0]) === 0) {
-					$defaultPath = $path;
-					break;
-				}
-			}
-		}
-		throw new MissingViewException(array('file' => $defaultPath . $name . $this->ext));
+		throw new MissingViewException(array('file' => $name . $this->ext));
 	}
 
 /**
@@ -384,7 +373,7 @@ class BcAppView extends View {
 		}
 		// <<<
 
-		throw new MissingLayoutException(array('file' => $paths[0] . $file . $this->ext));
+		throw new MissingLayoutException(array('file' => $file . $this->ext));
 	}
 
 /**

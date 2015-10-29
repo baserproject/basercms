@@ -139,12 +139,12 @@ class HttpSocket extends CakeSocket {
  *
  * Or use an array to configure multiple options:
  *
- * {{{
+ * ```
  * $http = new HttpSocket(array(
  *    'host' => 'cakephp.org',
  *    'timeout' => 20
  * ));
- * }}}
+ * ```
  *
  * See HttpSocket::$config for options that can be used.
  *
@@ -169,21 +169,21 @@ class HttpSocket extends CakeSocket {
  * Accepts two forms of parameters. If all you need is a username + password, as with
  * Basic authentication you can do the following:
  *
- * {{{
+ * ```
  * $http->configAuth('Basic', 'mark', 'secret');
- * }}}
+ * ```
  *
  * If you are using an authentication strategy that requires more inputs, like Digest authentication
  * you can call `configAuth()` with an array of user information.
  *
- * {{{
+ * ```
  * $http->configAuth('Digest', array(
  *		'user' => 'mark',
  *		'pass' => 'secret',
  *		'realm' => 'my-realm',
  *		'nonce' => 1235
  * ));
- * }}}
+ * ```
  *
  * To remove any set authentication strategy, call `configAuth()` with no parameters:
  *
@@ -294,6 +294,7 @@ class HttpSocket extends CakeSocket {
 		if (isset($host)) {
 			$this->config['host'] = $host;
 		}
+
 		$this->_setProxy();
 		$this->request['proxy'] = $this->_proxy;
 
@@ -342,6 +343,9 @@ class HttpSocket extends CakeSocket {
 		if (!empty($this->request['body']) && !isset($this->request['header']['Content-Length'])) {
 			$this->request['header']['Content-Length'] = strlen($this->request['body']);
 		}
+		if (isset($this->request['uri']['scheme']) && $this->request['uri']['scheme'] === 'https' && in_array($this->config['protocol'], array(false, 'tcp'))) {
+			$this->config['protocol'] = 'ssl';
+		}
 
 		$connectionType = null;
 		if (isset($this->request['header']['Connection'])) {
@@ -374,7 +378,7 @@ class HttpSocket extends CakeSocket {
 
 		$response = null;
 		$inHeader = true;
-		while ($data = $this->read()) {
+		while (($data = $this->read()) !== false) {
 			if ($this->_contentResource) {
 				if ($inHeader) {
 					$response .= $data;
@@ -435,12 +439,12 @@ class HttpSocket extends CakeSocket {
  *
  * You could express the same thing using a uri array and query string parameters:
  *
- * {{{
+ * ```
  * $response = $http->get(
  *     array('host' => 'google.com', 'path' => '/search'),
  *     array('q' => 'cakephp', 'client' => 'safari')
  * );
- * }}}
+ * ```
  *
  * @param string|array $uri URI to request. Either a string uri, or a uri array, see HttpSocket::_parseUri()
  * @param array $query Querystring parameters to append to URI
@@ -463,16 +467,42 @@ class HttpSocket extends CakeSocket {
 	}
 
 /**
+ * Issues a HEAD request to the specified URI, query, and request.
+ *
+ * By definition HEAD request are identical to GET request except they return no response body. This means that all
+ * information and examples relevant to GET also applys to HEAD.
+ *
+ * @param string|array $uri URI to request. Either a string URI, or a URI array, see HttpSocket::_parseUri()
+ * @param array $query Querystring parameters to append to URI
+ * @param array $request An indexed array with indexes such as 'method' or uri
+ * @return mixed Result of request, either false on failure or the response to the request.
+ */
+	public function head($uri = null, $query = array(), $request = array()) {
+		if (!empty($query)) {
+			$uri = $this->_parseUri($uri, $this->config['request']['uri']);
+			if (isset($uri['query'])) {
+				$uri['query'] = array_merge($uri['query'], $query);
+			} else {
+				$uri['query'] = $query;
+			}
+			$uri = $this->_buildUri($uri);
+		}
+
+		$request = Hash::merge(array('method' => 'HEAD', 'uri' => $uri), $request);
+		return $this->request($request);
+	}
+
+/**
  * Issues a POST request to the specified URI, query, and request.
  *
  * `post()` can be used to post simple data arrays to a URL:
  *
- * {{{
+ * ```
  * $response = $http->post('http://example.com', array(
  *     'username' => 'batman',
  *     'password' => 'bruce_w4yne'
  * ));
- * }}}
+ * ```
  *
  * @param string|array $uri URI to request. See HttpSocket::_parseUri()
  * @param array $data Array of request body data keys and values.
@@ -533,10 +563,10 @@ class HttpSocket extends CakeSocket {
  * After configuring part of the request parameters, you can use url() to generate
  * URLs.
  *
- * {{{
+ * ```
  * $http = new HttpSocket('http://www.cakephp.org');
  * $url = $http->url('/search?q=bar');
- * }}}
+ * ```
  *
  * Would return `http://www.cakephp.org/search?q=bar`
  *
@@ -622,6 +652,7 @@ class HttpSocket extends CakeSocket {
 		}
 		$this->config['host'] = $this->_proxy['host'];
 		$this->config['port'] = $this->_proxy['port'];
+		$this->config['proxy'] = true;
 
 		if (empty($this->_proxy['method']) || !isset($this->_proxy['user'], $this->_proxy['pass'])) {
 			return;
@@ -686,6 +717,20 @@ class HttpSocket extends CakeSocket {
 				$this->config['context']['ssl'][$contextKey] = $value;
 			}
 			unset($this->config[$key]);
+		}
+		if (version_compare(PHP_VERSION, '5.3.2', '>=')) {
+			if (!isset($this->config['context']['ssl']['SNI_enabled'])) {
+				$this->config['context']['ssl']['SNI_enabled'] = true;
+			}
+			if (version_compare(PHP_VERSION, '5.6.0', '>=')) {
+				if (empty($this->config['context']['ssl']['peer_name'])) {
+					$this->config['context']['ssl']['peer_name'] = $host;
+				}
+			} else {
+				if (empty($this->config['context']['ssl']['SNI_server_name'])) {
+					$this->config['context']['ssl']['SNI_server_name'] = $host;
+				}
+			}
 		}
 		if (empty($this->config['context']['ssl']['cafile'])) {
 			$this->config['context']['ssl']['cafile'] = CAKE . 'Config' . DS . 'cacert.pem';
@@ -896,7 +941,7 @@ class HttpSocket extends CakeSocket {
 
 		$request['uri'] = $this->_parseUri($request['uri']);
 		$request += array('method' => 'GET');
-		if (!empty($this->_proxy['host'])) {
+		if (!empty($this->_proxy['host']) && $request['uri']['scheme'] !== 'https') {
 			$request['uri'] = $this->_buildUri($request['uri'], '%scheme://%host:%port/%path?%query');
 		} else {
 			$request['uri'] = $this->_buildUri($request['uri'], '/%path?%query');
@@ -1033,3 +1078,4 @@ class HttpSocket extends CakeSocket {
 	}
 
 }
+

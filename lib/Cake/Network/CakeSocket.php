@@ -116,13 +116,10 @@ class CakeSocket {
  */
 	public function __construct($config = array()) {
 		$this->config = array_merge($this->_baseConfig, $config);
-		if (!is_numeric($this->config['protocol'])) {
-			$this->config['protocol'] = getprotobyname($this->config['protocol']);
-		}
 	}
 
 /**
- * Connect the socket to the given host and port.
+ * Connects the socket to the given host and port.
  *
  * @return bool Success
  * @throws SocketException
@@ -133,8 +130,8 @@ class CakeSocket {
 		}
 
 		$scheme = null;
-		if (isset($this->config['request']['uri']) && $this->config['request']['uri']['scheme'] === 'https') {
-			$scheme = 'ssl://';
+		if (!empty($this->config['protocol']) && strpos($this->config['host'], '://') === false && empty($this->config['proxy'])) {
+			$scheme = $this->config['protocol'] . '://';
 		}
 
 		if (!empty($this->config['context'])) {
@@ -172,6 +169,28 @@ class CakeSocket {
 		$this->connected = is_resource($this->connection);
 		if ($this->connected) {
 			stream_set_timeout($this->connection, $this->config['timeout']);
+
+			if (!empty($this->config['request']) &&
+				$this->config['request']['uri']['scheme'] === 'https' &&
+				!empty($this->config['proxy'])
+			) {
+				$req = array();
+				$req[] = 'CONNECT ' . $this->config['request']['uri']['host'] . ':' .
+					$this->config['request']['uri']['port'] . ' HTTP/1.1';
+				$req[] = 'Host: ' . $this->config['host'];
+				$req[] = 'User-Agent: php proxy';
+
+				fwrite($this->connection, implode("\r\n", $req) . "\r\n\r\n");
+
+				while (!feof($this->connection)) {
+					$s = rtrim(fgets($this->connection, 4096));
+					if (preg_match('/^$/', $s)) {
+						break;
+					}
+				}
+
+				$this->enableCrypto('tls', 'client');
+			}
 		}
 		return $this->connected;
 	}
@@ -191,19 +210,19 @@ class CakeSocket {
 	}
 
 /**
- * Get the connection context.
+ * Gets the connection context.
  *
  * @return null|array Null when there is no connection, an array when there is.
  */
 	public function context() {
 		if (!$this->connection) {
-			return;
+			return null;
 		}
 		return stream_context_get_options($this->connection);
 	}
 
 /**
- * Get the host name of the current connection.
+ * Gets the host name of the current connection.
  *
  * @return string Host name
  */
@@ -215,7 +234,7 @@ class CakeSocket {
 	}
 
 /**
- * Get the IP address of the current connection.
+ * Gets the IP address of the current connection.
  *
  * @return string IP address
  */
@@ -227,7 +246,7 @@ class CakeSocket {
 	}
 
 /**
- * Get all IP addresses associated with the current connection.
+ * Gets all IP addresses associated with the current connection.
  *
  * @return array IP addresses
  */
@@ -239,7 +258,7 @@ class CakeSocket {
 	}
 
 /**
- * Get the last error as a string.
+ * Gets the last error as a string.
  *
  * @return string|null Last error
  */
@@ -251,7 +270,7 @@ class CakeSocket {
 	}
 
 /**
- * Set the last error.
+ * Sets the last error.
  *
  * @param int $errNum Error code
  * @param string $errStr Error string
@@ -262,7 +281,7 @@ class CakeSocket {
 	}
 
 /**
- * Write data to the socket.
+ * Writes data to the socket.
  *
  * @param string $data The data to write to the socket
  * @return bool Success
@@ -284,7 +303,7 @@ class CakeSocket {
 	}
 
 /**
- * Read data from the socket. Returns false if no data is available or no connection could be
+ * Reads data from the socket. Returns false if no data is available or no connection could be
  * established.
  *
  * @param int $length Optional buffer length to read; defaults to 1024
@@ -310,7 +329,7 @@ class CakeSocket {
 	}
 
 /**
- * Disconnect the socket from the current connection.
+ * Disconnects the socket from the current connection.
  *
  * @return bool Success
  */
@@ -356,14 +375,14 @@ class CakeSocket {
 	}
 
 /**
- * Encrypts current stream socket, using one of the defined encryption methods
+ * Encrypts current stream socket, using one of the defined encryption methods.
  *
- * @param string $type can be one of 'ssl2', 'ssl3', 'ssl23' or 'tls'
- * @param string $clientOrServer can be one of 'client', 'server'. Default is 'client'
- * @param bool $enable enable or disable encryption. Default is true (enable)
+ * @param string $type Type which can be one of 'sslv2', 'sslv3', 'sslv23' or 'tls'.
+ * @param string $clientOrServer Can be one of 'client', 'server'. Default is 'client'.
+ * @param bool $enable Enable or disable encryption. Default is true (enable)
  * @return bool True on success
  * @throws InvalidArgumentException When an invalid encryption scheme is chosen.
- * @throws SocketException When attempting to enable SSL/TLS fails
+ * @throws SocketException When attempting to enable SSL/TLS fails.
  * @see stream_socket_enable_crypto
  */
 	public function enableCrypto($type, $clientOrServer = 'client', $enable = true) {
@@ -372,7 +391,8 @@ class CakeSocket {
 		}
 		$enableCryptoResult = false;
 		try {
-			$enableCryptoResult = stream_socket_enable_crypto($this->connection, $enable, $this->_encryptMethods[$type . '_' . $clientOrServer]);
+			$enableCryptoResult = stream_socket_enable_crypto($this->connection, $enable,
+				$this->_encryptMethods[$type . '_' . $clientOrServer]);
 		} catch (Exception $e) {
 			$this->setLastError(null, $e->getMessage());
 			throw new SocketException($e->getMessage());
@@ -387,3 +407,4 @@ class CakeSocket {
 	}
 
 }
+

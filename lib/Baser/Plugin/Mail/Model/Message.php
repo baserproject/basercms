@@ -203,7 +203,7 @@ class Message extends MailAppModel {
 						}
 					} else {
 						$this->validate[$mailField['field_name']] = array('notEmpty' => array(
-								'rule' => array('notEmpty'),
+								'rule' => array('notBlank'),
 								'message' => '必須項目です。',
 								'required' => true
 						));

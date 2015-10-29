@@ -40,7 +40,7 @@ class ThemeFolder extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'テーマフォルダ名を入力してください。',
 				'required' => true),
 			array('rule' => array('halfText'),

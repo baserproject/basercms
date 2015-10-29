@@ -653,7 +653,7 @@ class ControllerTest extends CakeTestCase {
 		$expected = $Controller->ControllerComment->validationErrors;
 
 		$Controller->viewPath = 'Posts';
-		$result = $Controller->render('index');
+		$Controller->render('index');
 		$View = $Controller->View;
 		$this->assertTrue(isset($View->validationErrors['ControllerComment']));
 		$this->assertEquals($expected, $View->validationErrors['ControllerComment']);
@@ -1032,6 +1032,30 @@ class ControllerTest extends CakeTestCase {
 	}
 
 /**
+ * Test that the referer is not absolute if it is '/'.
+ *
+ * This avoids the base path being applied twice on string urls.
+ *
+ * @return void
+ */
+	public function testRefererSlash() {
+		$request = $this->getMock('CakeRequest', array('referer'));
+		$request->base = '/base';
+		$request->expects($this->any())
+			->method('referer')
+			->will($this->returnValue('/'));
+		Router::setRequestInfo($request);
+
+		$controller = new Controller($request);
+		$result = $controller->referer('/', true);
+		$this->assertEquals('/', $result);
+
+		$controller = new Controller($request);
+		$result = $controller->referer('/some/path', true);
+		$this->assertEquals('/base/some/path', $result);
+	}
+
+/**
  * testSetAction method
  *
  * @return void
@@ -1082,7 +1106,7 @@ class ControllerTest extends CakeTestCase {
 		$TestController = new TestController();
 
 		$Post = new ControllerPost();
-		$Post->validate = array('title' => 'notEmpty');
+		$Post->validate = array('title' => 'notBlank');
 		$Post->set('title', '');
 		$result = $TestController->validateErrors($Post);
 

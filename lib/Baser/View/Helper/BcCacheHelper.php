@@ -29,8 +29,8 @@ class BcCacheHelper extends CacheHelper {
  *
  * @param string $content view content to write to a cache file.
  * @param string $timestamp Duration to set for cache file.
- * @param bool $useCallbacks Whether to include statements in cached file which
- *   run callbacks.
+ * @param bool|null $useCallbacks Whether to include statements in cached file which
+ *   run callbacks, otherwise null.
  * @return bool success of caching view.
  */
 	protected function _writeFile($content, $timestamp, $useCallbacks = false) {
@@ -62,7 +62,7 @@ class BcCacheHelper extends CacheHelper {
 		$cache = strtolower(Inflector::slug($path));
 
 		if (empty($cache)) {
-			return;
+			return null;
 		}
 		$cache = $cache . '.php';
 		$file = '<!--cachetime:' . $cacheTime . '--><?php';

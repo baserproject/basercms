@@ -71,7 +71,7 @@ class BlogCategory extends BlogAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "ブログカテゴリ名を入力してください。",
 				'required' => true),
 			array('rule' => 'halfText',
@@ -82,7 +82,7 @@ class BlogCategory extends BlogAppModel {
 				'message' => 'ブログカテゴリ名は255文字以内で入力してください。')
 		),
 		'title' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "ブログカテゴリタイトルを入力してください。",
 				'required' => true),
 			array('rule' => array('maxLength', 255),

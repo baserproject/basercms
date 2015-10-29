@@ -175,7 +175,7 @@ class ConsoleOptionParser {
 /**
  * Build a parser from an array. Uses an array like
  *
- * {{{
+ * ```
  * $spec = array(
  *		'description' => 'text',
  *		'epilog' => 'text',
@@ -189,7 +189,7 @@ class ConsoleOptionParser {
  *			// list of subcommands to add.
  *		)
  * );
- * }}}
+ * ```
  *
  * @param array $spec The spec to build the OptionParser with.
  * @return ConsoleOptionParser
@@ -407,6 +407,17 @@ class ConsoleOptionParser {
 			$command = new ConsoleInputSubcommand($options);
 		}
 		$this->_subcommands[$name] = $command;
+		return $this;
+	}
+
+/**
+ * Remove a subcommand from the option parser.
+ *
+ * @param string $name The subcommand name to remove.
+ * @return $this
+ */
+	public function removeSubcommand($name) {
+		unset($this->_subcommands[$name]);
 		return $this;
 	}
 

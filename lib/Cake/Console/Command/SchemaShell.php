@@ -122,7 +122,7 @@ class SchemaShell extends AppShell {
 		if ($this->params['force']) {
 			$options['models'] = false;
 		} elseif (!empty($this->params['models'])) {
-			$options['models'] = String::tokenize($this->params['models']);
+			$options['models'] = CakeText::tokenize($this->params['models']);
 		}
 
 		$snapshot = false;
@@ -151,14 +151,14 @@ class SchemaShell extends AppShell {
 		Configure::write('Cache.disable', $cacheDisable);
 
 		if (!empty($this->params['exclude']) && !empty($content)) {
-			$excluded = String::tokenize($this->params['exclude']);
+			$excluded = CakeText::tokenize($this->params['exclude']);
 			foreach ($excluded as $table) {
 				unset($content['tables'][$table]);
 			}
 		}
 
 		if ($snapshot === true) {
-			$fileName = rtrim($this->params['file'], '.php');
+			$fileName = basename($this->params['file'], '.php');
 			$Folder = new Folder($this->Schema->path);
 			$result = $Folder->read();
 
@@ -285,7 +285,7 @@ class SchemaShell extends AppShell {
 			'connection' => $this->params['connection'],
 		);
 		if (!empty($this->params['snapshot'])) {
-			$fileName = rtrim($this->Schema->file, '.php');
+			$fileName = basename($this->Schema->file, '.php');
 			$options['file'] = $fileName . '_' . $this->params['snapshot'] . '.php';
 		}
 

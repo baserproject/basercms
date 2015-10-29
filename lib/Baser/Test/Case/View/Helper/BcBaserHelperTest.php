@@ -697,7 +697,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 		// CSS
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', array('inline' => false));
 		ob_start();
 		$this->BcBaser->scripts();
@@ -715,7 +715,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
 		// meta
-		$expected = '<meta name="description" content="説明文" />';
+		$expected = '<meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
 		$BcHtml->meta('description', '説明文', array('inline' => false));
@@ -726,7 +726,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
 		// ツールバー
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
 		$this->BcBaser->set('user', array('User'));
 		ob_start();
 		$this->BcBaser->scripts();
@@ -829,7 +829,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testIcon() {
-		$this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon" /><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon" />' . "\n");
+		$this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon"/><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"/>' . "\n");
 		$this->BcBaser->icon();
 	}
 
@@ -863,23 +863,23 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->css('admin/import');
 		$result = ob_get_clean();
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// 拡張子あり
 		ob_start();
 		$this->BcBaser->css('admin/import.css');
 		$result = ob_get_clean();
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// インラインオフ（array）
 		$this->BcBaser->css('admin/import.css', array('inline' => false));
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$result = $this->_View->Blocks->get('css');
 		$this->assertEquals($expected, $result);
 		$this->_View->Blocks->end();
 		// インラインオフ（boolean）
 		$this->BcBaser->css('admin/import.css', false);
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->_View->assign('css', '');
 		$this->assertEquals($expected, $result);
 	}
@@ -923,7 +923,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testImg() {
-		$this->expectOutputString('<img src="/img/baser.power.gif" alt="" />');
+		$this->expectOutputString('<img src="/img/baser.power.gif" alt=""/>');
 		$this->BcBaser->img('baser.power.gif');
 	}
 
@@ -943,8 +943,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function getImgDataProvider() {
 		return array(
-			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ" />'),
-			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt="" />')
+			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ"/>'),
+			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt=""/>')
 		);
 	}
 
@@ -1800,7 +1800,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testLogo() {
-		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS" \/>/');
+		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS"\/>/');
 		$this->BcBaser->logo();
 	}
 
@@ -1834,7 +1834,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function mainImageDataProvider() {
 		return array(
-			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
+			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'),
 			array(array('num' => 2), 'main_image_2'),
 			array(array('all' => true, 'num' => 2), '^(.*main_image_1.*main_image_2)'),
 			array(array('all' => true, 'class' => 'test-class', 'id' => 'test-id'), '^(.*id="test-id".*class="test-class")'), 
@@ -2066,7 +2066,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input  type="submit" value="検索"\/>.*<\/form><\/div>/s');
+		$this->expectOutputRegex('/<div class="section search-box">.*<input type="submit" value="検索"\/>.*<\/form><\/div>/s');
 		$this->BcBaser->siteSearchForm();
 	}
 

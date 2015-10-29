@@ -73,18 +73,18 @@ class Permission extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '設定名を入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => '設定名は255文字以内で入力してください。')
 		),
 		'user_group_id' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'ユーザーグループを選択してください。',
 				'required' => true)
 		),
 		'url' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '設定URLを入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => '設定URLは255文字以内で入力してください。'),

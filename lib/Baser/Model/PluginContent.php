@@ -64,14 +64,14 @@ class PluginContent extends AppModel {
 				'message' => 'コンテンツ名は50文字以内で入力してください。')
 		),
 		'content_id' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'コンテンツIDを入力してください。',
 				'on' => 'update')
 		),
 		'plugin' => array(
 			array('rule' => array('alphaNumericPlus'),
 				'message' => 'プラグイン名は半角英数字、ハイフン、アンダースコアのみで入力してください。'),
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'プラグイン名を入力してください。'),
 			array('rule' => array('maxLength', 20),
 				'message' => 'プラグイン名は20文字以内で入力してください。')
