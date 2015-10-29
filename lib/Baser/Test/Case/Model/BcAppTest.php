@@ -306,6 +306,26 @@ class BcAppTest extends BaserTestCase {
 		);
 	}
 
+/**
+ * 最大のバイト数チェック
+ *
+ * @param mixed $check
+ * @param int $min
+ * @param boolean $expect
+ * @dataProvider maxByteDataProvider
+ */
+	public function testMaxByte($check, $min, $expect) {
+		$result = $this->BcApp->maxByte($check, $min);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function maxByteDataProvider() {
+		return array(
+			array("あいう", 10, true),
+			array("あいう", 9, true),
+			array("あいう", 8, false)
+		);
+	}
 
 /**
  * 範囲を指定しての長さチェック

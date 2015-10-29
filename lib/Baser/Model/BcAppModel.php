@@ -432,6 +432,20 @@ class BcAppModel extends Model {
 	}
 
 /**
+ * 最大のバイト数チェック
+ * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+ *
+ * @param mixed $check 対象となる値
+ * @param int $max バイト数の最大値
+ * @return boolean
+ */
+	public function maxByte($check, $max) {
+		$check = (is_array($check)) ? current($check) : $check;
+		$byte = strlen($check);
+		return ($byte <= $max);
+	}
+
+/**
  * 範囲を指定しての長さチェック
  *
  * @param mixed	$check 対象となる値

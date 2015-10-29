@@ -12,6 +12,7 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+App::uses('PageCategory', 'Model');
 App::uses('Page', 'Model');
 App::uses('Plugin', 'Model');
 App::uses('User', 'Model');
@@ -114,6 +115,17 @@ class BcManagerComponent extends Component {
 		if (!$this->executeDefaultUpdates($dbConfig)) {
 			$this->log('データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。');
 			return false;
+		}
+
+		// コアプラグインのインストール
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		$this->connectDb($dbConfig, 'plugin');
+		foreach ($corePlugins as $corePlugin) {
+			CakePlugin::load($corePlugin);
+			if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
+				$this->log("コアプラグイン" . $corePlugin . "のインストールに失敗しました。");
+				return false;
+			}
 		}
 
 		// テーマを配置
@@ -240,7 +252,7 @@ class BcManagerComponent extends Component {
  * @access	protected
  */
 	public function createPageTemplates() {
-		$Page = new Page(null, null, 'baser');
+		$Page = ClassRegistry::init('Page');
 		clearAllCache();
 		$pages = $Page->find('all', array('recursive' => -1));
 		if ($pages) {
@@ -259,14 +271,6 @@ class BcManagerComponent extends Component {
 		$result = true;
 		if (!$this->_updatePluginStatus($dbConfig)) {
 			$this->log('プラグインの有効化に失敗しました。');
-			$result = false;
-		}
-		if (!$this->updateBlogEntryDate($dbConfig)) {
-			$this->log('ブログ記事の投稿日更新に失敗しました。');
-			$result = false;
-		}
-		if (!$this->_updateBaserNewsFeedUrl($dbConfig)) {
-			$this->log('baserCMS公式新着情報のフィードURLの更新に失敗しました。');
 			$result = false;
 		}
 		return $result;
@@ -295,7 +299,7 @@ class BcManagerComponent extends Component {
 			$data['Plugin']['title'] = $title;
 			$data['Plugin']['version'] = $version;
 			$data['Plugin']['status'] = true;
-			$data['Plugin']['db_inited'] = true;
+			$data['Plugin']['db_inited'] = false;
 			$data['Plugin']['priority'] = $priority;
 			$Plugin->create($data);
 			if (!$Plugin->save()) {
@@ -306,63 +310,6 @@ class BcManagerComponent extends Component {
 		return $result;
 	}
 
-/**
- * 登録日を更新する
- *
- * @return boolean
- */
-	public function updateBlogEntryDate($dbConfig) {
-		$this->connectDb($dbConfig, 'plugin');
-		CakePlugin::load('Blog');
-		App::uses('BlogPost', 'Blog.Model');
-		$BlogPost = new BlogPost();
-		$BlogPost->contentSaving = false;
-		$datas = $BlogPost->find('all', array('recursive' => -1));
-		if ($datas) {
-			$ret = true;
-			foreach ($datas as $data) {
-				$data['BlogPost']['posts_date'] = date('Y-m-d H:i:s');
-				unset($data['BlogPost']['eye_catch']);
-				$BlogPost->set($data);
-				if (!$BlogPost->save($data)) {
-					$ret = false;
-				}
-			}
-			return $ret;
-		} else {
-			return false;
-		}
-	}
-
-/**
- * baserCMS公式サイトのフィードURLを更新
- * 
- * @param array $dbConfig
- * @return boolean
- */
-	protected function _updateBaserNewsFeedUrl($dbConfig) {
-		$this->connectDb($dbConfig, 'plugin');
-		CakePlugin::load('Feed');
-		App::uses('FeedDetail', 'Feed.Model');
-		App::uses('FeedAppModel', 'Feed.Model');
-		$FeedDetail = new FeedDetail();
-		$datas = $FeedDetail->find('all', array('recursive' => -1));
-		if($datas) {
-			$ret = true;
-			foreach($datas as $data) {
-				if($data['FeedDetail']['url'] == 'http://basercms.net/news/index.rss') {
-					$data['FeedDetail']['url'] .= '?site=' . siteUrl();
-				}
-				$FeedDetail->set($data);
-				if (!$FeedDetail->save($data)) {
-					$ret = false;
-				}
-			}
-			return $ret;
-		} else {
-			return false;
-		}
-	}
 /**
  * サイト基本設定に管理用メールアドレスを登録する
  * 
@@ -567,82 +514,41 @@ class BcManagerComponent extends Component {
 	}
 
 /**
- * データベースを初期化する
+ * baserCMSコアのデータベースを構築する
  * 
- * @param type $reset
- * @param type $dbConfig
- * @param type $dbDataPattern
- * @return type
- * @access public 
- */
-	public function initDb($dbConfig, $reset = true, $dbDataPattern = '') {
-		if (!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-		}
-
-		if ($reset) {
-			$this->deleteTables();
-			$this->deleteTables('plugin');
-		}
-
-		return $this->constructionDb($dbConfig, $dbDataPattern);
-	}
-
-/**
- * データベースを構築する
- * 
- * @param array $dbConfig
- * @param string $dbDataPattern
+ * @param array $dbConfig データベース設定名
+ * @param string $dbDataPattern データパターン
  * @return boolean
- * @access public
  */
 	public function constructionDb($dbConfig, $dbDataPattern = '') {
+
+		$coreExcludes = array('users', 'dblogs', 'plugins');
+
 		if (!$dbDataPattern) {
 			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-		}
-
-		if (!$this->constructionTable('Core', 'baser', $dbConfig)) {
-			$this->log("コアテーブルの構築に失敗しました。");
-			return false;
-		}
-		$dbConfig['prefix'] .= Configure::read('BcEnv.pluginDbPrefix');
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		foreach ($corePlugins as $corePlugin) {
-			if (!$this->constructionTable($corePlugin, 'plugin', $dbConfig)) {
-				$this->log("プラグインテーブルの構築に失敗しました。");
-				return false;
-			}
 		}
 
 		if (strpos($dbDataPattern, '.') === false) {
 			$this->log("データパターンの形式が不正です。");
 			return false;
 		}
+
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 
-		$coreExcludes = array('users', 'dblogs', 'plugins');
+		if (!$this->constructionTable('Core', 'baser', $dbConfig)) {
+			$this->log("コアテーブルの構築に失敗しました。");
+			return false;
+		}
 
 		if ($theme == 'core') {
 			if (!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
 			}
-			foreach ($corePlugins as $corePlugin) {
-				if (!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, 'core', $corePlugin)) {
-					$this->log("プラグインの初期データのロードに失敗しました。");
-					return false;
-				}
-			}
 		} else {
 			if (!$this->loadDefaultDataPattern('baser', $dbConfig, $pattern, $theme, 'core', $coreExcludes)) {
 				$this->log("コアの初期データのロードに失敗しました。");
 				return false;
-			}
-			foreach ($corePlugins as $corePlugin) {
-				if (!$this->loadDefaultDataPattern('plugin', $dbConfig, $pattern, $theme, $corePlugin)) {
-					$this->log("プラグインの初期データのロードに失敗しました。");
-					return false;
-				}
 			}
 		}
 
@@ -651,30 +557,9 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 
-		if(!$this->reconstructionMessage()) {
-			$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
-			return false;
-		}
-		
 		return true;
 	}
 
-/**
- * メール受信テーブルの再構築
- * 
- * @return boolean
- */
-	public function reconstructionMessage() {
-		
-		CakePlugin::load('Mail');
-		App::uses('Message', 'Mail.Model');
-		$Message = new Message();
-		if (!$Message->reconstructionAll()) {
-			return false;
-		}
-		return true;
-		
-	}
 /**
  * 全ての初期データセットのリストを取得する
  * 
@@ -1698,7 +1583,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function installPlugin($name) {
-		
+
 		$paths = App::path('Plugin');
 		$exists = false;
 		foreach($paths as $path) {
@@ -1715,17 +1600,11 @@ class BcManagerComponent extends Component {
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$data = $this->Plugin->find('first', array('conditions' => array('name' => $name)));
 		$title = '';
-		
 
-		
 		if (empty($data['Plugin']['db_inited'])) {
 			$initPath = $path . $name . DS . 'Config' . DS . 'init.php';
 			if (file_exists($initPath)) {
-				try {
-					include $initPath;
-				} catch (Exception $e) {
-					$this->log($e->getMessage());
-				}
+				$this->initPlugin($initPath);
 			}
 		}
 		$configPath = $path . $name . DS . 'config.php';
@@ -1777,7 +1656,21 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 	}
-	
+
+/**
+ * プラグインを初期化
+ *
+ * @param $_path
+ */
+	public function initPlugin($_path) {
+		if (file_exists($_path)) {
+			try {
+				include $_path;
+			} catch (Exception $e) {
+				$this->log($e->getMessage());
+			}
+		}
+	}
 /**
  * プラグインをアンインストールする
  * 

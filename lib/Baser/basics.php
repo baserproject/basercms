@@ -545,7 +545,12 @@ function topLevelUrl($lastSlash = true) {
  */
 function siteUrl() {
 	$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
-	return topLevelUrl(false) . $baseUrl;
+	$topLevelUrl = topLevelUrl(false);
+	if($topLevelUrl) {
+		return $topLevelUrl . $baseUrl;
+	} else {
+		return '';
+	}
 }
 
 /**

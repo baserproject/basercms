@@ -205,6 +205,20 @@ function mailContentSender1ClickHandler(){
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
 		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.save_info', '送信情報') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('MailContent.save_info', array('type' => 'radio', 'options' => array(1 => '保存する', 0 => '保存しない'))) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'saveInfo', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->error('MailContent.save_info') ?>
+				<div id="saveInfo" class="helptext">
+					<ul>
+						<li>メールフォームから送信された情報をデータベースに保存するかどうかを指定できます。</li>
+						<li>メールフォームから送信された情報をデータベースに保存したくない場合は、保存しないを指定してください。</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.auth_capthca', 'イメージ認証') ?></th>
 			<td class="col-input">
 <?php echo $this->BcForm->input('MailContent.auth_captcha', array('type' => 'checkbox', 'label' => '利用する')) ?>

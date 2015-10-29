@@ -96,7 +96,10 @@ class MaildataHelper extends BcTextHelper {
 				}
 
 				$out = '';
-				foreach ($value as $data) {
+				foreach ($value as $key => $data) {
+					if ($key != 0) {
+						$out .= " ";
+					}
 					if (isset($options[$data])) {
 						$out .= "・" . $options[$data] . PHP_EOL;
 					}

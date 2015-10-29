@@ -320,7 +320,7 @@ class BcBaserHelper extends AppHelper {
  * @return string コンテンツタイトル
  */
 	public function getContentsTitle() {
-		if ($this->_View->name === 'CakeError' || empty($this->_View->pageTitle)) {
+		if (empty($this->_View->pageTitle)) {
 			return '';
 		}
 
@@ -1150,9 +1150,13 @@ class BcBaserHelper extends AppHelper {
  * @return bool リンクが存在する場合は true を返す
  */
 	public function existsPublishLink() {
-		return !empty($this->_View->viewVars['currentUserAuthPrefixes'])
-		&& in_array(Configure::read('Routing.prefixes.0'), $this->_View->viewVars['currentUserAuthPrefixes'])
-		&& !empty($this->_View->viewVars['publishLink']);
+		if (empty($this->_View->viewVars['currentUserAuthPrefixes'])) return false;
+		if (empty($this->_View->viewVars['publishLink'])) return false;
+		foreach($this->_View->viewVars['currentUserAuthPrefixes'] as $currentPrefix) {
+			if (Configure::read('Routing.prefixes.0') == $currentPrefix) return true;
+			if (Configure::read('Routing.prefixes.0') == Configure::read('BcAuthPrefix.' . $currentPrefix . '.alias')) return true;
+		}
+		return false;
 	}
 
 /**

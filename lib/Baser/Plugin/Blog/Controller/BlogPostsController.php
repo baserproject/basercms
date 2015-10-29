@@ -337,7 +337,7 @@ class BlogPostsController extends BlogAppController {
 		$this->set('categories', $categories);
 		$this->set('previewId', 'add_' . mt_rand(0, 99999999));
 		$this->set('editorOptions', $editorOptions);
-		$this->set('users', $this->BlogPost->User->getUserList(array('User.id' => $user['id'])));
+		$this->set('users', $this->BlogPost->User->getUserList());
 		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規記事登録';
 		$this->help = 'blog_posts_form';
 		$this->render('form');

@@ -127,7 +127,10 @@ class Page extends AppModel {
 				'message' => '説明文は255文字以内で入力してください。')
 		),
 		'contents' => array(
-			array('rule' => array('phpValidSyntax'))
+			array('rule' => array('phpValidSyntax'),
+				'message' => 'PHPの構文エラーが発生しました。'),
+			array('rule' => array('maxByte', 64000),
+				'message' => '保存できるデータ量を超えています。')
 		)
 	);
 
@@ -1240,6 +1243,10 @@ class Page extends AppModel {
  */
 	public function phpValidSyntax($check) {
 		if(empty($check[key($check)])) {
+			return true;
+		}
+
+		if(!function_exists('exec')) {
 			return true;
 		}
 

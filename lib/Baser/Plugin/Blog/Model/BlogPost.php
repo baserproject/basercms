@@ -129,6 +129,10 @@ class BlogPost extends BlogAppModel {
 			array('rule' => array('maxLength', 255),
 				'message' => 'タイトルは255文字以内で入力してください。')
 		),
+		'detail' => array(
+			array('rule' => array('maxByte', 64000),
+			'message' => '保存できるデータ量を超えています。')
+		),
 		'posts_date' => array(
 			array('rule' => array('notEmpty'),
 				'message' => '投稿日を入力してください。',
