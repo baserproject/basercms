@@ -18,6 +18,13 @@
 	$this->Plugin->initDb('plugin', 'Mail');
 
 /**
+ * メッセージテーブル構築
+ */
+	App::uses('Message', 'Mail.Model');
+	$Message = new Message();
+	$Message->reconstructionAll();
+
+/**
  * 必要フォルダ初期化
  */
 	$filesPath = WWW_ROOT.'files';
