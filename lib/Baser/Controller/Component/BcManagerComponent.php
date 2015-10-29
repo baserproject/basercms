@@ -567,28 +567,6 @@ class BcManagerComponent extends Component {
 	}
 
 /**
- * データベースを初期化する
- * 
- * @param type $reset
- * @param type $dbConfig
- * @param type $dbDataPattern
- * @return type
- * @access public 
- */
-	public function initDb($dbConfig, $reset = true, $dbDataPattern = '') {
-		if (!$dbDataPattern) {
-			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-		}
-
-		if ($reset) {
-			$this->deleteTables();
-			$this->deleteTables('plugin');
-		}
-
-		return $this->constructionDb($dbConfig, $dbDataPattern);
-	}
-
-/**
  * データベースを構築する
  * 
  * @param array $dbConfig

@@ -410,20 +410,6 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 /**
- * データベースを初期化する
- * 
- * @param type $reset
- * @param type $dbConfig
- * @param type $dbDataPattern
- * @return type
- * @access public 
- */
-	public function testInitDb() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-	}
-
-/**
  * データベースを構築する
  * 
  * @param array $dbConfig
