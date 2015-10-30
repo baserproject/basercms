@@ -108,7 +108,7 @@ class BcUtil extends Object {
 /**
  * スキーマ情報のパスを取得する
  * 
- * @param string $plugin
+ * @param string $plugin プラグイン名
  * @return string Or false
  */
 	public static function getSchemaPath($plugin = null) {
@@ -145,7 +145,9 @@ class BcUtil extends Object {
  * 
  * 初期データのフォルダは アンダースコア区切り推奨
  * 
- * @param string $plugin
+ * @param string $plugin プラグイン名
+ * @param string $theme テーマ名
+ * @param string $pattern 初期データの類型
  * @return string Or false
  */
 	public static function getDefaultDataPath($plugin = null, $theme = null, $pattern = null) {
@@ -220,7 +222,7 @@ class BcUtil extends Object {
 /**
  * シリアライズ
  * 
- * @param mixed $value
+ * @param mixed $value 対象文字列
  * @return string
  */
 	public static function serialize($value) {
@@ -231,7 +233,7 @@ class BcUtil extends Object {
  * アンシリアライズ
  * base64_decode が前提
  * 
- * @param string $value
+ * @param mixed $value 対象文字列
  * @return mixed
  */
 	public static function unserialize($value) {
