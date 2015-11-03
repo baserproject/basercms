@@ -310,13 +310,6 @@ class ThemesController extends AppController {
 			}
 		}
 
-		// ブログ記事の投稿日を更新
-		$Db = ConnectionManager::getDataSource('plugin');
-		if(!$this->BcManager->updateBlogEntryDate($Db->config)) {
-			$result = false;
-			$this->log('ブログ記事投稿日の初期化に失敗しました。');
-		}
-
 		$Db = ConnectionManager::getDataSource('baser');
 		if($Db->config['datasource'] == 'Database/BcPostgres') {
 			$Db->updateSequence();
