@@ -660,7 +660,6 @@ class BcManagerComponent extends Component {
 		$path = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
 
 		if (!$path) {
-			$this->log("初期データフォルダが見つかりません。");
 			return false;
 		}
 

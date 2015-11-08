@@ -314,7 +314,8 @@ class User extends AppModel {
 		if ($defaultFavorites) {
 			$defaultFavorites = BcUtil::unserialize($defaultFavorites);
 			if ($defaultFavorites) {
-				$this->deleteFavorites($userId);	
+				$this->deleteFavorites($userId);
+				$this->Favorite->Behaviors->detach('BcCache');
 				foreach ($defaultFavorites as $favorites) {
 					$favorites['user_id'] = $userId;
 					$favorites['sort'] = $this->Favorite->getMax('sort', array('Favorite.user_id' => $userId)) + 1;
