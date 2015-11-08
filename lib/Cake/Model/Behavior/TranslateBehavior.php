@@ -140,7 +140,7 @@ class TranslateBehavior extends ModelBehavior {
 			unset($this->_joinTable, $this->_runtimeModel);
 			return $query;
 		} elseif (is_string($query['fields'])) {
-			$query['fields'] = CakeText::tokenize($query['fields']);
+			$query['fields'] = String::tokenize($query['fields']);
 		}
 
 		$fields = array_merge(
@@ -436,10 +436,6 @@ class TranslateBehavior extends ModelBehavior {
 			$tempData = $this->_prepareTranslations($Model, $tempData);
 		}
 		$locale = $this->_getLocale($Model);
-		$atomic = array();
-		if (isset($options['atomic'])) {
-			$atomic = array('atomic' => $options['atomic']);
-		}
 
 		foreach ($tempData as $field => $value) {
 			unset($conditions['content']);
@@ -469,11 +465,10 @@ class TranslateBehavior extends ModelBehavior {
 					$RuntimeModel->save(array(
 						$RuntimeModel->alias => array_merge(
 							$conditions, array('id' => $translations[$_locale])
-						),
-						$atomic
+						)
 					));
 				} else {
-					$RuntimeModel->save(array($RuntimeModel->alias => $conditions), $atomic);
+					$RuntimeModel->save(array($RuntimeModel->alias => $conditions));
 				}
 			}
 		}
@@ -589,8 +584,7 @@ class TranslateBehavior extends ModelBehavior {
 		$RuntimeModel = $this->translateModel($Model);
 		$default = array(
 			'className' => $RuntimeModel->alias,
-			'foreignKey' => 'foreign_key',
-			'order' => 'id'
+			'foreignKey' => 'foreign_key'
 		);
 
 		foreach ($fields as $key => $value) {

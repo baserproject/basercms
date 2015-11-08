@@ -17,7 +17,7 @@
  */
 
 App::uses('Component', 'Controller');
-App::uses('CakeText', 'Utility');
+App::uses('String', 'Utility');
 App::uses('Hash', 'Utility');
 App::uses('Security', 'Utility');
 
@@ -47,7 +47,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a POST request is required
  *
  * @var array
- * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requirePost()
  */
 	public $requirePost = array();
@@ -56,7 +56,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a GET request is required
  *
  * @var array
- * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requireGet()
  */
 	public $requireGet = array();
@@ -65,7 +65,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a PUT request is required
  *
  * @var array
- * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requirePut()
  */
 	public $requirePut = array();
@@ -74,7 +74,7 @@ class SecurityComponent extends Component {
  * List of controller actions for which a DELETE request is required
  *
  * @var array
- * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
+ * @deprecated 3.0.0 Use CakeRequest::onlyAllow() instead.
  * @see SecurityComponent::requireDelete()
  */
 	public $requireDelete = array();
@@ -355,7 +355,7 @@ class SecurityComponent extends Component {
  * Check if HTTP methods are required
  *
  * @param Controller $controller Instantiating controller
- * @return bool True if $method is required
+ * @return bool|null True if $method is required
  */
 	protected function _methodsRequired(Controller $controller) {
 		foreach (array('Post', 'Get', 'Put', 'Delete') as $method) {
@@ -365,7 +365,7 @@ class SecurityComponent extends Component {
 				if (in_array($this->_action, $require) || $this->$property === array('*')) {
 					if (!$this->request->is($method)) {
 						if (!$this->blackHole($controller, $method)) {
-							return false;
+							return null;
 						}
 					}
 				}
@@ -378,7 +378,7 @@ class SecurityComponent extends Component {
  * Check if access requires secure connection
  *
  * @param Controller $controller Instantiating controller
- * @return bool True if secure connection required
+ * @return bool|null True if secure connection required
  */
 	protected function _secureRequired(Controller $controller) {
 		if (is_array($this->requireSecure) && !empty($this->requireSecure)) {
@@ -387,7 +387,7 @@ class SecurityComponent extends Component {
 			if (in_array($this->_action, $requireSecure) || $this->requireSecure === array('*')) {
 				if (!$this->request->is('ssl')) {
 					if (!$this->blackHole($controller, 'secure')) {
-						return false;
+						return null;
 					}
 				}
 			}

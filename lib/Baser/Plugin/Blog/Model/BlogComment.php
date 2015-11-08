@@ -57,7 +57,7 @@ class BlogComment extends BlogAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => 'お名前を入力してください。'),
 			array('rule' => array('maxLength', 50),
 				'message' => 'お名前は50文字以内で入力してください。')
@@ -81,7 +81,7 @@ class BlogComment extends BlogAppModel {
 				'message' => 'URLは255文字以内で入力してください。')
 		),
 		'message' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "コメントを入力してください。")
 		)
 	);

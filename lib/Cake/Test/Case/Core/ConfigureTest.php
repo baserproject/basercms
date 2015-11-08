@@ -69,7 +69,6 @@ class ConfigureTest extends CakeTestCase {
 
 /**
  * Test to ensure bootrapping doesn't overwrite prior configs set under 'App' key
- *
  * @return void
  */
 	public function testBootstrap() {
@@ -150,39 +149,6 @@ class ConfigureTest extends CakeTestCase {
 	}
 
 /**
- * Test the consume method.
- *
- * @return void
- */
-	public function testConsume() {
-		$this->assertNull(Configure::consume('DoesNotExist'), 'Should be null on empty value');
-		Configure::write('Test', array('key' => 'value', 'key2' => 'value2'));
-
-		$result = Configure::consume('Test.key');
-		$this->assertEquals('value', $result);
-
-		$result = Configure::read('Test.key2');
-		$this->assertEquals('value2', $result, 'Other values should remain.');
-
-		$result = Configure::consume('Test');
-		$expected = array('key2' => 'value2');
-		$this->assertEquals($expected, $result);
-	}
-
-/**
- * testConsumeEmpty
- *
- * @return void
- */
-	public function testConsumeEmpty() {
-		Configure::write('Test', array('key' => 'value', 'key2' => 'value2'));
-		$result = Configure::consume('');
-		$this->assertNull($result);
-		$result = Configure::consume(null);
-		$this->assertNull($result);
-	}
-
-/**
  * test setting display_errors with debug.
  *
  * @return void
@@ -209,7 +175,7 @@ class ConfigureTest extends CakeTestCase {
 
 		Configure::delete('SomeName.someKey');
 		$result = Configure::read('SomeName.someKey');
-		$this->assertNull($result);
+		$this->assertTrue($result === null);
 
 		Configure::write('SomeName', array('someKey' => 'myvalue', 'otherKey' => 'otherValue'));
 
@@ -222,10 +188,10 @@ class ConfigureTest extends CakeTestCase {
 		Configure::delete('SomeName');
 
 		$result = Configure::read('SomeName.someKey');
-		$this->assertNull($result);
+		$this->assertTrue($result === null);
 
 		$result = Configure::read('SomeName.otherKey');
-		$this->assertNull($result);
+		$this->assertTrue($result === null);
 	}
 
 /**
@@ -279,8 +245,7 @@ class ConfigureTest extends CakeTestCase {
  * @return void
  */
 	public function testCheckEmpty() {
-		$this->assertFalse(Configure::check(''));
-		$this->assertFalse(Configure::check(null));
+		$this->assertFalse(Configure::check());
 	}
 
 /**
@@ -470,8 +435,6 @@ class ConfigureTest extends CakeTestCase {
 	}
 
 /**
- * testDumpNoAdapter
- *
  * @expectedException ConfigureException
  * @return void
  */

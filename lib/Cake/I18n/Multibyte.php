@@ -550,7 +550,7 @@ class Multibyte {
 				$matched = true;
 			} else {
 				$matched = false;
-				$keys = static::_find($char, 'upper');
+				$keys = self::_find($char, 'upper');
 
 				if (!empty($keys)) {
 					foreach ($keys as $key => $value) {
@@ -596,7 +596,7 @@ class Multibyte {
 
 			} else {
 				$matched = false;
-				$keys = static::_find($char);
+				$keys = self::_find($char);
 				$keyCount = count($keys);
 
 				if (!empty($keys)) {
@@ -815,7 +815,7 @@ class Multibyte {
 		} else {
 			$return = false;
 		}
-		static::$_codeRange[$decimal] = $return;
+		self::$_codeRange[$decimal] = $return;
 		return $return;
 	}
 
@@ -824,35 +824,35 @@ class Multibyte {
  *
  * @param int $char decimal value of character
  * @param string $type Type 'lower' or 'upper'. Defaults to 'lower'.
- * @return array
+ * @return array|null
  */
 	protected static function _find($char, $type = 'lower') {
 		$found = array();
-		if (!isset(static::$_codeRange[$char])) {
-			$range = static::_codepoint($char);
+		if (!isset(self::$_codeRange[$char])) {
+			$range = self::_codepoint($char);
 			if ($range === false) {
-				return array();
+				return null;
 			}
 			if (!Configure::configured('_cake_core_')) {
 				App::uses('PhpReader', 'Configure');
 				Configure::config('_cake_core_', new PhpReader(CAKE . 'Config' . DS));
 			}
 			Configure::load('unicode' . DS . 'casefolding' . DS . $range, '_cake_core_');
-			static::$_caseFold[$range] = Configure::read($range);
+			self::$_caseFold[$range] = Configure::read($range);
 			Configure::delete($range);
 		}
 
-		if (!static::$_codeRange[$char]) {
-			return array();
+		if (!self::$_codeRange[$char]) {
+			return null;
 		}
-		static::$_table = static::$_codeRange[$char];
-		$count = count(static::$_caseFold[static::$_table]);
+		self::$_table = self::$_codeRange[$char];
+		$count = count(self::$_caseFold[self::$_table]);
 
 		for ($i = 0; $i < $count; $i++) {
-			if ($type === 'lower' && static::$_caseFold[static::$_table][$i][$type][0] === $char) {
-				$found[] = static::$_caseFold[static::$_table][$i];
-			} elseif ($type === 'upper' && static::$_caseFold[static::$_table][$i][$type] === $char) {
-				$found[] = static::$_caseFold[static::$_table][$i];
+			if ($type === 'lower' && self::$_caseFold[self::$_table][$i][$type][0] === $char) {
+				$found[] = self::$_caseFold[self::$_table][$i];
+			} elseif ($type === 'upper' && self::$_caseFold[self::$_table][$i][$type] === $char) {
+				$found[] = self::$_caseFold[self::$_table][$i];
 			}
 		}
 		return $found;

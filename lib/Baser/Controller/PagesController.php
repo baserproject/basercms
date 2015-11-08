@@ -551,6 +551,8 @@ class PagesController extends AppController {
 	public function display() {
 		$path = func_get_args();
 
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		if (is_array($path) && count($path) == 1) {
 			$path = explode('/', $path[0]);
 		}
@@ -561,6 +563,7 @@ class PagesController extends AppController {
 		if (isset($path[0]) && ($path[0] == Configure::read('BcAgent.mobile.prefix') || $path[0] == Configure::read('BcAgent.smartphone.prefix'))) {
 			$this->notFound();
 		}
+		// <<<
 		
 		$count = count($path);
 		if (!$count) {
@@ -614,6 +617,8 @@ class PagesController extends AppController {
 			'title_for_layout' => $titleForLayout
 		));
 
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		$data = $this->Page->findByUrl($checkUrl);
 
 		$template = $layout = $agent = '';
@@ -651,9 +656,15 @@ class PagesController extends AppController {
 		} else {
 			$template = implode('/', $path);
 		}
+		// <<<
 		
 		try {
+			// CUSTOMIZE MODIFY 2014/07/02 ryuring
+			// >>>
+			//$this->render(implode('/', $path));
+			// ---
 			$this->render($template);
+			// <<<
 		} catch (MissingViewException $e) {
 			if (Configure::read('debug')) {
 				throw $e;

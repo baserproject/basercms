@@ -24,6 +24,7 @@
  *
  * from =>
  * The origin email. See CakeEmail::from() about the valid values
+ *
  */
 class EmailConfig {
 

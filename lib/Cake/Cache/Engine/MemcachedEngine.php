@@ -45,8 +45,6 @@ class MemcachedEngine extends CacheEngine {
  *  - serialize = string, default => php. The serializer engine used to serialize data.
  *    Available engines are php, igbinary and json. Beside php, the memcached extension
  *    must be compiled with the appropriate serializer support.
- *  - options - Additional options for the memcached client. Should be an array of option => value.
- *    Use the Memcached::OPT_* constants as keys.
  *
  * @var array
  */
@@ -94,8 +92,7 @@ class MemcachedEngine extends CacheEngine {
 			'persistent' => false,
 			'login' => null,
 			'password' => null,
-			'serialize' => 'php',
-			'options' => array()
+			'serialize' => 'php'
 		);
 		parent::init($settings);
 
@@ -135,11 +132,6 @@ class MemcachedEngine extends CacheEngine {
 			}
 			$this->_Memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
 			$this->_Memcached->setSaslAuthData($this->settings['login'], $this->settings['password']);
-		}
-		if (is_array($this->settings['options'])) {
-			foreach ($this->settings['options'] as $opt => $value) {
-				$this->_Memcached->setOption($opt, $value);
-			}
 		}
 
 		return true;
@@ -185,7 +177,7 @@ class MemcachedEngine extends CacheEngine {
  * @return array Array containing host, port
  */
 	protected function _parseServerString($server) {
-		if (strpos($server, 'unix://') === 0) {
+		if ($server[0] === 'u') {
 			return array($server, 0);
 		}
 		if (substr($server, 0, 1) === '[') {

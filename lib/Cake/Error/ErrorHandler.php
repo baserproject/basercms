@@ -96,14 +96,6 @@ App::uses('Router', 'Routing');
 class ErrorHandler {
 
 /**
- * Whether to give up rendering an exception, if the renderer itself is
- * throwing exceptions.
- *
- * @var bool
- */
-	protected static $_bailExceptionRendering = false;
-
-/**
  * Set as the default exception handler by the CakePHP bootstrap process.
  *
  * This will either use custom exception renderer class if configured,
@@ -115,7 +107,7 @@ class ErrorHandler {
  */
 	public static function handleException(Exception $exception) {
 		$config = Configure::read('Exception');
-		static::_log($exception, $config);
+		self::_log($exception, $config);
 
 		$renderer = isset($config['renderer']) ? $config['renderer'] : 'ExceptionRenderer';
 		if ($renderer !== 'ExceptionRenderer') {
@@ -133,8 +125,6 @@ class ErrorHandler {
 				$e->getMessage(),
 				$e->getTraceAsString()
 			);
-
-			static::$_bailExceptionRendering = true;
 			trigger_error($message, E_USER_ERROR);
 		}
 	}
@@ -156,7 +146,7 @@ class ErrorHandler {
 				$message .= "\nException Attributes: " . var_export($exception->getAttributes(), true);
 			}
 		}
-		if (PHP_SAPI !== 'cli') {
+		if (php_sapi_name() !== 'cli') {
 			$request = Router::getRequest();
 			if ($request) {
 				$message .= "\nRequest URL: " . $request->here();
@@ -185,7 +175,7 @@ class ErrorHandler {
 				}
 			}
 		}
-		return CakeLog::write(LOG_ERR, static::_getMessage($exception));
+		return CakeLog::write(LOG_ERR, self::_getMessage($exception));
 	}
 
 /**
@@ -208,9 +198,9 @@ class ErrorHandler {
 			return false;
 		}
 		$errorConfig = Configure::read('Error');
-		list($error, $log) = static::mapErrorCode($code);
+		list($error, $log) = self::mapErrorCode($code);
 		if ($log === LOG_ERR) {
-			return static::handleFatalError($code, $description, $file, $line);
+			return self::handleFatalError($code, $description, $file, $line);
 		}
 
 		$debug = Configure::read('debug');
@@ -230,16 +220,6 @@ class ErrorHandler {
 		}
 		$message = $error . ' (' . $code . '): ' . $description . ' in [' . $file . ', line ' . $line . ']';
 		if (!empty($errorConfig['trace'])) {
-			// https://bugs.php.net/bug.php?id=65322
-			if (version_compare(PHP_VERSION, '5.4.21', '<')) {
-				if (!class_exists('Debugger')) {
-					App::load('Debugger');
-				}
-				if (!class_exists('CakeText')) {
-					App::uses('CakeText', 'Utility');
-					App::load('CakeText');
-				}
-			}
 			$trace = Debugger::trace(array('start' => 1, 'format' => 'log'));
 			$message .= "\nTrace:\n" . $trace . "\n";
 		}
@@ -254,8 +234,6 @@ class ErrorHandler {
  * @param string $file File on which error occurred
  * @param int $line Line that triggered the error
  * @return bool
- * @throws FatalErrorException If the Exception renderer threw an exception during rendering, and debug > 0.
- * @throws InternalErrorException If the Exception renderer threw an exception during rendering, and debug is 0.
  */
 	public static function handleFatalError($code, $description, $file, $line) {
 		$logMessage = 'Fatal Error (' . $code . '): ' . $description . ' in [' . $file . ', line ' . $line . ']';
@@ -271,18 +249,10 @@ class ErrorHandler {
 		}
 
 		if (Configure::read('debug')) {
-			$exception = new FatalErrorException($description, 500, $file, $line);
+			call_user_func($exceptionHandler, new FatalErrorException($description, 500, $file, $line));
 		} else {
-			$exception = new InternalErrorException();
+			call_user_func($exceptionHandler, new InternalErrorException());
 		}
-
-		if (static::$_bailExceptionRendering) {
-			static::$_bailExceptionRendering = false;
-			throw $exception;
-		}
-
-		call_user_func($exceptionHandler, $exception);
-
 		return false;
 	}
 

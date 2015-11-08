@@ -210,7 +210,7 @@ abstract class ControllerTestCase extends CakeTestCase {
  *     - `result` Get the return value of the controller action. Useful
  *       for testing requestAction methods.
  *
- * @param string|array $url The URL to test.
+ * @param string $url The URL to test
  * @param array $options See options
  * @return mixed The specified return type.
  * @triggers ControllerTestCase $Dispatch, array('request' => $request)
@@ -223,10 +223,6 @@ abstract class ControllerTestCase extends CakeTestCase {
 			'method' => 'POST',
 			'return' => 'result'
 		);
-
-		if (is_array($url)) {
-			$url = Router::url($url);
-		}
 
 		$restore = array('get' => $_GET, 'post' => $_POST);
 
@@ -258,7 +254,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 		$Dispatch->parseParams(new CakeEvent('ControllerTestCase', $Dispatch, array('request' => $request)));
 		if (!isset($request->params['controller']) && Router::currentRoute()) {
 			$this->headers = Router::currentRoute()->response->header();
-			return null;
+			return;
 		}
 		if ($this->_dirtyController) {
 			$this->controller = null;
@@ -275,7 +271,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 			$params['requested'] = 1;
 		}
 		$Dispatch->testController = $this->controller;
-		$Dispatch->response = $this->getMock('CakeResponse', array('send', '_clearBuffer'));
+		$Dispatch->response = $this->getMock('CakeResponse', array('send'));
 		$this->result = $Dispatch->dispatch($request, $Dispatch->response, $params);
 		$this->controller = $Dispatch->testController;
 		$this->vars = $this->controller->viewVars;

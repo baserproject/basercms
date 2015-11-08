@@ -52,7 +52,7 @@ class Xml {
  *
  * Building from an array:
  *
- * ```
+ * {{{
  * 	$value = array(
  * 		'tags' => array(
  * 			'tag' => array(
@@ -68,7 +68,7 @@ class Xml {
  * 		)
  * 	);
  * $xml = Xml::build($value);
- * ```
+ * }}}
  *
  * When building XML from an array ensure that there is only one top level element.
  *
@@ -77,9 +77,6 @@ class Xml {
  * - `return` Can be 'simplexml' to return object of SimpleXMLElement or 'domdocument' to return DOMDocument.
  * - `loadEntities` Defaults to false. Set to true to enable loading of `<!ENTITY` definitions. This
  *   is disabled by default for security reasons.
- * - `readFile` Set to false to disable file reading. This is important to disable when
- *   putting user data into Xml::build(). If enabled local & remote files will be read if they exist.
- *   Defaults to true for backwards compatibility reasons.
  * - If using array as input, you can pass `options` from Xml::fromArray.
  *
  * @param string|array $input XML string, a path to a file, a URL or an array
@@ -94,24 +91,23 @@ class Xml {
 		$defaults = array(
 			'return' => 'simplexml',
 			'loadEntities' => false,
-			'readFile' => true
 		);
 		$options += $defaults;
 
 		if (is_array($input) || is_object($input)) {
-			return static::fromArray((array)$input, $options);
+			return self::fromArray((array)$input, $options);
 		} elseif (strpos($input, '<') !== false) {
-			return static::_loadXml($input, $options);
-		} elseif ($options['readFile'] && file_exists($input)) {
-			return static::_loadXml(file_get_contents($input), $options);
-		} elseif ($options['readFile'] && strpos($input, 'http://') === 0 || strpos($input, 'https://') === 0) {
+			return self::_loadXml($input, $options);
+		} elseif (file_exists($input)) {
+			return self::_loadXml(file_get_contents($input), $options);
+		} elseif (strpos($input, 'http://') === 0 || strpos($input, 'https://') === 0) {
 			try {
 				$socket = new HttpSocket(array('request' => array('redirect' => 10)));
 				$response = $socket->get($input);
 				if (!$response->isOk()) {
 					throw new XmlException(__d('cake_dev', 'XML cannot be read.'));
 				}
-				return static::_loadXml($response->body, $options);
+				return self::_loadXml($response->body, $options);
 			} catch (SocketException $e) {
 				throw new XmlException(__d('cake_dev', 'XML cannot be read.'));
 			}
@@ -160,7 +156,7 @@ class Xml {
  *
  * ### Options
  *
- * - `format` If create childs ('tags') or attributes ('attributes').
+ * - `format` If create childs ('tags') or attributes ('attribute').
  * - `pretty` Returns formatted Xml when set to `true`. Defaults to `false`
  * - `version` Version of XML document. Default is 1.0.
  * - `encoding` Encoding of XML document. If null remove from XML header. Default is the some of application.
@@ -168,7 +164,7 @@ class Xml {
  *
  * Using the following data:
  *
- * ```
+ * {{{
  * $value = array(
  *    'root' => array(
  *        'tag' => array(
@@ -178,13 +174,13 @@ class Xml {
  *         )
  *     )
  * );
- * ```
+ * }}}
  *
  * Calling `Xml::fromArray($value, 'tags');`  Will generate:
  *
  * `<root><tag><id>1</id><value>defect</value>description</tag></root>`
  *
- * And calling `Xml::fromArray($value, 'attributes');` Will generate:
+ * And calling `Xml::fromArray($value, 'attribute');` Will generate:
  *
  * `<root><tag id="1" value="defect">description</tag></root>`
  *
@@ -218,7 +214,7 @@ class Xml {
 		if ($options['pretty']) {
 			$dom->formatOutput = true;
 		}
-		static::_fromArray($dom, $dom, $input, $options['format']);
+		self::_fromArray($dom, $dom, $input, $options['format']);
 
 		$options['return'] = strtolower($options['return']);
 		if ($options['return'] === 'simplexml' || $options['return'] === 'simplexmlelement') {
@@ -233,7 +229,7 @@ class Xml {
  * @param DOMDocument $dom Handler to DOMDocument
  * @param DOMElement $node Handler to DOMElement (child)
  * @param array &$data Array of data to append to the $node.
- * @param string $format Either 'attributes' or 'tags'. This determines where nested keys go.
+ * @param string $format Either 'attribute' or 'tags'. This determines where nested keys go.
  * @return void
  * @throws XmlException
  */
@@ -282,10 +278,10 @@ class Xml {
 						foreach ($value as $item) {
 							$itemData = compact('dom', 'node', 'key', 'format');
 							$itemData['value'] = $item;
-							static::_createChild($itemData);
+							self::_createChild($itemData);
 						}
 					} else { // Struct
-						static::_createChild(compact('dom', 'node', 'key', 'value', 'format'));
+						self::_createChild(compact('dom', 'node', 'key', 'value', 'format'));
 					}
 				}
 			} else {
@@ -324,7 +320,7 @@ class Xml {
 			$child->setAttribute('xmlns', $childNS);
 		}
 
-		static::_fromArray($dom, $child, $value, $format);
+		self::_fromArray($dom, $child, $value, $format);
 		$node->appendChild($child);
 	}
 
@@ -344,7 +340,7 @@ class Xml {
 		}
 		$result = array();
 		$namespaces = array_merge(array('' => ''), $obj->getNamespaces(true));
-		static::_toArray($obj, $result, '', array_keys($namespaces));
+		self::_toArray($obj, $result, '', array_keys($namespaces));
 		return $result;
 	}
 
@@ -369,7 +365,7 @@ class Xml {
 			}
 
 			foreach ($xml->children($namespace, true) as $child) {
-				static::_toArray($child, $data, $namespace, $namespaces);
+				self::_toArray($child, $data, $namespace, $namespaces);
 			}
 		}
 

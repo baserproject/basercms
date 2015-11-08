@@ -474,9 +474,6 @@ class Sqlserver extends DboSource {
 			if (in_array($length->Type, array('nchar', 'nvarchar'))) {
 				return floor($length->Length / 2);
 			}
-			if ($length->Type === 'text') {
-				return null;
-			}
 			return $length->Length;
 		}
 		return parent::length($length);
@@ -544,7 +541,7 @@ class Sqlserver extends DboSource {
 					$page = (int)($limitOffset[1] / $limitOffset[2]);
 					$offset = (int)($limitOffset[2] * $page);
 
-					$rowCounter = static::ROW_COUNTER;
+					$rowCounter = self::ROW_COUNTER;
 					$sql = "SELECT {$limit} * FROM (
 							SELECT {$fields}, ROW_NUMBER() OVER ({$order}) AS {$rowCounter}
 							FROM {$table} {$alias} {$joins} {$conditions} {$group}
@@ -584,12 +581,11 @@ class Sqlserver extends DboSource {
  *
  * @param string $data String to be prepared for use in an SQL statement
  * @param string $column The column into which this data will be inserted
- * @param bool $null Column allows NULL values
  * @return string Quoted and escaped data
  */
-	public function value($data, $column = null, $null = true) {
+	public function value($data, $column = null) {
 		if ($data === null || is_array($data) || is_object($data)) {
-			return parent::value($data, $column, $null);
+			return parent::value($data, $column);
 		}
 		if (in_array($data, array('{$__cakeID__$}', '{$__cakeForeignKey__$}'), true)) {
 			return $data;
@@ -604,7 +600,7 @@ class Sqlserver extends DboSource {
 			case 'text':
 				return 'N' . $this->_connection->quote($data, PDO::PARAM_STR);
 			default:
-				return parent::value($data, $column, $null);
+				return parent::value($data, $column);
 		}
 	}
 
@@ -634,7 +630,7 @@ class Sqlserver extends DboSource {
 			$resultRow = array();
 			foreach ($this->map as $col => $meta) {
 				list($table, $column, $type) = $meta;
-				if ($table === 0 && $column === static::ROW_COUNTER) {
+				if ($table === 0 && $column === self::ROW_COUNTER) {
 					continue;
 				}
 				$resultRow[$table][$column] = $row[$col];

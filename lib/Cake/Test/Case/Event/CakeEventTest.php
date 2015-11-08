@@ -22,6 +22,7 @@ App::uses('CakeEvent', 'Event');
 
 /**
  * Tests the CakeEvent class functionality
+ *
  */
 class CakeEventTest extends CakeTestCase {
 

@@ -323,11 +323,10 @@ class ViewTaskTest extends CakeTestCase {
 	public function testBakeIndex() {
 		$this->Task->controllerName = 'ViewTaskComments';
 
-		$expected = file_get_contents(CAKE . 'Test' . DS . 'bake_compare' . DS . 'View' . DS . 'index.ctp');
 		$this->Task->expects($this->at(0))->method('createFile')
 			->with(
 				TMP . 'ViewTaskComments' . DS . 'index.ctp',
-				$expected
+				$this->stringContains("\$viewTaskComment['Article']['title']")
 			);
 		$this->Task->bake('index', true);
 	}

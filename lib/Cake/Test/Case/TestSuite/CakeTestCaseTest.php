@@ -327,6 +327,7 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextStartsWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
 
 		$this->assertStringStartsWith("some\nstring", $stringDirty);
 		$this->assertStringStartsNotWith("some\r\nstring\r\nwith", $stringDirty);
@@ -343,6 +344,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextStartsNotWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertTextStartsNotWith("some\nstring\nwithout", $stringDirty);
 	}
 
@@ -353,6 +356,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextEndsWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertTextEndsWith("string\nwith\r\ndifferent\rline endings!", $stringDirty);
 		$this->assertTextEndsWith("string\r\nwith\ndifferent\nline endings!", $stringDirty);
 	}
@@ -364,6 +369,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextEndsNotWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertStringEndsNotWith("different\nline endings", $stringDirty);
 		$this->assertTextEndsNotWith("different\rline endings", $stringDirty);
 	}
@@ -375,8 +382,11 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextContains() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertContains("different", $stringDirty);
 		$this->assertNotContains("different\rline", $stringDirty);
+
 		$this->assertTextContains("different\rline", $stringDirty);
 	}
 
@@ -387,6 +397,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextNotContains() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertTextNotContains("different\rlines", $stringDirty);
 	}
 
@@ -402,7 +414,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			)
 		), App::RESET);
 		$Post = $this->getMockForModel('Post');
-		$this->assertEquals('test', $Post->useDbConfig);
+
 		$this->assertInstanceOf('Post', $Post);
 		$this->assertNull($Post->save(array()));
 		$this->assertNull($Post->find('all'));
@@ -448,7 +460,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		), App::RESET);
 		CakePlugin::load('TestPlugin');
 		$this->getMockForModel('TestPlugin.TestPluginAppModel');
-		$this->getMockForModel('TestPlugin.TestPluginComment');
+		$TestPluginComment = $this->getMockForModel('TestPlugin.TestPluginComment');
 
 		$result = ClassRegistry::init('TestPlugin.TestPluginComment');
 		$this->assertInstanceOf('TestPluginComment', $result);

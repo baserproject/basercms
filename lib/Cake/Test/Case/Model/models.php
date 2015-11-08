@@ -208,7 +208,7 @@ class User extends CakeTestModel {
  *
  * @var array
  */
-	public $validate = array('user' => 'notBlank', 'password' => 'notBlank');
+	public $validate = array('user' => 'notEmpty', 'password' => 'notEmpty');
 
 /**
  * beforeFind() callback used to run ContainableBehaviorTest::testLazyLoad()
@@ -269,8 +269,8 @@ class Article extends CakeTestModel {
  */
 	public $validate = array(
 		'user_id' => 'numeric',
-		'title' => array('required' => false, 'rule' => 'notBlank'),
-		'body' => array('required' => false, 'rule' => 'notBlank'),
+		'title' => array('required' => false, 'rule' => 'notEmpty'),
+		'body' => array('required' => false, 'rule' => 'notEmpty'),
 	);
 
 /**
@@ -424,7 +424,7 @@ class ArticleFeatured extends CakeTestModel {
  *
  * @var array
  */
-	public $validate = array('user_id' => 'numeric', 'title' => 'notBlank', 'body' => 'notBlank');
+	public $validate = array('user_id' => 'numeric', 'title' => 'notEmpty', 'body' => 'notEmpty');
 
 }
 
@@ -732,14 +732,8 @@ class ModifiedAttachment extends CakeTestModel {
  * @return void
  */
 	public function afterFind($results, $primary = false) {
-		if ($this->useConsistentAfterFind) {
-			if (isset($results[0][$this->alias]['id'])) {
-				$results[0][$this->alias]['callback'] = 'Fired';
-			}
-		} else {
-			if (isset($results['id'])) {
-				$results['callback'] = 'Fired';
-			}
+		if (isset($results['id'])) {
+			$results['callback'] = 'Fired';
 		}
 		return $results;
 	}
@@ -802,7 +796,7 @@ class Apple extends CakeTestModel {
  *
  * @var array
  */
-	public $validate = array('name' => 'notBlank');
+	public $validate = array('name' => 'notEmpty');
 
 /**
  * hasOne property
@@ -1197,7 +1191,7 @@ class NodeAfterFind extends CakeTestModel {
  *
  * @var array
  */
-	public $validate = array('name' => 'notBlank');
+	public $validate = array('name' => 'notEmpty');
 
 /**
  * useTable property
@@ -1287,7 +1281,7 @@ class NodeNoAfterFind extends CakeTestModel {
  *
  * @var array
  */
-	public $validate = array('name' => 'notBlank');
+	public $validate = array('name' => 'notEmpty');
 
 /**
  * useTable property
@@ -2191,10 +2185,10 @@ class ValidationTest1 extends CakeTestModel {
  * @var array
  */
 	public $validate = array(
-		'title' => 'notBlank',
+		'title' => 'notEmpty',
 		'published' => 'customValidationMethod',
 		'body' => array(
-			'notBlank',
+			'notEmpty',
 			'/^.{5,}$/s' => 'no matchy',
 			'/^[0-9A-Za-z \\.]{1,}$/s'
 		)
@@ -2270,10 +2264,10 @@ class ValidationTest2 extends CakeTestModel {
  * @var array
  */
 	public $validate = array(
-		'title' => 'notBlank',
+		'title' => 'notEmpty',
 		'published' => 'customValidationMethod',
 		'body' => array(
-			'notBlank',
+			'notEmpty',
 			'/^.{5,}$/s' => 'no matchy',
 			'/^[0-9A-Za-z \\.]{1,}$/s'
 		)
@@ -2394,7 +2388,7 @@ class Story extends CakeTestModel {
  *
  * @var array
  */
-	public $validate = array('title' => 'notBlank');
+	public $validate = array('title' => 'notEmpty');
 }
 
 /**
@@ -4781,6 +4775,7 @@ class MysqlTestModel extends Model {
 
 /**
  * Test model for datasource prefixes
+ *
  */
 class PrefixTestModel extends CakeTestModel {
 }
@@ -5045,83 +5040,5 @@ class CustomArticle extends AppModel {
 			$this->findMethods['unPublished'] = 'true again';
 		}
 	}
-
-}
-
-/**
- * Example class
- *
- * @package       Cake.Test.Case.Model
- */
-class Example extends AppModel {
-
-/**
- * useTable property
- *
- * @var string
- */
-	public $useTable = false;
-
-/**
- * schema property
- *
- * @var array
- */
-	protected $_schema = array(
-		'filefield' => array(
-			'type' => 'string',
-			'length' => 254,
-			'default' => null,
-			'null' => true,
-			'comment' => null
-		),
-	);
-
-}
-
-/**
- * UserHasOneArticle class
- *
- * @package       Cake.Test.Case.Model
- */
-class UserHasOneArticle extends AppModel {
-
-/**
- * useTable property
- *
- * @var string
- */
-	public $useTable = 'users';
-
-/**
- * hasOne property
- *
- * @var array
- */
-	public $hasOne = array('Article');
-
-}
-
-
-/**
- * ArticlesTagBelongsToArticle class
- *
- * @package       Cake.Test.Case.Model
- */
-class ArticlesTagBelongsToArticle extends CakeTestModel {
-
-/**
- * useTable property
- *
- * @var string
- */
-	public $useTable = 'articles_tags';
-
-/**
- * belongsTo property
- *
- * @var array
- */
-	public $belongsTo = array('Article');
 
 }

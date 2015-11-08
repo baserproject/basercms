@@ -39,6 +39,7 @@ class AclNode extends Model {
 
 /**
  * Constructor
+ *
  */
 	public function __construct() {
 		$config = Configure::read('Acl.database');

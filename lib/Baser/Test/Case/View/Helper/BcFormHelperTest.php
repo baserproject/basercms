@@ -138,7 +138,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function checkboxDataProvider() {
 		return array(
-			array('test', array(), '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'),
+			array('test', array(), '<input type="checkbox" name="data\[test\]"  value="1" id="test"', 'checkbox()を出力できません'),
 			array('test', array('label' => 'testLabel'), '<label for="test"><input type="checkbox".*label="testLabel"', '属性を付与できません'),
 		);
 	}
@@ -477,7 +477,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function fileDataProvider() {
 		return array(
-			array('hoge', array(), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array(), '<input type="file" name="data\[hoge\]"  id="hoge"', 'ファイルインプットボックス出力できません'), 
 			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'), 
 		);
 	}

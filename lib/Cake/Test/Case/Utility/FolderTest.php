@@ -41,7 +41,7 @@ class FolderTest extends CakeTestCase {
 
 		foreach (scandir(TMP) as $file) {
 			if (is_dir(TMP . $file) && !in_array($file, array('.', '..'))) {
-				static::$_tmp[] = $file;
+				self::$_tmp[] = $file;
 			}
 		}
 	}
@@ -62,7 +62,7 @@ class FolderTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		$exclude = array_merge(static::$_tmp, array('.', '..'));
+		$exclude = array_merge(self::$_tmp, array('.', '..'));
 		foreach (scandir(TMP) as $dir) {
 			if (is_dir(TMP . $dir) && !in_array($dir, $exclude)) {
 				$iterator = new RecursiveDirectoryIterator(TMP . $dir);
@@ -192,7 +192,7 @@ class FolderTest extends CakeTestCase {
  * @return void
  */
 	public function testRecursiveCreateFailure() {
-		$this->skipIf(DIRECTORY_SEPARATOR === '\\', 'Cant perform operations using permissions on Windows.');
+		$this->skipIf(DIRECTORY_SEPARATOR === '\\', 'Cant perform operations using permissions on windows.');
 
 		$path = TMP . 'tests' . DS . 'one';
 		mkdir($path);
@@ -564,8 +564,6 @@ class FolderTest extends CakeTestCase {
 		$this->assertFalse(Folder::isAbsolute('0:\\path\\to\\file'));
 		$this->assertFalse(Folder::isAbsolute('\\path/to/file'));
 		$this->assertFalse(Folder::isAbsolute('\\path\\to\\file'));
-		$this->assertFalse(Folder::isAbsolute('notRegisteredStreamWrapper://example'));
-		$this->assertFalse(Folder::isAbsolute('://example'));
 
 		$this->assertTrue(Folder::isAbsolute('/usr/local'));
 		$this->assertTrue(Folder::isAbsolute('//path/to/file'));
@@ -573,7 +571,6 @@ class FolderTest extends CakeTestCase {
 		$this->assertTrue(Folder::isAbsolute('C:\\path\\to\\file'));
 		$this->assertTrue(Folder::isAbsolute('d:\\path\\to\\file'));
 		$this->assertTrue(Folder::isAbsolute('\\\\vmware-host\\Shared Folders\\file'));
-		$this->assertTrue(Folder::isAbsolute('http://www.example.com'));
 	}
 
 /**
@@ -1026,7 +1023,7 @@ class FolderTest extends CakeTestCase {
 		extract($this->_setupFilesystem());
 
 		$Folder = new Folder($folderOne);
-		$Folder->copy(array('to' => $folderThree, 'scheme' => Folder::OVERWRITE));
+		$result = $Folder->copy(array('to' => $folderThree, 'scheme' => Folder::OVERWRITE));
 
 		$this->assertTrue(file_exists($folderThree . DS . 'file1.php'));
 		$this->assertTrue(file_exists($folderThree . DS . 'folderA' . DS . 'fileA.php'));

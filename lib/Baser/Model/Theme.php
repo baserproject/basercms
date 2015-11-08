@@ -46,7 +46,7 @@ class Theme extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => 'テーマ名を入力してください。'),
 			array('rule' => 'alphaNumericPlus',
 				'message' => 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。'),

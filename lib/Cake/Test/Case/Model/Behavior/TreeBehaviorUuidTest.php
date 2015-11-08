@@ -20,7 +20,7 @@
 
 App::uses('Model', 'Model');
 App::uses('AppModel', 'Model');
-App::uses('CakeText', 'Utility');
+App::uses('String', 'Utility');
 
 require_once dirname(dirname(__FILE__)) . DS . 'models.php';
 
@@ -73,7 +73,7 @@ class TreeBehaviorUuidTest extends CakeTestCase {
 			'conditions' => array($modelClass . '.name' => '1.1')
 		));
 
-		$id = CakeText::uuid();
+		$id = String::uuid();
 		$this->Tree->create();
 		$result = $this->Tree->save(array($modelClass => array(
 			'id' => $id,

@@ -227,12 +227,12 @@ class Controller extends Object implements CakeEventListener {
  *
  * Example:
  *
- * ```
+ * {{{
  * public $cacheAction = array(
  *		'view/23/' => 21600,
  *		'recalled/' => 86400
  *	);
- * ```
+ * }}}
  *
  * $cacheAction can also be set to a strtotime() compatible string. This
  * marks all the actions in the controller for view caching.
@@ -751,7 +751,7 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param string|array $url A string or array-based URL pointing to another location within the app,
  *     or an absolute URL
- * @param int|array|null $status HTTP status code (eg: 301). Defaults to 302 when null is passed.
+ * @param int $status Optional HTTP status code (eg: 404)
  * @param bool $exit If true, exit() will be called after the redirect
  * @return void
  * @triggers Controller.beforeRedirect $this, array($url, $status, $exit)
@@ -785,10 +785,9 @@ class Controller extends Object implements CakeEventListener {
 			}
 		}
 
-		if ($status === null) {
-			$status = 302;
+		if ($status) {
+			$this->response->statusCode($status);
 		}
-		$this->response->statusCode($status);
 
 		if ($exit) {
 			$this->response->send();
@@ -858,10 +857,10 @@ class Controller extends Object implements CakeEventListener {
  *
  * Examples:
  *
- * ```
+ * {{{
  * setAction('another_action');
  * setAction('action_with_parameters', $parameter1);
- * ```
+ * }}}
  *
  * @param string $action The new action to be 'redirected' to.
  *   Any other parameters passed to this method will be passed as parameters to the new action.
@@ -975,7 +974,7 @@ class Controller extends Object implements CakeEventListener {
 		}
 
 		$referer = $this->request->referer($local);
-		if ($referer === '/' && $default && $default !== $referer) {
+		if ($referer === '/' && $default) {
 			return Router::url($default, !$local);
 		}
 		return $referer;

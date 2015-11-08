@@ -21,7 +21,8 @@
 echo "<?php\n";
 ?>
 /**
- * <?php echo $model; ?> Fixture
+ * <?php echo $model; ?>Fixture
+ *
  */
 class <?php echo $model; ?>Fixture extends CakeTestFixture {
 

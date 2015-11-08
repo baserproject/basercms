@@ -268,7 +268,7 @@ class ModelTaskTest extends CakeTestCase {
  */
 	public function testInitValidations() {
 		$result = $this->Task->initValidations();
-		$this->assertTrue(in_array('notBlank', $result));
+		$this->assertTrue(in_array('notEmpty', $result));
 	}
 
 /**
@@ -282,7 +282,7 @@ class ModelTaskTest extends CakeTestCase {
 		$this->Task->initValidations();
 
 		$result = $this->Task->fieldValidation('text', array('type' => 'string', 'length' => 10, 'null' => false));
-		$expected = array('notBlank' => 'notBlank');
+		$expected = array('notEmpty' => 'notEmpty');
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Task->fieldValidation('text', array('type' => 'date', 'length' => 10, 'null' => false));
@@ -318,7 +318,7 @@ class ModelTaskTest extends CakeTestCase {
 			->will($this->onConsecutiveCalls('24', 'y', '18', 'n'));
 
 		$result = $this->Task->fieldValidation('text', array('type' => 'string', 'length' => 10, 'null' => false));
-		$expected = array('notBlank' => 'notBlank', 'maxLength' => 'maxLength');
+		$expected = array('notEmpty' => 'notEmpty', 'maxLength' => 'maxLength');
 		$this->assertEquals($expected, $result);
 	}
 
@@ -339,7 +339,7 @@ class ModelTaskTest extends CakeTestCase {
 			->with($this->stringContains('make a valid'));
 
 		$result = $this->Task->fieldValidation('text', array('type' => 'string', 'length' => 10, 'null' => false));
-		$expected = array('notBlank' => 'notBlank');
+		$expected = array('notEmpty' => 'notEmpty');
 		$this->assertEquals($expected, $result);
 	}
 
@@ -371,7 +371,7 @@ class ModelTaskTest extends CakeTestCase {
 			->will($this->onConsecutiveCalls('24', 'y', 's'));
 
 		$result = $this->Task->fieldValidation('text', array('type' => 'string', 'length' => 10, 'null' => false));
-		$expected = array('notBlank' => 'notBlank', '_skipFields' => true);
+		$expected = array('notEmpty' => 'notEmpty', '_skipFields' => true);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -387,7 +387,7 @@ class ModelTaskTest extends CakeTestCase {
 			->will($this->onConsecutiveCalls('24', 's'));
 
 		$result = $this->Task->fieldValidation('text', array('type' => 'string', 'length' => 10, 'null' => false));
-		$expected = array('notBlank' => 'notBlank', '_skipFields' => true);
+		$expected = array('notEmpty' => 'notEmpty', '_skipFields' => true);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -400,7 +400,7 @@ class ModelTaskTest extends CakeTestCase {
 	public function testInteractiveDoValidationWithSkipping() {
 		$this->Task->expects($this->any())
 			->method('in')
-			->will($this->onConsecutiveCalls('34', '24', 'n', '10', 's'));
+			->will($this->onConsecutiveCalls('35', '24', 'n', '11', 's'));
 		$this->Task->interactive = true;
 		$Model = $this->getMock('Model');
 		$Model->primaryKey = 'id';
@@ -444,7 +444,7 @@ class ModelTaskTest extends CakeTestCase {
 		$result = $this->Task->doValidation($Model);
 		$expected = array(
 			'name' => array(
-				'notBlank' => 'notBlank'
+				'notEmpty' => 'notEmpty'
 			),
 			'email' => array(
 				'email' => 'email',
@@ -502,7 +502,7 @@ class ModelTaskTest extends CakeTestCase {
 		$result = $this->Task->doValidation($Model);
 		$expected = array(
 			'name' => array(
-				'notBlank' => 'notBlank'
+				'notEmpty' => 'notEmpty'
 			),
 			'email' => array(
 				'email' => 'email',
@@ -838,7 +838,7 @@ class ModelTaskTest extends CakeTestCase {
 	public function testBakeValidation() {
 		$validate = array(
 			'name' => array(
-				'notBlank' => 'notBlank'
+				'notempty' => 'notEmpty'
 			),
 			'email' => array(
 				'email' => 'email',
@@ -855,8 +855,8 @@ class ModelTaskTest extends CakeTestCase {
 		$this->assertRegExp('/\$validate \= array\(/', $result);
 		$expected = <<< STRINGEND
 array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+			'notempty' => array(
+				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,

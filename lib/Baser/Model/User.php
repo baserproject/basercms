@@ -69,7 +69,7 @@ class User extends AppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('notEmpty'),
 				'message' => 'アカウント名を入力してください。'
 			),
 			'alphaNumericPlus' => array(
@@ -87,7 +87,7 @@ class User extends AppModel {
 		),
 		'real_name_1' => array(
 			'notEmpty' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('notEmpty'),
 				'message' => '名前[姓]を入力してください。'),
 			'maxLength' => array(
 				'rule' => array('maxLength', 50),
@@ -129,7 +129,7 @@ class User extends AppModel {
 				'message' => 'Eメールは255文字以内で入力してください。')
 		),
 		'user_group_id' => array(
-			'rule' => array('notBlank'),
+			'rule' => array('notEmpty'),
 			'message' => 'グループを選択してください。'
 		)
 	);
@@ -314,8 +314,7 @@ class User extends AppModel {
 		if ($defaultFavorites) {
 			$defaultFavorites = BcUtil::unserialize($defaultFavorites);
 			if ($defaultFavorites) {
-				$this->deleteFavorites($userId);
-				$this->Favorite->Behaviors->detach('BcCache');
+				$this->deleteFavorites($userId);	
 				foreach ($defaultFavorites as $favorites) {
 					$favorites['user_id'] = $userId;
 					$favorites['sort'] = $this->Favorite->getMax('sort', array('Favorite.user_id' => $userId)) + 1;

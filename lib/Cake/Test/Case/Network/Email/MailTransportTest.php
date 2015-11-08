@@ -22,6 +22,7 @@ App::uses('MailTransport', 'Network/Email');
 
 /**
  * Test case
+ *
  */
 class MailTransportTest extends CakeTestCase {
 

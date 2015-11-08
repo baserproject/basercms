@@ -175,7 +175,7 @@ class TimeHelperTest extends CakeTestCase {
 				'title' => $timestamp,
 				'class' => 'time-ago-in-words'
 			),
-			'in 2 weeks',
+			'2 weeks',
 			'/div'
 		);
 		$this->assertTags($result, $expected);

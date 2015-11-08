@@ -154,7 +154,7 @@ class SanitizeTest extends CakeTestCase {
 		$string = '';
 		$expected = '';
 		$result = Sanitize::clean($string, array('connection' => 'test'));
-		$this->assertEquals($expected, $result);
+		$this->assertEquals($expected, $string);
 
 		$data = array(
 			'Grant' => array(

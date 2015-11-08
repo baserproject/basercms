@@ -138,11 +138,13 @@
  * Enables:
  *	`admin_index()` and `/admin/controller/index`
  *	`manager_index()` and `/manager/controller/index`
+ *
  */
 	//Configure::write('Routing.prefixes', array('admin'));
 
 /**
  * Turn off all caching application-wide.
+ *
  */
 	//Configure::write('Cache.disable', true);
 
@@ -153,6 +155,7 @@
  * public $cacheAction inside your controllers to define caching settings.
  * You can either set it controller-wide by setting public $cacheAction = true,
  * or in each action using $this->cacheAction = true.
+ *
  */
 	//Configure::write('Cache.check', true);
 
@@ -201,6 +204,7 @@
  *
  * To use database sessions, run the app/Config/Schema/sessions.php schema using
  * the cake shell command: cake schema create Sessions
+ *
  */
 	Configure::write('Session', array(
 		'defaults' => 'php'

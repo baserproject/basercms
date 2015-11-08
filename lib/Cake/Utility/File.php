@@ -393,10 +393,7 @@ class File {
  */
 	public function pwd() {
 		if ($this->path === null) {
-			$dir = $this->Folder->pwd();
-			if (is_dir($dir)) {
-				$this->path = $this->Folder->slashTerm($dir) . $this->name;
-			}
+			$this->path = $this->Folder->slashTerm($this->Folder->pwd()) . $this->name;
 		}
 		return $this->path;
 	}

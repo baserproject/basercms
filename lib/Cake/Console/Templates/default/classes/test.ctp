@@ -24,6 +24,7 @@ App::uses('<?php echo $dependency[0]; ?>', '<?php echo $dependency[1]; ?>');
 
 /**
  * <?php echo $fullClassName; ?> Test Case
+ *
  */
 <?php if ($type === 'Controller'): ?>
 class <?php echo $fullClassName; ?>Test extends ControllerTestCase {

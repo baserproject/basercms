@@ -64,7 +64,7 @@ class Folder {
 	public $sort = false;
 
 /**
- * Mode to be used on create. Does nothing on Windows platforms.
+ * Mode to be used on create. Does nothing on windows platforms.
  *
  * @var int
  * http://book.cakephp.org/2.0/en/core-utility-libraries/file-folder.html#Folder::$mode
@@ -263,7 +263,7 @@ class Folder {
  * Returns true if given $path is a Windows path.
  *
  * @param string $path Path to check
- * @return bool true if Windows path, false otherwise
+ * @return bool true if windows path, false otherwise
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/file-folder.html#Folder::isWindowsPath
  */
 	public static function isWindowsPath($path) {
@@ -278,29 +278,7 @@ class Folder {
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/file-folder.html#Folder::isAbsolute
  */
 	public static function isAbsolute($path) {
-		if (empty($path)) {
-			return false;
-		}
-
-		return $path[0] === '/' ||
-			preg_match('/^[A-Z]:\\\\/i', $path) ||
-			substr($path, 0, 2) === '\\\\' ||
-			static::isRegisteredStreamWrapper($path);
-	}
-
-/**
- * Returns true if given $path is a registered stream wrapper.
- *
- * @param string $path Path to check
- * @return boo true If path is registered stream wrapper.
- */
-	public static function isRegisteredStreamWrapper($path) {
-		if (preg_match('/^[A-Z]+(?=:\/\/)/i', $path, $matches) &&
-			in_array($matches[0], stream_get_wrappers())
-		) {
-			return true;
-		}
-		return false;
+		return !empty($path) && ($path[0] === '/' || preg_match('/^[A-Z]:\\\\/i', $path) || substr($path, 0, 2) === '\\\\');
 	}
 
 /**
@@ -525,8 +503,8 @@ class Folder {
 			return true;
 		}
 
-		if (!static::isAbsolute($pathname)) {
-			$pathname = static::addPathElement($this->pwd(), $pathname);
+		if (!self::isAbsolute($pathname)) {
+			$pathname = self::addPathElement($this->pwd(), $pathname);
 		}
 
 		if (!$mode) {
@@ -604,7 +582,7 @@ class Folder {
 			$path = $this->pwd();
 		}
 		if (!$path) {
-			return false;
+			return null;
 		}
 		$path = Folder::slashTerm($path);
 		if (is_dir($path)) {

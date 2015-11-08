@@ -19,7 +19,7 @@
  */
 
 App::uses('CakeLog', 'Log');
-App::uses('CakeText', 'Utility');
+App::uses('String', 'Utility');
 
 /**
  * Provide custom logging and error handling.
@@ -91,6 +91,7 @@ class Debugger {
 
 /**
  * Constructor.
+ *
  */
 	public function __construct() {
 		$docRef = ini_get('docref_root');
@@ -173,7 +174,7 @@ class Debugger {
  * @link http://book.cakephp.org/2.0/en/development/debugging.html#Debugger::dump
  */
 	public static function dump($var, $depth = 3) {
-		pr(static::exportVar($var, $depth));
+		pr(self::exportVar($var, $depth));
 	}
 
 /**
@@ -187,8 +188,8 @@ class Debugger {
  * @link http://book.cakephp.org/2.0/en/development/debugging.html#Debugger::log
  */
 	public static function log($var, $level = LOG_DEBUG, $depth = 3) {
-		$source = static::trace(array('start' => 1)) . "\n";
-		CakeLog::write($level, "\n" . $source . static::exportVar($var, $depth));
+		$source = self::trace(array('start' => 1)) . "\n";
+		CakeLog::write($level, "\n" . $source . self::exportVar($var, $depth));
 	}
 
 /**
@@ -199,7 +200,7 @@ class Debugger {
  * @param string $file File on which error occurred
  * @param int $line Line that triggered the error
  * @param array $context Context
- * @return bool|null True if error was handled, otherwise null.
+ * @return bool true if error was handled
  * @deprecated 3.0.0 Will be removed in 3.0. This function is superseded by Debugger::outputError().
  */
 	public static function showError($code, $description, $file = null, $line = null, $context = null) {
@@ -216,7 +217,7 @@ class Debugger {
 		if (!in_array($info, $self->errors)) {
 			$self->errors[] = $info;
 		} else {
-			return null;
+			return;
 		}
 
 		switch ($code) {
@@ -246,7 +247,7 @@ class Debugger {
 				$level = LOG_NOTICE;
 				break;
 			default:
-				return null;
+				return;
 		}
 
 		$data = compact(
@@ -333,10 +334,10 @@ class Debugger {
 				} else {
 					$tpl = $self->_templates['base']['traceLine'];
 				}
-				$trace['path'] = static::trimPath($trace['file']);
+				$trace['path'] = self::trimPath($trace['file']);
 				$trace['reference'] = $reference;
 				unset($trace['object'], $trace['args']);
-				$back[] = CakeText::insert($tpl, $trace, array('before' => '{:', 'after' => '}'));
+				$back[] = String::insert($tpl, $trace, array('before' => '{:', 'after' => '}'));
 			}
 		}
 
@@ -407,7 +408,7 @@ class Debugger {
 			if (!isset($data[$i])) {
 				continue;
 			}
-			$string = str_replace(array("\r\n", "\n"), "", static::_highlight($data[$i]));
+			$string = str_replace(array("\r\n", "\n"), "", self::_highlight($data[$i]));
 			if ($i == $line) {
 				$lines[] = '<span class="code-highlight">' . $string . '</span>';
 			} else {
@@ -467,7 +468,7 @@ class Debugger {
  * @link http://book.cakephp.org/2.0/en/development/debugging.html#Debugger::exportVar
  */
 	public static function exportVar($var, $depth = 3) {
-		return static::_export($var, $depth, 0);
+		return self::_export($var, $depth, 0);
 	}
 
 /**
@@ -479,7 +480,7 @@ class Debugger {
  * @return string The dumped variable.
  */
 	protected static function _export($var, $depth, $indent) {
-		switch (static::getType($var)) {
+		switch (self::getType($var)) {
 			case 'boolean':
 				return ($var) ? 'true' : 'false';
 			case 'integer':
@@ -492,7 +493,7 @@ class Debugger {
 				}
 				return "'" . $var . "'";
 			case 'array':
-				return static::_array($var, $depth - 1, $indent + 1);
+				return self::_array($var, $depth - 1, $indent + 1);
 			case 'resource':
 				return strtolower(gettype($var));
 			case 'null':
@@ -500,7 +501,7 @@ class Debugger {
 			case 'unknown':
 				return 'unknown';
 			default:
-				return static::_object($var, $depth - 1, $indent + 1);
+				return self::_object($var, $depth - 1, $indent + 1);
 		}
 	}
 
@@ -549,9 +550,9 @@ class Debugger {
 				if ($key === 'GLOBALS' && is_array($val) && isset($val['GLOBALS'])) {
 					$val = '[recursion]';
 				} elseif ($val !== $var) {
-					$val = static::_export($val, $depth, $indent);
+					$val = self::_export($val, $depth, $indent);
 				}
-				$vars[] = $break . static::exportVar($key) .
+				$vars[] = $break . self::exportVar($key) .
 					' => ' .
 					$val;
 			}
@@ -582,7 +583,7 @@ class Debugger {
 			$break = "\n" . str_repeat("\t", $indent);
 			$objectVars = get_object_vars($var);
 			foreach ($objectVars as $key => $value) {
-				$value = static::_export($value, $depth - 1, $indent);
+				$value = self::_export($value, $depth - 1, $indent);
 				$props[] = "$key => " . $value;
 			}
 
@@ -599,7 +600,7 @@ class Debugger {
 						$reflectionProperty->setAccessible(true);
 						$property = $reflectionProperty->getValue($var);
 
-						$value = static::_export($property, $depth - 1, $indent);
+						$value = self::_export($property, $depth - 1, $indent);
 						$key = $reflectionProperty->name;
 						$props[] = sprintf('[%s] %s => %s', $visibility, $key, $value);
 					}
@@ -636,7 +637,7 @@ class Debugger {
  *
  * `Debugger::addFormat('custom', $data);`
  *
- * Where $data is an array of strings that use CakeText::insert() variable
+ * Where $data is an array of strings that use String::insert() variable
  * replacement. The template vars should be in a `{:id}` style.
  * An error formatter can have the following keys:
  *
@@ -774,7 +775,7 @@ class Debugger {
 
 		if (isset($tpl['links'])) {
 			foreach ($tpl['links'] as $key => $val) {
-				$links[$key] = CakeText::insert($val, $data, $insertOpts);
+				$links[$key] = String::insert($val, $data, $insertOpts);
 			}
 		}
 
@@ -790,14 +791,14 @@ class Debugger {
 			if (is_array($value)) {
 				$value = implode("\n", $value);
 			}
-			$info .= CakeText::insert($tpl[$key], array($key => $value) + $data, $insertOpts);
+			$info .= String::insert($tpl[$key], array($key => $value) + $data, $insertOpts);
 		}
 		$links = implode(' ', $links);
 
 		if (isset($tpl['callback']) && is_callable($tpl['callback'])) {
 			return call_user_func($tpl['callback'], $data, compact('links', 'info'));
 		}
-		echo CakeText::insert($tpl['error'], compact('links', 'info') + $data, $insertOpts);
+		echo String::insert($tpl['error'], compact('links', 'info') + $data, $insertOpts);
 	}
 
 /**
