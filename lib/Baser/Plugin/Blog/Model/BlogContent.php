@@ -215,7 +215,12 @@ class BlogContent extends BlogAppModel {
 
 		$_data = array();
 		$_data['Content']['type'] = 'ブログ';
-		$_data['Content']['model_id'] = $this->id;
+		// $this->idに値が入ってない場合もあるので
+		if (!empty($data['id'])) {
+			$_data['Content']['model_id'] = $data['id'];
+		} else {
+			$_data['Content']['model_id'] = $this->id;
+		}
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];
 		$_data['Content']['detail'] = $data['description'];
