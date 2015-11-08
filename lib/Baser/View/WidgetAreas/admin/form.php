@@ -319,6 +319,21 @@ function updateWidget(id) {
 	});
 
 }
+
+$(function() {
+	$('.useWidget').click(function(){
+		$item = $(this).parent('.useWidgetWarper').children('.useWidgetItem');
+		$mark = $(this).children('.useWidgetMark');
+		if ($item.css('display') === 'none') {
+			$item.show();
+			$mark.text('▼');
+		} else {
+			$item.hide();
+			$mark.text('▲');
+		}
+	});
+});
+
 </script>
 <?php if ($this->request->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('WidgetArea', array('url' => array('action' => 'add'))) ?>
@@ -347,8 +362,13 @@ function updateWidget(id) {
 			<div id="Source">
 
 				<h2>利用できるウィジェット</h2>
-				<?php foreach ($widgetInfos as $widgetInfo) : ?>
-					<h3><?php echo $widgetInfo['title'] ?></h3>
+				<?php foreach ($widgetInfos as $key => $widgetInfo): ?>
+				<span id="widget<?php echo $key ?>Warper" class="useWidgetWarper">
+					<h3 id="widget<?php echo $key ?>" class="useWidget">
+						<?php echo $widgetInfo['title'] ?>
+						<span id="widget<?php echo $key ?>Mark" class="useWidgetMark">▼</span>
+					</h3>
+					<span id="widget<?php echo $key ?>Item" class="useWidgetItem">
 					<?php
 					$widgets = array();
 					foreach ($widgetInfo['paths'] as $path) {
@@ -405,6 +425,8 @@ function updateWidget(id) {
 							</div>
 						</div>
 					<?php endforeach ?>
+					</span>
+				</span>
 				<?php endforeach ?>
 			</div>
 		</div>
