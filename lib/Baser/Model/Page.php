@@ -425,7 +425,7 @@ class Page extends AppModel {
 		$_data['Content']['title'] = $data['title'];
 		$parameters = explode('/', preg_replace("/^\//", '', $data['url']));
 
-		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
+		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$_data['Content']['detail'] = $data['description'] . ' ' . $detail;
