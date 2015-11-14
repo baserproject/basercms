@@ -27,7 +27,7 @@ $(function(){
 	<?php endif ?>
 	var safemodeAlert = '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\n'+
 						'ページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。';
-	$("#BtnSubmit").click(function(){
+	$("#BtnSave").click(function(){
 		var result = true;
 		if(safeModeOn && (theme != $("#SiteConfigTheme").val())) {
 			if(!confirm(safemodeAlert)) {
