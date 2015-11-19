@@ -114,18 +114,13 @@ class BcManagerComponent extends Component {
 		// データベースの初期更新
 		if (!$this->executeDefaultUpdates($dbConfig)) {
 			$this->log('データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。');
-			return false;
+			$result = false;
 		}
 
 		// コアプラグインのインストール
-		$corePlugins = Configure::read('BcApp.corePlugins');
-		$this->connectDb($dbConfig, 'plugin');
-		foreach ($corePlugins as $corePlugin) {
-			CakePlugin::load($corePlugin);
-			if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
-				$this->log("コアプラグイン" . $corePlugin . "のインストールに失敗しました。");
-				return false;
-			}
+		if(!$this->installCorePlugin($dbConfig, $dbDataPattern)) {
+			$this->log('コアプラグインのインストールに失敗しました。');
+			$result = false;
 		}
 
 		// テーマを配置
@@ -160,6 +155,25 @@ class BcManagerComponent extends Component {
 		return $result;
 	}
 
+/**
+ * コアプラグインをインストールする
+ *
+ * TODO 引数となる $dbDataPattern は、BcManager::installPlugin() で利用できる仕様となっていない
+ * @return bool
+ */
+	public function installCorePlugin($dbConfig, $dbDataPattern) {
+		$result = true;
+		$corePlugins = Configure::read('BcApp.corePlugins');
+		$this->connectDb($dbConfig, 'plugin');
+		foreach ($corePlugins as $corePlugin) {
+			CakePlugin::load($corePlugin);
+			if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
+				$this->log("コアプラグイン" . $corePlugin . "のインストールに失敗しました。");
+				$result = false;
+			}
+		}
+		return $result;
+	}
 /**
  * データベースに接続する
  *
