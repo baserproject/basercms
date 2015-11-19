@@ -903,9 +903,10 @@ background: #888;
 	/* height:100%; */
 	width:100%;
 	z-index: 10000;
+	margin-top:31px;
 }
 #LoginInner {
-	margin:150px auto auto 50px;
+	margin:119px auto auto 50px;
 	color:#333;
 	padding:50px 50px 94px 50px;
 	width:460px;
