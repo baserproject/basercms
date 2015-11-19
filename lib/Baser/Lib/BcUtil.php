@@ -170,11 +170,11 @@ class BcUtil extends Object {
 			$paths = array(BASER_CONFIGS . 'data' . DS . $pattern);
 			if($theme != 'core') {
 				$paths = array_merge(array(
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 				), $paths);
 			}
@@ -191,20 +191,20 @@ class BcUtil extends Object {
 				return false;
 			}
 			$paths = array(
-				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
+				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
 				$pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
-				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 				$pluginPath . DS . 'sql',
 			);
 			if($theme != 'core') {
 				$paths = array_merge(array(
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
 				), $paths);
 			}

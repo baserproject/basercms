@@ -209,26 +209,26 @@ class BcUtilTest extends BaserTestCase {
 		
 		// 初期データ用のダミーディレクトリを作成
 		if ($isset_ptt) {
-			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern);
+			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern);
 		}
 		if ($isset_plt && !$isset_plptt) {
-			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin);
+			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin);
 		}
 		if ($isset_plptt) {
-			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin);
+			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin);
 		}
 
 		$result = $this->util->getDefaultDataPath($plugin, $theme, $pattern);
 
 		// 初期データ用のダミーディレクトリを削除
 		if ($isset_ptt) {
-			$Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern);
+			$Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern);
 		}
 		if ($isset_plt && !$isset_plptt) {
-			$Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin);
+			$Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin);
 		}
 		if ($isset_plptt) {
-			$Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin);
+			$Folder->delete(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin);
 		}
 
 		$this->assertEquals($expect, $result, '初期データのパスを正しく取得できません');
@@ -243,10 +243,10 @@ class BcUtilTest extends BaserTestCase {
 		return array(
 			array(null, null, null, BASER_CONFIGS . 'data/default'),
 			array(null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'),
-			array(null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/Data/not_default'),
-			array('Blog', null, null, BASER_PLUGINS . 'Blog/Config/Data/Default'),
-			array('Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/Data/default/Blog'),
-			array('Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/Data/not_default/Blog'),
+			array(null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/default'),
+			array('Blog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'),
+			array('Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'),
+			array('Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'),
 		);
 	}
 

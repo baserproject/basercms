@@ -406,12 +406,14 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testGetAllDefaultDataPatterns() {
 		
 		$result = $this->BcManager->getAllDefaultDataPatterns();
-		$expected = array(
+		$expecteds = array(
 			'core.default' => 'コア ( default )',
-			'm-single.default' => 'M-SinglePage ( default )',
+			'm-single.default' => 'm-single ( default )',
 			'nada-icons.default' => 'nada icons ( default )',
 		);
-		$this->assertEquals($expected, $result, '全ての初期データセットのリストを正しく取得できません');
+		foreach($expecteds as $expected) {
+			$this->assertContains($expected, $result, '全ての初期データセットのリストを正しく取得できません');
+		}
 
 	}
 
