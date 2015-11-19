@@ -408,7 +408,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		$result = $this->BcManager->getAllDefaultDataPatterns();
 		$expecteds = array(
 			'core.default' => 'コア ( default )',
-			'm-single.default' => 'm-single ( default )',
+			'm-single.default' => 'M-SinglePage ( default )',
 			'nada-icons.default' => 'nada icons ( default )',
 		);
 		foreach($expecteds as $expected) {
