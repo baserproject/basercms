@@ -98,7 +98,11 @@ class PluginsController extends AppController {
 
 		$zippedName = $this->request->data['Plugin']['file']['name'];
 		move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
-		exec('unzip -o ' . TMP . $zippedName . ' -d ' . APP . 'Plugin' . DS, $return);
+
+		$format = 'unzip -o ' . TMP . '%s' . ' -d ' . APP . 'Plugin' . DS;
+		$command = sprintf($format, escapeshellarg($zippedName));
+
+		exec($command, $return);
 
 		//ZIPファイル展開失敗
 		if (empty($return[2])) {

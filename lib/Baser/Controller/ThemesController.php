@@ -76,7 +76,11 @@ class ThemesController extends AppController {
 			} else {
 				$name = $this->request->data['Theme']['file']['name'];
 				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
-				exec('unzip -o ' . TMP . $name . ' -d ' . BASER_THEMES, $return);
+
+				$format = 'unzip -o ' . TMP . '%s' . ' -d ' . BASER_THEMES;;
+				$command = sprintf($format, escapeshellarg($name));
+
+				exec($command, $return);
 				if(!empty($return[2])) {
 					$theme = str_replace('  inflating: ' . BASER_THEMES, '', $return[2]);
 					$theme = explode(DS, $theme);
