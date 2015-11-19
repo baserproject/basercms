@@ -33,7 +33,6 @@
 			'admin/i18n/ui.datepicker-ja',
 			'admin/jquery.corner-2.12',
 			'admin/jquery.bt.min',
-			'admin/cb',
 			'admin/jquery.contextMenu-1.0/jquery.contextMenu',
 			'admin/jquery.form-2.94',
 			'admin/jquery.validate.min',
@@ -53,7 +52,7 @@
 		<!-- Waiting -->
 		<div id="Waiting" class="waiting-box" style="display:none">
 			<div class="corner10">
-		<?php echo $this->Html->image('ajax-loader.gif') ?><br />
+		<?php echo $this->Html->image('admin/ajax-loader.gif') ?><br />
 				W A I T
 			</div>
 		</div>
