@@ -34,6 +34,12 @@ $this->append('script', <<< CSS_END
 #CreditScrollerInner {
 	margin-right:0;
 }
+html {
+	margin-top:0;
+}
+#ToolBar {
+	position:relative;
+}
 </style>
 CSS_END
 );
@@ -74,7 +80,7 @@ $(function(){
 	if($("#LoginCredit").html() == 1) {
 		$("body").append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
 		$("#LoginInner").css('color', '#FFF');
-		$("#HeaderInner").css('height', '70px');
+		$("#HeaderInner").css('height', '50px');
 		$("#Logo").css('position', 'absolute');
 		$("#Logo").css('z-index', '10000');
 		changeView($("#LoginCredit").html());
@@ -82,43 +88,44 @@ $(function(){
 		$("body").fadeIn(50);
 	}
 
+	function changeNavi(target){
+		if($(target).val()) {
+			$(target).prev().hide();
+		} else {
+			$(target).prev().show();
+		}
+	}
+	function changeView(creditOn) {
+		if(creditOn) {
+			credit();
+		} else {
+			openCredit();
+		}
+	}
+	function openCredit(completeHandler) {
+
+		if(!$("#Credit").size()) {
+			return;
+		}
+
+		$("#LoginInner").css('color', '#333');
+		$("#HeaderInner").css('height', 'auto');
+		$("#Logo").css('position', 'relative');
+		$("#Logo").css('z-index', '0');
+		$("#Wrap").css('height', '280px');
+		if(completeHandler) {
+			if($("#Credit").length) {
+				$("#Credit").fadeOut(1000, completeHandler);
+			}
+			completeHandler();
+		} else {
+			if($("#Credit").length) {
+				$("#Credit").fadeOut(1000);
+			}
+		}
+	}
 });
-function changeNavi(target){
-	if($(target).val()) {
-		$(target).prev().hide();
-	} else {
-		$(target).prev().show();
-	}
-}
-function changeView(creditOn) {
-	if(creditOn) {
-		credit();
-	} else {
-		openCredit();
-	}
-}
-function openCredit(completeHandler) {
-	
-	if(!$("#Credit").size()) {
-		return;
-	}
-	
-	$("#LoginInner").css('color', '#333');
-	$("#HeaderInner").css('height', 'auto');
-	$("#Logo").css('position', 'relative');
-	$("#Logo").css('z-index', '0');
-	$("#Wrap").css('height', '280px');
-	if(completeHandler) {
-		if($("#Credit").length) {
-			$("#Credit").fadeOut(1000, completeHandler);
-		}
-		completeHandler();
-	} else {
-		if($("#Credit").length) {
-			$("#Credit").fadeOut(1000);
-		}
-	}
-}
+
 </script>
 
 <div id="UserModel" style="display:none"><?php echo $userModel ?></div>
