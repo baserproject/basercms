@@ -152,7 +152,7 @@ DOC_END;
 			});
 INFO_END;
 		}
-		$googleScript = '<script src="//maps.google.com/maps/api/js?sensor=false&amp;language=ja" type="text/javascript"></script>';
+		$googleScript = '<script src="//maps.google.com/maps/api/js?language=ja" type="text/javascript"></script>';
 		return $googleScript . '<script type="text/javascript">' . $script . '</script>';
 	}
 
