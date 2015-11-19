@@ -383,8 +383,6 @@ class ModelTask extends BakeTask {
 		if (class_exists('Validation')) {
 			$options = get_class_methods('Validation');
 		}
-		$deprecatedOptions = array('notEmpty', 'between', 'ssn');
-		$options = array_diff($options, $deprecatedOptions);
 		sort($options);
 		$default = 1;
 		foreach ($options as $option) {
@@ -445,9 +443,9 @@ class ModelTask extends BakeTask {
 				} elseif ($metaData['type'] === 'string' && $metaData['length'] == 36) {
 					$guess = $methods['uuid'];
 				} elseif ($metaData['type'] === 'string') {
-					$guess = $methods['notBlank'];
+					$guess = $methods['notEmpty'];
 				} elseif ($metaData['type'] === 'text') {
-					$guess = $methods['notBlank'];
+					$guess = $methods['notEmpty'];
 				} elseif ($metaData['type'] === 'integer') {
 					$guess = $methods['numeric'];
 				} elseif ($metaData['type'] === 'float') {
@@ -462,8 +460,6 @@ class ModelTask extends BakeTask {
 					$guess = $methods['datetime'];
 				} elseif ($metaData['type'] === 'inet') {
 					$guess = $methods['ip'];
-				} elseif ($metaData['type'] === 'decimal') {
-					$guess = $methods['decimal'];
 				}
 			}
 

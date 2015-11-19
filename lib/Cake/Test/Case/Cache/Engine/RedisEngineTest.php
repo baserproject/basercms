@@ -77,7 +77,6 @@ class RedisEngineTest extends CakeTestCase {
 			'persistent' => true,
 			'password' => false,
 			'database' => 0,
-			'unix_socket' => false,
 		);
 		$this->assertEquals($expecting, $settings);
 	}

@@ -67,14 +67,14 @@ class CakeEventManager {
  */
 	public static function instance($manager = null) {
 		if ($manager instanceof CakeEventManager) {
-			static::$_generalManager = $manager;
+			self::$_generalManager = $manager;
 		}
-		if (empty(static::$_generalManager)) {
-			static::$_generalManager = new CakeEventManager();
+		if (empty(self::$_generalManager)) {
+			self::$_generalManager = new CakeEventManager();
 		}
 
-		static::$_generalManager->_isGlobal = true;
-		return static::$_generalManager;
+		self::$_generalManager->_isGlobal = true;
+		return self::$_generalManager;
 	}
 
 /**
@@ -105,7 +105,7 @@ class CakeEventManager {
 			$this->_attachSubscriber($callable);
 			return;
 		}
-		$options = $options + array('priority' => static::$defaultPriority, 'passParams' => false);
+		$options = $options + array('priority' => self::$defaultPriority, 'passParams' => false);
 		$this->_listeners[$eventKey][$options['priority']][] = array(
 			'callable' => $callable,
 			'passParams' => $options['passParams'],
@@ -265,7 +265,7 @@ class CakeEventManager {
 			$localListeners = $this->prioritisedListeners($eventKey);
 			$localListeners = empty($localListeners) ? array() : $localListeners;
 		}
-		$globalListeners = static::instance()->prioritisedListeners($eventKey);
+		$globalListeners = self::instance()->prioritisedListeners($eventKey);
 		$globalListeners = empty($globalListeners) ? array() : $globalListeners;
 
 		$priorities = array_merge(array_keys($globalListeners), array_keys($localListeners));

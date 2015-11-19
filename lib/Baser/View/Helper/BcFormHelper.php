@@ -58,14 +58,14 @@ class BcFormHelper extends FormHelper {
  */
 	private $__id = null;
 // <<<
-
+	
 /**
  * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
  *
  * ### Attributes:
  *
  * - `monthNames` If false, 2 digit numbers will be used instead of text.
- *   If an array, the given array will be used.
+ *   If a array, the given array will be used.
  * - `minYear` The lowest year to use in the year select
  * - `maxYear` The maximum year to use in the year select
  * - `interval` The interval for the minutes select. Defaults to 1
@@ -206,7 +206,7 @@ class BcFormHelper extends FormHelper {
 				// <<<
 				case 'Y':
 					$attrs['Year']['value'] = $year;
-
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->year(
 						$fieldName, $minYear, $maxYear, $attrs['Year']
@@ -222,18 +222,18 @@ class BcFormHelper extends FormHelper {
 				case 'M':
 					$attrs['Month']['value'] = $month;
 					$attrs['Month']['monthNames'] = $monthNames;
-
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->month($fieldName, $attrs['Month']); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
 					$selects[] = $this->month($fieldName, $attrs['Month']) . $suffix;
 					// <<<
-
+					
 					break;
 				case 'D':
 					$attrs['Day']['value'] = $day;
-
+					
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->day($fieldName, $attrs['Day']); */
 					// ---
@@ -252,15 +252,15 @@ class BcFormHelper extends FormHelper {
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$opt .= $this->hour($fieldName, true, $attrs['Hour']) . ':' .
-					$this->minute($fieldName, $attrs['Minute']);
+				$this->minute($fieldName, $attrs['Minute']);
 				break;
 			case '12':
 				$attrs['Hour']['value'] = $hour;
 				$attrs['Minute']['value'] = $min;
 				$attrs['Meridian']['value'] = $meridian;
 				$opt .= $this->hour($fieldName, false, $attrs['Hour']) . ':' .
-					$this->minute($fieldName, $attrs['Minute']) . ' ' .
-					$this->meridian($fieldName, $attrs['Meridian']);
+				$this->minute($fieldName, $attrs['Minute']) . ' ' .
+				$this->meridian($fieldName, $attrs['Meridian']);
 				break;
 		}
 		return $opt;
@@ -459,12 +459,12 @@ class BcFormHelper extends FormHelper {
 			$output = $this->hidden($fieldName, $hiddenOptions);
 		}
 		unset($options['hiddenField']);
-
+		
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// label を追加
 		// CUSTOMIZE MODIRY 2014/10/27 ryuring
 		// チェックボックスをラベルで囲う仕様に変更
-		// >>>
+		// >>> 
 		//return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
 		// ---
 		if (!empty($options['label'])) {
@@ -478,10 +478,10 @@ class BcFormHelper extends FormHelper {
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
  *
- * @param array $elements Elements to format.
- * @param array $parents Parents for OPTGROUP.
- * @param bool $showParents Whether to show parents.
- * @param array $attributes HTML attributes.
+ * @param array $elements
+ * @param array $parents
+ * @param boolean $showParents
+ * @param array $attributes
  * @return array
  */
 	protected function _selectOptions($elements = array(), $parents = array(), $showParents = null, $attributes = array()) {
@@ -575,7 +575,7 @@ class BcFormHelper extends FormHelper {
 						} elseif ($attributes['class'] === 'form-error') {
 							$attributes['class'] = 'checkbox ' . $attributes['class'];
 						}
-
+						
 						// CUSTOMIZE MODIFY 2014/02/24 ryuring
 						// checkboxのdivを外せるオプションを追加
 						// CUSTOMIZE MODIFY 2014/10/27 ryuring
@@ -592,7 +592,7 @@ class BcFormHelper extends FormHelper {
 							$select[] = $this->Html->div($attributes['class'], $item);
 						}
 						// <<<
-
+						
 					} else {
 						if ($attributes['escape']) {
 							$name = h($name);
@@ -637,7 +637,7 @@ class BcFormHelper extends FormHelper {
 		// <<<
 
 		$options = $this->_initInputField($fieldName, array_merge(
-			$options, array('secure' => static::SECURE_SKIP)
+			$options, array('secure' => self::SECURE_SKIP)
 		));
 
 		if ($secure === true) {
@@ -776,35 +776,18 @@ class BcFormHelper extends FormHelper {
 /**
  * Generates a form input element complete with label and wrapper div
  *
- * ### Options
+ * Options - See each field type method for more information. Any options that are part of
+ * $attributes or $options for the different type methods can be included in $options for input().
  *
- * See each field type method for more information. Any options that are part of
- * $attributes or $options for the different **type** methods can be included in `$options` for input().i
- * Additionally, any unknown keys that are not in the list below, or part of the selected type's options
- * will be treated as a regular html attribute for the generated input.
- *
- * - `type` - Force the type of widget you want. e.g. `type => 'select'`
- * - `label` - Either a string label, or an array of options for the label. See FormHelper::label().
- * - `div` - Either `false` to disable the div, or an array of options for the div.
- *	See HtmlHelper::div() for more options.
- * - `options` - For widgets that take options e.g. radio, select.
- * - `error` - Control the error message that is produced. Set to `false` to disable any kind of error reporting (field
- *    error and error messages).
- * - `errorMessage` - Boolean to control rendering error messages (field error will still occur).
- * - `empty` - String or boolean to enable empty select box options.
- * - `before` - Content to place before the label + input.
- * - `after` - Content to place after the label + input.
- * - `between` - Content to place between the label + input.
- * - `format` - Format template for element order. Any element that is not in the array, will not be in the output.
- *	- Default input format order: array('before', 'label', 'between', 'input', 'after', 'error')
- *	- Default checkbox format order: array('before', 'input', 'between', 'label', 'after', 'error')
- *	- Hidden input will not be formatted
- *	- Radio buttons cannot have the order of input and label elements controlled with these settings.
+ * - 'type' - Force the type of widget you want. e.g. ```type => 'select'```
+ * - 'label' - control the label
+ * - 'div' - control the wrapping div element
+ * - 'options' - for widgets that take options e.g. radio, select
+ * - 'error' - control the error message that is produced
  *
  * @param string $fieldName This should be "Modelname.fieldname"
  * @param array $options Each type of input takes different options.
- * @return string Completed form widget.
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#creating-form-elements
+ * @return string Completed form widget
  */
 	public function input($fieldName, $options = array()) {
 
@@ -849,7 +832,7 @@ class BcFormHelper extends FormHelper {
 				break;
 		}
 		// <<<
-
+		
 		$this->setEntity($fieldName);
 		$options = $this->_parseOptions($options);
 
@@ -911,6 +894,7 @@ class BcFormHelper extends FormHelper {
 			$options['between'] = $out['between'];
 			$out['between'] = null;
 		}
+		
 		$out['input'] = $this->_getInput(compact('type', 'fieldName', 'options', 'radioOptions', 'selected', 'dateFormat', 'timeFormat'));
 
 		$output = '';
@@ -928,7 +912,7 @@ class BcFormHelper extends FormHelper {
 		// >>>
 		// return $output;
 		// ---
-
+		
 		/* カウンター */
 		if (!empty($options['counter'])) {
 			$domId = $this->domId($fieldName, $options);
@@ -1508,19 +1492,10 @@ DOC_END;
 		}
 		return $out;
 	}
-
+	
 /**
  * Creates a set of radio widgets. Will create a legend and fieldset
  * by default. Use $options to control this
- *
- * You can also customize each radio input element using an array of arrays:
- *
- * ```
- * $options = array(
- *  array('name' => 'United states', 'value' => 'US', 'title' => 'My title'),
- *  array('name' => 'Germany', 'value' => 'DE', 'class' => 'de-de', 'title' => 'Another title'),
- * );
- * ```
  *
  * ### Attributes:
  *
@@ -1543,9 +1518,7 @@ DOC_END;
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function radio($fieldName, $options = array(), $attributes = array()) {
-		$attributes['options'] = $options;
 		$attributes = $this->_initInputField($fieldName, $attributes);
-		unset($attributes['options']);
 
 		$showEmpty = $this->_extractOption('empty', $attributes);
 		if ($showEmpty) {
@@ -1604,15 +1577,6 @@ DOC_END;
 		$this->_domIdSuffixes = array();
 		foreach ($options as $optValue => $optTitle) {
 			$optionsHere = array('value' => $optValue, 'disabled' => false);
-			if (is_array($optTitle)) {
-				if (isset($optTitle['value'])) {
-					$optionsHere['value'] = $optTitle['value'];
-				}
-
-				$optionsHere += $optTitle;
-				$optTitle = $optionsHere['name'];
-				unset($optionsHere['name']);
-			}
 
 			if (isset($value) && strval($optValue) === strval($value)) {
 				$optionsHere['checked'] = 'checked';

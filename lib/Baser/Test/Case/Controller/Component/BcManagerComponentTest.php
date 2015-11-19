@@ -109,9 +109,9 @@ class BcManagerComponentTest extends BaserTestCase {
 		);
 
 		// protectedなオブジェクトの変数にアクセスするため、配列にキャストする
-		$result = $this->BcManager->connectDb($config, $name);
-		$sources = $result->listSources();
-		$prefix = $result->config['prefix'];
+		$result = (array)  $this->BcManager->connectDb($config, $name);
+		$sources = $result["\0*\0_sources"];
+		$prefix = $result['config']['prefix'];
 
 		$this->assertContains($expected, $sources, 'datasourceを正しく取得できません');
 
@@ -545,8 +545,9 @@ class BcManagerComponentTest extends BaserTestCase {
  * @dataProvider _getDataSourceDataProvider
  */
 	public function test_getDataSource($dbConfigKeyName, $expected) {
-		$result = $this->BcManager->_getDataSource($dbConfigKeyName);
-		$sources = $result->listSources();
+		$result = (array) $this->BcManager->_getDataSource($dbConfigKeyName);
+		$sources = $result["\0*\0_sources"];
+		
 		$this->assertContains($expected, $sources, 'データソースを正しく取得できません');
 	}
 

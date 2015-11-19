@@ -58,7 +58,7 @@ class EditorTemplate extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => 'テンプレート名を入力してください。')
 		)
 	);

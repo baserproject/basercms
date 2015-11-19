@@ -69,7 +69,7 @@ class BlogTag extends BlogAppModel {
 	public $validate = array(
 		'name' => array(
 			'notEmpty' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('notEmpty'),
 				'message' => 'ブログタグを入力してください。'
 			),
 			'duplicate' => array(

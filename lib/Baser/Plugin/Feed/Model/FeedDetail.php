@@ -60,14 +60,14 @@ class FeedDetail extends FeedAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "フィード詳細名を入力してください。",
 				'required' => true),
 			array('rule' => array('maxLength', 50),
 				'message' => 'フィード詳細名は50文字以内で入力してください。')
 		),
 		'url' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "フィードURLを入力してください。",
 				'required' => true),
 			array('rule' => array('maxLength', 255),

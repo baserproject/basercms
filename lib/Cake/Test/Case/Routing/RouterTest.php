@@ -201,7 +201,7 @@ class RouterTest extends CakeTestCase {
 		));
 		CakePlugin::load('TestPlugin');
 		App::uses('TestRoute', 'TestPlugin.Routing/Route');
-		Router::mapResources('Posts', array(
+		$resources = Router::mapResources('Posts', array(
 			'connectOptions' => array(
 				'routeClass' => 'TestPlugin.TestRoute',
 				'foo' => '^(bar)$',
@@ -238,7 +238,7 @@ class RouterTest extends CakeTestCase {
 		$this->assertEquals($expected, $result);
 		$this->assertEquals(array('test_plugin'), $resources);
 
-		Router::mapResources('Posts', array('prefix' => 'api'));
+		$resources = Router::mapResources('Posts', array('prefix' => 'api'));
 
 		$_SERVER['REQUEST_METHOD'] = 'GET';
 		$result = Router::parse('/api/posts');
@@ -1579,7 +1579,7 @@ class RouterTest extends CakeTestCase {
 		$request->base = '/';
 		Router::setRequestInfo($request);
 
-		Router::parse('/admin/controller/index/type:whatever');
+		$result = Router::parse('/admin/controller/index/type:whatever');
 		$result = Router::url(array('type' => 'new'));
 		$expected = "/admin/controller/index/type:new";
 		$this->assertEquals($expected, $result);

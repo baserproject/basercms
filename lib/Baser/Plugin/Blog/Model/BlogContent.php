@@ -82,7 +82,7 @@ class BlogContent extends BlogAppModel {
 				'message' => 'ブログアカウント名は100文字以内で入力してください。')
 		),
 		'title' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => 'ブログタイトルを入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => 'ブログタイトルは255文字以内で入力してください。')
@@ -105,7 +105,7 @@ class BlogContent extends BlogAppModel {
 				'message' => "一覧表示件数は半角で入力してください。",
 				'allowEmpty' => false)
 		),
-		'list_direction' => array(array('rule' => array('notBlank'),
+		'list_direction' => array(array('rule' => array('notEmpty'),
 				'message' => "一覧に表示する順番を指定してください。")
 		),
 		'eye_catch_size' => array(array(
@@ -215,7 +215,12 @@ class BlogContent extends BlogAppModel {
 
 		$_data = array();
 		$_data['Content']['type'] = 'ブログ';
-		$_data['Content']['model_id'] = $this->id;
+		// $this->idに値が入ってない場合もあるので
+		if (!empty($data['id'])) {
+			$_data['Content']['model_id'] = $data['id'];
+		} else {
+			$_data['Content']['model_id'] = $this->id;
+		}
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];
 		$_data['Content']['detail'] = $data['description'];

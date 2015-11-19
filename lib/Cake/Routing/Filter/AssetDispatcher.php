@@ -42,7 +42,7 @@ class AssetDispatcher extends DispatcherFilter {
 	public function beforeDispatch(CakeEvent $event) {
 		$url = urldecode($event->data['request']->url);
 		if (strpos($url, '..') !== false || strpos($url, '.') === false) {
-			return null;
+			return;
 		}
 
 		if ($result = $this->_filterAsset($event)) {
@@ -149,11 +149,12 @@ class AssetDispatcher extends DispatcherFilter {
 			}
 			$response->type($contentType);
 		}
-		$response->length(false);
+		if (!$compressionEnabled) {
+			$response->header('Content-Length', filesize($assetFile));
+		}
 		$response->cache(filemtime($assetFile));
 		$response->send();
 		ob_clean();
-
 		if ($ext === 'css' || $ext === 'js') {
 			include $assetFile;
 		} else {

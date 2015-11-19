@@ -73,27 +73,27 @@ class MailContent extends MailAppModel {
 			'maxLength' => array(
 				'rule' => array('maxLength', 100),
 				'message' => 'メールフォームアカウント名は100文字以内で入力してください。'),
-			'notEmpty' => array('rule' => array('notBlank'),
+			'notEmpty' => array('rule' => array('notEmpty'),
 				'message' => "メールフォームアカウント名を入力してください。")
 		),
 		'title' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "メールフォームタイトルを入力してください。")
 		),
 		'sender_name' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "送信先名を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '送信先名は50文字以内で入力してください。')
 		),
 		'subject_user' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "自動返信メール件名[ユーザー宛]を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')
 		),
 		'subject_admin' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "自動送信メール件名[管理者宛]を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。')
@@ -241,7 +241,12 @@ class MailContent extends MailAppModel {
 
 		$_data = array();
 		$_data['Content']['type'] = 'メール';
-		$_data['Content']['model_id'] = $this->id;
+		// $this->idに値が入ってない場合もあるので
+		if (!empty($data['id'])) {
+			$_data['Content']['model_id'] = $data['id'];
+		} else {
+			$_data['Content']['model_id'] = $this->id;
+		}
 		$_data['Content']['category'] = '';
 		$_data['Content']['title'] = $data['title'];
 		$_data['Content']['detail'] = $data['description'];

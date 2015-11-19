@@ -20,6 +20,7 @@ App::uses('CakePlugin', 'Core');
 
 /**
  * CakePluginTest class
+ *
  */
 class CakePluginTest extends CakeTestCase {
 

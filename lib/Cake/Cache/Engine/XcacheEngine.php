@@ -44,7 +44,7 @@ class XcacheEngine extends CacheEngine {
  * @return bool True if the engine has been successfully initialized, false if not
  */
 	public function init($settings = array()) {
-		if (PHP_SAPI !== 'cli') {
+		if (php_sapi_name() !== 'cli') {
 			parent::init(array_merge(array(
 				'engine' => 'Xcache',
 				'prefix' => Inflector::slug(APP_DIR) . '_',

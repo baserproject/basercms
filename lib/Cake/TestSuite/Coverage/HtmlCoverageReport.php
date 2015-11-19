@@ -200,7 +200,6 @@ HTML;
  * @return string
  */
 	public function coverageHeader($filename, $percent) {
-		$hash = md5($filename);
 		$filename = basename($filename);
 		list($file) = explode('.', $filename);
 		$display = in_array($file, $this->_testNames) ? 'block' : 'none';
@@ -208,11 +207,11 @@ HTML;
 		return <<<HTML
 	<div class="coverage-container $primary" style="display:$display;">
 	<h4>
-		<a href="#coverage-$filename-$hash" onclick="coverage_show_hide('coverage-$filename-$hash');">
+		<a href="#coverage-$filename" onclick="coverage_show_hide('coverage-$filename');">
 			$filename Code coverage: $percent%
 		</a>
 	</h4>
-	<div class="code-coverage-results" id="coverage-$filename-$hash" style="display:none;">
+	<div class="code-coverage-results" id="coverage-$filename" style="display:none;">
 	<pre>
 HTML;
 	}

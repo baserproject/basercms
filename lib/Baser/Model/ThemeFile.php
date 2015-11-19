@@ -40,7 +40,7 @@ class ThemeFile extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notBlank'),
+			array('rule' => array('notEmpty'),
 				'message' => "テーマファイル名を入力してください。",
 				'required' => true),
 			array('rule' => array('duplicateThemeFile'),

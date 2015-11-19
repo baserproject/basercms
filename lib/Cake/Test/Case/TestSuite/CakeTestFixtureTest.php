@@ -534,7 +534,7 @@ class CakeTestFixtureTest extends CakeTestCase {
  */
 	public function testInsertInvalid() {
 		$Fixture = new InvalidTestFixture();
-		$Fixture->insert($this->criticDb);
+		$return = $Fixture->insert($this->criticDb);
 	}
 
 /**

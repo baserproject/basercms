@@ -75,15 +75,15 @@ class I18nTest extends CakeTestCase {
 		$this->assertEquals('Dom 1 Foo', I18n::translate('dom1.foo', false, 'dom1'));
 		$this->assertEquals('Dom 1 Bar', I18n::translate('dom1.bar', false, 'dom1'));
 		$domains = I18n::domains();
-		$this->assertEquals('Dom 1 Foo', $domains['dom1']['cache_test_po']['LC_MESSAGES']['dom1.foo']['']);
+		$this->assertEquals('Dom 1 Foo', $domains['dom1']['cache_test_po']['LC_MESSAGES']['dom1.foo']);
 
 		// reset internally stored entries
 		I18n::clear();
 
 		// now only dom1 should be in cache
 		$cachedDom1 = Cache::read('dom1_' . $lang, '_cake_core_');
-		$this->assertEquals('Dom 1 Foo', $cachedDom1['LC_MESSAGES']['dom1.foo']['']);
-		$this->assertEquals('Dom 1 Bar', $cachedDom1['LC_MESSAGES']['dom1.bar']['']);
+		$this->assertEquals('Dom 1 Foo', $cachedDom1['LC_MESSAGES']['dom1.foo']);
+		$this->assertEquals('Dom 1 Bar', $cachedDom1['LC_MESSAGES']['dom1.bar']);
 		// dom2 not in cache
 		$this->assertFalse(Cache::read('dom2_' . $lang, '_cake_core_'));
 
@@ -92,11 +92,11 @@ class I18nTest extends CakeTestCase {
 
 		// verify dom2 was cached through manual read from cache
 		$cachedDom2 = Cache::read('dom2_' . $lang, '_cake_core_');
-		$this->assertEquals('Dom 2 Foo', $cachedDom2['LC_MESSAGES']['dom2.foo']['']);
-		$this->assertEquals('Dom 2 Bar', $cachedDom2['LC_MESSAGES']['dom2.bar']['']);
+		$this->assertEquals('Dom 2 Foo', $cachedDom2['LC_MESSAGES']['dom2.foo']);
+		$this->assertEquals('Dom 2 Bar', $cachedDom2['LC_MESSAGES']['dom2.bar']);
 
 		// modify cache entry manually to verify that dom1 entries now will be read from cache
-		$cachedDom1['LC_MESSAGES']['dom1.foo'][''] = 'FOO';
+		$cachedDom1['LC_MESSAGES']['dom1.foo'] = 'FOO';
 		Cache::write('dom1_' . $lang, $cachedDom1, '_cake_core_');
 		$this->assertEquals('FOO', I18n::translate('dom1.foo', false, 'dom1'));
 	}
@@ -1759,30 +1759,6 @@ class I18nTest extends CakeTestCase {
 	}
 
 /**
- * Test that Configure::read('I18n.preferApp') will prefer app.
- *
- * @return void
- */
-	public function testPluginTranslationPreferApp() {
-		// Reset internally stored entries
-		I18n::clear();
-		Cache::clear(false, '_cake_core_');
-
-		Configure::write('I18n.preferApp', true);
-
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		));
-
-		Configure::write('Config.language', 'po');
-		$singular = $this->_domainSingular();
-		$this->assertEquals('Plural Rule 1', $singular);
-
-		$plurals = $this->_domainPlural();
-		$this->assertTrue(in_array('0 = 0 or > 1', $plurals));
-	}
-
-/**
  * testPoMultipleLineTranslation method
  *
  * @return void
@@ -2022,38 +1998,6 @@ class I18nTest extends CakeTestCase {
 		$result = I18n::loadLocaleDefinition($path . 'nld' . DS . 'LC_TIME');
 		$expected = array('zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag');
 		$this->assertSame($expected, $result['day']);
-	}
-
-/**
- * Test basic context support
- *
- * @return void
- */
-	public function testContext() {
-		Configure::write('Config.language', 'nld');
-
-		$this->assertSame("brief", __x('mail', 'letter'));
-		$this->assertSame("letter", __x('character', 'letter'));
-		$this->assertSame("bal", __x('spherical object', 'ball'));
-		$this->assertSame("danspartij", __x('social gathering', 'ball'));
-		$this->assertSame("balans", __('balance'));
-		$this->assertSame("saldo", __x('money', 'balance'));
-	}
-
-/**
- * Test basic context support using mo files.
- *
- * @return void
- */
-	public function testContextMoFile() {
-		Configure::write('Config.language', 'nld_mo');
-
-		$this->assertSame("brief", __x('mail', 'letter'));
-		$this->assertSame("letter", __x('character', 'letter'));
-		$this->assertSame("bal", __x('spherical object', 'ball'));
-		$this->assertSame("danspartij", __x('social gathering', 'ball'));
-		$this->assertSame("balans", __('balance'));
-		$this->assertSame("saldo", __x('money', 'balance'));
 	}
 
 /**
