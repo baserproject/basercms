@@ -980,4 +980,29 @@ class BlogHelper extends AppHelper {
 		$MailHelper->link($title, $contentsName, $datas, $options);
 	}
 
+/**
+ * 表示ページがカテゴリ別記事一覧だった場合、カテゴリ名を取得する
+ *
+ * @return string 表示ページのカテゴリ名
+ */
+	public function getCategoryName() {
+		if (!empty($this->_View->viewVars['blogCategoryName'])) {
+			return $this->_View->viewVars['blogCategoryName'];
+		} else {
+			return '';
+		}
+	}
+
+/**
+ * 表示ページがタグ別記事一覧だった場合、タグ名を取得する
+ *
+ * @return string 表示ページのタグ名
+ */
+	public function getTagName() {
+		if (!empty($this->_View->viewVars['blogTagName'])) {
+			return $this->_View->viewVars['blogTagName'];
+		} else {
+			return '';
+		}
+	}
 }
