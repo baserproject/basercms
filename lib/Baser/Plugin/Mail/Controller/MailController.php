@@ -457,7 +457,9 @@ class MailController extends MailAppController {
 		// 2013/11/08 - gondoh mailヘッダインジェクション対策時に
 		// 確認画面にもhiddenタグ出力するよう変更したため削除
 
-		$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
+		// >>> DELETE 2015/11/25 - gondoh view側で吸収するように変更
+		// $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
+		// <<<
 
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
