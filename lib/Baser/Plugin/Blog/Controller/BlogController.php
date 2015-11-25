@@ -262,6 +262,7 @@ class BlogController extends BlogAppController {
 				$this->pageTitle = $blogCategories[count($blogCategories) - 1]['BlogCategory']['title'];
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
+				$this->set('blogCategoryName', $blogCategories[count($blogCategories) - 1]['BlogCategory']['name']);
 				$this->set('blogArchiveType', $type);
 
 				break;
@@ -289,6 +290,7 @@ class BlogController extends BlogAppController {
 				$this->pageTitle = urldecode($tag);
 				$template = $this->blogContent['BlogContent']['template'] . DS . 'archives';
 
+				$this->set('blogTagName', $tag);
 				$this->set('blogArchiveType', $type);
 
 				break;
