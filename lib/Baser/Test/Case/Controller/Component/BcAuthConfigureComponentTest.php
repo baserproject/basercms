@@ -176,12 +176,12 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 
 	public function settingCheckValueDataProvider() {
 		return array(
-			array('login', 'pre', 'userScope', 'auth_prefix'),
-			array(null, 'pre', 'userScope', 'auth_prefix'),
-			array(null, null, 'userScope', 'auth_prefix'),
-			array('login', 'pre', null, 'auth_prefix'),
-			array('login', 'pre', null, null),
-			array('login', '/admin', 'userScope', 'auth_prefix'),
+			array('login', 'pre', array('userScope'), 'auth_prefix'),
+			array(null, 'pre', array('userScope'), 'auth_prefix'),
+			array(null, null, array('userScope'), 'auth_prefix'),
+			array('login', 'pre', array(), 'auth_prefix'),
+			array('login', 'pre', array() null),
+			array('login', '/admin', array('userScope'), 'auth_prefix'),
 		);
 	}
 
