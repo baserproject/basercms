@@ -124,6 +124,8 @@ class BcAuthConfigureComponent extends Component {
 		if (isset($UserModel->belongsTo['UserGroup']) && !empty($config['auth_prefix']) && !isset($userScope)) {
 			$BcAuth->authenticate['Form']['scope'] += array('UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%');
 		} elseif (isset($userScope)) {
+			// 文字列の場合配列に変更
+			if (is_string($userScope)) $userScope = array($userScope);
 			$BcAuth->authenticate['Form']['scope'] += $userScope;
 		}
 
