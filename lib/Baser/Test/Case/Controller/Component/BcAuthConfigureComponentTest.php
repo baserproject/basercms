@@ -106,6 +106,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 			'serial'			=> 'serial',
 			'loginAction'		=> $loginAction,
 			'userScope'		=> $userScope,
+			'scope'			=> array(),
 			'auth_prefix' => $auth_prefix
 		);
 
@@ -135,6 +136,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 					'userModel' => 'User',
 					'fields' => array('username' => 'basercms', 'password' => 'basercms'),
 					'serial' => 'serial',
+					'scope'	=> array(),
 				),
 			),
 			'sessionKey' => null,
@@ -154,9 +156,10 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 
 		// userScope
 		if (!empty($userScope)) {
-			$expected['authenticate']['Form']['scope'] = $userScope;
+			if (is_string($userScope)) $userScope = array($userScope);
+			$expected['authenticate']['Form']['scope'] += $userScope;
 		} else if (!empty($auth_prefix)) {
-			$expected['authenticate']['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $auth_prefix .'%');
+			$expected['authenticate']['Form']['scope'] += array('UserGroup.auth_prefix LIKE' => '%' . $auth_prefix .'%');
 		}
 
 		// Session Auth.redirect
