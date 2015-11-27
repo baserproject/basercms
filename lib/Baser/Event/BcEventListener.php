@@ -65,14 +65,24 @@ class BcEventListener extends Object implements CakeEventListener {
 	public function implementedEvents() {
 		
 		$events = array();
+		$options = array();
 		if ($this->events) {
-			foreach ($this->events as $registerEvent) {
+			foreach ($this->events as $key => $registerEvent) {
+				if(is_array($registerEvent)) {
+					$options = $registerEvent;
+					$registerEvent = $key;
+				}
 				$eventName = $this->layer . '.' . $registerEvent;
 				if (strpos($registerEvent, '.') !== false) {
 					$aryRegisterEvent = explode('.', $registerEvent);
 					$registerEvent = Inflector::variable(implode('_', $aryRegisterEvent));
 				}
-				$events[$eventName] = array('callable' => $registerEvent);
+				if($options) {
+					$options = array_merge(array('callable' => $registerEvent), $options);
+				} else {
+					$options = array('callable' => $registerEvent);
+				}
+				$events[$eventName] = $options;
 			}
 		}
 
