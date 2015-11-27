@@ -160,7 +160,7 @@ if (Configure::read('BcRequest.agent')) {
 
 		<?php if ($blogContent['BlogContent']['auth_captcha']): ?>
 			<div class="auth-captcha clearfix">
-				<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
+				<img src="" alt="認証画像" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none" />
 				<?php $this->BcBaser->img('admin/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id' => 'CaptchaLoader')) ?>
 				<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?><br />
 				&nbsp;画像の文字を入力してください<br />

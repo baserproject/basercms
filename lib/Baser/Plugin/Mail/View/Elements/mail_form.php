@@ -62,13 +62,11 @@ $(function(){
 
 <?php /* 送信ボタン */ ?>
 <div class="submit">
-	<?php if ($this->action == 'index'): ?>
-		<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button" />
-	<?php endif; ?>
 	<?php if ($freezed): ?>
 		<?php echo $this->Mailform->submit('　書き直す　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageBack')) ?>
 		<?php echo $this->Mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageSubmit')) ?> 
-	<?php elseif ($this->action != 'submit'): ?>
+	<?php else: ?>
+		<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button" />
 		<?php echo $this->Mailform->submit('　入力内容を確認する　', array('div' => false, 'class' => 'btn-orange button form-submit', 'id' => 'BtnMessageConfirm')) ?>
 	<?php endif; ?>
 </div>
