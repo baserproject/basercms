@@ -282,9 +282,12 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testClearAllCache() {
 		// ダミーのキャッシュファイルを生成
-		$coreConf = Cache::config('_cake_core_')['settings'];
-		$modelConf = Cache::config('_cake_model_')['settings'];
-		$envConf = Cache::config('_cake_env_')['settings'];
+		$coreConf = Cache::config('_cake_core_');
+		$coreConf = $coreConf['settings'];
+		$modelConf = Cache::config('_cake_model_');
+		$modelConf = $modelConf['settings'];
+		$envConf = Cache::config('_cake_env_');
+		$envConf = $envConf['settings'];
 
 		$coreCache = new File($coreConf['path'] . $coreConf['prefix'] . 'cache', true);
 		$modelCache = new File($modelConf['path'] . $modelConf['prefix'] . 'cache', true);
