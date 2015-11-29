@@ -15,7 +15,7 @@
  * Include files
  */
 App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
-
+App::uses('FeedAppModel', 'Feed.Model');
 /**
  * フィード読込モデル
  *
