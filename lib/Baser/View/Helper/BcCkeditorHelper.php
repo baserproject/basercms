@@ -85,8 +85,8 @@ class BcCkeditorHelper extends AppHelper {
 		'simple' => array(
 			array('Bold', 'Underline', '-',
 				'NumberedList', 'BulletedList', '-',
-				'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
-				'Format', 'FontSize', 'TextColor', 'BGColor', 'Link', 'Image'),
+				'JustifyLeft', 'JustifyCenter', 'JustifyRight',
+				'Format', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
 			array('Maximize', 'ShowBlocks', 'Source')
 		),
 		'normal' => array(
