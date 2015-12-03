@@ -1668,8 +1668,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_setAgent($agent);
 		$this->BcBaser->request = $this->_getRequest($url);
 
-		$this->expectOutputRegex('/' . $expected . '/');
+		ob_start();
 		$this->BcBaser->WidgetArea($no);
+		$result = ob_get_clean();
+		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function widgetAreaDataProvider() {
