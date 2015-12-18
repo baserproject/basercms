@@ -26,6 +26,7 @@ class BcAllTest extends CakeTestSuite {
 		$suite = new CakeTestSuite('Baser All Tests');
 
 		$path = BASER_TEST_CASES . DS;
+		$pluginPath = BASER_PLUGINS;
 
 		$suite->addTestFile($path . 'BcBasicsTest.php');
 //		$suite->addTestFile($path . 'BcAllConsoleTest.php');
@@ -50,6 +51,7 @@ class BcAllTest extends CakeTestSuite {
 //		$suite->addTestFile($path . 'BcAllUtilityTest.php');
 //		$suite->addTestFile($path . 'BcAllViewTest.php');
 //		$suite->addTestFile($path . 'BcAllI18nTest.php');
+		$suite->addTestFile($pluginPath . 'Mail' . DS . 'Test' . DS . 'Case' . DS . 'MailAllModelTest.php');
 		return $suite;
 	}
 

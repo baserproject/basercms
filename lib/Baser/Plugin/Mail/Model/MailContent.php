@@ -12,10 +12,7 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::uses('MailAppModel', 'Mail.Model');
+
 /**
  * メールコンテンツモデル
  *
@@ -288,7 +285,7 @@ class MailContent extends MailAppModel {
 					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 				}
 				App::uses('Message', 'Mail.Model');
-				$Message = new Message();
+				$Message = ClassRegistry::init('Mail.Message');
 				$Message->setup($result['MailContent']['id']);
 				$Message->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 				$Message->createTable($result['MailContent']['name']);
