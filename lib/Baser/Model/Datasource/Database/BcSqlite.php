@@ -794,33 +794,34 @@ class BcSqlite extends Sqlite {
 			return false;
 		}
 
+		$result = true;
 		foreach ($compare as $table => $types) {
 			if (!$types) {
 				return false;
 			}
 			foreach ($types as $type => $fields) {
 				if (!$fields) {
-					return false;
+					continue;
 				}
 				foreach ($fields as $fieldName => $column) {
 					switch ($type) {
 						case 'add':
 							if (!$this->addColumn(array('field' => $fieldName, 'table' => $table, 'column' => $column))) {
-								return false;
+								$reuslt = false;
 							}
 							break;
 						case 'change':
 							// TODO 未実装
 							// SQLiteでは、SQLで実装できない？ので、フィールドの作り直しとなる可能性が高い
 							// その場合、changeColumnメソッドをオーバライドして実装する
-							return false;
+							$reuslt = false;
 							/* if(!$this->changeColumn(array('field'=>$fieldName,'table'=>$table, 'column'=>$column))){
 							  return false;
 							  } */
 							break;
 						case 'drop':
 							if (!$this->dropColumn(array('field' => $fieldName, 'table' => $table))) {
-								return false;
+								$reuslt = false;
 							}
 							break;
 					}
@@ -828,7 +829,7 @@ class BcSqlite extends Sqlite {
 			}
 		}
 
-		return true;
+		return $result;
 	}
 
 /**
@@ -1033,11 +1034,13 @@ class BcSqlite extends Sqlite {
 			if ($fields[$column[0]['name']]['default'] == 'NULL') {
 				$fields[$column[0]['name']]['default'] = null;
 			}
-			if ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
+			// 2015/12/24 ryuring
+			// CakeSchema::compare() でスキーマファイルの比較に失敗してしまう為、コメントアウト
+			/*if ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'1'") {
 				$fields[$column[0]['name']]['default'] = 1;
 			} elseif ($fields[$column[0]['name']]['type'] == 'boolean' && $fields[$column[0]['name']]['default'] == "'0'") {
 				$fields[$column[0]['name']]['default'] = 0;
-			}
+			}*/
 			if ($column[0]['pk'] == 1) {
 				$fields[$column[0]['name']] = array(
 					'type' => $fields[$column[0]['name']]['type'],
