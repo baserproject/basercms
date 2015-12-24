@@ -1250,6 +1250,12 @@ class Page extends AppModel {
 			return true;
 		}
 
+		// CL版 php がインストールされてない場合はシンタックスチェックできないので true を返す
+		exec('php -l 2>&1', $output, $exit);
+		if($exit !== 0) {
+			return true;
+		}
+
 		if(isWindows()) {
 			$tmpName = tempnam(TMP, "syntax");
 			$tmp = new File($tmpName);
