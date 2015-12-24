@@ -503,7 +503,7 @@ class UsersController extends AppController {
 				$this->Session->setFlash('メールアドレスを入力してください。');
 				return;
 			}
-			$email = $this->request->data[$userModel]['email'];
+			$email = trim($this->request->data[$userModel]['email']);
 			$user = $this->{$userModel}->findByEmail($email);
 			if (!$user) {
 				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
