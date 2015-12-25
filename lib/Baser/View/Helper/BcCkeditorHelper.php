@@ -295,7 +295,7 @@ class BcCkeditorHelper extends AppHelper {
 			$jscode .= "CKEDITOR.config.templates_files = [ '" . $this->url(array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'js')) . "' ];";
 		}
 		$jscode .= "CKEDITOR.config.allowedContent = true;";
-		$jscode .= "CKEDITOR.config.extraPlugins = 'draft';";
+		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,showprotected';";
 		$jscode .= "CKEDITOR.config.stylesCombo_stylesSet = '" . $editorStylesSet . "';";
 		$jscode .= "CKEDITOR.config.protectedSource.push( /<\?[\s\S]*?\?>/g );";
 
