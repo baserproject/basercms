@@ -13,7 +13,7 @@
  */
 App::uses('MailAppModel', 'Mail.Model');
 
-class MailContentTest extends BaserTestCase {
+class MailAppTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SiteConfig',

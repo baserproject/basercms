@@ -20,8 +20,8 @@ class MessageTest extends BaserTestCase {
 		'baser.Default.pluginContent',
 		'plugin.mail.Default/Message',
 		'plugin.mail.Default/MailConfig',
-		'plugin.mail.Model/Message/MailContent',
-		'plugin.mail.Model/Message/MailField',
+		'plugin.mail.Model/Message/MailContentMessage',
+		'plugin.mail.Model/Message/MailFieldMessage',
 	);
 
 	public function setUp() {

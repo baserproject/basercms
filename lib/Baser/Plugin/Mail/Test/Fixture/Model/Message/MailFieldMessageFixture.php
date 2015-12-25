@@ -3,7 +3,7 @@
  * MailFieldFixture
  *
  */
-class MailFieldFixture extends BaserTestFixture {
+class MailFieldMessageFixture extends BaserTestFixture {
 /**
  * Name of the object
  *

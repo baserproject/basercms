@@ -51,7 +51,6 @@ class BcAllTest extends CakeTestSuite {
 //		$suite->addTestFile($path . 'BcAllUtilityTest.php');
 //		$suite->addTestFile($path . 'BcAllViewTest.php');
 //		$suite->addTestFile($path . 'BcAllI18nTest.php');
-		$suite->addTestFile($pluginPath . 'Mail' . DS . 'Test' . DS . 'Case' . DS . 'MailAllModelTest.php');
 		return $suite;
 	}
 
