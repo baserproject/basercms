@@ -20,7 +20,7 @@
 /**
  * 管理システム用アセットの再デプロイ
  */
-    $this->Components->init('BcManager');
+    $this->Components->load('BcManager');
     if($this->BcManager->deployAdminAssets()) {
         $this->setUpdateLog('管理システム用アセットの再配置に成功しました。');
     } else {
