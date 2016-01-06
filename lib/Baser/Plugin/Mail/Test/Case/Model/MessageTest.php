@@ -451,7 +451,6 @@ class MessageTest extends BaserTestCase {
  * @access public
  */
 	public function testConstruction() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$contentName = 'contact';
 		$fullTable = $this->Message->getTablePrefixByContentName($contentName) . 'messages';
@@ -463,7 +462,7 @@ class MessageTest extends BaserTestCase {
 		$this->assertTrue($this->Message->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
 		
 		$expectColumns = array('id', 'modified', 'created');
-		$sql = "DESCRIBE $fullTable";
+		$sql = "EXPLAIN $fullTable";
 		$resultColumns = array();
 		foreach ($this->Message->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
@@ -480,7 +479,7 @@ class MessageTest extends BaserTestCase {
 		));
 		array_unshift($expectColumns, 'id', 'modified', 'created');
 
-		$sql = "DESCRIBE $fullTable";
+		$sql = "EXPLAIN $fullTable";
 		$resultColumns = array();
 		foreach ($this->Message->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
