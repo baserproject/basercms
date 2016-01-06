@@ -26,6 +26,7 @@ class BcAllTest extends CakeTestSuite {
 		$suite = new CakeTestSuite('Baser All Tests');
 
 		$path = BASER_TEST_CASES . DS;
+		$pluginPath = BASER_PLUGINS;
 
 		$suite->addTestFile($path . 'BcBasicsTest.php');
 //		$suite->addTestFile($path . 'BcAllConsoleTest.php');
