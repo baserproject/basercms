@@ -243,7 +243,7 @@ class BcUtilTest extends BaserTestCase {
 		return array(
 			array(null, null, null, BASER_CONFIGS . 'data/default'),
 			array(null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'),
-			array(null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/default'),
+			array(null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default'),
 			array('Blog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'),
 			array('Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'),
 			array('Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'),
