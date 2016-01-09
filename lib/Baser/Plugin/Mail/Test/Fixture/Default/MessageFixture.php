@@ -4,6 +4,12 @@
  *
  */
 class MessageFixture extends BaserTestFixture {
+/**
+ * Name of the object
+ *
+ * @var string
+ */
+  public $name = 'Message';
 
 /**
  * Fields

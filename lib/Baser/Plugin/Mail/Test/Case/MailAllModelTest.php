@@ -11,6 +11,10 @@
  * @since           baserCMS v 3.0.0-beta
  * @license         http://basercms.net/license/index.html
  */
+
+/**
+ * @package Baser.Test.Case
+ */
 class MailAllModelTest extends CakeTestSuite {
 
 /**
