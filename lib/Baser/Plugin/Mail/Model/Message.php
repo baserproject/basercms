@@ -81,6 +81,7 @@ class Message extends MailAppModel {
 		App::uses('MailField', 'Mail.Model');
 		$MailField = ClassRegistry::init('Mail.MailField');
 		$this->mailFields = $MailField->find('all', array('conditions' => array("mail_content_id" => $mailContentId), 'order' => 'MailField.sort', 'recursive' => -1));
+
 		// アップロード設定
 		$this->setupUpload();
 		return true;
@@ -168,6 +169,7 @@ class Message extends MailAppModel {
  */
 	public function afterValidate() {
 		$data = $this->data;
+
 		// Eメール確認チェック
 		$this->_validEmailCofirm($data);
 		// 不完全データチェック
@@ -786,8 +788,8 @@ class Message extends MailAppModel {
  * @access public
  */
 	public function construction($mailContentId) {
-		$mailFieldClass = new MailField();
-		$mailContentClass = new MailContent();
+		$mailFieldClass = ClassRegistry::init('Mail.MailField');
+		$mailContentClass = ClassRegistry::init('Mail.MailContent');
 
 		// フィールドリストを取得
 		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $mailContentId)));
@@ -865,7 +867,7 @@ class Message extends MailAppModel {
  * @return boolean
  */
 	public function reconstructionAll() {
-		
+
 		// メール受信テーブルの作成
 		$PluginContent = ClassRegistry::init('PluginContent');
 		$pluginContents = $PluginContent->find('all', array('conditions' => array('PluginContent.plugin' => 'mail')));
@@ -881,7 +883,7 @@ class Message extends MailAppModel {
 			}
 		}
 		return $result;
-		
+
 	}
 
 	

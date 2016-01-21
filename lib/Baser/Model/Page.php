@@ -1251,7 +1251,7 @@ class Page extends AppModel {
 		}
 
 		// CL版 php がインストールされてない場合はシンタックスチェックできないので true を返す
-		exec('php -l 2>&1', $output, $exit);
+		exec('php --version 2>&1', $output, $exit);
 		if($exit !== 0) {
 			return true;
 		}
