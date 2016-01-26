@@ -106,7 +106,7 @@ class BcUploadHelperTest extends BaserTestCase {
 		);
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" />';
-		$this->assertEqual($expects, $result);
+		$this->assertEquals($expects, $result);
 
 	}
 
