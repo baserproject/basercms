@@ -65,7 +65,7 @@ class BcUploadHelper extends BcAppHelper {
 	public function fileLink($fieldName, $options = array()) {
 
 		$options = array_merge(array(
-			'imgsize' => 'midium', // 画像サイズ
+			'imgsize' => 'medium', // 画像サイズ
 			'rel' => '', // rel属性
 			'title' => '', // タイトル属性
 			'link' => true, // 大きいサイズの画像へのリンク有無
@@ -167,7 +167,7 @@ class BcUploadHelper extends BcAppHelper {
 	public function uploadImage($fieldName, $fileName, $options = array()) {
 
 		$options = array_merge(array(
-			'imgsize' => 'midium', // 画像サイズ
+			'imgsize' => 'medium', // 画像サイズ
 			'link' => true, // 大きいサイズの画像へのリンク有無
 			'escape' => false, // エスケープ
 			'mobile' => false, // モバイル
