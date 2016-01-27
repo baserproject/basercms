@@ -1382,7 +1382,7 @@ DOC_END;
 		$fieldName = implode('.', $entity);
 
 		$options = array_merge(array(
-			'imgsize' => 'midium', // 画像サイズ
+			'imgsize' => 'medium', // 画像サイズ
 			'rel' => '', // rel属性
 			'title' => '', // タイトル属性
 			'link' => true, // 大きいサイズの画像へのリンク有無
