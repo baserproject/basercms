@@ -554,6 +554,13 @@ class BcFormHelper extends FormHelper {
 			// <<<
 		);
 
+		// CUSTOMIZE ADD 2016/01/28 ryuring
+		// checkboxのdivを外せるオプションを追加
+		// >>>
+		$div = $this->_extractOption('div', $attributes);
+		unset($attributes['div']);
+		// <<<
+
 		$escapeOptions = $this->_extractOption('escape', $attributes);
 		$secure = $this->_extractOption('secure', $attributes);
 		$showEmpty = $this->_extractOption('empty', $attributes);
@@ -645,7 +652,7 @@ class BcFormHelper extends FormHelper {
 				// CUSTOMIZE ADD 2016/01/26 ryuring
 				// checkboxのdivを外せるオプションを追加
 				// >>>
-				'div' => $attributes['div']
+				'div' => $div
 				// <<<
 			)
 		));
