@@ -372,14 +372,21 @@ $engine = 'File';
 // $this->BcBaser->blogPost等を利用して表示した場合、
 // キャッシュを利用すると手動で更新等しない限りブログ記事の公開期限の反映が
 // 正しく反映されない可能性があるためデフォルトの時間を短縮。
+// CUSTOMIZE MODIFY 2016/01/22 gondoh
+// 全てを短くすると負荷が高くなるため、Viewのみの設定値を追加
 // >>>
-// $duration = '+999 days';
+//$duration = '+999 days';
+//if (Configure::read('debug') > 0) {
+//	$duration = '+10 seconds';
+//}
 // ---
-$duration = '+5 min';
-// <<<
+$duration = '+999 days';
+$viewDuration = '+5 min';
 if (Configure::read('debug') > 0) {
 	$duration = '+10 seconds';
+	$viewDuration = '+10 seconds';
 }
+// <<<
 
 // Prefix each application on the same server with a different string, to avoid Memcache and APC conflicts.
 $prefix = 'myapp_';
@@ -422,6 +429,7 @@ $prefix = 'myapp_';
 Configure::write('BcCache', array(
 	'engine'	=> $engine,
 	'duration'	=> $duration,
+	'viewDuration' => $viewDuration,
 	'prefix'	=> $prefix
 ));
 

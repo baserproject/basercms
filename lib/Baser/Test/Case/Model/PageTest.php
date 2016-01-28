@@ -685,10 +685,10 @@ class PageTest extends BaserTestCase {
 
 	public function getCacheTimeDataProvider() {
 		return array(
-			array('/index', '+5 min', 'キャッシュ時間を取得できません'),
-			array('/service', '+5 min', 'キャッシュ時間を取得できません'),
-			array('/hidden_status', '+5 min', 'キャッシュ時間を取得できません'),
-			array('/company', '+5 min', 'キャッシュ時間を取得できません'),
+			array('/index', '+999 days', 'キャッシュ時間を取得できません'),
+			array('/service', '+999 days', 'キャッシュ時間を取得できません'),
+			array('/hidden_status', '+999 days', 'キャッシュ時間を取得できません'),
+			array('/company', '+999 days', 'キャッシュ時間を取得できません'),
 		);
 	}
 

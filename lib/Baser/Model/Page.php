@@ -803,7 +803,11 @@ class Page extends AppModel {
 		if ($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
 			return strtotime($page['Page']['publish_end']) - time();
 		} else {
-			return Configure::read('BcCache.duration');
+			// #10680 Modify 2016/01/22 gondoh
+			// 3.1.0で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
+			$duration = Configure::read('BcCache.viewDuration');
+			if ($duration) $duration = Configure::read('BcCache.duration');
+			return $duration;
 		}
 	}
 

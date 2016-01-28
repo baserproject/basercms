@@ -159,7 +159,7 @@ class BlogHelper extends AppHelper {
 		return $this->BcBaser->getLink($title, $url, $options);
 	}
 
-/*
+/**
  * ブログ記事のURLを取得する
  *
  * @param array $post ブログ記事データ
