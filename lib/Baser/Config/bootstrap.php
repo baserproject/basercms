@@ -213,7 +213,7 @@ if (BC_INSTALLED) {
 	Cache::config('_cake_model_', array(
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_model_',
-		'path' => CACHE . 'models' . DS,
+		'path' => CACHE . 'models',
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
@@ -221,7 +221,7 @@ if (BC_INSTALLED) {
 	Cache::config('_cake_core_', array(
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_core_',
-		'path' => CACHE . 'persistent' . DS,
+		'path' => CACHE . 'persistent',
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
