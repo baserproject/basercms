@@ -63,53 +63,25 @@ class BootstrapTest extends BaserTestCase {
 	/**
 	 * キャッシュの初期設定をチェックする
 	 *
-	 * @param string $cacheName キャッシュ名
-	 * @param string $expected 期待値
+	 * @param string $name 		キャッシュ名
+	 * @param string $prefix 	接頭語
+	 * @param string $path 		ディレクトリパス
+	 * @param string $duration	キャッシュ時間
 	 * @dataProvider getCacheSettingDataProvider
 	 */
-	public function testCacheSettings($cacheName, $expected) {
-		$config = Cache::config($cacheName);
-		$result = array(
-			'prefix' => $config['settings']['prefix'],
-			'engine' => $config['settings']['engine'],
-			'path' => $config['settings']['path'],
-			'duration' => $config['settings']['duration'],
-			'probability' => $config['settings']['probability'],
-		);
-		$this->assertEquals($expected,$result);
+	public function testCacheSettings($name, $prefix, $path, $duration) {
+		$config = Cache::config($name);
+		$this->assertEquals($prefix, $config['settings']['prefix']);
+		$this->assertEquals($duration,$config['settings']['duration']);
+		$this->assertTrue(strpos($config['settings']['path'], $path) === 0);
 	}
 
 	public function getCacheSettingDataProvider() {
 		return array(
-			array('_cake_model_', array(
-				'prefix' => 'myapp_cake_model_',
-				'engine' => 'File',
-				'path' => CACHE . 'models' . DS,
-				'duration' => strtotime("+999 days") - time(),
-				'probability' => 100,
-			)),
-			array('_cake_core_', array(
-				'prefix' => 'myapp_cake_core_',
-				'engine' => 'File',
-				'path' => CACHE . 'persistent' . DS,
-				'duration' => strtotime("+999 days") - time(),
-				'probability' => 100,
-			)),
-			array('_cake_data_', array(
-				'prefix' => 'myapp_cake_data_',
-				'engine' => 'File',
-				'path' => CACHE . 'datas' . DS,
-				'probability' => 100,
-				'duration' => strtotime("+999 days") - time(),
-			)),
-			array('_cake_env_', array(
-				'prefix' => 'myapp_cake_env_',
-				'engine' => 'File',
-				'path' => CACHE . 'environment' . DS,
-				'duration' => strtotime("+999 days") - time(),
-				'probability' => 100,
-			)),
+			array('_cake_model_', 	'myapp_cake_model_', 	CACHE . 'models' . DS, 		strtotime("+999 days") - time()),
+			array('_cake_core_', 	'myapp_cake_core_', 	CACHE . 'persistent' . DS, 	strtotime("+999 days") - time()),
+			array('_cake_data_', 	'myapp_cake_data_', 	CACHE . 'datas' . DS, 		strtotime("+999 days") - time()),
+			array('_cake_env_', 	'myapp_cake_env_', 		CACHE . 'environment' . DS, strtotime("+999 days") - time()),
 		);
 	}
-
 }
