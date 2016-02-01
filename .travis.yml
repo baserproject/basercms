@@ -30,8 +30,7 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpenv config-add travis.php.ini; fi;'
-
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpenv config-add travis.php.ini; fi;
   - |
     bash -c "if [ '$DB' == 'mysql' ]; then
     mysql -u root -e \"CREATE DATABASE basercms CHARACTER SET utf8;\";
@@ -42,7 +41,9 @@ before_script:
     psql -U postgres -c \"CREATE USER basercms WITH PASSWORD 'basercms';\";
     psql -U postgres -c \"CREATE DATABASE basercms OWNER basercms ENCODING='utf8'\";
     fi;"
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "5.2" ]; then composer install --dev; fi;'
+  - if [ "$TRAVIS_PHP_VERSION" != "5.2" ]; then composer self-update; fi;
+  - if [ "$TRAVIS_PHP_VERSION" != "5.2" ] && [ -n "$GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
+  - if [ "$TRAVIS_PHP_VERSION" != "5.2" ]; then composer install --dev; fi;
   - cd app
   - php ./Console/cake.php bc_manager checkenv
   - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "nada-icons.default"
