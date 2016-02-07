@@ -980,4 +980,11 @@ class BlogHelper extends AppHelper {
 		$MailHelper->link($title, $contentsName, $datas, $options);
 	}
 
+/**
+ * 文字列から制御文字を取り除く
+ */
+	public function removeCtrlChars($string) {
+		# fixes #10683
+		return preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
+	}
 }
