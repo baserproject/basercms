@@ -329,6 +329,9 @@ table.sub-menu{
 	border-top: 1px dotted #DDD;
 	border-bottom: 1px dotted #DDD;
 }
+.contents-body .list-table td.eye_catch img {
+	max-width: 100px;
+}
 .contents-body .list-table td a{
 	color:#333;
 	text-decoration:underline;
