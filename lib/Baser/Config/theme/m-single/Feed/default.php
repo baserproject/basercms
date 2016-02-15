@@ -2,11 +2,8 @@
 /**
  * フィード
  */
-$this->Feed->saveCachetime();
 ?>
-<cake:nocache>
-<?php $this->Feed->cacheHeader() ?>
-</cake:nocache>
+
 
 <?php if (!empty($items)): ?>
 <dl class="recentNews">

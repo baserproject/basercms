@@ -1451,7 +1451,6 @@ class BcBaserHelper extends AppHelper {
 		if (!is_numeric($expire)) {
 			$expire = strtotime($expire);
 		}
-
 		header("Date: " . date("D, j M Y G:i:s ", $fileModified) . 'GMT');
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s", $fileModified) . " GMT");
 		header('Content-type: ' . $contentType[$type]);

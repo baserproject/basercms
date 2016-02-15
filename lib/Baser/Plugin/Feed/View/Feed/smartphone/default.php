@@ -12,9 +12,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<!--nocache-->
-	<?php $this->Feed->cacheHeader() ?>
-<!--/nocache-->
+
 
 <?php if (!empty($items)): ?>
 	<?php foreach ($items as $key => $item): ?>
