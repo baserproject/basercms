@@ -1231,7 +1231,7 @@ class BcBaserHelper extends AppHelper {
 		$plugin = '';
 		$controller = '';
 		$action = '';
-		$pass = '';
+		$pass = array();
 		$url0 = '';
 		$url1 = '';
 		$url2 = '';
@@ -1296,7 +1296,6 @@ class BcBaserHelper extends AppHelper {
 				$plugin = '';
 				$controller = $url0;
 			}
-
 			if ($plugin) {
 				$controller = $plugin . '_' . $controller;
 			}
@@ -1315,17 +1314,14 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		if ($this->_View->name == 'CakeError') {
-
 			$contentsName = $error;
 		} elseif (count($aryUrl) >= 2) {
-
 			if (!$detail) {
 				$contentsName = $aryUrl[0];
 			} else {
 				$contentsName = implode('_', $aryUrl);
 			}
 		} elseif (count($aryUrl) == 1 && $aryUrl[0] == 'index') {
-
 			$contentsName = $home;
 		} else {
 			if (!$detail) {
@@ -1555,6 +1551,7 @@ class BcBaserHelper extends AppHelper {
 				return call_user_func_array(array($pluginBaser, $method), $params);
 			}
 		}
+		return null;
 	}
 
 /**
