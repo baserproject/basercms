@@ -497,6 +497,9 @@ function pageTypeChengeHandler() {
 </div>
 
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+<?php if (BcUtil::isAdminUser()): ?>
+	<?php if ($this->BcForm->value('Page.code')): ?><p class="align-right"><small>※ コード欄に記述有</small></p><?php endif ?>
+<?php endif ?>
 
 <div id ="formOptionBody" class="slide-body section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
