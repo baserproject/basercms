@@ -194,7 +194,7 @@ function delWidget(id){
 		},
 		success: function(result){
 			if(result != '1'){
-				$("#flashMessage").html('ウィジェッの削除に失敗しました。');
+				$("#flashMessage").html('ウィジェットの削除に失敗しました。');
 				$("#flashMessage").slideDown();
 			} else {
 				$("#Setting"+id+"").slideUp(200, function(){
@@ -300,7 +300,7 @@ function updateWidget(id) {
 		},
 		success: function(result){
 			if(result != '1'){
-				$("#flashMessage").html('ウィジェッの保存に失敗しました。');
+				$("#flashMessage").html('ウィジェットの保存に失敗しました。');
 				$("#flashMessage").slideDown();
 			}else{
 				$("#Setting"+id+' .head').html($("#Setting"+id+' .name').val());
