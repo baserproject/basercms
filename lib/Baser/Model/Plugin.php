@@ -433,7 +433,8 @@ class Plugin extends AppModel {
  * @param array $user ユーザーデータの配列
  * @return void
  */
-	public function addFavoriteAdminLink($pluginName, $user) {
+	public function addFavoriteAdminLink($pluginName, $user)
+	{
 		$plugin = $this->findByName($pluginName);
 		$dirPath = $this->getDirectoryPath($pluginName);
 		$pluginInfo = $this->getPluginInfo(array($plugin), $dirPath);
@@ -451,13 +452,15 @@ class Plugin extends AppModel {
 
 		$adminLinkUrl = Router::url($pluginInfo['Plugin']['admin_link']);
 		$baseUrl = Configure::read('App.baseUrl');
-		if($baseUrl) {
+		if ($baseUrl) {
 			$adminLinkUrl = preg_replace('/^' . preg_quote($baseUrl, '/') . '/', '', $adminLinkUrl);
 		}
 		$request = Router::getRequest();
-		$base = $request->base;
-		if($request->base) {
-			$adminLinkUrl = preg_replace('/^' . preg_quote($request->base, '/') . '/', '', $adminLinkUrl);
+		if ($request) {
+			$base = $request->base;
+			if ($request->base) {
+				$adminLinkUrl = preg_replace('/^' . preg_quote($request->base, '/') . '/', '', $adminLinkUrl);
+			}
 		}
 
 		//すでにお気に入りにリンクが含まれている場合
