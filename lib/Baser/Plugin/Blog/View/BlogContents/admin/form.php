@@ -257,6 +257,7 @@ $(function(){
 					</ul>
 				</div>
 			</td>
+		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.eye_catch_size_width', 'アイキャッチ画像サイズ') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -278,7 +279,7 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.use_content', '記事概要') ?></th>
 			<td class="col-input">
 	<?php echo $this->BcForm->input('BlogContent.use_content', array('type' => 'checkbox', 'label' => '利用する')) ?>
-	<?php echo $this->BcForm->error('BlogContent.tag_use') ?>
+	<?php echo $this->BcForm->error('BlogContent.use_content') ?>
 			</td>
 		</tr>
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
