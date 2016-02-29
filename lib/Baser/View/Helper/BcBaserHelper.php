@@ -1237,7 +1237,7 @@ class BcBaserHelper extends AppHelper {
 		$url2 = '';
 		$aryUrl = array();
 
-		if (!empty($this->request->params['prefix']) && Configure::read('BcRequest.agentPrefix') != $this->request->params['prefix']) {
+		if (!empty($this->request->params['prefix'])) {
 			$prefix = h($this->request->params['prefix']);
 		}
 		if (!empty($this->request->params['plugin'])) {
@@ -1293,6 +1293,7 @@ class BcBaserHelper extends AppHelper {
 
 			// プラグインルーティングの場合
 			if ((($url1 == '' && in_array($action, array('index', 'mobile_index', 'smartphone_index'))) || ($url1 == $action)) && $url2 != $action && $plugin) {
+				$prefix = '';
 				$plugin = '';
 				$controller = $url0;
 			}
@@ -1309,7 +1310,7 @@ class BcBaserHelper extends AppHelper {
 				$aryUrl[] = $action;
 			}
 			if ($pass) {
-				$aryUrl = $aryUrl + $pass;
+				$aryUrl = array_merge($aryUrl, $pass);
 			}
 		}
 
