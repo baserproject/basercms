@@ -97,6 +97,7 @@ class ToolsController extends AppController {
 				if ($messages) {
 					$this->setMessage(implode('<br />', $messages), $error);
 				}
+				clearAllCache();
 				$this->redirect(array('action' => 'maintenance'));
 				break;
 		}
