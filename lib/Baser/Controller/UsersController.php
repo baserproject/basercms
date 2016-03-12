@@ -491,10 +491,12 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_reset_password() {
-		if (empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front')) {
+		if ((empty($this->params['prefix']) && !Configure::read('BcAuthPrefix.front'))) {
 			$this->notFound();
 		}
-
+		if($this->BcAuth->user()) {
+			$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
+		}
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		if ($this->request->data) {
