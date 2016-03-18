@@ -43,7 +43,7 @@ $(function(){
 </div>
 
 <div class="align-center">
-	<?php echo $this->BcForm->input('Plugin.permission', array('type' => 'radio', 'options' => array('1' => '管理ユーザーのみ利用', '2' => '全てのユーザーで利用'))) ?>
+	<?php echo $this->BcForm->input('Plugin.permission', array('type' => 'radio', 'options' => array('1' => '全てのユーザーで利用', '2' => '管理ユーザーのみ利用'))) ?>
 </div>
 
 <div>

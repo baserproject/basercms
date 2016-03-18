@@ -423,11 +423,6 @@ class PluginsController extends AppController {
 				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
 				switch ($data['Plugin']['permission']) {
 					case 1:
-						if ($permission) {
-							$Permission->delete($permission['Permission']['id']);
-						}
-						break;
-					case 2:
 						if (!$permission) {
 							$Permission->create(array(
 								'name'			=> $data['Plugin']['title'] . '管理',
@@ -439,6 +434,11 @@ class PluginsController extends AppController {
 								'sort'			=> $Permission->getMax('sort', array('user_group_id' => $userGroup['UserGroup']['id'])) + 1
 							));
 							$Permission->save();
+						}
+						break;
+					case 2:
+						if ($permission) {
+							$Permission->delete($permission['Permission']['id']);
 						}
 						break;
 				}
