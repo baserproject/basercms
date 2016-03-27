@@ -69,7 +69,7 @@ $(function(){
 <?php if ($freezed): ?>
 <?php echo $this->Mailform->submit('　書き直す　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageBack')) ?>
 <?php echo $this->Mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageSubmit')) ?> 
-<?php elseif ($this->action != 'submit'): ?>
+<?php else: ?>
 <?php echo $this->Mailform->submit('　入力内容を確認する　', array('div' => false, 'class' => 'btn-orange button form-submit', 'id' => 'BtnMessageConfirm')) ?>
 <?php endif; ?>
 </div>
