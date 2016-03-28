@@ -538,8 +538,10 @@ class MailController extends MailAppController {
 				if ($mailField['MailField']['type'] == 'radio' || 
 					  $mailField['MailField']['type'] == 'select') {
 					$source = explode('|', $mailField['MailField']['source']);
-					$mailContent['subject_user'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_user']);
-					$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_admin']);
+					if(!empty($value)){
+						$mailContent['subject_user'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_user']);
+						$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_admin']);
+					}
 				} else {
 					$mailContent['subject_user'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_user']);
 					$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_admin']);
