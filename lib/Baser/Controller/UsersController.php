@@ -217,8 +217,12 @@ class UsersController extends AppController {
 	public function setAuthCookie($data) {
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		$cookie = array();
-		$cookie['name'] = $data[$userModel]['name'];
-		$cookie['password'] = $data[$userModel]['password'];							// ハッシュ化されている
+		foreach($data[$userModel] as $key => $val) {
+			// savedは除外
+			if ($key !== "saved") {
+				$cookie[$key] = $val;
+			}
+		}
 		$this->Cookie->write(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)), $cookie, true, '+2 weeks');	// 3つめの'true'で暗号化
 	}
 
