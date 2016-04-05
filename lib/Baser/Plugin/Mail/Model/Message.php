@@ -401,11 +401,12 @@ class Message extends MailAppModel {
 			}
 
 			$value = null;
-			if(!empty($data['Message'][$mailField['field_name']])) {
+			if(isset($data['Message'][$mailField['field_name']]) &&
+				$data['Message'][$mailField['field_name']] !== "") {
 				$value = $data['Message'][$mailField['field_name']];
 			}
 
-			if ($value) {
+			if ($value !== null) {
 
 				// 半角処理
 				if ($mailField['auto_convert'] == 'CONVERT_HANKAKU') {
