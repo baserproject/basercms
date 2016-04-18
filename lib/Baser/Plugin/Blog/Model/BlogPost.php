@@ -131,7 +131,11 @@ class BlogPost extends BlogAppModel {
 		),
 		'detail' => array(
 			array('rule' => array('maxByte', 64000),
-			'message' => '保存できるデータ量を超えています。')
+			'message' => '本稿欄に保存できるデータ量を超えています。')
+		),
+		'detail_draft' => array(
+			array('rule' => array('maxByte', 64000),
+			'message' => '草稿欄に保存できるデータ量を超えています。')
 		),
 		'posts_date' => array(
 			array('rule' => array('notEmpty'),
