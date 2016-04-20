@@ -219,10 +219,11 @@ class BcFreezeHelper extends BcFormHelper {
 			$selectDayAttr['value'] = $day;
 			$selects[] = $this->freezeControll($fieldName . ".month", array(), $selectMonthAttr) . "月";
 			$selects[] = $this->freezeControll($fieldName . ".day", array(), $selectDayAttr) . "日";
-			$selects[] = $this->freezeControll($fieldName . ".hour", array(), array('value' => $hour)) . "時";
-			$selects[] = $this->freezeControll($fieldName . ".min", array(), array('value' => $min )) . "分";
+			if($timeFormat) {
+				$selects[] = $this->freezeControll($fieldName . ".hour", array(), array('value' => $hour)) . "時";
+				$selects[] = $this->freezeControll($fieldName . ".min", array(), array('value' => $min)) . "分";
+			}
 			return implode($separator, $selects);
-			;
 		} else {
 
 			return parent::dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
