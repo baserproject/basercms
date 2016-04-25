@@ -185,6 +185,15 @@ class BcAppController extends Controller {
 			try {
 				$SiteConfig = ClassRegistry::init('SiteConfig');
 				$this->siteConfigs = Configure::read('BcSite');
+
+				// asset ファイルの読み込みの際、bootstrap で、loadSiteConfig() を実行しない仕様となっているが、
+				// 存在しない asset ファイルを読み込んだ際に、上記理由により、Not Found ページで、テーマが適用されない為、
+				// 再度、loadSiteConfig() を実行
+				if(!$this->siteConfigs) {
+					loadSiteConfig();
+					$this->siteConfigs = Configure::read('BcSite');
+				}
+
 				if (empty($this->siteConfigs['version'])) {
 					$this->siteConfigs['version'] = $this->getBaserVersion();
 					$SiteConfig->saveKeyValue($this->siteConfigs);
