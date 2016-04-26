@@ -38,6 +38,7 @@
  * MailContent.save_info
  */
     CakePlugin::load('Mail');
+    App::uses('MailAppModel', 'Mail.Model');
     App::uses('MailContent', 'Mail.Model');
 
     $MailContent = new MailContent();
