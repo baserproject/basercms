@@ -281,7 +281,7 @@ class BlogHelper extends AppHelper {
 /**
  * タグを出力する
  *
- * 復数所属する場合は復数出力する
+ * 複数所属する場合は複数出力する
  *
  * @param array $post 記事データ
  * @param string $separator 区切り文字（初期値 :  , ）
@@ -294,7 +294,7 @@ class BlogHelper extends AppHelper {
 /**
  * タグを取得する
  *
- * 復数所属する場合は復数取得する
+ * 複数所属する場合は複数取得する
  *
  * @param array $post 記事データ
  * @param string $separator 区切り文字（初期値 :  , ）
