@@ -64,15 +64,30 @@ class BaserTestFixture extends CakeTestFixture {
  * @return null|string
  */
 	public function findSchemaFile($tableName, $plugin = null) {
+		$configDir = array();
 		if (empty($plugin)) {
-			$configDir = BASER_CONFIGS;
+			$configDir[] = BASER_CONFIGS;
 		} else {
-			$configDir = BASER_PLUGINS . Inflector::camelize($plugin) . DS . 'Config' . DS;
+			$configDir[] = BASER_PLUGINS . Inflector::camelize($plugin) . DS . 'Config' . DS;
+			$pluginPathList = App::path('Plugin');
+			foreach ($pluginPathList as $pluginPath) {
+				$configDir[] = $pluginPath . Inflector::camelize($plugin) . DS . 'Config' . DS;
+			}
 		}
-		$schemaFile = $configDir . 'Schema' . DS . $tableName . '.php';
 
-		if (file_exists($schemaFile)) {
-			return $schemaFile;
+		$schemaFileList = array();
+		foreach ($configDir as $configPath) {
+			$schemaFileList[] = $configPath . 'Schema' . DS . $tableName . '.php';
+		}
+
+		if (!$schemaFileList) {
+			return null;
+		}
+
+		foreach ($schemaFileList as $schemaFile) {
+			if (file_exists($schemaFile)) {
+				return $schemaFile;
+			}
 		}
 		return null;
 	}
