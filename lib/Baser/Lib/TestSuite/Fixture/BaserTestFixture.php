@@ -68,9 +68,7 @@ class BaserTestFixture extends CakeTestFixture {
 		if (empty($plugin)) {
 			$configDir[] = BASER_CONFIGS;
 		} else {
-			$configDir[] = BASER_PLUGINS . Inflector::camelize($plugin) . DS . 'Config' . DS;
-			$pluginPathList = App::path('Plugin');
-			foreach ($pluginPathList as $pluginPath) {
+			foreach (App::path('Plugin') as $pluginPath) {
 				$configDir[] = $pluginPath . Inflector::camelize($plugin) . DS . 'Config' . DS;
 			}
 		}
