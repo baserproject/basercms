@@ -73,20 +73,13 @@ class BaserTestFixture extends CakeTestFixture {
 			}
 		}
 
-		$schemaFileList = array();
 		foreach ($configDir as $configPath) {
-			$schemaFileList[] = $configPath . 'Schema' . DS . $tableName . '.php';
-		}
-
-		if (!$schemaFileList) {
-			return null;
-		}
-
-		foreach ($schemaFileList as $schemaFile) {
+			$schemaFile = $configPath . 'Schema' . DS . $tableName . '.php';
 			if (file_exists($schemaFile)) {
 				return $schemaFile;
 			}
 		}
+
 		return null;
 	}
 
