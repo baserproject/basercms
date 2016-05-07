@@ -1713,6 +1713,42 @@ END_FLASH;
 	}
 
 /**
+ * 指定のプラグインかを判別する
+ * 現状、blog,mail のみ動作確認
+ *
+ * @param string name プラグイン名
+ * @return bool
+ */
+	protected function isPluginContents($name) {
+		if (empty($this->request->params['plugin'])) {
+			return false;
+		}
+		return (
+			$this->request->params['plugin'] === $name &&
+			$this->request->params['controller'] === $name
+		);
+	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isBlog() {
+		return $this->isPluginContents('blog');
+	}
+
+/**
+ * 現在のページがメールブログかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isMail() {
+		return $this->isPluginContents('mail');
+	}
+
+
+/**
  * 現在のページの純粋なURLを取得する
  * 
  * スマートURL、サブフォルダかどうかに依存しない、スラッシュから始まるURLを取得
