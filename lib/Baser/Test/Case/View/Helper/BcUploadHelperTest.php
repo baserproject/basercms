@@ -108,6 +108,12 @@ class BcUploadHelperTest extends BaserTestCase {
 		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" />';
 		$this->assertEquals($expects, $result);
 
+		// パスのみ出力
+		$options = array(
+			'output' => 'path'
+		);
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+		$this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
 	}
 
 }
