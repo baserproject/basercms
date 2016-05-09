@@ -15,6 +15,9 @@
 /**
  * ブログヘルパー
  * @package Blog.View.Helper
+ * @property BcTimeHelper $BcTime BcTimeヘルパ
+ * @property BcBaserHelper $BcBaser BcBaserヘルパ
+ * @property BcUploadHelper $BcUpload BcUploadヘルパ
  */
 class BlogHelper extends AppHelper {
 
@@ -1000,6 +1003,24 @@ class BlogHelper extends AppHelper {
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
 	}
+
+/**
+ * アイキャッチ画像のパスを返す
+ *
+ * @param array $post ブログ記事
+ * @return string アイキャッチ画像へのフルパス
+ */
+	public function getEyeCatchPath($post) {
+		$this->setContent($post['BlogPost']['blog_content_id']);
+		$options = array(
+			'imgsize' => 'thumb',
+			'link' => false, // 大きいサイズの画像へのリンク有無
+			'output' => 'path', // 出力形式
+		);
+
+		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
+	}
+
 
 /**
  * メールフォームプラグインのフォームへのリンクを生成する
