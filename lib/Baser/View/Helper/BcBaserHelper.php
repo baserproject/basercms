@@ -2272,4 +2272,30 @@ END_FLASH;
 		$this->element('site_search_form', $data, $options);
 	}
 
+/**
+ * WEBサイト名を出力する
+ *
+ * @return void
+ */
+	public function siteName() {
+		echo $this->getSiteName();
+	}
+
+	/**
+ * WEBサイト名を取得する
+ *
+ * @return string サイト基本設定のWEBサイト名
+ */
+	public function getSiteName() {
+		if (!empty($this->_View->viewVars['siteConfig']['formal_name'])) {
+			return $this->_View->viewVars['siteConfig']['formal_name'];
+		}
+
+		if(!empty($this->siteConfig['formal_name'])) {
+			return $this->siteConfig['formal_name'];
+		}
+
+		return '';
+	}
+
 }
