@@ -70,6 +70,24 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
+ * ブログアカウント名を出力する
+ *
+ * @return void
+ */
+	public function blogName() {
+		echo $this->getBlogName();
+	}
+
+/**
+ * ブログアカウント名を取得する
+ *
+ * @return string
+ */
+	public function getBlogName() {
+		return $this->blogContent['name'];
+	}
+
+/**
  * ブログタイトルを出力する
  *
  * @return void
