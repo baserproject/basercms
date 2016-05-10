@@ -469,6 +469,115 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @param bool $expected 期待値
+ * @param string $url リクエストURL
+ * @param string $agent ユーザーエージェント
+ *
+ * @return void
+ * @dataProvider isBlogDataProvider
+ */
+	public function testIsBlog($expected, $url, $agent = null) {
+		$this->_unsetAgent();
+		if ($agent !== null) {
+			$this->_setAgent($agent);
+		}
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->isBlog());
+	}
+
+	public function isBlogDataProvider() {
+		return array(
+			//PC
+			array(false, '/'),
+			array(false, '/index'),
+			array(false, '/contact/index'),
+			array(true, '/news/index'),
+
+			// モバイルページ
+			array(false, '/m/', 'mobile'),
+			array(false, '/m/index', 'mobile'),
+			array(false, '/m/contact/index', 'mobile'),
+			array(true, '/m/news/index', 'mobile'),
+
+			// スマートフォンページ
+			array(false, '/s/', 'smartphone'),
+			array(false, '/s/index', 'smartphone'),
+			array(false, '/s/contact/index', 'smartphone'),
+			array(true, '/s/news/index', 'smartphone')
+		);
+	}
+
+	/**
+	 * 現在のページがメールプラグインかどうかを判定する
+	 *
+	 * @param bool $expected 期待値
+	 * @param string $url リクエストURL
+	 * @param string $agent ユーザーエージェント
+	 *
+	 * @return void
+	 * @dataProvider isMailDataProvider
+	 */
+	public function testIsMail($expected, $url, $agent = null) {
+		$this->_unsetAgent();
+		if ($agent !== null) {
+			$this->_setAgent($agent);
+		}
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->isMail());
+	}
+
+	public function isMailDataProvider() {
+		return array(
+			//PC
+			array(false, '/'),
+			array(false, '/index'),
+			array(false, '/news/index'),
+			array(true, '/contact/index'),
+
+			// モバイルページ
+			array(false, '/m/', 'mobile'),
+			array(false, '/m/index', 'mobile'),
+			array(false, '/m/news/index', 'mobile'),
+			array(true, '/m/contact/index', 'mobile'),
+
+			// スマートフォンページ
+			array(false, '/s/', 'smartphone'),
+			array(false, '/s/index', 'smartphone'),
+			array(false, '/s/news/index', 'smartphone'),
+			array(true, '/s/contact/index', 'smartphone')
+		);
+	}
+
+	/**
+	 * 現在のページが指定のプラグインかどうかを判定する
+	 *
+	 * @return void
+	 */
+	public function testIsPluginContent() {
+
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->assertEquals(false, $this->BcBaser->isPluginContent('Blog'));
+
+		$this->BcBaser->request = $this->_getRequest('/news/index');
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('Blog'));
+
+		$this->BcBaser->request = $this->_getRequest('/index');
+		$this->assertEquals(false, $this->BcBaser->isPluginContent('Mail'));
+
+		$this->BcBaser->request = $this->_getRequest('/contact/index');
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('Mail'));
+
+		$this->BcBaser->request->params['plugin'] = 'hollow_world';
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('HollowWorld'));
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollowWorld'));
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollow_world'));
+		$this->assertEquals(false, $this->BcBaser->isPluginContent('hollowworld'));
+	}
+
+
+/**
  * baserCMSが設置されているパスを出力する
  *
  * @param string $expected 期待値
