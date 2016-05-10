@@ -2181,4 +2181,22 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->siteSearchForm();
 	}
 
+/**
+ * WEBサイト名を出力する
+ *
+ * @return void
+ */
+	public function testSiteName() {
+		$this->expectOutputString('baserCMS inc. [デモ]');
+		$this->BcBaser->siteName();
+	}
+
+/**
+ * WEBサイト名を取得する
+ *
+ * @return void
+ */
+	public function testgetSiteName() {
+		$this->assertEquals('baserCMS inc. [デモ]', $this->BcBaser->getSiteName());
+	}
 }
