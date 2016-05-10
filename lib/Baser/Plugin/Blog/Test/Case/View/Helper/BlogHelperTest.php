@@ -16,6 +16,7 @@ App::uses('View', 'View');
 App::uses('Helper', 'View');
 App::uses('BlogHelper', 'Blog.View/Helper');
 App::uses('BlogPost', 'Blog.Model');
+App::uses('BlogContent', 'Blog.Model');
 
 /**
  * Blog helper library.
@@ -23,6 +24,7 @@ App::uses('BlogPost', 'Blog.Model');
  * @package       Baser.Test.Case
  * @property      BlogHelper $Blog
  * @property      BlogPost $BlogPost
+ * @property      BlogContent $BlogContent
  */
 class BlogHelperTest extends BaserTestCase {
 
@@ -70,6 +72,10 @@ class BlogHelperTest extends BaserTestCase {
 		$this->Blog = new BlogHelper($View);
 		$this->BlogPost = ClassRegistry::init('BlogPost');
 		$this->post = $this->BlogPost->find('first', array('conditions' => array('BlogPost.id' => 1)));
+
+		$this->BlogContent = ClassRegistry::init('BlogContent');
+		$this->BlogContent->expects(array());
+		$this->Blog->blogContent = Hash::extract($this->BlogContent->read(null, 1), 'BlogContent');
 	}
 
 /**
@@ -80,6 +86,7 @@ class BlogHelperTest extends BaserTestCase {
 	public function tearDown() {
 		unset($this->Blog);
 		unset($this->BlogPost);
+		unset($this->BlogContent);
 		Router::reload();
 		parent::tearDown();
 	}
@@ -91,8 +98,6 @@ class BlogHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetPostDetail() {
-
-
 		$result = $this->Blog->getPostDetail($this->post);
 		$expects = $this->post['BlogPost']['detail'];
 		$this->assertEquals($expects, $result);
@@ -116,11 +121,11 @@ class BlogHelperTest extends BaserTestCase {
 		$this->Blog->postDetail($this->post);
 	}
 
-	/**
-	 * 詳細情報を出力する cut option利用時
-	 *
-	 * @return void
-	 */
+/**
+ * 詳細情報を出力する cut option利用時
+ *
+ * @return void
+ */
 	public function testPostDetailCut() {
 		$this->expectOutputString('詳細が入ります。詳細が入ります。詳細が入ります。詳細が入りま');
 
@@ -130,4 +135,26 @@ class BlogHelperTest extends BaserTestCase {
 		);
 		$this->Blog->postDetail($this->post, $options);
 	}
+
+/**
+ * ブログアカウント名を取得する
+ *
+ * @return void
+ */
+	public function testGetBlogName() {
+		$result = $this->Blog->getBlogName();
+		$expects = 'news';
+		$this->assertEquals($expects, $result);
+	}
+
+/**
+ * ブログアカウント名を出力する
+ *
+ * @return void
+ */
+	public function testBlogName() {
+		$this->expectOutputString('news');
+		$this->Blog->blogName();
+	}
+
 }
