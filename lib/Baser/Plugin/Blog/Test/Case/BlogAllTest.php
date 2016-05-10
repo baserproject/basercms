@@ -25,8 +25,10 @@ class BlogAllTest extends CakeTestSuite {
 	public static function suite() {
 		$suite = new CakeTestSuite('Baser Blog All Tests');
 
-		//$path = dirname(__FILE__) . DS;
+		$path = dirname(__FILE__) . DS;
+		//$suite->addTestFile($path . 'BlogAllControllerTest.php');
 		//$suite->addTestFile($path . 'BlogAllModelTest.php');
+		$suite->addTestFile($path . 'BlogAllHelpersTest.php');
 
 		return $suite;
 	}

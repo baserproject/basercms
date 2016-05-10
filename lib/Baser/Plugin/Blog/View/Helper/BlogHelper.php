@@ -70,6 +70,24 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
+ * ブログアカウント名を出力する
+ *
+ * @return void
+ */
+	public function blogName() {
+		echo $this->getBlogName();
+	}
+
+/**
+ * ブログアカウント名を取得する
+ *
+ * @return string
+ */
+	public function getBlogName() {
+		return $this->blogContent['name'];
+	}
+
+/**
  * ブログタイトルを出力する
  *
  * @return void
@@ -226,6 +244,43 @@ class BlogHelper extends AppHelper {
 			}
 			$out .= '<p class="more">' . $this->Html->link($moreLink, array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no'], '#' => 'post-detail'), null, null, false) . '</p>';
 		}
+		return $out;
+	}
+
+/**
+ * 記事の詳細を表示する
+ *
+ * @param array $post ブログ記事データ
+ * @param array $options オプション（初期値 : array()）getPostDetailを参照
+ * @return void
+ */
+	public function postDetail($post, $options = array()) {
+		echo $this->getPostDetail($post, $options);
+	}
+
+/**
+ * 記事の詳細を取得する
+ *
+ * @param array $post ブログ記事データ
+ * @param array $options オプション（初期値 : array()）
+ *	- `cut` : 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
+ * @return string 記事本文
+ */
+	public function getPostDetail($post, $options = array()) {
+
+		$options = array_merge(array(
+			'cut' => false
+		), $options);
+		extract($options);
+
+		unset($options['cut']);
+
+		$out = $post['BlogPost']['detail'];
+
+		if ($cut) {
+			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
+		}
+
 		return $out;
 	}
 
