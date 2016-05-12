@@ -779,6 +779,7 @@ class BcBaserHelper extends AppHelper {
 
 		// デバッグ
 		if (Configure::read('debug') >= 2) {
+			$this->element('template_dump', array(), array('subDir' => false));
 			$this->element('sql_dump', array(), array('subDir' => false));
 		}
 	}
