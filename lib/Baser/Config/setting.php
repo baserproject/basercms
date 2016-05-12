@@ -48,7 +48,7 @@ $config['BcApp'] = array(
 				array('name' => '環境情報', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info'))
 			))),
 	// コアプラグイン
-	'corePlugins' => array('Blog', 'Feed', 'Mail'),
+	'corePlugins' => array('Blog', 'Feed', 'Mail', 'Uploader'),
 	// アップデートキー
 	'updateKey' => 'update',
 	// 管理者グループID
