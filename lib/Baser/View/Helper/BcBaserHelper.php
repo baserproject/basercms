@@ -2281,7 +2281,7 @@ END_FLASH;
 		echo $this->getSiteName();
 	}
 
-	/**
+/**
  * WEBサイト名を取得する
  *
  * @return string サイト基本設定のWEBサイト名
@@ -2298,4 +2298,37 @@ END_FLASH;
 		return '';
 	}
 
+/**
+ * Blogの基本情報を全て取得する
+ *
+ * @param array $options オプション（初期値 :array()）
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ * @return string サイト基本設定配列
+ */
+	public function getBlogs($options = array()) {
+		$options = array_merge(array(
+			'sort' => 'id'
+		), $options);
+
+		extract($options);
+
+		$BlogContent = ClassRegistry::init('BlogContent');
+		$datas = $BlogContent->find('all', array(
+				'conditions' => array(
+					'BlogContent.status' => true,
+				),
+				'order' => array(
+					'BlogContent.' . $sort
+				),
+				'cache' => false
+			)
+		);
+		$contents = array();
+		foreach($datas as $val){
+			$val = $BlogContent->constructEyeCatchSize($val);
+			unset($val['BlogContent']['eye_catch_size']);
+			$contents[] = $val['BlogContent'];
+		}
+		return $contents ;
+	}
 }

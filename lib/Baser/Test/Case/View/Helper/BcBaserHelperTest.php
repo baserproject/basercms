@@ -2199,4 +2199,23 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testgetSiteName() {
 		$this->assertEquals('baserCMS inc. [デモ]', $this->BcBaser->getSiteName());
 	}
+
+/**
+ * 全ブログコンテンツの基本情報を取得する
+ *
+ * @return void
+ */
+	public function testgetBlogs() {
+		$blogs = $this->BcBaser->getBlogs();
+		$this->assertEquals(2, count($blogs)); // 非公開は取得しないので２つ
+		$this->assertEquals(1, $blogs[0]['id']);
+
+		//ソート順を変更
+		$options = array(
+			'sort' => 'id DESC',
+		);
+		$blogs = $this->BcBaser->getBlogs($options);
+		$this->assertEquals(3, $blogs[0]['id']);
+
+	}
 }
