@@ -2302,7 +2302,7 @@ END_FLASH;
  * Blogの基本情報を全て取得する
  *
  * @param array $options オプション（初期値 :array()）
- *	- `sort` : データのソート順 id, created, modified （初期値 : 'id'）, 'id DESC'の指定は通る
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
  * @return string サイト基本設定配列
  */
 	public function getBlogs($options = array()) {
@@ -2319,7 +2319,8 @@ END_FLASH;
 				),
 				'order' => array(
 					'BlogContent.' . $sort
-				)
+				),
+				'cache' => false
 			)
 		);
 		$contents = array();
