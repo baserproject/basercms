@@ -2298,4 +2298,27 @@ END_FLASH;
 		return '';
 	}
 
+/**
+ * WEBサイトURLを出力する
+ *
+ * @param boolean ssl （初期値 : false）
+ * @return void
+ */
+	public function siteUrl($ssl = false) {
+		echo $this->getSiteUrl($ssl);
+	}
+
+/**
+ * WEBサイトURLを取得する
+ *
+ * @param boolean ssl （初期値 : false）
+ * @return string サイト基本設定のWEBサイト名
+ */
+	public function getSiteUrl($ssl = false) {
+		if($ssl){
+			return Configure::read('BcEnv.sslUrl');
+		} else {
+			return Configure::read('BcEnv.siteUrl');
+		}
+	}
 }
