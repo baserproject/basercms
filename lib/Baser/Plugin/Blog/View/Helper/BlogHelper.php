@@ -15,6 +15,9 @@
 /**
  * ブログヘルパー
  * @package Blog.View.Helper
+ * @property BcTimeHelper $BcTime BcTimeヘルパ
+ * @property BcBaserHelper $BcBaser BcBaserヘルパ
+ * @property BcUploadHelper $BcUpload BcUploadヘルパ
  */
 class BlogHelper extends AppHelper {
 
@@ -998,6 +1001,7 @@ class BlogHelper extends AppHelper {
  *	- `tmp` : 一時保存データの場合に true を指定（初期値 : false）
  *	- `class` : タグの class を指定（初期値 : img-eye-catch）
  *	- `force` : 画像が存在しない場合でも強制的に出力する場合に true を指定する（初期値 : false）
+ *	- `output` : 出力形式 tag, url のを指定できる（初期値 : ''）
  *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
  * @return string アイキャッチ画像のHTML
  */
@@ -1013,7 +1017,8 @@ class BlogHelper extends AppHelper {
 			'height' => '', // 高さ
 			'noimage' => '', // 画像がなかった場合に表示する画像
 			'tmp' => false,
-			'class' => 'img-eye-catch'
+			'class' => 'img-eye-catch',
+			'output' => '', // 出力形式 tag or url
 		), $options);
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);

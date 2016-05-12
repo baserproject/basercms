@@ -108,6 +108,20 @@ class BcUploadHelperTest extends BaserTestCase {
 		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" />';
 		$this->assertEquals($expects, $result);
 
+		// output を tag で、linkをtrue (無視される)
+		$options = array(
+			'link' => true,
+			'output' => 'tag'
+		);
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+		$this->assertRegExp('/^<img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
+
+		// output を urlに
+		$options = array(
+			'output' => 'url'
+		);
+		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
+		$this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
 	}
 
 }

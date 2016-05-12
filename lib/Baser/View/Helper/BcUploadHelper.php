@@ -80,18 +80,17 @@ class BcUploadHelper extends BcAppHelper {
 			throw new BcException('BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。');
 		}
 		$this->setEntity($fieldName);
-		$modelName = $this->model();
 		$field = $this->field();
 
 		$tmp = false;
-		$entity = $this->entity();
-		$Model = ClassRegistry::init($modelName);
+		$Model = ClassRegistry::init($this->model());
 
-		if (empty($Model->Behaviors->BcUpload)) {
-			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
+		try{
+			$settings = $this->getBcUploadSetting();
+		} catch (BcException $e){
+			throw $e ;
 		}
 
-		$settings = $Model->Behaviors->BcUpload->settings[$modelName];
 		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
 		if (empty($options['value'])) {
@@ -176,7 +175,8 @@ class BcUploadHelper extends BcAppHelper {
 			'height' => '', // 高さ
 			'noimage' => '', // 画像がなかった場合に表示する画像
 			'tmp' => false,
-			'force' => false
+			'force' => false,
+			'output' => '', // 出力タイプ tag ,url を指定、未指定(or false)の場合は、tagで出力(互換性のため)
 			), $options);
 
 		extract($options);
@@ -190,6 +190,8 @@ class BcUploadHelper extends BcAppHelper {
 		unset($options['height']);
 		unset($options['noimage']);
 		unset($options['tmp']);
+		unset($options['force']);
+		unset($options['output']);
 
 		$imgOptions = array(
 			'alt' => $alt,
@@ -234,13 +236,15 @@ class BcUploadHelper extends BcAppHelper {
 		}
 
 		$this->setEntity($fieldName);
-		$modelName = $this->model();
 		$field = $this->field();
-		$Model = ClassRegistry::init($modelName);
 
-		$settings = $Model->Behaviors->BcUpload->settings[$modelName];
+		try{
+			$settings = $this->getBcUploadSetting();
+		} catch (BcException $e){
+			throw $e ;
+		}
 
-		$fileUrl = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		$fileUrl = $this->getBasePath($settings);
 		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;
 
 		if (isset($settings['fields'][$field]['imagecopy'])) {
@@ -319,11 +323,49 @@ class BcUploadHelper extends BcAppHelper {
 			}
 		}
 
-		if ($link && !($noimage == $fileName)) {
-			return $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, am($options, $linkOptions));
-		} else {
-			return $this->Html->image($mostSizeUrl, am($options, $imgOptions));
+		switch($output){
+			case 'url' :
+				return $mostSizeUrl;
+			case 'tag' :
+				return $this->Html->image($mostSizeUrl, am($options, $imgOptions));
+			default :
+				if ($link && !($noimage == $fileName)) {
+					return $this->Html->link($this->Html->image($mostSizeUrl, $imgOptions), $maxSizeUrl, am($options, $linkOptions));
+				} else {
+					return $this->Html->image($mostSizeUrl, am($options, $imgOptions));
+				}
 		}
 	}
 
+/**
+ * アップロード先のベースパスを取得
+ *
+ * @param string $fieldName 格納されているDBのフィールド名、ex) BlogPost.eye_catch
+ * @return string パス
+ */
+	public function getBasePath($settings = null) {
+		if(! $settings){
+			try{
+				$settings = $this->getBcUploadSetting();
+			} catch (BcException $e){
+				throw $e ;
+			}
+		}
+		return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+	}
+
+/**
+ * アップロードの設定を取得する
+ *
+ * @param string $modelName
+ * @return array
+ */
+	protected function getBcUploadSetting(){
+		$modelName = $this->model();
+		$Model = ClassRegistry::init($modelName);
+		if (empty($Model->Behaviors->BcUpload)) {
+			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
+		}
+		return $Model->Behaviors->BcUpload->settings[$modelName];
+	}
 }
