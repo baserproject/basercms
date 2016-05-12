@@ -2214,8 +2214,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		$options = array(
 			'sort' => 'id DESC',
 		);
-		$blogs = $this->BcBaser->getBlogs($options);
+		$blogs = $this->BcBaser->getBlogs('',$options);
 		$this->assertEquals(3, $blogs[0]['id']);
 
+		//ブログ指定
+		$blogs = $this->BcBaser->getBlogs('news');
+		$this->assertEquals(1, count($blogs));
+		$this->assertEquals('news', $blogs[0]['name']);
 	}
 }
