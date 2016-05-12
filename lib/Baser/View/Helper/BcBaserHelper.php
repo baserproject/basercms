@@ -242,12 +242,34 @@ class BcBaserHelper extends AppHelper {
  * タイトルタグを取得する
  * 
  * ページタイトルと直属のカテゴリ名が同じ場合は、ページ名を省略する
+ * version 3.0.10 より第2引数 $categoryTitleOn は、 $options にまとめられました。
+ * 後方互換のために第2引数に配列型以外を指定された場合は、 $categoryTitleOn として取り扱います。
  *
  * @param string $separator 区切り文字
- * @param string $categoryTitleOn カテゴリタイトルを表示するかどうか boolean で指定
+ * @param array $options
+ *  `categoryTitleOn` カテゴリタイトルを表示するかどうか boolean で指定 (初期値 : null)
+ *  `tag` (boolean) false でタグを削除するかどうか (初期値 : true)
+ *  `allowableTags` tagが falseの場合、削除しないタグを指定できる (初期値 : '')
  * @return string メタタグ用のタイトルを返す
  */
-	public function getTitle($separator = '｜', $categoryTitleOn = null) {
+	public function getTitle($separator = '｜', $options = array()) {
+		if(! is_array($options)){
+			$categoryTitleOn = $options;
+			unset($options);
+			$options['categoryTitleOn'] = $categoryTitleOn ;
+		}
+
+		$options = array_merge(array(
+			'categoryTitleOn' => null,
+			'tag' => true,
+			'allowableTags' => ''
+		), $options);
+		extract($options);
+
+		unset($options['categoryTitleOn']);
+		unset($options['tag']);
+		unset($options['allowableTags']);
+
 		$title = array();
 		$crumbs = $this->getCrumbs($categoryTitleOn);
 		if ($crumbs) {
@@ -258,13 +280,21 @@ class BcBaserHelper extends AppHelper {
 						continue;
 					}
 				}
-				$title[] = $crumb['name'];
+				if(!$tag){
+					$title[] = strip_tags($crumb['name'], $allowableTags);
+				} else {
+					$title[] = $crumb['name'];
+				}
 			}
 		}
 
 		// サイトタイトルを追加
 		if (!empty($this->siteConfig['name'])) {
-			$title[] = $this->siteConfig['name'];
+			if(!$tag){
+				$title[] = strip_tags($this->siteConfig['name'], $allowableTags);
+			} else {
+				$title[] = $this->siteConfig['name'];
+			}
 		}
 
 		return implode($separator, $title);
