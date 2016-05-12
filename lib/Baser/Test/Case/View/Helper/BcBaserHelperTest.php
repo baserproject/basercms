@@ -2118,7 +2118,8 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testContentsNavi() {
 		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
-		$this->BcBaser->crumbsList();	}
+		$this->BcBaser->crumbsList();
+	}
 
 /**
  * パンくずリストを出力する
@@ -2198,5 +2199,35 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testgetSiteName() {
 		$this->assertEquals('baserCMS inc. [デモ]', $this->BcBaser->getSiteName());
+	}
+
+/**
+ * WEBサイトURLを出力する
+ *
+ * @return void
+ */
+	public function testSiteUrl() {
+
+		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
+		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
+
+		$this->expectOutputString('http://basercms.net/');
+		$this->BcBaser->siteUrl();
+	}
+
+/**
+ * WEBサイトURLを取得する
+ *
+ * @return void
+ */
+	public function testgetSiteUrl() {
+
+		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
+		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
+
+		// http
+		$this->assertEquals('http://basercms.net/', $this->BcBaser->getSiteUrl());
+		//https
+		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
 	}
 }
