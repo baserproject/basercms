@@ -14,7 +14,8 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Uploader');
+	$this->Plugin->initDb('plugin', 'Uploader', array('dbDataPattern'	=> $dbDataPattern));
+	
 /**
  * 必要フォルダ初期化
  */

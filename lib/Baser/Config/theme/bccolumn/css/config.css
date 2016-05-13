@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+.main-color {
+	background: MAIN !important;
+}
+.sub-color {
+	background: SUB !important;
+}
+a {
+	color:LINK;
+}
+a:link {
+	color:LINK;
+}
+a:visited {
+	color:LINK;
+}
+a:hover {
+	color:HOVER;
+}
+a:active {
+	color:HOVER;
+}
+
+.btn {
+    background-color: MAIN !important;
+}
+.side h2 {
+    background: SUB !important;
+}

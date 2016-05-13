@@ -1,7 +1,8 @@
 <?php
+
 /**
  * GoogleMapヘルパー
- * 
+ *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
@@ -25,66 +26,58 @@ class BcGooglemapsHelper extends AppHelper {
 
 /**
  * タイトル
- * 
+ *
  * @var string
- * @access public
  */
 	public $title = '';
 
 /**
  * マーカーテキスト
  * @var string
- * @access public
  */
 	public $markerText = '';
 
 /**
  * 地図を表示するDOM ID
- * 
+ *
  * @var string
- * @access public
  */
 	public $mapId = 'map';
 
 /**
  * 住所
- * 
+ *
  * @var string
- * @access public
  */
 	public $address = '';
 
 /**
  * latitude
- * 
+ *
  * @var string
- * @access public
  */
 	public $latitude = '';
 
 /**
  * longitude
- * 
+ *
  * @var string
- * @access public
  */
 	public $longitude = '';
 
 /**
  * ズーム
  * @var int
- * @access public
  */
 	public $zoom = 16;
 
 /**
  * Google マップ を読み込む
- * 
+ *
  * @param string $address
  * @param int $width
  * @param int $height
  * @return boolean
- * @access public 
  */
 	public function load($address = '', $width = null, $height = null) {
 
@@ -99,9 +92,9 @@ class BcGooglemapsHelper extends AppHelper {
 		$script = $this->_getScript();
 		if ($script) {
 			if ($width || $height) {
-				echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"></div>';
+				echo '<div id="' . $this->mapId . '" style="width: ' . $width . 'px; height:' . $height . 'px"><noscript>※ JavaScript を有効にしてください。</noscript></div>';
 			} else {
-				echo '<div id="' . $this->mapId . '"></div>';
+				echo '<div id="' . $this->mapId . '"><noscript>※ JavaScript を有効にしてください。</noscript></div>';
 			}
 			echo $this->_getScript();
 			return true;
@@ -112,9 +105,8 @@ class BcGooglemapsHelper extends AppHelper {
 
 /**
  * Google マップ読み込み用のjavascriptを生成する
- * 
+ *
  * @return string
- * @access public 
  */
 	protected function _getScript() {
 
@@ -130,7 +122,8 @@ class BcGooglemapsHelper extends AppHelper {
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				navigationControl: true,
 				mapTypeControl: true,
-				scaleControl: true
+				scaleControl: true,
+				scrollwheel: false,
 			};
 			var map = new google.maps.Map(document.getElementById("{$this->mapId}"), options);
 			var marker = new google.maps.Marker({
@@ -152,16 +145,16 @@ DOC_END;
 			});
 INFO_END;
 		}
-		$googleScript = '<script src="//maps.google.com/maps/api/js?language=ja" type="text/javascript"></script>';
-		return $googleScript . '<script type="text/javascript">' . $script . '</script>';
+
+		$googleScript = '<script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=ja"></script>';
+
+		return $googleScript . '<script>' . $script . '</script>';
 	}
 
 /**
  * 位置情報を読み込む
- * 読み込みに成功したら、trueを返す
- * 
+ *
  * @return boolean
- * @access public
  */
 	public function loadLocation() {
 
@@ -180,11 +173,9 @@ INFO_END;
 
 /**
  * 位置情報を取得する
- * 取得が成功したら、位置情報を返す
  *
  * @param string $address
- * @return boolean 
- * @access public
+ * @return boolean
  */
 	public function getLocation($address) {
 

@@ -81,8 +81,19 @@ class Plugin extends AppModel {
  * @param string $filterType 更新タイプ指定
  * @return bool
  */
-	public function initDb($dbConfigName = 'plugin', $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
-		return parent::initDb($dbConfigName, $pluginName, true, $filterTable, 'create');
+	public function initDb($dbConfigName = 'plugin', $pluginName = '', $options = array()) {
+		$options = array_merge(array(
+			'loadCsv'		=> true,
+			'filterTable'	=> '',
+			'filterType'	=> 'create',
+			'dbDataPattern'	=> ''
+		), $options);
+		return parent::initDb($dbConfigName, $pluginName, array(
+			'loadCsv'		=> $options['loadCsv'],
+			'filterTable'	=> $options['filterTable'],
+			'filterType'	=> $options['filterType'],
+			'dbDataPattern'	=> $options['dbDataPattern']
+		));
 	}
 
 /**

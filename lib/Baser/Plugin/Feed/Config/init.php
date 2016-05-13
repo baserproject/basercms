@@ -15,7 +15,7 @@
  /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Feed');
+	$this->Plugin->initDb('plugin', 'Feed', array('dbDataPattern'	=> $dbDataPattern));
 
 /**
  * フィードURLを更新

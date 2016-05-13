@@ -557,7 +557,7 @@ class UpdatersController extends AppController {
 		} else {
 			$dbConfigName = 'baser';
 		}
-		return $this->Updater->loadCsv($dbConfigName, $path, $filterTable);
+		return $this->Updater->loadCsv($dbConfigName, $path, array('filterTable' => $filterTable));
 	}
 
 /**

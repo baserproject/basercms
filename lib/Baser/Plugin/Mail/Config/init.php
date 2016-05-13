@@ -15,7 +15,7 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Mail');
+	$this->Plugin->initDb('plugin', 'Mail', array('dbDataPattern'	=> $dbDataPattern));
 
 /**
  * メッセージテーブル構築

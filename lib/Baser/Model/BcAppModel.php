@@ -274,7 +274,14 @@ class BcAppModel extends Model {
  * @param	string	プラグイン名
  * @return 	boolean
  */
-	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
+	public function initDb($dbConfigName, $pluginName = '', $options = array()) {
+		$options = array_merge(array(
+			'loadCsv'		=> true,
+			'filterTable'	=> '',
+			'filterType'	=> '',
+			'dbDataPattern'	=> ''
+		), $options);
+
 		// 初期データフォルダを走査
 		if (!$pluginName) {
 			$path = BASER_CONFIGS . 'Schema';
@@ -284,9 +291,13 @@ class BcAppModel extends Model {
 				return true;
 			}
 		}
-		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
-			if ($loadCsv) {
-				$path = BcUtil::getDefaultDataPath($pluginName);
+		if ($this->loadSchema($dbConfigName, $path, $options['filterTable'], $options['filterType'], array(), $dropField = false)) {
+			if ($options['loadCsv']) {
+				$theme = $pattern = null;
+				if($options['dbDataPattern']) {
+					list($theme, $pattern) = explode('.', $options['dbDataPattern']);
+				}
+				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
 				if($path) {
 					return $this->loadCsv($dbConfigName, $path);
 				} else {
@@ -377,7 +388,11 @@ class BcAppModel extends Model {
  * @param	string	テーブル指定
  * @return 	boolean
  */
-	public function loadCsv($dbConfigName, $path, $filterTable = '') {
+	public function loadCsv($dbConfigName, $path, $options = array()) {
+		$options = array_merge(array(
+			'filterTable' => ''
+		), $options);
+
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
@@ -389,7 +404,7 @@ class BcAppModel extends Model {
 			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
 				$table = $matches[1];
 				if (in_array($prefix . $table, $listSources)) {
-					if ($filterTable && $filterTable != $table) {
+					if ($options['filterTable'] && $options['filterTable'] != $table) {
 						continue;
 					}
 
