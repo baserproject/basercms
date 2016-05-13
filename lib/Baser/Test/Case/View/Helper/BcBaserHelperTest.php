@@ -297,6 +297,25 @@ class BcBaserHelperTest extends BaserTestCase {
 		// カテゴリが対象ページと同じ場合に省略する
 		$this->BcBaser->setTitle('会社データ');
 		$this->assertEquals("会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', true));
+
+		// strip_tagの機能確認 tag付
+		$this->BcBaser->setTitle('会社<br>沿革<center>真ん中</center>');
+		$this->assertEquals("会社<br>沿革<center>真ん中</center>｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', true));
+
+		// strip_tagの機能確認 tagを削除
+		$options = array(
+			'categoryTitleOn' => true,
+			'tag' => false
+		);
+		$this->assertEquals("会社沿革真ん中｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', $options));
+
+		// 一部タグだけ削除
+		$options = array(
+			'categoryTitleOn' => true,
+			'tag' => false,
+			'allowableTags' => '<center>'
+		);
+		$this->assertEquals("会社沿革<center>真ん中</center>｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', $options));
 	}
 
 /**
