@@ -73,6 +73,24 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
+ * ブログIDを出力する
+ *
+ * @return void
+ */
+	public function blogId() {
+		echo $this->getBlogId();
+	}
+
+/**
+ * ブログIDを取得する
+ *
+ * @return integer
+ */
+	public function getBlogId() {
+		return $this->blogContent['id'];
+	}
+
+/**
  * ブログアカウント名を出力する
  *
  * @return void
