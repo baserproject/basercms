@@ -2249,4 +2249,26 @@ class BcBaserHelperTest extends BaserTestCase {
 		//https
 		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
 	}
+
+/**
+ * 全ブログコンテンツの基本情報を取得する
+ *
+ * @return void
+ */
+	public function testgetBlogs() {
+		$blogs = $this->BcBaser->getBlogs();
+		$this->assertEquals(2, count($blogs)); // 非公開は取得しないので２つ
+		$this->assertEquals(1, $blogs[0]['id']);
+
+		//ソート順を変更
+		$options = array(
+			'sort' => 'id DESC',
+		);
+		$blogs = $this->BcBaser->getBlogs('',$options);
+		$this->assertEquals(3, $blogs[0]['id']);
+
+		//ブログ指定 1つなので、配列に梱包されてない
+		$blogs = $this->BcBaser->getBlogs('news');
+		$this->assertEquals('news', $blogs['name']);
+	}
 }

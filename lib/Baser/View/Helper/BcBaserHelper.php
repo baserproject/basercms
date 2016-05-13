@@ -2307,7 +2307,7 @@ END_FLASH;
 		echo $this->getSiteName();
 	}
 
-	/**
+/**
  * WEBサイト名を取得する
  *
  * @return string サイト基本設定のWEBサイト名
@@ -2341,10 +2341,54 @@ END_FLASH;
  * @return string サイト基本設定のWEBサイト名
  */
 	public function getSiteUrl($ssl = false) {
-		if($ssl){
+		if ($ssl) {
 			return Configure::read('BcEnv.sslUrl');
 		} else {
 			return Configure::read('BcEnv.siteUrl');
 		}
+	}
+
+/**
+ * Blogの基本情報を全て取得する
+ *
+ * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
+ * @param array $options オプション（初期値 :array()）
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ * @return array サイト基本設定配列
+ */
+	public function getBlogs($name = '', $options = array()) {
+		$options = array_merge(array(
+			'sort' => 'id'
+		), $options);
+
+		$conditions['BlogContent.status'] = true ;
+		if(! empty($name)){
+			$conditions['BlogContent.name'] = $name ;
+		}
+
+		$BlogContent = ClassRegistry::init('BlogContent');
+		$datas = $BlogContent->find('all', array(
+				'conditions' => $conditions,
+				'order' => array(
+					'BlogContent.' . $options['sort']
+				),
+				'cache' => false
+			)
+		);
+
+		$contents = array();
+		if( count($datas) === 1 ){
+			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
+			unset($datas['BlogContent']['eye_catch_size']);
+			$contents = $datas['BlogContent'];
+		} else {
+			foreach($datas as $val){
+				$val = $BlogContent->constructEyeCatchSize($val);
+				unset($val['BlogContent']['eye_catch_size']);
+				$contents[] = $val['BlogContent'];
+			}
+		}
+
+		return $contents ;
 	}
 }
