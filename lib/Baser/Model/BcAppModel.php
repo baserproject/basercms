@@ -1451,10 +1451,28 @@ class BcAppModel extends Model {
  */
 	public function checkDate($check) {
 		$value = $check[key($check)];
+		if(!$value) {
+			return true;
+		}
+		list($date, $time) = explode(' ', $value);
 		if (DS != '\\') {
-			if (!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d')) {
-				return false;
+			if ($time) {
+				if (!strptime($value, '%Y-%m-%d %H:%M')) {
+					return false;
+				}
+			} else {
+				if (!strptime($value, '%Y-%m-%d')) {
+					return false;
+				}
 			}
+		}
+		list($Y, $m, $d) = explode('-', $date);
+		if (checkdate($m, $d, $Y) !== true) {
+			return false;
+		}
+		list($H, $i) = explode('-', $time);
+		if (checktime($H, $i) !== true) {
+			return false;
 		}
 		if (date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
 			return false;

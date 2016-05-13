@@ -1403,12 +1403,7 @@ DOC_END;
 		}
 
 		if ($value) {
-			$value = $this->BcTime->format('Y/m/d', $value);
-			if ($value) {
-				$attributes['value'] = date('Y/m/d', strtotime($value));
-			} else {
-				$attributes['value'] = '';
-			}
+			$attributes['value'] = str_replace('-', '/', $value);
 		} else {
 			unset($attributes['value']);
 		}
@@ -1454,8 +1449,7 @@ DOC_END;
 			unset($attributes['value']);
 		}
 		if ($value && $value != '0000-00-00 00:00:00') {
-			$dateValue = date('Y/m/d', strtotime($value));
-			$timeValue = date('H:i:s', strtotime($value));
+			list($dateValue, $timeValue) = explode(' ', $value);
 			$attributes['value'] = $dateValue;
 			$timeAttributes['value'] = $timeValue;
 		}

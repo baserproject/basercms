@@ -1000,3 +1000,29 @@ function base64UrlsafeDecode($val) {
 function isWindows() {
 	return DIRECTORY_SEPARATOR == '\\';
 }
+
+/**
+ * 時刻の有効性チェックを行う
+ *
+ * @param $hour
+ * @param $min
+ * @param $sec
+ * @return bool
+ */
+function checktime($hour, $min, $sec = null) {
+	$hour = (int) $hour;
+	if ($hour < 0 || $hour > 23) {
+		return false;
+	}
+	$min = (int) $min;
+	if ($min < 0 || $min > 59) {
+		return false;
+	}
+	if($sec) {
+		$sec = (int) $sec;
+		if ($sec < 0 || $sec > 59) {
+			return false;
+		}
+	}
+	return true;
+}

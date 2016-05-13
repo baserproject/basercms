@@ -137,6 +137,14 @@ class BlogPost extends BlogAppModel {
 			array('rule' => array('maxByte', 64000),
 			'message' => '草稿欄に保存できるデータ量を超えています。')
 		),
+		'publish_begin' => array(
+			array('rule' => array('checkDate'),
+				'message' => '公開開始日の形式が不正です。')
+		),
+		'publish_end' => array(
+			array('rule' => array('checkDate'),
+				'message' => '公開終了日の形式が不正です。')
+		),
 		'posts_date' => array(
 			array('rule' => array('notEmpty'),
 				'message' => '投稿日を入力してください。',
