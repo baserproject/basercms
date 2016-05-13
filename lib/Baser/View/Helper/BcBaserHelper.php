@@ -249,7 +249,7 @@ class BcBaserHelper extends AppHelper {
  * @param array $options
  *  `categoryTitleOn` カテゴリタイトルを表示するかどうか boolean で指定 (初期値 : null)
  *  `tag` (boolean) false でタグを削除するかどうか (初期値 : true)
- *  `allowableTags` tagが falseの場合、削除しないタグを指定できる (初期値 : '')
+ *  `allowableTags` tagが falseの場合、削除しないタグを指定できる。詳しくは、php strip_tags のドキュメントを参考してください。 (初期値 : '')
  * @return string メタタグ用のタイトルを返す
  */
 	public function getTitle($separator = '｜', $options = array()) {
@@ -264,14 +264,9 @@ class BcBaserHelper extends AppHelper {
 			'tag' => true,
 			'allowableTags' => ''
 		), $options);
-		extract($options);
-
-		unset($options['categoryTitleOn']);
-		unset($options['tag']);
-		unset($options['allowableTags']);
 
 		$title = array();
-		$crumbs = $this->getCrumbs($categoryTitleOn);
+		$crumbs = $this->getCrumbs($options['categoryTitleOn']);
 		if ($crumbs) {
 			$crumbs = array_reverse($crumbs);
 			foreach ($crumbs as $key => $crumb) {
@@ -280,8 +275,8 @@ class BcBaserHelper extends AppHelper {
 						continue;
 					}
 				}
-				if(!$tag){
-					$title[] = strip_tags($crumb['name'], $allowableTags);
+				if(!$options['tag']){
+					$title[] = strip_tags($crumb['name'], $options['allowableTags']);
 				} else {
 					$title[] = $crumb['name'];
 				}
@@ -290,8 +285,8 @@ class BcBaserHelper extends AppHelper {
 
 		// サイトタイトルを追加
 		if (!empty($this->siteConfig['name'])) {
-			if(!$tag){
-				$title[] = strip_tags($this->siteConfig['name'], $allowableTags);
+			if(!$options['tag']){
+				$title[] = strip_tags($this->siteConfig['name'], $options['allowableTags']);
 			} else {
 				$title[] = $this->siteConfig['name'];
 			}
