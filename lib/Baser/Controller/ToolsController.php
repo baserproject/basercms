@@ -342,4 +342,66 @@ class ToolsController extends AppController {
 		return emptyFolder($path);
 	}
 
+/**
+ * ログメンテナンス
+ *
+ * @param string $mode
+ * @return void
+ * @access public
+ */
+	public function admin_log($mode = '') {
+		$errorLogPath = TMP . 'logs' . DS . 'error.log' ;
+		switch ($mode) {
+			case 'download':
+				set_time_limit(0);
+				$this->_downloadErrorLog();
+				break;
+			case 'delete':
+				if( file_exists($errorLogPath) ){
+					if( unlink($errorLogPath) ){
+						$messages[] = 'エラーログを削除しました。';
+						$error = false;
+					} else {
+						$messages[] = 'エラーログが削除できませんでした。';
+						$error = true;
+					}
+				} else {
+					$messages[] = 'エラーログが存在しません。';
+					$error = true;
+				}
+
+				if ($messages) {
+					$this->setMessage(implode('<br />', $messages), $error);
+				}
+				$this->redirect(array('action' => 'log'));
+				break;
+		}
+
+		$fileSize = 0 ;
+		if( file_exists($errorLogPath) ){
+			$fileSize = filesize($errorLogPath);
+		}
+
+		$this->pageTitle = 'データメンテナンス';
+		$this->subMenuElements = array('site_configs');
+		$this->help = 'tools_log';
+		$this->set('fileSize', $fileSize);
+	}
+
+	/**
+	 * ログフォルダを圧縮ダウンロードする
+	 *
+	 * @return void
+	 * @access protected
+	 */
+	protected function _downloadErrorLog() {
+		$tmpDir = TMP . 'logs' . DS;
+
+		// ZIP圧縮して出力
+		$fileName = 'basercms_logs_' . date('Ymd_His');
+		$Simplezip = new Simplezip();
+		$Simplezip->addFolder($tmpDir);
+		$Simplezip->download($fileName);
+		exit();
+	}
 }
