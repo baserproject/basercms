@@ -2217,9 +2217,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$blogs = $this->BcBaser->getBlogs('',$options);
 		$this->assertEquals(3, $blogs[0]['id']);
 
-		//ブログ指定
+		//ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');
-		$this->assertEquals(1, count($blogs));
-		$this->assertEquals('news', $blogs[0]['name']);
+		$this->assertEquals('news', $blogs['name']);
 	}
 }
