@@ -2249,4 +2249,30 @@ class BcBaserHelperTest extends BaserTestCase {
 		//https
 		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
 	}
+
+/**
+ * URLのパラメータ情報を返す
+ *
+ * @return void
+ */
+	public function testgetParams() {
+		$this->BcBaser->request = $this->_getRequest('/news/index/example/test?name=value');
+		$params = $this->BcBaser->getParams();
+
+		$this->assertEquals('blog', $params['plugin']);
+		$this->assertEquals('example', $params['pass'][0]);
+		$this->assertEquals('test', $params['pass'][1]);
+		$this->assertEquals('value', $params['query']['name']);
+		$this->assertEquals('news/index/example/test?name=value', $params['url']); // _getRequest では、?name=valueが一部として扱われる
+		$this->assertEquals('/news/index/example/test?name=value', $params['here']);
+
+		$this->BcBaser->request = $this->_getRequest('/?name=value');
+		$params = $this->BcBaser->getParams();
+
+		$this->assertEquals(null, $params['plugin']);
+		$this->assertEquals('index', $params['pass'][0]);
+		$this->assertEquals('value', $params['query']['name']);
+		$this->assertEquals('?name=value', $params['url']);
+		$this->assertEquals('/?name=value', $params['here']);
+	}
 }
