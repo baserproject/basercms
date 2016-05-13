@@ -2304,16 +2304,12 @@ END_FLASH;
  * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
  * @param array $options オプション（初期値 :array()）
  *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
- * @return string サイト基本設定配列
+ * @return array サイト基本設定配列
  */
 	public function getBlogs($name = '', $options = array()) {
 		$options = array_merge(array(
 			'sort' => 'id'
 		), $options);
-
-		extract($options);
-
-		unset($options['sort']);
 
 		$conditions['BlogContent.status'] = true ;
 		if(! empty($name)){
@@ -2324,17 +2320,26 @@ END_FLASH;
 		$datas = $BlogContent->find('all', array(
 				'conditions' => $conditions,
 				'order' => array(
-					'BlogContent.' . $sort
+					'BlogContent.' . $options['sort']
 				),
 				'cache' => false
 			)
 		);
+
 		$contents = array();
-		foreach($datas as $val){
-			$val = $BlogContent->constructEyeCatchSize($val);
-			unset($val['BlogContent']['eye_catch_size']);
-			$contents[] = $val['BlogContent'];
+
+		if( count($datas) === 1 ){
+			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
+			unset($datas['BlogContent']['eye_catch_size']);
+			$contents = $datas['BlogContent'];
+		} else {
+			foreach($datas as $val){
+				$val = $BlogContent->constructEyeCatchSize($val);
+				unset($val['BlogContent']['eye_catch_size']);
+				$contents[] = $val['BlogContent'];
+			}
 		}
+
 		return $contents ;
 	}
 }
