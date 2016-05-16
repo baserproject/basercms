@@ -156,7 +156,7 @@ class BcUtilTest extends BaserTestCase {
  * テーマ梱包プラグインのリストを取得する
  */
 	public function testGetCurrentThemesPlugins() {
-		// プラグインが存在しない場合(デフォルトのm-single)
+		// プラグインが存在しない場合(デフォルトのbccolumn)
 		$result = $this->util->getCurrentThemesPlugins();
 		$expect = array();
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');

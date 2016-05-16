@@ -114,12 +114,12 @@ class SiteConfigTest extends BaserTestCase {
 		$results = $this->SiteConfig->getThemes();
 		$result = array();
 		foreach ($results as $key => $value) {
-			if(strstr($key, 'm-single') || strstr($key, 'nada-icons') || strstr($key, 'skelton')) {
+			if(strstr($key, 'bccolumn') || strstr($key, 'nada-icons') || strstr($key, 'skelton')) {
 				$result[$key] = $value;
 			}
 		}
 		$expected = array(
-			'm-single' => 'M-single',
+			'bccolumn' => 'Bccolumn',
 			'nada-icons' => 'Nada-icons',
 			'skelton' => 'Skelton'
 		);

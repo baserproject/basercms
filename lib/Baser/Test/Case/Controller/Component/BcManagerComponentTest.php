@@ -407,7 +407,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		$result = $this->BcManager->getAllDefaultDataPatterns();
 		$expecteds = array(
 			'core.default' => 'コア ( default )',
-			'm-single.default' => 'M-SinglePage ( default )',
+			'bccolumn.default' => 'bcColumn ( default )',
 			'nada-icons.default' => 'nada icons ( default )',
 		);
 		foreach($expecteds as $expected) {
@@ -575,7 +575,7 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		$this->BcManager->deployTheme($theme);
 
-		if ($theme != 'm-single') {
+		if ($theme != 'bccolumn') {
 			$this->assertFileExists($targetPath, 'テーマを配置できません');
 		
 		} else {
@@ -590,7 +590,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		return array(
 			array(null),
 			array('nada-icons'),
-			array('m-single'),
+			array('bccolumn'),
 		);
 	}
 

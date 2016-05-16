@@ -1595,7 +1595,7 @@ class BcManagerComponent extends Component {
  * @param string $name
  * @return boolean
  */
-	public function installPlugin($name, $dbDataPattern) {
+	public function installPlugin($name, $dbDataPattern = '') {
 
 		$paths = App::path('Plugin');
 		$exists = false;
@@ -1675,7 +1675,7 @@ class BcManagerComponent extends Component {
  *
  * @param $_path
  */
-	public function initPlugin($_path, $dbDataPattern) {
+	public function initPlugin($_path, $dbDataPattern = '') {
 		if (file_exists($_path)) {
 			try {
 				include $_path;

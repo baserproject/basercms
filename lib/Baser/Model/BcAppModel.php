@@ -1454,7 +1454,12 @@ class BcAppModel extends Model {
 		if(!$value) {
 			return true;
 		}
-		list($date, $time) = explode(' ', $value);
+		$time = '';
+		if(strpos($value, ' ') !== false) {
+			list($date, $time) = explode(' ', $value);
+		} else {
+			$date = $value;
+		}
 		if (DS != '\\') {
 			if ($time) {
 				if (!strptime($value, '%Y-%m-%d %H:%M')) {
@@ -1470,9 +1475,15 @@ class BcAppModel extends Model {
 		if (checkdate($m, $d, $Y) !== true) {
 			return false;
 		}
-		list($H, $i) = explode('-', $time);
-		if (checktime($H, $i) !== true) {
-			return false;
+		if($time) {
+			if(strpos($value, ':') !== false) {
+				list($H, $i) = explode(':', $time);
+				if (checktime($H, $i) !== true) {
+					return false;
+				}
+			} else {
+				return false;
+			}
 		}
 		if (date('Y-m-d H:i:s', strtotime($value)) == '1970-01-01 09:00:00') {
 			return false;

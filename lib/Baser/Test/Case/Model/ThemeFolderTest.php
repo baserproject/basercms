@@ -68,7 +68,7 @@ class ThemeFolderTest extends BaserTestCase {
 	public function test重複チェック異常系() {
 		$this->ThemeFolder->create(array(
 			'ThemeFolder' => array(
-				'name' => 'm-single',
+				'name' => 'nada-icons',
 				'pastname' => 'test',
 				'parent' => WWW_ROOT . 'theme/',
 			)

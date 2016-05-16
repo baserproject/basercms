@@ -400,7 +400,7 @@ class BcFormHelperTest extends BaserTestCase {
 		return array(
 			array('baser', array(), 'type="text".*id="baser".*("#baser")', 'datepicker()が出力できません'), 
 			array('baser', array('test1' => 'testValue1'), 'test1="testValue1"', '要素に属性を付与できません'),
-			array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01"', '時間を指定できません'),
+			array('baser', array('value' => '2010-4-1'), 'value="2010\/4\/1"', '時間を指定できません'),
 		);
 	}
 
