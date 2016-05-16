@@ -142,7 +142,7 @@ class BlogHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetBlogId() {
-		$result = $this->Blog->getBlogId();
+		$result = $this->Blog->getCurrentBlogId();
 		$expects = '1';
 		$this->assertEquals($expects, $result);
 	}
@@ -152,9 +152,9 @@ class BlogHelperTest extends BaserTestCase {
  *
  * @return void
  */
-	public function testBlogId() {
+	public function testCurrentBlogId() {
 		$this->expectOutputString('1');
-		$this->Blog->blogId();
+		$this->Blog->currentBlogId();
 	}
 
 /**

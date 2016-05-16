@@ -77,8 +77,8 @@ class BlogHelper extends AppHelper {
  *
  * @return void
  */
-	public function blogId() {
-		echo $this->getBlogId();
+	public function currentBlogId() {
+		echo $this->getCurrentBlogId();
 	}
 
 /**
@@ -86,7 +86,7 @@ class BlogHelper extends AppHelper {
  *
  * @return integer
  */
-	public function getBlogId() {
+	public function getCurrentBlogId() {
 		return $this->blogContent['id'];
 	}
 
