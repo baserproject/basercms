@@ -137,6 +137,27 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
+ * ブログIDを取得する
+ *
+ * @return void
+ */
+	public function testGetBlogId() {
+		$result = $this->Blog->getCurrentBlogId();
+		$expects = '1';
+		$this->assertEquals($expects, $result);
+	}
+
+/**
+ * ブログIDを出力する
+ *
+ * @return void
+ */
+	public function testCurrentBlogId() {
+		$this->expectOutputString('1');
+		$this->Blog->currentBlogId();
+	}
+
+/**
  * ブログアカウント名を取得する
  *
  * @return void
