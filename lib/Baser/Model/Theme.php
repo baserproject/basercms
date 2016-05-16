@@ -124,6 +124,7 @@ class Theme extends AppModel {
 		}
 
 		$reader = new BcThemeConfigReader();
+		$data = array_merge($reader->read($data['name']), $data);
 		$reader->dump($data['name'], $data);
 
 		return true;
