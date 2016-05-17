@@ -54,6 +54,8 @@ class BlogBaserHelper extends AppHelper {
  *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC]（初期値 : null）
  *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `page` : ページ数を指定（初期値 : null）
+ *	- `extends` : 追加で読み込むコンテンツ名（初期値 : null）
+ *					ALL：ブログすべて
  * @return void
  */
 	public function blogPosts($contentsName, $num = 5, $options = array()) {
@@ -68,7 +70,8 @@ class BlogBaserHelper extends AppHelper {
 			'template' => null,
 			'direction' => null,
 			'page' => null,
-			'sort' => null
+			'sort' => null,
+			'extends' => null,
 		), $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');

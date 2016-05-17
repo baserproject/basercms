@@ -524,7 +524,8 @@ class BlogController extends BlogAppController {
 			'day' => null,
 			'id' => null,
 			'keyword' => null,
-			'author' => null
+			'author' => null,
+			'extends' => null,
 			), $_conditions);
 
 		$options = array_merge(array(
@@ -537,7 +538,22 @@ class BlogController extends BlogAppController {
 		extract($options);
 
 		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
-		$conditions = array('BlogPost.blog_content_id' => $this->contentId);
+		$conditions = array();
+
+		if ($_conditions['extends']) {
+			if ($_conditions['extends'] != 'ALL') {
+				$blogContents= $this->BlogContent->find('list', array(
+					'fields' => array('id', 'id'),
+					'conditions' => array(
+						'BlogContent.name' => $_conditions['extends'],
+					)
+				));
+				$blogContentIds = Hash::extract($blogContents, '{n}');
+				$conditions[] = array('BlogPost.blog_content_id' => $blogContentIds);
+			}
+		} else {
+			$conditions[] = array('BlogPost.blog_content_id' => $this->contentId);
+		}
 
 		// カテゴリ条件
 		if ($_conditions['category']) {
@@ -678,6 +694,7 @@ class BlogController extends BlogAppController {
 		unset($_conditions['num']);
 		unset($_conditions['sort']);
 		unset($_conditions['direction']);
+		unset($_conditions['extends']);
 
 		if ($_conditions) {
 			// とりあえず BlogPost のフィールド固定
