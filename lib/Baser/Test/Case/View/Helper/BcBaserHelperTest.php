@@ -2216,7 +2216,7 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @return void
  */
-	public function testgetSiteName() {
+	public function testGetSiteName() {
 		$this->assertEquals('baserCMS inc. [デモ]', $this->BcBaser->getSiteName());
 	}
 
@@ -2239,7 +2239,7 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @return void
  */
-	public function testgetSiteUrl() {
+	public function testGetSiteUrl() {
 
 		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
 		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
@@ -2255,7 +2255,8 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @return void
  */
-	public function testgetBlogs() {
+	public function testGetBlogs()
+	{
 		$blogs = $this->BcBaser->getBlogs();
 		$this->assertEquals(2, count($blogs)); // 非公開は取得しないので２つ
 		$this->assertEquals(1, $blogs[0]['id']);
@@ -2264,11 +2265,37 @@ class BcBaserHelperTest extends BaserTestCase {
 		$options = array(
 			'sort' => 'id DESC',
 		);
-		$blogs = $this->BcBaser->getBlogs('',$options);
+		$blogs = $this->BcBaser->getBlogs('', $options);
 		$this->assertEquals(3, $blogs[0]['id']);
 
 		//ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');
 		$this->assertEquals('news', $blogs['name']);
+	}
+
+/**
+ * URLのパラメータ情報を返す
+ *
+ * @return void
+ */
+	public function testGetParams() {
+		$this->BcBaser->request = $this->_getRequest('/news/index/example/test?name=value');
+		$params = $this->BcBaser->getParams();
+
+		$this->assertEquals('blog', $params['plugin']);
+		$this->assertEquals('example', $params['pass'][0]);
+		$this->assertEquals('test', $params['pass'][1]);
+		$this->assertEquals('value', $params['query']['name']);
+		$this->assertEquals('news/index/example/test?name=value', $params['url']); // _getRequest では、?name=valueが一部として扱われる
+		$this->assertEquals('/news/index/example/test?name=value', $params['here']);
+
+		$this->BcBaser->request = $this->_getRequest('/?name=value');
+		$params = $this->BcBaser->getParams();
+
+		$this->assertEquals(null, $params['plugin']);
+		$this->assertEquals('index', $params['pass'][0]);
+		$this->assertEquals('value', $params['query']['name']);
+		$this->assertEquals('?name=value', $params['url']);
+		$this->assertEquals('/?name=value', $params['here']);
 	}
 }
