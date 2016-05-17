@@ -691,7 +691,23 @@ class BlogController extends BlogAppController {
 
 		$this->BlogPost->expects($expects, false);
 
-		$order = "BlogPost.{$sort} {$direction}";
+		if (strtoupper($direction) == 'RANDOM') {
+			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+			$datasouce = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
+			switch ($datasouce) {
+				case 'mysql':
+					$order = 'RAND()';
+					break;
+				case 'postgres':
+					$order = 'RANDOM()';
+					break;
+				case 'sqlite':
+					$order = 'RANDOM()';
+					break;
+			}
+		} else {
+			$order = "BlogPost.{$sort} {$direction}";
+		}
 
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$this->paginate = array(
