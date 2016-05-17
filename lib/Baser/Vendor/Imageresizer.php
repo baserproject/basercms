@@ -90,7 +90,27 @@ class Imageresizer {
 		}
 
 		// 新しい画像のベースを作成
-		$newImage = $this->_createBaseImange($newWidth,$newHeight);
+		switch($image_type) {
+			case IMAGETYPE_GIF:
+				$newImage = imagecreatetruecolor($newWidth, $newHeight);
+				$alpha = imagecolorallocatealpha($newImage, 255, 255, 255, 0);
+				imagefill($newImage, 0, 0, $alpha);
+				imagecolortransparent($newImage, $alpha);
+				break;
+			case IMAGETYPE_PNG:
+				$newImage = imagecreatetruecolor($newWidth, $newHeight);
+				imagealphablending($newImage, false);
+				imagesavealpha($newImage, true);
+				break;
+			default:
+				$newImage = imagecreatetruecolor($newWidth, $newHeight);
+				$color = imagecolorallocatealpha($newImage, 255, 255, 255, 0);
+				imagealphablending($newImage, true);
+				imagesavealpha($newImage, true);
+				imagefill($newImage, 0, 0, $color);
+				break;
+		}
+
 		// 画像をコピーし、リサイズする
 		$newImage = $this->_copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming);
 		imagedestroy($srcImage);
