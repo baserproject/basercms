@@ -51,7 +51,7 @@ class BlogBaserHelper extends AppHelper {
  *	- `id` : id で絞り込む場合に id を指定（初期値 : null）
  *	- `keyword` : キーワードで絞り込む場合にキーワードを指定（初期値 : null）
  *	- `template` : 読み込むテンプレート名を指定する場合にテンプレート名を指定（初期値 : null）
- *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC]（初期値 : null）
+ *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC or ランダム:RANDOM]（初期値 : null）
  *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `page` : ページ数を指定（初期値 : null）
  * @return void
