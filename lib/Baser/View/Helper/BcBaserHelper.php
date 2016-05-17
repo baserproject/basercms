@@ -2389,6 +2389,35 @@ END_FLASH;
 			}
 		}
 
-		return $contents ;
+		return $contents;
 	}
+
+/**
+ * URLのパラメータ情報を返す
+ * 主なreturnデータは
+ * http://basercms.net/news/index/example/test?name=value の場合
+ * 'plugin' => blog (利用しているプラグイン)
+ * 'pass' => [0] => 'example'
+ *           [1] => 'test'
+ * 'isAjax' => (boolean)false
+ * 'query' => 'name' => 'value'
+ * 'url' => 'news/index/fuga/hoge'
+ * 'here' => '/news/index/fuga/hoge'
+ *
+ * @return array URLのパラメータ情報の配列
+ */
+	public function getParams() {
+		$params = $this->request->params ;
+		$params['query'] = $this->request->query;
+		$params['url'] = $this->request->url;
+		$params['here'] = $this->request->here;
+		unset($params['named']);
+		unset($params['controller']);
+		unset($params['action']);
+		unset($params['models']);
+		unset($params['_Token']);
+		unset($params['paging']);
+		return $params;
+	}
+
 }
