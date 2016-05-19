@@ -40,7 +40,16 @@ class BlogBaserHelper extends AppHelper {
  * 《利用例》
  * $this->BcBaser->blogPosts('news', 3)
  * 
- * @param int $contentsName 管理システムで指定したコンテンツ名
+ * 複数のコンテンツを指定する場合：配列にて複数のコンテンツ名を指定
+ *									コンテンツテンプレート名は配列の先頭を利用する
+ * $this->BcBaser->blogPosts(array('news', 'work'), 3)
+ * 
+ * 全てのコンテンツを指定する場合：nullを指定
+ *									contentsTemplateオプションにて
+ *									コンテンツテンプレート名を指定する（必須）
+ * $this->BcBaser->blogPosts(null, 3, array('contentsTemplate' => 'news'))
+ * 
+ * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）
  * @param int $num 記事件数（初期値 : 5）
  * @param array $options オプション（初期値 : array()）
  *	- `category` : カテゴリで絞り込む場合にアルファベットのカテゴリ名指定（初期値 : null）
@@ -50,13 +59,14 @@ class BlogBaserHelper extends AppHelper {
  *	- `day` : 日で絞り込む場合に日を指定（初期値 : null）
  *	- `id` : id で絞り込む場合に id を指定（初期値 : null）
  *	- `keyword` : キーワードで絞り込む場合にキーワードを指定（初期値 : null）
+ *	- `contentsTemplate` : コンテンツテンプレート名を指定（初期値 : null）
  *	- `template` : 読み込むテンプレート名を指定する場合にテンプレート名を指定（初期値 : null）
  *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC or ランダム:RANDOM]（初期値 : null）
  *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `page` : ページ数を指定（初期値 : null）
  * @return void
  */
-	public function blogPosts($contentsName, $num = 5, $options = array()) {
+	public function blogPosts($contentsName = null, $num = 5, $options = array()) {
 		$options = array_merge(array(
 			'category' => null,
 			'tag' => null,
@@ -65,6 +75,7 @@ class BlogBaserHelper extends AppHelper {
 			'day' => null,
 			'id' => null,
 			'keyword' => null,
+			'contentsTemplate' => null,
 			'template' => null,
 			'direction' => null,
 			'page' => null,
@@ -72,7 +83,39 @@ class BlogBaserHelper extends AppHelper {
 		), $options);
 
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$id = $BlogContent->field('id', array('BlogContent.name' => $contentsName));
+		$conditions = array('BlogContent.status' => 1);
+		if ($contentsName) {
+			$conditions[] = array(
+				'BlogContent.name' => $contentsName,
+			);
+		}
+		$blogContents = $BlogContent->find('list', array(
+			'fields' => array('id', 'name'),
+			'conditions' => $conditions,
+			'recursive' => -1,
+		));
+		$blogContentId = array_keys($blogContents);
+		if ($contentsName) {
+			if (count($blogContents) > 1) {
+				// コンテンツ名配列の最初のIDを取得
+				$id = array_search(current($contentsName), $blogContents);
+			} else {
+				// コンテンツIDを取得
+				$id = current($blogContentId);
+			}
+		} else {
+			if ($options['contentsTemplate']) {
+				$id = array_search($options['contentsTemplate'], $blogContents);
+			} else {
+				// ERROR： contentsTemplateオプションを指定して下さい。
+				trigger_error('コンテンツ名省略時は、contentsTemplateオプションを指定して下さい。', E_USER_WARNING);
+				return;
+			}
+		}
+
+		unset($options['contentsTemplate']);
+		$options['contentId'] = $blogContentId;
+
 		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
 
 		$settings = Configure::read('BcAgent');
@@ -88,7 +131,7 @@ class BlogBaserHelper extends AppHelper {
 				break;
 			}
 		}
-
+		
 		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
 	}
 
