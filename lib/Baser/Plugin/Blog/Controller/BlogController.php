@@ -503,6 +503,10 @@ class BlogController extends BlogAppController {
 			$options['sort'] = $named['sort'];
 			unset($named['sort']);
 		}
+		if (!empty($named['contentId'])) {
+			$options['contentId'] = $named['contentId'];
+			unset($named['contentId']);
+		}
 
 		$_conditions = array();
 		if (!empty($this->request->params['named'])) {
@@ -537,8 +541,15 @@ class BlogController extends BlogAppController {
 		extract($options);
 
 		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
-		$conditions = array('BlogPost.blog_content_id' => $this->contentId);
+		$conditions = array();
 
+		if ($options['contentId']) {
+			$conditions[] = array('BlogPost.blog_content_id' => $options['contentId']);
+			
+		} elseif ($this->contentId) {
+			$conditions[] = array('BlogPost.blog_content_id' => $this->contentId);
+		}
+		
 		// カテゴリ条件
 		if ($_conditions['category']) {
 			$category = $_conditions['category'];
@@ -678,6 +689,7 @@ class BlogController extends BlogAppController {
 		unset($_conditions['num']);
 		unset($_conditions['sort']);
 		unset($_conditions['direction']);
+		unset($_conditions['contentId']);
 
 		if ($_conditions) {
 			// とりあえず BlogPost のフィールド固定
