@@ -108,7 +108,7 @@ class BlogBaserHelper extends AppHelper {
 				$id = array_search($options['contentsTemplate'], $blogContents);
 			} else {
 				// ERROR： contentsTemplateオプションを指定して下さい。
-				trigger_error('コンテンツ名省略時は、contentsTemplateオプションを指定して下さい。', E_USER_WARNING);
+				trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
 				return;
 			}
 		}
