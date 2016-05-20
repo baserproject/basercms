@@ -1,4 +1,4 @@
-3.0.10-dev
+3.0.10
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // +---------------------------------------------------------------------------------------------------+ //
@@ -16,6 +16,57 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 
+
+[2016-05-] basercms-3.0.10
+-NEW: [BC]	fix #4690 ファイルアップローダープラグインをコアプラグインとして梱包
+-NEW: [BC]	fixes #12060 logのバックアップ及び、error_logの削除インターフェイスの作成
+-NEW: [BC]	fix #12018 標準テーマ賞テーマ「bcColumn」を標準テーマとして組込
+-NEW: [BC]	fix #12045 デバッグモード２で、画面で利用しているするテンプレート一覧を表示
+-NEW: [BC]	fixes #12015 siteUrl getSiteUrl のhelperを実装
+-NEW: [BC]	fixes #12058 BcBaser::getParams() Helperの実装
+-NEW: [BC]	fix #12016 siteName getSiteName の実装
+-NEW: [BC]	fix #10771 CKEditorでPHP等の不可視コードを表示する機能
+-NEW: [BG]	fixes #12039 getBlogsの実装
+-NEW: [BG]	fixes #12057 BlogHelper に getCurrentBlogId currentBlogId の実装
+-NEW: [BG]	fixes #12014 blogName getBlogName のmethodをBlogHelperに追加
+-NEW: [BG]	fixed #12011 getPostDetail methodの作成
+-CHG: [BC]	fix #11132 BcBaserHelper::isPageの判定をURLからRequest情報に変更
+-CHG: [BC]	fix #10683 制御文字を除去
+-CHG: [BC]	fix #11096 イベントリスナの挙動を修正
+-CHG: [BC]	fix #10680 Viewとデータのキャッシュ時間を分離
+-CHG: [BC]	PagesControllerのcheckPublishメソッドの引数修正
+-CHG: [BC]	fix #12071 画像のリサイズ時（サムネイル作成時など）の透過画像対応
+-CHG: [BC]	fixes #12038 BcBaser->getTItleの第2引数を調整、tag除去等のオプションを追加
+-CHG: [BC]	fixes #11792 maxByteバリデーションを草案に適用
+-CHG: [BC]	fix #11762 cookieに保存するログイン情報の修正
+-CHG: [BC]	プラグインインストール時の初期値を「全てのユーザーで利用」に変更
+-CHG: [BG]	fixes #11140 管理側のブログ記事一覧にアイキャッチ画像のサムネイルを表示する
+-CHG: [BG]	fix #12069 blogPosts拡張：複数ブログから記事を拾ってこれるようにした
+-CHG: [BG]	fix #12070 blogPosts拡張：記事のランダム取得 (ソート順にてランダムを指定可能に）
+-CHG: [BG]	fixes #12010 eyeCatch(BcUpload->uploadImage)のoptionにoutputを追加してurlでの返り値を取得出来るようにした
+-CHG: [ML]	Fix #11781 - メールフォームのvalidationメッセージ追加
+-BUG: [BC]	fix #11991 存在しない日付を入力した際に、空欄になって保存される問題を改善
+-BUG: [BC]	連続して２回以上のユニットテストを行う場合に失敗してしまう問題を改善
+-BUG: [BC]	fixes #11995 app/Plugin/ 配下に置いたプラグインのテストが実行できない問題を改善
+-BUG: [BC]	fixed #11925 3.0.9へのアップデータ実行時に Class 'MailAppModel' not found が発生する
+-BUG: [BC]	fix #11867 特定条件（URL）で404エラーが起きると、テーマのエラーページ（Errors/error400.php）が無視される場合がある問題を改善
+-BUG: [BC]	fix #11492 パスワードのリセット画面でサイドバーが表示されてしまう不具合を改善
+-BUG: [BC]	fix #10681 CLI版のPHPがインストールされていない環境で、固定ページ保存時のバリデーションが失敗する問題を改善
+-BUG: [BC]	fix #10770 複数の初期データがあると「default」しか読み込めない不具合を改善
+-BUG: [BC]	SQLiteを利用している場合、CakeSchema::compare() においてスキーマファイルの比較に失敗してしまう不具合を改善
+-BUG: [BC]	fix #11261 サブフォルダ環境において、プラグインインストール時、よく使う項目のURLが正常に設定されない不具合を改善
+-BUG: [BG]	fix #11222 スマホ版BlogにてgetContentsNameで取得するコンテンツ名がBlogBlogになってしまう問題を改善
+-BUG: [FD]	fix #11139 フィード読み込み機能についてキャッシュ時間が正しく適用できない不具合を改善
+-BUG: [ML]	メールフォームのselectやcheckboxで、Undefined offset エラーになる問題を修正
+-BUG: [ML]	メールフォームでバリデートグループに未入力フィールドがあると、Undefined offset エラーになる問題を修正
+-BUG: [ML]	メールフォームの「書き直す」ボタンで前に戻ると、ページに「送信する」ボタンなどが表示されない問題を修正
+-BUG: [ML]	fix #10951 メールフォームをAjaxで読み込んだ際に送信ボタンがクリックできない不具合を改善
+-BUG: [ML]	fix #12064 メールフォーム セレクトボックスのオプション欄にてempty|falseが有効にならない
+-BUG: [ML]	fix #11833 メールフォームで和暦日付が正常に動作しない不具合を改善
+-BUG: [ML]	fix #11773 メールフォームのフィールドを必須にすると、0, falseなどが入力出来ない問題を改善
+-BUG: [UL]	fixed #9929 アップローダの medium 表記の typo 対応 /midium/medium/
+ 【アップデート時の注意事項】
+■ app/Config/core.php の上書きが必要です。
 
 [2015-11-30] basercms-3.0.9
 -NEW: [ML]	fix #9557 メールフォームで受信データをデータベースへ保存しないオプションの追加
