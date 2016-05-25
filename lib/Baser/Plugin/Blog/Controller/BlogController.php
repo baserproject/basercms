@@ -1004,11 +1004,7 @@ class BlogController extends BlogAppController {
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
-		if ($this->blogContent['BlogContent']['status']) {
-			$datas = $this->_getBlogPosts(array('listCount' => $limit));
-		} else {
-			$datas = array();
-		}
+		$datas = $this->_getBlogPosts(array('listCount' => $limit));
 
 		$this->set('posts', $datas);
 
