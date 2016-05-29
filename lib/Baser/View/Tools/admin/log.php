@@ -20,7 +20,7 @@
 
 <div class="submit"><?php $this->BcBaser->link('ダウンロード', array('download'), array('class' => 'btn-red button')) ?> </div>
 
-<h2>データの削除</h2>
+<h2>エラーログの削除</h2>
 
 <p>エラーログを削除します。サーバの容量を圧迫する場合時などに利用ください。<br/>
 エラーログのサイズは、<?php echo number_format($fileSize) ?> bytesです。
