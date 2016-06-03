@@ -194,7 +194,9 @@ $(document).ready( function() {
 				<li><label>初期データ</label><br />
 					<?php echo $this->BcForm->input('Installation.dbDataPattern', array('type' => 'select', 'options' => $dbDataPatterns)) ?><br /><br />
 					<small>※ コアパッケージや、テーマが保有するデモンストレーション用データを選択します。<br />
+<?php if (isset($dbDataPatterns[$this->request->data['Installation']['dbDataPattern']])): ?>
 						※ 初めてインストールされる方は、「<?php echo $dbDataPatterns[$this->request->data['Installation']['dbDataPattern']]; ?>」を選択してください。</small>
+<?php endif; ?>
 				</li>
 			</ul>
 		</div>
