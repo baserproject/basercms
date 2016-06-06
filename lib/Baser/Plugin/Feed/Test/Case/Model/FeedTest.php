@@ -15,6 +15,50 @@ App::uses('Feed', 'Feed.Model');
 
 class FeedTest extends BaserTestCase {
 
+	public $fixtures = array(
+		// 'baser.Default.SiteConfig',
+		'plugin.feed.Default/FeedConfig',
+		'plugin.feed.Default/FeedDetail',
+		'plugin.feed.Model/Feed/BlogPostFeed',
+	);
+
+	public function setUp() {
+		$this->Feed = ClassRegistry::init('Feed.Feed');
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		unset($this->Feed);
+		parent::tearDown();
+	}
+
+/**
+ * フィードを取得する
+ */
+	public function testGetFeed() {
+		$url = FULL_BASE_URL . "/news/index.rss";
+		
+		$result = $this->Feed->getFeed($url);
+		$this->assertEquals($result['Channel']['title']['value'], '新着情報｜baserCMS inc. [デモ]', 'RSSフィードを正しく取得できません');
+
+		$result = $this->Feed->getFeed($url, 1);
+		$this->assertEquals(count($result['Items']), 1, '指定した件数分のRSSを取得できません');
+		
+		$result = $this->Feed->getFeed($url, 2);
+		$this->assertEquals(count($result['Items']), 2, '指定した件数分のRSSを取得できません');
+
+		$result = $this->Feed->getFeed($url, 10, null);
+		debug($result);
+	}
+
+
+/**
+ * URL文字列に対しキャッシュファイルのハッシュを生成して返す
+ */
+	public function createCacheHash($ext = '', $url) {
+
+	}
+
 /**
  * 文字列から<img>タグとURLを抽出する
  *
