@@ -16,10 +16,8 @@ App::uses('Feed', 'Feed.Model');
 class FeedTest extends BaserTestCase {
 
 	public $fixtures = array(
-		// 'baser.Default.SiteConfig',
 		'plugin.feed.Default/FeedConfig',
 		'plugin.feed.Default/FeedDetail',
-		'plugin.feed.Model/Feed/BlogPostFeed',
 	);
 
 	public function setUp() {
@@ -34,6 +32,8 @@ class FeedTest extends BaserTestCase {
 
 /**
  * フィードを取得する
+ * 
+ * cacheExpiresのテストはcache()メソッドを使用しているので、実装していない
  */
 	public function testGetFeed() {
 		$url = FULL_BASE_URL . "/news/index.rss";
@@ -47,16 +47,23 @@ class FeedTest extends BaserTestCase {
 		$result = $this->Feed->getFeed($url, 2);
 		$this->assertEquals(count($result['Items']), 2, '指定した件数分のRSSを取得できません');
 
-		$result = $this->Feed->getFeed($url, 10, null);
-		debug($result);
+		$result = $this->Feed->getFeed($url, 10, null, 'hoge');
+		$this->assertEquals(count($result['Items']), 0, '指定したカテゴリのRSSを取得できません');
+
+		$result = $this->Feed->getFeed($url, 10, null, 'プレスリリース');
+		$this->assertEquals(count($result['Items']), 2, '指定したカテゴリのRSSを取得できません');
 	}
 
 
 /**
  * URL文字列に対しキャッシュファイルのハッシュを生成して返す
  */
-	public function createCacheHash($ext = '', $url) {
-
+	public function testCreateCacheHash() {
+		$result =	$this->Feed->createCacheHash('', '/');
+		$this->assertEquals($result, '2c0187b8225c556ddea9e68e268f2bd3', 'ハッシュが正しくありません');
+		
+		$result =	$this->Feed->createCacheHash('.php', '/test');
+		$this->assertEquals($result, 'c6978d994b82654df04fd1cea5451e43.php', 'ハッシュが正しくありません');
 	}
 
 /**
