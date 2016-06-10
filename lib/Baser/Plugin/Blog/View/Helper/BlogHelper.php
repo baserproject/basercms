@@ -841,8 +841,6 @@ class BlogHelper extends AppHelper {
 			'order' => 'BlogPost.posts_date DESC'
 			), $options);
 
-		extract($options);
-
 		$tagNames = array();
 		foreach ($post['BlogTag'] as $tag) {
 			$tagNames[] = urldecode($tag['name']);
@@ -852,13 +850,13 @@ class BlogHelper extends AppHelper {
 			'conditions' => array('BlogTag.name' => $tagNames),
 			'recursive' => 1
 		));
-
+		
 		if (!isset($tags[0]['BlogPost'][0]['id'])) {
 			return array();
 		}
 
-		$ids = Hash::extract($tags, '{n}.BlogPost.id');
-
+		$ids = array_unique(Hash::extract($tags, '{n}.BlogPost.{n}.id'));
+		
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
 		$conditions = array(
@@ -871,9 +869,9 @@ class BlogHelper extends AppHelper {
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$relatedPosts = $BlogPost->find('all', array(
 			'conditions' => $conditions,
-			'recursive' => $recursive,
-			'order' => $order,
-			'limit' => $limit,
+			'recursive' => $options['recursive'],
+			'order' => $options['order'],
+			'limit' => $options['limit'],
 			'cache' => false
 		));
 

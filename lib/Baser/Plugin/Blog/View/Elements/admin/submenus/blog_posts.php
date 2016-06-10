@@ -24,9 +24,7 @@
 			<?php endif ?>			
 			<li><?php $this->BcBaser->link($blogContent['BlogContent']['title'] . '設定', array('controller' => 'blog_contents', 'action' => 'edit', $blogContent['BlogContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('公開ページ確認', '/' . $blogContent['BlogContent']['name'] . '/index') ?></li>
-			<?php if($blogContent['BlogContent']['comment_use']): ?>
-				<li><?php $this->BcBaser->link('コメント一覧', array('controller' => 'blog_comments', 'action' => 'index', $blogContent['BlogContent']['id'])) ?></li>
-			<?php endif; ?>
+			<li><?php $this->BcBaser->link('コメント一覧', array('controller' => 'blog_comments', 'action' => 'index', $blogContent['BlogContent']['id'])) ?></li>
 		</ul>
 	</td>
 </tr>
