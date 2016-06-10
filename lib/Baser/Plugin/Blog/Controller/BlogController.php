@@ -698,6 +698,7 @@ class BlogController extends BlogAppController {
 
 		// プレビューの場合は公開ステータスを条件にしない
 		if (!$this->preview) {
+			$conditions = array_merge($conditions, array('BlogContent.status' => true));
 			$conditions = array_merge($conditions, $this->BlogPost->getConditionAllowPublish());
 		}
 
@@ -1004,11 +1005,7 @@ class BlogController extends BlogAppController {
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
-		if ($this->blogContent['BlogContent']['status']) {
-			$datas = $this->_getBlogPosts(array('listCount' => $limit));
-		} else {
-			$datas = array();
-		}
+		$datas = $this->_getBlogPosts(array('listCount' => $limit));
 
 		$this->set('posts', $datas);
 

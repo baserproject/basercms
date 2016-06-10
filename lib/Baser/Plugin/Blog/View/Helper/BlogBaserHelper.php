@@ -82,38 +82,59 @@ class BlogBaserHelper extends AppHelper {
 			'sort' => null
 		), $options);
 
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$conditions = array('BlogContent.status' => 1);
-		if ($contentsName) {
-			$conditions[] = array(
-				'BlogContent.name' => $contentsName,
-			);
+		if (empty($contentsName)) {
+			// コンテンツ名が空の場合
+			$contentsName = array();
+		} elseif (!is_array($contentsName)) {
+			// コンテンツ名が配列でない場合
+			$contentsName = array($contentsName);
 		}
-		$blogContents = $BlogContent->find('list', array(
-			'fields' => array('id', 'name'),
-			'conditions' => $conditions,
+
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$blogContents = $BlogContent->find('all', array(
+			'fields' => array('id', 'name', 'status'),
 			'recursive' => -1,
 		));
-		$blogContentId = array_keys($blogContents);
-		if ($contentsName) {
-			if (count($blogContents) > 1) {
-				// コンテンツ名配列の最初のIDを取得
-				$id = array_search(current($contentsName), $blogContents);
-			} else {
-				// コンテンツIDを取得
-				$id = current($blogContentId);
-			}
+		if (empty($blogContents)) {
+			return;
 		} else {
-			if ($options['contentsTemplate']) {
-				$id = array_search($options['contentsTemplate'], $blogContents);
+			$blogContents = Hash::combine($blogContents, '{n}.BlogContent.name', '{n}.BlogContent');
+		}
+		if ($options['contentsTemplate']) {
+			$contentsTemplate = $options['contentsTemplate'];
+		} else {
+			if ($contentsName) {
+				if (is_array($contentsName)) {
+					$contentsTemplate = current($contentsName);
+				} else {
+					$contentsTemplate = $contentsName;
+				}
 			} else {
-				// ERROR： contentsTemplateオプションを指定して下さい。
 				trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
 				return;
 			}
 		}
 
+		if ($blogContents[$contentsTemplate]['id']) {
+			$id = $blogContents[$contentsTemplate]['id'];
+		}
+
 		unset($options['contentsTemplate']);
+		$blogContentId = array();
+
+		if ($contentsName) {
+			foreach ($blogContents as $key => $value) {
+				if (array_search($key, $contentsName) !== false && $value['status']) {
+					$blogContentId[] = $value['id'];
+				}
+			}
+		} else {
+			foreach ($blogContents as $key => $value) {
+				if ($value['status']) {
+					$blogContentId[] = $value['id'];
+				}
+			}
+		}
 		$options['contentId'] = $blogContentId;
 
 		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
