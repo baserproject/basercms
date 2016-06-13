@@ -93,7 +93,8 @@ class BlogCategory extends BlogAppModel {
 /**
  * コントロールソースを取得する
  *
- * @param string フィールド名
+ * @param string $field フィールド名
+ * @param array $option オプション
  * @return array コントロールソース
  * @access public
  */
@@ -205,8 +206,8 @@ class BlogCategory extends BlogAppModel {
 /**
  * カテゴリリストを取得する
  *
- * @param int $id
- * @param boolean $count
+ * @param int $blogContentId
+ * @param array $options
  * @return array
  * @access public
  */
@@ -271,6 +272,7 @@ class BlogCategory extends BlogAppModel {
 						'cache' => false
 					));
 				}
+
 				if ($current < $depth) {
 					$children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current + 1);
 					if ($children) {
@@ -325,6 +327,7 @@ class BlogCategory extends BlogAppModel {
 		}
 
 		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId)));
+
 		return $Permission->check($ajaxAddUrl, $userGroupId);
 		
 	}
