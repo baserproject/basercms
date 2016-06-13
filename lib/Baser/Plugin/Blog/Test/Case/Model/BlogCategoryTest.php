@@ -142,20 +142,22 @@ class BlogCategoryTest extends BaserTestCase {
  */
 	public function testGetControlSource($field, $options, $expected) {
 		$result = $this->BlogCategory->getControlSource($field, $options);
-		$this->assertEquals($result, $expected, 'コントロールソースを正しく取得できません');
+		$this->assertEquals($expected, $result, 'コントロールソースを正しく取得できません');
 	}
 
 	public function getControlSourceDataProvider() {
 		return array(
 			array('parent_id', array('blogContentId' => 1), array(
-				1 => '&nbsp&nbsp&nbsp└プレスリリース',
-				2 => '子カテゴリ')),
+				1 => 'プレスリリース',
+				2 => '&nbsp&nbsp&nbsp└子カテゴリ',
+				3 => '親子関係なしカテゴリ')),
 			array('parent_id', array('blogContentId' => 0), array()),
-			array('parent_id', array('blogContentId' => 1, 'excludeParentId' => 1), array(2 => '子カテゴリ')),
+			array('parent_id', array('blogContentId' => 1, 'excludeParentId' => true), array(3 => '親子関係なしカテゴリ')),
 			array('parent_id', array('blogContentId' => 1, 'ownerId' => 2), array()),
 			array('parent_id', array('blogContentId' => 1, 'ownerId' => 1), array(
-				1 => '&nbsp&nbsp&nbsp└プレスリリース',
-				2 => '子カテゴリ')),
+				1 => 'プレスリリース',
+				2 => '&nbsp&nbsp&nbsp└子カテゴリ',
+				3 => '親子関係なしカテゴリ')),
 			array('owner_id', array(), array(
 				1 => 'システム管理',
 				2 => 'サイト運営')),
@@ -215,14 +217,15 @@ class BlogCategoryTest extends BaserTestCase {
  * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
  */
 	public function testCheckNewCategoryAddable() {
+		$message = '新しいカテゴリが追加できる状態チェックが正しくありません';
 		$result = $this->BlogCategory->checkNewCategoryAddable(1, false);
-		$this->assertTrue($result, '新しいカテゴリが追加できる状態チェックが正しくありません');
+		$this->assertTrue($result, $message);
 
 		$result = $this->BlogCategory->checkNewCategoryAddable(99, false);
-		$this->assertFalse($result, '新しいカテゴリが追加できる状態チェックが正しくありません');
+		$this->assertFalse($result, $message);
 
 		$result = $this->BlogCategory->checkNewCategoryAddable(99, true);
-		$this->assertTrue($result, '新しいカテゴリが追加できる状態チェックが正しくありません');
+		$this->assertTrue($result, $message);
 	}
 	
 /**

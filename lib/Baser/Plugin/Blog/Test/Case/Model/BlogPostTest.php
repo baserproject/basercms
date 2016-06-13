@@ -203,7 +203,7 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function testGetPostedDates($blogContentId, $options, $expected) {
 		$result = $this->BlogPost->getPostedDates($blogContentId, $options);
-		$this->assertEquals($result, $expected, '正しくブログの月別一覧を取得できません');
+		$this->assertEquals($expected, $result, '正しくブログの月別一覧を取得できません');
 	}
 
 	public function getPostedDatesDataProvider() {
@@ -237,7 +237,7 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function testGetEntryDates($blogContentId, $year, $month, $expected) {
 		$result = $this->BlogPost->getEntryDates($blogContentId, $year, $month);
-		$this->assertEquals($result, $expected, '正しく日付リストを取得できません');
+		$this->assertEquals($expected, $result, '正しく日付リストを取得できません');
 	}
 
 	public function getEntryDatesDataProvider() {
@@ -291,12 +291,12 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function testGetControlSource($options, $expected) {
 		$result = $this->BlogPost->getControlSource('blog_category_id', $options);
-		$this->assertEquals($result, $expected, '正しくコントロールソースを取得できません');
+		$this->assertEquals($expected, $result, '正しくコントロールソースを取得できません');
 	}
 
 	public function getControlSourceDataProvider() {
 		return array(
-			array(array('blogContentId' => 1), array(1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ')),
+			array(array('blogContentId' => 1), array(1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ')),
 			array(array('blogContentId' => 2), array()),
 			array(array('userGroupId' => 1, 'blogContentId' => 1, 'postEditable' => false, 'blogCategoryId' => 2), array(2 => '子カテゴリ')),
 		);
@@ -392,14 +392,14 @@ class BlogPostTest extends BaserTestCase {
 		));
 
 		$result = $this->BlogPost->createContent($data);
-		$this->assertEquals($result, $expected, '正しく検索用データを生成できません');
+		$this->assertEquals($expected, $result, '正しく検索用データを生成できません');
 
 		// blog_category_idを指定
 		$data['blog_category_id'] = 1;
 		$expected['Content']['category'] = 'プレスリリース';
 		$result = $this->BlogPost->createContent($data);
 
-		$this->assertEquals($result, $expected, '正しく検索用データを生成できません');
+		$this->assertEquals($expected, $result, '正しく検索用データを生成できません');
 
 	}
 

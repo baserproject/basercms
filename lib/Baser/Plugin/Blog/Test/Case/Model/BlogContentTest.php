@@ -246,7 +246,7 @@ class BlogContentTest extends BaserTestCase {
 				'status' => true
 			)
 		);
-		$this->assertEquals($result, $expected, '正しく検索用データを生成でません');
+		$this->assertEquals($expected, $result, '正しく検索用データを生成でません');
 	}
 
 /**
