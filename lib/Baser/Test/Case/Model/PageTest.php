@@ -763,7 +763,7 @@ class PageTest extends BaserTestCase {
  */
 	public function agentExists($type, $data, $expected, $message = null) {
 		$result = $this->Page->agentExists($type, $data);
-		$this->assertEquals($result, $expected);
+		$this->assertEquals($expected, $result);
 	}
 
 	public function agentExistsDataProvider() {
