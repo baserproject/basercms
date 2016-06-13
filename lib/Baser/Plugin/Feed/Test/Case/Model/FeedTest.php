@@ -17,7 +17,7 @@ class FeedTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'plugin.feed.Default/FeedConfig',
-		'plugin.feed.Default/FeedDetail',
+		'baser.Default.FeedDetail',
 	);
 
 	public function setUp() {
