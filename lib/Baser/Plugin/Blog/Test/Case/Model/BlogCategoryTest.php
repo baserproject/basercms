@@ -22,11 +22,11 @@ class BlogCategoryTest extends BaserTestCase {
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.SiteConfig',
-		'plugin.blog.Default/BlogPost',
-		'plugin.blog.Default/BlogPostsBlogTag',
-		'plugin.blog.Default/BlogContent',
-		'plugin.blog.Default/BlogComment',
-		'plugin.blog.Default/BlogTag',
+		'baser.Default.BlogPost',
+		'baser.Default.BlogPostsBlogTag',
+		'baser.Default.BlogContent',
+		'baser.Default.BlogComment',
+		'baser.Default.BlogTag',
 		'plugin.blog.Model/BlogCategoryModel',
 	);
 

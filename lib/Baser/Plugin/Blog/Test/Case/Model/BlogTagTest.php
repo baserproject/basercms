@@ -16,9 +16,9 @@ App::uses('BlogTag', 'Blog.Model');
 class BlogTagTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'plugin.blog.Default/BlogTag',
-		'plugin.blog.Default/BlogPostsBlogTag',
-		'plugin.blog.Default/BlogPost',
+		'baser.Default.BlogTag',
+		'baser.Default.BlogPostsBlogTag',
+		'baser.Default.BlogPost',
 	);
 
 	public function setUp() {

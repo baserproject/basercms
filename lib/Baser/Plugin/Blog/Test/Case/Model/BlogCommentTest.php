@@ -16,7 +16,7 @@ App::uses('BlogComment', 'Blog.Model');
 class BlogCommentTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'plugin.blog.Default/BlogComment',
+		'baser.Default.BlogComment',
 	);
 
 	public function setUp() {
