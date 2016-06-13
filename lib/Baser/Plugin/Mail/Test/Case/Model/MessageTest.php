@@ -550,7 +550,6 @@ class MessageTest extends BaserTestCase {
 				'modified' => 'v21',
 			))
 		);
-		$result = $this->Message->convertMessageToCsv(1, $messages);
 
 		$expected = array(
 			0 => array(
@@ -577,6 +576,7 @@ class MessageTest extends BaserTestCase {
 			)
 		);
 		
+		$result = $this->Message->convertMessageToCsv(1, $messages);
 		$this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');
 	}
 
