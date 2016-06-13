@@ -36,6 +36,7 @@ class FeedTest extends BaserTestCase {
  * cacheExpiresのテストはcache()メソッドを使用しているので、実装していない
  */
 	public function testGetFeed() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$url = FULL_BASE_URL . "/news/index.rss";
 		
 		$result = $this->Feed->getFeed($url);
