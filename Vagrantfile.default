@@ -88,7 +88,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # vagrant upの前に、vagrant-omnibusプラグインを導入してください。
   #   $ vagrant plugin install vagrant-omnibus
   #
-  config.omnibus.chef_version = :latest
+  config.omnibus.chef_version = "12.10.24"
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"
