@@ -161,9 +161,7 @@ class BlogPost extends BlogAppModel {
 /**
  * アップロードビヘイビアの設定
  *
- * @param	int		$id
- * @param	string	$table
- * @param	string	$ds
+ * @param	int $id ブログコンテンツID
  */
 	public function setupUpload($id) {
 		$sizes = array('thumb', 'mobile_thumb');
@@ -207,8 +205,8 @@ class BlogPost extends BlogAppModel {
 /**
  * ブログの月別一覧を取得する
  *
- * @param array $blogContentId
- * @param array $options
+ * @param int $blogContentId ブログコンテンツID
+ * @param array $options オプション
  * @return array 月別リストデータ
  * @access public
  */
@@ -306,16 +304,16 @@ class BlogPost extends BlogAppModel {
 /**
  * カレンダー用に指定した月で記事の投稿がある日付のリストを取得する
  * 
- * @param int $contentId
- * @param int $year
- * @param int $month
+ * @param int $blogContentId ブログコンテンツID
+ * @param int $year 年
+ * @param int $month 月
  * @return array
  * @access public
  */
-	public function getEntryDates($contentId, $year, $month) {
+	public function getEntryDates($blogContentId, $year, $month) {
 		$entryDates = $this->find('all', array(
 			'fields' => array('BlogPost.posts_date'),
-			'conditions' => $this->_getEntryDatesConditions($contentId, $year, $month),
+			'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
 			'recursive' => -1,
 			'cache' => false
 		));
@@ -329,8 +327,8 @@ class BlogPost extends BlogAppModel {
 /**
  * 投稿者の一覧を取得する
  * 
- * @param int $blogContentId
- * @param array $options
+ * @param int $blogContentId ブログコンテンツID
+ * @param array $options オプション
  * @return array 
  */
 	public function getAuthors($blogContentId, $options) {
@@ -361,15 +359,15 @@ class BlogPost extends BlogAppModel {
 /**
  * 指定した月の記事が存在するかチェックする
  *
- * @param	int $contentId
+ * @param	int $blogContentId
  * @param	int $year
  * @param	int $month
  * @return	boolean
  */
-	public function existsEntry($contentId, $year, $month) {
+	public function existsEntry($blogContentId, $year, $month) {
 		if ($this->find('first', array(
 				'fields' => array('BlogPost.id'),
-				'conditions' => $this->_getEntryDatesConditions($contentId, $year, $month),
+				'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
 				'recursive' => -1,
 				'cache' => false
 			))) {
@@ -383,13 +381,13 @@ class BlogPost extends BlogAppModel {
  * 年月を指定した検索条件を生成
  * データベースごとに構文が違う
  * 
- * @param int $contentId
+ * @param int $blogContentId
  * @param int $year
  * @param int $month
  * @return string
  * @access private
  */
-	protected function _getEntryDatesConditions($contentId, $year, $month) {
+	protected function _getEntryDatesConditions($blogContentId, $year, $month) {
 		$dbConfig = new DATABASE_CONFIG();
 		$datasource = $dbConfig->plugin['datasource'];
 
@@ -435,7 +433,7 @@ class BlogPost extends BlogAppModel {
 				break;
 		}
 
-		$conditions = am($conditions, array('BlogPost.blog_content_id' => $contentId), $this->getConditionAllowPublish());
+		$conditions = am($conditions, array('BlogPost.blog_content_id' => $blogContentId), $this->getConditionAllowPublish());
 		return $conditions;
 	}
 
@@ -586,7 +584,6 @@ class BlogPost extends BlogAppModel {
 		if ($this->contentSaving && !$this->data['BlogPost']['exclude_search']) {
 			$this->saveContent($this->createContent($this->data));
 		} else {
-
 			if (!empty($this->data['BlogPost']['id'])) {
 				$this->deleteContent($this->data['BlogPost']['id']);
 			} elseif (!empty($this->id)) {
