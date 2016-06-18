@@ -413,7 +413,7 @@ class BlogHelper extends AppHelper {
 		extract($options);
 
 		if (!isset($this->BlogCategory)) {
-			$this->BlogCategory = ClassRegistry::init('BlogCategory', 'Model');
+			$this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
