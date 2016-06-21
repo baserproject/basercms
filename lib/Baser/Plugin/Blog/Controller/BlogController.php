@@ -543,9 +543,8 @@ class BlogController extends BlogAppController {
 		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
 		$conditions = array();
 
-		if ($options['contentId']) {
+		if (isset($options['contentId']) && $options['contentId']) {
 			$conditions[] = array('BlogPost.blog_content_id' => $options['contentId']);
-			
 		} elseif ($this->contentId) {
 			$conditions[] = array('BlogPost.blog_content_id' => $this->contentId);
 		}
