@@ -811,6 +811,14 @@ class BcAppController extends Controller {
 			'tls' => $tls
 		);
 
+		/**
+		 * CakeEmailでは、return-path の正しい設定のためには additionalParameters を設定する必要がある
+		 * @url http://norm-nois.com/blog/archives/2865
+		 */
+		if (!empty($options['additionalParameters'])) {
+			$config = Hash::merge($config, array('additionalParameters' => $options['additionalParameters']));
+		}
+
 		$cakeEmail = new CakeEmail($config);
 
 		// charset
