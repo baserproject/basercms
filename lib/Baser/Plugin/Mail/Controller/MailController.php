@@ -569,7 +569,8 @@ class MailController extends MailAppController {
 				'from'		=> $fromAdmin,
 				'template'	=> 'Mail.' . $mailContent['mail_template'],
 				'replyTo'		=> $fromAdmin,
-				'attachments'	=> $attachments
+				'attachments'	=> $attachments,
+				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
@@ -584,7 +585,8 @@ class MailController extends MailAppController {
 				'template' => 'Mail.' . $mailContent['mail_template'],
 				'bcc' => $mailContent['sender_2'],
 				'agentTemplate' => false,
-				'attachments'	=> $attachments
+				'attachments'	=> $attachments,
+				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
 			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
 		}
