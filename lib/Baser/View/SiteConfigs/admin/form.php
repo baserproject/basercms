@@ -257,8 +257,8 @@ $(function(){
 				<?php if ($disableSettingInstallSetting): ?>
 					<?php echo $this->BcForm->input('SiteConfig.site_url', array('type' => 'hidden')) ?>
 				<?php endif ?>
-<?php echo $this->BcForm->error('SiteConfig.site_url') ?>
-<?php echo $this->BcForm->error('SiteConfig.ssl_url') ?>
+				<?php echo $this->BcForm->error('SiteConfig.site_url') ?>
+				<?php echo $this->BcForm->error('SiteConfig.ssl_url') ?>
 				<div id="helptextSiteUrl" class="helptext">baserCMSを設置しているURLを指定します。管理画面等でSSL通信を利用する場合は、SSL通信で利用するURLも指定します。</div>
 			</td>
 		</tr>
@@ -266,8 +266,8 @@ $(function(){
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.admin_ssl', '管理画面SSL設定') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.admin_ssl', array_merge(array('type' => 'radio', 'options' => $this->BcText->booleanDoList('SSL通信を利用'), 'separator' => '　', 'legend' => false), $disableSettingInstallSetting)) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-<?php echo $this->BcForm->error('SiteConfig.admin_ssl') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAdminSsl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.admin_ssl') ?>
 				<div id="helptextAdminSslOn" class="helptext">管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。<br />
 					また、SSL用のWebサイトURLの指定が必要です。</div>
 			</td>
@@ -275,10 +275,13 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.address', 'GoogleMaps住所') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.address', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAddress', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-<?php echo $this->BcForm->error('SiteConfig.address') ?>
-				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所を入力してください。</div>
+				<?php echo $this->BcForm->input('SiteConfig.address', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => '住所')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAddress', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<br />
+				<?php echo $this->BcForm->input('SiteConfig.google_maps_api_key', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => 'APIキー')) ?>
+				<?php echo $this->BcForm->error('SiteConfig.address') ?>
+				<?php echo $this->BcForm->error('SiteConfig.google_maps_api_key') ?>
+				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所、APIキーを入力してください。</div>
 			</td>
 		</tr>
 		<tr>
@@ -298,8 +301,8 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.widget_area', '標準ウィジェットエリア') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.widget_area', array('type' => 'select', 'options' => $this->BcForm->getControlSource('WidgetArea.id'), 'empty' => 'なし')) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.widget_area', array('type' => 'select', 'options' => $this->BcForm->getControlSource('WidgetArea.id'), 'empty' => 'なし')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextWidgetArea" class="helptext">
 					公開ページ全般で利用するウィジェットエリアを指定します。<br />
 					ウィジェットエリアは「<?php $this->BcBaser->link('ウィジェットエリア管理', array('controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
@@ -309,8 +312,8 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.maintenance', '公開状態') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.maintenance', array('type' => 'select', 'options' => array(0 => '公開中', 1 => 'メンテナンス中'))) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpMaintenance', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.maintenance', array('type' => 'select', 'options' => array(0 => '公開中', 1 => 'メンテナンス中'))) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpMaintenance', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextMaintenance" class="helptext">
 					公開状態を指定します。<br />
 					メンテナンス中の場合に、公開ページを確認するには、管理画面にログインする必要があります。
@@ -321,8 +324,8 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mode', '制作・開発モード') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.mode', array_merge(array('type' => 'select', 'options' => $this->BcForm->getControlSource('mode')), $disableSettingInstallSetting)) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpDebug', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.mode', array_merge(array('type' => 'select', 'options' => $this->BcForm->getControlSource('mode')), $disableSettingInstallSetting)) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpDebug', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
 					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
@@ -331,14 +334,14 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.mobile', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
+				<?php echo $this->BcForm->input('SiteConfig.mobile', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
 				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.smartphone', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
+				<?php echo $this->BcForm->input('SiteConfig.smartphone', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
 				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
 			</td>
 		</tr>
@@ -363,7 +366,7 @@ $(function(){
 				<span id="SpanRootLayoutTemplateMobile"><small>[携帯]</small>&nbsp;
 					<?php echo $this->BcForm->input('SiteConfig.root_layout_template_mobile', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'mobile'))) ?>　</span>
 				<span id="SpanRootLayoutTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
-<?php echo $this->BcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'smartphone'))) ?></span>
+				<?php echo $this->BcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'smartphone'))) ?></span>
 			</td>
 		</tr>
 		<tr>
@@ -374,7 +377,7 @@ $(function(){
 				<span id="SpanRootContentTemplateMobile"><small>[携帯]</small>&nbsp;
 					<?php echo $this->BcForm->input('SiteConfig.root_content_template_mobile', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'mobile'))) ?>　</span>
 				<span id="SpanRootContentTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
-<?php echo $this->BcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'smartphone'))) ?></span>
+				<?php echo $this->BcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'smartphone'))) ?></span>
 			</td>
 		</tr>
 	</table>
@@ -385,7 +388,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_enter_br', 'エディタタイプ') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.editor', array('type' => 'radio', 'options' => Configure::read('BcApp.editors'))) ?>
+				<?php echo $this->BcForm->input('SiteConfig.editor', array('type' => 'radio', 'options' => Configure::read('BcApp.editors'))) ?>
 			</td>
 		</tr>
 		<tr class="ckeditor-option">
@@ -402,7 +405,7 @@ $(function(){
 		<tr class="ckeditor-option">
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.editor_styles', 'エディタスタイルセット') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.editor_styles', array('type' => 'textarea', 'cols' => 36, 'rows' => 10)) ?>
+				<?php echo $this->BcForm->input('SiteConfig.editor_styles', array('type' => 'textarea', 'cols' => 36, 'rows' => 10)) ?>
 						<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 						<?php echo $this->BcForm->error('SiteConfig.editor_styles') ?>
 				<div id="helptextFormalName" class="helptext">
@@ -436,10 +439,10 @@ h2 {}
 		<tr>
 			<th><?php echo $this->BcForm->label('SiteConfig.mail_encode', 'メール送信文字コード') ?></th>
 			<td class="col-input">
-<?php echo $this->BcForm->input('SiteConfig.mail_encode', array('type' => 'select', 'options' => Configure::read('BcEncode.mail'))) ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpEncode', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('SiteConfig.mail_encode', array('type' => 'select', 'options' => Configure::read('BcEncode.mail'))) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpEncode', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextEncode" class="helptext">送信メールの文字コードを選択します。<br />受信したメールが文字化けする場合に変更します。</div>
-<?php echo $this->BcForm->error('SiteConfig.mail_encode') ?>
+				<?php echo $this->BcForm->error('SiteConfig.mail_encode') ?>
 			</td>
 		</tr>
 		<tr>
