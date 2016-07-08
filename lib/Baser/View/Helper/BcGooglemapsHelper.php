@@ -31,6 +31,13 @@ class BcGooglemapsHelper extends AppHelper {
  * @var string
  */
 	public $markerText = '';
+	
+/**
+ * ヘルパー
+ * 
+ * @var array
+ */
+	public $helpers = array('BcBaser');
 
 /**
  * 地図を表示するDOM ID
@@ -140,8 +147,12 @@ DOC_END;
 			});
 INFO_END;
 		}
-
-		$googleScript = '<script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=ja"></script>';
+		$apiKey = $this->BcBaser->siteConfig['google_maps_api_key'];
+		if (empty($apiKey)) {
+			$adminLink = $this->BcBaser->getUrl(array("admin"=>true, 'controller' => 'site_configs', 'action'=>'form'));
+			echo 'Google Maps APIのキーが設定されていません。<a href="' . $adminLink . '">システム管理</a>より設定してください。';
+		}
+		$googleScript = '<script src="http://maps.google.com/maps/api/js?key=' . h($apiKey) . '"></script>';
 
 		return $googleScript . '<script>' . $script . '</script>';
 	}
