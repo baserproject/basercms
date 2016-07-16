@@ -76,7 +76,11 @@ class ThemesController extends AppController {
 			} else {
 				$name = $this->request->data['Theme']['file']['name'];
 				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
-				exec('unzip -o ' . TMP . $name . ' -d ' . BASER_THEMES, $return);
+
+				$format = 'unzip -o ' . TMP . '%s' . ' -d ' . BASER_THEMES;;
+				$command = sprintf($format, escapeshellarg($name));
+
+				exec($command, $return);
 				if(!empty($return[2])) {
 					$theme = str_replace('  inflating: ' . BASER_THEMES, '', $return[2]);
 					$theme = explode(DS, $theme);
@@ -308,13 +312,6 @@ class ThemesController extends AppController {
 				$result = false;
 				$this->log('ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。');
 			}
-		}
-
-		// ブログ記事の投稿日を更新
-		$Db = ConnectionManager::getDataSource('plugin');
-		if(!$this->BcManager->updateBlogEntryDate($Db->config)) {
-			$result = false;
-			$this->log('ブログ記事投稿日の初期化に失敗しました。');
 		}
 
 		$Db = ConnectionManager::getDataSource('baser');

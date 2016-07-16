@@ -19,7 +19,7 @@ $config['BcApp'] = array(
 	// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 	'title' => 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 	// 初期テーマ
-	'defaultTheme' => 'm-single',
+	'defaultTheme' => 'bccolumn',
 	// 管理システムテーマ（キャメルケース）
 	'adminTheme' => '',
 	// テンプレートの基本となる拡張子（.php 推奨）
@@ -49,7 +49,7 @@ $config['BcApp'] = array(
 				array('name' => '環境情報', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info'))
 			))),
 	// コアプラグイン
-	'corePlugins' => array('Blog', 'Feed', 'Mail'),
+	'corePlugins' => array('Blog', 'Feed', 'Mail', 'Uploader'),
 	// アップデートキー
 	'updateKey' => 'update',
 	// 管理者グループID

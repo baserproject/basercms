@@ -85,14 +85,14 @@ class BcGmapsComponentTest extends BaserTestCase {
  */
 	public function testGetInfoLocation() {
 
-		$result = $this->BcGmaps->getInfoLocation('坂本龍馬像');
+		$result = $this->BcGmaps->getInfoLocation('東京タワー');
 		$this->assertTrue($result, 'getInfoLocationで情報を取得できません');
 
 		$lat = round($this->BcGmaps->getLatitude(), 1);
 		$lng = round($this->BcGmaps->getLongitude(), 1);
 
-		$this->assertEquals(34.2, $lat, '位置情報を正しく取得できません');
-		$this->assertEquals(133.8, $lng, '位置情報を正しく取得できません');
+		$this->assertEquals(35.7, $lat, '位置情報を正しく取得できません');
+		$this->assertEquals(139.7, $lng, '位置情報を正しく取得できません');
 
 		$result = $this->BcGmaps->getInfoLocation('');
 		$this->assertFalse($result, 'getInfoLocationに空のアドレスにtrueが返ってきます');

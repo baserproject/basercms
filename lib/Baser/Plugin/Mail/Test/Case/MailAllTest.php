@@ -23,7 +23,7 @@ class MailAllTest extends CakeTestSuite {
  * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new CakeTestSuite('Baser All Tests');
+		$suite = new CakeTestSuite('Baser Mail All Tests');
 
 		$path = dirname(__FILE__) . DS;
 

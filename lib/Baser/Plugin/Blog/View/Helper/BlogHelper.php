@@ -15,6 +15,9 @@
 /**
  * ブログヘルパー
  * @package Blog.View.Helper
+ * @property BcTimeHelper $BcTime BcTimeヘルパ
+ * @property BcBaserHelper $BcBaser BcBaserヘルパ
+ * @property BcUploadHelper $BcUpload BcUploadヘルパ
  */
 class BlogHelper extends AppHelper {
 
@@ -67,6 +70,42 @@ class BlogHelper extends AppHelper {
 			$BlogPost = ClassRegistry::init('Blog.BlogPost');
 			$BlogPost->setupUpload($this->blogContent['id']);
 		}
+	}
+
+/**
+ * ブログIDを出力する
+ *
+ * @return void
+ */
+	public function currentBlogId() {
+		echo $this->getCurrentBlogId();
+	}
+
+/**
+ * ブログIDを取得する
+ *
+ * @return integer
+ */
+	public function getCurrentBlogId() {
+		return $this->blogContent['id'];
+	}
+
+/**
+ * ブログアカウント名を出力する
+ *
+ * @return void
+ */
+	public function blogName() {
+		echo $this->getBlogName();
+	}
+
+/**
+ * ブログアカウント名を取得する
+ *
+ * @return string
+ */
+	public function getBlogName() {
+		return $this->blogContent['name'];
 	}
 
 /**
@@ -159,7 +198,7 @@ class BlogHelper extends AppHelper {
 		return $this->BcBaser->getLink($title, $url, $options);
 	}
 
-/*
+/**
  * ブログ記事のURLを取得する
  *
  * @param array $post ブログ記事データ
@@ -230,6 +269,43 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
+ * 記事の詳細を表示する
+ *
+ * @param array $post ブログ記事データ
+ * @param array $options オプション（初期値 : array()）getPostDetailを参照
+ * @return void
+ */
+	public function postDetail($post, $options = array()) {
+		echo $this->getPostDetail($post, $options);
+	}
+
+/**
+ * 記事の詳細を取得する
+ *
+ * @param array $post ブログ記事データ
+ * @param array $options オプション（初期値 : array()）
+ *	- `cut` : 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
+ * @return string 記事本文
+ */
+	public function getPostDetail($post, $options = array()) {
+
+		$options = array_merge(array(
+			'cut' => false
+		), $options);
+		extract($options);
+
+		unset($options['cut']);
+
+		$out = $post['BlogPost']['detail'];
+
+		if ($cut) {
+			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
+		}
+
+		return $out;
+	}
+
+/**
  * 記事が属するカテゴリ名を出力する
  *
  * @param array $post 記事データ
@@ -281,7 +357,7 @@ class BlogHelper extends AppHelper {
 /**
  * タグを出力する
  *
- * 復数所属する場合は復数出力する
+ * 複数所属する場合は複数出力する
  *
  * @param array $post 記事データ
  * @param string $separator 区切り文字（初期値 :  , ）
@@ -294,7 +370,7 @@ class BlogHelper extends AppHelper {
 /**
  * タグを取得する
  *
- * 復数所属する場合は復数取得する
+ * 複数所属する場合は複数取得する
  *
  * @param array $post 記事データ
  * @param string $separator 区切り文字（初期値 :  , ）
@@ -337,7 +413,7 @@ class BlogHelper extends AppHelper {
 		extract($options);
 
 		if (!isset($this->BlogCategory)) {
-			$this->BlogCategory = ClassRegistry::init('BlogCategory', 'Model');
+			$this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		}
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
@@ -765,8 +841,6 @@ class BlogHelper extends AppHelper {
 			'order' => 'BlogPost.posts_date DESC'
 			), $options);
 
-		extract($options);
-
 		$tagNames = array();
 		foreach ($post['BlogTag'] as $tag) {
 			$tagNames[] = urldecode($tag['name']);
@@ -776,13 +850,13 @@ class BlogHelper extends AppHelper {
 			'conditions' => array('BlogTag.name' => $tagNames),
 			'recursive' => 1
 		));
-
+		
 		if (!isset($tags[0]['BlogPost'][0]['id'])) {
 			return array();
 		}
 
-		$ids = Hash::extract($tags, '{n}.BlogPost.id');
-
+		$ids = array_unique(Hash::extract($tags, '{n}.BlogPost.{n}.id'));
+		
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
 		$conditions = array(
@@ -795,9 +869,9 @@ class BlogHelper extends AppHelper {
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$relatedPosts = $BlogPost->find('all', array(
 			'conditions' => $conditions,
-			'recursive' => $recursive,
-			'order' => $order,
-			'limit' => $limit,
+			'recursive' => $options['recursive'],
+			'order' => $options['order'],
+			'limit' => $options['limit'],
 			'cache' => false
 		));
 
@@ -943,6 +1017,7 @@ class BlogHelper extends AppHelper {
  *	- `tmp` : 一時保存データの場合に true を指定（初期値 : false）
  *	- `class` : タグの class を指定（初期値 : img-eye-catch）
  *	- `force` : 画像が存在しない場合でも強制的に出力する場合に true を指定する（初期値 : false）
+ *	- `output` : 出力形式 tag, url のを指定できる（初期値 : ''）
  *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
  * @return string アイキャッチ画像のHTML
  */
@@ -958,7 +1033,8 @@ class BlogHelper extends AppHelper {
 			'height' => '', // 高さ
 			'noimage' => '', // 画像がなかった場合に表示する画像
 			'tmp' => false,
-			'class' => 'img-eye-catch'
+			'class' => 'img-eye-catch',
+			'output' => '', // 出力形式 tag or url
 		), $options);
 
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
@@ -980,4 +1056,11 @@ class BlogHelper extends AppHelper {
 		$MailHelper->link($title, $contentsName, $datas, $options);
 	}
 
+/**
+ * 文字列から制御文字を取り除く
+ */
+	public function removeCtrlChars($string) {
+		# fixes #10683
+		return preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
+	}
 }

@@ -108,7 +108,7 @@ class BcUtil extends Object {
 /**
  * スキーマ情報のパスを取得する
  * 
- * @param string $plugin
+ * @param string $plugin プラグイン名
  * @return string Or false
  */
 	public static function getSchemaPath($plugin = null) {
@@ -145,7 +145,9 @@ class BcUtil extends Object {
  * 
  * 初期データのフォルダは アンダースコア区切り推奨
  * 
- * @param string $plugin
+ * @param string $plugin プラグイン名
+ * @param string $theme テーマ名
+ * @param string $pattern 初期データの類型
  * @return string Or false
  */
 	public static function getDefaultDataPath($plugin = null, $theme = null, $pattern = null) {
@@ -168,12 +170,12 @@ class BcUtil extends Object {
 			$paths = array(BASER_CONFIGS . 'data' . DS . $pattern);
 			if($theme != 'core') {
 				$paths = array_merge(array(
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
 				), $paths);
 			}
 		} else {
@@ -189,21 +191,21 @@ class BcUtil extends Object {
 				return false;
 			}
 			$paths = array(
-				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
-				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
 				$pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
-				$pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
-				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 				$pluginPath . DS . 'sql',
+				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
+				$pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
 			);
 			if($theme != 'core') {
 				$paths = array_merge(array(
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
-					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'config' . DS . 'data' . DS . $pattern . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
+					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
 				), $paths);
 			}
 		}
@@ -220,7 +222,7 @@ class BcUtil extends Object {
 /**
  * シリアライズ
  * 
- * @param mixed $value
+ * @param mixed $value 対象文字列
  * @return string
  */
 	public static function serialize($value) {
@@ -231,7 +233,7 @@ class BcUtil extends Object {
  * アンシリアライズ
  * base64_decode が前提
  * 
- * @param string $value
+ * @param mixed $value 対象文字列
  * @return mixed
  */
 	public static function unserialize($value) {

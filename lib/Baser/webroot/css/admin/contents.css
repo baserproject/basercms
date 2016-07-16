@@ -329,6 +329,9 @@ table.sub-menu{
 	border-top: 1px dotted #DDD;
 	border-bottom: 1px dotted #DDD;
 }
+.contents-body .list-table td.eye_catch img {
+	max-width: 100px;
+}
 .contents-body .list-table td a{
 	color:#333;
 	text-decoration:underline;
@@ -340,7 +343,7 @@ table.sub-menu{
 	background-color: #FFF;
 }
 .contents-body .list-table tr.even{
-	background-color:#F3F3F3;
+	background-color:#FAFAFA;
 }
 .contents-body .list-table tr.disablerow {
 	background-color:#bbb;
@@ -951,9 +954,10 @@ background: #888;
 	/* height:100%; */
 	width:100%;
 	z-index: 10000;
+	margin-top:31px;
 }
 #LoginInner {
-	margin:150px auto auto 50px;
+	margin:119px auto auto 50px;
 	color:#333;
 	padding:50px 50px 94px 50px;
 	width:460px;
@@ -1416,7 +1420,12 @@ background: #888;
 	width:286px;
 }
 .ui-widget-content {
-	border:1px solid #DDD;
+    border: 1px solid #DDD;
+}
+#PageTreeList {
+	padding:20px 20px;
+	border:1px solid #CCC;
+	margin-top:25px;
 }
 .ui-widget-header {
 	background:#EFEFEF;
@@ -1425,7 +1434,14 @@ background: #888;
 	font-weight: bold;
 }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+    color: #535A62;
+}
+#TreeList a {
 	color:#535A62;
+}
+#TreeList a:hover {
+	color:#AAA;
+	text-decoration: none;
 }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
 	color:#535A62;
@@ -1440,13 +1456,17 @@ background: #888;
     margin-bottom:0;
 }
 
+
 /* ==================================================================== */
 /*    Contents
 /* ==================================================================== */
 
 #ContentsTreeList li {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+}
+.ui-widget-content {
+	border:1px solid #DDD;
 }
 #ContentsTreeList li ul {
 	margin-left:26px;
@@ -1540,6 +1560,12 @@ div.jstree-publish-even{
 /*    Etc
 /* ==================================================================== */
 
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+	color:#535A62;
+}
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
+	color:#535A62;
+}
 .helptext {
 	display:none;
 }

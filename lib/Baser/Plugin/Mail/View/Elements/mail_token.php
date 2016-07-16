@@ -18,8 +18,11 @@ if (Configure::read('BcRequest.agent')) {
 $(document).ready(function(){
 	$('input[type="submit"]').attr('disabled', 'disabled');
 });
-$(window).unload(function(){});
+<?php if($this->request->is('ajax')): ?>
+$(document).ready(function(){
+<?php else: ?>
 $(window).load(function(){
+<?php endif ?>
 	var getTokenUrl = '<?php echo $this->BcBaser->getUrl($prefix . '/' . $mailContent['MailContent']['name'] . '/ajax_get_token') ?>';
 	$.ajaxSetup({cache: false});
 	$.get(getTokenUrl, function(result) {

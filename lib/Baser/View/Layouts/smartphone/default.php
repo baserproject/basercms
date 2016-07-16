@@ -24,7 +24,7 @@
 			'admin/colorbox/colorbox')); ?>
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 		<?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
+			'admin/jquery-2.1.4.min',
 			'admin/jquery-ui-1.11.4.min',
 			'admin/jquery.colorbox-min-1.4.5',
 			'admin/jquery.mScroll',

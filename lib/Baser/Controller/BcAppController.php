@@ -185,6 +185,15 @@ class BcAppController extends Controller {
 			try {
 				$SiteConfig = ClassRegistry::init('SiteConfig');
 				$this->siteConfigs = Configure::read('BcSite');
+
+				// asset ファイルの読み込みの際、bootstrap で、loadSiteConfig() を実行しない仕様となっているが、
+				// 存在しない asset ファイルを読み込んだ際に、上記理由により、Not Found ページで、テーマが適用されない為、
+				// 再度、loadSiteConfig() を実行
+				if(!$this->siteConfigs) {
+					loadSiteConfig();
+					$this->siteConfigs = Configure::read('BcSite');
+				}
+
 				if (empty($this->siteConfigs['version'])) {
 					$this->siteConfigs['version'] = $this->getBaserVersion();
 					$SiteConfig->saveKeyValue($this->siteConfigs);
@@ -817,6 +826,14 @@ class BcAppController extends Controller {
 			'password' => $password,
 			'tls' => $tls
 		);
+
+		/**
+		 * CakeEmailでは、return-path の正しい設定のためには additionalParameters を設定する必要がある
+		 * @url http://norm-nois.com/blog/archives/2865
+		 */
+		if (!empty($options['additionalParameters'])) {
+			$config = Hash::merge($config, array('additionalParameters' => $options['additionalParameters']));
+		}
 
 		$cakeEmail = new CakeEmail($config);
 

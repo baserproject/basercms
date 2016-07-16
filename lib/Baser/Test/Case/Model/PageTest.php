@@ -686,9 +686,6 @@ class PageTest extends BaserTestCase {
 	public function getCacheTimeDataProvider() {
 		return array(
 			array('/index', '+5 min', 'キャッシュ時間を取得できません'),
-			array('/service', '+5 min', 'キャッシュ時間を取得できません'),
-			array('/hidden_status', '+5 min', 'キャッシュ時間を取得できません'),
-			array('/company', '+5 min', 'キャッシュ時間を取得できません'),
 		);
 	}
 
@@ -766,7 +763,7 @@ class PageTest extends BaserTestCase {
  */
 	public function agentExists($type, $data, $expected, $message = null) {
 		$result = $this->Page->agentExists($type, $data);
-		$this->assertEquals($result, $expects);
+		$this->assertEquals($expected, $result);
 	}
 
 	public function agentExistsDataProvider() {

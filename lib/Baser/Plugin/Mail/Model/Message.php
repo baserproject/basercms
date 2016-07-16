@@ -81,6 +81,7 @@ class Message extends MailAppModel {
 		App::uses('MailField', 'Mail.Model');
 		$MailField = ClassRegistry::init('Mail.MailField');
 		$this->mailFields = $MailField->find('all', array('conditions' => array("mail_content_id" => $mailContentId), 'order' => 'MailField.sort', 'recursive' => -1));
+
 		// アップロード設定
 		$this->setupUpload();
 		return true;
@@ -168,6 +169,7 @@ class Message extends MailAppModel {
  */
 	public function afterValidate() {
 		$data = $this->data;
+
 		// Eメール確認チェック
 		$this->_validEmailCofirm($data);
 		// 不完全データチェック
@@ -214,6 +216,12 @@ class Message extends MailAppModel {
 							'rule' => array('email'),
 							'message' => '形式が不正です。'
 					));
+				// 半角数字
+				} elseif ($mailField['valid'] == '/^([0-9]+)$/') {
+					$this->validate[$mailField['field_name']] = array(
+							'rule' => '/^([0-9]+)$/',
+							'message' => '半角数字で入力してください。'
+					);
 				} else {
 					$this->validate[$mailField['field_name']] = $mailField['valid'];
 				}
@@ -372,10 +380,12 @@ class Message extends MailAppModel {
 		// バリデートグループにおけるデータ２つを比較し、違えばエラーとする
 		foreach ($dists as $key => $dist) {
 			list($a, $b) = $dist;
-			if ($a != $b) {
-				$this->invalidate($key . '_not_same');
-				$this->invalidate($key . '_1');
-				$this->invalidate($key . '_2');
+			if(count($dist) == 2){
+				if ($a != $b) {
+					$this->invalidate($key . '_not_same');
+					$this->invalidate($key . '_1');
+					$this->invalidate($key . '_2');
+				}
 			}
 		}
 	}
@@ -397,11 +407,12 @@ class Message extends MailAppModel {
 			}
 
 			$value = null;
-			if(!empty($data['Message'][$mailField['field_name']])) {
+			if(isset($data['Message'][$mailField['field_name']]) &&
+				$data['Message'][$mailField['field_name']] !== "") {
 				$value = $data['Message'][$mailField['field_name']];
 			}
 
-			if ($value) {
+			if ($value !== null) {
 
 				// 半角処理
 				if ($mailField['auto_convert'] == 'CONVERT_HANKAKU') {
@@ -786,8 +797,8 @@ class Message extends MailAppModel {
  * @access public
  */
 	public function construction($mailContentId) {
-		$mailFieldClass = new MailField();
-		$mailContentClass = new MailContent();
+		$mailFieldClass = ClassRegistry::init('Mail.MailField');
+		$mailContentClass = ClassRegistry::init('Mail.MailContent');
 
 		// フィールドリストを取得
 		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $mailContentId)));
@@ -865,7 +876,7 @@ class Message extends MailAppModel {
  * @return boolean
  */
 	public function reconstructionAll() {
-		
+
 		// メール受信テーブルの作成
 		$PluginContent = ClassRegistry::init('PluginContent');
 		$pluginContents = $PluginContent->find('all', array('conditions' => array('PluginContent.plugin' => 'mail')));
@@ -881,7 +892,7 @@ class Message extends MailAppModel {
 			}
 		}
 		return $result;
-		
+
 	}
 
 	

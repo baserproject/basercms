@@ -503,6 +503,10 @@ class BlogController extends BlogAppController {
 			$options['sort'] = $named['sort'];
 			unset($named['sort']);
 		}
+		if (!empty($named['contentId'])) {
+			$options['contentId'] = $named['contentId'];
+			unset($named['contentId']);
+		}
 
 		$_conditions = array();
 		if (!empty($this->request->params['named'])) {
@@ -537,8 +541,14 @@ class BlogController extends BlogAppController {
 		extract($options);
 
 		$expects = array('BlogContent', 'BlogCategory', 'User', 'BlogTag');
-		$conditions = array('BlogPost.blog_content_id' => $this->contentId);
+		$conditions = array();
 
+		if (isset($options['contentId']) && $options['contentId']) {
+			$conditions[] = array('BlogPost.blog_content_id' => $options['contentId']);
+		} elseif ($this->contentId) {
+			$conditions[] = array('BlogPost.blog_content_id' => $this->contentId);
+		}
+		
 		// カテゴリ条件
 		if ($_conditions['category']) {
 			$category = $_conditions['category'];
@@ -678,6 +688,7 @@ class BlogController extends BlogAppController {
 		unset($_conditions['num']);
 		unset($_conditions['sort']);
 		unset($_conditions['direction']);
+		unset($_conditions['contentId']);
 
 		if ($_conditions) {
 			// とりあえず BlogPost のフィールド固定
@@ -686,12 +697,29 @@ class BlogController extends BlogAppController {
 
 		// プレビューの場合は公開ステータスを条件にしない
 		if (!$this->preview) {
+			$conditions = array_merge($conditions, array('BlogContent.status' => true));
 			$conditions = array_merge($conditions, $this->BlogPost->getConditionAllowPublish());
 		}
 
 		$this->BlogPost->expects($expects, false);
 
-		$order = "BlogPost.{$sort} {$direction}";
+		if (strtoupper($direction) == 'RANDOM') {
+			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
+			$datasouce = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
+			switch ($datasouce) {
+				case 'mysql':
+					$order = 'RAND()';
+					break;
+				case 'postgres':
+					$order = 'RANDOM()';
+					break;
+				case 'sqlite':
+					$order = 'RANDOM()';
+					break;
+			}
+		} else {
+			$order = "BlogPost.{$sort} {$direction}";
+		}
 
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$this->paginate = array(
@@ -976,11 +1004,7 @@ class BlogController extends BlogAppController {
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
-		if ($this->blogContent['BlogContent']['status']) {
-			$datas = $this->_getBlogPosts(array('listCount' => $limit));
-		} else {
-			$datas = array();
-		}
+		$datas = $this->_getBlogPosts(array('listCount' => $limit));
 
 		$this->set('posts', $datas);
 

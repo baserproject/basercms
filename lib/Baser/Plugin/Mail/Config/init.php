@@ -15,7 +15,14 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Mail');
+	$this->Plugin->initDb('plugin', 'Mail', array('dbDataPattern'	=> $dbDataPattern));
+
+/**
+ * メッセージテーブル構築
+ */
+	App::uses('Message', 'Mail.Model');
+	$Message = new Message();
+	$Message->reconstructionAll();
 
 /**
  * 必要フォルダ初期化

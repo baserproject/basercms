@@ -15,7 +15,7 @@
  * Include files
  */
 App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
-
+App::uses('FeedAppModel', 'Feed.Model');
 /**
  * フィード読込モデル
  *
@@ -42,9 +42,9 @@ class Feed extends FeedAppModel {
 /**
  * フィードを取得する
  *
- * @param 	string RSSのURL
- * @param 	int 取得する件数
- * @param 	string キャッシュ保持期間
+ * @param string RSSのURL
+ * @param int 取得する件数
+ * @param string キャッシュ保持期間
  * @param string 抽出するカテゴリ
  * @return array RSSデータ
  * @access public

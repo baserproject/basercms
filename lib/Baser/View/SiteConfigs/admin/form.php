@@ -19,24 +19,50 @@ $(window).load(function() {
 	$("#SiteConfigFormalName").focus();
 });
 $(function(){
-	var theme = $("#SiteConfigTheme").val();
-	<?php if ($safeModeOn): ?>
-	var safeModeOn = 1;
-	<?php else: ?>
-	var safeModeOn = 0;
-	<?php endif ?>
-	var safemodeAlert = '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\n'+
-						'ページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。';
-	$("#BtnSubmit").click(function(){
-		var result = true;
+	/**
+	 * 「保存」ボタンを押下した際の動作
+	 */
+	$("#BtnSave").click(function(){
+		if (!isSafeModeCheck()) {
+			return false;
+		}
+		if (!hasCheckSmtpInput()) {
+			return false;
+		}
+	});
+
+	function isSafeModeCheck() {
+		var theme = $("#SiteConfigTheme").val();
+		<?php if ($safeModeOn): ?>
+		var safeModeOn = 1;
+		<?php else: ?>
+		var safeModeOn = 0;
+		<?php endif ?>
+		var safemodeAlert = '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\n'+
+							'ページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。';
+
 		if(safeModeOn && (theme != $("#SiteConfigTheme").val())) {
 			if(!confirm(safemodeAlert)) {
-				result = false;
+				return false;
 			}
 		}
-		return result;
-	});
-	
+		return true;
+	}
+
+	/**
+	 * SMTP設定に入力がある場合、アラートを表示する
+	 * 
+	 * @returns {Boolean}
+	 */
+	function hasCheckSmtpInput() {
+		if ($('#SiteConfigSmtpUser').val() || $('#SiteConfigSmtpPassword').val()) {
+			if(!confirm('SMTP設定に入力があります。保存してよろしいですか？')) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	// SMTP送信テスト
 	$("#BtnCheckSendmail").click(function(){
 		if(!confirm('テストメールを送信します。いいですか？')) {

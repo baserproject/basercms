@@ -297,6 +297,25 @@ class BcBaserHelperTest extends BaserTestCase {
 		// カテゴリが対象ページと同じ場合に省略する
 		$this->BcBaser->setTitle('会社データ');
 		$this->assertEquals("会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', true));
+
+		// strip_tagの機能確認 tag付
+		$this->BcBaser->setTitle('会社<br>沿革<center>真ん中</center>');
+		$this->assertEquals("会社<br>沿革<center>真ん中</center>｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', true));
+
+		// strip_tagの機能確認 tagを削除
+		$options = array(
+			'categoryTitleOn' => true,
+			'tag' => false
+		);
+		$this->assertEquals("会社沿革真ん中｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', $options));
+
+		// 一部タグだけ削除
+		$options = array(
+			'categoryTitleOn' => true,
+			'tag' => false,
+			'allowableTags' => '<center>'
+		);
+		$this->assertEquals("会社沿革<center>真ん中</center>｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', $options));
 	}
 
 /**
@@ -467,6 +486,115 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(false, '/s/news/index', 'smartphone')
 		);
 	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @param bool $expected 期待値
+ * @param string $url リクエストURL
+ * @param string $agent ユーザーエージェント
+ *
+ * @return void
+ * @dataProvider isBlogDataProvider
+ */
+	public function testIsBlog($expected, $url, $agent = null) {
+		$this->_unsetAgent();
+		if ($agent !== null) {
+			$this->_setAgent($agent);
+		}
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->isBlog());
+	}
+
+	public function isBlogDataProvider() {
+		return array(
+			//PC
+			array(false, '/'),
+			array(false, '/index'),
+			array(false, '/contact/index'),
+			array(true, '/news/index'),
+
+			// モバイルページ
+			array(false, '/m/', 'mobile'),
+			array(false, '/m/index', 'mobile'),
+			array(false, '/m/contact/index', 'mobile'),
+			array(true, '/m/news/index', 'mobile'),
+
+			// スマートフォンページ
+			array(false, '/s/', 'smartphone'),
+			array(false, '/s/index', 'smartphone'),
+			array(false, '/s/contact/index', 'smartphone'),
+			array(true, '/s/news/index', 'smartphone')
+		);
+	}
+
+	/**
+	 * 現在のページがメールプラグインかどうかを判定する
+	 *
+	 * @param bool $expected 期待値
+	 * @param string $url リクエストURL
+	 * @param string $agent ユーザーエージェント
+	 *
+	 * @return void
+	 * @dataProvider isMailDataProvider
+	 */
+	public function testIsMail($expected, $url, $agent = null) {
+		$this->_unsetAgent();
+		if ($agent !== null) {
+			$this->_setAgent($agent);
+		}
+		$this->BcBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->isMail());
+	}
+
+	public function isMailDataProvider() {
+		return array(
+			//PC
+			array(false, '/'),
+			array(false, '/index'),
+			array(false, '/news/index'),
+			array(true, '/contact/index'),
+
+			// モバイルページ
+			array(false, '/m/', 'mobile'),
+			array(false, '/m/index', 'mobile'),
+			array(false, '/m/news/index', 'mobile'),
+			array(true, '/m/contact/index', 'mobile'),
+
+			// スマートフォンページ
+			array(false, '/s/', 'smartphone'),
+			array(false, '/s/index', 'smartphone'),
+			array(false, '/s/news/index', 'smartphone'),
+			array(true, '/s/contact/index', 'smartphone')
+		);
+	}
+
+	/**
+	 * 現在のページが指定のプラグインかどうかを判定する
+	 *
+	 * @return void
+	 */
+	public function testIsPluginContent() {
+
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->assertEquals(false, $this->BcBaser->isPluginContent('Blog'));
+
+		$this->BcBaser->request = $this->_getRequest('/news/index');
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('Blog'));
+
+		$this->BcBaser->request = $this->_getRequest('/index');
+		$this->assertEquals(false, $this->BcBaser->isPluginContent('Mail'));
+
+		$this->BcBaser->request = $this->_getRequest('/contact/index');
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('Mail'));
+
+		$this->BcBaser->request->params['plugin'] = 'hollow_world';
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('HollowWorld'));
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollowWorld'));
+		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollow_world'));
+		$this->assertEquals(false, $this->BcBaser->isPluginContent('hollowworld'));
+	}
+
 
 /**
  * baserCMSが設置されているパスを出力する
@@ -1668,8 +1796,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_setAgent($agent);
 		$this->BcBaser->request = $this->_getRequest($url);
 
-		$this->expectOutputRegex('/' . $expected . '/');
+		ob_start();
 		$this->BcBaser->WidgetArea($no);
+		$result = ob_get_clean();
+		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function widgetAreaDataProvider() {
@@ -2007,7 +2137,8 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testContentsNavi() {
 		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
-		$this->BcBaser->crumbsList();	}
+		$this->BcBaser->crumbsList();
+	}
 
 /**
  * パンくずリストを出力する
@@ -2070,4 +2201,101 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->siteSearchForm();
 	}
 
+/**
+ * WEBサイト名を出力する
+ *
+ * @return void
+ */
+	public function testSiteName() {
+		$this->expectOutputString('baserCMS inc. [デモ]');
+		$this->BcBaser->siteName();
+	}
+
+/**
+ * WEBサイト名を取得する
+ *
+ * @return void
+ */
+	public function testGetSiteName() {
+		$this->assertEquals('baserCMS inc. [デモ]', $this->BcBaser->getSiteName());
+	}
+
+/**
+ * WEBサイトURLを出力する
+ *
+ * @return void
+ */
+	public function testSiteUrl() {
+
+		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
+		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
+
+		$this->expectOutputString('http://basercms.net/');
+		$this->BcBaser->siteUrl();
+	}
+
+/**
+ * WEBサイトURLを取得する
+ *
+ * @return void
+ */
+	public function testGetSiteUrl() {
+
+		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
+		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
+
+		// http
+		$this->assertEquals('http://basercms.net/', $this->BcBaser->getSiteUrl());
+		//https
+		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
+	}
+
+/**
+ * 全ブログコンテンツの基本情報を取得する
+ *
+ * @return void
+ */
+	public function testGetBlogs()
+	{
+		$blogs = $this->BcBaser->getBlogs();
+		$this->assertEquals(2, count($blogs)); // 非公開は取得しないので２つ
+		$this->assertEquals(1, $blogs[0]['id']);
+
+		//ソート順を変更
+		$options = array(
+			'sort' => 'id DESC',
+		);
+		$blogs = $this->BcBaser->getBlogs('', $options);
+		$this->assertEquals(3, $blogs[0]['id']);
+
+		//ブログ指定 1つなので、配列に梱包されてない
+		$blogs = $this->BcBaser->getBlogs('news');
+		$this->assertEquals('news', $blogs['name']);
+	}
+
+/**
+ * URLのパラメータ情報を返す
+ *
+ * @return void
+ */
+	public function testGetParams() {
+		$this->BcBaser->request = $this->_getRequest('/news/index/example/test?name=value');
+		$params = $this->BcBaser->getParams();
+
+		$this->assertEquals('blog', $params['plugin']);
+		$this->assertEquals('example', $params['pass'][0]);
+		$this->assertEquals('test', $params['pass'][1]);
+		$this->assertEquals('value', $params['query']['name']);
+		$this->assertEquals('news/index/example/test?name=value', $params['url']); // _getRequest では、?name=valueが一部として扱われる
+		$this->assertEquals('/news/index/example/test?name=value', $params['here']);
+
+		$this->BcBaser->request = $this->_getRequest('/?name=value');
+		$params = $this->BcBaser->getParams();
+
+		$this->assertEquals(null, $params['plugin']);
+		$this->assertEquals('index', $params['pass'][0]);
+		$this->assertEquals('value', $params['query']['name']);
+		$this->assertEquals('?name=value', $params['url']);
+		$this->assertEquals('/?name=value', $params['here']);
+	}
 }

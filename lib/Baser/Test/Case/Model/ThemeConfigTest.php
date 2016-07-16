@@ -53,7 +53,7 @@ class ThemeConfigTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// ダミーの画像を作成
-		$sourcePath = WWW_ROOT . 'theme' . DS . 'm-single' . DS . 'img' . DS . 'logo.png';
+		$sourcePath = WWW_ROOT . 'theme' . DS . 'nada-icons' . DS . 'img' . DS . 'logo.png';
 		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
 		$dummyTmpPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo_tmp.png';
 		copy($sourcePath, $dummyPath);
@@ -84,7 +84,7 @@ class ThemeConfigTest extends BaserTestCase {
 	public function testDeleteImage($data, $expected, $message = null) {
 		
 		// ダミーの画像を作成
-		$sourcePath = WWW_ROOT . 'theme' . DS . 'm-single' . DS . 'img' . DS . 'logo.png';
+		$sourcePath = WWW_ROOT . 'theme' . DS . 'nada-icons' . DS . 'img' . DS . 'logo.png';
 		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
 		copy($sourcePath, $dummyPath);
 

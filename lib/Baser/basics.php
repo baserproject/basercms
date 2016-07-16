@@ -36,6 +36,9 @@ function baseUrl() {
 		}
 	} else {
 		$script = $_SERVER['SCRIPT_FILENAME'];
+		if(isConsole()) {
+			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
+		}
 		$script = str_replace(docRoot(), '', $script);
 		if (BC_DEPLOY_PATTERN == 1) {
 			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
@@ -68,6 +71,10 @@ function docRoot() {
 
 	if (empty($_SERVER['SCRIPT_NAME'])) {
 		return '';
+	}
+
+	if(isConsole()) {
+		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $_SERVER['SCRIPT_NAME']);
 	}
 
 	if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {
@@ -291,7 +298,7 @@ function clearViewCache($url = null, $ext = '.php') {
 
 	$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 	if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
-		$homes = array('', 'index', 'index_html');
+		$homes = array('index', 'index_html');
 		foreach ($homes as $home) {
 			if (preg_match('/^\/m/is', $url)) {
 				if ($home) {
@@ -426,7 +433,7 @@ function checkTmpFolders() {
 }
 
 /**
- * フォルダの中をフォルダを残して空にする
+ * フォルダの中をフォルダを残して空にする(ファイルのみを削除する)
  *
  * @param	string	$path
  * @return	boolean
@@ -543,7 +550,12 @@ function topLevelUrl($lastSlash = true) {
  */
 function siteUrl() {
 	$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
-	return topLevelUrl(false) . $baseUrl;
+	$topLevelUrl = topLevelUrl(false);
+	if($topLevelUrl) {
+		return $topLevelUrl . $baseUrl;
+	} else {
+		return '';
+	}
 }
 
 /**
@@ -905,7 +917,21 @@ function loadPlugin($plugin, $priority) {
 		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 			App::uses($eventClass, $plugin . '.Event');
 			$CakeEvent = CakeEventManager::instance();
-			$CakeEvent->attach(new $eventClass(), null, array('priority' => $priority));
+			$EventClass = new $eventClass();
+
+			foreach($EventClass->events as $key => $options) {
+				// プラグイン側で priority の設定がされてない場合に設定
+				if(is_array($options)) {
+					if(empty($options['priority'])) {
+						$options['priority'] = $priority;
+						$EventClass->events[$key] = $options;
+					}
+				} else {
+					unset($EventClass->events[$key]);
+					$EventClass->events[$options] = array('priority' => $priority);
+				}
+			}
+			$CakeEvent->attach($EventClass, null);
 		}
 	}
 	return true;
@@ -971,4 +997,30 @@ function base64UrlsafeDecode($val) {
  */
 function isWindows() {
 	return DIRECTORY_SEPARATOR == '\\';
+}
+
+/**
+ * 時刻の有効性チェックを行う
+ *
+ * @param $hour
+ * @param $min
+ * @param $sec
+ * @return bool
+ */
+function checktime($hour, $min, $sec = null) {
+	$hour = (int) $hour;
+	if ($hour < 0 || $hour > 23) {
+		return false;
+	}
+	$min = (int) $min;
+	if ($min < 0 || $min > 59) {
+		return false;
+	}
+	if($sec) {
+		$sec = (int) $sec;
+		if ($sec < 0 || $sec > 59) {
+			return false;
+		}
+	}
+	return true;
 }

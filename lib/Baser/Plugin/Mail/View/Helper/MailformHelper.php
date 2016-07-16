@@ -69,7 +69,12 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				if (isset($attributes['empty'])) {
-					$showEmpty = $attributes['empty'];
+					if (strtolower($attributes['empty']) == 'false' || 
+						strtolower($attributes['empty']) == 'null') {
+						$showEmpty = false;
+					} else {
+						$showEmpty = $attributes['empty'];
+					}
 				} else {
 					$showEmpty = true;
 				}

@@ -68,7 +68,7 @@ class ThemeFileTest extends BaserTestCase {
 		$this->ThemeFile->create(array(
 			'ThemeFile' => array(
 				'name' => 'config.php',
-				'parent' => WWW_ROOT . 'theme/m-single/',
+				'parent' => WWW_ROOT . 'theme/nada-icons/',
 			)
 		));
 		$this->assertFalse($this->ThemeFile->validates());

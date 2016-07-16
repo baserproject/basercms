@@ -447,7 +447,7 @@ class UpdatersController extends AppController {
 		if (!isset($updaters['test'])) {
 			if (!$plugin) {
 				/* サイト基本設定にバージョンを保存 */
-				$SiteConfigClass = ClassRegistry::getObject('SiteConfig');
+				$SiteConfigClass = ClassRegistry::init('SiteConfig');
 				$SiteConfigClass->cacheQueries = false;
 				$data['SiteConfig']['version'] = $targetVersion;
 				$result = $SiteConfigClass->saveKeyValue($data);
@@ -557,7 +557,7 @@ class UpdatersController extends AppController {
 		} else {
 			$dbConfigName = 'baser';
 		}
-		return $this->Updater->loadCsv($dbConfigName, $path, $filterTable);
+		return $this->Updater->loadCsv($dbConfigName, $path, array('filterTable' => $filterTable));
 	}
 
 /**

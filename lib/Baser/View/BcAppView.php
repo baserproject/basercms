@@ -29,7 +29,14 @@ class BcAppView extends View {
  * @var string
  */
 	public $pageTitle = null;
-	
+
+/**
+ * テンプレートファイル一覧出力用
+ * デバッグモード２で利用
+ * @var array
+ */
+	protected $_viewFilesLog = array();
+
 /**
  * List of variables to collect from the associated controller
  *
@@ -478,6 +485,25 @@ class BcAppView extends View {
  */
 	public function evaluate($viewFile, $dataForView) {
 		return $this->_evaluate($viewFile, $dataForView);
+	}
+
+/**
+ * Sandbox method to evaluate a template / view script in.
+ *
+ * @param string $viewFile Filename of the view
+ * @param array $dataForView Data to include in rendered view.
+ *    If empty the current View::$viewVars will be used.
+ * @return string Rendered output
+ */
+	protected function _evaluate($viewFile, $dataForView) {
+		// ADD 2016/05/12 ryuring
+		// デバッグモード２でテンプレート一覧を出力する為に追加
+		// >>>
+		if(Configure::read('debug') > 1) {
+			$this->_viewFilesLog[] = $viewFile;
+		}
+		// <<<
+		return parent::_evaluate($viewFile, $dataForView);
 	}
 	
 }

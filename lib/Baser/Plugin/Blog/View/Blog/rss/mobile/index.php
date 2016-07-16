@@ -19,12 +19,13 @@ if($posts){
 }
 
 function transformRSS($data) {
+	$blogHelper = new BlogHelper($this);
 	return array(
 		'title' => $data['BlogPost']['name'],
 		'link' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no']),
 		'guid' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no']),
 		'category' => $data['BlogCategory']['title'],
-		'description' => $data['BlogPost']['content'],
+		'description' => $blogHelper->removeCtrlChars($data['BlogPost']['content']),
 		'pubDate' => $data['BlogPost']['posts_date']
 	);
 }

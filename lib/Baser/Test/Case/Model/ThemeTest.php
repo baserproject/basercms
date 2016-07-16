@@ -95,7 +95,7 @@ class ThemeTest extends BaserTestCase {
 	public function test重複チェック異常系() {
 		$this->Theme->create(array(
 			'Theme' => array(
-				'name' => 'm-single',
+				'name' => 'nada-icons',
 				'old_name' => 'hoge',
 			)
 		));
@@ -110,13 +110,13 @@ class ThemeTest extends BaserTestCase {
 	public function testSaveOnRename() {
 		$path = WWW_ROOT . 'theme' . DS;
 		$data = array('Theme' => array(
-			'old_name' => 'm-single',
-			'name' => 'new-m-single',
+			'old_name' => 'nada-icons',
+			'name' => 'new-nada-icons',
 			)
 		);
 		$this->Theme->save($data);
-		$this->assertFileExists($path . 'new-m-single', 'ファイル名を変更できません');
-		rename($path . 'new-m-single', $path . 'm-single');
+		$this->assertFileExists($path . 'new-nada-icons', 'ファイル名を変更できません');
+		rename($path . 'new-nada-icons', $path . 'nada-icons');
 	}
 
 }

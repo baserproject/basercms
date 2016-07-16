@@ -215,13 +215,17 @@ class BlogContent extends BlogAppModel {
 
 		$_data = array();
 		$_data['SearchIndex']['type'] = 'ブログ';
-		$_data['SearchIndex']['model_id'] = $this->id;
+		// $this->idに値が入ってない場合もあるので
+		if (!empty($data['id'])) {
+			$_data['SearchIndex']['model_id'] = $data['id'];
+		} else {
+			$_data['SearchIndex']['model_id'] = $this->id;
+		}
 		$_data['SearchIndex']['category'] = '';
 		$_data['SearchIndex']['title'] = $data['title'];
 		$_data['SearchIndex']['detail'] = $data['description'];
 		$_data['SearchIndex']['url'] = '/' . $data['name'] . '/index';
 		$_data['SearchIndex']['status'] = true;
-
 		return $_data;
 	}
 

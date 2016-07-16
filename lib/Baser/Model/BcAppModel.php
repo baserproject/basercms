@@ -274,7 +274,14 @@ class BcAppModel extends Model {
  * @param	string	プラグイン名
  * @return 	boolean
  */
-	public function initDb($dbConfigName, $pluginName = '', $loadCsv = true, $filterTable = '', $filterType = '') {
+	public function initDb($dbConfigName, $pluginName = '', $options = array()) {
+		$options = array_merge(array(
+			'loadCsv'		=> true,
+			'filterTable'	=> '',
+			'filterType'	=> '',
+			'dbDataPattern'	=> ''
+		), $options);
+
 		// 初期データフォルダを走査
 		if (!$pluginName) {
 			$path = BASER_CONFIGS . 'Schema';
@@ -284,9 +291,13 @@ class BcAppModel extends Model {
 				return true;
 			}
 		}
-		if ($this->loadSchema($dbConfigName, $path, $filterTable, $filterType, array(), $dropField = false)) {
-			if ($loadCsv) {
-				$path = BcUtil::getDefaultDataPath($pluginName);
+		if ($this->loadSchema($dbConfigName, $path, $options['filterTable'], $options['filterType'], array(), $dropField = false)) {
+			if ($options['loadCsv']) {
+				$theme = $pattern = null;
+				if($options['dbDataPattern']) {
+					list($theme, $pattern) = explode('.', $options['dbDataPattern']);
+				}
+				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
 				if($path) {
 					return $this->loadCsv($dbConfigName, $path);
 				} else {
@@ -377,7 +388,11 @@ class BcAppModel extends Model {
  * @param	string	テーブル指定
  * @return 	boolean
  */
-	public function loadCsv($dbConfigName, $path, $filterTable = '') {
+	public function loadCsv($dbConfigName, $path, $options = array()) {
+		$options = array_merge(array(
+			'filterTable' => ''
+		), $options);
+
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
@@ -389,7 +404,7 @@ class BcAppModel extends Model {
 			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
 				$table = $matches[1];
 				if (in_array($prefix . $table, $listSources)) {
-					if ($filterTable && $filterTable != $table) {
+					if ($options['filterTable'] && $options['filterTable'] != $table) {
 						continue;
 					}
 
@@ -429,6 +444,20 @@ class BcAppModel extends Model {
 		$check = (is_array($check)) ? current($check) : $check;
 		$length = mb_strlen($check, Configure::read('App.encoding'));
 		return ($length <= $max);
+	}
+
+/**
+ * 最大のバイト数チェック
+ * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+ *
+ * @param mixed $check 対象となる値
+ * @param int $max バイト数の最大値
+ * @return boolean
+ */
+	public function maxByte($check, $max) {
+		$check = (is_array($check)) ? current($check) : $check;
+		$byte = strlen($check);
+		return ($byte <= $max);
 	}
 
 /**
@@ -1432,8 +1461,37 @@ class BcAppModel extends Model {
  */
 	public function checkDate($check) {
 		$value = $check[key($check)];
+		if(!$value) {
+			return true;
+		}
+		$time = '';
+		if(strpos($value, ' ') !== false) {
+			list($date, $time) = explode(' ', $value);
+		} else {
+			$date = $value;
+		}
 		if (DS != '\\') {
-			if (!strptime($value, '%Y-%m-%d H:i:s') && !strptime($value, '%Y-%m-%d')) {
+			if ($time) {
+				if (!strptime($value, '%Y-%m-%d %H:%M')) {
+					return false;
+				}
+			} else {
+				if (!strptime($value, '%Y-%m-%d')) {
+					return false;
+				}
+			}
+		}
+		list($Y, $m, $d) = explode('-', $date);
+		if (checkdate($m, $d, $Y) !== true) {
+			return false;
+		}
+		if($time) {
+			if(strpos($value, ':') !== false) {
+				list($H, $i) = explode(':', $time);
+				if (checktime($H, $i) !== true) {
+					return false;
+				}
+			} else {
 				return false;
 			}
 		}

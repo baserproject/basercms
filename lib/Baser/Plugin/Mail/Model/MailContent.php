@@ -197,6 +197,7 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['auth_captcha'] = false;
 		$data['MailContent']['ssl_on'] = false;
 		$data['MailContent']['status'] = false;
+		$data['MailContent']['save_info'] = true;
 
 		return $data;
 	}
@@ -237,16 +238,19 @@ class MailContent extends MailAppModel {
 		if (isset($data['MailContent'])) {
 			$data = $data['MailContent'];
 		}
-
 		$_data = array();
 		$_data['SearchIndex']['type'] = 'メール';
-		$_data['SearchIndex']['model_id'] = $this->id;
+		// $this->idに値が入ってない場合もあるので
+		if (!empty($data['id'])) {
+			$_data['SearchIndex']['model_id'] = $data['id'];
+		} else {
+			$_data['SearchIndex']['model_id'] = $this->id;
+		}
 		$_data['SearchIndex']['category'] = '';
 		$_data['SearchIndex']['title'] = $data['title'];
 		$_data['SearchIndex']['detail'] = $data['description'];
 		$_data['SearchIndex']['url'] = '/' . $data['name'] . '/index';
 		$_data['SearchIndex']['status'] = $data['status'];
-
 		return $_data;
 	}
 
@@ -279,7 +283,7 @@ class MailContent extends MailAppModel {
 					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 				}
 				App::uses('Message', 'Mail.Model');
-				$Message = new Message();
+				$Message = ClassRegistry::init('Mail.Message');
 				$Message->setup($result['MailContent']['id']);
 				$Message->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 				$Message->createTable($result['MailContent']['name']);

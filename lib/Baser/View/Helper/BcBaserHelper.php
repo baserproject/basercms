@@ -242,14 +242,31 @@ class BcBaserHelper extends AppHelper {
  * タイトルタグを取得する
  * 
  * ページタイトルと直属のカテゴリ名が同じ場合は、ページ名を省略する
+ * version 3.0.10 より第2引数 $categoryTitleOn は、 $options にまとめられました。
+ * 後方互換のために第2引数に配列型以外を指定された場合は、 $categoryTitleOn として取り扱います。
  *
  * @param string $separator 区切り文字
- * @param string $categoryTitleOn カテゴリタイトルを表示するかどうか boolean で指定
+ * @param array $options
+ *  `categoryTitleOn` カテゴリタイトルを表示するかどうか boolean で指定 (初期値 : null)
+ *  `tag` (boolean) false でタグを削除するかどうか (初期値 : true)
+ *  `allowableTags` tagが falseの場合、削除しないタグを指定できる。詳しくは、php strip_tags のドキュメントを参考してください。 (初期値 : '')
  * @return string メタタグ用のタイトルを返す
  */
-	public function getTitle($separator = '｜', $categoryTitleOn = null) {
+	public function getTitle($separator = '｜', $options = array()) {
+		if(! is_array($options)){
+			$categoryTitleOn = $options;
+			unset($options);
+			$options['categoryTitleOn'] = $categoryTitleOn ;
+		}
+
+		$options = array_merge(array(
+			'categoryTitleOn' => null,
+			'tag' => true,
+			'allowableTags' => ''
+		), $options);
+
 		$title = array();
-		$crumbs = $this->getCrumbs($categoryTitleOn);
+		$crumbs = $this->getCrumbs($options['categoryTitleOn']);
 		if ($crumbs) {
 			$crumbs = array_reverse($crumbs);
 			foreach ($crumbs as $key => $crumb) {
@@ -258,15 +275,27 @@ class BcBaserHelper extends AppHelper {
 						continue;
 					}
 				}
-				$title[] = $crumb['name'];
+				if(!$options['tag']){
+					$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+				} else {
+					$title[] = $crumb['name'];
+				}
 			}
 		}
 
 		// サイトタイトルを追加
+		$siteName = '';
 		if(!empty($this->_View->site['title'])) {
-			$title[] = $this->_View->site['title'];
+			$siteName = $this->_View->site['title'];
 		} elseif (!empty($this->siteConfig['name'])) {
-			$title[] = $this->siteConfig['name'];
+			$siteName = $this->siteConfig['name'];
+		}
+		if ($siteName) {
+			if(!$options['tag']){
+				$title[] = strip_tags($siteName, $options['allowableTags']);
+			} else {
+				$title[] = $siteName;
+			}
 		}
 
 		return implode($separator, $title);
@@ -781,6 +810,7 @@ class BcBaserHelper extends AppHelper {
 
 		// デバッグ
 		if (Configure::read('debug') >= 2) {
+			$this->element('template_dump', array(), array('subDir' => false));
 			$this->element('sql_dump', array(), array('subDir' => false));
 		}
 	}
@@ -1240,13 +1270,13 @@ class BcBaserHelper extends AppHelper {
 		$plugin = '';
 		$controller = '';
 		$action = '';
-		$pass = '';
+		$pass = array();
 		$url0 = '';
 		$url1 = '';
 		$url2 = '';
 		$aryUrl = array();
 
-		if (!empty($this->request->params['prefix']) && Configure::read('BcRequest.agentPrefix') != $this->request->params['prefix']) {
+		if (!empty($this->request->params['prefix'])) {
 			$prefix = h($this->request->params['prefix']);
 		}
 		if (!empty($this->request->params['plugin'])) {
@@ -1302,10 +1332,10 @@ class BcBaserHelper extends AppHelper {
 
 			// プラグインルーティングの場合
 			if ((($url1 == '' && in_array($action, array('index', 'mobile_index', 'smartphone_index'))) || ($url1 == $action)) && $url2 != $action && $plugin) {
+				$prefix = '';
 				$plugin = '';
 				$controller = $url0;
 			}
-
 			if ($plugin) {
 				$controller = $plugin . '_' . $controller;
 			}
@@ -1319,22 +1349,19 @@ class BcBaserHelper extends AppHelper {
 				$aryUrl[] = $action;
 			}
 			if ($pass) {
-				$aryUrl = $aryUrl + $pass;
+				$aryUrl = array_merge($aryUrl, $pass);
 			}
 		}
 
 		if ($this->_View->name == 'CakeError') {
-
 			$contentsName = $error;
 		} elseif (count($aryUrl) >= 2) {
-
 			if (!$detail) {
 				$contentsName = $aryUrl[0];
 			} else {
 				$contentsName = implode('_', $aryUrl);
 			}
 		} elseif (count($aryUrl) == 1 && $aryUrl[0] == 'index') {
-
 			$contentsName = $home;
 		} else {
 			if (!$detail) {
@@ -1470,7 +1497,6 @@ class BcBaserHelper extends AppHelper {
 		if (!is_numeric($expire)) {
 			$expire = strtotime($expire);
 		}
-
 		header("Date: " . date("D, j M Y G:i:s ", $fileModified) . 'GMT');
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s", $fileModified) . " GMT");
 		header('Content-type: ' . $contentType[$type]);
@@ -1570,6 +1596,7 @@ class BcBaserHelper extends AppHelper {
 				return call_user_func_array(array($pluginBaser, $method), $params);
 			}
 		}
+		return null;
 	}
 
 /**
@@ -1720,17 +1747,48 @@ END_FLASH;
  * @return bool 固定ページの場合は true を返す
  */
 	public function isPage() {
-		$here = $this->getHere();
-		/**
-		 * ページ連携していた場合prefixを除外する
-		 */
-		$here = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $here);
-		if ($this->_View->name == 'Pages' && preg_match('/(.+)_display$/', $this->request->params['action'], $maches)) {
-			if ($this->_Page->isLinked($maches[1], $here)) {
-				$here = preg_replace('/^\/' . Configure::read('BcRequest.agentPrefix') . '\//', '/', $here);
+		if ($this->request->params['controller'] == 'pages') {
+			if ($this->request->params['action'] == 'display' ||
+				$this->request->params['action'] == 'smartphone_display' ||
+				$this->request->params['action'] == 'mobile_display') {
+				return true;
 			}
 		}
-		return $this->_Page->isPageUrl($here);
+		return false;
+	}
+
+/**
+ * 指定のプラグインかを判別する
+ * 現状、Blog,Mail のみ動作確認
+ *
+ * @param string name プラグイン名
+ * @return bool
+ */
+	public function isPluginContent($name) {
+		if (empty($this->request->params['plugin'])) {
+			return false;
+		}
+		return (
+			$this->request->params['plugin'] === Inflector::underscore($name)
+		);
+	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isBlog() {
+		return $this->isPluginContent('Blog');
+	}
+
+/**
+ * 現在のページがメールプラグインかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isMail() {
+		return $this->isPluginContent('Mail');
 	}
 
 /**
@@ -2257,6 +2315,128 @@ END_FLASH;
  */
 	public function siteSearchForm($data = array(), $options = array()) {
 		$this->element('site_search_form', $data, $options);
+	}
+
+/**
+ * WEBサイト名を出力する
+ *
+ * @return void
+ */
+	public function siteName() {
+		echo $this->getSiteName();
+	}
+
+/**
+ * WEBサイト名を取得する
+ *
+ * @return string サイト基本設定のWEBサイト名
+ */
+	public function getSiteName() {
+		if (!empty($this->_View->viewVars['siteConfig']['formal_name'])) {
+			return $this->_View->viewVars['siteConfig']['formal_name'];
+		}
+
+		if(!empty($this->siteConfig['formal_name'])) {
+			return $this->siteConfig['formal_name'];
+		}
+
+		return '';
+	}
+
+/**
+ * WEBサイトURLを出力する
+ *
+ * @param boolean ssl （初期値 : false）
+ * @return void
+ */
+	public function siteUrl($ssl = false) {
+		echo $this->getSiteUrl($ssl);
+	}
+
+/**
+ * WEBサイトURLを取得する
+ *
+ * @param boolean ssl （初期値 : false）
+ * @return string サイト基本設定のWEBサイト名
+ */
+	public function getSiteUrl($ssl = false) {
+		if ($ssl) {
+			return Configure::read('BcEnv.sslUrl');
+		} else {
+			return Configure::read('BcEnv.siteUrl');
+		}
+	}
+
+/**
+ * Blogの基本情報を全て取得する
+ *
+ * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
+ * @param array $options オプション（初期値 :array()）
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ * @return array サイト基本設定配列
+ */
+	public function getBlogs($name = '', $options = array()) {
+		$options = array_merge(array(
+			'sort' => 'id'
+		), $options);
+
+		$conditions['BlogContent.status'] = true ;
+		if(! empty($name)){
+			$conditions['BlogContent.name'] = $name ;
+		}
+
+		$BlogContent = ClassRegistry::init('BlogContent');
+		$datas = $BlogContent->find('all', array(
+				'conditions' => $conditions,
+				'order' => array(
+					'BlogContent.' . $options['sort']
+				),
+				'cache' => false
+			)
+		);
+
+		$contents = array();
+		if( count($datas) === 1 ){
+			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
+			unset($datas['BlogContent']['eye_catch_size']);
+			$contents = $datas['BlogContent'];
+		} else {
+			foreach($datas as $val){
+				$val = $BlogContent->constructEyeCatchSize($val);
+				unset($val['BlogContent']['eye_catch_size']);
+				$contents[] = $val['BlogContent'];
+			}
+		}
+
+		return $contents;
+	}
+
+/**
+ * URLのパラメータ情報を返す
+ * 主なreturnデータは
+ * http://basercms.net/news/index/example/test?name=value の場合
+ * 'plugin' => blog (利用しているプラグイン)
+ * 'pass' => [0] => 'example'
+ *           [1] => 'test'
+ * 'isAjax' => (boolean)false
+ * 'query' => 'name' => 'value'
+ * 'url' => 'news/index/fuga/hoge'
+ * 'here' => '/news/index/fuga/hoge'
+ *
+ * @return array URLのパラメータ情報の配列
+ */
+	public function getParams() {
+		$params = $this->request->params ;
+		$params['query'] = $this->request->query;
+		$params['url'] = $this->request->url;
+		$params['here'] = $this->request->here;
+		unset($params['named']);
+		unset($params['controller']);
+		unset($params['action']);
+		unset($params['models']);
+		unset($params['_Token']);
+		unset($params['paging']);
+		return $params;
 	}
 
 }

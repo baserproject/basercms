@@ -108,10 +108,9 @@ class BcManagerComponentTest extends BaserTestCase {
 			'encoding' => 'utf8',
 		);
 
-		// protectedなオブジェクトの変数にアクセスするため、配列にキャストする
-		$result = (array)  $this->BcManager->connectDb($config, $name);
-		$sources = $result["\0*\0_sources"];
-		$prefix = $result['config']['prefix'];
+		$result = $this->BcManager->connectDb($config, $name);
+		$sources = $result->listSources();
+		$prefix = $result->config['prefix'];
 
 		$this->assertContains($expected, $sources, 'datasourceを正しく取得できません');
 
@@ -233,38 +232,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		);
 		$this->Plugin->delete(4);
 		unset($this->Plugin);
-		$this->assertEquals($expected, $plugin, 'プラグインのステータスを正しく更新できません');	
-
-
-		// =====================
-		// 登録日更新チェック
-		// =====================
-		$this->BlogPost = ClassRegistry::init('BlogPost');
-		$post = $this->BlogPost->find('first', array(
-				'fields' => array('posts_date'),
-				'recursive' => -1,
-			)
-		);
-		// テストを行うタイミングで時間がずれるので、年月日のみを抜き出す
-		$postDate = new DateTime($post['BlogPost']['posts_date']);
-		$postDate = $postDate->format('Y-m-d');
-		$today = date('Y-m-d');
-		$this->assertEquals($today, $postDate, 'ブログの登録日を更新できません');
-
-
-		// ========================================
-		// baserCMS公式サイトのフィードURLを更新チェック
-		// ========================================
-		$this->FeedDetail = ClassRegistry::init('FeedDetail');
-		$feed = $this->FeedDetail->find('first', array(
-				'recursive' => -1
-			)
-		);
-		unset($this->FeedDetail);
-		$expected = 'http://basercms.net/news/index.rss?site=' . siteUrl();
-		$this->assertEquals($expected, $feed['FeedDetail']['url'], 'baserCMS公式サイトのフィードURLを正しく更新できません');
-
-
+		$this->assertEquals($expected, $plugin, 'プラグインのステータスを正しく更新できません');
 		$this->assertTrue($result, 'データベースのデータに初期更新に失敗しました');
 	}
 
@@ -410,20 +378,6 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 /**
- * データベースを初期化する
- * 
- * @param type $reset
- * @param type $dbConfig
- * @param type $dbDataPattern
- * @return type
- * @access public 
- */
-	public function testInitDb() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-	}
-
-/**
  * データベースを構築する
  * 
  * @param array $dbConfig
@@ -451,12 +405,14 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testGetAllDefaultDataPatterns() {
 		
 		$result = $this->BcManager->getAllDefaultDataPatterns();
-		$expected = array(
+		$expecteds = array(
 			'core.default' => 'コア ( default )',
-			'm-single.default' => 'M-SinglePage ( default )',
+			'bccolumn.default' => 'bcColumn ( default )',
 			'nada-icons.default' => 'nada icons ( default )',
 		);
-		$this->assertEquals($expected, $result, '全ての初期データセットのリストを正しく取得できません');
+		foreach($expecteds as $expected) {
+			$this->assertContains($expected, $result, '全ての初期データセットのリストを正しく取得できません');
+		}
 
 	}
 
@@ -590,9 +546,9 @@ class BcManagerComponentTest extends BaserTestCase {
  * @dataProvider _getDataSourceDataProvider
  */
 	public function test_getDataSource($dbConfigKeyName, $expected) {
-		$result = (array) $this->BcManager->_getDataSource($dbConfigKeyName);
-		$sources = $result["\0*\0_sources"];
-		
+
+		$result = $this->BcManager->_getDataSource($dbConfigKeyName);
+		$sources = $result->listSources();
 		$this->assertContains($expected, $sources, 'データソースを正しく取得できません');
 	}
 
@@ -619,7 +575,7 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		$this->BcManager->deployTheme($theme);
 
-		if ($theme != 'm-single') {
+		if ($theme != 'bccolumn') {
 			$this->assertFileExists($targetPath, 'テーマを配置できません');
 		
 		} else {
@@ -634,7 +590,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		return array(
 			array(null),
 			array('nada-icons'),
-			array('m-single'),
+			array('bccolumn'),
 		);
 	}
 

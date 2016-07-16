@@ -98,7 +98,11 @@ class PluginsController extends AppController {
 
 		$zippedName = $this->request->data['Plugin']['file']['name'];
 		move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
-		exec('unzip -o ' . TMP . $zippedName . ' -d ' . APP . 'Plugin' . DS, $return);
+
+		$format = 'unzip -o ' . TMP . '%s' . ' -d ' . APP . 'Plugin' . DS;
+		$command = sprintf($format, escapeshellarg($zippedName));
+
+		exec($command, $return);
 
 		//ZIPファイル展開失敗
 		if (empty($return[2])) {
@@ -421,11 +425,6 @@ class PluginsController extends AppController {
 				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
 				switch ($data['Plugin']['permission']) {
 					case 1:
-						if ($permission) {
-							$Permission->delete($permission['Permission']['id']);
-						}
-						break;
-					case 2:
 						if (!$permission) {
 							$Permission->create(array(
 								'name'			=> $data['Plugin']['title'] . '管理',
@@ -437,6 +436,11 @@ class PluginsController extends AppController {
 								'sort'			=> $Permission->getMax('sort', array('user_group_id' => $userGroup['UserGroup']['id'])) + 1
 							));
 							$Permission->save();
+						}
+						break;
+					case 2:
+						if ($permission) {
+							$Permission->delete($permission['Permission']['id']);
 						}
 						break;
 				}

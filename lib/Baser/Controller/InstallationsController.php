@@ -317,8 +317,10 @@ class InstallationsController extends AppController {
 			// 固定ページでプラグインを利用している場合あり、プラグインがロードされていないとエラーになる為、
 			// リダイレクト前にコアプラグインの有効化とテーマ保有のプラグインのインストールを完了させておく
 			// =================================================================
+			$dbConfig = $this->_readDbSetting(Cache::read('Installation', 'default'));
+
 			// データベースのデータを初期設定に更新
-			$this->BcManager->executeDefaultUpdates($this->_readDbSetting(Cache::read('Installation', 'default')));
+			$this->BcManager->executeDefaultUpdates($dbConfig);
 			
 			// テーマを配置する
 			$this->BcManager->deployTheme();
@@ -326,6 +328,9 @@ class InstallationsController extends AppController {
 			$dbDataPattern = $this->Session->read('Installation.dbDataPattern');
 			list($theme, $pattern) = explode('.', $dbDataPattern);
 			loadSiteConfig();
+
+			$this->BcManager->installCorePlugin($dbConfig, $dbDataPattern);
+
 			App::build(array('Plugin' => array_merge(array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS), App::path('Plugin'))));
 			$themesPlugins = BcUtil::getCurrentThemesPlugins();
 			if($themesPlugins) {

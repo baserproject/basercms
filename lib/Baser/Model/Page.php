@@ -127,8 +127,17 @@ class Page extends AppModel {
 				'message' => '説明文は255文字以内で入力してください。')
 		),
 		'contents' => array(
-			array('rule' => array('phpValidSyntax'))
-		)
+			array('rule' => array('phpValidSyntax'),
+				'message' => 'PHPの構文エラーが発生しました。'),
+			array('rule' => array('maxByte', 64000),
+				'message' => '本稿欄に保存できるデータ量を超えています。')
+		),
+		'draft' => array(
+			array('rule' => array('phpValidSyntax'),
+				'message' => 'PHPの構文エラーが発生しました。'),
+			array('rule' => array('maxByte', 64000),
+				'message' => '草稿欄に保存できるデータ量を超えています。')
+		),
 	);
 
 /**
@@ -422,7 +431,7 @@ class Page extends AppModel {
 		$_data['SearchIndex']['title'] = $data['title'];
 		$parameters = explode('/', preg_replace("/^\//", '', $data['url']));
 
-		$detail = $this->requestAction(array('admin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
+		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$_data['SearchIndex']['detail'] = $data['description'] . ' ' . $detail;
@@ -800,7 +809,11 @@ class Page extends AppModel {
 		if ($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
 			return strtotime($page['Page']['publish_end']) - time();
 		} else {
-			return Configure::read('BcCache.duration');
+			// #10680 Modify 2016/01/22 gondoh
+			// 3.1.0で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
+			$duration = Configure::read('BcCache.viewDuration');
+			if (empty($duration)) $duration = Configure::read('BcCache.duration');
+			return $duration;
 		}
 	}
 
@@ -1240,6 +1253,16 @@ class Page extends AppModel {
  */
 	public function phpValidSyntax($check) {
 		if(empty($check[key($check)])) {
+			return true;
+		}
+
+		if(!function_exists('exec')) {
+			return true;
+		}
+
+		// CL版 php がインストールされてない場合はシンタックスチェックできないので true を返す
+		exec('php --version 2>&1', $output, $exit);
+		if($exit !== 0) {
 			return true;
 		}
 

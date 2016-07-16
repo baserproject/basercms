@@ -381,9 +381,14 @@ class MailController extends MailAppController {
 			// データの入力チェックを行う
 			if ($this->Message->validates()) {
 
-				// validation OK
-				$result = $this->Message->save(null, false);
-				
+				// 送信データを保存するか確認
+				if ($this->dbDatas['mailContent']['MailContent']['save_info']) {
+					// validation OK
+					$result = $this->Message->save(null, false);
+				} else {
+					$result = $this->request->data;
+				}
+
 				if ($result) {
 					
 					$this->request->data = $result;
@@ -452,7 +457,9 @@ class MailController extends MailAppController {
 		// 2013/11/08 - gondoh mailヘッダインジェクション対策時に
 		// 確認画面にもhiddenタグ出力するよう変更したため削除
 
-		$this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
+		// >>> DELETE 2015/11/25 - gondoh view側で吸収するように変更
+		// $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
+		// <<<
 
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
@@ -531,8 +538,10 @@ class MailController extends MailAppController {
 				if ($mailField['MailField']['type'] == 'radio' || 
 					  $mailField['MailField']['type'] == 'select') {
 					$source = explode('|', $mailField['MailField']['source']);
-					$mailContent['subject_user'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_user']);
-					$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_admin']);
+					if(!empty($value)){
+						$mailContent['subject_user'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_user']);
+						$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $source[$value-1], $mailContent['subject_admin']);
+					}
 				} else {
 					$mailContent['subject_user'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_user']);
 					$mailContent['subject_admin'] = str_replace('{$' . $field . '}', $value, $mailContent['subject_admin']);
@@ -560,7 +569,8 @@ class MailController extends MailAppController {
 				'from'		=> $fromAdmin,
 				'template'	=> 'Mail.' . $mailContent['mail_template'],
 				'replyTo'		=> $fromAdmin,
-				'attachments'	=> $attachments
+				'attachments'	=> $attachments,
+				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
 		}
@@ -575,7 +585,8 @@ class MailController extends MailAppController {
 				'template' => 'Mail.' . $mailContent['mail_template'],
 				'bcc' => $mailContent['sender_2'],
 				'agentTemplate' => false,
-				'attachments'	=> $attachments
+				'attachments'	=> $attachments,
+				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
 			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
 		}
