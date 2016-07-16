@@ -6,7 +6,7 @@
  * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2014, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project

@@ -1,11 +1,9 @@
 <?php
 /**
- * Htmlヘルパーの拡張クラス
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -27,7 +25,6 @@ class BcHtmlHelper extends HtmlHelper {
  * Included helpers.
  *
  * @var array
- * @access public
  */
 	public $helpers = array('Js');
 

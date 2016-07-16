@@ -1,12 +1,9 @@
 <?php
-
 /**
- * よく使う項目　コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class FavoritesController extends AppController {
  * クラス名
  * 
  * @var string
- * @access public
  */
 	public $name = 'Favorites';
 
@@ -32,7 +28,6 @@ class FavoritesController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -76,7 +71,6 @@ class FavoritesController extends AppController {
  * 
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_edit($id) {
 		if (!$id) {

@@ -1,19 +1,13 @@
 <?php
-
 /**
- * フィードコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,14 +21,12 @@ class FeedController extends FeedAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Feed';
 
 /**
  * コンポーネント
  * @var array
- * @access public
  */
 	public $components = array('RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure');
 
@@ -42,7 +34,6 @@ class FeedController extends FeedAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
 
@@ -50,7 +41,6 @@ class FeedController extends FeedAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcText', 'Feed.Feed', 'BcArray');
 
@@ -58,7 +48,6 @@ class FeedController extends FeedAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		/* 認証設定 */
@@ -71,7 +60,6 @@ class FeedController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function index($id) {
 		
@@ -202,7 +190,6 @@ class FeedController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function mobile_index($id) {
 		$this->setAction('index', $id);
@@ -213,7 +200,6 @@ class FeedController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function smartphone_index($id) {
 		$this->setAction('index', $id);
@@ -224,7 +210,6 @@ class FeedController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function ajax($id) {
 		if (strpos($id, '.js') !== false) {
@@ -244,7 +229,6 @@ class FeedController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function smartphone_ajax($id) {
 		$this->setAction('ajax', $id);
@@ -256,7 +240,6 @@ class FeedController extends FeedAppController {
  * @param array $a
  * @param array $b
  * @return array
- * @access protected
  */
 	protected function _sortDescByTimestamp($a, $b) {
 		if ($a['timestamp'] == $b['timestamp']) {
@@ -272,7 +255,6 @@ class FeedController extends FeedAppController {
  * @param string $flag = ソート対象の配列要素
  * @param string $order = ソートの昇順・降順 デフォルトは昇順
  * @return array 並び替え後の配列
- * @access protected
  */
 	protected function _bsort(&$val, $flag = "", $order = "ASC") {
 		$count = count($val);

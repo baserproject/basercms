@@ -1,20 +1,15 @@
 <?php
-
 /**
- * 記事モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BlogAppModel', 'Blog.Model');
 
 /**
@@ -28,7 +23,6 @@ class BlogPost extends BlogAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogPost';
 
@@ -36,7 +30,6 @@ class BlogPost extends BlogAppModel {
  * 検索テーブルへの保存可否
  *
  * @var boolean
- * @access public
  */
 	public $searchIndexSaving = true;
 
@@ -44,7 +37,6 @@ class BlogPost extends BlogAppModel {
  * ビヘイビア
  *
  * @var array
- * @access public
  */
 	public $actsAs = array(
 		'BcSearchIndexManager',
@@ -65,7 +57,6 @@ class BlogPost extends BlogAppModel {
  * belongsTo
  *
  * @var array
- * @access public
  */
 	public $belongsTo = array(
 		'BlogCategory' => array(
@@ -83,7 +74,6 @@ class BlogPost extends BlogAppModel {
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array(
 		'BlogComment' => array(
@@ -99,7 +89,6 @@ class BlogPost extends BlogAppModel {
  * HABTM
  * 
  * @var array
- * @access public
  */
 	public $hasAndBelongsToMany = array(
 		'BlogTag' => array(
@@ -119,7 +108,6 @@ class BlogPost extends BlogAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -193,7 +181,6 @@ class BlogPost extends BlogAppModel {
  * 初期値を取得する
  *
  * @return array $authUser 初期値データ
- * @access public
  */
 	public function getDefaultValue($authUser) {
 		$data[$this->name]['user_id'] = $authUser['id'];
@@ -208,7 +195,6 @@ class BlogPost extends BlogAppModel {
  * @param int $blogContentId ブログコンテンツID
  * @param array $options オプション
  * @return array 月別リストデータ
- * @access public
  */
 	public function getPostedDates($blogContentId, $options) {
 		$options = array_merge(array(
@@ -308,7 +294,6 @@ class BlogPost extends BlogAppModel {
  * @param int $year 年
  * @param int $month 月
  * @return array
- * @access public
  */
 	public function getEntryDates($blogContentId, $year, $month) {
 		$entryDates = $this->find('all', array(
@@ -385,7 +370,6 @@ class BlogPost extends BlogAppModel {
  * @param int $year
  * @param int $month
  * @return string
- * @access private
  */
 	protected function _getEntryDatesConditions($blogContentId, $year, $month) {
 		$dbConfig = new DATABASE_CONFIG();
@@ -511,7 +495,6 @@ class BlogPost extends BlogAppModel {
  *
  * @param array データリスト
  * @return boolean 公開状態
- * @access public
  */
 	public function allowPublish($data) {
 		if (isset($data['BlogPost'])) {
@@ -558,7 +541,6 @@ class BlogPost extends BlogAppModel {
  *
  * @param array $options
  * @return array
- * @access public
  */
 	public function getPublishes($options) {
 		if (!empty($options['conditions'])) {
@@ -577,7 +559,6 @@ class BlogPost extends BlogAppModel {
  *
  * @param boolean $created
  * @return boolean
- * @access public
  */
 	public function afterSave($created, $options = array()) {
 		// 検索用テーブルへの登録・削除
@@ -599,7 +580,6 @@ class BlogPost extends BlogAppModel {
  *
  * @param array $data
  * @return array
- * @access public
  */
 	public function createSearchIndex($data) {
 		if (isset($data['BlogPost'])) {
@@ -630,7 +610,6 @@ class BlogPost extends BlogAppModel {
  * beforeDelete
  *
  * @return boolean
- * @access public
  */
 	public function beforeDelete($cascade = true) {
 		return $this->deleteSearchIndex($this->id);

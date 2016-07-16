@@ -1,19 +1,13 @@
 <?php
-
 /**
- * メールフィールドコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,7 +21,6 @@ class MailFieldsController extends MailAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailFields';
 
@@ -35,7 +28,6 @@ class MailFieldsController extends MailAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Mail.MailField', 'Mail.MailContent', 'Mail.Message');
 
@@ -43,7 +35,6 @@ class MailFieldsController extends MailAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcHtml', 'BcTime', 'BcForm', 'BcText', 'BcCsv');
 
@@ -51,7 +42,6 @@ class MailFieldsController extends MailAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -59,7 +49,6 @@ class MailFieldsController extends MailAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
@@ -69,7 +58,6 @@ class MailFieldsController extends MailAppController {
  * サブメニューエレメント
  *
  * @var string
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -77,7 +65,6 @@ class MailFieldsController extends MailAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -90,7 +77,6 @@ class MailFieldsController extends MailAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -102,7 +88,6 @@ class MailFieldsController extends MailAppController {
  *
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_index($mailContentId) {
 		if (!$mailContentId || !$this->mailContent) {
@@ -131,7 +116,6 @@ class MailFieldsController extends MailAppController {
  * 一覧の表示用データをセットする
  * 
  * @return void
- * @access protected
  */
 	protected function _setAdminIndexViewData() {
 		/* セッション処理 */
@@ -152,7 +136,6 @@ class MailFieldsController extends MailAppController {
  *
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_add($mailContentId) {
 		if (!$mailContentId || !$this->mailContent) {
@@ -202,7 +185,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_edit($mailContentId, $id) {
 		if (!$id && empty($this->request->data)) {
@@ -255,7 +237,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($mailContentId, $id = null) {
 		/* 除外処理 */
@@ -283,7 +264,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_delete($mailContentId, $id = null) {
 		/* 除外処理 */
@@ -314,7 +294,6 @@ class MailFieldsController extends MailAppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -339,7 +318,6 @@ class MailFieldsController extends MailAppController {
  * フォームの初期値を取得する
  *
  * @return string
- * @access protected
  */
 	protected function _getDefaultValue() {
 		$data['MailField']['type'] = 'text';
@@ -354,7 +332,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $Id
  * @return void
- * @access protected
  * @deprecated admin_ajax_copy に移行
  */
 	public function admin_copy($mailContentId, $id) {
@@ -403,7 +380,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $Id
  * @return void
- * @access protected
  */
 	public function admin_ajax_copy($mailContentId, $id) {
 		/* 除外処理 */
@@ -425,7 +401,6 @@ class MailFieldsController extends MailAppController {
  * 
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_download_csv($mailContentId) {
 		if (!$mailContentId || !$this->mailContent) {
@@ -472,7 +447,6 @@ class MailFieldsController extends MailAppController {
  *
  * @param array $mailContentId
  * @return string
- * @access protected
  */
 	protected function _createAdminIndexConditions($mailContentId) {
 		$conditions = array('MailField.mail_content_id' => $mailContentId);
@@ -486,7 +460,6 @@ class MailFieldsController extends MailAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_unpublish($mailContentId, $id) {
 		if (!$id) {
@@ -507,7 +480,6 @@ class MailFieldsController extends MailAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_publish($mailContentId, $id) {
 		if (!$id) {

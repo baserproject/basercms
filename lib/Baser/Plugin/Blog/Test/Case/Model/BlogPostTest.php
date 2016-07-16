@@ -1,16 +1,15 @@
 <?php
-
 /**
- * test for BlogPost
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS BlogPosts Community <http://sites.google.com/site/baserBlogPosts/>
- * @package         Feed.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS BlogPosts Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.1.0-beta
- * @license         http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Blog.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BlogPost', 'Blog.Model');
 
 class BlogPostTest extends BaserTestCase {
@@ -379,7 +378,6 @@ class BlogPostTest extends BaserTestCase {
  *
  * @param array $data
  * @return array
- * @access public
  */
 	public function testCreateContent() {
 		$data = array(

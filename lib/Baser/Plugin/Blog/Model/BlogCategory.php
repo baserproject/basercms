@@ -1,20 +1,15 @@
 <?php
-
 /**
- * ブログカテゴリモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BlogAppModel', 'Blog.Model');
 
 /**
@@ -28,7 +23,6 @@ class BlogCategory extends BlogAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogCategory';
 
@@ -36,7 +30,6 @@ class BlogCategory extends BlogAppModel {
  * バリデーション設定
  * 
  * @var array
- * @access public
  */
 	public $validationParams = array();
 
@@ -44,7 +37,6 @@ class BlogCategory extends BlogAppModel {
  * actsAs
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('Tree', 'BcCache');
 
@@ -52,7 +44,6 @@ class BlogCategory extends BlogAppModel {
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array('BlogPost' =>
 		array('className' => 'Blog.BlogPost',
@@ -67,7 +58,6 @@ class BlogCategory extends BlogAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -96,7 +86,6 @@ class BlogCategory extends BlogAppModel {
  * @param string $field フィールド名
  * @param array $option オプション
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field, $options = array()) {
 		switch ($field) {
@@ -160,7 +149,6 @@ class BlogCategory extends BlogAppModel {
  * 
  * @param array $check
  * @return boolean
- * @access public
  */
 	public function duplicateBlogCategory($check) {
 		$conditions = array('BlogCategory.' . key($check) => $check[key($check)],
@@ -181,7 +169,6 @@ class BlogCategory extends BlogAppModel {
  * 
  * @param boolean $cascade
  * @return boolean
- * @access public
  */
 	public function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
@@ -209,7 +196,6 @@ class BlogCategory extends BlogAppModel {
  * @param int $blogContentId
  * @param array $options
  * @return array
- * @access public
  */
 	public function getCategoryList($blogContentId, $options) {
 		$options = array_merge(array(

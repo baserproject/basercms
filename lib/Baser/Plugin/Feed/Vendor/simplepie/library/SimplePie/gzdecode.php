@@ -55,8 +55,7 @@ class SimplePie_gzdecode
 	/**
 	 * Compressed data
 	 *
-	 * @access private
-	 * @var string
+		 * @var string
 	 * @see gzdecode::$data
 	 */
 	var $compressed_data;
@@ -64,40 +63,35 @@ class SimplePie_gzdecode
 	/**
 	 * Size of compressed data
 	 *
-	 * @access private
-	 * @var int
+		 * @var int
 	 */
 	var $compressed_size;
 
 	/**
 	 * Minimum size of a valid gzip string
 	 *
-	 * @access private
-	 * @var int
+		 * @var int
 	 */
 	var $min_compressed_size = 18;
 
 	/**
 	 * Current position of pointer
 	 *
-	 * @access private
-	 * @var int
+		 * @var int
 	 */
 	var $position = 0;
 
 	/**
 	 * Flags (FLG)
 	 *
-	 * @access private
-	 * @var int
+		 * @var int
 	 */
 	var $flags;
 
 	/**
 	 * Uncompressed data
 	 *
-	 * @access public
-	 * @see gzdecode::$compressed_data
+		 * @see gzdecode::$compressed_data
 	 * @var string
 	 */
 	var $data;
@@ -105,32 +99,28 @@ class SimplePie_gzdecode
 	/**
 	 * Modified time
 	 *
-	 * @access public
-	 * @var int
+		 * @var int
 	 */
 	var $MTIME;
 
 	/**
 	 * Extra Flags
 	 *
-	 * @access public
-	 * @var int
+		 * @var int
 	 */
 	var $XFL;
 
 	/**
 	 * Operating System
 	 *
-	 * @access public
-	 * @var int
+		 * @var int
 	 */
 	var $OS;
 
 	/**
 	 * Subfield ID 1
 	 *
-	 * @access public
-	 * @see gzdecode::$extra_field
+		 * @see gzdecode::$extra_field
 	 * @see gzdecode::$SI2
 	 * @var string
 	 */
@@ -139,8 +129,7 @@ class SimplePie_gzdecode
 	/**
 	 * Subfield ID 2
 	 *
-	 * @access public
-	 * @see gzdecode::$extra_field
+		 * @see gzdecode::$extra_field
 	 * @see gzdecode::$SI1
 	 * @var string
 	 */
@@ -149,8 +138,7 @@ class SimplePie_gzdecode
 	/**
 	 * Extra field content
 	 *
-	 * @access public
-	 * @see gzdecode::$SI1
+		 * @see gzdecode::$SI1
 	 * @see gzdecode::$SI2
 	 * @var string
 	 */
@@ -159,16 +147,14 @@ class SimplePie_gzdecode
 	/**
 	 * Original filename
 	 *
-	 * @access public
-	 * @var string
+		 * @var string
 	 */
 	var $filename;
 
 	/**
 	 * Human readable comment
 	 *
-	 * @access public
-	 * @var string
+		 * @var string
 	 */
 	var $comment;
 

@@ -3,7 +3,7 @@
  * test for BcTextHelper
  *
  * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
@@ -31,7 +31,6 @@ class Contact extends CakeTestModel {
  * ビヘイビア
  *
  * @var array
- * @access public
  */
 	public $actsAs = array(
 		'BcSearchIndexManager',
@@ -174,7 +173,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @param array $model
  * @param array $options
  * @return string
- * @access public
  */
 	public function testCreate() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -330,7 +328,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
- * @access public
  */
 	public function testGetControlSource() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -344,7 +341,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @param mixed $fields
  * @param mixed $order
  * @return mixed リストまたは、false
- * @access public
  */
 	public function testGenerateList() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

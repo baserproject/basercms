@@ -112,7 +112,6 @@ class ToolTest extends BaserTestCase {
  * @param array $data
  * @param string $tmpPath
  * @return boolean
- * @access public
  */
 	public function testLoadSchemaFile() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

@@ -1,19 +1,13 @@
 <?php
-
 /**
- * お問い合わせメールフォーム用コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,7 +21,6 @@ class MailController extends MailAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Mail';
 
@@ -35,7 +28,6 @@ class MailController extends MailAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Mail.Message', 'Mail.MailContent', 'Mail.MailField', 'Mail.MailConfig');
 
@@ -43,7 +35,6 @@ class MailController extends MailAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array(
 		'BcFreeze', 'BcArray', 'BcTime', 'Mail.Mailform', 'Mail.Maildata', 'Mail.Mailfield', 'Mail.Mail', 'Js'
@@ -53,7 +44,6 @@ class MailController extends MailAppController {
  * Array of components a controller will use
  *
  * @var array
- * @access public
  */
 	// PHP4の場合、メールフォームの部品が別エレメントになった場合、利用するヘルパが別インスタンスとなってしまう様子。
 	// そのためSecurityコンポーネントが利用できない
@@ -68,7 +58,6 @@ class MailController extends MailAppController {
  * CSS
  *
  * @var array
- * @access public
  */
 	public $css = array('mail/form');
 
@@ -76,7 +65,6 @@ class MailController extends MailAppController {
  * ページタイトル
  *
  * @var string
- * @access public
  */
 	public $pageTitle = 'お問い合わせ';
 
@@ -84,7 +72,6 @@ class MailController extends MailAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -92,7 +79,6 @@ class MailController extends MailAppController {
  * データベースデータ
  *
  * @var array
- * @access public
  */
 	public $dbDatas = null;
 
@@ -100,7 +86,6 @@ class MailController extends MailAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array();
 
@@ -108,7 +93,6 @@ class MailController extends MailAppController {
  * beforeFilter.
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		/* 認証設定 */
@@ -175,7 +159,6 @@ class MailController extends MailAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -189,7 +172,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function index($id = null) {
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
@@ -235,7 +217,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function mobile_index($id = null) {
 		$this->setAction('index', $id);
@@ -246,7 +227,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function smartphone_index($id = null) {
 		$this->setAction('index', $id);
@@ -257,7 +237,6 @@ class MailController extends MailAppController {
  *
  * @param mixed	mail_content_id
  * @return void
- * @access public
  */
 	public function confirm($id = null) {
 
@@ -317,7 +296,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function mobile_confirm($id = null) {
 		$this->setAction('confirm', $id);
@@ -328,7 +306,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function smartphone_confirm($id = null) {
 		$this->setAction('confirm', $id);
@@ -339,7 +316,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function submit($id = null) {
 		if (!$this->MailContent->isPublish($this->dbDatas['mailContent']['MailContent']['status'], $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
@@ -442,7 +418,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function _back($id) {
 		$this->set('freezed', false);
@@ -470,7 +445,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function mobile_submit($id = null) {
 		$this->setAction('submit', $id);
@@ -481,7 +455,6 @@ class MailController extends MailAppController {
  *
  * @param mixed mail_content_id
  * @return void
- * @access public
  */
 	public function smartphone_submit($id = null) {
 		$this->setAction('submit', $id);
@@ -491,7 +464,6 @@ class MailController extends MailAppController {
  * メール送信する
  * 
  * @return void
- * @access protected
  */
 	protected function _sendEmail() {
 		$mailConfig = $this->dbDatas['mailConfig']['MailConfig'];
@@ -596,7 +568,6 @@ class MailController extends MailAppController {
  * 認証用のキャプチャ画像を表示する
  * 
  * @return void
- * @access public
  */
 	public function captcha() {
 		$this->BcCaptcha->render();
@@ -607,7 +578,6 @@ class MailController extends MailAppController {
  * [SMARTPHONE] 認証用のキャプチャ画像を表示する
  * 
  * @return void
- * @access public
  */
 	public function smartphone_captcha() {
 		$this->BcCaptcha->render();
@@ -618,19 +588,17 @@ class MailController extends MailAppController {
  * [ajax] Tokenのkeyを取得
  *
  * @return void
- * @access public
  */
 	public function ajax_get_token() {
 		echo $this->request->params['_Token']['key'];
 		exit();
 	}
 
-	/**
-	 * [ajax] Tokenのkeyを取得
-	 *
-	 * @return void
-	 * @access public
-	 */
+/**
+ * [ajax] Tokenのkeyを取得
+ *
+ * @return void
+ */
 	public function smartphone_ajax_get_token() {
 		$this->setAction('ajax_get_token');
 	}

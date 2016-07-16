@@ -3,7 +3,7 @@
  * Simplezip
  * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
@@ -172,8 +172,6 @@ class Simplezip {
  * @param  string   file contents
  * @param  string   name of the file in the archive (may contains the path)
  * @param  integer  the current timestamp
- *
- * @access public
  */
     function unix2DosTime($unixtime = 0) {
         $timearray = ($unixtime == 0) ? getdate() : getdate($unixtime);

@@ -1,12 +1,9 @@
 <?php
-
 /**
- * ウィジェットエリアコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -23,28 +20,24 @@ class WidgetAreasController extends AppController {
 /**
  * クラス名
  * @var string
- * @access public
  */
 	public $name = 'WidgetAreas';
 
 /**
  * コンポーネント
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler');
 
 /**
  * ヘルパー
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
 /**
  * モデル
  * @var array
- * @access public
  */
 	public $uses = array('WidgetArea', 'Plugin');
 
@@ -52,7 +45,6 @@ class WidgetAreasController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'ウィジェットエリア管理', 'url' => array('controller' => 'widget_areas', 'action' => 'index'))
@@ -62,7 +54,6 @@ class WidgetAreasController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array('widget_areas');
 
@@ -70,7 +61,6 @@ class WidgetAreasController extends AppController {
  * beforeFilter
  * 
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		$this->BcAuth->allow('get_widgets');
@@ -80,7 +70,6 @@ class WidgetAreasController extends AppController {
 /**
  * 一覧
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->pageTitle = 'ウィジェットエリア一覧';
@@ -103,7 +92,6 @@ class WidgetAreasController extends AppController {
  * 新規登録
  * 
  * @return void
- * @access public
  */
 	public function admin_add() {
 		$this->pageTitle = '新規ウィジェットエリア登録';
@@ -125,7 +113,6 @@ class WidgetAreasController extends AppController {
  * 編集
  * 
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		$this->pageTitle = 'ウィジェットエリア編集';
@@ -184,7 +171,6 @@ class WidgetAreasController extends AppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 		/* 除外処理 */
@@ -209,7 +195,6 @@ class WidgetAreasController extends AppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -229,7 +214,6 @@ class WidgetAreasController extends AppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
 		/* 除外処理 */
@@ -255,7 +239,6 @@ class WidgetAreasController extends AppController {
  * [AJAX] タイトル更新
  * 
  * @return boolean
- * @access public
  */
 	public function admin_update_title() {
 		if (!$this->request->data) {
@@ -274,7 +257,6 @@ class WidgetAreasController extends AppController {
  * 
  * @param int $widgetAreaId
  * @return boolean
- * @access public
  */
 	public function admin_update_widget($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
@@ -321,7 +303,6 @@ class WidgetAreasController extends AppController {
  * 並び順を更新する
  * @param int $widgetAreaId
  * @return boolean
- * @access public
  */
 	public function admin_update_sort($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
@@ -355,7 +336,6 @@ class WidgetAreasController extends AppController {
  * @param int $widgetAreaId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_del_widget($widgetAreaId, $id) {
 		$widgetArea = $this->WidgetArea->read(null, $widgetAreaId);
@@ -390,7 +370,6 @@ class WidgetAreasController extends AppController {
  * 
  * @param int $id
  * @return array $widgets
- * @access public
  * @deprecated BcWidgetAreaHelper::showWidgets() に移行
  */
 	public function get_widgets($id) {

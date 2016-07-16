@@ -1,19 +1,15 @@
 <?php
 /**
- * Controller 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('ConnectionManager', 'Model');
 App::uses('AppView', 'View');
 App::uses('BcAuthConfigureComponent', 'Controller/Component');
@@ -68,7 +64,6 @@ class BcAppController extends Controller {
  * モデル
  *
  * @var mixed
- * @access protected
  * TODO メニュー管理を除外後、Menuを除外する
  */
 	public $uses = array('User', 'Menu', 'Favorite');
@@ -93,7 +88,6 @@ class BcAppController extends Controller {
  * サブメニューエレメント
  *
  * @var string
- * @access public
  */
 	public $subMenuElements = '';
 
@@ -101,7 +95,6 @@ class BcAppController extends Controller {
  * パンくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array();
 
@@ -109,7 +102,6 @@ class BcAppController extends Controller {
  * 検索ボックス
  *
  * @var string
- * @access public
  */
 	public $search = '';
 
@@ -117,7 +109,6 @@ class BcAppController extends Controller {
  * ヘルプ
  *
  * @var string
- * @access public
  */
 	public $help = '';
 
@@ -125,7 +116,6 @@ class BcAppController extends Controller {
  * ページ説明文
  *
  * @var string
- * @access public
  */
 	public $siteDescription = '';
 
@@ -133,7 +123,6 @@ class BcAppController extends Controller {
  * コンテンツタイトル
  *
  * @var string
- * @access public
  */
 	public $contentsTitle = '';
 
@@ -141,7 +130,6 @@ class BcAppController extends Controller {
  * サイトコンフィグデータ
  *
  * @var array
- * @access public
  */
 	public $siteConfigs = array();
 
@@ -149,7 +137,6 @@ class BcAppController extends Controller {
  * プレビューフラグ
  *
  * @var bool
- * @access public
  */
 	public $preview = false;
 
@@ -165,7 +152,6 @@ class BcAppController extends Controller {
  *
  * @param CakeRequest $request リクエストオブジェクト
  * @param CakeResponse $response レスポンスオブジェクト
- * @access private
  */
 	public function __construct($request = null, $response = null) {
 		parent::__construct($request, $response);
@@ -447,7 +433,6 @@ class BcAppController extends Controller {
  * テーマをセットする
  *
  * @return void
- * @access public
  */
 	public function setTheme() {
 		$theme = '';
@@ -473,7 +458,6 @@ class BcAppController extends Controller {
  *
  * @param string $var
  * @return bool
- * @access public
  */
 	protected function _adminSslMethods($var) {
 		return preg_match('/^admin_/', $var);
@@ -536,7 +520,6 @@ class BcAppController extends Controller {
  * 初回アクセスメッセージ用のフラグを更新する
  *
  * @return void
- * @access private
  */
 	private function __updateFirstAccess() {
 		// 初回アクセスメッセージ表示設定
@@ -623,7 +606,6 @@ class BcAppController extends Controller {
  * @param array $data 変換前データ
  * @param string $outenc 変換後の文字コード
  * @return array 変換後データ
- * @access protected
  */
 	protected function _autoConvertEncodingByArray($data, $outenc) {
 		foreach ($data as $key => $value) {
@@ -698,7 +680,6 @@ class BcAppController extends Controller {
  *
  * @param string $plugin プラグイン名
  * @return string Baserバージョン
- * @access public
  */
 	public function getBaserVersion($plugin = '') {
 		return getVersion($plugin);
@@ -709,7 +690,6 @@ class BcAppController extends Controller {
  *
  * @param string $theme テーマ名
  * @return string
- * @access public
  */
 	public function getThemeVersion($theme) {
 		$path = WWW_ROOT . 'theme' . DS . $theme . DS . 'VERSION.txt';
@@ -731,7 +711,6 @@ class BcAppController extends Controller {
  *
  * @param string $plugin プラグイン名
  * @return string
- * @access public
  */
 	public function getSiteVersion($plugin = '') {
 		if (!$plugin) {
@@ -1209,7 +1188,6 @@ class BcAppController extends Controller {
  * @param string $fieldName フィールド名
  * @param mixed $value 値
  * @return array
- * @access public
  */
 	public function convertBetweenCondition($fieldName, $value) {
 		if (strpos($value, '-') === false) {
@@ -1231,7 +1209,6 @@ class BcAppController extends Controller {
  *
  * @param int $len 文字列の長さ
  * @return string パスワード
- * @access public
  */
 	public function generatePassword($len = 8) {
 		srand((double)microtime() * 1000000);
@@ -1271,7 +1248,6 @@ class BcAppController extends Controller {
  * @param string $default Default URL to use if HTTP_REFERER cannot be read from headers
  * @param bool $local If true, restrict referring URLs to local server
  * @return string Referring URL
- * @access public
  * @link http://book.cakephp.org/view/430/referer
  */
 	public function referer($default = null, $local = false) {
@@ -1304,7 +1280,6 @@ class BcAppController extends Controller {
  * 現在のユーザーのドキュメントルートの書き込み権限確認
  *
  * @return bool
- * @access public
  */
 	public function checkRootEditable() {
 		if (!isset($this->BcAuth)) {
@@ -1347,7 +1322,6 @@ class BcAppController extends Controller {
  * @param int $status Optional HTTP status code (eg: 404)
  * @param bool $exit If true, exit() will be called after the redirect
  * @return mixed void if $exit = false. Terminates script if $exit = true
- * @access public
  */
 	public function redirect($url, $status = null, $exit = true) {
 		$url = addSessionId($url, true);
@@ -1370,7 +1344,6 @@ class BcAppController extends Controller {
  * @param array $extra if array includes the key "return" it sets the AutoRender to true.
  * @return mixed Boolean true or false on success/failure, or contents
  *               of rendered action if 'return' is set in $extra.
- * @access public
  */
 	public function requestAction($url, $extra = array()) {
 		// >>> CUSTOMIZE ADD 2011/12/16 ryuring
@@ -1412,7 +1385,6 @@ class BcAppController extends Controller {
  * 処理結果として成功の場合は、バッチ処理名を出力する
  *
  * @return void
- * @access public
  */
 	public function admin_ajax_batch() {
 		$method = $this->request->data['ListTool']['batch'];
@@ -1456,7 +1428,6 @@ class BcAppController extends Controller {
  *
  * @param string $action The new action to be redirected to
  * @return mixed Returns the return value of the called action
- * @access public
  */
 	public function setAction($action) {
 		// CUSTOMIZE ADD 2012/04/22 ryuring
@@ -1483,7 +1454,6 @@ class BcAppController extends Controller {
  * 管理画面では読み込まない
  *
  * @return void
- * @access public
  */
 	public function setThemeHelpers() {
 		if (!empty($this->request->params['admin'])) {
@@ -1507,7 +1477,6 @@ class BcAppController extends Controller {
  * @param int $errorNo エラーのステータスコード
  * @param mixed $message エラーメッセージ
  * @return void
- * @access public
  */
 	public function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 ' . $errorNo);

@@ -64,7 +64,6 @@ class BcGmapsComponentTest extends BaserTestCase {
  * Construct
  * 
  * @return void
- * @access private
  */
 	public function test__construct() {
 		$this->BcGmaps->__construct();
@@ -81,7 +80,6 @@ class BcGmapsComponentTest extends BaserTestCase {
  * @param string $city
  * @param string $state
  * @return boolean
- * @access public
  */
 	public function testGetInfoLocation() {
 

@@ -1,11 +1,9 @@
 <?php
 /**
- * Textヘルパー拡張
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -41,7 +39,6 @@ class BcTextHelper extends TextHelper {
  *
  * @param boolean $value
  * @return string ○ または ― 
- * @access public
  */
 	public function booleanMark($value) {
 		if ($value) {
@@ -55,7 +52,6 @@ class BcTextHelper extends TextHelper {
  * boolean型用のリストを ○ ― マークで出力
  *
  * @return array マークリスト（ - ○ ）
- * @access public
  */
 	public function booleanMarkList() {
 		return array(0 => "―", 1 => "○");
@@ -65,7 +61,6 @@ class BcTextHelper extends TextHelper {
  * boolean型用のリストを「有」「無」で出力
  *
  * @return array 「有」「無」リスト
- * @access public
  */
 	public function booleanExistsList() {
 		return array(0 => "無", 1 => "有");
@@ -75,7 +70,6 @@ class BcTextHelper extends TextHelper {
  * boolean型用のリストを可、不可で出力
  *
  * @return array 可/不可リスト
- * @access public
  */
 	public function booleanAllowList() {
 		return array(0 => "不可", 1 => "可");
@@ -86,7 +80,6 @@ class BcTextHelper extends TextHelper {
  *
  * @param string $doText Do文字列
  * @return array [〜する/〜しない]形式のリスト
- * @access public
  */
 	public function booleanDoList($doText = null) {
 		return array(0 => $doText . "しない", 1 => $doText . "する");
@@ -98,7 +91,6 @@ class BcTextHelper extends TextHelper {
  * @param boolean $value 値
  * @param string $doText Do文字列
  * @return string
- * @access public
  */
 	public function booleanDo($value, $doText = null) {
 		$booleanDoList = $this->booleanDoList($doText);
@@ -109,7 +101,6 @@ class BcTextHelper extends TextHelper {
  * 都道府県のリストを出力
  *
  * @return array 都道府県リスト
- * @access public
  */
 	public function prefList($empty = '都道府県') {
 		$pref = array();
@@ -136,7 +127,6 @@ class BcTextHelper extends TextHelper {
  * 
  * @param array $value
  * @return string
- * @access public
  */
 	public function sex($value = 1) {
 		if (preg_match('/[1|2]/', $value)) {
@@ -186,7 +176,6 @@ class BcTextHelper extends TextHelper {
  * @param mixed $value
  * @param	mixed $noValue データが空の場合に返す値
  * @return mixed そのままのデータ/空の場合のデータ
- * @access public
  */
 	public function noValue($value, $noValue) {
 		if (!$value) {
@@ -216,7 +205,6 @@ class BcTextHelper extends TextHelper {
  *
  * @param boolean $value
  * @return string 有/無
- * @access public
  */
 	public function booleanExists($value) {
 		$list = $this->booleanExistsList();
@@ -237,7 +225,6 @@ class BcTextHelper extends TextHelper {
  * 	- `month` : 月
  * 	- `day` : 日
  * @return string 和暦（例）平成 27年 8月 11日
- * @access public
  */
 	public function dateTimeWareki($arrDate) {
 		if (!is_array($arrDate)) {
@@ -279,7 +266,6 @@ class BcTextHelper extends TextHelper {
  * 	- `month` : 月
  * 	- `day` : 日
  * @return string 日付（例）2015/8/11
- * @access public
  */
 	public function dateTime($arrDate) {
 		if (!isset($arrDate['year']) || !isset($arrDate['month']) || !isset($arrDate['day'])) {
@@ -312,7 +298,6 @@ class BcTextHelper extends TextHelper {
  * @param string $field フィールド名
  * @param mixed $value 値
  * @return string 表示用データ
- * @access public
  */
 	public function listValue($field, $value) {
 		$list = $this->BcForm->getControlSource($field);
@@ -329,7 +314,6 @@ class BcTextHelper extends TextHelper {
  * @param string $separator
  * @param string $value
  * @return array
- * @access public
  * @deprecated explode() と同じ仕様となってしまった為、非推奨
  */
 	public function toArray($separator, $value) {
@@ -371,7 +355,6 @@ class BcTextHelper extends TextHelper {
  * @param array $keys 結合対象のキーのリスト
  * @param array $array リスト
  * @return string
- * @access public
  */
 	public function arrayValues($glue, $keys, $array) {
 		$values = array();
@@ -394,7 +377,6 @@ class BcTextHelper extends TextHelper {
  * @param string $suffix
  * @param mixed $noValue
  * @return mixed
- * @access public
  */
 	public function age($birthday, $suffix = '歳', $noValue = '不明') {
 		if (!$birthday) {
@@ -418,7 +400,6 @@ class BcTextHelper extends TextHelper {
  * boolean型用のリストを有効、無効で出力
  *
  * @return array 可/不可リスト
- * @access public
  */
 	public function booleanStatusList() {
 		return array(0 => "無効", 1 => "有効");
@@ -429,7 +410,6 @@ class BcTextHelper extends TextHelper {
  *
  * @param boolean
  * @return string 無効/有効
- * @access public
  */
 	public function booleanStatus($value) {
 		$list = $this->booleanStatusList();

@@ -1,19 +1,15 @@
 <?php
 /**
- * GoogleMap コンポーネント
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * defines
- */
+
 define('MAPS_HOST', 'maps.googleapis.com');
 
 /**
@@ -27,7 +23,6 @@ class BcGmapsComponent extends Component {
  * Latitude
  *
  * @var double
- * @access protected
  */
 	protected $_latitude;
 
@@ -35,7 +30,6 @@ class BcGmapsComponent extends Component {
  * Longitude
  *
  * @var double
- * @access protected
  */
 	protected $_longitude;
 
@@ -43,7 +37,6 @@ class BcGmapsComponent extends Component {
  * Address
  *
  * @var string
- * @access protected
  */
 	protected $_address;
 
@@ -51,7 +44,6 @@ class BcGmapsComponent extends Component {
  * Country name
  *
  * @var string
- * @access protected
  */
 	protected $_countryName;
 
@@ -59,7 +51,6 @@ class BcGmapsComponent extends Component {
  * Country name code
  *
  * @var string
- * @access protected
  */
 	protected $_countryNameCode;
 
@@ -67,7 +58,6 @@ class BcGmapsComponent extends Component {
  * Administrative area name
  *
  * @var string
- * @access protected
  */
 	protected $_administrativeAreaName;
 
@@ -75,7 +65,6 @@ class BcGmapsComponent extends Component {
  * Postal Code
  *
  * @var string
- * @access protected
  */
 	protected $_postalCode;
 
@@ -83,7 +72,6 @@ class BcGmapsComponent extends Component {
  * Base Url
  *
  * @var string
- * @access protected
  */
 	protected $_baseUrl;
 
@@ -91,7 +79,6 @@ class BcGmapsComponent extends Component {
  * Construct
  * 
  * @return void
- * @access private
  */
 	public function __construct() {
 		$this->_baseUrl = "http://" . MAPS_HOST . "/maps/api/geocode/xml?";
@@ -104,7 +91,6 @@ class BcGmapsComponent extends Component {
  * @param string $city
  * @param string $state
  * @return boolean
- * @access public
  */
 	public function getInfoLocation($address) {
 		if (!empty($address)) {
@@ -118,7 +104,6 @@ class BcGmapsComponent extends Component {
  *
  * @param string $param
  * @return boolean
- * @access protected
  */
 	protected function _connect($param) {
 		$requestUrl = $this->_baseUrl . "sensor=false&language=ja&address=" . urlencode($param);
@@ -159,7 +144,6 @@ class BcGmapsComponent extends Component {
  * get the Postal Code
  *
  * @return string
- * @access public
  */
 	//public function getPostalCode () {
 	//	return $this->_postalCode;
@@ -169,7 +153,6 @@ class BcGmapsComponent extends Component {
  * get the Address
  *
  * @return string
- * @access public
  */
 	//public function getAddress () {
 	//	return $this->_address;
@@ -179,7 +162,6 @@ class BcGmapsComponent extends Component {
  * get the Country name
  *
  * @return string
- * @access public
  */
 	//public function getCountryName () {
 	//	return $this->_countryName;
@@ -189,7 +171,6 @@ class BcGmapsComponent extends Component {
  * get the Country name code
  *
  * @return string
- * @access public
  */
 	//public function getCountryNameCode () {
 	//	return $this->_countryNameCode;
@@ -199,7 +180,6 @@ class BcGmapsComponent extends Component {
  * get the Administrative area name
  *
  * @return string
- * @access public
  */
 	//public function getAdministrativeAreaName () {
 	//	return $this->_administrativeAreaName;
@@ -209,7 +189,6 @@ class BcGmapsComponent extends Component {
  * get the Latitude coordinate
  *
  * @return double
- * @access public
  */
 	public function getLatitude() {
 		return $this->_latitude;
@@ -219,7 +198,6 @@ class BcGmapsComponent extends Component {
  * get the Longitude coordinate
  *
  * @return double
- * @access public
  */
 	public function getLongitude() {
 		return $this->_longitude;

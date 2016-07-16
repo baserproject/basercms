@@ -1,19 +1,13 @@
 <?php
-
 /**
- * ブログコメントコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,7 +21,6 @@ class BlogCommentsController extends BlogAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogComments';
 
@@ -35,7 +28,6 @@ class BlogCommentsController extends BlogAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
 
@@ -43,7 +35,6 @@ class BlogCommentsController extends BlogAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array();
 
@@ -51,7 +42,6 @@ class BlogCommentsController extends BlogAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcCaptcha');
 
@@ -59,7 +49,6 @@ class BlogCommentsController extends BlogAppController {
  * ぱんくずナビ
  *
  * @var string
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
@@ -69,7 +58,6 @@ class BlogCommentsController extends BlogAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -77,7 +65,6 @@ class BlogCommentsController extends BlogAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -120,7 +107,6 @@ class BlogCommentsController extends BlogAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -133,7 +119,6 @@ class BlogCommentsController extends BlogAppController {
  * [ADMIN] ブログを一覧表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index($blogContentId, $blogPostId = null) {
 		if (!$blogContentId || empty($this->blogContent['BlogContent'])) {
@@ -173,7 +158,6 @@ class BlogCommentsController extends BlogAppController {
  * @param int $blogPostId
  * @param int $id
  * @return void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -191,7 +175,6 @@ class BlogCommentsController extends BlogAppController {
  * @param int $blogPostId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($blogContentId, $blogPostId, $id = null) {
 		/* 除外処理 */
@@ -213,7 +196,6 @@ class BlogCommentsController extends BlogAppController {
  * @param int $blogPostId
  * @param int $id
  * @return void
- * @access public
  */
 	protected function _del($id = null) {
 		/* 削除処理 */
@@ -237,7 +219,6 @@ class BlogCommentsController extends BlogAppController {
  * @param int $blogPostId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_delete($blogContentId, $blogPostId, $id = null) {
 		/* 除外処理 */
@@ -271,7 +252,6 @@ class BlogCommentsController extends BlogAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
 		if (!$id) {
@@ -293,7 +273,6 @@ class BlogCommentsController extends BlogAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_publish($blogContentId, $blogPostId, $id) {
 		if (!$id) {
@@ -375,7 +354,6 @@ class BlogCommentsController extends BlogAppController {
  * @param string $blogContentId
  * @param string $blogPostId
  * @return boolean
- * @access public
  */
 	public function add($blogContentId, $blogPostId) {
 		Configure::write('debug', 0);
@@ -416,7 +394,6 @@ class BlogCommentsController extends BlogAppController {
  * @param string $blogContentId
  * @param string $blogPostId
  * @return boolean
- * @access public
  */
 	public function smartphone_add($blogContentId, $blogPostId) {
 		$this->setAction('add', $blogContentId, $blogPostId);
@@ -426,7 +403,6 @@ class BlogCommentsController extends BlogAppController {
  * 認証用のキャプチャ画像を表示する
  * 
  * @return void
- * @access public
  */
 	public function captcha() {
 		$this->BcCaptcha->render();
@@ -437,7 +413,6 @@ class BlogCommentsController extends BlogAppController {
  * [SMARTPHONE] 認証用のキャプチャ画像を表示する
  * 
  * @return void
- * @access public
  */
 	public function smartphone_captcha() {
 		$this->BcCaptcha->render();

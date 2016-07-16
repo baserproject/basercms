@@ -1,17 +1,15 @@
 <?php
-
 /**
- * ツールコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('Simplezip', 'Vendor');
 
 /**
@@ -25,7 +23,6 @@ class ToolsController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Tools';
 
@@ -35,7 +32,6 @@ class ToolsController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -43,7 +39,6 @@ class ToolsController extends AppController {
  * ヘルパ
  * 
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
@@ -59,7 +54,6 @@ class ToolsController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form'))
@@ -70,7 +64,6 @@ class ToolsController extends AppController {
  *
  * @param string $mode
  * @return void
- * @access public
  */
 	public function admin_maintenance($mode = '') {
 		switch ($mode) {
@@ -111,7 +104,6 @@ class ToolsController extends AppController {
  *
  * @param array $data
  * @return boolean
- * @access protected
  */
 	protected function _restoreDb($data) {
 		
@@ -153,7 +145,6 @@ class ToolsController extends AppController {
  * @param string $path スキーマファイルのパス
  * @param string $configKeyName DB接続名
  * @return boolean
- * @access protected
  */
 	protected function _loadBackup($path, $configKeyName) {
 		$Folder = new Folder($path);
@@ -201,7 +192,6 @@ class ToolsController extends AppController {
  * バックアップデータを作成する
  *
  * @return void
- * @access protected
  */
 	protected function _backupDb() {
 		$tmpDir = TMP . 'schemas' . DS;
@@ -231,7 +221,6 @@ class ToolsController extends AppController {
  * @param string $configKeyName
  * @param string $path
  * @return boolean
- * @access protected
  */
 	protected function _writeBackup($configKeyName, $path, $plugin = '') {
 		$db = ConnectionManager::getDataSource($configKeyName);
@@ -269,7 +258,6 @@ class ToolsController extends AppController {
  * モデル名からスキーマファイルを生成する
  *
  * @return void
- * @access public
  */
 	public function admin_write_schema() {
 		$path = TMP . 'schemas' . DS;
@@ -304,7 +292,6 @@ class ToolsController extends AppController {
  * スキーマファイルを読み込みテーブルを生成する
  *
  * @return void
- * @access public
  */
 	public function admin_load_schema() {
 		if (!$this->request->data) {
@@ -335,7 +322,6 @@ class ToolsController extends AppController {
  * スキーマ用の一時フォルダをリセットする
  *
  * @return boolean
- * @access protected
  */
 	protected function _resetTmpSchemaFolder() {
 		$path = TMP . 'schemas' . DS;
@@ -347,7 +333,6 @@ class ToolsController extends AppController {
  *
  * @param string $mode
  * @return void
- * @access public
  */
 	public function admin_log($mode = '') {
 		$errorLogPath = TMP . 'logs' . DS . 'error.log' ;
@@ -392,8 +377,7 @@ class ToolsController extends AppController {
 	 * ログフォルダを圧縮ダウンロードする
 	 *
 	 * @return void
-	 * @access protected
-	 */
+		 */
 	protected function _downloadErrorLog() {
 		$tmpDir = TMP . 'logs' . DS;
 

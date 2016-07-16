@@ -285,7 +285,6 @@ class BcManagerComponentTest extends BaserTestCase {
  *
  * @param	array	$options
  * @return boolean
- * @access private
  */
 	public function testCreateDatabaseConfig() {
 
@@ -383,7 +382,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param array $dbConfig
  * @param string $dbDataPattern
  * @return boolean
- * @access public
  */
 	public function testConstructionDb() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -468,7 +466,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param string	$dbConfig
  * @param string	$dbDataPattern
  * @return boolean
- * @access public
  */
 	public function testConstructionTable() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -481,7 +478,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * 
  * @param array $dbConfig 
  * @return boolean
- * @access public
  */
 	public function testDeleteAllTables($dbConfig = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -598,7 +594,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * エディタテンプレート用のアイコン画像をデプロイ
  * 
  * @return boolean
- * @access public
  */
 	public function testDeployEditorTemplateImage() {
 
@@ -639,7 +634,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * 設定ファイルをリセットする
  * 
  * @return boolean 
- * @access public
  */
 	public function testResetSetting() {
 		
@@ -670,7 +664,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * テーマのページテンプレートを初期化する 
  * 
  * @return boolean
- * @access public
  */
 	public function testResetThemePages() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -727,7 +720,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * baserCMSをリセットする
  * 
  * @param array $dbConfig 
- * @access public
  */
 	public function testReset() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

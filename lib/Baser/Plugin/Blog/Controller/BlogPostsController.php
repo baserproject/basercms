@@ -1,20 +1,16 @@
 <?php
 /**
- * 記事コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('Xml', 'Utility');
-/**
- * Include files
- */
 
 /**
  * 記事コントローラー
@@ -27,7 +23,6 @@ class BlogPostsController extends BlogAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogPosts';
 
@@ -35,7 +30,6 @@ class BlogPostsController extends BlogAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogPost', 'Blog.BlogContent');
 
@@ -43,7 +37,6 @@ class BlogPostsController extends BlogAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('Blog.Blog');
 
@@ -51,7 +44,6 @@ class BlogPostsController extends BlogAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail');
 
@@ -59,7 +51,6 @@ class BlogPostsController extends BlogAppController {
  * ぱんくずナビ
  *
  * @var string
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
@@ -69,7 +60,6 @@ class BlogPostsController extends BlogAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -77,7 +67,6 @@ class BlogPostsController extends BlogAppController {
  * ブログコンテンツデータ
  *
  * @var array
- * @access public
  */
 	public $blogContent;
 
@@ -85,7 +74,6 @@ class BlogPostsController extends BlogAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -109,7 +97,6 @@ class BlogPostsController extends BlogAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -120,7 +107,6 @@ class BlogPostsController extends BlogAppController {
  * [ADMIN] 一覧表示
  *
  * @return void
- * @access public
  */
 	public function admin_index($blogContentId) {
 		if (!$blogContentId || !$this->blogContent) {
@@ -178,7 +164,6 @@ class BlogPostsController extends BlogAppController {
  * 一覧の表示用データをセットする
  * 
  * @return void
- * @access protected
  */
 	protected function _setAdminIndexViewData() {
 		$user = $this->BcAuth->user();
@@ -196,7 +181,6 @@ class BlogPostsController extends BlogAppController {
  * @param array $blogContentId
  * @param array $data
  * @return array $conditions
- * @access protected
  */
 	protected function _createAdminIndexConditions($blogContentId, $data) {
 		unset($data['ListTool']);
@@ -265,7 +249,6 @@ class BlogPostsController extends BlogAppController {
  *
  * @param int $blogContentId
  * @return void
- * @access public
  */
 	public function admin_add($blogContentId) {
 		if (!$blogContentId || !$this->blogContent) {
@@ -349,7 +332,6 @@ class BlogPostsController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_edit($blogContentId, $id) {
 		if (!$blogContentId || !$id) {
@@ -451,7 +433,6 @@ class BlogPostsController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
 		if (!$id) {
@@ -472,7 +453,6 @@ class BlogPostsController extends BlogAppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -488,7 +468,6 @@ class BlogPostsController extends BlogAppController {
  * 
  * @param int $id
  * @return boolean 
- * @access protected
  */
 	protected function _del($id) {
 		// メッセージ用にデータを取得
@@ -509,7 +488,6 @@ class BlogPostsController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_delete($blogContentId, $id = null) {
 		if (!$blogContentId || !$id) {
@@ -536,7 +514,6 @@ class BlogPostsController extends BlogAppController {
  * WordPressのみ対応（2.2.3のみ検証済）
  *
  * @return void
- * @access public
  * @todo 未実装
  */
 	public function admin_import() {
@@ -639,7 +616,6 @@ class BlogPostsController extends BlogAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_unpublish($blogContentId, $id) {
 		if (!$id) {
@@ -661,7 +637,6 @@ class BlogPostsController extends BlogAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_publish($blogContentId, $id) {
 		if (!$id) {
@@ -740,7 +715,6 @@ class BlogPostsController extends BlogAppController {
  * 
  * @param int $id 
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($blogContentId, $id = null) {
 		$result = $this->BlogPost->copy($id);

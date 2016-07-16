@@ -1,20 +1,15 @@
 <?php
-
 /**
- * フィード詳細モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('FeedAppModel', 'Feed.Model');
 
 /**
@@ -28,7 +23,6 @@ class FeedDetail extends FeedAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'FeedDetail';
 
@@ -36,7 +30,6 @@ class FeedDetail extends FeedAppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
@@ -44,7 +37,6 @@ class FeedDetail extends FeedAppModel {
  * belongsTo
  * 
  * @var array
- * @access public
  */
 	public $belongsTo = array('FeedConfig' => array('className' => 'Feed.FeedConfig',
 			'conditions' => '',
@@ -56,7 +48,6 @@ class FeedDetail extends FeedAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -100,7 +91,6 @@ class FeedDetail extends FeedAppModel {
  * 
  * @param string $feedDetailId
  * @retun array $data
- * @access public
  */
 	public function getDefaultValue($feedConfigId) {
 		$feedConfig = $this->FeedConfig->find('first', array('conditions' => array('FeedConfig.id' => $feedConfigId)));

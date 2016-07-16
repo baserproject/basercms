@@ -1,17 +1,15 @@
 <?php
-
 /**
- * プラグイン拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('AppController', 'Controller');
 
 /**
@@ -33,7 +31,6 @@ class BcPluginAppController extends AppController {
  * beforeFilter
  *
  * @return void
- * @access private
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -55,7 +52,6 @@ class BcPluginAppController extends AppController {
  * 一つのプラグインで複数のコンテンツを実装する際に利用する。
  *
  * @return int $pluginNo
- * @access public
  */
 	public function getContentId() {
 		// 管理画面の場合には取得しない

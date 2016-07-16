@@ -9,15 +9,13 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::import('Controller', 'Plugins');
 
 /**
  * ファイルカテゴリコントローラー
  *
- * @package			uploader.controllers
+ * @package			Uploader.Controller
  */
 class UploaderCategoriesController extends BcPluginAppController {
 
@@ -155,7 +153,6 @@ class UploaderCategoriesController extends BcPluginAppController {
  * @param int $uploaderCategoryId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 
@@ -177,7 +174,6 @@ class UploaderCategoriesController extends BcPluginAppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	public function _batch_del($ids) {
 		
@@ -194,7 +190,6 @@ class UploaderCategoriesController extends BcPluginAppController {
  * 
  * @param int $id
  * @return boolean 
- * @access protected
  */
 	public function _del($id = null) {
 		// メッセージ用にデータを取得
@@ -213,7 +208,6 @@ class UploaderCategoriesController extends BcPluginAppController {
  * 
  * @param int $id 
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($id = null) {
 		

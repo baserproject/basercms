@@ -1,20 +1,15 @@
 <?php
-
 /**
- * フィード設定モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('FeedAppModel', 'Feed.Model');
 
 /**
@@ -28,7 +23,6 @@ class FeedConfig extends FeedAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'FeedConfig';
 
@@ -36,14 +30,12 @@ class FeedConfig extends FeedAppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
 /**
  * DB設定
  * @var string
- * @access public
  */
 	public $useDbConfig = 'plugin';
 
@@ -51,7 +43,6 @@ class FeedConfig extends FeedAppModel {
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array("FeedDetail" =>
 		array("className" => "Feed.FeedDetail",
@@ -66,7 +57,6 @@ class FeedConfig extends FeedAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -103,7 +93,6 @@ class FeedConfig extends FeedAppModel {
  * 初期値を取得
  * 
  * @return array
- * @access public
  */
 	public function getDefaultValue() {
 		$data['FeedConfig']['display_number'] = '5';

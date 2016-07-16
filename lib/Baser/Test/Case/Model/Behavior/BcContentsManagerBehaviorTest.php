@@ -3,7 +3,7 @@
  * BcContentsManagerBehaviorのテスト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
@@ -54,7 +54,6 @@ class BcContentsManagerTest extends BaserTestCase {
  * @param Model $model
  * @param array $data
  * @return boolean
- * @access public
  */
 	public function testSaveContent() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -137,7 +136,6 @@ class BcContentsManagerTest extends BaserTestCase {
  *
  * @param string $contentCategory
  * @return boolean
- * @access public
  */
 	public function testUpdateContentMeta() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

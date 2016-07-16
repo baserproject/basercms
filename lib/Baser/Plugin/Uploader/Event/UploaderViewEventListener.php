@@ -9,6 +9,12 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * UploaderViewEventListener
+ *
+ * @package Uploader.Event
+ */
 class UploaderViewEventListener extends BcViewEventListener {
 	
 	public $events = array('afterLayout',

@@ -1,12 +1,9 @@
 <?php
-
 /**
- * メールコンテンツモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
@@ -25,7 +22,6 @@ class MailContent extends MailAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailContent';
 
@@ -33,7 +29,6 @@ class MailContent extends MailAppModel {
  * behaviors
  *
  * @var array
- * @access public
  */
 	public $actsAs = array('BcSearchIndexManager', 'BcPluginContent', 'BcCache');
 
@@ -41,7 +36,6 @@ class MailContent extends MailAppModel {
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array('MailField' =>
 		array('className' => 'Mail.MailField',
@@ -56,7 +50,6 @@ class MailContent extends MailAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -151,7 +144,6 @@ class MailContent extends MailAppModel {
  * 
  * @param string $check チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function checkSslUrl($check) {
 		if ($check[key($check)]) {
@@ -171,7 +163,6 @@ class MailContent extends MailAppModel {
  *
  * @param string $check チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function alphaNumeric($check) {
 		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
@@ -185,7 +176,6 @@ class MailContent extends MailAppModel {
  * フォームの初期値を取得する
  *
  * @return string
- * @access protected
  */
 	public function getDefaultValue() {
 		$data['MailContent']['subject_user'] = 'お問い合わせ頂きありがとうございます';
@@ -206,7 +196,6 @@ class MailContent extends MailAppModel {
  * afterSave
  *
  * @return boolean
- * @access public
  */
 	public function afterSave($created, $options = array()) {
 		// 検索用テーブルへの登録・削除
@@ -232,7 +221,6 @@ class MailContent extends MailAppModel {
  *
  * @param array $data
  * @return array
- * @access public
  */
 	public function createSearchIndex($data) {
 		if (isset($data['MailContent'])) {

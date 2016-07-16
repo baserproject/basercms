@@ -85,7 +85,6 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
  * @param string $action
  * @param string ... etc.
  * @return void
- * @access public
  */
 	public function testAllow() {
 		$this->BcReplacePrefix->allowedPureActions = array( 'a' => 'hoge1', 'b' => 'hoge2');

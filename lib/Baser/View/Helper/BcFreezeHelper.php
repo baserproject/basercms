@@ -1,23 +1,21 @@
 <?php
 /**
- * FreezeHelper
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BcFormHelper', 'View/Helper');
 App::uses('BcUploadHelper', 'View/Helper');
 
 /**
+ * Class BcFreezeHelper
+ * 
  * @package Baser.View.Helper
  */
 class BcFreezeHelper extends BcFormHelper {
@@ -26,7 +24,6 @@ class BcFreezeHelper extends BcFormHelper {
  * 凍結状態
  * 
  * @var boolean
- * @access public
  */
 	public $freezed = false;
 
@@ -34,7 +31,6 @@ class BcFreezeHelper extends BcFormHelper {
  * フォームを凍結させる
  * 
  * @return void
- * @access public
  */
 	public function freeze() {
 
@@ -112,7 +108,6 @@ class BcFreezeHelper extends BcFormHelper {
  * - 凍結時、$attributes['selected']に要素を格納することで日付を選択する
  * (例) $attributes['selected'] = array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1'))
  * @return string htmlタグ
- * @access public
  */
 	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
 
@@ -240,7 +235,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $attributes Attribute array for the select elements.
  * @param boolean $showEmpty Show/hide the empty select option
  * @return string
- * @access public
  */
 	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
 
@@ -303,7 +297,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * @return string htmlタグ
- * @access public
  */
 	public function checkbox($fieldName, $attributes = array()) {
 
@@ -325,7 +318,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param string フィールド文字列
  * @param array html属性
  * @return string htmlタグ
- * @access public
  */
 	public function textarea($fieldName, $attributes = array()) {
 
@@ -354,7 +346,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $options コントロールソース
  * @param array $attributes html属性
  * @return string htmlタグ
- * @access public
  */
 	public function radio($fieldName, $options = array(), $attributes = array()) {
 
@@ -371,7 +362,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param string $fieldName
  * @param array $options
  * @return string
- * @access public
  */
 	public function file($fieldName, $options = array()) {
 
@@ -403,7 +393,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param	array $attributes html属性
  * @param array $imageAttributes 画像属性
  * @return string htmlタグ
- * @access public
  */
 	public function image($fieldName, $attributes = array(), $imageAttributes = array()) {
 
@@ -459,7 +448,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param string $fieldName フィールド文字列
  * @param array $attributes html属性
  * @return string	htmlタグ
- * @access public
  */
 	public function jsonList($fieldName, $attributes) {
 
@@ -487,7 +475,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param string $fieldName フィールド文字列
  * @param array $attributes HTML属性
  * @return string html
- * @access public
  */
 	public function datepicker($fieldName, $attributes = array()) {
 
@@ -515,7 +502,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @param	array	$options コントロールソース
  * @param	array	$attributes html属性
  * @return string htmlタグ
- * @access public
  */
 	public function freezeControll($fieldName, $options, $attributes = array()) {
 

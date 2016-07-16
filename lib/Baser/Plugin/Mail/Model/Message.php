@@ -1,20 +1,15 @@
 <?php
-
 /**
- * メッセージモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('MailAppModel', 'Mail.Model');
 App::uses('MailField', 'Mail.Model');
 App::uses('MailContent', 'Mail.Model');
@@ -52,7 +47,6 @@ class Message extends MailAppModel {
  * ビヘイビア
  *
  * @var array
- * @access public
  */
 	public $actsAs = array(
 		'BcUpload' => array(
@@ -141,7 +135,6 @@ class Message extends MailAppModel {
  * beforeSave
  *
  * @return boolean
- * @access public
  */
 	public function beforeSave($options = array()) {
 		$this->data = $this->convertToDb($this->data);
@@ -186,7 +179,6 @@ class Message extends MailAppModel {
  * VALID_EMAIL		メール形式チェック
  *
  * @return void
- * @access protected
  * TODO Cake1.2に対応させる
  */
 	protected function _setValidate() {
@@ -260,7 +252,6 @@ class Message extends MailAppModel {
  *
  * @param array $data
  * @return void
- * @access protected
  */
 	protected function _validExtends($data) {
 		$dists = array();
@@ -292,7 +283,6 @@ class Message extends MailAppModel {
  * バリデートグループエラーチェック
  *
  * @return void
- * @access protected
  */
 	protected function _validGroupErrorCheck() {
 		$dists = array();
@@ -321,7 +311,6 @@ class Message extends MailAppModel {
  *
  * @param array $data
  * @return void
- * @access protected
  */
 	protected function _validGroupComplate($data) {
 		$dists = array();
@@ -360,7 +349,6 @@ class Message extends MailAppModel {
  *
  * @param array $data
  * @return void
- * @access protected
  */
 	protected function _validEmailCofirm($data) {
 		$dists = array();
@@ -397,7 +385,6 @@ class Message extends MailAppModel {
  *
  * @param array $data
  * @return array $data
- * @access public
  */
 	public function autoConvert($data) {
 		foreach ($this->mailFields as $mailField) {
@@ -442,7 +429,6 @@ class Message extends MailAppModel {
  * 初期値の設定をする
  *
  * @return array $data
- * @access public
  */
 	public function getDefaultValue($data) {
 		$_data = array();
@@ -481,7 +467,6 @@ class Message extends MailAppModel {
  *
  * @param array $dbDatas
  * @return array $dbDatas
- * @access public
  */
 	public function convertToDb($dbData) {
 		// マルチチェックのデータを｜区切りに変換
@@ -511,7 +496,6 @@ class Message extends MailAppModel {
  *
  * @param string $str 変換対象文字列
  * @return string $str 変換後文字列
- * @access public
  * TODO AppExModeに移行すべきかも
  */
 	public function replaceText($str) {
@@ -594,7 +578,6 @@ class Message extends MailAppModel {
  *
  * @param array $dbDatas
  * @return array $dbDatas
- * @access public
  * TODO ヘルパー化すべきかも
  */
 	public function convertDatasToMail($dbData) {
@@ -633,7 +616,6 @@ class Message extends MailAppModel {
  *
  * @param string $contentName コンテンツ名
  * @return boolean
- * @access public
  */
 	public function createTable($contentName) {
 		$db = $this->getDataSource();
@@ -664,7 +646,6 @@ class Message extends MailAppModel {
  * @param string $source 元コンテンツ名
  * @param string $target 変更後コンテンツ名
  * @return boolean
- * @access public
  */
 	public function renameTable($source, $target) {
 		$db = $this->getDataSource();
@@ -696,7 +677,6 @@ class Message extends MailAppModel {
  *
  * @param string $contentName コンテンツ名
  * @return boolean
- * @access private
  */
 	public function dropTable($contentName) {
 		$db = $this->getDataSource();
@@ -724,7 +704,6 @@ class Message extends MailAppModel {
  * @param string $contentName
  * @param string $field
  * @return array
- * @access public
  */
 	public function addMessageField($contentName, $field) {
 		$fullTable = $this->getTablePrefixByContentName($contentName) . $this->useTable;
@@ -741,7 +720,6 @@ class Message extends MailAppModel {
  * @param string $contentName
  * @param string $field
  * @return array
- * @access public
  */
 	public function delMessageField($contentName, $field) {
 		$fullTable = $this->getTablePrefixByContentName($contentName) . $this->useTable;
@@ -758,7 +736,6 @@ class Message extends MailAppModel {
  * @param string $oldFieldName
  * @param string $newfieldName
  * @return array
- * @access private
  */
 	public function renameMessageField($contentName, $oldFieldName, $newfieldName) {
 		$fullTable = $this->getTablePrefixByContentName($contentName) . $this->useTable;
@@ -773,7 +750,6 @@ class Message extends MailAppModel {
  * 
  * @param string $contentName
  * @return string
- * @access public
  */
 	public function getTablePrefixByContentName($contentName) {
 		$db = $this->getDataSource();
@@ -794,7 +770,6 @@ class Message extends MailAppModel {
  * @param array $dbConfig
  * @param int $mailContentId
  * @return boolean
- * @access public
  */
 	public function construction($mailContentId) {
 		$mailFieldClass = ClassRegistry::init('Mail.MailField');
@@ -833,7 +808,6 @@ class Message extends MailAppModel {
  * @param int $id
  * @param array $messages
  * @return array
- * @access public
  */
 	public function convertMessageToCsv($id, $messages) {
 		App::uses('MailField', 'Mail.Model');

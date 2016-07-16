@@ -1,17 +1,15 @@
 <?php
-
 /**
- * テーマコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('Simplezip', 'Vendor');
 
 /**
@@ -33,7 +31,6 @@ class ThemesController extends AppController {
 /**
  * モデル
  * @var array
- * @access public
  */
 	public $uses = array('Theme', 'Page', 'SiteConfig');
 
@@ -41,7 +38,6 @@ class ThemesController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
 
@@ -49,14 +45,12 @@ class ThemesController extends AppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
 /**
  * パンくずナビ
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
@@ -106,7 +100,6 @@ class ThemesController extends AppController {
  * テーマ一覧
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->pageTitle = 'テーマ一覧';
@@ -375,7 +368,6 @@ class ThemesController extends AppController {
  * 
  * @param string $theme
  * @return void
- * @access public
  */
 	public function admin_edit($theme) {
 		if (!$theme) {
@@ -433,7 +425,6 @@ class ThemesController extends AppController {
  *
  * @param string $theme
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($theme) {
 		if (!$theme) {
@@ -452,7 +443,6 @@ class ThemesController extends AppController {
  *
  * @param string $theme
  * @return boolean
- * @access public
  */
 	protected function _copy($theme) {
 		$basePath = WWW_ROOT . 'theme' . DS;
@@ -477,7 +467,6 @@ class ThemesController extends AppController {
  *
  * @param string $theme
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($theme) {
 		if (!$theme) {
@@ -518,7 +507,6 @@ class ThemesController extends AppController {
  *
  * @param string $theme
  * @return void
- * @access public
  */
 	public function admin_del($theme) {
 		if (!$theme) {
@@ -672,7 +660,6 @@ class ThemesController extends AppController {
  * @param string $configKeyName
  * @param string $path
  * @return boolean
- * @access protected
  */
 	function _writeCsv($configKeyName, $plugin, $path, $exclude = array()) {
 		

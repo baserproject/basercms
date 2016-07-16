@@ -1,14 +1,12 @@
 <?php
 /**
- * BcContentsComponent
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2016, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2016, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
- * @since			baserCMS v 3.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 

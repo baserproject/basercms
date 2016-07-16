@@ -9,14 +9,13 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::import('Controller', 'Plugins');
+
 /**
  * ファイルアップローダーコントローラー
  *
- * @package			uploader.controllers
+ * @package			Uploader.Controller
  */
 class UploaderFilesController extends BcPluginAppController {
 /**
@@ -58,7 +57,6 @@ class UploaderFilesController extends BcPluginAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
@@ -262,7 +260,6 @@ class UploaderFilesController extends BcPluginAppController {
  * レイアウト、デバッグフラグの設定をする
  *
  * @return 成功時：true　／　失敗時：null
- * @access public
  */
 	public function admin_ajax_upload() {
 

@@ -1,19 +1,13 @@
 <?php
-
 /**
- * メールコンテンツコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,7 +21,6 @@ class MailContentsController extends MailAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailContents';
 
@@ -35,7 +28,6 @@ class MailContentsController extends MailAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array("Mail.MailContent", 'Mail.Message');
 
@@ -43,7 +35,6 @@ class MailContentsController extends MailAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcHtml', 'BcTime', 'BcForm', 'BcText', 'Mail.Mail');
 
@@ -51,7 +42,6 @@ class MailContentsController extends MailAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -59,7 +49,6 @@ class MailContentsController extends MailAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
@@ -69,7 +58,6 @@ class MailContentsController extends MailAppController {
  * サブメニューエレメント
  *
  * @var string
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -77,7 +65,6 @@ class MailContentsController extends MailAppController {
  * [ADMIN] メールフォーム一覧
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$listDatas = $this->MailContent->find('all');
@@ -91,7 +78,6 @@ class MailContentsController extends MailAppController {
  * [ADMIN] メールフォーム追加
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
 		$this->pageTitle = '新規メールフォーム登録';
@@ -131,7 +117,6 @@ class MailContentsController extends MailAppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		/* 除外処理 */
@@ -193,7 +178,6 @@ class MailContentsController extends MailAppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 		/* 除外処理 */
@@ -220,7 +204,6 @@ class MailContentsController extends MailAppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
 		/* 除外処理 */
@@ -250,7 +233,6 @@ class MailContentsController extends MailAppController {
  * 
  * @param string $template
  * @return void
- * @access public
  */
 	public function redirectEditLayout($template) {
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
@@ -278,7 +260,6 @@ class MailContentsController extends MailAppController {
  * 
  * @param string $template
  * @return void
- * @access public
  */
 	public function redirectEditMail($template) {
 		$type = 'Emails';
@@ -310,7 +291,6 @@ class MailContentsController extends MailAppController {
  * 
  * @param string $template
  * @return void
- * @access public
  */
 	public function redirectEditForm($template) {
 		$path = 'Mail' . DS . $template;
@@ -341,7 +321,6 @@ class MailContentsController extends MailAppController {
  * @param int $mailContentId
  * @param int $Id
  * @return void
- * @access protected
  */
 	public function admin_ajax_copy($id) {
 		/* 除外処理 */

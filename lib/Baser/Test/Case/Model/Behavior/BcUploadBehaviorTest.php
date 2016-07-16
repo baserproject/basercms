@@ -3,7 +3,7 @@
  * ファイルアップロードビヘイビアのテスト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
@@ -122,7 +122,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param Model $created
  * @param Model $options
  * @return boolean
- * @access public
  */
 	public function testAfterSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -149,7 +148,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param array $data
  * @param string $tmpId
  * @return boolean
- * @access public
  */
 	public function testSaveTmpFiles() {
 
@@ -341,7 +339,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param Model $Model
  * @param string $fieldName
  * @return void
- * @access public
  */
 	public function testMoveFileSessionToTmp() {
 		
@@ -618,7 +615,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * 
  * @param Model $Model
  * @return void
- * @access public
  */
 	public function testBeforeDelete() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -630,7 +626,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * 
  * @param Model $Model
  * @return boolean
- * @access public
  */
 	public function testDelFiles() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

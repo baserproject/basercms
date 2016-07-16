@@ -56,32 +56,28 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Data to be parsed
 	 *
-	 * @access private
-	 * @var string
+		 * @var string
 	 */
 	var $data = '';
 
 	/**
 	 * Currently consumed bytes
 	 *
-	 * @access private
-	 * @var string
+		 * @var string
 	 */
 	var $consumed = '';
 
 	/**
 	 * Position of the current byte being parsed
 	 *
-	 * @access private
-	 * @var int
+		 * @var int
 	 */
 	var $position = 0;
 
 	/**
 	 * Create an instance of the class with the input data
 	 *
-	 * @access public
-	 * @param string $data Input data
+		 * @param string $data Input data
 	 */
 	public function __construct($data)
 	{
@@ -91,8 +87,7 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Parse the input data
 	 *
-	 * @access public
-	 * @return string Output data
+		 * @return string Output data
 	 */
 	public function parse()
 	{
@@ -108,8 +103,7 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Consume the next byte
 	 *
-	 * @access private
-	 * @return mixed The next byte, or false, if there is no more data
+		 * @return mixed The next byte, or false, if there is no more data
 	 */
 	public function consume()
 	{
@@ -127,8 +121,7 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Consume a range of characters
 	 *
-	 * @access private
-	 * @param string $chars Characters to consume
+		 * @param string $chars Characters to consume
 	 * @return mixed A series of characters that match the range, or false
 	 */
 	public function consume_range($chars)
@@ -149,8 +142,7 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Unconsume one byte
 	 *
-	 * @access private
-	 */
+		 */
 	public function unconsume()
 	{
 		$this->consumed = substr($this->consumed, 0, -1);
@@ -160,8 +152,7 @@ class SimplePie_Decode_HTML_Entities
 	/**
 	 * Decode an entity
 	 *
-	 * @access private
-	 */
+		 */
 	public function entity()
 	{
 		switch ($this->consume())

@@ -1,18 +1,15 @@
 <?php
-
 /**
- * Custom TestShell Command
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Console.Command
- * @since			baserCMS v 3.0.0-beta
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- * 
  */
+
 App::uses('TestShell', 'Console/Command');
 App::uses('BaserTestSuiteDispatcher', 'TestSuite');
 App::uses('BaserTestSuiteCommand', 'TestSuite');
@@ -162,7 +159,6 @@ class BaserTestShell extends TestShell {
  * @param string $file
  * @param string $category 
  * @param boolean $throwOnMissingFile 
- * @access protected
  * @return array(type, case)
  * @throws Exception
  */
@@ -251,7 +247,6 @@ class BaserTestShell extends TestShell {
  * For the given file, what category of test is it? returns app, core or the name of the plugin
  *
  * @param string $file
- * @access protected
  * @return string
  */
 	protected function _mapFileToCategory($file) {

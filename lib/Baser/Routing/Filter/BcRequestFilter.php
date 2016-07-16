@@ -1,21 +1,12 @@
 <?php
 /**
- * BcRequestFilter
- *
- * CakeRequestに検出器を追加するためのフィルター
- *
- * （例）$request->is('admin')
- *      $request->is('smartphone')
- * 		$request->is(array('smartphone', 'mobile')) // OR
- * 		$request->isAll(array('smartphone', 'page_display')) // AND
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
- * @since			baserCMS v 3.1.0-beta
+ * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */
 
@@ -24,6 +15,15 @@ app::uses('DispatcherFilter', 'Routing');
 
 /**
  * Class BcRequestFilter
+ *
+ * CakeRequestに検出器を追加するためのフィルター
+ *
+ * （例）$request->is('admin')
+ *      $request->is('smartphone')
+ * 		$request->is(array('smartphone', 'mobile')) // OR
+ * 		$request->isAll(array('smartphone', 'page_display')) // AND
+ *
+ * @package Baser.Routing.Filter
  */
 class BcRequestFilter extends DispatcherFilter {
 

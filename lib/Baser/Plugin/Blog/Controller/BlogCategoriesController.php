@@ -1,19 +1,13 @@
 <?php
-
 /**
- * カテゴリコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -29,7 +23,6 @@ class BlogCategoriesController extends BlogAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogCategories';
 
@@ -37,7 +30,6 @@ class BlogCategoriesController extends BlogAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogContent');
 
@@ -45,7 +37,6 @@ class BlogCategoriesController extends BlogAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcText', 'BcTime', 'BcForm', 'Blog.Blog');
 
@@ -53,7 +44,6 @@ class BlogCategoriesController extends BlogAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -61,7 +51,6 @@ class BlogCategoriesController extends BlogAppController {
  * ぱんくずナビ
  *
  * @var string
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
@@ -71,7 +60,6 @@ class BlogCategoriesController extends BlogAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -79,7 +67,6 @@ class BlogCategoriesController extends BlogAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -100,7 +87,6 @@ class BlogCategoriesController extends BlogAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -111,7 +97,6 @@ class BlogCategoriesController extends BlogAppController {
  * [ADMIN] ブログを一覧表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index($blogContentId) {
 		$conditions = array('BlogCategory.blog_content_id' => $blogContentId);
@@ -141,7 +126,6 @@ class BlogCategoriesController extends BlogAppController {
  *
  * @param string $blogContentId
  * @return void
- * @access public
  */
 	public function admin_add($blogContentId) {
 		if (!$blogContentId) {
@@ -197,7 +181,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_edit($blogContentId, $id) {
 		/* 除外処理 */
@@ -248,7 +231,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -265,7 +247,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
 		/* 除外処理 */
@@ -286,7 +267,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	protected function _del($id = null) {
 		// メッセージ用にデータを取得
@@ -306,7 +286,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	public function admin_delete($blogContentId, $id = null) {
 		/* 除外処理 */

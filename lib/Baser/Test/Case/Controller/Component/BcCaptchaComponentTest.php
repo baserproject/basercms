@@ -78,7 +78,6 @@ class BcCaptchaComponentTest extends BaserTestCase {
  * キャプチャ画象を表示する
  * 
  * @return void
- * @access public
  */
 	public function testRender() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

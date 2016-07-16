@@ -1,20 +1,15 @@
 <?php
-
 /**
- * FormHelper 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('HtmlHelper', 'View/Helper');
 App::uses('FormHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
@@ -46,7 +41,6 @@ class BcFormHelper extends FormHelper {
  * sizeCounter用の関数読み込み可否
  * 
  * @var boolean
- * @access public
  */
 	public $sizeCounterFunctionLoaded = false;
 
@@ -54,7 +48,6 @@ class BcFormHelper extends FormHelper {
  * フォームID
  * 
  * @var string
- * @access private
  */
 	private $__id = null;
 // <<<
@@ -877,7 +870,6 @@ class BcFormHelper extends FormHelper {
  * @param array $model
  * @param array $options
  * @return string
- * @access public
  */
 	public function create($model = null, $options = array()) {
 
@@ -1221,7 +1213,6 @@ DOC_END;
  * @param mixed $selected Selected option
  * @param array $attributes Array of HTML options for the opening SELECT element
  * @return string 都道府県用のSELECTタグ
- * @access public
  */
 	public function prefTag($fieldName, $selected = null, $attributes = array()) {
 
@@ -1300,7 +1291,6 @@ DOC_END;
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field, $options = array()) {
 
@@ -1334,7 +1324,6 @@ DOC_END;
  * @param mixed $fields
  * @param mixed $order
  * @return mixed リストまたは、false
- * @access public
  */
 	public function generateList($modelName, $conditions = array(), $fields = array(), $order = array()) {
 
@@ -1363,7 +1352,6 @@ DOC_END;
  * @param string $field フィールド文字列
  * @param string $attributes
  * @return array 属性
- * @access public
  */
 	public function jsonList($field, $attributes) {
 
@@ -1398,7 +1386,6 @@ DOC_END;
  * @param string フィールド文字列
  * @param array HTML属性
  * @return string html
- * @access public
  */
 	public function datepicker($fieldName, $attributes = array()) {
 
@@ -1441,7 +1428,6 @@ DOC_END;
  * @param string $fieldName
  * @param array $attributes
  * @return string
- * @access public
  */
 	public function dateTimePicker($fieldName, $attributes = array()) {
 
@@ -1497,7 +1483,6 @@ DOC_END;
  * @param array $attributes htmlの属性
  * @param mixed $showEmpty 空要素の表示/非表示、初期値
  * @return string
- * @access public
  */
 	public function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 

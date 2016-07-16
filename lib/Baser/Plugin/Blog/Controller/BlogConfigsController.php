@@ -1,19 +1,13 @@
 <?php
-
 /**
- * ブログ設定コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,7 +21,6 @@ class BlogConfigsController extends BlogAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogConfigs';
 
@@ -35,7 +28,6 @@ class BlogConfigsController extends BlogAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
 
@@ -43,7 +35,6 @@ class BlogConfigsController extends BlogAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -51,7 +42,6 @@ class BlogConfigsController extends BlogAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -59,7 +49,6 @@ class BlogConfigsController extends BlogAppController {
  * ぱんくずナビ
  *
  * @var string
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
@@ -70,7 +59,6 @@ class BlogConfigsController extends BlogAppController {
  * before_filter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -83,7 +71,6 @@ class BlogConfigsController extends BlogAppController {
  * [ADMIN] サイト基本設定
  *
  * @return void
- * @access public
  */
 	public function admin_form() {
 		if (empty($this->request->data)) {

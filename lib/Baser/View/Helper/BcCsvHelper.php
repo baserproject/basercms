@@ -1,16 +1,15 @@
 <?php
 /**
- * CSVヘルパー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * CSVヘルパー
  *
@@ -22,7 +21,6 @@ class BcCsvHelper extends AppHelper {
  * CSVヘッド
  *
  * @var string
- * @access public
  */
 	public $csvHead = '';
 
@@ -30,7 +28,6 @@ class BcCsvHelper extends AppHelper {
  * CSVボディ
  *
  * @var string
- * @access public
  */
 	public $csvBody = '';
 
@@ -38,7 +35,6 @@ class BcCsvHelper extends AppHelper {
  * CSVヘッドの出力
  *
  * @var boolean
- * @access public
  */
 	public $exportCsvHead = true;
 
@@ -48,7 +44,6 @@ class BcCsvHelper extends AppHelper {
  * @param string $modelName
  * @param array $data
  * @return void
- * @access public
  */
 	public function addModelData($modelName, $data) {
 
@@ -89,7 +84,6 @@ class BcCsvHelper extends AppHelper {
  *
  * @param array $data
  * @return string|false $head
- * @access protected
  */
 	protected function _perseKey($data) {
 
@@ -112,7 +106,6 @@ class BcCsvHelper extends AppHelper {
  *
  * @param array $data
  * @return string $body
- * @access protected
  */
 	protected function _perseValue($data) {
 

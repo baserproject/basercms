@@ -160,7 +160,6 @@ class PageCategoryTest extends BaserTestCase {
  * beforeSave
  * 
  * @return boolean
- * @access public
  */
 	public function testBeforeSave($options = array()) {
 		$this->markTestIncomplete('このテストは、まだ完成していません');
@@ -276,7 +275,6 @@ class PageCategoryTest extends BaserTestCase {
  * 
  * @param boolean $cascade
  * @return boolean
- * @access public
  */
 	public function testBeforeDelete() {
 		$this->markTestIncomplete('このテストは、まだ完成していません');
@@ -291,7 +289,6 @@ class PageCategoryTest extends BaserTestCase {
  * 
  * @param int $categoryId
  * @return boolean
- * @access public
  */
 	public function testReleaseRelatedPagesRecursive() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

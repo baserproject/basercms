@@ -1,17 +1,15 @@
 <?php
-
 /**
- * BcManagerコンポーネント
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('PageCategory', 'Model');
 App::uses('Page', 'Model');
 App::uses('Plugin', 'Model');
@@ -20,6 +18,11 @@ App::uses('File', 'Utility');
 App::uses('Component', 'Controller');
 App::uses('ConnectionManager', 'Model');
 
+/**
+ * baser Manager コンポーネント
+ *
+ * @package Baser.Controller.Component
+ */
 class BcManagerComponent extends Component {
 /**
  * Controller
@@ -179,7 +182,6 @@ class BcManagerComponent extends Component {
  *
  * @param array $config
  * @return DboSource $db
- * @access public
  */
 	public function connectDb($config, $name = 'baser') {
 		if ($name == 'plugin') {
@@ -214,7 +216,6 @@ class BcManagerComponent extends Component {
  *
  * @param string datasource name.postgre.mysql.etc.
  * @return string
- * @access public
  */
 	public function getDatasourceName($datasource = null) {
 		$name = false;
@@ -374,7 +375,6 @@ class BcManagerComponent extends Component {
  *
  * @param	array	$options
  * @return boolean
- * @access private
  */
 	public function createDatabaseConfig($options = array()) {
 		if (!is_writable(APP . 'Config' . DS)) {
@@ -464,7 +464,6 @@ class BcManagerComponent extends Component {
  * インストール設定ファイルを生成する
  * 
  * @return boolean 
- * @access public
  */
 	public function createInstallFile($securitySalt, $secrityCipherSeed, $siteUrl = "") {
 		$installFileName = APP . 'Config' . DS . 'install.php';
@@ -827,7 +826,6 @@ class BcManagerComponent extends Component {
  * @param string	$dbConfig
  * @param string	$dbDataPattern
  * @return boolean
- * @access public
  */
 	public function constructionTable($plugin, $dbConfigKeyName = 'baser', $dbConfig = null) {
 
@@ -869,7 +867,6 @@ class BcManagerComponent extends Component {
  * 
  * @param array $dbConfig 
  * @return boolean
- * @access public
  */
 	public function deleteAllTables($dbConfig = null) {
 		$result = true;
@@ -978,7 +975,6 @@ class BcManagerComponent extends Component {
  * @param string $dbConfigKeyName
  * @param array $dbConfig
  * @return boolean
- * @access public
  * TODO 処理を DboSource に移動する
  * TODO コアのテーブルを削除する際、プレフィックスだけでは、プラグインを識別できないので、プラグインのテーブルも削除されてしまう。
  * 		その為、プラグインのテーブルを削除しようとすると存在しない為、Excerptionが発生してしまい。処理が停止してしまうので、
@@ -1060,7 +1056,6 @@ class BcManagerComponent extends Component {
  * @param string $configKeyName
  * @param array $dbConfig
  * @return DataSource
- * @access public
  */
 	public function _getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		if ($dbConfig) {
@@ -1081,7 +1076,6 @@ class BcManagerComponent extends Component {
  *
  * @param string $theme
  * @return boolean
- * @access public
  */
 	public function deployTheme($theme = null) {
 		$Folder = new Folder(BASER_CONFIGS . 'theme');
@@ -1118,7 +1112,6 @@ class BcManagerComponent extends Component {
  * エディタテンプレート用のアイコン画像をデプロイ
  * 
  * @return boolean
- * @access public
  */
 	public function deployEditorTemplateImage() {
 		$path = WWW_ROOT . 'files' . DS . 'editor' . DS;
@@ -1166,7 +1159,6 @@ class BcManagerComponent extends Component {
  * 設定ファイルをリセットする
  * 
  * @return boolean 
- * @access public
  */
 	public function resetSetting() {
 		$result = true;
@@ -1187,7 +1179,6 @@ class BcManagerComponent extends Component {
  * テーマのページテンプレートを初期化する 
  * 
  * @return boolean
- * @access public
  */
 	public function resetThemePages() {
 		$result = true;
@@ -1291,7 +1282,6 @@ class BcManagerComponent extends Component {
  * baserCMSをリセットする
  * 
  * @param array $dbConfig 
- * @access public
  */
 	public function reset($dbConfig) {
 		$result = true;
@@ -1459,7 +1449,6 @@ class BcManagerComponent extends Component {
  * @throws Exception
  * @throws PDOException
  * @return boolean
- * @access private
  */
 	public function checkDbConnection($config) {
 		extract($config);

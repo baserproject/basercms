@@ -1,12 +1,9 @@
 <?php
-
 /**
- * 受信メールコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class MailMessagesController extends MailAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailMessages';
 
@@ -32,7 +28,6 @@ class MailMessagesController extends MailAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.Message');
 
@@ -40,7 +35,6 @@ class MailMessagesController extends MailAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('Mail.Maildata', 'Mail.Mailfield', 'BcText', 'BcArray');
 
@@ -48,7 +42,6 @@ class MailMessagesController extends MailAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -56,7 +49,6 @@ class MailMessagesController extends MailAppController {
  * メールコンテンツデータ
  *
  * @var array
- * @access public
  */
 	public $mailContent;
 
@@ -64,7 +56,6 @@ class MailMessagesController extends MailAppController {
  * サブメニュー
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array('mail_fields');
 
@@ -72,7 +63,6 @@ class MailMessagesController extends MailAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
@@ -82,7 +72,6 @@ class MailMessagesController extends MailAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -100,7 +89,6 @@ class MailMessagesController extends MailAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -112,7 +100,6 @@ class MailMessagesController extends MailAppController {
  *
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_index($mailContentId) {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
@@ -139,7 +126,6 @@ class MailMessagesController extends MailAppController {
  * @param int $mailContentId
  * @param int $messageId
  * @return void
- * @access public
  */
 	public function admin_view($mailContentId, $messageId) {
 		if (!$mailContentId || !$messageId) {
@@ -166,7 +152,6 @@ class MailMessagesController extends MailAppController {
  * @param int $mailContentId
  * @param int $messageId
  * @return void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -183,7 +168,6 @@ class MailMessagesController extends MailAppController {
  * @param int $mailContentId
  * @param int $messageId
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($mailContentId, $messageId) {
 		if (!$messageId) {
@@ -202,7 +186,6 @@ class MailMessagesController extends MailAppController {
  * @param int $mailContentId
  * @param int $messageId
  * @return void
- * @access public
  */
 	protected function _del($id = null) {
 		if ($this->Message->delete($id)) {
@@ -220,7 +203,6 @@ class MailMessagesController extends MailAppController {
  * @param int $mailContentId
  * @param int $messageId
  * @return void
- * @access public
  */
 	public function admin_delete($mailContentId, $messageId) {
 		if (!$mailContentId || !$messageId) {

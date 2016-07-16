@@ -1,17 +1,15 @@
 <?php
-
 /**
- * キャプチャコンポーネント
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::import('Vendor', 'kcaptcha/kcaptcha');
 
 /**
@@ -26,7 +24,6 @@ class BcCaptchaComponent extends Component {
  * kcaptchaの設定ファイルを読み込む為に利用
  *
  * @var string
- * @access public
  */
 	public $vendorsPath = BASER_VENDORS;
 
@@ -35,7 +32,6 @@ class BcCaptchaComponent extends Component {
  * kcaptcha_config.php で設定されたものを読み込む為に利用
  * 
  * @var string
- * @access public
  */
 	public $alphabet = '';
 
@@ -44,7 +40,6 @@ class BcCaptchaComponent extends Component {
  * kcaptcha_config.php で設定されたものを読み込む為に利用
  * 
  * @var string
- * @access public
  */
 	public $convert = '';
 
@@ -53,7 +48,6 @@ class BcCaptchaComponent extends Component {
  * 
  * @param Controller $controller
  * @return void
- * @access public
  */
 	public function startup(Controller $controller) {
 		$this->controller = $controller;
@@ -63,7 +57,6 @@ class BcCaptchaComponent extends Component {
  * キャプチャ画象を表示する
  * 
  * @return void
- * @access public
  */
 	public function render() {
 		$kcaptcha = new KCAPTCHA();
@@ -75,7 +68,6 @@ class BcCaptchaComponent extends Component {
  * 
  * @param	string	$value	フォームから送信された文字列
  * @return	boolean
- * @access public
  */
 	public function check($value) {
 		include $this->vendorsPath . 'kcaptcha/kcaptcha_config.php';

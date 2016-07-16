@@ -1,16 +1,15 @@
 <?php
-
 /**
- * test for MessageModel
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- * @package         Mail.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS Users Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.0.0-beta
- * @license         http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Mail.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('Message', 'Mail.Model');
 
 class MessageTest extends BaserTestCase {
@@ -73,7 +72,6 @@ class MessageTest extends BaserTestCase {
  * beforeSave
  *
  * @return boolean
- * @access public
  */
 	public function testBeforeSave() {
 		// 初期化
@@ -462,7 +460,6 @@ class MessageTest extends BaserTestCase {
  * @param array $dbConfig
  * @param int $mailContentId
  * @return boolean
- * @access public
  */
 	public function testConstruction() {
 
@@ -523,7 +520,6 @@ class MessageTest extends BaserTestCase {
  * @param int $id
  * @param array $messages
  * @return array
- * @access public
  */
 	public function testConvertMessageToCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

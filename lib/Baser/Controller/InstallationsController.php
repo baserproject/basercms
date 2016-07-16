@@ -1,11 +1,9 @@
 <?php
 /**
- * インストーラーコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -32,7 +30,6 @@ class InstallationsController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('Session', 'BcEmail', 'BcManager');
 
@@ -81,7 +78,6 @@ class InstallationsController extends AppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -135,7 +131,6 @@ class InstallationsController extends AppController {
  * Step 1: ウェルカムページ
  *
  * @return void
- * @access public
  */
 	public function index() {
 		$this->pageTitle = 'baserCMSのインストール';
@@ -146,7 +141,6 @@ class InstallationsController extends AppController {
  * Step 2: 必須条件チェック
  *
  * @return void
- * @access public
  */
 	public function step2() {
 		if ($this->request->data && $this->request->data['clicked'] == 'next') {
@@ -170,7 +164,6 @@ class InstallationsController extends AppController {
  * Step 3: データベースの接続設定
  * 
  * @return void
- * @access public
  */
 	public function step3() {
 		$dbsource = $this->_getDbSource();
@@ -220,7 +213,6 @@ class InstallationsController extends AppController {
  * Step 4: データベース生成／管理者ユーザー作成
  *
  * @return void
- * @access public
  */
 	public function step4() {
 		if (!$this->request->data) {
@@ -277,7 +269,6 @@ class InstallationsController extends AppController {
  * @param	string	$name
  * @param	string	$password
  * @return void
- * @access protected
  */
 	protected function _sendCompleteMail($email, $name, $password) {
 		if (DS !== '\\') {
@@ -292,7 +283,6 @@ class InstallationsController extends AppController {
  * インストールファイル[install.php]
  * 
  * @return void
- * @access public
  */
 	public function step5() {
 		$this->pageTitle = 'baserCMSのインストール完了！';
@@ -395,7 +385,6 @@ class InstallationsController extends AppController {
  * 
  * @param type $dbDataPattern データパターン
  * @return boolean
- * @access protected
  */
 	protected function _constructionDb($dbDataPattern = null) {
 		$dbConfig = $this->_readDbSetting();
@@ -530,7 +519,6 @@ class InstallationsController extends AppController {
  *
  * @param array $config
  * @return boolean
- * @access protected
  */
 	protected function _testConnectDb($config) {
 		/* データベース接続確認 */
@@ -621,7 +609,6 @@ class InstallationsController extends AppController {
  * インストール不能警告メッセージを表示
  *
  * @return void
- * @access public
  */
 	public function alert() {
 		$this->pageTitle = 'baserCMSのインストールを開始できません';

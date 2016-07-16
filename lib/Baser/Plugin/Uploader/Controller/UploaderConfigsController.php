@@ -9,14 +9,13 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::import('Controller', 'Plugins');
+
 /**
  * ファイルアップローダーコントローラー
  *
- * @package			uploader.controllers
+ * @package			Uploader.Controller
  */
 class UploaderConfigsController extends BcPluginAppController {
 /**

@@ -1,12 +1,9 @@
 <?php
-
 /**
- * メニューコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class MenusController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Menus';
 
@@ -32,7 +28,6 @@ class MenusController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Menu');
 
@@ -48,7 +43,6 @@ class MenusController extends AppController {
  * ヘルパ
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcTime', 'BcForm');
 
@@ -56,7 +50,6 @@ class MenusController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -64,7 +57,6 @@ class MenusController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
@@ -75,7 +67,6 @@ class MenusController extends AppController {
  * メニューの一覧を表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		/* セッション処理 */
@@ -118,7 +109,6 @@ class MenusController extends AppController {
  * [ADMIN] 登録処理
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
 		if (!$this->request->data) {
@@ -155,7 +145,6 @@ class MenusController extends AppController {
  *
  * @param	int ID
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		/* 除外処理 */
@@ -194,7 +183,6 @@ class MenusController extends AppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -218,7 +206,6 @@ class MenusController extends AppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 		/* 除外処理 */
@@ -244,7 +231,6 @@ class MenusController extends AppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
 		/* 除外処理 */
@@ -314,7 +300,6 @@ class MenusController extends AppController {
  *
  * @param array $data
  * @return string
- * @access protected
  */
 	protected function _createAdminIndexConditions($data) {
 		if (isset($data['Menu'])) {

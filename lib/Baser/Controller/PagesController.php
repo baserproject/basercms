@@ -1,11 +1,9 @@
 <?php
 /**
- * 固定ページコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -23,7 +21,6 @@ class PagesController extends AppController {
  * コントローラー名
  *
  * @var string
- * @access public
  */
 	public $name = 'Pages';
 
@@ -31,7 +28,6 @@ class PagesController extends AppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array(
 		'Html', 'Session', 'BcGooglemaps', 
@@ -43,7 +39,6 @@ class PagesController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail');
 
@@ -59,7 +54,6 @@ class PagesController extends AppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -88,7 +82,6 @@ class PagesController extends AppController {
  * [ADMIN] ページリスト
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		/* 画面情報設定 */
@@ -217,7 +210,6 @@ class PagesController extends AppController {
  * [ADMIN] 固定ページ情報登録
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
 		if (empty($this->request->data)) {
@@ -316,7 +308,6 @@ class PagesController extends AppController {
  *
  * @param int $id (page_id)
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		/* 除外処理 */
@@ -484,7 +475,6 @@ class PagesController extends AppController {
  *
  * @param int $id (page_id)
  * @return void
- * @access public
  * @deprecated admin_ajax_delete で Ajax化
  */
 	public function admin_delete($id = null) {
@@ -514,7 +504,6 @@ class PagesController extends AppController {
  * [ADMIN] 固定ページファイルを登録する
  *
  * @return void
- * @access public
  */
 	public function admin_entry_page_files() {
 		// 現在のテーマの固定ページファイルのパスを取得
@@ -529,7 +518,6 @@ class PagesController extends AppController {
  * [ADMIN] 固定ページファイルを登録する
  *
  * @return void
- * @access public
  */
 	public function admin_write_page_files() {
 		if ($this->Page->createAllPageTemplate()) {
@@ -546,7 +534,6 @@ class PagesController extends AppController {
  *
  * @param mixed
  * @return void
- * @access public
  */
 	public function display() {
 		$path = func_get_args();
@@ -678,7 +665,6 @@ class PagesController extends AppController {
  *
  * @param string	$url
  * @return array
- * @access protected
  */
 	protected function _getCrumbs($url) {
 		if (Configure::read('BcRequest.agent')) {
@@ -725,7 +711,6 @@ class PagesController extends AppController {
  *
  * @param mixed
  * @return void
- * @access public
  */
 	public function mobile_display() {
 		$path = func_get_args();
@@ -737,7 +722,6 @@ class PagesController extends AppController {
  *
  * @param mixed
  * @return void
- * @access public
  */
 	public function smartphone_display() {
 		$path = func_get_args();
@@ -749,7 +733,6 @@ class PagesController extends AppController {
  *
  * @param mixed	$id (blog_post_id)
  * @return void
- * @access public
  */
 	public function admin_create_preview($id) {
 		if (isset($this->request->data['Page'])) {
@@ -801,7 +784,6 @@ class PagesController extends AppController {
  * プレビューを表示する
  *
  * @return void
- * @access public
  */
 	public function admin_preview($id) {
 		$page = Cache::read('page_preview_' . $id, '_cake_core_');
@@ -867,7 +849,6 @@ class PagesController extends AppController {
 /**
  * 並び替えを更新する [AJAX]
  *
- * @access public
  * @return boolean
  */
 	public function admin_ajax_update_sort() {
@@ -896,7 +877,6 @@ class PagesController extends AppController {
  *
  * @param array $data
  * @return string
- * @access protected
  */
 	protected function _createAdminIndexConditions($data) {
 		/* 条件を生成 */
@@ -1019,7 +999,6 @@ class PagesController extends AppController {
  * @param int $type
  * @param int $id
  * @return boolean
- * @access public
  */
 	public function admin_check_agent_page_addable($type, $id = null) {
 		$user = $this->BcAuth->user();
@@ -1068,7 +1047,6 @@ class PagesController extends AppController {
  * @param int $type
  * @param boolean $empty
  * @return array
- * @access public
  */
 	public function admin_ajax_category_source($type) {
 		$option = array();
@@ -1086,7 +1064,6 @@ class PagesController extends AppController {
  * @param int $options
  * @param boolean $empty
  * @return array
- * @access public
  */
 	public function getCategorySource($type, $options = array()) {
 		$editable = true;
@@ -1151,7 +1128,6 @@ class PagesController extends AppController {
  * @param int $pageCategoryId
  * @param int $ownerId
  * @return boolean
- * @access public
  */
 	public function checkCurrentEditable($pageCategoryId, $ownerId) {
 		$user = $this->BcAuth->user();
@@ -1174,7 +1150,6 @@ class PagesController extends AppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -1195,7 +1170,6 @@ class PagesController extends AppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_unpublish($id) {
 		if (!$id) {
@@ -1216,7 +1190,6 @@ class PagesController extends AppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_publish($id) {
 		if (!$id) {
@@ -1293,7 +1266,6 @@ class PagesController extends AppController {
  *
  * @param int $id (page_id)
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 		if (!$id) {
@@ -1315,7 +1287,6 @@ class PagesController extends AppController {
  * 
  * @param int $id 
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($id = null) {
 		$result = $this->Page->copy($id);
@@ -1334,7 +1305,6 @@ class PagesController extends AppController {
  * 一覧の表示用データをセットする
  * 
  * @return void
- * @access protected
  */
 	protected function _setAdminIndexViewData() {
 		$user = $this->BcAuth->user();

@@ -3,7 +3,7 @@
  * プラグインコンテンツビヘイビアのテスト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
@@ -131,7 +131,6 @@ class BcCacheBehaviorTest extends BaserTestCase {
  * @param string $method
  * @args mixed
  * @return mixed
- * @access public
  */
 	public function testReadCache() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -161,7 +160,6 @@ class BcCacheBehaviorTest extends BaserTestCase {
  * 
  * @param Model $model
  * @return void
- * @access public
  */
 	public function testDelCache() {
 		$path = CACHE_DATA_PATH . $this->Page->tablePrefix . $this->Page->table;

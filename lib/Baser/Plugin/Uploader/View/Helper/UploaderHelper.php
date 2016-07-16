@@ -9,10 +9,11 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * アップローダーヘルパー
  *
- * @package			baser.plugins.uploader.views.helpers
+ * @package			Uploader.View.Helper
  */
 class UploaderHelper extends AppHelper {
 /**

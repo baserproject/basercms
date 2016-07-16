@@ -1,16 +1,15 @@
 <?php
 /**
- * 検索インデックスコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('HttpSocket', 'Core.Network/Http');
 
 /**
@@ -24,7 +23,6 @@ class SearchIndicesController extends AppController {
  * クラス名
  *
  * @var array
- * @access public
  */
 	public $name = 'SearchIndices';
 
@@ -32,7 +30,6 @@ class SearchIndicesController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('SearchIndex', 'Page');
 
@@ -40,7 +37,6 @@ class SearchIndicesController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -48,7 +44,6 @@ class SearchIndicesController extends AppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcText', 'BcForm');
 
@@ -56,7 +51,6 @@ class SearchIndicesController extends AppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -77,7 +71,6 @@ class SearchIndicesController extends AppController {
  * コンテンツ検索
  *
  * @return void
- * @access public
  */
 	public function search() {
 		$datas = array();
@@ -125,7 +118,6 @@ class SearchIndicesController extends AppController {
  *
  * @param string $query
  * @return array
- * @access protected
  */
 	protected function _parseQuery($query) {
 		$query = str_replace('　', ' ', $query);
@@ -295,7 +287,6 @@ class SearchIndicesController extends AppController {
  * [ADMIN] 検索インデックス
  * 
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->pageTitle = '検索インデックス一覧';
@@ -476,7 +467,6 @@ class SearchIndicesController extends AppController {
  * [AJAX] 優先順位を変更する
  * 
  * @return boolean
- * @access public
  */
 	public function admin_ajax_change_priority() {
 		if ($this->request->data) {

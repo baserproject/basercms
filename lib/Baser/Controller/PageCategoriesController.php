@@ -1,11 +1,9 @@
 <?php
 /**
- * 固定ページカテゴリーコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -23,7 +21,6 @@ class PageCategoriesController extends AppController {
  * Controller name
  *
  * @var string
- * @access public
  */
 	public $name = 'PageCategories';
 
@@ -31,7 +28,6 @@ class PageCategoriesController extends AppController {
  * Default helper
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcText', 'BcForm', 'BcArray', 'BcPage');
 
@@ -39,7 +35,6 @@ class PageCategoriesController extends AppController {
  * This controller does not use a model
  *
  * @var array
- * @access public
  */
 	public $uses = array('PageCategory');
 
@@ -47,7 +42,6 @@ class PageCategoriesController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -62,7 +56,6 @@ class PageCategoriesController extends AppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -77,7 +70,6 @@ class PageCategoriesController extends AppController {
  * [ADMIN] 固定ページカテゴリーリスト
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$default = array('PageCategory' => array('type' => '1'));
@@ -149,7 +141,6 @@ class PageCategoriesController extends AppController {
  * [ADMIN] 固定ページカテゴリー情報登録
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
 		if (empty($this->request->data)) {
@@ -246,7 +237,6 @@ class PageCategoriesController extends AppController {
  *
  * @param int page_id
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		/* 除外処理 */
@@ -344,7 +334,6 @@ class PageCategoriesController extends AppController {
  *
  * @param int page_id
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
 		/* 除外処理 */
@@ -371,7 +360,6 @@ class PageCategoriesController extends AppController {
  *
  * @param int $id 固定ページカテゴリーID
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 		if (!$id) {
@@ -392,7 +380,6 @@ class PageCategoriesController extends AppController {
  * 
  * @param int $id 固定ページカテゴリID
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($id = null) {
 		$result = $this->PageCategory->copy($id);
@@ -409,7 +396,6 @@ class PageCategoriesController extends AppController {
  * 一覧の表示用データをセットする
  * 
  * @return void
- * @access protected
  */
 	protected function _setAdminIndexViewData() {
 		$user = $this->BcAuth->user();
@@ -426,7 +412,6 @@ class PageCategoriesController extends AppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -445,7 +430,6 @@ class PageCategoriesController extends AppController {
  * 
  * @param int $id
  * @return void 
- * @access public
  */
 	public function admin_ajax_up($id) {
 		if ($this->PageCategory->moveUp($id)) {
@@ -461,7 +445,6 @@ class PageCategoriesController extends AppController {
  * 
  * @param int $id 
  * @return void
- * @access public
  * @deprecated
  */
 	public function admin_ajax_down($id) {

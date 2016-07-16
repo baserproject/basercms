@@ -414,129 +414,111 @@ class SimplePie
 {
 	/**
 	 * @var array Raw data
-	 * @access private
-	 */
+		 */
 	public $data = array();
 
 	/**
 	 * @var mixed Error string
-	 * @access private
-	 */
+		 */
 	public $error;
 
 	/**
 	 * @var object Instance of SimplePie_Sanitize (or other class)
 	 * @see SimplePie::set_sanitize_class()
-	 * @access private
-	 */
+		 */
 	public $sanitize;
 
 	/**
 	 * @var string SimplePie Useragent
 	 * @see SimplePie::set_useragent()
-	 * @access private
-	 */
+		 */
 	public $useragent = SIMPLEPIE_USERAGENT;
 
 	/**
 	 * @var string Feed URL
 	 * @see SimplePie::set_feed_url()
-	 * @access private
-	 */
+		 */
 	public $feed_url;
 
 	/**
 	 * @var object Instance of SimplePie_File to use as a feed
 	 * @see SimplePie::set_file()
-	 * @access private
-	 */
+		 */
 	public $file;
 
 	/**
 	 * @var string Raw feed data
 	 * @see SimplePie::set_raw_data()
-	 * @access private
-	 */
+		 */
 	public $raw_data;
 
 	/**
 	 * @var int Timeout for fetching remote files
 	 * @see SimplePie::set_timeout()
-	 * @access private
-	 */
+		 */
 	public $timeout = 10;
 
 	/**
 	 * @var bool Forces fsockopen() to be used for remote files instead
 	 * of cURL, even if a new enough version is installed
 	 * @see SimplePie::force_fsockopen()
-	 * @access private
-	 */
+		 */
 	public $force_fsockopen = false;
 
 	/**
 	 * @var bool Force the given data/URL to be treated as a feed no matter what
 	 * it appears like
 	 * @see SimplePie::force_feed()
-	 * @access private
-	 */
+		 */
 	public $force_feed = false;
 
 	/**
 	 * @var bool Enable/Disable Caching
 	 * @see SimplePie::enable_cache()
-	 * @access private
-	 */
+		 */
 	public $cache = true;
 
 	/**
 	 * @var int Cache duration (in seconds)
 	 * @see SimplePie::set_cache_duration()
-	 * @access private
-	 */
+		 */
 	public $cache_duration = 3600;
 
 	/**
 	 * @var int Auto-discovery cache duration (in seconds)
 	 * @see SimplePie::set_autodiscovery_cache_duration()
-	 * @access private
-	 */
+		 */
 	public $autodiscovery_cache_duration = 604800; // 7 Days.
 
 	/**
 	 * @var string Cache location (relative to executing script)
 	 * @see SimplePie::set_cache_location()
-	 * @access private
-	 */
+		 */
 	public $cache_location = './cache';
 
 	/**
 	 * @var string Function that creates the cache filename
 	 * @see SimplePie::set_cache_name_function()
-	 * @access private
-	 */
+		 */
 	public $cache_name_function = 'md5';
 
 	/**
 	 * @var bool Reorder feed by date descending
 	 * @see SimplePie::enable_order_by_date()
-	 * @access private
-	 */
+		 */
 	public $order_by_date = true;
 
 	/**
 	 * @var mixed Force input encoding to be set to the follow value
 	 * (false, or anything type-cast to false, disables this feature)
 	 * @see SimplePie::set_input_encoding()
-	 * @access private
-	 */
+		 */
 	public $input_encoding = false;
 
 	/**
 	 * @var int Feed Autodiscovery Level
 	 * @see SimplePie::set_autodiscovery_level()
-	 * @access private
-	 */
+		 */
 	public $autodiscovery = SIMPLEPIE_LOCATOR_ALL;
 
 	/**
@@ -549,63 +531,54 @@ class SimplePie
 	/**
 	 * @var int Maximum number of feeds to check with autodiscovery
 	 * @see SimplePie::set_max_checked_feeds()
-	 * @access private
-	 */
+		 */
 	public $max_checked_feeds = 10;
 
 	/**
 	 * @var array All the feeds found during the autodiscovery process
 	 * @see SimplePie::get_all_discovered_feeds()
-	 * @access private
-	 */
+		 */
 	public $all_discovered_feeds = array();
 
 	/**
 	 * @var string Web-accessible path to the handler_image.php file.
 	 * @see SimplePie::set_image_handler()
-	 * @access private
-	 */
+		 */
 	public $image_handler = '';
 
 	/**
 	 * @var array Stores the URLs when multiple feeds are being initialized.
 	 * @see SimplePie::set_feed_url()
-	 * @access private
-	 */
+		 */
 	public $multifeed_url = array();
 
 	/**
 	 * @var array Stores SimplePie objects when multiple feeds initialized.
-	 * @access private
-	 */
+		 */
 	public $multifeed_objects = array();
 
 	/**
 	 * @var array Stores the get_object_vars() array for use with multifeeds.
 	 * @see SimplePie::set_feed_url()
-	 * @access private
-	 */
+		 */
 	public $config_settings = null;
 
 	/**
 	 * @var integer Stores the number of items to return per-feed with multifeeds.
 	 * @see SimplePie::set_item_limit()
-	 * @access private
-	 */
+		 */
 	public $item_limit = 0;
 
 	/**
 	 * @var array Stores the default attributes to be stripped by strip_attributes().
 	 * @see SimplePie::strip_attributes()
-	 * @access private
-	 */
+		 */
 	public $strip_attributes = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc');
 
 	/**
 	 * @var array Stores the default tags to be stripped by strip_htmltags().
 	 * @see SimplePie::strip_htmltags()
-	 * @access private
-	 */
+		 */
 	public $strip_htmltags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style');
 
 	/**
@@ -1954,8 +1927,7 @@ class SimplePie
 	/**
 	 * Sanitize feed data
 	 *
-	 * @access private
-	 * @see SimplePie_Sanitize::sanitize()
+		 * @see SimplePie_Sanitize::sanitize()
 	 * @param string $data Data to sanitize
 	 * @param int $type One of the SIMPLEPIE_CONSTRUCT_* constants
 	 * @param string $base Base URL to resolve URLs against
@@ -2985,8 +2957,7 @@ class SimplePie
 	/**
 	 * Sorting callback for items
 	 *
-	 * @access private
-	 * @param SimplePie $a
+		 * @param SimplePie $a
 	 * @param SimplePie $b
 	 * @return boolean
 	 */

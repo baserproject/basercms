@@ -1,19 +1,13 @@
 <?php
-
 /**
- * フィード設定コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -30,7 +24,6 @@ class FeedConfigsController extends FeedAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'FeedConfigs';
 
@@ -38,7 +31,6 @@ class FeedConfigsController extends FeedAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
 
@@ -46,7 +38,6 @@ class FeedConfigsController extends FeedAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcText', 'BcTime', 'BcForm', 'Feed.Feed');
 
@@ -54,7 +45,6 @@ class FeedConfigsController extends FeedAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -62,7 +52,6 @@ class FeedConfigsController extends FeedAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
@@ -72,7 +61,6 @@ class FeedConfigsController extends FeedAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -80,7 +68,6 @@ class FeedConfigsController extends FeedAppController {
  * before_filter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -94,7 +81,6 @@ class FeedConfigsController extends FeedAppController {
  * [ADMIN] 一覧表示
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
@@ -120,7 +106,6 @@ class FeedConfigsController extends FeedAppController {
  * [ADMIN] 登録
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
 		if (empty($this->request->data)) {
@@ -153,7 +138,6 @@ class FeedConfigsController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
@@ -196,7 +180,6 @@ class FeedConfigsController extends FeedAppController {
  * 
  * @param string $template
  * @return void
- * @access public
  */
 	public function redirectEditTemplate($template) {
 		$path = 'Feed' . DS . $template . $this->ext;
@@ -226,7 +209,6 @@ class FeedConfigsController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -248,7 +230,6 @@ class FeedConfigsController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
 		if (!$id) {
@@ -271,7 +252,6 @@ class FeedConfigsController extends FeedAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
 		if (!$id) {
@@ -301,7 +281,6 @@ class FeedConfigsController extends FeedAppController {
  *
  * @param string $id
  * @return void
- * @access public
  */
 	public function admin_preview($id) {
 		if (!$id) {
@@ -315,7 +294,6 @@ class FeedConfigsController extends FeedAppController {
  * フィードのキャッシュを全て削除する
  * 
  * @return void
- * @access public
  */
 	public function admin_delete_cache() {
 		$this->_clearCache();
@@ -329,7 +307,6 @@ class FeedConfigsController extends FeedAppController {
  * @param string $feedConfigId
  * @param string $url
  * @return void
- * @access protected
  */
 	public function admin_clear_cache($feedConfigId = '', $url = '') {
 		$this->_clearCache($feedConfigId, $url);

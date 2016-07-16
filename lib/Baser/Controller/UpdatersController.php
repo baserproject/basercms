@@ -1,13 +1,9 @@
 <?php
 /**
- * アップデーターコントローラー
- *
- * baserCMSのコアや、プラグインのアップデートを行います
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -16,6 +12,8 @@
 
 /**
  * アップデーターコントローラー
+ *
+ * baserCMSのコアや、プラグインのアップデートを行います
  * 
  * @package	Baser.Controller
  */
@@ -25,7 +23,6 @@ class UpdatersController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Updaters';
 
@@ -33,7 +30,6 @@ class UpdatersController extends AppController {
  * アップデートメッセージ
  *
  * @var array
- * @access protected
  */
 	protected $_updateMessage = array();
 
@@ -41,7 +37,6 @@ class UpdatersController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -49,7 +44,6 @@ class UpdatersController extends AppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
@@ -57,7 +51,6 @@ class UpdatersController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Menu', 'Favorite');
 
@@ -65,7 +58,6 @@ class UpdatersController extends AppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		$this->Updater = ClassRegistry::init('Updater');
@@ -87,7 +79,6 @@ class UpdatersController extends AppController {
  * コアのアップデート実行
  *
  * @return void
- * @access public
  */
 	public function index() {
 		$aryUrl = explode('/', $this->request->url);
@@ -182,7 +173,6 @@ class UpdatersController extends AppController {
  * [ADMIN] アップデートスクリプトを実行する
  *
  * @return void
- * @access public
  */
 	public function admin_exec_script() {
 		if ($this->request->data) {
@@ -215,7 +205,6 @@ class UpdatersController extends AppController {
  * 
  * @param string $name
  * @return void
- * @access public
  */
 	public function admin_plugin($name) {
 		if (!$name) {
@@ -273,7 +262,6 @@ class UpdatersController extends AppController {
  * @param string $targetVersion
  * @param string $plugin
  * @return array $updates
- * @access protected
  */
 	protected function _getUpdaters($plugin = '') {
 		
@@ -331,7 +319,6 @@ class UpdatersController extends AppController {
  * @param string $targetVersion
  * @param string $plugin
  * @return array $updates
- * @access protected
  */
 	protected function _getScriptMessages($plugin = '') {
 		$targetVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getBaserVersion($plugin)));
@@ -390,7 +377,6 @@ class UpdatersController extends AppController {
  *
  * @param string $plugin
  * @return mixed $path or false
- * @access protected
  */
 	protected function _getUpdateFolder($plugin = '') {
 		if (!$plugin) {
@@ -420,7 +406,6 @@ class UpdatersController extends AppController {
  * @param string $sourceVersion
  * @param string $plugin
  * @return boolean
- * @access public
  */
 	protected function _update($plugin = '') {
 		$targetVersion = $this->getBaserVersion($plugin);
@@ -477,7 +462,6 @@ class UpdatersController extends AppController {
  * @param string $__plugin
  * @param string $__version
  * @return void
- * @access protected
  */
 	public function _execScript($__plugin, $__version) {
 		$__path = $this->_getUpdateFolder($__plugin) . $__version . DS . 'updater.php';
@@ -503,7 +487,6 @@ class UpdatersController extends AppController {
  * @param boolean $head 見出しとして設定する
  * @param boolean $beforeBreak 前の行で改行する
  * @return void
- * @access public
  */
 	public function setUpdateLog($message) {
 		$this->_updateMessage[] = $message;
@@ -545,7 +528,6 @@ class UpdatersController extends AppController {
  * @param string $filterTable 指定したテーブルのみCSVファイルを読み込む場合は、プレフィックス部分を除外したテーブル名を指定します。（例）'permissions'
  *		指定しない場合は全てのテーブルが対象になります。
  * @return boolean
- * @access public
  */
 	public function loadCsv($version, $plugin = '', $filterTable = '') {
 		$path = $this->_getUpdatePath($version, $plugin);
@@ -593,7 +575,6 @@ class UpdatersController extends AppController {
  * アップデートメッセージを保存する
  *
  * @return void
- * @access protected
  */
 	protected function _writeUpdateLog() {
 		if ($this->_updateMessage) {

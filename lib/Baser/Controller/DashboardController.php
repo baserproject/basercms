@@ -1,19 +1,13 @@
 <?php
-
 /**
- * ダッシュボードコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -28,7 +22,6 @@ class DashboardController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Dashboard';
 
@@ -36,7 +29,6 @@ class DashboardController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Dblog', 'User', 'Menu', 'Page');
 
@@ -44,7 +36,6 @@ class DashboardController extends AppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcTime', 'Js');
 
@@ -52,7 +43,6 @@ class DashboardController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -60,7 +50,6 @@ class DashboardController extends AppController {
  * ぱんくずナビ
  *
  * @var string
- * @access public
  */
 	public $crumbs = array();
 
@@ -68,7 +57,6 @@ class DashboardController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -76,7 +64,6 @@ class DashboardController extends AppController {
  * [ADMIN] 管理者ダッシュボードページにajaxでデータを取得する
  *
  * @return void
- * @access public
  */
 	public function admin_ajax_dblog_index() {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
@@ -92,7 +79,6 @@ class DashboardController extends AppController {
  * [ADMIN] 管理者ダッシュボードページを表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->pageTitle = '管理者ダッシュボード';
@@ -116,7 +102,6 @@ class DashboardController extends AppController {
  * [ADMIN] 最近の動きを削除
  * 
  * @return void
- * @access public
  */
 	public function admin_del() {
 		if ($this->Dblog->deleteAll('1 = 1')) {

@@ -1,11 +1,9 @@
 <?php
 /**
- * ThemeConfig
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
  * @since			baserCMS v 3.0.0
@@ -17,6 +15,8 @@ App::uses('DispatcherFilter', 'Routing');
 /**
  * This filter will check whether the response was previously cached in the file system
  * and served it back to the client if appropriate.
+ *
+ * @package Baser.Routing.Filter
  */
 class BcCacheDispatcher extends DispatcherFilter {
 

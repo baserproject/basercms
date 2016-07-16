@@ -9,13 +9,11 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 /**
  * ファイルアップローダーモデル
  *
- * @package		uploader.models
+ * @package		Uploader.Model
  */
 class UploaderFile extends BcPluginAppModel {
 /**

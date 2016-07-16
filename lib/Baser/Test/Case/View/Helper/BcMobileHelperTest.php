@@ -3,7 +3,7 @@
  * ThemeConfig
  * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright   Copyright 2008 - 2015, baserCMS Users Community
  * @link      http://basercms.net baserCMS Project
@@ -58,7 +58,6 @@ class BcMobileHelperTest extends BaserTestCase {
  * afterLayout
  *
  * @return void
- * @access public
  */
 	public function testAfterLayout() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -69,7 +68,6 @@ class BcMobileHelperTest extends BaserTestCase {
  * コンテンツタイプを出力
  * 
  * @return void
- * @access public
  */
 	public function testHeader() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

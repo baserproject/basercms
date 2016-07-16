@@ -1,20 +1,15 @@
 <?php
-
 /**
- * ブログコンテンツモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BlogAppModel', 'Blog.Model');
 
 /**
@@ -28,7 +23,6 @@ class BlogContent extends BlogAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogContent';
 
@@ -36,7 +30,6 @@ class BlogContent extends BlogAppModel {
  * behaviors
  *
  * @var array
- * @access public
  */
 	public $actsAs = array('BcSearchIndexManager', 'BcPluginContent', 'BcCache');
 
@@ -44,7 +37,6 @@ class BlogContent extends BlogAppModel {
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array('BlogPost' =>
 		array('className' => 'Blog.BlogPost',
@@ -67,7 +59,6 @@ class BlogContent extends BlogAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -136,7 +127,6 @@ class BlogContent extends BlogAppModel {
  *
  * @param string $check チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function alphaNumeric($check) {
 		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
@@ -151,7 +141,6 @@ class BlogContent extends BlogAppModel {
  *
  * @param string フィールド名
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field = null, $options = array()) {
 		$controlSources['id'] = $this->find('list');
@@ -167,7 +156,6 @@ class BlogContent extends BlogAppModel {
  * afterSave
  *
  * @return boolean
- * @access public
  */
 	public function afterSave($created, $options = array()) {
 		if (empty($this->data['BlogContent']['id'])) {
@@ -206,7 +194,6 @@ class BlogContent extends BlogAppModel {
  *
  * @param array $data
  * @return array
- * @access public
  */
 	public function createSearchIndex($data) {
 		if (isset($data['BlogContent'])) {
@@ -262,7 +249,6 @@ class BlogContent extends BlogAppModel {
  * フォームの初期値を取得する
  *
  * @return void
- * @access protected
  */
 	public function getDefaultValue() {
 		$data['BlogContent']['comment_use'] = true;

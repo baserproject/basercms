@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Controller.Component
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
+ */
 
 /**
  * リプレースプレフィックスコンポーネント
@@ -20,7 +29,7 @@
  * ・Authと併用する場合は、コンポーネントの宣言で、Authより前に宣言しないと認証処理が動作しない。
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright 2008 - 2015, baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
@@ -35,7 +44,6 @@ class BcReplacePrefixComponent extends Component {
  * プレフィックスなしの純粋なアクション名を指定する
  *
  * @var array
- * @access public
  */
 	public $allowedPureActions = array();
 
@@ -43,7 +51,6 @@ class BcReplacePrefixComponent extends Component {
  * 置き換え後のプレフィックス
  *
  * @var string
- * @access public
  */
 	public $replacedPrefix = 'admin';
 
@@ -60,7 +67,6 @@ class BcReplacePrefixComponent extends Component {
  *
  * @param Controller $Controller
  * @return void
- * @access public
  */
 	public function initialize(Controller $Controller) {
 		$this->_methods = $Controller->methods;
@@ -75,7 +81,6 @@ class BcReplacePrefixComponent extends Component {
  * @param string $action
  * @param string ... etc.
  * @return void
- * @access public
  */
 	public function allow() {
 		$args = func_get_args();
@@ -154,7 +159,6 @@ class BcReplacePrefixComponent extends Component {
  *
  * @param string $plugin
  * @return array paths
- * @access private
  */
 	public function getViewPaths($Controller) {
 		$paths = array_merge(App::path('View', $Controller->plugin), App::path('View'));

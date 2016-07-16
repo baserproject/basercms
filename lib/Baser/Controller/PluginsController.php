@@ -1,12 +1,9 @@
 <?php
-
 /**
- * Plugin 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -30,7 +27,6 @@ class PluginsController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Plugins';
 
@@ -38,7 +34,6 @@ class PluginsController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Menu', 'Plugin', 'PluginContent');
 
@@ -46,7 +41,6 @@ class PluginsController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -54,7 +48,6 @@ class PluginsController extends AppController {
  * ヘルパ
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcTime', 'BcForm');
 
@@ -62,7 +55,6 @@ class PluginsController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -70,7 +62,6 @@ class PluginsController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
@@ -146,7 +137,6 @@ class PluginsController extends AppController {
  * プラグインの一覧を表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->Plugin->cacheQueries = false;

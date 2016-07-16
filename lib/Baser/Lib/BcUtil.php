@@ -1,11 +1,9 @@
 <?php
 /**
- * BcUtil
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Lib
  * @since			baserCMS v 3.0.7
@@ -14,6 +12,11 @@
 
 App::uses('BcAuthComponent', 'Controller/Component');
 
+/**
+ * Class BcUtil
+ *
+ * @package Baser.Lib
+ */
 class BcUtil extends Object {
 
 /**

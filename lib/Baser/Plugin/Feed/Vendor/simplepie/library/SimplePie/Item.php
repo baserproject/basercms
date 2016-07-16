@@ -58,16 +58,14 @@ class SimplePie_Item
 	/**
 	 * Parent feed
 	 *
-	 * @access private
-	 * @var SimplePie
+		 * @var SimplePie
 	 */
 	var $feed;
 
 	/**
 	 * Raw data
 	 *
-	 * @access private
-	 * @var array
+		 * @var array
 	 */
 	var $data = array();
 
@@ -170,8 +168,7 @@ class SimplePie_Item
 	/**
 	 * Sanitize feed data
 	 *
-	 * @access private
-	 * @see SimplePie::sanitize()
+		 * @see SimplePie::sanitize()
 	 * @param string $data Data to sanitize
 	 * @param int $type One of the SIMPLEPIE_CONSTRUCT_* constants
 	 * @param string $base Base URL to resolve URLs against
