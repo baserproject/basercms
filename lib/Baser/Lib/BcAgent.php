@@ -81,6 +81,9 @@ class BcAgent {
  * @return BcAgent[]
  */
 	public static function findAll() {
+		if(!BC_INSTALLED) {
+			return [];
+		}
 		$configs = Configure::read("BcAgent");
 		$Site = ClassRegistry::init('Site');
 		$alias = $Site->find('list', ['fields' => ['name', 'alias'], 'conditions' => ['Site.name' => array_keys($configs)]]);
