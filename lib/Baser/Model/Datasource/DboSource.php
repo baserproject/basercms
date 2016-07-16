@@ -37,7 +37,6 @@ class DboSource extends DataSource {
  * PHP←→DBエンコーディングマップ
  *
  * @var array
- * @access	protected
  */
 	protected $_encodingMaps = array('utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP');
 
@@ -3565,7 +3564,6 @@ class DboSource extends DataSource {
  * @param array $options	path は必須
  * @param pass $path
  * @return boolean
- * @access public
  */
 	public function loadSchema($options) {
 		App::uses('CakeSchema', 'Model');
@@ -3655,7 +3653,6 @@ class DboSource extends DataSource {
  *
  * @param string	$filename 保存先のフルパス
  * @return boolean
- * @access public
  */
 	public function writeCurrentSchema($filename) {
 		$this->cacheSources = false;
@@ -3686,7 +3683,6 @@ class DboSource extends DataSource {
  * @param	array	model	モデル名
  * 					path	スキーマファイルの生成場所
  * @return	mixed	スキーマファイルの内容 Or false
- * @access	public
  */
 	public function writeSchema($options) {
 		//App::uses('CakeSchema', 'Model');
@@ -3767,7 +3763,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ path ]
  * @return boolean
- * @access	public
  */
 	public function createTableBySchema($options) {
 		extract($options);
@@ -3797,7 +3792,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ oldPath / newPath ]
  * @return boolean
- * @access public
  */
 	public function alterTableBySchema($options) {
 		$options = array_merge(array('dropField' => true), $options);
@@ -3838,7 +3832,6 @@ class DboSource extends DataSource {
  * @param string $oldName
  * @param string $newName
  * @return boolean
- * @access public
  */
 	public function dropTableBySchema($options) {
 		extract($options);
@@ -3867,7 +3860,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ schema / table ]
  * @return boolean
- * @access public
  */
 	public function createTable($options) {
 		extract($options);
@@ -3900,7 +3892,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ new / old ]
  * @return boolean
- * @access	public
  */
 	public function alterTable($options) {
 		$options = array_merge(array('dropField' => true), $options);
@@ -3942,7 +3933,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ schema / table ]
  * @return boolean
- * @access public
  */
 	public function dropTable($options) {
 		extract($options);
@@ -3981,7 +3971,6 @@ class DboSource extends DataSource {
  * @param string $oldName
  * @param array $options [ old / new ]
  * @return boolean
- * @access public
  */
 	public function renameTable($options) {
 		extract($options);
@@ -4001,7 +3990,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / column ]
  * @return boolean
- * @access public
  */
 	public function addColumn($options) {
 		extract($options);
@@ -4053,7 +4041,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / column / field ]
  * @return boolean
- * @access public
  */
 	public function changeColumn($options) {
 		extract($options);
@@ -4089,7 +4076,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / field ]
  * @return boolean
- * @access public
  */
 	public function dropColumn($options) {
 		extract($options);
@@ -4117,7 +4103,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / new / old ]
  * @return boolean
- * @access public
  */
 	public function renameColumn($options) {
 		extract($options);
@@ -4137,7 +4122,6 @@ class DboSource extends DataSource {
  * @param string $sourceName
  * @param string $targetName
  * @return string
- * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
 		return "ALTER TABLE " . $sourceName . " RENAME " . $targetName;
@@ -4148,7 +4132,6 @@ class DboSource extends DataSource {
  *
  * @param string $table
  * @return array $schema
- * @access public
  */
 	public function readSchema($table, $options = array()) {
 		if (is_array($options)) {
@@ -4189,7 +4172,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ path / encoding ]
  * @return boolean
- * @access public
  */
 	public function loadCsv($options) {
 		
@@ -4316,7 +4298,6 @@ class DboSource extends DataSource {
  *
  * @param array $record
  * @return array
- * @access protected
  */
 	protected function _convertRecordToCsv($record) {
 		foreach ($record as $field => $value) {
@@ -4330,7 +4311,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ path / table / encoding ]
  * @return boolean
- * @access public
  */
 	public function writeCsv($options) {
 		$options = array_merge(array(
@@ -4436,7 +4416,6 @@ class DboSource extends DataSource {
  *
  * @param string	$enc
  * @return string
- * @access protected
  */
 	protected function _dbEncToPhp($enc) {
 		if(is_array($enc)) {

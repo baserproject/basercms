@@ -23,7 +23,6 @@ class BcPostgres extends Postgres {
  * @param string $sourceName
  * @param string $targetName
  * @return string
- * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
 		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
@@ -34,7 +33,6 @@ class BcPostgres extends Postgres {
  *
  * @param array $options [ table / new / old  ]
  * @return boolean
- * @access public
  */
 	public function renameColumn($options) {
 		extract($options);

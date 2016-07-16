@@ -1,19 +1,13 @@
 <?php
-
 /**
- * ウィジェットエリアモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -26,7 +20,6 @@ class WidgetArea extends AppModel {
 /**
  * クラス名
  * @var string
- * @access public
  */
 	public $name = 'WidgetArea';
 
@@ -34,7 +27,6 @@ class WidgetArea extends AppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
@@ -42,7 +34,6 @@ class WidgetArea extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -60,7 +51,6 @@ class WidgetArea extends AppModel {
  * コントロールソース取得
  * @param string $field
  * @return array
- * @access public
  */
 	public function getControlSource($field) {
 		$controllSource['id'] = $this->find('list');

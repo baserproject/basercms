@@ -23,7 +23,6 @@ class BcMysql extends Mysql {
  * @param string $sourceName
  * @param string $targetName
  * @return string
- * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
 		return "ALTER TABLE `" . $sourceName . "` RENAME `" . $targetName . "`";

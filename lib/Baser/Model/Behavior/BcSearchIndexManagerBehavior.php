@@ -1,14 +1,12 @@
 <?php
 /**
- * 検索インデックス管理ビヘイビア
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 
@@ -23,7 +21,6 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  * SearchIndex Model
  * 
  * @var SearchIndex
- * @access public
  */
 	public $SearchIndex = null;
 
@@ -42,7 +39,6 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  * @param Model $model
  * @param array $data
  * @return boolean
- * @access public
  */
 	public function saveSearchIndex(Model $model, $data) {
 		if (!$data) {
@@ -101,7 +97,6 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  *
  * @param Model $model
  * @return boolean
- * @access public
  */
 	public function updateSearchIndexMeta(Model $model) {
 		$db = ConnectionManager::getDataSource('baser');

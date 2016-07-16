@@ -1,20 +1,15 @@
 <?php
-
 /**
- * Model 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('Sanitize', 'Utility');
 App::uses('Folder', 'Utility');
 App::uses('Model', 'Model');
@@ -65,7 +60,6 @@ class BcAppModel extends Model {
  * beforeSave
  *
  * @return	boolean
- * @access	public
  */
 	public function beforeSave($options = array()) {
 		$result = parent::beforeSave($options);
@@ -575,7 +569,6 @@ class BcAppModel extends Model {
  *
  * @param	array	$options [ field / table ]
  * @return	boolean
- * @access	public
  */
 	public function delField($options) {
 		extract($options);
@@ -602,7 +595,6 @@ class BcAppModel extends Model {
  * @param array	$options [ new / old / table ]
  * @param array $column
  * @return boolean
- * @access public
  */
 	public function renameField($options) {
 		extract($options);
@@ -866,7 +858,6 @@ class BcAppModel extends Model {
 /**
  * Modelキャッシュを削除する
  * @return void
- * @access public
  */
 	public function deleteModelCache() {
 		$this->_schema = null;
@@ -1236,7 +1227,6 @@ class BcAppModel extends Model {
  * @param boolean $cascade Set to true to delete records that depend on this record
  * @param boolean $callbacks Run callbacks (not being used)
  * @return boolean True on success, false on failure
- * @access public
  * @link http://book.cakephp.org/view/692/deleteAll
  */
 	public function deleteAll($conditions, $cascade = true, $callbacks = false) {
@@ -1431,7 +1421,6 @@ class BcAppModel extends Model {
  * @param string $publishBegin 公開開始日時
  * @param string $publishEnd		公開終了日時
  * @return	array
- * @access public
  */
 	public function isPublish($status, $publishBegin, $publishEnd) {
 		if (!$status) {

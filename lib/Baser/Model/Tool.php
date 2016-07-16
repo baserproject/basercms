@@ -1,21 +1,20 @@
 <?php
-
 /**
- * ツールモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('CakeSchema', 'Model');
 
 /**
  * ツールモデル
+ *
  * @package Baser.Model
  */
 class Tool extends AppModel {
@@ -24,7 +23,6 @@ class Tool extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Tool';
 
@@ -32,7 +30,6 @@ class Tool extends AppModel {
  * テーブル
  * 
  * @var string
- * @access public
  */
 	public $useTable = false;
 
@@ -41,7 +38,6 @@ class Tool extends AppModel {
  *
  * @param string フィールド名
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field) {
 		// スキーマ用モデルリスト
@@ -59,7 +55,6 @@ class Tool extends AppModel {
  * 
  * @param string $configKeyName データソース名
  * @return array
- * @access public
  */
 	public function getListModels($configKeyName = 'baser') {
 		$db = ConnectionManager::getDataSource($configKeyName);
@@ -83,7 +78,6 @@ class Tool extends AppModel {
  * @param array $data
  * @param string $path スキーマファイルの生成場所
  * @return boolean
- * @access public
  */
 	public function writeSchema($data, $path) {
 		if (isset($data['Tool'])) {
@@ -114,7 +108,6 @@ class Tool extends AppModel {
  * @param array $data
  * @param string $tmpPath 
  * @return boolean
- * @access public
  */
 	public function loadSchemaFile($data, $tmpPath) {
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
@@ -140,7 +133,6 @@ class Tool extends AppModel {
  * @param array $values
  * @param string $path スキーマファイルの生成場所
  * @return boolean
- * @access protected
  */
 	protected function _writeSchema($field, $values, $path) {
 		$db = ConnectionManager::getDataSource($field);

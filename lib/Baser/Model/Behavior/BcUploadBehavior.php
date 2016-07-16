@@ -1,19 +1,15 @@
 <?php
 /**
- * ファイルアップロードビヘイビア
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('Imageresizer', 'Vendor');
 
 /**
@@ -53,7 +49,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 保存ディレクトリ
  * 
  * @var string
- * @access public
  */
 	public $savePath = '';
 
@@ -61,7 +56,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 設定
  * 
  * @var array
- * @access public
  */
 	public $settings = null;
 
@@ -69,7 +63,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 一時ID
  * 
  * @var string
- * @access public
  */
 	public $tmpId = null;
 
@@ -77,7 +70,6 @@ class BcUploadBehavior extends ModelBehavior {
  * Session
  * 
  * @var Session
- * @access public
  */
 	public $Session = null;
 
@@ -103,7 +95,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model	$Model
  * @param array	actsAsの設定
  * @return void
- * @access public
  */
 	public function setup(Model $Model, $settings = array()) {
 		$this->settings[$Model->alias] = Hash::merge(array(
@@ -133,7 +124,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param Model $options
  * @return boolean
- * @access public
  */
 	public function beforeSave(Model $Model, $options = array()) {
 		return $this->saveFiles($Model);
@@ -146,7 +136,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $created
  * @param Model $options
  * @return boolean
- * @access public
  */
 	public function afterSave(Model $Model, $created, $options = array()) {
 		if($this->uploaded) {
@@ -163,7 +152,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param array $data
  * @param string $tmpId
  * @return boolean
- * @access public
  */
 	public function saveTmpFiles(Model $Model, $data, $tmpId) {
 		$this->Session->delete('Upload');
@@ -181,7 +169,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param Model $Model
  * @return boolean
- * @access public
  */
 	public function saveFiles(Model $Model) {
 		$serverData = $Model->findById($Model->id);
@@ -320,7 +307,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param string $fieldName
  * @return void
- * @access public
  */
 	public function moveFileSessionToTmp(Model $Model, $fieldName) {
 		$fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
@@ -366,7 +352,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param array 画像保存対象フィールドの設定
  * @return ファイル名 Or false
- * @access public
  */
 	public function saveFile(Model $Model, $field) {
 		// データを取得
@@ -428,7 +413,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param array 画像保存対象フィールドの設定
  * @return boolean
- * @access public
  */
 	public function copyImage(Model $Model, $field) {
 		// データを取得
@@ -469,7 +453,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param int $height 高さ
  * @param boolean $$thumb サムネイルとしてコピーするか
  * @return boolean
- * @access public
  */
 	public function resizeImage($source, $distination, $width = 0, $height = 0, $thumb = false) {
 		if ($width > 0 || $height > 0) {
@@ -493,7 +476,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param string $path 画像のパス
  * @return mixed array / false
- * @access public
  */
 	public function getImageSize($path) {
 		$imginfo = getimagesize($path);
@@ -521,7 +503,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param Model $Model
  * @return boolean
- * @access public
  */
 	public function delFiles(Model $Model, $fieldName = null) {
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
@@ -545,7 +526,6 @@ class BcUploadBehavior extends ModelBehavior {
  * - suffix 対象のファイルの接尾辞
  * @param boolean $delImagecopy 
  * @return boolean
- * @access public
  */
 	public function delFile(Model $Model, $file, $field, $delImagecopy = true) {
 		if (!$file) {
@@ -591,7 +571,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param Model $Model
  * @return boolean
- * @access public
  */
 	public function renameToFieldBasename(Model $Model, $copy = false) {
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $setting) {
@@ -660,7 +639,6 @@ class BcUploadBehavior extends ModelBehavior {
  * - nameadd nameを追加しないか
  * @param string $ext ファイルの拡張子
  * @return mixed false / string
- * @access public
  */
 	public function getFieldBasename(Model $Model, $setting, $ext) {
 		if (empty($setting['namefield'])) {
@@ -710,7 +688,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param array $setting
  * @param string $filename
  * @return string
- * @access public
  */
 	public function getFileName(Model $Model, $setting, $filename) {
 		if (empty($setting)) {
@@ -740,7 +717,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param array $setting
  * @param string $filename
  * @return string
- * @access public
  */
 	public function getBasename(Model $Model, $setting, $filename) {
 		$pattern = "/^" . $setting['prefix'] . "(.*?)" . $setting['suffix'] . "\.[a-zA-Z0-9]*$/is";
@@ -757,7 +733,6 @@ class BcUploadBehavior extends ModelBehavior {
  * @param string $fieldName 一意の名前を取得する元となるフィールド名
  * @param string $fileName 対象のファイル名
  * @return string
- * @access public
  */
 	public function getUniqueFileName(Model $Model, $fieldName, $fileName, $setting = null) {
 		$pathinfo = pathinfo($fileName);

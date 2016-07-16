@@ -35,7 +35,6 @@ class BcSqlite extends Sqlite {
  * Enter description here...
  *
  * @var string
- * @access public
  */
 	public $description = "SQLite3 DBO Driver";
 
@@ -43,7 +42,6 @@ class BcSqlite extends Sqlite {
  * Enter description here...
  *
  * @var string
- * @access public
  */
 	public $startQuote = '"';
 
@@ -51,7 +49,6 @@ class BcSqlite extends Sqlite {
  * Enter description here...
  *
  * @var string
- * @access public
  */
 	public $endQuote = '"';
 
@@ -59,7 +56,6 @@ class BcSqlite extends Sqlite {
  * Base configuration settings for SQLite3 driver
  *
  * @var array
- * @access protected
  */
 	protected $_baseConfig = array(
 		'persistent' => false,
@@ -71,7 +67,6 @@ class BcSqlite extends Sqlite {
  * SQLite3 column definition
  *
  * @var array
- * @access public
  */
 	public $columns = array(
 		'primary_key' => array('name' => 'integer primary key autoincrement'),
@@ -100,7 +95,6 @@ class BcSqlite extends Sqlite {
  *
  * @param array $config Configuration array for connecting
  * @return mixed
- * @access public
  */
 	public function connect() {
 		//echo "runs connect\n";
@@ -136,7 +130,6 @@ class BcSqlite extends Sqlite {
  *
  * @param string $sql SQL statement
  * @return resource Result resource identifier
- * @access protected
  */
 	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
 		//echo "runs execute\n";
@@ -166,7 +159,6 @@ class BcSqlite extends Sqlite {
  * Returns an array of tables in the database. If there are no tables, an error is raised and the application exits.
  *
  * @return array Array of tablenames in the database
- * @access public
  */
 	public function listSources($data = null) {
 		//echo "runs listSources\n";
@@ -211,7 +203,6 @@ class BcSqlite extends Sqlite {
  * @param string $column
  * @param int $safe
  * @return string Quoted and escaped
- * @access public
  */
 	public function value($data, $column = null, $safe = false) {
 		$parent = parent::value($data, $column, $safe);
@@ -263,7 +254,6 @@ class BcSqlite extends Sqlite {
  * @param array $values
  * @param mixed $conditions
  * @return array
- * @access public
  */
 	public function update(Model $model, $fields = null, $values = null, $conditions = null) {
 		if (empty($values) && !empty($fields)) {
@@ -287,7 +277,6 @@ class BcSqlite extends Sqlite {
  * @param string $model
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions).
- * @access public
  */
 	public function begin() {
 		return null;
@@ -309,7 +298,6 @@ class BcSqlite extends Sqlite {
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
  * or a transaction has not started).
- * @access public
  */
 	public function commit() {
 		return null;
@@ -329,7 +317,6 @@ class BcSqlite extends Sqlite {
  * @return boolean True on success, false on fail
  * (i.e. if the database/model does not support transactions,
  * or a transaction has not started).
- * @access public
  */
 	public function rollback() {
 		return null;
@@ -343,7 +330,6 @@ class BcSqlite extends Sqlite {
  * Returns a formatted error message from previous database operation.
  *
  * @return string Error message
- * @access public
  */
 	public function lastError(PDOStatement $query = null) {
 		return $this->last_error;
@@ -353,7 +339,6 @@ class BcSqlite extends Sqlite {
  * Returns number of affected rows in previous database operation. If no previous operation exists, this returns false.
  *
  * @return integer Number of affected rows
- * @access public
  */
 	public function lastAffected($source = null) {
 		if ($this->_result) {
@@ -367,7 +352,6 @@ class BcSqlite extends Sqlite {
  * this returns false.
  *
  * @return integer Number of rows in resultset
- * @access public
  */
 	public function lastNumRows($source = null) {
 		if ($this->pdo_statement) {
@@ -381,7 +365,6 @@ class BcSqlite extends Sqlite {
  * Returns the ID generated from the previous INSERT operation.
  *
  * @return int
- * @access public
  */
 	public function lastInsertId($source = null) {
 		//return sqlite3_last_insert_rowid($this->_connection);
@@ -393,7 +376,6 @@ class BcSqlite extends Sqlite {
  *
  * @param string $real Real database-layer column type (i.e. "varchar(255)")
  * @return string Abstract column type (i.e. "string")
- * @access public
  */
 	public function column($real) {
 		if (is_array($real)) {
@@ -428,7 +410,6 @@ class BcSqlite extends Sqlite {
  *
  * @param unknown_type $results
  * @return string
- * @access public
  */
 	public function resultSet($results) {
 		$this->results = $results;
@@ -491,7 +472,6 @@ class BcSqlite extends Sqlite {
  * Fetches the next row from the current result set
  *
  * @return unknown
- * @access public
  */
 	public function fetchResult() {
 		//if ($row = sqlite3_fetch_array($this->results, SQLITE3_ASSOC)) {
@@ -526,7 +506,6 @@ class BcSqlite extends Sqlite {
  * @param integer $limit Limit of results returned
  * @param integer $offset Offset from which to start results
  * @return string SQL limit/offset statement
- * @access public
  */
 	public function limit($limit, $offset = null) {
 		if ($limit) {
@@ -549,7 +528,6 @@ class BcSqlite extends Sqlite {
  * @param array $column An array structured like the following: array('name'=>'value', 'type'=>'value'[, options]),
  * where options can be 'default', 'length', or 'key'.
  * @return string
- * @access public
  */
 	public function buildColumn($column) {
 		$name = $type = null;
@@ -667,7 +645,6 @@ class BcSqlite extends Sqlite {
  *
  * @param array $compare Result of a CakeSchema::compare()
  * @return array Array of alter statements to make.
- * @access public
  */
 	public function alterSchema($compare, $table = null) {
 		if (!is_array($compare)) {
@@ -721,7 +698,6 @@ class BcSqlite extends Sqlite {
  *
  * @param string $model Name of model to inspect
  * @return array Fields in table. Keys are column and unique
- * @access public
  */
 	public function index($model) {
 		$index = array();
@@ -766,7 +742,6 @@ class BcSqlite extends Sqlite {
  * @param string $table Table to alter indexes for
  * @param array $new Indexes to add and drop
  * @return array Index alteration statements
- * @access protected
  */
 	protected function _alterIndexes($table, $indexes) {
 		return array();
@@ -777,7 +752,6 @@ class BcSqlite extends Sqlite {
  *
  * @param array $options [ new / old ]
  * @return boolean
- * @access public
  */
 	public function alterTable($options) {
 		extract($options);
@@ -838,7 +812,6 @@ class BcSqlite extends Sqlite {
  * @param string $sourceName
  * @param string $targetName
  * @return string
- * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
 		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
@@ -849,7 +822,6 @@ class BcSqlite extends Sqlite {
  * 
  * @param	array	$options [ table / new / old ]
  * @return boolean
- * @access public
  */
 	public function renameColumn($options) {
 		extract($options);
@@ -923,7 +895,6 @@ class BcSqlite extends Sqlite {
  * 
  * @param	array	$options [ table / field / prefix ]
  * @return boolean
- * @access public
  */
 	public function dropColumn($options) {
 		extract($options);
@@ -984,7 +955,6 @@ class BcSqlite extends Sqlite {
  * @param string	$targetTableName
  * @param array	$schema
  * @return booelan
- * @access protected
  */
 	protected function _moveData($sourceTableName, $targetTableName, $schema) {
 		$sql = 'INSERT INTO ' . $targetTableName . ' SELECT ' . $this->_convertCsvFieldsFromSchema($schema) . ' FROM ' . $sourceTableName;
@@ -995,7 +965,6 @@ class BcSqlite extends Sqlite {
  * スキーマ情報よりCSV形式のフィールドリストを取得する
  * @param array $schema
  * @return string
- * @access protected
  */
 	protected function _convertCsvFieldsFromSchema($schema) {
 		$fields = '';
@@ -1012,7 +981,6 @@ class BcSqlite extends Sqlite {
  *
  * @param string $tableName Name of database table to inspect
  * @return array Fields in table. Keys are name and type
- * @access public
  */
 	public function describe($model) {
 		$cache = $this->__describe($model);
@@ -1064,7 +1032,6 @@ class BcSqlite extends Sqlite {
  * 
  * @param Model $model
  * @return mixed
- * @access private
  */
 	private function __describe($model) {
 		if ($this->cacheSources === false) {

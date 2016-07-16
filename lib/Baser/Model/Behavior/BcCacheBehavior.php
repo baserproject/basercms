@@ -1,11 +1,9 @@
 <?php
 /**
- * キャッシュビヘイビア
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
  * @since			baserCMS v 0.1.0
@@ -25,7 +23,6 @@ class BcCacheBehavior extends ModelBehavior {
  * @param Model $model
  * @param array $config 
  * @return void
- * @access public
  */
 	public function setup(Model $model, $config = array()) {
 		if (!defined('CACHE_DATA_PATH')) {
@@ -61,7 +58,6 @@ class BcCacheBehavior extends ModelBehavior {
  * @param string $method
  * @args mixed
  * @return mixed
- * @access public
  */
 	public function readCache(Model $model, $expire, $type, $query = array()) {
 		static $cacheData = array();
@@ -123,7 +119,6 @@ class BcCacheBehavior extends ModelBehavior {
  * 
  * @param Model $model
  * @return void
- * @access public
  */
 	public function delCache(Model $model) {
 		if (!defined('CACHE_DATA_PATH')) {
@@ -141,7 +136,6 @@ class BcCacheBehavior extends ModelBehavior {
  * @param Model $model
  * @param boolean $created 
  * @return void
- * @access public
  */
 	public function afterSave(Model $model, $created, $options = array()) {
 		$this->delAssockCache($model);
@@ -152,7 +146,6 @@ class BcCacheBehavior extends ModelBehavior {
  * 
  * @param Model $model 
  * @return void
- * @access public
  */
 	public function afterDelete(Model $model) {
 		$this->delAssockCache($model);
@@ -163,7 +156,6 @@ class BcCacheBehavior extends ModelBehavior {
  * 
  * @param Model $model
  * @return void
- * @access public
  * @todo 現在、3階層まで再帰対応。CakePHPのrecursiveの仕組み合わせたい
  */
 	public function delAssockCache(Model $model, $recursive = 0) {

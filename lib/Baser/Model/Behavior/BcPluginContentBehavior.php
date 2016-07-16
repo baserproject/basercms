@@ -1,4 +1,14 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Model.Behavior
+ * @since			baserCMS v 4.0.0
+ * @license			http://basercms.net/license/index.html
+ */
 
 /**
  * プラグインコンテンツビヘイビア
@@ -6,19 +16,6 @@
  * 一つのプラグインに複数のコンテンツを持つ場合に、一つのコンテンツに対し
  * [http://example/コンテンツ名/コントローラー/アクション]形式のURLでアクセスする為のビヘイビア
  * プラグインコンテンツテーブルへの自動的なデータの追加と削除を実装する。
- *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Baser.Model.Behavior
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
- */
-
-/**
- * プラグインコンテンツビヘイビア
  *
  * @package Baser.Model.Behavior
  */
@@ -28,7 +25,6 @@ class BcPluginContentBehavior extends ModelBehavior {
  * プラグインコンテンツモデル
  *
  * @var Model
- * @access public
  */
 	public $PluginContent = null;
 
@@ -37,7 +33,6 @@ class BcPluginContentBehavior extends ModelBehavior {
  *
  * @param array $config
  * @return void
- * @access public
  */
 	public function setup(Model $model, $config = array()) {
 		$this->PluginContent = ClassRegistry::init('PluginContent', 'Model');
@@ -49,7 +44,6 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @param Model $model
  * @param Model $options
  * @return void
- * @access public
  */
 	public function beforeSave(Model $model, $options = array()) {
 		if (!$model->exists()) {
@@ -76,7 +70,6 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @param	Model	$model
  * @param Model $created
  * @return	void
- * @access	public
  */
 	public function afterSave(Model $model, $created, $options = array()) {
 		// コンテンツIDを取得
@@ -103,7 +96,6 @@ class BcPluginContentBehavior extends ModelBehavior {
  * @param Model $model
  * @param Model $contentId
  * @return	array
- * @access	protected
  */
 	protected function _generatePluginContentData(Model $model, $contentId = '') {
 		// プラグイン名を取得
@@ -135,7 +127,6 @@ class BcPluginContentBehavior extends ModelBehavior {
  *
  * @param	Model	$model
  * @return	void
- * @access	public
  */
 	public function beforeDelete(Model $model, $cascade = true) {
 		// プラグインコンテンツを自動削除する

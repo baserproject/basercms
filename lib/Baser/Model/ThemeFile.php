@@ -1,34 +1,26 @@
 <?php
-
-
 /**
- * テーマファイルモデル
- * DBには接続しない
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-class ThemeFile extends AppModel {
 
 /**
- * クラス名
+ * テーマファイルモデル
  *
- * @var string
- * @access public
+ * @package Baser.Model
  */
-	public $name = 'ThemeFile';
+class ThemeFile extends AppModel {
 
 /**
  * use table
  * 
  * @var boolean
- * @access	public
  */
 	public $useTable = false;
 
@@ -36,7 +28,6 @@ class ThemeFile extends AppModel {
  * バリデーション
  *
  * @var array
- * @access	public
  */
 	public $validate = array(
 		'name' => array(
@@ -53,7 +44,6 @@ class ThemeFile extends AppModel {
  * 
  * @param	array	$check
  * @return	boolean
- * @access public
  */
 	public function duplicateThemeFile($check) {
 		if (!$check[key($check)]) {

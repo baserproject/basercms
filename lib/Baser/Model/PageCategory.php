@@ -1,12 +1,9 @@
 <?php
-
 /**
- * ページカテゴリーモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://sites.google.com/site/baserusers/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class PageCategory extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'PageCategory';
 
@@ -32,7 +28,6 @@ class PageCategory extends AppModel {
  * データベース接続
  *
  * @var string
- * @access public
  */
 	public $useDbConfig = 'baser';
 
@@ -40,7 +35,6 @@ class PageCategory extends AppModel {
  * actsAs
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('Tree', 'BcCache');
 
@@ -48,7 +42,6 @@ class PageCategory extends AppModel {
  * hasMany
  * 
  * @var array
- * @access public
  */
 	public $hasMany = array('Page' => array('className' => 'Page',
 			'conditions' => '',
@@ -65,7 +58,6 @@ class PageCategory extends AppModel {
  * キャッシュ用
  * 
  * @var mixed
- * @access protected
  */
 	protected $_pageCategoryPathes = -1;
 
@@ -73,7 +65,6 @@ class PageCategory extends AppModel {
  * エージェントカテゴリのID
  * 
  * @var array
- * @access	protected
  */
 	protected $_agentId = array();
 
@@ -81,7 +72,6 @@ class PageCategory extends AppModel {
  * 保存時に関連ページを更新するかどうか
  * 
  * @var boolean
- * @access public
  */
 	public $updateRelatedPage = true;
 
@@ -89,7 +79,6 @@ class PageCategory extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -120,7 +109,6 @@ class PageCategory extends AppModel {
  * @param string $field フィールド名
  * @param array $options オプション
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field, $options = array()) {
 		switch ($field) {
@@ -205,7 +193,6 @@ class PageCategory extends AppModel {
  * beforeSave
  * 
  * @return boolean
- * @access public
  */
 	public function beforeSave($options = array()) {
 
@@ -240,7 +227,6 @@ class PageCategory extends AppModel {
  * 
  * @param boolean $created
  * @return void
- * @access public
  */
 	public function afterSave($created, $options = array()) {
 		if (!$created && $this->updateRelatedPage) {
@@ -253,7 +239,6 @@ class PageCategory extends AppModel {
  * 
  * @param array $data ページカテゴリデータ
  * @return mixid カテゴリのパス / false
- * @access public
  */
 	public function createPageCategoryFolder($data) {
 		$path = $this->getPageCategoryFolderPath($data);
@@ -270,7 +255,6 @@ class PageCategory extends AppModel {
  * 
  * @param array $data ページカテゴリデータ
  * @return string $path
- * @access public
  */
 	public function getPageCategoryFolderPath($data) {
 		if (isset($data['PageCategory'])) {
@@ -298,7 +282,6 @@ class PageCategory extends AppModel {
  * 
  * @param array $check
  * @return boolean
- * @access public
  */
 	public function duplicatePageCategory($check) {
 		$parentId = $this->data['PageCategory']['parent_id'];
@@ -331,7 +314,6 @@ class PageCategory extends AppModel {
  * 
  * @param boolean $cascade
  * @return boolean
- * @access public
  */
 	public function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
@@ -351,7 +333,6 @@ class PageCategory extends AppModel {
  * 
  * @param int $categoryId ページカテゴリーID
  * @return boolean
- * @access public
  */
 	public function releaseRelatedPagesRecursive($categoryId) {
 		if (!$this->releaseRelatedPages($categoryId)) {
@@ -372,7 +353,6 @@ class PageCategory extends AppModel {
  * 
  * @param int $categoryId ページカテゴリーID
  * @return boolean
- * @access public
  */
 	public function releaseRelatedPages($categoryId) {
 		$pages = $this->Page->find('all', array('conditions' => array('Page.page_category_id' => $categoryId), 'recursive' => -1));
@@ -395,7 +375,6 @@ class PageCategory extends AppModel {
  * 
  * @param string $categoryId ページカテゴリーID
  * @return void
- * @access public
  */
 	public function updateRelatedPageUrlRecursive($categoryId) {
 		if (!$this->updateRelatedPageUrl($categoryId)) {
@@ -417,7 +396,6 @@ class PageCategory extends AppModel {
  * 
  * @param string $id ページカテゴリーID
  * @return void
- * @access public
  */
 	public function updateRelatedPageUrl($id) {
 		if (!$id) {
@@ -445,7 +423,6 @@ class PageCategory extends AppModel {
  * 
  * @param string $path カテゴリフォルダのパス
  * @return int
- * @access public
  */
 	public function getIdByPath($path) {
 		if ($this->_pageCategoryPathes == -1) {
@@ -471,7 +448,6 @@ class PageCategory extends AppModel {
  * @param string $type ページカテゴリーのタイプ
  * @param boolean $top 一番上の親カテゴリも取得するかどうか
  * @return array $ids
- * @access public
  */
 	public function getAgentCategoryIds($type = 'mobile', $top = true) {
 		$agentId = $this->getAgentId($type);
@@ -496,7 +472,6 @@ class PageCategory extends AppModel {
  * 
  * @param int $targetId
  * @return int
- * @access public
  */
 	public function getAgentId($type = 'mobile') {
 		if (!isset($this->_agentId[$type])) {
@@ -553,7 +528,6 @@ class PageCategory extends AppModel {
  * @param array $fields 出力するページカテゴリーのフィールド名
  * @param int $id ページカテゴリーID
  * @return array
- * @access public 
  */
 	public function getTreeList($fields, $id) {
 		$this->recursive = -1;
@@ -572,7 +546,6 @@ class PageCategory extends AppModel {
  * @param int $userGroupId ユーザグループID	
  * @param boolean $rootEditable 編集可/不可
  * @return boolean
- * @access public
  */
 	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
 		$newCatAddable = false;
@@ -627,8 +600,7 @@ class PageCategory extends AppModel {
  * 1:PC / 2:ケータイ / 3:スマフォ
  * 
  * @param int $id
- * @return string 
- * @access public
+ * @return string
  */
 	public function getType($id) {
 		$types = array('' => '1', Configure::read('BcAgent.mobile.prefix') => '2', Configure::read('BcAgent.smartphone.prefix') => '3');
