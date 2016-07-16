@@ -6,12 +6,12 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
- * @since			baserCMS v 3.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 
 /**
- * 統合コンテンツ管理モデル
+ * コンテンツモデル
  *
  * @package Baser.Model
  * @property Site $Site
@@ -773,24 +773,6 @@ class Content extends AppModel {
 	}
 
 /**
- * シングルコンテンツが存在するか判定
- *
- * @param string $type 例）Blog.BlogContent
- * @return bool
- */
-	public function singleContentExists($type) {
-		list($plugin, $type) = pluginSplit($type);
-		if(!$plugin) {
-			$plugin = 'Core';
-		}
-		$conditions = array(
-			'plugin' => $plugin,
-			'type'	=> $type
-		);
-		return (bool) $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
-	}
-
-/**
  * タイプよりコンテンツを削除する
  *
  * @param string $type 例）Blog.BlogContent
@@ -965,25 +947,6 @@ class Content extends AppModel {
 	}
 
 /**
- * 再帰的にデータを取得する
- *
- * TODO return でデータを返却していない為、利用できるように処理を見直す
- * TODO 利用するかどうかも検証する
- * @param string $parentId
- */
-	public function findRecursived($parentId = '') {
-		$datas = $this->find('all', array(
-			'conditions' => array('Content.parent_id' => $parentId),
-			'order' => 'lft'
-		));
-		if($datas) {
-			foreach($datas as $key => $data) {
-				$datas[$key]['children'] = $this->findRecursived($data['id']);
-			}
-		}
-	}
-
-/**
  * 公開済の conditions を取得
  *
  * @return array 公開条件（conditions 形式）
@@ -1020,30 +983,6 @@ class Content extends AppModel {
 		}
 
 		return $allowPublish;
-	}
-
-/**
- * 階層構造のメニューデータに深さ情報を追加する
- * （再帰処理）
- *
- * TODO 利用するかどうかも検証する
- * @param array $datas
- * @param int $depth
- * @return array 階層構造のデータ
- */
-	public function updateTreeDataDepth($datas, $recursive = null, $currentDepth = 1) {
-		if($recursive && $recursive < $currentDepth) {
-			return array();
-		}
-		if($datas) {
-			foreach($datas as $key => $data) {
-				$datas[$key]['Content']['depth'] = $currentDepth;
-				if(!empty($data['children'])) {
-					$datas[$key]['children'] = $this->updateTreeDataDepth($data['children'], $recursive, $currentDepth + 1);
-				}
-			}
-		}
-		return $datas;
 	}
 
 /**
