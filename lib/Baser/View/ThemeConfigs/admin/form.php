@@ -12,7 +12,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('admin/colpick', array('inline' => false));
-$this->BcBaser->js('admin/colpick', false);
+$this->BcBaser->js('admin/vendors/colpick', false);
 ?>
 <script type="text/javascript">
 $(function(){

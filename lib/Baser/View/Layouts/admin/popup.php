@@ -23,14 +23,14 @@
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->css('admin/import') ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
+		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
-			'jquery-1.4.2.min',
-			'jquery-ui-1.8.19.custom.min',
-			'admin/i18n/ui.datepicker-ja',
-			'admin/jquery.bt.min',
-			'admin/jquery.corner-2.12',
+			'admin/vendors/jquery-2.1.4.min',
+			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/i18n/ui.datepicker-ja',
+			'admin/vendors/jquery.bt.min',
+			'admin/vendors/jquery.corner-2.12',
 			'admin/functions'))
 		?>
 <?php $this->BcBaser->scripts() ?>

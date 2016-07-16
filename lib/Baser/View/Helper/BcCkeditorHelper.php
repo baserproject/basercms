@@ -260,7 +260,7 @@ class BcCkeditorHelper extends AppHelper {
 
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->BcHtml->script('admin/ckeditor/ckeditor.js', array("inline" => false));
+			$this->BcHtml->script('admin/vendors/ckeditor/ckeditor.js', array("inline" => false));
 		}
 
 		if ($editorUseDraft) {

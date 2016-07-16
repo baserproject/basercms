@@ -12,7 +12,7 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('AuthComponent', 'Controller/Component');
-$this->BcBaser->js(array('admin/outerClick', 'admin/jquery.fixedMenu'));
+$this->BcBaser->js(array('admin/vendors/outerClick', 'admin/jquery.fixedMenu'));
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 if (!empty($currentAuthPrefix['loginAction'])) {

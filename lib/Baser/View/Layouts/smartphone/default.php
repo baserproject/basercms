@@ -22,16 +22,16 @@
 		<?php $this->BcBaser->css(array(
 			'import',
 			'admin/colorbox/colorbox')); ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
+		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php $this->BcBaser->js(array(
-			'admin/jquery-2.1.4.min',
-			'admin/jquery-ui-1.11.4.min',
-			'admin/jquery.colorbox-min-1.4.5',
-			'admin/jquery.mScroll',
+			'admin/vendors/jquery-2.1.4.min',
+			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/jquery.colorbox-min-1.4.5',
+			'admin/libs/jquery.mScroll',
 			'admin/functions',
 			'admin/startup',
-			'admin/adjust_scroll',
-			'admin/yuga')); ?>
+			'admin/libs/adjust_scroll',
+			'admin/vendors/yuga')); ?>
 			<?php $this->BcBaser->scripts() ?>
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">

@@ -30,27 +30,27 @@
 		<?php if($favoriteBoxOpened): ?>
 			<?php $this->BcBaser->css('admin/sidebar_opened') ?>
 		<?php endif ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
+		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
-			'admin/jquery-2.1.4.min',
-			'admin/jquery-ui-1.11.4.min',
-			'admin/i18n/ui.datepicker-ja',
-			'admin/jquery.bt.min',
-			'admin/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
-			'admin/jquery.form-2.94',
-			'admin/jquery.validate.min',
-			'admin/jquery.colorbox-min-1.4.5',
-			'admin/jquery.mScroll',
-			'admin/jquery.baseUrl',
-			'admin/jquery.bcConfirm',
-			'admin/credit',
-			'admin/validate_messages_ja',
+			'admin/vendors/jquery-2.1.4.min',
+			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/i18n/ui.datepicker-ja',
+			'admin/vendors/jquery.bt.min',
+			'admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
+			'admin/vendors/jquery.form-2.94',
+			'admin/vendors/jquery.validate.min',
+			'admin/vendors/jquery.colorbox-min-1.4.5',
+			'admin/libs/jquery.mScroll',
+			'admin/libs/jquery.baseUrl',
+			'admin/libs/jquery.bcConfirm',
+			'admin/libs/credit',
+			'admin/vendors/validate_messages_ja',
 			'admin/functions',
 			'admin/startup',
-			'admin/adjust_scroll',
-			'admin/jquery.bcUtil',
-			'admin/yuga'))
+			'admin/libs/adjust_scroll',
+			'admin/libs/jquery.bcUtil',
+			'admin/vendors/yuga'))
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>

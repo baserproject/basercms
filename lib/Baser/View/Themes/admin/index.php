@@ -12,8 +12,8 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list',
-	'admin/baser_ajax_data_list_config'
+	'admin/libs/jquery.baser_ajax_data_list',
+	'admin/libs/baser_ajax_data_list_config'
 ));
 ?>
 

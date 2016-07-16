@@ -12,5 +12,5 @@
  * @since			baserCMS v 3.0.7
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js(array('admin/credit', 'admin/startup'), false);
+$this->BcBaser->js(array('admin/libs/credit', 'admin/startup'), false);
 include BASER_VIEWS . 'Users' . DS . 'admin' . DS . 'login.php';

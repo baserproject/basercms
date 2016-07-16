@@ -14,7 +14,7 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
-$this->BcBaser->js('admin/jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->js('admin/vendors/jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 

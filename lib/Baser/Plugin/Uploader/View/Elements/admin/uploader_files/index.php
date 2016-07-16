@@ -9,7 +9,7 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js(array('Uploader.uploader_list'));
+$this->BcBaser->js(array('Uploader.admin/uploader_files/uploader_list'));
 if(!isset($listId)) {
 	$listId = '';
 }

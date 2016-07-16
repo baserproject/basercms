@@ -1431,7 +1431,7 @@ DOC_END;
  */
 	public function dateTimePicker($fieldName, $attributes = array()) {
 
-		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
+		$this->Html->script('admin/vendors/jquery.timepicker', array('inline' => false));
 		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
 		$timeAttributes = array_merge($attributes, array('size' => 8, 'maxlength' => 8));
 		if (!isset($attributes['value'])) {
