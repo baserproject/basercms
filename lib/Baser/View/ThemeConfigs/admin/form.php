@@ -24,7 +24,6 @@ $(function(){
 		} else {
 			color = 'ffffff';
 		}
-		p(color);
 		$(this).colpick({
 			layout:'hex',
 			color:color,

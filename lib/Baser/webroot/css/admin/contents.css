@@ -345,6 +345,13 @@ table.sub-menu{
 .contents-body .list-table tr.disablerow {
 	background-color:#bbb;
 }
+.contents-body .list-table tr.currentrow {
+	background-color:#3392e3;
+	color:#fff;
+}
+.contents-body .list-table tr.currentrow td small {
+	color:#FFF;
+}
 .contents-body .list-table tr.activerow{
 	background-color:#C30;
 	color:#fff;
@@ -681,25 +688,45 @@ table.sub-menu{
 #authMessage,
 #flashMessage,
 #AlertMessage,
+#BcSystemMessage,
 #UpdateMessage {
 	padding:10px 10px 10px 36px;
 	margin:20px 0;
-	font-weight:bold;
 	font-size:16px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+	font-weight:bold;
+}
+#BcMessageBox {
+	display:none;
 }
 #MessageBox .message,
-#MessageBox .notice-message {
-	color:#669900;
-	border:5px solid #669900;
-	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
+#MessageBox .notice-message,
+#BcMessageBox .notice-message{
+	color:#5C8A01;
+	background: #EBF5E1 url(../../img/admin/icn_info.png) no-repeat 10px 13px;
 }
 #MessageBox .alert-message,
 #authMessage,
 #AlertMessage,
+#BcMessageBox .alert-message,
 #UpdateMessage {
-	color:#F03;
-	background: url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
-	border:5px solid #E02;
+	color:#F23561;
+	background: #F7E9EC url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
+}
+#Login #flashMessage {
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+}
+#Login #MessageBox .notice-message{
+	border:5px solid #5C8A01;
+	background-color: transparent;
+}
+#Login #MessageBox .alert-message{
+	border:5px solid #F23561;
+	background-color: transparent;
 }
 .no-data {
 	padding:10px 10px 10px 10px;
@@ -723,6 +750,27 @@ table.sub-menu{
 
 .phpinfo {
 	border:1px solid #DDD;
+}
+
+/* ui
+----------------------------------------------- */
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 4px;
+}
+.corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 0px;
 }
 
 /* ui-dialog
@@ -1095,6 +1143,34 @@ background: #888;
 	text-align:center;
 }
 
+/* TreeList
+----------------------------------------------- */
+#PageTreeList {
+	padding:20px 20px;
+	border:1px solid #CCC;
+	margin-top:25px;
+}
+#TreeList {
+	font-size:14px;
+}
+#TreeList a {
+	color:#535A62;
+}
+#TreeList a:hover {
+	color:#AAA;
+	text-decoration: none;
+}
+#cboxContent button {
+	border:none;
+}
+.filetree span.folder,
+.filetree span.file {
+	padding: 1px 0 1px 18px!important;
+	display: block;
+	line-height:1em;
+	margin-bottom: 10px;
+}
+
 
 /* ==================================================================== */
 /*    Installations
@@ -1339,39 +1415,11 @@ background: #888;
 	padding:7px;
 	width:286px;
 }
-
-#PageTreeList {
-	padding:20px 20px;
-	border:1px solid #CCC;
-	margin-top:25px;
-}
-#TreeList {
-	font-size:14px;
-}
-#TreeList a {
-	color:#535A62;
-}
-#TreeList a:hover {
-	color:#AAA;
-	text-decoration: none;
-}
-#cboxContent button {
-	border:none;
-}
-.filetree span.folder,
-.filetree span.file
-{
-	padding: 1px 0 1px 18px!important;
-	display: block;
-	line-height:1em;
-	margin-bottom: 10px;
-}
-
 .ui-widget-content {
 	border:1px solid #DDD;
 }
 .ui-widget-header {
-	background:#DFDFDF;
+	background:#EFEFEF;
 }
 .ui-tabs .ui-tabs-nav li {
 	font-weight: bold;
@@ -1382,6 +1430,143 @@ background: #888;
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
 	color:#535A62;
 }
+#ContentsFormTabs {
+    margin-bottom:20px;
+}
+#ContentsFormTabs .ui-tabs-panel{
+    padding:1em;
+}
+#ContentsFormTabs table {
+    margin-bottom:0;
+}
+
+/* ==================================================================== */
+/*    Contents
+/* ==================================================================== */
+
+#ContentsTreeList li {
+	margin: 0;
+	padding: 0;
+}
+#ContentsTreeList li ul {
+	margin-left:26px;
+}
+.contents-body li.jstree-closed {
+	/*background-color:#F9F9F9;*/
+}
+.jstree-proton .jstree-anchor {
+	margin: 0!important;
+}
+.vakata-context,
+.vakata-context ul {
+	background-color: #FFF;
+	font-size: 14px;
+}
+.vakata-context li {
+	/*padding:0px 10px;*/
+}
+.vakata-context li > a {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.vakata-context li > a .vakata-contextmenu-sep {
+	border-left: none !important;
+	background: none;
+}
+.vakata-context .vakata-context-separator > a,
+.vakata-context .vakata-context-separator > a:hover {
+	margin: 0;
+}
+#ContentsTreeList {
+	border:1px solid #DDD;
+}
+#ContentsTreeList li .alias {
+	display:block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_alias_layerd.png");
+	position: absolute;
+	top:0;
+}
+ul.jstree-contextmenu li .icon-alias-layerd {
+	display:block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_alias_layerd.png");
+	position: absolute;
+	margin-top:-32px;
+}
+ul.jstree-contextmenu li .icon-add-layerd {
+	display:block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_add_layerd.png");
+	position: absolute;
+	margin-top:-32px;
+}
+#ContentsTreeList li .function {
+	display:inline-block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_function.png");
+	position: absolute;
+    cursor: pointer;
+}
+div.jstree-unpublish-odd{
+    background-color: #BBB;
+}
+div.jstree-unpublish-even{
+    background-color: #CBCBCB;
+}
+div.jstree-publish-odd{
+    background-color: #FFF;
+}
+div.jstree-publish-even{
+    background-color: #F2F2F2;
+}
+#RelatedContentsSetting .icon-add-layerd {
+	display:inline-block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_add_layerd.png");
+	position: absolute;
+	margin-left:-32px;
+}
+#ContentsFormTabs {
+	display:none;
+}
+
+/* ==================================================================== */
+/*    Etc
+/* ==================================================================== */
+
 .helptext {
 	display:none;
+}
+.bt-content {
+    line-height:1.5em;
+    color:#690;
+}
+.bt-content p{
+    margin-bottom:10px;
+}
+.eyecatch-list li {
+	float:left;
+	list-style-type: none;
+	background: none;
+}
+.eyecatch-list li img{
+	margin-bottom:10px;
+}
+.eyecatch-list li p{
+	text-align: center;
+}
+#BasicSetting .url {
+	font-weight:bold;
+	font-size:14px;
+}
+#BasicSetting .url a {
+	color:#9C0;
+	padding-left:5px;
+	padding-right:5px;
 }

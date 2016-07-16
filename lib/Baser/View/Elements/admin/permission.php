@@ -18,10 +18,7 @@
 $(function(){
 		
 	$("#BtnMenuPermission").click(function(){
-		var y = $(this).position().top;
-		var x = $(this).position().left-500;
-		
-		$("#PermissionDialog").dialog('option', 'position', [x, y]);
+		$("#PermissionDialog").dialog('option', 'position', { my: "center", at: "center", of: window });
 		$('#PermissionDialog').dialog('open');
 		return false;
 	});

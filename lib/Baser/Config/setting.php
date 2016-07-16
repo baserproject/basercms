@@ -38,6 +38,7 @@ $config['BcApp'] = array(
 				array('name' => 'ユーザー登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'add')),
 				array('name' => 'ユーザーグループ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
 				array('name' => 'ユーザーグループ登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'add')),
+				array('name' => 'サブサイト管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index')),
 				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index')),
 				array('name' => 'メニュー一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'menus', 'action' => 'index')),
 				array('name' => 'メニュー登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'menus', 'action' => 'add')),
@@ -155,7 +156,6 @@ $config['BcEmail'] = array(
  */
 $config['BcAgent'] = array(
 	'mobile' => array(
-		'alias' => 'm',
 		'prefix' => 'mobile',
 		'autoRedirect' => true,
 		'autoLink' => true,
@@ -172,7 +172,6 @@ $config['BcAgent'] = array(
 		'sessionId' => true
 	),
 	'smartphone' => array(
-		'alias' => 's',
 		'prefix' => 'smartphone',
 		'autoRedirect' => true,
 		'autoLink' => true,
@@ -193,3 +192,88 @@ $config['BcAgent'] = array(
 		)
 	)
 );
+$config['BcContents'] = [
+	'items' => [
+		'Core' => [
+			'Default'	=> [
+				'title' => 'コンテンツ',
+				'routes' => [
+					'add'	=> [
+						'controller'=> 'contents',
+						'action'	=> 'add'
+					],
+					'edit'	=> [
+						'controller'=> 'contents',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'controller'=> 'contents',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'contents',
+						'action'	=> 'view'
+					]
+				],
+				'icon'	=> 'admin/icon_content.png',
+			],
+			'ContentFolder'	=> [
+				'multiple'	=> true,
+				'preview'	=> true,
+				'title' => 'フォルダー',
+				'routes' => [
+					'add'	=> [
+						'controller'=> 'content_folders',
+						'action'	=> 'add'
+					],
+					'edit'	=> [
+						'controller'=> 'content_folders',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'controller'=> 'content_folders',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'content_folders',
+						'action'	=> 'view'
+					]
+				],
+				'icon'	=> 'admin/icon_folder.png',
+			],
+			'ContentAlias'	=> [
+				'multiple' => true,
+				'title' => 'エイリアス',
+				'icon'	=> 'admin/icon_alias.png',
+			],
+			'ContentLink'	=> [
+				'multiple' => true,
+				'title' => 'リンク',
+				'routes' => [
+					'add'	=> [
+						'controller'=> 'content_links',
+						'action'	=> 'add'
+					],
+					'edit'	=> [
+						'controller'=> 'content_links',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'controller'=> 'content_links',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'content_links',
+						'action'	=> 'view'
+					]
+				],
+				'icon'	=> 'admin/icon_link.png',
+			],
+			'Page'	=> [
+				'title' => '固定ページ',
+				// TODO routes を実装要
+				'icon'	=> 'admin/icon_page.png',
+			]
+		]
+	]
+];

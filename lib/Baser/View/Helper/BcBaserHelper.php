@@ -263,7 +263,9 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// サイトタイトルを追加
-		if (!empty($this->siteConfig['name'])) {
+		if(!empty($this->_View->site['title'])) {
+			$title[] = $this->_View->site['title'];
+		} elseif (!empty($this->siteConfig['name'])) {
 			$title[] = $this->siteConfig['name'];
 		}
 
@@ -660,18 +662,18 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function content() {
-		/*** beforeContent ***/
+		/*** contentHeader ***/
 		$this->dispatchEvent('contentHeader', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
 
-		/*** Controller.beforeContent ***/
+		/*** Controller.contentHeader ***/
 		$this->dispatchEvent('contentHeader', null, array('layer' => 'View', 'class' => $this->_View->name));
 
 		echo $this->_View->fetch('content');
 
-		/*** afterContent ***/
+		/*** contentFooter ***/
 		$event = $this->dispatchEvent('contentFooter', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
 
-		/*** Controller.afterContent ***/
+		/*** Controller.contentFooter ***/
 		$event = $this->dispatchEvent('contentFooter', null, array('layer' => 'View', 'class' => $this->_View->name));
 	}
 
@@ -863,8 +865,9 @@ class BcBaserHelper extends AppHelper {
  * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
  * @return void
  */
-	public function js($url, $inline = true) {
-		$result = $this->BcHtml->script($url, array('inline' => $inline));
+	public function js($url, $inline = true, $options = []) {
+		$options = array_merge(['inline' => $inline], $options);
+		$result = $this->BcHtml->script($url, $options);
 		if ($inline) {
 			echo $result;
 		}
@@ -989,15 +992,16 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		// ページ公開チェック
-		if (isset($this->_Page) && empty($this->request->params['admin'])) {
-			$adminPrefix = Configure::read('Routing.prefixes.0');
-			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
-				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
-					$enabled = false;
-				}
-			}
-		}
+		// コンテンツ公開チェック
+		// TODO 統合コンテンツ管理のチェックに変更する
+//		if (isset($this->_Page) && empty($this->request->params['admin'])) {
+//			$adminPrefix = Configure::read('Routing.prefixes.0');
+//			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
+//				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
+//					$enabled = false;
+//				}
+//			}
+//		}
 
 		if (!$enabled) {
 			if ($forceTitle) {
@@ -1140,7 +1144,12 @@ class BcBaserHelper extends AppHelper {
  */
 	public function publishLink() {
 		if ($this->existsPublishLink()) {
-			$this->link('公開ページ', $this->_View->viewVars['publishLink'], array('class' => 'tool-menu'));
+			if(isset($this->_View->BcContents) && isset($this->request->data['Site']['use_subdomain'])) {
+				$url = $this->_View->BcContents->getUrl($this->_View->viewVars['publishLink'], true, $this->request->data['Site']['use_subdomain']);
+			} else {
+				$url = $this->_View->viewVars['publishLink'];
+			}
+			$this->link('公開ページ', $url, array('class' => 'tool-menu'));
 		}
 	}
 
@@ -1361,7 +1370,13 @@ class BcBaserHelper extends AppHelper {
 		}
 		$out = array();
 		if ($startText) {
-			$out[] = $this->getLink($startText, '/');
+			$homeUrl = '/';
+			if($this->_View->site['alias']) {
+				$homeUrl = '/' . $this->_View->site['alias'] . '/';
+			} elseif($this->_View->site['name']) {
+				$homeUrl = '/' . $this->_View->site['name'] . '/';
+			}
+			$out[] = $this->getLink($startText, $homeUrl);
 		}
 		foreach ($crumbs as $crumb) {
 			if (!empty($crumb[1])) {

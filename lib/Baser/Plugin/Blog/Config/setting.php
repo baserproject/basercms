@@ -38,3 +38,9 @@ foreach ($blogContents as $blogContent) {
 		array('name' => '[' . $blogContent['title'] . '] 設定', 'url' => array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $blogContent['id'])),
 	));
 }
+$config['BcContents']['items']['Blog'] = [
+	'Blog'	=> [
+		'title' => 'ブログ',
+		'icon' => 'admin/icon_blog.png'
+	]
+];

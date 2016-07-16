@@ -264,11 +264,9 @@ function getUrlFromEnv() {
  * @return type
  */
 function getPureUrl($Request) {
-
 	if (!$Request) {
 		$Request = new CakeRequest();
 	}
-	$agentAlias = Configure::read('BcRequest.agentAlias');
 	$url = $Request->url;
 	if ($url === false) {
 		$url = '/';
@@ -276,7 +274,7 @@ function getPureUrl($Request) {
 	if (strpos($url, '?') !== false) {
 		list($url) = explode('?', $url);
 	}
-	return preg_replace('/^' . $agentAlias . '\//', '', $url);
+	return $url;
 }
 
 /**

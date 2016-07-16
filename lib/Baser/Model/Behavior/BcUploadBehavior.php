@@ -89,6 +89,15 @@ class BcUploadBehavior extends ModelBehavior {
 	public $imgExts = array('gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png');
 
 /**
+ * アップロードしたかどうか
+ *
+ * afterSave のリネーム判定に利用
+ *
+ * @var bool
+ */
+	public $uploaded = false;
+
+/**
  * セットアップ
  * 
  * @param Model	$Model
@@ -140,8 +149,11 @@ class BcUploadBehavior extends ModelBehavior {
  * @access public
  */
 	public function afterSave(Model $Model, $created, $options = array()) {
-		$this->renameToFieldBasename($Model);
-		$Model->data = $Model->save($Model->data, array('callbacks' => false, 'validate' => false));
+		if($this->uploaded) {
+			$this->renameToFieldBasename($Model);
+			$Model->data = $Model->save($Model->data, array('callbacks' => false, 'validate' => false));
+			$this->uploaded = false;
+		}
 	}
 
 /**
@@ -174,6 +186,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function saveFiles(Model $Model) {
 		$serverData = $Model->findById($Model->id);
 
+		$this->uploaded = false;
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
 
 			if (empty($field['name'])) {
@@ -289,6 +302,7 @@ class BcUploadBehavior extends ModelBehavior {
 						} else {
 							$Model->data[$Model->name][$field['name']]['session_key'] = $fileName;
 						}
+						$this->uploaded = true;
 					} else {
 						// 失敗したら処理を中断してfalseを返す
 						return false;
@@ -495,12 +509,11 @@ class BcUploadBehavior extends ModelBehavior {
  * 削除に失敗してもデータの削除は行う
  * 
  * @param Model $Model
- * @return void
- * @access public
  */
 	public function beforeDelete(Model $Model, $cascade = true) {
 		$Model->data = $Model->findById($Model->id);
 		$this->delFiles($Model);
+		return true;
 	}
 
 /**
@@ -515,8 +528,10 @@ class BcUploadBehavior extends ModelBehavior {
 			if (empty($field['name'])) {
 				$field['name'] = $key;
 			}
-			$file = $Model->data[$Model->name][$field['name']];
-			$ret = $this->delFile($Model, $file, $field);
+			if(!empty($Model->data[$Model->name][$field['name']])) {
+				$file = $Model->data[$Model->name][$field['name']];
+				$this->delFile($Model, $file, $field);
+			}
 		}
 	}
 

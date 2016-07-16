@@ -39,7 +39,7 @@ class BcAppView extends View {
 	protected $_passedVars = array(
 		'viewVars', 'autoLayout', 'ext', 'helpers', 'view', 'layout', 'name', 'theme',
 		'layoutPath', 'viewPath', 'request', 'plugin', 'passedArgs', 'cacheAction',
-		'subDir', 'adminTheme', 'pageTitle'
+		'subDir', 'adminTheme', 'pageTitle', 'content', 'site'
 	);
 
 /**
@@ -203,7 +203,16 @@ class BcAppView extends View {
 		// <<<
 
 		if (strpos($name, DS) === false && $name[0] !== '.') {
-			$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
+			// CUSTOMIZE MODIFY 2016/06/01 ryuring
+			// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
+			// >>>
+			//$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
+			// ---
+			$name = array(
+				$this->viewPath . DS . $subDir . Inflector::underscore($name),
+				$this->viewPath . DS . Inflector::underscore($name),
+			);
+			// <<<
 		} elseif (strpos($name, DS) !== false) {
 			if ($name[0] === DS || $name[1] === ':') {
 				if (is_file($name)) {
@@ -212,14 +221,22 @@ class BcAppView extends View {
 				$name = trim($name, DS);
 			} elseif ($name[0] === '.') {
 				$name = substr($name, 3);
-				// CUSTOMIZE MODIFY 2013/08/21 ryuring
-				// サブフォルダが適用されない為調整
-				// >>>
-				//} elseif (!$plugin || $this->viewPath !== $this->name) {
-				// ---
-			} else {
-				// <<<
+			// CUSTOMIZE MODIFY 2013/08/21 ryuring
+			// サブフォルダが適用されない為調整
+			// CUSTOMIZE MODIFY 2016/06/01 ryuring
+			// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
+			// >>>
+			/*
+			} elseif (!$plugin || $this->viewPath !== $this->name) {
 				$name = $this->viewPath . DS . $subDir . $name;
+			*/
+			// ---
+			} else {
+				$name = array(
+					$this->viewPath . DS . $subDir . $name,
+					$this->viewPath . DS . $name
+				);
+			// <<<
 			}
 		}
 		$paths = $this->_paths($plugin);
@@ -228,22 +245,33 @@ class BcAppView extends View {
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
 		// @deprecated .php への移行を推奨
+		// CUSTOMIZE MODIFY 2016/06/01 ryuring
+		// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
 		// >>>
-		/* foreach ($exts as $ext) {
-		  foreach ($paths as $path) {
-		  if (file_exists($path . $name . $ext)) {
-		  return $path . $name . $ext;
-		  }
-		  }
-		  } */
+		/*
+		foreach ($exts as $ext) {
+			foreach ($paths as $path) {
+				if (file_exists($path . $name . $ext)) {
+					return $path . $name . $ext;
+		  		}
+		  	}
+		}
+		*/
 		// ---
+		if(is_array($name)) {
+			$names = $name;
+		} else {
+			$names[] = $name;
+		}
 		foreach ($paths as $path) {
 			foreach ($exts as $ext) {
-				if (file_exists($path . $name . $ext)) {
-					if ($ext == '.ctp') {
-						trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $name . $ext, E_USER_WARNING);
+				foreach($names as $name) {
+					if (file_exists($path . $name . $ext)) {
+						if ($ext == '.ctp') {
+							trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $name . $ext, E_USER_WARNING);
+						}
+						return $path . $name . $ext;
 					}
-					return $path . $name . $ext;
 				}
 			}
 		}
@@ -356,7 +384,17 @@ class BcAppView extends View {
 		}
 		list($plugin, $name) = $this->pluginSplit($name);
 		$paths = $this->_paths($plugin);
-		$file = 'Layouts' . DS . $subDir . $name;
+
+		// CUSTOMIZE MODIFY 2016/06/01 ryuring
+		// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
+		// >>>
+		//$file = 'Layouts' . DS . $subDir . $name;
+		// ---
+		$files = array(
+			'Layouts' . DS . $subDir . $name,
+			'Layouts' . DS . $name
+		);
+		// <<<
 
 		$exts = $this->_getExtensions();
 
@@ -364,21 +402,25 @@ class BcAppView extends View {
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
 		// @deprecated .php への移行を推奨
 		// >>>
-		/* foreach ($exts as $ext) {
-		  foreach ($paths as $path) {
-		  if (file_exists($path . $file . $ext)) {
-		  return $path . $file . $ext;
-		  }
-		  }
-		  } */
+		/*
+		foreach ($exts as $ext) {
+			foreach ($paths as $path) {
+				if (file_exists($path . $file . $ext)) {
+					return $path . $file . $ext;
+				}
+			}
+		}
+		*/
 		// ---
 		foreach ($paths as $path) {
 			foreach ($exts as $ext) {
-				if (file_exists($path . $file . $ext)) {
-					if ($ext == '.ctp') {
-						trigger_error('レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $file . $ext, E_USER_WARNING);
+				foreach($files as $file) {
+					if (file_exists($path . $file . $ext)) {
+						if ($ext == '.ctp') {
+							trigger_error('レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $file . $ext, E_USER_WARNING);
+						}
+						return $path . $file . $ext;
 					}
-					return $path . $file . $ext;
 				}
 			}
 		}

@@ -17,11 +17,12 @@
 
 
 <tr>
-	<th>システム設定共通メニュー</th>
+	<th>システム設定メニュー</th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('サイト基本設定', array('controller' => 'site_configs', 'action' => 'form', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('ユーザー管理', array('controller' => 'users', 'action' => 'index', 'plugin' => null)) ?></li>
+			<li><?php $this->BcBaser->link('サブサイト管理', array('controller' => 'sites', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('検索インデックス管理', array('controller' => 'contents', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('メニュー管理', array('controller' => 'menus', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('エディタテンプレート管理', array('controller' => 'editor_templates', 'action' => 'index', 'plugin' => null)) ?></li>

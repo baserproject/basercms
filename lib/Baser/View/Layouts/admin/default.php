@@ -21,9 +21,9 @@
 		<?php $this->BcBaser->title() ?>
 		<?php
 		$this->BcBaser->css(array(
-			'admin/jquery-ui/ui.all',
+			'admin/jquery-ui/jquery-ui.min',
 			'admin/import',
-			'../js/admin/jquery.contextMenu-1.0/jquery.contextMenu',
+			'../js/admin/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/colorbox/colorbox',
 			'admin/toolbar'))
 		?>
@@ -33,12 +33,11 @@
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-			'admin/jquery-ui-1.8.19.custom.min',
+			'admin/jquery-2.1.4.min',
+			'admin/jquery-ui-1.11.4.min',
 			'admin/i18n/ui.datepicker-ja',
-			'admin/jquery.corner-2.12',
 			'admin/jquery.bt.min',
-			'admin/jquery.contextMenu-1.0/jquery.contextMenu',
+			'admin/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/jquery.form-2.94',
 			'admin/jquery.validate.min',
 			'admin/jquery.colorbox-min-1.4.5',
@@ -50,6 +49,7 @@
 			'admin/functions',
 			'admin/startup',
 			'admin/adjust_scroll',
+			'admin/jquery.bcUtil',
 			'admin/yuga'))
 		?>
 <?php $this->BcBaser->scripts() ?>
@@ -105,6 +105,8 @@
 							<?php endif ?>
 
 							<?php $this->BcBaser->flash() ?>
+
+							<div id="BcMessageBox"><div id="BcSystemMessage" class="notice-message">&nbsp;</div></div>
 
 							<?php $this->BcBaser->element('submenu') ?>
 

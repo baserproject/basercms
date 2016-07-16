@@ -82,8 +82,15 @@ class BcAgent {
  */
 	public static function findAll() {
 		$configs = Configure::read("BcAgent");
+		$Site = ClassRegistry::init('Site');
+		$alias = $Site->find('list', ['fields' => ['name', 'alias'], 'conditions' => ['Site.name' => array_keys($configs)]]);
 		$agents = array();
 		foreach ($configs as $name => $config) {
+			if(!empty($alias[$name])) {
+				$config['alias'] = $alias[$name];
+			} else {
+				$config['alias'] = $name;
+			}
 			$agents[] = new self($name, $config);
 		}
 

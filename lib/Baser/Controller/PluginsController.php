@@ -252,18 +252,20 @@ class PluginsController extends AppController {
  * @return bool
  */
 	public function admin_ajax_update_sort() {
+		$this->autoRender = false;
 		if ($this->request->data) {
 			if ($this->Plugin->changePriority($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'])) {
 				clearViewCache();
 				clearDataCache();
-				echo true;
+				Configure::write('debug', 0);
+				return true;
 			} else {
 				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 			}
 		} else {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		exit();
+		return false;
 	}
 /**
  * [ADMIN] ファイル削除

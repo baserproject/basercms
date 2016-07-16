@@ -960,7 +960,13 @@ DOC_END;
 	protected function _getId($model = null, $options = array()) {
 
 		if (!isset($options['id'])) {
+            if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
+                $model = key($this->request->params['models']);
+            } elseif (empty($model) && empty($this->request->params['models'])) {
+                $model = false;
+            }
 			if ($model !== false) {
+                list(, $model) = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
 			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
@@ -1255,7 +1261,7 @@ DOC_END;
 
 		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
 		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
-		$timeAttributes = array('size' => 8, 'maxlength' => 8);
+		$timeAttributes = array_merge($attributes, array('size' => 8, 'maxlength' => 8));
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
 		} else {
@@ -1645,7 +1651,64 @@ DOC_END;
 		}
 		return $out;
 	}
-	
+
+/**
+ * Creates a submit button element. This method will generate `<input />` elements that
+ * can be used to submit, and reset forms by using $options. image submits can be created by supplying an
+ * image path for $caption.
+ *
+ * ### Options
+ *
+ * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
+ *   FormHelper::input().
+ * - `before` - Content to include before the input.
+ * - `after` - Content to include after the input.
+ * - `type` - Set to 'reset' for reset inputs. Defaults to 'submit'
+ * - Other attributes will be assigned to the input element.
+ *
+ * ### Options
+ *
+ * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
+ *   FormHelper::input().
+ * - Other attributes will be assigned to the input element.
+ *
+ * @param string $caption The label appearing on the button OR if string contains :// or the
+ *  extension .jpg, .jpe, .jpeg, .gif, .png use an image if the extension
+ *  exists, AND the first character is /, image is relative to webroot,
+ *  OR if the first character is not /, image is relative to webroot/img.
+ * @param array $options Array of options. See above.
+ * @return string A HTML submit button
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::submit
+ */
+	public function submit($caption = null, $options = array()) {
+
+		// CUSTOMIZE ADD 2016/06/08 ryuring
+		// >>>
+		/*** beforeInput ***/
+		$event = $this->dispatchEvent('beforeSubmit', array(
+            'id'      => $this->__id,
+			'caption' => $caption,
+			'options' => $options
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$output = parent::submit($caption, $options);
+
+		/*** afterInput ***/
+		$event = $this->dispatchEvent('afterSubmit', array(
+            'id'      => $this->__id,
+			'caption' => $caption,
+			'out' => $output
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+		return $output;
+		// <<<
+
+	}
 // <<<
 /**
  * 日付タグ

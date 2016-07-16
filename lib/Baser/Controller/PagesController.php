@@ -871,6 +871,7 @@ class PagesController extends AppController {
  * @return boolean
  */
 	public function admin_ajax_update_sort() {
+		$this->autoRender = false;
 		if ($this->request->data) {
 			$this->setViewConditions('Page', array('action' => 'admin_index'));
 			$conditions = $this->_createAdminIndexConditions($this->request->data);
@@ -879,14 +880,15 @@ class PagesController extends AppController {
 			if ($this->Page->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
 				clearViewCache();
 				clearDataCache();
-				echo true;
+				Configure::write('debug', 0);
+				return true;
 			} else {
 				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 			}
 		} else {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		exit();
+		return false;
 	}
 
 /**

@@ -22,11 +22,6 @@ if ($this->BcBaser->isHome()) {
 	$crumbs = $this->BcBaser->getCrumbs();
 	if (!empty($crumbs)) {
 		foreach ($crumbs as $key => $crumb) {
-			if ($this->BcArray->last($crumbs, $key + 1)) {
-				if ($crumbs[$key + 1]['name'] == $crumb['name']) {
-					continue;
-				}
-			}
 			if ($this->BcArray->last($crumbs, $key)) {
 				if ($this->viewPath != 'home' && $crumb['name']) {
 					$this->BcBaser->addCrumb('<strong>' . $crumb['name'] . '</strong>');

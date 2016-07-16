@@ -192,7 +192,12 @@ class BcAppHelper extends Helper {
 		} elseif (!is_array($url) && preg_match('/^javascript:/', $url)) {
 			return $url;
 		} else {
-			return parent::url($url, $full);
+			if(!BcUtil::isAdminSystem() && !is_array($url) && !empty($this->_View->site['use_subdomain']) && BcUtil::getSubDomain()) {
+				$Content = ClassRegistry::init('Content');
+				return $Content->getUrl($url, true, true);
+			} else {
+				return parent::url($url, $full);
+			}
 		}
 	}
 

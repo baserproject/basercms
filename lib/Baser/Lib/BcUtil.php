@@ -244,4 +244,105 @@ class BcUtil extends Object {
 		return $value;
 	}
 
+/**
+ * URL用に文字列を変換する
+ *
+ * できるだけ可読性を高める為、不要な記号は除外する
+ *
+ * @param $value
+ * @return string
+ */
+	public static function urlencode($value) {
+		$value = str_replace(array(
+			' ', '　', '\\', '\'','|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+			'/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+		), '_', $value);
+		$value = preg_replace('/\_{2,}/', '_', $value);
+		$value = preg_replace('/(^_|_$)/', '', $value);
+		return urlencode($value);
+	}
+
+/**
+ * レイアウトテンプレートのリストを取得する
+ *
+ * @param string $path
+ * @param string $plugin
+ * @param string $theme
+ * @return array
+ */
+	public static function getTemplateList($path, $plugin, $theme) {
+		$templatesPathes = App::path('View');
+		if($plugin) {
+			$templatesPathes = array_merge($templatesPathes, App::path('View', $plugin));
+		}
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
+		}
+		$_templates = array();
+		foreach ($templatesPathes as $templatesPath) {
+			$templatesPath .= $path . DS;
+			$folder = new Folder($templatesPath);
+			$files = $folder->read(true, true);
+			$foler = null;
+			if ($files[1]) {
+				if ($_templates) {
+					$_templates = array_merge($_templates, $files[1]);
+				} else {
+					$_templates = $files[1];
+				}
+			}
+		}
+		$templates = array();
+		foreach ($_templates as $template) {
+			$ext = Configure::read('BcApp.templateExt');
+			if ($template != 'installations' . $ext) {
+				$template = basename($template, $ext);
+				$templates[$template] = $template;
+			}
+		}
+		return $templates;
+	}
+
+/**
+ * テーマリストを取得する
+ *
+ * @return array
+ */
+	public static function getThemeList() {
+		$path = WWW_ROOT . 'theme';
+		$folder = new Folder($path);
+		$files = $folder->read(true, true);
+		$themes = array();
+		foreach ($files[0] as $theme) {
+			if ($theme != 'core' && $theme != '_notes') {
+				$themes[$theme] = $theme;
+			}
+		}
+		return $themes;
+	}
+
+/**
+ * サブドメインを取得する
+ *
+ * @return string
+ */
+	public static function getSubDomain() {
+
+		if(strpos($_SERVER['HTTP_HOST'], '.') === false) {
+			return '';
+		}
+		$mainUrlInfo = parse_url(Configure::read('BcEnv.siteUrl'));
+		if($_SERVER['HTTP_HOST'] == $mainUrlInfo['host']) {
+			return '';
+		}
+		if(strpos($_SERVER['HTTP_HOST'], $mainUrlInfo['host']) === false) {
+			return '';
+		}
+		$subDomain = str_replace($mainUrlInfo['host'], '', $_SERVER['HTTP_HOST']);
+		if($subDomain) {
+			return preg_replace('/\.$/', '', $subDomain);
+		}
+		return '';
+
+	}
 }

@@ -19,13 +19,15 @@
 		<meta name="robots" content="noindex,nofollow" />
 		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
+		<?php $this->BcBaser->metaDescription() ?>
+		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->css(array(
 			'import',
 			'admin/colorbox/colorbox')); ?>
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 		<?php $this->BcBaser->js(array(
 			'admin/jquery-1.7.2.min',
-			'admin/jquery-ui-1.8.19.custom.min',
+			'admin/jquery-ui-1.11.4.min',
 			'admin/jquery.colorbox-min-1.4.5',
 			'admin/jquery.mScroll',
 			'admin/functions',
@@ -36,8 +38,9 @@
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
 		<div id="Page" style="text-align: center">
-		<?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?>
+			<?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?>
 			<div class="contents-body" style="text-align:left;width:1000px;margin-left:auto;margin-right:auto;margin-top:60px;background-color:#FFF;padding:40px;">
+				<?php $this->BcBaser->crumbsList() ?>
 				<?php $this->BcBaser->content() ?>
 			</div>
 		</div>

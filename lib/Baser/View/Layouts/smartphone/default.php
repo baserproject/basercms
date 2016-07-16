@@ -1,60 +1,47 @@
 <?php
 /**
- * デフォルトレイアウト
+ * [PUBLISH] デフォルトレイアウト
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ *
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.View.layout
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $this->BcBaser->docType('html5') ?>
-<html lang="ja">
+<?php $this->BcBaser->xmlHeader() ?>
+<?php $this->BcBaser->docType() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=320, user-scalable=no">
+		<meta name="robots" content="noindex,nofollow" />
+		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
-		<?php $this->BcBaser->metaDescription() ?>
-		<?php $this->BcBaser->metaKeywords() ?>
-		<?php $this->BcBaser->css(array('admin/html5reset-1.6.1', 'smartphone/style')) ?>
+		<?php $this->BcBaser->css(array(
+			'import',
+			'admin/colorbox/colorbox')); ?>
+		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
 		<?php $this->BcBaser->js(array(
 			'admin/jquery-1.7.2.min',
-			'smartphone/startup.js'
-		)); ?>
-		<?php $this->BcBaser->scripts() ?>
-		<?php $this->BcBaser->element('google_analytics', array(), array('subDir' => false)) ?>
+			'admin/jquery-ui-1.11.4.min',
+			'admin/jquery.colorbox-min-1.4.5',
+			'admin/jquery.mScroll',
+			'admin/functions',
+			'admin/startup',
+			'admin/adjust_scroll',
+			'admin/yuga')); ?>
+			<?php $this->BcBaser->scripts() ?>
 	</head>
-	<body id="<?php $this->BcBaser->contentsName() ?>">
-		<div id="Page">
-
-			<header>
-				<div class="clearfix" id="BoxLogo">
-					<div id="Logo"><?php echo $this->BcBaser->siteConfig['name'] ?></div>
-				</div>
-				<?php $this->BcBaser->element('global_menu') ?>
-			</header>
-
-			<div id="ContentsBody" class="contents-body clearfix">
-				<?php $this->BcBaser->flash() ?>
+	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
+		<p style="text-align:center;font-weight: bold;">スマートフォン用レイアウト</p>
+		<div id="Page" style="text-align: center">
+		<?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?>
+			<div class="contents-body" style="text-align:left;width:1000px;margin-left:auto;margin-right:auto;margin-top:60px;background-color:#FFF;padding:40px;">
 				<?php $this->BcBaser->content() ?>
-				<?php $this->BcBaser->element('contents_navi') ?>
 			</div>
-
-			<div>
-				<?php if (!empty($widgetArea)): ?>
-				<?php $this->BcBaser->element('widget_area', array('no' => $widgetArea)) ?>
-				<?php endif; ?>
-			</div>
-
-			<section id="ToTop">
-				<a href="#Page">PAGE TOP</a>
-			</section>
-
-			<footer>
-					<?php $this->BcBaser->element('global_menu') ?>
-				<address>Copyright(C) <?php $this->BcBaser->copyYear(2008) ?> <br />baserCMS All rights Reserved.</address>
-				<div class="banner">
-					<?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project', 'border' => "0")), 'http://basercms.net') ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework', 'border' => "0")), 'http://cakephp.jp') ?>
-				</div>
-			</footer>
-
 		</div>
-		<?php $this->BcBaser->func() ?>
+	<?php $this->BcBaser->func() ?>
 	</body>
 </html>

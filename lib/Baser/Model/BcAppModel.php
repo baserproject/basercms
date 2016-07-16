@@ -629,13 +629,23 @@ class BcAppModel extends Model {
  * ハイフンアンダースコアを許容
  *
  * @param array $check チェック対象文字列
+ * @param array $options 他に許容する文字列
  * @return boolean
  */
-	public function alphaNumericPlus($check) {
+	public function alphaNumericPlus($check, $options = []) {
 		if (!$check[key($check)]) {
 			return true;
 		}
-		if (preg_match("/^[a-zA-Z0-9\-_]+$/", $check[key($check)])) {
+		if($options && !array_key_exists('rule', $options)) {
+			if(!is_array($options)) {
+				$options = [$options];
+			}
+			$options = preg_quote(implode('', $options), '/');
+		} else {
+			$options = '';
+		}
+
+		if (preg_match("/^[a-zA-Z0-9\-_" . $options . "]+$/", $check[key($check)])) {
 			return true;
 		} else {
 			return false;
@@ -1462,5 +1472,18 @@ class BcAppModel extends Model {
 		}
 		return true;
 	}
-	
+	public function exists($id = null) {
+		if ($this->Behaviors->loaded('SoftDelete')) {
+			return $this->existsAndNotDeleted($id);
+		} else {
+			return parent::exists($id);
+		}
+	}
+	public function delete($id = null, $cascade = true) {
+		$result = parent::delete($id, $cascade);
+		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
+			return (bool)$this->field('deleted', array('deleted' => 1));
+		}
+		return $result;
+	}
 }

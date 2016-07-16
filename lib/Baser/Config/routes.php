@@ -63,6 +63,121 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * プラグインルーティング
  */
 	CakePlugin::routes();
+
+// TODO >>> 統合コンテンツ管理ルーティング
+// TODO プラグインが有効かどうかのチェックが必要
+// TODO 公開状態のチェックが必要
+	if(!BcUtil::isAdminSystem()) {
+		$Content = ClassRegistry::init('Content');
+		$publishConditions = array();
+		$subDomain = BcUtil::getSubDomain();
+		if($subDomain) {
+			$conditions = ['Content.url' => '/' . $subDomain . '/' . $parameter];
+		} else {
+			$conditions = ['Content.url' => '/' . $parameter];
+		}
+
+		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
+		if(!empty($request->query['preview'])) {
+			if(!BcUtil::isAdminUser()) {
+				if($Content->find('first', array('conditions' => $conditions))) {
+					$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
+					header('Location: ' . topLevelUrl(false) . baseUrl() . $authPrefixes['admin']['alias'] . '/users/login');
+					exit();
+				}
+			}
+		} else {
+			$publishConditions = $Content->getConditionAllowPublish();
+		}
+        $conditions = $publishConditions + $conditions;
+		$content = $Content->find('first', array('conditions' => $conditions, 'order' => 'Content.url DESC'));
+
+		if ($content) {
+			$isPublish = true;
+			if($content['Content']['alias_id']) {
+				if(!$Content->isPublishById($content['Content']['alias_id'])) {
+					$isPublish = false;
+				}
+			}
+			if($isPublish) {
+				Configure::write('BcContents.currentContent', $content['Content']);
+				Configure::write('BcContents.currentSite', $content['Site']);
+				$viewParams = Configure::read('BcContents.items.' . $content['Content']['plugin'] . '.' . $content['Content']['type'] . '.routes.view');
+				if($subDomain) {
+					$url = preg_replace('/^\/' . $subDomain . '\//', '/', urldecode($content['Content']['url']));
+				} else {
+					$url = urldecode($content['Content']['url']);
+				}
+
+				if (!$viewParams) {
+					$viewParams = Configure::read('BcContents.items.Core.Default.routes.view');
+					Router::connect($url, array(
+						'controller' => $viewParams['controller'],
+						'action' => $viewParams['action'],
+						$content['Content']['plugin'],
+						$content['Content']['type']
+					));
+				} else {
+					$plugin = '';
+					if (!empty($viewParams['plugin'])) {
+						$plugin = $viewParams['plugin'];
+					}
+					Router::connect($url, array(
+						'plugin' => $plugin,
+						'controller' => $viewParams['controller'],
+						'action' => $viewParams['action'],
+						$content['Content']['entity_id']
+					));
+				}
+			}
+		} else {
+			$params = explode('/', $parameter);
+			$condUrls = array();
+			$count = count($params);
+			for ($i = $count; $i > 0; $i--) {
+				unset($params[$i]);
+				if($subDomain) {
+					$condUrls[] = '/' . $subDomain . '/' . implode('/', $params);
+				} else {
+					$condUrls[] = '/' . implode('/', $params);
+				}
+			}
+			$conditions = $publishConditions + array('Content.url' => $condUrls);
+			$content = $Content->find('first', array('order' => 'url DESC', 'conditions' => $conditions));
+			if ($content) {
+				$isPublish = true;
+				if($content['Content']['alias_id']) {
+					if(!$Content->isPublishById($content['Content']['alias_id'])) {
+						$isPublish = false;
+					}
+				}
+				if($isPublish) {
+					Configure::write('BcContents.currentContent', $content['Content']);
+					Configure::write('BcContents.currentSite', $content['Site']);
+					$viewParams = Configure::read('BcContents.items.' . $content['Content']['plugin'] . '.' . $content['Content']['type'] . '.routes.view');
+					if ($viewParams) {
+						$plugin = '';
+						if (!empty($viewParams['plugin'])) {
+							$plugin = $viewParams['plugin'];
+						}
+						if($subDomain) {
+							$url = preg_replace('/^\/' . $subDomain . '\//', '/', urldecode($content['Content']['url']));
+						} else {
+							$url = urldecode($content['Content']['url']);
+						}
+
+						Router::connect($url . '/:action/*', array(
+							'plugin' => $plugin,
+							'controller' => $viewParams['controller'],
+							$content['Content']['entity_id']
+						));
+					}
+				}
+			}
+		}
+	}
+// <<<
+
 /**
  * プラグイン判定 ＆ プラグイン名の書き換え
  * 

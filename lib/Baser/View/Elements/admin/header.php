@@ -25,7 +25,7 @@ if (!empty($this->request->params['prefix'])) {
 			<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>
 				<div id="GlobalMenu">
 					<ul class="clearfix">
-						<li id="GlobalMenu1"><?php $this->BcBaser->link('固定ページ管理', array('plugin' => '', 'controller' => 'pages', 'action' => 'index')) ?></li>
+						<li id="GlobalMenu1"><?php $this->BcBaser->link('コンテンツ管理', array('plugin' => '', 'controller' => 'contents', 'action' => 'index')) ?></li>
 						<li id="GlobalMenu2"><?php $this->BcBaser->link('ウィジェット管理', array('plugin' => '', 'controller' => 'widget_areas', 'action' => 'index')) ?></li>
 						<li id="GlobalMenu3"><?php $this->BcBaser->link('テーマ管理', array('plugin' => '', 'controller' => 'themes', 'action' => 'index')) ?></li>
 						<li id="GlobalMenu4"><?php $this->BcBaser->link('プラグイン管理', array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')) ?></li>

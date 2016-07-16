@@ -137,10 +137,12 @@ class BcAuthConfigureComponent extends Component {
 		$BcAuth->setSessionKey('Auth.' . $sessionKey);
 
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
-		$redirect = $BcAuth->Session->read('Auth.redirect');
-		if ($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix) === false) {
-			$BcAuth->Session->write('Auth.redirect', null);
-		}
+		// 2016/06/09 ryuring
+		// 必要性がないようなので一旦コメントアウト
+//		$redirect = $BcAuth->Session->read('Auth.redirect');
+//		if ($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix) === false) {
+//			$BcAuth->Session->write('Auth.redirect', null);
+//		}
 
 		// ログイン後にリダイレクトするURL
 		$BcAuth->loginRedirect = $loginRedirect;

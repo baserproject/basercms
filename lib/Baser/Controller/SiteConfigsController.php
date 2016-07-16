@@ -125,6 +125,11 @@ class SiteConfigsController extends AppController {
 				// DBに保存
 				if ($this->SiteConfig->saveKeyValue($this->request->data)) {
 
+					$ContentFolder = ClassRegistry::init('ContentFolder');
+					$ContentFolder->saveSiteRoot(0, [
+						'title'		=> $this->request->data['SiteConfig']['name']
+					]);
+
 					$this->setMessage('システム設定を保存しました。');
 
 					// 環境設定を保存

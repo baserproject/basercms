@@ -247,6 +247,13 @@ class BcAppController extends Controller {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
+		if(BcUtil::isAdminSystem()) {
+			$siteUrl = Configure::read('BcEnv.siteUrl');
+			if(siteUrl() != $siteUrl) {
+				$this->redirect($siteUrl . preg_replace('/^\//', '', Router::reverse($this->request, false)));
+			}
+		}
+
 		// テーマを設定
 		$this->setTheme();
 
@@ -378,11 +385,18 @@ class BcAppController extends Controller {
 				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
 				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
 			}
+		}
+
+		if(!BcUtil::isAdminSystem()) {
 			$agent = Configure::read('BcRequest.agent');
 			if ($agent == 'mobile') {
 				$this->helpers[] = 'BcMobile';
 			} elseif ($agent == 'smartphone') {
 				$this->helpers[] = 'BcSmartphone';
+			}
+			if(isset($this->site)) {
+				$this->layoutPath = $this->site['name'];
+				$this->subDir = $this->site['name'];
 			}
 		}
 
@@ -428,7 +442,9 @@ class BcAppController extends Controller {
  */
 	public function setTheme() {
 		$theme = '';
-		if (!empty($this->siteConfigs['theme'])) {
+		if(!empty($this->site['theme'])) {
+			$theme = $this->site['theme'];
+		} elseif (!empty($this->siteConfigs['theme'])) {
 			$theme = $this->siteConfigs['theme'];
 		} else {
 			$theme = Configure::read('BcApp.adminTheme');
@@ -1501,20 +1517,20 @@ class BcAppController extends Controller {
  * @param string $message メッセージ
  * @param bool $alert 警告かどうか
  * @param bool $saveDblog Dblogに保存するか
+ * @param bool $setFlash flash message に保存するか
  * @return void
  */
-	public function setMessage($message, $alert = false, $saveDblog = false) {
+	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
 		if (!isset($this->Session)) {
 			return;
 		}
-
 		$class = 'notice-message';
 		if ($alert) {
 			$class = 'alert-message';
 		}
-
-		$this->Session->setFlash($message, 'default', array('class' => $class));
-
+		if($setFlash) {
+			$this->Session->setFlash($message, 'default', array('class' => $class));
+		}
 		if ($saveDblog) {
 			$AppModel = ClassRegistry::init('AppModel');
 			$AppModel->saveDblog($message);
@@ -1538,6 +1554,16 @@ class BcAppController extends Controller {
 			), $options);
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
+	}
+
+/**
+ * Token の key を取得
+ *
+ * @return string
+ */
+	public function admin_ajax_get_token() {
+		$this->autoRender = false;
+		return $this->request->params['_Token']['key'];
 	}
 
 }
