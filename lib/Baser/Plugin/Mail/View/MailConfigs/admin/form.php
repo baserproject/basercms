@@ -23,7 +23,7 @@ $(window).load(function() {
 <!-- form -->
 <h2>基本項目</h2>
 
-<?php echo $this->BcForm->create('MailConfig', array('action' => 'form')) ?>
+<?php echo $this->BcForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
 <?php echo $this->BcForm->input('MailConfig.id', array('type' => 'hidden')) ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">

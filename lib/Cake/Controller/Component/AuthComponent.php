@@ -26,6 +26,7 @@ App::uses('Hash', 'Utility');
 App::uses('CakeSession', 'Model/Datasource');
 App::uses('BaseAuthorize', 'Controller/Component/Auth');
 App::uses('BaseAuthenticate', 'Controller/Component/Auth');
+App::uses('CakeEvent', 'Event');
 
 /**
  * Authentication control component class
@@ -49,25 +50,25 @@ class AuthComponent extends Component {
  *
  * @var array
  */
-	public $components = array('Session', 'RequestHandler');
+	public $components = array('Session', 'Flash', 'RequestHandler');
 
 /**
  * An array of authentication objects to use for authenticating users. You can configure
  * multiple adapters and they will be checked sequentially when users are identified.
  *
- * {{{
+ * ```
  *	$this->Auth->authenticate = array(
  *		'Form' => array(
  *			'userModel' => 'Users.User'
  *		)
  *	);
- * }}}
+ * ```
  *
  * Using the class name without 'Authenticate' as the key, you can pass in an array of settings for each
  * authentication object. Additionally you can define settings that should be set to all authentications objects
  * using the 'all' key:
  *
- * {{{
+ * ```
  *	$this->Auth->authenticate = array(
  *		'all' => array(
  *			'userModel' => 'Users.User',
@@ -76,7 +77,7 @@ class AuthComponent extends Component {
  *		'Form',
  *		'Basic'
  *	);
- * }}}
+ * ```
  *
  * You can also use AuthComponent::ALL instead of the string 'all'.
  *
@@ -88,7 +89,7 @@ class AuthComponent extends Component {
 /**
  * Objects that will be used for authentication checks.
  *
- * @var array
+ * @var BaseAuthenticate[]
  */
 	protected $_authenticateObjects = array();
 
@@ -96,19 +97,19 @@ class AuthComponent extends Component {
  * An array of authorization objects to use for authorizing users. You can configure
  * multiple adapters and they will be checked sequentially when authorization checks are done.
  *
- * {{{
+ * ```
  *	$this->Auth->authorize = array(
  *		'Crud' => array(
  *			'actionPath' => 'controllers/'
  *		)
  *	);
- * }}}
+ * ```
  *
  * Using the class name without 'Authorize' as the key, you can pass in an array of settings for each
  * authorization object. Additionally you can define settings that should be set to all authorization objects
  * using the 'all' key:
  *
- * {{{
+ * ```
  *	$this->Auth->authorize = array(
  *		'all' => array(
  *			'actionPath' => 'controllers/'
@@ -116,7 +117,7 @@ class AuthComponent extends Component {
  *		'Crud',
  *		'CustomAuth'
  *	);
- * }}}
+ * ```
  *
  * You can also use AuthComponent::ALL instead of the string 'all'
  *
@@ -128,7 +129,7 @@ class AuthComponent extends Component {
 /**
  * Objects that will be used for authorization checks.
  *
- * @var array
+ * @var BaseAuthorize[]
  */
 	protected $_authorizeObjects = array();
 
@@ -372,7 +373,9 @@ class AuthComponent extends Component {
 			$this->_stop();
 			return false;
 		}
-		$controller->redirect(null, 403);
+		$controller->response->statusCode(403);
+		$controller->response->send();
+		$this->_stop();
 		return false;
 	}
 
@@ -416,7 +419,7 @@ class AuthComponent extends Component {
 		} else {
 			$url = $this->unauthorizedRedirect;
 		}
-		$controller->redirect($url, null, true);
+		$controller->redirect($url);
 		return false;
 	}
 
@@ -445,8 +448,8 @@ class AuthComponent extends Component {
  * Each adapter will be checked in sequence, if any of them return true, then the user will
  * be authorized for the request.
  *
- * @param array $user The user to check the authorization of. If empty the user in the session will be used.
- * @param CakeRequest $request The request to authenticate for. If empty, the current request will be used.
+ * @param array|null $user The user to check the authorization of. If empty the user in the session will be used.
+ * @param CakeRequest|null $request The request to authenticate for. If empty, the current request will be used.
  * @return bool True if $user is authorized, otherwise false
  */
 	public function isAuthorized($user = null, CakeRequest $request = null) {
@@ -478,7 +481,7 @@ class AuthComponent extends Component {
  */
 	public function constructAuthorize() {
 		if (empty($this->authorize)) {
-			return;
+			return null;
 		}
 		$this->_authorizeObjects = array();
 		$config = Hash::normalize((array)$this->authorize);
@@ -513,7 +516,7 @@ class AuthComponent extends Component {
  * `$this->Auth->allow('edit', 'add');` or
  * `$this->Auth->allow();` to allow all actions
  *
- * @param string|array $action Controller action name or array of actions
+ * @param string|array|null $action Controller action name or array of actions
  * @return void
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#making-actions-public
  */
@@ -538,7 +541,7 @@ class AuthComponent extends Component {
  * `$this->Auth->deny('edit', 'add');` or
  * `$this->Auth->deny();` to remove all items from the allowed list
  *
- * @param string|array $action Controller action name or array of actions
+ * @param string|array|null $action Controller action name or array of actions
  * @return void
  * @see AuthComponent::allow()
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#making-actions-require-authorization
@@ -569,17 +572,24 @@ class AuthComponent extends Component {
  * attached authorize objects.
  *
  * @param array $map Actions to map
- * @return void
+ * @return array
  * @see BaseAuthorize::mapActions()
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#mapping-actions-when-using-crudauthorize
+ * @deprecated 3.0.0 Map actions using `actionMap` config key on authorize objects instead
  */
 	public function mapActions($map = array()) {
 		if (empty($this->_authorizeObjects)) {
 			$this->constructAuthorize();
 		}
+		$mappedActions = array();
 		foreach ($this->_authorizeObjects as $auth) {
-			$auth->mapActions($map);
+			$mappedActions = Hash::merge($mappedActions, $auth->mapActions($map));
 		}
+		if (empty($map)) {
+			return $mappedActions;
+		}
+
+		return array();
 	}
 
 /**
@@ -590,7 +600,7 @@ class AuthComponent extends Component {
  * the user record is written to the session key specified in AuthComponent::$sessionKey. Logging in
  * will also change the session id in order to help mitigate session replays.
  *
- * @param array $user Either an array of user data, or null to identify a user using the current request.
+ * @param array|null $user Either an array of user data, or null to identify a user using the current request.
  * @return bool True on login success, false on failure
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#identifying-users-and-logging-them-in
  */
@@ -602,7 +612,9 @@ class AuthComponent extends Component {
 		}
 		if ($user) {
 			$this->Session->renew();
-			$this->Session->write(self::$sessionKey, $user);
+			$this->Session->write(static::$sessionKey, $user);
+			$event = new CakeEvent('Auth.afterIdentify', $this, array('user' => $user));
+			$this->_Collection->getController()->getEventManager()->dispatch($event);
 		}
 		return (bool)$this->user();
 	}
@@ -629,7 +641,7 @@ class AuthComponent extends Component {
 		foreach ($this->_authenticateObjects as $auth) {
 			$auth->logout($user);
 		}
-		$this->Session->delete(self::$sessionKey);
+		$this->Session->delete(static::$sessionKey);
 		$this->Session->delete('Auth.redirect');
 		$this->Session->renew();
 		return Router::normalize($this->logoutRedirect);
@@ -642,15 +654,15 @@ class AuthComponent extends Component {
  * cache is primarily used for stateless authentication. For stateful authentication,
  * cookies + sessions will be used.
  *
- * @param string $key field to retrieve. Leave null to get entire User record
- * @return array|null User record. or null if no user is logged in.
+ * @param string|null $key field to retrieve. Leave null to get entire User record
+ * @return mixed|null User record. or null if no user is logged in.
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#accessing-the-logged-in-user
  */
 	public static function user($key = null) {
-		if (!empty(self::$_user)) {
-			$user = self::$_user;
-		} elseif (self::$sessionKey && CakeSession::check(self::$sessionKey)) {
-			$user = CakeSession::read(self::$sessionKey);
+		if (!empty(static::$_user)) {
+			$user = static::$_user;
+		} elseif (static::$sessionKey && CakeSession::check(static::$sessionKey)) {
+			$user = CakeSession::read(static::$sessionKey);
 		} else {
 			return null;
 		}
@@ -664,7 +676,7 @@ class AuthComponent extends Component {
  * Similar to AuthComponent::user() except if the session user cannot be found, connected authentication
  * objects will have their getUser() methods called. This lets stateless authentication methods function correctly.
  *
- * @return bool true if a user can be found, false if one cannot.
+ * @return bool True if a user can be found, false if one cannot.
  */
 	protected function _getUser() {
 		$user = $this->user();
@@ -679,7 +691,7 @@ class AuthComponent extends Component {
 		foreach ($this->_authenticateObjects as $auth) {
 			$result = $auth->getUser($this->request);
 			if (!empty($result) && is_array($result)) {
-				self::$_user = $result;
+				static::$_user = $result;
 				return true;
 			}
 		}
@@ -690,7 +702,7 @@ class AuthComponent extends Component {
 /**
  * Backwards compatible alias for AuthComponent::redirectUrl().
  *
- * @param string|array $url Optional URL to write as the login redirect URL.
+ * @param string|array|null $url Optional URL to write as the login redirect URL.
  * @return string Redirect URL
  * @deprecated 3.0.0 Since 2.3.0, use AuthComponent::redirectUrl() instead
  */
@@ -713,7 +725,7 @@ class AuthComponent extends Component {
  *    value is returned.
  *  - If there is no session and no $loginRedirect, / is returned.
  *
- * @param string|array $url Optional URL to write as the login redirect URL.
+ * @param string|array|null $url Optional URL to write as the login redirect URL.
  * @return string Redirect URL
  */
 	public function redirectUrl($url = null) {
@@ -762,12 +774,12 @@ class AuthComponent extends Component {
 /**
  * Loads the configured authentication objects.
  *
- * @return mixed either null on empty authenticate value, or an array of loaded objects.
+ * @return mixed Either null on empty authenticate value, or an array of loaded objects.
  * @throws CakeException
  */
 	public function constructAuthenticate() {
 		if (empty($this->authenticate)) {
-			return;
+			return null;
 		}
 		$this->_authenticateObjects = array();
 		$config = Hash::normalize((array)$this->authenticate);
@@ -791,7 +803,9 @@ class AuthComponent extends Component {
 				throw new CakeException(__d('cake_dev', 'Authentication objects must implement an %s method.', 'authenticate()'));
 			}
 			$settings = array_merge($global, (array)$settings);
-			$this->_authenticateObjects[] = new $className($this->_Collection, $settings);
+			$auth = new $className($this->_Collection, $settings);
+			$this->_Collection->getController()->getEventManager()->attach($auth);
+			$this->_authenticateObjects[] = $auth;
 		}
 		return $this->_authenticateObjects;
 	}
@@ -830,7 +844,7 @@ class AuthComponent extends Component {
 		if ($message === false) {
 			return;
 		}
-		$this->Session->setFlash($message, $this->flash['element'], $this->flash['params'], $this->flash['key']);
+		$this->Flash->set($message, $this->flash);
 	}
 
 }

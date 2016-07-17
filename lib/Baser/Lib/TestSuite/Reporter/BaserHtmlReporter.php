@@ -136,12 +136,12 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		if (!empty($this->params['case'])) {
 			$query['case'] = $this->params['case'];
 		}
-		$show = $this->_queryString($show);
-		$query = $this->_queryString($query);
+		list($show, $query) = $this->_getQueryLink();
 
 		echo "<p><a href='" . $this->baseUrl() . $show . "'>Run more tests</a> | <a href='" . $this->baseUrl() . $query . "&amp;show_passes=1'>Show Passes</a> | \n";
 		echo "<a href='" . $this->baseUrl() . $query . "&amp;debug=1'>Enable Debug Output</a> | \n";
-		echo "<a href='" . $this->baseUrl() . $query . "&amp;code_coverage=true'>Analyze Code Coverage</a></p>\n";
+		echo "<a href='" . $this->baseUrl() . $query . "&amp;code_coverage=true'>Analyze Code Coverage</a> | \n";
+		echo "<a href='" . $this->baseUrl() . $query . "&amp;code_coverage=true&amp;show_passes=1&amp;debug=1'>All options enabled</a></p>\n";
 	}
 
 /**

@@ -11,24 +11,25 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Baser.Model.Datasource
+ * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DataSource', 'Model/Datasource');
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 App::uses('View', 'View');
-App::uses('Set', 'Utility');
-App::uses('String', 'Utility');
-App::uses('CakeSchema', 'Model'); // CUSTOMIZE ADD 2012/11/04 itm_kiyo
+// CUSTOMIZE ADD 2012/11/04 itm_kiyo
+// >>>
+App::uses('CakeSchema', 'Model');
+// <<<
 
 /**
  * DboSource
  *
  * Creates DBO-descendant objects from a given db connection configuration
  *
- * @package       Baser.Model.Datasource
+ * @package       Cake.Model.Datasource
  */
 class DboSource extends DataSource {
 
@@ -39,7 +40,6 @@ class DboSource extends DataSource {
  * @var array
  */
 	protected $_encodingMaps = array('utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP');
-
 // <<<
 	
 /**
@@ -2506,7 +2506,7 @@ class DboSource extends DataSource {
 		if ($allFields) {
 			$fields = array_keys($Model->schema());
 		} elseif (!is_array($fields)) {
-			$fields = String::tokenize($fields);
+			$fields = CakeText::tokenize($fields);
 		}
 		$fields = array_values(array_filter($fields));
 		$allFields = $allFields || in_array('*', $fields) || in_array($Model->alias . '.*', $fields);
@@ -2805,7 +2805,7 @@ class DboSource extends DataSource {
 		}
 
 		if ($bound) {
-			return String::insert($key . ' ' . trim($operator), $value);
+			return CakeText::insert($key . ' ' . trim($operator), $value);
 		}
 
 		if (!preg_match($operatorMatch, trim($operator))) {
@@ -3555,9 +3555,8 @@ class DboSource extends DataSource {
 		}
 	}
 
-// CUSTOM ADD 2010/10/04 ryuring
+// CUSTOMIZE ADD 2010/10/04 ryuring
 // >>>
-
 /**
  * スキーマファイルを利用してテーブルを生成する
  *
@@ -4450,7 +4449,6 @@ class DboSource extends DataSource {
 			return $enc;
 		}
 	}
-
 // <<<
 
 }

@@ -17,16 +17,16 @@ $categories = am(array('none' => 'カテゴリなし'), BcUtil::unserialize($thi
 $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 ?>
 
-<?php echo $this->BcForm->create('Content', array('url' => array('action' => 'index'))) ?>
-<?php echo $this->BcForm->hidden('Content.open', array('value' => true)) ?>
+<?php echo $this->BcForm->create('SearchIndex', array('url' => array('action' => 'index'))) ?>
+<?php echo $this->BcForm->hidden('SearchIndex.open', array('value' => true)) ?>
 <p>
-	<span><?php echo $this->BcForm->label('Content.type', 'タイプ') ?> <?php echo $this->BcForm->input('Content.type', array('type' => 'select', 'options' => $types, 'empty' => '指定なし')) ?></span>
-	<span><?php echo $this->BcForm->label('Content.category', 'カテゴリー') ?> <?php echo $this->BcForm->input('Content.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
-	<span><?php echo $this->BcForm->label('Content.keyword', 'キーワード') ?> <?php echo $this->BcForm->input('Content.keyword', array('type' => 'text', 'size' => '30')) ?></span>
-	<span><?php echo $this->BcForm->label('Content.status', '公開状態') ?> 
-		<?php echo $this->BcForm->input('Content.status', array('type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
-	<span><?php echo $this->BcForm->label('Content.priority', '優先度') ?> 
-		<?php echo $this->BcForm->input('Content.priority', array('type' => 'select', 'options' => $priorities, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.type', 'タイプ') ?> <?php echo $this->BcForm->input('SearchIndex.type', array('type' => 'select', 'options' => $types, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.category', 'カテゴリー') ?> <?php echo $this->BcForm->input('SearchIndex.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.keyword', 'キーワード') ?> <?php echo $this->BcForm->input('SearchIndex.keyword', array('type' => 'text', 'size' => '30')) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.status', '公開状態') ?> 
+		<?php echo $this->BcForm->input('SearchIndex.status', array('type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $this->BcForm->label('SearchIndex.priority', '優先度') ?> 
+		<?php echo $this->BcForm->input('SearchIndex.priority', array('type' => 'select', 'options' => $priorities, 'empty' => '指定なし')) ?></span>
 </p>
 <div class="button">
 	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 

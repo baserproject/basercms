@@ -39,7 +39,7 @@ class MailField extends MailAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "項目名を入力してください。"),
 			array('rule' => array('maxLength', 255),
 				'message' => '項目名は255文字以内で入力してください。')
@@ -54,7 +54,7 @@ class MailField extends MailAppModel {
 				'message' => 'フィールド名は255文字以内で入力してください。')
 		),
 		'type' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "タイプを入力してください。")
 		),
 		'head' => array(

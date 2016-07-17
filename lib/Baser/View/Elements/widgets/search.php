@@ -18,9 +18,9 @@
  */
 
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'num' => $this->passedArgs['num']);
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
 } else {
-	$url = array('plugin' => null, 'controller' => 'search_indices');
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
 }
 ?>
 
@@ -29,7 +29,7 @@ if (!empty($this->passedArgs['num'])) {
 	<?php if ($name && $use_title): ?>
 		<h2><?php echo $name ?></h2>
 	<?php endif ?>
-	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
+	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'url' => $url)) ?>
 	<?php if (BcUtil::unserialize($this->BcBaser->siteConfig['content_categories'])) : ?>
 		<?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
 	<?php endif ?>

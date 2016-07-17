@@ -299,7 +299,7 @@ class PermissionsController extends AppController {
 		if ($this->Permission->delete($id)) {
 			$this->setMessage('アクセス制限設定「' . $post['Permission']['name'] . '」 を削除しました。', false, true);
 		} else {
-			$this->Session->setFlash('データベース処理中にエラーが発生しました。');
+			$this->setMessage('データベース処理中にエラーが発生しました。', true, false);
 		}
 
 		$this->redirect(array('action' => 'index', $userGroupId));

@@ -60,7 +60,7 @@ class FeedConfig extends FeedAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'フィード設定名を入力してください。',
 				'required' => true),
 			array('rule' => array('maxLength', 50),
@@ -80,7 +80,7 @@ class FeedConfig extends FeedAppModel {
 				'required' => true)
 		),
 		'template' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'テンプレート名を入力してください。'),
 			array('rule' => 'halfText',
 				'message' => 'テンプレート名は半角のみで入力してください。'),

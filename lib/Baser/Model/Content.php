@@ -65,7 +65,7 @@ class Content extends AppModel {
  */
 	public $validate = [
 		'name' => [
-			['rule' => ['notEmpty'],
+			['rule' => ['notBlank'],
 				'message' => 'スラッグを入力してください。'],
 			['rule' => ['maxLength', 2083],
 				'message' => 'タイトルは255文字以内で入力してください。'],
@@ -73,7 +73,7 @@ class Content extends AppModel {
 				'message' => '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。']
 		],
 		'title' => [
-			['rule' => ['notEmpty'],
+			['rule' => ['notBlank'],
 				'message' => 'タイトルを入力してください。'],
 			['rule' => ['maxLength', 255],
 				'message' => 'タイトルは255文字以内で入力してください。'],

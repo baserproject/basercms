@@ -182,11 +182,11 @@ class ControllerTask extends BakeTask {
 				$components = $this->doComponents();
 
 				$wannaUseSession = $this->in(
-					__d('cake_console', "Would you like to use Session flash messages?"), array('y', 'n'), 'y'
+					__d('cake_console', "Would you like to use the FlashComponent to display flash messages?"), array('y', 'n'), 'y'
 				);
 
 				if (strtolower($wannaUseSession) === 'y') {
-					array_push($components, 'Session');
+					array_push($components, 'Session', 'Flash');
 				}
 				array_unique($components);
 			}

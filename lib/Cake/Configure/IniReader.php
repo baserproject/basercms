@@ -34,10 +34,10 @@ App::uses('CakePlugin', 'Core');
  * You can nest properties as deeply as needed using `.`'s. In addition to using `.` you
  * can use standard ini section notation to create nested structures:
  *
- * {{{
+ * ```
  * [section]
  * key = value
- * }}}
+ * ```
  *
  * Once loaded into Configure, the above would be accessed using:
  *
@@ -102,7 +102,7 @@ class IniReader implements ConfigReaderInterface {
 		}
 
 		$file = $this->_getFilePath($key);
-		if (!is_file($file)) {
+		if (!is_file(realpath($file))) {
 			throw new ConfigureException(__d('cake_dev', 'Could not load configuration file: %s', $file));
 		}
 

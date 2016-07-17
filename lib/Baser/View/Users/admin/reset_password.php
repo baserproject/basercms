@@ -22,9 +22,9 @@ if (!$userModel) {
 	<p>パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />
 		新しいパスワードをメールでお知らせします。</p>
 	<?php if ($currentPrefix == 'front'): ?>
-		<?php echo $this->BcForm->create($userModel, array('action' => 'reset_password')) ?>
+		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password']]) ?>
 	<?php else: ?>
-		<?php echo $this->BcForm->create($userModel, array('action' => 'reset_password', 'url' => array($this->request->params['prefix'] => true))) ?>
+		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password', $this->request->params['prefix'] => true]]) ?>
 	<?php endif ?>
 	<div class="submit">
 		<?php echo $this->BcForm->input($userModel . '.email', array('type' => 'text', 'size' => 60)) ?>

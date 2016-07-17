@@ -1,25 +1,15 @@
 <?php
 /**
- * SQLite DBO拡張
- * 
- * TODO
- * 2014/07/04 ryuring
- * CakePHPの標準のものを移植しようとしたが全く使い物にならなかったので、
- * 一旦、スルーして現行のものをそのまま利用する事にした。
- * listSourcesの取得で何故かエラーとなっていた。
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('DboSource', 'Model/Datasource');
 App::uses('Sqlite', 'Model/Datasource/Database');
 App::uses('CakeSchema', 'Model');
@@ -27,6 +17,10 @@ App::uses('CakeSchema', 'Model');
 /**
  * SQLite DBO拡張
  *
+ * @TODO 2014/07/04 ryuring
+ * 		CakePHPの標準のものを移植しようとしたが全く使い物にならなかったので、
+ * 		一旦、スルーして現行のものをそのまま利用する事にした。
+ * 		listSourcesの取得で何故かエラーとなっていた。
  * @package Baser.Model.Datasource.Database
  */
 class BcSqlite extends Sqlite {
@@ -405,12 +399,12 @@ class BcSqlite extends Sqlite {
 		return 'text';
 	}
 
-/**
- * Enter description here...
- *
- * @param unknown_type $results
- * @return string
- */
+	/**
+	 * Generate ResultSet
+	 *
+	 * @param mixed $results The results to modify.
+	 * @return void
+	 */
 	public function resultSet($results) {
 		$this->results = $results;
 		$this->map = array();
@@ -418,14 +412,19 @@ class BcSqlite extends Sqlite {
 		$index = 0;
 		$j = 0;
 
-		//PDO::getColumnMeta is experimental and does not work with sqlite3,
-		//	so try to figure it out based on the querystring
+		// PDO::getColumnMeta is experimental and does not work with sqlite3,
+		// so try to figure it out based on the querystring
 		$querystring = $results->queryString;
-		if (stripos($querystring, 'SELECT') === 0) {
-			$last = strripos($querystring, 'FROM');
-			if ($last !== false) {
-				$selectpart = substr($querystring, 7, $last - 8);
-				$selects = String::tokenize($selectpart, ',', '(', ')');
+		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
+			$selectpart = substr($querystring, 7);
+			$selects = array();
+			foreach (CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
+				$fromPos = stripos($part, ' FROM ');
+				if ($fromPos !== false) {
+					$selects[] = trim(substr($part, 0, $fromPos));
+					break;
+				}
+				$selects[] = $part;
 			}
 		} elseif (strpos($querystring, 'PRAGMA table_info') === 0) {
 			$selects = array('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk');
@@ -439,7 +438,7 @@ class BcSqlite extends Sqlite {
 				$j++;
 				continue;
 			}
-			if (preg_match('/\bAS\s+(.*)/i', $selects[$j], $matches)) {
+			if (preg_match('/\bAS(?!.*\bAS\b)\s+(.*)/i', $selects[$j], $matches)) {
 				$columnName = trim($matches[1], '"');
 			} else {
 				$columnName = trim(str_replace('"', '', $selects[$j]));
@@ -998,6 +997,9 @@ class BcSqlite extends Sqlite {
 				// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
 				'length' => ($column[0]['type']) ? $this->length($column[0]['type']) : ''
 			);
+			if (in_array($fields[$column['name']]['type'], array('timestamp', 'datetime')) && strtoupper($fields[$column['name']]['default']) === 'CURRENT_TIMESTAMP') {
+				$fields[$column['name']]['default'] = null;
+			}
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
 			if ($fields[$column[0]['name']]['default'] == 'NULL') {
 				$fields[$column[0]['name']]['default'] = null;

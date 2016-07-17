@@ -31,8 +31,16 @@ class BcAssetDispatcher extends AssetDispatcher {
  * This filter should run before the request gets parsed by router
  * @var int
  */
+	// CUSTOMIZE MODIFY 2016/07/17 ryuring
+	// >>>
+	//public $priority = 9;
+	// ---
 	public $priority = 4;
+	// <<<
 
+// CUSTOMIZE MODIFY 2016/07/17 ryuring
+// 継承元を呼び出す前提でオーバーライド
+// >>>
 /**
  * Builds asset file path based off url
  *
@@ -55,5 +63,5 @@ class BcAssetDispatcher extends AssetDispatcher {
 
 		return null;
 	}
-
+// <<<
 }

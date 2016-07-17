@@ -37,7 +37,7 @@ class BcCacheDispatcher extends DispatcherFilter {
 	public function beforeDispatch(CakeEvent $event) {
 
 		if (Configure::read('Cache.check') !== true) {
-			return;
+			return null;
 		}
 
 		// CUSTOMIZE 2014/08/11 ryuring

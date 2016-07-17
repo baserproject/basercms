@@ -36,7 +36,7 @@ class MultiPage extends BcPluginAppModel {
  */
 	public $validate = array(
 		'content' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'コンテンツ内容を入力してください。',
 				'required' => true)
 		)

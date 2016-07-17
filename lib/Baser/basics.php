@@ -12,6 +12,7 @@
 
 App::uses('EmailComponent', 'Controller/Component');
 App::uses('BcEmailComponent', 'Controller/Component');
+App::uses('CakeText', 'Utility');
 
 /**
  * baserCMS共通関数
@@ -765,7 +766,7 @@ function getVersion($plugin = '') {
 function sendUpdateMail() {
 
 	$bcSite = Configure::read('BcSite');
-	$bcSite['update_id'] = String::uuid();
+	$bcSite['update_id'] = CakeText::uuid();
 	$SiteConfig = ClassRegistry::init('SiteConfig');
 	$SiteConfig->saveKeyValue(array('SiteConfig' => $bcSite));
 	ClassRegistry::removeObject('SiteConfig');

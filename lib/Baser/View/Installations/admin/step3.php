@@ -146,7 +146,7 @@ $(document).ready( function() {
 	}
 </script>
 
-<?php echo $this->BcForm->create(null, array('action' => 'step3', 'id' => 'dbsettings', 'name' => 'dbsettings')) ?>
+<?php echo $this->BcForm->create(null, ['url' => ['action' => 'step3'], 'id' => 'dbsettings', 'name' => 'dbsettings']) ?>
 
 <div class="step-3">
 

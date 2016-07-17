@@ -54,7 +54,7 @@ $(document).ready(function(){
 
 	<h2>管理情報登録</h2>
 
-	<?php echo $this->BcForm->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
+	<?php echo $this->BcForm->create(null, ['url' => ['action' => 'step4'], 'id' => 'adminSettings', 'name' => 'adminSettings']) ?>
 
 	<div class="panel-box corner10">
 		<div class="section">

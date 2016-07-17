@@ -69,7 +69,7 @@ class UserGroup extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'ユーザーグループ名を入力してください。'),
 			array('rule' => array('halfText'),
 				'message' => 'ユーザーグループ名は半角のみで入力してください。'),
@@ -79,13 +79,13 @@ class UserGroup extends AppModel {
 				'message' => 'ユーザーグループ名は50文字以内で入力してください。')
 		),
 		'title' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '表示名を入力してください。'),
 			array('rule' => array('maxLength', 50),
 				'message' => '表示名は50文字以内で入力してください。')
 		),
 		'auth_prefix' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '認証プレフィックスを入力してください。')
 		)
 	);

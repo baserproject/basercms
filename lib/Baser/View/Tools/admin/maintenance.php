@@ -26,7 +26,7 @@
 	<small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。<br />
 		v1.6.6以前のバックアップデータの復元はできません。v1.6.6以前のデータを復元するには、phpMyAdminなどのDB管理ツールをご利用ください。</small></p>
 
-<?php echo $this->BcForm->create('Tool', array('action' => 'maintenance', 'url' => array('restore'), 'type' => 'file')) ?>
+<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr>

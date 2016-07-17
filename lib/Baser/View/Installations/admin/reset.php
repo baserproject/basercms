@@ -33,7 +33,7 @@ $(function(){
 		<p>データベースのバックアップをとられていない場合は必ずバックアップを保存してから実行してください。</p>
 		<ul><li><?php $this->BcBaser->link('バックアップはこちらから', array('admin' => true, 'controller' => 'tools', 'action' => 'maintenance', 'backup')) ?></li></ul>
 	<?php endif ?>
-	<?php echo $this->BcForm->create('Installation', array('action' => 'reset')) ?>
+	<?php echo $this->BcForm->create('Installation', ['url' => ['action' => 'reset']]) ?>
 	<?php echo $this->BcForm->input('Installation.reset', array('type' => 'hidden', 'value' => true)) ?>
 	<?php echo $this->BcForm->end(array('label' => '初期化する', 'class' => 'button')) ?>
 

@@ -45,6 +45,8 @@ class MemcachedEngine extends CacheEngine {
  *  - serialize = string, default => php. The serializer engine used to serialize data.
  *    Available engines are php, igbinary and json. Beside php, the memcached extension
  *    must be compiled with the appropriate serializer support.
+ *  - options - Additional options for the memcached client. Should be an array of option => value.
+ *    Use the Memcached::OPT_* constants as keys.
  *
  * @var array
  */
@@ -92,7 +94,8 @@ class MemcachedEngine extends CacheEngine {
 			'persistent' => false,
 			'login' => null,
 			'password' => null,
-			'serialize' => 'php'
+			'serialize' => 'php',
+			'options' => array()
 		);
 		parent::init($settings);
 
@@ -132,6 +135,11 @@ class MemcachedEngine extends CacheEngine {
 			}
 			$this->_Memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
 			$this->_Memcached->setSaslAuthData($this->settings['login'], $this->settings['password']);
+		}
+		if (is_array($this->settings['options'])) {
+			foreach ($this->settings['options'] as $opt => $value) {
+				$this->_Memcached->setOption($opt, $value);
+			}
 		}
 
 		return true;
@@ -177,8 +185,9 @@ class MemcachedEngine extends CacheEngine {
  * @return array Array containing host, port
  */
 	protected function _parseServerString($server) {
-		if ($server[0] === 'u') {
-			return array($server, 0);
+		$socketTransport = 'unix://';
+		if (strpos($server, $socketTransport) === 0) {
+			return array(substr($server, strlen($socketTransport)), 0);
 		}
 		if (substr($server, 0, 1) === '[') {
 			$position = strpos($server, ']:');
@@ -199,7 +208,7 @@ class MemcachedEngine extends CacheEngine {
 
 /**
  * Write data for key into cache. When using memcached as your cache engine
- * remember that the Memcached pecl extension does not support cache expiry times greater
+ * remember that the Memcached PECL extension does not support cache expiry times greater
  * than 30 days in the future. Any duration greater than 30 days will be treated as never expiring.
  *
  * @param string $key Identifier for the data
@@ -265,7 +274,8 @@ class MemcachedEngine extends CacheEngine {
  *
  * @param bool $check If true no deletes will occur and instead CakePHP will rely
  *   on key TTL values.
- * @return bool True if the cache was successfully cleared, false otherwise
+ * @return bool True if the cache was successfully cleared, false otherwise. Will
+ *   also return false if you are using a binary protocol.
  */
 	public function clear($check) {
 		if ($check) {
@@ -273,6 +283,9 @@ class MemcachedEngine extends CacheEngine {
 		}
 
 		$keys = $this->_Memcached->getAllKeys();
+		if ($keys === false) {
+			return false;
+		}
 
 		foreach ($keys as $key) {
 			if (strpos($key, $this->settings['prefix']) === 0) {
@@ -326,5 +339,25 @@ class MemcachedEngine extends CacheEngine {
  */
 	public function clearGroup($group) {
 		return (bool)$this->_Memcached->increment($this->settings['prefix'] . $group);
+	}
+
+/**
+ * Write data for key into cache if it doesn't exist already. When using memcached as your cache engine
+ * remember that the Memcached pecl extension does not support cache expiry times greater
+ * than 30 days in the future. Any duration greater than 30 days will be treated as never expiring.
+ * If it already exists, it fails and returns false.
+ *
+ * @param string $key Identifier for the data.
+ * @param mixed $value Data to be cached.
+ * @param int $duration How long to cache the data, in seconds.
+ * @return bool True if the data was successfully cached, false on failure.
+ * @link http://php.net/manual/en/memcached.add.php
+ */
+	public function add($key, $value, $duration) {
+		if ($duration > 30 * DAY) {
+			$duration = 0;
+		}
+
+		return $this->_Memcached->add($key, $value, $duration);
 	}
 }

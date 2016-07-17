@@ -1,7 +1,5 @@
 <?php
 /**
- * CacheHelper helps create full page view caching.
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -24,8 +22,10 @@ App::uses('AppHelper', 'View/Helper');
  * When using CacheHelper you don't call any of its methods, they are all automatically
  * called by View, and use the $cacheAction settings set in the controller.
  *
- * @package       Cake.View.Helper
+ * @package Cake.View.Helper
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/cache.html
+ * @deprecated This class will be removed in 3.0. You should use a separate response cache
+ * like Varnish instead.
  */
 class CacheHelper extends AppHelper {
 
@@ -271,8 +271,8 @@ class CacheHelper extends AppHelper {
  *
  * @param string $content view content to write to a cache file.
  * @param string $timestamp Duration to set for cache file.
- * @param bool $useCallbacks Whether to include statements in cached file which
- *   run callbacks.
+ * @param bool|null $useCallbacks Whether to include statements in cached file which
+ *   run callbacks, otherwise null.
  * @return bool success of caching view.
  */
 	protected function _writeFile($content, $timestamp, $useCallbacks = false) {
@@ -294,7 +294,7 @@ class CacheHelper extends AppHelper {
 		$cache = strtolower(Inflector::slug($path));
 
 		if (empty($cache)) {
-			return;
+			return null;
 		}
 		$cache = $cache . '.php';
 		$file = '<!--cachetime:' . $cacheTime . '--><?php';

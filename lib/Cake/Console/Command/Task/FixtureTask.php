@@ -74,7 +74,7 @@ class FixtureTask extends BakeTask {
 		))->addOption('count', array(
 			'help' => __d('cake_console', 'When using generated data, the number of records to include in the fixture(s).'),
 			'short' => 'n',
-			'default' => 10
+			'default' => 1
 		))->addOption('connection', array(
 			'help' => __d('cake_console', 'Which database configuration to use for baking.'),
 			'short' => 'c',
@@ -125,7 +125,8 @@ class FixtureTask extends BakeTask {
 				return $this->all();
 			}
 			$model = $this->_modelName($this->args[0]);
-			$this->bake($model);
+			$importOptions = $this->importOptions($model);
+			$this->bake($model, false, $importOptions);
 		}
 	}
 
@@ -177,24 +178,29 @@ class FixtureTask extends BakeTask {
  */
 	public function importOptions($modelName) {
 		$options = array();
+		$plugin = '';
+		if (isset($this->params['plugin'])) {
+			$plugin = $this->params['plugin'] . '.';
+		}
 
 		if (!empty($this->params['schema'])) {
-			$options['schema'] = $modelName;
-		} else {
+			$options['schema'] = $plugin . $modelName;
+		} elseif ($this->interactive) {
 			$doSchema = $this->in(__d('cake_console', 'Would you like to import schema for this fixture?'), array('y', 'n'), 'n');
 			if ($doSchema === 'y') {
 				$options['schema'] = $modelName;
 			}
 		}
+
 		if (!empty($this->params['records'])) {
-			$doRecords = 'y';
-		} else {
+			$options['fromTable'] = true;
+		} elseif ($this->interactive) {
 			$doRecords = $this->in(__d('cake_console', 'Would you like to use record importing for this fixture?'), array('y', 'n'), 'n');
+			if ($doRecords === 'y') {
+				$options['records'] = true;
+			}
 		}
-		if ($doRecords === 'y') {
-			$options['records'] = true;
-		}
-		if ($doRecords === 'n') {
+		if (!isset($options['records']) && $this->interactive) {
 			$prompt = __d('cake_console', "Would you like to build this fixture with data from %s's table?", $modelName);
 			$fromTable = $this->in($prompt, array('y', 'n'), 'n');
 			if (strtolower($fromTable) === 'y') {
@@ -210,7 +216,7 @@ class FixtureTask extends BakeTask {
  * @param string $model Name of model to bake.
  * @param string $useTable Name of table to use.
  * @param array $importOptions Options for public $import
- * @return string Baked fixture content
+ * @return string|null Baked fixture content, otherwise null.
  */
 	public function bake($model, $useTable = false, $importOptions = array()) {
 		App::uses('CakeSchema', 'Model');
@@ -243,7 +249,7 @@ class FixtureTask extends BakeTask {
 		$data = $this->_Schema->read(array('models' => false, 'connection' => $this->connection));
 		if (!isset($data['tables'][$useTable])) {
 			$this->err("<warning>Warning:</warning> Could not find the '${useTable}' table for ${model}.");
-			return;
+			return null;
 		}
 
 		$tableInfo = $data['tables'][$useTable];
@@ -340,7 +346,7 @@ class FixtureTask extends BakeTask {
 							isset($fieldInfo['length']) && $fieldInfo['length'] == 36
 						);
 						if ($isPrimaryUuid) {
-							$insert = String::uuid();
+							$insert = CakeText::uuid();
 						} else {
 							$insert = "Lorem ipsum dolor sit amet";
 							if (!empty($fieldInfo['length'])) {
@@ -414,19 +420,26 @@ class FixtureTask extends BakeTask {
  * @return array Array of records.
  */
 	protected function _getRecordsFromTable($modelName, $useTable = null) {
+		$modelObject = new Model(array('name' => $modelName, 'table' => $useTable, 'ds' => $this->connection));
 		if ($this->interactive) {
 			$condition = null;
 			$prompt = __d('cake_console', "Please provide a SQL fragment to use as conditions\nExample: WHERE 1=1");
 			while (!$condition) {
 				$condition = $this->in($prompt, null, 'WHERE 1=1');
 			}
+
+			$recordsFound = $modelObject->find('count', array(
+				'conditions' => $condition,
+				'recursive' => -1,
+			));
+
 			$prompt = __d('cake_console', "How many records do you want to import?");
-			$recordCount = $this->in($prompt, null, 10);
+			$recordCount = $this->in($prompt, null, ($recordsFound < 10 ) ? $recordsFound : 10);
 		} else {
 			$condition = 'WHERE 1=1';
 			$recordCount = (isset($this->params['count']) ? $this->params['count'] : 10);
 		}
-		$modelObject = new Model(array('name' => $modelName, 'table' => $useTable, 'ds' => $this->connection));
+
 		$records = $modelObject->find('all', array(
 			'conditions' => $condition,
 			'recursive' => -1,

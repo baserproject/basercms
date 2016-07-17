@@ -323,7 +323,7 @@ function updateWidget(id) {
 <?php if ($this->request->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('WidgetArea', array('url' => array('action' => 'add'))) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('WidgetArea', array('action' => 'update_title', 'url' => array('action' => 'update_title', 'id' => false))) ?>
+	<?php echo $this->BcForm->create('WidgetArea', array('url' => array('action' => 'update_title', 'id' => false))) ?>
 <?php endif ?>
 
 <?php echo $this->BcForm->hidden('WidgetArea.id') ?>
