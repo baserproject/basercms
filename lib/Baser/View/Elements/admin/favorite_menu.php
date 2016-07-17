@@ -11,7 +11,6 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js('admin/libs/baser_favorite');
 ?>
 
 

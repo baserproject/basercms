@@ -11,8 +11,9 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+// JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
+$this->BcBaser->js(array('admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu', 'admin/toolbar'));
 App::uses('AuthComponent', 'Controller/Component');
-$this->BcBaser->js(array('admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu'));
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 if (!empty($currentAuthPrefix['loginAction'])) {
@@ -31,30 +32,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 	$authName = '';
 }
 ?>
-<script type="text/javascript">
-$(function(){
-	$('#UserMenu').fixedMenu();
-	$('#SystemMenu h2').click(function(){
-		if($(this).next().css('display')=='none') {
-			$(this).next().slideDown(200);
-		} else {
-			$(this).next().slideUp(200);
-		}
-	});
-	$('#SystemMenu ul:first').show();
-	$("#UserMenu ul li div ul li").each(function(){
-		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
-			$(this).remove();
-		}
-	});
-	$("#UserMenu ul li div ul").each(function(){
-		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
-			$(this).prev().remove();
-			$(this).remove();
-		}
-	});
-});
-</script>
+
 
 <div id="ToolBar">
 	<div id="ToolbarInner" class="clearfix">

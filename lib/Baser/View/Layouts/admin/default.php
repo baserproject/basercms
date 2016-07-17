@@ -50,6 +50,8 @@
 			'admin/startup',
 			'admin/libs/adjust_scroll',
 			'admin/libs/jquery.bcUtil',
+			'admin/favorite',
+			'admin/permission',
 			'admin/vendors/yuga'))
 		?>
 <?php $this->BcBaser->scripts() ?>
