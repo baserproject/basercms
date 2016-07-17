@@ -260,7 +260,23 @@ class CakeRequest implements ArrayAccess {
 			$uri = $var[0];
 		}
 
-		$base = $this->base;
+		// CUSTOMIZE ADD 2013/11/25 ryuring
+		// サブフォルダに設置した場合URIを正常に取得できない為調整
+		// >>>
+		if (Configure::read('App.baseUrl')) {
+			$dir = dirname($this->base);
+			if (strpos($uri, $dir) === 0) {
+				//$uri = substr($uri, strlen($dir));
+			}
+		}
+		// <<<
+		// CUSTOMIZE MODIFY 2013/09/30 ryuring
+		// サブディレクトリ設置時のスマートURLオフに対応していなかったので調整
+		// >>>
+		//$base = $this->base;
+		// ---
+		$base = str_replace('/index.php', '', $this->base);
+		// <<<
 
 		if (strlen($base) > 0 && strpos($uri, $base) === 0) {
 			$uri = substr($uri, strlen($base));
@@ -339,7 +355,14 @@ class CakeRequest implements ArrayAccess {
 		$docRoot = env('DOCUMENT_ROOT');
 		$docRootContainsWebroot = strpos($docRoot, $dir . DS . $webroot);
 
-		if (!empty($base) || !$docRootContainsWebroot) {
+		// CUSTOMIZE MODIFY 2013/11/25 ryuring
+		// BC_DEPLOY_PATTERN が 2 の場合は、上位階層に、app/webroot/ という階層を持たない為、
+		// $this->webroot に、 app/webroot/ を付加しない
+		// >>>
+		//if (!empty($base) || !$docRootContainsWebroot) {
+		// ---
+		if ((!empty($base) || !$docRootContainsWebroot) && BC_DEPLOY_PATTERN != 2) {
+		// <<<
 			if (strpos($this->webroot, '/' . $dir . '/') === false) {
 				$this->webroot .= $dir . '/';
 			}
@@ -1141,4 +1164,49 @@ class CakeRequest implements ArrayAccess {
 		unset($this->params[$name]);
 	}
 
+// CUSTOMIZE ADD XXXX/XX/XX nakae
+// >>>
+	/**
+	 * 現在のURLを正規化して取得する
+	 *
+	 * $this->request->here は、ビューキャッシュの命名規則に影響する為、
+	 * CacheHelper 等で、このメソッドを利用する事で、同一ページによる複数キャッシュの生成を防ぐ
+	 *
+	 * （例）
+	 * /news/ → /news/index
+	 * /company/ → /company/index
+	 *
+	 * @return string
+	 */
+	public function normalizedHere() {
+		$here = $this->here;
+		if(!BcUtil::isAdminSystem() && $this->params['controller'] == 'pages') {
+			if($this->params['pass'][count($this->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $here)) {
+				if(preg_match('/\/$/', $here)) {
+					$here .= 'index';
+				} else {
+					$here .= '/index';
+				}
+			}
+			$here = preg_replace('/\.html$/', '', $here);
+		} else {
+			if($this->action == 'index') {
+				list($here,) = explode('?', $here);
+				if(!empty($this->params['pass'])) {
+					foreach ($this->params['pass'] as $pass) {
+						$here = preg_replace('/\/' . $pass . '$/', '', $here);
+					}
+				}
+				if(!preg_match('/\/index$/', $here)) {
+					if(preg_match('/\/$/', $here)) {
+						$here .= 'index';
+					} else {
+						$here .= '/index';
+					}
+				}
+			}
+		}
+		return $here;
+	}
+// <<<
 }
