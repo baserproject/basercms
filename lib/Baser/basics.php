@@ -281,7 +281,7 @@ function getPureUrl($Request) {
 	}
 	$url = $Request->url;
 	if ($url === false) {
-		$url = '/';
+		$url = '';
 	}
 	if (strpos($url, '?') !== false) {
 		list($url) = explode('?', $url);
