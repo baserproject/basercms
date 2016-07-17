@@ -33,9 +33,9 @@ foreach ($mailContents as $mailContent) {
 		array('name' => '[' . $mailContent['title'] . '] 設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $mailContent['id'])),
 	));
 }
-$config['BcContents']['items']['Mail'] = [
-	'Mail'	=> [
-		'title' => 'メール',
-		'icon' => 'admin/icon_mail.png'
-	]
-];
+//$config['BcContents']['items']['Mail'] = [
+//	'Mail'	=> [
+//		'title' => 'メール',
+//		'icon' => 'admin/icon_mail.png'
+//	]
+//];

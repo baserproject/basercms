@@ -267,11 +267,11 @@ $config['BcContents'] = [
 				],
 				'icon'	=> 'admin/icon_link.png',
 			],
-			'Page'	=> [
-				'title' => '固定ページ',
-				// TODO routes を実装要
-				'icon'	=> 'admin/icon_page.png',
-			]
+//			'Page'	=> [
+//				'title' => '固定ページ',
+//				// TODO routes を実装要
+//				'icon'	=> 'admin/icon_page.png',
+//			]
 		]
 	]
 ];

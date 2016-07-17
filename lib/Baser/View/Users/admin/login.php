@@ -11,7 +11,7 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-$this->Flash->render('auth');
+echo $this->Flash->render('auth');
 $userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
 if (!$userModel) {
 	$userModel = 'User';
