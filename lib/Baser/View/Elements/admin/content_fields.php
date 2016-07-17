@@ -57,7 +57,9 @@ if($this->request->data['Site']['relate_main_site'] && $this->request->data['Con
 	<ul>
 		<li><a href="#BasicSetting">基本情報</a></li>
 		<li><a href="#OptionalSetting">オプション</a></li>
+		<?php if(count($relatedContents) > 1): ?>
 		<li><a href="#RelatedContentsSetting">関連コンテンツ</a></li>
+		<?php endif ?>
 	</ul>
 	<div id="BasicSetting">
 		<table class="form-table" >
@@ -198,6 +200,7 @@ if($this->request->data['Site']['relate_main_site'] && $this->request->data['Con
 			</tr>
 		</table>
 	</div>
+<?php if(count($relatedContents) > 1): ?>
 	<div id="RelatedContentsSetting">
 		<table class="list-table">
 			<tr>
@@ -276,4 +279,5 @@ if($this->request->data['Site']['relate_main_site'] && $this->request->data['Con
 			<?php endforeach ?>
 		</table>
 	</div>
+<?php endif ?>
 </div>
