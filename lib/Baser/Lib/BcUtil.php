@@ -332,7 +332,9 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function getSubDomain() {
-
+		if(isConsole()) {
+			return '';
+		}
 		if(strpos($_SERVER['HTTP_HOST'], '.') === false) {
 			return '';
 		}
