@@ -151,7 +151,7 @@ $(function(){
 <h2>基本項目</h2>
 
 
-<?php echo $this->BcForm->create('SiteConfig', array('action' => 'form')) ?>
+<?php echo $this->BcForm->create('SiteConfig', ['url' => ['action' => 'form']]) ?>
 <?php echo $this->BcForm->hidden('SiteConfig.id') ?>
 
 <table cellpadding="0" cellspacing="0" class="form-table section">

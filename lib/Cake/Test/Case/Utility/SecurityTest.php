@@ -152,15 +152,35 @@ class SecurityTest extends CakeTestCase {
 	}
 
 /**
+ * Test that blowfish doesn't return '' when the salt is ''
+ *
+ * @return void
+ */
+	public function testHashBlowfishEmptySalt() {
+		$test = Security::hash('password', 'blowfish');
+		$this->skipIf(strpos($test, '$2a$') === false, 'Blowfish hashes are incorrect.');
+
+		$stored = '';
+		$hash = Security::hash('anything', 'blowfish', $stored);
+		$this->assertNotEquals($stored, $hash);
+
+		$hash = Security::hash('anything', 'blowfish', false);
+		$this->assertNotEquals($stored, $hash);
+
+		$hash = Security::hash('anything', 'blowfish', null);
+		$this->assertNotEquals($stored, $hash);
+	}
+
+/**
  * Test that hash() works with blowfish.
  *
  * @return void
  */
 	public function testHashBlowfish() {
-		Security::setCost(10);
 		$test = Security::hash('password', 'blowfish');
 		$this->skipIf(strpos($test, '$2a$') === false, 'Blowfish hashes are incorrect.');
 
+		Security::setCost(10);
 		$_hashType = Security::$hashType;
 
 		$key = 'someKey';
@@ -324,7 +344,7 @@ class SecurityTest extends CakeTestCase {
 	public function testDecryptKeyFailure() {
 		$txt = 'The quick brown fox';
 		$key = 'This key is longer than 32 bytes long.';
-		$result = Security::encrypt($txt, $key);
+		Security::encrypt($txt, $key);
 
 		$key = 'Not the same key. This one will fail';
 		$this->assertFalse(Security::decrypt($txt, $key), 'Modified key will fail.');
@@ -424,4 +444,16 @@ class SecurityTest extends CakeTestCase {
 		Security::decrypt($txt, $key);
 	}
 
+/**
+ * Test the random method.
+ *
+ * @return void
+ */
+	public function testRandomBytes() {
+		$value = Security::randomBytes(16);
+		$this->assertSame(16, strlen($value));
+
+		$value = Security::randomBytes(64);
+		$this->assertSame(64, strlen($value));
+	}
 }

@@ -49,7 +49,7 @@ class Dblog extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "ログ内容を入力してください。",
 				'required' => true)
 		)

@@ -25,7 +25,7 @@ class Site extends AppModel {
 	public $validate = [
 		'name' => [
 			[
-				'rule' => ['notEmpty'],
+				'rule' => ['notBlank'],
 				'message' => '識別名称を入力してください。'
 			],
 			[
@@ -43,7 +43,7 @@ class Site extends AppModel {
 		],
 		'display_name' => [
 			[
-				'rule' => ['notEmpty'],
+				'rule' => ['notBlank'],
 				'message' => 'サブサイト名を入力してください。'
 			],
 			[
@@ -67,7 +67,7 @@ class Site extends AppModel {
 		],
 		'title' => [
 			[
-				'rule' => ['notEmpty'],
+				'rule' => ['notBlank'],
 				'message' => 'サブサイトタイトルを入力してください。'
 			],
 			[

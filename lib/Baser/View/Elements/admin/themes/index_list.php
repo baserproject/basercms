@@ -54,7 +54,7 @@ $(function(){
 		</div>
 		<br /><br />
 		<?php if ($defaultDataPatterns && $this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->create('Theme', array('action' => 'load_default_data_pattern')) ?>
+			<?php echo $this->BcForm->create('Theme', ['url' => ['action' => 'load_default_data_pattern']]) ?>
 			<?php echo $this->BcForm->input('Theme.default_data_pattern', array('type' => 'select', 'options' => $defaultDataPatterns)) ?>
 			<?php echo $this->BcForm->submit('初期データ読込', array('class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern')) ?>
 			<?php echo $this->BcForm->end() ?>

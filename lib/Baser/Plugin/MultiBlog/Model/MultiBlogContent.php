@@ -52,7 +52,7 @@ class MultiBlogContent extends BcPluginAppModel {
 	public $validate = array(
 		'content' => array(
 			array(
-				'rule'		=> array('notEmpty'),
+				'rule'		=> array('notBlank'),
 				'message'	=> 'ブログの内容を入力してください。',
 				'required'	=> true
 			)

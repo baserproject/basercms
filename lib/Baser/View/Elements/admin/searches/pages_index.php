@@ -64,7 +64,7 @@ function pageTypeChengeHandler() {
 
 <div id="AjaxCategorySourceUrl" class="display-none"><?php $this->BcBaser->url(array('action' => 'ajax_category_source')) ?></div>
 
-<?php echo $this->BcForm->create('Page', array('action' => 'index', 'url' => array('action' => 'index'))) ?>
+<?php echo $this->BcForm->create('Page', array('url' => array('action' => 'index'))) ?>
 
 <p>
 	<span><?php echo $this->BcForm->label('Page.name', 'ページ名') ?> <?php echo $this->BcForm->input('Page.name', array('type' => 'text', 'size' => '30')) ?></span>

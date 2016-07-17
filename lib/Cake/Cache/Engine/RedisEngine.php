@@ -59,7 +59,7 @@ class RedisEngine extends CacheEngine {
 		}
 		parent::init(array_merge(array(
 			'engine' => 'Redis',
-			'prefix' => null,
+			'prefix' => Inflector::slug(APP_DIR) . '_',
 			'server' => '127.0.0.1',
 			'database' => 0,
 			'port' => 6379,
@@ -79,7 +79,6 @@ class RedisEngine extends CacheEngine {
  * @return bool True if Redis server was connected
  */
 	protected function _connect() {
-		$return = false;
 		try {
 			$this->_Redis = new Redis();
 			if (!empty($this->settings['unix_socket'])) {
@@ -91,15 +90,15 @@ class RedisEngine extends CacheEngine {
 				$return = $this->_Redis->pconnect($this->settings['server'], $this->settings['port'], $this->settings['timeout'], $persistentId);
 			}
 		} catch (RedisException $e) {
+			$return = false;
+		}
+		if (!$return) {
 			return false;
 		}
-		if ($return && $this->settings['password']) {
-			$return = $this->_Redis->auth($this->settings['password']);
+		if ($this->settings['password'] && !$this->_Redis->auth($this->settings['password'])) {
+			return false;
 		}
-		if ($return) {
-			$return = $this->_Redis->select($this->settings['database']);
-		}
-		return $return;
+		return $this->_Redis->select($this->settings['database']);
 	}
 
 /**
@@ -114,6 +113,11 @@ class RedisEngine extends CacheEngine {
 		if (!is_int($value)) {
 			$value = serialize($value);
 		}
+
+		if (!$this->_Redis->isConnected()) {
+			$this->_connect();
+		}
+
 		if ($duration === 0) {
 			return $this->_Redis->set($key, $value);
 		}
@@ -129,11 +133,11 @@ class RedisEngine extends CacheEngine {
  */
 	public function read($key) {
 		$value = $this->_Redis->get($key);
-		if (ctype_digit($value)) {
-			$value = (int)$value;
+		if (preg_match('/^[-]?\d+$/', $value)) {
+			return (int)$value;
 		}
 		if ($value !== false && is_string($value)) {
-			$value = unserialize($value);
+			return unserialize($value);
 		}
 		return $value;
 	}
@@ -227,5 +231,28 @@ class RedisEngine extends CacheEngine {
 		if (!$this->settings['persistent']) {
 			$this->_Redis->close();
 		}
+	}
+
+/**
+ * Write data for key into cache if it doesn't exist already.
+ * If it already exists, it fails and returns false.
+ *
+ * @param string $key Identifier for the data.
+ * @param mixed $value Data to be cached.
+ * @param int $duration How long to cache the data, in seconds.
+ * @return bool True if the data was successfully cached, false on failure.
+ * @link https://github.com/phpredis/phpredis#setnx
+ */
+	public function add($key, $value, $duration) {
+		if (!is_int($value)) {
+			$value = serialize($value);
+		}
+
+		$result = $this->_Redis->setnx($key, $value);
+		// setnx() doesn't have an expiry option, so overwrite the key with one
+		if ($result) {
+			return $this->_Redis->setex($key, $duration, $value);
+		}
+		return false;
 	}
 }

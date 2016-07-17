@@ -43,7 +43,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage');
+	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage', 'Flash');
 
 /**
  * ページモデル
@@ -715,7 +715,7 @@ class BcBaserHelper extends AppHelper {
 	public function flash($key = 'flash') {
 		if ($this->Session->check('Message.' . $key)) {
 			echo '<div id="MessageBox">';
-			echo $this->Session->flash($key);
+			echo $this->Flash->render($key);
 			echo '</div>';
 		}
 	}

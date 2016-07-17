@@ -1,11 +1,9 @@
 <?php
 /**
- * PostgreSQL DBO拡張
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
@@ -14,6 +12,11 @@
 
 App::uses('Postgres', 'Model/Datasource/Database');
 
+/**
+ * PostgreSQL DBO拡張
+ *
+ * @package Baser.Model.Datasource.Database
+ */
 class BcPostgres extends Postgres {
 // CUSTOMIZE ADD 2014/07/02 ryuirng
 // >>>
@@ -48,46 +51,16 @@ class BcPostgres extends Postgres {
 // <<<
 
 /**
- * Returns a quoted and escaped string of $data for use in an SQL statement.
- *
- * @param string $data String to be prepared for use in an SQL statement
- * @param string $column The column datatype into which this data will be inserted.
- * @return string Quoted and escaped data
+ * {@inheritDoc}
  */
-	public function value($data, $column = null) {
-		if (is_array($data) && !empty($data)) {
-			return array_map(
-				array(&$this, 'value'),
-				$data, array_fill(0, count($data), $column)
-			);
-		} elseif (is_object($data) && isset($data->type, $data->value)) {
-			if ($data->type === 'identifier') {
-				return $this->name($data->value);
-			} elseif ($data->type === 'expression') {
-				return $data->value;
-			}
-		} elseif (in_array($data, array('{$__cakeID__$}', '{$__cakeForeignKey__$}'), true)) {
-			return $data;
-		}
-
-		if ($data === null || (is_array($data) && empty($data))) {
+	public function value($data, $column = null, $null = true) {
+		$value = parent::value($data, $column, $null);
+		if ($column === 'uuid' && is_scalar($data) && $data === '') {
 			return 'NULL';
 		}
-
-		if (empty($column)) {
-			$column = $this->introspectType($data);
-		}
-
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
 		switch ($column) {
-			case 'binary':
-				return $this->_connection->quote($data, PDO::PARAM_LOB);
-			case 'boolean':
-				return $this->_connection->quote($this->boolean($data, true), PDO::PARAM_BOOL);
-			case 'string':
-			case 'text':
-				return $this->_connection->quote($data, PDO::PARAM_STR);
-			// CUSTOMIZE ADD 2014/07/02 ryuring
-			// >>>
 			case 'date':
 			case 'datetime':
 			case 'timestamp':
@@ -96,31 +69,15 @@ class BcPostgres extends Postgres {
 				if ($data === '0000-00-00 00:00:00') {
 					return "'" . date('Y-m-d H:i:s', 0) . "'";
 				}
-				// no break
 			case 'integer':
 				// TreeBehavior::getPath() にて、引数 $id に、null、または、空文字を指定した場合に、
 				// Model::id の初期値 false に上書きされてしまう仕様の為、SQLエラーが発生してしまう。
 				if ($data === false) {
-					// <<<
 					return 'NULL';
 				}
-				// no break
-			// <<<
-			default:
-				if ($data === '') {
-					return 'NULL';
-				}
-				if (is_float($data)) {
-					return str_replace(',', '.', strval($data));
-				}
-				if ((is_int($data) || $data === '0') || (
-					is_numeric($data) && strpos($data, ',') === false &&
-					$data[0] != '0' && strpos($data, 'e') === false)
-				) {
-					return $data;
-				}
-				return $this->_connection->quote($data);
 		}
+		// <<<
+		return $value;
 	}
 
 /**
@@ -135,20 +92,57 @@ class BcPostgres extends Postgres {
 			return intval($maches[1]);
 		}
 		// <<<
-		
-		$col = str_replace(array(')', 'unsigned'), '', $real);
-		$limit = null;
 
-		if (strpos($col, '(') !== false) {
-			list($col, $limit) = explode('(', $col);
+		if (!preg_match_all('/([\w\s]+)(?:\((\d+)(?:,(\d+))?\))?(\sunsigned)?(\szerofill)?/', $real, $result)) {
+			$col = str_replace(array(')', 'unsigned'), '', $real);
+			$limit = null;
+
+			if (strpos($col, '(') !== false) {
+				list($col, $limit) = explode('(', $col);
+			}
+			if ($limit !== null) {
+				return (int)$limit;
+			}
+			return null;
 		}
-		if ($col === 'uuid') {
-			return 36;
+
+		$types = array(
+			'int' => 1, 'tinyint' => 1, 'smallint' => 1, 'mediumint' => 1, 'integer' => 1, 'bigint' => 1
+		);
+
+		list($real, $type, $length, $offset, $sign) = $result;
+		$typeArr = $type;
+		$type = $type[0];
+		$length = $length[0];
+		$offset = $offset[0];
+
+		$isFloat = in_array($type, array('dec', 'decimal', 'float', 'numeric', 'double'));
+		if ($isFloat && $offset) {
+			return $length . ',' . $offset;
 		}
-		if ($limit) {
-			return (int)$limit;
+
+		if (($real[0] == $type) && (count($real) === 1)) {
+			return null;
 		}
-		return null;
+
+		if (isset($types[$type])) {
+			$length += $types[$type];
+			if (!empty($sign)) {
+				$length--;
+			}
+		} elseif (in_array($type, array('enum', 'set'))) {
+			$length = 0;
+			foreach ($typeArr as $key => $enumValue) {
+				if ($key === 0) {
+					continue;
+				}
+				$tmpLength = strlen($enumValue);
+				if ($tmpLength > $length) {
+					$length = $tmpLength;
+				}
+			}
+		}
+		return (int)$length;
 	}
 
 /**
@@ -159,8 +153,6 @@ class BcPostgres extends Postgres {
  */
 	public function describe($model) {
 		$table = $this->fullTableName($model, false, false);
-
-		// CUSTOMIZE MODIFY 2013/08/16 ryuring
 		// CUSTOMIZE MODIFY 2014/03/28 ryuring
 		// 関連シーケンスを正常に取得できない仕様対策
 		// >>>
@@ -172,23 +164,22 @@ class BcPostgres extends Postgres {
 		$cols = null;
 
 		if ($fields === null) {
-
 			// CUSTOMIZE MODIFY 2013/08/16 ryuring
 			// udt_name フィールドを追加
 			// >>>
-			/* 	$cols = $this->_execute(
-				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
-					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
-					character_octet_length AS oct_length FROM information_schema.columns
-				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
-				array($table, $this->config['schema'])
-			); */
+			// $cols = $this->_execute(
+			// 	"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
+			// 		column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
+			// 		character_octet_length AS oct_length FROM information_schema.columns
+			// 	WHERE table_name = ? AND table_schema = ?  ORDER BY position",
+			// 	array($table, $this->config['schema'])
+			// );
 			// ---
 			$cols = $this->_execute(
-				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null,
-					column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
-					character_octet_length AS oct_length FROM information_schema.columns
-				WHERE table_name = ? AND table_schema = ?  ORDER BY position",
+				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null," .
+					"column_default AS default, ordinal_position AS position, character_maximum_length AS char_length," .
+					"character_octet_length AS oct_length FROM information_schema.columns" .
+				"WHERE table_name = ? AND table_schema = ?  ORDER BY position",
 				array($table, $this->config['schema'])
 			);
 			// <<<
@@ -207,6 +198,7 @@ class BcPostgres extends Postgres {
 						$length = null;
 					// <<<
 					} elseif ($c->type === 'uuid') {
+						$type = 'uuid';
 						$length = 36;
 					} else {
 						$length = (int)$c->oct_length;
@@ -214,7 +206,6 @@ class BcPostgres extends Postgres {
 				} elseif (!empty($c->char_length)) {
 					$length = (int)$c->char_length;
 				} else {
-
 					// CUSTOMIZE MODIFY 2013/08/16 ryuring
 					// >>>
 					//$length = $this->length($c->type);
@@ -235,7 +226,6 @@ class BcPostgres extends Postgres {
 					),
 					'length' => $length
 				);
-
 				// CUSTOMIZE ADD 2013/08/16 ryuring
 				// >>>
 				if (!$fields[$c->name]['length'] && $fields[$c->name]['type'] == 'integer') {
@@ -245,14 +235,17 @@ class BcPostgres extends Postgres {
 				if ($model instanceof Model) {
 					if ($c->name === $model->primaryKey) {
 						$fields[$c->name]['key'] = 'primary';
-						if ($fields[$c->name]['type'] !== 'string') {
+						if (
+							$fields[$c->name]['type'] !== 'string' &&
+							$fields[$c->name]['type'] !== 'uuid'
+						) {
 							$fields[$c->name]['length'] = 11;
-							
 						}
 					}
 				}
 				if (
 					$fields[$c->name]['default'] === 'NULL' ||
+					$c->default === null ||
 					preg_match('/nextval\([\'"]?([\w.]+)/', $c->default, $seq)
 				) {
 					$fields[$c->name]['default'] = null;
@@ -265,7 +258,6 @@ class BcPostgres extends Postgres {
 						$this->_sequenceMap[$table][$c->name] = $sequenceName;
 					}
 				}
-				
 				if ($fields[$c->name]['type'] === 'timestamp' && $fields[$c->name]['default'] === '') {
 					$fields[$c->name]['default'] = null;
 				}
@@ -273,15 +265,12 @@ class BcPostgres extends Postgres {
 					$fields[$c->name]['default'] = constant($fields[$c->name]['default']);
 				}
 			}
-			
-			// CUSTOMIZE MODIFY 2014/03/28 ryuring
+			// CUSTOMIZE ADD 2014/03/28 ryuring
 			// 関連シーケンスを正常に取得できない仕様対策
 			// >>>
-			//$this->_cacheDescription($table, $fields);
-			// ---
 			$fields['sequence'] = $this->_sequenceMap;
-			$this->_cacheDescription($table, $fields);
 			// <<<
+			$this->_cacheDescription($table, $fields);
 		}
 		// @codingStandardsIgnoreEnd
 
@@ -323,7 +312,6 @@ class BcPostgres extends Postgres {
 		$cache = $this->_cacheDescription($table);
 
 		if ($cache !== null) {
-			
 			// CUSTOMIZE ADD 2014/03/28 ryuring
 			// 関連シーケンスを正常に取得できない仕様対策
 			// >>>

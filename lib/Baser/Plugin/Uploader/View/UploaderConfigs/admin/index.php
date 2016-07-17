@@ -19,7 +19,7 @@ $(window).load(function() {
 </script>
 
 <!-- form -->
-<?php echo $this->BcForm->create('UploaderConfig', array('action' => 'index')) ?>
+<?php echo $this->BcForm->create('UploaderConfig', ['url' => ['action' => 'index']]) ?>
 
 <h2>画像サイズ設定</h2>
 

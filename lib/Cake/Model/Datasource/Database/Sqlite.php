@@ -17,7 +17,7 @@
  */
 
 App::uses('DboSource', 'Model/Datasource');
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 
 /**
  * DBO implementation for the SQLite3 DBMS.
@@ -185,6 +185,9 @@ class Sqlite extends DboSource {
 				'default' => $default,
 				'length' => $this->length($column['type'])
 			);
+			if (in_array($fields[$column['name']]['type'], array('timestamp', 'datetime')) && strtoupper($fields[$column['name']]['default']) === 'CURRENT_TIMESTAMP') {
+				$fields[$column['name']]['default'] = null;
+			}
 			if ($column['pk'] == 1) {
 				$fields[$column['name']]['key'] = $this->index['PRI'];
 				$fields[$column['name']]['null'] = false;
@@ -303,7 +306,7 @@ class Sqlite extends DboSource {
 		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
 			$selectpart = substr($querystring, 7);
 			$selects = array();
-			foreach (String::tokenize($selectpart, ',', '(', ')') as $part) {
+			foreach (CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
 				$fromPos = stripos($part, ' FROM ');
 				if ($fromPos !== false) {
 					$selects[] = trim(substr($part, 0, $fromPos));
@@ -323,7 +326,7 @@ class Sqlite extends DboSource {
 				$j++;
 				continue;
 			}
-			if (preg_match('/\bAS\s+(.*)/i', $selects[$j], $matches)) {
+			if (preg_match('/\bAS(?!.*\bAS\b)\s+(.*)/i', $selects[$j], $matches)) {
 				$columnName = trim($matches[1], '"');
 			} else {
 				$columnName = trim(str_replace('"', '', $selects[$j]));

@@ -17,13 +17,13 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'num' => $this->passedArgs['num']);
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
 } else {
-	$url = array('plugin' => null, 'controller' => 'search_indices');
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
 }
 ?>
 <div class="section search-box">
-	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'action' => 'search', 'url' => $url)) ?>
+	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'url' => $url)) ?>
 	<?php if ($this->BcBaser->siteConfig['content_categories']) : ?>
 		<?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
 	<?php endif ?>

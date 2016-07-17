@@ -1,11 +1,9 @@
 <?php
 /**
- * MySQL DBO拡張
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Datasource.Database
  * @since			baserCMS v 0.1.0
@@ -14,6 +12,11 @@
 
 App::uses('Mysql', 'Model/Datasource/Database');
 
+/**
+ * MySQL DBO拡張
+ *
+ * @package Baser.Model.Datasource.Database
+ */
 class BcMysql extends Mysql {
 // COSTOMIZE ADD 2014/07/02 ryuring
 // >>>

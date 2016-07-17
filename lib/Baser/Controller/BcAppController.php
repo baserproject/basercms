@@ -74,7 +74,7 @@ class BcAppController extends Controller {
  * @var		array
  * @access	public
  */
-	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email');
+	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash');
 
 /**
  * サブディレクトリ
@@ -1515,7 +1515,10 @@ class BcAppController extends Controller {
 			$class = 'alert-message';
 		}
 		if($setFlash) {
-			$this->Session->setFlash($message, 'default', array('class' => $class));
+			$this->Flash->set($message, [
+				'element' => 'default',
+				'params' => ['class' => $class]
+			]);
 		}
 		if ($saveDblog) {
 			$AppModel = ClassRegistry::init('AppModel');

@@ -52,6 +52,7 @@ App::uses('CakeEventManager', 'Event');
  * @property      RequestHandlerComponent $RequestHandler
  * @property      SecurityComponent $Security
  * @property      SessionComponent $Session
+ * @property      FlashComponent $Flash
  * @link          http://book.cakephp.org/2.0/en/controllers.html
  */
 class Controller extends Object implements CakeEventListener {
@@ -189,7 +190,7 @@ class Controller extends Object implements CakeEventListener {
  * @var array
  * @link http://book.cakephp.org/2.0/en/controllers/components.html
  */
-	public $components = array('Session');
+	public $components = array('Session', 'Flash');
 
 /**
  * The name of the View class this controller sends output to.
@@ -227,12 +228,12 @@ class Controller extends Object implements CakeEventListener {
  *
  * Example:
  *
- * {{{
+ * ```
  * public $cacheAction = array(
  *		'view/23/' => 21600,
  *		'recalled/' => 86400
  *	);
- * }}}
+ * ```
  *
  * $cacheAction can also be set to a strtotime() compatible string. This
  * marks all the actions in the controller for view caching.
@@ -751,9 +752,9 @@ class Controller extends Object implements CakeEventListener {
  *
  * @param string|array $url A string or array-based URL pointing to another location within the app,
  *     or an absolute URL
- * @param int $status Optional HTTP status code (eg: 404)
+ * @param int|array|null $status HTTP status code (eg: 301). Defaults to 302 when null is passed.
  * @param bool $exit If true, exit() will be called after the redirect
- * @return void
+ * @return \Cake\Network\Response|null
  * @triggers Controller.beforeRedirect $this, array($url, $status, $exit)
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::redirect
  */
@@ -769,7 +770,7 @@ class Controller extends Object implements CakeEventListener {
 		$this->getEventManager()->dispatch($event);
 
 		if ($event->isStopped()) {
-			return;
+			return null;
 		}
 		$response = $event->result;
 		extract($this->_parseBeforeRedirect($response, $url, $status, $exit), EXTR_OVERWRITE);
@@ -785,14 +786,17 @@ class Controller extends Object implements CakeEventListener {
 			}
 		}
 
-		if ($status) {
-			$this->response->statusCode($status);
+		if ($status === null) {
+			$status = 302;
 		}
+		$this->response->statusCode($status);
 
 		if ($exit) {
 			$this->response->send();
 			$this->_stop();
 		}
+
+		return $this->response;
 	}
 
 /**
@@ -857,10 +861,10 @@ class Controller extends Object implements CakeEventListener {
  *
  * Examples:
  *
- * {{{
+ * ```
  * setAction('another_action');
  * setAction('action_with_parameters', $parameter1);
- * }}}
+ * ```
  *
  * @param string $action The new action to be 'redirected' to.
  *   Any other parameters passed to this method will be passed as parameters to the new action.
@@ -974,7 +978,7 @@ class Controller extends Object implements CakeEventListener {
 		}
 
 		$referer = $this->request->referer($local);
-		if ($referer === '/' && $default) {
+		if ($referer === '/' && $default && $default !== $referer) {
 			return Router::url($default, !$local);
 		}
 		return $referer;
@@ -1002,7 +1006,7 @@ class Controller extends Object implements CakeEventListener {
  * @param string $layout Layout you want to use, defaults to 'flash'
  * @return void
  * @link http://book.cakephp.org/2.0/en/controllers.html#Controller::flash
- * @deprecated 3.0.0 Will be removed in 3.0. Use Session::setFlash().
+ * @deprecated 3.0.0 Will be removed in 3.0. Use Flash::set() with version 2.7+ or Session::setFlash() prior to 2.7.
  */
 	public function flash($message, $url, $pause = 1, $layout = 'flash') {
 		$this->autoRender = false;

@@ -11,9 +11,7 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-if ($this->Session->check('Message.auth')) {
-	$this->Session->flash('auth');
-}
+$this->Flash->render('auth');
 $userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
 if (!$userModel) {
 	$userModel = 'User';
@@ -136,7 +134,7 @@ $(function(){
 		<?php $this->BcBaser->flash() ?>
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
-		<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array())) ?>
+		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'login']]) ?>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
 			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1)) ?>

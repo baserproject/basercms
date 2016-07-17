@@ -45,13 +45,13 @@ class Menu extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'メニュー名を入力してください。'),
 			array('rule' => array('maxLength', 20),
 				'message' => 'メニュー名は20文字以内で入力してください。')
 		),
 		'link' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'リンクURLを入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => 'リンクURLは255文字以内で入力してください。')

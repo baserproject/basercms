@@ -189,15 +189,15 @@ class Message extends MailAppModel {
 				if ($mailField['valid'] == 'VALID_NOT_EMPTY') {
 					if($mailField['type'] == 'file') {
 						if(!isset($this->data['Message'][$mailField['field_name'] . '_tmp'])) {
-							$this->validate[$mailField['field_name']] = array('notEmpty' => array(
+							$this->validate[$mailField['field_name']] = array('notBlank' => array(
 									'rule' => array('notFileEmpty'),
 									'message' => '必須項目です。',
 									'required' => true
 							));
 						}
 					} else {
-						$this->validate[$mailField['field_name']] = array('notEmpty' => array(
-								'rule' => array('notEmpty'),
+						$this->validate[$mailField['field_name']] = array('notBlank' => array(
+								'rule' => array('notBlank'),
 								'message' => '必須項目です。',
 								'required' => true
 						));

@@ -503,28 +503,28 @@ class UsersController extends AppController {
 		if ($this->request->data) {
 
 			if (empty($this->request->data[$userModel]['email'])) {
-				$this->Session->setFlash('メールアドレスを入力してください。');
+				$this->setMessage('メールアドレスを入力してください。', true, false);
 				return;
 			}
 			$email = trim($this->request->data[$userModel]['email']);
 			$user = $this->{$userModel}->findByEmail($email);
 			if (!$user) {
-				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
+				$this->setMessage('送信されたメールアドレスは登録されていません。', true, false);
 				return;
 			}
 			$password = $this->generatePassword();
 			$user[$userModel]['password'] = $password;
 			$this->{$userModel}->set($user);
 			if (!$this->{$userModel}->save()) {
-				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
+				$this->setMessage('新しいパスワードをデータベースに保存できませんでした。', true, false);
 				return;
 			}
 			$body = $email . ' の新しいパスワードは、 ' . $password . ' です。';
 			if (!$this->sendMail($email, 'パスワードを変更しました', $body)) {
-				$this->Session->setFlash('メール送信時にエラーが発生しました。');
+				$this->setMessage('メール送信時にエラーが発生しました。', true, false);
 				return;
 			}
-			$this->Session->setFlash($email . ' 宛に新しいパスワードを送信しました。');
+			$this->setMessage('$email . \' 宛に新しいパスワードを送信しました。', true, false);
 			$this->request->data = array();
 		}
 	}

@@ -46,7 +46,7 @@ class UploaderCategory extends BcPluginAppModel {
 	public $validate = array(
 		'name' => array(
 			array(
-				'rule'		=> array('notEmpty'),
+				'rule'		=> array('notBlank'),
 				'message'	=> 'カテゴリ名を入力してください。')
 			)
 		);

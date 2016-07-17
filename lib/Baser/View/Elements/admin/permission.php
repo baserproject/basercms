@@ -82,7 +82,7 @@ $(function(){
 
 
 <div id="PermissionDialog" title="アクセス制限登録" style="display:none">
-	<?php echo $this->BcForm->create('Permission', array('action' => 'ajax_add', 'url' => array('plugin' => null))) ?>
+	<?php echo $this->BcForm->create('Permission', array('url' => array('plugin' => null, 'action' => 'ajax_add'))) ?>
 	<?php echo $this->BcForm->input('Permission.id') ?>
 	<dl>
 		<dt><?php echo $this->BcForm->label('Permission.user_group_id', 'ユーザーグループ') ?></dt>

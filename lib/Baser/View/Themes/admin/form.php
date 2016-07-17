@@ -28,7 +28,7 @@ $(window).load(function() {
 <?php endif ?>
 
 
-<?php echo $this->BcForm->create('Theme', array('action' => 'edit', 'url' => array('action' => 'edit', $theme))) ?>
+<?php echo $this->BcForm->create('Theme', array('url' => array('action' => 'edit', $theme))) ?>
 
 <!-- form -->
 <div class="section">
