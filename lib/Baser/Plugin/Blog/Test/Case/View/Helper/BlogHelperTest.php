@@ -36,6 +36,7 @@ class BlogHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
+		'baser.Default.User',
 		'baser.Default.Page',
 		'baser.Default.PluginContent',
 		'baser.Default.Plugin',
@@ -316,7 +317,7 @@ class BlogHelperTest extends BaserTestCase {
 		return array(
 			array(1, array(), '/news/archives/category/release'),
 			array(2, array(), '/news/archives/category/release/child'),
-			array(3, array(), '/news/archives/category/child'),
+			array(3, array(), '/news/archives/category/child-no-parent'),
 			array(1, array('test1', 'test2'), '/news/archives/category/release/test1/test2'),
 		);
 	}
@@ -350,10 +351,10 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function getCategoryListDataProvider() {
 		return array(
-			array(3, false, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ</a></li></ul></li><li><a href="/news/archives/category/child">親子関係なしカテゴリ</a></li></ul>'),
-			array(1, false, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース</a></li><li><a href="/news/archives/category/child">親子関係なしカテゴリ</a></li></ul>'),
+			array(3, false, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ</a></li></ul></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'),
+			array(1, false, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース</a></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ</a></li></ul>'),
 			array(0, false, array(), ''),
-			array(3, true, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース(1)</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li><a href="/news/archives/category/child">親子関係なしカテゴリ(0)</a></li></ul>'),
+			array(3, true, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース(1)</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ(0)</a></li></ul>'),
 		);
 	}
 
