@@ -499,9 +499,9 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function getPostImgDataProvider() {
 		return array(
-			array(1, false, '<img src="/img/test1.jpg" alt="test-name " />'),
-			array(2, false, '<img src="/img/test2.jpg" alt="test-name " />'),
-			array(1, true, '<a href="/news/archives"><img src="/img/test1.jpg" alt="test-name " /></a>'),
+			array(1, false, '<img src="/img/test1.jpg" alt="test-name" />'),
+			array(2, false, '<img src="/img/test2.jpg" alt="test-name" />'),
+			array(1, true, '<a href="/news/archives"><img src="/img/test1.jpg" alt="test-name" /></a>'),
 			array(3, false, ''),
 		);
 	}

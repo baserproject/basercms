@@ -15,7 +15,7 @@ App::uses('BlogCategory', 'Blog.Model');
 class BlogCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.PluginContent',
 		'baser.Default.Permission',
 		'baser.Default.User',

@@ -10,7 +10,6 @@
  * @since			baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
-App::uses('Page', 'Model');
 
 /**
  * PageTest class
@@ -22,8 +21,8 @@ class BcPluginContentBehaviorTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.BlogContent',
 		'baser.Default.PluginContent',
-		'baser.Default.Content',
 		'baser.Default.SiteConfig',
+		'baser.Default.SearchIndex',
 	);
 
 /**

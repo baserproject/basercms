@@ -15,8 +15,8 @@ App::uses('BlogContent', 'Blog.Model');
 class BlogContentTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Content',
-		'baser.Default.PluginContent',
+		'baser.Default.SearchIndex',
+		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogPostsBlogTag',
@@ -226,7 +226,9 @@ class BlogContentTest extends BaserTestCase {
 /**
  * 検索用データを生成する
  */
-	public function testCreateContent() {
+	public function testCreateSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		$data = array(
 			'name' => 'test-name',
 			'title' => 'test-title',

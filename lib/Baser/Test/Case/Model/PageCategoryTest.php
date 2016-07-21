@@ -27,7 +27,7 @@ App::uses('PageCategory', 'Model');
 class PageCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.Permission',
 		'baser.Model.PageCategory.PagePageCategoryModel',
 		'baser.Model.PageCategory.PageCategoryPageCategoryModel',
