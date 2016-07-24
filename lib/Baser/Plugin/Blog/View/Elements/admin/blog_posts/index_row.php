@@ -18,6 +18,10 @@ if (!$this->Blog->allowPublish($data)) {
 	$classies = array('publish');
 }
 $class = ' class="' . implode(' ', $classies) . '"';
+
+if (Hash::get($data, 'BlogPost.eye_catch')) {
+	$existEyeCatch = true;
+}
 ?>
 
 
