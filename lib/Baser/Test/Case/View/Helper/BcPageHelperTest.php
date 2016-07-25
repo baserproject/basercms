@@ -41,6 +41,8 @@ class BcPageHelperTest extends BaserTestCase {
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
 		'baser.Default.ThemeConfig',
+		'baser.Default.Content',
+		'baser.Default.Site',
 	);
 
 /**

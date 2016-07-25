@@ -76,7 +76,7 @@ class BaserTestCase extends CakeTestCase {
  * ユーザーエージェント判定に利用される値をConfigureに設定
  * bootstrap.phpで行われている処理の代替
  *
- * MEMO: BcRequest.(agent).aliasは使われていない 
+ * MEMO: BcRequest.(agent).aliasは廃止
  *
  * @param string $prefix エージェントのプレフィックス
  * @return void
@@ -88,6 +88,7 @@ class BaserTestCase extends CakeTestCase {
 		}
 		Configure::write('BcRequest.agent', $prefix);
 		Configure::write('BcRequest.agentPrefix', $agent['prefix']);
+		// Configure::write('BcRequest.agentAlias', $agent['alias']);
 	}
 
 /**
@@ -104,14 +105,14 @@ class BaserTestCase extends CakeTestCase {
 /**
  * エージェント判定に利用される値を消去する
  *
- * MEMO: BcRequest.(agent).aliasは使われていない 
+ * MEMO: BcRequest.(agent).aliasは廃止
  *
  * @return void
  */
 	protected function _unsetAgent() {
 		Configure::delete('BcRequest.agent');
 		Configure::delete('BcRequest.agentPrefix');
-		Configure::delete('BcRequest.agentAlias');
+		// Configure::delete('BcRequest.agentAlias');
 	}
 /**
  * エージェントごとの固定ページの連動の判定に利用される値をConfigureに設定

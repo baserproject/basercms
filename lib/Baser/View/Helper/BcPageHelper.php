@@ -188,6 +188,8 @@ class BcPageHelper extends Helper {
 /**
  * ページカテゴリ間の次の記事へのリンクを取得する
  *
+ * MEMO: BcRequest.(agent).aliasは廃止
+ *
  * @param string $title
  * @param array $options オプション（初期値 : array()）
  *	- `class` : CSSのクラス名（初期値 : 'next-link'）
@@ -220,12 +222,12 @@ class BcPageHelper extends Helper {
 				$title = $page['Page']['title'] . $arrow;
 			}
 			$url = $page['Page']['url'];
-			foreach (Configure::read('BcAgent') as $agent) {
-				if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
-					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
-					break;
-				}
-			}
+			// foreach (Configure::read('BcAgent') as $agent) {
+			// 	if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
+			// 		$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
+			// 		break;
+			// 	}
+			// }
 			return $this->BcBaser->getLink($title, $url, $options);
 		}
 
@@ -248,6 +250,8 @@ class BcPageHelper extends Helper {
 
 /**
  * ページカテゴリ間の前の記事へのリンクを取得する
+ *
+ * MEMO: BcRequest.(agent).aliasは廃止
  *
  * @param string $title
  * @param array $options オプション（初期値 : array()）
@@ -281,12 +285,12 @@ class BcPageHelper extends Helper {
 				$title = $arrow . $page['Page']['title'];
 			}
 			$url = $page['Page']['url'];
-			foreach (Configure::read('BcAgent') as $agent) {
-				if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
-					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
-					break;
-				}
-			}
+			// foreach (Configure::read('BcAgent') as $agent) {
+			// 	if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
+			// 		$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
+			// 		break;
+			// 	}
+			// }
 			return $this->BcBaser->getLink($title, $url, $options);
 		}
 

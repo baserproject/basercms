@@ -419,7 +419,7 @@ class BcBaserHelper extends AppHelper {
 /**
  * 現在のページがトップページかどうかを判定する
  *
- * MEMO: BcRequest.(agent).aliasは使われていない
+ * MEMO: BcRequest.(agent).aliasは廃止
  *
  * @return bool
  */
