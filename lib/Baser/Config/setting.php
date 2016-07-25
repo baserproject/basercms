@@ -190,88 +190,89 @@ $config['BcAgent'] = array(
 		)
 	)
 );
-$config['BcContents'] = array(
-	'items' => array(
-		'Core' => array(
-			'Default'	=> array(
+$config['BcContents'] = [
+	'items' => [
+		'Core' => [
+			'Default'	=> [
 				'title' => 'コンテンツ',
-				'routes' => array(
-					'add'	=> array(
+				'routes' => [
+					'add'	=> [
 						'controller'=> 'contents',
 						'action'	=> 'add'
-					),
-					'edit'	=> array(
+					],
+					'edit'	=> [
 						'controller'=> 'contents',
 						'action'	=> 'edit'
-					),
-					'delete' => array(
+					],
+					'delete' => [
 						'controller'=> 'contents',
 						'action'	=> 'delete'
-					),
-					'view' => array(
+					],
+					'view' => [
 						'controller'=> 'contents',
 						'action'	=> 'view'
-					)
-				),
+					]
+				],
 				'icon'	=> 'admin/icon_content.png',
-			),
-			'ContentFolder'	=> array(
+			],
+			'ContentFolder'	=> [
 				'multiple'	=> true,
 				'preview'	=> true,
 				'title' => 'フォルダー',
-				'routes' => array(
-					'add'	=> array(
+				'routes' => [
+					'add'	=> [
 						'controller'=> 'content_folders',
 						'action'	=> 'add'
-					),
-					'edit'	=> array(
+					],
+					'edit'	=> [
 						'controller'=> 'content_folders',
 						'action'	=> 'edit'
-					),
-					'delete' => array(
+					],
+					'delete' => [
 						'controller'=> 'content_folders',
 						'action'	=> 'delete'
-					),
-					'view' => array(
+					],
+					'view' => [
 						'controller'=> 'content_folders',
 						'action'	=> 'view'
-					)
-				),
+					]
+				],
 				'icon'	=> 'admin/icon_folder.png',
-			),
-			'ContentAlias'	=> array(
+			],
+			'ContentAlias'	=> [
 				'multiple' => true,
 				'title' => 'エイリアス',
 				'icon'	=> 'admin/icon_alias.png',
-			),
-			'ContentLink'	=> array(
+			],
+			'ContentLink'	=> [
 				'multiple' => true,
 				'title' => 'リンク',
-				'routes' => array(
-					'add'	=> array(
+				'routes' => [
+					'add'	=> [
 						'controller'=> 'content_links',
 						'action'	=> 'add'
-					),
-					'edit'	=> array(
+					],
+					'edit'	=> [
 						'controller'=> 'content_links',
 						'action'	=> 'edit'
-					),
-					'delete' => array(
+					],
+					'delete' => [
 						'controller'=> 'content_links',
 						'action'	=> 'delete'
-					),
-					'view' => array(
+					],
+					'view' => [
 						'controller'=> 'content_links',
 						'action'	=> 'view'
-					)
-				),
+					]
+				],
 				'icon'	=> 'admin/icon_link.png',
-			),
+			],
 //			'Page'	=> [
 //				'title' => '固定ページ',
 //				// TODO routes を実装要
 //				'icon'	=> 'admin/icon_page.png',
 //			]
-		)
-	)
-);
+		]
+	]
+];
+
