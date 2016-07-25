@@ -964,7 +964,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testIcon() {
-		$this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon" /><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon" />' . "\n");
+		$this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon"/><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"/>' . "\n");
 		$this->BcBaser->icon();
 	}
 
@@ -998,23 +998,23 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->css('admin/import');
 		$result = ob_get_clean();
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// 拡張子あり
 		ob_start();
 		$this->BcBaser->css('admin/import.css');
 		$result = ob_get_clean();
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// インラインオフ（array）
 		$this->BcBaser->css('admin/import.css', array('inline' => false));
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$result = $this->_View->Blocks->get('css');
 		$this->assertEquals($expected, $result);
 		$this->_View->Blocks->end();
 		// インラインオフ（boolean）
 		$this->BcBaser->css('admin/import.css', false);
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->_View->assign('css', '');
 		$this->assertEquals($expected, $result);
 	}
@@ -1058,7 +1058,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testImg() {
-		$this->expectOutputString('<img src="/img/baser.power.gif" alt="" />');
+		$this->expectOutputString('<img src="/img/baser.power.gif" alt=""/>');
 		$this->BcBaser->img('baser.power.gif');
 	}
 
@@ -1078,8 +1078,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function getImgDataProvider() {
 		return array(
-			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ" />'),
-			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt="" />')
+			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ"/>'),
+			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt=""/>')
 		);
 	}
 

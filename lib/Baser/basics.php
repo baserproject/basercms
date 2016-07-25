@@ -271,7 +271,9 @@ function getUrlFromEnv() {
 
 /**
  * モバイルプレフィックスは除外したURLを取得する
- * 
+ *
+ * MEMO: BcRequest.(agent).aliasは使われていない 
+ *
  * @param CakeRequest $Request
  * @return type
  */
