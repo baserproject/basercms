@@ -24,6 +24,7 @@ class BlogPostTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.Site',
+		'baser.Default.Content',
 		'plugin.blog.Model/BlogPostModel',
 		'plugin.blog.Model/BlogCategoryModel',
 	);
@@ -348,15 +349,15 @@ class BlogPostTest extends BaserTestCase {
 			'publish_end' => '2020-01-27 12:57:59',
 		));
 
-		$Content = ClassRegistry::init('Content');
+		$SearchIndex = ClassRegistry::init('SearchIndex');
 		
 		// 登録
 		$data['BlogPost']['exclude_search'] = false;
 		$this->BlogPost->create($data);
 		$this->BlogPost->save();
 
-		$result = $Content->find('count', array(
-			'conditions' => array('Content.title' => 'test-name'),
+		$result = $SearchIndex->find('count', array(
+			'conditions' => array('SearchIndex.title' => 'test-name'),
 		));
 		$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
 		
@@ -365,12 +366,12 @@ class BlogPostTest extends BaserTestCase {
 		$this->BlogPost->create($data);
 		$this->BlogPost->save();
 
-		$result = $Content->find('count', array(
-			'conditions' => array('Content.title' => 'test-name'),
+		$result = $SearchIndex->find('count', array(
+			'conditions' => array('SearchIndex.title' => 'test-name'),
 		));
 		$this->assertEquals($result, 0, '検索用テーブルから削除できません');
 
-		unset($Content);
+		unset($SearchIndex);
 	}
 
 

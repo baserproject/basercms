@@ -26,7 +26,10 @@ class BcUploadHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Default.PluginContent'
+		'baser.Default.PluginContent',
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.Page',
 	);
 
 /**
@@ -105,7 +108,7 @@ class BcUploadHelperTest extends BaserTestCase {
 			'tmp' => true
 		);
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" />';
+		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt=""/>';
 		$this->assertEquals($expects, $result);
 
 		// output を tag で、linkをtrue (無視される)

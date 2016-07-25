@@ -160,11 +160,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		}
 
 		// Session Auth.redirect
-		if ($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix) === false) {
-			$expected['redirect'] = null;
-		} else {
-			$expected['redirect'] = $redirect;
-		}
+		$expected['redirect'] = null;
 
 		// 判定
 		$this->assertEquals($expected, $result, '認証設定が正しくありません');

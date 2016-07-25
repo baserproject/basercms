@@ -22,6 +22,9 @@ class BlogContentTest extends BaserTestCase {
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.PluginContent',
 	);
 
 	public function setUp() {

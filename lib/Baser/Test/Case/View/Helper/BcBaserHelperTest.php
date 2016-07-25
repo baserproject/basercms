@@ -46,6 +46,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
 		'baser.Default.Site',
+		'baser.Default.Content',
 	);
 
 /**
@@ -581,7 +582,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	 * @return void
 	 */
 	public function testIsPluginContent() {
-
 		$this->BcBaser->request = $this->_getRequest('/');
 		$this->assertEquals(false, $this->BcBaser->isPluginContent('Blog'));
 
@@ -850,7 +850,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
 		// meta
-		$expected = '<meta name="description" content="説明文" />';
+		$expected = '<meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
 		$BcHtml->meta('description', '説明文', array('inline' => false));
@@ -861,7 +861,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
 		// ツールバー
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
 		$this->BcBaser->set('user', array('User'));
 		ob_start();
 		$this->BcBaser->scripts();
@@ -908,7 +908,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * サブメニューを設定する
  * 
  * @param array $elements サブメニューエレメント名を配列で指定
- * @param array $expects サブメニュータイトル
+ * @param array $expects 期待するサブメニュータイトル
  * @return void
  * @dataProvider setSubMenusDataProvider
  */
@@ -925,8 +925,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function setSubMenusDataProvider() {
 		return array(
-			array(array('contents'), array('<th>検索インデックスメニュー</th>')),
-			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定共通メニュー</th>')),
+			array(array('contents'), array('<th>コンテンツ管理メニュー</th>')),
+			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>')),
 			array(array('menus', 'tools'), array('<th>メニュー管理メニュー</th>', '<th>ツールメニュー</th>')),
 			array(array('plugins', 'themes'), array('<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>')),
 			array(array('users'), array('<th>ユーザー管理メニュー</th>')),
@@ -1937,7 +1937,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testLogo() {
-		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS" \/>/');
+		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS"\/>/');
 		$this->BcBaser->logo();
 	}
 
@@ -1971,7 +1971,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function mainImageDataProvider() {
 		return array(
-			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
+			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'),
 			array(array('num' => 2), 'main_image_2'),
 			array(array('all' => true, 'num' => 2), '^(.*main_image_1.*main_image_2)'),
 			array(array('all' => true, 'class' => 'test-class', 'id' => 'test-id'), '^(.*id="test-id".*class="test-class")'), 
@@ -2204,7 +2204,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input  type="submit" value="検索"\/>.*<\/form><\/div>/s');
+		$this->expectOutputRegex('/<div class="section search-box">.*<input type="submit" value="検索"\/>.*<\/form><\/div>/s');
 		$this->BcBaser->siteSearchForm();
 	}
 
