@@ -12,7 +12,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('AppView', 'View');
+App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 
 /**
@@ -45,6 +45,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
+		'baser.Default.Site',
 	);
 
 /**
@@ -72,7 +73,12 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_View = new AppView();
+		$this->_View = new BcAppView();
+		$this->_View->site = array(
+			'use_subdomain' => null,
+			'name' => null,
+			'alias' => null,
+		);
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		$siteConfig = $SiteConfig->findExpanded();
 		$this->_View->set('widgetArea', $siteConfig['widget_area']);
@@ -140,17 +146,17 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setTitle('会社案内');
 		$this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
 
-		// // カテゴリがある場合
-		// $this->BcBaser->_View->set('crumbs', array(
-		// 	array('name' => '会社案内', 'url' => '/company/index'),
-		// 	array('name' => '会社データ', 'url' => '/company/data')
-		// ));
-		// $this->BcBaser->setTitle('会社沿革');
-		// $this->assertEquals("会社沿革｜会社データ｜会社案内{$topTitle}", $this->BcBaser->getTitle());
+		// カテゴリがある場合
+		$this->BcBaser->_View->set('crumbs', array(
+			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社データ', 'url' => '/company/data')
+		));
+		$this->BcBaser->setTitle('会社沿革');
+		$this->assertEquals("会社沿革｜会社データ｜会社案内{$topTitle}", $this->BcBaser->getTitle());
 
-		// // カテゴリは存在するが、カテゴリの表示をオフにした場合
-		// $this->BcBaser->setTitle('会社沿革', false);
-		// $this->assertEquals("会社沿革{$topTitle}", $this->BcBaser->getTitle());
+		// カテゴリは存在するが、カテゴリの表示をオフにした場合
+		$this->BcBaser->setTitle('会社沿革', false);
+		$this->assertEquals("会社沿革{$topTitle}", $this->BcBaser->getTitle());
 	}
 
 /**
@@ -722,6 +728,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 		// ### 管理画面
 		$View = new BcAppView();
+		$View->site = array('use_subdomain' => null);
 		$View->subDir = 'admin';
 		$this->BcBaser = new BcBaserHelper($View);
 		// 管理画面用のテンプレートがなくフロントのテンプレートがある場合
@@ -825,7 +832,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 		// CSS
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', array('inline' => false));
 		ob_start();
 		$this->BcBaser->scripts();

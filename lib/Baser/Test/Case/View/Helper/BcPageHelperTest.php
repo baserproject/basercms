@@ -69,6 +69,11 @@ class BcPageHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
+		$this->_View->site = array(
+			'use_subdomain' => null,
+			'name' => null,
+			'alias' => null,
+		);
 		$this->_View->helpers = array('BcBaser', 'BcPage');
 		$this->_View->loadHelpers();
 		$this->Page = ClassRegistry::init('Page');

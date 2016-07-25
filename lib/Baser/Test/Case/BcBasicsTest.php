@@ -189,30 +189,6 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 /**
- * モバイルプレフィックスは除外したURLを取得する
- * 
- * @param	string $url URL
- * @param	string $expect 期待値
- * @dataProvider getPureUrlDataProvider
- */
-	public function testGetPureUrl($url, $expect) {
-		$request = new CakeRequest($url);
-		Configure::write('BcRequest.agentAlias', 'm');
-		$result = getPureUrl($request);
-		
-		$this->assertEquals($expect, $result, 'モバイルプレフィックスは除外したURLを正しく取得できません');
-	}
-
-	public function getPureUrlDataProvider() {
-		return array(
-			array('hoge', 'hoge'),
-			array('m/', ''),
-			array('/m/', ''),
-			array('/m/hoge', 'hoge'),
-		);
-	}
-
-/**
  * Viewキャッシュを削除する
  * TODO basics.php 295行目 $homesにバグ？あり
  * 			app/tmp/cache/views/のキャッシュファイルを複数回削除している

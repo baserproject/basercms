@@ -16,7 +16,6 @@ class BlogContentTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SearchIndex',
-		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogPostsBlogTag',
@@ -205,12 +204,12 @@ class BlogContentTest extends BaserTestCase {
 			unset($BlogPost);
 		
 		} else {
-			$Content = ClassRegistry::init('Content');
-			$result = $Content->find('count', array(
-				'conditions' => array('Content.model' => 'BlogContent'),
+			$SearchIndex = ClassRegistry::init('SearchIndex');
+			$result = $SearchIndex->find('count', array(
+				'conditions' => array('SearchIndex.model' => 'BlogContent'),
 			));
 			$this->assertEquals($result, 0, '検索用テーブルから削除できません');
-			unset($Content);
+			unset($SearchIndex);
 
 		}
 

@@ -144,8 +144,7 @@ class BcPageHelper extends Helper {
  * @return array
  */
 	public function getPageList($pageCategoryId, $recursive = null) {
-
-		return $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
+		return $this->requestAction('/SearchIndices/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 	}
 
 /**

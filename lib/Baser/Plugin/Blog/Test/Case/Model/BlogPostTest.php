@@ -23,6 +23,7 @@ class BlogPostTest extends BaserTestCase {
 		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
+		'baser.Default.Site',
 		'plugin.blog.Model/BlogPostModel',
 		'plugin.blog.Model/BlogCategoryModel',
 	);
