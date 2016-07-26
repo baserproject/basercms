@@ -16,7 +16,7 @@ class BlogPostTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.User',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogTag',
@@ -379,7 +379,8 @@ class BlogPostTest extends BaserTestCase {
  * @param array $data
  * @return array
  */
-	public function testCreateContent() {
+	public function testCreateSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$data = array(
 			'name' => 'test-name',
 			'content' => 'test-content',

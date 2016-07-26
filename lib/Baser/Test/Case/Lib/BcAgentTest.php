@@ -24,7 +24,8 @@ class BcAgentTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'baser.Default.Page'
+		'baser.Default.Page',
+		'baser.Default.Site',
 	);
 
 /**
