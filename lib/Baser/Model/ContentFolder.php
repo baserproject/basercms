@@ -45,7 +45,7 @@ class ContentFolder extends AppModel {
 			$_data['Content'] = array_merge($_data['Content'], $data['Content']);
 			$data = $_data;
 		}
-		if($data = $this->save($data, ['validate' => false])) {
+		if($this->save($data)) {
 			return true;
 		} else {
 			return false;
