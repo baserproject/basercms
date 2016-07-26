@@ -11,6 +11,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
+App::uses('BcAppView', 'View');
 App::uses('BcFormHelper', 'View/Helper');
 
 /**
@@ -64,6 +65,8 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.Page',
 		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
+		'baser.Default.Content',
+		'baser.Default.Site',
 	);
 	
 /**
@@ -76,8 +79,10 @@ class BcFormHelperTest extends BaserTestCase {
 		Configure::write('Config.language', 'jp');
 		Configure::write('App.base', '');
 		Configure::delete('Asset');
-		$this->BcForm = new BcFormHelper(new View);
-		$this->BcTime = new BcTimeHelper(new View);
+		$this->_View = new BcAppView();
+		$this->_View->site = array('use_subdomain' => null);
+		$this->BcForm = new BcFormHelper($this->_View);
+		$this->BcTime = new BcTimeHelper($this->_View);
 		$this->BcForm->request = new CakeRequest('contacts/add', false);
 		$this->BcForm->request->here = '/contacts/add';
 		$this->BcForm->request['action'] = 'add';
@@ -137,7 +142,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function checkboxDataProvider() {
 		return array(
-			array('test', array(), '<input type="checkbox" name="data\[test\]"  value="1" id="test"', 'checkbox()を出力できません'),
+			array('test', array(), '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'),
 			array('test', array('label' => 'testLabel'), '<label for="test"><input type="checkbox".*label="testLabel"', '属性を付与できません'),
 		);
 	}
@@ -473,7 +478,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function fileDataProvider() {
 		return array(
-			array('hoge', array(), '<input type="file" name="data\[hoge\]"  id="hoge"', 'ファイルインプットボックス出力できません'), 
+			array('hoge', array(), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'), 
 			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'), 
 		);
 	}

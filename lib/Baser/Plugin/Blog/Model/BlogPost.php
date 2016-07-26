@@ -598,7 +598,7 @@ class BlogPost extends BlogAppModel {
 			}
 		}
 		$_data['SearchIndex']['title'] = $data['name'];
-		$_data['SearchIndex']['detail'] = $data['SearchIndex'] . ' ' . $data['detail'];
+		$_data['SearchIndex']['detail'] = $data['content'] . ' ' . $data['detail'];
 		$PluginContent = ClassRegistry::init('PluginContent');
 		$_data['SearchIndex']['url'] = '/' . $PluginContent->field('name', array('PluginContent.content_id' => $data['blog_content_id'], 'plugin' => 'blog')) . '/archives/' . $data['no'];
 		$_data['SearchIndex']['status'] = $this->allowPublish($data);

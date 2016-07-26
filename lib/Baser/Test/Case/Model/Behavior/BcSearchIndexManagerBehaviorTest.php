@@ -38,4 +38,16 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+
+/**
+ * コンテンツデータを登録する
+ *
+ * @param Model $model
+ * @param array $data
+ * @return boolean
+ */
+	public function testSaveSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。'); 
+	}
+
 }

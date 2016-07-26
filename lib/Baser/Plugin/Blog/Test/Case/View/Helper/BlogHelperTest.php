@@ -72,6 +72,11 @@ class BlogHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$View = new View();
+		$View->site = array(
+			'use_subdomain' => null,
+			'name' => null,
+			'alias' => null,
+		);
 		$this->Blog = new BlogHelper($View);
 
 		$this->BlogContent = ClassRegistry::init('BlogContent');
@@ -494,14 +499,14 @@ class BlogHelperTest extends BaserTestCase {
 			'link' => $link,
 		);
 		$result = $this->Blog->getPostImg($post, $options);
-		$this->assertEqual($result, $expected, '記事中の画像を正しく取得できません');
+		$this->assertEqual($expected, $result, '記事中の画像を正しく取得できません');
 	}
 
 	public function getPostImgDataProvider() {
 		return array(
-			array(1, false, '<img src="/img/test1.jpg" alt="test-name" />'),
-			array(2, false, '<img src="/img/test2.jpg" alt="test-name" />'),
-			array(1, true, '<a href="/news/archives"><img src="/img/test1.jpg" alt="test-name" /></a>'),
+			array(1, false, '<img src="/img/test1.jpg" alt="test-name "/>'),
+			array(2, false, '<img src="/img/test2.jpg" alt="test-name "/>'),
+			array(1, true, '<a href="/news/archives"><img src="/img/test1.jpg" alt="test-name "/></a>'),
 			array(3, false, ''),
 		);
 	}

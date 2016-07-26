@@ -17,7 +17,6 @@ class MailContentTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.SearchIndex',
-		'baser.Default.SearchIndex',
 		'plugin.mail.Default/Message',
 		'plugin.mail.Default/MailConfig',
 		'plugin.mail.Default/MailContent',
@@ -232,14 +231,14 @@ class MailContentTest extends BaserTestCase {
 		$this->MailContent->save($data);
 
 		// Contentチェック
-		$this->Content = ClassRegistry::init('Content');
-		$result = $this->Content->find('first', array(
+		$this->SearchIndex = ClassRegistry::init('SearchIndex');
+		$result = $this->SearchIndex->find('first', array(
 			'conditions' => array('title' => 'hogeTitle')
 		));
 		if (!$exclude_search) {
-			$this->assertNotEmpty($result, 'Contentにデータを追加できません');
+			$this->assertNotEmpty($result, 'SearchIndexにデータを追加できません');
 		} else {
-			$this->assertEmpty($result, 'Contentのデータを削除できません');
+			$this->assertEmpty($result, 'SearchIndexのデータを削除できません');
 		}
 	}
 
@@ -267,12 +266,12 @@ class MailContentTest extends BaserTestCase {
 		$this->assertEmpty($contents, 'メールコンテンツデータを削除できません');
 		$this->assertEmpty($fields, '関連したメールフィールドデータを削除できません');
 		
-		// Contentチェック
-		$this->Content = ClassRegistry::init('Content');
-		$result = $this->Content->find('all', array(
+		// SearchIndexチェック
+		$this->SearchIndex = ClassRegistry::init('SearchIndex');
+		$result = $this->SearchIndex->find('all', array(
 			'conditions' => array('type' => 'メール', 'model_id' => 1)
 		));
-		$this->assertEmpty($result, '関連したContentを削除できません');
+		$this->assertEmpty($result, '関連したSearchIndexを削除できません');
 	}
 
 /**
@@ -299,7 +298,7 @@ class MailContentTest extends BaserTestCase {
 
 		$result = $this->MailContent->createContent($data);
 		$expected = array(
-			'Content' => array(
+			'SearchIndex' => array(
 				'type' => 'メール',
 				'model_id' => $expected,
 				'category' => '',
