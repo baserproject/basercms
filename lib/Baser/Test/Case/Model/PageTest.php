@@ -25,7 +25,7 @@ class PageTest extends BaserTestCase {
 		'baser.Default.BlogPost',
 		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.BlogTag',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Model.Page.PagePageModel',
 		'baser.Model.Page.PageCategoryPageModel',
@@ -33,6 +33,7 @@ class PageTest extends BaserTestCase {
 		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
 		'baser.Default.User',
+		'baser.Default.Site',
 	);
 
 /**
@@ -184,6 +185,7 @@ class PageTest extends BaserTestCase {
 		$expected = array('Page' => array(
 				'sort' => 17,
 				'status' => false,
+				'author_id' => 1,
 			)
 		);
 		$result = $this->Page->getDefaultValue();
@@ -329,7 +331,9 @@ class PageTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider createContentDataProvider
  */
-	public function testCreateContent($id, $name, $categoryId, $title, $url, $description, $publish_begin, $publish_end, $status, $message = null) {
+	public function testCreateSearchIndex($id, $name, $categoryId, $title, $url, $description, $publish_begin, $publish_end, $status, $message = null) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		
 		$data = array(
 			'Page' => array(
 				'id' => $id,
@@ -349,35 +353,7 @@ class PageTest extends BaserTestCase {
 				'type' => 'ページ',
 				'category' => '',
 				'title' => $title,
-				'detail' => ' 
-',
-// 				'detail' => ' 
-
-// <section class="mainHeadline">
-// <h2>シングルページデザインで<br />
-// <span class="fcGreen">見やすくカッコいい</span>WEBサイトへ！</h2>
-// </section>
-// <!-- /mainHeadline -->
-
-// <div class="mainWidth" id="information">
-// <section class="news1">
-// <h2>NEWS RELEASE</h2>
-// 	<ul class="post-list">
-// 																		<li class="clearfix post-1 first">
-// 				<span class="date">2015.08.10</span><br />
-// 				<span class="title"><a href="/news/archives/2">新商品を販売を開始しました。</a></span>
-// 			</li>
-// 																		<li class="clearfix post-2 last">
-// 				<span class="date">2015.08.10</span><br />
-// 				<span class="title"><a href="/news/archives/1">ホームページをオープンしました</a></span>
-// 			</li>
-// 			</ul>
-// 	</section>
-
-// <section class="news2">
-// <h2>BaserCMS NEWS</h2>
-// <script type="text/javascript" src="/feed/ajax/1.js"></script></section>
-// </div><!-- /information -->',
+				'detail' => '',
 				'url' => $url,
 				'status' => $status,
 			)

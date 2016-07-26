@@ -34,7 +34,7 @@ class BcPageHelperTest extends BaserTestCase {
 		'baser.View.Helper.BcPageHelper.PageBcPageHelper',
 		'baser.View.Helper.BcPageHelper.PageCategoryBcPageHelper',
 		'baser.Default.PluginContent',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
 		'baser.Default.UserGroup',

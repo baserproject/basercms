@@ -25,7 +25,8 @@ class BcRequestFilterTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'baser.Default.Page'
+		'baser.Default.Page',
+		'baser.Default.PluginContent',
 	);
 
 /**

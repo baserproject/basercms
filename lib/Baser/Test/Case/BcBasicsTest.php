@@ -27,6 +27,7 @@ class BcBasicsTest extends BaserTestCase {
 		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
+		'baser.Default.Site',
 	);
 
 	public function setUp() {

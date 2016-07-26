@@ -102,36 +102,34 @@ class Site extends AppModel {
 		$data = $Content->find('first', ['conditions' => ['Content.id' => $contentId]]);
 		$isMainSite = $this->isMain($data['Site']['id']);
 
-    	$conditions = [
-    		'Site.status' => true
-    	];
-    	if(is_null($data['Site']['main_site_id'])){
-    		$conditions['Site.main_site_id'] = 0;
-    		$mainSaiteContentId = $data['Content']['id'];
-    	} else {
-    		$conditions['or'] = [
-    			['Site.main_site_id' => $data['Site']['main_site_id']],
-    			['Site.id' => $data['Site']['main_site_id']]
-			];
-			if($isMainSite) {
-				$conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
-			}
-    		if($data['Content']['main_site_content_id']) {
-				$mainSaiteContentId = $data['Content']['main_site_content_id'];
-    		} else {
-    			$mainSaiteContentId = $data['Content']['id'];
-    		}
-    	}
-    	$sites = $this->find('all', ['fields' => ['id', 'name', 'alias', 'display_name', 'main_site_id'], 'conditions' => $conditions, 'order' => 'main_site_id']);
-    	if($data['Site']['main_site_id'] == 0) {
-			$sites = array_merge([['Site' => [
-    		'id' => '0',
-    		'display_name' => 'Home',
-    		'main_site_id' => '',
-    		'name' => '',
-    		'alias' => ''
-    		]]], $sites);
-    	}
+    $conditions = ['Site.status' => true];
+  	if(is_null($data['Site']['main_site_id'])){
+  		$conditions['Site.main_site_id'] = 0;
+  		$mainSaiteContentId = $data['Content']['id'];
+  	} else {
+  		$conditions['or'] = [
+  			['Site.main_site_id' => $data['Site']['main_site_id']],
+  			['Site.id' => $data['Site']['main_site_id']]
+  	];
+  	if($isMainSite) {
+  		$conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
+  	}
+  		if($data['Content']['main_site_content_id']) {
+  		$mainSaiteContentId = $data['Content']['main_site_content_id'];
+  		} else {
+  			$mainSaiteContentId = $data['Content']['id'];
+  		}
+  	}
+  	$sites = $this->find('all', ['fields' => ['id', 'name', 'alias', 'display_name', 'main_site_id'], 'conditions' => $conditions, 'order' => 'main_site_id']);
+  	if($data['Site']['main_site_id'] == 0) {
+  	$sites = array_merge([['Site' => [
+  		'id' => '0',
+  		'display_name' => 'Home',
+  		'main_site_id' => '',
+  		'name' => '',
+  		'alias' => ''
+  		]]], $sites);
+  	}
 		$conditions = [
 			'or' => [
 				['Content.id' => $mainSaiteContentId],
@@ -189,11 +187,11 @@ class Site extends AppModel {
  * @param bool $created
  * @param array $options
  */
-    public function afterSave($created, $options = []) {
+  public function afterSave($created, $options = []) {
 		parent::afterSave($created, $options);
-    	App::uses('AuthComponent',  'Controller/Component');
-    	$user = AuthComponent::user();
-    	$ContentFolder = ClassRegistry::init('ContentFolder');
+    App::uses('AuthComponent',  'Controller/Component');
+    $user = AuthComponent::user();
+    $ContentFolder = ClassRegistry::init('ContentFolder');
 		if($created) {
 			$ContentFolder->saveSiteRoot(null, [
 				'site_id'	=> $this->id,
@@ -210,7 +208,7 @@ class Site extends AppModel {
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'title'		=> $this->data['Site']['title'],
 				'status'	=> $this->data['Site']['status'],
-			]);
+		  ]);
 		}
 		if(!empty($this->data['Site']['main'])) {
 			$data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
@@ -219,17 +217,17 @@ class Site extends AppModel {
 				$this->save($data, array('validate' => false, 'callbacks' => false));
 			}
 		}
-    }
+  }
 
 /**
  * After Delete
  */
-    public function afterDelete() {
-    	parent::afterDelete();
-    	$Content = ClassRegistry::init('Content');
-    	$id = $Content->field('id', [
-				'Content.site_id' => $this->id,
-				'Content.site_root' => true
+  public function afterDelete() {
+    parent::afterDelete();
+    $Content = ClassRegistry::init('Content');
+    $id = $Content->field('id', [
+			'Content.site_id' => $this->id,
+			'Content.site_root' => true
 		]);
 
 		$children = $Content->children($id, false);
@@ -245,7 +243,7 @@ class Site extends AppModel {
 
 		$Content->softDelete(false);
 		$Content->removeFromTree($id, true);
-    }
+  }
 
 /**
  * プレフィックスを取得する

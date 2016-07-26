@@ -27,7 +27,7 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 	);
 
 /**
