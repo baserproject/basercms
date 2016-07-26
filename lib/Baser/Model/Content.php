@@ -496,7 +496,9 @@ class Content extends AppModel {
  */
 	public function updateSystemData($data) {
 		if(empty($data['Content']['type']) || empty($data['Content']['name'])) {
-			return false;
+			if($data['Content']['id'] != 1) {
+				return false;	
+			}
 		}
 
 		$_parents = $parents = $this->getPath($data['Content']['id'], ['name', 'status', 'publish_begin', 'publish_end'], -1);
