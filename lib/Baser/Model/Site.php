@@ -102,38 +102,38 @@ class Site extends AppModel {
 		$data = $Content->find('first', ['conditions' => ['Content.id' => $contentId]]);
 		$isMainSite = $this->isMain($data['Site']['id']);
 
-    $conditions = ['Site.status' => true];
-  	if(is_null($data['Site']['main_site_id'])){
-  		$conditions['Site.main_site_id'] = 0;
-  		$mainSaiteContentId = $data['Content']['id'];
-  	} else {
-  		$conditions['or'] = [
-  			['Site.main_site_id' => $data['Site']['main_site_id']],
-  			['Site.id' => $data['Site']['main_site_id']]
-  	];
-  	if($isMainSite) {
-  		$conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
-  	}
-  		if($data['Content']['main_site_content_id']) {
-  		$mainSaiteContentId = $data['Content']['main_site_content_id'];
-  		} else {
-  			$mainSaiteContentId = $data['Content']['id'];
-  		}
-  	}
-  	$sites = $this->find('all', ['fields' => ['id', 'name', 'alias', 'display_name', 'main_site_id'], 'conditions' => $conditions, 'order' => 'main_site_id']);
-  	if($data['Site']['main_site_id'] == 0) {
-  	$sites = array_merge([['Site' => [
-  		'id' => '0',
-  		'display_name' => 'Home',
-  		'main_site_id' => '',
-  		'name' => '',
-  		'alias' => ''
-  		]]], $sites);
-  	}
+		$conditions = ['Site.status' => true];
+		if(is_null($data['Site']['main_site_id'])){
+			$conditions['Site.main_site_id'] = 0;
+			$mainSiteContentId = $data['Content']['id'];
+		} else {
+			$conditions['or'] = [
+				['Site.main_site_id' => $data['Site']['main_site_id']],
+				['Site.id' => $data['Site']['main_site_id']]
+		];
+		if($isMainSite) {
+			$conditions['or'][] = ['Site.main_site_id' => $data['Site']['id']];
+		}
+			if($data['Content']['main_site_content_id']) {
+			$mainSiteContentId = $data['Content']['main_site_content_id'];
+			} else {
+				$mainSiteContentId = $data['Content']['id'];
+			}
+		}
+		$sites = $this->find('all', ['fields' => ['id', 'name', 'alias', 'display_name', 'main_site_id'], 'conditions' => $conditions, 'order' => 'main_site_id']);
+		if($data['Site']['main_site_id'] == 0) {
+		$sites = array_merge([['Site' => [
+			'id' => '0',
+			'display_name' => 'Home',
+			'main_site_id' => '',
+			'name' => '',
+			'alias' => ''
+			]]], $sites);
+		}
 		$conditions = [
 			'or' => [
-				['Content.id' => $mainSaiteContentId],
-				['Content.main_site_content_id' => $mainSaiteContentId]
+				['Content.id' => $mainSiteContentId],
+				['Content.main_site_content_id' => $mainSiteContentId]
 			]
 		];
 		if($isMainSite) {
@@ -189,9 +189,9 @@ class Site extends AppModel {
  */
   public function afterSave($created, $options = []) {
 		parent::afterSave($created, $options);
-    App::uses('AuthComponent',  'Controller/Component');
-    $user = AuthComponent::user();
-    $ContentFolder = ClassRegistry::init('ContentFolder');
+		App::uses('AuthComponent',  'Controller/Component');
+		$user = AuthComponent::user();
+		$ContentFolder = ClassRegistry::init('ContentFolder');
 		if($created) {
 			$ContentFolder->saveSiteRoot(null, [
 				'site_id'	=> $this->id,
@@ -223,9 +223,9 @@ class Site extends AppModel {
  * After Delete
  */
   public function afterDelete() {
-    parent::afterDelete();
-    $Content = ClassRegistry::init('Content');
-    $id = $Content->field('id', [
+		parent::afterDelete();
+		$Content = ClassRegistry::init('Content');
+		$id = $Content->field('id', [
 			'Content.site_id' => $this->id,
 			'Content.site_root' => true
 		]);
