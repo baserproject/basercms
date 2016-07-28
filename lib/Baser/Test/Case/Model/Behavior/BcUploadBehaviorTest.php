@@ -29,6 +29,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function setUp() {
+		@session_start();
 		parent::setUp();
 		$this->EditorTemplate = ClassRegistry::init('EditorTemplate');
 		$this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
@@ -40,6 +41,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function tearDown() {
+		@session_destroy();
 		unset($this->EditorTemplate);
 		unset($this->BcUploadBehavior);
 		parent::tearDown();

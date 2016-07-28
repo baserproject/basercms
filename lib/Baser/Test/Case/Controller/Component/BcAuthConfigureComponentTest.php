@@ -35,7 +35,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	public $components = array('BcAuthConfigure');
 	
 	public function setUp() {
-	
+		@session_start();
 		parent::setUp();
 		
 		// コンポーネントと偽のコントローラをセットアップする
@@ -58,7 +58,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	}
 	
 	public function tearDown() {
-	
+		@session_destroy();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcAuthConfigure);
