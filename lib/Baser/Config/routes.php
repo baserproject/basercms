@@ -69,12 +69,28 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		$Content = ClassRegistry::init('Content');
 		$publishConditions = array();
 		$subDomain = BcUtil::getSubDomain();
+		$paths = [];
+		
 		if($subDomain) {
-			$conditions = ['Content.url' => '/' . $subDomain . '/' . $parameter];
+			$paths[] = '/' . $subDomain . '/' . $parameter;
 		} else {
-			$conditions = ['Content.url' => '/' . $parameter];
+			$paths[] = '/' . $parameter;
 		}
-
+		
+		if(preg_match('/\/$/', $paths[0])) {
+			$paths[] = $paths[0] . 'index'; 
+		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
+				$paths[] = $matches[1];
+			}
+		}
+		
+		$url = urldecode($paths[0]);
+		
+		$conditions = ['Content.url' => $paths];
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		if(!empty($request->query['preview'])) {
 			if(!BcUtil::isAdminUser()) {
@@ -101,12 +117,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 				Configure::write('BcContents.currentContent', $content['Content']);
 				Configure::write('BcContents.currentSite', $content['Site']);
 				$viewParams = Configure::read('BcContents.items.' . $content['Content']['plugin'] . '.' . $content['Content']['type'] . '.routes.view');
-				if($subDomain) {
-					$url = preg_replace('/^\/' . $subDomain . '\//', '/', urldecode($content['Content']['url']));
-				} else {
-					$url = urldecode($content['Content']['url']);
-				}
-
 				if (!$viewParams) {
 					$viewParams = Configure::read('BcContents.items.Core.Default.routes.view');
 					Router::connect($url, array(
@@ -158,12 +168,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 						if (!empty($viewParams['plugin'])) {
 							$plugin = $viewParams['plugin'];
 						}
-						if($subDomain) {
-							$url = preg_replace('/^\/' . $subDomain . '\//', '/', urldecode($content['Content']['url']));
-						} else {
-							$url = urldecode($content['Content']['url']);
-						}
-
 						Router::connect($url . '/:action/*', array(
 							'plugin' => $plugin,
 							'controller' => $viewParams['controller'],
@@ -240,59 +244,59 @@ if (BC_INSTALLED || isConsole()) {
  * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
  * それを /xxx で呼び出す為のルーティング
  */
-	$adminPrefix = Configure::read('Routing.prefixes.0');
-	if (!preg_match("/^{$adminPrefix}/", $parameter)) {
-		/* 1.5.10 以降 */
-		App::uses('Page', 'Model');
-		$Page = ClassRegistry::init('Page');
-		if ($Page) {
-
-			$parameter = urldecode($parameter);
-
-			if (!$parameter) {
-				$params = array('index');
-			} elseif (preg_match('/\/$/is', $parameter)) {
-				$params = array($parameter . 'index');
-			} else {
-				$params = array($parameter, $parameter . '/index');
-			}
-
-			foreach ($params as $param) {
-
-				$linkedPages = $Page->isLinked($agentPrefix, '/' . $param);
-
-				if (!$agent || $linkedPages) {
-					$url = "/{$param}";
-				} else {
-					$url = "/{$agentPrefix}/{$param}";
-				}
-
-				if ($Page->isPageUrl($url)) {
-					if (!$agent) {
-						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $param)));
-					} else {
-						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
-					}
-					break;
-				} else {
-
-					// 拡張子付き（.html）の場合も透過的にマッチングさせる
-					if (preg_match('/^(.+?)\.html$/', $url, $matches)) {
-						$url = $matches[1];
-						if ($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth']['User']))) {
-							$param = str_replace('.html', '', $param);
-							if (!$agent) {
-								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $param));
-							} else {
-								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
-							}
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
+//	$adminPrefix = Configure::read('Routing.prefixes.0');
+//	if (!preg_match("/^{$adminPrefix}/", $parameter)) {
+//		/* 1.5.10 以降 */
+//		App::uses('Page', 'Model');
+//		$Page = ClassRegistry::init('Page');
+//		if ($Page) {
+//
+//			$parameter = urldecode($parameter);
+//
+//			if (!$parameter) {
+//				$params = array('index');
+//			} elseif (preg_match('/\/$/is', $parameter)) {
+//				$params = array($parameter . 'index');
+//			} else {
+//				$params = array($parameter, $parameter . '/index');
+//			}
+//
+//			foreach ($params as $param) {
+//
+//				$linkedPages = $Page->isLinked($agentPrefix, '/' . $param);
+//
+//				if (!$agent || $linkedPages) {
+//					$url = "/{$param}";
+//				} else {
+//					$url = "/{$agentPrefix}/{$param}";
+//				}
+//
+//				if ($Page->isPageUrl($url)) {
+//					if (!$agent) {
+//						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $param)));
+//					} else {
+//						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
+//					}
+//					break;
+//				} else {
+//
+//					// 拡張子付き（.html）の場合も透過的にマッチングさせる
+//					if (preg_match('/^(.+?)\.html$/', $url, $matches)) {
+//						$url = $matches[1];
+//						if ($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]))) {
+//							$param = str_replace('.html', '', $param);
+//							if (!$agent) {
+//								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $param));
+//							} else {
+//								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
+//							}
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
 
 /**
  * 携帯標準ルーティング

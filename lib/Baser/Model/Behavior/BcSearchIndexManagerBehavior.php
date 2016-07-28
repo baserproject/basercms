@@ -50,8 +50,8 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 		$data['SearchIndex']['detail'] = str_replace(array("\r\n", "\r", "\n", "\t", "\s"), '', trim(strip_tags($data['SearchIndex']['detail'])));
 
 		// 検索用データとして保存
-		$id = '';
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
+		$before = false;
 		if (!empty($data['SearchIndex']['model_id'])) {
 			$before = $this->SearchIndex->find('first', array(
 				'fields' => array('SearchIndex.id', 'SearchIndex.category'),

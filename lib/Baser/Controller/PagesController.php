@@ -14,6 +14,9 @@
  * 固定ページコントローラー
  *
  * @package Baser.Controller
+ * @property Page $Page
+ * @property Content $Content
+ * @property BcContentsComponent $BcContents
  */
 class PagesController extends AppController {
 
@@ -40,7 +43,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true]);
 
 /**
  * モデル
@@ -207,6 +210,31 @@ class PagesController extends AppController {
 	}
 
 /**
+ * 固定ページ情報登録
+ * 
+ * @return mixed json|false
+ */
+	public function admin_ajax_add() {
+		$this->autoRender = false;
+		if(!$this->request->data) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$this->request->data['Page'] = $this->Page->getDefaultValue()['Page'];
+		if ($data = $this->Page->save($this->request->data)) {
+			$message = '固定ページ「' . $this->request->data['Content']['title'] . '」を追加しました。';
+			$this->setMessage($message, false, true, false);
+			return json_encode(array(
+				'contentId' => $this->Content->id,
+				'entityId' => $this->Page->id,
+				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
+			));
+		} else {
+			$this->ajaxError(500, $this->Page->validationErrors);
+		}
+		return false;
+	}
+	
+/**
  * [ADMIN] 固定ページ情報登録
  *
  * @return void
@@ -223,7 +251,6 @@ class PagesController extends AppController {
 			} elseif ($this->request->data['Page']['page_type'] == 3 && !$this->request->data['Page']['page_category_id']) {
 				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			}
-			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
 			
 			/*			 * * Pages.beforeAdd ** */
 			$event = $this->dispatchEvent('beforeAdd', array(
@@ -313,7 +340,7 @@ class PagesController extends AppController {
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
@@ -329,8 +356,7 @@ class PagesController extends AppController {
 				$this->request->data['Page']['page_type'] = 1;
 			}
 		} else {
-
-			$before = $this->Page->find('first', array('conditions' => array('Page.id' => $id)));
+			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
 			if (empty($this->request->data['Page']['page_type'])) {
 				$this->request->data['Page']['page_type'] = 1;
 			}
@@ -340,43 +366,37 @@ class PagesController extends AppController {
 			} elseif ($this->request->data['Page']['page_type'] == 3 && !$this->request->data['Page']['page_category_id']) {
 				$this->request->data['Page']['page_category_id'] = $this->PageCategory->getAgentId('smartphone');
 			}
-			$this->request->data['Page']['url'] = $this->Page->getPageUrl($this->request->data);
 
-			/*			 * * Pages.beforeEdit ** */
-			$event = $this->dispatchEvent('beforeEdit', array(
+			/*** Pages.beforeEdit ***/
+			$event = $this->dispatchEvent('beforeEdit', [
 				'data' => $this->request->data
-			));
+			]);
 			if ($event !== false) {
 				$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 			}
 
 			$this->Page->set($this->request->data);
-
 			if ($this->Page->validates()) {
 
 				if ($data = $this->Page->save(null, false)) {
-
 					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
-					$beforeStatus = $this->Page->isPublish($before['Page']['status'], $before['Page']['publish_begin'], $before['Page']['publish_end']);
-					$afterStatus = $this->Page->isPublish($this->request->data['Page']['status'], $this->request->data['Page']['publish_begin'], $this->request->data['Page']['publish_end']);
-					if ($beforeStatus != $afterStatus || $before['Page']['title'] != $this->request->data['Page']['title'] || $before['Page']['url'] != $this->request->data['Page']['url']) {
+					if ($isChangedStatus) {
 						clearViewCache();
 					} else {
-						clearViewCache($this->request->data['Page']['url']);
+						clearViewCache($this->request->data['Content']['url']);
 					}
 
 					// 完了メッセージ
-					$this->setMessage('固定ページ「' . $this->request->data['Page']['name'] . '」を更新しました。', false, true);
+					$this->setMessage('固定ページ「' . $this->request->data['Content']['name'] . '」を更新しました。', false, true);
 
-					/*					 * * Pages.afterEdit ** */
-					$this->dispatchEvent('afterEdit', array(
+					/*** Pages.afterEdit ***/
+					$this->dispatchEvent('afterEdit', [
 						'data' => $data
-					));
+					]);
 
 					// 同固定ページへリダイレクト
-					$this->redirect(array('action' => 'edit', $id));
+					$this->redirect(['action' => 'edit', $id]);
 				} else {
-
 					$this->setMessage('保存中にエラーが発生しました。', true);
 				}
 			} else {
@@ -396,12 +416,12 @@ class PagesController extends AppController {
 			$currentCatOwnerId = $this->request->data['PageCategory']['owner_id'];
 		}
 
-		$categories = $this->getCategorySource($this->request->data['Page']['page_type'], array(
-			'currentOwnerId' => $currentCatOwnerId,
+		$categories = $this->getCategorySource($this->request->data['Page']['page_type'], [
+			'currentOwnerId' 		=> $currentCatOwnerId,
 			'currentPageCategoryId' => $currentPageCategoryId,
-			'own' => true,
-			'empty' => '指定しない'
-		));
+			'own' 					=> true,
+			'empty' 				=> '指定しない'
+		]);
 
 		$url = $this->Page->convertViewUrl($this->request->data['Page']['url']);
 
@@ -420,15 +440,15 @@ class PagesController extends AppController {
 			$reflectSmartphone = false;
 		}
 
-		$editorOptions = array('editorDisableDraft' => false);
+		$editorOptions = ['editorDisableDraft' => false];
 		if (!empty($this->siteConfigs['editor_styles'])) {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
-			$editorStyles = array('default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles']));
-			$editorOptions = array_merge($editorOptions, array(
-				'editorStylesSet' => 'default',
-				'editorStyles' => $editorStyles
-			));
+			$editorStyles = ['default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])];
+			$editorOptions = array_merge($editorOptions, [
+				'editorStylesSet'	=> 'default',
+				'editorStyles' 		=> $editorStyles
+			]);
 		}
 
 		$this->set('currentCatOwnerId', $currentCatOwnerId);
@@ -444,7 +464,6 @@ class PagesController extends AppController {
 		$this->set('smartphoneExists', $this->Page->agentExists('smartphone', $this->request->data));
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
-		$this->subMenuElements = array('pages', 'page_categories');
 		if (!empty($this->request->data['Page']['title'])) {
 			$this->pageTitle = '固定ページ情報編集：' . $this->request->data['Page']['title'];
 		} else {
@@ -471,33 +490,20 @@ class PagesController extends AppController {
 	}
 
 /**
- * [ADMIN] 固定ページ情報削除
+ * 削除
+ * 
+ * Controller::requestAction() で呼び出される
  *
- * @param int $id (page_id)
- * @return void
- * @deprecated admin_ajax_delete で Ajax化
+ * @return bool
  */
-	public function admin_delete($id = null) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+	public function admin_delete() {
+		if(empty($this->request->data['entityId'])) {
+			return false;
 		}
-
-		// メッセージ用にデータを取得
-		$page = $this->Page->read(null, $id);
-
-		/* 削除処理 */
-		if ($this->Page->delete($id)) {
-
-			// 完了メッセージ
-			$this->setMessage('固定ページ: ' . $page['Page']['name'] . ' を削除しました。', false, true);
-		} else {
-
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+		if($this->Page->delete($this->request->data['entityId'])) {
+			return true;
 		}
-
-		$this->redirect(array('action' => 'index'));
+		return false;
 	}
 
 /**
@@ -540,17 +546,21 @@ class PagesController extends AppController {
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
+		if($this->content['alias_id']) {
+			$urlTmp = $this->Content->field('url', ['Content.id' => $this->content['alias_id']]);
+		} else {
+			$urlTmp = $this->request->url;
+		}
+		if($this->site['alias']) {
+			$path = [preg_replace('/^' . preg_quote($this->site['alias'], '/') .'\//', $this->site['name'] . '/', $urlTmp)];	
+		} else {
+			$path = [$urlTmp];
+		}
 		if (is_array($path) && count($path) == 1) {
 			$path = explode('/', $path[0]);
 		}
 
 		$url = '/' . implode('/', $path);
-
-		// モバイルディレクトリへのアクセスは Not Found
-		if (isset($path[0]) && ($path[0] == Configure::read('BcAgent.mobile.prefix') || $path[0] == Configure::read('BcAgent.smartphone.prefix'))) {
-			$this->notFound();
-		}
-		// <<<
 		
 		$count = count($path);
 		if (!$count) {
@@ -568,26 +578,18 @@ class PagesController extends AppController {
 			$titleForLayout = Inflector::humanize($path[$count - 1]);
 		}
 
-		// CUSTOMIZE ADD 2014/07/02 ryuring
-		// >>>
 		$agentAlias = Configure::read('BcRequest.agentAlias');
 		if ($agentAlias) {
 			$checkUrl = '/' . $agentAlias . $url;
 		} else {
 			$checkUrl = $url;
 		}
-
-		// 固定ページを保存する際、非公開の場合でも、検索用データを作成時に
-		// requestAction で呼ばれる為、requestAction時には無視する仕様とする
-		if(empty($this->request->params['requested']) && !$this->Page->checkPublish($checkUrl)) {
-			$this->notFound();
-		}
 		
 		// キャッシュ設定
 		// TODO 手法検討要
 		// Consoleから requestAction で呼出された場合、getCacheTimeがうまくいかない
 		// Consoleの場合は実行しない
-		if (!isset($_SESSION['Auth']['User']) && !isConsole()) {
+		if (!isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && !isConsole()) {
 			$this->helpers[] = 'BcCache';
 			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
@@ -638,11 +640,21 @@ class PagesController extends AppController {
 			$this->layout = $layout;
 		}
 
-		if ($template) {
-			$this->set('pagePath', implode('/', $path));
-		} else {
-			$template = implode('/', $path);
+		$previewCreated = false;
+		if($this->request->data) {
+			if($this->BcContents->preview == 'default') {
+				$this->set('previewTemplate', TMP . 'pages_preview_' . $this->createPreviewTemplate($this->request->data) . $this->ext);
+				$previewCreated = true;
+			}
 		}
+
+		$pagePath = implode('/', $path);
+		if ($template) {
+			$this->set('pagePath', $pagePath);
+		} else {
+			$template = $pagePath;
+		}
+
 		// <<<
 		
 		try {
@@ -651,6 +663,9 @@ class PagesController extends AppController {
 			//$this->render(implode('/', $path));
 			// ---
 			$this->render($template);
+			if($previewCreated) {
+				@unlink(TMP . 'pages_preview_' . $uuid . $this->ext);
+			}
 			// <<<
 		} catch (MissingViewException $e) {
 			if (Configure::read('debug')) {
@@ -658,6 +673,27 @@ class PagesController extends AppController {
 			}
 			throw new NotFoundException();
 		}
+	}
+
+/**
+ * プレビュー用テンプレートを生成する
+ *
+ * @param mixed	$id 固定ページID
+ * @return string uuid
+ */
+	public function createPreviewTemplate($data) {
+		// 一時ファイルとしてビューを保存
+		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
+		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
+		$uuid = CakeText::uuid();
+		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
+		$file = new File($path);
+		$file->open('w');
+		$file->append($contents);
+		$file->close();
+		unset($file);
+		@chmod($path, 0666);
+		return $uuid;
 	}
 
 /**
@@ -735,6 +771,7 @@ class PagesController extends AppController {
  * @return void
  */
 	public function admin_create_preview($id) {
+		return;
 		if (isset($this->request->data['Page'])) {
 			$page = $this->request->data;
 			if (empty($page['Page']['page_category_id']) && $page['Page']['page_type'] == 2) {
@@ -742,8 +779,6 @@ class PagesController extends AppController {
 			} elseif (empty($page['Page']['page_category_id']) && $page['Page']['page_type'] == 3) {
 				$page['Page']['page_category_id'] = $this->Page->PageCategory->getAgentId('smartphone');
 			}
-
-			$page['Page']['url'] = $this->Page->getPageUrl($page);
 		} else {
 			$conditions = array('Page.id' => $id);
 			$page = $this->Page->find($conditions);
@@ -786,6 +821,7 @@ class PagesController extends AppController {
  * @return void
  */
 	public function admin_preview($id) {
+		return;
 		$page = Cache::read('page_preview_' . $id, '_cake_core_');
 		
 		// 直接previewにアクセスした場合
@@ -1283,22 +1319,28 @@ class PagesController extends AppController {
 	}
 
 /**
- * [ADMIN] 固定ページコピー
- * 
- * @param int $id 
- * @return void
+ * コピー
+ *
+ * @return bool
  */
-	public function admin_ajax_copy($id = null) {
-		$result = $this->Page->copy($id);
-		if ($result) {
-			$result['Page']['id'] = $this->Page->getInsertID();
-			$this->setViewConditions('Page', array('action' => 'admin_index'));
-			$this->_setAdminIndexViewData();
-			ClassRegistry::removeObject('View'); // Page 保存時に requestAction で 固定ページテンプレート生成用に初期化される為
-			$this->set('data', $result);
+	public function admin_ajax_copy() {
+		$this->autoRender = false;
+		if(!$this->request->data) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$user = $this->BcAuth->user();
+		if ($this->Page->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
+			$message = '固定ページのコピー「' . $this->request->data['title'] . '」を追加しました。';
+			$this->setMessage($message, false, true, false);
+			return json_encode(array(
+				'contentId' => $this->Content->id,
+				'entityId' => $this->Page->id,
+				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
+			));
 		} else {
 			$this->ajaxError(500, $this->Page->validationErrors);
 		}
+		return false;
 	}
 
 /**

@@ -425,7 +425,7 @@ class UploaderFilesController extends BcPluginAppController {
 	public function view_limited_file($filename) {
 		
 		$display = false;
-		if(!empty($_SESSION['Auth']['User'])) {
+		if(!empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$display = true;
 		} else {
 			$conditions = array(

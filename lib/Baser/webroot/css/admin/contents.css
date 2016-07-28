@@ -1236,15 +1236,13 @@ background: #888;
 }
 
 .contents-body .btn-slide-form{
-	border-left:1px solid #CCC;
-	border-right:1px solid #CCC;
-	border-bottom:1px solid #CCC;
+	border:1px solid #CCC;
 	text-align: center;
 	margin-left:auto;
 	margin-right:0;
 	padding:0!important;
 	/*position: absolute;*/
-	margin-top:-30px;
+	margin-top:-31px;
 	width:140px;
 	font-size:14px;
 }

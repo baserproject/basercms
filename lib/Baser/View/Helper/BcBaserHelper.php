@@ -1651,7 +1651,7 @@ class BcBaserHelper extends AppHelper {
 	public function sitemap($pageCategoryId = null, $recursive = null) {
 		$pageList = $this->requestAction('/search_indices/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
 		$params = array('pageList' => $pageList);
-		if (empty($_SESSION['Auth']['User'])) {
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$params = am($params, array(
 				'cache' => array(
 					'time' => Configure::read('BcCache.duration'),

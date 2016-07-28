@@ -487,6 +487,31 @@ class Content extends AppModel {
 	}
 
 /**
+ * コンテンツデータよりURLを生成する
+ * 
+ * @param int $id コンテンツID
+ * @param string $type タイプ
+ * @return string URL
+ */
+	public function createUrl($id, $type) {
+		if($id == 1) {
+			$url = '/';
+		} else {
+			$parents = $this->getPath($id, ['name', 'status', 'publish_begin', 'publish_end'], -1);
+			unset($parents[0]);
+			$names = array();
+			foreach($parents as $parent) {
+				$names[] = $parent['Content']['name'];
+			}
+			$url = '/' . implode('/', $names);
+			if($type == 'ContentFolder') {
+				$url .= '/';
+			}
+		}
+		return $url;
+	}
+	
+/**
  * システムデータを更新する
  *
  * URL / 公開状態 / メインサイトの関連コンテンツID
@@ -501,25 +526,11 @@ class Content extends AppModel {
 			}
 		}
 
-		$_parents = $parents = $this->getPath($data['Content']['id'], ['name', 'status', 'publish_begin', 'publish_end'], -1);
+		$parents = $this->getPath($data['Content']['id'], ['name', 'status', 'publish_begin', 'publish_end'], -1);
 		$site = $this->Site->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
 
 		// URLを更新
-		if(!$data['Content']['parent_id']) {
-			if($data['Content']['id'] == 1) {
-				$data['Content']['url'] = '/';
-			}
-		} else {
-			unset($_parents[0]);
-			$names = array();
-			foreach($_parents as $parent) {
-				$names[] = $parent['Content']['name'];
-			}
-			$data['Content']['url'] = '/' . implode('/', $names);
-			if($data['Content']['type'] == 'ContentFolder') {
-				$data['Content']['url'] .= '/';
-			}
-		}
+		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $data['Content']['type']);
 
 		// 親フォルダの公開状態に合わせて公開状態を更新
 		unset($parents[count($parents)-1]);
@@ -1005,6 +1016,50 @@ class Content extends AppModel {
 				return true;
 			}
 			$url .= '/';
+		}
+		return false;
+	}
+
+/**
+ * データが公開済みかどうかチェックする
+ *
+ * @param boolean $status 公開ステータス
+ * @param string $publishBegin 公開開始日時
+ * @param string $publishEnd 公開終了日時
+ * @return	bool
+ */
+	public function isPublish($status, $publishBegin, $publishEnd) {
+		if (!$status) {
+			return false;
+		}
+		if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+			if ($publishBegin > date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+		if ($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+			if ($publishEnd < date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+/**
+ * タイトル、URL、公開状態が更新されているか確認する
+ *
+ * @param $id コンテンツID
+ * @param $newData 新しいコンテンツデータ
+ */
+	public function isChangedStatus($id, $newData)	{
+		$before = $this->find('first', ['conditions' => ['Content.id' => $id]]);
+		if(!$before) {
+			return true;
+		}
+		$beforeStatus = $this->isPublish($before['Content']['status'], $before['Content']['publish_begin'], $before['Content']['publish_end']);
+		$afterStatus = $this->isPublish($newData['Content']['status'], $newData['Content']['publish_begin'], $newData['Content']['publish_end']);
+		if ($beforeStatus != $afterStatus || $before['Content']['title'] != $newData['Content']['title'] || $before['Content']['url'] != $newData['Content']['url']) {
+			return true;
 		}
 		return false;
 	}

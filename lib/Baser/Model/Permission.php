@@ -217,9 +217,9 @@ class Permission extends AppModel {
 			'/^admin\/users\/logout$/',
 			'/^admin\/user_groups\/set_default_favorites$/'
 		);
-
-		if (!empty($_SESSION['Auth']['User']['id'])) {
-			$allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth']['User']['id'] . '$/';
+		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+		if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
+			$allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
 		}
 
 		foreach ($allows as $allow) {

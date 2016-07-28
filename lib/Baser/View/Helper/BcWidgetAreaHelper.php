@@ -47,7 +47,7 @@ class BcWidgetAreaHelper extends AppHelper {
 				$params = array();
 				$plugin = '';
 				$params['widget'] = true;
-				if (empty($_SESSION['Auth']['User']) && !isset($cache)) {
+				if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && !isset($cache)) {
 					$params['cache'] = '+1 month';
 				}
 				$params = am($params, $widget[$key]);

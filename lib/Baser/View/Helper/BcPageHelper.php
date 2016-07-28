@@ -415,22 +415,13 @@ class BcPageHelper extends Helper {
  * @return void
  */
 	public function content() {
-
-		$agent = '';
-		if (Configure::read('BcRequest.agentPrefix')) {
-			$agent = Configure::read('BcRequest.agentPrefix');
+		$previewTemplate = $this->_View->get('previewTemplate');
+		if($previewTemplate) {
+			$path = $previewTemplate;	
+		} else {
+			$path = getViewPath() . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->ext;
 		}
-		$path = $this->_View->getVar('pagePath');
-
-		if ($agent) {
-			$url = '/' . implode('/', $this->request->params['pass']);
-			$linked = $this->Page->isLinked($agent, $url);
-			if (!$linked) {
-				$path = $agent . DS . $path;
-			}
-		}
-		echo $this->_View->evaluate(getViewPath() . 'Pages' . DS . $path . '.php', $this->_View->viewVars);
-
+		echo $this->_View->evaluate($path, $this->_View->viewVars);
 	}
 
 /**

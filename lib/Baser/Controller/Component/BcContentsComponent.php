@@ -261,7 +261,7 @@ class BcContentsComponent extends Component {
 		$data['Content']['name'] = urldecode($data['Content']['name']);
 		$controller->set('layoutTemplates', $templates);
 		$controller->set('parentContents', $controller->Content->getContentFolderList($currentSiteId, $options));
-		$controller->set('authors', $controller->User->find('list', array('fields' => array('id', 'real_name'))));
+		$controller->set('authors', $controller->User->getUserList());
 		$Site = ClassRegistry::init('Site');
 		$site = $controller->Content->find('first', ['conditions' => ['Content.id' => $data['Content']['id']]]);
     	if(!is_null($site['Site']['main_site_id'])){

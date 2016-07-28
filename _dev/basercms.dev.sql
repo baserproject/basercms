@@ -11,7 +11,7 @@
  Target Server Version : 50548
  File Encoding         : utf-8
 
- Date: 07/15/2016 14:49:25 PM
+ Date: 07/28/2016 16:29:47 PM
 */
 
 SET NAMES utf8;
@@ -805,6 +805,26 @@ INSERT INTO `mysite_plugins` VALUES ('1', 'Blog', 'ブログ', '3.0.8', '1', '1'
 COMMIT;
 
 -- ----------------------------
+--  Table structure for `mysite_search_indices`
+-- ----------------------------
+DROP TABLE IF EXISTS `mysite_search_indices`;
+CREATE TABLE `mysite_search_indices` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `type` varchar(100) DEFAULT NULL,
+  `model` varchar(50) NOT NULL,
+  `model_id` int(8) NOT NULL,
+  `category` varchar(50) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `detail` text,
+  `url` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `priority` varchar(3) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `mysite_site_configs`
 -- ----------------------------
 DROP TABLE IF EXISTS `mysite_site_configs`;
@@ -821,7 +841,7 @@ CREATE TABLE `mysite_site_configs` (
 --  Records of `mysite_site_configs`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mysite_site_configs` VALUES ('1', 'name', 'baserCMS inc.｜日本語', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('2', 'keyword', 'baser,CMS,コンテンツマネジメントシステム,開発支援', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('3', 'description', 'baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('4', 'address', '福岡県', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('5', 'theme', '', '2015-10-02 18:12:02', '2016-04-04 16:05:12'), ('6', 'email', 'test@e-catchup.jp', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('7', 'widget_area', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('8', 'maintenance', '0', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('9', 'mail_encode', 'UTF-8', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('10', 'smtp_host', '', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('11', 'smtp_user', 'admin', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('12', 'smtp_password', 'basercms', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('13', 'smtp_port', '', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('14', 'formal_name', 'baserCMS inc. [デモ]', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('15', 'admin_list_num', '10', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('16', 'google_analytics_id', '', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('17', 'content_categories', 'YTowOnt9', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('18', 'content_types', 'YToxOntzOjk6IuODmuODvOOCuCI7czo5OiLjg5rjg7zjgrgiO30=', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('19', 'root_owner_id', '', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('20', 'category_permission', '', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('21', 'admin_theme', '', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('22', 'login_credit', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('23', 'first_access', '', '2015-10-02 18:12:02', '2015-10-02 18:12:44'), ('24', 'editor', 'BcCkeditor', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('25', 'editor_styles', '#青見出し\r\nh3 {\r\ncolor:Blue;\r\n}\r\n#赤見出し\r\nh3 {\r\ncolor:Red;\r\n}\r\n#黄マーカー\r\nspan {\r\nbackground-color:Yellow;\r\n}\r\n#緑マーカー\r\nspan {\r\nbackground-color:Lime;\r\n}\r\n#大文字\r\nbig {}\r\n#小文字\r\nsmall {}\r\n#コード\r\ncode {}\r\n#削除文\r\ndel {}\r\n#挿入文\r\nins {}\r\n#引用\r\ncite {}\r\n#インライン\r\nq {}', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('26', 'editor_enter_br', '0', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('27', 'root_layout_template', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('28', 'root_layout_template_mobile', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('29', 'root_layout_template_smartphone', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('30', 'root_content_template', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('31', 'root_content_template_mobile', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('32', 'root_content_template_smartphone', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('33', 'linked_pages_mobile', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('34', 'linked_pages_smartphone', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('36', 'admin_side_banner', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('37', 'smtp_tls', '0', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('38', 'use_universal_analytics', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('39', 'version', '3.0.8', '2015-10-02 18:12:27', '2016-06-29 20:22:16');
+INSERT INTO `mysite_site_configs` VALUES ('1', 'name', 'baserCMS inc.｜日本語', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('2', 'keyword', 'baser,CMS,コンテンツマネジメントシステム,開発支援', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('3', 'description', 'baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('4', 'address', '福岡県', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('5', 'theme', '', '2015-10-02 18:12:02', '2016-04-04 16:05:12'), ('6', 'email', 'test@e-catchup.jp', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('7', 'widget_area', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('8', 'maintenance', '0', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('9', 'mail_encode', 'UTF-8', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('10', 'smtp_host', '', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('11', 'smtp_user', 'admin', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('12', 'smtp_password', 'basercms', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('13', 'smtp_port', '', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('14', 'formal_name', 'baserCMS inc. [デモ]', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('15', 'admin_list_num', '10', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('16', 'google_analytics_id', '', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('17', 'content_categories', 'YTowOnt9', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('18', 'content_types', 'YToxOntzOjk6IuODmuODvOOCuCI7czo5OiLjg5rjg7zjgrgiO30=', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('19', 'root_owner_id', '', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('20', 'category_permission', '', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('21', 'admin_theme', '', '2015-10-02 18:12:02', '2015-10-02 18:12:40'), ('22', 'login_credit', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('23', 'first_access', '', '2015-10-02 18:12:02', '2015-10-02 18:12:44'), ('24', 'editor', 'BcCkeditor', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('25', 'editor_styles', '#青見出し\r\nh3 {\r\ncolor:Blue;\r\n}\r\n#赤見出し\r\nh3 {\r\ncolor:Red;\r\n}\r\n#黄マーカー\r\nspan {\r\nbackground-color:Yellow;\r\n}\r\n#緑マーカー\r\nspan {\r\nbackground-color:Lime;\r\n}\r\n#大文字\r\nbig {}\r\n#小文字\r\nsmall {}\r\n#コード\r\ncode {}\r\n#削除文\r\ndel {}\r\n#挿入文\r\nins {}\r\n#引用\r\ncite {}\r\n#インライン\r\nq {}', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('26', 'editor_enter_br', '0', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('27', 'root_layout_template', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('28', 'root_layout_template_mobile', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('29', 'root_layout_template_smartphone', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('30', 'root_content_template', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('31', 'root_content_template_mobile', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('32', 'root_content_template_smartphone', 'default', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('33', 'linked_pages_mobile', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('34', 'linked_pages_smartphone', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('36', 'admin_side_banner', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('37', 'smtp_tls', '0', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('38', 'use_universal_analytics', '1', '2015-10-02 18:12:02', '2016-06-28 12:35:24'), ('39', 'version', '4.0.0-dev', '2015-10-02 18:12:27', '2016-06-29 20:22:16');
 COMMIT;
 
 -- ----------------------------

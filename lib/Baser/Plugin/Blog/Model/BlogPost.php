@@ -627,8 +627,9 @@ class BlogPost extends BlogAppModel {
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => 1));
 		}
-		if (!empty($_SESSION['Auth']['User'])) {
-			$data['BlogPost']['user_id'] = $_SESSION['Auth']['User']['id'];
+		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+		if (!empty($_SESSION['Auth'][$sessionKey])) {
+			$data['BlogPost']['user_id'] = $_SESSION['Auth'][$sessionKey]['id'];
 		}
 
 		$data['BlogPost']['name'] .= '_copy';

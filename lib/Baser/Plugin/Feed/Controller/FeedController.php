@@ -170,7 +170,7 @@ class FeedController extends FeedAppController {
 		$items = array_slice($items, 0, $feedConfig['FeedConfig']['display_number']);
 
 		/* キャッシュを設定 */
-		if (!isset($_SESSION['Auth']['User'])) {
+		if (!isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			// モバイルの場合、BcMobileHelper より CacheHelper が先に読み込まれた場合、
 			// nocacheが正常に動作しなくなる為、ここでヘルパの設定を行う
 			// ※ Shift-JISでキャッシュを保存する為先にBcMobileHelperのイベントを実行する必要がある為

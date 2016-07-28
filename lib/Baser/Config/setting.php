@@ -26,8 +26,6 @@ $config['BcApp'] = array(
 	'adminNavi' => array('core' => array(
 			'name' => 'baserCMSコア',
 			'contents' => array(
-				array('name' => '固定ページ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'pages', 'action' => 'index')),
-				array('name' => '固定ページカテゴリ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'page_categories', 'action' => 'index')),
 				array('name' => 'ウィジェット管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
 				array('name' => 'テーマ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index')),
 				array('name' => 'プラグイン管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index')),
@@ -267,11 +265,34 @@ $config['BcContents'] = [
 				],
 				'icon'	=> 'admin/icon_link.png',
 			],
-//			'Page'	=> [
-//				'title' => '固定ページ',
-//				// TODO routes を実装要
-//				'icon'	=> 'admin/icon_page.png',
-//			]
+			'Page'	=> [
+				'title' => '固定ページ',
+				'multiple'	=> true,
+				'preview'	=> true,
+				'icon'	=> 'admin/icon_page.png',
+				'routes' => [
+					'add'	=> [
+						'controller'=> 'pages',
+						'action'	=> 'ajax_add'
+					],
+					'edit'	=> [
+						'controller'=> 'pages',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'controller'=> 'pages',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'pages',
+						'action'	=> 'display'
+					],
+					'copy'	=> [
+						'controller'=> 'pages',
+						'action'	=> 'ajax_copy'
+					]
+				]
+			]
 		]
 	]
 ];

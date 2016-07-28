@@ -286,7 +286,7 @@ class BcAppController extends Controller {
 		if (!empty($this->siteConfigs['maintenance']) &&
 			($this->request->params['controller'] != 'maintenance' && $this->request->url != 'maintenance') &&
 			(!isset($this->request->params['prefix']) || $this->request->params['prefix'] != 'admin') &&
-			(Configure::read('debug') < 1 && empty($_SESSION['Auth']['User']))) {
+			(Configure::read('debug') < 1 && empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]))) {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
 			} else {

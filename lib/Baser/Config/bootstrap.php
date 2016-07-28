@@ -337,7 +337,7 @@ if (Configure::read('debug') == 0) {
 		// TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、
 		// セキュリティ上の問題もあるので実装は検討が必要。
 		// bootstrapで実装した場合、他ページへの負荷の問題もある
-		if (isset($_SESSION['Auth']['User'])) {
+		if (isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			Configure::write('Cache.check', false);
 		}
 	}

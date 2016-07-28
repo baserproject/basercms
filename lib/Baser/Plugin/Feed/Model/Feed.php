@@ -149,7 +149,7 @@ class Feed extends FeedAppModel {
 			$rssData = $this->_convertSimplePie($SimplePie->get_items());
 
 			// ログインしてなければキャッシュを作成
-			if (!isset($_SESSION['Auth']['User'])) {
+			if (!isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 				cache($cachePath, BcUtil::serialize($rssData));
 				chmod(CACHE . $cachePath, 0666);
 			}

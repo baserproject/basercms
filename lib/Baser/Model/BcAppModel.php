@@ -140,7 +140,7 @@ class BcAppModel extends Model {
 		// ログを記録する
 		$Dblog = ClassRegistry::init('Dblog');
 		$logdata['Dblog']['name'] = $message;
-		$logdata['Dblog']['user_id'] = @$_SESSION['Auth']['User']['id'];
+		$logdata['Dblog']['user_id'] = @$_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]['id'];
 		return $Dblog->save($logdata);
 	}
 
@@ -1417,29 +1417,13 @@ class BcAppModel extends Model {
 /**
  * データが公開済みかどうかチェックする
  *
- * @param boolean $status 			公開ステータス
+ * @param boolean $status 公開ステータス
  * @param string $publishBegin 公開開始日時
- * @param string $publishEnd		公開終了日時
- * @return	array
+ * @param string $publishEnd 公開終了日時
+ * @return bool
  */
 	public function isPublish($status, $publishBegin, $publishEnd) {
-		if (!$status) {
-			return false;
-		}
-
-		if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
-			if ($publishBegin > date('Y-m-d H:i:s')) {
-				return false;
-			}
-		}
-
-		if ($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
-			if ($publishEnd < date('Y-m-d H:i:s')) {
-				return false;
-			}
-		}
-
-		return true;
+		return $this->Content->isPublish($status, $publishBegin, $publishEnd);
 	}
 
 /**

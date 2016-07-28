@@ -191,8 +191,8 @@ class PageTest extends BaserTestCase {
 		$result = $this->Page->getDefaultValue();
 		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
 	
-		//$_SESSION['Auth']['User']が存在する場合
-		$_SESSION['Auth']['User'] = array(
+		//$_SESSION['Auth']が存在する場合
+		$_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')] = array(
 			'id' => 2,
 		);
 		$expected = array('Page' => array(
@@ -538,37 +538,6 @@ class PageTest extends BaserTestCase {
 			array('index', null, true, 'ページファイルを削除できません'),
 			array('index', 1, true, 'ページファイルを削除できません'),
 			array('index', 2, true, 'ページファイルを削除できません'),
-		);
-	}
-
-/**
- * ページのURLを取得する
- * 
- * @param array $name ページ名
- * @param array $categoryId ページカテゴリーID
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getPageUrlDataProvider
- */
-	public function testGetPageUrl($name, $categoryId, $expected, $message = null) {
-		$data = array(
-			'Page' => array(
-				'name' => $name,
-				'page_category_id' => $categoryId,
-			)
-		);
-		$result = $this->Page->getPageUrl($data);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function getPageUrlDataProvider() {
-		return array(
-			array('index', null, '/index', 'ページのURLを取得できません'),
-			array('index', 1, '/mobile/index', 'ページのURLを取得できません'),
-			array('index', 2, '/smartphone/index', 'ページのURLを取得できません'),
-			array('hoge', 2, '/smartphone/hoge', 'ページのURLを取得できません'),
-			array('hoge', 3, '/smartphone/garaphone/hoge', 'ページのURLを取得できません'),
-			array('hoge', 4, '/smartphone/garaphone/garaphone2/hoge', 'ページのURLを取得できません'),
 		);
 	}
 

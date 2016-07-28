@@ -360,7 +360,6 @@ class PageCategory extends AppModel {
 		if ($pages) {
 			foreach ($pages as $page) {
 				$page['Page']['page_category_id'] = '';
-				$page['Page']['url'] = $this->Page->getPageUrl($page);
 				$this->Page->set($page);
 				if (!$this->Page->save()) {
 					$ret = false;
@@ -407,7 +406,6 @@ class PageCategory extends AppModel {
 		if ($pages) {
 			$this->Page->saveFile = false;
 			foreach ($pages as $page) {
-				$page['Page']['url'] = $this->Page->getPageUrl($page);
 				$this->Page->set($page);
 				if (!$this->Page->save()) {
 					$result = false;
