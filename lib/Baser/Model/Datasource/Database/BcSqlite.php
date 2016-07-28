@@ -997,8 +997,8 @@ class BcSqlite extends Sqlite {
 				// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
 				'length' => ($column[0]['type']) ? $this->length($column[0]['type']) : ''
 			);
-			if (in_array($fields[$column['name']]['type'], array('timestamp', 'datetime')) && strtoupper($fields[$column['name']]['default']) === 'CURRENT_TIMESTAMP') {
-				$fields[$column['name']]['default'] = null;
+			if (in_array($fields[$column[0]['name']]['type'], array('timestamp', 'datetime')) && strtoupper($fields[$column[0]['name']]['default']) === 'CURRENT_TIMESTAMP') {
+				$fields[$column[0]['name']]['default'] = null;
 			}
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
 			if ($fields[$column[0]['name']]['default'] == 'NULL') {
