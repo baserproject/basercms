@@ -75,10 +75,10 @@ if($this->request->data['Site']['relate_main_site'] && $this->request->data['Con
 					<?php endif ?>
 					<span class="url">
 						<?php if(!$this->request->data['Content']['site_root']): ?>
-							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20)) ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>
+							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20)) ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?> <?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->error('Content.name') ?>
 						<?php else: ?>
-							<?php echo $baseUrl ?><?php echo $this->BcForm->value('Content.name') ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>
+							<?php echo $baseUrl ?><?php echo $this->BcForm->value('Content.name') ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?> <?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->hidden('Content.name') ?>
 						<?php endif ?>
 					</span>
