@@ -422,7 +422,7 @@ class Page extends AppModel {
 		$url = $this->Content->createUrl($data['Content']['parent_id'], 'ContentFolder');
 		if($url != '/') {
 			$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
-			if($data['Content']['site_id'] !== 0) {
+			if($data['Content']['site_id'] != 0) {
 				$urlAry[0] = $this->Content->Site->field('name', ['Site.id' => $data['Content']['site_id']]);
 			}
 			foreach ($urlAry as $value) {

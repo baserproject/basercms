@@ -549,10 +549,11 @@ class PagesController extends AppController {
 		if($this->content['alias_id']) {
 			$urlTmp = $this->Content->field('url', ['Content.id' => $this->content['alias_id']]);
 		} else {
-			$urlTmp = $this->request->url;
+			$urlTmp = $this->content['url'];
 		}
+		$urlTmp = preg_replace('/^\//', '', $urlTmp);
 		if($this->site['alias']) {
-			$path = [preg_replace('/^' . preg_quote($this->site['alias'], '/') .'\//', $this->site['name'] . '/', $urlTmp)];	
+			$path = [preg_replace('/^' . preg_quote($this->site['alias'], '/') .'\//', $this->site['name'] . '/', $urlTmp)];
 		} else {
 			$path = [$urlTmp];
 		}

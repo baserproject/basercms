@@ -16,7 +16,7 @@
 		<?php $this->BcBaser->css('style') ?>
 
 <?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
+			'jquery-1.7.2.min',
 			'admin/functions',
 			'startup',
 			'jquery.bxSlider.min',
