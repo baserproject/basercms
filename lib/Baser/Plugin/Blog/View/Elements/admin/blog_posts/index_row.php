@@ -35,7 +35,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	</td>
 	<td><?php echo $data['BlogPost']['no']; ?></td>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['posts_date']); ?></td>
-	<?php if ($existEyeCatch): ?>
+	<?php if (Hash::get($data, 'BlogPost.eye_catch')): ?>
 	<td class="eye_catch"><?php echo $this->BcUpload->uploadImage('BlogPost.eye_catch',  $data['BlogPost']['eye_catch'], array('imgsize' => 'mobile_thumb')) ?></td>
 	<?php endif ?>
 	<td>
