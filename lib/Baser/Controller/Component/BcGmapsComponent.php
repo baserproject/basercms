@@ -107,7 +107,7 @@ class BcGmapsComponent extends Component {
  */
 	protected function _connect($param) {
 		$apiKey = empty($this->Controller->siteConfig['google_maps_api_key']) ? "" : $this->Controller->siteConfig['google_maps_api_key'];
-		$requestUrl = $this->_baseUrl . "key=" . $key . "&address=" . urlencode($param);
+		$requestUrl = $this->_baseUrl . "key=" . $apiKey . "&address=" . urlencode($param);
 
 		App::uses('Xml', 'Utility');
 
