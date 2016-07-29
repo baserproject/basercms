@@ -306,6 +306,13 @@ q {}',
 			'created' => '2015-01-27 12:58:10',
 			'modified' => '2015-01-27 12:58:25'
 		),
+		array(
+			'id' => '40',
+			'name' => 'google_maps_api_key',
+			'value' => 'AIzaSyBeDLfQ5IY3qYm9D9T6OCscuGFB7_0WH08',
+			'created' => '2015-01-27 12:58:10',
+			'modified' => '2015-01-27 12:58:25'
+		),
 	);
 
 }
