@@ -64,10 +64,6 @@ class PagesController extends AppController {
 		// 認証設定
 		$this->BcAuth->allow('display', 'mobile_display', 'smartphone_display');
 
-		if (!empty($this->request->params['admin'])) {
-			$this->crumbs = array(array('name' => '固定ページ管理', 'url' => array('controller' => 'pages', 'action' => 'index')));
-		}
-
 		$user = $this->BcAuth->user();
 		if ($user) {
 			$newCatAddable = $this->PageCategory->checkNewCategoryAddable(
@@ -464,10 +460,10 @@ class PagesController extends AppController {
 		$this->set('smartphoneExists', $this->Page->agentExists('smartphone', $this->request->data));
 		$this->set('rootMobileId', $this->PageCategory->getAgentId('mobile'));
 		$this->set('rootSmartphoneId', $this->PageCategory->getAgentId('smartphone'));
-		if (!empty($this->request->data['Page']['title'])) {
-			$this->pageTitle = '固定ページ情報編集：' . $this->request->data['Page']['title'];
+		if (!empty($this->request->data['Content']['title'])) {
+			$this->pageTitle = '固定ページ情報編集：' . $this->request->data['Content']['title'];
 		} else {
-			$this->pageTitle = '固定ページ情報編集：' . Inflector::Classify($this->request->data['Page']['name']);
+			$this->pageTitle = '固定ページ情報編集：' . Inflector::Classify($this->request->data['Content']['name']);
 		}
 		$this->help = 'pages_form';
 		$this->render('form');
@@ -595,9 +591,6 @@ class PagesController extends AppController {
 			$this->helpers[] = 'BcCache';
 			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
-
-		// ナビゲーションを取得
-		$this->crumbs = $this->_getCrumbs($url);
 
 		$this->subMenuElements = array('default');
 		// <<<
