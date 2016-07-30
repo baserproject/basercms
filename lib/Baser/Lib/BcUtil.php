@@ -41,7 +41,7 @@ class BcUtil extends Object {
  * @return boolean
  */
 	public static function isAdminUser() {
-		$user = self::loginUser();
+		$user = self::loginUser('admin');
 		if (empty($user['UserGroup']['name'])) {
 			return false;
 		}
@@ -53,9 +53,9 @@ class BcUtil extends Object {
  * 
  * @return array
  */
-	public static function loginUser() {
+	public static function loginUser($prefix = 'admin') {
 		$Session = new CakeSession();
-		$sessionKey = BcUtil::getLoginUserSessionKey();
+		$sessionKey = Configure::read('BcAuthPrefix.' . $prefix . '.sessionKey');
 		$user = $Session->read('Auth.' . $sessionKey);
 		if (!$user) {
 			if (!empty($_SESSION['Auth'][$sessionKey])) {
@@ -71,9 +71,6 @@ class BcUtil extends Object {
  */
 	public static function getLoginUserSessionKey() {
 		list(, $sessionKey) = explode('.', BcAuthComponent::$sessionKey);
-		if (empty($sessionKey)) {
-			$sessionKey = 'User';
-		}
 		return $sessionKey;
 	}
 /**
