@@ -661,18 +661,6 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 /**
- * テーマのページテンプレートを初期化する 
- * 
- * @return boolean
- */
-	public function testResetThemePages() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-		$this->BcManager->resetThemePages();
-		$this->BcManager->deployTheme();
-	}
-
-/**
  * files フォルダを初期化する
  * 
  * @return boolean

@@ -546,26 +546,27 @@ class PagesController extends AppController {
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
-		if($this->content['alias_id']) {
-			$urlTmp = $this->Content->field('url', ['Content.id' => $this->content['alias_id']]);
-		} else {
-			$urlTmp = $this->content['url'];
-		}
-		$urlTmp = preg_replace('/^\//', '', $urlTmp);
-		if($this->site['alias']) {
-			$path = [preg_replace('/^' . preg_quote($this->site['alias'], '/') .'\//', $this->site['name'] . '/', $urlTmp)];
-		} else {
-			$path = [$urlTmp];
-		}
-		if (is_array($path) && count($path) == 1) {
+		if(empty($this->request->params['requested'])) {
+			if($this->content['alias_id']) {
+				$urlTmp = $this->Content->field('url', ['Content.id' => $this->content['alias_id']]);
+			} else {
+				$urlTmp = $this->content['url'];
+			}
+			$urlTmp = preg_replace('/^\//', '', $urlTmp);
 			$path = explode('/', $path[0]);
 		}
 
+		if($this->site['alias']) {
+			if($path[0] == $this->site['alias']) {
+				$path[0] = $this->site['name'];
+			}
+		}
+
 		$url = '/' . implode('/', $path);
-		
+
 		$count = count($path);
 		if (!$count) {
-			return $this->redirect('/');
+			$this->redirect('/');
 		}
 		$page = $subpage = $titleForLayout = null;
 

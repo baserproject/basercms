@@ -84,6 +84,13 @@ class BcContentsComponent extends Component {
 		}
 		// フロントで現在のページが関連している Content を設定する
 		if(!BcUtil::isAdminSystem()) {
+			if($controller->request->params['requested']) {
+				$urlAry = $controller->request->params['pass'];
+				$url = '/' . implode('/', $urlAry);
+				$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
+				Configure::write('BcContents.currentContent', $data['Content']);
+				Configure::write('BcContents.currentSite', $data['Site']);
+			}
 			$currentContent = Configure::read('BcContents.currentContent');
 			$currentSite = Configure::read('BcContents.currentSite');
 			if ($currentContent) {
@@ -290,8 +297,12 @@ class BcContentsComponent extends Component {
  * レイアウトテンプレートを取得する
  *
  * @param $id
+ * @return string $parentTemplate|false
  */
 	public function getParentLayoutTemplate($id) {
+		if(!$id) {
+			return false;
+		}
 		$contents = $this->_Controller->Content->getPath($id);
 		$contents = array_reverse($contents);
 		unset($contents[0]);

@@ -269,7 +269,7 @@ class BcManagerComponent extends Component {
 	public function createPageTemplates() {
 		$Page = ClassRegistry::init('Page');
 		clearAllCache();
-		$pages = $Page->find('all', array('recursive' => -1));
+		$pages = $Page->find('all', array('recursive' => 0));
 		if ($pages) {
 			foreach ($pages as $page) {
 				$Page->create($page);
@@ -1078,6 +1078,8 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function deployTheme($theme = null) {
+		
+		$this->resetTheme();
 		$Folder = new Folder(BASER_CONFIGS . 'theme');
 		
 		if ($theme) {
@@ -1095,7 +1097,6 @@ class BcManagerComponent extends Component {
 		foreach ($sources as $theme) {
 			$targetPath = WWW_ROOT . 'theme' . DS . $theme;
 			$sourcePath = BASER_CONFIGS . 'theme' . DS . $theme;
-			$Folder->delete($targetPath);
 			if ($Folder->copy(array('to' => $targetPath, 'from' => $sourcePath, 'mode' => 00777, 'skip' => array('_notes')))) {
 				if (!$Folder->create($targetPath . DS . 'Pages', 00777)) {
 					$result = false;
@@ -1172,40 +1173,6 @@ class BcManagerComponent extends Component {
 				$result = false;
 			}
 		}
-		return $result;
-	}
-
-/**
- * テーマのページテンプレートを初期化する 
- * 
- * @return boolean
- */
-	public function resetThemePages() {
-		$result = true;
-		$themeFolder = new Folder(WWW_ROOT . 'theme');
-		$themeFiles = $themeFolder->read(true, true, true);
-		foreach ($themeFiles[0] as $theme) {
-			$pagesFolder = new Folder($theme . DS . 'Pages');
-			$pathes = $pagesFolder->read(true, true, true);
-			foreach ($pathes[0] as $path) {
-				if (basename($path) != 'admin') {
-					$folder = new Folder();
-					if (!$folder->delete($path)) {
-						$result = false;
-					}
-					$folder = null;
-				}
-			}
-			foreach ($pathes[1] as $path) {
-				if (basename($path) != 'empty') {
-					if (!unlink($path)) {
-						$result = false;
-					}
-				}
-			}
-			$pagesFolder = null;
-		}
-		$themeFolder = null;
 		return $result;
 	}
 
@@ -1300,9 +1267,9 @@ class BcManagerComponent extends Component {
 		}
 
 		// テーマのページテンプレートを初期化
-		if (!$this->resetThemePages()) {
+		if (!$this->resetTheme()) {
 			$result = false;
-			$this->log('テーマのページテンプレートを初期化できませんでした。');
+			$this->log('テーマフォルダを初期化できませんでした。');
 		}
 		
 		// files フォルダの初期化
@@ -1323,6 +1290,26 @@ class BcManagerComponent extends Component {
 		return $result;
 	}
 
+/**
+ * テーマリセットする
+ *
+ * @return bool
+ */
+	public function resetTheme() {
+		$Folder = new Folder(BASER_CONFIGS . 'theme');
+		$sources = $Folder->read()[0];
+		$result = true;
+		foreach ($sources as $theme) {
+			$targetPath = WWW_ROOT . 'theme' . DS . $theme;
+			if(is_dir($targetPath)) {
+				if(!$Folder->delete($targetPath)) {
+					$result = false;
+				}
+			}
+		}
+		return $result;
+	}
+	
 /**
  * インストール設定を書き換える
  *
