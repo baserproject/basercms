@@ -168,7 +168,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 						if (!empty($viewParams['plugin'])) {
 							$plugin = $viewParams['plugin'];
 						}
-						Router::connect($url . '/:action/*', array(
+						Router::connect(urldecode($content['Content']['url']) . '/:action/*', array(
 							'plugin' => $plugin,
 							'controller' => $viewParams['controller'],
 							$content['Content']['entity_id']
