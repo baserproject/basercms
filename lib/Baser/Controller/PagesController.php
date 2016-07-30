@@ -553,7 +553,7 @@ class PagesController extends AppController {
 				$urlTmp = $this->content['url'];
 			}
 			$urlTmp = preg_replace('/^\//', '', $urlTmp);
-			$path = explode('/', $path[0]);
+			$path = explode('/', $urlTmp);
 		}
 
 		if($this->site['alias']) {

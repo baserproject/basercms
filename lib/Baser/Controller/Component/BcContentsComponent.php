@@ -84,7 +84,7 @@ class BcContentsComponent extends Component {
 		}
 		// フロントで現在のページが関連している Content を設定する
 		if(!BcUtil::isAdminSystem()) {
-			if($controller->request->params['requested']) {
+			if(!empty($controller->request->params['requested'])) {
 				$urlAry = $controller->request->params['pass'];
 				$url = '/' . implode('/', $urlAry);
 				$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
