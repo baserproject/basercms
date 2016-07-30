@@ -10,13 +10,13 @@
  * @license			http://basercms.net/license/index.html
  */
 
-class MessageFixture extends BaserTestFixture {
+class MailMessageFixture extends BaserTestFixture {
 /**
  * Name of the object
  *
  * @var string
  */
-  public $name = 'Message';
+  public $name = 'MailMessage';
 
 /**
  * Fields

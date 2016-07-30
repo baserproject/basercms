@@ -18,9 +18,9 @@
 /**
  * メッセージテーブル構築
  */
-	App::uses('Message', 'Mail.Model');
-	$Message = new Message();
-	$Message->reconstructionAll();
+	App::uses('MailMessage', 'Mail.Model');
+	$MailMessage = new MailMessage();
+	$MailMessage->reconstructionAll();
 
 /**
  * 必要フォルダ初期化

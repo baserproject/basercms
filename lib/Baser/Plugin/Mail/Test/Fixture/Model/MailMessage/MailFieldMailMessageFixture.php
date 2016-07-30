@@ -5,12 +5,12 @@
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Mail.Test.Fixture.Model.Message
+ * @package			Mail.Test.Fixture.Model.MailMessage
  * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */
 
-class MailFieldMessageFixture extends BaserTestFixture {
+class MailFieldMailMessageFixture extends BaserTestFixture {
 /**
  * Name of the object
  *

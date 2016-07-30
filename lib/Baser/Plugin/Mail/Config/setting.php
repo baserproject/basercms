@@ -33,9 +33,38 @@ foreach ($mailContents as $mailContent) {
 		array('name' => '[' . $mailContent['title'] . '] 設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $mailContent['id'])),
 	));
 }
-//$config['BcContents']['items']['Mail'] = [
-//	'Mail'	=> [
-//		'title' => 'メール',
-//		'icon' => 'admin/icon_mail.png'
-//	]
-//];
+$config['BcContents']['items']['Mail'] = [
+	'MailContent'	=> [
+		'title' => 'メールフォーム',
+		'multiple'	=> true,
+		'preview'	=> true,
+		'icon'	=> 'admin/icon_mail.png',
+		'routes' => [
+			'add'	=> [
+				'plugin'	=> 'mail',
+				'controller'=> 'mail_contents',
+				'action'	=> 'ajax_add'
+			],
+			'edit'	=> [
+				'plugin'	=> 'mail',
+				'controller'=> 'mail_contents',
+				'action'	=> 'edit'
+			],
+			'delete' => [
+				'plugin'	=> 'mail',
+				'controller'=> 'mail_contents',
+				'action'	=> 'delete'
+			],
+			'view' => [
+				'plugin'	=> 'mail',
+				'controller'=> 'mail',
+				'action'	=> 'index'
+			],
+			'copy'	=> [
+				'plugin'	=> 'mail',
+				'controller'=> 'mail_contents',
+				'action'	=> 'ajax_copy'
+			]
+		]
+	]	
+];

@@ -13,5 +13,5 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-<?php $this->BcCsv->addModelDatas(Inflector::camelize($contentName . '_message'), $messages) ?>
+<?php $this->BcCsv->addModelDatas('MailMessage' . $mailContent['MailContent']['id'], $messages) ?>
 <?php $this->BcCsv->download($contentName) ?>

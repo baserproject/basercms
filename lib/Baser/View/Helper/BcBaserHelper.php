@@ -788,7 +788,7 @@ class BcBaserHelper extends AppHelper {
 		$currentPrefix = $this->_View->get('currentPrefix');
 		$authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 		$toolbar = true;
-		if (isset($authPrefix['toolbar'])) {
+		if ($authPrefix && isset($authPrefix['toolbar'])) {
 			$toolbar = $authPrefix['toolbar'];
 		}
 

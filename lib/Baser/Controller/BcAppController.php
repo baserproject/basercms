@@ -637,7 +637,6 @@ class BcAppController extends Controller {
  * beforeRenderで呼び出される
  *
  * @return	void
- * @access	private
  */
 	private function __loadDataToView() {
 		$this->set('subMenuElements', $this->subMenuElements);	// サブメニューエレメント
@@ -646,21 +645,30 @@ class BcAppController extends Controller {
 		$this->set('help', $this->help);
 		$this->set('preview', $this->preview);
 
-		/* ログインユーザー */
-		$sessionKey = BcUtil::getLoginUserSessionKey();
-		if (BC_INSTALLED && isset($_SESSION['Auth'][$sessionKey]) && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
-			$this->set('user', $_SESSION['Auth'][$sessionKey]);
-			if (!empty($this->request->params['admin'])) {
-				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $_SESSION['Auth'][$sessionKey]['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
-			}
-		}
-
 		if (!empty($this->request->params['prefix'])) {
 			$currentPrefix = $this->request->params['prefix'];
 		} else {
 			$currentPrefix = 'front';
 		}
 		$this->set('currentPrefix', $currentPrefix);
+		$authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
+		$user = null;
+		if($authPrefix) {
+			$sessionKey = BcUtil::getLoginUserSessionKey();
+			$user = BcUtil::loginUser($currentPrefix);
+		} else {
+			$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+			$user = BcUtil::loginUser('admin');
+		}
+		/* ログインユーザー */
+		
+		if (BC_INSTALLED && $user && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
+			$this->set('user', $user);
+			if (!empty($this->request->params['admin'])) {
+				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $user['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+			}
+		}
+		
 		$currentUserAuthPrefixes = array();
 		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));

@@ -17,7 +17,7 @@ class MailContentTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.SearchIndex',
-		'plugin.mail.Default/Message',
+		'plugin.mail.Default/MailMessage',
 		'plugin.mail.Default/MailConfig',
 		'plugin.mail.Default/MailContent',
 		'plugin.mail.Default/MailField',

@@ -26,12 +26,12 @@
 <?php /* 送信ボタン */ ?>
 <?php if ($freezed): ?>
 	<center>
-		<?php echo $this->Mailform->hidden('Message.mode', array('value' => 'Submit')) ?>
+		<?php echo $this->Mailform->hidden('MailMessage.mode', array('value' => 'Submit')) ?>
 		<?php echo $this->Mailform->submit('　送信する　', array('class' => 'button')) ?>
 	</center>
 	<?php else: ?>
 	<center>
-		<?php echo $this->Mailform->hidden('Message.mode', array('value' => 'Confirm')) ?>
+		<?php echo $this->Mailform->hidden('MailMessage.mode', array('value' => 'Confirm')) ?>
 		<?php echo $this->Mailform->submit('　入力内容を確認する　', array("class" => "button")) ?>
 	</center>
 <?php endif; ?>

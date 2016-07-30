@@ -18,12 +18,12 @@
 	<th>メールフォーム管理メニュー</th>
 	<td>
 		<ul class="cleafix">
+			<li><?php $this->BcBaser->link($this->content['title'] . '設定', array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('メールフィールド一覧', array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('メールフィールド新規追加', array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link($mailContent['MailContent']['title'].'設定', array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link('公開ページ確認', '/' . $mailContent['MailContent']['name'] . '/index') ?></li>
 			<li><?php $this->BcBaser->link('受信メール一覧', array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('受信メールCSVダウンロード', array('controller' => 'mail_fields', 'action' => 'download_csv', $mailContent['MailContent']['id'])) ?></li>
+			<li><?php $this->BcBaser->link('メールプラグイン基本設定', array('controller' => 'mail_configs', 'action' => 'form')) ?></li>
 		</ul>
 	</td>
 </tr>

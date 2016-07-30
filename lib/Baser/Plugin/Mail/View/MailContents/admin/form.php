@@ -11,73 +11,10 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+$this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 ?>
 
 
-<script type="text/javascript">
-$(window).load(function() {
-	$("#MailContentName").focus();
-});
-$(function(){
-	$('input[name="data[MailContent][sender_1_]"]').click(mailContentSender1ClickHandler);
-	$("#MailContentSender1").hide();
-
-	if($('input[name="data[MailContent][sender_1_]"]:checked').val()===undefined){
-		if($("#MailContentSender1").val()!=''){
-			$("#MailContentSender11").attr('checked',true);
-		}else{
-			$("#MailContentSender10").attr('checked',true);
-		}
-	}
-	$("#EditLayout").click(function(){
-		if(confirm('メールフォーム設定を保存して、レイアウトテンプレート '+$("#MailContentLayoutTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#MailContentEditLayout").val(1);
-			$("#MailContentEditMailForm").val('');
-			$("#MailContentEditMail").val('');
-			$("#MailContentAdminEditForm").submit();
-		}
-	});
-	$("#EditForm").click(function(){
-		if(confirm('メールフォーム設定を保存して、メールフォームテンプレート '+$("#MailContentFormTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#MailContentEditLayout").val('');
-			$("#MailContentEditMailForm").val(1);
-			$("#MailContentEditMail").val('');
-			$("#MailContentAdminEditForm").submit();
-		}
-	});
-	$("#EditMail").click(function(){
-		if(confirm('メールフォーム設定を保存して、送信メールテンプレート '+$("#MailContentMailTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#MailContentEditLayout").val('');
-			$("#MailContentEditMailForm").val('');
-			$("#MailContentEditMail").val(1);
-			$("#MailContentAdminEditForm").submit();
-		}
-	});
-	mailContentSender1ClickHandler();
-});
-
-function mailContentSender1ClickHandler(){
-	if($('input[name="data[MailContent][sender_1_]"]:checked').val() == '1'){
-		$("#MailContentSender1").slideDown(100);
-	}else{
-		$("#MailContentSender1").slideUp(100);
-	}
-}
-</script>
-<?php if ($this->action == 'admin_edit'): ?>
-	<div class="em-box align-left">このメールフォームのURL：
-		<?php if (!empty($mailContent['MailContent']['status'])): ?>
-			<?php
-			$this->BcBaser->link(
-				$this->BcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index'), '/' . $mailContent['MailContent']['name'] . '/index')
-			?>
-		<?php else: ?>
-			<?php echo $this->BcBaser->getUri('/' . $mailContent['MailContent']['name'] . '/index') ?>
-		<?php endif; ?>
-	</div>
-		<?php endif; ?>
-
-<!-- form -->
 <h2>基本項目</h2>
 
 <?php echo $this->BcForm->create('MailContent', array('novalidate' => true)) ?>
@@ -92,28 +29,6 @@ function mailContentSender1ClickHandler(){
 				</td>
 			</tr>
 <?php endif; ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.name', 'メールフォームアカウント名') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-<?php echo $this->BcForm->error('MailContent.name') ?>
-				<div id="helptextName" class="helptext">
-					<ul>
-						<li>メールフォームのURLに利用します。<br />
-							<div class="example-box">(例)メールフォームアカウント名が test の場合<br />http://{baserCMS設置URL}/test/index</div></li>
-						<li>半角英数字、ハイフン、アンダースコアで入力してください。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.title', 'メールフォームタイトル') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-<?php echo $this->BcForm->error('MailContent.title') ?>
-			</td>
-		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.description', 'メールフォーム説明文') ?></th>
 			<td class="col-input">
@@ -183,20 +98,6 @@ function mailContentSender1ClickHandler(){
 				</div>
 			</td>
 		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.status', '公開期間') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
-				<?php echo $this->BcForm->error('MailContent.status') ?>
-				&nbsp;&nbsp;
-				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
-				&nbsp;〜&nbsp;
-<?php echo $this->BcForm->dateTimePicker('MailContent.publish_end', array('size' => 12, 'maxlength' => 10), true) ?><br />
-<?php echo $this->BcForm->input('MailContent.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
-<?php echo $this->BcForm->error('MailContent.publish_begin') ?>
-<?php echo $this->BcForm->error('MailContent.publish_end') ?>
-			</td>
-		</tr>
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>	
 </div>
@@ -204,6 +105,21 @@ function mailContentSender1ClickHandler(){
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.status', 'フォーム受付期間') ?></th>
+			<td class="col-input">
+				&nbsp;&nbsp;
+				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+				&nbsp;〜&nbsp;
+				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">
+					<p>公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエラーではなく受付期間外のページを表示します。</p>
+				</div>
+				<?php echo $this->BcForm->error('MailContent.publish_begin') ?>
+				<?php echo $this->BcForm->error('MailContent.publish_end') ?>
+			</td>
+		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.save_info', '送信情報') ?></th>
 			<td class="col-input">
@@ -270,24 +186,6 @@ function mailContentSender1ClickHandler(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.layout_template', 'レイアウトテンプレート名') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('MailContent.layout_template', array('type' => 'select', 'options' => $this->Mail->getLayoutTemplates())) ?>
-				<?php echo $this->BcForm->input('MailContent.edit_layout', array('type' => 'hidden')) ?>
-<?php if ($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditLayout')) ?>
-<?php endif ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpLayoutTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-<?php echo $this->BcForm->error('MailContent.layout_template') ?>
-				<div id="helptextLayoutTemplate" class="helptext">
-					<ul>
-						<li>メールフォームの外枠のテンプレートを指定します。</li>
-						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.form_template', 'メールフォームテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $this->Mail->getFormTemplates())) ?>
@@ -330,11 +228,6 @@ function mailContentSender1ClickHandler(){
 <!-- button -->
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php if ($this->action == 'admin_edit'): ?>
-		<?php
-		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('MailContent.id')), array('class' => 'button'), sprintf("%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。", $this->BcForm->value('MailContent.name')), false);
-		?>
-	<?php endif; ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

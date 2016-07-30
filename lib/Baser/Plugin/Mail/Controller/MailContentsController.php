@@ -14,6 +14,13 @@
  * メールコンテンツコントローラー
  *
  * @package Mail.Controller
+ * @property MailMessage $MailMessage
+ * @property MailContent $MailContent
+ * @property BcAuthComponent $BcAuth
+ * @property CookieComponent $Cookie
+ * @property BcAuthConfigureComponent $BcAuthConfigure
+ * @property BcContentsComponent $BcContents
+ * @property Content $Content
  */
 class MailContentsController extends MailAppController {
 
@@ -29,7 +36,7 @@ class MailContentsController extends MailAppController {
  *
  * @var array
  */
-	public $uses = array("Mail.MailContent", 'Mail.Message');
+	public $uses = array("Mail.MailContent", 'Mail.MailMessage');
 
 /**
  * ヘルパー
@@ -43,16 +50,7 @@ class MailContentsController extends MailAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = array(
-		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
-	);
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
 
 /**
  * サブメニューエレメント
@@ -75,6 +73,32 @@ class MailContentsController extends MailAppController {
 	}
 
 /**
+ * メールフォーム登録
+ *
+ * @return mixed json|false
+ */
+	public function admin_ajax_add() {
+		$this->autoRender = false;
+		if(!$this->request->data) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$this->request->data['MailContent'] = $this->MailContent->getDefaultValue()['MailContent'];
+		if ($data = $this->MailContent->save($this->request->data)) {
+			$this->MailMessage->createTable($data['MailContent']['id']);
+			$message = 'メールフォーム「' . $this->request->data['Content']['title'] . '」を追加しました。';
+			$this->setMessage($message, false, true, false);
+			return json_encode(array(
+				'contentId' => $this->Content->id,
+				'entityId' => $this->MailContent->id,
+				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
+			));
+		} else {
+			$this->ajaxError(500, $this->MailContent->validationErrors);
+		}
+		return false;
+	}
+	
+/**
  * [ADMIN] メールフォーム追加
  *
  * @return void
@@ -92,7 +116,7 @@ class MailContentsController extends MailAppController {
 			}
 			$this->MailContent->create($this->request->data);
 			if ($this->MailContent->validates()) {
-				if ($this->Message->createTable($this->request->data['MailContent']['name'])) {
+				if ($this->MailMessage->createTable($this->request->data['MailContent']['id'])) {
 					/* データを保存 */
 					if ($this->MailContent->save(null, false)) {
 						$this->setMessage('新規メールフォーム「' . $this->request->data['MailContent']['title'] . '」を追加しました。', false, true);
@@ -119,7 +143,7 @@ class MailContentsController extends MailAppController {
  * @return void
  */
 	public function admin_edit($id) {
-		/* 除外処理 */
+
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
@@ -128,104 +152,55 @@ class MailContentsController extends MailAppController {
 		if (empty($this->request->data)) {
 			$this->request->data = $this->MailContent->read(null, $id);
 		} else {
-			$old = $this->MailContent->read(null, $id);
 			if (!$this->request->data['MailContent']['sender_1_']) {
 				$this->request->data['MailContent']['sender_1'] = '';
 			}
 			$this->MailContent->set($this->request->data);
 			if ($this->MailContent->validates()) {
-				$ret = true;
-				// メッセージテーブルの名前を変更
-				if ($old['MailContent']['name'] != $this->request->data['MailContent']['name']) {
-					$ret = $this->Message->renameTable($old['MailContent']['name'], $this->request->data['MailContent']['name']);
-				}
-				/* 更新処理 */
-				if ($ret) {
-					if ($this->MailContent->save(null, false)) {
-
-						$this->setMessage('メールフォーム「' . $this->request->data['MailContent']['title'] . '」を更新しました。', false, true);
-
-						if ($this->request->data['MailContent']['edit_layout']) {
-							$this->redirectEditLayout($this->request->data['MailContent']['layout_template']);
-						} elseif ($this->request->data['MailContent']['edit_mail_form']) {
-							$this->redirectEditForm($this->request->data['MailContent']['form_template']);
-						} elseif ($this->request->data['MailContent']['edit_mail']) {
-							$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
-						} else {
-							$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
-						}
+				if ($this->MailContent->save(null, false)) {
+					$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
+					if ($this->request->data['MailContent']['edit_layout']) {
+						$this->redirectEditLayout($this->request->data['MailContent']['layout_template']);
+					} elseif ($this->request->data['MailContent']['edit_mail_form']) {
+						$this->redirectEditForm($this->request->data['MailContent']['form_template']);
+					} elseif ($this->request->data['MailContent']['edit_mail']) {
+						$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
 					} else {
-						$this->setMessage('データベース処理中にエラーが発生しました。', true);
+						$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
 					}
 				} else {
-					$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルのリネームに失敗しました。', true);
+					$this->setMessage('データベース処理中にエラーが発生しました。', true);
 				}
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
-		/* 表示設定 */
+		$this->content = $this->BcContents->getContent($id)['Content'];
+		$this->set('publishLink', $this->content['url']);
 		$this->set('mailContent', $this->request->data);
-		$this->subMenuElements = array('mail_fields', 'mail_common');
-		$this->pageTitle = 'メールフォーム設定編集：' . $this->request->data['MailContent']['title'];
+		$this->subMenuElements = ['mail_fields'];
+		$this->pageTitle = 'メールフォーム設定編集：' . $this->request->data['Content']['title'];
 		$this->help = 'mail_contents_form';
 		$this->render('form');
 	}
-
+	
 /**
- * [ADMIN] 削除処理　(ajax);
+ * 削除
  *
- * @param int ID
- * @return void
- */
-	public function admin_ajax_delete($id = null) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
-		}
-
-		// メッセージ用にデータを取得
-		$mailContent = $this->MailContent->read(null, $id);
-
-		/* 削除処理 */
-		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
-			if ($this->MailContent->delete($id)) {
-				$message = 'メールフォーム「' . $mailContent['MailContent']['title'] . '」 を削除しました。';
-				$this->MailContent->saveDbLog($message);
-				exit(true);
-			}
-		}
-		exit();
-	}
-
-/**
- * [ADMIN] 削除処理
+ * Controller::requestAction() で呼び出される
  *
- * @param int ID
- * @return void
+ * @return bool
  */
-	public function admin_delete($id = null) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+	public function admin_delete() {
+		if(empty($this->request->data['entityId'])) {
+			return false;
 		}
-
-		// メッセージ用にデータを取得
-		$mailContent = $this->MailContent->read(null, $id);
-
-		/* 削除処理 */
-		if ($this->Message->dropTable($mailContent['MailContent']['name'])) {
-			if ($this->MailContent->delete($id)) {
-				$this->setMessage('メールフォーム「' . $mailContent['MailContent']['title'] . '」 を削除しました。', false, true);
-			} else {
-				$this->setMessage('データベース処理中にエラーが発生しました。', true);
-			}
-		} else {
-			$this->setMessage('データベースに問題があります。メール受信データ保存用テーブルの削除に失敗しました。', true);
+		if($this->MailContent->delete($this->request->data['entityId'])) {
+			$this->MailMessage->dropTable($this->request->data['entityId']);
+			return true;
 		}
-		$this->redirect(array('action' => 'index'));
+		return false;
 	}
 
 /**
@@ -316,28 +291,28 @@ class MailContentsController extends MailAppController {
 	}
 
 /**
- * データをコピーする
+ * コピー
  *
- * @param int $mailContentId
- * @param int $Id
- * @return void
+ * @return bool
  */
-	public function admin_ajax_copy($id) {
-		/* 除外処理 */
-		if (!$id) {
+	public function admin_ajax_copy() {
+		$this->autoRender = false;
+		if(!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-
-		$result = $this->MailContent->copy($id);
-		if ($result) {
-			$this->set('data', $result);
+		$user = $this->BcAuth->user();
+		if ($this->MailContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
+			$message = 'メールフォームのコピー「' . $this->request->data['title'] . '」を追加しました。';
+			$this->setMessage($message, false, true, false);
+			return json_encode(array(
+				'contentId' => $this->Content->id,
+				'entityId' => $this->MailContent->id,
+				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
+			));
 		} else {
-			if (isset($this->MailContent->validationErrors['name']) && $this->MailContent->validate['name']['maxLength']['message'] == $this->MailContent->validationErrors['name']) {
-				$this->ajaxError(500, 'コピー元のメールコンテンツ名が長い為コピーに失敗しました。<br />コピー後のメールコンテンツ名は20文字以内になる必要があります。');
-			} else {
-				$this->ajaxError(500, $this->MailContent->validationErrors);
-			}
+			$this->ajaxError(500, $this->MailContent->validationErrors);
 		}
+		return false;
 	}
 
 }

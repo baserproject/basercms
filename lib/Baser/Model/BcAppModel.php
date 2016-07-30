@@ -22,6 +22,7 @@ App::uses('AppController', 'Controller');
  * 既存のCakePHPプロジェクトで、設置済のAppModelと共存できるように、AppModelとは別にした。
  *
  * @package			Baser.Model
+ * @property Content $Content
  */
 class BcAppModel extends Model {
 

@@ -10,62 +10,48 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('Message', 'Mail.Model');
+App::uses('MailMessage', 'Mail.Model');
 
-class MessageTest extends BaserTestCase {
+class MailMessageTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.pluginContent',
-		'plugin.mail.Default/Message',
+		'plugin.mail.Default/MailMessage',
 		'plugin.mail.Default/MailConfig',
-		'plugin.mail.Model/Message/MailContentMessage',
-		'plugin.mail.Model/Message/MailFieldMessage',
+		'plugin.mail.Model/MailMessage/MailContentMailMessage',
+		'plugin.mail.Model/MailMessage/MailFieldMailMessage',
 	);
 
 	public function setUp() {
-		$this->Message = ClassRegistry::init('Mail.Message');
+		$this->MailMessage = ClassRegistry::init('Mail.MailMessage');
 		parent::setUp();
 	}
 
 	public function tearDown() {
-		unset($this->Message);
+		unset($this->MailMessage);
 		parent::tearDown();
 	}
 	
 /**
  * モデルのセットアップを行う
  * 
- * Messageモデルは利用前にこのメソッドを呼び出しておく必要あり
+ * MailMessageモデルは利用前にこのメソッドを呼び出しておく必要あり
  * 
  * @param type $mailContentId
  * @return boolean
  */
 	public function testSetup() {
-		$this->Message->setup(1);
-		$this->assertEquals('mysite_test_contact_', $this->Message->tablePrefix, 'テーブルプレフィックスを正しく設定できません');
+		$this->MailMessage->setup(1);
+		$this->assertEquals('mysite_test_contact_', $this->MailMessage->tablePrefix, 'テーブルプレフィックスを正しく設定できません');
 
 		// setupUpload
-		$this->Message->setup(99);
+		$this->MailMessage->setup(99);
 		// protectedな値にアクセスするため配列にキャストする
-		$result = (array) $this->Message->Behaviors;
-		$saveDir = $result["\0*\0_loaded"]['BcUpload']->settings['Message']['saveDir'];
+		$result = (array) $this->MailMessage->Behaviors;
+		$saveDir = $result["\0*\0_loaded"]['BcUpload']->settings['MailMessage']['saveDir'];
 		$expected = "mail" . DS . "limited" . DS . 'uploader' . DS . "messages";
 		$this->assertEquals($expected, $saveDir, 'アップロード設定を正しく設定できません');
-	}
-
-/**
- * テーブルプレフィックスを設定する
- */
-	public function testSetTablePrefix() {
-		$this->assertTrue($this->Message->setTablePrefix('message'));
-		$this->assertEquals('mysite_test_', $this->Message->tablePrefix);
-		
-		$this->assertTrue($this->Message->setTablePrefix('contact'));
-		$this->assertEquals('mysite_test_contact_', $this->Message->tablePrefix);
-		
-		$this->assertFalse($this->Message->setTablePrefix(''));
-		$this->assertEquals('mysite_test_contact_', $this->Message->tablePrefix);
 	}
 	
 /**
@@ -75,11 +61,11 @@ class MessageTest extends BaserTestCase {
  */
 	public function testBeforeSave() {
 		// 初期化
-		$this->Message->data = array('Message' => array(
+		$this->MailMessage->data = array('MailMessage' => array(
 			'value' => "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9",
 		));
-		$result = $this->Message->save();
-		$this->assertEquals('IIIメートル(代)', $result['Message']['value'], 'beforeSaveでデータベース用のデータに変換されていません');
+		$result = $this->MailMessage->save();
+		$this->assertEquals('IIIメートル(代)', $result['MailMessage']['value'], 'beforeSaveでデータベース用のデータに変換されていません');
 	}
 
 /**
@@ -88,11 +74,11 @@ class MessageTest extends BaserTestCase {
  * @dataProvider validateDataProvider
  */
 	public function testValidate($id, $data, $expected, $message) {
-		$this->Message->setup($id);
-		$this->Message->data = array('Message' => $data);
+		$this->MailMessage->setup($id);
+		$this->MailMessage->data = array('MailMessage' => $data);
 
-		$this->Message->validates();
-		$this->assertEquals($expected, $this->Message->validationErrors, $message);
+		$this->MailMessage->validates();
+		$this->assertEquals($expected, $this->MailMessage->validationErrors, $message);
 	}
 
 	public function validateDataProvider() {
@@ -175,21 +161,21 @@ class MessageTest extends BaserTestCase {
  */
 	public function testAutoConvert($auto_convert, $value, $expected, $message) {
 		// 初期化
-		$this->Message->mailFields = array(
+		$this->MailMessage->mailFields = array(
 			array('MailField' => array(
 				'field_name' => 'value',
 				'auto_convert' => $auto_convert,
 				'use_field' => true,
 			)
 		));
-		$data = array('Message' => array(
+		$data = array('MailMessage' => array(
 			'value' => $value
 		));
 
 		// 実行
-		$result = $this->Message->autoConvert($data);
+		$result = $this->MailMessage->autoConvert($data);
 
-		$this->assertEquals($expected, $result['Message']['value'], $message);
+		$this->assertEquals($expected, $result['MailMessage']['value'], $message);
 	}
 
 	public function autoConvertDataProvider() {
@@ -209,7 +195,7 @@ class MessageTest extends BaserTestCase {
  */
 	public function testGetDefaultValue($type) {
 		// 初期化
-		$this->Message->mailFields = array(
+		$this->MailMessage->mailFields = array(
 			array('MailField' => array(
 				'field_name' => 'value',
 				'use_field' => true,
@@ -217,17 +203,17 @@ class MessageTest extends BaserTestCase {
 				'type' => $type,
 			)
 		));
-		$data = array('Message' => array(
+		$data = array('MailMessage' => array(
 			'key1' => 'hoge1',
 			'key2' => 'hoge2',
 		));
 
 		// 実行
-		$result = $this->Message->getDefaultValue($data);
+		$result = $this->MailMessage->getDefaultValue($data);
 
 		if ($type != 'multi_check') {
 			$expected = array(
-				'Message' => array(
+				'MailMessage' => array(
 					'value' => 'default',
 					'key1' => 'hoge1',
 					'key2' => 'hoge2'
@@ -235,7 +221,7 @@ class MessageTest extends BaserTestCase {
 			$this->assertEquals($expected, $result);
 
 		} else {
-			$this->assertEquals('default', $result['Message']['value'][0]);
+			$this->assertEquals('default', $result['MailMessage']['value'][0]);
 		}
 	}
 
@@ -256,21 +242,21 @@ class MessageTest extends BaserTestCase {
  */
 	public function testConvertToDb($type, $value, $expected) {
 		// 初期化
-		$this->Message->mailFields = array(
+		$this->MailMessage->mailFields = array(
 			array('MailField' => array(
 				'field_name' => 'value',
 				'use_field' => true,
 				'type' => $type,
 			)
 		));
-		$dbData = array('Message' => array(
+		$dbData = array('MailMessage' => array(
 			'value' => $value,
 		));
 
 		// 実行
-		$result = $this->Message->convertToDb($dbData);
+		$result = $this->MailMessage->convertToDb($dbData);
 
-		$this->assertEquals($expected, $result['Message']['value']);
+		$this->assertEquals($expected, $result['MailMessage']['value']);
 	}
 
 	public function convertToDbDataProvider() {
@@ -292,7 +278,7 @@ class MessageTest extends BaserTestCase {
  */
 	public function testConvertDatasToMail($no_send, $type) {
 		// 初期化
-		$this->Message->mailFields = array(
+		$this->MailMessage->mailFields = array(
 			array('MailField' => array(
 				'field_name' => 'value',
 				'use_field' => true,
@@ -318,7 +304,7 @@ class MessageTest extends BaserTestCase {
 
 
 		// 実行
-		$result = $this->Message->convertDatasToMail($dbData);
+		$result = $this->MailMessage->convertDatasToMail($dbData);
 
 		if (is_null($type)) {
 			if (!$no_send) {
@@ -364,26 +350,26 @@ class MessageTest extends BaserTestCase {
  */
 	public function testCreateRenameDropTable($contentName) {
 		// 初期化
-		$fullTable = $this->Message->getTablePrefixByContentName($contentName) . 'messages';
+		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
 		$toContentName = $contentName . '_renamed';
-		$toFullTable = $this->Message->getTablePrefixByContentName($toContentName) . 'messages';
+		$toFullTable = $this->MailMessage->getTablePrefixByContentName($toContentName) . 'messages';
 
 		// テーブル作成
-		$this->Message->createTable($contentName);
-		$this->assertTrue($this->Message->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
+		$this->MailMessage->createTable($contentName);
+		$this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
 
 		// テーブル名変更
-		$this->Message->renameTable($contentName, $toContentName);
-		$this->assertTrue($this->Message->tableExists($toFullTable), 'メッセージテーブルの名前を正しく変更できません');
+		$this->MailMessage->renameTable($contentName, $toContentName);
+		$this->assertTrue($this->MailMessage->tableExists($toFullTable), 'メッセージテーブルの名前を正しく変更できません');
 		if ($contentName == 'messages') {
-			$this->assertTrue($this->Message->tableExists($fullTable), '指定されたコンテンツ名がmessageの時、テーブルが再生成されていません');
+			$this->assertTrue($this->MailMessage->tableExists($fullTable), '指定されたコンテンツ名がmessageの時、テーブルが再生成されていません');
 		}
 
 		// テーブル削除
-		$this->Message->dropTable($toContentName);
-		$this->assertFalse($this->Message->tableExists($toFullTable), 'メッセージテーブルを削除できません');
+		$this->MailMessage->dropTable($toContentName);
+		$this->assertFalse($this->MailMessage->tableExists($toFullTable), 'メッセージテーブルを削除できません');
 		if ($contentName == 'messages') {
-			$this->assertTrue($this->Message->tableExists($fullTable), '指定されたコンテンツ名がmessageの時、テーブルが再生成されていません');
+			$this->assertTrue($this->MailMessage->tableExists($fullTable), '指定されたコンテンツ名がmessageの時、テーブルが再生成されていません');
 		}
 	}
 
@@ -399,7 +385,7 @@ class MessageTest extends BaserTestCase {
  */
 	public function testAddRenameDelMessageField() {
 		
-		$db = $this->Message->getDataSource();
+		$db = $this->MailMessage->getDataSource();
 		switch ($db->config['datasource']) {
 			case 'Database/BcPostgres' :
 				$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -416,28 +402,28 @@ class MessageTest extends BaserTestCase {
 
 		// 初期化
 		$contentName = 'hoge';
-		$fullTable = $this->Message->getTablePrefixByContentName($contentName) . 'messages';
+		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
 		$fieldName = 'hogeField';
 		$toFieldName = 'hogeField_renamed';
 
-		$this->Message->createTable($contentName);
+		$this->MailMessage->createTable($contentName);
 
 		// フィールド追加
-		$this->Message->addMessageField($contentName, $fieldName);
+		$this->MailMessage->addMessageField($contentName, $fieldName);
 		$sql = $command . " $fullTable $fieldName";
-		$this->assertNotEmpty($this->Message->query($sql), 'メッセージファイルにフィールドを正しく追加できません');
+		$this->assertNotEmpty($this->MailMessage->query($sql), 'メッセージファイルにフィールドを正しく追加できません');
 
 		// フィールド名変更
-		$this->Message->renameMessageField($contentName, $fieldName, $toFieldName);
+		$this->MailMessage->renameMessageField($contentName, $fieldName, $toFieldName);
 		$sql = $command . " $fullTable $toFieldName";
-		$this->assertNotEmpty($this->Message->query($sql), 'メッセージファイルのフィールド名を正しく変更できません');
+		$this->assertNotEmpty($this->MailMessage->query($sql), 'メッセージファイルのフィールド名を正しく変更できません');
 
 		// フィールド削除
-		$this->Message->delMessageField($contentName, $toFieldName);
+		$this->MailMessage->delMessageField($contentName, $toFieldName);
 		$sql = $command . " $fullTable $toFieldName";
-		$this->assertEmpty($this->Message->query($sql), 'メッセージファイルのフィールドを正しく削除できません');
+		$this->assertEmpty($this->MailMessage->query($sql), 'メッセージファイルのフィールドを正しく削除できません');
 
-		$this->Message->dropTable($contentName);
+		$this->MailMessage->dropTable($contentName);
 
 	}
 
@@ -445,10 +431,10 @@ class MessageTest extends BaserTestCase {
  * コンテンツ名つきのテーブルプレフィックスを取得する
  */
 	public function testGetTablePrefixByContentName() {
-		$result = $this->Message->getTablePrefixByContentName('hoge');
+		$result = $this->MailMessage->getTablePrefixByContentName('hoge');
 		$this->assertEquals('mysite_test_hoge_', $result);
 
-		$result = $this->Message->getTablePrefixByContentName('messages');
+		$result = $this->MailMessage->getTablePrefixByContentName('messages');
 		$this->assertEquals('mysite_test_', $result);
 	}
 
@@ -463,7 +449,7 @@ class MessageTest extends BaserTestCase {
  */
 	public function testConstruction() {
 
-		$db = $this->Message->getDataSource();
+		$db = $this->MailMessage->getDataSource();
 
 		switch ($db->config['datasource']) {
 			case 'Database/BcPostgres' :
@@ -479,24 +465,24 @@ class MessageTest extends BaserTestCase {
 		}
 
 		$contentName = 'contact';
-		$fullTable = $this->Message->getTablePrefixByContentName($contentName) . 'messages';
+		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
 
-		$this->Message->dropTable($contentName);
+		$this->MailMessage->dropTable($contentName);
 
 		// 一回目
-		$this->Message->construction(1);
-		$this->assertTrue($this->Message->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
+		$this->MailMessage->construction(1);
+		$this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
 		
 		$expectColumns = array('id', 'modified', 'created');
 		$sql = $command . " $fullTable";
 		$resultColumns = array();
-		foreach ($this->Message->query($sql) as $key => $value) {
+		foreach ($this->MailMessage->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
 		}
 		$this->assertEquals($expectColumns, $resultColumns, '正しくカラムが追加されていません');
 
 		// 二回目
-		$this->Message->construction(1);
+		$this->MailMessage->construction(1);
 
 		$this->MailField = ClassRegistry::init('Mail.MailField');
 		$expectColumns = $this->MailField->find('list', array(
@@ -507,7 +493,7 @@ class MessageTest extends BaserTestCase {
 
 		$sql = $command . " $fullTable";
 		$resultColumns = array();
-		foreach ($this->Message->query($sql) as $key => $value) {
+		foreach ($this->MailMessage->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
 		}
 		$this->assertEquals($expectColumns, $resultColumns, '正しくカラムが追加されていません');
@@ -525,7 +511,7 @@ class MessageTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		$messages = array(
-			array('Message' => array(
+			array('MailMessage' => array(
 				'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
 				'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
 				'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
@@ -535,7 +521,7 @@ class MessageTest extends BaserTestCase {
 				'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
 				'modified' => 'v21',
 			)),
-			array('Message' => array(
+			array('MailMessage' => array(
 				'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
 				'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
 				'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
@@ -549,7 +535,7 @@ class MessageTest extends BaserTestCase {
 
 		$expected = array(
 			0 => array(
-				'Message' => array(
+				'MailMessage' => array(
 					'NO' => 1, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
 					'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
 					'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
@@ -560,7 +546,7 @@ class MessageTest extends BaserTestCase {
 				)
 			),
 			1 => array(
-				'Message' => array(
+				'MailMessage' => array(
 					'NO' => 2, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
 					'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
 					'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
@@ -572,7 +558,7 @@ class MessageTest extends BaserTestCase {
 			)
 		);
 		
-		$result = $this->Message->convertMessageToCsv(1, $messages);
+		$result = $this->MailMessage->convertMessageToCsv(1, $messages);
 		$this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');
 	}
 
@@ -583,11 +569,11 @@ class MessageTest extends BaserTestCase {
  */
 	public function testReconstructionAll() {
 		$contentName = 'contact';
-		$fullTable = $this->Message->getTablePrefixByContentName($contentName) . 'messages';
-		$this->Message->dropTable($contentName);
+		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
+		$this->MailMessage->dropTable($contentName);
 
-		$this->assertTrue($this->Message->reconstructionAll());
-		$this->assertTrue($this->Message->tableExists($fullTable));
+		$this->assertTrue($this->MailMessage->reconstructionAll());
+		$this->assertTrue($this->MailMessage->tableExists($fullTable));
 	}
 
 	

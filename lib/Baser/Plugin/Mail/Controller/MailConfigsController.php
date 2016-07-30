@@ -36,23 +36,7 @@ class MailConfigsController extends MailAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * サブメニューエレメント
- *
- * @var array
- */
-	public $subMenuElements = array();
-
-/**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = array(
-		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
-	);
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
 
 /**
  * [ADMIN] メールフォーム設定
@@ -72,9 +56,7 @@ class MailConfigsController extends MailAppController {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
-
-		/* 表示設定 */
-		$this->subMenuElements = array('mail_common');
+		
 		$this->pageTitle = 'メールプラグイン基本設定';
 		$this->help = 'mail_configs_form';
 	}

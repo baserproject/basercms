@@ -2,7 +2,7 @@
 /**
  * メールフォーム送信完了ページ
  */
-if (Configure::read('debug') == 0) {
+if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
 	$this->Html->meta(array('http-equiv' => 'Refresh'), null, array('content' => '5;url=' . $mailContent['MailContent']['redirect_url'], 'inline' => false));
 }
 ?>

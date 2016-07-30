@@ -231,18 +231,20 @@ class BcContentsComponent extends Component {
  */
 	public function beforeRender(Controller $controller) {
 		parent::beforeRender($controller);
+		$controller->set('contentsSettings', $this->settings['items']);
 		if(BcUtil::isAdminSystem()) {
 			// パンくずをセット
 			array_unshift($controller->crumbs, array('name' => 'コンテンツ一覧', 'url' => array('plugin' => null, 'controller' => 'contents', 'action' => 'index')));
-			if($this->useForm && $controller->request->action == $this->editAction) {
+			if($controller->subMenuElements && !in_array('contents', $controller->subMenuElements)) {
+				array_unshift($controller->subMenuElements, 'contents');
+			} else {
+				$controller->subMenuElements =  ['contents'];	
+			}
+			if ($this->useForm && $controller->request->action == $this->editAction && !empty($controller->request->data['Content'])) {
 				// フォームをセット
 				$this->settingForm($controller, $controller->request->data['Content']['site_id'], $controller->request->data['Content']['id']);
 			}
-			if(empty($controller->subMenuElements)) {
-				$controller->subMenuElements = array('contents');
-			}
 		}
-		$controller->set('contentsSettings', $this->settings['items']);
 	}
 
 /**

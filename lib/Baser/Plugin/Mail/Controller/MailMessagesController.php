@@ -29,7 +29,7 @@ class MailMessagesController extends MailAppController {
  *
  * @var array
  */
-	public $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.Message');
+	public $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.MailMessage');
 
 /**
  * ヘルパー
@@ -43,7 +43,7 @@ class MailMessagesController extends MailAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
 
 /**
  * メールコンテンツデータ
@@ -60,15 +60,6 @@ class MailMessagesController extends MailAppController {
 	public $subMenuElements = array('mail_fields');
 
 /**
- * ぱんくずナビ
- *
- * @var array
- */
-	public $crumbs = array(
-		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
-	);
-
-/**
  * beforeFilter
  *
  * @return void
@@ -77,12 +68,12 @@ class MailMessagesController extends MailAppController {
 		parent::beforeFilter();
 		$this->MailContent->recursive = -1;
 		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
-		if ($this->mailContent['MailContent']['name'] != 'message') {
-			App::uses('Message', 'Mail.Model');
-			$this->Message = new Message();
-			$this->Message->setup($this->mailContent['MailContent']['id']);
-		}
-		$this->crumbs[] = array('name' => $this->mailContent['MailContent']['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
+		App::uses('MailMessage', 'Mail.Model');
+		$this->MailMessage = new MailMessage();
+		$this->MailMessage->setup($this->mailContent['MailContent']['id']);
+		$mailContentId = $this->params['pass'][0];
+		$this->content = $this->BcContents->getContent($mailContentId)['Content'];
+		$this->crumbs[] = array('name' => $this->content['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
 	}
 
 /**
@@ -106,10 +97,10 @@ class MailMessagesController extends MailAppController {
 		$this->setViewConditions('MailMessage', array('default' => $default));
 		$this->paginate = array(
 			'fields' => array(),
-			'order' => 'Message.created DESC',
+			'order' => 'MailMessage.created DESC',
 			'limit' => $this->passedArgs['num']
 		);
-		$messages = $this->paginate('Message');
+		$messages = $this->paginate('MailMessage');
 		$mailFields = $this->MailField->find('all', array(
 			'conditions' => array('MailField.mail_content_id' => $mailContentId),
 			'order' => 'MailField.sort'
@@ -132,8 +123,8 @@ class MailMessagesController extends MailAppController {
 			$this->setMessage('無効な処理です。', true);
 			$this->notFound();
 		}
-		$message = $this->Message->find('first', array(
-			'conditions' => array('Message.id' => $messageId),
+		$message = $this->MailMessage->find('first', array(
+			'conditions' => array('MailMessage.id' => $messageId),
 			'order' => 'created DESC'
 		));
 		$mailFields = $this->MailField->find('all', array(
@@ -188,9 +179,9 @@ class MailMessagesController extends MailAppController {
  * @return void
  */
 	protected function _del($id = null) {
-		if ($this->Message->delete($id)) {
+		if ($this->MailMessage->delete($id)) {
 			$message = '受信データ NO「' . $id . '」 を削除しました。';
-			$this->Message->saveDbLog($message);
+			$this->MailMessage->saveDbLog($message);
 			return true;
 		} else {
 			return false;
@@ -209,7 +200,7 @@ class MailMessagesController extends MailAppController {
 			$this->setMessage('無効な処理です。', true);
 			$this->notFound();
 		}
-		if ($this->Message->delete($messageId)) {
+		if ($this->MailMessage->delete($messageId)) {
 			$this->setMessage($this->mailContent['MailContent']['title'] . 'への受信データ NO「' . $messageId . '」 を削除しました。', false, true);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -224,7 +215,7 @@ class MailMessagesController extends MailAppController {
 		$args = func_get_args();
 		unset($args[0]);
 		$file = implode('/', $args);
-		$settings = $this->Message->Behaviors->BcUpload->settings['Message'];
+		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
 		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS . $file;
 		$ext = decodeContent(null, $file);
 		$mineType = 'application/octet-stream';

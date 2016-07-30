@@ -9,11 +9,9 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-$prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
-}
 ?>
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 	$('input[type="submit"]').attr('disabled', 'disabled');
@@ -23,7 +21,7 @@ $(document).ready(function(){
 <?php else: ?>
 $(window).load(function(){
 <?php endif ?>
-	var getTokenUrl = '<?php echo $this->BcBaser->getUrl($prefix . '/' . $mailContent['MailContent']['name'] . '/ajax_get_token') ?>';
+	var getTokenUrl = '<?php echo $this->BcBaser->getUrl($this->content['url'] . '/ajax_get_token') ?>';
 	$.ajaxSetup({cache: false});
 	$.get(getTokenUrl, function(result) {
 		$('input[name="data[_Token][key]"]').val(result);

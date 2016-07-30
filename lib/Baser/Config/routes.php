@@ -78,7 +78,8 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		}
 		
 		if(preg_match('/\/$/', $paths[0])) {
-			$paths[] = $paths[0] . 'index'; 
+			$paths[] = $paths[0] . 'index';
+			$paths[] = preg_replace('/\/$/', '', $paths[0]);
 		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
 			$paths[] = $matches[1];
 		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
@@ -105,7 +106,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		}
         $conditions = $publishConditions + $conditions;
 		$content = $Content->find('first', array('conditions' => $conditions, 'order' => 'Content.url DESC'));
-
 		if ($content) {
 			$isPublish = true;
 			if($content['Content']['alias_id']) {

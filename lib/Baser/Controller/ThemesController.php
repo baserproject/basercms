@@ -258,8 +258,8 @@ class ThemesController extends AppController {
 		
 		// メール受信テーブルの作成
 		App::uses('Message', 'Mail.Model');
-		$Message = new Message();
-		if (!$Message->reconstructionAll()) {
+		$MailMessage = new MailMessage();
+		if (!$MailMessage->reconstructionAll()) {
 			$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
 			$result = false;
 		}
