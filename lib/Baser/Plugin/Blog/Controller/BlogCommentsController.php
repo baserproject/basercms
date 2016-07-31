@@ -14,15 +14,12 @@
  * ブログコメントコントローラー
  *
  * @package Blog.Controller
+ * @property BcAuthComponent $BcAuth
+ * @property CookieComponent $Cookie
+ * @property BcAuthConfigureComponent $BcAuthConfigure
+ * @property BcContentsComponent $BcContents
  */
 class BlogCommentsController extends BlogAppController {
-
-/**
- * クラス名
- *
- * @var string
- */
-	public $name = 'BlogComments';
 
 /**
  * モデル
@@ -32,34 +29,11 @@ class BlogCommentsController extends BlogAppController {
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
 
 /**
- * ヘルパー
- *
- * @var array
- */
-	public $helpers = array();
-
-/**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcCaptcha');
-
-/**
- * ぱんくずナビ
- *
- * @var string
- */
-	public $crumbs = array(
-		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
-	);
-
-/**
- * サブメニューエレメント
- *
- * @var array
- */
-	public $subMenuElements = array();
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcCaptcha', 'BcContents' => ['type' => 'Blog.BlogContent']];
 
 /**
  * beforeFilter
@@ -72,6 +46,7 @@ class BlogCommentsController extends BlogAppController {
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
 
 		$crumbs = array();
+		$this->content = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
 		if (!empty($this->params['pass'][1])) {
 
 			$dbDatas = $this->BlogPost->read(null, $this->params['pass'][1]);
@@ -83,18 +58,18 @@ class BlogCommentsController extends BlogAppController {
 			$this->blogPost = array('BlogPost' => $dbDatas['BlogPost']);
 			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
 
-			$crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+			$crumbs[] = array('name' => $this->content['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 			$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
 		} elseif (!empty($this->params['pass'][0])) {
 
 			$dbDatas = $this->BlogPost->BlogContent->read(null, $this->params['pass'][0]);
 			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
-			$crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+			$crumbs[] = array('name' => $this->content['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 		}
 
 		$this->crumbs = am($this->crumbs, $crumbs);
 		if (!empty($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_posts', 'blog_categories');
+			$this->subMenuElements = array('blog_posts');
 		}
 
 		if (empty($this->params['admin'])) {

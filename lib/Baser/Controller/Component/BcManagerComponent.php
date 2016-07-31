@@ -218,7 +218,7 @@ class BcManagerComponent extends Component {
  * @return string
  */
 	public function getDatasourceName($datasource = null) {
-		$name = false;
+		$name = $datasource;
 		switch ($datasource) {
 			case 'postgres' :
 				$name = 'Database/BcPostgres';

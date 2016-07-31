@@ -15,7 +15,15 @@ App::uses('BlogAppController', 'Blog.Controller');
 /**
  * ブログ記事コントローラー
  *
- * @package			Blog.Controller
+ * @package Blog.Controller
+ * @property BlogContent $BlogContent
+ * @property BlogCategory $BlogCategory
+ * @property BlogPost $BlogPost
+ * @property BcAuthComponent $BcAuth
+ * @property CookieComponent $Cookie
+ * @property BcAuthConfigureComponent $BcAuthConfigure
+ * @property BcContentsComponent $BcContents
+ * @property Content $Content
  */
 class BlogController extends BlogAppController {
 
@@ -45,7 +53,7 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents');
 
 /**
  * ぱんくずナビ
@@ -88,11 +96,15 @@ class BlogController extends BlogAppController {
 			$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
 			$this->contentId = $this->params['pass'][0];
 		}
+		
+		if(empty($this->content)) {
+			// ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
+			$this->content = $this->BcContents->getContent($this->params['pass'][0]);
+		}
 
 		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 
 		$this->subMenuElements = array('default');
-		$this->crumbs = array(array('name' => $this->blogContent['BlogContent']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/index'));
 
 		// ページネーションのリンク対策
 		// コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
@@ -135,21 +147,20 @@ class BlogController extends BlogAppController {
  * @return void
  */
 	public function index() {
-		if (!$this->blogContent['BlogContent']['status']) {
-			$this->notFound();
-		}
 
+		if($this->BcContents->preview == 'default' && $this->request->data) {
+			$this->blogContent['BlogContent'] = $this->request->data['BlogContent'];
+		}
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
 			$this->set('channel', array(
-				'title' => h($this->blogContent['BlogContent']['title'] . '｜' . $this->siteConfigs['name']),
+				'title' => h($this->content['title'] . '｜' . $this->siteConfigs['name']),
 				'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
 			));
 			$this->layout = 'default';
 			$template = 'index';
 			$listCount = $this->blogContent['BlogContent']['feed_count'];
 		} else {
-			$this->layout = $this->blogContent['BlogContent']['layout'];
 			$template = $this->blogContent['BlogContent']['template'] . DS . 'index';
 			$listCount = $this->blogContent['BlogContent']['list_count'];
 		}
@@ -158,8 +169,7 @@ class BlogController extends BlogAppController {
 		$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
 		$this->set('posts', $datas);
 		$this->set('single', false);
-		$this->pageTitle = $this->blogContent['BlogContent']['title'];
-		$this->crumbs = array();
+		$this->pageTitle = $this->content['title'];
 		$this->render($template);
 	}
 
@@ -189,27 +199,26 @@ class BlogController extends BlogAppController {
  * @return void
  */
 	public function archives() {
-		if (!$this->blogContent['BlogContent']['status']) {
-			$this->notFound();
-		}
 
 		// パラメーター処理
-		$pass = $this->params['pass'];
+		$pass = $this->request->params['pass'];
 		$type = $year = $month = $day = $id = '';
 		$crumbs = $posts = array();
 		$single = false;
 		$posts = array();
 
-		if ($pass[0] == 'category') {
+		if ($pass[1] == 'category') {
 			$type = 'category';
-		} elseif ($pass[0] == 'author') {
+		} elseif ($pass[1] == 'author') {
 			$type = 'author';
-		} elseif ($pass[0] == 'tag') {
+		} elseif ($pass[1] == 'tag') {
 			$type = 'tag';
-		} elseif ($pass[0] == 'date') {
+		} elseif ($pass[1] == 'date') {
 			$type = 'date';
 		}
 
+		$crumbs[] = array('name' => $this->content['title'], 'url' => $this->content['url']);
+		
 		switch ($type) {
 
 			/* カテゴリ一覧 */
@@ -217,7 +226,7 @@ class BlogController extends BlogAppController {
 
 				$category = $pass[count($pass) - 1];
 				if (empty($category)) {
-					$this->notFound();
+					//$this->notFound();
 				}
 
 				// ナビゲーションを設定
@@ -232,12 +241,11 @@ class BlogController extends BlogAppController {
 
 				// 記事を取得
 				$posts = $this->_getBlogPosts(array('conditions' => array('category' => urlencode($category))));
-
 				$blogCategories = $this->BlogCategory->getPath($categoryId, array('name', 'title'));
 				if (count($blogCategories) > 1) {
 					foreach ($blogCategories as $key => $blogCategory) {
 						if ($key < count($blogCategories) - 1) {
-							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => $this->content['url'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -278,9 +286,9 @@ class BlogController extends BlogAppController {
 			/* 月別アーカイブ一覧 */
 			case 'date':
 
-				$year = h($pass[1]);
-				$month = h(@$pass[2]);
-				$day = h(@$pass[3]);
+				$year = h($pass[2]);
+				$month = h(@$pass[3]);
+				$day = h(@$pass[4]);
 				if (!$year && !$month && !$day) {
 					$this->notFound();
 				}
@@ -347,8 +355,8 @@ class BlogController extends BlogAppController {
 					}
 				} else {
 
-					if (!empty($pass[0])) {
-						$id = $pass[0];
+					if (!empty($pass[1])) {
+						$id = $pass[1];
 					} else {
 						$this->notFound();
 					}
@@ -375,7 +383,7 @@ class BlogController extends BlogAppController {
 					$blogCategories = $this->BlogCategory->getPath($post['BlogPost']['blog_category_id'], array('name', 'title'));
 					if ($blogCategories) {
 						foreach ($blogCategories as $blogCategory) {
-							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => '/' . $this->blogContent['BlogContent']['name'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => $this->content['url'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -677,7 +685,6 @@ class BlogController extends BlogAppController {
 
 		// プレビューの場合は公開ステータスを条件にしない
 		if (!$this->preview) {
-			$conditions = array_merge($conditions, array('BlogContent.status' => true));
 			$conditions = array_merge($conditions, $this->BlogPost->getConditionAllowPublish());
 		}
 

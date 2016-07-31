@@ -14,6 +14,10 @@
  * ブログタグコントローラー
  *
  * @package Blog.Controller
+ * @property BcAuthComponent $BcAuth
+ * @property CookieComponent $Cookie
+ * @property BcAuthConfigureComponent $BcAuthConfigure
+ * @property BcContentsComponent $BcContents
  */
 class BlogTagsController extends BlogAppController {
 
@@ -36,25 +40,8 @@ class BlogTagsController extends BlogAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ぱんくずナビ
- *
- * @var string
- */
-	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
-		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
-	);
-
-/**
- * サブメニューエレメント
- *
- * @var array
- */
-	public $subMenuElements = array('blog_common');
-
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
+	
 /**
  * [ADMIN] タグ一覧
  *

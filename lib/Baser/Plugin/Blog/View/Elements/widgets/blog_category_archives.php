@@ -48,7 +48,7 @@ $this->Blog = new BlogHelper($this);
 	<?php if ($by_year): ?>
 		<ul>
 			<?php foreach ($categories as $key => $category): ?>
-				<li class="category-year"><span><?php $this->BcBaser->link($key . '年', array('plugin' => null, 'controller' => $blogContent['BlogContent']['name'], 'action' => 'archives', 'date', $key)) ?></span>
+				<li class="category-year"><span><?php $this->BcBaser->link($key . '年', array('plugin' => null, 'controller' => $this->content['url'], 'action' => 'archives', 'date', $key)) ?></span>
 						<?php echo $this->Blog->getCategoryList($category, $depth, $view_count, array('named' => array('year' => $key))) ?>
 				</li>
 			<?php endforeach ?>

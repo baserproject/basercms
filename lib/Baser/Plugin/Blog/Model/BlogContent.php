@@ -16,6 +16,7 @@ App::uses('BlogAppModel', 'Blog.Model');
  * ブログコンテンツモデル
  *
  * @package Blog.Model
+ * @property BlogPost $BlogPost
  */
 class BlogContent extends BlogAppModel {
 
@@ -31,29 +32,31 @@ class BlogContent extends BlogAppModel {
  *
  * @var array
  */
-	public $actsAs = array('BcSearchIndexManager', 'BcPluginContent', 'BcCache');
+	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
 
 /**
  * hasMany
  *
  * @var array
  */
-	public $hasMany = array('BlogPost' =>
-		array('className' => 'Blog.BlogPost',
+	public $hasMany = [
+		'BlogPost' => [
+			'className' => 'Blog.BlogPost',
 			'order' => 'id DESC',
 			'limit' => 10,
 			'foreignKey' => 'blog_content_id',
 			'dependent' => true,
 			'exclusive' => false,
-			'finderQuery' => ''),
-		'BlogCategory' =>
-		array('className' => 'Blog.BlogCategory',
+			'finderQuery' => ''],
+		'BlogCategory' => [
+			'className' => 'Blog.BlogCategory',
 			'order' => 'id',
 			'limit' => 10,
 			'foreignKey' => 'blog_content_id',
 			'dependent' => true,
 			'exclusive' => false,
-			'finderQuery' => ''));
+			'finderQuery' => '']
+	];
 
 /**
  * validate
@@ -61,23 +64,6 @@ class BlogContent extends BlogAppModel {
  * @var array
  */
 	public $validate = array(
-		'name' => array(
-			array('rule' => array('halfText'),
-				'message' => 'ブログアカウント名は半角のみ入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('notInList', array('blog')),
-				'message' => 'ブログアカウント名に「blog」は利用できません。'),
-			array('rule' => array('isUnique'),
-				'message' => '入力されたブログアカウント名は既に使用されています。'),
-			array('rule' => array('maxLength', 100),
-				'message' => 'ブログアカウント名は100文字以内で入力してください。')
-		),
-		'title' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'ブログタイトルを入力してください。'),
-			array('rule' => array('maxLength', 255),
-				'message' => 'ブログタイトルは255文字以内で入力してください。')
-		),
 		'layout' => array(
 			array('rule' => 'halfText',
 				'message' => 'レイアウトテンプレート名は半角で入力してください。',
@@ -163,7 +149,7 @@ class BlogContent extends BlogAppModel {
 		}
 
 		// 検索用テーブルへの登録・削除
-		if (!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status']) {
+		if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
 			clearDataCache();
 			$datas = $this->BlogPost->find('all', array(
@@ -196,55 +182,66 @@ class BlogContent extends BlogAppModel {
  * @return array
  */
 	public function createSearchIndex($data) {
-		if (isset($data['BlogContent'])) {
-			$data = $data['BlogContent'];
+		if (!isset($data['BlogContent']) || !isset($data['Content'])) {
+			return false;
 		}
-
-		$_data = array();
-		$_data['SearchIndex']['type'] = 'ブログ';
-		// $this->idに値が入ってない場合もあるので
-		if (!empty($data['id'])) {
-			$_data['SearchIndex']['model_id'] = $data['id'];
-		} else {
-			$_data['SearchIndex']['model_id'] = $this->id;
-		}
-		$_data['SearchIndex']['category'] = '';
-		$_data['SearchIndex']['title'] = $data['title'];
-		$_data['SearchIndex']['detail'] = $data['description'];
-		$_data['SearchIndex']['url'] = '/' . $data['name'] . '/index';
-		$_data['SearchIndex']['status'] = true;
-		return $_data;
+		$blogContent = $data['BlogContent'];
+		$content = $data['Content'];
+		return ['SearchIndex' => [
+			'type'	=> 'ブログ',
+			'model_id'	=> (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
+			'category'	=> '',
+			'title'		=> $content['title'],
+			'detail'	=> $blogContent['description'],
+			'url'		=> $content['url'],
+			'status'	=> $content['status']
+		]];
 	}
 
 /**
- * ユーザーグループデータをコピーする
- * 
- * @param int $id
- * @param array $data
- * @return mixed BlogContent Or false
+ * ブログコンテンツをコピーする
+ *
+ * @param int $id ページID
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しいユーザーID
+ * @param int $newSiteId 新しいサイトID
+ * @return mixed blogContent|false
  */
-	public function copy($id, $data = null) {
-		if ($id) {
-			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
-		}
-		$data['BlogContent']['name'] .= '_copy';
-		$data['BlogContent']['title'] .= '_copy';
-		$data['BlogContent']['status'] = false;
-		unset($data['BlogContent']['id']);
-		$this->create($data);
-		$result = $this->save();
-		if ($result) {
-			$result['BlogContent']['id'] = $this->getInsertID();
-			return $result;
-		} else {
-			if (isset($this->validationErrors['name'])) {
-				return $this->copy(null, $data);
-			} else {
-				return false;
-			}
-		}
-	}
+	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
+		$data = $this->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
+		$url = $data['Content']['url'];
+		$siteId = $data['Content']['site_id'];
+		unset($data['BlogContent']['id']);
+		unset($data['BlogContent']['created']);
+		unset($data['BlogContent']['modified']);
+		unset($data['Content']);
+		$data['Content'] = [
+			'parent_id'	=> $newParentId,
+			'title'		=> $newTitle,
+			'author_id' => $newAuthorId,
+			'site_id' 	=> $siteId
+		];
+		if(!is_null($newSiteId) && $siteId != $newSiteId) {
+			$data['Content']['site_id'] = $newSiteId;
+			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
+		}
+		$this->getDataSource()->begin();
+		if ($result = $this->save($data)) {
+			$result['BlogContent']['id'] = $this->getInsertID();
+			$blogPosts = $this->BlogPost->find('all', array('conditions' => array('BlogPost.blog_content_id' => $id), 'order' => 'BlogPost.id', 'recursive' => -1));
+			foreach ($blogPosts as $blogPost) {
+				$blogPost['BlogPost']['blog_content_id'] = $result['BlogContent']['id'];
+				$this->BlogPost->copy(null, $blogPost);
+			}
+			$this->getDataSource()->commit();
+			return $result;
+		}
+		$this->getDataSource()->rollback();
+		return false;
+	}
+	
 /**
  * フォームの初期値を取得する
  *
@@ -256,6 +253,7 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['layout'] = 'default';
 		$data['BlogContent']['template'] = 'default';
 		$data['BlogContent']['list_count'] = 10;
+		$data['BlogContent']['list_direction'] = 'DESC';
 		$data['BlogContent']['feed_count'] = 10;
 		$data['BlogContent']['auth_captcha'] = 1;
 		$data['BlogContent']['tag_use'] = false;

@@ -26,6 +26,7 @@ $config['BcApp'] = array(
 	'adminNavi' => array('core' => array(
 			'name' => 'baserCMSコア',
 			'contents' => array(
+				array('name' => 'コンテンツ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
 				array('name' => 'ウィジェット管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
 				array('name' => 'テーマ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index')),
 				array('name' => 'プラグイン管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index')),

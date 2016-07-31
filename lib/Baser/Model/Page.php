@@ -369,7 +369,10 @@ class Page extends AppModel {
 		if (isset($data['Page'])) {
 			$page = $data['Page'];
 		}
-		$contents = $this->addBaserPageTag($page['id'], $page['contents'], $page['title'], $page['description'], $page['code']);
+		if(isset($data['Content'])) {
+			$content = $data['Content'];
+		}
+		$contents = $this->addBaserPageTag($page['id'], $page['contents'], $content['title'], $content['description'], $page['code']);
 
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->getPageFilePath($data);

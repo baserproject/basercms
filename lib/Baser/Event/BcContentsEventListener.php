@@ -50,6 +50,9 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  */
 	public function formAfterCreate(CakeEvent $event) {
 		$View = $event->subject();
+		if($event->data['id'] == 'FavoriteAdminEditForm') {
+			return;
+		}
 		if(!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
 			return;
 		}

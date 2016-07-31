@@ -45,16 +45,7 @@ class BlogCategoriesController extends BlogAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ぱんくずナビ
- *
- * @var string
- */
-	public $crumbs = array(
-		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
-	);
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['type' => 'Blog.BlogContent']];
 
 /**
  * サブメニューエレメント
@@ -72,11 +63,12 @@ class BlogCategoriesController extends BlogAppController {
 		parent::beforeFilter();
 
 		$this->BlogContent->recursive = -1;
+		$this->content = $this->BcContents->getContent($this->params['pass'][0])['Content'];
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
-		$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
+		$this->crumbs[] = array('name' => $this->content['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 
 		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_posts', 'blog_categories');
+			$this->subMenuElements = array('blog_posts');
 		}
 
 		// バリデーション設定

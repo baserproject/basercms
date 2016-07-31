@@ -623,7 +623,6 @@ class BlogPost extends BlogAppModel {
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {
-		$data = array();
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => 1));
 		}

@@ -88,6 +88,12 @@ class Site extends AppModel {
     	if(!is_null($mainSiteId)) {
     		$conditions['Site.main_site_id'] = $mainSiteId;
     	}
+		if(!Configure::read('BcApp.mobile')){
+			$conditions[] = ['Site.id <>' => 1];
+		}
+		if(!Configure::read('BcApp.smartphone')){
+			$conditions[] = ['Site.id <>' => 2];
+		}
     	return [0 => 'Home'] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
 

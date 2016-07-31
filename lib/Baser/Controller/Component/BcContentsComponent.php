@@ -88,8 +88,10 @@ class BcContentsComponent extends Component {
 				$urlAry = $controller->request->params['pass'];
 				$url = '/' . implode('/', $urlAry);
 				$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
-				Configure::write('BcContents.currentContent', $data['Content']);
-				Configure::write('BcContents.currentSite', $data['Site']);
+				if($data) {
+					Configure::write('BcContents.currentContent', $data['Content']);
+					Configure::write('BcContents.currentSite', $data['Site']);
+				}
 			}
 			$currentContent = Configure::read('BcContents.currentContent');
 			$currentSite = Configure::read('BcContents.currentSite');
@@ -194,6 +196,7 @@ class BcContentsComponent extends Component {
  */
 	public function getCrumbs($id) {
 		$contents = $this->_Controller->Content->getPath($id, [], -1);
+		unset($contents[count($contents) -1]);
 		$crumbs = [];
 		foreach($contents as $content) {
 			if(!$content['Content']['site_root']) {

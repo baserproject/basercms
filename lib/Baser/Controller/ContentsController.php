@@ -45,10 +45,15 @@ class ContentsController extends AppController {
 	public function admin_index() {
 
 		$this->pageTitle = 'コンテンツ一覧';
+		$sites = $this->Site->getSiteList();
+		$siteId = 0;
+		if(!$sites) {
+			$siteId = 1;
+		}
 		$default = array(
 			'named' => array(
 				'num'		=> $this->siteConfigs['admin_list_num'],
-				'site_id'	=> 0
+				'site_id'	=> $siteId
 			)
 		);
 		$this->setViewConditions('Content', ['default' => $default]);
@@ -56,32 +61,30 @@ class ContentsController extends AppController {
 			$this->pageTitle = 'ゴミ箱';
 		}
 
-		$conditions = array();
-		if($this->action == 'admin_index') {
-			if($this->passedArgs['site_id'] != 'all') {
-				$conditions = ['Content.site_id' => $this->passedArgs['site_id']];
-			} else {
-				$conditions = ['or' => [
-					['Site.use_subdomain' => false],
-					['Content.site_id' => 0]
-				]];
-			}
-		} elseif($this->action == 'admin_trash_index') {
-			$this->Content->Behaviors->unload('SoftDelete');
-			$conditions = [
-				'Content.deleted' => true
-			];
-		}
-		$datas = $this->Content->find('threaded', ['order' => ['Content.site_id', 'Content.lft'], 'conditions' => $conditions, 'recursive' => 0]);
-		$this->set('datas', $datas);
-
 		if (!empty($this->request->isAjax)) {
+			$conditions = array();
+			if($this->action == 'admin_index') {
+				if($this->passedArgs['site_id'] != 'all') {
+					$conditions = ['Content.site_id' => $this->passedArgs['site_id']];
+				} else {
+					$conditions = ['or' => [
+						['Site.use_subdomain' => false],
+						['Content.site_id' => 0]
+					]];
+				}
+			} elseif($this->action == 'admin_trash_index') {
+				$this->Content->Behaviors->unload('SoftDelete');
+				$conditions = [
+					'Content.deleted' => true
+				];
+			}
+			$datas = $this->Content->find('threaded', ['order' => ['Content.site_id', 'Content.lft'], 'conditions' => $conditions, 'recursive' => 0]);
+			$this->set('datas', $datas);
 			Configure::write('debug', 0);
 			$this->render('ajax_index');
 			return;
 		}
 		$this->request->data['ViewSetting']['site_id'] = $this->passedArgs['site_id'];
-		$sites = $this->Site->getSiteList();
 		if($sites) {
 			$sites = ['all' => '全て'] + $sites;
 		}

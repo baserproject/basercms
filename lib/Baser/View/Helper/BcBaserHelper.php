@@ -2439,4 +2439,16 @@ END_FLASH;
 		return $params;
 	}
 
+/**
+ * 現在のコンテンツ情報を取得する
+ * 
+ * @return mixed|null
+ */
+	public function getCurrentContent() {
+		if(!empty($this->_View->content)) {
+			return $this->_View->content;
+		}
+		return null;
+	}
+	
 }

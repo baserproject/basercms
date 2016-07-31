@@ -57,7 +57,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/date/';
 					$this->BcBaser->link($title, array(
 						'admin' => false,
 						'plugin' => '',
-						'controller' => $blogContent['BlogContent']['name'],
+						'controller' => $this->content['url'],
 						'action' => 'archives',
 						'date', $postedDate['year'], $postedDate['month']
 					))

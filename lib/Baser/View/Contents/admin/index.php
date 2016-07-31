@@ -13,7 +13,9 @@
  */
 $this->BcBaser->css('../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min', array('inline' => false));
 $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
-$this->BcBaser->js('admin/contents/index', false);
+$this->BcBaser->js('admin/contents/index', false, ['id' => 'AdminContentsIndexScript',
+	'data-siteId' => $this->passedArgs['site_id']
+]);
 echo $this->BcForm->input('BcManageContent', array('type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()));
 ?>
 

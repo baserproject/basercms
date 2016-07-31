@@ -58,9 +58,13 @@ class BlogHelper extends AppHelper {
 			return;
 		}
 		if ($blogContentId) {
-			$BlogContent = ClassRegistry::getObject('BlogContent');
-			$BlogContent->expects(array());
-			$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
+			if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
+				$this->blogContent = $this->request->data['BlogContent'];
+			} else {
+				$BlogContent = ClassRegistry::getObject('BlogContent');
+				$BlogContent->expects(array());
+				$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
+			}	
 		} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
@@ -103,7 +107,7 @@ class BlogHelper extends AppHelper {
  * @return string
  */
 	public function getBlogName() {
-		return $this->blogContent['name'];
+		return $this->_View->content['name'];
 	}
 
 /**
@@ -121,7 +125,7 @@ class BlogHelper extends AppHelper {
  * @return string
  */
 	public function getTitle() {
-		return $this->blogContent['title'];
+		return $this->_View->content['title'];
 	}
 
 /**
@@ -192,7 +196,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostLink($post, $title, $options = array()) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		$url = array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']);
+		$url = array('admin' => false, 'plugin' => '', 'controller' => $this->_View->content['url'], 'action' => 'archives', $post['BlogPost']['no']);
 		return $this->BcBaser->getLink($title, $url, $options);
 	}
 
@@ -204,7 +208,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostLinkUrl($post) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		return $this->url(array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']));
+		return $this->url(array('admin' => false, 'plugin' => '', 'controller' => $this->_View->content['url'], 'action' => 'archives', $post['BlogPost']['no']));
 	}
 
 /**
@@ -261,7 +265,7 @@ class BlogHelper extends AppHelper {
 			if (!isset($this->Html)) {
 				$this->Html = new HtmlHelper($this->_View);
 			}
-			$out .= '<p class="more">' . $this->Html->link($moreLink, array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no'], '#' => 'post-detail'), null, null, false) . '</p>';
+			$out .= '<p class="more">' . $this->Html->link($moreLink, array('admin' => false, 'plugin' => '', 'controller' => $this->_View->content['url'], 'action' => 'archives', $post['BlogPost']['no'], '#' => 'post-detail'), null, null, false) . '</p>';
 		}
 		return $out;
 	}
@@ -381,7 +385,7 @@ class BlogHelper extends AppHelper {
 				$url = array(
 					'admin' => false,
 					'plugin' => '',
-					'controller' => $post['BlogContent']['name'],
+					'controller' => $this->_View->content['url'],
 					'action' => 'archives', 'tag', $tag['name']
 				);
 				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
@@ -416,7 +420,7 @@ class BlogHelper extends AppHelper {
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
 		$this->setContent($blogContentId);
-		$blogContentName = $this->blogContent['name'];
+		$blogContentName = $this->_View->content['url'];
 
 		$path = array('category');
 		if ($categoryPath) {
@@ -584,7 +588,7 @@ class BlogHelper extends AppHelper {
 			if (!$title) {
 				$title = $arrow . $prevPost['BlogPost']['name'];
 			}
-			$this->BcBaser->link($title, array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $no), $htmlAttributes);
+			$this->BcBaser->link($title, array('admin' => false, 'plugin' => '', 'controller' => $this->_View->content['url'], 'action' => 'archives', $no), $htmlAttributes);
 		}
 	}
 
@@ -625,7 +629,7 @@ class BlogHelper extends AppHelper {
 			if (!$title) {
 				$title = $nextPost['BlogPost']['name'] . $arrow;
 			}
-			$this->BcBaser->link($title, array('admin' => false, 'plugin' => '', 'mobile' => false, 'controller' => $this->blogContent['name'], 'action' => 'archives', $no), $htmlAttributes);
+			$this->BcBaser->link($title, array('admin' => false, 'plugin' => '', 'mobile' => false, 'controller' => $this->_View->content['url'], 'action' => 'archives', $no), $htmlAttributes);
 		}
 	}
 
@@ -775,7 +779,7 @@ class BlogHelper extends AppHelper {
 			$url = preg_replace('/^' . preg_quote($this->base, '/') . '/', '', $url);
 			$img = $this->BcBaser->getImg($url, $options);
 			if ($link) {
-				return $this->BcBaser->getLink($img, $url = array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']));
+				return $this->BcBaser->getLink($img, $url = array('admin' => false, 'plugin' => '', 'controller' => $this->_View->content['url'], 'action' => 'archives', $post['BlogPost']['no']));
 			} else {
 				return $img;
 			}
