@@ -78,7 +78,7 @@ class BlogBaserHelperTest extends BaserTestCase {
     $View = new View();
     $this->BlogBaser = new BlogBaserHelper($View);
 
-    $this->BlogContent = ClassRegistry::init('BlogContent');
+    $this->BlogContent = ClassRegistry::init('Blog.BlogContent');
     $this->BlogContent->expects(array());
     $this->BlogBaser->blogContent = Hash::extract($this->BlogContent->read(null, 1), 'BlogContent');
   }
@@ -106,6 +106,7 @@ class BlogBaserHelperTest extends BaserTestCase {
  * @dataProvider blogPostsProvider
  */
   public function testBlogPosts($contentsName, $num, $options, $expected, $message = null) {
+	  $this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
     $this->expectOutputRegex($expected, $message);
     $this->BlogBaser->blogPosts($contentsName, $num, $options);
   }

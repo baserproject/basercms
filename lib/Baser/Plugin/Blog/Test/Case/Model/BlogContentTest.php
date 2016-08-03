@@ -12,6 +12,11 @@
 
 App::uses('BlogContent', 'Blog.Model');
 
+/**
+ * Class BlogContentTest
+ * 
+ * @property BlogContent $BlogContent
+ */
 class BlogContentTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -41,7 +46,7 @@ class BlogContentTest extends BaserTestCase {
  * validate
  */
 	public function test空チェック() {
-
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
 				'title' => '',
@@ -59,7 +64,7 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
-
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
 				'name' => '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901',
@@ -98,6 +103,7 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 	public function testその他異常系() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 半角チェック
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
@@ -185,26 +191,30 @@ class BlogContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($id, $exclude_search) {
-		$this->BlogContent->create(array(
-			'BlogContent' => array(
+		$this->BlogContent->create([
+			'BlogContent' => [
 				'id' => $id,
-				'name' => 'test-name',
-				'title' => 'test-title',
 				'description' => 'test-description',
+			],
+			'Content' => [
+				'name' => 'test-name',
+				'parent_id' => 1,
+				'title' => 'test-title',
 				'exclude_search' => $exclude_search,
-				'status' => 1
-			)
-		));
+				'status' => 1,
+				'site_id' => 0
+			]
+		]);
 
 		$this->BlogContent->save();
 
 		if (!$exclude_search) {
-			$BlogPost = ClassRegistry::init('Blog.BlogContent');
-			$result = $BlogPost->find('count', array(
-				'conditions' => array('BlogContent.name' => 'test-name'),
+			$BlogContent = ClassRegistry::init('Blog.BlogContent');
+			$result = $BlogContent->find('count', array(
+				'conditions' => array('Content.name' => 'test-name'),
 			));
 			$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
-			unset($BlogPost);
+			unset($BlogContent);
 		
 		} else {
 			$SearchIndex = ClassRegistry::init('SearchIndex');
@@ -253,27 +263,19 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 /**
- * ユーザーグループデータをコピーする
+ * ブログコンテンツデータをコピーする
  */
 	public function testCopy() {
-		$this->BlogContent->copy(1);
+		$this->BlogContent->copy(1, 1, 'hoge1', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
-		$this->assertEquals($result['BlogContent']['name'], 'news_copy');
-
-		$data = array(
-			'BlogContent' => array(
-				'name' => 'test-name',
-				'title' => 'test-title',
-				'description' => 'test-description',
-				'exclude_search' => 0,
-		));
-		$this->BlogContent->copy(false, $data);
+		$this->assertEquals($result['Content']['name'], 'hoge1');
+		$this->BlogContent->copy(1, 1, 'test-title', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
-		$this->assertEquals($result['BlogContent']['name'], 'test-name_copy');
+		$this->assertEquals($result['Content']['name'], 'test-title');
 	}
 
 }

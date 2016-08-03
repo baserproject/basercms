@@ -22,10 +22,10 @@ App::uses('BlogCategory', 'Blog.Model');
 /**
  * Blog helper library.
  *
- * @package       Baser.Test.Case
- * @property      BlogHelper $Blog
- * @property      BlogPost $BlogPost
- * @property      BlogContent $BlogContent
+ * @package Baser.Test.Case
+ * @property BlogPost $BlogPost
+ * @property BlogContent $BlogContent
+ * @property BlogHelper $Blog
  */
 class BlogHelperTest extends BaserTestCase {
 
@@ -40,6 +40,8 @@ class BlogHelperTest extends BaserTestCase {
 		'baser.Default.Plugin',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogContent',
+		'baser.Default.Content',
+		'baser.Default.Site',
 		'baser.Default.BlogTag',
 		'plugin.blog.Model/BlogCategoryModel',
 		'plugin.blog.Model/BlogPostModel',
@@ -72,14 +74,19 @@ class BlogHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$View = new View();
-		$View->site = array(
+		$View->request->params['Site'] = array(
 			'use_subdomain' => null,
 			'name' => null,
 			'alias' => null,
 		);
+		$View->request->params['Content'] = [
+			'url' => '/news',
+			'name' => 'news',
+			'title' => '新着情報'
+		];
 		$this->Blog = new BlogHelper($View);
 
-		$this->BlogContent = ClassRegistry::init('BlogContent');
+		$this->BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$this->BlogContent->expects(array());
 		$this->Blog->blogContent = Hash::extract($this->BlogContent->read(null, 1), 'BlogContent');
 	}
@@ -176,11 +183,11 @@ class BlogHelperTest extends BaserTestCase {
 
 		// $link = true
 		$result = $this->Blog->getPostTitle($post);
-		$this->assertEqual('<a href="/news2/archives/4">test-name</a>', $result, '記事タイトルを正しく取得できません');
+		$this->assertEquals('<a href="/news/archives/4">test-name</a>', $result, '記事タイトルを正しく取得できません');
 
 		// $link = false
 		$result  = $this->Blog->getPostTitle($post, false);
-		$this->assertEqual('test-name', $result, '記事タイトルを正しく取得できません');
+		$this->assertEquals('test-name', $result, '記事タイトルを正しく取得できません');
 	}
 
 /**
@@ -192,7 +199,7 @@ class BlogHelperTest extends BaserTestCase {
 			'no' => 3,
 		));
 		$result = $this->Blog->getPostLink($post, 'test-title');
-		$this->assertEqual('<a href="/news2/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
+		$this->assertEquals('<a href="/news/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
 	}
 
 /**
@@ -204,7 +211,7 @@ class BlogHelperTest extends BaserTestCase {
 			'no' => 3,
 		));
 		$result = $this->Blog->getPostLinkUrl($post);
-		$this->assertEqual('/news2/archives/3', $result, '記事へのリンクを正しく取得できません');
+		$this->assertEquals('/news/archives/3', $result, '記事へのリンクを正しく取得できません');
 	}
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * run all baser filter tests
+ * run all baser route tests
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright 2008 - 2015, baserCMS Users Community <http://basercms.net/community/>
@@ -15,7 +15,7 @@
 /**
  * @package Baser.Test.Case
  */
-class BcAllFilterTest extends CakeTestSuite {
+class BcAllRouteTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
@@ -23,8 +23,8 @@ class BcAllFilterTest extends CakeTestSuite {
  * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new CakeTestSuite('All Routing Filter tests');
-		$suite->addTestDirectory(BASER_TEST_CASES . DS . 'Routing' . DS . 'Filter' . DS);
+		$suite = new CakeTestSuite('All Routing Route tests');
+		$suite->addTestDirectory(BASER_TEST_CASES . DS . 'Routing' . DS . 'Route' . DS);
 		return $suite;
 	}
 

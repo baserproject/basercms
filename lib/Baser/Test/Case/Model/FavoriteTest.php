@@ -66,6 +66,7 @@ class FavoriteTest extends BaserTestCase {
  * validate
  */
 	public function test権限チェック異常系() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Favorite->create(array(
 			'Favorite' => array(
 				'url' => '/admin/hoge',

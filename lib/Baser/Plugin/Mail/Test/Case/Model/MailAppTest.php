@@ -12,6 +12,11 @@
 
 App::uses('MailAppModel', 'Mail.Model');
 
+/**
+ * Class MailAppTest
+ * @property MailAppModel $MailApp
+ */
+
 class MailAppTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -23,7 +28,7 @@ class MailAppTest extends BaserTestCase {
 	);
 
 	public function setUp() {
-		$this->MailApp = ClassRegistry::init('MailAppModel');
+		$this->MailApp = ClassRegistry::init('Mail.MailApp');
 		parent::setUp();
 	}
 

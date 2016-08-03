@@ -116,7 +116,8 @@ class ThemeTest extends BaserTestCase {
 		);
 		$this->Theme->save($data);
 		$this->assertFileExists($path . 'new-nada-icons', 'ファイル名を変更できません');
-		rename($path . 'new-nada-icons', $path . 'nada-icons');
+		$Folder = new Folder($path . 'new-nada-icons');
+		$Folder->move(['to' => $path . 'nada-icons']);
 	}
 
 }

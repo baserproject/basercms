@@ -1,4 +1,4 @@
-<h1><?php echo $this->content['title'] ?></h1>
+<h1><?php echo $this->request->params['Content']['title'] ?></h1>
 <?php if($children): ?>
 <ul class="eyecatch-list clearfix">
 	<?php foreach($children as $child): ?>

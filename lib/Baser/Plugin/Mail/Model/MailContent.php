@@ -232,7 +232,7 @@ class MailContent extends MailAppModel {
 			'parent_id'	=> $newParentId,
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,
-			'site_id' 	=> $siteId
+			'site_id' 	=> $newSiteId
 		];
 		if(!is_null($newSiteId) && $siteId != $newSiteId) {
 			$data['Content']['site_id'] = $newSiteId;

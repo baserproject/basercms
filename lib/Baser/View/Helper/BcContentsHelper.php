@@ -139,10 +139,10 @@ class BcContentsHelper extends AppHelper {
  * @return mixed|string
  */
 	public function getCurrentRelatedSiteUrl($siteName) {
-		if(empty($this->_View->site)) {
+		if(empty($this->request->params['Site'])) {
 			return '';
 		}
-		$url = $this->getPureUrl('/' . $this->request->url, $this->_View->site['name'], $this->_View->site['alias']);
+		$url = $this->getPureUrl('/' . $this->request->url, $this->request->params['Site']['name'], $this->request->params['Site']['alias']);
 		$Site = ClassRegistry::init('Site');
 		$site = $Site->find('first', ['conditions' => ['Site.name' => $siteName], 'recursive' => -1]);
 		if(!$site) {

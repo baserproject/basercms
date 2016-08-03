@@ -119,7 +119,7 @@ class MailController extends MailAppController {
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
 		
 		// ページタイトルをセット
-		$this->pageTitle = $this->content['title'];
+		$this->pageTitle = $this->request->params['Content']['title'];
 		// レイアウトをセット
 		$this->layout = $this->dbDatas['mailContent']['MailContent']['layout_template'];
 

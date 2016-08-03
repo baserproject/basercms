@@ -73,10 +73,10 @@ class BlogPostsController extends BlogAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		if (isset($this->request->params['pass'][0])) {
-			$this->content = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
+			$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
 			$this->BlogContent->recursive = -1;
 			$this->blogContent = $this->BlogContent->read(null, $this->request->params['pass'][0]);
-			$this->crumbs[] = array('name' => $this->content['title'] . '設定', 'url' => array('controller' => 'blog_contents', 'action' => 'edit', $this->request->params['pass'][0]));
+			$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_contents', 'action' => 'edit', $this->request->params['pass'][0]));
 			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
 			if ($this->request->params['prefix'] == 'admin') {
 				$this->subMenuElements = ['blog_posts'];
@@ -149,7 +149,7 @@ class BlogPostsController extends BlogAppController {
 			return;
 		}
 
-		$this->pageTitle = '[' . $this->content['title'] . '] 記事一覧';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 記事一覧';
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
 	}
@@ -308,14 +308,14 @@ class BlogPostsController extends BlogAppController {
 				'editorStyles' => $editorStyles
 			));
 		}
-		$this->crumbs[] = array('name' => $this->content['title'] . '記事一覧', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $blogContentId));
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '記事一覧', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $blogContentId));
 		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
 		$this->set('editable', true);
 		$this->set('categories', $categories);
 		$this->set('previewId', 'add_' . mt_rand(0, 99999999));
 		$this->set('editorOptions', $editorOptions);
 		$this->set('users', $this->BlogPost->User->getUserList());
-		$this->pageTitle = '[' . $this->content['title'] . '] 新規記事登録';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規記事登録';
 		$this->help = 'blog_posts_form';
 		$this->render('form');
 	}
@@ -409,7 +409,7 @@ class BlogPostsController extends BlogAppController {
 			));
 		}
 
-		$this->crumbs[] = array('name' => $this->content['title'] . '記事一覧', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $blogContentId));
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '記事一覧', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $blogContentId));
 		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
 		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
@@ -417,7 +417,7 @@ class BlogPostsController extends BlogAppController {
 		$this->set('previewId', $this->request->data['BlogPost']['id']);
 		$this->set('users', $this->BlogPost->User->getUserList());
 		$this->set('editorOptions', $editorOptions);
-		$this->pageTitle = '[' . $this->content['title'] . '] 記事編集： ' . $this->request->data['BlogPost']['name'];
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 記事編集： ' . $this->request->data['BlogPost']['name'];
 		$this->help = 'blog_posts_form';
 		$this->render('form');
 	}

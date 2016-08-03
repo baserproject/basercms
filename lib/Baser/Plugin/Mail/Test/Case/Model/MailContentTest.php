@@ -12,11 +12,18 @@
 
 App::uses('MailContent', 'Mail.Model');
 
+/**
+ * Class MailContentTest
+ *
+ * @property MailContent $MailContent
+ */
 class MailContentTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.SearchIndex',
+		'baser.Default.Site',
+		'baser.Default.Content',
 		'plugin.mail.Default/MailMessage',
 		'plugin.mail.Default/MailConfig',
 		'plugin.mail.Default/MailContent',
@@ -24,7 +31,7 @@ class MailContentTest extends BaserTestCase {
 	);
 
 	public function setUp() {
-		$this->MailContent = ClassRegistry::init('MailContent');
+		$this->MailContent = ClassRegistry::init('Mail.MailContent');
 		parent::setUp();
 	}
 
@@ -58,6 +65,7 @@ class MailContentTest extends BaserTestCase {
 	}
 
 	public function test空白チェック() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
 				'name' => '',
@@ -90,6 +98,7 @@ class MailContentTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
 				'name' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
@@ -124,6 +133,7 @@ class MailContentTest extends BaserTestCase {
 	}
 
 	public function test半角英数チェック() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
 				'name' => '１２３ａｂｃ',
@@ -144,6 +154,7 @@ class MailContentTest extends BaserTestCase {
 	}
 
 	public function testNameMailチェック() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
 				'name' => 'mail',
@@ -157,6 +168,7 @@ class MailContentTest extends BaserTestCase {
 	}
 	
 	public function test既存アカウント名チェック() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
 				'name' => 'contact',
@@ -219,13 +231,18 @@ class MailContentTest extends BaserTestCase {
  */
 	public function testAfterSave($exclude_search) {
 		// 初期化
-		$data = array('MailContent' => array(
-			'name' => 'hogeName' . $exclude_search,
-			'title' => 'hogeTitle',
+		$data = ['MailContent' => [
 			'description' => 'hogeDescription',
-			'status' => true,
-			'exclude_search' => $exclude_search,
-		));
+			],
+			'Content' => [
+				'name' => 'hogeName' . $exclude_search,
+				'title' => 'hogeTitle',
+				'status' => true,
+				'exclude_search' => $exclude_search,
+				'parent_id' => 1,
+				'site_id' => 0
+			]
+		];
 
 		// データ保存
 		$this->MailContent->save($data);
@@ -322,12 +339,14 @@ class MailContentTest extends BaserTestCase {
  * メールコンテンツデータをコピーする
  * 
  * @param int $id
- * @param array $data
- * @param array $recursive
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しい作成者ID
+ * @param int $newSiteId 新しいサイトID
  * @param array $expected 期待値
  * @dataProvider copyDataProvider
  */
-	public function testCopy($id, $data, $recursive) {
+	public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId) {
 
 		$db = $this->MailContent->getDataSource();
 		switch ($db->config['datasource']) {
@@ -337,36 +356,23 @@ class MailContentTest extends BaserTestCase {
 			default :
 		}
 		
-		$result = $this->MailContent->copy($id, $data, $recursive);
+		$result = $this->MailContent->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		if (!is_null($id)) {
-			$this->assertRegExp('/contact_copy/', $result['MailContent']['name'], 'メールコンテンツデータをコピーできません');
+			$this->assertRegExp('/hogeName/', $result['Content']['name'], 'メールコンテンツデータをコピーできません');
 			// メールフィールドもコピーされているか
 			$this->MailField = ClassRegistry::init('MailField');
 			$field = $this->MailField->find('first',
 				array('conditions' => array('id' => 19)
 			));
-
-			if ($recursive) {
-				$this->assertEquals(2, $field['MailField']['mail_content_id'], 'メールフィールドデータをコピーできません');
-			} else {
-				$this->assertEmpty($field, '意図しないメールフィールドがコピーされています');
-			}
-
-		} else {
-			$this->assertEquals('hogeName_copy', $result['MailContent']['name'], 'メールコンテンツデータをコピーできません');
+			
+			$this->assertEquals(2, $field['MailField']['mail_content_id'], 'メールフィールドデータをコピーできません');
 		}
 	}
 
 	public function copyDataProvider() {
 		return array(
-			array(1, array(), true),
-			array(null, array('MailContent' => array(
-				'name' => 'hogeName',
-				'title' => 'hogeTitle',
-				'exclude_search' => null
-			)), true),
-			array(1, array(), false),
+			array(1, 1, 'hogeName', 1, 0)
 		);
 	}
 

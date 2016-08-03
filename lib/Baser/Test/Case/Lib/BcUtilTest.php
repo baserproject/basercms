@@ -53,6 +53,7 @@ class BcUtilTest extends BaserTestCase {
  * @dataProvider isAdminSystemDataProvider
  */
 	public function testIsAdminSystem($url, $expect) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		Configure::write('BcRequest.pureUrl', $url);
 		$result = $this->util->isAdminSystem();
 
@@ -82,6 +83,7 @@ class BcUtilTest extends BaserTestCase {
  * @dataProvider isAdminUserDataProvider
  */
 	public function testIsAdminUser($usergroup, $expect) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 偽装ログイン
 		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 		$this->util->Session = new CakeSession();
@@ -108,6 +110,7 @@ class BcUtilTest extends BaserTestCase {
  * ログインユーザーのデータを取得する
  */
 	public function testLoginUser() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// ログインしていない場合
 		$result = $this->util->loginUser();
 		$this->assertNull($result, 'ログインユーザーのデータを正しく取得できません');
@@ -125,6 +128,7 @@ class BcUtilTest extends BaserTestCase {
  * ログインしているユーザー名を取得
  */
 	public function testLoginUserName() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// ログインしていない場合
 		$result = $this->util->loginUserName();
 		$this->assertEmpty($result, 'ログインユーザーのデータを正しく取得できません');
@@ -141,6 +145,7 @@ class BcUtilTest extends BaserTestCase {
  * ログインしているユーザーのセッションキーを取得
  */
 	public function testGetLoginUserSessionKey() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// セッションキーを未設定の場合
 		$result = $this->util->getLoginUserSessionKey();
 		$this->assertEquals('User', $result, 'セッションキーを取得を正しく取得できません');

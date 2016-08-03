@@ -870,41 +870,6 @@ class BcManagerComponentTest extends BaserTestCase {
 		$result = $this->BcManager->checkDbConnection($config);
 
 	}
-
-/**
- * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックする
- * 作成してないものがひとつでもあると true を返す
- * 
- * @return boolean
- * @deprecated since version 3.0.1
- */
-	public function testIsCreatedAdminAssetsSymlink() {
-
-		$result = $this->BcManager->isCreatedAdminAssetsSymlink();
-		$this->assertFalse($result, '管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックが正しくありません');
-
-		$viewPath = getViewPath();
-		$paths = array(
-			'img' . DS . 'admin',
-			'css' . DS . 'admin',
-			'js' . DS . 'admin'
-		);
-		// シンボリックリンクを作成
-		foreach ($paths as $path) {
-			symlink(BASER_WEBROOT . $path, $viewPath . $path);
-		}
-
-		// チェックを実行
-		$result = $this->BcManager->isCreatedAdminAssetsSymlink();
-
-		// シンボリックリンクを削除
-		foreach ($paths as $path) {
-			unlink($viewPath . $path);
-		}
-
-		$this->assertTrue($result, '管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックが正しくありません');
-	
-	}
 	
 /**
  * テーマに管理システム用アセットを配置する

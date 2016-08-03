@@ -51,6 +51,7 @@ App::build(array(
 App::build(array(
 	'Event'						=> array(APP . 'Event', BASER_EVENTS),
 	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'Routing/Route'				=> array(BASER . 'Routing' . DS . 'Route' . DS),
 	'Configure'					=> array(BASER . 'Configure' . DS),
 	'TestSuite'					=> array(BASER_TEST_SUITE),
 	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),

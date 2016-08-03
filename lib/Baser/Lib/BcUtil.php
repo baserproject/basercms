@@ -11,6 +11,7 @@
  */
 
 App::uses('BcAuthComponent', 'Controller/Component');
+App::uses('Router', 'Routing');
 
 /**
  * Class BcUtil
@@ -30,7 +31,12 @@ class BcUtil extends Object {
  * @return boolean
  */
 	public static function isAdminSystem() {
-		$url = Router::getRequest(true)->url;
+		$request = Router::getRequest(true);
+		if($request) {
+			$url = Router::getRequest(true)->url;
+		} else {
+			return false;
+		}
 		$adminPrefix = Configure::read('Routing.prefixes.0');
 		return (boolean)(preg_match('/^' . $adminPrefix . '\//', $url) || preg_match('/^' . $adminPrefix . '$/', $url));
 	}

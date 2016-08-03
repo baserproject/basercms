@@ -22,7 +22,7 @@ if (isset($blogContent)) {
 $data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count);
 $authors = $data['authors'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $this->content['url'] . '/archives/';
+$baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';
 ?>
 <div class="widget widget-blog-authors widget-blog-authors-<?php echo $id ?> blog-widget">
 	<?php if ($name && $use_title): ?>

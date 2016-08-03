@@ -303,7 +303,7 @@ class Page extends AppModel {
 			}
 		}
 		$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
-		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
+		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('path' => $parameters, 'return'));
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$description = '';
 		if(!empty($content['description'])) {
@@ -364,14 +364,12 @@ class Page extends AppModel {
 		if (function_exists('ini_set')) {
 			ini_set('memory_limit ', '-1');
 		}
-		
+		if (!isset($data['Page']) || !isset($data['Content'])) {
+			return false;
+		}
 		$data['Page'] = array_merge(['id' => '', 'contents' => '', 'title' => '', 'description' => '', 'code' => ''], $data['Page']);
-		if (isset($data['Page'])) {
-			$page = $data['Page'];
-		}
-		if(isset($data['Content'])) {
-			$content = $data['Content'];
-		}
+		$page = $data['Page'];
+		$content = $data['Content'];
 		$contents = $this->addBaserPageTag($page['id'], $page['contents'], $content['title'], $content['description'], $page['code']);
 
 		// 新しいページファイルのパスを取得する
@@ -949,16 +947,17 @@ class Page extends AppModel {
 			'parent_id'	=> $newParentId,
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,
-			'site_id' 	=> $siteId
+			'site_id' 	=> $newSiteId,
+			'description' => ''
 		];
 		if(!is_null($newSiteId) && $siteId != $newSiteId) {
 			$data['Content']['site_id'] = $newSiteId;
 			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
 		$this->getDataSource()->begin();
-		if ($this->save($data)) {
+		if ($data = $this->save($data)) {
 			$this->getDataSource()->commit();
-			return true;
+			return $data;
 		}
 		$this->getDataSource()->rollback();
 		return false;

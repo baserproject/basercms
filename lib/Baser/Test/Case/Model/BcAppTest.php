@@ -28,6 +28,7 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
 		'baser.Default.SearchIndex',
+		'baser.Default.Content'
 	);
 
 /**

@@ -1495,36 +1495,6 @@ class BcManagerComponent extends Component {
 			return true;
 		}
 	}
-
-/**
- * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックする
- * 作成してないものがひとつでもあると false を返す
- * 
- * @return boolean
- * @deprecated since version 3.0.1
- */
-	public function isCreatedAdminAssetsSymlink() {
-		// Windowsの場合シンボリックリンクをサポートしないのでそのままtrueを返す
-		if (DS == '\\') {
-			return true;
-		}
-
-		$viewPath = getViewPath();
-		$css = $viewPath . 'css' . DS . 'admin';
-		$js = $viewPath . 'js' . DS . 'admin';
-		$img = $viewPath . 'img' . DS . 'admin';
-		$result = true;
-		if (!is_dir($css) && !is_link($css)) {
-			$result = false;
-		}
-		if (!is_dir($js) && !is_link($js)) {
-			$result = false;
-		}
-		if (!is_dir($img) && !is_link($img)) {
-			$result = false;
-		}
-		return $result;
-	}
 	
 /**
  * テーマに管理システム用アセットを配置する

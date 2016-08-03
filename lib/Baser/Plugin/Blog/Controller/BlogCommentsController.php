@@ -46,7 +46,7 @@ class BlogCommentsController extends BlogAppController {
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
 
 		$crumbs = array();
-		$this->content = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
+		$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
 		if (!empty($this->params['pass'][1])) {
 
 			$dbDatas = $this->BlogPost->read(null, $this->params['pass'][1]);
@@ -58,13 +58,13 @@ class BlogCommentsController extends BlogAppController {
 			$this->blogPost = array('BlogPost' => $dbDatas['BlogPost']);
 			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
 
-			$crumbs[] = array('name' => $this->content['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+			$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 			$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
 		} elseif (!empty($this->params['pass'][0])) {
 
 			$dbDatas = $this->BlogPost->BlogContent->read(null, $this->params['pass'][0]);
 			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
-			$crumbs[] = array('name' => $this->content['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+			$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 		}
 
 		$this->crumbs = am($this->crumbs, $crumbs);

@@ -15,10 +15,10 @@
 
 
 <tr>
-	<th><?php echo $this->content['title'] ?>管理メニュー</th>
+	<th><?php echo $this->request->params['Content']['title'] ?>管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link($this->content['title'] . '設定', array('controller' => 'blog_contents', 'action' => 'edit', $blogContent['BlogContent']['id'])) ?></li>
+			<li><?php $this->BcBaser->link($this->request->params['Content']['title'] . '設定', array('controller' => 'blog_contents', 'action' => 'edit', $blogContent['BlogContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('記事一覧', array('controller' => 'blog_posts', 'action' => 'index', $blogContent['BlogContent']['id'])) ?></li>
 			<?php if (isset($newCatAddable) && $newCatAddable): ?>
 				<li><?php $this->BcBaser->link('記事新規追加', array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id'])) ?></li>

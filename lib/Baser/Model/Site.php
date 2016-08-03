@@ -269,6 +269,9 @@ class Site extends AppModel {
 		if(isset($data['Site'])) {
 			$data = $data['Site'];
 		}
+		if(empty($data['name'])) {
+			return '';
+		}
 		$prefix = $data['name'];
 		if($data['alias']) {
 			$prefix = $data['alias'];

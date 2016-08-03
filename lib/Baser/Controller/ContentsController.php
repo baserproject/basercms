@@ -323,7 +323,7 @@ class ContentsController extends AppController {
  * @param $type
  */
 	public function view($plugin, $type) {
-		$data = array('Content' => $this->content);
+		$data = array('Content' => $this->request->params['Content']);
         if($this->BcContents->preview && $this->request->data) {
             $data = $this->request->data;
         }

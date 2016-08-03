@@ -221,14 +221,16 @@ class BlogContent extends BlogAppModel {
 			'parent_id'	=> $newParentId,
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,
-			'site_id' 	=> $siteId
+			'site_id' 	=> $newSiteId,
+			'exclude_search' => false
 		];
 		if(!is_null($newSiteId) && $siteId != $newSiteId) {
 			$data['Content']['site_id'] = $newSiteId;
 			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
 		$this->getDataSource()->begin();
-		if ($result = $this->save($data)) {
+		$this->create($data);
+		if ($result = $this->save()) {
 			$result['BlogContent']['id'] = $this->getInsertID();
 			$blogPosts = $this->BlogPost->find('all', array('conditions' => array('BlogPost.blog_content_id' => $id), 'order' => 'BlogPost.id', 'recursive' => -1));
 			foreach ($blogPosts as $blogPost) {

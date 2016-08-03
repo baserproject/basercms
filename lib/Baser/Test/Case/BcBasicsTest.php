@@ -377,7 +377,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testEmptyFolder() {
 
-		$dummyPath = WWW_ROOT . 'test' . DS;
+		$dummyPath = TMP . 'test' . DS;
 		$names = array(
 			'folder' => array('folder1', 'folder2'),
 			'file' => array('file1', 'file2'),
@@ -609,7 +609,7 @@ class BcBasicsTest extends BaserTestCase {
 
 		// プラグインのバージョンを取得
 		// ダミーのプラグインを作成
-		$path = BASER_PLUGINS . 'Hoge' . DS;
+		$path = APP . 'Plugin' . DS . 'Hoge' . DS;
 		$Folder = new Folder($path, true);
 		$File = new File($path . 'VERSION.txt', true);
 		$File->write('1.2.3');

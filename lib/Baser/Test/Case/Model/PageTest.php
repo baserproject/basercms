@@ -34,6 +34,7 @@ class PageTest extends BaserTestCase {
 		'baser.Default.PluginContent',
 		'baser.Default.User',
 		'baser.Default.Site',
+		'baser.Default.Content',
 	);
 
 /**
@@ -91,6 +92,7 @@ class PageTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Page->create(array(
 			'Page' => array(
 				'name' => '',
@@ -113,6 +115,7 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Page->create(array(
 			'Page' => array(
 				'name' => '123456789012345678901234567890123456789012345678901',
@@ -140,6 +143,7 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function test既存ページチェック異常系() {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Page->create(array(
 			'Page' => array(
 				'name' => 'index',
@@ -181,7 +185,7 @@ class PageTest extends BaserTestCase {
  * @return	array	初期値データ
  */
 	public function testGetDefaultValue() {
-
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$expected = array('Page' => array(
 				'sort' => 17,
 				'status' => false,
@@ -262,18 +266,19 @@ class PageTest extends BaserTestCase {
  * ページテンプレートファイルが開けるかチェックする
  * 
  * @param array $name ページ名
- * @param array $categoryId ページカテゴリーID
+ * @param array $parentId 親コンテンツID
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider checkOpenPageFileDataProvider
  */
-	public function testCheckOpenPageFile($name, $categoryId, $expected, $message = null) {
-		$data = array(
-			'Page' => array(
+	public function testCheckOpenPageFile($name, $parentId, $expected, $message = null) {
+		$data = [
+			'Content' => [
 				'name' => $name,
-				'page_category_id' => $categoryId,
-			)
-		);
+				'parent_id' => $parentId,
+				'site_id' => 0
+			]
+		];
 		$result = $this->Page->checkOpenPageFile($data);
 		$this->assertEquals($expected, $result, $message);
 	}
@@ -379,16 +384,16 @@ class PageTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider beforeDeleteDataProvider
  */
-	public function testBeforeDelete($id, $expected, $message = null) {
-		
+	public function testBeforeDelete($id, $message = null) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 削除したファイルを再生するため内容を取得
-		$Page = $this->Page->find('first', array(
-			'conditions' => array('Page.id' => $id),
-			'fields' => array('Page.url'),
-			'recursive' => -1,
-			)
+		$Page = $this->Page->find('first', [
+			'conditions' => ['Page.id' => $id],
+			'fields' => ['Content.url'],
+			'recursive' => 0,
+			]
 		);
-		$path = getViewPath() . 'Pages' . $Page['Page']['url'] . '.php';
+		$path = getViewPath() . 'Pages' . $Page['Content']['url'] . '.php';
 		$File = new File($path);  
 		$Content = $File->read();
 
@@ -409,7 +414,7 @@ class PageTest extends BaserTestCase {
 
 	public function beforeDeleteDataProvider() {
 		return array(
-			array(3, 'fasdfd', 'PageモデルのbeforeDeleteが機能していません'),
+			array(3, 'PageモデルのbeforeDeleteが機能していません'),
 		);
 	}
 
@@ -553,6 +558,7 @@ class PageTest extends BaserTestCase {
  * @dataProvider convertViewUrlDataProvider
  */
 	public function testConvertViewUrl($url, $expected, $message = null) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$result = $this->Page->convertViewUrl($url);
 		$this->assertEquals($expected, $result, $message);
 	}
@@ -756,13 +762,13 @@ class PageTest extends BaserTestCase {
 	public function testDelete($id, $expected, $message = null) {
 
 		// 削除したファイルを再生するため内容を取得
-		$Page = $this->Page->find('first', array(
-			'conditions' => array('Page.id' => $id),
-			'fields' => array('Page.url'),
-			'recursive' => -1,
-			)
+		$Page = $this->Page->find('first', [
+			'conditions' => ['Page.id' => $id],
+			'fields' => ['Content.url'],
+			'recursive' => 0
+			]
 		);
-		$path = getViewPath() . 'Pages' . $Page['Page']['url'] . '.php';
+		$path = getViewPath() . 'Pages' . $Page['Content']['url'] . '.php';
 		$File = new File($path);  
 		$Content = $File->read();
 
@@ -789,19 +795,19 @@ class PageTest extends BaserTestCase {
  * ページデータをコピーする
  * 
  * @param int $id ページID
- * @param array $data コピーしたいデータ
- * @param array $expected 期待値
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しい作成者ID
+ * @param int $newSiteId 新しいサイトID
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider copyDataProvider
  */
-	public function testCopy($id, $data, $expected, $message = null) {
-
-		$data = array('Page' => $data);
-
-		$result = $this->Page->copy($id, $data);
+	public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+		$result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		// コピーしたファイル存在チェック
-		$path = getViewPath() . 'Pages' . $result['Page']['url'] . '.php';
+		$path = getViewPath() . 'Pages' . $result['Content']['url'] . '.php';
 		$this->assertFileExists($path, $message);
 		@unlink($path);
 
@@ -813,11 +819,8 @@ class PageTest extends BaserTestCase {
 
 	public function copyDataProvider() {
 		return array(
-			array(1, array(), array(), 'ページデータをコピーできません'),
-			array(null,
-						array('name' => 'hoge','title' => 'hoge','page_category_id' => null,'description' => 'hoge'),
-						array('Page' => array()),
-						'ページデータをコピーできません'),
+			array(1, 1, 'hoge1', 1, 0, 'ページデータをコピーできません'),
+			array(3, 1, 'hoge', 1, 0, 'ページデータをコピーできません')
 		);
 	}
 

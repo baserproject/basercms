@@ -141,6 +141,7 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider pageDisplayDataProvider
  */
 	public function testPageDisplay($url, $pass) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
@@ -178,6 +179,7 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider mobilePageDisplayDataProvider
  */
 	public function testMobilePageDisplay($url, $pass) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->_setAgent('mobile');
 		$this->_setAgentLink('mobile');
 		$params = $this->_getParams($url);
@@ -216,6 +218,7 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider smartphonePageDisplayDataProvider
  */
 	public function testSmartphonePageDisplay($url, $pass) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->_setAgent('smartphone');
 		$this->_setAgentLink('smartphone');
 		$params = $this->_getParams($url);
@@ -243,35 +246,5 @@ class RoutesTest extends BaserTestCase {
 			array('/s/recruit', array('recruit'))
 		);
 	}
-
-/**
- * プラグインコンテンツのルーティングテスト
- *
- * @param array $pluginContent プラグインコンテンツのレコードの配列
- * @return void
- *
- * @dataProvider pluginContentDataProvider
- */
-	public function testPluginContent(array $pluginContent) {
-		$url = $pluginContent['name'];
-		$params = $this->_getParams($url);
-		$expects = array(
-			'controller' => $pluginContent['plugin'],
-			'action' => 'index',
-			'plugin' => $pluginContent['plugin'],
-			'named' => array(),
-			'pass' => array()
-		);
-
-		$this->assertEquals($expects, $params);
-	}
-
-/**
- * プラグインコンテンツ用データプロバイダ
- *
- * @return array
- */
-	public function pluginContentDataProvider() {
-		return ClassRegistry::init('PluginContent')->find('all');
-	}
+	
 }

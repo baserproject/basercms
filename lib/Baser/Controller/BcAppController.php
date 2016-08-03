@@ -148,6 +148,20 @@ class BcAppController extends Controller {
 	public $adminTheme = null;
 
 /**
+ * サイトデータ
+ *
+ * @var array
+ */
+	public $site = [];
+
+/**
+ * コンテンツデータ
+ *
+ * @var array
+ */
+	public $content = [];
+
+/**
  * コンストラクタ
  *
  * @param CakeRequest $request リクエストオブジェクト
@@ -389,9 +403,9 @@ class BcAppController extends Controller {
 			} elseif ($agent == 'smartphone') {
 				$this->helpers[] = 'BcSmartphone';
 			}
-			if(isset($this->site)) {
-				$this->layoutPath = $this->site['name'];
-				$this->subDir = $this->site['name'];
+			if(isset($this->request->params['Site'])) {
+				$this->layoutPath = $this->request->params['Site']['name'];
+				$this->subDir = $this->request->params['Site']['name'];
 			}
 		}
 
@@ -436,8 +450,8 @@ class BcAppController extends Controller {
  */
 	public function setTheme() {
 		$theme = '';
-		if(!empty($this->site['theme'])) {
-			$theme = $this->site['theme'];
+		if(!empty($this->request->params['Site']['theme'])) {
+			$theme = $this->request->params['Site']['theme'];
 		} elseif (!empty($this->siteConfigs['theme'])) {
 			$theme = $this->siteConfigs['theme'];
 		} else {

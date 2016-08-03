@@ -1424,7 +1424,8 @@ class BcAppModel extends Model {
  * @return bool
  */
 	public function isPublish($status, $publishBegin, $publishEnd) {
-		return $this->Content->isPublish($status, $publishBegin, $publishEnd);
+		$Content = ClassRegistry::init('Content');
+		return $Content->isPublish($status, $publishBegin, $publishEnd);
 	}
 
 /**

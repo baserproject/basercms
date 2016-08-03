@@ -283,8 +283,8 @@ class BcBaserHelper extends AppHelper {
 
 		// サイトタイトルを追加
 		$siteName = '';
-		if(!empty($this->_View->site['title'])) {
-			$siteName = $this->_View->site['title'];
+		if(!empty($this->request->params['Site']['title'])) {
+			$siteName = $this->request->params['Site']['title'];
 		} elseif (!empty($this->siteConfig['name'])) {
 			$siteName = $this->siteConfig['name'];
 		}
@@ -424,15 +424,17 @@ class BcBaserHelper extends AppHelper {
  * @return bool
  */
 	public function isHome() {
-		if (!Configure::read('BcRequest.agentAlias')) {
+		$Site = ClassRegistry::init('Site');
+		$prefix = $Site->getPrefix(['Site' => $this->request->params['Site']]);
+		if (!$prefix) {
 			return (
 				$this->request->url == false ||
 				$this->request->url == 'index'
 			);
 		} else {
 			return (
-				$this->request->url == Configure::read('BcRequest.agentAlias') . '/' ||
-				$this->request->url == Configure::read('BcRequest.agentAlias') . '/index'
+				$this->request->url == $prefix . '/' ||
+				$this->request->url == $prefix . '/index'
 			);
 		}
 	}
@@ -1398,10 +1400,10 @@ class BcBaserHelper extends AppHelper {
 		$out = array();
 		if ($startText) {
 			$homeUrl = '/';
-			if($this->_View->site['alias']) {
-				$homeUrl = '/' . $this->_View->site['alias'] . '/';
-			} elseif($this->_View->site['name']) {
-				$homeUrl = '/' . $this->_View->site['name'] . '/';
+			if($this->request->params['Site']['alias']) {
+				$homeUrl = '/' . $this->request->params['Site']['alias'] . '/';
+			} elseif($this->request->params['Site']['name']) {
+				$homeUrl = '/' . $this->request->params['Site']['name'] . '/';
 			}
 			$out[] = $this->getLink($startText, $homeUrl);
 		}
@@ -1566,17 +1568,9 @@ class BcBaserHelper extends AppHelper {
 				$pluginBasers[] = $pluginName . 'BaserHelper';
 			}
 		}
-		$vars = array(
-			'base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin'
-		);
-		$c = count($vars);
 		foreach ($pluginBasers as $key => $pluginBaser) {
 			$this->_pluginBasers[$key] = new $pluginBaser($view);
-			for ($j = 0; $j < $c; $j++) {
-				if (isset($view->{$vars[$j]})) {
-					$this->_pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
-				}
-			}
+			$this->_pluginBasers[$key]->request = $view->request;
 		}
 	}
 
@@ -1719,6 +1713,7 @@ END_FLASH;
  * @return string 変換後のURL
  */
 	public function changePrefixToAlias($url, $type) {
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$alias = Configure::read("BcAgent.{$type}.alias");
 		$prefix = Configure::read("BcAgent.{$type}.prefix");
 		return preg_replace('/^\/' . $prefix . '\//is', '/' . $alias . '/', $url);
@@ -2380,12 +2375,12 @@ END_FLASH;
 			'sort' => 'id'
 		), $options);
 
-		$conditions['BlogContent.status'] = true ;
+		$conditions['Content.status'] = true;
 		if(! empty($name)){
-			$conditions['BlogContent.name'] = $name ;
+			$conditions['BlogContent.name'] = $name;
 		}
 
-		$BlogContent = ClassRegistry::init('BlogContent');
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$datas = $BlogContent->find('all', array(
 				'conditions' => $conditions,
 				'order' => array(
@@ -2445,8 +2440,8 @@ END_FLASH;
  * @return mixed|null
  */
 	public function getCurrentContent() {
-		if(!empty($this->_View->content)) {
-			return $this->_View->content;
+		if(!empty($this->request->params['Content'])) {
+			return $this->request->params['Content'];
 		}
 		return null;
 	}

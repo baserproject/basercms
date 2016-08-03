@@ -66,9 +66,9 @@ class MailFieldsController extends MailAppController {
 		$this->MailContent->recursive = -1;
 		$mailContentId = $this->params['pass'][0];
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
-		$this->content = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = array('name' => $this->content['title'] . '設定', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
-		$this->set('publishLink', $this->content['url']);
+		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
+		$this->set('publishLink', $this->request->params['Content']['url']);
 	}
 
 /**
@@ -104,7 +104,7 @@ class MailFieldsController extends MailAppController {
 			return;
 		}
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = '[' . $this->content['title'] . '] メールフィールド一覧';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] メールフィールド一覧';
 		$this->help = 'mail_fields_index';
 	}
 
@@ -170,7 +170,7 @@ class MailFieldsController extends MailAppController {
 		}
 
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = '[' . $this->content['title'] . '] 新規メールフィールド登録';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規メールフィールド登録';
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -222,7 +222,7 @@ class MailFieldsController extends MailAppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = '[' . $this->content['title'] . '] メールフィールド編集： ' . $this->request->data['MailField']['name'];
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] メールフィールド編集： ' . $this->request->data['MailField']['name'];
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -410,7 +410,7 @@ class MailFieldsController extends MailAppController {
 		$this->MailMessage->setUseTable($mailContentId);
 		$messages = $this->MailMessage->convertMessageToCsv($mailContentId, $this->MailMessage->find('all'));
 		$this->set('messages', $messages);
-		$this->set('contentName', $this->content['name']);
+		$this->set('contentName', $this->request->params['Content']['name']);
 	}
 
 /**

@@ -97,9 +97,9 @@ class BlogController extends BlogAppController {
 			$this->contentId = $this->params['pass'][0];
 		}
 		
-		if(empty($this->content)) {
+		if(empty($this->request->params['Content'])) {
 			// ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
-			$this->content = $this->BcContents->getContent($this->params['pass'][0]);
+			$this->request->params['Content'] = $this->BcContents->getContent($this->params['pass'][0]);
 		}
 
 		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
@@ -154,7 +154,7 @@ class BlogController extends BlogAppController {
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
 			$this->set('channel', array(
-				'title' => h($this->content['title'] . '｜' . $this->siteConfigs['name']),
+				'title' => h($this->request->params['Content']['title'] . '｜' . $this->siteConfigs['name']),
 				'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
 			));
 			$this->layout = 'default';
@@ -169,7 +169,7 @@ class BlogController extends BlogAppController {
 		$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
 		$this->set('posts', $datas);
 		$this->set('single', false);
-		$this->pageTitle = $this->content['title'];
+		$this->pageTitle = $this->request->params['Content']['title'];
 		$this->render($template);
 	}
 
@@ -217,7 +217,7 @@ class BlogController extends BlogAppController {
 			$type = 'date';
 		}
 
-		$crumbs[] = array('name' => $this->content['title'], 'url' => $this->content['url']);
+		$crumbs[] = array('name' => $this->request->params['Content']['title'], 'url' => $this->request->params['Content']['url']);
 		
 		switch ($type) {
 
@@ -245,7 +245,7 @@ class BlogController extends BlogAppController {
 				if (count($blogCategories) > 1) {
 					foreach ($blogCategories as $key => $blogCategory) {
 						if ($key < count($blogCategories) - 1) {
-							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => $this->content['url'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => $this->request->params['Content']['url'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}
@@ -383,7 +383,7 @@ class BlogController extends BlogAppController {
 					$blogCategories = $this->BlogCategory->getPath($post['BlogPost']['blog_category_id'], array('name', 'title'));
 					if ($blogCategories) {
 						foreach ($blogCategories as $blogCategory) {
-							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => $this->content['url'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
+							$crumbs[] = array('name' => $blogCategory['BlogCategory']['title'], 'url' => $this->request->params['Content']['url'] . '/archives/category/' . $blogCategory['BlogCategory']['name']);
 						}
 					}
 				}

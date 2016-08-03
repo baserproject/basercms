@@ -18,7 +18,7 @@
  * 《役割》
  * - コンテンツ一覧へのパンくずを自動追加
  * - フロントエンドでコンテンツデータを設定
- * 		Controller / View にて、$this->content で参照できる
+ * 		Controller / View にて、$this->request->params['Content'] で参照できる
  * - コンテンツ保存フォームを自動表示
  * - コンテンツ保存フォームのデータソースを設定
  * - コンテンツ保存フォームの初期値を設定
@@ -84,38 +84,31 @@ class BcContentsComponent extends Component {
 		}
 		// フロントで現在のページが関連している Content を設定する
 		if(!BcUtil::isAdminSystem()) {
-			if(!empty($controller->request->params['requested'])) {
-				$urlAry = $controller->request->params['pass'];
+			if(!empty($controller->request->params['requested']) && !empty($controller->request->params['path'])) {
+				$urlAry = $controller->request->params['path'];
 				$url = '/' . implode('/', $urlAry);
 				$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
 				if($data) {
-					Configure::write('BcContents.currentContent', $data['Content']);
-					Configure::write('BcContents.currentSite', $data['Site']);
+					$controller->request->params['Content'] = $data['Content'];
+					$controller->request->params['Site'] = $data['Site'];
 				}
 			}
-			$currentContent = Configure::read('BcContents.currentContent');
-			$currentSite = Configure::read('BcContents.currentSite');
-			if ($currentContent) {
-				$controller->content = $currentContent;
-			}
-			if ($currentSite) {
-				$controller->site = $currentSite;
-			}
 			if(!empty($controller->request->query['preview']) && !empty($controller->request->data['Content'])) {
-				Configure::write('BcContents.currentContent', $controller->request->data['Content']);
-				$controller->content = $controller->request->data['Content'];
+				$controller->request->params['Content'] = $controller->request->data['Content'];
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
 			}
-			// レイアウトテンプレート設定
-			$controller->layout = $controller->content['layout_template'];
-			if(!$controller->layout) {
-				$controller->layout = $this->getParentLayoutTemplate($controller->content['id']);
+			if(!empty($controller->request->params['Content'])) {
+				// レイアウトテンプレート設定
+				$controller->layout = $controller->request->params['Content']['layout_template'];
+				if(!$controller->layout) {
+					$controller->layout = $this->getParentLayoutTemplate($controller->request->params['Content']['id']);
+				}
+				// パンくず
+				$controller->crumbs = $this->getCrumbs($controller->request->params['Content']['id']);
+				// 説明文
+				$controller->set('description', $controller->request->params['Content']['description']);
 			}
-			// パンくず
-			$controller->crumbs = $this->getCrumbs($currentContent['id']);
-			// 説明文
-			$controller->set('description', $currentContent['description']);
 		}
 
 		if(!empty($this->_Controller->request->query['preview'])) {
@@ -311,6 +304,9 @@ class BcContentsComponent extends Component {
 		$contents = $this->_Controller->Content->getPath($id);
 		$contents = array_reverse($contents);
 		unset($contents[0]);
+		if(!$contents) {
+			return false;
+		}
 		$parentTemplates = Hash::extract($contents, '{n}.Content.layout_template');
 		foreach($parentTemplates as $parentTemplate) {
 			if($parentTemplate) {

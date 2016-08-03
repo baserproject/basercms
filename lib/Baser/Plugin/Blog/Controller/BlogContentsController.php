@@ -174,7 +174,7 @@ class BlogContentsController extends BlogAppController {
 		}
 
 		$this->set('publishLink', $this->request->data['Content']['url']);
-		$this->content = $this->BcContents->getContent($id)['Content'];
+		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('blogContent', $this->request->data);
 		$this->subMenuElements = ['blog_posts'];
 		$this->set('themes', $this->SiteConfig->getThemes());
