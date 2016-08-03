@@ -80,7 +80,7 @@ class BcFormHelperTest extends BaserTestCase {
 		Configure::write('App.base', '');
 		Configure::delete('Asset');
 		$this->_View = new BcAppView();
-		$this->_View->site = array('use_subdomain' => null);
+		$this->request->params['Site'] = array('use_subdomain' => null);
 		$this->BcForm = new BcFormHelper($this->_View);
 		$this->BcTime = new BcTimeHelper($this->_View);
 		$this->BcForm->request = new CakeRequest('contacts/add', false);

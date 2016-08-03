@@ -12,6 +12,6 @@
 ?>
 
 
-<h1><?php echo h($this->content['title']) ?></h1>
+<h1><?php echo h($this->request->params['Content']['title']) ?></h1>
 <h2><?php echo h($data['SingleBlogPost']['title']) ?></h2>
 <p><?php echo h($data['SingleBlogPost']['content']) ?></p>

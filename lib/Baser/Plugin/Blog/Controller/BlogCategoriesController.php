@@ -63,9 +63,9 @@ class BlogCategoriesController extends BlogAppController {
 		parent::beforeFilter();
 
 		$this->BlogContent->recursive = -1;
-		$this->content = $this->BcContents->getContent($this->params['pass'][0])['Content'];
+		$this->request->params['Content'] = $this->BcContents->getContent($this->params['pass'][0])['Content'];
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
-		$this->crumbs[] = array('name' => $this->content['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 
 		if ($this->params['prefix'] == 'admin') {
 			$this->subMenuElements = array('blog_posts');

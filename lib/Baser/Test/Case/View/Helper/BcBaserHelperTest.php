@@ -75,7 +75,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
-		$this->_View->site = array(
+		$this->request->params['Site'] = array(
 			'use_subdomain' => null,
 			'name' => null,
 			'alias' => null,

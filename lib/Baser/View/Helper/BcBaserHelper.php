@@ -283,8 +283,8 @@ class BcBaserHelper extends AppHelper {
 
 		// サイトタイトルを追加
 		$siteName = '';
-		if(!empty($this->_View->site['title'])) {
-			$siteName = $this->_View->site['title'];
+		if(!empty($this->request->params['Site']['title'])) {
+			$siteName = $this->request->params['Site']['title'];
 		} elseif (!empty($this->siteConfig['name'])) {
 			$siteName = $this->siteConfig['name'];
 		}
@@ -1398,10 +1398,10 @@ class BcBaserHelper extends AppHelper {
 		$out = array();
 		if ($startText) {
 			$homeUrl = '/';
-			if($this->_View->site['alias']) {
-				$homeUrl = '/' . $this->_View->site['alias'] . '/';
-			} elseif($this->_View->site['name']) {
-				$homeUrl = '/' . $this->_View->site['name'] . '/';
+			if($this->request->params['Site']['alias']) {
+				$homeUrl = '/' . $this->request->params['Site']['alias'] . '/';
+			} elseif($this->request->params['Site']['name']) {
+				$homeUrl = '/' . $this->request->params['Site']['name'] . '/';
 			}
 			$out[] = $this->getLink($startText, $homeUrl);
 		}
@@ -2445,8 +2445,8 @@ END_FLASH;
  * @return mixed|null
  */
 	public function getCurrentContent() {
-		if(!empty($this->_View->content)) {
-			return $this->_View->content;
+		if(!empty($this->request->params['Content'])) {
+			return $this->request->params['Content'];
 		}
 		return null;
 	}

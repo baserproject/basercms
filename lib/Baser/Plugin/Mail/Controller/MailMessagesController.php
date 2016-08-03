@@ -72,8 +72,8 @@ class MailMessagesController extends MailAppController {
 		$this->MailMessage = new MailMessage();
 		$this->MailMessage->setup($this->mailContent['MailContent']['id']);
 		$mailContentId = $this->params['pass'][0];
-		$this->content = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = array('name' => $this->content['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
+		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
 	}
 
 /**

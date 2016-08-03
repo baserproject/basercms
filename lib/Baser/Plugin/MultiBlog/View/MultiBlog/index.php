@@ -12,7 +12,7 @@
 ?>
 
 
-<h1><?php echo h($this->content['title']) ?></h1>
+<h1><?php echo h($this->request->params['Content']['title']) ?></h1>
 <p><?php echo h($blogContent['MultiBlogContent']['content']) ?></p>
 
 <?php if($datas): ?>
@@ -21,7 +21,7 @@
             <li>
                 <?php echo $this->BcBaser->link($data['MultiBlogPost']['title'], array(
                     'plugin' => '',
-                    'controller' => $this->content['url'],
+                    'controller' => $this->request->params['Content']['url'],
                     'action' => 'view',
                     $data['MultiBlogPost']['no']
                 )) ?>

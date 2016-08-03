@@ -190,7 +190,7 @@ class BcAppHelper extends Helper {
 		} elseif (!is_array($url) && preg_match('/^javascript:/', $url)) {
 			return $url;
 		} else {
-			if(!BcUtil::isAdminSystem() && !is_array($url) && isset($this->_View->site) && !empty($this->_View->site['use_subdomain']) && BcUtil::getSubDomain()) {
+			if(!BcUtil::isAdminSystem() && !is_array($url) && isset($this->request->params['Site']) && !empty($this->request->params['Site']['use_subdomain']) && BcUtil::getSubDomain()) {
 				$Content = ClassRegistry::init('Content');
 				return $Content->getUrl($url, true, true);
 			} else {

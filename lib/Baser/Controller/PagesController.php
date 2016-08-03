@@ -543,18 +543,18 @@ class PagesController extends AppController {
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
 		if(empty($this->request->params['requested'])) {
-			if($this->content['alias_id']) {
-				$urlTmp = $this->Content->field('url', ['Content.id' => $this->content['alias_id']]);
+			if($this->request->params['Content']['alias_id']) {
+				$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->params['Content']['alias_id']]);
 			} else {
-				$urlTmp = $this->content['url'];
+				$urlTmp = $this->request->params['Content']['url'];
 			}
 			$urlTmp = preg_replace('/^\//', '', $urlTmp);
 			$path = explode('/', $urlTmp);
 		}
 
-		if($this->site['alias']) {
-			if($path[0] == $this->site['alias']) {
-				$path[0] = $this->site['name'];
+		if($this->request->params['Site']['alias']) {
+			if($path[0] == $this->request->params['Site']['alias']) {
+				$path[0] = $this->request->params['Site']['name'];
 			}
 		}
 

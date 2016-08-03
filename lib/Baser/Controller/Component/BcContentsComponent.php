@@ -18,7 +18,7 @@
  * 《役割》
  * - コンテンツ一覧へのパンくずを自動追加
  * - フロントエンドでコンテンツデータを設定
- * 		Controller / View にて、$this->content で参照できる
+ * 		Controller / View にて、$this->request->params['Content'] で参照できる
  * - コンテンツ保存フォームを自動表示
  * - コンテンツ保存フォームのデータソースを設定
  * - コンテンツ保存フォームの初期値を設定
@@ -96,21 +96,21 @@ class BcContentsComponent extends Component {
 			$currentContent = Configure::read('BcContents.currentContent');
 			$currentSite = Configure::read('BcContents.currentSite');
 			if ($currentContent) {
-				$controller->content = $currentContent;
+				$controller->request->params['Content'] = $currentContent;
 			}
 			if ($currentSite) {
-				$controller->site = $currentSite;
+				$controller->request->params['Site'] = $currentSite;
 			}
 			if(!empty($controller->request->query['preview']) && !empty($controller->request->data['Content'])) {
 				Configure::write('BcContents.currentContent', $controller->request->data['Content']);
-				$controller->content = $controller->request->data['Content'];
+				$controller->request->params['Content'] = $controller->request->data['Content'];
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
 			}
 			// レイアウトテンプレート設定
-			$controller->layout = $controller->content['layout_template'];
+			$controller->layout = $controller->request->params['Content']['layout_template'];
 			if(!$controller->layout) {
-				$controller->layout = $this->getParentLayoutTemplate($controller->content['id']);
+				$controller->layout = $this->getParentLayoutTemplate($controller->request->params['Content']['id']);
 			}
 			// パンくず
 			$controller->crumbs = $this->getCrumbs($currentContent['id']);

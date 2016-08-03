@@ -25,13 +25,13 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false);
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<?php if ($this->BcForm->value('BlogPost.status') && $this->content['status']): ?>
+		<?php if ($this->BcForm->value('BlogPost.status') && $this->request->params['Content']['status']): ?>
 			この記事のURL　：<?php
 			$this->BcBaser->link(
-				$this->BcBaser->getUri($this->content['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')), $this->content['url'] . '/archives/' . $this->BcForm->value('BlogPost.no'))
+				$this->BcBaser->getUri($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')), $this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no'))
 			?>
 		<?php else: ?>
-			この記事のURL　：<?php echo $this->BcBaser->getUri($this->content['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
+			この記事のURL　：<?php echo $this->BcBaser->getUri($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
 		<?php endif ?>
 			<br />
 			プレビュー用URL：<?php $this->BcBaser->link(
