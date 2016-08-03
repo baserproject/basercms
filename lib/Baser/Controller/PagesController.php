@@ -542,7 +542,11 @@ class PagesController extends AppController {
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
+<<<<<<< HEAD
 		if(!empty($this->request->params['requested'])) {
+=======
+		if(empty($this->request->params['requested'])) {
+>>>>>>> f8b3824b6f924ad4ffb0f3169797d9dc24fb1fb7
 			if($this->request->params['Content']['alias_id']) {
 				$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->params['Content']['alias_id']]);
 			} else {
