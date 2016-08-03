@@ -30,4 +30,4 @@ License
 
 Licensed under the MIT license since version 2.0
 
-[![Build Status](https://travis-ci.org/baserproject/basercms.svg?branch=dev-3)](https://travis-ci.org/baserproject/basercms)
+[![Build Status](https://travis-ci.org/baserproject/basercms.svg?branch=dev-4)](https://travis-ci.org/baserproject/basercms)
