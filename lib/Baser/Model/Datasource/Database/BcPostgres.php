@@ -178,7 +178,7 @@ class BcPostgres extends Postgres {
 			$cols = $this->_execute(
 				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null," .
 					"column_default AS default, ordinal_position AS position, character_maximum_length AS char_length," .
-					"character_octet_length AS oct_length FROM information_schema.columns" .
+					"character_octet_length AS oct_length FROM information_schema.columns " .
 				"WHERE table_name = ? AND table_schema = ?  ORDER BY position",
 				array($table, $this->config['schema'])
 			);
