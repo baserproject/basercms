@@ -4,13 +4,6 @@
  *
  */
 class SiteFixture extends BaserTestFixture {
-
-/**
- * Import
- *
- * @var array
- */
-  public $import = array('model' => 'Site');
   
 /**
  * Records
