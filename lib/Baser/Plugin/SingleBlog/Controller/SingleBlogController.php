@@ -63,7 +63,8 @@ class SingleBlogController extends AppController {
  * @param $id
  * @return void
  */
-	public function view($entityId, $blogPostId) {
+	public function view($blogPostId) {
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'], 'url' => $this->request->params['Content']['url']);
 		$data = $this->SingleBlogPost->find('first', array('conditions' => array(
 			'SingleBlogPost.id' => $blogPostId
 		)));

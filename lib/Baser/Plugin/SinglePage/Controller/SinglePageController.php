@@ -41,6 +41,7 @@ class SinglePageController extends AppController {
 		if($this->BcContents->preview == 'default' && $this->request->data) {
 			$data = $this->request->data['SinglePageConfig'];
         }
+		$this->pageTitle = $this->request->params['Content']['title'];
 		$this->set('data', $data);
 		$this->set('editLink', array('plugin' => 'single_page', 'admin' => true, 'controller' => 'single_page_configs', 'action' => 'edit'));
 	}

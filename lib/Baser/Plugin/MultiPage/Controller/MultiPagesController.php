@@ -25,13 +25,6 @@ class MultiPagesController extends AppController {
 	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true));
 
 /**
- * サブメニュー
- *
- * @var array
- */
-	public $subMenuElements = array('multi_pages');
-
-/**
  * beforeFilter
  *
  * @return void
@@ -143,10 +136,11 @@ class MultiPagesController extends AppController {
  * @param $id
  * @return void
  */
-	public function view ($id) {
-		if(!$id) {
+	public function view () {
+		if(empty($this->request->params['entityId'])) {
 			$this->notFound();
 		}
+		$id = $this->request->params['entityId'];
 		$data = $this->MultiPage->find('first', array('conditions' => array('MultiPage.id' => $id)));
 		if($this->BcContents->preview == 'default' && $this->request->data) {
 			$data = $this->request->data;
@@ -156,6 +150,7 @@ class MultiPagesController extends AppController {
 		if(!$data) {
 			$this->notFound();
 		}
+		$this->pageTitle = $data['Content']['title'];
 		$this->set('data', $data);
 		$this->set('editLink', array('plugin' => 'multi_page', 'admin' => true, 'controller' => 'multi_pages', 'action' => 'edit', $data['MultiPage']['id']));
 	}

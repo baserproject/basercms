@@ -29,13 +29,6 @@ class SinglePageConfigsController extends AppController {
 	));
 
 /**
- * サブメニュー
- *
- * @var array
- */
-	public $subMenuElements = array('single_pages');
-
-/**
  * 編集
  */
 	public function admin_edit() {
