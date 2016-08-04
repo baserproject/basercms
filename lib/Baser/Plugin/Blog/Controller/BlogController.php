@@ -53,7 +53,7 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents' => ['type' => 'Blog.BlogContent']];
 
 /**
  * ぱんくずナビ
@@ -88,18 +88,26 @@ class BlogController extends BlogAppController {
 		$this->BcAuth->allow(
 			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives', 'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries', 'get_authors'
 		);
-
+		$blogContentId = null;
+		if(!empty($this->request->params['entityId'])) {
+			$blogContentId = $this->request->params['entityId'];	
+		} elseif(!empty($this->request->params['pass'])) {
+			// 後方互換の為 pass もチェック
+			$blogContentId = $this->request->params['pass'];
+		}
 		$this->BlogContent->recursive = -1;
 		if ($this->contentId) {
 			$this->blogContent = $this->BlogContent->read(null, $this->contentId);
 		} else {
-			$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
-			$this->contentId = $this->params['pass'][0];
+			$this->blogContent = $this->BlogContent->read(null, $blogContentId);
+			$this->contentId = $blogContentId;
 		}
 		
 		if(empty($this->request->params['Content'])) {
 			// ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
-			$this->request->params['Content'] = $this->BcContents->getContent($this->params['pass'][0]);
+			$content = $this->BcContents->getContent($blogContentId);
+			$this->request->params['Content'] = $content['Content'];
+			$this->request->params['Site'] = $content['Site'];
 		}
 
 		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
@@ -207,13 +215,13 @@ class BlogController extends BlogAppController {
 		$single = false;
 		$posts = array();
 
-		if ($pass[1] == 'category') {
+		if ($pass[0] == 'category') {
 			$type = 'category';
-		} elseif ($pass[1] == 'author') {
+		} elseif ($pass[0] == 'author') {
 			$type = 'author';
-		} elseif ($pass[1] == 'tag') {
+		} elseif ($pass[0] == 'tag') {
 			$type = 'tag';
-		} elseif ($pass[1] == 'date') {
+		} elseif ($pass[0] == 'date') {
 			$type = 'date';
 		}
 
@@ -286,9 +294,9 @@ class BlogController extends BlogAppController {
 			/* 月別アーカイブ一覧 */
 			case 'date':
 
-				$year = h($pass[2]);
-				$month = h(@$pass[3]);
-				$day = h(@$pass[4]);
+				$year = h($pass[1]);
+				$month = h(@$pass[2]);
+				$day = h(@$pass[3]);
 				if (!$year && !$month && !$day) {
 					$this->notFound();
 				}
@@ -355,8 +363,8 @@ class BlogController extends BlogAppController {
 					}
 				} else {
 
-					if (!empty($pass[1])) {
-						$id = $pass[1];
+					if (!empty($pass[0])) {
+						$id = $pass[0];
 					} else {
 						$this->notFound();
 					}

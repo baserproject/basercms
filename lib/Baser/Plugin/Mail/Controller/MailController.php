@@ -113,7 +113,7 @@ class MailController extends MailAppController {
 
 		parent::beforeFilter();
 
-		$this->MailMessage->setup($this->request->params['pass'][0]);
+		$this->MailMessage->setup($this->request->params['entityId']);
 		$this->dbDatas['mailContent'] = $this->MailMessage->mailContent;
 		$this->dbDatas['mailFields'] = $this->MailMessage->mailFields;
 		$this->dbDatas['mailConfig'] = $this->MailConfig->find();
@@ -125,7 +125,7 @@ class MailController extends MailAppController {
 
 		if (empty($this->contentId)) {
 			// 配列のインデックスが無いためエラーとなるため修正
-			$this->contentId = isset($this->request->params['pass'][0]) ? $this->request->params['pass'][0] : null;
+			$this->contentId = isset($this->request->params['entityId']) ? $this->request->params['entityId'] : null;
 		}
 
 		$this->subMenuElements = array('default');

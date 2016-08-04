@@ -151,7 +151,7 @@ class BlogBaserHelper extends AppHelper {
 			}
 		}
 		
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
+		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'entityId' => $id, 'named' => $options));
 	}
 
 /**

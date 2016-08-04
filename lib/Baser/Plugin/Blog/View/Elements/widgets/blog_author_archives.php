@@ -19,7 +19,7 @@ if (isset($blogContent)) {
 } else {
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count);
+$data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count, ['entityId' => $id]);
 $authors = $data['authors'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';

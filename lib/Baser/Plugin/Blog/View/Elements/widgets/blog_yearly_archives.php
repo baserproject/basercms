@@ -31,7 +31,7 @@ if ($limit) {
 if ($view_count) {
 	$actionUrl .= '/1';
 }
-$data = $this->requestAction($actionUrl);
+$data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
 $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/date/';

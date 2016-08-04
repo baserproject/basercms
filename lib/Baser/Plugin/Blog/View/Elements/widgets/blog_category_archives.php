@@ -34,7 +34,7 @@ $actionUrl = '/blog/blog/get_categories/' . $id . '/' . $limit . '/' . $view_cou
 if ($by_year) {
 	$actionUrl .= '/year';
 }
-$data = $this->requestAction($actionUrl);
+$data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $categories = $data['categories'];
 $this->viewVars['blogContent'] = $data['blogContent'];
 $this->Blog = new BlogHelper($this);
