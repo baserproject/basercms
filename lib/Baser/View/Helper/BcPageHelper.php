@@ -89,13 +89,13 @@ class BcPageHelper extends Helper {
  * @return string URL
  */
 	public function getUrl($page) {
-		if(isset($page['Page'])) {
-			$page = $page['Page'];
+		if(isset($page['Content'])) {
+			$page = $page['Content'];
 		}
 		if(!isset($page['url'])) {
 			return '';
 		}
-		return $this->Page->convertViewUrl($page['url']);
+		return $page['url'];
 	}
 
 /**
@@ -320,7 +320,8 @@ class BcPageHelper extends Helper {
  * @return array 次、または、前の固定ページデータ
  */
 	protected function _getPageByNextOrPrev($page, $type, $overCategory = false) {
-
+		// TODO baserCMS4 に合わせて改修
+		return [];
 		switch ($type) {
 			case 'next':
 				$operator = '>';
@@ -352,7 +353,7 @@ class BcPageHelper extends Helper {
 		return $this->Page->find('first', array(
 			'conditions' => array_merge(array(
 				array('Page.sort ' . $operator => $page['Page']['sort']),
-				$this->Page->getConditionAllowPublish(),
+				$this->Page->Content->getConditionAllowPublish(),
 				$pageCategoryConditions
 			)),
 			'fields' => array('title', 'url'),
@@ -361,39 +362,6 @@ class BcPageHelper extends Helper {
 			'cache' => false
 		));
 
-	}
-
-/**
- * PC以外全てのエージェントのカテゴリIDを取得する
- * エージェント自体を指すカテゴリIDも含む
- *
- * @return array カテゴリID
- */
-	protected function _getAllAgentCategoryIds() {
-		$categoryIds = array();
-		$agents = Configure::read('BcAgent');
-		foreach($agents as $agent) {
-			$categoryIds += $this->_getAgentCategoryIds($agent['prefix']);
-		}
-		return $categoryIds;
-	}
-
-/**
- * PC以外全てのエージェントのカテゴリIDを取得する
- * エージェント自体を指すカテゴリIDも含む
- *
- * @param string $prefix エージェントのプレフィックス（例）mobile / smartphone
- * @return array
- */
-	protected function _getAgentCategoryIds($prefix) {
-		$agentId = $this->Page->PageCategory->getAgentId($prefix);
-		$categoryIds[] = $agentId;
-		// Agentが持つページカテゴリIDを取得する
-		$children = $this->Page->PageCategory->children($agentId);
-		if($children) {
-			$categoryIds = array_merge($categoryIds, Hash::extract($children, '{n}.PageCategory.id'));
-		}
-		return $categoryIds;
 	}
 
 /**

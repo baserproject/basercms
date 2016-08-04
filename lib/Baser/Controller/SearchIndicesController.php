@@ -194,6 +194,8 @@ class SearchIndicesController extends AppController {
  * @access private 
  */
 	private function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
+		return false;
+		// TODO baserCMS4に合わせて改修
 		if (empty($this->Page->PageCategory)) {
 			// インストールの段階で呼出された場合 ClassRegistry::init() だと AppModelで初期化されてしまう
 			$this->Page->PageCategory = new PageCategory(false, null, 'baser');
@@ -211,7 +213,7 @@ class SearchIndicesController extends AppController {
 
 		// ページリスト取得
 		$conditions = array('Page.page_category_id' => $parentCategoryId);
-		$conditions = am($conditions, $this->Page->getConditionAllowPublish());
+		$conditions = am($conditions, $this->Page->Content->getConditionAllowPublish());
 		$pages = $this->Page->find('all', array(
 			'conditions' => $conditions,
 			'fields' => array('name', 'title', 'url'),

@@ -32,7 +32,6 @@ class BcPageHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
 		'baser.View.Helper.BcPageHelper.PageBcPageHelper',
-		'baser.View.Helper.BcPageHelper.PageCategoryBcPageHelper',
 		'baser.Default.PluginContent',
 		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
@@ -154,42 +153,6 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 /**
- * 現在のページが所属するカテゴリデータを取得する
- * 
- * MEMO : コンソールから実行すると失敗する
- * 
- * @param array $pageId 固定ページID
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getCategoryDataProvider
- */
-	public function testGetCategory($pageId, $expected, $message = null) {
-		// 固定ページのデータ取得
-		$conditions = array('Page.id' => $pageId);
-		$this->BcPage->request->data = $this->getPageData($conditions);
-
-		$result = $this->BcPage->getCategory();
-		if($result) {
-			$result = array(
-				'id' => $result['id']
-			);
-		}
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function getCategoryDataProvider() {
-		return array(
-			array(1, false),
-			array(2, false),
-			array(3, false),
-			array(4, false),
-			array(5, array('id' => '1'), 'カテゴリのデータを取得できません'),
-			array(6, array('id' => '2'), 'カテゴリのデータを取得できません'),
-			array(999, false),
-		);
-	}
-
-/**
  * 現在のページが所属する親のカテゴリを取得する
  * 
  * @param array $pageId 固定ページID
@@ -265,17 +228,6 @@ class BcPageHelperTest extends BaserTestCase {
 					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
 					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
 					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
-				),
-				'pageCategories' => array(
-					array(
-						'PageCategory' => array('id' => '3','title' => 'ガラホ', 'url' => '/garaphone/index'),
-						'children' => array('pages' =>array(
-								array(
-									'Page'=>array('name' => 'index','title' => 'ガラホ', 'url' => '/garaphone/')
-								)
-							)
-						),
-					)
 				)),
 			'子カテゴリをもったカテゴリからページリストを取得できません'),
 			array(2, 0, array(
@@ -285,11 +237,6 @@ class BcPageHelperTest extends BaserTestCase {
 					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
 					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
 					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
-				),
-				'pageCategories' => array(
-					array(
-						'PageCategory' => array('id' => '3','title' => 'ガラホ','url' => '/garaphone/index'),
-					)
 				)
 			),
 			'$recursive(関連データの階層)を指定できません'),
@@ -300,17 +247,6 @@ class BcPageHelperTest extends BaserTestCase {
 					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
 					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
 					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
-				),
-				'pageCategories' => array(
-					array(
-						'PageCategory' => array('id' => '3','title' => 'ガラホ', 'url' => '/garaphone/index'),
-						'children' => array('pages' =>array(
-								array(
-									'Page'=>array('name' => 'index','title' => 'ガラホ','url' => '/garaphone/')
-								)
-							)
-						),
-					)
 				)
 			),
 			'$recursive(関連データの階層)を指定できません'),
@@ -325,35 +261,6 @@ class BcPageHelperTest extends BaserTestCase {
 			array(4, null, array(), '存在しないカテゴリに対してfalseが返ってきません'),
 		);
 	}
-
-/**
- * カテゴリ名を取得する
- * 
- * @param array $pageId 固定ページID
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getCategoryNameDataProvider
- */
-	public function testGetCategoryName($pageId, $expected, $message = null) {
-		// 固定ページのデータ取得
-		$conditions = array('Page.id' => $pageId);
-		$fields = array('PageCategory.id','PageCategory.name');
-		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
-
-		$result = $this->BcPage->getCategoryName();
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function getCategoryNameDataProvider() {
-		return array(
-			array(0, false, 'IDが0のページは存在しません'),
-			array(1, false, 'IDが1のページはカテゴリを持っていません'),
-			array(5, 'mobile', 'カテゴリ名を取得できません'),
-			array(6, 'smartphone', 'カテゴリ名を取得できません'),
-			array(12, 'garaphone', 'カテゴリ名を取得できません'),
-		);
-	}
-
 
 /**
  * 公開状態を取得する
@@ -493,33 +400,6 @@ class BcPageHelperTest extends BaserTestCase {
 			array('/smartphone/about', 'smartphone', '前のページへ', array('overCategory' => false), false), // smartphone
 			array('/smartphone/service', 'smartphone', '', array('overCategory' => true), '<a href="/s/about" class="prev-link">≪ 会社案内</a>'), // smartphone
 			array('/smartphone/service', 'smartphone', '前のページへ', array('overCategory' => true), '<a href="/s/about" class="prev-link">前のページへ</a>'), // smartphone
-		);
-	}
-
-/**
- * コンテンツナビ有効チェック
- *
- * @param string $expected 期待値
- * @param string $message テスト失敗時、表示するメッセージ
- * @dataProvider contentsNaviAvailableDataProvider
- */
-	public function testContentsNaviAvailable($pageId, $expected, $message = null) {
-		// 固定ページのデータ取得
-		$conditions = array('Page.id' => $pageId);
-		$fields = array('Page.page_category_id','PageCategory.id','PageCategory.contents_navi');
-		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
-
-		$result = $this->BcPage->contentsNaviAvailable();
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function contentsNaviAvailableDataProvider() {
-		return array(
-			array(0, false),
-			array(1, false),
-			array(5, false),
-			array(6, false),
-			array(12, true, 'コンテンツナビが有効になっていません'),
 		);
 	}
 

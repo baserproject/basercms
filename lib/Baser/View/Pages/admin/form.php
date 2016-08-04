@@ -20,15 +20,6 @@ $this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('
 
 
 <div class="display-none">
-	<div id="PreviewUrl"><?php $this->BcBaser->url(array('action' => 'create_preview', $previewId)) ?></div>
-	<div id="CheckAgentPageAddableUrl"><?php $this->BcBaser->url(array('action' => 'check_agent_page_addable')) ?></div>
-	<div id="AjaxCategorySourceUrl"><?php $this->BcBaser->url(array('action' => 'ajax_category_source')) ?></div>
-	<div id="PageCategoryId"><?php echo $this->BcForm->value('PageCategory.id') ?></div>
-	<div id="PageCategoryOwnerId"><?php echo $this->BcForm->value('PageCategory.owner_id') ?></div>
-	<div id="RootMobileId"><?php echo $rootMobileId ?></div>
-	<div id="RootSmartphoneId"><?php echo $rootSmartphoneId ?></div>
-	<div id="ReflectMobileOn"><?php echo $reflectMobile ?></div>
-	<div id="ReflectSmartphoneOn"><?php echo $reflectSmartphone ?></div>
 	<div id="Action"><?php echo $this->request->action ?></div>
 </div>
 
@@ -74,9 +65,7 @@ $this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('
 <?php endif ?>
 
 <div class="submit">
-	<?php if ($editable): ?>
-		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-	<?php endif ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 </div>
 
 <?php echo $this->BcForm->end(); ?>

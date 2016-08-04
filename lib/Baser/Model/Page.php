@@ -37,8 +37,6 @@ class Page extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'PageCategory' => array('className' => 'PageCategory',
-			'foreignKey' => 'page_category_id'),
 		'User' => array('className' => 'User',
 			'foreignKey' => 'author_id'));
 
@@ -178,21 +176,6 @@ class Page extends AppModel {
 			}
 		}
 		return $result;
-	}
-
-/**
- * URLよりモバイルやスマートフォン等のプレフィックスを取り除く
- * 
- * @param string $url 変換対象のURL
- * @return string $url 変換後のURL
- */
-	public function removeAgentPrefixFromUrl($url) {
-		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//', '/', $url);
-		} elseif (preg_match('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//', '/', $url);
-		}
-		return $url;
 	}
 
 /**
@@ -450,25 +433,6 @@ class Page extends AppModel {
 		}
 		return true;
 	}
-	
-/**
- * 固定ページのURLを表示用のURLに変換する
- * 
- * 《変換例》
- * /mobile/index → /m/
- * 
- * @param string $url 変換対象のURL
- * @return string 表示の用のURL
- */
-	public function convertViewUrl($url) {
-		$url = preg_replace('/\/index$/', '/', $url);
-		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
-		} elseif (preg_match('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
-		}
-		return $url;
-	}
 
 /**
  * 本文にbaserが管理するタグを追加する
@@ -507,68 +471,6 @@ class Page extends AppModel {
  */
 	public function getControlSource($field, $options = array()) {
 		switch ($field) {
-
-			case 'page_category_id':
-
-				$catOption = array();
-				$isSuperAdmin = false;
-				$agentRoot = true;
-
-				extract($options);
-
-				if (!empty($userGroupId)) {
-
-					if (!isset($pageCategoryId)) {
-						$pageCategoryId = '';
-					}
-
-					if ($userGroupId == 1) {
-						$isSuperAdmin = true;
-					}
-
-					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
-					if (!$pageEditable && $pageCategoryId) {
-						$catOption = array('conditions' => array('OR' => array('PageCategory.id' => $pageCategoryId)));
-					}
-
-					// super admin でない場合は、管理許可のあるカテゴリのみ取得
-					if (!$isSuperAdmin) {
-						$catOption['ownerId'] = $userGroupId;
-					}
-
-					if ($pageEditable && !$rootEditable && !$isSuperAdmin) {
-						unset($empty);
-						$agentRoot = false;
-					}
-				}
-
-				$options = am($options, $catOption);
-				$categories = $this->PageCategory->getControlSource('parent_id', $options);
-
-				// 「指定しない」追加
-				if (isset($empty)) {
-					if ($categories) {
-						$categories = array('' => $empty) + $categories;
-					} else {
-						$categories = array('' => $empty);
-					}
-				}
-				if (!$agentRoot) {
-					// TODO 整理
-					$agentId = $this->PageCategory->getAgentId('mobile');
-					if (isset($categories[$agentId])) {
-						unset($categories[$agentId]);
-					}
-					$agentId = $this->PageCategory->getAgentId('smartphone');
-					if (isset($categories[$agentId])) {
-						unset($categories[$agentId]);
-					}
-				}
-
-				$controlSources['page_category_id'] = $categories;
-
-				break;
-
 			case 'user_id':
 			case 'author_id':
 				$controlSources[$field] = $this->User->getUserList($options);
@@ -607,52 +509,6 @@ class Page extends AppModel {
 			if (empty($duration)) $duration = Configure::read('BcCache.duration');
 			return $duration;
 		}
-	}
-
-/**
- * 公開チェックを行う
- * 
- * @param string $url
- * @return boolean
- */
-	public function checkPublish($url) {
-		if (preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
-
-		if ($this->_publishes == -1) {
-			$conditions = $this->getConditionAllowPublish();
-			// 毎秒抽出条件が違うのでキャッシュしない
-			$pages = $this->find('all', array(
-				'fields' => 'url',
-				'conditions' => $conditions,
-				'recursive' => -1,
-				'cache' => false
-			));
-			if (!$pages) {
-				$this->_publishes = array();
-				return false;
-			}
-			$this->_publishes = Hash::extract($pages, '{n}.Page.url');
-		}
-		return in_array($url, $this->_publishes);
-	}
-
-/**
- * 公開済を取得するための conditions を取得
- *
- * @return array
- */
-	public function getConditionAllowPublish() {
-		$conditions[$this->alias . '.status'] = true;
-		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_begin' => null),
-				array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
-		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_end' => null),
-				array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
-		return $conditions;
 	}
 
 /**
@@ -836,26 +692,6 @@ class Page extends AppModel {
 	}
 
 /**
- * 関連ページの存在チェック
- * 存在する場合は、ページIDを返す
- *
- * @param string $type エージェントタイプ
- * @param array $data ページデータ
- * @return mixed ページID / false
- */
-	public function agentExists($type, $data) {
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
-		}
-		$url = $this->removeAgentPrefixFromUrl($data['url']);
-		if (preg_match('/^\/' . Configure::read('BcAgent.' . $type . '.prefix') . '\//is', $url)) {
-			// 対象ページがモバイルページの場合はfalseを返す
-			return false;
-		}
-		return $this->field('id', array('Page.url' => '/' . Configure::read('BcAgent.' . $type . '.prefix') . $url));
-	}
-
-/**
  * 固定ページとして管理されているURLかチェックする
  * 
  * $this->_pages をキャッシュとして利用する
@@ -868,18 +704,17 @@ class Page extends AppModel {
 		if (preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
 
 		if ($this->_pages == -1) {
 			$pages = $this->find('all', array(
-				'fields'	=> 'url',
-				'recursive' => -1
+				'fields'	=> 'Content.url',
+				'recursive' => 1
 			));
 			if (!$pages) {
 				$this->_pages = array();
 				return false;
 			}
-			$this->_pages = Hash::extract($pages, '{n}.Page.url');
+			$this->_pages = Hash::extract($pages, '{n}.Content.url');
 		}
 		if(in_array($url, $this->_pages)) {
 			return true;
@@ -962,81 +797,7 @@ class Page extends AppModel {
 		$this->getDataSource()->rollback();
 		return false;
 	}
-
-/**
- * 連携チェック
- * 
- * @param string $agentPrefix
- * @param string $url
- * @return boolean 
- */
-	public function isLinked($agentPrefix, $url) {
-		if (!$agentPrefix) {
-			return false;
-		}
-
-		if (!Configure::read('BcApp.' . $agentPrefix)) {
-			return false;
-		}
-
-		$siteConfig = Configure::read('BcSite');
-		$linked = false;
-
-		if (isset($siteConfig['linked_pages_' . $agentPrefix])) {
-			$linked = $siteConfig['linked_pages_' . $agentPrefix];
-		}
-
-		if (preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-
-		if ($this->field('unlinked_' . $agentPrefix, array('Page.url' => $url))) {
-			$linked = false;
-		}
-
-		return $linked;
-	}
-
-/**
- * treeList
- * ページカテゴリーに関連したデータを取得する
- * 
- * @param int $categoryId ページカテゴリーID
- */
-	public function treeList($categoryId) {
-		return $this->_treeList($categoryId);
-	}
-
-	protected function _treeList($categoryId) {
-		$datas = array();
-		$pages = $this->find('all', array(
-			'conditions' => array('Page.page_category_id' => $categoryId),
-			'recursive' => -1,
-			'order' => 'sort'
-		));
-
-		$conditions = array('PageCategory.parent_id' => $categoryId);
-		if (!$categoryId) {
-			$conditions['PageCategory.id NOT IN'] = array(1, 2);
-		}
-		$pageCategories = $this->PageCategory->find('all', array(
-			'conditions' => $conditions,
-			'recursive' => -1,
-			'order' => 'lft'
-		));
-		foreach ($pageCategories as $key => $pageCategory) {
-			$children = $this->_treeList($pageCategory['PageCategory']['id']);
-			if ($children) {
-				$pageCategories[$key]['children'] = $children;
-			}
-		}
-		$datas = array(
-			'pageCategories' => $pageCategories,
-			'pages' => $pages
-		);
-		return $datas;
-	}
-
+	
 /**
  * PHP構文チェック
  *

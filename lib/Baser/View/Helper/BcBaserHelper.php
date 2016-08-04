@@ -1313,7 +1313,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if ($controller == 'pages' && ($action == 'display' || $action == 'mobile_display' || $action == 'smartphone_display')) {
+		if ($controller == 'pages' && $action == 'display') {
 
 			if (strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/', '', $pass[0]);
@@ -1469,10 +1469,6 @@ class BcBaserHelper extends AppHelper {
 
 		if (empty($pages)) {
 			return false;
-		}
-
-		foreach ($pages as $key => $page) {
-			$pages[$key]['Page']['url'] = $this->_Page->convertViewUrl($page['Page']['url']);
 		}
 
 		return Hash::extract($pages, '{n}.Page');
@@ -1742,14 +1738,7 @@ END_FLASH;
  * @return bool 固定ページの場合は true を返す
  */
 	public function isPage() {
-		if ($this->request->params['controller'] == 'pages') {
-			if ($this->request->params['action'] == 'display' ||
-				$this->request->params['action'] == 'smartphone_display' ||
-				$this->request->params['action'] == 'mobile_display') {
-				return true;
-			}
-		}
-		return false;
+		return ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display');
 	}
 
 /**

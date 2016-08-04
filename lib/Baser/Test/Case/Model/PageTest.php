@@ -28,7 +28,6 @@ class PageTest extends BaserTestCase {
 		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Model.Page.PagePageModel',
-		'baser.Model.Page.PageCategoryPageModel',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.PluginContent',
@@ -218,30 +217,6 @@ class PageTest extends BaserTestCase {
  */
 	public function testBeforeSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-
-/**
- * URLよりモバイルやスマートフォン等のプレフィックスを取り除く
- * 
- * @param string $url 変換対象のURL
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider removeAgentPrefixFromUrlDataProvider
- */
-	public function testRemoveAgentPrefixFromUrl($url, $expected, $message = null) {
-		$result = $this->Page->removeAgentPrefixFromUrl($url);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function removeAgentPrefixFromUrlDataProvider() {
-		return array(
-			array('index', 'index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
-			array('/mobile/index', '/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
-			array('/smartphone/index', '/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
-			array('/m/index', '/m/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
-			array('/company/index', '/company/index', 'URLよりモバイルやスマートフォン等のプレフィックスを取り除くことができません'),
-		);
 	}
 
 /**
@@ -547,33 +522,6 @@ class PageTest extends BaserTestCase {
 	}
 
 /**
- * 固定ページのURLを表示用のURLに変換する
- * 
- * 《変換例》
- * /mobile/index → /m/
- * 
- * @param string $url 変換対象のURL
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider convertViewUrlDataProvider
- */
-	public function testConvertViewUrl($url, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$result = $this->Page->convertViewUrl($url);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function convertViewUrlDataProvider() {
-		return array(
-			array('/index', '/', '固定ページのURLを表示用のURLに変換できません'),
-			array('/service', '/service', '固定ページのURLを表示用のURLに変換できません'),
-			array('/mobile/index', '/m/', '固定ページのURLを表示用のURLに変換できません'),
-			array('/smartphone/index', '/s/', '固定ページのURLを表示用のURLに変換できません'),
-			array('/smartphone/sitemap', '/s/sitemap', '固定ページのURLを表示用のURLに変換できません'),
-		);
-	}
-
-/**
  * 本文にbaserが管理するタグを追加する
  * 
  * @param string $id ID
@@ -616,7 +564,6 @@ class PageTest extends BaserTestCase {
 
 	public function getControlSourceDataProvider() {
 		return array(
-			array('page_category_id', array(5 => 'タブレット'), 'コントロールソースを取得できません'),
 			array('author_id', array(1 => 'basertest', 2 => 'basertest2'), 'コントロールソースを取得できません'),
 		);
 	}
@@ -641,56 +588,6 @@ class PageTest extends BaserTestCase {
 	}
 
 /**
- * 公開チェックを行う
- * 
- * @param string $url
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider checkPublishDataProvider
- */
-	public function testCheckPublish($url, $expected, $message = null) {
-		$result = $this->Page->checkPublish($url);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function checkPublishDataProvider() {
-		return array(
-			array('/index', true, '公開チェックが正しくありません'),
-			array('/service', true, '公開チェックが正しくありません'),
-			array('/hidden_status', false, '公開チェックが正しくありません'),
-			array('/hidden_publish_end', false, '公開チェックが正しくありません'),
-		);
-	}
-
-/**
- * 公開済の conditions を取得
- */
-	public function testGetConditionAllowPublish() {
-		$result = $this->Page->getConditionAllowPublish();
-		$now = date('Y-m-d H:i:s');
-		$expected = array(
-			'Page.status' => true,
-			0 => array(
-				'or' => array(
-					array('Page.publish_begin <=' => $now),
-					array('Page.publish_begin' => null),
-					array('Page.publish_begin' => '0000-00-00 00:00:00'),
-				),
-			),
-			1 => array(
-				'or' => array(
-					array('Page.publish_end >=' => $now),
-					array('Page.publish_end' => null),
-					array('Page.publish_end' => '0000-00-00 00:00:00'),
-				),
-			),
-		);
-		$this->assertEquals($expected, $result, '公開済を取得するための conditions を取得できません');
-	}
-
-
-
-/**
  * ページファイルを登録する
  * ※ 再帰処理
  *
@@ -700,31 +597,6 @@ class PageTest extends BaserTestCase {
  */
 	public function testEntryPageFiles() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * 関連ページの存在チェック
- * 存在する場合は、ページIDを返す
- *
- * @param string $type エージェントタイプ
- * @param array $data ページデータ
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider agentExistsDataProvider
- */
-	public function agentExists($type, $data, $expected, $message = null) {
-		$result = $this->Page->agentExists($type, $data);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function agentExistsDataProvider() {
-		return array(
-			array('/service', true),
-			array('/service.html', true),
-			array('/servce.css', false),
-			array('/', true),
-			array('/hoge', false)
-		);
 	}
 
 /**
@@ -821,71 +693,6 @@ class PageTest extends BaserTestCase {
 		return array(
 			array(1, 1, 'hoge1', 1, 0, 'ページデータをコピーできません'),
 			array(3, 1, 'hoge', 1, 0, 'ページデータをコピーできません')
-		);
-	}
-
-/**
- * 連携チェック
- * 
- * @param string $agentPrefix
- * @param string $url
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider isLinkedDataProvider
- */
-	public function testIsLinked($agentPrefix, $url, $expected, $message = null) {
-
-		Configure::write('BcApp', array(
-			'mobile' => true,
-			'smartphone' => true,
-			)
-		);
-
-		$result = $this->Page->isLinked($agentPrefix, $url);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function isLinkedDataProvider() {
-		return array(
-			array('mobile', '/mobile/index', '0', '連携チェックが正しくありません'),
-			array('smartphone', '/smartphone', '0', '連携チェックが正しくありません'),
-		);
-	}
-
-/**
- * treeList
- * 
- * @param int $categoryId ページカテゴリーID
- * @param string $expectedChildPageCategory 期待するページカテゴリー
- * @param array $expectedPageIds 期待するページID
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider treeListDataProvider
- */
-	public function testTreeList($categoryId, $expectedChildPageCategory, $expectedPageIds, $message = null) {
-		$result = $this->Page->treeList($categoryId);
-
-		// 子カテゴリを代入
-		$resultChildPageCategory = '';
-		if (isset($result['pageCategories'][0]['PageCategory']['name'])) {
-			$resultChildPageCategory = $result['pageCategories'][0]['PageCategory']['name'];
-		}
-
-		// 関連ページのIDを代入
-		$resultPageIds = array();
-		foreach ($result['pages'] as $key => $value) {
-			$resultPageIds[] = $value['Page']['id'];
-		}
-
-		$this->assertEquals($expectedChildPageCategory, $resultChildPageCategory, $message);
-		$this->assertEquals($expectedPageIds, $resultPageIds, $message);
-	}
-
-	public function treeListDataProvider() {
-		return array(
-			array(1, '', array(5, 11), 'ページカテゴリーに関連したデータを取得できません'),
-			array(2, 'garaphone', array(6, 7, 8, 9, 10), 'ページカテゴリーに関連したデータを取得できません'),
-			array(3, 'garaphone2', array(12), 'ページカテゴリーに関連したデータを取得できません'),
-			array(4, '', array(13), 'ページカテゴリーに関連したデータを取得できません'),
 		);
 	}
 

@@ -23,7 +23,6 @@ class BcAppTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.Dblog',
-		'baser.Model.BcApp.PageCategoryBcAppModel',
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
@@ -41,7 +40,6 @@ class BcAppTest extends BaserTestCase {
 		$this->BcApp = ClassRegistry::init('BcApp');
 		$this->Page = ClassRegistry::init('Page');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		$this->PageCategory = ClassRegistry::init('PageCategory');
 		$this->Dblog = ClassRegistry::init('Dblog');
 	}
 
@@ -54,7 +52,6 @@ class BcAppTest extends BaserTestCase {
 		unset($this->BcApp);
 		unset($this->Page);
 		unset($this->SiteConfig);
-		unset($this->PageCategory);
 		unset($this->Dblog);
 		parent::tearDown();
 	}
@@ -175,28 +172,6 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * 子カテゴリのIDリストを取得する
- *
- * @param id ページカテゴリーID
- * @param boolean $expected 期待値
- * @param boolean $message テストが失敗した場合に表示されるメッセージ
- * @dataProvider getChildIdsListDataProvider
- */
-	public function testGetChildIdsList($id, $expected, $message = null) {
-		$result = $this->PageCategory->getChildIdsList($id);
-		$this->assertEquals($expected, $result, $message);
-
-	}
-
-	public function getChildIdsListDataProvider() {
-		return array(
-			array(1, array(), 'ページカテゴリーID 1は子カテゴリは存在しません'),
-			array(2, array(3, 4), '子カテゴリのIDリストを取得できません'),
-			array(3, array(4), '子カテゴリのIDリストを取得できません'),
-		);
-	}
-
-/**
  * 機種依存文字の変換処理
  *
  * @param string 変換対象文字列
@@ -222,15 +197,6 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testInitDb() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->PageCategory->deleteAll(array('id >' => 0));
-
-		$this->PageCategory->initDb('test');
-
-		$result = $this->PageCategory->find('all', array(
-				'recursive' => -1
-			)
-		);
-		var_dump($result);
 	}
 
 /**
@@ -249,20 +215,6 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		// $this->PageCategory->deleteAll(array('id >' => 0));
-
-		$path = WWW_ROOT . 'files' . DS . 'page_categories.csv';
-		$Csv = new File($path);
-		$Csv->write("id,parent_id,lft,rght,name,title,sort,contents_navi,owner_id,layout_template,content_template,modified,created\n1,2,2,4,'asdfasd','',3,1,2,null,null,null,null");
-
-		$this->PageCategory->loadCsv('baser', WWW_ROOT . 'files');
-
-		$result = $this->PageCategory->find('all', array(
-				'recursive' => -1
-			)
-		);
-		var_dump($result);
-		// $this->assertEquals($expect, $result)
 	}
 
 /**
@@ -740,8 +692,8 @@ class BcAppTest extends BaserTestCase {
 
 	public function expectsDataProvider() {
 		return array(
-			array(array(), array('Page'), array('PageCategory', 'User')),
-			array(array('User'), array('Page', 'User'), array('PageCategory')),
+			array(array(), array('Page'), array('User')),
+			array(array('User'), array('Page', 'User'), array()),
 		);
 	}
 
@@ -845,46 +797,6 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testRemoveFromTreeRecursive() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->PageCategory->data['PageCategory']['id'] = 2;
-		$this->PageCategory->removeFromTreeRecursive(2);
-		$result = $this->PageCategory->find('all', array(
-				'fields' => array('parent_id', 'lft', 'rght'),
-				'recursive' => '-1',
-			)
-		);
-		
-		// smartphoneカテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 0,
-			'rght' => 0,
-		);
-		$this->assertEquals($expected, $result[1]['PageCategory']);
-
-		// garaphone カテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 0,
-			'rght' => 0,
-		);
-		$this->assertEquals($expected, $result[2]['PageCategory']);
-
-		// garaphone2 カテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 3,
-			'rght' => 4,
-		);
-		$this->assertEquals($expected, $result[3]['PageCategory']);
-
-		// tablet カテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 5,
-			'rght' => 6,
-		);
-		$this->assertEquals($expected, $result[4]['PageCategory']);
-
 	}
 
 /**

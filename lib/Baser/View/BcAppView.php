@@ -189,18 +189,6 @@ class BcAppView extends View {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
-		// CUSTOMIZE ADD 2012/10/11 ryuring
-		// モバイルの固定ページの場合、PCの固定ページと連動する場合は、サブフォルダを空に設定
-		// >>>
-		$siteConfig = $this->getVar('siteConfig');
-		if ($this->name == 'Pages' && preg_match('/(.+)_display$/', $this->request->action, $maches)) {
-			$Page = ClassRegistry::getObject('Page');
-			$url = '/' . implode('/', $this->params['pass']);
-			if ($Page->isLinked($maches[1], $url)) {
-				$subDir = '';
-			}
-		}
-		// <<<
 
 		if (strpos($name, DS) === false && $name[0] !== '.') {
 			// CUSTOMIZE MODIFY 2016/06/01 ryuring

@@ -41,7 +41,6 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		'baser.Default.SiteConfig',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
-		'baser.Default.PageCategory',
 		'baser.Default.Page',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
