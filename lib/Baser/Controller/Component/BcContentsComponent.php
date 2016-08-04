@@ -108,6 +108,7 @@ class BcContentsComponent extends Component {
 				$controller->crumbs = $this->getCrumbs($controller->request->params['Content']['id']);
 				// 説明文
 				$controller->set('description', $controller->request->params['Content']['description']);
+				$controller->pageTitle = $controller->request->params['Content']['title'];
 			}
 		}
 
@@ -202,8 +203,8 @@ class BcContentsComponent extends Component {
 		}
 		if(!empty($this->_Controller->request->query['preview'])) {
 			$crumbs[count($crumbs) - 1] = array(
-				'name' => $this->_Controller->content['title'],
-				'url' => $this->_Controller->content['url']
+				'name' => $this->_Controller->request->params['Content']['title'],
+				'url' => $this->_Controller->request->params['Content']['url']
 			);
 		}
 		return $crumbs;

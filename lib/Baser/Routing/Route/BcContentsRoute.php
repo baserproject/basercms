@@ -38,7 +38,7 @@ class BcContentsRoute extends CakeRoute {
 			$content = $this->getContent($url, false);
 			if($content && !BcUtil::isAdminUser()) {
 				$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
-				header('Location: ' . topLevelUrl(false) . baseUrl() . $authPrefixes['admin']['alias'] . '/users/login');
+				header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
 				exit();
 			}
 		} else {
@@ -122,16 +122,19 @@ class BcContentsRoute extends CakeRoute {
 				'pass' => [$plugin, $type]
 			];
 		} else {
-			$pass = [$entityId];
+			$pass = [];
 			$action = $viewParams['action'];
-			if($requestUrl != $entryUrl) {
+			if($type == 'Page') {
+				$url = preg_replace('/^\//', '', $entryUrl);
+				$pass = explode('/', $url);
+			} elseif($requestUrl != $entryUrl) {
 				$url = preg_replace('/^' . preg_quote($entryUrl, '/') . '/', '', $requestUrl);
 				$url = preg_replace('/^\//', '', $url);
 				$urlAry = explode('/', $url);
 				$action = $urlAry[0];
-				unset($urlAry[0]);
+				array_shift($urlAry);
 				if($urlAry) {
-					$pass = $pass + $urlAry;
+					$pass = $urlAry;
 				}
 			}
 			if($plugin == 'Core') {
@@ -141,7 +144,8 @@ class BcContentsRoute extends CakeRoute {
 				'plugin' => Inflector::underscore($plugin),
 				'controller' => $viewParams['controller'],
 				'action' => $action,
-				'pass' => $pass
+				'pass' => $pass,
+				'entityId' => $entityId
 			];
 		}
 		return $params;
