@@ -44,7 +44,7 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testSetup() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailMessage->setup(1);
 		$this->assertEquals('mysite_test_contact_', $this->MailMessage->tablePrefix, 'テーブルプレフィックスを正しく設定できません');
 
@@ -63,7 +63,7 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testBeforeSave() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 初期化
 		$this->MailMessage->setup(1);
 		$this->MailMessage->data = array('MailMessage' => array(
@@ -354,7 +354,7 @@ class MailMessageTest extends BaserTestCase {
  * @dataProvider createRenameDropTableDataProvider
  */
 	public function testCreateRenameDropTable($contentName) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 初期化
 		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
 		$toContentName = $contentName . '_renamed';
@@ -390,7 +390,7 @@ class MailMessageTest extends BaserTestCase {
  * メッセージファイルのフィールドを追加/名前変更/削除する
  */
 	public function testAddRenameDelMessageField() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$db = $this->MailMessage->getDataSource();
 		switch ($db->config['datasource']) {
 			case 'Database/BcPostgres' :
@@ -454,7 +454,7 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testConstruction() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$db = $this->MailMessage->getDataSource();
 
 		switch ($db->config['datasource']) {
@@ -574,7 +574,7 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testReconstructionAll() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$contentName = 'contact';
 		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
 		$this->MailMessage->dropTable($contentName);
