@@ -266,4 +266,49 @@ class BaserTestShell extends TestShell {
 		return 'app';
 	}
 
+/**
+ * Main entry point to this shell
+ *
+ * @return void
+ */
+	public function main() {
+
+		// CUSTOMIZE MODIFY 2016/08/06 ryuring
+		// >>>
+		//$this->out(__d('cake_console', 'CakePHP Test Shell'));
+		// ---
+		$this->out(__d('cake_console', 'baserCMS Test Shell'));
+		// <<<
+		
+		$this->hr();
+		$args = $this->_parseArgs();
+
+		if (empty($args['case'])) {
+			return $this->available();
+		}
+
+		$this->_run($args, $this->_runnerOptions());
+	}
+
+/**
+ * Displays a header for the shell
+ *
+ * @return void
+ */
+	protected function _welcome() {
+		$this->out();
+		
+		// CUSTOMIZE MODIFY 2016/08/06 ryuring
+		// >>>
+		//$this->out(__d('cake_console', '<info>Welcome to CakePHP %s Console</info>', 'v' . Configure::version()));
+		// ---
+		$this->out(__d('cake_console', '<info>Welcome to baserCMS %s Console</info>', 'v' . getVersion()));
+		// <<<
+		
+		$this->hr();
+		$this->out(__d('cake_console', 'App : %s', APP_DIR));
+		$this->out(__d('cake_console', 'Path: %s', APP));
+		$this->hr();
+	}
+	
 }

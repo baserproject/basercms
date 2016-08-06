@@ -46,41 +46,24 @@ class BlogContentTest extends BaserTestCase {
  * validate
  */
 	public function test空チェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'title' => '',
 				'list_direction' => ''
 			)
 		));
-
 		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('title', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログタイトルを入力してください。', current($this->BlogContent->validationErrors['title']));
-
 		$this->assertArrayHasKey('list_direction', $this->BlogContent->validationErrors);
 		$this->assertEquals('一覧に表示する順番を指定してください。', current($this->BlogContent->validationErrors['list_direction']));
 	}
 
 	public function test桁数チェック異常系() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'name' => '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901',
-				'title' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'layout' => '123456789012345678901',
 				'template' => '123456789012345678901',
 			)
 		));
-
 		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログアカウント名は100文字以内で入力してください。', current($this->BlogContent->validationErrors['name']));
-
-		$this->assertArrayHasKey('title', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログタイトルは255文字以内で入力してください。', current($this->BlogContent->validationErrors['title']));
 
 		$this->assertArrayHasKey('layout', $this->BlogContent->validationErrors);
 		$this->assertEquals('レイアウトテンプレート名は20文字以内で入力してください。', current($this->BlogContent->validationErrors['layout']));
@@ -92,8 +75,6 @@ class BlogContentTest extends BaserTestCase {
 	public function test桁数チェック正常系() {
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
-				'title' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'layout' => '12345678901234567890',
 				'template' => '12345678901234567890',
 			)
@@ -103,12 +84,9 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 	public function testその他異常系() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 半角チェック
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'name' => 'テスト',
-				'layout' => 'テスト',
 				'template' => 'テスト',
 				'list_count' => 'テスト',
 			)
@@ -116,42 +94,12 @@ class BlogContentTest extends BaserTestCase {
 
 		$this->assertFalse($this->BlogContent->validates());
 
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログアカウント名は半角のみ入力してください。', current($this->BlogContent->validationErrors['name']));
-
-		$this->assertArrayHasKey('layout', $this->BlogContent->validationErrors);
-		$this->assertEquals('レイアウトテンプレート名は半角で入力してください。', current($this->BlogContent->validationErrors['layout']));
-
 		$this->assertArrayHasKey('template', $this->BlogContent->validationErrors);
 		$this->assertEquals('コンテンツテンプレート名は半角で入力してください。', current($this->BlogContent->validationErrors['template']));
 
 		$this->assertArrayHasKey('list_count', $this->BlogContent->validationErrors);
 		$this->assertEquals('一覧表示件数は半角で入力してください。', current($this->BlogContent->validationErrors['list_count']));
-
-		// 重複チェック
-		$this->BlogContent->create(array(
-			'BlogContent' => array(
-				'name' => 'news',
-			)
-		));
-
-		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('入力されたブログアカウント名は既に使用されています。', current($this->BlogContent->validationErrors['name']));
-
-		// notInListチェック
-		$this->BlogContent->create(array(
-			'BlogContent' => array(
-				'name' => 'blog',
-			)
-		));
-
-		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログアカウント名に「blog」は利用できません。', current($this->BlogContent->validationErrors['name']));
-
+		
 		// eye_catch_sizeチェック
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
@@ -191,7 +139,6 @@ class BlogContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($id, $exclude_search) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->create([
 			'BlogContent' => [
 				'id' => $id,
@@ -267,7 +214,6 @@ class BlogContentTest extends BaserTestCase {
  * ブログコンテンツデータをコピーする
  */
 	public function testCopy() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->copy(1, 1, 'hoge1', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())

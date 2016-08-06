@@ -61,7 +61,7 @@ class BcUtil extends Object {
  */
 	public static function loginUser($prefix = 'admin') {
 		$Session = new CakeSession();
-		$sessionKey = Configure::read('BcAuthPrefix.' . $prefix . '.sessionKey');
+		$sessionKey = BcUtil::authSessionKey($prefix);
 		$user = $Session->read('Auth.' . $sessionKey);
 		if (!$user) {
 			if (!empty($_SESSION['Auth'][$sessionKey])) {
@@ -70,6 +70,17 @@ class BcUtil extends Object {
 		}
 		return $user;
 	}
+
+/**
+ * 認証用のキーを取得
+ * 
+ * @param string $prefix
+ * @return mixed
+ */
+	public static function authSessionKey($prefix = 'admin') {
+		return Configure::read('BcAuthPrefix.' . $prefix . '.sessionKey');
+	}
+	
 /**
  * ログインしているユーザーのセッションキーを取得
  * 

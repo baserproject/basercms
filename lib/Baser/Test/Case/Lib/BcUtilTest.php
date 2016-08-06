@@ -19,6 +19,7 @@ App::uses('BcAuthComponent', 'Controller/Component');
  * BcUtilTest class
  * 
  * @package Baser.Test.Case.Lib
+ * @property BcUtil $BcUtil
  */
 class BcUtilTest extends BaserTestCase {
 /**
@@ -26,7 +27,10 @@ class BcUtilTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'baser.Default.SiteConfig'
+		'baser.Default.SiteConfig',
+		'baser.Default.PluginContent',
+		'baser.Default.Content',
+		'baser.Default.Site'
 	);
 
 /**
@@ -35,12 +39,15 @@ class BcUtilTest extends BaserTestCase {
  * @return void
  */
 	public function setUp() {
+		// 前のテストで変更されている為
+		$BcAuth = new BcAuthComponent(new ComponentCollection([]));
+		$BcAuth->setSessionKey('Auth.User');
+		@session_start();
 		parent::setUp();
-		$this->util = new BcUtil();
 	}
 
 	public function tearDown() {
-		unset($this->util);
+		@session_destroy();
 		parent::tearDown();
 	}
 
@@ -53,10 +60,8 @@ class BcUtilTest extends BaserTestCase {
  * @dataProvider isAdminSystemDataProvider
  */
 	public function testIsAdminSystem($url, $expect) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		Configure::write('BcRequest.pureUrl', $url);
-		$result = $this->util->isAdminSystem();
-
+		$this->_getRequest($url);
+		$result = BcUtil::isAdminSystem();
 		$this->assertEquals($expect, $result, '正しく管理システムかチェックできません');
 	}
 
@@ -68,7 +73,8 @@ class BcUtilTest extends BaserTestCase {
 	public function isAdminSystemDataProvider() {
 		return array(
 			array('admin', true),
-			array('/admin', false),
+			array('admin/hoge', true),
+			array('/admin/hoge', true),
 			array('admin/', true),
 			array('hoge', false),
 			array('hoge/', false),
@@ -83,13 +89,10 @@ class BcUtilTest extends BaserTestCase {
  * @dataProvider isAdminUserDataProvider
  */
 	public function testIsAdminUser($usergroup, $expect) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		// 偽装ログイン
-		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
-		$this->util->Session = new CakeSession();
-		$this->util->Session->write('Auth.User.UserGroup.name', $usergroup);
-
-		$result = $this->util->isAdminUser();
+		$Session = new CakeSession();
+		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+		$Session->write('Auth.' . $sessionKey . '.UserGroup.name', $usergroup);
+		$result = BcUtil::isAdminUser();
 		$this->assertEquals($expect, $result, '正しく管理ユーザーがチェックできません');
 	}
 
@@ -110,17 +113,15 @@ class BcUtilTest extends BaserTestCase {
  * ログインユーザーのデータを取得する
  */
 	public function testLoginUser() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// ログインしていない場合
-		$result = $this->util->loginUser();
+		$result = BcUtil::loginUser();
 		$this->assertNull($result, 'ログインユーザーのデータを正しく取得できません');
 
 		// ログインしている場合
 		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
-		$this->util->Session = new CakeSession();
-		$this->util->Session->write('Auth.User.name', 'admin');
-
-		$result = $this->util->loginUser();
+		$Session = new CakeSession();
+		$Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'admin');
+		$result = BcUtil::loginUser();
 		$this->assertEquals($result['name'], 'admin', 'ログインユーザーのデータを正しく取得できません');
 	}
 
@@ -128,16 +129,15 @@ class BcUtilTest extends BaserTestCase {
  * ログインしているユーザー名を取得
  */
 	public function testLoginUserName() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// ログインしていない場合
-		$result = $this->util->loginUserName();
+		$result = BcUtil::loginUserName();
 		$this->assertEmpty($result, 'ログインユーザーのデータを正しく取得できません');
 
 		// ログインしている場合
 		session_id('baser'); // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
-		$this->util->Session = new CakeSession();
-		$this->util->Session->write('Auth.User.name', 'hoge');
-		$result = $this->util->loginUserName();
+		$Session = new CakeSession();
+		$Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'hoge');
+		$result = BcUtil::loginUserName();
 		$this->assertEquals('hoge', $result, 'ログインユーザーのデータを正しく取得できません');
 	}
 
@@ -145,14 +145,13 @@ class BcUtilTest extends BaserTestCase {
  * ログインしているユーザーのセッションキーを取得
  */
 	public function testGetLoginUserSessionKey() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// セッションキーを未設定の場合
-		$result = $this->util->getLoginUserSessionKey();
+		$result = BcUtil::getLoginUserSessionKey();
 		$this->assertEquals('User', $result, 'セッションキーを取得を正しく取得できません');
 		
 		// セッションキーを設定した場合
 		BcAuthComponent::$sessionKey = 'Auth.Hoge';
-		$result = $this->util->getLoginUserSessionKey();
+		$result = BcUtil::getLoginUserSessionKey();
 		$this->assertEquals($result, 'Hoge', 'セッションキーを取得を正しく取得できません');
 	}
 
@@ -162,7 +161,7 @@ class BcUtilTest extends BaserTestCase {
  */
 	public function testGetCurrentThemesPlugins() {
 		// プラグインが存在しない場合(デフォルトのbccolumn)
-		$result = $this->util->getCurrentThemesPlugins();
+		$result = BcUtil::getCurrentThemesPlugins();
 		$expect = array();
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
 
@@ -174,7 +173,7 @@ class BcUtilTest extends BaserTestCase {
 		$Folder->create($path . DS . 'dummy1');
 		$Folder->create($path . DS . 'dummy2');
 
-		$result = $this->util->getCurrentThemesPlugins();
+		$result = BcUtil::getCurrentThemesPlugins();
 		// ダミーのプラグインディレクトリを削除
 		$Folder->delete($path);
 
@@ -187,11 +186,11 @@ class BcUtilTest extends BaserTestCase {
  */
 	public function testGetSchemaPath() {
 		// Core
-		$result = $this->util->getSchemaPath();
+		$result = BcUtil::getSchemaPath();
 		$this->assertEquals(BASER_CONFIGS . 'Schema', $result, 'Coreのスキーマ情報のパスを正しく取得できません');
 
 		// Blog
-		$result = $this->util->getSchemaPath('Blog');
+		$result = BcUtil::getSchemaPath('Blog');
 		$this->assertEquals(BASER_PLUGINS . 'Blog/Config/Schema', $result, 'プラグインのスキーマ情報のパスを正しく取得できません');
 	}
 	
@@ -223,7 +222,7 @@ class BcUtilTest extends BaserTestCase {
 			$Folder->create(BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin);
 		}
 
-		$result = $this->util->getDefaultDataPath($plugin, $theme, $pattern);
+		$result = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);
 
 		// 初期データ用のダミーディレクトリを削除
 		if ($isset_ptt) {
@@ -260,13 +259,13 @@ class BcUtilTest extends BaserTestCase {
  */
 	public function testSerialize() {
 		// BcUtil::serialize()でシリアライズした場合
-		$serialized = $this->util->serialize('hoge');
-		$result = $this->util->unserialize($serialized);
+		$serialized = BcUtil::serialize('hoge');
+		$result = BcUtil::unserialize($serialized);
 		$this->assertEquals('hoge', $result, 'BcUtil::serialize()で正しくシリアライズ/アンシリアライズできません');
 
 		// serialize()のみでシリアライズした場合
 		$serialized = serialize('hoge');
-		$result = $this->util->unserialize($serialized);
+		$result = BcUtil::unserialize($serialized);
 		$this->assertEquals('hoge', $result, 'serializeのみで正しくシリアライズ/アンシリアライズできません');
 
 	}

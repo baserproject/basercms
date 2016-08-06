@@ -77,7 +77,8 @@ class BlogBaserHelper extends AppHelper {
 			'template' => null,
 			'direction' => null,
 			'page' => null,
-			'sort' => null
+			'sort' => null,
+			'siteId' => 0
 		), $options);
 
 		if (empty($contentsName)) {
@@ -87,16 +88,42 @@ class BlogBaserHelper extends AppHelper {
 			// コンテンツ名が配列でない場合
 			$contentsName = array($contentsName);
 		}
-
+		$Content = ClassRegistry::init('Content');
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$blogContents = $BlogContent->find('all', array(
-			'fields' => array('id', 'name', 'status'),
-			'recursive' => -1,
-		));
+		$joins = [];
+		if($Content->useDbConfig != $BlogContent->useDbConfig) {
+			// =====================================================
+			// TODO コアとプラグインの useDbConfig を統一したら削除する
+			// useDbConfig が違う場合、hasOne でも inner join しない為
+			// アソシエーション先のフィールドを検索条件に指定できない
+			// table の指定をクラスにしているのは、プラグインのテーブルプレフィックスが
+			// 自動的に付与されてしまうから。
+			// クラスを指定するとコアのテーブルプレフィックスが不要される。
+			// ちなみに UnitTest の場合は、useDbConfigが同じ為不要となる。
+			// =====================================================
+			$joins = [[
+				'type' => 'LEFT',
+				'alias' => 'Content',
+				'table' => ClassRegistry::init('Content'),
+				'conditions' => 'Content.entity_id = BlogContent.id'
+			]];
+		}
+		$blogContents = $BlogContent->find('all', [
+			'fields' => ['BlogContent.id', 'Content.name', 'Content.status'],
+			'conditions' => ['Content.site_id' => $options['siteId']],
+			'recursive' => 0,
+			'joins' => $joins
+		]);
 		if (empty($blogContents)) {
 			return;
 		} else {
-			$blogContents = Hash::combine($blogContents, '{n}.BlogContent.name', '{n}.BlogContent');
+			foreach($blogContents as $blogContent) {
+				$blogContentsTmp[$blogContent['Content']['name']] = [
+					'id' => $blogContent['BlogContent']['id'],
+					'status' => $blogContent['Content']['status']
+				];
+			}
+			$blogContents = $blogContentsTmp;
 		}
 		if ($options['contentsTemplate']) {
 			$contentsTemplate = $options['contentsTemplate'];
@@ -113,10 +140,13 @@ class BlogBaserHelper extends AppHelper {
 			}
 		}
 
-		if ($blogContents[$contentsTemplate]['id']) {
+		if (!empty($blogContents[$contentsTemplate]['id'])) {
 			$id = $blogContents[$contentsTemplate]['id'];
+		} else {
+			return;
 		}
 
+		unset($options['siteId']);
 		unset($options['contentsTemplate']);
 		$blogContentId = array();
 

@@ -65,7 +65,6 @@ class MailContentTest extends BaserTestCase {
 	}
 
 	public function test空白チェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
 				'name' => '',
@@ -83,29 +82,22 @@ class MailContentTest extends BaserTestCase {
 			)
 		));
 		$this->assertFalse($this->MailContent->validates());
-
 		$expected = array(
-			'name' => array('メールフォームアカウント名を入力してください。'),
-  		'title' => array('メールフォームタイトルを入力してください。'),
-  		'sender_name' => array('送信先名を入力してください。'),
-  		'subject_user' => array('自動返信メール件名[ユーザー宛]を入力してください。'),
-  		'subject_admin' => array('自動送信メール件名[管理者宛]を入力してください。'),
-  		'layout_template' => array('レイアウトテンプレート名は半角のみで入力してください。'),
-  		'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
-  		'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
-  	);
+			'sender_name' => array('送信先名を入力してください。'),
+			'subject_user' => array('自動返信メール件名[ユーザー宛]を入力してください。'),
+			'subject_admin' => array('自動送信メール件名[管理者宛]を入力してください。'),
+			'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
+			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
+  		);
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
 
 	public function test桁数チェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
-				'name' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
 				'sender_name' => '012345678901234567890123456789012345678901234567890',
 				'subject_user' => '012345678901234567890123456789012345678901234567890',
 				'subject_admin' => '012345678901234567890123456789012345678901234567890',
-				'layout_template' => '012345678901234567890123456789012345678901234567890',
 				'form_template' => '012345678901234567890123456789012345678901234567890',
 				'mail_template' => '012345678901234567890123456789012345678901234567890',
 				'redirect_url' => 'http://01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.co.jp',
@@ -117,11 +109,9 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 
 		$expected = array(
-			'name' => array('メールフォームアカウント名は100文字以内で入力してください。'),
 			'sender_name' => array('送信先名は50文字以内で入力してください。'),
 			'subject_user' => array('自動返信メール件名[ユーザー宛]は50文字以内で入力してください。'),
 			'subject_admin' => array('自動返信メール件名[管理者宛]は50文字以内で入力してください。'),
-			'layout_template' => array('レイアウトテンプレート名は20文字以内で入力してください。'),
 			'form_template' => array('フォームテンプレート名は20文字以内で入力してください。'),
 			'mail_template' => array('メールテンプレート名は20文字以内で入力してください。'),
 			'redirect_url' => array('リダイレクトURLは255文字以内で入力してください。'),
@@ -133,11 +123,8 @@ class MailContentTest extends BaserTestCase {
 	}
 
 	public function test半角英数チェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailContent->create(array(
 			'MailContent' => array(
-				'name' => '１２３ａｂｃ',
-				'layout_template' => '１２３ａｂｃ',
 				'form_template' => '１２３ａｂｃ',
 				'mail_template' => '１２３ａｂｃ',
 				'ssl_on' => ''
@@ -146,38 +133,9 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 		
 		$expected = array(
-			'layout_template' => array('レイアウトテンプレート名は半角のみで入力してください。'),
 			'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
 			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
 		);
-		$this->assertEquals($expected, $this->MailContent->validationErrors);
-	}
-
-	public function testNameMailチェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->MailContent->create(array(
-			'MailContent' => array(
-				'name' => 'mail',
-				'ssl_on' => ''
-			)
-		));
-		$this->assertFalse($this->MailContent->validates());
-		
-		$expected =  array('name' => array('メールフォームアカウント名に「mail」は利用できません。'));
-		$this->assertEquals($expected, $this->MailContent->validationErrors);
-	}
-	
-	public function test既存アカウント名チェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->MailContent->create(array(
-			'MailContent' => array(
-				'name' => 'contact',
-				'ssl_on' => ''
-			)
-		));
-		$this->assertFalse($this->MailContent->validates());
-		
-		$expected =  array('name' => array('入力されたメールフォームアカウント名は既に使用されています。'));
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
 	
@@ -230,7 +188,6 @@ class MailContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($exclude_search) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 初期化
 		$data = ['MailContent' => [
 			'description' => 'hogeDescription',

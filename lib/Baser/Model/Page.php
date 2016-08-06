@@ -137,11 +137,10 @@ class Page extends AppModel {
  */
 	public function getDefaultValue() {
 		$key = Configure::read('BcAuthPrefix.admin.sessionKey');
+		$data = [];
 		if (!empty($_SESSION['Auth'][$key])) {
 			$data[$this->name]['author_id'] = $_SESSION['Auth'][$key]['id'];
 		}
-		$data[$this->name]['sort'] = $this->getMax('sort') + 1;
-		$data[$this->name]['status'] = false;
 		return $data;
 	}
 

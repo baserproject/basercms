@@ -11,10 +11,8 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-if (!isset($this->BcPage) || !$this->BcPage->contentsNaviAvailable()) {
-	return;
-}
 ?>
+
 
 <div id="ContentsNavi">
 	<?php $this->BcPage->prevLink() ?>

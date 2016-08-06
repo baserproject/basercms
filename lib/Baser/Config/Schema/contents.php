@@ -41,6 +41,7 @@ class ContentsSchema extends CakeSchema {
 		'deleted' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'layout_template' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'main_site_content_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false),
+		'level' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),

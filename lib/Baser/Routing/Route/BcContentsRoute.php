@@ -181,4 +181,46 @@ class BcContentsRoute extends CakeRoute {
 		return $paths;
 	}
 
+/**
+ * Reverse route
+ *
+ * TODO ryuring リバースルーティングについて pass や named を付加できていない為
+ * 途中までの処理をコメントアウトとして残す
+ *
+ * @param array $url Array of parameters to convert to a string.
+ * @return mixed either false or a string URL.
+ */
+//	public function match($url) {
+//		$request = Router::getRequest();
+//		$plugin = $request->params['plugin'];
+//		if(!$plugin) {
+//			$plugin = 'Core';
+//		} else {
+//			$plugin = Inflector::camelize($plugin);
+//		}
+//
+//		$viewParams = Configure::read('BcContents.items.' . $plugin);
+//		$type = '';
+//		foreach($viewParams as $type => $param) {
+//			if(empty($param['routes']['view'])) {
+//				continue;
+//			}
+//			$viewParam = $param['routes']['view'];
+//			if($plugin == $type && $url['controller'] == $viewParam['controller'] && $url['action'] == $viewParam['action']) {
+//				$type = $key;
+//				break;
+//			}
+//		}
+//		if(!$type) {
+//			return false;
+//		}
+//		$Content = ClassRegistry::init('Content');
+//		$entryId = null;
+//		if(!empty($request->params['entityId'])) {
+//			$entryId = $request->params['entityId'];
+//		}
+//		$content = $Content->findByType($plugin . '.' . $type, $entryId);
+//		$result = $content['Content']['url'];
+//		return $result;
+//	}
 }

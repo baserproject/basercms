@@ -24,7 +24,7 @@ class Content extends AppModel {
  * @var array
  */
 	public $actsAs = array(
-		'Tree',
+		'Tree' => ['level' => 'level'],
 		'BcCache',
 		'SoftDelete',
 		'BcUpload' => array(
@@ -1062,6 +1062,16 @@ class Content extends AppModel {
 			return true;
 		}
 		return false;
+	}
+
+/**
+ * サイトルートコンテンツを取得する
+ * 
+ * @param $siteId
+ * @return array|null
+ */
+	public function getSiteRoot($siteId) {
+		return $this->find('first', ['conditions' => ['Content.site_id' => $siteId, 'Content.site_root' => true]]);
 	}
 
 }

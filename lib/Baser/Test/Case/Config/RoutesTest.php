@@ -140,7 +140,6 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider pageDisplayDataProvider
  */
 	public function testPageDisplay($url, $pass) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
@@ -149,6 +148,9 @@ class RoutesTest extends BaserTestCase {
 			'named' => array(),
 			'pass' => $pass,
 		);
+		unset($params['Content']);
+		unset($params['Site']);
+		unset($params['entityId']);
 		$this->assertEquals($expects, $params);
 	}
 
@@ -162,9 +164,9 @@ class RoutesTest extends BaserTestCase {
 	public function pageDisplayDataProvider() {
 		return array(
 			array('/', array('index')),
-			array('/company', array('company')),
+			array('/about', array('about')),
 			array('/service', array('service')),
-			array('/recruit', array('recruit'))
+			array('/sitemap', array('sitemap'))
 		);
 	}
 
@@ -178,18 +180,18 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider mobilePageDisplayDataProvider
  */
 	public function testMobilePageDisplay($url, $pass) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->_setAgent('mobile');
-		$this->_setAgentLink('mobile');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
-			'action' => 'mobile_display',
+			'action' => 'display',
 			'plugin' => null,
-			'prefix' => 'mobile',
 			'named' => array(),
 			'pass' => $pass,
 		);
+		unset($params['Content']);
+		unset($params['Site']);
+		unset($params['entityId']);
 		$this->assertEquals($expects, $params);
 	}
 
@@ -202,8 +204,7 @@ class RoutesTest extends BaserTestCase {
  */
 	public function mobilePageDisplayDataProvider() {
 		return array(
-			array('/m/', array('index')),
-			array('/m/service', array('service'))
+			array('/m/', array('m', 'index'))
 		);
 	}
 
@@ -217,18 +218,18 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider smartphonePageDisplayDataProvider
  */
 	public function testSmartphonePageDisplay($url, $pass) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->_setAgent('smartphone');
-		$this->_setAgentLink('smartphone');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
-			'action' => 'smartphone_display',
+			'action' => 'display',
 			'plugin' => null,
-			'prefix' => 'smartphone',
 			'named' => array(),
 			'pass' => $pass,
 		);
+		unset($params['Content']);
+		unset($params['Site']);
+		unset($params['entityId']);
 		$this->assertEquals($expects, $params);
 	}
 
@@ -241,8 +242,8 @@ class RoutesTest extends BaserTestCase {
  */
 	public function smartphonePageDisplayDataProvider() {
 		return array(
-			array('/s/', array('index')),
-			array('/s/recruit', array('recruit'))
+			array('/s/', array('s', 'index')),
+			array('/s/service', array('s', 'service'))
 		);
 	}
 	

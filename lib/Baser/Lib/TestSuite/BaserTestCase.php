@@ -114,29 +114,5 @@ class BaserTestCase extends CakeTestCase {
 		Configure::delete('BcRequest.agentPrefix');
 		// Configure::delete('BcRequest.agentAlias');
 	}
-/**
- * エージェントごとの固定ページの連動の判定に利用される値をConfigureに設定
- *
- * @param string $prefix エージェントのプレフィックス
- * @return void
- */
-	protected function _setAgentLink($prefix) {
-		$agent = Configure::read("BcAgent.{$prefix}");
-		if (empty($agent)) {
-			return;
-		}
-		Configure::write("BcSite.linked_pages_{$prefix}", '1');
-	}
-
-/**
- * エージェントの連携の判定を全てOFFにする
- *
- * @return void
- */
-	protected function _unsetAgentLinks() {
-		$prefixes = array('smartphone', 'mobile');
-		foreach ($prefixes as $prefix) {
-			Configure::write("BcSite.linked_pages_{$prefix}", '0');
-		}
-	}
+	
 }

@@ -47,7 +47,6 @@ class ToolTest extends BaserTestCase {
  * @dataProvider getControlSourceDataProvider
  */
 	public function testGetControlSource($field, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$result = $this->Tool->getControlSource($field);
 		$this->assertContains($expected, $result, $message);
 	}
@@ -68,7 +67,6 @@ class ToolTest extends BaserTestCase {
  * @dataProvider getListModelsDataProvider
  */
 	public function testGetListModels($configKeyName, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$result = $this->Tool->getControlSource($configKeyName);
 		$this->assertContains($expected, $result, $message);
 	}

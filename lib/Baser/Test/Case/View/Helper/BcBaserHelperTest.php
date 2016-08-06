@@ -45,7 +45,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
 		'baser.Default.Site',
-		'baser.Default.Content',
+		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 	);
 
 /**
@@ -106,7 +106,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		unset($user['User']['password']);
 		$this->BcBaser->set('user', $user['User']);
 		$user['User']['UserGroup'] = $user['UserGroup'];
-		$sessionKey = BcUtil::getLoginUserSessionKey();
+		$sessionKey = BcUtil::authSessionKey('admin');
 		$_SESSION['Auth'][$sessionKey] = $user['User'];
 	}
 
@@ -1305,20 +1305,13 @@ class BcBaserHelperTest extends BaserTestCase {
  * 
  * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
-	public function testGetContentsName($url, $expects, $ua = null, array $agents = array(), array $linkedAgents = array()) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testGetContentsName($url, $expects, $ua = null, array $agents = array()) {
 		//Configure周りの設定を全てOFF状態に
 		$this->_unsetAgent();
-		$this->_unsetAgentLinks();
 
 		if (!empty($ua) && !empty($agents) && in_array($ua, $agents)) {
 			$this->_setAgentSetting($ua, true);
 			$this->_setAgent($ua);
-		}
-
-		//連携を設定
-		foreach ($linkedAgents as $linked) {
-			$this->_setAgentLink($linked);
 		}
 
 		$this->BcBaser->request = $this->_getRequest($url);
@@ -1331,35 +1324,20 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('/', 'Home'),
 			array('/news', 'News'),
 			array('/contact', 'Contact'),
-			array('/company', 'Default'),
-
-			//モバイル　対応OFF 連動OFF
-
-			//スマートフォン 対応OFF　連動OFF
+			array('/about', 'Default'),
 
 			//モバイル　対応ON 連動OFF
 			array('/m/', 'Home', 'mobile', array('mobile')),
 			array('/m/news', 'News', 'mobile', array('mobile')),
 			array('/m/contact', 'Contact', 'mobile', array('mobile')),
-			array('/m/company', 'M', 'mobile', array('mobile')),	// 存在しないページ
+			array('/m/hoge', 'M', 'mobile', array('mobile')),	// 存在しないページ
 
 			//スマートフォン 対応ON　連動OFF
 			array('/s/', 'Home', 'smartphone', array('smartphone')),
 			array('/s/news', 'News', 'smartphone', array('smartphone')),
 			array('/s/contact', 'Contact', 'smartphone', array('smartphone')),
-			array('/s/company', 'S', 'smartphone', array('smartphone')),	// 存在しないページ
-
-			//モバイル　対応ON 連動ON
-			array('/m/', 'Home', 'mobile', array('mobile'), array('mobile')),
-			array('/m/news', 'News', 'mobile', array('mobile'), array('mobile')),
-			array('/m/contact', 'Contact', 'mobile', array('mobile'), array('mobile')),
-			array('/m/company', 'Default', 'mobile', array('mobile'), array('mobile')),	// 存在しないページ
-
-			//スマートフォン 対応ON　連動ON
-			array('/s/', 'Home', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/news', 'News', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/contact', 'Contact', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/company', 'Default', 'smartphone', array('smartphone'), array('smartphone'))	// 存在しないページ
+			array('/s/about', 'Default', 'smartphone', array('smartphone')),
+			array('/s/hoge', 'S', 'smartphone', array('smartphone')),	// 存在しないページ
 		);
 	}
 
@@ -1436,59 +1414,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * ページ機能で作成したページの一覧データを取得する
- * 
- * @param int $pageCategoryId 固定ページカテゴリ
- * @param array $options オプション
- * @param array $expected ページリストデータ
- * @return void
- * @dataProvider getPageListDataProvider
- */
-	public function testGetPageList($pageCategoryId, $options, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->fixtures = array(
-			'baser.Default.Page',
-		);
-
-		$this->_setAgentSetting('mobile', true);
-		$this->_setAgentSetting('smartphone', true);
-		$result = $this->BcBaser->getPageList($pageCategoryId, $options);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function getPageListDataProvider() {
-		return array(
-			array(null, array(), array(
-				array('title' => 'PCトップページ', 'url' => '/'),
-				array('title' => 'サービス', 'url' => '/service'),
-				array('title' => '会社案内', 'url' => '/company'),
-				array('title' => '採用情報', 'url' => '/recruit'),
-				array('title' => 'モバイルトップページ', 'url' => '/m/'),
-				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
-				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service'),
-				array('title' => '親カテゴリ','url' => '/parent_category/'),
-				array('title' => '子カテゴリ','url' => '/parent_category/child_category/'),
-			)),
-			array(1, null, array(
-				array('title' => 'モバイルトップページ', 'url' => '/m/'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service')
-			)),
-			array(null, array('order' => 'Page.sort DESC'), array(
-				array('title' => '子カテゴリ', 'url' => '/parent_category/child_category/'),
-				array('title' => '親カテゴリ', 'url' => '/parent_category/'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service'),
-				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
-				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
-				array('title' => 'モバイルトップページ', 'url' => '/m/'),
-				array('title' => '採用情報', 'url' => '/recruit'),
-				array('title' => '会社案内', 'url' => '/company'),
-				array('title' => 'サービス', 'url' => '/service'),
-				array('title' => 'PCトップページ', 'url' => '/')
-			))
-		);
-	}
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
@@ -1584,20 +1509,18 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param boolean $expected 期待値
  * @dataProvider sitemapDataProvider
  */
-	public function testSitemap($pageCategoryId, $recursive, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testSitemap($id, $level, $expected) {
 		$message = 'サイトマップを正しく出力できません';
 		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->sitemap($pageCategoryId, $recursive);
-	
+		$this->BcBaser->sitemap($id, $level);
 	}
 
 	public function sitemapDataProvider() {
 		return array(
-			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内.*<\/li>.*<\/ul>.*<\/li>.*<\/ul'),
-			array(2, null, '<a href="\/s\/index">スマートフォントップページ.*<\/li>.*<\/ul>'),
-			array(3, 1, '<li class="sitemap-page li-level-1">.*<a href="\/parent_category\/child_category\/index">子カテゴリ<\/a>	.*<\/li>.*<\/ul>$'),
-			array(3, 2, '<ul class="sitemap section ul-level-2">.*<li class="sitemap-category li-level-2"><a href="\/parent_category\/child_category\/index">子カテゴリ<\/a><\/li>.*<\/ul>.*<\/li>.*<\/ul>'),
+			array(1, null, '<li class="sitemap-content li-level-1"><a href="\/index">トップページ<\/a><\/li>'),
+			array(2, null, '<a href="\/m\/index">トップページ.*<\/li>.*<\/ul>'),
+			array(3, null, '<a href="\/s\/index">トップページ.*<\/li>.*<\/ul>'),
+			array(3, 2, '<ul class="sitemap ul-level-2">.*<li class="sitemap-content li-level-2"><a href="\/s\/service\/index">サービス１<\/a><\/li>.*<\/ul>.*<\/ul>'),
 		);
 	}
 
@@ -1630,30 +1553,6 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('test', 300, 300, array('noflash' => 'Flashがインストールされていません'), '<div id="test">Flashがインストールされていません<\/div>', 'Flashを正しく表示できません'),
 		);
 	}
-
-/**
- * URLをリンクとして利用可能なURLに変換する
- *
- * @param string $url 元となるURL
- * @param string $type mobile、または、smartphone
- * @param boolean $expected 期待値
- * @dataProvider changePrefixToAliasDataProvider
- */
-	public function testChangePrefixToAlias($url, $type, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$result = $this->BcBaser->changePrefixToAlias($url, $type);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function changePrefixToAliasDataProvider() {
-		return array(
-			array("/index", "mobile", "/index"),
-			array("/mobile/index", "mobile", "/m/index"),
-			array("/smartphone/index", "smartphone", "/s/index"),
-			array("/test/index", "test", "/test/index"),
-		);
-	}
-	
 
 /**
  * 現在のログインユーザーが管理者グループかどうかチェックする
@@ -2184,11 +2083,14 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * 表示件数設定機能を出力する
  *
+ * TODO ryuring 現在の資料として、Contents テーブルで管理しているURLの場合、URLが解決できない
+ * BcContentsRoute::match() に途中までの処理を記述している
+ *
  * @return void
  */
 	public function testListNum() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->expectOutputRegex('/<div class="list-num">.*<span><a href="\/index\/num:100">100<\/a><\/span><\/p>.*<\/div>/s');
+		$this->BcBaser->request = $this->_getRequest('/search_indices/search');
+		$this->expectOutputRegex('/<div class="list-num">.*<span><a href="\/search_indices\/search\/num:100">100<\/a><\/span><\/p>.*<\/div>/s');
 		$this->BcBaser->listNum();
 	}
 
@@ -2256,24 +2158,23 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @return void
  */
-	public function testGetBlogs()
-	{
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testGetBlogs() {
 		// TODO コンテンツデータが紐付けられていない
 		$blogs = $this->BcBaser->getBlogs();
-		$this->assertEquals(2, count($blogs)); // 非公開は取得しないので２つ
-		$this->assertEquals(1, $blogs[0]['id']);
+		$this->assertEquals(1, count($blogs));
+		$this->assertEquals(16, $blogs[0]['Content']['id']);
 
 		//ソート順を変更
 		$options = array(
-			'sort' => 'id DESC',
+			'sort' => 'Content.id DESC',
+			'siteId' => ''
 		);
 		$blogs = $this->BcBaser->getBlogs('', $options);
-		$this->assertEquals(3, $blogs[0]['id']);
+		$this->assertEquals(20, $blogs[0]['Content']['id']);
 
 		//ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');
-		$this->assertEquals('news', $blogs['name']);
+		$this->assertEquals('news', $blogs['Content']['name']);
 	}
 
 /**
@@ -2282,7 +2183,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetParams() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BcBaser->request = $this->_getRequest('/news/index/example/test?name=value');
 		$params = $this->BcBaser->getParams();
 
@@ -2297,7 +2197,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$params = $this->BcBaser->getParams();
 
 		$this->assertEquals(null, $params['plugin']);
-		$this->assertEquals([], $params['pass']);
+		$this->assertEquals(['index'], $params['pass']);
 		$this->assertEquals('value', $params['query']['name']);
 		$this->assertEquals('?name=value', $params['url']);
 		$this->assertEquals('/?name=value', $params['here']);

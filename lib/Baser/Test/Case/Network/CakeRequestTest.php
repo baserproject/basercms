@@ -22,6 +22,8 @@ class CakeRequestTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.PluginContent',
+		'baser.Default.Content',
+		'baser.Default.Site',
 	);
 
 /**
@@ -33,7 +35,6 @@ class CakeRequestTest extends BaserTestCase {
  * @dataProvider normalizedHereDataProvider
  */
 	public function testNormalizedHere($url, $expect) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $request->normalizedHere());
 	}

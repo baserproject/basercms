@@ -19,6 +19,7 @@ App::uses('Controller', 'Controller');
  * 偽コントローラ
  *
  * @package       Cake.Test.Case.Controller.Component
+ * @property BcManagerComponent $BcManager
  */
 class BcManagerTestController extends Controller {
 
@@ -94,7 +95,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * @dataProvider connectDbDataProvider
  */
 	public function testConnectDb($datasource, $name, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$config = array(
 			'datasource' => $datasource,
 			'persistent' => false,
@@ -542,7 +542,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * @dataProvider _getDataSourceDataProvider
  */
 	public function test_getDataSource($dbConfigKeyName, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$result = $this->BcManager->_getDataSource($dbConfigKeyName);
 		$sources = $result->listSources();
 		$this->assertContains($expected, $sources, 'データソースを正しく取得できません');

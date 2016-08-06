@@ -12,6 +12,11 @@
 
 App::uses('MailMessage', 'Mail.Model');
 
+/**
+ * Class MailMessageTest
+ * 
+ * @property MailMessage $MailMessage
+ */
 class MailMessageTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -44,16 +49,12 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testSetup() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->MailMessage->setup(1);
-		$this->assertEquals('mysite_test_contact_', $this->MailMessage->tablePrefix, 'テーブルプレフィックスを正しく設定できません');
+		$this->assertEquals('mail_message_1', $this->MailMessage->createTableName(1), 'テーブルを正しく設定できません');
 
 		// setupUpload
-		$this->MailMessage->setup(99);
-		// protectedな値にアクセスするため配列にキャストする
-		$result = (array) $this->MailMessage->Behaviors;
-		$saveDir = $result["\0*\0_loaded"]['BcUpload']->settings['MailMessage']['saveDir'];
-		$expected = "mail" . DS . "limited" . DS . 'uploader' . DS . "messages";
+		$saveDir = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage']['saveDir'];
+		$expected = "mail" . DS . "limited" . DS . 'contact' . DS . "messages";
 		$this->assertEquals($expected, $saveDir, 'アップロード設定を正しく設定できません');
 	}
 	
@@ -63,14 +64,26 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testBeforeSave() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 初期化
+		$this->MailMessage->createTable(1);
+		// ======================================================
+		// createTable の際、CakeSchema::read(); が実行され、
+		// ClassRegistry内のモデルが全てAppModelに変換され MailMessage::setup() が失敗する
+		// その為、ClassRegistry::flush() を行うが、次は、setup() 内の setupUpload() で、Behavior のロードに失敗する
+		// といったわけで、ClassRegistry::addObject で強制的に更新
+		// ======================================================
+		ClassRegistry::flush();
+		ClassRegistry::addObject('MailMessage', $this->MailMessage);
 		$this->MailMessage->setup(1);
 		$this->MailMessage->data = array('MailMessage' => array(
-			'value' => "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9",
+			'name_1' => "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9",
+			'name_2' => 'hoge',
+			'root' => '2',
+			'category' => '2'
 		));
 		$result = $this->MailMessage->save();
-		$this->assertEquals('IIIメートル(代)', $result['MailMessage']['value'], 'beforeSaveでデータベース用のデータに変換されていません');
+		$this->MailMessage->dropTable(1);
+		$this->assertEquals('IIIメートル(代)', $result['MailMessage']['name_1'], 'beforeSaveでデータベース用のデータに変換されていません');
 	}
 
 /**
@@ -116,40 +129,9 @@ class MailMessageTest extends BaserTestCase {
 				'tel_2' => array(true),
 				'tel_3' => array(true),
 				'category' => array('必須項目です。'),
-				'message' => array('日付の形式が不正です。'),
 				'name' => array(true, true),
 				'email' => array(true, true)
 			), 'バリデーションチェックが正しく行われていません'),
-			// ファイル正常系
-			array(99, array(
-				'file_1' => array(
-					'name' => 'test.jpg',
-					'size' => 9,
-					'type' => 'image/jpg'
-					)
-			), array(), 'ファイルのバリデーションチェックが正しく行われていません'),
-			// ファイルサイズ異常系
-			array(99, array(
-				'file_1' => array(
-					'name' => 'test.png',
-					'size' => 9999999,
-					'type' => 'image/png'
-				)
-			),
-			array(
-				'file_1' => array('ファイルサイズがオーバーしています。1MB以内のファイルをご利用ください。')
-			), 'ファイルのバリデーションチェックが正しく行われていません'),
-			// ファイル形式異常系
-			array(99, array(
-				'file_1' => array(
-					'name' => 'test.png',
-					'size' => 9,
-					'type' => 'image/png'
-				)
-			),
-			array(
-				'file_1' => array('ファイル形式が不正です。')
-			), 'ファイルのバリデーションチェックが正しく行われていません'),
 		);
 	}
 
@@ -348,49 +330,9 @@ class MailMessageTest extends BaserTestCase {
 	}
 
 /**
- * メッセージテーブルを作成/名前変更/削除する
- *
- * @param string $contentName コンテンツ名
- * @dataProvider createRenameDropTableDataProvider
- */
-	public function testCreateRenameDropTable($contentName) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		// 初期化
-		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
-		$toContentName = $contentName . '_renamed';
-		$toFullTable = $this->MailMessage->getTablePrefixByContentName($toContentName) . 'messages';
-
-		// テーブル作成
-		$this->MailMessage->createTable($contentName);
-		$this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
-
-		// テーブル名変更
-		$this->MailMessage->renameTable($contentName, $toContentName);
-		$this->assertTrue($this->MailMessage->tableExists($toFullTable), 'メッセージテーブルの名前を正しく変更できません');
-		if ($contentName == 'messages') {
-			$this->assertTrue($this->MailMessage->tableExists($fullTable), '指定されたコンテンツ名がmessageの時、テーブルが再生成されていません');
-		}
-
-		// テーブル削除
-		$this->MailMessage->dropTable($toContentName);
-		$this->assertFalse($this->MailMessage->tableExists($toFullTable), 'メッセージテーブルを削除できません');
-		if ($contentName == 'messages') {
-			$this->assertTrue($this->MailMessage->tableExists($fullTable), '指定されたコンテンツ名がmessageの時、テーブルが再生成されていません');
-		}
-	}
-
-	public function createRenameDropTableDataProvider() {
-		return array(
-			array('hoge'),
-			array('messages'),
-		);
-	}
-
-/**
  * メッセージファイルのフィールドを追加/名前変更/削除する
  */
 	public function testAddRenameDelMessageField() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$db = $this->MailMessage->getDataSource();
 		switch ($db->config['datasource']) {
 			case 'Database/BcPostgres' :
@@ -407,41 +349,31 @@ class MailMessageTest extends BaserTestCase {
 		}
 
 		// 初期化
-		$contentName = 'hoge';
-		$fullTable = $this->MailMessage->getTable(1);
+		$id = 1;
+		$fullTable = $this->MailMessage->createFullTableName($id);
 		$fieldName = 'hogeField';
 		$toFieldName = 'hogeField_renamed';
 
-		$this->MailMessage->createTable($contentName);
-
+		$this->MailMessage->createTable($id);
+		$this->MailMessage->construction($id);
+		
 		// フィールド追加
-		$this->MailMessage->addMessageField($contentName, $fieldName);
+		$this->MailMessage->addMessageField($id, $fieldName);
 		$sql = $command . " $fullTable $fieldName";
 		$this->assertNotEmpty($this->MailMessage->query($sql), 'メッセージファイルにフィールドを正しく追加できません');
 
 		// フィールド名変更
-		$this->MailMessage->renameMessageField($contentName, $fieldName, $toFieldName);
+		$this->MailMessage->renameMessageField($id, $fieldName, $toFieldName);
 		$sql = $command . " $fullTable $toFieldName";
 		$this->assertNotEmpty($this->MailMessage->query($sql), 'メッセージファイルのフィールド名を正しく変更できません');
 
 		// フィールド削除
-		$this->MailMessage->delMessageField($contentName, $toFieldName);
+		$this->MailMessage->delMessageField($id, $toFieldName);
 		$sql = $command . " $fullTable $toFieldName";
 		$this->assertEmpty($this->MailMessage->query($sql), 'メッセージファイルのフィールドを正しく削除できません');
 
-		$this->MailMessage->dropTable($contentName);
+		$this->MailMessage->dropTable($id);
 
-	}
-
-/**
- * コンテンツ名つきのテーブルプレフィックスを取得する
- */
-	public function testGetTablePrefixByContentName() {
-		$result = $this->MailMessage->getTablePrefixByContentName('hoge');
-		$this->assertEquals('mysite_test_hoge_', $result);
-
-		$result = $this->MailMessage->getTablePrefixByContentName('messages');
-		$this->assertEquals('mysite_test_', $result);
 	}
 
 /**
@@ -454,7 +386,6 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testConstruction() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$db = $this->MailMessage->getDataSource();
 
 		switch ($db->config['datasource']) {
@@ -470,13 +401,13 @@ class MailMessageTest extends BaserTestCase {
 			default :
 		}
 
-		$contentName = 'contact';
-		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
+		$id = 1;
+		$fullTable = $this->MailMessage->createFullTableName(1);
 
-		$this->MailMessage->dropTable($contentName);
+		$this->MailMessage->dropTable($id);
 
 		// 一回目
-		$this->MailMessage->construction(1);
+		$this->MailMessage->construction($id);
 		$this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
 		
 		$expectColumns = array('id', 'modified', 'created');
@@ -488,7 +419,7 @@ class MailMessageTest extends BaserTestCase {
 		$this->assertEquals($expectColumns, $resultColumns, '正しくカラムが追加されていません');
 
 		// 二回目
-		$this->MailMessage->construction(1);
+		$this->MailMessage->construction($id);
 
 		$this->MailField = ClassRegistry::init('Mail.MailField');
 		$expectColumns = $this->MailField->find('list', array(
@@ -574,11 +505,9 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testReconstructionAll() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$contentName = 'contact';
-		$fullTable = $this->MailMessage->getTablePrefixByContentName($contentName) . 'messages';
-		$this->MailMessage->dropTable($contentName);
-
+		$id = 1;
+		$fullTable = $this->MailMessage->createFullTableName($id);
+		$this->MailMessage->dropTable($id);
 		$this->assertTrue($this->MailMessage->reconstructionAll());
 		$this->assertTrue($this->MailMessage->tableExists($fullTable));
 	}

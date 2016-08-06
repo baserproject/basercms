@@ -56,7 +56,7 @@ class SearchIndicesController extends AppController {
 		parent::beforeFilter();
 
 		// 認証設定
-		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search', 'get_page_list_recursive');
+		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search');
 
 		if (!empty($this->request->params['admin'])) {
 			$this->subMenuElements = array('search_indices');

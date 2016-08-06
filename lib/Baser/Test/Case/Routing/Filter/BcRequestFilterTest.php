@@ -212,7 +212,6 @@ class BcRequestFilterTest extends BaserTestCase {
  * @dataProvider isPageDataProvider
  */
 	public function testIsPage($expect, $url) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isPage($request));
 	}
@@ -228,8 +227,8 @@ class BcRequestFilterTest extends BaserTestCase {
 			array(false, '/news/index'),
 			array(true, '/'),
 			array(true, '/service'),
-			array(true, '/company'),
-			array(true, '/recruit')
+			array(true, '/about'),
+			array(false, '/recruit')
 		);
 	}
 

@@ -28,6 +28,7 @@ App::uses('BcAuthComponent', 'Controller/Component');
  * @property BcXmlHelper $BcXml BcXmlヘルパ
  * @property BcArrayHelper $BcArray BcArrayヘルパ
  * @property BcPageHelper $BcPage BcPageヘルパ
+ * @property BcContentsHelper $BcContents
  */
 class BcBaserHelper extends AppHelper {
 
@@ -43,7 +44,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage', 'Flash');
+	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage', 'Flash', 'BcContents');
 
 /**
  * ページモデル
@@ -1324,6 +1325,12 @@ class BcBaserHelper extends AppHelper {
 					$pageUrl = implode('/', $pass);
 				}
 			}
+			
+			$sitePrefix = $this->getSitePrefix();
+			if($sitePrefix) {
+				$pageUrl = preg_replace('/^' . preg_quote($sitePrefix, '/') . '\//', '', $pageUrl);
+			}
+			
 			if (preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
@@ -1380,6 +1387,15 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		return $contentsName;
+	}
+	
+	public function getSitePrefix() {
+		$site = null;
+		if($this->request->params['Site']) {
+			$site = $this->request->params['Site'];
+		}
+		$Site = ClassRegistry::init('Site');
+		return $Site->getPrefix($site);
 	}
 
 /**
@@ -1445,33 +1461,32 @@ class BcBaserHelper extends AppHelper {
  *	- `fields` : 取得フィールド（初期値 : array('title', 'url')）
  *	- `order` : 並び順（初期値 : array('Page.sort')）
  * @return mixed ページ一覧、または、false
+ * @deprecated BcContents::getTree() に移行
  */
-	public function getPageList($categoryId = null, $options = array()) {
-		if (empty($this->_Page)) {
-			return false;
-		}
-
-		if (!is_array($options)) {
-			$options = array();
-		}
+	public function getPageList($id = null, $options = array()) {
 		$options = array_merge(array(
-			'conditions' => array('Page.status' => 1),
-			'fields' => array('title', 'url'),
-			'order' => 'Page.sort'
+			'conditions' => array('Content.status' => 1),
+			'order' => 'Content.lft'
 		), $options);
-
-		if ($categoryId) {
-			$options['conditions']['Page.page_category_id'] = $categoryId;
-		}
-
-		$this->_Page->unbindModel(array('belongsTo' => array('PageCategory')));
-		$pages = $this->_Page->find('all', $options);
-
+		$pages = $this->BcContents->getTree($id, 1, $options);
 		if (empty($pages)) {
 			return false;
 		}
+		return Hash::extract($pages, '{n}.Content');
+	}
 
-		return Hash::extract($pages, '{n}.Page');
+/**
+ * サイトマップを取得する
+ * 
+ * @return array
+ */
+	public function getSitemap($id = null, $level = null) {
+		if(!$id) {
+			$Content = ClassRegistry::init('Content');
+			$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+			$id = $siteRoot['Content']['id'];
+		}	
+		return $this->BcContents->getTree($id, $level);
 	}
 
 /**
@@ -1638,14 +1653,13 @@ class BcBaserHelper extends AppHelper {
  * @param string $recursive 取得する階層
  * @return void ページ一覧
  */
-	public function sitemap($pageCategoryId = null, $recursive = null) {
-		$pageList = $this->requestAction('/search_indices/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
-		$params = array('pageList' => $pageList);
+	public function sitemap($id = null, $level = null) {
+		$params = array('tree' => $this->getSitemap($id, $level));
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
-			$params = am($params, array(
-				'cache' => array(
+			$params = array_merge($params, [
+				'cache' => [
 					'time' => Configure::read('BcCache.duration'),
-					'key' => $pageCategoryId))
+					'key' => $id]]
 			);
 		}
 		$this->element('sitemap', $params);
@@ -1696,23 +1710,6 @@ class BcBaserHelper extends AppHelper {
 END_FLASH;
 
 		echo $out;
-	}
-
-/**
- * スマートフォンURLをリンクとして利用可能なURLに変換する
- * 
- * ページの確認用URL取得に利用する
- * /smartphone/about → /s/about
- *
- * @param string $url 元となるURL
- * @param string $type mobile、または、smartphone
- * @return string 変換後のURL
- */
-	public function changePrefixToAlias($url, $type) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$alias = Configure::read("BcAgent.{$type}.alias");
-		$prefix = Configure::read("BcAgent.{$type}.prefix");
-		return preg_replace('/^\/' . $prefix . '\//is', '/' . $alias . '/', $url);
 	}
 
 /**
@@ -2357,41 +2354,49 @@ END_FLASH;
  * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
  * @param array $options オプション（初期値 :array()）
  *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
  * @return array サイト基本設定配列
  */
 	public function getBlogs($name = '', $options = array()) {
 		$options = array_merge(array(
-			'sort' => 'id'
+			'sort' => 'BlogContent.id',
+			'siteId' => 0
 		), $options);
-
 		$conditions['Content.status'] = true;
 		if(! empty($name)){
-			$conditions['BlogContent.name'] = $name;
+			$conditions['Content.name'] = $name;
 		}
-
+		if($options['siteId'] !== '') {
+			$conditions['Content.site_id'] = $options['siteId'];
+		}
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$BlogContent->unbindModel(
+			['hasMany' => ['BlogPost', 'BlogCategory']]
+		);
 		$datas = $BlogContent->find('all', array(
 				'conditions' => $conditions,
-				'order' => array(
-					'BlogContent.' . $options['sort']
-				),
+				'order' => $options['sort'],
 				'cache' => false
 			)
 		);
-
+		if(!$datas) {
+			return false;
+		}
 		$contents = array();
 		if( count($datas) === 1 ){
 			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
 			unset($datas['BlogContent']['eye_catch_size']);
-			$contents = $datas['BlogContent'];
+			$contents[] = $datas;
 		} else {
 			foreach($datas as $val){
 				$val = $BlogContent->constructEyeCatchSize($val);
 				unset($val['BlogContent']['eye_catch_size']);
-				$contents[] = $val['BlogContent'];
+				$contents[] = $val;
 			}
 		}
-
+		if($name) {
+			$contents = $contents[0];
+		}
 		return $contents;
 	}
 

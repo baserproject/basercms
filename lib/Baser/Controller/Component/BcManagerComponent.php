@@ -738,27 +738,6 @@ class BcManagerComponent extends Component {
 		$corePath = BASER_CONFIGS . 'data' . DS . 'default';
 		$result = true;
 
-		/* page_categories の初期データをチェック＆設定 */
-		$PageCategory = ClassRegistry::init('PageCategory');
-		if(!$PageCategory->find('count', array('PageCategory.name' => 'mobile', 'PageCategory.parent_id' => null))) {
-			$pageCategories = $db->loadCsvToArray($corePath . DS . 'page_categories.csv', 'SJIS');
-			foreach($pageCategories as $pageCategory) {
-				if($pageCategory['name'] == 'mobile') {
-					$PageCategory->save($pageCategory);
-					break;
-				}
-			}
-		}
-		if(!$PageCategory->find('count', array('PageCategory.name' => 'smartphone', 'PageCategory.parent_id' => null))) {
-			$pageCategories = $db->loadCsvToArray($corePath . DS . 'page_categories.csv', 'SJIS');
-			foreach($pageCategories as $pageCategory) {
-				if($pageCategory['name'] == 'smartphone') {
-					$PageCategory->save($pageCategory);
-					break;
-				}
-			}
-		}
-
 		/* user_groupsの初期データをチェック＆設定 */
 		$UserGroup = ClassRegistry::init('UserGroup');
 		if(!$UserGroup->find('count', array('UserGroup.name' => 'admins'))) {

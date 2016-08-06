@@ -39,11 +39,13 @@ class FavoriteTest extends BaserTestCase {
 	public $components = array("Auth","Cookie","Session");
 
 	public function setUp() {
+		@session_start();
 		parent::setUp();
 		$this->Favorite = ClassRegistry::init('Favorite');
 	}
 
 	public function tearDown() {
+		@session_destroy();
 		unset($this->Favorite);
 		parent::tearDown();
 	}
@@ -58,15 +60,15 @@ class FavoriteTest extends BaserTestCase {
 	public function login($id) {
 		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 		$this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
-		$this->Favorite->_Session->write('Auth.User.id', $id);
-		$this->Favorite->_Session->write('Auth.User.user_group_id', $id);
+		$prefix = BcUtil::authSessionKey('admin');
+		$this->Favorite->_Session->write('Auth.' . $prefix . '.id', $id);
+		$this->Favorite->_Session->write('Auth.' . $prefix . '.user_group_id', $id);
 	}
 
 /**
  * validate
  */
 	public function test権限チェック異常系() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Favorite->create(array(
 			'Favorite' => array(
 				'url' => '/admin/hoge',

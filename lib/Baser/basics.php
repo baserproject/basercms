@@ -534,7 +534,7 @@ function fullUrl($url) {
  */
 function topLevelUrl($lastSlash = true) {
 	if (isConsole()) {
-		return false;
+		return Configure::read('App.fullBaseUrl');
 	}
 	$protocol = 'http://';
 	if (!empty($_SERVER['HTTPS'])) {

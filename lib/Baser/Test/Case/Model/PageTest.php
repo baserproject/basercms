@@ -16,6 +16,7 @@ App::uses('Page', 'Model');
  * PageTest class
  * 
  * @package Baser.Test.Case.Model
+ * @property Page $Page
  */
 class PageTest extends BaserTestCase {
 
@@ -87,50 +88,6 @@ class PageTest extends BaserTestCase {
 
 	}
 
-/**
- * validate
- */
-	public function test必須チェック() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->Page->create(array(
-			'Page' => array(
-				'name' => '',
-			)
-		));
-		$this->assertFalse($this->Page->validates());
-		$this->assertArrayHasKey('name', $this->Page->validationErrors);
-		$this->assertEquals('ページ名を入力してください。', current($this->Page->validationErrors['name']));
-	}
-
-	public function test桁数チェック正常系() {
-		$this->Page->create(array(
-			'Page' => array(
-				'name' => '12345678901234567890123456789012345678901234567890',
-				'title' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
-				'description' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
-			)
-		));
-		$this->assertTrue($this->Page->validates());
-	}
-
-	public function test桁数チェック異常系() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->Page->create(array(
-			'Page' => array(
-				'name' => '123456789012345678901234567890123456789012345678901',
-				'title' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
-				'description' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
-			)
-		));
-		$this->assertFalse($this->Page->validates());
-		$this->assertArrayHasKey('name', $this->Page->validationErrors);
-		$this->assertEquals('ページ名は50文字以内で入力してください。', current($this->Page->validationErrors['name']));
-		$this->assertArrayHasKey('title', $this->Page->validationErrors);
-		$this->assertEquals('ページタイトルは255文字以内で入力してください。', current($this->Page->validationErrors['title']));
-		$this->assertArrayHasKey('description', $this->Page->validationErrors);
-		$this->assertEquals('説明文は255文字以内で入力してください。', current($this->Page->validationErrors['description']));
-	}
-
 	public function test既存ページチェック正常() {
 		$this->Page->create(array(
 			'Page' => array(
@@ -139,19 +96,6 @@ class PageTest extends BaserTestCase {
 			)
 		));
 		$this->assertTrue($this->Page->validates());
-	}
-
-	public function test既存ページチェック異常系() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$this->Page->create(array(
-			'Page' => array(
-				'name' => 'index',
-				'page_category_id' => '1',
-			)
-		));
-		$this->assertFalse($this->Page->validates());
-		$this->assertArrayHasKey('name', $this->Page->validationErrors);
-		$this->assertEquals('指定したページは既に存在します。ファイル名、またはカテゴリを変更してください。', current($this->Page->validationErrors['name']));
 	}
 
 	public function testPHP構文チェック正常系() {
@@ -184,13 +128,7 @@ class PageTest extends BaserTestCase {
  * @return	array	初期値データ
  */
 	public function testGetDefaultValue() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$expected = array('Page' => array(
-				'sort' => 17,
-				'status' => false,
-				'author_id' => 1,
-			)
-		);
+		$expected = [];
 		$result = $this->Page->getDefaultValue();
 		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
 	
@@ -200,13 +138,10 @@ class PageTest extends BaserTestCase {
 		);
 		$expected = array('Page' => array(
 				'author_id' => 2,
-				'sort' => 17,
-				'status' => false,
 			)
 		);
 		$result = $this->Page->getDefaultValue();
 		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
-
 	}
 
 /**
@@ -360,28 +295,26 @@ class PageTest extends BaserTestCase {
  * @dataProvider beforeDeleteDataProvider
  */
 	public function testBeforeDelete($id, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 削除したファイルを再生するため内容を取得
-		$Page = $this->Page->find('first', [
+		$page = $this->Page->find('first', [
 			'conditions' => ['Page.id' => $id],
-			'fields' => ['Content.url'],
 			'recursive' => 0,
 			]
 		);
-		$path = getViewPath() . 'Pages' . $Page['Content']['url'] . '.php';
+		$path = getViewPath() . 'Pages' . $page['Content']['url'] . '.php';
 		$File = new File($path);  
-		$Content = $File->read();
+		$content = $File->read();
 
 		// 削除実行
 		$this->Page->delete($id);
 
 		// 元のファイルを再生成
-		$File->write($Content);
+		$File->write($content);
 		$File->close();
 
 		// Contentも削除されているかチェック
 		$this->Content = ClassRegistry::init('Content');
-		$exists = $this->Content->exists($id - 1);
+		$exists = $this->Content->exists($page['Content']['id']);
 		$this->assertFalse($exists, $message);
 		unset($this->Content);
 
@@ -675,7 +608,6 @@ class PageTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		// コピーしたファイル存在チェック
@@ -686,7 +618,6 @@ class PageTest extends BaserTestCase {
 		// DBに書き込まれているかチェック
 		$exists = $this->Page->exists($result['Page']['id']);
 		$this->assertTrue($exists);
-
 	}
 
 	public function copyDataProvider() {

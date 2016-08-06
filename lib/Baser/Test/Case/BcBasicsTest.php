@@ -477,7 +477,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testTopLevelUrl() {
 		if (isConsole()) {
-			$this->assertFalse(topLevelUrl());
+			$this->assertEquals('http://localhost', topLevelUrl());
 		} else {
 			$this->assertRegExp('/^http:\/\/.*\/$/', topLevelUrl());
 			$this->assertRegExp('/^http:\/\/.*[^\/]$/', topLevelUrl(false));
@@ -492,7 +492,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testSiteUrl() {
 		if (isConsole()) {
-			$this->assertEmpty(siteUrl());
+			$this->assertEquals('http://localhost/', siteUrl());
 		} else {
 			$topLevelUrl = topLevelUrl(false);
 

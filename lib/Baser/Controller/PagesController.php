@@ -167,20 +167,14 @@ class PagesController extends AppController {
 			}
 		}
 
-		/* 表示設定 */
-		$currentPageCategoryId = '';
-		if (!empty($this->request->data['PageCategory']['id'])) {
-			$currentPageCategoryId = $this->request->data['PageCategory']['id'];
-		}
-
 		if (empty($this->request->data['PageCategory']['id']) || $this->request->data['PageCategory']['name'] == 'mobile' || $this->request->data['PageCategory']['name'] == 'smartphone') {
 			$currentCatOwnerId = $this->siteConfigs['root_owner_id'];
 		} else {
 			$currentCatOwnerId = $this->request->data['PageCategory']['owner_id'];
 		}
 
-		if ($this->request->params['Content']['url']) {
-			$this->set('publishLink', $this->request->params['Content']['url']);
+		if ($this->request->data['Content']['url']) {
+			$this->set('publishLink', $this->request->data['Content']['url']);
 		}
 
 		if (Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
@@ -211,7 +205,6 @@ class PagesController extends AppController {
 		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('editorOptions', $editorOptions);
-		$this->set('url', $url);
 		if (!empty($this->request->data['Content']['title'])) {
 			$this->pageTitle = '固定ページ情報編集：' . $this->request->data['Content']['title'];
 		} else {

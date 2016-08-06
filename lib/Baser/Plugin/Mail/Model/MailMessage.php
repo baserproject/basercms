@@ -305,7 +305,7 @@ class MailMessage extends MailAppModel {
 			// 対象フィールドがあれば、バリデートグループごとに配列に格納する
 			$valids = explode(',', $mailField['valid_ex']);
 			if (in_array('VALID_GROUP_COMPLATE', $valids) && !empty($mailField['use_field'])) {
-				$dists[$mailField['group_valid']][] = $data['MailMessage'][$mailField['field_name']];
+				$dists[$mailField['group_valid']][] = @$data['MailMessage'][$mailField['field_name']];
 			}
 		}
 		// チェック
@@ -604,6 +604,16 @@ class MailMessage extends MailAppModel {
 	public function createTableName($mailContentId) {
 		return 'mail_message_' . $mailContentId;
 	}
+
+/**
+ * フルテーブル名を生成する
+ * 
+ * @param $mailContentId
+ * @return string
+ */
+	public function createFullTableName($mailContentId) {
+		return $this->tablePrefix . $this->createTableName($mailContentId);
+	}
 	
 /**
  * メッセージテーブルを作成する
@@ -628,38 +638,6 @@ class MailMessage extends MailAppModel {
 			return false;
 		}
 		$ret = $db->createTable(array('schema' => $schema, 'table' => $table));
-		$this->deleteModelCache();
-		return $ret;
-	}
-
-/**
- * メッセージテーブルの名前を変更する
- *
- * @param string $source 元コンテンツ名
- * @param string $target 変更後コンテンツ名
- * @return boolean
- */
-	public function renameTable($source, $target) {
-		$db = $this->getDataSource();
-
-		$sourceName = $this->getTablePrefixByContentName($source) . 'messages';
-		$targetName = $this->getTablePrefixByContentName($target) . 'messages';
-		$sourceTable = str_replace($db->config['prefix'], '', $sourceName);
-		$targetTable = str_replace($db->config['prefix'], '', $targetName);
-
-		$ret = true;
-		if ($target == 'messages') {
-			$ret = $db->dropTable(array('table' => $targetTable));
-		}
-		if (!$ret) {
-			return false;
-		}
-		$ret = $db->renameTable(array('old' => $sourceTable, 'new' => $targetTable));
-
-		if ($ret && $source == 'messages') {
-			$ret = $this->createTable($source);
-		}
-
 		$this->deleteModelCache();
 		return $ret;
 	}
@@ -702,10 +680,8 @@ class MailMessage extends MailAppModel {
  * @param string $field
  * @return array
  */
-	public function delMessageField($contentName, $field) {
-		$fullTable = $this->getTablePrefixByContentName($contentName) . $this->useTable;
-		$db = $this->getDataSource();
-		$table = str_replace($db->config['prefix'], '', $fullTable);
+	public function delMessageField($mailContentId, $field) {
+		$table = $this->createTableName($mailContentId);
 		$ret = parent::delField(array('field' => $field, 'table' => $table));
 		return $ret;
 	}
@@ -718,29 +694,10 @@ class MailMessage extends MailAppModel {
  * @param string $newfieldName
  * @return array
  */
-	public function renameMessageField($contentName, $oldFieldName, $newfieldName) {
-		$fullTable = $this->getTablePrefixByContentName($contentName) . $this->useTable;
-		$db = $this->getDataSource();
-		$table = str_replace($db->config['prefix'], '', $fullTable);
+	public function renameMessageField($mailContentId, $oldFieldName, $newfieldName) {
+		$table = $this->createTableName($mailContentId);
 		$ret = parent::renameField(array('old' => $oldFieldName, 'new' => $newfieldName, 'table' => $table));
 		return $ret;
-	}
-
-/**
- * コンテンツ名つきのテーブルプレフィックスを取得する
- * 
- * @param string $contentName
- * @return string
- */
-	public function getTablePrefixByContentName($contentName) {
-		$db = $this->getDataSource();
-		$prefix = '';
-		if ($contentName != 'messages') {
-			$prefix = $db->config['prefix'] . $contentName . "_";
-		} else {
-			$prefix = $db->config['prefix'];
-		}
-		return $prefix;
 	}
 
 /**
@@ -756,8 +713,7 @@ class MailMessage extends MailAppModel {
 		$mailFieldClass = ClassRegistry::init('Mail.MailField');
 		// フィールドリストを取得
 		$mailFields = $mailFieldClass->find('all', array('conditions' => array('MailField.mail_content_id' => $mailContentId)));
-		$table = $this->createTableName($mailContentId);
-		if (!$this->tableExists($this->getDataSource()->config['prefix'] . $table)) {
+		if (!$this->tableExists($this->createFullTableName($mailContentId))) {
 			/* 初回の場合 */
 			$this->createTable($mailContentId);
 		} else {

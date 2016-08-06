@@ -1,17 +1,16 @@
 <?php
 /**
- * ContentFixture
- *
+ * Content Fixture
  */
-class ContentFixture extends BaserTestFixture {
-
+class ContentBcContentsHelperFixture extends BaserTestFixture {
+	
 /**
  * Name of the object
  *
  * @var string
  */
 	public $name = 'Content';
-	
+
 /**
  * Records
  *
@@ -27,7 +26,7 @@ class ContentFixture extends BaserTestFixture {
 			'url' => '/',
 			'parent_id' => null,
 			'lft' => '1',
-			'rght' => '40',
+			'rght' => '52',
 			'title' => 'baserCMS inc. [デモ]',
 			'status' => 1,
 			'created' => '2016-07-29 18:02:53',
@@ -39,7 +38,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:04:23',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => null,
 			'site_root' => 1,
@@ -47,7 +46,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => 'default',
 			'main_site_content_id' => null,
-			'level' => 0
+			'level' => '0'
 		),
 		array(
 			'id' => '2',
@@ -70,7 +69,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:04:23',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '2',
 			'alias_id' => null,
 			'site_root' => 1,
@@ -78,7 +77,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => 'default',
 			'main_site_content_id' => '1',
-			'level' => 1
+			'level' => '1'
 		),
 		array(
 			'id' => '3',
@@ -89,7 +88,7 @@ class ContentFixture extends BaserTestFixture {
 			'url' => '/s/',
 			'parent_id' => '1',
 			'lft' => '10',
-			'rght' => '25',
+			'rght' => '27',
 			'title' => 'baserCMS inc.｜スマホ',
 			'status' => 1,
 			'created' => '2016-07-29 18:02:53',
@@ -101,7 +100,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:04:23',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '3',
 			'alias_id' => null,
 			'site_root' => 1,
@@ -109,7 +108,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => 'default',
 			'main_site_content_id' => '1',
-			'level' => 1
+			'level' => '1'
 		),
 		array(
 			'id' => '4',
@@ -119,8 +118,8 @@ class ContentFixture extends BaserTestFixture {
 			'type' => 'Page',
 			'url' => '/index',
 			'parent_id' => '1',
-			'lft' => '26',
-			'rght' => '27',
+			'lft' => '28',
+			'rght' => '29',
 			'title' => 'トップページ',
 			'status' => 1,
 			'created' => '2016-07-29 18:13:03',
@@ -132,7 +131,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-08-03 23:30:16',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -140,7 +139,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 1
+			'level' => '1'
 		),
 		array(
 			'id' => '5',
@@ -150,8 +149,8 @@ class ContentFixture extends BaserTestFixture {
 			'type' => 'Page',
 			'url' => '/about',
 			'parent_id' => '1',
-			'lft' => '28',
-			'rght' => '29',
+			'lft' => '30',
+			'rght' => '31',
 			'title' => '会社案内',
 			'status' => 1,
 			'created' => '2016-07-29 18:13:56',
@@ -163,7 +162,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-08-03 23:49:22',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '2',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -171,18 +170,18 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 1
+			'level' => '1'
 		),
 		array(
 			'id' => '6',
 			'site_id' => '0',
-			'name' => 'service',
+			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
-			'url' => '/service',
-			'parent_id' => '1',
-			'lft' => '30',
-			'rght' => '31',
+			'url' => '/service/index',
+			'parent_id' => '21',
+			'lft' => '41',
+			'rght' => '42',
 			'title' => 'サービス',
 			'status' => 1,
 			'created' => '2016-07-29 18:14:33',
@@ -194,7 +193,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:14:54',
+			'modified' => '2016-08-06 17:55:01',
 			'entity_id' => '3',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -202,7 +201,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 1
+			'level' => '2'
 		),
 		array(
 			'id' => '7',
@@ -225,7 +224,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:15:29',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '4',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -233,7 +232,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 1
+			'level' => '1'
 		),
 		array(
 			'id' => '8',
@@ -256,7 +255,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:16:20',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '5',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -264,7 +263,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 1
+			'level' => '1'
 		),
 		array(
 			'id' => '9',
@@ -287,7 +286,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:19:05',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '6',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -295,7 +294,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '4',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '10',
@@ -318,7 +317,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:22:39',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '7',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -326,7 +325,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '4',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '11',
@@ -349,7 +348,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:22:21',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '8',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -357,19 +356,19 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '5',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '12',
 			'site_id' => '2',
-			'name' => 'service',
+			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
-			'url' => '/s/service',
-			'parent_id' => '3',
-			'lft' => '15',
-			'rght' => '16',
-			'title' => 'サービス',
+			'url' => '/s/service/index',
+			'parent_id' => '26',
+			'lft' => '24',
+			'rght' => '25',
+			'title' => 'サービス１',
 			'status' => 1,
 			'created' => '2016-07-29 18:20:35',
 			'description' => '',
@@ -380,7 +379,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:22:05',
+			'modified' => '2016-08-06 18:24:35',
 			'entity_id' => '9',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -388,7 +387,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '6',
-			'level' => 2
+			'level' => '3'
 		),
 		array(
 			'id' => '13',
@@ -398,8 +397,8 @@ class ContentFixture extends BaserTestFixture {
 			'type' => 'Page',
 			'url' => '/s/icons',
 			'parent_id' => '3',
-			'lft' => '17',
-			'rght' => '18',
+			'lft' => '15',
+			'rght' => '16',
 			'title' => 'アイコンの使い方',
 			'status' => 1,
 			'created' => '2016-07-29 18:20:50',
@@ -411,7 +410,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:21:49',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '10',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -419,7 +418,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '7',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '14',
@@ -429,8 +428,8 @@ class ContentFixture extends BaserTestFixture {
 			'type' => 'Page',
 			'url' => '/s/sitemap',
 			'parent_id' => '3',
-			'lft' => '19',
-			'rght' => '20',
+			'lft' => '17',
+			'rght' => '18',
 			'title' => 'サイトマップ',
 			'status' => 1,
 			'created' => '2016-07-29 18:21:04',
@@ -442,7 +441,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-29 18:21:31',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '11',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -450,7 +449,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '8',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '15',
@@ -473,7 +472,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-30 21:53:22',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -481,7 +480,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 2
+			'level' => '1'
 		),
 		array(
 			'id' => '16',
@@ -504,7 +503,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-31 15:02:16',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => null,
 			'site_root' => 0,
@@ -512,7 +511,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => null,
-			'level' => 2
+			'level' => '1'
 		),
 		array(
 			'id' => '17',
@@ -535,7 +534,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-31 16:46:39',
+			'modified' => '2016-08-06 17:57:43',
 			'entity_id' => '1',
 			'alias_id' => '15',
 			'site_root' => 0,
@@ -543,7 +542,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '15',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '18',
@@ -553,8 +552,8 @@ class ContentFixture extends BaserTestFixture {
 			'type' => 'MailContent',
 			'url' => '/s/contact',
 			'parent_id' => '3',
-			'lft' => '21',
-			'rght' => '22',
+			'lft' => '19',
+			'rght' => '20',
 			'title' => 'お問い合わせ',
 			'status' => 1,
 			'created' => '2016-07-31 16:46:47',
@@ -566,7 +565,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-31 16:46:55',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => '15',
 			'site_root' => 0,
@@ -574,7 +573,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '15',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '19',
@@ -597,7 +596,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-31 16:47:14',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => '16',
 			'site_root' => 0,
@@ -605,7 +604,7 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '16',
-			'level' => 2
+			'level' => '2'
 		),
 		array(
 			'id' => '20',
@@ -615,8 +614,8 @@ class ContentFixture extends BaserTestFixture {
 			'type' => 'BlogContent',
 			'url' => '/s/news',
 			'parent_id' => '3',
-			'lft' => '23',
-			'rght' => '24',
+			'lft' => '21',
+			'rght' => '22',
 			'title' => '新着情報',
 			'status' => 1,
 			'created' => '2016-07-31 16:47:21',
@@ -628,7 +627,7 @@ class ContentFixture extends BaserTestFixture {
 			'publish_begin' => null,
 			'publish_end' => null,
 			'exclude_search' => 0,
-			'modified' => '2016-07-31 16:47:26',
+			'modified' => '2016-08-06 17:55:00',
 			'entity_id' => '1',
 			'alias_id' => '16',
 			'site_root' => 0,
@@ -636,7 +635,193 @@ class ContentFixture extends BaserTestFixture {
 			'deleted' => 0,
 			'layout_template' => '',
 			'main_site_content_id' => '16',
-			'level' => 2
+			'level' => '2'
+		),
+		array(
+			'id' => '21',
+			'site_id' => '0',
+			'name' => 'service',
+			'plugin' => 'Core',
+			'type' => 'ContentFolder',
+			'url' => '/service/',
+			'parent_id' => '1',
+			'lft' => '40',
+			'rght' => '51',
+			'title' => 'サービス',
+			'status' => 1,
+			'created' => '2016-08-06 17:36:09',
+			'description' => '',
+			'eyecatch' => null,
+			'author_id' => '1',
+			'created_date' => '2016-08-06 17:36:09',
+			'modified_date' => null,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'modified' => '2016-08-06 17:55:01',
+			'entity_id' => '4',
+			'alias_id' => null,
+			'site_root' => 0,
+			'deleted_date' => null,
+			'deleted' => 0,
+			'layout_template' => '',
+			'main_site_content_id' => null,
+			'level' => '1'
+		),
+		array(
+			'id' => '22',
+			'site_id' => '0',
+			'name' => 'service2',
+			'plugin' => 'Core',
+			'type' => 'Page',
+			'url' => '/service/service2',
+			'parent_id' => '21',
+			'lft' => '43',
+			'rght' => '44',
+			'title' => 'サービス２',
+			'status' => 1,
+			'created' => '2016-08-06 17:37:26',
+			'description' => '',
+			'eyecatch' => null,
+			'author_id' => '1',
+			'created_date' => '2016-08-06 17:37:33',
+			'modified_date' => null,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'modified' => '2016-08-06 17:55:01',
+			'entity_id' => '12',
+			'alias_id' => null,
+			'site_root' => 0,
+			'deleted_date' => null,
+			'deleted' => 0,
+			'layout_template' => null,
+			'main_site_content_id' => null,
+			'level' => '2'
+		),
+		array(
+			'id' => '23',
+			'site_id' => '0',
+			'name' => 'service3',
+			'plugin' => 'Core',
+			'type' => 'Page',
+			'url' => '/service/service3',
+			'parent_id' => '21',
+			'lft' => '45',
+			'rght' => '46',
+			'title' => 'サービス３',
+			'status' => 1,
+			'created' => '2016-08-06 17:37:45',
+			'description' => '',
+			'eyecatch' => null,
+			'author_id' => '1',
+			'created_date' => '2016-08-06 17:37:49',
+			'modified_date' => null,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'modified' => '2016-08-06 17:55:01',
+			'entity_id' => '13',
+			'alias_id' => null,
+			'site_root' => 0,
+			'deleted_date' => null,
+			'deleted' => 0,
+			'layout_template' => '',
+			'main_site_content_id' => null,
+			'level' => '2'
+		),
+		array(
+			'id' => '24',
+			'site_id' => '0',
+			'name' => 'sub_service',
+			'plugin' => 'Core',
+			'type' => 'ContentFolder',
+			'url' => '/service/sub_service/',
+			'parent_id' => '21',
+			'lft' => '47',
+			'rght' => '50',
+			'title' => 'サブサービス',
+			'status' => 1,
+			'created' => '2016-08-06 17:38:16',
+			'description' => null,
+			'eyecatch' => null,
+			'author_id' => null,
+			'created_date' => '2016-08-06 17:38:16',
+			'modified_date' => null,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'modified' => '2016-08-06 17:55:01',
+			'entity_id' => '5',
+			'alias_id' => null,
+			'site_root' => 0,
+			'deleted_date' => null,
+			'deleted' => 0,
+			'layout_template' => null,
+			'main_site_content_id' => null,
+			'level' => '2'
+		),
+		array(
+			'id' => '25',
+			'site_id' => '0',
+			'name' => 'sub_service_1',
+			'plugin' => 'Core',
+			'type' => 'Page',
+			'url' => '/service/sub_service/sub_service_1',
+			'parent_id' => '24',
+			'lft' => '48',
+			'rght' => '49',
+			'title' => 'サブサービス１',
+			'status' => 1,
+			'created' => '2016-08-06 17:38:39',
+			'description' => '',
+			'eyecatch' => null,
+			'author_id' => '1',
+			'created_date' => '2016-08-06 17:38:39',
+			'modified_date' => null,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'modified' => '2016-08-06 17:55:01',
+			'entity_id' => '14',
+			'alias_id' => null,
+			'site_root' => 0,
+			'deleted_date' => null,
+			'deleted' => 0,
+			'layout_template' => '',
+			'main_site_content_id' => null,
+			'level' => '3'
+		),
+		array(
+			'id' => '26',
+			'site_id' => '2',
+			'name' => 'service',
+			'plugin' => 'Core',
+			'type' => 'ContentFolder',
+			'url' => '/s/service/',
+			'parent_id' => '3',
+			'lft' => '23',
+			'rght' => '26',
+			'title' => 'サービス',
+			'status' => 1,
+			'created' => '2016-08-06 17:51:40',
+			'description' => '',
+			'eyecatch' => null,
+			'author_id' => '1',
+			'created_date' => '2016-08-06 17:51:40',
+			'modified_date' => null,
+			'publish_begin' => null,
+			'publish_end' => null,
+			'exclude_search' => 0,
+			'modified' => '2016-08-06 18:24:31',
+			'entity_id' => '6',
+			'alias_id' => null,
+			'site_root' => 0,
+			'deleted_date' => null,
+			'deleted' => 0,
+			'layout_template' => '',
+			'main_site_content_id' => '21',
+			'level' => '2'
 		),
 	);
 

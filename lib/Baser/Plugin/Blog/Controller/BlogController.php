@@ -664,7 +664,7 @@ class BlogController extends BlogAppController {
 			));
 			$conditions['BlogPost.user_id'] = $userId;
 		}
-
+		
 		if ($_conditions['id']) {
 			$conditions["BlogPost.no"] = $_conditions['id'];
 			$expects[] = 'BlogComment';

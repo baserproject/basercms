@@ -527,7 +527,7 @@ class MailFieldMailMessageFixture extends BaserTestFixture {
 			'group_field' => '',
 			'group_valid' => '',
 			'valid' => '',
-			'valid_ex' => 'VALID_DATETIME',
+			'valid_ex' => '',
 			'auto_convert' => '',
 			'not_empty' => 0,
 			'use_field' => 1,

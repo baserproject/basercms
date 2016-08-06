@@ -26,12 +26,14 @@ class BcContentsHelper extends AppHelper {
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
 		$this->settings = $this->_View->get('contentsSettings');
-		foreach($this->settings as $key => $setting) {
-			// icon
-			if (!empty($setting['icon'])) {
-				$this->settings[$key]['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);
-			} else {
-				$this->settings[$key]['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
+		if($this->settings) {
+			foreach($this->settings as $key => $setting) {
+				// icon
+				if (!empty($setting['icon'])) {
+					$this->settings[$key]['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);
+				} else {
+					$this->settings[$key]['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
+				}
 			}
 		}
 	}
@@ -155,4 +157,48 @@ class BcContentsHelper extends AppHelper {
 		return $url;
 	}
 
+/**
+ * コンテンツリストをツリー構造で取得する
+ * 
+ * @param $id
+ * @param null $level
+ * @param array $options
+ * @return array
+ */
+	public function getTree($id, $level = null, $options = []) {
+		$options = array_merge([
+			'type' => '',
+			'order' => ['Content.site_id', 'Content.lft']
+		], $options);
+		$Content = ClassRegistry::init('Content');
+		$conditions = array_merge($Content->getConditionAllowPublish(), ['Content.id' => $id]);
+		$content = $Content->find('first', ['conditions' => $conditions]);
+		if (!$content) {
+			return [];
+		}
+		$conditions = array_merge($Content->getConditionAllowPublish(), [
+			'Content.site_root' => false,
+			'rght <' => $content['Content']['rght'],
+			'lft >' => $content['Content']['lft']
+		]);
+		if ($level) {
+			$level++;
+			if ($content['Content']['site_id'] !== 0) {
+				$level = $level + $content['Content']['level'];
+			}
+			$conditions['Content.level <'] = $level;
+		}
+		if(!empty($options['type'])) {
+			$conditions['Content.type'] = ['ContentFolder', $options['type']];
+		}
+		if(!empty($options['conditions'])) {
+			$conditions = array_merge($conditions, $options['conditions']);
+		}
+		// CAUTION CakePHP2系では、fields を指定すると正常なデータが取得できない
+		return $Content->find('threaded', [
+			'order' => $options['order'], 
+			'conditions' => $conditions, 
+			'recursive' => 0
+		]);
+	}
 }

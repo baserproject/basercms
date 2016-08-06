@@ -20,8 +20,8 @@ App::uses('BcPageHelper', 'View/Helper');
 /**
  * BcPage helper library.
  *
- * @package       Baser.Test.Case
- * @property      BcPagerHelper $BcBaser
+ * @package Baser.Test.Case
+ * @property BcPageHelper $BcPage
  */
 class BcPageHelperTest extends BaserTestCase {
 	
@@ -40,7 +40,7 @@ class BcPageHelperTest extends BaserTestCase {
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
 		'baser.Default.ThemeConfig',
-		'baser.Default.Content',
+		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 		'baser.Default.Site',
 	);
 
@@ -70,11 +70,6 @@ class BcPageHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
-		$this->request->params['Site'] = array(
-			'use_subdomain' => null,
-			'name' => null,
-			'alias' => null,
-		);
 		$this->_View->helpers = array('BcBaser', 'BcPage');
 		$this->_View->loadHelpers();
 		$this->Page = ClassRegistry::init('Page');
@@ -113,16 +108,6 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 /**
- * beforeRender
- * 
- */
-	public function testBeforeRender() {
-	    $this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-
-
-/**
  * ページ機能用URLを取得する
  * 
  * @param array $pageId 固定ページID
@@ -131,10 +116,9 @@ class BcPageHelperTest extends BaserTestCase {
  * @dataProvider getUrlDataProvider
  */
 	public function testGetUrl($pageId, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 固定ページのデータ取得
 		$conditions = array('Page.id' => $pageId);
-		$fields = array('url');
+		$fields = array('Content.url');
 		$page = $this->getPageData($conditions, $fields);
 
 		$result = $this->BcPage->getUrl($page);
@@ -143,12 +127,12 @@ class BcPageHelperTest extends BaserTestCase {
 
 	public function getUrlDataProvider() {
 		return array(
-			array(1, '/'),
-			array(2, '/company'),
-			array(3, '/service'),
-			array(4, '/recruit'),
-			array(5, '/m/'),
-			array(6, '/s/'),
+			array(1, '/index'),
+			array(2, '/about'),
+			array(3, '/service/index'),
+			array(4, '/icons'),
+			array(5, '/sitemap'),
+			array(6, '/m/index'),
 		);
 	}
 
@@ -202,63 +186,63 @@ class BcPageHelperTest extends BaserTestCase {
  * ページリストを取得する
  * 
  * @param int $pageCategoryId カテゴリID
- * @param int $recursive 関連データの階層	
- * @param array $expected 期待値
+ * @param int $level 関連データの階層	
+ * @param int $expectedCount 期待値
+ * @param string $expectedTitle  
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider getPageListDataProvider
  */
-	public function testGetPageList($pageCategoryId, $recursive, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$result = $this->BcPage->getPageList($pageCategoryId, $recursive);
-		$this->assertEquals($expected, $result, $message);		
+	public function testGetPageList($id, $level, $expectedCount, $expectedTitle, $message = null) {
+		$result = $this->BcPage->getPageList($id, $level);
+		$resultTitle = null;
+		$resultCount = null;
+		switch($level) {
+			case 1:
+				if(!empty($result[0]['Content']['title'])) {
+					$resultTitle = $result[0]['Content']['title'];
+					$resultCount = count($result);
+				}
+				break;
+			case 2:
+				if($result) {
+					foreach($result as $data) {
+						if($data['children']) {
+							$resultTitle = $data['children'][0]['Content']['title'];
+							$resultCount = count($data['children']);
+						}
+					}
+				}
+				break;
+			case 3:
+				if($result) {
+					foreach($result as $data) {
+						if($data['children']) {
+							foreach($data['children'] as $data2) {
+								if($data2['children']) {
+									$resultTitle = $data2['children'][0]['Content']['title'];
+									$resultCount = count($data2['children']);
+								}
+							}
+						}
+					}
+				}
+				break;
+		}
+		$this->assertEquals($expectedCount, $resultCount, 'カウントエラー：' . $message);
+		$this->assertEquals($expectedTitle, $resultTitle, 'タイトルエラー：' . $message);
 	}
 
 	public function getPageListDataProvider() {
 		return array(
-			array(1, null, array(
-				'pages' => array(
-					array('Page'=>array('name' => 'index','title' => '','url' => '/m/index')),
-					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/m/about')),
-				)),
-			'カテゴリからページリストを取得できません'),
-			array(2, null, array(
-				'pages' => array(
-					array('Page'=>array('name' => 'index','title' => '', 'url' => '/s/index')),
-					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/s/about')),
-					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
-					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
-					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
-				)),
-			'子カテゴリをもったカテゴリからページリストを取得できません'),
-			array(2, 0, array(
-				'pages' => array(
-					array('Page'=>array('name' => 'index','title' => '', 'url' => '/s/index')),
-					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/s/about')),
-					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
-					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
-					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
-				)
-			),
-			'$recursive(関連データの階層)を指定できません'),
-			array(2, 2, array(
-				'pages' => array(
-					array('Page'=>array('name' => 'index','title' => '', 'url' => '/s/index')),
-					array('Page'=>array('name' => 'about','title' => '会社案内','url' => '/s/about')),
-					array('Page'=>array('name' => 'service','title' => 'サービス','url' => '/s/service')),
-					array('Page'=>array('name' => 'sitemap','title' => 'サイトマップ','url' => '/s/sitemap')),
-					array('Page'=>array('name' => 'icons','title' => 'アイコンの使い方','url' => '/s/icons')),
-				)
-			),
-			'$recursive(関連データの階層)を指定できません'),
-			array(3, null, array('pages' => array(
-					array('Page'=>array(
-						'name' => 'index',
-						'title' => 'ガラホ',
-						'url' => '/garaphone/',
-					)),
-			)),
-			'親カテゴリをもったカテゴリからページリストを取得できません'),
-			array(4, null, array(), '存在しないカテゴリに対してfalseが返ってきません'),
+			// PC版
+			array(1, 1, 5, 'トップページ', 'PC版１階層目のデータが正常に取得できません'),
+			array(1, 2, 4, 'サービス', 'PC版２階層目のデータが正常に取得できません'),
+			array(1, 3, 1, 'サブサービス１', 'PC版３階層目のデータが正常に取得できません'),
+			// ケータイ
+			array(2, 1, 1, 'トップページ', 'ケータイ版１階層目のデータが正常に取得できません'),
+			// スマホ
+			array(3, 1, 5, 'トップページ', 'スマホ版１階層目のデータが正常に取得できません'),
+			array(3, 2, 1, 'サービス１', 'スマホ版２階層目のデータが正常に取得できません')
 		);
 	}
 
@@ -307,11 +291,8 @@ class BcPageHelperTest extends BaserTestCase {
  * 
  * @dataProvider getNextLinkDataProvider
  */
-	public function testGetNextLink($url, $agent, $title, $options, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testGetNextLink($url, $title, $options, $expected) {
 		$this->BcPage->request = $this->_getRequest($url);
-		$this->BcPage->beforeRender(null);
-		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		$result = $this->BcPage->getNextLink($title, $options);
 		$this->assertEquals($expected, $result);
 	}
@@ -321,31 +302,24 @@ class BcPageHelperTest extends BaserTestCase {
  * 
  * @dataProvider getNextLinkDataProvider
  */
-	public function testNextLink($url, $agent, $title, $options, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testNextLink($url, $title, $options, $expected) {
 		$this->BcPage->request = $this->_getRequest($url);
-		$this->BcPage->beforeRender(null);
-		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		ob_start();
-		echo $this->BcPage->getNextLink($title, $options);
+		$this->BcPage->nextLink($title, $options);
 		$result = ob_get_clean();
 		$this->assertEquals($expected, $result);
 	}
 
 	public function getNextLinkDataProvider() {
 		return array(
-			array('/', null, '', array('overCategory' => false), false), // PC
-			array('/', null, '次のページへ', array('overCategory' => false), false), // PC
-			array('/company', null, '', array('overCategory' => true), '<a href="/service" class="next-link">事業案内 ≫</a>'), // PC
-			array('/service', null, '次のページへ', array('overCategory' => true), '<a href="/recruit" class="next-link">次のページへ</a>'), // PC
-			array('/mobile/index', 'mobile', '', array('overCategory' => false), false), // mobile
-			array('/mobile/index', 'mobile', '次のページへ', array('overCategory' => false), false), // mobile
-			array('/mobile/index', 'mobile', '', array('overCategory' => true), '<a href="/m/about" class="next-link">会社案内 ≫</a>'), // mobile
-			array('/mobile/index', 'mobile', '次のページへ', array('overCategory' => true), '<a href="/m/about" class="next-link">次のページへ</a>'), // mobile
-			array('/smartphone/index', 'smartphone', '', array('overCategory' => false), false), // smartphone
-			array('/smartphone/index', 'smartphone', '次のページへ', array('overCategory' => false), false), // smartphone
-			array('/smartphone/about', 'smartphone', '', array('overCategory' => true), '<a href="/s/service" class="next-link">サービス ≫</a>'), // smartphone
-			array('/smartphone/about', 'smartphone', '次のページへ', array('overCategory' => true), '<a href="/s/service" class="next-link">次のページへ</a>'), // smartphone
+			array('/company', '', array('overCategory' => false), false), // PC
+			array('/company', '次のページへ', array('overCategory' => false), false), // PC
+			array('/about', '', array('overCategory' => true), '<a href="/icons" class="next-link">アイコンの使い方 ≫</a>'), // PC
+			array('/about', '次のページへ', array('overCategory' => true), '<a href="/icons" class="next-link">次のページへ</a>'), // PC
+			array('/s/about', '', array('overCategory' => false), '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'), // smartphone
+			array('/s/about', '次のページへ', array('overCategory' => false), '<a href="/s/icons" class="next-link">次のページへ</a>'), // smartphone
+			array('/s/sitemap', '', array('overCategory' => true), '<a href="/s/contact" class="next-link">お問い合わせ ≫</a>'), // smartphone
+			array('/s/sitemap', '次のページへ', array('overCategory' => true), '<a href="/s/contact" class="next-link">次のページへ</a>'), // smartphone
 		);
 	}
 
@@ -361,11 +335,8 @@ class BcPageHelperTest extends BaserTestCase {
  * 
  * @dataProvider getPrevLinkDataProvider
  */	
-	public function testGetPrevLink($url, $agent, $title, $options, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testGetPrevLink($url, $title, $options, $expected) {
 		$this->BcPage->request = $this->_getRequest($url);
-		$this->BcPage->beforeRender(null);
-		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		$result = $this->BcPage->getPrevLink($title, $options);
 		$this->assertEquals($expected, $result);
 	}
@@ -375,31 +346,24 @@ class BcPageHelperTest extends BaserTestCase {
  *
  * @dataProvider getPrevLinkDataProvider
  */
-	public function testPrevLink($url, $agent, $title, $options, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
+	public function testPrevLink($url, $title, $options, $expected) {
 		$this->BcPage->request = $this->_getRequest($url);
-		$this->BcPage->beforeRender(null);
-		$this->BcPage->request->params['prefix'] = $this->_setAgent($agent);
 		ob_start();
-		echo $this->BcPage->getPrevLink($title, $options);
+		$this->BcPage->prevLink($title, $options);
 		$result = ob_get_clean();
 		$this->assertEquals($expected, $result);
 	}
 
 	public function getPrevLinkDataProvider() {
 		return array(
-			array('/company', null, '', array('overCategory' => false), false), // PC
-			array('/company', null, '前のページへ', array('overCategory' => false), false), // PC
-			array('/service', null, '', array('overCategory' => true), '<a href="/company" class="prev-link">≪ 会社案内</a>'), // PC
-			array('/service', null, '前のページへ', array('overCategory' => true), '<a href="/company" class="prev-link">前のページへ</a>'), // PC
-			array('/mobile/about', 'mobile', '', array('overCategory' => false), false), // mobile
-			array('/mobile/about', 'mobile', '前のページへ', array('overCategory' => false), false), // mobile
-			array('/mobile/about', 'mobile', '', array('overCategory' => true), '<a href="/m/index" class="prev-link">≪ </a>'), // mobile
-			array('/mobile/about', 'mobile', '前のページへ', array('overCategory' => true), '<a href="/m/index" class="prev-link">前のページへ</a>'), // mobile
-			array('/smartphone/about', 'smartphone', '', array('overCategory' => false), false), // smartphone
-			array('/smartphone/about', 'smartphone', '前のページへ', array('overCategory' => false), false), // smartphone
-			array('/smartphone/service', 'smartphone', '', array('overCategory' => true), '<a href="/s/about" class="prev-link">≪ 会社案内</a>'), // smartphone
-			array('/smartphone/service', 'smartphone', '前のページへ', array('overCategory' => true), '<a href="/s/about" class="prev-link">前のページへ</a>'), // smartphone
+			array('/company', '', array('overCategory' => false), false), // PC
+			array('/company', '前のページへ', array('overCategory' => false), false), // PC
+			array('/about', '', array('overCategory' => true), '<a href="/index" class="prev-link">≪ トップページ</a>'), // PC
+			array('/about', '前のページへ', array('overCategory' => true), '<a href="/index" class="prev-link">前のページへ</a>'), // PC
+			array('/s/about', '', array('overCategory' => false), '<a href="/s/index" class="prev-link">≪ トップページ</a>'), // smartphone
+			array('/s/about', '前のページへ', array('overCategory' => false), '<a href="/s/index" class="prev-link">前のページへ</a>'), // smartphone
+			array('/s/sitemap', '', array('overCategory' => true), '<a href="/s/icons" class="prev-link">≪ アイコンの使い方</a>'), // smartphone
+			array('/s/sitemap', '前のページへ', array('overCategory' => true), '<a href="/s/icons" class="prev-link">前のページへ</a>'), // smartphone
 		);
 	}
 

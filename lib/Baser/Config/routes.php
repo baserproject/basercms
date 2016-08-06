@@ -85,26 +85,26 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * 
  * DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
  */
-	try {
-		$PluginContent = ClassRegistry::init('PluginContent');
-	} catch (Exception $ex) {
-		$PluginContent = null;
-	}
-	
-	if ($PluginContent) {
-		$pluginContent = $PluginContent->currentPluginContent($parameter);
-		if ($pluginContent) {
-			$pluginContentName = $pluginContent['PluginContent']['name'];
-			$pluginName = $pluginContent['PluginContent']['plugin'];
-			if (!$agent) {
-				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller' => $pluginName));
-				Router::connect("/{$pluginContentName}", array('plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
-			} else {
-				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName));
-				Router::connect("/{$agentAlias}/{$pluginContentName}", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
-			}
-		}
-	}
+//	try {
+//		$PluginContent = ClassRegistry::init('PluginContent');
+//	} catch (Exception $ex) {
+//		$PluginContent = null;
+//	}
+//	
+//	if ($PluginContent) {
+//		$pluginContent = $PluginContent->currentPluginContent($parameter);
+//		if ($pluginContent) {
+//			$pluginContentName = $pluginContent['PluginContent']['name'];
+//			$pluginName = $pluginContent['PluginContent']['plugin'];
+//			if (!$agent) {
+//				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller' => $pluginName));
+//				Router::connect("/{$pluginContentName}", array('plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
+//			} else {
+//				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName));
+//				Router::connect("/{$agentAlias}/{$pluginContentName}", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
+//			}
+//		}
+//	}
 /**
  * 認証プレフィックス
  */

@@ -19,36 +19,23 @@
  * $this->BcBaser->sitemap() で呼び出す
  */
 		 
-if (!isset($recursive)) {
-	$recursive = 1;
-}
-$prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if (!isset($level)) {
+	$level = 1;
 }
 ?>
-<ul class="sitemap section ul-level-<?php echo $recursive ?>">
-	<?php if (isset($pageList['pages'])): ?>
-		<?php foreach ($pageList['pages'] as $page): ?>
-			<?php if ($page['Page']['title']): ?>
-				<li class="sitemap-category li-level-<?php echo $recursive ?>"><?php $this->BcBaser->link($page['Page']['title'], $prefix . $page['Page']['url']) ?></li>
+
+
+<?php if (isset($tree)): ?>
+<ul class="sitemap ul-level-<?php echo $level ?>">
+	<?php if (isset($tree)): ?>
+		<?php foreach ($tree as $content): ?>
+			<?php if ($content['Content']['title']): ?>
+				<li class="sitemap-content li-level-<?php echo $level ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?></li>
+			<?php endif ?>
+			<?php if (!empty($content['children'])): ?>
+				<?php $this->BcBaser->element('sitemap', array('tree' => $content['children'], 'level' => $level + 1)) ?>
 			<?php endif ?>
 		<?php endforeach; ?>
 	<?php endif ?>
-	<?php if (isset($pageList['pageCategories'])): ?>
-		<?php foreach ($pageList['pageCategories'] as $pageCategories): ?>
-			<li class="sitemap-page li-level-<?php echo $recursive ?>">
-				<?php if (!empty($pageCategories['PageCategory']['url'])): ?>
-					<?php $this->BcBaser->link($pageCategories['PageCategory']['title'], $prefix . $pageCategories['PageCategory']['url']) ?>
-				<?php else: ?>
-					<?php if (isset($pageCategories['children'])): ?>
-						<?php echo $pageCategories['PageCategory']['title'] ?>
-					<?php endif ?>
-				<?php endif ?>
-				<?php if (isset($pageCategories['children'])): ?>
-					<?php $this->BcBaser->element('sitemap', array('pageList' => $pageCategories['children'], 'recursive' => $recursive + 1)) ?>
-				<?php endif ?>
-			</li>
-		<?php endforeach ?>
-	<?php endif ?>
 </ul>
+<?php endif ?>
