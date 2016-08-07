@@ -136,7 +136,8 @@ class ContentFoldersController extends AppController {
  * @param $entityId
  * @return void
  */
-	public function view($entityId) {
+	public function view() {
+		$entityId = $this->request->params['entityId'];
 		$data = $this->ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId)));
 		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = array('Content.site_root' => false) + $this->ContentFolder->Content->getConditionAllowPublish();
 		$children = $this->ContentFolder->Content->children($data['Content']['id'], true, array(), 'lft');
