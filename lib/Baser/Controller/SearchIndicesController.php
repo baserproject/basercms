@@ -48,6 +48,13 @@ class SearchIndicesController extends AppController {
 	public $helpers = array('BcText', 'BcForm');
 
 /**
+ * サブメニュー
+ *
+ * @var array
+ */
+	public $subMenuElements = ['site_configs'];
+	
+/**
  * beforeFilter
  *
  * @return void
@@ -59,7 +66,6 @@ class SearchIndicesController extends AppController {
 		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search');
 
 		if (!empty($this->request->params['admin'])) {
-			$this->subMenuElements = array('search_indices');
 			$this->crumbs = array(
 				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
 				array('name' => '検索インデックス管理', 'url' => array('controller' => 'search_indices', 'action' => 'index'))

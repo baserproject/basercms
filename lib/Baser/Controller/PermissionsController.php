@@ -50,7 +50,7 @@ class PermissionsController extends AppController {
  *
  * @var array
  */
-	public $subMenuElements = array('permissions');
+	public $subMenuElements = array('site_configs', 'users', 'user_groups', 'permissions');
 
 /**
  * ぱんくずナビ

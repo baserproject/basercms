@@ -7,6 +7,8 @@ app/db/*
 !app/db/empty
 app/Plugin/*
 !app/Plugin/empty
+app/View/*
+!app/View/empty
 app/webroot/files/*
 !app/webroot/files/empty
 app/webroot/css/admin

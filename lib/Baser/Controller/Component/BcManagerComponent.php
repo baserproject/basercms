@@ -1323,6 +1323,7 @@ class BcManagerComponent extends Component {
 			'jsAdminDirExists'	=> is_dir(WWW_ROOT . 'js' . DS . 'admin'),
 			'cssAdminDirExists'	=> is_dir(WWW_ROOT . 'css' . DS . 'admin'),
 			'tmpDirWritable'	=> is_writable(TMP),
+			'pagesDirWritable'	=> is_writable(APP . 'View' . DS . 'Pages'),
 			'dbDirWritable'		=> is_writable(APP . 'db'),
 			'phpActualVersion'	=> preg_replace('/[a-z-]/', '', phpversion()),
 			'phpGd'				=> extension_loaded('gd'),

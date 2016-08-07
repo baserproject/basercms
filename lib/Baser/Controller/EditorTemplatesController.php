@@ -31,7 +31,7 @@ class EditorTemplatesController extends AppController {
  * 
  * @var array
  */
-	public $subMenuElements = array('editor_templates');
+	public $subMenuElements = array('site_configs', 'editor_templates');
 
 /**
  * パンくず設定

@@ -238,11 +238,11 @@ class PagesController extends AppController {
  */
 	public function admin_entry_page_files() {
 		// 現在のテーマの固定ページファイルのパスを取得
-		$pagesPath = getViewPath() . 'Pages';
+		$pagesPath = APP . 'View' . DS . 'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();
 		$this->setMessage($result['all'] . ' ページ中 ' . $result['insert'] . ' ページの新規登録、 ' . $result['update'] . ' ページの更新に成功しました。');
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
 	}
 
 /**
@@ -257,7 +257,7 @@ class PagesController extends AppController {
 			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
 		}
 		clearViewCache();
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
 	}
 
 /**

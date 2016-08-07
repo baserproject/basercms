@@ -29,13 +29,24 @@ class SitesController extends AppController {
  *
  * @var array
  */
-	public $subMenuElements = ['sites'];
+	public $subMenuElements = ['site_configs', 'sites'];
 
+/**
+ * Before Filter
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->crumbs = array(
+			array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
+			array('name' => 'サブサイト管理', 'url' => array('controller' => 'sites', 'action' => 'index'))
+		);
+	}
+	
 /**
  * サブサイト一覧
  */
 	public function admin_index() {
-		$this->pageTitle = 'サブサイト管理';
+		$this->pageTitle = 'サブサイト一覧';
 		$this->paginate = ['order' => 'id'];
 		$datas = $this->paginate('Site');
 		$this->set('mainSites', $this->Site->getSiteList());

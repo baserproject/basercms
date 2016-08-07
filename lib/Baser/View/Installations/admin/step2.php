@@ -84,6 +84,17 @@ $(function(){
 <?php endif ?>
 					</div>
 				</li>
+				<li class='<?php if ($pagesDirWritable) echo 'check'; else echo'failed'; ?>'>
+					/app/View/Pages フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+					<div class="check-result">
+						<?php if ($pagesDirWritable): ?>
+							書き込み可
+						<?php else: ?>
+							書き込み不可<br />
+							<small>/app/View/Pages フォルダに書き込み権限が必要です。</small>
+						<?php endif ?>
+					</div>
+				</li>
 				<li class='<?php if ($filesDirWritable) echo 'check'; else echo'failed'; ?>'>
 <?php if (ROOT . DS != WWW_ROOT): ?>
 						/app/webroot/files フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）

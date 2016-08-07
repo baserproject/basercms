@@ -917,7 +917,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		return array(
 			array(array('contents'), array('<th>コンテンツ管理メニュー</th>')),
 			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>')),
-			array(array('menus', 'tools'), array('<th>メニュー管理メニュー</th>', '<th>ツールメニュー</th>')),
+			array(array('tools'), array('<th>ユーティリティメニュー</th>')),
 			array(array('plugins', 'themes'), array('<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>')),
 			array(array('users'), array('<th>ユーザー管理メニュー</th>')),
 			array(array('widget_areas'), array('<th>ウィジェットエリア管理メニュー</th>')),

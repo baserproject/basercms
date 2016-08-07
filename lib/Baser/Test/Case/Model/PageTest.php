@@ -64,29 +64,6 @@ class PageTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
-/**
- * _getPageFilePath を呼び出す
- * 
- * 次のテストで使います
- * testCreateAllPageTemplate()
- * testCreatePageTemplate()
- * testDelFile()
- * 
- * @param array $data ページデータ
- * @return string
- */
-	public function getPageFilePath($data) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		// リフレクションで _getPageFilePath を呼び出す
-		$reflec = new ReflectionMethod($this->Page, '_getPageFilePath');
-		$reflec->setAccessible(true);
-		$path = $reflec->invoke(new $this->Page(), $data);
-
-		return $path;
-
-	}
-
 	public function test既存ページチェック正常() {
 		$this->Page->create(array(
 			'Page' => array(
@@ -300,7 +277,7 @@ class PageTest extends BaserTestCase {
 			'recursive' => 0,
 			]
 		);
-		$path = getViewPath() . 'Pages' . $page['Content']['url'] . '.php';
+		$path = APP . 'View' . DS . 'Pages' . $page['Content']['url'] . '.php';
 		$File = new File($path);  
 		$content = $File->read();
 
@@ -329,32 +306,21 @@ class PageTest extends BaserTestCase {
  * DBデータを元にページテンプレートを全て生成する
  */
 	public function testCreateAllPageTemplate() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Page->createAllPageTemplate();
 
 		// ファイルが生成されているか確認
 		$result = true;
-		$pages = $this->Page->find('all', array('recursive' => -1));
+		$pages = $this->Page->find('all', ['conditions' => ['Content.status' => true], 'recursive' => 0]);
 		foreach ($pages as $page) {
-			$data = array(
-				'Page' => array(
-					'name' => $page['Page']['name'],
-					'page_category_id' => $page['Page']['page_category_id'],
-				)
-			);
-			$path = $this->getPageFilePath($data);
-
+			$path = $this->Page->getPageFilePath($page);
 			if (!file_exists($path)) {
 				$result = false;
 			}
-
-			// デフォルトのPage情報にあわせて独自に追加したファイルを削除
+			// フィクスチャ：Default.PageのPage情報にあわせて独自に追加したファイルを削除
 			if ($page['Page']['id'] > 12) {
 				@unlink($path);
 			}
-
 		}
-		
 		$this->assertEquals(true, $result, 'DBデータを元にページテンプレートを全て生成できません');
 	}
 
@@ -372,11 +338,16 @@ class PageTest extends BaserTestCase {
 
 		$data = array(
 			'Page' => array(
+				'contents' => '',
+			),
+			'Content' => array(
 				'name' => $name,
-				'page_category_id' => $categoryId,
+				'parent_id' => $categoryId,
+				'site_id' => 0,
+				'title' => ''
 			)
 		);
-		$path = $this->getPageFilePath($data);
+		$path = $this->Page->getPageFilePath($data);
 
 		// ファイル生成
 		$this->Page->createPageTemplate($data);
@@ -411,12 +382,17 @@ class PageTest extends BaserTestCase {
 
 		$data = array(
 			'Page' => array(
+				'contents' => '',
+			),
+			'Content' => array(
 				'name' => $name,
-				'page_category_id' => $categoryId,
+				'parent_id' => $categoryId,
+				'site_id' => 0,
+				'title' => ''
 			)
 		);
 
-		$path = $this->getPageFilePath($data);
+		$path = $this->Page->getPageFilePath($data);
 
 		$File = new File($path);
 
@@ -572,7 +548,7 @@ class PageTest extends BaserTestCase {
 			'recursive' => 0
 			]
 		);
-		$path = getViewPath() . 'Pages' . $Page['Content']['url'] . '.php';
+		$path = APP . 'View' . DS . 'Pages' . $Page['Content']['url'] . '.php';
 		$File = new File($path);  
 		$Content = $File->read();
 
@@ -610,7 +586,7 @@ class PageTest extends BaserTestCase {
 		$result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		// コピーしたファイル存在チェック
-		$path = getViewPath() . 'Pages' . $result['Content']['url'] . '.php';
+		$path = APP . 'View' . DS . 'Pages' . $result['Content']['url'] . '.php';
 		$this->assertFileExists($path, $message);
 		@unlink($path);
 

@@ -315,8 +315,7 @@ class Page extends AppModel {
 		if (function_exists('ini_set')) {
 			ini_set('memory_limit ', '-1');
 		}
-
-		$pages = $this->find('all', array('recursive' => -1));
+		$pages = $this->find('all', array('recursive' => 0));
 		$result = true;
 		foreach ($pages as $page) {
 			if (!$this->createPageTemplate($page)) {
@@ -374,19 +373,9 @@ class Page extends AppModel {
  * @param array $data
  * @return string
  */
-	protected function getPageFilePath($data) {
+	public function getPageFilePath($data) {
 		
-		$SiteConfig = ClassRegistry::init('SiteConfig');
-		$SiteConfig->cacheQueries = false;
-		$siteConfig = $SiteConfig->findExpanded();
-		$theme = $siteConfig['theme'];
-
-		// Pagesディレクトリのパスを取得
-		if ($theme) {
-			$path = BASER_THEMES . $theme . DS . 'Pages' . DS;
-		} else {
-			$path = APP . 'View' . DS . 'Pages' . DS;
-		}
+		$path = APP . 'View' . DS . 'Pages' . DS;
 		
 		if (!is_dir($path)) {
 			mkdir($path);
@@ -509,12 +498,12 @@ class Page extends AppModel {
  * @param string $parentCategoryId
  * @return array 処理結果 all / success
  */
-	public function entryPageFiles($targetPath, $parentCategoryId = '') {
+	public function entryPageFiles($targetPath, $parentId = '') {
 		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->unload('BcCache');
 		}
-		if ($this->PageCategory->Behaviors->loaded('BcCache')) {
-			$this->PageCategory->Behaviors->unload('BcCache');
+		if ($this->Content->Behaviors->loaded('BcCache')) {
+			$this->Content->Behaviors->unload('BcCache');
 		}
 
 		$this->fileSave = false;
@@ -526,65 +515,80 @@ class Page extends AppModel {
 		$all = 0;
 
 		// カテゴリの取得・登録
-		$categoryName = basename($targetPath);
+		$folderName = basename($targetPath);
 
-		$specialCategoryIds = array(
-			'',
-			$this->PageCategory->getAgentId('mobile'),
-			$this->PageCategory->getAgentId('smartphone')
-		);
-
-		if (in_array($parentCategoryId, $specialCategoryIds) && $categoryName == 'templates') {
+		if ($folderName == 'templates') {
 			return array('all' => 0, 'insert' => 0, 'update' => 0);
 		}
-
-		$pageCategoryId = '';
-		$this->PageCategory->updateRelatedPage = false;
-		if ($categoryName != 'Pages') {
-
+		$basePath = APP . 'View' . DS . 'Pages';
+		$url = str_replace($basePath, '', $targetPath);
+		$url = str_replace(DS, '/', $url);
+		$Site = ClassRegistry::init('Site');
+		$url = preg_replace('/^\//', '', $url);
+		$urlAry = explode('/', $url);
+		$siteId = 0;
+		if(!empty($urlAry[0])) {
+			$site = $Site->find('first', ['conditions' => ['Site.name' => $urlAry[0]]]);
+			if($site['Site']['alias']) {
+				$urlAry[0] = $site['Site']['alias'];
+			}
+			$siteId = $site['Site']['id'];
+		}
+		
+		if($urlAry[0]) {
+			$url = '/' . implode('/', $urlAry) . '/';	
+		} else {
+			$url = '/';
+		}
+		
+		$contentId = '';
+		
+		// フォルダー登録
+		if ($folderName != 'Pages') {
 			// カテゴリ名の取得
 			// 標準では設定されてないので、利用する場合は、あらかじめ bootstrap 等で宣言しておく
-			$categoryTitles = Configure::read('Baser.pageCategoryTitles');
-			$categoryTitle = -1;
-			if ($categoryTitles) {
-				$categoryNames = explode('/', str_replace(getViewPath() . 'Pages' . DS, '', $targetPath));
-				foreach ($categoryNames as $key => $value) {
-					if (isset($categoryTitles[$value])) {
-						if (count($categoryNames) == ($key + 1)) {
-							$categoryTitle = $categoryTitles[$value]['title'];
-						} elseif (isset($categoryTitles[$value]['children'])) {
-							$categoryTitles = $categoryTitles[$value]['children'];
+			$folderTitles = Configure::read('Baser.pageCategoryTitles');
+			$folderTitle = -1;
+			if ($folderTitles) {
+				$folderNames = explode('/', $url);
+				foreach ($folderNames as $key => $value) {
+					if (isset($folderTitles[$value])) {
+						if (count($folderNames) == ($key + 1)) {
+							$folderTitle = $folderTitles[$value]['title'];
+						} elseif (isset($folderTitles[$value]['children'])) {
+							$folderTitles = $folderTitles[$value]['children'];
 						}
 					}
 				}
 			}
 
-			$categoryId = $this->PageCategory->getIdByPath($targetPath);
-			if ($categoryId) {
-				$pageCategoryId = $categoryId;
-				if ($categoryTitle != -1) {
-					$pageCategory = $this->PageCategory->find('first', array('conditions' => array('PageCategory.id' => $pageCategoryId), 'recursive' => -1));
-					$pageCategory['PageCategory']['title'] = $categoryTitle;
-					$this->PageCategory->set($pageCategory);
-					$this->PageCategory->save();
+			$ContentFolder = ClassRegistry::init('ContentFolder');
+			$entityId = $this->Content->field('entity_id', ['Content.url' => $url, 'Content.type' => 'ContentFolder']);
+			if ($entityId) {
+				$content = $ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId), 'recursive' => 0));
+				$contentId = $content['Content']['id'];
+				if ($folderTitle != -1) {
+					$content['Content']['title'] = $folderTitle;
+					$ContentFolder->set($content);
+					$ContentFolder->save();
 				}
 			} else {
-				$pageCategory['PageCategory']['parent_id'] = $parentCategoryId;
-				$pageCategory['PageCategory']['name'] = $categoryName;
-				if ($categoryTitle == -1) {
-					$pageCategory['PageCategory']['title'] = $categoryName;
+				$content = [
+					'parent_id' => $parentId,
+					'name' => $folderName,
+					'site_id' => $siteId
+				];
+				if ($folderTitle == -1) {
+					$content['Content']['title'] = $folderName;
 				} else {
-					$pageCategory['PageCategory']['title'] = $categoryTitle;
+					$content['Content']['title'] = $folderTitle;
 				}
-				$pageCategory['PageCategory']['sort'] = $this->PageCategory->getMax('sort') + 1;
-				$this->PageCategory->cacheQueries = false;
-				$this->PageCategory->create($pageCategory);
-				if ($this->PageCategory->save()) {
-					$pageCategoryId = $this->PageCategory->getInsertID();
+				$ContentFolder->cacheQueries = false;
+				$ContentFolder->create($content);
+				if ($ContentFolder->save()) {
+					$contentId = $ContentFolder->Content->id;
 				}
 			}
-		} else {
-			$categoryName = '';
 		}
 
 		// ファイル読み込み・ページ登録
@@ -593,6 +597,7 @@ class Page extends AppModel {
 		}
 		foreach ($files[1] as $path) {
 
+			$contents = $page = $pageName = $title = $description = $conditions = $descriptionReg = $titleReg = $pageTagReg = null;
 			if (preg_match('/' . preg_quote(Configure::read('BcApp.templateExt')) . '$/is', $path) == false) {
 				continue;
 			}
@@ -625,13 +630,13 @@ class Page extends AppModel {
 			$pageTagReg = '/<\!\-\- BaserPageTagBegin \-\->.*?<\!\-\- BaserPageTagEnd \-\->/is';
 			$contents = preg_replace($pageTagReg, '', $contents);
 
-			$conditions['Page.name'] = $pageName;
-			if ($pageCategoryId) {
-				$conditions['Page.page_category_id'] = $pageCategoryId;
+			$conditions['Content.name'] = $pageName;
+			if ($contentId) {
+				$conditions['Content.parent_id'] = $contentId;
 			} else {
-				$conditions['Page.page_category_id'] = null;
+				$conditions['Content.parent_id'] = 1;
 			}
-			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
+			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => 0));
 			if ($page) {
 				$chage = false;
 				if ($title != $page['Content']['title']) {
@@ -653,14 +658,27 @@ class Page extends AppModel {
 					}
 				}
 			} else {
-				$page = $this->getDefaultValue();
-				$page['Page']['contents'] = $contents;
+				$page = array_merge($this->getDefaultValue(), [
+					'Page' => [
+						'contents' => $contents,
+					],
+					'Content' => [
+						'name' => $pageName,
+						'title' => $title,
+						'description' => $description
+					]
+				]);
+				$page['Content']['site_id'] = $siteId;
+				if ($contentId) {
+					$page['Content']['parent_id'] = $contentId;
+				} else {
+					$page['Content']['parent_id'] = 1;
+				}
 				$this->create($page);
 				if ($this->save()) {
 					$insert++;
 				}
 			}
-			$contents = $page = $pageName = $title = $description = $conditions = $descriptionReg = $titleReg = $pageTagReg = null;
 			$all++;
 		}
 
@@ -671,13 +689,12 @@ class Page extends AppModel {
 		foreach ($files[0] as $file) {
 			$folderName = basename($file);
 			if ($folderName != '_notes' && $folderName != 'admin') {
-				$result = $this->entryPageFiles($file, $pageCategoryId);
+				$result = $this->entryPageFiles($file, $contentId);
 				$insert += $result['insert'];
 				$update += $result['update'];
 				$all += $result['all'];
 			}
 		}
-
 		return array('all' => $all, 'insert' => $insert, 'update' => $update);
 	}
 

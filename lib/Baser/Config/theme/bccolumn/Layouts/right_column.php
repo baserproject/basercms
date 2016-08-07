@@ -28,8 +28,7 @@
 		<?php $this->BcBaser->css('responsive') ?>
 
 <?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-			'admin/functions',
+			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
 			'baser.min',
 			'startup'
