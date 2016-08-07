@@ -47,7 +47,7 @@ before_script:
   - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "nada-icons.default"
 
 script:
-  - php ./Console/cake.php baser_test baser Controller/Component/BcManagerComponent
+  - php ./Console/cake.php baser_test baser BcAll
 
 notifications:
   email: false
