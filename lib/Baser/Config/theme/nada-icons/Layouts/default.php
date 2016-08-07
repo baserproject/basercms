@@ -17,8 +17,6 @@
 
 <?php $this->BcBaser->js(array(
 			'jquery-1.7.2.min',
-			'admin/functions',
-			'startup',
 			'jquery.bxSlider.min',
 			'jquery.easing.1.3',
 			'nada-icons'

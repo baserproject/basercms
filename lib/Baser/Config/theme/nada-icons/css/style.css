@@ -904,3 +904,8 @@ table.row-table-01 tr.odd td {
 	margin-top:5px;
 	margin-bottom: 5px;
 }
+#ContentsNavi {
+     text-align: center;
+     margin-top:60px;
+     margin-bottom:60px;
+ }

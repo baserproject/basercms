@@ -2,8 +2,8 @@
 /**
  * ブログトップ
  */
-$this->BcBaser->css('admin/colorbox/colorbox', array('inline' => false));
-$this->BcBaser->js('admin/jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->css('colorbox/colorbox', array('inline' => false));
+$this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 <!-- blog title -->
