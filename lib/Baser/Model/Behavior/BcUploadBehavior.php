@@ -442,7 +442,14 @@ class BcUploadBehavior extends ModelBehavior {
 			$thumb = false;
 		}
 
-		return $this->resizeImage($Model->data[$Model->name][$field['name']]['tmp_name'], $filePath, $field['width'], $field['height'], $thumb);
+		// 画像比率を保ったサムネイル作成指定
+		if (!empty($field['sameratio'])) {
+			$sameRatio = $field['sameratio'];
+		} else {
+			$sameRatio = false;
+		}
+
+		return $this->resizeImage($Model->data[$Model->name][$field['name']]['tmp_name'], $filePath, $field['width'], $field['height'], $thumb, $sameRatio);
 	}
 
 /**
@@ -453,14 +460,15 @@ class BcUploadBehavior extends ModelBehavior {
  * @param string $distination コピー先のパス
  * @param int $width 横幅
  * @param int $height 高さ
- * @param boolean $$thumb サムネイルとしてコピーするか
+ * @param boolean $thumb サムネイルとしてコピーするか
+ * @param boolean $sameRatio 画像比率を保持するか
  * @return boolean
  * @access public
  */
-	public function resizeImage($source, $distination, $width = 0, $height = 0, $thumb = false) {
+	public function resizeImage($source, $distination, $width = 0, $height = 0, $thumb = false, $sameRatio = false) {
 		if ($width > 0 || $height > 0) {
 			$imageresizer = new Imageresizer();
-			$ret = $imageresizer->resize($source, $distination, $width, $height, $thumb);
+			$ret = $imageresizer->resize($source, $distination, $width, $height, $thumb, $sameRatio);
 		} else {
 			$ret = copy($source, $distination);
 		}

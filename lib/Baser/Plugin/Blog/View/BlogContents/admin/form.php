@@ -263,14 +263,21 @@ $(function(){
 			<td class="col-input">
 				<span>PCサイズ</span>　
 				<small>[幅]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
-				<small>[高さ]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_height', array('type' => 'text', 'size' => '8')) ?><br />
+				<small>[高さ]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_height', array('type' => 'text', 'size' => '8')) ?>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<?php echo $this->BcForm->input('BlogContent.eye_catch_size_thumb_sameratio', array('type' => 'checkbox', 'label' => '比率を保持した指定サイズにする')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpEyeCatchSize', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<br />
 				<span>携帯サイズ</span>　
 				<small>[幅]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_width', array('type' => 'text', 'size' => '8')) ?>&nbsp;px　×　
 				<small>[高さ]</small><?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_height', array('type' => 'text', 'size' => '8')) ?>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<?php echo $this->BcForm->input('BlogContent.eye_catch_size_mobile_thumb_sameratio', array('type' => 'checkbox', 'label' => '比率を保持した指定サイズにする')) ?>
 <?php echo $this->BcForm->error('BlogContent.eye_catch_size') ?>
-				<div id="helptextTemplate" class="helptext">
+				<div id="helptextEyeCatchSize" class="helptext">
 					<ul>
 						<li>アイキャッチ画像のサイズを指定します。</li>
+						<li>「比率を保持した指定サイズにする」場合、<br />切り取られる画像は中央が基準となります。</li>
 					</ul>
 				</div>
 			</td>

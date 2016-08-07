@@ -164,7 +164,7 @@ class BlogPost extends BlogAppModel {
  * @param	int $id ブログコンテンツID
  */
 	public function setupUpload($id) {
-		$sizes = array('thumb', 'mobile_thumb');
+		$sizes = array('thumb', 'mobile_thumb', 'sameratio');
 		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id)));
 		$data = $this->BlogContent->constructEyeCatchSize($data);
 		$data = $data['BlogContent'];
@@ -178,6 +178,7 @@ class BlogPost extends BlogAppModel {
 			$imagecopy[$size] = array('suffix' => '__' . $size);
 			$imagecopy[$size]['width'] = $data['eye_catch_size_' . $size . '_width'];
 			$imagecopy[$size]['height'] = $data['eye_catch_size_' . $size . '_height'];
+			$imagecopy[$size]['sameratio'] = $data['eye_catch_size_' . $size . '_sameratio'];
 		}
 
 		$settings = $this->Behaviors->BcUpload->settings['BlogPost'];
