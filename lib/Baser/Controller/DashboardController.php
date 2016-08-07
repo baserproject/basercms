@@ -91,8 +91,8 @@ class DashboardController extends AppController {
 		);
 
 		$this->set('viewDblogs', $this->paginate('Dblog'));
-		$publishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => true)));
-		$unpublishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => false)));
+		$publishedPages = $this->Page->find('count', array('conditions' => $this->Page->Content->getConditionAllowPublish()));
+		$unpublishedPages = $this->Page->find('count', array('conditions' => $this->Page->Content->getConditionAllowPublish()));
 		$totalPages = $publishedPages + $unpublishedPages;
 		$this->set(compact('publishedPages', 'unpublishedPages', 'totalPages'));
 		$this->help = 'dashboard_index';

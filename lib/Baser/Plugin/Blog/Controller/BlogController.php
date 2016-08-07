@@ -118,8 +118,8 @@ class BlogController extends BlogAppController {
 		// コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
 		// Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
 		if (!isset($this->request->params['admin'])) {
-			$this->passedArgs['controller'] = $this->blogContent['BlogContent']['name'];
-			$this->passedArgs['plugin'] = $this->blogContent['BlogContent']['name'];
+			$this->passedArgs['controller'] = $this->request->params['Content']['name'];
+			$this->passedArgs['plugin'] = $this->request->params['Content']['name'];
 			$this->passedArgs['action'] = $this->action;
 		}
 
@@ -410,7 +410,6 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $posts);
 		$this->set('year', $year);
 		$this->set('month', $month);
-		$this->layout = $this->blogContent['BlogContent']['layout'];
 		$this->render($template);
 	}
 
@@ -812,7 +811,7 @@ class BlogController extends BlogAppController {
 		unset($this->request->params['pass']);
 		unset($this->request->params['prefix']);
 		unset($this->request->params['admin']);
-		$this->request->params['controller'] = $this->blogContent['BlogContent']['name'];
+		$this->request->params['controller'] = $this->request->params['Content']['name'];
 		$this->request->params['action'] = 'archives';
 		$this->request->url = $this->params['controller'] . '/' . 'archives' . '/' . $no;
 		$this->request->params['pass'][0] = $no;

@@ -47,7 +47,7 @@ $baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';
 					<?php
 					$this->BcBaser->link($title, array(
 						'admin' => false, 'plugin' => '',
-						'controller' => $blogContent['BlogContent']['name'],
+						'controller' => $this->request->params['Content']['name'],
 						'action' => 'archives',
 						'author',
 						$author['User']['name']

@@ -12,6 +12,11 @@
 
 App::uses('BlogPost', 'Blog.Model');
 
+/**
+ * Class BlogPostTest
+ * 
+ * @property BlogPost $BlogPost
+ */
 class BlogPostTest extends BaserTestCase {
 
 	public $fixtures = array(

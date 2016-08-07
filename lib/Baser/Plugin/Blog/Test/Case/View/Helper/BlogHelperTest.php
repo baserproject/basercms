@@ -123,14 +123,14 @@ class BlogHelperTest extends BaserTestCase {
 		}
 
 		$this->Blog->setContent($blogContentId);
-		$this->assertEqual($this->Blog->blogContent['name'], $expected, 'ブログコンテンツデータを正しくセットできません');
+		$this->assertEquals($this->Blog->blogContent['id'], $expected, 'ブログコンテンツデータを正しくセットできません');
 	}
 
 	public function setContentDataProvider() {
 		return array(
-			array(null, false, 'news'),
-			array(2, false, 'news2'),
-			array(null, true, 'test'),
+			array(null, false, 1),
+			array(2, false, 2),
+			array(null, true, 3),
 		);
 	}
 
@@ -230,7 +230,7 @@ class BlogHelperTest extends BaserTestCase {
 			'no' => 3
 		));
 		$result = $this->Blog->getPostContent($post, $moreText, $moreLink, $cut);
-		$this->assertEqual($result, $expected, '記事の本文を正しく取得できません');
+		$this->assertEquals($result, $expected, '記事の本文を正しく取得できません');
 	}
 
 	public function getPostContentDataProvider() {
@@ -320,7 +320,7 @@ class BlogHelperTest extends BaserTestCase {
 			'named' => $named,
 		);
 		$result = $this->Blog->getCategoryUrl($blogCategoryId, $options);
-		$this->assertEqual($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
+		$this->assertEquals($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
 	}
 
 	public function getCategoryUrlDataProvider() {
@@ -353,10 +353,10 @@ class BlogHelperTest extends BaserTestCase {
  * @dataProvider getCategoryListDataProvider
  */
 	public function testGetCategoryList($depth, $count, $options, $expected) {
-		$BlogCategory = ClassRegistry::init('BlogCategory');
+		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		$categories = $BlogCategory->getCategoryList(1, array('viewCount' => true, 'depth' => 3));
 		$result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
-		$this->assertEqual($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
+		$this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
 	}
 
 	public function getCategoryListDataProvider() {
@@ -437,7 +437,7 @@ class BlogHelperTest extends BaserTestCase {
 	public function testGetLayoutTemplates($theme, $expected) {
 		$this->Blog->BcBaser->siteConfig['theme'] = $theme;
 		$result = $this->Blog->getLayoutTemplates();
-		$this->assertEqual($result, $expected, 'レイアウトテンプレートを正しく取得できません');
+		$this->assertEquals($result, $expected, 'レイアウトテンプレートを正しく取得できません');
 
 	}
 
@@ -458,7 +458,7 @@ class BlogHelperTest extends BaserTestCase {
 	public function testGetBlogTemplates($theme, $expected) {
 		$this->Blog->BcBaser->siteConfig['theme'] = $theme;
 		$result = $this->Blog->getBlogTemplates();
-		$this->assertEqual($result, $expected, 'ブログテンプレートを正しく取得できません');
+		$this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
 	}
 
 	public function getBlogTemplatesDataProvider() {
@@ -478,11 +478,11 @@ class BlogHelperTest extends BaserTestCase {
 			'publish_end' => '9000-08-10 18:58:07'
 		);
 		$result = $this->Blog->allowPublish($data);
-		$this->assertEqual($result, 1, '公開状態を正しく取得できません');
+		$this->assertEquals($result, 1, '公開状態を正しく取得できません');
 
 		$data['status'] = 0;
 		$result = $this->Blog->allowPublish($data);
-		$this->assertEqual($result, 0, '公開状態を正しく取得できません');
+		$this->assertEquals($result, 0, '公開状態を正しく取得できません');
 	}
 
 /**
@@ -506,7 +506,7 @@ class BlogHelperTest extends BaserTestCase {
 			'link' => $link,
 		);
 		$result = $this->Blog->getPostImg($post, $options);
-		$this->assertEqual($expected, $result, '記事中の画像を正しく取得できません');
+		$this->assertEquals($expected, $result, '記事中の画像を正しく取得できません');
 	}
 
 	public function getPostImgDataProvider() {
@@ -560,15 +560,15 @@ class BlogHelperTest extends BaserTestCase {
 			)
 		);
 		$result = $this->Blog->getRelatedPosts($post);
-		$this->assertEqual($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません
+		$this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません
 			');
-		$this->assertEqual($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません
+		$this->assertEquals($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません
 			');
 
 		$post['BlogPost']['id'] = 2;
 		$post['BlogPost']['blog_content_id'] = 1;
 		$result = $this->Blog->getRelatedPosts($post);
-		$this->assertEqual($result[0]['BlogPost']['id'], 1, '同じタグの関連投稿を正しく取得できません
+		$this->assertEquals($result[0]['BlogPost']['id'], 1, '同じタグの関連投稿を正しく取得できません
 			');
 
 		$post['BlogPost']['id'] = 1;

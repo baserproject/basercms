@@ -13,7 +13,7 @@
 				<?php $class[] = 'first' ?>
 			<?php elseif ($this->BcArray->last($posts, $key)): ?>
 				<?php $class[] = 'last' ?>
-			<?php endif ?>			<?php $uri = $this->BcBaser->getRoot().$post['BlogContent']['name'].'/archives/'.$post['BlogPost']['no']; ?>
+			<?php endif ?>			<?php $uri = $this->BcBaser->getRoot().$this->request->params['Content']['name'].'/archives/'.$post['BlogPost']['no']; ?>
 
 			<li class="<?php echo implode(' ', $class) ?>">
 				<div class="thumbnail">

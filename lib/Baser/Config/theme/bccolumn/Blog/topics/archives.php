@@ -21,7 +21,7 @@ $(function(){
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
 			<h3><?php $this->Blog->postTitle($post) ?></h3>
-			<?php $uri = $this->BcBaser->getRoot().$post['BlogContent']['name'].'/archives/'.$post['BlogPost']['no']; ?>
+			<?php $uri = $this->BcBaser->getRoot().$this->request->params['Content']['name'].'/archives/'.$post['BlogPost']['no']; ?>
 			<div class="eye-catch">
 				<a href="<?php echo $uri ?>">
 					<?php $this->Blog->eyeCatch($post, array('link'=>false, 'width'=>'80px')) ?>

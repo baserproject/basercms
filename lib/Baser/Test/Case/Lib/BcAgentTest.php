@@ -151,34 +151,6 @@ class BcAgentTest extends BaserTestCase {
 	}
 
 /**
- * HTTPリクエストのURLのプレフィックスに合致するインスタンスを返す
- *
- * @param CakeRequest $request URLをチェックするリクエスト
- * @param string $expect 期待値
- * @return void
- * @dataProvider findByUrlDataProvider
- */
-	public function testFindByUrl($alias, $expect) {
-		$request = new CakeRequest($alias);
-		$result = $this->agent->findByUrl($request);
-		
-		if (!is_null($result)) {
-			$this->assertEquals($expect, $result->name, '設定を正しく読み込めません');
-		} else {
-			$this->assertNull($result, '存在しないエイリアス名で設定が読み込まれています');
-		}
-	}
-
-
-	public function findByUrlDataProvider() {
-		return array(
-			array('m/', 'mobile'),
-			array('s/', 'smartphone'),
-			array('hoge/', null),
-		);
-	}
-
-/**
  * 現在の環境のHTTP_USER_AGENTの値に合致するインスタンスを返す
  *
  * @param string $agent ユーザーエージェント名

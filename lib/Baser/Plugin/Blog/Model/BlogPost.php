@@ -153,24 +153,24 @@ class BlogPost extends BlogAppModel {
  */
 	public function setupUpload($id) {
 		$sizes = array('thumb', 'mobile_thumb');
-		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id)));
+		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => 0));
 		$data = $this->BlogContent->constructEyeCatchSize($data);
-		$data = $data['BlogContent'];
+		$blogContent = $data['BlogContent'];
 
 		$imagecopy = array();
 
 		foreach ($sizes as $size) {
-			if (!isset($data['eye_catch_size_' . $size . '_width']) || !isset($data['eye_catch_size_' . $size . '_height'])) {
+			if (!isset($blogContent['eye_catch_size_' . $size . '_width']) || !isset($blogContent['eye_catch_size_' . $size . '_height'])) {
 				continue;
 			}
 			$imagecopy[$size] = array('suffix' => '__' . $size);
-			$imagecopy[$size]['width'] = $data['eye_catch_size_' . $size . '_width'];
-			$imagecopy[$size]['height'] = $data['eye_catch_size_' . $size . '_height'];
+			$imagecopy[$size]['width'] = $blogContent['eye_catch_size_' . $size . '_width'];
+			$imagecopy[$size]['height'] = $blogContent['eye_catch_size_' . $size . '_height'];
 		}
 
 		$settings = $this->Behaviors->BcUpload->settings['BlogPost'];
-		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['name'], '/') . '\//', $settings['saveDir'])) {
-			$settings['saveDir'] = "blog" . DS . $data['name'] . DS . "blog_posts";
+		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['Content']['name'], '/') . '\//', $settings['saveDir'])) {
+			$settings['saveDir'] = "blog" . DS . $data['Content']['name'] . DS . "blog_posts";
 		}
 
 		$settings['fields']['eye_catch']['imagecopy'] = $imagecopy;

@@ -48,11 +48,13 @@ class BcBasicsTest extends BaserTestCase {
  * @param	string $expect 期待値
  * @dataProvider baseUrlDataProvider
  */
-	public function testBaseUrl($baseUrl, $script, $expect) {
+	public function testBaseUrl($baseUrl, $expect) {
 		// 初期化
 		Configure::write('App.baseUrl', $baseUrl);
-		$_SERVER['SCRIPT_FILENAME'] = WWW_ROOT . $script;
-
+		if(isConsole()) {
+			$_SERVER['SCRIPT_FILENAME'] = APP . 'Console' . DS . 'cake.php';
+			$_SERVER['SCRIPT_NAME'] = APP . 'Console' . DS . 'cake.php';
+		}
 		$result = baseUrl();
 		$this->assertEquals($expect, $result, 'WEBサイトのベースとなるURLを正しく取得できません');
 
@@ -60,10 +62,10 @@ class BcBasicsTest extends BaserTestCase {
 
 	public function baseUrlDataProvider() {
 		return array(
-			array('/hoge/test', 'test.php', '/hoge/test/'),
-			array(null, 'test.php', '/'),
-			array('/hoge/test', null, '/hoge/test/'),
-			array(null, null, '/'),
+			array('/hoge/test', '/hoge/test/'),
+			array(null, '/'),
+			array('/hoge/test', '/hoge/test/'),
+			array(null, '/'),
 		);
 	}
 

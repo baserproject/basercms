@@ -44,7 +44,8 @@ function baseUrl() {
 		if(isConsole()) {
 			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 		}
-		$script = str_replace(docRoot(), '', $script);
+		$docroot = docRoot();
+		$script = str_replace($docroot, '', $script);
 		if (BC_DEPLOY_PATTERN == 1) {
 			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
 			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
@@ -79,7 +80,8 @@ function docRoot() {
 	}
 
 	if(isConsole()) {
-		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $_SERVER['SCRIPT_NAME']);
+		$script = $_SERVER['SCRIPT_NAME'];
+		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 	}
 
 	if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {

@@ -22,7 +22,7 @@ if (isset($blogContent)) {
 $data = $this->requestAction('/blog/blog/get_recent_entries/' . $id . '/' . $count, ['entityId' => $id]);
 $recentEntries = $data['recentEntries'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
+$baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/';
 ?>
 <div class="widget widget-blog-recent-entries widget-blog-recent-entries-<?php echo $id ?> blog-widget">
 	<?php if ($name && $use_title): ?>

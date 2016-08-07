@@ -20,10 +20,6 @@ class PagePageModelFixture extends BaserTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'sort' => 1,
-			'name' => 'index',
-			'title' => '',
-			'description' => '',
 			'contents' => '<section class="mainHeadline">
 <h2>シングルページデザインで<br />
 <span class="fcGreen">見やすくカッコいい</span>WEBサイトへ！</h2>
@@ -41,26 +37,13 @@ class PagePageModelFixture extends BaserTestFixture {
 <?php echo $this->BcBaser->js(\'/feed/ajax/1\'); ?>
 </section>
 </div><!-- /information -->',
-			'page_category_id' => null,
-			'status' => 1,
-			'url' => '/index',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 2,
-			'sort' => 2,
-			'name' => 'company',
-			'title' => '会社案内',
-			'description' => 'baserCMS inc.の会社案内ページ',
 			'contents' => '<div class="articleArea" id="company">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Company Profile <span>会社案内</span></h2>
@@ -99,26 +82,13 @@ class PagePageModelFixture extends BaserTestFixture {
 </section>
 </article>
 <?php $this->BcBaser->googleMaps(array("width" => "100%","height" => 500)) ?></div>',
-			'page_category_id' => null,
-			'status' => 1,
-			'url' => '/company',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 3,
-			'sort' => 3,
-			'name' => 'service',
-			'title' => '事業案内',
-			'description' => 'baserCMS inc.の事業案内ページ。',
 			'contents' => '<div class="articleArea bgGray" id="service">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Service <span>事業案内</span></h2>
@@ -132,26 +102,13 @@ class PagePageModelFixture extends BaserTestFixture {
 <figure class="imgArea"><?php $this->BcBaser->img(\'img_service.jpg\',array(\'alt\'=>\'事業内容の写真\')) ?></figure>
 </article>
 </div>',
-			'page_category_id' => null,
-			'status' => 1,
-			'url' => '/service',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 4,
-			'sort' => 4,
-			'name' => 'recruit',
-			'title' => '採用情報',
-			'description' => 'baserCMS inc.の採用情報ページ',
 			'contents' => '<div class="articleArea" id="recruit">
 <article class="mainWidth">
 <h2 class="fontawesome-circle-arrow-down">Recruit <span>採用情報</span></h2>
@@ -198,26 +155,13 @@ class PagePageModelFixture extends BaserTestFixture {
 </table>
 </article>
 </div>',
-			'page_category_id' => null,
-			'status' => 1,
-			'url' => '/recruit',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 5,
-			'sort' => 6,
-			'name' => 'index',
-			'title' => '',
-			'description' => '',
 			'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">メインメニュー</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
@@ -234,26 +178,13 @@ class PagePageModelFixture extends BaserTestFixture {
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">baserCMS NEWS</span> </div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->BcBaser->feed(1) ?>',
-			'page_category_id' => 1,
-			'status' => 1,
-			'url' => '/mobile/index',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 6,
-			'sort' => 7,
-			'name' => 'index',
-			'title' => '',
-			'description' => '',
 			'contents' => '<div id="news" class="clearfix">
 <div class="news" style="margin-right:28px;">
 <h2 id="newsHead01">NEWS RELEASE</h2>
@@ -268,26 +199,13 @@ class PagePageModelFixture extends BaserTestFixture {
 </div>
 </div>
 </div>',
-			'page_category_id' => 2,
-			'status' => 1,
-			'url' => '/smartphone/index',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 7,
-			'sort' => 8,
-			'name' => 'about',
-			'title' => '会社案内',
-			'description' => 'baserCMS inc.の会社案内ページ',
 			'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
 <div class="section">
@@ -304,26 +222,13 @@ WEBシステム開発事業（ダミー）</td></tr>
 <div class="section">
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
-			'page_category_id' => 2,
-			'status' => 1,
-			'url' => '/smartphone/about',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 8,
-			'sort' => 9,
-			'name' => 'service',
-			'title' => 'サービス',
-			'description' => 'baserCMS inc.のサービス紹介ページ。',
 			'contents' => '<h2 class="contents-head">サービス</h2>
 <div class="section">
 <p>
@@ -349,52 +254,26 @@ WEBシステム開発事業（ダミー）</td></tr>
 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。
 </p>
 </div>',
-			'page_category_id' => 2,
-			'status' => 1,
-			'url' => '/smartphone/service',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 9,
-			'sort' => 10,
-			'name' => 'sitemap',
-			'title' => 'サイトマップ',
-			'description' => 'baserCMS inc.のサイトマップページ',
 			'contents' => '<h2 class="contents-head">サイトマップ</h2>
 <?php $this->BcBaser->sitemap() ?>
 <ul class="section sitemap">
 	<li><?php $this->BcBaser->link("新着情報","/s/news/index") ?></li>
 	<li><?php $this->BcBaser->link("お問い合わせ","/s/contact/index") ?>	</li>
 </ul>',
-			'page_category_id' => 2,
-			'status' => 1,
-			'url' => '/smartphone/sitemap',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 10,
-			'sort' => 11,
-			'name' => 'icons',
-			'title' => 'アイコンの使い方',
-			'description' => '50種類のアイコンを自由にカスタマイズしよう。',
 			'contents' => '<h2>
 	アイコンの使い方</h2>
 <h3>
@@ -490,26 +369,13 @@ WEBシステム開発事業（ダミー）</td></tr>
 	&nbsp;</p>
 <p style="text-align: center;">
 	<?php $this->BcBaser->img(\'icons/about_007.png\', array(\'style\' => \'width: 656px; height: 278px;\')) ?></p>',
-			'page_category_id' => 2,
-			'status' => 1,
-			'url' => '/smartphone/icons',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 11,
-			'sort' => 12,
-			'name' => 'about',
-			'title' => '会社案内',
-			'description' => 'baserCMS inc.の会社案内ページ',
 			'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
 <div class="section">
@@ -526,101 +392,40 @@ WEBシステム開発事業（ダミー）</td></tr>
 <div class="section">
 <?php $this->BcBaser->googleMaps(array("width" => 585)) ?>
 </div>',
-			'page_category_id' => 1,
-			'status' => 1,
-			'url' => '/mobile/about',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 12,
-			'sort' => 13,
-			'name' => 'index',
-			'title' => 'ガラホ',
-			'description' => 'baserCMS inc.の会社案内ページ',
 			'contents' => '<h2 class="contents-head">会社案内</h2>',
-			'page_category_id' => 3,
-			'status' => 1,
-			'url' => '/garaphone/',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 13,
-			'sort' => 14,
-			'name' => 'index',
-			'title' => 'ガラホ2',
-			'description' => 'baserCMS inc.の会社案内ページ',
 			'contents' => '<h2 class="contents-head">会社案内</h2>',
-			'page_category_id' => 4,
-			'status' => 1,
-			'url' => '/garaphone2/',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 14,
-			'sort' => 15,
-			'name' => 'hidden_status',
-			'title' => '',
-			'description' => '',
 			'contents' => '非公開です',
-			'page_category_id' => null,
-			'status' => 0,
-			'url' => '/hidden_status',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => null,
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),
 		array(
 			'id' => 15,
-			'sort' => 16,
-			'name' => 'hidden_publish_end',
-			'title' => '',
-			'description' => '',
 			'contents' => '非公開です',
-			'page_category_id' => null,
-			'status' => 1,
-			'url' => '/hidden_publish_end',
 			'draft' => '',
-			'author_id' => 1,
-			'publish_begin' => null,
-			'publish_end' => '2015-01-27 12:56:52',
-			'exclude_search' => 0,
 			'code' => '',
-			'unlinked_mobile' => 0,
-			'unlinked_smartphone' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
 		),

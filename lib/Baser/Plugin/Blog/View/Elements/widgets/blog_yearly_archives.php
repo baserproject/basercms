@@ -34,7 +34,7 @@ if ($view_count) {
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/date/';
+$baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/date/';
 ?>
 
 

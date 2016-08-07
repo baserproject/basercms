@@ -26,6 +26,9 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'baser.Default.Permission',
 		'baser.Default.SearchIndex',
 		'baser.Default.Content'
 	);
@@ -41,6 +44,7 @@ class BcAppTest extends BaserTestCase {
 		$this->Page = ClassRegistry::init('Page');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->Dblog = ClassRegistry::init('Dblog');
+		$this->User = ClassRegistry::init('User');
 	}
 
 /**
@@ -307,9 +311,6 @@ class BcAppTest extends BaserTestCase {
  * 指定フィールドのMAX値を取得する
  */
 	public function testGetMax() {
-		$result = $this->Page->getMax('page_category_id');
-		$this->assertEquals(2, $result, '指定フィールドのMAX値を取得できません');
-
 		$result = $this->Page->getMax('Page\.id');
 		$this->assertEquals(11, $result, '指定フィールドのMAX値を取得できません');
 	}
@@ -499,59 +500,6 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * 一つ位置を上げる
- */
-	public function testSortup() {
-		$this->Page->data = array(
-			'Page' => array(
-				'name' => 'index',
-				'page_category_id' => null,
-				'title' => '',
-				'url' => '/index',
-				'description' => '',
-				'status' => 1,
-			)
-		);
-		$result = $this->Page->sortup(2, array('id' => 1));
-
-		$Page = $this->Page->find('first', array(
-				'conditions' => array('id' => 1),
-				'fields' => array('sort'),
-				'recursive' => -1,
-			)
-		);
-		$sort = $Page['Page']['sort'];
-		$this->assertEquals(2, $sort, 'sortを一つ位置を上げることができません');
-	}
-
-/**
- * 一つ位置を下げる
- */
-	public function testSortdown() {
-		$this->Page->data = array(
-			'Page' => array(
-				'name' => 'company',
-				'page_category_id' => null,
-				'title' => '会社案内',
-				'url' => '/company',
-				'description' => '',
-				'status' => 1,
-			)
-		);
-		$result = $this->Page->sortdown(1, array('id' => 2));
-
-		$Page = $this->Page->find('first', array(
-				'conditions' => array('id' => 2),
-				'fields' => array('sort'),
-				'recursive' => -1,
-			)
-		);
-		$sort = $Page['Page']['sort'];
-		$this->assertEquals(1, $sort, 'sortを一つ位置を下げることができません');
-
-	}
-
-/**
  * Modelキャッシュを削除する
  */
 	public function testDeleteModelCache() {
@@ -625,7 +573,7 @@ class BcAppTest extends BaserTestCase {
  * Deconstructs a complex data type (array or object) into a single field value.
  */
 	public function testDeconstruct() {
-		$field = 'Page.name';
+		$field = 'Page.contents';
 		$data = array(
 			'wareki' => true,
 			'year' => 'h-27',
@@ -675,9 +623,8 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider expectsDataProvider
  */
 	public function testExpects($arguments, $expectedHasKeys, $expectedNotHasKeys) {
-		$this->Page->expects($arguments);
-
-		$result = $this->Page->find('first');
+		$this->User->expects($arguments);
+		$result = $this->User->find('first', ['recursive' => 1]);
 
 		// 存在するキー
 		foreach ($expectedHasKeys as $key) {
@@ -692,8 +639,8 @@ class BcAppTest extends BaserTestCase {
 
 	public function expectsDataProvider() {
 		return array(
-			array(array(), array('Page'), array('User')),
-			array(array('User'), array('Page', 'User'), array()),
+			array(array(), array('User'), array('UserGroup', 'Favorite')),
+			array(array('UserGroup'), array('User', 'UserGroup'), array('Favorite')),
 		);
 	}
 

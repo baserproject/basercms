@@ -16,6 +16,8 @@ class BlogCommentTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.BlogComment',
+		'baser.Default.Content',
+		'baser.Default.Site',
 	);
 
 	public function setUp() {

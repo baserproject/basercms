@@ -40,7 +40,7 @@ $(function(){
 <div id="contentsNavi">
 	<?php $this->Blog->prevLink($post, "＜ 前の記事") ?>
 	&nbsp;  &nbsp;
-	<?php $this->BcBaser->link('一覧へ', '/'.$post['BlogContent']['name'].'/index') ?>
+	<?php $this->BcBaser->link('一覧へ', '/'.$this->request->params['Content']['name'].'/index') ?>
 	&nbsp;  &nbsp;	<?php $this->Blog->nextLink($post, "後の記事 ＞") ?>
 </div>
 <?php $this->BcBaser->element('blog_comments') ?>

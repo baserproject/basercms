@@ -332,14 +332,6 @@ class MailController extends MailAppController {
 		} elseif (isset($this->request->data['MailMessage']['mode']) && $this->request->data['MailMessage']['mode'] == 'Back') {
 			$this->_back($id);
 		} else {
-			// 複数のメールフォームに対応する為、プレフィックス付のCSVファイルに保存。
-			// ※ nameフィールドの名称を[message]以外にする
-			if ($this->dbDatas['mailContent']['MailContent']['name'] != 'message') {
-				$prefix = $this->dbDatas['mailContent']['MailContent']['name'] . "_";
-			} else {
-				$prefix = "";
-			}
-
 			// 画像認証を行う
 			if (Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
 				$captchaResult = $this->BcCaptcha->check($this->request->data['MailMessage']['auth_captcha']);

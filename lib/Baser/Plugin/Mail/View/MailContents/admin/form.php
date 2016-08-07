@@ -106,7 +106,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.status', 'フォーム受付期間') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.publish_begin', 'フォーム受付期間') ?></th>
 			<td class="col-input">
 				&nbsp;&nbsp;
 				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>

@@ -12,6 +12,12 @@
 
 App::uses('BlogCategory', 'Blog.Model');
 
+/**
+ * Class BlogCategoryTest
+ * 
+ * @property BlogCategory $BlogCategory
+ */
+
 class BlogCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -26,6 +32,8 @@ class BlogCategoryTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogTag',
+		'baser.Default.Content',
+		'baser.Default.Site',
 		'plugin.blog.Model/BlogCategoryModel',
 	);
 

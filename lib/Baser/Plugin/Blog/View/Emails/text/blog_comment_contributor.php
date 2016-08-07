@@ -20,7 +20,7 @@
 
 <?php echo $BlogComment['name'] ?>さんが、
 「<?php echo $BlogPost['name'] ?>」にコメントしました。
-<?php echo $this->BcBaser->getUri('/' . $BlogContent['name'] . '/archives/' . $BlogPost['no'], false) ?>　
+<?php echo $this->BcBaser->getUri('/' . $content['name'] . '/archives/' . $BlogPost['no'], false) ?>　
  
 <?php echo ($BlogComment['message']) ?>　
 　

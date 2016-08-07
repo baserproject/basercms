@@ -32,15 +32,6 @@ class Page extends AppModel {
 	public $useDbConfig = 'baser';
 
 /**
- * belongsTo
- * 
- * @var array
- */
-	public $belongsTo = array(
-		'User' => array('className' => 'User',
-			'foreignKey' => 'author_id'));
-
-/**
  * ビヘイビア
  *
  * @var array
@@ -472,7 +463,7 @@ class Page extends AppModel {
 		switch ($field) {
 			case 'user_id':
 			case 'author_id':
-				$controlSources[$field] = $this->User->getUserList($options);
+				$controlSources[$field] = $this->Content->User->getUserList($options);
 				break;
 		}
 
@@ -495,12 +486,12 @@ class Page extends AppModel {
 		}
 
 		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
-		$page = $this->find('first', array('conditions' => array('Page.url' => $url), 'recursive' => -1));
+		$page = $this->find('first', array('conditions' => array('Content.url' => $url), 'recursive' => 0));
 		if (!$page) {
 			return false;
 		}
-		if ($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
-			return strtotime($page['Page']['publish_end']) - time();
+		if ($page['Content']['status'] && $page['Content']['publish_end'] && $page['Content']['publish_end'] != '0000-00-00 00:00:00') {
+			return strtotime($page['Content']['publish_end']) - time();
 		} else {
 			// #10680 Modify 2016/01/22 gondoh
 			// 3.1.0で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
@@ -643,18 +634,18 @@ class Page extends AppModel {
 			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
 			if ($page) {
 				$chage = false;
-				if ($title != $page['Page']['title']) {
+				if ($title != $page['Content']['title']) {
 					$chage = true;
 				}
-				if ($description != $page['Page']['description']) {
+				if ($description != $page['Content']['description']) {
 					$chage = true;
 				}
 				if (trim($contents) != trim($page['Page']['contents'])) {
 					$chage = true;
 				}
 				if ($chage) {
-					$page['Page']['title'] = $title;
-					$page['Page']['description'] = $description;
+					$page['Content']['title'] = $title;
+					$page['Content']['description'] = $description;
 					$page['Page']['contents'] = $contents;
 					$this->set($page);
 					if ($this->save()) {
@@ -746,7 +737,7 @@ class Page extends AppModel {
 
 			// 公開状態だった場合、サイトマップのキャッシュを削除
 			// 公開期間のチェックは行わず確実に削除
-			if ($page['Page']['status']) {
+			if ($page['Content']['status']) {
 				clearViewCache();
 			}
 			return true;

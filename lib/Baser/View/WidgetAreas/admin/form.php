@@ -336,7 +336,7 @@ function updateWidget(id) {
 
 <?php if (!empty($widgetInfos)): ?>
 
-	<?php echo $this->BcForm->create('WidgetArea', array('action' => 'update_sort', 'url' => array('action' => 'update_sort', $this->BcForm->value('WidgetArea.id'), 'id' => false))) ?>
+	<?php echo $this->BcForm->create('WidgetArea', array('url' => array('action' => 'update_sort', $this->BcForm->value('WidgetArea.id'), 'id' => false))) ?>
 	<?php echo $this->BcForm->input('WidgetArea.sorted_ids', array('type' => 'hidden')) ?>
 	<?php echo $this->BcForm->end() ?>
 

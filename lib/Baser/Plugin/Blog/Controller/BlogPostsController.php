@@ -395,7 +395,7 @@ class BlogPostsController extends BlogAppController {
 		));
 
 		if ($this->request->data['BlogPost']['status']) {
-			$this->set('publishLink', '/' . $this->blogContent['BlogContent']['name'] . '/archives/' . $this->request->data['BlogPost']['no']);
+			$this->set('publishLink', '/' . $this->request->params['Content']['name'] . '/archives/' . $this->request->data['BlogPost']['no']);
 		}
 
 		$editorOptions = array('editorDisableDraft' => false);

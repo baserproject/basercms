@@ -51,12 +51,16 @@ class Content extends AppModel {
  * 
  * @var array
  */
-	public $belongsTo = array(
-		'Site'	=> array(
+	public $belongsTo = [
+		'Site'	=> [
 			'className' => 'Site',
 			'foreignKey' => 'site_id'
-		)
-	);
+		],
+		'User' => [
+			'className' => 'User',
+			'foreignKey' => 'author_id'
+		]	
+	];
 
 /**
  * バリデーション

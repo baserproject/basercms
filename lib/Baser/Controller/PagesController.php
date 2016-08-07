@@ -332,37 +332,6 @@ class PagesController extends AppController {
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
-		$data = $this->Page->findByUrl($checkUrl);
-
-		$template = $layout = $agent = '';
-
-		if (Configure::read('BcRequest.agent')) {
-			$agent = '_' . Configure::read('BcRequest.agent');
-		}
-
-		if (empty($data['PageCategory']['id'])) {
-			if (!empty($this->siteConfigs['root_layout_template' . $agent])) {
-				$layout = $this->siteConfigs['root_layout_template' . $agent];
-			}
-			if (!empty($this->siteConfigs['root_content_template' . $agent])) {
-				$template = 'templates/' . $this->siteConfigs['root_content_template' . $agent];
-			} else {
-				$template = join('/', $path);
-			}
-		} else {
-			if (!empty($data['PageCategory']['layout_template'])) {
-				$layout = $data['PageCategory']['layout_template'];
-			}
-			if (!empty($data['PageCategory']['content_template'])) {
-				$template = 'templates/' . $data['PageCategory']['content_template'];
-			} else {
-				$template = join('/', $path);
-			}
-		}
-
-		if ($layout) {
-			$this->layout = $layout;
-		}
 
 		$previewCreated = false;
 		if($this->request->data) {
@@ -371,7 +340,9 @@ class PagesController extends AppController {
 				$previewCreated = true;
 			}
 		}
-
+		
+		// TODO コンテンツテンプレート未実装
+		$template = '';
 		$pagePath = implode('/', $path);
 		if ($template) {
 			$this->set('pagePath', $pagePath);
@@ -418,52 +389,6 @@ class PagesController extends AppController {
 		unset($file);
 		@chmod($path, 0666);
 		return $uuid;
-	}
-
-/**
- * パンくずナビ用の配列を取得する
- *
- * @param string	$url
- * @return array
- */
-	protected function _getCrumbs($url) {
-		if (Configure::read('BcRequest.agent')) {
-			$url = '/' . Configure::read('BcRequest.agentAlias') . $url;
-		}
-
-		// 直属のカテゴリIDを取得
-		$pageCategoryId = $this->Page->field('page_category_id', array('Page.url' => $url));
-
-		// 関連カテゴリを取得（関連固定ページも同時に取得）
-		$pageCategorires = array();
-		if ($pageCategoryId) {
-			$pageCategorires = $this->Page->PageCategory->getPath($pageCategoryId, array('PageCategory.name', 'PageCategory.title'), 1);
-		}
-
-		$crumbs = array();
-		if ($pageCategorires) {
-			// index 固定ページの有無によりリンクを判別
-			foreach ($pageCategorires as $pageCategory) {
-				if (!empty($pageCategory['Page'])) {
-					$categoryUrl = '';
-					foreach ($pageCategory['Page'] as $page) {
-						if ($page['name'] == 'index') {
-							$categoryUrl = $page['url'];
-							break;
-						}
-					}
-					if ($categoryUrl) {
-						$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => $categoryUrl);
-					} else {
-						$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
-					}
-				} else {
-					$crumbs[] = array('name' => $pageCategory['PageCategory']['title'], 'url' => '');
-				}
-			}
-		}
-
-		return $crumbs;
 	}
 
 /**

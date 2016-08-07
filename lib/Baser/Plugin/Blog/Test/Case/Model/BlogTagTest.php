@@ -18,6 +18,8 @@ class BlogTagTest extends BaserTestCase {
 		'baser.Default.BlogTag',
 		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.BlogPost',
+		'baser.Default.Content',
+		'baser.Default.Site',
 	);
 
 	public function setUp() {

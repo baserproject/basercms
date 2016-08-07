@@ -90,7 +90,7 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 						<li>半角数字で入力してください。</li>
 							<?php if ($this->action == 'admin_edit'): ?>
 							<li>RSSフィードのURLは
-							<?php $this->BcBaser->link(Router::url('/' . $this->BcForm->value('BlogContent.name') . '/index.rss', true), '/' . $this->BcForm->value('BlogContent.name') . '/index.rss', array('target' => '_blank')) ?>
+							<?php $this->BcBaser->link(Router::url('/' . $this->BcForm->value('Content.name') . '/index.rss', true), '/' . $this->BcForm->value('Content.name') . '/index.rss', array('target' => '_blank')) ?>
 								となります。</li>
 							<?php endif ?>
 					</ul>

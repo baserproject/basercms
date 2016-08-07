@@ -425,6 +425,9 @@ class BcBaserHelper extends AppHelper {
  * @return bool
  */
 	public function isHome() {
+		if(empty($this->request->params['Site'])) {
+			return false;
+		}
 		$Site = ClassRegistry::init('Site');
 		$prefix = $Site->getPrefix(['Site' => $this->request->params['Site']]);
 		if (!$prefix) {
@@ -1416,9 +1419,9 @@ class BcBaserHelper extends AppHelper {
 		$out = array();
 		if ($startText) {
 			$homeUrl = '/';
-			if($this->request->params['Site']['alias']) {
+			if(!empty($this->request->params['Site']['alias'])) {
 				$homeUrl = '/' . $this->request->params['Site']['alias'] . '/';
-			} elseif($this->request->params['Site']['name']) {
+			} elseif(!empty($this->request->params['Site']['name'])) {
 				$homeUrl = '/' . $this->request->params['Site']['name'] . '/';
 			}
 			$out[] = $this->getLink($startText, $homeUrl);

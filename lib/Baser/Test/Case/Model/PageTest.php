@@ -73,7 +73,6 @@ class PageTest extends BaserTestCase {
  * testDelFile()
  * 
  * @param array $data ページデータ
- * - $data['Page']['name'], $data['Page']['page_category_id'] が必要
  * @return string
  */
 	public function getPageFilePath($data) {
@@ -322,7 +321,7 @@ class PageTest extends BaserTestCase {
 
 	public function beforeDeleteDataProvider() {
 		return array(
-			array(3, 'PageモデルのbeforeDeleteが機能していません'),
+			array(2, 'PageモデルのbeforeDeleteが機能していません'),
 		);
 	}
 
@@ -330,7 +329,7 @@ class PageTest extends BaserTestCase {
  * DBデータを元にページテンプレートを全て生成する
  */
 	public function testCreateAllPageTemplate() {
-
+		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->Page->createAllPageTemplate();
 
 		// ファイルが生成されているか確認
