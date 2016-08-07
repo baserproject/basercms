@@ -1013,7 +1013,7 @@ class BcManagerComponent extends Component {
  * @param array $dbConfig
  * @return DataSource
  */
-	public function _getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
+	protected function _getDataSource($dbConfigKeyName = 'baser', $dbConfig = null) {
 		if ($dbConfig) {
 			$dbConfig['datasource'] = $this->getDatasourceName($dbConfig['datasource']);
 			$db = ConnectionManager::create($dbConfigKeyName, $dbConfig);

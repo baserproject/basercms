@@ -19,8 +19,8 @@ class BlogCategoriesSchema extends CakeSchema {
 
 	public $blog_categories = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
-		'no' => array('type' => 'integer', 'null' => false, 'length' => 8),
+		'blog_content_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
+		'no' => array('type' => 'integer', 'null' => true, 'length' => 8),
 		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 2),

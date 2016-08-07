@@ -90,43 +90,9 @@ class BcManagerComponentTest extends BaserTestCase {
 
 /**
  * データベースに接続する
- *
- * @param string $expected 期待値
- * @dataProvider connectDbDataProvider
  */
-	public function testConnectDb($datasource, $name, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$config = array(
-			'datasource' => $datasource,
-			'persistent' => false,
-			'host' => 'localhost',
-			'port' => '8889',
-			'login' => 'root',
-			'password' => 'root',
-			'database' => 'basercms',
-			'schema' => '',
-			'prefix' => 'mysite_',
-			'encoding' => 'utf8',
-		);
-
-		$result = $this->BcManager->connectDb($config, $name);
-		$sources = $result->listSources();
-		$prefix = $result->config['prefix'];
-
-		$this->assertContains($expected, $sources, 'datasourceを正しく取得できません');
-
-		if ($name == 'plugin') {
-			$this->assertEquals('mysite_pg_', $prefix, 'プラグイン用テーブルのprefixが正しく取得できません');
-		}
-	}
-
-	public function connectDbDataProvider() {
-		return array(
-			array('mysql', 'baser', 'mysite_pages'),
-			array('hoge', 'baser', 'mysite_pages'),
-			array('mysql', 'plugin', 'mysite_pages'),
-			array('postgres', 'baser', 'mysite_pages'),
-		);
+	public function testConnectDb() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -536,27 +502,6 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 /**
- * データソースを取得する
- * 
- * @param string $dbConfigKeyName データベースの種類
- * @param string $expected 期待値
- * @dataProvider _getDataSourceDataProvider
- */
-	public function test_getDataSource($dbConfigKeyName, $expected) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
-		$result = $this->BcManager->_getDataSource($dbConfigKeyName);
-		$sources = $result->listSources();
-		$this->assertContains($expected, $sources, 'データソースを正しく取得できません');
-	}
-
-	public function _getDataSourceDataProvider() {
-		return array(
-			array('baser', 'mysite_pages'),
-			array('plugin', 'mysite_pages'),
-		);
-	}
-
-/**
  * テーマを配置する
  *
  * @param string $theme テーマ名
@@ -773,7 +718,7 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testCheckDbConnection() {
 
 		// 使用しているDBのデータを取得し設定
-		$dbData = $this->BcManager->_getDataSource();
+		$dbData = ConnectionManager::getDataSource('baser');
 
 		$config = array(
 			'database' => $dbData->config['database'],
@@ -853,7 +798,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		);
 
 		// まともな datasource
-		$dbData = $this->BcManager->_getDataSource();
+		$dbData = ConnectionManager::getDataSource('baser');
 		$datasource = $dbData->config['datasource'];
 		switch ($datasource) {
 			case 'Database/BcPostgres' :

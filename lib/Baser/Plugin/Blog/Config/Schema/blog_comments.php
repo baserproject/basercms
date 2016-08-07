@@ -19,9 +19,9 @@ class BlogCommentsSchema extends CakeSchema {
 
 	public $blog_comments = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
-		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
-		'blog_post_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
-		'no' => array('type' => 'integer', 'null' => false),
+		'blog_content_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
+		'blog_post_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
+		'no' => array('type' => 'integer', 'null' => true),
 		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 2),
 		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'email' => array('type' => 'string', 'null' => true, 'default' => null),

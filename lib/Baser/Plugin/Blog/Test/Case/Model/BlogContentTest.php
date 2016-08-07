@@ -139,19 +139,20 @@ class BlogContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($id, $exclude_search) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->create([
 			'BlogContent' => [
 				'id' => $id,	
 				'description' => 'test-description',
 			],
 			'Content' => [
+				'id' => $id,
 				'name' => 'test-name',
 				'parent_id' => 1,
 				'title' => 'test-title',
 				'exclude_search' => $exclude_search,
 				'status' => 1,
-				'site_id' => 0
+				'site_id' => 0,
+				'entity_id' => $id
 			]
 		]);
 
@@ -215,7 +216,6 @@ class BlogContentTest extends BaserTestCase {
  * ブログコンテンツデータをコピーする
  */
 	public function testCopy() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		$this->BlogContent->copy(1, 1, 'hoge1', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())

@@ -19,8 +19,8 @@ class BlogPostsSchema extends CakeSchema {
 
 	public $blog_posts = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
-		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
-		'no' => array('type' => 'integer', 'null' => false),
+		'blog_content_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
+		'no' => array('type' => 'integer', 'null' => true),
 		'name' => array('type' => 'string', 'null' => true, 'default' => null),
 		'content' => array('type' => 'text', 'null' => true, 'default' => null),
 		'detail' => array('type' => 'text', 'null' => true, 'default' => null),

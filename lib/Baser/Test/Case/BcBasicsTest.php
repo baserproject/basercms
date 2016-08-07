@@ -330,7 +330,7 @@ class BcBasicsTest extends BaserTestCase {
 		// app/Config/database.phpが存在する場合
 		if (rename($dbconfigPath . '_copy', $dbconfigPath)) {
 			$result = getDbConfig();
-			$this->assertContains('basercms', $result, 'app/Config/database.php が存在している場合にデータベースの情報が返ってきません');
+			$this->assertContains('utf8', $result, 'app/Config/database.php が存在している場合にデータベースの情報が返ってきません');
 
 			$result = getDbConfig('hoge');
 			$this->assertFalse($result, '存在しないデータベースの設定名を入力した場合にfalseが返ってきます');

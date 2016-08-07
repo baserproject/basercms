@@ -20,9 +20,9 @@ class SitesSchema extends CakeSchema {
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'alias' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'theme' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'status' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
-		'use_subdomain' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
-		'relate_main_site' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'use_subdomain' => array('type' => 'boolean', 'null' => true, 'default' => 0),
+		'relate_main_site' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(

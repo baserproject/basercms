@@ -64,7 +64,6 @@ class MailMessageTest extends BaserTestCase {
  * @return boolean
  */
 	public function testBeforeSave() {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 初期化
 		$this->MailMessage->createTable(1);
 		// ======================================================

@@ -19,10 +19,10 @@ class FavoritesSchema extends CakeSchema {
 
 	public $favorites = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'user_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8),
-		'name' => array('type' => 'string', 'null' => false, 'default' => null),
-		'url' => array('type' => 'string', 'null' => false, 'default' => null),
-		'sort' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8),
+		'user_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
+		'name' => array('type' => 'string', 'null' => true, 'default' => null),
+		'url' => array('type' => 'string', 'null' => true, 'default' => null),
+		'sort' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

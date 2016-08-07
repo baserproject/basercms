@@ -482,6 +482,15 @@ class Content extends AppModel {
 		$content['plugin'] = $plugin;
 		$content['type'] = $type;
 		$content['entity_id'] = $entityId;
+		if(!isset($content['deleted'])) {
+			$content['deleted'] = false;	
+		}
+		if(!isset($content['site_root'])) {
+			$content['site_root'] = 0;
+		}
+		if(!isset($content['exclude_search'])) {
+			$content['exclude_search'] = 0;
+		}
 		$this->create($content);
 		return $this->save(null, $validate);
 	}

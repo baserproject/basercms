@@ -1181,7 +1181,7 @@ class CakeRequest implements ArrayAccess {
 	public function normalizedHere() {
 		$here = $this->here;
 		if(!BcUtil::isAdminSystem() && $this->params['controller'] == 'pages') {
-			if($this->params['pass'][count($this->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $here)) {
+			if(!empty($this->params['pass']) && $this->params['pass'][count($this->params['pass'])-1] == 'index' && !preg_match('/\/index$/', $here)) {
 				if(preg_match('/\/$/', $here)) {
 					$here .= 'index';
 				} else {

@@ -188,7 +188,6 @@ class MailContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($exclude_search) {
-		$this->markTestIncomplete('このテストは、baserCMS4に対応されていません。');
 		// 初期化
 		$data = ['MailContent' => [
 			'description' => 'hogeDescription',

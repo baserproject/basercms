@@ -199,11 +199,24 @@ class BcSqlite extends Sqlite {
  * @return string Quoted and escaped
  */
 	public function value($data, $column = null, $safe = false) {
-		$parent = parent::value($data, $column, $safe);
 
+		// ================================================================
+		// MEMO 2016/08/07 ryuring
+		// SQLiteで、CakeSchemaが出力するスキーマファイルにおいて、
+		// boolean に初期値を設定していた場合 false だと、
+		// 'default' => "'0'" と出力され、値変換時に true と判定されてしまう。
+		// フィールドのデータに初期値を設定しない事が一番望ましいが設定されている場合に
+		// バグとなるので念の為対応しておく
+		// ================================================================
+		if(($column == 'boolean' && ($data === "'0'" || $data === "'1'"))) {
+			return $data;
+		}
+		
+		$parent = parent::value($data, $column, $safe);
 		if ($parent != null) {
 			return $parent;
 		}
+	
 
 		if ($data === null) {
 			return 'NULL';
