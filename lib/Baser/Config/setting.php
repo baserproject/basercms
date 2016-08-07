@@ -194,14 +194,17 @@ $config['BcContents'] = [
 				'title' => 'コンテンツ',
 				'routes' => [
 					'add'	=> [
+						'admin' => true,
 						'controller'=> 'contents',
 						'action'	=> 'add'
 					],
 					'edit'	=> [
+						'admin' => true,
 						'controller'=> 'contents',
 						'action'	=> 'edit'
 					],
 					'delete' => [
+						'admin' => true,
 						'controller'=> 'contents',
 						'action'	=> 'delete'
 					],
@@ -218,14 +221,17 @@ $config['BcContents'] = [
 				'title' => 'フォルダー',
 				'routes' => [
 					'add'	=> [
+						'admin' => true,
 						'controller'=> 'content_folders',
 						'action'	=> 'add'
 					],
 					'edit'	=> [
+						'admin' => true,
 						'controller'=> 'content_folders',
 						'action'	=> 'edit'
 					],
 					'delete' => [
+						'admin' => true,
 						'controller'=> 'content_folders',
 						'action'	=> 'delete'
 					],
@@ -246,14 +252,17 @@ $config['BcContents'] = [
 				'title' => 'リンク',
 				'routes' => [
 					'add'	=> [
+						'admin' => true,
 						'controller'=> 'content_links',
 						'action'	=> 'add'
 					],
 					'edit'	=> [
+						'admin' => true,
 						'controller'=> 'content_links',
 						'action'	=> 'edit'
 					],
 					'delete' => [
+						'admin' => true,
 						'controller'=> 'content_links',
 						'action'	=> 'delete'
 					],
@@ -271,14 +280,17 @@ $config['BcContents'] = [
 				'icon'	=> 'admin/icon_page.png',
 				'routes' => [
 					'add'	=> [
+						'admin' => true,
 						'controller'=> 'pages',
 						'action'	=> 'ajax_add'
 					],
 					'edit'	=> [
+						'admin' => true,
 						'controller'=> 'pages',
 						'action'	=> 'edit'
 					],
 					'delete' => [
+						'admin' => true,
 						'controller'=> 'pages',
 						'action'	=> 'delete'
 					],
@@ -287,6 +299,7 @@ $config['BcContents'] = [
 						'action'	=> 'display'
 					],
 					'copy'	=> [
+						'admin' => true,
 						'controller'=> 'pages',
 						'action'	=> 'ajax_copy'
 					]

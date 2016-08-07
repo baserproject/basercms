@@ -18,16 +18,19 @@ $config['BcContents']['items']['MultiPage'] = [
 		'icon'	=> 'admin/icon_multi_page.png',
 		'routes' => [
 			'add'	=> [
+				'admin' => true,
 				'plugin'	=> 'multi_page',
 				'controller'=> 'multi_pages',
 				'action'	=> 'add'
 			],
 			'edit'	=> [
+				'admin' => true,
 				'plugin'	=> 'multi_page',
 				'controller'=> 'multi_pages',
 				'action'	=> 'edit'
 			],
 			'delete' => [
+				'admin' => true,
 				'plugin'	=> 'multi_page',
 				'controller'=> 'multi_pages',
 				'action'	=> 'delete'
@@ -38,6 +41,7 @@ $config['BcContents']['items']['MultiPage'] = [
 				'action'	=> 'view'
 			],
 			'copy'	=> [
+				'admin' => true,
 				'plugin'	=> 'multi_page',
 				'controller'=> 'multi_pages',
 				'action'	=> 'copy'

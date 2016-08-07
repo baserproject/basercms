@@ -18,21 +18,25 @@ $config['BcContents']['items']['MultiBlog'] = [
 		'icon'	=> 'admin/icon_multi_blog.png',
 		'routes' => [
 			'manage' => [
+				'admin' => true,
 				'plugin'	=> 'multi_blog',
 				'controller'=> 'multi_blog_posts',
 				'action'	=> 'index'
 			],
 			'add'	=> [
+				'admin' => true,
 				'plugin'	=> 'multi_blog',
 				'controller'=> 'multi_blog_contents',
 				'action'	=> 'add'
 			],
 			'edit'	=> [
+				'admin' => true,
 				'plugin'	=> 'multi_blog',
 				'controller'=> 'multi_blog_contents',
 				'action'	=> 'edit'
 			],
 			'delete' => [
+				'admin' => true,
 				'plugin'	=> 'multi_blog',
 				'controller'=> 'multi_blog_contents',
 				'action'	=> 'delete'
@@ -43,6 +47,7 @@ $config['BcContents']['items']['MultiBlog'] = [
 				'action'	=> 'index'
 			],
 			'copy'	=> [
+				'admin' => true,
 				'plugin'	=> 'multi_blog',
 				'controller'=> 'multi_blog_contents',
 				'action'	=> 'copy'

@@ -28,16 +28,19 @@ $config['BcContents']['items']['Blog'] = [
 		'icon'	=> 'admin/icon_blog.png',
 		'routes' => [
 			'add'	=> [
+				'admin' => true,
 				'plugin'	=> 'blog',
 				'controller'=> 'blog_contents',
 				'action'	=> 'ajax_add'
 			],
 			'edit'	=> [
+				'admin' => true,
 				'plugin'	=> 'blog',
 				'controller'=> 'blog_contents',
 				'action'	=> 'edit'
 			],
 			'delete' => [
+				'admin' => true,
 				'plugin'	=> 'blog',
 				'controller'=> 'blog_contents',
 				'action'	=> 'delete'
@@ -48,6 +51,7 @@ $config['BcContents']['items']['Blog'] = [
 				'action'	=> 'index'
 			],
 			'copy'	=> [
+				'admin' => true,
 				'plugin'	=> 'blog',
 				'controller'=> 'blog_contents',
 				'action'	=> 'ajax_copy'

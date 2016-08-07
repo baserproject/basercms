@@ -27,16 +27,19 @@ $config['BcContents']['items']['Mail'] = [
 		'icon'	=> 'admin/icon_mail.png',
 		'routes' => [
 			'add'	=> [
+				'admin' => true,
 				'plugin'	=> 'mail',
 				'controller'=> 'mail_contents',
 				'action'	=> 'ajax_add'
 			],
 			'edit'	=> [
+				'admin' => true,
 				'plugin'	=> 'mail',
 				'controller'=> 'mail_contents',
 				'action'	=> 'edit'
 			],
 			'delete' => [
+				'admin' => true,
 				'plugin'	=> 'mail',
 				'controller'=> 'mail_contents',
 				'action'	=> 'delete'
@@ -47,6 +50,7 @@ $config['BcContents']['items']['Mail'] = [
 				'action'	=> 'index'
 			],
 			'copy'	=> [
+				'admin' => true,
 				'plugin'	=> 'mail',
 				'controller'=> 'mail_contents',
 				'action'	=> 'ajax_copy'

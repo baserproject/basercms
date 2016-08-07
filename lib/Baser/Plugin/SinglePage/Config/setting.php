@@ -17,11 +17,13 @@ $config['BcContents']['items']['SinglePage'] = [
 		'icon'	=> 'admin/icon_single_page.png',
 		'routes' => [
 			'edit' => [
+				'admin' => true,
 				'plugin'	=> 'single_page',
 				'controller'=> 'single_page_configs',
 				'action'	=> 'edit'
 			],
 			'delete' => [
+				'admin' => true,
 				'plugin'	=> 'single_page',
 				'controller'=> 'single_page_configs',
 				'action'	=> 'delete'
