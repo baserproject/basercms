@@ -91,6 +91,8 @@ class ToolsController extends AppController {
 					$messages[] = 'データの復元に失敗しました。ログの確認を行なって下さい。';
 					$error = true;
 				}
+				// Pageモデルがレストア処理でAppModelで初期化されClassRegistryにセットされている為
+				ClassRegistry::flush();
 				if (!$error && !$this->Page->createAllPageTemplate()) {
 					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
 				}
@@ -133,10 +135,11 @@ class ToolsController extends AppController {
 		@unlink($targetPath);
 
 		$result = true;
-		if (!$this->_loadBackup($tmpPath . 'baser' . DS, 'baser')) {
+		
+		if (!$this->_loadBackup($tmpPath . 'core' . DS)) {
 			$result = false;
 		}
-		if (!$this->_loadBackup($tmpPath . 'plugin' . DS, 'plugin')) {
+		if (!$this->_loadBackup($tmpPath . 'plugin' . DS)) {
 			$result = false;
 		}
 
@@ -153,14 +156,14 @@ class ToolsController extends AppController {
  * @param string $configKeyName DB接続名
  * @return boolean
  */
-	protected function _loadBackup($path, $configKeyName) {
+	protected function _loadBackup($path) {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if (!is_array($files[1])) {
 			return false;
 		}
 
-		$db = ConnectionManager::getDataSource($configKeyName);
+		$db = ConnectionManager::getDataSource('default');
 		$result = true;
 		/* テーブルを削除する */
 		foreach ($files[1] as $file) {
@@ -204,15 +207,14 @@ class ToolsController extends AppController {
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
-		$this->_writeBackup('baser', $tmpDir . 'baser' . DS);
+		$this->_writeBackup($tmpDir . 'core' . DS);
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
 		if ($plugins) {
 			foreach ($plugins as $plugin) {
-				$this->_writeBackup('plugin', $tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
+				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
 			}
 		}
-
 		// ZIP圧縮して出力
 		$fileName = 'baserbackup_' . $version . '_' . date('Ymd_His');
 		$Simplezip = new Simplezip();
@@ -229,26 +231,14 @@ class ToolsController extends AppController {
  * @param string $path
  * @return boolean
  */
-	protected function _writeBackup($configKeyName, $path, $plugin = '') {
-		$db = ConnectionManager::getDataSource($configKeyName);
+	protected function _writeBackup($path, $plugin = '') {
+		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
-		$pluginPrefix = Inflector::underscore($plugin) . '_';
-
+		$tableList = getTableList();
 		foreach ($tables as $table) {
-			if (preg_match("/^" . $db->config['prefix'] . "([^_].+)$/", $table, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
-				$table = $matches[1];
-				if ($plugin) {
-					if (!preg_match('/^' . $pluginPrefix . '([^_].+)$/', $table)) {
-						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
-						if ($plugin != 'Mail') {
-							continue;
-						} elseif (!preg_match("/messages$/", $table)) {
-							continue;
-						}
-					}
-				}
+			if((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
+				$table = str_replace($db->config['prefix'], '', $table);
 				$model = Inflector::classify(Inflector::singularize($table));
 				if (!$db->writeSchema(array('path' => $path, 'model' => $model, 'plugin' => $plugin))) {
 					return false;
@@ -270,7 +260,7 @@ class ToolsController extends AppController {
 		$path = TMP . 'schemas' . DS;
 
 		if (!$this->request->data) {
-			$this->request->data['Tool']['connection'] = 'baser';
+			$this->request->data['Tool']['connection'] = 'core';
 		} else {
 			if (empty($this->request->data['Tool'])) {
 				$this->setMessage('テーブルを選択してください。', true);

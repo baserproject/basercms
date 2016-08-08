@@ -31,7 +31,7 @@ class BcAppModel extends Model {
  *
  * @var string
  */
-	public $useDbConfig = 'baser';
+	public $useDbConfig = 'default';
 
 /**
  * コンストラクタ
@@ -39,7 +39,7 @@ class BcAppModel extends Model {
  * @return	void
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		if (isset($db->config['datasource'])) {
 			if ($db->config['datasource'] != '') {
 				parent::__construct($id, $table, $ds);
@@ -269,7 +269,7 @@ class BcAppModel extends Model {
  * @param	string	プラグイン名
  * @return 	boolean
  */
-	public function initDb($dbConfigName, $pluginName = '', $options = array()) {
+	public function initDb($pluginName = '', $options = array()) {
 		$options = array_merge(array(
 			'loadCsv'		=> true,
 			'filterTable'	=> '',
@@ -286,15 +286,22 @@ class BcAppModel extends Model {
 				return true;
 			}
 		}
-		if ($this->loadSchema($dbConfigName, $path, $options['filterTable'], $options['filterType'], array(), $dropField = false)) {
+		$dbDataPattern = null;
+		if(!empty($options['dbDataPattern'])) {
+			$dbDataPattern = $options['dbDataPattern'];
+		} elseif(!empty($_SESSION['dbDataPattern'])) {
+			$dbDataPattern = $_SESSION['dbDataPattern'];
+			unset($_SESSION['dbDataPattern']);
+		}	
+		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], array(), $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
 				if($options['dbDataPattern']) {
-					list($theme, $pattern) = explode('.', $options['dbDataPattern']);
+					list($theme, $pattern) = explode('.', $dbDataPattern);
 				}
 				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
 				if($path) {
-					return $this->loadCsv($dbConfigName, $path);
+					return $this->loadCsv('default', $path);
 				} else {
 					return true;
 				}

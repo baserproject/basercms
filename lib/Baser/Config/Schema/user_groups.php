@@ -8,7 +8,7 @@ class UserGroupsSchema extends CakeSchema {
 
 	public $file = 'user_groups.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

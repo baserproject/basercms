@@ -19,7 +19,7 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Blog', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('Blog');
 
 /**
  * ブログ記事の投稿日を更新

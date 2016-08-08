@@ -353,7 +353,7 @@ class BcBasicsTest extends BaserTestCase {
 			TMP . 'logs',
 			TMP . 'sessions',
 			TMP . 'schemas',
-			TMP . 'schemas' . DS . 'baser',
+			TMP . 'schemas' . DS . 'core',
 			TMP . 'schemas' . DS . 'plugin',
 			CACHE,
 			CACHE . 'models',

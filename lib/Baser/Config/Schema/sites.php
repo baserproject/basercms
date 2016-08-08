@@ -3,7 +3,7 @@ class SitesSchema extends CakeSchema {
 
 	public $file = 'sites.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

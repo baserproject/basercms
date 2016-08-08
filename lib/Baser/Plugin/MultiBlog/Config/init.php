@@ -13,4 +13,4 @@
 /**
  * データベース初期化
  */
-$this->Plugin->initDb('plugin', 'MultiBlog', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('MultiBlog');

@@ -16,13 +16,4 @@
  * @package SingleBlog.Model
  * @property SingleBlogContent $SingleBlogContent
  */
-class SingleBlogPost extends AppModel {
-
-/**
- * useDbConfig
- *
- * @var string
- */
-    public $useDbConfig = 'plugin';
-    
-}
+class SingleBlogPost extends AppModel {}

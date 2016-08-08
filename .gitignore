@@ -7,8 +7,6 @@ app/db/*
 !app/db/empty
 app/Plugin/*
 !app/Plugin/empty
-app/View/*
-!app/View/empty
 app/webroot/files/*
 !app/webroot/files/empty
 app/webroot/css/admin
@@ -16,7 +14,8 @@ app/webroot/img/admin
 app/webroot/js/admin
 app/tmp/*
 !app/tmp/empty
-app/View/pages/
+app/View/Pages/*
+!app/View/Pages/empty
 app/webroot/theme/*
 !app/webroot/theme/empty
 app/webroot/sitemap.xml

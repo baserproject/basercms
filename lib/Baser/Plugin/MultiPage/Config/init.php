@@ -13,4 +13,4 @@
 /**
  * データベース初期化
  */
-$this->Plugin->initDb('plugin', 'MultiPage', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('MultiPage');

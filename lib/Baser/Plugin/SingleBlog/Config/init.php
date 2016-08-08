@@ -13,4 +13,4 @@
 /**
  * データベース初期化
  */
-$this->Plugin->initDb('plugin', 'SingleBlog', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('SingleBlog');

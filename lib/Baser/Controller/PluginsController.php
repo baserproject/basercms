@@ -314,7 +314,7 @@ class PluginsController extends AppController {
 		}
 
 		// テーブルを削除
-		$this->Plugin->loadSchema('plugin', $tmpPath);
+		$this->Plugin->loadSchema('default', $tmpPath);
 
 		// プラグインフォルダを削除
 		$folder->delete($pluginPath);

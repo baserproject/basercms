@@ -15,13 +15,4 @@
  *
  * @package SinglePageConfig.Model
  */
-class SinglePageConfig extends AppModel {
-
-/**
- * useDbConfig
- *
- * @var string
- */
-    public $useDbConfig = 'plugin';
-    
-}
+class SinglePageConfig extends AppModel {}

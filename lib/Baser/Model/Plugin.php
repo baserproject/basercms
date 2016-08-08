@@ -18,25 +18,11 @@
 class Plugin extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- */
-	public $name = 'Plugin';
-
-/**
  * ビヘイビア
  * 
  * @var array
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- */
-	public $useDbConfig = 'baser';
 
 /**
  * バリデーション
@@ -99,14 +85,10 @@ class Plugin extends AppModel {
 			return true;
 		}
 
-		$baserDb = ConnectionManager::getDataSource('baser');
-		$baserDb->cacheSources = false;
-		$baserListSources = $baserDb->listSources();
-		$baserPrefix = $baserDb->config['prefix'];
-		$pluginDb = ConnectionManager::getDataSource('plugin');
-		$pluginDb->cacheSources = false;
-		$pluginListSources = $pluginDb->listSources();
-		$pluginPrefix = $pluginDb->config['prefix'];
+		$db = ConnectionManager::getDataSource('default');
+		$db->cacheSources = false;
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
 
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
@@ -126,15 +108,6 @@ class Plugin extends AppModel {
 
 				$type = 'drop';
 				$table = $matches[1];
-				$File = new File($path . DS . $file);
-				$data = $File->read();
-				if (preg_match('/(public|var)\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
-					$conType = $matches[2];
-					$listSources = ${$conType . 'ListSources'};
-					$prefix = ${$conType . 'Prefix'};
-				} else {
-					continue;
-				}
 
 				$schemaPath = $tmpdir;
 				if (preg_match('/^create_(.*?)\.php$/', $file, $matches)) {
@@ -162,12 +135,7 @@ class Plugin extends AppModel {
 					$oldSchemaPath = $tmpdir . $file;
 					$File = new File($oldSchemaPath);
 					$File->write($data);
-
-					if ($conType == 'baser') {
-						$schemaPath = BcUtil::getSchemaPath() . DS;
-					} else {
-						$schemaPath = BcUtil::getSchemaPath($pluginName) . DS;
-					}
+					$schemaPath = BcUtil::getSchemaPath($pluginName) . DS;
 				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
 					$type = 'create';
 					$table = $matches[1];
@@ -180,12 +148,6 @@ class Plugin extends AppModel {
 						continue;
 					}
 					copy($path . DS . $file, $tmpdir . $table . '.php');
-				}
-
-				if ($conType == 'baser') {
-					$db = $baserDb;
-				} else {
-					$db = $pluginDb;
 				}
 
 				if (!$db->loadSchema(array('type' => $type, 'path' => $schemaPath, 'file' => $table . '.php', 'dropField' => true, 'oldSchemaPath' => $oldSchemaPath))) {

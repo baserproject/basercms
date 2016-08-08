@@ -19,13 +19,6 @@
 class MultiBlogPost extends AppModel {
 
 /**
- * useDbConfig
- *
- * @var string
- */
-    public $useDbConfig = 'plugin';
-
-/**
  * belongsTo
  *
  * @var array

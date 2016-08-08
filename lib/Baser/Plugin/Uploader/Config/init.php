@@ -13,7 +13,7 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Uploader', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('Uploader');
 	
 /**
  * 必要フォルダ初期化

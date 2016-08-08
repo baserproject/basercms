@@ -242,8 +242,8 @@ class BlogPostTest extends BaserTestCase {
  * @dataProvider getEntryDatesDataProvider
  */
 	public function testGetEntryDates($blogContentId, $year, $month, $expected) {
-		$dbConfig = new DATABASE_CONFIG();
-		$datasource = $dbConfig->plugin['datasource'];
+
+		$datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
 		if ($datasource === 'Database/BcSqlite') {
 			$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		}
@@ -280,8 +280,7 @@ class BlogPostTest extends BaserTestCase {
  * 指定した月の記事が存在するかチェックする
  */
 	public function testExistsEntry() {
-		$dbConfig = new DATABASE_CONFIG();
-		$datasource = $dbConfig->plugin['datasource'];
+		$datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
 		if ($datasource === 'Database/BcSqlite') {
 			$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		}

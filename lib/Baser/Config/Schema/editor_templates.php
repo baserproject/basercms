@@ -8,7 +8,7 @@ class EditorTemplatesSchema extends CakeSchema {
 
 	public $file = 'editor_templates.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

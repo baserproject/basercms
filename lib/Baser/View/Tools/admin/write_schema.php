@@ -20,12 +20,12 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.baser', 'コアテーブル名') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('Tool.baser', array(
+			<?php echo $this->BcForm->input('Tool.core', array(
 				'type' => 'select',
-				'options' => $this->BcForm->getControlSource('Tool.baser'),
+				'options' => $this->BcForm->getControlSource('Tool.core'),
 				'multiple' => true,
 				'style' => 'width:400px;height:250px')); ?>
-			<?php echo $this->BcForm->error('Tool.baser') ?>
+			<?php echo $this->BcForm->error('Tool.core') ?>
 		</td>
 	</tr>
 	<tr>

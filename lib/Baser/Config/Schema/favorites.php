@@ -8,7 +8,7 @@ class FavoritesSchema extends CakeSchema {
 
 	public $file = 'favorites.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

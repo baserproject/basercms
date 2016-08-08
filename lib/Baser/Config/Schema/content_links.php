@@ -3,7 +3,7 @@ class ContentLinksSchema extends CakeSchema {
 
 	public $file = 'content_links.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

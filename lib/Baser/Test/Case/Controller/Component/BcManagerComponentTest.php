@@ -275,7 +275,7 @@ class BcManagerComponentTest extends BaserTestCase {
 			$File->close();
 			rename($configPath . 'database.php.copy', $configPath . 'database.php');
 
-			$this->assertRegExp("/\\\$baser.*'datasource' => 'Database\/BcMysql'.*'host' => 'hoge'.*'port' => '0000'/s", $result, 'データベース設定ファイル[database.php]を正しく保存できません');
+			$this->assertRegExp("/\\\$default.*'datasource' => 'Database\/BcMysql'.*'host' => 'hoge'.*'port' => '0000'/s", $result, 'データベース設定ファイル[database.php]を正しく保存できません');
 
 		} else {
 			$this->markTestIncomplete('database.phpのバックアップに失敗したため、このテストをスキップします。');
@@ -718,7 +718,7 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testCheckDbConnection() {
 
 		// 使用しているDBのデータを取得し設定
-		$dbData = ConnectionManager::getDataSource('baser');
+		$dbData = ConnectionManager::getDataSource('default');
 
 		$config = array(
 			'database' => $dbData->config['database'],
@@ -798,7 +798,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		);
 
 		// まともな datasource
-		$dbData = ConnectionManager::getDataSource('baser');
+		$dbData = ConnectionManager::getDataSource('default');
 		$datasource = $dbData->config['datasource'];
 		switch ($datasource) {
 			case 'Database/BcPostgres' :

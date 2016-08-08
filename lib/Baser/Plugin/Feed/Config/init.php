@@ -13,7 +13,7 @@
  /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Feed', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('Feed');
 
 /**
  * フィードURLを更新

@@ -8,7 +8,7 @@ class PluginContentsSchema extends CakeSchema {
 
 	public $file = 'plugin_contents.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

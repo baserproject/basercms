@@ -19,19 +19,6 @@
 class Page extends AppModel {
 
 /**
- * クラス名
- * @var string
- */
-	public $name = 'Page';
-
-/**
- * データベース接続
- * 
- * @var string
- */
-	public $useDbConfig = 'baser';
-
-/**
  * ビヘイビア
  *
  * @var array

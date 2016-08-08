@@ -18,25 +18,11 @@
 class UserGroup extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- */
-	public $name = 'UserGroup';
-
-/**
  * ビヘイビア
  * 
  * @var array
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- */
-	public $useDbConfig = 'baser';
 
 /**
  * hasMany

@@ -406,8 +406,7 @@ function isInstalled() {
  * @param string $name
  * @return mixed DatabaseConfig Or false 
  */
-function getDbConfig($name = 'baser') {
-
+function getDbConfig($name = 'default') {
 	if (file_exists(APP . 'Config' . DS . 'database.php')) {
 		require_once APP . 'Config' . DS . 'database.php';
 		$dbConfig = new DATABASE_CONFIG();
@@ -431,7 +430,7 @@ function checkTmpFolders() {
 	$folder->create(TMP . 'logs', 0777);
 	$folder->create(TMP . 'sessions', 0777);
 	$folder->create(TMP . 'schemas', 0777);
-	$folder->create(TMP . 'schemas' . DS . 'baser', 0777);
+	$folder->create(TMP . 'schemas' . DS . 'core', 0777);
 	$folder->create(TMP . 'schemas' . DS . 'plugin', 0777);
 	$folder->create(CACHE, 0777);
 	$folder->create(CACHE . 'models', 0777);
@@ -694,7 +693,7 @@ function getEnablePlugins() {
 		} catch (Exception $ex) {
 			return array();
 		}
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
@@ -831,7 +830,7 @@ function p($var) {
  * @param string $dbConfigKeyName
  * @return string 
  */
-function getDbDriver($dbConfigKeyName = 'baser') {
+function getDbDriver($dbConfigKeyName = 'default') {
 
 	$db = ConnectionManager::getDataSource($dbConfigKeyName);
 	return $db->config['datasource'];
@@ -1032,4 +1031,38 @@ function checktime($hour, $min, $sec = null) {
 		}
 	}
 	return true;
+}
+
+function getTableList() {
+	$list = Cache::read('table_list', '_cake_core_');
+	if($list !== false) {
+		return $list;
+	}
+	$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+	$Folder = new Folder(BASER_CONFIGS . 'Schema');
+	$files = $Folder->read(true, true);
+	$list = [];
+	if($files[1]) {
+		foreach($files[1] as $file) {
+			$list['core'][] = $prefix . basename($file, '.php');
+		}
+	}
+	$plugins = CakePlugin::loaded();
+	foreach($plugins as $plugin) {
+		$path = null;
+		if(is_dir(APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema')){
+			$path = APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema';
+		} elseif(is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
+			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
+		}
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		if($files[1]) {
+			foreach($files[1] as $file) {
+				$list['plugin'][] = $prefix . basename($file, '.php');
+			}
+		}
+	}
+	Cache::write('table_list', $list, '_cake_core_');
+	return $list;
 }

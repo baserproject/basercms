@@ -206,7 +206,7 @@ class SiteConfigsController extends AppController {
 		
 		$this->pageTitle = '環境情報';
 		$datasources = array('csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
 		$datasource = preg_replace('/^bc/', '', strtolower($name));
 		$this->set('datasource', @$datasources[$datasource]);

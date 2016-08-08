@@ -18,25 +18,11 @@
 class Permission extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- */
-	public $name = 'Permission';
-
-/**
  * ビヘイビア
  * 
  * @var array
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- */
-	public $useDbConfig = 'baser';
 
 /**
  * belongsTo

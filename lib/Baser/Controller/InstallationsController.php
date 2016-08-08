@@ -86,7 +86,7 @@ class InstallationsController extends AppController {
 		if (file_exists(APP . 'Config' . DS . 'database.php')) {
 			ConnectionManager::sourceList();
 			$db = ConnectionManager::$config;
-			if ($db->baser['datasource'] != '') {
+			if ($db->default['datasource'] != '') {
 				$installed = 'complete';
 			} else {
 				$installed = 'half';
@@ -631,7 +631,7 @@ class InstallationsController extends AppController {
 
 			$dbConfig = $this->_readDbSetting();
 			if (!$dbConfig) {
-				$dbConfig = getDbConfig('baser');
+				$dbConfig = getDbConfig('default');
 			}
 
 			if (!$this->BcManager->reset($dbConfig)) {
@@ -661,7 +661,7 @@ class InstallationsController extends AppController {
 		if (!$dbConfig) {
 			$dbConfig = getDbConfig();
 		}
-		$this->BcManager->deleteAllTables($dbConfig);
+		$this->BcManager->deleteTables('default', $dbConfig);
 	}
 
 }

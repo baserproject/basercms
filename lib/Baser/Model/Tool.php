@@ -41,7 +41,7 @@ class Tool extends AppModel {
  */
 	public function getControlSource($field) {
 		// スキーマ用モデルリスト
-		$controlSources['connection'] = array('baser' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）');
+		$controlSources['connection'] = array('core' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）');
 		$controlSources = $this->getListModels($field);
 		if (isset($controlSources)) {
 			return $controlSources;
@@ -56,16 +56,16 @@ class Tool extends AppModel {
  * @param string $configKeyName データソース名
  * @return array
  */
-	public function getListModels($configKeyName = 'baser') {
-		$db = ConnectionManager::getDataSource($configKeyName);
+	public function getListModels($type = 'core') {
+		$db = ConnectionManager::getDataSource('default');
 		$listSources = $db->listSources();
 		if (!$listSources) {
 			return array();
 		}
+		$tableList = getTableList();
 		$sources = array();
 		foreach ($listSources as $source) {
-			if (preg_match("/^" . $db->config['prefix'] . "([^_].+)$/", $source, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
+			if(in_array($source, $tableList[$type])) {
 				$sources[] = $source;
 			}
 		}
@@ -83,14 +83,14 @@ class Tool extends AppModel {
 		if (isset($data['Tool'])) {
 			$data = $data['Tool'];
 		}
-		if (!$data['baser'] && !$data['plugin']) {
+		if (!$data['core'] && !$data['plugin']) {
 			return false;
 		}
 
 		$result = true;
 
-		if ($data['baser']) {
-			if (!$this->_writeSchema('baser', $data['baser'], $path)) {
+		if ($data['core']) {
+			if (!$this->_writeSchema('core', $data['core'], $path)) {
 				$result = false;
 			}
 		}
@@ -135,17 +135,14 @@ class Tool extends AppModel {
  * @return boolean
  */
 	protected function _writeSchema($field, $values, $path) {
-		$db = ConnectionManager::getDataSource($field);
+		$db = ConnectionManager::getDataSource('default');
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = array();
 		foreach ($tableList as $key => $table) {
-			if (preg_match('/^' . $prefix . '([a-z][a-z_]*?)$/is', $table, $maches)) {
-				$model = Inflector::camelize(Inflector::singularize($maches[1]));
-				$modelList[$key] = $model;
-			}
+			$model = Inflector::camelize(Inflector::singularize(str_replace($prefix, '', $table)));
+			$modelList[$key] = $model;
 		}
-
 		$result = true;
 		foreach ($values as $value) {
 			if (!$db->writeSchema(array('model' => $modelList[$value], 'path' => $path))) {

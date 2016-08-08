@@ -13,7 +13,7 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Mail', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('Mail');
 
 /**
  * メッセージテーブル構築

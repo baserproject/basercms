@@ -782,13 +782,13 @@ class MailMessage extends MailAppModel {
 	public function reconstructionAll() {
 
 		// メール受信テーブルの作成
-		$Content = ClassRegistry::init('Content');
-		$contents = $Content->find('all', ['conditions' => ['Content.type' => 'MailContent'], 'recursive' => -1]);
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$contents = $MailContent->find('all', ['recursive' => -1]);
 
 		$result = true;
 		foreach ($contents as $content) {
-			if ($this->createTable($content['Content']['entity_id'])) {
-				if (!$this->construction($content['Content']['entity_id'])) {
+			if ($this->createTable($content['MailContent']['id'])) {
+				if (!$this->construction($content['MailContent']['id'])) {
 					$result = false;
 				}
 			} else {
@@ -810,7 +810,7 @@ class MailMessage extends MailAppModel {
 	public function find($type = 'first', $query = array()) {
 		// テーブルを共用しているため、環境によってはデータ取得に失敗する。
 		// その原因のキャッシュメソッドをfalseに設定。
-		$db = ConnectionManager::getDataSource('plugin');
+		$db = ConnectionManager::getDataSource('default');
 		$db->cacheMethods = false;
 		$result = parent::find($type, $query);
 		$db->cacheMethods = true;

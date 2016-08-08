@@ -8,7 +8,7 @@ class PagesSchema extends CakeSchema {
 
 	public $file = 'pages.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

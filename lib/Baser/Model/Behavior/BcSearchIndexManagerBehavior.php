@@ -99,7 +99,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  * @return boolean
  */
 	public function updateSearchIndexMeta(Model $model) {
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		$contentCategories = array();
 		$contentTypes = array();
 		if ($db->config['datasource'] == 'Database/BcCsv') {

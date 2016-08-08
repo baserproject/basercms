@@ -16,20 +16,7 @@
  * @package			Uploader.Model
  */
 class UploaderCategory extends BcPluginAppModel {
-/**
- * クラス名
- *
- * @var		string
- * @access	public
- */
-	public $name = 'UploaderCategory';
-/**
- * DB接続設定
- *
- * @var		string
- * @access	public
- */
-	public $useDbConfig = 'plugin';
+
 /**
  * プラグイン名
  *

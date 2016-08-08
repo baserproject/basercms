@@ -16,20 +16,7 @@
  * @package		Uploader.Model
  */
 class UploaderFile extends BcPluginAppModel {
-/**
- * モデル名
- * 
- * @var     string
- * @access  public
- */
-	public $name = 'UploaderFile';
-/**
- * データソース
- *
- * @var		string
- * @access 	public
- */
-	public $useDbConfig = 'plugin';
+
 /**
  * プラグイン名
  *

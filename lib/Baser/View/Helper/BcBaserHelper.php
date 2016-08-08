@@ -29,6 +29,7 @@ App::uses('BcAuthComponent', 'Controller/Component');
  * @property BcArrayHelper $BcArray BcArrayヘルパ
  * @property BcPageHelper $BcPage BcPageヘルパ
  * @property BcContentsHelper $BcContents
+ * @property FlashHelper $Flash
  */
 class BcBaserHelper extends AppHelper {
 
@@ -723,7 +724,7 @@ class BcBaserHelper extends AppHelper {
 	public function flash($key = 'flash') {
 		if ($this->Session->check('Message.' . $key)) {
 			echo '<div id="MessageBox">';
-			echo $this->Flash->render($key);
+			echo $this->Flash->render($key, ['escape' => false]);
 			echo '</div>';
 		}
 	}

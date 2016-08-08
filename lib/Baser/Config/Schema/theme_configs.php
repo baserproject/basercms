@@ -4,7 +4,7 @@ class ThemeConfigsSchema extends CakeSchema {
 
 	public $file = 'theme_configs.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

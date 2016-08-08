@@ -16,19 +16,7 @@
  * @package			Uploader.Model
  */
 class UploaderConfig extends BcPluginAppModel {
-/**
- * モデル名
- * @var     string
- * @access  public
- */
-	public $name = 'UploaderConfig';
-/**
- * データソース
- *
- * @var		string
- * @access 	public
- */
-	public $useDbConfig = 'plugin';
+
 /**
  * プラグイン名
  *
@@ -36,6 +24,7 @@ class UploaderConfig extends BcPluginAppModel {
  * @access 	public
  */
 	public $plugin = 'Uploader';
+
 /**
  * バリデート
  *

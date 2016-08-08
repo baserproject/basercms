@@ -371,7 +371,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider tableExistsDataProvider
  */
 	public function testTableExists($tableName, $expect) {
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		$prefix = $db->config['prefix'];
 
 		$result = $this->BcApp->tableExists($prefix . $tableName);

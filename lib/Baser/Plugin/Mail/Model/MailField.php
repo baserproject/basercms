@@ -19,13 +19,6 @@
 class MailField extends MailAppModel {
 
 /**
- * クラス名
- *
- * @var string
- */
-	public $name = 'MailField';
-
-/**
  * ビヘイビア
  * 
  * @var array

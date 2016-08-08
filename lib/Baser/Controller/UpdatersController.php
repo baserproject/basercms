@@ -509,13 +509,8 @@ class UpdatersController extends AppController {
 		if (!$path) {
 			return false;
 		}
-		if ($plugin) {
-			$dbConfigName = 'plugin';
-		} else {
-			$dbConfigName = 'baser';
-		}
 		// アップデートの場合 drop field は実行しない
-		$result = $this->Updater->loadSchema($dbConfigName, $path, $filterTable, $filterType, array('updater.php'), false);
+		$result = $this->Updater->loadSchema('default', $path, $filterTable, $filterType, array('updater.php'), false);
 		clearAllCache();
 		return $result;
 	}

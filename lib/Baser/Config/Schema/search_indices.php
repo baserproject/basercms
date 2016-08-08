@@ -8,7 +8,7 @@ class SearchIndicesSchema extends CakeSchema {
 
 	public $file = 'search_indices.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

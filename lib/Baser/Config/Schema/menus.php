@@ -8,7 +8,7 @@ class MenusSchema extends CakeSchema {
 
 	public $file = 'menus.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

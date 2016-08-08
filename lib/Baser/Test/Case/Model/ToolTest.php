@@ -23,6 +23,7 @@ App::uses('Tool', 'Model');
  * }
  * 
  * @package Baser.Test.Case.Model
+ * @property Tool $Tool
  */
 class ToolTest extends BaserTestCase {
 
@@ -53,8 +54,8 @@ class ToolTest extends BaserTestCase {
 
 	public function getControlSourceDataProvider() {
 		return array(
-			array('baser', 'mysite_users', 'モデルリストを取得できません'),
-			array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
+			array('core', 'mysite_users', 'モデルリストを取得できません'),
+			array('plugin', 'mysite_blog_categories', 'モデルリストを取得できません'),
 		);
 	}
 
@@ -73,8 +74,8 @@ class ToolTest extends BaserTestCase {
 
 	public function getListModelsDataProvider() {
 		return array(
-			array('baser', 'mysite_users', 'モデルリストを取得できません'),
-			array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
+			array('core', 'mysite_users', 'モデルリストを取得できません'),
+			array('plugin', 'mysite_blog_categories', 'モデルリストを取得できません'),
 		);
 	}
 

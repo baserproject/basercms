@@ -222,7 +222,7 @@ class ThemesController extends AppController {
 		$result = true;
 
 		/* コアデータ */
-		if (!$this->BcManager->loadDefaultDataPattern('baser', null, $pattern, $theme, 'core', $excludes)) {
+		if (!$this->BcManager->loadDefaultDataPattern('default', null, $pattern, $theme, 'core', $excludes)) {
 			$result = false;
 			$this->log($dbDataPattern . " の初期データのロードに失敗しました。");
 		}
@@ -232,17 +232,17 @@ class ThemesController extends AppController {
 		$plugins = array_merge($corePlugins, BcUtil::getCurrentThemesPlugins());
 		
 		foreach ($plugins as $plugin) {
-			$this->BcManager->loadDefaultDataPattern('plugin', null, $pattern, $theme, $plugin, $excludes);
+			$this->BcManager->loadDefaultDataPattern('default', null, $pattern, $theme, $plugin, $excludes);
 		}
 
 		if (!$result) {
 			/* 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる */
-			if (!$this->BcManager->loadDefaultDataPattern('baser', null, 'default', 'core', 'core', $excludes)) {
+			if (!$this->BcManager->loadDefaultDataPattern('default', null, 'default', 'core', 'core', $excludes)) {
 				$this->log("コアの初期データのロードに失敗しました。");
 				$result = false;
 			}
 			foreach ($corePlugins as $corePlugin) {
-				if (!$this->BcManager->loadDefaultDataPattern('plugin', null, 'default', 'core', $corePlugin, $excludes)) {
+				if (!$this->BcManager->loadDefaultDataPattern('default', null, 'default', 'core', $corePlugin, $excludes)) {
 					$this->log("コアのプラグインの初期データのロードに失敗しました。");
 					$result = false;
 				}
@@ -257,7 +257,7 @@ class ThemesController extends AppController {
 		clearAllCache();
 		
 		// メール受信テーブルの作成
-		App::uses('Message', 'Mail.Model');
+		App::uses('MailMessage', 'Mail.Model');
 		$MailMessage = new MailMessage();
 		if (!$MailMessage->reconstructionAll()) {
 			$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
@@ -265,7 +265,7 @@ class ThemesController extends AppController {
 		}
 
 		clearAllCache();
-
+		ClassRegistry::flush();
 
 		if($currentTheme) {
 			$siteConfigs = array('SiteConfig' => array('theme' => $currentTheme));
@@ -307,15 +307,11 @@ class ThemesController extends AppController {
 			}
 		}
 
-		$Db = ConnectionManager::getDataSource('baser');
+		$Db = ConnectionManager::getDataSource('default');
 		if($Db->config['datasource'] == 'Database/BcPostgres') {
 			$Db->updateSequence();
 		}
-		$Db = ConnectionManager::getDataSource('plugin');
-		if($Db->config['datasource'] == 'Database/BcPostgres') {
-			$Db->updateSequence();
-		}
-		
+
 		// システム基本設定の更新
 		$siteConfigs = array('SiteConfig' => array(
 				'email' => $this->siteConfigs['email'],
@@ -621,14 +617,14 @@ class ThemesController extends AppController {
 		clearAllCache();
 
 		$excludes = array('plugins', 'dblogs', 'users', 'favorites');
-		$this->_writeCsv('baser', 'core', $tmpDir, $excludes);
+		$this->_writeCsv('core', $tmpDir, $excludes);
 
 		/* プラグインのCSVを生成 */
 		$plugins = CakePlugin::loaded();
 		foreach ($plugins as $plugin) {
 			$Folder->create($tmpDir . $plugin);
 			emptyFolder($tmpDir . $plugin);
-			$this->_writeCsv('plugin', $plugin, $tmpDir . $plugin . DS);
+			$this->_writeCsv($plugin, $tmpDir . $plugin . DS);
 		}
 
 		/* site_configsの編集 (email / google_analytics_id / version) */
@@ -661,7 +657,7 @@ class ThemesController extends AppController {
  * @param string $path
  * @return boolean
  */
-	function _writeCsv($configKeyName, $plugin, $path, $exclude = array()) {
+	function _writeCsv($plugin, $path, $exclude = array()) {
 		
 		$pluginTables = array();
 		if($plugin != 'core') {
@@ -679,33 +675,20 @@ class ThemesController extends AppController {
 		}
 		
 		$pluginKey = Inflector::underscore($plugin);
-		$db = ConnectionManager::getDataSource($configKeyName);
+		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
-
+		$tableList = getTableList();
 		$result = true;
 		foreach ($tables as $table) {
-			if (preg_match("/^" . $db->config['prefix'] . "([^_].+)$/", $table, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
-				$table = $matches[1];
-
+			if(($plugin == 'core' && in_array($table, $tableList['core'])) || ($plugin != 'core' && in_array($table, $tableList['plugin']))) {
+				$table = str_replace($db->config['prefix'], '', $table);
 				if (in_array($table, $exclude)) {
 					continue;
 				}
-
-				if ($pluginKey != 'core') {
-					// プラグインの場合は対象プラグイン名が先頭にない場合スキップ
-					//if (!preg_match("/^" . $pluginKey . "_([^_].+)$/", $table)) {
-					if(!in_array($table, $pluginTables)) {
-						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
-						if ($pluginKey != 'mail') {
-							continue;
-						} elseif (!preg_match("/messages$/", $table)) {
-							continue;
-						}
-					}
+				if ($pluginKey != 'core' && !in_array($table, $pluginTables)) {
+					continue;
 				}
-
 				if (!$db->writeCsv(array(
 						'path' => $path . $table . '.csv',
 						'encoding' => 'SJIS',

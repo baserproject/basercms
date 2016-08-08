@@ -20,24 +20,11 @@ App::uses('FeedAppModel', 'Feed.Model');
 class FeedConfig extends FeedAppModel {
 
 /**
- * クラス名
- *
- * @var string
- */
-	public $name = 'FeedConfig';
-
-/**
  * ビヘイビア
  * 
  * @var array
  */
 	public $actsAs = array('BcCache');
-
-/**
- * DB設定
- * @var string
- */
-	public $useDbConfig = 'plugin';
 
 /**
  * hasMany

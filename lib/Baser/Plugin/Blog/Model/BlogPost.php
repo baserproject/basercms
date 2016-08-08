@@ -372,8 +372,8 @@ class BlogPost extends BlogAppModel {
  * @return string
  */
 	protected function _getEntryDatesConditions($blogContentId, $year, $month) {
-		$dbConfig = new DATABASE_CONFIG();
-		$datasource = $dbConfig->plugin['datasource'];
+
+		$datasource = $this->getDataSource()->config['datasource'];
 
 		switch ($datasource) {
 			case 'Database/BcMysql':

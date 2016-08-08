@@ -3667,10 +3667,10 @@ class DboSource extends DataSource {
 
 		$tables = $this->listSources();
 		$models = array();
+		$tableList = getTableList();
 		foreach ($tables as $table) {
-			if (preg_match("/^" . $this->config['prefix'] . "([^_].+)$/", $table, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
-				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
+			if(in_array($table, $tableList['core']) || in_array($table, $tableList['plugin'])) {
+				$models[] = Inflector::classify(Inflector::singularize(str_replace($this->config['prefix'], '', $table)));
 			}
 		}
 		return $this->writeSchema(array('name' => $name, 'model' => $models, 'path' => $path, 'file' => $file));

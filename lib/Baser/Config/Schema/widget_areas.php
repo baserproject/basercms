@@ -8,7 +8,7 @@ class WidgetAreasSchema extends CakeSchema {
 
 	public $file = 'widget_areas.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

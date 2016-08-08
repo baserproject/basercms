@@ -3,7 +3,7 @@ class ContentsSchema extends CakeSchema {
 
 	public $file = 'contents.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

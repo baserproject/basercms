@@ -3,7 +3,7 @@ class ContentFoldersSchema extends CakeSchema {
 
 	public $file = 'content_folders.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

@@ -18,13 +18,6 @@
 class Favorite extends AppModel {
 
 /**
- * データベース接続
- *
- * @var string
- */
-	public $useDbConfig = 'baser';
-
-/**
  * クラス名
  *
  * @var string

@@ -16,13 +16,4 @@
  *
  * @package Baser.Model
  */
-class BcPluginAppModel extends AppModel {
-
-/**
- * The name of the DataSource connection that this Model uses
- *
- * @var		string
- */
-	public $useDbConfig = 'plugin';
-
-}
+class BcPluginAppModel extends AppModel {}

@@ -8,7 +8,7 @@ class DblogsSchema extends CakeSchema {
 
 	public $file = 'dblogs.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;
