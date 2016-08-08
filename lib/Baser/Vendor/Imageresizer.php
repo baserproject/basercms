@@ -14,9 +14,11 @@ class Imageresizer {
  * @param 	string 	保存先のパス
  * @param 	int 	幅
  * @param 	int		高さ
+ * @param boolean $trimming サムネイルとしてコピーするか
+ * @param boolean $sameRatio 画像比率を保持するか
  * @return 	boolean
  */
-	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false) {
+	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false, $sameRatio = false) {
 
 		// 元画像のサイズを取得
 		$imginfo = getimagesize($imgPath);
@@ -85,8 +87,10 @@ class Imageresizer {
 		}
 
 		if(!$trimming) {
-			$newWidth = $srcWidth / $rate;
-			$newHeight = $srcHeight / $rate;
+			if (!$sameRatio) {
+				$newWidth	 = $srcWidth / $rate;
+				$newHeight	 = $srcHeight / $rate;
+			}
 		}
 
 		// 新しい画像のベースを作成
@@ -112,7 +116,7 @@ class Imageresizer {
 		}
 
 		// 画像をコピーし、リサイズする
-		$newImage = $this->_copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming);
+		$newImage = $this->_copyAndResize($srcImage, $newImage, $srcWidth, $srcHeight, $newWidth, $newHeight, $trimming, $sameRatio);
 		imagedestroy($srcImage);
 
 		if($savePath && file_exists($savePath)) {
@@ -161,9 +165,29 @@ class Imageresizer {
  * @param 	int		元の高さ
  * @param 	int 	新しい幅
  * @param 	int		新しい高さ
+ * @param	boolean	サムネイルとしてコピーするか
+ * @param	boolean	画像比率を保持するか
  * @return 	Image	新しいイメージオブジェクト
  */
-	function _copyAndResize($srcImage,$newImage,$srcWidth,$srcHeight,$newWidth,$newHeight,$trimming = false) {
+	function _copyAndResize($srcImage, $newImage, $srcWidth, $srcHeight, $newWidth, $newHeight, $trimming = false, $sameRatio = false) {
+
+		if ($sameRatio) {
+			$widthRatio	 = $srcWidth / $newWidth; // 新しい画像サイズとの横幅比率
+			$heightRatio = $srcHeight / $newHeight; // 新しい画像サイズとの縦幅比率
+			if ($widthRatio < $heightRatio) {
+				// 横より縦の比率が大きい場合: 求める画像サイズより縦長: 縦の上下をカットする
+				$cut = floor((($heightRatio - $widthRatio) * $newHeight) / 2);
+				imagecopyresampled($newImage, $srcImage, 0, 0, 0, $cut, $newWidth, $newHeight, $srcWidth, $srcHeight - ($cut * 2));
+			} else if ($heightRatio < $widthRatio) {
+				// 縦より横の比率が大きい場合: 求める画像サイズより横長: 横の左右をカットする
+				$cut = floor((($widthRatio - $heightRatio) * $newWidth) / 2);
+				imagecopyresampled($newImage, $srcImage, 0, 0, $cut, 0, $newWidth, $newHeight, $srcWidth - ($cut * 2), $srcHeight);
+			} else {
+				// 縦横比が同じなら、そのまま縮小する
+				imagecopyresampled($newImage, $srcImage, 0, 0, 0, 0, $newWidth, $newHeight, $srcWidth, $srcHeight);
+			}
+			return $newImage;
+		}
 
 		if($trimming) {
 			if($srcWidth > $srcHeight) {
