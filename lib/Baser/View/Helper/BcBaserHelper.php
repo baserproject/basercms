@@ -1480,20 +1480,6 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * サイトマップを取得する
- * 
- * @return array
- */
-	public function getSitemap($id = null, $level = null) {
-		if(!$id) {
-			$Content = ClassRegistry::init('Content');
-			$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
-			$id = $siteRoot['Content']['id'];
-		}	
-		return $this->BcContents->getTree($id, $level);
-	}
-
-/**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
  * @param string|int|float $expire キャッシュの有効期間（初期値 : null） ※ 指定しない場合は、baserCMSコアのキャッシュ設定値
@@ -1646,10 +1632,10 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * サイトマップを出力する
+ * メニューを出力する
  * 
  * ログインしていない場合はキャッシュする
- * sitemap エレメントで、HTMLカスタマイズ可能
+ * contents_menu エレメントで、HTMLカスタマイズ可能
  *
  * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
  *	- 0 : 仕様確認要
@@ -1657,8 +1643,16 @@ class BcBaserHelper extends AppHelper {
  * @param string $recursive 取得する階層
  * @return void ページ一覧
  */
-	public function sitemap($id = null, $level = null) {
-		$params = array('tree' => $this->getSitemap($id, $level));
+	public function contentsMenu($id = null, $level = null, $currentId = null) {
+		if(!$id) {
+			$Content = ClassRegistry::init('Content');
+			$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+			$id = $siteRoot['Content']['id'];
+		}
+		$params = [
+			'tree' => $this->BcContents->getTree($id, $level),
+			'currentId' => $currentId
+		];
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$params = array_merge($params, [
 				'cache' => [
@@ -1666,7 +1660,17 @@ class BcBaserHelper extends AppHelper {
 					'key' => $id]]
 			);
 		}
-		$this->element('sitemap', $params);
+		$this->element('contents_menu', $params);
+	}
+
+/**
+ * サイトマップを出力する
+ *
+ * ログインしていない場合はキャッシュする
+ * contents_menu エレメントで、HTMLカスタマイズ可能
+ */
+	public function sitemap() {
+		$this->contentsMenu();
 	}
 
 /**

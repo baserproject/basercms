@@ -17,19 +17,20 @@
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
  */
 
-if (!isset($this->BcPage)) {
-	return;
-}
-$pageCategory = $this->BcPage->getCategory();
-if (!$pageCategory) {
-	return;
+if($this->request->params['Content']['type'] == 'ContentFoler') {
+	$parentId = $this->request->params['Content']['id'];
+	$title = $this->request->params['Content']['title'];
+} else {
+	$parent = $this->BcContents->getParent($this->request->params['Content']['id']);
+	$parentId = $parent['Content']['id'];
+	$title = $parent['Content']['title'];
 }
 ?>
 
 
 <div class="widget widget-local-navi widget-local-navi-<?php echo $id ?>">
 	<?php if ($use_title): ?>
-		<h2><?php echo $pageCategory['title'] ?></h2>
+		<h2><?php echo h($title) ?></h2>
 	<?php endif ?>
-	<?php $this->BcBaser->element('page_list', array('categoryId' => $pageCategory['id'])) ?>
+	<?php $this->BcBaser->contentsMenu($parentId, 1, $this->request->params['Content']['id']) ?>
 </div>

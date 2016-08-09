@@ -201,4 +201,16 @@ class BcContentsHelper extends AppHelper {
 			'recursive' => 0
 		]);
 	}
+
+/**
+ * 親コンテンツを取得する
+ * 
+ * @param $contentId
+ * @return mixed
+ */
+	public function getParent($contentId) {
+		$Content = ClassRegistry::init('Content');
+		return $Content->getParentNode($contentId);
+	}
+	
 }

@@ -26,11 +26,17 @@ if (!isset($level)) {
 
 
 <?php if (isset($tree)): ?>
-<ul class="sitemap ul-level-<?php echo $level ?>">
+<ul class="menu ul-level-<?php echo $level ?>">
 	<?php if (isset($tree)): ?>
 		<?php foreach ($tree as $content): ?>
 			<?php if ($content['Content']['title']): ?>
-				<li class="sitemap-content li-level-<?php echo $level ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?></li>
+				<?php
+					$liClass = 'menu-content li-level-' . $level;
+					if($content['Content']['id'] == $currentId) {
+						$liClass .= ' current';
+					}
+				?>
+				<li class="<?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?></li>
 			<?php endif ?>
 			<?php if (!empty($content['children'])): ?>
 				<?php $this->BcBaser->element('sitemap', array('tree' => $content['children'], 'level' => $level + 1)) ?>
