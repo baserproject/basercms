@@ -190,7 +190,7 @@ class BlogContent extends BlogAppModel {
 		return ['SearchIndex' => [
 			'type'	=> 'ブログ',
 			'model_id'	=> (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
-			'category'	=> '',
+			'content_id'=> $content['id'],
 			'title'		=> $content['title'],
 			'detail'	=> $blogContent['description'],
 			'url'		=> $content['url'],

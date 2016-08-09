@@ -237,30 +237,12 @@ class Page extends AppModel {
 		if (!$content['title']) {
 			$content['title'] = Inflector::camelize($content['name']);
 		}
-
-		// モバイル未対応の為除外
-		// インストール時取得できないのでハードコーディング
-		// TODO 検討
-//		$excludeIds = array_merge($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
-//		if (!$excludeIds) {
-//			$excludeIds = array(1, 2);
-//		}
-//		if (in_array($content['site_id'], $excludeIds)) {
-//			return array();
-//		}
 		
 		// $this->idに値が入ってない場合もあるので
 		if (!empty($page['id'])) {
 			$mobileId = $page['id'];
 		} else {
 			$mobileId = $this->id;
-		}
-		$category = '';
-		if (!empty($page['page_category_id'])) {
-			$categoryPath = $this->PageCategory->getPath($page['page_category_id'], array('title'));
-			if ($categoryPath) {
-				$category = $categoryPath[0]['PageCategory']['title'];
-			}
 		}
 		$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
 		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('path' => $parameters, 'return'));
@@ -273,7 +255,7 @@ class Page extends AppModel {
 			'model_id'	=> $page['id'],
 			'type'		=> 'ページ',
 			'mobile_id' => $mobileId,
-			'category'	=> $category,
+			'content_id'=> $content['id'],
 			'title'		=> $content['title'],
 			'detail'	=> $description . ' ' . $detail,
 			'url'		=> $content['url'],

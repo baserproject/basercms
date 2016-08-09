@@ -585,24 +585,20 @@ class BlogPost extends BlogAppModel {
 		if (isset($data['BlogPost'])) {
 			$data = $data['BlogPost'];
 		}
-
+		$content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_category_id']);
 		$_data = array();
 		$_data['SearchIndex']['type'] = 'ブログ';
 		$_data['SearchIndex']['model_id'] = $this->id;
-		$_data['SearchIndex']['category'] = '';
+		$_data['SearchIndex']['content_filter_id'] = '';
 		if (!empty($data['blog_category_id'])) {
-			$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
-			$categoryPath = $BlogCategory->getPath($data['blog_category_id'], array('title'));
-			if ($categoryPath) {
-				$_data['SearchIndex']['category'] = $categoryPath[0]['BlogCategory']['title'];
-			}
+			$_data['SearchIndex']['content_filter_id'] = $data['blog_category_id'];
 		}
+		$_data['SearchIndex']['content_id'] = $content['Content']['id'];
 		$_data['SearchIndex']['title'] = $data['name'];
 		$_data['SearchIndex']['detail'] = $data['content'] . ' ' . $data['detail'];
 		$PluginContent = ClassRegistry::init('PluginContent');
-		$_data['SearchIndex']['url'] = '/' . $PluginContent->field('name', array('PluginContent.content_id' => $data['blog_content_id'], 'plugin' => 'blog')) . '/archives/' . $data['no'];
+		$_data['SearchIndex']['url'] = '/' . $content['Content']['url'] . '/archives/' . $data['no'];
 		$_data['SearchIndex']['status'] = $this->allowPublish($data);
-
 		return $_data;
 	}
 

@@ -54,7 +54,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 		$before = false;
 		if (!empty($data['SearchIndex']['model_id'])) {
 			$before = $this->SearchIndex->find('first', array(
-				'fields' => array('SearchIndex.id', 'SearchIndex.category'),
+				'fields' => array('SearchIndex.id', 'SearchIndex.content_id'),
 				'conditions' => array(
 					'SearchIndex.model' => $data['SearchIndex']['model'],
 					'SearchIndex.model_id' => $data['SearchIndex']['model_id']
@@ -73,7 +73,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 
 		// カテゴリを site_configsに保存
 		if ($result) {
-			return $this->updateSearchIndexMeta($model, $data['SearchIndex']['category']);
+			return $this->updateSearchIndexMeta($model);
 		}
 
 		return $result;
@@ -100,35 +100,13 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  */
 	public function updateSearchIndexMeta(Model $model) {
 		$db = ConnectionManager::getDataSource('default');
-		$contentCategories = array();
 		$contentTypes = array();
-		if ($db->config['datasource'] == 'Database/BcCsv') {
-			// CSVの場合GROUP BYが利用できない（baserCMS 2.0.2）
-			$contents = $this->SearchIndex->find('all', array('conditions' => array('SearchIndex.status' => true)));
-			foreach ($contents as $content) {
-				if ($content['SearchIndex']['category'] && !in_array($content['SearchIndex']['category'], $contentCategories)) {
-					$contentCategories[$content['SearchIndex']['category']] = $content['SearchIndex']['category'];
-				}
-				if ($content['SearchIndex']['type'] && !in_array($content['SearchIndex']['type'], $contentTypes)) {
-					$contentTypes[$content['SearchIndex']['type']] = $content['SearchIndex']['type'];
-				}
-			}
-		} else {
-			$searchIndexes = $this->SearchIndex->find('all', array('fields' => array('SearchIndex.category'), 'group' => array('SearchIndex.category'), 'conditions' => array('SearchIndex.status' => true)));
-			foreach ($searchIndexes as $searchIndex) {
-				if ($searchIndex['SearchIndex']['category']) {
-					$contentCategories[$searchIndex['SearchIndex']['category']] = $searchIndex['SearchIndex']['category'];
-				}
-			}
-			$searchIndexes = $this->SearchIndex->find('all', array('fields' => array('SearchIndex.type'), 'group' => array('SearchIndex.type'), 'conditions' => array('SearchIndex.status' => true)));
-			foreach ($searchIndexes as $searchIndex) {
-				if ($searchIndex['SearchIndex']['type']) {
-					$contentTypes[$searchIndex['SearchIndex']['type']] = $searchIndex['SearchIndex']['type'];
-				}
+		$searchIndexes = $this->SearchIndex->find('all', array('fields' => array('SearchIndex.type'), 'group' => array('SearchIndex.type'), 'conditions' => array('SearchIndex.status' => true)));
+		foreach ($searchIndexes as $searchIndex) {
+			if ($searchIndex['SearchIndex']['type']) {
+				$contentTypes[$searchIndex['SearchIndex']['type']] = $searchIndex['SearchIndex']['type'];
 			}
 		}
-
-		$siteConfigs['SiteConfig']['content_categories'] = BcUtil::serialize($contentCategories);
 		$siteConfigs['SiteConfig']['content_types'] = BcUtil::serialize($contentTypes);
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		return $SiteConfig->saveKeyValue($siteConfigs);
