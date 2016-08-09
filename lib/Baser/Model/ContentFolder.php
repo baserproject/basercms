@@ -52,17 +52,56 @@ class ContentFolder extends AppModel {
 		}
 	}
 
+/**
+ * フォルダのテンプレートリストを取得する
+ *
+ * @param $contentId
+ * @param $theme
+ * @return array
+ */
 	public function getFolderTemplateList($contentId, $theme) {
 		$folderTemplates = BcUtil::getTemplateList('ContentFolders', '', $theme);
 		if($contentId != 1) {
-			$parentTemplate = $this->Content->getParentTemplate($contentId);
+			$parentTemplate = $this->getParentTemplate($contentId, 'folder');
 			$searchKey = array_search($parentTemplate, $folderTemplates);
 			if($searchKey !== false) {
-				unset($pageTemplates[$searchKey]);
+				unset($folderTemplates[$searchKey]);
 			}
 			array_unshift($folderTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
 		}
 		return $folderTemplates;
+	}
+
+/**
+ * 親のテンプレートを取得する
+ *
+ * @param int $id
+ * @param string $type folder|page
+ */
+	public function getParentTemplate($id, $type) {
+		$this->Content->bindModel(
+			array('belongsTo' => array(
+					'ContentFolder' => array(
+						'className' => 'ContentFolder',
+						'foreignKey' => 'entity_id'
+					)
+				)
+			), false
+		);
+		$contents = $this->Content->getPath($id, null, 0);
+		$contents = array_reverse($contents);
+		unset($contents[0]);
+		$parentTemplates = Hash::extract($contents, '{n}.ContentFolder.' . $type . '_template');
+		$parentTemplate = '';
+		foreach($parentTemplates as $parentTemplate) {
+			if($parentTemplate) {
+				break;
+			}
+		}
+		if(!$parentTemplate) {
+			$parentTemplate = 'default';
+		}
+		return $parentTemplate;
 	}
 
 }

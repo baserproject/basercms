@@ -1093,17 +1093,7 @@ class Content extends AppModel {
  * @param $id
  */
 	public function getParentTemplate($id) {
-		$this->bindModel(
-			array('belongsTo' => array(
-					'ContentFolder' => array(
-						'className' => 'ContentFolder',
-						'foreignKey' => 'entity_id'
-					)
-				)
-			), false
-		);
-		$contents = $this->getPath($id, null, 3);
-		$this->bindModel(array('belongsTo' => array('ContentFolder')));
+		$contents = $this->getPath($id, null, -1);
 		$contents = array_reverse($contents);
 		unset($contents[0]);
 		$parentTemplates = Hash::extract($contents, '{n}.Content.layout_template');

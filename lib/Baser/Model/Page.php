@@ -849,7 +849,8 @@ class Page extends AppModel {
 	public function getPageTemplateList($contentId, $theme) {
 		$pageTemplates = BcUtil::getTemplateList('Pages/templates', '', $theme);
 		if($contentId != 1) {
-			$parentTemplate = $this->getParentPageTemplate($contentId);
+			$ContentFolder = ClassRegistry::init('ContentFolder');
+			$parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
 			$searchKey = array_search($parentTemplate, $pageTemplates);
 			if ($searchKey !== false) {
 				unset($pageTemplates[$searchKey]);

@@ -45,11 +45,11 @@ $this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.page_template', '固定ページテンプレート') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('ContentFolder.page_template', array('type' => 'select', 'options' => $pageTemplateList)) ?>
+				<?php echo $this->BcForm->input('Page.page_template', array('type' => 'select', 'options' => $pageTemplateList)) ?>
 				<div class="helptext">
 					テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。
 				</div>
-				<?php echo $this->BcForm->error('Page.code') ?>
+				<?php echo $this->BcForm->error('Page.page_template') ?>
 			</td>
 		</tr>
 		<tr>
