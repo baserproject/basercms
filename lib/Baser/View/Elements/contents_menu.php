@@ -42,7 +42,7 @@ if(!isset($currentId)) {
 				<li class="<?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?></li>
 			<?php endif ?>
 			<?php if (!empty($content['children'])): ?>
-				<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1)) ?>
+				<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
 			<?php endif ?>
 		<?php endforeach; ?>
 	<?php endif ?>
