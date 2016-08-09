@@ -594,9 +594,9 @@ class BlogPost extends BlogAppModel {
 			$_data['SearchIndex']['content_filter_id'] = $data['blog_category_id'];
 		}
 		$_data['SearchIndex']['content_id'] = $content['Content']['id'];
+		$_data['SearchIndex']['site_id'] = $content['Content']['site_id'];
 		$_data['SearchIndex']['title'] = $data['name'];
 		$_data['SearchIndex']['detail'] = $data['content'] . ' ' . $data['detail'];
-		$PluginContent = ClassRegistry::init('PluginContent');
 		$_data['SearchIndex']['url'] = '/' . $content['Content']['url'] . '/archives/' . $data['no'];
 		$_data['SearchIndex']['status'] = $this->allowPublish($data);
 		return $_data;

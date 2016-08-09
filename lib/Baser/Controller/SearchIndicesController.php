@@ -16,6 +16,8 @@ App::uses('HttpSocket', 'Core.Network/Http');
  * 検索インデックスコントローラー
  *
  * @package	Baser.Controller
+ * @property Content $Content
+ * @property Site $Site
  */
 class SearchIndicesController extends AppController {
 
@@ -31,7 +33,7 @@ class SearchIndicesController extends AppController {
  *
  * @var array
  */
-	public $uses = array('SearchIndex', 'Page');
+	public $uses = array('SearchIndex', 'Page', 'Site', 'Content');
 
 /**
  * コンポーネント
@@ -145,26 +147,29 @@ class SearchIndicesController extends AppController {
 	protected function _createSearchConditions($data) {
 		$conditions = array('SearchIndex.status' => true);
 		$query = '';
+		if (!empty($data['SearchIndex']['q'])) {
+			$query = $data['SearchIndex']['q'];
+		}
+		if (!empty($data['SearchIndex']['cf'])) {
+			$data['SearchIndex']['content_filter_id'] = $data['SearchIndex']['cf'];
+		}
+		if (!empty($data['SearchIndex']['m'])) {
+			$data['SearchIndex']['model'] = $data['SearchIndex']['m'];
+		}
+		if (!empty($data['SearchIndex']['f'])) {
+			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['f']], 'recursive' => -1]);
+			$data['SearchIndex']['SearchIndex.rght <'] = $content['Content']['rght'];
+			$data['SearchIndex']['SearchIndex.lft >'] = $content['Content']['lft'];
+		}
+		
 		unset($data['SearchIndex']['key']);
 		unset($data['SearchIndex']['fields']);
 		unset($data['SearchIndex']['_Token']);
-		if (isset($data['SearchIndex']['q'])) {
-			$query = $data['SearchIndex']['q'];
-			unset($data['SearchIndex']['q']);
-		}
-		if (isset($data['SearchIndex']['c'])) {
-			if ($data['SearchIndex']['c']) {
-				$data['SearchIndex']['category'] = $data['SearchIndex']['c'];
-			}
-			unset($data['SearchIndex']['c']);
-		}
-		if (isset($data['SearchIndex']['m'])) {
-			if ($data['SearchIndex']['m']) {
-				$data['SearchIndex']['model'] = $data['SearchIndex']['m'];
-			}
-			unset($data['SearchIndex']['m']);
-		}
-
+		unset($data['SearchIndex']['q']);
+		unset($data['SearchIndex']['cf']);
+		unset($data['SearchIndex']['m']);
+		unset($data['SearchIndex']['f']);
+		
 		$conditions = am($conditions, $this->postConditions($data));
 
 		if ($query) {
@@ -187,7 +192,10 @@ class SearchIndicesController extends AppController {
 		$this->pageTitle = '検索インデックス一覧';
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
+		$default = [
+			'named' => ['num' => $this->siteConfigs['admin_list_num']],
+			'SearchIndex' => ['site_id' => 1]
+		];
 		$this->setViewConditions('SearchIndex', array('default' => $default));
 		$conditions = $this->_createAdminIndexConditions($this->request->data);
 		$this->paginate = array(
@@ -198,11 +206,12 @@ class SearchIndicesController extends AppController {
 		);
 		$this->set('datas', $this->paginate('SearchIndex'));
 
-		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
+		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
-
+		$this->set('folders', $this->Content->getContentFolderList($this->passedArgs['site_id'], ['conditions' => ['Content.site_root' => false]]));
+		$this->set('sites', $this->Site->find('list', ['fields' => ['id', 'display_name']]));
 		$this->search = 'search_indices_index';
 		$this->help = 'search_indices_index';
 	}
@@ -389,15 +398,17 @@ class SearchIndicesController extends AppController {
 		$conditions = array();
 
 		$type = $data['SearchIndex']['type'];
-		$category = $data['SearchIndex']['category'];
 		$status = $data['SearchIndex']['status'];
 		$keyword = $data['SearchIndex']['keyword'];
-
+		$folderId = $data['SearchIndex']['folder_id'];
+		$siteId = $data['SearchIndex']['site_id'];
 		unset($data['SearchIndex']['type']);
-		unset($data['SearchIndex']['category']);
 		unset($data['SearchIndex']['status']);
 		unset($data['SearchIndex']['keyword']);
+		unset($data['SearchIndex']['folder_id']);
+		unset($data['SearchIndex']['site_id']);
 		unset($data['SearchIndex']['open']);
+		unset($data['ListTool']);
 		if (!$data['SearchIndex']['priority']) {
 			unset($data['SearchIndex']['priority']);
 		}
@@ -406,20 +417,21 @@ class SearchIndicesController extends AppController {
 				unset($data['SearchIndex'][$key]);
 			}
 		}
-
 		if ($data['SearchIndex']) {
 			$conditions = $this->postConditions($data);
 		}
-
 		if ($type) {
 			$conditions['SearchIndex.type'] = $type;
 		}
-		if ($category) {
-			if ($category == 'none') {
-				$conditions['SearchIndex.category'] = '';
-			} else {
-				$conditions['SearchIndex.category'] = $category;
-			}
+		if($siteId) {
+			$conditions['SearchIndex.site_id'] = $siteId;
+		} else {
+			$conditions['SearchIndex.site_id'] = 0;
+		}
+		if ($folderId) {
+			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $folderId], 'recursive' => -1]);
+			$conditions['SearchIndex.rght <'] = $content['Content']['rght'];
+			$conditions['SearchIndex.lft >'] = $content['Content']['lft'];
 		}
 		if ($status != '') {
 			$conditions['SearchIndex.status'] = $status;

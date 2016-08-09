@@ -13,7 +13,6 @@
  */
 $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
 	'0.6' => '0.6', '0.7' => '0.7', '0.8' => '0.8', '0.9' => '0.9', '1.0' => '1.0');
-$categories = am(array('none' => 'カテゴリなし'), BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']));
 $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 ?>
 
@@ -21,7 +20,8 @@ $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 <?php echo $this->BcForm->hidden('SearchIndex.open', array('value' => true)) ?>
 <p>
 	<span><?php echo $this->BcForm->label('SearchIndex.type', 'タイプ') ?> <?php echo $this->BcForm->input('SearchIndex.type', array('type' => 'select', 'options' => $types, 'empty' => '指定なし')) ?></span>
-	<span><?php echo $this->BcForm->label('SearchIndex.category', 'カテゴリー') ?> <?php echo $this->BcForm->input('SearchIndex.category', array('type' => 'select', 'options' => $categories, 'empty' => '指定なし')) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.site_id', 'サブサイト') ?> <?php echo $this->BcForm->input('SearchIndex.site_id', array('type' => 'select', 'options' => $sites, 'empty' => 'HOME')) ?></span>
+	<span><?php echo $this->BcForm->label('SearchIndex.folder_id', 'フォルダ') ?> <?php echo $this->BcForm->input('SearchIndex.folder_id', array('type' => 'select', 'options' => $folders, 'empty' => '指定なし')) ?></span>
 	<span><?php echo $this->BcForm->label('SearchIndex.keyword', 'キーワード') ?> <?php echo $this->BcForm->input('SearchIndex.keyword', array('type' => 'text', 'size' => '30')) ?></span>
 	<span><?php echo $this->BcForm->label('SearchIndex.status', '公開状態') ?> 
 		<?php echo $this->BcForm->input('SearchIndex.status', array('type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　

@@ -38,9 +38,10 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('id' => 'PriorityAjaxLoader' . $data['SearchIndex']['id'], 'style' => "vertical-align:middle;display:none")) ?>
 	</td>
 	<td><?php echo $data['SearchIndex']['id'] ?></td>
-	<td style="width:15%"><?php echo $data['SearchIndex']['type'] ?><br /><?php echo $data['SearchIndex']['category'] ?></td>
 	<td style="width:15%">
-		<?php echo $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], '設定なし'), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), array('target' => '_blank')) ?></td>
+		<?php echo $data['SearchIndex']['type'] ?><br />
+		<?php echo $this->BcBaser->link($this->BcText->noValue($data['SearchIndex']['title'], '設定なし'), siteUrl() . preg_replace('/^\//', '', $data['SearchIndex']['url']), array('target' => '_blank')) ?>
+	</td>
 	<td><?php echo $this->Text->truncate($data['SearchIndex']['detail'], 50) ?></td>
 	<td style="width:10%;text-align:center">
 		<?php echo $this->BcText->booleanMark($data['SearchIndex']['status']); ?><br />

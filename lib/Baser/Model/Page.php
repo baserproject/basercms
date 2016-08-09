@@ -256,6 +256,7 @@ class Page extends AppModel {
 			'type'		=> 'ページ',
 			'mobile_id' => $mobileId,
 			'content_id'=> $content['id'],
+			'site_id'=> $content['site_id'],
 			'title'		=> $content['title'],
 			'detail'	=> $description . ' ' . $detail,
 			'url'		=> $content['url'],

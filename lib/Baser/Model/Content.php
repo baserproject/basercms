@@ -679,6 +679,9 @@ class Content extends AppModel {
 		if($options['excludeId']) {
 			$conditions['id <>'] = $options['excludeId'];
 		}
+		if(!empty($options['conditions'])) {
+			$conditions = array_merge($conditions, $options['conditions']);
+		}
 		$folders = $this->generateTreeList($conditions);
 		if($folders) {
 			return $this->convertTreeList($folders);;

@@ -345,28 +345,6 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 /**
- * テンプレートを取得
- * セレクトボックスのソースとして利用
- * 
- * @param string $expected 期待値
- * @param string $message テスト失敗時、表示するメッセージ
- * @dataProvider getTemplatesDataProvider
- */
-	public function testGetTemplates($type, $agent, $expected, $message = null) {
-		$result = $this->BcPage->getTemplates($type, $agent);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function getTemplatesDataProvider() {
-		return array(
-			array('layout', '', array('default' => 'default','ajax' => 'ajax','empty' => 'empty','error' => 'error'), 'テンプレートを正しく取得できません'),
-			array('content', '', array('default' => 'default'), 'テンプレートを正しく取得できません'),
-			array('layout', 'mobile', array('default' => 'default'), 'テンプレートを正しく取得できません'),
-			array('content', 'mobile', array('default' => 'default'), 'テンプレートを正しく取得できません'),
-		);
-	}
-
-/**
  * treeList
  */
 	public function testTreeList() {

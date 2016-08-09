@@ -199,9 +199,10 @@ class MailContent extends MailAppModel {
 		$mailContent = $data['MailContent'];
 		$content = $data['Content'];
 		return ['SearchIndex' => [
-			'type'	=> 'メール',
+			'type'		=> 'メール',
 			'model_id'	=> (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
 			'content_id'=> $content['id'],
+			'site_id'	=> $content['site_id'],
 			'title'		=> $content['title'],
 			'detail'	=> $mailContent['description'],
 			'url'		=> $content['url'],

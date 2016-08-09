@@ -191,6 +191,7 @@ class BlogContent extends BlogAppModel {
 			'type'	=> 'ブログ',
 			'model_id'	=> (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
 			'content_id'=> $content['id'],
+			'site_id'=> $content['site_id'],
 			'title'		=> $content['title'],
 			'detail'	=> $blogContent['description'],
 			'url'		=> $content['url'],

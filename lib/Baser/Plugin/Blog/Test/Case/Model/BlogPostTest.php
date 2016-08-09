@@ -344,6 +344,7 @@ class BlogPostTest extends BaserTestCase {
 			'exclude_search' => 0,
 			'name' => 'test-name',
 			'blog_content_id' => 1,
+			'blog_category_id' => null,
 			'posts_date' => '2020-01-27 12:57:59',
 			'content' => 'test-content',
 			'detail' => 'test-detail',
