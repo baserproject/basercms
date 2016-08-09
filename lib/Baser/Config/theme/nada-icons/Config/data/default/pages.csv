@@ -152,7 +152,7 @@
 
 <p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","","","","2016-07-29 18:15:29","2016-07-29 18:15:14"
 "5","<h2 class=""contents-head"">サイトマップ</h2>
-<div class=""section"">
+<div class=""section sitemap"">
 <?php $this->BcBaser->sitemap() ?>
 </div>","","","","2016-07-29 18:16:20","2016-07-29 18:15:50"
 "6","<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
@@ -325,6 +325,6 @@
 
 <p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","","","","2016-07-29 18:21:48","2016-07-29 18:20:50"
 "11","<h2 class=""contents-head"">サイトマップ</h2>
-<div class=""section"">
+<div class=""section sitemap"">
 <?php $this->BcBaser->sitemap() ?>
 </div>","","","","2016-07-29 18:21:31","2016-07-29 18:21:04"

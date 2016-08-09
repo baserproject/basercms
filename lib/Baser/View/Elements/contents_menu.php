@@ -16,11 +16,14 @@
 
 /**
  * カテゴリの階層構造を表現する為、再帰呼び出しを行う
- * $this->BcBaser->sitemap() で呼び出す
+ * $this->BcBaser->contentsMenu() で呼び出す
  */
 		 
 if (!isset($level)) {
 	$level = 1;
+}
+if(!isset($currentId)) {
+	$currentId = null;
 }
 ?>
 
@@ -39,7 +42,7 @@ if (!isset($level)) {
 				<li class="<?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?></li>
 			<?php endif ?>
 			<?php if (!empty($content['children'])): ?>
-				<?php $this->BcBaser->element('sitemap', array('tree' => $content['children'], 'level' => $level + 1)) ?>
+				<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1)) ?>
 			<?php endif ?>
 		<?php endforeach; ?>
 	<?php endif ?>

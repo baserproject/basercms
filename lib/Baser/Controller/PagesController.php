@@ -342,15 +342,15 @@ class PagesController extends AppController {
 			}
 		}
 		
-		// TODO コンテンツテンプレート未実装
-		$template = '';
+		$page = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']], 'recursive' => -1]);
+		$template = $page['Page']['page_template'];
 		$pagePath = implode('/', $path);
-		if ($template) {
-			$this->set('pagePath', $pagePath);
-		} else {
-			$template = $pagePath;
+		if (!$template) {
+			$ContentFolder = ClassRegistry::init('ContentFolder');
+			$template = $ContentFolder->getParentTemplate($this->request->params['Content']['id'], 'page');
 		}
-
+		$this->set('pagePath', $pagePath);
+		
 		// <<<
 		
 		try {
@@ -358,7 +358,7 @@ class PagesController extends AppController {
 			// >>>
 			//$this->render(implode('/', $path));
 			// ---
-			$this->render($template);
+			$this->render('templates/' . $template);
 			if($previewCreated) {
 				@unlink(TMP . 'pages_preview_' . $uuid . $this->ext);
 			}

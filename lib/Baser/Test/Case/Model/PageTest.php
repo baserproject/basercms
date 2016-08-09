@@ -35,6 +35,7 @@ class PageTest extends BaserTestCase {
 		'baser.Default.User',
 		'baser.Default.Site',
 		'baser.Default.Content',
+		'baser.Default.ContentFolder',
 	);
 
 /**

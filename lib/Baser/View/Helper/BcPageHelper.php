@@ -267,7 +267,8 @@ class BcPageHelper extends Helper {
 	protected function _getPageByNextOrPrev($lft, $parentId, $type, $overCategory = false) {
 		$Content = ClassRegistry::init('Content');
 		$conditions = array_merge($Content->getConditionAllowPublish(), [
-			//'Content.type <>' => 'ContentFolder'
+			'Content.type <>' => 'ContentFolder',
+			'Content.site_id' => $this->request->params['Content']['site_id']
 		]);
 		if ($overCategory !== true) {
 			$conditions['Content.parent_id'] =  $parentId;
@@ -297,7 +298,7 @@ class BcPageHelper extends Helper {
 		if($previewTemplate) {
 			$path = $previewTemplate;	
 		} else {
-			$path = getViewPath() . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->ext;
+			$path = APP . 'View' . DS . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->ext;
 		}
 		echo $this->_View->evaluate($path, $this->_View->viewVars);
 	}

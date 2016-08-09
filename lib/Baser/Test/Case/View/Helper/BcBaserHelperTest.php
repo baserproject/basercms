@@ -1509,18 +1509,18 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param boolean $expected 期待値
  * @dataProvider sitemapDataProvider
  */
-	public function testSitemap($id, $level, $expected) {
+	public function testSitemap($siteId, $level, $expected) {
 		$message = 'サイトマップを正しく出力できません';
 		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->sitemap($id, $level);
+		$this->BcBaser->sitemap($siteId);
 	}
 
 	public function sitemapDataProvider() {
 		return array(
-			array(1, null, '<li class="sitemap-content li-level-1"><a href="\/index">トップページ<\/a><\/li>'),
-			array(2, null, '<a href="\/m\/index">トップページ.*<\/li>.*<\/ul>'),
-			array(3, null, '<a href="\/s\/index">トップページ.*<\/li>.*<\/ul>'),
-			array(3, 2, '<ul class="sitemap ul-level-2">.*<li class="sitemap-content li-level-2"><a href="\/s\/service\/index">サービス１<\/a><\/li>.*<\/ul>.*<\/ul>'),
+			array(0, null, '<li class="menu-content li-level-1"><a href="\/index">トップページ<\/a><\/li>'),
+			array(1, null, '<a href="\/m\/index">トップページ.*<\/li>.*<\/ul>'),
+			array(2, null, '<a href="\/s\/index">トップページ.*<\/li>.*<\/ul>'),
+			array(2, 2, '<ul class="menu ul-level-2">.*<li class="menu-content li-level-2"><a href="\/s\/service\/index">サービス１<\/a><\/li>.*<\/ul>.*<\/ul>'),
 		);
 	}
 

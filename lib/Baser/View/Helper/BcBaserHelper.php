@@ -1669,8 +1669,10 @@ class BcBaserHelper extends AppHelper {
  * ログインしていない場合はキャッシュする
  * contents_menu エレメントで、HTMLカスタマイズ可能
  */
-	public function sitemap() {
-		$this->contentsMenu();
+	public function sitemap($siteId = 0) {
+		$Site = ClassRegistry::init('Site');
+		$contentId = $Site->getRootContentId($siteId);
+		$this->contentsMenu($contentId);
 	}
 
 /**
