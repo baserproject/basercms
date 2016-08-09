@@ -6,9 +6,9 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'contents', 'action' => 'search', 'num' => $this->passedArgs['num']);
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
 } else {
-	$url = array('plugin' => null, 'controller' => 'contents', 'action' => 'search');
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
 }
 ?>
 
