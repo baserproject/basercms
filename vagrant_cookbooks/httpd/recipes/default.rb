@@ -1,8 +1,13 @@
-packages = %w{httpd httpd-devel mod_ssl php php-cli php-pear php-pdo php-mysql php-pgsql php-sqlite php-curl php-gd php-mbstring php-xml php-xmlrpc php-dom php-intl php-mcrypt php-pecl-xdebug phpMyAdmin phpPgAdmin}
+packages = %w{httpd httpd-devel mod_ssl php php-cli php-pear php-pdo php-mysql php-pgsql php-sqlite php-curl php-gd php-mbstring php-xml php-xmlrpc php-dom php-intl php-mcrypt php-pecl-xdebug phpPgAdmin}
 packages.each do |packagename|
   package packagename do
     action :install
   end
+end
+
+package 'phpMyAdmin' do
+  version "4.4.15.7-1.el6.remi"
+  action :install
 end
 
 service "httpd" do
