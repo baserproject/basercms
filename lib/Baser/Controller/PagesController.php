@@ -199,6 +199,7 @@ class PagesController extends AppController {
 			]);
 		}
 
+		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
 		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('previewId', $this->request->data['Page']['id']);
 		$this->set('reflectMobile', $reflectMobile);

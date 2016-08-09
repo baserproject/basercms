@@ -2,9 +2,15 @@
 <?php echo $this->BcForm->hidden('ContentFolder.id') ?>
 <table class="form-table">
 	<tr>
-		<th><?php echo $this->BcForm->label('ContentFolder.content_template', 'コンテンツテンプレート') ?></th>
+		<th><?php echo $this->BcForm->label('ContentFolder.folder_template', 'フォルダーテンプレート') ?></th>
 		<td>
-			<?php echo $this->BcForm->input('ContentFolder.content_template', array('type' => 'select', 'options' => $contentTemplates)) ?>
+			<?php echo $this->BcForm->input('ContentFolder.folder_template', array('type' => 'select', 'options' => $folderTemplateList)) ?>
+		</td>
+	</tr>
+	<tr>
+		<th><?php echo $this->BcForm->label('ContentFolder.page_template', '固定ページテンプレート') ?></th>
+		<td>
+			<?php echo $this->BcForm->input('ContentFolder.page_template', array('type' => 'select', 'options' => $pageTemplateList)) ?>
 		</td>
 	</tr>
 </table>

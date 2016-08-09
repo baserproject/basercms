@@ -834,4 +834,28 @@ class Page extends AppModel {
 		$message = 'PHPの構文エラーです： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
 		return $message;
 	}
+
+	public function getParentPageTemplate($id) {
+		return 'default';
+	}
+
+/**
+ * 固定ページテンプレートリストを取得する
+ *
+ * @param $contentId
+ * @param $theme
+ * @return array
+ */
+	public function getPageTemplateList($contentId, $theme) {
+		$pageTemplates = BcUtil::getTemplateList('Pages/templates', '', $theme);
+		if($contentId != 1) {
+			$parentTemplate = $this->getParentPageTemplate($contentId);
+			$searchKey = array_search($parentTemplate, $pageTemplates);
+			if ($searchKey !== false) {
+				unset($pageTemplates[$searchKey]);
+			}
+			array_unshift($pageTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+		}
+		return $pageTemplates;
+	}
 }

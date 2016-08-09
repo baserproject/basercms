@@ -26,6 +26,13 @@ class ContentFoldersController extends AppController {
 	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true));
 
 /**
+ * モデル
+ *
+ * @var array
+ */
+	public $uses = ['ContentFolder', 'Page'];
+
+/**
  * Before Filter
  */
 	public function beforeFilter() {
@@ -77,42 +84,9 @@ class ContentFoldersController extends AppController {
 				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
 			}
 		}
-		$contentTemplates = BcUtil::getTemplateList('ContentFolders', '', $this->siteConfigs['theme']);
-		if($this->request->data['Content']['id'] != 1) {
-			$parentTemplate = $this->getParentTemplate($this->request->data['Content']['id']);
-			array_unshift($contentTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
-		}
-		$this->set('contentTemplates', $contentTemplates);
+		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
+		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
 		$this->set('publishLink', $this->request->data['Content']['url']);
-	}
-
-/**
- * 親のテンプレートを取得する
- *
- * @param $id
- */
-	public function getParentTemplate($id) {
-		$this->Content->bindModel(
-			array('belongsTo' => array(
-					'ContentFolder' => array(
-						'className' => 'ContentFolder',
-						'foreignKey' => 'entity_id'
-					)
-				)
-			), false
-		);
-		$contents = $this->Content->getPath($id, null, 3);
-		$this->Content->bindModel(array('belongsTo' => array('ContentFolder')));
-		$contents = array_reverse($contents);
-		unset($contents[0]);
-		$parentTemplates = Hash::extract($contents, '{n}.Content.layout_template');
-		$parentTemplate = '';
-		foreach($parentTemplates as $parentTemplate) {
-			if($parentTemplate) {
-				break;
-			}
-		}
-		return $parentTemplate;
 	}
 
 /**
@@ -145,15 +119,12 @@ class ContentFoldersController extends AppController {
 			$data['Content'] = $this->request->data['Content'];
 		}
 		$this->set(compact('data', 'children'));
-		$contentTemplate = $data['ContentFolder']['content_template'];
-		if(!$contentTemplate) {
-			$contentTemplate = $this->getParentTemplate($data['Content']['id']);
-			if(!$contentTemplate) {
-				$contentTemplate = 'default';
-			}
+		$folderTemplate = $data['ContentFolder']['folder_template'];
+		if(!$folderTemplate) {
+			$folderTemplate = $this->getParentTemplate($data['Content']['id']);
 		}
 		$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']));
-		$this->render($contentTemplate);
+		$this->render($folderTemplate);
 	}
 
 }

@@ -51,4 +51,18 @@ class ContentFolder extends AppModel {
 			return false;
 		}
 	}
+
+	public function getFolderTemplateList($contentId, $theme) {
+		$folderTemplates = BcUtil::getTemplateList('ContentFolders', '', $theme);
+		if($contentId != 1) {
+			$parentTemplate = $this->Content->getParentTemplate($contentId);
+			$searchKey = array_search($parentTemplate, $folderTemplates);
+			if($searchKey !== false) {
+				unset($pageTemplates[$searchKey]);
+			}
+			array_unshift($folderTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+		}
+		return $folderTemplates;
+	}
+
 }

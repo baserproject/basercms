@@ -137,52 +137,6 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 /**
- * 現在のページが所属する親のカテゴリを取得する
- * 
- * @param array $pageId 固定ページID
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getParentCategoryDataProvider
- */
-	public function testGetParentCategory($pageId, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		// 固定ページのデータ取得
-		$conditions = array('Page.id' => $pageId);
-		$fields = array();
-		$this->BcPage->request->data = $this->getPageData($conditions, $fields);
-		$result = $this->BcPage->getParentCategory();
-		$this->assertEquals($expected, $result, $message);		
-	}
-
-	public function getParentCategoryDataProvider() {
-		return array(
-			array(1, false),
-			array(2, false),
-			array(5, array()),
-			array(6, array()),
-			array(12, array('PageCategory' => array(
-				'id' => '2',
-        'parent_id' => null,
-        'lft' => '3',
-        'rght' => '4',
-        'name' => 'smartphone',
-        'title' => 'スマートフォン',
-        'sort' => '1',
-        'contents_navi' => false,
-				'owner_id' => null,
-				'layout_template' => '',
-        'content_template' => '',
-        'modified' => null,
-        'created' => '2015-01-27 12:56:52'
-			)),
-			'親カテゴリを取得できません'),
-			array(999, false),
-
-		);
-	}
-
-
-/**
  * ページリストを取得する
  * 
  * @param int $pageCategoryId カテゴリID

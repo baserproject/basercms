@@ -1087,4 +1087,35 @@ class Content extends AppModel {
 		return $this->find('first', ['conditions' => ['Content.site_id' => $siteId, 'Content.site_root' => true]]);
 	}
 
+/**
+ * 親のテンプレートを取得する
+ *
+ * @param $id
+ */
+	public function getParentTemplate($id) {
+		$this->bindModel(
+			array('belongsTo' => array(
+					'ContentFolder' => array(
+						'className' => 'ContentFolder',
+						'foreignKey' => 'entity_id'
+					)
+				)
+			), false
+		);
+		$contents = $this->getPath($id, null, 3);
+		$this->bindModel(array('belongsTo' => array('ContentFolder')));
+		$contents = array_reverse($contents);
+		unset($contents[0]);
+		$parentTemplates = Hash::extract($contents, '{n}.Content.layout_template');
+		$parentTemplate = '';
+		foreach($parentTemplates as $parentTemplate) {
+			if($parentTemplate) {
+				break;
+			}
+		}
+		if(!$parentTemplate) {
+			$parentTemplate = 'default';
+		}
+		return $parentTemplate;
+	}
 }

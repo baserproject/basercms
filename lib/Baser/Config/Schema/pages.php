@@ -21,6 +21,7 @@ class PagesSchema extends CakeSchema {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
 		'contents' => array('type' => 'text', 'null' => true, 'default' => null),
 		'draft' => array('type' => 'text', 'null' => true, 'default' => null),
+		'page_template' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'code' => array('type' => 'text', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
