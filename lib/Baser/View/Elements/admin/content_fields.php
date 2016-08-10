@@ -36,7 +36,7 @@ if(is_null($currentSiteId)) {
 	$currentSiteId = 0;
 }
 $disableEdit = false;
-if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] && $this->request->data['Content']['main_site_content_id'] && 
+if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] && $this->request->data['Content']['main_site_content_id'] &&
 	($this->request->data['Content']['alias_id'] || $this->request->data['Content']['type'] == 'ContentFolder'))) {
 	$disableEdit = true;
 }
@@ -76,7 +76,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					<?php endif ?>
 					<span class="url">
 						<?php if(!$this->request->data['Content']['site_root']): ?>
-							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20)) ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?> <?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
+							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20, 'autofocus' => true)) ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?> <?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->error('Content.name') ?>
 						<?php else: ?>
 							<?php echo $baseUrl ?><?php echo $this->BcForm->value('Content.name') ?><?php if($this->request->data['Content']['type'] == 'ContentFolder' && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?> <?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
