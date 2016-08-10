@@ -1599,7 +1599,8 @@ div.jstree-publish-even{
 .eyecatch-list li p{
 	text-align: center;
 }
-#BasicSetting .url {
+#BasicSetting .url,
+#BlogPostForm .url {
 	font-weight:bold;
 	font-size:14px;
 }

@@ -57,14 +57,19 @@ class BlogHelper extends AppHelper {
 		if (isset($this->blogContent) && !$blogContentId) {
 			return;
 		}
+
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
+
 		if ($blogContentId) {
 			if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
-				$this->blogContent = $this->request->data['BlogContent'];
-			} else {
-				$BlogContent = ClassRegistry::getObject('BlogContent');
-				$BlogContent->expects(array());
+				if(!empty($this->request->data['BlogContent'])) {
+					$this->blogContent = $this->request->data['BlogContent'];
+				}
+			}
+			if(empty($this->blogContent)) {
 				$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
-			}	
+			}
 		} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}

@@ -73,7 +73,9 @@ class BlogPostsController extends BlogAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		if (isset($this->request->params['pass'][0])) {
-			$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
+			$content = $this->BcContents->getContent($this->request->params['pass'][0]);
+			$this->request->params['Content'] = $content['Content'];
+			$this->request->params['Site'] = $content['Site'];
 			$this->BlogContent->recursive = -1;
 			$this->blogContent = $this->BlogContent->read(null, $this->request->params['pass'][0]);
 			$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_contents', 'action' => 'edit', $this->request->params['pass'][0]));

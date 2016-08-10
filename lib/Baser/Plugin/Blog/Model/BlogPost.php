@@ -666,4 +666,42 @@ class BlogPost extends BlogAppModel {
 		}
 	}
 
+/**
+ * プレビュー用のデータを生成する
+ *
+ * @param array $data
+ */
+	public function createPreviewData($data) {
+		$post['BlogPost'] = $data['BlogPost'];
+		$post['BlogPost']['detail'] = $post['BlogPost']['detail_tmp'];
+
+		if ($data['BlogPost']['blog_category_id']) {
+			$blogCategory = $this->BlogCategory->find('first', array(
+				'conditions' => array('BlogCategory.id' => $data['BlogPost']['blog_category_id']),
+				'recursive' => -1
+			));
+			$post['BlogCategory'] = $blogCategory['BlogCategory'];
+		}
+
+		if ($data['BlogPost']['user_id']) {
+			$author = $this->User->find('first', array(
+				'conditions' => array('User.id' => $data['BlogPost']['user_id']),
+				'recursive' => -1
+			));
+			$post['User'] = $author['User'];
+		}
+
+		if (!empty($data['BlogTag']['BlogTag'])) {
+			$tags = $this->BlogTag->find('all', array(
+				'conditions' => array('BlogTag.id' => $data['BlogTag']['BlogTag']),
+				'recursive' => -1
+			));
+			if ($tags) {
+				$tags = Hash::extract($tags, '{n}.BlogTag');
+				$post['BlogTag'] = $tags;
+			}
+		}
+		return $post;
+	}
+
 }

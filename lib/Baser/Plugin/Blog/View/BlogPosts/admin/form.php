@@ -14,33 +14,14 @@
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $statuses = array(0 => '非公開', 1 => '公開');
 $this->BcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
-$this->BcBaser->js('Blog.admin/blog_posts/form', false);
+$this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlogBLogPostsEditScript',
+	'data-fullurl' => $this->BcContents->getUrl($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no'), true, $this->request->params['Site']['use_subdomain'])
+));
 ?>
 
-<div id="CreatePreviewUrl" style="display:none"><?php echo $this->BcBaser->url(array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'create')) ?></div>
+
 <div id="AddTagUrl" style="display:none"><?php echo $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
 <div id="AddBlogCategoryUrl" style="display:none"><?php echo $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContent['BlogContent']['id'])) ?></div>
-<?php echo $this->BcForm->input('UseContent', array('type' => 'hidden', 'value' => $blogContent['BlogContent']['use_content'])) ?>
-
-
-<?php if ($this->action == 'admin_edit'): ?>
-	<div class="em-box align-left">
-		<?php if ($this->BcForm->value('BlogPost.status') && $this->request->params['Content']['status']): ?>
-			この記事のURL　：<?php
-			$this->BcBaser->link(
-				$this->BcBaser->getUri($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')), $this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no'))
-			?>
-		<?php else: ?>
-			この記事のURL　：<?php echo $this->BcBaser->getUri($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?>
-		<?php endif ?>
-			<br />
-			プレビュー用URL：<?php $this->BcBaser->link(
-				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
-				$this->BcBaser->getUri(array('controller' => 'blog', 'action'=>'preview', $blogContent['BlogContent']['id'], $this->data['BlogPost']['id'], 'view')),
-				array('target' => '_blank')
-			); ?>
-	</div>
-<?php endif ?>
 
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
@@ -68,6 +49,13 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false);
 			<td class="col-input">
 				<?php echo $this->BcForm->value('BlogPost.no') ?>
 				<?php echo $this->BcForm->input('BlogPost.no', array('type' => 'hidden')) ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head" style="width:53px"><?php echo $this->BcForm->label('BlogPost.url', 'URL') ?></th>
+			<td class="col-input">
+				<span class="url"><?php echo $this->BcBaser->getUri($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no')) ?></span>　
+				<?php echo $this->BcForm->button('URLコピー', ['class' => 'small-button', 'style' => 'font-weght:normal', 'id' => 'BtnCopyUrl']) ?>
 			</td>
 		</tr>
 	<?php endif; ?>
@@ -196,9 +184,9 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false);
 		<?php if ($editable): ?>
 		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 		<?php endif ?>
-		<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
+		<?php echo $this->BcForm->button('プレビュー', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 		<?php if ($editable): ?>
-		<?php $this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogPost.name')), false); ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。', $this->BcForm->value('BlogPost.name')), false); ?>
 		<?php endif ?>
 	<?php endif ?>
 </div>
