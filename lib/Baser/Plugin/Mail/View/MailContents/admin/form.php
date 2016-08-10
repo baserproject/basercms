@@ -18,17 +18,10 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <h2>基本項目</h2>
 
 <?php echo $this->BcForm->create('MailContent', array('novalidate' => true)) ?>
+<?php echo $this->BcForm->input('MailContent.id', array('type' => 'hidden')) ?>
+
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
-<?php if ($this->action == 'admin_edit'): ?>
-			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('MailContent.id', 'NO') ?></th>
-				<td class="col-input">
-					<?php echo $this->BcForm->value('MailContent.id') ?>
-	<?php echo $this->BcForm->input('MailContent.id', array('type' => 'hidden')) ?>
-				</td>
-			</tr>
-<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('MailContent.description', 'メールフォーム説明文') ?></th>
 			<td class="col-input">
@@ -67,7 +60,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_user', '自動返信メール<br />件名<br />[ユーザー宛]') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_user', '自動返信メール件名<br />[ユーザー宛]') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 <?php echo $this->BcForm->input('MailContent.subject_user', array('type' => 'text', 'size' => 80)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectUser', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
@@ -76,7 +69,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_admin', '自動送信メール<br />件名<br />[管理者宛]') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('MailContent.subject_admin', '自動送信メール件名<br />[管理者宛]') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 <?php echo $this->BcForm->input('MailContent.subject_admin', array('type' => 'text', 'size' => 80)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectAdmin', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>

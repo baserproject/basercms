@@ -52,15 +52,18 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 <?php echo $this->BcForm->hidden('Content.alias_id') ?>
 <?php echo $this->BcForm->hidden('Content.site_root') ?>
 <?php echo $this->BcForm->hidden('Content.site_id') ?>
+<?php echo $this->BcForm->hidden('Content.lft') ?>
+<?php echo $this->BcForm->hidden('Content.right') ?>
 
 
 <div id="ContentsFormTabs">
 	<ul>
-		<li><a href="#BasicSetting">基本情報</a></li>
+		<li><a href="#BasicSetting">基本設定</a></li>
 		<li><a href="#OptionalSetting">オプション</a></li>
 		<?php if(count($relatedContents) > 1): ?>
 		<li><a href="#RelatedContentsSetting">関連コンテンツ</a></li>
 		<?php endif ?>
+		<li><a href="#EtcSetting">その他情報</a></li>
 	</ul>
 	<div id="BasicSetting">
 		<table class="form-table" >
@@ -280,5 +283,15 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 			<?php endforeach ?>
 		</table>
 	</div>
+	<?php if($this->request->action == 'admin_edit'): ?>
+	<div id="EtcSetting">
+		<p><span>コンテンツID</span>：<?php echo $this->request->data['Content']['id'] ?></p>
+		<p><span>実体ID</span>：<?php echo $this->request->data['Content']['entity_id'] ?></p>
+		<p><span>プラグイン</span>：<?php echo $this->request->data['Content']['plugin'] ?></p>
+		<p><span>コンテンツタイプ</span>：<?php echo $this->request->data['Content']['type'] ?></p>
+		<p><span>データ作成日</span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created']) ?></p>
+		<p><span>データ更新日</span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified']) ?></p>
+	</div>
+	<?php endif ?>
 <?php endif ?>
 </div>

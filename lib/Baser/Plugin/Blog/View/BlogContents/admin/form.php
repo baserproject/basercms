@@ -19,17 +19,10 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 
 
 <?php echo $this->BcForm->create('BlogContent') ?>
+<?php echo $this->BcForm->input('BlogContent.id', array('type' => 'hidden')) ?>
+
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
-		<?php if ($this->action == 'admin_edit'): ?>
-			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('BlogContent.id', 'NO') ?></th>
-				<td class="col-input">
-					<?php echo $this->BcForm->value('BlogContent.id') ?>
-					<?php echo $this->BcForm->input('BlogContent.id', array('type' => 'hidden')) ?>
-				</td>
-			</tr>
-		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.description', 'ブログ説明文') ?></th>
 			<td class="col-input">
