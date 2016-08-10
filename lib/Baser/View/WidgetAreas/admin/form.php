@@ -16,9 +16,6 @@
 <div id="CurrentAction" style="display:none"><?php echo $this->request->action ?></div>
 
 <script type="text/javascript">
-$(window).load(function() {
-	$("#WidgetAreaName").focus();
-});
 $(function() {
 
 	var sortableOptions = {
@@ -329,7 +326,7 @@ function updateWidget(id) {
 <?php echo $this->BcForm->hidden('WidgetArea.id') ?>
 
 <?php echo $this->BcForm->label('WidgetArea.name', 'ウィジェットエリア名') ?>&nbsp;
-<?php echo $this->BcForm->input('WidgetArea.name', array('type' => 'text', 'size' => 40)) ?>&nbsp;
+<?php echo $this->BcForm->input('WidgetArea.name', array('type' => 'text', 'size' => 40, 'autofocus' => true)) ?>&nbsp;
 <span class="submit"><?php echo $this->BcForm->end(array('label' => 'エリア名を保存する', 'div' => false, 'class' => 'button btn-red', 'id' => 'WidgetAreaUpdateTitleSubmit')) ?></span>
 <?php $this->BcBaser->img('admin/ajax-loader-s.gif', array('style' => 'vertical-align:middle;display:none', 'id' => 'WidgetAreaUpdateTitleLoader')) ?>
 <?php echo $this->BcForm->error('WidgetArea.name') ?>

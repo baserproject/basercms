@@ -10,13 +10,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#UploaderCategoryName").focus();
-});
-</script>
-
 <!-- form -->
 <?php echo $this->BcForm->create('UploaderCategory') ?>
 <?php echo $this->BcForm->input('UploaderCategory.id', array('type' => 'hidden')) ?>
@@ -34,7 +27,7 @@ $(window).load(function() {
 	<tr>
 		<th><?php echo $this->BcForm->label('UploaderCategory.name', 'カテゴリ名') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('UploaderCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50)) ?>
+			<?php echo $this->BcForm->input('UploaderCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50, 'autofocus' => true)) ?>
 			<?php echo $this->BcForm->error('UploaderCategory.name') ?>
 		</td>
 	</tr>

@@ -13,14 +13,6 @@
  */
 $params = explode('/', $path);
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#ThemeFileName").focus();
-});
-</script>
-
 <!-- current -->
 <div class="em-box align-left">
 	現在の位置：<?php echo $currentPath ?>
@@ -41,7 +33,7 @@ $(window).load(function() {
 			<th class="col-head"><?php echo $this->BcForm->label('ThemeFile.name', 'ファイル名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($this->request->action != 'admin_view'): ?>
-					<?php echo $this->BcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255)) ?> 
+					<?php echo $this->BcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true)) ?>
 					<?php if ($this->BcForm->value('ThemeFile.ext')): ?>.<?php endif ?>
 					<?php echo $this->BcForm->value('ThemeFile.ext') ?>
 					<?php echo $this->BcForm->input('ThemeFile.ext', array('type' => 'hidden')) ?>

@@ -15,9 +15,6 @@
 
 
 <script type="text/javascript">
-$(window).load(function() {
-	$("#FeedConfigName").focus();
-});
 $(function(){
 	$("#EditTemplate").click(function(){
 		if(confirm('フィード設定を保存して、テンプレート '+$("#FeedConfigTemplate").val()+' の編集画面に移動します。よろしいですか？')){
@@ -32,7 +29,7 @@ $(function(){
 
 <div class="section">
 
-	<h2>基本項目</h2>	
+	<h2>基本項目</h2>
 
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<?php if ($this->action == 'admin_edit'): ?>
@@ -47,7 +44,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('FeedConfig.name', 'フィード設定名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('FeedConfig.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('FeedConfig.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.name') ?>
 				<div id="helptextName" class="helptext">

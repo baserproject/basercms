@@ -38,7 +38,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 		<tr id="RowFieldName">
 			<th class="col-head"><?php echo $this->BcForm->label('MailField.field_name', 'フィールド名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailField.field_name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('MailField.field_name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpFieldName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailField.field_name') ?>
 				<div id="helptextFieldName" class="helptext">重複しない半角英数字で入力してください。</div>

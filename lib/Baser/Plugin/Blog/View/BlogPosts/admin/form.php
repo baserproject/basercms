@@ -87,7 +87,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.name', 'タイトル') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogPost.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'counter' => true)) ?>
+				<?php echo $this->BcForm->input('BlogPost.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true, 'counter' => true)) ?>
 				<?php echo $this->BcForm->error('BlogPost.name') ?>
 			</td>
 		</tr>

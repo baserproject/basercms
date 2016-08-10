@@ -1,7 +1,7 @@
 <?php
 /**
  * [ADMIN] 検索インデックス登録フォーム
- * 
+ *
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -14,16 +14,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#SearchIndexUrl").focus();
-});
-</script>
-
 <?php echo $this->BcForm->create('SearchIndex') ?>
-
 
 <!-- form -->
 <div class="section">
@@ -38,7 +29,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.url', 'URL') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('SearchIndex.url', array('type' => 'text', 'size' => 60, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('SearchIndex.url', array('type' => 'text', 'size' => 60, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('SearchIndex.url') ?>
 				<div id="helptextUrl" class="helptext">
