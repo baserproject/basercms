@@ -121,14 +121,14 @@ class BlogHelperTest extends BaserTestCase {
 			));
 			$this->Blog = new BlogHelper($View);
 		}
-
+		$this->Blog->blogContent = null;
 		$this->Blog->setContent($blogContentId);
 		$this->assertEquals($this->Blog->blogContent['id'], $expected, 'ブログコンテンツデータを正しくセットできません');
 	}
 
 	public function setContentDataProvider() {
 		return array(
-			array(null, false, 1),
+			array(null, false, null),
 			array(2, false, 2),
 			array(null, true, 3),
 		);

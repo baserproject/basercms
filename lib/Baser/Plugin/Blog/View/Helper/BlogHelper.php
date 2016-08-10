@@ -54,24 +54,20 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function setContent($blogContentId = null) {
-		if (isset($this->blogContent) && !$blogContentId) {
-			return;
-		}
-
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
-
-		if ($blogContentId) {
-			if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
-				if(!empty($this->request->data['BlogContent'])) {
-					$this->blogContent = $this->request->data['BlogContent'];
+		if(empty($this->blogContent)) {
+			if ($blogContentId) {
+				if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
+					if(!empty($this->request->data['BlogContent'])) {
+						$this->blogContent = $this->request->data['BlogContent'];
+					}
+				} else {
+					$BlogContent = ClassRegistry::init('Blog.BlogContent');
+					$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
+					$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
 				}
+			} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
+				$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 			}
-			if(empty($this->blogContent)) {
-				$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
-			}
-		} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
-			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
 		}
 		if ($this->blogContent) {
 			$BlogPost = ClassRegistry::init('Blog.BlogPost');
