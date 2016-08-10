@@ -172,6 +172,7 @@ input[type=text], textarea, select, input[type=password] {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	background-color:#fff;
+	color:#535A62;
 }
 input[type=checkbox] {
 	vertical-align: middle;
@@ -188,6 +189,7 @@ input[type=button] {
 }
 input[type=text], textarea, input[type=password] {
 	font-size: 1.3em;
+	color:#535A62;
 	padding: 3px 3px;
 }
 input[type=text], input[type=password] {
@@ -199,7 +201,7 @@ input[type="radio"][disabled]{
     cursor:not-allowed; /* 禁止カーソル */
 }
 select {
-	font-size: 1.2em;
+	font-size: 1.3em!important;
 }
 select {
 	padding: 1px;

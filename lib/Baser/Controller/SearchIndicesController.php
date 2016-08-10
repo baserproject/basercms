@@ -156,6 +156,9 @@ class SearchIndicesController extends AppController {
 		if (!empty($data['SearchIndex']['m'])) {
 			$data['SearchIndex']['model'] = $data['SearchIndex']['m'];
 		}
+		if (isset($data['SearchIndex']['s'])) {
+			$data['SearchIndex']['site_id'] = $data['SearchIndex']['s'];
+		}
 		if (!empty($data['SearchIndex']['f'])) {
 			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['f']], 'recursive' => -1]);
 			$data['SearchIndex']['SearchIndex.rght <'] = $content['Content']['rght'];
@@ -169,6 +172,7 @@ class SearchIndicesController extends AppController {
 		unset($data['SearchIndex']['cf']);
 		unset($data['SearchIndex']['m']);
 		unset($data['SearchIndex']['f']);
+		unset($data['SearchIndex']['s']);
 		
 		$conditions = am($conditions, $this->postConditions($data));
 

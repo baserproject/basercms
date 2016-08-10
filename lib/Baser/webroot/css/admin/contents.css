@@ -837,7 +837,7 @@ background: #888;
 	border-bottom: 1px dotted #CCC;
 }
 .ui-widget-content {
-	color:#333;
+	color:#535A62!important;
 }
 .ui-dialog dt label {
 	color:#690!important;
@@ -1552,6 +1552,20 @@ div.jstree-publish-even{
 }
 #ContentsFormTabs {
 	display:none;
+}
+
+
+/* ==================================================================== */
+/*    CkEditor
+/* ==================================================================== */
+
+.cke_chrome {
+	border:1px solid #DDD!important;
+	box-shadow:none!important;
+}
+.cke_top, .cke_bottom {
+	background: #EFEFEF!important;
+	background-image: linear-gradient(to bottom,#EFEFEF,#EEE)!important;
 }
 
 /* ==================================================================== */

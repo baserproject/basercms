@@ -17,6 +17,9 @@
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
  */
 
+if (Configure::read('BcRequest.isMaintenance')) {
+	return;
+}
 if (!empty($this->passedArgs['num'])) {
 	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
 } else {
@@ -25,15 +28,10 @@ if (!empty($this->passedArgs['num'])) {
 ?>
 
 
-<div class="widget widget-site-search widgetsite-search-<?php echo $id ?>">
-	<?php if ($name && $use_title): ?>
-		<h2><?php echo $name ?></h2>
-	<?php endif ?>
-	<?php echo $this->BcForm->create('Content', array('type' => 'get', 'url' => $url)) ?>
-	<?php if (BcUtil::unserialize($this->BcBaser->siteConfig['content_categories'])) : ?>
-		<?php echo $this->BcForm->input('Content.c', array('type' => 'select', 'options' => BcUtil::unserialize($this->BcBaser->siteConfig['content_categories']), 'empty' => 'カテゴリー： 指定しない　')) ?>
-	<?php endif ?>
-	<?php echo $this->BcForm->input('Content.q') ?>
-	<?php echo $this->BcForm->submit('検索', array('div' => false)) ?>
+<div class="section search-box">
+	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
+	<?php echo $this->BcForm->input('SearchIndex.q') ?>
+	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => 0]) ?>
+	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
 	<?php echo $this->BcForm->end() ?>
 </div>
