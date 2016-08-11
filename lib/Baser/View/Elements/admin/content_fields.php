@@ -246,8 +246,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					}
 				?>
 			<tr<?php echo $class ?> id="Row<?php echo $relatedContent['Site']['id'] ?>">
-				<td style="width:10%">
-
+				<td style="width:10%;white-space: nowrap">
 					<?php if(!$current): ?>
 						<?php if(!empty($relatedContent['Content'])): ?>
 							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_check.png', array('alt' => '確認')), $relatedContent['Content']['url'], array('title' => '確認', 'target' => '_blank')) ?>
