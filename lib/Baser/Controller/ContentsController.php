@@ -152,7 +152,6 @@ class ContentsController extends AppController {
 
 		$user = $this->BcAuth->user();
 		$this->request->data['Content']['author_id'] = $user['id'];
-
 		$this->Content->create(false);
 		if($data = $this->Content->save($this->request->data)) {
 			if($alias) {

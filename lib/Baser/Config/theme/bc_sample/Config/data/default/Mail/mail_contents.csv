@@ -1,0 +1,4 @@
+id,description,sender_1,sender_2,sender_name,subject_user,subject_admin,form_template,mail_template,redirect_url,auth_captcha,widget_area,ssl_on,created,modified
+1,"<p>フォームの説明文が入ります。<span style=""line-height: 20.7999992370605px;"">フォームの説明文が入ります。フォームの説明文が入ります。フォームの説明文が入ります。フォームの説明文が入ります。フォームの説明文が入ります。</span></p>
+
+<p><span style=""color:#C30"">*</span> 印の項目は必須となりますので、必ず入力してください。</p>",,,baserCMS inc. [デモ]　お問い合わせ,【baserCMS】お問い合わせ頂きありがとうございます。,【baserCMS】お問い合わせを受け付けました,default,mail_default,http://basercms.net/,1,,,2015-06-26 20:34:08,2015-06-27 13:21:54

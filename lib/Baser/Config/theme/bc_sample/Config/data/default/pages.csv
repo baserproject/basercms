@@ -1,0 +1,128 @@
+id,contents,draft,exclude_search,code,page_template,modified,created
+1,"<div class=""clearfix"" id=""NewsList"">
+<h2>新着情報</h2>
+<?php $this->BcBaser->blogPosts('news', 5) ?></div>
+
+<div id=""BaserFeed"">
+<h2>baserCMS</h2>
+<?php $this->BcBaser->js('/feed/ajax/1') ?></div>",,,,,2015-06-27 15:10:03,2015-06-26 20:34:06
+2,"<h2>会社案内</h2>
+
+<h3>会社データ</h3>
+
+<table>
+	<tbody>
+		<tr>
+			<th>会社名</th>
+			<td>コンテストサンプル</td>
+		</tr>
+		<tr>
+			<th>設立</th>
+			<td>2015年6月</td>
+		</tr>
+		<tr>
+			<th>所在地</th>
+			<td>住所が入ります。住所が入ります。住所が入ります。</td>
+		</tr>
+		<tr>
+			<th>事業内容</th>
+			<td>事業内容１が入ります。<br />
+			事業内容２が入ります。<br />
+			事業内容３が入ります。</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>アクセスマップ</h3>
+<?php $this->BcBaser->googleMaps(array(""width"" => 585)) ?>",,,,,2015-06-30 22:40:35,2015-06-26 20:34:06
+3,"<h2>サービス１</h2>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>",,,,,2015-06-27 15:36:11,2015-06-26 20:34:06
+4,"<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">メインメニュー</span> </div>
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<span style=""color:#8ABE08"">■</span>
+<?php $this->BcBaser->link(""ニュースリリース"",array(""controller""=>""news"",""action""=>""index"")) ?>
+<br />
+<span style=""color:#8ABE08"">■</span>
+<?php $this->BcBaser->link(""お問い合わせ"",array(""controller""=>""contact"",""action""=>""index"")) ?>
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">NEWS RELEASE</span> </div>
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<?php $this->BcBaser->blogPosts('news', 5) ?> <div>&nbsp;</div>
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<div style=""text-align:center;background-color:#8ABE08;""> <span style=""color:white;"">baserCMS NEWS</span> </div>
+<hr size=""1"" style=""width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;"" />
+<?php $this->BcBaser->feed(1) ?>",,,,,,2015-06-26 20:34:06
+5,"<h1>見出し１</h1>
+
+<p>段落の文章が入ります。<span style=""line-height: 20.7999992370605px;"">段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。段落の文章が入ります。</span></p>
+
+<h2>見出し２</h2>
+
+<ul style=""line-height: 20.7999992370605px;"">
+	<li>リスト１</li>
+	<li>リスト２</li>
+	<li>リスト３</li>
+</ul>
+
+<h3>見出し３</h3>
+
+<ol style=""line-height: 20.7999992370605px;"">
+	<li>連番リスト１</li>
+	<li><span style=""line-height: 20.7999992370605px;"">連番リスト２</span></li>
+	<li><span style=""line-height: 20.7999992370605px;"">連番リスト３</span></li>
+</ol>
+
+<h4>見出し４</h4>
+
+<p><strong style=""line-height: 20.7999992370605px;"">太字文章が入ります。太字文章が入ります。太字文章が入ります。太字文章が入ります。</strong></p>
+
+<h5>見出し５</h5>
+
+<p><em style=""line-height: 20.7999992370605px;"">斜体文章が入ります。斜体文章が入ります。斜体文章が入ります。斜体文章が入ります。</em></p>
+
+<h6>見出し６</h6>
+
+<p><u style=""line-height: 20.7999992370605px;"">下線付文章が入ります。下線付文章が入ります。下線付文章が入ります。下線付文章が入ります。</u></p>
+
+<table>
+	<thead>
+		<tr>
+			<th scope=""col"">表見出し</th>
+			<th scope=""col"">表見出し</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>表の文章が入ります。</td>
+			<td><span style=""line-height: 20.7999992370605px;"">表の文章が入ります。</span></td>
+		</tr>
+		<tr>
+			<td><span style=""line-height: 20.7999992370605px;"">表の文章が入ります。</span></td>
+			<td><span style=""line-height: 20.7999992370605px;"">表の文章が入ります。</span></td>
+		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>",,,,,2015-06-27 15:37:32,2015-06-27 12:40:09
+6,"<h2>サービス２</h2>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>",,,,,2015-06-27 15:37:32,2015-06-27 15:36:22
+7,"<h2>サービス３</h2>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>
+
+<p>サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。 サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。</p>",,,,,2015-06-27 15:37:33,2015-06-27 15:36:53

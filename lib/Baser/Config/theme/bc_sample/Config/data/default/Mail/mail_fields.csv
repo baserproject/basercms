@@ -1,0 +1,6 @@
+"id","mail_content_id","no","name","field_name","type","head","attention","before_attachment","after_attachment","source","size","rows","maxlength","options","class","separator","default_value","description","group_field","group_valid","valid","valid_ex","auto_convert","not_empty","use_field","no_send","sort","created","modified"
+"1","1","1","お名前","name","text","お名前","","","","","20","","255","","","","","","name","name","VALID_NOT_EMPTY","","","1","1","","1","2015-06-26 20:34:08","2015-06-27 13:44:21"
+"6","1","7","メールアドレス","email_1","email","メールアドレス","","","<br />","","25","","50","","","","","<small>確認の為、２回入力して下さい。</small><br />","email","email","VALID_EMAIL","VALID_EMAIL_CONFIRM","","1","1","","6","2015-06-26 20:34:08",""
+"7","1","8","メールアドレス確認","email_2","text","メールアドレス（確認）","<small>[確認]</small>","","","","25","","50","","","","","","email","email","VALID_EMAIL","VALID_EMAIL_CONFIRM","","1","1","1","7","2015-06-26 20:34:08",""
+"15","1","16","お問い合わせ項目","category","multi_check","お問い合わせ項目","","","","資料請求|問い合わせ|その他","0","0","0","","","","","","","","","VALID_NOT_UNCHECKED","","1","1","","15","2015-06-26 20:34:08",""
+"16","1","17","お問い合わせ内容","message","textarea","お問い合わせ内容","","","","","30","8","","","","","","","","","","","","","1","","16","2015-06-26 20:34:08","2015-06-30 19:12:20"

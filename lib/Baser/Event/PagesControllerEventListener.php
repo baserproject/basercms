@@ -64,7 +64,7 @@ class PagesControllerEventListener extends BcControllerEventListener {
  */
 	public function contentsBeforeMove(CakeEvent $event) {
 		if($event->data['data']['type'] != 'Page') {
-			return;
+			return true;
 		}
 		$Controller = $event->subject();
 		$entityId = $Controller->Content->field('entity_id', [

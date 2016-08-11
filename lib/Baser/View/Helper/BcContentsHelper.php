@@ -165,7 +165,7 @@ class BcContentsHelper extends AppHelper {
  * @param array $options
  * @return array
  */
-	public function getTree($id, $level = null, $options = []) {
+	public function getTree($id = 1, $level = null, $options = []) {
 		$options = array_merge([
 			'type' => '',
 			'order' => ['Content.site_id', 'Content.lft']

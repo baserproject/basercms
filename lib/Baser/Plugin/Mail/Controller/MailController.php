@@ -120,8 +120,6 @@ class MailController extends MailAppController {
 		
 		// ページタイトルをセット
 		$this->pageTitle = $this->request->params['Content']['title'];
-		// レイアウトをセット
-		$this->layout = $this->dbDatas['mailContent']['MailContent']['layout_template'];
 
 		if (empty($this->contentId)) {
 			// 配列のインデックスが無いためエラーとなるため修正
