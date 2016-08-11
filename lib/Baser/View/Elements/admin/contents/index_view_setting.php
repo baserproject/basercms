@@ -7,7 +7,7 @@ if($this->action == 'admin_index') {
 ?>
 
 
-<?php if($this->action == 'admin_index' && count($sites) > 2): ?>
+<?php if($this->action == 'admin_index' && count($sites) >= 2): ?>
 <div class="panel-box">
     <small>サイト</small> <?php echo $this->BcForm->input('ViewSetting.site_id', array('type' => 'radio', 'options' => $sites)) ?>
 </div>

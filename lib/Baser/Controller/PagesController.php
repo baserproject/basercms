@@ -176,18 +176,7 @@ class PagesController extends AppController {
 		if ($this->request->data['Content']['url']) {
 			$this->set('publishLink', $this->request->data['Content']['url']);
 		}
-
-		if (Configure::read('BcApp.mobile') && (!isset($this->siteConfigs['linked_pages_mobile']) || !$this->siteConfigs['linked_pages_mobile'])) {
-			$reflectMobile = true;
-		} else {
-			$reflectMobile = false;
-		}
-		if (Configure::read('BcApp.smartphone') && (!isset($this->siteConfigs['linked_pages_smartphone']) || !$this->siteConfigs['linked_pages_smartphone'])) {
-			$reflectSmartphone = true;
-		} else {
-			$reflectSmartphone = false;
-		}
-
+		
 		$editorOptions = ['editorDisableDraft' => false];
 		if (!empty($this->siteConfigs['editor_styles'])) {
 			App::uses('CKEditorStyleParser', 'Vendor');
@@ -202,8 +191,6 @@ class PagesController extends AppController {
 		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
 		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('previewId', $this->request->data['Page']['id']);
-		$this->set('reflectMobile', $reflectMobile);
-		$this->set('reflectSmartphone', $reflectSmartphone);
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('editorOptions', $editorOptions);
 		if (!empty($this->request->data['Content']['title'])) {

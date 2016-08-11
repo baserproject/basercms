@@ -227,17 +227,6 @@ class BcAppController extends Controller {
 			}
 		}
 
-		if (Configure::read('BcRequest.agent') == 'mobile') {
-			if (!Configure::read('BcApp.mobile')) {
-				$this->notFound();
-			}
-		}
-		if (Configure::read('BcRequest.agent') == 'smartphone') {
-			if (!Configure::read('BcApp.smartphone')) {
-				$this->notFound();
-			}
-		}
-
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
 		// TODO 携帯をコンポーネントなどで判別し、携帯からのアクセスのみ実行させるようにする
 		// ※ コンストラクト時点で、$this->request->params['prefix']を利用できない為。

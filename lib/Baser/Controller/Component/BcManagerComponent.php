@@ -464,8 +464,6 @@ class BcManagerComponent extends Component {
 			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
 			"Configure::write('BcEnv.sslUrl', '');",
 			"Configure::write('BcApp.adminSsl', false);",
-			"Configure::write('BcApp.mobile', false);",
-			"Configure::write('BcApp.smartphone', false);",
 			"Cache::config('default', array('engine' => 'File'));",
 			"Configure::write('debug', 0);"
 		);

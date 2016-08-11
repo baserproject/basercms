@@ -132,15 +132,11 @@ class SiteConfigsController extends AppController {
 						$this->BcManager->setInstallSetting('BcEnv.siteUrl', "'" . $siteUrl . "'");
 						$this->BcManager->setInstallSetting('BcEnv.sslUrl', "'" . $sslUrl . "'");
 						$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl) ? 'true' : 'false');
-						$this->BcManager->setInstallSetting('BcApp.mobile', ($mobile) ? 'true' : 'false');
-						$this->BcManager->setInstallSetting('BcApp.smartphone', ($smartphone) ? 'true' : 'false');
 					}
 
 					// キャッシュをクリア
 					if ($this->request->data['SiteConfig']['maintenance'] ||
-						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id']) ||
-						(!$smartphone && Configure::read('BcApp.smartphone')) || 
-						(!$mobile && Configure::read('BcApp.mobile'))
+						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id'])
 					) {
 						clearViewCache();
 					}
@@ -232,17 +228,6 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
 		$data['SiteConfig']['admin_ssl'] = (int)Configure::read('BcApp.adminSsl');
-		$data['SiteConfig']['mobile'] = Configure::read('BcApp.mobile');
-		$data['SiteConfig']['smartphone'] = Configure::read('BcApp.smartphone');
-		if (is_null($data['SiteConfig']['mobile'])) {
-			$data['SiteConfig']['mobile'] = false;
-		}
-		if (!isset($data['SiteConfig']['linked_pages_mobile'])) {
-			$data['SiteConfig']['linked_pages_mobile'] = 0;
-		}
-		if (!isset($data['SiteConfig']['linked_pages_smartphone'])) {
-			$data['SiteConfig']['linked_pages_smartphone'] = 0;
-		}
 		if (!isset($data['SiteConfig']['editor_enter_br'])) {
 			$data['SiteConfig']['editor_enter_br'] = 0;
 		}

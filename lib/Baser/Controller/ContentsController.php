@@ -85,9 +85,6 @@ class ContentsController extends AppController {
 			return;
 		}
 		$this->request->data['ViewSetting']['site_id'] = $this->passedArgs['site_id'];
-		if($sites) {
-			$sites = ['all' => '全て'] + $sites;
-		}
 		$this->set('sites', $sites);
 		$this->subMenuElements = ['contents'];
 
