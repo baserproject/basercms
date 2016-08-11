@@ -12,14 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#ThemeName").focus();
-});
-</script>
-
 <?php if ($folderDisabled): ?>
 	<p><span class="required">テーマフォルダに書込権限がありません。</span></p>
 <?php endif ?>
@@ -36,7 +28,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Theme.name', 'テーマ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Theme.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'disabled' => $folderDisabled)) ?>
+				<?php echo $this->BcForm->input('Theme.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true, 'disabled' => $folderDisabled)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('Theme.name') ?>
 				<div id="helptextName" class="helptext"> 半角英数字のみで入力してください。 </div>

@@ -20,7 +20,6 @@ foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 
 <script type="text/javascript">
 $(window).load(function() {
-	$("#UserGroupName").focus();
 <?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
 	$("#UserGroupAuthPrefixAdmin").attr('disabled', 'disabled');
 <?php endif ?>
@@ -50,7 +49,7 @@ $(window).load(function() {
 					<?php echo $this->BcForm->value('UserGroup.name') ?>
 					<?php echo $this->BcForm->input('UserGroup.name', array('type' => 'hidden')) ?>
 				<?php else: ?>
-					<?php echo $this->BcForm->text('UserGroup.name', array('size' => 20, 'maxlength' => 255)) ?>
+					<?php echo $this->BcForm->text('UserGroup.name', array('size' => 20, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php endif ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('UserGroup.name') ?>

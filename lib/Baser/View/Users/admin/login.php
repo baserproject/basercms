@@ -51,7 +51,6 @@ $(function(){
 		$("body").hide();
 	}
 	$("body").prepend($("#Login"));
-	$("#"+$("#UserModel").html()+"Name").focus();
 	changeNavi("#"+$("#UserModel").html()+"Name");
 	changeNavi("#"+$("#UserModel").html()+"Password");
 
@@ -137,7 +136,7 @@ $(function(){
 		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'login']]) ?>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
-			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1)) ?>
+			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1, 'autofocus' => true)) ?>
 		</div>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.password', 'パスワード') ?>

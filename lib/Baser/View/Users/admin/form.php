@@ -15,9 +15,6 @@
 
 
 <script type="text/javascript">
-$(window).load(function() {
-	$("#UserName").focus();
-});
 $(function(){
 	$("#BtnSave").click(function(){
 		if($("#SelfUpdate").html()) {
@@ -36,7 +33,7 @@ $(function(){
 		var data = {};
 		$("#DefaultFavorites li").each(function(i){
 			data[i] ={
-				'name' : $(this).find('.favorite-name').val(), 
+				'name' : $(this).find('.favorite-name').val(),
 				'url' :$(this).find('.favorite-url').val()
 			};
 		});
@@ -101,7 +98,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('User.name', 'アカウント名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('User.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('User.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('User.name') ?>
 				<div id="helptextName" class="helptext">半角英数字とハイフン、アンダースコアのみで入力してください。</div>
@@ -125,7 +122,7 @@ $(function(){
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('User.nickname') ?>
 				<div id="helptextNickname" class="helptext">ニックネームを設定している場合は全ての表示にニックネームが利用されます。</div>
-			</td> 
+			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
@@ -140,7 +137,7 @@ $(function(){
 				<?php else: ?>
 					<?php echo $this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups) ?>
 					<?php echo $this->BcForm->input('User.user_group_id', array('type' => 'hidden')) ?>
-				<?php endif ?>	
+				<?php endif ?>
 			</td>
 		</tr>
 		<tr>
