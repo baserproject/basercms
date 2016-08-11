@@ -290,10 +290,12 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::uses('BcControllerEventDispatcher', 'Event');
 	App::uses('BcModelEventDispatcher', 'Event');
 	App::uses('BcViewEventDispatcher', 'Event');
+	App::uses('PagesControllerEventListener', 'Event');
 	$CakeEvent = CakeEventManager::instance();
 	$CakeEvent->attach(new BcControllerEventDispatcher());
 	$CakeEvent->attach(new BcModelEventDispatcher());
 	$CakeEvent->attach(new BcViewEventDispatcher());
+	$CakeEvent->attach(new PagesControllerEventListener());
 
 /**
  * テーマの bootstrap を実行する

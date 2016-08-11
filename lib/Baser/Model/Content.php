@@ -1111,4 +1111,30 @@ class Content extends AppModel {
 		}
 		return $parentTemplate;
 	}
+
+/**
+ * コンテンツを移動する
+ * 
+ * @param $id
+ * @param $offset
+ * @return array|false
+ */
+	public function move($id, $offset) {
+		$offset = (int) $offset;
+		if($offset > 0) {
+			$result = $this->moveDown($id, abs($offset));
+		} elseif($offset < 0) {
+			$result = $this->moveUp($id, abs($offset));
+		} else {
+			$result = true;
+		}
+		if($result) {
+			return $this->find('first', [
+				'conditions' => ['Content.id' => $id],
+				'recursive' => -1
+			]);
+		} else {
+			return false;
+		}
+	}
 }

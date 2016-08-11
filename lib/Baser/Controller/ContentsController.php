@@ -377,9 +377,17 @@ class ContentsController extends AppController {
 			$this->ajaxError(500, 'データが存在しません。');
 		}
 
+		// EVENT Contents.beforeMove
+		$event = $this->dispatchEvent('beforeMove', array(
+			'data' => $this->request->data
+		));
+		if ($event !== false) {
+			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+		
 		$result = true;
 		if($this->request->data['currentParentId'] == $this->request->data['targetParentId']) {
-			$result = $this->_move($this->request->data['currentId'], $this->request->data['offset']);
+			$result = $this->Content->move($this->request->data['currentId'], $this->request->data['offset']);
 		} else {
 			// フォルダを絞って直下のデータを全件取得
 			$conditions = array('Content.parent_id' => $this->request->data['targetParentId']);
@@ -402,54 +410,36 @@ class ContentsController extends AppController {
 			}
 			// 親を変更
 			$name = $this->Content->field('name', array('Content.id' => $this->request->data['currentId']));
-			if(!$this->Content->save(array('Content' => array(
+			$result = $this->Content->save(array('Content' => array(
 				'id'		=> $this->request->data['currentId'],
 				'name'		=> $name,
 				'parent_id' => $this->request->data['targetParentId'],
 				'site_id'	=> $this->request->data['targetSiteId'],
 				'type' 		=> $this->request->data['type'],
-			)), false)) {
-				$result = false;
-			}
-
+			)), false);
 			if($targetSort && $result) {
 				// 自分の並び順を取得
 				$currentSort = count($contents) + 1;
 				// 親変更後のオフセットを取得
 				$offset = $targetSort - $currentSort;
 				// オフセットを元に移動
-				if(!$this->_move($this->request->data['currentId'], $offset)) {
-					$result = false;
-				}
+				$result = $this->Content->move($this->request->data['currentId'], $offset);
 			}
 		}
 
 		if($result) {
+
+			// EVENT Contents.afterAdd
+			$this->dispatchEvent('afterMove', array(
+				'data' => $result
+			));
+			
 			echo true;
 		} else {
 			$this->ajaxError(500, 'データ保存中にエラーが発生しました。');
 		}
 		exit();
 
-	}
-
-/**
- * コンテンツを移動する
- * ※ 同階層のみ
- *
- * @param $id
- * @param $offset
- * @return bool
- */
-	protected function _move($id, $offset) {
-		$offset = (int) $offset;
-		if($offset > 0) {
-			return $this->Content->moveDown($id, abs($offset));
-		} elseif($offset < 0) {
-			return $this->Content->moveUp($id, abs($offset));
-		} else {
-			return true;
-		}
 	}
 
 /**
