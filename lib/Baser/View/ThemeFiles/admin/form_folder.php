@@ -13,14 +13,6 @@
  */
 $params = explode('/', $path);
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#ThemeFolderName").focus();
-});
-</script>
-
 <!-- current -->
 <div class="em-box align-left">
 	現在の位置：<?php echo $currentPath ?>
@@ -42,7 +34,7 @@ $(window).load(function() {
 			<th class="col-head"><?php echo $this->BcForm->label('ThemeFolder.name', 'フォルダ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($this->request->action != 'admin_view_folder'): ?>
-					<?php echo $this->BcForm->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+					<?php echo $this->BcForm->input('ThemeFolder.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 					<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 					<div id="helptextName" class="helptext">
 						<ul>

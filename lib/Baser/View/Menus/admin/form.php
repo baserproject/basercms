@@ -12,15 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#MenuName").focus();
-});
-</script>
-
-
 <?php echo $this->BcForm->create('Menu') ?>
 <?php echo $this->BcForm->input('Menu.id', array('type' => 'hidden')) ?>
 <div class="section">
@@ -37,7 +28,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Menu.name', 'メニュー名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Menu.name', array('type' => 'text', 'size' => 40, 'maxlength' => 20)) ?>
+				<?php echo $this->BcForm->input('Menu.name', array('type' => 'text', 'size' => 40, 'maxlength' => 20, 'autofocus' => true)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<div id="helptextName" class="helptext">
 					<ul>

@@ -12,15 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#BlogTagName").focus();
-});
-</script>
-
-
 <!-- form -->
 <?php echo $this->BcForm->create('BlogTag') ?>
 <div class="section">
@@ -37,11 +28,11 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.name', 'ブログタグ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogTag.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('BlogTag.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcForm->error('BlogTag.name') ?>
 			</td>
 		</tr>
-		
+
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>

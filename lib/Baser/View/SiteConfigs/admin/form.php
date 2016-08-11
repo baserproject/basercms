@@ -1,7 +1,7 @@
 <?php
 /**
  * [管理画面] サイト設定 フォーム
- * 
+ *
  * PHP versions 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
@@ -29,7 +29,7 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.formal_name', 'WEBサイト名') ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('SiteConfig.formal_name', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'class' => 'full-width')) ?>
+			<?php echo $this->BcForm->input('SiteConfig.formal_name', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'autofocus' => true, 'class' => 'full-width')) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpFormalName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $this->BcForm->error('SiteConfig.formal_name') ?>
 			<div id="helptextFormalName" class="helptext">

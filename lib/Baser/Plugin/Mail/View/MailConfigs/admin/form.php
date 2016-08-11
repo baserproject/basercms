@@ -12,14 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#MailConfigSiteName").focus();
-});
-</script>
-
 <!-- form -->
 <h2>基本項目</h2>
 
@@ -30,7 +22,7 @@ $(window).load(function() {
 		<tr>
 			<th><?php echo $this->BcForm->label('MailConfig.site_name', '署名：WEBサイト名') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailConfig.site_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('MailConfig.site_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_name') ?>
 				<div id="helptextSiteName" class="helptext">自動送信メールの署名に挿入されます。</div>

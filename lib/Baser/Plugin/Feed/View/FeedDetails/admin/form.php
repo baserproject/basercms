@@ -13,13 +13,6 @@
  */
 ?>
 
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#FeedDetailName").focus();
-});
-</script>
-
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedDetail.feed_config_id')))) ?>
 	<?php elseif ($this->action == 'admin_edit'): ?>
@@ -44,7 +37,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('FeedDetail.name', 'フィード詳細名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('FeedDetail.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('FeedDetail.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcForm->error('FeedDetail.name') ?>
 			</td>
 		</tr>

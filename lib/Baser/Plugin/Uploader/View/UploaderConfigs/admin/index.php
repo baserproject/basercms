@@ -10,14 +10,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#UploaderConfigLargeWidth").focus();
-});
-</script>
-
 <!-- form -->
 <?php echo $this->BcForm->create('UploaderConfig', ['url' => ['action' => 'index']]) ?>
 
@@ -30,7 +22,7 @@ $(window).load(function() {
 				<?php echo $this->BcForm->label('UploaderConfig.large_width', 'PCサイズ（大）') ?>
 			</th>
 			<td>
-				<small>[幅]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.large_width', array('type' => 'text', 'size' => 8,'maxlength' => 8)) ?>&nbsp;px　×　
+				<small>[幅]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.large_width', array('type' => 'text', 'size' => 8,'maxlength' => 8, 'autofocus' => true)) ?>&nbsp;px　×　
 				<small>[高さ]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.large_height', array('type' => 'text', 'size' => 8,'maxlength' => 8)) ?>&nbsp;px
 				<?php echo $this->BcForm->error('UploaderConfig.large_width') ?>
 				<?php echo $this->BcForm->error('UploaderConfig.large_height') ?>

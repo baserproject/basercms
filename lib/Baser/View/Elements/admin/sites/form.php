@@ -12,15 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-
-
-<script>
-$(window).load(function() {
-	$("#SiteName").focus();
-});
-</script>
-
-
 <table class="form-table">
 <?php if($this->request->action == 'admin_edit'): ?>
 	<tr>
@@ -34,7 +25,7 @@ $(window).load(function() {
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.name', '識別名称') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.name', array('type' => 'input', 'size' => '50')) ?>
+			<?php echo $this->BcForm->input('Site.name', array('type' => 'input', 'size' => '50', 'autofocus' => true)) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<div class="helptext">サブサイトを特定する事ができる識別名称を入力します。半角英数とハイフン（-）・アンダースコア（_）のみが利用できます。エイリアスを入力しない場合は、URLにも利用されます。</div>
 			　<small>[<?php echo $this->BcForm->label('Site.alias', 'エイリアス') ?>]</small>
