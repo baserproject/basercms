@@ -274,6 +274,10 @@ class PagesController extends AppController {
 				$path[0] = $this->request->params['Site']['name'];
 			}
 		}
+		
+		if($this->request->params['Site']['id'] != 0 && $this->request->params['Content']['alias_id'] == $this->request->params['Content']['main_site_content_id']) {
+			unset($path[0]);
+		}
 
 		$url = '/' . implode('/', $path);
 

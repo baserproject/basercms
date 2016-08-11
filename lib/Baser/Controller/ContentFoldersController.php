@@ -16,6 +16,7 @@ App::uses('BcContentsController', 'Controller');
  * フォルダ コントローラー
  *
  * @package Baser.Controller
+ * @property ContentFolder $ContentFolder
  */
 class ContentFoldersController extends AppController {
 
@@ -121,7 +122,7 @@ class ContentFoldersController extends AppController {
 		$this->set(compact('data', 'children'));
 		$folderTemplate = $data['ContentFolder']['folder_template'];
 		if(!$folderTemplate) {
-			$folderTemplate = $this->getParentTemplate($data['Content']['id']);
+			$folderTemplate = $this->ContentFolder->getParentTemplate($data['Content']['id'], 'folder');
 		}
 		$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']));
 		$this->render($folderTemplate);

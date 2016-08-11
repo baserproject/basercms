@@ -172,8 +172,17 @@ class Content extends AppModel {
 			if(!isset($this->data['Content']['status'])) {
 				$this->data['Content']['status'] = false;
 			}
+			if(!isset($this->data['Content']['deleted'])) {
+				$this->data['Content']['deleted'] = false;
+			}
 			if(!isset($this->data['Content']['created_date'])) {
 				$this->data['Content']['created_date'] = date('Y-m-d H:i:s');
+			}
+			if(!isset($this->data['Content']['site_root'])) {
+				$this->data['Content']['site_root'] = 0;
+			}
+			if(!isset($this->data['Content']['exclude_search'])) {
+				$this->data['Content']['exclude_search'] = 0;
 			}
 		} else {
 			if(isset($this->data['Content']['name'])) {
@@ -494,6 +503,9 @@ class Content extends AppModel {
 		}
 		if(!isset($content['exclude_search'])) {
 			$content['exclude_search'] = 0;
+		}
+		if(!isset($content['created_date'])) {
+			$content['created_date'] = date('Y-m-d H:i:s');
 		}
 		$this->create($content);
 		return $this->save(null, $validate);

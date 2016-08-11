@@ -16,7 +16,9 @@
  * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
  */
-
+if(empty($this->request->params['Content'])) {
+	return;
+}
 if($this->request->params['Content']['type'] == 'ContentFoler') {
 	$parentId = $this->request->params['Content']['id'];
 	$title = $this->request->params['Content']['title'];
@@ -24,6 +26,9 @@ if($this->request->params['Content']['type'] == 'ContentFoler') {
 	$parent = $this->BcContents->getParent($this->request->params['Content']['id']);
 	$parentId = $parent['Content']['id'];
 	$title = $parent['Content']['title'];
+}
+if($parent['Content']['site_root']) {
+	return;
 }
 ?>
 
@@ -33,4 +38,4 @@ if($this->request->params['Content']['type'] == 'ContentFoler') {
 		<h2><?php echo h($title) ?></h2>
 	<?php endif ?>
 	<?php $this->BcBaser->contentsMenu($parentId, 1, $this->request->params['Content']['id']) ?>
-</div>
+</div>	
