@@ -749,7 +749,7 @@ class Content extends AppModel {
 			$content['Content']['url'] = '';
 			unset($content['Content']['lft']);
 			unset($content['Content']['rght']);
-			$this->save($content, array('validate' => false, 'callbacks' => false));
+			$this->save($content, array('validate' => false));
 			return $this->delete($id);
 		}
 		return false;
