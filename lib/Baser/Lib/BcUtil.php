@@ -353,13 +353,17 @@ class BcUtil extends Object {
 			return '';
 		}
 		$mainUrlInfo = parse_url(Configure::read('BcEnv.siteUrl'));
-		if($_SERVER['HTTP_HOST'] == $mainUrlInfo['host']) {
+		$host = $mainUrlInfo['host'];
+		if(!empty($mainUrlInfo['port'])) {
+			$host .= ':' . $mainUrlInfo['port'];
+		}
+		if($_SERVER['HTTP_HOST'] == $host) {
 			return '';
 		}
-		if(strpos($_SERVER['HTTP_HOST'], $mainUrlInfo['host']) === false) {
+		if(strpos($_SERVER['HTTP_HOST'], $host) === false) {
 			return '';
 		}
-		$subDomain = str_replace($mainUrlInfo['host'], '', $_SERVER['HTTP_HOST']);
+		$subDomain = str_replace($host, '', $_SERVER['HTTP_HOST']);
 		if($subDomain) {
 			return preg_replace('/\.$/', '', $subDomain);
 		}
