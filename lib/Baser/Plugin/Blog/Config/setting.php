@@ -27,6 +27,12 @@ $config['BcContents']['items']['Blog'] = [
 		'preview'	=> true,
 		'icon'	=> 'admin/icon_blog.png',
 		'routes' => [
+			'manage'	=> [
+				'admin' => true,
+				'plugin'	=> 'blog',
+				'controller'=> 'blog_posts',
+				'action'	=> 'index'
+			],
 			'add'	=> [
 				'admin' => true,
 				'plugin'	=> 'blog',

@@ -157,7 +157,7 @@ class BcContentsComponent extends Component {
 				}
 
 				// routes
-				foreach (array('add', 'edit', 'delete', 'index', 'view', 'copy') as $action) {
+				foreach (array('manage', 'add', 'edit', 'delete', 'index', 'view', 'copy') as $action) {
 					if (empty($setting['routes'][$action]) && $action != 'copy') {
 						$setting['routes'][$action] = array('controller' => 'contents', 'action' => $action);
 					}
@@ -166,7 +166,8 @@ class BcContentsComponent extends Component {
 					$setting['routes'][$action] = Router::url($route);
 					// index アクションの際、index が省略されてしまうので強制的に補完
 					if($route['action'] == 'index') {
-						unset($route['plugin'], $route['prefix'], $route['controller'], $route['action']);
+						// 規定以外の引数がないかチェック
+						unset($route['admin'], $route['plugin'], $route['prefix'], $route['controller'], $route['action']);
 						if(count($route) == 0) {
 							$setting['routes'][$action] .= '/index';
 						}

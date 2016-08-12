@@ -26,6 +26,12 @@ $config['BcContents']['items']['Mail'] = [
 		'preview'	=> true,
 		'icon'	=> 'admin/icon_mail.png',
 		'routes' => [
+			'manage'	=> [
+				'admin' => true,
+				'plugin'	=> 'mail',
+				'controller'=> 'mail_fields',
+				'action'	=> 'index'
+			],
 			'add'	=> [
 				'admin' => true,
 				'plugin'	=> 'mail',

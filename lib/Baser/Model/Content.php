@@ -758,12 +758,19 @@ class Content extends AppModel {
 		}
 		if($result) {
 			$content = $this->find('first', array('conditions' => array('Content.id' => $id), 'recursive' => -1));
-			$content['Content']['parent_id'] = null;
-			$content['Content']['url'] = '';
-			unset($content['Content']['lft']);
-			unset($content['Content']['rght']);
-			$this->save($content, array('validate' => false));
-			return $this->delete($id);
+			if(empty($content['Content']['alias_id'])) {
+				$content['Content']['parent_id'] = null;
+				$content['Content']['url'] = '';
+				unset($content['Content']['lft']);
+				unset($content['Content']['rght']);
+				$this->save($content, array('validate' => false));
+				return $this->delete($id);
+			} else {
+				$this->softDelete(false);
+				$result = $this->removeFromTree($content['Content']['id'], true);
+				$this->softDelete(true);
+				return $result;
+			}
 		}
 		return false;
 	}
