@@ -265,7 +265,7 @@ class BcManagerComponent extends Component {
 		ClassRegistry::flush();
 		$Page = ClassRegistry::init('Page');
 		clearAllCache();
-		$pages = $Page->find('all', array('recursive' => 0));
+		$pages = $Page->find('all', ['conditions' => ['Content.alias_id' => null], 'recursive' => 0]);
 		if ($pages) {
 			foreach ($pages as $page) {
 				$Page->create($page);
