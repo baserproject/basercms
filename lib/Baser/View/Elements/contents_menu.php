@@ -29,7 +29,7 @@ if(!isset($currentId)) {
 
 
 <?php if (isset($tree)): ?>
-<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
+<ul class="menu ul-level-<?php echo $level ?>">
 	<?php if (isset($tree)): ?>
 		<?php foreach ($tree as $content): ?>
 			<?php if ($content['Content']['title']): ?>
@@ -39,14 +39,12 @@ if(!isset($currentId)) {
 						$liClass .= ' current';
 					}
 				?>
-				<li class="nav-item <?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?>
+				<li class="<?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?>
+				<?php if (!empty($content['children'])): ?>
+					<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+				<?php endif ?>
+				</li>
 			<?php endif ?>
-			<?php if (!empty($content['children'])): ?>
-			<div class="sub-nav">
-				<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
-			</div>
-			<?php endif ?>
-			</li>
 		<?php endforeach; ?>
 	<?php endif ?>
 </ul>

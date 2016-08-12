@@ -1664,6 +1664,32 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
+ * グローバルメニューを出力する
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return void
+ */
+	public function globalMenu($level = 1, $options = array()) {
+		$Content = ClassRegistry::init('Content');
+		$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+		$id = $siteRoot['Content']['id'];
+		$options = array_merge([
+			'tree' => $this->BcContents->getTree($id, $level),
+			'currentId' => $currentId
+		], $options);
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+			$options = array_merge($options, [
+				'cache' => [
+					'time' => Configure::read('BcCache.duration'),
+					'key' => $id]]
+			);
+		}
+		$this->element('global_menu', $options);
+	}
+
+/**
  * サイトマップを出力する
  *
  * ログインしていない場合はキャッシュする
@@ -2242,18 +2268,6 @@ END_FLASH;
  */
 	public function crumbsList($data = array(), $options = array()) {
 		$this->element('crumbs', $data, $options);
-	}
-
-/**
- * グローバルメニューを出力する
- * 
- * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
- * @param array $options オプション（初期値 : array()）
- *	※ その他のパラメータについては、View::element() を参照
- * @return void
- */
-	public function globalMenu($data = array(), $options = array()) {
-		$this->element('global_menu', $data, $options);
 	}
 
 /**

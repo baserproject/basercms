@@ -1,54 +1,53 @@
 <?php
 /**
- * グローバルメニュー
- * 呼出箇所：全ページ
+ * [PUBLISH] サイトマップ
  *
- * BcBaserHelper::globalMenu() で呼び出す
- * （例）<?php $this->BcBaser->globalMenu() ?>
+ * PHP versions 5
+ *
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright 2008 - 2014, baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
  */
-if (Configure::read('BcRequest.isMaintenance')) {
-	return;
+
+/**
+ * カテゴリの階層構造を表現する為、再帰呼び出しを行う
+ * $this->BcBaser->contentsMenu() で呼び出す
+ */
+
+if (!isset($level)) {
+	$level = 1;
 }
-$prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if(!isset($currentId)) {
+	$currentId = null;
 }
 ?>
 
-<nav>
-<ul class="global-menu nav-menu clearfix">
-	<?php if (empty($menuType)) $menuType = '' ?>
-	<?php $globalMenus = $this->BcContents->getTree() ?>
-	<?php if (!empty($globalMenus)): ?>
-		<?php foreach ($globalMenus as $key => $globalMenu): ?>
-			<?php if ($globalMenu['Content']['status']): ?>
 
+<?php if (isset($tree)): ?>
+<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
+	<?php if (isset($tree)): ?>
+		<?php foreach ($tree as $content): ?>
+			<?php if ($content['Content']['title']): ?>
 				<?php
-				$no = sprintf('%02d', $key + 1);
-				$classies = array('menu' . $no);
-				if ($this->BcArray->first($globalMenus, $key)) {
-					$classies[] = 'first';
-				} elseif ($this->BcArray->last($globalMenus, $key)) {
-					$classies[] = 'last';
-				}
-				if ($this->BcBaser->isCurrentUrl($globalMenu['Content']['url'])) {
-					$classies[] = 'current';
-				}
-				$class = ' class="' . implode(' ', $classies) . '"';
+					$liClass = 'menu-content li-level-' . $level;
+					if($content['Content']['id'] == $currentId) {
+						$liClass .= ' current';
+					}
 				?>
-
-				<?php if (!Configure::read('BcRequest.agent') && $this->base == '/index.php' && $globalMenu['Content']['url'] == '/'): ?>
-					<?php /* PC版トップページ */ ?>
-					<li<?php echo $class ?>>
-						<?php echo str_replace('/index.php', '', $this->BcBaser->link($globalMenu['Content']['title'], $globalMenu['Content']['title'])) ?>
-					</li>
-				<?php else: ?>
-					<li<?php echo $class ?>>
-						<?php $this->BcBaser->link($globalMenu['Content']['title'], $prefix . $globalMenu['Content']['url']) ?>
-					</li>
-				<?php endif ?>
+				<li class="nav-item <?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?>
+					<?php if (!empty($content['children'])): ?>
+					<div class="sub-nav">
+						<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+					</div>
+					<?php endif ?>
+				</li>
 			<?php endif ?>
-		<?php endforeach ?>
+		<?php endforeach; ?>
 	<?php endif ?>
 </ul>
-</nav>
+<?php endif ?>
