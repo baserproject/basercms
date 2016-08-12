@@ -14,6 +14,7 @@
  * サイト設定コントローラー
  *
  * @package Baser.Controller
+ * @property BcManagerComponent $BcManager
  */
 class SiteConfigsController extends AppController {
 

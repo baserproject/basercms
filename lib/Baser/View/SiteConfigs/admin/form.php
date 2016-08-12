@@ -202,18 +202,6 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
 			</td>
 		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'ケータイ') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.mobile', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.smartphone', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
-			</td>
-		</tr>
 <?php if ($this->BcBaser->siteConfig['category_permission']): ?>
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
