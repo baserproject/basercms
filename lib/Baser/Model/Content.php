@@ -593,9 +593,10 @@ class Content extends AppModel {
 				$data['Content']['main_site_content_id'] = null;
 			}
 		}
-
-		$this->data = $this->save($data, array('validate' => false, 'callbacks' => false));
-		return (bool) ($this->data);
+		$dataTmp = $this->data;
+		$data = $this->save($data, array('validate' => false, 'callbacks' => false));
+		$this->data = $dataTmp;
+		return (bool) ($data);
 	}
 
 /**
