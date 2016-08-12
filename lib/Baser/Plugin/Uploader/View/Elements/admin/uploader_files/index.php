@@ -39,18 +39,6 @@ if(!isset($listId)) {
 <?php $this->BcBaser->element('list_num') ?>
 <?php endif ?>
 
-
-<!-- コンテキストメニュー -->
-<ul id="FileMenu1" class="context-menu">
-    <li class="edit"><a href="#edit">編集</a></li>
-    <li class="delete"><a href="#delete">削除</a></li>
-</ul>
-<ul id="FileMenu2" class="context-menu">
-    <li class="edit disabled"><a href="#">編集</a></li>
-    <li class="delete disabled"><a href="#">削除</a></li>
-</ul>
-
-
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="ファイル情報編集">
 	<?php $this->BcBaser->element('uploader_files/form', array('listId', $listId, 'popup' => true)) ?>
