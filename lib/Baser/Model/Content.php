@@ -1161,18 +1161,17 @@ class Content extends AppModel {
  * @return array|bool|false
  */
 	public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId) {
-		$this->moveRelateSubSiteContent($currentId, $targetId);
+		$this->moveRelateSubSiteContent($currentId, $targetParentId, $targetId);
 		$targetSort = $this->getOrderSameParent($targetId, $targetParentId);
 		if($currentParentId != $targetParentId) {
 			// 親を変更
-			//$name = $this->field('name', array('Content.id' => $currentId));
 			$this->save(['Content' => [
 				'id'		=> $currentId,
 				'parent_id' => $targetParentId,
 				'site_id'	=> $targetSiteId
 			]], false);
-			// フォルダにコンテンツがない場合は親を変更して終了
-			if(!$targetSort) {
+			// フォルダにコンテンツがない場合、targetId が空で一番後を指定の場合は、親を変更して終了
+			if(!$targetSort || !$targetId) {
 				return $this->find('first', [
 					'conditions' => ['Content.id' => $currentId],
 					'recursive' => -1
@@ -1193,11 +1192,11 @@ class Content extends AppModel {
  *
  * @param $data
  */
-	public function moveRelateSubSiteContent($mainSiteCurrentId, $mainSiteTargetId) {
+	public function moveRelateSubSiteContent($mainCurrentId, $mainTargetParentId, $mainTargetId) {
 		// 他のデータを更新する為、一旦退避
 		$dataTmp = $this->data;
 		$idTmp = $this->id;
-		$data = $this->find('first', ['conditions' => ['Content.id' => $mainSiteCurrentId], 'recursive' => -1]);
+		$data = $this->find('first', ['conditions' => ['Content.id' => $mainCurrentId], 'recursive' => -1]);
 		// 自身がエイリアスか確認し、エイリアスの場合は終了
 		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id']) || !isset($data['Content']['type'])) {
 			return true;
@@ -1214,12 +1213,34 @@ class Content extends AppModel {
 		$result = true;
 		foreach($sites as $site) {
 			// 自信をメインコンテンツとしているデータを取得
-			$current = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainSiteCurrentId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
-			$target = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainSiteTargetId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
-			if(!$current || !$target) {
+			$current = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainCurrentId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
+			if(!$current) {
 				continue;
 			}
-			if(!$this->move($current['Content']['id'], $current['Content']['parent_id'], $target['Content']['site_id'], $target['Content']['parent_id'], $target['Content']['id'])) {
+			$currentId = $current['Content']['id'];
+			$currentParentId = $current['Content']['parent_id'];
+			$target = null;
+			$targetId = "";
+			$targetParentId = "";
+			if($mainTargetId) {
+				$target = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainTargetId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
+				if($target) {
+					$targetId = $target['Content']['id'];
+					$targetParentId = $target['Content']['parent_id'];
+				}	
+			}
+			if(!$target) {
+				// ターゲットが見つからない場合は親IDより取得
+				$target = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainTargetParentId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
+				if($target) {
+					$targetParentId = $target['Content']['id'];
+				}
+			}
+			if(!$target) {
+				continue;
+			}
+			$targetSiteId = $target['Content']['site_id'];
+			if(!$this->move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId)) {
 				$result = false;
 			}	
 		}
@@ -1281,7 +1302,7 @@ class Content extends AppModel {
 					}
 				}
 			} else {
-				$order = count($contents);
+				return count($contents);
 			}
 		} else {
 			return false;
