@@ -362,6 +362,7 @@ class Content extends AppModel {
  * @param $data
  */
 	public function updateRelateSubSiteContent($data) {
+		$dataTmp = $this->data;
 		// 自身がエイリアスか確認し、エイリアスの場合は終了
 		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id']) || !isset($data['Content']['type'])) {
 			return true;
@@ -460,8 +461,7 @@ class Content extends AppModel {
 				}
 			}
 		}
-		$this->data = $data;
-		$this->id = $data['Content']['id'];
+		$this->data = $dataTmp;
 		return $result;
 	}
 
@@ -593,9 +593,8 @@ class Content extends AppModel {
 				$data['Content']['main_site_content_id'] = null;
 			}
 		}
-		$dataTmp = $this->data;
 		$data = $this->save($data, array('validate' => false, 'callbacks' => false));
-		$this->data = $dataTmp;
+		$this->data = $data;
 		return (bool) ($data);
 	}
 
@@ -638,6 +637,7 @@ class Content extends AppModel {
  * @return bool
  */
 	public function updateChildren($id) {
+		$data = $this->data;
 		$children = $this->children($id);
 		$result = true;
 		if($children) {
@@ -647,6 +647,7 @@ class Content extends AppModel {
 				}
 			}
 		}
+		$this->data = $data;
 		return $result;
 	}
 

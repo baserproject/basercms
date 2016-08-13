@@ -98,12 +98,12 @@ class BcContentsBehavior extends ModelBehavior {
 			return;
 		}
 		if(!empty($options['validate'])) {
+			// beforeValidate で調整したデータを利用する為、$model->Content->data['Content'] を利用
 			$data = $model->Content->data['Content'];
 		} else {
 			$data = $model->data['Content'];
 		}
 		if($created) {
-			// beforeValidate で調整したデータを利用する為、$model->Content->data['Content'] を利用
 			$data = $model->Content->createContent($data, ($model->plugin)? $model->plugin: "Core", $model->name, $model->id, false);
 		} else {
 			$model->Content->clear();
