@@ -362,7 +362,7 @@ class Content extends AppModel {
  * @param $data
  */
 	public function updateRelateSubSiteContent($data) {
-		// 他のデータを更新する為、一旦待避
+		// 他のデータを更新する為、一旦退避
 		$dataTmp = $this->data;
 		$idTmp = $this->id;
 		// 自身がエイリアスか確認し、エイリアスの場合は終了
@@ -463,7 +463,7 @@ class Content extends AppModel {
 				}
 			}
 		}
-		// 待避したデータを戻す
+		// 退避したデータを戻す
 		$this->data = $dataTmp;
 		$this->id = $idTmp;
 		return $result;
@@ -641,7 +641,7 @@ class Content extends AppModel {
  * @return bool
  */
 	public function updateChildren($id) {
-		// 他のデータを更新する為一旦待避
+		// 他のデータを更新する為一旦退避
 		$dataTmp = $this->data;
 		$idTmp = $this->id;
 		$children = $this->children($id);
@@ -653,7 +653,7 @@ class Content extends AppModel {
 				}
 			}
 		}
-		// 待避したデータを戻す
+		// 退避したデータを戻す
 		$this->data = $dataTmp;
 		$this->id = $idTmp;
 		return $result;
@@ -1161,18 +1161,22 @@ class Content extends AppModel {
  * @return array|bool|false
  */
 	public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId) {
+		$this->moveRelateSubSiteContent($currentId, $targetId);
 		$targetSort = $this->getOrderSameParent($targetId, $targetParentId);
 		if($currentParentId != $targetParentId) {
 			// 親を変更
 			//$name = $this->field('name', array('Content.id' => $currentId));
-			$data = $this->save(['Content' => [
+			$this->save(['Content' => [
 				'id'		=> $currentId,
 				'parent_id' => $targetParentId,
 				'site_id'	=> $targetSiteId
 			]], false);
 			// フォルダにコンテンツがない場合は親を変更して終了
 			if(!$targetSort) {
-				return $data;
+				return $this->find('first', [
+					'conditions' => ['Content.id' => $currentId],
+					'recursive' => -1
+				]);
 			}
 			$currentSort = $this->getOrderSameParent(null, $targetParentId);
 		} else {
@@ -1182,6 +1186,47 @@ class Content extends AppModel {
 		$offset = $targetSort - $currentSort;
 		// オフセットを元に移動
 		return $this->moveOffset($currentId, $offset);
+	}
+
+/**
+ * メインサイトの場合、連携設定がされている子サイトも移動する
+ *
+ * @param $data
+ */
+	public function moveRelateSubSiteContent($mainSiteCurrentId, $mainSiteTargetId) {
+		// 他のデータを更新する為、一旦退避
+		$dataTmp = $this->data;
+		$idTmp = $this->id;
+		$data = $this->find('first', ['conditions' => ['Content.id' => $mainSiteCurrentId], 'recursive' => -1]);
+		// 自身がエイリアスか確認し、エイリアスの場合は終了
+		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id']) || !isset($data['Content']['type'])) {
+			return true;
+		}
+		// メインサイトか確認し、メインサイトでない場合は終了
+		if(!$this->Site->isMain($data['Content']['site_id'])) {
+			return true;
+		}
+		// 連携設定となっている小サイトを取得
+		$sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $data['Content']['site_id'], 'relate_main_site' => true]]);
+		if(!$sites) {
+			return true;
+		}
+		$result = true;
+		foreach($sites as $site) {
+			// 自信をメインコンテンツとしているデータを取得
+			$current = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainSiteCurrentId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
+			$target = $this->find('first', ['conditions' => ['Content.main_site_content_id' => $mainSiteTargetId, 'Content.site_id' => $site['Site']['id']], 'recursive' => -1]);
+			if(!$current || !$target) {
+				continue;
+			}
+			if(!$this->move($current['Content']['id'], $current['Content']['parent_id'], $target['Content']['site_id'], $target['Content']['parent_id'], $target['Content']['id'])) {
+				$result = false;
+			}	
+		}
+		// 退避したデータを戻す
+		$this->data = $dataTmp;
+		$this->id = $idTmp;
+		return $result;
 	}
 	
 /**
