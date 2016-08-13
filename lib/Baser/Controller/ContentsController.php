@@ -46,25 +46,25 @@ class ContentsController extends AppController {
 
 		$this->pageTitle = 'コンテンツ一覧';
 		$sites = $this->Site->getSiteList();
-		$siteId = 0;
-		if(!$sites) {
-			$siteId = 1;
-		}
-		$default = array(
-			'named' => array(
+		$default = [
+			'named' => [
 				'num'		=> $this->siteConfigs['admin_list_num'],
-				'site_id'	=> $siteId
-			)
-		);
+				'site_id'	=> 0
+			]
+		];
 		$this->setViewConditions('Content', ['default' => $default]);
 		if($this->action == 'admin_trash_index') {
 			$this->pageTitle = 'ゴミ箱';
 		}
 
 		if (!empty($this->request->isAjax)) {
-			$conditions = array();
+			$conditions = [];
 			if($this->action == 'admin_index') {
 				if($this->passedArgs['site_id'] != 'all') {
+					if(empty($sites[$this->passedArgs['site_id']])) {
+						$this->passedArgs['site_id'] = 0;
+						$this->Session->write('ContentsAdminIndex.named.site_id', 0);
+					}
 					$conditions = ['Content.site_id' => $this->passedArgs['site_id']];
 				} else {
 					$conditions = ['or' => [

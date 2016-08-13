@@ -762,6 +762,9 @@ class Content extends AppModel {
 			if(empty($content['Content']['alias_id'])) {
 				$content['Content']['parent_id'] = null;
 				$content['Content']['url'] = '';
+				$content['Content']['status'] = false;
+				$content['Content']['publish_begin'] = '';
+				$content['Content']['publish_end'] = '';
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
 				$this->save($content, array('validate' => false));
@@ -811,12 +814,15 @@ class Content extends AppModel {
 				$siteRootId = $this->field('id', array('Content.site_id' => $content['Content']['site_id'], 'site_root' => true));
 				$content['Content']['parent_id'] = $siteRootId;
 			}
+			unset($content['Content']['lft']);
+			unset($content['Content']['rght']);
 			if($this->save($content, false)) {
 				return $content['Content']['site_id'];
 			} else {
 				$result = false;
 			}
 		} else {
+			$this->Behaviors->load('Tree');
 			$result = false;
 		}
 		return $result;

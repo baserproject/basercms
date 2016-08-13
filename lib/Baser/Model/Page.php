@@ -338,7 +338,7 @@ class Page extends AppModel {
 	}
 
 /**
- * ページファイルのディレクトリを取得する
+ * ページファイルのパスを取得する
  * 
  * @param array $data
  * @return string
@@ -378,7 +378,7 @@ class Page extends AppModel {
 	public function delFile($data) {
 		$path = $this->getPageFilePath($data);
 		if ($path) {
-			return unlink($path);
+			return @unlink($path);
 		}
 		return true;
 	}

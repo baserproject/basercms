@@ -233,7 +233,8 @@ class Site extends AppModel {
 		$children = $Content->children($id, false);
 		foreach($children as $child) {
 			$child['Content']['site_id'] = 0;
-			$Content->save($child);
+			// バリデートすると name が変換されてしまう
+			$Content->save($child, false);
 		}
 
 		$children = $Content->children($id, true);
