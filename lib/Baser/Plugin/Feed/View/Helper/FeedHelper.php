@@ -68,7 +68,7 @@ class FeedHelper extends BcTextHelper {
  * <!--nocache--><!--/nocache-->でキャッシュタイムを参照できるようにする
  *
  * @return void
- * @deprecated since version 3.1.0
+ * @deprecated since version 4.0.0
  */
 	public function saveCachetime() {
 		$feedId = $this->params['pass'][0];
@@ -87,7 +87,7 @@ class FeedHelper extends BcTextHelper {
  * 事前に $this->Feed->saveCachetime() でキャッシュタイムを保存しておく
  *
  * @return void
- * @deprecated since version 3.1.0
+ * @deprecated since version 4.0.0
  */
 	public function cacheHeader() {
 		$feedId = $this->params['pass'][0];

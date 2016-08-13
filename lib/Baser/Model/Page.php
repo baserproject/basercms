@@ -453,7 +453,7 @@ class Page extends AppModel {
 			return strtotime($page['Content']['publish_end']) - time();
 		} else {
 			// #10680 Modify 2016/01/22 gondoh
-			// 3.1.0で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
+			// 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
 			$duration = Configure::read('BcCache.viewDuration');
 			if (empty($duration)) $duration = Configure::read('BcCache.duration');
 			return $duration;

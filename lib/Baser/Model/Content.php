@@ -775,7 +775,7 @@ class Content extends AppModel {
 				$content['Content']['publish_end'] = '';
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
-				$this->save($content, array('validate' => false));
+				$this->save($content, array('validate' => false, 'callbacks' => false));
 				return $this->delete($id);
 			} else {
 				$this->softDelete(false);

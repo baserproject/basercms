@@ -8,14 +8,13 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			baserCMS v 3.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->css('../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min', array('inline' => false));
 $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
-$this->BcBaser->js('admin/contents/index', false, ['id' => 'AdminContentsIndexScript',
-	'data-siteId' => $this->passedArgs['site_id']
-]);
+$this->BcBaser->js('admin/contents/index', false);
+$this->BcBaser->js('admin/libs/jquery.bcTree', false);
 echo $this->BcForm->input('BcManageContent', array('type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()));
 ?>
 
