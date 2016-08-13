@@ -362,7 +362,9 @@ class Content extends AppModel {
  * @param $data
  */
 	public function updateRelateSubSiteContent($data) {
+		// 他のデータを更新する為、一旦待避
 		$dataTmp = $this->data;
+		$idTmp = $this->id;
 		// 自身がエイリアスか確認し、エイリアスの場合は終了
 		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id']) || !isset($data['Content']['type'])) {
 			return true;
@@ -461,7 +463,9 @@ class Content extends AppModel {
 				}
 			}
 		}
+		// 待避したデータを戻す
 		$this->data = $dataTmp;
+		$this->id = $idTmp;
 		return $result;
 	}
 
@@ -637,7 +641,9 @@ class Content extends AppModel {
  * @return bool
  */
 	public function updateChildren($id) {
-		$data = $this->data;
+		// 他のデータを更新する為一旦待避
+		$dataTmp = $this->data;
+		$idTmp = $this->id;
 		$children = $this->children($id);
 		$result = true;
 		if($children) {
@@ -647,7 +653,9 @@ class Content extends AppModel {
 				}
 			}
 		}
-		$this->data = $data;
+		// 待避したデータを戻す
+		$this->data = $dataTmp;
+		$this->id = $idTmp;
 		return $result;
 	}
 
