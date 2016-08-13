@@ -381,48 +381,14 @@ class ContentsController extends AppController {
 			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 		}
 		
-		$result = true;
-		if($this->request->data['currentParentId'] == $this->request->data['targetParentId']) {
-			$result = $this->Content->move($this->request->data['currentId'], $this->request->data['offset']);
-		} else {
-			// フォルダを絞って直下のデータを全件取得
-			$conditions = array('Content.parent_id' => $this->request->data['targetParentId']);
-			$contents = $this->Content->find('all', array(
-				'fields' => array('Content.id', 'Content.parent_id', 'Content.title'),
-				'order' => 'lft',
-				'conditions' => $conditions,
-				'recursive' => -1
-			));
-			$targetSort = null;
-			if($contents) {
-				$contents = Hash::extract($contents, '{n}.Content');
-				// 移動先の並び順を取得
-				foreach($contents as $key => $data) {
-					if($this->request->data['targetId'] == $data['id']) {
-						$targetSort = $key + 1;
-						break;
-					}
-				}
-			}
-			// 親を変更
-			$name = $this->Content->field('name', array('Content.id' => $this->request->data['currentId']));
-			$result = $this->Content->save(array('Content' => array(
-				'id'		=> $this->request->data['currentId'],
-				'name'		=> $name,
-				'parent_id' => $this->request->data['targetParentId'],
-				'site_id'	=> $this->request->data['targetSiteId'],
-				'type' 		=> $this->request->data['type'],
-			)), false);
-			if($targetSort && $result) {
-				// 自分の並び順を取得
-				$currentSort = count($contents) + 1;
-				// 親変更後のオフセットを取得
-				$offset = $targetSort - $currentSort;
-				// オフセットを元に移動
-				$result = $this->Content->move($this->request->data['currentId'], $offset);
-			}
-		}
-
+		$data = $this->request->data;
+		$result = $this->Content->move(
+			$data['currentId'], 
+			$data['currentParentId'],
+			$data['targetSiteId'], 
+			$data['targetParentId'], 
+			$data['targetId']
+		);
 		if($result) {
 
 			// EVENT Contents.afterAdd

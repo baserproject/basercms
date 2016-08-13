@@ -63,12 +63,12 @@ class PagesControllerEventListener extends BcControllerEventListener {
  * @return bool|void
  */
 	public function contentsBeforeMove(CakeEvent $event) {
-		if($event->data['data']['type'] != 'Page') {
+		if($event->data['data']['currentType'] != 'Page') {
 			return true;
 		}
 		$Controller = $event->subject();
 		$entityId = $Controller->Content->field('entity_id', [
-			'Content.id' =>$event->data['data']['currentId']
+			'Content.id' => $event->data['data']['currentId']
 		]);
 		$this->oldPath = $this->Page->getPageFilePath(
 			$this->Page->find('first', array(

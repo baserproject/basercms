@@ -1136,11 +1136,48 @@ class Content extends AppModel {
 /**
  * コンテンツを移動する
  * 
+ * 基本的に targetId の上に移動する前提となる
+ * targetId が空の場合は、同親中、一番下に移動する
+ * 
+ * @param $currentId
+ * @param $type
+ * @param $targetSiteId
+ * @param $targetParentId
+ * @param $targetId
+ * @return array|bool|false
+ */
+	public function move($currentId, $currentParentId, $targetSiteId, $targetParentId, $targetId) {
+		$targetSort = $this->getOrderSameParent($targetId, $targetParentId);
+		if($currentParentId != $targetParentId) {
+			// 親を変更
+			//$name = $this->field('name', array('Content.id' => $currentId));
+			$data = $this->save(['Content' => [
+				'id'		=> $currentId,
+				'parent_id' => $targetParentId,
+				'site_id'	=> $targetSiteId
+			]], false);
+			// フォルダにコンテンツがない場合は親を変更して終了
+			if(!$targetSort) {
+				return $data;
+			}
+			$currentSort = $this->getOrderSameParent(null, $targetParentId);
+		} else {
+			$currentSort = $this->getOrderSameParent($currentId, $targetParentId);	
+		}
+		// 親変更後のオフセットを取得
+		$offset = $targetSort - $currentSort;
+		// オフセットを元に移動
+		return $this->moveOffset($currentId, $offset);
+	}
+	
+/**
+ * オフセットを元にコンテンツを移動する
+ *
  * @param $id
  * @param $offset
  * @return array|false
  */
-	public function move($id, $offset) {
+	public function moveOffset($id, $offset) {
 		$offset = (int) $offset;
 		if($offset > 0) {
 			$result = $this->moveDown($id, abs($offset));
@@ -1158,4 +1195,39 @@ class Content extends AppModel {
 			return false;
 		}
 	}
+
+/**
+ * 同じ階層における並び順を取得
+ * 
+ * id が空の場合は、一番最後とみなす
+ * 
+ * @param $id
+ * @param $parentId
+ * @return bool|int|null|string
+ */
+	public function getOrderSameParent($id, $parentId) {
+		$contents = $this->find('all', array(
+			'fields' => array('Content.id', 'Content.parent_id', 'Content.title'),
+			'order' => 'lft',
+			'conditions' => ['Content.parent_id' => $parentId],
+			'recursive' => -1
+		));
+		$order = null;
+		if($contents) {
+			if($id) {
+				foreach($contents as $key => $data) {
+					if($id == $data['Content']['id']) {
+						$order = $key + 1;
+						break;
+					}
+				}
+			} else {
+				$order = count($contents);
+			}
+		} else {
+			return false;
+		}
+		return $order;
+	}
+	
 }
