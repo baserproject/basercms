@@ -5,17 +5,17 @@
 ?>
 
 <div id="Alfa" >
-	<div id="sidebox">
+	<div class="sidebox clearfix">
 		<div id="GlobalMenus" class="Left-GlobalMenus">
-			<?php $this->BcBaser->element('global_menu') ?>
+			<?php $this->BcBaser->globalMenu() ?>
 		</div>
 	</div>
 
-	<div id="sidebox">
+	<div class="sidebox">
 		<?php $this->BcBaser->widgetArea() ?>
 	</div>
 
-	<div id="sidebox">
+	<div class="sidebox">
 		<div id="sidebox-bnr">
 			<?php $this->BcBaser->img('./sidebox/icons_banner_01.png', array('url' => '/#')); ?>
 		</div>
@@ -25,7 +25,7 @@
 	</div>
 
 
-	<div id="sidebox">
+	<div class="sidebox">
 		<div id="sidebox-bnr3"><?php $this->BcBaser->img('./sidebox/sidebox_logo.png'); ?></div>
 		<div id="sidebox-txt" class="sidebox-text">baserCMS</div>
 		<div id="sidebox-bnr4">
@@ -43,8 +43,8 @@
 	<div id="fb-root"></div>
 	<script>(function(d, s, id) {
 			var js, fjs = d.getElementsByTagName(s)[0];
-				if (d.getElementById(id)) return;
-				js = d.createElement(s); js.id = id;
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
 			js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1";
 			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));

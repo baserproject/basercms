@@ -152,25 +152,25 @@ pre {
     width: 212px;
 }
 
-#GlobalMenus li.menu01{
+#GlobalMenus li.nav-item-1{
     background: url("../img/icons/icons_ico_squ_01.png") no-repeat scroll 20px center transparent;
 }
-#GlobalMenus li.menu02{
+#GlobalMenus li.nav-item-2{
     background: url("../img/icons/icons_ico_squ_02.png") no-repeat scroll 20px center transparent;
 }
-#GlobalMenus li.menu03{
+#GlobalMenus li.nav-item-3{
     background: url("../img/icons/icons_ico_squ_03.png") no-repeat scroll 20px center transparent;
 }
-#GlobalMenus li.menu04{
+#GlobalMenus li.nav-item-4{
     background: url("../img/icons/icons_ico_squ_04.png") no-repeat scroll 20px center transparent;
 }
-#GlobalMenus li.menu05{
+#GlobalMenus li.nav-item-5{
     background: url("../img/icons/icons_ico_squ_05.png") no-repeat scroll 20px center transparent;
 }
-#GlobalMenus li.menu06{
+#GlobalMenus li.nav-item-6{
     background: url("../img/icons/icons_ico_squ_06.png") no-repeat scroll 20px center transparent;
 }
-#GlobalMenus li.menu07{
+#GlobalMenus li.nav-item-7{
     background: url("../img/icons/icons_ico_00.png") no-repeat scroll 20px center transparent;
 }
 
@@ -334,7 +334,7 @@ h1{
 
 /* sidebox
 ----------------------------------------------- */
-#sidebox{
+.sidebox{
     background-color: #FFF;
     border: 1px solid #E3E3E3;
     border-radius: 4px 4px 4px 4px;

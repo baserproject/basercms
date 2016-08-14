@@ -22,7 +22,7 @@
 	<h1><?php $this->BcBaser->link(@$this->BcBaser->siteConfig['name'], '/') ?></h1>
 
 	<div id="GlobalMenus">
-		<?php $this->BcBaser->element('global_menu') ?>
+		<?php $this->BcBaser->globalMenu() ?>
 	</div>
 
 	<?php if (!$this->BcBaser->isHome()): ?>

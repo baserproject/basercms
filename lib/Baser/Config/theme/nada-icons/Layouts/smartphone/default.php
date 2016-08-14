@@ -12,16 +12,16 @@
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->css(array('admin/html5reset-1.6.1', 'smartphone/style')) ?>
-<?php $this->BcBaser->js(array(
-			'jquery-1.7.2.min',
-			'smartphone/startup.js',
-			'startup',
-			'jquery.bxSlider.min',
-			'jquery.easing.1.3',
-			'nada-icons'
-)) ?>
+		<?php $this->BcBaser->js(array(
+				'jquery-1.7.2.min',
+				'smartphone/startup.js',
+				'startup',
+				'jquery.bxSlider.min',
+				'jquery.easing.1.3',
+				'nada-icons'
+		)) ?>
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics', array(), array('subDir' => false)) ?>
+<?php $this->BcBaser->googleAnalytics([], ['subDir' => false]) ?>
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>">
 		<div id="Page">
@@ -31,7 +31,7 @@
 					<div id="Logo"><h1><?php $this->BcBaser->logo(array('link' => '/s/')) ?></h1></div>
 				</div>
 				<div class="clearfix" id="global_menu">
-					<?php $this->BcBaser->element('global_menu') ?>
+					<?php $this->BcBaser->globalMenu() ?>
 				</div>
 			</header>
 
@@ -50,7 +50,7 @@
 			<div id="ContentsBody" class="contents-body clearfix">
 				<?php $this->BcBaser->flash() ?>
 				<?php $this->BcBaser->content() ?>
-				<?php $this->BcBaser->element('contents_navi') ?>
+				<?php $this->BcBaser->contentsNavi() ?>
 			</div>
 
 			<div>
@@ -65,7 +65,7 @@
 
 			<footer>
 				<div class="clearfix" id="global_menu">
-					<?php $this->BcBaser->element('global_menu') ?>
+					<?php $this->BcBaser->globalMenu() ?>
 				</div>
 
 				<address>Copyright(C) 2008 - <?php echo date('Y') ?> <br />baserCMS All rights Reserved.</address>

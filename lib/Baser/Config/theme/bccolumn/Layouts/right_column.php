@@ -35,7 +35,7 @@
 			'startup'
 )) ?>
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics') ?>
+<?php $this->BcBaser->googleAnalytics() ?>
 </head>
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>">

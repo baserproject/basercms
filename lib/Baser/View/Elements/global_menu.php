@@ -24,12 +24,13 @@ if(!isset($currentId)) {
 
 
 <?php if (isset($tree)): ?>
-	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
+	<ul class="global-menu ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
 		<?php if (isset($tree)): ?>
+			<?php $i = 1 ?>
 			<?php foreach ($tree as $content): ?>
 				<?php if ($content['Content']['title']): ?>
 					<?php
-					$liClass = 'menu-content li-level-' . $level;
+					$liClass = 'nav-item-' . $i . ' li-level-' . $level;
 					if($content['Content']['id'] == $currentId) {
 						$liClass .= ' current';
 					}
@@ -42,6 +43,7 @@ if(!isset($currentId)) {
 						<?php endif ?>
 					</li>
 				<?php endif ?>
+				<?php $i++ ?>
 			<?php endforeach; ?>
 		<?php endif ?>
 	</ul>

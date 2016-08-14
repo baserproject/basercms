@@ -715,8 +715,8 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetElement() {
 		// フロント
-		$result = $this->BcBaser->getElement(('global_menu'));
-		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+		$result = $this->BcBaser->getElement('site_search_form');
+		$this->assertTextContains('<div class="section search-box">', $result);
 
 		// ### 管理画面
 		$View = new BcAppView();
@@ -724,11 +724,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		$View->subDir = 'admin';
 		// 管理画面用のテンプレートがなくフロントのテンプレートがある場合
 		// ※ フロントが存在する場合にはフロントのテンプレートを利用する
-		$result = $this->BcBaser->getElement(('global_menu'));
-		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+		$result = $this->BcBaser->getElement(('site_search_form'));
+		$this->assertTextContains('<div class="section search-box">', $result);
 		// 強制的にフロントのテンプレートに切り替えた場合
 		$result = $this->BcBaser->getElement('crumbs', array(), array('subDir' => false));
-		$this->assertEquals('<strong>ホーム</strong>', $result);
+		$this->assertTextContains('ホーム', $result);
 	}
 
 /**
@@ -739,8 +739,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testElement() {
-		$this->expectOutputRegex('/<ul class="global-menu clearfix">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
-		$this->BcBaser->element(('global_menu'));
+		$this->expectOutputRegex('/<div id="Footer">/s');
+		$this->BcBaser->element(('footer'));
 	}
 
 /**
@@ -2037,8 +2037,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testContentsNavi() {
-		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
-		$this->BcBaser->crumbsList();
+		$this->BcBaser->request = $this->_getRequest('/about');
+		$this->expectOutputRegex('/<div id=\"ContentsNavi\">/');
+		$this->BcBaser->contentsNavi();
 	}
 
 /**
@@ -2047,7 +2048,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testCrumbsList() {
-		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
+		$this->expectOutputRegex('/ホーム/');
 		$this->BcBaser->crumbsList();
 	}
 
@@ -2057,7 +2058,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGlobalMenu() {
-		$this->expectOutputRegex('/<ul class="global-menu clearfix">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
+		$this->expectOutputRegex('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
 		$this->BcBaser->globalMenu();
 	}
 

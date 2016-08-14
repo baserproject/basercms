@@ -50,7 +50,7 @@ $(function(){
 <?php endif ?>
 
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics') ?>
+<?php $this->BcBaser->googleAnalytics() ?>
 </head>
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>">
@@ -89,7 +89,7 @@ $(function(){
 
 	<?php if (!$this->BcBaser->isHome()): ?>
 	<div id="Breadcrumbs">
-		<?php $this->BcBaser->element('crumbs'); ?>
+		<?php $this->BcBaser->crumbsList(); ?>
 	</div>
 	<?php endif; ?>
 

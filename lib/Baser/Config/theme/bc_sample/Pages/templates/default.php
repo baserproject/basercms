@@ -14,8 +14,5 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-if($this->pageTitle && !$this->BcBaser->isHome()) {
-	echo '<h1>' . $this->pageTitle . '</h1>';
-}
 $this->BcPage->content();
 $this->BcBaser->element('contents_navi');
