@@ -53,7 +53,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 <?php echo $this->BcForm->hidden('Content.site_root') ?>
 <?php echo $this->BcForm->hidden('Content.site_id') ?>
 <?php echo $this->BcForm->hidden('Content.lft') ?>
-<?php echo $this->BcForm->hidden('Content.right') ?>
+<?php echo $this->BcForm->hidden('Content.rght') ?>
 
 
 <div id="ContentsFormTabs">

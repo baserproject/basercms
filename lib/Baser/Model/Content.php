@@ -253,7 +253,13 @@ class Content extends AppModel {
 		}
 
 	}
-
+	public $beforeSaveParentId = null;
+	public function beforeSave($options = []) {
+		if(!empty($this->data['Content']['id'])) {
+			$this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);	
+		}
+		return parent::beforeSave($options);
+	}
 /**
  * After Save
  *
@@ -269,6 +275,11 @@ class Content extends AppModel {
 			$this->updateChildren($this->data['Content']['id']);
 		}
 		$this->updateRelateSubSiteContent($this->data);
+		if(!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
+			$SiteConfig = ClassRegistry::init('SiteConfig');
+			$SiteConfig->updateContentsSortLastModified();
+			$this->beforeSaveParentId = null;
+		}
 	}
 
 /**

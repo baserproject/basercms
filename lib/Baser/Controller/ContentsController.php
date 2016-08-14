@@ -20,6 +20,7 @@ App::uses('BcContentsController', 'Controller');
  * @package Baser.Controller
  * @property Content $Content
  * @property BcAuthComponent $BcAuth
+ * @property SiteConfig $SiteConfig
  */
 class ContentsController extends AppController {
 
@@ -28,7 +29,7 @@ class ContentsController extends AppController {
  *
  * @var array
  */
-	public $uses = ['Content', 'Site'];
+	public $uses = ['Content', 'Site', 'SiteConfig'];
 
 /**
  * コンポーネント
@@ -85,6 +86,8 @@ class ContentsController extends AppController {
 				];
 			}
 			$datas = $this->Content->find('threaded', ['order' => ['Content.site_id', 'Content.lft'], 'conditions' => $conditions, 'recursive' => 0]);
+			// 並び替え最終更新時刻をリセット
+			$this->SiteConfig->resetContentsSortLastModified();
 			$this->set('datas', $datas);
 			Configure::write('debug', 0);
 			$this->render('ajax_index');
@@ -383,6 +386,10 @@ class ContentsController extends AppController {
 			$this->ajaxError(500, 'データが存在しません。');
 		}
 
+		if($this->SiteConfig->isChangedContentsSortLastModified($this->request->data['listDisplayed'])) {
+			$this->ajaxError(500, "コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。");
+		}
+		
 		// EVENT Contents.beforeMove
 		$event = $this->dispatchEvent('beforeMove', array(
 			'data' => $this->request->data
@@ -399,6 +406,12 @@ class ContentsController extends AppController {
 			$data['targetParentId'], 
 			$data['targetId']
 		);
+		
+		if($data['currentParentId'] == $data['targetParentId']) {
+			// 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様の為ここで更新する
+			$this->SiteConfig->updateContentsSortLastModified();	
+		}
+		
 		if($result) {
 
 			// EVENT Contents.afterAdd
