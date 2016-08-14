@@ -13,6 +13,6 @@
 $title = 'メールフォーム';
 $description = '複数設置可能の高機能メールフォーム';
 $author = 'ryuring';
-$url = 'http://www.e-catchup.jp';
+$url = 'http://ryuring.com';
 $adminLink = array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index');
 $installMessage = '';

@@ -13,6 +13,6 @@
 $title = 'フィードリーダー';
 $description = 'RSSフィードをWebページに貼り付ける事ができるフィードリーダー';
 $author = 'ryuring';
-$url = 'http://www.e-catchup.jp';
+$url = 'http://ryuring.com';
 $adminLink = array('plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index');
 $installMessage = '';

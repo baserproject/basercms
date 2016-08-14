@@ -19,7 +19,7 @@
 	<script src="js/html5shiv-printshiv.js"></script>
 <![endif]-->
 
-		<?php $this->BcBaser->css('style') ?>
+		<?php $this->BcBaser->css(['style', 'colorbox/colorbox-1.6.1']) ?>
 <?php if($this->BcBaser->isHome()): ?>
 		<?php $this->BcBaser->css('top') ?>
 <?php else: ?>
@@ -30,6 +30,7 @@
 <?php $this->BcBaser->js(array(
 			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
+			'jquery.colorbox-1.6.1.min',
 			'baser.min',
 			'startup'
 )) ?>

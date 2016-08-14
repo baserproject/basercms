@@ -1,5 +1,5 @@
 <?php
-$title = 'BcSample';
-$description = 'テーマの説明文を記載します。改行が利用できます。';
-$author = '制作者名';
-$url = 'http://web-site.url';
+$title = 'baserCMSサンプルテーマ';
+$description = 'baserCMSのサンプルテーマです。オリジナルテーマ制作のベースにご利用ください。';
+$author = 'ryuring';
+$url = 'http://ryuring.com/';

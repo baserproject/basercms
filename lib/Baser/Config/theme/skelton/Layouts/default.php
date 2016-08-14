@@ -14,9 +14,10 @@
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 		<?php $this->BcBaser->css('style') ?>
-<?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-	'admin/functions')) ?>
+		<?php $this->BcBaser->js(array(
+			'admin/vendors/jquery-2.1.4.min',
+			'admin/functions'
+		)) ?>
 <?php $this->BcBaser->scripts() ?>
 <?php $this->BcBaser->element('google_analytics') ?>
 	</head>

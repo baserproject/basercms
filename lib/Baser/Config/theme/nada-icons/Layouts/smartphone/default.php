@@ -15,7 +15,6 @@
 <?php $this->BcBaser->js(array(
 			'jquery-1.7.2.min',
 			'smartphone/startup.js',
-			'admin/functions',
 			'startup',
 			'jquery.bxSlider.min',
 			'jquery.easing.1.3',
