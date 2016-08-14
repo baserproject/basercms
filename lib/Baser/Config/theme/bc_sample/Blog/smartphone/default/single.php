@@ -4,7 +4,6 @@
  * 呼出箇所：ブログ記事詳細ページ
  */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
-$this->Blog->editPost($post['BlogPost']['blog_content_id'], $post['BlogPost']['id']);
 ?>
 
 

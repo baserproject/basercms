@@ -727,9 +727,6 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
-		// TODO CakePHP では、 scripts_for_layout は deprecated となっているが後方互換の為残しておく
-		// baserCMS 4系で除外予定
-		$scripts .= str_replace($scripts, '', $this->_View->get('scripts_for_layout'));
 		echo $scripts;
 
 		// ### ツールバー用CSS出力
@@ -2265,12 +2262,11 @@ END_FLASH;
  *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
-	public function googleAnalytics($data = array(), $options = array()) {
-		if(!empty($this->siteConfig['use_universal_analytics'])) {
-			$this->element('google_analytics', $data, $options);
-		} else {
-			$this->element('google_analytics_old', $data, $options);
-		}
+	public function googleAnalytics($data = [], $options = []) {
+		$data = array_merge([
+			'useUniversalAnalytics' => (bool) @$this->siteConfig['use_universal_analytics']
+		], $data);
+		$this->element('google_analytics', $data, $options);
 	}
 
 /**
@@ -2449,6 +2445,19 @@ END_FLASH;
 			return $this->request->params['Content'];
 		}
 		return null;
+	}
+
+/**
+ * 現在のサイトプレフィックスを取得する
+ * 
+ * @return string
+ */
+	public function getCurrentPrefix() {
+		if(empty($this->request->params['Site'])) {
+			return '';
+		}
+		$Site = ClassRegistry::init('Site');
+		return $Site->getPrefix($this->request->params['Site']);
 	}
 	
 }

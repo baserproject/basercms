@@ -296,7 +296,7 @@ class BcAppModel extends Model {
 		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], array(), $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
-				if($options['dbDataPattern']) {
+				if($dbDataPattern) {
 					list($theme, $pattern) = explode('.', $dbDataPattern);
 				}
 				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);

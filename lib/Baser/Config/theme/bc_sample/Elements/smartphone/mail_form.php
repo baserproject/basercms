@@ -21,9 +21,9 @@ if (Configure::read('BcRequest.agent')) {
 </script>
 
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/confirm', 'type' => 'file')) ?>
+	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $this->request->params['Content']['url'] . '/confirm', 'type' => 'file')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/submit')) ?>
+	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $this->request->params['Content']['url'] . '/submit')) ?>
 <?php endif; ?>
 
 <?php echo $this->Mailform->hidden('Message.mode') ?>
@@ -36,7 +36,7 @@ if (Configure::read('BcRequest.agent')) {
 <?php if ($mailContent['MailContent']['auth_captcha']): ?>
 	<?php if (!$freezed): ?>
 		<div class="auth-captcha clearfix">
-			<?php $this->BcBaser->img($prefix . '/' . $mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
+			<?php $this->BcBaser->img($prefix . '/' . $this->request->params['Content']['url'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
 			<?php echo $this->Mailform->text('Message.auth_captcha') ?><br>
 			&nbsp;画像の文字を入力してください<br clear="all">
 			<?php echo $this->Mailform->error('Message.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>

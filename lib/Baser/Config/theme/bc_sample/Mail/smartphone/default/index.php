@@ -3,7 +3,6 @@
  * メールフォーム（スマホ用）
  * 呼出箇所：メールフォーム
  */
-$this->Mail->indexFields($mailContent['MailContent']['id']);
 ?>
 
 

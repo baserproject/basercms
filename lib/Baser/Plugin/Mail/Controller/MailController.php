@@ -260,7 +260,7 @@ class MailController extends MailAppController {
 
 			// 画像認証を行う
 			if (Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
-				$captchaResult = $this->BcCaptcha->check($this->request->data['MailMessage']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check(@$this->request->data['MailMessage']['auth_captcha']);
 				if (!$captchaResult) {
 					$this->MailMessage->invalidate('auth_captcha');
 				}

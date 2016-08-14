@@ -48,6 +48,7 @@
 				<?php endif ?>
 				<div class="contents-body">
 					<?php $this->BcBaser->content() ?>
+					<?php $this->BcBaser->element('contents_navi') ?>
 				</div>
 			</div>	
 		</div>

@@ -326,5 +326,5 @@
 <p style=""text-align: center;""><?php $this->BcBaser->img('icons/about_007.png', array('style' => 'width: 656px; height: 278px;')) ?></p>","","","","2016-07-29 18:21:48","2016-07-29 18:20:50"
 "11","<h2 class=""contents-head"">サイトマップ</h2>
 <div class=""section sitemap"">
-<?php $this->BcBaser->sitemap() ?>
+<?php $this->BcBaser->sitemap(2) ?>
 </div>","","","","2016-07-29 18:21:31","2016-07-29 18:21:04"

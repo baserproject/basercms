@@ -14,9 +14,9 @@
 ?>
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $this->request->params['Content']['name'], 'action' => 'confirm'))) ?>
+	<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $this->request->params['Content']['url'], 'action' => 'confirm'))) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $this->request->params['Content']['name'], 'action' => 'submit'))) ?>
+	<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $this->request->params['Content']['url'], 'action' => 'submit'))) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 <?php echo $this->BcBaser->element('mail_input', array('blockStart' => 1)) ?>

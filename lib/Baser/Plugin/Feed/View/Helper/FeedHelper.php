@@ -16,7 +16,7 @@
  * @package Feed.View.Helper
  *
  */
-class FeedHelper extends BcTextHelper {
+class FeedHelper extends AppHelper {
 
 /**
  * ヘルパー

@@ -5,11 +5,8 @@
  *
  * フィード読込JavascriptよりAjaxとして呼び出される
  */
-$this->Feed->saveCachetime();
 ?>
-<!--nocache-->
-	<?php $this->Feed->cacheHeader() ?>
-<!--/nocache-->
+
 
 <?php if (!empty($items)): ?>
 	<ul>
