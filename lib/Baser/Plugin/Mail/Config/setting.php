@@ -16,7 +16,7 @@
 $config['BcApp.adminNavi.mail'] = array(
 	'name' => 'メールプラグイン',
 	'contents' => array(
-		array('name' => 'メールプラグイン基本設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
+		array('name' => '基本設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
 	)
 );
 $config['BcContents']['items']['Mail'] = [
