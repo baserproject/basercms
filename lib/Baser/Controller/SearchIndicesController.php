@@ -73,6 +73,44 @@ class SearchIndicesController extends AppController {
 				array('name' => '検索インデックス管理', 'url' => array('controller' => 'search_indices', 'action' => 'index'))
 			);
 		}
+		
+		if(!BcUtil::isAdminSystem()) {
+			$Content = ClassRegistry::init('Content');
+			// 各サイトのトップとして動作する仕様とする
+			$url = '/';
+			switch ($this->request->params['action']) {
+				case 'search':
+					break;
+				case 'mobile_search':
+					$site = $Content->Site->find('first', ['conditions' => ['name' => 'mobile']]);
+					if($site) {
+						if($site['Site']['alias']) {
+							$url = '/' . $site['Site']['alias'] . '/';
+						} else {
+							$url = '/' . $site['Site']['name'] . '/';
+						}
+					} else {
+						break;
+					}
+					break;
+				case 'smartphone_search':
+					$site = $Content->Site->find('first', ['conditions' => ['name' => 'smartphone']]);
+					if($site) {
+						if($site['Site']['alias']) {
+							$url = '/' . $site['Site']['alias'] . '/';
+						} else {
+							$url = '/' . $site['Site']['name'] . '/';
+						}
+					} else {
+						break;
+					}
+					break;
+			}
+			$content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
+			$this->request->params['Content'] = $content['Content'];
+			$this->request->params['Site'] = $content['Site'];
+		}
+		
 	}
 
 /**

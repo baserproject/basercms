@@ -50,7 +50,6 @@
 			<div id="ContentsBody" class="contents-body clearfix">
 				<?php $this->BcBaser->flash() ?>
 				<?php $this->BcBaser->content() ?>
-				<?php $this->BcBaser->contentsNavi() ?>
 			</div>
 
 			<div>

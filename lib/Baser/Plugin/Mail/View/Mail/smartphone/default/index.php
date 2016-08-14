@@ -13,7 +13,6 @@
  */
 $this->BcBaser->css('admin/jquery-ui/ui.all', array('inline' => true));
 $this->BcBaser->js(array('admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i18n/ui.datepicker-ja'), false);
-$this->Mail->indexFields($mailContent['MailContent']['id']);
 ?>
 
 <h2 class="contents-head">

@@ -12,7 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
-$this->Blog->editPost($post['BlogPost']['blog_content_id'], $post['BlogPost']['id']);
 ?>
 
 <!-- blog title -->

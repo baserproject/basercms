@@ -1652,11 +1652,19 @@ EOD;
  */
 	public function globalMenu($level = 1, $options = array()) {
 		$Content = ClassRegistry::init('Content');
-		$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+		$siteId = 0;
+		if(!empty($this->request->params['Content']['site_id'])) {
+			$siteId = $this->request->params['Content']['site_id'];
+		}
+		$siteRoot = $Content->getSiteRoot($siteId);
 		$id = $siteRoot['Content']['id'];
+		$currentId = null;
+		if(!empty($this->request->params['Content']['id'])) {
+			$currentId = $this->request->params['Content']['id'];
+		}
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
-			'currentId' => $this->request->params['Content']['id']
+			'currentId' => $currentId
 		], $options);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$options = array_merge($options, [
