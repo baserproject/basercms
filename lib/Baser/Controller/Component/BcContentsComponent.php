@@ -158,7 +158,7 @@ class BcContentsComponent extends Component {
 
 				// routes
 				foreach (array('manage', 'add', 'edit', 'delete', 'index', 'view', 'copy') as $action) {
-					if (empty($setting['routes'][$action]) && $action != 'copy') {
+					if (empty($setting['routes'][$action]) && !in_array($action, ['copy', 'manage'])) {
 						$setting['routes'][$action] = array('controller' => 'contents', 'action' => $action);
 					}
 				}

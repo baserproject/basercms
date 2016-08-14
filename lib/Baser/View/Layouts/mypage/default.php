@@ -23,7 +23,7 @@
 			'admin/jquery-ui/ui.all',
 			'admin/import',
 			'../js/admin/jquery.contextMenu-1.0/jquery.contextMenu',
-			'admin/colorbox/colorbox'))
+			'admin/colorbox/colorbox-1.6.1'))
 		?>
 	<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php
@@ -36,7 +36,7 @@
 			'admin/vendors/jquery.contextMenu-1.0/jquery.contextMenu',
 			'admin/vendors/jquery.form-2.94',
 			'admin/vendors/jquery.validate.min',
-			'admin/vendors/jquery.colorbox-min-1.4.5',
+			'admin/vendors/jquery.colorbox-1.6.1.min',
 			'admin/libs/jquery.mScroll',
 			'admin/libs/jquery.baseUrl',
 			'admin/libs/credit',

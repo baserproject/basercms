@@ -1,0 +1,148 @@
+
+#Logo {
+    margin-bottom:60px;
+}
+#Wrap {
+    text-align:left;
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:#FFF;
+    padding:60px;
+}
+.contents-body {
+    min-height:200px;
+    padding:0 0 30px 0;
+}
+.contents-body p{
+    margin-bottom:30px;
+}
+.contents-body h1,
+.contents-body h2{
+    margin-bottom:30px;
+}
+#ContentsNavi {
+    margin-top:60px;
+    text-align: center;
+}
+#CrumbList {
+    color:#999;
+    margin-bottom:30px;
+}
+#CrumbList li {
+    float:left;
+    line-height:2em;
+}
+#GlobalMenu {
+    float:none;
+    width:1120px;
+    margin-left:auto;
+    margin-right:auto;
+}
+#GlobalMenu ul{
+    padding:0;
+}
+#GlobalMenu .global-menu{
+    padding:0;
+}
+#GlobalMenu ul li a {
+    line-height:2em;
+    padding:10px 20px;
+    font-size:16px;
+}
+
+/* mega menu list */
+nav .nav-menu {
+    display: block;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 15;
+}
+
+/* a top level navigation item in the mega menu */
+nav .nav-item {
+    list-style: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+/* first descendant link within a top level navigation item */
+nav .nav-item > a {
+    position: relative;
+    display: inline-block;
+    padding: 0.5em 1em;
+    margin: 0 0 -1px 0;
+    border: 1px solid transparent;
+}
+
+/* focus/open states of first descendant link within a top level
+   navigation item */
+nav .nav-item > a:focus,
+nav .nav-item > a.open {
+    border: 1px solid #dedede;
+}
+
+/* open state of first descendant link within a top level
+   navigation item */
+nav .nav-item > a.open {
+    background-color: #fff;
+    border-bottom: none;
+    z-index: 2;
+}
+
+/* sub-navigation panel */
+nav .sub-nav {
+    position: absolute;
+    display: none;
+    padding: 20px;
+    border: 1px solid #dedede;
+    background-color: #fff;
+    z-index:1;
+}
+#MainImage {
+    z-index:0;
+}
+/* sub-navigation panel open state */
+nav .sub-nav.open {
+    display: block;
+}
+
+/* list of items within sub-navigation panel */
+nav .sub-nav ul {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 1em 0 0;
+    padding: 0;
+}
+
+/* list item within sub-navigation panel */
+nav .sub-nav li {
+    float:none!important;
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav .ul-level-2 a{
+    padding:10px 10px!important;
+    text-align: left;
+    font-size: 14px!important;
+}
+nav .ul-level-3 {
+    margin-left:40px!important;
+    margin-bottom:20px!important;
+}
+nav .ul-level-3 a{
+    padding:0px!important;
+    font-weight: normal!important;
+}
+
+.ul-level-2,
+.ul-level-3 {
+    margin-left:40px;
+}
+

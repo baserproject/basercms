@@ -14,48 +14,35 @@
  * @license			http://basercms.net/license/index.html
  */
 
-if (Configure::read('BcRequest.isMaintenance')) {
-	return;
+if (!isset($level)) {
+	$level = 1;
 }
-$prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if(!isset($currentId)) {
+	$currentId = null;
 }
 ?>
 
 
-<ul class="global-menu clearfix">
-	<?php if (empty($menuType)) $menuType = '' ?>
-	<?php $globalMenus = $this->BcBaser->getMenus() ?>
-	<?php if (!empty($globalMenus)): ?>
-		<?php foreach ($globalMenus as $key => $globalMenu): ?>
-			<?php if ($globalMenu['Menu']['status']): ?>
-
-				<?php
-				$no = sprintf('%02d', $key + 1);
-				$classies = array('menu' . $no);
-				if ($this->BcArray->first($globalMenus, $key)) {
-					$classies[] = 'first';
-				} elseif ($this->BcArray->last($globalMenus, $key)) {
-					$classies[] = 'last';
-				}
-				if ($this->BcBaser->isCurrentUrl($globalMenu['Menu']['link'])) {
-					$classies[] = 'current';
-				}
-				$class = ' class="' . implode(' ', $classies) . '"';
-				?>
-
-				<?php if (!Configure::read('BcRequest.agent') && $this->base == '/index.php' && $globalMenu['Menu']['link'] == '/'): ?>
-					<?php /* PC版トップページ */ ?>
-					<li<?php echo $class ?>>
-						<?php echo str_replace('/index.php', '', $this->BcBaser->link($globalMenu['Menu']['name'], $globalMenu['Menu']['link'])) ?>
-					</li>
-				<?php else: ?>
-					<li<?php echo $class ?>>
-						<?php $this->BcBaser->link($globalMenu['Menu']['name'], $prefix . $globalMenu['Menu']['link']) ?>
+<?php if (isset($tree)): ?>
+	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
+		<?php if (isset($tree)): ?>
+			<?php foreach ($tree as $content): ?>
+				<?php if ($content['Content']['title']): ?>
+					<?php
+					$liClass = 'menu-content li-level-' . $level;
+					if($content['Content']['id'] == $currentId) {
+						$liClass .= ' current';
+					}
+					?>
+					<li class="nav-item <?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?>
+						<?php if (!empty($content['children'])): ?>
+							<div class="sub-nav">
+								<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+							</div>
+						<?php endif ?>
 					</li>
 				<?php endif ?>
-			<?php endif ?>
-		<?php endforeach ?>
-	<?php endif ?>
-</ul>
+			<?php endforeach; ?>
+		<?php endif ?>
+	</ul>
+<?php endif ?>

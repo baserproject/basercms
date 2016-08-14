@@ -1412,12 +1412,11 @@ class BcBaserHelper extends AppHelper {
  * @param string|bool $startText トップページを先頭に追加する場合にはトップページのテキストを指定する（初期値 : false）
  * @return void
  */
-	public function crumbs($separator = '&raquo;', $startText = false) {
+	public function crumbs($separator = '&raquo;', $startText = false, $onSchema = false) {
 		$crumbs = $this->BcHtml->getStripCrumbs();
 		if (empty($crumbs)) {
 			return;
 		}
-		$out = array();
 		if ($startText) {
 			$homeUrl = '/';
 			if(!empty($this->request->params['Site']['alias'])) {
@@ -1425,16 +1424,45 @@ class BcBaserHelper extends AppHelper {
 			} elseif(!empty($this->request->params['Site']['name'])) {
 				$homeUrl = '/' . $this->request->params['Site']['name'] . '/';
 			}
-			$out[] = $this->getLink($startText, $homeUrl);
+			array_unshift($crumbs, [
+				0 => $startText,
+				1 => $homeUrl
+			]);
 		}
-		foreach ($crumbs as $crumb) {
-			if (!empty($crumb[1])) {
-				$out[] = $this->getLink($crumb[0], $crumb[1], $crumb[2]);
-			} else {
-				$out[] = $crumb[0];
+		
+		$out = array();
+		if(!$onSchema) {
+			foreach ($crumbs as $crumb) {
+				if (!empty($crumb[1])) {
+					$out[] = $this->getLink($crumb[0], $crumb[1], @$crumb[2]);
+				} else {
+					$out[] = $crumb[0];
+				}
 			}
+			$out = implode($separator, $out);
+		} else {
+			$counter = 1;
+			foreach ($crumbs as $crumb) {
+				$options = ['itemprop' => 'item'];
+				if(!empty($crumb[2])) {
+					$options = array_merge($options, $crumb[2]);
+				}
+				if (!empty($crumb[1])) {
+					$crumb = $this->getLink('<span itemprop="name">' . $crumb[0] . '</span>', $crumb[1], $options) . '<span class="separator">' . $separator . '</span>';
+				} else {
+					$crumb = '<span itemprop="name">' . $crumb[0] . '</span>';
+				}
+				$out[] = <<< EOD
+<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+	{$crumb}
+	<meta itemprop="position" content="{$counter}" />
+</li>
+EOD;
+				$counter++;
+			}
+			$out = implode("\n", $out);
 		}
-		echo implode($separator, $out);
+		echo $out;
 	}
 
 /**
@@ -1677,7 +1705,7 @@ class BcBaserHelper extends AppHelper {
 		$id = $siteRoot['Content']['id'];
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
-			'currentId' => $currentId
+			'currentId' => $this->request->params['Content']['id']
 		], $options);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$options = array_merge($options, [
@@ -2267,6 +2295,9 @@ END_FLASH;
  * @return void
  */
 	public function crumbsList($data = array(), $options = array()) {
+		$data = array_merge([
+			'onSchema' => false
+		], $data);
 		$this->element('crumbs', $data, $options);
 	}
 

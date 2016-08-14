@@ -24,7 +24,7 @@
 			'admin/jquery-ui/jquery-ui.min',
 			'admin/import',
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
-			'admin/colorbox/colorbox',
+			'admin/colorbox/colorbox-1.6.1',
 			'admin/toolbar'))
 		?>
 		<?php if($favoriteBoxOpened): ?>
@@ -40,7 +40,7 @@
 			'admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/vendors/jquery.form-2.94',
 			'admin/vendors/jquery.validate.min',
-			'admin/vendors/jquery.colorbox-min-1.4.5',
+			'admin/vendors/jquery.colorbox-1.6.1.min',
 			'admin/libs/jquery.mScroll',
 			'admin/libs/jquery.baseUrl',
 			'admin/libs/jquery.bcConfirm',
