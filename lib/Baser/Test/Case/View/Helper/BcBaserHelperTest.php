@@ -1510,8 +1510,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param boolean $expected 期待値
  * @dataProvider sitemapDataProvider
  */
-	public function testSitemap($siteId, $level, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testSitemap($siteId, $expected) {
 		$message = 'サイトマップを正しく出力できません';
 		$this->expectOutputRegex('/' . $expected . '/s', $message);
 		$this->BcBaser->sitemap($siteId);
@@ -1519,10 +1518,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function sitemapDataProvider() {
 		return array(
-			array(0, null, '<li class="menu-content li-level-1"><a href="\/index">トップページ<\/a><\/li>'),
-			array(1, null, '<a href="\/m\/index">トップページ.*<\/li>.*<\/ul>'),
-			array(2, null, '<a href="\/s\/index">トップページ.*<\/li>.*<\/ul>'),
-			array(2, 2, '<ul class="menu ul-level-2">.*<li class="menu-content li-level-2"><a href="\/s\/service\/index">サービス１<\/a><\/li>.*<\/ul>.*<\/ul>'),
+			array(0, '<li class="menu-content li-level-1"><a href="\/index">トップページ<\/a>.*?<\/li>'),
+			array(1, '<a href="\/m\/index">トップページ.*<\/li>.*<\/ul>'),
+			array(2, '<a href="\/s\/index">トップページ.*<\/li>.*<\/ul>')
 		);
 	}
 
