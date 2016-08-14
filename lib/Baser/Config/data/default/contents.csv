@@ -1,6 +1,3 @@
 "id","site_id","name","plugin","type","url","parent_id","lft","rght","title","status","created","description","eyecatch","author_id","created_date","modified_date","publish_begin","publish_end","exclude_search","modified","entity_id","alias_id","site_root","deleted_date","deleted","layout_template","main_site_content_id","level"
 "1","0","","Core","ContentFolder","/","","1","10","baserCMS inc.","1","","","","1","","","","","","","1","","1","","","default","","0"
 "2","1","s","Core","ContentFolder","/s/","1","2","3","baserCMS inc.ÅbÉXÉ}Éz","1","","","","1","","","","","","","2","","1","","","default","1","1"
-"3","2","m","Core","ContentFolder","/m/","1","4","5","baserCMS inc.ÅbÉPÅ[É^ÉC","1","","","","1","","","","","","","3","","1","","","default","1","1"
-"4","3","en","Core","ContentFolder","/en/","1","6","7","baserCMS inc.ÅbEnglish","1","","","","1","","","","","","","4","","1","","","default","1","1"
-"5","4","en/s","Core","ContentFolder","/en/s/","1","8","9","baserCMS inc.ÅbEnglishÅbSmartphone","1","","","","1","","","","","","","5","","1","","","default","2","1"
