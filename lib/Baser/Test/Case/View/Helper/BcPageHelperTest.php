@@ -30,7 +30,6 @@ class BcPageHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
 		'baser.View.Helper.BcPageHelper.PageBcPageHelper',
 		'baser.Default.PluginContent',
 		'baser.Default.SearchIndex',
