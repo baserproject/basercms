@@ -146,3 +146,20 @@ nav .ul-level-3 a{
     margin-left:40px;
 }
 
+#ContentUpdateInformation dl {
+    float:right;
+    clear:both;
+}
+#ContentUpdateInformation dt,dd {
+    line-height:2em;
+    text-align: right;
+}
+#ContentUpdateInformation dt {
+    clear: left;
+    float: left;
+    width: 80px;
+}
+#ContentUpdateInformation dd {
+    margin-left: 60px;
+    width: 120px;
+}

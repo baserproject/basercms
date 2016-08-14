@@ -2459,5 +2459,43 @@ END_FLASH;
 		$Site = ClassRegistry::init('Site');
 		return $Site->getPrefix($this->request->params['Site']);
 	}
+
+/**
+ * コンテンツ作成日を取得
+ * @return null|string
+ */
+	public function getContentCreatedDate($format = 'Y/m/d H:i') {
+		$content = $this->getCurrentContent();
+		if($content['created_date']) {
+			return date($format, strtotime($content['created_date']));	
+		} else {
+			return '';
+		}
+	}
+
+/**
+ * コンテンツ更新日を取得
+ * 
+ * @param string $format
+ * @return null|string
+ */
+	public function getContentModifiedDate($format = 'Y/m/d H:i') {
+		$content = $this->getCurrentContent();
+		if($content['modified_date']) {
+			return date($format, strtotime($content['modified_date']));
+		} else {
+			return '';
+		}
+	}
+
+/**
+ * 更新情報を出力する 
+ */
+	public function contentUpdateInformation() {
+		$this->element('content_update_information', [
+			'createdDate' => $this->getContentCreatedDate(),
+			'modifiedDate' => $this->getContentModifiedDate()
+		]);
+	}
 	
 }

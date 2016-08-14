@@ -84,6 +84,14 @@ class Content extends AppModel {
 		],
 	];
 
+/**
+ * 保存前の親ID
+ * 
+ * IDの変更比較に利用
+ * 
+ * @var null
+ */
+	public $beforeSaveParentId = null;
 
 /**
  * Implemented Events
@@ -185,6 +193,9 @@ class Content extends AppModel {
 				$this->data['Content']['exclude_search'] = 0;
 			}
 		} else {
+			if(empty($this->data['Content']['modified_date'])) {
+				$this->data['Content']['modified_date'] = date('Y-m-d H:i:s');
+			}
 			if(isset($this->data['Content']['name'])) {
 				$this->data['Content']['name'] = BcUtil::urlencode(mb_substr($this->data['Content']['name'], 0, 230, 'UTF-8'));
 			}
@@ -253,13 +264,20 @@ class Content extends AppModel {
 		}
 
 	}
-	public $beforeSaveParentId = null;
+
+/**
+ * Before Save
+ * 
+ * @param array $options
+ * @return bool
+ */
 	public function beforeSave($options = []) {
 		if(!empty($this->data['Content']['id'])) {
 			$this->beforeSaveParentId = $this->field('parent_id', ['Content.id' => $this->data['Content']['id']]);	
 		}
 		return parent::beforeSave($options);
 	}
+	
 /**
  * After Save
  *
