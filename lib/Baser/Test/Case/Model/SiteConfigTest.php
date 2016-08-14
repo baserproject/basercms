@@ -111,18 +111,12 @@ class SiteConfigTest extends BaserTestCase {
  */
 	public function testGetTheme() {
 		$results = $this->SiteConfig->getThemes();
-		$result = array();
-		foreach ($results as $key => $value) {
-			if(strstr($key, 'bccolumn') || strstr($key, 'nada-icons') || strstr($key, 'skelton')) {
-				$result[$key] = $value;
-			}
-		}
 		$expected = array(
+			'bc_sample' => 'BcSample',
 			'bccolumn' => 'Bccolumn',
-			'nada-icons' => 'Nada-icons',
-			'skelton' => 'Skelton'
+			'nada-icons' => 'Nada-icons'
 		);
-		$this->assertEquals($expected, $result);
+		$this->assertEquals($expected, $results);
 	}
 
 /**
