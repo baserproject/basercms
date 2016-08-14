@@ -3,9 +3,9 @@
  * [ADMIN] テーマファイル管理メニュー
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
@@ -29,6 +29,7 @@ if ($theme == 'core') {
 	$themeFiles = array(0 => array('name' => '', 'title' => $theme));
 }
 ?>
+
 
 <?php foreach ($themeFiles as $themeFile): ?>
 	<tr>

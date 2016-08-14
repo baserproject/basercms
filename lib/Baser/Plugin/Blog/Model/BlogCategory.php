@@ -277,7 +277,7 @@ class BlogCategory extends BlogAppModel {
  * @param bool $rootEditable ドキュメントルートの書き込み権限の有無
  * @return bool
  */
-	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
+	public function checkNewCategoryAddable($userGroupId) {
 		
 		$newCatAddable = false;
 		$ownerCats = $this->find('count', array(
@@ -288,7 +288,7 @@ class BlogCategory extends BlogAppModel {
 				)
 		)));
 
-		if ($ownerCats || $rootEditable) {
+		if ($ownerCats) {
 			$newCatAddable = true;
 		}
 

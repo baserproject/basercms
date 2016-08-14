@@ -12,6 +12,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <p>ログのバックアップと削除が行えます。</p>
 <ul>
 	<li>エラーログが肥大化してディスクを圧迫する時などご利用ください。</li>

@@ -294,7 +294,6 @@ class BlogPostsController extends BlogAppController {
 		$user = $this->BcAuth->user();
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
-			'rootEditable' => $this->checkRootEditable(),
 			'userGroupId' => $user['user_group_id'],
 			'postEditable' => true,
 			'empty' => '指定しない'
@@ -368,28 +367,22 @@ class BlogPostsController extends BlogAppController {
 
 		// 表示設定
 		$user = $this->BcAuth->user();
-		$editable = false;
 		$blogCategoryId = '';
-		$currentCatOwner = '';
 
 		if (isset($this->request->data['BlogPost']['blog_category_id'])) {
 			$blogCategoryId = $this->request->data['BlogPost']['blog_category_id'];
 		}
-		if (!$blogCategoryId) {
-			$currentCatOwner = $this->siteConfigs['root_owner_id'];
-		} else {
+		if ($blogCategoryId) {
 			if (empty($this->request->data['BlogCategory']['owner_id'])) {
 				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
 				$currentCatOwner = $data['BlogCategory']['owner_id'];
 			}
 		}
 
-		$editable = ($currentCatOwner == $user['user_group_id'] ||
-			$user['user_group_id'] == Configure::read('BcApp.adminGroupId') || !$currentCatOwner);
+		$editable = ($user['user_group_id'] == Configure::read('BcApp.adminGroupId'));
 
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
-			'rootEditable' => $this->checkRootEditable(),
 			'blogCategoryId' => $blogCategoryId,
 			'userGroupId' => $user['user_group_id'],
 			'postEditable' => $editable,
@@ -413,7 +406,6 @@ class BlogPostsController extends BlogAppController {
 
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '記事一覧', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $blogContentId));
 		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
-		$this->set('currentCatOwnerId', $currentCatOwner);
 		$this->set('editable', $editable);
 		$this->set('categories', $categories);
 		$this->set('previewId', $this->request->data['BlogPost']['id']);

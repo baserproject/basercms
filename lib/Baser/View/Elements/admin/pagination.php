@@ -25,6 +25,8 @@ if (isset($this->Paginator->params['paging'][$this->Paginator->defaultModel()]['
 	$pageCount = $this->Paginator->params['paging'][$this->Paginator->defaultModel()]['pageCount'];
 }
 ?>
+
+
 <div class="pagination clearfix">
 
 	<?php if ($pageCount > 1): ?>

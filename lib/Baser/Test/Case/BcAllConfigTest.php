@@ -1,5 +1,4 @@
 <?php
-
 /**
  * run all config baser tests
  *

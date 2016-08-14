@@ -51,7 +51,7 @@ class PagesController extends AppController {
  * @var array
  * @access	public
  */
-	public $uses = array('Page', 'PageCategory');
+	public $uses = array('Page');
 
 /**
  * beforeFilter
@@ -167,12 +167,6 @@ class PagesController extends AppController {
 			}
 		}
 
-		if (empty($this->request->data['PageCategory']['id']) || $this->request->data['PageCategory']['name'] == 'mobile' || $this->request->data['PageCategory']['name'] == 'smartphone') {
-			$currentCatOwnerId = $this->siteConfigs['root_owner_id'];
-		} else {
-			$currentCatOwnerId = $this->request->data['PageCategory']['owner_id'];
-		}
-
 		if ($this->request->data['Content']['url']) {
 			$this->set('publishLink', $this->request->data['Content']['url']);
 		}
@@ -189,7 +183,6 @@ class PagesController extends AppController {
 		}
 
 		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
-		$this->set('currentCatOwnerId', $currentCatOwnerId);
 		$this->set('previewId', $this->request->data['Page']['id']);
 		$this->set('users', $this->Page->getControlSource('user_id'));
 		$this->set('editorOptions', $editorOptions);

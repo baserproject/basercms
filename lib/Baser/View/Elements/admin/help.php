@@ -15,6 +15,8 @@ if (empty($help)) {
 	return;
 }
 ?>
+
+
 <div id="Help" class="clearfix">
 
 	<h2 class="head">

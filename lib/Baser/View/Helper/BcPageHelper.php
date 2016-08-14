@@ -72,31 +72,6 @@ class BcPageHelper extends Helper {
 	}
 
 /**
- * 現在のページが所属する親のカテゴリを取得する
- *
- * @param boolean $top 親カテゴリが存在するかどうか、 オプションのパラメータ、初期値はオプションのパラメータ、初期値は false
- * @return array
- */
-	public function getParentCategory($top = false) {
-
-		$category = $this->getCategory();
-		if (empty($category['id'])) {
-			return false;
-		}
-		if ($top) {
-			$path = $this->Page->PageCategory->getPath($category['id']);
-			if ($path) {
-				$parent = $path[0];
-			} else {
-				return false;
-			}
-		} else {
-			$parent = $this->Page->PageCategory->getParentNode($category['id']);
-		}
-		return $parent;
-	}
-
-/**
  * ページリストを取得する
  * 
  * @param int $pageCategoryId カテゴリID

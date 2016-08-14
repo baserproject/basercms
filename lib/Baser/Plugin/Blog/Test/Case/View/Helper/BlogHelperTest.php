@@ -369,15 +369,6 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
- * ブログ編集ページへのリンクを出力
- */
-	public function testEditPost() {
-		$this->expectOutputString('<div class="edit-link"><a href="/admin/blog_posts/edit/1/1" target="_blank">≫ 編集する</a></div>');
-		$this->Blog->_View->viewVars['user'] = 1;
-		$this->Blog->editPost(1, 1);
-	}
-
-/**
  * 前の記事へのリンクを出力する
  * 
  * @param int $blogContentId ブログコンテンツID

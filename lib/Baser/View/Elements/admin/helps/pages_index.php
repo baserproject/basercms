@@ -12,6 +12,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <p>ページ管理では、Webページの新規追加や編集・削除などが行えます。</p>
 <ul>
 	<li>新しいページを登録するには、一覧左上の「新規追加」ボタンをクリックします。</li>

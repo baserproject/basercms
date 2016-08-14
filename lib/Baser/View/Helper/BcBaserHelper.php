@@ -123,21 +123,6 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * メニューのデータを取得する
- * 
- * 配列で全件取得する
- *
- * @return array|false メニューデータ、または、false
- */
-	public function getMenus() {
-		$Menu = ClassRegistry::init('Menu');
-		if ($Menu) {
-			return $Menu->find('all', array('order' => 'sort'));
-		}
-		return false;
-	}
-
-/**
  * タイトルを設定する
  *
  * @param string $title タイトル

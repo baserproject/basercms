@@ -1,10 +1,9 @@
 <?php
-
 /**
  * [ADMIN] パスワードリセット画面
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project

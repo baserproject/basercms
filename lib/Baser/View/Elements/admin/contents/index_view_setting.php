@@ -1,4 +1,14 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 4.0.0
+ * @license			http://basercms.net/license/index.html
+ */
 if($this->action == 'admin_index') {
 	echo $this->BcForm->hidden('ViewSetting.mode', array('value' => 'index'));
 } elseif($this->action = 'admin_trash_index') {

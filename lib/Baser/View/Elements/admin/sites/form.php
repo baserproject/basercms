@@ -5,13 +5,15 @@
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2016, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <table class="form-table">
 <?php if($this->request->action == 'admin_edit'): ?>
 	<tr>

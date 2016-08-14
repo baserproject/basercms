@@ -12,6 +12,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <p>メニューに表示するアイテムを登録•編集します。<br />
 <ul>
 	<li>一時的に利用しない場合には、利用状態を「利用しない」に設定します。</li>

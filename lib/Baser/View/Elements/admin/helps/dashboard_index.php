@@ -12,4 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <p>ダッシュボードはログインした際に一番初めに来るページです。初期状態では、baserCMS公式の更新情報（baserCMSニュース）、現在のページ状況、管理画面の利用履歴（最近の動き）が表示されます。</p>

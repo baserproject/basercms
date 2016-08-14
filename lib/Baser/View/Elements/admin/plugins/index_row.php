@@ -18,6 +18,7 @@ if (!$data['Plugin']['status']) {
 $class = ' class="' . implode(' ', $classies) . '"';
 ?>
 
+
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 		<?php if ($sortmode): ?>

@@ -2,8 +2,6 @@
 /**
  * [ADMIN] サイドバー
  *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -14,6 +12,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 
 <div id="SideBar">
 	<div id="BtnSideBarOpener">＜</div>

@@ -11,38 +11,9 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+$this->BcBaser->js('admin/dashboard/index_dblog_list', false);
 ?>
-<script type="text/javascript">
-$ (function (){
-	$('.pagination a, .list-num a').click(function(){
-		var ajaxurl = $(this).attr('href');
-		$.ajax({
-			url:ajaxurl,
-			type:'GET',
-			dataType:'html',
-			beforeSend:function(){
-				$('#Waiting').show();
-			},
-			complete:function(){
-				$('#Waiting').hide();
-			},
-			error:function(){
-				$('#AlertMessage').html('データの取得に失敗しました。');
-				$('#AlertMessage').fadeIn(500);
-			},
-			success:function(response,stuts){
-				if(response){
-					$('#DblogList').html(response);
-				}else{
-					$('#AlertMessage').html('データの取得に失敗しました。');
-					$('#AlertMessage').fadeIn(500);
-				}
-			}
-		});
-		return false;
-	});
-});
-</script>
+
 
 <?php if ($viewDblogs): ?>
 	<?php $this->passedArgs['action'] = 'ajax_dblog_index' ?>

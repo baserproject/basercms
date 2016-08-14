@@ -16,6 +16,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 $types = BcUtil::unserialize($this->BcBaser->siteConfig['content_types']);
 ?>
 
+
 <?php echo $this->BcForm->create('SearchIndex', array('url' => array('action' => 'index'))) ?>
 <?php echo $this->BcForm->hidden('SearchIndex.open', array('value' => true)) ?>
 <p>

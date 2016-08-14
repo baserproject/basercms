@@ -154,12 +154,10 @@ class BlogCategoriesController extends BlogAppController {
 			$catOptions['ownerId'] = $user['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
-		if ($this->checkRootEditable()) {
-			if ($parents) {
-				$parents = array('' => '指定しない') + $parents;
-			} else {
-				$parents = array('' => '指定しない');
-			}
+		if ($parents) {
+			$parents = array('' => '指定しない') + $parents;
+		} else {
+			$parents = array('' => '指定しない');
 		}
 		$this->set('parents', $parents);
 		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規カテゴリ登録';
@@ -204,12 +202,10 @@ class BlogCategoriesController extends BlogAppController {
 			$catOptions['ownerId'] = $user['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
-		if ($this->checkRootEditable()) {
-			if ($parents) {
-				$parents = array('' => '指定しない') + $parents;
-			} else {
-				$parents = array('' => '指定しない');
-			}
+		if ($parents) {
+			$parents = array('' => '指定しない') + $parents;
+		} else {
+			$parents = array('' => '指定しない');
 		}
 		$this->set('parents', $parents);
 		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ編集';

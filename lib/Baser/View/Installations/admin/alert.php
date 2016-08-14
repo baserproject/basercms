@@ -3,15 +3,16 @@
  * [PUBLISH] インストール警告ページ
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
 
 <p>インストールを開始するにはデバッグモードが -1 である必要があります。</p>
 <p>デバッグモードを変更するには次の手順のとおり操作してください。</p>

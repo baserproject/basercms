@@ -13,6 +13,7 @@
  */
 ?>
 
+
 <?php echo $this->BcForm->create('User', array('url' => array('action' => 'index'))) ?>
 <p>
 	<?php echo $this->BcForm->label('User.user_group_id', 'ユーザーグループ') ?> 

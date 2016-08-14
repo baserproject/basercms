@@ -139,48 +139,41 @@ class SiteConfigFixture extends BaserTestFixture {
 		),
 		array(
 			'id' => '19',
-			'name' => 'root_owner_id',
-			'value' => '',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 12:58:25'
-		),
-		array(
-			'id' => '20',
 			'name' => 'category_permission',
 			'value' => '',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 12:58:25'
 		),
 		array(
-			'id' => '21',
+			'id' => '20',
 			'name' => 'admin_theme',
 			'value' => '',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 12:58:25'
 		),
 		array(
-			'id' => '22',
+			'id' => '21',
 			'name' => 'login_credit',
 			'value' => '1',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 13:01:58'
 		),
 		array(
-			'id' => '23',
+			'id' => '22',
 			'name' => 'first_access',
 			'value' => '',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 13:01:32'
 		),
 		array(
-			'id' => '24',
+			'id' => '23',
 			'name' => 'editor',
 			'value' => 'BcCkeditor',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 13:01:58'
 		),
 		array(
-			'id' => '25',
+			'id' => '24',
 			'name' => 'editor_styles',
 			'value' => '#青見出し
 h3 {
@@ -216,98 +209,42 @@ q {}',
 			'modified' => '2015-01-27 13:01:58'
 		),
 		array(
-			'id' => '26',
+			'id' => '25',
 			'name' => 'editor_enter_br',
 			'value' => '0',
 			'created' => '2015-01-27 12:56:52',
 			'modified' => '2015-01-27 13:01:58'
 		),
 		array(
-			'id' => '27',
-			'name' => 'root_layout_template',
-			'value' => 'default',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '28',
-			'name' => 'root_layout_template_mobile',
-			'value' => 'default',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '29',
-			'name' => 'root_layout_template_smartphone',
-			'value' => 'default',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '30',
-			'name' => 'root_content_template',
-			'value' => 'default',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '31',
-			'name' => 'root_content_template_mobile',
-			'value' => 'default',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '32',
-			'name' => 'root_content_template_smartphone',
-			'value' => 'default',
-			'created' => '2015-01-27 12:56:52',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '33',
-			'name' => 'linked_pages_mobile',
-			'value' => '1',
-			'created' => '2015-01-27 12:56:53',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '34',
-			'name' => 'linked_pages_smartphone',
-			'value' => '1',
-			'created' => '2015-01-27 12:56:53',
-			'modified' => '2015-01-27 13:01:58'
-		),
-		array(
-			'id' => '36',
+			'id' => '26',
 			'name' => 'admin_side_banner',
 			'value' => '1',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 13:01:58'
 		),
 		array(
-			'id' => '37',
+			'id' => '27',
 			'name' => 'smtp_tls',
 			'value' => '0',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 13:01:58'
 		),
 		array(
-			'id' => '38',
+			'id' => '28',
 			'name' => 'version',
 			'value' => '3.0.6.1',
 			'created' => '2015-01-27 12:58:10',
 			'modified' => '2015-01-27 12:58:25'
 		),
 		array(
-			'id' => '39',
+			'id' => '29',
 			'name' => 'use_universal_analytics',
 			'value' => '1',
 			'created' => '2015-01-27 12:58:10',
 			'modified' => '2015-01-27 12:58:25'
 		),
 		array(
-			'id' => '40',
+			'id' => '30',
 			'name' => 'google_maps_api_key',
 			'value' => 'AIzaSyBeDLfQ5IY3qYm9D9T6OCscuGFB7_0WH08',
 			'created' => '2015-01-27 12:58:10',

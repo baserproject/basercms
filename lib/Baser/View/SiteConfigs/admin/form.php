@@ -2,12 +2,10 @@
 /**
  * [管理画面] サイト設定 フォーム
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://basercms.net/community/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
@@ -202,14 +200,6 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
 			</td>
 		</tr>
-<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
-				<td class="col-input">
-			<?php echo $this->BcForm->input('SiteConfig.root_owner_id', array('type' => 'select', 'options' => $userGroups, 'empty' => '指定しない')) ?>
-				</td>
-			</tr>
-<?php endif ?>
 	</table>
 
 	<h2>エディタ設定関連</h2>

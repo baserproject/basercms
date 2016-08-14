@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] 統合コンテンツ一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *

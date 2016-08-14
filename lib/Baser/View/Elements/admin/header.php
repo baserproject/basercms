@@ -17,6 +17,8 @@ if (!empty($this->request->params['prefix'])) {
 	$loginUrl = '/users/login';
 }
 ?>
+
+
 <div id="Header" class="clearfix">
 	<?php $this->BcBaser->element('toolbar') ?>
 	<?php if ($this->name == 'Installations' || ('/' . $this->request->url == Configure::read('BcAuthPrefix.admin.loginAction')) || (@$this->request->params['prefix'] == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>

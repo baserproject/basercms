@@ -1,8 +1,6 @@
 <?php
 /**
  * [PUBLISH] サブメニュー
- * 
- * PHP versions 4 and 5
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>

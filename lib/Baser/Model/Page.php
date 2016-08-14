@@ -94,21 +94,6 @@ class Page extends AppModel {
 	);
 
 /**
- * コンストラクタ
- *
- * @param boolean $id
- * @param string $table
- * @param string $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
-		parent::__construct($id, $table, $ds);
-		if (isConsole() && !isInstalled()) {
-			App::uses('PageCategory', 'Model');
-			$this->PageCategory = new PageCategory(null, null, $ds);
-		}
-	}
-
-/**
  * フォームの初期値を設定する
  * 
  * @return	array	初期値データ

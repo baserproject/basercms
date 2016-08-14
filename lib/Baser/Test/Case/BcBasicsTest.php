@@ -1,5 +1,4 @@
 <?php
-
 /**
  * test for basics.php
  *
@@ -527,21 +526,6 @@ class BcBasicsTest extends BaserTestCase {
 		$a = array(array('a1'),'a2', 'a3');
 		$b = array(array(array('b1')));
 		$this->assertEquals(array(array(array('b1')), 'a2', 'a3'), amr($a, $b));
-	}
-
-/**
- * プラグインのコンフィグファイルを読み込む
- */
-	public function testLoadPluginConfig() {
-		// Blogプラグインの設定を削除
-		Configure::write('BcApp.adminNavi.blog', null);
-
-		// 存在しないファイル名
-		$this->assertFalse(loadPluginConfig('Blog.hoge'), '存在しないファイル名に対してtrueが返ってきます');
-
-		// 正常に読み込む
-		$this->assertTrue(loadPluginConfig('Blog.setting'));
-		$this->assertContains('ブログプラグイン', Configure::read('BcApp.adminNavi.blog'), 'プラグインのコンフィグファイルを読み込めません');
 	}
 
 /**

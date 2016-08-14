@@ -105,8 +105,7 @@ class BlogAppController extends BcPluginAppController {
 			return;
 		}
 		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
-			$user['user_group_id'], 
-			$this->checkRootEditable()
+			$user['user_group_id']
 		);
 		$this->set('newCatAddable', $newCatAddable);
 	}

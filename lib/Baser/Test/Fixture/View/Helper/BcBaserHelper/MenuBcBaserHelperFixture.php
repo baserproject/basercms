@@ -2,8 +2,6 @@
 /**
  * MenuFixture
  *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *

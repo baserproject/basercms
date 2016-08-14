@@ -1,12 +1,11 @@
 <?php
-
 /**
  * ThemeFileモデルのテスト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS ThemeFiles Community <http://sites.google.com/site/baserThemeFiles/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS ThemeFiles Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link      http://basercms.net baserCMS Project
  * @since     baserCMS v 3.0.0-beta
  * @license     http://basercms.net/license/index.html

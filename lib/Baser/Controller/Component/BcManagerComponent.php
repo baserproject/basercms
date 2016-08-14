@@ -10,7 +10,6 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('PageCategory', 'Model');
 App::uses('Page', 'Model');
 App::uses('Plugin', 'Model');
 App::uses('User', 'Model');

@@ -33,6 +33,8 @@ if ($links) {
 	$link = implode('｜', $links);
 }
 ?>
+
+
 <?php if ($link): ?>
 	<div class="list-num">
 		<strong>表示件数</strong><p><?php echo $link ?></p>

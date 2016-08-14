@@ -1,4 +1,3 @@
-
 <?php
 /**
  * test for BcBaserHelper
@@ -118,17 +117,6 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	protected function _logout() {
 		$this->BcBaser->set('user', '');
-	}
-
-/**
- * メニューを取得する
- *
- * @return void
- */
-	public function testGetMenus() {
-		$result = $this->BcBaser->getMenus();
-		$this->assertEquals(7, count($result));
-		$this->assertEquals(true, isset($result[0]['Menu']['id']));
 	}
 
 /**
@@ -2101,7 +2089,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input type="submit" value="検索"\/>.*<\/form><\/div>/s');
+		$this->expectOutputRegex('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s');
 		$this->BcBaser->siteSearchForm();
 	}
 

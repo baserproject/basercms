@@ -225,14 +225,10 @@ class BlogCategoryTest extends BaserTestCase {
  */
 	public function testCheckNewCategoryAddable() {
 		$message = '新しいカテゴリが追加できる状態チェックが正しくありません';
-		$result = $this->BlogCategory->checkNewCategoryAddable(1, false);
+		$result = $this->BlogCategory->checkNewCategoryAddable(1);
 		$this->assertTrue($result, $message);
-
-		$result = $this->BlogCategory->checkNewCategoryAddable(99, false);
+		$result = $this->BlogCategory->checkNewCategoryAddable(99);
 		$this->assertFalse($result, $message);
-
-		$result = $this->BlogCategory->checkNewCategoryAddable(99, true);
-		$this->assertTrue($result, $message);
 	}
 	
 /**

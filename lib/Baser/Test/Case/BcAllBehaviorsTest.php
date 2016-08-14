@@ -1,5 +1,4 @@
 <?php
-
 /**
  * run all behavior baser tests
  *

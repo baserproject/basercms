@@ -5,7 +5,7 @@
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link      http://basercms.net baserCMS Project
  * @package     Baser.Test.Case.View.Helper
  * @since     baserCMS v 3.0.0

@@ -458,7 +458,7 @@ class PageTest extends BaserTestCase {
 /**
  * コントロールソースを取得する
  * 
- * MEMO: $optionのテストについては、UserTest, PageCategoryTestでテスト済み
+ * MEMO: $optionのテストについては、UserTest でテスト済み
  * 
  * @param string $field フィールド名
  * @param array $options

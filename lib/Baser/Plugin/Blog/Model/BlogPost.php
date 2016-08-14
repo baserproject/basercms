@@ -457,7 +457,7 @@ class BlogPost extends BlogAppModel {
 						$catOption['ownerId'] = $userGroupId;
 					}
 
-					if ($postEditable && !$rootEditable && !$isSuperAdmin) {
+					if ($postEditable && !$isSuperAdmin) {
 						unset($empty);
 					}
 				}

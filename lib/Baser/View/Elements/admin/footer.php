@@ -12,6 +12,8 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <div id="Footer">
 
 	<div id="FooterInner" class="clearfix">

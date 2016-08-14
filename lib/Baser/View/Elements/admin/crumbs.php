@@ -35,6 +35,7 @@ if (!empty($crumbs)) {
 }
 ?>
 
+
 <div id="Crumb">
 	<?php if (!empty($user)): ?>
 		<?php $this->BcBaser->crumbs(' &gt; ') ?>&nbsp;

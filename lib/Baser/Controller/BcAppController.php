@@ -1288,28 +1288,6 @@ class BcAppController extends Controller {
 	}
 
 /**
- * 現在のユーザーのドキュメントルートの書き込み権限確認
- *
- * @return bool
- */
-	public function checkRootEditable() {
-		if (!isset($this->BcAuth)) {
-			return false;
-		}
-		$user = $this->BcAuth->user();
-		$userModel = $this->getUserModel();
-		if (!$user || !$userModel) {
-			return false;
-		}
-		if (@$this->siteConfigs['root_owner_id'] == $user['user_group_id'] ||
-			!@$this->siteConfigs['root_owner_id'] || $user['user_group_id'] == Configure::read('BcApp.adminGroupId')) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-/**
  * リクエストされた画面に対しての認証用ユーザーモデルを取得する
  *
  * @return mixed string Or false

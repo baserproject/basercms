@@ -5,7 +5,7 @@
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright     Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link          http://basercms.net baserCMS Project
  * @package       Baser.Test.Case.Config
  * @since         baserCMS v 3.0.6
@@ -158,8 +158,6 @@ class RoutesTest extends BaserTestCase {
  * 固定ページ用データプロバイダ
  *
  * @return array
- *
- * @todo ページカテゴリを含むテスト追加。PageCategoryのフィクスチャを変更してテスト専用のデータにするべきか
  */
 	public function pageDisplayDataProvider() {
 		return array(

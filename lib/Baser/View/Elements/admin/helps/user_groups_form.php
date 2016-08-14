@@ -12,4 +12,6 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+
 <p>ログインするユーザーのグループを登録します。コンテンツへの権限内容がわかりやすい名称で登録します。</p>

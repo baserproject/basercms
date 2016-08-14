@@ -1,5 +1,4 @@
 <?php
-
 /**
  * [MOBILE] RSS
  *
