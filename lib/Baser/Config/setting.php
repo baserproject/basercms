@@ -197,7 +197,7 @@ $config['BcContents'] = [
 					'delete' => [
 						'admin' => true,
 						'controller'=> 'contents',
-						'action'	=> 'delete'
+						'action'	=> 'empty'
 					],
 					'view' => [
 						'controller'=> 'contents',

@@ -19,6 +19,7 @@ App::uses('BcContentsController', 'Controller');
  *
  * @package Baser.Controller
  * @property Content $Content
+ * @property BcAuthComponent $BcAuth
  */
 class ContentsController extends AppController {
 
@@ -36,6 +37,11 @@ class ContentsController extends AppController {
  */
 	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true));
 
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->BcAuth->allow('view');
+	}
+	
 /**
  * コンテンツ一覧
  *
@@ -300,7 +306,11 @@ class ContentsController extends AppController {
 		$result = true;
 		if($contents) {
 			foreach($contents as $content) {
-				$route = $this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'];
+				if(!empty($this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'])) {
+					$route = $this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'];	
+				} else {
+					$route = $this->BcContents->settings['items']['Default']['routes']['delete'];
+				}
 				if(!$this->requestAction($route, array('data' => array(
 					'contentId' => $content['Content']['id'],
 					'entityId' => $content['Content']['entity_id'],
@@ -484,6 +494,20 @@ class ContentsController extends AppController {
 		$this->autoRender = false;
 		Configure::write('debug', 0);
 		return $this->Content->exists($id);
+	}
+
+/**
+ * プラグイン等と関連付けられていない素のコンテンツをゴミ箱より消去する
+ * 
+ * @param $id
+ * @return bool
+ */
+	public function admin_empty() {
+		if(empty($this->request->data['contentId'])) {
+			return false;
+		}
+		$this->Content->softDelete(false);
+		return $this->Content->removeFromTree($this->request->data['contentId'], true);
 	}
 
 }

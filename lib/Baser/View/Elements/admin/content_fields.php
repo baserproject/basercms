@@ -101,7 +101,11 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					<?php endif ?>
 					<small>[タイプ]</small>
 					<?php if(!$this->BcForm->value('Content.alias_id')): ?>
-					<?php echo $contentsSettings[$this->BcForm->value('Content.type')]['title'] ?>
+						<?php if(!empty($contentsSettings[$this->BcForm->value('Content.type')])): ?>
+							<?php echo $contentsSettings[$this->BcForm->value('Content.type')]['title'] ?>
+						<?php else: ?>
+							デフォルト	
+						<?php endif ?>
 					<?php else: ?>
 					エイリアス
 					<?php endif ?>
@@ -294,3 +298,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 	<?php endif ?>
 <?php endif ?>
 </div>
+
+<?php if(empty($contentsSettings[$this->BcForm->value('Content.type')])): ?>
+<p class="section">タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。</p>
+<?php endif ?>

@@ -25,7 +25,11 @@ switch ($type) {
 		$iconPath = '/img/admin/icon_folder.png';
 		break;
 	default:
-		$iconPath = $this->BcContents->settings[$type]['icon'];
+		if(!empty($this->BcContents->settings[$type]['icon'])) {
+			$iconPath = $this->BcContents->settings[$type]['icon'];	
+		} else {
+			$iconPath = $this->BcContents->settings['Default']['icon'];
+		}
 		break;
 }
 if($data['Content']['alias_id']) {
