@@ -591,35 +591,6 @@ function amr($a, $b) {
 }
 
 /**
- * プラグインのコンフィグファイルを読み込む
- *
- * @param string $name
- * @return boolean
- * @deprecated since version 3.0.2
- */
-function loadPluginConfig($name) {
-
-	if (strpos($name, '.') === false) {
-		return false;
-	}
-	list($plugin, $file) = explode('.', $name);
-	$pluginPaths = App::path('Plugin');
-	$config = null;
-	foreach ($pluginPaths as $pluginPath) {
-		$configPath = $pluginPath . $plugin . DS . 'Config' . DS . $file . '.php';
-		if (file_exists($configPath)) {
-			include $configPath;
-		}
-	}
-
-	if ($config) {
-		return Configure::write($config);
-	} else {
-		return false;
-	}
-}
-
-/**
  * URLにセッションIDを付加する
  * 既に付加されている場合は重複しない
  * 

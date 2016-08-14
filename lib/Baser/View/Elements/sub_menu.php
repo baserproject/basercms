@@ -20,6 +20,8 @@
 ?>
 
 
-<?php foreach ($subMenuElements as $subMenuElement): ?>
-	<?php $this->BcBaser->element('submenus' . DS . $subMenuElement) ?>
-<?php endforeach ?>
+<?php if(!empty($subMenuElements)): ?>
+	<?php foreach ($subMenuElements as $subMenuElement): ?>
+		<?php $this->BcBaser->element('submenus' . DS . $subMenuElement) ?>
+	<?php endforeach ?>
+<?php endif ?>

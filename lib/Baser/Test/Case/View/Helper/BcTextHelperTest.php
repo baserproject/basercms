@@ -368,33 +368,6 @@ class BcTextHelperTest extends BaserTestCase {
 	}
 
 /**
- * 区切り文字で区切られたテキストを配列に変換するヘルパーのテスト
- */
-	public function testToArray() {
-
-		// $separatorが「,」の場合
-		$result = $this->Helper->toArray(",", "a,i,u,e,o");
-		$expect = array("a","i","u","e","o");
-		$this->assertEquals($expect, $result);
-
-		// $separatorが「"」の場合
-		$result = $this->Helper->toArray('"', 'a"i"u"e"o');
-		$expect = array("a","i","u","e","o");
-		$this->assertEquals($expect, $result);
-
-		// $separatorが「'」の場合
-		$result = $this->Helper->toArray("'", "a'i'u'e'o");
-		$expect = array("a","i","u","e","o");
-		$this->assertEquals($expect, $result);
-
-		// $separatorが含まれていない場合
-		$result = $this->Helper->toArray(",", "aiueo");
-		$expect = array("aiueo");
-		$this->assertEquals($expect, $result);
-
-	}
-
-/**
  * 配列とキーを指定して値を取得するヘルパーのテスト
  */
 	public function testArrayValue() {

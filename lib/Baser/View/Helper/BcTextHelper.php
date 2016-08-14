@@ -309,27 +309,6 @@ class BcTextHelper extends TextHelper {
 	}
 
 /**
- * 区切り文字で区切られたテキストを配列に変換する
- * 
- * @param string $separator
- * @param string $value
- * @return array
- * @deprecated explode() と同じ仕様となってしまった為、非推奨
- */
-	public function toArray($separator, $value) {
-		if (strpos($value, $separator) === false) {
-			if ($value) {
-				return array($value);
-			} else {
-				return array();
-			}
-		}
-		$values = explode($separator, $value);
-
-		return $values;
-	}
-
-/**
  * 配列とキーを指定して値を取得する
  * 
  * @param int $key 配列のキー

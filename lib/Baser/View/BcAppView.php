@@ -232,7 +232,6 @@ class BcAppView extends View {
 
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
-		// @deprecated .php への移行を推奨
 		// CUSTOMIZE MODIFY 2016/06/01 ryuring
 		// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
 		// >>>
@@ -388,7 +387,6 @@ class BcAppView extends View {
 
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
-		// @deprecated .php への移行を推奨
 		// >>>
 		/*
 		foreach ($exts as $ext) {
@@ -424,7 +422,7 @@ class BcAppView extends View {
  */
 	protected function _getExtensions() {
 		$this->ext = Configure::read('BcApp.templateExt');
-		$exts = array($this->ext);
+		$exts = [$this->ext];
 		if ($this->ext !== '.ctp') {
 			$exts[] = '.ctp';
 		}

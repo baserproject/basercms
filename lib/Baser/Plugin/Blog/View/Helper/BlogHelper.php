@@ -541,20 +541,6 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
- * ブログ編集ページへのリンクを出力
- *
- * @param int $blogContentId ブログコンテンツID
- * @param int $blogPostId ブログ記事ID
- * @return void
- * @deprecated ツールバーに移行
- */
-	public function editPost($blogContentId, $blogPostId) {
-		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			echo '<div class="edit-link">' . $this->BcBaser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')) . '</div>';
-		}
-	}
-
-/**
  * 前の記事へのリンクを出力する
  *
  * @param array $post ブログ記事

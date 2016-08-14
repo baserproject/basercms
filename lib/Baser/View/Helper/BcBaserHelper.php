@@ -408,17 +408,6 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * トップページかどうか判断する
- *
- * @return bool
- * @deprecated isHomeに統合する
- */
-	public function isTop() {
-		trigger_error(deprecatedMessage('ヘルパーメソッド：BcBaserHelper::isTop()', '3.0.6', '3.1.0', '$this->BcBaser->isHome() を利用してください。'), E_USER_DEPRECATED);
-		return $this->isHome();
-	}
-
-/**
  * 現在のページがトップページかどうかを判定する
  *
  * MEMO: BcRequest.(agent).aliasは廃止
@@ -1485,29 +1474,6 @@ EOD;
 	}
 
 /**
- * 固定ページ機能で作成したページの一覧データを取得する
- *
- * @param string $categoryId 固定ページカテゴリID（初期値 : null）※ 指定しない場合は全ページを取得
- * @param array $options オプション（初期値 : array()）
- *	- `conditions` : 検索条件（初期値 : array('Page.status' => 1)）
- *	- `fields` : 取得フィールド（初期値 : array('title', 'url')）
- *	- `order` : 並び順（初期値 : array('Page.sort')）
- * @return mixed ページ一覧、または、false
- * @deprecated BcContents::getTree() に移行
- */
-	public function getPageList($id = null, $options = array()) {
-		$options = array_merge(array(
-			'conditions' => array('Content.status' => 1),
-			'order' => 'Content.lft'
-		), $options);
-		$pages = $this->BcContents->getTree($id, 1, $options);
-		if (empty($pages)) {
-			return false;
-		}
-		return Hash::extract($pages, '{n}.Content');
-	}
-
-/**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
  * @param string|int|float $expire キャッシュの有効期間（初期値 : null） ※ 指定しない場合は、baserCMSコアのキャッシュ設定値
@@ -2268,9 +2234,6 @@ END_FLASH;
  * @return void
  */
 	public function subMenu($data = array(), $options = array()) {
-		if (!$this->_View->get('subMenuElements')) {
-			return;
-		}
 		$this->element('sub_menu', $data, $options);
 	}
 

@@ -62,36 +62,4 @@ class FeedHelper extends BcTextHelper {
 		return $templates;
 	}
 
-/**
- * フィードのキャッシュタイムをキャッシュファイルに保存
- * 
- * <!--nocache--><!--/nocache-->でキャッシュタイムを参照できるようにする
- *
- * @return void
- * @deprecated since version 4.0.0
- */
-	public function saveCachetime() {
-		$feedId = $this->params['pass'][0];
-		if (isset($this->BcBaser->_View->viewVars['cachetime'])) {
-			$cachetime = $this->BcBaser->_View->viewVars['cachetime'];
-			cache('views' . DS . 'feed_cachetime_' . $feedId . '.php', $cachetime);
-		}
-	}
-
-/**
- * フィードリストのキャッシュヘッダーを出力する
- * 
- * キャッシュ時間は管理画面で設定した値
- * ヘッダーを出力するには<cake:nocache>を利用する
- * <!--nocache--><!--/nocache-->内では動的変数を利用できないのでキャッシュファイルを利用する
- * 事前に $this->Feed->saveCachetime() でキャッシュタイムを保存しておく
- *
- * @return void
- * @deprecated since version 4.0.0
- */
-	public function cacheHeader() {
-		$feedId = $this->params['pass'][0];
-		$this->BcBaser->cacheHeader(cache('views' . DS . 'feed_cachetime_' . $feedId . '.php'));
-	}
-
 }

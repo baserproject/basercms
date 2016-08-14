@@ -55,20 +55,6 @@ class MailHelper extends AppHelper {
 	}
 
 /**
- * 管理画面のメールフィールド一覧ページへのリンクを出力する
- *
- * @param string $mailContentId メールコンテンツID
- * @return void
- * @todo ツールバーに移行
- * @deprecated
- */
-	public function indexFields($mailContentId) {
-		if (!empty($this->BcBaser->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			echo '<div class="edit-link">' . $this->BcBaser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')) . '</div>';
-		}
-	}
-
-/**
  * レイアウトテンプレートを取得
  * 
  * コンボボックスのソースとして利用

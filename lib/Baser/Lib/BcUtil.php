@@ -141,15 +141,10 @@ class BcUtil extends Object {
 		}
 		
 		$paths = App::path('Plugin');
-		// @deprecated since 3.0.2
-		// sql ディレクトリは非推奨
-		$folders = array('Schema', 'sql');
 		foreach ($paths as $path) {
-			foreach($folders as $folder) {
-				$_path = $path . $plugin . DS . 'Config' . DS . $folder;
-				if (is_dir($_path)) {
-					return $_path;
-				}
+			$_path = $path . $plugin . DS . 'Config' . DS . 'Schema';
+			if (is_dir($_path)) {
+				return $_path;
 			}
 		}
 		

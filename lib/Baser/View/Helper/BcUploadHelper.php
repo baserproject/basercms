@@ -27,30 +27,6 @@ class BcUploadHelper extends BcAppHelper {
 	public $helpers = array('Html', 'BcForm');
 	
 /**
- * ファイルインプットボックス出力
- * 
- * 画像の場合は画像タグ、その他の場合はファイルへのリンク
- * そして削除用のチェックボックスを表示する
- * 
- * 《オプション》
- * imgsize	画像のサイズを指定する
- * rel		A タグの rel 属性を指定
- * title	A タグの title 属性を指定
- * link		大きいサイズへの画像へのリンク有無
- * delCheck	削除用チェックボックスの利用可否
- * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
- * 
- * @param string $fieldName
- * @param array $options
- * @return string
- * @deprecated since version 3.0.6
- */
-	public function file($fieldName, $options = array()) {
-		trigger_error(deprecatedMessage('メソッド：BcUploadHelper::file()', '3.0.6', '3.1.0', 'BcFormHelper::file() を利用してください。'), E_USER_DEPRECATED);
-		return $this->BcForm->file($fieldName, $options);
-	}
-	
-/**
  * ファイルへのリンクを取得する
  *
  * @param string $fieldName

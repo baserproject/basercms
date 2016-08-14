@@ -227,20 +227,6 @@ class PluginsController extends AppController {
 	}
 
 /**
- * [ADMIN] ファイル削除
- *
- * @param string $pluginName プラグイン名
- * @return void
- *
- * @deprecated admin_ajax_delete_file に移行
- */
-	public function admin_delete_file($pluginName) {
-		$this->__deletePluginFile($pluginName);
-		$this->setMessage('プラグイン「' . $pluginName . '」 を完全に削除しました。');
-		$this->redirect(array('action' => 'index'));
-	}
-
-/**
  * 並び替えを更新する [AJAX]
  *
  * @return bool

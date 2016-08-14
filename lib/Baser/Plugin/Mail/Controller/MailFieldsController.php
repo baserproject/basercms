@@ -328,54 +328,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $Id
  * @return void
- * @deprecated admin_ajax_copy に移行
- */
-	public function admin_copy($mailContentId, $id) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		/* コピー対象フィールドデータを読み込む */
-		$mailField = $this->MailField->read(null, $id);
-		if (!$mailField) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		// 不要な値をリセットする
-		unset($mailField['MailField']['id']);
-		unset($mailField['MailField']['modified']);
-		unset($mailField['MailField']['created']);
-
-		// メッセージ用
-		$oldName = $mailField['MailField']['name'];
-
-		// 項目名とフィールド名は識別用に__n形式のナンバーを付加する
-		$mailField['MailField']['field_name'] = $this->__getNewValueOnCopy('field_name', $mailField['MailField']['field_name']);
-		$mailField['MailField']['name'] = $this->__getNewValueOnCopy('name', $mailField['MailField']['name']);
-		$mailField['MailField']['no'] = $this->MailField->getMax('no', array('MailField.mail_content_id' => $mailContentId)) + 1;
-		$mailField['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
-
-		// データを保存
-		$this->MailField->create($mailField);
-		if ($this->MailField->save()) {
-			$this->setMessage('メールフィールド「' . $oldName . '」 をコピーしました。', false, true);
-			$this->MailMessage->construction($mailContentId);
-		} else {
-			$this->setMessage('コピー中にエラーが発生しました。', true);
-		}
-
-		$this->redirect(array('action' => 'index', $mailContentId));
-	}
-
-/**
- * フィールドデータをコピーする
- *
- * @param int $mailContentId
- * @param int $Id
- * @return void
  */
 	public function admin_ajax_copy($mailContentId, $id) {
 		/* 除外処理 */
