@@ -109,7 +109,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 表示設定 */
 		$this->set('owners', $this->BlogCategory->getControlSource('owner_id'));
 		$this->set('dbDatas', $dbDatas);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ一覧';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] カテゴリ一覧';
 		$this->help = 'blog_categories_index';
 	}
 
@@ -160,7 +160,7 @@ class BlogCategoriesController extends BlogAppController {
 			$parents = array('' => '指定しない');
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規カテゴリ登録';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規カテゴリ登録';
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -208,7 +208,7 @@ class BlogCategoriesController extends BlogAppController {
 			$parents = array('' => '指定しない');
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ編集';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] カテゴリ編集';
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}

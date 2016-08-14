@@ -107,7 +107,7 @@ class BlogCommentsController extends BlogAppController {
 			$this->pageTitle = '[' . $this->blogPost['BlogPost']['name'] . '] コメント一覧';
 		} else {
 			$conditions['BlogComment.blog_content_id'] = $blogContentId;
-			$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] コメント一覧';
+			$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] コメント一覧';
 		}
 
 		/* 画面情報設定 */
@@ -178,7 +178,7 @@ class BlogCommentsController extends BlogAppController {
 			if (isset($this->blogPost['BlogPost']['name'])) {
 				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを削除しました。';
 			} else {
-				$message = '記事「' . $this->blogContent['BlogContent']['title'] . '」へのコメントを削除しました。';
+				$message = '記事「' . $this->request->params['Content']['title'] . '」へのコメントを削除しました。';
 			}
 			$this->BlogComment->saveDbLog($message);
 			return true;
@@ -206,7 +206,7 @@ class BlogCommentsController extends BlogAppController {
 			if (isset($this->blogPost['BlogPost']['name'])) {
 				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを削除しました。';
 			} else {
-				$message = '記事「' . $this->blogContent['BlogContent']['title'] . '」へのコメントを削除しました。';
+				$message = '記事「' . $this->request->params['Content']['title'] . '」へのコメントを削除しました。';
 			}
 			$this->setMessage($message, false, true);
 		} else {
@@ -314,7 +314,7 @@ class BlogCommentsController extends BlogAppController {
 			if (isset($this->blogPost['BlogPost']['name'])) {
 				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを' . $statusText . 'に設定しました。';
 			} else {
-				$message = '記事「' . $this->blogContent['BlogContent']['title'] . '」へのコメントを' . $statusText . 'に設定しました。';
+				$message = '記事「' . $this->request->params['Content']['title'] . '」へのコメントを' . $statusText . 'に設定しました。';
 			}
 			$this->BlogComment->saveDbLog($message);
 			return true;
