@@ -857,7 +857,7 @@ class Content extends AppModel {
 			}
 			unset($content['Content']['lft']);
 			unset($content['Content']['rght']);
-			if($this->save($content, false)) {
+			if($this->save($content, true)) {
 				return $content['Content']['site_id'];
 			} else {
 				$result = false;
