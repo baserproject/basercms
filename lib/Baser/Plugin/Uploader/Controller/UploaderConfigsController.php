@@ -10,14 +10,12 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::import('Controller', 'Plugins');
-
 /**
  * ファイルアップローダーコントローラー
  *
  * @package			Uploader.Controller
  */
-class UploaderConfigsController extends BcPluginAppController {
+class UploaderConfigsController extends AppController {
 /**
  * クラス名
  *

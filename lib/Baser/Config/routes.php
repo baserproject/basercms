@@ -62,49 +62,14 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  */
 	CakePlugin::routes();
 
-// TODO >>> 統合コンテンツ管理ルーティング
-// TODO プラグインが有効かどうかのチェックが必要
-// TODO 公開状態のチェックが必要
+/**
+ * コンテンツ管理ルーティング
+ */
 	if(!BcUtil::isAdminSystem()) {
 		App::uses('BcContentsRoute', 'Routing/Route');
 		Router::connect('*', [], array('routeClass' => 'BcContentsRoute'));
 	}
-// <<<
-
-/**
- * プラグイン判定 ＆ プラグイン名の書き換え
- * 
- * DBに登録したデータを元にURLのプラグイン名部分を書き換える。
- * 一つのプラグインで二つのコンテンツを設置した場合に利用する。
- * あらかじめ、plugin_contentsテーブルに、URLに使う名前とコンテンツを特定する。
- * プラグインごとの一意のキー[content_id]を保存しておく。
- *
- * content_idをコントローラーで取得するには、$plugins_controllerのcontentIdプロパティを利用する。
- * Router::connectの引数として値を与えると、$this->Html->linkなどで、
- * Routerを利用する際にマッチしなくなりURLがデフォルトのプラグイン名となるので注意
- * 
- * DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
- */
-//	try {
-//		$PluginContent = ClassRegistry::init('PluginContent');
-//	} catch (Exception $ex) {
-//		$PluginContent = null;
-//	}
-//	
-//	if ($PluginContent) {
-//		$pluginContent = $PluginContent->currentPluginContent($parameter);
-//		if ($pluginContent) {
-//			$pluginContentName = $pluginContent['PluginContent']['name'];
-//			$pluginName = $pluginContent['PluginContent']['plugin'];
-//			if (!$agent) {
-//				Router::connect("/{$pluginContentName}/:action/*", array('plugin' => $pluginName, 'controller' => $pluginName));
-//				Router::connect("/{$pluginContentName}", array('plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
-//			} else {
-//				Router::connect("/{$agentAlias}/{$pluginContentName}/:action/*", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName));
-//				Router::connect("/{$agentAlias}/{$pluginContentName}", array('prefix' => $agentPrefix, 'plugin' => $pluginName, 'controller' => $pluginName, 'action' => 'index'));
-//			}
-//		}
-//	}
+	
 /**
  * 認証プレフィックス
  */
@@ -130,64 +95,6 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 }
 
 if (BC_INSTALLED || isConsole()) {
-/**
- * ページ機能拡張
- * cakephp の ページ機能を利用する際、/pages/xxx とURLである必要があるが
- * それを /xxx で呼び出す為のルーティング
- */
-//	$adminPrefix = Configure::read('Routing.prefixes.0');
-//	if (!preg_match("/^{$adminPrefix}/", $parameter)) {
-//		/* 1.5.10 以降 */
-//		App::uses('Page', 'Model');
-//		$Page = ClassRegistry::init('Page');
-//		if ($Page) {
-//
-//			$parameter = urldecode($parameter);
-//
-//			if (!$parameter) {
-//				$params = array('index');
-//			} elseif (preg_match('/\/$/is', $parameter)) {
-//				$params = array($parameter . 'index');
-//			} else {
-//				$params = array($parameter, $parameter . '/index');
-//			}
-//
-//			foreach ($params as $param) {
-//
-//				$linkedPages = $Page->isLinked($agentPrefix, '/' . $param);
-//
-//				if (!$agent || $linkedPages) {
-//					$url = "/{$param}";
-//				} else {
-//					$url = "/{$agentPrefix}/{$param}";
-//				}
-//
-//				if ($Page->isPageUrl($url)) {
-//					if (!$agent) {
-//						Router::connect("/{$parameter}", array_merge(array('controller' => 'pages', 'action' => 'display'), explode('/', $param)));
-//					} else {
-//						Router::connect("/{$agentAlias}/{$parameter}", array_merge(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
-//					}
-//					break;
-//				} else {
-//
-//					// 拡張子付き（.html）の場合も透過的にマッチングさせる
-//					if (preg_match('/^(.+?)\.html$/', $url, $matches)) {
-//						$url = $matches[1];
-//						if ($Page->isPageUrl($url) && ($Page->checkPublish($url) || !empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]))) {
-//							$param = str_replace('.html', '', $param);
-//							if (!$agent) {
-//								Router::connect("/{$parameter}", am(array('controller' => 'pages', 'action' => 'display'), $param));
-//							} else {
-//								Router::connect("/{$agentAlias}/{$parameter}", am(array('prefix' => $agentPrefix, 'controller' => 'pages', 'action' => 'display'), explode('/', $param)));
-//							}
-//							break;
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
 
 /**
  * 携帯標準ルーティング

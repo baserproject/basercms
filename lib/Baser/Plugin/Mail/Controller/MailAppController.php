@@ -10,12 +10,10 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('BcPluginAppController', 'Controller');
-
 /**
  * メールプラグインコントローラー根底クラス
  *
  * @package			Mail.Controller
  */
-class MailAppController extends BcPluginAppController {
+class MailAppController extends AppController {
 }

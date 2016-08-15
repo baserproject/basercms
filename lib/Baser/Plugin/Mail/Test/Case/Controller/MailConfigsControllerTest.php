@@ -21,7 +21,6 @@ class MailConfigsControllerTest extends BaserTestCase {
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.Permission',
 		'baser.Default.Favorite',
 		'plugin.mail.Default/MailConfig',

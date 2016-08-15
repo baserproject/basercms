@@ -22,7 +22,6 @@ class BlogCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SearchIndex',
-		'baser.Default.PluginContent',
 		'baser.Default.Permission',
 		'baser.Default.User',
 		'baser.Default.UserGroup',

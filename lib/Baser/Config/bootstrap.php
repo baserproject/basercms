@@ -120,8 +120,6 @@ App::uses('BcControllerEventListener', 'Event');
 App::uses('BcModelEventListener', 'Event');
 App::uses('BcViewEventListener', 'Event');
 App::uses('BcHelperEventListener', 'Event');
-App::uses('BcPluginAppController', 'Controller');
-App::uses('BcPluginAppModel', 'Model');
 App::uses('BcManagerShell', 'Console/Command');
 App::uses('CakeRequest', 'Network');
 

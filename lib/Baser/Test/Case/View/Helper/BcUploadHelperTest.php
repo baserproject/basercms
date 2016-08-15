@@ -26,7 +26,6 @@ class BcUploadHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.Page',

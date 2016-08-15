@@ -31,7 +31,6 @@ class UserGroupTest extends BaserTestCase {
 		'baser.Default.UserGroup',
 		'baser.Default.Permission',
 		'baser.Default.Page',
-		'baser.Default.PluginContent',
 		'baser.Default.Favorite',
 	);
 

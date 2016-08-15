@@ -29,7 +29,6 @@ class PluginTest extends BaserTestCase {
 		'baser.Default.Favorite',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.User',
 	);
 

@@ -11,18 +11,13 @@
  */
 
 /**
- * Include Files
- */
-App::uses('BcPluginAppModel', 'Model');
-
-/**
  * MultiBlogContent
  *
  * @package MultiBlog.Model
  * @property MultiBlogPost $MultiBlogPost
  * @property Content $Content
  */
-class MultiBlogContent extends BcPluginAppModel {
+class MultiBlogContent extends AppModel {
 
 /**
  * Behavior Setting

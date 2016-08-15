@@ -64,7 +64,6 @@ class BcFormHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.Site',
 	);

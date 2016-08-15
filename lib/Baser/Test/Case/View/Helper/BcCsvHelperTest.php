@@ -28,7 +28,6 @@ class BcCsvHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
-		'baser.Default.PluginContent',
 	);
 
 	public function setUp() {

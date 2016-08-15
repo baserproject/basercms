@@ -10,14 +10,12 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('BcPluginAppModel', 'Model');
-
 /**
  * メールプラグインモデル根底クラス
  *
  * @package			Mail.Model
  */
-class MailAppModel extends BcPluginAppModel {
+class MailAppModel extends AppModel {
 
 /**
  * データの消毒をおこなう

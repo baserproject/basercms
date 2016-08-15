@@ -31,7 +31,6 @@ class PageTest extends BaserTestCase {
 		'baser.Model.Page.PagePageModel',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.User',
 		'baser.Default.Site',
 		'baser.Default.Content',

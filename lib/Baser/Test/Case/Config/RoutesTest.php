@@ -30,7 +30,6 @@ class RoutesTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.User',
 		'baser.Config.Routes.PageRoutes',
-		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.Site',
 	);

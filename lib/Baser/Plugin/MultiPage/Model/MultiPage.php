@@ -11,16 +11,11 @@
  */
 
 /**
- * Include Files
- */
-App::uses('BcPluginAppModel', 'Model');
-
-/**
  * MultiPage
  *
  * @package MultiPage.MultiPage
  */
-class MultiPage extends BcPluginAppModel {
+class MultiPage extends AppModel {
 
 /**
  * Behavior Setting

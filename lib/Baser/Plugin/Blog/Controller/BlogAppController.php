@@ -10,8 +10,6 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('BcPluginAppController', 'Controller');
-
 /**
  * ブログコントローラー基底クラス
  *
@@ -19,7 +17,7 @@ App::uses('BcPluginAppController', 'Controller');
  * @property BlogPost $BlogPost
  * @property BlogCategory $BlogCategory
  */
-class BlogAppController extends BcPluginAppController {
+class BlogAppController extends AppController {
 
 /**
  * コメントを管理者メールへメール送信する

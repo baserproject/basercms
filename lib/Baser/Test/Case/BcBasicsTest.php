@@ -24,7 +24,6 @@ class BcBasicsTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.Site',
 		'baser.Default.Content',

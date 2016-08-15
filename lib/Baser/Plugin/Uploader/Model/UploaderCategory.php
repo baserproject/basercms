@@ -15,7 +15,7 @@
  *
  * @package			Uploader.Model
  */
-class UploaderCategory extends BcPluginAppModel {
+class UploaderCategory extends AppModel {
 
 /**
  * プラグイン名

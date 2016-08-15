@@ -10,12 +10,10 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('BcPluginAppModel', 'Model');
-
 /**
  * RSSリーダーモデル基底クラス
  *
  * @package			Feed.Model
  */
-class FeedAppModel extends BcPluginAppModel {
+class FeedAppModel extends AppModel {
 }

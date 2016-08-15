@@ -22,7 +22,6 @@ class BlogPostTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.User',
 		'baser.Default.SearchIndex',
-		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogTag',
 		'baser.Default.BlogPostsBlogTag',

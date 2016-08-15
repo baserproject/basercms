@@ -11,14 +11,9 @@
  */
 
 /**
- * Include files
- */
-App::uses('BcPluginAppController', 'Controller');
-
-/**
  * RSSリーダーコントローラー基底クラス
  *
  * @package			Feed.Controller
  */
-class FeedAppController extends BcPluginAppController {
+class FeedAppController extends AppController {
 }

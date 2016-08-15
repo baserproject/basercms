@@ -39,7 +39,6 @@ class BlogBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.User',
 		'baser.Default.Page',
-		'baser.Default.PluginContent', 
 		'baser.Default.Content', 
 		'baser.Default.Site',  
 		'baser.Default.Plugin',

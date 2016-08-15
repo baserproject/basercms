@@ -27,7 +27,6 @@ class BcMobileHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Default.PluginContent',
 		'baser.Default.Page',
 	);
 

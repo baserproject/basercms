@@ -21,7 +21,6 @@ class CakeRequestTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.Page',
-		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.Site',
 	);

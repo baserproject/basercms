@@ -27,7 +27,6 @@ class BcUtilTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
-		'baser.Default.PluginContent',
 		'baser.Default.Content',
 		'baser.Default.Site'
 	);

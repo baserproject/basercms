@@ -30,7 +30,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
-		'baser.Default.PluginContent',
 		'baser.Default.SearchIndex',
 		'baser.Default.User',
 		'baser.Default.UserGroup',
@@ -39,7 +38,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.ThemeConfig',
 		'baser.Default.WidgetArea',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
@@ -554,32 +552,6 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(true, '/s/contact/index', 'smartphone')
 		);
 	}
-
-	/**
-	 * 現在のページが指定のプラグインかどうかを判定する
-	 *
-	 * @return void
-	 */
-	public function testIsPluginContent() {
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->assertEquals(false, $this->BcBaser->isPluginContent('Blog'));
-
-		$this->BcBaser->request = $this->_getRequest('/news/index');
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('Blog'));
-
-		$this->BcBaser->request = $this->_getRequest('/index');
-		$this->assertEquals(false, $this->BcBaser->isPluginContent('Mail'));
-
-		$this->BcBaser->request = $this->_getRequest('/contact/index');
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('Mail'));
-
-		$this->BcBaser->request->params['plugin'] = 'hollow_world';
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('HollowWorld'));
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollowWorld'));
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollow_world'));
-		$this->assertEquals(false, $this->BcBaser->isPluginContent('hollowworld'));
-	}
-
 
 /**
  * baserCMSが設置されているパスを出力する

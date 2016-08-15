@@ -1759,28 +1759,12 @@ END_FLASH;
 	}
 
 /**
- * 指定のプラグインかを判別する
- * 現状、Blog,Mail のみ動作確認
- *
- * @param string name プラグイン名
- * @return bool
- */
-	public function isPluginContent($name) {
-		if (empty($this->request->params['plugin'])) {
-			return false;
-		}
-		return (
-			$this->request->params['plugin'] === Inflector::underscore($name)
-		);
-	}
-
-/**
  * 現在のページがブログプラグインかどうかを判定する
  *
  * @return bool
  */
 	public function isBlog() {
-		return $this->isPluginContent('Blog');
+		return ($this->request->params['Content']['plugin'] == 'Blog');
 	}
 
 /**
@@ -1789,7 +1773,7 @@ END_FLASH;
  * @return bool
  */
 	public function isMail() {
-		return $this->isPluginContent('Mail');
+		return ($this->request->params['Content']['plugin'] == 'Mail');
 	}
 
 /**

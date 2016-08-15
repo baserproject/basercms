@@ -17,7 +17,6 @@
  * @package Baser.Controller
  * @property Menu $Menu
  * @property Plugin $Plugin
- * @property PluginContent $PluginContent
  * @property BcManagerComponent $BcManager
  * @property BcAuthComponent $BcAuth
  */
@@ -35,7 +34,7 @@ class PluginsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Menu', 'Plugin', 'PluginContent');
+	public $uses = array('Menu', 'Plugin');
 
 /**
  * コンポーネント

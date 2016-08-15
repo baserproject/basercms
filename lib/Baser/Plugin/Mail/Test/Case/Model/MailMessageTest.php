@@ -21,7 +21,6 @@ class MailMessageTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
-		'baser.Default.pluginContent',
 		'baser.Default.Site',
 		'baser.Default.Content',
 		'plugin.Mail.Default/MailMessage',

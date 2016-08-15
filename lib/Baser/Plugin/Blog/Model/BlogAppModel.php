@@ -10,12 +10,10 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('BcPluginAppModel', 'Model');
-
 /**
  * ブログモデル基底クラス
  *
  * @package			Blog.Model
  */
-class BlogAppModel extends BcPluginAppModel {
+class BlogAppModel extends AppModel {
 }
