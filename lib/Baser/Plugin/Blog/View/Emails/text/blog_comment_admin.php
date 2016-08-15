@@ -18,11 +18,11 @@
 　　　　　　　　◆◇　コメントを受付けました　◇◆ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-　<?php echo $BlogContent['title'] ?> へのコメントを受け付けました。
+　<?php echo $Content['title'] ?> へのコメントを受け付けました。
 　受信内容は下記のとおりです。
 
 　「<?php echo $BlogPost['name'] ?>」
-　<?php echo $this->BcBaser->getUri('/' . $content['name'] . '/archives/' . $BlogPost['no'], false) ?>　
+　<?php echo $this->BcBaser->getUri($Content['url'] . '/archives/' . $BlogPost['no'], false) ?>　
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ コメント内容 

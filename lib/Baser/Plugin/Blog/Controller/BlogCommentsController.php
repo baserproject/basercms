@@ -45,37 +45,38 @@ class BlogCommentsController extends BlogAppController {
 
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
 
-		$crumbs = array();
-		$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
-		if (!empty($this->params['pass'][1])) {
-
-			$dbDatas = $this->BlogPost->read(null, $this->params['pass'][1]);
-
-			if (!$dbDatas) {
-				$this->notFound();
-			}
-
-			$this->blogPost = array('BlogPost' => $dbDatas['BlogPost']);
-			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
-
-			$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
-			$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
-		} elseif (!empty($this->params['pass'][0])) {
-
-			$dbDatas = $this->BlogPost->BlogContent->read(null, $this->params['pass'][0]);
-			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
-			$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
-		}
-
-		$this->crumbs = am($this->crumbs, $crumbs);
-		if (!empty($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+		if (BcUtil::isAdminSystem()) {
 			$this->subMenuElements = array('blog_posts');
-		}
-
-		if (empty($this->params['admin'])) {
+			$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
 			$this->Security->enabled = true;
 			$this->Security->requireAuth('add');
 		}
+		
+		$crumbs = array();
+		
+		if (!empty($this->params['pass'][1])) {
+			$dbDatas = $this->BlogPost->find('first', ['conditions' => ['BlogPost.id' => $this->params['pass'][1]]]);
+			if (!$dbDatas) {
+				$this->notFound();
+			}
+			$this->blogPost = array('BlogPost' => $dbDatas['BlogPost']);
+			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
+			if (BcUtil::isAdminSystem()) {
+				$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+				$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
+			}	
+		} elseif (!empty($this->params['pass'][0])) {
+			if(!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
+				$dbDatas = $this->BlogPost->BlogContent->read('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
+				$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
+				if (BcUtil::isAdminSystem()) {
+					$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+				}	
+			}
+		}
+
+		$this->crumbs = array_merge($this->crumbs, $crumbs);
+		
 	}
 
 /**
@@ -351,6 +352,8 @@ class BlogCommentsController extends BlogAppController {
 
 			$result = $this->BlogComment->add($this->request->data, $blogContentId, $blogPostId, $this->blogContent['BlogContent']['comment_approve']);
 			if ($result && $captchaResult) {
+				$content = $this->BlogPost->BlogContent->Content->findByType('Blog.BlogContent', $this->blogContent['BlogContent']['id']);
+				$this->request->data['Content'] = $content['Content'];
 				$this->_sendCommentAdmin($blogPostId, $this->request->data);
 				// コメント承認機能を利用していない場合は、公開されているコメント投稿者にアラートを送信
 				if (!$this->blogContent['BlogContent']['comment_approve']) {

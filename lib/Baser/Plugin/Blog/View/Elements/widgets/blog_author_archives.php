@@ -44,15 +44,7 @@ $baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/';
 				}
 				?>
 				<li<?php echo $class ?>>
-					<?php
-					$this->BcBaser->link($title, array(
-						'admin' => false, 'plugin' => '',
-						'controller' => $this->request->params['Content']['name'],
-						'action' => 'archives',
-						'author',
-						$author['User']['name']
-					))
-					?>
+					<?php $this->BcBaser->link($title, $this->request->params['Content']['name'] . '/archives/author/' . $author['User']['name']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

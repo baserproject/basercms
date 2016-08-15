@@ -253,13 +253,13 @@ class MailController extends MailAppController {
 		}
 
 		if (!$this->request->data) {
-			$this->redirect(array('action' => 'index', $id));
+			$this->redirect($this->request->params['Content']['url'] . '/index');
 		} else {
 			// 入力データを整形し、モデルに引き渡す
 			$this->request->data = $this->MailMessage->create($this->MailMessage->autoConvert($this->request->data));
 
 			// 画像認証を行う
-			if (Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
+			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
 				$captchaResult = $this->BcCaptcha->check(@$this->request->data['MailMessage']['auth_captcha']);
 				if (!$captchaResult) {
 					$this->MailMessage->invalidate('auth_captcha');
@@ -322,19 +322,19 @@ class MailController extends MailAppController {
 			return;
 		}
 		if (!$this->Session->read('Mail.valid')) {
-			$this->redirect(array('action' => 'index', $id));
+			$this->redirect($this->request->params['Content']['url'] . '/index');
 		}
 
 		if (!$this->request->data) {
-			$this->redirect(array('action' => 'index', $id));
+			$this->redirect($this->request->params['Content']['url'] . '/index');
 		} elseif (isset($this->request->data['MailMessage']['mode']) && $this->request->data['MailMessage']['mode'] == 'Back') {
 			$this->_back($id);
 		} else {
 			// 画像認証を行う
-			if (Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
+			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
 				$captchaResult = $this->BcCaptcha->check($this->request->data['MailMessage']['auth_captcha']);
 				if (!$captchaResult) {
-					$this->redirect(array('action' => 'index', $id));
+					$this->redirect($this->request->params['Content']['url'] . '/index');
 				} else {
 					unset($this->request->data['MailMessage']['auth_captcha']);
 				}

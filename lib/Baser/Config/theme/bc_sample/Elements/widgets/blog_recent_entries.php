@@ -37,7 +37,7 @@ $baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/';
 					<?php $class = '' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($recentEntry['BlogPost']['name'], array('admin' => false, 'plugin' => '', 'controller' => $this->request->params['Content']['url'], 'action' => 'archives', $recentEntry['BlogPost']['no'])) ?>
+					<?php $this->BcBaser->link($recentEntry['BlogPost']['name'], $this->request->params['Content']['url'] . '/archives/' . $recentEntry['BlogPost']['no']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

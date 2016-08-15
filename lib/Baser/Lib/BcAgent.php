@@ -223,7 +223,8 @@ class BcAgent {
  * @return bool
  */
 	public function isEnabled() {
-		return (bool)Configure::read("BcApp.{$this->name}");
+		$Site = ClassRegistry::init('Site');
+		return (bool) $Site->find('count', ['conditions' => ['Site.name' => $this->name, 'Site.status' => true], 'recursive' => -1]);
 	}
 
 /**

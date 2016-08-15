@@ -18,9 +18,9 @@
 　　　　　　　　◆◇　コメントが投稿されました　◇◆ 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<?php echo $BlogComment['name'] ?>さんが、
+<?php echo $Content['name'] ?>さんが、
 「<?php echo $BlogPost['name'] ?>」にコメントしました。
-<?php echo $this->BcBaser->getUri('/' . $content['name'] . '/archives/' . $BlogPost['no'], false) ?>　
+<?php echo $this->BcBaser->getUri($Content['url'] . '/archives/' . $BlogPost['no'], false) ?>　
  
 <?php echo ($BlogComment['message']) ?>　
 　

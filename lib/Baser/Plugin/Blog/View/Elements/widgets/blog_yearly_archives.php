@@ -58,15 +58,7 @@ $baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/date/';
 					<?php $title = $postedDate['year'] . '年' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php
-					$this->BcBaser->link($title, array(
-						'admin' => false,
-						'plugin' => '',
-						'controller' => $this->request->params['Content']['url'],
-						'action' => 'archives',
-						'date', $postedDate['year']
-					))
-					?>
+					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
