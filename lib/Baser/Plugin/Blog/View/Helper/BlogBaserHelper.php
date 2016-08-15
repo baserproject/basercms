@@ -47,7 +47,7 @@ class BlogBaserHelper extends AppHelper {
  *									コンテンツテンプレート名を指定する（必須）
  * $this->BcBaser->blogPosts(null, 3, array('contentsTemplate' => 'news'))
  * 
- * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）
+ * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）２階層目以降はURLで指定
  * @param int $num 記事件数（初期値 : 5）
  * @param array $options オプション（初期値 : array()）
  *	- `category` : カテゴリで絞り込む場合にアルファベットのカテゴリ名指定（初期値 : null）
@@ -78,95 +78,66 @@ class BlogBaserHelper extends AppHelper {
 			'direction' => null,
 			'page' => null,
 			'sort' => null,
-			'siteId' => 0
+			'siteId' => $this->request->params['Site']['id']
 		), $options);
 
-		if (empty($contentsName)) {
-			// コンテンツ名が空の場合
-			$contentsName = array();
-		} elseif (!is_array($contentsName)) {
-			// コンテンツ名が配列でない場合
-			$contentsName = array($contentsName);
+		if(!$contentsName && empty($options['contentsTemplate'])) {
+			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
+			return;
 		}
+		
+		// コンテンツ名を配列に
+		if (empty($contentsName)) {
+			$contentsName = [];
+		} elseif (!is_array($contentsName)) {
+			$contentsName = [$contentsName];
+		}
+		
+		// URL形式に変換
+		foreach($contentsName as $key => $value) {
+			if(!preg_match('/^\//', $value)) {
+				$contentsName[$key] = '/' . $value;
+			}
+		}
+		
+		// 有効ブログを取得
 		$Content = ClassRegistry::init('Content');
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$joins = [];
-		if($Content->useDbConfig != $BlogContent->useDbConfig) {
-			// =====================================================
-			// TODO コアとプラグインの useDbConfig を統一したら削除する
-			// useDbConfig が違う場合、hasOne でも inner join しない為
-			// アソシエーション先のフィールドを検索条件に指定できない
-			// table の指定をクラスにしているのは、プラグインのテーブルプレフィックスが
-			// 自動的に付与されてしまうから。
-			// クラスを指定するとコアのテーブルプレフィックスが不要される。
-			// ちなみに UnitTest の場合は、useDbConfigが同じ為不要となる。
-			// =====================================================
-			$joins = [[
-				'type' => 'LEFT',
-				'alias' => 'Content',
-				'table' => ClassRegistry::init('Content'),
-				'conditions' => 'Content.entity_id = BlogContent.id'
-			]];
-		}
 		$blogContents = $BlogContent->find('all', [
 			'fields' => ['BlogContent.id', 'Content.name', 'Content.status'],
-			'conditions' => ['Content.site_id' => $options['siteId']],
+			'conditions' => array_merge([
+				'Content.site_id' => $options['siteId'],
+				'Content.url' => $contentsName
+			], $Content->getConditionAllowPublish()),
 			'recursive' => 0,
-			'joins' => $joins
 		]);
+		
 		if (empty($blogContents)) {
 			return;
-		} else {
-			foreach($blogContents as $blogContent) {
-				$blogContentsTmp[$blogContent['Content']['name']] = [
-					'id' => $blogContent['BlogContent']['id'],
-					'status' => $blogContent['Content']['status']
-				];
-			}
-			$blogContents = $blogContentsTmp;
-		}
-		if ($options['contentsTemplate']) {
-			$contentsTemplate = $options['contentsTemplate'];
-		} else {
-			if ($contentsName) {
-				if (is_array($contentsName)) {
-					$contentsTemplate = current($contentsName);
-				} else {
-					$contentsTemplate = $contentsName;
-				}
-			} else {
-				trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
-				return;
-			}
 		}
 
-		if (!empty($blogContents[$contentsTemplate]['id'])) {
-			$id = $blogContents[$contentsTemplate]['id'];
-		} else {
-			return;
+		$options['contentId'] = Hash::extract($blogContents, "{n}.BlogContent.id");
+		
+		// 指定したコンテンツテンプレートに紐づくブログIDを特定
+		// 指定したコンテンツネームに紐づくブログIDを取得
+		$blogContentId = null;
+		foreach($blogContents as $key => $blogContent) {
+			if(!empty($options['contentsTemplate']) && $options['contentsTemplate'] == $blogContent['BlogContent']['template']) {
+				$blogContentId = $blogContent['BlogContent']['id'];	
+				break;
+			}
+		}
+		
+		// コンテンツテンプレートに紐づくブログIDを特定できない場合は
+		// 対象ブログの先頭のブログIDとする
+		if (!$blogContentId) {
+			$blogContentId = current($options['contentId']);
 		}
 
 		unset($options['siteId']);
 		unset($options['contentsTemplate']);
-		$blogContentId = array();
-
-		if ($contentsName) {
-			foreach ($blogContents as $key => $value) {
-				if (array_search($key, $contentsName) !== false && $value['status']) {
-					$blogContentId[] = $value['id'];
-				}
-			}
-		} else {
-			foreach ($blogContents as $key => $value) {
-				if ($value['status']) {
-					$blogContentId[] = $value['id'];
-				}
-			}
-		}
-		$options['contentId'] = $blogContentId;
 
 		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
-
 		$settings = Configure::read('BcAgent');
 		foreach ($settings as $key => $setting) {
 			if (isset($options[$key])) {
@@ -181,7 +152,7 @@ class BlogBaserHelper extends AppHelper {
 			}
 		}
 		
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'entityId' => $id, 'named' => $options));
+		echo $this->requestAction($url, array('return', 'pass' => array($blogContentId, $num), 'entityId' => $blogContentId, 'named' => $options));
 	}
 
 /**
