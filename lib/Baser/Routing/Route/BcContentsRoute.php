@@ -98,9 +98,21 @@ class BcContentsRoute extends CakeRoute {
 					$condUrls[] = '/' . implode('/', $params);
 				}
 			}
-			$conditions = ['Content.url' => $condUrls];
+			$conditions = [
+				'Content.url' => $condUrls,
+				'or' => [
+					['Site.status' => true],
+					['Site.status' => null]
+				]
+			];
 		} else {
-			$conditions = ['Content.url' => $this->getUrlPattern($url)];
+			$conditions = [
+				'Content.url' => $this->getUrlPattern($url),
+				'or' => [
+					['Site.status' => true],
+					['Site.status' => null]
+				]
+			];	
 		}
 		if($publish) {
 			$conditions = $conditions + $Content->getConditionAllowPublish();

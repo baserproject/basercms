@@ -53,14 +53,11 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 		}
 		$pluginMatch = array('plugin' => implode('|', $plugins));
 	}
+	
 /**
  * 名前付きパラメータを追加 
  */
 	Router::connectNamed(array('sortmode', 'num', 'page', 'sort', 'direction'));
-/**
- * プラグインルーティング
- */
-	CakePlugin::routes();
 
 /**
  * コンテンツ管理ルーティング

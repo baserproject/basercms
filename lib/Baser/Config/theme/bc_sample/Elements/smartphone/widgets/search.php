@@ -4,9 +4,9 @@
  * 呼出箇所：ウィジェット
  */
 if (!empty($this->passedArgs['num'])) {
-$url = array('smartphone' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
 } else {
-$url = array('smartphone' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
+	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
 }
 ?>
 
