@@ -725,8 +725,7 @@ class Content extends AppModel {
 
 		$conditions = [
 			'type' => 'ContentFolder', 
-			'alias_id' => null,
-			'site_root' => false
+			'alias_id' => null
 		];
 		if(!is_null($siteId)) {
 			$conditions['site_id'] = $siteId;

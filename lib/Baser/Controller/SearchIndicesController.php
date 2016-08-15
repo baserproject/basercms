@@ -267,7 +267,7 @@ class SearchIndicesController extends AppController {
 	public function admin_ajax_get_content_folder_list($siteId) {
 		$this->autoRender = false;
 		Configure::write('debug', 0);
-		return json_encode($this->Content->getContentFolderList((int) $siteId));
+		return json_encode($this->Content->getContentFolderList((int) $siteId, ['conditions' => ['Content.site_root' => false]]));
 	}
 
 /**
