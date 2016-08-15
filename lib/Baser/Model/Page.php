@@ -337,7 +337,7 @@ class Page extends AppModel {
 			chmod($path, 0777);
 		}
 		
-		$url = $this->Content->createUrl($data['Content']['parent_id'], 'ContentFolder');
+		$url = $this->Content->createUrl($data['Content']['parent_id'], true);
 		if($url != '/') {
 			$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
 			if($data['Content']['site_id'] != 0) {

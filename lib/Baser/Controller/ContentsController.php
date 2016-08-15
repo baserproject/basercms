@@ -378,6 +378,7 @@ class ContentsController extends AppController {
  */
 	public function admin_ajax_move() {
 
+		$this->autoRender = false;
 		if(!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -419,11 +420,10 @@ class ContentsController extends AppController {
 				'data' => $result
 			));
 			
-			echo true;
+			return json_encode($this->Content->getUrlById($result['Content']['id'], true));
 		} else {
 			$this->ajaxError(500, 'データ保存中にエラーが発生しました。');
 		}
-		exit();
 
 	}
 

@@ -395,9 +395,15 @@ class Content extends AppModel {
 		$dataTmp = $this->data;
 		$idTmp = $this->id;
 		// 自身がエイリアスか確認し、エイリアスの場合は終了
-		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id']) || !isset($data['Content']['type'])) {
+		if(!empty($data['Content']['alias_id']) || !isset($data['Content']['site_id'])) {
 			return true;
 		}
+		
+		$isContentFolder = false;
+		if(!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
+			$isContentFolder = true;
+		}
+		
 		// メインサイトか確認し、メインサイトでない場合は終了
 		if(!$this->Site->isMain($data['Content']['site_id'])) {
 			return true;
@@ -414,7 +420,7 @@ class Content extends AppModel {
 		}
 
 		$CreateModel = $this;
-		if($data['Content']['type'] == 'ContentFolder') {
+		if($isContentFolder) {
 			$CreateModel = ClassRegistry::init('ContentFolder');
 		}
 
@@ -437,7 +443,7 @@ class Content extends AppModel {
 			if($content) {
 				// 存在する場合は、自身のエイリアスかどうか確認し、エイリアスの場合は、公開状態とタイトル、説明文、アイキャッチ、更新日を更新
 				// フォルダの場合も更新する
-				if($content['Content']['alias_id'] == $data['Content']['id'] || ($content['Content']['type'] == 'ContentFolder' && $data['Content']['type'] == 'ContentFolder')) {
+				if($content['Content']['alias_id'] == $data['Content']['id'] || ($content['Content']['type'] == 'ContentFolder' && $isContentFolder)) {
 					$content['Content']['name'] = urldecode($data['Content']['name']);
 					$content['Content']['title'] = $data['Content']['title'];
 					$content['Content']['description'] = $data['Content']['description'];
@@ -551,7 +557,7 @@ class Content extends AppModel {
  * @param string $type タイプ
  * @return string URL
  */
-	public function createUrl($id, $type) {
+	public function createUrl($id, $isContentFolder) {
 		if($id == 1) {
 			$url = '/';
 		} else {
@@ -562,7 +568,7 @@ class Content extends AppModel {
 				$names[] = $parent['Content']['name'];
 			}
 			$url = '/' . implode('/', $names);
-			if($type == 'ContentFolder') {
+			if($isContentFolder) {
 				$url .= '/';
 			}
 		}
@@ -578,17 +584,21 @@ class Content extends AppModel {
  * @return mixed
  */
 	public function updateSystemData($data) {
-		if(empty($data['Content']['type']) || empty($data['Content']['name'])) {
+		if(empty($data['Content']['name'])) {
 			if($data['Content']['id'] != 1) {
 				return false;	
 			}
 		}
-
+		
+		$isContentFolder = false;
+		if(empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
+			$isContentFolder = true;
+		}
 		$parents = $this->getPath($data['Content']['id'], ['name', 'status', 'publish_begin', 'publish_end'], -1);
 		$site = $this->Site->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
 
 		// URLを更新
-		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $data['Content']['type']);
+		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $isContentFolder);
 
 		// 親フォルダの公開状態に合わせて公開状態を更新
 		unset($parents[count($parents)-1]);
@@ -1196,18 +1206,21 @@ class Content extends AppModel {
 		$this->moveRelateSubSiteContent($currentId, $targetParentId, $targetId);
 		$targetSort = $this->getOrderSameParent($targetId, $targetParentId);
 		if($currentParentId != $targetParentId) {
+			$data = $this->find('first', [
+				'conditions' => ['Content.id' => $currentId],
+				'recursive' => -1
+			]);
 			// 親を変更
-			$this->save(['Content' => [
+			$data = $this->save(['Content' => [
 				'id'		=> $currentId,
+				'name'		=> $data['Content']['name'],
+				'type' 		=> $data['Content']['type'],
 				'parent_id' => $targetParentId,
 				'site_id'	=> $targetSiteId
 			]], false);
 			// フォルダにコンテンツがない場合、targetId が空で一番後を指定の場合は、親を変更して終了
 			if(!$targetSort || !$targetId) {
-				return $this->find('first', [
-					'conditions' => ['Content.id' => $currentId],
-					'recursive' => -1
-				]);
+				return $data;
 			}
 			$currentSort = $this->getOrderSameParent(null, $targetParentId);
 		} else {
