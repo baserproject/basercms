@@ -15,7 +15,8 @@ $this->BcBaser->js(array(
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
-	'admin/libs/baser_ajax_batch_config'
+	'admin/libs/baser_ajax_batch_config',
+	'admin/search_indices/index'
 ));
 ?>
 <script type="text/javascript">

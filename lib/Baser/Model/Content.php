@@ -723,7 +723,11 @@ class Content extends AppModel {
 			'excludeId' => null
 		), $options);
 
-		$conditions = array('type' => 'ContentFolder', 'alias_id' => null);
+		$conditions = [
+			'type' => 'ContentFolder', 
+			'alias_id' => null,
+			'site_root' => false
+		];
 		if(!is_null($siteId)) {
 			$conditions['site_id'] = $siteId;
 		}
@@ -735,7 +739,7 @@ class Content extends AppModel {
 		}
 		$folders = $this->generateTreeList($conditions);
 		if($folders) {
-			return $this->convertTreeList($folders);;
+			return $this->convertTreeList($folders);
 		}
 		return false;
 	}

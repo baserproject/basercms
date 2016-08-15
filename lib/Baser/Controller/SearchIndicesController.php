@@ -252,10 +252,22 @@ class SearchIndicesController extends AppController {
 			$this->render('ajax_index');
 			return;
 		}
-		$this->set('folders', $this->Content->getContentFolderList($this->passedArgs['site_id'], ['conditions' => ['Content.site_root' => false]]));
-		$this->set('sites', $this->Site->find('list', ['fields' => ['id', 'display_name']]));
+
+		$this->set('folders', $this->Content->getContentFolderList((int) $this->request->data['SearchIndex']['site_id'], ['conditions' => ['Content.site_root' => false]]));
+		$this->set('sites', array_merge([0 => 'HOME'], $this->Site->find('list', ['fields' => ['id', 'display_name']])));
 		$this->search = 'search_indices_index';
 		$this->help = 'search_indices_index';
+	}
+
+/**
+ * サイトに紐付いたフォルダリストを取得
+ * 
+ * @param $siteId
+ */
+	public function admin_ajax_get_content_folder_list($siteId) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return json_encode($this->Content->getContentFolderList((int) $siteId));
 	}
 
 /**
@@ -435,23 +447,35 @@ class SearchIndicesController extends AppController {
 		if (empty($data['SearchIndex'])) {
 			return array();
 		}
-
 		/* 条件を生成 */
 		$conditions = array();
 
-		$type = $data['SearchIndex']['type'];
-		$status = $data['SearchIndex']['status'];
-		$keyword = $data['SearchIndex']['keyword'];
-		$folderId = $data['SearchIndex']['folder_id'];
-		$siteId = $data['SearchIndex']['site_id'];
+		$type = $status = $keyword = $folderId = $siteId = null;
+		if(isset($data['SearchIndex']['type'])) {
+			$type = $data['SearchIndex']['type'];	
+		}
+		if(isset($data['SearchIndex']['status'])) {
+			$status = $data['SearchIndex']['status'];
+		}
+		if(isset($data['SearchIndex']['keyword'])) {
+			$keyword = $data['SearchIndex']['keyword'];
+		}
+		if(isset($data['SearchIndex']['folder_id'])) {
+			$folderId = $data['SearchIndex']['folder_id'];
+		}
+		if(isset($data['SearchIndex']['site_id'])) {
+			$siteId = $data['SearchIndex']['site_id'];
+		}
+
 		unset($data['SearchIndex']['type']);
 		unset($data['SearchIndex']['status']);
 		unset($data['SearchIndex']['keyword']);
 		unset($data['SearchIndex']['folder_id']);
 		unset($data['SearchIndex']['site_id']);
+		unset($data['SearchIndex']['site_id']);
 		unset($data['SearchIndex']['open']);
 		unset($data['ListTool']);
-		if (!$data['SearchIndex']['priority']) {
+		if (empty($data['SearchIndex']['priority'])) {
 			unset($data['SearchIndex']['priority']);
 		}
 		foreach ($data['SearchIndex'] as $key => $value) {
