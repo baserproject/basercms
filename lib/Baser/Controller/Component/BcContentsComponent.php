@@ -140,6 +140,8 @@ class BcContentsComponent extends Component {
 			$existContents[$existContent['Content']['plugin'] . '.' . $existContent['Content']['type']] = $existContent['Content']['title'];
 		}
 
+		$Permission = ClassRegistry::init('Permission');
+		$user = BcUtil::loginUser('admin');
 		foreach($items as $name => $settings) {
 			foreach ($settings as $type => $setting) {
 				$setting['plugin'] = $name;
@@ -174,6 +176,14 @@ class BcContentsComponent extends Component {
 					}
 				}
 
+				// disabled
+				$setting['addDisabled'] = !($Permission->check($setting['routes']['add'], $user['user_group_id']));
+				$setting['editDisabled'] = !($Permission->check($setting['routes']['edit'], $user['user_group_id']));
+				$setting['manageDisabled'] = false;
+				if(!empty($setting['routes']['manage'])) {
+					$setting['manageDisabled'] = !($Permission->check($setting['routes']['manage'], $user['user_group_id']));
+				}
+				
 				// title
 				if (empty($setting['title'])) {
 					$setting['title'] = $type;
