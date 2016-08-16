@@ -78,10 +78,10 @@ class BlogBaserHelper extends AppHelper {
 			'direction' => null,
 			'page' => null,
 			'sort' => null,
-			'siteId' => $this->request->params['Site']['id']
+			'siteId' => (int) $this->request->params['Site']['id']
 		), $options);
 
-		if(!$contentsName && empty($options['contentsTemplate'])) {
+			if(!$contentsName && empty($options['contentsTemplate'])) {
 			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
 			return;
 		}
@@ -100,15 +100,19 @@ class BlogBaserHelper extends AppHelper {
 			}
 		}
 		
-		// 有効ブログを取得
+		// ブログコンテンツの条件生成
 		$Content = ClassRegistry::init('Content');
+		$conditions = ['Content.site_id' => $options['siteId']];
+		if($contentsName) {
+			$conditions['Content.url'] = $contentsName;
+		}
+		$conditions = array_merge($conditions, $Content->getConditionAllowPublish());
+		
+		// 有効ブログを取得
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$blogContents = $BlogContent->find('all', [
-			'fields' => ['BlogContent.id', 'Content.name', 'Content.status'],
-			'conditions' => array_merge([
-				'Content.site_id' => $options['siteId'],
-				'Content.url' => $contentsName
-			], $Content->getConditionAllowPublish()),
+			'fields' => ['BlogContent.id', 'BlogContent.template', 'Content.name', 'Content.status'],
+			'conditions' => $conditions,
 			'recursive' => 0,
 		]);
 		
