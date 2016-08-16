@@ -134,11 +134,10 @@ class BcFreezeHelperTest extends BaserTestCase {
 		// 凍結させる
 		if($freezed) {
 			$this->BcFreeze->freeze();
-
 		}
 
 		$result = $this->BcFreeze->dateTime($fieldName, $dateFormat, $timeFormat, $attributes);
-			$this->assertRegExp('/' . $expected . '/s', $result);
+		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
 	public function dateTimeDataProvider() {
@@ -147,7 +146,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 			array(false, 'test', 'DMY', '12', array(), 'id="testDay".*id="testMonth".*id="testYear"'),
 			array(false, 'test', 'YMD', '24', array(), '59<\/option>.<\/select>$'),
 			array(false, 'test', 'YMD', '12', array('class' => 'bcclass'), 'class="bcclass"'),
-			array(false, 'test', 'YMD', '12', array('empty' => false), '^((?!value="").)*$'),
+			array(false, 'test', 'YMD', '12', array('empty' => false), '^(?!value="").*$'),
 			array(false, 'test', 'YMD', '12', array('empty' => array('day' => '選択されていません')), '<option value="">選択されていません'),
 			array(true, 'test', 'YMD', '12', array(), 'type="hidden"'),
 			array(true, 'test', 'YMD', '12', array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1')), '2010年.*4月.*1日'),
