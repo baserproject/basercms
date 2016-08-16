@@ -15,7 +15,7 @@ class Imageresizer {
  * @param 	int 	幅
  * @param 	int		高さ
  * @param boolean $trimming サムネイルとしてコピーするか
- * @param boolean $sameRatio 画像比率を保持するか
+ * @param boolean $sameRatio サムネイルを指定サイズにトリミングするか
  * @return 	boolean
  */
 	function resize($imgPath, $savePath = null, $newWidth=null, $newHeight=null, $trimming = false, $sameRatio = false) {
@@ -166,7 +166,7 @@ class Imageresizer {
  * @param 	int 	新しい幅
  * @param 	int		新しい高さ
  * @param	boolean	サムネイルとしてコピーするか
- * @param	boolean	画像比率を保持するか
+ * @param	boolean	サムネイルを指定サイズにトリミングするか
  * @return 	Image	新しいイメージオブジェクト
  */
 	function _copyAndResize($srcImage, $newImage, $srcWidth, $srcHeight, $newWidth, $newHeight, $trimming = false, $sameRatio = false) {
