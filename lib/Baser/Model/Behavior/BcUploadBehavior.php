@@ -461,7 +461,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param int $width 横幅
  * @param int $height 高さ
  * @param boolean $thumb サムネイルとしてコピーするか
- * @param boolean $sameRatio 画像比率を保持するか
+ * @param boolean $sameRatio サムネイルを指定サイズにトリミングするか
  * @return boolean
  * @access public
  */
