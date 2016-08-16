@@ -54,8 +54,8 @@ class BlogCommentsController extends BlogAppController {
 		
 		$crumbs = array();
 		
-		if (!empty($this->params['pass'][1])) {
-			$dbDatas = $this->BlogPost->find('first', ['conditions' => ['BlogPost.id' => $this->params['pass'][1]]]);
+		if (!empty($this->request->params['pass'][1])) {
+			$dbDatas = $this->BlogPost->find('first', ['conditions' => ['BlogPost.id' => $this->request->params['pass'][1]]]);
 			if (!$dbDatas) {
 				$this->notFound();
 			}
@@ -65,9 +65,9 @@ class BlogCommentsController extends BlogAppController {
 				$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
 				$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
 			}	
-		} elseif (!empty($this->params['pass'][0])) {
+		} elseif (!empty($this->request->params['pass'][0])) {
 			if(!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
-				$dbDatas = $this->BlogPost->BlogContent->read('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
+				$dbDatas = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $this->request->params['pass'][0]]]);
 				$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
 				if (BcUtil::isAdminSystem()) {
 					$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
