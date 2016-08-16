@@ -1,5 +1,9 @@
 baserCMS
 ==========
+
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Build Status](https://travis-ci.org/baserproject/basercms.svg?branch=dev-4)](https://travis-ci.org/baserproject/basercms)
+
 ![baserCMS](http://basercms.net/img/basercms_logo.png)
 
 Based Website Development Project  
@@ -29,5 +33,3 @@ License
 -------
 
 Licensed under the MIT license since version 2.0
-
-[![Build Status](https://travis-ci.org/baserproject/basercms.svg?branch=dev-4)](https://travis-ci.org/baserproject/basercms)
