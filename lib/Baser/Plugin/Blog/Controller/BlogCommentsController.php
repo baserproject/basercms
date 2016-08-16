@@ -67,7 +67,7 @@ class BlogCommentsController extends BlogAppController {
 			}	
 		} elseif (!empty($this->params['pass'][0])) {
 			if(!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
-				$dbDatas = $this->BlogPost->BlogContent->read('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
+				$dbDatas = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
 				$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
 				if (BcUtil::isAdminSystem()) {
 					$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
@@ -99,7 +99,7 @@ class BlogCommentsController extends BlogAppController {
 	public function admin_index($blogContentId, $blogPostId = null) {
 		if (!$blogContentId || empty($this->blogContent['BlogContent'])) {
 			$this->setMessage('無効な処理です。', true);
-			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
+			$this->redirect('/admin');
 		}
 
 		/* 検索条件 */

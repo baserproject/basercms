@@ -372,20 +372,11 @@ class BlogPostsController extends BlogAppController {
 		if (isset($this->request->data['BlogPost']['blog_category_id'])) {
 			$blogCategoryId = $this->request->data['BlogPost']['blog_category_id'];
 		}
-		if ($blogCategoryId) {
-			if (empty($this->request->data['BlogCategory']['owner_id'])) {
-				$data = $this->BlogPost->BlogCategory->find('first', array('conditions' => array('BlogCategory.id' => $this->request->data['BlogPost']['blog_category_id']), 'recursive' => -1));
-				$currentCatOwner = $data['BlogCategory']['owner_id'];
-			}
-		}
-
-		$editable = ($user['user_group_id'] == Configure::read('BcApp.adminGroupId'));
 
 		$categories = $this->BlogPost->getControlSource('blog_category_id', array(
 			'blogContentId' => $this->blogContent['BlogContent']['id'],
 			'blogCategoryId' => $blogCategoryId,
 			'userGroupId' => $user['user_group_id'],
-			'postEditable' => $editable,
 			'empty' => '指定しない'
 		));
 
@@ -406,7 +397,6 @@ class BlogPostsController extends BlogAppController {
 
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '記事一覧', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $blogContentId));
 		$this->set('hasNewCategoryAddablePermission', $this->BlogPost->BlogCategory->hasNewCategoryAddablePermission($user['user_group_id'], $blogContentId));
-		$this->set('editable', $editable);
 		$this->set('categories', $categories);
 		$this->set('previewId', $this->request->data['BlogPost']['id']);
 		$this->set('users', $this->BlogPost->User->getUserList());
