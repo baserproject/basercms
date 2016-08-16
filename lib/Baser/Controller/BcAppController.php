@@ -303,8 +303,7 @@ class BcAppController extends Controller {
 
 		/* 認証設定 */
 		if ($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
-
-			$currentAuthPrefix = '';
+			
 			$authConfig = array();
 
 			if (!empty($this->request->params['prefix'])) {
@@ -414,7 +413,7 @@ class BcAppController extends Controller {
 				if ($user) {
 					if (!$Permission->check($this->request->url, $user['user_group_id'])) {
 						$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
-						$this->redirect($this->BcAuth->loginAction);
+						$this->redirect($this->BcAuth->loginRedirect);
 					}
 				}
 			}
