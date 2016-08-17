@@ -17,6 +17,55 @@
 CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 
 
+[2016-08-17] basercms-4.0.0-dev
+-NEW: [BC]	コンテンツ管理機能を追加、全てのコンテンツをツリー構造で管理できる
+	https://github.com/baserproject/basercms-docs/tree/dev-4/機能仕様/コンテンツ管理
+-NEW: [BC]	サブサイト管理機能を追加、全てのコンテンツをサブサイトで分けて管理できる
+	https://github.com/baserproject/basercms-docs/tree/dev-4/機能仕様/サブサイト管理
+-NEW: [BC]	エイリアス機能を追加、一つのコンテンツを別のURLで参照する事ができ、レイアウトテンプレートを変更する事ができる。
+	https://github.com/baserproject/basercms-docs/blob/dev-4/機能仕様/コンテンツ管理/エイリアス.md
+-NEW: [BC]	リンク機能を追加、外部リンクや内部リンクをメニューに配置する事ができる
+	https://github.com/baserproject/basercms-docs/blob/dev-4/機能仕様/コンテンツ管理/リンク.md
+-CHG: [BC]	固定ページテンプレートの出力先をテーマフォルダから、app/View/Pages/ に変更
+-CHG: [BC]	固定ページカテゴリ機能の廃止
+-CHG: [BC]	メニュー管理機能の廃止
+-CHG: [BC]	モバイル・スマホの設定をシステム基本設定からサブサイト設定に移動
+-CHG: [BC]	固定ページのテーブル構造変更
+	・name / page_category_id / title / description / publish_begin / publish_end / author_id / exclude_search / を contents テーブルに移動
+	・linked_page_mobile / linked_pages_smartphone を削除
+-CHG: [ML]	メールコンテンツのテーブル構造変更
+	・name / title / layout_template / status を contents テーブルに移動
+-CHG: [BG]	ブログコンテンツのテーブル構造変更
+	・name / titlte / layout / status / exclude_search を contents テーブルに移動
+
+《廃止メソッド》 ※ private / protected は除く
+Controller/Component/BcManagerComponent::isCreatedAdminAssetsSymlink()
+Controller/PagesController::mobile_display()
+Controller/PagesController::smartphone_display()
+Controller/PagesController::admin_create_preview()
+Controller/PagesController::admin_preview()
+Controller/PagesController::admin_ajax_update_sort()
+Controller/PagesController::admin_check_agent_page_addable()
+Controller/PagesController::admin_ajax_category_source()
+Controller/PagesController::admin_ajax_unpublish()
+Controller/PagesController::admin_ajax_publish()
+Controller/PagesController::_batch_publish()
+Controller/PagesController::_batch_del()
+Controller/PagesController::_changeStatus()
+Controller/PagesController::checkCurrentEditable()
+Controller/PagesController::admin_ajax_delete()
+Controller/PagesController::admin_add()
+Controller/PagesController::admin_index()
+Controller/PagesController::convertViewUrl()
+Controller/PagesController::getCategorySource()
+View/Helper/BcPageHelper::getCategory()
+View/Helper/BcPageHelper::contentsNaviAvailable()
+Model/Page::getPageUrl()
+Model/Page::pageExists()
+Model/Page::findByUrl()
+Mail.Model/Message::setTablePrefix()
+
+
 [2016-05-20] basercms-3.0.10
 -NEW: [BC]	fix #4690 ファイルアップローダープラグインをコアプラグインとして梱包
 -NEW: [BC]	fixes #12060 logのバックアップ及び、error_logの削除インターフェイスの作成
