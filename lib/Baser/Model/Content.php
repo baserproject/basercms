@@ -1103,9 +1103,14 @@ class Content extends AppModel {
 			return false;
 		}
 		$url = '/';
-		foreach($urlAry as $name) {
+		$last = count($urlAry);
+		foreach($urlAry as $key => $name) {
 			$url .= $name;
-			if($this->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => -1])) {
+			$conditions = ['Content.url' => $url];
+			if(($key + 1) != $last) {
+				$conditions['Content.type <>'] = 'ContentFolder';
+			}
+			if($this->find('first', ['conditions' => ['Content.url' => $url, 'Content.type <>' => 'ContentFolder'], 'recursive' => -1])) {
 				return true;
 			}
 			$url .= '/';
