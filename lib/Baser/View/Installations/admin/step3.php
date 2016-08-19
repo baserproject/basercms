@@ -54,6 +54,9 @@ $(document).ready( function() {
 			} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
 				alert("プレフィックスは英数字とアンダースコアの組み合わせにしてください。（例）mysite_");
 				return false;
+			} else if ($("#InstallationDbName").val().match(/^.*\..*$/)) {
+				alert("ドット（.）を含むデータベース名にはインストールできません。");
+				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
 				alert("データベースのポートナンバーを入力してください。");
 				return false;
