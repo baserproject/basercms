@@ -88,24 +88,20 @@ class PluginsController extends AppController {
 
 		$zippedName = $this->request->data['Plugin']['file']['name'];
 		move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
-
-		$format = 'unzip -o ' . TMP . '%s' . ' -d ' . APP . 'Plugin' . DS;
-		$command = sprintf($format, escapeshellarg($zippedName));
-
-		exec($command, $return);
-
-		//ZIPファイル展開失敗
-		if (empty($return[2])) {
+		App::uses('BcZip', 'Lib');
+		$BcZip = new BcZip();
+		if (!$BcZip->extract(TMP . $zippedName, APP . 'Plugin' . DS)) {
 			$msg = 'アップロードしたZIPファイルの展開に失敗しました。';
-			exec('unzip 2>&1', $errs);
-			$msg .= '<br />' . implode('<br />', $errs);
+			$msg .= '<br />' . $BcZip->error;
 			$this->setMessage($msg, true);
 			$this->redirect(array('action' => 'add'));
 			return;
 		}
 
+		$plugin = $BcZip->topArchiveName;
+
 		// 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
-		$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
+		$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $plugin);
 		$plugin = explode(DS, $plugin);
 		$plugin = $plugin[0];
 		$srcPluginPath = APP . 'Plugin' . DS . $plugin;

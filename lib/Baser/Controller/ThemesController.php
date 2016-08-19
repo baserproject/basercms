@@ -60,40 +60,28 @@ class ThemesController extends AppController {
  * テーマをアップロードして適用する
  */
 	public function admin_add() {
-		
 		$this->pageTitle = 'テーマアップロード';
 		$this->subMenuElements = array('themes');
-		
 		if($this->request->data) {
 			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
 				$this->setMessage('ファイルのアップロードに失敗しました。', true);
 			} else {
 				$name = $this->request->data['Theme']['file']['name'];
 				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
-
-				$format = 'unzip -o ' . TMP . '%s' . ' -d ' . BASER_THEMES;;
-				$command = sprintf($format, escapeshellarg($name));
-
-				exec($command, $return);
-				if(!empty($return[2])) {
-					$theme = str_replace('  inflating: ' . BASER_THEMES, '', $return[2]);
-					$theme = explode(DS, $theme);
-					$theme = $theme[0];
-					$themePath = BASER_THEMES . $theme;
-					$Folder = new Folder();
-					$Folder->chmod($themePath, 0777);
+				App::uses('BcZip', 'Lib');
+				$BcZip = new BcZip();
+				if ($BcZip->extract(TMP . $name, BASER_THEMES)) {
+					$theme = $BcZip->topArchiveName;
 					unlink(TMP . $name);
 					$this->_applyTheme($theme);
 					$this->redirect(array('action' => 'index'));
 				} else {
                     $msg = 'アップロードしたZIPファイルの展開に失敗しました。';
-                    exec('unzip 2>&1', $errs);
-                    $msg .= '<br />'.implode('<br />', $errs);
+                    $msg .= '<br />'.$BcZip->error;
 					$this->setMessage($msg, true);
 				}
 			}
 		}
-		
 	}
 	
 /**

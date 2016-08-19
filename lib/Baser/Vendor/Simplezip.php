@@ -14,6 +14,8 @@
 
 /**
  * シンプルなZIP利用クラス
+ *
+ * CAUTION 現在、Macで圧縮したZipファイルに対応していない
  */
 class Simplezip {
 	
@@ -332,7 +334,7 @@ class Simplezip {
  * @return <type>
  */
 	function unzip($source, $tareget) {
-
+		$tareget = preg_replace('/\/$/', '', $tareget);
 		$entries = $this->_readFile($source);
 		if(!$entries) {
 			return false;
@@ -352,7 +354,6 @@ class Simplezip {
 			fclose($fp);
 		}
 		return $result;
-
 	}
 	
 /**
