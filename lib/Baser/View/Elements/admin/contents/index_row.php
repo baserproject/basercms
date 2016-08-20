@@ -16,21 +16,10 @@ $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site'
 $parentId = $data['Content']['parent_id'];
 $alias = false;
 $open = false;
-switch ($type) {
-	case 'Page':
-		$iconPath = '/img/admin/icon_page.png';
-		break;
-	case 'ContentFolder':
-		$treeItemType = 'folder';
-		$iconPath = '/img/admin/icon_folder.png';
-		break;
-	default:
-		if(!empty($this->BcContents->settings[$type]['icon'])) {
-			$iconPath = $this->BcContents->settings[$type]['icon'];	
-		} else {
-			$iconPath = $this->BcContents->settings['Default']['icon'];
-		}
-		break;
+if(!empty($this->BcContents->settings[$type]['icon'])) {
+	$iconPath = $this->BcContents->settings[$type]['icon'];	
+} else {
+	$iconPath = $this->BcContents->settings['Default']['icon'];
 }
 if($data['Content']['alias_id']) {
 	$alias = true;
