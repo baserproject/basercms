@@ -591,7 +591,7 @@ class Content extends AppModel {
 		}
 		
 		$isContentFolder = false;
-		if(empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
+		if(!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
 			$isContentFolder = true;
 		}
 		$parents = $this->getPath($data['Content']['id'], ['name', 'status', 'publish_begin', 'publish_end'], -1);
@@ -943,6 +943,7 @@ class Content extends AppModel {
 				return Router::url($originUrl);
 			}
 		} else {
+			$url = preg_replace('/\/index$/', '/', $url);
 			if($full) {
 				return fullUrl($url);
 			} else {
