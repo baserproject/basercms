@@ -712,7 +712,8 @@ class Content extends AppModel {
 		}
 		$conditions = array(
 			'plugin' => $plugin,
-			'type'	=> $type
+			'type'	=> $type,
+			'alias_id' => null
 		);
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
