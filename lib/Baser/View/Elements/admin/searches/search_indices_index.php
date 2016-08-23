@@ -1,6 +1,6 @@
 <?php
 /**
- * [ADMIN] ユーザー一覧　検索ボックス
+ * [ADMIN] 検索インデックス一覧　検索ボックス
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>

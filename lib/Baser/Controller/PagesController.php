@@ -79,7 +79,6 @@ class PagesController extends AppController {
 		if(!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		$this->request->data['Page'] = $this->Page->getDefaultValue()['Page'];
 
 		// EVENT Pages.beforeAdd
 		$event = $this->dispatchEvent('beforeAdd', array(

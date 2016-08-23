@@ -225,11 +225,13 @@ class MailContent extends MailAppModel {
 		$data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
+		$name = $data['Content']['name'];
 		unset($data['MailContent']['id']);
 		unset($data['MailContent']['created']);
 		unset($data['MailContent']['modified']);
 		unset($data['Content']);
 		$data['Content'] = [
+			'name'		=> $name,
 			'parent_id'	=> $newParentId,
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,

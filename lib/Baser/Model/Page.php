@@ -94,20 +94,6 @@ class Page extends AppModel {
 	);
 
 /**
- * フォームの初期値を設定する
- * 
- * @return	array	初期値データ
- */
-	public function getDefaultValue() {
-		$key = Configure::read('BcAuthPrefix.admin.sessionKey');
-		$data = [];
-		if (!empty($_SESSION['Auth'][$key])) {
-			$data[$this->name]['author_id'] = $_SESSION['Auth'][$key]['id'];
-		}
-		return $data;
-	}
-
-/**
  * beforeSave
  *
  * @param array $options
@@ -736,11 +722,13 @@ class Page extends AppModel {
 		$data = $this->find('first', ['conditions' => ['Page.id' => $id], 'recursive' => 0]);
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
+		$name = $data['Content']['name'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
 		unset($data['Content']);
 		$data['Content'] = [
+			'name'		=> $name,
 			'parent_id'	=> $newParentId,
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,

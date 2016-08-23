@@ -214,11 +214,13 @@ class BlogContent extends BlogAppModel {
 		$data = $this->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
+		$name = $data['Content']['name'];
 		unset($data['BlogContent']['id']);
 		unset($data['BlogContent']['created']);
 		unset($data['BlogContent']['modified']);
 		unset($data['Content']);
 		$data['Content'] = [
+			'name'		=> $name,
 			'parent_id'	=> $newParentId,
 			'title'		=> $newTitle,
 			'author_id' => $newAuthorId,

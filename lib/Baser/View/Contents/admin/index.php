@@ -18,6 +18,12 @@ $this->BcBaser->js('admin/libs/jquery.bcTree', false, [
 	'id' => 'AdminContentsIndexScript',
 	'data-isAdmin' => BcUtil::isAdminUser()
 ]);
+$this->BcBaser->js(array(
+	'admin/libs/jquery.baser_ajax_data_list',
+	'admin/libs/jquery.baser_ajax_batch',
+	'admin/libs/baser_ajax_data_list_config',
+	'admin/libs/baser_ajax_batch_config'
+));
 echo $this->BcForm->input('BcManageContent', array('type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()));
 ?>
 

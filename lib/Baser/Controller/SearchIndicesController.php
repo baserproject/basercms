@@ -254,20 +254,9 @@ class SearchIndicesController extends AppController {
 		}
 
 		$this->set('folders', $this->Content->getContentFolderList((int) $this->request->data['SearchIndex']['site_id'], ['conditions' => ['Content.site_root' => false]]));
-		$this->set('sites', array_merge([0 => 'HOME'], $this->Site->find('list', ['fields' => ['id', 'display_name']])));
+		$this->set('sites', $this->Site->getSiteList());
 		$this->search = 'search_indices_index';
 		$this->help = 'search_indices_index';
-	}
-
-/**
- * サイトに紐付いたフォルダリストを取得
- * 
- * @param $siteId
- */
-	public function admin_ajax_get_content_folder_list($siteId) {
-		$this->autoRender = false;
-		Configure::write('debug', 0);
-		return json_encode($this->Content->getContentFolderList((int) $siteId, ['conditions' => ['Content.site_root' => false]]));
 	}
 
 /**

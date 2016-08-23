@@ -13,10 +13,10 @@ header('Content-type: text/html; charset=utf-8');
 ?>
 
 
-<?php if(!empty($datas)): ?>
+<?php if($datas): ?>
 <div id="ContentsTreeList" style="display:none">
-<?php $this->BcBaser->element('contents/index_list'); ?>
+<?php $this->BcBaser->element('contents/index_list_tree'); ?>
 </div>
-<?php elseif($this->action == 'admin_trash_index'): ?>
-<div class="em-box">ゴミ箱は空です</div>
+<?php else: ?>
+<div class="tree-empty">ゴミ箱は空です</div>
 <?php endif ?>

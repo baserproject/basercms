@@ -346,7 +346,7 @@ table.sub-menu{
 	background-color:#FAFAFA;
 }
 .contents-body .list-table tr.disablerow {
-	background-color:#bbb;
+	background-color:#CCC;
 }
 .contents-body .list-table tr.currentrow {
 	background-color:#3392e3;
@@ -664,6 +664,18 @@ table.sub-menu{
 	text-decoration: none;
 }
 
+/* tree empty
+----------------------------------------------- */
+.tree-empty {
+	border:1px solid #DDD;
+	padding:15px;
+	color:#535A62;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 auto 20px;
+	text-align: center;
+	line-height: 24px;
+}
 
 /* ToTop
 ----------------------------------------------- */
@@ -937,8 +949,8 @@ background: #888;
 
 .panel-box {
 	border:5px solid #DDD;
-	padding:20px;
-	margin:10px 0;
+	padding:10px 20px;
+	margin:20px 0;
 }
 .panel-box li .date {
 	/*font-weight: bold;*/
@@ -1505,6 +1517,14 @@ background: #888;
 	background:url("../../img/admin/icon_alias_layerd.png");
 	position: absolute;
 	top:0;
+}
+#DataList td .alias {
+    display:block;
+    width:32px;
+    height: 32px;
+    background:url("../../img/admin/icon_alias_layerd.png");
+    position: relative;
+    top:-32px;
 }
 ul.jstree-contextmenu li .icon-alias-layerd {
 	display:block;

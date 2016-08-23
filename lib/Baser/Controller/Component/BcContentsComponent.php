@@ -333,4 +333,17 @@ class BcContentsComponent extends Component {
 		return $parentTemplate;
 	}
 
+/**
+ * 登録されているタイプの一覧を取得する
+ * 
+ * @return array
+ */
+	public function getTypes() {
+		$types = [];
+		foreach($this->settings['items'] as $key => $value) {
+			$types[$key] = $value['title'];
+		}
+		return $types;
+	}
+
 }

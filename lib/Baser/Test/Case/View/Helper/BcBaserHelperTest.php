@@ -1313,7 +1313,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 		// パンくずが設定されている場合
 		$crumbs = array(
-			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社案内', 'url' => '/company/'),
 			array('name' => '会社データ', 'url' => '/company/data'),
 			array('name' => '会社沿革', 'url' => '')
 		);
@@ -1324,7 +1324,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->crumbs();
 		$result = ob_get_clean();
 		$expected = array(
-			array('a' => array('href' => '/company/index')),
+			array('a' => array('href' => '/company/')),
 			'会社案内',
 			'/a',
 			'&raquo;',
@@ -1344,7 +1344,7 @@ class BcBaserHelperTest extends BaserTestCase {
 			'ホーム',
 			'/a',
 			' | ',
-			array('a' => array('href' => '/company/index')),
+			array('a' => array('href' => '/company/')),
 			'会社案内',
 			'/a',
 			' | ',
@@ -1362,12 +1362,12 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testAddCrumbs() {
-		$this->BcBaser->addCrumb('会社案内', '/company/index');
+		$this->BcBaser->addCrumb('会社案内', '/company/');
 		ob_start();
 		$this->BcBaser->crumbs();
 		$result = ob_get_clean();
 		$expected = array(
-			array('a' => array('href' => '/company/index')),
+			array('a' => array('href' => '/company/')),
 			'会社案内',
 			'/a'
 		);
@@ -1477,9 +1477,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function sitemapDataProvider() {
 		return array(
-			array(0, '<li class="menu-content li-level-1"><a href="\/index">トップページ<\/a>.*?<\/li>'),
-			array(1, '<a href="\/m\/index">トップページ.*<\/li>.*<\/ul>'),
-			array(2, '<a href="\/s\/index">トップページ.*<\/li>.*<\/ul>')
+			array(0, '<li class="menu-content li-level-1"><a href="\/">トップページ<\/a>.*?<\/li>'),
+			array(1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'),
+			array(2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>')
 		);
 	}
 

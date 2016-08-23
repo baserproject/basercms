@@ -9,9 +9,11 @@
  * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
-$iconType = 'Content';
-$treeItemType = 'default';
 $type = $data['Content']['type'];
+$treeItemType = 'default';
+if($type == 'ContentFolder') {
+	$treeItemType = 'folder';	
+}
 $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site']['use_subdomain']);
 $parentId = $data['Content']['parent_id'];
 $alias = false;
@@ -28,11 +30,6 @@ $status = $this->BcContents->isAllowPublish($data);
 if(in_array($data['Content']['parent_id'], array(0,1))) {
 	$open = true;
 }
-$related = false;
-if(($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['alias_id']) ||
-	$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
-	$related = true;
-}
 ?>
 
 
@@ -41,7 +38,7 @@ if(($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'
 	"type":"<?php echo $treeItemType ?>",
 	"status":"<?php echo $status ?>",
 	"alias":"<?php echo $alias ?>",
-	"related":"<?php echo $related ?>",
+	"related":"<?php echo $this->BcContents->isSiteRelated($data) ?>",
 	"contentId":"<?php echo $data['Content']['id'] ?>",
 	"contentParentId":"<?php echo $parentId ?>",
 	"contentEntityId":"<?php echo $data['Content']['entity_id'] ?>",
@@ -55,6 +52,6 @@ if(($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
 	<span><?php echo $data['Content']['title'] ?></span>
 	<?php if(!empty($data['children'])): ?>
-		<?php $this->BcBaser->element('admin/contents/index_list', array('datas' => $data['children'])) ?>
+		<?php $this->BcBaser->element('admin/contents/index_list_tree', array('datas' => $data['children'])) ?>
 	<?php endif ?>
 </li>

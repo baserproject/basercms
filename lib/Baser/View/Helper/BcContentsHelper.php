@@ -212,5 +212,31 @@ class BcContentsHelper extends AppHelper {
 		$Content = ClassRegistry::init('Content');
 		return $Content->getParentNode($contentId);
 	}
+
+/**
+ * 公開状態を取得する
+ *
+ * @param array $dasta データリスト
+ * @return boolean 公開状態
+ */
+	public function allowPublish($data) {
+		$Content = ClassRegistry::init('Content');
+		return $Content->allowPublish($data);
+	}
+
+/**
+ * サイト連携データかどうか確認する
+ * 
+ * @param array $data
+ * @return bool
+ */
+	public function isSiteRelated($data) {
+		if(($data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['alias_id']) ||
+			$data['Site']['relate_main_site'] && $data['Content']['main_site_content_id'] && $data['Content']['type'] == 'ContentFolder') {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }

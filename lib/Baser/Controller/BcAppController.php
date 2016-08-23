@@ -1089,7 +1089,11 @@ class BcAppController extends Controller {
 		}
 
 		if (!empty($this->request->params['named'])) {
-			$named = am($this->Session->read("{$contentsName}.named"), $this->request->params['named']);
+			if($this->Session->check("{$contentsName}.named")) {
+				$named = array_merge($this->Session->read("{$contentsName}.named"), $this->request->params['named']);	
+			} else {
+				$named = $this->request->params['named'];
+			}
 			$this->Session->write("{$contentsName}.named", $named);
 		}
 	}
@@ -1141,7 +1145,7 @@ class BcAppController extends Controller {
 				$named = $default['named'];
 			}
 			if ($this->Session->check("{$contentsName}.named")) {
-				$named = am($named, $this->Session->read("{$contentsName}.named"));
+				$named = array_merge($named, $this->Session->read("{$contentsName}.named"));
 			}
 		} elseif ($type == 'get') {
 			if (!empty($this->request->query)) {

@@ -85,6 +85,13 @@ class Content extends AppModel {
 	];
 
 /**
+ * 関連データを更新する
+ * 
+ * @var bool
+ */
+	public $updatingRelated = true;
+	
+/**
  * 保存前の親ID
  * 
  * IDの変更比較に利用
@@ -192,6 +199,10 @@ class Content extends AppModel {
 			if(!isset($this->data['Content']['exclude_search'])) {
 				$this->data['Content']['exclude_search'] = 0;
 			}
+			if(!isset($this->data['Content']['author_id'])) {
+				$user = BcUtil::loginUser('admin');
+				$this->data['Content']['author_id'] = $user['id'];
+			}
 		} else {
 			if(empty($this->data['Content']['modified_date'])) {
 				$this->data['Content']['modified_date'] = date('Y-m-d H:i:s');
@@ -287,16 +298,19 @@ class Content extends AppModel {
  */
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created, $options);
+
 		$this->updateSystemData($this->data);
-		// ゴミ箱から戻す場合、 type の定義がないが問題なし
-		if(!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
-			$this->updateChildren($this->data['Content']['id']);
-		}
-		$this->updateRelateSubSiteContent($this->data);
-		if(!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
-			$SiteConfig = ClassRegistry::init('SiteConfig');
-			$SiteConfig->updateContentsSortLastModified();
-			$this->beforeSaveParentId = null;
+		if($this->updatingRelated) {
+			// ゴミ箱から戻す場合、 type の定義がないが問題なし
+			if(!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
+				$this->updateChildren($this->data['Content']['id']);
+			}
+			$this->updateRelateSubSiteContent($this->data);
+			if(!empty($this->data['Content']['parent_id']) && $this->beforeSaveParentId != $this->data['Content']['parent_id']) {
+				$SiteConfig = ClassRegistry::init('SiteConfig');
+				$SiteConfig->updateContentsSortLastModified();
+				$this->beforeSaveParentId = null;
+			}
 		}
 	}
 
@@ -766,7 +780,7 @@ class Content extends AppModel {
 		foreach ($nodes as $key => $value) {
 			if (preg_match("/^([_]+)/i", $value, $matches)) {
 				$value = preg_replace("/^[_]+/i", '', $value);
-				$prefix = str_replace('_', '&nbsp&nbsp&nbsp', $matches[1]);
+				$prefix = str_replace('_', '&nbsp;&nbsp;&nbsp;', $matches[1]);
 				$value = $prefix . '└' . $value;
 			}
 			$nodes[$key] = $value;
@@ -858,8 +872,10 @@ class Content extends AppModel {
 			}
 		}
 		$this->Behaviors->unload('Tree');
+		$this->updatingRelated = false;
 		if($result && $this->undelete($id)) {
 			$this->Behaviors->load('Tree');
+			$this->updatingRelated = true;
 			$content = $this->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 			if($top) {
 				$siteRootId = $this->field('id', array('Content.site_id' => $content['Content']['site_id'], 'site_root' => true));
