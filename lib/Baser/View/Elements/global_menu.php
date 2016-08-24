@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] グロバールメニュー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +10,9 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [ADMIN] グロバールメニュー
+ */
 if (!isset($level)) {
 	$level = 1;
 }

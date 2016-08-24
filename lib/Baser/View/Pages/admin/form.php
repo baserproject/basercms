@@ -1,9 +1,5 @@
 <?php
 /**
- * [ADMIN] ページ登録・編集フォーム
- * 
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +8,10 @@
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ページ登録・編集フォーム
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->js('admin/pages/edit', false);

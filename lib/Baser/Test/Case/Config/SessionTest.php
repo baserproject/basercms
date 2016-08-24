@@ -1,15 +1,13 @@
 <?php
 /**
- * test for session.php
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
- * @package       Baser.Test.Case.Config
- * @since         baserCMS v 3.0.6
- * @license       http://basercms.net/license/index.html
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Config
+ * @since			baserCMS v 3.0.9
+ * @license			http://basercms.net/license/index.html
  */
 
 

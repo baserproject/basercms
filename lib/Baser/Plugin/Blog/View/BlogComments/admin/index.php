@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ブログ記事コメント 一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +10,9 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [ADMIN] ブログ記事コメント 一覧
+ */
 
 $this->BcBaser->js(array(
 	'admin/libs/jquery.baser_ajax_data_list',

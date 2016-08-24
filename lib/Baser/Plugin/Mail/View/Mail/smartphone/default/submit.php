@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] メールフォーム送信完了ページ
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,10 +9,15 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] メールフォーム送信完了ページ
+ */
 if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
 	$this->Html->meta(array('http-equiv' => 'Refresh'), null, array('content' => '5;url=' . $mailContent['MailContent']['redirect_url'], 'inline' => false));
 }
 ?>
+
 
 <h2 class="contents-head">
 	<?php $this->BcBaser->contentsTitle() ?>

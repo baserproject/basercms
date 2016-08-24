@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] テーマ設定編集
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,9 +9,15 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマ設定編集
+ */
 $this->BcBaser->css('admin/colpick', array('inline' => false));
 $this->BcBaser->js('admin/vendors/colpick', false);
 ?>
+
+
 <script type="text/javascript">
 $(function(){
 	$(".color-picker").each(function() {

@@ -1,7 +1,5 @@
 <?php
 /**
- * [MOBILE] メールフォーム本体
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,7 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [MOBILE] メールフォーム本体
+ */
 ?>
+
+
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
 	<?php echo $this->Mailform->create(null, array('url' => $this->request->params['Content']['url'] . '/confirm')) ?>

@@ -1,7 +1,5 @@
 <?php
 /**
- * [EMAIL] メール送信データ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +10,9 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [EMAIL] メール送信データ
+ */
 $group_field = null;
 foreach ($mailFields as $field) {
 	$field = $field['MailField'];

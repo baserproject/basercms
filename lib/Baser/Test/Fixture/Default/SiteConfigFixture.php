@@ -1,7 +1,6 @@
 <?php
 /**
  * SiteConfigFixture
- *
  */
 class SiteConfigFixture extends BaserTestFixture {
 

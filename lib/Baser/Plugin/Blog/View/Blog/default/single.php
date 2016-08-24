@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログ詳細ページ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,10 +9,15 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] ブログ詳細ページ
+ */
 $this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
 $this->BcBaser->js('admin/vendors/jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
+
 
 <script type="text/javascript">
 $(function(){

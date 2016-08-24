@@ -1,18 +1,17 @@
 <?php
 /**
- * ファイルアップロードビヘイビアのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Model.Behavior
  * @since			baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
 
 /**
- * PageTest class
+ * BcUploadBehaviorTest class
  * 
  * @package Baser.Test.Case.Model
  */

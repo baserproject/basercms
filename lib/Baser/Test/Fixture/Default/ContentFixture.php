@@ -1,7 +1,6 @@
 <?php
 /**
  * ContentFixture
- *
  */
 class ContentFixture extends BaserTestFixture {
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログアーカイブ一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,8 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] ブログアーカイブ一覧
+ */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
 ?>
+
 
 <!-- title -->
 <h2 class="contents-head">

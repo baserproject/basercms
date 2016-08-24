@@ -1,7 +1,5 @@
 <?php
 /**
- * [MOBILE] ブログ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,8 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [MOBILE] ブログ
+ */
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
+
 
 <!-- title -->
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />

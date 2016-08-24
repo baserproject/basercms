@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * PageRoutesFixture
+ */
 class PageRoutesFixture extends BaserTestFixture {
 
 /**

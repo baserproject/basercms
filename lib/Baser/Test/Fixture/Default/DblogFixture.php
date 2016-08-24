@@ -1,7 +1,6 @@
 <?php
 /**
  * DblogFixture
- *
  */
 class DblogFixture extends BaserTestFixture {
 

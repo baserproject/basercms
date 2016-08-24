@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] メールコンテンツ一覧　ヘルプ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,7 +9,12 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] メールコンテンツ一覧　ヘルプ
+ */
 ?>
+
 
 <p>メールフォームの各フィールド（項目）の管理が行えます。</p>
 <ul>

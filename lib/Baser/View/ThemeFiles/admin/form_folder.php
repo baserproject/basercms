@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] テーマフォルダ登録・編集
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,8 +9,14 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマフォルダ登録・編集
+ */
 $params = explode('/', $path);
 ?>
+
+
 <!-- current -->
 <div class="em-box align-left">
 	現在の位置：<?php echo $currentPath ?>

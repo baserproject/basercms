@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログ詳細ページ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,8 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] ブログ詳細ページ
+ */
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
+
 
 <!-- blog title -->
 <h2 class="contents-head">

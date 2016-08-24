@@ -1,8 +1,6 @@
 <?php
 /**
- * test for BcTextHelper
- *
- * baserCMS : Based Website Development Project <http://basercms.net>
+ * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community

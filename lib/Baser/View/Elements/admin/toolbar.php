@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ツールバー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ツールバー
  */
 // JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
 $this->BcBaser->js(array('admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu', 'admin/toolbar'));

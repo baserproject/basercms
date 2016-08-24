@@ -1,7 +1,5 @@
 <?php
 /**
- * [MOBILE] ブログ詳細
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,9 +9,14 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [MOBILE] ブログ詳細
+ */
 $this->BcBaser->setTitle($this->pageTitle . '｜' . $this->Blog->getTitle());
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
+
 
 <!-- title -->
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />

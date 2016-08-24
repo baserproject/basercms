@@ -1,7 +1,5 @@
 <?php
 /**
- * [SMARTPHONE] メールフォーム本体
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,5 +8,9 @@
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [SMARTPHONE] メールフォーム本体
  */
 include BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Elements' . DS . 'mail_input' . $this->ext;

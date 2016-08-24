@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ブログ記事コメント一覧　Ajax
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,5 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [ADMIN] ブログ記事コメント一覧　Ajax
+ */
 
 $this->BcBaser->element('blog_comments/index_list');

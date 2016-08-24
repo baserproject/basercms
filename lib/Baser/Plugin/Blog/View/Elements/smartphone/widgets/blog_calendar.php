@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログカレンダー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,5 +8,9 @@
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] ブログカレンダー
  */
 include BASER_PLUGINS . 'Blog' . DS . 'View' . DS . 'Elements' . DS . 'widgets' . DS . 'blog_calendar' . $this->ext;

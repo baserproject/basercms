@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] パスワードリセット画面
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,5 +8,9 @@
  * @package			Baser.View
  * @since			baserCMS v 3.0.7
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] パスワードリセット画面
  */
 include BASER_VIEWS . 'Users' . DS . 'admin' . DS . 'reset_password.php';

@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] サブメニュー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -13,6 +11,8 @@
  */
 
 /**
+ * [PUBLISH] サブメニュー
+ * 
  * $this->BcBaser->subMenu() 経由で呼び出す
  */
 ?>

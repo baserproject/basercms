@@ -1,7 +1,5 @@
 <?php
 /**
- * [MOBILE] レイアウト
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [MOBILE] レイアウト
  */
 ?><!--nocache--><?php $this->BcMobile->header() ?><!--/nocache--><?php $this->BcBaser->xmlHeader() ?><?php $this->BcBaser->docType() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">

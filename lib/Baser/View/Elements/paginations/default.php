@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ページネーション標準
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -13,6 +11,8 @@
  */
 
 /**
+ * [PUBLISH] ページネーション標準
+ * 
  * $this->BcBaser->patination() で呼び出す
  */
 ?>

@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] 固定ページコンテンツナビゲーション
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -13,6 +11,8 @@
  */
 
 /**
+ * [PUBLISH] 固定ページコンテンツナビゲーション
+ * 
  * $this->BcBaser->contentsNavi() で呼び出す
  */
 ?>

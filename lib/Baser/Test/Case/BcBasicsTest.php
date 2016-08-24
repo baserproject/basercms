@@ -1,17 +1,18 @@
 <?php
 /**
- * test for basics.php
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
 
 /**
+ * test for basics.php
+ * 
  * @package Baser.Test.Case
  */
 class BcBasicsTest extends BaserTestCase {

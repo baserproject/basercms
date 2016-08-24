@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] フィード設定一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,7 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] フィード設定一覧
+ */
 ?>
+
+
 <?php if ($this->action != 'admin_add'): ?>
 
 	<?php

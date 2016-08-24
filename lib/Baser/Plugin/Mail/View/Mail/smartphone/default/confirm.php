@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] メールフォーム確認ページ
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,12 +9,17 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] メールフォーム確認ページ
+ */
 $this->BcBaser->css('admin/jquery-ui/ui.all', array('inline' => true));
 $this->BcBaser->js(array('admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i18n/ui.datepicker-ja'), false);
 if ($freezed) {
 	$this->Mailform->freeze();
 }
 ?>
+
 
 <h2 class="contents-head">
 	<?php $this->BcBaser->contentsTitle(); ?>

@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] 検索インデックス一覧　検索ボックス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] 検索インデックス一覧　検索ボックス
  */
 $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.4', '0.5' => '0.5',
 	'0.6' => '0.6', '0.7' => '0.7', '0.8' => '0.8', '0.9' => '0.9', '1.0' => '1.0');

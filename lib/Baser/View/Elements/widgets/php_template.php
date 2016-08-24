@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] PHPテンプレート読み込みウィジェット
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -13,6 +11,8 @@
  */
 
 /**
+ * [PUBLISH] PHPテンプレート読み込みウィジェット
+ * 
  * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
  */

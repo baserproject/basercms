@@ -1,7 +1,6 @@
 <?php
 /**
- * PageFixture
- *
+ * PageBcPageHelperFixture
  */
 class PageBcPageHelperFixture extends BaserTestFixture {
 

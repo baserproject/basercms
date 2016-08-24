@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] テーマ フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,7 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマ フォーム
+ */
 ?>
+
+
 <?php if ($folderDisabled): ?>
 	<p><span class="required">テーマフォルダに書込権限がありません。</span></p>
 <?php endif ?>

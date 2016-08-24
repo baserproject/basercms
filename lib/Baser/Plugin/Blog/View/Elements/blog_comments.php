@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログコメント一覧
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,11 +9,17 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] ブログコメント一覧
+ */
 $prefix = '';
 if (Configure::read('BcRequest.agent')) {
 	$prefix = '/' . Configure::read('BcRequest.agentAlias');
 }
 ?>
+
+
 <script type="text/javascript">
 	$(function() {
 		loadAuthCaptcha();

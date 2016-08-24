@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ウィジェットエリア編集
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,7 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ウィジェットエリア編集
+ */
 ?>
+
+
 <div id="DelWidgetUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'widget_areas', 'action' => 'del_widget', $this->BcForm->value('WidgetArea.id'))) ?></div>
 <div id="CurrentAction" style="display:none"><?php echo $this->request->action ?></div>
 

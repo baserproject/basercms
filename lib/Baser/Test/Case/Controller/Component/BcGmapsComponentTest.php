@@ -1,14 +1,13 @@
 <?php
 /**
- * BcGmapsComponentのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Controller.Component
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('BcGmapsComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -25,7 +24,9 @@ class BcGmapsTestController extends Controller {
 
 }
 
-
+/**
+ * BcGmapsComponentのテスト
+ */
 class BcGmapsComponentTest extends BaserTestCase {
 
 	public $fixtures = array();

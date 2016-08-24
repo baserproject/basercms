@@ -1,7 +1,6 @@
 <?php
 /**
  * BlogCategoryFixture
- *
  */
 class BlogCategoryFixture extends BaserTestFixture {
 

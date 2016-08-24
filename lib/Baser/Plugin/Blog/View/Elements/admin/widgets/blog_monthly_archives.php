@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ブログ月別アーカイブー一覧ウィジェット設定
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ブログ月別アーカイブー一覧ウィジェット設定
  */
 $title = '月別アーカイブ一覧';
 $description = 'ブログの月別アーカイブー一覧を表示します。';

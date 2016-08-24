@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログ投稿者一覧
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] ブログ投稿者一覧
  */
 if (empty($view_count)) {
 	$view_count = '0';

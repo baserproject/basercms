@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] メールコンテンツ一覧　行
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,12 +10,16 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [ADMIN] メールコンテンツ一覧　行
+ */
 if (!$data['MailContent']['status']) {
 	$class = ' class="unpublish disablerow"';
 } else {
 	$class = ' class="publish"';
 }
 ?>
+
 
 <tr <?php echo $class; ?>>
 	<td class="row-tools">

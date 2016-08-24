@@ -1,15 +1,15 @@
 <?php
 /**
- * BcRequestFilterクラスのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 4.0.0
+ * @package			Baser.Test.Case.Routing.Filter
+ * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BcRequestFilter', 'Routing/Filter');
 
 /**

@@ -1,7 +1,5 @@
 <?php
 /**
- * [MOBILE] メールフィールド
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +10,9 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [MOBILE] メールフィールド
+ */
 $group_field = null;
 $iteration = 0;
 if (!isset($blockEnd)) {

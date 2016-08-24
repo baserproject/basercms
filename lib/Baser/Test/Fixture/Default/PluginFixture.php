@@ -1,7 +1,6 @@
 <?php
 /**
  * PluginFixture
- *
  */
 class PluginFixture extends BaserTestFixture {
 

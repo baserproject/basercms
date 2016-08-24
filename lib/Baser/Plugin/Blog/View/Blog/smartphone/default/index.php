@@ -1,7 +1,5 @@
 <?php
 /**
- * [SMARTPHONE] ブログトップ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,8 +9,13 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [SMARTPHONE] ブログトップ
+ */
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
+
 
 <!-- title -->
 <h2 class="contents-head">

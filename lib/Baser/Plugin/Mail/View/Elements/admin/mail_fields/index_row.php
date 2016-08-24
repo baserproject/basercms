@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] メールフィールド 一覧　行
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,12 +9,17 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] メールフィールド 一覧　行
+ */
 if (!$data['MailField']['use_field']) {
 	$class = ' class="unpublish disablerow sortable"';
 } else {
 	$class = ' class="publish sortable"';
 }
 ?>
+
 
 <tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
 	<td style="width:25%" class="row-tools">

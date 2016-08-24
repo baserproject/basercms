@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ブログ記事コメント 一覧　行
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +10,9 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * [ADMIN] ブログ記事コメント 一覧　行
+ */
 if (!$data['BlogComment']['status']) {
 	$class = ' class="disablerow unpublish"';
 } else {

@@ -1,7 +1,6 @@
 <?php
 /**
  * UserFixture
- *
  */
 class UserFixture extends BaserTestFixture {
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] よく使う項目
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] よく使う項目
  */
 ?>
 

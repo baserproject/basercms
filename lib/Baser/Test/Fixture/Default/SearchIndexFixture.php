@@ -1,7 +1,6 @@
 <?php
 /**
  * SearchIndexFixture
- *
  */
 class SearchIndexFixture extends BaserTestFixture {
 

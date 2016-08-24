@@ -1,6 +1,6 @@
 <?php
 /**
- * Content Fixture
+ * ContentBcContentsHelperFixture
  */
 class ContentBcContentsHelperFixture extends BaserTestFixture {
 	

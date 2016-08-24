@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ページネーションシンプル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -13,6 +11,8 @@
  */
 
 /**
+ * [PUBLISH] ページネーションシンプル
+ * 
  * $this->BcBaser->pagination() で呼び出す
  */
 

@@ -1,15 +1,17 @@
 <?php
 /**
- * コンテンツ更新情報
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * コンテンツ更新情報
  */
 ?>
 

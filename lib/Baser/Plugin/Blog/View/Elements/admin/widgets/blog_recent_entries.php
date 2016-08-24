@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] ブログ最近の投稿ウィジェット設定
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ブログ最近の投稿ウィジェット設定
  */
 $title = '最近の投稿';
 $description = 'ブログの最近の投稿を表示します。';

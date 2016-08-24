@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] 統合コンテンツ一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Baser.View
  * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] 統合コンテンツ一覧
  */
 $this->BcBaser->css('../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min', array('inline' => false));
 $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);

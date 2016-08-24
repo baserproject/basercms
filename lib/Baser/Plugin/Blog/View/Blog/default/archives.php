@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] ブログアーカイブ一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] ブログアーカイブ一覧
  */
 $this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
 $this->BcBaser->js('admin/vendors/jquery.colorbox-min-1.4.5', false);

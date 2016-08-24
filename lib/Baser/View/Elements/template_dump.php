@@ -1,9 +1,5 @@
 <?php
 /**
- * 利用しているテンプレート一覧
- *
- * デバッグモード２以上で表示
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +8,12 @@
  * @package			Baser.View
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * 利用しているテンプレート一覧
+ *
+ * デバッグモード２以上で表示
  */
  if(!$this->_viewFilesLog) return;
  ?>

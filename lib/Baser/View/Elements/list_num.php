@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] リスト設定リンク
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -13,6 +11,8 @@
  */
 
 /**
+ * リスト設定リンク
+ * 
  * $this->BcBaser->listNum() で呼び出す
  */
 

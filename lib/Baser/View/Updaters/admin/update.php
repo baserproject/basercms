@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] アップデート
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,12 +9,18 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] アップデート
+ */
 if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)) {
 	$requireUpdate = true;
 } else {
 	$requireUpdate = false;
 }
 ?>
+
+
 <?php $this->start('script') ?>
 <style type="text/css">
 .em-box {

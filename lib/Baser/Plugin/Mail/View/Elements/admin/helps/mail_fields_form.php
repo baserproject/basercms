@@ -1,7 +1,5 @@
 <?php
 /**
- * [ADMIN] メールコンテンツ一覧　ヘルプ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -11,7 +9,12 @@
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] メールコンテンツ一覧　ヘルプ
+ */
 ?>
+
 
 <p>メールフォームのフィールド（項目）の登録を行います。<br />
 	項目のタイプをはじめ、入力チェックの設定等、便利な機能を用意しています。<br />

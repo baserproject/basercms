@@ -1,3 +1,16 @@
+<?php
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.View
+ * @since			baserCMS v 0.1.0
+ * @license			http://basercms.net/license/index.html
+ */
+?>
+
 
 <div style="text-align: center; margin-top:60px;margin-bottom:60px;">
 <?php $this->BcBaser->link('サーバーキャッシュ削除', array('controller' => 'site_configs', 'action' => 'del_cache', 'plugin' => null), array('class' => 'button-small', 'confirm' => 'サーバーキャッシュを削除します。いいですか？')) ?>　

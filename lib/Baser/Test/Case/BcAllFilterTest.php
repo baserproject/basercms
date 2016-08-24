@@ -1,17 +1,18 @@
 <?php
 /**
- * run all baser filter tests
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case
  * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 
 /**
+ * run all baser filter tests
+ * 
  * @package Baser.Test.Case
  */
 class BcAllFilterTest extends CakeTestSuite {

@@ -1,7 +1,5 @@
 <?php
 /**
- * [PUBLISH] メールフォーム送信完了ページ
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -10,6 +8,10 @@
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] メールフォーム送信完了ページ
  */
 $this->BcBaser->css('Mail.style', array('inline' => true));
 if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
