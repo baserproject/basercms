@@ -25,17 +25,107 @@ class BcContentsHelper extends AppHelper {
  */
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
-		$this->settings = $this->_View->get('contentsSettings');
-		if($this->settings) {
-			foreach($this->settings as $key => $setting) {
-				// icon
-				if (!empty($setting['icon'])) {
-					$this->settings[$key]['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);
+		if(BcUtil::isAdminSystem()) {
+			$this->setup();
+		}	
+	}
+
+/**
+ * セットアップ 
+ */
+	public function setup() {
+		$settings = $this->_View->get('contentsSettings');
+		if(!$settings) {
+			return;
+		}
+		
+		$existsTitles = $this->_getExistsTitles();
+		$user = BcUtil::loginUser('admin');
+		$Permission = ClassRegistry::init('Permission');
+		
+		foreach($settings as $type => $setting) {
+
+			// title
+			if (empty($setting['title'])) {
+				$setting['title'] = $type;
+			}
+
+			// exists
+			if (empty($setting['multiple'])) {
+				$setting['multiple'] = false;
+				if (array_key_exists($setting['plugin'] . '.' . $type, $existsTitles)) {
+					$setting['exists'] = true;
+					$setting['existsTitle'] = $existsTitles[$setting['plugin'] . '.' . $type];
 				} else {
-					$this->settings[$key]['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
+					$setting['exists'] = false;
+					$setting['existsTitle'] = '';
+				}
+			}
+
+			// icon
+			if (!empty($setting['icon'])) {
+				$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], $setting['icon']);
+			} else {
+				$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
+			}
+			// routes
+			foreach (['manage', 'add', 'edit', 'delete', 'index', 'view', 'copy'] as $action) {
+				if (empty($setting['routes'][$action]) && !in_array($action, ['copy', 'manage'])) {
+					$setting['routes'][$action] = ['controller' => 'contents', 'action' => $action];
+				}
+				if (!empty($setting['routes'][$action])) {
+					$route = $setting['routes'][$action];
+					$setting['url'][$action] = Router::url($route);
+					// index アクションの際、index が省略されてしまうので強制的に補完
+					if ($action == 'index') {
+						// 規定以外の引数がないかチェック
+						unset($route['admin'], $route['plugin'], $route['prefix'], $route['controller'], $route['action']);
+						if (count($route) == 0) {
+							$setting['url'][$action] .= '/index';
+						}
+					}
+				}
+			}
+			// disabled
+			$setting['addDisabled'] = !($Permission->check($setting['url']['add'], $user['user_group_id']));
+			$setting['editDisabled'] = !($Permission->check($setting['url']['edit'], $user['user_group_id']));
+			$setting['manageDisabled'] = false;
+			if (!empty($setting['routes']['manage'])) {
+				$setting['manageDisabled'] = !($Permission->check($setting['url']['manage'], $user['user_group_id']));
+			}
+			$settings[$type] = $setting;
+		}
+		$this->settings = $settings;
+	}
+
+/**
+ * シングルコンテンツで既に登録済のタイトルを取得する
+ * @return array
+ */
+	protected function _getExistsTitles() {
+		$items = Configure::read('BcContents.items');
+		// シングルコンテンツの存在チェック
+		$conditions = [];
+		foreach($items as $name => $settings) {
+			foreach ($settings as $type => $setting) {
+				if(empty($setting['multiple'])) {
+					$conditions['or'][] = [
+						'Content.plugin' => $name,
+						'Content.type' => $type,
+						'Content.alias_id'=> null
+					];
 				}
 			}
 		}
+		$Content = ClassRegistry::init('Content');
+		$Content->Behaviors->unload('SoftDelete');
+		$contents = $Content->find('all', array('fields' => array('plugin', 'type', 'title'), 'conditions' => $conditions, 'recursive' => -1));
+		$Content->Behaviors->load('SoftDelete');
+		$existContents = [];
+		foreach($contents as $content) {
+			$existContents[$content['Content']['plugin'] . '.' . $content['Content']['type']] = $content['Content']['title'];
+		}
+		return $existContents;
 	}
 
 /**

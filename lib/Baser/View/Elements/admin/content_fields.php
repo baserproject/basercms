@@ -101,8 +101,8 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					<?php endif ?>
 					<small>[タイプ]</small>
 					<?php if(!$this->BcForm->value('Content.alias_id')): ?>
-						<?php if(!empty($contentsSettings[$this->BcForm->value('Content.type')])): ?>
-							<?php echo $contentsSettings[$this->BcForm->value('Content.type')]['title'] ?>
+						<?php if(!empty($this->BcContents->settings[$this->BcForm->value('Content.type')])): ?>
+							<?php echo $this->BcContents->settings[$this->BcForm->value('Content.type')]['title'] ?>
 						<?php else: ?>
 							デフォルト	
 						<?php endif ?>
@@ -224,7 +224,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					$current = false;
 					if(!empty($relatedContent['Content'])){
 						if(!$relatedContent['Content']['alias_id']) {
-							$editUrl = $contentsSettings[$relatedContent['Content']['type']]['routes']['edit'];
+							$editUrl = $this->BcContents->settings[$relatedContent['Content']['type']]['routes']['edit'];
 							if($relatedContent['Content']['entity_id']) {
 								$editUrl .= '/' . $relatedContent['Content']['entity_id'];
 							}
@@ -271,7 +271,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					<?php if(!empty($relatedContent['Content'])): ?>
 						<?php echo $relatedContent['Content']['title'] ?>
 						<?php if(!empty($relatedContent['Content'])): ?>
-							<small>（<?php echo $contentsSettings[$relatedContent['Content']['type']]['title'] ?>）</small>
+							<small>（<?php echo $this->BcContents->settings[$relatedContent['Content']['type']]['title'] ?>）</small>
 						<?php endif ?>
 					<?php else: ?>
 						<small>未登録</small>
@@ -299,6 +299,6 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 <?php endif ?>
 </div>
 
-<?php if(empty($contentsSettings[$this->BcForm->value('Content.type')])): ?>
+<?php if(empty($this->BcContents->settings[$this->BcForm->value('Content.type')])): ?>
 <p class="section">タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。</p>
 <?php endif ?>

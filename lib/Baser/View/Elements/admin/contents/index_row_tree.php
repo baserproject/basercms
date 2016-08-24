@@ -19,9 +19,9 @@ $parentId = $data['Content']['parent_id'];
 $alias = false;
 $open = false;
 if(!empty($this->BcContents->settings[$type]['icon'])) {
-	$iconPath = $this->BcContents->settings[$type]['icon'];	
+	$iconPath = $this->BcContents->settings[$type]['url']['icon'];	
 } else {
-	$iconPath = $this->BcContents->settings['Default']['icon'];
+	$iconPath = $this->BcContents->settings['Default']['url']['icon'];
 }
 if($data['Content']['alias_id']) {
 	$alias = true;

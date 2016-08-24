@@ -82,9 +82,40 @@ class BcContentsComponent extends Component {
 				$this->type = $controller->modelClass;
 			}
 		}
-		// フロントで現在のページが関連している Content を設定する
 		if(!BcUtil::isAdminSystem()) {
-			if(!empty($controller->request->params['requested']) && !empty($controller->request->params['path'])) {
+			// フロントエンド設定
+			$this->setupFront();
+		} else {
+			// 管理システム設定
+			$this->setupAdmin();
+		}
+	}
+
+/**
+ * 管理システム設定 
+ */
+	public function setupAdmin() {
+		$items = Configure::read('BcContents.items');
+		$createdSettings = [];
+		foreach($items as $name => $settings) {
+			foreach ($settings as $type => $setting) {
+				$setting['plugin'] = $name;
+				$setting['type'] = $type;
+				$createdSettings[$type] = $setting;
+			}
+		}
+		$this->settings['items'] = $createdSettings;
+	}
+
+/**
+ * フロントエンドのセットアップ 
+ */
+	public function setupFront() {
+		$controller = $this->_Controller;
+		
+		// リクエストアクション時のデータセット
+		if(!empty($controller->request->params['requested'])) {
+			if(!empty($controller->request->params['path'])) {
 				$urlAry = $controller->request->params['path'];
 				$url = '/' . implode('/', $urlAry);
 				$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
@@ -93,109 +124,33 @@ class BcContentsComponent extends Component {
 					$controller->request->params['Site'] = $data['Site'];
 				}
 			}
-			if(!empty($controller->request->query['preview']) && !empty($controller->request->data['Content'])) {
+		}
+		
+		// プレビュー時のデータセット
+		if(!empty($controller->request->query['preview'])) {
+			$this->preview = $this->_Controller->request->query['preview'];
+			if(!empty($controller->request->data['Content'])) {
 				$controller->request->params['Content'] = $controller->request->data['Content'];
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
 			}
-			if(!empty($controller->request->params['Content'])) {
-				// レイアウトテンプレート設定
-				$controller->layout = $controller->request->params['Content']['layout_template'];
-				if(!$controller->layout) {
-					$controller->layout = $this->getParentLayoutTemplate($controller->request->params['Content']['id']);
-				}
-				// パンくず
-				$controller->crumbs = $this->getCrumbs($controller->request->params['Content']['id']);
-				// 説明文
-				$controller->set('description', $controller->request->params['Content']['description']);
-				$controller->pageTitle = $controller->request->params['Content']['title'];
-			}
-		}
-
-		if(!empty($this->_Controller->request->query['preview'])) {
-			$this->preview = $this->_Controller->request->query['preview'];
-		}
-
-		$items = Configure::read('BcContents.items');
-
-		// シングルコンテンツの存在チェック
-		$conditions = array();
-		foreach($items as $name => $settings) {
-			foreach ($settings as $type => $setting) {
-				if(empty($setting['multiple'])) {
-					$conditions['or'][] = array(
-						'Content.plugin' => $name,
-						'Content.type' => $type,
-						'Content.alias_id'=> null
-					);
-				}
-			}
-		}
-		$Content = ClassRegistry::init('Content');
-		$Content->Behaviors->unload('SoftDelete');
-		$_existContents = $Content->find('all', array('fields' => array('plugin', 'type', 'title'), 'conditions' => $conditions, 'recursive' => -1));
-		$Content->Behaviors->load('SoftDelete');
-		$existContents = array();
-		foreach($_existContents as $existContent) {
-			$existContents[$existContent['Content']['plugin'] . '.' . $existContent['Content']['type']] = $existContent['Content']['title'];
-		}
-
-		if(BcUtil::isAdminSystem()) {
-			$Permission = ClassRegistry::init('Permission');
 		}
 		
-		$user = BcUtil::loginUser('admin');
-		foreach($items as $name => $settings) {
-			foreach ($settings as $type => $setting) {
-				$setting['plugin'] = $name;
-				$setting['type'] = $type;
-
-				if(empty($setting['multiple'])) {
-					if(array_key_exists($name . '.' . $type, $existContents)) {
-						$setting['exists'] = true;
-						$setting['existsTitle'] = $existContents[$name . '.' . $type];
-					} else {
-						$setting['exists'] = false;
-						$setting['existsTitle'] = '';
-					}
-					$setting['multiple'] = false;
-				}
-
-				// routes
-				foreach (array('manage', 'add', 'edit', 'delete', 'index', 'view', 'copy') as $action) {
-					if (empty($setting['routes'][$action]) && !in_array($action, ['copy', 'manage'])) {
-						$setting['routes'][$action] = array('controller' => 'contents', 'action' => $action);
-					}
-				}
-				foreach ($setting['routes'] as $action => $route) {
-					$setting['routes'][$action] = Router::url($route);
-					// index アクションの際、index が省略されてしまうので強制的に補完
-					if($route['action'] == 'index') {
-						// 規定以外の引数がないかチェック
-						unset($route['admin'], $route['plugin'], $route['prefix'], $route['controller'], $route['action']);
-						if(count($route) == 0) {
-							$setting['routes'][$action] .= '/index';
-						}
-					}
-				}
-
-				if(BcUtil::isAdminSystem()) {
-					// disabled
-					$setting['addDisabled'] = !($Permission->check($setting['routes']['add'], $user['user_group_id']));
-					$setting['editDisabled'] = !($Permission->check($setting['routes']['edit'], $user['user_group_id']));
-					$setting['manageDisabled'] = false;
-					if (!empty($setting['routes']['manage'])) {
-						$setting['manageDisabled'] = !($Permission->check($setting['routes']['manage'], $user['user_group_id']));
-					}
-				}
-				
-				// title
-				if (empty($setting['title'])) {
-					$setting['title'] = $type;
-				}
-				$this->settings['items'][$type] = $setting;
+		// 表示設定
+		if(!empty($controller->request->params['Content'])) {
+			// レイアウトテンプレート設定
+			$controller->layout = $controller->request->params['Content']['layout_template'];
+			if(!$controller->layout) {
+				$controller->layout = $this->getParentLayoutTemplate($controller->request->params['Content']['id']);
 			}
+			// パンくず
+			$controller->crumbs = $this->getCrumbs($controller->request->params['Content']['id']);
+			// 説明文
+			$controller->set('description', $controller->request->params['Content']['description']);
+			// タイトル
+			$controller->pageTitle = $controller->request->params['Content']['title'];
 		}
+		
 	}
 
 /**
@@ -244,8 +199,8 @@ class BcContentsComponent extends Component {
  */
 	public function beforeRender(Controller $controller) {
 		parent::beforeRender($controller);
-		$controller->set('contentsSettings', $this->settings['items']);
 		if(BcUtil::isAdminSystem()) {
+			$controller->set('contentsSettings', $this->settings['items']);
 			// パンくずをセット
 			array_unshift($controller->crumbs, array('name' => 'コンテンツ一覧', 'url' => array('plugin' => null, 'controller' => 'contents', 'action' => 'index')));
 			if($controller->subMenuElements && !in_array('contents', $controller->subMenuElements)) {

@@ -35,6 +35,9 @@ if(!empty($this->BcContents->settings[$type]['icon'])) {
 } else {
 	$iconPath = $this->BcContents->settings['Default']['icon'];
 }
+if($data['Content']['plugin'] != 'Core') {
+	$iconPath = $data['Content']['plugin'] . '.' . $iconPath; 
+}
 if (!$isPublish) {
 	$toStatus = 'publish';
 	$classies = ['unpublish', 'disablerow'];
@@ -55,17 +58,17 @@ $class = ' class="' . implode(' ', $classies) . '"';
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_check.png', ['width' => 32, 'height' => 32, 'alt' => '確認', 'class' => 'btn']), $data['Content']['url'], ['title' => '確認', 'class' => 'btn-check', 'target' => '_blank']) ?>
 		<?php endif ?>
 		<?php if(!$manageDisabled && !empty($this->BcContents->settings[$type]['routes']['manage'])): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_manage.png', ['width' => 32, 'height' => 32, 'alt' => '管理', 'class' => 'btn']), $this->BcContents->settings[$type]['routes']['manage'] . '/' . $data['Content']['entity_id'], ['title' => '管理', 'class' => 'btn-manage']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_manage.png', ['width' => 32, 'height' => 32, 'alt' => '管理', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['manage'], [$data['Content']['entity_id']]), ['title' => '管理', 'class' => 'btn-manage']) ?>
 		<?php endif ?>
 		<?php if(!$isSiteRoot && !$isSiteRelated): ?>
 		<?php //$this->BcBaser->link($this->BcBaser->getImg('admin/icon_unpublish.png', ['width' => 32, 'height' => 32, 'alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
 		<?php //$this->BcBaser->link($this->BcBaser->getImg('admin/icon_publish.png', ['width' => 32, 'height' => 32, 'alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '公開', 'class' => 'btn-publish']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled && $type != 'ContentFolder' && !empty($this->BcContents->settings[$type]['routes']['copy'])): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_copy.png', ['width' => 32, 'height' => 32, 'alt' => 'コピー', 'class' => 'btn']), $this->BcContents->settings[$type]['routes']['copy'] . '/' . $data['Content']['entity_id'], ['title' => 'コピー', 'class' => 'btn-copy']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_copy.png', ['width' => 32, 'height' => 32, 'alt' => 'コピー', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['copy'], [$data['Content']['entity_id']]), ['title' => 'コピー', 'class' => 'btn-copy']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_edit.png', ['width' => 32, 'height' => 32, 'alt' => '編集', 'class' => 'btn']), $this->BcContents->settings[$type]['routes']['edit'] . '/' . $data['Content']['entity_id'], ['title' => '編集', 'class' => 'btn-edit']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_edit.png', ['width' => 32, 'height' => 32, 'alt' => '編集', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['edit'], [$data['Content']['entity_id']]), ['title' => '編集', 'class' => 'btn-edit']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled && !$isSiteRoot): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_delete.png', ['width' => 32, 'height' => 32, 'alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['Content']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
