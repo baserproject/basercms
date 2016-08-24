@@ -220,12 +220,12 @@ class BlogContentTest extends BaserTestCase {
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
-		$this->assertEquals($result['Content']['name'], 'hoge1');
+		$this->assertEquals($result['Content']['title'], 'hoge1');
 		$this->BlogContent->copy(1, 1, 'test-title', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
-		$this->assertEquals($result['Content']['name'], 'test-title');
+		$this->assertEquals($result['Content']['title'], 'test-title');
 	}
 
 }

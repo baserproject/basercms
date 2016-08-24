@@ -97,29 +97,6 @@ class PageTest extends BaserTestCase {
 		$this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
 	}
 
-
-/**
- * フォームの初期値を設定する
- * 
- * @return	array	初期値データ
- */
-	public function testGetDefaultValue() {
-		$expected = [];
-		$result = $this->Page->getDefaultValue();
-		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
-	
-		//$_SESSION['Auth']が存在する場合
-		$_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')] = array(
-			'id' => 2,
-		);
-		$expected = array('Page' => array(
-				'author_id' => 2,
-			)
-		);
-		$result = $this->Page->getDefaultValue();
-		$this->assertEquals($expected, $result, 'フォームの初期値を設定するデータが正しくありません');
-	}
-
 /**
  * beforeSave
  *
