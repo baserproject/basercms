@@ -233,6 +233,9 @@ class BcContentsComponent extends Component {
 		$templates = BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $this->_Controller->siteConfigs['theme']);
 		if($data['Content']['id'] != 1) {
 			$parentTemplate = $this->getParentLayoutTemplate($data['Content']['id']);
+			if(in_array($parentTemplate, $templates)) {
+				unset($templates[$parentTemplate]);
+			}
 			array_unshift($templates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
 		}
 		$data['Content']['name'] = urldecode($data['Content']['name']);
