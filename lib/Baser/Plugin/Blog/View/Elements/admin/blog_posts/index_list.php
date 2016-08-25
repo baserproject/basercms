@@ -68,7 +68,7 @@
 	<?php endforeach; ?>
 	<?php else: ?>
 	<tr>
-		<td colspan="<?php echo ($existEyeCatch) ? '9' : '8' ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+		<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
 	</tr>
 <?php endif; ?>
 </tbody>
