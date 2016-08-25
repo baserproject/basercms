@@ -230,7 +230,10 @@ class BcContentsComponent extends Component {
 		}
 		$data = $controller->request->data;
 		$controller->set('isPublishByParents', $controller->Content->isPublishByParents($data['Content']['id']));
-		$templates = BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $this->_Controller->siteConfigs['theme']);
+		$templates = array_merge(
+			BcUtil::getTemplateList('Layouts', '', $this->_Controller->siteConfigs['theme']),
+			BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $this->_Controller->siteConfigs['theme'])
+		);
 		if($data['Content']['id'] != 1) {
 			$parentTemplate = $this->getParentLayoutTemplate($data['Content']['id']);
 			if(in_array($parentTemplate, $templates)) {

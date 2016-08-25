@@ -13,38 +13,24 @@
 /**
  * [ADMIN] ダッシュボード
  */
+$this->BcBaser->js('admin/libs/jquery.bcDashboard', false);
 ?>
 
 
 <div id="AlertMessage" class="message" style="display:none"></div>
 
+<?php if($panels): ?>
+	<?php foreacH($panels as $key => $templates): ?>
+		<?php foreach($templates as $template): ?>
 <div class="float-left" style="width:33%">
-	<div class="panel-box corner10">
-		<h2>baserCMSニュース</h2>
-		<?php $this->BcBaser->js('/feed/ajax/1') ?>
-		<br />
-		<small>baserCMSについて、不具合の発見・改善要望がありましたら<a href="http://forum.basercms.net" target="_blank">ユーザーズフォーラム</a> よりお知らせください。</small>
+	<div class="panel-box">
+		<?php if($key == 'Core'): ?>
+			<?php echo $this->BcBaser->element('admin/dashboard/' . $template) ?>
+		<?php else: ?>
+			<?php echo $this->BcBaser->element($key . '.admin/dashboard/' . $template) ?>
+		<?php endif ?>		
 	</div>
 </div>
-
-<div class="float-left" style="width:33%">
-	<div class="panel-box corner10">	
-		<h2>現在の状況</h2>
-		<h3>固定ページ</h3>
-		<ul>
-			<li>公開中： <?php echo $publishedPages ?> ページ<br />
-				非公開： <?php echo $unpublishedPages ?> ページ<br />
-				合　計： <?php echo $totalPages ?> ページ<br />
-			</li>
-		</ul>
-	</div>
-</div>
-
-<div class="float-left" style="width:33%">
-	<div class="panel-box corner10">
-		<h2>最近の動き</h2>
-		<div id="DblogList">
-			<?php $this->BcBaser->element('dashboard/index_dblog_list') ?>
-		</div>
-	</div>
-</div>
+		<?php endforeach ?>
+	<?php endforeach ?>
+<?php endif ?>

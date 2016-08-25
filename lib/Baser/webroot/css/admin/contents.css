@@ -1289,14 +1289,18 @@ background: #888;
 /*    Dashboard
 /* ==================================================================== */
 
+#AdminDashboard .pagination .next,
+#AdminDashboard .pagination .prev{
+    padding: 0;
+}
+#AdminDashboard .pagination .next a,
+#AdminDashboard .pagination .prev a{
+    padding: 1px 6px;
+}
 #AdminDashboard .pagination span span a,
 #AdminDashboard .pagination .disabled,
 #AdminDashboard .pagination .current{
     padding: 1px 6px;
-}
-#AdminDashboard .pagination .next,
-#AdminDashboard .pagination .prev{
-    padding: 1px 4px;
 }
 #AdminDashboard .panel-box {
 	margin:10px;

@@ -680,4 +680,21 @@ class ContentsController extends AppController {
 		return json_encode($this->Content->getContentFolderList((int) $siteId, ['conditions' => ['Content.site_root' => false]]));
 	}
 
+/**
+ * コンテンツ情報を取得する
+ */
+	public function admin_ajax_contents_info() {
+		$this->autoLayout = false;
+		$sites = [['Site' => ['id' => 0, 'display_name' => 'HOME']]];
+		$subSites = $this->Site->find('all', ['conditions' => ['Site.status' => true]]);
+		if($subSites) {
+			$sites = array_merge($sites, $subSites);
+		}
+		foreach($sites as $key => $site) {
+			$sites[$key]['published'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]);
+			$sites[$key]['unpublished'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]);
+			$sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
+		}
+		$this->set('sites', $sites);
+	}
 }

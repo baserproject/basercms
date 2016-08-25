@@ -9,8 +9,14 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+?>
 
-/**
- * [ADMIN] ダッシュボード　データベースログ　(ajax)
- */
-$this->BcBaser->element('dashboard/index_dblog_list');
+
+<script>
+$(function(){
+	$.bcDashboard.ajax('/admin/contents/ajax_contents_info', '#ContentInfo');
+});
+</script>
+
+<h2>コンテンツ情報</h2>
+<div id="ContentInfo"></div>

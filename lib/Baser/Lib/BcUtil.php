@@ -285,9 +285,11 @@ class BcUtil extends Object {
  * @return array
  */
 	public static function getTemplateList($path, $plugin, $theme) {
-		$templatesPathes = App::path('View');
+		
 		if($plugin) {
-			$templatesPathes = array_merge($templatesPathes, App::path('View', $plugin));
+			$templatesPathes = App::path('View', $plugin);
+		} else {
+			$templatesPathes = App::path('View');	
 		}
 		if ($theme) {
 			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);

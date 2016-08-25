@@ -30,7 +30,7 @@ class DashboardController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Dblog', 'User', 'Page');
+	public $uses = array('User', 'Page');
 
 /**
  * ヘルパー
@@ -61,55 +61,22 @@ class DashboardController extends AppController {
 	public $subMenuElements = array();
 
 /**
- * [ADMIN] 管理者ダッシュボードページにajaxでデータを取得する
- *
- * @return void
- */
-	public function admin_ajax_dblog_index() {
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
-		$this->paginate = array(
-				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
-				'limit' => $this->passedArgs['num']
-		);
-		$this->set('viewDblogs', $this->paginate('Dblog'));
-	}
-
-/**
  * [ADMIN] 管理者ダッシュボードページを表示する
  *
  * @return void
  */
 	public function admin_index() {
 		$this->pageTitle = '管理者ダッシュボード';
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Dblog', array('default' => $default));
-
-		$this->paginate = array(
-				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
-				'limit' => $this->passedArgs['num']
-		);
-
-		$this->set('viewDblogs', $this->paginate('Dblog'));
-		$publishedPages = $this->Page->find('count', array('conditions' => $this->Page->Content->getConditionAllowPublish()));
-		$unpublishedPages = $this->Page->find('count', array('conditions' => $this->Page->Content->getConditionAllowPublish()));
-		$totalPages = $publishedPages + $unpublishedPages;
-		$this->set(compact('publishedPages', 'unpublishedPages', 'totalPages'));
-		$this->help = 'dashboard_index';
-	}
-
-/**
- * [ADMIN] 最近の動きを削除
- * 
- * @return void
- */
-	public function admin_del() {
-		if ($this->Dblog->deleteAll('1 = 1')) {
-			$this->setMessage('最近の動きのログを削除しました。');
-		} else {
-			$this->setMessage('最近の動きのログ削除に失敗しました。', true);
+		$panels = [];
+		$panels['Core'] = BcUtil::getTemplateList('Elements/admin/dashboard', '', $this->siteConfigs['theme']);
+		$plugins = CakePlugin::loaded();
+		if($plugins) {
+			foreach($plugins as $plugin) {
+				$panels[$plugin] = BcUtil::getTemplateList('Elements/admin/dashboard', $plugin, $this->siteConfigs['theme']);
+			}
 		}
-		$this->redirect(array('action' => 'index'));
+		$this->set('panels', $panels);
+		$this->help = 'dashboard_index';
 	}
 
 }
