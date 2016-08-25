@@ -123,6 +123,12 @@ App::uses('BcHelperEventListener', 'Event');
 App::uses('BcManagerShell', 'Console/Command');
 App::uses('CakeRequest', 'Network');
 
+// @deprecated
+// >>>
+App::uses('BcPluginAppController', 'Controller');
+App::uses('BcPluginAppModel', 'Model');
+// <<<
+
 /**
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定

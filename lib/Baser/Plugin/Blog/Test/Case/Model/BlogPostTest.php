@@ -314,7 +314,7 @@ class BlogPostTest extends BaserTestCase {
 		return array(
 			array(array('blogContentId' => 1), array(1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ')),
 			array(array('blogContentId' => 2), array()),
-			array(array('userGroupId' => 1, 'blogContentId' => 1, 'postEditable' => false, 'blogCategoryId' => 2), array(2 => '子カテゴリ')),
+			array(array('blogContentId' => 1, 'blogCategoryId' => 2), array(2 => '子カテゴリ')),
 		);
 	}
 

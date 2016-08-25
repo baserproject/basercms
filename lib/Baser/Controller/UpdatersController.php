@@ -52,7 +52,7 @@ class UpdatersController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Menu', 'Favorite');
+	public $uses = array('Favorite');
 
 /**
  * beforeFilter

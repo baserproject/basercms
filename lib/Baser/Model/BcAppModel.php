@@ -377,7 +377,7 @@ class BcAppModel extends Model {
 				@unlink($tmpdir . $table . '.php');
 			}
 		}
-
+		ClassRegistry::flush();
 		clearAllCache();
 		return $result;
 	}
@@ -402,6 +402,7 @@ class BcAppModel extends Model {
 		$prefix = $db->config['prefix'];
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
+		$result = true;
 		foreach ($files[1] as $file) {
 			if (preg_match('/^(.*?)\.csv$/', $file, $matches)) {
 				$table = $matches[1];
@@ -411,13 +412,15 @@ class BcAppModel extends Model {
 					}
 
 					if (!$db->loadCsv(array('path' => $path . DS . $file, 'encoding' => 'SJIS'))) {
-						return false;
+						$result = false;
+						break;
 					}
 				}
 			}
 		}
-
-		return true;
+		ClassRegistry::flush();
+		clearAllCache();
+		return $result;
 	}
 
 /**

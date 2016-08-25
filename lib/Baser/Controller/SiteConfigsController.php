@@ -30,7 +30,7 @@ class SiteConfigsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('SiteConfig', 'Menu', 'Page');
+	public $uses = array('SiteConfig', 'Page');
 
 /**
  * コンポーネント

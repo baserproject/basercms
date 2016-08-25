@@ -58,6 +58,12 @@ class Plugin extends AppModel {
  * @return bool
  */
 	public function initDb($pluginName = '', $options = array()) {
+		// @deprecated 5.0.0 since 4.0.0 baserCMS３まで第二引数がプラグイン名だったが、第一引数にプラグイン名を設定するように変更。元の第一引数は不要
+		trigger_error(deprecatedMessage('メソッド：Plugin::initDb()', '4.0.0', '5.0.0', 'initDbの引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。'), E_USER_DEPRECATED);
+		if(!is_array($options)) {
+			$pluginName = $options;
+			$options = [];
+		}
 		$options = array_merge(array(
 			'loadCsv'		=> true,
 			'filterTable'	=> '',

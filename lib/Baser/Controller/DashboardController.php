@@ -30,7 +30,7 @@ class DashboardController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Dblog', 'User', 'Menu', 'Page');
+	public $uses = array('Dblog', 'User', 'Page');
 
 /**
  * ヘルパー

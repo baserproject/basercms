@@ -64,9 +64,8 @@ class BcAppController extends Controller {
  * モデル
  *
  * @var mixed
- * TODO メニュー管理を除外後、Menuを除外する
  */
-	public $uses = array('User', 'Menu', 'Favorite');
+	public $uses = array('User', 'Favorite');
 
 /**
  * コンポーネント

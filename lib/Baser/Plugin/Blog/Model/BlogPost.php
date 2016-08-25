@@ -16,6 +16,7 @@ App::uses('BlogAppModel', 'Blog.Model');
  * 記事モデル
  *
  * @package Blog.Model
+ * @property BlogCategory $BlogCategory
  */
 class BlogPost extends BlogAppModel {
 
@@ -432,21 +433,27 @@ class BlogPost extends BlogAppModel {
 	public function getControlSource($field, $options = array()) {
 		$options = array_merge([
 			'blogContentId' => '',
+			'userGroupId' => '',
+			'blogCategoryId' => '',
 			'empty' => ''
 		], $options);
-		
+
+		$blogCategoryId = $options['blogCategoryId'];
 		$blogContentId = $options['blogContentId'];
 		$empty = $options['empty'];
+		$userGroupId = $options['userGroupId'];
+		unset($options['blogCategoryId']);
 		unset($options['blogContentId']);
 		unset($options['empty']);
+		unset($options['userGroupId']);
 		
 		switch ($field) {
 			case 'blog_category_id':
-
-				extract($options);
 				$catOption = array('blogContentId' => $blogContentId);
 				$isSuperAdmin = false;
-
+				if ($blogCategoryId) {
+					$catOption['conditions'] = ['BlogCategory.id' => $blogCategoryId];
+				}
 				if (!empty($userGroupId)) {
 					if ($userGroupId == 1) {
 						$isSuperAdmin = true;

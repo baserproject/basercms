@@ -15,7 +15,6 @@
  * プラグインのコントローラーより継承して利用する
  *
  * @package Baser.Controller
- * @property Menu $Menu
  * @property Plugin $Plugin
  * @property BcManagerComponent $BcManager
  * @property BcAuthComponent $BcAuth
@@ -34,7 +33,7 @@ class PluginsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Menu', 'Plugin');
+	public $uses = array('Plugin');
 
 /**
  * コンポーネント
