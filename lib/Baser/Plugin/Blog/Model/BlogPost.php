@@ -430,6 +430,16 @@ class BlogPost extends BlogAppModel {
  * @access	public
  */
 	public function getControlSource($field, $options = array()) {
+		$options = array_merge([
+			'blogContentId' => '',
+			'empty' => ''
+		], $options);
+		
+		$blogContentId = $options['blogContentId'];
+		$empty = $options['empty'];
+		unset($options['blogContentId']);
+		unset($options['empty']);
+		
 		switch ($field) {
 			case 'blog_category_id':
 
@@ -438,41 +448,23 @@ class BlogPost extends BlogAppModel {
 				$isSuperAdmin = false;
 
 				if (!empty($userGroupId)) {
-
-					if (!isset($blogCategoryId)) {
-						$blogCategoryId = '';
-					}
-
 					if ($userGroupId == 1) {
 						$isSuperAdmin = true;
 					}
-
-					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
-					if (!$postEditable && $blogCategoryId) {
-						$catOption['conditions'] = array('OR' => array('BlogCategory.id' => $blogCategoryId));
-					}
-
 					// super admin でない場合は、管理許可のあるカテゴリのみ取得
 					if (!$isSuperAdmin) {
 						$catOption['ownerId'] = $userGroupId;
 					}
-
-					if ($postEditable && !$isSuperAdmin) {
-						unset($empty);
-					}
 				}
-
 				$categories = $this->BlogCategory->getControlSource('parent_id', $catOption);
-
 				// 「指定しない」追加
-				if (isset($empty)) {
+				if ($empty) {
 					if ($categories) {
 						$categories = array('' => $empty) + $categories;
 					} else {
 						$categories = array('' => $empty);
 					}
 				}
-
 				$controlSources['blog_category_id'] = $categories;
 
 				break;

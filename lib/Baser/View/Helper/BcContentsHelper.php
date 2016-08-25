@@ -69,19 +69,19 @@ class BcContentsHelper extends AppHelper {
 				$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
 			}
 			// routes
-			foreach (['manage', 'add', 'edit', 'delete', 'index', 'view', 'copy'] as $action) {
-				if (empty($setting['routes'][$action]) && !in_array($action, ['copy', 'manage'])) {
-					$setting['routes'][$action] = ['controller' => 'contents', 'action' => $action];
+			foreach (['manage', 'add', 'edit', 'delete', 'copy'] as $method) {
+				if (empty($setting['routes'][$method]) && !in_array($method, ['copy', 'manage'])) {
+					$setting['routes'][$method] = ['admin' => true, 'controller' => 'contents', 'action' => $method];
 				}
-				if (!empty($setting['routes'][$action])) {
-					$route = $setting['routes'][$action];
-					$setting['url'][$action] = Router::url($route);
+				if (!empty($setting['routes'][$method])) {
+					$route = $setting['routes'][$method];
+					$setting['url'][$method] = Router::url($route);
 					// index アクションの際、index が省略されてしまうので強制的に補完
-					if ($action == 'index') {
+					if ($route['action'] == 'index') {
 						// 規定以外の引数がないかチェック
 						unset($route['admin'], $route['plugin'], $route['prefix'], $route['controller'], $route['action']);
 						if (count($route) == 0) {
-							$setting['url'][$action] .= '/index';
+							$setting['url'][$method] .= '/index';
 						}
 					}
 				}
