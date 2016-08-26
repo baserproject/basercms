@@ -19,7 +19,7 @@ if($posts){
 }
 
 function transformRSS($data) {
-	$blogHelper = new BlogHelper($this);
+	$blogHelper = new BlogHelper(new View());
 	return array(
 		'title' => $data['BlogPost']['name'],
 		'link' => '/' . $data['BlogContent']['name'] . '/archives/' . $data['BlogPost']['no'],
