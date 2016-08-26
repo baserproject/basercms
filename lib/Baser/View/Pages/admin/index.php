@@ -32,6 +32,7 @@ $(function(){
 <div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'pages', 'action' => 'ajax_update_sort')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
+<?php echo $this->BcForm->hidden('listDisplayed', array('value' => date('U'))); ?>
 
 <?php $this->BcBaser->element('pages/index_view_setting') ?>
 
