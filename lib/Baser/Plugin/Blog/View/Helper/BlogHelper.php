@@ -257,6 +257,8 @@ class BlogHelper extends AppHelper {
 			$out .= '<div id="post-detail">' . $post['BlogPost']['detail'] . '</div>';
 		}
 		if ($cut) {
+			$out = str_replace(array("\r\n", "\r", "\n"), '', $out);
+			$out = html_entity_decode($out, ENT_QUOTES, 'UTF-8');
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
 		}
 		if ($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
