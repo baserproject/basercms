@@ -20,11 +20,12 @@ if($posts){
 }
 
 function transformRSS($data) {
-	$blogHelper = new BlogHelper($this);
+	$view = new View();
+	$blogHelper = new BlogHelper($view);
 	return array(
 		'title' => $data['BlogPost']['name'],
-		'link' => '/' . $this->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
-		'guid' => '/' . $this->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
+		'link' => '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
+		'guid' => '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
 		'category' => $data['BlogCategory']['title'],
 		'description' => $blogHelper->removeCtrlChars($data['BlogPost']['content'] . $data['BlogPost']['detail']),
 		'pubDate' => $data['BlogPost']['posts_date']
