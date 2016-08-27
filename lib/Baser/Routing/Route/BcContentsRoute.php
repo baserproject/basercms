@@ -118,6 +118,9 @@ class BcContentsRoute extends CakeRoute {
 			$conditions = $conditions + $Content->getConditionAllowPublish();
 		}
 		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC']);
+		if($content && empty($content['Site']['id'])) {
+			$content['Site'] = $Content->Site->getMain()['Site'];
+		}
 		return $content;
 	}
 

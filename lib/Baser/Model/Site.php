@@ -78,6 +78,23 @@ class Site extends AppModel {
 	];
 
 /**
+ * 公開されている全てのサイトを取得する
+ * 
+ * @return array
+ */
+	public function getPublishedAll() {
+		$conditions = ['Site.status' => true];
+		$sites = $this->find('all', ['conditions' => $conditions]);
+		$main = $this->getMain();
+		if($sites) {
+			array_unshift($sites, $main);
+		} else {
+			$sites = [$main];
+		}
+		return $sites;
+	}
+	
+/**
  * サイトリストを取得
  *
  * @param bool $mainOnly
@@ -88,8 +105,46 @@ class Site extends AppModel {
     	if(!is_null($mainSiteId)) {
     		$conditions['Site.main_site_id'] = $mainSiteId;
     	}
-    	return [0 => 'Home'] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
+		$main = $this->getMain();
+    	return [$main['Site']['id'] => $main['Site']['display_name']] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
+	
+/**
+ * メインサイトのデータを取得する
+ * 
+ * @return array
+ */
+	public function getMain($options = []) {
+		$options += [
+			'fields' => []	
+		];
+		$siteConfigs = Configure::read('BcSite');
+		$site = ['Site' => [
+			'id' => 0,
+			'main_site_id' => null,
+			'name' => null,
+			'display_name' => $siteConfigs['main_site_display_name'],
+			'title' => $siteConfigs['name'],
+			'alias' => null,
+			'theme' => $siteConfigs['theme'],
+			'status' => !$siteConfigs['maintenance'],
+			'use_subdomain' => false,
+			'relate_main_site' => null,
+			'created' => null,
+			'modified' => null
+		]];
+		if($options['fields']) {
+			if(!is_array($options['fields'])) {
+				$options['fields'] = [$options['fields']];
+			}
+			$siteTmp = [];
+			foreacH($options['fields'] as $field) {
+				$siteTmp[$field] = $site['Site'][$field];
+			}
+			$site = ['Site' => $siteTmp];
+		}
+		return $site;
+	}
 
 /**
  * コンテンツに関連したコンテンツをサイト情報と一緒に全て取得する
@@ -120,15 +175,10 @@ class Site extends AppModel {
 				$mainSiteContentId = $data['Content']['id'];
 			}
 		}
-		$sites = $this->find('all', ['fields' => ['id', 'name', 'alias', 'display_name', 'main_site_id'], 'conditions' => $conditions, 'order' => 'main_site_id']);
+		$fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
+		$sites = $this->find('all', ['fields' => $fields, 'conditions' => $conditions, 'order' => 'main_site_id']);
 		if($data['Site']['main_site_id'] == 0) {
-		$sites = array_merge([['Site' => [
-			'id' => '0',
-			'display_name' => 'Home',
-			'main_site_id' => '',
-			'name' => '',
-			'alias' => ''
-			]]], $sites);
+			$sites = array_merge([$this->getMain(['fields' => $fields])], $sites);
 		}
 		$conditions = [
 			'or' => [
@@ -187,7 +237,7 @@ class Site extends AppModel {
  * @param bool $created
  * @param array $options
  */
-  public function afterSave($created, $options = []) {
+	public function afterSave($created, $options = []) {
 		parent::afterSave($created, $options);
 		App::uses('AuthComponent',  'Controller/Component');
 		$user = AuthComponent::user();
@@ -217,34 +267,34 @@ class Site extends AppModel {
 				$this->save($data, array('validate' => false, 'callbacks' => false));
 			}
 		}
-  }
+	}
 
 /**
  * After Delete
  */
-  public function afterDelete() {
+	public function afterDelete() {
 		parent::afterDelete();
 		$Content = ClassRegistry::init('Content');
 		$id = $Content->field('id', [
 			'Content.site_id' => $this->id,
 			'Content.site_root' => true
 		]);
-
+	
 		$children = $Content->children($id, false);
 		foreach($children as $child) {
 			$child['Content']['site_id'] = 0;
 			// バリデートすると name が変換されてしまう
 			$Content->save($child, false);
 		}
-
+	
 		$children = $Content->children($id, true);
 		foreach($children as $child) {
 			$Content->softDeleteFromTree($child['Content']['id']);
 		}
-
+	
 		$Content->softDelete(false);
 		$Content->removeFromTree($id, true);
-  }
+	}
 
 /**
  * プレフィックスを取得する

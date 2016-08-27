@@ -328,5 +328,48 @@ class BcContentsHelper extends AppHelper {
 			return false;
 		}
 	}
+
+/**
+ * 関連サイトのコンテンツを取得
+ * 
+ * @param int $id コンテンツID
+ * @return array | false
+ */
+	public function getRelatedSiteContents($id = null) {
+		$Content = ClassRegistry::init('Content');
+		$Content->unbindModel(['belongsTo' => ['User']]);
+		if(!$id && !empty($this->request->params['Content'])) {
+			$content = $this->request->params['Content'];
+			if($content['main_site_content_id']) {
+				$id = $content['main_site_content_id'];
+			} else {
+				$id = $content['id'];
+			}
+		} else {
+			return false;
+		}
+		return $Content->getRelatedSiteContents($id);
+	}
+
+/**
+ * 関連サイトのリンク情報を取得する
+ * 
+ * @param int $id
+ * @return array
+ */
+	public function getRelatedSiteLinks($id = null) {
+		$contents = $this->getRelatedSiteContents($id);
+		$urls = [];
+		if($contents) {
+			foreach($contents as $content) {
+				$urls[] = [
+					'prefix' => $content['Site']['name'],
+					'name' => $content['Site']['display_name'],
+					'url' => $content['Content']['url']
+				];
+			}
+		}
+		return $urls;		
+	}
 	
 }

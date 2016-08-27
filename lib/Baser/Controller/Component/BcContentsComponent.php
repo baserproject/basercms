@@ -252,7 +252,9 @@ class BcContentsComponent extends Component {
 		} else {
 			$mainSiteId = 0;
 		}
-		$controller->set('sites', ['' => '', 0 => 'Home'] + $controller->Content->Site->find('list', ['fields' => ['id', 'display_name']]));
+		$siteList = ['' => ''] + $controller->Content->Site->getSiteList();
+		$controller->set('sites', $siteList);
+		$controller->set('mainSiteDisplayName', $siteList[0]);
 		$data['Site'] = $site['Site'];
 		$controller->set('mainSiteId', $mainSiteId);
 		$controller->set('relatedContents', $Site->getRelatedContents($data['Content']['id']));

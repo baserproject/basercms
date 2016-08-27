@@ -21,6 +21,9 @@
 .contents-body h2{
     margin-bottom:30px;
 }
+.contents-body ul{
+    margin-bottom:30px;
+}
 #ContentsNavi {
     margin-top:60px;
     text-align: center;
@@ -145,7 +148,10 @@ nav .ul-level-3 a{
 .ul-level-3 {
     margin-left:40px;
 }
-
+#ContentUpdateInformation {
+    border-bottom:1px solid #efefef;
+    padding-bottom:30px;
+}
 #ContentUpdateInformation dl {
     float:right;
     clear:both;
@@ -168,4 +174,22 @@ nav .ul-level-3 a{
 }
 .widget {
     margin-bottom:30px;
+}
+.related-site-links li{
+    line-height:2em;
+    padding:10px;
+}
+.related-site-links li a {
+    color:#535A62;
+    font-weight:bold;
+}
+.related-site-links{
+    display: flex;
+    justify-content: center;
+    background-color: #EFEFEF;
+}
+.widget {
+    padding-top:30px;
+    padding-bottom: 30px;
+    border-bottom:1px solid #efefef;    
 }

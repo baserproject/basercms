@@ -959,7 +959,11 @@ class Content extends AppModel {
 				return Router::url($originUrl);
 			}
 		} else {
-			$url = preg_replace('/\/index$/', '/', $url);
+			$params = explode('?', $url);
+			$url = preg_replace('/\/index$/', '/', $params[0]);
+			if(!empty($params[1])) {
+				$url .= '?' . $params[1];
+			}
 			if($full) {
 				return fullUrl($url);
 			} else {
@@ -1376,6 +1380,33 @@ class Content extends AppModel {
 			return false;
 		}
 		return $order;
+	}
+
+/**
+ * 関連サイトの関連コンテンツを取得する
+ * 
+ * @param int $id
+ * @return array|false
+ */
+	public function getRelatedSiteContents($id) {
+		$conditions = [
+			'OR' => [
+				['Content.id' => $id],
+				['Content.main_site_content_id' => $id]
+			]
+		];
+		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
+		$contents = $this->find('all', [
+			'conditions' => $conditions,
+			'recursive' => 0
+		]);
+		$mainSite = $this->Site->getMain();
+		foreach($contents as $key => $content) {
+			if($content['Content']['site_id'] == 0) {
+				$contents[$key]['Site'] = $mainSite['Site'];
+			}
+		}
+		return $contents;
 	}
 	
 }

@@ -72,7 +72,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 			<tr>
 				<th><?php echo $this->BcForm->label('Content.name', 'URL') ?>&nbsp;<span class="required">*</span></th>
 				<td>
-					<smalL>[サイト]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], 'HOME') ?>　
+					<smalL>[サイト]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?>　
 					<?php if(!$this->request->data['Content']['site_root']): ?>
 					<small>[フォルダ]</small>
 					<?php echo $this->BcForm->input('Content.parent_id', array('type' => 'select', 'options' => $parentContents, 'escape' => false)) ?>　
@@ -226,7 +226,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					$current = false;
 					if(!empty($relatedContent['Content'])){
 						if(!$relatedContent['Content']['alias_id']) {
-							$editUrl = $this->BcContents->settings[$relatedContent['Content']['type']]['routes']['edit'];
+							$editUrl = $this->BcContents->settings[$relatedContent['Content']['type']]['url']['edit'];
 							if($relatedContent['Content']['entity_id']) {
 								$editUrl .= '/' . $relatedContent['Content']['entity_id'];
 							}

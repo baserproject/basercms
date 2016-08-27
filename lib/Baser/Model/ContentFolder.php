@@ -86,7 +86,7 @@ class ContentFolder extends AppModel {
 						'foreignKey' => 'entity_id'
 					)
 				)
-			), false
+			)
 		);
 		$contents = $this->Content->getPath($id, null, 0);
 		$contents = array_reverse($contents);

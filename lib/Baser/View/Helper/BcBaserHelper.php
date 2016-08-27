@@ -2481,5 +2481,24 @@ END_FLASH;
 			'modifiedDate' => $this->getContentModifiedDate()
 		]);
 	}
+
+/**
+ * 関連サイトのリンク一覧を取得
+ * 
+ * @param int $id コンテンツID
+ */
+	public function getRelatedSiteLinks($id = null) {
+		$links = $this->BcContents->getRelatedSiteLinks($id);
+		return $this->getElement('related_site_links', ['links' => $links]);
+	}
+
+/**
+ * 関連サイトのリンク一覧を表示
+ * 
+ * @param int $id コンテンツID
+ */
+	public function relatedSiteLinks($id = null) {
+		echo $this->getRelatedSiteLinks($id);
+	}
 	
 }

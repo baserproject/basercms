@@ -36,9 +36,10 @@
 			'startup')); ?>
 			<?php $this->BcBaser->scripts() ?>
 	</head>
-	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
+	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal front">
 		<p style="text-align:center;font-weight: bold;">スマートフォン用レイアウト</p>
 		<div id="Page" style="text-align: center">
+			<?php $this->BcBaser->relatedSiteLinks() ?>
 			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?></div>
 			<nav id="GlobalMenu" class="clearfix"><?php $this->BcBaser->globalMenu(3) ?></nav>
 			<div id="Wrap">

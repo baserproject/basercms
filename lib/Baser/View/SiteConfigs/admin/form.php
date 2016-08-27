@@ -180,6 +180,17 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 				</div>
 			</td>
 		</tr>
+<?php if($useSubSite): ?>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.main_site_display_name', 'メインサイト表示名称') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.main_site_display_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div class="helptext">サブサイトを利用する際に、メインサイトを特定する識別名称を設定します。</div>
+				<?php echo $this->BcForm->error('SiteConfig.main_site_display_name') ?>
+			</td>
+		</tr>
+<?php endif ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.maintenance', '公開状態') ?></th>
 			<td class="col-input">

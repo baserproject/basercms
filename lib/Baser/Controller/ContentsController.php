@@ -21,6 +21,7 @@ App::uses('BcContentsController', 'Controller');
  * @property Content $Content
  * @property BcAuthComponent $BcAuth
  * @property SiteConfig $SiteConfig
+ * @property Site $Site
  * @property User $User
  * @property BcContentsComponent $BcContents
  */
@@ -685,11 +686,7 @@ class ContentsController extends AppController {
  */
 	public function admin_ajax_contents_info() {
 		$this->autoLayout = false;
-		$sites = [['Site' => ['id' => 0, 'display_name' => 'HOME']]];
-		$subSites = $this->Site->find('all', ['conditions' => ['Site.status' => true]]);
-		if($subSites) {
-			$sites = array_merge($sites, $subSites);
-		}
+		$sites = $this->Site->getPublishedAll();
 		foreach($sites as $key => $site) {
 			$sites[$key]['published'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]);
 			$sites[$key]['unpublished'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]);

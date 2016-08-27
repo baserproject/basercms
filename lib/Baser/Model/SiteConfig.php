@@ -59,6 +59,11 @@ class SiteConfig extends AppModel {
 		'admin_ssl' => array(
 			'rule' => array('sslUrlExists'),
 			'message' => "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
+		),
+		'main_site_display_name' => array(
+			'rule' => array('notBlank'),
+			'message' => "メインサイト表示名を入力してください。",
+			'required' => false
 		)
 	);
 

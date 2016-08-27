@@ -61,27 +61,26 @@ class BcAuthConfigureComponent extends Component {
 			'username'			=> 'name',
 			'password'			=> 'password',
 			'serial'			=> '',
-			'loginAction'		=> ''
+			'loginAction'		=> '',
+			'userModel'			=> 'User',
+			'auth_prefix'		=> '',
+			'userScope'			=> '',
+			'sessionKey'		=> Configure::read('BcAuthPrefix.admin.sessionKey')
 			), $config);
-		extract($config);
-
-		if (empty($userModel)) {
-			$userModel = 'User';
-		}
-
+		
 		// ログインアクション
-		if (empty($loginAction)) {
+		if (!$config['loginAction']) {
 			if ($requestedPrefix) {
-				$loginAction = array('prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login');
+				$config['loginAction'] = array('prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login');
 			} else {
-				$loginAction = array('controller' => 'users', 'action' => 'login');
+				$config['loginAction'] = array('controller' => 'users', 'action' => 'login');
 			}
 		}
-		$BcAuth->loginAction = $loginAction;
+		$BcAuth->loginAction = $config['loginAction'];
 
 		// ログアウト時のリダイレクト先
-		if (!empty($logoutRedirect)) {
-			$BcAuth->logoutRedirect = $logoutRedirect;
+		if ($config['logoutRedirect']) {
+			$BcAuth->logoutRedirect = $config['logoutRedirect'];
 		}
 
 		// オートリダイレクトをOFF
@@ -106,25 +105,21 @@ class BcAuthConfigureComponent extends Component {
 		// フォームの認証設定
 		$BcAuth->authenticate = array(
 			'Form' => array(
-				'userModel' => $userModel,
+				'userModel' => $config['userModel'],
 				'fields' => array(
-					'username' => $username,
-					'password' => $password
+					'username' => $config['username'],
+					'password' => $config['password']
 				),
-				'serial' => $serial
+				'serial' => $config['serial']
 			)
 		);
 
 		// 認証プレフィックスによるスコープ設定
-		$UserModel = ClassRegistry::init($userModel);
-		if (isset($UserModel->belongsTo['UserGroup']) && !empty($config['auth_prefix']) && !isset($userScope)) {
+		$UserModel = ClassRegistry::init($config['userModel']);
+		if (isset($UserModel->belongsTo['UserGroup']) && $config['auth_prefix'] && !$config['userScope']) {
 			$BcAuth->authenticate['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%');
-		} elseif (isset($userScope)) {
-			$BcAuth->authenticate['Form']['scope'] = $userScope;
-		}
-
-		if(empty($sessionKey)) {
-			$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+		} elseif ($config['userScope']) {
+			$BcAuth->authenticate['Form']['scope'] = $config['userScope'];
 		}
 
 		// セッション識別
@@ -132,7 +127,7 @@ class BcAuthConfigureComponent extends Component {
 		// 静的プロパティの書き換えが外部よりできなかったのでメソッドを作って無理矢理対応
 		// 現在のバージョン（3.0.0 beta）では、認証情報を複数持てる仕様となっていない
 		// 上記仕様に対応させる為には、ここの処理変更だけでなく全体的な認証の仕組みを見直す必要あり
-		$BcAuth->setSessionKey('Auth.' . $sessionKey);
+		$BcAuth->setSessionKey('Auth.' . $config['sessionKey']);
 
 		// 記録された過去のリダイレクト先が対象のプレフィックス以外の場合はリセット
 		// 2016/06/09 ryuring
@@ -143,8 +138,8 @@ class BcAuthConfigureComponent extends Component {
 //		}
 
 		// ログイン後にリダイレクトするURL
-		$BcAuth->loginRedirect = $loginRedirect;
-
+		$BcAuth->loginRedirect = $config['loginRedirect'];
+		
 		if (!$BcAuth->user()) {
 
 			// クッキーがある場合にはクッキーで認証
@@ -161,15 +156,18 @@ class BcAuthConfigureComponent extends Component {
 				// 上記参考情報には、「クライアントPCの時刻を1年以上昔に設定」とあるが、そうしない場合も再現できた
 				// その原因までは追っていない
 				// ===================================================================================
-				
 				if (!empty($cookie) && $cookie != 'deleted') {					
 					if(is_array($cookie)) {
-						$requestData = $Controller->request->data[$userModel];
-						$Controller->request->data[$userModel] = $cookie;
+						if(!empty($Controller->request->data[$config['userModel']])) {
+							$requestData = $Controller->request->data[$config['userModel']];	
+						}
+						$Controller->request->data[$config['userModel']] = $cookie;
 						if ($BcAuth->login()) {
 							return true;
 						}
-						$Controller->request->data[$userModel] = $requestData;
+						if(!empty($requestData)) {
+							$Controller->request->data[$config['userModel']] = $requestData;	
+						}
 					}
 					$Controller->Cookie->write($cookieKey, null);
 				}

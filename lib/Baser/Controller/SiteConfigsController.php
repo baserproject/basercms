@@ -181,7 +181,8 @@ class SiteConfigsController extends AppController {
 		$this->set(compact(
 				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
-
+		$Site = ClassRegistry::init('Site');
+		$this->set('useSubSite', (bool) $Site->find('count', ['conditions' => ['Site.status' => true]]));
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
 		$this->help = 'site_configs_form';
