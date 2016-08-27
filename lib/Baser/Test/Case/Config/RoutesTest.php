@@ -30,6 +30,8 @@ class RoutesTest extends BaserTestCase {
 		'baser.Config.Routes.PageRoutes',
 		'baser.Default.Content',
 		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
 	);
 
 /**

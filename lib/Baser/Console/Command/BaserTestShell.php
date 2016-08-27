@@ -30,6 +30,15 @@ class BaserTestShell extends TestShell {
  * @throws Exception
  */
 	public function initialize() {
+		// CUSTOMIZE ADD 2016/08/28 ryuring
+		// >>>
+		$currentTheme = Configure::read('BcSite.theme');
+		$testTheme = Configure::read('BcApp.testTheme');
+		if($currentTheme != $testTheme) {
+			trigger_error('CLIでのユニットテストは、' . $testTheme . ' テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。', E_USER_ERROR);
+			exit();
+		}
+		// <<<
 		$this->_dispatcher = new BaserTestSuiteDispatcher();
 		$sucess = $this->_dispatcher->loadTestFramework();
 		if (!$sucess) {

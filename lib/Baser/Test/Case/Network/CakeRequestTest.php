@@ -23,6 +23,8 @@ class CakeRequestTest extends BaserTestCase {
 		'baser.Default.Page',
 		'baser.Default.Content',
 		'baser.Default.Site',
+		'baser.Default.User',
+		'baser.Default.SiteConfig',
 	);
 
 /**

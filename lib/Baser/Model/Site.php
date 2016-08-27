@@ -118,7 +118,16 @@ class Site extends AppModel {
 		$options += [
 			'fields' => []	
 		];
-		$siteConfigs = Configure::read('BcSite');
+		// =============================================================
+		// テストの際、Fixture のロード前に、設定 BcSite を、DBから読む為、
+		// テストデータが利用できないので、テストの際には、直接DBより取得させる
+		// =============================================================
+		if($this->useDbConfig == 'test') {
+			$SiteConfig = ClassRegistry::init('SiteConfig');
+			$siteConfigs = $SiteConfig->findExpanded();
+		} else {
+			$siteConfigs = Configure::read('BcSite');	
+		}
 		$site = ['Site' => [
 			'id' => 0,
 			'main_site_id' => null,
