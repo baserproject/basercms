@@ -26,11 +26,11 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-		return array(
-			'Helper.Form.beforeCreate' => array('callable' => 'formBeforeCreate'),
-			'Helper.Form.afterCreate' => array('callable' => 'formAfterCreate'),
-			'Helper.Form.afterSubmit' => array('callable' => 'formAfterSubmit')
-		);
+		return [
+			'Helper.Form.beforeCreate' => ['callable' => 'formBeforeCreate'],
+			'Helper.Form.afterCreate' => ['callable' => 'formAfterCreate'],
+			'Helper.Form.afterSubmit' => ['callable' => 'formAfterSubmit']
+		];
 	}
 
 /**
@@ -39,6 +39,9 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  * @param CakeEvent $event
  */
 	public function formBeforeCreate(CakeEvent $event) {
+		if(!BcUtil::isAdminSystem()) {
+			return;
+		}
 		$event->data['options']['type'] = 'file';
 	}
 
@@ -49,6 +52,9 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  * @return string
  */
 	public function formAfterCreate(CakeEvent $event) {
+		if(!BcUtil::isAdminSystem()) {
+			return;
+		}
 		$View = $event->subject();
 		if($event->data['id'] == 'FavoriteAdminEditForm') {
 			return;
@@ -69,6 +75,9 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  * @return string
  */
 	public function formAfterSubmit(CakeEvent $event) {
+		if(!BcUtil::isAdminSystem()) {
+			return;
+		}
 		$View = $event->subject();
 		$data = $View->request->data;
 		if(!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {

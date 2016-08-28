@@ -64,3 +64,10 @@ $config['BcContents']['items']['Mail'] = [
 		]
 	]	
 ];
+
+/**
+ * ショートコード
+ */
+$config['BcShortCode']['Mail'] = [
+	'Mail.getForm'	
+];

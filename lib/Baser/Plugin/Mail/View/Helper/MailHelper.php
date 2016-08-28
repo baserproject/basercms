@@ -245,4 +245,26 @@ class MailHelper extends AppHelper {
 		echo $this->getToken();
 	}
 
+/**
+ * メールフォームを取得する
+ * 
+ * @param $id
+ * @return mixed
+ */
+	public function getForm($id = null) {
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$conditions = [];
+		if($id) {
+			$conditions = [
+				'MailContent.id' => $id
+			];
+		}
+		$mailContent = $MailContent->findPublished('first', ['conditions' => $conditions]);
+		if(!$mailContent) {
+			return false;
+		}
+		$url = $mailContent['Content']['url'];
+		return $this->requestAction($url, ['return' => true]);
+	}
+	
 }

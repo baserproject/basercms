@@ -58,9 +58,14 @@ class BcCaptchaComponent extends Component {
  * 
  * @return void
  */
-	public function render() {
+	public function render($token = null) {
 		$kcaptcha = new KCAPTCHA();
-		$this->controller->Session->write('captcha', $kcaptcha->getKeyString());
+		$key = 'captcha';
+		if(!$token) {
+			$token = '0';
+		}
+		$key .= '.' . $token;
+		$this->controller->Session->write($key, $kcaptcha->getKeyString());
 	}
 
 /**
@@ -69,11 +74,16 @@ class BcCaptchaComponent extends Component {
  * @param	string	$value	フォームから送信された文字列
  * @return	boolean
  */
-	public function check($value) {
+	public function check($value, $token = null) {
 		include $this->vendorsPath . 'kcaptcha/kcaptcha_config.php';
 		$this->alphabet = $alphabet;
 		$this->convert = $convert;
-		$_value = $this->convert($this->controller->Session->read('captcha'));
+		$key = 'captcha';
+		if(!$token) {
+			$token = '0';
+		}
+		$key .= '.' . $token;
+		$_value = $this->convert($this->controller->Session->read($key));
 		if (!$_value) {
 			return false;
 		} else {

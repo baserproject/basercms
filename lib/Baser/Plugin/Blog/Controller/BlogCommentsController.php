@@ -341,7 +341,7 @@ class BlogCommentsController extends BlogAppController {
 			// 画像認証を行う
 			$captchaResult = true;
 			if ($this->blogContent['BlogContent']['auth_captcha']) {
-				$captchaResult = $this->BcCaptcha->check($this->request->data['BlogComment']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->request->data['BlogComment']['auth_captcha'], @$this->request->data['BlogComment']['captcha_id']);
 				if (!$captchaResult) {
 					$this->set('dbData', false);
 					return false;
@@ -382,8 +382,8 @@ class BlogCommentsController extends BlogAppController {
  * 
  * @return void
  */
-	public function captcha() {
-		$this->BcCaptcha->render();
+	public function captcha($token = null) {
+		$this->BcCaptcha->render($token);
 		exit();
 	}
 
@@ -392,8 +392,8 @@ class BlogCommentsController extends BlogAppController {
  * 
  * @return void
  */
-	public function smartphone_captcha() {
-		$this->BcCaptcha->render();
+	public function smartphone_captcha($token = null) {
+		$this->BcCaptcha->render($token);
 		exit();
 	}
 

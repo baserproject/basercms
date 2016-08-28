@@ -22,8 +22,10 @@
 
 <?php $this->BcBaser->element('admin/contents/form_alias') ?>
 
+<?php if(!$related): ?>
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('class' => 'button', 'div' => false)) ?>
 </div>
+<?php endif ?>
 
 <?php echo $this->BcForm->end() ?>

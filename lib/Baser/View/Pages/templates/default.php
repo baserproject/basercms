@@ -17,5 +17,5 @@ if($this->pageTitle && !$this->BcBaser->isHome()) {
 	echo '<h1>' . $this->pageTitle . '</h1>';
 }
 $this->BcPage->content();
-$this->BcBaser->contentUpdateInformation();
+$this->BcBaser->updateInfo();
 

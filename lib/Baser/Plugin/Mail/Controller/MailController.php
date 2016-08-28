@@ -144,7 +144,7 @@ class MailController extends MailAppController {
 				}
 			}
 			$this->Security->requireAuth('confirm', 'submit');
-			$this->Security->disabledFields = array_merge($this->Security->disabledFields, $disabledFields);
+			$this->Security->unlockedFields = array_merge($this->Security->unlockedFields, $disabledFields);
 
 			// SSL設定
 			if ($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
@@ -173,7 +173,7 @@ class MailController extends MailAppController {
  * @return void
  */
 	public function index($id = null) {
-		if (!$this->MailContent->isPublish(true, $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
 		}
@@ -244,7 +244,7 @@ class MailController extends MailAppController {
 			}
 		}
 		
-		if (!$this->MailContent->isPublish(true, $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
 		}
@@ -260,7 +260,7 @@ class MailController extends MailAppController {
 
 			// 画像認証を行う
 			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
-				$captchaResult = $this->BcCaptcha->check(@$this->request->data['MailMessage']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check(@$this->request->data['MailMessage']['auth_captcha'], @$this->request->data['MailMessage']['captcha_id']);
 				if (!$captchaResult) {
 					$this->MailMessage->invalidate('auth_captcha');
 				}
@@ -317,7 +317,7 @@ class MailController extends MailAppController {
  * @return void
  */
 	public function submit($id = null) {
-		if (!$this->MailContent->isPublish(true, $this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
+		if (!$this->MailContent->isAccepting($this->dbDatas['mailContent']['MailContent']['publish_begin'], $this->dbDatas['mailContent']['MailContent']['publish_end'])) {
 			$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'unpublish');
 			return;
 		}
@@ -332,7 +332,7 @@ class MailController extends MailAppController {
 		} else {
 			// 画像認証を行う
 			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
-				$captchaResult = $this->BcCaptcha->check($this->request->data['MailMessage']['auth_captcha']);
+				$captchaResult = $this->BcCaptcha->check($this->request->data['MailMessage']['auth_captcha'], @$this->request->data['MailMessage']['captcha_id']);
 				if (!$captchaResult) {
 					$this->redirect($this->request->params['Content']['url'] . '/index');
 				} else {
@@ -561,8 +561,8 @@ class MailController extends MailAppController {
  * 
  * @return void
  */
-	public function captcha() {
-		$this->BcCaptcha->render();
+	public function captcha($token = null) {
+		$this->BcCaptcha->render($token);
 		exit();
 	}
 
@@ -571,8 +571,8 @@ class MailController extends MailAppController {
  * 
  * @return void
  */
-	public function smartphone_captcha() {
-		$this->BcCaptcha->render();
+	public function smartphone_captcha($token = null) {
+		$this->BcCaptcha->render($token);
 		exit();
 	}
 

@@ -22,6 +22,9 @@
 <?php else: ?>
 	<?php echo $this->Mailform->create(null, array('url' => $this->request->params['Content']['url'] . '/submit')) ?>
 <?php endif; ?>
+
+<?php $this->Mailform->unlockField('MailMessage.mode') ?>
+
 <?php /* フォーム本体 */ ?>
 <?php echo $this->BcBaser->element('mail_input', array('blockStart' => 1)) ?>
 

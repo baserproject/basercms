@@ -54,6 +54,7 @@ $config['BcApp'] = array(
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks'	=> 'http://basercms.net/special_thanks/special_thanks/ajax_users'
 );
+
 /**
  * システム要件 
  */
@@ -61,6 +62,7 @@ $config['BcRequire'] = array(
 	'phpVersion' => "5.2.0",
 	'phpMemory' => "32"
 );
+
 /**
  * 環境設定 
  */
@@ -68,6 +70,7 @@ $config['BcEnv'] = array(
 	// テストDBプレフィックス
 	'testDbPrefix' => 'test_',
 );
+
 /**
  * 文字コード設定
  */
@@ -131,6 +134,7 @@ $config['BcAuthPrefix'] = array(
 	  'sessionKey'	=> 'User'
 	) */
 );
+
 /**
  * Eメール設定
  */
@@ -138,6 +142,7 @@ $config['BcEmail'] = array(
 	// 改行コード
 	'lfcode' => "\n"
 );
+
 /**
  * エージェント設定
  */
@@ -179,6 +184,10 @@ $config['BcAgent'] = array(
 		)
 	)
 );
+
+/**
+ * コンテンツ設定
+ */
 $config['BcContents'] = [
 	'items' => [
 		'Core' => [
@@ -299,5 +308,17 @@ $config['BcContents'] = [
 			]
 		]
 	]
+];
+
+/**
+ * ショートコード設定
+ */
+$config['BcShortCode']['Core'] = [
+	'BcBaser.getSitemap',
+	'BcBaser.getRelatedSiteLinks',
+	'BcBaser.getWidgetArea',
+	'BcBaser.getGoogleMaps',
+	'BcBaser.getSiteSearchForm',
+	'BcBaser.getUpdateInfo'
 ];
 

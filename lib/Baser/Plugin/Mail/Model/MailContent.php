@@ -261,4 +261,61 @@ class MailContent extends MailAppModel {
 		return false;
 	}
 
+/**
+ * フォームが公開中かどうかチェックする
+ *
+ * @param string $publishBegin 公開開始日時
+ * @param string $publishEnd 公開終了日時
+ * @return	bool
+ */
+	public function isAccepting($publishBegin, $publishEnd) {
+		if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+			if ($publishBegin > date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+		if ($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+			if ($publishEnd < date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+/**
+ * 公開済の conditions を取得
+ *
+ * @return array 公開条件（conditions 形式）
+ */
+	public function getConditionAllowAccepting() {
+		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
+			array($this->alias . '.publish_begin' => null),
+			array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
+		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
+			array($this->alias . '.publish_end' => null),
+			array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
+		return $conditions;
+	}
+
+/**
+ * 公開されたコンテンツを取得する
+ *
+ * @param Model $model
+ * @param string $type
+ * @param array $query
+ * @return array|null
+ */
+	public function findAccepting($type = 'first', $query = []) {
+		$getConditionAllowAccepting = $this->getConditionAllowAccepting();
+		if(!empty($query['conditions'])) {
+			$query['conditions'] = array_merge(
+				$getConditionAllowAccepting,
+				$query['conditions']
+			);
+		} else {
+			$query['conditions'] = $getConditionAllowAccepting;
+		}
+		return $this->find($type, $query);
+	}
+	
 }

@@ -93,12 +93,12 @@ class BcCaptchaComponentTest extends BaserTestCase {
 		$this->BcCaptcha->startup($this->Controller);
 
 		// 正常系
-		$this->Controller->Session->write('captcha', '3KbC');
+		$this->Controller->Session->write('captcha.0', '3KbC');
 		$result = $this->BcCaptcha->check('えがしら');
 		$this->assertTrue($result, 'キャプチャの認証が正しくありません');
 
 		// 異常系
-		$this->Controller->Session->write('captcha', '3KbC');
+		$this->Controller->Session->write('captcha.0', '3KbC');
 		$result = $this->BcCaptcha->check('あいうえお');
 		$this->assertFalse($result, 'キャプチャの認証が正しくありません');
 

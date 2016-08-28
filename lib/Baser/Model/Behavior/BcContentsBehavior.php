@@ -150,4 +150,25 @@ class BcContentsBehavior extends ModelBehavior {
 		}
 	}
 
+/**
+ * 公開されたコンテンツを取得する
+ * 
+ * @param Model $model
+ * @param string $type
+ * @param array $query
+ * @return array|null
+ */
+	public function findPublished(Model $model, $type = 'first', $query = []) {
+		$conditionAllowPublish = $model->Content->getConditionAllowPublish();
+		if(!empty($query['conditions'])) {
+			$query['conditions'] = array_merge(
+				$conditionAllowPublish,
+				$query['conditions']
+			);
+		} else {
+			$query['conditions'] = $conditionAllowPublish;
+		}
+		return $model->find($type, $query);
+	}
+	
 }

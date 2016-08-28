@@ -9,7 +9,7 @@
  * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
-$editLink = $this->BcContents->settings[$srcContent['type']]['routes']['edit'];
+$editLink = $this->BcContents->settings[$srcContent['type']]['url']['edit'];
 if($srcContent['entity_id']) {
     $editLink .= '/' . $srcContent['entity_id'];
 }

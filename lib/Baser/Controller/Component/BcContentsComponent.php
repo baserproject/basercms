@@ -118,11 +118,13 @@ class BcContentsComponent extends Component {
 			if(!empty($controller->request->params['path'])) {
 				$urlAry = $controller->request->params['path'];
 				$url = '/' . implode('/', $urlAry);
-				$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
-				if($data) {
-					$controller->request->params['Content'] = $data['Content'];
-					$controller->request->params['Site'] = $data['Site'];
-				}
+			} else {
+				$url = '/' . $controller->request->url;
+			}
+			$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
+			if($data) {
+				$controller->request->params['Content'] = $data['Content'];
+				$controller->request->params['Site'] = $data['Site'];
 			}
 		}
 		
@@ -208,11 +210,18 @@ class BcContentsComponent extends Component {
 			} else {
 				$controller->subMenuElements =  ['contents'];	
 			}
-			if ($this->useForm && $controller->request->action == $this->editAction && !empty($controller->request->data['Content'])) {
+			if ($this->useForm && in_array($controller->request->action, [$this->editAction, 'admin_edit_alias']) && !empty($controller->request->data['Content'])) {
 				// フォームをセット
 				$this->settingForm($controller, $controller->request->data['Content']['site_id'], $controller->request->data['Content']['id']);
+				// フォームを読み込む為のイベントを設定
+				// 内部で useForm を参照できない為、ここに記述。
+				// フォームの設定しかできないイベントになってしまっている。
+				// TODO 改善要
+				App::uses('BcContentsEventListener', 'Event');
+				CakeEventManager::instance()->attach(new BcContentsEventListener());
 			}
 		}
+
 	}
 
 /**
@@ -265,9 +274,6 @@ class BcContentsComponent extends Component {
 		}
 		$controller->set('related', $related);
 		$controller->request->data = $data;
-		// フォームを読み込む為のイベントを設定
-        App::uses('BcContentsEventListener', 'Event');
-		CakeEventManager::instance()->attach(new BcContentsEventListener());
 
 	}
 

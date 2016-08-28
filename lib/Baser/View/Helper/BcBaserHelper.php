@@ -1608,18 +1608,32 @@ EOD;
 	}
 
 /**
- * メニューを出力する
+ * コンテンツメニューを出力する
  * 
  * ログインしていない場合はキャッシュする
  * contents_menu エレメントで、HTMLカスタマイズ可能
  *
- * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
- *	- 0 : 仕様確認要
- *	- null : 仕様確認要
- * @param string $recursive 取得する階層
- * @return void ページ一覧
+ * @param mixed $id コンテンツID（初期値：null）
+ * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
+ * @param string $currentId 現在のページのコンテンツID（初期値：null）
+ * @return string コンテンツメニュー
  */
 	public function contentsMenu($id = null, $level = null, $currentId = null) {
+		echo $this->getContentsName($id, $level, $currentId);
+	}
+
+/**
+ * メニューを出力する
+ *
+ * ログインしていない場合はキャッシュする
+ * contents_menu エレメントで、HTMLカスタマイズ可能
+ *
+ * @param mixed $id コンテンツID（初期値：null）
+ * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
+ * @param string $currentId 現在のページのコンテンツID（初期値：null）
+ * @return string コンテンツメニュー
+ */
+	public function getContentsMenu($id = null, $level = null, $currentId = null) {
 		if(!$id) {
 			$Content = ClassRegistry::init('Content');
 			$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
@@ -1631,23 +1645,35 @@ EOD;
 		];
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$params = array_merge($params, [
-				'cache' => [
-					'time' => Configure::read('BcCache.duration'),
-					'key' => $id]]
+					'cache' => [
+						'time' => Configure::read('BcCache.duration'),
+						'key' => $id]]
 			);
 		}
-		$this->element('contents_menu', $params);
+		return $this->getElement('contents_menu', $params);
 	}
 
 /**
  * グローバルメニューを出力する
  *
- * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $level 取得する階層（初期値 : 1）
  * @param array $options オプション（初期値 : array()）
  *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
 	public function globalMenu($level = 1, $options = array()) {
+		echo $this->getGlobalMenu($level, $options);
+	}
+
+/**
+ * グローバルメニューを取得する
+ *
+ * @param array $level 取得する階層（初期値 : 1）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getGlobalMenu($level = 1, $options = array()) {
 		$Content = ClassRegistry::init('Content');
 		$siteId = 0;
 		if(!empty($this->request->params['Content']['site_id'])) {
@@ -1665,24 +1691,37 @@ EOD;
 		], $options);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$options = array_merge($options, [
-				'cache' => [
-					'time' => Configure::read('BcCache.duration'),
-					'key' => $id]]
+					'cache' => [
+						'time' => Configure::read('BcCache.duration'),
+						'key' => $id]]
 			);
 		}
-		$this->element('global_menu', $options);
+		return $this->getElement('global_menu', $options);
 	}
 
 /**
  * サイトマップを出力する
  *
  * ログインしていない場合はキャッシュする
- * contents_menu エレメントで、HTMLカスタマイズ可能
+ * 
+ * @param int $siteId サイトID
  */
 	public function sitemap($siteId = 0) {
+		echo $this->getSitemap($siteId);
+	}
+
+/**
+ * サイトマップを取得する
+ *
+ * ログインしていない場合はキャッシュする
+ * 
+ * @param int $siteId サイトID
+ * @return string サイトマップ
+ */
+	public function getSitemap($siteId = 0) {
 		$Site = ClassRegistry::init('Site');
 		$contentId = $Site->getRootContentId($siteId);
-		$this->contentsMenu($contentId);
+		return $this->getContentsMenu($contentId);
 	}
 
 /**
@@ -1875,6 +1914,20 @@ END_FLASH;
  * @return void
  */
 	public function widgetArea($no = null, $options = array()) {
+		echo $this->getWidgetArea($no, $options);
+	}
+
+/**
+ * ウィジェットエリアを取得する
+ *
+ * @param int $no ウィジェットエリアNO（初期値 : null）※ 省略した場合は、コンテンツごとに管理システムにて設定されているウィジェットエリアを出力する
+ * @param array $options オプション（初期値 : array()）
+ *	- `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
+ * todo loadHelpersが利用されていないのをなんとかする
+ *	- `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
+ * @return string
+ */
+	public function getWidgetArea($no = null, $options = array()) {
 		$options = array_merge(array(
 			'loadHelpers'	=> false,
 			'subDir'		=> true,
@@ -1886,8 +1939,9 @@ END_FLASH;
 			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if ($no) {
-			$this->element('widget_area', array('no' => $no, 'subDir' => $subDir), array('subDir' => $subDir));
+			return $this->getElement('widget_area', array('no' => $no, 'subDir' => $subDir), array('subDir' => $subDir));
 		}
+		return '';
 	}
 
 /**
@@ -2261,8 +2315,20 @@ END_FLASH;
  *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
-	public function googleMaps($data = array(), $options = array()) {
-		$this->element('google_maps', $data, $options);
+	public function googleMaps($data = [], $options = []) {
+		echo $this->getGoogleMaps($data, $options);
+	}
+
+/**
+ * Google Maps を取得する
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return void
+ */
+	public function getGoogleMaps($data = [], $options = []) {
+		return $this->getElement('google_maps', $data, $options);
 	}
 
 /**
@@ -2286,9 +2352,21 @@ END_FLASH;
  * @return void
  */
 	public function siteSearchForm($data = array(), $options = array()) {
-		$this->element('site_search_form', $data, $options);
+		echo $this->getSiteSearchForm($data, $options);
 	}
 
+/**
+ * サイト内検索フォームを取得
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getSiteSearchForm($data = array(), $options = array()) {
+		return $this->getElement('site_search_form', $data, $options);
+	}
+	
 /**
  * WEBサイト名を出力する
  *
@@ -2475,8 +2553,15 @@ END_FLASH;
 /**
  * 更新情報を出力する 
  */
-	public function contentUpdateInformation() {
-		$this->element('content_update_information', [
+	public function updateInfo() {
+		echo $this->getUpdateInfo();
+	}
+
+/**
+ * 更新情報を取得する
+ */
+	public function getUpdateInfo() {
+		return $this->getElement('update_info', [
 			'createdDate' => $this->getContentCreatedDate(),
 			'modifiedDate' => $this->getContentModifiedDate()
 		]);

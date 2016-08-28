@@ -1093,7 +1093,7 @@ class Content extends AppModel {
 /**
  * 公開状態を取得する
  *
- * @param array データリスト
+ * @param array $data コンテンツデータ
  * @return boolean 公開状態
  */
 	public function allowPublish($data) {

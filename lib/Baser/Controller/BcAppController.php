@@ -473,9 +473,27 @@ class BcAppController extends Controller {
 	public function beforeRender() {
 		parent::beforeRender();
 
-		// テーマのヘルパーをセット
-		if (BC_INSTALLED) {
-			$this->setThemeHelpers();
+		$favoriteBoxOpened = false;
+		if(BcUtil::isAdminSystem()) {
+			$this->__updateFirstAccess();
+			if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
+				$user = $this->BcAuth->user();
+				if ($user) {
+					if ($this->Session->check('Baser.favorite_box_opened')) {
+						$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
+					} else {
+						$favoriteBoxOpened = true;
+					}
+				}
+			}
+		} else {
+			// テーマのヘルパーをセット
+			if (BC_INSTALLED) {
+				$this->setThemeHelpers();
+				// ショートコード
+				App::uses('BcShortCodeEventListener', 'Event');
+				CakeEventManager::instance()->attach(new BcShortCodeEventListener());
+			}
 		}
 
 		// テンプレートの拡張子
@@ -492,22 +510,8 @@ class BcAppController extends Controller {
 			$this->response->disableCache();
 		}
 
-		$this->__updateFirstAccess();
-
-		$favoriteBoxOpened = false;
-		if (!empty($this->BcAuth) && !empty($this->request->url) && $this->request->url != 'update') {
-			$user = $this->BcAuth->user();
-			if ($user) {
-				if ($this->Session->check('Baser.favorite_box_opened')) {
-					$favoriteBoxOpened = $this->Session->read('Baser.favorite_box_opened');
-				} else {
-					$favoriteBoxOpened = true;
-				}
-			}
-		}
-
-		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->__loadDataToView();
+		$this->set('favoriteBoxOpened', $favoriteBoxOpened);
 		$this->set('isSSL', $this->request->is('ssl'));
 		$this->set('safeModeOn', ini_get('safe_mode'));
 		$this->set('baserVersion', $this->getBaserVersion());
