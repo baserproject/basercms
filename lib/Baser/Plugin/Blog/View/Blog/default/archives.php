@@ -13,8 +13,7 @@
 /**
  * [PUBLISH] ブログアーカイブ一覧
  */
-$this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
-$this->BcBaser->js('admin/vendors/jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->css(array('Blog.style'), array('inline' => false));
 //$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
 ?>
@@ -26,22 +25,22 @@ $(function(){
 </script>
 
 <!-- title -->
-<h2 class="contents-head">
+<h1 class="contents-head">
 <?php $this->Blog->title() ?>
-</h2>
+</h1>
 
 <!-- archives title -->
-<h3 class="contents-head">
+<h2 class="contents-head">
 <?php $this->BcBaser->contentsTitle() ?>
-</h3>
+</h2>
 
 <!-- list -->
 <?php if (!empty($posts)): ?>
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
-			<h4 class="contents-head">
+			<h3 class="contents-head">
 			<?php $this->Blog->postTitle($post) ?>
-			</h4>
+			</h3>
 					<?php $this->Blog->postContent($post, true, true) ?>
 			<div class="meta"><span>
 					<?php $this->Blog->category($post) ?>

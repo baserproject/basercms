@@ -16,7 +16,7 @@
 ?>
 
 
-<div id="ContentsNavi">
+<div class="contents-navi">
 	<?php $this->BcPage->prevLink() ?>
 	&nbsp;｜&nbsp;
 	<?php $this->BcPage->nextLink() ?>

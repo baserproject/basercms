@@ -15,11 +15,11 @@
  */
 ?>
 
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->BcBaser->contentsTitle() ?>
-</h2>
+</h1>
 
-<h3 class="contents-head">受付中止</h3>
+<h2 class="contents-head">受付中止</h2>
 
 <div class="section">
 	<p>現在、受付を中止しています。</p>

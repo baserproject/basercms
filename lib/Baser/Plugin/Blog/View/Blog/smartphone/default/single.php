@@ -13,23 +13,24 @@
 /**
  * [PUBLISH] ブログ詳細ページ
  */
+$this->BcBaser->css(array('Blog.style'), array('inline' => false));
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 
 
 <!-- blog title -->
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->Blog->title() ?>
-</h2>
+</h1>
 
 <!-- post detail -->
 <div class="post">
 
 	<!-- post title -->
-	<h3 class="contents-head">
+	<h2 class="contents-head">
 		<?php $this->BcBaser->contentsTitle() ?><br />
 		<small><?php $this->Blog->postDate($post) ?></small>
-	</h3>
+	</h2>
 
 	<?php $this->Blog->postContent($post) ?>
 
@@ -38,7 +39,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 </div>
 
 <!-- contents navi -->
-<div id="contentsNavi">
+<div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
 	<?php $this->Blog->nextLink($post) ?>

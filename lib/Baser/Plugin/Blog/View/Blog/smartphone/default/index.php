@@ -13,14 +13,15 @@
 /**
  * [SMARTPHONE] ブログトップ
  */
+$this->BcBaser->css(array('Blog.style'), array('inline' => false));
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
 
 <!-- title -->
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->Blog->title() ?>
-</h2>
+</h1>
 
 <!-- description -->
 <?php if ($this->Blog->descriptionExists()): ?>

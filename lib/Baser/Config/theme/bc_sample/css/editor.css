@@ -266,7 +266,6 @@ optgroup option{
 	border-bottom: 1px solid #999!important;
 	font-weight: bold;
 	padding:10px;
-	white-space: nowrap;
 }
 .contents-body td,
 .cke_editable td {

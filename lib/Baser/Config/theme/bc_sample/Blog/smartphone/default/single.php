@@ -27,7 +27,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 	</div>
 </article>
 
-<div id="ContentsNavi">
+<div class="contents-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
 	<?php $this->Blog->nextLink($post) ?>

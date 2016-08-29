@@ -13,8 +13,7 @@
 /**
  * [PUBLISH] ブログ詳細ページ
  */
-$this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
-$this->BcBaser->js('admin/vendors/jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->css(array('Blog.style'), array('inline' => false));
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 
@@ -26,14 +25,14 @@ $(function(){
 </script>
 
 <!-- blog title -->
-<h2 class="contents-head">
+<h1 class="contents-head">
 <?php $this->Blog->title() ?>
-</h2>
+</h1>
 
 <!-- post title -->
-<h3 class="contents-head">
+<h2 class="contents-head">
 <?php $this->BcBaser->contentsTitle() ?>
-</h3>
+</h2>
 
 <div class="eye-catch">
 <?php $this->Blog->eyeCatch($post) ?>
@@ -53,7 +52,7 @@ $(function(){
 </div>
 
 <!-- contents navi -->
-<div id="contentsNavi">
+<div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
 <?php $this->Blog->nextLink($post) ?>

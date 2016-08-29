@@ -1,8 +1,5 @@
 @charset "UTF-8";
 /**
- * CSSインポート
- * 全てのページで読み込むCSSを記述
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
@@ -12,6 +9,10 @@
  * @license			http://basercms.net/license/index.html
  */
 
+/**
+ * CSSインポート
+ * 全てのページで読み込むCSSを記述
+ */
 @import "admin/default.css";
 @import "admin/base.css";
 @import "admin/layout.css";

@@ -35,7 +35,7 @@ $(function(){
     </div>
 <?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
-<div id="contentsNavi">
+<div class="post-navi">
 	<?php $this->Blog->prevLink($post, "＜ 前の記事") ?>
 	&nbsp;  &nbsp;
 	<?php $this->BcBaser->link('一覧へ', '/'.$this->request->params['Content']['name'].'/index') ?>

@@ -17,11 +17,11 @@ $this->BcBaser->css(array('Mail.style', 'admin/jquery-ui/ui.all'), array('inline
 $this->BcBaser->js(array('admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i18n/ui.datepicker-ja'), false);
 ?>
 
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->BcBaser->contentsTitle() ?>
-</h2>
+</h1>
 
-<h3 class="contents-head">入力フォーム</h3>
+<h2 class="contents-head">入力フォーム</h2>
 
 <?php if ($this->Mail->descriptionExists()): ?>
 	<div class="section mail-description">

@@ -709,7 +709,7 @@ table.row-table-01{
     text-align: center;
 }
 
-#contentsNavi{
+.post-navi{
     text-align:center;
 }
 #ContentsBody .meta , .tag{
@@ -904,7 +904,7 @@ table.row-table-01 tr.odd td {
     margin-top:5px;
     margin-bottom: 5px;
 }
-#ContentsNavi {
+.contents-navi {
     text-align: center;
     margin-top:60px;
     margin-bottom:60px;

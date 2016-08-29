@@ -13,8 +13,7 @@
 /**
  * [PUBLISH] ブログトップ
  */
-$this->BcBaser->css(array('Blog.style', 'admin/colorbox/colorbox'), array('inline' => false));
-$this->BcBaser->js('admin/vendors/jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->css(array('Blog.style'), array('inline' => false));
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
@@ -25,9 +24,9 @@ $(function(){
 </script>
 
 <!-- title -->
-<h2 class="contents-head">
+<h1 class="contents-head">
 <?php $this->Blog->title() ?>
-</h2>
+</h1>
 
 <!-- description -->
 	<?php if ($this->Blog->descriptionExists()): ?>
@@ -40,9 +39,9 @@ $(function(){
 <?php if (!empty($posts)): ?>
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
-			<h4 class="contents-head">
+			<h3 class="contents-head">
 			<?php $this->Blog->postTitle($post) ?>
-			</h4>
+			</h3>
 					<?php $this->Blog->postContent($post, false, true) ?>
 			<div class="meta"><span>
 					<?php $this->Blog->category($post) ?>

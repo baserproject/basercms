@@ -20,15 +20,15 @@ if ($freezed) {
 }
 ?>
 
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->BcBaser->contentsTitle() ?>
-</h2>
+</h1>
 
 <?php if ($freezed): ?>
-	<h3 class="contents-head">入力内容の確認</h3>
+	<h2 class="contents-head">入力内容の確認</h2>
 	<p class="section">入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。</p>
 	<?php else: ?>
-	<h3 class="contents-head">入力フォーム</h3>
+	<h2 class="contents-head">入力フォーム</h2>
 <?php endif ?>
 
 <div class="section">

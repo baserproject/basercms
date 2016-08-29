@@ -19,11 +19,11 @@ if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']
 ?>
 
 
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->BcBaser->contentsTitle() ?>
-</h2>
+</h1>
 
-<h3 class="contents-head">メール送信完了</h3>
+<h2 class="contents-head">メール送信完了</h2>
 
 <div class="section">
 	<p>お問い合わせ頂きありがとうございました。<br />

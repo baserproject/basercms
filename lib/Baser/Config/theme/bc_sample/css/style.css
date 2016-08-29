@@ -151,7 +151,7 @@ nav .global-menu li a:hover{
 /* Contents Navi
 ----------------------------------------------- */
 
-#ContentsNavi {
+.contents-navi {
 	margin:60px 0;
 	text-align: center;
 }
@@ -252,10 +252,10 @@ nav .global-menu li a:hover{
 }
 
 
-/* ContentsNavi
+/* contents-navi
 ----------------------------------------------- */
 
-#ContentsNavi {
+.contents-navi {
 	text-align: center;
 	margin-bottom:60px;
 }

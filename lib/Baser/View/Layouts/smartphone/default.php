@@ -21,6 +21,7 @@
 		<?php $this->BcBaser->title() ?>
 		<?php $this->BcBaser->css(array(
 			'import',
+			'smartphone',
 			'admin/colorbox/colorbox-1.6.1')); ?>
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php $this->BcBaser->js(array(
@@ -37,7 +38,6 @@
 			<?php $this->BcBaser->scripts() ?>
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal front">
-		<p style="text-align:center;font-weight: bold;">スマートフォン用レイアウト</p>
 		<div id="Page" style="text-align: center">
 			<?php $this->BcBaser->relatedSiteLinks() ?>
 			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?></div>
@@ -48,7 +48,7 @@
 				<?php endif ?>
 				<div class="contents-body">
 					<?php $this->BcBaser->content() ?>
-					<?php $this->BcBaser->element('contents_navi') ?>
+					<?php $this->BcBaser->contentsNavi() ?>
 					<?php $this->BcBaser->widgetArea() ?>
 				</div>
 			</div>

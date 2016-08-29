@@ -1993,7 +1993,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testContentsNavi() {
 		$this->BcBaser->request = $this->_getRequest('/about');
-		$this->expectOutputRegex('/<div id=\"ContentsNavi\">/');
+		$this->expectOutputRegex('/<div id=\"contents-navi\">/');
 		$this->BcBaser->contentsNavi();
 	}
 

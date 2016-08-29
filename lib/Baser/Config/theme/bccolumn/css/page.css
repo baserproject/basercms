@@ -273,14 +273,12 @@ img.auth-captcha-image {
 
 /* baser system style
 -------------------- */
-	/* ContentsNavi */
-#contentsNavi,
-#ContentsNavi {
+	/* contents-navi */
+#contents-navi {
 	margin: 50px 0 20px;
 	text-align: center;
 }
-#contentsNavi a,
-#ContentsNavi a {
+#contents-navi a {
 	color: #333;
 }
 

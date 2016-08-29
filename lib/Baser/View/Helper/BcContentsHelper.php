@@ -16,7 +16,14 @@
  * @package Baser.View.Helper
  */
 class BcContentsHelper extends AppHelper {
-	
+
+/**
+ * Helper
+ *
+ * @var array
+ */
+	public $helpers = ['BcBaser'];
+
 /**
  * Constructor.
  *

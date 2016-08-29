@@ -40,7 +40,7 @@ $(function(){
     </div>
 <?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
-<div id="contentsNavi">
+<div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;  &nbsp;
 <?php $this->Blog->nextLink($post) ?>

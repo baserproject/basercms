@@ -16,7 +16,8 @@
 ?>
 
 
-<div id="ContentUpdateInformation" class="clearfix">
+<?php if(!$this->BcBaser->isHome()): ?>
+<div class="update-info clearfix">
 	<dl>
 <?php if($createdDate): ?>
 		<dt>作成日</dt>
@@ -28,3 +29,4 @@
 <?php endif ?>
 	</dl>
 </div>
+<?php endif ?>

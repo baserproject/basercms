@@ -151,10 +151,10 @@ address {
 }
 
 
-/* ContentsNavi
+/* contents-navi
 ----------------------------------------------- */
 
-#ContentsNavi {
+.contents-navi {
 	text-align: center;
 	margin-bottom:60px;
 }
@@ -405,7 +405,7 @@ address {
 .post{
 	border-bottom:1px solid #E7E7E7!important;
 }
-#ContentsNavi {
+.post-navi {
 	border-bottom:1px solid #E7E7E7;
 	padding-bottom:60px;
 }
