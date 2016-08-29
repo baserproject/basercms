@@ -20,11 +20,12 @@ if($posts){
 }
 
 function transformRSS($data) {
-	$blogHelper = new BlogHelper($this);
+	$view = new View();
+	$blogHelper = new BlogHelper($view);
 	return array(
 		'title' => $data['BlogPost']['name'],
-		'link' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $this->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no']),
-		'guid' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $this->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no']),
+		'link' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no']),
+		'guid' => Router::url('/' . Configure::read('BcRequest.agentAlias') . '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no']),
 		'category' => $data['BlogCategory']['title'],
 		'description' => $blogHelper->removeCtrlChars($data['BlogPost']['content']),
 		'pubDate' => $data['BlogPost']['posts_date']
