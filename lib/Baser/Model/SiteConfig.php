@@ -138,4 +138,44 @@ class SiteConfig extends AppModel {
 		return true;
 	}
 
+/**
+ * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
+ * 
+ * @param $listDisplayed
+ * @return bool
+ */
+	public function isChangedContentsSortLastModified($listDisplayed) {
+		$siteConfigs = $this->findExpanded();
+		$changed = false;
+		if(!empty($siteConfigs['contents_sort_last_modified'])) {
+			$lastModified = $siteConfigs['contents_sort_last_modified'];
+			list($lastModified, $sessionId) = explode('|', $lastModified);
+			if(session_id() != $sessionId) {
+				// 60秒はブラウザのロード時間を加味したバッファ
+				if($lastModified >= ($listDisplayed - 60)) {
+					$changed = true;
+				}
+			}
+		}
+		return $changed;
+	}
+
+/**
+ * コンテンツ並び順変更時間を更新する
+ */
+	public function updateContentsSortLastModified() {
+		$siteConfigs = $this->findExpanded();
+		$siteConfigs['contents_sort_last_modified'] = date('U') . '|' . session_id();
+		$this->saveKeyValue($siteConfigs);
+	}
+
+/**
+ * コンテンツ並び替え順変更時間をリセットする 
+ */
+	public function resetContentsSortLastModified() {
+		$siteConfigs = $this->findExpanded();
+		$siteConfigs['contents_sort_last_modified'] = '';
+		$this->saveKeyValue($siteConfigs);
+	}
+
 }

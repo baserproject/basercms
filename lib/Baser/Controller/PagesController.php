@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access	public
  */
-	public $uses = array('Page', 'PageCategory');
+	public $uses = array('Page', 'PageCategory', 'SiteConfig');
 
 /**
  * beforeFilter
@@ -91,6 +91,9 @@ class PagesController extends AppController {
  * @access public
  */
 	public function admin_index() {
+
+		$this->SiteConfig->resetContentsSortLastModified();
+
 		/* 画面情報設定 */
 		$default = array(
 			'named' => array('num' => $this->siteConfigs['admin_list_num'], 'sortmode' => 0, 'view_type' => 1, 'page_type' => 1),
@@ -872,6 +875,11 @@ class PagesController extends AppController {
  */
 	public function admin_ajax_update_sort() {
 		if ($this->request->data) {
+
+			if($this->SiteConfig->isChangedContentsSortLastModified($this->request->data('listDisplayed'))) {
+				$this->ajaxError(500, "コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。");
+			}
+
 			$this->setViewConditions('Page', array('action' => 'admin_index'));
 			$conditions = $this->_createAdminIndexConditions($this->request->data);
 			$this->Page->fileSave = false;
@@ -879,6 +887,7 @@ class PagesController extends AppController {
 			if ($this->Page->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], $conditions)) {
 				clearViewCache();
 				clearDataCache();
+				$this->SiteConfig->updateContentsSortLastModified();
 				echo true;
 			} else {
 				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
