@@ -14,7 +14,7 @@
  * コンテンツ一覧 テーブル行
  */
 $isSiteRelated = $this->BcContents->isSiteRelated($data);
-$isPublish = $this->BcContents->allowPublish($data);
+$isPublish = $this->BcContents->isAllowPublish($data, true);
 $isSiteRoot = $data['Content']['site_root'];
 $isAlias = (boolean) $data['Content']['alias_id'];
 if(!empty($this->BcContents->settings[$data['Content']['type']])) {
@@ -61,8 +61,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_manage.png', ['width' => 32, 'height' => 32, 'alt' => '管理', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['manage'], [$data['Content']['entity_id']]), ['title' => '管理', 'class' => 'btn-manage']) ?>
 		<?php endif ?>
 		<?php if(!$isSiteRoot && !$isSiteRelated): ?>
-		<?php //$this->BcBaser->link($this->BcBaser->getImg('admin/icon_unpublish.png', ['width' => 32, 'height' => 32, 'alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
-		<?php //$this->BcBaser->link($this->BcBaser->getImg('admin/icon_publish.png', ['width' => 32, 'height' => 32, 'alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '公開', 'class' => 'btn-publish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_unpublish.png', ['width' => 32, 'height' => 32, 'alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_publish.png', ['width' => 32, 'height' => 32, 'alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '公開', 'class' => 'btn-publish']) ?>
 		<?php endif ?>
 		<?php if(!$editDisabled && $type != 'ContentFolder' && !empty($this->BcContents->settings[$type]['routes']['copy'])): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_copy.png', ['width' => 32, 'height' => 32, 'alt' => 'コピー', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['copy'], [$data['Content']['entity_id']]), ['title' => 'コピー', 'class' => 'btn-copy']) ?>

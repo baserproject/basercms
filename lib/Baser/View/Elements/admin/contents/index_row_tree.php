@@ -26,7 +26,7 @@ if(!empty($this->BcContents->settings[$type]['icon'])) {
 if($data['Content']['alias_id']) {
 	$alias = true;
 }
-$status = $this->BcContents->isAllowPublish($data);
+$status = $this->BcContents->isAllowPublish($data, true);
 if(in_array($data['Content']['parent_id'], array(0,1))) {
 	$open = true;
 }

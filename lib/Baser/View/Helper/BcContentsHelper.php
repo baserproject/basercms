@@ -186,12 +186,13 @@ class BcContentsHelper extends AppHelper {
 /**
  * データが公開状態にあるか確認する
  *
- * @param $data
+ * @param array $data コンテンツデータ
+ * @param bool $self コンテンツ自身の公開状態かどうか 
  * @return mixed
  */
-	public function isAllowPublish($data) {
+	public function isAllowPublish($data, $self = false) {
 		$Content = ClassRegistry::init('Content');
-		return $Content->allowPublish($data);
+		return $Content->isAllowPublish($data, $self);
 	}
 
 /**
@@ -308,17 +309,6 @@ class BcContentsHelper extends AppHelper {
 	public function getParent($contentId) {
 		$Content = ClassRegistry::init('Content');
 		return $Content->getParentNode($contentId);
-	}
-
-/**
- * 公開状態を取得する
- *
- * @param array $dasta データリスト
- * @return boolean 公開状態
- */
-	public function allowPublish($data) {
-		$Content = ClassRegistry::init('Content');
-		return $Content->allowPublish($data);
 	}
 
 /**

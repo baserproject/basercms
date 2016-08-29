@@ -238,7 +238,6 @@ class BcContentsComponent extends Component {
 			$options['excludeId'] = $currentContentId;
 		}
 		$data = $controller->request->data;
-		$controller->set('isPublishByParents', $controller->Content->isPublishByParents($data['Content']['id']));
 		$templates = array_merge(
 			BcUtil::getTemplateList('Layouts', '', $this->_Controller->siteConfigs['theme']),
 			BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $this->_Controller->siteConfigs['theme'])

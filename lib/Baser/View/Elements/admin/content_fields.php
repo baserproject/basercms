@@ -114,30 +114,39 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 				</td>
 			</tr>
 			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('Content.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
+				<th class="col-head"><?php echo $this->BcForm->label('Content.self_status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 				<td class="col-input">
-					<?php if($isPublishByParents && !$this->request->data['Content']['site_root'] && !$disableEdit): ?>
-						<?php echo $this->BcForm->input('Content.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
+					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+						<?php echo $this->BcForm->input('Content.self_status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
 					<?php else: ?>
-						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.status'), $this->BcText->booleanDoList('公開')) ?>
-						<?php echo $this->BcForm->hidden('Content.status') ?>
+						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
+						<?php echo $this->BcForm->hidden('Content.self_status') ?>
 					<?php endif ?>
 					&nbsp;&nbsp;
-					<?php if($isPublishByParents && !$this->request->data['Content']['site_root'] && !$disableEdit): ?>
-						<?php echo $this->BcForm->dateTimePicker('Content.publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 						&nbsp;〜&nbsp;
-						<?php echo $this->BcForm->dateTimePicker('Content.publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
+						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
 					<?php else: ?>
-						<?php if($this->BcForm->value('Content.publish_begin') || $this->BcForm->value('Content.publish_end')): ?>
-							<?php echo $this->BcForm->value('Content.publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcForm->value('Content.publish_end') ?>
+						<?php if($this->BcForm->value('Content.self_publish_begin') || $this->BcForm->value('Content.self_publish_end')): ?>
+							<?php echo $this->BcForm->value('Content.self_publish_begin') ?>&nbsp;〜&nbsp;<?php echo $this->BcForm->value('Content.self_publish_end') ?>
 						<?php endif ?>
-						<?php echo $this->BcForm->hidden('Content.publish_begin') ?>
-						<?php echo $this->BcForm->hidden('Content.publish_end') ?>
+						<?php echo $this->BcForm->hidden('Content.self_publish_begin') ?>
+						<?php echo $this->BcForm->hidden('Content.self_publish_end') ?>
 					<?php endif ?>
 					<br />
-					<?php echo $this->BcForm->error('Content.status') ?>
-					<?php echo $this->BcForm->error('Content.publish_begin') ?>
-					<?php echo $this->BcForm->error('Content.publish_end') ?>
+					<?php echo $this->BcForm->error('Content.self_status') ?>
+					<?php echo $this->BcForm->error('Content.self_publish_begin') ?>
+					<?php echo $this->BcForm->error('Content.self_self_publish_end') ?>
+					<?php if($this->BcForm->value('Content.status') != $this->BcForm->value('Content.self_status')): ?>
+						<p>※ 親フォルダの設定を継承し非公開状態となっています</p>
+					<?php endif ?>
+					<?php if(($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) || 
+							($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
+						<p>※ 親フォルダの設定を継承し公開期間が設定されている状態となっています<br>
+							（<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_begin')) ?> 〜
+							<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_end')) ?>）</p>
+					<?php endif ?>
 				</td>
 			</tr>
 		</table>

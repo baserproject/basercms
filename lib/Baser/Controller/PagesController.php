@@ -267,8 +267,10 @@ class PagesController extends AppController {
 			}
 		}
 		
-		if($this->request->params['Site']['id'] != 0 && $this->request->params['Content']['alias_id'] == $this->request->params['Content']['main_site_content_id']) {
-			unset($path[0]);
+		if($this->request->params['Content']['alias_id']) {
+			if($this->request->params['Site']['id'] != 0 && $this->request->params['Content']['alias_id'] == $this->request->params['Content']['main_site_content_id']) {
+				unset($path[0]);
+			}
 		}
 
 		$url = '/' . implode('/', $path);

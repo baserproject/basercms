@@ -32,8 +32,8 @@
 		<?php echo $this->BcForm->input('Content.type', ['type' => 'select', 'options' => $contentTypes, 'empty' => '指定なし']) ?>　
 	</span>
 	<span>
-		<?php echo $this->BcForm->label('Content.status', '公開状態') ?>
-		<?php echo $this->BcForm->input('Content.status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => '指定なし']) ?>　
+		<?php echo $this->BcForm->label('Content.self_status', '公開状態') ?>
+		<?php echo $this->BcForm->input('Content.self_status', ['type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => '指定なし']) ?>　
 	</span>
 	<span>
 		<?php echo $this->BcForm->label('Content.author_id', '作成者') ?>

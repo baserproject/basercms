@@ -151,7 +151,7 @@ class ContentsController extends AppController {
 			'name' => '',
 			'folder_id' => '',
 			'author_id' => '',
-			'status' => '',
+			'self_status' => '',
 			'type' => ''
 		], $data['Content']);
 		
@@ -170,8 +170,8 @@ class ContentsController extends AppController {
 		if($data['Content']['author_id']) {
 			$conditions['Content.author_id'] = $data['Content']['author_id']; 
 		}
-		if($data['Content']['status'] !== '') {
-			$conditions['Content.status'] = $data['Content']['status'];
+		if($data['Content']['self_status'] !== '') {
+			$conditions['Content.self_status'] = $data['Content']['self_status'];
 		}
 		if($data['Content']['type']) {
 			$conditions['Content.type'] = $data['Content']['type'];
@@ -388,12 +388,12 @@ class ContentsController extends AppController {
 		$typeName = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type'] . '.title');
 		if(!$content['alias_id']) {
 			$result = $this->Content->softDeleteFromTree($id);
-			$message = $typeName . '「' . $content['title'] . '」を削除しました。';
+			$message = $typeName . '「' . $content['title'] . '」をゴミ箱に移動しました。';
 		} else {
 			$this->Content->softDelete(false);
 			$result = $this->Content->removeFromTree($id, true);
 			$this->Content->softDelete(true);
-			$message = $typeName . 'のエイリアス「' . $content['title'] . '」をゴミ箱に移動しました。';
+			$message = $typeName . 'のエイリアス「' . $content['title'] . '」を削除しました。';
 		}
 		if($result) {
 			$this->setMessage($message, false, true, $useFlashMessage);
@@ -483,20 +483,11 @@ class ContentsController extends AppController {
 		if(!$content) {
 			return false;
 		}
-		$path = $this->Content->getPath($id, ['status', 'publish_begin', 'publish_end'], -1);
-		unset($path[count($path)-1]);
-		if($path) {
-			foreach($path as $row) {
-				if(!$this->Content->allowPublish($row)) {
-					return false;
-				}
-			}
-		}
 		unset($content['Content']['lft']);
 		unset($content['Content']['rght']);
-		$content['Content']['publish_begin'] = '';
-		$content['Content']['publish_end'] = '';
-		$content['Content']['status'] = $status;
+		$content['Content']['self_publish_begin'] = '';
+		$content['Content']['self_publish_end'] = '';
+		$content['Content']['self_status'] = $status;
 		return (bool) $this->Content->save($content, false);
 	}
 	

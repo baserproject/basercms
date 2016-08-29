@@ -184,8 +184,14 @@ class Content extends AppModel {
 			if(!isset($this->data['Content']['name'])) {
 				$this->data['Content']['name'] = BcUtil::urlencode(mb_substr($this->data['Content']['title'], 0, 230, 'UTF-8'));
 			}
-			if(!isset($this->data['Content']['status'])) {
-				$this->data['Content']['status'] = false;
+			if(!isset($this->data['Content']['self_status'])) {
+				$this->data['Content']['self_status'] = false;
+			}
+			if(!isset($this->data['Content']['self_publish_begin'])) {
+				$this->data['Content']['self_publish_begin'] = null;
+			}
+			if(!isset($this->data['Content']['self_publish_end'])) {
+				$this->data['Content']['self_publish_end'] = null;
 			}
 			if(!isset($this->data['Content']['deleted'])) {
 				$this->data['Content']['deleted'] = false;
@@ -461,9 +467,9 @@ class Content extends AppModel {
 					$content['Content']['name'] = urldecode($data['Content']['name']);
 					$content['Content']['title'] = $data['Content']['title'];
 					$content['Content']['description'] = $data['Content']['description'];
-					$content['Content']['status'] = $data['Content']['status'];
-					$content['Content']['publish_begin'] = $data['Content']['publish_begin'];
-					$content['Content']['publish_end'] = $data['Content']['publish_end'];
+					$content['Content']['self_status'] = $data['Content']['self_status'];
+					$content['Content']['self_publish_begin'] = $data['Content']['self_publish_begin'];
+					$content['Content']['self_publish_end'] = $data['Content']['self_publish_end'];
 					$content['Content']['created_date'] = $data['Content']['created_date'];
 					$content['Content']['modified_date'] = $data['Content']['modified_date'];
 					$content['Content']['exclude_search'] = $data['Content']['exclude_search'];
@@ -575,7 +581,7 @@ class Content extends AppModel {
 		if($id == 1) {
 			$url = '/';
 		} else {
-			$parents = $this->getPath($id, ['name', 'status', 'publish_begin', 'publish_end'], -1);
+			$parents = $this->getPath($id, ['name'], -1);
 			unset($parents[0]);
 			$names = array();
 			foreach($parents as $parent) {
@@ -608,22 +614,26 @@ class Content extends AppModel {
 		if(!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
 			$isContentFolder = true;
 		}
-		$parents = $this->getPath($data['Content']['id'], ['name', 'status', 'publish_begin', 'publish_end'], -1);
+
 		$site = $this->Site->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
 
 		// URLを更新
 		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $isContentFolder);
 
-		// 親フォルダの公開状態に合わせて公開状態を更新
-		unset($parents[count($parents)-1]);
-		if($parents) {
-			foreach($parents as $parent) {
-				if(!$this->allowPublish($parent)) {
-					$data['Content']['status'] = $parent['Content']['status'];
-					$data['Content']['publish_begin'] = $parent['Content']['publish_begin'];
-					$data['Content']['publish_end'] = $parent['Content']['publish_end'];
-					break;
-				}
+		// 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
+		$data['Content']['status'] = $data['Content']['self_status'];
+		$data['Content']['publish_begin'] = $data['Content']['self_publish_begin'];
+		$data['Content']['publish_end'] = $data['Content']['self_publish_end'];
+		if($data['Content']['parent_id']) {
+			$parent = $this->find('first', [
+				'fields' => ['name', 'status', 'publish_begin', 'publish_end'], 
+				'conditions' => ['Content.id' => $data['Content']['parent_id']], 
+				'recursive' => -1
+			]);
+			if(!$parent['Content']['status'] || $parent['Content']['publish_begin'] || $parent['Content']['publish_begin']) {
+				$data['Content']['status'] = $parent['Content']['status'];
+				$data['Content']['publish_begin'] = $parent['Content']['publish_begin'];
+				$data['Content']['publish_end'] = $parent['Content']['publish_end'];
 			}
 		}
 
@@ -656,27 +666,6 @@ class Content extends AppModel {
 	}
 
 /**
- * 親ノードが公開状態になっているか確認する
- *
- * @param $id
- * @return bool
- */
-	public function isPublishByParents($id) {
-		$parents = $this->getPath($id, ['name', 'status', 'publish_begin', 'publish_end'], -1);
-		unset($parents[count($parents)-1]);
-		$isPublish = true;
-		if($parents) {
-			foreach($parents as $parent) {
-				if(!$this->allowPublish($parent)) {
-					$isPublish = false;
-					break;
-				}
-			}
-		}
-		return $isPublish;
-	}
-
-/**
  * ID を指定して公開状態かどうか判定する
  *
  * @param $id
@@ -697,7 +686,7 @@ class Content extends AppModel {
 		// 他のデータを更新する為一旦退避
 		$dataTmp = $this->data;
 		$idTmp = $this->id;
-		$children = $this->children($id);
+		$children = $this->children($id, false, null, 'Content.lft');
 		$result = true;
 		if($children) {
 			foreach($children as $child) {
@@ -827,9 +816,6 @@ class Content extends AppModel {
 			if(empty($content['Content']['alias_id'])) {
 				$content['Content']['parent_id'] = null;
 				$content['Content']['url'] = '';
-				$content['Content']['status'] = false;
-				$content['Content']['publish_begin'] = '';
-				$content['Content']['publish_end'] = '';
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
 				$this->save($content, array('validate' => false, 'callbacks' => false));
@@ -881,6 +867,7 @@ class Content extends AppModel {
 				$siteRootId = $this->field('id', array('Content.site_id' => $content['Content']['site_id'], 'site_root' => true));
 				$content['Content']['parent_id'] = $siteRootId;
 			}
+			unset($content['Content']['name']);
 			unset($content['Content']['lft']);
 			unset($content['Content']['rght']);
 			if($this->save($content, true)) {
@@ -1021,7 +1008,7 @@ class Content extends AppModel {
 						'plugin'	=> 'Core',
 						'type' 		=> 'ContentFolder',
 						'site_id' 	=> $targetSiteId,
-						'status' 	=> false
+						'self_status' 	=> false
 					]
 				];
 				$ContentFolder->create($data);
@@ -1062,9 +1049,9 @@ class Content extends AppModel {
 		} else {
 			$data['Content']['title'] .= 'のコピー';
 		}
-		$data['Content']['publish_begin'] = null;
-		$data['Content']['publish_end'] = null;
-		$data['Content']['status'] = false;
+		$data['Content']['self_publish_begin'] = null;
+		$data['Content']['self_publish_end'] = null;
+		$data['Content']['self_status'] = false;
 		$data['Content']['author_id'] = $newAuthorId;
 		$data['Content']['created_date'] = date('Y-m-d H:i:s');
 		$data['Content']['entity_id'] = $entityId;
@@ -1096,17 +1083,28 @@ class Content extends AppModel {
  * @param array $data コンテンツデータ
  * @return boolean 公開状態
  */
-	public function allowPublish($data) {
+	public function isAllowPublish($data, $self = false) {
 
 		if (isset($data['Content'])) {
 			$data = $data['Content'];
 		}
-
-		$allowPublish = (int) $data['status'];
+		
+		$fields = [
+			'status' => 'status',
+			'publish_begin' => 'publish_begin',
+			'publish_end' => 'publish_end'
+		];
+		if($self) {
+			foreach($fields as $key => $field) {
+				$fields[$key] = 'self_' . $field;
+			}
+		}
+		
+		$allowPublish = (int) $data[$fields['status']];
 
 		// 期限を設定している場合に条件に該当しない場合は強制的に非公開とする
-		if (($data['publish_begin'] != 0 && $data['publish_begin'] >= date('Y-m-d H:i:s')) ||
-			($data['publish_end'] != 0 && $data['publish_end'] <= date('Y-m-d H:i:s'))) {
+		if (($data[$fields['publish_begin']] != 0 && $data[$fields['publish_begin']] >= date('Y-m-d H:i:s')) ||
+			($data[$fields['publish_end']] != 0 && $data[$fields['publish_end']] <= date('Y-m-d H:i:s'))) {
 			$allowPublish = false;
 		}
 
@@ -1168,16 +1166,16 @@ class Content extends AppModel {
 /**
  * タイトル、URL、公開状態が更新されているか確認する
  *
- * @param $id コンテンツID
- * @param $newData 新しいコンテンツデータ
+ * @param int $id コンテンツID
+ * @param array $newData 新しいコンテンツデータ
  */
 	public function isChangedStatus($id, $newData)	{
 		$before = $this->find('first', ['conditions' => ['Content.id' => $id]]);
 		if(!$before) {
 			return true;
 		}
-		$beforeStatus = $this->isPublish($before['Content']['status'], $before['Content']['publish_begin'], $before['Content']['publish_end']);
-		$afterStatus = $this->isPublish($newData['Content']['status'], $newData['Content']['publish_begin'], $newData['Content']['publish_end']);
+		$beforeStatus = $this->isPublish($before['Content']['self_status'], $before['Content']['self_publish_begin'], $before['Content']['self_publish_end']);
+		$afterStatus = $this->isPublish($newData['Content']['self_status'], $newData['Content']['self_publish_begin'], $newData['Content']['self_publish_end']);
 		if ($beforeStatus != $afterStatus || $before['Content']['title'] != $newData['Content']['title'] || $before['Content']['url'] != $newData['Content']['url']) {
 			return true;
 		}
