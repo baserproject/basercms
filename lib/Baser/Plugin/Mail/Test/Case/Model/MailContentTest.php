@@ -194,8 +194,9 @@ class MailContentTest extends BaserTestCase {
 			'description' => 'hogeDescription',
 			],
 			'Content' => [
-				'name' => 'hogeName' . $exclude_search,
+				'name' => 'hogeName',
 				'title' => 'hogeTitle',
+				'self_status' => true,
 				'status' => true,
 				'exclude_search' => $exclude_search,
 				'parent_id' => 1,
