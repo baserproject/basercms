@@ -42,13 +42,10 @@ class ContentLinksController extends AppController {
 		if(!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		if ($this->ContentLink->save($this->request->data)) {
-			$data = array(
-				'contentId'	=> $this->Content->id,
-				'entityId'	=> $this->ContentLink->id
-			);
+		$data = $this->ContentLink->save($this->request->data);
+		if ($data) {
 			$this->setMessage("リンク「{$this->request->data['Content']['title']}」を追加しました。", false, true, false);
-			echo json_encode($data);
+			echo json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, '保存中にエラーが発生しました。');
 		}

@@ -87,8 +87,9 @@ class PagesController extends AppController {
 		if ($event !== false) {
 			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 		}
-		
-		if ($data = $this->Page->save($this->request->data)) {
+
+		$data = $this->Page->save($this->request->data);
+		if ($data) {
 
 			// EVENT Pages.afterAdd
 			$this->dispatchEvent('afterAdd', array(
@@ -97,11 +98,7 @@ class PagesController extends AppController {
 			
 			$message = '固定ページ「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->Page->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->Page->validationErrors);
 		}
@@ -388,14 +385,11 @@ class PagesController extends AppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$user = $this->BcAuth->user();
-		if ($this->Page->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
+		$data = $this->Page->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
+		if ($data) {
 			$message = '固定ページのコピー「' . $this->request->data['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->Page->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->Page->validationErrors);
 		}

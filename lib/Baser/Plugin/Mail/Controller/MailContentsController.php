@@ -83,15 +83,12 @@ class MailContentsController extends MailAppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$this->request->data['MailContent'] = $this->MailContent->getDefaultValue()['MailContent'];
-		if ($data = $this->MailContent->save($this->request->data)) {
+		$data = $this->MailContent->save($this->request->data);
+		if ($data) {
 			$this->MailMessage->createTable($data['MailContent']['id']);
 			$message = 'メールフォーム「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->MailContent->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->MailContent->validationErrors);
 		}
@@ -301,14 +298,11 @@ class MailContentsController extends MailAppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$user = $this->BcAuth->user();
-		if ($this->MailContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
+		$data = $this->MailContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
+		if ($data) {
 			$message = 'メールフォームのコピー「' . $this->request->data['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->MailContent->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->MailContent->validationErrors);
 		}

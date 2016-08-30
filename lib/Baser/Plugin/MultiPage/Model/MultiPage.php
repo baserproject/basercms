@@ -54,10 +54,12 @@ class MultiPage extends AppModel {
 		unset($data['MultiPage']['modified']);
 		unset($data['MultiPage']['created']);
 		$this->getDataSource()->begin();
-		$result = $this->save($data['MultiPage']);
-		if ($result && $this->Content->copy($data['Content']['id'], $this->id, $newTitle, $newAuthorId, $newSiteId)) {
-			$this->getDataSource()->commit();
-			return $result;
+		if ($this->save($data['MultiPage'])) {
+			$data = $this->Content->copy($data['Content']['id'], $this->id, $newTitle, $newAuthorId, $newSiteId);
+			if($data) {
+				$this->getDataSource()->commit();
+				return $data;
+			}
 		}
 		$this->getDataSource()->rollback();
 		return false;

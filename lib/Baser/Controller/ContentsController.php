@@ -253,7 +253,8 @@ class ContentsController extends AppController {
 		$user = $this->BcAuth->user();
 		$this->request->data['Content']['author_id'] = $user['id'];
 		$this->Content->create(false);
-		if($data = $this->Content->save($this->request->data)) {
+		$data = $this->Content->save($this->request->data);
+		if($data) {
 			if($alias) {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
 					'「' . $srcContent['title'] . '」のエイリアス「' . $this->request->data['Content']['title'] . '」を追加しました。';
@@ -261,11 +262,7 @@ class ContentsController extends AppController {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			}
 			$this->setMessage($message, false, true, false);
-			echo json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => null,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			echo json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, '保存中にエラーが発生しました。');
 		}
@@ -684,5 +681,11 @@ class ContentsController extends AppController {
 			$sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
 		}
 		$this->set('sites', $sites);
+	}
+	
+	public function admin_ajax_get_full_url($id) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return $this->Content->getUrlById($id, true);
 	}
 }

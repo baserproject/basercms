@@ -25,7 +25,7 @@
 	</span>
 	<span>
 		<?php echo $this->BcForm->label('Content.name', '名称') ?>
-		<?php echo $this->BcForm->input('Content.name', ['type' => 'text', 'size' => 40]) ?>
+		<?php echo $this->BcForm->input('Content.name', ['type' => 'text', 'size' => 20]) ?>
 	</span>
 	<span>
 		<?php echo $this->BcForm->label('Content.type', 'タイプ') ?>

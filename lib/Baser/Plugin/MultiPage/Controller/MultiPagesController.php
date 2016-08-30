@@ -48,11 +48,7 @@ class MultiPagesController extends AppController {
 		if ($data = $this->MultiPage->save($this->request->data)) {
 			$message = 'マルチページ「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->MultiPage->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, '保存中にエラーが発生しました。');
 		}
@@ -100,14 +96,10 @@ class MultiPagesController extends AppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$user = $this->BcAuth->user();
-		if ($this->MultiPage->copy($this->request->data['entityId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
+		if ($data = $this->MultiPage->copy($this->request->data['entityId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
 			$message = 'マルチページのコピー「' . $this->request->data['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->MultiPage->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, '保存中にエラーが発生しました。');
 		}

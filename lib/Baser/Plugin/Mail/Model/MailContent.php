@@ -150,6 +150,7 @@ class MailContent extends MailAppModel {
  * @return string
  */
 	public function getDefaultValue() {
+		$data['MailContent']['sender_name'] = '送信先名を入力してください';
 		$data['MailContent']['subject_user'] = 'お問い合わせ頂きありがとうございます';
 		$data['MailContent']['subject_admin'] = 'お問い合わせを頂きました';
 		$data['MailContent']['layout_template'] = 'default';
@@ -243,7 +244,7 @@ class MailContent extends MailAppModel {
 		}
 		$this->getDataSource()->begin();
 		if ($result = $this->save($data)) {
-			$result['MailContent']['id'] = $this->getInsertID();
+			$result['MailContent']['id'] = $this->id;
 			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
 			foreach ($mailFields as $mailField) {
 				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];

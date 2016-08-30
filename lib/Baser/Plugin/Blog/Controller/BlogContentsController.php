@@ -94,14 +94,11 @@ class BlogContentsController extends BlogAppController {
 		}
 		$this->request->data['BlogContent'] = $this->BlogContent->getDefaultValue()['BlogContent'];
 		$this->request->data = $this->BlogContent->deconstructEyeCatchSize($this->request->data);
-		if ($data = $this->BlogContent->save($this->request->data)) {
+		$data = $this->BlogContent->save($this->request->data);
+		if ($data) {
 			$message = 'ブログ「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->BlogContent->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->BlogContent->validationErrors);
 		}
@@ -267,14 +264,11 @@ class BlogContentsController extends BlogAppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$user = $this->BcAuth->user();
-		if ($this->BlogContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId'])) {
+		$data = $this->BlogContent->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
+		if ($data) {
 			$message = 'ブログのコピー「' . $this->request->data['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
-			return json_encode(array(
-				'contentId' => $this->Content->id,
-				'entityId' => $this->BlogContent->id,
-				'fullUrl' => $this->Content->getUrlById($this->Content->id, true)
-			));
+			return json_encode($data['Content']);
 		} else {
 			$this->ajaxError(500, $this->BlogContent->validationErrors);
 		}
