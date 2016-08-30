@@ -34,7 +34,7 @@ class ContentsSchema extends CakeSchema {
 		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'self_status' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'self_status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'self_publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'self_publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => null),
