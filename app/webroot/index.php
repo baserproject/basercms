@@ -34,6 +34,11 @@ if (!defined('DS')) {
 	define('DS', DIRECTORY_SEPARATOR);
 }
 
+// CUSTOMIZE ADD 2016/08/30 katokaisya
+// >>>
+$fileName = str_replace('/', DS, $fileName);
+// <<<
+
 /**
  * These defines should only be edited if you have CakePHP installed in
  * a directory layout other than the way it is distributed.
