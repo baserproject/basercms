@@ -1619,7 +1619,7 @@ EOD;
  * @return string コンテンツメニュー
  */
 	public function contentsMenu($id = null, $level = null, $currentId = null) {
-		echo $this->getContentsName($id, $level, $currentId);
+		echo $this->getContentsMenu($id, $level, $currentId);
 	}
 
 /**
