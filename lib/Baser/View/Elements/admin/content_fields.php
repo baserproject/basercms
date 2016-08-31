@@ -267,8 +267,8 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_check.png', array('alt' => '確認')), $relatedContent['Content']['url'], array('title' => '確認', 'target' => '_blank')) ?>
 							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_edit.png', array('alt' => '編集')), $editUrl, array('title' => '編集')) ?>
 						<?php elseif($currentSiteId == $mainSiteId && $this->BcForm->value('Content.type') != 'ContentFolder'): ?>
-							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_alias.png', array('alt' => 'エイリアス作成')) . '<span class="icon-add-layerd"></span>', '', array('class' => 'create-alias', 'title' => 'エイリアス作成', 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id'])) ?>
-							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_copy.png', array('alt' => 'コピー作成')) . '<span class="icon-add-layerd"></span>', '', array('class' => 'create-copy', 'title' => 'コピー作成', 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id'])) ?>
+							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_alias.png', array('alt' => 'エイリアス作成')) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', array('class' => 'create-alias', 'title' => 'エイリアス作成', 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id'])) ?>
+							<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icon_copy.png', array('alt' => 'コピー作成')) . '<span class="icon-add-layerd"></span>', 'javascript:void(0)', array('class' => 'create-copy', 'title' => 'コピー作成', 'target' => '_blank', 'data-site-id' => $relatedContent['Site']['id'])) ?>
 						<?php endif ?>
 					<?php endif ?>
 					<?php echo $this->BcForm->input('Site.display_name' . $relatedContent['Site']['id'], array('type' => 'hidden', 'value' => $relatedContent['Site']['display_name'])) ?>

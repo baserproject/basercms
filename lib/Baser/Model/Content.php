@@ -1008,7 +1008,7 @@ class Content extends AppModel {
 						'plugin'	=> 'Core',
 						'type' 		=> 'ContentFolder',
 						'site_id' 	=> $targetSiteId,
-						'self_status' 	=> false
+						'self_status' 	=> true
 					]
 				];
 				$ContentFolder->create($data);

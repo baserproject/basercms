@@ -257,7 +257,7 @@ class Site extends AppModel {
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'parent_id'	=> 1,
 				'title'		=> $this->data['Site']['title'],
-				'status'	=> $this->data['Site']['status'],
+				'self_status'	=> $this->data['Site']['status'],
 				'author_id' => $user['id'],
 				'site_root'	=> true,
 				'layout_template' => 'default'
@@ -266,7 +266,7 @@ class Site extends AppModel {
 			$ContentFolder->saveSiteRoot($this->id, [
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'title'		=> $this->data['Site']['title'],
-				'status'	=> $this->data['Site']['status'],
+				'self_status'	=> $this->data['Site']['status'],
 		  ]);
 		}
 		if(!empty($this->data['Site']['main'])) {
