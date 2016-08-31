@@ -42,8 +42,10 @@ class PagesController extends AppController {
  * コンポーネント
  *
  * @var array
+ * @deprecated useViewCache 5.0.0 since 4.0.0
+ * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true]);
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]);
 
 /**
  * モデル
@@ -286,22 +288,6 @@ class PagesController extends AppController {
 		}
 		if (!empty($path[$count - 1])) {
 			$titleForLayout = Inflector::humanize($path[$count - 1]);
-		}
-
-		$agentAlias = Configure::read('BcRequest.agentAlias');
-		if ($agentAlias) {
-			$checkUrl = '/' . $agentAlias . $url;
-		} else {
-			$checkUrl = $url;
-		}
-		
-		// キャッシュ設定
-		// TODO 手法検討要
-		// Consoleから requestAction で呼出された場合、getCacheTimeがうまくいかない
-		// Consoleの場合は実行しない
-		if (!isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && !isConsole()) {
-			$this->helpers[] = 'BcCache';
-			$this->cacheAction = $this->Page->getCacheTime($checkUrl);
 		}
 
 		$this->subMenuElements = array('default');

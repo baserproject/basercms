@@ -453,25 +453,6 @@ class PageTest extends BaserTestCase {
 	}
 
 /**
- * キャッシュ時間を取得する
- * 
- * @param string $url
- * @param array $expected 期待値
- * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider getCacheTimeDataProvider
- */
-	public function testGetCacheTime($url, $expected, $message = null) {
-		$result = $this->Page->getCacheTime($url);
-		$this->assertEquals($expected, $result, $message);
-	}
-
-	public function getCacheTimeDataProvider() {
-		return array(
-			array('/index', '+5 min', 'キャッシュ時間を取得できません'),
-		);
-	}
-
-/**
  * ページファイルを登録する
  * ※ 再帰処理
  *

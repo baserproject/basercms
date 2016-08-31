@@ -58,13 +58,20 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
  * 名前付きパラメータを追加 
  */
 	Router::connectNamed(array('sortmode', 'num', 'page', 'sort', 'direction'));
-
+	
+/**
+ * プラグイン
+ * 
+ * コンテンツ管理ルーティングよりも優先させる為に先に記述
+ */
+	Router::connect("/:plugin/:controller/:action/*", [], $pluginMatch);
+	
 /**
  * コンテンツ管理ルーティング
  */
 	if(!BcUtil::isAdminSystem()) {
 		App::uses('BcContentsRoute', 'Routing/Route');
-		Router::connect('*', [], array('routeClass' => 'BcContentsRoute'));
+		Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
 	}
 	
 /**

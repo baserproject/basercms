@@ -1406,5 +1406,32 @@ class Content extends AppModel {
 		}
 		return $contents;
 	}
+
+/**
+ * キャッシュ時間を取得する
+ *
+ * @param mixed $id | $data
+ * @return mixed int or false
+ */
+	public function getCacheTime($data) {
+		if(!is_array($data)) {
+			$data = $this->find('first', array('conditions' => array('Content.id' => $data), 'recursive' => 0));
+		}
+		if(isset($data['Content'])) {
+			$data = $data['Content'];
+		}
+		if (!$data) {
+			return false;
+		}
+		if ($data['status'] && $data['publish_end'] && $data['publish_end'] != '0000-00-00 00:00:00') {
+			return strtotime($data['publish_end']) - time();
+		} else {
+			// #10680 Modify 2016/01/22 gondoh
+			// 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
+			$duration = Configure::read('BcCache.viewDuration');
+			if (empty($duration)) $duration = Configure::read('BcCache.duration');
+			return $duration;
+		}
+	}
 	
 }

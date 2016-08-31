@@ -36,6 +36,15 @@ class BcContentsComponent extends Component {
  	public $useForm = false;
 
 /**
+ * ビューキャッシュを利用するかどうか
+ * 
+ * @var bool
+ * @deprecated 5.0.0 since 4.0.0
+ * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+ */
+	public $useViewCache = false;
+
+/**
  * コンテンツ編集用のアクション名
  * 判定に利用
  * settings で指定する
@@ -135,6 +144,13 @@ class BcContentsComponent extends Component {
 				$controller->request->params['Content'] = $controller->request->data['Content'];
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
+			}
+		} else {
+			// @deprecated 5.0.0 since 4.0.0
+			//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+			if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole()) {
+				$controller->helpers[] = 'BcCache';
+				$controller->cacheAction = $controller->Content->getCacheTime($controller->request->params['Content']);
 			}
 		}
 		

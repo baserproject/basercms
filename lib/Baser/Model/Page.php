@@ -405,33 +405,6 @@ class Page extends AppModel {
 	}
 
 /**
- * キャッシュ時間を取得する
- * 
- * @param string $url
- * @return mixed int or false
- */
-	public function getCacheTime($url) {
-		if (preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-
-		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
-		$page = $this->find('first', array('conditions' => array('Content.url' => $url), 'recursive' => 0));
-		if (!$page) {
-			return false;
-		}
-		if ($page['Content']['status'] && $page['Content']['publish_end'] && $page['Content']['publish_end'] != '0000-00-00 00:00:00') {
-			return strtotime($page['Content']['publish_end']) - time();
-		} else {
-			// #10680 Modify 2016/01/22 gondoh
-			// 3.0.10 で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
-			$duration = Configure::read('BcCache.viewDuration');
-			if (empty($duration)) $duration = Configure::read('BcCache.duration');
-			return $duration;
-		}
-	}
-
-/**
  * ページファイルを登録する
  * ※ 再帰処理
  *

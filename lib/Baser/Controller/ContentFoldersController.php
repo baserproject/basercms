@@ -23,8 +23,10 @@ class ContentFoldersController extends AppController {
 /**
  * コンポーネント
  * @var array
+ * @deprecated useViewCache 5.0.0 since 4.0.0
+ * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
  */
-	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true));
+	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true, 'useViewCache' => true));
 
 /**
  * モデル
@@ -71,6 +73,7 @@ class ContentFoldersController extends AppController {
 			$this->request->data = $this->ContentFolder->read(null, $entityId);
 		} else {
 			if ($this->ContentFolder->save($this->request->data)) {
+				clearViewCache();
 				$this->setMessage("フォルダ「{$this->request->data['Content']['title']}」を更新しました。", false, true);
 				$this->redirect(array(
 					'plugin' => '',

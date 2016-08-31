@@ -46,14 +46,14 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $helpers = array('BcText', 'BcTime', 'BcFreeze', 'BcArray', 'Paginator', 'Blog.Blog', 'Cache');
+	public $helpers = array('BcText', 'BcTime', 'BcFreeze', 'BcArray', 'Paginator', 'Blog.Blog');
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents' => ['type' => 'Blog.BlogContent']];
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents' => ['type' => 'Blog.BlogContent', 'useViewCache' => true]];
 
 /**
  * ぱんくずナビ
