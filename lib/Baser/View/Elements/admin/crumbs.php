@@ -31,7 +31,7 @@ if (!empty($crumbs)) {
 				$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 			}
 		} else {
-			$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
+			$this->BcBaser->addCrumb(strip_tags($crumb['name']), $crumb['url']);
 		}
 	}
 }

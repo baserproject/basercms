@@ -47,10 +47,10 @@ if(in_array($data['Content']['parent_id'], array(0,1))) {
 	"contentType":"<?php echo $type ?>",
 	"contentAliasId":"<?php echo $data['Content']['alias_id'] ?>",
 	"contentPlugin":"<?php echo $data['Content']['plugin'] ?>",
-	"contentTitle":"<?php echo $data['Content']['title'] ?>",
+	"contentTitle":"<?php echo strip_tags($data['Content']['title']) ?>",
 	"contentSiteRoot":"<?php echo $data['Content']['site_root'] ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
-	<span><?php echo $data['Content']['title'] ?></span>
+	<span><?php echo strip_tags($data['Content']['title']) ?></span>
 	<?php if(!empty($data['children'])): ?>
 		<?php $this->BcBaser->element('admin/contents/index_list_tree', array('datas' => $data['children'])) ?>
 	<?php endif ?>
