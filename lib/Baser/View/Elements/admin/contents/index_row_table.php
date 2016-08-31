@@ -51,7 +51,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 
 <tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
 	<td class="row-tools" style="width:20%">
-		<?php if ($this->BcBaser->isAdminUser()): ?>
+		<?php if ($this->BcBaser->isAdminUser() && empty($data['Content']['site_root'])): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Content']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id']]) ?>
 		<?php endif ?>
 		<?php if($isPublish): ?>
