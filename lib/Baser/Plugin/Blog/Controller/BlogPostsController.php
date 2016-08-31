@@ -151,7 +151,7 @@ class BlogPostsController extends BlogAppController {
 			return;
 		}
 
-		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 記事一覧';
+		$this->pageTitle = '[' . strip_tags($this->request->params['Content']['title']) . '] 記事一覧';
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
 	}
