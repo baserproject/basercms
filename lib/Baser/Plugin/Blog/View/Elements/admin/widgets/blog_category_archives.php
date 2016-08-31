@@ -21,14 +21,14 @@ $description = 'ブログのカテゴリー一覧を表示します。';
 $(function(){
 	var key = "<?php echo $key ?>";
 	$("#"+key+"ByYear").click(function(){
-		if($("#"+key+"ByYear").attr('checked') == 'checked') {
+		if($("#"+key+"ByYear").prop('checked')) {
 			$("#"+key+"Depth").val(1);
 			$("#Span"+key+"Depth").slideUp(200);
 		} else {
 			$("#Span"+key+"Depth").slideDown(200);
 		}
 	});
-	if($("#"+key+"ByYear").attr('checked') == 'checked') {
+	if($("#"+key+"ByYear").prop('checked')) {
 		$("#"+key+"Depth").val(1);
 		$("#Span"+key+"Depth").hide();
 	}

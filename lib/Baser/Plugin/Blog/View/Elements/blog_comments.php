@@ -51,7 +51,7 @@ if (Configure::read('BcRequest.agent')) {
 				data: $("#BlogCommentAddForm").serialize(),
 				dataType: 'html',
 				beforeSend: function() {
-					$("#BlogCommentAddButton").attr('disabled', 'disabled');
+					$("#BlogCommentAddButton").prop('disabled', true);
 					$("#ResultMessage").slideUp();
 				},
 				success: function(result) {

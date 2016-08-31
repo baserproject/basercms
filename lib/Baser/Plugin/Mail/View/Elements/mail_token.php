@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('input[type="submit"]').attr('disabled', 'disabled');
+	$('input[type="submit"]').prop('disabled', true);
 });
 <?php if($this->request->is('ajax')): ?>
 $(document).ready(function(){

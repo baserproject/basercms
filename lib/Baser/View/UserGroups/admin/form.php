@@ -23,7 +23,7 @@ foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 <script type="text/javascript">
 $(window).load(function() {
 <?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
-	$("#UserGroupAuthPrefixAdmin").attr('disabled', 'disabled');
+	$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
 <?php endif ?>
 	$("#UserGroupAdminEditForm").submit(function(){
 		$("#UserGroupAuthPrefixAdmin").removeAttr('disabled');

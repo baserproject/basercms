@@ -1516,12 +1516,12 @@ $(document).ready(function() {
     aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
     for(key in aryValue){
         var value = aryValue[key];
-        $("#"+camelize("{$id}_"+value)).attr('checked',true);
+        $("#"+camelize("{$id}_"+value)).prop('checked',true);
     }
     $("#{$_id} input[type=checkbox]").change(function(){
         var aryValue = [];
         $("#{$_id} input[type=checkbox]").each(function(key,value){
-            if($(this).attr('checked')){
+            if($(this).prop('checked')){
                 aryValue.push("'"+$(this).val()+"'");
             }
         });

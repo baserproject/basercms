@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
 $(document).ready( function() {
-	if ($('#btnnext').attr('disabled')) {
+	if ($('#btnnext').prop('disabled')) {
 		$('#btnnext').hide();
 	}
 	initForm();
