@@ -64,6 +64,9 @@ class BcCacheBehavior extends ModelBehavior {
 
 		// キャッシュキー
 		$tableName = $model->tablePrefix . $model->table;
+		if(empty($query['recursive'])) {
+			$query['recursive'] = $model->recursive;
+		}
 		$cachekey = $tableName . '_' . $type . '_' . $expire . '_' . md5(serialize($query));
 
 		// 変数キャッシュの場合
