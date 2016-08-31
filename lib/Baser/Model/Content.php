@@ -621,9 +621,15 @@ class Content extends AppModel {
 		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $isContentFolder);
 
 		// 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
-		$data['Content']['status'] = $data['Content']['self_status'];
-		$data['Content']['publish_begin'] = $data['Content']['self_publish_begin'];
-		$data['Content']['publish_end'] = $data['Content']['self_publish_end'];
+		if(isset($data['Content']['self_status'])) {
+			$data['Content']['status'] = $data['Content']['self_status'];	
+		}
+		if(isset($data['Content']['self_publish_begin'])) {
+			$data['Content']['publish_begin'] = $data['Content']['self_publish_begin'];	
+		}
+		if(isset($data['Content']['self_publish_end'])) {
+			$data['Content']['publish_end'] = $data['Content']['self_publish_end'];
+		}
 		if($data['Content']['parent_id']) {
 			$parent = $this->find('first', [
 				'fields' => ['name', 'status', 'publish_begin', 'publish_end'], 
