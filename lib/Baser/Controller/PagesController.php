@@ -305,7 +305,8 @@ class PagesController extends AppController {
 		$previewCreated = false;
 		if($this->request->data) {
 			if($this->BcContents->preview == 'default') {
-				$this->set('previewTemplate', TMP . 'pages_preview_' . $this->createPreviewTemplate($this->request->data) . $this->ext);
+				$uuid = $this->createPreviewTemplate($this->request->data);
+				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
 		}
