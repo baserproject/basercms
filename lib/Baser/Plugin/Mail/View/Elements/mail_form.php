@@ -56,7 +56,8 @@ $(function(){
 		</div>
 	<?php else: ?>
 		<?php echo $this->Mailform->hidden('MailMessage.auth_captcha') ?>
-	<?php endif ?> 
+		<?php echo $this->Mailform->hidden('MailMessage.captcha_id') ?>
+	<?php endif ?>
 <?php endif ?>
 
 <?php /* 送信ボタン */ ?>
