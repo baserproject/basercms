@@ -210,11 +210,20 @@ class ContentsController extends AppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 		$this->autoRender = false;
+
+		// EVENT Contents.beforeTrashReturn
+		$this->dispatchEvent('beforeTrashReturn', [
+			'data' => $this->request->data['id']
+		]);
+		
 		$siteId = $this->Content->trashReturn($this->request->data['id']);
-		if($siteId !== false) {
-			return $siteId;
-		}
-		return false;
+
+		// EVENT Contents.afterTrashReturn
+		$this->dispatchEvent('afterTrashReturn', [
+			'data' => $this->request->data['id']
+		]);
+		
+		return $siteId;
 	}
 
 /**
@@ -383,6 +392,12 @@ class ContentsController extends AppController {
 		}
 		$content = $content['Content'];
 		$typeName = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type'] . '.title');
+
+		// EVENT Contents.beforeDelete
+		$this->dispatchEvent('beforeDelete', [
+			'data' => $id
+		]);
+		
 		if(!$content['alias_id']) {
 			$result = $this->Content->softDeleteFromTree($id);
 			$message = $typeName . '「' . $content['title'] . '」をゴミ箱に移動しました。';
@@ -394,9 +409,14 @@ class ContentsController extends AppController {
 		}
 		if($result) {
 			$this->setMessage($message, false, true, $useFlashMessage);
-			return true;
 		}
-		return false;
+
+		// EVENT Contents.afterDelete
+		$this->dispatchEvent('afterDelete', [
+			'data' => $id
+		]);
+		
+		return $result;
 	}
 	
 /**
@@ -498,6 +518,12 @@ class ContentsController extends AppController {
 		$this->Content->softDelete(false);
 		$contents = $this->Content->find('all', array('conditions' => array('Content.deleted'), 'order' => array('Content.plugin', 'Content.type'), 'recursive' => -1));
 		$result = true;
+
+		// EVENT Contents.beforeTrashEmpty
+		$this->dispatchEvent('beforeTrashEmpty', [
+			'data' => $contents
+		]);
+		
 		if($contents) {
 			foreach($contents as $content) {
 				if(!empty($this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'])) {
@@ -513,6 +539,12 @@ class ContentsController extends AppController {
 				}
 			}
 		}
+
+		// EVENT Contents.afterTrashEmpty
+		$this->dispatchEvent('afterTrashEmpty', [
+			'data' => $result
+		]);
+		
 		return $result;
 	}
 

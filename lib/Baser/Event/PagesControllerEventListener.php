@@ -27,8 +27,9 @@ class PagesControllerEventListener extends BcControllerEventListener {
  */
 	public $events = [
 		'Contents.beforeMove',
-		'Contents.afterMove'
-		
+		'Contents.afterMove',
+		'Contents.beforeDelete',
+		'Contents.afterTrashReturn'
 	];
 
 /**
@@ -105,4 +106,35 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		$this->Page->oldPath = $this->oldPath;	
 		$this->Page->createPageTemplate($data);
 	}
+
+/**
+ * Contents Before Delete
+ * 
+ * ゴミ箱に入れた固定ページのテンプレートの削除が目的
+ * 
+ * @param CakeEvent $event
+ */
+	public function contentsBeforeDelete(CakeEvent $event) {
+		$id = $event->data;
+		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
+		if($data) {
+			$this->Page->delFile($data);
+		}
+	}
+
+/**
+ * Contents After Trash Return
+ * 
+ * ゴミ箱から戻した固定ページのテンプレート生成が目的
+ * 
+ * @param CakeEvent $event
+ */
+	public function contentsAfterTrashReturn(CakeEvent $event) {
+		$id = $event->data;
+		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
+		if($data) {
+			$this->Page->createPageTemplate($data);
+		}
+	}
+	
 }
