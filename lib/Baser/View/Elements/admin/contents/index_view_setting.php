@@ -21,6 +21,8 @@ if($this->action == 'admin_index') {
 <div class="panel-box" id="ViewSetting">
 <?php if(count($sites) >= 2): ?>
     <small>サイト</small> <?php echo $this->BcForm->input('ViewSetting.site_id', array('type' => 'select', 'options' => $sites)) ?>　｜　
+<?php else : ?>
+    <?php echo $this->BcForm->input('ViewSetting.site_id', array('type' => 'hidden', 'options' => $sites)) ?>
 <?php endif ?>
     <small>表示</small> <?php echo $this->BcForm->input('ViewSetting.list_type', array('type' => 'radio', 'options' => $listTypes)) ?>
 </div>
