@@ -36,8 +36,8 @@ $(document).ready(function(){
 			}else if($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()){
 				alert("パスワードが確認欄のパスワードと同じではありません。");
 				return false;
-			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_]+$/)) {
-				alert("パスワードには半角英数字とハイフン、アンダースコアのみ利用可能です。");
+			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_ \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*]+$/)) {
+				alert("パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。");
 				return false;
 			}
 		}else if(this.id == 'btnback') {
