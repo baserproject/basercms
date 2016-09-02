@@ -102,8 +102,8 @@ class ContentLinksController extends AppController {
  * @param $entityId
  * @return void
  */
-	public function view($entityId) {
-		$data = $this->ContentLink->find('first', array('conditions' => array('ContentLink.id' => $entityId)));
+	public function view() {
+		$data = $this->ContentLink->find('first', array('conditions' => array('ContentLink.id' => $this->request->params['entityId'])));
 		$this->set(compact('data'));
 	}
 
