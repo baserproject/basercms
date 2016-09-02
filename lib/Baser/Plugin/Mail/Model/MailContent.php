@@ -60,7 +60,7 @@ class MailContent extends MailAppModel {
  */
 	public $validate = array(
 		'name' => array(
-			'notInList' => array(
+			'halfText' => array(
 				'rule' => array('halfText'),
 				'message' => 'メールフォームアカウント名は半角のみで入力してください。',
 				'allowEmpty' => false),
