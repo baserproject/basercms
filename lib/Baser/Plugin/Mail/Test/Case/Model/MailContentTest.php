@@ -79,7 +79,7 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 
 		$expected = array(
-			'name' => array('メールフォームアカウント名を入力してください。'),
+			'name' => array('メールフォームアカウント名は半角のみで入力してください。'),
   		'title' => array('メールフォームタイトルを入力してください。'),
   		'sender_name' => array('送信先名を入力してください。'),
   		'subject_user' => array('自動返信メール件名[ユーザー宛]を入力してください。'),
@@ -140,7 +140,8 @@ class MailContentTest extends BaserTestCase {
 		$expected = array(
 			'layout_template' => array('レイアウトテンプレート名は半角のみで入力してください。'),
 			'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
-			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
+			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。'),
+			'name' => array('メールフォームアカウント名は半角のみで入力してください。')
 		);
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
