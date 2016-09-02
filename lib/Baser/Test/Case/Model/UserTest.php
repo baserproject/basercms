@@ -125,7 +125,7 @@ class UserTest extends BaserTestCase {
 		$this->assertArrayHasKey('name', $this->User->validationErrors);
 		$this->assertEquals('アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。', current($this->User->validationErrors['name']));
 		$this->assertArrayHasKey('password', $this->User->validationErrors);
-		$this->assertEquals('パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。', current($this->User->validationErrors['password']));
+		$this->assertEquals('パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。', current($this->User->validationErrors['password']));
 
 	}
 
@@ -137,6 +137,27 @@ class UserTest extends BaserTestCase {
 			)
 		));
 		$this->assertTrue($this->User->validates());
+	}
+
+	public function testパスワード記号正常系() {
+		$this->User->create(array(
+			'User' => array(
+				'password' => '. _-:/()#,@[]+=&;{}!$*',
+			)
+		));
+		$this->assertTrue($this->User->validates());
+	}
+
+	public function testパスワード記号異常系() {
+		$this->User->create(array(
+			'User' => array(
+				'password' => '. _-:/()#,@[]+=&;{}!$*^~"',
+			)
+		));
+		$this->assertFalse($this->User->validates());
+
+		$this->assertArrayHasKey('password', $this->User->validationErrors);
+		$this->assertEquals('パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。', current($this->User->validationErrors['password']));
 	}
 
 	public function test既存ユーザチェック異常系() {
