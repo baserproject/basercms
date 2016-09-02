@@ -98,9 +98,9 @@ class User extends AppModel {
 				'rule' => array('maxLength', 255),
 				'message' => 'パスワードは255文字以内で入力してください。'
 			),
-			'alphaNumeric' => array(
-				'rule' => 'alphaNumericPlus',
-				'message' => 'パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。'
+			'alphaNumericPlus' => array(
+				'rule' => ['alphaNumericPlus',[' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*']],
+				'message' => 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。'
 			),
 			'confirm' => array(
 				'rule' => array('confirm', array('password_1', 'password_2')),
