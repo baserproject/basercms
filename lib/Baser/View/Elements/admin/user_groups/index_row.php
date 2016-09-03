@@ -19,12 +19,12 @@
 <tr>
 	<td class="row-tools">
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_permission.png', array('width' => 24, 'height' => 24, 'alt' => '制限', 'class' => 'btn')), array('controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']), array('title' => '制限')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_permission.png', array('alt' => '制限', 'class' => 'btn')), array('controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']), array('title' => '制限')) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['UserGroup']['id']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['UserGroup']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['UserGroup']['id']), array('title' => '編集')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['UserGroup']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['UserGroup']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['UserGroup']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>

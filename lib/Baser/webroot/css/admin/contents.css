@@ -728,7 +728,7 @@ table.sub-menu{
 #BcMessageBox .alert-message,
 #UpdateMessage {
 	color:#F23561;
-	background: #F7E9EC url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
+	background: #F7E9EC url(../../img/admin/warning.png) no-repeat 10px 13px;
 }
 #Login #flashMessage {
     border-radius: 0px;
@@ -1642,10 +1642,10 @@ div.jstree-publish-even{
     content:""!important;
 }
 .context-menu-icon-edit {
-    background: url(../../img/admin/icon_edit.png) no-repeat left top;
+    background: url(../../img/admin/icn_tool_edit.png) no-repeat left top;
 }
 .context-menu-icon-delete {
-    background: url(../../img/admin/icon_delete.png) no-repeat left top;
+    background: url(../../img/admin/icn_tool_delete.png) no-repeat left top;
 }
 .context-menu-item {
     font-size:14px;

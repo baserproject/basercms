@@ -34,14 +34,14 @@
     <?php foreach($datas as $data): ?>
         <tr>
             <td>
-                <?php echo $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), $content['Content']['url'] . '/view/' . $data['SingleBlogPost']['id'], array('target' => '_blank')) ?>
-                <?php echo $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array(
+                <?php echo $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', array('alt' => '編集', 'class' => 'btn')), $content['Content']['url'] . '/view/' . $data['SingleBlogPost']['id'], array('target' => '_blank')) ?>
+                <?php echo $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array(
                     'plugin' => 'single_blog',
                     'controller' => 'single_blog_posts',
                     'action' => 'edit',
                     $data['SingleBlogPost']['id']
                 )) ?>
-                <?php echo $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('width' => 24, 'height' => 24, 'alt' => '削除', 'class' => 'btn')), array(
+                <?php echo $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array(
                     'plugin'    => 'single_blog',
                     'controller'=> 'single_blog_posts',
                     'action'    => 'delete',
