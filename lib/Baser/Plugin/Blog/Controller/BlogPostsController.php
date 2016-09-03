@@ -76,6 +76,9 @@ class BlogPostsController extends BlogAppController {
 		parent::beforeFilter();
 		if (isset($this->request->params['pass'][0])) {
 			$content = $this->BcContents->getContent($this->request->params['pass'][0]);
+			if(!$content) {
+				$this->notFound();
+			}
 			$this->request->params['Content'] = $content['Content'];
 			$this->request->params['Site'] = $content['Site'];
 			$this->BlogContent->recursive = -1;

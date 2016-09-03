@@ -1633,3 +1633,42 @@ div.jstree-publish-even{
 	padding-left:5px;
 	padding-right:5px;
 }
+
+/* context-menu
+----------------------------------------------- */
+
+.context-menu-icon-edit:before,
+.context-menu-icon-delete:before{
+    content:""!important;
+}
+.context-menu-icon-edit {
+    background: url(../../img/admin/icon_edit.png) no-repeat left top;
+}
+.context-menu-icon-delete {
+    background: url(../../img/admin/icon_delete.png) no-repeat left top;
+}
+.context-menu-item {
+    font-size:14px;
+    line-height: 2.4em;
+    padding: 0 2em 0 2.4em;
+    height:2.4em;
+    text-shadow: 1px 1px 0 #fff;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
+}
+.context-menu-item span{
+    display:block;
+    padding-left:0.5em;
+    border-left:1px solid #FFF;
+}
+.context-menu-hover {
+    background-color:#efeff7!important;
+    box-shadow: 0 0 2px #0a6aa1;
+    color:#000!important;
+}
+.context-menu-list {
+    padding:2px;
+    border-radius: 0;
+    background: #f5f5f5;
+}
