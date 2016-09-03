@@ -305,7 +305,7 @@ class PagesController extends AppController {
 		$previewCreated = false;
 		if($this->request->data) {
 			if($this->BcContents->preview == 'default') {
-				$uuid = $this->createPreviewTemplate($this->request->data);
+				$uuid = $this->_createPreviewTemplate($this->request->data);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
@@ -346,7 +346,7 @@ class PagesController extends AppController {
  * @param mixed	$id 固定ページID
  * @return string uuid
  */
-	public function createPreviewTemplate($data) {
+	protected function _createPreviewTemplate($data) {
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
 		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);

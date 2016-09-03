@@ -60,6 +60,13 @@ class BcAgent {
 	public $sessionId;
 
 /**
+ * エージェントリスト
+ * 
+ * @var null
+ */
+	protected static $_agents = null;
+
+/**
  * 名前をキーとしてインスタンスを探す
  *
  * @param string $name 名前
@@ -78,7 +85,6 @@ class BcAgent {
  *
  * @return BcAgent[]
  */
-	protected static $_agents = null;
 	public static function findAll() {
 		if(!BC_INSTALLED) {
 			return [];
@@ -298,6 +304,18 @@ class BcAgent {
 	}
 
 /**
+ * リクエストをリダイレクトするURLが存在するか確認
+ * 
+ * @param CakeRequest $request
+ * @return bool
+ */
+	public function existsRedirectUrl($request) {
+		$url = $request->base . '/' . $this->makeRedirectUrl($request);
+		$Content = ClassRegistry::init('Content');
+		return $Content->existsPublishUrl($url);
+	}
+
+/**
  * リクエストをリダイレクトするURLを生成
  *
  * @param CakeRequest $request リクエスト
@@ -315,4 +333,5 @@ class BcAgent {
 
 		return $replacedUrl;
 	}
+
 } 

@@ -44,7 +44,9 @@ class BcContentsRoute extends CakeRoute {
 		$content = $this->getContent($url, $publish);
 		if(!$content) {
 			$content = $this->getContent($url, $publish, true);
-			$extend = true;
+			if($content) {
+				$extend = true;	
+			}
 		}
 
 		if (!$content) {
@@ -119,7 +121,7 @@ class BcContentsRoute extends CakeRoute {
 		}
 		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC']);
 		if($content && empty($content['Site']['id'])) {
-			$content['Site'] = $Content->Site->getMain()['Site'];
+			$content['Site'] = $Content->Site->getRootMain()['Site'];
 		}
 		return $content;
 	}

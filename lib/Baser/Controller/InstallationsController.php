@@ -193,7 +193,7 @@ class InstallationsController extends AppController {
 				if (isset($this->request->data['Installation']['dbDataPattern'])) {
 					$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
 				}
-				$this->deleteAllTables();
+				$this->_deleteAllTables();
 				if ($this->_constructionDb($dbDataPattern)) {
 					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
@@ -656,7 +656,7 @@ class InstallationsController extends AppController {
  * @return void
  * @access public 
  */
-	public function deleteAllTables() {
+	public function _deleteAllTables() {
 		$dbConfig = $this->_readDbSetting();
 		if (!$dbConfig) {
 			$dbConfig = getDbConfig();
