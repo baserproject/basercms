@@ -544,6 +544,11 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 
+		$Db = $this->_getDataSource();
+		if($Db->config['datasource'] == 'Database/BcPostgres') {
+			$Db->updateSequence();
+		}
+
 		return true;
 	}
 
