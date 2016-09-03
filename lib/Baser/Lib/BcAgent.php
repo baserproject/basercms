@@ -78,24 +78,28 @@ class BcAgent {
  *
  * @return BcAgent[]
  */
+	protected static $_agents = null;
 	public static function findAll() {
 		if(!BC_INSTALLED) {
 			return [];
 		}
+		if(!is_null(self::$_agents)) {
+			return self::$_agents;
+		}
 		$configs = Configure::read("BcAgent");
 		$Site = ClassRegistry::init('Site');
 		$alias = $Site->find('list', ['fields' => ['name', 'alias'], 'conditions' => ['Site.name' => array_keys($configs)]]);
-		$agents = array();
+		self::$_agents = [];
 		foreach ($configs as $name => $config) {
 			if(!empty($alias[$name])) {
 				$config['alias'] = $alias[$name];
 			} else {
 				$config['alias'] = $name;
 			}
-			$agents[] = new self($name, $config);
+			self::$_agents[] = new self($name, $config);
 		}
 
-		return $agents;
+		return self::$_agents;
 	}
 
 /**

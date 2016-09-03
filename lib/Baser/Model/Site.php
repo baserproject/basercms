@@ -18,6 +18,13 @@
 class Site extends AppModel {
 
 /**
+ * ビヘイビア
+ *
+ * @var array
+ */
+	public $actsAs = ['BcCache'];
+		
+/**
  * バリデーション
  *
  * @var array
