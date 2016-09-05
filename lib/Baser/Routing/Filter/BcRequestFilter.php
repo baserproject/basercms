@@ -51,17 +51,6 @@ class BcRequestFilter extends DispatcherFilter {
 			return;
 		}
 
-		//$_SERVER['HTTP_USER_AGENT']からエージェントを取得
-		$agent = BcAgent::findCurrent();
-
-		if (!is_null($agent) && $agent->isEnabled()) {
-			if (!$request->is('admin') && $agent->shouldRedirects($request)) {
-				$response->header('Location', $request->base . '/' . $agent->makeRedirectUrl($request));
-				$response->statusCode(302);
-				return $response;
-			}
-		}
-
 		//URLからエージェントを取得
 		$agentByUrl = BcAgent::findByUrl($request);
 		if (!is_null($agentByUrl) && $agentByUrl->isEnabled()) {

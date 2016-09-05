@@ -26,7 +26,7 @@ class BcCacheDispatcher extends DispatcherFilter {
  *
  * @var int
  */
-	public $priority = 10;
+	public $priority = 5;
 
 /**
  * Checks whether the response was cached and set the body accordingly.
@@ -39,7 +39,7 @@ class BcCacheDispatcher extends DispatcherFilter {
 		if (Configure::read('Cache.check') !== true) {
 			return null;
 		}
-
+		
 		// CUSTOMIZE 2014/08/11 ryuring
 		// $this->request->here で、URLを取得する際、URL末尾の 「index」の有無に関わらず
 		// 同一ファイルを参照すべきだが、別々のURLを出力してしまう為、
@@ -51,7 +51,7 @@ class BcCacheDispatcher extends DispatcherFilter {
 		// <<<
 		
 		if ($path === '/') {
-			$path = 'home';
+			$path = 'index';
 		}
 		$prefix = Configure::read('Cache.viewPrefix');
 		if ($prefix) {

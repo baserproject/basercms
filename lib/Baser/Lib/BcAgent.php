@@ -60,6 +60,13 @@ class BcAgent {
 	public $sessionId;
 
 /**
+ * エージェントリスト
+ * 
+ * @var null
+ */
+	protected static $_agents = null;
+
+/**
  * 名前をキーとしてインスタンスを探す
  *
  * @param string $name 名前
@@ -82,20 +89,23 @@ class BcAgent {
 		if(!BC_INSTALLED) {
 			return [];
 		}
+		if(!is_null(self::$_agents)) {
+			return self::$_agents;
+		}
 		$configs = Configure::read("BcAgent");
 		$Site = ClassRegistry::init('Site');
 		$alias = $Site->find('list', ['fields' => ['name', 'alias'], 'conditions' => ['Site.name' => array_keys($configs)]]);
-		$agents = array();
+		self::$_agents = [];
 		foreach ($configs as $name => $config) {
 			if(!empty($alias[$name])) {
 				$config['alias'] = $alias[$name];
 			} else {
 				$config['alias'] = $name;
 			}
-			$agents[] = new self($name, $config);
+			self::$_agents[] = new self($name, $config);
 		}
 
-		return $agents;
+		return self::$_agents;
 	}
 
 /**
@@ -294,6 +304,18 @@ class BcAgent {
 	}
 
 /**
+ * リクエストをリダイレクトするURLが存在するか確認
+ * 
+ * @param CakeRequest $request
+ * @return bool
+ */
+	public function existsRedirectUrl($request) {
+		$url = $request->base . '/' . $this->makeRedirectUrl($request);
+		$Content = ClassRegistry::init('Content');
+		return $Content->existsPublishUrl($url);
+	}
+
+/**
  * リクエストをリダイレクトするURLを生成
  *
  * @param CakeRequest $request リクエスト
@@ -311,4 +333,5 @@ class BcAgent {
 
 		return $replacedUrl;
 	}
+
 } 

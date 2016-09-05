@@ -728,7 +728,7 @@ table.sub-menu{
 #BcMessageBox .alert-message,
 #UpdateMessage {
 	color:#F23561;
-	background: #F7E9EC url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
+	background: #F7E9EC url(../../img/admin/warning.png) no-repeat 10px 13px;
 }
 #Login #flashMessage {
     border-radius: 0px;
@@ -1632,4 +1632,43 @@ div.jstree-publish-even{
 	color:#9C0;
 	padding-left:5px;
 	padding-right:5px;
+}
+
+/* context-menu
+----------------------------------------------- */
+
+.context-menu-icon-edit:before,
+.context-menu-icon-delete:before{
+    content:""!important;
+}
+.context-menu-icon-edit {
+    background: url(../../img/admin/icn_tool_edit.png) no-repeat left top;
+}
+.context-menu-icon-delete {
+    background: url(../../img/admin/icn_tool_delete.png) no-repeat left top;
+}
+.context-menu-item {
+    font-size:14px;
+    line-height: 2.4em;
+    padding: 0 2em 0 2.4em;
+    height:2.4em;
+    text-shadow: 1px 1px 0 #fff;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
+}
+.context-menu-item span{
+    display:block;
+    padding-left:0.5em;
+    border-left:1px solid #FFF;
+}
+.context-menu-hover {
+    background-color:#efeff7!important;
+    box-shadow: 0 0 2px #0a6aa1;
+    color:#000!important;
+}
+.context-menu-list {
+    padding:2px;
+    border-radius: 0;
+    background: #f5f5f5;
 }

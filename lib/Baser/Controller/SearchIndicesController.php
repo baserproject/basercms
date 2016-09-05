@@ -236,7 +236,7 @@ class SearchIndicesController extends AppController {
 		/* 画面情報設定 */
 		$default = [
 			'named' => ['num' => $this->siteConfigs['admin_list_num']],
-			'SearchIndex' => ['site_id' => 1]
+			'SearchIndex' => ['site_id' => 0]
 		];
 		$this->setViewConditions('SearchIndex', array('default' => $default));
 		$conditions = $this->_createAdminIndexConditions($this->request->data);

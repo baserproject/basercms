@@ -18,6 +18,13 @@
 class Site extends AppModel {
 
 /**
+ * ビヘイビア
+ *
+ * @var array
+ */
+	public $actsAs = ['BcCache'];
+		
+/**
  * バリデーション
  *
  * @var array
@@ -85,7 +92,7 @@ class Site extends AppModel {
 	public function getPublishedAll() {
 		$conditions = ['Site.status' => true];
 		$sites = $this->find('all', ['conditions' => $conditions]);
-		$main = $this->getMain();
+		$main = $this->getRootMain();
 		if($sites) {
 			array_unshift($sites, $main);
 		} else {
@@ -105,7 +112,7 @@ class Site extends AppModel {
     	if(!is_null($mainSiteId)) {
     		$conditions['Site.main_site_id'] = $mainSiteId;
     	}
-		$main = $this->getMain();
+		$main = $this->getRootMain();
     	return [$main['Site']['id'] => $main['Site']['display_name']] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
 	
@@ -114,7 +121,7 @@ class Site extends AppModel {
  * 
  * @return array
  */
-	public function getMain($options = []) {
+	public function getRootMain($options = []) {
 		$options += [
 			'fields' => []	
 		];
@@ -187,7 +194,7 @@ class Site extends AppModel {
 		$fields = ['id', 'name', 'alias', 'display_name', 'main_site_id'];
 		$sites = $this->find('all', ['fields' => $fields, 'conditions' => $conditions, 'order' => 'main_site_id']);
 		if($data['Site']['main_site_id'] == 0) {
-			$sites = array_merge([$this->getMain(['fields' => $fields])], $sites);
+			$sites = array_merge([$this->getRootMain(['fields' => $fields])], $sites);
 		}
 		$conditions = [
 			'or' => [
@@ -347,4 +354,41 @@ class Site extends AppModel {
 		return $Content->field('id', ['Content.site_root' => true, 'Content.site_id' => $id]);
 	}
 
+/**
+ * URLよりサイトを取得する
+ * 
+ * @param string $url
+ * @return array|bool|null
+ */
+	public function findByUrl($url) {
+		$params = explode('/', $url);
+		if(empty($params[0])) {
+			return false;
+		}
+		return $this->find('first', ['conditions' => [
+			'or' => [
+				'Site.name' => $params[0],
+				'Site.alias' => $params[0]
+			]
+		], 'recursive' => -1]);
+	}
+
+/**
+ * メインサイトを取得する
+ * 
+ * @param int $id
+ * @return array|null
+ */
+	public function getMain($id) {
+		$mainSiteId = $this->field('main_site_id', [
+			'Site.id' => $id
+		]);
+		if($mainSiteId == 0) {
+			return $this->getRootMain();
+		}
+		return $this->find('first', ['conditions' => [
+			'Site.main_site_id' => $mainSiteId
+		], 'recursive' => -1]);
+	}
+	
 }

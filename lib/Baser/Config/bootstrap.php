@@ -94,7 +94,9 @@ Configure::write('Dispatcher.filters',
 		array(
 			'BcAssetDispatcher',
 			'BcCacheDispatcher',
-			'BcRequestFilter'
+			'BcRequestFilter',
+			'BcMainSiteRedirectFilter',
+			'BcAgentRedirectFilter'
 		)
 	)
 );

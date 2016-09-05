@@ -1145,6 +1145,18 @@ class Content extends AppModel {
 	}
 
 /**
+ * 公開されたURLが存在するか確認する
+ * 
+ * @param string $url
+ * @return bool
+ */
+	public function existsPublishUrl($url) {
+		$conditions = $this->getConditionAllowPublish();
+		$conditions['url'] = $url;
+		return (boolean) $this->find('count', ['conditions' => $conditions]);
+	}
+
+/**
  * データが公開済みかどうかチェックする
  *
  * @param boolean $status 公開ステータス
@@ -1404,7 +1416,7 @@ class Content extends AppModel {
 			'conditions' => $conditions,
 			'recursive' => 0
 		]);
-		$mainSite = $this->Site->getMain();
+		$mainSite = $this->Site->getRootMain();
 		foreach($contents as $key => $content) {
 			if($content['Content']['site_id'] == 0) {
 				$contents[$key]['Site'] = $mainSite['Site'];
