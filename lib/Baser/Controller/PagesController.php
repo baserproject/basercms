@@ -102,7 +102,15 @@ class PagesController extends AppController {
 			$this->setMessage($message, false, true, false);
 			return json_encode($data['Content']);
 		} else {
-			$this->ajaxError(500, $this->Page->validationErrors);
+			// 本当は、どこのmodelで、validationErrorがおきたのか取得して、ajaxErrorにつなげたい。
+			// ここでは、titleだけに限定しておかないと、nameの errorも拾ってきて、エラーが重複するため。
+			if ( $this->Content->validationErrors['title'] ) {
+				$this->ajaxError(500, $this->Content->validationErrors);
+			} else if( $this->Page->validationErrors ) {
+				$this->ajaxError(500, $this->Page->validationErrors);
+			} else {
+				$this->ajaxError(500);
+			}
 		}
 		return false;
 	}
