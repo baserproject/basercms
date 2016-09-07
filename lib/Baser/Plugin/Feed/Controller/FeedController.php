@@ -61,7 +61,7 @@ class FeedController extends FeedAppController {
  * @param int $id
  * @return void
  */
-	public function index($id) {
+	public function index($id = null) {
 		
 		$this->navis = array();
 		
