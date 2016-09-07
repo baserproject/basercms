@@ -988,7 +988,8 @@ class BcAppController extends Controller {
 		if (!empty($options['template'])) {
 
 			$subDir = $plugin = '';
-			if ($options['agentTemplate'] && $this->request->params['Site']['name']) {
+			// インストール時にSiteは参照できない
+			if ($options['agentTemplate'] && @$this->request->params['Site']['name']) {
 				$subDir = $this->request->params['Site']['name'];
 			}
 
