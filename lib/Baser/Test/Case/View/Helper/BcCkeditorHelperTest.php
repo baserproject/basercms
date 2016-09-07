@@ -17,7 +17,7 @@ App::uses('BcCkeditorHelper', 'View/Helper');
  * text helper library.
  *
  * @package Baser.Test.Case.View.Helper
- * @property BcTextHelper $Helper
+ * @property BcCkeditor $BcCkeditor
  */
 class BcCkeditorHelperTest extends BaserTestCase {
 
@@ -28,12 +28,16 @@ class BcCkeditorHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
+		'baser.Default.Site',
+		'baser.Default.Content',
+		'baser.Default.User'
 	);
 
 	public function setUp() {
 		parent::setUp();
 		$View = new View();
 		$this->BcCkeditor = new BcCkeditorHelper($View);
+		$this->BcCkeditor->request = $this->_getRequest('/');
 	}
 
 	public function tearDown() {

@@ -26,6 +26,10 @@ class BcMobileHelperTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.Default.Page',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.Content',
+		'baser.Default.User'
 	);
 
 /**
@@ -37,8 +41,7 @@ class BcMobileHelperTest extends BaserTestCase {
 		parent::setUp();
 		$View = new View();
 		$this->BcMobile = new BcMobileHelper($View);
-		$this->_setAgent('mobile');
-		$this->BcMobile->request = $this->_getRequest('/');
+		$this->BcMobile->request = $this->_getRequest('/m/');
 	}
 
 /**

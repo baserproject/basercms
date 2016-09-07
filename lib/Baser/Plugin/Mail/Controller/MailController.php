@@ -203,7 +203,7 @@ class MailController extends MailAppController {
 		}
 
 		$user = BcUtil::loginUser('admin');
-		if (!empty($user) && !Configure::read('BcRequest.agent')) {
+		if (!empty($user)) {
 			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
@@ -283,7 +283,7 @@ class MailController extends MailAppController {
 			$this->set('mailFields', $this->dbDatas['mailFields']);
 		}
 		$user = BcUtil::loginUser('admin');
-		if (!empty($user) && !Configure::read('BcRequest.agent')) {
+		if (!empty($user)) {
 			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
@@ -400,7 +400,7 @@ class MailController extends MailAppController {
 			}
 		}
 		$user = BcUtil::loginUser('admin');
-		if (!empty($user) && !Configure::read('BcRequest.agent')) {
+		if (!empty($user)) {
 			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
 		}
 	}

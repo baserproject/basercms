@@ -33,7 +33,7 @@ class BcUtil extends Object {
 	public static function isAdminSystem() {
 		$request = Router::getRequest(true);
 		if($request) {
-			$url = Router::getRequest(true)->url;
+			$url = $request->url;
 		} else {
 			return false;
 		}

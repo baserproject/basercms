@@ -26,7 +26,10 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = [
+		'baser.Default.Site',
+		'baser.Default.SiteConfig'
+	];
 
 	public function setUp() {
 		parent::setUp();

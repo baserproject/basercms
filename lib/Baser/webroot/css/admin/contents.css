@@ -1633,6 +1633,10 @@ div.jstree-publish-even{
 	padding-left:5px;
 	padding-right:5px;
 }
+#SectionLangAccessType label, #SectionDeviceAccessType label {
+    white-space: nowrap;
+}
+
 
 /* context-menu
 ----------------------------------------------- */
@@ -1672,3 +1676,4 @@ div.jstree-publish-even{
     border-radius: 0;
     background: #f5f5f5;
 }
+

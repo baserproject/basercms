@@ -3,8 +3,6 @@ class SitesSchema extends CakeSchema {
 
 	public $file = 'sites.php';
 
-	public $connection = 'default';
-
 	public function before($event = array()) {
 		return true;
 	}
@@ -21,8 +19,13 @@ class SitesSchema extends CakeSchema {
 		'alias' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'theme' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'use_subdomain' => array('type' => 'boolean', 'null' => true, 'default' => 0),
+		'use_subdomain' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'relate_main_site' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'device' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'lang' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'same_main_url' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'auto_redirect' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
+		'auto_link' => array('type' => 'boolean', 'null' => true, 'default' => '0'),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(

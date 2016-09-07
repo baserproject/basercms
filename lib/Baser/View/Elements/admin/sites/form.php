@@ -13,6 +13,16 @@
 /**
  * サブサイトフォーム
  */
+$agents = Configure::read('BcAgent');
+$devices = ['' => '指定しない'];
+foreach($agents as $key => $agent) {
+	$devices[$key] = $agent['name'];
+}
+$languages = Configure::read('BcLang');
+$langs = ['' => '指定しない'];
+foreach($languages as $key => $lang) {
+	$langs[$key] = $lang['name'];
+}
 ?>
 
 
@@ -72,6 +82,23 @@
 				</p>
 			</div>
 			<?php echo $this->BcForm->error('Site.main_site_id') ?>
+		</td>
+	</tr>
+	<tr>
+		<th><?php echo $this->BcForm->label('Site.device', 'デバイス・言語') ?></th>
+		<td>
+			<p>
+				<small>[デバイス]</small><?php echo $this->BcForm->input('Site.device', array('type' => 'select', 'options' => $devices)) ?>　
+				<small>[言語]</small><?php echo $this->BcForm->input('Site.lang', array('type' => 'select', 'options' => $langs)) ?>
+				<p id="SectionAccessType" style="display:none">
+					<small>[アクセス設定]</small><br>
+					<?php echo $this->BcForm->input('Site.same_main_url', array('type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス')) ?>　
+					<?php echo $this->BcForm->input('Site.auto_redirect', array('type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト')) ?>
+					<?php echo $this->BcForm->input('Site.auto_link', array('type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する')) ?>　
+				</p>
+			</p>
+			<?php echo $this->BcForm->error('Site.device') ?>
+			<?php echo $this->BcForm->error('Site.lang') ?>
 		</td>
 	</tr>
 	<tr>

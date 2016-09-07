@@ -153,8 +153,7 @@ class BcBasicsTest extends BaserTestCase {
 
 	public function getUrlParamFromEnvDataProvider() {
 		return array(
-			array(null, '/s/test/', 's/test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません'),
-			array('s', '/s/test/', 'test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません'),
+			array(null, '/s/test/', 's/test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません')
 		);
 	}
 
@@ -535,9 +534,8 @@ class BcBasicsTest extends BaserTestCase {
 		// 初期化
 		session_id('baser');
 		session_name('BASERCMS');
-		Configure::write('BcRequest.agent', 'mobile');
+		$_SERVER['REQUEST_URI'] = '/m/';
 		$message = 'URLにセッションIDを正しく付加できません';
-
 		$this->assertEquals('/?BASERCMS=baser', addSessionId('/', true), $message);
 		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1', true), $message);
 		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1&BASERCMS=1', true), $message);

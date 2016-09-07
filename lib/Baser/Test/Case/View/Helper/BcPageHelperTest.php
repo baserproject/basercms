@@ -262,9 +262,7 @@ class BcPageHelperTest extends BaserTestCase {
  */
 	public function testContent($agent, $expected, $message = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->_setAgent($agent);
 		$this->BcPage->_View->viewVars['pagePath'] = 'service';
-
 		$this->expectOutputRegex('/' . $expected . '/', $message);
 		$this->BcPage->content();
 	}

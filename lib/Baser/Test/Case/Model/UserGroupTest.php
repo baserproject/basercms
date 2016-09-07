@@ -31,6 +31,9 @@ class UserGroupTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.Page',
 		'baser.Default.Favorite',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.Content'
 	);
 
 	public function setUp() {

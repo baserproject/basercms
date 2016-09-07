@@ -32,7 +32,7 @@ var errorCallback = function (xml, status, e)
 //  リクエスト処理
 $.ajax({
 	type: 'GET',
-	url:      '<?php echo $this->BcBaser->getUrl(array(Configure::read('BcAgent.smartphone.alias') => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id)); ?>',
+	url:      '<?php echo $this->BcBaser->getUrl(array($this->request->params['Site']['alias'] => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id)); ?>',
 	cache: false,
 	success:  successCallback,
 	error:    errorCallback

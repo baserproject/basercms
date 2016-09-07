@@ -119,7 +119,7 @@ class UsersController extends AppController {
 			$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 			if ($user && $this->isAuthorized($user)) {
 				if (!empty($this->request->data[$userModel]['saved'])) {
-					if (Configure::read('BcRequest.agentAlias') != 'mobile') {
+					if (!$this->request->is('mobile')) {
 						$this->setAuthCookie($this->request->data);
 					} else {
 						$this->BcAuth->saveSerial();

@@ -41,6 +41,7 @@ class BlogHelperTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.Content',
 		'baser.Default.Site',
+		'baser.Default.SiteConfig',
 		'baser.Default.BlogTag',
 		'plugin.blog.Model/BlogCategoryModel',
 		'plugin.blog.Model/BlogPostModel',

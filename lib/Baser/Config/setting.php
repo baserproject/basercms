@@ -148,9 +148,8 @@ $config['BcEmail'] = array(
  */
 $config['BcAgent'] = array(
 	'mobile' => array(
-		'prefix' => 'mobile',
-		'autoRedirect' => true,
-		'autoLink' => true,
+		'name' => 'ケータイ',
+		'helper' => 'BcMobile',
 		'agents' => array(
 			'Googlebot-Mobile',
 			'Y!J-SRD',
@@ -164,9 +163,8 @@ $config['BcAgent'] = array(
 		'sessionId' => true
 	),
 	'smartphone' => array(
-		'prefix' => 'smartphone',
-		'autoRedirect' => true,
-		'autoLink' => true,
+		'name' => 'スマートフォン',
+		'helper' => 'BcSmartphone',
 		'agents' => array(
 			'iPhone',			// Apple iPhone
 			'iPod',				// Apple iPod touch
@@ -184,6 +182,16 @@ $config['BcAgent'] = array(
 		)
 	)
 );
+
+//p($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+$config['BcLang'] = [
+	'english' => [
+		'name' => '英語',
+		'langs' => [
+			'en'
+		]	
+	]
+];
 
 /**
  * コンテンツ設定

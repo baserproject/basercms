@@ -27,6 +27,7 @@ class BcUploadHelperTest extends BaserTestCase {
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.Page',
+		'baser.Default.SiteConfig',
 	);
 
 /**

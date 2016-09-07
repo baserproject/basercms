@@ -18,6 +18,41 @@
 class BcMobileHelper extends Helper {
 
 /**
+ * ヘルパ
+ *
+ * @var array
+ */
+	public $helpers = ['BcHtml'];
+
+/**
+ * After Render
+ *
+ * @param string $viewFile
+ */
+	public function afterRender($viewFile) {
+		parent::afterRender($viewFile);
+		$site = BcSite::findCurrent();
+		if($site->device != 'mobile' || $site->sameMainUrl) {
+			return;
+		}
+		// 別URLの場合、canonicalを出力
+		$pureUrl = $site->getPureUrl($this->request->url);
+		$mainSite = BcSite::findCurrentMain();
+		$url = $mainSite->makeUrl(new CakeRequest($pureUrl));
+		$this->_View->set('meta',
+			$this->BcHtml->meta('canonical',
+				$this->BcHtml->url($url, true),
+				[
+					'rel' => 'canonical',
+					'type' => null,
+					'title' => null,
+					'inline' => false
+				]
+			)
+		);
+	}
+	
+/**
  * afterLayout
  *
  * @return void
@@ -33,7 +68,8 @@ class BcMobileHelper extends Helper {
 			$rss = false;
 		}
 
-		if (!$rss && Configure::read('BcRequest.agent') == 'mobile' && $View->layoutPath != 'Emails' . DS . 'text') {
+		$site = BcSite::findCurrent(true);
+		if (!$rss && $site && $site->device == 'mobile' && $View->layoutPath != 'Emails' . DS . 'text') {
 
 			$View->output = str_replace('＆', '&amp;', $View->output);
 			$View->output = str_replace('＜', '&lt;', $View->output);
@@ -43,8 +79,8 @@ class BcMobileHelper extends Helper {
 			$View->output = mb_convert_encoding($View->output, "SJIS-win", "UTF-8");
 
 			// 内部リンクの自動変換
-			if (Configure::read('BcAgent.mobile.autoLink')) {
-				$currentAlias = Configure::read('BcRequest.agentAlias');
+			if ($site->autoLink) {
+				$currentAlias = $this->request->params['Site']['alias'];
 				// 一旦プレフィックスを除外
 				$reg = '/href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
 				$View->output = preg_replace_callback($reg, array($this, '_removeMobilePrefix'), $View->output);
@@ -64,7 +100,7 @@ class BcMobileHelper extends Helper {
  * @return void
  */
 	public function header() {
-		if (Configure::read('BcRequest.agent') == 'mobile') {
+		if ($this->request->params['Site']['device'] == 'mobile') {
 			$this->_View->response->charset('Shift-JIS');
 			header("Content-type: application/xhtml+xml");
 		}
@@ -94,7 +130,7 @@ class BcMobileHelper extends Helper {
  * @return string 
  */
 	protected function _addMobilePrefix($matches) {
-		$currentAlias = Configure::read('BcRequest.agentAlias');
+		$currentAlias = $this->request->params['Site']['alias'];
 		$url = $matches[1];
 		if (strpos($url, 'mobile=off') === false) {
 			return 'href="' . BC_BASE_URL . $currentAlias . '/' . $url . '"';

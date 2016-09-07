@@ -177,7 +177,6 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider mobilePageDisplayDataProvider
  */
 	public function testMobilePageDisplay($url, $pass) {
-		$this->_setAgent('mobile');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
@@ -215,7 +214,6 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider smartphonePageDisplayDataProvider
  */
 	public function testSmartphonePageDisplay($url, $pass) {
-		$this->_setAgent('smartphone');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',

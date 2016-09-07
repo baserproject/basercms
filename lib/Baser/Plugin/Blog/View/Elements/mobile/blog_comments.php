@@ -37,7 +37,7 @@
 		<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 		<div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">コメントを送る</span> </div>
 		<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-		<?php echo $this->BcForm->create('BlogComment', array('url' => '/' . Configure::read('BcAgent.mobile.alias') . '/' . $this->request->params['Content']['name'] . '/archives/' . $post['BlogPost']['no'] . '#BlogComment')) ?> 
+		<?php echo $this->BcForm->create('BlogComment', array('url' => '/' . $this->request->params['Site']['alias'] . '/' . $this->request->params['Content']['name'] . '/archives/' . $post['BlogPost']['no'] . '#BlogComment')) ?> 
 		<?php echo $this->BcForm->label('BlogComment.name', 'お名前') ?><br />
 		<?php echo $this->BcForm->text('BlogComment.name') ?><br />
 		<span style="color:red;"><?php echo $this->BcForm->error('BlogComment.name') ?></span> 

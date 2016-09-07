@@ -952,6 +952,12 @@ class Content extends AppModel {
 				return Router::url($originUrl);
 			}
 		} else {
+			if(BC_INSTALLED) {
+				$site = BcSite::findCurrent(false);
+				if($site && $site->sameMainUrl) {
+					$url = $site->getPureUrl($url);
+				}
+			}
 			$params = explode('?', $url);
 			$url = preg_replace('/\/index$/', '/', $params[0]);
 			if(!empty($params[1])) {
@@ -1207,7 +1213,11 @@ class Content extends AppModel {
  * @return array|null
  */
 	public function getSiteRoot($siteId) {
-		return $this->find('first', ['conditions' => ['Content.site_id' => $siteId, 'Content.site_root' => true]]);
+		return $this->find('first', [
+			'conditions' => [
+				'Content.site_id' => $siteId, 
+				'Content.site_root' => true
+		], 'recursive' => -1]);
 	}
 
 /**

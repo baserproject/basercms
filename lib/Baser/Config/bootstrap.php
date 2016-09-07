@@ -95,8 +95,8 @@ Configure::write('Dispatcher.filters',
 			'BcAssetDispatcher',
 			'BcCacheDispatcher',
 			'BcRequestFilter',
-			'BcMainSiteRedirectFilter',
-			'BcAgentRedirectFilter'
+			'BcRedirectMainSiteFilter',
+			'BcRedirectSubSiteFilter'
 		)
 	)
 );
@@ -124,6 +124,9 @@ App::uses('BcViewEventListener', 'Event');
 App::uses('BcHelperEventListener', 'Event');
 App::uses('BcManagerShell', 'Console/Command');
 App::uses('CakeRequest', 'Network');
+App::uses('BcSite', 'Lib');
+App::uses('BcAgent', 'Lib');
+App::uses('BcLang', 'Lib');
 
 // @deprecated
 // >>>
@@ -175,9 +178,7 @@ if (BC_INSTALLED) {
 /**
  * パラメーター取得
  */
-$url = getUrlFromEnv(); // 環境変数からパラメータを取得
 $parameter = getUrlParamFromEnv();
-Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる
 
 if (BC_INSTALLED) {
 /**

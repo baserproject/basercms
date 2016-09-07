@@ -16,8 +16,43 @@
  * @package Baser.View.Helper
  */
 class BcSmartphoneHelper extends Helper {
+	
+/**
+ * ヘルパ
+ * 
+ * @var array
+ */
+	public $helpers = ['BcHtml'];
 
 /**
+ * After Render
+ * 
+ * @param string $viewFile
+ */
+	public function afterRender($viewFile) {
+		parent::afterRender($viewFile);
+		$site = BcSite::findCurrent();
+		if($site->device != 'smartphone' || $site->sameMainUrl) {
+			return;
+		}
+		// 別URLの場合、canonicalを出力
+		$pureUrl = $site->getPureUrl($this->request->url);
+		$mainSite = BcSite::findCurrentMain();
+		$url = $mainSite->makeUrl(new CakeRequest($pureUrl));
+		$this->_View->set('meta',
+			$this->BcHtml->meta('canonical',
+				$this->BcHtml->url($url, true),
+				[
+					'rel' => 'canonical',
+					'type' => null,
+					'title' => null,
+					'inline' => false
+				]
+			)
+		);	
+	}
+
+	/**
  * afterLayout
  *
  * @return void
@@ -30,14 +65,15 @@ class BcSmartphoneHelper extends Helper {
 			$rss = false;
 		}
 
-		if (!$rss && Configure::read('BcRequest.agent') == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
+		$site = BcSite::findCurrent();
+		if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
 			// 内部リンクの自動変換
-			if (Configure::read('BcAgent.smartphone.autoLink')) {
+			if ($site->autoLink) {
 				$bcBaseUrl = BC_BASE_URL;
 				if ($this->_View->BcBaser->isSSL()) {
 					$bcBaseUrl = Configure::read('BcEnv.siteUrl');
 				}
-				$currentAlias = Configure::read('BcRequest.agentAlias');
+				$currentAlias = $this->request->params['Site']['alias'];
 				// 一旦プレフィックスを除外
 				$reg = '/a(.*?)href="' . preg_quote($bcBaseUrl, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
 				$this->_View->output = preg_replace_callback($reg, array($this, '_removePrefix'), $this->_View->output);
@@ -86,7 +122,7 @@ class BcSmartphoneHelper extends Helper {
 		if ($this->_View->BcBaser->isSSL()) {
 			$bcBaseUrl = Configure::read('BcEnv.siteUrl');
 		}
-		$currentAlias = Configure::read('BcRequest.agentAlias');
+		$currentAlias = $this->request->params['Site']['alias'];
 		$etc = $matches[1];
 		$url = $matches[2];
 		if (strpos($url, 'smartphone=off') === false) {

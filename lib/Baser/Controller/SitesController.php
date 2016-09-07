@@ -14,6 +14,7 @@
  * サイトコントローラー
  *
  * @package Baser.Controller
+ * @property Site $Site
  */
 class SitesController extends AppController {
 
@@ -132,7 +133,7 @@ class SitesController extends AppController {
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
-		$this->set('mainSites', $this->Site->getSiteList(0));
+		$this->set('mainSites', $this->Site->getSiteList(0, ['excludeIds' => $this->request->data['Site']['id']]));
 		$this->set('themes', array_merge(['' => $defaultThemeName], BcUtil::getThemeList()));
 	}
 

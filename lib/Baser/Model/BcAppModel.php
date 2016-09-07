@@ -40,6 +40,7 @@ class BcAppModel extends Model {
  */
 	public function __construct($id = false, $table = null, $ds = null) {
 		$db = ConnectionManager::getDataSource('default');
+		$request = new CakeRequest();
 		if (isset($db->config['datasource'])) {
 			if ($db->config['datasource'] != '') {
 				// @deprecated 5.0.0 since 4.0.0 
@@ -51,7 +52,7 @@ class BcAppModel extends Model {
 			} elseif ($db->config['login'] == 'dummy' &&
 				$db->config['password'] == 'dummy' &&
 				$db->config['database'] == 'dummy' &&
-				Configure::read('BcRequest.pureUrl') == '') {
+				$request->url === false) {
 				// データベース設定がインストール段階の状態でトップページへのアクセスの場合、
 				// 初期化ページにリダイレクトする
 				$AppController = new AppController();
@@ -1533,5 +1534,27 @@ class BcAppModel extends Model {
 			return (bool)$this->field('deleted', array('deleted' => 1));
 		}
 		return $result;
+	}
+
+	public function dataIter(&$results, $callback) {
+		if (! $isVector = isset($results[0])) {
+			$results = array($results);
+		}
+		$modeled = array_key_exists($this->alias, $results[0]);
+		foreach ($results as &$value) {
+			if (! $modeled) {
+				$value = array($this->alias => $value);
+			}
+			$continue = $callback($value, $this);
+			if (! $modeled) {
+				$value = $value[$this->alias];
+			}
+			if (! is_null($continue) && ! $continue) {
+				break;
+			}
+		}
+		if (! $isVector) {
+			$results = $results[0];
+		}
 	}
 }

@@ -30,22 +30,11 @@ Configure::write('BcRequest.routerLoaded', true);
 App::uses('BaserPluginApp', 'Controller');
 App::uses('BaserPluginAppModel', 'Model');
 
-$request = null;
-if (!empty(self::$_requests[0])) {
-	$request = self::$_requests[0];
-}
-// パラメータ取得
-$parameter = getPureUrl($request);
-
-Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
-$agent = Configure::read('BcRequest.agent');
-$agentAlias = Configure::read('BcRequest.agentAlias');
-$agentPrefix = Configure::read('BcRequest.agentPrefix');
+$request = new CakeRequest();
 $authPrefixes = Configure::read('BcAuthPrefix');
+$pluginMatch = [];
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-
-	$pluginMatch = array();
 	$plugins = CakePlugin::loaded();
 	if ($plugins) {
 		foreach ($plugins as $key => $value) {
@@ -101,15 +90,22 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 if (BC_INSTALLED || isConsole()) {
 
 /**
- * 携帯標準ルーティング
+ * サブサイト標準ルーティング
  */
-	if ($agent) {
+	$Site = ClassRegistry::init('Site');
+	$site = $Site->findByUrl($request->url);
+	$siteAlias = $sitePrefix = '';
+	if($site) {
+		$siteAlias = $site['Site']['alias'];
+		$sitePrefix = $site['Site']['name'];
+	}
+	if ($siteAlias) {
 		// プラグイン
-		Router::connect("/{$agentAlias}/:plugin/:controller", array('prefix' => $agentPrefix, 'action' => 'index'), $pluginMatch);
-		Router::connect("/{$agentAlias}/:plugin/:controller/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
-		Router::connect("/{$agentAlias}/:plugin/:action/*", array('prefix' => $agentPrefix), $pluginMatch);
+		Router::connect("/{$siteAlias}/:plugin/:controller", array('prefix' => $sitePrefix, 'action' => 'index'), $pluginMatch);
+		Router::connect("/{$siteAlias}/:plugin/:controller/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
+		Router::connect("/{$siteAlias}/:plugin/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
 		// 携帯ノーマル
-		Router::connect("/{$agentAlias}/:controller/:action/*", array('prefix' => $agentPrefix));
+		Router::connect("/{$siteAlias}/:controller/:action/*", array('prefix' => $sitePrefix));
 	}
 
 /**

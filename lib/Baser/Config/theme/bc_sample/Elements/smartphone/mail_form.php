@@ -4,8 +4,8 @@
  * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
  */
 $prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if ($this->request->params['Site']['alias']) {
+	$prefix = '/' . $this->request->params['Site']['alias'];
 }
 ?>
 

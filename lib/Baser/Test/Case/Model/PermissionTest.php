@@ -28,6 +28,10 @@ class PermissionTest extends BaserTestCase {
 		'baser.Default.Page',
 		'baser.Model.Permission.PermissionPermissionModel',
 		'baser.Default.UserGroup',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.Content',
+		'baser.Default.User'
 	);
 
 	public function setUp() {

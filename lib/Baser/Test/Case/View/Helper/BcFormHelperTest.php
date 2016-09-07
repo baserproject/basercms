@@ -51,8 +51,9 @@ class Contact extends CakeTestModel {
 /**
  * FormHelperTest class
  *
- * @package		Baser.Test.Case.View.Helper
- * @property	BcFormHelper $BcForm
+ * @package Baser.Test.Case.View.Helper
+ * @property BcFormHelper $BcForm
+ * @property View $_View
  */
 class BcFormHelperTest extends BaserTestCase {
 
@@ -65,6 +66,8 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.Plugin',
 		'baser.Default.Content',
 		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.User'
 	);
 	
 /**
@@ -78,14 +81,9 @@ class BcFormHelperTest extends BaserTestCase {
 		Configure::write('App.base', '');
 		Configure::delete('Asset');
 		$this->_View = new BcAppView();
-		$this->request->params['Site'] = array('use_subdomain' => null);
+		$this->_View->request = $this->_getRequest('/contacts/add');
 		$this->BcForm = new BcFormHelper($this->_View);
 		$this->BcTime = new BcTimeHelper($this->_View);
-		$this->BcForm->request = new CakeRequest('contacts/add', false);
-		$this->BcForm->request->here = '/contacts/add';
-		$this->BcForm->request['action'] = 'add';
-		$this->BcForm->request->webroot = '';
-		$this->BcForm->request->base = '';
 	}
 
 /**
@@ -584,7 +582,6 @@ class BcFormHelperTest extends BaserTestCase {
 		);
 
 		$result = $this->BcForm->file($fieldName);
-
 		$expected = array(
 			'div'	=> array('class' => 'upload-file'),
 			array('input' => array('type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch')),
@@ -594,7 +591,7 @@ class BcFormHelperTest extends BaserTestCase {
 			'label' => array('for' => 'ContactEyeCatchDelete'),
 			'削除する',
 			'/label',
-			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'id' => 'ContactEyeCatch')),
+			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch')),
 			array('br' => true),
 			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
@@ -660,7 +657,7 @@ class BcFormHelperTest extends BaserTestCase {
 			'label' => array('for' => 'Contact0EyeCatchDelete'),
 			'削除する',
 			'/label',
-			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'id' => 'Contact0EyeCatch')),
+			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'Contact0EyeCatch')),
 			array('br' => true),
 			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),

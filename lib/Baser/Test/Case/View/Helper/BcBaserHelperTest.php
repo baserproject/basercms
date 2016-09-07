@@ -436,16 +436,10 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param bool $expected 期待値
  * @param string $url リクエストURL
- * @param string $agent ユーザーエージェント
- *
  * @return void
  * @dataProvider isHomeDataProvider
  */
-	public function testIsHome($expected, $url, $agent = null) {
-		$this->_unsetAgent();
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
+	public function testIsHome($expected, $url) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isHome());
 	}
@@ -458,14 +452,15 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(false, '/news/index'),
 
 			// モバイルページ
-			array(true, '/m/', 'mobile'),
-			array(true, '/m/index', 'mobile'),
-			array(false, '/m/news/index', 'mobile'),
+			array(true, '/m/'),
+			array(true, '/m/index'),
+			array(false, '/m/news/index'),
 
 			// スマートフォンページ
-			array(true, '/s/', 'smartphone'),
-			array(true, '/s/index', 'smartphone'),
-			array(false, '/s/news/index', 'smartphone')
+			array(true, '/s/'),
+			array(true, '/s/index'),
+			array(false, '/s/news/index'),
+			array(false, '/s/news/index')
 		);
 	}
 
@@ -474,16 +469,10 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param bool $expected 期待値
  * @param string $url リクエストURL
- * @param string $agent ユーザーエージェント
- *
  * @return void
  * @dataProvider isBlogDataProvider
  */
-	public function testIsBlog($expected, $url, $agent = null) {
-		$this->_unsetAgent();
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
+	public function testIsBlog($expected, $url) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isBlog());
 	}
@@ -515,16 +504,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	 *
 	 * @param bool $expected 期待値
 	 * @param string $url リクエストURL
-	 * @param string $agent ユーザーエージェント
-	 *
 	 * @return void
 	 * @dataProvider isMailDataProvider
 	 */
-	public function testIsMail($expected, $url, $agent = null) {
-		$this->_unsetAgent();
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
+	public function testIsMail($expected, $url) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isMail());
 	}
@@ -538,16 +521,16 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(true, '/contact/index'),
 
 			// モバイルページ
-			array(false, '/m/', 'mobile'),
-			array(false, '/m/index', 'mobile'),
-			array(false, '/m/news/index', 'mobile'),
-			array(true, '/m/contact/index', 'mobile'),
+			array(false, '/m/'),
+			array(false, '/m/index'),
+			array(false, '/m/news/index'),
+			array(true, '/m/contact/index'),
 
 			// スマートフォンページ
-			array(false, '/s/', 'smartphone'),
-			array(false, '/s/index', 'smartphone'),
-			array(false, '/s/news/index', 'smartphone'),
-			array(true, '/s/contact/index', 'smartphone')
+			array(false, '/s/'),
+			array(false, '/s/index'),
+			array(false, '/s/news/index'),
+			array(true, '/s/contact/index')
 		);
 	}
 
@@ -886,23 +869,20 @@ class BcBaserHelperTest extends BaserTestCase {
  * XMLヘッダタグを出力する
  *
  * @param string $expected 期待値
- * @param string $agent ユーザーエージェント
+ * @param string $url URL
  * @return void
  * @dataProvider xmlDataProvider
  */
-	public function testXmlHeader($expected, $agent = null) {
+	public function testXmlHeader($expected, $url = null) {
+		$this->BcBaser->request = $this->_getRequest($url);
 		$this->expectOutputString($expected);
-
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
 		$this->BcBaser->xmlHeader();
 	}
 
 	public function xmlDataProvider() {
 		return array(
-			array('<?xml version="1.0" encoding="UTF-8" ?>' . "\n"),
-			array('<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", 'mobile')
+			array('<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/'),
+			array('<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", '/m/')
 		);
 	}
 
@@ -1095,20 +1075,13 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param string $expected 期待値
  * @param string $encoding エンコード
- * @param string $agent ユーザーエージェント
+ * @param string $url URL
  * @return void
  * @dataProvider charsetDataProvider
  */
-	public function testCharset($expected, $encoding, $agent = null) {
+	public function testCharset($expected, $encoding, $url = null) {
+		$this->BcBaser->request = $this->_getRequest($url);
 		$this->expectOutputString($expected);
-
-		$this->_unsetAgent();
-
-		if ($agent !== null) {
-			$this->_setAgentSetting($agent, true);
-			$this->_setAgent($agent);
-		}
-
 		if ($encoding !== null) {
 			$this->BcBaser->charset($encoding);
 		} else {
@@ -1118,8 +1091,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function charsetDataProvider() {
 		return array(
-			array('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8'),
-			array('<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, 'mobile')
+			array('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'),
+			array('<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, '/m/')
 		);
 	}
 
@@ -1255,23 +1228,13 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param string $url URL
  * @param string $expects コンテンツ名
- * @param string $ua リクエストのユーザーエージェント
- * @param array $agents 対応する設定のエージェントのリスト
- * @param array $linkedAgents 連動する設定のエージェントのリスト
  * @return void*
  * @dataProvider getContentsNameDataProvider
  * 
  * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
-	public function testGetContentsName($url, $expects, $ua = null, array $agents = array()) {
+	public function testGetContentsName($url, $expects) {
 		//Configure周りの設定を全てOFF状態に
-		$this->_unsetAgent();
-
-		if (!empty($ua) && !empty($agents) && in_array($ua, $agents)) {
-			$this->_setAgentSetting($ua, true);
-			$this->_setAgent($ua);
-		}
-
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expects, $this->BcBaser->getContentsName());
 	}
@@ -1285,17 +1248,17 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('/about', 'Default'),
 
 			//モバイル　対応ON 連動OFF
-			array('/m/', 'Home', 'mobile', array('mobile')),
-			array('/m/news', 'News', 'mobile', array('mobile')),
-			array('/m/contact', 'Contact', 'mobile', array('mobile')),
-			array('/m/hoge', 'M', 'mobile', array('mobile')),	// 存在しないページ
+			array('/m/', 'Home'),
+			array('/m/news', 'News'),
+			array('/m/contact', 'Contact'),
+			array('/m/hoge', 'M'),	// 存在しないページ
 
 			//スマートフォン 対応ON　連動OFF
-			array('/s/', 'Home', 'smartphone', array('smartphone')),
-			array('/s/news', 'News', 'smartphone', array('smartphone')),
-			array('/s/contact', 'Contact', 'smartphone', array('smartphone')),
-			array('/s/about', 'Default', 'smartphone', array('smartphone')),
-			array('/s/hoge', 'S', 'smartphone', array('smartphone')),	// 存在しないページ
+			array('/s/', 'Home'),
+			array('/s/news', 'News'),
+			array('/s/contact', 'Contact'),
+			array('/s/about', 'Default'),
+			array('/s/hoge', 'S'),	// 存在しないページ
 		);
 	}
 
@@ -1558,36 +1521,23 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 現在のページの純粋なURLを取得する
- * 
- * @param string $agent エージェント
+ *
  * @param string $url 現在のURL
  * @param string $expected 期待値
  * @return void
  * @dataProvider getHereDataProvider
  */
-	public function testGetHere($agent, $url, $expected) {
-		$this->_setAgent($agent);
+	public function testGetHere($url, $expected) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->getHere());
 	}
 
 	public function getHereDataProvider() {
 		return array(
-			// PCページ
-			array('', '/', '/'),
-			array('', '/index', '/index'),
-			array('', '/contact/index', '/contact/index'),
-			array('', '/blog/blog/index', '/blog/blog/index'),
-			// モバイルページ
-			array('mobile', '/', '/'),
-			array('mobile', '/index', '/index'),
-			array('mobile', '/contact/index', '/contact/index'),
-			array('mobile', '/blog/blog/index', '/blog/blog/index'),
-			// スマートフォンページ
-			array('smartphone', '/', '/'),
-			array('smartphone', '/index', '/index'),
-			array('smartphone', '/contact/index', '/contact/index'),
-			array('smartphone', '/blog/blog/index', '/blog/blog/index')
+			array('/', '/'),
+			array('/index', '/index'),
+			array('/contact/index', '/contact/index'),
+			array('/blog/blog/index', '/blog/blog/index')
 		);
 	}
 
@@ -1599,8 +1549,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  * @dataProvider isCategoryTopDataProvider
  */
-	public function testIsCategoryTop($agent, $url, $expected) {
-		$this->_setAgent($agent);
+	public function testIsCategoryTop($url, $expected) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isCategoryTop());
 	}
@@ -1608,20 +1557,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function isCategoryTopDataProvider() {
 		return array(
 			// PCページ
-			array('', '/', false),
-			array('', '/index', false),
-			array('', '/contact/index', true),
-			array('', '/contact/test', false),
-			// モバイルページ
-			array('mobile', '/', false),
-			array('mobile', '/index', false),
-			array('mobile', '/mobile/', true),
-			array('mobile', '/mobile/test', false),
-			// スマートフォンページ
-			array('smartphone', '/', false),
-			array('smartphone', '/index', false),
-			array('smartphone', '/contact/index', true),
-			array('smartphone', '/blog/blog/index', true)
+			array('/', false),
+			array('/index', false),
+			array('/contact/index', true),
+			array('/contact/test', false),
 		);
 	}
 
@@ -1641,28 +1580,25 @@ class BcBaserHelperTest extends BaserTestCase {
  * 
  * TODO: $noが指定されてない(null)場合のテストを記述する
  * $noを指定していない場合、ウィジェットが出力されません。
- * 
- * @param string $agent エージェント
+ *
  * @param string $url 現在のURL
  * @param int $no 
  * @param string $expected 期待値
  * @dataProvider widgetAreaDataProvider
  */
-	public function testWidgetArea($agent, $url, $no, $expected) {
-		$this->_setAgent($agent);
+	public function testWidgetArea($url, $no, $expected) {
 		$this->BcBaser->request = $this->_getRequest($url);
-
 		ob_start();
-		$this->BcBaser->WidgetArea($no);
+		$this->BcBaser->widgetArea($no);
 		$result = ob_get_clean();
 		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function widgetAreaDataProvider() {
 		return array(
-			array('', '/company', 1, '<div class="widget-area widget-area-1">'),
-			array('', '/company', 2, '<div class="widget-area widget-area-2">'),
-			array('', '/company', null, '<div class="widget-area widget-area-1">'),
+			array('/company', 1, '<div class="widget-area widget-area-1">'),
+			array('/company', 2, '<div class="widget-area widget-area-2">'),
+			array('/company', null, '<div class="widget-area widget-area-1">'),
 		);
 	}
 

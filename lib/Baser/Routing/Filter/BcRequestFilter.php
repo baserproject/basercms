@@ -10,8 +10,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
-app::uses('BcAgent', 'Lib');
-app::uses('DispatcherFilter', 'Routing');
+App::uses('DispatcherFilter', 'Routing');
 
 /**
  * Class BcRequestFilter
@@ -45,19 +44,15 @@ class BcRequestFilter extends DispatcherFilter {
 		$response = $event->data['response'];
 		$this->addDetectors($request);
 
-		//アセットならスキップ
+		// アセットならスキップ
 		if ($this->isAsset($request)) {
 			Configure::write('BcRequest.asset', true);
 			return;
 		}
 
-		//URLからエージェントを取得
-		$agentByUrl = BcAgent::findByUrl($request);
-		if (!is_null($agentByUrl) && $agentByUrl->isEnabled()) {
-			Configure::write('BcRequest.agent', $agentByUrl->name);
-			Configure::write('BcRequest.agentPrefix', $agentByUrl->prefix);
-			Configure::write('BcRequest.agentAlias', $agentByUrl->alias);
-
+		// URLからエージェントを取得
+		$site = BcSite::findCurrent(true);
+		if ($site && $site->device) {
 			/*
 			 * =========================================================
 			 * /m/files/... へのアクセスの場合、/files/... へ自動リダイレクト
@@ -68,7 +63,7 @@ class BcRequestFilter extends DispatcherFilter {
 			 * 2014/12/30 nakae bootstrap.phpから移行
 			 * =========================================================
 			 */
-			$param = preg_replace('/^' . $agentByUrl->alias . '\//', '', $request->url);
+			$param = preg_replace('/^' . $site->alias . '\//', '', $request->url);
 			if (preg_match('/^files/', $param)) {
 				$response->statusCode(301);
 				$response->header('Location', "{$request->base}/{$param}");
@@ -98,8 +93,7 @@ class BcRequestFilter extends DispatcherFilter {
 
 		$agents = BcAgent::findAll();
 		foreach ($agents as $agent) {
-			$configs[$agent->name] = array('env' => 'HTTP_USER_AGENT', 'pattern' => $agent->getUserAgentRegex());
-			$configs["{$agent->name}url"] = array('callback' => array($agent, 'urlMatches'));
+			$configs[$agent->name] = array('env' => 'HTTP_USER_AGENT', 'pattern' => $agent->getDetectorRegex());
 		}
 
 		return $configs;
@@ -190,16 +184,7 @@ class BcRequestFilter extends DispatcherFilter {
  * @return bool
  */
 	public function isPage(CakeRequest $request) {
-		$params = explode('/', $request->url);
-
-		$agent = BcAgent::findByAlias($params[0]);
-
-		if (is_null($agent)) {
-			$action = 'display';
-		} else {
-			$action = "{$agent->prefix}_display";
-		}
 		return $request->params['controller'] === 'pages'
-			&& $request->params['action'] === $action;
+			&& $request->params['action'] === 'display';
 	}
 }

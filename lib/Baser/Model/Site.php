@@ -107,11 +107,17 @@ class Site extends AppModel {
  * @param bool $mainOnly
  * @return array
  */
-    public function getSiteList($mainSiteId = null) {
+    public function getSiteList($mainSiteId = null, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
     	$conditions = ['Site.status' => true];
     	if(!is_null($mainSiteId)) {
     		$conditions['Site.main_site_id'] = $mainSiteId;
     	}
+		if($options['excludeIds']) {
+			$conditions[]['Site.id <>'] = $options['excludeIds']; 
+		}
 		$main = $this->getRootMain();
     	return [$main['Site']['id'] => $main['Site']['display_name']] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
@@ -146,6 +152,11 @@ class Site extends AppModel {
 			'status' => !$siteConfigs['maintenance'],
 			'use_subdomain' => false,
 			'relate_main_site' => null,
+			'device' => null,
+			'same_main_url' => false,
+			'auto_redirect' => false,
+			'auto_link' => false,
+			'lang' => null,
 			'created' => null,
 			'modified' => null
 		]];
@@ -361,16 +372,23 @@ class Site extends AppModel {
  * @return array|bool|null
  */
 	public function findByUrl($url) {
+		if($url === false || $url === "") {
+			return $this->getRootMain();
+		}
 		$params = explode('/', $url);
 		if(empty($params[0])) {
 			return false;
 		}
-		return $this->find('first', ['conditions' => [
+		$site = $this->find('first', ['conditions' => [
 			'or' => [
 				'Site.name' => $params[0],
 				'Site.alias' => $params[0]
 			]
 		], 'recursive' => -1]);
+		if(!$site) {
+			$site = $this->getRootMain();
+		}
+		return $site;
 	}
 
 /**
@@ -389,6 +407,25 @@ class Site extends AppModel {
 		return $this->find('first', ['conditions' => [
 			'Site.main_site_id' => $mainSiteId
 		], 'recursive' => -1]);
+	}
+	
+	public function getPureUrl($url) {
+		$site = $this->findByUrl($url);
+		if($site) {
+			return preg_replace('/.+?\//', '', $url);
+		} else {
+			return $url;
+		}
+	}
+	
+	public function afterFind($results, $primary = false) {
+		$results = parent::afterFind($results, $primary = false);
+		$this->dataIter($results, function(&$entity, &$model) {
+			if(empty($entity['Site']['alias']) && !empty($entity['Site']['name'])) {
+				$entity['Site']['alias'] = $entity['Site']['name'];	
+			}
+		});
+		return $results;
 	}
 	
 }

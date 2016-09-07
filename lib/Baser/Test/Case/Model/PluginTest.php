@@ -29,6 +29,8 @@ class PluginTest extends BaserTestCase {
 		'baser.Default.Page',
 		'baser.Default.Plugin',
 		'baser.Default.User',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
 	);
 
 	public function setUp() {

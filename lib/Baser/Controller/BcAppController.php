@@ -214,13 +214,14 @@ class BcAppController extends Controller {
 
 			$this->uses = null;
 
-			// モバイルのエラー用
-			if (Configure::read('BcRequest.agent')) {
-				$this->layoutPath = Configure::read('BcRequest.agentPrefix');
-				$agent = Configure::read('BcRequest.agent');
-				if ($agent == 'mobile') {
+			// サブサイト用のエラー
+			$Site = ClassRegistry::init('Site');
+			$site = $Site->findByUrl($this->request->url);
+			if (!empty($site['Site']['name'])) {
+				$this->layoutPath = $site['Site']['name'];
+				if ($site['Site']['name'] == 'mobile') {
 					$this->helpers[] = 'BcMobile';
-				} elseif ($agent == 'smartphone') {
+				} elseif ($site['Site']['name'] == 'smartphone') {
 					$this->helpers[] = 'BcSmartphone';
 				}
 			}
@@ -293,8 +294,8 @@ class BcAppController extends Controller {
 				return;
 			} else {
 				$redirectUrl = '/maintenance';
-				if (Configure::read('BcRequest.agentAlias')) {
-					$redirectUrl = '/' . Configure::read('BcRequest.agentAlias') . $redirectUrl;
+				if ($this->request->params['Site']['alias']) {
+					$redirectUrl = '/' . $this->request->params['Site']['alias'] . $redirectUrl;
 				}
 				$this->redirect($redirectUrl);
 			}
@@ -383,12 +384,10 @@ class BcAppController extends Controller {
 			}
 		}
 
-		if(!BcUtil::isAdminSystem()) {
-			$agent = Configure::read('BcRequest.agent');
-			if ($agent == 'mobile') {
-				$this->helpers[] = 'BcMobile';
-			} elseif ($agent == 'smartphone') {
-				$this->helpers[] = 'BcSmartphone';
+		if(!BcUtil::isAdminSystem() && !empty($this->request->params['Site']['name'])) {
+			$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
+			if($agentSetting && !empty($agentSetting['helper'])) {
+				$this->helpers[] = $agentSetting['helper'];
 			}
 			if(isset($this->request->params['Site'])) {
 				$this->layoutPath = $this->request->params['Site']['name'];
@@ -405,7 +404,7 @@ class BcAppController extends Controller {
 		}
 
 		// 権限チェック
-		if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) && !Configure::read('BcRequest.agent') && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
+		if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) && empty($this->request->params['Site']['name']) && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
 			if (!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
 				$user = $this->BcAuth->user();
 				$Permission = ClassRegistry::init('Permission');
@@ -928,7 +927,7 @@ class BcAppController extends Controller {
 		$cakeEmail->subject($title);
 
 		//From
-		$fromName = $from = '';
+		$from = '';
 		if (!empty($options['from'])) {
 			$from = $options['from'];
 		} else {
@@ -948,7 +947,7 @@ class BcAppController extends Controller {
 			if (!empty($this->siteConfigs['formal_name'])) {
 				$fromName = $this->siteConfigs['formal_name'];
 			} else {
-				$formalName = Configure::read('BcApp.title');
+				$fromName = Configure::read('BcApp.title');
 			}
 		}
 		$cakeEmail->from($from, $fromName);
@@ -988,10 +987,9 @@ class BcAppController extends Controller {
 		//template
 		if (!empty($options['template'])) {
 
-			$layoutPath = $subDir = $plugin = '';
-			if ($options['agentTemplate'] && Configure::read('BcRequest.agent')) {
-				$layoutPath = Configure::read('BcRequest.agentPrefix');
-				$subDir = Configure::read('BcRequest.agentPrefix');
+			$subDir = $plugin = '';
+			if ($options['agentTemplate'] && $this->request->params['Site']['name']) {
+				$subDir = $this->request->params['Site']['name'];
 			}
 
 			list($plugin, $template) = pluginSplit($options['template']);

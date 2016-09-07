@@ -77,8 +77,7 @@ class BlogBaserHelper extends AppHelper {
 			'template' => null,
 			'direction' => null,
 			'page' => null,
-			'sort' => null,
-			'siteId' => (int) $this->request->params['Site']['id']
+			'sort' => null
 		), $options);
 
 			if(!$contentsName && empty($options['contentsTemplate'])) {
@@ -102,7 +101,7 @@ class BlogBaserHelper extends AppHelper {
 		
 		// ブログコンテンツの条件生成
 		$Content = ClassRegistry::init('Content');
-		$conditions = ['Content.site_id' => $options['siteId']];
+		$conditions = [];
 		if($contentsName) {
 			$conditions['Content.url'] = $contentsName;
 		}
@@ -137,25 +136,13 @@ class BlogBaserHelper extends AppHelper {
 		if (!$blogContentId) {
 			$blogContentId = current($options['contentId']);
 		}
-
-		unset($options['siteId']);
+		
 		unset($options['contentsTemplate']);
 
 		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
-		$settings = Configure::read('BcAgent');
-		foreach ($settings as $key => $setting) {
-			if (isset($options[$key])) {
-				$agentOn = $options[$key];
-				unset($options[$key]);
-			} else {
-				$agentOn = (Configure::read('BcRequest.agent') == $key);
-			}
-			if ($agentOn) {
-				$url['prefix'] = $setting['prefix'];
-				break;
-			}
+		if($this->request->params['Site']['device']) {
+			$url['prefix'] = $this->request->params['Site']['device'];
 		}
-		
 		echo $this->requestAction($url, array('return', 'pass' => array($blogContentId, $num), 'entityId' => $blogContentId, 'named' => $options));
 	}
 

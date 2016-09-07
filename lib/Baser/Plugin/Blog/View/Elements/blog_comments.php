@@ -14,8 +14,8 @@
  * [PUBLISH] ブログコメント一覧
  */
 $prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if ($this->request->params['Site']['alias']) {
+	$prefix = '/' . $this->request->params['Site']['alias'];
 }
 ?>
 

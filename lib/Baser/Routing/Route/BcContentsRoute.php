@@ -31,8 +31,7 @@ class BcContentsRoute extends CakeRoute {
 			return false;
 		}
 		$Content = ClassRegistry::init('Content');
-		$request = new CakeRequest();
-
+		$request = Router::getRequest(true);
 		$extend = false;
 
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
@@ -41,6 +40,15 @@ class BcContentsRoute extends CakeRoute {
 			$publish = false;
 		}
 
+		// 同一URL対応
+		$sameUrl = false;
+		$subSite = BcSite::findCurrentSub(true);
+		if($subSite && $subSite->existsUrl($request)) {
+			$sameUrl = true;
+			$url = $subSite->makeUrl($request);
+			header('Vary: User-Agent');
+		}
+		
 		$content = $this->getContent($url, $publish);
 		if(!$content) {
 			$content = $this->getContent($url, $publish, true);
@@ -63,12 +71,16 @@ class BcContentsRoute extends CakeRoute {
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
-		$request = Router::getRequest();
 		$request->params['Content'] = $content['Content'];
 		$request->params['Site'] = $content['Site'];
 		if(!$extend) {
 			$url = $content['Content']['url'];
 		}
+		
+		if($sameUrl && $subSite) {
+			$content['Content']['url'] = $subSite->getPureUrl($url);
+		}
+		
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id']);
 		if($params) {
 			return $params;

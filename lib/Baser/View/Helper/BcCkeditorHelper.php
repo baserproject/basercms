@@ -322,17 +322,15 @@ class BcCkeditorHelper extends AppHelper {
 			'url' => $this->webroot('/css/admin/ckeditor/contents.css')
 		);
 
-		if ($theme && isset($this->request->data['Page']['page_type'])) {
-			$agentPrefix = '';
-			if ($this->request->data['Page']['page_type'] == 2) {
-				$agentPrefix = Configure::read('BcAgent.mobile.prefix');
-			} elseif ($this->request->data['Page']['page_type'] == 3) {
-				$agentPrefix = Configure::read('BcAgent.smartphone.prefix');
+		if ($theme) {
+			$sitePrefix = '';
+			if(!empty($this->request->data['Site']['name'])) {
+				$sitePrefix = $this->request->data['Site']['name'];	
 			}
-			if ($agentPrefix) {
+			if ($sitePrefix) {
 				array_unshift($themeEditorCsses, array(
-					'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $agentPrefix . DS . 'editor.css',
-					'url' => $this->webroot('/css/' . $agentPrefix . '/editor.css')
+					'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
+					'url' => $this->webroot('/css/' . $sitePrefix . '/editor.css')
 				));
 			}
 		}

@@ -15,6 +15,7 @@
  */
 header("Content-type: text/javascript charset=UTF-8");
 $this->BcBaser->cacheHeader(MONTH, 'js');
+$site = BcSite::findCurrent();
 ?>
 document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
 
@@ -38,7 +39,7 @@ var errorCallback = function (xml, status, e)
 //  リクエスト処理
 $.ajax({
 	type: 'GET',
-	url:      '<?php echo $this->BcBaser->getUrl(array(Configure::read('BcAgent.smartphone.alias') => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id)); ?>',
+	url:      '<?php echo $this->BcBaser->getUrl([$site->device => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id]); ?>',
 	cache: false,
 	success:  successCallback,
 	error:    errorCallback

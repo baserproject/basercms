@@ -148,7 +148,7 @@ class BcContentsComponent extends Component {
 		} else {
 			// @deprecated 5.0.0 since 4.0.0
 			//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
-			if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole()) {
+			if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
 				$controller->helpers[] = 'BcCache';
 				$controller->cacheAction = $controller->Content->getCacheTime($controller->request->params['Content']);
 			}

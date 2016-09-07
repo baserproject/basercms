@@ -4,8 +4,8 @@
  * 呼出箇所：ブログ記事詳細
  */
 $prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if ($this->request->params['Site']['alias']) {
+	$prefix = '/' . $this->request->params['Site']['alias'];
 }
 ?>
 

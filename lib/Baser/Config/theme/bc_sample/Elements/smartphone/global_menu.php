@@ -10,8 +10,8 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 $prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
+if ($this->request->params['Site']['alias']) {
+	$prefix = '/' . $this->request->params['Site']['alias'];
 }
 ?>
 
@@ -37,7 +37,7 @@ if (Configure::read('BcRequest.agent')) {
 				$class = ' class="' . implode(' ', $classies) . '"';
 				?>
 
-				<?php if (!Configure::read('BcRequest.agent') && $this->base == '/index.php' && $globalMenu['Content']['url'] == '/'): ?>
+				<?php if (empty($this->request->params['Site']['name']) && $this->base == '/index.php' && $globalMenu['Content']['url'] == '/'): ?>
 					<?php /* PC版トップページ */ ?>
 					<li<?php echo $class ?>>
 						<?php echo str_replace('/index.php', '', $this->BcBaser->link($globalMenu['Content']['title'], $globalMenu['Content']['url'])) ?>

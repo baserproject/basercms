@@ -737,7 +737,7 @@ class BcBaserHelper extends AppHelper {
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->css('admin/toolbar');
@@ -778,7 +778,7 @@ class BcBaserHelper extends AppHelper {
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->element('admin/toolbar', array(), array('subDir' => false));
@@ -810,7 +810,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function xmlHeader($attrib = array()) {
-		if (empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile') {
+		if (empty($attrib['encoding']) && @$this->request->params['Site']['device'] == 'mobile') {
 			$attrib['encoding'] = 'Shift-JIS';
 		}
 		echo $this->BcXml->header($attrib) . "\n";
@@ -1078,7 +1078,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function charset($charset = null) {
-		if (!$charset && Configure::read('BcRequest.agent') == 'mobile') {
+		if (!$charset && @$this->request->params['Site']['device'] == 'mobile') {
 			$charset = 'Shift-JIS';
 		}
 		echo $this->BcHtml->charset($charset);
@@ -1112,7 +1112,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function setPageEditLink($id) {
-		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 			$this->_View->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
 	}
@@ -1274,7 +1274,7 @@ class BcBaserHelper extends AppHelper {
 
 		$url = explode('/', h($this->request->url));
 
-		if (Configure::read('BcRequest.agent')) {
+		if (@$this->request->params['Site']['alias']) {
 			array_shift($url);
 		}
 
@@ -2585,5 +2585,40 @@ END_FLASH;
 	public function relatedSiteLinks($id = null) {
 		echo $this->getRelatedSiteLinks($id);
 	}
-	
+
+/**
+ * After Render
+ *
+ * @param string $viewFile
+ */
+	public function afterRender($viewFile) {
+		parent::afterRender($viewFile);
+		$site = BcSite::findCurrent();
+		if(!$site) {
+			return;
+		}
+		if($site->device != '') {
+			return;
+		}
+		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
+		$pureUrl = $site->getPureUrl($this->request->url);
+		$agent = BcAgent::find('smartphone');
+		$subSite = BcSite::findCurrentSub(false, $agent);
+		if(!$subSite) {
+			return;
+		}
+		$url = $subSite->makeUrl(new CakeRequest($pureUrl));
+		$this->_View->set('meta',
+			$this->BcHtml->meta('canonical',
+				$this->BcHtml->url($url, true),
+				[
+					'rel' => 'canonical',
+					'media' => 'only screen and (max-width: 640px)',
+					'type' => null,
+					'title' => null,
+					'inline' => false
+				]
+			)
+		);
+	}
 }

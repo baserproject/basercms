@@ -36,16 +36,20 @@ if($data['Site']['alias']) {
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['Site']['id']), array('title' => '編集')) ?>
 	</td>
 	<td style="width:5%"><?php echo $data['Site']['id']; ?></td>
-	<td><?php $this->BcBaser->link($data['Site']['name'], array('action' => 'edit', $data['Site']['id'])); ?></td>
 	<td><?php echo $data['Site']['display_name'] ?></td>
-	<td><?php echo $data['Site']['alias'] ?></td>
+	<td><?php $this->BcBaser->link($data['Site']['name'], array('action' => 'edit', $data['Site']['id'])); ?><br>
+		<?php echo $data['Site']['alias'] ?>
+	</td>
 	<td style="width:5%;" class="align-center status">
 		<?php echo $this->BcText->booleanMark($data['Site']['status']); ?><br />
 	</td>
-	<td style="width:5%;" class="align-center">
-		<?php echo $this->BcText->arrayValue($data['Site']['main_site_id'], $mainSites, ''); ?>
+	<td class="align-center">
+		<?php echo $this->BcText->arrayValue($data['Site']['device'], $devices, ''); ?><br>
+		<?php echo $this->BcText->arrayValue($data['Site']['lang'], $langs, ''); ?>
 	</td>
-	<td><?php echo $this->BcText->noValue($data['Site']['theme'], $this->BcBaser->siteConfig['theme']) ?></td>
+	<td><?php echo $this->BcText->arrayValue($data['Site']['main_site_id'], $mainSites, ''); ?><br>
+		<?php echo $this->BcText->noValue($data['Site']['theme'], $this->BcBaser->siteConfig['theme']) ?>
+	</td>
 	<td style="width:10%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Site']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Site']['modified']) ?>

@@ -43,8 +43,10 @@ class BaserTestCase extends CakeTestCase {
  * @return CakeRequest
  */
 	protected function _getRequest($url) {
+		Router::$initialized = false;
 		Router::reload();
 		$request = new CakeRequest($url);
+		
 		// コンソールからのテストの場合、requestのパラメーターが想定外のものとなってしまうので調整
 		if (isConsole()) {
 			$baseUrl = Configure::read('App.baseUrl');
@@ -65,54 +67,12 @@ class BaserTestCase extends CakeTestCase {
 				$request->webroot = '/';
 			}
 		}
-
 		Router::setRequestInfo($request);
 		$params = Router::parse($request->url);
+		unset($params['?']);
+		$request = Router::getRequest(true);
 		$request->addParams($params);
 		return $request;
 	}
 
-/**
- * ユーザーエージェント判定に利用される値をConfigureに設定
- * bootstrap.phpで行われている処理の代替
- *
- * MEMO: BcRequest.(agent).aliasは廃止
- *
- * @param string $prefix エージェントのプレフィックス
- * @return void
- */
-	protected function _setAgent($prefix) {
-		$agent = Configure::read("BcAgent.{$prefix}");
-		if (empty($agent)) {
-			return;
-		}
-		Configure::write('BcRequest.agent', $prefix);
-		Configure::write('BcRequest.agentPrefix', $agent['prefix']);
-		// Configure::write('BcRequest.agentAlias', $agent['alias']);
-	}
-
-/**
- * ユーザーエージェント設定
- * 
- * @param string $agentType エージェントのタイプ
- * @param bool $enabled true:有効 / false:無効
- * @return void
- */
-	protected function _setAgentSetting($agentType, $enabled) {
-		Configure::write('BcApp.' . $agentType, $enabled);
-	}
-
-/**
- * エージェント判定に利用される値を消去する
- *
- * MEMO: BcRequest.(agent).aliasは廃止
- *
- * @return void
- */
-	protected function _unsetAgent() {
-		Configure::delete('BcRequest.agent');
-		Configure::delete('BcRequest.agentPrefix');
-		// Configure::delete('BcRequest.agentAlias');
-	}
-	
 }

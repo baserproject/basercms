@@ -6,20 +6,27 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
- * @since			baserCMS v 3.0.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
 
 /**
- * BcMainRedirectFilter class
+ * BcRedirectMainSiteFilter class
+ * 
+ * サブサイトにコンテンツが存在しない場合、同階層のメインサイトのコンテンツを確認し、
+ * 存在していれば、メインサイトへリダイレクトをする。
+ * 
+ * （例）
+ * /s/service → /service
  *
  * @package Baser.Routing.Filter
  */
-class BcMainSiteRedirectFilter extends DispatcherFilter {
+class BcRedirectMainSiteFilter extends DispatcherFilter {
 
 /**
  * priority 
  * 
+ * URLの存在確認が完了しているタイミングを前提としている為、
  * Dispacher::parseParams() より後に実行される必要がある
  * 
  * @var int
@@ -33,7 +40,6 @@ class BcMainSiteRedirectFilter extends DispatcherFilter {
  * @return void|CakeResponse
  */
 	public function beforeDispatch(CakeEvent $event) {
-
 		$request = $event->data['request'];
 		$response = $event->data['response'];
 		if(!empty($request->params['Content'])) {
@@ -43,22 +49,23 @@ class BcMainSiteRedirectFilter extends DispatcherFilter {
 				return;
 			}
 		}
-		$Site = ClassRegistry::init('Site');
-		$site = $Site->findByUrl($request->url);
+		$site = BcSite::findCurrent();
 		if(!$site) {
 			return;
 		}
-		$mainSite = $Site->getMain($site['Site']['id']);
+		$mainSite = $site->getMain();
 		if(!$mainSite) {
 			return;
 		}
-		$mainSiteUrl = '/' . preg_replace('/^' . $Site->getPrefix($site) . '\//', '', $request->url);
-		$mainSitePrefix = $Site->getPrefix($mainSite);
-		if($mainSitePrefix) {
-			$mainSiteUrl = '/' . $mainSitePrefix . $mainSiteUrl;
+		$mainSiteUrl = '/' . preg_replace('/^' . $site->alias . '\//', '', $request->url);
+		if($mainSite->alias) {
+			$mainSiteUrl = '/' . $mainSite->alias . $mainSiteUrl;
 		}
 		if($mainSiteUrl) {
-			if(Router::parse($mainSiteUrl)) {
+			$request = new CakeRequest($mainSiteUrl);
+			$params = Router::parse($request->url);
+			$request->addParams($params);
+			if($this->_existController($request)) {
 				$response->header('Location', $request->base . $mainSiteUrl);
 				$response->statusCode(302);
 				return $response;

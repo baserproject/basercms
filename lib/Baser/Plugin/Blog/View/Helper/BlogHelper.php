@@ -688,7 +688,7 @@ class BlogHelper extends AppHelper {
 		}
 
 		$excludes = Configure::read('BcAgent');
-		$excludes = Hash::extract($excludes, '{s}.prefix');
+		$excludes = array_keys($excludes);
 
 		$excludes[] = 'rss';
 		$templates = array();
@@ -941,14 +941,10 @@ class BlogHelper extends AppHelper {
 		if (empty($this->request->params['plugin'])) {
 			return false;
 		}
-		$agentPrefix = Configure::read('BcRequest.agentPrefix');
-		if($agentPrefix) {
-			$agentPrefix .= '_';
-		}
 		return (
 			$this->request->params['plugin'] == 'blog' &&
 			$this->request->params['controller'] == 'blog' &&
-			$this->request->params['action'] == $agentPrefix . 'archives' &&
+			$this->request->params['action'] == 'archives' &&
 			!$this->getBlogArchiveType()
 		);
 	}

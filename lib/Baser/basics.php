@@ -205,22 +205,19 @@ function decodeContent($content, $fileName = null) {
 /**
  * 環境変数よりURLパラメータを取得する
  * 
- * ＊ モバイルプレフィックスは除外する
+ * ＊ プレフィックスは除外する
  * ＊ GETパラメーターは除外する
  * 
  * 《注意》
  * bootstrap 実行後でのみ利用可 
  */
 function getUrlParamFromEnv() {
-
-	$agentAlias = Configure::read('BcRequest.agentAlias');
 	$url = getUrlFromEnv();
-
+	$url = preg_replace('/^\//', '',  $url);
 	if (strpos($url, '?') !== false) {
 		list($url) = explode('?', $url);
 	}
-
-	return preg_replace('/^' . $agentAlias . '\//', '', $url);
+	return $url;
 }
 
 /**
@@ -598,12 +595,16 @@ function amr($a, $b) {
  * @return mixed
  */
 function addSessionId($url, $force = false) {
+	if(BcUtil::isAdminSystem()) {
+		return $url;
+	}
 	$sessionId = session_id();
 	if(!$sessionId) {
 		return $url;
 	}
 	// use_trans_sid が有効になっている場合、２重で付加されてしまう
-	if (Configure::read('BcRequest.agent') == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
+	$site = BcSite::findCurrent();
+	if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
 		if (is_array($url)) {
 			$url["?"][session_name()] = $sessionId;
 		} else {
