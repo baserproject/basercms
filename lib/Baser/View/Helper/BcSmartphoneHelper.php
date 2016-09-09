@@ -64,9 +64,11 @@ class BcSmartphoneHelper extends Helper {
 		} else {
 			$rss = false;
 		}
-
 		$site = BcSite::findCurrent();
 		if (!$rss && $site->device == 'smartphone' && $this->_View->layoutPath != 'Emails' . DS . 'text') {
+			if(empty($this->request->params['Site'])) {
+				return;
+			}
 			// 内部リンクの自動変換
 			if ($site->autoLink) {
 				$bcBaseUrl = BC_BASE_URL;
