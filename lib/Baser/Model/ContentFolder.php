@@ -87,8 +87,14 @@ class ContentFolder extends AppModel {
 					)
 				)
 			)
-		);
+		, false);
 		$contents = $this->Content->getPath($id, null, 0);
+		$this->Content->unbindModel(
+			array('belongsTo' => array(
+					'ContentFolder'
+				)
+			)
+		);
 		$contents = array_reverse($contents);
 		unset($contents[0]);
 		$parentTemplates = Hash::extract($contents, '{n}.ContentFolder.' . $type . '_template');
