@@ -101,8 +101,16 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 					<li>
 						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<div id="SystemMenu"><div>
-								<?php $adminSitemap = Configure::read('BcApp.adminNavi') ?>
+								<?php 
+								$adminSitemap = Configure::read('BcApp.adminNavi');
+								$isAdminGlobalmenuUsed = $this->BcAdmin->isAdminGlobalmenuUsed();
+								?>
 								<?php foreach ($adminSitemap as $key => $package): ?>
+									<?php 
+									if(!$isAdminGlobalmenuUsed && $key == 'core') {
+										continue;
+									}
+									?>
 									<?php if (empty($package['name'])): ?>
 										<?php $package['name'] = $key ?>
 									<?php endif ?>
