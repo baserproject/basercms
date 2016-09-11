@@ -181,7 +181,7 @@ class FeedConfigsController extends FeedAppController {
  * @param string $template
  * @return void
  */
-	public function redirectEditTemplate($template) {
+	protected function redirectEditTemplate($template) {
 		$path = 'Feed' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
 		$sorces = array(BASER_PLUGINS . 'Feed' . DS . 'View' . DS . $path);

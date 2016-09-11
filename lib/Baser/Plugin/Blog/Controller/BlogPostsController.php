@@ -500,98 +500,98 @@ class BlogPostsController extends BlogAppController {
  * @return void
  * @todo 未実装
  */
-	public function admin_import() {
-		// 入力チェック
-		$check = true;
-		$message = '';
-		if (!isset($this->request->data['Import']['blog_content_id']) || !$this->request->data['Import']['blog_content_id']) {
-			$message .= '取り込み対象のブログを選択してください<br />';
-			$check = false;
-		}
-		if (!isset($this->request->data['Import']['user_id']) || !$this->request->data['Import']['user_id']) {
-			$message .= '記事の投稿者を選択してください<br />';
-			$check = false;
-		}
-		if (!isset($this->request->data['Import']['file']['tmp_name'])) {
-			$message .= 'XMLデータを選択してください<br />';
-			$check = false;
-		}
-		if ($this->request->data['Import']['file']['type'] != 'text/xml') {
-			$message .= 'XMLデータを選択してください<br />';
-			$check = false;
-		} else {
-
-			// XMLデータを読み込む
-			$xml = new Xml($this->request->data['Import']['file']['tmp_name']);
-
-			$_posts = Xml::toArray($xml);
-
-			if (!isset($_posts['Rss']['Channel']['Item'])) {
-				$message .= 'XMLデータが不正です<br />';
-				$check = false;
-			} else {
-				$_posts = $_posts['Rss']['Channel']['Item'];
-			}
-		}
-
-		// 送信内容に問題がある場合には元のページにリダイレクト
-		if (!$check) {
-			$this->setMessage($message, true);
-			$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
-		}
-
-		// カテゴリ一覧の取得
-		$blogCategoryList = $this->BlogCategory->find('list', array('conditions' => array('blog_content_id' => $this->request->data['Import']['blog_content_id'])));
-		$blogCategoryList = array_flip($blogCategoryList);
-
-		// ポストデータに変換し１件ずつ保存
-		$count = 0;
-		foreach ($_posts as $_post) {
-			if (!$_post['Encoded'][0]) {
-				continue;
-			}
-			$post = array();
-			$post['blog_content_id'] = $this->request->data['Import']['blog_content_id'];
-			$post['no'] = $this->BlogPost->getMax('no', array('BlogPost.blog_content_id' => $this->request->data['Import']['blog_content_id'])) + 1;
-			$post['name'] = $_post['title'];
-			$_post['Encoded'][0] = str_replace("\n", "<br />", $_post['Encoded'][0]);
-			$encoded = explode('<!--more-->', $_post['Encoded'][0]);
-			$post['content'] = $encoded[0];
-			if (isset($encoded[1])) {
-				$post['detail'] = $encoded[1];
-			} else {
-				$post['detail'] = '';
-			}
-			if (isset($_post['Category'])) {
-				$_post['category'] = $_post['Category'][0];
-			} elseif (isset($_post['category'])) {
-				$_post['category'] = $_post['category'];
-			} else {
-				$_post['category'] = '';
-			}
-			if (isset($blogCategoryList[$_post['category']])) {
-				$post['blog_category_no'] = $blogCategoryList[$_post['category']];
-			} else {
-				$no = $this->BlogCategory->getMax('no', array('BlogCategory.blog_content_id' => $this->request->data['Import']['blog_content_id'])) + 1;
-				$this->BlogCategory->create(array('name' => $_post['category'], 'blog_content_id' => $this->request->data['Import']['blog_content_id'], 'no' => $no));
-				$this->BlogCategory->save();
-				$post['blog_category_id'] = $this->BlogCategory->getInsertID();
-				$blogCategoryList[$_post['category']] = $post['blog_category_id'];
-			}
-
-			$post['user_id'] = $this->request->data['Import']['user_id'];
-			$post['status'] = 1;
-			$post['posts_date'] = $_post['post_date'];
-
-			$this->BlogPost->create($post);
-			if ($this->BlogPost->save()) {
-				$count++;
-			}
-		}
-
-		$this->setMessage($count . ' 件の記事を取り込みました');
-		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
-	}
+//	public function admin_import() {
+//		// 入力チェック
+//		$check = true;
+//		$message = '';
+//		if (!isset($this->request->data['Import']['blog_content_id']) || !$this->request->data['Import']['blog_content_id']) {
+//			$message .= '取り込み対象のブログを選択してください<br />';
+//			$check = false;
+//		}
+//		if (!isset($this->request->data['Import']['user_id']) || !$this->request->data['Import']['user_id']) {
+//			$message .= '記事の投稿者を選択してください<br />';
+//			$check = false;
+//		}
+//		if (!isset($this->request->data['Import']['file']['tmp_name'])) {
+//			$message .= 'XMLデータを選択してください<br />';
+//			$check = false;
+//		}
+//		if ($this->request->data['Import']['file']['type'] != 'text/xml') {
+//			$message .= 'XMLデータを選択してください<br />';
+//			$check = false;
+//		} else {
+//
+//			// XMLデータを読み込む
+//			$xml = new Xml($this->request->data['Import']['file']['tmp_name']);
+//
+//			$_posts = Xml::toArray($xml);
+//
+//			if (!isset($_posts['Rss']['Channel']['Item'])) {
+//				$message .= 'XMLデータが不正です<br />';
+//				$check = false;
+//			} else {
+//				$_posts = $_posts['Rss']['Channel']['Item'];
+//			}
+//		}
+//
+//		// 送信内容に問題がある場合には元のページにリダイレクト
+//		if (!$check) {
+//			$this->setMessage($message, true);
+//			$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
+//		}
+//
+//		// カテゴリ一覧の取得
+//		$blogCategoryList = $this->BlogCategory->find('list', array('conditions' => array('blog_content_id' => $this->request->data['Import']['blog_content_id'])));
+//		$blogCategoryList = array_flip($blogCategoryList);
+//
+//		// ポストデータに変換し１件ずつ保存
+//		$count = 0;
+//		foreach ($_posts as $_post) {
+//			if (!$_post['Encoded'][0]) {
+//				continue;
+//			}
+//			$post = array();
+//			$post['blog_content_id'] = $this->request->data['Import']['blog_content_id'];
+//			$post['no'] = $this->BlogPost->getMax('no', array('BlogPost.blog_content_id' => $this->request->data['Import']['blog_content_id'])) + 1;
+//			$post['name'] = $_post['title'];
+//			$_post['Encoded'][0] = str_replace("\n", "<br />", $_post['Encoded'][0]);
+//			$encoded = explode('<!--more-->', $_post['Encoded'][0]);
+//			$post['content'] = $encoded[0];
+//			if (isset($encoded[1])) {
+//				$post['detail'] = $encoded[1];
+//			} else {
+//				$post['detail'] = '';
+//			}
+//			if (isset($_post['Category'])) {
+//				$_post['category'] = $_post['Category'][0];
+//			} elseif (isset($_post['category'])) {
+//				$_post['category'] = $_post['category'];
+//			} else {
+//				$_post['category'] = '';
+//			}
+//			if (isset($blogCategoryList[$_post['category']])) {
+//				$post['blog_category_no'] = $blogCategoryList[$_post['category']];
+//			} else {
+//				$no = $this->BlogCategory->getMax('no', array('BlogCategory.blog_content_id' => $this->request->data['Import']['blog_content_id'])) + 1;
+//				$this->BlogCategory->create(array('name' => $_post['category'], 'blog_content_id' => $this->request->data['Import']['blog_content_id'], 'no' => $no));
+//				$this->BlogCategory->save();
+//				$post['blog_category_id'] = $this->BlogCategory->getInsertID();
+//				$blogCategoryList[$_post['category']] = $post['blog_category_id'];
+//			}
+//
+//			$post['user_id'] = $this->request->data['Import']['user_id'];
+//			$post['status'] = 1;
+//			$post['posts_date'] = $_post['post_date'];
+//
+//			$this->BlogPost->create($post);
+//			if ($this->BlogPost->save()) {
+//				$count++;
+//			}
+//		}
+//
+//		$this->setMessage($count . ' 件の記事を取り込みました');
+//		$this->redirect(array('controller' => 'blog_configs', 'action' => 'form'));
+//	}
 
 /**
  * [ADMIN] 無効状態にする（AJAX）

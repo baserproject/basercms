@@ -72,26 +72,26 @@ class BlogConfigsController extends BlogAppController {
  *
  * @return void
  */
-	public function admin_form() {
-		if (empty($this->request->data)) {
-			$this->request->data = $this->BlogConfig->read(null, 1);
-			$blogContentList = $this->BlogContent->find("list");
-			$this->set('blogContentList', $blogContentList);
-			$userList = $this->User->find("list");
-			$this->set('userList', $userList);
-		} else {
-
-			/* 更新処理 */
-			if ($this->BlogConfig->save($this->request->data)) {
-				$this->setMessage('ブログ設定を保存しました。', false, true);
-				$this->redirect(array('action' => 'form'));
-			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
-			}
-		}
-
-		/* 表示設定 */
-		$this->pageTitle = 'ブログ設定';
-	}
+//	public function admin_form() {
+//		if (empty($this->request->data)) {
+//			$this->request->data = $this->BlogConfig->read(null, 1);
+//			$blogContentList = $this->BlogContent->find("list");
+//			$this->set('blogContentList', $blogContentList);
+//			$userList = $this->User->find("list");
+//			$this->set('userList', $userList);
+//		} else {
+//
+//			/* 更新処理 */
+//			if ($this->BlogConfig->save($this->request->data)) {
+//				$this->setMessage('ブログ設定を保存しました。', false, true);
+//				$this->redirect(array('action' => 'form'));
+//			} else {
+//				$this->setMessage('入力エラーです。内容を修正してください。', true);
+//			}
+//		}
+//
+//		/* 表示設定 */
+//		$this->pageTitle = 'ブログ設定';
+//	}
 
 }

@@ -271,78 +271,78 @@ class SearchIndicesController extends AppController {
  * @return	void
  * @access 	public
  */
-	public function admin_add() {
-		$this->pageTitle = '検索インデックス登録';
-
-		if ($this->request->data) {
-			$url = $this->request->data['SearchIndex']['url'];
-			$url = str_replace(FULL_BASE_URL . $this->request->base, '', $url);
-
-			if (!$this->SearchIndex->find('count', array('conditions' => array('SearchIndex.url' => $url)))) {
-
-				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
-				Router::reload();
-				// URLのデータを取得
-				try {
-					$searchIndex = $this->requestAction($url, array('return' => 1));
-				} catch (Exception $e) {
-					$searchIndex = $e;
-				}
-
-				Router::reload();
-				// 元の設定を復元
-				Router::setRequestInfo($this->request);
-
-				if (!is_a($searchIndex, 'Exception')) {
-					$searchIndex = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $searchIndex);
-				} elseif (preg_match('/\.html/', $url)) {
-					App::uses('HttpSocket', 'Network/Http');
-					$socket = new HttpSocket();
-					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
-					$HttpSocketResponse = $socket->get(siteUrl() . preg_replace('/^\//', '', $url));
-					$code = $HttpSocketResponse->code;
-					if ($code != 200) {
-						unset($searchIndex);
-					} else {
-						if (preg_match('/<body>(.*?)<\/body>/is', $HttpSocketResponse->body, $matches)) {
-							$searchIndex = $matches[1];
-						} else {
-							$searchIndex = '';
-						}
-					}
-				} else {
-					unset($searchIndex);
-				}
-
-				if (isset($searchIndex)) {
-					$searchIndex = Sanitize::stripAll($searchIndex);
-					$searchIndex = strip_tags($searchIndex);
-					$data = array('SearchIndex' => array(
-							'title'		=> $this->request->data['SearchIndex']['title'],
-							'detail'	=> $searchIndex,
-							'url'		=> $url,
-							'type'		=> 'その他',
-							'status'	=> true,
-							'priority'	=> 0.5
-					));
-					$this->SearchIndex->create($data);
-					if ($this->SearchIndex->save()) {
-						$this->setMessage('検索インデックスに ' . $url . ' を追加しました。');
-						$this->redirect(array('action' => 'index'));
-					} else {
-						$this->setMessage('保存中にエラーが発生しました。', true);
-					}
-				} else {
-					$this->SearchIndex->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
-					$this->setMessage('保存中にエラーが発生しました。', true);
-				}
-			} else {
-				$this->SearchIndex->invalidate('url', '既に登録済のURLです。');
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
-			}
-		}
-		$this->help = 'search_indices_add';
-	}
+//	public function admin_add() {
+//		$this->pageTitle = '検索インデックス登録';
+//
+//		if ($this->request->data) {
+//			$url = $this->request->data['SearchIndex']['url'];
+//			$url = str_replace(FULL_BASE_URL . $this->request->base, '', $url);
+//
+//			if (!$this->SearchIndex->find('count', array('conditions' => array('SearchIndex.url' => $url)))) {
+//
+//				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
+//				Router::reload();
+//				// URLのデータを取得
+//				try {
+//					$searchIndex = $this->requestAction($url, array('return' => 1));
+//				} catch (Exception $e) {
+//					$searchIndex = $e;
+//				}
+//
+//				Router::reload();
+//				// 元の設定を復元
+//				Router::setRequestInfo($this->request);
+//
+//				if (!is_a($searchIndex, 'Exception')) {
+//					$searchIndex = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $searchIndex);
+//				} elseif (preg_match('/\.html/', $url)) {
+//					App::uses('HttpSocket', 'Network/Http');
+//					$socket = new HttpSocket();
+//					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
+//					$HttpSocketResponse = $socket->get(siteUrl() . preg_replace('/^\//', '', $url));
+//					$code = $HttpSocketResponse->code;
+//					if ($code != 200) {
+//						unset($searchIndex);
+//					} else {
+//						if (preg_match('/<body>(.*?)<\/body>/is', $HttpSocketResponse->body, $matches)) {
+//							$searchIndex = $matches[1];
+//						} else {
+//							$searchIndex = '';
+//						}
+//					}
+//				} else {
+//					unset($searchIndex);
+//				}
+//
+//				if (isset($searchIndex)) {
+//					$searchIndex = Sanitize::stripAll($searchIndex);
+//					$searchIndex = strip_tags($searchIndex);
+//					$data = array('SearchIndex' => array(
+//							'title'		=> $this->request->data['SearchIndex']['title'],
+//							'detail'	=> $searchIndex,
+//							'url'		=> $url,
+//							'type'		=> 'その他',
+//							'status'	=> true,
+//							'priority'	=> 0.5
+//					));
+//					$this->SearchIndex->create($data);
+//					if ($this->SearchIndex->save()) {
+//						$this->setMessage('検索インデックスに ' . $url . ' を追加しました。');
+//						$this->redirect(array('action' => 'index'));
+//					} else {
+//						$this->setMessage('保存中にエラーが発生しました。', true);
+//					}
+//				} else {
+//					$this->SearchIndex->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
+//					$this->setMessage('保存中にエラーが発生しました。', true);
+//				}
+//			} else {
+//				$this->SearchIndex->invalidate('url', '既に登録済のURLです。');
+//				$this->setMessage('入力エラーです。内容を修正してください。', true);
+//			}
+//		}
+//		$this->help = 'search_indices_add';
+//	}
 
 /**
  * [ADMIN] 検索インデックス削除　(ajax)
@@ -363,29 +363,6 @@ class SearchIndicesController extends AppController {
 			exit(true);
 		}
 		exit();
-	}
-
-/**
- * [ADMIN] 検索インデックス削除
- *
- * @param	int		$id
- * @return	void
- * @access 	public
- */
-	public function admin_delete($id = null) {
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		/* 削除処理 */
-		if ($this->SearchIndex->delete($id)) {
-			$this->setMessage('検索インデックスより NO.' . $id . ' を削除しました。', false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-
-		$this->redirect(array('action' => 'index'));
 	}
 
 /**

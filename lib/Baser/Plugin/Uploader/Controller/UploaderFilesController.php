@@ -103,9 +103,8 @@ class UploaderFilesController extends AppController {
  * インストール状態の確認
  *
  * @return	string	インストールメッセージ
- * @access	public
  */
-	public function checkInstall() {
+	protected function checkInstall() {
 
 		// インストール確認
 		$installMessage = '';
@@ -219,7 +218,7 @@ class UploaderFilesController extends AppController {
  * @param array $data
  * @return array 
  */
-	public function _createAdminIndexConditions($data) {
+	protected function _createAdminIndexConditions($data) {
 		
 		$conditions = array();
 		if(!empty($data['uploader_category_id'])) {

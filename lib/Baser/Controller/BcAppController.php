@@ -240,7 +240,6 @@ class BcAppController extends Controller {
  * beforeFilter
  *
  * @return	void
- * @access	public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -254,8 +253,7 @@ class BcAppController extends Controller {
 
 		// テーマを設定
 		$this->setTheme();
-
-		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
+		
 		if (!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
 			$this->Security->csrfCheck = false;
@@ -434,7 +432,7 @@ class BcAppController extends Controller {
  *
  * @return void
  */
-	public function setTheme() {
+	protected function setTheme() {
 		$theme = '';
 		if(!empty($this->request->params['Site']['theme'])) {
 			$theme = $this->request->params['Site']['theme'];
@@ -467,7 +465,6 @@ class BcAppController extends Controller {
  * beforeRender
  *
  * @return	void
- * @access	public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -597,10 +594,9 @@ class BcAppController extends Controller {
  * NOT FOUNDページを出力する
  *
  * @return	void
- * @access	public
  * @throws	NotFoundException
  */
-	public function notFound() {
+	protected function notFound() {
 		throw new NotFoundException('見つかりませんでした。');
 	}
 
@@ -693,7 +689,7 @@ class BcAppController extends Controller {
  * @param string $plugin プラグイン名
  * @return string Baserバージョン
  */
-	public function getBaserVersion($plugin = '') {
+	protected function getBaserVersion($plugin = '') {
 		return getVersion($plugin);
 	}
 
@@ -703,7 +699,7 @@ class BcAppController extends Controller {
  * @param string $theme テーマ名
  * @return string
  */
-	public function getThemeVersion($theme) {
+	protected function getThemeVersion($theme) {
 		$path = WWW_ROOT . 'theme' . DS . $theme . DS . 'VERSION.txt';
 		if (!file_exists($path)) {
 			return false;
@@ -724,7 +720,7 @@ class BcAppController extends Controller {
  * @param string $plugin プラグイン名
  * @return string
  */
-	public function getSiteVersion($plugin = '') {
+	protected function getSiteVersion($plugin = '') {
 		if (!$plugin) {
 			if (isset($this->siteConfigs['version'])) {
 				return preg_replace("/baserCMS ([0-9\.]+?[\sa-z]*)/is", "$1", $this->siteConfigs['version']);
@@ -742,7 +738,7 @@ class BcAppController extends Controller {
  *
  * @return string Baserバージョン
  */
-	public function getCakeVersion() {
+	protected function getCakeVersion() {
 		$versionFile = new File(CAKE_CORE_INCLUDE_PATH . DS . CAKE . 'VERSION.txt');
 		$versionData = $versionFile->read();
 		$lines = explode("\n", $versionData);
@@ -787,7 +783,7 @@ class BcAppController extends Controller {
  * @param array $options オプション
  * @return bool 送信結果
  */
-	public function sendMail($to, $title = '', $body = '', $options = array()) {
+	protected function sendMail($to, $title = '', $body = '', $options = array()) {
 		$options = array_merge(array(
 			'agentTemplate' => true,
 			'template' => 'default'
@@ -1046,7 +1042,7 @@ class BcAppController extends Controller {
  * @return	void
  * @access	public
  */
-	public function setViewConditions($filterModels = array(), $options = array()) {
+	protected function setViewConditions($filterModels = array(), $options = array()) {
 		$_options = array('type' => 'post', 'session' => true);
 		$options = am($_options, $options);
 		extract($options);
@@ -1179,9 +1175,8 @@ class BcAppController extends Controller {
  * @param mixed $values 値
  * @param array $options オプション
  * @return	string
- * @access	public
  */
-	public function convertSelectTextCondition($fieldName, $values, $options = array()) {
+	protected function convertSelectTextCondition($fieldName, $values, $options = array()) {
 		$_options = array('type' => 'string', 'conditionType' => 'or');
 		$options = am($_options, $options);
 		$conditions = array();
@@ -1205,7 +1200,7 @@ class BcAppController extends Controller {
  * @param mixed $value 値
  * @return array
  */
-	public function convertBetweenCondition($fieldName, $value) {
+	protected function convertBetweenCondition($fieldName, $value) {
 		if (strpos($value, '-') === false) {
 			return false;
 		}
@@ -1226,7 +1221,7 @@ class BcAppController extends Controller {
  * @param int $len 文字列の長さ
  * @return string パスワード
  */
-	public function generatePassword($len = 8) {
+	protected function generatePassword($len = 8) {
 		srand((double)microtime() * 1000000);
 		$seed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		$password = "";
@@ -1297,7 +1292,7 @@ class BcAppController extends Controller {
  *
  * @return mixed string Or false
  */
-	public function getUserModel() {
+	protected function getUserModel() {
 		if (!isset($this->BcAuth)) {
 			return false;
 		}
@@ -1449,7 +1444,7 @@ class BcAppController extends Controller {
  *
  * @return void
  */
-	public function setThemeHelpers() {
+	protected function setThemeHelpers() {
 		if (!empty($this->request->params['admin'])) {
 			return;
 		}
@@ -1472,7 +1467,7 @@ class BcAppController extends Controller {
  * @param mixed $message エラーメッセージ
  * @return void
  */
-	public function ajaxError($errorNo = 500, $message = '') {
+	protected function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 ' . $errorNo);
 		if ($message) {
 			if (is_array($message)) {
@@ -1500,7 +1495,7 @@ class BcAppController extends Controller {
  * @param bool $setFlash flash message に保存するか
  * @return void
  */
-	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
+	protected function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
 		if (!isset($this->Session)) {
 			return;
 		}
