@@ -58,6 +58,9 @@ class BcContentsBehavior extends ModelBehavior {
 			$model->Content->clear();
 			$model->Content->set($model->data['Content']);
 			$model->Content->validates($options);
+			if($model->Content->validationErrors && empty($model->data['Content']['id'])) {
+				$model->validationErrors += $model->Content->validationErrors;
+			}
 			if(!empty($model->Content->data['Content'])) {
 				$model->data['Content'] = $model->Content->data['Content'];
 			}

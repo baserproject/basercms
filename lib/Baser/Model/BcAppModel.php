@@ -690,6 +690,26 @@ class BcAppModel extends Model {
 		}
 	}
 
+	/**
+	 * 削除文字チェック
+	 *
+	 * BcUtile::urlencode で、削除される文字のみで構成されているかチェック(結果ブランクになるためnotBlankになる確認)
+	 *
+	 * @param array $check チェック対象文字列
+	 * @return boolean
+	 */
+	public function bcUtileUrlencodeBlank($check) {
+		if (!$check[key($check)]) {
+			return true;
+		}
+
+		if (preg_match("/^[\\'\|`\^\"\(\)\{\}\[\];\/\?:@&=\+\$,%<>#! 　]+$/", $check[key($check)])) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 /**
  * データの重複チェックを行う
  * @param array $check

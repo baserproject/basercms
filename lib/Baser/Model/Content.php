@@ -69,18 +69,22 @@ class Content extends AppModel {
  */
 	public $validate = [
 		'name' => [
+			['rule' => ['bcUtileUrlencodeBlank'],
+				'message' => 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。'],
 			['rule' => ['notBlank'],
 				'message' => 'スラッグを入力してください。'],
 			['rule' => ['maxLength', 2083],
-				'message' => 'タイトルは255文字以内で入力してください。'],
+				'message' => 'タイトルは230文字以内で入力してください。'],
 			['rule' => ['duplicateRelatedSiteContent'],
 				'message' => '連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。']
 		],
 		'title' => [
+			['rule' => ['bcUtileUrlencodeBlank'],
+				'message' => 'タイトルはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。'],
 			['rule' => ['notBlank'],
 				'message' => 'タイトルを入力してください。'],
-			['rule' => ['maxLength', 255],
-				'message' => 'タイトルは255文字以内で入力してください。'],
+			['rule' => ['maxLength', 230],
+				'message' => 'タイトルは230文字以内で入力してください。'],
 		],
 	];
 
@@ -229,6 +233,17 @@ class Content extends AppModel {
 			$this->data['Content']['name'] = $this->getUniqueName($this->data['Content']['name'], $this->data['Content']['parent_id'], $contentId);
 		}
 		return true;
+	}
+
+/**
+ * After Validate 
+ */
+	public function afterValidate() {
+		parent::afterValidate();
+		// 新規追加の際、name は、title より自動設定される為、バリデーションエラーが発生してもエラーメッセージを表示しない
+		if(empty($this->data['Content']['id']) && !empty($this->validationErrors['name'])) {
+			unset($this->validationErrors['name']);
+		}
 	}
 
 /**
