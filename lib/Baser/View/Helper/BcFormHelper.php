@@ -1461,16 +1461,16 @@ $(function(){
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
+		//if(this.id.replace('{$domId}','') == 'Date') {
+			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
+				$("#{$domId}Time").val('00:00');
+			}
+		//}
 		var value = $("#{$domId}Date").val().replace(/\//g, '-');
 		if($("#{$domId}Time").val()) {
 			value += ' '+$("#{$domId}Time").val();
 		}
         $("#{$domId}").val(value);
-		if(this.id.replace('{$domId}','') == 'Date') {
-			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
-				$("#{$domId}Time").val('00:00:00');
-			}
-		}
    }
 });
 </script>
