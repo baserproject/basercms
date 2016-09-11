@@ -217,18 +217,6 @@ class BlogCategoryTest extends BaserTestCase {
 		$result = $this->BlogCategory->getCategoryList(1, array('type' => 'year', 'limit' => 1, 'viewCount' => true));
 		$this->assertEquals($result['2015'][0]['BlogCategory']['count'], 1, $message);
 	}
-
-
-/**
- * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
- */
-	public function testCheckNewCategoryAddable() {
-		$message = '新しいカテゴリが追加できる状態チェックが正しくありません';
-		$result = $this->BlogCategory->checkNewCategoryAddable(1);
-		$this->assertTrue($result, $message);
-		$result = $this->BlogCategory->checkNewCategoryAddable(99);
-		$this->assertFalse($result, $message);
-	}
 	
 /**
  * アクセス制限としてカテゴリの新規追加ができるか確認する

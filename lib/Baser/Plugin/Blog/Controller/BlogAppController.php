@@ -90,22 +90,4 @@ class BlogAppController extends AppController {
 		return $result;
 	}
 
-/**
- * beforeFilter
- *
- * @return	void
- * @access 	public
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		$user = $this->BcAuth->user();
-		if (!$user) {
-			return;
-		}
-		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
-			$user['user_group_id']
-		);
-		$this->set('newCatAddable', $newCatAddable);
-	}
-
 }

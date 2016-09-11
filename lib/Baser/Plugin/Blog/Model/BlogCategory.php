@@ -269,32 +269,6 @@ class BlogCategory extends BlogAppModel {
 		}
 		return $datas;
 	}
-
-/**
- * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
- * 
- * @param int $userGroupId ユーザーグループID
- * @param bool $rootEditable ドキュメントルートの書き込み権限の有無
- * @return bool
- */
-	public function checkNewCategoryAddable($userGroupId) {
-		
-		$newCatAddable = false;
-		$ownerCats = $this->find('count', array(
-			'conditions' => array(
-				'OR' => array(
-					array('BlogCategory.owner_id' => null),
-					array('BlogCategory.owner_id' => $userGroupId)
-				)
-		)));
-
-		if ($ownerCats) {
-			$newCatAddable = true;
-		}
-
-		return $newCatAddable;
-
-	}
 	
 /**
  * アクセス制限としてカテゴリの新規追加ができるか確認する

@@ -22,9 +22,7 @@
 		<tr>
 			<th style="width:160px" class="list-tool">
 	<div>
-		<?php if ($newCatAddable): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
-		<?php endif ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
 	</div>
 	<?php if ($this->BcBaser->isAdminUser()): ?>
 		<div>
