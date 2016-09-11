@@ -437,11 +437,9 @@ class BlogPost extends BlogAppModel {
 			'blogCategoryId' => '',
 			'empty' => ''
 		], $options);
-
-		$blogCategoryId = $options['blogCategoryId'];
+		
 		$blogContentId = $options['blogContentId'];
 		$empty = $options['empty'];
-		$userGroupId = $options['userGroupId'];
 		unset($options['blogCategoryId']);
 		unset($options['blogContentId']);
 		unset($options['empty']);
@@ -450,19 +448,6 @@ class BlogPost extends BlogAppModel {
 		switch ($field) {
 			case 'blog_category_id':
 				$catOption = array('blogContentId' => $blogContentId);
-				$isSuperAdmin = false;
-				if ($blogCategoryId) {
-					$catOption['conditions'] = ['BlogCategory.id' => $blogCategoryId];
-				}
-				if (!empty($userGroupId)) {
-					if ($userGroupId == 1) {
-						$isSuperAdmin = true;
-					}
-					// super admin でない場合は、管理許可のあるカテゴリのみ取得
-					if (!$isSuperAdmin) {
-						$catOption['ownerId'] = $userGroupId;
-					}
-				}
 				$categories = $this->BlogCategory->getControlSource('parent_id', $catOption);
 				// 「指定しない」追加
 				if ($empty) {
@@ -584,7 +569,7 @@ class BlogPost extends BlogAppModel {
 		if (isset($data['BlogPost'])) {
 			$data = $data['BlogPost'];
 		}
-		$content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_category_id']);
+		$content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_content_id']);
 		$_data = array();
 		$_data['SearchIndex']['type'] = 'ブログ';
 		$_data['SearchIndex']['model_id'] = $this->id;

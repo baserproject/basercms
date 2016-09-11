@@ -264,7 +264,7 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', array('BlogPost.blog_content_id' => $blogContentId)) + 1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
-
+			
 			/*			 * * BlogPosts.beforeAdd ** */
 			$event = $this->dispatchEvent('beforeAdd', array(
 				'data' => $this->request->data
