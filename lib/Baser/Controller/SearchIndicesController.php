@@ -366,29 +366,6 @@ class SearchIndicesController extends AppController {
 	}
 
 /**
- * [ADMIN] 検索インデックス削除
- *
- * @param	int		$id
- * @return	void
- * @access 	public
- */
-	public function admin_delete($id = null) {
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		/* 削除処理 */
-		if ($this->SearchIndex->delete($id)) {
-			$this->setMessage('検索インデックスより NO.' . $id . ' を削除しました。', false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-
-		$this->redirect(array('action' => 'index'));
-	}
-
-/**
  * [ADMIN] 検索インデックス一括削除
  *
  * @param	int		$id

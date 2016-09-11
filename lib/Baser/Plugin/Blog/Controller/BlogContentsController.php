@@ -186,7 +186,7 @@ class BlogContentsController extends BlogAppController {
  * @param string $template
  * @return void
  */
-	public function redirectEditLayout($template) {
+	protected function redirectEditLayout($template) {
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
 		$sorces = array(BASER_PLUGINS . 'blog' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
 			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext);
@@ -213,7 +213,7 @@ class BlogContentsController extends BlogAppController {
  * @param string $template
  * @return void
  */
-	public function redirectEditBlog($template) {
+	protected function redirectEditBlog($template) {
 		$path = 'Blog' . DS . $template;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
 		$sources = array(BASER_PLUGINS . 'Blog' . DS . 'View' . DS . $path);
