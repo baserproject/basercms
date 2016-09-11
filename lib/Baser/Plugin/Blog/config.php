@@ -14,5 +14,4 @@ $title = 'ブログ';
 $description = '複数設置可能なシンプルブログ';
 $author = 'ryuring';
 $url = 'http://ryuring.com';
-$adminLink = array('plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'index');
 $installMessage = '';

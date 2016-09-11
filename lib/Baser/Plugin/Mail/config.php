@@ -14,5 +14,5 @@ $title = 'メールフォーム';
 $description = '複数設置可能の高機能メールフォーム';
 $author = 'ryuring';
 $url = 'http://ryuring.com';
-$adminLink = array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index');
+$adminLink = array('plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form');
 $installMessage = '';
