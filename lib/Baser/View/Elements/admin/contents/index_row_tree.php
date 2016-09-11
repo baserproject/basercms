@@ -36,9 +36,9 @@ if(in_array($data['Content']['parent_id'], array(0,1))) {
 <li id="node-<?php echo $data['Content']['id'] ?>" data-jstree='{
 	"icon":"<?php echo $iconPath ?>",
 	"type":"<?php echo $treeItemType ?>",
-	"status":"<?php echo $status ?>",
-	"alias":"<?php echo $alias ?>",
-	"related":"<?php echo $this->BcContents->isSiteRelated($data) ?>",
+	"status":"<?php echo (bool) $status ?>",
+	"alias":"<?php echo (bool) $alias ?>",
+	"related":"<?php echo (bool) $this->BcContents->isSiteRelated($data) ?>",
 	"contentId":"<?php echo $data['Content']['id'] ?>",
 	"contentParentId":"<?php echo $parentId ?>",
 	"contentEntityId":"<?php echo $data['Content']['entity_id'] ?>",
@@ -48,7 +48,7 @@ if(in_array($data['Content']['parent_id'], array(0,1))) {
 	"contentAliasId":"<?php echo $data['Content']['alias_id'] ?>",
 	"contentPlugin":"<?php echo $data['Content']['plugin'] ?>",
 	"contentTitle":"<?php echo addslashes(strip_tags($data['Content']['title'])) ?>",
-	"contentSiteRoot":"<?php echo $data['Content']['site_root'] ?>"
+	"contentSiteRoot":"<?php echo (bool) $data['Content']['site_root'] ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
 	<span><?php echo strip_tags($data['Content']['title']) ?></span>
 	<?php if(!empty($data['children'])): ?>
