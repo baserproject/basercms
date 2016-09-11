@@ -57,11 +57,13 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	
 /**
  * コンテンツ管理ルーティング
+ * 
+ * 高速化の為、管理システムURLのアクセスの場合、処理を除外したいが、
+ * 管理システムより、フロントのURLを requestAction で呼び出された場合に、
+ * 正常に動作しなくなってしまう為、除外しない事。
  */
-	if(!BcUtil::isAdminSystem()) {
-		App::uses('BcContentsRoute', 'Routing/Route');
-		Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
-	}
+	App::uses('BcContentsRoute', 'Routing/Route');
+	Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
 	
 /**
  * 認証プレフィックス
