@@ -263,6 +263,7 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -286,6 +287,7 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_delete($userGroupId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -348,6 +350,7 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_ajax_copy($userGroupId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -376,6 +379,7 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_ajax_unpublish($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -396,6 +400,7 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_ajax_publish($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

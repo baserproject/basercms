@@ -370,7 +370,7 @@ class UploaderFilesController extends AppController {
  * @access	public
  */
 	public function admin_delete($id) {
-
+		$this->_checkSubmitToken();
 		if(!$id) {
 			$this->notFound();
 		}

@@ -256,7 +256,12 @@ class BcAppController extends Controller {
 		
 		if (!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if(BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins))) {
+				$this->Security->csrfCheck = true;
+			} else {
+				$this->Security->csrfCheck = false;
+			}
 		}
 
 		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
@@ -1376,6 +1381,7 @@ class BcAppController extends Controller {
  * @return void
  */
 	public function admin_ajax_batch() {
+		$this->_checkSubmitToken();
 		$method = $this->request->data['ListTool']['batch'];
 
 		if ($this->request->data['ListTool']['batch_targets']) {
@@ -1544,4 +1550,15 @@ class BcAppController extends Controller {
 		return $this->request->params['_Token']['key'];
 	}
 
+/**
+ * リクエストメソッドとトークンをチェックする
+ * 
+ * - GETでのアクセスの場合 not found
+ * - トークンが送信されていない場合 not found 
+ */
+	protected function _checkSubmitToken() {
+		if(strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
+			$this->notFound();
+		}
+	}
 }

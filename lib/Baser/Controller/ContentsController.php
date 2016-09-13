@@ -519,6 +519,9 @@ class ContentsController extends AppController {
  * @return bool
  */
 	public function admin_ajax_trash_empty() {
+		if(!$this->request->data) {
+			$this->notFound();
+		}
 		$this->autoRender = false;
 		$this->Content->softDelete(false);
 		$contents = $this->Content->find('all', array('conditions' => array('Content.deleted'), 'order' => array('Content.plugin', 'Content.type'), 'recursive' => -1));

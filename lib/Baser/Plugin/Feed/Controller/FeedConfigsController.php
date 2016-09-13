@@ -232,6 +232,7 @@ class FeedConfigsController extends FeedAppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -254,6 +255,7 @@ class FeedConfigsController extends FeedAppController {
  * @return void
  */
 	public function admin_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 
 			$this->setMessage('無効なIDです。', true);
@@ -296,6 +298,7 @@ class FeedConfigsController extends FeedAppController {
  * @return void
  */
 	public function admin_delete_cache() {
+		$this->_checkSubmitToken();
 		$this->_clearCache();
 		$this->setMessage('フィードのキャッシュを削除しました。');
 		$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));

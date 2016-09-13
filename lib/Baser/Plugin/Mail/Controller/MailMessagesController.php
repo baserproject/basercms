@@ -161,6 +161,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  */
 	public function admin_ajax_delete($mailContentId, $messageId) {
+		$this->_checkSubmitToken();
 		if (!$messageId) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -196,6 +197,7 @@ class MailMessagesController extends MailAppController {
  * @return void
  */
 	public function admin_delete($mailContentId, $messageId) {
+		$this->_checkSubmitToken();
 		if (!$mailContentId || !$messageId) {
 			$this->setMessage('無効な処理です。', true);
 			$this->notFound();

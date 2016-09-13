@@ -127,7 +127,7 @@ class UploaderCategoriesController extends AppController {
  * @access	public
  */
 	public function admin_delete($id = null) {
-
+		$this->_checkSubmitToken();
 		if(!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action'=>'index'));
@@ -136,7 +136,7 @@ class UploaderCategoriesController extends AppController {
 		// メッセージ用にデータを取得
 		$name = $this->UploaderCategory->field('name', array('UploaderCategory.id' => $id));
 
-		if($this->UploaderCategory->del($id)) {
+		if($this->UploaderCategory->delete($id)) {
 			$this->setMessage('アップロードファイルカテゴリ「'.$name.'」を削除しました。', false, true);
 		}else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
@@ -153,6 +153,7 @@ class UploaderCategoriesController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -208,7 +209,7 @@ class UploaderCategoriesController extends AppController {
  * @return void
  */
 	public function admin_ajax_copy($id = null) {
-		
+		$this->_checkSubmitToken();
 		$result = $this->UploaderCategory->copy($id);
 		if($result) {
 			$result['UploaderCategory']['id'] = $this->UploaderCategory->getInsertID();

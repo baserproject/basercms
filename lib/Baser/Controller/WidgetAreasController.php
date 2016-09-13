@@ -173,6 +173,7 @@ class WidgetAreasController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -207,32 +208,6 @@ class WidgetAreasController extends AppController {
 			clearViewCache('element_widget', '');
 		}
 		return true;
-	}
-
-/**
- * [ADMIN] 削除処理
- *
- * @param int ID
- * @return void
- */
-	public function admin_delete($id = null) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		// メッセージ用にデータを取得
-		$post = $this->WidgetArea->read(null, $id);
-
-		/* 削除処理 */
-		if ($this->WidgetArea->delete($id)) {
-			$this->setMessage('ウィジェットエリア「' . $post['WidgetArea']['name'] . '」 を削除しました。', false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-		clearViewCache('element_widget', '');
-		$this->redirect(array('action' => 'index'));
 	}
 
 /**
@@ -338,6 +313,7 @@ class WidgetAreasController extends AppController {
  * @return void
  */
 	public function admin_del_widget($widgetAreaId, $id) {
+		$this->_checkSubmitToken();
 		$widgetArea = $this->WidgetArea->read(null, $widgetAreaId);
 		if (!$widgetArea['WidgetArea']['widgets']) {
 			exit();

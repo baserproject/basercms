@@ -39,6 +39,7 @@ class DblogsController extends AppController {
  * @return void
  */
 	public function admin_del() {
+		$this->_checkSubmitToken();
 		if ($this->Dblog->deleteAll('1 = 1')) {
 			$this->setMessage('最近の動きのログを削除しました。');
 		} else {

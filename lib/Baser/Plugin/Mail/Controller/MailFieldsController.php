@@ -235,6 +235,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_ajax_delete($mailContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -262,6 +263,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_delete($mailContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -297,9 +299,8 @@ class MailFieldsController extends MailAppController {
 
 				// メッセージ用にデータを取得
 				$mailField = $this->MailField->read(null, $id);
-				$mailContentName = $this->MailContent->field('name', array('MailContent.id' => $mailField['MailField']['mail_content_id']));
 				/* 削除処理 */
-				if ($this->MailMessage->delMessageField($mailContentName, $mailField['MailField']['field_name'])) {
+				if ($this->MailMessage->delMessageField($mailField['MailField']['mail_content_id'], $mailField['MailField']['field_name'])) {
 					if ($this->MailField->delete($id)) {
 						$this->MailField->saveDbLog('メールフィールド「' . $mailField['MailField']['name'] . '」 を削除しました。');
 					}
@@ -330,6 +331,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_ajax_copy($mailContentId, $id) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id || !$mailContentId) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -410,6 +412,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_ajax_unpublish($mailContentId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -430,6 +433,7 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_ajax_publish($mailContentId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

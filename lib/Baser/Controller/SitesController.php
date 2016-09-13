@@ -144,6 +144,7 @@ class SitesController extends AppController {
  * @return bool
  */
 	public function admin_ajax_unpublish($id) {
+		$this->_checkSubmitToken();
 		$this->autoRender = false;
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -163,6 +164,7 @@ class SitesController extends AppController {
  * @return bool
  */
 	public function admin_ajax_publish($id) {
+		$this->_checkSubmitToken();
 		$this->autoRender = false;
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');

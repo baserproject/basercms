@@ -21,45 +21,7 @@ $this->BcBaser->js(array(
 	'admin/search_indices/index'
 ));
 ?>
-<script type="text/javascript">
-$(function(){
-	if($("#SearchIndexOpen").html()) {
-		$("#SearchIndexFilterBody").show();
-	}
-	$(".priority").change(function() {
-		var id = this.id.replace('SearchIndexPriority', '');
-		var data = {
-			'data[SearchIndex][id]':id,
-			'data[SearchIndex][priority]':$(this).val()
-		};
-		$.ajax({
-			type: "POST",
-			url: $("#AjaxChangePriorityUrl").html()+'/'+id,
-			data: data,
-			beforeSend: function() {
-				$("#flashMessage").slideUp();
-				$("#PriorityAjaxLoader"+id).show();
-			},
-			success: function(result){
-				if(!result) {
-					$("#flashMessage").html('処理中にエラーが発生しました。');
-					$("#flashMessage").slideDown();
-				}
-			},
-			error: function() {
-				$("#flashMessage").html('処理中にエラーが発生しました。');
-				$("#flashMessage").slideDown();
-			},
-			complete: function() {
-				$("#PriorityAjaxLoader"+id).hide();
-			}
-		});
-	});
-	$.baserAjaxDataList.init();
-	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 
-});
-</script>
 
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'search_indices', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>

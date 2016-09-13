@@ -153,6 +153,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_delete($blogContentId, $blogPostId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -189,39 +190,6 @@ class BlogCommentsController extends BlogAppController {
 	}
 
 /**
- * [ADMIN] 削除処理
- *
- * @param int $blogContentId
- * @param int $blogPostId
- * @param int $id
- * @return void
- */
-	public function admin_delete($blogContentId, $blogPostId, $id = null) {
-		/* 除外処理 */
-		if (!$blogContentId || !$id) {
-			$this->notFound();
-		}
-
-		/* 削除処理 */
-		if ($this->BlogComment->delete($id)) {
-			if (isset($this->blogPost['BlogPost']['name'])) {
-				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを削除しました。';
-			} else {
-				$message = '記事「' . $this->request->params['Content']['title'] . '」へのコメントを削除しました。';
-			}
-			$this->setMessage($message, false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-
-		if ($blogPostId) {
-			$this->redirect(array('action' => 'index', $blogContentId, $blogPostId));
-		} else {
-			$this->redirect(array('action' => 'index', $blogContentId));
-		}
-	}
-
-/**
  * [ADMIN] 無効状態にする（AJAX）
  * 
  * @param string $blogContentId
@@ -230,6 +198,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -251,6 +220,7 @@ class BlogCommentsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_publish($blogContentId, $blogPostId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

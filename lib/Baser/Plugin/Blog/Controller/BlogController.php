@@ -323,11 +323,6 @@ class BlogController extends BlogAppController {
 			/* 単ページ */
 			default:
 
-				// コメント送信
-				if (isset($this->request->data['BlogComment'])) {
-					$this->add_comment($id);
-				}
-
 				// プレビュー
 				if ($this->BcContents->preview && !empty($this->request->data['BlogPost'])) {
 					$post = $this->BlogPost->createPreviewData($this->request->data);
@@ -345,6 +340,11 @@ class BlogController extends BlogAppController {
 					}
 				}
 
+				// コメント送信
+				if (isset($this->request->data['BlogComment'])) {
+					$this->add_comment($id);
+				}
+				
 				if (BcUtil::isAdminUser()) {
 					$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $post['BlogPost']['blog_content_id'], $post['BlogPost']['id']));
 				}

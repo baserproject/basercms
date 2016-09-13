@@ -29,7 +29,7 @@
 	</p>
 	<p class="row-tools">
 		<?php if ($data['name'] != $this->BcBaser->siteConfig['theme']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_apply.png', array('alt' => '適用', 'class' => 'btn')), array('action' => 'apply', $data['name']), array('title' => '適用')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_apply.png', array('alt' => '適用', 'class' => 'btn')), array('action' => 'apply', $data['name']), array('title' => '適用', 'class' => 'submit-token')) ?>
 		<?php endif ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('alt' => '管理', 'class' => 'btn')), array('controller' => 'theme_files', 'action' => 'index', $data['name']), array('title' => '管理')) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['name']), array('title' => '編集')) ?>

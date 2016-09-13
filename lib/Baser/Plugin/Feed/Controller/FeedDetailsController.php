@@ -194,6 +194,7 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_ajax_delete($feedConfigId, $id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -212,6 +213,7 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_delete($feedConfigId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);

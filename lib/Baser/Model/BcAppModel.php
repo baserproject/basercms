@@ -553,6 +553,7 @@ class BcAppModel extends Model {
 		$options = array('field' => $field, 'table' => $table, 'column' => $column);
 		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
+		ClassRegistry::flush();
 		return $ret;
 	}
 
@@ -578,6 +579,7 @@ class BcAppModel extends Model {
 		$options = array('field' => $field, 'table' => $table, 'column' => $column);
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
+		ClassRegistry::flush();
 		return $ret;
 	}
 
@@ -603,6 +605,7 @@ class BcAppModel extends Model {
 		$options = array('field' => $field, 'table' => $table);
 		$ret = $db->dropColumn($options);
 		$this->deleteModelCache();
+		ClassRegistry::flush();
 		return $ret;
 	}
 
@@ -629,6 +632,7 @@ class BcAppModel extends Model {
 		$options = array('new' => $new, 'old' => $old, 'table' => $table);
 		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
+		ClassRegistry::flush();
 		return $ret;
 	}
 

@@ -33,7 +33,7 @@
 	<?php if(BcUtil::isAdminUser()): ?>
 	<div class="submit clear">
 		<?php
-		$this->BcBaser->link('削除', array('action' => 'del'), array('class' => 'btn-gray button'), '最近の動きのログを削除します。いいですか？')
+		$this->BcBaser->link('削除', array('action' => 'del'), array('class' => 'btn-gray button submit-token'), '最近の動きのログを削除します。いいですか？')
 		?>
 	</div>
 	<?php endif ?>	

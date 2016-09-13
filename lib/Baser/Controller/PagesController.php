@@ -216,6 +216,7 @@ class PagesController extends AppController {
  * @return void
  */
 	public function admin_entry_page_files() {
+		$this->_checkSubmitToken();
 		// 現在のテーマの固定ページファイルのパスを取得
 		$pagesPath = APP . 'View' . DS . 'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
@@ -230,6 +231,7 @@ class PagesController extends AppController {
  * @return void
  */
 	public function admin_write_page_files() {
+		$this->_checkSubmitToken();
 		if ($this->Page->createAllPageTemplate()) {
 			$this->setMessage('固定ページテンプレートの書き出しに成功しました。');
 		} else {

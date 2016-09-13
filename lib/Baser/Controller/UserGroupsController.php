@@ -171,6 +171,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -195,6 +196,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -221,6 +223,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_ajax_copy($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -242,7 +245,6 @@ class UserGroupsController extends AppController {
 		if (!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		$user = $this->BcAuth->user();
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;
 		$data = $this->UserGroup->read();

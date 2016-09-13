@@ -339,6 +339,7 @@ class ToolsController extends AppController {
 				$this->_downloadErrorLog();
 				break;
 			case 'delete':
+				$this->_checkSubmitToken();
 				if( file_exists($errorLogPath) ){
 					if( unlink($errorLogPath) ){
 						$messages[] = 'エラーログを削除しました。';
@@ -357,6 +358,7 @@ class ToolsController extends AppController {
 				}
 				$this->redirect(array('action' => 'log'));
 				break;
+			
 		}
 
 		$fileSize = 0 ;

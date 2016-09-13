@@ -118,6 +118,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  */
 	public function admin_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
@@ -141,6 +142,7 @@ class BlogTagsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

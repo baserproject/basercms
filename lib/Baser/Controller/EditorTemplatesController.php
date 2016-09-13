@@ -121,6 +121,7 @@ class EditorTemplatesController extends AppController {
  * @param int $id
  */
 	public function admin_delete($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
@@ -139,6 +140,7 @@ class EditorTemplatesController extends AppController {
  * @param int $id 
  */
 	public function admin_ajax_delete($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

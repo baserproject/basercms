@@ -419,6 +419,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -474,6 +475,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  */
 	public function admin_delete($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		if (!$blogContentId || !$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
@@ -602,6 +604,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_unpublish($blogContentId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -623,6 +626,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_publish($blogContentId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -701,6 +705,7 @@ class BlogPostsController extends BlogAppController {
  * @return void
  */
 	public function admin_ajax_copy($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		$result = $this->BlogPost->copy($id);
 		if ($result) {
 			// タグ情報を取得するため読み込みなおす

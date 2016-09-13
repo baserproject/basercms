@@ -35,8 +35,7 @@ $config['BcApp'] = array(
 				array('name' => 'ユーザーグループ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
 				array('name' => 'サブサイト管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index')),
 				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index')),
-				array('name' => 'エディタテンプレート管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
-				array('name' => 'サーバーキャッシュ削除', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache')),
+				array('name' => 'エディタテンプレート管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index'))
 			))),
 	// コアプラグイン
 	'corePlugins' => array('Blog', 'Feed', 'Mail', 'Uploader'),

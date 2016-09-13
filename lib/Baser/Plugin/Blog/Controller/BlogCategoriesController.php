@@ -237,6 +237,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return	void
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -276,6 +277,7 @@ class BlogCategoriesController extends BlogAppController {
  * @return	void
  */
 	public function admin_delete($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);

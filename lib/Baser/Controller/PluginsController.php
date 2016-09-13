@@ -248,6 +248,7 @@ class PluginsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete_file($pluginName) {
+		$this->_checkSubmitToken();
 		if (!$pluginName) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -451,6 +452,7 @@ class PluginsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($name = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$name) {
 			$this->ajaxError(500, '無効な処理です。');

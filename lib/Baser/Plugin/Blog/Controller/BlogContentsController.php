@@ -65,24 +65,6 @@ class BlogContentsController extends BlogAppController {
 	}
 
 /**
- * [ADMIN] ブログコンテンツ一覧
- *
- * @return void
- */
-	public function admin_index() {
-		$datas = $this->BlogContent->find('all', array('order' => array('BlogContent.id')));
-		$this->set('datas', $datas);
-
-		if ($this->RequestHandler->isAjax() || !empty($this->query['ajax'])) {
-			$this->render('ajax_index');
-			return;
-		}
-
-		$this->pageTitle = 'ブログ一覧';
-		$this->help = 'blog_contents_index';
-	}
-
-/**
  * ブログ登録
  *
  * @return mixed json|false

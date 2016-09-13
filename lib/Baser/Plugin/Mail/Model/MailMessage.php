@@ -721,6 +721,7 @@ class MailMessage extends MailAppModel {
 			$this->setUseTable($mailContentId);
 			$this->_schema = null;
 			$this->cacheSources = false;
+			ClassRegistry::flush();
 			$schema = $this->schema();
 			$messageFields = array_keys($schema);
 			foreach ($mailFields as $mailField) {

@@ -339,6 +339,7 @@ class ThemeFilesController extends AppController {
  * @return void
  */
 	public function admin_del() {
+		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -369,6 +370,7 @@ class ThemeFilesController extends AppController {
  * @return void
  */
 	public function admin_ajax_del() {
+		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 
 		if (!$args) {
@@ -781,6 +783,7 @@ class ThemeFilesController extends AppController {
  * @return void
  */
 	public function admin_copy_to_theme() {
+		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
@@ -816,6 +819,7 @@ class ThemeFilesController extends AppController {
  * @return void
  */
 	public function admin_copy_folder_to_theme() {
+		$this->_checkSubmitToken();
 		$args = $this->_parseArgs(func_get_args());
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {

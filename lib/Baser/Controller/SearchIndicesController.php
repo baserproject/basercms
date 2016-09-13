@@ -352,6 +352,7 @@ class SearchIndicesController extends AppController {
  * @access 	public
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

@@ -177,7 +177,7 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_reset_data() {
-
+		$this->_checkSubmitToken();
 		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
 
 		if ($result) {
@@ -411,6 +411,7 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_ajax_copy($theme) {
+		$this->_checkSubmitToken();
 		if (!$theme) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -453,6 +454,7 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($theme) {
+		$this->_checkSubmitToken();
 		if (!$theme) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -493,6 +495,7 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_del($theme) {
+		$this->_checkSubmitToken();
 		if (!$theme) {
 			$this->notFound();
 		}
@@ -516,6 +519,7 @@ class ThemesController extends AppController {
  * @return void
  */
 	public function admin_apply($theme) {
+		$this->_checkSubmitToken();
 		if (!$theme) {
 			$this->notFound();
 		}

@@ -49,9 +49,10 @@
 			'admin/libs/credit',
 			'admin/vendors/validate_messages_ja',
 			'admin/functions',
-			'admin/startup',
 			'admin/libs/adjust_scroll',
 			'admin/libs/jquery.bcUtil',
+			'admin/libs/jquery.bcToken',
+			'admin/startup',
 			'admin/favorite',
 			'admin/permission',
 			'admin/vendors/yuga'))
