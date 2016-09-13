@@ -209,7 +209,7 @@ class SitesController extends AppController {
 			$this->redirect(['action' => 'index']);
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-			$this->redirect(['action' => 'edit', $id]);
+			$this->redirect(['action' => 'edit', $this->request->data['Site']['id']]);
 		}
 	}
 
