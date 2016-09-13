@@ -62,7 +62,7 @@ class ContentsController extends AppController {
 				$this->pageTitle = 'ゴミ箱';
 				break;
 		}
-
+		
 		$this->setViewConditions('Content', ['default' => [
 			'named' => [
 				'num'		=> $this->siteConfigs['admin_list_num'],
@@ -70,6 +70,11 @@ class ContentsController extends AppController {
 				'list_type'	=> 1
 			]
 		]]);
+		
+		$sites = $this->Site->getSiteList();
+		if(!in_array($this->passedArgs['site_id'], array_keys($sites))) {
+			$this->passedArgs['site_id'] = 0;
+		}
 		
 		$this->request->data['ViewSetting']['site_id'] = $currentSiteId = $this->passedArgs['site_id'];
 		$this->request->data['ViewSetting']['list_type'] = $currentListType = $this->passedArgs['list_type'];
@@ -118,7 +123,7 @@ class ContentsController extends AppController {
 		$this->set('authors', $this->User->getUserList());
 		$this->set('folders', $this->Content->getContentFolderList((int) $currentSiteId, ['conditions' => ['Content.site_root' => false]]));
 		$this->set('listTypes', [1 => 'ツリー形式', 2 => '表形式']);
-		$this->set('sites', $this->Site->getSiteList());
+		$this->set('sites', $sites);
 		$this->search = 'contents_index';
 		$this->subMenuElements = ['contents'];
 

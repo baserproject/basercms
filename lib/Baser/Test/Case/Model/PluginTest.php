@@ -236,6 +236,10 @@ class PluginTest extends BaserTestCase {
 		
 		$this->Plugin->addFavoriteAdminLink($pluginName, $user);
 
+		if(!isset($this->Plugin->Favorite)) {
+			return;
+		}
+		
 		// 追加したお気に入りを取得
 		$this->Plugin->Favorite->cacheQueries = false;
 		$lastId = $this->Plugin->Favorite->getLastInsertID();
