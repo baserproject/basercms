@@ -26,7 +26,7 @@ if (!empty($user)) {
 						list($plugin, $subMenuElement) = explode('.', $subMenuElement);
 						$plugin .= '.';
 					}
-					$this->BcBaser->element($plugin . $elementPath . $subMenuElement);
+					$this->BcBaser->element($plugin . $elementPath . $subMenuElement, [], ['cache' => ['key' => '_submenu_' . $plugin . $subMenuElement]]);
 				}
 				?>
 			</table>

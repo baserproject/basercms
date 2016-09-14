@@ -47,8 +47,8 @@ class BcWidgetAreaHelper extends AppHelper {
 				$params = array();
 				$plugin = '';
 				$params['widget'] = true;
-				if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && !isset($cache)) {
-					$params['cache'] = '+1 month';
+				if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && !isset($options['cache'])) {
+					$options['cache'] = '+1 month';
 				}
 				$params = am($params, $widget[$key]);
 				$params[$no . '_' . $widget[$key]['id']] = $no . '_' . $widget[$key]['id']; // 同じタイプのウィジェットでキャッシュを特定する為に必要

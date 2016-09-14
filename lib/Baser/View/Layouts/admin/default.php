@@ -64,8 +64,8 @@
 
 		<div id="Page">
 			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
-			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
-			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
+			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box')) ?></div>
+			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 			<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.' . $this->BcBaser->getContentsName(true)) ?></div>
 			<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
 			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/admin/dashboard/index' : '/' . $this->request->url; ?></div>
@@ -115,7 +115,7 @@
 
 							<?php $this->BcBaser->element('submenu') ?>
 
-							<?php $this->BcBaser->element('help') ?>
+							<?php $this->BcBaser->element('help', [], ['cache' => ['key' => '_admin_help_' . @$help]]) ?>
 
 							<?php $this->BcBaser->element('search') ?>
 
@@ -135,7 +135,7 @@
 
 				<!-- / #Wrap .clearfix --></div>
 
-<?php $this->BcBaser->footer() ?>
+<?php $this->BcBaser->footer([], ['cache' => ['key' => '_admin_footer']]) ?>
 
 			<!-- / #Page --></div>
 
