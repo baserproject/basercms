@@ -75,7 +75,7 @@ $(document).ready(function(){
 					<?php echo $this->BcForm->input('Installation.admin_username', array('type' => 'text')); ?>
 				</li>
 				<li class="clearfix">
-					<label>パスワード</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
+					<label>パスワード</label>&nbsp;<small>半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&amp;;{}!$*)</small><br />
 					<div class="float-left">
 						<?php echo $this->BcForm->input('Installation.admin_password', array('type' => 'password')); ?>
 					</div>
