@@ -14,7 +14,21 @@ class PagesSchema extends CakeSchema {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = [])
+	{
+		$db = ConnectionManager::getDataSource($this->connection);
+		if (get_class($db) !== 'BcMysql') {
+			return true;
+		}
+
+		if (isset($event['create'])) {
+			switch ($event['create']) {
+				case 'pages':
+					$tableName = $db->config['prefix'] . 'pages';
+					$db->query("ALTER TABLE {$tableName} CHANGE contents contents MEDIUMTEXT");
+					break;
+			}
+		}
 	}
 
 	public $pages = array(
