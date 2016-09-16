@@ -148,11 +148,17 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.address', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => '住所')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAddress', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は地図を表示させたい住所を入力してください。郵便番号からでも大丈夫です。<br>
+					<br>
+					入力例1) 福岡市中央区大名2-11-25<br>
+					入力例2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br>
+					<br>
+					建物名を含めるとうまく表示されない場合があります。<br>
+					その時は建物名を省略して試してください。<br>APIキーを入力しないと地図が表示されない場合があります。<a href="https://developers.google.com/maps/web/" target="_blank">「ウェブ向け Google Maps API」</a></div>
 				<br />
 				<?php echo $this->BcForm->input('SiteConfig.google_maps_api_key', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => 'APIキー')) ?>
 				<?php echo $this->BcForm->error('SiteConfig.address') ?>
 				<?php echo $this->BcForm->error('SiteConfig.google_maps_api_key') ?>
-				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所、APIキーを入力してください。</div>
 			</td>
 		</tr>
 		<tr>
@@ -160,13 +166,13 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpGoogleAnalyticsId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?><br />
-				ユニバーサルアナリティクスを <?php echo $this->BcForm->input('SiteConfig.use_universal_analytics', array('type' => 'radio', 'options' => array('0' => '利用していない', '1' => '利用している'))) ?>
 				<div id="helptextGoogleAnalyticsId" class="helptext">
-					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
-					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />
+					Googleの無料のアクセス解析サービス <a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用される方は、取得したトラッキングID (UA-000000-01 のような文字列）を入力してください。<br />
+					※事前に<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> で登録作業が必要です。<br />
 					テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser->googleAnalytics() ?&gt;</pre> で出力します。
 				</div>
+				<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?><br />
+				ユニバーサルアナリティクスを <?php echo $this->BcForm->input('SiteConfig.use_universal_analytics', array('type' => 'radio', 'options' => array('0' => '利用していない', '1' => '利用している'))) ?>
 			</td>
 		</tr>
 		<tr>
