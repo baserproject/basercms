@@ -94,9 +94,7 @@ class BlogBaserHelper extends AppHelper {
 		
 		// URL形式に変換
 		foreach($contentsName as $key => $value) {
-			if(!preg_match('/^\//', $value)) {
-				$contentsName[$key] = '/' . $value;
-			}
+			$contentsName[$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value);
 		}
 		
 		// ブログコンテンツの条件生成
@@ -106,6 +104,7 @@ class BlogBaserHelper extends AppHelper {
 			$conditions['Content.url'] = $contentsName;
 		}
 		$conditions = array_merge($conditions, $Content->getConditionAllowPublish());
+		$conditions['Content.type'] = "BlogContent";
 		
 		// 有効ブログを取得
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
@@ -116,6 +115,7 @@ class BlogBaserHelper extends AppHelper {
 		]);
 		
 		if (empty($blogContents)) {
+			trigger_error('指定されたコンテンツが見つかりません。（' . implode(', ', $contentsName) . '）', E_USER_NOTICE);
 			return;
 		}
 
