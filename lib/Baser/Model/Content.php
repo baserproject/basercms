@@ -1201,6 +1201,41 @@ class Content extends AppModel {
 		}
 		return true;
 	}
+	
+/**
+ * 移動元のコンテンツと移動先のディレクトリから移動が可能かチェックする
+ * 
+ * @param $currentId int 移動元コンテンツID
+ * @param $targetParentId int 移動先コンテンツID (ContentFolder)
+ * @return bool
+ */
+	public function isMovable($currentId, $targetParentId) {
+		$currentContent = $this->find('first', [
+			'conditions' => ['id' => $currentId],
+			'recursive' => -1
+		]);
+		$parentCuntent = $this->find('first', [
+			'conditions' => ['id' => $targetParentId],
+			'recursive' => -1
+		]);
+		
+		// 指定コンテンツがない
+		if (!$currentContent || !$parentCuntent) {
+			return false;
+		}
+		
+		// 移動先に同一コンテンツが存在する
+		$movedUrl = $parentCuntent['Content']['url'] . $currentContent['Content']['name'];
+		$movedContent = $this->find('first', [
+			'conditions' => ['url' => $movedUrl],
+			'recursive' => -1
+		]);
+		if ($movedContent) {
+			return false;
+		}
+		
+		return true;
+	}
 
 /**
  * タイトル、URL、公開状態が更新されているか確認する
