@@ -622,6 +622,10 @@ class ContentsController extends AppController {
 			$this->ajaxError(500, "コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。");
 		}
 		
+		if(!$this->Content->isMovable($this->request->data['currentId'], $this->request->data['targetParentId'])) {
+			$this->ajaxError(500, "同一URLのコンテンツが存在するため処理に失敗しました。");
+		}
+		
 		// EVENT Contents.beforeMove
 		$event = $this->dispatchEvent('beforeMove', array(
 			'data' => $this->request->data
