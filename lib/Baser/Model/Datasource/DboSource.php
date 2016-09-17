@@ -3880,7 +3880,11 @@ class DboSource extends DataSource {
 
 		// SQLを生成して実行
 		$sql = $this->createSchema($schema);
-		$return = $this->execute($sql);
+		if($return = $this->execute($sql)){
+			if(method_exists($schema, 'after')){
+				$schema->after(['create'=> strtolower($schema->name),'errors'=>null]);
+			}
+		}
 		// とりあえずキャッシュを全て削除
 		clearCache(null, 'models');
 		return $return;

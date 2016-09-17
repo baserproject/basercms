@@ -14,7 +14,21 @@ class BlogPostsSchema extends CakeSchema {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = [])
+	{
+		$db = ConnectionManager::getDataSource($this->connection);
+		if( get_class($db) !== 'BcMysql'){
+			return true ;
+		}
+
+		if (isset($event['create'])) {
+			switch ($event['create']) {
+				case 'blogposts':
+					$tableName = $db->config['prefix'] . 'blog_posts';
+					$db->query("ALTER TABLE {$tableName} CHANGE detail detail MEDIUMTEXT");
+					break;
+			}
+		}
 	}
 
 	public $blog_posts = array(
