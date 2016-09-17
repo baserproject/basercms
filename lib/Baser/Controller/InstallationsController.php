@@ -218,16 +218,16 @@ class InstallationsController extends AppController {
 		if (!$this->request->data) {
 			$this->request->data = $this->_getDefaultValuesStep4();
 		} else {
-
+            
 			// ユーザー情報をセッションに保存
 			$this->Session->write('Installation.admin_email', $this->request->data['Installation']['admin_email']);
 			$this->Session->write('Installation.admin_username', $this->request->data['Installation']['admin_username']);
 			$this->Session->write('Installation.admin_password', $this->request->data['Installation']['admin_password']);
 
-			if ($this->request->data['clicked'] == 'back') {
+			if ($this->request->data['Installation']['clicked'] == 'back') {
 
 				$this->redirect('step3');
-			} elseif ($this->request->data['clicked'] == 'finish') {
+			} elseif ($this->request->data['Installation']['clicked'] == 'finish') {
 
 				// DB接続
 				$db = $this->BcManager->connectDb($this->_readDbSetting());
