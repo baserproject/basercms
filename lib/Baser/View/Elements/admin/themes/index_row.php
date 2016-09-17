@@ -35,9 +35,6 @@
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['name']), array('title' => '編集')) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['name']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['name']), array('title' => '削除', 'class' => 'btn-delete')) ?>
-		<?php if (!$data['is_writable_pages']): ?>
-		<br /><div class="error-message lastChild clearfix" style="clear:both">「Pages」フォルダに書き込み権限を与えてください。</div>
-	<?php endif ?>
 </p>
 <p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
 <p class="theme-author">制作者：
