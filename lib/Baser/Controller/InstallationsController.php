@@ -254,7 +254,11 @@ class InstallationsController extends AppController {
 					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
 					$this->redirect('step5');
 				} else {
-					$this->setMessage('管理ユーザーを作成できませんでした。<br />' . $db->error, true);
+                    $User = ClassRegistry::init('User', 'Model');
+                    if ( !empty($User->validationErrors) ) {
+                        $errMsg = implode('<br />', Hash::extract($User->validationErrors, '{s}.{n}'));
+                    }
+					$this->setMessage('管理ユーザーを作成できませんでした。<br />' . $errMsg, true);
 				}
 			}
 		}

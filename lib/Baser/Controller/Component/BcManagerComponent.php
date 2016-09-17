@@ -357,7 +357,8 @@ class BcManagerComponent extends Component {
 			'password_2' => ''
 			), $user);
 
-		$User = new User();
+        $User = ClassRegistry::init('User', 'Model');
+//		$User = new User();
 
 		$user['password'] = $user['password_1'];
 		$User->create($user);
