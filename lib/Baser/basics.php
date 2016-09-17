@@ -44,6 +44,7 @@ function baseUrl() {
 		if(isConsole()) {
 			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 		}
+		$script = str_replace(array('\\', '/'), DS, $script);
 		$docroot = docRoot();
 		$script = str_replace($docroot, '', $script);
 		if (BC_DEPLOY_PATTERN == 1) {
