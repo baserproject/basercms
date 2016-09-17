@@ -333,11 +333,6 @@ class ThemesController extends AppController {
 		} else {
 			$theme['screenshot'] = false;
 		}
-		if (is_writable($path . DS . $themename . DS . 'Pages' . DS)) {
-			$theme['is_writable_pages'] = true;
-		} else {
-			$theme['is_writable_pages'] = false;
-		}
 		$theme['name'] = $themename;
 		$theme['title'] = $title;
 		$theme['description'] = $description;
