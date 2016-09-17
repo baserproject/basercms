@@ -11,6 +11,15 @@ SERVER_IP_ADDRESS = SERVER_IP_NETWORK + "10"
 SERVER_IP_SUBNETMASK = "255.255.255.0"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # SSH設定
+  # 通常変更する必要はありません。
+  # private keyでログインする場合はinsert_keyをtrueにしてprivate_key_pathを設定。
+  # ローカル側のssh configも設定する必要があります。
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+  config.ssh.insert_key = false
+  # config.ssh.private_key_path = "~/.vagrant.d/insecure_private_key"
+
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -118,6 +127,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :default_charset => 'UTF-8',
         :upload_max_filesize => '16M'
       },
+      :phpMyAdmin => {
+        :blowfish_secret => '1d30f67bce33f51a2170e0280c510490'
+      },
       :xdebug => {
         :remote_host => SERVER_IP_NETWORK + '1',
         :remote_port => '9000',
@@ -128,8 +140,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
     chef.add_recipe "centos"
     chef.add_recipe "iptables"
-    chef.add_recipe "yum::epel"
-    chef.add_recipe "yum::remi"
+    chef.add_recipe "yum"
     chef.add_recipe "yum-packages"
     chef.add_recipe "mysql"
     chef.add_recipe "postgres"

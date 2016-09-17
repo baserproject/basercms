@@ -10,8 +10,8 @@ baserCMSをテスト・開発することが出来ます。
 ■動作確認環境
 ----------------------------------------
 
-・Vagrant 1.3.5
-・VirtualBox 4.2.18
+・Vagrant 1.8.5
+・VirtualBox 5.0.26
 ・Mac OSX 10.9
 
 ※VagrantとVirtualBoxはバージョン依存が大きいため、できる限り近いバージョンでの
@@ -28,6 +28,9 @@ Vagrantfile.default ファイルを Vagrantfile にリネームします。
 vagrantにプラグインがインストールされていない場合は、次のコマンドを実行してください。
 
 $ vagrant plugin install vagrant-omnibus
+
+※basercmsリポジトリをpullした場合は、Vagrantfile.defaultの内容も確認してください。
+　設定項目が追加変更されている場合があります。
 
 
 ----------------------------------------
@@ -93,11 +96,11 @@ $ vagrant destroy
 ■VM環境
 ----------------------------------------
 
-・CentOS 6.4
+・CentOS 6.7
 ・Apache2.2
 ・MySQL5.5
 ・PostgreSQL8.4
-・PHP5.4
+・PHP5.6
 
 ※基本的にyumで最新バージョンがインストールされます
 
@@ -148,6 +151,11 @@ Vagrantでは、VMとローカル側で共有フォルダを構成しており�
 アップロードしなくてもリアルタイムにファイルの共有が行われています。
 ローカルのカレントディレクトリ(Vagrantfileのある場所)はサーバ内では
 「/vagrant」に対応しています。
+
+※共有フォルダがマウントされない場合
+　共有フォルダのマウントが失敗する場合は、VMサーバ側のvbguestがローカル側の
+　virtualboxのバージョンと合っていない場合が多いです。
+　この場合は「vagrant vbguest」を実行し、「vagrant reload」で再起動してください。
 
 
 ----------------------------------------
