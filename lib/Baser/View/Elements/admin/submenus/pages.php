@@ -22,8 +22,8 @@
 			<?php if ($newCatAddable): ?>
 				<li><?php $this->BcBaser->link('固定ページ新規追加', array('controller' => 'pages', 'action' => 'add')) ?></li>
 			<?php endif; ?>
-			<li><?php $this->BcBaser->link('固定ページテンプレート読込', array('controller' => 'pages', 'action' => 'entry_page_files'), array('confirm' => 'テーマ ' . Inflector::camelize($this->BcBaser->siteConfig['theme']) . " フォルダ内のページテンプレートを全て読み込みます。\n本当によろしいですか？")) ?></li>
-			<li><?php $this->BcBaser->link('固定ページテンプレート書出', array('controller' => 'pages', 'action' => 'write_page_files'), array('confirm' => 'データベース内のページデータを、' . 'テーマ ' . Inflector::camelize($this->BcBaser->siteConfig['theme']) . " のページテンプレートとして全て書出します。\n本当によろしいですか？")) ?></li>
+			<li><?php $this->BcBaser->link('固定ページテンプレート読込', array('controller' => 'pages', 'action' => 'entry_page_files'), array('class' => 'submit-token', 'confirm' => 'テーマ ' . Inflector::camelize($this->BcBaser->siteConfig['theme']) . " フォルダ内のページテンプレートを全て読み込みます。\n本当によろしいですか？")) ?></li>
+			<li><?php $this->BcBaser->link('固定ページテンプレート書出', array('controller' => 'pages', 'action' => 'write_page_files'), array('class' => 'submit-token', 'confirm' => 'データベース内のページデータを、' . 'テーマ ' . Inflector::camelize($this->BcBaser->siteConfig['theme']) . " のページテンプレートとして全て書出します。\n本当によろしいですか？")) ?></li>
 		</ul>
 	</td>
 </tr>

@@ -44,6 +44,8 @@
 			'admin/credit',
 			'admin/validate_messages_ja',
 			'admin/functions',
+			'admin/jquery.bcToken',
+			'admin/jquery.bcUtil',
 			'admin/startup',
 			'admin/adjust_scroll',
 			'admin/yuga'))

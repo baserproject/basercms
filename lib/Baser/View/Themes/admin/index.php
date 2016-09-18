@@ -27,7 +27,8 @@ $(function(){
 			console.log(result);
 			var config = $.baserAjaxDataList.config;
 			if(result) {
-				$.baserAjaxDataList.load(document.location.href);
+				$.bcUtil.showLoader();
+				document.location.reload();
 			} else {
 				$(config.alertBox).html('コピーに失敗しました。');
 				$(config.alertBox).fadeIn(500);
@@ -40,7 +41,8 @@ $(function(){
 		result: function(row, result) {
 			var config = $.baserAjaxDataList.config;
 			if(result) {
-				$.baserAjaxDataList.load(document.location.href);
+				$.bcUtil.showLoader();
+				document.location.reload();
 			} else {
 				$(config.alertBox).html('削除に失敗しました。');
 				$(config.alertBox).fadeIn(500);
