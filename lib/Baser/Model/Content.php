@@ -1227,7 +1227,10 @@ class Content extends AppModel {
 		// 移動先に同一コンテンツが存在する
 		$movedUrl = $parentCuntent['Content']['url'] . $currentContent['Content']['name'];
 		$movedContent = $this->find('first', [
-			'conditions' => ['url' => $movedUrl],
+			'conditions' => [
+				'url' => $movedUrl,
+				'id !=' => $currentContent['Content']['id']
+			],
 			'recursive' => -1
 		]);
 		if ($movedContent) {
