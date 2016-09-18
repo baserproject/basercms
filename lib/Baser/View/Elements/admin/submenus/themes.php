@@ -27,7 +27,7 @@
 					"ダウンロードしたデータは、配布用テーマの Config/data/ 内に配置してください。") ?>
 			</li>
 			<li>
-				<?php $this->BcBaser->link('データリセット', array('plugin' => null, 'controller' => 'themes', 'action' => 'reset_data'), array(),
+				<?php $this->BcBaser->link('データリセット', array('plugin' => null, 'controller' => 'themes', 'action' => 'reset_data'), array('class' => 'submit-token'),
 				"現在のデータを、baserCMSコアの初期データでリセットします。よろしいですか？\n\n" .
 				"※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。\n" .
 				"※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。") ?>

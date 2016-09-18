@@ -134,7 +134,7 @@ function pageCategoryIdChangeHandler() {
 		// モバイルカテゴリを選択した場合は表示しない
 		if(pageType != 2 && $("#Action").html() == 'admin_edit'){
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				url: $("#CheckAgentPageAddableUrl").html()+'/mobile/'+pageCategoryId,
 				beforeSend: function() {
 					$("#AjaxLoader").show();
@@ -156,7 +156,7 @@ function pageCategoryIdChangeHandler() {
 		// スマートフォンカテゴリを選択した場合は表示しない
 		if(pageType != 3 && $("#Action").html() == 'admin_edit'){
 			$.ajax({
-				type: "POST",
+				type: "GET",
 				url: $("#CheckAgentPageAddableUrl").html()+'/smartphone/'+pageCategoryId,
 				beforeSend: function() {
 					$("#AjaxLoader").show();
@@ -304,26 +304,33 @@ function pageTypeChengeHandler() {
 			"data[Option][empty]": '指定しない'
 		};
 	}
-	$.ajax({
-		type: "POST",
-		data: options,
-		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
-		beforeSend: function() {
-			$("#CategoryAjaxLoader").show();
-		},
-		success: function(result){
-			if(result) {
-				$("#PagePageCategoryId option").remove();
-				$("#PagePageCategoryId").append($(result).find('option'));
-				$("#PagePageCategoryId").val('');
-				pageCategoryIdChangeHandler();
+	$.bcToken.check(function(){
+		$.extend(options, {
+			_Token: {
+				key: $.bcToken.key
 			}
-		},
-		complete: function() {
-			$("#CategoryAjaxLoader").hide();
-		}
-	});
-	
+		});
+		$.ajax({
+			type: "POST",
+			data: options,
+			url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
+			beforeSend: function() {
+				$("#CategoryAjaxLoader").show();
+			},
+			success: function(result){
+				if(result) {
+					$("#PagePageCategoryId option").remove();
+					$("#PagePageCategoryId").append($(result).find('option'));
+					$("#PagePageCategoryId").val('');
+					pageCategoryIdChangeHandler();
+				}
+			},
+			complete: function() {
+				$("#CategoryAjaxLoader").hide();
+			}
+		});
+	}, {loaderType: 'none'});
+
 }
 </script>
 
@@ -586,7 +593,7 @@ function pageTypeChengeHandler() {
 		<?php endif ?>
 		<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 	<?php if ($editable): ?>
-		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('Page.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Page.name')), false); ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('Page.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Page.name')), false); ?>
 	<?php endif; ?>
 <?php endif; ?>
 </div>
