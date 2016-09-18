@@ -112,7 +112,7 @@ $(window).load(function() {
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->request->action == 'admin_edit'): ?>
 		<?php if ($this->BcForm->value('UserGroup.name') != 'admins'): ?>
-			<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('UserGroup.id')), array('class' => 'button'), sprintf("%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $this->BcForm->value('UserGroup.name')), false); ?>
+			<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('UserGroup.id')), array('class' => 'submit-token button'), sprintf("%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $this->BcForm->value('UserGroup.name')), false); ?>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>

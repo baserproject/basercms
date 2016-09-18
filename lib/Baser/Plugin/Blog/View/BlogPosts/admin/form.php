@@ -94,10 +94,14 @@ $(function(){
 		if(!$("#BlogTagName").val()) {
 			return false;
 		}
+		$.bcToken.check(function () {
 		$.ajax({
 			type: "POST",
 			url: $("#AddTagUrl").html(),
-			data: {'data[BlogTag][name]': $("#BlogTagName").val()},
+			data: {
+				'data[BlogTag][name]': $("#BlogTagName").val(),
+				'data[_Token][key]': $.bcToken.key
+			},
 			dataType: 'html',
 			beforeSend: function() {
 				$("#BtnAddBlogTag").attr('disabled', 'disabled');
@@ -120,6 +124,7 @@ $(function(){
 				$("#BlogTags").effect("highlight",{},1500);
 			}
 		});
+		}, {loaderType: 'target', loaderSelector: '#TagLoader', hideLoader: false});
 		return false;
 	});
 /**
@@ -130,10 +135,14 @@ $(function(){
 		if(!category) {
 			return false;
 		}
+		$.bcToken.check(function () {
 		$.ajax({
 			type: "POST",
 			url: $("#AddBlogCategoryUrl").html(),
-			data: {'data[BlogCategory][name]': category},
+			data: {
+				'data[BlogCategory][name]': category,
+				'data[_Token][key]': $.bcToken.key
+			},
 			dataType: 'script',
 			beforeSend: function() {
 				$("#BtnAddBlogCategory").attr('disabled', 'disabled');
@@ -160,6 +169,7 @@ $(function(){
 				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
 			}
 		});
+		}, {loaderType: 'target', loaderSelector: '#BlogCategoryLoader', hideLoader: false});
 		return false;
 	});
 });
@@ -338,7 +348,7 @@ $(function(){
 		<?php endif ?>
 		<?php echo $this->BcForm->button('保存前確認', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 		<?php if ($editable): ?>
-		<?php $this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogPost.name')), false); ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogPost.name')), false); ?>
 		<?php endif ?>
 	<?php endif ?>
 </div>

@@ -24,10 +24,10 @@ $this->BcBaser->js(array(
 			button: '.btn-copy',
 			confirm: '',
 			result: function(row, result) {
-				console.log(result);
 				var config = $.baserAjaxDataList.config;
 				if(result) {
-					$.baserAjaxDataList.load(document.location.href);
+					$.bcUtil.showLoader();
+					document.location.reload();
 				} else {
 					$(config.alertBox).html('コピーに失敗しました。');
 					$(config.alertBox).fadeIn(500);
@@ -40,7 +40,8 @@ $this->BcBaser->js(array(
 			result: function(row, result) {
 				var config = $.baserAjaxDataList.config;
 				if(result) {
-					$.baserAjaxDataList.load(document.location.href);
+					$.bcUtil.showLoader();
+					document.location.reload();
 				} else {
 					$(config.alertBox).html('削除に失敗しました。');
 					$(config.alertBox).fadeIn(500);
@@ -53,7 +54,8 @@ $this->BcBaser->js(array(
 				'初期データを読み込みます。よろしいですか？\n\n'+
 				'※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。\n'+
 				'※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。')) {
-				return true;
+				$.bcUtil.showLoader();
+				$("#ThemeLoadDefaultDataPatternForm").submit();
 			}
 			return false;
 		});
