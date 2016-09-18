@@ -268,12 +268,18 @@ class BcAppController extends Controller {
 		$this->setTheme();
 
 		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
-		if (!empty($this->request->params['admin']) || Configure::read('BcRequest.isUpdater')) {
+		if (!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
-			$this->Security->csrfCheck = false;
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if(BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins))) {
+				$this->Security->csrfCheck = true;
+			} else {
+				$this->Security->csrfCheck = false;
+			}
 		}
-		
+
 		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
+			$this->Security->validatePost = false;
 			return;
 		}
 
@@ -421,6 +427,8 @@ class BcAppController extends Controller {
 				$this->Security->requireSecure = $adminSslMethods;
 			}
 		}
+
+		$this->_isRequireCheckSubmitToken();
 
 	}
 
@@ -1510,6 +1518,78 @@ class BcAppController extends Controller {
 			), $options);
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
+	}
+
+/**
+ * Token の key を取得
+ *
+ * @return string
+ */
+	public function admin_ajax_get_token() {
+		$this->autoRender = false;
+		return $this->request->params['_Token']['key'];
+	}
+	
+/**
+ * リクエストメソッドとトークンをチェックする
+ *
+ * - GETでのアクセスの場合 not found
+ * - トークンが送信されていない場合 not found
+ */
+	protected function _checkSubmitToken() {
+		if(strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
+			$this->notFound();
+		}
+	}
+
+	protected function _isRequireCheckSubmitToken() {
+		if($this->name == 'CakeError') {
+			return;
+		}
+		$controller = $this->request->params['controller'];
+		$action = $this->request->params['action'];
+		$requires = [
+			'dashboard' => ['admin_del'],
+			'editor_templates' => ['admin_delete', 'admin_ajax_delete'],
+			'pages' => ['admin_delete', 'admin_ajax_copy', 'admin_ajax_publish', 'admin_ajax_unpublish', 'admin_ajax_update_sort', 'admin_ajax_delete', 'admin_entry_page_files', 'admin_write_page_files'],
+			'page_categories' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_copy', 'admin_ajax_down', 'admin_ajax_up'],
+			'permissions' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_copy', 'admin_ajax_unpublish', 'admin_ajax_publish'],
+			'plugins' => ['admin_ajax_delete_file', 'admin_ajax_delete'],
+			'search_indices' => ['admin_ajax_delete'],
+			'site_configs' => ['admin_del_cache'],
+			'theme_files' => ['admin_del', 'admin_ajax_del', 'admin_copy_to_theme', 'admin_copy_folder_to_theme'],
+			'themes' => ['admin_reset_data', 'admin_ajax_copy', 'admin_ajax_delete', 'admin_del', 'admin_apply'],
+			'user_groups' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_copy'],
+			'users' => ['admin_ajax_delete', 'admin_delete'],
+			'widget_areas' => ['admin_ajax_delete', 'admin_delete', 'admin_del_widget'],
+			'blog_categories' => ['admin_ajax_delete', 'admin_delete'],
+			'blog_comments' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_unpublish', 'admin_ajax_publish'],
+			'blog_contents' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_copy'],
+			'blog_posts' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_unpublish', 'admin_ajax_publish', 'admin_ajax_copy'],
+			'blog_tags' => ['admin_delete', 'admin_ajax_delete'],
+			'feed_configs' => ['admin_ajax_delete', 'admin_delete', 'admin_delete_cache'],
+			'feed_details' => ['admin_ajax_delete', 'admin_delete'],
+			'mail_contents' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_copy'],
+			'mail_fields' => ['admin_ajax_delete', 'admin_delete', 'admin_ajax_copy', 'admin_ajax_unpublish', 'admin_ajax_publish'],
+			'mail_messages' => ['admin_ajax_delete', 'admin_delete'],
+			'uploader_categories' => ['admin_delete', 'admin_ajax_delete', 'admin_ajax_copy'],
+			'uploader_files' => ['admin_delete'],
+			'menus' => ['admin_delete', 'admin_ajax_delete'],
+		];
+		if($controller == 'tools' && $action == 'admin_log' && $this->request->params['pass'][0] == 'delete') {
+			$this->_checkSubmitToken();
+		} elseif($action == 'admin_ajax_batch') {
+			$this->_checkSubmitToken();
+		}
+
+		foreach($requires as $checkController => $checkActions) {
+			foreach($checkActions as $checkAction) {
+				if($controller == $checkController && $action == $checkAction) {
+					$this->_checkSubmitToken();
+					break;
+				}
+			}
+		}
 	}
 
 }

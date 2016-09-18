@@ -36,6 +36,7 @@
 			'admin/jquery.corner-2.12',
 			'admin/jquery.bt.min',
 			'admin/cb',
+			'admin/jquery.baseUrl',
 			'admin/jquery.contextMenu-1.0/jquery.contextMenu',
 			'admin/jquery.form-2.94',
 			'admin/jquery.validate.min',
@@ -45,6 +46,8 @@
 			'admin/credit',
 			'admin/validate_messages_ja',
 			'admin/functions',
+			'admin/jquery.bcToken',
+			'admin/jquery.bcUtil',
 			'admin/startup',
 			'admin/adjust_scroll',
 			'admin/yuga'))

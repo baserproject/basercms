@@ -287,7 +287,7 @@ $(function(){
 <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
 <?php if ($this->action == 'admin_edit'): ?>
 	<?php
-	$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('BlogContent.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogContent.title')), false);
+	$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('BlogContent.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogContent.title')), false);
 	?>
 <?php endif ?>
 </div>
