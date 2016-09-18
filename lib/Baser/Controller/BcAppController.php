@@ -265,6 +265,7 @@ class BcAppController extends Controller {
 		}
 
 		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
+			$this->Security->validatePost = false;
 			return;
 		}
 
