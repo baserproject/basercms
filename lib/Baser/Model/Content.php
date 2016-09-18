@@ -837,6 +837,8 @@ class Content extends AppModel {
 			if(empty($content['Content']['alias_id'])) {
 				$content['Content']['parent_id'] = null;
 				$content['Content']['url'] = '';
+				$content['Content']['status'] = false;
+				$content['Content']['self_status'] = false;
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
 				$this->save($content, array('validate' => false, 'callbacks' => false));
