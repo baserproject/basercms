@@ -31,51 +31,51 @@ class BlogComment extends BlogAppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * belongsTo
  *
  * @var array
  */
-	public $belongsTo = array('BlogPost' => array('className' => 'Blog.BlogPost',
-			'foreignKey' => 'blog_post_id'));
+	public $belongsTo = ['BlogPost' => ['className' => 'Blog.BlogPost',
+			'foreignKey' => 'blog_post_id']];
 
 /**
  * validate
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'お名前を入力してください。'),
-			array('rule' => array('maxLength', 50),
-				'message' => 'お名前は50文字以内で入力してください。')
-		),
-		'email' => array(
-			'email' => array(
-				'rule' => array('email'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
+				'message' => 'お名前を入力してください。'],
+			['rule' => ['maxLength', 50],
+				'message' => 'お名前は50文字以内で入力してください。']
+		],
+		'email' => [
+			'email' => [
+				'rule' => ['email'],
 				'message' => 'Eメールの形式が不正です。',
-				'allowEmpty' => true),
-			'maxLength' => array(
-				'rule' => array('maxLength', 255),
-				'message' => 'Eメールは255文字以内で入力してください。')
-		),
-		'url' => array(
-			'url' => array(
-				'rule' => array('url'),
+				'allowEmpty' => true],
+			'maxLength' => [
+				'rule' => ['maxLength', 255],
+				'message' => 'Eメールは255文字以内で入力してください。']
+		],
+		'url' => [
+			'url' => [
+				'rule' => ['url'],
 				'message' => 'URLの形式が不正です。',
-				'allowEmpty' => true),
-			'maxLength' => array(
-				'rule' => array('maxLength', 255),
-				'message' => 'URLは255文字以内で入力してください。')
-		),
-		'message' => array(
-			array('rule' => array('notBlank'),
-				'message' => "コメントを入力してください。")
-		)
-	);
+				'allowEmpty' => true],
+			'maxLength' => [
+				'rule' => ['maxLength', 255],
+				'message' => 'URLは255文字以内で入力してください。']
+		],
+		'message' => [
+			['rule' => ['notBlank'],
+				'message' => "コメントを入力してください。"]
+		]
+	];
 
 /**
  * 初期値を取得する
@@ -118,7 +118,7 @@ class BlogComment extends BlogAppModel {
 			$data['status'] = true;
 		}
 
-		$data['no'] = $this->getMax('no', array('blog_content_id' => $contentId)) + 1;
+		$data['no'] = $this->getMax('no', ['blog_content_id' => $contentId]) + 1;
 		$this->create($data);
 
 		return $this->save();

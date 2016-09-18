@@ -31,15 +31,15 @@ class BlogTag extends BlogAppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * HABTM
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array(
-		'BlogPost' => array(
+	public $hasAndBelongsToMany = [
+		'BlogPost' => [
 			'className' => 'Blog.BlogPost',
 			'joinTable' => 'blog_posts_blog_tags',
 			'foreignKey' => 'blog_tag_id',
@@ -50,23 +50,23 @@ class BlogTag extends BlogAppModel {
 			'unique' => true,
 			'finderQuery' => '',
 			'deleteQuery' => ''
-	));
+	]];
 
 /**
  * validate
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			'notBlank' => [
+				'rule' => ['notBlank'],
 				'message' => 'ブログタグを入力してください。'
-			),
-			'duplicate' => array(
-				'rule' => array('duplicate', 'name'),
+			],
+			'duplicate' => [
+				'rule' => ['duplicate', 'name'],
 				'message' => '既に登録のあるタグです。'
-			)
-	));
+			]
+	]];
 
 }
