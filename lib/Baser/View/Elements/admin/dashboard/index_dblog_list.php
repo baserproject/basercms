@@ -39,6 +39,7 @@ $ (function (){
 			success:function(response,stuts){
 				if(response){
 					$('#DblogList').html(response);
+					$.bcToken.replaceLinkToSubmitToken('#DblogList .submit-token');
 				}else{
 					$('#AlertMessage').html('データの取得に失敗しました。');
 					$('#AlertMessage').fadeIn(500);
@@ -70,7 +71,7 @@ $ (function (){
 	<?php $this->BcBaser->element('list_num') ?>
 	<div class="submit clear">
 		<?php
-		$this->BcBaser->link('削除', array('action' => 'del'), array('class' => 'btn-gray button'), '最近の動きのログを削除します。いいですか？')
+		$this->BcBaser->link('削除', array('action' => 'del'), array('class' => 'submit-token btn-gray button'), '最近の動きのログを削除します。いいですか？')
 		?>
 	</div>
 <?php endif; ?>
