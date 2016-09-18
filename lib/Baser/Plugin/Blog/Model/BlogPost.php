@@ -581,7 +581,7 @@ class BlogPost extends BlogAppModel {
 		$_data['SearchIndex']['site_id'] = $content['Content']['site_id'];
 		$_data['SearchIndex']['title'] = $data['name'];
 		$_data['SearchIndex']['detail'] = $data['content'] . ' ' . $data['detail'];
-		$_data['SearchIndex']['url'] = '/' . $content['Content']['url'] . '/archives/' . $data['no'];
+		$_data['SearchIndex']['url'] = $content['Content']['url'] . '/archives/' . $data['no'];
 		$_data['SearchIndex']['status'] = $this->allowPublish($data);
 		return $_data;
 	}
