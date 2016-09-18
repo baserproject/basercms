@@ -183,36 +183,42 @@ function registWidgetEvent(baseId){
  * ウィジェットを削除
  */
 function delWidget(id){
-
-	$.ajax({
-		url: $("#DelWidgetUrl").html()+'/'+id,
-		type: 'GET',
-		dataType: 'text',
-		beforeSend: function() {
-			$("#WidgetAreaUpdateSortLoader").show();
-			$("#flashMessage").slideUp();
-		},
-		success: function(result){
-			if(result != '1'){
-				$("#flashMessage").html('ウィジェッの削除に失敗しました。');
+	$.bcToken.check(function(){
+		$("#WidgetAreaUpdateSortForm input[name='data[_Token][key]']").val($.bcToken.key);
+		$.ajax({
+			url: $("#DelWidgetUrl").html()+'/'+id,
+			type: 'POST',
+			data: {
+				_Token:{
+					key: $.bcToken.key
+				}
+			},
+			dataType: 'text',
+			beforeSend: function() {
+				$("#WidgetAreaUpdateSortLoader").show();
+				$("#flashMessage").slideUp();
+			},
+			success: function(result){
+				if(result != '1'){
+					$("#flashMessage").html('ウィジェットの削除に失敗しました。');
+					$("#flashMessage").slideDown();
+				} else {
+					$("#Setting"+id+"").slideUp(200, function(){
+						$("#Setting"+id).remove();
+						widgetAreaUpdateSortedIds();
+					});
+				}
+			},
+			error: function(){
+				$("#flashMessage").html('ウィジェットの削除に失敗しました。');
 				$("#flashMessage").slideDown();
-			} else {
-				$("#Setting"+id+"").slideUp(200, function(){
-					$("#Setting"+id).remove();
-					widgetAreaUpdateSortedIds();
-				});
+			},
+			complete: function(xhr, textStatus) {
+				$("#WidgetAreaUpdateSortLoader").hide();
 			}
-		},
-		error: function(){
-			$("#flashMessage").html('ウィジェットの削除に失敗しました。');
-			$("#flashMessage").slideDown();
-		},
-		complete: function(xhr, textStatus) {
-			$("#WidgetAreaUpdateSortLoader").hide();
-		}
-
-	});
-
+	
+		});
+	}, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateSortLoader", hideLoader: false});
 }
 /**
  * 並び順を更新する
@@ -224,100 +230,104 @@ function widgetAreaUpdateSortedIds(){
 		ids.push($(this).attr('id').replace('Setting',''));
 	});
 	$("#WidgetAreaSortedIds").val(ids.join(','));
-	$.ajax({
-		url: $("#WidgetAreaUpdateSortForm").attr('action'),
-		type: 'POST',
-		data: $("#WidgetAreaUpdateSortForm").serialize(),
-		dataType: 'text',
-		beforeSend: function() {
-			$("#flashMessage").slideUp();
-			$("#WidgetAreaUpdateSortLoader").show();
-		},
-		success: function(result){
-			if(result != '1'){
+	$.bcToken.check(function(){
+		$("#WidgetAreaUpdateSortForm input[name='data[_Token][key]']").val($.bcToken.key);
+		$.ajax({
+			url: $("#WidgetAreaUpdateSortForm").attr('action'),
+			type: 'POST',
+			data: $("#WidgetAreaUpdateSortForm").serialize(),
+			dataType: 'text',
+			beforeSend: function() {
+				$("#flashMessage").slideUp();
+				$("#WidgetAreaUpdateSortLoader").show();
+			},
+			success: function(result){
+				if(result != '1'){
+					$("#flashMessage").html('ウィジェットエリアの並び替えの保存に失敗しました。');
+					$("#flashMessage").slideDown();
+				}
+			},
+			error: function(){
 				$("#flashMessage").html('ウィジェットエリアの並び替えの保存に失敗しました。');
 				$("#flashMessage").slideDown();
+			},
+			complete: function(xhr, textStatus) {
+				$("#WidgetAreaUpdateSortLoader").hide();
 			}
-		},
-		error: function(){
-			$("#flashMessage").html('ウィジェットエリアの並び替えの保存に失敗しました。');
-			$("#flashMessage").slideDown();
-		},
-		complete: function(xhr, textStatus) {
-			$("#WidgetAreaUpdateSortLoader").hide();
-		}
-	});
-
+		});
+	}, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateSortLoader", hideLoader: false});
 }
 /**
  * タイトルを更新する
  */
 function widgetAreaUpdateTitle(){
-
-	$.ajax({
-		url: $("#WidgetAreaUpdateTitleForm").attr('action'),
-		type: 'POST',
-		data: $("#WidgetAreaUpdateTitleForm").serialize(),
-		dataType: 'text',
-		beforeSend: function() {
-			$("#WidgetAreaUpdateTitleSubmit").attr('disabled', 'disabled');
-			$("#flashMessage").slideUp();
-			$("#WidgetAreaUpdateTitleLoader").show();
-		},
-		success: function(result){
-			if(result){
-				$("#flashMessage").html('ウィジェットエリア名を保存しました。');
-			}else{
+	$.bcToken.check(function(){
+		$('#WidgetAreaUpdateTitleForm input[name="data[_Token][key]"]').val($.bcToken.key);
+		$.ajax({
+			url: $("#WidgetAreaUpdateTitleForm").attr('action'),
+			type: 'POST',
+			data: $("#WidgetAreaUpdateTitleForm").serialize(),
+			dataType: 'text',
+			beforeSend: function() {
+				$("#WidgetAreaUpdateTitleSubmit").attr('disabled', 'disabled');
+				$("#flashMessage").slideUp();
+				$("#WidgetAreaUpdateTitleLoader").show();
+			},
+			success: function(result){
+				if(result){
+					$("#flashMessage").html('ウィジェットエリア名を保存しました。');
+				}else{
+					$("#flashMessage").html('ウィジェットエリア名の保存に失敗しました。');
+				}
+				$("#flashMessage").slideDown();
+			},
+			error: function(){
 				$("#flashMessage").html('ウィジェットエリア名の保存に失敗しました。');
+				$("#flashMessage").slideDown();
+			},
+			complete: function(xhr, textStatus) {
+				$("#WidgetAreaUpdateTitleSubmit").removeAttr('disabled');
+				$("#WidgetAreaUpdateTitleLoader").hide();
 			}
-			$("#flashMessage").slideDown();
-		},
-		error: function(){
-			$("#flashMessage").html('ウィジェットエリア名の保存に失敗しました。');
-			$("#flashMessage").slideDown();
-		},
-		complete: function(xhr, textStatus) {
-			$("#WidgetAreaUpdateTitleSubmit").removeAttr('disabled');
-			$("#WidgetAreaUpdateTitleLoader").hide();
-		}
-	});
-
+		});
+	}, {loaderType: "target", loaderSelector: "#WidgetAreaUpdateTitleLoader", hideLoader: false});
 }
 /**
  * ウィジェットを更新する
  */
 function updateWidget(id) {
-
-	$.ajax({
-		url: $("#WidgetUpdateWidgetForm"+id).attr('action'),
-		type: 'POST',
-		data: $("#WidgetUpdateWidgetForm"+id).serialize(),
-		dataType: 'text',
-		beforeSend: function() {
-			$("#WidgetUpdateWidgetSubmit"+id).attr('disabled', 'disabled');
-			$("#WidgetUpdateWidgetLoader"+id).show();
-			$("#flashMessage").slideUp();
-		},
-		success: function(result){
-			if(result != '1'){
-				$("#flashMessage").html('ウィジェッの保存に失敗しました。');
+	$.bcToken.check(function(){
+		$("#WidgetUpdateWidgetForm" + id + ' input[name="data[_Token][key]"]').val($.bcToken.key);
+		$.ajax({
+			url: $("#WidgetUpdateWidgetForm"+id).attr('action'),
+			type: 'POST',
+			data: $("#WidgetUpdateWidgetForm"+id).serialize(),
+			dataType: 'text',
+			beforeSend: function() {
+				$("#WidgetUpdateWidgetSubmit"+id).attr('disabled', 'disabled');
+				$("#WidgetUpdateWidgetLoader"+id).show();
+				$("#flashMessage").slideUp();
+			},
+			success: function(result){
+				if(result != '1'){
+					$("#flashMessage").html('ウィジェットの保存に失敗しました。');
+					$("#flashMessage").slideDown();
+				}else{
+					$("#Setting"+id+' .head').html($("#Setting"+id+' .name').val());
+				}
+			},
+			error: function(){
+				$("#flashMessage").html('ウィジェットの保存に失敗しました。');
 				$("#flashMessage").slideDown();
-			}else{
-				$("#Setting"+id+' .head').html($("#Setting"+id+' .name').val());
+			},
+			complete: function(xhr, textStatus) {
+				$("#WidgetUpdateWidgetSubmit"+id).removeAttr('disabled');
+				$("#WidgetUpdateWidgetLoader"+id).hide();
+				widgetAreaUpdateSortedIds();
 			}
-		},
-		error: function(){
-			$("#flashMessage").html('ウィジェットの保存に失敗しました。');
-			$("#flashMessage").slideDown();
-		},
-		complete: function(xhr, textStatus) {
-			$("#WidgetUpdateWidgetSubmit"+id).removeAttr('disabled');
-			$("#WidgetUpdateWidgetLoader"+id).hide();
-			widgetAreaUpdateSortedIds();
-		}
-
-	});
-
+	
+		});
+	}, {loaderType: "target", loaderSelector: "#WidgetUpdateWidgetLoader"+id, hideLoader: false});
 }
 </script>
 <?php if ($this->request->action == 'admin_add'): ?>

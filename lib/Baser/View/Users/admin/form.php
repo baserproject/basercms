@@ -41,40 +41,47 @@ $(function(){
 			};
 		});
 
-		$.ajax({
-			url: $("#UserGroupSetDefaultFavoritesUrl").html(),
-			type: 'POST',
-			data: data,
-			dataType: 'html',
-			beforeSend: function() {
-				$("#Waiting").show();
-				alertBox();
-			},
-			success: function(result){
-				$("#ToTop a").click();
-				if(result) {
-					alertBox('登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。');
-				} else {
-					alertBox('処理に失敗しました。');
+		$.bcToken.check(function(){
+			data = $.extend(data, {
+				_Token: {
+					key: $.bcToken.key
 				}
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown){
-				var errorMessage = '';
-				if(XMLHttpRequest.status == 404) {
-					errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
-				} else {
-					if(XMLHttpRequest.responseText) {
-						errorMessage = '<br />'+XMLHttpRequest.responseText;
+			});
+			$.ajax({
+				url: $("#UserGroupSetDefaultFavoritesUrl").html(),
+				type: 'POST',
+				data: data,
+				dataType: 'html',
+				beforeSend: function() {
+					$("#Waiting").show();
+					alertBox();
+				},
+				success: function(result){
+					$("#ToTop a").click();
+					if(result) {
+						alertBox('登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。');
 					} else {
-						errorMessage = '<br />'+errorThrown;
+						alertBox('処理に失敗しました。');
 					}
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+					var errorMessage = '';
+					if(XMLHttpRequest.status == 404) {
+						errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
+					} else {
+						if(XMLHttpRequest.responseText) {
+							errorMessage = '<br />'+XMLHttpRequest.responseText;
+						} else {
+							errorMessage = '<br />'+errorThrown;
+						}
+					}
+					alertBox('処理に失敗しました。('+XMLHttpRequest.status+')'+errorMessage);
+				},
+				complete: function() {
+					$("#Waiting").hide();
 				}
-				alertBox('処理に失敗しました。('+XMLHttpRequest.status+')'+errorMessage);
-			},
-			complete: function() {
-				$("#Waiting").hide();
-			}
-		});
+			});
+		});	
 	});
 });
 </script>
@@ -188,7 +195,7 @@ $(function(){
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php if ($editable): ?>
 	<?php if ($this->request->action == 'admin_edit' && $deletable): ?>
-			<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('User.id')), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('User.name')), false); ?>
+			<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('User.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('User.name')), false); ?>
 	<?php endif; ?>
 <?php endif; ?>
 </div>
