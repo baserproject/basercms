@@ -20,7 +20,7 @@
 $(document).ready(function(){
 	$('#btnfinish,#btnback').click( function() {
 		if(this.id == 'btnfinish') {
-			$("#clicked").val('finish');
+			$("#InstallationClicked").val('finish');
 			if($("#InstallationAdminEmail").val() == ""){
 				alert("管理用メールアドレスを入力してください。");
 				return false;
@@ -41,7 +41,7 @@ $(document).ready(function(){
 				return false;
 			}
 		}else if(this.id == 'btnback') {
-			$("#clicked").val('back');
+			$("#InstallationClicked").val('back');
 		}
 		$('#adminSettings').submit();
 	});
