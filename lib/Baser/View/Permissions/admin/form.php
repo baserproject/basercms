@@ -96,7 +96,7 @@ $(window).load(function() {
 <?php if ($this->request->action == 'admin_edit'): ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action'=>'delete', $this->request->params['pass'][0], $this->BcForm->value('Permission.id')),
-			array('class' => 'button'),
+			array('class' => 'submit-token button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Permission.name')),
 			false); ?>
 <?php endif ?>

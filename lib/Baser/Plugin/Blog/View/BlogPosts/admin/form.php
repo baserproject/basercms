@@ -90,32 +90,38 @@ $(function(){
 		if(!$("#BlogTagName").val()) {
 			return;
 		}
-		$.ajax({
-			type: "POST",
-			url: $("#AddTagUrl").html(),
-			data: {'data[BlogTag][name]': $("#BlogTagName").val()},
-			dataType: 'html',
-			beforeSend: function() {
-				$("#BtnAddBlogTag").attr('disabled', 'disabled');
-				$("#TagLoader").show();
-			},
-			success: function(result){
-				if(result) {
-					$("#BlogTags").append(result);
-					$("#BlogTagName").val('');
-				} else {
-					alert('ブログタグの追加に失敗しました。既に登録されていないか確認してください。');
+		$.bcToken.check(function(){
+			$.ajax({
+				type: "POST",
+				url: $("#AddTagUrl").html(),
+				data: {
+					'data[BlogTag][name]': $("#BlogTagName").val(),
+					'data[_Token][key]': $.bcToken.key
+				},
+				dataType: 'html',
+				beforeSend: function() {
+					$("#BtnAddBlogTag").attr('disabled', 'disabled');
+					$("#TagLoader").show();
+				},
+				success: function(result){
+					if(result) {
+						$("#BlogTags").append(result);
+						$("#BlogTagName").val('');
+					} else {
+						alert('ブログタグの追加に失敗しました。既に登録されていないか確認してください。');
+					}
+				},
+				error: function(){
+					alert('ブログタグの追加に失敗しました。');
+				},
+				complete: function(xhr, textStatus) {
+					$("#BtnAddBlogTag").removeAttr('disabled');
+					$("#TagLoader").hide();
+					$("#BlogTags").effect("highlight",{},1500);
 				}
-			},
-			error: function(){
-				alert('ブログタグの追加に失敗しました。');
-			},
-			complete: function(xhr, textStatus) {
-				$("#BtnAddBlogTag").removeAttr('disabled');
-				$("#TagLoader").hide();
-				$("#BlogTags").effect("highlight",{},1500);
-			}
-		});
+			});
+		}, {loaderType: 'target', loaderSelector: '#TagLoader', hideLoader: false});
+		return false;
 	});
 /**
  * ブログカテゴリ追加
@@ -125,36 +131,42 @@ $(function(){
 		if(!category) {
 			return false;
 		}
-		$.ajax({
-			type: "POST",
-			url: $("#AddBlogCategoryUrl").html(),
-			data: {'data[BlogCategory][name]': category},
-			dataType: 'script',
-			beforeSend: function() {
-				$("#BtnAddBlogCategory").attr('disabled', 'disabled');
-				$("#BlogCategoryLoader").show();
-			},
-			success: function(result){
-				if(result) {
-					$("#BlogPostBlogCategoryId").append($('<option />').val(result).html(category));
-					$("#BlogPostBlogCategoryId").val(result);
-				} else {
-					alert('ブログカテゴリの追加に失敗しました。既に登録されていないか確認してください。');
+		$.bcToken.check(function(){
+			$.ajax({
+				type: "POST",
+				url: $("#AddBlogCategoryUrl").html(),
+				data: {
+					'data[BlogCategory][name]': category,
+					'data[_Token][key]': $.bcToken.key
+				},
+				dataType: 'script',
+				beforeSend: function() {
+					$("#BtnAddBlogCategory").attr('disabled', 'disabled');
+					$("#BlogCategoryLoader").show();
+				},
+				success: function(result){
+					if(result) {
+						$("#BlogPostBlogCategoryId").append($('<option />').val(result).html(category));
+						$("#BlogPostBlogCategoryId").val(result);
+					} else {
+						alert('ブログカテゴリの追加に失敗しました。既に登録されていないか確認してください。');
+					}
+				},
+				error: function(XMLHttpRequest, textStatus){
+					if(XMLHttpRequest.responseText) {
+						alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.responseText);
+					} else {
+						alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.statusText);
+					}
+				},
+				complete: function(xhr, textStatus) {
+					$("#BtnAddBlogCategory").removeAttr('disabled');
+					$("#BlogCategoryLoader").hide();
+					$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
 				}
-			},
-			error: function(XMLHttpRequest, textStatus){
-				if(XMLHttpRequest.responseText) {
-					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.responseText);
-				} else {
-					alert('ブログカテゴリの追加に失敗しました。\n\n' + XMLHttpRequest.statusText);
-				}
-			},
-			complete: function(xhr, textStatus) {
-				$("#BtnAddBlogCategory").removeAttr('disabled');
-				$("#BlogCategoryLoader").hide();
-				$("#BlogPostBlogCategoryId").effect("highlight",{},1500);
-			}
-		});
+			});
+		}, {loaderType: 'target', loaderSelector: '#BlogCategoryLoader', hideLoader: false});
+		return false;
 	});
 });
 </script>
@@ -325,7 +337,7 @@ $(function(){
 	<?php if($editable): ?>
 	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')),
-			array('class'=>'button'),
+			array('class'=>'submit-token button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogPost.name')),
 			false); ?>
 	<?php endif ?>

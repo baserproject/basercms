@@ -101,7 +101,7 @@ $(window).load(function() {
 <?php if($this->action == 'admin_edit'): ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action' => 'delete', $this->BcForm->value('FeedConfig.id'), $this->BcForm->value('FeedDetail.id')),
-			array('class' => 'button'),
+			array('class' => 'submit-token button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('FeedConfig.name')),false); ?>
 <?php endif ?>
 </div>

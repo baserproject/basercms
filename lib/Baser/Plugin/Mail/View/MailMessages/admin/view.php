@@ -66,6 +66,6 @@ foreach($mailFields as $key => $mailField) {
 <p class="submit">
 	<?php $this->BcBaser->link('削除',
 					array('action'=>'delete', $mailContent['MailContent']['id'], $message['Message']['id']),
-					array('class'=>'btn-gray button'),
+					array('class'=>'submit-token btn-gray button'),
 					sprintf('受信メール NO「%s」を削除してもいいですか？', $message['Message']['id']), false) ?>
 </p>

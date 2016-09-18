@@ -343,7 +343,7 @@ jQuery(function($) {
 <?php if($this->action == 'admin_edit'): ?>
 	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id')),
-			array('class' => 'button'),
+			array('class' => 'submit-token button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('MailField.name')),
 			false); ?>
 <?php endif ?>

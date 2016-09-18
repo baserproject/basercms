@@ -318,7 +318,7 @@ function mailContentSender1ClickHandler(){
 <?php if($this->action == 'admin_edit'): ?>
 	<?php $this->BcBaser->link('削除', 
 			array('action' => 'delete', $this->BcForm->value('MailContent.id')),
-			array('class' => 'button'),
+			array('class' => 'submit-token button'),
 			sprintf("%s を本当に削除してもいいですか？\n\n※ 現在このメールフォームに設定されているフィールドは全て削除されます。", $this->BcForm->value('MailContent.name')),
 			false); ?>
 <?php endif ?>

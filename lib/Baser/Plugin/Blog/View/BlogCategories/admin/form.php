@@ -120,14 +120,12 @@ $(window).load(function() {
 
 <!-- button -->
 <div class="submit">
-<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
-<?php if($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('削除',
-			array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')),
-			array('class' => 'button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')),
-			false); ?>
-<?php endif ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
+	<?php if ($this->action == 'admin_edit'): ?>
+		<?php
+		$this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);
+		?>
+	<?php endif ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

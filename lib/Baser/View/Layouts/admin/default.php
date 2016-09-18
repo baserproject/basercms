@@ -39,6 +39,7 @@
 	'admin/jquery.corner-2.12',
 	'admin/jquery.bt.min',
 	'admin/cb',
+	'admin/jquery.baseUrl',
 	'admin/jquery.contextMenu-1.0/jquery.contextMenu',
 	'admin/jquery.form-2.94',
 	'admin/jquery.validate.min',
@@ -46,6 +47,8 @@
 	'admin/jquery.mScroll',
 	'admin/validate_messages_ja',
 	'admin/functions',
+	'admin/jquery.bcToken',
+	'admin/jquery.bcUtil',
 	'admin/startup',
 	'admin/adjust_scroll',
 	'admin/yuga')) ?>
@@ -55,6 +58,7 @@
 <body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
 
 <div id="Page">
+	<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 	<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
 	<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 	<div id="FavoriteBoxOpened" style="display:none"><?php echo $favoriteBoxOpened ?></div>
