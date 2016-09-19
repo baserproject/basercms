@@ -103,7 +103,15 @@ class Content extends AppModel {
  * @var null
  */
 	public $beforeSaveParentId = null;
-
+	
+/**
+ * 削除時の削除対象レコード
+ * 
+ * afterDelete で利用する為、beforeDelete で取得し保存する
+ * @var []
+ */
+	private $__deleteTarget;
+	
 /**
  * Implemented Events
  *
@@ -319,7 +327,7 @@ class Content extends AppModel {
  */
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created, $options);
-
+		$this->deleteAssocCache($this->data);
 		$this->updateSystemData($this->data);
 		if($this->updatingRelated) {
 			// ゴミ箱から戻す場合、 type の定義がないが問題なし
@@ -336,6 +344,24 @@ class Content extends AppModel {
 	}
 
 /**
+ * 関連するコンテンツ本体のデータキャッシュを削除する
+ * @param $data
+ */
+	public function deleteAssocCache($data) {
+		if(empty($data['Content']['plugin']) || empty($data['Content']['type'])) {
+			$data = $this->find('first', ['fields' => ['Content.plugin', 'Content.type'], 'conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
+		}
+		$assoc = $data['Content']['type'];
+		if($data['Content']['plugin'] != 'Core') {
+			$assoc = $data['Content']['plugin'] . '.' . $assoc;
+		}
+		$AssocModel = ClassRegistry::init($assoc);
+		if($AssocModel && in_array('BcCache', $AssocModel->actsAs)) {
+			$AssocModel->delCache();
+		}
+	}
+
+/**
  * Before delete
  *
  * @param Model $model
@@ -346,17 +372,29 @@ class Content extends AppModel {
 		if(!parent::beforeDelete($cascade)) {
 			return false;
 		}
-		if(!$this->softDelete(null)) {
-			return true;
-		}
 		$data = $this->find('first', array(
 			'conditions' => array($this->alias . '.id' => $this->id)
 		));
+		$this->__deleteTarget = $data;
+		if(!$this->softDelete(null)) {
+			return true;
+		}
 		if($data) {
 			$this->deleteRelateSubSiteContent($data);
 			$this->deleteAlias($data);
 		}
 		return true;
+	}
+
+/**
+ * After Delete
+ *
+ * 関連コンテンツのキャッシュを削除する 
+ */
+	public function afterDelete() {
+		parent::afterDelete();
+		$this->deleteAssocCache($this->__deleteTarget);
+		$this->__deleteTarget = null;
 	}
 
 /**
@@ -842,7 +880,13 @@ class Content extends AppModel {
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
 				$this->save($content, array('validate' => false, 'callbacks' => false));
-				return $this->delete($id);
+				$result = $this->delete($id);
+				// =====================================================================
+				// 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
+				// 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
+				// =====================================================================
+				$this->deleteAssocCache($content);
+				return $result;
 			} else {
 				$this->softDelete(false);
 				$result = $this->removeFromTree($content['Content']['id'], true);
