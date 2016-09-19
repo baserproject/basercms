@@ -60,6 +60,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
 
+  # 【注意！】
+  # virtualboxのバージョンとvbguestのバージョンが合っていない場合に、vagrantが正常にprovision出来ず、
+  # 途中で止まってしまうことがあります。この場合は、vagrant-vbguestをインストールしてください
+  #   $ vagrant plugin install vagrant-vbguest
+  #   $ vagrant vbguest
+  # 
+  # vbguestの更新で失敗する場合は、次の手順でOSのカーネルをアップデートしてください
+  #    $ vagrant ssh
+  #      (ゲストOS内)
+  #    $ sudo yum -y update kernel
+  #    $ exit
+  #      (以下ホストOS内)
+  #    $ vagrant vbguest
+  #    $ vagrant reload
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+     config.vbguest.auto_update = false
+  end
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -93,11 +111,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  # chefでのプロビジョニングにはvagrant-omnibusプラグインのインストールが必要です。
-  # vagrant upの前に、vagrant-omnibusプラグインを導入してください。
-  #   $ vagrant plugin install vagrant-omnibus
+  #【注意！】
+  # vagrant-omnibusプラグインのインストールは不要になりました。
+  # vmを作り直す場合は「vagrant destroy 後に」下記コマンドでプラグインを削除してください
+  #   $ vagrant plugin uninstall vagrant-omnibus
   #
-  config.omnibus.chef_version = "12.10.24"
+  # また、vagrant-omnibusプラグインを引き続き利用したい場合は次の設定を有効にしてください
+  # config.omnibus.chef_version = :latest
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"
