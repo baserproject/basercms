@@ -63,33 +63,33 @@ class BlogContent extends BlogAppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'layout' => array(
-			array('rule' => 'halfText',
+	public $validate = [
+		'layout' => [
+			['rule' => 'halfText',
 				'message' => 'レイアウトテンプレート名は半角で入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
-		),
-		'template' => array(
-			array('rule' => 'halfText',
+				'allowEmpty' => false],
+			['rule' => ['maxLength', 20],
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。']
+		],
+		'template' => [
+			['rule' => 'halfText',
 				'message' => 'コンテンツテンプレート名は半角で入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
-		),
-		'list_count' => array(array('rule' => 'halfText',
+				'allowEmpty' => false],
+			['rule' => ['maxLength', 20],
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。']
+		],
+		'list_count' => [['rule' => 'halfText',
 				'message' => "一覧表示件数は半角で入力してください。",
-				'allowEmpty' => false)
-		),
-		'list_direction' => array(array('rule' => array('notBlank'),
-				'message' => "一覧に表示する順番を指定してください。")
-		),
-		'eye_catch_size' => array(array(
-				'rule' => array('checkEyeCatchSize'),
+				'allowEmpty' => false]
+		],
+		'list_direction' => [['rule' => ['notBlank'],
+				'message' => "一覧に表示する順番を指定してください。"]
+		],
+		'eye_catch_size' => [[
+				'rule' => ['checkEyeCatchSize'],
 				'message' => 'アイキャッチ画像のサイズが不正です。'
-			))
-	);
+			]]
+	];
 
 /**
  * アイキャッチ画像サイズバリデーション
@@ -128,7 +128,7 @@ class BlogContent extends BlogAppModel {
  * @param string フィールド名
  * @return array コントロールソース
  */
-	public function getControlSource($field = null, $options = array()) {
+	public function getControlSource($field = null, $options = []) {
 		$controlSources['id'] = $this->find('list');
 
 		if (isset($controlSources[$field])) {
@@ -143,7 +143,7 @@ class BlogContent extends BlogAppModel {
  *
  * @return boolean
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		if (empty($this->data['BlogContent']['id'])) {
 			$this->data['BlogContent']['id'] = $this->getInsertID();
 		}
@@ -152,10 +152,10 @@ class BlogContent extends BlogAppModel {
 		if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
 			clearDataCache();
-			$datas = $this->BlogPost->find('all', array(
-				'conditions' => array('BlogPost.blog_content_id' => $this->data['BlogContent']['id']),
+			$datas = $this->BlogPost->find('all', [
+				'conditions' => ['BlogPost.blog_content_id' => $this->data['BlogContent']['id']],
 				'recursive' => -1
-			));
+			]);
 			foreach($datas as $data) {
 				$this->BlogPost->set($data);
 				$this->BlogPost->afterSave(true);
@@ -235,7 +235,7 @@ class BlogContent extends BlogAppModel {
 		$this->create($data);
 		if ($result = $this->save()) {
 			$result['BlogContent']['id'] = $this->getInsertID();
-			$blogPosts = $this->BlogPost->find('all', array('conditions' => array('BlogPost.blog_content_id' => $id), 'order' => 'BlogPost.id', 'recursive' => -1));
+			$blogPosts = $this->BlogPost->find('all', ['conditions' => ['BlogPost.blog_content_id' => $id], 'order' => 'BlogPost.id', 'recursive' => -1]);
 			foreach ($blogPosts as $blogPost) {
 				$blogPost['BlogPost']['blog_content_id'] = $result['BlogContent']['id'];
 				$this->BlogPost->copy(null, $blogPost);
@@ -279,12 +279,12 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	public function deconstructEyeCatchSize($data) {
-		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize(array(
+		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize([
 			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
 			'mobile_thumb_width' => $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
 			'mobile_thumb_height' => $data['BlogContent']['eye_catch_size_mobile_thumb_height'],
-		));
+		]);
 		unset($data['BlogContent']['eye_catch_size_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_thumb_height']);
 		unset($data['BlogContent']['eye_catch_size_mobile_thumb_width']);

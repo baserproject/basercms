@@ -39,60 +39,60 @@ class BlogPost extends BlogAppModel {
  *
  * @var array
  */
-	public $actsAs = array(
+	public $actsAs = [
 		'BcSearchIndexManager',
 		'BcCache',
-		'BcUpload' => array(
+		'BcUpload' => [
 			'subdirDateFormat' => 'Y/m/',
-			'fields' => array(
-				'eye_catch' => array(
+			'fields' => [
+				'eye_catch' => [
 					'type' => 'image',
 					'namefield' => 'no',
 					'nameformat' => '%08d'
-				)
-			)
-		)
-	);
+				]
+			]
+		]
+	];
 
 /**
  * belongsTo
  *
  * @var array
  */
-	public $belongsTo = array(
-		'BlogCategory' => array(
+	public $belongsTo = [
+		'BlogCategory' => [
 			'className' => 'Blog.BlogCategory',
-			'foreignKey' => 'blog_category_id'),
-		'User' => array(
+			'foreignKey' => 'blog_category_id'],
+		'User' => [
 			'className' => 'User',
-			'foreignKey' => 'user_id'),
-		'BlogContent' => array(
+			'foreignKey' => 'user_id'],
+		'BlogContent' => [
 			'className' => 'Blog.BlogContent',
-			'foreignKey' => 'blog_content_id')
-	);
+			'foreignKey' => 'blog_content_id']
+	];
 
 /**
  * hasMany
  *
  * @var array
  */
-	public $hasMany = array(
-		'BlogComment' => array(
+	public $hasMany = [
+		'BlogComment' => [
 			'className' => 'Blog.BlogComment',
 			'order' => 'created',
 			'foreignKey' => 'blog_post_id',
 			'dependent' => true,
 			'exclusive' => false,
-			'finderQuery' => '')
-	);
+			'finderQuery' => '']
+	];
 
 /**
  * HABTM
  * 
  * @var array
  */
-	public $hasAndBelongsToMany = array(
-		'BlogTag' => array(
+	public $hasAndBelongsToMany = [
+		'BlogTag' => [
 			'className' => 'Blog.BlogTag',
 			'joinTable' => 'blog_posts_blog_tags',
 			'foreignKey' => 'blog_post_id',
@@ -103,49 +103,54 @@ class BlogPost extends BlogAppModel {
 			'unique' => true,
 			'finderQuery' => '',
 			'deleteQuery' => ''
-	));
+	]];
 
 /**
  * validate
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => 'タイトルを入力してください。',
-				'required' => true),
-			array('rule' => array('maxLength', 255),
-				'message' => 'タイトルは255文字以内で入力してください。')
-		),
-		'detail' => array(
-			array('rule' => array('maxByte', 64000),
-			'message' => '本稿欄に保存できるデータ量を超えています。')
-		),
-		'detail_draft' => array(
-			array('rule' => array('maxByte', 64000),
-			'message' => '草稿欄に保存できるデータ量を超えています。')
-		),
-		'publish_begin' => array(
-			array('rule' => array('checkDate'),
-				'message' => '公開開始日の形式が不正です。')
-		),
-		'publish_end' => array(
-			array('rule' => array('checkDate'),
-				'message' => '公開終了日の形式が不正です。')
-		),
-		'posts_date' => array(
-			array('rule' => array('notBlank'),
+				'required' => true],
+			['rule' => ['maxLength', 255],
+				'message' => 'タイトルは255文字以内で入力してください。']
+		],
+		'detail' => [
+			['rule' => ['maxByte', 64000],
+			'message' => '本稿欄に保存できるデータ量を超えています。']
+		],
+		'detail_draft' => [
+			['rule' => ['maxByte', 64000],
+			'message' => '草稿欄に保存できるデータ量を超えています。']
+		],
+		'publish_begin' => [
+			['rule' => ['checkDate'],
+				'message' => '公開開始日の形式が不正です。'],
+			['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'],
+				'message' => '公開期間が不正です。']
+			
+		],
+		'publish_end' => [
+			['rule' => ['checkDate'],
+				'message' => '公開終了日の形式が不正です。'],
+			['rule' => ['checkDateRenge', 'publish_begin', 'publish_end'],
+				'message' => '公開期間が不正です。']
+		],
+		'posts_date' => [
+			['rule' => ['notBlank'],
 				'message' => '投稿日を入力してください。',
-				'required' => true),
-			array('rule' => array('checkDate'),
-				'message' => '投稿日の形式が不正です。')
-		),
-		'user_id' => array(
-			array('rule' => array('notBlank'),
-				'message' => '投稿者を選択してください。')
-		)
-	);
+				'required' => true],
+			['rule' => ['checkDate'],
+				'message' => '投稿日の形式が不正です。']
+		],
+		'user_id' => [
+			['rule' => ['notBlank'],
+				'message' => '投稿者を選択してください。']
+		]
+	];
 
 /**
  * アップロードビヘイビアの設定
@@ -153,18 +158,18 @@ class BlogPost extends BlogAppModel {
  * @param	int $id ブログコンテンツID
  */
 	public function setupUpload($id) {
-		$sizes = array('thumb', 'mobile_thumb');
-		$data = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => 0));
+		$sizes = ['thumb', 'mobile_thumb'];
+		$data = $this->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
 		$data = $this->BlogContent->constructEyeCatchSize($data);
 		$blogContent = $data['BlogContent'];
 
-		$imagecopy = array();
+		$imagecopy = [];
 
 		foreach ($sizes as $size) {
 			if (!isset($blogContent['eye_catch_size_' . $size . '_width']) || !isset($blogContent['eye_catch_size_' . $size . '_height'])) {
 				continue;
 			}
-			$imagecopy[$size] = array('suffix' => '__' . $size);
+			$imagecopy[$size] = ['suffix' => '__' . $size];
 			$imagecopy[$size]['width'] = $blogContent['eye_catch_size_' . $size . '_width'];
 			$imagecopy[$size]['height'] = $blogContent['eye_catch_size_' . $size . '_height'];
 		}
@@ -198,15 +203,15 @@ class BlogPost extends BlogAppModel {
  * @return array 月別リストデータ
  */
 	public function getPostedDates($blogContentId, $options) {
-		$options = array_merge(array(
+		$options = array_merge([
 			'category' => false,
 			'limit' => false,
 			'viewCount' => false,
 			'type' => 'month' // month Or year
-			), $options);
+			], $options);
 
 		extract($options);
-		$conditions = array('BlogPost.blog_content_id' => $blogContentId);
+		$conditions = ['BlogPost.blog_content_id' => $blogContentId];
 		$conditions = am($conditions, $this->getConditionAllowPublish());
 		// TODO CSVDBではGROUP BYが実装されていない為、取り急ぎPHPで処理
 		/* $dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
@@ -215,29 +220,29 @@ class BlogPost extends BlogAppModel {
 
 		if ($category) {
 			$recursive = 1;
-			$this->unbindModel(array(
-				'belongsTo' => array('User', 'BlogContent'),
-				'hasAndBelongsToMany' => array('BlogTag')
-			));
+			$this->unbindModel([
+				'belongsTo' => ['User', 'BlogContent'],
+				'hasAndBelongsToMany' => ['BlogTag']
+			]);
 		} else {
 			$recursive = -1;
 		}
 
 		// 毎秒抽出条件が違うのでキャッシュしない
-		$posts = $this->find('all', array(
+		$posts = $this->find('all', [
 			'conditions' => $conditions,
 			'order' => 'BlogPost.posts_date DESC',
 			'recursive' => $recursive,
 			'cache' => false
-		));
+		]);
 
-		$dates = array();
+		$dates = [];
 		$counter = 0;
 
 		foreach ($posts as $post) {
 
 			$exists = false;
-			$_date = array();
+			$_date = [];
 			$year = date('Y', strtotime($post['BlogPost']['posts_date']));
 			$month = date('m', strtotime($post['BlogPost']['posts_date']));
 			$categoryId = $post['BlogPost']['blog_category_id'];
@@ -297,12 +302,12 @@ class BlogPost extends BlogAppModel {
  * @return array
  */
 	public function getEntryDates($blogContentId, $year, $month) {
-		$entryDates = $this->find('all', array(
-			'fields' => array('BlogPost.posts_date'),
+		$entryDates = $this->find('all', [
+			'fields' => ['BlogPost.posts_date'],
 			'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
 			'recursive' => -1,
 			'cache' => false
-		));
+		]);
 		$entryDates = Hash::extract($entryDates, '{n}.BlogPost.posts_date');
 		foreach ($entryDates as $key => $entryDate) {
 			$entryDates[$key] = date('Y-m-d', strtotime($entryDate));
@@ -318,20 +323,20 @@ class BlogPost extends BlogAppModel {
  * @return array 
  */
 	public function getAuthors($blogContentId, $options) {
-		$options = array_merge(array(
+		$options = array_merge([
 			'viewCount' => false
-			), $options);
+			], $options);
 		extract($options);
 
-		$users = $this->User->find('all', array('recursive' => -1, array('order' => 'User.id'), 'fields' => array(
+		$users = $this->User->find('all', ['recursive' => -1, ['order' => 'User.id'], 'fields' => [
 				'User.id', 'User.name', 'User.real_name_1', 'User.real_name_2', 'User.nickname'
-		)));
-		$availableUsers = array();
+		]]);
+		$availableUsers = [];
 		foreach ($users as $key => $user) {
-			$count = $this->find('count', array('conditions' => array_merge(array(
+			$count = $this->find('count', ['conditions' => array_merge([
 					'BlogPost.user_id' => $user['User']['id'],
 					'BlogPost.blog_content_id' => $blogContentId
-					), $this->getConditionAllowPublish())));
+					], $this->getConditionAllowPublish())]);
 			if ($count) {
 				if ($viewCount) {
 					$user['count'] = $count;
@@ -351,12 +356,12 @@ class BlogPost extends BlogAppModel {
  * @return	boolean
  */
 	public function existsEntry($blogContentId, $year, $month) {
-		if ($this->find('first', array(
-				'fields' => array('BlogPost.id'),
+		if ($this->find('first', [
+				'fields' => ['BlogPost.id'],
 				'conditions' => $this->_getEntryDatesConditions($blogContentId, $year, $month),
 				'recursive' => -1,
 				'cache' => false
-			))) {
+			])) {
 			return true;
 		} else {
 			return false;
@@ -418,7 +423,7 @@ class BlogPost extends BlogAppModel {
 				break;
 		}
 
-		$conditions = am($conditions, array('BlogPost.blog_content_id' => $blogContentId), $this->getConditionAllowPublish());
+		$conditions = am($conditions, ['BlogPost.blog_content_id' => $blogContentId], $this->getConditionAllowPublish());
 		return $conditions;
 	}
 
@@ -430,7 +435,7 @@ class BlogPost extends BlogAppModel {
  * @return	array	コントロールソース
  * @access	public
  */
-	public function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = []) {
 		$options = array_merge([
 			'blogContentId' => '',
 			'userGroupId' => '',
@@ -447,14 +452,14 @@ class BlogPost extends BlogAppModel {
 		
 		switch ($field) {
 			case 'blog_category_id':
-				$catOption = array('blogContentId' => $blogContentId);
+				$catOption = ['blogContentId' => $blogContentId];
 				$categories = $this->BlogCategory->getControlSource('parent_id', $catOption);
 				// 「指定しない」追加
 				if ($empty) {
 					if ($categories) {
-						$categories = array('' => $empty) + $categories;
+						$categories = ['' => $empty] + $categories;
 					} else {
-						$categories = array('' => $empty);
+						$categories = ['' => $empty];
 					}
 				}
 				$controlSources['blog_category_id'] = $categories;
@@ -511,12 +516,12 @@ class BlogPost extends BlogAppModel {
  */
 	public function getConditionAllowPublish() {
 		$conditions[$this->alias . '.status'] = true;
-		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_begin' => null),
-				array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
-		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_end' => null),
-				array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
+		$conditions[] = ['or' => [[$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
+				[$this->alias . '.publish_begin' => null],
+				[$this->alias . '.publish_begin' => '0000-00-00 00:00:00']]];
+		$conditions[] = ['or' => [[$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
+				[$this->alias . '.publish_end' => null],
+				[$this->alias . '.publish_end' => '0000-00-00 00:00:00']]];
 		return $conditions;
 	}
 
@@ -544,7 +549,7 @@ class BlogPost extends BlogAppModel {
  * @param boolean $created
  * @return boolean
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		// 検索用テーブルへの登録・削除
 		if ($this->searchIndexSaving && !$this->data['BlogPost']['exclude_search']) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
@@ -570,7 +575,7 @@ class BlogPost extends BlogAppModel {
 			$data = $data['BlogPost'];
 		}
 		$content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_content_id']);
-		$_data = array();
+		$_data = [];
 		$_data['SearchIndex']['type'] = 'ブログ';
 		$_data['SearchIndex']['model_id'] = $this->id;
 		$_data['SearchIndex']['content_filter_id'] = '';
@@ -602,9 +607,9 @@ class BlogPost extends BlogAppModel {
  * @param array $data
  * @return mixed page Or false
  */
-	public function copy($id = null, $data = array()) {
+	public function copy($id = null, $data = []) {
 		if ($id) {
-			$data = $this->find('first', array('conditions' => array('BlogPost.id' => $id), 'recursive' => 1));
+			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id], 'recursive' => 1]);
 		}
 		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
 		if (!empty($_SESSION['Auth'][$sessionKey])) {
@@ -612,7 +617,7 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$data['BlogPost']['name'] .= '_copy';
-		$data['BlogPost']['no'] = $this->getMax('no', array('BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id'])) + 1;
+		$data['BlogPost']['no'] = $this->getMax('no', ['BlogPost.blog_content_id' => $data['BlogPost']['blog_content_id']]) + 1;
 		$data['BlogPost']['status'] = '0'; // TODO intger の為 false では正常に保存できない（postgreSQLで確認）
 
 		unset($data['BlogPost']['id']);
@@ -660,26 +665,26 @@ class BlogPost extends BlogAppModel {
 		$post['BlogPost']['detail'] = $post['BlogPost']['detail_tmp'];
 
 		if ($data['BlogPost']['blog_category_id']) {
-			$blogCategory = $this->BlogCategory->find('first', array(
-				'conditions' => array('BlogCategory.id' => $data['BlogPost']['blog_category_id']),
+			$blogCategory = $this->BlogCategory->find('first', [
+				'conditions' => ['BlogCategory.id' => $data['BlogPost']['blog_category_id']],
 				'recursive' => -1
-			));
+			]);
 			$post['BlogCategory'] = $blogCategory['BlogCategory'];
 		}
 
 		if ($data['BlogPost']['user_id']) {
-			$author = $this->User->find('first', array(
-				'conditions' => array('User.id' => $data['BlogPost']['user_id']),
+			$author = $this->User->find('first', [
+				'conditions' => ['User.id' => $data['BlogPost']['user_id']],
 				'recursive' => -1
-			));
+			]);
 			$post['User'] = $author['User'];
 		}
 
 		if (!empty($data['BlogTag']['BlogTag'])) {
-			$tags = $this->BlogTag->find('all', array(
-				'conditions' => array('BlogTag.id' => $data['BlogTag']['BlogTag']),
+			$tags = $this->BlogTag->find('all', [
+				'conditions' => ['BlogTag.id' => $data['BlogTag']['BlogTag']],
 				'recursive' => -1
-			));
+			]);
 			if ($tags) {
 				$tags = Hash::extract($tags, '{n}.BlogTag');
 				$post['BlogTag'] = $tags;
