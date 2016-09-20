@@ -77,7 +77,7 @@ function pageTypeChengeHandler() {
 	});
 	
 	$.ajax({
-		type: "POST",
+		type: "GET",
 		url: $("#AjaxCategorySourceUrl").html()+'/'+pageType,
 		data: options,
 		beforeSend: function() {
