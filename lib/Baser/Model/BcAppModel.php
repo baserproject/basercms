@@ -57,7 +57,7 @@ class BcAppModel extends Model {
 				// 初期化ページにリダイレクトする
 				$AppController = new AppController();
 				session_start();
-				$_SESSION['Message']['flash'] = array('message' => 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。', 'layout' => 'default');
+				$_SESSION['Message']['flash'] = ['message' => 'インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。', 'layout' => 'default'];
 				$AppController->redirect(BC_BASE_URL . 'installations/reset');
 			}
 		}
@@ -68,7 +68,7 @@ class BcAppModel extends Model {
  *
  * @return	boolean
  */
-	public function beforeSave($options = array()) {
+	public function beforeSave($options = []) {
 		$result = parent::beforeSave($options);
 		// 日付フィールドが空の場合、nullを保存する
 		foreach ($this->_schema as $key => $field) {
@@ -92,7 +92,7 @@ class BcAppModel extends Model {
  * @param	array	$fieldList List of fields to allow to be written
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
-	public function save($data = null, $validate = true, $fieldList = array()) {
+	public function save($data = null, $validate = true, $fieldList = []) {
 		if (!$data) {
 			$data = $this->data;
 		}
@@ -159,7 +159,7 @@ class BcAppModel extends Model {
  * @return 	array
  */
 	public function getControlSource($field) {
-		return array();
+		return [];
 	}
 
 /**
@@ -171,7 +171,7 @@ class BcAppModel extends Model {
  * @return 	array
  */
 	public function getChildIdsList($id) {
-		$ids = array();
+		$ids = [];
 		if ($this->childCount($id)) {
 			$children = $this->children($id);
 			foreach ($children as $child) {
@@ -193,7 +193,7 @@ class BcAppModel extends Model {
  */
 	public function replaceText($str) {
 		$ret = $str;
-		$arr = array(
+		$arr = [
 			"\xE2\x85\xA0" => "I",
 			"\xE2\x85\xA1" => "II",
 			"\xE2\x85\xA2" => "III",
@@ -261,7 +261,7 @@ class BcAppModel extends Model {
 			"\xE3\x88\xB1" => "(株)",
 			"\xE3\x88\xB2" => "(有)",
 			"\xE3\x88\xB9" => "(代)",
-		);
+		];
 
 		return str_replace(array_keys($arr), array_values($arr), $str);
 	}
@@ -275,13 +275,13 @@ class BcAppModel extends Model {
  * @param	string	プラグイン名
  * @return 	boolean
  */
-	public function initDb($pluginName = '', $options = array()) {
-		$options = array_merge(array(
+	public function initDb($pluginName = '', $options = []) {
+		$options = array_merge([
 			'loadCsv'		=> true,
 			'filterTable'	=> '',
 			'filterType'	=> '',
 			'dbDataPattern'	=> ''
-		), $options);
+		], $options);
 
 		// 初期データフォルダを走査
 		if (!$pluginName) {
@@ -299,7 +299,7 @@ class BcAppModel extends Model {
 			$dbDataPattern = $_SESSION['dbDataPattern'];
 			unset($_SESSION['dbDataPattern']);
 		}	
-		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], array(), $dropField = false)) {
+		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
 				if($dbDataPattern) {
@@ -328,7 +328,7 @@ class BcAppModel extends Model {
  * @param	string	更新タイプ指定
  * @return 	boolean
  */
-	public function loadSchema($dbConfigName, $path, $filterTable = '', $filterType = '', $excludePath = array(), $dropField = true) {
+	public function loadSchema($dbConfigName, $path, $filterTable = '', $filterType = '', $excludePath = [], $dropField = true) {
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
 		$db->cacheSources = false;
@@ -377,7 +377,7 @@ class BcAppModel extends Model {
 				}
 				$tmpdir = TMP . 'schemas' . DS;
 				copy($path . DS . $file, $tmpdir . $table . '.php');
-				if (!$db->loadSchema(array('type' => $type, 'path' => $tmpdir, 'file' => $table . '.php', 'dropField' => $dropField))) {
+				if (!$db->loadSchema(['type' => $type, 'path' => $tmpdir, 'file' => $table . '.php', 'dropField' => $dropField])) {
 					$result = false;
 				}
 				@unlink($tmpdir . $table . '.php');
@@ -396,10 +396,10 @@ class BcAppModel extends Model {
  * @param	string	テーブル指定
  * @return 	boolean
  */
-	public function loadCsv($dbConfigName, $path, $options = array()) {
-		$options = array_merge(array(
+	public function loadCsv($dbConfigName, $path, $options = []) {
+		$options = array_merge([
 			'filterTable' => ''
-		), $options);
+		], $options);
 
 		// テーブルリストを取得
 		$db = ConnectionManager::getDataSource($dbConfigName);
@@ -417,7 +417,7 @@ class BcAppModel extends Model {
 						continue;
 					}
 
-					if (!$db->loadCsv(array('path' => $path . DS . $file, 'encoding' => 'SJIS'))) {
+					if (!$db->loadCsv(['path' => $path . DS . $file, 'encoding' => 'SJIS'])) {
 						$result = false;
 						break;
 					}
@@ -470,6 +470,25 @@ class BcAppModel extends Model {
 		$byte = strlen($check);
 		return ($byte <= $max);
 	}
+	
+/**
+ * 最大のバイト数チェック
+ * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+ *
+ * @param mixed $check 対象となる値
+ * @param int $max バイト数の最大値
+ * @return boolean
+ */
+	public function checkDateRenge($check, $begin, $end) {
+		if(!empty($this->data[$this->alias][$begin]) &&
+			!empty($this->data[$this->alias][$end])) {
+			if (strtotime($this->data[$this->alias][$begin]) >= 
+				strtotime($this->data[$this->alias][$end])) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 /**
  * 範囲を指定しての長さチェック
@@ -494,7 +513,7 @@ class BcAppModel extends Model {
  * @param array $conditions
  * @return int
  */
-	public function getMax($field, $conditions = array()) {
+	public function getMax($field, $conditions = []) {
 		if (strpos($field, '.') === false) {
 			$modelName = $this->alias;
 		} else {
@@ -507,7 +526,7 @@ class BcAppModel extends Model {
 			// CSVDBの場合はMAX関数が利用できない為、プログラムで処理する
 			// TODO dboでMAX関数の実装できたらここも変更する
 			$this->cacheQueries = false;
-			$dbDatas = $this->find('all', array('conditions' => $conditions, 'fields' => array($modelName . '.' . $field)));
+			$dbDatas = $this->find('all', ['conditions' => $conditions, 'fields' => [$modelName . '.' . $field]]);
 			$this->cacheQueries = true;
 			$max = 0;
 			if ($dbDatas) {
@@ -521,7 +540,7 @@ class BcAppModel extends Model {
 		} else {
 			$this->cacheQueries = false;
 			// SQLiteの場合、Max関数にmodel名を含むと、戻り値の添字が崩れる（CakePHPのバグ）
-			$dbData = $this->find('all', array('conditions' => $conditions, 'fields' => array('MAX(' . $modelName . '.' . $field . ') AS max')));
+			$dbData = $this->find('all', ['conditions' => $conditions, 'fields' => ['MAX(' . $modelName . '.' . $field . ') AS max']]);
 			$this->cacheQueries = true;
 			if (isset($dbData[0][0]['max'])) {
 				return $dbData[0][0]['max'];
@@ -550,7 +569,7 @@ class BcAppModel extends Model {
 
 		$this->_schema = null;
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
-		$options = array('field' => $field, 'table' => $table, 'column' => $column);
+		$options = ['field' => $field, 'table' => $table, 'column' => $column];
 		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
@@ -576,7 +595,7 @@ class BcAppModel extends Model {
 
 		$this->_schema = null;
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
-		$options = array('field' => $field, 'table' => $table, 'column' => $column);
+		$options = ['field' => $field, 'table' => $table, 'column' => $column];
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
@@ -602,7 +621,7 @@ class BcAppModel extends Model {
 
 		$this->_schema = null;
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
-		$options = array('field' => $field, 'table' => $table);
+		$options = ['field' => $field, 'table' => $table];
 		$ret = $db->dropColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
@@ -629,7 +648,7 @@ class BcAppModel extends Model {
 
 		$this->_schema = null;
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
-		$options = array('new' => $new, 'old' => $old, 'table' => $table);
+		$options = ['new' => $new, 'old' => $old, 'table' => $table];
 		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
@@ -720,11 +739,11 @@ class BcAppModel extends Model {
  * @return boolean false 重複あり / true 重複なし
  */
 	public function duplicate($check) {
-		$conditions = array($this->alias . '.' . key($check) => $check[key($check)]);
+		$conditions = [$this->alias . '.' . key($check) => $check[key($check)]];
 		if ($this->exists()) {
-			$conditions['NOT'] = array($this->alias . '.' . $this->primaryKey => $this->id);
+			$conditions['NOT'] = [$this->alias . '.' . $this->primaryKey => $this->id];
 		}
-		$ret = $this->find('first', array('conditions' => $conditions));
+		$ret = $this->find('first', ['conditions' => $conditions]);
 		if ($ret) {
 			return false;
 		} else {
@@ -815,28 +834,28 @@ class BcAppModel extends Model {
  * @param array		$conditions
  * @return boolean
  */
-	public function changeSort($id, $offset, $conditions = array()) {
+	public function changeSort($id, $offset, $conditions = []) {
 		if ($conditions) {
 			$_conditions = $conditions;
 		} else {
-			$_conditions = array();
+			$_conditions = [];
 		}
 
 		// 一時的にキャッシュをOFFする
 		$this->cacheQueries = false;
 
-		$current = $this->find('first', array(
-			'conditions' => array($this->alias . '.id' => $id),
-			'fields' => array($this->alias . '.id', $this->alias . '.sort')
-		));
+		$current = $this->find('first', [
+			'conditions' => [$this->alias . '.id' => $id],
+			'fields' => [$this->alias . '.id', $this->alias . '.sort']
+		]);
 
 		// 変更相手のデータを取得
 		if ($offset > 0) { // DOWN
-			$order = array($this->alias . '.sort');
+			$order = [$this->alias . '.sort'];
 			$limit = $offset;
 			$conditions[$this->alias . '.sort >'] = $current[$this->alias]['sort'];
 		} elseif ($offset < 0) { // UP
-			$order = array($this->alias . '.sort DESC');
+			$order = [$this->alias . '.sort DESC'];
 			$limit = $offset * -1;
 			$conditions[$this->alias . '.sort <'] = $current[$this->alias]['sort'];
 		} else {
@@ -844,13 +863,13 @@ class BcAppModel extends Model {
 		}
 
 		$conditions = array_merge($conditions, $_conditions);
-		$target = $this->find('all', array(
+		$target = $this->find('all', [
 			'conditions' => $conditions,
-			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
+			'fields' => [$this->alias . '.id', $this->alias . '.sort'],
 			'order' => $order,
 			'limit' => $limit,
 			'recursive' => -1
-		));
+		]);
 
 		if (!isset($target[count($target) - 1])) {
 			return false;
@@ -860,7 +879,7 @@ class BcAppModel extends Model {
 		$targetSort = $target[count($target) - 1][$this->alias]['sort'];
 
 		// current から target までのデータをsortで範囲指定して取得
-		$conditions = array();
+		$conditions = [];
 		if ($offset > 0) { // DOWN
 			$conditions[$this->alias . '.sort >='] = $currentSort;
 			$conditions[$this->alias . '.sort <='] = $targetSort;
@@ -870,12 +889,12 @@ class BcAppModel extends Model {
 		}
 
 		$conditions = array_merge($conditions, $_conditions);
-		$datas = $this->find('all', array(
+		$datas = $this->find('all', [
 			'conditions' => $conditions,
-			'fields' => array($this->alias . '.id', $this->alias . '.sort'),
+			'fields' => [$this->alias . '.id', $this->alias . '.sort'],
 			'order' => $order,
 			'recursive' => -1
-		));
+		]);
 
 		// 全てのデータを更新
 		foreach ($datas as $data) {
@@ -917,8 +936,8 @@ class BcAppModel extends Model {
  * @return array
  */
 	public function findExpanded() {
-		$dbDatas = $this->find('all', array('fields' => array('name', 'value')));
-		$expandedData = array();
+		$dbDatas = $this->find('all', ['fields' => ['name', 'value']]);
+		$expandedData = [];
 		if ($dbDatas) {
 			foreach ($dbDatas as $dbData) {
 				$expandedData[$dbData[$this->alias]['name']] = $dbData[$this->alias]['value'];
@@ -945,14 +964,14 @@ class BcAppModel extends Model {
 
 		foreach ($data as $key => $value) {
 
-			if ($this->find('count', array('conditions' => array('name' => $key))) > 1) {
-				$this->deleteAll(array('name' => $key));
+			if ($this->find('count', ['conditions' => ['name' => $key]]) > 1) {
+				$this->deleteAll(['name' => $key]);
 			}
 
-			$dbData = $this->find('first', array('conditions' => array('name' => $key)));
+			$dbData = $this->find('first', ['conditions' => ['name' => $key]]);
 
 			if (!$dbData) {
-				$dbData = array();
+				$dbData = [];
 				$dbData[$this->alias]['name'] = $key;
 				$dbData[$this->alias]['value'] = $value;
 				$this->create($dbData);
@@ -1005,7 +1024,7 @@ class BcAppModel extends Model {
 		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
 		/* if (!in_array($type, array('datetime', 'timestamp', 'date', 'time'))) { */
 		// ---
-		if (!in_array($type, array('string', 'text', 'datetime', 'timestamp', 'date', 'time'))) {
+		if (!in_array($type, ['string', 'text', 'datetime', 'timestamp', 'date', 'time'])) {
 			// <<<
 			return $data;
 		}
@@ -1016,10 +1035,10 @@ class BcAppModel extends Model {
 		// >>> CUSTOMIZE MODIFY 2013/11/10 ryuring 和暦対応
 		/* $dateFields = array('Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'); */
 		// ---
-		$dateFields = array('W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec');
+		$dateFields = ['W' => 'wareki', 'Y' => 'year', 'm' => 'month', 'd' => 'day', 'H' => 'hour', 'i' => 'min', 's' => 'sec'];
 		// <<<
-		$timeFields = array('H' => 'hour', 'i' => 'min', 's' => 'sec');
-		$date = array();
+		$timeFields = ['H' => 'hour', 'i' => 'min', 's' => 'sec'];
+		$date = [];
 
 		if (isset($data['meridian']) && empty($data['meridian'])) {
 			return null;
@@ -1067,7 +1086,7 @@ class BcAppModel extends Model {
 
 				// >>> CUSTOMIZE ADD 2013/11/10 ryuring	和暦対応
 				if ($val == 'wareki' && !empty($data['wareki'])) {
-					$warekis = array('m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988);
+					$warekis = ['m' => 1867, 't' => 1911, 's' => 1925, 'h' => 1988];
 					if (!empty($data['year'])) {
 						list($wareki, $year) = explode('-', $data['year']);
 						$data['year'] = $year + $warekis[$wareki];
@@ -1102,7 +1121,7 @@ class BcAppModel extends Model {
 			}
 			// <<<
 
-			foreach (array('m', 'd', 'H', 'i', 's') as $index) {
+			foreach (['m', 'd', 'H', 'i', 's'] as $index) {
 				if (isset($date[$index])) {
 					$date[$index] = sprintf('%02d', $date[$index]);
 				}
@@ -1150,7 +1169,7 @@ class BcAppModel extends Model {
  * @return void
  */
 	public function expects($arguments, $reset = true) {
-		$models = array();
+		$models = [];
 
 		foreach ($arguments as $index => $argument) {
 			if (is_array($argument)) {
@@ -1168,7 +1187,7 @@ class BcAppModel extends Model {
 		}
 
 		if (count($arguments) == 0) {
-			$models[$this->name] = array();
+			$models[$this->name] = [];
 		} else {
 			foreach ($arguments as $argument) {
 				if (strpos($argument, '.') !== false) {
@@ -1176,7 +1195,7 @@ class BcAppModel extends Model {
 					$child = substr($argument, strpos($argument, '.') + 1);
 
 					if ($child == $model) {
-						$models[$model] = array();
+						$models[$model] = [];
 					} else {
 						$models[$model][] = $child;
 					}
@@ -1186,7 +1205,7 @@ class BcAppModel extends Model {
 			}
 		}
 
-		$relationTypes = array('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
+		$relationTypes = ['belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany'];
 
 		foreach ($models as $bindingName => $children) {
 			$model = null;
@@ -1206,7 +1225,7 @@ class BcAppModel extends Model {
 
 			if (isset($model) && $model != $this->name && isset($this->$model)) {
 				if (!isset($this->__backInnerAssociation)) {
-					$this->__backInnerAssociation = array();
+					$this->__backInnerAssociation = [];
 				}
 				$this->__backInnerAssociation[] = $model;
 				$this->$model->expects(true, $children);
@@ -1221,7 +1240,7 @@ class BcAppModel extends Model {
 			}
 
 			$models = array_unique($models[$this->name]);
-			$unbind = array();
+			$unbind = [];
 
 			foreach ($relationTypes as $relation) {
 				if (isset($this->$relation)) {
@@ -1245,12 +1264,12 @@ class BcAppModel extends Model {
  * @return boolean 
  */
 	public function emails($check) {
-		$emails = array();
+		$emails = [];
 		if (strpos($check[key($check)], ',') !== false) {
 			$emails = explode(',', $check[key($check)]);
 		}
 		if (!$emails) {
-			$emails = array($check[key($check)]);
+			$emails = [$check[key($check)]];
 		}
 		$result = true;
 		foreach ($emails as $email) {
@@ -1307,7 +1326,7 @@ class BcAppModel extends Model {
  * @param string $method Method to be called in the error class (AppError or ErrorHandler classes)
  * @param array $messages Message that is to be displayed by the error class
  */
-	public function cakeError($method, $messages = array()) {
+	public function cakeError($method, $messages = []) {
 		//======================================================================
 		// router.php がロードされる前のタイミング（bootstrap.php）でエラーが発生した場合、
 		// AppControllerなどがロードされていない為、Object::cakeError() を実行する事ができない。
@@ -1388,7 +1407,7 @@ class BcAppModel extends Model {
  * @return array|null Array of records, or Null on failure.
  * @link http://book.cakephp.org/2.0/en/models/retrieving-your-data.html
  */
-	public function find($type = 'first', $query = array()) {
+	public function find($type = 'first', $query = []) {
 		$this->findQueryType = $type;
 		$this->id = $this->getID();
 
@@ -1443,13 +1462,13 @@ class BcAppModel extends Model {
  * @param array $params
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array(), $options = array()) {
-		$options = array_merge(array(
+	public function dispatchEvent($name, $params = [], $options = []) {
+		$options = array_merge([
 			'modParams' => 0,
 			'plugin' => $this->plugin,
 			'layer' => 'Model',
 			'class' => $this->name
-			), $options);
+			], $options);
 
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
@@ -1555,19 +1574,19 @@ class BcAppModel extends Model {
 	public function delete($id = null, $cascade = true) {
 		$result = parent::delete($id, $cascade);
 		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
-			return (bool)$this->field('deleted', array('deleted' => 1));
+			return (bool)$this->field('deleted', ['deleted' => 1]);
 		}
 		return $result;
 	}
 
 	public function dataIter(&$results, $callback) {
 		if (! $isVector = isset($results[0])) {
-			$results = array($results);
+			$results = [$results];
 		}
 		$modeled = array_key_exists($this->alias, $results[0]);
 		foreach ($results as &$value) {
 			if (! $modeled) {
-				$value = array($this->alias => $value);
+				$value = [$this->alias => $value];
 			}
 			$continue = $callback($value, $this);
 			if (! $modeled) {
