@@ -145,13 +145,6 @@ class BcContentsComponent extends Component {
 				$controller->Security->validatePost = false;
 				$controller->Security->csrfCheck = false;
 			}
-		} else {
-			// @deprecated 5.0.0 since 4.0.0
-			//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
-			if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
-				$controller->helpers[] = 'BcCache';
-				$controller->cacheAction = $controller->Content->getCacheTime($controller->request->params['Content']);
-			}
 		}
 		
 		// 表示設定
@@ -235,6 +228,16 @@ class BcContentsComponent extends Component {
 				// TODO 改善要
 				App::uses('BcContentsEventListener', 'Event');
 				CakeEventManager::instance()->attach(new BcContentsEventListener());
+			}
+		} else {
+			// ビューキャッシュ設定
+			if(empty($controller->request->query['preview'])) {
+				// @deprecated 5.0.0 since 4.0.0
+				//	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
+				if ($this->useViewCache && !BcUtil::loginUser('admin') && !isConsole() && !empty($controller->request->params['Content'])) {
+					$controller->helpers[] = 'BcCache';
+					$controller->cacheAction = $controller->Content->getCacheTime($controller->request->params['Content']);
+				}
 			}
 		}
 
