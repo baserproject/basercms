@@ -2572,8 +2572,12 @@ END_FLASH;
  * 
  * @param int $id コンテンツID
  */
-	public function getRelatedSiteLinks($id = null) {
-		$links = $this->BcContents->getRelatedSiteLinks($id);
+	public function getRelatedSiteLinks($id = null, $excludeIds = []) {
+		$options = [];
+		if($excludeIds) {
+			$options['excludeIds'] = $excludeIds;
+		}
+		$links = $this->BcContents->getRelatedSiteLinks($id, $options);
 		return $this->getElement('related_site_links', ['links' => $links]);
 	}
 
@@ -2582,8 +2586,8 @@ END_FLASH;
  * 
  * @param int $id コンテンツID
  */
-	public function relatedSiteLinks($id = null) {
-		echo $this->getRelatedSiteLinks($id);
+	public function relatedSiteLinks($id = null, $excludeIds = []) {
+		echo $this->getRelatedSiteLinks($id, $excludeIds);
 	}
 
 /**

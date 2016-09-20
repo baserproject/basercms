@@ -1513,13 +1513,22 @@ class Content extends AppModel {
  * @param int $id
  * @return array|false
  */
-	public function getRelatedSiteContents($id) {
+	public function getRelatedSiteContents($id, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
 		$conditions = [
 			'OR' => [
 				['Content.id' => $id],
 				['Content.main_site_content_id' => $id]
 			]
 		];
+		if($options['excludeIds']) {
+			if(count($options['excludeIds']) == 1) {
+				$options['excludeIds'] = $options['excludeIds'][0];
+			}
+			$conditions['Content.site_id <>'] = $options['excludeIds'];
+		}
 		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		$contents = $this->find('all', [
 			'conditions' => $conditions,

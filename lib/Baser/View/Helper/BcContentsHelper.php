@@ -332,7 +332,10 @@ class BcContentsHelper extends AppHelper {
  * @param int $id コンテンツID
  * @return array | false
  */
-	public function getRelatedSiteContents($id = null) {
+	public function getRelatedSiteContents($id = null, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
 		$Content = ClassRegistry::init('Content');
 		$Content->unbindModel(['belongsTo' => ['User']]);
 		if(!$id && !empty($this->request->params['Content'])) {
@@ -345,7 +348,7 @@ class BcContentsHelper extends AppHelper {
 		} else {
 			return false;
 		}
-		return $Content->getRelatedSiteContents($id);
+		return $Content->getRelatedSiteContents($id, $options);
 	}
 
 /**
@@ -354,8 +357,11 @@ class BcContentsHelper extends AppHelper {
  * @param int $id
  * @return array
  */
-	public function getRelatedSiteLinks($id = null) {
-		$contents = $this->getRelatedSiteContents($id);
+	public function getRelatedSiteLinks($id = null, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
+		$contents = $this->getRelatedSiteContents($id, $options);
 		$urls = [];
 		if($contents) {
 			foreach($contents as $content) {
