@@ -108,6 +108,7 @@ if (BC_INSTALLED || isConsole()) {
 		Router::connect("/{$siteAlias}/:plugin/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
 		// 携帯ノーマル
 		Router::connect("/{$siteAlias}/:controller/:action/*", array('prefix' => $sitePrefix));
+		Router::connect("/{$siteAlias}/:controller", array('prefix' => $sitePrefix, 'action' => 'index'));
 	}
 
 /**
