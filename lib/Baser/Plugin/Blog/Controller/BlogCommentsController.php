@@ -232,40 +232,6 @@ class BlogCommentsController extends BlogAppController {
 	}
 
 /**
- * [ADMIN] 削除処理
- *
- * @param int $blogContentId
- * @param int $blogPostId
- * @param int $id
- * @return void
- * @access public
- */
-	public function admin_delete($blogContentId, $blogPostId, $id = null) {
-		/* 除外処理 */
-		if (!$blogContentId || !$id) {
-			$this->notFound();
-		}
-
-		/* 削除処理 */
-		if ($this->BlogComment->delete($id)) {
-			if (isset($this->blogPost['BlogPost']['name'])) {
-				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを削除しました。';
-			} else {
-				$message = '記事「' . $this->blogContent['BlogContent']['title'] . '」へのコメントを削除しました。';
-			}
-			$this->setMessage($message, false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-
-		if ($blogPostId) {
-			$this->redirect(array('action' => 'index', $blogContentId, $blogPostId));
-		} else {
-			$this->redirect(array('action' => 'index', $blogContentId));
-		}
-	}
-
-/**
  * [ADMIN] 無効状態にする（AJAX）
  * 
  * @param string $blogContentId
