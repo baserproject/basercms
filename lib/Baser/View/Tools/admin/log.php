@@ -26,4 +26,4 @@
 エラーログのサイズは、<?php echo number_format($fileSize) ?> bytesです。
 </p>
 
-<div class="submit"><?php $this->BcBaser->link('削除', array('delete'), array('class' => 'btn-red button', 'confirm' => 'エラーログを削除します。いいですか？')) ?> </div>
+<div class="submit"><?php $this->BcBaser->link('削除', array('delete'), array('class' => 'submit-token btn-red button', 'confirm' => 'エラーログを削除します。いいですか？')) ?> </div>
