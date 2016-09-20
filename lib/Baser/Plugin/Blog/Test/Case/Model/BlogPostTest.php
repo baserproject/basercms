@@ -147,7 +147,7 @@ class BlogPostTest extends BaserTestCase {
 		$this->BlogPost->create(array(
 			'BlogPost' => array(
 				'publish_begin' => '2020-01-27 12:57:59',
-				'publish_end' => '2020-01-27 12:57:59',
+				'publish_end' => '2020-01-29 12:57:59',
 				'posts_date' => '2020-01-27 12:57:59',
 			)
 		));
@@ -349,7 +349,7 @@ class BlogPostTest extends BaserTestCase {
 			'no' => 4,
 			'status' => 0,
 			'publish_begin' => '2020-01-27 12:57:59',
-			'publish_end' => '2020-01-27 12:57:59',
+			'publish_end' => '2020-01-28 12:57:59',
 		));
 
 		$SearchIndex = ClassRegistry::init('SearchIndex');
