@@ -140,7 +140,7 @@ class UploaderCategoriesController extends BcPluginAppController {
 		// メッセージ用にデータを取得
 		$name = $this->UploaderCategory->field('name', array('UploaderCategory.id' => $id));
 
-		if($this->UploaderCategory->del($id)) {
+		if($this->UploaderCategory->delete($id)) {
 			$this->setMessage('アップロードファイルカテゴリ「'.$name.'」を削除しました。', false, true);
 		}else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
