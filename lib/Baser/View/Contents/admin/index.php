@@ -34,8 +34,8 @@ $(function(){
 		var priority = $(this).val();
 		$.bcToken.check(function(){
 			var data = {
-				'data[SearchIndex][id]':id,
-				'data[SearchIndex][priority]': priority,
+				'data[Content][id]':id,
+				'data[Content][priority]': priority,
 				'data[_Token][key]': $.bcToken.key
 			};
 			$.ajax({
