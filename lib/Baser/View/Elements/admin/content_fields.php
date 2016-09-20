@@ -298,16 +298,18 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 			<?php endforeach ?>
 		</table>
 	</div>
-	<?php if($this->request->action == 'admin_edit'): ?>
+<?php endif ?>
+<?php if($this->request->action == 'admin_edit'): ?>
 	<div id="EtcSetting">
+		<div>
 		<p><span>コンテンツID</span>：<?php echo $this->request->data['Content']['id'] ?></p>
 		<p><span>実体ID</span>：<?php echo $this->request->data['Content']['entity_id'] ?></p>
 		<p><span>プラグイン</span>：<?php echo $this->request->data['Content']['plugin'] ?></p>
 		<p><span>コンテンツタイプ</span>：<?php echo $this->request->data['Content']['type'] ?></p>
 		<p><span>データ作成日</span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created']) ?></p>
 		<p><span>データ更新日</span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified']) ?></p>
+		</div>
 	</div>
-	<?php endif ?>
 <?php endif ?>
 </div>
 
