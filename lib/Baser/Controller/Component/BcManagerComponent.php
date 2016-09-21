@@ -356,9 +356,12 @@ class BcManagerComponent extends Component {
 			'password_1' => '',
 			'password_2' => ''
 			), $user);
-
-        $User = ClassRegistry::init('User', 'Model');
-//		$User = new User();
+		
+		/** 2016/09/21 gondoh
+		 *  Consoleから動作させた場合ClassRegistryからインスタンスを取得すると
+		 *  動的生成されたAppModelを利用してしまうため明示的にnewする。
+		 */
+		$User = new User();
 
 		$user['password'] = $user['password_1'];
 		$User->create($user);
