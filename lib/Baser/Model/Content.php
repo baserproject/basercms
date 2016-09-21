@@ -1518,10 +1518,14 @@ class Content extends AppModel {
 			'excludeIds' => []
 		], $options);
 		$conditions = [
-			'OR' => [
+			['OR' => [
 				['Content.id' => $id],
 				['Content.main_site_content_id' => $id]
-			]
+			]],
+			['OR' => [
+				['Site.status' => true],
+				['Site.status' => null]	// ルートメインサイト
+			]]
 		];
 		if($options['excludeIds']) {
 			if(count($options['excludeIds']) == 1) {
