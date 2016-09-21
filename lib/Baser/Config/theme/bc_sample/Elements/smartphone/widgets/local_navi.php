@@ -6,7 +6,7 @@
 if(empty($this->request->params['Content'])) {
 	return;
 }
-if($this->request->params['Content']['type'] == 'ContentFoler') {
+if($this->request->params['Content']['type'] == 'ContentFolder') {
 	$parentId = $this->request->params['Content']['id'];
 	$title = $this->request->params['Content']['title'];
 } else {
