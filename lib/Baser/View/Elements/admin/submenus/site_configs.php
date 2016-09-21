@@ -26,6 +26,7 @@
 			<li><?php $this->BcBaser->link('エディタテンプレート管理', array('controller' => 'editor_templates', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('サブサイト管理', array('controller' => 'sites', 'action' => 'index', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('ユーティリティ', array('controller' => 'tools', 'action' => 'index', 'plugin' => null)) ?></li>
+			<li><?php $this->BcBaser->link('環境情報', array('controller' => 'site_configs', 'action' => 'info', 'plugin' => null)) ?></li>
 		</ul>
 	</td>
 </tr>
