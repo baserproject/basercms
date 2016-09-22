@@ -881,7 +881,8 @@ class Content extends AppModel {
 				$content['Content']['self_status'] = false;
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
-				$this->save($content, array('validate' => false, 'callbacks' => false));
+				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は必要（default: true）
+				$this->save($content, array('validate' => false));
 				$result = $this->delete($id);
 				// =====================================================================
 				// 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
