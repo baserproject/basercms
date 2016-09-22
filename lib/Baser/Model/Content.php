@@ -936,7 +936,6 @@ class Content extends AppModel {
 				$siteRootId = $this->field('id', array('Content.site_id' => $content['Content']['site_id'], 'site_root' => true));
 				$content['Content']['parent_id'] = $siteRootId;
 			}
-			unset($content['Content']['name']);
 			unset($content['Content']['lft']);
 			unset($content['Content']['rght']);
 			if($this->save($content, true)) {
