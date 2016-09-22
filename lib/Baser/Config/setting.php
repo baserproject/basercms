@@ -33,9 +33,11 @@ $config['BcApp'] = array(
 				array('name' => 'システム設定', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form')),
 				array('name' => 'ユーザー管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index')),
 				array('name' => 'ユーザーグループ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
-				array('name' => 'サブサイト管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index')),
 				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index')),
-				array('name' => 'エディタテンプレート管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index'))
+				array('name' => 'エディタテンプレート管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
+				array('name' => 'サブサイト管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index')),
+				array('name' => 'ユーティリティ', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index')),
+				array('name' => '環境情報', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info')),
 			))),
 	// コアプラグイン
 	'corePlugins' => array('Blog', 'Feed', 'Mail', 'Uploader'),
