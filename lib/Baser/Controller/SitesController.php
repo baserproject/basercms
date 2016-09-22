@@ -90,8 +90,12 @@ class SitesController extends AppController {
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
+		$themes = BcUtil::getThemeList();
+		if(in_array($this->siteConfigs['theme'], $themes)) {
+			unset($themes[$this->siteConfigs['theme']]);
+		}
 		$this->set('mainSites', $this->Site->getSiteList(0));
-		$this->set('themes', array_merge(['' => $defaultThemeName], BcUtil::getThemeList()));
+		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 
 	}
 
@@ -133,8 +137,12 @@ class SitesController extends AppController {
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
+		$themes = BcUtil::getThemeList();
+		if(in_array($this->siteConfigs['theme'], $themes)) {
+			unset($themes[$this->siteConfigs['theme']]);
+		}
 		$this->set('mainSites', $this->Site->getSiteList(0, ['excludeIds' => $this->request->data['Site']['id']]));
-		$this->set('themes', array_merge(['' => $defaultThemeName], BcUtil::getThemeList()));
+		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 	}
 
 /**
