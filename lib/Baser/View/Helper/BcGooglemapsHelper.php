@@ -149,7 +149,7 @@ INFO_END;
 		}
 		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key']) ? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
 		if (empty($apiKey)) {
-			$adminLink = $this->BcBaser->getUrl(array("admin"=>true, 'controller' => 'site_configs', 'action'=>'form'));
+			$adminLink = $this->BcBaser->getUrl(array("admin"=>true, 'plugin' => '', 'controller' => 'site_configs', 'action'=>'form'));
 			echo 'Google Maps APIのキーが設定されていません。<a href="' . $adminLink . '">システム管理</a>より設定してください。';
 		}
 		$googleScript = '<script src="http://maps.google.com/maps/api/js?key=' . h($apiKey) . '"></script>';
