@@ -137,29 +137,24 @@ class PagesController extends AppController {
 			}
 
 			$this->Page->set($this->request->data);
-			if ($this->Page->validates()) {
-
-				if ($data = $this->Page->save(null, false)) {
-					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
-					if ($isChangedStatus) {
-						clearViewCache();
-					} else {
-						clearViewCache($this->request->data['Content']['url']);
-					}
-
-					// 完了メッセージ
-					$this->setMessage('固定ページ「' . $this->request->data['Content']['name'] . '」を更新しました。', false, true);
-
-					// EVENT Pages.afterEdit
-					$this->dispatchEvent('afterEdit', [
-						'data' => $data
-					]);
-
-					// 同固定ページへリダイレクト
-					$this->redirect(['action' => 'edit', $id]);
+			if ($data = $this->Page->save()) {
+				// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
+				if ($isChangedStatus) {
+					clearViewCache();
 				} else {
-					$this->setMessage('保存中にエラーが発生しました。', true);
+					clearViewCache($this->request->data['Content']['url']);
 				}
+
+				// 完了メッセージ
+				$this->setMessage('固定ページ「' . $this->request->data['Content']['name'] . '」を更新しました。', false, true);
+
+				// EVENT Pages.afterEdit
+				$this->dispatchEvent('afterEdit', [
+					'data' => $data
+				]);
+
+				// 同固定ページへリダイレクト
+				$this->redirect(['action' => 'edit', $id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}

@@ -69,6 +69,8 @@ class Content extends AppModel {
  */
 	public $validate = [
 		'name' => [
+			['rule' => ['notBlank'],
+				'message' => 'URLを入力してください。'],
 			['rule' => ['bcUtileUrlencodeBlank'],
 				'message' => 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。'],
 			['rule' => ['notBlank'],
