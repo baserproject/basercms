@@ -174,10 +174,12 @@ class BcAppController extends Controller {
 		}
 		// テンプレートの拡張子
 		$this->ext = Configure::read('BcApp.templateExt');
+		$isRequestView = $request->is('requestview');
+		$isInstall = $request->is('install');
 
 		// コンソールベースのインストールの際のページテンプレート生成において、
 		// BC_INSTALLEDが true でない為、コンソールの場合も実行する
-		if (BC_INSTALLED || isConsole()) {
+		if ((BC_INSTALLED || isConsole()) && $isRequestView) {
 
 			// サイト基本設定の読み込み
 			// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
@@ -202,8 +204,8 @@ class BcAppController extends Controller {
 			}
 
 		} else {
-			if ($this->name != 'Installations') {
-				if ($this->name == 'CakeError' && $request->params['controller'] != 'installations') {
+			if ($isInstall) {
+				if ($this->name == 'CakeError') {
 					$this->redirect('/');
 				}
 			}
@@ -244,56 +246,22 @@ class BcAppController extends Controller {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		if(BcUtil::isAdminSystem()) {
+		$isRequestView = $this->request->is('requestview');
+		$isUpdate = $this->request->is('update');
+		$isAdmin = $this->request->is('admin');
+		$isInstall = $this->request->is('install');
+		$isMaintenance = $this->request->is('maintenance');
+
+		// 設定されたサイトURLとリクエストされたサイトURLが違う場合は設定されたサイトにリダイレクト
+		if($isAdmin) {
 			$siteUrl = Configure::read('BcEnv.siteUrl');
 			if(siteUrl() != $siteUrl) {
 				$this->redirect($siteUrl . preg_replace('/^\//', '', Router::reverse($this->request, false)));
 			}
 		}
 
-		// テーマを設定
-		$this->setTheme();
-		
-		if (!empty($this->request->params['admin'])) {
-			$this->Security->validatePost = false;
-			$corePlugins = Configure::read('BcApp.corePlugins');
-			if(BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins))) {
-				$this->Security->csrfCheck = true;
-			} else {
-				$this->Security->csrfCheck = false;
-			}
-		}
-
-		if (!BC_INSTALLED || Configure::read('BcRequest.isUpdater')) {
-			$this->Security->validatePost = false;
-			return;
-		}
-
-		if ($this->request->params['controller'] != 'installations') {
-			// ===============================================================================
-			// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
-			// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
-			// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
-			// 表示されてしまうので明示的に指定している。
-			// （例）
-			// [変更後] app/webroot/theme/demo/blog/news/index.php
-			// [正　規] app/plugins/blog/views/theme/demo/blog/news/index.php
-			// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
-			// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
-			// ※ AppView::_pathsも関連している
-			// ===============================================================================
-			$pluginThemePath = WWW_ROOT . 'theme' . DS . $this->theme . DS;
-			$pluginPaths = Configure::read('pluginPaths');
-			if ($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
-				Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
-			}
-		}
-
 		// メンテナンス
-		if (!empty($this->siteConfigs['maintenance']) &&
-			($this->request->params['controller'] != 'maintenance' && $this->request->url != 'maintenance') &&
-			(!isset($this->request->params['prefix']) || $this->request->params['prefix'] != 'admin') &&
-			(Configure::read('debug') < 1 && empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]))) {
+		if (!empty($this->siteConfigs['maintenance']) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
 			} else {
@@ -305,17 +273,81 @@ class BcAppController extends Controller {
 			}
 		}
 
-		/* 認証設定 */
-		if ($this->name != 'Installations' && $this->name != 'Updaters' && isset($this->BcAuthConfigure)) {
-			
-			$authConfig = array();
+		// セキュリティ設定
+		$this->Security->blackHoleCallback = '_blackHoleCallback';
+		if (!BC_INSTALLED || $isUpdate) {
+			$this->Security->validatePost = false;
+		}
+		if ($isAdmin) {
+			$this->Security->validatePost = false;
+			$corePlugins = Configure::read('BcApp.corePlugins');
+			if(BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins))) {
+				$this->Security->csrfCheck = true;
+			} else {
+				$this->Security->csrfCheck = false;
+			}
+			// SSLリダイレクト設定
+			if (Configure::read('BcApp.adminSsl')) {
+				$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
+				if ($adminSslMethods) {
+					$this->Security->requireSecure = $adminSslMethods;
+				}
+			}
+		}
 
+		// 送信データの文字コードを内部エンコーディングに変換
+		$this->__convertEncodingHttpInput();
+
+		// $this->request->query['url'] の調整
+		// 環境によって？キーにamp;が付加されてしまうため
+		if (isset($this->request->query) && is_array($this->request->query)) {
+			foreach ($this->request->query as $key => $val) {
+				if (strpos($key, 'amp;') === 0) {
+					$this->request->query[substr($key, 4)] = $val;
+					unset($this->request->query[$key]);
+				}
+			}
+		}
+
+		// コンソールから利用される場合、$isInstall だけでは判定できないので、BC_INSTALLED も判定に入れる
+		if(!BC_INSTALLED || $isInstall || $isUpdate) {
+			return;
+		}
+
+		// Ajax ヘッダー
+		if ($this->request->is('ajax')) {
+			// キャッシュ対策
+			header("Cache-Control: no-cache, must-revalidate");
+			header("Cache-Control: post-check=0, pre-check=0", false);
+			header("Pragma: no-cache");
+		}
+
+		// テーマ内プラグインのテンプレートをテーマに梱包できるようにプラグインパスにテーマのパスを追加
+		// ===============================================================================
+		// 実際には、プラグインの場合も下記パスがテンプレートの検索対象となっている為不要だが、
+		// ビューが存在しない場合に、プラグインテンプレートの正規のパスがエラーメッセージに
+		// 表示されてしまうので明示的に指定している。
+		// （例）
+		// [変更後] app/webroot/theme/demo/blog/news/index.php
+		// [正　規] app/plugins/blog/views/theme/demo/blog/news/index.php
+		// 但し、CakePHPの仕様としてはテーマ内にプラグインのテンプレートを梱包できる仕様となっていないので
+		// 将来的には、blog / mail / feed をプラグインではなくコアへのパッケージングを検討する必要あり。
+		// ※ AppView::_pathsも関連している
+		// ===============================================================================
+		$pluginThemePath = WWW_ROOT . 'theme' . DS . $this->theme . DS;
+		$pluginPaths = Configure::read('pluginPaths');
+		if ($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
+			Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
+		}
+
+		// 認証設定
+		if (isset($this->BcAuthConfigure)) {
+			$authConfig = array();
 			if (!empty($this->request->params['prefix'])) {
 				$currentAuthPrefix = $this->request->params['prefix'];
 			} else {
 				$currentAuthPrefix = 'front';
 			}
-
 			$authPrefixSettings = Configure::read('BcAuthPrefix');
 			foreach ($authPrefixSettings as $key => $authPrefixSetting) {
 				if (isset($authPrefixSetting['alias']) && $authPrefixSetting['alias'] == $currentAuthPrefix) {
@@ -329,9 +361,7 @@ class BcAppController extends Controller {
 					break;
 				}
 			}
-
 			if ($authConfig) {
-				// 認証設定
 				$this->BcAuthConfigure->setting($authConfig);
 			}
 
@@ -366,71 +396,42 @@ class BcAppController extends Controller {
 			}
 		}
 
-		// 送信データの文字コードを内部エンコーディングに変換
-		$this->__convertEncodingHttpInput();
-
-		// $this->request->query['url'] の調整
-		// 環境によって？キーにamp;が付加されてしまうため
-		if (isset($this->request->query) && is_array($this->request->query)) {
-			foreach ($this->request->query as $key => $val) {
-				if (strpos($key, 'amp;') === 0) {
-					$this->request->query[substr($key, 4)] = $val;
-					unset($this->request->query[$key]);
+		if($isRequestView) {
+			// テーマ、レイアウトとビュー用サブディレクトリの設定
+			$this->setTheme();
+			if (isset($this->request->params['prefix'])) {
+				if ($this->name != 'CakeError') {
+					$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
+					$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
 				}
 			}
-		}
-
-		/* レイアウトとビュー用サブディレクトリの設定 */
-		if (isset($this->request->params['prefix'])) {
-			if ($this->name != 'CakeError') {
-				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
-				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
+			if (!$isAdmin && !empty($this->request->params['Site']['name'])) {
+				$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
+				if ($agentSetting && !empty($agentSetting['helper'])) {
+					$this->helpers[] = $agentSetting['helper'];
+				}
+				if (isset($this->request->params['Site'])) {
+					$this->layoutPath = $this->request->params['Site']['name'];
+					$this->subDir = $this->request->params['Site']['name'];
+				}
 			}
-		}
 
-		if(!BcUtil::isAdminSystem() && !empty($this->request->params['Site']['name'])) {
-			$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
-			if($agentSetting && !empty($agentSetting['helper'])) {
-				$this->helpers[] = $agentSetting['helper'];
-			}
-			if(isset($this->request->params['Site'])) {
-				$this->layoutPath = $this->request->params['Site']['name'];
-				$this->subDir = $this->request->params['Site']['name'];
-			}
-		}
-
-		// Ajax
-		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
-			// キャッシュ対策
-			header("Cache-Control: no-cache, must-revalidate");
-			header("Cache-Control: post-check=0, pre-check=0", false);
-			header("Pragma: no-cache");
-		}
-
-		// 権限チェック
-		if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) && empty($this->request->params['Site']['name']) && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
-			if (!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
-				$user = $this->BcAuth->user();
-				$Permission = ClassRegistry::init('Permission');
-				if ($user) {
-					if (!$Permission->check($this->request->url, $user['user_group_id'])) {
-						$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
-						$this->redirect($this->BcAuth->loginRedirect);
+			// 権限チェック
+			if (isset($User->belongsTo['UserGroup']) && isset($this->BcAuth) && isset($this->request->params['prefix']) &&
+					empty($this->request->params['Site']['name']) && isset($this->request->params['action']) && empty($this->request->params['requested'])) {
+				if (!$this->BcAuth->allowedActions || !in_array($this->request->params['action'], $this->BcAuth->allowedActions)) {
+					$user = $this->BcAuth->user();
+					$Permission = ClassRegistry::init('Permission');
+					if ($user) {
+						if (!$Permission->check($this->request->url, $user['user_group_id'])) {
+							$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+							$this->redirect($this->BcAuth->loginRedirect);
+						}
 					}
 				}
 			}
 		}
 
-		//Securityコンポーネント設定
-		$this->Security->blackHoleCallback = '_blackHoleCallback';
-
-		// SSLリダイレクト設定
-		if (Configure::read('BcApp.adminSsl') && !empty($this->request->params['admin'])) {
-			$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
-			if ($adminSslMethods) {
-				$this->Security->requireSecure = $adminSslMethods;
-			}
-		}
 	}
 
 /**

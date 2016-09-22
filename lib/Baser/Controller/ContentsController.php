@@ -79,7 +79,7 @@ class ContentsController extends AppController {
 		$this->request->data['ViewSetting']['site_id'] = $currentSiteId = $this->passedArgs['site_id'];
 		$this->request->data['ViewSetting']['list_type'] = $currentListType = $this->passedArgs['list_type'];
 
-		if (!empty($this->request->isAjax)) {
+		if ($this->request->is('ajax')) {
 			$template = null;
 			$datas = [];
 			switch($this->request->params['action']) {

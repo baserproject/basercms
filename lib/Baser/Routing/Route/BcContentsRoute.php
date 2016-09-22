@@ -30,7 +30,7 @@ class BcContentsRoute extends CakeRoute {
 		if(is_array($url)) {
 			return false;
 		}
-		$Content = ClassRegistry::init('Content');
+		
 		$request = Router::getRequest(true);
 		$extend = false;
 
@@ -68,6 +68,7 @@ class BcContentsRoute extends CakeRoute {
 			exit();
 		}
 
+		$Content = ClassRegistry::init('Content');
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}

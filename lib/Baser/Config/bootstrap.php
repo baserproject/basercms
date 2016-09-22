@@ -15,11 +15,6 @@ require BASER . 'basics.php';
 require BASER . 'Error' . DS . 'exceptions.php';
 
 /**
- * インストール状態
- */
-define('BC_INSTALLED', isInstalled());
-
-/**
  * Baserパス追加
  */
 //優先度高
@@ -60,28 +55,6 @@ App::build(array(
 ), App::REGISTER);
 
 /**
- * 配置パターン
- * Windows対策として、「\」を「/」へ変換してチェックする
- */
-if (!defined('BC_DEPLOY_PATTERN')) {
-	if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
-		// CakePHP標準の配置
-		define('BC_DEPLOY_PATTERN', 3);
-	} elseif (ROOT . DS == WWW_ROOT) {
-		// webrootをドキュメントルートにして、その中に app / baser / cake を配置
-		define('BC_DEPLOY_PATTERN', 2);
-	} else {
-		// baserCMS配布時の配置
-		define('BC_DEPLOY_PATTERN', 1);
-	}
-}
-
-/**
- * baserUrl取得
- */
-define('BC_BASE_URL', baseUrl());
-
-/**
  * ディスパッチャーフィルターを追加
  */
 $filters = Configure::read('Dispatcher.filters');
@@ -100,6 +73,46 @@ Configure::write('Dispatcher.filters',
 		)
 	)
 );
+
+/**
+ * 配置パターン
+ * Windows対策として、「\」を「/」へ変換してチェックする
+ */
+if (!defined('BC_DEPLOY_PATTERN')) {
+	if (!preg_match('/' . preg_quote(str_replace('\\', '/', docRoot()), '/') . '/', str_replace('\\', '/', ROOT))) {
+		// CakePHP標準の配置
+		define('BC_DEPLOY_PATTERN', 3);
+	} elseif (ROOT . DS == WWW_ROOT) {
+		// webrootをドキュメントルートにして、その中に app / baser / cake を配置
+		define('BC_DEPLOY_PATTERN', 2);
+	} else {
+		// baserCMS配布時の配置
+		define('BC_DEPLOY_PATTERN', 1);
+	}
+}
+
+/**
+ * baserUrl取得
+ * BC_DEPLOY_PATTERN の定義より後に実行
+ */
+define('BC_BASE_URL', baseUrl());
+
+/**
+ * 静的ファイルの読み込みの場合はスキップ
+ */
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$uri = @$_SERVER['REQUEST_URI'];
+if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+	Configure::write('BcRequest.asset', true);
+	return;
+}
+
+/**
+ * インストール状態
+ */
+define('BC_INSTALLED', isInstalled());
+Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
 
 /**
  * クラスローダー設定
@@ -155,17 +168,6 @@ if (BC_INSTALLED && $baserSettings) {
 			}
 		}
 	}
-}
-
-/**
- * 静的ファイルの読み込みの場合はスキップ
- */
-$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$uri = @$_SERVER['REQUEST_URI'];
-if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
-	Configure::write('BcRequest.asset', true);
-	return;
 }
 
 /**
@@ -254,7 +256,9 @@ if (BC_INSTALLED) {
  * サイト基本設定を読み込む
  * bootstrapではモデルのロードは行わないようにする為ここで読み込む
  */
-	loadSiteConfig();
+ if(empty($_GET['requestview']) || $_GET['requestview'] != 'false') {
+ 	loadSiteConfig();
+ }
 
 /**
  * メンテナンスチェック
@@ -294,6 +298,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * イベント登録
  */
+ 	App::uses('CakeEventManager', 'Event');
 	App::uses('BcControllerEventDispatcher', 'Event');
 	App::uses('BcModelEventDispatcher', 'Event');
 	App::uses('BcViewEventDispatcher', 'Event');
@@ -307,16 +312,20 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * テーマの bootstrap を実行する
  */
-	$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
-	$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
-	if (file_exists($themeBootstrap)) {
-		include $themeBootstrap;
-	}
+ 	if(!BcUtil::isAdminSystem()) {
+		$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
+		$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
+		if (file_exists($themeBootstrap)) {
+			include $themeBootstrap;
+		}
+ 	}
 }
+
 /**
  * 文字コードの検出順を指定
  */
 mb_detect_order(Configure::read('BcEncode.detectOrder'));
+
 /**
  * メモリー設定
  */
@@ -324,11 +333,13 @@ $memoryLimit = (int)ini_get('memory_limit');
 if ($memoryLimit < 32 && $memoryLimit != -1) {
 	ini_set('memory_limit', '32M');
 }
+
 /**
  * ロケール設定
  * 指定しないと 日本語入りの basename 等が失敗する
  */
 setlocale(LC_ALL, 'ja_JP.UTF-8');
+
 /**
  * セッションスタート 
  */
