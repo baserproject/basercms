@@ -2262,7 +2262,19 @@ END_FLASH;
  * @return void
  */
 	public function subMenu($data = array(), $options = array()) {
-		$this->element('sub_menu', $data, $options);
+		echo $this->getSubMenu($data, $options);
+	}
+
+/**
+ * サブメニューを取得する
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getSubMenu($data = array(), $options = array()) {
+		return $this->getElement('sub_menu', $data, $options);
 	}
 
 /**
