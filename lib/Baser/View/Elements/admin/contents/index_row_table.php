@@ -83,7 +83,7 @@ if($data['Content']['entity_id']) {
 			<input type="hidden" name="data[type]" value="<?php echo $data['Content']['type'] ?>">
 			<input type="hidden" name="data[entityId]" value="<?php echo $data['Content']['entity_id'] ?>">
 			<input type="hidden" name="data[parentId]" value="<?php echo $data['Content']['parent_id'] ?>">
-			<input type="hidden" name="data[title]" value="<?php echo $data['Content']['title'] ?>">
+			<input type="hidden" name="data[title]" value="<?php echo h($data['Content']['title']) ?>">
 			<input type="hidden" name="data[siteId]" value="<?php echo $data['Content']['site_id'] ?>">
 			<input type="hidden" name="data[status]" value="<?php echo $toStatus ?>">
 			<input type="hidden" name="data[alias]" value="<?php echo (bool) $data['Content']['alias_id'] ?>">
