@@ -441,7 +441,7 @@ class Site extends AppModel {
 	public function afterFind($results, $primary = false) {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {
-			if(empty($entity['Site']['alias']) && !empty($entity['Site']['name'])) {
+			if(isset($entity['Site']['alias']) && $entity['Site']['alias'] === '' && !empty($entity['Site']['name'])) {
 				$entity['Site']['alias'] = $entity['Site']['name'];	
 			}
 		});
