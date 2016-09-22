@@ -124,10 +124,10 @@ class BcSite {
  * @return BcSite|null
  */
 	public static function findCurrent($direct = true) {
-//		$request = Router::getRequest(true);
-//		if(!$request) {
+		$request = Router::getRequest(true);
+		if(!$request) {
 			$request = new CakeRequest();
-//		}
+		}
 		$url = $request->url;
 		$sites = self::findAll();
 		if (!$sites) {

@@ -50,7 +50,7 @@ class BcRedirectMainSiteFilter extends DispatcherFilter {
 			}
 		}
 		$site = BcSite::findCurrent();
-		if(!$site) {
+		if(!$site || !$site->enabled) {
 			return;
 		}
 		$mainSite = $site->getMain();
