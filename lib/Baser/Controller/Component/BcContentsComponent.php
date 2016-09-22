@@ -133,7 +133,11 @@ class BcContentsComponent extends Component {
 			$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
 			if($data) {
 				$controller->request->params['Content'] = $data['Content'];
-				$controller->request->params['Site'] = $data['Site'];
+				if(!$data['Site']['id']) {
+					$controller->request->params['Site'] = $controller->Content->Site->getRootMain()['Site'];
+				} else {
+					$controller->request->params['Site'] = $data['Site'];	
+				}
 			}
 		}
 		
@@ -171,7 +175,14 @@ class BcContentsComponent extends Component {
  * @return array
  */
 	public function getCrumbs($id) {
-		$contents = $this->_Controller->Content->getPath($id, [], -1);
+		// ===========================================================================================
+		// 2016/09/22 ryuring
+		// PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成の為、BcContentsComponent が
+		// 呼び出されるが、その際、モデルのマジックメソッドの戻り値を返すタイミングで処理がストップしてしまう。
+		// その為、ビヘイビアのメソッドを直接実行して対処した。
+		// CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
+		// ===========================================================================================
+		$contents = $this->_Controller->Content->Behaviors->Tree->getPath($this->_Controller->Content, $id, [], -1);
 		unset($contents[count($contents) -1]);
 		$crumbs = [];
 		foreach($contents as $content) {
@@ -305,7 +316,14 @@ class BcContentsComponent extends Component {
 		if(!$id) {
 			return false;
 		}
-		$contents = $this->_Controller->Content->getPath($id);
+		// ===========================================================================================
+		// 2016/09/22 ryuring
+		// PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成の為、BcContentsComponent が
+		// 呼び出されるが、その際、モデルのマジックメソッドの戻り値を返すタイミングで処理がストップしてしまう。
+		// その為、ビヘイビアのメソッドを直接実行して対処した。
+		// CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
+		// ===========================================================================================
+		$contents = $this->_Controller->Content->Behaviors->Tree->getPath($this->_Controller->Content, $id);
 		$contents = array_reverse($contents);
 		unset($contents[0]);
 		if(!$contents) {

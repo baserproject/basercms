@@ -1432,7 +1432,14 @@ class BcAppModel extends Model {
 		}
 		if (BC_INSTALLED && isset($this->Behaviors) && $this->Behaviors->attached('BcCache') &&
 			$this->Behaviors->enabled('BcCache') && Configure::read('debug') == 0) {
-			$results = $this->readCache($cache, $type, $query);
+			// ===========================================================================================
+			// 2016/09/22 ryuring
+			// PHP 7.0.8 環境にて、コンテンツ一覧追加時、検索インデックス作成の為、BcContentsComponent 経由で
+			// 呼び出されるが、その際だけ、モデルのマジックメソッドの戻り値を返すタイミングで処理がストップしてしまう。
+			// その為、ビヘイビアのメソッドを直接実行して対処した。
+			// CakePHPも、PHP自体のエラーも発生せず、ただ止まる。PHP7のバグ？PHP側のメモリーを256Mにしても変わらず。
+			// ===========================================================================================
+			$results = $this->Behaviors->BcCache->readCache($this, $cache, $type, $query);
 		} else {
 			$results = $this->getDataSource()->read($this, $query);
 		}
