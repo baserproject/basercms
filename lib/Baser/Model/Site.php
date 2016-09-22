@@ -70,6 +70,10 @@ class Site extends AppModel {
             [
             	'rule' => ['duplicate'],
             	'message' => '既に利用されているエイリアス名です。別の名称に変更してください。'
+			],
+			[
+				'rule' => ['aliasSlashChecks'],
+				'message' => 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。'
 			]
 		],
 		'title' => [
@@ -83,6 +87,22 @@ class Site extends AppModel {
 			]
 		]
 	];
+
+/**
+ * エイリアスのスラッシュをチェックする
+ * 
+ * - 連続してスラッシュは入力できない
+ * - 先頭と末尾にスラッシュは入力できない
+ * @param $check
+ * @return bool
+ */
+	public function aliasSlashChecks($check) {
+		$alias = $check[key($check)];
+		if(preg_match('/(^\/|[\/]{2,}|\/$)/', $alias)) {
+			return false;
+		}
+		return true;
+	}
 
 /**
  * 公開されている全てのサイトを取得する
