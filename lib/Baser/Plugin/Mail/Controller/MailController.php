@@ -427,7 +427,10 @@ class MailController extends MailAppController {
 		// >>> DELETE 2015/11/25 - gondoh view側で吸収するように変更
 		// $this->action = 'index'; //viewのボタンの表示の切り替えに必要なため変更
 		// <<<
-
+		$user = BcUtil::loginUser('admin');
+		if (!empty($user)) {
+			$this->set('editLink', array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'edit', $this->dbDatas['mailContent']['MailContent']['id']));
+		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'index');
 	}
