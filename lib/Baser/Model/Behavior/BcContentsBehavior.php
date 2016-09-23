@@ -147,8 +147,10 @@ class BcContentsBehavior extends ModelBehavior {
  */
 	public function afterDelete(Model $model) {
 		if($this->_deleteContentId) {
+			$softDelete = $model->Content->softDelete(null);
 			$model->Content->softDelete(false);
 			$model->Content->removeFromTree($this->_deleteContentId, true);
+			$model->Content->softDelete($softDelete);
 			$this->_deleteContentId = null;
 		}
 	}

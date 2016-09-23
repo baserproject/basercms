@@ -338,9 +338,11 @@ class Site extends AppModel {
 		foreach($children as $child) {
 			$Content->softDeleteFromTree($child['Content']['id']);
 		}
-	
+
+		$softDelete = $Content->softDelete(null);
 		$Content->softDelete(false);
 		$Content->removeFromTree($id, true);
+		$Content->softDelete($softDelete);
 	}
 
 /**

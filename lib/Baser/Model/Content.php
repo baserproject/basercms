@@ -96,6 +96,13 @@ class Content extends AppModel {
  * @var bool
  */
 	public $updatingRelated = true;
+
+/**
+ * システムデータを更新する
+ * 
+ * @var bool
+ */
+	public $updatingSystemData = true;
 	
 /**
  * 保存前の親ID
@@ -330,7 +337,9 @@ class Content extends AppModel {
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created, $options);
 		$this->deleteAssocCache($this->data);
-		$this->updateSystemData($this->data);
+		if($this->updatingSystemData) {
+			$this->updateSystemData($this->data);	
+		}
 		if($this->updatingRelated) {
 			// ゴミ箱から戻す場合、 type の定義がないが問題なし
 			if(!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
@@ -364,9 +373,9 @@ class Content extends AppModel {
 	}
 
 /**
- * Before delete
- *
- * @param Model $model
+ * Before Delete
+ * 
+ * 論理削除の場合、
  * @param bool $cascade
  * @return bool
  */
@@ -378,6 +387,7 @@ class Content extends AppModel {
 			'conditions' => array($this->alias . '.id' => $this->id)
 		));
 		$this->__deleteTarget = $data;
+		
 		if(!$this->softDelete(null)) {
 			return true;
 		}
@@ -400,8 +410,10 @@ class Content extends AppModel {
 	}
 
 /**
- * エイリアスを削除する
+ * 自データのエイリアスを削除する
  *
+ * 全サイトにおけるエイリアスを全て削除
+ * 
  * @param $data
  */
 	public function deleteAlias($data) {
@@ -409,12 +421,19 @@ class Content extends AppModel {
 		if($data['Content']['alias_id']) {
 			return;
 		}
-		$contents = $this->find('all', ['conditions' => ['Content.alias_id' => $data['Content']['id']], 'recursive' => -1]);
+		$contents = $this->find('all', [
+			'fields' => ['Content.id'], 
+			'conditions' => [
+				'Content.alias_id' => $data['Content']['id']
+		], 'recursive' => -1]);
 		if(!$contents) {
 			return;
 		}
 		foreach($contents as $content) {
-			$this->softDeleteFromTree($content['Content']['id']);
+			$softDelete = $this->softDelete(null);
+			$this->softDelete(false);
+			$this->removeFromTree($content['Content']['id'], true);
+			$this->softDelete($softDelete);
 		}
 		$this->data = $data;
 		$this->id = $data['Content']['id'];
@@ -448,11 +467,12 @@ class Content extends AppModel {
 			if($content) {
 				// 存在する場合は、自身のエイリアスかどうか確認し削除する
 				if($content['Content']['alias_id'] == $data['Content']['id']) {
+					$softDelete = $this->softDelete(null);
 					$this->softDelete(false);
 					$this->removeFromTree($content['Content']['id'], true);
-					$this->softDelete(true);
+					$this->softDelete($softDelete);
 				} elseif($content['Content']['type'] == 'ContentFolder') {
-					$this->updateChildren($content['Content']['type']);
+					$this->updateChildren($content['Content']['id']);
 				}
 			}
 		}
@@ -882,7 +902,9 @@ class Content extends AppModel {
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
 				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は必要（default: true）
+				$this->updatingSystemData = false;
 				$this->save($content, array('validate' => false));
+				$this->updatingSystemData = true;
 				$result = $this->delete($id);
 				// =====================================================================
 				// 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
@@ -891,9 +913,10 @@ class Content extends AppModel {
 				$this->deleteAssocCache($content);
 				return $result;
 			} else {
+				$softDelete = $this->softDelete(null);
 				$this->softDelete(false);
 				$result = $this->removeFromTree($content['Content']['id'], true);
-				$this->softDelete(true);
+				$this->softDelete($softDelete);
 				return $result;
 			}
 		}
@@ -971,9 +994,12 @@ class Content extends AppModel {
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
+		$softDelete = $this->softDelete(null);
 		$this->softDelete(false);
 		$id = $this->field('id', $conditions);
-		return $this->removeFromTree($id, true);
+		$result = $this->removeFromTree($id, true);
+		$this->softDelete($softDelete);
+		return $result;
 	}
 
 /**
