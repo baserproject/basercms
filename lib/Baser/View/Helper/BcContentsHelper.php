@@ -270,7 +270,7 @@ class BcContentsHelper extends AppHelper {
 		], $options);
 		$Content = ClassRegistry::init('Content');
 		$conditions = array_merge($Content->getConditionAllowPublish(), ['Content.id' => $id]);
-		$content = $Content->find('first', ['conditions' => $conditions]);
+		$content = $Content->find('first', ['conditions' => $conditions, 'cache' => false]);
 		if (!$content) {
 			return [];
 		}
@@ -296,7 +296,8 @@ class BcContentsHelper extends AppHelper {
 		return $Content->find('threaded', [
 			'order' => $options['order'], 
 			'conditions' => $conditions, 
-			'recursive' => 0
+			'recursive' => 0,
+			'cache' => false
 		]);
 	}
 

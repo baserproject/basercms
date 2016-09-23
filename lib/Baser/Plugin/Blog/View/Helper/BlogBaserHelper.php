@@ -112,6 +112,7 @@ class BlogBaserHelper extends AppHelper {
 			'fields' => ['BlogContent.id', 'BlogContent.template', 'Content.name', 'Content.status'],
 			'conditions' => $conditions,
 			'recursive' => 0,
+			'cache' => false
 		]);
 		
 		if (empty($blogContents)) {

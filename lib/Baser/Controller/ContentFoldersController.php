@@ -115,7 +115,11 @@ class ContentFoldersController extends AppController {
 		$entityId = $this->request->params['entityId'];
 		$data = $this->ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId)));
 		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = array('Content.site_root' => false) + $this->ContentFolder->Content->getConditionAllowPublish();
+		// 公開期間を条件に入れている為、キャッシュをオフにしないとキャッシュが無限増殖してしまう
+		$this->ContentFolder->Content->Behaviors->unload('BcCache');
 		$children = $this->ContentFolder->Content->children($data['Content']['id'], true, array(), 'lft');
+		$this->ContentFolder->Content->Behaviors->load('BcCache');
+		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
 		if($this->BcContents->preview && !empty($this->request->data['Content'])) {
 			$data['Content'] = $this->request->data['Content'];
 		}
