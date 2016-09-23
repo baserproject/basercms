@@ -222,4 +222,27 @@ class MailField extends MailAppModel {
 		}
 	}
 
+/**
+ * After Delete 
+ */
+	public function afterDelete() {
+		parent::afterDelete();
+		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$MailContent->delCache();
+	}
+
+/**
+ * After Save
+ * 
+ * @param bool $created
+ * @param array $options
+ */
+	public function afterSave($created, $options = array()) {
+		parent::afterSave($created, $options);
+		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$MailContent->delCache();
+	}
+
 }
