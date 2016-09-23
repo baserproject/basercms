@@ -368,7 +368,9 @@ class Content extends AppModel {
 		}
 		$AssocModel = ClassRegistry::init($assoc);
 		if($AssocModel && in_array('BcCache', $AssocModel->actsAs)) {
-			$AssocModel->delCache();
+			if($AssocModel->Behaviors->hasMethod('delCache')) {
+				$AssocModel->delCache();	
+			}
 		}
 	}
 
