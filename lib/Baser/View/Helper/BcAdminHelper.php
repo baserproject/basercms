@@ -34,8 +34,8 @@ class BcAdminHelper extends AppHelper {
 		if (Configure::read('BcRequest.isUpdater')) {
 			return false;
 		}
-		$user = $this->_View->getVar('user');
-		if (empty($this->request->params['admin']) || !$user) {
+		$user = $this->_View->get('user');
+		if (!$user) {
 			return false;
 		}
 		$UserGroup = ClassRegistry::init('UserGroup');
