@@ -21,7 +21,9 @@ App::uses('Controller', 'Controller');
 /**
  * Controller 拡張クラス
  *
- * @package			Baser.Controller
+ * @package Baser.Controller
+ * @property BcAuthConfigureComponent $BcAuthConfigure
+ * @property BcAuthComponent $BcAuth
  */
 class BcAppController extends Controller {
 
@@ -363,6 +365,8 @@ class BcAppController extends Controller {
 			}
 			if ($authConfig) {
 				$this->BcAuthConfigure->setting($authConfig);
+			} else {
+				$this->BcAuth->setSessionKey('Auth.' . Configure::read('BcAuthPrefix.admin.sessionKey'));
 			}
 
 			// =================================================================
