@@ -1681,3 +1681,6 @@ div.jstree-publish-even{
     background: #f5f5f5;
 }
 
+.jstree-icon{
+    cursor: move;
+}
