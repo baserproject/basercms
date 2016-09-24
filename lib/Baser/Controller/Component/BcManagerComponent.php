@@ -1612,15 +1612,18 @@ class BcManagerComponent extends Component {
 		$Folder = new Folder($corePath);
 		$files = $Folder->read(true, true);
 		$coreTables = $files[1];
-
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if(empty($files[1])) {
 			return false;
 		}
-		
+		// よく使う項目は、user_groups より生成するのでなくてもよい
+		$excludes = ['favorites.csv'];
 		$targetTables = $files[1];
 		foreach($coreTables as $coreTable) {
+			if(in_array($coreTable, $excludes)) {
+				continue;
+			}
 			if(!in_array($coreTable, $targetTables)) {
 				return false;
 			}	
