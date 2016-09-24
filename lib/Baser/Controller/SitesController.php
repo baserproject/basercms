@@ -223,4 +223,19 @@ class SitesController extends AppController {
 		}
 	}
 
+/**
+ * 選択可能なデバイスと言語の一覧を取得する
+ * 
+ * @param int $mainSiteId メインサイトID
+ * @return string
+ */
+	public function admin_ajax_get_selectable_devices_and_lang($mainSiteId) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return json_encode([
+			'devices' => $this->Site->getSelectableDevices($mainSiteId),
+			'langs' => $this->Site->getSelectableLangs($mainSiteId),
+		]);
+	}
+
 }

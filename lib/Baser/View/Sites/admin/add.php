@@ -13,6 +13,7 @@
 /**
  * サブサイト新規登録
  */
+$this->BcBaser->js('admin/sites/edit', false);
 ?>
 
 
