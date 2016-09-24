@@ -31,10 +31,10 @@
 		<?php if ($data['name'] != $this->BcBaser->siteConfig['theme']): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_apply.png', array('alt' => '適用', 'class' => 'btn')), array('action' => 'apply', $data['name']), array('title' => '適用', 'class' => 'submit-token')) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('alt' => '管理', 'class' => 'btn')), array('controller' => 'theme_files', 'action' => 'index', $data['name']), array('title' => '管理')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['name']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['name']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['name']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('alt' => 'テンプレート編集', 'class' => 'btn')), array('controller' => 'theme_files', 'action' => 'index', $data['name']), array('title' => 'テンプレート編集')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => 'テーマ情報設定', 'class' => 'btn')), array('action' => 'edit', $data['name']), array('title' => 'テーマ情報設定')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'テーマコピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['name']), array('title' => 'テーマコピー', 'class' => 'btn-copy')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => 'テーマ削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['name']), array('title' => 'テーマ削除', 'class' => 'btn-delete')) ?>
 </p>
 <p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
 <p class="theme-author">制作者：
