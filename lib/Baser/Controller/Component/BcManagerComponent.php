@@ -1591,5 +1591,41 @@ class BcManagerComponent extends Component {
 		}
 		
 	}
+
+/**
+ * 初期データチェックする
+ *
+ * @param string $dbConfigKeyName
+ * @param array $dbConfig
+ * @param string $pattern
+ * @param string $theme
+ * @param string $plugin
+ * @return boolean
+ */
+	public function checkDefaultDataPattern($pattern, $theme = 'core') {
+		$path = BcUtil::getDefaultDataPath('core', $theme, $pattern);
+		if (!$path) {
+			return false;
+		}
+		$corePath = BcUtil::getDefaultDataPath('core', 'core', 'default');
+		
+		$Folder = new Folder($corePath);
+		$files = $Folder->read(true, true);
+		$coreTables = $files[1];
+
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		if(empty($files[1])) {
+			return false;
+		}
+		
+		$targetTables = $files[1];
+		foreach($coreTables as $coreTable) {
+			if(!in_array($coreTable, $targetTables)) {
+				return false;
+			}	
+		}
+		return true;
+	}
 	
 }

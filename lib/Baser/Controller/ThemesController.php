@@ -165,7 +165,9 @@ class ThemesController extends AppController {
 		if ($result) {
 			$this->setMessage('初期データの読み込みが完了しました。');
 		} else {
-			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
+			if(!CakeSession::check('Message.flash.message')) {
+				$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);	
+			}
 		}
 
 		$this->redirect('index');
@@ -193,20 +195,23 @@ class ThemesController extends AppController {
 /**
  * 初期データを読み込む
  * 
- * @param string $dbDataPattern 初期データのパターン
+ * @param string $dbDataPattern 初期データのパターン	
  * @param string $currentTheme テーマ名
  * @return bool
  */
 	protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '') {
+
+		list($theme, $pattern) = explode('.', $dbDataPattern);
+		if(!$this->BcManager->checkDefaultDataPattern($pattern, $theme)) {
+			$this->setMessage('初期データのバージョンが違うか、初期データの構造が壊れています。', true);
+			return false;
+		}
 		
 		$excludes = array('plugins', 'dblogs', 'users');
-
 		$User = ClassRegistry::init('User');
 
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
-
-		list($theme, $pattern) = explode('.', $dbDataPattern);
 		$result = true;
 
 		/* コアデータ */
