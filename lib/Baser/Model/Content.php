@@ -336,9 +336,6 @@ class Content extends AppModel {
  */
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created, $options);
-		
-		
-		
 		$this->deleteAssocCache($this->data);
 		if($this->updatingSystemData) {
 			$this->updateSystemData($this->data);	
@@ -875,8 +872,10 @@ class Content extends AppModel {
 	public function softDeleteFromTree($id) {
 		$this->softDelete(true);
 		$this->Behaviors->unload('BcCache');
+		$this->Behaviors->unload('BcUpload');
 		$result = $this->deleteRecursive($id);
 		$this->Behaviors->load('BcCache');
+		$this->Behaviors->load('BcUpload');
 		$this->delAssockCache();
 		return $result;
 	}
