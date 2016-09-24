@@ -251,23 +251,35 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 
 		$title = array();
-		$crumbs = $this->getCrumbs($options['categoryTitleOn']);
-		if ($crumbs) {
-			$crumbs = array_reverse($crumbs);
-			foreach ($crumbs as $key => $crumb) {
-				if ($this->BcArray->first($crumbs, $key) && isset($crumbs[$key + 1])) {
-					if ($crumbs[$key + 1]['name'] == $crumb['name']) {
-						continue;
-					}
-				}
+		
+		if($this->isHome()) {
+			$homeTitle = $this->_View->get('homeTitle');
+			if($homeTitle) {
 				if(!$options['tag']){
-					$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+					$title[] = strip_tags($homeTitle, $options['allowableTags']);
 				} else {
-					$title[] = $crumb['name'];
+					$title[] = $homeTitle;
+				}
+			}
+		} else {
+			$crumbs = $this->getCrumbs($options['categoryTitleOn']);
+			if ($crumbs) {
+				$crumbs = array_reverse($crumbs);
+				foreach ($crumbs as $key => $crumb) {
+					if ($this->BcArray->first($crumbs, $key) && isset($crumbs[$key + 1])) {
+						if ($crumbs[$key + 1]['name'] == $crumb['name']) {
+							continue;
+						}
+					}
+					if(!$options['tag']){
+						$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+					} else {
+						$title[] = $crumb['name'];
+					}
 				}
 			}
 		}
-
+		
 		// サイトタイトルを追加
 		$siteName = '';
 		if(!empty($this->request->params['Site']['title'])) {
@@ -2637,4 +2649,21 @@ END_FLASH;
 			)
 		);
 	}
+
+/**
+ * トップページのタイトルをセットする
+ * 
+ * @param $title
+ */
+	public function setHomeTitle($title = null) {
+		if(!$title) {
+			$crumbs = $this->getCrumbs();
+			if ($crumbs) {
+				$crumbs = array_reverse($crumbs);
+				$title = $crumbs[0]['name'];
+			}
+		}
+		$this->_View->set('homeTitle', $title);
+	}
+	
 }
