@@ -209,7 +209,9 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 				<th class="col-head"><?php echo $this->BcForm->label('Content.exclude_search', 'その他設定') ?></th>
 				<td class="col-input">
 					<?php if(!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
+						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?></span>　
+						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_menu', array('type' => 'checkbox', 'label' => '公開ページのメニューより除外する')) ?></span>　
+						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.blank_link', array('type' => 'checkbox', 'label' => 'メニューのリンクを別ウィンドウ開く')) ?></span>
 					<?php else: ?>
 						<?php if($this->BcForm->value('Content.exclude_search')): ?>
 							サイト内検索の検索結果より除外する

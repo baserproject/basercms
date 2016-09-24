@@ -18,25 +18,32 @@ if(!isset($currentId)) {
 
 
 <?php if (isset($tree)): ?>
-<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
-	<?php if (isset($tree)): ?>
-		<?php foreach ($tree as $content): ?>
-			<?php if ($content['Content']['title']): ?>
-				<?php
+	<ul class="ul-level-<?php echo $level ?><?php echo ($level > 1) ? ' sub-nav-group': ' nav-menu'?>">
+		<?php if (isset($tree)): ?>
+			<?php foreach ($tree as $content): ?>
+				<?php if ($content['Content']['title']): ?>
+					<?php
+					if(!empty($content['Content']['exclude_menu'])) {
+						continue;
+					}
 					$liClass = 'menu-content li-level-' . $level;
 					if($content['Content']['id'] == $currentId) {
 						$liClass .= ' current';
 					}
-				?>
-				<li class="nav-item <?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?>
-					<?php if (!empty($content['children'])): ?>
-					<div class="sub-nav">
-						<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
-					</div>
-					<?php endif ?>
-				</li>
-			<?php endif ?>
-		<?php endforeach; ?>
-	<?php endif ?>
-</ul>
+					$options = [];
+					if(!empty($content['Content']['blank_link'])) {
+						$options = ['target' => '_blank'];
+					}
+					?>
+					<li class="nav-item <?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url'], $options) ?>
+						<?php if (!empty($content['children'])): ?>
+							<div class="sub-nav">
+								<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+							</div>
+						<?php endif ?>
+					</li>
+				<?php endif ?>
+			<?php endforeach; ?>
+		<?php endif ?>
+	</ul>
 <?php endif ?>
