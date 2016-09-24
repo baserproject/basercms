@@ -13,12 +13,14 @@
 /**
  * [ADMIN] 統合コンテンツ一覧
  */
+$currentUser = BcUtil::loginUser('admin');
 $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
-$this->BcBaser->js('admin/contents/index', false);
-$this->BcBaser->js('admin/libs/jquery.bcTree', false, [
+$this->BcBaser->js('admin/contents/index', false, [
 	'id' => 'AdminContentsIndexScript',
-	'data-isAdmin' => BcUtil::isAdminUser()
+	'data-isAdmin' => BcUtil::isAdminUser(),
+	'data-isUseMoveContents' => (bool) $currentUser['UserGroup']['use_move_contents']
 ]);
+$this->BcBaser->js('admin/libs/jquery.bcTree', false);
 $this->BcBaser->js(array(
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
