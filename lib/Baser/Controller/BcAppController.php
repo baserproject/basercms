@@ -179,6 +179,10 @@ class BcAppController extends Controller {
 		$isRequestView = $request->is('requestview');
 		$isInstall = $request->is('install');
 
+		if(!BC_INSTALLED && !$isInstall) {
+			$this->redirect('/');
+		}
+		
 		// コンソールベースのインストールの際のページテンプレート生成において、
 		// BC_INSTALLEDが true でない為、コンソールの場合も実行する
 		if ((BC_INSTALLED || isConsole()) && $isRequestView) {
@@ -208,7 +212,7 @@ class BcAppController extends Controller {
 		} else {
 			if ($isInstall) {
 				if ($this->name == 'CakeError') {
-					$this->redirect('/');
+					//$this->redirect('/');
 				}
 			}
 		}
@@ -219,16 +223,18 @@ class BcAppController extends Controller {
 			$this->uses = null;
 
 			// サブサイト用のエラー
-			$Site = ClassRegistry::init('Site');
-			$site = $Site->findByUrl($this->request->url);
-			if (!empty($site['Site']['name'])) {
-				$this->layoutPath = $site['Site']['name'];
-				if ($site['Site']['name'] == 'mobile') {
-					$this->helpers[] = 'BcMobile';
-				} elseif ($site['Site']['name'] == 'smartphone') {
-					$this->helpers[] = 'BcSmartphone';
+			try {
+				$Site = ClassRegistry::init('Site');
+				$site = $Site->findByUrl($this->request->url);
+				if (!empty($site['Site']['name'])) {
+					$this->layoutPath = $site['Site']['name'];
+					if ($site['Site']['name'] == 'mobile') {
+						$this->helpers[] = 'BcMobile';
+					} elseif ($site['Site']['name'] == 'smartphone') {
+						$this->helpers[] = 'BcSmartphone';
+					}
 				}
-			}
+			} catch(Exception $e) {}
 		}
 
 		/* 携帯用絵文字のモデルとコンポーネントを設定 */
@@ -257,7 +263,7 @@ class BcAppController extends Controller {
 		// 設定されたサイトURLとリクエストされたサイトURLが違う場合は設定されたサイトにリダイレクト
 		if($isAdmin) {
 			$siteUrl = Configure::read('BcEnv.siteUrl');
-			if(siteUrl() != $siteUrl) {
+			if($siteUrl && siteUrl() != $siteUrl) {
 				$this->redirect($siteUrl . preg_replace('/^\//', '', Router::reverse($this->request, false)));
 			}
 		}

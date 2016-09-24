@@ -41,9 +41,13 @@
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal front">
 		<div id="Page" style="text-align: center">
+			<?php if(BC_INSTALLED): ?>
 			<?php $this->BcBaser->relatedSiteLinks() ?>
+			<?php endif ?>
 			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?></div>
+			<?php if(BC_INSTALLED): ?>
 			<nav id="GlobalMenu" class="clearfix"><?php $this->BcBaser->globalMenu(3) ?></nav>
+			<?php endif ?>
 			<div id="Wrap">
 				<?php if(!$this->BcBaser->isHome()): ?>
 				<div id="CrumbList" class="clearfix"><?php $this->BcBaser->crumbsList(['onSchema' => true]) ?></div>

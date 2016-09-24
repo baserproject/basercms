@@ -15,6 +15,9 @@
  * 
  * $this->BcBaser->contentsNavi() で呼び出す
  */
+if(!BC_INSTALLED) {
+	return;
+}
 ?>
 
 

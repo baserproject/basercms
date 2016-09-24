@@ -193,12 +193,19 @@ class InstallationsController extends AppController {
 				if (isset($this->request->data['Installation']['dbDataPattern'])) {
 					$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
 				}
-				$this->_deleteAllTables();
-				if ($this->_constructionDb($dbDataPattern)) {
+				$result = false;
+				$errorMessage = "データベースの構築中にエラーが発生しました。";
+				try {
+					$this->_deleteAllTables();
+					$result = $this->_constructionDb($dbDataPattern);
+				} catch(Exception $e) {
+					$errorMessage .= '<br>' . $e->getMessage();
+				}
+				if ($result) {
 					$this->setMessage("データベースの構築に成功しました。");
 					$this->redirect('step4');
 				} else {
-					$this->setMessage("データベースの構築中にエラーが発生しました。", true);
+					$this->setMessage($errorMessage, true);
 				}
 			}
 		}
