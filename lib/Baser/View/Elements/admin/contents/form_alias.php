@@ -10,18 +10,22 @@
  * @license			http://basercms.net/license/index.html
  */
 if((!empty($this->BcContents->settings[$srcContent['type']]))) {
-	$editLink = $this->BcContents->settings[$srcContent['type']]['url']['edit'];
 	$title = $this->BcContents->settings[$srcContent['type']]['title'];
+	$editLink = $this->BcContents->settings[$srcContent['type']]['routes']['edit'];
+	$editLink = array_merge($editLink, [
+		$srcContent['entity_id'],
+		'content_id' => $srcContent['id'],
+		'parent_id' => $srcContent['parent_id']
+	]);
 } else {
-	$editLink = '/admin/contents/edit';
 	$title = '無所属コンテンツ';
+	$editLink = '/admin/contents/edit';
+	if($srcContent['entity_id']) {
+		$editLink .= '/' . $srcContent['entity_id'];
+		$editLink .= '/content_id:' . $srcContent['id'] . '/parent_id:' . $srcContent['parent_id'];
+	}
 }
 
-
-if($srcContent['entity_id']) {
-    $editLink .= '/' . $srcContent['entity_id'];
-}
-$editLink .= '/content_id:' . $srcContent['id'] . '/parent_id:' . $srcContent['parent_id'];
 ?>
 
 
