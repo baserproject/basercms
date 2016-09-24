@@ -336,6 +336,9 @@ class Content extends AppModel {
  */
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created, $options);
+		
+		
+		
 		$this->deleteAssocCache($this->data);
 		if($this->updatingSystemData) {
 			$this->updateSystemData($this->data);	
@@ -364,10 +367,13 @@ class Content extends AppModel {
 		}
 		$assoc = $data['Content']['type'];
 		if($data['Content']['plugin'] != 'Core') {
+			if(!CakePlugin::loaded($assoc = $data['Content']['plugin'])) {
+				return;
+			}
 			$assoc = $data['Content']['plugin'] . '.' . $assoc;
 		}
 		$AssocModel = ClassRegistry::init($assoc);
-		if($AssocModel && in_array('BcCache', $AssocModel->actsAs)) {
+		if($AssocModel && !empty($AssocModel->actsAs) && in_array('BcCache', $AssocModel->actsAs)) {
 			if($AssocModel->Behaviors->hasMethod('delCache')) {
 				$AssocModel->delCache();	
 			}

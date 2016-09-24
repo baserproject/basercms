@@ -1631,6 +1631,7 @@ div.jstree-publish-even{
 #BlogPostForm .url {
 	font-weight:bold;
 	font-size:14px;
+    word-break: break-all;
 }
 #BasicSetting .url a {
 	color:#9C0;
