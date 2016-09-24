@@ -132,7 +132,7 @@ if ($this->request->params['Site']['alias']) {
 			<table cellpadding="0" cellspacing="0" class="row-table-01">
 				<tbody>
 				<tr>
-					<th><?php echo $this->BcForm->label('BlogComment.name', 'お名前') ?><span style="color:red">＊</span></th>
+					<th><?php echo $this->BcForm->label('BlogComment.name', 'お名前・ニックネーム') ?><span style="color:red">＊</span></th>
 					<td><?php echo $this->BcForm->input('BlogComment.name', array('type' => 'text', 'class' => 'form-m')) ?></td>
 				</tr>
 				<tr>
