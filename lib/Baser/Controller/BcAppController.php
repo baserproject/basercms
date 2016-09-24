@@ -953,7 +953,13 @@ class BcAppController extends Controller {
 				$fromName = Configure::read('BcApp.title');
 			}
 		}
-		$cakeEmail->from($from, $fromName);
+		
+		try {
+			$cakeEmail->from($from, $fromName);
+		} catch (Exception $e) {
+			$this->setMessage($e->getMessage() . ' 送信元のメールアドレスが不正です。',true, false, true);
+			return false;
+		}
 
 		//Reply-To
 		if (!empty($options['replyTo'])) {
