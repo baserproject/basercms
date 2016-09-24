@@ -102,9 +102,10 @@
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
 								<div id="FirstMessage" class="em-box" style="text-align:left">
 									baserCMSへようこそ。<br />
-									<ul style="font-weight:normal;font-size:14px;"><li>画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。</li>
+									<ul style="font-weight:normal;font-size:14px;">
+										<li>画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。</li>
 										<li>よく使う機能については、画面右側にある「よく使う項目」をクリックして、お気に入りとして登録する事ができます。</li>
-										<li>短くスマートなURLを実現する「スマートURL」の設定は、<?php $this->BcBaser->link('システム設定', '/admin/site_configs/form') ?>より行えます。</li>
+										<li>まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。</li>
 									</ul>
 								</div>
 							<?php endif ?>

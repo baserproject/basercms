@@ -50,32 +50,6 @@ http://basercms.net/about/guide.html
 
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　◆ スマートURLについて
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-スマートURL機能は、サイトのURLを短くわかりやすいURL表示に変更する機能です。
-この機能を利用する事で、短くスマートなURLを実現する事ができます。
-また、表示速度改善にも役立ちます。
-
-スマートURLを実現するにはApache Rewriteモジュールと.htaccessの利用許可が必要です。
-スマートURLの設定は、管理画面のシステム設定より行えます。
-　（例）
-　　・スマートURLオフ：http://localhost/index.php/contact/index
-　　・スマートURLオン：http://localhost/contact/index
-
-スマートURLの設定はサーバー環境に深く依存します。
-「オン」に変更した場合、サーバーエラーとなり画面にアクセスできなくなる可能性もありますのでご注意ください。
-こちらより各種レンタルサーバーの動作状況を確認できます。
-http://basercms.net/hosting/index
-
-----------------------------------------
-スマートURLがうまく動作しない場合は、
-下記２ヶ所の.htaccessファイルのコメントを確認してください。
-/.htaccess
-/app/webroot/.htaccess
-----------------------------------------
-
-
-━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ 事例掲載について
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 あなたが作った baserCMS の Webサイトを、公式サイトでアピールしませんか？
@@ -110,17 +84,13 @@ http://www.facebook.com/groups/308200669249993/
 http://forum.basercms.net/
 不具合や改善報告はこちらよりどうぞ！
 
-■ baserCMS勉強会サイト
-http://study.basercms.net/
-勉強会の資料などを配布しています。
-
 ■ baserCMSユーザー会
-http://basercms.net/
-baserCMSコミュニティの公式サイトです。
+http://basercms.net/community
+baserCMSコミュニティの紹介ページです。
 
-■ baserCMSユーザー会メーリングリスト
+■ baserCMSメールマガジン
 https://groups.google.com/forum/?fromgroups#!forum/basercms
-baserCMSの最新情報などを発信しています！まずはメーリングリストへ参加！
+baserCMSの最新情報などを発信しています！
 
 ■ baserCMS開発プロジェクト
 http://project.e-catchup.jp/projects/basercms
