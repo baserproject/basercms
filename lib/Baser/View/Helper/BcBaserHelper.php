@@ -2665,5 +2665,20 @@ END_FLASH;
 		}
 		$this->_View->set('homeTitle', $title);
 	}
+
+/**
+ * スマートフォン用のウェブクリップアイコン用のタグを出力する
+ * 
+ * @param string $fileName ファイル名（webroot に配置する事が前提）
+ * @param bool $useGloss 光沢有無
+ */
+	public function webClipIcon($fileName = 'apple-touch-icon-precomposed.png', $useGloss = false) {
+		if($useGloss) {
+			$rel = 'apple-touch-icon';
+		} else {
+			$rel = 'apple-touch-icon-precomposed';
+		}
+		echo '<link rel="' . $rel . '" href="' . Router::url('/' . $fileName, true) . '" />';
+	}
 	
 }

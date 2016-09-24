@@ -253,20 +253,13 @@ class PagesController extends AppController {
 			$urlTmp = $this->request->params['Content']['url'];
 		}
 		$urlTmp = preg_replace('/^\//', '', $urlTmp);
-		$path = explode('/', $urlTmp);
-
+		$urlTmp = explode('/', $urlTmp);
 		if($this->request->params['Site']['alias']) {
 			if($path[0] == $this->request->params['Site']['alias']) {
 				$path[0] = $this->request->params['Site']['name'];
 			}
 		}
 		
-		if($this->request->params['Content']['alias_id']) {
-			if($this->request->params['Site']['id'] != 0 && $this->request->params['Content']['alias_id'] == $this->request->params['Content']['main_site_content_id']) {
-				unset($path[0]);
-			}
-		}
-
 		$url = '/' . implode('/', $path);
 
 		$count = count($path);

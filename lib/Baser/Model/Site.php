@@ -456,12 +456,15 @@ class Site extends AppModel {
  * @param int $mainSiteId メインサイトID
  * @return array
  */
-	public function getSelectableDevices($mainSiteId) {
+	public function getSelectableDevices($mainSiteId, $currentSiteId) {
 		$agents = Configure::read('BcAgent');
 		$devices = ['' => '指定しない'];
 		$selected = $this->find('list', [
 			'fields' => ['id', 'device'],
-			'conditions' => ['Site.main_site_id' => $mainSiteId]
+			'conditions' => [
+				'Site.main_site_id' => $mainSiteId,
+				'Site.id <>' => $currentSiteId
+			]
 		]);
 		foreach($agents as $key => $agent) {
 			if(in_array($key, $selected)) {
@@ -478,12 +481,15 @@ class Site extends AppModel {
  * @param int $mainSiteId メインサイトID
  * @return array
  */
-	public function getSelectableLangs($mainSiteId) {
+	public function getSelectableLangs($mainSiteId, $currentSiteId) {
 		$langs = Configure::read('BcLang');
 		$devices = ['' => '指定しない'];
 		$selected = $this->find('list', [
 			'fields' => ['id', 'lang'],
-			'conditions' => ['Site.main_site_id' => $mainSiteId]
+			'conditions' => [
+				'Site.main_site_id' => $mainSiteId,
+				'Site.id <>' => $currentSiteId
+			]
 		]);
 		foreach($langs as $key => $lang) {
 			if(in_array($key, $selected)) {

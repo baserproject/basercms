@@ -229,12 +229,12 @@ class SitesController extends AppController {
  * @param int $mainSiteId メインサイトID
  * @return string
  */
-	public function admin_ajax_get_selectable_devices_and_lang($mainSiteId) {
+	public function admin_ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId) {
 		$this->autoRender = false;
 		Configure::write('debug', 0);
 		return json_encode([
-			'devices' => $this->Site->getSelectableDevices($mainSiteId),
-			'langs' => $this->Site->getSelectableLangs($mainSiteId),
+			'devices' => $this->Site->getSelectableDevices($mainSiteId, $currentSiteId),
+			'langs' => $this->Site->getSelectableLangs($mainSiteId, $currentSiteId),
 		]);
 	}
 

@@ -12,6 +12,8 @@
 		<?php $this->BcBaser->title() ?>
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
+		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->css(array('smartphone/style', 'slicknav/slicknav')) ?>
 		<?php $this->BcBaser->js(array(
 			'jquery-1.11.3.min',

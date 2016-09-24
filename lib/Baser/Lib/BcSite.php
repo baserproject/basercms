@@ -291,7 +291,7 @@ class BcSite {
  * @return bool
  */
 	public function existsUrl(CakeRequest $request) {
-		$url = $request->base . $this->makeUrl($request);
+		$url = $this->makeUrl($request);
 		$Content = ClassRegistry::init('Content');
 		return $Content->existsPublishUrl($url);
 	}

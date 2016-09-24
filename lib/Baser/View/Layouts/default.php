@@ -21,6 +21,8 @@
 		<?php $this->BcBaser->title() ?>
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
+		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->css(array(
 			'import',
 			'admin/colorbox/colorbox-1.6.1')); ?>
