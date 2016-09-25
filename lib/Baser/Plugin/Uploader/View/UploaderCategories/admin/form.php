@@ -47,7 +47,7 @@ $(window).load(function() {
 	<?php echo $this->BcForm->submit('更　新', array('div' => false, 'class' => 'button')) ?>
 	<?php $this->BcBaser->link('削　除',
 			array('action' => 'delete', $this->BcForm->value('UploaderCategory.id')),
-			array('class' => 'button'),
+			array('class' => 'submit-token button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('UploaderCategory.name')),
 			false); ?>
 <?php endif ?>

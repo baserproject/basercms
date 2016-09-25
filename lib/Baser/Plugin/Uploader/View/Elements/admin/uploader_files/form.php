@@ -118,7 +118,7 @@ $(function(){
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php $this->BcBaser->link('削除',
 			array('action' => 'delete', $this->BcForm->value('UploaderFile.id')),
-			array('class' => 'button'),
+			array('class' => 'submit-token button'),
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('UploaderFile.name')),
 			false); ?>
 </div>
