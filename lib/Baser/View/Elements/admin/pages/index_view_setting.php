@@ -20,7 +20,7 @@ $(function(){
 	$("input[name='data[ViewSetting][page_type]']").click(function(){
 		var pageType = $("input[name='data[ViewSetting][page_type]']:checked").val();
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			url: $("#PageIndexUrl").html()+'/page_type:'+pageType,
 			beforeSend: function() {
 				$("#Waiting").show();
