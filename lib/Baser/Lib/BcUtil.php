@@ -30,15 +30,17 @@ class BcUtil extends Object {
  * 
  * @return boolean
  */
-	public static function isAdminSystem() {
-		$request = Router::getRequest(true);
-		if($request) {
-			$url = $request->url;
-		} else {
-			return false;
+	public static function isAdminSystem($url = null) {
+		if(!$url) {
+			$request = Router::getRequest(true);
+			if($request) {
+				$url = $request->url;
+			} else {
+				return false;
+			}
 		}
 		$adminPrefix = Configure::read('Routing.prefixes.0');
-		return (boolean)(preg_match('/^' . $adminPrefix . '\//', $url) || preg_match('/^' . $adminPrefix . '$/', $url));
+		return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
 	}
 
 /**

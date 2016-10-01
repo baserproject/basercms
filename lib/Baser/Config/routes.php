@@ -98,13 +98,13 @@ if($isUpdater) {
 		}
 	}
 
-	if (!BcUtil::isAdminSystem()) {
+/**
+ * コンテンツ管理ルーティング
+ */
+	App::uses('BcContentsRoute', 'Routing/Route');
+	Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
 
-	/**
-	 * コンテンツ管理ルーティング
-	 */
-		App::uses('BcContentsRoute', 'Routing/Route');
-		Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
+	if (!BcUtil::isAdminSystem()) {
 
 	/**
 	 * サブサイト標準ルーティング

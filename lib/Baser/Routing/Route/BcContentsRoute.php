@@ -30,7 +30,11 @@ class BcContentsRoute extends CakeRoute {
 		if(is_array($url)) {
 			return false;
 		}
-		
+
+		if(BcUtil::isAdminSystem($url)) {
+			return false;
+		}
+
 		$request = Router::getRequest(true);
 		$extend = false;
 
