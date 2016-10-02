@@ -211,8 +211,11 @@ class SiteConfigsController extends AppController {
 		$this->set('datasource', @$datasources[$datasource]);
 		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
-		$this->subMenuElements = array('site_configs', 'tools');
-		
+		$this->subMenuElements = ['tools'];
+		$this->crumbs = [
+			['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
+		];
+
 	}
 
 /**

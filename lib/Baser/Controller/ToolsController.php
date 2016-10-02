@@ -48,22 +48,22 @@ class ToolsController extends AppController {
  * @var type
  * @access public 
  */
-	public $subMenuElements = array('site_configs', 'tools');
+	public $subMenuElements = array('tools');
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form'))
-	);
+	public $crumbs = [
+		['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
+	];
 
 /**
  * ユーティリティ 
  */
 	public function admin_index() {
-		$this->pageTitle = 'ユーティリティ';
+		$this->pageTitle = 'ユーティリティトップ';
 	}
 	
 /**
@@ -104,7 +104,6 @@ class ToolsController extends AppController {
 				break;
 		}
 		$this->pageTitle = 'データメンテナンス';
-		$this->subMenuElements = array('site_configs', 'tools');
 		$this->help = 'tools_maintenance';
 	}
 
@@ -372,7 +371,6 @@ class ToolsController extends AppController {
 		}
 
 		$this->pageTitle = 'データメンテナンス';
-		$this->subMenuElements = array('site_configs', 'tools');
 		$this->help = 'tools_log';
 		$this->set('fileSize', $fileSize);
 	}

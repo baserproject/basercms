@@ -21,6 +21,7 @@
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('ユーティリティトップ', array('controller' => 'tools', 'action' => 'index', 'plugin' => null)) ?></li>
+			<li><?php $this->BcBaser->link('環境情報', array('controller' => 'site_configs', 'action' => 'info', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('データメンテナンス', array('controller' => 'tools', 'action' => 'maintenance', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('ログメンテナンス', array('controller' => 'tools', 'action' => 'log', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('スキーマファイル生成', array('controller' => 'tools', 'action' => 'write_schema')) ?></li>

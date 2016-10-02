@@ -497,7 +497,7 @@ table.sub-menu{
 }
 
 .contents-body .form-table th {
-    font-size: 14px;
+    font-size: 12px;
 }
 
     /* edit form
@@ -1258,7 +1258,7 @@ background: #888;
 	margin-right:0;
 	padding:0!important;
 	/*position: absolute;*/
-	margin-top:-31px;
+	margin-top:-61px;
 	width:140px;
 	font-size:14px;
 }

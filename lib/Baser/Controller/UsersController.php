@@ -59,10 +59,10 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+		['name' => 'ユーザー管理', 'url' => ['controller' => 'users', 'action' => 'index']]
+	];
 
 /**
  * beforeFilter

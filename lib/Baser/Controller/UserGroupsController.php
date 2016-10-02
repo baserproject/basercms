@@ -49,17 +49,17 @@ class UserGroupsController extends AppController {
  *
  * @var array
  */
-	public $subMenuElements = array('site_configs', 'users', 'user_groups');
+	public $subMenuElements = array('site_configs', 'users');
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
-		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+		['name' => 'ユーザーグループ管理', 'url' => ['controller' => 'user_groups', 'action' => 'index']]
+	];
 
 /**
  * beforeFilter

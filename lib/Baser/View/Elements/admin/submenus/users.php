@@ -22,6 +22,8 @@
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link('ユーザー一覧', array('controller' => 'users', 'action' => 'index')) ?></li>
 			<li><?php $this->BcBaser->link('ユーザー新規追加', array('controller' => 'users', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('ユーザーグループ一覧', array('controller' => 'user_groups', 'action' => 'index')) ?></li>
+			<li><?php $this->BcBaser->link('ユーザーグループ新規登録', array('controller' => 'user_groups', 'action' => 'add')) ?></li>
 		</ul>
 	</td>
 </tr>
