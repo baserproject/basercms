@@ -158,7 +158,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 				<th><?php echo $this->BcForm->label('Content.description', '説明文') ?></th>
 				<td>
 					<?php if(!$disableEdit): ?>
-						<?php echo $this->BcForm->input('Content.description', array('type' => 'textarea', 'rows' => 2)) ?>　
+						<?php echo $this->BcForm->input('Content.description', array('type' => 'textarea', 'rows' => 2, 'placeholder' => $this->BcBaser->siteConfig['description'])) ?>　
 					<?php else: ?>
 						<?php echo $this->BcForm->value('Content.description') ?>
 						<?php echo $this->BcForm->hidden('Content.description') ?>
