@@ -85,7 +85,7 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 		}
 		$output = $View->BcHtml->link('一覧に戻る', array('plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'), array('class' => 'button'));
 		$setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
-		if (!empty($setting['preview'])) {
+		if (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder') {
 			$output .= "\n" . $View->BcForm->button('プレビュー', array('class' => 'button', 'id' => 'BtnPreview'));
 		}
 		$output .= $event->data['out'];
