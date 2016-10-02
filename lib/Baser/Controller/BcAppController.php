@@ -286,7 +286,7 @@ class BcAppController extends Controller {
 		if ($isAdmin) {
 			$this->Security->validatePost = false;
 			$corePlugins = Configure::read('BcApp.corePlugins');
-			if(BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins))) {
+			if(BC_INSTALLED && (!$this->plugin || in_array($this->plugin, $corePlugins)) && Configure::read('debug') === 0) {
 				$this->Security->csrfCheck = true;
 			} else {
 				$this->Security->csrfCheck = false;

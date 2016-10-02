@@ -178,7 +178,7 @@ class MailController extends MailAppController {
 			return;
 		}
 
-		if($this->BcContents->preview == 'default' && $this->request->data) {
+		if($this->BcContents->preview == 'default' && $this->request->data && empty($this->request->params['requested'])) {
 			$this->dbDatas['mailContent']['MailContent'] = $this->request->data['MailContent'];
 		}
 		
