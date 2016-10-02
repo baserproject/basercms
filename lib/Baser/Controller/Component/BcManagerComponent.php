@@ -283,9 +283,31 @@ class BcManagerComponent extends Component {
 			$this->log('プラグインの有効化に失敗しました。');
 			$result = false;
 		}
+		if(!$this->_updateContents()) {
+			$this->log('コンテンツの更新に失敗しました。');
+			$result = false;
+		}
 		return $result;
 	}
 
+/**
+ * コンテンツを更新する
+ * @return bool
+ */
+	protected function _updateContents() {
+		App::uses('Content', 'Model');
+		$Content = new Content();
+		$contents = $Content->find('all', ['recursive' => -1]);
+		$result = true;
+		foreach($contents as $content) {
+			$content['Content']['created_date'] = date('Y-m-d H:i:s');
+			if(!$Content->save($content, ['validation' => false, 'callbacks' => false])) {
+				$result = false;
+			}
+		}
+		return $result;
+	}
+	
 /**
  * プラグインのステータスを更新する
  *
