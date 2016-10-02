@@ -10,66 +10,76 @@
  * @license			http://basercms.net/license/index.html
  */
 
+// CakeRequest 判定できる関数があるが、CakeRequest での判定は、
+// routes.php の処理が完了している事が前提である為利用できない
+$isMaintenance = Configure::read('BcRequest.isMaintenance');
+$isUpdater = Configure::read('BcRequest.isUpdater');
+$isInstalled = Configure::read('BcRequest.isInstalled');
+
+// ==================================================================
+// Object::cakeError() の為、router.php が読み込まれた事をマークしておく
+// BaserAppModel::cakeError で利用
+// ==================================================================
+Configure::write('BcRequest.routerLoaded', true);
+
 /**
  * vendors内の静的ファイルの読み込みの場合はスキップ
  */
-if (Configure::read('BcRequest.asset')) {
+if (Configure::read('BcRequest.asset') || $isMaintenance) {
 	return;
 }
-if (BC_INSTALLED || isConsole()) {
-	$isMaintenance = Configure::read('BcRequest.isMaintenance');
-	$isUpdater = Configure::read('BcRequest.isUpdater');
-}
+
 /**
- * Object::cakeError() の為、router.php が読み込まれた事をマークしておく
- * BaserAppModel::cakeError で利用
+ * インストーラー
  */
-Configure::write('BcRequest.routerLoaded', true);
+if (!$isInstalled) {
+	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
+	Router::connect('/install', array('controller' => 'installations', 'action' => 'index'));
+	return;
+}
+
 // プラグインの基底クラス読み込み
-// bootstrapで読み込むの場合、継承元のクラスが読み込まれていない為エラーとなる。
+// bootstrapで読み込む場合、継承元のクラスが読み込まれていない為エラーとなる。
 App::uses('BaserPluginApp', 'Controller');
 App::uses('BaserPluginAppModel', 'Model');
 
-$request = new CakeRequest();
-$authPrefixes = Configure::read('BcAuthPrefix');
-$pluginMatch = [];
 
-if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
+/**
+ * アップデーター
+ */
+if($isUpdater) {
+	$updateKey = Configure::read('BcApp.updateKey');
+	Router::connect('/' . $updateKey, array('controller' => 'updaters', 'action' => 'index'));
+	Router::connect('/' . $updateKey . '/index', array('controller' => 'updaters', 'action' => 'index'));
+	return;
+}
+
+/**
+ * プラグイン
+ *
+ * コンテンツ管理ルーティングよりも優先させる為に先に記述
+ */
+ 	$pluginMatch = [];
 	$plugins = CakePlugin::loaded();
 	if ($plugins) {
-		foreach ($plugins as $key => $value) {
+		foreach($plugins as $key => $value) {
 			$plugins[$key] = Inflector::underscore($value);
 		}
 		$pluginMatch = array('plugin' => implode('|', $plugins));
+		Router::connect("/:plugin/:controller/:action/*", [], $pluginMatch);
 	}
-	
+
 /**
- * 名前付きパラメータを追加 
+ * 名前付きパラメータを追加
  */
 	Router::connectNamed(array('sortmode', 'num', 'page', 'sort', 'direction'));
-	
-/**
- * プラグイン
- * 
- * コンテンツ管理ルーティングよりも優先させる為に先に記述
- */
-	Router::connect("/:plugin/:controller/:action/*", [], $pluginMatch);
-	
-/**
- * コンテンツ管理ルーティング
- * 
- * 高速化の為、管理システムURLのアクセスの場合、処理を除外したいが、
- * 管理システムより、フロントのURLを requestAction で呼び出された場合に、
- * 正常に動作しなくなってしまう為、除外しない事。
- */
-	App::uses('BcContentsRoute', 'Routing/Route');
-	Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
-	
+
 /**
  * 認証プレフィックス
  */
+	$authPrefixes = Configure::read('BcAuthPrefix');
 	if ($authPrefixes && is_array($authPrefixes)) {
-		foreach ($authPrefixes as $key => $authPrefix) {
+		foreach($authPrefixes as $key => $authPrefix) {
 			$prefix = $key;
 			if (!empty($authPrefix['alias'])) {
 				$alias = $authPrefix['alias'];
@@ -87,44 +97,40 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 			}
 		}
 	}
-}
-
-if (BC_INSTALLED || isConsole()) {
 
 /**
- * サブサイト標準ルーティング
+ * コンテンツ管理ルーティング
  */
-	$Site = ClassRegistry::init('Site');
-	$site = $Site->findByUrl($request->url);
-	$siteAlias = $sitePrefix = '';
-	if($site) {
-		$siteAlias = $site['Site']['alias'];
-		$sitePrefix = $site['Site']['name'];
+	App::uses('BcContentsRoute', 'Routing/Route');
+	Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
+
+	if (!BcUtil::isAdminSystem()) {
+
+	/**
+	 * サブサイト標準ルーティング
+	 */
+		$Site = ClassRegistry::init('Site');
+		$request = new CakeRequest();
+		$site = $Site->findByUrl($request->url);
+		$siteAlias = $sitePrefix = '';
+		if($site) {
+			$siteAlias = $site['Site']['alias'];
+			$sitePrefix = $site['Site']['name'];
+		}
+		if ($siteAlias) {
+			// プラグイン
+			Router::connect("/{$siteAlias}/:plugin/:controller", array('prefix' => $sitePrefix, 'action' => 'index'), $pluginMatch);
+			Router::connect("/{$siteAlias}/:plugin/:controller/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
+			Router::connect("/{$siteAlias}/:plugin/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
+			// モバイルノーマル
+			Router::connect("/{$siteAlias}/:controller/:action/*", array('prefix' => $sitePrefix));
+			Router::connect("/{$siteAlias}/:controller", array('prefix' => $sitePrefix, 'action' => 'index'));
+		}
+
+	/**
+	 * フィード出力
+	 * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
+	 */
+		Router::parseExtensions('rss');
+
 	}
-	if ($siteAlias) {
-		// プラグイン
-		Router::connect("/{$siteAlias}/:plugin/:controller", array('prefix' => $sitePrefix, 'action' => 'index'), $pluginMatch);
-		Router::connect("/{$siteAlias}/:plugin/:controller/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
-		Router::connect("/{$siteAlias}/:plugin/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
-		// 携帯ノーマル
-		Router::connect("/{$siteAlias}/:controller/:action/*", array('prefix' => $sitePrefix));
-	}
-
-/**
- * フィード出力
- * 拡張子rssの場合は、rssディレクトリ内のビューを利用する
- */
-	Router::parseExtensions('rss');
-} else {
-	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
-}
-/**
- * アップデーター用 
- */
-$updateKey = Configure::read('BcApp.updateKey');
-Router::connect('/' . $updateKey, array('controller' => 'updaters', 'action' => 'index'));
-Router::connect('/' . $updateKey . '/index', array('controller' => 'updaters', 'action' => 'index'));
-/**
- * インストーラー用
- */
-Router::connect('/install', array('controller' => 'installations', 'action' => 'index'));

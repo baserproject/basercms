@@ -26,7 +26,7 @@ if(empty($links) || count($links) <= 1) {
 	<?php
 	$class = $query = '';
 	$queryArray = [];
-	if(('/' . $this->request->url) == $link['url']) {
+	if($this->request->params['Content']['url'] == $link['url']) {
 		$class = ' class="current"'; 					
 	}
 	if($this->request->params['Site']['name']) {

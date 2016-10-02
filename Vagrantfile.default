@@ -111,13 +111,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  #【注意！】
-  # vagrant-omnibusプラグインのインストールは不要になりました。
-  # vmを作り直す場合は「vagrant destroy 後に」下記コマンドでプラグインを削除してください
-  #   $ vagrant plugin uninstall vagrant-omnibus
+  # vagrant-omnibusプラグインのインストールは必須ではなくなりました。
+  # (新しいバージョンのvagrantではchefインストールが自動になったため)
+  # 引き続きomnibusを使用する場合は、バージョンは最新版を使うようにしてください。
   #
-  # また、vagrant-omnibusプラグインを引き続き利用したい場合は次の設定を有効にしてください
-  # config.omnibus.chef_version = :latest
+  if Vagrant.has_plugin?("vagrant-omnibus") then
+    config.omnibus.chef_version = :latest
+  end
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"

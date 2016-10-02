@@ -356,9 +356,12 @@ class BcManagerComponent extends Component {
 			'password_1' => '',
 			'password_2' => ''
 			), $user);
-
-        $User = ClassRegistry::init('User', 'Model');
-//		$User = new User();
+		
+		/** 2016/09/21 gondoh
+		 *  Consoleから動作させた場合ClassRegistryからインスタンスを取得すると
+		 *  動的生成されたAppModelを利用してしまうため明示的にnewする。
+		 */
+		$User = new User();
 
 		$user['password'] = $user['password_1'];
 		$User->create($user);
@@ -1587,6 +1590,45 @@ class BcManagerComponent extends Component {
 			return false;
 		}
 		
+	}
+
+/**
+ * 初期データチェックする
+ *
+ * @param string $dbConfigKeyName
+ * @param array $dbConfig
+ * @param string $pattern
+ * @param string $theme
+ * @param string $plugin
+ * @return boolean
+ */
+	public function checkDefaultDataPattern($pattern, $theme = 'core') {
+		$path = BcUtil::getDefaultDataPath('core', $theme, $pattern);
+		if (!$path) {
+			return false;
+		}
+		$corePath = BcUtil::getDefaultDataPath('core', 'core', 'default');
+		
+		$Folder = new Folder($corePath);
+		$files = $Folder->read(true, true);
+		$coreTables = $files[1];
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		if(empty($files[1])) {
+			return false;
+		}
+		// よく使う項目は、user_groups より生成するのでなくてもよい
+		$excludes = ['favorites.csv'];
+		$targetTables = $files[1];
+		foreach($coreTables as $coreTable) {
+			if(in_array($coreTable, $excludes)) {
+				continue;
+			}
+			if(!in_array($coreTable, $targetTables)) {
+				return false;
+			}	
+		}
+		return true;
 	}
 	
 }

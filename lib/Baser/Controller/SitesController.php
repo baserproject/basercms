@@ -90,8 +90,12 @@ class SitesController extends AppController {
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
+		$themes = BcUtil::getThemeList();
+		if(in_array($this->siteConfigs['theme'], $themes)) {
+			unset($themes[$this->siteConfigs['theme']]);
+		}
 		$this->set('mainSites', $this->Site->getSiteList(0));
-		$this->set('themes', array_merge(['' => $defaultThemeName], BcUtil::getThemeList()));
+		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 
 	}
 
@@ -133,8 +137,12 @@ class SitesController extends AppController {
 		if(!empty($this->siteConfigs['theme'])) {
 			$defaultThemeName .= '（' . $this->siteConfigs['theme'] . '）';
 		}
+		$themes = BcUtil::getThemeList();
+		if(in_array($this->siteConfigs['theme'], $themes)) {
+			unset($themes[$this->siteConfigs['theme']]);
+		}
 		$this->set('mainSites', $this->Site->getSiteList(0, ['excludeIds' => $this->request->data['Site']['id']]));
-		$this->set('themes', array_merge(['' => $defaultThemeName], BcUtil::getThemeList()));
+		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 	}
 
 /**
@@ -213,6 +221,21 @@ class SitesController extends AppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 			$this->redirect(['action' => 'edit', $this->request->data['Site']['id']]);
 		}
+	}
+
+/**
+ * 選択可能なデバイスと言語の一覧を取得する
+ * 
+ * @param int $mainSiteId メインサイトID
+ * @return string
+ */
+	public function admin_ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return json_encode([
+			'devices' => $this->Site->getSelectableDevices($mainSiteId, $currentSiteId),
+			'langs' => $this->Site->getSelectableLangs($mainSiteId, $currentSiteId),
+		]);
 	}
 
 }

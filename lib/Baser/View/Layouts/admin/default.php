@@ -24,6 +24,7 @@
 		<?php
 		$this->BcBaser->css(array(
 			'admin/jquery-ui/jquery-ui.min',
+			'../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min',
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/import',
 			'admin/colorbox/colorbox-1.6.1',
@@ -64,8 +65,8 @@
 
 		<div id="Page">
 			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
-			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_favorite_box')) ?></div>
-			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
+			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box')) ?></div>
+			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 			<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.' . $this->BcBaser->getContentsName(true)) ?></div>
 			<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
 			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/admin/dashboard/index' : '/' . $this->request->url; ?></div>
@@ -102,9 +103,10 @@
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
 								<div id="FirstMessage" class="em-box" style="text-align:left">
 									baserCMSへようこそ。<br />
-									<ul style="font-weight:normal;font-size:14px;"><li>画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。</li>
+									<ul style="font-weight:normal;font-size:14px;">
+										<li>画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。</li>
 										<li>よく使う機能については、画面右側にある「よく使う項目」をクリックして、お気に入りとして登録する事ができます。</li>
-										<li>短くスマートなURLを実現する「スマートURL」の設定は、<?php $this->BcBaser->link('システム設定', '/admin/site_configs/form') ?>より行えます。</li>
+										<li>まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。</li>
 									</ul>
 								</div>
 							<?php endif ?>
@@ -115,7 +117,7 @@
 
 							<?php $this->BcBaser->element('submenu') ?>
 
-							<?php $this->BcBaser->element('help') ?>
+							<?php $this->BcBaser->element('help', [], ['cache' => ['key' => '_admin_help_' . @$help]]) ?>
 
 							<?php $this->BcBaser->element('search') ?>
 
@@ -135,7 +137,7 @@
 
 				<!-- / #Wrap .clearfix --></div>
 
-<?php $this->BcBaser->footer() ?>
+<?php $this->BcBaser->footer([], ['cache' => ['key' => '_admin_footer']]) ?>
 
 			<!-- / #Page --></div>
 

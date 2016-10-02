@@ -152,6 +152,7 @@ class UserGroupsController extends AppController {
 			}
 			if ($this->UserGroup->save($this->request->data)) {
 				$this->setMessage('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。', false, true);
+				$this->BcAuth->relogin();
 				$this->redirect(array('action' => 'index', $id));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);

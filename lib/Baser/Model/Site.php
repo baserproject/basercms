@@ -70,6 +70,10 @@ class Site extends AppModel {
             [
             	'rule' => ['duplicate'],
             	'message' => '既に利用されているエイリアス名です。別の名称に変更してください。'
+			],
+			[
+				'rule' => ['aliasSlashChecks'],
+				'message' => 'エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。'
 			]
 		],
 		'title' => [
@@ -83,6 +87,22 @@ class Site extends AppModel {
 			]
 		]
 	];
+
+/**
+ * エイリアスのスラッシュをチェックする
+ * 
+ * - 連続してスラッシュは入力できない
+ * - 先頭と末尾にスラッシュは入力できない
+ * @param $check
+ * @return bool
+ */
+	public function aliasSlashChecks($check) {
+		$alias = $check[key($check)];
+		if(preg_match('/(^\/|[\/]{2,}|\/$)/', $alias)) {
+			return false;
+		}
+		return true;
+	}
 
 /**
  * 公開されている全てのサイトを取得する
@@ -318,9 +338,11 @@ class Site extends AppModel {
 		foreach($children as $child) {
 			$Content->softDeleteFromTree($child['Content']['id']);
 		}
-	
+
+		$softDelete = $Content->softDelete(null);
 		$Content->softDelete(false);
 		$Content->removeFromTree($id, true);
+		$Content->softDelete($softDelete);
 	}
 
 /**
@@ -421,11 +443,60 @@ class Site extends AppModel {
 	public function afterFind($results, $primary = false) {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {
-			if(empty($entity['Site']['alias']) && !empty($entity['Site']['name'])) {
+			if(isset($entity['Site']['alias']) && $entity['Site']['alias'] === '' && !empty($entity['Site']['name'])) {
 				$entity['Site']['alias'] = $entity['Site']['name'];	
 			}
 		});
 		return $results;
 	}
-	
+
+/**
+ * 選択可能なデバイスの一覧を取得する
+ *
+ * @param int $mainSiteId メインサイトID
+ * @return array
+ */
+	public function getSelectableDevices($mainSiteId, $currentSiteId) {
+		$agents = Configure::read('BcAgent');
+		$devices = ['' => '指定しない'];
+		$selected = $this->find('list', [
+			'fields' => ['id', 'device'],
+			'conditions' => [
+				'Site.main_site_id' => $mainSiteId,
+				'Site.id <>' => $currentSiteId
+			]
+		]);
+		foreach($agents as $key => $agent) {
+			if(in_array($key, $selected)) {
+				continue;
+			}
+			$devices[$key] = $agent['name'];
+		}
+		return $devices;
+	}
+
+/**
+ * 選択可能が言語の一覧を取得する
+ * 
+ * @param int $mainSiteId メインサイトID
+ * @return array
+ */
+	public function getSelectableLangs($mainSiteId, $currentSiteId) {
+		$langs = Configure::read('BcLang');
+		$devices = ['' => '指定しない'];
+		$selected = $this->find('list', [
+			'fields' => ['id', 'lang'],
+			'conditions' => [
+				'Site.main_site_id' => $mainSiteId,
+				'Site.id <>' => $currentSiteId
+			]
+		]);
+		foreach($langs as $key => $lang) {
+			if(in_array($key, $selected)) {
+				continue;
+			}
+			$devices[$key] = $lang['name'];
+		}
+		return $devices;
+	}
 }

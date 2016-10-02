@@ -92,9 +92,9 @@ foreach($languages as $key => $lang) {
 				<small>[言語]</small><?php echo $this->BcForm->input('Site.lang', array('type' => 'select', 'options' => $langs)) ?>
 				<p id="SectionAccessType" style="display:none">
 					<small>[アクセス設定]</small><br>
-					<?php echo $this->BcForm->input('Site.same_main_url', array('type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス')) ?>　
-					<?php echo $this->BcForm->input('Site.auto_redirect', array('type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト')) ?>
-					<?php echo $this->BcForm->input('Site.auto_link', array('type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する')) ?>　
+					<span id="SpanSiteSameMainUrl"><?php echo $this->BcForm->input('Site.same_main_url', array('type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス')) ?>　</span><br>
+					<span id="SpanSiteAutoRedirect"><?php echo $this->BcForm->input('Site.auto_redirect', array('type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト')) ?>　</span>
+					<span id="SpanSiteAutoLink"><?php echo $this->BcForm->input('Site.auto_link', array('type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する')) ?>　</span>
 				</p>
 			</p>
 			<?php echo $this->BcForm->error('Site.device') ?>

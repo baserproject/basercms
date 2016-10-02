@@ -251,23 +251,35 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 
 		$title = array();
-		$crumbs = $this->getCrumbs($options['categoryTitleOn']);
-		if ($crumbs) {
-			$crumbs = array_reverse($crumbs);
-			foreach ($crumbs as $key => $crumb) {
-				if ($this->BcArray->first($crumbs, $key) && isset($crumbs[$key + 1])) {
-					if ($crumbs[$key + 1]['name'] == $crumb['name']) {
-						continue;
-					}
-				}
+		
+		if($this->isHome()) {
+			$homeTitle = $this->_View->get('homeTitle');
+			if($homeTitle) {
 				if(!$options['tag']){
-					$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+					$title[] = strip_tags($homeTitle, $options['allowableTags']);
 				} else {
-					$title[] = $crumb['name'];
+					$title[] = $homeTitle;
+				}
+			}
+		} else {
+			$crumbs = $this->getCrumbs($options['categoryTitleOn']);
+			if ($crumbs) {
+				$crumbs = array_reverse($crumbs);
+				foreach ($crumbs as $key => $crumb) {
+					if ($this->BcArray->first($crumbs, $key) && isset($crumbs[$key + 1])) {
+						if ($crumbs[$key + 1]['name'] == $crumb['name']) {
+							continue;
+						}
+					}
+					if(!$options['tag']){
+						$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+					} else {
+						$title[] = $crumb['name'];
+					}
 				}
 			}
 		}
-
+		
 		// サイトタイトルを追加
 		$siteName = '';
 		if(!empty($this->request->params['Site']['title'])) {
@@ -2262,7 +2274,19 @@ END_FLASH;
  * @return void
  */
 	public function subMenu($data = array(), $options = array()) {
-		$this->element('sub_menu', $data, $options);
+		echo $this->getSubMenu($data, $options);
+	}
+
+/**
+ * サブメニューを取得する
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getSubMenu($data = array(), $options = array()) {
+		return $this->getElement('sub_menu', $data, $options);
 	}
 
 /**
@@ -2572,8 +2596,12 @@ END_FLASH;
  * 
  * @param int $id コンテンツID
  */
-	public function getRelatedSiteLinks($id = null) {
-		$links = $this->BcContents->getRelatedSiteLinks($id);
+	public function getRelatedSiteLinks($id = null, $excludeIds = []) {
+		$options = [];
+		if($excludeIds) {
+			$options['excludeIds'] = $excludeIds;
+		}
+		$links = $this->BcContents->getRelatedSiteLinks($id, $options);
 		return $this->getElement('related_site_links', ['links' => $links]);
 	}
 
@@ -2582,8 +2610,8 @@ END_FLASH;
  * 
  * @param int $id コンテンツID
  */
-	public function relatedSiteLinks($id = null) {
-		echo $this->getRelatedSiteLinks($id);
+	public function relatedSiteLinks($id = null, $excludeIds = []) {
+		echo $this->getRelatedSiteLinks($id, $excludeIds);
 	}
 
 /**
@@ -2621,4 +2649,36 @@ END_FLASH;
 			)
 		);
 	}
+
+/**
+ * トップページのタイトルをセットする
+ * 
+ * @param $title
+ */
+	public function setHomeTitle($title = null) {
+		if(!$title) {
+			$crumbs = $this->getCrumbs();
+			if ($crumbs) {
+				$crumbs = array_reverse($crumbs);
+				$title = $crumbs[0]['name'];
+			}
+		}
+		$this->_View->set('homeTitle', $title);
+	}
+
+/**
+ * スマートフォン用のウェブクリップアイコン用のタグを出力する
+ * 
+ * @param string $fileName ファイル名（webroot に配置する事が前提）
+ * @param bool $useGloss 光沢有無
+ */
+	public function webClipIcon($fileName = 'apple-touch-icon-precomposed.png', $useGloss = false) {
+		if($useGloss) {
+			$rel = 'apple-touch-icon';
+		} else {
+			$rel = 'apple-touch-icon-precomposed';
+		}
+		echo '<link rel="' . $rel . '" href="' . Router::url('/' . $fileName, true) . '" />';
+	}
+	
 }

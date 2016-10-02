@@ -84,7 +84,9 @@ class RoutesTest extends BaserTestCase {
  * @return void
  */
 	public function testInstall() {
+		Configure::write('BcRequest.isInstalled', false);
 		$params = $this->_getParams('install');
+		Configure::write('BcRequest.isInstall', true);
 		$expects = array(
 			'named' => array(),
 			'pass' => array(),
@@ -104,7 +106,9 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider updateDataProvider
  */
 	public function testUpdate($url) {
+		Configure::write('BcRequest.isUpdater', true);
 		$params = $this->_getParams($url);
+		Configure::write('BcRequest.isUpdater', false);
 		$expects = array(
 			'controller' => 'updaters',
 			'action' => 'index',

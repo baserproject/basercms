@@ -79,7 +79,7 @@ class ContentsController extends AppController {
 		$this->request->data['ViewSetting']['site_id'] = $currentSiteId = $this->passedArgs['site_id'];
 		$this->request->data['ViewSetting']['list_type'] = $currentListType = $this->passedArgs['list_type'];
 
-		if (!empty($this->request->isAjax)) {
+		if ($this->request->is('ajax')) {
 			$template = null;
 			$datas = [];
 			switch($this->request->params['action']) {
@@ -407,9 +407,10 @@ class ContentsController extends AppController {
 			$result = $this->Content->softDeleteFromTree($id);
 			$message = $typeName . '「' . $content['title'] . '」をゴミ箱に移動しました。';
 		} else {
+			$softDelete = $this->Content->softDelete(null);
 			$this->Content->softDelete(false);
 			$result = $this->Content->removeFromTree($id, true);
-			$this->Content->softDelete(true);
+			$this->Content->softDelete($softDelete);
 			$message = $typeName . 'のエイリアス「' . $content['title'] . '」を削除しました。';
 		}
 		if($result) {
@@ -698,8 +699,11 @@ class ContentsController extends AppController {
 		if(empty($this->request->data['contentId'])) {
 			return false;
 		}
+		$softDelete = $this->Content->softDelete(null);
 		$this->Content->softDelete(false);
-		return $this->Content->removeFromTree($this->request->data['contentId'], true);
+		$result = $this->Content->removeFromTree($this->request->data['contentId'], true);
+		$this->Content->softDelete($softDelete);
+		return $result;
 	}
 
 /**

@@ -209,7 +209,9 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 				<th class="col-head"><?php echo $this->BcForm->label('Content.exclude_search', 'その他設定') ?></th>
 				<td class="col-input">
 					<?php if(!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?>
+						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_search', array('type' => 'checkbox', 'label' => 'サイト内検索の検索結果より除外する')) ?></span>　
+						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.exclude_menu', array('type' => 'checkbox', 'label' => '公開ページのメニューより除外する')) ?></span>　
+						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.blank_link', array('type' => 'checkbox', 'label' => 'メニューのリンクを別ウィンドウ開く')) ?></span>
 					<?php else: ?>
 						<?php if($this->BcForm->value('Content.exclude_search')): ?>
 							サイト内検索の検索結果より除外する
@@ -298,16 +300,18 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 			<?php endforeach ?>
 		</table>
 	</div>
-	<?php if($this->request->action == 'admin_edit'): ?>
+<?php endif ?>
+<?php if($this->request->action == 'admin_edit'): ?>
 	<div id="EtcSetting">
+		<div>
 		<p><span>コンテンツID</span>：<?php echo $this->request->data['Content']['id'] ?></p>
 		<p><span>実体ID</span>：<?php echo $this->request->data['Content']['entity_id'] ?></p>
 		<p><span>プラグイン</span>：<?php echo $this->request->data['Content']['plugin'] ?></p>
 		<p><span>コンテンツタイプ</span>：<?php echo $this->request->data['Content']['type'] ?></p>
 		<p><span>データ作成日</span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created']) ?></p>
 		<p><span>データ更新日</span>：<?php echo $this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified']) ?></p>
+		</div>
 	</div>
-	<?php endif ?>
 <?php endif ?>
 </div>
 

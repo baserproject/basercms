@@ -30,7 +30,11 @@ class BcContentsRoute extends CakeRoute {
 		if(is_array($url)) {
 			return false;
 		}
-		$Content = ClassRegistry::init('Content');
+
+		if(BcUtil::isAdminSystem($url)) {
+			return false;
+		}
+
 		$request = Router::getRequest(true);
 		$extend = false;
 
@@ -68,6 +72,7 @@ class BcContentsRoute extends CakeRoute {
 			exit();
 		}
 
+		$Content = ClassRegistry::init('Content');
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
@@ -131,7 +136,7 @@ class BcContentsRoute extends CakeRoute {
 		if($publish) {
 			$conditions = $conditions + $Content->getConditionAllowPublish();
 		}
-		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC']);
+		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
 		if($content && empty($content['Site']['id'])) {
 			$content['Site'] = $Content->Site->getRootMain()['Site'];
 		}

@@ -32,15 +32,23 @@ if(!isset($currentId)) {
 		<?php foreach ($tree as $content): ?>
 			<?php if ($content['Content']['title']): ?>
 				<?php
-					$liClass = 'menu-content li-level-' . $level;
-					if($content['Content']['id'] == $currentId) {
-						$liClass .= ' current';
-					}
+				if(!empty($content['Content']['exclude_menu'])) {
+					continue;
+				}
+				$liClass = 'menu-content li-level-' . $level;
+				if($content['Content']['id'] == $currentId) {
+					$liClass .= ' current';
+				}
+				$options = [];
+				if(!empty($content['Content']['blank_link'])) {
+					$options = ['target' => '_blank'];
+				}
 				?>
-				<li class="<?php echo $liClass ?>"><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url']) ?>
-				<?php if (!empty($content['children'])): ?>
-					<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
-				<?php endif ?>
+				<li class="<?php echo $liClass ?>">
+					<?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url'], $options) ?>
+					<?php if (!empty($content['children'])): ?>
+						<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+					<?php endif ?>
 				</li>
 			<?php endif ?>
 		<?php endforeach; ?>

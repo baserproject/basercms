@@ -25,7 +25,6 @@
 			<li><?php $this->BcBaser->link('ログメンテナンス', array('controller' => 'tools', 'action' => 'log', 'plugin' => null)) ?></li>
 			<li><?php $this->BcBaser->link('スキーマファイル生成', array('controller' => 'tools', 'action' => 'write_schema')) ?></li>
 			<li><?php $this->BcBaser->link('スキーマファイル読込', array('controller' => 'tools', 'action' => 'load_schema')) ?></li>
-			<li><?php $this->BcBaser->link('環境情報', array('controller' => 'site_configs', 'action' => 'info', 'plugin' => null)) ?></li>
 		</ul>
 	</td>
 </tr>

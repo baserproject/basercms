@@ -118,7 +118,13 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 									<?php if (!empty($package['contents'])): ?>
 										<ul class="clearfix">
 											<?php foreach ($package['contents'] as $contents): ?>
-												<li><?php $this->BcBaser->link($contents['name'], $contents['url'], array('title' => $contents['name'])) ?></li>
+												<?php
+												$options =  ['title' => $contents['name']];
+												if(!empty($contents['options'])){
+													$options = array_merge($options, $contents['options']);
+												}
+												?>
+												<li><?php $this->BcBaser->link($contents['name'], $contents['url'], $options) ?></li>
 											<?php endforeach ?>
 										</ul>
 									<?php endif ?>

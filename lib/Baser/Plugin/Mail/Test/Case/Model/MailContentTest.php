@@ -152,7 +152,6 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 		
 		$expected =  array(
-			'redirect_url' => array('リダイレクトURLの形式が不正です。'),
 			'sender_1' => array('送信先メールアドレスの形式が不正です。'),
 			'sender_2' => array('送信先メールアドレスの形式が不正です。')
 		);

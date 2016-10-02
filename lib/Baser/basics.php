@@ -897,6 +897,7 @@ function loadPlugin($plugin, $priority) {
 		$eventClass = $plugin . $eventTarget . 'EventListener';
 		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 			App::uses($eventClass, $plugin . '.Event');
+			App::uses('CakeEventManager', 'Event');
 			$CakeEvent = CakeEventManager::instance();
 			$EventClass = new $eventClass();
 

@@ -21,6 +21,8 @@
 		<?php $this->BcBaser->title() ?>
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
+		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->css(array(
 			'import',
 			'admin/colorbox/colorbox-1.6.1')); ?>
@@ -30,6 +32,7 @@
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/jquery.colorbox-1.6.1.min',
 			'admin/vendors/jquery-accessibleMegaMenu',
+			'admin/libs/jquery.bcToken',
 			'admin/libs/jquery.mScroll',
 			'admin/functions',
 			'admin/startup',
@@ -40,9 +43,13 @@
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal front">
 		<div id="Page" style="text-align: center">
+			<?php if(BC_INSTALLED): ?>
 			<?php $this->BcBaser->relatedSiteLinks() ?>
+			<?php endif ?>
 			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?></div>
+			<?php if(BC_INSTALLED): ?>
 			<nav id="GlobalMenu" class="clearfix"><?php $this->BcBaser->globalMenu(3) ?></nav>
+			<?php endif ?>
 			<div id="Wrap">
 				<?php if(!$this->BcBaser->isHome()): ?>
 				<div id="CrumbList" class="clearfix"><?php $this->BcBaser->crumbsList(['onSchema' => true]) ?></div>

@@ -11,12 +11,12 @@
  */
 
 /**
- * [PUBLISH] ローカルナビゲーションウィジェット
+ * [PUBLISH] ローカルナビゲーション
  */
 if(empty($this->request->params['Content'])) {
 	return;
 }
-if($this->request->params['Content']['type'] == 'ContentFoler') {
+if($this->request->params['Content']['type'] == 'ContentFolder') {
 	$parentId = $this->request->params['Content']['id'];
 	$title = $this->request->params['Content']['title'];
 } else {
@@ -34,4 +34,3 @@ if($parent['Content']['site_root']) {
 	<h2><?php echo h($title) ?></h2>
 	<?php $this->BcBaser->contentsMenu($parentId, 1, $this->request->params['Content']['id']) ?>
 </div>
-

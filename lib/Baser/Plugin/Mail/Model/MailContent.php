@@ -85,9 +85,6 @@ class MailContent extends MailAppModel {
 				'message' => 'メールテンプレート名は20文字以内で入力してください。')
 		),
 		'redirect_url' => array(
-			array('rule' => array('url'),
-				'message' => "リダイレクトURLの形式が不正です。",
-				'allowEmpty' => true),
 			array('rule' => array('maxLength', 255),
 				'message' => 'リダイレクトURLは255文字以内で入力してください。')
 		),

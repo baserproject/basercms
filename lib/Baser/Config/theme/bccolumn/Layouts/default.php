@@ -12,6 +12,7 @@
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 		
 <!--[if lt IE 9]>

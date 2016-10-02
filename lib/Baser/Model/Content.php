@@ -69,6 +69,8 @@ class Content extends AppModel {
  */
 	public $validate = [
 		'name' => [
+			['rule' => ['notBlank'],
+				'message' => 'URLを入力してください。'],
 			['rule' => ['bcUtileUrlencodeBlank'],
 				'message' => 'URLはスペース、全角スペース及び、指定の記号(\\\'|`^"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。'],
 			['rule' => ['notBlank'],
@@ -94,6 +96,13 @@ class Content extends AppModel {
  * @var bool
  */
 	public $updatingRelated = true;
+
+/**
+ * システムデータを更新する
+ * 
+ * @var bool
+ */
+	public $updatingSystemData = true;
 	
 /**
  * 保存前の親ID
@@ -103,7 +112,15 @@ class Content extends AppModel {
  * @var null
  */
 	public $beforeSaveParentId = null;
-
+	
+/**
+ * 削除時の削除対象レコード
+ * 
+ * afterDelete で利用する為、beforeDelete で取得し保存する
+ * @var []
+ */
+	private $__deleteTarget;
+	
 /**
  * Implemented Events
  *
@@ -319,8 +336,10 @@ class Content extends AppModel {
  */
 	public function afterSave($created, $options = array()) {
 		parent::afterSave($created, $options);
-
-		$this->updateSystemData($this->data);
+		$this->deleteAssocCache($this->data);
+		if($this->updatingSystemData) {
+			$this->updateSystemData($this->data);	
+		}
 		if($this->updatingRelated) {
 			// ゴミ箱から戻す場合、 type の定義がないが問題なし
 			if(!empty($this->data['Content']['type']) && $this->data['Content']['type'] == 'ContentFolder') {
@@ -336,9 +355,32 @@ class Content extends AppModel {
 	}
 
 /**
- * Before delete
- *
- * @param Model $model
+ * 関連するコンテンツ本体のデータキャッシュを削除する
+ * @param $data
+ */
+	public function deleteAssocCache($data) {
+		if(empty($data['Content']['plugin']) || empty($data['Content']['type'])) {
+			$data = $this->find('first', ['fields' => ['Content.plugin', 'Content.type'], 'conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
+		}
+		$assoc = $data['Content']['type'];
+		if($data['Content']['plugin'] != 'Core') {
+			if(!CakePlugin::loaded($assoc = $data['Content']['plugin'])) {
+				return;
+			}
+			$assoc = $data['Content']['plugin'] . '.' . $assoc;
+		}
+		$AssocModel = ClassRegistry::init($assoc);
+		if($AssocModel && !empty($AssocModel->actsAs) && in_array('BcCache', $AssocModel->actsAs)) {
+			if($AssocModel->Behaviors->hasMethod('delCache')) {
+				$AssocModel->delCache();	
+			}
+		}
+	}
+
+/**
+ * Before Delete
+ * 
+ * 論理削除の場合、
  * @param bool $cascade
  * @return bool
  */
@@ -346,12 +388,14 @@ class Content extends AppModel {
 		if(!parent::beforeDelete($cascade)) {
 			return false;
 		}
-		if(!$this->softDelete(null)) {
-			return true;
-		}
 		$data = $this->find('first', array(
 			'conditions' => array($this->alias . '.id' => $this->id)
 		));
+		$this->__deleteTarget = $data;
+		
+		if(!$this->softDelete(null)) {
+			return true;
+		}
 		if($data) {
 			$this->deleteRelateSubSiteContent($data);
 			$this->deleteAlias($data);
@@ -360,8 +404,21 @@ class Content extends AppModel {
 	}
 
 /**
- * エイリアスを削除する
+ * After Delete
  *
+ * 関連コンテンツのキャッシュを削除する 
+ */
+	public function afterDelete() {
+		parent::afterDelete();
+		$this->deleteAssocCache($this->__deleteTarget);
+		$this->__deleteTarget = null;
+	}
+
+/**
+ * 自データのエイリアスを削除する
+ *
+ * 全サイトにおけるエイリアスを全て削除
+ * 
  * @param $data
  */
 	public function deleteAlias($data) {
@@ -369,12 +426,19 @@ class Content extends AppModel {
 		if($data['Content']['alias_id']) {
 			return;
 		}
-		$contents = $this->find('all', ['conditions' => ['Content.alias_id' => $data['Content']['id']], 'recursive' => -1]);
+		$contents = $this->find('all', [
+			'fields' => ['Content.id'], 
+			'conditions' => [
+				'Content.alias_id' => $data['Content']['id']
+		], 'recursive' => -1]);
 		if(!$contents) {
 			return;
 		}
 		foreach($contents as $content) {
-			$this->softDeleteFromTree($content['Content']['id']);
+			$softDelete = $this->softDelete(null);
+			$this->softDelete(false);
+			$this->removeFromTree($content['Content']['id'], true);
+			$this->softDelete($softDelete);
 		}
 		$this->data = $data;
 		$this->id = $data['Content']['id'];
@@ -408,11 +472,12 @@ class Content extends AppModel {
 			if($content) {
 				// 存在する場合は、自身のエイリアスかどうか確認し削除する
 				if($content['Content']['alias_id'] == $data['Content']['id']) {
+					$softDelete = $this->softDelete(null);
 					$this->softDelete(false);
 					$this->removeFromTree($content['Content']['id'], true);
-					$this->softDelete(true);
+					$this->softDelete($softDelete);
 				} elseif($content['Content']['type'] == 'ContentFolder') {
-					$this->updateChildren($content['Content']['type']);
+					$this->updateChildren($content['Content']['id']);
 				}
 			}
 		}
@@ -807,8 +872,10 @@ class Content extends AppModel {
 	public function softDeleteFromTree($id) {
 		$this->softDelete(true);
 		$this->Behaviors->unload('BcCache');
+		$this->Behaviors->unload('BcUpload');
 		$result = $this->deleteRecursive($id);
 		$this->Behaviors->load('BcCache');
+		$this->Behaviors->load('BcUpload');
 		$this->delAssockCache();
 		return $result;
 	}
@@ -841,12 +908,22 @@ class Content extends AppModel {
 				$content['Content']['self_status'] = false;
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
-				$this->save($content, array('validate' => false, 'callbacks' => false));
-				return $this->delete($id);
+				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は必要（default: true）
+				$this->updatingSystemData = false;
+				$this->save($content, array('validate' => false));
+				$this->updatingSystemData = true;
+				$result = $this->delete($id);
+				// =====================================================================
+				// 通常の削除の際、afterDelete で、関連コンテンツのキャッシュを削除しているが、
+				// 論理削除の場合、afterDelete が呼ばれない為、ここで削除する
+				// =====================================================================
+				$this->deleteAssocCache($content);
+				return $result;
 			} else {
+				$softDelete = $this->softDelete(null);
 				$this->softDelete(false);
 				$result = $this->removeFromTree($content['Content']['id'], true);
-				$this->softDelete(true);
+				$this->softDelete($softDelete);
 				return $result;
 			}
 		}
@@ -890,7 +967,6 @@ class Content extends AppModel {
 				$siteRootId = $this->field('id', array('Content.site_id' => $content['Content']['site_id'], 'site_root' => true));
 				$content['Content']['parent_id'] = $siteRootId;
 			}
-			unset($content['Content']['name']);
 			unset($content['Content']['lft']);
 			unset($content['Content']['rght']);
 			if($this->save($content, true)) {
@@ -925,9 +1001,12 @@ class Content extends AppModel {
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
+		$softDelete = $this->softDelete(null);
 		$this->softDelete(false);
 		$id = $this->field('id', $conditions);
-		return $this->removeFromTree($id, true);
+		$result = $this->removeFromTree($id, true);
+		$this->softDelete($softDelete);
+		return $result;
 	}
 
 /**
@@ -1469,13 +1548,26 @@ class Content extends AppModel {
  * @param int $id
  * @return array|false
  */
-	public function getRelatedSiteContents($id) {
+	public function getRelatedSiteContents($id, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
 		$conditions = [
-			'OR' => [
+			['OR' => [
 				['Content.id' => $id],
 				['Content.main_site_content_id' => $id]
-			]
+			]],
+			['OR' => [
+				['Site.status' => true],
+				['Site.status' => null]	// ルートメインサイト
+			]]
 		];
+		if($options['excludeIds']) {
+			if(count($options['excludeIds']) == 1) {
+				$options['excludeIds'] = $options['excludeIds'][0];
+			}
+			$conditions['Content.site_id <>'] = $options['excludeIds'];
+		}
 		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		$contents = $this->find('all', [
 			'conditions' => $conditions,

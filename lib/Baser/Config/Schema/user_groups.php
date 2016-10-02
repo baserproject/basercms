@@ -24,6 +24,7 @@ class UserGroupsSchema extends CakeSchema {
 		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
 		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'default_favorites' => array('type' => 'text', 'null' => true, 'default' => null),
+		'use_move_contents' => array('type' => 'boolean', 'null' => true, 'default' => false),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

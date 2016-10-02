@@ -270,7 +270,7 @@ class BcContentsHelper extends AppHelper {
 		], $options);
 		$Content = ClassRegistry::init('Content');
 		$conditions = array_merge($Content->getConditionAllowPublish(), ['Content.id' => $id]);
-		$content = $Content->find('first', ['conditions' => $conditions]);
+		$content = $Content->find('first', ['conditions' => $conditions, 'cache' => false]);
 		if (!$content) {
 			return [];
 		}
@@ -296,7 +296,8 @@ class BcContentsHelper extends AppHelper {
 		return $Content->find('threaded', [
 			'order' => $options['order'], 
 			'conditions' => $conditions, 
-			'recursive' => 0
+			'recursive' => 0,
+			'cache' => false
 		]);
 	}
 
@@ -332,7 +333,10 @@ class BcContentsHelper extends AppHelper {
  * @param int $id コンテンツID
  * @return array | false
  */
-	public function getRelatedSiteContents($id = null) {
+	public function getRelatedSiteContents($id = null, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
 		$Content = ClassRegistry::init('Content');
 		$Content->unbindModel(['belongsTo' => ['User']]);
 		if(!$id && !empty($this->request->params['Content'])) {
@@ -345,7 +349,7 @@ class BcContentsHelper extends AppHelper {
 		} else {
 			return false;
 		}
-		return $Content->getRelatedSiteContents($id);
+		return $Content->getRelatedSiteContents($id, $options);
 	}
 
 /**
@@ -354,8 +358,11 @@ class BcContentsHelper extends AppHelper {
  * @param int $id
  * @return array
  */
-	public function getRelatedSiteLinks($id = null) {
-		$contents = $this->getRelatedSiteContents($id);
+	public function getRelatedSiteLinks($id = null, $options = []) {
+		$options = array_merge([
+			'excludeIds' => []
+		], $options);
+		$contents = $this->getRelatedSiteContents($id, $options);
 		$urls = [];
 		if($contents) {
 			foreach($contents as $content) {

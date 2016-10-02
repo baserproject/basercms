@@ -24,4 +24,14 @@ class ContentLink extends AppModel {
  */
 	public $actsAs = array('BcContents');
 
+	/**
+	 * バリデーション
+	 *
+	 * @var array
+	 */
+	public $validate = [
+		'url' => [
+			['rule' => ['notBlank'],
+			 'message' => 'リンク先URLを入力してください。']
+	]];
 }

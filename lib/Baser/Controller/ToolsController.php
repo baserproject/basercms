@@ -336,7 +336,12 @@ class ToolsController extends AppController {
 		switch ($mode) {
 			case 'download':
 				set_time_limit(0);
-				$this->_downloadErrorLog();
+				if($this->_downloadErrorLog()) {
+					exit();
+				} else {
+					$this->setMessage('エラーログが存在しません。', false);
+				}
+				$this->redirect(array('action' => 'log'));
 				break;
 			case 'delete':
 				$this->_checkSubmitToken();
@@ -350,7 +355,7 @@ class ToolsController extends AppController {
 					}
 				} else {
 					$messages[] = 'エラーログが存在しません。';
-					$error = true;
+					$error = false;
 				}
 
 				if ($messages) {
@@ -375,16 +380,20 @@ class ToolsController extends AppController {
 	/**
 	 * ログフォルダを圧縮ダウンロードする
 	 *
-	 * @return void
-		 */
+	 * @return bool
+	 */
 	protected function _downloadErrorLog() {
 		$tmpDir = TMP . 'logs' . DS;
-
+		$Folder = new Folder($tmpDir);
+		$files = $Folder->read(true, true, false);
+		if(count($files[0]) === 0 && count($files[1]) === 0) {
+			return false;
+		}
 		// ZIP圧縮して出力
 		$fileName = 'basercms_logs_' . date('Ymd_His');
 		$Simplezip = new Simplezip();
 		$Simplezip->addFolder($tmpDir);
 		$Simplezip->download($fileName);
-		exit();
+		return true;
 	}
 }

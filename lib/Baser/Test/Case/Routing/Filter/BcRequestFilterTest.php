@@ -123,6 +123,7 @@ class BcRequestFilterTest extends BaserTestCase {
  * @dataProvider isInstallDataProvider
  */
 	public function testIsInstall($expect, $url) {
+		Configure::write('BcRequest.isInstalled', false);
 		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isInstall($request));
 	}
@@ -138,7 +139,7 @@ class BcRequestFilterTest extends BaserTestCase {
 			array(true, '/install/'),
 			array(false, '/install/index'),
 			array(true, '/installations/step2'),
-			array(false, '/'),
+			array(true, '/'),
 			array(false, '/service')
 		);
 	}

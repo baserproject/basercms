@@ -36,11 +36,11 @@ if ($this->request->params['Site']['alias']) {
 		
 		<table cellpadding="0" cellspacing="0" class="row-table-01">
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.name', 'お名前') ?></th>
+				<th><?php echo $this->BcForm->label('BlogComment.name', 'お名前・ニックネーム') ?><span style="color:red">＊</span></th>
 				<td><?php echo $this->BcForm->input('BlogComment.name', array('type' => 'text')) ?></td>
 			</tr>
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.email', 'Eメール') ?></th>
+				<th><?php echo $this->BcForm->label('BlogComment.email', 'Eメール') ?><span style="color:red">＊</span></th>
 				<td>
 					<?php echo $this->BcForm->input('BlogComment.email', array('type' => 'text', 'size' => 30)) ?>&nbsp;
 					<br><small>※ メールは公開されません</small>
@@ -51,7 +51,7 @@ if ($this->request->params['Site']['alias']) {
 				<td><?php echo $this->BcForm->input('BlogComment.url', array('type' => 'text', 'size' => 30)) ?></td>
 			</tr>
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.message', 'コメント') ?></th>
+				<th><?php echo $this->BcForm->label('BlogComment.message', 'コメント') ?><span style="color:red">＊</span></th>
 				<td><?php echo $this->BcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52)) ?></td>
 			</tr>
 		</table>

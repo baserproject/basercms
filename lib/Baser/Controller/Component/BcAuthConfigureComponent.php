@@ -162,7 +162,9 @@ class BcAuthConfigureComponent extends Component {
 							$requestData = $Controller->request->data[$config['userModel']];	
 						}
 						$Controller->request->data[$config['userModel']] = $cookie;
-						if ($BcAuth->login()) {
+						$loginResult = $BcAuth->login();
+						unset($Controller->request->data[$config['userModel']]);
+						if ($loginResult) {
 							return true;
 						}
 						if(!empty($requestData)) {

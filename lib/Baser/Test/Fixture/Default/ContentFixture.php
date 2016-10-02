@@ -50,6 +50,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '2',
@@ -84,6 +86,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '3',
@@ -118,6 +122,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '4',
@@ -152,6 +158,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '5',
@@ -186,6 +194,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '6',
@@ -220,6 +230,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '7',
@@ -254,6 +266,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '8',
@@ -288,6 +302,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '9',
@@ -322,6 +338,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '10',
@@ -356,6 +374,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '11',
@@ -390,6 +410,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '12',
@@ -424,6 +446,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '13',
@@ -458,6 +482,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '14',
@@ -492,6 +518,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '15',
@@ -526,6 +554,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '16',
@@ -560,6 +590,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '17',
@@ -594,6 +626,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '18',
@@ -628,6 +662,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '19',
@@ -662,6 +698,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 		array(
 			'id' => '20',
@@ -696,6 +734,8 @@ class ContentFixture extends BaserTestFixture {
 			'self_status' => 1,
 			'self_publish_begin' => null,
 			'self_publish_end' => null,
+			'exclude_menu' => 0,
+			'blank_link' => 0
 		),
 	);
 

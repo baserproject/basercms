@@ -496,8 +496,12 @@ table.sub-menu{
 	cursor: pointer;
 }
 
-/* edit form
------------------------------------------------ */
+.contents-body .form-table th {
+    font-size: 14px;
+}
+
+    /* edit form
+    ----------------------------------------------- */
 .editor-area {
 	text-align: center;
 }
@@ -1627,6 +1631,7 @@ div.jstree-publish-even{
 #BlogPostForm .url {
 	font-weight:bold;
 	font-size:14px;
+    word-break: break-all;
 }
 #BasicSetting .url a {
 	color:#9C0;
@@ -1676,4 +1681,3 @@ div.jstree-publish-even{
     border-radius: 0;
     background: #f5f5f5;
 }
-

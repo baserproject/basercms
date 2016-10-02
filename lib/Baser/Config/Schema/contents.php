@@ -43,6 +43,8 @@ class ContentsSchema extends CakeSchema {
 		'site_root' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'deleted_date' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'deleted' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'exclude_menu' => array('type' => 'boolean', 'null' => true, 'default' => false),
+		'blank_link' => array('type' => 'boolean', 'null' => true, 'default' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(

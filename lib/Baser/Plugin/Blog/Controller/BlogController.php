@@ -53,7 +53,7 @@ class BlogController extends BlogAppController {
  *
  * @var array
  */
-	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents' => ['type' => 'Blog.BlogContent', 'useViewCache' => true]];
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler', 'BcEmail', 'Security', 'BcContents' => ['type' => 'Blog.BlogContent', 'useViewCache' => false]];
 
 /**
  * ぱんくずナビ
@@ -338,6 +338,12 @@ class BlogController extends BlogAppController {
 					} else {
 						$this->notFound();
 					}
+					
+					// 一覧系のページの場合、時限公開の記事が存在し、キャッシュがあると反映できないが、
+					// 詳細ページの場合は、記事の終了期間の段階でキャッシュが切れる前提となる為、キャッシュを利用する
+					// プレビューでは利用しない事。
+					$this->BcContents->useViewCache = true;
+					
 				}
 
 				// コメント送信

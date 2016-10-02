@@ -137,29 +137,24 @@ class PagesController extends AppController {
 			}
 
 			$this->Page->set($this->request->data);
-			if ($this->Page->validates()) {
-
-				if ($data = $this->Page->save(null, false)) {
-					// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
-					if ($isChangedStatus) {
-						clearViewCache();
-					} else {
-						clearViewCache($this->request->data['Content']['url']);
-					}
-
-					// 完了メッセージ
-					$this->setMessage('固定ページ「' . $this->request->data['Content']['name'] . '」を更新しました。', false, true);
-
-					// EVENT Pages.afterEdit
-					$this->dispatchEvent('afterEdit', [
-						'data' => $data
-					]);
-
-					// 同固定ページへリダイレクト
-					$this->redirect(['action' => 'edit', $id]);
+			if ($data = $this->Page->save()) {
+				// タイトル、URL、公開状態が更新された場合、全てビューキャッシュを削除する
+				if ($isChangedStatus) {
+					clearViewCache();
 				} else {
-					$this->setMessage('保存中にエラーが発生しました。', true);
+					clearViewCache($this->request->data['Content']['url']);
 				}
+
+				// 完了メッセージ
+				$this->setMessage('固定ページ「' . $this->request->data['Content']['name'] . '」を更新しました。', false, true);
+
+				// EVENT Pages.afterEdit
+				$this->dispatchEvent('afterEdit', [
+					'data' => $data
+				]);
+
+				// 同固定ページへリダイレクト
+				$this->redirect(['action' => 'edit', $id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -252,28 +247,19 @@ class PagesController extends AppController {
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
-		if(!empty($this->request->params['requested'])) {
-			if($this->request->params['Content']['alias_id']) {
-				$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->params['Content']['alias_id']]);
-			} else {
-				$urlTmp = $this->request->params['Content']['url'];
-			}
-			$urlTmp = preg_replace('/^\//', '', $urlTmp);
-			$path = explode('/', $urlTmp);
+		if($this->request->params['Content']['alias_id']) {
+			$urlTmp = $this->Content->field('url', ['Content.id' => $this->request->params['Content']['alias_id']]);
+		} else {
+			$urlTmp = $this->request->params['Content']['url'];
 		}
-
+		$urlTmp = preg_replace('/^\//', '', $urlTmp);
+		$path = explode('/', $urlTmp);
 		if($this->request->params['Site']['alias']) {
 			if($path[0] == $this->request->params['Site']['alias']) {
 				$path[0] = $this->request->params['Site']['name'];
 			}
 		}
 		
-		if($this->request->params['Content']['alias_id']) {
-			if($this->request->params['Site']['id'] != 0 && $this->request->params['Content']['alias_id'] == $this->request->params['Content']['main_site_content_id']) {
-				unset($path[0]);
-			}
-		}
-
 		$url = '/' . implode('/', $path);
 
 		$count = count($path);

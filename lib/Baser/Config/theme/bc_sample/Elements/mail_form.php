@@ -45,6 +45,7 @@ $this->Mail->token();
 		</div>
 	<?php else: ?>
 		<?php echo $this->Mailform->hidden('MailMessage.auth_captcha') ?>
+		<?php echo $this->Mailform->hidden('MailMessage.captcha_id') ?>
 	<?php endif ?>
 <?php endif ?>
 

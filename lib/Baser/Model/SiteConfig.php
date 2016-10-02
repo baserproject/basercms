@@ -155,7 +155,6 @@ class SiteConfig extends AppModel {
  * コンテンツ並び替え順変更時間をリセットする 
  */
 	public function resetContentsSortLastModified() {
-		$siteConfigs = $this->findExpanded();
 		$siteConfigs['contents_sort_last_modified'] = '';
 		$this->saveKeyValue($siteConfigs);
 	}

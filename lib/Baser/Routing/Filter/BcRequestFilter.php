@@ -90,6 +90,7 @@ class BcRequestFilter extends DispatcherFilter {
 		$configs['maintenance'] = array('callback' => array($this, 'isMaintenance'));
 		$configs['update'] = array('callback' => array($this, 'isUpdate'));
 		$configs['page'] = array('callback' => array($this, 'isPage'));
+		$configs['requestview'] = array('callback' => array($this, 'isRequestView'));
 
 		$agents = BcAgent::findAll();
 		foreach ($agents as $agent) {
@@ -186,5 +187,15 @@ class BcRequestFilter extends DispatcherFilter {
 	public function isPage(CakeRequest $request) {
 		return $request->params['controller'] === 'pages'
 			&& $request->params['action'] === 'display';
+	}
+
+/**
+ * baserCMSの基本処理を必要とするかどうか
+ *
+ * @param CakeRequest $request
+ * @return bool
+ */
+	public function isRequestView(CakeRequest $request) {
+		return !(isset($request->query['requestview']) && $request->query['requestview'] === "false");
 	}
 }

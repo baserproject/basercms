@@ -443,10 +443,14 @@ class Page extends AppModel {
 		$siteId = 0;
 		if(!empty($urlAry[0])) {
 			$site = $Site->find('first', ['conditions' => ['Site.name' => $urlAry[0]]]);
-			if($site['Site']['alias']) {
-				$urlAry[0] = $site['Site']['alias'];
+			if($site) {
+				if($site['Site']['alias']) {
+					$urlAry[0] = $site['Site']['alias'];
+				}
+				$siteId = $site['Site']['id'];
+			} else {
+				$siteId = 0;
 			}
-			$siteId = $site['Site']['id'];
 		}
 		
 		if($urlAry[0]) {
@@ -487,11 +491,11 @@ class Page extends AppModel {
 					$ContentFolder->save();
 				}
 			} else {
-				$content = [
+				$content = ['Content' => [
 					'parent_id' => $parentId,
 					'name' => $folderName,
 					'site_id' => $siteId
-				];
+				]];
 				if ($folderTitle == -1) {
 					$content['Content']['title'] = $folderName;
 				} else {
@@ -510,8 +514,6 @@ class Page extends AppModel {
 			$files[1] = array();
 		}
 		foreach ($files[1] as $path) {
-
-			$contents = $page = $pageName = $title = $description = $conditions = $descriptionReg = $titleReg = $pageTagReg = null;
 			if (preg_match('/' . preg_quote(Configure::read('BcApp.templateExt')) . '$/is', $path) == false) {
 				continue;
 			}
@@ -543,7 +545,7 @@ class Page extends AppModel {
 			// PageTagコメントの削除
 			$pageTagReg = '/<\!\-\- BaserPageTagBegin \-\->.*?<\!\-\- BaserPageTagEnd \-\->/is';
 			$contents = preg_replace($pageTagReg, '', $contents);
-
+			$conditions = [];
 			$conditions['Content.name'] = $pageName;
 			if ($contentId) {
 				$conditions['Content.parent_id'] = $contentId;
@@ -572,7 +574,7 @@ class Page extends AppModel {
 					}
 				}
 			} else {
-				$page = array_merge($this->getDefaultValue(), [
+				$page = [
 					'Page' => [
 						'contents' => $contents,
 					],
@@ -581,7 +583,7 @@ class Page extends AppModel {
 						'title' => $title,
 						'description' => $description
 					]
-				]);
+				];
 				$page['Content']['site_id'] = $siteId;
 				if ($contentId) {
 					$page['Content']['parent_id'] = $contentId;

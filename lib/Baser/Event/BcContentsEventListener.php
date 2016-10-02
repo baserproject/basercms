@@ -90,7 +90,12 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 		}
 		$output .= $event->data['out'];
 		if(empty($data['Content']['site_root'])) {
-			$output .= $View->BcForm->button('削除', array('class' => 'button', 'id' => 'BtnDelete'));
+			if($data['Content']['alias_id']) {
+				$deleteText = '削除';
+			} else {
+				$deleteText = 'ゴミ箱へ移動';
+			}
+			$output .= $View->BcForm->button($deleteText, array('class' => 'button', 'id' => 'BtnDelete'));
 		}
 		return $output;
 	}
