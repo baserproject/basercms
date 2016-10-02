@@ -137,6 +137,15 @@ class MaildataHelper extends BcTextHelper {
 				}
 				return $this->dateTimeWareki($value);
 
+			case 'date_time_seireki':
+				if (is_array($value)) {
+					$value = $this->dateTime($value);
+				}
+				if ($value) {
+					return date('Y年 m月 d日', strtotime($value));
+				}
+				return '';
+
 			case 'autozip':
 				if (strlen($value) == 7) {
 					return substr($value, 0, 3) . '-' . substr($value, 3, 7);
