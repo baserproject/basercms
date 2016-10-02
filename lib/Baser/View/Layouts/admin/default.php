@@ -117,8 +117,10 @@
 
 							<?php $this->BcBaser->element('submenu') ?>
 
-							<?php $this->BcBaser->element('help', [], ['cache' => ['key' => '_admin_help_' . @$help]]) ?>
-
+							<?php if(@$help): ?>
+							<?php $this->BcBaser->element('help', [], ['cache' => ['key' => '_admin_help_' . $help]]) ?>
+							<?php endif ?>
+							
 							<?php $this->BcBaser->element('search') ?>
 
 							<?php $this->BcBaser->content() ?>

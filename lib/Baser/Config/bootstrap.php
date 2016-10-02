@@ -241,6 +241,16 @@ if (BC_INSTALLED) {
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
+	// エレメントキャッシュ
+	Cache::config('_cake_element_', array(
+		'engine' => $cacheEngine,
+		'path' => CACHE . 'views',
+		'probability' => 100,
+//		'prefix' => $cachePrefix . 'cake_data_',
+		'lock' => true,
+		'serialize' => ($cacheEngine === 'File'),
+		'duration' => Configure::read('BcCache.viewDuration')
+	));
 	// 環境情報キャッシュ
 	Cache::config('_cake_env_', array(
 		'engine' => $cacheEngine,

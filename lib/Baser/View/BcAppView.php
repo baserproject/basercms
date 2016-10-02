@@ -25,6 +25,13 @@ class BcAppView extends View {
 	public $pageTitle = null;
 
 /**
+ * エレメントキャッシュ
+ * 
+ * @var string
+ */
+	public $elementCache = '_cake_element_';
+
+/**
  * テンプレートファイル一覧出力用
  * デバッグモード２で利用
  * @var array
