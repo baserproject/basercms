@@ -179,7 +179,10 @@ class BcAppController extends Controller {
 		$isRequestView = $request->is('requestview');
 		$isInstall = $request->is('install');
 
-		if(!BC_INSTALLED && !$isInstall) {
+		// インストールされていない場合、トップページにリダイレクトする
+		// コンソールベースのインストールの際のページテンプレート生成において、
+		// BC_INSTALLED、$isInstall ともに true でない為、コンソールの場合は無視する
+		if(!(BC_INSTALLED || isConsole()) && !$isInstall) {
 			$this->redirect('/');
 		}
 		
@@ -209,12 +212,6 @@ class BcAppController extends Controller {
 				$this->siteConfigs = array();
 			}
 
-		} else {
-			if ($isInstall) {
-				if ($this->name == 'CakeError') {
-					//$this->redirect('/');
-				}
-			}
 		}
 
 		// TODO beforeFilterでも定義しているので整理する
