@@ -1560,12 +1560,23 @@ class BcAppController extends Controller {
 
 /**
  * Token の key を取得
+ * CSRF対策のためにフォームのトークンを入手するためのもの
+ * adminと表画面でアクションを分離するために、取得部分を共通化
+ *
+ * @return string
+ */
+	protected function getToken() {
+		return $this->request->params['_Token']['key'];
+	}
+
+/**
+ * admin用Token取得アクション
  *
  * @return string
  */
 	public function admin_ajax_get_token() {
 		$this->autoRender = false;
-		return $this->request->params['_Token']['key'];
+		return $this->getToken();
 	}
 
 /**

@@ -368,14 +368,14 @@ class BlogCommentsController extends BlogAppController {
 	}
 
 /**
- * コメント送信用にAjax経由でトークンを取得する
+ * コメント送信用にAjax経由でトークンを取得するアクション
  */
 	public function get_token() {
 		if (!preg_match('/^' . preg_quote(Configure::read('BcEnv.siteUrl'), '/') . '/', $_SERVER['HTTP_REFERER'])) {
 			$this->notFound();
 		}
-		echo $this->Session->read('_Token.key');
-		exit();
+		$this->autoRender = false;
+		return $this->getToken();
 	}
 
 }
