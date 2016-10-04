@@ -259,7 +259,11 @@ class BcAppController extends Controller {
 
 		// 設定されたサイトURLとリクエストされたサイトURLが違う場合は設定されたサイトにリダイレクト
 		if($isAdmin) {
-			$siteUrl = Configure::read('BcEnv.siteUrl');
+			if($this->request->is('ssl')) {
+				$siteUrl = Configure::read('BcEnv.sslUrl');
+			} else {
+				$siteUrl = Configure::read('BcEnv.siteUrl');				
+			}
 			if($siteUrl && siteUrl() != $siteUrl) {
 				$this->redirect($siteUrl . preg_replace('/^\//', '', Router::reverse($this->request, false)));
 			}

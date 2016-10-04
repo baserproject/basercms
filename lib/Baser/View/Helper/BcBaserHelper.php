@@ -1050,7 +1050,12 @@ class BcBaserHelper extends AppHelper {
 			if (!$ssl && !$admin) {
 				$url = Configure::read('BcEnv.siteUrl') . $_url;
 			} else {
-				$url = Configure::read('BcEnv.sslUrl') . $_url;
+				$sslUrl = Configure::read('BcEnv.sslUrl');
+				if($sslUrl) {
+					$url = $sslUrl . $_url;	
+				} else {
+					$url = '/' . $_url;	
+				}
 			}
 		}
 
