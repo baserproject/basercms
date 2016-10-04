@@ -67,9 +67,18 @@ class ContentsController extends AppController {
 			'named' => [
 				'num'		=> $this->siteConfigs['admin_list_num'],
 				'site_id'	=> 0,
-				'list_type'	=> 1
+				'list_type'	=> 1,
+				'sort'		=> 'id',
+				'direction' => 'asc'
 			]
 		]]);
+		
+		if(empty($this->request->params['named']['sort'])) {
+			$this->request->params['named']['sort'] = $this->passedArgs['sort'];
+		}
+		if(empty($this->request->params['named']['direction'])) {
+			$this->request->params['named']['direction'] = $this->passedArgs['direction'];
+		}
 		
 		$sites = $this->Site->getSiteList();
 		if(!in_array($this->passedArgs['site_id'], array_keys($sites))) {
@@ -94,8 +103,9 @@ class ContentsController extends AppController {
 							break;
 						case 2:
 							$conditions = $this->_createAdminIndexConditionsByTable($currentSiteId, $this->request->data);
+							$sort = 'Content.' . $this->passedArgs['sort'] . ' ' . $this->passedArgs['direction'];
 							$this->paginate = [
-								'order' => ['Content.lft'], 
+								'order' => $sort, 
 								'conditions' => $conditions,
 								'limit' => $this->passedArgs['num'],
 								'recursive' => 0
