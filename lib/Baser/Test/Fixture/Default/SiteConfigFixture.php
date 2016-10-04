@@ -255,6 +255,20 @@ q {}',
 			'value' => 'パソコン',
 			'created' => '2015-01-27 12:58:10',
 			'modified' => '2015-01-27 12:58:25'
+		),
+		array(
+			'id' => '32',
+			'name' => 'use_site_device_setting',
+			'value' => '1',
+			'created' => '2015-01-27 12:58:10',
+			'modified' => '2015-01-27 12:58:25'
+		),
+		array(
+			'id' => '33',
+			'name' => 'use_site_lang_setting',
+			'value' => '0',
+			'created' => '2015-01-27 12:58:10',
+			'modified' => '2015-01-27 12:58:25'
 		)
 	);
 
