@@ -325,6 +325,7 @@ class ThemeFilesController extends AppController {
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));
 		$this->subMenuElements = array('theme_files');
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . DS);
+		$this->set('isWritable', is_writable($fullpath));
 		$this->set('theme', $theme);
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
@@ -654,6 +655,7 @@ class ThemeFilesController extends AppController {
 		$this->crumbs[] = array('name' => $this->_tempalteTypes[$type], 'url' => array('controller' => 'theme_files', 'action' => 'index', $theme, $type));
 		$this->subMenuElements = array('theme_files');
 		$this->set('currentPath', str_replace(ROOT, '', dirname($fullpath)) . '/');
+		$this->set('isWritable', is_writable($fullpath));
 		$this->set('theme', $theme);
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);

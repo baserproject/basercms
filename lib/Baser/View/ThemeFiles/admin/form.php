@@ -20,6 +20,10 @@ $params = explode('/', $path);
 	現在の位置：<?php echo $currentPath ?>
 </div>
 
+<?php if($theme	!= 'core' && !$isWritable): ?>
+<div id="AlertMessage">ファイルに書き込み権限がないので編集できません。</div>
+<?php endif ?>
+
 <?php if ($this->request->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array_merge(array('action' => 'add'), array($theme, $plugin, $type), explode('/', $path)))) ?>
 <?php elseif ($this->request->action == 'admin_edit'): ?>
@@ -79,18 +83,15 @@ $params = explode('/', $path);
 <div class="submit">
 	<?php if ($this->request->action == 'admin_add'): ?>
 		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('class' => 'btn-gray button')); ?>
-	<?php else: ?>
-		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', dirname($path))), array('class' => 'btn-gray button')); ?>
-	<?php endif ?>
-	<?php if ($this->request->action == 'admin_add'): ?>
 		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php elseif ($this->request->action == 'admin_edit'): ?>
-		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-		<?php
-		$this->BcBaser->link('削除', array_merge(array('action' => 'del', $theme, $plugin, $type), $params), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', basename($path)), false
-		)
-		?>
+		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('class' => 'btn-gray button')); ?>
+		<?php if($isWritable): ?>
+			<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+			<?php $this->BcBaser->link('削除', array_merge(array('action' => 'del', $theme, $plugin, $type), $params), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', basename($path)), false) ?>
+		<?php endif ?>	
 	<?php else: ?>
+		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', dirname($path))), array('class' => 'btn-gray button')); ?>
 		<?php // プラグインのアセットの場合はコピーできない ?>
 		<?php if (!$safeModeOn): ?>
 			<?php //if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>
