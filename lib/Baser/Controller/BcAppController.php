@@ -407,10 +407,8 @@ class BcAppController extends Controller {
 			// テーマ、レイアウトとビュー用サブディレクトリの設定
 			$this->setTheme();
 			if (isset($this->request->params['prefix'])) {
-				if ($this->name != 'CakeError') {
-					$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
-					$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
-				}
+				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
+				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
 			}
 			if (!$isAdmin && !empty($this->request->params['Site']['name'])) {
 				$agentSetting = Configure::read('BcAgent.' . $this->request->params['Site']['device']);
