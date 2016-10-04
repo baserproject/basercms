@@ -48,7 +48,7 @@ class ToolsController extends AppController {
  * @var type
  * @access public 
  */
-	public $subMenuElements = array('tools');
+	public $subMenuElements = ['site_configs', 'tools'];
 
 /**
  * ぱんくずナビ
@@ -56,6 +56,7 @@ class ToolsController extends AppController {
  * @var array
  */
 	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'index']],
 		['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
 	];
 

@@ -181,8 +181,6 @@ class SiteConfigsController extends AppController {
 		$this->set(compact(
 				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
-		$Site = ClassRegistry::init('Site');
-		$this->set('useSubSite', (bool) $Site->find('count', ['conditions' => ['Site.status' => true]]));
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
 		$this->help = 'site_configs_form';
@@ -211,8 +209,9 @@ class SiteConfigsController extends AppController {
 		$this->set('datasource', @$datasources[$datasource]);
 		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
-		$this->subMenuElements = ['tools'];
+		$this->subMenuElements = ['site_configs', 'tools'];
 		$this->crumbs = [
+			['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'index']],
 			['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
 		];
 

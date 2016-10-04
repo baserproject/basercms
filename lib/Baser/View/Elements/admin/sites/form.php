@@ -23,6 +23,8 @@ $langs = ['' => '指定しない'];
 foreach($languages as $key => $lang) {
 	$langs[$key] = $lang['name'];
 }
+$useSiteDeviceSetting = @$this->get('siteConfig')['use_site_device_setting'];
+$useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 ?>
 
 
@@ -84,23 +86,43 @@ foreach($languages as $key => $lang) {
 			<?php echo $this->BcForm->error('Site.main_site_id') ?>
 		</td>
 	</tr>
+<?php if($useSiteDeviceSetting || $useSiteLangSetting): ?>
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.device', 'デバイス・言語') ?></th>
 		<td>
-			<p>
-				<small>[デバイス]</small><?php echo $this->BcForm->input('Site.device', array('type' => 'select', 'options' => $devices)) ?>　
-				<small>[言語]</small><?php echo $this->BcForm->input('Site.lang', array('type' => 'select', 'options' => $langs)) ?>
-				<p id="SectionAccessType" style="display:none">
-					<small>[アクセス設定]</small><br>
-					<span id="SpanSiteSameMainUrl"><?php echo $this->BcForm->input('Site.same_main_url', array('type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス')) ?>　</span><br>
-					<span id="SpanSiteAutoRedirect"><?php echo $this->BcForm->input('Site.auto_redirect', array('type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト')) ?>　</span>
-					<span id="SpanSiteAutoLink"><?php echo $this->BcForm->input('Site.auto_link', array('type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する')) ?>　</span>
-				</p>
-			</p>
+			<?php if($useSiteDeviceSetting): ?>
+				<small>[デバイス]</small><?php echo $this->BcForm->input('Site.device', ['type' => 'select', 'options' => $devices]) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。</div>
+			<?php else: ?>
+				<?php echo $this->BcForm->input('Site.device', ['type' => 'hidden']) ?>
+			<?php endif ?>
+			<?php if($useSiteLangSetting): ?>
+				<small>[言語]</small><?php echo $this->BcForm->input('Site.lang', ['type' => 'select', 'options' => $langs]) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。</div>
+			<?php else: ?>
+				<?php echo $this->BcForm->input('Site.lang', ['type' => 'hidden']) ?>
+			<?php endif ?>				
+			<div id="SectionAccessType" style="display:none">
+				<small>[アクセス設定]</small>
+				<br>
+				<span id="SpanSiteSameMainUrl"><?php echo $this->BcForm->input('Site.same_main_url', array('type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス')) ?></span>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">メインサイトと同一URLでアクセスし、デバイス設定や言語設定を判定し、適切なサイトを表示します。このオプションをオフにした場合は、エイリアスを利用した別URLを利用したアクセスとなります。</div>
+				<br>
+				<span id="SpanSiteAutoRedirect"><?php echo $this->BcForm->input('Site.auto_redirect', array('type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト')) ?></span>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">メインサイトと別URLでアクセスする際、デバイス設定や言語設定を判定し、適切なサイトへリダイレクトします。</div>
+				<span id="SpanSiteAutoLink"><?php echo $this->BcForm->input('Site.auto_link', array('type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する')) ?>　</span>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">メインサイトと別URLでアクセスし、エイリアスを利用して同一コンテンツを利用する場合、コンテンツ内の全てのリンクをサブサイト用に変換します。</div>
+			</div>
 			<?php echo $this->BcForm->error('Site.device') ?>
 			<?php echo $this->BcForm->error('Site.lang') ?>
 		</td>
 	</tr>
+<?php endif ?>
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.theme', 'テーマ') ?></th>
 		<td>

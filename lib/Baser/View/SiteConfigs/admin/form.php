@@ -24,7 +24,7 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 
 <?php echo $this->BcForm->create('SiteConfig', ['url' => ['action' => 'form']]) ?>
 <?php echo $this->BcForm->hidden('SiteConfig.id') ?>
-
+<div class="section">
 <table cellpadding="0" cellspacing="0" class="form-table section">
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.formal_name', 'WEBサイト名') ?>&nbsp;<span class="required">*</span></th>
@@ -96,6 +96,7 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 	</tr>
 	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
+</div>
 
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
 
@@ -186,7 +187,6 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 				</div>
 			</td>
 		</tr>
-<?php if($useSubSite): ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.main_site_display_name', 'メインサイト表示名称') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
@@ -196,7 +196,19 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 				<?php echo $this->BcForm->error('SiteConfig.main_site_display_name') ?>
 			</td>
 		</tr>
-<?php endif ?>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.use_site_device_setting', 'デバイス・言語設定') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.use_site_device_setting', ['type' => 'checkbox', 'label' => 'サブサイトでデバイス設定を利用する']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。</div>
+				<?php echo $this->BcForm->input('SiteConfig.use_site_lang_setting', ['type' => 'checkbox', 'label' => 'サブサイトで言語設定を利用する']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。</div>
+				<?php echo $this->BcForm->error('SiteConfig.use_site_device_setting') ?>
+				<?php echo $this->BcForm->error('SiteConfig.use_site_lang_setting') ?>
+			</td>
+		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.maintenance', '公開状態') ?></th>
 			<td class="col-input">
