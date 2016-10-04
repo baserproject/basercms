@@ -121,7 +121,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSetTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
-
+		$this->BcBaser->request = $this->_getRequest('/company');
 		// カテゴリがない場合
 		$this->BcBaser->setTitle('会社案内');
 		$this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
@@ -176,7 +176,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSetCategoryTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
-
+		$this->BcBaser->request = $this->_getRequest('/company');
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
 			array('name' => '会社データ', 'url' => '/company/data')
@@ -265,7 +265,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetTitle() {
 		$topTitle = 'baserCMS inc. [デモ]';
-
+		$this->BcBaser->request = $this->_getRequest('/company');
 		// 通常
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
@@ -367,6 +367,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testTitle() {
 		$topTitle = 'baserCMS inc. [デモ]';
 		$title = '会社データ';
+		$this->BcBaser->request = $this->_getRequest('/company');
 		$this->expectOutputString('<title>' . $title . '｜' . $topTitle . '</title>' . PHP_EOL);
 		$this->BcBaser->setTitle($title);
 		$this->BcBaser->title();
@@ -1438,7 +1439,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function sitemapDataProvider() {
 		return array(
-			array(0, '<li class="menu-content li-level-1"><a href="\/">トップページ<\/a>.*?<\/li>'),
+			array(0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'),
 			array(1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'),
 			array(2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>')
 		);
