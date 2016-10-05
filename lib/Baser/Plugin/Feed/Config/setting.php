@@ -17,7 +17,6 @@ $config['BcApp.adminNavi.feed'] = array(
 	'name' => 'フィードプラグイン',
 	'contents' => array(
 		array('name' => 'フィード設定一覧', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index')),
-		array('name' => 'フィード設定登録', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'add')),
-		array('name' => 'フィードキャッシュ削除', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'delete_cache'), 'options' => array('class' => 'submit-token', 'confirm' => 'フィードキャッシュを削除します。いいですか？'))
+		array('name' => 'フィード設定登録', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'add'))
 	)
 );
