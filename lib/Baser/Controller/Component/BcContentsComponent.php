@@ -194,12 +194,6 @@ class BcContentsComponent extends Component {
 				$crumbs[] = $crumb;
 			}
 		}
-		if(!empty($this->_Controller->request->query['preview'])) {
-			$crumbs[count($crumbs) - 1] = array(
-				'name' => $this->_Controller->request->params['Content']['title'],
-				'url' => $this->_Controller->request->params['Content']['url']
-			);
-		}
 		return $crumbs;
 	}
 
