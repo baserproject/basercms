@@ -84,7 +84,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.eye_catch', 'アイキャッチ画像') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->file('BlogPost.eye_catch', array('imgsize' => 'thumb')) ?>
+				<?php echo $this->BcForm->file('BlogPost.eye_catch', array('imgsize' => 'thumb', 'width' => '300')) ?>
 				<?php echo $this->BcForm->error('BlogPost.eye_catch') ?>
 			</td>
 		</tr>

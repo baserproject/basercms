@@ -1567,7 +1567,9 @@ DOC_END;
 			'title' => '', // タイトル属性
 			'link' => true, // 大きいサイズの画像へのリンク有無
 			'delCheck' => true,
-			'force' => false
+			'force' => false,
+			'width' => '',
+			'height' => ''
 			), $options);
 
 		extract($options);
@@ -1578,6 +1580,8 @@ DOC_END;
 		unset($options['link']);
 		unset($options['delCheck']);
 		unset($options['force']);
+		unset($options['width']);
+		unset($options['height']);
 
 		$linkOptions = array(
 			'imgsize' => $imgsize,
@@ -1585,7 +1589,9 @@ DOC_END;
 			'title' => $title,
 			'link' => $link,
 			'delCheck' => $delCheck,
-			'force' => $force
+			'force' => $force,
+			'width' => $width,
+			'height' => $height
 		);
 
 		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);

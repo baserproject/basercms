@@ -187,6 +187,7 @@ input[type=text], input[type=password] {
 }
 select {
 	font-size: 1.2em;
+    height:2.2em;
 }
 select {
 	padding: 1px;

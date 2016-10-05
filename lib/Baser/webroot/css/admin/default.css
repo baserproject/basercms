@@ -203,9 +203,8 @@ input[type="radio"][disabled]{
 }
 select {
 	font-size: 1.3em!important;
-}
-select {
 	padding: 1px;
+    height:1.8em;
 }
 optgroup option{
 	padding-left:20px;

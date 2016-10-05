@@ -22,12 +22,14 @@ if(empty($this->request->params['Content'])) {
 if($this->request->params['Content']['type'] == 'ContentFolder') {
 	$parentId = $this->request->params['Content']['id'];
 	$title = $this->request->params['Content']['title'];
+	$siteRoot = $this->request->params['Content']['site_root'];
 } else {
 	$parent = $this->BcContents->getParent($this->request->params['Content']['id']);
 	$parentId = $parent['Content']['id'];
 	$title = $parent['Content']['title'];
+	$siteRoot = $parent['Content']['site_root'];
 }
-if(@$parent['Content']['site_root']) {
+if($siteRoot) {
 	return;
 }
 ?>

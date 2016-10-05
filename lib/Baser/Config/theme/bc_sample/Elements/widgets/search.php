@@ -25,12 +25,24 @@ if (!empty($this->passedArgs['num'])) {
 } else {
 	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
 }
+$folders = $this->BcContents->getContentFolderList(0, ['excludeId' => 1]);
+$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+$blogCategories = $BlogCategory->find('list');
 ?>
 
 
 <div class="widget widget-search-box widget-search-box-<?php echo $id ?>">
+	<h2>サイト内検索</h2>
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
-	<?php echo $this->BcForm->input('SearchIndex.q') ?>
+	<?php if($folders): ?>
+		<?php echo $this->BcForm->label('SearchIndex.f', 'カテゴリ') ?><br>
+		<?php echo $this->BcForm->input('SearchIndex.f', ['type' => 'select', 'options' => $folders, 'empty' => '指定しない', 'escape' => false]) ?><br>
+	<?php endif ?>
+	<?php if($blogCategories): ?>
+		<?php echo $this->BcForm->label('SearchIndex.cf', 'ブログカテゴリ') ?><br>
+		<?php echo $this->BcForm->input('SearchIndex.cf', ['type' => 'select', 'options' => $blogCategories, 'empty' => '指定しない', 'escape' => false]) ?><br>
+	<?php endif ?>
+	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => 'キーワード']) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => 0]) ?>
 	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
 	<?php echo $this->BcForm->end() ?>

@@ -263,6 +263,7 @@ class BcManagerComponent extends Component {
 	public function createPageTemplates() {
 		ClassRegistry::flush();
 		$Page = ClassRegistry::init('Page');
+		$Page->searchIndexSaving = false;
 		clearAllCache();
 		$pages = $Page->find('all', ['conditions' => ['Content.alias_id' => null], 'recursive' => 0]);
 		if ($pages) {

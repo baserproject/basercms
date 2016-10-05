@@ -25,6 +25,13 @@ class BcContentsHelper extends AppHelper {
 	public $helpers = ['BcBaser'];
 
 /**
+ * Content Model
+ * 
+ * @var Content
+ */
+	protected $_Content = null;
+	
+/**
  * Constructor.
  *
  * @return	void
@@ -32,9 +39,10 @@ class BcContentsHelper extends AppHelper {
  */
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
+		$this->_Content = ClassRegistry::init('Content');
 		if(BcUtil::isAdminSystem()) {
 			$this->setup();
-		}	
+		}
 	}
 
 /**
@@ -124,10 +132,9 @@ class BcContentsHelper extends AppHelper {
 				}
 			}
 		}
-		$Content = ClassRegistry::init('Content');
-		$Content->Behaviors->unload('SoftDelete');
-		$contents = $Content->find('all', array('fields' => array('plugin', 'type', 'title'), 'conditions' => $conditions, 'recursive' => -1));
-		$Content->Behaviors->load('SoftDelete');
+		$this->_Content->Behaviors->unload('SoftDelete');
+		$contents = $this->_Content->find('all', array('fields' => array('plugin', 'type', 'title'), 'conditions' => $conditions, 'recursive' => -1));
+		$this->_Content->Behaviors->load('SoftDelete');
 		$existContents = [];
 		foreach($contents as $content) {
 			$existContents[$content['Content']['plugin'] . '.' . $content['Content']['type']] = $content['Content']['title'];
@@ -191,8 +198,7 @@ class BcContentsHelper extends AppHelper {
  * @return mixed
  */
 	public function isAllowPublish($data, $self = false) {
-		$Content = ClassRegistry::init('Content');
-		return $Content->isAllowPublish($data, $self);
+		return $this->_Content->isAllowPublish($data, $self);
 	}
 
 /**
@@ -202,8 +208,7 @@ class BcContentsHelper extends AppHelper {
  * @return mixed
  */
 	public function getUrlById($id, $full = false) {
-		$Content = ClassRegistry::init('Content');
-		return $Content->getUrlById($id, $full);
+		return $this->_Content->getUrlById($id, $full);
 	}
 
 /**
@@ -213,8 +218,7 @@ class BcContentsHelper extends AppHelper {
  * @param bool $useSubDomain
  */
 	public function getUrl($url, $full = false, $useSubDomain = false) {
-		$Content = ClassRegistry::init('Content');
-		return $Content->getUrl($url, $full, $useSubDomain);
+		return $this->_Content->getUrl($url, $full, $useSubDomain);
 	}
 
 /**
@@ -268,13 +272,12 @@ class BcContentsHelper extends AppHelper {
 			'type' => '',
 			'order' => ['Content.site_id', 'Content.lft']
 		], $options);
-		$Content = ClassRegistry::init('Content');
-		$conditions = array_merge($Content->getConditionAllowPublish(), ['Content.id' => $id]);
-		$content = $Content->find('first', ['conditions' => $conditions, 'cache' => false]);
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['Content.id' => $id]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'cache' => false]);
 		if (!$content) {
 			return [];
 		}
-		$conditions = array_merge($Content->getConditionAllowPublish(), [
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), [
 			'Content.site_root' => false,
 			'rght <' => $content['Content']['rght'],
 			'lft >' => $content['Content']['lft']
@@ -293,7 +296,7 @@ class BcContentsHelper extends AppHelper {
 			$conditions = array_merge($conditions, $options['conditions']);
 		}
 		// CAUTION CakePHP2系では、fields を指定すると正常なデータが取得できない
-		return $Content->find('threaded', [
+		return $this->_Content->find('threaded', [
 			'order' => $options['order'], 
 			'conditions' => $conditions, 
 			'recursive' => 0,
@@ -308,8 +311,7 @@ class BcContentsHelper extends AppHelper {
  * @return mixed
  */
 	public function getParent($contentId) {
-		$Content = ClassRegistry::init('Content');
-		return $Content->getParentNode($contentId);
+		return $this->_Content->getParentNode($contentId);
 	}
 
 /**
@@ -337,8 +339,7 @@ class BcContentsHelper extends AppHelper {
 		$options = array_merge([
 			'excludeIds' => []
 		], $options);
-		$Content = ClassRegistry::init('Content');
-		$Content->unbindModel(['belongsTo' => ['User']]);
+		$this->_Content->unbindModel(['belongsTo' => ['User']]);
 		if(!$id && !empty($this->request->params['Content'])) {
 			$content = $this->request->params['Content'];
 			if($content['main_site_content_id']) {
@@ -349,7 +350,7 @@ class BcContentsHelper extends AppHelper {
 		} else {
 			return false;
 		}
-		return $Content->getRelatedSiteContents($id, $options);
+		return $this->_Content->getRelatedSiteContents($id, $options);
 	}
 
 /**
@@ -374,6 +375,17 @@ class BcContentsHelper extends AppHelper {
 			}
 		}
 		return $urls;		
+	}
+
+/**
+ * フォルダリストを取得する
+ * 
+ * @param int $siteId
+ * @param array $options
+ * @return array|bool
+ */
+	public function getContentFolderList($siteId = null, $options = array()) {
+		return $this->_Content->getContentFolderList($siteId, $options);
 	}
 	
 }
