@@ -136,6 +136,7 @@ class ContentsController extends AppController {
 		$this->set('sites', $sites);
 		$this->search = 'contents_index';
 		$this->subMenuElements = ['contents'];
+		$this->help = 'contents_index';
 
 	}
 
