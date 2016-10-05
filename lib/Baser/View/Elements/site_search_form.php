@@ -27,7 +27,7 @@ $blogCategories = $BlogCategory->find('list');
 ?>
 
 
-<div class="widget widget-search-box widget-search-box-<?php echo $id ?>">
+<div class="section search-box">
 	<h2>サイト内検索</h2>
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
 	<?php if($folders): ?>
