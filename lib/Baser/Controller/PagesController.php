@@ -243,7 +243,8 @@ class PagesController extends AppController {
  * @return void
  */
 	public function display() {
-		$path = func_get_args();
+		// CUSTOMIZE DELETE 2016/10/05 ryuring
+		// $path = func_get_args();
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
@@ -259,15 +260,12 @@ class PagesController extends AppController {
 				$path[0] = $this->request->params['Site']['name'];
 			}
 		}
-		
-		$url = '/' . implode('/', $path);
 
 		$count = count($path);
 		if (!$count) {
 			$this->redirect('/');
 		}
 		$page = $subpage = $titleForLayout = null;
-
 		if (!empty($path[0])) {
 			$page = $path[0];
 		}
@@ -277,8 +275,6 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$titleForLayout = Inflector::humanize($path[$count - 1]);
 		}
-
-		$this->subMenuElements = array('default');
 		// <<<
 		
 		$this->set(array(
