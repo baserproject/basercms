@@ -212,7 +212,6 @@ class PagesController extends AppController {
  */
 	public function admin_entry_page_files() {
 		$this->_checkSubmitToken();
-		// 現在のテーマの固定ページファイルのパスを取得
 		$pagesPath = APP . 'View' . DS . 'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();

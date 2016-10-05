@@ -428,7 +428,7 @@ class Page extends AppModel {
 		$update = 0;
 		$all = 0;
 
-		// カテゴリの取得・登録
+		// フォルダの取得・登録
 		$folderName = basename($targetPath);
 
 		if ($folderName == 'templates') {
@@ -461,7 +461,6 @@ class Page extends AppModel {
 		
 		$contentId = '';
 		
-		// フォルダー登録
 		if ($folderName != 'Pages') {
 			// カテゴリ名の取得
 			// 標準では設定されてないので、利用する場合は、あらかじめ bootstrap 等で宣言しておく
@@ -507,6 +506,8 @@ class Page extends AppModel {
 					$contentId = $ContentFolder->Content->id;
 				}
 			}
+		} else {
+			$contentId = 1;
 		}
 
 		// ファイル読み込み・ページ登録
