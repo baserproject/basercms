@@ -15,7 +15,6 @@
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->js('admin/pages/edit', false);
-$this->BcBaser->link('&nbsp;', array('action' => 'preview', $previewId), array('style' => 'display:none', 'id' => 'LinkPreview'));
 ?>
 
 

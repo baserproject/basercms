@@ -114,7 +114,6 @@ class PagesController extends AppController {
  * @return void
  */
 	public function admin_edit($id) {
-		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(['action' => 'index']);
@@ -160,25 +159,27 @@ class PagesController extends AppController {
 			}
 		}
 
+		// 公開リンク
+		$publishLink = '';
 		if ($this->request->data['Content']['url']) {
-			$this->set('publishLink', $this->request->data['Content']['url']);
+			$publishLink = $this->request->data['Content']['url'];
 		}
-		
+		// エディタオプション
 		$editorOptions = ['editorDisableDraft' => false];
 		if (!empty($this->siteConfigs['editor_styles'])) {
 			App::uses('CKEditorStyleParser', 'Vendor');
 			$CKEditorStyleParser = new CKEditorStyleParser();
-			$editorStyles = ['default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])];
 			$editorOptions = array_merge($editorOptions, [
 				'editorStylesSet'	=> 'default',
-				'editorStyles' 		=> $editorStyles
+				'editorStyles' 		=> [
+					'default' => $CKEditorStyleParser->parse($this->siteConfigs['editor_styles'])
+				]
 			]);
 		}
-
-		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
-		$this->set('previewId', $this->request->data['Page']['id']);
-		$this->set('users', $this->Page->getControlSource('user_id'));
-		$this->set('editorOptions', $editorOptions);
+		// ページテンプレートリスト
+		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']);
+		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
+		
 		if (!empty($this->request->data['Content']['title'])) {
 			$this->pageTitle = '固定ページ情報編集：' . $this->request->data['Content']['title'];
 		} else {
