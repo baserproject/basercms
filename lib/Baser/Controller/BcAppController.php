@@ -1586,7 +1586,23 @@ class BcAppController extends Controller {
  */
 	protected function _checkSubmitToken() {
 		if(strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' || empty($_POST['_Token']['key']) && empty($_POST['data']['_Token']['key'])) {
-			$this->notFound();
+			throw new NotFoundException();
+		}
+	}
+
+/**
+ * リファラチェックを行う
+ *
+ * @return bool
+ */
+	protected function _checkReferer() {
+		if($this->request->is('ssl')) {
+			$siteUrl = Configure::read('BcEnv.sslUrl');
+		} else {
+			$siteUrl = Configure::read('BcEnv.siteUrl');
+		}
+		if (!preg_match('/^' . preg_quote($siteUrl, '/') . '/', $_SERVER['HTTP_REFERER'])) {
+			throw new NotFoundException();
 		}
 	}
 }

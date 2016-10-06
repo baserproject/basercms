@@ -371,9 +371,7 @@ class BlogCommentsController extends BlogAppController {
  * コメント送信用にAjax経由でトークンを取得するアクション
  */
 	public function get_token() {
-		if (!preg_match('/^' . preg_quote(Configure::read('BcEnv.siteUrl'), '/') . '/', $_SERVER['HTTP_REFERER'])) {
-			$this->notFound();
-		}
+		$this->_checkReferer();
 		$this->autoRender = false;
 		return $this->getToken();
 	}

@@ -298,10 +298,10 @@ class FeedConfigsController extends FeedAppController {
  * @return void
  */
 	public function admin_delete_cache() {
-		$this->_checkSubmitToken();
+		$this->_checkReferer();
 		$this->_clearCache();
 		$this->setMessage('フィードのキャッシュを削除しました。');
-		$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
+		$this->redirect($this->referer());
 	}
 
 /**
