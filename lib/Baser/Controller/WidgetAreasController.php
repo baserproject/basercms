@@ -341,6 +341,26 @@ class WidgetAreasController extends AppController {
 		exit();
 	}
 
+/**
+ * ウィジェットを並び替えた上で取得する
+ *
+ * @param int $id
+ * @return array $widgets
+ * @deprecated 4.1.0 since 4.0.0 BcWidgetAreaHelper::showWidgets() に移行
+ */
+	public function get_widgets($id) {
+		trigger_error(deprecatedMessage('メソッド：WidgetAreaController::get_widgets()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。'), E_USER_DEPRECATED);
+		$widgetArea = $this->WidgetArea->read(null, $id);
+		if (!empty($widgetArea['WidgetArea']['widgets'])) {
+			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
+			usort($widgets, 'widgetSort');
+			return $widgets;
+		} else {
+			return [];
+		}
+	}
+
+
 }
 
 /**
