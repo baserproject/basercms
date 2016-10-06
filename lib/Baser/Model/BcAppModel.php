@@ -1607,4 +1607,23 @@ class BcAppModel extends Model {
 			$results = $results[0];
 		}
 	}
+
+/**
+ * 指定した日付よりも新しい日付かどうかチェックする
+ *
+ * @param $check
+ * @param $target
+ * @return bool
+ * @unittest yet
+ */
+	public function checkDateAfterThan($check, $target) {
+		$check = (is_array($check)) ? current($check) : $check;
+		if(!empty($this->data[$this->alias][$target])) {
+			if(strtotime($check) <= strtotime($this->data[$this->alias][$target])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

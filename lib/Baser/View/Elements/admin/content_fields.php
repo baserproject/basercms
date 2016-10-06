@@ -138,7 +138,7 @@ if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] &
 					<br />
 					<?php echo $this->BcForm->error('Content.self_status') ?>
 					<?php echo $this->BcForm->error('Content.self_publish_begin') ?>
-					<?php echo $this->BcForm->error('Content.self_self_publish_end') ?>
+					<?php echo $this->BcForm->error('Content.self_publish_end') ?>
 					<?php if($this->BcForm->value('Content.status') != $this->BcForm->value('Content.self_status')): ?>
 						<p>※ 親フォルダの設定を継承し非公開状態となっています</p>
 					<?php endif ?>
