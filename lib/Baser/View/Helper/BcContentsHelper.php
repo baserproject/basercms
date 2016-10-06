@@ -283,10 +283,7 @@ class BcContentsHelper extends AppHelper {
 			'lft >' => $content['Content']['lft']
 		]);
 		if ($level) {
-			$level++;
-			if ($content['Content']['site_id'] !== 0) {
-				$level = $level + $content['Content']['level'];
-			}
+			$level = $level + $content['Content']['level'] + 1;
 			$conditions['Content.level <'] = $level;
 		}
 		if(!empty($options['type'])) {
