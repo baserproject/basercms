@@ -41,11 +41,11 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.name', '識別名称') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.name', array('type' => 'input', 'size' => '50', 'autofocus' => true)) ?>
+			<?php echo $this->BcForm->input('Site.name', array('type' => 'input', 'size' => '30', 'autofocus' => true)) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<div class="helptext">サブサイトを特定する事ができる識別名称を入力します。半角英数とハイフン（-）・アンダースコア（_）のみが利用できます。エイリアスを入力しない場合は、URLにも利用されます。</div>
-			　<small>[<?php echo $this->BcForm->label('Site.alias', 'エイリアス') ?>]</small>
-			<?php echo $this->BcForm->input('Site.alias', array('type' => 'input', 'size' => '10')) ?>
+			　<span style="white-space: nowrap;"><small>[<?php echo $this->BcForm->label('Site.alias', 'エイリアス') ?>]</small>
+			<?php echo $this->BcForm->input('Site.alias', array('type' => 'input', 'size' => '10')) ?></span>
 			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<div class="helptext">サブサイトの識別名称とは別のURLにしたい場合、別名を入力する事ができます。エイリアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）が利用できます。</div>
 			<?php echo $this->BcForm->error('Site.name') ?>
