@@ -39,6 +39,9 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
 baserCMS を初めてご利用される場合は次のページをご覧ください。
 
+■ baserCMS公式サイト
+http://basercms.net/
+
 ■ baserCMSとは？
 http://basercms.net/about/index.html
 
@@ -47,6 +50,12 @@ http://basercms.net/about/feature.html
 
 ■ はじめてガイド
 http://basercms.net/about/guide.html
+
+■ baserCMS公式ガイド
+http://wiki.basercms.net/
+
+■ baserCMSメールマガジン
+https://groups.google.com/forum/?fromgroups#!forum/basercms
 
 
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -64,33 +73,42 @@ http://basercms.net/postworks/index
 ━━━━◇◆━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 　◆ ユーザーズコミュニティについて
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━◆◇━━━━
-■ baserCMS公式サイト
-http://basercms.net/
-最新版のダウンロード、利用方法やカスタマイズ方法はこちらから！
+■ baserCMSユーザー会
+http://basercms.net/community
+baserCMSコミュニティの紹介ページです。Let's Join！
 
 ■ baserCMS公式Facebook
 http://www.facebook.com/basercms
-いいね！をクリックして普及にご協力ください！
+いいね！をクリックして普及にご協力ください。
 
 ■ baserCMS公式Twitter
 http://twitter.com/#!/basercms
-TIPSや最新情報をつぶやいてます！ Follow Me！
+TIPSや最新情報をつぶやいてます。Follow Me！
 
 ■ baserCMSの雑談広場（Facebook）
 http://www.facebook.com/groups/308200669249993/
-ちょっとした雑談やつぶやきに！初心者歓迎！
+ちょっとした雑談やつぶやきにどうぞ。初心者歓迎！
+
+■ 各地域のユーザーグループ（Facebook）
+ご自分のエリアのユーザーグループに参加して情報交換しましょう。
+《baserCMS UG 北海道》
+https://www.facebook.com/groups/921458584560227/
+《baserCMS UG 東北》
+https://www.facebook.com/groups/baser.ug.tohoku/
+《baserCMS UG 関東》
+https://www.facebook.com/groups/1421256191506609/
+《baserCMS UG 近畿・中部》
+https://www.facebook.com/groups/576635385808915/
+《baserCMS UG 中国・四国》
+https://www.facebook.com/groups/996045227085786/
+《baserCMS UG 九州北部》
+https://www.facebook.com/groups/785098234940587/
+《baserCMS UG 九州南部》
+現在グループ準備中
 
 ■ baserCMSユーザーズフォーラム
 http://forum.basercms.net/
-不具合や改善報告はこちらよりどうぞ！
-
-■ baserCMSユーザー会
-http://basercms.net/community
-baserCMSコミュニティの紹介ページです。
-
-■ baserCMSメールマガジン
-https://groups.google.com/forum/?fromgroups#!forum/basercms
-baserCMSの最新情報などを発信しています！
+不具合や改善報告はこちらよりどうぞ。
 
 ■ baserCMS開発プロジェクト
 http://project.e-catchup.jp/projects/basercms
