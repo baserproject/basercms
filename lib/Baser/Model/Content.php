@@ -722,10 +722,11 @@ class Content extends AppModel {
 		if(isset($data['Content']['self_status'])) {
 			$data['Content']['status'] = $data['Content']['self_status'];	
 		}
-		if(isset($data['Content']['self_publish_begin'])) {
-			$data['Content']['publish_begin'] = $data['Content']['self_publish_begin'];	
+		// null の場合、isset で判定できないので array_key_exists を利用
+		if(array_key_exists('self_publish_begin', $data['Content'])) {
+			$data['Content']['publish_begin'] = $data['Content']['self_publish_begin'];
 		}
-		if(isset($data['Content']['self_publish_end'])) {
+		if(array_key_exists('self_publish_end', $data['Content'])) {
 			$data['Content']['publish_end'] = $data['Content']['self_publish_end'];
 		}
 		if($data['Content']['parent_id']) {

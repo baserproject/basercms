@@ -1618,7 +1618,7 @@ class BcAppModel extends Model {
  */
 	public function checkDateAfterThan($check, $target) {
 		$check = (is_array($check)) ? current($check) : $check;
-		if(!empty($this->data[$this->alias][$target])) {
+		if($check && !empty($this->data[$this->alias][$target])) {
 			if(strtotime($check) <= strtotime($this->data[$this->alias][$target])) {
 				return false;
 			}
