@@ -17,7 +17,7 @@ $config['BcApp'] = array(
 	// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 	'title' => 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 	// 初期テーマ
-	'defaultTheme' => 'bccolumn',
+	'defaultTheme' => 'bc_sample',
 	// 管理システムテーマ（キャメルケース）
 	'adminTheme' => '',
 	// テンプレートの基本となる拡張子（.php 推奨）
