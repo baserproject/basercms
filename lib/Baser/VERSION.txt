@@ -17,10 +17,11 @@
 CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 
 
-[2016-08-17] basercms-4.0.0-dev
--NEW: [BC]	コンテンツ管理機能を追加、全てのコンテンツをツリー構造で管理できる
+[2016-10-07] basercms-4.0.0
+-NEW: [BC]	fix #12962 PHP７に対応
+-NEW: [BC]	統合コンテンツ管理機能を実装
 	https://github.com/baserproject/basercms-docs/tree/dev-4/機能仕様/コンテンツ管理
--NEW: [BC]	サブサイト管理機能を追加、全てのコンテンツをサブサイトで分けて管理できる
+-NEW: [BC]	サブサイト管理機能を実装
 	https://github.com/baserproject/basercms-docs/tree/dev-4/機能仕様/サブサイト管理
 -NEW: [BC]	エイリアス機能を追加、一つのコンテンツを別のURLで参照する事ができ、レイアウトテンプレートを変更する事ができる。
 	https://github.com/baserproject/basercms-docs/blob/dev-4/機能仕様/コンテンツ管理/エイリアス.md
@@ -29,41 +30,61 @@ CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 -CHG: [BC]	固定ページテンプレートの出力先をテーマフォルダから、app/View/Pages/ に変更
 -CHG: [BC]	固定ページカテゴリ機能の廃止
 -CHG: [BC]	メニュー管理機能の廃止
--CHG: [BC]	モバイル・スマホの設定をシステム基本設定からサブサイト設定に移動
--CHG: [BC]	固定ページのテーブル構造変更
-	・name / page_category_id / title / description / publish_begin / publish_end / author_id / exclude_search / を contents テーブルに移動
-	・linked_page_mobile / linked_pages_smartphone を削除
--CHG: [ML]	メールコンテンツのテーブル構造変更
-	・name / title / layout_template / status を contents テーブルに移動
--CHG: [BG]	ブログコンテンツのテーブル構造変更
-	・name / titlte / layout / status / exclude_search を contents テーブルに移動
-
-《廃止メソッド》 ※ private / protected は除く
-Controller/Component/BcManagerComponent::isCreatedAdminAssetsSymlink()
-Controller/PagesController::mobile_display()
-Controller/PagesController::smartphone_display()
-Controller/PagesController::admin_create_preview()
-Controller/PagesController::admin_preview()
-Controller/PagesController::admin_ajax_update_sort()
-Controller/PagesController::admin_check_agent_page_addable()
-Controller/PagesController::admin_ajax_category_source()
-Controller/PagesController::admin_ajax_unpublish()
-Controller/PagesController::admin_ajax_publish()
-Controller/PagesController::_batch_publish()
-Controller/PagesController::_batch_del()
-Controller/PagesController::_changeStatus()
-Controller/PagesController::checkCurrentEditable()
-Controller/PagesController::admin_ajax_delete()
-Controller/PagesController::admin_add()
-Controller/PagesController::admin_index()
-Controller/PagesController::convertViewUrl()
-Controller/PagesController::getCategorySource()
-View/Helper/BcPageHelper::getCategory()
-View/Helper/BcPageHelper::contentsNaviAvailable()
-Model/Page::getPageUrl()
-Model/Page::pageExists()
-Model/Page::findByUrl()
-Mail.Model/Message::setTablePrefix()
+-NEW: [BC]	fix #7296 コンテンツ管理のソート状態を保持する仕組みを実装
+-NEW: [BC]	fix #14281 コンテンツ一覧でユーザーグループごとにコンテンツのD&Dを制限する機能を追加
+-NEW: [BC]	fix #14169 #14317 コンテンツツリーで生成されるメニューについて、各コンテンツに 表示しないオプションと、blank オプションを追加した
+-NEW: [BC]	fix #12948 サイト間連携リンク作成機能実装
+-NEW: [BC]	エイリアスのサイト間並び替え連携実装
+-NEW: [BC]	fix #12957 表形式のコンテンツ一覧を実装
+-NEW: [BC]	fix #12961 コンテンツの作成日・編集日表示機能実装
+-NEW: [BC]	コンテンツのパンくずを schema.org に対応
+-NEW: [BC]	コンテンツURLのクリップボードコピー機能実装
+-NEW: [BC]	固定ページのコンテンツテンプレートをフォルダ単位で設定できるようにした
+-NEW: [BC]	fix #13844 #13855 スマートフォンの同一URL対応、Varyヘッダ出力対応、スマートフォン別URL時の：canonical属性とalternate属性出力対応
+-NEW: [BC]	fix #14185 ウェブクリップアイコンに対応
+-NEW: [BC]	fix #13327 ショートコード機能実装
+-NEW: [BC]	fix #12963 ダッシュボードAPI実装
+			・プラグインやテーマ内の/Elements/admin/dashboard/ 内にテンプレートを配置すると自動的に読む仕様とした
+			・DB処理等サーバー処理が必要な場合は Ajax を推奨. $.bcDashboard.ajax() を利用
+-NEW: [BC]	fix #12954 階層化ローカルナビゲーションを実装
+-CHG: [BC]	CakePHP-2.8.5 対応
+-CHG: [BC]	jQuery-2.1.4 対応
+-CHG: [BC]	jQueryUI-1.11.4 対応
+-CHG: [BC]	javascript のフォルダ構成を変更
+			外部ライブラリを admin/vendors/ 配下へ
+			baserCMSライブラリを admin/libs/ 配下へ
+-CHG: [BC]	管理画面の表示速度改善
+-CHG: [BC]	fix #9238 テーマのテンプレートに書き込み権限がない場合にアラートを表示した
+-CHG: [BC]	コンテンツの description が空の際にシステム管理の description をplaceholder として表示
+-CHG: [BG]	fix #14138 ブログのコメント入力欄に必須マークがないので調整
+-CHG: [BC]	fix #13894 RewriteBaseの記述が必要なサーバーの為にINSTALL.txt を追加
+-CHG: [BC]	fix #13943 固定ページ/ブログの本文の保存サイズを増加
+-CHG: [BC]	fix #13896 グローバルナビを利用しない時はシステムナビからもそのメニューを消すようにした
+-CHG: [BC]	fix #12949 スマホでメインサイトにアクセスした際、スマホサイトがない場合はリダイレクトしないように調整
+-CHG: [BC]	フロントエンドでビューキャッシュが効いている場合、発行するSQLを0になるよう調整
+-CHG: [BC]	fix #12604 ユーザのパスワードに記号を使えるように調整
+-CHG: [BC]	固定ページのビューキャッシュをコンテンツのビューキャッシュに統合
+			・デフォルトはキャッシュオフ、コンテンツタイプごとに明示的に利用指定をする
+			・BcContentsComponent の setting パラメーター useViewCache で指定
+			・現在は、固定ページ、フォルダ、リンク、ブログで利用
+-CHG: [BC]	スマホ・ケータイ対応をサイト基本設定より、サブサイト設定に移動
+-CHG: [BC]	Configure で管理している BcApp.mobile / BcApp.smartphone を廃止
+			サブサイトのステータスで管理する仕様に変更
+-CHG: [BG]	fix #13339 ブログ記事のプレビュー機能を別ウィンドウで表示できるようにした
+-CHG: [BC]	サイト内検索の仕様を変更
+			サイト内検索の c の category は廃止
+			サイト内検索に f として、folder_id を追加（内包するコンテンツを検索対象にする）
+			サイト内検索に cf として content_filter_id を追加（ブログカテゴリ等に利用）
+-CHG: [BC]	fix #13063 プラグインのテーブルプレフィックスを除外し、DBコネクションを default 一つに統合した
+-BUG: [BC]	fix #3261 スマートフォンでエラーページを表示した場合、エレメントにPC用が適用されてしまう問題を改善
+-BUG: [BG]	fix #14133 ブログ記事を複製した際、カラムがずれる問題を調整。アイキャッチの列は常に表示する仕様とする
+-BUG: [BC]	fix #14173 エラーログをダウンロードする際、存在しない場合はメッセージを表示してzipをダウンロードしない仕様に調整
+-BUG: [BC]	fix #14147 「Google Maps APIのキーが設定されていません。システム管理より設定してください。」のリンク先不具合を調整
+-BUG: [BC]	fix #14080 プラグインを全部オフ時でもルーティングがオンになっていた問題を調整
+-BUG: [BC]	BcForm::dateTimePicker() で、時間を空にするとWarningを表示する問題を改善
+-BUG: [BC]	初期状態で検索インデックス一覧のデータが表示されない不具合を改善
+-BUG: [BG]	Fixes #13614 ブログ概要の文字列をgetPostContentにてカットした時に文字数が合わない問題を改善
+-BUG: [BC]	fix #13482 OSのzipコマンドのパスが違う場合に、プラグインやテーマのアップロードに失敗する問題を改善
 
 
 [2016-05-20] basercms-3.0.10
