@@ -20,13 +20,9 @@ CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 [2016-10-07] basercms-4.0.0
 -NEW: [BC]	fix #12962 PHP７に対応
 -NEW: [BC]	統合コンテンツ管理機能を実装
-	https://github.com/baserproject/basercms-docs/tree/dev-4/機能仕様/コンテンツ管理
 -NEW: [BC]	サブサイト管理機能を実装
-	https://github.com/baserproject/basercms-docs/tree/dev-4/機能仕様/サブサイト管理
 -NEW: [BC]	エイリアス機能を追加、一つのコンテンツを別のURLで参照する事ができ、レイアウトテンプレートを変更する事ができる。
-	https://github.com/baserproject/basercms-docs/blob/dev-4/機能仕様/コンテンツ管理/エイリアス.md
 -NEW: [BC]	リンク機能を追加、外部リンクや内部リンクをメニューに配置する事ができる
-	https://github.com/baserproject/basercms-docs/blob/dev-4/機能仕様/コンテンツ管理/リンク.md
 -CHG: [BC]	固定ページテンプレートの出力先をテーマフォルダから、app/View/Pages/ に変更
 -CHG: [BC]	固定ページカテゴリ機能の廃止
 -CHG: [BC]	メニュー管理機能の廃止
@@ -56,7 +52,6 @@ CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 -CHG: [BC]	管理画面の表示速度改善
 -CHG: [BC]	fix #9238 テーマのテンプレートに書き込み権限がない場合にアラートを表示した
 -CHG: [BC]	コンテンツの description が空の際にシステム管理の description をplaceholder として表示
--CHG: [BG]	fix #14138 ブログのコメント入力欄に必須マークがないので調整
 -CHG: [BC]	fix #13894 RewriteBaseの記述が必要なサーバーの為にINSTALL.txt を追加
 -CHG: [BC]	fix #13943 固定ページ/ブログの本文の保存サイズを増加
 -CHG: [BC]	fix #13896 グローバルナビを利用しない時はシステムナビからもそのメニューを消すようにした
@@ -70,22 +65,22 @@ CHG: 変更内容 / BUG: バグフィックス / NEW: 機能追加
 -CHG: [BC]	スマホ・ケータイ対応をサイト基本設定より、サブサイト設定に移動
 -CHG: [BC]	Configure で管理している BcApp.mobile / BcApp.smartphone を廃止
 			サブサイトのステータスで管理する仕様に変更
--CHG: [BG]	fix #13339 ブログ記事のプレビュー機能を別ウィンドウで表示できるようにした
 -CHG: [BC]	サイト内検索の仕様を変更
 			サイト内検索の c の category は廃止
 			サイト内検索に f として、folder_id を追加（内包するコンテンツを検索対象にする）
 			サイト内検索に cf として content_filter_id を追加（ブログカテゴリ等に利用）
 -CHG: [BC]	fix #13063 プラグインのテーブルプレフィックスを除外し、DBコネクションを default 一つに統合した
+-CHG: [BG]	fix #14138 ブログのコメント入力欄に必須マークがないので調整
+-CHG: [BG]	fix #13339 ブログ記事のプレビュー機能を別ウィンドウで表示できるようにした
 -BUG: [BC]	fix #3261 スマートフォンでエラーページを表示した場合、エレメントにPC用が適用されてしまう問題を改善
--BUG: [BG]	fix #14133 ブログ記事を複製した際、カラムがずれる問題を調整。アイキャッチの列は常に表示する仕様とする
 -BUG: [BC]	fix #14173 エラーログをダウンロードする際、存在しない場合はメッセージを表示してzipをダウンロードしない仕様に調整
 -BUG: [BC]	fix #14147 「Google Maps APIのキーが設定されていません。システム管理より設定してください。」のリンク先不具合を調整
 -BUG: [BC]	fix #14080 プラグインを全部オフ時でもルーティングがオンになっていた問題を調整
 -BUG: [BC]	BcForm::dateTimePicker() で、時間を空にするとWarningを表示する問題を改善
 -BUG: [BC]	初期状態で検索インデックス一覧のデータが表示されない不具合を改善
--BUG: [BG]	Fixes #13614 ブログ概要の文字列をgetPostContentにてカットした時に文字数が合わない問題を改善
 -BUG: [BC]	fix #13482 OSのzipコマンドのパスが違う場合に、プラグインやテーマのアップロードに失敗する問題を改善
-
+-BUG: [BG]	fix #14133 ブログ記事を複製した際、カラムがずれる問題を調整。アイキャッチの列は常に表示する仕様とする
+-BUG: [BG]	Fixes #13614 ブログ概要の文字列をgetPostContentにてカットした時に文字数が合わない問題を改善
 
 [2016-05-20] basercms-3.0.10
 -NEW: [BC]	fix #4690 ファイルアップローダープラグインをコアプラグインとして梱包
