@@ -68,13 +68,13 @@ $(window).load(function() {
 	<?php elseif ($this->request->action == 'admin_edit_folder'): ?>
 		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 		<?php
-		$this->BcBaser->link('削除', array_merge(array('action' => 'del', $theme, $type), $params), array('class' => 'button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('ThemeFolder.name')), false
+		$this->BcBaser->link('削除', array_merge(array('action' => 'del', $theme, $type), $params), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('ThemeFolder.name')), false
 		)
 		?>
 	<?php else: ?>
 		<?php if (!$safeModeOn): ?>
 			<?php if ($theme == 'core'): ?>
-				<?php $this->BcBaser->link('現在のテーマにコピー', array_merge(array('action' => 'copy_folder_to_theme', $theme, $plugin, $type), $params), array('class' => 'btn-red button'), '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
+				<?php $this->BcBaser->link('現在のテーマにコピー', array_merge(array('action' => 'copy_folder_to_theme', $theme, $plugin, $type), $params), array('class' => 'submit-token btn-red button'), '本当に現在のテーマ「' . Inflector::camelize($siteConfig['theme']) . "」にコピーしてもいいですか？\n既に存在するファイルは上書きされます。"); ?>
 			<?php endif; ?>
 		<?php else: ?>
 			機能制限のセーフモードで動作していますので、現在のテーマへのコピーはできません。

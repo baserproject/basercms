@@ -25,31 +25,35 @@ $(function(){
 	}
 	$(".priority").change(function() {
 		var id = this.id.replace('ContentPriority', '');
-		var data = {
-			'data[Content][id]':id,
-			'data[Content][priority]':$(this).val()
-		};
-		$.ajax({
-			type: "POST",
-			url: $("#AjaxChangePriorityUrl").html()+'/'+id,
-			data: data,
-			beforeSend: function() {
-				$("#flashMessage").slideUp();
-				$("#PriorityAjaxLoader"+id).show();
-			},
-			success: function(result){
-				if(!result) {
+		var priority = $(this).val();
+		$.bcToken.check(function(){
+			var data = {
+				'data[Content][id]':id,
+				'data[Content][priority]': priority,
+				'data[_Token][key]': $.bcToken.key
+			};
+			$.ajax({
+				type: "POST",
+				url: $("#AjaxChangePriorityUrl").html()+'/'+id,
+				data: data,
+				beforeSend: function() {
+					$("#flashMessage").slideUp();
+					$("#PriorityAjaxLoader"+id).show();
+				},
+				success: function(result){
+					if(!result) {
+						$("#flashMessage").html('処理中にエラーが発生しました。');
+						$("#flashMessage").slideDown();
+					}
+				},
+				error: function() {
 					$("#flashMessage").html('処理中にエラーが発生しました。');
 					$("#flashMessage").slideDown();
+				},
+				complete: function() {
+					$("#PriorityAjaxLoader"+id).hide();
 				}
-			},
-			error: function() {
-				$("#flashMessage").html('処理中にエラーが発生しました。');
-				$("#flashMessage").slideDown();
-			},
-			complete: function() {
-				$("#PriorityAjaxLoader"+id).hide();
-			}
+			});
 		});
 	});
 	$.baserAjaxDataList.init();
