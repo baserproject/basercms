@@ -195,6 +195,7 @@ class SiteConfigsController extends AppController {
  * キャッシュファイルを全て削除する
  */
 	public function admin_del_cache() {
+		$this->_checkReferer();
 		clearAllCache();
 		$this->setMessage('サーバーキャッシュを削除しました。');
 		$this->redirect($this->referer());
