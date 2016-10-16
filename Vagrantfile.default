@@ -122,6 +122,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"
     chef.json = {
+      :centos => {
+        #シャドウパスワード。デフォルトは「test」
+        #「openssl passwd -1 '(パスワード文字列)'」で出力されたものを記述
+        :testuser_name => 'test',
+        :testuser_password => '$1$yu6a20Nu$8RrSM367EtzGhBwKpwant.'
+      },
+      :postfix => {
+        #デフォルトで「test@example.com」にてメールの送受信を行う
+        #hostsにmyhostnameで記述したホストを登録すれば、メールクライアントからも利用可
+        #(SMTP設定は、認証なしの設定に注意！)
+        :mydomain => 'example.com',
+        :myhostname => 'local.example.com',
+        :mynetworks => 'mynetworks = 192.168.33.0/24, 127.0.0.0/8'
+      },
       :mysql => {
         :password => 'root'
       },
@@ -162,6 +176,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "iptables"
     chef.add_recipe "yum"
     chef.add_recipe "yum-packages"
+    chef.add_recipe "postfix"
     chef.add_recipe "mysql"
     chef.add_recipe "postgres"
     chef.add_recipe "httpd"
