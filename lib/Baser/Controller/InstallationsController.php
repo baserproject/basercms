@@ -85,7 +85,7 @@ class InstallationsController extends AppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-
+		set_time_limit(300);
 		/* インストール状態判別 */
 		if (file_exists(APP . 'Config' . DS . 'database.php')) {
 			ConnectionManager::sourceList();
