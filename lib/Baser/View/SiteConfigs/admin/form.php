@@ -321,6 +321,8 @@ h2 {}
 				<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
 				</div>
 				<div style="margin-bottom: 0.5em;">
+				<!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
+				<input type="password" name="dummypass" style="display: none;">
 				<?php echo $this->BcForm->label('SiteConfig.smtp_password', 'パスワード') ?>
 				<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
 				<?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>
