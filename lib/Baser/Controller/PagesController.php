@@ -587,8 +587,14 @@ class PagesController extends AppController {
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
 		$agentAlias = Configure::read('BcRequest.agentAlias');
+		$agent = Configure::read('BcRequest.agent');
+
 		if ($agentAlias) {
-			$checkUrl = '/' . $agentAlias . $url;
+			if($agent && $this->siteConfigs['linked_pages_' . $agent]) {
+				$checkUrl = $url;
+			} else {
+				$checkUrl = '/' . $agentAlias . $url;
+			}
 		} else {
 			$checkUrl = $url;
 		}
