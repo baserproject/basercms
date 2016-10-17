@@ -1602,7 +1602,6 @@ class BcAppController extends Controller {
 			'permissions' => array('admin_ajax_delete', 'admin_delete', 'admin_ajax_copy', 'admin_ajax_unpublish', 'admin_ajax_publish'),
 			'plugins' => array('admin_ajax_delete_file', 'admin_ajax_delete'),
 			'search_indices' => array('admin_ajax_delete'),
-			'site_configs' => array('admin_del_cache'),
 			'theme_files' => array('admin_del', 'admin_ajax_del', 'admin_copy_to_theme', 'admin_copy_folder_to_theme'),
 			'themes' => array('admin_reset_data', 'admin_ajax_copy', 'admin_ajax_delete', 'admin_del', 'admin_apply'),
 			'user_groups' => array('admin_ajax_delete', 'admin_delete', 'admin_ajax_copy'),
@@ -1613,7 +1612,7 @@ class BcAppController extends Controller {
 			'blog_contents' => array('admin_ajax_delete', 'admin_delete', 'admin_ajax_copy'),
 			'blog_posts' => array('admin_ajax_delete', 'admin_delete', 'admin_ajax_unpublish', 'admin_ajax_publish', 'admin_ajax_copy'),
 			'blog_tags' => array('admin_delete', 'admin_ajax_delete'),
-			'feed_configs' => array('admin_ajax_delete', 'admin_delete', 'admin_delete_cache'),
+			'feed_configs' => array('admin_ajax_delete', 'admin_delete'),
 			'feed_details' => array('admin_ajax_delete', 'admin_delete'),
 			'mail_contents' => array('admin_ajax_delete', 'admin_delete', 'admin_ajax_copy'),
 			'mail_fields' => array('admin_ajax_delete', 'admin_delete', 'admin_ajax_copy', 'admin_ajax_unpublish', 'admin_ajax_publish'),
@@ -1638,5 +1637,19 @@ class BcAppController extends Controller {
 		}
 	}
 
-
+/**
+ * リファラチェックを行う
+ *
+ * @return bool
+ */
+	protected function _checkReferer() {
+		if($this->request->is('ssl')) {
+			$siteUrl = Configure::read('BcEnv.sslUrl');
+		} else {
+			$siteUrl = Configure::read('BcEnv.siteUrl');
+		}
+		if (!preg_match('/^' . preg_quote($siteUrl, '/') . '/', $_SERVER['HTTP_REFERER'])) {
+			throw new NotFoundException();
+		}
+	}
 }
