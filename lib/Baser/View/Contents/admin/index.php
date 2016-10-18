@@ -18,7 +18,8 @@ $this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
 $this->BcBaser->js('admin/contents/index', false, [
 	'id' => 'AdminContentsIndexScript',
 	'data-isAdmin' => BcUtil::isAdminUser(),
-	'data-isUseMoveContents' => (bool) $currentUser['UserGroup']['use_move_contents']
+	'data-isUseMoveContents' => (bool) $currentUser['UserGroup']['use_move_contents'],
+	'data-adminPrefix' => Configure::read('BcAuthPrefix.admin.alias')
 ]);
 $this->BcBaser->js('admin/libs/jquery.bcTree', false);
 $this->BcBaser->js(array(
