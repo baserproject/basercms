@@ -835,6 +835,8 @@ class BcAppModel extends Model {
 		));
 
 		// 全てのデータを更新
+		$dataSource = $this->getDataSource();
+		$dataSource->begin();
 		foreach ($datas as $data) {
 			if ($data[$this->alias]['sort'] == $currentSort) {
 				$data[$this->alias]['sort'] = $targetSort;
@@ -846,9 +848,11 @@ class BcAppModel extends Model {
 				}
 			}
 			if (!$this->save($data, false)) {
+				$dataSource->rollback();
 				return false;
 			}
 		}
+		$dataSource->commit();
 
 		return true;
 	}
