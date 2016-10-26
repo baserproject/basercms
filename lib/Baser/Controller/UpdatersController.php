@@ -18,6 +18,7 @@
  * アップデーターコントローラー
  * 
  * @package	Baser.Controller
+ * @property BcManagerComponent $BcManager
  */
 class UpdatersController extends AppController {
 
@@ -43,7 +44,7 @@ class UpdatersController extends AppController {
  * @var array
  * @access public
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
 
 /**
  * ヘルパー
@@ -465,6 +466,8 @@ class UpdatersController extends AppController {
 		} else {
 			$result = true;
 		}
+
+		$this->BcManager->deployAdminAssets();
 
 		$this->setUpdateLog($name . ' ' . $targetVersion . ' へのアップデートが完了しました。');
 
