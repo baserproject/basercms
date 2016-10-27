@@ -156,9 +156,7 @@ class MailContentsController extends MailAppController {
 			if ($this->MailContent->validates()) {
 				if ($this->MailContent->save(null, false)) {
 					$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
-					if ($this->request->data['MailContent']['edit_layout']) {
-						$this->redirectEditLayout($this->request->data['MailContent']['layout_template']);
-					} elseif ($this->request->data['MailContent']['edit_mail_form']) {
+					if ($this->request->data['MailContent']['edit_mail_form']) {
 						$this->redirectEditForm($this->request->data['MailContent']['form_template']);
 					} elseif ($this->request->data['MailContent']['edit_mail']) {
 						$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
@@ -198,33 +196,6 @@ class MailContentsController extends MailAppController {
 			return true;
 		}
 		return false;
-	}
-
-/**
- * レイアウト編集画面にリダイレクトする
- * 
- * @param string $template
- * @return void
- */
-	public function redirectEditLayout($template) {
-		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
-		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
-			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext);
-		if ($this->siteConfigs['theme']) {
-			if (!file_exists($target)) {
-				foreach ($sorces as $source) {
-					if (file_exists($source)) {
-						copy($source, $target);
-						chmod($target, 0666);
-						break;
-					}
-				}
-			}
-			$this->redirect(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'Layouts', $template . $this->ext));
-		} else {
-			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
-			$this->redirect(array('action' => 'index'));
-		}
 	}
 
 /**
