@@ -303,7 +303,7 @@ class BcAppController extends Controller {
 				}
 			}
 		}
-
+		//$this->Security->validatePost = false;
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
 
@@ -1596,12 +1596,12 @@ class BcAppController extends Controller {
  * @return bool
  */
 	protected function _checkReferer() {
-		if($this->request->is('ssl')) {
-			$siteUrl = Configure::read('BcEnv.sslUrl');
-		} else {
-			$siteUrl = Configure::read('BcEnv.siteUrl');
+		$siteDomain = BcUtil::getFullDomain();
+		if(empty($_SERVER['HTTP_REFERER'])) {
+			return;
 		}
-		if (!preg_match('/^' . preg_quote($siteUrl, '/') . '/', $_SERVER['HTTP_REFERER'])) {
+		$refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
+		if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
 			throw new NotFoundException();
 		}
 	}

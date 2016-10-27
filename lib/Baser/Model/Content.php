@@ -1055,8 +1055,16 @@ class Content extends AppModel {
 			if($full) {
 				$fullUrl = fullUrl($originUrl);
 				if (BcUtil::isAdminSystem()) {
-					$furllUrlArray = explode('//', $fullUrl);
-					return $furllUrlArray[0] . '//' . $subDomain . '.' . $furllUrlArray[1];
+					$domainType = BcSite::getDomainType($useSubDomain, $subDomain);
+					if($domainType == 1) {
+						$fullUrlArray = explode('//', $fullUrl);
+						return $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
+					} elseif($domainType == 2) {
+						$fullUrlArray = explode('//', $fullUrl);
+						$urlArray = explode('/', $fullUrlArray[1]);
+						unset($urlArray[0]);
+						return $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
+					}
 				} else {
 					return $fullUrl;
 				}

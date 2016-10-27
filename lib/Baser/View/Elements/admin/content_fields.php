@@ -15,6 +15,12 @@
  */
 $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
 unset($urlArray[count($urlArray) -1]);
+if($this->request->data['Site']['use_subdomain']) {
+	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
+	unset($urlArray[0]);
+} else {
+	$host = $this->BcContents->getUrl('/', true, $this->request->data['Site']['use_subdomain']);
+}
 $checkUrl = '/';
 $Content = ClassRegistry::init('Content');
 foreach($urlArray as $key => $value) {
@@ -26,7 +32,7 @@ $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
-$baseUrl = $this->BcContents->getUrl('/', true, $this->request->data['Site']['use_subdomain']) . $baseUrl;
+$baseUrl = $host . $baseUrl;
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['name'], $this->request->data['Site']['alias']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),

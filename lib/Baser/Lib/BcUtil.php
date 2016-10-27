@@ -351,11 +351,7 @@ class BcUtil extends Object {
 		if(strpos($_SERVER['HTTP_HOST'], '.') === false) {
 			return '';
 		}
-		$mainUrlInfo = parse_url(Configure::read('BcEnv.siteUrl'));
-		$host = $mainUrlInfo['host'];
-		if(!empty($mainUrlInfo['port'])) {
-			$host .= ':' . $mainUrlInfo['port'];
-		}
+		$host = BcUtil::getMainFullDomain();
 		if($_SERVER['HTTP_HOST'] == $host) {
 			return '';
 		}
@@ -369,4 +365,22 @@ class BcUtil extends Object {
 		return '';
 
 	}
+	
+	public static function getDomain($url) {
+		$mainUrlInfo = parse_url($url);
+		$host = $mainUrlInfo['host'];
+		if(!empty($mainUrlInfo['port'])) {
+			$host .= ':' . $mainUrlInfo['port'];
+		}
+		return $host;
+	}
+	
+	public static function getMainFullDomain() {
+		return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
+	}
+	
+	public static function getFullDomain() {
+		return $_SERVER['HTTP_HOST'];
+	}
+	
 }

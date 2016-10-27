@@ -171,6 +171,7 @@ class Site extends AppModel {
 			'theme' => $siteConfigs['theme'],
 			'status' => !$siteConfigs['maintenance'],
 			'use_subdomain' => false,
+			'domain_type' => false,
 			'relate_main_site' => null,
 			'device' => null,
 			'same_main_url' => false,

@@ -192,7 +192,7 @@ class BcAppHelper extends Helper {
 		} else {
 			if(!BcUtil::isAdminSystem() && !is_array($url) && !empty($this->request->params['Content'])) {
 				$Content = ClassRegistry::init('Content');
-				$url = $Content->getUrl($url, $full, $this->_View->request->params['Site']['use_subdomain']);
+				$url = $Content->getUrl($url, $full, @$this->_View->request->params['Site']['domain_type']);
 			} else {
 				$url = parent::url($url, $full);
 			}

@@ -82,6 +82,10 @@ class BcSite {
  * @var int
  */
 	public $mainSiteId;
+	
+	public $useSubDomain;
+	
+	public $domainType;
 
 /**
  * コンストラクタ
@@ -115,6 +119,23 @@ class BcSite {
 		$this->autoRedirect = $config['auto_redirect'];
 		$this->autoLink = $config['auto_link'];
 		$this->mainSiteId = $config['main_site_id'];
+		$this->useSubDomain = $config['use_subdomain'];
+		$this->domainType = BcSite::getDomainType($this->useSubDomain, $this->alias);
+	}
+	
+	public static function getDomainType($useSubDomain, $alias) {
+		if($useSubDomain) {
+			if(BcUtil::getSubDomain() == $alias) {
+				$domainType = 1;
+			} elseif(BcUtil::getMainFullDomain() != $alias) {
+				$domainType = 2;
+			} else {
+				$domainType = 0;
+			}
+		} else {
+			$domainType = 0;
+		}
+		return $domainType;
 	}
 
 /**
@@ -137,8 +158,16 @@ class BcSite {
 		$currentSite = null;
 		foreach($sites as $site) {
 			if($site->alias) {
+				$domainKey = '';
+				if($site->useSubDomain) {
+					if($site->domainType == 1) {
+						$domainKey = BcUtil::getSubDomain() . '/';
+					} elseif($site->domainType == 2) {
+						$domainKey = BcUtil::getFullDomain() . '/';
+					}
+				}
 				$regex = '/^' . preg_quote($site->alias, '/') . '\//';
-				if (preg_match($regex, $url)) {
+				if (preg_match($regex, $domainKey . $url)) {
 					$currentSite = $site;
 					break;
 				}
@@ -243,6 +272,16 @@ class BcSite {
 			self::$_sites[] = new self($site['Site']['name'], $site['Site']);
 		}
 		return self::$_sites;
+	}
+	
+	public static function findById($id) {
+		$sites = self::findAll();
+		foreach($sites as $site) {
+			if($id == $site->id) {
+				return $site;
+			}
+		}
+		return null;
 	}
 
 /**
