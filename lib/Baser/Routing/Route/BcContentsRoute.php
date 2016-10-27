@@ -205,6 +205,12 @@ class BcContentsRoute extends CakeRoute {
 			if($plugin == 'Core') {
 				$plugin = '';
 			}
+			$controllerClass = Inflector::camelize($viewParams['controller']) . 'Controller';
+			App::uses($controllerClass, ($plugin)? $plugin . '.Controller' : 'Controller');
+			$methods = get_class_methods($controllerClass);
+			if(!in_array($action, $methods)) {
+				return false;
+			}
 			$params = [
 				'plugin' => Inflector::underscore($plugin),
 				'controller' => $viewParams['controller'],
@@ -252,6 +258,7 @@ class BcContentsRoute extends CakeRoute {
  * @return mixed either false or a string URL.
  */
 	public function match($url) {
+		
 		// フロント以外のURLの場合にマッチしない
 		if(!empty($url['admin'])) {
 			return false;
@@ -293,6 +300,11 @@ class BcContentsRoute extends CakeRoute {
 		if(isset($url['entityId'])) {
 			$entityId = $url['entityId'];
 			unset($params['entityId']);
+		} else {
+			$request = Router::getRequest(true);
+			if($request->params['entityId']) {
+				$entityId = $request->params['entityId'];
+			}
 		}
 
 		// コンテンツ確定、できなければスルー
@@ -304,6 +316,10 @@ class BcContentsRoute extends CakeRoute {
 		
 		// URL生成
 		$strUrl = $content['Content']['url'];
+		$site = BcSite::findCurrent();
+		if($site->useSubDomain) {
+			$strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);
+		}
 		$pass = [];
 		$named = [];
 		$setting = Configure::read('BcContents.items.' . $plugin . '.' . $type);

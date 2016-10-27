@@ -10,6 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
+App::uses('MailAppController', 'Mail.Controller');
+
 /**
  * お問い合わせメールフォーム用コントローラー
  *
