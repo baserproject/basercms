@@ -31,7 +31,7 @@ if ($this->request->params['Site']['alias']) {
 
 		<h4 class="contents-head">コメントを送る</h4>
 
-		<?php echo $this->BcForm->create('BlogComment', array('url' => $prefix . '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
+		<?php echo $this->BcForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 		<?php echo $this->BcForm->input('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 		
 		<table cellpadding="0" cellspacing="0" class="row-table-01">
