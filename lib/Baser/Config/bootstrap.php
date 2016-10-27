@@ -45,6 +45,7 @@ App::build(array(
 //新規登録
 App::build(array(
 	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+	'Routing'					=> array(BASER . 'Routing' . DS),
 	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
 	'Routing/Route'				=> array(BASER . 'Routing' . DS . 'Route' . DS),
 	'Configure'					=> array(BASER . 'Configure' . DS),

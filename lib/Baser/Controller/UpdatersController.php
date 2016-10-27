@@ -38,7 +38,7 @@ class UpdatersController extends AppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
 
 /**
  * ヘルパー
@@ -425,9 +425,12 @@ class UpdatersController extends AppController {
 			asort($updaters);
 			foreach ($updaters as $version => $updateVerPoint) {
 				$this->setUpdateLog('アップデートプログラム ' . $version . ' を実行します。');
+				ClassRegistry::flush();
 				$this->_execScript($plugin, $version);
 			}
 		}
+
+		ClassRegistry::flush();
 
 		if (!isset($updaters['test'])) {
 			if (!$plugin) {
@@ -450,7 +453,9 @@ class UpdatersController extends AppController {
 		} else {
 			$result = true;
 		}
-
+		
+		$this->BcManager->deployAdminAssets();
+		
 		$this->setUpdateLog($name . ' ' . $targetVersion . ' へのアップデートが完了しました。');
 
 		return $result;

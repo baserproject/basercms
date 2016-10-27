@@ -244,10 +244,10 @@ class BcPageHelperTest extends BaserTestCase {
 		return array(
 			array('/company', '', array('overCategory' => false), false), // PC
 			array('/company', '前のページへ', array('overCategory' => false), false), // PC
-			array('/about', '', array('overCategory' => true), '<a href="/index" class="prev-link">≪ トップページ</a>'), // PC
-			array('/about', '前のページへ', array('overCategory' => true), '<a href="/index" class="prev-link">前のページへ</a>'), // PC
-			array('/s/about', '', array('overCategory' => false), '<a href="/s/index" class="prev-link">≪ トップページ</a>'), // smartphone
-			array('/s/about', '前のページへ', array('overCategory' => false), '<a href="/s/index" class="prev-link">前のページへ</a>'), // smartphone
+			array('/about', '', array('overCategory' => true), '<a href="/" class="prev-link">≪ トップページ</a>'), // PC
+			array('/about', '前のページへ', array('overCategory' => true), '<a href="/" class="prev-link">前のページへ</a>'), // PC
+			array('/s/about', '', array('overCategory' => false), '<a href="/s/" class="prev-link">≪ トップページ</a>'), // smartphone
+			array('/s/about', '前のページへ', array('overCategory' => false), '<a href="/s/" class="prev-link">前のページへ</a>'), // smartphone
 			array('/s/sitemap', '', array('overCategory' => true), '<a href="/s/icons" class="prev-link">≪ アイコンの使い方</a>'), // smartphone
 			array('/s/sitemap', '前のページへ', array('overCategory' => true), '<a href="/s/icons" class="prev-link">前のページへ</a>'), // smartphone
 		);

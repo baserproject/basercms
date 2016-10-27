@@ -40,7 +40,7 @@ class BcContentsRoute extends CakeRoute {
 
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
-		if(!empty($request->query['preview'])) {
+		if(!empty($request->query['preview']) || !empty($request->query['force'])) {
 			$publish = false;
 		}
 
@@ -66,7 +66,7 @@ class BcContentsRoute extends CakeRoute {
 		}
 
 		// データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
-		if(!empty($request->query['preview']) &&  !BcUtil::isAdminUser()) {
+		if((!empty($request->query['preview']) || !empty($request->query['force'])) &&  !BcUtil::isAdminUser()) {
 			$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
 			header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
 			exit();
@@ -108,16 +108,26 @@ class BcContentsRoute extends CakeRoute {
 		if($extend) {
 			$params = explode('/', $url);
 			$condUrls = [];
+			if($subDomain) {
+				$condUrls[] = '/' . implode('/', $params);
+			} else {
+				$condUrls[] = '/' . implode('/', $params);
+			}
 			$count = count($params);
-			for ($i = $count; $i > 0; $i--) {
-				unset($params[$i]);
+			for ($i = $count; $i > 1; $i--) {
+				unset($params[$i - 1]);
+				$path = implode('/', $params);
 				if($subDomain) {
-					$condUrls[] = '/' . $subDomain . '/' . implode('/', $params);
+					$condUrls[] = '/' . $subDomain . '/' . $path . '/';
+					$condUrls[] = '/' . $subDomain . '/' . $path;
 				} else {
-					$condUrls[] = '/' . implode('/', $params);
+					$condUrls[] = '/' . $path . '/';
+					$condUrls[] = '/' . $path;
 				}
 			}
+			// 固定ページはURL拡張はしない
 			$conditions = [
+				'Content.type <>' => 'Page',
 				'Content.url' => $condUrls,
 				'or' => [
 					['Site.status' => true],
@@ -137,6 +147,12 @@ class BcContentsRoute extends CakeRoute {
 			$conditions = $conditions + $Content->getConditionAllowPublish();
 		}
 		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
+		if(!$content) {
+			return false;
+		}
+		if($extend && $content['Content']['type'] == 'ContentFolder') {
+			return false;
+		}
 		if($content && empty($content['Site']['id'])) {
 			$content['Site'] = $Content->Site->getRootMain()['Site'];
 		}
@@ -164,6 +180,7 @@ class BcContentsRoute extends CakeRoute {
 			];
 		} else {
 			$pass = [];
+			$named = [];
 			$action = $viewParams['action'];
 			if($type == 'Page') {
 				$url = preg_replace('/^\//', '', $entryUrl);
@@ -175,7 +192,14 @@ class BcContentsRoute extends CakeRoute {
 				$action = $urlAry[0];
 				array_shift($urlAry);
 				if($urlAry) {
-					$pass = $urlAry;
+					foreach($urlAry as $param) {
+						if(strpos($param, ':') !== false) {
+							list($key, $value) = explode(':', $param);
+							$named[$key] = $value;
+						} else {
+							$pass[] = $param;
+						}
+					}
 				}
 			}
 			if($plugin == 'Core') {
@@ -186,6 +210,7 @@ class BcContentsRoute extends CakeRoute {
 				'controller' => $viewParams['controller'],
 				'action' => $action,
 				'pass' => $pass,
+				'named' => $named,
 				'entityId' => $entityId
 			];
 		}
@@ -209,10 +234,8 @@ class BcContentsRoute extends CakeRoute {
 		}
 		if(preg_match('/\/$/', $paths[0])) {
 			$paths[] = $paths[0] . 'index';
-			$paths[] = preg_replace('/\/$/', '', $paths[0]);
 		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
 			$paths[] = $matches[1];
-			$paths[] = preg_replace('/\/$/', '', $matches[1]);
 		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
 			$paths[] = $matches[1];
 			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
@@ -225,43 +248,128 @@ class BcContentsRoute extends CakeRoute {
 /**
  * Reverse route
  *
- * TODO ryuring リバースルーティングについて pass や named を付加できていない為
- * 途中までの処理をコメントアウトとして残す
- *
  * @param array $url Array of parameters to convert to a string.
  * @return mixed either false or a string URL.
  */
-//	public function match($url) {
-//		$request = Router::getRequest();
-//		$plugin = $request->params['plugin'];
-//		if(!$plugin) {
-//			$plugin = 'Core';
-//		} else {
-//			$plugin = Inflector::camelize($plugin);
-//		}
-//
-//		$viewParams = Configure::read('BcContents.items.' . $plugin);
-//		$type = '';
-//		foreach($viewParams as $type => $param) {
-//			if(empty($param['routes']['view'])) {
-//				continue;
-//			}
-//			$viewParam = $param['routes']['view'];
-//			if($plugin == $type && $url['controller'] == $viewParam['controller'] && $url['action'] == $viewParam['action']) {
-//				$type = $key;
-//				break;
-//			}
-//		}
-//		if(!$type) {
-//			return false;
-//		}
-//		$Content = ClassRegistry::init('Content');
-//		$entryId = null;
-//		if(!empty($request->params['entityId'])) {
-//			$entryId = $request->params['entityId'];
-//		}
-//		$content = $Content->findByType($plugin . '.' . $type, $entryId);
-//		$result = $content['Content']['url'];
-//		return $result;
-//	}
+	public function match($url) {
+		// フロント以外のURLの場合にマッチしない
+		if(!empty($url['admin'])) {
+			return false;
+		}
+		
+		// プラグイン確定
+		if(empty($url['plugin'])) {
+			$plugin = 'Core';
+		} else {
+			$plugin = Inflector::camelize($url['plugin']);
+		}
+
+		// アクション確定
+		if(!empty($url['action'])) {
+			$action = $url['action'];
+		} else {
+			$action = 'index';
+		}
+
+		$params = $url;
+		unset($params['plugin']);
+		unset($params['controller']);
+		unset($params['action']);
+		unset($params['entityId']);
+
+		// コンテンツタイプ確定、できなければスルー
+		$type = $this->_getContentTypeByParams($url);
+		if($type) {
+			unset($params['action']);
+		} else {
+			$type = $this->_getContentTypeByParams($url, false);
+		}
+		if(!$type) {
+			return false;
+		}
+
+		// エンティティID確定
+		$entityId = null;
+		if(isset($url['entityId'])) {
+			$entityId = $url['entityId'];
+			unset($params['entityId']);
+		}
+
+		// コンテンツ確定、できなければスルー
+		$Content = ClassRegistry::init('Content');
+		$content = $Content->findByType($plugin . '.' . $type, $entityId);
+		if(!$content) {
+			return false;
+		}
+		
+		// URL生成
+		$strUrl = $content['Content']['url'];
+		$pass = [];
+		$named = [];
+		$setting = Configure::read('BcContents.items.' . $plugin . '.' . $type);
+		if(!$params) {
+			if(empty($setting['omitViewAction']) && $setting['routes']['view']['action'] != $action) {
+				$strUrl .= '/' . $action;
+			}
+		} else {
+			if(empty($setting['omitViewAction'])) {
+				$strUrl .= '/' . $action;
+			}
+			foreach($params as $key => $param) {
+				if(!is_numeric($key)) {
+					if($key == 'page' && !$param) {
+						$param = 1;
+					}
+					if(!is_array($param)) {
+						$named[] = $key . ':' . $param;	
+					}
+				} else {
+					$pass[] = $param;
+				}
+			}
+		}
+		if($pass) {
+			$strUrl .= '/' . implode('/', $pass);
+		}
+		if($named) {
+			$strUrl .= '/' . implode('/', $named);
+		}
+		return $strUrl;
+	}
+
+/**
+ * パラメーターよりコンテンツタイプを取得する
+ *
+ * @param array $params パラメーター
+ * @param bool $useAction アクションを判定に入れるかどうか
+ * @return bool|string
+ */
+	protected function _getContentTypeByParams($params, $useAction = true) {
+		if(empty($params['plugin'])) {
+			$plugin = 'Core';
+		} else {
+			$plugin = Inflector::camelize($params['plugin']);
+		}
+		$settings = Configure::read('BcContents.items.' . $plugin);
+		if(!$settings) {
+			return false;
+		}
+		foreach($settings as $key => $setting) {
+			if(empty($setting['routes']['view'])) {
+				continue;
+			}
+			$viewParams = $setting['routes']['view'];
+			if($useAction) {
+				if($params['controller'] == $viewParams['controller'] && $params['action'] == $viewParams['action']) {
+					return $key;
+				}
+			} else {
+				if($params['controller'] == $viewParams['controller']) {
+					return $key;
+				}
+			}
+		}
+		return false;
+	}
+
 }

@@ -9,10 +9,6 @@
 if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
-$prefix = '';
-if ($this->request->params['Site']['alias']) {
-	$prefix = '/' . $this->request->params['Site']['alias'];
-}
 ?>
 
 
@@ -44,7 +40,7 @@ if ($this->request->params['Site']['alias']) {
 					</li>
 				<?php else: ?>
 					<li<?php echo $class ?>>
-						<?php $this->BcBaser->link($globalMenu['Content']['title'], $prefix . $globalMenu['Content']['url']) ?>
+						<?php $this->BcBaser->link($globalMenu['Content']['title'], $globalMenu['Content']['url']) ?>
 					</li>
 				<?php endif ?>
 			<?php endif ?>

@@ -244,7 +244,7 @@ class PagesController extends AppController {
  */
 	public function display() {
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
-		// $path = func_get_args();
+		 $path = func_get_args();
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>

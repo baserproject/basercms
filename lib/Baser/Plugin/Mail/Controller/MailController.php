@@ -211,26 +211,6 @@ class MailController extends MailAppController {
 	}
 
 /**
- * [MOBILE] フォームを表示する
- *
- * @param mixed mail_content_id
- * @return void
- */
-	public function mobile_index($id = null) {
-		$this->setAction('index', $id);
-	}
-
-/**
- * [SMARTPHONE] フォームを表示する
- *
- * @param mixed mail_content_id
- * @return void
- */
-	public function smartphone_index($id = null) {
-		$this->setAction('index', $id);
-	}
-
-/**
  * [PUBIC] データの確認画面を表示
  *
  * @param mixed	mail_content_id
@@ -289,26 +269,6 @@ class MailController extends MailAppController {
 		}
 		$this->set('mailContent', $this->dbDatas['mailContent']);
 		$this->render($this->dbDatas['mailContent']['MailContent']['form_template'] . DS . 'confirm');
-	}
-
-/**
- * [MOBILE] フォームを表示する
- *
- * @param mixed mail_content_id
- * @return void
- */
-	public function mobile_confirm($id = null) {
-		$this->setAction('confirm', $id);
-	}
-
-/**
- * [SMARTPHONE] フォームを表示する
- *
- * @param mixed mail_content_id
- * @return void
- */
-	public function smartphone_confirm($id = null) {
-		$this->setAction('confirm', $id);
 	}
 
 /**
@@ -440,26 +400,6 @@ class MailController extends MailAppController {
 	}
 
 /**
- * [MOBILE] 送信完了ページ
- *
- * @param mixed mail_content_id
- * @return void
- */
-	public function mobile_submit($id = null) {
-		$this->setAction('submit', $id);
-	}
-
-/**
- * [SMARTPHONE] 送信完了ページ
- *
- * @param mixed mail_content_id
- * @return void
- */
-	public function smartphone_submit($id = null) {
-		$this->setAction('submit', $id);
-	}
-
-/**
  * メール送信する
  * 
  * @return void
@@ -569,16 +509,6 @@ class MailController extends MailAppController {
  * @return void
  */
 	public function captcha($token = null) {
-		$this->BcCaptcha->render($token);
-		exit();
-	}
-
-/**
- * [SMARTPHONE] 認証用のキャプチャ画像を表示する
- * 
- * @return void
- */
-	public function smartphone_captcha($token = null) {
 		$this->BcCaptcha->render($token);
 		exit();
 	}

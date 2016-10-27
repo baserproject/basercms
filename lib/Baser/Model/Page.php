@@ -211,21 +211,19 @@ class Page extends AppModel {
 		
 		// $this->idに値が入ってない場合もあるので
 		if (!empty($page['id'])) {
-			$mobileId = $page['id'];
+			$modelId = $page['id'];
 		} else {
-			$mobileId = $this->id;
+			$modelId = $this->id;
 		}
-		$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
-		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('path' => $parameters, 'return'));
+		$detail = $this->requestAction($content['url'] . '?force=true', ['return' => true]);
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$description = '';
 		if(!empty($content['description'])) {
 			$description = $content['description'];
 		}
 		$searchIndex = ['SearchIndex' => [
-			'model_id'	=> $page['id'],
+			'model_id'	=> $modelId,
 			'type'		=> 'ページ',
-			'mobile_id' => $mobileId,
 			'content_id'=> $content['id'],
 			'site_id'=> $content['site_id'],
 			'title'		=> $content['title'],
@@ -323,7 +321,7 @@ class Page extends AppModel {
 			chmod($path, 0777);
 		}
 		
-		$url = $this->Content->createUrl($data['Content']['parent_id'], true);
+		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'Page');
 		if($url != '/') {
 			$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
 			if($data['Content']['site_id'] != 0) {

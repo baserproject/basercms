@@ -64,7 +64,12 @@ class BcContentsHelper extends AppHelper {
 			if (empty($setting['title'])) {
 				$setting['title'] = $type;
 			}
-
+			
+			// omitViewAction
+			if(empty($setting['omitViewAction'])) {
+				$setting['omitViewAction'] = false;
+			}
+			
 			// exists
 			if (empty($setting['multiple'])) {
 				$setting['multiple'] = false;

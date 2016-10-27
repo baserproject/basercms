@@ -94,7 +94,7 @@ class BlogBaserHelper extends AppHelper {
 		
 		// URL形式に変換
 		foreach($contentsName as $key => $value) {
-			$contentsName[$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value);
+			$contentsName[$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
 		}
 		
 		// ブログコンテンツの条件生成

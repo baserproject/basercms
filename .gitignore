@@ -38,3 +38,6 @@ vendors/*
 /plugins
 Plugin/*
 composer.lock
+gulpfile.js
+node_modules/
+package.json

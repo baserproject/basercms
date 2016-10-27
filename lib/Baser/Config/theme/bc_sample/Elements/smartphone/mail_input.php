@@ -27,7 +27,7 @@ if (!empty($mailFields)) {
 				if ($field['type'] == 'hidden') {
 					echo ' style="display:none"';
 				}
-				echo '>' . "\n" . $this->Mailform->label("Message." . $field['field_name'] . "", $field['head']);
+				echo '>' . "\n" . $this->Mailform->label("MailMessage." . $field['field_name'] . "", $field['head']);
 				if ($field['not_empty']) {
 					echo '<span class="required">*</span>';
 				}
@@ -40,24 +40,24 @@ if (!empty($mailFields)) {
 			}
 
 			/* 入力欄 */
-			if (!$freezed || $this->Mailform->value("Message." . $field['field_name']) !== '') {
+			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
 			if ($field['no_send'] && $freezed) {
-				echo $this->Mailform->control('hidden', "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+				echo $this->Mailform->control('hidden', "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 			} else {
-				echo $this->Mailform->control($field['type'], "Message." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+				echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 			}
 
-			if (!$freezed || $this->Mailform->value("Message." . $field['field_name']) !== '') {
+			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
 			}
 			if (!$freezed) {
 				echo '<span class="mail-attention">' . $field['attention'] . '</span>';
 			}
 			if (!$field['group_valid']) {
-				echo $this->Mailform->error("Message." . $field['field_name']);
+				echo $this->Mailform->error("MailMessage." . $field['field_name']);
 			}
 
 			/* 説明欄 */
@@ -68,10 +68,10 @@ if (!empty($mailFields)) {
 
 				if ($field['group_valid']) {
 					if ($field['valid']) {
-						echo $this->Mailform->error("Message." . $field['group_field'], "必須項目です。");
+						echo $this->Mailform->error("MailMessage." . $field['group_field'], "必須項目です。");
 					}
-					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_same", "入力データが一致していません。");
-					echo $this->Mailform->error("Message." . $field['group_field'] . "_not_complate", "入力データが不完全です。");
+					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", "入力データが一致していません。");
+					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", "入力データが不完全です。");
 				}
 
 				echo '</span>';

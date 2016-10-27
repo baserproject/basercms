@@ -75,4 +75,16 @@ class BaserTestCase extends CakeTestCase {
 		return $request;
 	}
 
+/**
+ * 管理画面にログインする
+ * @param string $group
+ */
+	protected function _loginAdmin($id = 1) {
+		$key = Configure::read('BcAuthPrefix.admin.sessionKey');
+		$User = ClassRegistry::init('User', 'Model');
+		$user = $User->find('first', ['conditions' => ['User.id' => $id]]);
+		$user['User']['UserGroup'] = $user['UserGroup'];
+		$_SESSION['Auth'][$key] = $user['User'];
+	}
+
 }

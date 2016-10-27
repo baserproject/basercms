@@ -103,6 +103,7 @@ if($isUpdater) {
  */
 	App::uses('BcContentsRoute', 'Routing/Route');
 	Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
+	Router::promote();	// 優先順位を最優先とする	
 
 	if (!BcUtil::isAdminSystem()) {
 

@@ -34,6 +34,8 @@ class PageTest extends BaserTestCase {
 		'baser.Default.Site',
 		'baser.Default.Content',
 		'baser.Default.ContentFolder',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite'
 	);
 
 /**
@@ -540,6 +542,7 @@ class PageTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId, $message = null) {
+		$this->_loginAdmin();		
 		$result = $this->Page->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		// コピーしたファイル存在チェック

@@ -3,10 +3,6 @@
  * メールフォーム（スマホ用）
  * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
  */
-$prefix = '';
-if ($this->request->params['Site']['alias']) {
-	$prefix = '/' . $this->request->params['Site']['alias'];
-}
 ?>
 
 
@@ -14,19 +10,19 @@ if ($this->request->params['Site']['alias']) {
 	$(function(){
 		$(".form-submit").click(function(){
 			var mode = $(this).attr('id').replace('BtnMessage', '');
-			$("#MessageMode").val(mode);
+			$("#MailMessageMode").val(mode);
 			return true;
 		});
 	});
 </script>
 
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $this->request->params['Content']['url'] . '/confirm', 'type' => 'file')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . '/confirm', 'type' => 'file')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $this->request->params['Content']['url'] . '/submit')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . '/submit')) ?>
 <?php endif; ?>
 
-<?php echo $this->Mailform->hidden('Message.mode') ?>
+<?php echo $this->Mailform->hidden('MailMessage.mode') ?>
 
 <section>
 	<!-- /Elements/mail_input.php -->
@@ -37,14 +33,15 @@ if ($this->request->params['Site']['alias']) {
 	<?php if (!$freezed): ?>
 		<div class="auth-captcha clearfix">
 			<?php $captchaId = mt_rand(0, 99999999) ?>
-			<?php $this->BcBaser->img($prefix . '/' . $this->request->params['Content']['url'] . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
-			<?php echo $this->Mailform->text('Message.auth_captcha') ?><br>
+			<?php $this->BcBaser->img($this->request->params['Content']['url'] . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
+			<?php echo $this->Mailform->text('MailMessage.auth_captcha') ?><br>
 			&nbsp;画像の文字を入力してください<br clear="all">
-			<?php echo $this->Mailform->error('Message.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
+			<?php echo $this->Mailform->error('MailMessage.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
 			<?php echo $this->Mailform->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 		</div>
 	<?php else: ?>
-		<?php echo $this->Mailform->hidden('Message.auth_captcha') ?>
+		<?php echo $this->Mailform->hidden('MailMessage.auth_captcha') ?>
+		<?php echo $this->Mailform->hidden('MailMessage.captcha_id') ?>
 	<?php endif ?>
 <?php endif ?>
 

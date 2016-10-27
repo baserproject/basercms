@@ -667,15 +667,16 @@ class Content extends AppModel {
 		$this->create($content);
 		return $this->save(null, $validate);
 	}
-
+	
 /**
  * コンテンツデータよりURLを生成する
  * 
  * @param int $id コンテンツID
+ * @param string $plugin プラグイン
  * @param string $type タイプ
  * @return string URL
  */
-	public function createUrl($id, $isContentFolder) {
+	public function createUrl($id, $plugin, $type) {
 		if($id == 1) {
 			$url = '/';
 		} else {
@@ -686,7 +687,8 @@ class Content extends AppModel {
 				$names[] = $parent['Content']['name'];
 			}
 			$url = '/' . implode('/', $names);
-			if($isContentFolder) {
+			$setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
+			if($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
 				$url .= '/';
 			}
 		}
@@ -707,16 +709,11 @@ class Content extends AppModel {
 				return false;	
 			}
 		}
-		
-		$isContentFolder = false;
-		if(!empty($data['Content']['type']) && $data['Content']['type'] == 'ContentFolder') {
-			$isContentFolder = true;
-		}
 
 		$site = $this->Site->find('first', ['conditions' => ['Site.id' => $data['Content']['site_id']]]);
 
 		// URLを更新
-		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $isContentFolder);
+		$data['Content']['url'] = $this->createUrl($data['Content']['id'], $data['Content']['plugin'], $data['Content']['type']);
 
 		// 親フォルダの公開状態に合わせて公開状態を更新（自身も含める）
 		if(isset($data['Content']['self_status'])) {
@@ -818,15 +815,15 @@ class Content extends AppModel {
 		if(!$plugin) {
 			$plugin = 'Core';
 		}
-		$conditions = array(
-			'plugin' => $plugin,
-			'type'	=> $type,
-			'alias_id' => null
-		);
+		$conditions = [
+			'Content.plugin' => $plugin,
+			'Content.type'	=> $type,
+			'Content.alias_id' => null
+		];
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
-		return $this->find('first', array('conditions' => $conditions));
+		return $this->find('first', ['conditions' => $conditions]);
 	}
 
 /**
@@ -1072,11 +1069,6 @@ class Content extends AppModel {
 				if($site && $site->sameMainUrl) {
 					$url = $site->getPureUrl($url);
 				}
-			}
-			$params = explode('?', $url);
-			$url = preg_replace('/\/index$/', '/', $params[0]);
-			if(!empty($params[1])) {
-				$url .= '?' . $params[1];
 			}
 			if($full) {
 				return fullUrl($url);
@@ -1626,6 +1618,32 @@ class Content extends AppModel {
 			if (empty($duration)) $duration = Configure::read('BcCache.duration');
 			return $duration;
 		}
+	}
+
+/**
+ * 全てのURLをデータの状況に合わせ更新する
+ * 
+ * @return bool
+ */
+	public function updateAllUrl() {
+		$contents = $this->find('all', [
+			'recursive' => -1,
+			'order' => ['Content.lft']
+		]);
+		$result = true;
+		$updatingRelated = $this->updatingRelated;
+		$updatingSystemData = $this->updatingSystemData;
+		$this->updatingRelated = false;
+		$this->updatingSystemData = false;
+		foreach($contents as $content) {
+			$content['Content']['url'] = $this->createUrl($content['Content']['id'], $content['Content']['plugin'], $content['Content']['type']);
+			if(!$this->save($content)) {
+				$result = false;
+			}
+		}
+		$this->updatingRelated = $updatingRelated;
+		$this->updatingSystemData = $updatingSystemData;
+		return $result;
 	}
 	
 }

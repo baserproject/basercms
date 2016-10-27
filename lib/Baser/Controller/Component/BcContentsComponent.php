@@ -121,26 +121,6 @@ class BcContentsComponent extends Component {
  */
 	public function setupFront() {
 		$controller = $this->_Controller;
-		
-		// リクエストアクション時のデータセット
-		if(!empty($controller->request->params['requested'])) {
-			if(!empty($controller->request->params['path'])) {
-				$urlAry = $controller->request->params['path'];
-				$url = '/' . implode('/', $urlAry);
-			} else {
-				$url = '/' . $controller->request->url;
-			}
-			$data = $controller->Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
-			if($data) {
-				$controller->request->params['Content'] = $data['Content'];
-				if(!$data['Site']['id']) {
-					$controller->request->params['Site'] = $controller->Content->Site->getRootMain()['Site'];
-				} else {
-					$controller->request->params['Site'] = $data['Site'];	
-				}
-			}
-		}
-		
 		// プレビュー時のデータセット
 		if(!empty($controller->request->query['preview'])) {
 			$this->preview = $this->_Controller->request->query['preview'];

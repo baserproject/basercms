@@ -192,10 +192,16 @@ class BcAppHelper extends Helper {
 		} else {
 			if(!BcUtil::isAdminSystem() && !is_array($url) && !empty($this->request->params['Content'])) {
 				$Content = ClassRegistry::init('Content');
-				return $Content->getUrl($url, $full, $this->_View->request->params['Site']['use_subdomain']);
+				$url = $Content->getUrl($url, $full, $this->_View->request->params['Site']['use_subdomain']);
 			} else {
-				return parent::url($url, $full);
+				$url = parent::url($url, $full);
 			}
+			$params = explode('?', $url);
+			$url = preg_replace('/\/index$/', '/', $params[0]);
+			if(!empty($params[1])) {
+				$url .= '?' . $params[1];
+			}
+			return $url;
 		}
 	}
 

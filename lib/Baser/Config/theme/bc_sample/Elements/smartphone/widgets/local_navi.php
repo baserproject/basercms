@@ -14,7 +14,7 @@ if($this->request->params['Content']['type'] == 'ContentFolder') {
 	$parentId = $parent['Content']['id'];
 	$title = $parent['Content']['title'];
 }
-if($parent['Content']['site_root']) {
+if(@$parent['Content']['site_root']) {
 	return;
 }
 ?>
