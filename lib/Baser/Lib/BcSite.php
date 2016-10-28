@@ -285,6 +285,22 @@ class BcSite {
 	}
 
 /**
+ * エイリアスからサイトを検索する
+ *
+ * @param $alias
+ * @return BcSite|null
+ */
+	public static function findByAlias($alias) {
+		$sites = self::findAll();
+		foreach($sites as $site) {
+			if($alias == $site->alias) {
+				return $site;
+			}
+		}
+		return null;
+	}
+
+/**
  * 設定が有効かどうかを判定
  *
  * @return bool

@@ -1046,10 +1046,10 @@ class Content extends AppModel {
 	public function getUrl($url, $full = false, $useSubDomain = false) {
 		if($useSubDomain && !is_array($url)) {
 			$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
-			$site = BcSite::findCurrent();
 			$subDomain = '';
-			if($site->alias == $urlArray[0]) {
-				$subDomain = $urlArray[0];
+			$site = BcSite::findByAlias($urlArray[0]);
+			if($site) {
+				$subDomain = $site->alias;
 				unset($urlArray[0]);
 			}
 			$originUrl = '/' . implode('/', $urlArray);
