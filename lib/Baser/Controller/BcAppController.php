@@ -170,7 +170,6 @@ class BcAppController extends Controller {
  */
 	public function __construct($request = null, $response = null) {
 		parent::__construct($request, $response);
-		//Router::promote(10);
 		if (isConsole()) {
 			unset($this->components['Session']);
 		}

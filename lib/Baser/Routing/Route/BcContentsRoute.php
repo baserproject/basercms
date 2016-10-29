@@ -296,26 +296,39 @@ class BcContentsRoute extends CakeRoute {
 		}
 
 		// エンティティID確定
-		$entityId = null;
+		$entityId = $contentId = null;
 		if(isset($url['entityId'])) {
 			$entityId = $url['entityId'];
-			unset($params['entityId']);
 		} else {
 			$request = Router::getRequest(true);
 			if($request->params['entityId']) {
 				$entityId = $request->params['entityId'];
 			}
+			if(!empty($request->params['Content']['alias_id'])) {
+				$contentId = $request->params['Content']['id'];
+			}
 		}
 
 		// コンテンツ確定、できなければスルー
 		$Content = ClassRegistry::init('Content');
-		$content = $Content->findByType($plugin . '.' . $type, $entityId);
-		if(!$content) {
+
+		if($contentId) {
+			$conditions = ['Content.id' => $contentId];
+		} else {
+			$conditions = [
+				'Content.plugin' => $plugin,
+				'Content.type' => $type,
+				'Content.entity_Id' => $entityId
+			];
+		}
+
+		$strUrl = $Content->field('url', $conditions);
+
+		if(!$strUrl) {
 			return false;
 		}
-		
+
 		// URL生成
-		$strUrl = $content['Content']['url'];
 		$site = BcSite::findCurrent();
 		if($site->useSubDomain) {
 			$strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);

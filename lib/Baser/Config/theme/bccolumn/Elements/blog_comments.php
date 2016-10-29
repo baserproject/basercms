@@ -2,16 +2,12 @@
 /**
  * ブログコメント一覧
  */
-$prefix = '';
-if ($this->request->params['Site']['alias']) {
-	$prefix = '/' . $this->request->params['Site']['alias'];
-}
 ?>
 
 <?php echo $this->element('blog_comments_scripts'); ?>
 
 <?php $captchaId = mt_rand(0, 99999999) ?>
-<div id="BlogCommentCaptchaUrl" style="display:none"><?php echo $this->BcBaser->getUrl($prefix . '/blog/blog_comments/captcha/' . $captchaId) ?></div>
+<div id="BlogCommentCaptchaUrl" style="display:none"><?php echo $this->BcBaser->getUrl('/blog/blog_comments/captcha/' . $captchaId) ?></div>
 <div id="BlogCommentGetTokenUrl" style="display:none"><?php echo $this->BcBaser->getUrl('/blog/blog_comments/get_token') ?></div>
 
 <?php if ($blogContent['BlogContent']['comment_use']): ?>
@@ -27,7 +23,7 @@ if ($this->request->params['Site']['alias']) {
 
 		<div id="CommentForm">
 			<h3>コメント送信フォーム</h3>
-			<?php echo $this->BcForm->create('BlogComment', array('url' => $prefix . '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
+			<?php echo $this->BcForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 			<?php echo $this->BcForm->input('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 
 			<table cellpadding="0" cellspacing="0" class="row-table-01">

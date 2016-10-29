@@ -3,16 +3,12 @@
  * ブログコメント一覧
  * 呼出箇所：ブログ記事詳細
  */
-$prefix = '';
-if ($this->request->params['Site']['alias']) {
-	$prefix = '/' . $this->request->params['Site']['alias'];
-}
 ?>
 
 <?php echo $this->element('blog_comments_scripts'); ?>
 
 <?php $captchaId = mt_rand(0, 99999999) ?>
-<div id="BlogCommentCaptchaUrl" style="display:none"><?php echo $this->BcBaser->getUrl($prefix . '/blog/blog_comments/captcha/' . $captchaId) ?></div>
+<div id="BlogCommentCaptchaUrl" style="display:none"><?php echo $this->BcBaser->getUrl('/blog/blog_comments/captcha/' . $captchaId) ?></div>
 <div id="BlogCommentGetTokenUrl" style="display:none"><?php echo $this->BcBaser->getUrl('/blog/blog_comments/get_token') ?></div>
 
 <?php if ($blogContent['BlogContent']['comment_use']): ?>
