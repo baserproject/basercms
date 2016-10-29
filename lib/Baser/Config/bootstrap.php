@@ -383,6 +383,14 @@ if (Configure::read('debug') == 0) {
 	clearViewCache();
 }
 
+// サブサイトの際にキャッシュがメインサイトと重複しないように調整
+if(Configure::read('Cache.check')) {
+	$site = BcSite::findCurrent();
+	if($site->useSubDomain) {
+		Configure::write('Cache.viewPrefix', $site->alias);
+	}
+}
+
 /**
  * テーマヘルパーのパスを追加する 
  */
