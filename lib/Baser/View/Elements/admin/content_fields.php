@@ -14,7 +14,9 @@
  * [ADMIN] 統合コンテンツフォーム
  */
 $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
-unset($urlArray[count($urlArray) -1]);
+if(count($urlArray) > 1) {
+	unset($urlArray[count($urlArray) -1]);
+}
 if($this->request->data['Site']['use_subdomain']) {
 	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
 	unset($urlArray[0]);
@@ -92,7 +94,13 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20, 'autofocus' => true)) ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->error('Content.name') ?>
 						<?php else: ?>
-							<?php echo $baseUrl ?><?php echo $this->BcForm->value('Content.name') ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
+							<?php
+							$contentName = '';
+							if(!$this->request->data['Site']['use_subdomain']){
+								$contentName = $this->BcForm->value('Content.name');
+							}
+							?>
+							<?php echo $baseUrl ?><?php echo $contentName ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/' && !$this->request->data['Site']['use_subdomain']): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->hidden('Content.name') ?>
 						<?php endif ?>
 					</span>
