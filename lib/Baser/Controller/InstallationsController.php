@@ -342,6 +342,11 @@ class InstallationsController extends AppController {
 				}
 			}
 
+			$Db = ConnectionManager::getDataSource('default');
+			if($Db->config['datasource'] == 'Database/BcPostgres') {
+				$Db->updateSequence();
+			}
+
 			clearAllCache();
 			if (function_exists('opcache_reset')) {
 				opcache_reset();
