@@ -291,10 +291,10 @@ class BcUtil extends Object {
 		if($plugin) {
 			$templatesPathes = App::path('View', $plugin);
 		} else {
-			$templatesPathes = App::path('View');	
-		}
-		if ($theme) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
+			$templatesPathes = App::path('View');
+			if ($theme) {
+				array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
+			}
 		}
 		$_templates = array();
 		foreach ($templatesPathes as $templatesPath) {
