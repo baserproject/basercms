@@ -14,9 +14,7 @@
  * [ADMIN] 統合コンテンツフォーム
  */
 $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
-if(count($urlArray) > 1) {
-	unset($urlArray[count($urlArray) -1]);
-}
+unset($urlArray[count($urlArray) -1]);
 if($this->request->data['Site']['use_subdomain']) {
 	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
 	unset($urlArray[0]);
