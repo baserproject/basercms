@@ -88,7 +88,7 @@ class MailMessage extends MailAppModel {
  * @param $mailContentId
  */
 	public function setUseTable($mailContentId) {
-		$this->useTable = $this->createTableName($mailContentId);
+		$this->table = $this->useTable = $this->createTableName($mailContentId);
 	}
 	
 /**
@@ -716,6 +716,7 @@ class MailMessage extends MailAppModel {
 		if (!$this->tableExists($this->createFullTableName($mailContentId))) {
 			/* 初回の場合 */
 			$this->createTable($mailContentId);
+			$this->construction($mailContentId);
 		} else {
 			/* 2回目以降の場合 */
 			$this->setUseTable($mailContentId);
