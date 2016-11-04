@@ -1,0 +1,25 @@
+{
+  "name": "basercms",
+  "version": "4.0.0",
+  "private": true,
+  "description": "baserCMS : Based Website Development Project http://basercms.net",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baserproject/basercms.git"
+  },
+  "author": "baserCMS Users Community",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/baserproject/basercms/issues"
+  },
+  "homepage": "http://basercms.net",
+  "devDependencies": {
+    "eslint": "^3.9.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1"
+  }
+}
