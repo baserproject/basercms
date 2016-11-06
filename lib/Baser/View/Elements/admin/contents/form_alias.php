@@ -38,7 +38,7 @@ if((!empty($this->BcContents->settings[$srcContent['type']]))) {
            &nbsp;
            <?php $this->BcBaser->link($srcContent['title'], $editLink, array('target' => '_blank')) ?>
 			<?php if($related): ?>
-			<p>このコンテンツはメインサイトの連携エイリアスです。<br>レイアウトテンプレート以外を編集する場合は上記リンクをクリックしてメインサイトのコンテンツを編集してください。</p>
+			<p>このコンテンツはメインサイトの連携エイリアスです。<br>フォルダ、レイアウトテンプレート以外を編集する場合は上記リンクをクリックしてメインサイトのコンテンツを編集してください。</p>
 			<?php endif ?>
         </td>
     </tr>
