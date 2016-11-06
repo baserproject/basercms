@@ -415,17 +415,16 @@ class BcBaserHelper extends AppHelper {
 		if(empty($this->request->params['Site'])) {
 			return false;
 		}
-		$Site = ClassRegistry::init('Site');
-		$prefix = $Site->getPrefix(['Site' => $this->request->params['Site']]);
-		if (!$prefix) {
+		$site = BcSite::findCurrent(true);
+		if (!$site->alias || $site->sameMainUrl || $site->useSubDomain) {
 			return (
 				$this->request->url == false ||
 				$this->request->url == 'index'
 			);
 		} else {
 			return (
-				$this->request->url == $prefix . '/' ||
-				$this->request->url == $prefix . '/index'
+				$this->request->url == $site->alias . '/' ||
+				$this->request->url == $site->alias . '/index'
 			);
 		}
 	}

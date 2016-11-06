@@ -183,6 +183,8 @@ class UpdatersController extends AppController {
 		if ($this->request->data) {
 			$this->setUpdateLog('アップデートスクリプトの実行します。');
 			if ($this->_execScript($this->request->data['Updater']['plugin'], $this->request->data['Updater']['version'])) {
+				clearAllCache();
+				$this->BcManager->deployAdminAssets();
 				$this->setUpdateLog('アップデートスクリプトの実行が完了しました。');
 				$this->_writeUpdateLog();
 				$this->setMessage('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
