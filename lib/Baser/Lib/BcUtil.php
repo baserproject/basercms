@@ -344,21 +344,25 @@ class BcUtil extends Object {
  *
  * @return string
  */
-	public static function getSubDomain() {
-		if(isConsole()) {
+	public static function getSubDomain($host = null) {
+		if(isConsole() && empty($_SERVER['HTTP_HOST']) && !$host) {
 			return '';
 		}
-		if(strpos($_SERVER['HTTP_HOST'], '.') === false) {
+		if(!$host) {
+			$host = $_SERVER['HTTP_HOST'];
+		}
+
+		if(strpos($host, '.') === false) {
 			return '';
 		}
-		$host = BcUtil::getMainFullDomain();
-		if($_SERVER['HTTP_HOST'] == $host) {
+		$mainHost = BcUtil::getMainFullDomain();
+		if($host == $mainHost) {
 			return '';
 		}
-		if(strpos($_SERVER['HTTP_HOST'], $host) === false) {
+		if(strpos($host, $mainHost) === false) {
 			return '';
 		}
-		$subDomain = str_replace($host, '', $_SERVER['HTTP_HOST']);
+		$subDomain = str_replace($mainHost, '', $host);
 		if($subDomain) {
 			return preg_replace('/\.$/', '', $subDomain);
 		}
@@ -380,6 +384,9 @@ class BcUtil extends Object {
 	}
 	
 	public static function getFullDomain() {
+		if(isConsole() && empty($_SERVER['HTTP_HOST'])) {
+			return '';
+		}
 		return $_SERVER['HTTP_HOST'];
 	}
 	

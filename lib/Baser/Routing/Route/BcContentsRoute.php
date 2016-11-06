@@ -45,18 +45,25 @@ class BcContentsRoute extends CakeRoute {
 			$publish = false;
 		}
 
-		// 同一URL対応
 		$sameUrl = false;
-		$subSite = BcSite::findCurrentSub(true);
-		if($subSite && $subSite->existsUrl($request)) {
+		$site = BcSite::findCurrentSub(true);
+		if($site) {
+			// 同一URL対応
 			$sameUrl = true;
-			$url = $subSite->makeUrl($request);
-			header('Vary: User-Agent');
+			$checkUrl = $site->makeUrl($request);
+			@header('Vary: User-Agent');
+		} else {
+			$site = BcSite::findCurrent(true);
+			if($site->useSubDomain) {
+				$checkUrl = '/' . $site->alias . (($url)? $url : '/');
+			} else {
+				$checkUrl = (($url)? $url : '/');
+			}
 		}
-		
-		$content = $this->getContent($url, $publish);
+
+		$content = $this->getContent($checkUrl, $publish, false, $sameUrl, $site->useSubDomain);
 		if(!$content) {
-			$content = $this->getContent($url, $publish, true);
+			$content = $this->getContent($checkUrl, $publish, true, $sameUrl, $site->useSubDomain);
 			if($content) {
 				$extend = true;	
 			}
@@ -79,16 +86,9 @@ class BcContentsRoute extends CakeRoute {
 		}
 		$request->params['Content'] = $content['Content'];
 		$request->params['Site'] = $content['Site'];
-		if(!$extend) {
-			$url = $content['Content']['url'];
-		}
-		
-		if($sameUrl && $subSite) {
-			$content['Content']['url'] = $subSite->getPureUrl($url);
-		}
-		
-		$site = BcSite::findCurrent();
-		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->domainType);
+
+		$url = $site->getPureUrl($url);
+		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
 		if($params) {
 			return $params;
 		}
@@ -103,41 +103,52 @@ class BcContentsRoute extends CakeRoute {
  * @param bool $extend
  * @return mixed
  */
-	public function getContent($url, $publish = true, $extend = false) {
+	public function getContent($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false) {
 		$url = preg_replace('/^\//', '', $url);
 		$Content = ClassRegistry::init('Content');
-		$site = BcSite::findCurrent();
-		$domainKey = '';
-		if($site->useSubDomain) {
-			$domainKey = $site->alias . '/';
-		}
 		if($extend) {
 			$params = explode('/', $url);
 			$condUrls = [];
-			$condUrls[] = '/' . $domainKey . implode('/', $params);
+			$condUrls[] = '/' . implode('/', $params);
 			$count = count($params);
 			for ($i = $count; $i > 1; $i--) {
 				unset($params[$i - 1]);
 				$path = implode('/', $params);
-				$condUrls[] = '/' . $domainKey . $path . '/';
-				$condUrls[] = '/' . $domainKey . $path;
+				$condUrls[] = '/' . $path . '/';
+				$condUrls[] = '/' . $path;
 			}
 			// 固定ページはURL拡張はしない
 			$conditions = [
 				'Content.type <>' => 'Page',
 				'Content.url' => $condUrls,
-				'or' => [
+				['or' => [
 					['Site.status' => true],
 					['Site.status' => null]
-				]
+				]],
+				['or' => [
+					['Site.same_main_url' => $sameUrl],
+					['Site.same_main_url' => null]
+				]],
+				['or' => [
+					['Site.use_subdomain' => $useSubDomain],
+					['Site.use_subdomain' => null]
+				]]
 			];
 		} else {
 			$conditions = [
 				'Content.url' => $this->getUrlPattern($url),
-				'or' => [
+				['or' => [
 					['Site.status' => true],
 					['Site.status' => null]
-				]
+				]],
+				['or' => [
+					['Site.same_main_url' => $sameUrl],
+					['Site.same_main_url' => null]
+				]],
+				['or' => [
+					['Site.use_subdomain' => $useSubDomain],
+					['Site.use_subdomain' => null]
+				]]
 			];	
 		}
 		if($publish) {
@@ -166,7 +177,7 @@ class BcContentsRoute extends CakeRoute {
  * @param $entityId
  * @return array
  */
-	public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $domainType = 0) {
+	public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias) {
 		$viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');
 		if (!$viewParams) {
 			$viewParams = Configure::read('BcContents.items.Core.Default.routes.view');
@@ -179,18 +190,23 @@ class BcContentsRoute extends CakeRoute {
 			$pass = [];
 			$named = [];
 			$action = $viewParams['action'];
+			// 別ドメインの場合は１階層目を除外
+			$pureEntryUrl = $entryUrl;
+			if($alias) {
+				$pureEntryUrl = preg_replace('/^\/' . preg_quote($alias, '/') . '\//', '/', $pureEntryUrl);
+			}
 			if($type == 'Page') {
 				$url = preg_replace('/^\//', '', $entryUrl);
 				$pass = explode('/', $url);
-			} elseif($requestUrl != $entryUrl) {
-				if($domainType) {
-					$entryUrl = preg_replace('/^\/.+?\//', '/', $entryUrl);
-				}
-				$url = preg_replace('/^' . preg_quote($entryUrl, '/') . '/', '', $requestUrl);
+			} elseif($requestUrl != $pureEntryUrl) {
+				// コントローラーとなり得る部分までの文字列を除外してアクションを取得
+				$url = preg_replace('/^' . preg_quote($pureEntryUrl, '/') . '/', '', $requestUrl);
 				$url = preg_replace('/^\//', '', $url);
 				$urlAry = explode('/', $url);
 				$action = $urlAry[0];
+				// アクション部分を除外
 				array_shift($urlAry);
+				// パラメーターを取得（pass / named）
 				if($urlAry) {
 					foreach($urlAry as $param) {
 						if(strpos($param, ':') !== false) {
@@ -231,13 +247,8 @@ class BcContentsRoute extends CakeRoute {
  */
 	public function getUrlPattern($url) {
 		$parameter = preg_replace('/^\//', '', $url);
-		$site = BcSite::findCurrent();
-		$domainKey = '';
-		if($site->useSubDomain) {
-			$domainKey = $site->alias . '/';
-		}
 		$paths = [];
-		$paths[] = '/' . $domainKey . $parameter;
+		$paths[] = '/' . $parameter;
 		if(preg_match('/\/$/', $paths[0])) {
 			$paths[] = $paths[0] . 'index';
 		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
@@ -301,7 +312,7 @@ class BcContentsRoute extends CakeRoute {
 			$entityId = $url['entityId'];
 		} else {
 			$request = Router::getRequest(true);
-			if($request->params['entityId']) {
+			if(!empty($request->params['entityId'])) {
 				$entityId = $request->params['entityId'];
 			}
 			if(!empty($request->params['Content']['alias_id'])) {
@@ -310,27 +321,36 @@ class BcContentsRoute extends CakeRoute {
 		}
 
 		// コンテンツ確定、できなければスルー
-		$Content = ClassRegistry::init('Content');
-
-		if($contentId) {
-			$conditions = ['Content.id' => $contentId];
+		if($type == 'Page') {
+			$pass = [];
+			foreach($params as $key => $param) {
+				if(!is_string($key)) {
+					$pass[] = $param;
+					unset($params[$key]);
+				}
+			}
+			$strUrl = '/' . implode('/', $pass);
 		} else {
-			$conditions = [
-				'Content.plugin' => $plugin,
-				'Content.type' => $type,
-				'Content.entity_Id' => $entityId
-			];
+			$Content = ClassRegistry::init('Content');
+			if($contentId) {
+				$conditions = ['Content.id' => $contentId];
+			} else {
+				$conditions = [
+					'Content.plugin' => $plugin,
+					'Content.type' => $type,
+					'Content.entity_Id' => $entityId
+				];
+			}
+			$strUrl = $Content->field('url', $conditions);
 		}
-
-		$strUrl = $Content->field('url', $conditions);
 
 		if(!$strUrl) {
 			return false;
 		}
 
 		// URL生成
-		$site = BcSite::findCurrent();
-		if($site->useSubDomain) {
+		$site = BcSite::findByUrl($strUrl);
+		if($site && $site->useSubDomain) {
 			$strUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $strUrl);
 		}
 		$pass = [];

@@ -415,7 +415,9 @@ class MailMessageTest extends BaserTestCase {
 		foreach ($this->MailMessage->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
 		}
-		$this->assertEquals($expectColumns, $resultColumns, '正しくカラムが追加されていません');
+		foreach($expectColumns as $column) {
+			$this->assertContains($column, $resultColumns, '正しくカラムが追加されていません');
+		}
 
 		// 二回目
 		$this->MailMessage->construction($id);

@@ -13,6 +13,8 @@ App::uses('SiteConfig', 'Model');
 
 /**
  * SiteConfigTest class
+ *
+ * @property SiteConfig $SiteConfig
  * 
  * class NonAssosiationSiteConfig extends SiteConfig {
  *  public $name = 'SiteConfig';
@@ -110,12 +112,13 @@ class SiteConfigTest extends BaserTestCase {
  */
 	public function testGetTheme() {
 		$results = $this->SiteConfig->getThemes();
-		$expected = array(
-			'bc_sample' => 'BcSample',
-			'bccolumn' => 'Bccolumn',
-			'nada-icons' => 'Nada-icons'
-		);
-		$this->assertEquals($expected, $results);
+		$Folder = new Folder(BASER_CONFIGS . 'theme');
+		$files = $Folder->read(true, true, false);
+		$expected = [];
+		foreach($files[0] as $file) {
+			$this->assertContains(Inflector::camelize($file), $results);
+			$this->assertArrayHasKey($file, $results);
+		}
 	}
 
 /**

@@ -253,13 +253,16 @@ class PagesController extends AppController {
 		} else {
 			$urlTmp = $this->request->params['Content']['url'];
 		}
-		$urlTmp = preg_replace('/^\//', '', $urlTmp);
-		$path = explode('/', $urlTmp);
+
 		if($this->request->params['Site']['alias']) {
-			if($path[0] == $this->request->params['Site']['alias']) {
-				$path[0] = $this->request->params['Site']['name'];
+			$site = BcSite::findByUrl($urlTmp);
+			if($site && ($site->alias == $this->request->params['Site']['alias'])) {
+				$urlTmp = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $this->request->params['Site']['name'] . '/', $urlTmp);
 			}
 		}
+
+		$urlTmp = preg_replace('/^\//', '', $urlTmp);
+		$path = explode('/', $urlTmp);
 
 		$count = count($path);
 		if (!$count) {

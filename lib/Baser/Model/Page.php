@@ -215,7 +215,10 @@ class Page extends AppModel {
 		} else {
 			$modelId = $this->id;
 		}
-		$detail = $this->requestAction($content['url'] . '?force=true', ['return' => true]);
+
+		$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
+		$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], array('?' => ['force' => 'true'], 'pass' => $parameters, 'return'));
+
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$description = '';
 		if(!empty($content['description'])) {
@@ -321,12 +324,15 @@ class Page extends AppModel {
 			chmod($path, 0777);
 		}
 		
-		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'Page');
+		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'ContentFolder');
 		if($url != '/') {
-			$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
 			if($data['Content']['site_id'] != 0) {
-				$urlAry[0] = $this->Content->Site->field('name', ['Site.id' => $data['Content']['site_id']]);
+				$site = BcSite::findByUrl($url);
+				if($site) {
+					$url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $site->name . '/', $url);
+				}
 			}
+			$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
 			foreach ($urlAry as $value) {
 				$path .= $value . DS;
 				if (!is_dir($path)) {

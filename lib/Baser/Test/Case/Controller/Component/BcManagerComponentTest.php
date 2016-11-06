@@ -44,6 +44,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.User',
+		'baser.Default.Site',
 	);
 
 	public $components = array('BcManager');

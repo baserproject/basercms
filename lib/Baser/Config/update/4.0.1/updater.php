@@ -36,3 +36,12 @@
     } else {
         $this->setUpdateLog('contents テーブルのデータ更新に失敗しました。', true);
     }
+
+/**
+ * sites テーブル構造変更
+ */
+    if($this->loadSchema('4.0.1', '', 'sites', $filterType = 'alter')) {
+        $this->setUpdateLog('sites テーブルの構造変更に成功しました。');
+    } else {
+        $this->setUpdateLog('sites テーブルの構造変更に失敗しました。', true);
+    }

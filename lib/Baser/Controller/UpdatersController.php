@@ -75,6 +75,11 @@ class UpdatersController extends AppController {
 		$this->subDir = 'admin';
 	}
 
+	public function beforeRender() {
+		parent::beforeRender();
+		$this->set('favoriteBoxOpened', false);
+	}
+
 /**
  * コアのアップデート実行
  *

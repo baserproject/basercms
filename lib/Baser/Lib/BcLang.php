@@ -70,7 +70,7 @@ class BcLang extends BcAbstractDetector {
  * @return bool
  */
 	public function isMatchDecisionKey() {
-		$key = $this->_parseLang($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$key = $this->_parseLang(@$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		$regex = $this->getDetectorRegex();
 		return (bool)preg_match($regex, $key);
 	}

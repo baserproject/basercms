@@ -332,6 +332,12 @@ class BlogController extends BlogAppController {
 					} else {
 						$this->notFound();
 					}
+
+					// コメント送信
+					if (isset($this->request->data['BlogComment'])) {
+						$this->add_comment($id);
+					}
+
 					$post = $this->_getBlogPosts(array('preview' => (bool) $this->BcContents->preview, 'conditions' => array('id' => $id)));
 					if (!empty($post[0])) {
 						$post = $post[0];
@@ -342,13 +348,12 @@ class BlogController extends BlogAppController {
 					// 一覧系のページの場合、時限公開の記事が存在し、キャッシュがあると反映できないが、
 					// 詳細ページの場合は、記事の終了期間の段階でキャッシュが切れる前提となる為、キャッシュを利用する
 					// プレビューでは利用しない事。
-					$this->BcContents->useViewCache = true;
-					
-				}
+					// コメント送信時、キャッシュはクリアされるが、モバイルの場合、このメソッドに対してデータを送信する為、
+					// キャッシュがあるとデータが処理されないので、キャッシュは全く作らない設定とする
+					if(BcSite::findCurrent()->device != 'mobile') {
+						$this->BcContents->useViewCache = true;
+					}
 
-				// コメント送信
-				if (isset($this->request->data['BlogComment'])) {
-					$this->add_comment($id);
 				}
 				
 				if (BcUtil::isAdminUser()) {
@@ -427,7 +432,7 @@ class BlogController extends BlogAppController {
 
 			$commentMessage = 'コメントの送信に失敗しました。';
 		}
-
+		clearViewCache();
 		$this->set('commentMessage', $commentMessage);
 	}
 

@@ -80,7 +80,7 @@ class BlogHelperTest extends BaserTestCase {
 			'alias' => null,
 		);
 		$View->request->params['Content'] = [
-			'url' => '/news',
+			'url' => '/news/',
 			'name' => 'news',
 			'title' => '新着情報'
 		];

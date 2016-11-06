@@ -1045,25 +1045,28 @@ class Content extends AppModel {
  */
 	public function getUrl($url, $full = false, $useSubDomain = false) {
 		if($useSubDomain && !is_array($url)) {
-			$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
 			$subDomain = '';
-			$site = BcSite::findByAlias($urlArray[0]);
+			$site = BcSite::findByUrl($url);
+			$originUrl = $url;
 			if($site) {
 				$subDomain = $site->alias;
-				unset($urlArray[0]);
+				$originUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $url);
 			}
-			$originUrl = '/' . implode('/', $urlArray);
+			if($originUrl == '/') {
+				$urlArray = [];
+			} else {
+				$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $originUrl));
+			}
 			if(preg_match('/\/$/', $url) && count($urlArray) > 0) {
 				$originUrl .= '/';
 			}
 			if($full) {
 				$fullUrl = fullUrl($originUrl);
 				if (BcUtil::isAdminSystem()) {
-					$domainType = BcSite::getDomainType($useSubDomain, $subDomain);
-					if($domainType == 1) {
+					if($site->domainType == 1) {
 						$fullUrlArray = explode('//', $fullUrl);
 						return $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
-					} elseif($domainType == 2) {
+					} elseif($site->domainType == 2) {
 						$fullUrlArray = explode('//', $fullUrl);
 						$urlArray = explode('/', $fullUrlArray[1]);
 						unset($urlArray[0]);
