@@ -338,7 +338,7 @@ class BcContentsRoute extends CakeRoute {
 				$conditions = [
 					'Content.plugin' => $plugin,
 					'Content.type' => $type,
-					'Content.entity_Id' => $entityId
+					'Content.entity_id' => $entityId
 				];
 			}
 			$strUrl = $Content->field('url', $conditions);
