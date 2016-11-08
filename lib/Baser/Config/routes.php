@@ -79,22 +79,22 @@ if($isUpdater) {
  */
 	$authPrefixes = Configure::read('BcAuthPrefix');
 	if ($authPrefixes && is_array($authPrefixes)) {
-		foreach($authPrefixes as $key => $authPrefix) {
-			$prefix = $key;
+		foreach($authPrefixes as $prefix => $authPrefix) {
 			if (!empty($authPrefix['alias'])) {
 				$alias = $authPrefix['alias'];
 			} else {
 				$alias = $prefix;
 			}
-			if ($alias) {
-				Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action' => 'index'));
-				if (CakePlugin::loaded()) {
-					Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-					Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-					Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-				}
-				Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action' => 'index'));
+			if (CakePlugin::loaded()) {
+				Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
 			}
+			Router::connect("/{$alias}/:controller", ['prefix' => $prefix, $prefix => true]);
+			Router::connect("/{$alias}/:controller/", ['prefix' => $prefix, $prefix => true]);
+			Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
 		}
 	}
 
