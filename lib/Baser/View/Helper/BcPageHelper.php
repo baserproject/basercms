@@ -84,21 +84,6 @@ class BcPageHelper extends Helper {
 	}
 
 /**
- * カテゴリ名を取得する
- * 
- * @return mixed string / false
- */
-	public function getCategoryName() {
-
-		$category = $this->getCategory();
-		if ($category['name']) {
-			return $category['name'];
-		} else {
-			return false;
-		}
-	}
-
-/**
  * 公開状態を取得する
  *
  * @param array データリスト
