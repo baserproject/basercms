@@ -87,14 +87,12 @@ if($isUpdater) {
 			}
 			Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action' => 'index'));
 			if (CakePlugin::loaded()) {
-				Router::connect("/{$alias}/:plugin/:controller", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-				Router::connect("/{$alias}/:plugin/:controller/", array('prefix' => $prefix, $prefix => true), $pluginMatch);
 				Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/", array('prefix' => $prefix, $prefix => true), $pluginMatch);
 				Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
 			}
-			Router::connect("/{$alias}/:controller", ['prefix' => $prefix, $prefix => true]);
-			Router::connect("/{$alias}/:controller/", ['prefix' => $prefix, $prefix => true]);
 			Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			Router::connect("/{$alias}/:controller/", ['prefix' => $prefix, $prefix => true]);
 		}
 	}
 

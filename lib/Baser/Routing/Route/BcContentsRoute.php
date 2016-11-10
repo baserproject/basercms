@@ -37,7 +37,6 @@ class BcContentsRoute extends CakeRoute {
 		}
 
 		$request = Router::getRequest(true);
-		$extend = false;
 
 		//管理システムにログインしているかつプレビューの場合は公開状態のステータスは無視する
 		$publish = true;
@@ -54,9 +53,24 @@ class BcContentsRoute extends CakeRoute {
 			@header('Vary: User-Agent');
 		} else {
 			$site = BcSite::findCurrent(true);
-			if($site->useSubDomain) {
-				$checkUrl = '/' . $site->alias . (($url)? $url : '/');
+			if(!is_null($site->name)) {
+				if($site->useSubDomain) {
+					$checkUrl = '/' . $site->alias . (($url)? $url : '/');
+				} else {
+					$checkUrl = (($url)? $url : '/');
+				}
 			} else {
+				if(!empty($request->query['force']) && BcUtil::isAdminUser()) {
+					// =================================================================================================
+					// 2016/11/10 ryuring
+					// 別ドメインの際に、固定ページのプレビューで、正しくサイト情報を取得できない。
+					// そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
+					// =================================================================================================
+					$tmpSite = BcSite::findByUrl($url);
+					if(!is_null($tmpSite)) {
+						$site = $tmpSite;
+					}
+				}
 				$checkUrl = (($url)? $url : '/');
 			}
 		}
@@ -64,9 +78,6 @@ class BcContentsRoute extends CakeRoute {
 		$content = $this->getContent($checkUrl, $publish, false, $sameUrl, $site->useSubDomain);
 		if(!$content) {
 			$content = $this->getContent($checkUrl, $publish, true, $sameUrl, $site->useSubDomain);
-			if($content) {
-				$extend = true;	
-			}
 		}
 
 		if (!$content) {

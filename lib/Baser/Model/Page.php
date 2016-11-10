@@ -216,8 +216,15 @@ class Page extends AppModel {
 			$modelId = $this->id;
 		}
 
-		$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
-		$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], array('?' => ['force' => 'true'], 'pass' => $parameters, 'return'));
+		// =================================================================================================
+		// 2016/11/10 ryuring
+		// パラメーターでリクエストアクションを送った場合、 BcContentsRoute::match() にて、ホスト情報が消されてしまい、
+		// 別ドメインの際に、BcContentsRoute::parse() にて正しいホストを特定できず、プレビュー用URLの解決ができない。
+		// そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
+		// =================================================================================================
+		//$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
+		//$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => ['force' => 'true'], 'pass' => $parameters, 'return']);
+		$detail = $this->requestAction($content['url'] . '?force=true', ['return']);
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$description = '';
