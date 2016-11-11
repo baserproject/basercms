@@ -60,8 +60,8 @@ $config['BcApp'] = array(
  * システム要件 
  */
 $config['BcRequire'] = array(
-	'phpVersion' => "5.2.0",
-	'phpMemory' => "32"
+	'phpVersion' => "5.4.0",
+	'phpMemory' => "128"
 );
 
 /**
