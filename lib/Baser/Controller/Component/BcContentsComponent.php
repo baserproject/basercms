@@ -242,9 +242,15 @@ class BcContentsComponent extends Component {
 			$options['excludeId'] = $currentContentId;
 		}
 		$data = $controller->request->data;
+		
+		$theme = $this->_Controller->siteConfigs['theme'];
+		$site = BcSite::findById($data['Content']['site_id']);
+		if($site->theme) {
+			$theme = $site->theme;	
+		}
 		$templates = array_merge(
-			BcUtil::getTemplateList('Layouts', '', $this->_Controller->siteConfigs['theme']),
-			BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $this->_Controller->siteConfigs['theme'])
+			BcUtil::getTemplateList('Layouts', '', $theme),
+			BcUtil::getTemplateList('Layouts', $this->_Controller->plugin, $theme)
 		);
 		if($data['Content']['id'] != 1) {
 			$parentTemplate = $this->getParentLayoutTemplate($data['Content']['id']);
