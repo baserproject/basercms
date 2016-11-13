@@ -15,13 +15,24 @@
  */
 $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
 unset($urlArray[count($urlArray) -1]);
+if($this->request->data['Site']['same_main_url']) {
+	$site = BcSite::findById($this->request->data['Site']['main_site_id']);
+	array_shift($urlArray);
+	if($site->alias) {
+		$urlArray = explode('/', $site->alias) + $urlArray;
+	}
+}
 if($this->request->data['Site']['use_subdomain']) {
 	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
-	unset($urlArray[0]);
+	array_shift($urlArray);
 } else {
 	$host = $this->BcContents->getUrl('/', true, $this->request->data['Site']['use_subdomain']);
 }
-$checkUrl = '/';
+if($this->request->data['Site']['alias']) {
+	$checkUrl = '/' . $this->request->data['Site']['alias'] . '/';
+} else {
+	$checkUrl = '/';
+}
 $Content = ClassRegistry::init('Content');
 foreach($urlArray as $key => $value) {
 	$checkUrl .= $value . '/';

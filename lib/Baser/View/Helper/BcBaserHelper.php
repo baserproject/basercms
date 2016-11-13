@@ -2628,6 +2628,9 @@ END_FLASH;
 		if(BcUtil::isAdminSystem()) {
 			return;
 		}
+		if(empty($this->request->params['Site'])) {
+			return;
+		}
 		if(isset($this->request->params['Site']['name']) && is_null($this->request->params['Site']['name'])) {
 			return;
 		}

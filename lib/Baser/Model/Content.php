@@ -1067,6 +1067,10 @@ class Content extends AppModel {
 						$fullUrlArray = explode('//', $fullUrl);
 						$urlArray = explode('/', $fullUrlArray[1]);
 						unset($urlArray[0]);
+						if($site->sameMainUrl) {
+							$mainSite = BcSite::findById($site->mainSiteId);
+							$subDomain = $mainSite->alias;
+						}
 						return $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
 					}
 				} else {
@@ -1077,9 +1081,16 @@ class Content extends AppModel {
 			}
 		} else {
 			if(BC_INSTALLED) {
-				$site = BcSite::findCurrent(false);
-				if($site && $site->sameMainUrl) {
-					$url = $site->getPureUrl($url);
+				if(!is_array($url)) {
+					$site = BcSite::findByUrl($url);
+					if($site && $site->sameMainUrl) {
+						$mainSite = BcSite::findById($site->mainSiteId);
+						$alias = $mainSite->alias;
+						if($alias) {
+							$alias = '/' . $alias;
+						}
+						$url = $alias . $site->getPureUrl($url);
+					}
 				}
 			}
 			if($full) {
