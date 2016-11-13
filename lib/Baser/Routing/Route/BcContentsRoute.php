@@ -85,7 +85,7 @@ class BcContentsRoute extends CakeRoute {
 		}
 
 		// データが存在してもプレビューで管理システムにログインしていない場合はログイン画面に遷移
-		if((!empty($request->query['preview']) || !empty($request->query['force'])) &&  !BcUtil::isAdminUser()) {
+		if((!empty($request->query['preview']) || !empty($request->query['force'])) && !BcUtil::loginUser()) {
 			$_SESSION['Auth']['redirect'] = $_SERVER['REQUEST_URI'];
 			header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
 			exit();

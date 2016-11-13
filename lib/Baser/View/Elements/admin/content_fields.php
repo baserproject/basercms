@@ -37,7 +37,7 @@ $Content = ClassRegistry::init('Content');
 foreach($urlArray as $key => $value) {
 	$checkUrl .= $value . '/';
 	$entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);
-	$urlArray[$key] = $this->BcBaser->getLink(urldecode($value), array('admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId));
+	$urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
 }
 $baseUrl = '';
 if($urlArray) {
