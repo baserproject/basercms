@@ -433,8 +433,7 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function getBlogTemplatesDataProvider() {
 		return array(
-			array('nada-icons', array('default' => 'default')),
-			array('bccolumn', array('default' => 'default', 'topics' => 'topics', 'works' => 'works')),
+			array('nada-icons', array('default' => 'default'))
 		);
 	}
 
