@@ -15,6 +15,7 @@
  *
  * @package Baser.View.Helper
  * @property Content $_Content
+ * @property Permission $_Permission
  */
 class BcContentsHelper extends AppHelper {
 
@@ -31,6 +32,7 @@ class BcContentsHelper extends AppHelper {
  * @var Content
  */
 	protected $_Content = null;
+	protected $_Permission = null;
 	
 /**
  * Constructor.
@@ -41,6 +43,7 @@ class BcContentsHelper extends AppHelper {
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
 		$this->_Content = ClassRegistry::init('Content');
+		$this->_Permission = ClassRegistry::init('Permission');
 		if(BcUtil::isAdminSystem()) {
 			$this->setup();
 		}
@@ -57,7 +60,6 @@ class BcContentsHelper extends AppHelper {
 		
 		$existsTitles = $this->_getExistsTitles();
 		$user = BcUtil::loginUser('admin');
-		$Permission = ClassRegistry::init('Permission');
 		
 		foreach($settings as $type => $setting) {
 
@@ -100,15 +102,16 @@ class BcContentsHelper extends AppHelper {
 				}
 			}
 			// disabled
-			$setting['addDisabled'] = !($Permission->check($setting['url']['add'], $user['user_group_id']));
-			$setting['editDisabled'] = !($Permission->check($setting['url']['edit'], $user['user_group_id']));
-			$setting['manageDisabled'] = false;
-			if (!empty($setting['routes']['manage'])) {
-				$setting['manageDisabled'] = !($Permission->check($setting['url']['manage'], $user['user_group_id']));
-			}
+			$setting['addDisabled'] = !($this->_Permission->check($setting['url']['add'], $user['user_group_id']));
 			$settings[$type] = $setting;
 		}
 		$this->settings = $settings;
+	}
+	
+	public function isActionAvailable($type, $action, $entityId) {
+		$user = BcUtil::loginUser('admin');
+		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
+		return $this->_Permission->check($url, $user['user_group_id']);
 	}
 
 /**
