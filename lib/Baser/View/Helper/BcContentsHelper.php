@@ -14,6 +14,7 @@
  * コンテンツヘルパ
  *
  * @package Baser.View.Helper
+ * @property Content $_Content
  */
 class BcContentsHelper extends AppHelper {
 
@@ -377,6 +378,19 @@ class BcContentsHelper extends AppHelper {
  */
 	public function getContentFolderList($siteId = null, $options = array()) {
 		return $this->_Content->getContentFolderList($siteId, $options);
+	}
+	
+	public function getSiteRoot($siteId) {
+		return $this->_Content->getSiteRoot($siteId);
+	}
+	
+	public function getSiteRootId($siteId) {
+		$content = $this->getSiteRoot($siteId);
+		if($content) {
+			return $content['Content']['id'];
+		} else {
+			return false;
+		}
 	}
 	
 }
