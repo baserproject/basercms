@@ -419,27 +419,6 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
- * レイアウトテンプレートを取得
- * 
- * @param string $theme テーマ名
- * @param array $expected 期待値
- * @dataProvider getLayoutTemplatesDataProvider
- */
-	public function testGetLayoutTemplates($theme, $expected) {
-		$this->Blog->BcBaser->siteConfig['theme'] = $theme;
-		$result = $this->Blog->getLayoutTemplates();
-		$this->assertEquals($result, $expected, 'レイアウトテンプレートを正しく取得できません');
-
-	}
-
-	public function getLayoutTemplatesDataProvider() {
-		return array(
-			array('nada-icons', array('default' => 'default', 'ajax' => 'ajax', 'empty' => 'empty', 'error' => 'error')),
-			array('bccolumn', array('default' => 'default', 'left_column' => 'left_column', 'right_column' => 'right_column', 'ajax' => 'ajax', 'empty' => 'empty', 'error' => 'error')),
-		);
-	}
-
-/**
  * ブログテンプレートを取得
  * 
  * @param string $theme テーマ名

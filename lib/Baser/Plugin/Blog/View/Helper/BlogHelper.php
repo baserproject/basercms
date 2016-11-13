@@ -609,46 +609,6 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
- * レイアウトテンプレートを取得
- *
- * コンボボックスのソースとして利用
- *
- * @return array レイアウトテンプレート一覧
- * @todo 別のヘルパに移動
- */
-	public function getLayoutTemplates() {
-		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
-
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
-		}
-
-		$_templates = array();
-		foreach ($templatesPathes as $templatesPath) {
-			$templatesPath .= 'Layouts' . DS;
-			$folder = new Folder($templatesPath);
-			$files = $folder->read(true, true);
-			$foler = null;
-			if ($files[1]) {
-				if ($_templates) {
-					$_templates = am($_templates, $files[1]);
-				} else {
-					$_templates = $files[1];
-				}
-			}
-		}
-		$templates = array();
-		foreach ($_templates as $template) {
-			$ext = Configure::read('BcApp.templateExt');
-			if ($template != 'installations' . $ext) {
-				$template = basename($template, $ext);
-				$templates[$template] = $template;
-			}
-		}
-		return $templates;
-	}
-
-/**
  * ブログテンプレートを取得
  *
  * コンボボックスのソースとして利用
@@ -656,10 +616,15 @@ class BlogHelper extends AppHelper {
  * @return array ブログテンプレート一覧
  * @todo 別のヘルパに移動
  */
-	public function getBlogTemplates() {
+	public function getBlogTemplates($siteId = 0) {
+		$site = BcSite::findById($siteId);
+		$theme = $this->BcBaser->siteConfig['theme'];
+		if($site->theme) {
+			$theme = $site->theme;
+		}
 		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
 		$_templates = array();
