@@ -50,7 +50,7 @@ $urlParams = ['content_id' => $data['Content']['id']];
 if($data['Content']['entity_id']) {
 	$urlParams = array_merge($urlParams, [$data['Content']['entity_id']]);
 }
-
+$fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site']['use_subdomain']);
 ?>
 
 
@@ -60,7 +60,7 @@ if($data['Content']['entity_id']) {
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Content']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id']]) ?>
 		<?php endif ?>
 		<?php if($isPublish): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['width' => 32, 'height' => 32, 'alt' => '確認', 'class' => 'btn']), $data['Content']['url'], ['title' => '確認', 'class' => 'btn-check', 'target' => '_blank']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['width' => 32, 'height' => 32, 'alt' => '確認', 'class' => 'btn']), $fullUrl, ['title' => '確認', 'class' => 'btn-check', 'target' => '_blank']) ?>
 		<?php endif ?>
 		<?php if(!$manageDisabled && !empty($this->BcContents->settings[$type]['routes']['manage'])): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['width' => 32, 'height' => 32, 'alt' => '管理', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['manage'], $urlParams), ['title' => '管理', 'class' => 'btn-manage']) ?>
@@ -97,7 +97,7 @@ if($data['Content']['entity_id']) {
 		<?php endif ?>
 	</td>
 	<td style="word-break: break-all;">
-		<?php $this->BcBaser->link(urldecode($data['Content']['url']), $data['Content']['url'], ['target' => '_blank']) ?><br>
+		<?php $this->BcBaser->link(urldecode($fullUrl), $fullUrl, ['target' => '_blank']) ?><br>
 		<?php echo h($data['Content']['title']) ?>
 	</td>
 	<td style="width:8%;text-align:center">
