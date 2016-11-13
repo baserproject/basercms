@@ -630,11 +630,8 @@ class Content extends AppModel {
  * @return mixed
  */
 	public function pureUrl($url, $siteId) {
-		$prefix = $this->Site->getPrefix($siteId);
-		if($prefix) {
-			$url = preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $url);
-		}
-		return $url;
+		$site = BcSite::findById($siteId);
+		return $site->getPureUrl($url);
 	}
 
 /**

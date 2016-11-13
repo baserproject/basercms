@@ -17,9 +17,17 @@ App::uses('BcFreezeHelper', 'View/Helper');
  * メールフォームヘルパー
  *
  * @package Mail.View.Helper
- *
+ * @property BcBaserHelper $BcBaser
+ * @property BcContentsHelper $BcContents
  */
 class MailformHelper extends BcFreezeHelper {
+
+/**
+ * ヘルパー
+ * 
+ * @var array
+ */
+	public $helpers = ['Html', 'BcTime', 'BcText', 'Js', 'BcUpload', 'BcCkeditor', 'BcBaser', 'BcContents'];
 
 /**
  * メールフィールドのデータよりコントロールを生成する
@@ -194,8 +202,33 @@ class MailformHelper extends BcFreezeHelper {
 		if (!isset($options['type'])) {
 			$options['type'] = 'file';
 		}
-
+		if(!empty($options['url']) && !empty($this->request->params['Site']['same_main_url'])) {
+			$options['url'] = $this->BcContents->getPureUrl($options['url'], $this->request->params['Site']['id']);
+		}
 		return parent::create($model, $options);
+	}
+
+/**
+ * 認証キャプチャを表示する
+ * 
+ * @param array $options オプション（初期値 : []）
+ * 	- `separate` : 画像と入力欄の区切り（初期値：''）
+ * 	- `class` : CSSクラス名（初期値：auth-captcha-image）
+ */
+	public function authCaptcha($fieldName, $options = []) {
+		$options = array_merge([
+			'separate' => '',
+			'class' => 'auth-captcha-image'
+		], $options);
+		$captchaId = mt_rand(0, 99999999);
+		$url = $this->request->params['Content']['url'];
+		if(!empty($this->request->params['Site']['same_main_url'])) {
+			$url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
+		}
+		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => $options['class']));
+		$output .= $options['separate'] . $this->text($fieldName);
+		$output .= $this->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
+		echo $output;
 	}
 
 }

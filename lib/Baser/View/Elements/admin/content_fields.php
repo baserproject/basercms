@@ -33,7 +33,7 @@ if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
 $baseUrl = $host . $baseUrl;
-$pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['name'], $this->request->data['Site']['alias']);
+$pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),
 	'data-current' => json_encode($this->request->data),

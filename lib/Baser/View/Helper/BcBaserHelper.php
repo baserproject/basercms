@@ -2625,15 +2625,17 @@ END_FLASH;
  */
 	public function afterRender($viewFile) {
 		parent::afterRender($viewFile);
-		$site = BcSite::findCurrent();
-		if(!$site) {
+		if(BcUtil::isAdminSystem()) {
 			return;
 		}
-		if($site->device != '') {
+		if(isset($this->request->params['Site']['name']) && is_null($this->request->params['Site']['name'])) {
+			return;
+		}
+		if(isset($this->request->params['Site']['device']) && $this->request->params['Site']['device'] != '') {
 			return;
 		}
 		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
-		$pureUrl = $site->getPureUrl($this->request->url);
+		$pureUrl = $this->BcContents->getPureUrl($this->request->url, $this->request->params['Site']['id']);
 		$agent = BcAgent::find('smartphone');
 		$subSite = BcSite::findCurrentSub(false, $agent);
 		if(!$subSite) {

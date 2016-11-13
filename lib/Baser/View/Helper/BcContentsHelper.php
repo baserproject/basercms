@@ -234,11 +234,8 @@ class BcContentsHelper extends AppHelper {
  * @param string $alias
  * @return mixed
  */
-	public function getPureUrl($url, $prefix, $alias) {
-		if($alias) {
-			$prefix = $alias;
-		}
-		return preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $url);
+	public function getPureUrl($url, $siteId) {
+		return $this->_Content->pureUrl($url, $siteId);
 	}
 
 /**
@@ -251,7 +248,7 @@ class BcContentsHelper extends AppHelper {
 		if(empty($this->request->params['Site'])) {
 			return '';
 		}
-		$url = $this->getPureUrl('/' . $this->request->url, $this->request->params['Site']['name'], $this->request->params['Site']['alias']);
+		$url = $this->getPureUrl('/' . $this->request->url, $this->request->params['Site']['id']);
 		$Site = ClassRegistry::init('Site');
 		$site = $Site->find('first', ['conditions' => ['Site.name' => $siteName], 'recursive' => -1]);
 		if(!$site) {
