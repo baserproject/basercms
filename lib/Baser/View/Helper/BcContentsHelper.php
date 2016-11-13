@@ -96,14 +96,6 @@ class BcContentsHelper extends AppHelper {
 				if (!empty($setting['routes'][$method])) {
 					$route = $setting['routes'][$method];
 					$setting['url'][$method] = Router::url($route);
-					// index アクションの際、index が省略されてしまうので強制的に補完
-					if ($route['action'] == 'index') {
-						// 規定以外の引数がないかチェック
-						unset($route['admin'], $route['plugin'], $route['prefix'], $route['controller'], $route['action']);
-						if (count($route) == 0) {
-							$setting['url'][$method] .= '/index';
-						}
-					}
 				}
 			}
 			// disabled
