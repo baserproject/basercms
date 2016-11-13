@@ -259,7 +259,8 @@ class ThemesController extends AppController {
 
 		clearAllCache();
 		ClassRegistry::flush();
-
+		BcSite::flash();
+		
 		if($currentTheme) {
 			$siteConfigs = array('SiteConfig' => array('theme' => $currentTheme));
 			$this->SiteConfig->saveKeyValue($siteConfigs);

@@ -94,6 +94,7 @@ class ToolsController extends AppController {
 				}
 				// Pageモデルがレストア処理でAppModelで初期化されClassRegistryにセットされている為
 				ClassRegistry::flush();
+				BcSite::flash();
 				if (!$error && !$this->Page->createAllPageTemplate()) {
 					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
 				}

@@ -384,6 +384,7 @@ class BcAppModel extends Model {
 			}
 		}
 		ClassRegistry::flush();
+		BcSite::flash();
 		clearAllCache();
 		return $result;
 	}
@@ -425,6 +426,7 @@ class BcAppModel extends Model {
 			}
 		}
 		ClassRegistry::flush();
+		BcSite::flash();
 		clearAllCache();
 		return $result;
 	}
@@ -573,6 +575,7 @@ class BcAppModel extends Model {
 		$ret = $db->addColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
+		BcSite::flash();
 		return $ret;
 	}
 
@@ -599,6 +602,7 @@ class BcAppModel extends Model {
 		$ret = $db->changeColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
+		BcSite::flash();
 		return $ret;
 	}
 
@@ -625,6 +629,7 @@ class BcAppModel extends Model {
 		$ret = $db->dropColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
+		BcSite::flash();
 		return $ret;
 	}
 
@@ -652,6 +657,7 @@ class BcAppModel extends Model {
 		$ret = $db->renameColumn($options);
 		$this->deleteModelCache();
 		ClassRegistry::flush();
+		BcSite::flash();
 		return $ret;
 	}
 
