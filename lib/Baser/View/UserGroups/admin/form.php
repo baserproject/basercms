@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] ユーザーグループ登録/編集フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ユーザーグループ登録/編集フォーム
  */
 $authPrefixes = array();
 foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
@@ -20,9 +22,8 @@ foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 
 <script type="text/javascript">
 $(window).load(function() {
-	$("#UserGroupName").focus();
 <?php if ($this->BcForm->value('UserGroup.name') == 'admins'): ?>
-	$("#UserGroupAuthPrefixAdmin").attr('disabled', 'disabled');
+	$("#UserGroupAuthPrefixAdmin").prop('disabled', true);
 <?php endif ?>
 	$("#UserGroupAdminEditForm").submit(function(){
 		$("#UserGroupAuthPrefixAdmin").removeAttr('disabled');
@@ -50,7 +51,7 @@ $(window).load(function() {
 					<?php echo $this->BcForm->value('UserGroup.name') ?>
 					<?php echo $this->BcForm->input('UserGroup.name', array('type' => 'hidden')) ?>
 				<?php else: ?>
-					<?php echo $this->BcForm->text('UserGroup.name', array('size' => 20, 'maxlength' => 255)) ?>
+					<?php echo $this->BcForm->text('UserGroup.name', array('size' => 20, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php endif ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('UserGroup.name') ?>
@@ -72,25 +73,34 @@ $(window).load(function() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.use_admin_globalmenu', '管理システムの<br />グローバルメニューを利用する') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.use_admin_globalmenu', 'その他') ?></th>
 			<td class="col-input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php if ($this->BcForm->value('UserGroup.use_admin_globalmenu')): ?>
-						利用する
+						管理システムのグローバルメニューを利用する
 					<?php else: ?>
-						利用しない
+						管理システムのグローバルメニューを利用しない
 					<?php endif ?>
 				<?php else: ?>
-					<?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', array('type' => 'checkbox', 'label' => '利用する')) ?>
+					<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', array('type' => 'checkbox', 'label' => '管理システムのグローバルメニューを利用する')) ?>　</span>
+					<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div id="helptextName" class="helptext">
+						<ul>
+							<li>管理システムでグローバルメニューを利用するかどうか設定します。</li>
+							<li>管理グループの場合は変更できません。</li>
+						</ul>
+					</div>
+					<?php echo $this->BcForm->error('UserGroup.use_admin_globalmenu') ?>
 				<?php endif ?>
+				<br>
+				<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_move_contents', array('type' => 'checkbox', 'label' => 'コンテンツのドラッグ＆ドロップ移動機能を利用する')) ?></span>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('UserGroup.use_admin_globalmenu') ?>
 				<div id="helptextName" class="helptext">
-					<ul>
-						<li>管理システムでグローバルメニューを利用するかどうか設定します。</li>
-						<li>admins の場合は変更できません。</li>
-					</ul>
+					<span>
+						コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。
+					</span>
 				</div>
+				<?php echo $this->BcForm->error('UserGroup.use_move_contents') ?>
 			</td>
 		</tr>
 		<?php if (count($authPrefixes) > 1): ?>

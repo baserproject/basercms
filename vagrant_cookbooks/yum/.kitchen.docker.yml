@@ -1,0 +1,43 @@
+driver:
+  name: dokken
+  chef_version: latest
+  privileged: true # because Docker and SystemD/Upstart
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+
+verifier:
+  root_path: '/opt/verifier'
+  sudo: false
+
+platforms:
+- name: centos-5
+  driver:
+    image: centos:5
+
+- name: centos-6
+  driver:
+    image: centos:6
+
+- name: centos-7
+  driver:
+    image: centos:7
+
+- name: fedora-latest
+  driver:
+    image: fedora:latest
+
+suites:
+  - name: default
+    run_list:
+      - recipe[yum::default]
+      - recipe[yum_test::test_repo]
+    excludes: fedora-latest
+  - name: dnf_compat
+    run_list:
+      - recipe[yum::dnf_yum_compat]
+      - recipe[yum_test::test_dnf_compat]
+    includes: fedora-latest

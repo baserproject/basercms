@@ -1,16 +1,15 @@
 <?php
-
 /**
- * run all models baser feed tests
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- * @package         Feed.Test.Case
- * @copyright       Copyright 2008 - 2015, baserCMS Users Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.1.0-beta
- * @license         http://basercms.net/license/index.html
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Feed.Test.Case
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 class FeedAllModelTest extends CakeTestSuite {
 
 /**

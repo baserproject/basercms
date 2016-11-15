@@ -1,19 +1,13 @@
 <?php
-
 /**
- * パーミッションモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -24,33 +18,15 @@
 class Permission extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- * @access public
- */
-	public $name = 'Permission';
-
-/**
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
 /**
- * データベース接続
- *
- * @var string
- * @access public
- */
-	public $useDbConfig = 'baser';
-
-/**
  * belongsTo
  * @var array
- * @access public
  */
 	public $belongsTo = array('UserGroup' => array('className' => 'UserGroup',
 			'foreignKey' => 'user_group_id'));
@@ -61,7 +37,6 @@ class Permission extends AppModel {
  * キャッシュ用
  * 
  * @var mixed
- * @access public
  */
 	public $permissionsTmp = -1;
 
@@ -69,22 +44,21 @@ class Permission extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '設定名を入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => '設定名は255文字以内で入力してください。')
 		),
 		'user_group_id' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'ユーザーグループを選択してください。',
 				'required' => true)
 		),
 		'url' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '設定URLを入力してください。'),
 			array('rule' => array('maxLength', 255),
 				'message' => '設定URLは255文字以内で入力してください。'),
@@ -98,7 +72,6 @@ class Permission extends AppModel {
  *
  * @param array $check チェックするURL
  * @return boolean True if the operation should continue, false if it should abort
- * @access public
  */
 	public function checkUrl($check) {
 		if (!$check[key($check)]) {
@@ -132,7 +105,6 @@ class Permission extends AppModel {
  *
  * @param int $id PermissionのID
  * @return string
- * @access public
  */
 	public function getAuthPrefix($id) {
 		$data = $this->find('first', array(
@@ -149,7 +121,6 @@ class Permission extends AppModel {
 /**
  * 初期値を取得する
  * @return array
- * @access public
  */
 	public function getDefaultValue() {
 		$data['Permission']['auth'] = 0;
@@ -162,7 +133,6 @@ class Permission extends AppModel {
  *
  * @param string フィールド名
  * @return array コントロールソース
- * @access	public
  */
 	public function getControlSource($field = null) {
 		$controlSources['user_group_id'] = $this->UserGroup->find('list', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId'))));
@@ -180,7 +150,6 @@ class Permission extends AppModel {
  * 
  * @param array $options
  * @return boolean
- * @access public
  */
 	public function beforeSave($options = array()) {
 		if (isset($this->data['Permission'])) {
@@ -203,7 +172,6 @@ class Permission extends AppModel {
  * @param array $url
  * @param string $userGroupId
  * @return boolean
- * @access public
  */
 	public function check($url, $userGroupId) {
 		if ($this->permissionsTmp === -1) {
@@ -232,12 +200,13 @@ class Permission extends AppModel {
 			'/^admin$/',
 			'/^admin\/$/',
 			'/^admin\/dashboard\/.*?/',
+			'/^admin\/dblogs\/.*?/',
 			'/^admin\/users\/logout$/',
 			'/^admin\/user_groups\/set_default_favorites$/'
 		);
-
-		if (!empty($_SESSION['Auth']['User']['id'])) {
-			$allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth']['User']['id'] . '$/';
+		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
+		if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
+			$allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
 		}
 
 		foreach ($allows as $allow) {

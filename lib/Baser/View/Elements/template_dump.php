@@ -1,19 +1,19 @@
 <?php
 /**
- * 利用しているテンプレート一覧
- *
- * デバッグモード２以上で表示
- *
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * 利用しているテンプレート一覧
+ *
+ * デバッグモード２以上で表示
  */
  if(!$this->_viewFilesLog) return;
  ?>

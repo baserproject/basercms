@@ -441,7 +441,7 @@ ul.sitemap ul.ul-level-2 li:last-child{
 #BlogCommentAddForm {
 	padding:0 10px 40px 10px;
 }
-#contentsNavi {
+.post-navi {
 	text-align: center;
 	margin-bottom: 40px;
 }

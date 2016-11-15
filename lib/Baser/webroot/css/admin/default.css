@@ -3,9 +3,9 @@
  * タグ・クラスの基本設定
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
@@ -172,6 +172,7 @@ input[type=text], textarea, select, input[type=password] {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	background-color:#fff;
+	color:#535A62;
 }
 input[type=checkbox] {
 	vertical-align: middle;
@@ -188,16 +189,22 @@ input[type=button] {
 }
 input[type=text], textarea, input[type=password] {
 	font-size: 1.3em;
+	color:#535A62;
 	padding: 3px 3px;
 }
 input[type=text], input[type=password] {
 	height:1.4em;
 }
-select {
-	font-size: 1.2em;
+select[disabled],
+input[type="text"][disabled],
+input[type="radio"][disabled]{
+    background:#EFEFEF;
+    cursor:not-allowed; /* 禁止カーソル */
 }
 select {
+	font-size: 1.3em!important;
 	padding: 1px;
+    height:1.8em;
 }
 optgroup option{
 	padding-left:20px;

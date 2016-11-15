@@ -1,11 +1,9 @@
 <?php
 /**
- * BcUtil
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Lib
  * @since			baserCMS v 3.0.7
@@ -13,7 +11,13 @@
  */
 
 App::uses('BcAuthComponent', 'Controller/Component');
+App::uses('Router', 'Routing');
 
+/**
+ * Class BcUtil
+ *
+ * @package Baser.Lib
+ */
 class BcUtil extends Object {
 
 /**
@@ -26,10 +30,17 @@ class BcUtil extends Object {
  * 
  * @return boolean
  */
-	public static function isAdminSystem() {
-		$url = Configure::read('BcRequest.pureUrl');
+	public static function isAdminSystem($url = null) {
+		if(!$url) {
+			$request = Router::getRequest(true);
+			if($request) {
+				$url = $request->url;
+			} else {
+				return false;
+			}
+		}
 		$adminPrefix = Configure::read('Routing.prefixes.0');
-		return (boolean)(preg_match('/^' . $adminPrefix . '\//', $url) || preg_match('/^' . $adminPrefix . '$/', $url));
+		return (boolean)(preg_match('/^(|\/)' . $adminPrefix . '\//', $url) || preg_match('/^(|\/)' . $adminPrefix . '$/', $url));
 	}
 
 /**
@@ -38,7 +49,7 @@ class BcUtil extends Object {
  * @return boolean
  */
 	public static function isAdminUser() {
-		$user = self::loginUser();
+		$user = self::loginUser('admin');
 		if (empty($user['UserGroup']['name'])) {
 			return false;
 		}
@@ -50,9 +61,9 @@ class BcUtil extends Object {
  * 
  * @return array
  */
-	public static function loginUser() {
+	public static function loginUser($prefix = 'admin') {
 		$Session = new CakeSession();
-		$sessionKey = BcUtil::getLoginUserSessionKey();
+		$sessionKey = BcUtil::authSessionKey($prefix);
 		$user = $Session->read('Auth.' . $sessionKey);
 		if (!$user) {
 			if (!empty($_SESSION['Auth'][$sessionKey])) {
@@ -61,6 +72,17 @@ class BcUtil extends Object {
 		}
 		return $user;
 	}
+
+/**
+ * 認証用のキーを取得
+ * 
+ * @param string $prefix
+ * @return mixed
+ */
+	public static function authSessionKey($prefix = 'admin') {
+		return Configure::read('BcAuthPrefix.' . $prefix . '.sessionKey');
+	}
+	
 /**
  * ログインしているユーザーのセッションキーを取得
  * 
@@ -68,9 +90,6 @@ class BcUtil extends Object {
  */
 	public static function getLoginUserSessionKey() {
 		list(, $sessionKey) = explode('.', BcAuthComponent::$sessionKey);
-		if (empty($sessionKey)) {
-			$sessionKey = 'User';
-		}
 		return $sessionKey;
 	}
 /**
@@ -124,15 +143,10 @@ class BcUtil extends Object {
 		}
 		
 		$paths = App::path('Plugin');
-		// @deprecated since 3.0.2
-		// sql ディレクトリは非推奨
-		$folders = array('Schema', 'sql');
 		foreach ($paths as $path) {
-			foreach($folders as $folder) {
-				$_path = $path . $plugin . DS . 'Config' . DS . $folder;
-				if (is_dir($_path)) {
-					return $_path;
-				}
+			$_path = $path . $plugin . DS . 'Config' . DS . 'Schema';
+			if (is_dir($_path)) {
+				return $_path;
 			}
 		}
 		
@@ -246,4 +260,134 @@ class BcUtil extends Object {
 		return $value;
 	}
 
+/**
+ * URL用に文字列を変換する
+ *
+ * できるだけ可読性を高める為、不要な記号は除外する
+ *
+ * @param $value
+ * @return string
+ */
+	public static function urlencode($value) {
+		$value = str_replace(array(
+			' ', '　', '\\', '\'','|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
+			'/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
+		), '_', $value);
+		$value = preg_replace('/\_{2,}/', '_', $value);
+		$value = preg_replace('/(^_|_$)/', '', $value);
+		return urlencode($value);
+	}
+
+/**
+ * レイアウトテンプレートのリストを取得する
+ *
+ * @param string $path
+ * @param string $plugin
+ * @param string $theme
+ * @return array
+ */
+	public static function getTemplateList($path, $plugin, $theme) {
+		
+		if($plugin) {
+			$templatesPathes = App::path('View', $plugin);
+		} else {
+			$templatesPathes = App::path('View');
+			if ($theme) {
+				array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
+			}
+		}
+		$_templates = array();
+		foreach ($templatesPathes as $templatesPath) {
+			$templatesPath .= $path . DS;
+			$folder = new Folder($templatesPath);
+			$files = $folder->read(true, true);
+			$foler = null;
+			if ($files[1]) {
+				if ($_templates) {
+					$_templates = array_merge($_templates, $files[1]);
+				} else {
+					$_templates = $files[1];
+				}
+			}
+		}
+		$templates = array();
+		foreach ($_templates as $template) {
+			$ext = Configure::read('BcApp.templateExt');
+			if ($template != 'installations' . $ext) {
+				$template = basename($template, $ext);
+				$templates[$template] = $template;
+			}
+		}
+		return $templates;
+	}
+
+/**
+ * テーマリストを取得する
+ *
+ * @return array
+ */
+	public static function getThemeList() {
+		$path = WWW_ROOT . 'theme';
+		$folder = new Folder($path);
+		$files = $folder->read(true, true);
+		$themes = array();
+		foreach ($files[0] as $theme) {
+			if ($theme != 'core' && $theme != '_notes') {
+				$themes[$theme] = $theme;
+			}
+		}
+		return $themes;
+	}
+
+/**
+ * サブドメインを取得する
+ *
+ * @return string
+ */
+	public static function getSubDomain($host = null) {
+		if(isConsole() && empty($_SERVER['HTTP_HOST']) && !$host) {
+			return '';
+		}
+		if(!$host) {
+			$host = $_SERVER['HTTP_HOST'];
+		}
+
+		if(strpos($host, '.') === false) {
+			return '';
+		}
+		$mainHost = BcUtil::getMainFullDomain();
+		if($host == $mainHost) {
+			return '';
+		}
+		if(strpos($host, $mainHost) === false) {
+			return '';
+		}
+		$subDomain = str_replace($mainHost, '', $host);
+		if($subDomain) {
+			return preg_replace('/\.$/', '', $subDomain);
+		}
+		return '';
+
+	}
+	
+	public static function getDomain($url) {
+		$mainUrlInfo = parse_url($url);
+		$host = $mainUrlInfo['host'];
+		if(!empty($mainUrlInfo['port'])) {
+			$host .= ':' . $mainUrlInfo['port'];
+		}
+		return $host;
+	}
+	
+	public static function getMainFullDomain() {
+		return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
+	}
+	
+	public static function getFullDomain() {
+		if(isConsole() && empty($_SERVER['HTTP_HOST'])) {
+			return '';
+		}
+		return $_SERVER['HTTP_HOST'];
+	}
+	
 }

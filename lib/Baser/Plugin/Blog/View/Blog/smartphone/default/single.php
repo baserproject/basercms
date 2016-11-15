@@ -1,35 +1,36 @@
 <?php
 /**
- * [PUBLISH] ブログ詳細ページ
- * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] ブログ詳細ページ
+ */
+$this->BcBaser->css(array('Blog.style'), array('inline' => false));
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
-$this->Blog->editPost($post['BlogPost']['blog_content_id'], $post['BlogPost']['id']);
 ?>
 
+
 <!-- blog title -->
-<h2 class="contents-head">
+<h1 class="contents-head">
 	<?php $this->Blog->title() ?>
-</h2>
+</h1>
 
 <!-- post detail -->
 <div class="post">
 
 	<!-- post title -->
-	<h3 class="contents-head">
+	<h2 class="contents-head">
 		<?php $this->BcBaser->contentsTitle() ?><br />
 		<small><?php $this->Blog->postDate($post) ?></small>
-	</h3>
+	</h2>
 
 	<?php $this->Blog->postContent($post) ?>
 
@@ -38,7 +39,7 @@ $this->Blog->editPost($post['BlogPost']['blog_content_id'], $post['BlogPost']['i
 </div>
 
 <!-- contents navi -->
-<div id="contentsNavi">
+<div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;｜&nbsp;
 	<?php $this->Blog->nextLink($post) ?>

@@ -1,20 +1,15 @@
 <?php
-
 /**
- * フィード設定モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('FeedAppModel', 'Feed.Model');
 
 /**
@@ -25,33 +20,16 @@ App::uses('FeedAppModel', 'Feed.Model');
 class FeedConfig extends FeedAppModel {
 
 /**
- * クラス名
- *
- * @var string
- * @access public
- */
-	public $name = 'FeedConfig';
-
-/**
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
-
-/**
- * DB設定
- * @var string
- * @access public
- */
-	public $useDbConfig = 'plugin';
 
 /**
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array("FeedDetail" =>
 		array("className" => "Feed.FeedDetail",
@@ -66,11 +44,10 @@ class FeedConfig extends FeedAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'フィード設定名を入力してください。',
 				'required' => true),
 			array('rule' => array('maxLength', 50),
@@ -90,7 +67,7 @@ class FeedConfig extends FeedAppModel {
 				'required' => true)
 		),
 		'template' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'テンプレート名を入力してください。'),
 			array('rule' => 'halfText',
 				'message' => 'テンプレート名は半角のみで入力してください。'),
@@ -103,7 +80,6 @@ class FeedConfig extends FeedAppModel {
  * 初期値を取得
  * 
  * @return array
- * @access public
  */
 	public function getDefaultValue() {
 		$data['FeedConfig']['display_number'] = '5';

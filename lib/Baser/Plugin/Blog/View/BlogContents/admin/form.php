@@ -1,89 +1,30 @@
 <?php
-/**
- * [ADMIN] ブログコンテンツ フォーム
- *
+/** 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ブログコンテンツ フォーム
+ */
+$this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 ?>
 
 
-<script type="text/javascript">
-	$(window).load(function() {
-		$("#BlogContentName").focus();
-	});
-$(function(){
-	$("#EditLayoutTemplate").click(function(){
-		if(confirm('ブログ設定を保存して、レイアウトテンプレート '+$("#BlogContentLayout").val()+' の編集画面に移動します。よろしいですか？')){
-				$("#BlogContentEditLayoutTemplate").val(1);
-				$("#BlogContentEditBlogTemplate").val('');
-				$("#BlogContentAdminEditForm").submit();
-			}
-		});
-	$("#EditBlogTemplate").click(function(){
-		if(confirm('ブログ設定を保存して、コンテンツテンプレート '+$("#BlogContentTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-				$("#BlogContentEditLayoutTemplate").val('');
-				$("#BlogContentEditBlogTemplate").val(1);
-				$("#BlogContentAdminEditForm").submit();
-			}
-		});
-	});
-</script>
-
-<?php if ($this->action == 'admin_edit'): ?>
-	<div class="em-box align-left">
-		<?php if ($this->BcForm->value('BlogContent.status')): ?>
-			<strong>このブログのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/index'), '/' . $blogContent['BlogContent']['name'] . '/index') ?></strong>
-		<?php else: ?>
-			<strong>このブログのURL：<?php echo $this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/index') ?></strong>
-		<?php endif ?>
-	</div>
-<?php endif ?>
-
-<!-- form -->
 <h2>基本項目</h2>
 
 
 <?php echo $this->BcForm->create('BlogContent') ?>
+<?php echo $this->BcForm->input('BlogContent.id', array('type' => 'hidden')) ?>
+
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table">
-		<?php if ($this->action == 'admin_edit'): ?>
-			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('BlogContent.id', 'NO') ?></th>
-				<td class="col-input">
-					<?php echo $this->BcForm->value('BlogContent.id') ?>
-					<?php echo $this->BcForm->input('BlogContent.id', array('type' => 'hidden')) ?>
-				</td>
-			</tr>
-		<?php endif; ?>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.name', 'ブログアカウント名') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpCategoryFilter', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('BlogContent.name') ?>
-				<div id="helptextCategoryFilter" class="helptext">
-					<ul>
-						<li>ブログのURLに利用します。<br />
-							(例)ブログアカウント名が test の場合・・・http://example/test/</li>
-						<li>半角英数字で入力してください。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.title', 'ブログタイトル') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogContent.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'counter' => true)) ?>
-				<?php echo $this->BcForm->error('BlogContent.title') ?>
-			</td>
-		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.description', 'ブログ説明文') ?></th>
 			<td class="col-input">
@@ -96,15 +37,6 @@ $(function(){
 				))
 				?>
 <?php echo $this->BcForm->error('BlogContent.description') ?>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.exclude_search', '公開設定') ?></th>
-			<td class="col-input">
-
-				<?php echo $this->BcForm->input('BlogContent.status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
-<?php echo $this->BcForm->error('BlogContent.status') ?>
-<?php echo $this->BcForm->input('BlogContent.exclude_search', array('type' => 'checkbox', 'label' => 'このブログのトップページをサイト内検索の検索結果より除外する')) ?>
 			</td>
 		</tr>
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
@@ -153,7 +85,7 @@ $(function(){
 						<li>半角数字で入力してください。</li>
 							<?php if ($this->action == 'admin_edit'): ?>
 							<li>RSSフィードのURLは
-							<?php $this->BcBaser->link(Router::url('/' . $this->BcForm->value('BlogContent.name') . '/index.rss', true), '/' . $this->BcForm->value('BlogContent.name') . '/index.rss', array('target' => '_blank')) ?>
+							<?php $this->BcBaser->link(Router::url('/' . $this->BcForm->value('Content.name') . '/index.rss', true), '/' . $this->BcForm->value('Content.name') . '/index.rss', array('target' => '_blank')) ?>
 								となります。</li>
 							<?php endif ?>
 					</ul>
@@ -215,34 +147,12 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.layout', 'レイアウトテンプレート名') ?>&nbsp;<span class="required">*</span></th>
-			<td class="col-input">
-				<?php
-				echo $this->BcForm->input('BlogContent.layout', array(
-					'type' => 'select',
-					'options' => $this->Blog->getLayoutTemplates()))
-				?>
-<?php echo $this->BcForm->input('BlogContent.edit_layout_template', array('type' => 'hidden')) ?>
-<?php if ($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditLayoutTemplate')) ?>
-<?php endif ?>
-<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpLayout', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-<?php echo $this->BcForm->error('BlogContent.layout') ?>
-				<div id="helptextLayout" class="helptext">
-					<ul>
-						<li>ブログの外枠のテンプレートを指定します。</li>
-						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
-					</ul>
-				</div>
-			</td>
-		</tr>
-		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogContent.template', 'コンテンツテンプレート名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php
 				echo $this->BcForm->input('BlogContent.template', array(
 					'type' => 'select',
-					'options' => $this->Blog->getBlogTemplates()))
+					'options' => $this->Blog->getBlogTemplates($this->BcForm->value('Content.site_id'))))
 				?>
 <?php echo $this->BcForm->input('BlogContent.edit_blog_template', array('type' => 'hidden')) ?>
 <?php if ($this->action == 'admin_edit'): ?>
@@ -288,11 +198,6 @@ $(function(){
 <!-- button -->
 <div class="submit">
 <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
-<?php if ($this->action == 'admin_edit'): ?>
-	<?php
-	$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('BlogContent.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogContent.title')), false);
-	?>
-<?php endif ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

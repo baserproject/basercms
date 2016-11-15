@@ -1,20 +1,15 @@
 <?php
-
 /**
- * GoogleMapヘルパー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BcGmapsComponent', 'Controller/Component');
 
 /**
@@ -154,8 +149,8 @@ INFO_END;
 		}
 		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key']) ? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
 		if (empty($apiKey)) {
-			$adminLink = $this->BcBaser->getUrl(array("admin"=>true, 'controller' => 'site_configs', 'action'=>'form'));
-			echo 'Google Maps APIのキーが設定されていません。<a href="' . $adminLink . '">システム管理</a>より設定してください。';
+			$adminLink = $this->BcBaser->getUrl(array("admin"=>true, 'plugin' => '', 'controller' => 'site_configs', 'action'=>'form'));
+			echo 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="' . $adminLink . '">システム管理</a>より設定してください。';
 		}
 		$googleScript = '<script src="http://maps.google.com/maps/api/js?key=' . h($apiKey) . '"></script>';
 

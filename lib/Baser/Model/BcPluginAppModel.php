@@ -1,36 +1,19 @@
 <?php
-
 /**
- * プラグイン拡張クラス
- * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
 
 /**
- * プラグイン拡張クラス
- * プラグインのモデルより継承して利用します。
- * @package Baser.Model
- */
-class BcPluginAppModel extends AppModel {
-
-/**
- * The name of the DataSource connection that this Model uses
+ * Class BcPluginAppModel
  *
- * @var		string
- * @access 	public
+ * @deprecated 5.0.0 since 4.0.0 プラグインは AppModel を直接継承させる
  */
-	public $useDbConfig = 'plugin';
-
-}
+CakeLog::write(LOG_ALERT, 'モデル：BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。');
+class BcPluginAppModel extends AppModel {}

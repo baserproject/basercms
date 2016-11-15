@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] リスト設定リンク
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] リスト設定リンク
  */
 $currentNum = '';
 if (empty($nums)) {
@@ -33,6 +35,8 @@ if ($links) {
 	$link = implode('｜', $links);
 }
 ?>
+
+
 <?php if ($link): ?>
 	<div class="list-num">
 		<strong>表示件数</strong><p><?php echo $link ?></p>

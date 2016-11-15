@@ -1,22 +1,18 @@
 <?php
 /**
- * [PUBLISH] フォーム
- * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-$prefix = '';
-if (Configure::read('BcRequest.agent')) {
-	$prefix = '/' . Configure::read('BcRequest.agentAlias');
-}
+
+/**
+ * [PUBLISH] フォーム
+ */
 // ブラウザのヒストリーバック（戻るボタン）対応
 $this->Mail->token();
 ?>
@@ -26,7 +22,7 @@ $this->Mail->token();
 $(function(){
 	$(".form-submit").click(function(){
 		var mode = $(this).attr('id').replace('BtnMessage', '');
-		$("#MessageMode").val(mode);
+		$("#MailMessageMode").val(mode);
 		return true;
 	});
 });
@@ -35,13 +31,14 @@ $(function(){
 
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/confirm', 'type' => 'file')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . 'confirm', 'type' => 'file')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create('Message', array('url' => $prefix . '/' . $mailContent['MailContent']['name'] . '/submit')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url']  . 'submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 
-<?php echo $this->Mailform->hidden('Message.mode') ?>
+<?php $this->Mailform->unlockField('MailMessage.mode') ?>
+<?php echo $this->Mailform->hidden('MailMessage.mode') ?>
 
 <table cellpadding="0" cellspacing="0" class="row-table-01">
 	<?php $this->BcBaser->element('mail_input', array('blockStart' => 1)) ?>
@@ -50,14 +47,15 @@ $(function(){
 <?php if ($mailContent['MailContent']['auth_captcha']): ?>
 	<?php if (!$freezed): ?>
 		<div class="auth-captcha clearfix">
-			<?php $this->BcBaser->img($prefix . '/' . $mailContent['MailContent']['name'] . '/captcha', array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
-			<?php echo $this->Mailform->text('Message.auth_captcha') ?><br />
+			<?php echo $this->Mailform->authCaptcha('MailMessage.auth_captcha') ?>
+			<br />
 			&nbsp;画像の文字を入力してください<br clear="all" />
-			<?php echo $this->Mailform->error('Message.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
+			<?php echo $this->Mailform->error('MailMessage.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
 		</div>
 	<?php else: ?>
-		<?php echo $this->Mailform->hidden('Message.auth_captcha') ?>
-	<?php endif ?> 
+		<?php echo $this->Mailform->hidden('MailMessage.auth_captcha') ?>
+		<?php echo $this->Mailform->hidden('MailMessage.captcha_id') ?>
+	<?php endif ?>
 <?php endif ?>
 
 <?php /* 送信ボタン */ ?>

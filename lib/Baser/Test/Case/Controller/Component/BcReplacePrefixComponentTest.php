@@ -1,15 +1,13 @@
 <?php
-
 /**
- * BcReplacePrefixComponentのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Favorites Community <http://sites.google.com/site/baserFavorites/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Favorites Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Controller.Component
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('BcReplacePrefixComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -28,7 +26,9 @@ class BcReplacePrefixTestController extends Controller {
 
 }
 
-
+/**
+ * BcReplacePrefixComponentのテスト
+ */
 class BcReplacePrefixComponentTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -36,12 +36,11 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogTag',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.FeedDetail',
 		'baser.Default.SiteConfig',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
-		'baser.Default.PageCategory',
 		'baser.Default.Page',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
@@ -85,7 +84,6 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
  * @param string $action
  * @param string ... etc.
  * @return void
- * @access public
  */
 	public function testAllow() {
 		$this->BcReplacePrefix->allowedPureActions = array( 'a' => 'hoge1', 'b' => 'hoge2');

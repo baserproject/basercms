@@ -1,29 +1,34 @@
 <?php
-
 /**
- * test for BlogPost
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS BlogPosts Community <http://sites.google.com/site/baserBlogPosts/>
- * @package         Feed.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS BlogPosts Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.1.0-beta
- * @license         http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Blog.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BlogPost', 'Blog.Model');
 
+/**
+ * Class BlogPostTest
+ * 
+ * @property BlogPost $BlogPost
+ */
 class BlogPostTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.User',
-		'baser.Default.Content',
-		'baser.Default.PluginContent',
+		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogTag',
 		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
+		'baser.Default.Site',
+		'baser.Default.Content',
 		'plugin.blog.Model/BlogPostModel',
 		'plugin.blog.Model/BlogCategoryModel',
 	);
@@ -142,7 +147,7 @@ class BlogPostTest extends BaserTestCase {
 		$this->BlogPost->create(array(
 			'BlogPost' => array(
 				'publish_begin' => '2020-01-27 12:57:59',
-				'publish_end' => '2020-01-27 12:57:59',
+				'publish_end' => '2020-01-29 12:57:59',
 				'posts_date' => '2020-01-27 12:57:59',
 			)
 		));
@@ -236,8 +241,8 @@ class BlogPostTest extends BaserTestCase {
  * @dataProvider getEntryDatesDataProvider
  */
 	public function testGetEntryDates($blogContentId, $year, $month, $expected) {
-		$dbConfig = new DATABASE_CONFIG();
-		$datasource = $dbConfig->plugin['datasource'];
+
+		$datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
 		if ($datasource === 'Database/BcSqlite') {
 			$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		}
@@ -274,8 +279,7 @@ class BlogPostTest extends BaserTestCase {
  * 指定した月の記事が存在するかチェックする
  */
 	public function testExistsEntry() {
-		$dbConfig = new DATABASE_CONFIG();
-		$datasource = $dbConfig->plugin['datasource'];
+		$datasource = $datasource = $this->BlogPost->getDataSource()->config['datasource'];
 		if ($datasource === 'Database/BcSqlite') {
 			$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		}
@@ -309,8 +313,7 @@ class BlogPostTest extends BaserTestCase {
 	public function getControlSourceDataProvider() {
 		return array(
 			array(array('blogContentId' => 1), array(1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ')),
-			array(array('blogContentId' => 2), array()),
-			array(array('userGroupId' => 1, 'blogContentId' => 1, 'postEditable' => false, 'blogCategoryId' => 2), array(2 => '子カテゴリ')),
+			array(array('blogContentId' => 2), array())
 		);
 	}
 
@@ -339,24 +342,25 @@ class BlogPostTest extends BaserTestCase {
 			'exclude_search' => 0,
 			'name' => 'test-name',
 			'blog_content_id' => 1,
+			'blog_category_id' => null,
 			'posts_date' => '2020-01-27 12:57:59',
 			'content' => 'test-content',
 			'detail' => 'test-detail',
 			'no' => 4,
 			'status' => 0,
 			'publish_begin' => '2020-01-27 12:57:59',
-			'publish_end' => '2020-01-27 12:57:59',
+			'publish_end' => '2020-01-28 12:57:59',
 		));
 
-		$Content = ClassRegistry::init('Content');
+		$SearchIndex = ClassRegistry::init('SearchIndex');
 		
 		// 登録
 		$data['BlogPost']['exclude_search'] = false;
 		$this->BlogPost->create($data);
 		$this->BlogPost->save();
 
-		$result = $Content->find('count', array(
-			'conditions' => array('Content.title' => 'test-name'),
+		$result = $SearchIndex->find('count', array(
+			'conditions' => array('SearchIndex.title' => 'test-name'),
 		));
 		$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
 		
@@ -365,12 +369,12 @@ class BlogPostTest extends BaserTestCase {
 		$this->BlogPost->create($data);
 		$this->BlogPost->save();
 
-		$result = $Content->find('count', array(
-			'conditions' => array('Content.title' => 'test-name'),
+		$result = $SearchIndex->find('count', array(
+			'conditions' => array('SearchIndex.title' => 'test-name'),
 		));
 		$this->assertEquals($result, 0, '検索用テーブルから削除できません');
 
-		unset($Content);
+		unset($SearchIndex);
 	}
 
 
@@ -379,9 +383,9 @@ class BlogPostTest extends BaserTestCase {
  *
  * @param array $data
  * @return array
- * @access public
  */
-	public function testCreateContent() {
+	public function testCreateSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$data = array(
 			'name' => 'test-name',
 			'content' => 'test-content',

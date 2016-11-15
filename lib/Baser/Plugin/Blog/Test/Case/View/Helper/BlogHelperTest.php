@@ -1,14 +1,12 @@
 <?php
 /**
- * test for BlogHelper
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.View.Helper
- * @since	       baserCMS v 3.0.6
+ * @package			Blog.Test.Case
+ * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */
 
@@ -24,10 +22,10 @@ App::uses('BlogCategory', 'Blog.Model');
 /**
  * Blog helper library.
  *
- * @package       Baser.Test.Case
- * @property      BlogHelper $Blog
- * @property      BlogPost $BlogPost
- * @property      BlogContent $BlogContent
+ * @package Baser.Test.Case
+ * @property BlogPost $BlogPost
+ * @property BlogContent $BlogContent
+ * @property BlogHelper $Blog
  */
 class BlogHelperTest extends BaserTestCase {
 
@@ -38,10 +36,12 @@ class BlogHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.User',
 		'baser.Default.Page',
-		'baser.Default.PluginContent',
 		'baser.Default.Plugin',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogContent',
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
 		'baser.Default.BlogTag',
 		'plugin.blog.Model/BlogCategoryModel',
 		'plugin.blog.Model/BlogPostModel',
@@ -74,9 +74,19 @@ class BlogHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$View = new View();
+		$View->request->params['Site'] = array(
+			'use_subdomain' => null,
+			'name' => null,
+			'alias' => null,
+		);
+		$View->request->params['Content'] = [
+			'url' => '/news/',
+			'name' => 'news',
+			'title' => '新着情報'
+		];
 		$this->Blog = new BlogHelper($View);
 
-		$this->BlogContent = ClassRegistry::init('BlogContent');
+		$this->BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$this->BlogContent->expects(array());
 		$this->Blog->blogContent = Hash::extract($this->BlogContent->read(null, 1), 'BlogContent');
 	}
@@ -111,16 +121,16 @@ class BlogHelperTest extends BaserTestCase {
 			));
 			$this->Blog = new BlogHelper($View);
 		}
-
+		$this->Blog->blogContent = null;
 		$this->Blog->setContent($blogContentId);
-		$this->assertEqual($this->Blog->blogContent['name'], $expected, 'ブログコンテンツデータを正しくセットできません');
+		$this->assertEquals($this->Blog->blogContent['id'], $expected, 'ブログコンテンツデータを正しくセットできません');
 	}
 
 	public function setContentDataProvider() {
 		return array(
-			array(null, false, 'news'),
-			array(2, false, 'news2'),
-			array(null, true, 'test'),
+			array(null, false, null),
+			array(2, false, 2),
+			array(null, true, 3),
 		);
 	}
 
@@ -173,11 +183,11 @@ class BlogHelperTest extends BaserTestCase {
 
 		// $link = true
 		$result = $this->Blog->getPostTitle($post);
-		$this->assertEqual('<a href="/news2/archives/4">test-name</a>', $result, '記事タイトルを正しく取得できません');
+		$this->assertEquals('<a href="/news/archives/4">test-name</a>', $result, '記事タイトルを正しく取得できません');
 
 		// $link = false
 		$result  = $this->Blog->getPostTitle($post, false);
-		$this->assertEqual('test-name', $result, '記事タイトルを正しく取得できません');
+		$this->assertEquals('test-name', $result, '記事タイトルを正しく取得できません');
 	}
 
 /**
@@ -189,7 +199,7 @@ class BlogHelperTest extends BaserTestCase {
 			'no' => 3,
 		));
 		$result = $this->Blog->getPostLink($post, 'test-title');
-		$this->assertEqual('<a href="/news2/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
+		$this->assertEquals('<a href="/news/archives/3">test-title</a>', $result, '記事へのリンクを正しく取得できません');
 	}
 
 /**
@@ -201,7 +211,7 @@ class BlogHelperTest extends BaserTestCase {
 			'no' => 3,
 		));
 		$result = $this->Blog->getPostLinkUrl($post);
-		$this->assertEqual('/news2/archives/3', $result, '記事へのリンクを正しく取得できません');
+		$this->assertEquals('/news/archives/3', $result, '記事へのリンクを正しく取得できません');
 	}
 
 /**
@@ -220,7 +230,7 @@ class BlogHelperTest extends BaserTestCase {
 			'no' => 3
 		));
 		$result = $this->Blog->getPostContent($post, $moreText, $moreLink, $cut);
-		$this->assertEqual($result, $expected, '記事の本文を正しく取得できません');
+		$this->assertEquals($result, $expected, '記事の本文を正しく取得できません');
 	}
 
 	public function getPostContentDataProvider() {
@@ -310,7 +320,7 @@ class BlogHelperTest extends BaserTestCase {
 			'named' => $named,
 		);
 		$result = $this->Blog->getCategoryUrl($blogCategoryId, $options);
-		$this->assertEqual($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
+		$this->assertEquals($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
 	}
 
 	public function getCategoryUrlDataProvider() {
@@ -343,10 +353,10 @@ class BlogHelperTest extends BaserTestCase {
  * @dataProvider getCategoryListDataProvider
  */
 	public function testGetCategoryList($depth, $count, $options, $expected) {
-		$BlogCategory = ClassRegistry::init('BlogCategory');
+		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		$categories = $BlogCategory->getCategoryList(1, array('viewCount' => true, 'depth' => 3));
 		$result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
-		$this->assertEqual($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
+		$this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
 	}
 
 	public function getCategoryListDataProvider() {
@@ -356,15 +366,6 @@ class BlogHelperTest extends BaserTestCase {
 			array(0, false, array(), ''),
 			array(3, true, array(), '<ul class="depth-1"><li><a href="/news/archives/category/release">プレスリリース(1)</a><ul class="depth-2"><li><a href="/news/archives/category/release/child">子カテゴリ(2)</a></li></ul></li><li><a href="/news/archives/category/child-no-parent">親子関係なしカテゴリ(0)</a></li></ul>'),
 		);
-	}
-
-/**
- * ブログ編集ページへのリンクを出力
- */
-	public function testEditPost() {
-		$this->expectOutputString('<div class="edit-link"><a href="/admin/blog_posts/edit/1/1" target="_blank">≫ 編集する</a></div>');
-		$this->Blog->_View->viewVars['user'] = 1;
-		$this->Blog->editPost(1, 1);
 	}
 
 /**
@@ -418,27 +419,6 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
- * レイアウトテンプレートを取得
- * 
- * @param string $theme テーマ名
- * @param array $expected 期待値
- * @dataProvider getLayoutTemplatesDataProvider
- */
-	public function testGetLayoutTemplates($theme, $expected) {
-		$this->Blog->BcBaser->siteConfig['theme'] = $theme;
-		$result = $this->Blog->getLayoutTemplates();
-		$this->assertEqual($result, $expected, 'レイアウトテンプレートを正しく取得できません');
-
-	}
-
-	public function getLayoutTemplatesDataProvider() {
-		return array(
-			array('nada-icons', array('default' => 'default', 'ajax' => 'ajax', 'empty' => 'empty', 'error' => 'error')),
-			array('bccolumn', array('default' => 'default', 'left_column' => 'left_column', 'right_column' => 'right_column', 'ajax' => 'ajax', 'empty' => 'empty', 'error' => 'error')),
-		);
-	}
-
-/**
  * ブログテンプレートを取得
  * 
  * @param string $theme テーマ名
@@ -448,13 +428,12 @@ class BlogHelperTest extends BaserTestCase {
 	public function testGetBlogTemplates($theme, $expected) {
 		$this->Blog->BcBaser->siteConfig['theme'] = $theme;
 		$result = $this->Blog->getBlogTemplates();
-		$this->assertEqual($result, $expected, 'ブログテンプレートを正しく取得できません');
+		$this->assertEquals($result, $expected, 'ブログテンプレートを正しく取得できません');
 	}
 
 	public function getBlogTemplatesDataProvider() {
 		return array(
-			array('nada-icons', array('default' => 'default')),
-			array('bccolumn', array('default' => 'default', 'topics' => 'topics', 'works' => 'works')),
+			array('nada-icons', array('default' => 'default'))
 		);
 	}
 
@@ -468,11 +447,11 @@ class BlogHelperTest extends BaserTestCase {
 			'publish_end' => '9000-08-10 18:58:07'
 		);
 		$result = $this->Blog->allowPublish($data);
-		$this->assertEqual($result, 1, '公開状態を正しく取得できません');
+		$this->assertEquals($result, 1, '公開状態を正しく取得できません');
 
 		$data['status'] = 0;
 		$result = $this->Blog->allowPublish($data);
-		$this->assertEqual($result, 0, '公開状態を正しく取得できません');
+		$this->assertEquals($result, 0, '公開状態を正しく取得できません');
 	}
 
 /**
@@ -496,14 +475,14 @@ class BlogHelperTest extends BaserTestCase {
 			'link' => $link,
 		);
 		$result = $this->Blog->getPostImg($post, $options);
-		$this->assertEqual($result, $expected, '記事中の画像を正しく取得できません');
+		$this->assertEquals($expected, $result, '記事中の画像を正しく取得できません');
 	}
 
 	public function getPostImgDataProvider() {
 		return array(
-			array(1, false, '<img src="/img/test1.jpg" alt="test-name " />'),
-			array(2, false, '<img src="/img/test2.jpg" alt="test-name " />'),
-			array(1, true, '<a href="/news/archives"><img src="/img/test1.jpg" alt="test-name " /></a>'),
+			array(1, false, '<img src="/img/test1.jpg" alt="test-name "/>'),
+			array(2, false, '<img src="/img/test2.jpg" alt="test-name "/>'),
+			array(1, true, '<a href="/news/archives/"><img src="/img/test1.jpg" alt="test-name "/></a>'),
 			array(3, false, ''),
 		);
 	}
@@ -550,15 +529,15 @@ class BlogHelperTest extends BaserTestCase {
 			)
 		);
 		$result = $this->Blog->getRelatedPosts($post);
-		$this->assertEqual($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません
+		$this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません
 			');
-		$this->assertEqual($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません
+		$this->assertEquals($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません
 			');
 
 		$post['BlogPost']['id'] = 2;
 		$post['BlogPost']['blog_content_id'] = 1;
 		$result = $this->Blog->getRelatedPosts($post);
-		$this->assertEqual($result[0]['BlogPost']['id'], 1, '同じタグの関連投稿を正しく取得できません
+		$this->assertEquals($result[0]['BlogPost']['id'], 1, '同じタグの関連投稿を正しく取得できません
 			');
 
 		$post['BlogPost']['id'] = 1;

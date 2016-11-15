@@ -1,12 +1,9 @@
 <?php
-
 /**
- * DBログモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class Dblog extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Dblog';
 
@@ -32,7 +28,6 @@ class Dblog extends AppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
@@ -40,7 +35,6 @@ class Dblog extends AppModel {
  * belongsTo
  * 
  * @var array
- * @access public
  */
 	public $belongsTo = array(
 		'User' => array(
@@ -52,11 +46,10 @@ class Dblog extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "ログ内容を入力してください。",
 				'required' => true)
 		)

@@ -1,19 +1,20 @@
 <?php
 /**
- * [ADMIN] サイドバー
- *
- * PHP versions 4 and 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 3.0.3
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] サイドバー
+ */
 ?>
+
 
 <div id="SideBar">
 	<div id="BtnSideBarOpener">＜</div>

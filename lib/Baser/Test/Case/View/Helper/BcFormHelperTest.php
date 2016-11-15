@@ -1,16 +1,16 @@
 <?php
 /**
- * test for BcTextHelper
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.6-beta
+ * @package			Baser.Test.Case.View.Helper
+ * @since			baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
 
+App::uses('BcAppView', 'View');
 App::uses('BcFormHelper', 'View/Helper');
 
 /**
@@ -31,10 +31,9 @@ class Contact extends CakeTestModel {
  * ビヘイビア
  *
  * @var array
- * @access public
  */
 	public $actsAs = array(
-		'BcContentsManager',
+		'BcSearchIndexManager',
 		'BcCache',
 		'BcUpload' => array(
 			'subdirDateFormat' => 'Y/m/',
@@ -52,8 +51,9 @@ class Contact extends CakeTestModel {
 /**
  * FormHelperTest class
  *
- * @package		Baser.Test.Case.View.Helper
- * @property	BcFormHelper $BcForm
+ * @package Baser.Test.Case.View.Helper
+ * @property BcFormHelper $BcForm
+ * @property View $_View
  */
 class BcFormHelperTest extends BaserTestCase {
 
@@ -64,7 +64,10 @@ class BcFormHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.User'
 	);
 	
 /**
@@ -77,13 +80,10 @@ class BcFormHelperTest extends BaserTestCase {
 		Configure::write('Config.language', 'jp');
 		Configure::write('App.base', '');
 		Configure::delete('Asset');
-		$this->BcForm = new BcFormHelper(new View);
-		$this->BcTime = new BcTimeHelper(new View);
-		$this->BcForm->request = new CakeRequest('contacts/add', false);
-		$this->BcForm->request->here = '/contacts/add';
-		$this->BcForm->request['action'] = 'add';
-		$this->BcForm->request->webroot = '';
-		$this->BcForm->request->base = '';
+		$this->_View = new BcAppView();
+		$this->_View->request = $this->_getRequest('/contacts/add');
+		$this->BcForm = new BcFormHelper($this->_View);
+		$this->BcTime = new BcTimeHelper($this->_View);
 	}
 
 /**
@@ -138,7 +138,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function checkboxDataProvider() {
 		return array(
-			array('test', array(), '<input type="checkbox" name="data\[test\]"  value="1" id="test"', 'checkbox()を出力できません'),
+			array('test', array(), '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'),
 			array('test', array('label' => 'testLabel'), '<label for="test"><input type="checkbox".*label="testLabel"', '属性を付与できません'),
 		);
 	}
@@ -174,7 +174,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @param array $model
  * @param array $options
  * @return string
- * @access public
  */
 	public function testCreate() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -330,7 +329,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
- * @access public
  */
 	public function testGetControlSource() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -344,7 +342,6 @@ class BcFormHelperTest extends BaserTestCase {
  * @param mixed $fields
  * @param mixed $order
  * @return mixed リストまたは、false
- * @access public
  */
 	public function testGenerateList() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -477,7 +474,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function fileDataProvider() {
 		return array(
-			array('hoge', array(), '<input type="file" name="data\[hoge\]"  id="hoge"', 'ファイルインプットボックス出力できません'), 
+			array('hoge', array(), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'), 
 			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'), 
 		);
 	}
@@ -585,7 +582,6 @@ class BcFormHelperTest extends BaserTestCase {
 		);
 
 		$result = $this->BcForm->file($fieldName);
-
 		$expected = array(
 			'div'	=> array('class' => 'upload-file'),
 			array('input' => array('type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch')),
@@ -595,7 +591,7 @@ class BcFormHelperTest extends BaserTestCase {
 			'label' => array('for' => 'ContactEyeCatchDelete'),
 			'削除する',
 			'/label',
-			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'id' => 'ContactEyeCatch')),
+			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch')),
 			array('br' => true),
 			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
@@ -661,7 +657,7 @@ class BcFormHelperTest extends BaserTestCase {
 			'label' => array('for' => 'Contact0EyeCatchDelete'),
 			'削除する',
 			'/label',
-			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'id' => 'Contact0EyeCatch')),
+			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'Contact0EyeCatch')),
 			array('br' => true),
 			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),

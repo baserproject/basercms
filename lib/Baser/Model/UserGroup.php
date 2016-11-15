@@ -1,12 +1,9 @@
 <?php
-
 /**
- * ユーザーグループモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
@@ -21,25 +18,11 @@
 class UserGroup extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- */
-	public $name = 'UserGroup';
-
-/**
  * ビヘイビア
  * 
  * @var array
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- */
-	public $useDbConfig = 'baser';
 
 /**
  * hasMany
@@ -72,7 +55,7 @@ class UserGroup extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'ユーザーグループ名を入力してください。'),
 			array('rule' => array('halfText'),
 				'message' => 'ユーザーグループ名は半角のみで入力してください。'),
@@ -82,13 +65,13 @@ class UserGroup extends AppModel {
 				'message' => 'ユーザーグループ名は50文字以内で入力してください。')
 		),
 		'title' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '表示名を入力してください。'),
 			array('rule' => array('maxLength', 50),
 				'message' => '表示名は50文字以内で入力してください。')
 		),
 		'auth_prefix' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '認証プレフィックスを入力してください。')
 		)
 	);

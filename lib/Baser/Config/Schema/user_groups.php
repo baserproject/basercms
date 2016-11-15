@@ -8,7 +8,7 @@ class UserGroupsSchema extends CakeSchema {
 
 	public $file = 'user_groups.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;
@@ -22,8 +22,9 @@ class UserGroupsSchema extends CakeSchema {
 		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
-		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
+		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'default_favorites' => array('type' => 'text', 'null' => true, 'default' => null),
+		'use_move_contents' => array('type' => 'boolean', 'null' => true, 'default' => false),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

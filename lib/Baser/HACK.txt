@@ -1,27 +1,48 @@
 CakePHP Hacking File List (Replace Or Override)
 -----------------------------------------------
 
-/app/Config/bootstrap.php
-/app/Config/core.php
-/app/Config/routes.php
+- /app/Config/bootstrap.php
+- /app/Config/core.php
+- /app/Config/routes.php
 /app/webroot/index.php
 /app/webroot/test.php
-/lib/Baser/Controller/PagesController.php
-/lib/Baser/Event/CakeEventManager.php
-/lib/Baser/Lib/TestSuite/Fixture/CakeFixtureManager.php
-/lib/Baser/Lib/TestSuite/Reporter/BaserHtmlReporter.php
-/lib/Baser/Lib/TestSuite/Reporter/BaserTextReporter.php
-/lib/Baser/Lib/TestSuite/BaserTestLoader.php
-/lib/Baser/Lib/TestSuite/BaserTestSuiteCommand.php
-/lib/Baser/Lib/TestSuite/BaserTestSuiteDispatcher.php
-/lib/Baser/Model/Datasource/Database/DboSource.php
-/lib/Baser/Model/Datasource/Database/BcMysql.php
-/lib/Baser/Model/Datasource/Database/BcPostgres.php ---> 動作確認要
-/lib/Baser/Model/Datasource/Database/BcSqlite.php ---> 動作確認しながら再チェック要
-/lib/Baser/Model/CakeSchema.php
-/lib/Baser/Network/CakeRequest.php
-/lib/Baser/Routing/Filter/BcAssetDispatcher.php
-/lib/Baser/View/Helper/BcFormHelper.php
-/lib/Baser/View/Helper/BcHtmlHelper.php
-/lib/Baser/View/Helper/BcTextHelper.php
-/lib/Baser/View/Helper/BcTimeHelper.php
+- /lib/Baser/Controller/PagesController.php
+	− [上書] /lib/Cake/Console/Templates/skel/PagesController.php を上書
+- /lib/Baser/Event/CakeEventManager.php
+	- [上書] /lib/Cake/Event/CakeEventManager.php
+- /lib/Baser/Lib/TestSuite/Fixture/CakeFixtureManager.php
+	- [上書] /lib/Cake/TestSuite/Fixture/CakeFixtureManager.php
+- /lib/Baser/Lib/TestSuite/Reporter/BaserHtmlReporter.php
+	- [継承] /lib/Cake/TestSuite/Reporter/CakeHtmlReporter
+- /lib/Baser/Lib/TestSuite/Reporter/BaserTextReporter.php
+	- [継承] /lib/Cake/TestSuite/Reporter/CakeTextReporter
+- /lib/Baser/Lib/TestSuite/BaserTestLoader.php
+	- [継承] /lib/Cake/TestSuite/CakeTestLoader.php
+- /lib/Baser/Lib/TestSuite/BaserTestSuiteCommand.php
+	- [継承] /lib/Cake/TestSuite/CakeTestSuiteCommand.php
+- /lib/Baser/Lib/TestSuite/BaserTestSuiteDispatcher.php
+	- [継承] /lib/Cake/TestSuite/CakeTestSuiteDispatcher.php
+- /lib/Baser/Model/Datasource/Database/DboSource.php
+	- [上書] /lib/Cake/Model/Datasource/Database/DboSource.php
+- /lib/Baser/Model/Datasource/Database/BcMysql.php
+	- [継承] /lib/Cake/Model/Datasource/Database/Mysql.php
+- /lib/Baser/Model/Datasource/Database/BcPostgres.php
+	- [継承] /lib/Cake/Model/Datasource/Database/Postgres.php
+- /lib/Baser/Model/Datasource/Database/BcSqlite.php
+	- [継承] /lib/Cake/Model/Datasource/Database/Sqlite.php
+- /lib/Baser/Model/CakeSchema.php
+	- [上書] /lib/Baser/Model/CakeSchema.php
+- /lib/Baser/Network/CakeRequest.php
+	- [上書] /lib/Cake/Network/CakeRequest.php
+- /lib/Baser/Routing/Filter/BcAssetDispatcher.php
+	- [継承] /lib/Cake/Routing/Filter/AssetDispatcher.php
+- /lib/Baser/Routing/Filter/BcCacheDispatcher.php
+	- [継承] /lib/Cake/Routing/Filter/CacheDispatcher.php
+- /lib/Baser/View/Helper/BcFormHelper.php
+	- [継承] /lib/Cake/View/Helper/FormHelper.php
+- /lib/Baser/View/Helper/BcHtmlHelper.php
+	- [継承] /lib/Cake/View/Helper/HtmlHelper.php
+- /lib/Baser/View/Helper/BcTextHelper.php
+	- [継承] /lib/Cake/View/Helper/TextHelper.php
+- /lib/Baser/View/Helper/BcTimeHelper.php
+	- [継承] /lib/Cake/View/Helper/TimeHelper.php

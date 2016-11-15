@@ -1,25 +1,19 @@
 <?php
-
 /**
- * view 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser
+ * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
 
 /**
  * view 拡張クラス
  *
- * @package			Baser.View
+ * @package Baser.View
  */
 class BcAppView extends View {
 
@@ -29,6 +23,13 @@ class BcAppView extends View {
  * @var string
  */
 	public $pageTitle = null;
+
+/**
+ * エレメントキャッシュ
+ * 
+ * @var string
+ */
+	public $elementCache = '_cake_element_';
 
 /**
  * テンプレートファイル一覧出力用
@@ -41,12 +42,11 @@ class BcAppView extends View {
  * List of variables to collect from the associated controller
  *
  * @var array
- * @access protected
  */
 	protected $_passedVars = array(
 		'viewVars', 'autoLayout', 'ext', 'helpers', 'view', 'layout', 'name', 'theme',
 		'layoutPath', 'viewPath', 'request', 'plugin', 'passedArgs', 'cacheAction',
-		'subDir', 'adminTheme', 'pageTitle'
+		'subDir', 'adminTheme', 'pageTitle', 'content', 'site'
 	);
 
 /**
@@ -196,21 +196,18 @@ class BcAppView extends View {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
 		// <<<
-		// CUSTOMIZE ADD 2012/10/11 ryuring
-		// モバイルの固定ページの場合、PCの固定ページと連動する場合は、サブフォルダを空に設定
-		// >>>
-		$siteConfig = $this->getVar('siteConfig');
-		if ($this->name == 'Pages' && preg_match('/(.+)_display$/', $this->request->action, $maches)) {
-			$Page = ClassRegistry::getObject('Page');
-			$url = '/' . implode('/', $this->params['pass']);
-			if ($Page->isLinked($maches[1], $url)) {
-				$subDir = '';
-			}
-		}
-		// <<<
 
 		if (strpos($name, DS) === false && $name[0] !== '.') {
-			$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
+			// CUSTOMIZE MODIFY 2016/06/01 ryuring
+			// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
+			// >>>
+			//$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
+			// ---
+			$name = array(
+				$this->viewPath . DS . $subDir . Inflector::underscore($name),
+				$this->viewPath . DS . Inflector::underscore($name),
+			);
+			// <<<
 		} elseif (strpos($name, DS) !== false) {
 			if ($name[0] === DS || $name[1] === ':') {
 				if (is_file($name)) {
@@ -219,14 +216,22 @@ class BcAppView extends View {
 				$name = trim($name, DS);
 			} elseif ($name[0] === '.') {
 				$name = substr($name, 3);
-				// CUSTOMIZE MODIFY 2013/08/21 ryuring
-				// サブフォルダが適用されない為調整
-				// >>>
-				//} elseif (!$plugin || $this->viewPath !== $this->name) {
-				// ---
-			} else {
-				// <<<
+			// CUSTOMIZE MODIFY 2013/08/21 ryuring
+			// サブフォルダが適用されない為調整
+			// CUSTOMIZE MODIFY 2016/06/01 ryuring
+			// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
+			// >>>
+			/*
+			} elseif (!$plugin || $this->viewPath !== $this->name) {
 				$name = $this->viewPath . DS . $subDir . $name;
+			*/
+			// ---
+			} else {
+				$name = array(
+					$this->viewPath . DS . $subDir . $name,
+					$this->viewPath . DS . $name
+				);
+			// <<<
 			}
 		}
 		$paths = $this->_paths($plugin);
@@ -234,23 +239,33 @@ class BcAppView extends View {
 
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
-		// @deprecated .php への移行を推奨
+		// CUSTOMIZE MODIFY 2016/06/01 ryuring
+		// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
 		// >>>
-		/* foreach ($exts as $ext) {
-		  foreach ($paths as $path) {
-		  if (file_exists($path . $name . $ext)) {
-		  return $path . $name . $ext;
-		  }
-		  }
-		  } */
-		// ---
-		foreach ($paths as $path) {
-			foreach ($exts as $ext) {
+		/*
+		foreach ($exts as $ext) {
+			foreach ($paths as $path) {
 				if (file_exists($path . $name . $ext)) {
-					if ($ext == '.ctp') {
-						trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $name . $ext, E_USER_WARNING);
-					}
 					return $path . $name . $ext;
+		  		}
+		  	}
+		}
+		*/
+		// ---
+		if(is_array($name)) {
+			$names = $name;
+		} else {
+			$names[] = $name;
+		}
+		foreach($names as $name) {
+			foreach ($paths as $path) {
+				foreach ($exts as $ext) {
+					if (file_exists($path . $name . $ext)) {
+						if ($ext == '.ctp') {
+							trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $name . $ext, E_USER_WARNING);
+						}
+						return $path . $name . $ext;
+					}
 				}
 			}
 		}
@@ -363,29 +378,42 @@ class BcAppView extends View {
 		}
 		list($plugin, $name) = $this->pluginSplit($name);
 		$paths = $this->_paths($plugin);
-		$file = 'Layouts' . DS . $subDir . $name;
+
+		// CUSTOMIZE MODIFY 2016/06/01 ryuring
+		// サブフォルダが存在しない場合にはサブフォルダなしのパスを利用するようにした
+		// >>>
+		//$file = 'Layouts' . DS . $subDir . $name;
+		// ---
+		$files = array(
+			'Layouts' . DS . $subDir . $name,
+			'Layouts' . DS . $name
+		);
+		// <<<
 
 		$exts = $this->_getExtensions();
 
 		// CUSTOMIZE MODIFY 2012/04/11 ryuring
 		// 拡張子優先順位よりもパスの優先順位を優先する仕様に変更
-		// @deprecated .php への移行を推奨
 		// >>>
-		/* foreach ($exts as $ext) {
-		  foreach ($paths as $path) {
-		  if (file_exists($path . $file . $ext)) {
-		  return $path . $file . $ext;
-		  }
-		  }
-		  } */
-		// ---
-		foreach ($paths as $path) {
-			foreach ($exts as $ext) {
+		/*
+		foreach ($exts as $ext) {
+			foreach ($paths as $path) {
 				if (file_exists($path . $file . $ext)) {
-					if ($ext == '.ctp') {
-						trigger_error('レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $file . $ext, E_USER_WARNING);
-					}
 					return $path . $file . $ext;
+				}
+			}
+		}
+		*/
+		// ---
+		foreach($files as $file) {
+			foreach ($paths as $path) {
+				foreach ($exts as $ext) {
+					if (file_exists($path . $file . $ext)) {
+						if ($ext == '.ctp') {
+							trigger_error('レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $file . $ext, E_USER_WARNING);
+						}
+						return $path . $file . $ext;
+					}
 				}
 			}
 		}
@@ -401,7 +429,7 @@ class BcAppView extends View {
  */
 	protected function _getExtensions() {
 		$this->ext = Configure::read('BcApp.templateExt');
-		$exts = array($this->ext);
+		$exts = [$this->ext];
 		if ($this->ext !== '.ctp') {
 			$exts[] = '.ctp';
 		}

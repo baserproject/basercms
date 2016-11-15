@@ -1,19 +1,13 @@
 <?php
-
 /**
- * ダッシュボードコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -28,7 +22,6 @@ class DashboardController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Dashboard';
 
@@ -36,15 +29,13 @@ class DashboardController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
-	public $uses = array('Dblog', 'User', 'Menu', 'Page');
+	public $uses = array('User', 'Page');
 
 /**
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcTime', 'Js');
 
@@ -52,7 +43,6 @@ class DashboardController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -60,7 +50,6 @@ class DashboardController extends AppController {
  * ぱんくずナビ
  *
  * @var string
- * @access public
  */
 	public $crumbs = array();
 
@@ -68,63 +57,26 @@ class DashboardController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
-
-/**
- * [ADMIN] 管理者ダッシュボードページにajaxでデータを取得する
- *
- * @return void
- * @access public
- */
-	public function admin_ajax_dblog_index() {
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
-		$this->paginate = array(
-				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
-				'limit' => $this->passedArgs['num']
-		);
-		$this->set('viewDblogs', $this->paginate('Dblog'));
-	}
 
 /**
  * [ADMIN] 管理者ダッシュボードページを表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->pageTitle = '管理者ダッシュボード';
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Dblog', array('default' => $default));
-
-		$this->paginate = array(
-				'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
-				'limit' => $this->passedArgs['num']
-		);
-
-		$this->set('viewDblogs', $this->paginate('Dblog'));
-		$publishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => true)));
-		$unpublishedPages = $this->Page->find('count', array('conditions' => array('Page.status' => false)));
-		$totalPages = $publishedPages + $unpublishedPages;
-		$this->set(compact('publishedPages', 'unpublishedPages', 'totalPages'));
-		$this->help = 'dashboard_index';
-	}
-
-/**
- * [ADMIN] 最近の動きを削除
- * 
- * @return void
- * @access public
- */
-	public function admin_del() {
-		if ($this->Dblog->deleteAll('1 = 1')) {
-			$this->setMessage('最近の動きのログを削除しました。');
-		} else {
-			$this->setMessage('最近の動きのログ削除に失敗しました。', true);
+		$panels = [];
+		$panels['Core'] = BcUtil::getTemplateList('Elements/admin/dashboard', '', $this->siteConfigs['theme']);
+		$plugins = CakePlugin::loaded();
+		if($plugins) {
+			foreach($plugins as $plugin) {
+				$panels[$plugin] = BcUtil::getTemplateList('Elements/admin/dashboard', $plugin, $this->siteConfigs['theme']);
+			}
 		}
-		$this->redirect(array('action' => 'index'));
+		$this->set('panels', $panels);
+		$this->help = 'dashboard_index';
 	}
 
 }

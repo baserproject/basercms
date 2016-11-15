@@ -1,16 +1,15 @@
 <?php
-
 /**
- * test for BcCkeditorHelper
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- *
- * @copyright   Copyright 2008 - 2015, baserCMS Users Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.View.Helper
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('View', 'View');
 App::uses('BcCkeditorHelper', 'View/Helper');
 
@@ -18,7 +17,7 @@ App::uses('BcCkeditorHelper', 'View/Helper');
  * text helper library.
  *
  * @package Baser.Test.Case.View.Helper
- * @property BcTextHelper $Helper
+ * @property BcCkeditor $BcCkeditor
  */
 class BcCkeditorHelperTest extends BaserTestCase {
 
@@ -29,13 +28,16 @@ class BcCkeditorHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
-		'baser.Default.PluginContent',
+		'baser.Default.Site',
+		'baser.Default.Content',
+		'baser.Default.User'
 	);
 
 	public function setUp() {
 		parent::setUp();
 		$View = new View();
 		$this->BcCkeditor = new BcCkeditorHelper($View);
+		$this->BcCkeditor->request = $this->_getRequest('/');
 	}
 
 	public function tearDown() {

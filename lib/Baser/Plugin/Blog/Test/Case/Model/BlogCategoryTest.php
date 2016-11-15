@@ -1,23 +1,27 @@
 <?php
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Blog.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
+ */
+
+App::uses('BlogCategory', 'Blog.Model');
 
 /**
- * test for BlogCategory
- *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS BlogCategorys Community <http://sites.google.com/site/baserBlogCategorys/>
- * @package         Feed.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS BlogCategorys Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.1.0-beta
- * @license         http://basercms.net/license/index.html
+ * Class BlogCategoryTest
+ * 
+ * @property BlogCategory $BlogCategory
  */
-App::uses('BlogCategory', 'Blog.Model');
 
 class BlogCategoryTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Content',
-		'baser.Default.PluginContent',
+		'baser.Default.SearchIndex',
 		'baser.Default.Permission',
 		'baser.Default.User',
 		'baser.Default.UserGroup',
@@ -27,6 +31,8 @@ class BlogCategoryTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogTag',
+		'baser.Default.Content',
+		'baser.Default.Site',
 		'plugin.blog.Model/BlogCategoryModel',
 	);
 
@@ -210,22 +216,6 @@ class BlogCategoryTest extends BaserTestCase {
 		// option limit true
 		$result = $this->BlogCategory->getCategoryList(1, array('type' => 'year', 'limit' => 1, 'viewCount' => true));
 		$this->assertEquals($result['2015'][0]['BlogCategory']['count'], 1, $message);
-	}
-
-
-/**
- * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
- */
-	public function testCheckNewCategoryAddable() {
-		$message = '新しいカテゴリが追加できる状態チェックが正しくありません';
-		$result = $this->BlogCategory->checkNewCategoryAddable(1, false);
-		$this->assertTrue($result, $message);
-
-		$result = $this->BlogCategory->checkNewCategoryAddable(99, false);
-		$this->assertFalse($result, $message);
-
-		$result = $this->BlogCategory->checkNewCategoryAddable(99, true);
-		$this->assertTrue($result, $message);
 	}
 	
 /**

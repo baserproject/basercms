@@ -1,16 +1,15 @@
 <?php
-
 /**
- * test for BcTextHelper
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.0.0-beta
+ * @package			Baser.Test.Case.View.Helper
+ * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('View', 'View');
 App::uses('BcTextHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
@@ -363,33 +362,6 @@ class BcTextHelperTest extends BaserTestCase {
 		$this->Helper->BcForm->setEntity('Baser', true);
 		$expect = false;
 		$result = $this->Helper->listValue('user_group_id', 1);
-		$this->assertEquals($expect, $result);
-
-	}
-
-/**
- * 区切り文字で区切られたテキストを配列に変換するヘルパーのテスト
- */
-	public function testToArray() {
-
-		// $separatorが「,」の場合
-		$result = $this->Helper->toArray(",", "a,i,u,e,o");
-		$expect = array("a","i","u","e","o");
-		$this->assertEquals($expect, $result);
-
-		// $separatorが「"」の場合
-		$result = $this->Helper->toArray('"', 'a"i"u"e"o');
-		$expect = array("a","i","u","e","o");
-		$this->assertEquals($expect, $result);
-
-		// $separatorが「'」の場合
-		$result = $this->Helper->toArray("'", "a'i'u'e'o");
-		$expect = array("a","i","u","e","o");
-		$this->assertEquals($expect, $result);
-
-		// $separatorが含まれていない場合
-		$result = $this->Helper->toArray(",", "aiueo");
-		$expect = array("aiueo");
 		$this->assertEquals($expect, $result);
 
 	}

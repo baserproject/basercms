@@ -1,5 +1,4 @@
 <?php
-
 /**
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
@@ -14,7 +13,7 @@
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Uploader', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('Uploader');
 	
 /**
  * 必要フォルダ初期化

@@ -3,9 +3,9 @@
  * コンテンツ
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
@@ -346,7 +346,14 @@ table.sub-menu{
 	background-color:#FAFAFA;
 }
 .contents-body .list-table tr.disablerow {
-	background-color:#bbb;
+	background-color:#CCC;
+}
+.contents-body .list-table tr.currentrow {
+	background-color:#3392e3;
+	color:#fff;
+}
+.contents-body .list-table tr.currentrow td small {
+	color:#FFF;
 }
 .contents-body .list-table tr.activerow{
 	background-color:#C30;
@@ -489,8 +496,12 @@ table.sub-menu{
 	cursor: pointer;
 }
 
-/* edit form
------------------------------------------------ */
+.contents-body .form-table th {
+    font-size: 12px;
+}
+
+    /* edit form
+    ----------------------------------------------- */
 .editor-area {
 	text-align: center;
 }
@@ -657,6 +668,18 @@ table.sub-menu{
 	text-decoration: none;
 }
 
+/* tree empty
+----------------------------------------------- */
+.tree-empty {
+	border:1px solid #DDD;
+	padding:15px;
+	color:#535A62;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 auto 20px;
+	text-align: center;
+	line-height: 24px;
+}
 
 /* ToTop
 ----------------------------------------------- */
@@ -684,25 +707,45 @@ table.sub-menu{
 #authMessage,
 #flashMessage,
 #AlertMessage,
+#BcSystemMessage,
 #UpdateMessage {
 	padding:10px 10px 10px 36px;
 	margin:20px 0;
-	font-weight:bold;
 	font-size:16px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+	font-weight:bold;
+}
+#BcMessageBox {
+	display:none;
 }
 #MessageBox .message,
-#MessageBox .notice-message {
-	color:#669900;
-	border:5px solid #669900;
-	background: url(../../img/admin/icn_info.png) no-repeat 10px 13px;
+#MessageBox .notice-message,
+#BcMessageBox .notice-message{
+	color:#5C8A01;
+	background: #EBF5E1 url(../../img/admin/icn_info.png) no-repeat 10px 13px;
 }
 #MessageBox .alert-message,
 #authMessage,
 #AlertMessage,
+#BcMessageBox .alert-message,
 #UpdateMessage {
-	color:#F03;
-	background: url(../../img/admin/icn_warning.png) no-repeat 10px 13px;
-	border:5px solid #E02;
+	color:#F23561;
+	background: #F7E9EC url(../../img/admin/warning.png) no-repeat 10px 13px;
+}
+#Login #flashMessage {
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+}
+#Login #MessageBox .notice-message{
+	border:5px solid #5C8A01;
+	background-color: transparent;
+}
+#Login #MessageBox .alert-message{
+	border:5px solid #F23561;
+	background-color: transparent;
 }
 .no-data {
 	padding:10px 10px 10px 10px;
@@ -726,6 +769,27 @@ table.sub-menu{
 
 .phpinfo {
 	border:1px solid #DDD;
+}
+
+/* ui
+----------------------------------------------- */
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 4px;
+}
+.corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 0px;
 }
 
 /* ui-dialog
@@ -789,7 +853,7 @@ background: #888;
 	border-bottom: 1px dotted #CCC;
 }
 .ui-widget-content {
-	color:#333;
+	color:#535A62!important;
 }
 .ui-dialog dt label {
 	color:#690!important;
@@ -889,8 +953,8 @@ background: #888;
 
 .panel-box {
 	border:5px solid #DDD;
-	padding:20px;
-	margin:10px 0;
+	padding:10px 20px;
+	margin:20px 0;
 }
 .panel-box li .date {
 	/*font-weight: bold;*/
@@ -1099,6 +1163,34 @@ background: #888;
 	text-align:center;
 }
 
+/* TreeList
+----------------------------------------------- */
+#PageTreeList {
+	padding:20px 20px;
+	border:1px solid #CCC;
+	margin-top:25px;
+}
+#TreeList {
+	font-size:14px;
+}
+#TreeList a {
+	color:#535A62;
+}
+#TreeList a:hover {
+	color:#AAA;
+	text-decoration: none;
+}
+#cboxContent button {
+	border:none;
+}
+.filetree span.folder,
+.filetree span.file {
+	padding: 1px 0 1px 18px!important;
+	display: block;
+	line-height:1em;
+	margin-bottom: 10px;
+}
+
 
 /* ==================================================================== */
 /*    Installations
@@ -1160,15 +1252,13 @@ background: #888;
 }
 
 .contents-body .btn-slide-form{
-	border-left:1px solid #CCC;
-	border-right:1px solid #CCC;
-	border-bottom:1px solid #CCC;
+	border:1px solid #CCC;
 	text-align: center;
 	margin-left:auto;
 	margin-right:0;
 	padding:0!important;
 	/*position: absolute;*/
-	margin-top:-30px;
+	margin-top:-61px;
 	width:140px;
 	font-size:14px;
 }
@@ -1203,14 +1293,18 @@ background: #888;
 /*    Dashboard
 /* ==================================================================== */
 
+#AdminDashboard .pagination .next,
+#AdminDashboard .pagination .prev{
+    padding: 0;
+}
+#AdminDashboard .pagination .next a,
+#AdminDashboard .pagination .prev a{
+    padding: 1px 6px;
+}
 #AdminDashboard .pagination span span a,
 #AdminDashboard .pagination .disabled,
 #AdminDashboard .pagination .current{
     padding: 1px 6px;
-}
-#AdminDashboard .pagination .next,
-#AdminDashboard .pagination .prev{
-    padding: 1px 4px;
 }
 #AdminDashboard .panel-box {
 	margin:10px;
@@ -1343,14 +1437,22 @@ background: #888;
 	padding:7px;
 	width:286px;
 }
-
+.ui-widget-content {
+    border: 1px solid #DDD;
+}
 #PageTreeList {
 	padding:20px 20px;
 	border:1px solid #CCC;
 	margin-top:25px;
 }
-#TreeList {
-	font-size:14px;
+.ui-widget-header {
+	background:#EFEFEF;
+}
+.ui-tabs .ui-tabs-nav li {
+	font-weight: bold;
+}
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+    color: #535A62;
 }
 #TreeList a {
 	color:#535A62;
@@ -1359,27 +1461,145 @@ background: #888;
 	color:#AAA;
 	text-decoration: none;
 }
-#cboxContent button {
-	border:none;
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited {
+	color:#535A62;
 }
-.filetree span.folder,
-.filetree span.file
-{
-	padding: 1px 0 1px 18px!important;
-	display: block;
-	line-height:1em;
-	margin-bottom: 10px;
+#ContentsFormTabs {
+    margin-bottom:20px;
+}
+#ContentsFormTabs .ui-tabs-panel{
+    padding:1em;
+}
+#ContentsFormTabs table {
+    margin-bottom:0;
 }
 
+
+/* ==================================================================== */
+/*    Contents
+/* ==================================================================== */
+
+#ContentsTreeList li {
+    margin: 0;
+    padding: 0;
+}
 .ui-widget-content {
 	border:1px solid #DDD;
 }
-.ui-widget-header {
-	background:#DFDFDF;
+#ContentsTreeList li ul {
+	margin-left:26px;
 }
-.ui-tabs .ui-tabs-nav li {
-	font-weight: bold;
+.contents-body li.jstree-closed {
+	/*background-color:#F9F9F9;*/
 }
+.jstree-proton .jstree-anchor {
+	margin: 0!important;
+}
+.vakata-context,
+.vakata-context ul {
+	background-color: #FFF;
+	font-size: 14px;
+}
+.vakata-context li {
+	/*padding:0px 10px;*/
+}
+.vakata-context li > a {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.vakata-context li > a .vakata-contextmenu-sep {
+	border-left: none !important;
+	background: none;
+}
+.vakata-context .vakata-context-separator > a,
+.vakata-context .vakata-context-separator > a:hover {
+	margin: 0;
+}
+#ContentsTreeList {
+	border:1px solid #DDD;
+}
+#ContentsTreeList li .alias {
+	display:block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_alias_layerd.png");
+	position: absolute;
+	top:0;
+}
+#DataList td .alias {
+    display:block;
+    width:32px;
+    height: 32px;
+    background:url("../../img/admin/icon_alias_layerd.png");
+    position: relative;
+    top:-32px;
+}
+ul.jstree-contextmenu li .icon-alias-layerd {
+	display:block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_alias_layerd.png");
+	position: absolute;
+	margin-top:-32px;
+}
+ul.jstree-contextmenu li .icon-add-layerd {
+	display:block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_add_layerd.png");
+	position: absolute;
+	margin-top:-32px;
+}
+#ContentsTreeList li .function {
+	display:inline-block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_function.png");
+	position: absolute;
+    cursor: pointer;
+}
+div.jstree-unpublish-odd{
+    background-color: #BBB;
+}
+div.jstree-unpublish-even{
+    background-color: #CBCBCB;
+}
+div.jstree-publish-odd{
+    background-color: #FFF;
+}
+div.jstree-publish-even{
+    background-color: #F2F2F2;
+}
+#RelatedContentsSetting .icon-add-layerd {
+	display:inline-block;
+	width:32px;
+	height: 32px;
+	background:url("../../img/admin/icon_add_layerd.png");
+	position: absolute;
+	margin-left:-32px;
+}
+#ContentsFormTabs {
+	display:none;
+}
+
+
+/* ==================================================================== */
+/*    CkEditor
+/* ==================================================================== */
+
+.cke_chrome {
+	border:1px solid #DDD!important;
+	box-shadow:none!important;
+}
+.cke_top, .cke_bottom {
+	background: #EFEFEF!important;
+	background-image: linear-gradient(to bottom,#EFEFEF,#EEE)!important;
+}
+
+/* ==================================================================== */
+/*    Etc
+/* ==================================================================== */
+
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
 	color:#535A62;
 }
@@ -1388,4 +1608,76 @@ background: #888;
 }
 .helptext {
 	display:none;
+}
+.bt-content {
+    line-height:1.5em;
+    color:#690;
+}
+.bt-content p{
+    margin-bottom:10px;
+}
+.eyecatch-list li {
+	float:left;
+	list-style-type: none;
+	background: none;
+}
+.eyecatch-list li img{
+	margin-bottom:10px;
+}
+.eyecatch-list li p{
+	text-align: center;
+}
+#BasicSetting .url,
+#BlogPostForm .url {
+	font-weight:bold;
+	font-size:14px;
+    word-break: break-all;
+}
+#BasicSetting .url a {
+	color:#9C0;
+	padding-left:5px;
+	padding-right:5px;
+}
+#SectionLangAccessType label, #SectionDeviceAccessType label {
+    white-space: nowrap;
+}
+
+
+/* context-menu
+----------------------------------------------- */
+
+.context-menu-icon-edit:before,
+.context-menu-icon-delete:before{
+    content:""!important;
+}
+.context-menu-icon-edit {
+    background: url(../../img/admin/icn_tool_edit.png) no-repeat left top;
+}
+.context-menu-icon-delete {
+    background: url(../../img/admin/icn_tool_delete.png) no-repeat left top;
+}
+.context-menu-item {
+    font-size:14px;
+    line-height: 2.4em;
+    padding: 0 2em 0 2.4em;
+    height:2.4em;
+    text-shadow: 1px 1px 0 #fff;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
+}
+.context-menu-item span{
+    display:block;
+    padding-left:0.5em;
+    border-left:1px solid #FFF;
+}
+.context-menu-hover {
+    background-color:#efeff7!important;
+    box-shadow: 0 0 2px #0a6aa1;
+    color:#000!important;
+}
+.context-menu-list {
+    padding:2px;
+    border-radius: 0;
+    background: #f5f5f5;
 }

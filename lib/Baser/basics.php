@@ -1,13 +1,9 @@
 <?php
 /**
- * baserCMS共通関数
- *
- * baser/config/bootstrapより呼び出される
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser
  * @since			baserCMS v 0.1.0
@@ -16,6 +12,15 @@
 
 App::uses('EmailComponent', 'Controller/Component');
 App::uses('BcEmailComponent', 'Controller/Component');
+App::uses('CakeText', 'Utility');
+
+/**
+ * baserCMS共通関数
+ *
+ * baser/config/bootstrapより呼び出される
+ *
+ * @package			Baser
+ */
 
 /**
  * WEBサイトのベースとなるURLを取得する
@@ -39,7 +44,9 @@ function baseUrl() {
 		if(isConsole()) {
 			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 		}
-		$script = str_replace(docRoot(), '', $script);
+		$script = str_replace(array('\\', '/'), DS, $script);
+		$docroot = docRoot();
+		$script = str_replace($docroot, '', $script);
 		if (BC_DEPLOY_PATTERN == 1) {
 			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'index.php', '/') . '/', '', $script);
 			$baseUrl = preg_replace('/' . preg_quote('app' . DS . 'webroot' . DS . 'test.php', '/') . '/', '', $baseUrl);
@@ -74,7 +81,8 @@ function docRoot() {
 	}
 
 	if(isConsole()) {
-		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $_SERVER['SCRIPT_NAME']);
+		$script = $_SERVER['SCRIPT_NAME'];
+		return str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 	}
 
 	if (strpos($_SERVER['SCRIPT_NAME'], '.php') === false) {
@@ -198,22 +206,19 @@ function decodeContent($content, $fileName = null) {
 /**
  * 環境変数よりURLパラメータを取得する
  * 
- * ＊ モバイルプレフィックスは除外する
+ * ＊ プレフィックスは除外する
  * ＊ GETパラメーターは除外する
  * 
  * 《注意》
  * bootstrap 実行後でのみ利用可 
  */
 function getUrlParamFromEnv() {
-
-	$agentAlias = Configure::read('BcRequest.agentAlias');
 	$url = getUrlFromEnv();
-
+	$url = preg_replace('/^\//', '',  $url);
 	if (strpos($url, '?') !== false) {
 		list($url) = explode('?', $url);
 	}
-
-	return preg_replace('/^' . $agentAlias . '\//', '', $url);
+	return $url;
 }
 
 /**
@@ -266,24 +271,24 @@ function getUrlFromEnv() {
 
 /**
  * モバイルプレフィックスは除外したURLを取得する
- * 
+ *
+ * MEMO: BcRequest.(agent).aliasは廃止
+ *
  * @param CakeRequest $Request
  * @return type
  */
 function getPureUrl($Request) {
-
 	if (!$Request) {
 		$Request = new CakeRequest();
 	}
-	$agentAlias = Configure::read('BcRequest.agentAlias');
 	$url = $Request->url;
 	if ($url === false) {
-		$url = '/';
+		$url = '';
 	}
 	if (strpos($url, '?') !== false) {
 		list($url) = explode('?', $url);
 	}
-	return preg_replace('/^' . $agentAlias . '\//', '', $url);
+	return $url;
 }
 
 /**
@@ -399,8 +404,7 @@ function isInstalled() {
  * @param string $name
  * @return mixed DatabaseConfig Or false 
  */
-function getDbConfig($name = 'baser') {
-
+function getDbConfig($name = 'default') {
 	if (file_exists(APP . 'Config' . DS . 'database.php')) {
 		require_once APP . 'Config' . DS . 'database.php';
 		$dbConfig = new DATABASE_CONFIG();
@@ -424,7 +428,7 @@ function checkTmpFolders() {
 	$folder->create(TMP . 'logs', 0777);
 	$folder->create(TMP . 'sessions', 0777);
 	$folder->create(TMP . 'schemas', 0777);
-	$folder->create(TMP . 'schemas' . DS . 'baser', 0777);
+	$folder->create(TMP . 'schemas' . DS . 'core', 0777);
 	$folder->create(TMP . 'schemas' . DS . 'plugin', 0777);
 	$folder->create(CACHE, 0777);
 	$folder->create(CACHE . 'models', 0777);
@@ -528,8 +532,8 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
-	if (isConsole()) {
-		return false;
+	if (isConsole() && empty($_SERVER['HTTP_HOST'])) {
+		return Configure::read('App.fullBaseUrl');
 	}
 	$protocol = 'http://';
 	if (!empty($_SERVER['HTTPS'])) {
@@ -585,35 +589,6 @@ function amr($a, $b) {
 }
 
 /**
- * プラグインのコンフィグファイルを読み込む
- *
- * @param string $name
- * @return boolean
- * @deprecated since version 3.0.2
- */
-function loadPluginConfig($name) {
-
-	if (strpos($name, '.') === false) {
-		return false;
-	}
-	list($plugin, $file) = explode('.', $name);
-	$pluginPaths = App::path('Plugin');
-	$config = null;
-	foreach ($pluginPaths as $pluginPath) {
-		$configPath = $pluginPath . $plugin . DS . 'Config' . DS . $file . '.php';
-		if (file_exists($configPath)) {
-			include $configPath;
-		}
-	}
-
-	if ($config) {
-		return Configure::write($config);
-	} else {
-		return false;
-	}
-}
-
-/**
  * URLにセッションIDを付加する
  * 既に付加されている場合は重複しない
  * 
@@ -621,12 +596,16 @@ function loadPluginConfig($name) {
  * @return mixed
  */
 function addSessionId($url, $force = false) {
+	if(BcUtil::isAdminSystem()) {
+		return $url;
+	}
 	$sessionId = session_id();
 	if(!$sessionId) {
 		return $url;
 	}
 	// use_trans_sid が有効になっている場合、２重で付加されてしまう
-	if (Configure::read('BcRequest.agent') == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
+	$site = BcSite::findCurrent();
+	if ($site && $site->device == 'mobile' && Configure::read('BcAgent.mobile.sessionId') && (!ini_get('session.use_trans_sid') || $force)) {
 		if (is_array($url)) {
 			$url["?"][session_name()] = $sessionId;
 		} else {
@@ -687,7 +666,7 @@ function getEnablePlugins() {
 		} catch (Exception $ex) {
 			return array();
 		}
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
 		$enablePlugins = array();
@@ -763,7 +742,7 @@ function getVersion($plugin = '') {
 function sendUpdateMail() {
 
 	$bcSite = Configure::read('BcSite');
-	$bcSite['update_id'] = String::uuid();
+	$bcSite['update_id'] = CakeText::uuid();
 	$SiteConfig = ClassRegistry::init('SiteConfig');
 	$SiteConfig->saveKeyValue(array('SiteConfig' => $bcSite));
 	ClassRegistry::removeObject('SiteConfig');
@@ -824,7 +803,7 @@ function p($var) {
  * @param string $dbConfigKeyName
  * @return string 
  */
-function getDbDriver($dbConfigKeyName = 'baser') {
+function getDbDriver($dbConfigKeyName = 'default') {
 
 	$db = ConnectionManager::getDataSource($dbConfigKeyName);
 	return $db->config['datasource'];
@@ -918,6 +897,7 @@ function loadPlugin($plugin, $priority) {
 		$eventClass = $plugin . $eventTarget . 'EventListener';
 		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
 			App::uses($eventClass, $plugin . '.Event');
+			App::uses('CakeEventManager', 'Event');
 			$CakeEvent = CakeEventManager::instance();
 			$EventClass = new $eventClass();
 
@@ -1025,4 +1005,38 @@ function checktime($hour, $min, $sec = null) {
 		}
 	}
 	return true;
+}
+
+function getTableList() {
+	$list = Cache::read('table_list', '_cake_core_');
+	if($list !== false) {
+		return $list;
+	}
+	$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+	$Folder = new Folder(BASER_CONFIGS . 'Schema');
+	$files = $Folder->read(true, true);
+	$list = [];
+	if($files[1]) {
+		foreach($files[1] as $file) {
+			$list['core'][] = $prefix . basename($file, '.php');
+		}
+	}
+	$plugins = CakePlugin::loaded();
+	foreach($plugins as $plugin) {
+		$path = null;
+		if(is_dir(APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema')){
+			$path = APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema';
+		} elseif(is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
+			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
+		}
+		$Folder = new Folder($path);
+		$files = $Folder->read(true, true);
+		if($files[1]) {
+			foreach($files[1] as $file) {
+				$list['plugin'][] = $prefix . basename($file, '.php');
+			}
+		}
+	}
+	Cache::write('table_list', $list, '_cake_core_');
+	return $list;
 }

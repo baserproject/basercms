@@ -1,15 +1,17 @@
 <?php
 /**
- * [PUBLISH] ブログ投稿者一覧
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] ブログ投稿者一覧
  */
 if (empty($view_count)) {
 	$view_count = '0';
@@ -19,11 +21,13 @@ if (isset($blogContent)) {
 } else {
 	$id = $blog_content_id;
 }
-$data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count);
+$data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count, ['entityId' => $id]);
 $authors = $data['authors'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
+$baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/author/';
 ?>
+
+
 <div class="widget widget-blog-authors widget-blog-authors-<?php echo $id ?> blog-widget">
 	<?php if ($name && $use_title): ?>
 		<h2><?php echo $name ?></h2>
@@ -32,7 +36,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
 		<ul>
 			<?php foreach ($authors as $author): ?>
 				<?php
-				if ($this->request->url == $baseCurrentUrl . $author['User']['name']) {
+				if ('/' . $this->request->url == $baseCurrentUrl . $author['User']['name']) {
 					$class = ' class="current"';
 				} else {
 					$class = '';
@@ -44,15 +48,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/';
 				}
 				?>
 				<li<?php echo $class ?>>
-					<?php
-					$this->BcBaser->link($title, array(
-						'admin' => false, 'plugin' => '',
-						'controller' => $blogContent['BlogContent']['name'],
-						'action' => 'archives',
-						'author',
-						$author['User']['name']
-					))
-					?>
+					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/author/' . $author['User']['name']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

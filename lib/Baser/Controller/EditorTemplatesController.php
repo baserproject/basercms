@@ -1,19 +1,13 @@
 <?php
-
 /**
- * エディタテンプレートコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -37,7 +31,7 @@ class EditorTemplatesController extends AppController {
  * 
  * @var array
  */
-	public $subMenuElements = array('editor_templates');
+	public $subMenuElements = array('site_configs', 'editor_templates');
 
 /**
  * パンくず設定
@@ -53,7 +47,6 @@ class EditorTemplatesController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -128,6 +121,7 @@ class EditorTemplatesController extends AppController {
  * @param int $id
  */
 	public function admin_delete($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action' => 'index'));
@@ -146,6 +140,7 @@ class EditorTemplatesController extends AppController {
  * @param int $id 
  */
 	public function admin_ajax_delete($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

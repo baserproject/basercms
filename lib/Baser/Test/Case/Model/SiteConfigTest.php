@@ -1,20 +1,20 @@
 <?php
-
 /**
- * SiteConfig モデルのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS SiteConfigs Community <http://sites.google.com/site/baserSiteConfigs/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS SiteConfigs Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Model
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('SiteConfig', 'Model');
 
 /**
  * SiteConfigTest class
+ *
+ * @property SiteConfig $SiteConfig
  * 
  * class NonAssosiationSiteConfig extends SiteConfig {
  *  public $name = 'SiteConfig';
@@ -112,18 +112,13 @@ class SiteConfigTest extends BaserTestCase {
  */
 	public function testGetTheme() {
 		$results = $this->SiteConfig->getThemes();
-		$result = array();
-		foreach ($results as $key => $value) {
-			if(strstr($key, 'bccolumn') || strstr($key, 'nada-icons') || strstr($key, 'skelton')) {
-				$result[$key] = $value;
-			}
+		$Folder = new Folder(BASER_CONFIGS . 'theme');
+		$files = $Folder->read(true, true, false);
+		$expected = [];
+		foreach($files[0] as $file) {
+			$this->assertContains(Inflector::camelize($file), $results);
+			$this->assertArrayHasKey($file, $results);
 		}
-		$expected = array(
-			'bccolumn' => 'Bccolumn',
-			'nada-icons' => 'Nada-icons',
-			'skelton' => 'Skelton'
-		);
-		$this->assertEquals($expected, $result);
 	}
 
 /**

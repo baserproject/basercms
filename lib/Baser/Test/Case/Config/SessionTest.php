@@ -1,15 +1,13 @@
 <?php
 /**
- * test for session.php
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright     Copyright 2008 - 2015, baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
- * @package       Baser.Test.Case.Config
- * @since         baserCMS v 3.0.6
- * @license       http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Config
+ * @since			baserCMS v 3.0.9
+ * @license			http://basercms.net/license/index.html
  */
 
 

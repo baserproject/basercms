@@ -1,21 +1,24 @@
 <?php
 /**
- * [PUBLISH] インストーラー Step3
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] インストーラー Step3
+ */
 ?>
+
 
 <script type="text/javascript">
 $(document).ready( function() {
-	if ($('#btnnext').attr('disabled')) {
+	if ($('#btnnext').prop('disabled')) {
 		$('#btnnext').hide();
 	}
 	initForm();
@@ -52,6 +55,9 @@ $(document).ready( function() {
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
 				alert("プレフィックスは英数字とアンダースコアの組み合わせにしてください。（例）mysite_");
+				return false;
+			} else if ($("#InstallationDbName").val().match(/^.*\..*$/)) {
+				alert("ドット（.）を含むデータベース名にはインストールできません。");
 				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
 				alert("データベースのポートナンバーを入力してください。");
@@ -146,7 +152,7 @@ $(document).ready( function() {
 	}
 </script>
 
-<?php echo $this->BcForm->create(null, array('action' => 'step3', 'id' => 'dbsettings', 'name' => 'dbsettings')) ?>
+<?php echo $this->BcForm->create(null, ['url' => ['controller'=>'installations', 'action' => 'step3'], 'id' => 'dbsettings', 'name' => 'dbsettings']) ?>
 
 <div class="step-3">
 

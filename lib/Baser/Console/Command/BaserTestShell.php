@@ -1,18 +1,15 @@
 <?php
-
 /**
- * Custom TestShell Command
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Console.Command
- * @since			baserCMS v 3.0.0-beta
+ * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- * 
  */
+
 App::uses('TestShell', 'Console/Command');
 App::uses('BaserTestSuiteDispatcher', 'TestSuite');
 App::uses('BaserTestSuiteCommand', 'TestSuite');
@@ -33,6 +30,15 @@ class BaserTestShell extends TestShell {
  * @throws Exception
  */
 	public function initialize() {
+		// CUSTOMIZE ADD 2016/08/28 ryuring
+		// >>>
+		$currentTheme = Configure::read('BcSite.theme');
+		$testTheme = Configure::read('BcApp.testTheme');
+		if($currentTheme != $testTheme) {
+			trigger_error('CLIでのユニットテストは、' . $testTheme . ' テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。', E_USER_ERROR);
+			exit();
+		}
+		// <<<
 		$this->_dispatcher = new BaserTestSuiteDispatcher();
 		$sucess = $this->_dispatcher->loadTestFramework();
 		if (!$sucess) {
@@ -162,7 +168,6 @@ class BaserTestShell extends TestShell {
  * @param string $file
  * @param string $category 
  * @param boolean $throwOnMissingFile 
- * @access protected
  * @return array(type, case)
  * @throws Exception
  */
@@ -251,7 +256,6 @@ class BaserTestShell extends TestShell {
  * For the given file, what category of test is it? returns app, core or the name of the plugin
  *
  * @param string $file
- * @access protected
  * @return string
  */
 	protected function _mapFileToCategory($file) {
@@ -271,4 +275,49 @@ class BaserTestShell extends TestShell {
 		return 'app';
 	}
 
+/**
+ * Main entry point to this shell
+ *
+ * @return void
+ */
+	public function main() {
+
+		// CUSTOMIZE MODIFY 2016/08/06 ryuring
+		// >>>
+		//$this->out(__d('cake_console', 'CakePHP Test Shell'));
+		// ---
+		$this->out(__d('cake_console', 'baserCMS Test Shell'));
+		// <<<
+		
+		$this->hr();
+		$args = $this->_parseArgs();
+
+		if (empty($args['case'])) {
+			return $this->available();
+		}
+
+		$this->_run($args, $this->_runnerOptions());
+	}
+
+/**
+ * Displays a header for the shell
+ *
+ * @return void
+ */
+	protected function _welcome() {
+		$this->out();
+		
+		// CUSTOMIZE MODIFY 2016/08/06 ryuring
+		// >>>
+		//$this->out(__d('cake_console', '<info>Welcome to CakePHP %s Console</info>', 'v' . Configure::version()));
+		// ---
+		$this->out(__d('cake_console', '<info>Welcome to baserCMS %s Console</info>', 'v' . getVersion()));
+		// <<<
+		
+		$this->hr();
+		$this->out(__d('cake_console', 'App : %s', APP_DIR));
+		$this->out(__d('cake_console', 'Path: %s', APP));
+		$this->hr();
+	}
+	
 }

@@ -1,12 +1,9 @@
 <?php
-
 /**
- * ウィジェットエリアコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -23,28 +20,24 @@ class WidgetAreasController extends AppController {
 /**
  * クラス名
  * @var string
- * @access public
  */
 	public $name = 'WidgetAreas';
 
 /**
  * コンポーネント
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler');
 
 /**
  * ヘルパー
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
 /**
  * モデル
  * @var array
- * @access public
  */
 	public $uses = array('WidgetArea', 'Plugin');
 
@@ -52,7 +45,6 @@ class WidgetAreasController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'ウィジェットエリア管理', 'url' => array('controller' => 'widget_areas', 'action' => 'index'))
@@ -62,7 +54,6 @@ class WidgetAreasController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array('widget_areas');
 
@@ -70,7 +61,6 @@ class WidgetAreasController extends AppController {
  * beforeFilter
  * 
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		$this->BcAuth->allow('get_widgets');
@@ -80,7 +70,6 @@ class WidgetAreasController extends AppController {
 /**
  * 一覧
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->pageTitle = 'ウィジェットエリア一覧';
@@ -103,7 +92,6 @@ class WidgetAreasController extends AppController {
  * 新規登録
  * 
  * @return void
- * @access public
  */
 	public function admin_add() {
 		$this->pageTitle = '新規ウィジェットエリア登録';
@@ -125,7 +113,6 @@ class WidgetAreasController extends AppController {
  * 編集
  * 
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		$this->pageTitle = 'ウィジェットエリア編集';
@@ -184,9 +171,9 @@ class WidgetAreasController extends AppController {
  *
  * @param int ID
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -209,7 +196,6 @@ class WidgetAreasController extends AppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -225,37 +211,9 @@ class WidgetAreasController extends AppController {
 	}
 
 /**
- * [ADMIN] 削除処理
- *
- * @param int ID
- * @return void
- * @access public
- */
-	public function admin_delete($id = null) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		// メッセージ用にデータを取得
-		$post = $this->WidgetArea->read(null, $id);
-
-		/* 削除処理 */
-		if ($this->WidgetArea->delete($id)) {
-			$this->setMessage('ウィジェットエリア「' . $post['WidgetArea']['name'] . '」 を削除しました。', false, true);
-		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
-		}
-		clearViewCache('element_widget', '');
-		$this->redirect(array('action' => 'index'));
-	}
-
-/**
  * [AJAX] タイトル更新
  * 
  * @return boolean
- * @access public
  */
 	public function admin_update_title() {
 		if (!$this->request->data) {
@@ -274,7 +232,6 @@ class WidgetAreasController extends AppController {
  * 
  * @param int $widgetAreaId
  * @return boolean
- * @access public
  */
 	public function admin_update_widget($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
@@ -321,7 +278,6 @@ class WidgetAreasController extends AppController {
  * 並び順を更新する
  * @param int $widgetAreaId
  * @return boolean
- * @access public
  */
 	public function admin_update_sort($widgetAreaId) {
 		if (!$widgetAreaId || !$this->request->data) {
@@ -355,9 +311,9 @@ class WidgetAreasController extends AppController {
  * @param int $widgetAreaId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_del_widget($widgetAreaId, $id) {
+		$this->_checkSubmitToken();
 		$widgetArea = $this->WidgetArea->read(null, $widgetAreaId);
 		if (!$widgetArea['WidgetArea']['widgets']) {
 			exit();
@@ -387,20 +343,23 @@ class WidgetAreasController extends AppController {
 
 /**
  * ウィジェットを並び替えた上で取得する
- * 
+ *
  * @param int $id
  * @return array $widgets
- * @access public
- * @deprecated BcWidgetAreaHelper::showWidgets() に移行
+ * @deprecated 4.1.0 since 4.0.0 BcWidgetAreaHelper::showWidgets() に移行
  */
 	public function get_widgets($id) {
+		trigger_error(deprecatedMessage('メソッド：WidgetAreaController::get_widgets()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。'), E_USER_DEPRECATED);
 		$widgetArea = $this->WidgetArea->read(null, $id);
 		if (!empty($widgetArea['WidgetArea']['widgets'])) {
 			$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
 			usort($widgets, 'widgetSort');
 			return $widgets;
+		} else {
+			return [];
 		}
 	}
+
 
 }
 

@@ -1,16 +1,15 @@
 <?php
-
 /**
- * test for BlogTag
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS BlogTags Community <http://sites.google.com/site/baserBlogTags/>
- * @package         Feed.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS BlogTags Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.1.0-beta
- * @license         http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Blog.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BlogTag', 'Blog.Model');
 
 class BlogTagTest extends BaserTestCase {
@@ -19,6 +18,8 @@ class BlogTagTest extends BaserTestCase {
 		'baser.Default.BlogTag',
 		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.BlogPost',
+		'baser.Default.Content',
+		'baser.Default.Site',
 	);
 
 	public function setUp() {

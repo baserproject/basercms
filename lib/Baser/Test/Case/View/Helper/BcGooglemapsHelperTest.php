@@ -1,16 +1,15 @@
 <?php
-
 /**
- * test for BcGooglemapsHelper
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
- *
- * @copyright   Copyright 2008 - 2015, baserCMS Users Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.View.Helper
+ * @since			baserCMS v 3.0.6
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('View', 'View');
 App::uses('BcGooglemapsHelper', 'View/Helper');
 App::uses('Component', 'Controller');
@@ -27,7 +26,10 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = [
+		'baser.Default.Site',
+		'baser.Default.SiteConfig'
+	];
 
 	public function setUp() {
 		parent::setUp();

@@ -1,23 +1,26 @@
 <?php
 /**
- * [PUBLISH] インストーラー Step4
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] インストーラー Step4
+ */
 ?>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#btnfinish,#btnback').click( function() {
 		if(this.id == 'btnfinish') {
-			$("#clicked").val('finish');
+			$("#InstallationClicked").val('finish');
 			if($("#InstallationAdminEmail").val() == ""){
 				alert("管理用メールアドレスを入力してください。");
 				return false;
@@ -33,12 +36,12 @@ $(document).ready(function(){
 			}else if($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()){
 				alert("パスワードが確認欄のパスワードと同じではありません。");
 				return false;
-			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_]+$/)) {
-				alert("パスワードには半角英数字とハイフン、アンダースコアのみ利用可能です。");
+			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_ \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*]+$/)) {
+				alert("パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。");
 				return false;
 			}
 		}else if(this.id == 'btnback') {
-			$("#clicked").val('back');
+			$("#InstallationClicked").val('back');
 		}
 		$('#adminSettings').submit();
 	});
@@ -54,7 +57,7 @@ $(document).ready(function(){
 
 	<h2>管理情報登録</h2>
 
-	<?php echo $this->BcForm->create(null, array('action' => 'step4', 'id' => 'adminSettings', 'name' => 'adminSettings')) ?>
+	<?php echo $this->BcForm->create(null, ['url' => ['controller'=>'installations', 'action' => 'step4'], 'id' => 'adminSettings', 'name' => 'adminSettings']) ?>
 
 	<div class="panel-box corner10">
 		<div class="section">
@@ -72,7 +75,7 @@ $(document).ready(function(){
 					<?php echo $this->BcForm->input('Installation.admin_username', array('type' => 'text')); ?>
 				</li>
 				<li class="clearfix">
-					<label>パスワード</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
+					<label>パスワード</label>&nbsp;<small>半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&amp;;{}!$*)</small><br />
 					<div class="float-left">
 						<?php echo $this->BcForm->input('Installation.admin_password', array('type' => 'password')); ?>
 					</div>
@@ -83,7 +86,7 @@ $(document).ready(function(){
 				</li>
 			</ul>
 		</div>
-		<?php echo $this->BcForm->input('clicked', array('type' => 'hidden')) ?>
+		<?php echo $this->BcForm->input('Installation.clicked', array('type' => 'hidden')) ?>
 
 
 	</div>

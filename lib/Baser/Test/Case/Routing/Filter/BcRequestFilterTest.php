@@ -1,16 +1,15 @@
 <?php
-
 /**
- * BcRequestFilterクラスのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @since			baserCMS v 3.1.0-beta
+ * @package			Baser.Test.Case.Routing.Filter
+ * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BcRequestFilter', 'Routing/Filter');
 
 /**
@@ -25,7 +24,11 @@ class BcRequestFilterTest extends BaserTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'baser.Default.Page'
+		'baser.Default.Page',
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
 	);
 
 /**
@@ -52,7 +55,7 @@ class BcRequestFilterTest extends BaserTestCase {
  * @return void
  * @dataProvider isAdminDataProvider
  */
-	public function isAdmin($expect, $url) {
+	public function testIsAdmin($expect, $url) {
 		$request = new CakeRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isAdmin($request));
 	}
@@ -120,6 +123,7 @@ class BcRequestFilterTest extends BaserTestCase {
  * @dataProvider isInstallDataProvider
  */
 	public function testIsInstall($expect, $url) {
+		Configure::write('BcRequest.isInstalled', false);
 		$request = $this->_getRequest($url);
 		$this->assertEquals($expect, $this->requestFilter->isInstall($request));
 	}
@@ -135,7 +139,7 @@ class BcRequestFilterTest extends BaserTestCase {
 			array(true, '/install/'),
 			array(false, '/install/index'),
 			array(true, '/installations/step2'),
-			array(false, '/'),
+			array(true, '/'),
 			array(false, '/service')
 		);
 	}
@@ -224,8 +228,8 @@ class BcRequestFilterTest extends BaserTestCase {
 			array(false, '/news/index'),
 			array(true, '/'),
 			array(true, '/service'),
-			array(true, '/company'),
-			array(true, '/recruit')
+			array(true, '/about'),
+			array(false, '/recruit')
 		);
 	}
 

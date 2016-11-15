@@ -9,6 +9,12 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * UploaderViewEventListener
+ *
+ * @package Uploader.Event
+ */
 class UploaderViewEventListener extends BcViewEventListener {
 	
 	public $events = array('afterLayout',
@@ -41,7 +47,7 @@ class UploaderViewEventListener extends BcViewEventListener {
 				
 				$jscode = $this->BcHtml->scriptBlock("var baseUrl ='" . $View->request->base . "/';");
 				$jscode .= $this->BcHtml->scriptBlock("var adminPrefix ='" . Configure::read('Routing.prefixes.0') . "';");
-				$jscode .= $this->BcHtml->script('Uploader.ckeditor_uploader');
+				$jscode .= $this->BcHtml->script('Uploader.admin/libs/ckeditor_uploader');
 				$View->output = str_replace('</head>', $jscode . '</head>', $View->output);
 
 				/* CSSを読み込む */

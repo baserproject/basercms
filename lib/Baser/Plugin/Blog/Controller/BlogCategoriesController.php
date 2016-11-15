@@ -1,19 +1,13 @@
 <?php
-
 /**
- * カテゴリコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -29,7 +23,6 @@ class BlogCategoriesController extends BlogAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogCategories';
 
@@ -37,7 +30,6 @@ class BlogCategoriesController extends BlogAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogContent');
 
@@ -45,7 +37,6 @@ class BlogCategoriesController extends BlogAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcText', 'BcTime', 'BcForm', 'Blog.Blog');
 
@@ -53,25 +44,13 @@ class BlogCategoriesController extends BlogAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ぱんくずナビ
- *
- * @var string
- * @access public
- */
-	public $crumbs = array(
-		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
-	);
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['type' => 'Blog.BlogContent']];
 
 /**
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -79,17 +58,17 @@ class BlogCategoriesController extends BlogAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
 
 		$this->BlogContent->recursive = -1;
+		$this->request->params['Content'] = $this->BcContents->getContent($this->params['pass'][0])['Content'];
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
-		$this->crumbs[] = array('name' => $this->blogContent['BlogContent']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 
 		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_posts', 'blog_categories');
+			$this->subMenuElements = array('blog_posts');
 		}
 
 		// バリデーション設定
@@ -100,7 +79,6 @@ class BlogCategoriesController extends BlogAppController {
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -111,7 +89,6 @@ class BlogCategoriesController extends BlogAppController {
  * [ADMIN] ブログを一覧表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index($blogContentId) {
 		$conditions = array('BlogCategory.blog_content_id' => $blogContentId);
@@ -132,7 +109,7 @@ class BlogCategoriesController extends BlogAppController {
 		/* 表示設定 */
 		$this->set('owners', $this->BlogCategory->getControlSource('owner_id'));
 		$this->set('dbDatas', $dbDatas);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ一覧';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] カテゴリ一覧';
 		$this->help = 'blog_categories_index';
 	}
 
@@ -141,7 +118,6 @@ class BlogCategoriesController extends BlogAppController {
  *
  * @param string $blogContentId
  * @return void
- * @access public
  */
 	public function admin_add($blogContentId) {
 		if (!$blogContentId) {
@@ -178,15 +154,13 @@ class BlogCategoriesController extends BlogAppController {
 			$catOptions['ownerId'] = $user['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
-		if ($this->checkRootEditable()) {
-			if ($parents) {
-				$parents = array('' => '指定しない') + $parents;
-			} else {
-				$parents = array('' => '指定しない');
-			}
+		if ($parents) {
+			$parents = array('' => '指定しない') + $parents;
+		} else {
+			$parents = array('' => '指定しない');
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] 新規カテゴリ登録';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規カテゴリ登録';
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -197,7 +171,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_edit($blogContentId, $id) {
 		/* 除外処理 */
@@ -229,15 +202,13 @@ class BlogCategoriesController extends BlogAppController {
 			$catOptions['ownerId'] = $user['user_group_id'];
 		}
 		$parents = $this->BlogCategory->getControlSource('parent_id', $catOptions);
-		if ($this->checkRootEditable()) {
-			if ($parents) {
-				$parents = array('' => '指定しない') + $parents;
-			} else {
-				$parents = array('' => '指定しない');
-			}
+		if ($parents) {
+			$parents = array('' => '指定しない') + $parents;
+		} else {
+			$parents = array('' => '指定しない');
 		}
 		$this->set('parents', $parents);
-		$this->pageTitle = '[' . $this->blogContent['BlogContent']['title'] . '] カテゴリ編集';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] カテゴリ編集';
 		$this->help = 'blog_categories_form';
 		$this->render('form');
 	}
@@ -248,7 +219,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -265,9 +235,9 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	public function admin_ajax_delete($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -286,7 +256,6 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	protected function _del($id = null) {
 		// メッセージ用にデータを取得
@@ -306,9 +275,9 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId
  * @param int $id
  * @return	void
- * @access public
  */
 	public function admin_delete($blogContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);

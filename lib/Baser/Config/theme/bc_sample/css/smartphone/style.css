@@ -1,0 +1,551 @@
+@charset "UTF-8";
+/**
+ * メインスタイルシート（スマホ用）
+ * 呼出箇所：全てのページ
+ */
+
+/* import
+----------------------------------------------- */
+
+@import "../editor.css";
+
+
+/* Layout
+----------------------------------------------- */
+
+#Logo {
+	padding:20px;
+	text-align: center;
+	line-height: 1em;
+}
+.global-menu {
+	display: none;
+}
+#MainImage {
+	display: none;
+}
+.contents-body {
+	padding:20px 20px 60px;
+	border-top:1px solid #E7E7E7;
+	border-bottom:1px solid #E7E7E7;
+}
+#Home .contents-body {
+	border-top: none;
+}
+footer {
+	background-color: #EFEFEF;
+	padding:60px 0;
+	text-align: center;
+}
+address {
+	font-size:12px;
+	color:#999;
+}
+
+
+/* eye catch
+----------------------------------------------- */
+
+.img-eye-catch {
+	float:left;
+	margin-right:20px;
+	margin-bottom:20px;
+}
+
+
+/* News List
+----------------------------------------------- */
+
+#NewsList li {
+	border-bottom:1px solid #E7E7E7;
+	margin-bottom: 20px;
+	list-style:none;
+}
+
+
+/* Baser Feed
+----------------------------------------------- */
+
+#BaserFeed li {
+	border-bottom:1px solid #E7E7E7;
+	margin-bottom: 20px;
+	list-style:none;
+}
+
+
+/* blog description
+----------------------------------------------- */
+
+.blog-description {
+	margin-bottom: 40px;
+}
+
+
+/* post
+----------------------------------------------- */
+
+.post {
+	margin-bottom: 60px;
+	padding-bottom:20px;
+	border-bottom:1px solid #CCC;
+}
+.post .meta {
+	text-align: right;
+	color:#CCC;
+}
+
+
+/* eye catch
+----------------------------------------------- */
+
+.img-eye-catch {
+	float:left;
+	margin-right:20px;
+	margin-bottom:20px;
+}
+.detail-eye-catch .img-eye-catch{
+	float:none;
+	margin:0 0 20px 0;
+}
+
+
+/* calendar
+----------------------------------------------- */
+
+.widget-blog-calendar table {
+
+}
+.widget-blog-calendar th {
+	border-bottom:1px solid #e2e2e2;
+}
+.widget-blog-calendar th,
+.widget-blog-calendar td {
+	padding:2px 9px;
+	font-size:14px;
+	text-align: center;
+}
+.widget-blog-calendar .sunday {
+	color:#ff6633;
+}
+.widget-blog-calendar .saturday {
+	color:#3366FF;
+}
+.widget-blog-calendar .today {
+	background-color:#e2e2e2;
+}
+
+
+/* Comment
+----------------------------------------------- */
+
+#BlogCommentList .comment{
+	margin-bottom:20px;
+	padding-bottom:20px;
+	border-bottom:1px solid #CCC;
+}
+#BlogCommentList {
+	margin-bottom:60px;
+}
+#BlogCommentList .comment-name {
+	font-weight: bold;
+}
+
+
+/* contents-navi
+----------------------------------------------- */
+
+.contents-navi {
+	text-align: center;
+	margin-bottom:60px;
+}
+
+
+/* button
+----------------------------------------------- */
+
+.submit .button{
+	color:#333;
+	border:1px solid #CCC;
+	cursor:pointer;
+	text-shadow:rgba(255,255,255,0.4) 1px 1px 0;
+	-webkit-border-radius:2px;
+	-moz-border-radius:2px;
+	-o-border-radius:2px;
+	border-radius:2px;
+	-webkit-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	-moz-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	-o-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	box-shadow:inset 0 0 0 1px rgba(255,255,255,0.4);
+	background:#F3F3F3;
+	background:-moz-linear-gradient(top,#FFF,#F3F3F3);
+	background:-webkit-gradient(linear,left top,left bottom,from(#FFF),color-stop(100%,#F3F3F3));
+	background:-o-linear-gradient(top,#FFF,#F3F3F3);
+	margin:10px;
+	padding:5px 40px;
+	font-weight: bold;
+	font-size: 16px;
+	white-space: nowrap;
+	line-height: 24px;
+}
+.submit .button:hover{
+	border:1px solid #CCC;
+	text-decoration:none;
+	background:#f4f4f4;
+	background:-moz-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),color-stop(100%,#dfdfdf));
+	background:-o-linear-gradient(top,#f4f4f4,#dfdfdf 100%);
+}
+.submit .button:active{
+	border:1px solid #CCC;text-decoration:none;
+	background:#cdcdcd;
+	background:-moz-linear-gradient(top,#cdcdcd,#eee 100%);
+	background:-webkit-gradient(linear,left top,left bottom,from(#cdcdcd),color-stop(100%,#eee));
+	background:-o-linear-gradient(top,#cdcdcd,#eee 100%);
+}
+
+
+/* button small
+----------------------------------------------- */
+
+.button-small{
+	text-decoration: none!important;
+	display:inline-block;
+	padding:4px 10px 4px;
+	margin-bottom:0;
+	font-size:13px;
+	line-height:18px;
+	color:#333!important;
+	text-align:center;
+	text-shadow:0 1px 1px rgba(255, 255, 255, 0.75);
+	vertical-align:middle;
+	cursor:pointer;
+	background-color:#f5f5f5;
+	background-image:-ms-linear-gradient(top, #fff, #e6e6e6);
+	background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#e6e6e6));
+	background-image:-webkit-linear-gradient(top, #fff, #e6e6e6);
+	background-image:-o-linear-gradient(top, #fff, #e6e6e6);
+	background-image:linear-gradient(top, #fff, #e6e6e6);
+	background-image:-moz-linear-gradient(top, #fff, #e6e6e6);
+	background-repeat:repeat-x;
+	border:1px solid #ccc;
+	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+	border-color:#e6e6e6 #e6e6e6 #bfbfbf;
+	border-bottom-color:#b3b3b3;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	filter:progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+	filter:progid:dximagetransform.microsoft.gradient(enabled=false);
+	-webkit-box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	border-color:#ccc;
+	border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.button-small:hover{
+	background-color:#e6e6e6;
+	color:#333;
+	text-decoration:none;
+	background-color:#e6e6e6;
+	background-position:0 -15px;
+	-webkit-transition:background-position .1s linear;
+	-moz-transition:background-position .1s linear;
+	-ms-transition:background-position .1s linear;
+	-o-transition:background-position .1s linear;
+	transition:background-position .1s linear;
+}
+
+
+/* pagination
+----------------------------------------------- */
+
+.pagination {
+	margin-bottom:20px;
+}
+.pagination {
+	padding-right: 10px;
+	text-align: right;
+	line-height: 18px;
+}
+.pagination .page-result{
+	margin: 5px 5px 0;
+	float:right;
+}
+.pagination .page-numbers {
+	float:left;
+}
+.pagination span span a {
+	border: 1px solid #00a9c7;
+	margin: 0 2px 4px;
+	text-decoration: none;
+	display:block;
+	float:left;
+}
+.pagination span span a:hover {
+	background-color: #00a9c7;
+	color: #FFFFFF;
+}
+.pagination .current {
+	background-color: #E2E2E2;
+	font-weight:bold;
+	border:1px solid #E2E2E2;
+	margin: 0 2px 4px;
+	display:block;
+	float:left;
+}
+.pagination .next, .pagination .prev {
+	margin: 0 2px 4px;
+	text-decoration: none;
+	border: 1px solid #00a9c7;
+	float:left;
+}
+.pagination .next a, .pagination .prev a {
+	text-decoration: none;
+}
+.pagination .next a:hover, .pagination .prev a:hover {
+	background-color: #00a9c7;
+	color:#fff;
+}
+.pagination .next:hover, .pagination .prev:hover {
+	background-color: #00a9c7;
+}
+.pagination span span a,
+.pagination .disabled,
+.pagination .current{
+	padding: 3px 9px;
+}
+.pagination .next, .pagination .prev{
+	padding: 3px 9px;
+}
+.pagination .disabled,
+.pagination .disabled:hover{
+	background-color: #FFF;
+	border: 1px solid #DFDFDF;
+	margin: 0 2px;
+	display:block;
+	float:left;
+	color:#DFDFDF;
+}
+
+
+/* clear
+----------------------------------------------- */
+
+.clear {
+	clear:both;
+}
+.clearfix:after {
+	content: " ";
+	display: block;
+	clear: both;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}
+
+
+/* submit
+----------------------------------------------- */
+
+.submit {
+	text-align:center;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+
+/* widget
+----------------------------------------------- */
+
+.widget {
+	border-bottom:1px solid #E7E7E7;
+	padding:40px 20px;
+}
+.widget-area h2 {
+	font-weight: bold;
+	font-size:20px;
+}
+.widget-blog-calendar table{
+	width:100%;
+}
+
+
+/* search result
+----------------------------------------------- */
+
+.search-result {
+	background: #efefef;
+	padding:10px 20px;
+	text-align: right;
+	margin-bottom: 20px;
+}
+#SearchResultList article{
+	border-bottom:1px solid #E7E7E7;
+	margin-bottom:40px;
+	padding-bottom: 20px;
+}
+
+
+/* list num
+----------------------------------------------- */
+
+.list-num {
+	text-align: right;
+	margin-bottom: 20px;
+}
+
+
+/* blog parts
+----------------------------------------------- */
+
+.post{
+	border-bottom:1px solid #E7E7E7!important;
+}
+.post-navi {
+	border-bottom:1px solid #E7E7E7;
+	padding-bottom:60px;
+}
+
+
+/* form parts
+----------------------------------------------- */
+
+textarea {
+	max-width: 95%;
+}
+input[type=text] {
+	max-width: 95%;
+}
+
+
+/* site search
+----------------------------------------------- */
+
+.widget-site-search input,
+.widget-site-search select{
+	font-size:14px;
+}
+.widget-site-search select {
+	width:100%;
+}
+.widget-site-search input[name=q] {
+	width:170px;
+}
+
+
+/* bx slider
+----------------------------------------------- */
+
+.bx-wrapper {
+	margin:0 auto;
+}
+.bx-controls {
+	display:none;
+}
+
+
+/* baserCMS parts
+----------------------------------------------- */
+
+.edit-link {
+	margin-bottom:10px;
+	text-align:right;
+	font-size: 12px;
+}
+.edit-link a{
+	border:1px solid #1C98D4;
+	color:#1C98D4;
+	padding:5px 10px;
+	text-decoration:none;
+}
+.edit-link a:hover{
+	color:#1C98D4;
+	text-decoration:underline;
+}
+.upload-file input[type=file] {
+	margin-bottom: 5px;
+}
+.upload-file a {
+	padding:5px;
+	background-color: #F1F1F1;
+	display: inline-block;
+}
+
+
+/* CakePHP parts
+----------------------------------------------- */
+
+table.cake-sql-log {
+	width:90%;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #666;
+	border-right: 1px solid #666;
+	color:#333;
+	background-color: #fff;
+	clear:both;
+	padding: 0;
+	margin: 0 0 1em 0;
+	white-space: normal;
+	border-collapse:separate;
+	margin:20px auto;
+}
+table.cake-sql-log caption {
+	font-weight:bold;
+	text-align:center;
+}
+table.cake-sql-log th {
+	background-color: #e2e2e2;
+	padding:4px 8px;
+	font-weight:bold;
+	text-align:center;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #FFFFFF;
+	border-right-color: #666;
+	border-bottom-color: #666;
+	border-left-color: #FFFFFF;
+	font-size:0.8em;
+}
+table.cake-sql-log tr td {
+	background-color: #F7F7F7;
+	padding:6px 8px;
+	vertical-align:top;
+	text-align: left;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #ccc;
+	border-bottom-color: #ccc;
+	font-size:0.8em;
+}
+#flashMessage, #ResultMessage {
+	padding:10px 20px;
+	margin:15px auto!important;
+	color:#FF0033;
+	font-weight:bold;
+	border:5px solid #FF0033;
+}
+.required {
+	color:#FF0033!important;
+	font-size:16px;
+}
+.form-error {
+	background-color:#FCF5EB;
+}
+.error-message {
+	color:#FF0033;
+	font-weight: bold;
+	font-size: small;
+}

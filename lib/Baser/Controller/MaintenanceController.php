@@ -1,12 +1,9 @@
 <?php
-
 /**
- * メンテナンスコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class MaintenanceController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Maintenance';
 
@@ -32,7 +28,6 @@ class MaintenanceController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = null;
 
@@ -40,7 +35,6 @@ class MaintenanceController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array();
 
@@ -48,7 +42,6 @@ class MaintenanceController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 

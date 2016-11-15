@@ -1,12 +1,9 @@
 <?php
-
 /**
- * Plugin 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -18,9 +15,7 @@
  * プラグインのコントローラーより継承して利用する
  *
  * @package Baser.Controller
- * @property Menu $Menu
  * @property Plugin $Plugin
- * @property PluginContent $PluginContent
  * @property BcManagerComponent $BcManager
  * @property BcAuthComponent $BcAuth
  */
@@ -30,7 +25,6 @@ class PluginsController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Plugins';
 
@@ -38,15 +32,13 @@ class PluginsController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
-	public $uses = array('Menu', 'Plugin', 'PluginContent');
+	public $uses = array('Plugin');
 
 /**
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -54,7 +46,6 @@ class PluginsController extends AppController {
  * ヘルパ
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcTime', 'BcForm');
 
@@ -62,7 +53,6 @@ class PluginsController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -70,7 +60,6 @@ class PluginsController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
@@ -98,24 +87,20 @@ class PluginsController extends AppController {
 
 		$zippedName = $this->request->data['Plugin']['file']['name'];
 		move_uploaded_file($this->request->data['Plugin']['file']['tmp_name'], TMP . $zippedName);
-
-		$format = 'unzip -o ' . TMP . '%s' . ' -d ' . APP . 'Plugin' . DS;
-		$command = sprintf($format, escapeshellarg($zippedName));
-
-		exec($command, $return);
-
-		//ZIPファイル展開失敗
-		if (empty($return[2])) {
+		App::uses('BcZip', 'Lib');
+		$BcZip = new BcZip();
+		if (!$BcZip->extract(TMP . $zippedName, APP . 'Plugin' . DS)) {
 			$msg = 'アップロードしたZIPファイルの展開に失敗しました。';
-			exec('unzip 2>&1', $errs);
-			$msg .= '<br />' . implode('<br />', $errs);
+			$msg .= '<br />' . $BcZip->error;
 			$this->setMessage($msg, true);
 			$this->redirect(array('action' => 'add'));
 			return;
 		}
 
+		$plugin = $BcZip->topArchiveName;
+
 		// 解凍したプラグインフォルダがキャメルケースでない場合にキャメルケースに変換
-		$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $return[2]);
+		$plugin = preg_replace('/^\s*?(creating|inflating):\s*' . preg_quote(APP . 'Plugin' . DS, '/') . '/', '', $plugin);
 		$plugin = explode(DS, $plugin);
 		$plugin = $plugin[0];
 		$srcPluginPath = APP . 'Plugin' . DS . $plugin;
@@ -146,7 +131,6 @@ class PluginsController extends AppController {
  * プラグインの一覧を表示する
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$this->Plugin->cacheQueries = false;
@@ -237,37 +221,25 @@ class PluginsController extends AppController {
 	}
 
 /**
- * [ADMIN] ファイル削除
- *
- * @param string $pluginName プラグイン名
- * @return void
- *
- * @deprecated admin_ajax_delete_file に移行
- */
-	public function admin_delete_file($pluginName) {
-		$this->__deletePluginFile($pluginName);
-		$this->setMessage('プラグイン「' . $pluginName . '」 を完全に削除しました。');
-		$this->redirect(array('action' => 'index'));
-	}
-
-/**
  * 並び替えを更新する [AJAX]
  *
  * @return bool
  */
 	public function admin_ajax_update_sort() {
+		$this->autoRender = false;
 		if ($this->request->data) {
 			if ($this->Plugin->changePriority($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'])) {
 				clearViewCache();
 				clearDataCache();
-				echo true;
+				Configure::write('debug', 0);
+				return true;
 			} else {
 				$this->ajaxError(500, '一度リロードしてから再実行してみてください。');
 			}
 		} else {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		exit();
+		return false;
 	}
 /**
  * [ADMIN] ファイル削除
@@ -276,6 +248,7 @@ class PluginsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete_file($pluginName) {
+		$this->_checkSubmitToken();
 		if (!$pluginName) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -322,7 +295,7 @@ class PluginsController extends AppController {
 		}
 
 		// テーブルを削除
-		$this->Plugin->loadSchema('plugin', $tmpPath);
+		$this->Plugin->loadSchema('default', $tmpPath);
 
 		// プラグインフォルダを削除
 		$folder->delete($pluginPath);
@@ -479,6 +452,7 @@ class PluginsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($name = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$name) {
 			$this->ajaxError(500, '無効な処理です。');

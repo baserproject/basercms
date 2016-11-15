@@ -9,29 +9,14 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 /**
  * ファイルカテゴリモデル
  *
- * @package			uploader.models
+ * @package			Uploader.Model
  */
-class UploaderCategory extends BcPluginAppModel {
-/**
- * クラス名
- *
- * @var		string
- * @access	public
- */
-	public $name = 'UploaderCategory';
-/**
- * DB接続設定
- *
- * @var		string
- * @access	public
- */
-	public $useDbConfig = 'plugin';
+class UploaderCategory extends AppModel {
+
 /**
  * プラグイン名
  *
@@ -48,7 +33,7 @@ class UploaderCategory extends BcPluginAppModel {
 	public $validate = array(
 		'name' => array(
 			array(
-				'rule'		=> array('notEmpty'),
+				'rule'		=> array('notBlank'),
 				'message'	=> 'カテゴリ名を入力してください。')
 			)
 		);

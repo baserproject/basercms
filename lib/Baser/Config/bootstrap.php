@@ -1,27 +1,18 @@
 <?php
 /**
- * 起動スクリプト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Config
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 require CORE_PATH . 'Baser' . DS . 'Config' . DS . 'paths.php';
 require BASER . 'basics.php';
 require BASER . 'Error' . DS . 'exceptions.php';
-
-/**
- * インストール状態
- */
-define('BC_INSTALLED', isInstalled());
 
 /**
  * Baserパス追加
@@ -54,13 +45,35 @@ App::build(array(
 //新規登録
 App::build(array(
 	'Event'						=> array(APP . 'Event', BASER_EVENTS),
+	'Routing'					=> array(BASER . 'Routing' . DS),
 	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
+	'Routing/Route'				=> array(BASER . 'Routing' . DS . 'Route' . DS),
 	'Configure'					=> array(BASER . 'Configure' . DS),
 	'TestSuite'					=> array(BASER_TEST_SUITE),
 	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),
 	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS),
 	'Network'					=> array(BASER . 'Network' . DS)
 ), App::REGISTER);
+
+/**
+ * ディスパッチャーフィルターを追加
+ */
+$filters = Configure::read('Dispatcher.filters');
+if (!is_array($filters)) {
+	$filters = array();
+}
+Configure::write('Dispatcher.filters',
+	array_merge(
+		$filters,
+		array(
+			'BcAssetDispatcher',
+			'BcCacheDispatcher',
+			'BcRequestFilter',
+			'BcRedirectMainSiteFilter',
+			'BcRedirectSubSiteFilter'
+		)
+	)
+);
 
 /**
  * 配置パターン
@@ -81,26 +94,26 @@ if (!defined('BC_DEPLOY_PATTERN')) {
 
 /**
  * baserUrl取得
+ * BC_DEPLOY_PATTERN の定義より後に実行
  */
 define('BC_BASE_URL', baseUrl());
 
 /**
- * ディスパッチャーフィルターを追加
+ * 静的ファイルの読み込みの場合はスキップ
  */
-$filters = Configure::read('Dispatcher.filters');
-if (!is_array($filters)) {
-	$filters = array();
+$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
+$uri = @$_SERVER['REQUEST_URI'];
+if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
+	Configure::write('BcRequest.asset', true);
+	return;
 }
-Configure::write('Dispatcher.filters',
-	array_merge(
-		$filters,
-		array(
-			'BcAssetDispatcher',
-			'BcCacheDispatcher',
-			'BcRequestFilter'
-		)
-	)
-);
+
+/**
+ * インストール状態
+ */
+define('BC_INSTALLED', isInstalled());
+Configure::write('BcRequest.isInstalled', BC_INSTALLED); // UnitTest用
 
 /**
  * クラスローダー設定
@@ -123,10 +136,17 @@ App::uses('BcControllerEventListener', 'Event');
 App::uses('BcModelEventListener', 'Event');
 App::uses('BcViewEventListener', 'Event');
 App::uses('BcHelperEventListener', 'Event');
-App::uses('BcPluginAppController', 'Controller');
-App::uses('BcPluginAppModel', 'Model');
 App::uses('BcManagerShell', 'Console/Command');
 App::uses('CakeRequest', 'Network');
+App::uses('BcSite', 'Lib');
+App::uses('BcAgent', 'Lib');
+App::uses('BcLang', 'Lib');
+
+// @deprecated
+// >>>
+App::uses('BcPluginAppController', 'Controller');
+App::uses('BcPluginAppModel', 'Model');
+// <<<
 
 /**
  * 設定ファイル読み込み
@@ -152,17 +172,6 @@ if (BC_INSTALLED && $baserSettings) {
 }
 
 /**
- * 静的ファイルの読み込みの場合はスキップ
- */
-$assetRegex = '/^' . preg_quote(BC_BASE_URL, '/') . '(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$assetRegexTheme = '/^' . preg_quote(BC_BASE_URL, '/') . 'theme\/[^\/]+?\/(css|js|img)' . '\/.+\.(js|css|gif|jpg|jpeg|png)$/';
-$uri = @$_SERVER['REQUEST_URI'];
-if (preg_match($assetRegex, $uri) || preg_match($assetRegexTheme, $uri)) {
-	Configure::write('BcRequest.asset', true);
-	return;
-}
-
-/**
  * セッション設定
  */
 if (BC_INSTALLED) {
@@ -172,9 +181,7 @@ if (BC_INSTALLED) {
 /**
  * パラメーター取得
  */
-$url = getUrlFromEnv(); // 環境変数からパラメータを取得
 $parameter = getUrlParamFromEnv();
-Configure::write('BcRequest.pureUrl', $parameter); // ※ requestActionに対応する為、routes.php で上書きされる
 
 if (BC_INSTALLED) {
 /**
@@ -235,6 +242,16 @@ if (BC_INSTALLED) {
 		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
+	// エレメントキャッシュ
+	Cache::config('_cake_element_', array(
+		'engine' => $cacheEngine,
+		'path' => CACHE . 'views',
+		'probability' => 100,
+//		'prefix' => $cachePrefix . 'cake_data_',
+		'lock' => true,
+		'serialize' => ($cacheEngine === 'File'),
+		'duration' => Configure::read('BcCache.viewDuration')
+	));
 	// 環境情報キャッシュ
 	Cache::config('_cake_env_', array(
 		'engine' => $cacheEngine,
@@ -250,7 +267,9 @@ if (BC_INSTALLED) {
  * サイト基本設定を読み込む
  * bootstrapではモデルのロードは行わないようにする為ここで読み込む
  */
-	loadSiteConfig();
+ if(empty($_GET['requestview']) || $_GET['requestview'] != 'false') {
+ 	loadSiteConfig();
+ }
 
 /**
  * メンテナンスチェック
@@ -290,27 +309,34 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 /**
  * イベント登録
  */
+ 	App::uses('CakeEventManager', 'Event');
 	App::uses('BcControllerEventDispatcher', 'Event');
 	App::uses('BcModelEventDispatcher', 'Event');
 	App::uses('BcViewEventDispatcher', 'Event');
+	App::uses('PagesControllerEventListener', 'Event');
 	$CakeEvent = CakeEventManager::instance();
 	$CakeEvent->attach(new BcControllerEventDispatcher());
 	$CakeEvent->attach(new BcModelEventDispatcher());
 	$CakeEvent->attach(new BcViewEventDispatcher());
+	$CakeEvent->attach(new PagesControllerEventListener());
 
 /**
  * テーマの bootstrap を実行する
  */
-	$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
-	$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
-	if (file_exists($themeBootstrap)) {
-		include $themeBootstrap;
-	}
+ 	if(!BcUtil::isAdminSystem()) {
+		$themePath = WWW_ROOT . 'theme' . DS . Configure::read('BcSite.theme') . DS;
+		$themeBootstrap = $themePath . 'Config' . DS . 'bootstrap.php';
+		if (file_exists($themeBootstrap)) {
+			include $themeBootstrap;
+		}
+ 	}
 }
+
 /**
  * 文字コードの検出順を指定
  */
 mb_detect_order(Configure::read('BcEncode.detectOrder'));
+
 /**
  * メモリー設定
  */
@@ -318,11 +344,13 @@ $memoryLimit = (int)ini_get('memory_limit');
 if ($memoryLimit < 32 && $memoryLimit != -1) {
 	ini_set('memory_limit', '32M');
 }
+
 /**
  * ロケール設定
  * 指定しないと 日本語入りの basename 等が失敗する
  */
 setlocale(LC_ALL, 'ja_JP.UTF-8');
+
 /**
  * セッションスタート 
  */
@@ -341,7 +369,7 @@ if (Configure::read('debug') == 0) {
 		// TODO ブラウザを閉じても最初から編集ページへのリンクを表示する場合は、クッキーのチェックを行い、認証処理を行う必要があるが、
 		// セキュリティ上の問題もあるので実装は検討が必要。
 		// bootstrapで実装した場合、他ページへの負荷の問題もある
-		if (isset($_SESSION['Auth']['User'])) {
+		if (isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			Configure::write('Cache.check', false);
 		}
 	}
@@ -353,6 +381,14 @@ if (Configure::read('debug') == 0) {
 } else {
 	Configure::write('Cache.check', false);
 	clearViewCache();
+}
+
+// サブサイトの際にキャッシュがメインサイトと重複しないように調整
+if(Configure::read('Cache.check')) {
+	$site = BcSite::findCurrent();
+	if($site->useSubDomain) {
+		Configure::write('Cache.viewPrefix', $site->alias);
+	}
 }
 
 /**

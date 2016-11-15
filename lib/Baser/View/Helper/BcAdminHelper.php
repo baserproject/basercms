@@ -1,11 +1,9 @@
 <?php
 /**
- * BcAdminヘルパー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -28,7 +26,6 @@ class BcAdminHelper extends AppHelper {
  * 管理システムグローバルメニューの利用可否確認
  * 
  * @return boolean
- * @access public
  */
 	public function isAdminGlobalmenuUsed() {
 		if (!BC_INSTALLED) {
@@ -37,8 +34,8 @@ class BcAdminHelper extends AppHelper {
 		if (Configure::read('BcRequest.isUpdater')) {
 			return false;
 		}
-		$user = $this->_View->getVar('user');
-		if (empty($this->request->params['admin']) || !$user) {
+		$user = $this->_View->get('user');
+		if (!$user) {
 			return false;
 		}
 		$UserGroup = ClassRegistry::init('UserGroup');

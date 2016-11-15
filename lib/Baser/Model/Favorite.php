@@ -1,12 +1,9 @@
 <?php
-
 /**
- * よく使う項目　モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
@@ -21,18 +18,9 @@
 class Favorite extends AppModel {
 
 /**
- * データベース接続
- *
- * @var string
- * @access public
- */
-	public $useDbConfig = 'baser';
-
-/**
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Favorite';
 
@@ -40,7 +28,6 @@ class Favorite extends AppModel {
  * belongsTo
  * 
  * @var array
- * @access public
  */
 	public $belongsTo = array(
 		'User' => array(
@@ -52,12 +39,13 @@ class Favorite extends AppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
 /**
  * セッション
+ *
+ * @var Session
  */
 	public $_Session;
 
@@ -65,7 +53,6 @@ class Favorite extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'url' => array(
@@ -93,7 +80,8 @@ class Favorite extends AppModel {
 			return true;
 		}
 		$url = $check[key($check)];
-		$userGroupId = $this->_Session->read('Auth.User.user_group_id');
+		$prefix = BcUtil::authSessionKey('admin');
+		$userGroupId = $this->_Session->read('Auth.' . $prefix . '.user_group_id');
 		if ($userGroupId == Configure::read('BcApp.adminGroupId')) {
 			return true;
 		}

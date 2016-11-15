@@ -1,20 +1,15 @@
 <?php
-
 /**
- * FormHelper 拡張クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('HtmlHelper', 'View/Helper');
 App::uses('FormHelper', 'View/Helper');
 App::uses('BcTimeHelper', 'View/Helper');
@@ -46,7 +41,6 @@ class BcFormHelper extends FormHelper {
  * sizeCounter用の関数読み込み可否
  * 
  * @var boolean
- * @access public
  */
 	public $sizeCounterFunctionLoaded = false;
 
@@ -54,7 +48,6 @@ class BcFormHelper extends FormHelper {
  * フォームID
  * 
  * @var string
- * @access private
  */
 	private $__id = null;
 // <<<
@@ -498,13 +491,13 @@ class BcFormHelper extends FormHelper {
  *
  * A simple array will create normal options:
  *
- * {{{
+ * ```
  * $options = array(1 => 'one', 2 => 'two);
  * $this->Form->select('Model.field', $options));
- * }}}
+ * ```
  *
  * While a nested options array will create optgroups with options inside them.
- * {{{
+ * ```
  * $options = array(
  *  1 => 'bill',
  *  'fred' => array(
@@ -513,7 +506,7 @@ class BcFormHelper extends FormHelper {
  *  )
  * );
  * $this->Form->select('Model.field', $options);
- * }}}
+ * ```
  *
  * In the above `2 => 'fred'` will not generate an option element. You should enable the `showParents`
  * attribute to show the fred option.
@@ -521,12 +514,12 @@ class BcFormHelper extends FormHelper {
  * If you have multiple options that need to have the same value attribute, you can
  * use an array of arrays to express this:
  *
- * {{{
+ * ```
  * $options = array(
  *  array('name' => 'United states', 'value' => 'USA'),
  *  array('name' => 'USA', 'value' => 'USA'),
  * );
- * }}}
+ * ```
  *
  * @param string $fieldName Name attribute of the SELECT
  * @param array $options Array of the OPTION elements (as 'value'=>'Text' pairs) to be used in the
@@ -570,7 +563,7 @@ class BcFormHelper extends FormHelper {
 		$id = $this->_extractOption('id', $attributes);
 
 		$attributes = $this->_initInputField($fieldName, array_merge(
-			(array)$attributes, array('secure' => self::SECURE_SKIP)
+			(array)$attributes, array('secure' => static::SECURE_SKIP)
 		));
 
 		if (is_string($options) && isset($this->_options[$options])) {
@@ -680,6 +673,11 @@ class BcFormHelper extends FormHelper {
 		$selectedIsEmpty = ($attributes['value'] === '' || $attributes['value'] === null);
 		$selectedIsArray = is_array($attributes['value']);
 
+		// Cast boolean false into an integer so string comparisons can work.
+		if ($attributes['value'] === false) {
+			$attributes['value'] = 0;
+		}
+		
 		$this->_domIdSuffixes = array();
 		foreach ($elements as $name => $title) {
 			$htmlOptions = array();
@@ -824,7 +822,7 @@ class BcFormHelper extends FormHelper {
 		// <<<
 
 		$options = $this->_initInputField($fieldName, array_merge(
-			$options, array('secure' => self::SECURE_SKIP)
+			$options, array('secure' => static::SECURE_SKIP)
 		));
 
 		if ($secure === true) {
@@ -877,7 +875,6 @@ class BcFormHelper extends FormHelper {
  * @param array $model
  * @param array $options
  * @return string
- * @access public
  */
 	public function create($model = null, $options = array()) {
 
@@ -1151,7 +1148,13 @@ DOC_END;
 	protected function _getId($model = null, $options = array()) {
 
 		if (!isset($options['id'])) {
+            if (empty($model) && $model !== false && !empty($this->request->params['models'])) {
+                $model = key($this->request->params['models']);
+            } elseif (empty($model) && empty($this->request->params['models'])) {
+                $model = false;
+            }
 			if ($model !== false) {
+                list(, $model) = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
 			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
@@ -1215,7 +1218,6 @@ DOC_END;
  * @param mixed $selected Selected option
  * @param array $attributes Array of HTML options for the opening SELECT element
  * @return string 都道府県用のSELECTタグ
- * @access public
  */
 	public function prefTag($fieldName, $selected = null, $attributes = array()) {
 
@@ -1294,7 +1296,6 @@ DOC_END;
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field, $options = array()) {
 
@@ -1328,7 +1329,6 @@ DOC_END;
  * @param mixed $fields
  * @param mixed $order
  * @return mixed リストまたは、false
- * @access public
  */
 	public function generateList($modelName, $conditions = array(), $fields = array(), $order = array()) {
 
@@ -1357,7 +1357,6 @@ DOC_END;
  * @param string $field フィールド文字列
  * @param string $attributes
  * @return array 属性
- * @access public
  */
 	public function jsonList($field, $attributes) {
 
@@ -1392,7 +1391,6 @@ DOC_END;
  * @param string フィールド文字列
  * @param array HTML属性
  * @return string html
- * @access public
  */
 	public function datepicker($fieldName, $attributes = array()) {
 
@@ -1435,13 +1433,12 @@ DOC_END;
  * @param string $fieldName
  * @param array $attributes
  * @return string
- * @access public
  */
 	public function dateTimePicker($fieldName, $attributes = array()) {
 
-		$this->Html->script('admin/jquery.timepicker', array('inline' => false));
+		$this->Html->script('admin/vendors/jquery.timepicker', array('inline' => false));
 		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
-		$timeAttributes = array('size' => 8, 'maxlength' => 8);
+		$timeAttributes = array_merge($attributes, array('size' => 8, 'maxlength' => 8));
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
 		} else {
@@ -1464,16 +1461,16 @@ $(function(){
    $("#{$domId}Date").change({$domId}ChangeResultHandler);
    $("#{$domId}Time").change({$domId}ChangeResultHandler);
    function {$domId}ChangeResultHandler(){
+		//if(this.id.replace('{$domId}','') == 'Date') {
+			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
+				$("#{$domId}Time").val('00:00');
+			}
+		//}
 		var value = $("#{$domId}Date").val().replace(/\//g, '-');
 		if($("#{$domId}Time").val()) {
 			value += ' '+$("#{$domId}Time").val();
 		}
         $("#{$domId}").val(value);
-		if(this.id.replace('{$domId}','') == 'Date') {
-			if($("#{$domId}Date").val() && !$("#{$domId}Time").val()) {
-				$("#{$domId}Time").val('00:00:00');
-			}
-		}
    }
 });
 </script>
@@ -1491,7 +1488,6 @@ DOC_END;
  * @param array $attributes htmlの属性
  * @param mixed $showEmpty 空要素の表示/非表示、初期値
  * @return string
- * @access public
  */
 	public function selectText($fieldName, $options = array(), $selected = null, $attributes = array(), $showEmpty = '') {
 
@@ -1520,12 +1516,12 @@ $(document).ready(function() {
     aryValue = $("#{$id}").val().replace(/\'/g,"").split(",");
     for(key in aryValue){
         var value = aryValue[key];
-        $("#"+camelize("{$id}_"+value)).attr('checked',true);
+        $("#"+camelize("{$id}_"+value)).prop('checked',true);
     }
     $("#{$_id} input[type=checkbox]").change(function(){
         var aryValue = [];
         $("#{$_id} input[type=checkbox]").each(function(key,value){
-            if($(this).attr('checked')){
+            if($(this).prop('checked')){
                 aryValue.push("'"+$(this).val()+"'");
             }
         });
@@ -1559,7 +1555,6 @@ DOC_END;
 		$options = $this->_initInputField($fieldName, $options);
 		$entity = $this->entity();
 		$modelName = $this->model();
-		$field = $this->field();
 		$Model = ClassRegistry::init($modelName);
 		if (empty($Model->Behaviors->BcUpload)) {
 			return parent::file($fieldName, $options);
@@ -1572,7 +1567,9 @@ DOC_END;
 			'title' => '', // タイトル属性
 			'link' => true, // 大きいサイズの画像へのリンク有無
 			'delCheck' => true,
-			'force' => false
+			'force' => false,
+			'width' => '',
+			'height' => ''
 			), $options);
 
 		extract($options);
@@ -1583,6 +1580,8 @@ DOC_END;
 		unset($options['link']);
 		unset($options['delCheck']);
 		unset($options['force']);
+		unset($options['width']);
+		unset($options['height']);
 
 		$linkOptions = array(
 			'imgsize' => $imgsize,
@@ -1590,7 +1589,9 @@ DOC_END;
 			'title' => $title,
 			'link' => $link,
 			'delCheck' => $delCheck,
-			'force' => $force
+			'force' => $force,
+			'width' => $width,
+			'height' => $height
 		);
 
 		$fileLinkTag = $this->BcUpload->fileLink($fieldName, $linkOptions);
@@ -1677,10 +1678,19 @@ DOC_END;
 		}
 		return $out;
 	}
-	
+
 /**
  * Creates a set of radio widgets. Will create a legend and fieldset
  * by default. Use $options to control this
+ *
+ * You can also customize each radio input element using an array of arrays:
+ *
+ * ```
+ * $options = array(
+ *  array('name' => 'United states', 'value' => 'US', 'title' => 'My title'),
+ *  array('name' => 'Germany', 'value' => 'DE', 'class' => 'de-de', 'title' => 'Another title'),
+ * );
+ * ```
  *
  * ### Attributes:
  *
@@ -1688,6 +1698,7 @@ DOC_END;
  * - `between` - the string between legend and input set or array of strings to insert
  *    strings between each input block
  * - `legend` - control whether or not the widget set has a fieldset & legend
+ * - `fieldset` - sets the class of the fieldset. Fieldset is only generated if legend attribute is provided
  * - `value` - indicate a value that is should be checked
  * - `label` - boolean to indicate whether or not labels for widgets show be displayed
  * - `hiddenField` - boolean to indicate if you want the results of radio() to include
@@ -1703,7 +1714,9 @@ DOC_END;
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
  */
 	public function radio($fieldName, $options = array(), $attributes = array()) {
+		$attributes['options'] = $options;
 		$attributes = $this->_initInputField($fieldName, $attributes);
+		unset($attributes['options']);
 
 		$showEmpty = $this->_extractOption('empty', $attributes);
 		if ($showEmpty) {
@@ -1718,6 +1731,12 @@ DOC_END;
 			unset($attributes['legend']);
 		} elseif (count($options) > 1) {
 			$legend = __(Inflector::humanize($this->field()));
+		}
+
+		$fieldsetAttrs = '';
+		if (isset($attributes['fieldset'])) {
+			$fieldsetAttrs = array('class' => $attributes['fieldset']);
+			unset($attributes['fieldset']);
 		}
 
 		$label = true;
@@ -1762,6 +1781,15 @@ DOC_END;
 		$this->_domIdSuffixes = array();
 		foreach ($options as $optValue => $optTitle) {
 			$optionsHere = array('value' => $optValue, 'disabled' => false);
+			if (is_array($optTitle)) {
+				if (isset($optTitle['value'])) {
+					$optionsHere['value'] = $optTitle['value'];
+				}
+
+				$optionsHere += $optTitle;
+				$optTitle = $optionsHere['name'];
+				unset($optionsHere['name']);
+			}
 
 			if (isset($value) && strval($optValue) === strval($value)) {
 				$optionsHere['checked'] = 'checked';
@@ -1783,7 +1811,7 @@ DOC_END;
 			if (is_array($between)) {
 				$optTitle .= array_shift($between);
 			}
-			$allOptions = array_merge($attributes, $optionsHere);
+			$allOptions = $optionsHere + $attributes;
 			$out[] = $this->Html->useTag('radio', $attributes['name'], $tagName,
 				array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
 				$optTitle
@@ -1792,7 +1820,7 @@ DOC_END;
 			if (is_array($between)) {
 				$optTitle .= array_shift($between);
 			}
-			$allOptions = array_merge($attributes, $optionsHere);
+			$allOptions = $optionsHere + $attributes;
 			if ($label) {
 				$labelOpts = is_array($label) ? $label : array();
 				$labelOpts += array('for' => $tagName);
@@ -1825,12 +1853,71 @@ DOC_END;
 		if (is_array($between)) {
 			$between = '';
 		}
+
 		if ($legend) {
-			$out = $this->Html->useTag('fieldset', '', $this->Html->useTag('legend', $legend) . $between . $out);
+			$out = $this->Html->useTag('legend', $legend) . $between . $out;
+			$out = $this->Html->useTag('fieldset', $fieldsetAttrs, $out);
 		}
 		return $out;
 	}
-	
+
+/**
+ * Creates a submit button element. This method will generate `<input />` elements that
+ * can be used to submit, and reset forms by using $options. image submits can be created by supplying an
+ * image path for $caption.
+ *
+ * ### Options
+ *
+ * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
+ *   FormHelper::input().
+ * - `before` - Content to include before the input.
+ * - `after` - Content to include after the input.
+ * - `type` - Set to 'reset' for reset inputs. Defaults to 'submit'
+ * - Other attributes will be assigned to the input element.
+ *
+ * ### Options
+ *
+ * - `div` - Include a wrapping div?  Defaults to true. Accepts sub options similar to
+ *   FormHelper::input().
+ * - Other attributes will be assigned to the input element.
+ *
+ * @param string $caption The label appearing on the button OR if string contains :// or the
+ *  extension .jpg, .jpe, .jpeg, .gif, .png use an image if the extension
+ *  exists, AND the first character is /, image is relative to webroot,
+ *  OR if the first character is not /, image is relative to webroot/img.
+ * @param array $options Array of options. See above.
+ * @return string A HTML submit button
+ * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::submit
+ */
+	public function submit($caption = null, $options = array()) {
+
+		// CUSTOMIZE ADD 2016/06/08 ryuring
+		// >>>
+		/*** beforeInput ***/
+		$event = $this->dispatchEvent('beforeSubmit', array(
+            'id'      => $this->__id,
+			'caption' => $caption,
+			'options' => $options
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$output = parent::submit($caption, $options);
+
+		/*** afterInput ***/
+		$event = $this->dispatchEvent('afterSubmit', array(
+            'id'      => $this->__id,
+			'caption' => $caption,
+			'out' => $output
+			), array('class' => 'Form', 'plugin' => ''));
+		if ($event !== false) {
+			$output = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+		return $output;
+		// <<<
+
+	}
 // <<<
 /**
  * 日付タグ

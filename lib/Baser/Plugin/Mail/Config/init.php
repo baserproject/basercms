@@ -1,28 +1,26 @@
 <?php
-
 /**
- * メールインストーラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Config
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * データベース初期化
  */
-	$this->Plugin->initDb('plugin', 'Mail', array('dbDataPattern'	=> $dbDataPattern));
+	$this->Plugin->initDb('Mail');
 
 /**
  * メッセージテーブル構築
  */
-	App::uses('Message', 'Mail.Model');
-	$Message = new Message();
-	$Message->reconstructionAll();
+	App::uses('MailMessage', 'Mail.Model');
+	$MailMessage = new MailMessage();
+	$MailMessage->reconstructionAll();
 
 /**
  * 必要フォルダ初期化

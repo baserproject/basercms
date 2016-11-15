@@ -1,89 +1,24 @@
 <?php
 /**
- * [ADMIN] ユーザー フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ユーザー フォーム
+ */
+$this->BcBaser->js('admin/users/edit', false);
 ?>
 
 
 <script type="text/javascript">
-$(window).load(function() {
-	$("#UserName").focus();
-});
-$(function(){
-	$("#BtnSave").click(function(){
-		if($("#SelfUpdate").html()) {
-			if(confirm('更新内容をログイン情報に反映する為、一旦ログアウトします。よろしいですか？')) {
-				return true;
-			}
-		} else {
-			return true;
-		}
-		return false;
-	});
-	$("#btnSetUserGroupDefault").click(function() {
-		if(!confirm('登録されている「よく使う項目」を、このユーザーが所属するユーザーグループの初期設定として登録します。よろしいですか？')) {
-			return true;
-		}
-		var data = {};
-		$("#DefaultFavorites li").each(function(i){
-			data[i] ={
-				'name' : $(this).find('.favorite-name').val(), 
-				'url' :$(this).find('.favorite-url').val()
-			};
-		});
 
-		$.bcToken.check(function(){
-			data = $.extend(data, {
-				_Token: {
-					key: $.bcToken.key
-				}
-			});
-			$.ajax({
-				url: $("#UserGroupSetDefaultFavoritesUrl").html(),
-				type: 'POST',
-				data: data,
-				dataType: 'html',
-				beforeSend: function() {
-					$("#Waiting").show();
-					alertBox();
-				},
-				success: function(result){
-					$("#ToTop a").click();
-					if(result) {
-						alertBox('登録されている「よく使う項目」を所属するユーザーグループの初期値として設定しました。');
-					} else {
-						alertBox('処理に失敗しました。');
-					}
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown){
-					var errorMessage = '';
-					if(XMLHttpRequest.status == 404) {
-						errorMessage = '<br />'+'送信先のプログラムが見つかりません。';
-					} else {
-						if(XMLHttpRequest.responseText) {
-							errorMessage = '<br />'+XMLHttpRequest.responseText;
-						} else {
-							errorMessage = '<br />'+errorThrown;
-						}
-					}
-					alertBox('処理に失敗しました。('+XMLHttpRequest.status+')'+errorMessage);
-				},
-				complete: function() {
-					$("#Waiting").hide();
-				}
-			});
-		});	
-	});
-});
 </script>
 
 
@@ -108,7 +43,7 @@ $(function(){
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('User.name', 'アカウント名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('User.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('User.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('User.name') ?>
 				<div id="helptextName" class="helptext">半角英数字とハイフン、アンダースコアのみで入力してください。</div>
@@ -132,7 +67,7 @@ $(function(){
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('User.nickname') ?>
 				<div id="helptextNickname" class="helptext">ニックネームを設定している場合は全ての表示にニックネームが利用されます。</div>
-			</td> 
+			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
@@ -147,7 +82,7 @@ $(function(){
 				<?php else: ?>
 					<?php echo $this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups) ?>
 					<?php echo $this->BcForm->input('User.user_group_id', array('type' => 'hidden')) ?>
-				<?php endif ?>	
+				<?php endif ?>
 			</td>
 		</tr>
 		<tr>
@@ -181,7 +116,7 @@ $(function(){
 								パスワードの変更をする場合は、
 							<?php endif; ?>
 							確認の為２回入力してください。</li>
-						<li>半角英数字とハイフン、アンダースコアのみで入力してください</li>
+						<li>半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください</li>
 						<li>最低６文字以上で入力してください</li>
 					</ul>
 				</div>

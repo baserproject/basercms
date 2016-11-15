@@ -1,22 +1,25 @@
 <?php
 /**
- * CKEditorヘルパー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * Class BcCkeditorHelper
+ *
+ * @package Baser.View.Helper
  */
 class BcCkeditorHelper extends AppHelper {
 
 /**
  * ヘルパー
  * @var array
- * @access public
  */
 	public $helpers = array('BcHtml', 'BcForm', 'JqueryEngine');
 
@@ -25,7 +28,6 @@ class BcCkeditorHelper extends AppHelper {
  * 既にjavascriptが読み込まれている場合はfalse
  * 
  * @var boolean
- * @access public
  */
 	protected $_script = false;
 
@@ -34,7 +36,6 @@ class BcCkeditorHelper extends AppHelper {
  * 複数のCKEditorを設置する場合、一つ目を設置した時点で true となる
  *
  * @var boolean
- * @access public
  */
 	public $inited = false;
 
@@ -51,7 +52,6 @@ class BcCkeditorHelper extends AppHelper {
  * StyleSet 名 basercms
  *
  * @var array
- * @access public
  */
 	public $style = array(
 		array('name' => '青見出し(h3)',
@@ -172,7 +172,6 @@ class BcCkeditorHelper extends AppHelper {
  * @param string $fieldName
  * @param array $options
  * @return string
- * @access protected
  */
 	function _build($fieldName, $options = array()) {
 
@@ -261,7 +260,7 @@ class BcCkeditorHelper extends AppHelper {
 
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->BcHtml->script('admin/ckeditor/ckeditor.js', array("inline" => false));
+			$this->BcHtml->script('admin/vendors/ckeditor/ckeditor.js', array("inline" => false));
 		}
 
 		if ($editorUseDraft) {
@@ -323,17 +322,15 @@ class BcCkeditorHelper extends AppHelper {
 			'url' => $this->webroot('/css/admin/ckeditor/contents.css')
 		);
 
-		if ($theme && isset($this->request->data['Page']['page_type'])) {
-			$agentPrefix = '';
-			if ($this->request->data['Page']['page_type'] == 2) {
-				$agentPrefix = Configure::read('BcAgent.mobile.prefix');
-			} elseif ($this->request->data['Page']['page_type'] == 3) {
-				$agentPrefix = Configure::read('BcAgent.smartphone.prefix');
+		if ($theme) {
+			$sitePrefix = '';
+			if(!empty($this->request->data['Site']['name'])) {
+				$sitePrefix = $this->request->data['Site']['name'];	
 			}
-			if ($agentPrefix) {
+			if ($sitePrefix) {
 				array_unshift($themeEditorCsses, array(
-					'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $agentPrefix . DS . 'editor.css',
-					'url' => $this->webroot('/css/' . $agentPrefix . '/editor.css')
+					'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
+					'url' => $this->webroot('/css/' . $sitePrefix . '/editor.css')
 				));
 			}
 		}

@@ -3,11 +3,11 @@
  * [PUBLISH] デフォルトレイアウト
  *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.layout
+ * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
@@ -19,27 +19,47 @@
 		<meta name="robots" content="noindex,nofollow" />
 		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
+		<?php $this->BcBaser->metaDescription() ?>
+		<?php $this->BcBaser->metaKeywords() ?>
+		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->css(array(
 			'import',
-			'admin/colorbox/colorbox')); ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
+			'admin/colorbox/colorbox-1.6.1')); ?>
+		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-			'admin/jquery-ui-1.8.19.custom.min',
-			'admin/jquery.colorbox-min-1.4.5',
-			'admin/jquery.mScroll',
+			'admin/vendors/jquery-2.1.4.min',
+			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/jquery.colorbox-1.6.1.min',
+			'admin/vendors/jquery-accessibleMegaMenu',
+			'admin/libs/jquery.bcToken',
+			'admin/libs/jquery.mScroll',
 			'admin/functions',
 			'admin/startup',
-			'admin/adjust_scroll',
-			'admin/yuga')); ?>
+			'admin/libs/adjust_scroll',
+			'admin/vendors/yuga',
+			'startup')); ?>
 			<?php $this->BcBaser->scripts() ?>
 	</head>
-	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
+	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal front">
 		<div id="Page" style="text-align: center">
-		<?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?>
-			<div class="contents-body" style="text-align:left;width:1000px;margin-left:auto;margin-right:auto;margin-top:60px;background-color:#FFF;padding:40px;">
-				<?php $this->BcBaser->content() ?>
-			</div>
+			<?php if(BC_INSTALLED): ?>
+			<?php $this->BcBaser->relatedSiteLinks() ?>
+			<?php endif ?>
+			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?></div>
+			<?php if(BC_INSTALLED): ?>
+			<nav id="GlobalMenu" class="clearfix"><?php $this->BcBaser->globalMenu(3) ?></nav>
+			<?php endif ?>
+			<div id="Wrap">
+				<?php if(!$this->BcBaser->isHome()): ?>
+				<div id="CrumbList" class="clearfix"><?php $this->BcBaser->crumbsList(['onSchema' => true]) ?></div>
+				<?php endif ?>
+				<div class="contents-body">
+					<?php $this->BcBaser->content() ?>
+					<?php $this->BcBaser->contentsNavi() ?>
+					<?php $this->BcBaser->widgetArea() ?>
+				</div>
+			</div>	
 		</div>
 	<?php $this->BcBaser->func() ?>
 	</body>

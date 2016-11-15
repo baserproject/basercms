@@ -1,12 +1,9 @@
 <?php
-
 /**
- * メールフィールドモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
@@ -22,18 +19,9 @@
 class MailField extends MailAppModel {
 
 /**
- * クラス名
- *
- * @var string
- * @access public
- */
-	public $name = 'MailField';
-
-/**
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 
@@ -41,11 +29,10 @@ class MailField extends MailAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "項目名を入力してください。"),
 			array('rule' => array('maxLength', 255),
 				'message' => '項目名は255文字以内で入力してください。')
@@ -60,7 +47,7 @@ class MailField extends MailAppModel {
 				'message' => 'フィールド名は255文字以内で入力してください。')
 		),
 		'type' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "タイプを入力してください。")
 		),
 		'head' => array(
@@ -114,7 +101,6 @@ class MailField extends MailAppModel {
  *
  * @param string $field
  * @return array source
- * @access public
  */
 	public function getControlSource($field = null) {
 		
@@ -164,7 +150,6 @@ class MailField extends MailAppModel {
  *
  * @param array $check
  * @return boolean
- * @access public
  */
 	public function duplicateMailField($check) {
 		$conditions = array('MailField.' . key($check) => $check[key($check)],
@@ -186,7 +171,6 @@ class MailField extends MailAppModel {
  *
  * @param array $check
  * @return boolean
- * @access public
  */
 	public function halfTextMailField($check) {
 		$subject = $check[key($check)];
@@ -236,6 +220,29 @@ class MailField extends MailAppModel {
 		} else {
 			return false;
 		}
+	}
+
+/**
+ * After Delete 
+ */
+	public function afterDelete() {
+		parent::afterDelete();
+		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$MailContent->delCache();
+	}
+
+/**
+ * After Save
+ * 
+ * @param bool $created
+ * @param array $options
+ */
+	public function afterSave($created, $options = array()) {
+		parent::afterSave($created, $options);
+		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$MailContent->delCache();
 	}
 
 }

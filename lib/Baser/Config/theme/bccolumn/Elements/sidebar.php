@@ -5,7 +5,7 @@
 ?>
 
 
-<?php $this->BcBaser->element('search') ?>
+<?php $this->BcBaser->siteSearchForm() ?>
 
 <?php $this->BcBaser->widgetArea() ?>
 

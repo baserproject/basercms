@@ -1,19 +1,13 @@
 <?php
-
 /**
- * フィードヘルパー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -22,7 +16,7 @@
  * @package Feed.View.Helper
  *
  */
-class FeedHelper extends BcTextHelper {
+class FeedHelper extends AppHelper {
 
 /**
  * ヘルパー
@@ -69,35 +63,16 @@ class FeedHelper extends BcTextHelper {
 	}
 
 /**
- * フィードのキャッシュタイムをキャッシュファイルに保存
- * 
- * <!--nocache--><!--/nocache-->でキャッシュタイムを参照できるようにする
- *
- * @return void
- * @deprecated since version 3.1.0
+ * @deprecated 4.1.0 since 4.0.0 
  */
 	public function saveCachetime() {
-		$feedId = $this->params['pass'][0];
-		if (isset($this->BcBaser->_View->viewVars['cachetime'])) {
-			$cachetime = $this->BcBaser->_View->viewVars['cachetime'];
-			cache('views' . DS . 'feed_cachetime_' . $feedId . '.php', $cachetime);
-		}
+		trigger_error(deprecatedMessage('メソッド：FeedHelper::saveCachetime()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。'), E_USER_DEPRECATED);
 	}
-
 /**
- * フィードリストのキャッシュヘッダーを出力する
- * 
- * キャッシュ時間は管理画面で設定した値
- * ヘッダーを出力するには<cake:nocache>を利用する
- * <!--nocache--><!--/nocache-->内では動的変数を利用できないのでキャッシュファイルを利用する
- * 事前に $this->Feed->saveCachetime() でキャッシュタイムを保存しておく
- *
- * @return void
- * @deprecated since version 3.1.0
+ * @deprecated 4.1.0 since 4.0.0
  */
 	public function cacheHeader() {
-		$feedId = $this->params['pass'][0];
-		$this->BcBaser->cacheHeader(cache('views' . DS . 'feed_cachetime_' . $feedId . '.php'));
+		trigger_error(deprecatedMessage('メソッド：FeedHelper::cacheHeader()', '4.0.0', '4.1.0', 'このメソッドは非推奨となりました。代替機能はありません。この行を削除してください。'), E_USER_DEPRECATED);
 	}
 
 }

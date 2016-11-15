@@ -1,11 +1,9 @@
 <?php
 /**
- * [PUBLISH] ローカルナビゲーションウィジェット
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
@@ -13,15 +11,25 @@
  */
 
 /**
+ * [PUBLISH] ローカルナビゲーションウィジェット
+ * 
  * $this->BcBaser->widgetArea('ウィジェットエリアNO') で呼び出す
  * 管理画面で設定されたウィジェットエリアNOは、 $widgetArea で参照できる
  */
-
-if (!isset($this->BcPage)) {
+if(empty($this->request->params['Content'])) {
 	return;
 }
-$pageCategory = $this->BcPage->getCategory();
-if (!$pageCategory) {
+if($this->request->params['Content']['type'] == 'ContentFolder') {
+	$parentId = $this->request->params['Content']['id'];
+	$title = $this->request->params['Content']['title'];
+	$siteRoot = $this->request->params['Content']['site_root'];
+} else {
+	$parent = $this->BcContents->getParent($this->request->params['Content']['id']);
+	$parentId = $parent['Content']['id'];
+	$title = $parent['Content']['title'];
+	$siteRoot = $parent['Content']['site_root'];
+}
+if($siteRoot) {
 	return;
 }
 ?>
@@ -29,7 +37,7 @@ if (!$pageCategory) {
 
 <div class="widget widget-local-navi widget-local-navi-<?php echo $id ?>">
 	<?php if ($use_title): ?>
-		<h2><?php echo $pageCategory['title'] ?></h2>
+		<h2><?php echo h($title) ?></h2>
 	<?php endif ?>
-	<?php $this->BcBaser->element('page_list', array('categoryId' => $pageCategory['id'])) ?>
-</div>
+	<?php $this->BcBaser->contentsMenu($parentId, 1, $this->request->params['Content']['id']) ?>
+</div>	

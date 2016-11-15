@@ -1,19 +1,13 @@
 <?php
-
 /**
- * メールヘルパー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View.Helper
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -61,61 +55,6 @@ class MailHelper extends AppHelper {
 	}
 
 /**
- * 管理画面のメールフィールド一覧ページへのリンクを出力する
- *
- * @param string $mailContentId メールコンテンツID
- * @return void
- * @todo ツールバーに移行
- * @deprecated
- */
-	public function indexFields($mailContentId) {
-		if (!empty($this->BcBaser->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			echo '<div class="edit-link">' . $this->BcBaser->getLink('≫ 編集する', array('prefix' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId), array('target' => '_blank')) . '</div>';
-		}
-	}
-
-/**
- * レイアウトテンプレートを取得
- * 
- * コンボボックスのソースとして利用
- * 
- * @return array レイアウトテンプレート一覧データ
- * @todo 他のヘルパーに移動する
- */
-	public function getLayoutTemplates() {
-		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
-		}
-
-		$_templates = array();
-		foreach ($templatesPathes as $templatesPath) {
-			$templatesPath .= 'Layouts' . DS;
-			$folder = new Folder($templatesPath);
-			$files = $folder->read(true, true);
-			$foler = null;
-			if ($files[1]) {
-				if ($_templates) {
-					$_templates = am($_templates, $files[1]);
-				} else {
-					$_templates = $files[1];
-				}
-			}
-		}
-
-		$_templates = array_unique($_templates);
-		$templates = array();
-		$ext = Configure::read('BcApp.templateExt');
-		foreach ($_templates as $template) {
-			if ($template != 'installations' . $ext) {
-				$template = basename($template, $ext);
-				$templates[$template] = $template;
-			}
-		}
-		return $templates;
-	}
-
-/**
  * フォームテンプレートを取得
  * 
  * コンボボックスのソースとして利用
@@ -123,10 +62,15 @@ class MailHelper extends AppHelper {
  * @return array フォームテンプレート一覧データ
  * @todo 他のヘルパーに移動する
  */
-	public function getFormTemplates() {
+	public function getFormTemplates($siteId = 0) {
+		$site = BcSite::findById($siteId);
+		$theme = $this->BcBaser->siteConfig['theme'];
+		if($site->theme) {
+			$theme = $site->theme;
+		}
 		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
 		$_templates = array();
@@ -163,10 +107,15 @@ class MailHelper extends AppHelper {
  * @return array メールテンプレート一覧データ
  * @todo 他のヘルパに移動する
  */
-	public function getMailTemplates() {
+	public function getMailTemplates($siteId = 0) {
+		$site = BcSite::findById($siteId);
+		$theme = $this->BcBaser->siteConfig['theme'];
+		if($site->theme) {
+			$theme = $site->theme;
+		}
 		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
 		$_templates = array();
@@ -265,4 +214,26 @@ class MailHelper extends AppHelper {
 		echo $this->getToken();
 	}
 
+/**
+ * メールフォームを取得する
+ * 
+ * @param $id
+ * @return mixed
+ */
+	public function getForm($id = null) {
+		$MailContent = ClassRegistry::init('Mail.MailContent');
+		$conditions = [];
+		if($id) {
+			$conditions = [
+				'MailContent.id' => $id
+			];
+		}
+		$mailContent = $MailContent->findPublished('first', ['conditions' => $conditions]);
+		if(!$mailContent) {
+			return false;
+		}
+		$url = $mailContent['Content']['url'];
+		return $this->requestAction($url, ['return' => true]);
+	}
+	
 }

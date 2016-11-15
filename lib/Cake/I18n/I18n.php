@@ -93,9 +93,9 @@ class I18n {
  * The constants may be used in translation fetching
  * instead of hardcoded integers.
  * Example:
- * {{{
+ * ```
  *	I18n::translate('CakePHP is awesome.', null, null, I18n::LC_MESSAGES)
- * }}}
+ * ```
  *
  * To keep the code more readable, I18n constants are preferred over
  * hardcoded integers.
@@ -188,10 +188,13 @@ class I18n {
  * @param int $count Count Count is used with $plural to choose the correct plural form.
  * @param string $language Language to translate string to.
  *    If null it checks for language in session followed by Config.language configuration variable.
+ * @param string $context Context The context of the translation, e.g a verb or a noun.
  * @return string translated string.
  * @throws CakeException When '' is provided as a domain.
  */
-	public static function translate($singular, $plural = null, $domain = null, $category = self::LC_MESSAGES, $count = null, $language = null) {
+	public static function translate($singular, $plural = null, $domain = null, $category = self::LC_MESSAGES,
+		$count = null, $language = null, $context = null
+	) {
 		$_this = I18n::getInstance();
 
 		if (strpos($singular, "\r\n") !== false) {
@@ -220,7 +223,7 @@ class I18n {
 		}
 
 		if ($domain === null) {
-			$domain = self::$defaultDomain;
+			$domain = static::$defaultDomain;
 		}
 		if ($domain === '') {
 			throw new CakeException(__d('cake_dev', 'You cannot use "" as a domain.'));
@@ -253,9 +256,10 @@ class I18n {
 				$plurals = 0;
 			}
 		}
-
-		if (!empty($_this->_domains[$domain][$_this->_lang][$_this->category][$singular])) {
-			if (($trans = $_this->_domains[$domain][$_this->_lang][$_this->category][$singular]) || ($plurals) && ($trans = $_this->_domains[$domain][$_this->_lang][$_this->category][$plural])) {
+		if (isset($_this->_domains[$domain][$_this->_lang][$_this->category][$singular][$context])) {
+			if (($trans = $_this->_domains[$domain][$_this->_lang][$_this->category][$singular][$context]) ||
+				($plurals) && ($trans = $_this->_domains[$domain][$_this->_lang][$_this->category][$plural][$context])
+			) {
 				if (is_array($trans)) {
 					if (isset($trans[$plurals])) {
 						$trans = $trans[$plurals];
@@ -382,7 +386,9 @@ class I18n {
 				$pluginDomain = Inflector::underscore($plugin);
 				if ($pluginDomain === $domain) {
 					$searchPaths[] = CakePlugin::path($plugin) . 'Locale' . DS;
-					$searchPaths = array_reverse($searchPaths);
+					if (!Configure::read('I18n.preferApp')) {
+						$searchPaths = array_reverse($searchPaths);
+					}
 					break;
 				}
 			}
@@ -392,7 +398,7 @@ class I18n {
 			foreach ($this->l10n->languagePath as $lang) {
 				$localeDef = $directory . $lang . DS . $this->category;
 				if (is_file($localeDef)) {
-					$definitions = self::loadLocaleDefinition($localeDef);
+					$definitions = static::loadLocaleDefinition($localeDef);
 					if ($definitions !== false) {
 						$this->_domains[$domain][$this->_lang][$this->category] = $definitions;
 						$this->_noLocale = false;
@@ -405,10 +411,10 @@ class I18n {
 					$translations = false;
 
 					if (is_file($app . '.mo')) {
-						$translations = self::loadMo($app . '.mo');
+						$translations = static::loadMo($app . '.mo');
 					}
 					if ($translations === false && is_file($app . '.po')) {
-						$translations = self::loadPo($app . '.po');
+						$translations = static::loadPo($app . '.po');
 					}
 
 					if ($translations !== false) {
@@ -423,10 +429,10 @@ class I18n {
 				$translations = false;
 
 				if (is_file($file . '.mo')) {
-					$translations = self::loadMo($file . '.mo');
+					$translations = static::loadMo($file . '.mo');
 				}
 				if ($translations === false && is_file($file . '.po')) {
-					$translations = self::loadPo($file . '.po');
+					$translations = static::loadPo($file . '.po');
 				}
 
 				if ($translations !== false) {
@@ -471,6 +477,7 @@ class I18n {
  *
  * @param string $filename Binary .mo file to load
  * @return mixed Array of translations on success or false on failure
+ * @link https://www.gnu.org/software/gettext/manual/html_node/MO-Files.html
  */
 	public static function loadMo($filename) {
 		$translations = false;
@@ -488,7 +495,11 @@ class I18n {
 					$r = unpack("L1len/L1offs", substr($data, $o_msg + $n * 8, 8));
 					$msgid = substr($data, $r["offs"], $r["len"]);
 					unset($msgid_plural);
+					$context = null;
 
+					if (strpos($msgid, "\x04") !== false) {
+						list($context, $msgid) = explode("\x04", $msgid);
+					}
 					if (strpos($msgid, "\000")) {
 						list($msgid, $msgid_plural) = explode("\000", $msgid);
 					}
@@ -498,7 +509,12 @@ class I18n {
 					if (strpos($msgstr, "\000")) {
 						$msgstr = explode("\000", $msgstr);
 					}
-					$translations[$msgid] = $msgstr;
+
+					if ($msgid != '') {
+						$translations[$msgid][$context] = $msgstr;
+					} else {
+						$translations[$msgid] = $msgstr;
+					}
 
 					if (isset($msgid_plural)) {
 						$translations[$msgid_plural] =& $translations[$msgid];
@@ -525,12 +541,15 @@ class I18n {
 		$type = 0;
 		$translations = array();
 		$translationKey = '';
+		$translationContext = null;
 		$plural = 0;
 		$header = '';
 
 		do {
 			$line = trim(fgets($file));
 			if ($line === '' || $line[0] === '#') {
+				$translationContext = null;
+
 				continue;
 			}
 			if (preg_match("/msgid[[:space:]]+\"(.+)\"$/i", $line, $regs)) {
@@ -539,31 +558,33 @@ class I18n {
 			} elseif (preg_match("/msgid[[:space:]]+\"\"$/i", $line, $regs)) {
 				$type = 2;
 				$translationKey = '';
+			} elseif (preg_match("/msgctxt[[:space:]]+\"(.+)\"$/i", $line, $regs)) {
+				$translationContext = $regs[1];
 			} elseif (preg_match("/^\"(.*)\"$/i", $line, $regs) && ($type == 1 || $type == 2 || $type == 3)) {
 				$type = 3;
 				$translationKey .= stripcslashes($regs[1]);
 			} elseif (preg_match("/msgstr[[:space:]]+\"(.+)\"$/i", $line, $regs) && ($type == 1 || $type == 3) && $translationKey) {
-				$translations[$translationKey] = stripcslashes($regs[1]);
+				$translations[$translationKey][$translationContext] = stripcslashes($regs[1]);
 				$type = 4;
 			} elseif (preg_match("/msgstr[[:space:]]+\"\"$/i", $line, $regs) && ($type == 1 || $type == 3) && $translationKey) {
 				$type = 4;
-				$translations[$translationKey] = '';
+				$translations[$translationKey][$translationContext] = '';
 			} elseif (preg_match("/^\"(.*)\"$/i", $line, $regs) && $type == 4 && $translationKey) {
-				$translations[$translationKey] .= stripcslashes($regs[1]);
+				$translations[$translationKey][$translationContext] .= stripcslashes($regs[1]);
 			} elseif (preg_match("/msgid_plural[[:space:]]+\".*\"$/i", $line, $regs)) {
 				$type = 6;
 			} elseif (preg_match("/^\"(.*)\"$/i", $line, $regs) && $type == 6 && $translationKey) {
 				$type = 6;
 			} elseif (preg_match("/msgstr\[(\d+)\][[:space:]]+\"(.+)\"$/i", $line, $regs) && ($type == 6 || $type == 7) && $translationKey) {
 				$plural = $regs[1];
-				$translations[$translationKey][$plural] = stripcslashes($regs[2]);
+				$translations[$translationKey][$translationContext][$plural] = stripcslashes($regs[2]);
 				$type = 7;
 			} elseif (preg_match("/msgstr\[(\d+)\][[:space:]]+\"\"$/i", $line, $regs) && ($type == 6 || $type == 7) && $translationKey) {
 				$plural = $regs[1];
-				$translations[$translationKey][$plural] = '';
+				$translations[$translationKey][$translationContext][$plural] = '';
 				$type = 7;
 			} elseif (preg_match("/^\"(.*)\"$/i", $line, $regs) && $type == 7 && $translationKey) {
-				$translations[$translationKey][$plural] .= stripcslashes($regs[1]);
+				$translations[$translationKey][$translationContext][$plural] .= stripcslashes($regs[1]);
 			} elseif (preg_match("/msgstr[[:space:]]+\"(.+)\"$/i", $line, $regs) && $type == 2 && !$translationKey) {
 				$header .= stripcslashes($regs[1]);
 				$type = 5;
@@ -573,9 +594,10 @@ class I18n {
 			} elseif (preg_match("/^\"(.*)\"$/i", $line, $regs) && $type == 5) {
 				$header .= stripcslashes($regs[1]);
 			} else {
-				unset($translations[$translationKey]);
+				unset($translations[$translationKey][$translationContext]);
 				$type = 0;
 				$translationKey = '';
+				$translationContext = null;
 				$plural = 0;
 			}
 		} while (!feof($file));
@@ -651,6 +673,27 @@ class I18n {
 		}
 
 		return $definitions;
+	}
+
+/**
+ * Puts the parameters in raw translated strings
+ *
+ * @param string $translated The raw translated string
+ * @param array $args The arguments to put in the translation
+ * @return string Translated string with arguments
+ */
+	public static function insertArgs($translated, array $args) {
+		$len = count($args);
+		if ($len === 0 || ($len === 1 && $args[0] === null)) {
+			return $translated;
+		}
+
+		if (is_array($args[0])) {
+			$args = $args[0];
+		}
+
+		$translated = preg_replace('/(?<!%)%(?![%\'\-+bcdeEfFgGosuxX\d\.])/', '%%', $translated);
+		return vsprintf($translated, $args);
 	}
 
 /**

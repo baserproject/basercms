@@ -1,89 +1,26 @@
 <?php
 /**
- * [ADMIN] テーマ一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマ一覧
+ */
 $this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list',
-	'admin/baser_ajax_data_list_config'
+	'admin/libs/jquery.baser_ajax_data_list',
+	'admin/libs/baser_ajax_data_list_config',
+	'admin/themes/index'
 ));
 ?>
 
 
-<script type="text/javascript">
-$(function(){
-	$.baserAjaxDataList.config.methods.copy = {
-		button: '.btn-copy',
-		confirm: '',
-		result: function(row, result) {
-			console.log(result);
-			var config = $.baserAjaxDataList.config;
-			if(result) {
-				$.bcUtil.showLoader();
-				document.location.reload();
-			} else {
-				$(config.alertBox).html('コピーに失敗しました。');
-				$(config.alertBox).fadeIn(500);
-			}
-		}
-	}
-	$.baserAjaxDataList.config.methods.del = {
-		button: '.btn-delete',
-		confirm: 'このデータを本当に削除してもよろしいですか？\n※ 削除したデータは元に戻すことができません。',
-		result: function(row, result) {
-			var config = $.baserAjaxDataList.config;
-			if(result) {
-				$.bcUtil.showLoader();
-				document.location.reload();
-			} else {
-				$(config.alertBox).html('削除に失敗しました。');
-				$(config.alertBox).fadeIn(500);
-			}
-		}
-	};
-	$.baserAjaxDataList.init();
-	
-	/**
-	 * 初期データ読込ボタンを押下した際の動作
-	 */
-	$("#BtnLoadDefaultDataPattern").click(function() {
-		$.bcConfirm.show({
-			'title': '初期データ読込',
-			'message':'<p><strong>初期データを読み込みます。よろしいですか？</strong></p><br />' +
-						'<p>※ 初期データを読み込むと現在登録されている記事データや設定は全て上書きされますのでご注意ください。<br />' +
-						'※ 管理ログは読み込まれず、ユーザー情報はログインしているユーザーのみに初期化されます。</p>',
-			'ok':function(){
-				$.bcUtil.showLoader();
-				$("#ThemeLoadDefaultDataPatternForm").submit();
-			}
-		});
-		return false;
-	});
-	
-/**
- * マーケットのデータを取得
- */
-	$.ajax({
-		url: $.baseUrl + '/admin/themes/ajax_get_market_themes',
-		type: "GET",
-		success: function(result) {
-			$("#BaserMarket").html(result);
-		}
-	});
-
-	$( "#tabs" ).tabs();
-
-});
-</script>
-  
 <div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'themes', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>

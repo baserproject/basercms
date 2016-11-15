@@ -23,7 +23,7 @@
 			<?php $this->BcBaser->logo() ?>
 		</div>
 		<nav id="FooterLink">
-			<?php $this->BcBaser->element('global_menu') ?>
+			<?php $this->BcBaser->globalMenu() ?>
 		</nav>
 		<div id="Copyright">
 			<address>Copyright &copy; <a href="http://komomo.biz/" target="_blank">小桃</a><a href="http://clipdesign.jp/" target="_blank">クリップ</a> Allrights Reserved.</address>

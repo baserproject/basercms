@@ -1,15 +1,17 @@
 <?php
 /**
- * [PUBLISH] ブログ年別アーカイブ
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] ブログ年別アーカイブ
  */
 if (!isset($view_count)) {
 	$view_count = false;
@@ -31,10 +33,10 @@ if ($limit) {
 if ($view_count) {
 	$actionUrl .= '/1';
 }
-$data = $this->requestAction($actionUrl);
+$data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/date/';
+$baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/date/';
 ?>
 
 
@@ -58,15 +60,7 @@ $baseCurrentUrl = $blogContent['BlogContent']['name'] . '/archives/date/';
 					<?php $title = $postedDate['year'] . '年' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php
-					$this->BcBaser->link($title, array(
-						'admin' => false,
-						'plugin' => '',
-						'controller' => $blogContent['BlogContent']['name'],
-						'action' => 'archives',
-						'date', $postedDate['year']
-					))
-					?>
+					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

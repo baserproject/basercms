@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] ブログカテゴリ 一覧　テーブル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ブログカテゴリ 一覧　テーブル
  */
 ?>
 
@@ -20,9 +22,7 @@
 		<tr>
 			<th style="width:160px" class="list-tool">
 	<div>
-		<?php if ($newCatAddable): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
-		<?php endif ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
 	</div>
 	<?php if ($this->BcBaser->isAdminUser()): ?>
 		<div>

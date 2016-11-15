@@ -1,19 +1,13 @@
 <?php
-
 /**
- * フィード詳細コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -30,7 +24,6 @@ class FeedDetailsController extends FeedAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'FeedDetails';
 
@@ -38,7 +31,6 @@ class FeedDetailsController extends FeedAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Feed.FeedDetail', 'Feed.FeedConfig', 'Feed.Feed');
 
@@ -46,7 +38,6 @@ class FeedDetailsController extends FeedAppController {
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
@@ -54,7 +45,6 @@ class FeedDetailsController extends FeedAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -62,7 +52,6 @@ class FeedDetailsController extends FeedAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
@@ -72,7 +61,6 @@ class FeedDetailsController extends FeedAppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -80,7 +68,6 @@ class FeedDetailsController extends FeedAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -99,7 +86,6 @@ class FeedDetailsController extends FeedAppController {
  *
  * @param int feed_config_id
  * @return void
- * @access public
  */
 	public function admin_add($feedConfigId) {
 		/* 除外処理 */
@@ -208,6 +194,7 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_ajax_delete($feedConfigId, $id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -226,6 +213,7 @@ class FeedDetailsController extends FeedAppController {
  * @access	public
  */
 	public function admin_delete($feedConfigId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -250,7 +238,6 @@ class FeedDetailsController extends FeedAppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -266,7 +253,6 @@ class FeedDetailsController extends FeedAppController {
  * 
  * @param int $id
  * @return boolean 
- * @access protected
  */
 	protected function _del($id) {
 		$data = $this->FeedDetail->read(null, $id);

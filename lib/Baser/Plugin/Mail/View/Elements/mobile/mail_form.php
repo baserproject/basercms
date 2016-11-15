@@ -1,23 +1,30 @@
 <?php
 /**
- * [MOBILE] メールフォーム本体
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [MOBILE] メールフォーム本体
+ */
 ?>
+
+
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $mailContent['MailContent']['name'], 'action' => 'confirm'))) ?>
+	<?php echo $this->Mailform->create(null, array('url' => $this->request->params['Content']['url'] . 'confirm')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create(null, array('url' => array('plugin' => null, 'controller' => $mailContent['MailContent']['name'], 'action' => 'submit'))) ?>
+	<?php echo $this->Mailform->create(null, array('url' => $this->request->params['Content']['url'] . 'submit')) ?>
 <?php endif; ?>
+
+<?php $this->Mailform->unlockField('MailMessage.mode') ?>
+
 <?php /* フォーム本体 */ ?>
 <?php echo $this->BcBaser->element('mail_input', array('blockStart' => 1)) ?>
 
@@ -26,12 +33,12 @@
 <?php /* 送信ボタン */ ?>
 <?php if ($freezed): ?>
 	<center>
-		<?php echo $this->Mailform->hidden('Message.mode', array('value' => 'Submit')) ?>
+		<?php echo $this->Mailform->hidden('MailMessage.mode', array('value' => 'Submit')) ?>
 		<?php echo $this->Mailform->submit('　送信する　', array('class' => 'button')) ?>
 	</center>
 	<?php else: ?>
 	<center>
-		<?php echo $this->Mailform->hidden('Message.mode', array('value' => 'Confirm')) ?>
+		<?php echo $this->Mailform->hidden('MailMessage.mode', array('value' => 'Confirm')) ?>
 		<?php echo $this->Mailform->submit('　入力内容を確認する　', array("class" => "button")) ?>
 	</center>
 <?php endif; ?>

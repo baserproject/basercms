@@ -1,7 +1,6 @@
 <?php
 /**
  * EditorTemplateFixture
- *
  */
 class EditorTemplateFixture extends BaserTestFixture {
 

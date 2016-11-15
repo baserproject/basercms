@@ -1,21 +1,14 @@
 <?php
-
 /**
- * ブログコントローラー基底クラス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::uses('BcPluginAppController', 'Controller');
 
 /**
  * ブログコントローラー基底クラス
@@ -24,7 +17,7 @@ App::uses('BcPluginAppController', 'Controller');
  * @property BlogPost $BlogPost
  * @property BlogCategory $BlogCategory
  */
-class BlogAppController extends BcPluginAppController {
+class BlogAppController extends AppController {
 
 /**
  * コメントを管理者メールへメール送信する
@@ -32,7 +25,6 @@ class BlogAppController extends BcPluginAppController {
  * @param int $postId
  * @param array $data
  * @return boolean
- * @access protected
  */
 	protected function _sendCommentAdmin($postId, $data) {
 		if (!$postId || !$data || empty($this->siteConfigs['email'])) {
@@ -58,7 +50,6 @@ class BlogAppController extends BcPluginAppController {
  * @param int $postId
  * @param array $data
  * @return boolean 
- * @access protected
  */
 	protected function _sendCommentContributor($postId, $data) {
 		if (!$postId || !$data || empty($this->siteConfigs['email'])) {
@@ -97,25 +88,6 @@ class BlogAppController extends BcPluginAppController {
 		}
 
 		return $result;
-	}
-
-/**
- * beforeFilter
- *
- * @return	void
- * @access 	public
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		$user = $this->BcAuth->user();
-		if (!$user) {
-			return;
-		}
-		$newCatAddable = $this->BlogCategory->checkNewCategoryAddable(
-			$user['user_group_id'], 
-			$this->checkRootEditable()
-		);
-		$this->set('newCatAddable', $newCatAddable);
 	}
 
 }

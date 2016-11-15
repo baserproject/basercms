@@ -13,6 +13,7 @@
 
 require('OAuth.php');
 App::uses('HttpSocket', 'Network/Http');
+App::uses('CakeText', 'Utility');
 
 class OAuthClient {
     private $url = null;
@@ -130,7 +131,7 @@ class OAuthClient {
 
     private function doPostMultipartFormData($url, $authorization, $paths, $data) {
         App::uses('String', 'Utility');
-        $boundary = String::uuid();
+        $boundary = CakeText::uuid();
 
         $body = "--{$boundary}\r\n";
 

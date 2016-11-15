@@ -11,24 +11,25 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Baser.Model.Datasource
+ * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DataSource', 'Model/Datasource');
-App::uses('String', 'Utility');
+App::uses('CakeText', 'Utility');
 App::uses('View', 'View');
-App::uses('Set', 'Utility');
-App::uses('String', 'Utility');
-App::uses('CakeSchema', 'Model'); // CUSTOMIZE ADD 2012/11/04 itm_kiyo
+// CUSTOMIZE ADD 2012/11/04 itm_kiyo
+// >>>
+App::uses('CakeSchema', 'Model');
+// <<<
 
 /**
  * DboSource
  *
  * Creates DBO-descendant objects from a given db connection configuration
  *
- * @package       Baser.Model.Datasource
+ * @package       Cake.Model.Datasource
  */
 class DboSource extends DataSource {
 
@@ -37,10 +38,8 @@ class DboSource extends DataSource {
  * PHP←→DBエンコーディングマップ
  *
  * @var array
- * @access	protected
  */
 	protected $_encodingMaps = array('utf8' => 'UTF-8', 'sjis' => 'SJIS', 'ujis' => 'EUC-JP');
-
 // <<<
 	
 /**
@@ -2507,7 +2506,7 @@ class DboSource extends DataSource {
 		if ($allFields) {
 			$fields = array_keys($Model->schema());
 		} elseif (!is_array($fields)) {
-			$fields = String::tokenize($fields);
+			$fields = CakeText::tokenize($fields);
 		}
 		$fields = array_values(array_filter($fields));
 		$allFields = $allFields || in_array('*', $fields) || in_array($Model->alias . '.*', $fields);
@@ -2806,7 +2805,7 @@ class DboSource extends DataSource {
 		}
 
 		if ($bound) {
-			return String::insert($key . ' ' . trim($operator), $value);
+			return CakeText::insert($key . ' ' . trim($operator), $value);
 		}
 
 		if (!preg_match($operatorMatch, trim($operator))) {
@@ -3556,16 +3555,14 @@ class DboSource extends DataSource {
 		}
 	}
 
-// CUSTOM ADD 2010/10/04 ryuring
+// CUSTOMIZE ADD 2010/10/04 ryuring
 // >>>
-
 /**
  * スキーマファイルを利用してテーブルを生成する
  *
  * @param array $options	path は必須
  * @param pass $path
  * @return boolean
- * @access public
  */
 	public function loadSchema($options) {
 		App::uses('CakeSchema', 'Model');
@@ -3655,7 +3652,6 @@ class DboSource extends DataSource {
  *
  * @param string	$filename 保存先のフルパス
  * @return boolean
- * @access public
  */
 	public function writeCurrentSchema($filename) {
 		$this->cacheSources = false;
@@ -3671,10 +3667,10 @@ class DboSource extends DataSource {
 
 		$tables = $this->listSources();
 		$models = array();
+		$tableList = getTableList();
 		foreach ($tables as $table) {
-			if (preg_match("/^" . $this->config['prefix'] . "([^_].+)$/", $table, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
-				$models[] = Inflector::classify(Inflector::singularize($matches[1]));
+			if(in_array($table, $tableList['core']) || in_array($table, $tableList['plugin'])) {
+				$models[] = Inflector::classify(Inflector::singularize(str_replace($this->config['prefix'], '', $table)));
 			}
 		}
 		return $this->writeSchema(array('name' => $name, 'model' => $models, 'path' => $path, 'file' => $file));
@@ -3686,7 +3682,6 @@ class DboSource extends DataSource {
  * @param	array	model	モデル名
  * 					path	スキーマファイルの生成場所
  * @return	mixed	スキーマファイルの内容 Or false
- * @access	public
  */
 	public function writeSchema($options) {
 		//App::uses('CakeSchema', 'Model');
@@ -3767,7 +3762,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ path ]
  * @return boolean
- * @access	public
  */
 	public function createTableBySchema($options) {
 		extract($options);
@@ -3797,7 +3791,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ oldPath / newPath ]
  * @return boolean
- * @access public
  */
 	public function alterTableBySchema($options) {
 		$options = array_merge(array('dropField' => true), $options);
@@ -3838,7 +3831,6 @@ class DboSource extends DataSource {
  * @param string $oldName
  * @param string $newName
  * @return boolean
- * @access public
  */
 	public function dropTableBySchema($options) {
 		extract($options);
@@ -3867,7 +3859,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ schema / table ]
  * @return boolean
- * @access public
  */
 	public function createTable($options) {
 		extract($options);
@@ -3889,7 +3880,11 @@ class DboSource extends DataSource {
 
 		// SQLを生成して実行
 		$sql = $this->createSchema($schema);
-		$return = $this->execute($sql);
+		if($return = $this->execute($sql)){
+			if(method_exists($schema, 'after')){
+				$schema->after(['create'=> strtolower($schema->name),'errors'=>null]);
+			}
+		}
 		// とりあえずキャッシュを全て削除
 		clearCache(null, 'models');
 		return $return;
@@ -3900,7 +3895,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ new / old ]
  * @return boolean
- * @access	public
  */
 	public function alterTable($options) {
 		$options = array_merge(array('dropField' => true), $options);
@@ -3942,7 +3936,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ schema / table ]
  * @return boolean
- * @access public
  */
 	public function dropTable($options) {
 		extract($options);
@@ -3981,7 +3974,6 @@ class DboSource extends DataSource {
  * @param string $oldName
  * @param array $options [ old / new ]
  * @return boolean
- * @access public
  */
 	public function renameTable($options) {
 		extract($options);
@@ -4001,7 +3993,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / column ]
  * @return boolean
- * @access public
  */
 	public function addColumn($options) {
 		extract($options);
@@ -4053,7 +4044,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / column / field ]
  * @return boolean
- * @access public
  */
 	public function changeColumn($options) {
 		extract($options);
@@ -4089,7 +4079,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / field ]
  * @return boolean
- * @access public
  */
 	public function dropColumn($options) {
 		extract($options);
@@ -4117,7 +4106,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ table / new / old ]
  * @return boolean
- * @access public
  */
 	public function renameColumn($options) {
 		extract($options);
@@ -4137,7 +4125,6 @@ class DboSource extends DataSource {
  * @param string $sourceName
  * @param string $targetName
  * @return string
- * @access public
  */
 	public function buildRenameTable($sourceName, $targetName) {
 		return "ALTER TABLE " . $sourceName . " RENAME " . $targetName;
@@ -4148,7 +4135,6 @@ class DboSource extends DataSource {
  *
  * @param string $table
  * @return array $schema
- * @access public
  */
 	public function readSchema($table, $options = array()) {
 		if (is_array($options)) {
@@ -4189,7 +4175,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ path / encoding ]
  * @return boolean
- * @access public
  */
 	public function loadCsv($options) {
 		
@@ -4316,7 +4301,6 @@ class DboSource extends DataSource {
  *
  * @param array $record
  * @return array
- * @access protected
  */
 	protected function _convertRecordToCsv($record) {
 		foreach ($record as $field => $value) {
@@ -4330,7 +4314,6 @@ class DboSource extends DataSource {
  *
  * @param array $options [ path / table / encoding ]
  * @return boolean
- * @access public
  */
 	public function writeCsv($options) {
 		$options = array_merge(array(
@@ -4436,7 +4419,6 @@ class DboSource extends DataSource {
  *
  * @param string	$enc
  * @return string
- * @access protected
  */
 	protected function _dbEncToPhp($enc) {
 		if(is_array($enc)) {
@@ -4471,7 +4453,6 @@ class DboSource extends DataSource {
 			return $enc;
 		}
 	}
-
 // <<<
 
 }

@@ -3,9 +3,9 @@
  * Simplezip
  * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Vendor
  * @since			baserCMS v 3.0.0
@@ -14,6 +14,8 @@
 
 /**
  * シンプルなZIP利用クラス
+ *
+ * CAUTION 現在、Macで圧縮したZipファイルに対応していない
  */
 class Simplezip {
 	
@@ -172,8 +174,6 @@ class Simplezip {
  * @param  string   file contents
  * @param  string   name of the file in the archive (may contains the path)
  * @param  integer  the current timestamp
- *
- * @access public
  */
     function unix2DosTime($unixtime = 0) {
         $timearray = ($unixtime == 0) ? getdate() : getdate($unixtime);
@@ -334,7 +334,7 @@ class Simplezip {
  * @return <type>
  */
 	function unzip($source, $tareget) {
-
+		$tareget = preg_replace('/\/$/', '', $tareget);
 		$entries = $this->_readFile($source);
 		if(!$entries) {
 			return false;
@@ -354,7 +354,6 @@ class Simplezip {
 			fclose($fp);
 		}
 		return $result;
-
 	}
 	
 /**

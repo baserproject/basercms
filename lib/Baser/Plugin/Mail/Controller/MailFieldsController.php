@@ -1,25 +1,23 @@
 <?php
-
 /**
- * メールフィールドコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * メールフィールドコントローラー
  *
  * @package Mail.Controller
+ * @property BcContentsComponent $BcContents
+ * @property MailField $BcMailField
+ * @property MailContent $MailContent
+ * @property MailMessage $MailMessage
  */
 class MailFieldsController extends MailAppController {
 
@@ -27,7 +25,6 @@ class MailFieldsController extends MailAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailFields';
 
@@ -35,15 +32,13 @@ class MailFieldsController extends MailAppController {
  * モデル
  *
  * @var array
- * @access public
  */
-	public $uses = array('Mail.MailField', 'Mail.MailContent', 'Mail.Message');
+	public $uses = array('Mail.MailField', 'Mail.MailContent', 'Mail.MailMessage');
 
 /**
  * ヘルパー
  *
  * @var array
- * @access public
  */
 	public $helpers = array('BcHtml', 'BcTime', 'BcForm', 'BcText', 'BcCsv');
 
@@ -51,25 +46,13 @@ class MailFieldsController extends MailAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ぱんくずナビ
- *
- * @var array
- * @access public
- */
-	public $crumbs = array(
-		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
-	);
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['type' => 'Mail.MailContent']);
 
 /**
  * サブメニューエレメント
  *
  * @var string
- * @access public
  */
 	public $subMenuElements = array();
 
@@ -77,20 +60,21 @@ class MailFieldsController extends MailAppController {
  * beforeFilter
  *
  * @return void
- * @access public
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->MailContent->recursive = -1;
-		$this->mailContent = $this->MailContent->read(null, $this->params['pass'][0]);
-		$this->crumbs[] = array('name' => $this->mailContent['MailContent']['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
+		$mailContentId = $this->params['pass'][0];
+		$this->mailContent = $this->MailContent->read(null, $mailContentId);
+		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
+		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
+		$this->set('publishLink', $this->request->params['Content']['url']);
 	}
 
 /**
  * beforeRender
  *
  * @return void
- * @access public
  */
 	public function beforeRender() {
 		parent::beforeRender();
@@ -102,7 +86,6 @@ class MailFieldsController extends MailAppController {
  *
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_index($mailContentId) {
 		if (!$mailContentId || !$this->mailContent) {
@@ -116,14 +99,12 @@ class MailFieldsController extends MailAppController {
 
 		$this->_setAdminIndexViewData();
 
-		if ($this->RequestHandler->isAjax() || !empty($this->query['ajax'])) {
+		if ($this->request->is('ajax') || !empty($this->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
-
-		$this->set('publishLink', '/' . $this->mailContent['MailContent']['name'] . '/index');
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] メールフィールド一覧';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] メールフィールド一覧';
 		$this->help = 'mail_fields_index';
 	}
 
@@ -131,7 +112,6 @@ class MailFieldsController extends MailAppController {
  * 一覧の表示用データをセットする
  * 
  * @return void
- * @access protected
  */
 	protected function _setAdminIndexViewData() {
 		/* セッション処理 */
@@ -152,7 +132,6 @@ class MailFieldsController extends MailAppController {
  *
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_add($mailContentId) {
 		if (!$mailContentId || !$this->mailContent) {
@@ -174,7 +153,7 @@ class MailFieldsController extends MailAppController {
 			$data['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
 			$this->MailField->create($data);
 			if ($this->MailField->validates()) {
-				if ($this->Message->addMessageField($this->mailContent['MailContent']['name'], $data['MailField']['field_name'])) {
+				if ($this->MailMessage->addMessageField($this->mailContent['MailContent']['id'], $data['MailField']['field_name'])) {
 					// データを保存
 					if ($this->MailField->save(null, false)) {
 						$this->setMessage('新規メールフィールド「' . $data['MailField']['name'] . '」を追加しました。', false, true);
@@ -191,7 +170,7 @@ class MailFieldsController extends MailAppController {
 		}
 
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] 新規メールフィールド登録';
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規メールフィールド登録';
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -202,7 +181,6 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_edit($mailContentId, $id) {
 		if (!$id && empty($this->request->data)) {
@@ -224,7 +202,7 @@ class MailFieldsController extends MailAppController {
 			if ($this->MailField->validates()) {
 				$ret = true;
 				if ($old['MailField']['field_name'] != $data['MailField']['field_name']) {
-					$ret = $this->Message->renameMessageField($this->mailContent['MailContent']['name'], $old['MailField']['field_name'], $data['MailField']['field_name']);
+					$ret = $this->MailMessage->renameMessageField($mailContentId, $old['MailField']['field_name'], $data['MailField']['field_name']);
 				}
 				if ($ret) {
 					/* 更新処理 */
@@ -244,7 +222,7 @@ class MailFieldsController extends MailAppController {
 
 		/* 表示設定 */
 		$this->subMenuElements = array('mail_fields');
-		$this->pageTitle = '[' . $this->mailContent['MailContent']['title'] . '] メールフィールド編集：　' . $this->request->data['MailField']['name'];
+		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] メールフィールド編集： ' . $this->request->data['MailField']['name'];
 		$this->help = 'mail_fields_form';
 		$this->render('form');
 	}
@@ -255,9 +233,9 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($mailContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -266,7 +244,7 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->Message->delMessageField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
+		if ($this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
 			if ($this->MailField->delete($id)) {
 				$this->MailField->saveDbLog('メールフィールド「' . $mailField['MailField']['name'] . '」 を削除しました。');
 				exit(true);
@@ -283,9 +261,9 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_delete($mailContentId, $id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -296,7 +274,7 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->Message->delMessageField($this->mailContent['MailContent']['name'], $mailField['MailField']['field_name'])) {
+		if ($this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
 			if ($this->MailField->delete($id)) {
 				$this->setMessage('メールフィールド「' . $mailField['MailField']['name'] . '」 を削除しました。', false, true);
 			} else {
@@ -314,7 +292,6 @@ class MailFieldsController extends MailAppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -322,9 +299,8 @@ class MailFieldsController extends MailAppController {
 
 				// メッセージ用にデータを取得
 				$mailField = $this->MailField->read(null, $id);
-				$mailContentName = $this->MailContent->field('name', array('MailContent.id' => $mailField['MailField']['mail_content_id']));
 				/* 削除処理 */
-				if ($this->Message->delMessageField($mailContentName, $mailField['MailField']['field_name'])) {
+				if ($this->MailMessage->delMessageField($mailField['MailField']['mail_content_id'], $mailField['MailField']['field_name'])) {
 					if ($this->MailField->delete($id)) {
 						$this->MailField->saveDbLog('メールフィールド「' . $mailField['MailField']['name'] . '」 を削除しました。');
 					}
@@ -339,7 +315,6 @@ class MailFieldsController extends MailAppController {
  * フォームの初期値を取得する
  *
  * @return string
- * @access protected
  */
 	protected function _getDefaultValue() {
 		$data['MailField']['type'] = 'text';
@@ -354,58 +329,9 @@ class MailFieldsController extends MailAppController {
  * @param int $mailContentId
  * @param int $Id
  * @return void
- * @access protected
- * @deprecated admin_ajax_copy に移行
- */
-	public function admin_copy($mailContentId, $id) {
-		/* 除外処理 */
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		/* コピー対象フィールドデータを読み込む */
-		$mailField = $this->MailField->read(null, $id);
-		if (!$mailField) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		// 不要な値をリセットする
-		unset($mailField['MailField']['id']);
-		unset($mailField['MailField']['modified']);
-		unset($mailField['MailField']['created']);
-
-		// メッセージ用
-		$oldName = $mailField['MailField']['name'];
-
-		// 項目名とフィールド名は識別用に__n形式のナンバーを付加する
-		$mailField['MailField']['field_name'] = $this->__getNewValueOnCopy('field_name', $mailField['MailField']['field_name']);
-		$mailField['MailField']['name'] = $this->__getNewValueOnCopy('name', $mailField['MailField']['name']);
-		$mailField['MailField']['no'] = $this->MailField->getMax('no', array('MailField.mail_content_id' => $mailContentId)) + 1;
-		$mailField['MailField']['sort'] = $this->MailField->getMax('sort') + 1;
-
-		// データを保存
-		$this->MailField->create($mailField);
-		if ($this->MailField->save()) {
-			$this->setMessage('メールフィールド「' . $oldName . '」 をコピーしました。', false, true);
-			$this->Message->construction($mailContentId);
-		} else {
-			$this->setMessage('コピー中にエラーが発生しました。', true);
-		}
-
-		$this->redirect(array('action' => 'index', $mailContentId));
-	}
-
-/**
- * フィールドデータをコピーする
- *
- * @param int $mailContentId
- * @param int $Id
- * @return void
- * @access protected
  */
 	public function admin_ajax_copy($mailContentId, $id) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id || !$mailContentId) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -413,7 +339,7 @@ class MailFieldsController extends MailAppController {
 
 		$result = $this->MailField->copy($id);
 		if ($result) {
-			$this->Message->construction($mailContentId);
+			$this->MailMessage->construction($mailContentId);
 			$this->set('data', $result);
 		} else {
 			$this->ajaxError(500, 'データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。');
@@ -425,7 +351,6 @@ class MailFieldsController extends MailAppController {
  * 
  * @param int $mailContentId
  * @return void
- * @access public
  */
 	public function admin_download_csv($mailContentId) {
 		if (!$mailContentId || !$this->mailContent) {
@@ -433,13 +358,13 @@ class MailFieldsController extends MailAppController {
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
 
-		$this->Message->alias = Inflector::camelize($this->mailContent['MailContent']['name'] . '_message');
-		$this->Message->tablePrefix .= $this->mailContent['MailContent']['name'] . '_';
-		$this->Message->schema(true);
-		$this->Message->cacheSources = false;
-		$messages = $this->Message->convertMessageToCsv($mailContentId, $this->Message->find('all'));
+		$this->MailMessage->alias = 'MailMessage' . $mailContentId;
+		$this->MailMessage->schema(true);
+		$this->MailMessage->cacheSources = false;
+		$this->MailMessage->setUseTable($mailContentId);
+		$messages = $this->MailMessage->convertMessageToCsv($mailContentId, $this->MailMessage->find('all'));
 		$this->set('messages', $messages);
-		$this->set('contentName', $this->mailContent['MailContent']['name']);
+		$this->set('contentName', $this->request->params['Content']['name']);
 	}
 
 /**
@@ -472,7 +397,6 @@ class MailFieldsController extends MailAppController {
  *
  * @param array $mailContentId
  * @return string
- * @access protected
  */
 	protected function _createAdminIndexConditions($mailContentId) {
 		$conditions = array('MailField.mail_content_id' => $mailContentId);
@@ -486,9 +410,9 @@ class MailFieldsController extends MailAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_unpublish($mailContentId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -507,9 +431,9 @@ class MailFieldsController extends MailAppController {
  * @param string $blogPostId beforeFilterで利用
  * @param string $blogCommentId
  * @return void
- * @access public
  */
 	public function admin_ajax_publish($mailContentId, $id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}

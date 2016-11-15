@@ -9,16 +9,13 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::import('Controller', 'Plugins');
+
 /**
  * ファイルアップローダーコントローラー
  *
- * @package			uploader.controllers
+ * @package			Uploader.Controller
  */
-class UploaderFilesController extends BcPluginAppController {
+class UploaderFilesController extends AppController {
 /**
  * クラス名
  *
@@ -58,7 +55,6 @@ class UploaderFilesController extends BcPluginAppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
@@ -107,9 +103,8 @@ class UploaderFilesController extends BcPluginAppController {
  * インストール状態の確認
  *
  * @return	string	インストールメッセージ
- * @access	public
  */
-	public function checkInstall() {
+	protected function checkInstall() {
 
 		// インストール確認
 		$installMessage = '';
@@ -223,7 +218,7 @@ class UploaderFilesController extends BcPluginAppController {
  * @param array $data
  * @return array 
  */
-	public function _createAdminIndexConditions($data) {
+	protected function _createAdminIndexConditions($data) {
 		
 		$conditions = array();
 		if(!empty($data['uploader_category_id'])) {
@@ -262,7 +257,6 @@ class UploaderFilesController extends BcPluginAppController {
  * レイアウト、デバッグフラグの設定をする
  *
  * @return 成功時：true　／　失敗時：null
- * @access public
  */
 	public function admin_ajax_upload() {
 
@@ -376,7 +370,7 @@ class UploaderFilesController extends BcPluginAppController {
  * @access	public
  */
 	public function admin_delete($id) {
-
+		$this->_checkSubmitToken();
 		if(!$id) {
 			$this->notFound();
 		}
@@ -428,7 +422,7 @@ class UploaderFilesController extends BcPluginAppController {
 	public function view_limited_file($filename) {
 		
 		$display = false;
-		if(!empty($_SESSION['Auth']['User'])) {
+		if(!empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$display = true;
 		} else {
 			$conditions = array(

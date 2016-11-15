@@ -1,17 +1,21 @@
 <?php
 /**
- * [ADMIN] ウィジェットエリア一覧　ヘルプ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ウィジェットエリア一覧　ヘルプ
+ */
 ?>
+
+
 <p>一つのウィジェットエリアは、左側の「利用できるウィジェット」からお好きなウィジェットを複数選択して作成する事ができます。</p>
 <ul>
 	<li>まず、わかりやすい「ウィジェットエリア名」を決めて入力します。（例）サイドバー等</li>

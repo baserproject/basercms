@@ -1,552 +1,750 @@
 <?php
 /**
- * コンテンツコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
-App::uses('HttpSocket', 'Core.Network/Http');
+
+App::uses('BcContentsController', 'Controller');
 
 /**
- * コンテンツコントローラー
+ * 統合コンテンツ管理 コントローラー
  *
- * @package	Baser.Controller
+ * baserCMS内のコンテンツを統合的に管理する
+ *
+ * @package Baser.Controller
+ * @property Content $Content
+ * @property BcAuthComponent $BcAuth
+ * @property SiteConfig $SiteConfig
+ * @property Site $Site
+ * @property User $User
+ * @property BcContentsComponent $BcContents
  */
 class ContentsController extends AppController {
-
-/**
- * クラス名
- *
- * @var array
- * @access public
- */
-	public $name = 'Contents';
 
 /**
  * モデル
  *
  * @var array
- * @access public
  */
-	public $uses = array('Content', 'Page');
+	public $uses = ['Content', 'Site', 'SiteConfig'];
 
 /**
  * コンポーネント
  *
  * @var array
- * @access public
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true));
 
-/**
- * ヘルパー
- *
- * @var array
- * @access public
- */
-	public $helpers = array('BcText', 'BcForm');
-
-/**
- * beforeFilter
- *
- * @return void
- * @access public
- */
 	public function beforeFilter() {
 		parent::beforeFilter();
-
-		// 認証設定
-		$this->BcAuth->allow('search', 'mobile_search', 'smartphone_search', 'get_page_list_recursive');
-
-		if (!empty($this->request->params['admin'])) {
-			$this->subMenuElements = array('contents');
-			$this->crumbs = array(
-				array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-				array('name' => '検索インデックス管理', 'url' => array('controller' => 'contents', 'action' => 'index'))
-			);
-		}
+		$this->BcAuth->allow('view');
 	}
-
+	
 /**
- * コンテンツ検索
+ * コンテンツ一覧
  *
- * @return void
- * @access public
+ * @param integer $parentId
+ * @param void
  */
-	public function search() {
-		$datas = array();
-		$query = array();
+	public function admin_index() {
 
-		$default = array('named' => array('num' => 10));
-		$this->setViewConditions('Content', array('default' => $default, 'type' => 'get'));
+		switch($this->request->action) {
+			case 'admin_index':
+				$this->pageTitle = 'コンテンツ一覧';
+				break;
+			case 'admin_trash_index':
+				$this->pageTitle = 'ゴミ箱';
+				break;
+		}
+		
+		$this->setViewConditions('Content', ['default' => [
+			'named' => [
+				'num'		=> $this->siteConfigs['admin_list_num'],
+				'site_id'	=> 0,
+				'list_type'	=> 1,
+				'sort'		=> 'id',
+				'direction' => 'asc'
+			]
+		]]);
+		
+		if(empty($this->request->params['named']['sort'])) {
+			$this->request->params['named']['sort'] = $this->passedArgs['sort'];
+		}
+		if(empty($this->request->params['named']['direction'])) {
+			$this->request->params['named']['direction'] = $this->passedArgs['direction'];
+		}
+		
+		$sites = $this->Site->getSiteList();
+		if(!in_array($this->passedArgs['site_id'], array_keys($sites))) {
+			$this->passedArgs['site_id'] = 0;
+		}
+		
+		$this->request->data['ViewSetting']['site_id'] = $currentSiteId = $this->passedArgs['site_id'];
+		$this->request->data['ViewSetting']['list_type'] = $currentListType = $this->passedArgs['list_type'];
 
-		if (!empty($this->request->data['Content'])) {
-			foreach ($this->request->data['Content'] as $key => $value) {
-				$this->request->data['Content'][$key] = h($value);
+		if ($this->request->is('ajax')) {
+			$template = null;
+			$datas = [];
+			switch($this->request->params['action']) {
+				case 'admin_index':
+					switch($currentListType) {
+						case 1:
+							$conditions = $this->_createAdminIndexConditionsByTree($currentSiteId);
+							$datas = $this->Content->find('threaded', ['order' => ['Content.lft'], 'conditions' => $conditions, 'recursive' => 0]);
+							// 並び替え最終更新時刻をリセット
+							$this->SiteConfig->resetContentsSortLastModified();
+							$template = 'ajax_index_tree';
+							break;
+						case 2:
+							$conditions = $this->_createAdminIndexConditionsByTable($currentSiteId, $this->request->data);
+							$sort = 'Content.' . $this->passedArgs['sort'] . ' ' . $this->passedArgs['direction'];
+							$this->paginate = [
+								'order' => $sort, 
+								'conditions' => $conditions,
+								'limit' => $this->passedArgs['num'],
+								'recursive' => 0
+							];
+							$datas = $this->paginate('Content');
+							$this->set('authors', $this->User->getUserList());
+							$template = 'ajax_index_table';
+							break;
+					}
+					break;
+				case 'admin_trash_index':
+					$this->Content->Behaviors->unload('SoftDelete');
+					$conditions = $this->_createAdminIndexConditionsByTrash();
+					$datas = $this->Content->find('threaded', ['order' => ['Content.site_id', 'Content.lft'], 'conditions' => $conditions, 'recursive' => 0]);
+					$template = 'ajax_index_trash';
+					break;
 			}
+			$this->set('datas', $datas);
+			Configure::write('debug', 0);
+			$this->render($template);
+			return;
 		}
-		if (!empty($this->request->query['q'])) {
-			$this->paginate = array(
-				'conditions' => $this->_createSearchConditions($this->request->data),
-				'order' => 'Content.priority DESC, Content.modified DESC, Content.id',
-				'limit' => $this->passedArgs['num']
-			);
+		
+		$this->set('contentTypes', $this->BcContents->getTypes());
+		$this->set('authors', $this->User->getUserList());
+		$this->set('folders', $this->Content->getContentFolderList((int) $currentSiteId, ['conditions' => ['Content.site_root' => false]]));
+		$this->set('listTypes', [1 => 'ツリー形式', 2 => '表形式']);
+		$this->set('sites', $sites);
+		$this->search = 'contents_index';
+		$this->subMenuElements = ['contents'];
+		$this->help = 'contents_index';
 
-			$datas = $this->paginate('Content');
-			$query = $this->_parseQuery($this->request->query['q']);
-		}
-		$this->set('query', $query);
-		$this->set('datas', $datas);
-		$this->pageTitle = '検索結果一覧';
 	}
 
 /**
- * [MOBILE] コンテンツ検索
- */
-	public function mobile_search() {
-		$this->setAction('search');
-	}
-	
-/**
- * [SMARTPHONE] コンテンツ検索
- */
-	public function smartphone_search() {
-		$this->setAction('search');
-	}
-	
-/**
- * 検索キーワードを分解し配列に変換する
+ * ツリー表示用の検索条件を生成する
  *
- * @param string $query
  * @return array
- * @access protected
  */
-	protected function _parseQuery($query) {
-		$query = str_replace('　', ' ', $query);
-		if (strpos($query, ' ') !== false) {
-			$query = explode(' ', $query);
+	protected function _createAdminIndexConditionsByTree($currentSiteId) {
+		if($currentSiteId === 'all') {
+			$conditions = ['or' => [
+				['Site.use_subdomain' => false],
+				['Content.site_id' => 0]
+			]];
 		} else {
-			$query = array($query);
+			$conditions = ['Content.site_id' => $currentSiteId];
 		}
-		return h($query);
-	}
-
-/**
- * 検索条件を生成する
- *
- * @param	array	$data
- * @return	array	$conditions
- * @access	protected
- */
-	protected function _createSearchConditions($data) {
-		$conditions = array('Content.status' => true);
-		$query = '';
-		unset($data['Content']['key']);
-		unset($data['Content']['fields']);
-		unset($data['Content']['_Token']);
-		if (isset($data['Content']['q'])) {
-			$query = $data['Content']['q'];
-			unset($data['Content']['q']);
-		}
-		if (isset($data['Content']['c'])) {
-			if ($data['Content']['c']) {
-				$data['Content']['category'] = $data['Content']['c'];
-			}
-			unset($data['Content']['c']);
-		}
-		if (isset($data['Content']['m'])) {
-			if ($data['Content']['m']) {
-				$data['Content']['model'] = $data['Content']['m'];
-			}
-			unset($data['Content']['m']);
-		}
-
-		$conditions = am($conditions, $this->postConditions($data));
-
-		if ($query) {
-			$query = $this->_parseQuery($query);
-			foreach ($query as $key => $value) {
-				$conditions['and'][$key]['or'][] = array('Content.title LIKE' => "%{$value}%");
-				$conditions['and'][$key]['or'][] = array('Content.detail LIKE' => "%{$value}%");
-			}
-		}
-
 		return $conditions;
 	}
 
 /**
- * ページリストを取得する
- * 
- * @param mixid $parentCategoryId / '' / 0
- * @return type
- * @access public 
+ * テーブル表示用の検索条件を生成する
+ *	
+ * @return array
  */
-	public function get_page_list_recursive($parentCategoryId = null, $recursive = null) {
-		if (isConsole()) {
-			$this->Page = ClassRegistry::init('Page');
+	protected function _createAdminIndexConditionsByTable($currentSiteId, $data) {
+		$data['Content'] = array_merge([
+			'name' => '',
+			'folder_id' => '',
+			'author_id' => '',
+			'self_status' => '',
+			'type' => ''
+		], $data['Content']);
+		
+		$conditions = ['Content.site_id' => $currentSiteId];
+		if($data['Content']['name']) {
+			$conditions['or'] = [
+				'Content.name LIKE' => '%' . $data['Content']['name'] . '%',
+				'Content.title LIKE' => '%' . $data['Content']['name'] . '%'
+			];
 		}
-		return $this->__getPageListRecursive($parentCategoryId, $recursive);
+		if($data['Content']['folder_id']) {
+			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['Content']['folder_id']], 'recursive' => -1]);
+			$conditions['Content.rght <'] = $content['Content']['rght'];
+			$conditions['Content.lft >'] = $content['Content']['lft'];
+		}
+		if($data['Content']['author_id']) {
+			$conditions['Content.author_id'] = $data['Content']['author_id']; 
+		}
+		if($data['Content']['self_status'] !== '') {
+			$conditions['Content.self_status'] = $data['Content']['self_status'];
+		}
+		if($data['Content']['type']) {
+			$conditions['Content.type'] = $data['Content']['type'];
+		}
+		return $conditions;
 	}
 
 /**
- * ページリストを取得する（再帰）
- * TODO スマートフォン未対応
- * @param mixid $parentCategoryId / '' / 0
- * @return string
- * @access private 
- */
-	private function __getPageListRecursive($parentCategoryId = null, $recursive = null, $level = 0) {
-		if (empty($this->Page->PageCategory)) {
-			// インストールの段階で呼出された場合 ClassRegistry::init() だと AppModelで初期化されてしまう
-			$this->Page->PageCategory = new PageCategory(false, null, 'baser');
-		}
-		$direct = false;
-		$currentAgentId = $this->Page->PageCategory->getAgentId(Configure::read('BcRequest.agent'));
-		$mobileId = $this->Page->PageCategory->getAgentId('mobile');
-		$smartphoneId = $this->Page->PageCategory->getAgentId('smartphone');
-		if ($parentCategoryId === 0) {
-			$direct = true;
-			$parentCategoryId = null;
-		} elseif (!$parentCategoryId && Configure::read('BcRequest.agent') == Configure::read('BcAgent.mobile.prefix')) {
-			$parentCategoryId = $currentAgentId;
-		}
-
-		// ページリスト取得
-		$conditions = array('Page.page_category_id' => $parentCategoryId);
-		$conditions = am($conditions, $this->Page->getConditionAllowPublish());
-		$pages = $this->Page->find('all', array(
-			'conditions' => $conditions,
-			'fields' => array('name', 'title', 'url'),
-			'order' => 'Page.sort',
-			'recursive' => -1,
-			'cache' => false
-		));
-
-		foreach ($pages as $key => $page) {
-			$pages[$key]['Page']['url'] = $page['Page']['url'] = preg_replace('/^\/mobile/', '/' . Configure::read('BcAgent.mobile.alias'), $page['Page']['url']);
-			$pages[$key]['Page']['url'] = preg_replace('/^\/smartphone/', '/' . Configure::read('BcAgent.smartphone.alias'), $page['Page']['url']);
-		}
-
-		if (!$direct) {
-			// カテゴリリスト取得
-			$conditions = array('PageCategory.parent_id' => $parentCategoryId);
-			if (!$parentCategoryId) {
-				$conditions = am($conditions, array(array('PageCategory.id <>' => $mobileId), array('PageCategory.id <>' => $smartphoneId)));
-			} elseif ($parentCategoryId == $mobileId) {
-				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $smartphoneId)));
-			} elseif ($parentCategoryId == $smartphoneId) {
-				$conditions = am($conditions, array(array('PageCategory.id <>' => ''), array('PageCategory.id <>' => $mobileId)));
-			}
-
-			$pageCategories = $this->Page->PageCategory->find('all', array(
-				'conditions' => $conditions,
-				'fields' => array('id', 'title'),
-				'order' => 'PageCategory.lft',
-				'recursive' => -1
-			));
-		} else {
-			$pageCategories = array();
-		}
-
-		// カテゴリごとの子カテゴリ取得
-		$children = array();
-		if ($pageCategories) {
-			$level++;
-			foreach ($pageCategories as $key => $pageCategory) {
-				$children = $this->__getPageListRecursive($pageCategory['PageCategory']['id'], $recursive, $level);
-				if ($children && (is_null($recursive) || $recursive > $level)) {
-					$pageCategories[$key]['children'] = $children;
-				}
-				if (isset($children['pages'])) {
-					$paths = Hash::extract($children['pages'], '{n}.Page.name');
-					if (in_array('index', $paths)) {
-						$cats = $this->Page->PageCategory->getPath($pageCategory['PageCategory']['id'], array('name'), -1);
-						$cats = Hash::extract($cats, '{n}.PageCategory.name');
-						if ($cats) {
-							$parentCategoryPath = '/' . implode('/', $cats) . '/';
-						} else {
-							$parentCategoryPath = '/';
-						}
-						$parentCategoryPath = preg_replace('/^\/mobile/', '/m', $parentCategoryPath);
-						$pageCategories[$key]['PageCategory']['url'] = $parentCategoryPath . 'index';
-					}
-				}
-			}
-		}
-
-		$result = array();
-		if ($pages) {
-			$result['pages'] = $pages;
-		}
-		if ($pageCategories) {
-			$result['pageCategories'] = $pageCategories;
-		}
-
-		return $result;
-	}
-
-/**
- * [ADMIN] 検索インデックス
- * 
- * @return void
- * @access public
- */
-	public function admin_index() {
-		$this->pageTitle = '検索インデックス一覧';
-
-		/* 画面情報設定 */
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Content', array('default' => $default));
-		$conditions = $this->_createAdminIndexConditions($this->request->data);
-		$this->paginate = array(
-			'conditions' => $conditions,
-			'fields' => array(),
-			'order' => 'Content.priority DESC, Content.modified DESC, Content.id',
-			'limit' => $this->passedArgs['num']
-		);
-		$this->set('datas', $this->paginate('Content'));
-
-		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
-			$this->render('ajax_index');
-			return;
-		}
-
-		$this->search = 'contents_index';
-		$this->help = 'contents_index';
-	}
-
-/**
- * [ADMIN] 検索インデックス登録
- * 
- * TODO 2013/8/8 ryuring
- * この機能は、URLより、baserCMSで管理されたコンテンツのタイトルとコンテンツ本体を取得し、検索インデックスに登録する為の機能だったが、
- * CakePHP２より、Viewの扱いが変更となった（ClassRegistryで管理されなくなった）為、requestAction 時のタイトルを取得できなくなった。
- * よって機能自体を一旦廃止する事とする。
- * 実装の際は、自動取得ではなく、手動で、タイトルとコンテンツ本体等を取得する仕様に変更する。
- * 
- * @return	void
- * @access 	public
- */
-	public function admin_add() {
-		$this->pageTitle = '検索インデックス登録';
-
-		if ($this->request->data) {
-			$url = $this->request->data['Content']['url'];
-			$url = str_replace(FULL_BASE_URL . $this->request->base, '', $url);
-
-			if (!$this->Content->find('count', array('conditions' => array('Content.url' => $url)))) {
-
-				// ルーティングのデフォルト設定を再読み込み（requestActionでルーティング設定がダブって登録されてしまう為）
-				Router::reload();
-				// URLのデータを取得
-				try {
-					$content = $this->requestAction($url, array('return' => 1));
-				} catch (Exception $e) {
-					$content = $e;
-				}
-
-				Router::reload();
-				// 元の設定を復元
-				Router::setRequestInfo($this->request);
-
-				if (!is_a($content, 'Exception')) {
-					$content = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $content);
-				} elseif (preg_match('/\.html/', $url)) {
-					App::uses('HttpSocket', 'Network/Http');
-					$socket = new HttpSocket();
-					// ※ Router::url() では、スマートURLオフの場合、/app/webroot/ 内のURLが正常に取得できない
-					$HttpSocketResponse = $socket->get(siteUrl() . preg_replace('/^\//', '', $url));
-					$code = $HttpSocketResponse->code;
-					if ($code != 200) {
-						unset($content);
-					} else {
-						if (preg_match('/<body>(.*?)<\/body>/is', $HttpSocketResponse->body, $matches)) {
-							$content = $matches[1];
-						} else {
-							$content = '';
-						}
-					}
-				} else {
-					unset($content);
-				}
-
-				if (isset($content)) {
-					$content = Sanitize::stripAll($content);
-					$content = strip_tags($content);
-					$data = array('Content' => array(
-							'title'		=> $this->request->data['Content']['title'],
-							'detail'	=> $content,
-							'url'		=> $url,
-							'type'		=> 'その他',
-							'status'	=> true,
-							'priority'	=> 0.5
-					));
-					$this->Content->create($data);
-					if ($this->Content->save()) {
-						$this->setMessage('検索インデックスに ' . $url . ' を追加しました。');
-						$this->redirect(array('action' => 'index'));
-					} else {
-						$this->setMessage('保存中にエラーが発生しました。', true);
-					}
-				} else {
-					$this->Content->invalidate('url', '入力したURLは存在しないか、検索インデックスに登録できるURLではありません。');
-					$this->setMessage('保存中にエラーが発生しました。', true);
-				}
-			} else {
-				$this->Content->invalidate('url', '既に登録済のURLです。');
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
-			}
-		}
-		$this->help = 'contents_add';
-	}
-
-/**
- * [ADMIN] 検索インデックス削除　(ajax)
+ * ゴミ箱用の検索条件を生成する
  *
- * @param	int		$id
- * @return	void
- * @access 	public
+ * @return array
  */
-	public function admin_ajax_delete($id = null) {
-		if (!$id) {
+	protected function _createAdminIndexConditionsByTrash() {
+		return [
+			'Content.deleted' => true
+		];
+	}
+
+/**
+ * ゴミ箱内のコンテンツ一覧を表示する
+ */
+	public function admin_trash_index() {
+		$this->setAction('admin_index');
+		if (empty($this->request->isAjax)) {
+			$this->render('index');
+		}
+	}
+
+/**
+ * ゴミ箱のコンテンツを戻す
+ *
+ * @return mixed Site Id Or false
+ */
+	public function admin_ajax_trash_return() {
+		if(empty($this->request->data['id'])) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$this->autoRender = false;
+
+		// EVENT Contents.beforeTrashReturn
+		$this->dispatchEvent('beforeTrashReturn', [
+			'data' => $this->request->data['id']
+		]);
+		
+		$siteId = $this->Content->trashReturn($this->request->data['id']);
+
+		// EVENT Contents.afterTrashReturn
+		$this->dispatchEvent('afterTrashReturn', [
+			'data' => $this->request->data['id']
+		]);
+		
+		return $siteId;
+	}
+
+/**
+ * 新規コンテンツ登録（AJAX）
+ *
+ * @return void
+ */
+	public function admin_add($alias = false) {
+
+		if(!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 
-		/* 削除処理 */
-		if ($this->Content->delete($id)) {
-			$message = '検索インデックスより NO.' . $id . ' を削除しました。';
-			$this->Content->saveDbLog($message);
-			exit(true);
+		$srcContent = array();
+		if($alias) {
+			if($this->request->data['Content']['alias_id']) {
+				$conditions = array('id' => $this->request->data['Content']['alias_id']);
+			} else {
+				$conditions = array(
+					'plugin' => $this->request->data['Content']['plugin'],
+					'type' => $this->request->data['Content']['type']
+				);
+			}
+			$srcContent = $this->Content->find('first', array('conditions' => $conditions, 'recursive' => -1));
+			if($srcContent) {
+				$this->request->data['Content']['alias_id'] = $srcContent['Content']['id'];
+				$srcContent = $srcContent['Content'];
+			}
+
+			if(empty($this->request->data['Content']['parent_id']) && !empty($this->request->data['Content']['url'])) {
+				$this->request->data['Content']['parent_id'] = $this->Content->copyContentFolderPath($this->request->data['Content']['url'], $this->request->data['Content']['site_id']);
+			}
+
+		}
+
+		$user = $this->BcAuth->user();
+		$this->request->data['Content']['author_id'] = $user['id'];
+		$this->Content->create(false);
+		$data = $this->Content->save($this->request->data);
+		if($data) {
+			if($alias) {
+				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') .
+					'「' . $srcContent['title'] . '」のエイリアス「' . $this->request->data['Content']['title'] . '」を追加しました。';
+			} else {
+				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を追加しました。';
+			}
+			$this->setMessage($message, false, true, false);
+			echo json_encode($data['Content']);
+		} else {
+			$this->ajaxError(500, '保存中にエラーが発生しました。');
 		}
 		exit();
 	}
 
 /**
- * [ADMIN] 検索インデックス削除
+ * コンテンツ編集
  *
- * @param	int		$id
- * @return	void
- * @access 	public
+ * @return void
  */
-	public function admin_delete($id = null) {
-		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
-		}
-
-		/* 削除処理 */
-		if ($this->Content->delete($id)) {
-			$this->setMessage('検索インデックスより NO.' . $id . ' を削除しました。', false, true);
+	public function admin_edit() {
+		$this->pageTitle = 'コンテンツ編集';
+		if(!$this->request->data) {
+			$this->request->data = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->params['named']['content_id'])));
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			if($this->Content->save($this->request->data)) {
+				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を更新しました。';
+				$this->setMessage($message, false, true);
+				$this->redirect(array(
+					'plugin'	=> null,
+					'controller'=> 'contents',
+					'action'	=> 'edit',
+					'content_id' => $this->request->params['named']['content_id'],
+					'parent_id' => $this->request->params['named']['parent_id']
+				));
+			} else {
+				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
+			}
+		}
+		$this->set('publishLink', $this->request->data['Content']['url']);
+	}
+
+	/**
+	 * エイリアスを編集する
+	 *
+	 * @param string $plugin
+	 * @param string $type
+	 */
+	public function admin_edit_alias($id) {
+
+		$this->pageTitle = 'エイリアス編集';
+		if(!$this->request->data) {
+			$this->request->data = $this->Content->find('first', array('conditions' => array('Content.id' => $id)));
+			$srcContent = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->data['Content']['alias_id']), 'recursive' => -1));
+			$srcContent = $srcContent['Content'];
+		} else {
+			if($this->Content->save($this->request->data)) {
+				$srcContent = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->data['Content']['alias_id']), 'recursive' => -1));
+				$srcContent = $srcContent['Content'];
+				$message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
+					'「' . $srcContent['title'] . '」のエイリアス「' . $this->request->data['Content']['title'] . '」を編集しました。';
+				$this->setMessage($message, false, true);
+				$this->redirect(array(
+					'plugin'	=> null,
+					'controller'=> 'contents',
+					'action'	=> 'edit_alias',
+					$id
+				));
+			} else {
+				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
+			}
+
 		}
 
-		$this->redirect(array('action' => 'index'));
+		$this->set('srcContent', $srcContent);
+		$this->BcContents->settingForm($this, $this->request->data['Content']['site_id'], $this->request->data['Content']['id']);
+		$this->set('publishLink', $this->request->data['Content']['url']);
+
 	}
 
 /**
- * [ADMIN] 検索インデックス一括削除
+ * コンテンツ削除（論理削除）
  *
- * @param	int		$id
- * @return	void
- * @access 	public
+ * @return boolean
+ */
+	public function admin_ajax_delete() {
+		$this->autoRender = false;
+		if(empty($this->request->data['contentId'])) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		if($this->_delete($this->request->data['contentId'], false)) {
+			return true;
+		} else {
+			$this->ajaxError(500, '削除中にエラーが発生しました。');
+		}
+		return false;
+	}
+
+/**
+ * コンテンツ削除（論理削除）
+ */
+	public function admin_delete() {
+		if(empty($this->request->data['Content']['id'])) {
+			$this->notFound();
+		}
+		if($this->_delete($this->request->data['Content']['id'], true)) {
+			$this->redirect(array('plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index'));
+		} else {
+			$this->setMessage('削除中にエラーが発生しました。', true, true);
+		}
+	}
+
+/**
+ * コンテンツを削除する（論理削除）
+ * 
+ * ※ エイリアスの場合は直接削除
+ * 
+ * @param int $id
+ * @param bool $isAlias
+ * @param bool $useFlashMessage
+ * @return bool
+ */
+	protected function _delete($id, $useFlashMessage = false) {
+		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
+		if(!$content) {
+			return false;
+		}
+		$content = $content['Content'];
+		$typeName = Configure::read('BcContents.items.' . $content['plugin'] . '.' . $content['type'] . '.title');
+
+		// EVENT Contents.beforeDelete
+		$this->dispatchEvent('beforeDelete', [
+			'data' => $id
+		]);
+		
+		if(!$content['alias_id']) {
+			$result = $this->Content->softDeleteFromTree($id);
+			$message = $typeName . '「' . $content['title'] . '」をゴミ箱に移動しました。';
+		} else {
+			$softDelete = $this->Content->softDelete(null);
+			$this->Content->softDelete(false);
+			$result = $this->Content->removeFromTree($id, true);
+			$this->Content->softDelete($softDelete);
+			$message = $typeName . 'のエイリアス「' . $content['title'] . '」を削除しました。';
+		}
+		if($result) {
+			$this->setMessage($message, false, true, $useFlashMessage);
+		}
+
+		// EVENT Contents.afterDelete
+		$this->dispatchEvent('afterDelete', [
+			'data' => $id
+		]);
+		
+		return $result;
+	}
+	
+/**
+ * 一括削除
+ *
+ * @param array $ids
+ * @return boolean
+ * @access protected
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
-
 			foreach ($ids as $id) {
-
-				/* 削除処理 */
-				if ($this->Content->delete($id)) {
-					$message = '検索インデックスより NO.' . $id . ' を削除しました。';
-					$this->Content->saveDbLog($message);
-				}
+				$this->_delete($id, false);
 			}
 		}
 		return true;
 	}
 
 /**
- * [AJAX] 優先順位を変更する
- * 
+ * 一括公開
+ *
+ * @param array $ids
  * @return boolean
- * @access public
+ * @access protected
  */
-	public function admin_ajax_change_priority() {
-		if ($this->request->data) {
-			$this->Content->set($this->request->data);
-			if ($this->Content->save()) {
-				echo true;
+	protected function _batch_publish($ids) {
+		if ($ids) {
+			foreach ($ids as $id) {
+				$this->_changeStatus($id, true);
 			}
 		}
-		exit();
+		return true;
 	}
 
 /**
- * 管理画面ページ一覧の検索条件を取得する
+ * 一括非公開
  *
- * @param	array		$data
- * @return	string
- * @access	protected
+ * @param array $ids
+ * @return boolean
+ * @access protected
  */
-	protected function _createAdminIndexConditions($data) {
-		if (empty($data['Content'])) {
-			return array();
-		}
-
-		/* 条件を生成 */
-		$conditions = array();
-
-		$type = $data['Content']['type'];
-		$category = $data['Content']['category'];
-		$status = $data['Content']['status'];
-		$keyword = $data['Content']['keyword'];
-
-		unset($data['Content']['type']);
-		unset($data['Content']['category']);
-		unset($data['Content']['status']);
-		unset($data['Content']['keyword']);
-		unset($data['Content']['open']);
-		if (!$data['Content']['priority']) {
-			unset($data['Content']['priority']);
-		}
-		foreach ($data['Content'] as $key => $value) {
-			if (preg_match('/priority_[0-9]+$/', $key)) {
-				unset($data['Content'][$key]);
+	protected function _batch_unpublish($ids) {
+		if ($ids) {
+			foreach ($ids as $id) {
+				$this->_changeStatus($id, false);
 			}
 		}
-
-		if ($data['Content']) {
-			$conditions = $this->postConditions($data);
-		}
-
-		if ($type) {
-			$conditions['Content.type'] = $type;
-		}
-		if ($category) {
-			if ($category == 'none') {
-				$conditions['Content.category'] = '';
-			} else {
-				$conditions['Content.category'] = $category;
-			}
-		}
-		if ($status != '') {
-			$conditions['Content.status'] = $status;
-		}
-		if ($keyword) {
-			$conditions['and']['or'] = array(
-				'Content.title LIKE' => '%' . $keyword . '%',
-				'Content.detail LIKE' => '%' . $keyword . '%'
-			);
-		}
-
-		return $conditions;
+		return true;
 	}
 
+	/**
+	 * 公開状態を変更する
+	 *
+	 * @return bool
+	 */
+	public function admin_ajax_change_status() {
+		$this->autoRender = false;
+		if(!$this->request->data) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		switch($this->request->data['status']) {
+			case 'publish':
+				$result = $this->_changeStatus($this->request->data['contentId'], true);
+				break;
+			case 'unpublish':
+				$result = $this->_changeStatus($this->request->data['contentId'], false);
+				break;
+		}
+		return $result;
+	}
+
+/**
+ * 公開状態を変更する
+ * 
+ * @param int $id
+ * @param bool $status
+ * @return bool|mixed
+ */
+	protected function _changeStatus($id, $status) {
+		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
+		if(!$content) {
+			return false;
+		}
+		unset($content['Content']['lft']);
+		unset($content['Content']['rght']);
+		$content['Content']['self_publish_begin'] = '';
+		$content['Content']['self_publish_end'] = '';
+		$content['Content']['self_status'] = $status;
+		return (bool) $this->Content->save($content, false);
+	}
+	
+/**
+ * ゴミ箱を空にする
+ *
+ * @return bool
+ */
+	public function admin_ajax_trash_empty() {
+		if(!$this->request->data) {
+			$this->notFound();
+		}
+		$this->autoRender = false;
+		$this->Content->softDelete(false);
+		$contents = $this->Content->find('all', array('conditions' => array('Content.deleted'), 'order' => array('Content.plugin', 'Content.type'), 'recursive' => -1));
+		$result = true;
+
+		// EVENT Contents.beforeTrashEmpty
+		$this->dispatchEvent('beforeTrashEmpty', [
+			'data' => $contents
+		]);
+		
+		if($contents) {
+			foreach($contents as $content) {
+				if(!empty($this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'])) {
+					$route = $this->BcContents->settings['items'][$content['Content']['type']]['routes']['delete'];	
+				} else {
+					$route = $this->BcContents->settings['items']['Default']['routes']['delete'];
+				}
+				if(!$this->requestAction($route, array('data' => array(
+					'contentId' => $content['Content']['id'],
+					'entityId' => $content['Content']['entity_id'],
+				)))) {
+					$result = false;
+				}
+			}
+		}
+
+		// EVENT Contents.afterTrashEmpty
+		$this->dispatchEvent('afterTrashEmpty', [
+			'data' => $result
+		]);
+		
+		return $result;
+	}
+
+/**
+ * コンテンツ表示
+ *
+ * @param $plugin
+ * @param $type
+ */
+	public function view($plugin, $type) {
+		$data = array('Content' => $this->request->params['Content']);
+        if($this->BcContents->preview && $this->request->data) {
+            $data = $this->request->data;
+        }
+		$this->set('data', $data);
+		if(!$data['Content']['alias_id']) {
+			$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit', 'content_id' => $data['Content']['id']));
+		} else {
+			$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit_alias', $data['Content']['id']));
+		}
+	}
+
+/**
+ * リネーム
+ *
+ * 新規登録時の初回リネーム時は、name にも保存する
+ */
+	public function admin_ajax_rename() {
+		$this->autoRender = false;
+		if(!$this->request->data) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$data = ['Content' => [
+			'id'		=> $this->request->data['id'],
+			'title'		=> $this->request->data['newTitle'],
+			'parent_id' => $this->request->data['parentId'],
+			'type'		=> $this->request->data['type'],
+			'site_id'	=> $this->request->data['siteId']
+		]];
+		if($this->Content->save($data, array('firstCreate' => !empty($this->request->data['first'])))) {
+			$message = Configure::read('BcContents.items.' . $this->request->data['plugin'] . '.' . $this->request->data['type'] . '.title') .
+						'「' . $this->request->data['oldTitle'] . '」を「' . $this->request->data['newTitle'] . '」に名称変更しました。';
+			$this->setMessage($message, false, true, false);
+			Configure::write('debug', 0);
+			return $this->Content->getUrlById($this->Content->id);
+		} else {
+			$this->ajaxError(500, '名称変更中にエラーが発生しました。');
+		}
+		return false;
+	}
+
+/**
+ * 並び順を移動する
+ */
+	public function admin_ajax_move() {
+
+		$this->autoRender = false;
+		if(!$this->request->data) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		$this->Content->id = $this->request->data['currentId'];
+		if (!$this->Content->exists()) {
+			$this->ajaxError(500, 'データが存在しません。');
+		}
+
+		if($this->SiteConfig->isChangedContentsSortLastModified($this->request->data['listDisplayed'])) {
+			$this->ajaxError(500, "コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。");
+		}
+		
+		if(!$this->Content->isMovable($this->request->data['currentId'], $this->request->data['targetParentId'])) {
+			$this->ajaxError(500, "同一URLのコンテンツが存在するため処理に失敗しました。");
+		}
+		
+		// EVENT Contents.beforeMove
+		$event = $this->dispatchEvent('beforeMove', array(
+			'data' => $this->request->data
+		));
+		if ($event !== false) {
+			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+		
+		$data = $this->request->data;
+		$result = $this->Content->move(
+			$data['currentId'], 
+			$data['currentParentId'],
+			$data['targetSiteId'], 
+			$data['targetParentId'], 
+			$data['targetId']
+		);
+		
+		if($data['currentParentId'] == $data['targetParentId']) {
+			// 親が違う場合は、Contentモデルで更新してくれるが同じ場合更新しない仕様の為ここで更新する
+			$this->SiteConfig->updateContentsSortLastModified();	
+		}
+		
+		if($result) {
+
+			// EVENT Contents.afterAdd
+			$this->dispatchEvent('afterMove', array(
+				'data' => $result
+			));
+			
+			return json_encode($this->Content->getUrlById($result['Content']['id'], true));
+		} else {
+			$this->ajaxError(500, 'データ保存中にエラーが発生しました。');
+		}
+
+	}
+
+/**
+ * 指定したURLのパス上のコンテンツでフォルダ以外が存在するか確認
+ *
+ * @return mixed
+ */
+	public function admin_exists_content_by_url() {
+		$this->autoRender = false;
+		if(!$this->request->data['url']) {
+			$this->ajaxError(500, '無効な処理です。');
+		}
+		Configure::write('debug', 0);
+		return $this->Content->existsContentByUrl($this->request->data['url']);
+	}
+
+/**
+ * 指定したIDのコンテンツが存在するか確認する
+ * ゴミ箱のものは無視
+ *
+ * @param $id
+ */
+	public function admin_ajax_exists($id) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return $this->Content->exists($id);
+	}
+
+/**
+ * プラグイン等と関連付けられていない素のコンテンツをゴミ箱より消去する
+ * 
+ * @param $id
+ * @return bool
+ */
+	public function admin_empty() {
+		if(empty($this->request->data['contentId'])) {
+			return false;
+		}
+		$softDelete = $this->Content->softDelete(null);
+		$this->Content->softDelete(false);
+		$result = $this->Content->removeFromTree($this->request->data['contentId'], true);
+		$this->Content->softDelete($softDelete);
+		return $result;
+	}
+
+/**
+ * サイトに紐付いたフォルダリストを取得
+ *
+ * @param $siteId
+ */
+	public function admin_ajax_get_content_folder_list($siteId) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return json_encode($this->Content->getContentFolderList((int) $siteId, ['conditions' => ['Content.site_root' => false]]));
+	}
+
+/**
+ * コンテンツ情報を取得する
+ */
+	public function admin_ajax_contents_info() {
+		$this->autoLayout = false;
+		$sites = $this->Site->getPublishedAll();
+		foreach($sites as $key => $site) {
+			$sites[$key]['published'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => true]]);
+			$sites[$key]['unpublished'] = $this->Content->find('count', ['conditions' => ['Content.site_id' => $site['Site']['id'], 'Content.status' => false]]);
+			$sites[$key]['total'] = $sites[$key]['published'] + $sites[$key]['unpublished'];
+		}
+		$this->set('sites', $sites);
+	}
+	
+	public function admin_ajax_get_full_url($id) {
+		$this->autoRender = false;
+		Configure::write('debug', 0);
+		return $this->Content->getUrlById($id, true);
+	}
 }

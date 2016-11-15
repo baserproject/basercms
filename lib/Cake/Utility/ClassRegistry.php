@@ -79,19 +79,19 @@ class ClassRegistry {
  *
  * When $class is a numeric keyed array, multiple class instances will be stored in the registry,
  *  no instance of the object will be returned
- * {{{
+ * ```
  * array(
  *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry'),
  *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry'),
  *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry')
  * );
- * }}}
+ * ```
  *
  * @param string|array $class as a string or a single key => value array instance will be created,
  *  stored in the registry and returned.
  * @param bool $strict if set to true it will return false if the class was not found instead
  *	of trying to create an AppModel
- * @return object instance of ClassName.
+ * @return $class instance of ClassName.
  * @throws CakeException when you try to construct an interface or abstract class.
  */
 	public static function init($class, $strict = false) {
@@ -181,15 +181,9 @@ class ClassRegistry {
 					} elseif ($plugin && class_exists($plugin . 'AppModel')) {
 						$appModel = $plugin . 'AppModel';
 					}
-					if (!empty($appModel)) {
-						$settings['name'] = $class;
-						$instance = new $appModel($settings);
-					}
 
-					if (!isset($instance)) {
-						trigger_error(__d('cake_dev', '(ClassRegistry::init() could not create instance of %s', $class), E_USER_WARNING);
-						return false;
-					}
+					$settings['name'] = $class;
+					$instance = new $appModel($settings);
 				}
 				$_this->map($alias, $class);
 			}

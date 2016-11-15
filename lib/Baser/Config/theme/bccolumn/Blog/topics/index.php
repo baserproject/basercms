@@ -2,15 +2,13 @@
 /**
  * ブログトップ
  */
-$this->BcBaser->css('admin/colorbox/colorbox', array('inline' => false));
-$this->BcBaser->js('admin/jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade", maxWidth:"80%"});
 	});
 </script>
 
@@ -19,7 +17,7 @@ $(function(){
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
 			<h2><?php $this->Blog->postTitle($post) ?></h2>
-			<?php $uri = $this->BcBaser->getRoot().$post['BlogContent']['name'].'/archives/'.$post['BlogPost']['no']; ?>
+			<?php $uri = $this->BcBaser->getRoot().$this->request->params['Content']['name'].'/archives/'.$post['BlogPost']['no']; ?>
 			<div class="eye-catch">
 				<a href="<?php echo $uri ?>">
 					<?php $this->Blog->eyeCatch($post, array('link'=>false, 'width'=>'80px')) ?>

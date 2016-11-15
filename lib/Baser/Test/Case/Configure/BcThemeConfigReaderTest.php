@@ -1,19 +1,18 @@
 <?php
 /**
- * BcThemeConfigReader Test
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Configure
  * @since			baserCMS v 3.0.7
  * @license			http://basercms.net/license/index.html
  */
 App::uses('BcThemeConfigReader', 'Configure');
 
 /**
- * BcThemeConfigReader class
+ * BcThemeConfigReader Test
  * 
  * @package Baser.Test.Case.Network
  */

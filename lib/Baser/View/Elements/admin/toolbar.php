@@ -1,18 +1,21 @@
 <?php
 /**
- * [ADMIN] ツールバー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ツールバー
+ */
+// JSの出力について、ツールバーはフロントエンドでも利用するため、inlineに出力する
+$this->BcBaser->js(array('admin/vendors/outerClick', 'admin/vendors/jquery.fixedMenu', 'admin/toolbar'));
 App::uses('AuthComponent', 'Controller/Component');
-$this->BcBaser->js(array('admin/outerClick', 'admin/jquery.fixedMenu'));
 $loginUrl = '';
 $currentAuthPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 if (!empty($currentAuthPrefix['loginAction'])) {
@@ -31,30 +34,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 	$authName = '';
 }
 ?>
-<script type="text/javascript">
-$(function(){
-	$('#UserMenu').fixedMenu();
-	$('#SystemMenu h2').click(function(){
-		if($(this).next().css('display')=='none') {
-			$(this).next().slideDown(200);
-		} else {
-			$(this).next().slideUp(200);
-		}
-	});
-	$('#SystemMenu ul:first').show();
-	$("#UserMenu ul li div ul li").each(function(){
-		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
-			$(this).remove();
-		}
-	});
-	$("#UserMenu ul li div ul").each(function(){
-		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
-			$(this).prev().remove();
-			$(this).remove();
-		}
-	});
-});
-</script>
+
 
 <div id="ToolBar">
 	<div id="ToolbarInner" class="clearfix">
@@ -121,8 +101,16 @@ $(function(){
 					<li>
 						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<div id="SystemMenu"><div>
-								<?php $adminSitemap = Configure::read('BcApp.adminNavi') ?>
+								<?php 
+								$adminSitemap = Configure::read('BcApp.adminNavi');
+								$isAdminGlobalmenuUsed = $this->BcAdmin->isAdminGlobalmenuUsed();
+								?>
 								<?php foreach ($adminSitemap as $key => $package): ?>
+									<?php 
+									if(!$isAdminGlobalmenuUsed && $key == 'core') {
+										continue;
+									}
+									?>
 									<?php if (empty($package['name'])): ?>
 										<?php $package['name'] = $key ?>
 									<?php endif ?>
@@ -130,7 +118,13 @@ $(function(){
 									<?php if (!empty($package['contents'])): ?>
 										<ul class="clearfix">
 											<?php foreach ($package['contents'] as $contents): ?>
-												<li><?php $this->BcBaser->link($contents['name'], $contents['url'], array('title' => $contents['name'])) ?></li>
+												<?php
+												$options =  ['title' => $contents['name']];
+												if(!empty($contents['options'])){
+													$options = array_merge($options, $contents['options']);
+												}
+												?>
+												<li><?php $this->BcBaser->link($contents['name'], $contents['url'], $options) ?></li>
 											<?php endforeach ?>
 										</ul>
 									<?php endif ?>

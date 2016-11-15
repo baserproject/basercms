@@ -18,12 +18,9 @@
 	<thead>
 		<tr>
 			<th class="list-tool">
-				<?php $newCatAddable = true; ?>
-				<?php if($newCatAddable): ?>
 				<div>
 					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
 				</div>
-				<?php endif ?>
 				<?php if($this->BcBaser->isAdminUser()): ?>
 					<div>
 						<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>

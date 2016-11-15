@@ -1,18 +1,17 @@
 <?php
 /**
- * ファイルアップロードビヘイビアのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Model.Behavior
  * @since			baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
 
 /**
- * PageTest class
+ * BcUploadBehaviorTest class
  * 
  * @package Baser.Test.Case.Model
  */
@@ -29,6 +28,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function setUp() {
+		@session_start();
 		parent::setUp();
 		$this->EditorTemplate = ClassRegistry::init('EditorTemplate');
 		$this->BcUploadBehavior = ClassRegistry::init('BcUploadBehavior');
@@ -40,6 +40,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @return void
  */
 	public function tearDown() {
+		@session_destroy();
 		unset($this->EditorTemplate);
 		unset($this->BcUploadBehavior);
 		parent::tearDown();
@@ -122,7 +123,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param Model $created
  * @param Model $options
  * @return boolean
- * @access public
  */
 	public function testAfterSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -149,7 +149,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param array $data
  * @param string $tmpId
  * @return boolean
- * @access public
  */
 	public function testSaveTmpFiles() {
 
@@ -341,7 +340,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param Model $Model
  * @param string $fieldName
  * @return void
- * @access public
  */
 	public function testMoveFileSessionToTmp() {
 		
@@ -618,7 +616,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * 
  * @param Model $Model
  * @return void
- * @access public
  */
 	public function testBeforeDelete() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -630,7 +627,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * 
  * @param Model $Model
  * @return boolean
- * @access public
  */
 	public function testDelFiles() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

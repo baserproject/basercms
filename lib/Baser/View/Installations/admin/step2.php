@@ -1,17 +1,20 @@
 <?php
 /**
- * [PUBLISH] インストーラー Step2
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [PUBLISH] インストーラー Step2
+ */
 ?>
+
 
 <script type="text/javascript">
 $(function(){
@@ -82,6 +85,17 @@ $(function(){
 							書き込み不可<br />
 							<small>/app/tmp フォルダに書き込み権限が必要です。</small>
 <?php endif ?>
+					</div>
+				</li>
+				<li class='<?php if ($pagesDirWritable) echo 'check'; else echo'failed'; ?>'>
+					/app/View/Pages フォルダの書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）
+					<div class="check-result">
+						<?php if ($pagesDirWritable): ?>
+							書き込み可
+						<?php else: ?>
+							書き込み不可<br />
+							<small>/app/View/Pages フォルダに書き込み権限が必要です。</small>
+						<?php endif ?>
 					</div>
 				</li>
 				<li class='<?php if ($filesDirWritable) echo 'check'; else echo'failed'; ?>'>

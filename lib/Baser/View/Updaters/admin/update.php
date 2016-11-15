@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] アップデート
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] アップデート
  */
 if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)) {
 	$requireUpdate = true;
@@ -17,6 +19,8 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	$requireUpdate = false;
 }
 ?>
+
+
 <?php $this->start('script') ?>
 <style type="text/css">
 .em-box {
@@ -95,9 +99,9 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	<?php if ($requireUpdate): ?>
 		<p>「アップデート実行」をクリックしてデータベースのアップデートを完了させてください。</p>
 		<?php if (empty($plugin)): ?>
-			<?php echo $this->BcForm->create('Updater', array('action' => $this->action)) ?>
+			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action]]) ?>
 		<?php else: ?>
-			<?php echo $this->BcForm->create('Updater', array('action' => $this->request->action, 'url' => array($plugin))) ?>
+			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
 		<?php endif ?>
 		<?php echo $this->BcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
 		<?php echo $this->BcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>

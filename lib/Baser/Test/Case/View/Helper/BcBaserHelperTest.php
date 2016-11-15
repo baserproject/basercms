@@ -1,14 +1,12 @@
 <?php
 /**
- * test for BcBaserHelper
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
- * @since	       baserCMS v 3.0.6
+ * @since			baserCMS v 3.0.6
  * @license			http://basercms.net/license/index.html
  */
 
@@ -28,12 +26,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.View.Helper.BcBaserHelper.MenuBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
-		'baser.View.Helper.BcBaserHelper.PageCategoryBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
-		'baser.Default.PluginContent',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
@@ -41,10 +36,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.ThemeConfig',
 		'baser.Default.WidgetArea',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
+		'baser.Default.Site',
+		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 	);
 
 /**
@@ -73,6 +69,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
+		$this->_View->request = $this->_getRequest('/');
 		$SiteConfig = ClassRegistry::init('SiteConfig');
 		$siteConfig = $SiteConfig->findExpanded();
 		$this->_View->set('widgetArea', $siteConfig['widget_area']);
@@ -104,7 +101,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		unset($user['User']['password']);
 		$this->BcBaser->set('user', $user['User']);
 		$user['User']['UserGroup'] = $user['UserGroup'];
-		$sessionKey = BcUtil::getLoginUserSessionKey();
+		$sessionKey = BcUtil::authSessionKey('admin');
 		$_SESSION['Auth'][$sessionKey] = $user['User'];
 	}
 
@@ -118,24 +115,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * メニューを取得する
- *
- * @return void
- */
-	public function testGetMenus() {
-		$result = $this->BcBaser->getMenus();
-		$this->assertEquals(7, count($result));
-		$this->assertEquals(true, isset($result[0]['Menu']['id']));
-	}
-
-/**
  * タイトルを設定する
  *
  * @return void
  */
 	public function testSetTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
-
+		$this->BcBaser->request = $this->_getRequest('/company');
 		// カテゴリがない場合
 		$this->BcBaser->setTitle('会社案内');
 		$this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
@@ -190,7 +176,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSetCategoryTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
-
+		$this->BcBaser->request = $this->_getRequest('/company');
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
 			array('name' => '会社データ', 'url' => '/company/data')
@@ -279,7 +265,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetTitle() {
 		$topTitle = 'baserCMS inc. [デモ]';
-
+		$this->BcBaser->request = $this->_getRequest('/company');
 		// 通常
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
@@ -381,6 +367,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testTitle() {
 		$topTitle = 'baserCMS inc. [デモ]';
 		$title = '会社データ';
+		$this->BcBaser->request = $this->_getRequest('/company');
 		$this->expectOutputString('<title>' . $title . '｜' . $topTitle . '</title>' . PHP_EOL);
 		$this->BcBaser->setTitle($title);
 		$this->BcBaser->title();
@@ -450,16 +437,10 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param bool $expected 期待値
  * @param string $url リクエストURL
- * @param string $agent ユーザーエージェント
- *
  * @return void
  * @dataProvider isHomeDataProvider
  */
-	public function testIsHome($expected, $url, $agent = null) {
-		$this->_unsetAgent();
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
+	public function testIsHome($expected, $url) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isHome());
 	}
@@ -472,18 +453,15 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(false, '/news/index'),
 
 			// モバイルページ
-			array(false, '/', 'mobile'),
-			array(false, '/s/', 'mobile'),
-			array(true, '/m/', 'mobile'),
-			array(true, '/m/index', 'mobile'),
-			array(false, '/m/news/index', 'mobile'),
+			array(true, '/m/'),
+			array(true, '/m/index'),
+			array(false, '/m/news/index'),
 
 			// スマートフォンページ
-			array(false, '/', 'smartphone'),
-			array(false, '/m/', 'smartphone'),
-			array(true, '/s/', 'smartphone'),
-			array(true, '/s/index', 'smartphone'),
-			array(false, '/s/news/index', 'smartphone')
+			array(true, '/s/'),
+			array(true, '/s/index'),
+			array(false, '/s/news/index'),
+			array(false, '/s/news/index')
 		);
 	}
 
@@ -492,16 +470,10 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param bool $expected 期待値
  * @param string $url リクエストURL
- * @param string $agent ユーザーエージェント
- *
  * @return void
  * @dataProvider isBlogDataProvider
  */
-	public function testIsBlog($expected, $url, $agent = null) {
-		$this->_unsetAgent();
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
+	public function testIsBlog($expected, $url) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isBlog());
 	}
@@ -515,16 +487,16 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(true, '/news/index'),
 
 			// モバイルページ
-			array(false, '/m/', 'mobile'),
-			array(false, '/m/index', 'mobile'),
-			array(false, '/m/contact/index', 'mobile'),
-			array(true, '/m/news/index', 'mobile'),
+			array(false, '/m/'),
+			array(false, '/m/index'),
+			array(false, '/m/contact/index'),
+			array(true, '/m/news/index'),
 
 			// スマートフォンページ
-			array(false, '/s/', 'smartphone'),
-			array(false, '/s/index', 'smartphone'),
-			array(false, '/s/contact/index', 'smartphone'),
-			array(true, '/s/news/index', 'smartphone')
+			array(false, '/s/'),
+			array(false, '/s/index'),
+			array(false, '/s/contact/index'),
+			array(true, '/s/news/index')
 		);
 	}
 
@@ -533,16 +505,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	 *
 	 * @param bool $expected 期待値
 	 * @param string $url リクエストURL
-	 * @param string $agent ユーザーエージェント
-	 *
 	 * @return void
 	 * @dataProvider isMailDataProvider
 	 */
-	public function testIsMail($expected, $url, $agent = null) {
-		$this->_unsetAgent();
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
+	public function testIsMail($expected, $url) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isMail());
 	}
@@ -556,45 +522,18 @@ class BcBaserHelperTest extends BaserTestCase {
 			array(true, '/contact/index'),
 
 			// モバイルページ
-			array(false, '/m/', 'mobile'),
-			array(false, '/m/index', 'mobile'),
-			array(false, '/m/news/index', 'mobile'),
-			array(true, '/m/contact/index', 'mobile'),
+			array(false, '/m/'),
+			array(false, '/m/index'),
+			array(false, '/m/news/index'),
+			array(true, '/m/contact/index'),
 
 			// スマートフォンページ
-			array(false, '/s/', 'smartphone'),
-			array(false, '/s/index', 'smartphone'),
-			array(false, '/s/news/index', 'smartphone'),
-			array(true, '/s/contact/index', 'smartphone')
+			array(false, '/s/'),
+			array(false, '/s/index'),
+			array(false, '/s/news/index'),
+			array(true, '/s/contact/index')
 		);
 	}
-
-	/**
-	 * 現在のページが指定のプラグインかどうかを判定する
-	 *
-	 * @return void
-	 */
-	public function testIsPluginContent() {
-
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->assertEquals(false, $this->BcBaser->isPluginContent('Blog'));
-
-		$this->BcBaser->request = $this->_getRequest('/news/index');
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('Blog'));
-
-		$this->BcBaser->request = $this->_getRequest('/index');
-		$this->assertEquals(false, $this->BcBaser->isPluginContent('Mail'));
-
-		$this->BcBaser->request = $this->_getRequest('/contact/index');
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('Mail'));
-
-		$this->BcBaser->request->params['plugin'] = 'hollow_world';
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('HollowWorld'));
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollowWorld'));
-		$this->assertEquals(true, $this->BcBaser->isPluginContent('hollow_world'));
-		$this->assertEquals(false, $this->BcBaser->isPluginContent('hollowworld'));
-	}
-
 
 /**
  * baserCMSが設置されているパスを出力する
@@ -717,20 +656,20 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetElement() {
 		// フロント
-		$result = $this->BcBaser->getElement(('global_menu'));
-		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+		$result = $this->BcBaser->getElement('site_search_form');
+		$this->assertTextContains('<div class="section search-box">', $result);
 
 		// ### 管理画面
 		$View = new BcAppView();
+		$View->request = $this->_getRequest('/admin');
 		$View->subDir = 'admin';
-		$this->BcBaser = new BcBaserHelper($View);
 		// 管理画面用のテンプレートがなくフロントのテンプレートがある場合
 		// ※ フロントが存在する場合にはフロントのテンプレートを利用する
-		$result = $this->BcBaser->getElement(('global_menu'));
-		$this->assertTextContains('<ul class="global-menu clearfix">', $result);
+		$result = $this->BcBaser->getElement(('site_search_form'));
+		$this->assertTextContains('<div class="section search-box">', $result);
 		// 強制的にフロントのテンプレートに切り替えた場合
 		$result = $this->BcBaser->getElement('crumbs', array(), array('subDir' => false));
-		$this->assertEquals('<strong>ホーム</strong>', $result);
+		$this->assertTextContains('ホーム', $result);
 	}
 
 /**
@@ -741,8 +680,8 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testElement() {
-		$this->expectOutputRegex('/<ul class="global-menu clearfix">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
-		$this->BcBaser->element(('global_menu'));
+		$this->expectOutputRegex('/<div id="Footer">/s');
+		$this->BcBaser->element(('footer'));
 	}
 
 /**
@@ -825,7 +764,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testScripts() {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 		// CSS
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
 		$this->BcBaser->css('admin/layout', array('inline' => false));
 		ob_start();
 		$this->BcBaser->scripts();
@@ -843,7 +782,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('script', '');
 		// meta
-		$expected = '<meta name="description" content="説明文" />';
+		$expected = '<meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
 		$BcHtml->meta('description', '説明文', array('inline' => false));
@@ -854,7 +793,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		$this->_View->assign('meta', '');
 		// ツールバー
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
 		$this->BcBaser->set('user', array('User'));
 		ob_start();
 		$this->BcBaser->scripts();
@@ -901,7 +840,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * サブメニューを設定する
  * 
  * @param array $elements サブメニューエレメント名を配列で指定
- * @param array $expects サブメニュータイトル
+ * @param array $expects 期待するサブメニュータイトル
  * @return void
  * @dataProvider setSubMenusDataProvider
  */
@@ -918,9 +857,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function setSubMenusDataProvider() {
 		return array(
-			array(array('contents'), array('<th>検索インデックスメニュー</th>')),
-			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定共通メニュー</th>')),
-			array(array('menus', 'tools'), array('<th>メニュー管理メニュー</th>', '<th>ツールメニュー</th>')),
+			array(array('contents'), array('<th>コンテンツ管理メニュー</th>')),
+			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>')),
+			array(array('tools'), array('<th>ユーティリティメニュー</th>')),
 			array(array('plugins', 'themes'), array('<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>')),
 			array(array('users'), array('<th>ユーザー管理メニュー</th>')),
 			array(array('widget_areas'), array('<th>ウィジェットエリア管理メニュー</th>')),
@@ -931,23 +870,20 @@ class BcBaserHelperTest extends BaserTestCase {
  * XMLヘッダタグを出力する
  *
  * @param string $expected 期待値
- * @param string $agent ユーザーエージェント
+ * @param string $url URL
  * @return void
  * @dataProvider xmlDataProvider
  */
-	public function testXmlHeader($expected, $agent = null) {
+	public function testXmlHeader($expected, $url = null) {
+		$this->BcBaser->request = $this->_getRequest($url);
 		$this->expectOutputString($expected);
-
-		if ($agent !== null) {
-			$this->_setAgent($agent);
-		}
 		$this->BcBaser->xmlHeader();
 	}
 
 	public function xmlDataProvider() {
 		return array(
-			array('<?xml version="1.0" encoding="UTF-8" ?>' . "\n"),
-			array('<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", 'mobile')
+			array('<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/'),
+			array('<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", '/m/')
 		);
 	}
 
@@ -957,7 +893,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testIcon() {
-		$this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon" /><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon" />' . "\n");
+		$this->expectOutputString('<link href="/favicon.ico" type="image/x-icon" rel="icon"/><link href="/favicon.ico" type="image/x-icon" rel="shortcut icon"/>' . "\n");
 		$this->BcBaser->icon();
 	}
 
@@ -991,23 +927,23 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->css('admin/import');
 		$result = ob_get_clean();
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// 拡張子あり
 		ob_start();
 		$this->BcBaser->css('admin/import.css');
 		$result = ob_get_clean();
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// インラインオフ（array）
 		$this->BcBaser->css('admin/import.css', array('inline' => false));
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$result = $this->_View->Blocks->get('css');
 		$this->assertEquals($expected, $result);
 		$this->_View->Blocks->end();
 		// インラインオフ（boolean）
 		$this->BcBaser->css('admin/import.css', false);
-		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css" />';
+		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->_View->assign('css', '');
 		$this->assertEquals($expected, $result);
 	}
@@ -1051,7 +987,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testImg() {
-		$this->expectOutputString('<img src="/img/baser.power.gif" alt="" />');
+		$this->expectOutputString('<img src="/img/baser.power.gif" alt=""/>');
 		$this->BcBaser->img('baser.power.gif');
 	}
 
@@ -1071,8 +1007,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function getImgDataProvider() {
 		return array(
-			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ" />'),
-			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt="" />')
+			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ"/>'),
+			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt=""/>')
 		);
 	}
 
@@ -1116,7 +1052,7 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('', '/', array(), '<a href="/"></a>'),
 			array('会社案内', '/about', array(), '<a href="/about">会社案内</a>'),
 			array('会社案内 & 会社データ', '/about', array('escape' => true), '<a href="/about">会社案内 &amp; 会社データ</a>'),	// エスケープ
-			array('固定ページ管理', array('controller' => 'pages', 'action' => 'index'), array('prefix' => true), '<a href="/admin/pages/index">固定ページ管理</a>'),	// プレフィックス
+			array('固定ページ管理', array('controller' => 'pages', 'action' => 'index'), array('prefix' => true), '<a href="/admin/pages/">固定ページ管理</a>'),	// プレフィックス
 			array('システム設定', array('admin' => true, 'controller' => 'site_configs', 'action' => 'form'), array('forceTitle' => true), '<span>システム設定</span>'),	// 強制タイトル
 			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>'), // SSL
 			array('テーマファイル管理', array('controller' => 'themes', 'action' => 'manage', 'jsa'), array('ssl' => true), '<a href="https://localhost/themes/manage/jsa">テーマファイル管理</a>'), // SSL
@@ -1140,20 +1076,13 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param string $expected 期待値
  * @param string $encoding エンコード
- * @param string $agent ユーザーエージェント
+ * @param string $url URL
  * @return void
  * @dataProvider charsetDataProvider
  */
-	public function testCharset($expected, $encoding, $agent = null) {
+	public function testCharset($expected, $encoding, $url = null) {
+		$this->BcBaser->request = $this->_getRequest($url);
 		$this->expectOutputString($expected);
-
-		$this->_unsetAgent();
-
-		if ($agent !== null) {
-			$this->_setAgentSetting($agent, true);
-			$this->_setAgent($agent);
-		}
-
 		if ($encoding !== null) {
 			$this->BcBaser->charset($encoding);
 		} else {
@@ -1163,8 +1092,8 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function charsetDataProvider() {
 		return array(
-			array('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8'),
-			array('<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, 'mobile')
+			array('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'),
+			array('<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, '/m/')
 		);
 	}
 
@@ -1300,29 +1229,13 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @param string $url URL
  * @param string $expects コンテンツ名
- * @param string $ua リクエストのユーザーエージェント
- * @param array $agents 対応する設定のエージェントのリスト
- * @param array $linkedAgents 連動する設定のエージェントのリスト
  * @return void*
  * @dataProvider getContentsNameDataProvider
  * 
  * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
-	public function testGetContentsName($url, $expects, $ua = null, array $agents = array(), array $linkedAgents = array()) {
+	public function testGetContentsName($url, $expects) {
 		//Configure周りの設定を全てOFF状態に
-		$this->_unsetAgent();
-		$this->_unsetAgentLinks();
-
-		if (!empty($ua) && !empty($agents) && in_array($ua, $agents)) {
-			$this->_setAgentSetting($ua, true);
-			$this->_setAgent($ua);
-		}
-
-		//連携を設定
-		foreach ($linkedAgents as $linked) {
-			$this->_setAgentLink($linked);
-		}
-
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expects, $this->BcBaser->getContentsName());
 	}
@@ -1333,35 +1246,20 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('/', 'Home'),
 			array('/news', 'News'),
 			array('/contact', 'Contact'),
-			array('/company', 'Default'),
-
-			//モバイル　対応OFF 連動OFF
-
-			//スマートフォン 対応OFF　連動OFF
+			array('/about', 'Default'),
 
 			//モバイル　対応ON 連動OFF
-			array('/m/', 'Home', 'mobile', array('mobile')),
-			array('/m/news', 'News', 'mobile', array('mobile')),
-			array('/m/contact', 'Contact', 'mobile', array('mobile')),
-			array('/m/company', 'M', 'mobile', array('mobile')),	// 存在しないページ
+			array('/m/', 'Home'),
+			array('/m/news', 'News'),
+			array('/m/contact', 'Contact'),
+			array('/m/hoge', 'M'),	// 存在しないページ
 
 			//スマートフォン 対応ON　連動OFF
-			array('/s/', 'Home', 'smartphone', array('smartphone')),
-			array('/s/news', 'News', 'smartphone', array('smartphone')),
-			array('/s/contact', 'Contact', 'smartphone', array('smartphone')),
-			array('/s/company', 'S', 'smartphone', array('smartphone')),	// 存在しないページ
-
-			//モバイル　対応ON 連動ON
-			array('/m/', 'Home', 'mobile', array('mobile'), array('mobile')),
-			array('/m/news', 'News', 'mobile', array('mobile'), array('mobile')),
-			array('/m/contact', 'Contact', 'mobile', array('mobile'), array('mobile')),
-			array('/m/company', 'Default', 'mobile', array('mobile'), array('mobile')),	// 存在しないページ
-
-			//スマートフォン 対応ON　連動ON
-			array('/s/', 'Home', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/news', 'News', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/contact', 'Contact', 'smartphone', array('smartphone'), array('smartphone')),
-			array('/s/company', 'Default', 'smartphone', array('smartphone'), array('smartphone'))	// 存在しないページ
+			array('/s/', 'Home'),
+			array('/s/news', 'News'),
+			array('/s/contact', 'Contact'),
+			array('/s/about', 'Default'),
+			array('/s/hoge', 'S'),	// 存在しないページ
 		);
 	}
 
@@ -1377,7 +1275,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 		// パンくずが設定されている場合
 		$crumbs = array(
-			array('name' => '会社案内', 'url' => '/company/index'),
+			array('name' => '会社案内', 'url' => '/company/'),
 			array('name' => '会社データ', 'url' => '/company/data'),
 			array('name' => '会社沿革', 'url' => '')
 		);
@@ -1388,7 +1286,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->crumbs();
 		$result = ob_get_clean();
 		$expected = array(
-			array('a' => array('href' => '/company/index')),
+			array('a' => array('href' => '/company/')),
 			'会社案内',
 			'/a',
 			'&raquo;',
@@ -1408,7 +1306,7 @@ class BcBaserHelperTest extends BaserTestCase {
 			'ホーム',
 			'/a',
 			' | ',
-			array('a' => array('href' => '/company/index')),
+			array('a' => array('href' => '/company/')),
 			'会社案内',
 			'/a',
 			' | ',
@@ -1426,70 +1324,18 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testAddCrumbs() {
-		$this->BcBaser->addCrumb('会社案内', '/company/index');
+		$this->BcBaser->addCrumb('会社案内', '/company/');
 		ob_start();
 		$this->BcBaser->crumbs();
 		$result = ob_get_clean();
 		$expected = array(
-			array('a' => array('href' => '/company/index')),
+			array('a' => array('href' => '/company/')),
 			'会社案内',
 			'/a'
 		);
 		$this->assertTags($result, $expected);
 	}
 
-/**
- * ページ機能で作成したページの一覧データを取得する
- * 
- * @param int $pageCategoryId 固定ページカテゴリ
- * @param array $options オプション
- * @param array $expected ページリストデータ
- * @return void
- * @dataProvider getPageListDataProvider
- */
-	public function testGetPageList($pageCategoryId, $options, $expected) {
-		$this->fixtures = array(
-			'baser.Default.Page',
-		);
-
-		$this->_setAgentSetting('mobile', true);
-		$this->_setAgentSetting('smartphone', true);
-		$result = $this->BcBaser->getPageList($pageCategoryId, $options);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function getPageListDataProvider() {
-		return array(
-			array(null, array(), array(
-				array('title' => 'PCトップページ', 'url' => '/'),
-				array('title' => 'サービス', 'url' => '/service'),
-				array('title' => '会社案内', 'url' => '/company'),
-				array('title' => '採用情報', 'url' => '/recruit'),
-				array('title' => 'モバイルトップページ', 'url' => '/m/'),
-				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
-				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service'),
-				array('title' => '親カテゴリ','url' => '/parent_category/'),
-				array('title' => '子カテゴリ','url' => '/parent_category/child_category/'),
-			)),
-			array(1, null, array(
-				array('title' => 'モバイルトップページ', 'url' => '/m/'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service')
-			)),
-			array(null, array('order' => 'Page.sort DESC'), array(
-				array('title' => '子カテゴリ', 'url' => '/parent_category/child_category/'),
-				array('title' => '親カテゴリ', 'url' => '/parent_category/'),
-				array('title' => 'モバイルサービス', 'url' => '/m/service'),
-				array('title' => 'スマートフォン採用情報', 'url' => '/s/recruit'),
-				array('title' => 'スマートフォントップページ', 'url' => '/s/'),
-				array('title' => 'モバイルトップページ', 'url' => '/m/'),
-				array('title' => '採用情報', 'url' => '/recruit'),
-				array('title' => '会社案内', 'url' => '/company'),
-				array('title' => 'サービス', 'url' => '/service'),
-				array('title' => 'PCトップページ', 'url' => '/')
-			))
-		);
-	}
 /**
  * ブラウザにキャッシュさせる為のヘッダーを出力する
  *
@@ -1585,20 +1431,17 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param boolean $expected 期待値
  * @dataProvider sitemapDataProvider
  */
-	public function testSitemap($pageCategoryId, $recursive, $expected) {
-
+	public function testSitemap($siteId, $expected) {
 		$message = 'サイトマップを正しく出力できません';
 		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->sitemap($pageCategoryId, $recursive);
-	
+		$this->BcBaser->sitemap($siteId);
 	}
 
 	public function sitemapDataProvider() {
 		return array(
-			array(null, null, '<li class="sitemap-category li-level-1"><a href="\/company">会社案内.*<\/li>.*<\/ul>.*<\/li>.*<\/ul'),
-			array(2, null, '<a href="\/s\/index">スマートフォントップページ.*<\/li>.*<\/ul>'),
-			array(3, 1, '<li class="sitemap-page li-level-1">.*<a href="\/parent_category\/child_category\/index">子カテゴリ<\/a>	.*<\/li>.*<\/ul>$'),
-			array(3, 2, '<ul class="sitemap section ul-level-2">.*<li class="sitemap-category li-level-2"><a href="\/parent_category\/child_category\/index">子カテゴリ<\/a><\/li>.*<\/ul>.*<\/li>.*<\/ul>'),
+			array(0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'),
+			array(1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'),
+			array(2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>')
 		);
 	}
 
@@ -1631,29 +1474,6 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('test', 300, 300, array('noflash' => 'Flashがインストールされていません'), '<div id="test">Flashがインストールされていません<\/div>', 'Flashを正しく表示できません'),
 		);
 	}
-
-/**
- * URLをリンクとして利用可能なURLに変換する
- *
- * @param string $url 元となるURL
- * @param string $type mobile、または、smartphone
- * @param boolean $expected 期待値
- * @dataProvider changePrefixToAliasDataProvider
- */
-	public function testChangePrefixToAlias($url, $type, $expected) {
-		$result = $this->BcBaser->changePrefixToAlias($url, $type);
-		$this->assertEquals($expected, $result);
-	}
-
-	public function changePrefixToAliasDataProvider() {
-		return array(
-			array("/index", "mobile", "/index"),
-			array("/mobile/index", "mobile", "/m/index"),
-			array("/smartphone/index", "smartphone", "/s/index"),
-			array("/test/index", "test", "/test/index"),
-		);
-	}
-	
 
 /**
  * 現在のログインユーザーが管理者グループかどうかチェックする
@@ -1702,36 +1522,23 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * 現在のページの純粋なURLを取得する
- * 
- * @param string $agent エージェント
+ *
  * @param string $url 現在のURL
  * @param string $expected 期待値
  * @return void
  * @dataProvider getHereDataProvider
  */
-	public function testGetHere($agent, $url, $expected) {
-		$this->_setAgent($agent);
+	public function testGetHere($url, $expected) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->getHere());
 	}
 
 	public function getHereDataProvider() {
 		return array(
-			// PCページ
-			array('', '/', '/'),
-			array('', '/index', '/index'),
-			array('', '/contact/index', '/contact/index'),
-			array('', '/blog/blog/index', '/blog/blog/index'),
-			// モバイルページ
-			array('mobile', '/', '/'),
-			array('mobile', '/index', '/index'),
-			array('mobile', '/contact/index', '/contact/index'),
-			array('mobile', '/blog/blog/index', '/blog/blog/index'),
-			// スマートフォンページ
-			array('smartphone', '/', '/'),
-			array('smartphone', '/index', '/index'),
-			array('smartphone', '/contact/index', '/contact/index'),
-			array('smartphone', '/blog/blog/index', '/blog/blog/index')
+			array('/', '/'),
+			array('/index', '/index'),
+			array('/contact/index', '/contact/index'),
+			array('/blog/blog/index', '/blog/blog/index')
 		);
 	}
 
@@ -1743,8 +1550,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  * @dataProvider isCategoryTopDataProvider
  */
-	public function testIsCategoryTop($agent, $url, $expected) {
-		$this->_setAgent($agent);
+	public function testIsCategoryTop($url, $expected) {
 		$this->BcBaser->request = $this->_getRequest($url);
 		$this->assertEquals($expected, $this->BcBaser->isCategoryTop());
 	}
@@ -1752,20 +1558,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function isCategoryTopDataProvider() {
 		return array(
 			// PCページ
-			array('', '/', false),
-			array('', '/index', false),
-			array('', '/contact/index', true),
-			array('', '/contact/test', false),
-			// モバイルページ
-			array('mobile', '/', false),
-			array('mobile', '/index', false),
-			array('mobile', '/mobile/', true),
-			array('mobile', '/mobile/test', false),
-			// スマートフォンページ
-			array('smartphone', '/', false),
-			array('smartphone', '/index', false),
-			array('smartphone', '/contact/index', true),
-			array('smartphone', '/blog/blog/index', true)
+			array('/', false),
+			array('/index', false),
+			array('/contact/index', true),
+			array('/contact/test', false),
 		);
 	}
 
@@ -1785,28 +1581,25 @@ class BcBaserHelperTest extends BaserTestCase {
  * 
  * TODO: $noが指定されてない(null)場合のテストを記述する
  * $noを指定していない場合、ウィジェットが出力されません。
- * 
- * @param string $agent エージェント
+ *
  * @param string $url 現在のURL
  * @param int $no 
  * @param string $expected 期待値
  * @dataProvider widgetAreaDataProvider
  */
-	public function testWidgetArea($agent, $url, $no, $expected) {
-		$this->_setAgent($agent);
+	public function testWidgetArea($url, $no, $expected) {
 		$this->BcBaser->request = $this->_getRequest($url);
-
 		ob_start();
-		$this->BcBaser->WidgetArea($no);
+		$this->BcBaser->widgetArea($no);
 		$result = ob_get_clean();
 		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function widgetAreaDataProvider() {
 		return array(
-			array('', '/company', 1, '<div class="widget-area widget-area-1">'),
-			array('', '/company', 2, '<div class="widget-area widget-area-2">'),
-			array('', '/company', null, '<div class="widget-area widget-area-1">'),
+			array('/company', 1, '<div class="widget-area widget-area-1">'),
+			array('/company', 2, '<div class="widget-area widget-area-2">'),
+			array('/company', null, '<div class="widget-area widget-area-1">'),
 		);
 	}
 
@@ -1930,7 +1723,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testLogo() {
-		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS" \/>/');
+		$this->expectOutputRegex('/<img src="\/theme\/nada-icons\/img\/logo.png" alt="baserCMS"\/>/');
 		$this->BcBaser->logo();
 	}
 
@@ -1964,7 +1757,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function mainImageDataProvider() {
 		return array(
-			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS" \/>'),
+			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'),
 			array(array('num' => 2), 'main_image_2'),
 			array(array('all' => true, 'num' => 2), '^(.*main_image_1.*main_image_2)'),
 			array(array('all' => true, 'class' => 'test-class', 'id' => 'test-id'), '^(.*id="test-id".*class="test-class")'), 
@@ -2136,8 +1929,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testContentsNavi() {
-		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
-		$this->BcBaser->crumbsList();
+		$this->BcBaser->request = $this->_getRequest('/about');
+		$this->expectOutputRegex('/<div class=\"contents-navi\">/');
+		$this->BcBaser->contentsNavi();
 	}
 
 /**
@@ -2146,7 +1940,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testCrumbsList() {
-		$this->expectOutputRegex('/<strong>ホーム<\/strong>/');
+		$this->expectOutputRegex('/ホーム/');
 		$this->BcBaser->crumbsList();
 	}
 
@@ -2156,7 +1950,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGlobalMenu() {
-		$this->expectOutputRegex('/<ul class="global-menu clearfix">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
+		$this->expectOutputRegex('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
 		$this->BcBaser->globalMenu();
 	}
 
@@ -2184,10 +1978,14 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * 表示件数設定機能を出力する
  *
+ * TODO ryuring 現在の資料として、Contents テーブルで管理しているURLの場合、URLが解決できない
+ * BcContentsRoute::match() に途中までの処理を記述している
+ *
  * @return void
  */
 	public function testListNum() {
-		$this->expectOutputRegex('/<div class="list-num">.*<span><a href="\/index\/num:100">100<\/a><\/span><\/p>.*<\/div>/s');
+		$this->BcBaser->request = $this->_getRequest('/search_indices/search');
+		$this->expectOutputRegex('/<div class="list-num">.*<span><a href="\/search_indices\/search\/num:100">100<\/a><\/span><\/p>.*<\/div>/s');
 		$this->BcBaser->listNum();
 	}
 
@@ -2197,7 +1995,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input  type="submit" value="検索"\/>.*<\/form><\/div>/s');
+		$this->expectOutputRegex('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s');
 		$this->BcBaser->siteSearchForm();
 	}
 
@@ -2255,22 +2053,24 @@ class BcBaserHelperTest extends BaserTestCase {
  *
  * @return void
  */
-	public function testGetBlogs()
-	{
+	public function testGetBlogs() {
 		$blogs = $this->BcBaser->getBlogs();
-		$this->assertEquals(2, count($blogs)); // 非公開は取得しないので２つ
-		$this->assertEquals(1, $blogs[0]['id']);
+		$this->assertEquals(1, count($blogs));
+		$this->assertEquals(16, $blogs[0]['Content']['id']);
 
 		//ソート順を変更
+		// TODO テストデータの見直し要
+		// 該当するデータが一つしかないので sort の意味がない
 		$options = array(
-			'sort' => 'id DESC',
+			'sort' => 'Content.id DESC',
+			'siteId' => ''
 		);
 		$blogs = $this->BcBaser->getBlogs('', $options);
-		$this->assertEquals(3, $blogs[0]['id']);
+		$this->assertEquals(16, $blogs[0]['Content']['id']);
 
 		//ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');
-		$this->assertEquals('news', $blogs['name']);
+		$this->assertEquals('news', $blogs['Content']['name']);
 	}
 
 /**
@@ -2293,7 +2093,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$params = $this->BcBaser->getParams();
 
 		$this->assertEquals(null, $params['plugin']);
-		$this->assertEquals('index', $params['pass'][0]);
+		$this->assertEquals(['index'], $params['pass']);
 		$this->assertEquals('value', $params['query']['name']);
 		$this->assertEquals('?name=value', $params['url']);
 		$this->assertEquals('/?name=value', $params['here']);

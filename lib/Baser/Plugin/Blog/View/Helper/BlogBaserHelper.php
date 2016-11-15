@@ -1,11 +1,9 @@
 <?php
 /**
- * BlogBaserヘルパー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View.Helper
  * @since			baserCMS v 0.1.0
@@ -49,7 +47,7 @@ class BlogBaserHelper extends AppHelper {
  *									コンテンツテンプレート名を指定する（必須）
  * $this->BcBaser->blogPosts(null, 3, array('contentsTemplate' => 'news'))
  * 
- * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）
+ * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）２階層目以降はURLで指定
  * @param int $num 記事件数（初期値 : 5）
  * @param array $options オプション（初期値 : array()）
  *	- `category` : カテゴリで絞り込む場合にアルファベットのカテゴリ名指定（初期値 : null）
@@ -82,78 +80,71 @@ class BlogBaserHelper extends AppHelper {
 			'sort' => null
 		), $options);
 
-		if (empty($contentsName)) {
-			// コンテンツ名が空の場合
-			$contentsName = array();
-		} elseif (!is_array($contentsName)) {
-			// コンテンツ名が配列でない場合
-			$contentsName = array($contentsName);
-		}
-
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$blogContents = $BlogContent->find('all', array(
-			'fields' => array('id', 'name', 'status'),
-			'recursive' => -1,
-		));
-		if (empty($blogContents)) {
+			if(!$contentsName && empty($options['contentsTemplate'])) {
+			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
 			return;
-		} else {
-			$blogContents = Hash::combine($blogContents, '{n}.BlogContent.name', '{n}.BlogContent');
 		}
-		if ($options['contentsTemplate']) {
-			$contentsTemplate = $options['contentsTemplate'];
-		} else {
-			if ($contentsName) {
-				if (is_array($contentsName)) {
-					$contentsTemplate = current($contentsName);
-				} else {
-					$contentsTemplate = $contentsName;
-				}
-			} else {
-				trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
-				return;
-			}
+		
+		// コンテンツ名を配列に
+		if (empty($contentsName)) {
+			$contentsName = [];
+		} elseif (!is_array($contentsName)) {
+			$contentsName = [$contentsName];
+		}
+		
+		// URL形式に変換
+		foreach($contentsName as $key => $value) {
+			$contentsName[$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
+		}
+		
+		// ブログコンテンツの条件生成
+		$Content = ClassRegistry::init('Content');
+		$conditions = [];
+		if($contentsName) {
+			$conditions['Content.url'] = $contentsName;
+		}
+		$conditions = array_merge($conditions, $Content->getConditionAllowPublish());
+		$conditions['Content.type'] = "BlogContent";
+		
+		// 有効ブログを取得
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$blogContents = $BlogContent->find('all', [
+			'fields' => ['BlogContent.id', 'BlogContent.template', 'Content.name', 'Content.status'],
+			'conditions' => $conditions,
+			'recursive' => 0,
+			'cache' => false
+		]);
+		
+		if (empty($blogContents)) {
+			trigger_error('指定されたコンテンツが見つかりません。（' . implode(', ', $contentsName) . '）', E_USER_NOTICE);
+			return;
 		}
 
-		if ($blogContents[$contentsTemplate]['id']) {
-			$id = $blogContents[$contentsTemplate]['id'];
-		}
-
-		unset($options['contentsTemplate']);
-		$blogContentId = array();
-
-		if ($contentsName) {
-			foreach ($blogContents as $key => $value) {
-				if (array_search($key, $contentsName) !== false && $value['status']) {
-					$blogContentId[] = $value['id'];
-				}
-			}
-		} else {
-			foreach ($blogContents as $key => $value) {
-				if ($value['status']) {
-					$blogContentId[] = $value['id'];
-				}
-			}
-		}
-		$options['contentId'] = $blogContentId;
-
-		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
-
-		$settings = Configure::read('BcAgent');
-		foreach ($settings as $key => $setting) {
-			if (isset($options[$key])) {
-				$agentOn = $options[$key];
-				unset($options[$key]);
-			} else {
-				$agentOn = (Configure::read('BcRequest.agent') == $key);
-			}
-			if ($agentOn) {
-				$url['prefix'] = $setting['prefix'];
+		$options['contentId'] = Hash::extract($blogContents, "{n}.BlogContent.id");
+		
+		// 指定したコンテンツテンプレートに紐づくブログIDを特定
+		// 指定したコンテンツネームに紐づくブログIDを取得
+		$blogContentId = null;
+		foreach($blogContents as $key => $blogContent) {
+			if(!empty($options['contentsTemplate']) && $options['contentsTemplate'] == $blogContent['BlogContent']['template']) {
+				$blogContentId = $blogContent['BlogContent']['id'];	
 				break;
 			}
 		}
 		
-		echo $this->requestAction($url, array('return', 'pass' => array($id, $num), 'named' => $options));
+		// コンテンツテンプレートに紐づくブログIDを特定できない場合は
+		// 対象ブログの先頭のブログIDとする
+		if (!$blogContentId) {
+			$blogContentId = current($options['contentId']);
+		}
+		
+		unset($options['contentsTemplate']);
+
+		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
+		if($this->request->params['Site']['device']) {
+			$url['prefix'] = $this->request->params['Site']['device'];
+		}
+		echo $this->requestAction($url, array('return', 'pass' => array($blogContentId, $num), 'entityId' => $blogContentId, 'named' => $options));
 	}
 
 /**

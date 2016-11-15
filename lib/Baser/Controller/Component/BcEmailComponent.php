@@ -1,20 +1,15 @@
 <?php
-
 /**
- * Email 拡張モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller.Component
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('EmailComponent', 'Controller/Component');
 
 /**
@@ -30,7 +25,6 @@ class BcEmailComponent extends EmailComponent {
  * プラグインのテンプレートを指定できるようにした
  * 
  * @var string
- * @access public
  */
 	public $plugin = null;
 
@@ -110,7 +104,6 @@ class BcEmailComponent extends EmailComponent {
  *
  * @param 	string $message Message to wrap
  * @return 	string Wrapped message
- * @access private
  */
 	private function __wrap($message) {
 		$message = $this->__strip($message);
@@ -135,7 +128,6 @@ class BcEmailComponent extends EmailComponent {
  * 
  * @param array $lines
  * @return array
- * @access private
  */
 	private function ___wrap($lines) {
 		$formatted = array();
@@ -284,7 +276,6 @@ class BcEmailComponent extends EmailComponent {
  *
  * @param string $string String representing an email address
  * @return string Email address suitable for email headers or smtp pipe
- * @access private
  */
 	private function __formatAddress($string, $smtp = false) {
 		$hasAlias = preg_match('/((.*)\s)?<(.+)>/', $string, $matches);
@@ -309,7 +300,6 @@ class BcEmailComponent extends EmailComponent {
  *
  * @param string $content Content to render
  * @return array Email ready to be sent
- * @access private
  */
 	private function __renderTemplate($content) {
 		$viewClass = $this->Controller->viewClass;

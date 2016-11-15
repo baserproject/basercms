@@ -1,12 +1,9 @@
 <?php
-
 /**
- * ユーザーコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -34,7 +31,7 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User', 'Menu', 'UserGroup');
+	public $uses = array('User', 'UserGroup');
 
 /**
  * ヘルパー
@@ -62,10 +59,10 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+		['name' => 'ユーザー管理', 'url' => ['controller' => 'users', 'action' => 'index']]
+	];
 
 /**
  * beforeFilter
@@ -122,7 +119,7 @@ class UsersController extends AppController {
 			$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 			if ($user && $this->isAuthorized($user)) {
 				if (!empty($this->request->data[$userModel]['saved'])) {
-					if (Configure::read('BcRequest.agentAlias') != 'mobile') {
+					if (!$this->request->is('mobile')) {
 						$this->setAuthCookie($this->request->data);
 					} else {
 						$this->BcAuth->saveSerial();
@@ -265,7 +262,7 @@ class UsersController extends AppController {
 			return;
 		}
 
-		$this->subMenuElements = array('users', 'user_groups');
+		$this->subMenuElements = ['site_configs', 'users'];
 		$this->pageTitle = 'ユーザー一覧';
 		$this->search = 'users_index';
 		$this->help = 'users_index';
@@ -327,7 +324,7 @@ class UsersController extends AppController {
 		$this->set('userGroups', $userGroups);
 		$this->set('editable', true);
 		$this->set('selfUpdate', false);
-		$this->subMenuElements = array('users', 'user_groups');
+		$this->subMenuElements = ['site_configs', 'users'];
 		$this->pageTitle = '新規ユーザー登録';
 		$this->help = 'users_form';
 		$this->render('form');
@@ -420,7 +417,7 @@ class UsersController extends AppController {
 		}
 
 		$this->set(compact('userGroups', 'editable', 'selfUpdate', 'deletable'));
-		$this->subMenuElements = array('users', 'user_groups');
+		$this->subMenuElements = ['site_configs', 'users'];
 		$this->pageTitle = 'ユーザー情報編集';
 		$this->help = 'users_form';
 		$this->render('form');
@@ -433,6 +430,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -462,6 +460,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -506,28 +505,28 @@ class UsersController extends AppController {
 		if ($this->request->data) {
 
 			if (empty($this->request->data[$userModel]['email'])) {
-				$this->Session->setFlash('メールアドレスを入力してください。');
+				$this->setMessage('メールアドレスを入力してください。', true, false);
 				return;
 			}
 			$email = trim($this->request->data[$userModel]['email']);
 			$user = $this->{$userModel}->findByEmail($email);
 			if (!$user) {
-				$this->Session->setFlash('送信されたメールアドレスは登録されていません。');
+				$this->setMessage('送信されたメールアドレスは登録されていません。', true, false);
 				return;
 			}
 			$password = $this->generatePassword();
 			$user[$userModel]['password'] = $password;
 			$this->{$userModel}->set($user);
 			if (!$this->{$userModel}->save()) {
-				$this->Session->setFlash('新しいパスワードをデータベースに保存できませんでした。');
+				$this->setMessage('新しいパスワードをデータベースに保存できませんでした。', true, false);
 				return;
 			}
 			$body = $email . ' の新しいパスワードは、 ' . $password . ' です。';
 			if (!$this->sendMail($email, 'パスワードを変更しました', $body)) {
-				$this->Session->setFlash('メール送信時にエラーが発生しました。');
+				$this->setMessage('メール送信時にエラーが発生しました。', true, false);
 				return;
 			}
-			$this->Session->setFlash($email . ' 宛に新しいパスワードを送信しました。');
+			$this->setMessage('$email . \' 宛に新しいパスワードを送信しました。', true, false);
 			$this->request->data = array();
 		}
 	}

@@ -1,17 +1,15 @@
 <?php
-
 /**
- * ツールコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('Simplezip', 'Vendor');
 
 /**
@@ -25,7 +23,6 @@ class ToolsController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Tools';
 
@@ -35,7 +32,6 @@ class ToolsController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -43,7 +39,6 @@ class ToolsController extends AppController {
  * ヘルパ
  * 
  * @var array
- * @access public
  */
 	public $helpers = array('BcForm');
 
@@ -53,24 +48,30 @@ class ToolsController extends AppController {
  * @var type
  * @access public 
  */
-	public $subMenuElements = array('tools');
+	public $subMenuElements = ['site_configs', 'tools'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
-	public $crumbs = array(
-		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form'))
-	);
+	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'index']],
+		['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
+	];
 
+/**
+ * ユーティリティ 
+ */
+	public function admin_index() {
+		$this->pageTitle = 'ユーティリティトップ';
+	}
+	
 /**
  * データメンテナンス
  *
  * @param string $mode
  * @return void
- * @access public
  */
 	public function admin_maintenance($mode = '') {
 		switch ($mode) {
@@ -91,6 +92,9 @@ class ToolsController extends AppController {
 					$messages[] = 'データの復元に失敗しました。ログの確認を行なって下さい。';
 					$error = true;
 				}
+				// Pageモデルがレストア処理でAppModelで初期化されClassRegistryにセットされている為
+				ClassRegistry::flush();
+				BcSite::flash();
 				if (!$error && !$this->Page->createAllPageTemplate()) {
 					$messages[] = 'ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。';
 				}
@@ -102,7 +106,6 @@ class ToolsController extends AppController {
 				break;
 		}
 		$this->pageTitle = 'データメンテナンス';
-		$this->subMenuElements = array('site_configs');
 		$this->help = 'tools_maintenance';
 	}
 
@@ -111,7 +114,6 @@ class ToolsController extends AppController {
  *
  * @param array $data
  * @return boolean
- * @access protected
  */
 	protected function _restoreDb($data) {
 		
@@ -134,10 +136,11 @@ class ToolsController extends AppController {
 		@unlink($targetPath);
 
 		$result = true;
-		if (!$this->_loadBackup($tmpPath . 'baser' . DS, 'baser')) {
+		
+		if (!$this->_loadBackup($tmpPath . 'core' . DS)) {
 			$result = false;
 		}
-		if (!$this->_loadBackup($tmpPath . 'plugin' . DS, 'plugin')) {
+		if (!$this->_loadBackup($tmpPath . 'plugin' . DS)) {
 			$result = false;
 		}
 
@@ -153,16 +156,15 @@ class ToolsController extends AppController {
  * @param string $path スキーマファイルのパス
  * @param string $configKeyName DB接続名
  * @return boolean
- * @access protected
  */
-	protected function _loadBackup($path, $configKeyName) {
+	protected function _loadBackup($path) {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if (!is_array($files[1])) {
 			return false;
 		}
 
-		$db = ConnectionManager::getDataSource($configKeyName);
+		$db = ConnectionManager::getDataSource('default');
 		$result = true;
 		/* テーブルを削除する */
 		foreach ($files[1] as $file) {
@@ -201,21 +203,19 @@ class ToolsController extends AppController {
  * バックアップデータを作成する
  *
  * @return void
- * @access protected
  */
 	protected function _backupDb() {
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
-		$this->_writeBackup('baser', $tmpDir . 'baser' . DS);
+		$this->_writeBackup($tmpDir . 'core' . DS);
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
 		if ($plugins) {
 			foreach ($plugins as $plugin) {
-				$this->_writeBackup('plugin', $tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
+				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
 			}
 		}
-
 		// ZIP圧縮して出力
 		$fileName = 'baserbackup_' . $version . '_' . date('Ymd_His');
 		$Simplezip = new Simplezip();
@@ -231,28 +231,15 @@ class ToolsController extends AppController {
  * @param string $configKeyName
  * @param string $path
  * @return boolean
- * @access protected
  */
-	protected function _writeBackup($configKeyName, $path, $plugin = '') {
-		$db = ConnectionManager::getDataSource($configKeyName);
+	protected function _writeBackup($path, $plugin = '') {
+		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
-		$pluginPrefix = Inflector::underscore($plugin) . '_';
-
+		$tableList = getTableList();
 		foreach ($tables as $table) {
-			if (preg_match("/^" . $db->config['prefix'] . "([^_].+)$/", $table, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
-				$table = $matches[1];
-				if ($plugin) {
-					if (!preg_match('/^' . $pluginPrefix . '([^_].+)$/', $table)) {
-						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
-						if ($plugin != 'Mail') {
-							continue;
-						} elseif (!preg_match("/messages$/", $table)) {
-							continue;
-						}
-					}
-				}
+			if((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
+				$table = str_replace($db->config['prefix'], '', $table);
 				$model = Inflector::classify(Inflector::singularize($table));
 				if (!$db->writeSchema(array('path' => $path, 'model' => $model, 'plugin' => $plugin))) {
 					return false;
@@ -269,13 +256,12 @@ class ToolsController extends AppController {
  * モデル名からスキーマファイルを生成する
  *
  * @return void
- * @access public
  */
 	public function admin_write_schema() {
 		$path = TMP . 'schemas' . DS;
 
 		if (!$this->request->data) {
-			$this->request->data['Tool']['connection'] = 'baser';
+			$this->request->data['Tool']['connection'] = 'core';
 		} else {
 			if (empty($this->request->data['Tool'])) {
 				$this->setMessage('テーブルを選択してください。', true);
@@ -304,7 +290,6 @@ class ToolsController extends AppController {
  * スキーマファイルを読み込みテーブルを生成する
  *
  * @return void
- * @access public
  */
 	public function admin_load_schema() {
 		if (!$this->request->data) {
@@ -335,7 +320,6 @@ class ToolsController extends AppController {
  * スキーマ用の一時フォルダをリセットする
  *
  * @return boolean
- * @access protected
  */
 	protected function _resetTmpSchemaFolder() {
 		$path = TMP . 'schemas' . DS;
@@ -347,16 +331,21 @@ class ToolsController extends AppController {
  *
  * @param string $mode
  * @return void
- * @access public
  */
 	public function admin_log($mode = '') {
 		$errorLogPath = TMP . 'logs' . DS . 'error.log' ;
 		switch ($mode) {
 			case 'download':
 				set_time_limit(0);
-				$this->_downloadErrorLog();
+				if($this->_downloadErrorLog()) {
+					exit();
+				} else {
+					$this->setMessage('エラーログが存在しません。', false);
+				}
+				$this->redirect(array('action' => 'log'));
 				break;
 			case 'delete':
+				$this->_checkSubmitToken();
 				if( file_exists($errorLogPath) ){
 					if( unlink($errorLogPath) ){
 						$messages[] = 'エラーログを削除しました。';
@@ -367,7 +356,7 @@ class ToolsController extends AppController {
 					}
 				} else {
 					$messages[] = 'エラーログが存在しません。';
-					$error = true;
+					$error = false;
 				}
 
 				if ($messages) {
@@ -375,6 +364,7 @@ class ToolsController extends AppController {
 				}
 				$this->redirect(array('action' => 'log'));
 				break;
+			
 		}
 
 		$fileSize = 0 ;
@@ -383,7 +373,6 @@ class ToolsController extends AppController {
 		}
 
 		$this->pageTitle = 'データメンテナンス';
-		$this->subMenuElements = array('site_configs');
 		$this->help = 'tools_log';
 		$this->set('fileSize', $fileSize);
 	}
@@ -391,17 +380,20 @@ class ToolsController extends AppController {
 	/**
 	 * ログフォルダを圧縮ダウンロードする
 	 *
-	 * @return void
-	 * @access protected
+	 * @return bool
 	 */
 	protected function _downloadErrorLog() {
 		$tmpDir = TMP . 'logs' . DS;
-
+		$Folder = new Folder($tmpDir);
+		$files = $Folder->read(true, true, false);
+		if(count($files[0]) === 0 && count($files[1]) === 0) {
+			return false;
+		}
 		// ZIP圧縮して出力
 		$fileName = 'basercms_logs_' . date('Ymd_His');
 		$Simplezip = new Simplezip();
 		$Simplezip->addFolder($tmpDir);
 		$Simplezip->download($fileName);
-		exit();
+		return true;
 	}
 }

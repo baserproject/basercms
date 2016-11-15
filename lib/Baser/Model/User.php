@@ -1,26 +1,21 @@
 <?php
-
-
 /**
- * ユーザーモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-class User extends AppModel {
 
 /**
- * クラス名
+ * ユーザーモデル
  *
- * @var string
+ * @package Baser.Model
  */
-	public $name = 'User';
+class User extends AppModel {
 
 /**
  * ビヘイビア
@@ -28,13 +23,6 @@ class User extends AppModel {
  * @var array
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- */
-	public $useDbConfig = 'baser';
 
 /**
  * belongsTo
@@ -68,8 +56,8 @@ class User extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 				'message' => 'アカウント名を入力してください。'
 			),
 			'alphaNumericPlus' => array(
@@ -86,8 +74,8 @@ class User extends AppModel {
 			)
 		),
 		'real_name_1' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+			'notBlank' => array(
+				'rule' => array('notBlank'),
 				'message' => '名前[姓]を入力してください。'),
 			'maxLength' => array(
 				'rule' => array('maxLength', 50),
@@ -110,9 +98,9 @@ class User extends AppModel {
 				'rule' => array('maxLength', 255),
 				'message' => 'パスワードは255文字以内で入力してください。'
 			),
-			'alphaNumeric' => array(
-				'rule' => 'alphaNumericPlus',
-				'message' => 'パスワードは半角英数字とハイフン、アンダースコアのみで入力してください。'
+			'alphaNumericPlus' => array(
+				'rule' => ['alphaNumericPlus',[' \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*']],
+				'message' => 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。'
 			),
 			'confirm' => array(
 				'rule' => array('confirm', array('password_1', 'password_2')),
@@ -129,7 +117,7 @@ class User extends AppModel {
 				'message' => 'Eメールは255文字以内で入力してください。')
 		),
 		'user_group_id' => array(
-			'rule' => array('notEmpty'),
+			'rule' => array('notBlank'),
 			'message' => 'グループを選択してください。'
 		)
 	);

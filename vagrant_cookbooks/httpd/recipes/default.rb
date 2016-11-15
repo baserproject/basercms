@@ -2,6 +2,7 @@ packages = %w{httpd httpd-devel mod_ssl php php-cli php-pear php-pdo php-mysql p
 packages.each do |packagename|
   package packagename do
     action :install
+    options "--enablerepo=remi-php56,remi"
   end
 end
 
@@ -36,17 +37,38 @@ end
 
 template "/etc/httpd/conf.d/phpPgAdmin.conf" do
   source "phpPgAdmin.conf.erb"
-  owner "root"
-  group "root"
+  owner "vagrant"
+  group "vagrant"
   mode 0644
   notifies :reload, 'service[httpd]'
 end
 
-template "/etc/phpPgAdmin/config.inc.php" do
-  source "config.inc.php.erb"
-  owner "root"
-  group "root"
+template "/etc/phpMyAdmin/config.inc.php" do
+  source "phpMyAdmin-config.inc.php.erb"
+  owner "vagrant"
+  group "vagrant"
   mode 0644
+end
+
+directory '/etc/phpMyAdmin' do
+    owner 'vagrant'
+    group 'vagrant'
+    mode 0755
+    recursive true
+end
+
+template "/etc/phpPgAdmin/config.inc.php" do
+  source "phpPgAdmin-config.inc.php.erb"
+  owner "vagrant"
+  group "vagrant"
+  mode 0644
+end
+
+directory '/etc/phpPgAdmin' do
+    owner 'vagrant'
+    group 'vagrant'
+    mode 0755
+    recursive true
 end
 
 template "/etc/php.d/xdebug.ini" do

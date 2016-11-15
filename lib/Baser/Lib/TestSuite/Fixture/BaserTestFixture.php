@@ -1,15 +1,19 @@
 <?php
 /**
- * BaserTestCase
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Lib.TestSuite.Fixture
- * @since			baserCMS v 3.1.0-dev
+ * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * Baser Test Fixture
+ *
+ * @package			Baser.Lib.TestSuite.Fixture
  */
 
 class BaserTestFixture extends CakeTestFixture {

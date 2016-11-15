@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] エディタテンプレートー登録・編集
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] エディタテンプレートー登録・編集
  */
 ?>
 
@@ -65,7 +67,7 @@
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
-		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('EditorTemplate.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false);
+		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('EditorTemplate.id')), array('class' => 'button submit-token'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false);
 		?>
 	<?php endif ?>
 </div>

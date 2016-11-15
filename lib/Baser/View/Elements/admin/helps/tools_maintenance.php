@@ -1,17 +1,21 @@
 <?php
 /**
- * [ADMIN] データメンテナンス
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] データメンテナンス
+ */
 ?>
+
+
 <p>データベースのバックアップと復元が行えますので、定期的にバックアップを保存しておく事をおすすめします。</p>
 <ul>
 	<li>データベースのデータと構造をバックアップします。</li>

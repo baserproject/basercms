@@ -1,164 +1,35 @@
 <?php
 /**
- * [管理画面] サイト設定 フォーム
- * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [管理画面] サイト設定 フォーム
+ */
+$this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteConfigsFormScript',
+	'data-safeModeOn' => (string) $safeModeOn
+));
 ?>
-<script type="text/javascript">
-$(window).load(function() {
-	$("#SiteConfigFormalName").focus();
-});
-$(function(){
-	/**
-	 * 「保存」ボタンを押下した際の動作
-	 */
-	$("#BtnSave").click(function(){
-		if (!isSafeModeCheck()) {
-			return false;
-		}
-		if (!hasCheckSmtpInput()) {
-			return false;
-		}
-	});
-
-	function isSafeModeCheck() {
-		var theme = $("#SiteConfigTheme").val();
-		<?php if ($safeModeOn): ?>
-		var safeModeOn = 1;
-		<?php else: ?>
-		var safeModeOn = 0;
-		<?php endif ?>
-		var safemodeAlert = '機能制限のセーフモードで動作しています。テーマの切り替えを行う場合、あらかじめ切り替え対象のテーマ内に、データベースに登録されているページカテゴリ用のフォルダを作成しておき、書込権限を与えておく必要があります。\n'+
-							'ページカテゴリ用のフォルダが存在しない状態でテーマの切り替えを実行すると、対象ページカテゴリ内のWebページは正常に表示できなくなりますのでご注意ください。';
-
-		if(safeModeOn && (theme != $("#SiteConfigTheme").val())) {
-			if(!confirm(safemodeAlert)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * SMTP設定に入力がある場合、アラートを表示する
-	 * 
-	 * @returns {Boolean}
-	 */
-	function hasCheckSmtpInput() {
-		if ($('#SiteConfigSmtpUser').val() || $('#SiteConfigSmtpPassword').val()) {
-			if(!confirm('SMTP設定に入力があります。保存してよろしいですか？')) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	// SMTP送信テスト
-	$("#BtnCheckSendmail").click(function(){
-		if(!confirm('テストメールを送信します。いいですか？')) {
-			return false;
-		}
-		$.ajax({
-			type: 'POST',
-			url: '<?php $this->BcBaser->url(array('controller' => 'site_configs', 'action' => 'check_sendmail')) ?>',
-			data: $("#SiteConfigFormForm").serialize(),
-			beforeSend: function() {
-				$("#ResultCheckSendmail").hide();
-				$("#AjaxLoaderCheckSendmail").show();
-			},
-			success: function(result){
-				$("#ResultCheckSendmail").html("テストメールを送信しました。");
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				var errorMessage = '';
-				if(XMLHttpRequest.responseText) {
-					errorMessage = XMLHttpRequest.responseText;
-				} else {
-					errorMessage = errorThrown;
-				}
-				$("#ResultCheckSendmail").html("テストメールを送信に失敗しました。" + errorMessage);
-			},
-			complete: function() {
-				$("#ResultCheckSendmail").show();
-				$("#AjaxLoaderCheckSendmail").hide();
-			}
-		});
-		return false;
-	});
-	
-	$("#SiteConfigMobile").click(function(){
-		if($("#SiteConfigMobile").attr('checked')) {
-			$("#SpanLinkedPagesMobile").show();
-			$("#SpanRootLayoutTemplateMobile").show();
-			$("#SpanRootContentTemplateMobile").show();			
-		} else {
-			$("#SpanLinkedPagesMobile").hide();
-			$("#SpanRootLayoutTemplateMobile").hide();
-			$("#SpanRootContentTemplateMobile").hide();
-			$('#SiteConfigLinkedPagesMobile0').attr('checked', 'checked'); 
-		}
-	});
-	$("#SiteConfigSmartphone").click(function(){
-		if($("#SiteConfigSmartphone").attr('checked')) {
-			$("#SpanLinkedPagesSmartphone").show();
-			$("#SpanRootLayoutTemplateSmartphone").show();
-			$("#SpanRootContentTemplateSmartphone").show();
-		} else {
-			$("#SpanLinkedPagesSmartphone").hide();
-			$("#SpanRootLayoutTemplateSmartphone").hide();
-			$("#SpanRootContentTemplateSmartphone").hide();
-			$('#SiteConfigLinkedPagesSmartphone0').attr('checked', 'checked'); 
-		}
-	});
-
-	$('input[name="data[SiteConfig][editor]"]').click(siteConfigEditorClickHandler);
-	
-	if(!$("#SiteConfigMobile").attr('checked')) {
-		$("#SpanLinkedPagesMobile").hide();
-		$("#SpanRootLayoutTemplateMobile").hide();
-		$("#SpanRootContentTemplateMobile").hide();
-	}
-	if(!$("#SiteConfigSmartphone").attr('checked')) {
-		$("#SpanLinkedPagesSmartphone").hide();
-		$("#SpanRootLayoutTemplateSmartphone").hide();
-		$("#SpanRootContentTemplateSmartphone").hide();
-	}
-	
-	siteConfigEditorClickHandler();
-	
-	function siteConfigEditorClickHandler() {
-		if($('input[name="data[SiteConfig][editor]"]:checked').val() === 'BcCkeditor') {
-			$(".ckeditor-option").show();
-		} else {
-			$(".ckeditor-option").hide();
-		}
-	}
-	
-});
-</script>
 
 
 <h2>基本項目</h2>
 
 
-<?php echo $this->BcForm->create('SiteConfig', array('action' => 'form')) ?>
+<?php echo $this->BcForm->create('SiteConfig', ['url' => ['action' => 'form']]) ?>
 <?php echo $this->BcForm->hidden('SiteConfig.id') ?>
-
+<div class="section">
 <table cellpadding="0" cellspacing="0" class="form-table section">
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.formal_name', 'WEBサイト名') ?>&nbsp;<span class="required">*</span></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('SiteConfig.formal_name', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'class' => 'full-width')) ?>
+			<?php echo $this->BcForm->input('SiteConfig.formal_name', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'autofocus' => true, 'class' => 'full-width')) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpFormalName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<?php echo $this->BcForm->error('SiteConfig.formal_name') ?>
 			<div id="helptextFormalName" class="helptext">
@@ -225,6 +96,7 @@ $(function(){
 	</tr>
 	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
+</div>
 
 <h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
 
@@ -277,11 +149,17 @@ $(function(){
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.address', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => '住所')) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpAddress', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は地図を表示させたい住所を入力してください。郵便番号からでも大丈夫です。<br>
+					<br>
+					入力例1) 福岡市中央区大名2-11-25<br>
+					入力例2) 〒819-0041 福岡県福岡市中央区大名2-11-25<br>
+					<br>
+					建物名を含めるとうまく表示されない場合があります。<br>
+					その時は建物名を省略して試してください。<br>APIキーを入力しないと地図が表示されない場合があります。<a href="https://developers.google.com/maps/web/" target="_blank">「ウェブ向け Google Maps API」</a></div>
 				<br />
 				<?php echo $this->BcForm->input('SiteConfig.google_maps_api_key', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'placeholder' => 'APIキー')) ?>
 				<?php echo $this->BcForm->error('SiteConfig.address') ?>
 				<?php echo $this->BcForm->error('SiteConfig.google_maps_api_key') ?>
-				<div id="helptextAddress" class="helptext">GoogleMapを利用する場合は住所、APIキーを入力してください。</div>
 			</td>
 		</tr>
 		<tr>
@@ -289,13 +167,13 @@ $(function(){
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SiteConfig.google_analytics_id', array('type' => 'text', 'size' => 35, 'maxlength' => 16)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpGoogleAnalyticsId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
-				<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?><br />
-				ユニバーサルアナリティクスを <?php echo $this->BcForm->input('SiteConfig.use_universal_analytics', array('type' => 'radio', 'options' => array('0' => '利用していない', '1' => '利用している'))) ?>
 				<div id="helptextGoogleAnalyticsId" class="helptext">
-					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> 利用時の「UA」から始まる「ウェブプロパティID」を入力します。<br />
-					<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用するにはあらかじめ Google アカウントの取得が必要です。<br />
+					Googleの無料のアクセス解析サービス <a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> を利用される方は、取得したトラッキングID (UA-000000-01 のような文字列）を入力してください。<br />
+					※事前に<a href="http://www.google.com/intl/ja/analytics/" target="_blank">Google Analytics</a> で登録作業が必要です。<br />
 					テンプレートで利用する場合は、 <pre>&lt;?php $this->BcBaser->googleAnalytics() ?&gt;</pre> で出力します。
 				</div>
+				<?php echo $this->BcForm->error('SiteConfig.google_analytics_id') ?><br />
+				ユニバーサルアナリティクスを <?php echo $this->BcForm->input('SiteConfig.use_universal_analytics', array('type' => 'radio', 'options' => array('0' => '利用していない', '1' => '利用している'))) ?>
 			</td>
 		</tr>
 		<tr>
@@ -307,6 +185,28 @@ $(function(){
 					公開ページ全般で利用するウィジェットエリアを指定します。<br />
 					ウィジェットエリアは「<?php $this->BcBaser->link('ウィジェットエリア管理', array('controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
 				</div>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.main_site_display_name', 'メインサイト表示名称') ?>&nbsp;<span class="required">*</span></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.main_site_display_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+					<div class="helptext">サブサイトを利用する際に、メインサイトを特定する識別名称を設定します。</div>
+				<?php echo $this->BcForm->error('SiteConfig.main_site_display_name') ?>
+			</td>
+		</tr>
+		<tr>
+			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.use_site_device_setting', 'デバイス・言語設定') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('SiteConfig.use_site_device_setting', ['type' => 'checkbox', 'label' => 'サブサイトでデバイス設定を利用する']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。</div>
+				<?php echo $this->BcForm->input('SiteConfig.use_site_lang_setting', ['type' => 'checkbox', 'label' => 'サブサイトで言語設定を利用する']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<div class="helptext">サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。</div>
+				<?php echo $this->BcForm->error('SiteConfig.use_site_device_setting') ?>
+				<?php echo $this->BcForm->error('SiteConfig.use_site_lang_setting') ?>
 			</td>
 		</tr>
 		<tr>
@@ -329,55 +229,6 @@ $(function(){
 				<div id="helptextDebug" class="helptext">制作・開発時のモードを指定します。通常は、ノーマルモードを指定しておきます。<br />
 					※ CakePHPのデバッグモードを指します。<br />
 					※ インストールモードはbaserCMSを初期化する場合にしか利用しませんので普段は利用しないようにしてください。</div>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'モバイル') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.mobile', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
-				<span id="SpanLinkedPagesMobile">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_mobile', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.smartphone', 'スマートフォン') ?></th>
-			<td class="col-input">
-				<?php echo $this->BcForm->input('SiteConfig.smartphone', array_merge(array('type' => 'checkbox', 'label' => '対応する'), $disableSettingInstallSetting)) ?>
-				<span id="SpanLinkedPagesSmartphone">　（固定ページをPCと <?php echo $this->BcForm->input('SiteConfig.linked_pages_smartphone', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('連動'))) ?>）</span>
-			</td>
-		</tr>
-<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.mobile', 'ルート管理グループ') ?></th>
-				<td class="col-input">
-			<?php echo $this->BcForm->input('SiteConfig.root_owner_id', array('type' => 'select', 'options' => $userGroups, 'empty' => '指定しない')) ?>
-				</td>
-			</tr>
-<?php endif ?>
-	</table>
-
-	<h2>固定ページ関連</h2>
-
-	<table cellpadding="0" cellspacing="0" class="form-table">
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.root_layout_template', 'ルートレイアウトテンプレート') ?></th>
-			<td class="col-input">
-				<small>[PC]</small>&nbsp;
-					<?php echo $this->BcForm->input('SiteConfig.root_layout_template', array('type' => 'select', 'options' => $this->BcPage->getTemplates())) ?>　
-				<span id="SpanRootLayoutTemplateMobile"><small>[携帯]</small>&nbsp;
-					<?php echo $this->BcForm->input('SiteConfig.root_layout_template_mobile', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'mobile'))) ?>　</span>
-				<span id="SpanRootLayoutTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
-				<?php echo $this->BcForm->input('SiteConfig.root_layout_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('layout', 'smartphone'))) ?></span>
-			</td>
-		</tr>
-		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SiteConfig.root_content_template', 'ルートコンテンツテンプレート') ?></th>
-			<td class="col-input">
-				<small>[PC]</small>&nbsp;
-					<?php echo $this->BcForm->input('SiteConfig.root_content_template', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content'))) ?>　
-				<span id="SpanRootContentTemplateMobile"><small>[携帯]</small>&nbsp;
-					<?php echo $this->BcForm->input('SiteConfig.root_content_template_mobile', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'mobile'))) ?>　</span>
-				<span id="SpanRootContentTemplateSmartphone"><small>[スマートフォン]</small>&nbsp;
-				<?php echo $this->BcForm->input('SiteConfig.root_content_template_smartphone', array('type' => 'select', 'options' => $this->BcPage->getTemplates('content', 'smartphone'))) ?></span>
 			</td>
 		</tr>
 	</table>
@@ -470,6 +321,8 @@ h2 {}
 				<div id="helptextSmtpUsername" class="helptext">メールの送信にSMTPサーバーを利用する場合指定します。</div>
 				</div>
 				<div style="margin-bottom: 0.5em;">
+				<!-- ↓↓↓自動入力を防止する為のダミーフィールド↓↓↓ -->
+				<input type="password" name="dummypass" style="display: none;">
 				<?php echo $this->BcForm->label('SiteConfig.smtp_password', 'パスワード') ?>
 				<?php echo $this->BcForm->input('SiteConfig.smtp_password', array('type' => 'password', 'size' => 35, 'maxlength' => 255, 'autocomplete' => 'off')) ?>
 				<?php echo $this->BcForm->error('SiteConfig.smtp_password') ?>

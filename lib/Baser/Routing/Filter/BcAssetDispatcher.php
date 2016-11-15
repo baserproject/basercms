@@ -1,21 +1,12 @@
 <?php
 /**
- * BcAssetDispatcher
- * 
- * /app/View/webroot/ や、/baser/View/webroot/ 内のアセットファイルを
- * 読み込めるようにする為のフィルター
- * 
- * （例）/css/style.css では、次のファイルを参照する事ができる
- * 		/app/View/webroot/css/style.css
- * 		/lib/Baser/View/webroot/css/style.css
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */
 
@@ -23,6 +14,13 @@ App::uses('AssetDispatcher', 'Routing/Filter');
 
 /**
  * BcAssetDispatcher class
+ *
+ * /app/View/webroot/ や、/baser/View/webroot/ 内のアセットファイルを
+ * 読み込めるようにする為のフィルター
+ *
+ * （例）/css/style.css では、次のファイルを参照する事ができる
+ * 		/app/View/webroot/css/style.css
+ * 		/lib/Baser/View/webroot/css/style.css
  *
  * @package Baser.Routing.Filter
  */
@@ -33,8 +31,16 @@ class BcAssetDispatcher extends AssetDispatcher {
  * This filter should run before the request gets parsed by router
  * @var int
  */
+	// CUSTOMIZE MODIFY 2016/07/17 ryuring
+	// >>>
+	//public $priority = 9;
+	// ---
 	public $priority = 4;
+	// <<<
 
+// CUSTOMIZE MODIFY 2016/07/17 ryuring
+// 継承元を呼び出す前提でオーバーライド
+// >>>
 /**
  * Builds asset file path based off url
  *
@@ -57,5 +63,5 @@ class BcAssetDispatcher extends AssetDispatcher {
 
 		return null;
 	}
-
+// <<<
 }

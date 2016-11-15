@@ -1,15 +1,13 @@
 <?php
 /**
- * test for routes.php
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright     Copyright 2008 - 2015, baserCMS Users Community
- * @link          http://basercms.net baserCMS Project
- * @package       Baser.Test.Case.Config
- * @since         baserCMS v 3.0.6
- * @license       http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Config
+ * @since			baserCMS v 3.0.9
+ * @license			http://basercms.net/license/index.html
  */
 
 App::uses('Router', 'Routing');
@@ -30,8 +28,10 @@ class RoutesTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.User',
 		'baser.Config.Routes.PageRoutes',
-		'baser.Default.PageCategory',
-		'baser.Default.PluginContent'
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
 	);
 
 /**
@@ -84,7 +84,9 @@ class RoutesTest extends BaserTestCase {
  * @return void
  */
 	public function testInstall() {
+		Configure::write('BcRequest.isInstalled', false);
 		$params = $this->_getParams('install');
+		Configure::write('BcRequest.isInstall', true);
 		$expects = array(
 			'named' => array(),
 			'pass' => array(),
@@ -104,7 +106,9 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider updateDataProvider
  */
 	public function testUpdate($url) {
+		Configure::write('BcRequest.isUpdater', true);
 		$params = $this->_getParams($url);
+		Configure::write('BcRequest.isUpdater', false);
 		$expects = array(
 			'controller' => 'updaters',
 			'action' => 'index',
@@ -147,6 +151,9 @@ class RoutesTest extends BaserTestCase {
 			'named' => array(),
 			'pass' => $pass,
 		);
+		unset($params['Content']);
+		unset($params['Site']);
+		unset($params['entityId']);
 		$this->assertEquals($expects, $params);
 	}
 
@@ -154,15 +161,13 @@ class RoutesTest extends BaserTestCase {
  * 固定ページ用データプロバイダ
  *
  * @return array
- *
- * @todo ページカテゴリを含むテスト追加。PageCategoryのフィクスチャを変更してテスト専用のデータにするべきか
  */
 	public function pageDisplayDataProvider() {
 		return array(
 			array('/', array('index')),
-			array('/company', array('company')),
+			array('/about', array('about')),
 			array('/service', array('service')),
-			array('/recruit', array('recruit'))
+			array('/sitemap', array('sitemap'))
 		);
 	}
 
@@ -176,17 +181,17 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider mobilePageDisplayDataProvider
  */
 	public function testMobilePageDisplay($url, $pass) {
-		$this->_setAgent('mobile');
-		$this->_setAgentLink('mobile');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
-			'action' => 'mobile_display',
+			'action' => 'display',
 			'plugin' => null,
-			'prefix' => 'mobile',
 			'named' => array(),
 			'pass' => $pass,
 		);
+		unset($params['Content']);
+		unset($params['Site']);
+		unset($params['entityId']);
 		$this->assertEquals($expects, $params);
 	}
 
@@ -199,8 +204,7 @@ class RoutesTest extends BaserTestCase {
  */
 	public function mobilePageDisplayDataProvider() {
 		return array(
-			array('/m/', array('index')),
-			array('/m/service', array('service'))
+			array('/m/', array('m', 'index'))
 		);
 	}
 
@@ -214,17 +218,17 @@ class RoutesTest extends BaserTestCase {
  * @dataProvider smartphonePageDisplayDataProvider
  */
 	public function testSmartphonePageDisplay($url, $pass) {
-		$this->_setAgent('smartphone');
-		$this->_setAgentLink('smartphone');
 		$params = $this->_getParams($url);
 		$expects = array(
 			'controller' => 'pages',
-			'action' => 'smartphone_display',
+			'action' => 'display',
 			'plugin' => null,
-			'prefix' => 'smartphone',
 			'named' => array(),
 			'pass' => $pass,
 		);
+		unset($params['Content']);
+		unset($params['Site']);
+		unset($params['entityId']);
 		$this->assertEquals($expects, $params);
 	}
 
@@ -237,39 +241,9 @@ class RoutesTest extends BaserTestCase {
  */
 	public function smartphonePageDisplayDataProvider() {
 		return array(
-			array('/s/', array('index')),
-			array('/s/recruit', array('recruit'))
+			array('/s/', array('s', 'index')),
+			array('/s/service', array('s', 'service'))
 		);
 	}
-
-/**
- * プラグインコンテンツのルーティングテスト
- *
- * @param array $pluginContent プラグインコンテンツのレコードの配列
- * @return void
- *
- * @dataProvider pluginContentDataProvider
- */
-	public function testPluginContent(array $pluginContent) {
-		$url = $pluginContent['name'];
-		$params = $this->_getParams($url);
-		$expects = array(
-			'controller' => $pluginContent['plugin'],
-			'action' => 'index',
-			'plugin' => $pluginContent['plugin'],
-			'named' => array(),
-			'pass' => array()
-		);
-
-		$this->assertEquals($expects, $params);
-	}
-
-/**
- * プラグインコンテンツ用データプロバイダ
- *
- * @return array
- */
-	public function pluginContentDataProvider() {
-		return ClassRegistry::init('PluginContent')->find('all');
-	}
+	
 }

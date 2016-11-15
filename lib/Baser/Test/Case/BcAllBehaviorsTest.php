@@ -1,18 +1,18 @@
 <?php
-
 /**
- * run all behavior baser tests
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
 
 /**
+ * run all behavior baser tests
+ * 
  * @package Baser.Test.Case
  */
 class BcAllBeHaviorTest extends CakeTestSuite {

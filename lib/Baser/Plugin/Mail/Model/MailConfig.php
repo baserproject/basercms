@@ -1,12 +1,9 @@
 <?php
-
 /**
- * メール設定モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
@@ -25,7 +22,6 @@ class MailConfig extends MailAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailConfig';
 
@@ -33,7 +29,6 @@ class MailConfig extends MailAppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
 

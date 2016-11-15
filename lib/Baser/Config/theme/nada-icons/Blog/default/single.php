@@ -2,14 +2,14 @@
 /**
  * ブログ詳細ページ
  */
-$this->BcBaser->css('admin/colorbox/colorbox', array('inline' => false));
-$this->BcBaser->js('admin/jquery.colorbox-min-1.4.5', false);
+$this->BcBaser->css('colorbox/colorbox', array('inline' => false));
+$this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade", maxWidth:"80%"});
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade", maxWidth:"80%", maxWidth:"80%"});
 	});
 </script>
 
@@ -40,7 +40,7 @@ $(function(){
     </div>
 <?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
 </div>
-<div id="contentsNavi">
+<div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>
 	&nbsp;  &nbsp;
 <?php $this->Blog->nextLink($post) ?>

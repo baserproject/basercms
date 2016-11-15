@@ -1,20 +1,15 @@
 <?php
-
 /**
- * ブログコメントモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BlogAppModel', 'Blog.Model');
 
 /**
@@ -28,7 +23,6 @@ class BlogComment extends BlogAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogComment';
 
@@ -36,61 +30,57 @@ class BlogComment extends BlogAppModel {
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * belongsTo
  *
  * @var array
- * @access public
  */
-	public $belongsTo = array('BlogPost' => array('className' => 'Blog.BlogPost',
-			'foreignKey' => 'blog_post_id'));
+	public $belongsTo = ['BlogPost' => ['className' => 'Blog.BlogPost',
+			'foreignKey' => 'blog_post_id']];
 
 /**
  * validate
  *
  * @var array
- * @access public
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notEmpty'),
-				'message' => 'お名前を入力してください。'),
-			array('rule' => array('maxLength', 50),
-				'message' => 'お名前は50文字以内で入力してください。')
-		),
-		'email' => array(
-			'email' => array(
-				'rule' => array('email'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
+				'message' => 'お名前を入力してください。'],
+			['rule' => ['maxLength', 50],
+				'message' => 'お名前は50文字以内で入力してください。']
+		],
+		'email' => [
+			'email' => [
+				'rule' => ['email'],
 				'message' => 'Eメールの形式が不正です。',
-				'allowEmpty' => true),
-			'maxLength' => array(
-				'rule' => array('maxLength', 255),
-				'message' => 'Eメールは255文字以内で入力してください。')
-		),
-		'url' => array(
-			'url' => array(
-				'rule' => array('url'),
+				'allowEmpty' => true],
+			'maxLength' => [
+				'rule' => ['maxLength', 255],
+				'message' => 'Eメールは255文字以内で入力してください。']
+		],
+		'url' => [
+			'url' => [
+				'rule' => ['url'],
 				'message' => 'URLの形式が不正です。',
-				'allowEmpty' => true),
-			'maxLength' => array(
-				'rule' => array('maxLength', 255),
-				'message' => 'URLは255文字以内で入力してください。')
-		),
-		'message' => array(
-			array('rule' => array('notEmpty'),
-				'message' => "コメントを入力してください。")
-		)
-	);
+				'allowEmpty' => true],
+			'maxLength' => [
+				'rule' => ['maxLength', 255],
+				'message' => 'URLは255文字以内で入力してください。']
+		],
+		'message' => [
+			['rule' => ['notBlank'],
+				'message' => "コメントを入力してください。"]
+		]
+	];
 
 /**
  * 初期値を取得する
  *
  * @return array 初期値データ
- * @access public
  */
 	public function getDefaultValue() {
 		$data[$this->name]['name'] = 'NO NAME';
@@ -128,7 +118,7 @@ class BlogComment extends BlogAppModel {
 			$data['status'] = true;
 		}
 
-		$data['no'] = $this->getMax('no', array('blog_content_id' => $contentId)) + 1;
+		$data['no'] = $this->getMax('no', ['blog_content_id' => $contentId]) + 1;
 		$this->create($data);
 
 		return $this->save();

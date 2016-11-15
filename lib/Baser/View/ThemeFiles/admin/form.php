@@ -1,30 +1,28 @@
 <?php
 /**
- * [ADMIN] テーマファイル登録・編集
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマファイル登録・編集
+ */
 $params = explode('/', $path);
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#ThemeFileName").focus();
-});
-</script>
-
 <!-- current -->
 <div class="em-box align-left">
 	現在の位置：<?php echo $currentPath ?>
 </div>
+
+<?php if($theme	!= 'core' && !$isWritable): ?>
+<div id="AlertMessage">ファイルに書き込み権限がないので編集できません。</div>
+<?php endif ?>
 
 <?php if ($this->request->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array_merge(array('action' => 'add'), array($theme, $plugin, $type), explode('/', $path)))) ?>
@@ -41,7 +39,7 @@ $(window).load(function() {
 			<th class="col-head"><?php echo $this->BcForm->label('ThemeFile.name', 'ファイル名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($this->request->action != 'admin_view'): ?>
-					<?php echo $this->BcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255)) ?> 
+					<?php echo $this->BcForm->input('ThemeFile.name', array('type' => 'text', 'size' => 30, 'maxlength' => 255, 'autofocus' => true)) ?>
 					<?php if ($this->BcForm->value('ThemeFile.ext')): ?>.<?php endif ?>
 					<?php echo $this->BcForm->value('ThemeFile.ext') ?>
 					<?php echo $this->BcForm->input('ThemeFile.ext', array('type' => 'hidden')) ?>
@@ -85,18 +83,15 @@ $(window).load(function() {
 <div class="submit">
 	<?php if ($this->request->action == 'admin_add'): ?>
 		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('class' => 'btn-gray button')); ?>
-	<?php else: ?>
-		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', dirname($path))), array('class' => 'btn-gray button')); ?>
-	<?php endif ?>
-	<?php if ($this->request->action == 'admin_add'): ?>
 		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php elseif ($this->request->action == 'admin_edit'): ?>
-		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-		<?php
-		$this->BcBaser->link('削除', array_merge(array('action' => 'del', $theme, $plugin, $type), $params), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', basename($path)), false
-		)
-		?>
+		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('class' => 'btn-gray button')); ?>
+		<?php if($isWritable): ?>
+			<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+			<?php $this->BcBaser->link('削除', array_merge(array('action' => 'del', $theme, $plugin, $type), $params), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', basename($path)), false) ?>
+		<?php endif ?>	
 	<?php else: ?>
+		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', dirname($path))), array('class' => 'btn-gray button')); ?>
 		<?php // プラグインのアセットの場合はコピーできない ?>
 		<?php if (!$safeModeOn): ?>
 			<?php //if($theme == 'core' && !(($type == 'css' || $type == 'js' || $type == 'img') && $plugin)): ?>

@@ -8,7 +8,7 @@ class PermissionsSchema extends CakeSchema {
 
 	public $file = 'permissions.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

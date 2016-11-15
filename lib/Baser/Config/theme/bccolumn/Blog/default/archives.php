@@ -2,15 +2,13 @@
 /**
  * ブログアーカイブ一覧
  */
-$this->BcBaser->css('admin/colorbox/colorbox', array('inline' => false));
-$this->BcBaser->js('admin/jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
 ?>
 
 
 <script type="text/javascript">
 $(function(){
-	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade"});
+	if($("a[rel='colorbox']").colorbox) $("a[rel='colorbox']").colorbox({transition:"fade", maxWidth:"80%"});
 	});
 </script>
 

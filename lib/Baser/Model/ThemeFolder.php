@@ -1,18 +1,19 @@
 <?php
-
-
 /**
- * テーマフォルダモデル
- * DB接続はしない
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * テーマフォルダモデル
+ *
+ * @package Baser.Model
  */
 class ThemeFolder extends AppModel {
 
@@ -20,7 +21,6 @@ class ThemeFolder extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'ThemeFolder';
 
@@ -28,7 +28,6 @@ class ThemeFolder extends AppModel {
  * use table
  * 
  * @var boolean
- * @access public
  */
 	public $useTable = false;
 
@@ -36,11 +35,10 @@ class ThemeFolder extends AppModel {
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => 'テーマフォルダ名を入力してください。',
 				'required' => true),
 			array('rule' => array('halfText'),

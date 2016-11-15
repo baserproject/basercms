@@ -1,13 +1,11 @@
 <?php
-
 /**
- * Model 拡張クラスのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Model
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
@@ -23,11 +21,13 @@ class BcAppTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.Page',
 		'baser.Default.Dblog',
-		'baser.Model.BcApp.PageCategoryBcAppModel',
-		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-		'baser.Default.Content',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'baser.Default.Permission',
+		'baser.Default.SearchIndex',
+		'baser.Default.Content'
 	);
 
 /**
@@ -40,8 +40,8 @@ class BcAppTest extends BaserTestCase {
 		$this->BcApp = ClassRegistry::init('BcApp');
 		$this->Page = ClassRegistry::init('Page');
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		$this->PageCategory = ClassRegistry::init('PageCategory');
 		$this->Dblog = ClassRegistry::init('Dblog');
+		$this->User = ClassRegistry::init('User');
 	}
 
 /**
@@ -53,7 +53,6 @@ class BcAppTest extends BaserTestCase {
 		unset($this->BcApp);
 		unset($this->Page);
 		unset($this->SiteConfig);
-		unset($this->PageCategory);
 		unset($this->Dblog);
 		parent::tearDown();
 	}
@@ -174,28 +173,6 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * 子カテゴリのIDリストを取得する
- *
- * @param id ページカテゴリーID
- * @param boolean $expected 期待値
- * @param boolean $message テストが失敗した場合に表示されるメッセージ
- * @dataProvider getChildIdsListDataProvider
- */
-	public function testGetChildIdsList($id, $expected, $message = null) {
-		$result = $this->PageCategory->getChildIdsList($id);
-		$this->assertEquals($expected, $result, $message);
-
-	}
-
-	public function getChildIdsListDataProvider() {
-		return array(
-			array(1, array(), 'ページカテゴリーID 1は子カテゴリは存在しません'),
-			array(2, array(3, 4), '子カテゴリのIDリストを取得できません'),
-			array(3, array(4), '子カテゴリのIDリストを取得できません'),
-		);
-	}
-
-/**
  * 機種依存文字の変換処理
  *
  * @param string 変換対象文字列
@@ -221,15 +198,6 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testInitDb() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->PageCategory->deleteAll(array('id >' => 0));
-
-		$this->PageCategory->initDb('test');
-
-		$result = $this->PageCategory->find('all', array(
-				'recursive' => -1
-			)
-		);
-		var_dump($result);
 	}
 
 /**
@@ -248,20 +216,6 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		// $this->PageCategory->deleteAll(array('id >' => 0));
-
-		$path = WWW_ROOT . 'files' . DS . 'page_categories.csv';
-		$Csv = new File($path);
-		$Csv->write("id,parent_id,lft,rght,name,title,sort,contents_navi,owner_id,layout_template,content_template,modified,created\n1,2,2,4,'asdfasd','',3,1,2,null,null,null,null");
-
-		$this->PageCategory->loadCsv('baser', WWW_ROOT . 'files');
-
-		$result = $this->PageCategory->find('all', array(
-				'recursive' => -1
-			)
-		);
-		var_dump($result);
-		// $this->assertEquals($expect, $result)
 	}
 
 /**
@@ -354,9 +308,6 @@ class BcAppTest extends BaserTestCase {
  * 指定フィールドのMAX値を取得する
  */
 	public function testGetMax() {
-		$result = $this->Page->getMax('page_category_id');
-		$this->assertEquals(2, $result, '指定フィールドのMAX値を取得できません');
-
 		$result = $this->Page->getMax('Page\.id');
 		$this->assertEquals(11, $result, '指定フィールドのMAX値を取得できません');
 	}
@@ -417,7 +368,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider tableExistsDataProvider
  */
 	public function testTableExists($tableName, $expect) {
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		$prefix = $db->config['prefix'];
 
 		$result = $this->BcApp->tableExists($prefix . $tableName);
@@ -546,59 +497,6 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * 一つ位置を上げる
- */
-	public function testSortup() {
-		$this->Page->data = array(
-			'Page' => array(
-				'name' => 'index',
-				'page_category_id' => null,
-				'title' => '',
-				'url' => '/index',
-				'description' => '',
-				'status' => 1,
-			)
-		);
-		$result = $this->Page->sortup(2, array('id' => 1));
-
-		$Page = $this->Page->find('first', array(
-				'conditions' => array('id' => 1),
-				'fields' => array('sort'),
-				'recursive' => -1,
-			)
-		);
-		$sort = $Page['Page']['sort'];
-		$this->assertEquals(2, $sort, 'sortを一つ位置を上げることができません');
-	}
-
-/**
- * 一つ位置を下げる
- */
-	public function testSortdown() {
-		$this->Page->data = array(
-			'Page' => array(
-				'name' => 'company',
-				'page_category_id' => null,
-				'title' => '会社案内',
-				'url' => '/company',
-				'description' => '',
-				'status' => 1,
-			)
-		);
-		$result = $this->Page->sortdown(1, array('id' => 2));
-
-		$Page = $this->Page->find('first', array(
-				'conditions' => array('id' => 2),
-				'fields' => array('sort'),
-				'recursive' => -1,
-			)
-		);
-		$sort = $Page['Page']['sort'];
-		$this->assertEquals(1, $sort, 'sortを一つ位置を下げることができません');
-
-	}
-
-/**
  * Modelキャッシュを削除する
  */
 	public function testDeleteModelCache() {
@@ -672,7 +570,7 @@ class BcAppTest extends BaserTestCase {
  * Deconstructs a complex data type (array or object) into a single field value.
  */
 	public function testDeconstruct() {
-		$field = 'Page.name';
+		$field = 'Page.contents';
 		$data = array(
 			'wareki' => true,
 			'year' => 'h-27',
@@ -722,9 +620,8 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider expectsDataProvider
  */
 	public function testExpects($arguments, $expectedHasKeys, $expectedNotHasKeys) {
-		$this->Page->expects($arguments);
-
-		$result = $this->Page->find('first');
+		$this->User->expects($arguments);
+		$result = $this->User->find('first', ['recursive' => 1]);
 
 		// 存在するキー
 		foreach ($expectedHasKeys as $key) {
@@ -739,8 +636,8 @@ class BcAppTest extends BaserTestCase {
 
 	public function expectsDataProvider() {
 		return array(
-			array(array(), array('Page'), array('PageCategory', 'User')),
-			array(array('User'), array('Page', 'User'), array('PageCategory')),
+			array(array(), array('User'), array('UserGroup', 'Favorite')),
+			array(array('UserGroup'), array('User', 'UserGroup'), array('Favorite')),
 		);
 	}
 
@@ -844,46 +741,6 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testRemoveFromTreeRecursive() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->PageCategory->data['PageCategory']['id'] = 2;
-		$this->PageCategory->removeFromTreeRecursive(2);
-		$result = $this->PageCategory->find('all', array(
-				'fields' => array('parent_id', 'lft', 'rght'),
-				'recursive' => '-1',
-			)
-		);
-		
-		// smartphoneカテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 0,
-			'rght' => 0,
-		);
-		$this->assertEquals($expected, $result[1]['PageCategory']);
-
-		// garaphone カテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 0,
-			'rght' => 0,
-		);
-		$this->assertEquals($expected, $result[2]['PageCategory']);
-
-		// garaphone2 カテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 3,
-			'rght' => 4,
-		);
-		$this->assertEquals($expected, $result[3]['PageCategory']);
-
-		// tablet カテゴリ
-		$expected = array(
-			'parent_id' => null,
-			'lft' => 5,
-			'rght' => 6,
-		);
-		$this->assertEquals($expected, $result[4]['PageCategory']);
-
 	}
 
 /**

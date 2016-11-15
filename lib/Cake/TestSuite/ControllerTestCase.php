@@ -109,6 +109,7 @@ class InterceptContentHelper extends Helper {
  * ControllerTestCase class
  *
  * @package       Cake.TestSuite
+ * @method        mixed testAction() testAction($url, $options = array())  Lets you do functional tests of a controller action.
  */
 abstract class ControllerTestCase extends CakeTestCase {
 
@@ -178,6 +179,13 @@ abstract class ControllerTestCase extends CakeTestCase {
 	protected $_dirtyController = false;
 
 /**
+ * The class name to use for mocking the response object.
+ *
+ * @var string
+ */
+	protected $_responseClass = 'CakeResponse';
+
+/**
  * Used to enable calling ControllerTestCase::testAction() without the testing
  * framework thinking that it's a test case
  *
@@ -210,7 +218,7 @@ abstract class ControllerTestCase extends CakeTestCase {
  *     - `result` Get the return value of the controller action. Useful
  *       for testing requestAction methods.
  *
- * @param string $url The URL to test
+ * @param string|array $url The URL to test.
  * @param array $options See options
  * @return mixed The specified return type.
  * @triggers ControllerTestCase $Dispatch, array('request' => $request)
@@ -223,6 +231,10 @@ abstract class ControllerTestCase extends CakeTestCase {
 			'method' => 'POST',
 			'return' => 'result'
 		);
+
+		if (is_array($url)) {
+			$url = Router::url($url);
+		}
 
 		$restore = array('get' => $_GET, 'post' => $_POST);
 
@@ -254,7 +266,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 		$Dispatch->parseParams(new CakeEvent('ControllerTestCase', $Dispatch, array('request' => $request)));
 		if (!isset($request->params['controller']) && Router::currentRoute()) {
 			$this->headers = Router::currentRoute()->response->header();
-			return;
+			return null;
 		}
 		if ($this->_dirtyController) {
 			$this->controller = null;
@@ -271,8 +283,14 @@ abstract class ControllerTestCase extends CakeTestCase {
 			$params['requested'] = 1;
 		}
 		$Dispatch->testController = $this->controller;
-		$Dispatch->response = $this->getMock('CakeResponse', array('send'));
+		$Dispatch->response = $this->getMock($this->_responseClass, array('send', '_clearBuffer'));
 		$this->result = $Dispatch->dispatch($request, $Dispatch->response, $params);
+
+		// Clear out any stored requests.
+		while (Router::getRequest()) {
+			Router::popRequest();
+		}
+
 		$this->controller = $Dispatch->testController;
 		$this->vars = $this->controller->viewVars;
 		$this->contents = $this->controller->response->body();
@@ -334,7 +352,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 		$controllerObj = $this->getMock($name . 'Controller', $mocks['methods'], array(), '', false);
 		$controllerObj->name = $name;
 		$request = $this->getMock('CakeRequest');
-		$response = $this->getMock('CakeResponse', array('_sendHeader'));
+		$response = $this->getMock($this->_responseClass, array('_sendHeader'));
 		$controllerObj->__construct($request, $response);
 		$controllerObj->Components->setController($controllerObj);
 

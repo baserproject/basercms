@@ -1,15 +1,13 @@
 <?php
-
 /**
- * Toolモデルのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Tools Community <http://sites.google.com/site/baserTools/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Tools Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Model
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('Tool', 'Model');
 
@@ -23,6 +21,7 @@ App::uses('Tool', 'Model');
  * }
  * 
  * @package Baser.Test.Case.Model
+ * @property Tool $Tool
  */
 class ToolTest extends BaserTestCase {
 
@@ -53,8 +52,8 @@ class ToolTest extends BaserTestCase {
 
 	public function getControlSourceDataProvider() {
 		return array(
-			array('baser', 'mysite_users', 'モデルリストを取得できません'),
-			array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
+			array('core', 'mysite_users', 'モデルリストを取得できません'),
+			array('plugin', 'mysite_blog_categories', 'モデルリストを取得できません'),
 		);
 	}
 
@@ -73,8 +72,8 @@ class ToolTest extends BaserTestCase {
 
 	public function getListModelsDataProvider() {
 		return array(
-			array('baser', 'mysite_users', 'モデルリストを取得できません'),
-			array('plugin', 'mysite_pg_blog_categories', 'モデルリストを取得できません'),
+			array('core', 'mysite_users', 'モデルリストを取得できません'),
+			array('plugin', 'mysite_blog_categories', 'モデルリストを取得できません'),
 		);
 	}
 
@@ -112,7 +111,6 @@ class ToolTest extends BaserTestCase {
  * @param array $data
  * @param string $tmpPath
  * @return boolean
- * @access public
  */
 	public function testLoadSchemaFile() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

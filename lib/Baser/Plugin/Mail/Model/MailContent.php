@@ -1,12 +1,9 @@
 <?php
-
 /**
- * メールコンテンツモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Model
  * @since			baserCMS v 0.1.0
@@ -25,7 +22,6 @@ class MailContent extends MailAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailContent';
 
@@ -33,15 +29,13 @@ class MailContent extends MailAppModel {
  * behaviors
  *
  * @var array
- * @access public
  */
-	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+	public $actsAs = array('BcSearchIndexManager', 'BcCache', 'BcContents');
 
 /**
  * hasMany
  *
  * @var array
- * @access public
  */
 	public $hasMany = array('MailField' =>
 		array('className' => 'Mail.MailField',
@@ -56,54 +50,25 @@ class MailContent extends MailAppModel {
  * validate
  *
  * @var array
- * @access public
  */
 	public $validate = array(
-		'name' => array(
-			'halfText' => array(
-				'rule' => array('halfText'),
-				'message' => 'メールフォームアカウント名は半角のみで入力してください。',
-				'allowEmpty' => false),
-			'notInList' => array(
-				'rule' => array('notInList', array('mail')),
-				'message' => 'メールフォームアカウント名に「mail」は利用できません。'),
-			'isUnique' => array(
-				'rule' => array('isUnique'),
-				'message' => '入力されたメールフォームアカウント名は既に使用されています。'),
-			'maxLength' => array(
-				'rule' => array('maxLength', 100),
-				'message' => 'メールフォームアカウント名は100文字以内で入力してください。'),
-			'notEmpty' => array('rule' => array('notEmpty'),
-				'message' => "メールフォームアカウント名を入力してください。")
-		),
-		'title' => array(
-			array('rule' => array('notEmpty'),
-				'message' => "メールフォームタイトルを入力してください。")
-		),
 		'sender_name' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "送信先名を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '送信先名は50文字以内で入力してください。')
 		),
 		'subject_user' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "自動返信メール件名[ユーザー宛]を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')
 		),
 		'subject_admin' => array(
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => "自動送信メール件名[管理者宛]を入力してください。"),
 			array('rule' => array('maxLength', 50),
 				'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。')
-		),
-		'layout_template' => array(
-			array('rule' => array('halfText'),
-				'message' => 'レイアウトテンプレート名は半角のみで入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
 		),
 		'form_template' => array(
 			array('rule' => array('halfText'),
@@ -120,9 +85,6 @@ class MailContent extends MailAppModel {
 				'message' => 'メールテンプレート名は20文字以内で入力してください。')
 		),
 		'redirect_url' => array(
-			array('rule' => array('url'),
-				'message' => "リダイレクトURLの形式が不正です。",
-				'allowEmpty' => true),
 			array('rule' => array('maxLength', 255),
 				'message' => 'リダイレクトURLは255文字以内で入力してください。')
 		),
@@ -151,7 +113,6 @@ class MailContent extends MailAppModel {
  * 
  * @param string $check チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function checkSslUrl($check) {
 		if ($check[key($check)]) {
@@ -171,7 +132,6 @@ class MailContent extends MailAppModel {
  *
  * @param string $check チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function alphaNumeric($check) {
 		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
@@ -185,9 +145,9 @@ class MailContent extends MailAppModel {
  * フォームの初期値を取得する
  *
  * @return string
- * @access protected
  */
 	public function getDefaultValue() {
+		$data['MailContent']['sender_name'] = '送信先名を入力してください';
 		$data['MailContent']['subject_user'] = 'お問い合わせ頂きありがとうございます';
 		$data['MailContent']['subject_admin'] = 'お問い合わせを頂きました';
 		$data['MailContent']['layout_template'] = 'default';
@@ -196,9 +156,7 @@ class MailContent extends MailAppModel {
 		$data['MailContent']['use_description'] = true;
 		$data['MailContent']['auth_captcha'] = false;
 		$data['MailContent']['ssl_on'] = false;
-		$data['MailContent']['status'] = false;
 		$data['MailContent']['save_info'] = true;
-
 		return $data;
 	}
 
@@ -206,14 +164,13 @@ class MailContent extends MailAppModel {
  * afterSave
  *
  * @return boolean
- * @access public
  */
 	public function afterSave($created, $options = array()) {
 		// 検索用テーブルへの登録・削除
-		if (!$this->data['MailContent']['exclude_search'] && $this->data['MailContent']['status']) {
-			$this->saveContent($this->createContent($this->data));
+		if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
+			$this->saveSearchIndex($this->createSearchIndex($this->data));
 		} else {
-			$this->deleteContent($this->data['MailContent']['id']);
+			$this->deleteSearchIndex($this->data['MailContent']['id']);
 		}
 	}
 
@@ -224,7 +181,7 @@ class MailContent extends MailAppModel {
  * @access	public
  */
 	public function beforeDelete($cascade = true) {
-		return $this->deleteContent($this->id);
+		return $this->deleteSearchIndex($this->id);
 	}
 
 /**
@@ -232,73 +189,131 @@ class MailContent extends MailAppModel {
  *
  * @param array $data
  * @return array
- * @access public
  */
-	public function createContent($data) {
-		if (isset($data['MailContent'])) {
-			$data = $data['MailContent'];
+	public function createSearchIndex($data) {
+		if (!isset($data['MailContent']) || !isset($data['Content'])) {
+			return false;
 		}
-
-		$_data = array();
-		$_data['Content']['type'] = 'メール';
-		// $this->idに値が入ってない場合もあるので
-		if (!empty($data['id'])) {
-			$_data['Content']['model_id'] = $data['id'];
-		} else {
-			$_data['Content']['model_id'] = $this->id;
-		}
-		$_data['Content']['category'] = '';
-		$_data['Content']['title'] = $data['title'];
-		$_data['Content']['detail'] = $data['description'];
-		$_data['Content']['url'] = '/' . $data['name'] . '/index';
-		$_data['Content']['status'] = $data['status'];
-
-		return $_data;
+		$mailContent = $data['MailContent'];
+		$content = $data['Content'];
+		return ['SearchIndex' => [
+			'type'		=> 'メール',
+			'model_id'	=> (!empty($mailContent['id'])) ? $mailContent['id'] : $this->id,
+			'content_id'=> $content['id'],
+			'site_id'	=> $content['site_id'],
+			'title'		=> $content['title'],
+			'detail'	=> $mailContent['description'],
+			'url'		=> $content['url'],
+			'status'	=> $content['status']
+		]];
 	}
 
 /**
  * メールコンテンツデータをコピーする
- * 
- * @param int $id
- * @param array $data
- * @return mixed UserGroup Or false
+ *
+ * @param int $id ページID
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しいユーザーID
+ * @param int $newSiteId 新しいサイトID
+ * @return mixed mailContent|false
  */
-	public function copy($id, $data = array(), $recursive = true) {
-		if ($id) {
-			$data = $this->find('first', array('conditions' => array('MailContent.id' => $id), 'recursive' => -1));
-		}
+	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
-		$data['MailContent']['name'] .= '_copy';
-		$data['MailContent']['title'] .= '_copy';
+		$data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
+		$url = $data['Content']['url'];
+		$siteId = $data['Content']['site_id'];
+		$name = $data['Content']['name'];
 		unset($data['MailContent']['id']);
 		unset($data['MailContent']['created']);
 		unset($data['MailContent']['modified']);
-
-		$this->create($data);
-		$result = $this->save();
-		if ($result) {
-			$result['MailContent']['id'] = $this->getInsertID();
-			if ($recursive) {
-				$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
-				foreach ($mailFields as $mailField) {
-					$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
-					$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
-				}
-				App::uses('Message', 'Mail.Model');
-				$Message = ClassRegistry::init('Mail.Message');
-				$Message->setup($result['MailContent']['id']);
-				$Message->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
-				$Message->createTable($result['MailContent']['name']);
-				$Message->construction($result['MailContent']['id']);
+		unset($data['Content']);
+		$data['Content'] = [
+			'name'		=> $name,
+			'parent_id'	=> $newParentId,
+			'title'		=> $newTitle,
+			'author_id' => $newAuthorId,
+			'site_id' 	=> $newSiteId
+		];
+		if(!is_null($newSiteId) && $siteId != $newSiteId) {
+			$data['Content']['site_id'] = $newSiteId;
+			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
+		}
+		$this->getDataSource()->begin();
+		if ($result = $this->save($data)) {
+			$result['MailContent']['id'] = $this->id;
+			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
+			foreach ($mailFields as $mailField) {
+				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
+				$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
 			}
+			App::uses('MailMessage', 'Mail.Model');
+			$MailMessage = ClassRegistry::init('Mail.MailMessage');
+			$MailMessage->setup($result['MailContent']['id']);
+			$MailMessage->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
+			$MailMessage->construction($result['MailContent']['id']);
+			$this->getDataSource()->commit();
 			return $result;
-		} else {
-			if (isset($this->validationErrors['name']) && mb_strlen($data['MailContent']['name']) < 20) {
-				return $this->copy(null, $data, $recursive);
-			} else {
+		}
+		$this->getDataSource()->rollback();
+		return false;
+	}
+
+/**
+ * フォームが公開中かどうかチェックする
+ *
+ * @param string $publishBegin 公開開始日時
+ * @param string $publishEnd 公開終了日時
+ * @return	bool
+ */
+	public function isAccepting($publishBegin, $publishEnd) {
+		if ($publishBegin && $publishBegin != '0000-00-00 00:00:00') {
+			if ($publishBegin > date('Y-m-d H:i:s')) {
 				return false;
 			}
 		}
+		if ($publishEnd && $publishEnd != '0000-00-00 00:00:00') {
+			if ($publishEnd < date('Y-m-d H:i:s')) {
+				return false;
+			}
+		}
+		return true;
 	}
 
+/**
+ * 公開済の conditions を取得
+ *
+ * @return array 公開条件（conditions 形式）
+ */
+	public function getConditionAllowAccepting() {
+		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
+			array($this->alias . '.publish_begin' => null),
+			array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
+		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
+			array($this->alias . '.publish_end' => null),
+			array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
+		return $conditions;
+	}
+
+/**
+ * 公開されたコンテンツを取得する
+ *
+ * @param Model $model
+ * @param string $type
+ * @param array $query
+ * @return array|null
+ */
+	public function findAccepting($type = 'first', $query = []) {
+		$getConditionAllowAccepting = $this->getConditionAllowAccepting();
+		if(!empty($query['conditions'])) {
+			$query['conditions'] = array_merge(
+				$getConditionAllowAccepting,
+				$query['conditions']
+			);
+		} else {
+			$query['conditions'] = $getConditionAllowAccepting;
+		}
+		return $this->find($type, $query);
+	}
+	
 }

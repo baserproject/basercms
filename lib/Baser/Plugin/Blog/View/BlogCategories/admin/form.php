@@ -1,30 +1,25 @@
 <?php
 /**
- * [ADMIN] ブログカテゴリ フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ブログカテゴリ フォーム
+ */
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 ?>
 
 
-<script type="text/javascript">
-	$(window).load(function() {
-		$("#BlogCategoryName").focus();
-	});
-</script>
-
-
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $blogContent['BlogContent']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name')), '/' . $blogContent['BlogContent']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name'), array('target' => '_blank')) ?></strong></p>
+		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $this->request->params['Content']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name')), '/' . $this->request->params['Content']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name'), array('target' => '_blank')) ?></strong></p>
 	</div>
 <?php endif ?>
 
@@ -53,7 +48,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', 'ブログカテゴリ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('BlogCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">

@@ -1,7 +1,6 @@
 <?php
 /**
  * WidgetAreaFixture
- *
  */
 class WidgetAreaFixture extends BaserTestFixture {
 

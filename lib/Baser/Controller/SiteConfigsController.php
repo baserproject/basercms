@@ -1,25 +1,20 @@
 <?php
-
 /**
- * サイト設定コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * サイト設定コントローラー
  *
  * @package Baser.Controller
+ * @property BcManagerComponent $BcManager
  */
 class SiteConfigsController extends AppController {
 
@@ -35,7 +30,7 @@ class SiteConfigsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('SiteConfig', 'Menu', 'Page');
+	public $uses = array('SiteConfig', 'Page');
 
 /**
  * コンポーネント
@@ -125,6 +120,11 @@ class SiteConfigsController extends AppController {
 				// DBに保存
 				if ($this->SiteConfig->saveKeyValue($this->request->data)) {
 
+					$ContentFolder = ClassRegistry::init('ContentFolder');
+					$ContentFolder->saveSiteRoot(0, [
+						'title'		=> $this->request->data['SiteConfig']['name']
+					]);
+
 					$this->setMessage('システム設定を保存しました。');
 
 					// 環境設定を保存
@@ -133,15 +133,11 @@ class SiteConfigsController extends AppController {
 						$this->BcManager->setInstallSetting('BcEnv.siteUrl', "'" . $siteUrl . "'");
 						$this->BcManager->setInstallSetting('BcEnv.sslUrl', "'" . $sslUrl . "'");
 						$this->BcManager->setInstallSetting('BcApp.adminSsl', ($adminSsl) ? 'true' : 'false');
-						$this->BcManager->setInstallSetting('BcApp.mobile', ($mobile) ? 'true' : 'false');
-						$this->BcManager->setInstallSetting('BcApp.smartphone', ($smartphone) ? 'true' : 'false');
 					}
 
 					// キャッシュをクリア
 					if ($this->request->data['SiteConfig']['maintenance'] ||
-						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id']) ||
-						(!$smartphone && Configure::read('BcApp.smartphone')) || 
-						(!$mobile && Configure::read('BcApp.mobile'))
+						($this->siteConfigs['google_analytics_id'] != $this->request->data['SiteConfig']['google_analytics_id'])
 					) {
 						clearViewCache();
 					}
@@ -185,7 +181,6 @@ class SiteConfigsController extends AppController {
 		$this->set(compact(
 				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
-
 		$this->subMenuElements = array('site_configs');
 		$this->pageTitle = 'サイト基本設定';
 		$this->help = 'site_configs_form';
@@ -195,6 +190,7 @@ class SiteConfigsController extends AppController {
  * キャッシュファイルを全て削除する
  */
 	public function admin_del_cache() {
+		$this->_checkReferer();
 		clearAllCache();
 		$this->setMessage('サーバーキャッシュを削除しました。');
 		$this->redirect($this->referer());
@@ -207,14 +203,18 @@ class SiteConfigsController extends AppController {
 		
 		$this->pageTitle = '環境情報';
 		$datasources = array('csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
-		$db = ConnectionManager::getDataSource('baser');
+		$db = ConnectionManager::getDataSource('default');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
 		$datasource = preg_replace('/^bc/', '', strtolower($name));
 		$this->set('datasource', @$datasources[$datasource]);
 		$this->set('baserVersion', $this->siteConfigs['version']);
 		$this->set('cakeVersion', Configure::version());
-		$this->subMenuElements = array('site_configs');
-		
+		$this->subMenuElements = ['site_configs', 'tools'];
+		$this->crumbs = [
+			['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'index']],
+			['name' => 'ユーティリティ', 'url' => ['controller' => 'tools', 'action' => 'index']]
+		];
+
 	}
 
 /**
@@ -233,17 +233,6 @@ class SiteConfigsController extends AppController {
 		$data['SiteConfig']['site_url'] = Configure::read('BcEnv.siteUrl');
 		$data['SiteConfig']['ssl_url'] = Configure::read('BcEnv.sslUrl');
 		$data['SiteConfig']['admin_ssl'] = (int)Configure::read('BcApp.adminSsl');
-		$data['SiteConfig']['mobile'] = Configure::read('BcApp.mobile');
-		$data['SiteConfig']['smartphone'] = Configure::read('BcApp.smartphone');
-		if (is_null($data['SiteConfig']['mobile'])) {
-			$data['SiteConfig']['mobile'] = false;
-		}
-		if (!isset($data['SiteConfig']['linked_pages_mobile'])) {
-			$data['SiteConfig']['linked_pages_mobile'] = 0;
-		}
-		if (!isset($data['SiteConfig']['linked_pages_smartphone'])) {
-			$data['SiteConfig']['linked_pages_smartphone'] = 0;
-		}
 		if (!isset($data['SiteConfig']['editor_enter_br'])) {
 			$data['SiteConfig']['editor_enter_br'] = 0;
 		}

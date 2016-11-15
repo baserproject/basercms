@@ -30,7 +30,7 @@ App::uses('CakeSession', 'Model/Datasource');
 class SessionHelper extends AppHelper {
 
 /**
- * Used to read a session values set in a controller for a key or return values for all keys.
+ * Reads a session value for a key or returns values for all keys.
  *
  * In your view: `$this->Session->read('Controller.sessKey');`
  * Calling the method without a param will return all session vars
@@ -44,7 +44,19 @@ class SessionHelper extends AppHelper {
 	}
 
 /**
- * Used to check is a session key has been set
+ * Reads and deletes a session value for a key.
+ *
+ * In your view: `$this->Session->consume('Controller.sessKey');`
+ *
+ * @param string $name the name of the session key you want to read
+ * @return mixed values from the session vars
+ */
+	public function consume($name) {
+		return CakeSession::consume($name);
+	}
+
+/**
+ * Checks if a session key has been set.
  *
  * In your view: `$this->Session->check('Controller.sessKey');`
  *
@@ -77,17 +89,17 @@ class SessionHelper extends AppHelper {
  * You can pass additional information into the flash message generation. This allows you
  * to consolidate all the parameters for a given type of flash message into the view.
  *
- * {{{
+ * ```
  * echo $this->Session->flash('flash', array('params' => array('class' => 'new-flash')));
- * }}}
+ * ```
  *
  * The above would generate a flash message with a custom class name. Using $attrs['params'] you
  * can pass additional data into the element rendering that will be made available as local variables
  * when the element is rendered:
  *
- * {{{
+ * ```
  * echo $this->Session->flash('flash', array('params' => array('name' => $user['User']['name'])));
- * }}}
+ * ```
  *
  * This would pass the current user's name into the flash message, so you could create personalized
  * messages without the controller needing access to that data.
@@ -95,25 +107,26 @@ class SessionHelper extends AppHelper {
  * Lastly you can choose the element that is rendered when creating the flash message. Using
  * custom elements allows you to fully customize how flash messages are generated.
  *
- * {{{
+ * ```
  * echo $this->Session->flash('flash', array('element' => 'my_custom_element'));
- * }}}
+ * ```
  *
  * If you want to use an element from a plugin for rendering your flash message you can do that using the
  * plugin param:
  *
- * {{{
+ * ```
  * echo $this->Session->flash('flash', array(
  *		'element' => 'my_custom_element',
  *		'params' => array('plugin' => 'my_plugin')
  * ));
- * }}}
+ * ```
  *
  * @param string $key The [Message.]key you are rendering in the view.
  * @param array $attrs Additional attributes to use for the creation of this flash message.
  *    Supports the 'params', and 'element' keys that are used in the helper.
  * @return string
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/session.html#SessionHelper::flash
+ * @deprecated 3.0.0 Since 2.7, use FlashHelper::render() instead.
  */
 	public function flash($key = 'flash', $attrs = array()) {
 		$out = false;
@@ -143,6 +156,7 @@ class SessionHelper extends AppHelper {
 				}
 				$tmpVars = $flash['params'];
 				$tmpVars['message'] = $message;
+				$tmpVars['key'] = $key;
 				$out = $this->_View->element($flash['element'], $tmpVars, $options);
 			}
 		}

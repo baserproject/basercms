@@ -1,11 +1,9 @@
 <?php
 /**
- * [PUBLISH] ページネーション標準
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
@@ -13,6 +11,8 @@
  */
 
 /**
+ * [PUBLISH] ページネーション標準
+ * 
  * $this->BcBaser->pagination() で呼び出す
  */
 ?>

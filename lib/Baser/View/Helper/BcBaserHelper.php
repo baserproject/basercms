@@ -1,11 +1,9 @@
 <?php
 /**
- * BcBaserHelper
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -30,6 +28,8 @@ App::uses('BcAuthComponent', 'Controller/Component');
  * @property BcXmlHelper $BcXml BcXmlヘルパ
  * @property BcArrayHelper $BcArray BcArrayヘルパ
  * @property BcPageHelper $BcPage BcPageヘルパ
+ * @property BcContentsHelper $BcContents
+ * @property FlashHelper $Flash
  */
 class BcBaserHelper extends AppHelper {
 
@@ -45,7 +45,7 @@ class BcBaserHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage');
+	public $helpers = array('BcHtml', 'Js', 'Session', 'BcXml', 'BcArray', 'BcPage', 'Flash', 'BcContents');
 
 /**
  * ページモデル
@@ -120,21 +120,6 @@ class BcBaserHelper extends AppHelper {
 		if (BC_INSTALLED && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance')) {
 			$this->_initPluginBasers();
 		}
-	}
-
-/**
- * メニューのデータを取得する
- * 
- * 配列で全件取得する
- *
- * @return array|false メニューデータ、または、false
- */
-	public function getMenus() {
-		$Menu = ClassRegistry::init('Menu');
-		if ($Menu) {
-			return $Menu->find('all', array('order' => 'sort'));
-		}
-		return false;
 	}
 
 /**
@@ -266,29 +251,47 @@ class BcBaserHelper extends AppHelper {
 		), $options);
 
 		$title = array();
-		$crumbs = $this->getCrumbs($options['categoryTitleOn']);
-		if ($crumbs) {
-			$crumbs = array_reverse($crumbs);
-			foreach ($crumbs as $key => $crumb) {
-				if ($this->BcArray->first($crumbs, $key) && isset($crumbs[$key + 1])) {
-					if ($crumbs[$key + 1]['name'] == $crumb['name']) {
-						continue;
-					}
-				}
+		
+		if($this->isHome()) {
+			$homeTitle = $this->_View->get('homeTitle');
+			if($homeTitle) {
 				if(!$options['tag']){
-					$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+					$title[] = strip_tags($homeTitle, $options['allowableTags']);
 				} else {
-					$title[] = $crumb['name'];
+					$title[] = $homeTitle;
+				}
+			}
+		} else {
+			$crumbs = $this->getCrumbs($options['categoryTitleOn']);
+			if ($crumbs) {
+				$crumbs = array_reverse($crumbs);
+				foreach ($crumbs as $key => $crumb) {
+					if ($this->BcArray->first($crumbs, $key) && isset($crumbs[$key + 1])) {
+						if ($crumbs[$key + 1]['name'] == $crumb['name']) {
+							continue;
+						}
+					}
+					if(!$options['tag']){
+						$title[] = strip_tags($crumb['name'], $options['allowableTags']);
+					} else {
+						$title[] = $crumb['name'];
+					}
 				}
 			}
 		}
-
+		
 		// サイトタイトルを追加
-		if (!empty($this->siteConfig['name'])) {
+		$siteName = '';
+		if(!empty($this->request->params['Site']['title'])) {
+			$siteName = $this->request->params['Site']['title'];
+		} elseif (!empty($this->siteConfig['name'])) {
+			$siteName = $this->siteConfig['name'];
+		}
+		if ($siteName) {
 			if(!$options['tag']){
-				$title[] = strip_tags($this->siteConfig['name'], $options['allowableTags']);
+				$title[] = strip_tags($siteName, $options['allowableTags']);
 			} else {
-				$title[] = $this->siteConfig['name'];
+				$title[] = $siteName;
 			}
 		}
 
@@ -402,31 +405,26 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * トップページかどうか判断する
- *
- * @return bool
- * @deprecated isHomeに統合する
- */
-	public function isTop() {
-		trigger_error(deprecatedMessage('ヘルパーメソッド：BcBaserHelper::isTop()', '3.0.6', '3.1.0', '$this->BcBaser->isHome() を利用してください。'), E_USER_DEPRECATED);
-		return $this->isHome();
-	}
-
-/**
  * 現在のページがトップページかどうかを判定する
+ *
+ * MEMO: BcRequest.(agent).aliasは廃止
  *
  * @return bool
  */
 	public function isHome() {
-		if (!Configure::read('BcRequest.agentAlias')) {
+		if(empty($this->request->params['Site'])) {
+			return false;
+		}
+		$site = BcSite::findCurrent(true);
+		if (!$site->alias || $site->sameMainUrl || $site->useSubDomain) {
 			return (
 				$this->request->url == false ||
 				$this->request->url == 'index'
 			);
 		} else {
 			return (
-				$this->request->url == Configure::read('BcRequest.agentAlias') . '/' ||
-				$this->request->url == Configure::read('BcRequest.agentAlias') . '/index'
+				$this->request->url == $site->alias . '/' ||
+				$this->request->url == $site->alias . '/index'
 			);
 		}
 	}
@@ -685,18 +683,18 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function content() {
-		/*** beforeContent ***/
+		/*** contentHeader ***/
 		$this->dispatchEvent('contentHeader', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
 
-		/*** Controller.beforeContent ***/
+		/*** Controller.contentHeader ***/
 		$this->dispatchEvent('contentHeader', null, array('layer' => 'View', 'class' => $this->_View->name));
 
 		echo $this->_View->fetch('content');
 
-		/*** afterContent ***/
+		/*** contentFooter ***/
 		$event = $this->dispatchEvent('contentFooter', null, array('layer' => 'View', 'class' => '', 'plugin' => ''));
 
-		/*** Controller.afterContent ***/
+		/*** Controller.contentFooter ***/
 		$event = $this->dispatchEvent('contentFooter', null, array('layer' => 'View', 'class' => $this->_View->name));
 	}
 
@@ -711,7 +709,7 @@ class BcBaserHelper extends AppHelper {
 	public function flash($key = 'flash') {
 		if ($this->Session->check('Message.' . $key)) {
 			echo '<div id="MessageBox">';
-			echo $this->Session->flash($key);
+			echo $this->Flash->render($key, ['escape' => false]);
 			echo '</div>';
 		}
 	}
@@ -740,9 +738,6 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
-		// TODO CakePHP では、 scripts_for_layout は deprecated となっているが後方互換の為残しておく
-		// baserCMS 4系で除外予定
-		$scripts .= str_replace($scripts, '', $this->_View->get('scripts_for_layout'));
 		echo $scripts;
 
 		// ### ツールバー用CSS出力
@@ -753,7 +748,7 @@ class BcBaserHelper extends AppHelper {
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->css('admin/toolbar');
@@ -782,7 +777,7 @@ class BcBaserHelper extends AppHelper {
 		$currentPrefix = $this->_View->get('currentPrefix');
 		$authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 		$toolbar = true;
-		if (isset($authPrefix['toolbar'])) {
+		if ($authPrefix && isset($authPrefix['toolbar'])) {
 			$toolbar = $authPrefix['toolbar'];
 		}
 
@@ -794,7 +789,7 @@ class BcBaserHelper extends AppHelper {
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !Configure::read('BcRequest.agent')) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->element('admin/toolbar', array(), array('subDir' => false));
@@ -826,7 +821,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function xmlHeader($attrib = array()) {
-		if (empty($attrib['encoding']) && Configure::read('BcRequest.agent') == 'mobile') {
+		if (empty($attrib['encoding']) && @$this->request->params['Site']['device'] == 'mobile') {
 			$attrib['encoding'] = 'Shift-JIS';
 		}
 		echo $this->BcXml->header($attrib) . "\n";
@@ -889,8 +884,9 @@ class BcBaserHelper extends AppHelper {
  * @param bool $inline コンテンツ内に Javascript を出力するかどうか（初期値 : true）
  * @return void
  */
-	public function js($url, $inline = true) {
-		$result = $this->BcHtml->script($url, array('inline' => $inline));
+	public function js($url, $inline = true, $options = []) {
+		$options = array_merge(['inline' => $inline], $options);
+		$result = $this->BcHtml->script($url, $options);
 		if ($inline) {
 			echo $result;
 		}
@@ -1015,15 +1011,16 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		// ページ公開チェック
-		if (isset($this->_Page) && empty($this->request->params['admin'])) {
-			$adminPrefix = Configure::read('Routing.prefixes.0');
-			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
-				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
-					$enabled = false;
-				}
-			}
-		}
+		// コンテンツ公開チェック
+		// TODO 統合コンテンツ管理のチェックに変更する
+//		if (isset($this->_Page) && empty($this->request->params['admin'])) {
+//			$adminPrefix = Configure::read('Routing.prefixes.0');
+//			if (isset($this->_Page) && !preg_match('/^\/' . $adminPrefix . '/', $_url)) {
+//				if ($this->_Page->isPageUrl($_url) && !$this->_Page->checkPublish($_url)) {
+//					$enabled = false;
+//				}
+//			}
+//		}
 
 		if (!$enabled) {
 			if ($forceTitle) {
@@ -1052,7 +1049,12 @@ class BcBaserHelper extends AppHelper {
 			if (!$ssl && !$admin) {
 				$url = Configure::read('BcEnv.siteUrl') . $_url;
 			} else {
-				$url = Configure::read('BcEnv.sslUrl') . $_url;
+				$sslUrl = Configure::read('BcEnv.sslUrl');
+				if($sslUrl) {
+					$url = $sslUrl . $_url;	
+				} else {
+					$url = '/' . $_url;	
+				}
 			}
 		}
 
@@ -1092,7 +1094,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function charset($charset = null) {
-		if (!$charset && Configure::read('BcRequest.agent') == 'mobile') {
+		if (!$charset && @$this->request->params['Site']['device'] == 'mobile') {
 			$charset = 'Shift-JIS';
 		}
 		echo $this->BcHtml->charset($charset);
@@ -1126,7 +1128,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function setPageEditLink($id) {
-		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
+		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 			$this->_View->viewVars['editLink'] = array('admin' => true, 'controller' => 'pages', 'action' => 'edit', $id);
 		}
 	}
@@ -1166,7 +1168,12 @@ class BcBaserHelper extends AppHelper {
  */
 	public function publishLink() {
 		if ($this->existsPublishLink()) {
-			$this->link('公開ページ', $this->_View->viewVars['publishLink'], array('class' => 'tool-menu'));
+			if(isset($this->_View->BcContents) && isset($this->request->data['Site']['use_subdomain'])) {
+				$url = $this->_View->BcContents->getUrl($this->_View->viewVars['publishLink'], true, $this->request->data['Site']['use_subdomain']);
+			} else {
+				$url = $this->_View->viewVars['publishLink'];
+			}
+			$this->link('公開ページ', $url, array('class' => 'tool-menu'));
 		}
 	}
 
@@ -1283,7 +1290,7 @@ class BcBaserHelper extends AppHelper {
 
 		$url = explode('/', h($this->request->url));
 
-		if (Configure::read('BcRequest.agent')) {
+		if (@$this->request->params['Site']['alias']) {
 			array_shift($url);
 		}
 
@@ -1298,7 +1305,7 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if ($controller == 'pages' && ($action == 'display' || $action == 'mobile_display' || $action == 'smartphone_display')) {
+		if ($controller == 'pages' && $action == 'display') {
 
 			if (strpos($pass[0], 'pages/') !== false) {
 				$pageUrl = str_replace('pages/', '', $pass[0]);
@@ -1309,6 +1316,12 @@ class BcBaserHelper extends AppHelper {
 					$pageUrl = implode('/', $pass);
 				}
 			}
+			
+			$sitePrefix = $this->getSitePrefix();
+			if($sitePrefix) {
+				$pageUrl = preg_replace('/^' . preg_quote($sitePrefix, '/') . '\//', '', $pageUrl);
+			}
+			
 			if (preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
@@ -1366,6 +1379,15 @@ class BcBaserHelper extends AppHelper {
 
 		return $contentsName;
 	}
+	
+	public function getSitePrefix() {
+		$site = null;
+		if($this->request->params['Site']) {
+			$site = $this->request->params['Site'];
+		}
+		$Site = ClassRegistry::init('Site');
+		return $Site->getPrefix($site);
+	}
 
 /**
  * パンくずリストを出力する
@@ -1377,23 +1399,57 @@ class BcBaserHelper extends AppHelper {
  * @param string|bool $startText トップページを先頭に追加する場合にはトップページのテキストを指定する（初期値 : false）
  * @return void
  */
-	public function crumbs($separator = '&raquo;', $startText = false) {
+	public function crumbs($separator = '&raquo;', $startText = false, $onSchema = false) {
 		$crumbs = $this->BcHtml->getStripCrumbs();
 		if (empty($crumbs)) {
 			return;
 		}
-		$out = array();
 		if ($startText) {
-			$out[] = $this->getLink($startText, '/');
-		}
-		foreach ($crumbs as $crumb) {
-			if (!empty($crumb[1])) {
-				$out[] = $this->getLink($crumb[0], $crumb[1], $crumb[2]);
-			} else {
-				$out[] = $crumb[0];
+			$homeUrl = '/';
+			if(!empty($this->request->params['Site']['alias'])) {
+				$homeUrl = '/' . $this->request->params['Site']['alias'] . '/';
+			} elseif(!empty($this->request->params['Site']['name'])) {
+				$homeUrl = '/' . $this->request->params['Site']['name'] . '/';
 			}
+			array_unshift($crumbs, [
+				0 => $startText,
+				1 => $homeUrl
+			]);
 		}
-		echo implode($separator, $out);
+		
+		$out = array();
+		if(!$onSchema) {
+			foreach ($crumbs as $crumb) {
+				if (!empty($crumb[1])) {
+					$out[] = $this->getLink($crumb[0], $crumb[1], @$crumb[2]);
+				} else {
+					$out[] = $crumb[0];
+				}
+			}
+			$out = implode($separator, $out);
+		} else {
+			$counter = 1;
+			foreach ($crumbs as $crumb) {
+				$options = ['itemprop' => 'item'];
+				if(!empty($crumb[2])) {
+					$options = array_merge($options, $crumb[2]);
+				}
+				if (!empty($crumb[1])) {
+					$crumb = $this->getLink('<span itemprop="name">' . $crumb[0] . '</span>', $crumb[1], $options) . '<span class="separator">' . $separator . '</span>';
+				} else {
+					$crumb = '<span itemprop="name">' . $crumb[0] . '</span>';
+				}
+				$out[] = <<< EOD
+<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+	{$crumb}
+	<meta itemprop="position" content="{$counter}" />
+</li>
+EOD;
+				$counter++;
+			}
+			$out = implode("\n", $out);
+		}
+		echo $out;
 	}
 
 /**
@@ -1413,48 +1469,6 @@ class BcBaserHelper extends AppHelper {
 			'forceTitle' => true
 		), $options);
 		$this->BcHtml->addCrumb($name, $link, $options);
-	}
-
-/**
- * 固定ページ機能で作成したページの一覧データを取得する
- *
- * @param string $categoryId 固定ページカテゴリID（初期値 : null）※ 指定しない場合は全ページを取得
- * @param array $options オプション（初期値 : array()）
- *	- `conditions` : 検索条件（初期値 : array('Page.status' => 1)）
- *	- `fields` : 取得フィールド（初期値 : array('title', 'url')）
- *	- `order` : 並び順（初期値 : array('Page.sort')）
- * @return mixed ページ一覧、または、false
- */
-	public function getPageList($categoryId = null, $options = array()) {
-		if (empty($this->_Page)) {
-			return false;
-		}
-
-		if (!is_array($options)) {
-			$options = array();
-		}
-		$options = array_merge(array(
-			'conditions' => array('Page.status' => 1),
-			'fields' => array('title', 'url'),
-			'order' => 'Page.sort'
-		), $options);
-
-		if ($categoryId) {
-			$options['conditions']['Page.page_category_id'] = $categoryId;
-		}
-
-		$this->_Page->unbindModel(array('belongsTo' => array('PageCategory')));
-		$pages = $this->_Page->find('all', $options);
-
-		if (empty($pages)) {
-			return false;
-		}
-
-		foreach ($pages as $key => $page) {
-			$pages[$key]['Page']['url'] = $this->_Page->convertViewUrl($page['Page']['url']);
-		}
-
-		return Hash::extract($pages, '{n}.Page');
 	}
 
 /**
@@ -1547,17 +1561,9 @@ class BcBaserHelper extends AppHelper {
 				$pluginBasers[] = $pluginName . 'BaserHelper';
 			}
 		}
-		$vars = array(
-			'base', 'webroot', 'here', 'params', 'action', 'data', 'themeWeb', 'plugin'
-		);
-		$c = count($vars);
 		foreach ($pluginBasers as $key => $pluginBaser) {
 			$this->_pluginBasers[$key] = new $pluginBaser($view);
-			for ($j = 0; $j < $c; $j++) {
-				if (isset($view->{$vars[$j]})) {
-					$this->_pluginBasers[$key]->{$vars[$j]} = $view->{$vars[$j]};
-				}
-			}
+			$this->_pluginBasers[$key]->request = $view->request;
 		}
 	}
 
@@ -1618,28 +1624,120 @@ class BcBaserHelper extends AppHelper {
 	}
 
 /**
- * サイトマップを出力する
+ * コンテンツメニューを出力する
  * 
  * ログインしていない場合はキャッシュする
- * sitemap エレメントで、HTMLカスタマイズ可能
+ * contents_menu エレメントで、HTMLカスタマイズ可能
  *
- * @param mixed $pageCategoryId 固定ページカテゴリID（初期値 : null）
- *	- 0 : 仕様確認要
- *	- null : 仕様確認要
- * @param string $recursive 取得する階層
- * @return void ページ一覧
+ * @param mixed $id コンテンツID（初期値：null）
+ * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
+ * @param string $currentId 現在のページのコンテンツID（初期値：null）
+ * @return string コンテンツメニュー
  */
-	public function sitemap($pageCategoryId = null, $recursive = null) {
-		$pageList = $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
-		$params = array('pageList' => $pageList);
-		if (empty($_SESSION['Auth']['User'])) {
-			$params = am($params, array(
-				'cache' => array(
-					'time' => Configure::read('BcCache.duration'),
-					'key' => $pageCategoryId))
+	public function contentsMenu($id = null, $level = null, $currentId = null) {
+		echo $this->getContentsMenu($id, $level, $currentId);
+	}
+
+/**
+ * メニューを出力する
+ *
+ * ログインしていない場合はキャッシュする
+ * contents_menu エレメントで、HTMLカスタマイズ可能
+ *
+ * @param mixed $id コンテンツID（初期値：null）
+ * @param int $level 階層（初期値：null）※ null の場合は階層指定なし
+ * @param string $currentId 現在のページのコンテンツID（初期値：null）
+ * @return string コンテンツメニュー
+ */
+	public function getContentsMenu($id = null, $level = null, $currentId = null) {
+		if(!$id) {
+			$Content = ClassRegistry::init('Content');
+			$siteRoot = $Content->getSiteRoot($this->request->params['Content']['site_id']);
+			$id = $siteRoot['Content']['id'];
+		}
+		$params = [
+			'tree' => $this->BcContents->getTree($id, $level),
+			'currentId' => $currentId
+		];
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+			$params = array_merge($params, [
+					'cache' => [
+						'time' => Configure::read('BcCache.duration'),
+						'key' => $id]]
 			);
 		}
-		$this->element('sitemap', $params);
+		return $this->getElement('contents_menu', $params);
+	}
+
+/**
+ * グローバルメニューを出力する
+ *
+ * @param array $level 取得する階層（初期値 : 1）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return void
+ */
+	public function globalMenu($level = 1, $options = array()) {
+		echo $this->getGlobalMenu($level, $options);
+	}
+
+/**
+ * グローバルメニューを取得する
+ *
+ * @param array $level 取得する階層（初期値 : 1）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getGlobalMenu($level = 1, $options = array()) {
+		$Content = ClassRegistry::init('Content');
+		$siteId = 0;
+		if(!empty($this->request->params['Content']['site_id'])) {
+			$siteId = $this->request->params['Content']['site_id'];
+		}
+		$siteRoot = $Content->getSiteRoot($siteId);
+		$id = $siteRoot['Content']['id'];
+		$currentId = null;
+		if(!empty($this->request->params['Content']['id'])) {
+			$currentId = $this->request->params['Content']['id'];
+		}
+		$options = array_merge([
+			'tree' => $this->BcContents->getTree($id, $level),
+			'currentId' => $currentId
+		], $options);
+		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
+			$options = array_merge($options, [
+					'cache' => [
+						'time' => Configure::read('BcCache.duration'),
+						'key' => $id]]
+			);
+		}
+		return $this->getElement('global_menu', $options);
+	}
+
+/**
+ * サイトマップを出力する
+ *
+ * ログインしていない場合はキャッシュする
+ * 
+ * @param int $siteId サイトID
+ */
+	public function sitemap($siteId = 0) {
+		echo $this->getSitemap($siteId);
+	}
+
+/**
+ * サイトマップを取得する
+ *
+ * ログインしていない場合はキャッシュする
+ * 
+ * @param int $siteId サイトID
+ * @return string サイトマップ
+ */
+	public function getSitemap($siteId = 0) {
+		$Site = ClassRegistry::init('Site');
+		$contentId = $Site->getRootContentId($siteId);
+		return $this->getContentsMenu($contentId);
 	}
 
 /**
@@ -1690,22 +1788,6 @@ END_FLASH;
 	}
 
 /**
- * スマートフォンURLをリンクとして利用可能なURLに変換する
- * 
- * ページの確認用URL取得に利用する
- * /smartphone/about → /s/about
- *
- * @param string $url 元となるURL
- * @param string $type mobile、または、smartphone
- * @return string 変換後のURL
- */
-	public function changePrefixToAlias($url, $type) {
-		$alias = Configure::read("BcAgent.{$type}.alias");
-		$prefix = Configure::read("BcAgent.{$type}.prefix");
-		return preg_replace('/^\/' . $prefix . '\//is', '/' . $alias . '/', $url);
-	}
-
-/**
  * 管理者グループかどうかチェックする
  *
  * @param int $userGroupId ユーザーグループID（初期値 : null）※ 指定しない場合は、現在のログインユーザーについてチェックする
@@ -1728,30 +1810,7 @@ END_FLASH;
  * @return bool 固定ページの場合は true を返す
  */
 	public function isPage() {
-		if ($this->request->params['controller'] == 'pages') {
-			if ($this->request->params['action'] == 'display' ||
-				$this->request->params['action'] == 'smartphone_display' ||
-				$this->request->params['action'] == 'mobile_display') {
-				return true;
-			}
-		}
-		return false;
-	}
-
-/**
- * 指定のプラグインかを判別する
- * 現状、Blog,Mail のみ動作確認
- *
- * @param string name プラグイン名
- * @return bool
- */
-	public function isPluginContent($name) {
-		if (empty($this->request->params['plugin'])) {
-			return false;
-		}
-		return (
-			$this->request->params['plugin'] === Inflector::underscore($name)
-		);
+		return ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display');
 	}
 
 /**
@@ -1760,7 +1819,7 @@ END_FLASH;
  * @return bool
  */
 	public function isBlog() {
-		return $this->isPluginContent('Blog');
+		return ($this->request->params['Content']['plugin'] == 'Blog');
 	}
 
 /**
@@ -1769,7 +1828,7 @@ END_FLASH;
  * @return bool
  */
 	public function isMail() {
-		return $this->isPluginContent('Mail');
+		return ($this->request->params['Content']['plugin'] == 'Mail');
 	}
 
 /**
@@ -1871,6 +1930,20 @@ END_FLASH;
  * @return void
  */
 	public function widgetArea($no = null, $options = array()) {
+		echo $this->getWidgetArea($no, $options);
+	}
+
+/**
+ * ウィジェットエリアを取得する
+ *
+ * @param int $no ウィジェットエリアNO（初期値 : null）※ 省略した場合は、コンテンツごとに管理システムにて設定されているウィジェットエリアを出力する
+ * @param array $options オプション（初期値 : array()）
+ *	- `loadHelpers` : ヘルパーを読み込むかどうか（初期値 : false）
+ * todo loadHelpersが利用されていないのをなんとかする
+ *	- `subDir` : テンプレートの配置場所についてプレフィックスに応じたサブフォルダを利用するかどうか（初期値 : true）
+ * @return string
+ */
+	public function getWidgetArea($no = null, $options = array()) {
 		$options = array_merge(array(
 			'loadHelpers'	=> false,
 			'subDir'		=> true,
@@ -1882,8 +1955,9 @@ END_FLASH;
 			$no = $this->_View->viewVars['widgetArea'];
 		}
 		if ($no) {
-			$this->element('widget_area', array('no' => $no, 'subDir' => $subDir), array('subDir' => $subDir));
+			return $this->getElement('widget_area', array('no' => $no, 'subDir' => $subDir), array('subDir' => $subDir));
 		}
+		return '';
 	}
 
 /**
@@ -2204,10 +2278,19 @@ END_FLASH;
  * @return void
  */
 	public function subMenu($data = array(), $options = array()) {
-		if (!$this->_View->get('subMenuElements')) {
-			return;
-		}
-		$this->element('sub_menu', $data, $options);
+		echo $this->getSubMenu($data, $options);
+	}
+
+/**
+ * サブメニューを取得する
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getSubMenu($data = array(), $options = array()) {
+		return $this->getElement('sub_menu', $data, $options);
 	}
 
 /**
@@ -2231,19 +2314,10 @@ END_FLASH;
  * @return void
  */
 	public function crumbsList($data = array(), $options = array()) {
+		$data = array_merge([
+			'onSchema' => false
+		], $data);
 		$this->element('crumbs', $data, $options);
-	}
-
-/**
- * グローバルメニューを出力する
- * 
- * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
- * @param array $options オプション（初期値 : array()）
- *	※ その他のパラメータについては、View::element() を参照
- * @return void
- */
-	public function globalMenu($data = array(), $options = array()) {
-		$this->element('global_menu', $data, $options);
 	}
 
 /**
@@ -2254,12 +2328,11 @@ END_FLASH;
  *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
-	public function googleAnalytics($data = array(), $options = array()) {
-		if(!empty($this->siteConfig['use_universal_analytics'])) {
-			$this->element('google_analytics', $data, $options);
-		} else {
-			$this->element('google_analytics_old', $data, $options);
-		}
+	public function googleAnalytics($data = [], $options = []) {
+		$data = array_merge([
+			'useUniversalAnalytics' => (bool) @$this->siteConfig['use_universal_analytics']
+		], $data);
+		$this->element('google_analytics', $data, $options);
 	}
 
 /**
@@ -2270,8 +2343,20 @@ END_FLASH;
  *	※ その他のパラメータについては、View::element() を参照
  * @return void
  */
-	public function googleMaps($data = array(), $options = array()) {
-		$this->element('google_maps', $data, $options);
+	public function googleMaps($data = [], $options = []) {
+		echo $this->getGoogleMaps($data, $options);
+	}
+
+/**
+ * Google Maps を取得する
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return void
+ */
+	public function getGoogleMaps($data = [], $options = []) {
+		return $this->getElement('google_maps', $data, $options);
 	}
 
 /**
@@ -2295,9 +2380,21 @@ END_FLASH;
  * @return void
  */
 	public function siteSearchForm($data = array(), $options = array()) {
-		$this->element('site_search_form', $data, $options);
+		echo $this->getSiteSearchForm($data, $options);
 	}
 
+/**
+ * サイト内検索フォームを取得
+ *
+ * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
+ * @param array $options オプション（初期値 : array()）
+ *	※ その他のパラメータについては、View::element() を参照
+ * @return string
+ */
+	public function getSiteSearchForm($data = array(), $options = array()) {
+		return $this->getElement('site_search_form', $data, $options);
+	}
+	
 /**
  * WEBサイト名を出力する
  *
@@ -2354,41 +2451,49 @@ END_FLASH;
  * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
  * @param array $options オプション（初期値 :array()）
  *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
  * @return array サイト基本設定配列
  */
 	public function getBlogs($name = '', $options = array()) {
 		$options = array_merge(array(
-			'sort' => 'id'
+			'sort' => 'BlogContent.id',
+			'siteId' => 0
 		), $options);
-
-		$conditions['BlogContent.status'] = true ;
+		$conditions['Content.status'] = true;
 		if(! empty($name)){
-			$conditions['BlogContent.name'] = $name ;
+			$conditions['Content.name'] = $name;
 		}
-
-		$BlogContent = ClassRegistry::init('BlogContent');
+		if($options['siteId'] !== '') {
+			$conditions['Content.site_id'] = $options['siteId'];
+		}
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$BlogContent->unbindModel(
+			['hasMany' => ['BlogPost', 'BlogCategory']]
+		);
 		$datas = $BlogContent->find('all', array(
 				'conditions' => $conditions,
-				'order' => array(
-					'BlogContent.' . $options['sort']
-				),
+				'order' => $options['sort'],
 				'cache' => false
 			)
 		);
-
+		if(!$datas) {
+			return false;
+		}
 		$contents = array();
 		if( count($datas) === 1 ){
 			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
 			unset($datas['BlogContent']['eye_catch_size']);
-			$contents = $datas['BlogContent'];
+			$contents[] = $datas;
 		} else {
 			foreach($datas as $val){
 				$val = $BlogContent->constructEyeCatchSize($val);
 				unset($val['BlogContent']['eye_catch_size']);
-				$contents[] = $val['BlogContent'];
+				$contents[] = $val;
 			}
 		}
-
+		if($name) {
+			$contents = $contents[0];
+		}
 		return $contents;
 	}
 
@@ -2420,4 +2525,169 @@ END_FLASH;
 		return $params;
 	}
 
+/**
+ * 現在のコンテンツ情報を取得する
+ * 
+ * @return mixed|null
+ */
+	public function getCurrentContent() {
+		if(!empty($this->request->params['Content'])) {
+			return $this->request->params['Content'];
+		}
+		return null;
+	}
+
+/**
+ * 現在のサイトプレフィックスを取得する
+ * 
+ * @return string
+ */
+	public function getCurrentPrefix() {
+		if(empty($this->request->params['Site'])) {
+			return '';
+		}
+		$Site = ClassRegistry::init('Site');
+		return $Site->getPrefix($this->request->params['Site']);
+	}
+
+/**
+ * コンテンツ作成日を取得
+ * @return null|string
+ */
+	public function getContentCreatedDate($format = 'Y/m/d H:i') {
+		$content = $this->getCurrentContent();
+		if($content['created_date']) {
+			return date($format, strtotime($content['created_date']));	
+		} else {
+			return '';
+		}
+	}
+
+/**
+ * コンテンツ更新日を取得
+ * 
+ * @param string $format
+ * @return null|string
+ */
+	public function getContentModifiedDate($format = 'Y/m/d H:i') {
+		$content = $this->getCurrentContent();
+		if($content['modified_date']) {
+			return date($format, strtotime($content['modified_date']));
+		} else {
+			return '';
+		}
+	}
+
+/**
+ * 更新情報を出力する 
+ */
+	public function updateInfo() {
+		echo $this->getUpdateInfo();
+	}
+
+/**
+ * 更新情報を取得する
+ */
+	public function getUpdateInfo() {
+		return $this->getElement('update_info', [
+			'createdDate' => $this->getContentCreatedDate(),
+			'modifiedDate' => $this->getContentModifiedDate()
+		]);
+	}
+
+/**
+ * 関連サイトのリンク一覧を取得
+ * 
+ * @param int $id コンテンツID
+ */
+	public function getRelatedSiteLinks($id = null, $excludeIds = []) {
+		$options = [];
+		if($excludeIds) {
+			$options['excludeIds'] = $excludeIds;
+		}
+		$links = $this->BcContents->getRelatedSiteLinks($id, $options);
+		return $this->getElement('related_site_links', ['links' => $links]);
+	}
+
+/**
+ * 関連サイトのリンク一覧を表示
+ * 
+ * @param int $id コンテンツID
+ */
+	public function relatedSiteLinks($id = null, $excludeIds = []) {
+		echo $this->getRelatedSiteLinks($id, $excludeIds);
+	}
+
+/**
+ * After Render
+ *
+ * @param string $viewFile
+ */
+	public function afterRender($viewFile) {
+		parent::afterRender($viewFile);
+		if(BcUtil::isAdminSystem()) {
+			return;
+		}
+		if(empty($this->request->params['Site'])) {
+			return;
+		}
+		if(isset($this->request->params['Site']['name']) && is_null($this->request->params['Site']['name'])) {
+			return;
+		}
+		if(isset($this->request->params['Site']['device']) && $this->request->params['Site']['device'] != '') {
+			return;
+		}
+		// 別URLの場合、alternateを出力（スマートフォンのみ対応）
+		$pureUrl = $this->BcContents->getPureUrl($this->request->url, $this->request->params['Site']['id']);
+		$agent = BcAgent::find('smartphone');
+		$subSite = BcSite::findCurrentSub(false, $agent);
+		if(!$subSite) {
+			return;
+		}
+		$url = $subSite->makeUrl(new CakeRequest($pureUrl));
+		$this->_View->set('meta',
+			$this->BcHtml->meta('canonical',
+				$this->BcHtml->url($url, true),
+				[
+					'rel' => 'canonical',
+					'media' => 'only screen and (max-width: 640px)',
+					'type' => null,
+					'title' => null,
+					'inline' => false
+				]
+			)
+		);
+	}
+
+/**
+ * トップページのタイトルをセットする
+ * 
+ * @param $title
+ */
+	public function setHomeTitle($title = null) {
+		if(!$title) {
+			$crumbs = $this->getCrumbs();
+			if ($crumbs) {
+				$crumbs = array_reverse($crumbs);
+				$title = $crumbs[0]['name'];
+			}
+		}
+		$this->_View->set('homeTitle', $title);
+	}
+
+/**
+ * スマートフォン用のウェブクリップアイコン用のタグを出力する
+ * 
+ * @param string $fileName ファイル名（webroot に配置する事が前提）
+ * @param bool $useGloss 光沢有無
+ */
+	public function webClipIcon($fileName = 'apple-touch-icon-precomposed.png', $useGloss = false) {
+		if($useGloss) {
+			$rel = 'apple-touch-icon';
+		} else {
+			$rel = 'apple-touch-icon-precomposed';
+		}
+		echo '<link rel="' . $rel . '" href="' . Router::url('/' . $fileName, true) . '" />';
+	}
+	
 }

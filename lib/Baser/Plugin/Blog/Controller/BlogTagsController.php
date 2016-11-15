@@ -1,25 +1,23 @@
 <?php
-
 /**
- * ブログタグコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
  * ブログタグコントローラー
  *
  * @package Blog.Controller
+ * @property BcAuthComponent $BcAuth
+ * @property CookieComponent $Cookie
+ * @property BcAuthConfigureComponent $BcAuthConfigure
+ * @property BcContentsComponent $BcContents
  */
 class BlogTagsController extends BlogAppController {
 
@@ -27,7 +25,6 @@ class BlogTagsController extends BlogAppController {
  * クラス名
  *
  * @var array
- * @access public
  */
 	public $name = 'BlogTags';
 
@@ -35,7 +32,6 @@ class BlogTagsController extends BlogAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Blog.BlogCategory', 'Blog.BlogTag');
 
@@ -43,34 +39,13 @@ class BlogTagsController extends BlogAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * ぱんくずナビ
- *
- * @var string
- * @access public
- */
-	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
-		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
-	);
-
-/**
- * サブメニューエレメント
- *
- * @var array
- * @access public
- */
-	public $subMenuElements = array('blog_common');
-
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
+	
 /**
  * [ADMIN] タグ一覧
  *
  * @return void
- * @access public
  */
 	public function admin_index() {
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sort' => 'id', 'direction' => 'asc'));
@@ -90,7 +65,6 @@ class BlogTagsController extends BlogAppController {
  * [ADMIN] タグ登録
  *
  * @return void
- * @access public
  */
 	public function admin_add() {
 		if (!empty($this->request->data)) {
@@ -113,7 +87,6 @@ class BlogTagsController extends BlogAppController {
  *
  * @param int $id タグID
  * @return void
- * @access public
  */
 	public function admin_edit($id) {
 		if (!$id) {
@@ -143,9 +116,9 @@ class BlogTagsController extends BlogAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
@@ -167,9 +140,9 @@ class BlogTagsController extends BlogAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -188,7 +161,6 @@ class BlogTagsController extends BlogAppController {
  *
  * @param int $id
  * @return void
- * @access public
  */
 	protected function _batch_del($ids) {
 		if ($ids) {
@@ -207,7 +179,6 @@ class BlogTagsController extends BlogAppController {
  * [ADMIN] AJAXタグ登録
  *
  * @return void
- * @access public
  */
 	public function admin_ajax_add() {
 		if (!empty($this->request->data)) {

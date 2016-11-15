@@ -1,70 +1,46 @@
 <?php
 /**
- * [ADMIN] 検索インデックス一覧
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			baserCMS v 0.1.0
+ * @since			baserCMS v 4.0.0
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js(array(
-	'admin/jquery.baser_ajax_data_list',
-	'admin/jquery.baser_ajax_batch',
-	'admin/baser_ajax_data_list_config',
-	'admin/baser_ajax_batch_config'
-));
-?>
-<script type="text/javascript">
-$(function(){
-	if($("#ContentOpen").html()) {
-		$("#ContentFilterBody").show();
-	}
-	$(".priority").change(function() {
-		var id = this.id.replace('ContentPriority', '');
-		var priority = $(this).val();
-		$.bcToken.check(function(){
-			var data = {
-				'data[Content][id]':id,
-				'data[Content][priority]': priority,
-				'data[_Token][key]': $.bcToken.key
-			};
-			$.ajax({
-				type: "POST",
-				url: $("#AjaxChangePriorityUrl").html()+'/'+id,
-				data: data,
-				beforeSend: function() {
-					$("#flashMessage").slideUp();
-					$("#PriorityAjaxLoader"+id).show();
-				},
-				success: function(result){
-					if(!result) {
-						$("#flashMessage").html('処理中にエラーが発生しました。');
-						$("#flashMessage").slideDown();
-					}
-				},
-				error: function() {
-					$("#flashMessage").html('処理中にエラーが発生しました。');
-					$("#flashMessage").slideDown();
-				},
-				complete: function() {
-					$("#PriorityAjaxLoader"+id).hide();
-				}
-			});
-		});
-	});
-	$.baserAjaxDataList.init();
-	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 
-});
+/**
+ * [ADMIN] 統合コンテンツ一覧
+ */
+$currentUser = BcUtil::loginUser('admin');
+$this->BcBaser->js('admin/vendors/jquery.jstree-3.3.1/jstree.min', false);
+$this->BcBaser->js('admin/contents/index', false, [
+	'id' => 'AdminContentsIndexScript',
+	'data-isAdmin' => BcUtil::isAdminUser(),
+	'data-isUseMoveContents' => (bool) $currentUser['UserGroup']['use_move_contents'],
+	'data-adminPrefix' => Configure::read('BcAuthPrefix.admin.alias')
+]);
+$this->BcBaser->js('admin/libs/jquery.bcTree', false);
+$this->BcBaser->js(array(
+	'admin/libs/jquery.baser_ajax_data_list',
+	'admin/libs/jquery.baser_ajax_batch',
+	'admin/libs/baser_ajax_data_list_config',
+	'admin/libs/baser_ajax_batch_config'
+));
+echo $this->BcForm->input('BcManageContent', array('type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()));
+?>
+
+
+<script type="text/javascript">
+
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'contents', 'action' => 'ajax_batch')) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
-<div id="AjaxChangePriorityUrl" class="display-none"><?php echo $this->BcBaser->url(array('action' => 'ajax_change_priority')) ?></div>
-<div id="ContentOpen" class="display-none"><?php echo $this->BcForm->value('Content.open') ?></div>
-<div id="DataList"><?php $this->BcBaser->element('contents/index_list') ?></div>
+
+<?php $this->BcBaser->element('contents/index_view_setting') ?>
+
+<div id="DataList">&nbsp;</div>
+
+

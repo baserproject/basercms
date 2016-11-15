@@ -1,17 +1,21 @@
 <?php
 /**
- * [ADMIN] ユーザー一覧　ヘルプ
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマファイルフォーム（フォルダー）　ヘルプ
+ */
 ?>
+
+
 <p>テーマファイルを分類する為のフォルダの作成・編集・削除が行えます。</p>
 <ul>
 	<li>フォルダを作成するには、フォルダ名を半角で入力して「作成」ボタンをクリックします。</li>

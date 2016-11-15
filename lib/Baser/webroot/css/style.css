@@ -1,0 +1,228 @@
+@charset "UTF-8";
+/**
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
+ *
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @since			baserCMS v 2.0.0
+ * @license			http://basercms.net/license/index.html
+ */
+
+body {
+	font-family: 'Quicksand', "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", 'メイリオ' , Meiryo , Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+#Logo {
+    margin-bottom:60px;
+}
+#Wrap {
+    text-align:left;
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:#FFF;
+    padding:60px;
+}
+.contents-body {
+    min-height:200px;
+    padding:0 0 30px 0;
+}
+.contents-body p{
+    margin-bottom:30px;
+}
+.contents-body h1,
+.contents-body h2,
+.contents-body h3,
+.contents-body h4{
+    margin-bottom:30px;
+    padding-top:0;
+    padding-bottom:0;
+}
+.contents-body ul,
+.contents-body ol,
+.contents-body dl{
+    margin-bottom:30px;
+}
+.contents-body table {
+    margin-bottom:30px;
+}
+.contents-navi {
+    padding:30px 0;
+    text-align: center;
+    border-top:1px solid #efefef;
+}
+#CrumbList {
+    color:#999;
+    margin-bottom:30px;
+}
+#CrumbList li {
+    float:left;
+    line-height:2em;
+}
+#GlobalMenu {
+    float:none;
+    width:1120px;
+    margin-left:auto;
+    margin-right:auto;
+}
+#GlobalMenu ul{
+    padding:0;
+}
+#GlobalMenu .global-menu{
+    padding:0;
+}
+#GlobalMenu ul li a {
+    line-height:2em;
+    padding:10px 20px;
+    font-size:16px;
+}
+
+/* mega menu list */
+nav .nav-menu {
+    display: block;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 15;
+}
+
+/* a top level navigation item in the mega menu */
+nav .nav-item {
+    list-style: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+/* first descendant link within a top level navigation item */
+nav .nav-item > a {
+    position: relative;
+    display: inline-block;
+    padding: 0.5em 1em;
+    margin: 0 0 -1px 0;
+    border: 1px solid transparent;
+}
+
+/* focus/open states of first descendant link within a top level
+   navigation item */
+nav .nav-item > a:focus,
+nav .nav-item > a.open {
+    border: 1px solid #dedede;
+}
+
+/* open state of first descendant link within a top level
+   navigation item */
+nav .nav-item > a.open {
+    background-color: #fff;
+    border-bottom: none;
+    z-index: 2;
+}
+
+/* sub-navigation panel */
+nav .sub-nav {
+    position: absolute;
+    display: none;
+    padding: 20px;
+    border: 1px solid #dedede;
+    background-color: #fff;
+    z-index:1;
+}
+#MainImage {
+    z-index:0;
+}
+/* sub-navigation panel open state */
+nav .sub-nav.open {
+    display: block;
+}
+
+/* list of items within sub-navigation panel */
+nav .sub-nav ul {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 1em 0 0;
+    padding: 0;
+}
+
+/* list item within sub-navigation panel */
+nav .sub-nav li {
+    float:none!important;
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav .ul-level-2 a{
+    padding:10px 10px!important;
+    text-align: left;
+    font-size: 14px!important;
+}
+nav .ul-level-3 {
+    margin-left:40px!important;
+    margin-bottom:20px!important;
+}
+nav .ul-level-3 a{
+    padding:0px!important;
+    font-weight: normal!important;
+}
+
+.ul-level-2,
+.ul-level-3 {
+    margin-left:40px;
+}
+.update-info {
+    padding:30px 0 0 0;
+}
+.update-info dl {
+    float:right;
+    clear:both;
+}
+.update-info dt,dd {
+    line-height:2em;
+    text-align: right;
+}
+.update-info dt {
+    clear: left;
+    float: left;
+    width: 80px;
+}
+.update-info dd {
+    margin-left: 60px;
+    width: 120px;
+}
+.related-site-links li{
+    line-height:2em;
+    padding:10px;
+}
+.related-site-links li a {
+    color:#535A62;
+    font-weight:bold;
+}
+.related-site-links{
+    display: flex;
+    justify-content: center;
+    background-color: #EFEFEF;
+}
+.widget-area {
+    margin-top:60px;
+    border-top:5px solid #efefef;
+}
+.widget {
+    padding-top:30px;
+    padding-bottom: 30px;
+    border-bottom:1px solid #efefef;
+}
+.contents-body table{
+	width:100%;
+	margin-bottom: 20px;
+}
+.contents-body th{
+	border-bottom: 1px solid #999!important;
+	font-weight: bold;
+	padding:10px;
+}
+.contents-body td{
+	border-bottom: 1px solid #CCC!important;
+	padding:10px;
+}

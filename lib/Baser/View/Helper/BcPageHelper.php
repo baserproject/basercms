@@ -1,11 +1,9 @@
 <?php
 /**
- * ページヘルパー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -18,6 +16,7 @@ App::uses('Helper', 'View');
  * ページヘルパー
  *
  * @package Baser.View.Helper
+ * @property BcContentsHelper $BcContents
  */
 class BcPageHelper extends Helper {
 
@@ -25,14 +24,12 @@ class BcPageHelper extends Helper {
  * ページモデル
  * 
  * @var Page
- * @access public
  */
 	public $Page = null;
 
 /**
  * data
  * @var array
- * @access public
  */
 	public $data = array();
 
@@ -41,7 +38,7 @@ class BcPageHelper extends Helper {
  * 
  * @var array
  */
-	public $helpers = array('BcBaser');
+	public $helpers = array('BcBaser', 'BcContents');
 
 /**
  * construct
@@ -59,85 +56,19 @@ class BcPageHelper extends Helper {
 	}
 
 /**
- * beforeRender
- * 
- * @param string $viewFile (継承もとで利用中) The view file that is going to be rendered
- * @return void
- */
-	public function beforeRender($viewFile) {
-		if ($this->request->params['controller'] == 'pages' && preg_match('/(^|_)display$/', $this->request->params['action'])) {
-			// @TODO ページ機能が.html拡張子なしに統合できたらコメントアウトされたものに切り替える
-			//$this->request->data = $this->Page->findByUrl('/'.impload('/',$this->request->params['pass'][0]));
-			$param = Configure::read('BcRequest.pureUrl');
-			if ($param === '') {
-				$param = 'index';
-			} elseif (preg_match('/\/$/is', $param)) {
-				$param .= 'index';
-			}
-			
-			if (Configure::read('BcRequest.agent')) {
-				$agentPrefix = Configure::read('BcRequest.agentPrefix');
-				if(empty($this->BcBaser->siteConfig['linked_pages_' . $agentPrefix])) {
-					$param = $agentPrefix . '/' . $param;
-				}
-			}
-			$param = preg_replace("/\.html$/", '', $param);
-			$this->request->data = $this->Page->findByUrl('/' . $param);
-		}
-	}
-
-/**
  * ページ機能用URLを取得する
  * 
  * @param array $page 固定ページデータ
  * @return string URL
  */
 	public function getUrl($page) {
-		if(isset($page['Page'])) {
-			$page = $page['Page'];
+		if(isset($page['Content'])) {
+			$page = $page['Content'];
 		}
 		if(!isset($page['url'])) {
 			return '';
 		}
-		return $this->Page->convertViewUrl($page['url']);
-	}
-
-/**
- * 現在のページが所属するカテゴリデータを取得する
- * 
- * @return array 失敗すると getCategory() は FALSE を返します。
- */
-	public function getCategory() {
-		if (!empty($this->request->data['PageCategory']['id'])) {
-			return $this->request->data['PageCategory'];
-		} else {
-			return false;
-		}
-	}
-
-/**
- * 現在のページが所属する親のカテゴリを取得する
- *
- * @param boolean $top 親カテゴリが存在するかどうか、 オプションのパラメータ、初期値はオプションのパラメータ、初期値は false
- * @return array
- */
-	public function getParentCategory($top = false) {
-
-		$category = $this->getCategory();
-		if (empty($category['id'])) {
-			return false;
-		}
-		if ($top) {
-			$path = $this->Page->PageCategory->getPath($category['id']);
-			if ($path) {
-				$parent = $path[0];
-			} else {
-				return false;
-			}
-		} else {
-			$parent = $this->Page->PageCategory->getParentNode($category['id']);
-		}
-		return $parent;
+		return $page['url'];
 	}
 
 /**
@@ -147,24 +78,9 @@ class BcPageHelper extends Helper {
  * @param int $recursive 関連データの階層
  * @return array
  */
-	public function getPageList($pageCategoryId, $recursive = null) {
-
-		return $this->requestAction('/contents/get_page_list_recursive', array('pass' => array($pageCategoryId, $recursive)));
-	}
-
-/**
- * カテゴリ名を取得する
- * 
- * @return mixed string / false
- */
-	public function getCategoryName() {
-
-		$category = $this->getCategory();
-		if ($category['name']) {
-			return $category['name'];
-		} else {
-			return false;
-		}
+	public function getPageList($id, $level = null, $options = []) {
+		$options['type'] = 'Page';
+		return $this->BcContents->getTree($id, $level, $options);
 	}
 
 /**
@@ -193,6 +109,8 @@ class BcPageHelper extends Helper {
 /**
  * ページカテゴリ間の次の記事へのリンクを取得する
  *
+ * MEMO: BcRequest.(agent).aliasは廃止
+ *
  * @param string $title
  * @param array $options オプション（初期値 : array()）
  *	- `class` : CSSのクラス名（初期値 : 'next-link'）
@@ -202,38 +120,32 @@ class BcPageHelper extends Helper {
  * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
 	public function getNextLink($title = '', $options = array()) {
-		
+
+		if(empty($this->request->params['Content']['id']) || empty($this->request->params['Content']['parent_id'])) {
+			return false;
+		}
 		$options = array_merge(array(
 			'class'			=> 'next-link',
 			'arrow'			=> ' ≫',
 			'overCategory'	=> false,
 		), $options);
-
-		if (!isset($this->request->data['Page']) || (!$this->contentsNaviAvailable() && $options['overCategory'] !== true)) {
-			return false;
-		}
 		
 		$arrow = $options['arrow'];
-		unset($options['arrow']);
 		$overCategory = $options['overCategory'];
+		unset($options['arrow']);
 		unset($options['overCategory']);
-		
-		$page = $this->_getPageByNextOrPrev($this->request->data, 'next', $overCategory);
 
-		if ($page) {
+		$content = $this->_getPageByNextOrPrev($this->request->params['Content']['lft'], $this->request->params['Content']['parent_id'], 'next', $overCategory);
+
+		if ($content) {
 			if (!$title) {
-				$title = $page['Page']['title'] . $arrow;
+				$title = $content['Content']['title'] . $arrow;
 			}
-			$url = $page['Page']['url'];
-			foreach (Configure::read('BcAgent') as $agent) {
-				if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
-					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
-					break;
-				}
-			}
+			$url = $content['Content']['url'];
 			return $this->BcBaser->getLink($title, $url, $options);
+		} else {
+			return false;
 		}
-
 	}
 
 /**
@@ -259,42 +171,34 @@ class BcPageHelper extends Helper {
  *	- `class` : CSSのクラス名（初期値 : 'prev-link'）
  *	- `arrow` : 表示文字列（初期値 : ' ≫'）
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
- * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
- * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
+ * @return string|false
  */
 	public function getPrevLink($title = '', $options = array()) {
-
+		if(empty($this->request->params['Content']['id']) || empty($this->request->params['Content']['parent_id'])) {
+			return false;
+		}
 		$options = array_merge(array(
 			'class'			=> 'prev-link',
 			'arrow'			=> '≪ ',
 			'overCategory'	=> false,
 		), $options);
 
-		if (!isset($this->request->data['Page']) || (!$this->contentsNaviAvailable() && $options['overCategory'] !== true)) {
-			return false;
-		}
-
 		$arrow = $options['arrow'];
-		unset($options['arrow']);
 		$overCategory = $options['overCategory'];
+		unset($options['arrow']);
 		unset($options['overCategory']);
 
-		$page = $this->_getPageByNextOrPrev($this->request->data, 'prev', $overCategory);
+		$content = $this->_getPageByNextOrPrev($this->request->params['Content']['lft'], $this->request->params['Content']['parent_id'], 'prev', $overCategory);
 
-		if ($page) {
+		if ($content) {
 			if (!$title) {
-				$title = $arrow . $page['Page']['title'];
+				$title = $arrow . $content['Content']['title'];
 			}
-			$url = $page['Page']['url'];
-			foreach (Configure::read('BcAgent') as $agent) {
-				if (preg_match('/^\/' . $agent['prefix'] . '/', $page['Page']['url'])) {
-					$url = preg_replace('/^\/' . $agent['prefix'] . '/', '/' . $agent['alias'], $page['Page']['url']);
-					break;
-				}
-			}
+			$url = $content['Content']['url'];
 			return $this->BcBaser->getLink($title, $url, $options);
+		} else {
+			return false;
 		}
-
 	}
 
 /**
@@ -320,93 +224,27 @@ class BcPageHelper extends Helper {
  * @param bool $overCategory カテゴリをまたがるかどうか
  * @return array 次、または、前の固定ページデータ
  */
-	protected function _getPageByNextOrPrev($page, $type, $overCategory = false) {
-
-		switch ($type) {
-			case 'next':
-				$operator = '>';
-				$sort = 'sort';
-				break;
-			case 'prev':
-				$operator = '<';
-				$sort = 'sort DESC';
-				break;
+	protected function _getPageByNextOrPrev($lft, $parentId, $type, $overCategory = false) {
+		$Content = ClassRegistry::init('Content');
+		$conditions = array_merge($Content->getConditionAllowPublish(), [
+			'Content.type <>' => 'ContentFolder',
+			'Content.site_id' => $this->request->params['Content']['site_id']
+		]);
+		if ($overCategory !== true) {
+			$conditions['Content.parent_id'] =  $parentId;
 		}
-
-		if ($overCategory === true) {
-			$requestAgent = Configure::read('BcRequest.agent');
-			if ($requestAgent) {
-				$pageCategoryConditions = array('Page.page_category_id' => $this->_getAgentCategoryIds($requestAgent));
-			} else {
-				$pageCategoryConditions = array('or' => array(
-					array('Page.page_category_id !=' => $this->_getAllAgentCategoryIds()),
-					array('Page.page_category_id' => null)
-				));
-			}
-		} else {
-			$pageCategoryConditions = array(
-				'Page.sort ' . $operator => $page['Page']['sort'],
-				'Page.page_category_id' => $page['Page']['page_category_id']
-			);
-		}
-
-		return $this->Page->find('first', array(
-			'conditions' => array_merge(array(
-				array('Page.sort ' . $operator => $page['Page']['sort']),
-				$this->Page->getConditionAllowPublish(),
-				$pageCategoryConditions
-			)),
-			'fields' => array('title', 'url'),
-			'order' => $sort,
-			'recursive' => -1,
+		$data = $Content->find('neighbors',	[
+			'field' => 'lft',
+			'value' => $lft,
+			'conditions' => $conditions,
+			'order' => ['Content.lft'],
+			'recursive' => 0,
 			'cache' => false
-		));
-
-	}
-
-/**
- * PC以外全てのエージェントのカテゴリIDを取得する
- * エージェント自体を指すカテゴリIDも含む
- *
- * @return array カテゴリID
- */
-	protected function _getAllAgentCategoryIds() {
-		$categoryIds = array();
-		$agents = Configure::read('BcAgent');
-		foreach($agents as $agent) {
-			$categoryIds += $this->_getAgentCategoryIds($agent['prefix']);
-		}
-		return $categoryIds;
-	}
-
-/**
- * PC以外全てのエージェントのカテゴリIDを取得する
- * エージェント自体を指すカテゴリIDも含む
- *
- * @param string $prefix エージェントのプレフィックス（例）mobile / smartphone
- * @return array
- */
-	protected function _getAgentCategoryIds($prefix) {
-		$agentId = $this->Page->PageCategory->getAgentId($prefix);
-		$categoryIds[] = $agentId;
-		// Agentが持つページカテゴリIDを取得する
-		$children = $this->Page->PageCategory->children($agentId);
-		if($children) {
-			$categoryIds = array_merge($categoryIds, Hash::extract($children, '{n}.PageCategory.id'));
-		}
-		return $categoryIds;
-	}
-
-/**
- * コンテンツナビ有効チェック
- *
- * @return boolean
- */
-	public function contentsNaviAvailable() {
-		if (empty($this->request->data['Page']['page_category_id']) || empty($this->request->data['PageCategory']['contents_navi'])) {
-			return false;
+		]);
+		if($data && !empty($data[$type])) {
+			return $data[$type];
 		} else {
-			return true;
+			return false;
 		}
 	}
 
@@ -416,88 +254,13 @@ class BcPageHelper extends Helper {
  * @return void
  */
 	public function content() {
-
-		$agent = '';
-		if (Configure::read('BcRequest.agentPrefix')) {
-			$agent = Configure::read('BcRequest.agentPrefix');
-		}
-		$path = $this->_View->getVar('pagePath');
-
-		if ($agent) {
-			$url = '/' . implode('/', $this->request->params['pass']);
-			$linked = $this->Page->isLinked($agent, $url);
-			if (!$linked) {
-				$path = $agent . DS . $path;
-			}
-		}
-		echo $this->_View->evaluate(getViewPath() . 'Pages' . DS . $path . '.php', $this->_View->viewVars);
-
-	}
-
-/**
- * テンプレートを取得
- * セレクトボックスのソースとして利用
- * 
- * @param string $type layout or content
- * @param string $agent '' or mobile or smartphone
- * @return array
- */
-	public function getTemplates($type = 'layout', $agent = '') {
-
-		$agentPrefix = '';
-		if ($agent) {
-			$agentPrefix = Configure::read('BcAgent.' . $agent . '.prefix');
-		}
-
-		$siteConfig = Configure::read('BcSite');
-		$themePath = WWW_ROOT . 'theme' . DS . $siteConfig['theme'] . DS;
-		$viewPaths = array_merge(array($themePath), App::path('View'));
-		$ext = Configure::read('BcApp.templateExt');
-
-		$templates = array();
-
-		foreach ($viewPaths as $viewPath) {
-
-			$templatePath = '';
-			switch ($type) {
-				case 'layout':
-					if (!$agentPrefix) {
-						$templatePath = $viewPath . 'Layouts' . DS;
-					} else {
-						$templatePath = $viewPath . 'Layouts' . DS . $agentPrefix . DS;
-					}
-					break;
-				case 'content':
-					if (!$agentPrefix) {
-						$templatePath = $viewPath . 'Pages' . DS . 'templates' . DS;
-					} else {
-						$templatePath = $viewPath . 'Pages' . DS . $agentPrefix . DS . 'templates' . DS;
-					}
-					break;
-			}
-
-			if (!$templatePath) {
-				continue;
-			}
-
-			$Folder = new Folder($templatePath);
-			$files = $Folder->read(true, true);
-			if ($files[1]) {
-				foreach ($files[1] as $file) {
-					if (preg_match('/(.+)' . preg_quote($ext) . '$/', $file, $matches)) {
-						if (!in_array($matches[1], $templates)) {
-							$templates[] = $matches[1];
-						}
-					}
-				}
-			}
-		}
-
-		if ($templates) {
-			return array_combine($templates, $templates);
+		$previewTemplate = $this->_View->get('previewTemplate');
+		if($previewTemplate) {
+			$path = $previewTemplate;	
 		} else {
-			return array();
+			$path = APP . 'View' . DS . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->ext;
 		}
+		echo $this->_View->evaluate($path, $this->_View->viewVars);
 	}
 
 /**

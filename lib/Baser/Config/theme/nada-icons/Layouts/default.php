@@ -16,15 +16,13 @@
 		<?php $this->BcBaser->css('style') ?>
 
 <?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-			'admin/functions',
-			'startup',
+			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
 			'jquery.easing.1.3',
 			'nada-icons'
 )) ?>
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics') ?>
+<?php $this->BcBaser->googleAnalytics() ?>
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>">
 
@@ -40,7 +38,7 @@
 				<div id="Beta">
 					<?php if (!$this->BcBaser->isHome()): ?>
 					<div id="Navigation">
-						<?php $this->BcBaser->element('crumbs'); ?>
+						<?php $this->BcBaser->crumbsList(); ?>
 					</div>
 					<?php endif; ?>
 
@@ -81,7 +79,7 @@
 							</div>
 							<div id="top-main-telfax-right">
 								<div id="top-main-webcontact"><?php $this->BcBaser->img('icons_contact.png', array('url' => '/contact')); ?></div>
-								<div id="top-main-serch"><?php $this->BcBaser->element('search') ?></div>
+								<div id="top-main-serch"><?php $this->BcBaser->siteSearchForm() ?></div>
 							</div>
 						</div>
 

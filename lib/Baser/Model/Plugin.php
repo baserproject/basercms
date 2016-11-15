@@ -1,19 +1,13 @@
 <?php
-
 /**
- * プラグインモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -24,34 +18,16 @@
 class Plugin extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- * @access public
- */
-	public $name = 'Plugin';
-
-/**
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- * @access public
- */
-	public $useDbConfig = 'baser';
 
 /**
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'name' => array(
@@ -81,14 +57,20 @@ class Plugin extends AppModel {
  * @param string $filterType 更新タイプ指定
  * @return bool
  */
-	public function initDb($dbConfigName = 'plugin', $pluginName = '', $options = array()) {
+	public function initDb($pluginName = '', $options = array()) {
+		if(!is_array($options)) {
+			// @deprecated 5.0.0 since 4.0.0 baserCMS３まで第二引数がプラグイン名だったが、第一引数にプラグイン名を設定するように変更。元の第一引数は不要
+			$this->log('メソッド：Plugin::initDb()は、バージョン 4.0.0 より引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。', LOG_ALERT);
+			$pluginName = $options;
+			$options = [];
+		}
 		$options = array_merge(array(
 			'loadCsv'		=> true,
 			'filterTable'	=> '',
 			'filterType'	=> 'create',
 			'dbDataPattern'	=> ''
 		), $options);
-		return parent::initDb($dbConfigName, $pluginName, array(
+		return parent::initDb($pluginName, array(
 			'loadCsv'		=> $options['loadCsv'],
 			'filterTable'	=> $options['filterTable'],
 			'filterType'	=> $options['filterType'],
@@ -109,14 +91,10 @@ class Plugin extends AppModel {
 			return true;
 		}
 
-		$baserDb = ConnectionManager::getDataSource('baser');
-		$baserDb->cacheSources = false;
-		$baserListSources = $baserDb->listSources();
-		$baserPrefix = $baserDb->config['prefix'];
-		$pluginDb = ConnectionManager::getDataSource('plugin');
-		$pluginDb->cacheSources = false;
-		$pluginListSources = $pluginDb->listSources();
-		$pluginPrefix = $pluginDb->config['prefix'];
+		$db = ConnectionManager::getDataSource('default');
+		$db->cacheSources = false;
+		$listSources = $db->listSources();
+		$prefix = $db->config['prefix'];
 
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
@@ -136,15 +114,6 @@ class Plugin extends AppModel {
 
 				$type = 'drop';
 				$table = $matches[1];
-				$File = new File($path . DS . $file);
-				$data = $File->read();
-				if (preg_match('/(public|var)\s+\$connection\s+=\s+\'([a-z]+?)\';/', $data, $matches)) {
-					$conType = $matches[2];
-					$listSources = ${$conType . 'ListSources'};
-					$prefix = ${$conType . 'Prefix'};
-				} else {
-					continue;
-				}
 
 				$schemaPath = $tmpdir;
 				if (preg_match('/^create_(.*?)\.php$/', $file, $matches)) {
@@ -172,12 +141,7 @@ class Plugin extends AppModel {
 					$oldSchemaPath = $tmpdir . $file;
 					$File = new File($oldSchemaPath);
 					$File->write($data);
-
-					if ($conType == 'baser') {
-						$schemaPath = BcUtil::getSchemaPath() . DS;
-					} else {
-						$schemaPath = BcUtil::getSchemaPath($pluginName) . DS;
-					}
+					$schemaPath = BcUtil::getSchemaPath($pluginName) . DS;
 				} elseif (preg_match('/^drop_(.*?)\.php$/', $file, $matches)) {
 					$type = 'create';
 					$table = $matches[1];
@@ -190,12 +154,6 @@ class Plugin extends AppModel {
 						continue;
 					}
 					copy($path . DS . $file, $tmpdir . $table . '.php');
-				}
-
-				if ($conType == 'baser') {
-					$db = $baserDb;
-				} else {
-					$db = $pluginDb;
 				}
 
 				if (!$db->loadSchema(array('type' => $type, 'path' => $schemaPath, 'file' => $table . '.php', 'dropField' => true, 'oldSchemaPath' => $oldSchemaPath))) {

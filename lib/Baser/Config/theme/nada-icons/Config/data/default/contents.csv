@@ -1,8 +1,21 @@
-"id","type","model","model_id","category","title","detail","url","status","priority","created","modified"
-"","ページ","Page","2","","会社案内","baserCMS inc.の会社案内ページ 会社案内会社データ会社名baserCMS inc.  [デモ]設立2009年11月所在地福岡県福岡市博多区博多駅前（ダミー）事業内容インターネットサービス業（ダミー）WEBサイト制作事業（ダミー）WEBシステム開発事業（ダミー）アクセスマップvar latlng = new google.maps.LatLng(33.6065756,130.4182970);var options = {zoom: 16,center: latlng,mapTypeId: google.maps.MapTypeId.ROADMAP,navigationControl: true,mapTypeControl: true,scaleControl: true};var map = new google.maps.Map(document.getElementById(""map""), options);var marker = new google.maps.Marker({position: latlng,map: map,title:""baserCMS inc. [デモ]""});var infowindow = new google.maps.InfoWindow({content: 'baserCMS inc. [デモ]福岡県'});infowindow.open(map,marker);google.maps.event.addListener(marker, 'click', function() {infowindow.open(map,marker);});","/about","1","0.5","",""
-"","ページ","Page","3","","サービス","baserCMS inc.のサービス紹介ページ。 サービスサービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。サービスの案内文がはいります。","/service","1","0.5","",""
-"","ページ","Page","4","","アイコンの使い方","50種類のアイコンを自由にカスタマイズしよう。 アイコンの使い方50種類のアイコンを自由にカスタマイズしよう。&nbsp;&nbsp;まずは、nada-works-png.zip をダウンロードして解凍します。&nbsp;&nbsp;icons_ico_.pngをFireworksで開くと下記の50種類のアイコンがレイヤー分けされています。&nbsp;&nbsp;&nbsp;&nbsp;カスタマイズ1：ベースの形を変える。&nbsp;&nbsp;&nbsp;カスタマイズ2：色を変える。&nbsp;&nbsp;&nbsp;カスタマイズ3：パスを使って変形させる。（上級者向け）パスで作成しています。自由に変形させることが可能です。&nbsp;&nbsp;&nbsp;&nbsp;パターン例：各コンテンツで色を変える。同じアイコンを使用する、など&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文字と写真を変えるだけで完成！かんたんバナーを作ろう。&nbsp;&nbsp;icons_banner_00.png、icons_banner_l_00.pngをFireworksで開くと各要素をレイヤー分けされています。言葉、フォント、色、画像を変更してオリジナルのバナーを作成することができます。画像は「シンボル」にて配置しています。差し替えたい画像をシンボル化し、「シンボルを入れ替え」にて差し替えてご使用ください。&nbsp;&nbsp;例：言葉、フォントの変更、画像差し替え&nbsp;","/icons","1","0.5","",""
-"","ブログ","BlogContent","1","","ニュースリリース","Baser CMS inc. [デモ] の最新のニュースリリースをお届けします。","/news/index","1","0.5","",""
-"","メール","MailContent","1","","お問い合わせ","* 印の項目は必須となりますので、必ず入力してください。","/contact/index","1","0.5","",""
-"","ページ","Page","1","","Index","NEWS RELEASEbaserCMS NEWS","/index","1","0.5","",""
-"","ページ","Page","5","","サイトマップ","baserCMS inc.のサイトマップページ サイトマップ会社案内サービスアイコンの使い方サイトマップ新着情報お問い合わせ","/sitemap","1","0.5","",""
+id,site_id,name,plugin,type,url,parent_id,lft,rght,title,status,created,description,eyecatch,author_id,created_date,modified_date,publish_begin,publish_end,exclude_search,modified,entity_id,alias_id,site_root,deleted_date,deleted,layout_template,main_site_content_id,level,self_status,self_publish_begin,self_publish_end,exclude_menu,blank_link
+1,0,,Core,ContentFolder,/,,1,40,baserCMS inc. [デモ],1,,,,1,,,,,,,1,,1,,,default,,0,1,,,,
+2,1,m,Core,ContentFolder,/m/,1,2,9,baserCMS inc.｜ケータイ,0,,,,1,,,,,,,2,,1,,,default,1,1,,,,,
+3,2,s,Core,ContentFolder,/s/,1,10,25,baserCMS inc.｜スマホ,0,,,,1,,,,,,,3,,1,,,default,1,1,,,,,
+4,0,index,Core,Page,/index,1,26,27,トップページ,1,,,,1,,,,,,,1,,,,,,,1,1,,,,
+5,0,about,Core,Page,/about,1,34,35,会社案内,1,,,,1,,,,,,,2,,,,,,,1,1,,,,
+6,0,service,Core,Page,/service,1,30,31,サービス,1,,,,1,,,,,,,3,,,,,,,1,1,,,,
+7,0,icons,Core,Page,/icons,1,32,33,アイコンの使い方,1,,,,1,,,,,,,4,,,,,,,1,1,,,,
+8,0,sitemap,Core,Page,/sitemap,1,38,39,サイトマップ,1,,,,1,,,,,,,5,,,,,,,1,1,,,,
+9,1,index,Core,Page,/m/index,2,3,4,トップページ,1,,,,1,,,,,,,6,,,,,,4,2,1,,,,
+10,2,index,Core,Page,/s/index,3,11,12,トップページ,1,,,,1,,,,,,,7,,,,,,4,2,1,,,,
+11,2,about,Core,Page,/s/about,3,19,20,会社案内,1,,,,1,,,,,,,8,,,,,,5,2,1,,,,
+12,2,service,Core,Page,/s/service,3,15,16,サービス,1,,,,1,,,,,,,9,,,,,,6,2,1,,,,
+13,2,icons,Core,Page,/s/icons,3,17,18,アイコンの使い方,1,,,,1,,,,,,,10,,,,,,7,2,1,,,,
+14,2,sitemap,Core,Page,/s/sitemap,3,23,24,サイトマップ,1,,,,1,,,,,,,11,,,,,,8,2,1,,,,
+15,0,contact,Mail,MailContent,/contact/,1,36,37,お問い合わせ,1,,,,1,,,,,,,1,,,,,,,1,1,,,,
+16,0,news,Blog,BlogContent,/news/,1,28,29,新着情報,1,,,,1,,,,,,,1,,,,,,,1,1,,,,
+17,1,contact,Mail,MailContent,/m/contact/,2,5,6,お問い合わせ,1,,,,1,,,,,,,1,15,,,,,15,2,1,,,,
+18,2,contact,Mail,MailContent,/s/contact/,3,21,22,お問い合わせ,1,,,,1,,,,,,,1,15,,,,,15,2,1,,,,
+19,1,news,Blog,BlogContent,/m/news/,2,7,8,新着情報,1,,,,1,,,,,,,1,16,,,,,16,2,1,,,,
+20,2,news,Blog,BlogContent,/s/news/,3,13,14,新着情報,1,,,,1,,,,,,,1,16,,,,,16,2,1,,,,

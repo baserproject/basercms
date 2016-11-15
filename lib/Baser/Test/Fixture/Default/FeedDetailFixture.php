@@ -1,7 +1,6 @@
 <?php
 /**
  * FeedDetailFixture
- *
  */
 class FeedDetailFixture extends BaserTestFixture {
 /**

@@ -54,48 +54,42 @@ class SimplePie_XML_Declaration_Parser
 	/**
 	 * XML Version
 	 *
-	 * @access public
-	 * @var string
+		 * @var string
 	 */
 	var $version = '1.0';
 
 	/**
 	 * Encoding
 	 *
-	 * @access public
-	 * @var string
+		 * @var string
 	 */
 	var $encoding = 'UTF-8';
 
 	/**
 	 * Standalone
 	 *
-	 * @access public
-	 * @var bool
+		 * @var bool
 	 */
 	var $standalone = false;
 
 	/**
 	 * Current state of the state machine
 	 *
-	 * @access private
-	 * @var string
+		 * @var string
 	 */
 	var $state = 'before_version_name';
 
 	/**
 	 * Input data
 	 *
-	 * @access private
-	 * @var string
+		 * @var string
 	 */
 	var $data = '';
 
 	/**
 	 * Input data length (to avoid calling strlen() everytime this is needed)
 	 *
-	 * @access private
-	 * @var int
+		 * @var int
 	 */
 	var $data_length = 0;
 
@@ -103,15 +97,13 @@ class SimplePie_XML_Declaration_Parser
 	 * Current position of the pointer
 	 *
 	 * @var int
-	 * @access private
-	 */
+		 */
 	var $position = 0;
 
 	/**
 	 * Create an instance of the class with the input data
 	 *
-	 * @access public
-	 * @param string $data Input data
+		 * @param string $data Input data
 	 */
 	public function __construct($data)
 	{
@@ -122,8 +114,7 @@ class SimplePie_XML_Declaration_Parser
 	/**
 	 * Parse the input data
 	 *
-	 * @access public
-	 * @return bool true on success, false on failure
+		 * @return bool true on success, false on failure
 	 */
 	public function parse()
 	{
@@ -149,8 +140,7 @@ class SimplePie_XML_Declaration_Parser
 	/**
 	 * Check whether there is data beyond the pointer
 	 *
-	 * @access private
-	 * @return bool true if there is further data, false if not
+		 * @return bool true if there is further data, false if not
 	 */
 	public function has_data()
 	{

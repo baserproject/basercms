@@ -1,24 +1,19 @@
 <?php
 /**
- * [ADMIN] ブログタグ フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] ブログタグ フォーム
+ */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#BlogTagName").focus();
-});
-</script>
 
 
 <!-- form -->
@@ -37,11 +32,11 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogTag.name', 'ブログタグ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogTag.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('BlogTag.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcForm->error('BlogTag.name') ?>
 			</td>
 		</tr>
-		
+
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>

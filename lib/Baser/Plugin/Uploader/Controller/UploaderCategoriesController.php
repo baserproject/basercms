@@ -9,17 +9,13 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
-App::import('Controller', 'Plugins');
 
 /**
  * ファイルカテゴリコントローラー
  *
- * @package			uploader.controllers
+ * @package			Uploader.Controller
  */
-class UploaderCategoriesController extends BcPluginAppController {
+class UploaderCategoriesController extends AppController {
 
 /**
  * クラス名
@@ -131,7 +127,7 @@ class UploaderCategoriesController extends BcPluginAppController {
  * @access	public
  */
 	public function admin_delete($id = null) {
-
+		$this->_checkSubmitToken();
 		if(!$id) {
 			$this->setMessage('無効なIDです。', true);
 			$this->redirect(array('action'=>'index'));
@@ -155,9 +151,9 @@ class UploaderCategoriesController extends BcPluginAppController {
  * @param int $uploaderCategoryId
  * @param int $id
  * @return void
- * @access public
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 
 		if(!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -177,7 +173,6 @@ class UploaderCategoriesController extends BcPluginAppController {
  * 
  * @param array $ids
  * @return boolean
- * @access protected
  */
 	public function _batch_del($ids) {
 		
@@ -194,7 +189,6 @@ class UploaderCategoriesController extends BcPluginAppController {
  * 
  * @param int $id
  * @return boolean 
- * @access protected
  */
 	public function _del($id = null) {
 		// メッセージ用にデータを取得
@@ -213,10 +207,9 @@ class UploaderCategoriesController extends BcPluginAppController {
  * 
  * @param int $id 
  * @return void
- * @access public
  */
 	public function admin_ajax_copy($id = null) {
-		
+		$this->_checkSubmitToken();
 		$result = $this->UploaderCategory->copy($id);
 		if($result) {
 			$result['UploaderCategory']['id'] = $this->UploaderCategory->getInsertID();

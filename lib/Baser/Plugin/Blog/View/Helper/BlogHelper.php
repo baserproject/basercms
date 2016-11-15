@@ -1,11 +1,9 @@
 <?php
 /**
- * ブログヘルパー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View.Helper
  * @since			baserCMS v 0.1.0
@@ -56,15 +54,20 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function setContent($blogContentId = null) {
-		if (isset($this->blogContent) && !$blogContentId) {
-			return;
-		}
-		if ($blogContentId) {
-			$BlogContent = ClassRegistry::getObject('BlogContent');
-			$BlogContent->expects(array());
-			$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
-		} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
-			$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
+		if(empty($this->blogContent)) {
+			if ($blogContentId) {
+				if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
+					if(!empty($this->request->data['BlogContent'])) {
+						$this->blogContent = $this->request->data['BlogContent'];
+					}
+				} else {
+					$BlogContent = ClassRegistry::init('Blog.BlogContent');
+					$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
+					$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
+				}
+			} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
+				$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
+			}
 		}
 		if ($this->blogContent) {
 			$BlogPost = ClassRegistry::init('Blog.BlogPost');
@@ -105,7 +108,7 @@ class BlogHelper extends AppHelper {
  * @return string
  */
 	public function getBlogName() {
-		return $this->blogContent['name'];
+		return $this->request->params['Content']['name'];
 	}
 
 /**
@@ -123,7 +126,7 @@ class BlogHelper extends AppHelper {
  * @return string
  */
 	public function getTitle() {
-		return $this->blogContent['title'];
+		return $this->request->params['Content']['title'];
 	}
 
 /**
@@ -194,7 +197,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostLink($post, $title, $options = array()) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		$url = array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']);
+		$url = $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no'];
 		return $this->BcBaser->getLink($title, $url, $options);
 	}
 
@@ -206,7 +209,7 @@ class BlogHelper extends AppHelper {
  */
 	public function getPostLinkUrl($post) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		return $this->url(array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']));
+		return $this->url($this->request->params['Content']['url'].  'archives/' . $post['BlogPost']['no']);
 	}
 
 /**
@@ -263,9 +266,10 @@ class BlogHelper extends AppHelper {
 		}
 		if ($moreLink && trim($post['BlogPost']['detail']) && trim($post['BlogPost']['detail']) != "<br>") {
 			if (!isset($this->Html)) {
+				App::uses('HtmlHelper', 'View/Helper');
 				$this->Html = new HtmlHelper($this->_View);
 			}
-			$out .= '<p class="more">' . $this->Html->link($moreLink, array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no'], '#' => 'post-detail'), null, null, false) . '</p>';
+			$out .= '<p class="more">' . $this->Html->link($moreLink, $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no'] . '#post-detail', null, null, false) . '</p>';
 		}
 		return $out;
 	}
@@ -345,6 +349,7 @@ class BlogHelper extends AppHelper {
 
 			if ($link) {
 				if (!isset($this->Html)) {
+					App::uses('HtmlHelper', 'View/Helper');
 					$this->Html = new HtmlHelper($this->_View);
 				}
 				return $this->Html->link($post['BlogCategory']['title'], $this->getCategoryUrl($post['BlogCategory']['id'], $options), $options, null, false);
@@ -382,12 +387,7 @@ class BlogHelper extends AppHelper {
 		$tagLinks = array();
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
-				$url = array(
-					'admin' => false,
-					'plugin' => '',
-					'controller' => $post['BlogContent']['name'],
-					'action' => 'archives', 'tag', $tag['name']
-				);
+				$url = $this->request->params['Content']['url'] . 'archives/tag/' . $tag['name'];
 				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
 			}
 		}
@@ -420,7 +420,6 @@ class BlogHelper extends AppHelper {
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
 		$this->setContent($blogContentId);
-		$blogContentName = $this->blogContent['name'];
 
 		$path = array('category');
 		if ($categoryPath) {
@@ -433,7 +432,7 @@ class BlogHelper extends AppHelper {
 			$path = array_merge($path, $named);
 		}
 
-		$url = Router::url(am(array('admin' => false, 'plugin' => '', 'controller' => $blogContentName, 'action' => 'archives'), $path));
+		$url = Router::url($this->request->params['Content']['url'] . 'archives/' . implode('/', $path));
 		$baseUrl = preg_replace('/\/$/', '', BC_BASE_URL);
 		return preg_replace('/^' . preg_quote($baseUrl, '/') . '/', '', $url);
 	}
@@ -538,20 +537,6 @@ class BlogHelper extends AppHelper {
 	}
 
 /**
- * ブログ編集ページへのリンクを出力
- *
- * @param int $blogContentId ブログコンテンツID
- * @param int $blogPostId ブログ記事ID
- * @return void
- * @deprecated ツールバーに移行
- */
-	public function editPost($blogContentId, $blogPostId) {
-		if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user']) && !Configure::read('BcRequest.agent')) {
-			echo '<div class="edit-link">' . $this->BcBaser->getLink('≫ 編集する', array('admin' => true, 'prefix' => 'blog', 'controller' => 'blog_posts', 'action' => 'edit', $blogContentId, $blogPostId), array('target' => '_blank')) . '</div>';
-		}
-	}
-
-/**
  * 前の記事へのリンクを出力する
  *
  * @param array $post ブログ記事
@@ -561,16 +546,11 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function prevLink($post, $title = '', $htmlAttributes = array()) {
-		if (ClassRegistry::isKeySet('BlogPost')) {
-			$BlogPost = ClassRegistry::getObject('BlogPost');
-		} else {
-			$BlogPost = ClassRegistry::init('BlogPost');
-		}
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		$_htmlAttributes = array('class' => 'prev-link', 'arrow' => '≪ ');
 		$htmlAttributes = am($_htmlAttributes, $htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
-		$BlogPost = ClassRegistry::getObject('BlogPost');
 		$conditions = array();
 		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
@@ -588,7 +568,7 @@ class BlogHelper extends AppHelper {
 			if (!$title) {
 				$title = $arrow . $prevPost['BlogPost']['name'];
 			}
-			$this->BcBaser->link($title, array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $no), $htmlAttributes);
+			$this->BcBaser->link($title, $this->request->params['Content']['url'] . 'archives/' .$no, $htmlAttributes);
 		}
 	}
 
@@ -602,16 +582,11 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function nextLink($post, $title = '', $htmlAttributes = array()) {
-		if (ClassRegistry::isKeySet('BlogPost')) {
-			$BlogPost = ClassRegistry::getObject('BlogPost');
-		} else {
-			$BlogPost = ClassRegistry::init('BlogPost');
-		}
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		$_htmlAttributes = array('class' => 'next-link', 'arrow' => ' ≫');
 		$htmlAttributes = am($_htmlAttributes, $htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
-		$BlogPost = ClassRegistry::getObject('BlogPost');
 		$conditions = array();
 		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
@@ -629,48 +604,8 @@ class BlogHelper extends AppHelper {
 			if (!$title) {
 				$title = $nextPost['BlogPost']['name'] . $arrow;
 			}
-			$this->BcBaser->link($title, array('admin' => false, 'plugin' => '', 'mobile' => false, 'controller' => $this->blogContent['name'], 'action' => 'archives', $no), $htmlAttributes);
+			$this->BcBaser->link($title, $this->request->params['Content']['url'] . 'archives/' . $no, $htmlAttributes);
 		}
-	}
-
-/**
- * レイアウトテンプレートを取得
- *
- * コンボボックスのソースとして利用
- *
- * @return array レイアウトテンプレート一覧
- * @todo 別のヘルパに移動
- */
-	public function getLayoutTemplates() {
-		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
-
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
-		}
-
-		$_templates = array();
-		foreach ($templatesPathes as $templatesPath) {
-			$templatesPath .= 'Layouts' . DS;
-			$folder = new Folder($templatesPath);
-			$files = $folder->read(true, true);
-			$foler = null;
-			if ($files[1]) {
-				if ($_templates) {
-					$_templates = am($_templates, $files[1]);
-				} else {
-					$_templates = $files[1];
-				}
-			}
-		}
-		$templates = array();
-		foreach ($_templates as $template) {
-			$ext = Configure::read('BcApp.templateExt');
-			if ($template != 'installations' . $ext) {
-				$template = basename($template, $ext);
-				$templates[$template] = $template;
-			}
-		}
-		return $templates;
 	}
 
 /**
@@ -681,10 +616,15 @@ class BlogHelper extends AppHelper {
  * @return array ブログテンプレート一覧
  * @todo 別のヘルパに移動
  */
-	public function getBlogTemplates() {
+	public function getBlogTemplates($siteId = 0) {
+		$site = BcSite::findById($siteId);
+		$theme = $this->BcBaser->siteConfig['theme'];
+		if($site->theme) {
+			$theme = $site->theme;
+		}
 		$templatesPathes = array_merge(App::path('View', 'Blog'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
 		$_templates = array();
@@ -703,7 +643,7 @@ class BlogHelper extends AppHelper {
 		}
 
 		$excludes = Configure::read('BcAgent');
-		$excludes = Hash::extract($excludes, '{s}.prefix');
+		$excludes = array_keys($excludes);
 
 		$excludes[] = 'rss';
 		$templates = array();
@@ -753,7 +693,7 @@ class BlogHelper extends AppHelper {
  *	- `num` : 何枚目の画像か順番を指定（初期値 : 1）
  *	- `link` : 詳細ページへのリンクをつけるかどうか（初期値 : true）
  *	- `alt` : ALT属性（初期値 : ブログ記事のタイトル）
- * @return void
+ * @return string
  */
 	public function getPostImg($post, $options = array()) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
@@ -779,7 +719,7 @@ class BlogHelper extends AppHelper {
 			$url = preg_replace('/^' . preg_quote($this->base, '/') . '/', '', $url);
 			$img = $this->BcBaser->getImg($url, $options);
 			if ($link) {
-				return $this->BcBaser->getLink($img, $url = array('admin' => false, 'plugin' => '', 'controller' => $this->blogContent['name'], 'action' => 'archives', $post['BlogPost']['no']));
+				return $this->BcBaser->getLink($img, $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no']);
 			} else {
 				return $img;
 			}
@@ -956,14 +896,10 @@ class BlogHelper extends AppHelper {
 		if (empty($this->request->params['plugin'])) {
 			return false;
 		}
-		$agentPrefix = Configure::read('BcRequest.agentPrefix');
-		if($agentPrefix) {
-			$agentPrefix .= '_';
-		}
 		return (
 			$this->request->params['plugin'] == 'blog' &&
 			$this->request->params['controller'] == 'blog' &&
-			$this->request->params['action'] == $agentPrefix . 'archives' &&
+			$this->request->params['action'] == 'archives' &&
 			!$this->getBlogArchiveType()
 		);
 	}

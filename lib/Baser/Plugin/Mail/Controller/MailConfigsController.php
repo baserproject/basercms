@@ -1,19 +1,13 @@
 <?php
-
 /**
- * メールフォーム設定コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -27,7 +21,6 @@ class MailConfigsController extends MailAppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'MailConfigs';
 
@@ -35,7 +28,6 @@ class MailConfigsController extends MailAppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('Mail.MailConfig');
 
@@ -43,33 +35,13 @@ class MailConfigsController extends MailAppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
-
-/**
- * サブメニューエレメント
- *
- * @var array
- * @access public
- */
-	public $subMenuElements = array();
-
-/**
- * ぱんくずナビ
- *
- * @var array
- * @access public
- */
-	public $crumbs = array(
-		array('name' => 'メールフォーム管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_contents', 'action' => 'index'))
-	);
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
 
 /**
  * [ADMIN] メールフォーム設定
  *
  * @return void
- * @access public
  */
 	public function admin_form() {
 		if (empty($this->request->data)) {
@@ -84,9 +56,7 @@ class MailConfigsController extends MailAppController {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
-
-		/* 表示設定 */
-		$this->subMenuElements = array('mail_common');
+		
 		$this->pageTitle = 'メールプラグイン基本設定';
 		$this->help = 'mail_configs_form';
 	}

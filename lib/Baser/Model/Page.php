@@ -1,12 +1,9 @@
 <?php
-
 /**
- * ページモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
@@ -17,39 +14,16 @@
  * ページモデル
  * 
  * @package Baser.Model
+ * @property Content $Content
  */
 class Page extends AppModel {
-
-/**
- * クラス名
- * @var string
- */
-	public $name = 'Page';
-
-/**
- * データベース接続
- * 
- * @var string
- */
-	public $useDbConfig = 'baser';
-
-/**
- * belongsTo
- * 
- * @var array
- */
-	public $belongsTo = array(
-		'PageCategory' => array('className' => 'PageCategory',
-			'foreignKey' => 'page_category_id'),
-		'User' => array('className' => 'User',
-			'foreignKey' => 'author_id'));
 
 /**
  * ビヘイビア
  *
  * @var array
  */
-	public $actsAs = array('BcContentsManager', 'BcCache');
+	public $actsAs = array('BcSearchIndexManager', 'BcCache', 'BcContents');
 
 /**
  * 更新前のページファイルのパス
@@ -72,7 +46,7 @@ class Page extends AppModel {
  *
  * @var boolean
  */
-	public $contentSaving = true;
+	public $searchIndexSaving = true;
 
 /**
  * 公開WebページURLリスト
@@ -105,27 +79,6 @@ class Page extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'name' => array(
-			array('rule' => array('notEmpty'),
-				'message' => 'ページ名を入力してください。',
-				'required' => true),
-			array('rule' => array('maxLength', 50),
-				'message' => 'ページ名は50文字以内で入力してください。'),
-			array('rule' => array('pageExists'),
-				'message' => '指定したページは既に存在します。ファイル名、またはカテゴリを変更してください。')
-		),
-		'page_category_id' => array(
-			array('rule' => array('pageExists'),
-				'message' => '指定したページは既に存在します。ファイル名、またはカテゴリを変更してください。')
-		),
-		'title' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'ページタイトルは255文字以内で入力してください。')
-		),
-		'description' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '説明文は255文字以内で入力してください。')
-		),
 		'contents' => array(
 			array('rule' => array('phpValidSyntax'),
 				'message' => 'PHPの構文エラーが発生しました。'),
@@ -141,35 +94,6 @@ class Page extends AppModel {
 	);
 
 /**
- * コンストラクタ
- *
- * @param boolean $id
- * @param string $table
- * @param string $ds
- */
-	public function __construct($id = false, $table = null, $ds = null) {
-		parent::__construct($id, $table, $ds);
-		if (isConsole() && !isInstalled()) {
-			App::uses('PageCategory', 'Model');
-			$this->PageCategory = new PageCategory(null, null, $ds);
-		}
-	}
-
-/**
- * フォームの初期値を設定する
- * 
- * @return	array	初期値データ
- */
-	public function getDefaultValue() {
-		if (!empty($_SESSION['Auth']['User'])) {
-			$data[$this->name]['author_id'] = $_SESSION['Auth']['User']['id'];
-		}
-		$data[$this->name]['sort'] = $this->getMax('sort') + 1;
-		$data[$this->name]['status'] = false;
-		return $data;
-	}
-
-/**
  * beforeSave
  *
  * @param array $options
@@ -181,57 +105,25 @@ class Page extends AppModel {
 		}
 
 		// 保存前のページファイルのパスを取得
-		if ($this->exists()) {
+		if ($this->exists() && !empty($this->data['Content'])) {
 			$this->oldPath = $this->getPageFilePath(
 				$this->find('first', array(
 					'conditions' => array('Page.id' => $this->data['Page']['id']),
-					'recursive' => -1)
+					'recursive' => 0)
 				)
 			);
 		} else {
 			$this->oldPath = '';
 		}
-
+		
 		// 新しいページファイルのパスが開けるかチェックする
 		$result = true;
-		if (!$this->checkOpenPageFile($this->data)) {
-			$result = false;
-		}
-
-		if (isset($this->data['Page'])) {
-			$data = $this->data['Page'];
-		} else {
-			$data = $this->data;
-		}
-
-		if (!empty($data['reflect_mobile'])) {
-			$data['url'] = '/' . Configure::read('BcAgent.mobile.prefix') . $this->removeAgentPrefixFromUrl($data['url']);
-			if (!$this->checkOpenPageFile($data)) {
-				$result = false;
-			}
-		}
-		if (!empty($data['reflect_smartphone'])) {
-			$data['url'] = '/' . Configure::read('BcAgent.smartphone.prefix') . $this->removeAgentPrefixFromUrl($data['url']);
-			if (!$this->checkOpenPageFile($data)) {
+		if(!empty($this->data['Content'])) {
+			if (!$this->checkOpenPageFile($this->data)) {
 				$result = false;
 			}
 		}
 		return $result;
-	}
-
-/**
- * URLよりモバイルやスマートフォン等のプレフィックスを取り除く
- * 
- * @param string $url 変換対象のURL
- * @return string $url 変換後のURL
- */
-	public function removeAgentPrefixFromUrl($url) {
-		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//', '/', $url);
-		} elseif (preg_match('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//', '/', $url);
-		}
-		return $url;
 	}
 
 /**
@@ -272,14 +164,11 @@ class Page extends AppModel {
  * @return boolean
  */
 	public function afterSave($created, $options = array()) {
-		if (isset($this->data['Page'])) {
-			$data = $this->data['Page'];
-		} else {
-			$data = $this->data;
-		}
+
+		$data = $this->data;
 		// タイトルタグと説明文を追加
-		if (empty($data['id'])) {
-			$data['id'] = $this->id;
+		if (empty($data['Page']['id'])) {
+			$data['Page']['id'] = $this->id;
 		}
 
 		if ($this->fileSave) {
@@ -287,96 +176,14 @@ class Page extends AppModel {
 		}
 
 		// 検索用テーブルに登録
-		if ($this->contentSaving) {
-			if (empty($data['exclude_search'])) {
-				$this->saveContent($this->createContent($data));
+		if ($this->searchIndexSaving) {
+			if (empty($data['Content']['exclude_search'])) {
+				$this->saveSearchIndex($this->createSearchIndex($data));
 			} else {
-				$this->deleteContent($data['id']);
+				$this->deleteSearchIndex($data['Page']['id']);
 			}
 		}
 
-		// モバイルデータの生成
-		if (!empty($data['reflect_mobile'])) {
-			$this->refrect('mobile', $data);
-		}
-		if (!empty($data['reflect_smartphone'])) {
-			$this->refrect('smartphone', $data);
-		}
-	}
-
-/**
- * 関連ページに反映する
- * 
- * @param string $type
- * @param array $data
- * @return boolean
- */
-	public function refrect($type, $data) {
-		if (isset($this->data['Page'])) {
-			$data = $this->data['Page'];
-		}
-
-		// モバイルページへのコピーでスーパークラスのIDを上書きしてしまうので退避させておく
-		$this->__pageInsertID = parent::getInsertID();
-
-		$agentId = $this->PageCategory->getAgentId($type);
-		if (!$agentId) {
-			// カテゴリがない場合は trueを返して終了
-			return true;
-		}
-
-		$data['url'] = '/' . Configure::read('BcAgent.' . $type . '.prefix') . $this->removeAgentPrefixFromUrl($data['url']);
-
-		$agentPage = $this->find('first', array('conditions' => array('Page.url' => $data['url']), 'recursive' => -1));
-
-		unset($data['id']);
-		unset($data['sort']);
-		unset($data['status']);
-
-		if ($agentPage) {
-			$agentPage['Page']['name'] = $data['name'];
-			$agentPage['Page']['title'] = $data['title'];
-			$agentPage['Page']['description'] = $data['description'];
-			$agentPage['Page']['draft'] = $data['draft'];
-			$agentPage['Page']['modified'] = $data['modified'];
-			$agentPage['Page']['contents'] = $data['contents'];
-			$agentPage['Page']['reflect_mobile'] = false;
-			$agentPage['Page']['reflect_smartphone'] = false;
-			$this->set($agentPage);
-		} else {
-			if ($data['page_category_id']) {
-				$fields = array('parent_id', 'name', 'title');
-				$pageCategoryTree = $this->PageCategory->getTreeList($fields, $data['page_category_id']);
-				$path = getViewPath() . 'Pages' . DS . Configure::read('BcAgent.' . $type . '.prefix');
-				$parentId = $agentId;
-				foreach ($pageCategoryTree as $pageCategory) {
-					$path .= '/' . $pageCategory['PageCategory']['name'];
-					$categoryId = $this->PageCategory->getIdByPath($path);
-					if (!$categoryId) {
-						$pageCategory['PageCategory']['parent_id'] = $parentId;
-						$this->PageCategory->create($pageCategory);
-						$ret = $this->PageCategory->save();
-						$parentId = $categoryId = $this->PageCategory->getInsertID();
-					} else {
-						$parentId = $categoryId;
-					}
-				}
-				$data['page_category_id'] = $categoryId;
-			} else {
-				$data['page_category_id'] = $agentId;
-			}
-			$data['author_id'] = $_SESSION['Auth']['User']['id'];
-			$data['sort'] = $this->getMax('sort') + 1;
-			$data['status'] = false; // 新規ページの場合は非公開とする
-			unset($data['publish_begin']);
-			unset($data['publish_end']);
-			unset($data['created']);
-			unset($data['modified']);
-			$data['reflect_mobile'] = false;
-			$data['reflect_smartphone'] = false;
-			$this->create($data);
-		}
-		return $this->save();
 	}
 
 /**
@@ -385,60 +192,56 @@ class Page extends AppModel {
  * @param array $data
  * @return array
  */
-	public function createContent($data) {
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
+	public function createSearchIndex($data) {
+		if (!isset($data['Page']) || !isset($data['Content'])) {
+			return false;
 		}
-		if (!isset($data['publish_begin'])) {
-			$data['publish_begin'] = '';
+		$page = $data['Page'];
+		$content = $data['Content'];
+		if (!isset($content['publish_begin'])) {
+			$content['publish_begin'] = '';
 		}
-		if (!isset($data['publish_end'])) {
-			$data['publish_end'] = '';
-		}
-
-		if (!$data['title']) {
-			$data['title'] = Inflector::camelize($data['name']);
+		if (!isset($content['publish_end'])) {
+			$content['publish_end'] = '';
 		}
 
-		// モバイル未対応の為除外
-		$excludeIds = array_merge($this->PageCategory->getAgentCategoryIds('mobile'), $this->PageCategory->getAgentCategoryIds('smartphone'));
-
-		// インストール時取得できないのでハードコーディング
-		// TODO 検討
-		if (!$excludeIds) {
-			$excludeIds = array(1, 2);
+		if (!$content['title']) {
+			$content['title'] = Inflector::camelize($content['name']);
 		}
-
-		if (in_array($data['page_category_id'], $excludeIds)) {
-			return array();
-		}
-
-		$_data = array();
-		$_data['Content']['type'] = 'ページ';
+		
 		// $this->idに値が入ってない場合もあるので
-		if (!empty($data['id'])) {
-			$_data['Content']['model_id'] = $data['id'];
+		if (!empty($page['id'])) {
+			$modelId = $page['id'];
 		} else {
-			$_data['Content']['model_id'] = $this->id;
+			$modelId = $this->id;
 		}
-		$_data['Content']['category'] = '';
-		if (!empty($data['page_category_id'])) {
-			$categoryPath = $this->PageCategory->getPath($data['page_category_id'], array('title'));
-			if ($categoryPath) {
-				$_data['Content']['category'] = $categoryPath[0]['PageCategory']['title'];
-			}
-		}
-		$_data['Content']['title'] = $data['title'];
-		$parameters = explode('/', preg_replace("/^\//", '', $data['url']));
 
-		$detail = $this->requestAction(array('admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'), array('pass' => $parameters, 'return'));
+		// =================================================================================================
+		// 2016/11/10 ryuring
+		// パラメーターでリクエストアクションを送った場合、 BcContentsRoute::match() にて、ホスト情報が消されてしまい、
+		// 別ドメインの際に、BcContentsRoute::parse() にて正しいホストを特定できず、プレビュー用URLの解決ができない。
+		// そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
+		// =================================================================================================
+		//$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
+		//$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => ['force' => 'true'], 'pass' => $parameters, 'return']);
+		$detail = $this->requestAction($content['url'] . '?force=true', ['return']);
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
-		$_data['Content']['detail'] = $data['description'] . ' ' . $detail;
-		$_data['Content']['url'] = $data['url'];
-		$_data['Content']['status'] = $this->isPublish($data['status'], $data['publish_begin'], $data['publish_end']);
-
-		return $_data;
+		$description = '';
+		if(!empty($content['description'])) {
+			$description = $content['description'];
+		}
+		$searchIndex = ['SearchIndex' => [
+			'model_id'	=> $modelId,
+			'type'		=> 'ページ',
+			'content_id'=> $content['id'],
+			'site_id'=> $content['site_id'],
+			'title'		=> $content['title'],
+			'detail'	=> $description . ' ' . $detail,
+			'url'		=> $content['url'],
+			'status'	=> $this->isPublish($content['status'], $content['publish_begin'], $content['publish_end'])
+		]];
+		return $searchIndex;
 	}
 
 /**
@@ -448,7 +251,7 @@ class Page extends AppModel {
  * @return boolean
  */
 	public function beforeDelete($cascade = true) {
-		return $this->deleteContent($this->id);
+		return $this->deleteSearchIndex($this->id);
 	}
 
 /**
@@ -461,8 +264,7 @@ class Page extends AppModel {
 		if (function_exists('ini_set')) {
 			ini_set('memory_limit ', '-1');
 		}
-
-		$pages = $this->find('all', array('recursive' => -1));
+		$pages = $this->find('all', array('recursive' => 0));
 		$result = true;
 		foreach ($pages as $page) {
 			if (!$this->createPageTemplate($page)) {
@@ -483,13 +285,13 @@ class Page extends AppModel {
 		if (function_exists('ini_set')) {
 			ini_set('memory_limit ', '-1');
 		}
-		
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
+		if (!isset($data['Page']) || !isset($data['Content'])) {
+			return false;
 		}
-
-		$data = array_merge(array('id' => '', 'contents' => '', 'title' => '', 'description' => '', 'code' => ''), $data);
-		$contents = $this->addBaserPageTag($data['id'], $data['contents'], $data['title'], $data['description'], $data['code']);
+		$data['Page'] = array_merge(['id' => '', 'contents' => '', 'title' => '', 'description' => '', 'code' => ''], $data['Page']);
+		$page = $data['Page'];
+		$content = $data['Content'];
+		$contents = $this->addBaserPageTag($page['id'], $page['contents'], $content['title'], @$content['description'], @$page['code']);
 
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->getPageFilePath($data);
@@ -515,74 +317,38 @@ class Page extends AppModel {
 	}
 
 /**
- * ページファイルのディレクトリを取得する
+ * ページファイルのパスを取得する
  * 
  * @param array $data
  * @return string
  */
-	protected function getPageFilePath($data) {
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
-		}
-
-		$file = $data['name'];
-		$categoryId = $data['page_category_id'];
-		$SiteConfig = ClassRegistry::getObject('SiteConfig');
-		if (!$SiteConfig) {
-			$SiteConfig = ClassRegistry::init('SiteConfig');
-		}
-		$SiteConfig->cacheQueries = false;
-		$siteConfig = $SiteConfig->findExpanded();
-		$theme = $siteConfig['theme'];
-
-		// Pagesディレクトリのパスを取得
-		if ($theme) {
-			$path = BASER_THEMES . $theme . DS . 'Pages' . DS;
-		} else {
-			$path = APP . 'View' . DS . 'Pages' . DS;
-		}
-
-
+	public function getPageFilePath($data) {
+		
+		$path = APP . 'View' . DS . 'Pages' . DS;
+		
 		if (!is_dir($path)) {
 			mkdir($path);
 			chmod($path, 0777);
 		}
-
-		if ($categoryId) {
-			$this->PageCategory->cacheQueries = false;
-			$categoryPath = $this->PageCategory->getPath($categoryId, null, null, -1);
-			// インストール時データの取得ができないので暫定対応
-			// TODO 検討
-			if (!$categoryPath) {
-				if ($categoryId == 1) {
-					$categoryPath = array(0 => array('PageCategory' => array('name' => 'mobile')));
-				} elseif ($categoryId == 2) {
-					$categoryPath = array(0 => array('PageCategory' => array('name' => 'smartphone')));
+		
+		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'ContentFolder');
+		if($url != '/') {
+			if($data['Content']['site_id'] != 0) {
+				$site = BcSite::findByUrl($url);
+				if($site) {
+					$url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $site->name . '/', $url);
 				}
 			}
-			if ($categoryPath) {
-				foreach ($categoryPath as $category) {
-					$path .= $category['PageCategory']['name'] . DS;
-					if (!is_dir($path)) {
-						mkdir($path, 0777);
-						chmod($path, 0777);
-					}
+			$urlAry = explode('/', preg_replace('/(^\/|\/$)/', '', $url));
+			foreach ($urlAry as $value) {
+				$path .= $value . DS;
+				if (!is_dir($path)) {
+					mkdir($path, 0777);
+					chmod($path, 0777);
 				}
 			}
 		}
-
-		return $path . $file . Configure::read('BcApp.templateExt');
-	}
-
-/**
- * ページファイルのディレクトリを取得する
- * 
- * @param array $data
- * @deprecated publicのgetPageFilePath()がある為、非推奨
- * @return string
- */
-	protected function _getPageFilePath($data) {
-		$this->getPageFilePath($data);
+		return $path . $data['Content']['name'] . Configure::read('BcApp.templateExt');
 	}
 
 /**
@@ -594,58 +360,9 @@ class Page extends AppModel {
 	public function delFile($data) {
 		$path = $this->getPageFilePath($data);
 		if ($path) {
-			return unlink($path);
+			return @unlink($path);
 		}
 		return true;
-	}
-
-/**
- * ページのURLを取得する
- * 
- * @param array $data
- * @return string
- */
-	public function getPageUrl($data) {
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
-		}
-		$categoryId = $data['page_category_id'];
-		$url = '/';
-		if ($categoryId) {
-			$this->PageCategory->cacheQueries = false;
-			$categoryPath = $this->PageCategory->getPath($categoryId);
-			if ($categoryPath) {
-				foreach ($categoryPath as $key => $category) {
-					if ($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.mobile.prefix')) {
-						$url .= Configure::read('BcAgent.mobile.prefix') . '/';
-					} elseif ($key == 0 && $category['PageCategory']['name'] == Configure::read('BcAgent.smartphone.prefix')) {
-						$url .= Configure::read('BcAgent.smartphone.prefix') . '/';
-					} else {
-						$url .= $category['PageCategory']['name'] . '/';
-					}
-				}
-			}
-		}
-		return $url . $data['name'];
-	}
-	
-/**
- * 固定ページのURLを表示用のURLに変換する
- * 
- * 《変換例》
- * /mobile/index → /m/
- * 
- * @param string $url 変換対象のURL
- * @return string 表示の用のURL
- */
-	public function convertViewUrl($url) {
-		$url = preg_replace('/\/index$/', '/', $url);
-		if (preg_match('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.mobile.prefix') . '\//is', '/' . Configure::read('BcAgent.mobile.alias') . '/', $url);
-		} elseif (preg_match('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', $url)) {
-			$url = preg_replace('/^\/' . Configure::read('BcAgent.smartphone.prefix') . '\//is', '/' . Configure::read('BcAgent.smartphone.alias') . '/', $url);
-		}
-		return $url;
 	}
 
 /**
@@ -677,36 +394,6 @@ class Page extends AppModel {
 	}
 
 /**
- * ページ存在チェック
- *
- * @return boolean
- */
-	public function pageExists() {
-		$conditions['Page.name'] = $this->data['Page']['name'];
-		if ($this->exists()) {
-			$conditions['Page.id <>'] = $this->data['Page']['id'];
-		}
-
-		if (empty($this->data['Page']['page_category_id'])) {
-			if (isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 2) {
-				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('mobile');
-			} elseif (isset($this->data['Page']['page_type']) && $this->data['Page']['page_type'] == 3) {
-				$conditions['Page.page_category_id'] = $this->PageCategory->getAgentId('smartphone');
-			} else {
-				$conditions['Page.page_category_id'] = null;
-			}
-		} else {
-			$conditions['Page.page_category_id'] = $this->data['Page']['page_category_id'];
-		}
-
-		if (!$this->find('first', array('conditions' => $conditions, 'recursive' => -1))) {
-			return true;
-		} else {
-			return !file_exists($this->getPageFilePath($this->data));
-		}
-	}
-
-/**
  * コントロールソースを取得する
  *
  * @param string $field フィールド名
@@ -715,71 +402,9 @@ class Page extends AppModel {
  */
 	public function getControlSource($field, $options = array()) {
 		switch ($field) {
-
-			case 'page_category_id':
-
-				$catOption = array();
-				$isSuperAdmin = false;
-				$agentRoot = true;
-
-				extract($options);
-
-				if (!empty($userGroupId)) {
-
-					if (!isset($pageCategoryId)) {
-						$pageCategoryId = '';
-					}
-
-					if ($userGroupId == 1) {
-						$isSuperAdmin = true;
-					}
-
-					// 現在のページが編集不可の場合、現在表示しているカテゴリも取得する
-					if (!$pageEditable && $pageCategoryId) {
-						$catOption = array('conditions' => array('OR' => array('PageCategory.id' => $pageCategoryId)));
-					}
-
-					// super admin でない場合は、管理許可のあるカテゴリのみ取得
-					if (!$isSuperAdmin) {
-						$catOption['ownerId'] = $userGroupId;
-					}
-
-					if ($pageEditable && !$rootEditable && !$isSuperAdmin) {
-						unset($empty);
-						$agentRoot = false;
-					}
-				}
-
-				$options = am($options, $catOption);
-				$categories = $this->PageCategory->getControlSource('parent_id', $options);
-
-				// 「指定しない」追加
-				if (isset($empty)) {
-					if ($categories) {
-						$categories = array('' => $empty) + $categories;
-					} else {
-						$categories = array('' => $empty);
-					}
-				}
-				if (!$agentRoot) {
-					// TODO 整理
-					$agentId = $this->PageCategory->getAgentId('mobile');
-					if (isset($categories[$agentId])) {
-						unset($categories[$agentId]);
-					}
-					$agentId = $this->PageCategory->getAgentId('smartphone');
-					if (isset($categories[$agentId])) {
-						unset($categories[$agentId]);
-					}
-				}
-
-				$controlSources['page_category_id'] = $categories;
-
-				break;
-
 			case 'user_id':
 			case 'author_id':
-				$controlSources[$field] = $this->User->getUserList($options);
+				$controlSources[$field] = $this->Content->User->getUserList($options);
 				break;
 		}
 
@@ -791,79 +416,6 @@ class Page extends AppModel {
 	}
 
 /**
- * キャッシュ時間を取得する
- * 
- * @param string $url
- * @return mixed int or false
- */
-	public function getCacheTime($url) {
-		if (preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-
-		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
-		$page = $this->find('first', array('conditions' => array('Page.url' => $url), 'recursive' => -1));
-		if (!$page) {
-			return false;
-		}
-		if ($page['Page']['status'] && $page['Page']['publish_end'] && $page['Page']['publish_end'] != '0000-00-00 00:00:00') {
-			return strtotime($page['Page']['publish_end']) - time();
-		} else {
-			// #10680 Modify 2016/01/22 gondoh
-			// 3.1.0で追加されたViewキャッシュ分離の設定値を、後方互換のため存在しない場合は旧情報で取り込む 
-			$duration = Configure::read('BcCache.viewDuration');
-			if (empty($duration)) $duration = Configure::read('BcCache.duration');
-			return $duration;
-		}
-	}
-
-/**
- * 公開チェックを行う
- * 
- * @param string $url
- * @return boolean
- */
-	public function checkPublish($url) {
-		if (preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
-
-		if ($this->_publishes == -1) {
-			$conditions = $this->getConditionAllowPublish();
-			// 毎秒抽出条件が違うのでキャッシュしない
-			$pages = $this->find('all', array(
-				'fields' => 'url',
-				'conditions' => $conditions,
-				'recursive' => -1,
-				'cache' => false
-			));
-			if (!$pages) {
-				$this->_publishes = array();
-				return false;
-			}
-			$this->_publishes = Hash::extract($pages, '{n}.Page.url');
-		}
-		return in_array($url, $this->_publishes);
-	}
-
-/**
- * 公開済を取得するための conditions を取得
- *
- * @return array
- */
-	public function getConditionAllowPublish() {
-		$conditions[$this->alias . '.status'] = true;
-		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_begin' => null),
-				array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
-		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_end' => null),
-				array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
-		return $conditions;
-	}
-
-/**
  * ページファイルを登録する
  * ※ 再帰処理
  *
@@ -871,12 +423,12 @@ class Page extends AppModel {
  * @param string $parentCategoryId
  * @return array 処理結果 all / success
  */
-	public function entryPageFiles($targetPath, $parentCategoryId = '') {
+	public function entryPageFiles($targetPath, $parentId = '') {
 		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->unload('BcCache');
 		}
-		if ($this->PageCategory->Behaviors->loaded('BcCache')) {
-			$this->PageCategory->Behaviors->unload('BcCache');
+		if ($this->Content->Behaviors->loaded('BcCache')) {
+			$this->Content->Behaviors->unload('BcCache');
 		}
 
 		$this->fileSave = false;
@@ -887,66 +439,86 @@ class Page extends AppModel {
 		$update = 0;
 		$all = 0;
 
-		// カテゴリの取得・登録
-		$categoryName = basename($targetPath);
+		// フォルダの取得・登録
+		$folderName = basename($targetPath);
 
-		$specialCategoryIds = array(
-			'',
-			$this->PageCategory->getAgentId('mobile'),
-			$this->PageCategory->getAgentId('smartphone')
-		);
-
-		if (in_array($parentCategoryId, $specialCategoryIds) && $categoryName == 'templates') {
+		if ($folderName == 'templates') {
 			return array('all' => 0, 'insert' => 0, 'update' => 0);
 		}
-
-		$pageCategoryId = '';
-		$this->PageCategory->updateRelatedPage = false;
-		if ($categoryName != 'Pages') {
-
+		$basePath = APP . 'View' . DS . 'Pages';
+		$url = str_replace($basePath, '', $targetPath);
+		$url = str_replace(DS, '/', $url);
+		$Site = ClassRegistry::init('Site');
+		$url = preg_replace('/^\//', '', $url);
+		$urlAry = explode('/', $url);
+		$siteId = 0;
+		if(!empty($urlAry[0])) {
+			$site = $Site->find('first', ['conditions' => ['Site.name' => $urlAry[0]]]);
+			if($site) {
+				if($site['Site']['alias']) {
+					$urlAry[0] = $site['Site']['alias'];
+				}
+				$siteId = $site['Site']['id'];
+			} else {
+				$siteId = 0;
+			}
+		}
+		
+		if($urlAry[0]) {
+			$url = '/' . implode('/', $urlAry) . '/';	
+		} else {
+			$url = '/';
+		}
+		
+		$contentId = '';
+		
+		if ($folderName != 'Pages') {
 			// カテゴリ名の取得
 			// 標準では設定されてないので、利用する場合は、あらかじめ bootstrap 等で宣言しておく
-			$categoryTitles = Configure::read('Baser.pageCategoryTitles');
-			$categoryTitle = -1;
-			if ($categoryTitles) {
-				$categoryNames = explode('/', str_replace(getViewPath() . 'Pages' . DS, '', $targetPath));
-				foreach ($categoryNames as $key => $value) {
-					if (isset($categoryTitles[$value])) {
-						if (count($categoryNames) == ($key + 1)) {
-							$categoryTitle = $categoryTitles[$value]['title'];
-						} elseif (isset($categoryTitles[$value]['children'])) {
-							$categoryTitles = $categoryTitles[$value]['children'];
+			$folderTitles = Configure::read('Baser.pageCategoryTitles');
+			$folderTitle = -1;
+			if ($folderTitles) {
+				$folderNames = explode('/', $url);
+				foreach ($folderNames as $key => $value) {
+					if (isset($folderTitles[$value])) {
+						if (count($folderNames) == ($key + 1)) {
+							$folderTitle = $folderTitles[$value]['title'];
+						} elseif (isset($folderTitles[$value]['children'])) {
+							$folderTitles = $folderTitles[$value]['children'];
 						}
 					}
 				}
 			}
 
-			$categoryId = $this->PageCategory->getIdByPath($targetPath);
-			if ($categoryId) {
-				$pageCategoryId = $categoryId;
-				if ($categoryTitle != -1) {
-					$pageCategory = $this->PageCategory->find('first', array('conditions' => array('PageCategory.id' => $pageCategoryId), 'recursive' => -1));
-					$pageCategory['PageCategory']['title'] = $categoryTitle;
-					$this->PageCategory->set($pageCategory);
-					$this->PageCategory->save();
+			$ContentFolder = ClassRegistry::init('ContentFolder');
+			$entityId = $this->Content->field('entity_id', ['Content.url' => $url, 'Content.type' => 'ContentFolder']);
+			if ($entityId) {
+				$content = $ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId), 'recursive' => 0));
+				$contentId = $content['Content']['id'];
+				if ($folderTitle != -1) {
+					$content['Content']['title'] = $folderTitle;
+					$ContentFolder->set($content);
+					$ContentFolder->save();
 				}
 			} else {
-				$pageCategory['PageCategory']['parent_id'] = $parentCategoryId;
-				$pageCategory['PageCategory']['name'] = $categoryName;
-				if ($categoryTitle == -1) {
-					$pageCategory['PageCategory']['title'] = $categoryName;
+				$content = ['Content' => [
+					'parent_id' => $parentId,
+					'name' => $folderName,
+					'site_id' => $siteId
+				]];
+				if ($folderTitle == -1) {
+					$content['Content']['title'] = $folderName;
 				} else {
-					$pageCategory['PageCategory']['title'] = $categoryTitle;
+					$content['Content']['title'] = $folderTitle;
 				}
-				$pageCategory['PageCategory']['sort'] = $this->PageCategory->getMax('sort') + 1;
-				$this->PageCategory->cacheQueries = false;
-				$this->PageCategory->create($pageCategory);
-				if ($this->PageCategory->save()) {
-					$pageCategoryId = $this->PageCategory->getInsertID();
+				$ContentFolder->cacheQueries = false;
+				$ContentFolder->create($content);
+				if ($ContentFolder->save()) {
+					$contentId = $ContentFolder->Content->id;
 				}
 			}
 		} else {
-			$categoryName = '';
+			$contentId = 1;
 		}
 
 		// ファイル読み込み・ページ登録
@@ -954,7 +526,6 @@ class Page extends AppModel {
 			$files[1] = array();
 		}
 		foreach ($files[1] as $path) {
-
 			if (preg_match('/' . preg_quote(Configure::read('BcApp.templateExt')) . '$/is', $path) == false) {
 				continue;
 			}
@@ -986,28 +557,28 @@ class Page extends AppModel {
 			// PageTagコメントの削除
 			$pageTagReg = '/<\!\-\- BaserPageTagBegin \-\->.*?<\!\-\- BaserPageTagEnd \-\->/is';
 			$contents = preg_replace($pageTagReg, '', $contents);
-
-			$conditions['Page.name'] = $pageName;
-			if ($pageCategoryId) {
-				$conditions['Page.page_category_id'] = $pageCategoryId;
+			$conditions = [];
+			$conditions['Content.name'] = $pageName;
+			if ($contentId) {
+				$conditions['Content.parent_id'] = $contentId;
 			} else {
-				$conditions['Page.page_category_id'] = null;
+				$conditions['Content.parent_id'] = 1;
 			}
-			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => -1));
+			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => 0));
 			if ($page) {
 				$chage = false;
-				if ($title != $page['Page']['title']) {
+				if ($title != $page['Content']['title']) {
 					$chage = true;
 				}
-				if ($description != $page['Page']['description']) {
+				if ($description != $page['Content']['description']) {
 					$chage = true;
 				}
 				if (trim($contents) != trim($page['Page']['contents'])) {
 					$chage = true;
 				}
 				if ($chage) {
-					$page['Page']['title'] = $title;
-					$page['Page']['description'] = $description;
+					$page['Content']['title'] = $title;
+					$page['Content']['description'] = $description;
 					$page['Page']['contents'] = $contents;
 					$this->set($page);
 					if ($this->save()) {
@@ -1015,19 +586,27 @@ class Page extends AppModel {
 					}
 				}
 			} else {
-				$page = $this->getDefaultValue();
-				$page['Page']['name'] = $pageName;
-				$page['Page']['title'] = $title;
-				$page['Page']['description'] = $description;
-				$page['Page']['contents'] = $contents;
-				$page['Page']['page_category_id'] = $pageCategoryId;
-				$page['Page']['url'] = $this->getPageUrl($page);
+				$page = [
+					'Page' => [
+						'contents' => $contents,
+					],
+					'Content' => [
+						'name' => $pageName,
+						'title' => $title,
+						'description' => $description
+					]
+				];
+				$page['Content']['site_id'] = $siteId;
+				if ($contentId) {
+					$page['Content']['parent_id'] = $contentId;
+				} else {
+					$page['Content']['parent_id'] = 1;
+				}
 				$this->create($page);
 				if ($this->save()) {
 					$insert++;
 				}
 			}
-			$contents = $page = $pageName = $title = $description = $conditions = $descriptionReg = $titleReg = $pageTagReg = null;
 			$all++;
 		}
 
@@ -1038,34 +617,13 @@ class Page extends AppModel {
 		foreach ($files[0] as $file) {
 			$folderName = basename($file);
 			if ($folderName != '_notes' && $folderName != 'admin') {
-				$result = $this->entryPageFiles($file, $pageCategoryId);
+				$result = $this->entryPageFiles($file, $contentId);
 				$insert += $result['insert'];
 				$update += $result['update'];
 				$all += $result['all'];
 			}
 		}
-
 		return array('all' => $all, 'insert' => $insert, 'update' => $update);
-	}
-
-/**
- * 関連ページの存在チェック
- * 存在する場合は、ページIDを返す
- *
- * @param string $type エージェントタイプ
- * @param array $data ページデータ
- * @return mixed ページID / false
- */
-	public function agentExists($type, $data) {
-		if (isset($data['Page'])) {
-			$data = $data['Page'];
-		}
-		$url = $this->removeAgentPrefixFromUrl($data['url']);
-		if (preg_match('/^\/' . Configure::read('BcAgent.' . $type . '.prefix') . '\//is', $url)) {
-			// 対象ページがモバイルページの場合はfalseを返す
-			return false;
-		}
-		return $this->field('id', array('Page.url' => '/' . Configure::read('BcAgent.' . $type . '.prefix') . $url));
 	}
 
 /**
@@ -1081,18 +639,17 @@ class Page extends AppModel {
 		if (preg_match('/\/$/', $url)) {
 			$url .= 'index';
 		}
-		$url = preg_replace('/^\/' . Configure::read('BcRequest.agentAlias') . '\//', '/' . Configure::read('BcRequest.agentPrefix') . '/', $url);
 
 		if ($this->_pages == -1) {
 			$pages = $this->find('all', array(
-				'fields'	=> 'url',
-				'recursive' => -1
+				'fields'	=> 'Content.url',
+				'recursive' => 1
 			));
 			if (!$pages) {
 				$this->_pages = array();
 				return false;
 			}
-			$this->_pages = Hash::extract($pages, '{n}.Page.url');
+			$this->_pages = Hash::extract($pages, '{n}.Content.url');
 		}
 		if(in_array($url, $this->_pages)) {
 			return true;
@@ -1125,7 +682,7 @@ class Page extends AppModel {
 
 			// 公開状態だった場合、サイトマップのキャッシュを削除
 			// 公開期間のチェックは行わず確実に削除
-			if ($page['Page']['status']) {
+			if ($page['Content']['status']) {
 				clearViewCache();
 			}
 			return true;
@@ -1137,114 +694,47 @@ class Page extends AppModel {
 
 /**
  * ページデータをコピーする
+ *
+ * 固定ページテンプレートの生成処理を実行する必要がある為、
+ * Content::copy() は利用しない
  * 
  * @param int $id ページID
- * @param array $data コピーしたいデータ
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しいユーザーID
+ * @param int $newSiteId 新しいサイトID
  * @return mixed page Or false
  */
-	public function copy($id = null, $data = array()) {
-		if ($id) {
-			$data = $this->find('first', array('conditions' => array('Page.id' => $id), 'recursive' => -1));
-		}
-		$data['Page']['name'] .= '_copy';
-		$data['Page']['title'] .= '_copy';
-		if (!empty($_SESSION['Auth']['User'])) {
-			$data['Page']['author_id'] = $_SESSION['Auth']['User']['id'];
-		}
-		$data['Page']['sort'] = $this->getMax('sort') + 1;
-		$data['Page']['status'] = false;
-		$data['Page']['url'] = $this->getPageUrl($data);
+	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
+		$data = $this->find('first', ['conditions' => ['Page.id' => $id], 'recursive' => 0]);
+		$url = $data['Content']['url'];
+		$siteId = $data['Content']['site_id'];
+		$name = $data['Content']['name'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
-
-		$this->create($data);
-		$result = $this->save();
-		if ($result) {
-			return $result;
-		} else {
-			if (isset($this->validationErrors['name']) && $this->validationErrors['name'] != 'ページ名は50文字以内で入力してください。') {
-				return $this->copy(null, $data);
-			} else {
-				return false;
-			}
+		unset($data['Content']);
+		$data['Content'] = [
+			'name'		=> $name,
+			'parent_id'	=> $newParentId,
+			'title'		=> $newTitle,
+			'author_id' => $newAuthorId,
+			'site_id' 	=> $newSiteId,
+			'description' => ''
+		];
+		if(!is_null($newSiteId) && $siteId != $newSiteId) {
+			$data['Content']['site_id'] = $newSiteId;
+			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
+		$this->getDataSource()->begin();
+		if ($data = $this->save($data)) {
+			$this->getDataSource()->commit();
+			return $data;
+		}
+		$this->getDataSource()->rollback();
+		return false;
 	}
-
-/**
- * 連携チェック
- * 
- * @param string $agentPrefix
- * @param string $url
- * @return boolean 
- */
-	public function isLinked($agentPrefix, $url) {
-		if (!$agentPrefix) {
-			return false;
-		}
-
-		if (!Configure::read('BcApp.' . $agentPrefix)) {
-			return false;
-		}
-
-		$siteConfig = Configure::read('BcSite');
-		$linked = false;
-
-		if (isset($siteConfig['linked_pages_' . $agentPrefix])) {
-			$linked = $siteConfig['linked_pages_' . $agentPrefix];
-		}
-
-		if (preg_match('/\/$/', $url)) {
-			$url .= 'index';
-		}
-
-		if ($this->field('unlinked_' . $agentPrefix, array('Page.url' => $url))) {
-			$linked = false;
-		}
-
-		return $linked;
-	}
-
-/**
- * treeList
- * ページカテゴリーに関連したデータを取得する
- * 
- * @param int $categoryId ページカテゴリーID
- */
-	public function treeList($categoryId) {
-		return $this->_treeList($categoryId);
-	}
-
-	protected function _treeList($categoryId) {
-		$datas = array();
-		$pages = $this->find('all', array(
-			'conditions' => array('Page.page_category_id' => $categoryId),
-			'recursive' => -1,
-			'order' => 'sort'
-		));
-
-		$conditions = array('PageCategory.parent_id' => $categoryId);
-		if (!$categoryId) {
-			$conditions['PageCategory.id NOT IN'] = array(1, 2);
-		}
-		$pageCategories = $this->PageCategory->find('all', array(
-			'conditions' => $conditions,
-			'recursive' => -1,
-			'order' => 'lft'
-		));
-		foreach ($pageCategories as $key => $pageCategory) {
-			$children = $this->_treeList($pageCategory['PageCategory']['id']);
-			if ($children) {
-				$pageCategories[$key]['children'] = $children;
-			}
-		}
-		$datas = array(
-			'pageCategories' => $pageCategories,
-			'pages' => $pages
-		);
-		return $datas;
-	}
-
+	
 /**
  * PHP構文チェック
  *
@@ -1286,5 +776,30 @@ class Page extends AppModel {
 		}
 		$message = 'PHPの構文エラーです： ' . PHP_EOL . implode(' ' . PHP_EOL, $output);
 		return $message;
+	}
+
+	public function getParentPageTemplate($id) {
+		return 'default';
+	}
+
+/**
+ * 固定ページテンプレートリストを取得する
+ *
+ * @param $contentId
+ * @param $theme
+ * @return array
+ */
+	public function getPageTemplateList($contentId, $theme) {
+		$pageTemplates = BcUtil::getTemplateList('Pages/templates', '', $theme);
+		if($contentId != 1) {
+			$ContentFolder = ClassRegistry::init('ContentFolder');
+			$parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
+			$searchKey = array_search($parentTemplate, $pageTemplates);
+			if ($searchKey !== false) {
+				unset($pageTemplates[$searchKey]);
+			}
+			array_unshift($pageTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+		}
+		return $pageTemplates;
 	}
 }

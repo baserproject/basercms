@@ -1,14 +1,12 @@
 <?php
 /**
- * test for BcUploadHelper
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
- * @since           baserCMS v 3.0.0-beta
+ * @since			baserCMS v 3.0.0
  * @license			http://basercms.net/license/index.html
  */
 
@@ -26,7 +24,10 @@ class BcUploadHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Default.PluginContent'
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.Page',
+		'baser.Default.SiteConfig',
 	);
 
 /**
@@ -105,7 +106,7 @@ class BcUploadHelperTest extends BaserTestCase {
 			'tmp' => true
 		);
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" />';
+		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt=""/>';
 		$this->assertEquals($expects, $result);
 
 		// output を tag で、linkをtrue (無視される)

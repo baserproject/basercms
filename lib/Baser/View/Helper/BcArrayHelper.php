@@ -1,11 +1,9 @@
 <?php
 /**
- * 配列操作ヘルパー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -30,7 +28,6 @@ class BcArrayHelper extends AppHelper {
  * @param array $array 配列
  * @param mixed $key 現在のキー
  * @return boolean
- * @access public
  */
 	public function first($array, $key) {
 		reset($array);
@@ -48,7 +45,6 @@ class BcArrayHelper extends AppHelper {
  * @param array $array 配列
  * @param mixed $key 現在のキー
  * @return boolean
- * @access public
  */
 	public function last($array, $key) {
 		end($array);

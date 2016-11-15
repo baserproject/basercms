@@ -1,7 +1,5 @@
 <?php
 /**
- * PostgreSQL layer for DBO.
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -46,6 +44,7 @@ class Postgres extends DboSource {
 		'schema' => 'public',
 		'port' => 5432,
 		'encoding' => '',
+		'sslmode' => 'allow',
 		'flags' => array()
 	);
 
@@ -69,7 +68,8 @@ class Postgres extends DboSource {
 		'binary' => array('name' => 'bytea'),
 		'boolean' => array('name' => 'boolean'),
 		'number' => array('name' => 'numeric'),
-		'inet' => array('name' => 'inet')
+		'inet' => array('name' => 'inet'),
+		'uuid' => array('name' => 'uuid')
 	);
 
 /**
@@ -99,7 +99,7 @@ class Postgres extends DboSource {
  *
  * @var array
  */
-	protected $_sqlOps = array('like', 'ilike', 'or', 'not', 'in', 'between', '~', '~*', '!~', '!~*', 'similar to');
+	protected $_sqlOps = array('like', 'ilike', 'or', 'not', 'in', 'between', '~', '~\*', '\!~', '\!~\*', 'similar to');
 
 /**
  * Connects to the database using options in the given configuration array.
@@ -118,7 +118,7 @@ class Postgres extends DboSource {
 
 		try {
 			$this->_connection = new PDO(
-				"pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']}",
+				"pgsql:host={$config['host']};port={$config['port']};dbname={$config['database']};sslmode={$config['sslmode']}",
 				$config['login'],
 				$config['password'],
 				$flags
@@ -217,6 +217,7 @@ class Postgres extends DboSource {
 						$length = null;
 						$type = 'text';
 					} elseif ($c->type === 'uuid') {
+						$type = 'uuid';
 						$length = 36;
 					} else {
 						$length = (int)$c->oct_length;
@@ -242,7 +243,10 @@ class Postgres extends DboSource {
 				if ($model instanceof Model) {
 					if ($c->name === $model->primaryKey) {
 						$fields[$c->name]['key'] = 'primary';
-						if ($fields[$c->name]['type'] !== 'string') {
+						if (
+							$fields[$c->name]['type'] !== 'string' &&
+							$fields[$c->name]['type'] !== 'uuid'
+						) {
 							$fields[$c->name]['length'] = 11;
 						}
 					}
@@ -557,7 +561,11 @@ class Postgres extends DboSource {
 									$colList[] = 'ALTER COLUMN ' . $fieldName . '  SET DEFAULT NULL';
 									$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col)) . ' USING CASE WHEN TRUE THEN 1 ELSE 0 END';
 								} else {
-									$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col));
+									if ($original['type'] === 'text' && $col['type'] === 'integer') {
+										$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col)) . " USING cast({$fieldName} as INTEGER)";
+									} else {
+										$colList[] = 'ALTER COLUMN ' . $fieldName . ' TYPE ' . str_replace(array($fieldName, 'NOT NULL'), '', $this->buildColumn($col));
+									}
 								}
 
 								if (isset($nullable)) {
@@ -695,8 +703,10 @@ class Postgres extends DboSource {
 				return 'biginteger';
 			case (strpos($col, 'int') !== false && $col !== 'interval'):
 				return 'integer';
-			case (strpos($col, 'char') !== false || $col === 'uuid'):
+			case (strpos($col, 'char') !== false):
 				return 'string';
+			case (strpos($col, 'uuid') !== false):
+				return 'uuid';
 			case (strpos($col, 'text') !== false):
 				return 'text';
 			case (strpos($col, 'bytea') !== false):
@@ -917,6 +927,17 @@ class Postgres extends DboSource {
 			$join[] = $out;
 		}
 		return $join;
+	}
+
+/**
+ * {@inheritDoc}
+ */
+	public function value($data, $column = null, $null = true) {
+		$value = parent::value($data, $column, $null);
+		if ($column === 'uuid' && is_scalar($data) && $data === '') {
+			return 'NULL';
+		}
+		return $value;
 	}
 
 /**

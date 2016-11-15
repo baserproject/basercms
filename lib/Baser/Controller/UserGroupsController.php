@@ -1,18 +1,14 @@
 <?php
-
 /**
- * ユーザーグループコントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-
 /**
  * ユーザーグループコントローラー
  *
@@ -53,17 +49,17 @@ class UserGroupsController extends AppController {
  *
  * @var array
  */
-	public $subMenuElements = array('users', 'user_groups');
+	public $subMenuElements = array('site_configs', 'users');
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
-		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+		['name' => 'ユーザーグループ管理', 'url' => ['controller' => 'user_groups', 'action' => 'index']]
+	];
 
 /**
  * beforeFilter
@@ -156,6 +152,7 @@ class UserGroupsController extends AppController {
 			}
 			if ($this->UserGroup->save($this->request->data)) {
 				$this->setMessage('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。', false, true);
+				$this->BcAuth->relogin();
 				$this->redirect(array('action' => 'index', $id));
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -175,6 +172,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_ajax_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
@@ -199,6 +197,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_delete($id = null) {
+		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
@@ -225,6 +224,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_ajax_copy($id) {
+		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -246,7 +246,6 @@ class UserGroupsController extends AppController {
 		if (!$this->request->data) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
-		$user = $this->BcAuth->user();
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;
 		$data = $this->UserGroup->read();

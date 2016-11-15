@@ -20,18 +20,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-// CUSTOMIZE ADD 2014/07/03 ryuring
-// >>>
-// ダブルプレフィックスルーティング
-//Router::connect('/m/mypage/:controller/:action/*', array('prefix' => 'mobile_mypage', 'mobile_mypage' => true));
-/**
- * Include Files
- *
- * 先に読み込んだ設定から適用されるので Baser の routes 設定を上書きしたい場合はこれより上部に記述します。
- */
-	require BASER_CONFIGS . 'routes.php';
-// <<<
-
 // CUSTOMIZE DELETE 2015/03/27 n1215
 // CakePHPのPagesコントローラーの挙動を無効
 // >>>
@@ -52,6 +40,16 @@
  * how to customize the loading of plugin routes.
  */
 	CakePlugin::routes();
+
+// CUSTOMIZE ADD 2014/07/03 ryuring
+// >>>
+/**
+ * Include Files
+ *
+ * 先に読み込んだ設定から適用されるので Baser の routes 設定を上書きしたい場合はこれより上部に記述します。
+ */
+require BASER_CONFIGS . 'routes.php';
+// <<<
 
 /**
  * Load the CakePHP default routes. Only remove this if you do not want to use

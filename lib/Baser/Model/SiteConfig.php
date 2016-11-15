@@ -1,19 +1,13 @@
 <?php
-
 /**
- * システム設定モデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
- */
-/**
- * Include files
  */
 
 /**
@@ -24,65 +18,52 @@
 class SiteConfig extends AppModel {
 
 /**
- * クラス名
- *
- * @var string
- * @access public
- */
-	public $name = 'SiteConfig';
-
-/**
  * ビヘイビア
  * 
  * @var array
- * @access public
  */
 	public $actsAs = array('BcCache');
-
-/**
- * データベース接続
- *
- * @var string
- * @access public
- */
-	public $useDbConfig = 'baser';
 
 /**
  * バリデーション
  *
  * @var array
- * @access public
  */
 	public $validate = array(
 		'formal_name' => array(
-			'rule' => array('notEmpty'),
+			'rule' => array('notBlank'),
 			'message' => 'Webサイト名を入力してください。',
 			'required' => true
 		),
 		'name' => array(
-			'rule' => array('notEmpty'),
+			'rule' => array('notBlank'),
 			'message' => 'Webサイトタイトルを入力してください。',
 			'required' => true
 		),
 		'email' => array(
 			array('rule' => array('emails'),
 				'message' => '管理者メールアドレスの形式が不正です。'),
-			array('rule' => array('notEmpty'),
+			array('rule' => array('notBlank'),
 				'message' => '管理者メールアドレスを入力してください。')
 		),
 		'mail_encode' => array(
-			'rule' => array('notEmpty'),
+			'rule' => array('notBlank'),
 			'message' => "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。",
 			'required' => true
 		),
 		'site_url' => array(
-			'rule' => array('notEmpty'),
+			'rule' => array('notBlank'),
 			'message' => "WebサイトURLを入力してください。",
 			'required' => true
 		),
 		'admin_ssl' => array(
 			'rule' => array('sslUrlExists'),
 			'message' => "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
+		),
+		'main_site_display_name' => array(
+			'rule' => array('notBlank'),
+			'message' => "メインサイト表示名を入力してください。",
+			'required' => false
 		)
 	);
 
@@ -90,7 +71,6 @@ class SiteConfig extends AppModel {
  * テーマの一覧を取得する
  *
  * @return array
- * @access public
  */
 	public function getThemes() {
 		$themes = array();
@@ -112,7 +92,6 @@ class SiteConfig extends AppModel {
  * 
  * @param string $field
  * @return mixed array | false
- * @access public
  */
 	public function getControlSource($field = null) {
 		$controlSources['mode'] = array(-1 => 'インストールモード', 0 => 'ノーマルモード', 1 => 'デバッグモード１', 2 => 'デバッグモード２', 3 => 'デバッグモード３');
@@ -128,7 +107,6 @@ class SiteConfig extends AppModel {
  *
  * @param mixed	$check
  * @return boolean
- * @access public
  */
 	public function sslUrlExists($check) {
 		$sslOn = $check[key($check)];
@@ -148,9 +126,12 @@ class SiteConfig extends AppModel {
 		$siteConfigs = $this->findExpanded();
 		$changed = false;
 		if(!empty($siteConfigs['contents_sort_last_modified'])) {
+			$user = BcUtil::loginUser();
 			$lastModified = $siteConfigs['contents_sort_last_modified'];
-			list($lastModified, $sessionId) = explode('|', $lastModified);
-			if(session_id() != $sessionId) {
+			list($lastModified, $userId) = explode('|', $lastModified);
+			$lastModified = strtotime($lastModified);
+			if($user['id'] != $userId) {
+				$listDisplayed = strtotime($listDisplayed);
 				// 60秒はブラウザのロード時間を加味したバッファ
 				if($lastModified >= ($listDisplayed - 60)) {
 					$changed = true;
@@ -165,7 +146,8 @@ class SiteConfig extends AppModel {
  */
 	public function updateContentsSortLastModified() {
 		$siteConfigs = $this->findExpanded();
-		$siteConfigs['contents_sort_last_modified'] = date('U') . '|' . session_id();
+		$user = BcUtil::loginUser();
+		$siteConfigs['contents_sort_last_modified'] = date('Y-m-d H:i:s') . '|' . $user['id'];
 		$this->saveKeyValue($siteConfigs);
 	}
 
@@ -173,7 +155,6 @@ class SiteConfig extends AppModel {
  * コンテンツ並び替え順変更時間をリセットする 
  */
 	public function resetContentsSortLastModified() {
-		$siteConfigs = $this->findExpanded();
 		$siteConfigs['contents_sort_last_modified'] = '';
 		$this->saveKeyValue($siteConfigs);
 	}

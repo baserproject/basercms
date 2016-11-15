@@ -1,11 +1,9 @@
 <?php
 /**
- * Helper 拡張クラス
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View.Helper
  * @since			baserCMS v 0.1.0
@@ -192,7 +190,18 @@ class BcAppHelper extends Helper {
 		} elseif (!is_array($url) && preg_match('/^javascript:/', $url)) {
 			return $url;
 		} else {
-			return parent::url($url, $full);
+			if(!BcUtil::isAdminSystem() && !is_array($url) && !empty($this->request->params['Content'])) {
+				$Content = ClassRegistry::init('Content');
+				$url = $Content->getUrl($url, $full, @$this->_View->request->params['Site']['use_subdomain']);
+			} else {
+				$url = parent::url($url, $full);
+			}
+			$params = explode('?', $url);
+			$url = preg_replace('/\/index$/', '/', $params[0]);
+			if(!empty($params[1])) {
+				$url .= '?' . $params[1];
+			}
+			return $url;
 		}
 	}
 

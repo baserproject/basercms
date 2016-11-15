@@ -9,7 +9,7 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js(array('Uploader.uploader_list'));
+$this->BcBaser->js(array('Uploader.admin/uploader_files/uploader_list'));
 if(!isset($listId)) {
 	$listId = '';
 }
@@ -38,18 +38,6 @@ if(!isset($listId)) {
 <?php if(empty($this->params['isAjax'])): ?>
 <?php $this->BcBaser->element('list_num') ?>
 <?php endif ?>
-
-
-<!-- コンテキストメニュー -->
-<ul id="FileMenu1" class="context-menu">
-    <li class="edit"><a href="#edit">編集</a></li>
-    <li class="delete"><a href="#delete">削除</a></li>
-</ul>
-<ul id="FileMenu2" class="context-menu">
-    <li class="edit disabled"><a href="#">編集</a></li>
-    <li class="delete disabled"><a href="#">削除</a></li>
-</ul>
-
 
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="ファイル情報編集">

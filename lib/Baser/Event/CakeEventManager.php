@@ -69,14 +69,14 @@ class CakeEventManager {
  */
 	public static function instance($manager = null) {
 		if ($manager instanceof CakeEventManager) {
-			self::$_generalManager = $manager;
+			static::$_generalManager = $manager;
 		}
-		if (empty(self::$_generalManager)) {
-			self::$_generalManager = new CakeEventManager();
+		if (empty(static::$_generalManager)) {
+			static::$_generalManager = new CakeEventManager();
 		}
 
-		self::$_generalManager->_isGlobal = true;
-		return self::$_generalManager;
+		static::$_generalManager->_isGlobal = true;
+		return static::$_generalManager;
 	}
 
 /**
@@ -107,7 +107,7 @@ class CakeEventManager {
 			$this->_attachSubscriber($callable);
 			return;
 		}
-		$options = $options + array('priority' => self::$defaultPriority, 'passParams' => false);
+		$options = $options + array('priority' => static::$defaultPriority, 'passParams' => false);
 		$this->_listeners[$eventKey][$options['priority']][] = array(
 			'callable' => $callable,
 			'passParams' => $options['passParams'],

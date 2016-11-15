@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] テーマ一覧　テーブル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] テーマ一覧　テーブル
  */
 ?>
 
@@ -33,12 +35,9 @@ $(function(){
 				<?php endif ?>
 			</div>
 			<p class="row-tools">
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('width' => 24, 'height' => 24, 'alt' => '管理', 'class' => 'btn')), array('controller' => 'theme_files', 'action' => 'index', $currentTheme['name']), array('title' => '管理')) ?>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('width' => 24, 'height' => 24, 'alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $currentTheme['name']), array('title' => '編集')) ?>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('width' => 24, 'height' => 24, 'alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $currentTheme['name']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
-				<?php if (!$currentTheme['is_writable_pages']): ?>
-				<br /><div class="error-message lastChild clearfix" style="clear:both">「Pages」フォルダに書き込み権限を与えてください。</div>
-			<?php endif ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('alt' => 'テンプレート編集', 'class' => 'btn')), array('controller' => 'theme_files', 'action' => 'index', $currentTheme['name']), array('title' => 'テンプレート編集')) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => 'テーマ情報設定', 'class' => 'btn')), array('action' => 'edit', $currentTheme['name']), array('title' => 'テーマ情報設定')) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'テーマコピー', 'class' => 'btn')), array('action' => 'ajax_copy', $currentTheme['name']), array('title' => 'テーマコピー', 'class' => 'btn-copy')) ?>
 			</p>
 		</div>
 
@@ -54,7 +53,7 @@ $(function(){
 		</div>
 		<br /><br />
 		<?php if ($defaultDataPatterns && $this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->create('Theme', array('action' => 'load_default_data_pattern')) ?>
+			<?php echo $this->BcForm->create('Theme', ['url' => ['action' => 'load_default_data_pattern']]) ?>
 			<?php echo $this->BcForm->input('Theme.default_data_pattern', array('type' => 'select', 'options' => $defaultDataPatterns)) ?>
 			<?php echo $this->BcForm->submit('初期データ読込', array('class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern')) ?>
 			<?php echo $this->BcForm->end() ?>

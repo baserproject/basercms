@@ -18,3 +18,13 @@ execute 'resolv.conf' do
     command "echo 'options single-request-reopen' >> /etc/resolv.conf"
     not_if "cat /etc/resolv.conf | grep 'options single-request-reopen'"
 end
+
+user node['centos']['testuser_name'] do
+  comment node['centos']['testuser_name']
+  home "/home/" + node['centos']['testuser_name']
+  shell "/bin/bash"
+  password node['centos']['testuser_password']
+  supports :manage_home => true
+  action :create
+end
+

@@ -1,11 +1,9 @@
 <?php
 /**
- * [PUBLISH] 固定ページコンテンツナビゲーション
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
@@ -13,12 +11,18 @@
  */
 
 /**
+ * [PUBLISH] 固定ページコンテンツナビゲーション
+ * 
  * $this->BcBaser->contentsNavi() で呼び出す
  */
+if(!BC_INSTALLED) {
+	return;
+}
 ?>
 
-<?php if($this->BcPage->contentsNaviAvailable()): ?>
-<div id="ContentsNavi">
+
+<?php if(!$this->BcBaser->isHome()): ?>
+<div class="contents-navi">
 	<?php $this->BcPage->prevLink() ?>
 	&nbsp;｜&nbsp;
 	<?php $this->BcPage->nextLink() ?>

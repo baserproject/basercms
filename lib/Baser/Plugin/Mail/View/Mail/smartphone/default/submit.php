@@ -1,28 +1,29 @@
 <?php
 /**
- * [PUBLISH] メールフォーム送信完了ページ
- * 
- * PHP versions 5
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [PUBLISH] メールフォーム送信完了ページ
  */
 if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
 	$this->Html->meta(array('http-equiv' => 'Refresh'), null, array('content' => '5;url=' . $mailContent['MailContent']['redirect_url'], 'inline' => false));
 }
 ?>
 
-<h2 class="contents-head">
-	<?php $this->BcBaser->contentsTitle() ?>
-</h2>
 
-<h3 class="contents-head">メール送信完了</h3>
+<h1 class="contents-head">
+	<?php $this->BcBaser->contentsTitle() ?>
+</h1>
+
+<h2 class="contents-head">メール送信完了</h2>
 
 <div class="section">
 	<p>お問い合わせ頂きありがとうございました。<br />

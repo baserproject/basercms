@@ -1,18 +1,18 @@
 <?php
-
 /**
- * test for basics.php
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case
  * @since			baserCMS v 3.0.0-beta
  * @license			http://basercms.net/license/index.html
  */
 
 /**
+ * test for basics.php
+ * 
  * @package Baser.Test.Case
  */
 class BcBasicsTest extends BaserTestCase {
@@ -25,8 +25,9 @@ class BcBasicsTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
-		'baser.Default.PluginContent',
 		'baser.Default.SiteConfig',
+		'baser.Default.Site',
+		'baser.Default.Content',
 	);
 
 	public function setUp() {
@@ -46,11 +47,13 @@ class BcBasicsTest extends BaserTestCase {
  * @param	string $expect 期待値
  * @dataProvider baseUrlDataProvider
  */
-	public function testBaseUrl($baseUrl, $script, $expect) {
+	public function testBaseUrl($baseUrl, $expect) {
 		// 初期化
 		Configure::write('App.baseUrl', $baseUrl);
-		$_SERVER['SCRIPT_FILENAME'] = WWW_ROOT . $script;
-
+		if(isConsole()) {
+			$_SERVER['SCRIPT_FILENAME'] = APP . 'Console' . DS . 'cake.php';
+			$_SERVER['SCRIPT_NAME'] = APP . 'Console' . DS . 'cake.php';
+		}
 		$result = baseUrl();
 		$this->assertEquals($expect, $result, 'WEBサイトのベースとなるURLを正しく取得できません');
 
@@ -58,10 +61,10 @@ class BcBasicsTest extends BaserTestCase {
 
 	public function baseUrlDataProvider() {
 		return array(
-			array('/hoge/test', 'test.php', '/hoge/test/'),
-			array(null, 'test.php', '/'),
-			array('/hoge/test', null, '/hoge/test/'),
-			array(null, null, '/'),
+			array('/hoge/test', '/hoge/test/'),
+			array(null, '/'),
+			array('/hoge/test', '/hoge/test/'),
+			array(null, '/'),
 		);
 	}
 
@@ -150,8 +153,7 @@ class BcBasicsTest extends BaserTestCase {
 
 	public function getUrlParamFromEnvDataProvider() {
 		return array(
-			array(null, '/s/test/', 's/test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません'),
-			array('s', '/s/test/', 'test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません'),
+			array(null, '/s/test/', 's/test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません')
 		);
 	}
 
@@ -184,30 +186,6 @@ class BcBasicsTest extends BaserTestCase {
 			array(null, baseUrl() . '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
 			array(null, '/base/req/', '/base/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
 			array(null, '/base/req/', '/base/url/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
-		);
-	}
-
-/**
- * モバイルプレフィックスは除外したURLを取得する
- * 
- * @param	string $url URL
- * @param	string $expect 期待値
- * @dataProvider getPureUrlDataProvider
- */
-	public function testGetPureUrl($url, $expect) {
-		$request = new CakeRequest($url);
-		Configure::write('BcRequest.agentAlias', 'm');
-		$result = getPureUrl($request);
-		
-		$this->assertEquals($expect, $result, 'モバイルプレフィックスは除外したURLを正しく取得できません');
-	}
-
-	public function getPureUrlDataProvider() {
-		return array(
-			array('hoge', 'hoge'),
-			array('m/', ''),
-			array('/m/', ''),
-			array('/m/hoge', 'hoge'),
 		);
 	}
 
@@ -352,7 +330,7 @@ class BcBasicsTest extends BaserTestCase {
 		// app/Config/database.phpが存在する場合
 		if (rename($dbconfigPath . '_copy', $dbconfigPath)) {
 			$result = getDbConfig();
-			$this->assertContains('basercms', $result, 'app/Config/database.php が存在している場合にデータベースの情報が返ってきません');
+			$this->assertContains('utf8', $result, 'app/Config/database.php が存在している場合にデータベースの情報が返ってきません');
 
 			$result = getDbConfig('hoge');
 			$this->assertFalse($result, '存在しないデータベースの設定名を入力した場合にfalseが返ってきます');
@@ -373,7 +351,7 @@ class BcBasicsTest extends BaserTestCase {
 			TMP . 'logs',
 			TMP . 'sessions',
 			TMP . 'schemas',
-			TMP . 'schemas' . DS . 'baser',
+			TMP . 'schemas' . DS . 'core',
 			TMP . 'schemas' . DS . 'plugin',
 			CACHE,
 			CACHE . 'models',
@@ -399,7 +377,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testEmptyFolder() {
 
-		$dummyPath = WWW_ROOT . 'test' . DS;
+		$dummyPath = TMP . 'test' . DS;
 		$names = array(
 			'folder' => array('folder1', 'folder2'),
 			'file' => array('file1', 'file2'),
@@ -499,7 +477,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testTopLevelUrl() {
 		if (isConsole()) {
-			$this->assertFalse(topLevelUrl());
+			$this->assertEquals('http://localhost', topLevelUrl());
 		} else {
 			$this->assertRegExp('/^http:\/\/.*\/$/', topLevelUrl());
 			$this->assertRegExp('/^http:\/\/.*[^\/]$/', topLevelUrl(false));
@@ -514,7 +492,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testSiteUrl() {
 		if (isConsole()) {
-			$this->assertEmpty(siteUrl());
+			$this->assertEquals('http://localhost/', siteUrl());
 		} else {
 			$topLevelUrl = topLevelUrl(false);
 
@@ -550,30 +528,14 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 /**
- * プラグインのコンフィグファイルを読み込む
- */
-	public function testLoadPluginConfig() {
-		// Blogプラグインの設定を削除
-		Configure::write('BcApp.adminNavi.blog', null);
-
-		// 存在しないファイル名
-		$this->assertFalse(loadPluginConfig('Blog.hoge'), '存在しないファイル名に対してtrueが返ってきます');
-
-		// 正常に読み込む
-		$this->assertTrue(loadPluginConfig('Blog.setting'));
-		$this->assertContains('ブログプラグイン', Configure::read('BcApp.adminNavi.blog'), 'プラグインのコンフィグファイルを読み込めません');
-	}
-
-/**
  * URLにセッションIDを付加する
  */
 	public function testAddSessionId() {
 		// 初期化
 		session_id('baser');
 		session_name('BASERCMS');
-		Configure::write('BcRequest.agent', 'mobile');
+		$_SERVER['REQUEST_URI'] = '/m/';
 		$message = 'URLにセッションIDを正しく付加できません';
-
 		$this->assertEquals('/?BASERCMS=baser', addSessionId('/', true), $message);
 		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1', true), $message);
 		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1&BASERCMS=1', true), $message);
@@ -631,7 +593,7 @@ class BcBasicsTest extends BaserTestCase {
 
 		// プラグインのバージョンを取得
 		// ダミーのプラグインを作成
-		$path = BASER_PLUGINS . 'Hoge' . DS;
+		$path = APP . 'Plugin' . DS . 'Hoge' . DS;
 		$Folder = new Folder($path, true);
 		$File = new File($path . 'VERSION.txt', true);
 		$File->write('1.2.3');

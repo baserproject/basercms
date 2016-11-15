@@ -132,7 +132,8 @@ class PostgresTestModel extends Model {
 			'comments' => array('type' => 'text', 'null' => '1', 'default' => '', 'length' => ''),
 			'last_login' => array('type' => 'datetime', 'null' => '1', 'default' => '', 'length' => ''),
 			'created' => array('type' => 'date', 'null' => '1', 'default' => '', 'length' => ''),
-			'updated' => array('type' => 'datetime', 'null' => '1', 'default' => '', 'length' => null)
+			'updated' => array('type' => 'datetime', 'null' => '1', 'default' => '', 'length' => null),
+			'some_uuid' => array('type' => 'uuid', 'null' => '1', 'default' => null),
 		);
 	}
 
@@ -257,7 +258,8 @@ class PostgresTest extends CakeTestCase {
 			'"PostgresTestModel"."comments" AS "PostgresTestModel__comments"',
 			'"PostgresTestModel"."last_login" AS "PostgresTestModel__last_login"',
 			'"PostgresTestModel"."created" AS "PostgresTestModel__created"',
-			'"PostgresTestModel"."updated" AS "PostgresTestModel__updated"'
+			'"PostgresTestModel"."updated" AS "PostgresTestModel__updated"',
+			'"PostgresTestModel"."some_uuid" AS "PostgresTestModel__some_uuid"'
 		);
 
 		$result = $this->Dbo->fields($this->model);
@@ -300,6 +302,7 @@ class PostgresTest extends CakeTestCase {
 		$this->assertEquals('decimal', $this->Dbo2->column('numeric'));
 		$this->assertEquals('float', $this->Dbo2->column('float'));
 		$this->assertEquals('float', $this->Dbo2->column('double precision'));
+		$this->assertEquals('uuid', $this->Dbo2->column('uuid'));
 
 		$result = $this->Dbo2->column('bigint');
 		$expected = 'biginteger';
@@ -318,8 +321,8 @@ class PostgresTest extends CakeTestCase {
 		$this->assertEquals("0", $this->Dbo->value('0', 'integer'));
 		$this->assertEquals('NULL', $this->Dbo->value('', 'integer'));
 		$this->assertEquals('NULL', $this->Dbo->value('', 'float'));
-		$this->assertEquals("NULL", $this->Dbo->value('', 'integer', false));
-		$this->assertEquals("NULL", $this->Dbo->value('', 'float', false));
+		$this->assertEquals('""', $this->Dbo->value('', 'integer', false));
+		$this->assertEquals('""', $this->Dbo->value('', 'float', false));
 		$this->assertEquals("'0.0'", $this->Dbo->value('0.0', 'float'));
 
 		$this->assertEquals("'TRUE'", $this->Dbo->value('t', 'boolean'));
@@ -336,6 +339,8 @@ class PostgresTest extends CakeTestCase {
 		$this->assertEquals("'TRUE'", $this->Dbo->value('1', 'boolean'));
 		$this->assertEquals("NULL", $this->Dbo->value(null, 'boolean'));
 		$this->assertEquals("NULL", $this->Dbo->value(array()));
+		$this->assertEquals("'550e8400-e29b-41d4-a716-446655440000'", $this->Dbo->value('550e8400-e29b-41d4-a716-446655440000', 'uuid'));
+		$this->assertEquals("NULL", $this->Dbo->value(null, 'uuid'));
 	}
 
 /**
@@ -490,6 +495,10 @@ class PostgresTest extends CakeTestCase {
 		$this->assertSame(' WHERE "name" ~* \'[a-z_]+\'', $this->Dbo->conditions(array('name ~*' => '[a-z_]+')));
 		$this->assertSame(' WHERE "name" !~ \'[a-z_]+\'', $this->Dbo->conditions(array('name !~' => '[a-z_]+')));
 		$this->assertSame(' WHERE "name" !~* \'[a-z_]+\'', $this->Dbo->conditions(array('name !~*' => '[a-z_]+')));
+		$this->assertSame(
+			' WHERE EXTRACT( \'YEAR\' FROM "User"."birthday" ) = 2015',
+			$this->Dbo->conditions(array('EXTRACT( \'YEAR\' FROM User.birthday )' => 2015))
+		);
 	}
 
 /**
@@ -729,6 +738,42 @@ class PostgresTest extends CakeTestCase {
 		$query = $this->Dbo->alterSchema($New->compare($Old));
 		$result = $this->Dbo->query($query);
 		$this->Dbo->query($this->Dbo->dropSchema($Old));
+	}
+
+/**
+ * Test the alterSchema changing text to integer
+ *
+ * @return void
+ */
+	public function testAlterSchemaTextToIntegerField() {
+		$default = array(
+			'connection' => 'test',
+			'name' => 'TextField',
+			'text_fields' => array(
+				'id' => array('type' => 'integer', 'key' => 'primary'),
+				'name' => array('type' => 'string', 'length' => 50),
+				'active' => array('type' => 'text', 'null' => false),
+			)
+		);
+		$Old = new CakeSchema($default);
+		$result = $this->Dbo->query($this->Dbo->createSchema($Old));
+		$this->assertTrue($result);
+
+		$modified = $default;
+		$modified['text_fields']['active'] = array('type' => 'integer', 'null' => true);
+
+		$New = new CakeSchema($modified);
+		$this->Dbo->query($this->Dbo->alterSchema($New->compare($Old)));
+		$result = $this->Dbo->describe('text_fields');
+
+		$this->Dbo->query($this->Dbo->dropSchema($Old));
+		$expected = array(
+			'type' => 'integer',
+			'null' => true,
+			'default' => null,
+			'length' => null,
+		);
+		$this->assertEquals($expected, $result['active']);
 	}
 
 /**
@@ -1110,7 +1155,7 @@ class PostgresTest extends CakeTestCase {
 		$data = $db->describe('test_uuid_describe');
 
 		$expected = array(
-			'type' => 'string',
+			'type' => 'uuid',
 			'null' => false,
 			'default' => null,
 			'length' => 36,
@@ -1164,4 +1209,13 @@ class PostgresTest extends CakeTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
+/**
+ * Test build column working for new uuid types
+ */
+	public function testBuildColumnUuid() {
+		$column = array('name' => 'col1', 'type' => 'uuid');
+		$result = $this->Dbo2->buildColumn($column);
+
+		$this->assertEquals('"col1" uuid', $result);
+	}
 }

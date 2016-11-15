@@ -1,7 +1,6 @@
 <?php
 /**
  * PermissionFixture
- *
  */
 class PermissionPermissionModelFixture extends BaserTestFixture {
 /**

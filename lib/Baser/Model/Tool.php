@@ -1,21 +1,20 @@
 <?php
-
 /**
- * ツールモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 App::uses('CakeSchema', 'Model');
 
 /**
  * ツールモデル
+ *
  * @package Baser.Model
  */
 class Tool extends AppModel {
@@ -24,7 +23,6 @@ class Tool extends AppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'Tool';
 
@@ -32,7 +30,6 @@ class Tool extends AppModel {
  * テーブル
  * 
  * @var string
- * @access public
  */
 	public $useTable = false;
 
@@ -41,11 +38,10 @@ class Tool extends AppModel {
  *
  * @param string フィールド名
  * @return array コントロールソース
- * @access public
  */
 	public function getControlSource($field) {
 		// スキーマ用モデルリスト
-		$controlSources['connection'] = array('baser' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）');
+		$controlSources['connection'] = array('core' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）');
 		$controlSources = $this->getListModels($field);
 		if (isset($controlSources)) {
 			return $controlSources;
@@ -59,18 +55,17 @@ class Tool extends AppModel {
  * 
  * @param string $configKeyName データソース名
  * @return array
- * @access public
  */
-	public function getListModels($configKeyName = 'baser') {
-		$db = ConnectionManager::getDataSource($configKeyName);
+	public function getListModels($type = 'core') {
+		$db = ConnectionManager::getDataSource('default');
 		$listSources = $db->listSources();
 		if (!$listSources) {
 			return array();
 		}
+		$tableList = getTableList();
 		$sources = array();
 		foreach ($listSources as $source) {
-			if (preg_match("/^" . $db->config['prefix'] . "([^_].+)$/", $source, $matches) &&
-				!preg_match("/^" . Configure::read('BcEnv.pluginDbPrefix') . "[^_].+$/", $matches[1])) {
+			if(in_array($source, $tableList[$type])) {
 				$sources[] = $source;
 			}
 		}
@@ -83,20 +78,19 @@ class Tool extends AppModel {
  * @param array $data
  * @param string $path スキーマファイルの生成場所
  * @return boolean
- * @access public
  */
 	public function writeSchema($data, $path) {
 		if (isset($data['Tool'])) {
 			$data = $data['Tool'];
 		}
-		if (!$data['baser'] && !$data['plugin']) {
+		if (!$data['core'] && !$data['plugin']) {
 			return false;
 		}
 
 		$result = true;
 
-		if ($data['baser']) {
-			if (!$this->_writeSchema('baser', $data['baser'], $path)) {
+		if ($data['core']) {
+			if (!$this->_writeSchema('core', $data['core'], $path)) {
 				$result = false;
 			}
 		}
@@ -114,7 +108,6 @@ class Tool extends AppModel {
  * @param array $data
  * @param string $tmpPath 
  * @return boolean
- * @access public
  */
 	public function loadSchemaFile($data, $tmpPath) {
 		$path = $tmpPath . $data['Tool']['schema_file']['name'];
@@ -140,20 +133,16 @@ class Tool extends AppModel {
  * @param array $values
  * @param string $path スキーマファイルの生成場所
  * @return boolean
- * @access protected
  */
 	protected function _writeSchema($field, $values, $path) {
-		$db = ConnectionManager::getDataSource($field);
+		$db = ConnectionManager::getDataSource('default');
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
 		$modelList = array();
 		foreach ($tableList as $key => $table) {
-			if (preg_match('/^' . $prefix . '([a-z][a-z_]*?)$/is', $table, $maches)) {
-				$model = Inflector::camelize(Inflector::singularize($maches[1]));
-				$modelList[$key] = $model;
-			}
+			$model = Inflector::camelize(Inflector::singularize(str_replace($prefix, '', $table)));
+			$modelList[$key] = $model;
 		}
-
 		$result = true;
 		foreach ($values as $value) {
 			if (!$db->writeSchema(array('model' => $modelList[$value], 'path' => $path))) {

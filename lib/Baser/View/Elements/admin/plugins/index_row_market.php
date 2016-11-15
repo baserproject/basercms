@@ -1,22 +1,24 @@
 <?php
 /**
- * [ADMIN] プラグイン一覧　行
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] プラグイン一覧　行
  */
 ?>
 
 
 <tr>
 	<td class="row-tools">
-		<div><?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down_on.png', array('title' => 'ダウンロード', 'alt' => 'ダウンロード')), $data['link'], array('target' => '_blank')) ?></div>
+		<div><?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', array('title' => 'ダウンロード', 'alt' => 'ダウンロード')), $data['link'], array('target' => '_blank')) ?></div>
 	</td>
 	<td>
 		<?php echo $data['title'] ?>

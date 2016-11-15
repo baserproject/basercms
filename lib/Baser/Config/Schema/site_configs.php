@@ -8,7 +8,7 @@ class SiteConfigsSchema extends CakeSchema {
 
 	public $file = 'site_configs.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

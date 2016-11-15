@@ -12,11 +12,4 @@
 $this->BcBaser->css('Uploader.uploader', array('inline' => false));
 ?>
 
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#UploaderFileFile").focus();
-});
-</script>
-
 <?php $this->BcBaser->element('uploader_files/index') ?>

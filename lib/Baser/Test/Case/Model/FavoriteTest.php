@@ -1,15 +1,13 @@
 <?php
-
 /**
- * Favoriteモデルのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Favorites Community <http://sites.google.com/site/baserFavorites/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Favorites Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Model
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('Favorite', 'Model');
 App::uses('SessionComponent', 'Controller/Component');
@@ -39,11 +37,13 @@ class FavoriteTest extends BaserTestCase {
 	public $components = array("Auth","Cookie","Session");
 
 	public function setUp() {
+		@session_start();
 		parent::setUp();
 		$this->Favorite = ClassRegistry::init('Favorite');
 	}
 
 	public function tearDown() {
+		@session_destroy();
 		unset($this->Favorite);
 		parent::tearDown();
 	}
@@ -58,8 +58,9 @@ class FavoriteTest extends BaserTestCase {
 	public function login($id) {
 		session_id('baser');  // 適当な文字列を与え強制的にコンソール上でセッションを有効にする
 		$this->Favorite->setSession(new SessionComponent(new ComponentCollection()));
-		$this->Favorite->_Session->write('Auth.User.id', $id);
-		$this->Favorite->_Session->write('Auth.User.user_group_id', $id);
+		$prefix = BcUtil::authSessionKey('admin');
+		$this->Favorite->_Session->write('Auth.' . $prefix . '.id', $id);
+		$this->Favorite->_Session->write('Auth.' . $prefix . '.user_group_id', $id);
 	}
 
 /**

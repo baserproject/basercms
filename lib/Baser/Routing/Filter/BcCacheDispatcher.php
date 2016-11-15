@@ -1,11 +1,9 @@
 <?php
 /**
- * ThemeConfig
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Routing.Filter
  * @since			baserCMS v 3.0.0
@@ -17,6 +15,8 @@ App::uses('DispatcherFilter', 'Routing');
 /**
  * This filter will check whether the response was previously cached in the file system
  * and served it back to the client if appropriate.
+ *
+ * @package Baser.Routing.Filter
  */
 class BcCacheDispatcher extends DispatcherFilter {
 
@@ -26,7 +26,7 @@ class BcCacheDispatcher extends DispatcherFilter {
  *
  * @var int
  */
-	public $priority = 10;
+	public $priority = 5;
 
 /**
  * Checks whether the response was cached and set the body accordingly.
@@ -37,9 +37,9 @@ class BcCacheDispatcher extends DispatcherFilter {
 	public function beforeDispatch(CakeEvent $event) {
 
 		if (Configure::read('Cache.check') !== true) {
-			return;
+			return null;
 		}
-
+		
 		// CUSTOMIZE 2014/08/11 ryuring
 		// $this->request->here で、URLを取得する際、URL末尾の 「index」の有無に関わらず
 		// 同一ファイルを参照すべきだが、別々のURLを出力してしまう為、
@@ -51,7 +51,7 @@ class BcCacheDispatcher extends DispatcherFilter {
 		// <<<
 		
 		if ($path === '/') {
-			$path = 'home';
+			$path = 'index';
 		}
 		$prefix = Configure::read('Cache.viewPrefix');
 		if ($prefix) {

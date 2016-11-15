@@ -19,8 +19,8 @@ class BlogPostsBlogTagsSchema extends CakeSchema {
 
 	public $blog_posts_blog_tags = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'blog_post_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
-		'blog_tag_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
+		'blog_post_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
+		'blog_tag_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

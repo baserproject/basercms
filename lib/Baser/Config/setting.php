@@ -1,17 +1,15 @@
 <?php
-
 /**
- * baserCMS設定ファイル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Config
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
 /**
  * アプリケーション基本設定
  */
@@ -19,7 +17,7 @@ $config['BcApp'] = array(
 	// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 	'title' => 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 	// 初期テーマ
-	'defaultTheme' => 'bccolumn',
+	'defaultTheme' => 'bc_sample',
 	// 管理システムテーマ（キャメルケース）
 	'adminTheme' => '',
 	// テンプレートの基本となる拡張子（.php 推奨）
@@ -28,24 +26,18 @@ $config['BcApp'] = array(
 	'adminNavi' => array('core' => array(
 			'name' => 'baserCMSコア',
 			'contents' => array(
-				array('name' => '固定ページ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'pages', 'action' => 'index')),
-				array('name' => '固定ページカテゴリ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'page_categories', 'action' => 'index')),
+				array('name' => 'コンテンツ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
 				array('name' => 'ウィジェット管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
 				array('name' => 'テーマ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index')),
 				array('name' => 'プラグイン管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index')),
 				array('name' => 'システム設定', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form')),
-				array('name' => 'ユーザー一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index')),
-				array('name' => 'ユーザー登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'add')),
-				array('name' => 'ユーザーグループ一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
-				array('name' => 'ユーザーグループ登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'add')),
-				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
-				array('name' => 'メニュー一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'menus', 'action' => 'index')),
-				array('name' => 'メニュー登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'menus', 'action' => 'add')),
-				array('name' => 'エディタテンプレート一覧', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
-				array('name' => 'エディタテンプレート登録', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'add')),
-				array('name' => 'サーバーキャッシュ削除', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache')),
-				array('name' => 'データメンテナンス', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'maintenance')),
-				array('name' => '環境情報', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'info'))
+				array('name' => 'ユーザー管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index')),
+				array('name' => 'ユーザーグループ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
+				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index')),
+				array('name' => 'エディタテンプレート管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
+				array('name' => 'サブサイト管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index')),
+				array('name' => 'ユーティリティ', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index')),
+				array('name' => 'サーバーキャッシュ削除', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'), 'options' => array('confirm' => 'サーバーキャッシュを削除します。いいですか？'))
 			))),
 	// コアプラグイン
 	'corePlugins' => array('Blog', 'Feed', 'Mail', 'Uploader'),
@@ -58,26 +50,28 @@ $config['BcApp'] = array(
 		'none' => 'なし',
 		'BcCkeditor' => 'CKEditor'
 	),
+	'testTheme' => 'nada-icons',
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks'	=> 'http://basercms.net/special_thanks/special_thanks/ajax_users'
 );
+
 /**
  * システム要件 
  */
 $config['BcRequire'] = array(
-	'phpVersion' => "5.2.0",
-	'phpMemory' => "32"
+	'phpVersion' => "5.4.0",
+	'phpMemory' => "128"
 );
+
 /**
  * 環境設定 
  */
 $config['BcEnv'] = array(
-	// プラグインDBプレフィックス
-	'pluginDbPrefix' => 'pg_',
 	// テストDBプレフィックス
 	'testDbPrefix' => 'test_',
 );
+
 /**
  * 文字コード設定
  */
@@ -116,9 +110,7 @@ $config['BcAuthPrefix'] = array(
 		// モデル
 		'userModel' => 'User',
 		// セッションキー
-		// TODO Adminとした方がわかりやすいが、アップデート時にセッションキーが変わってしまうと
-		// 予期せぬ事態が発生しかねない為、メジャーバージョンアップのタイミングで変更する
-		'sessionKey' => 'User'
+		'sessionKey' => 'Admin'
 	)
 	// フロント（例）
 /* 'front' => array(
@@ -143,6 +135,7 @@ $config['BcAuthPrefix'] = array(
 	  'sessionKey'	=> 'User'
 	) */
 );
+
 /**
  * Eメール設定
  */
@@ -150,15 +143,14 @@ $config['BcEmail'] = array(
 	// 改行コード
 	'lfcode' => "\n"
 );
+
 /**
  * エージェント設定
  */
 $config['BcAgent'] = array(
 	'mobile' => array(
-		'alias' => 'm',
-		'prefix' => 'mobile',
-		'autoRedirect' => true,
-		'autoLink' => true,
+		'name' => 'ケータイ',
+		'helper' => 'BcMobile',
 		'agents' => array(
 			'Googlebot-Mobile',
 			'Y!J-SRD',
@@ -172,10 +164,8 @@ $config['BcAgent'] = array(
 		'sessionId' => true
 	),
 	'smartphone' => array(
-		'alias' => 's',
-		'prefix' => 'smartphone',
-		'autoRedirect' => true,
-		'autoLink' => true,
+		'name' => 'スマートフォン',
+		'helper' => 'BcSmartphone',
 		'agents' => array(
 			'iPhone',			// Apple iPhone
 			'iPod',				// Apple iPod touch
@@ -193,3 +183,154 @@ $config['BcAgent'] = array(
 		)
 	)
 );
+
+//p($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+$config['BcLang'] = [
+	'english' => [
+		'name' => '英語',
+		'langs' => [
+			'en'
+		]	
+	]
+];
+
+/**
+ * コンテンツ設定
+ */
+$config['BcContents'] = [
+	'items' => [
+		'Core' => [
+			'Default'	=> [
+				'title' => '無所属コンテンツ',
+				'omitViewAction' => true,
+				'routes' => [
+					'add'	=> [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'add'
+					],
+					'edit'	=> [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'empty'
+					],
+					'view' => [
+						'controller'=> 'contents',
+						'action'	=> 'view'
+					]
+				],
+				'icon'	=> 'admin/icon_content.png',
+			],
+			'ContentFolder'	=> [
+				'multiple'	=> true,
+				'preview'	=> true,
+				'title' => 'フォルダー',
+				'routes' => [
+					'add'	=> [
+						'admin' => true,
+						'controller'=> 'content_folders',
+						'action'	=> 'add'
+					],
+					'edit'	=> [
+						'admin' => true,
+						'controller'=> 'content_folders',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'admin' => true,
+						'controller'=> 'content_folders',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'content_folders',
+						'action'	=> 'view'
+					]
+				],
+				'icon'	=> 'admin/icon_folder.png',
+			],
+			'ContentAlias'	=> [
+				'multiple' => true,
+				'title' => 'エイリアス',
+				'icon'	=> 'admin/icon_alias.png',
+			],
+			'ContentLink'	=> [
+				'multiple' => true,
+				'title' => 'リンク',
+				'omitViewAction' => true,
+				'routes' => [
+					'add'	=> [
+						'admin' => true,
+						'controller'=> 'content_links',
+						'action'	=> 'add'
+					],
+					'edit'	=> [
+						'admin' => true,
+						'controller'=> 'content_links',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'admin' => true,
+						'controller'=> 'content_links',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'content_links',
+						'action'	=> 'view'
+					]
+				],
+				'icon'	=> 'admin/icon_link.png',
+			],
+			'Page'	=> [
+				'title' => '固定ページ',
+				'multiple'	=> true,
+				'preview'	=> true,
+				'icon'	=> 'admin/icon_page.png',
+				'omitViewAction' => true,
+				'routes' => [
+					'add'	=> [
+						'admin' => true,
+						'controller'=> 'pages',
+						'action'	=> 'ajax_add'
+					],
+					'edit'	=> [
+						'admin' => true,
+						'controller'=> 'pages',
+						'action'	=> 'edit'
+					],
+					'delete' => [
+						'admin' => true,
+						'controller'=> 'pages',
+						'action'	=> 'delete'
+					],
+					'view' => [
+						'controller'=> 'pages',
+						'action'	=> 'display'
+					],
+					'copy'	=> [
+						'admin' => true,
+						'controller'=> 'pages',
+						'action'	=> 'ajax_copy'
+					]
+				]
+			]
+		]
+	]
+];
+
+/**
+ * ショートコード設定
+ */
+$config['BcShortCode']['Core'] = [
+	'BcBaser.getSitemap',
+	'BcBaser.getRelatedSiteLinks',
+	'BcBaser.getWidgetArea',
+	'BcBaser.getGoogleMaps',
+	'BcBaser.getSiteSearchForm',
+	'BcBaser.getUpdateInfo'
+];
+

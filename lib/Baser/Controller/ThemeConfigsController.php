@@ -1,12 +1,9 @@
 <?php
-
 /**
- * テーマ設定コントローラー
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Controller
  * @since			baserCMS v 0.1.0
@@ -24,7 +21,6 @@ class ThemeConfigsController extends AppController {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'ThemeConfigs';
 
@@ -32,7 +28,6 @@ class ThemeConfigsController extends AppController {
  * モデル
  *
  * @var array
- * @access public
  */
 	public $uses = array('ThemeConfig');
 
@@ -40,7 +35,6 @@ class ThemeConfigsController extends AppController {
  * コンポーネント
  *
  * @var array
- * @access public
  */
 	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
 
@@ -48,7 +42,6 @@ class ThemeConfigsController extends AppController {
  * サブメニューエレメント
  *
  * @var array
- * @access public
  */
 	public $subMenuElements = array('themes');
 
@@ -56,7 +49,6 @@ class ThemeConfigsController extends AppController {
  * ぱんくずナビ
  *
  * @var array
- * @access public
  */
 	public $crumbs = array(
 		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))

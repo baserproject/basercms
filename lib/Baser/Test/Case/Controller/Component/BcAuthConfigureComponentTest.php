@@ -1,14 +1,13 @@
 <?php
 /**
- * BcAuthConfigureComponentのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Favorites Community <http://sites.google.com/site/baserFavorites/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Favorites Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Controller.Component
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('BcAuthConfigureComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -26,6 +25,9 @@ class BcAuthConfigureTestController extends Controller {
 
 }
 
+/**
+ * BcAuthConfigureComponentのテスト
+ */
 class BcAuthConfigureComponentTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.Default.User',
@@ -35,7 +37,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	public $components = array('BcAuthConfigure');
 	
 	public function setUp() {
-	
+		@session_start();
 		parent::setUp();
 		
 		// コンポーネントと偽のコントローラをセットアップする
@@ -54,11 +56,11 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		
 		Router::reload();
 		Router::connect('/:controller/:action/*');
-	
+
 	}
 	
 	public function tearDown() {
-	
+		@session_destroy();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcAuthConfigure);
@@ -73,7 +75,6 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  * @return boolean
  */
 	public function testSettingCheckInitialize() {
-
 		// 異常系
 		$result = $this->Controller->BcAuthConfigure->setting(array(1));
 		$this->assertFalse($result, '初期化がされていない場合にtrueが返ってきます');
@@ -111,9 +112,6 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 
 		$this->Controller->params['prefix'] = $requestedPrefix;
 
-		$redirect = '/admin';
-		$this->Controller->BcAuth->Session->write('Auth.redirect', $redirect);
-
 		// 認証設定を設定
 		$this->Controller->BcAuthConfigure->setting($config);
 
@@ -138,6 +136,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 				),
 			),
 			'sessionKey' => null,
+			'redirect' => null
 		);
 
 		// loginAction
@@ -157,13 +156,6 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 			$expected['authenticate']['Form']['scope'] = $userScope;
 		} else if (!empty($auth_prefix)) {
 			$expected['authenticate']['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $auth_prefix .'%');
-		}
-
-		// Session Auth.redirect
-		if ($redirect && $requestedPrefix && strpos($redirect, $requestedPrefix) === false) {
-			$expected['redirect'] = null;
-		} else {
-			$expected['redirect'] = $redirect;
 		}
 
 		// 判定

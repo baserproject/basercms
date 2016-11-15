@@ -1,15 +1,13 @@
 <?php
-
 /**
- * BcCaptchaComponentのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Favorites Community <http://sites.google.com/site/baserFavorites/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Favorites Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Controller.Component
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('BcCaptchaComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -26,7 +24,9 @@ class BcCaptchaTestController extends Controller {
 
 }
 
-
+/**
+ * BcCaptchaComponentのテスト
+ */
 class BcCaptchaComponentTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -34,12 +34,11 @@ class BcCaptchaComponentTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogTag',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.FeedDetail',
 		'baser.Default.SiteConfig',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
-		'baser.Default.PageCategory',
 		'baser.Default.Page',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
@@ -49,6 +48,7 @@ class BcCaptchaComponentTest extends BaserTestCase {
 	public $components = array('BcCaptcha');
 
 	public function setUp() {
+		@session_start();
 		parent::setUp();
 
 		// コンポーネントと偽のテストコントローラをセットアップする
@@ -69,6 +69,7 @@ class BcCaptchaComponentTest extends BaserTestCase {
 	}
 
 	public function tearDown() {
+		@session_destroy();
 		parent::tearDown();
 		unset($this->Controller);
 		unset($this->BcCaptcha);
@@ -78,7 +79,6 @@ class BcCaptchaComponentTest extends BaserTestCase {
  * キャプチャ画象を表示する
  * 
  * @return void
- * @access public
  */
 	public function testRender() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -93,12 +93,12 @@ class BcCaptchaComponentTest extends BaserTestCase {
 		$this->BcCaptcha->startup($this->Controller);
 
 		// 正常系
-		$this->Controller->Session->write('captcha', '3KbC');
+		$this->Controller->Session->write('captcha.0', '3KbC');
 		$result = $this->BcCaptcha->check('えがしら');
 		$this->assertTrue($result, 'キャプチャの認証が正しくありません');
 
 		// 異常系
-		$this->Controller->Session->write('captcha', '3KbC');
+		$this->Controller->Session->write('captcha.0', '3KbC');
 		$result = $this->BcCaptcha->check('あいうえお');
 		$this->assertFalse($result, 'キャプチャの認証が正しくありません');
 

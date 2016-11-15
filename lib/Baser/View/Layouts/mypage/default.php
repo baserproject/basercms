@@ -1,15 +1,17 @@
 <?php
 /**
- * [MYPAGE] デフォルトレイアウト（デモ用）
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.View.layout
+ * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [MYPAGE] デフォルトレイアウト（デモ用）
  */
 ?>
 <?php $this->BcBaser->xmlHeader() ?>
@@ -23,27 +25,27 @@
 			'admin/jquery-ui/ui.all',
 			'admin/import',
 			'../js/admin/jquery.contextMenu-1.0/jquery.contextMenu',
-			'admin/colorbox/colorbox'))
+			'admin/colorbox/colorbox-1.6.1'))
 		?>
-	<!--[if IE]><?php $this->BcBaser->js(array('admin/excanvas')) ?><![endif]-->
+	<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-			'admin/jquery-ui-1.8.19.custom.min',
-			'admin/i18n/ui.datepicker-ja',
-			'admin/jquery.corner-2.12',
-			'admin/jquery.bt.min',
-			'admin/jquery.contextMenu-1.0/jquery.contextMenu',
-			'admin/jquery.form-2.94',
-			'admin/jquery.validate.min',
-			'admin/jquery.colorbox-min-1.4.5',
-			'admin/jquery.mScroll',
-			'admin/jquery.baseUrl',
-			'admin/credit',
-			'admin/validate_messages_ja',
+			'admin/vendors/jquery-2.1.4.min',
+			'admin/vendors/jquery-ui-1.11.4.min',
+			'admin/vendors/i18n/ui.datepicker-ja',
+			'admin/vendors/jquery.corner-2.12',
+			'admin/vendors/jquery.bt.min',
+			'admin/vendors/jquery.contextMenu-1.0/jquery.contextMenu',
+			'admin/vendors/jquery.form-2.94',
+			'admin/vendors/jquery.validate.min',
+			'admin/vendors/jquery.colorbox-1.6.1.min',
+			'admin/libs/jquery.mScroll',
+			'admin/libs/jquery.baseUrl',
+			'admin/libs/credit',
+			'admin/vendors/validate_messages_ja',
 			'admin/functions',
 			'admin/startup',
-			'admin/adjust_scroll'))
+			'admin/libs/adjust_scroll'))
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>

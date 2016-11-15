@@ -8,7 +8,7 @@ class UsersSchema extends CakeSchema {
 
 	public $file = 'users.php';
 
-	public $connection = 'baser';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

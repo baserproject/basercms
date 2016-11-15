@@ -1,12 +1,9 @@
 <?php
-
 /**
- * フィードBaserヘルパー
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.View.Helper
  * @since			baserCMS v 0.1.0
@@ -40,10 +37,10 @@ class FeedBaserHelper extends AppHelper {
 	public function feed($id, $mobile = '') {
 		$url = array('mobile' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
 		if ($mobile === '') {
-			$mobile = (Configure::read('BcRequest.agent') == 'mobile');
+			$mobile = ($this->request->params['Site']['device'] == 'mobile');
 		}
 		if ($mobile) {
-			$url = array_merge($url, array(Configure::read('BcAgent.mobile.prefix') => true));
+			$url = array_merge($url, array($this->request->params['Site']['name'] => true));
 		}
 		echo $this->requestAction($url, array('pass' => array($id)));
 	}

@@ -1,18 +1,22 @@
 <?php
 /**
- * [ADMIN] よく使う項目　行
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] よく使う項目　行
+ */
 ?>
-<li>
+
+
+<li id="FavoriteRow<?php echo $favorite['Favorite']['name'] ?>">
 	<?php $this->BcBaser->link($favorite['Favorite']['name'], $favorite['Favorite']['url'], array('title' => Router::url($favorite['Favorite']['url'], true))) ?>
 	<?php echo $this->BcForm->input('Favorite.id.' . $favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['id'], 'class' => 'favorite-id')) ?>
 	<?php echo $this->BcForm->input('Favorite.name.' . $favorite['Favorite']['id'], array('type' => 'hidden', 'value' => $favorite['Favorite']['name'], 'class' => 'favorite-name')) ?>

@@ -1,24 +1,20 @@
 <?php
 /**
- * [ADMIN] テーマ フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] テーマ フォーム
+ */
 ?>
 
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#ThemeName").focus();
-});
-</script>
 
 <?php if ($folderDisabled): ?>
 	<p><span class="required">テーマフォルダに書込権限がありません。</span></p>
@@ -28,7 +24,7 @@ $(window).load(function() {
 <?php endif ?>
 
 
-<?php echo $this->BcForm->create('Theme', array('action' => 'edit', 'url' => array('action' => 'edit', $theme))) ?>
+<?php echo $this->BcForm->create('Theme', array('url' => array('action' => 'edit', $theme))) ?>
 
 <!-- form -->
 <div class="section">
@@ -36,7 +32,7 @@ $(window).load(function() {
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Theme.name', 'テーマ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Theme.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'disabled' => $folderDisabled)) ?>
+				<?php echo $this->BcForm->input('Theme.name', array('type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true, 'disabled' => $folderDisabled)) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('Theme.name') ?>
 				<div id="helptextName" class="helptext"> 半角英数字のみで入力してください。 </div>

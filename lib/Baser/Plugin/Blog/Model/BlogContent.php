@@ -1,26 +1,22 @@
 <?php
-
 /**
- * ブログコンテンツモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BlogAppModel', 'Blog.Model');
 
 /**
  * ブログコンテンツモデル
  *
  * @package Blog.Model
+ * @property BlogPost $BlogPost
  */
 class BlogContent extends BlogAppModel {
 
@@ -28,7 +24,6 @@ class BlogContent extends BlogAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogContent';
 
@@ -36,83 +31,65 @@ class BlogContent extends BlogAppModel {
  * behaviors
  *
  * @var array
- * @access public
  */
-	public $actsAs = array('BcContentsManager', 'BcPluginContent', 'BcCache');
+	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
 
 /**
  * hasMany
  *
  * @var array
- * @access public
  */
-	public $hasMany = array('BlogPost' =>
-		array('className' => 'Blog.BlogPost',
+	public $hasMany = [
+		'BlogPost' => [
+			'className' => 'Blog.BlogPost',
 			'order' => 'id DESC',
 			'limit' => 10,
 			'foreignKey' => 'blog_content_id',
 			'dependent' => true,
 			'exclusive' => false,
-			'finderQuery' => ''),
-		'BlogCategory' =>
-		array('className' => 'Blog.BlogCategory',
+			'finderQuery' => ''],
+		'BlogCategory' => [
+			'className' => 'Blog.BlogCategory',
 			'order' => 'id',
 			'limit' => 10,
 			'foreignKey' => 'blog_content_id',
 			'dependent' => true,
 			'exclusive' => false,
-			'finderQuery' => ''));
+			'finderQuery' => '']
+	];
 
 /**
  * validate
  *
  * @var array
- * @access public
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('halfText'),
-				'message' => 'ブログアカウント名は半角のみ入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('notInList', array('blog')),
-				'message' => 'ブログアカウント名に「blog」は利用できません。'),
-			array('rule' => array('isUnique'),
-				'message' => '入力されたブログアカウント名は既に使用されています。'),
-			array('rule' => array('maxLength', 100),
-				'message' => 'ブログアカウント名は100文字以内で入力してください。')
-		),
-		'title' => array(
-			array('rule' => array('notEmpty'),
-				'message' => 'ブログタイトルを入力してください。'),
-			array('rule' => array('maxLength', 255),
-				'message' => 'ブログタイトルは255文字以内で入力してください。')
-		),
-		'layout' => array(
-			array('rule' => 'halfText',
+	public $validate = [
+		'layout' => [
+			['rule' => 'halfText',
 				'message' => 'レイアウトテンプレート名は半角で入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
-		),
-		'template' => array(
-			array('rule' => 'halfText',
+				'allowEmpty' => false],
+			['rule' => ['maxLength', 20],
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。']
+		],
+		'template' => [
+			['rule' => 'halfText',
 				'message' => 'コンテンツテンプレート名は半角で入力してください。',
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。')
-		),
-		'list_count' => array(array('rule' => 'halfText',
+				'allowEmpty' => false],
+			['rule' => ['maxLength', 20],
+				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。']
+		],
+		'list_count' => [['rule' => 'halfText',
 				'message' => "一覧表示件数は半角で入力してください。",
-				'allowEmpty' => false)
-		),
-		'list_direction' => array(array('rule' => array('notEmpty'),
-				'message' => "一覧に表示する順番を指定してください。")
-		),
-		'eye_catch_size' => array(array(
-				'rule' => array('checkEyeCatchSize'),
+				'allowEmpty' => false]
+		],
+		'list_direction' => [['rule' => ['notBlank'],
+				'message' => "一覧に表示する順番を指定してください。"]
+		],
+		'eye_catch_size' => [[
+				'rule' => ['checkEyeCatchSize'],
 				'message' => 'アイキャッチ画像のサイズが不正です。'
-			))
-	);
+			]]
+	];
 
 /**
  * アイキャッチ画像サイズバリデーション
@@ -136,7 +113,6 @@ class BlogContent extends BlogAppModel {
  *
  * @param string $check チェック対象文字列
  * @return boolean
- * @access public
  */
 	public function alphaNumeric($check) {
 		if (preg_match("/^[a-z0-9]+$/", $check[key($check)])) {
@@ -151,9 +127,8 @@ class BlogContent extends BlogAppModel {
  *
  * @param string フィールド名
  * @return array コントロールソース
- * @access public
  */
-	public function getControlSource($field = null, $options = array()) {
+	public function getControlSource($field = null, $options = []) {
 		$controlSources['id'] = $this->find('list');
 
 		if (isset($controlSources[$field])) {
@@ -167,27 +142,26 @@ class BlogContent extends BlogAppModel {
  * afterSave
  *
  * @return boolean
- * @access public
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		if (empty($this->data['BlogContent']['id'])) {
 			$this->data['BlogContent']['id'] = $this->getInsertID();
 		}
 
 		// 検索用テーブルへの登録・削除
-		if (!$this->data['BlogContent']['exclude_search'] && $this->data['BlogContent']['status']) {
-			$this->saveContent($this->createContent($this->data));
+		if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
+			$this->saveSearchIndex($this->createSearchIndex($this->data));
 			clearDataCache();
-			$datas = $this->BlogPost->find('all', array(
-				'conditions' => array('BlogPost.blog_content_id' => $this->data['BlogContent']['id']),
+			$datas = $this->BlogPost->find('all', [
+				'conditions' => ['BlogPost.blog_content_id' => $this->data['BlogContent']['id']],
 				'recursive' => -1
-			));
+			]);
 			foreach($datas as $data) {
 				$this->BlogPost->set($data);
 				$this->BlogPost->afterSave(true);
 			}
 		} else {
-			$this->deleteContent($this->data['BlogContent']['id']);
+			$this->deleteSearchIndex($this->data['BlogContent']['id']);
 		}
 	}
 
@@ -198,7 +172,7 @@ class BlogContent extends BlogAppModel {
  * @access	public
  */
 	public function beforeDelete($cascade = true) {
-		return $this->deleteContent($this->id);
+		return $this->deleteSearchIndex($this->id);
 	}
 
 /**
@@ -206,64 +180,78 @@ class BlogContent extends BlogAppModel {
  *
  * @param array $data
  * @return array
- * @access public
  */
-	public function createContent($data) {
-		if (isset($data['BlogContent'])) {
-			$data = $data['BlogContent'];
+	public function createSearchIndex($data) {
+		if (!isset($data['BlogContent']) || !isset($data['Content'])) {
+			return false;
 		}
-
-		$_data = array();
-		$_data['Content']['type'] = 'ブログ';
-		// $this->idに値が入ってない場合もあるので
-		if (!empty($data['id'])) {
-			$_data['Content']['model_id'] = $data['id'];
-		} else {
-			$_data['Content']['model_id'] = $this->id;
-		}
-		$_data['Content']['category'] = '';
-		$_data['Content']['title'] = $data['title'];
-		$_data['Content']['detail'] = $data['description'];
-		$_data['Content']['url'] = '/' . $data['name'] . '/index';
-		$_data['Content']['status'] = true;
-
-		return $_data;
+		$blogContent = $data['BlogContent'];
+		$content = $data['Content'];
+		return ['SearchIndex' => [
+			'type'	=> 'ブログ',
+			'model_id'	=> (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
+			'content_id'=> $content['id'],
+			'site_id'=> $content['site_id'],
+			'title'		=> $content['title'],
+			'detail'	=> $blogContent['description'],
+			'url'		=> $content['url'],
+			'status'	=> $content['status']
+		]];
 	}
 
 /**
- * ユーザーグループデータをコピーする
- * 
- * @param int $id
- * @param array $data
- * @return mixed BlogContent Or false
+ * ブログコンテンツをコピーする
+ *
+ * @param int $id ページID
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しいユーザーID
+ * @param int $newSiteId 新しいサイトID
+ * @return mixed blogContent|false
  */
-	public function copy($id, $data = null) {
-		if ($id) {
-			$data = $this->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => -1));
-		}
-		$data['BlogContent']['name'] .= '_copy';
-		$data['BlogContent']['title'] .= '_copy';
-		$data['BlogContent']['status'] = false;
-		unset($data['BlogContent']['id']);
-		$this->create($data);
-		$result = $this->save();
-		if ($result) {
-			$result['BlogContent']['id'] = $this->getInsertID();
-			return $result;
-		} else {
-			if (isset($this->validationErrors['name'])) {
-				return $this->copy(null, $data);
-			} else {
-				return false;
-			}
-		}
-	}
+	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
+		$data = $this->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
+		$url = $data['Content']['url'];
+		$siteId = $data['Content']['site_id'];
+		$name = $data['Content']['name'];
+		unset($data['BlogContent']['id']);
+		unset($data['BlogContent']['created']);
+		unset($data['BlogContent']['modified']);
+		unset($data['Content']);
+		$data['Content'] = [
+			'name'		=> $name,
+			'parent_id'	=> $newParentId,
+			'title'		=> $newTitle,
+			'author_id' => $newAuthorId,
+			'site_id' 	=> $newSiteId,
+			'exclude_search' => false
+		];
+		if(!is_null($newSiteId) && $siteId != $newSiteId) {
+			$data['Content']['site_id'] = $newSiteId;
+			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
+		}
+		$this->getDataSource()->begin();
+		$this->create($data);
+		if ($result = $this->save()) {
+			$result['BlogContent']['id'] = $this->getInsertID();
+			$blogPosts = $this->BlogPost->find('all', ['conditions' => ['BlogPost.blog_content_id' => $id], 'order' => 'BlogPost.id', 'recursive' => -1]);
+			foreach ($blogPosts as $blogPost) {
+				$blogPost['BlogPost']['blog_category_id'] = null;
+				$blogPost['BlogPost']['blog_content_id'] = $result['BlogContent']['id'];
+				$this->BlogPost->copy(null, $blogPost);
+			}
+			$this->getDataSource()->commit();
+			return $result;
+		}
+		$this->getDataSource()->rollback();
+		return false;
+	}
+	
 /**
  * フォームの初期値を取得する
  *
  * @return void
- * @access protected
  */
 	public function getDefaultValue() {
 		$data['BlogContent']['comment_use'] = true;
@@ -271,6 +259,7 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['layout'] = 'default';
 		$data['BlogContent']['template'] = 'default';
 		$data['BlogContent']['list_count'] = 10;
+		$data['BlogContent']['list_direction'] = 'DESC';
 		$data['BlogContent']['feed_count'] = 10;
 		$data['BlogContent']['auth_captcha'] = 1;
 		$data['BlogContent']['tag_use'] = false;
@@ -291,12 +280,12 @@ class BlogContent extends BlogAppModel {
  * @return array 
  */
 	public function deconstructEyeCatchSize($data) {
-		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize(array(
+		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize([
 			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
 			'mobile_thumb_width' => $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
 			'mobile_thumb_height' => $data['BlogContent']['eye_catch_size_mobile_thumb_height'],
-		));
+		]);
 		unset($data['BlogContent']['eye_catch_size_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_thumb_height']);
 		unset($data['BlogContent']['eye_catch_size_mobile_thumb_width']);

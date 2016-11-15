@@ -1,15 +1,17 @@
 <?php
 /**
- * [ADMIN] ブログ記事 一覧　テーブル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
+ */
+
+/**
+ * [ADMIN] ブログ記事 一覧　テーブル
  */
 ?>
 
@@ -23,9 +25,7 @@
 	<tr>
 		<th class="list-tool">
 			<div>
-			<?php if ($newCatAddable): ?>
 				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
-			<?php endif ?>
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 			<div>
@@ -37,10 +37,7 @@
 		</th>
 		<th><?php echo $this->Paginator->sort('no', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' NO'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
 		<th><?php echo $this->Paginator->sort('posts_date', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 投稿日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 投稿日'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
-		<?php $existEyeCatch = array_filter(Hash::extract($posts, '{n}.BlogPost.eye_catch')); ?>
-		<?php if ($existEyeCatch): ?>
 		<th><?php echo $this->Paginator->sort('eye_catch', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' アイキャッチ', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' アイキャッチ'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
-		<?php endif ?>
 		<th>
 			<?php echo $this->Paginator->sort('BlogCategory.name', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' カテゴリ', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' カテゴリ'), array('escape' => false, 'class' => 'btn-direction')) ?>
 			<?php if ($blogContent['BlogContent']['tag_use']): ?>
@@ -62,11 +59,11 @@
 <tbody>
 <?php if (!empty($posts)): ?>
 	<?php foreach ($posts as $data): ?>
-		<?php $this->BcBaser->element('blog_posts/index_row', array('data' => $data, 'existEyeCatch' => $existEyeCatch)) ?>
+		<?php $this->BcBaser->element('blog_posts/index_row', array('data' => $data)) ?>
 	<?php endforeach; ?>
 	<?php else: ?>
 	<tr>
-		<td colspan="7"><p class="no-data">データが見つかりませんでした。</p></td>
+		<td colspan="9"><p class="no-data">データが見つかりませんでした。</p></td>
 	</tr>
 <?php endif; ?>
 </tbody>

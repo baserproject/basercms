@@ -1,0 +1,275 @@
+/**
+ * エディター用CSS
+ * 呼出箇所：全てのページ、WYSIWYGエディタ
+ */
+
+* {
+	margin:0px;
+	padding:0px;
+}
+html {
+	color: #434343;
+}
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+select,
+p,
+blockquote,
+th,
+td {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: 'Quicksand', "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", 'メイリオ' , Meiryo , Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+p {
+	line-height: 150%;
+}
+fieldset,
+img {
+	border: 0;
+}
+img {
+	margin:auto;
+}
+address,
+button,
+caption,
+cite,
+code,
+dfn,
+em,
+input,
+optgroup,
+option,
+select,
+strong,
+textarea,
+th,
+var {
+	font:inherit;
+}
+small {
+	color:#666;
+}
+strong {
+}
+em {
+}
+del,
+ins {
+	text-decoration: none;
+}
+ul,
+dl {
+	line-height:normal;
+}
+dl {
+}
+dt {
+}
+dd {
+}
+li {
+	list-style: none;
+}
+a:link,
+a:visited{
+	color:#00a9c7;
+}
+a:hover {
+	text-decoration: none;
+}
+li a {
+	zoom: 1;
+}
+caption,
+th {
+	text-align: left;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before,
+q:after {
+	content: '';
+}
+abbr,
+acronym {
+	border: 0;
+	font-variant: normal;
+}
+sup {
+	vertical-align: baseline;
+}
+sub {
+	vertical-align: baseline;
+}
+legend {
+	color: #000;
+}
+pre {
+	background-color:#F3F3F3;
+	text-align:left;
+	padding:10px 20px;
+	margin-bottom: 20px;
+	overflow:auto;
+	border:1px solid #E2E2E2;
+}
+form {
+	display:inline;
+}
+input, textarea, select, option {
+	font-family: 'Quicksand', "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", 'メイリオ' , Meiryo , Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+input[type=text], textarea, select, input[type=password] {
+	margin:3px 2px;
+	padding: 3px 1px;
+	border:1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color:#fff;
+}
+input[type=checkbox] {
+	vertical-align: middle;
+}
+input[type=radio],
+input[type=checkbox] {
+	margin-left:5px;
+	margin-right:5px;
+}
+input[type=submit],
+input[type=reset],
+input[type=button] {
+	font-family: 'Quicksand', "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", 'メイリオ' , Meiryo , Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+input[type=text], textarea, input[type=password] {
+	font-size: 1.3em;
+	padding: 3px 3px;
+}
+textarea {
+	width:95%;
+}
+input[type=text], input[type=password] {
+	line-height: 1.3em;
+}
+select {
+	font-size: 1.2em;
+    height:2.2em;
+}
+select {
+	padding: 1px;
+}
+optgroup option{
+	padding-left:20px;
+}
+.cke_editable {
+	padding:15px;
+}
+.contents-body h1,
+.cke_editable h1 {
+	font-size:40px;
+	margin-bottom:40px;
+	font-weight: bold;
+}
+.contents-body h2,
+.cke_editable h2 {
+	font-size:32px;
+	margin-bottom:40px;
+	font-weight: bold;
+}
+.contents-body h3,
+.cke_editable h3 {
+	font-size:24px;
+	margin-bottom:40px;
+	font-weight: bold;
+}
+.contents-body strong,
+.cke_editable strong {
+	font-weight: bold;
+}
+.contents-body em,
+.cke_editable em {
+	font-style: italic;
+}
+.contents-body h4,
+.contents-body h5,
+.contents-body h6,
+.cke_editable h4,
+.cke_editable h5,
+.cke_editable h6 {
+	font-size:18px;
+	margin-bottom:20px;
+	font-weight: bold;
+}
+.contents-body ul,
+.cke_editable ul {
+	margin-bottom: 40px;
+}
+.contents-body ol,
+.cke_editable ol {
+	margin-bottom: 40px;
+}
+.contents-body ol li,
+.cke_editable ol li {
+	list-style: decimal;
+	list-style-position: inside;
+}
+.contents-body ul li,
+.cke_editable ul li {
+	list-style: disc;
+	list-style-position: inside;
+}
+.contents-body p,
+.cke_editable p {
+	line-height: 1.6em;
+	margin-bottom: 20px;
+}
+.contents-body table,
+.cke_editable table {
+	width:100%;
+	margin-bottom: 20px;
+}
+.contents-body th,
+.cke_editable th {
+	border-bottom: 1px solid #999!important;
+	font-weight: bold;
+	padding:10px;
+}
+.contents-body td,
+.cke_editable td {
+	border-bottom: 1px solid #CCC!important;
+	padding:10px;
+}

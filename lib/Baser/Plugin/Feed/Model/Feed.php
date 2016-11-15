@@ -1,21 +1,18 @@
 <?php
 /**
- * フィード読込モデル
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
 App::uses('FeedAppModel', 'Feed.Model');
+
 /**
  * フィード読込モデル
  *
@@ -27,7 +24,6 @@ class Feed extends FeedAppModel {
  * useDbConfig
  * 
  * @var string
- * @access public
  */
 	public $useDbConfig = false;
 	
@@ -47,7 +43,6 @@ class Feed extends FeedAppModel {
  * @param string キャッシュ保持期間
  * @param string 抽出するカテゴリ
  * @return array RSSデータ
- * @access public
  */
 	public function getFeed($url, $limit = 10, $cacheExpires = null, $category = null) {
 		
@@ -71,7 +66,6 @@ class Feed extends FeedAppModel {
  * @param array $items
  * @param mixed $filterCategory
  * @return array $items
- * @access public
  */
 	public function _filteringCategory($items, $filterCategory = null) {
 		
@@ -155,7 +149,7 @@ class Feed extends FeedAppModel {
 			$rssData = $this->_convertSimplePie($SimplePie->get_items());
 
 			// ログインしてなければキャッシュを作成
-			if (!isset($_SESSION['Auth']['User'])) {
+			if (!isset($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 				cache($cachePath, BcUtil::serialize($rssData));
 				chmod(CACHE . $cachePath, 0666);
 			}

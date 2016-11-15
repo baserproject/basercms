@@ -1,15 +1,13 @@
 <?php
-
 /**
- * BcManagerComponentのテスト
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Favorites Community <http://sites.google.com/site/baserFavorites/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright   Copyright 2008 - 2015, baserCMS Favorites Community
- * @link      http://basercms.net baserCMS Project
- * @since     baserCMS v 3.0.0-beta
- * @license     http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Baser.Test.Case.Controller.Component
+ * @since			baserCMS v 3.0.0-beta
+ * @license			http://basercms.net/license/index.html
  */
 App::uses('BcManagerComponent', 'Controller/Component');
 App::uses('Controller', 'Controller');
@@ -19,6 +17,7 @@ App::uses('Controller', 'Controller');
  * 偽コントローラ
  *
  * @package       Cake.Test.Case.Controller.Component
+ * @property BcManagerComponent $BcManager
  */
 class BcManagerTestController extends Controller {
 
@@ -26,7 +25,9 @@ class BcManagerTestController extends Controller {
 
 }
 
-
+/**
+ * BcManagerComponentのテスト
+ */
 class BcManagerComponentTest extends BaserTestCase {
 
 	public $fixtures = array(
@@ -34,16 +35,16 @@ class BcManagerComponentTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogTag',
-		'baser.Default.Content',
+		'baser.Default.SearchIndex',
 		'baser.Default.FeedDetail',
 		'baser.Default.SiteConfig',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
-		'baser.Default.PageCategory',
 		'baser.Default.Page',
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.User',
+		'baser.Default.Site',
 	);
 
 	public $components = array('BcManager');
@@ -90,42 +91,9 @@ class BcManagerComponentTest extends BaserTestCase {
 
 /**
  * データベースに接続する
- *
- * @param string $expected 期待値
- * @dataProvider connectDbDataProvider
  */
-	public function testConnectDb($datasource, $name, $expected) {
-		$config = array(
-			'datasource' => $datasource,
-			'persistent' => false,
-			'host' => 'localhost',
-			'port' => '8889',
-			'login' => 'root',
-			'password' => 'root',
-			'database' => 'basercms',
-			'schema' => '',
-			'prefix' => 'mysite_',
-			'encoding' => 'utf8',
-		);
-
-		$result = $this->BcManager->connectDb($config, $name);
-		$sources = $result->listSources();
-		$prefix = $result->config['prefix'];
-
-		$this->assertContains($expected, $sources, 'datasourceを正しく取得できません');
-
-		if ($name == 'plugin') {
-			$this->assertEquals('mysite_pg_', $prefix, 'プラグイン用テーブルのprefixが正しく取得できません');
-		}
-	}
-
-	public function connectDbDataProvider() {
-		return array(
-			array('mysql', 'baser', 'mysite_pages'),
-			array('hoge', 'baser', 'mysite_pages'),
-			array('mysql', 'plugin', 'mysite_pages'),
-			array('postgres', 'baser', 'mysite_pages'),
-		);
+	public function testConnectDb() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -285,7 +253,6 @@ class BcManagerComponentTest extends BaserTestCase {
  *
  * @param	array	$options
  * @return boolean
- * @access private
  */
 	public function testCreateDatabaseConfig() {
 
@@ -309,7 +276,7 @@ class BcManagerComponentTest extends BaserTestCase {
 			$File->close();
 			rename($configPath . 'database.php.copy', $configPath . 'database.php');
 
-			$this->assertRegExp("/\\\$baser.*'datasource' => 'Database\/BcMysql'.*'host' => 'hoge'.*'port' => '0000'/s", $result, 'データベース設定ファイル[database.php]を正しく保存できません');
+			$this->assertRegExp("/\\\$default.*'datasource' => 'Database\/BcMysql'.*'host' => 'hoge'.*'port' => '0000'/s", $result, 'データベース設定ファイル[database.php]を正しく保存できません');
 
 		} else {
 			$this->markTestIncomplete('database.phpのバックアップに失敗したため、このテストをスキップします。');
@@ -383,7 +350,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param array $dbConfig
  * @param string $dbDataPattern
  * @return boolean
- * @access public
  */
 	public function testConstructionDb() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -468,7 +434,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param string	$dbConfig
  * @param string	$dbDataPattern
  * @return boolean
- * @access public
  */
 	public function testConstructionTable() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -481,7 +446,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * 
  * @param array $dbConfig 
  * @return boolean
- * @access public
  */
 	public function testDeleteAllTables($dbConfig = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -539,27 +503,6 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 /**
- * データソースを取得する
- * 
- * @param string $dbConfigKeyName データベースの種類
- * @param string $expected 期待値
- * @dataProvider _getDataSourceDataProvider
- */
-	public function test_getDataSource($dbConfigKeyName, $expected) {
-
-		$result = $this->BcManager->_getDataSource($dbConfigKeyName);
-		$sources = $result->listSources();
-		$this->assertContains($expected, $sources, 'データソースを正しく取得できません');
-	}
-
-	public function _getDataSourceDataProvider() {
-		return array(
-			array('baser', 'mysite_pages'),
-			array('plugin', 'mysite_pages'),
-		);
-	}
-
-/**
  * テーマを配置する
  *
  * @param string $theme テーマ名
@@ -598,7 +541,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * エディタテンプレート用のアイコン画像をデプロイ
  * 
  * @return boolean
- * @access public
  */
 	public function testDeployEditorTemplateImage() {
 
@@ -639,7 +581,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * 設定ファイルをリセットする
  * 
  * @return boolean 
- * @access public
  */
 	public function testResetSetting() {
 		
@@ -664,19 +605,6 @@ class BcManagerComponentTest extends BaserTestCase {
 		
 		}
 	
-	}
-
-/**
- * テーマのページテンプレートを初期化する 
- * 
- * @return boolean
- * @access public
- */
-	public function testResetThemePages() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-		$this->BcManager->resetThemePages();
-		$this->BcManager->deployTheme();
 	}
 
 /**
@@ -727,7 +655,6 @@ class BcManagerComponentTest extends BaserTestCase {
  * baserCMSをリセットする
  * 
  * @param array $dbConfig 
- * @access public
  */
 	public function testReset() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -792,7 +719,7 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testCheckDbConnection() {
 
 		// 使用しているDBのデータを取得し設定
-		$dbData = $this->BcManager->_getDataSource();
+		$dbData = ConnectionManager::getDataSource('default');
 
 		$config = array(
 			'database' => $dbData->config['database'],
@@ -872,7 +799,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		);
 
 		// まともな datasource
-		$dbData = $this->BcManager->_getDataSource();
+		$dbData = ConnectionManager::getDataSource('default');
 		$datasource = $dbData->config['datasource'];
 		switch ($datasource) {
 			case 'Database/BcPostgres' :
@@ -889,41 +816,6 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		$result = $this->BcManager->checkDbConnection($config);
 
-	}
-
-/**
- * 管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックする
- * 作成してないものがひとつでもあると true を返す
- * 
- * @return boolean
- * @deprecated since version 3.0.1
- */
-	public function testIsCreatedAdminAssetsSymlink() {
-
-		$result = $this->BcManager->isCreatedAdminAssetsSymlink();
-		$this->assertFalse($result, '管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックが正しくありません');
-
-		$viewPath = getViewPath();
-		$paths = array(
-			'img' . DS . 'admin',
-			'css' . DS . 'admin',
-			'js' . DS . 'admin'
-		);
-		// シンボリックリンクを作成
-		foreach ($paths as $path) {
-			symlink(BASER_WEBROOT . $path, $viewPath . $path);
-		}
-
-		// チェックを実行
-		$result = $this->BcManager->isCreatedAdminAssetsSymlink();
-
-		// シンボリックリンクを削除
-		foreach ($paths as $path) {
-			unlink($viewPath . $path);
-		}
-
-		$this->assertTrue($result, '管理システムアセットへのシンボリックリンクをテーマフォルダ内に作成したかチェックが正しくありません');
-	
 	}
 	
 /**

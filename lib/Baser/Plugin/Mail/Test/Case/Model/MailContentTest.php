@@ -1,32 +1,38 @@
 <?php
-
 /**
- * test for MailContent
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS MailContents Community <http://sites.google.com/site/baserMailContents/>
- * @package         Mail.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS MailContents Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.0.0-beta
- * @license         http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Mail.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('MailContent', 'Mail.Model');
 
+/**
+ * Class MailContentTest
+ *
+ * @property MailContent $MailContent
+ */
 class MailContentTest extends BaserTestCase {
 
 	public $fixtures = array(
 		'baser.Default.SiteConfig',
+		'baser.Default.SearchIndex',
+		'baser.Default.Site',
 		'baser.Default.Content',
-		'baser.Default.PluginContent',
-		'plugin.mail.Default/Message',
+		'baser.Default.User',
+		'plugin.mail.Default/MailMessage',
 		'plugin.mail.Default/MailConfig',
 		'plugin.mail.Default/MailContent',
 		'plugin.mail.Default/MailField',
 	);
 
 	public function setUp() {
-		$this->MailContent = ClassRegistry::init('MailContent');
+		$this->MailContent = ClassRegistry::init('Mail.MailContent');
 		parent::setUp();
 	}
 
@@ -77,28 +83,22 @@ class MailContentTest extends BaserTestCase {
 			)
 		));
 		$this->assertFalse($this->MailContent->validates());
-
 		$expected = array(
-			'name' => array('メールフォームアカウント名は半角のみで入力してください。'),
-  		'title' => array('メールフォームタイトルを入力してください。'),
-  		'sender_name' => array('送信先名を入力してください。'),
-  		'subject_user' => array('自動返信メール件名[ユーザー宛]を入力してください。'),
-  		'subject_admin' => array('自動送信メール件名[管理者宛]を入力してください。'),
-  		'layout_template' => array('レイアウトテンプレート名は半角のみで入力してください。'),
-  		'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
-  		'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
-  	);
+			'sender_name' => array('送信先名を入力してください。'),
+			'subject_user' => array('自動返信メール件名[ユーザー宛]を入力してください。'),
+			'subject_admin' => array('自動送信メール件名[管理者宛]を入力してください。'),
+			'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
+			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
+  		);
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
 
 	public function test桁数チェック() {
 		$this->MailContent->create(array(
 			'MailContent' => array(
-				'name' => '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
 				'sender_name' => '012345678901234567890123456789012345678901234567890',
 				'subject_user' => '012345678901234567890123456789012345678901234567890',
 				'subject_admin' => '012345678901234567890123456789012345678901234567890',
-				'layout_template' => '012345678901234567890123456789012345678901234567890',
 				'form_template' => '012345678901234567890123456789012345678901234567890',
 				'mail_template' => '012345678901234567890123456789012345678901234567890',
 				'redirect_url' => 'http://01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789001234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.co.jp',
@@ -110,11 +110,9 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 
 		$expected = array(
-			'name' => array('メールフォームアカウント名は100文字以内で入力してください。'),
 			'sender_name' => array('送信先名は50文字以内で入力してください。'),
 			'subject_user' => array('自動返信メール件名[ユーザー宛]は50文字以内で入力してください。'),
 			'subject_admin' => array('自動返信メール件名[管理者宛]は50文字以内で入力してください。'),
-			'layout_template' => array('レイアウトテンプレート名は20文字以内で入力してください。'),
 			'form_template' => array('フォームテンプレート名は20文字以内で入力してください。'),
 			'mail_template' => array('メールテンプレート名は20文字以内で入力してください。'),
 			'redirect_url' => array('リダイレクトURLは255文字以内で入力してください。'),
@@ -128,8 +126,6 @@ class MailContentTest extends BaserTestCase {
 	public function test半角英数チェック() {
 		$this->MailContent->create(array(
 			'MailContent' => array(
-				'name' => '１２３ａｂｃ',
-				'layout_template' => '１２３ａｂｃ',
 				'form_template' => '１２３ａｂｃ',
 				'mail_template' => '１２３ａｂｃ',
 				'ssl_on' => ''
@@ -138,37 +134,9 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 		
 		$expected = array(
-			'layout_template' => array('レイアウトテンプレート名は半角のみで入力してください。'),
 			'form_template' => array('メールフォームテンプレート名は半角のみで入力してください。'),
-			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。'),
-			'name' => array('メールフォームアカウント名は半角のみで入力してください。')
+			'mail_template' => array('送信メールテンプレートは半角のみで入力してください。')
 		);
-		$this->assertEquals($expected, $this->MailContent->validationErrors);
-	}
-
-	public function testNameMailチェック() {
-		$this->MailContent->create(array(
-			'MailContent' => array(
-				'name' => 'mail',
-				'ssl_on' => ''
-			)
-		));
-		$this->assertFalse($this->MailContent->validates());
-		
-		$expected =  array('name' => array('メールフォームアカウント名に「mail」は利用できません。'));
-		$this->assertEquals($expected, $this->MailContent->validationErrors);
-	}
-	
-	public function test既存アカウント名チェック() {
-		$this->MailContent->create(array(
-			'MailContent' => array(
-				'name' => 'contact',
-				'ssl_on' => ''
-			)
-		));
-		$this->assertFalse($this->MailContent->validates());
-		
-		$expected =  array('name' => array('入力されたメールフォームアカウント名は既に使用されています。'));
 		$this->assertEquals($expected, $this->MailContent->validationErrors);
 	}
 	
@@ -184,7 +152,6 @@ class MailContentTest extends BaserTestCase {
 		$this->assertFalse($this->MailContent->validates());
 		
 		$expected =  array(
-			'redirect_url' => array('リダイレクトURLの形式が不正です。'),
 			'sender_1' => array('送信先メールアドレスの形式が不正です。'),
 			'sender_2' => array('送信先メールアドレスの形式が不正です。')
 		);
@@ -222,26 +189,32 @@ class MailContentTest extends BaserTestCase {
  */
 	public function testAfterSave($exclude_search) {
 		// 初期化
-		$data = array('MailContent' => array(
-			'name' => 'hogeName' . $exclude_search,
-			'title' => 'hogeTitle',
+		$data = ['MailContent' => [
 			'description' => 'hogeDescription',
-			'status' => true,
-			'exclude_search' => $exclude_search,
-		));
+			],
+			'Content' => [
+				'name' => 'hogeName',
+				'title' => 'hogeTitle',
+				'self_status' => true,
+				'status' => true,
+				'exclude_search' => $exclude_search,
+				'parent_id' => 1,
+				'site_id' => 0
+			]
+		];
 
 		// データ保存
 		$this->MailContent->save($data);
 
 		// Contentチェック
-		$this->Content = ClassRegistry::init('Content');
-		$result = $this->Content->find('first', array(
+		$this->SearchIndex = ClassRegistry::init('SearchIndex');
+		$result = $this->SearchIndex->find('first', array(
 			'conditions' => array('title' => 'hogeTitle')
 		));
 		if (!$exclude_search) {
-			$this->assertNotEmpty($result, 'Contentにデータを追加できません');
+			$this->assertNotEmpty($result, 'SearchIndexにデータを追加できません');
 		} else {
-			$this->assertEmpty($result, 'Contentのデータを削除できません');
+			$this->assertEmpty($result, 'SearchIndexのデータを削除できません');
 		}
 	}
 
@@ -269,12 +242,12 @@ class MailContentTest extends BaserTestCase {
 		$this->assertEmpty($contents, 'メールコンテンツデータを削除できません');
 		$this->assertEmpty($fields, '関連したメールフィールドデータを削除できません');
 		
-		// Contentチェック
-		$this->Content = ClassRegistry::init('Content');
-		$result = $this->Content->find('all', array(
+		// SearchIndexチェック
+		$this->SearchIndex = ClassRegistry::init('SearchIndex');
+		$result = $this->SearchIndex->find('all', array(
 			'conditions' => array('type' => 'メール', 'model_id' => 1)
 		));
-		$this->assertEmpty($result, '関連したContentを削除できません');
+		$this->assertEmpty($result, '関連したSearchIndexを削除できません');
 	}
 
 /**
@@ -286,7 +259,9 @@ class MailContentTest extends BaserTestCase {
  * @param string $message テスト失敗時に表示するメッセージ
  * @dataProvider createContentDataProvider
  */
-	public function testCreateContent($id, $mailContentId, $expected, $message) {
+	public function createSearchIndex($id, $mailContentId, $expected, $message) {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		// 初期化
 		$data = array('MailContent' => array(
 			'id' => $id,
@@ -299,7 +274,7 @@ class MailContentTest extends BaserTestCase {
 
 		$result = $this->MailContent->createContent($data);
 		$expected = array(
-			'Content' => array(
+			'SearchIndex' => array(
 				'type' => 'メール',
 				'model_id' => $expected,
 				'category' => '',
@@ -323,12 +298,14 @@ class MailContentTest extends BaserTestCase {
  * メールコンテンツデータをコピーする
  * 
  * @param int $id
- * @param array $data
- * @param array $recursive
+ * @param int $newParentId 新しい親コンテンツID
+ * @param string $newTitle 新しいタイトル
+ * @param int $newAuthorId 新しい作成者ID
+ * @param int $newSiteId 新しいサイトID
  * @param array $expected 期待値
  * @dataProvider copyDataProvider
  */
-	public function testCopy($id, $data, $recursive) {
+	public function testCopy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId) {
 
 		$db = $this->MailContent->getDataSource();
 		switch ($db->config['datasource']) {
@@ -338,36 +315,23 @@ class MailContentTest extends BaserTestCase {
 			default :
 		}
 		
-		$result = $this->MailContent->copy($id, $data, $recursive);
+		$result = $this->MailContent->copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId);
 
 		if (!is_null($id)) {
-			$this->assertRegExp('/contact_copy/', $result['MailContent']['name'], 'メールコンテンツデータをコピーできません');
+			$this->assertRegExp('/hogeName/', $result['Content']['title'], 'メールコンテンツデータをコピーできません');
 			// メールフィールドもコピーされているか
 			$this->MailField = ClassRegistry::init('MailField');
 			$field = $this->MailField->find('first',
 				array('conditions' => array('id' => 19)
 			));
-
-			if ($recursive) {
-				$this->assertEquals(2, $field['MailField']['mail_content_id'], 'メールフィールドデータをコピーできません');
-			} else {
-				$this->assertEmpty($field, '意図しないメールフィールドがコピーされています');
-			}
-
-		} else {
-			$this->assertEquals('hogeName_copy', $result['MailContent']['name'], 'メールコンテンツデータをコピーできません');
+			
+			$this->assertEquals(2, $field['MailField']['mail_content_id'], 'メールフィールドデータをコピーできません');
 		}
 	}
 
 	public function copyDataProvider() {
 		return array(
-			array(1, array(), true),
-			array(null, array('MailContent' => array(
-				'name' => 'hogeName',
-				'title' => 'hogeTitle',
-				'exclude_search' => null
-			)), true),
-			array(1, array(), false),
+			array(1, 1, 'hogeName', 1, 0)
 		);
 	}
 

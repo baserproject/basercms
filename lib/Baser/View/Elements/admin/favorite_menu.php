@@ -1,17 +1,18 @@
 <?php
 /**
- * [ADMIN] よく使う項目
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js('admin/baser_favorite');
+
+/**
+ * [ADMIN] よく使う項目
+ */
 ?>
 
 
@@ -45,7 +46,7 @@ $this->BcBaser->js('admin/baser_favorite');
 </div>
 
 <div id="FavoriteDialog" title="よく使う項目" style="display:none">
-	<?php echo $this->BcForm->create('Favorite', array('action' => 'ajax', 'url' => array('plugin' => null))) ?>
+	<?php echo $this->BcForm->create('Favorite', array('url' => array('plugin' => null, 'action' => 'ajax'))) ?>
 	<?php echo $this->BcForm->input('Favorite.id', array('type' => 'hidden')) ?>
 	<dl>
 		<dt><?php echo $this->BcForm->label('Favorite.name', 'タイトル') ?></dt><dd><?php echo $this->BcForm->input('Favorite.name', array('type' => 'text', 'size' => 30, 'class' => 'required')) ?></dd>

@@ -12,6 +12,7 @@
 		<?php $this->BcBaser->metaDescription() ?>
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
+		<?php $this->BcBaser->webClipIcon() ?>
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 		
 <!--[if lt IE 9]>
@@ -19,7 +20,7 @@
 	<script src="js/html5shiv-printshiv.js"></script>
 <![endif]-->
 
-		<?php $this->BcBaser->css('style') ?>
+		<?php $this->BcBaser->css(['style', 'colorbox/colorbox-1.6.1']) ?>
 <?php if($this->BcBaser->isHome()): ?>
 		<?php $this->BcBaser->css('top') ?>
 <?php else: ?>
@@ -28,9 +29,9 @@
 		<?php $this->BcBaser->css('responsive') ?>
 
 <?php $this->BcBaser->js(array(
-			'admin/jquery-1.7.2.min',
-			'admin/functions',
+			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
+			'jquery.colorbox-1.6.1.min',
 			'baser.min',
 			'startup'
 )) ?>
@@ -50,7 +51,7 @@ $(function(){
 <?php endif ?>
 
 <?php $this->BcBaser->scripts() ?>
-<?php $this->BcBaser->element('google_analytics') ?>
+<?php $this->BcBaser->googleAnalytics() ?>
 </head>
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>">
@@ -89,7 +90,7 @@ $(function(){
 
 	<?php if (!$this->BcBaser->isHome()): ?>
 	<div id="Breadcrumbs">
-		<?php $this->BcBaser->element('crumbs'); ?>
+		<?php $this->BcBaser->crumbsList(); ?>
 	</div>
 	<?php endif; ?>
 

@@ -14,13 +14,27 @@ class BlogPostsSchema extends CakeSchema {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = [])
+	{
+		$db = ConnectionManager::getDataSource($this->connection);
+		if( get_class($db) !== 'BcMysql'){
+			return true ;
+		}
+
+		if (isset($event['create'])) {
+			switch ($event['create']) {
+				case 'blogposts':
+					$tableName = $db->config['prefix'] . 'blog_posts';
+					$db->query("ALTER TABLE {$tableName} CHANGE detail detail MEDIUMTEXT");
+					break;
+			}
+		}
 	}
 
 	public $blog_posts = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
-		'blog_content_id' => array('type' => 'integer', 'null' => false, 'length' => 8),
-		'no' => array('type' => 'integer', 'null' => false),
+		'blog_content_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
+		'no' => array('type' => 'integer', 'null' => true),
 		'name' => array('type' => 'string', 'null' => true, 'default' => null),
 		'content' => array('type' => 'text', 'null' => true, 'default' => null),
 		'detail' => array('type' => 'text', 'null' => true, 'default' => null),

@@ -1,36 +1,30 @@
 <?php
 /**
- * [ADMIN] メール設定 フォーム
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.View
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * [ADMIN] メール設定 フォーム
+ */
 ?>
-
-
-<script type="text/javascript">
-$(window).load(function() {
-	$("#MailConfigSiteName").focus();
-});
-</script>
-
 <!-- form -->
 <h2>基本項目</h2>
 
-<?php echo $this->BcForm->create('MailConfig', array('action' => 'form')) ?>
+<?php echo $this->BcForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
 <?php echo $this->BcForm->input('MailConfig.id', array('type' => 'hidden')) ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<tr>
 			<th><?php echo $this->BcForm->label('MailConfig.site_name', '署名：WEBサイト名') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('MailConfig.site_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('MailConfig.site_name', array('type' => 'text', 'size' => 35, 'maxlength' => 255, 'autofocus' => true)) ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpSiteName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('MailConfig.site_name') ?>
 				<div id="helptextSiteName" class="helptext">自動送信メールの署名に挿入されます。</div>

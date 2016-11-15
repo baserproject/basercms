@@ -1,20 +1,15 @@
 <?php
-
 /**
- * ブログカテゴリモデル
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Model
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
-/**
- * Include files
- */
+
 App::uses('BlogAppModel', 'Blog.Model');
 
 /**
@@ -28,7 +23,6 @@ class BlogCategory extends BlogAppModel {
  * クラス名
  *
  * @var string
- * @access public
  */
 	public $name = 'BlogCategory';
 
@@ -36,59 +30,55 @@ class BlogCategory extends BlogAppModel {
  * バリデーション設定
  * 
  * @var array
- * @access public
  */
-	public $validationParams = array();
+	public $validationParams = [];
 
 /**
  * actsAs
  * 
  * @var array
- * @access public
  */
-	public $actsAs = array('Tree', 'BcCache');
+	public $actsAs = ['Tree', 'BcCache'];
 
 /**
  * hasMany
  *
  * @var array
- * @access public
  */
-	public $hasMany = array('BlogPost' =>
-		array('className' => 'Blog.BlogPost',
+	public $hasMany = ['BlogPost' =>
+		['className' => 'Blog.BlogPost',
 			'order' => 'id DESC',
 			'limit' => 10,
 			'foreignKey' => 'blog_category_id',
 			'dependent' => false,
 			'exclusive' => false,
-			'finderQuery' => ''));
+			'finderQuery' => '']];
 
 /**
  * validate
  *
  * @var array
- * @access public
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notEmpty'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => "ブログカテゴリ名を入力してください。",
-				'required' => true),
-			array('rule' => 'halfText',
-				'message' => 'ブログカテゴリ名は半角のみで入力してください。'),
-			array('rule' => array('duplicateBlogCategory'),
-				'message' => '入力されたブログカテゴリは既に登録されています。'),
-			array('rule' => array('maxLength', 255),
-				'message' => 'ブログカテゴリ名は255文字以内で入力してください。')
-		),
-		'title' => array(
-			array('rule' => array('notEmpty'),
+				'required' => true],
+			['rule' => 'halfText',
+				'message' => 'ブログカテゴリ名は半角のみで入力してください。'],
+			['rule' => ['duplicateBlogCategory'],
+				'message' => '入力されたブログカテゴリは既に登録されています。'],
+			['rule' => ['maxLength', 255],
+				'message' => 'ブログカテゴリ名は255文字以内で入力してください。']
+		],
+		'title' => [
+			['rule' => ['notBlank'],
 				'message' => "ブログカテゴリタイトルを入力してください。",
-				'required' => true),
-			array('rule' => array('maxLength', 255),
-				'message' => 'ブログカテゴリ名は255文字以内で入力してください。')
-		)
-	);
+				'required' => true],
+			['rule' => ['maxLength', 255],
+				'message' => 'ブログカテゴリ名は255文字以内で入力してください。']
+		]
+	];
 
 /**
  * コントロールソースを取得する
@@ -96,22 +86,21 @@ class BlogCategory extends BlogAppModel {
  * @param string $field フィールド名
  * @param array $option オプション
  * @return array コントロールソース
- * @access public
  */
-	public function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = []) {
 		switch ($field) {
 			case 'parent_id':
 				if (!isset($options['blogContentId'])) {
 					return false;
 				}
-				$conditions = array();
+				$conditions = [];
 				if (isset($options['conditions'])) {
 					$conditions = $options['conditions'];
 				}
 				$conditions['BlogCategory.blog_content_id'] = $options['blogContentId'];
 				if (!empty($options['excludeParentId'])) {
 					$children = $this->children($options['excludeParentId']);
-					$excludeIds = array($options['excludeParentId']);
+					$excludeIds = [$options['excludeParentId']];
 					foreach ($children as $child) {
 						$excludeIds[] = $child['BlogCategory']['id'];
 					}
@@ -119,10 +108,10 @@ class BlogCategory extends BlogAppModel {
 				}
 
 				if (isset($options['ownerId'])) {
-					$ownerIdConditions = array(
-						array('BlogCategory.owner_id' => null),
-						array('BlogCategory.owner_id' => $options['ownerId']),
-					);
+					$ownerIdConditions = [
+						['BlogCategory.owner_id' => null],
+						['BlogCategory.owner_id' => $options['ownerId']],
+					];
 					if (isset($conditions['OR'])) {
 						$conditions['OR'] = am($conditions['OR'], $ownerIdConditions);
 					} else {
@@ -131,7 +120,7 @@ class BlogCategory extends BlogAppModel {
 				}
 
 				$parents = $this->generateTreeList($conditions);
-				$controlSources['parent_id'] = array();
+				$controlSources['parent_id'] = [];
 				foreach ($parents as $key => $parent) {
 					if (preg_match("/^([_]+)/i", $parent, $matches)) {
 						$parent = preg_replace("/^[_]+/i", '', $parent);
@@ -143,7 +132,7 @@ class BlogCategory extends BlogAppModel {
 				break;
 			case 'owner_id':
 				$UserGroup = ClassRegistry::init('UserGroup');
-				$controlSources['owner_id'] = $UserGroup->find('list', array('fields' => array('id', 'title'), 'recursive' => -1));
+				$controlSources['owner_id'] = $UserGroup->find('list', ['fields' => ['id', 'title'], 'recursive' => -1]);
 				break;
 		}
 
@@ -160,15 +149,14 @@ class BlogCategory extends BlogAppModel {
  * 
  * @param array $check
  * @return boolean
- * @access public
  */
 	public function duplicateBlogCategory($check) {
-		$conditions = array('BlogCategory.' . key($check) => $check[key($check)],
-			'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']);
+		$conditions = ['BlogCategory.' . key($check) => $check[key($check)],
+			'BlogCategory.blog_content_id' => $this->validationParams['blogContentId']];
 		if ($this->exists()) {
-			$conditions['NOT'] = array('BlogCategory.id' => $this->id);
+			$conditions['NOT'] = ['BlogCategory.id' => $this->id];
 		}
-		$ret = $this->find('first', array('conditions' => $conditions));
+		$ret = $this->find('first', ['conditions' => $conditions]);
 		if ($ret) {
 			return false;
 		} else {
@@ -181,15 +169,14 @@ class BlogCategory extends BlogAppModel {
  * 
  * @param boolean $cascade
  * @return boolean
- * @access public
  */
 	public function beforeDelete($cascade = true) {
 		parent::beforeDelete($cascade);
 		$ret = true;
 		if (!empty($this->data['BlogCategory']['id'])) {
 			$id = $this->data['BlogCategory']['id'];
-			$this->BlogPost->unBindModel(array('belongsTo' => array('BlogCategory')));
-			$datas = $this->BlogPost->find('all', array('conditions' => array('BlogPost.blog_category_id' => $id)));
+			$this->BlogPost->unBindModel(['belongsTo' => ['BlogCategory']]);
+			$datas = $this->BlogPost->find('all', ['conditions' => ['BlogPost.blog_category_id' => $id]]);
 			if ($datas) {
 				foreach ($datas as $data) {
 					$data['BlogPost']['blog_category_id'] = '';
@@ -209,36 +196,35 @@ class BlogCategory extends BlogAppModel {
  * @param int $blogContentId
  * @param array $options
  * @return array
- * @access public
  */
 	public function getCategoryList($blogContentId, $options) {
-		$options = array_merge(array(
+		$options = array_merge([
 			'depth' => 1,
 			'type' => null,
 			'order' => 'BlogCategory.id',
 			'limit' => false,
 			'viewCount' => false,
-			'fields' => array('id', 'name', 'title')
-			), $options);
-		$datas = array();
+			'fields' => ['id', 'name', 'title']
+			], $options);
+		$datas = [];
 
 		extract($options);
 		if (!$type) {
 			$datas = $this->_getCategoryList($blogContentId, null, $viewCount, $depth);
 		} elseif ($type == 'year') {
-			$options = array(
+			$options = [
 				'category' => true,
 				'limit' => $limit,
 				'viewCount' => $viewCount,
 				'type' => 'year'
-			);
+			];
 			$_datas = $this->BlogPost->getPostedDates($blogContentId, $options);
-			$datas = array();
+			$datas = [];
 			foreach ($_datas as $data) {
 				if ($viewCount) {
 					$data['BlogCategory']['count'] = $data['count'];
 				}
-				$datas[$data['year']][] = array('BlogCategory' => $data['BlogCategory']);
+				$datas[$data['year']][] = ['BlogCategory' => $data['BlogCategory']];
 			}
 		}
 
@@ -256,21 +242,21 @@ class BlogCategory extends BlogAppModel {
  * @param array $fields
  * @return array
  */
-	protected function _getCategoryList($blogContentId, $id = null, $viewCount = false, $depth = 1, $current = 1, $fields = array()) {
-		$datas = $this->find('all', array(
-			'conditions' => array('BlogCategory.blog_content_id' => $blogContentId, 'BlogCategory.parent_id' => $id),
+	protected function _getCategoryList($blogContentId, $id = null, $viewCount = false, $depth = 1, $current = 1, $fields = []) {
+		$datas = $this->find('all', [
+			'conditions' => ['BlogCategory.blog_content_id' => $blogContentId, 'BlogCategory.parent_id' => $id],
 			'fields' => $fields,
-			'recursive' => -1));
+			'recursive' => -1]);
 		if ($datas) {
 			foreach ($datas as $key => $data) {
 				if ($viewCount) {
-					$datas[$key]['BlogCategory']['count'] = $this->BlogPost->find('count', array(
+					$datas[$key]['BlogCategory']['count'] = $this->BlogPost->find('count', [
 						'conditions' =>
 						am(
-							array('BlogPost.blog_category_id' => $data['BlogCategory']['id']), $this->BlogPost->getConditionAllowPublish()
+							['BlogPost.blog_category_id' => $data['BlogCategory']['id']], $this->BlogPost->getConditionAllowPublish()
 						),
 						'cache' => false
-					));
+					]);
 				}
 
 				if ($current < $depth) {
@@ -282,32 +268,6 @@ class BlogCategory extends BlogAppModel {
 			}
 		}
 		return $datas;
-	}
-
-/**
- * カテゴリオーナーの基準において新しいカテゴリが追加できる状態かチェックする
- * 
- * @param int $userGroupId ユーザーグループID
- * @param bool $rootEditable ドキュメントルートの書き込み権限の有無
- * @return bool
- */
-	public function checkNewCategoryAddable($userGroupId, $rootEditable) {
-		
-		$newCatAddable = false;
-		$ownerCats = $this->find('count', array(
-			'conditions' => array(
-				'OR' => array(
-					array('BlogCategory.owner_id' => null),
-					array('BlogCategory.owner_id' => $userGroupId)
-				)
-		)));
-
-		if ($ownerCats || $rootEditable) {
-			$newCatAddable = true;
-		}
-
-		return $newCatAddable;
-
 	}
 	
 /**
@@ -326,7 +286,7 @@ class BlogCategory extends BlogAppModel {
 			$Permission = ClassRegistry::init('Permission');
 		}
 
-		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId)));
+		$ajaxAddUrl = preg_replace('|^/index.php|', '', Router::url(['plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContentId]));
 
 		return $Permission->check($ajaxAddUrl, $userGroupId);
 		

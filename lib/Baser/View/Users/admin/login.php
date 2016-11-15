@@ -1,19 +1,19 @@
 <?php
 /**
- * [ADMIN] ログイン
- *
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2014, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2014, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
  * @since			baserCMS v 2.0.0
  * @license			http://basercms.net/license/index.html
  */
-if ($this->Session->check('Message.auth')) {
-	$this->Session->flash('auth');
-}
+
+/**
+ * [ADMIN] ログイン
+ */
+echo $this->Flash->render('auth');
 $userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
 if (!$userModel) {
 	$userModel = 'User';
@@ -53,7 +53,6 @@ $(function(){
 		$("body").hide();
 	}
 	$("body").prepend($("#Login"));
-	$("#"+$("#UserModel").html()+"Name").focus();
 	changeNavi("#"+$("#UserModel").html()+"Name");
 	changeNavi("#"+$("#UserModel").html()+"Password");
 
@@ -136,10 +135,10 @@ $(function(){
 		<?php $this->BcBaser->flash() ?>
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
-		<?php echo $this->BcForm->create($userModel, array('action' => 'login', 'url' => array())) ?>
+		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'login']]) ?>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
-			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1)) ?>
+			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1, 'autofocus' => true)) ?>
 		</div>
 		<div class="float-left login-input">
 			<?php echo $this->BcForm->label($userModel . '.password', 'パスワード') ?>

@@ -1,22 +1,27 @@
----
-driver_plugin: vagrant
-driver_config:
-  require_chef_omnibus: true
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.12.15 # a chef release without yum built in
 
 platforms:
-- name: centos-6.4
-  driver_config:
-    box: opscode-centos-6.4
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-6.4_provisionerless.box
-
-- name: centos-5.9
-  driver_config:
-    box: opscode-centos-5.9
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-5.9_provisionerless.box
+  - name: centos-5.11
+  - name: centos-6.8
+  - name: centos-7.2
+  - name: fedora-24
 
 suites:
-- name: test
-  run_list:
-  - recipe[minitest-handler]
-  - recipe[yum::test]
-  attributes: {}
+  - name: default
+    run_list:
+      - recipe[yum::default]
+      - recipe[yum_test::test_repo]
+  - name: dnf_compat
+    run_list:
+      - recipe[yum::dnf_yum_compat]
+      - recipe[yum_test::test_dnf_compat]
+    includes: fedora-23
+  - name: global_conflig
+    run_list:
+      - recipe[yum::default]
+      - recipe[yum_test::test_globalconfig_two]

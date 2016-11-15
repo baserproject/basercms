@@ -11,6 +11,15 @@ SERVER_IP_ADDRESS = SERVER_IP_NETWORK + "10"
 SERVER_IP_SUBNETMASK = "255.255.255.0"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # SSH設定
+  # 通常変更する必要はありません。
+  # private keyでログインする場合はinsert_keyをtrueにしてprivate_key_pathを設定。
+  # ローカル側のssh configも設定する必要があります。
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+  config.ssh.insert_key = false
+  # config.ssh.private_key_path = "~/.vagrant.d/insecure_private_key"
+
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -51,6 +60,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   config.vm.synced_folder "./", "/vagrant", :create => true, :owner=> 'vagrant', :mount_options => ['dmode=777','fmode=777']
 
+  # 【注意！】
+  # virtualboxのバージョンとvbguestのバージョンが合っていない場合に、vagrantが正常にprovision出来ず、
+  # 途中で止まってしまうことがあります。この場合は、vagrant-vbguestをインストールしてください
+  #   $ vagrant plugin install vagrant-vbguest
+  #   $ vagrant vbguest
+  # 
+  # vbguestの更新で失敗する場合は、次の手順でOSのカーネルをアップデートしてください
+  #    $ vagrant ssh
+  #      (ゲストOS内)
+  #    $ sudo yum -y update kernel
+  #    $ exit
+  #      (以下ホストOS内)
+  #    $ vagrant vbguest
+  #    $ vagrant reload
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+     config.vbguest.auto_update = false
+  end
+
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -84,15 +111,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  # chefでのプロビジョニングにはvagrant-omnibusプラグインのインストールが必要です。
-  # vagrant upの前に、vagrant-omnibusプラグインを導入してください。
-  #   $ vagrant plugin install vagrant-omnibus
+  # vagrant-omnibusプラグインのインストールは必須ではなくなりました。
+  # (新しいバージョンのvagrantではchefインストールが自動になったため)
+  # 引き続きomnibusを使用する場合は、バージョンは最新版を使うようにしてください。
   #
-  config.omnibus.chef_version = "12.10.24"
+  if Vagrant.has_plugin?("vagrant-omnibus") then
+    config.omnibus.chef_version = :latest
+  end
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "./vagrant_cookbooks"
     chef.json = {
+      :centos => {
+        #シャドウパスワード。デフォルトは「test」
+        #「openssl passwd -1 '(パスワード文字列)'」で出力されたものを記述
+        :testuser_name => 'test',
+        :testuser_password => '$1$yu6a20Nu$8RrSM367EtzGhBwKpwant.'
+      },
+      :postfix => {
+        #デフォルトで「test@example.com」にてメールの送受信を行う
+        #hostsにmyhostnameで記述したホストを登録すれば、メールクライアントからも利用可
+        #(SMTP設定は、認証なしの設定に注意！)
+        :mydomain => 'example.com',
+        :myhostname => 'local.example.com',
+        :mynetworks => 'mynetworks = 192.168.33.0/24, 127.0.0.0/8'
+      },
       :mysql => {
         :password => 'root'
       },
@@ -118,6 +161,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :default_charset => 'UTF-8',
         :upload_max_filesize => '16M'
       },
+      :phpMyAdmin => {
+        :blowfish_secret => '1d30f67bce33f51a2170e0280c510490'
+      },
       :xdebug => {
         :remote_host => SERVER_IP_NETWORK + '1',
         :remote_port => '9000',
@@ -128,9 +174,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
     chef.add_recipe "centos"
     chef.add_recipe "iptables"
-    chef.add_recipe "yum::epel"
-    chef.add_recipe "yum::remi"
+    chef.add_recipe "yum"
     chef.add_recipe "yum-packages"
+    chef.add_recipe "postfix"
     chef.add_recipe "mysql"
     chef.add_recipe "postgres"
     chef.add_recipe "httpd"

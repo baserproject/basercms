@@ -2,8 +2,8 @@
 /**
  * メールフォーム確認ページ
  */
-$this->BcBaser->css('admin/jquery-ui/ui.all', array('inline' => true));
-$this->BcBaser->js(array('admin/jquery-ui-1.8.19.custom.min', 'admin/i18n/ui.datepicker-ja'), false);
+$this->BcBaser->css('admin/jquery-ui/jquery-ui.min', array('inline' => true));
+$this->BcBaser->js(array('admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i18n/ui.datepicker-ja'), false);
 if ($freezed) {
 	$this->Mailform->freeze();
 }

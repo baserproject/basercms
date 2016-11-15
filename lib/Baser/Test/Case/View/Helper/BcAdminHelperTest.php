@@ -1,11 +1,9 @@
 <?php
 /**
- * ThemeConfig
- * 
  * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS Users Community <http://sites.google.com/site/baserusers/>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * @copyright		Copyright 2008 - 2015, baserCMS Users Community
+ * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Test.Case.View.Helper
  * @since			baserCMS v 3.0.0
@@ -75,7 +73,7 @@ class BcAdminHelperTest extends BaserTestCase {
 		return array(
 			array('', null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
 			array(1, null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
-			array('', 1, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
+			array('', 1, true, '管理システムグローバルメニューの利用可否確認が正しくありません'),
 			array('1', 1, true, '管理ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'),
 			array('1', 2, 0, '運営ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'),
 		);

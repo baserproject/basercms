@@ -1,29 +1,35 @@
 <?php
-
 /**
- * test for BlogContent
+ * baserCMS :  Based Website Development Project <http://basercms.net>
+ * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
  *
- * baserCMS : Based Website Development Project <http://basercms.net>
- * Copyright 2008 - 2015, baserCMS BlogContents Community <http://sites.google.com/site/baserBlogContents/>
- * @package         Feed.Test.Case.Model
- * @copyright       Copyright 2008 - 2015, baserCMS BlogContents Community
- * @link            http://basercms.net baserCMS Project
- * @since           baserCMS v 3.1.0-beta
- * @license         http://basercms.net/license/index.html
+ * @copyright		Copyright (c) baserCMS Users Community
+ * @link			http://basercms.net baserCMS Project
+ * @package			Blog.Test.Case.Model
+ * @since			baserCMS v 3.0.0
+ * @license			http://basercms.net/license/index.html
  */
+
 App::uses('BlogContent', 'Blog.Model');
 
+/**
+ * Class BlogContentTest
+ * 
+ * @property BlogContent $BlogContent
+ */
 class BlogContentTest extends BaserTestCase {
 
 	public $fixtures = array(
-		'baser.Default.Content',
-		'baser.Default.PluginContent',
+		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogPost',
 		'baser.Default.BlogPostsBlogTag',
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
+		'baser.Default.Content',
+		'baser.Default.Site',
+		'baser.Default.User',
 	);
 
 	public function setUp() {
@@ -40,41 +46,24 @@ class BlogContentTest extends BaserTestCase {
  * validate
  */
 	public function test空チェック() {
-
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'title' => '',
 				'list_direction' => ''
 			)
 		));
-
 		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('title', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログタイトルを入力してください。', current($this->BlogContent->validationErrors['title']));
-
 		$this->assertArrayHasKey('list_direction', $this->BlogContent->validationErrors);
 		$this->assertEquals('一覧に表示する順番を指定してください。', current($this->BlogContent->validationErrors['list_direction']));
 	}
 
 	public function test桁数チェック異常系() {
-
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'name' => '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901',
-				'title' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'layout' => '123456789012345678901',
 				'template' => '123456789012345678901',
 			)
 		));
-
 		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログアカウント名は100文字以内で入力してください。', current($this->BlogContent->validationErrors['name']));
-
-		$this->assertArrayHasKey('title', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログタイトルは255文字以内で入力してください。', current($this->BlogContent->validationErrors['title']));
 
 		$this->assertArrayHasKey('layout', $this->BlogContent->validationErrors);
 		$this->assertEquals('レイアウトテンプレート名は20文字以内で入力してください。', current($this->BlogContent->validationErrors['layout']));
@@ -86,8 +75,6 @@ class BlogContentTest extends BaserTestCase {
 	public function test桁数チェック正常系() {
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890',
-				'title' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'layout' => '12345678901234567890',
 				'template' => '12345678901234567890',
 			)
@@ -100,8 +87,6 @@ class BlogContentTest extends BaserTestCase {
 		// 半角チェック
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
-				'name' => 'テスト',
-				'layout' => 'テスト',
 				'template' => 'テスト',
 				'list_count' => 'テスト',
 			)
@@ -109,42 +94,12 @@ class BlogContentTest extends BaserTestCase {
 
 		$this->assertFalse($this->BlogContent->validates());
 
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログアカウント名は半角のみ入力してください。', current($this->BlogContent->validationErrors['name']));
-
-		$this->assertArrayHasKey('layout', $this->BlogContent->validationErrors);
-		$this->assertEquals('レイアウトテンプレート名は半角で入力してください。', current($this->BlogContent->validationErrors['layout']));
-
 		$this->assertArrayHasKey('template', $this->BlogContent->validationErrors);
 		$this->assertEquals('コンテンツテンプレート名は半角で入力してください。', current($this->BlogContent->validationErrors['template']));
 
 		$this->assertArrayHasKey('list_count', $this->BlogContent->validationErrors);
 		$this->assertEquals('一覧表示件数は半角で入力してください。', current($this->BlogContent->validationErrors['list_count']));
-
-		// 重複チェック
-		$this->BlogContent->create(array(
-			'BlogContent' => array(
-				'name' => 'news',
-			)
-		));
-
-		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('入力されたブログアカウント名は既に使用されています。', current($this->BlogContent->validationErrors['name']));
-
-		// notInListチェック
-		$this->BlogContent->create(array(
-			'BlogContent' => array(
-				'name' => 'blog',
-			)
-		));
-
-		$this->assertFalse($this->BlogContent->validates());
-
-		$this->assertArrayHasKey('name', $this->BlogContent->validationErrors);
-		$this->assertEquals('ブログアカウント名に「blog」は利用できません。', current($this->BlogContent->validationErrors['name']));
-
+		
 		// eye_catch_sizeチェック
 		$this->BlogContent->create(array(
 			'BlogContent' => array(
@@ -184,34 +139,40 @@ class BlogContentTest extends BaserTestCase {
  * @dataProvider afterSaveDataProvider
  */
 	public function testAfterSave($id, $exclude_search) {
-		$this->BlogContent->create(array(
-			'BlogContent' => array(
+		$this->BlogContent->create([
+			'BlogContent' => [
+				'id' => $id,	
+				'description' => 'test-description',
+			],
+			'Content' => [
 				'id' => $id,
 				'name' => 'test-name',
+				'parent_id' => 1,
 				'title' => 'test-title',
-				'description' => 'test-description',
 				'exclude_search' => $exclude_search,
-				'status' => 1
-			)
-		));
+				'status' => 1,
+				'site_id' => 0,
+				'entity_id' => $id
+			]
+		]);
 
 		$this->BlogContent->save();
 
 		if (!$exclude_search) {
-			$BlogPost = ClassRegistry::init('Blog.BlogContent');
-			$result = $BlogPost->find('count', array(
-				'conditions' => array('BlogContent.name' => 'test-name'),
+			$BlogContent = ClassRegistry::init('Blog.BlogContent');
+			$result = $BlogContent->find('count', array(
+				'conditions' => array('Content.name' => 'test-name'),
 			));
 			$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
-			unset($BlogPost);
+			unset($BlogContent);
 		
 		} else {
-			$Content = ClassRegistry::init('Content');
-			$result = $Content->find('count', array(
-				'conditions' => array('Content.model' => 'BlogContent'),
+			$SearchIndex = ClassRegistry::init('SearchIndex');
+			$result = $SearchIndex->find('count', array(
+				'conditions' => array('SearchIndex.model' => 'BlogContent'),
 			));
 			$this->assertEquals($result, 0, '検索用テーブルから削除できません');
-			unset($Content);
+			unset($SearchIndex);
 
 		}
 
@@ -227,7 +188,9 @@ class BlogContentTest extends BaserTestCase {
 /**
  * 検索用データを生成する
  */
-	public function testCreateContent() {
+	public function testCreateSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 		$data = array(
 			'name' => 'test-name',
 			'title' => 'test-title',
@@ -250,27 +213,19 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 /**
- * ユーザーグループデータをコピーする
+ * ブログコンテンツデータをコピーする
  */
 	public function testCopy() {
-		$this->BlogContent->copy(1);
+		$this->BlogContent->copy(1, 1, 'hoge1', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
-		$this->assertEquals($result['BlogContent']['name'], 'news_copy');
-
-		$data = array(
-			'BlogContent' => array(
-				'name' => 'test-name',
-				'title' => 'test-title',
-				'description' => 'test-description',
-				'exclude_search' => 0,
-		));
-		$this->BlogContent->copy(false, $data);
+		$this->assertEquals($result['Content']['title'], 'hoge1');
+		$this->BlogContent->copy(1, 1, 'test-title', 1, 0);
 		$result = $this->BlogContent->find('first', array(
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
-		$this->assertEquals($result['BlogContent']['name'], 'test-name_copy');
+		$this->assertEquals($result['Content']['title'], 'test-title');
 	}
 
 }
