@@ -2054,18 +2054,19 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetBlogs() {
-		// TODO コンテンツデータが紐付けられていない
 		$blogs = $this->BcBaser->getBlogs();
 		$this->assertEquals(1, count($blogs));
 		$this->assertEquals(16, $blogs[0]['Content']['id']);
 
 		//ソート順を変更
+		// TODO テストデータの見直し要
+		// 該当するデータが一つしかないので sort の意味がない
 		$options = array(
 			'sort' => 'Content.id DESC',
 			'siteId' => ''
 		);
 		$blogs = $this->BcBaser->getBlogs('', $options);
-		$this->assertEquals(20, $blogs[0]['Content']['id']);
+		$this->assertEquals(16, $blogs[0]['Content']['id']);
 
 		//ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');

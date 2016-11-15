@@ -37,7 +37,8 @@ class BcContentsBehavior extends ModelBehavior {
 			'foreignKey'=> 'entity_id',
 			'dependent' => false,
 			'conditions'=> array(
-				'Content.type' => $model->name
+				'Content.type' => $model->name,
+				'Content.alias_id' => null
 			)
 		);
 		return true;
