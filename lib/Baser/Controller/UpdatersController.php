@@ -433,11 +433,13 @@ class UpdatersController extends AppController {
 			foreach ($updaters as $version => $updateVerPoint) {
 				$this->setUpdateLog('アップデートプログラム ' . $version . ' を実行します。');
 				ClassRegistry::flush();
+				BcSite::flash();
 				$this->_execScript($plugin, $version);
 			}
 		}
 
 		ClassRegistry::flush();
+		BcSite::flash();
 
 		if (!isset($updaters['test'])) {
 			if (!$plugin) {

@@ -86,6 +86,8 @@ class BcSite {
 	public $useSubDomain;
 	
 	public $domainType;
+	
+	public $theme;
 
 /**
  * コンストラクタ
@@ -119,6 +121,7 @@ class BcSite {
 		$this->autoRedirect = $config['auto_redirect'];
 		$this->autoLink = $config['auto_link'];
 		$this->mainSiteId = $config['main_site_id'];
+		$this->theme = $config['theme'];
 		$this->useSubDomain = $config['use_subdomain'];
 		if($this->useSubDomain) {
 			if(!empty($config['domain_type'])) {

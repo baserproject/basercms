@@ -432,15 +432,6 @@ class Site extends AppModel {
 		], 'recursive' => -1]);
 	}
 	
-	public function getPureUrl($url) {
-		$site = $this->findByUrl($url);
-		if($site) {
-			return preg_replace('/.+?\//', '', $url);
-		} else {
-			return $url;
-		}
-	}
-	
 	public function afterFind($results, $primary = false) {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {

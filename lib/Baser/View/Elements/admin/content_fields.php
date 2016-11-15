@@ -15,25 +15,36 @@
  */
 $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
 unset($urlArray[count($urlArray) -1]);
+if($this->request->data['Site']['same_main_url']) {
+	$site = BcSite::findById($this->request->data['Site']['main_site_id']);
+	array_shift($urlArray);
+	if($site->alias) {
+		$urlArray = explode('/', $site->alias) + $urlArray;
+	}
+}
 if($this->request->data['Site']['use_subdomain']) {
 	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
-	unset($urlArray[0]);
+	array_shift($urlArray);
 } else {
 	$host = $this->BcContents->getUrl('/', true, $this->request->data['Site']['use_subdomain']);
 }
-$checkUrl = '/';
+if($this->request->data['Site']['alias']) {
+	$checkUrl = '/' . $this->request->data['Site']['alias'] . '/';
+} else {
+	$checkUrl = '/';
+}
 $Content = ClassRegistry::init('Content');
 foreach($urlArray as $key => $value) {
 	$checkUrl .= $value . '/';
 	$entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);
-	$urlArray[$key] = $this->BcBaser->getLink(urldecode($value), array('admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId));
+	$urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
 }
 $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
 $baseUrl = $host . $baseUrl;
-$pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['name'], $this->request->data['Site']['alias']);
+$pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),
 	'data-current' => json_encode($this->request->data),

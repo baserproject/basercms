@@ -152,7 +152,7 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 				<?php
 				echo $this->BcForm->input('BlogContent.template', array(
 					'type' => 'select',
-					'options' => $this->Blog->getBlogTemplates()))
+					'options' => $this->Blog->getBlogTemplates($this->BcForm->value('Content.site_id'))))
 				?>
 <?php echo $this->BcForm->input('BlogContent.edit_blog_template', array('type' => 'hidden')) ?>
 <?php if ($this->action == 'admin_edit'): ?>

@@ -40,6 +40,8 @@
 		if(in_array($data['Content']['parent_id'], array(0,1))) {
 			$open = true;
 		}
+		$editDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'edit', $data['Content']['entity_id']);
+		$manageDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'manage', $data['Content']['entity_id']);
 		?>
 <li id="node-<?php echo $data['Content']['id'] ?>" data-jstree='{
 	"icon":"<?php echo $iconPath ?>",
@@ -56,7 +58,9 @@
 	"contentAliasId":"<?php echo $data['Content']['alias_id'] ?>",
 	"contentPlugin":"<?php echo $data['Content']['plugin'] ?>",
 	"contentTitle":"<?php echo addslashes(strip_tags(h($data['Content']['title']))) ?>",
-	"contentSiteRoot":"<?php echo (bool) $data['Content']['site_root'] ?>"
+	"contentSiteRoot":"<?php echo (bool) $data['Content']['site_root'] ?>",
+	"editDisabled":"<?php echo $editDisabled ?>",
+	"manageDisabled":"<?php echo $manageDisabled ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
 			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span>
 			<?php if(!empty($data['children'])): ?>

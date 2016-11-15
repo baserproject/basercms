@@ -76,35 +76,15 @@ class SearchIndicesController extends AppController {
 		
 		if(!BcUtil::isAdminSystem()) {
 			$Content = ClassRegistry::init('Content');
-			// 各サイトのトップとして動作する仕様とする
+			$currentSite = BcSite::findCurrent(true);
 			$url = '/';
-			switch ($this->request->params['action']) {
-				case 'search':
-					break;
-				case 'mobile_search':
-					$site = $Content->Site->find('first', ['conditions' => ['name' => 'mobile']]);
-					if($site) {
-						if($site['Site']['alias']) {
-							$url = '/' . $site['Site']['alias'] . '/';
-						} else {
-							$url = '/' . $site['Site']['name'] . '/';
-						}
-					} else {
-						break;
-					}
-					break;
-				case 'smartphone_search':
-					$site = $Content->Site->find('first', ['conditions' => ['name' => 'smartphone']]);
-					if($site) {
-						if($site['Site']['alias']) {
-							$url = '/' . $site['Site']['alias'] . '/';
-						} else {
-							$url = '/' . $site['Site']['name'] . '/';
-						}
-					} else {
-						break;
-					}
-					break;
+			if($this->request->params['action'] != 'search') {
+				$prefix = str_replace('_search', '', $this->request->params['action']);
+				if($prefix == $currentSite->name) {
+					$url = '/' . $currentSite->alias . '/';
+					$this->request->params['action'] = 'search';
+					$this->action = 'search';
+				}
 			}
 			$content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
 			$this->request->params['Content'] = $content['Content'];

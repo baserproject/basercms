@@ -20,11 +20,7 @@ if ($data['Site']['status']) {
 	$classies = array('unpublish', 'disablerow');
 }
 $class = ' class="' . implode(' ', $classies) . '"';
-if($data['Site']['alias']) {
-	$url = '/' . $data['Site']['alias'] . '/';
-} else {
-	$url = '/' . $data['Site']['name'] . '/';
-}
+$url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data['Site']['use_subdomain']);
 ?>
 
 

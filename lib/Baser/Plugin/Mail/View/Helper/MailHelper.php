@@ -55,47 +55,6 @@ class MailHelper extends AppHelper {
 	}
 
 /**
- * レイアウトテンプレートを取得
- * 
- * コンボボックスのソースとして利用
- * 
- * @return array レイアウトテンプレート一覧データ
- * @todo 他のヘルパーに移動する
- */
-	public function getLayoutTemplates() {
-		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
-		}
-
-		$_templates = array();
-		foreach ($templatesPathes as $templatesPath) {
-			$templatesPath .= 'Layouts' . DS;
-			$folder = new Folder($templatesPath);
-			$files = $folder->read(true, true);
-			$foler = null;
-			if ($files[1]) {
-				if ($_templates) {
-					$_templates = am($_templates, $files[1]);
-				} else {
-					$_templates = $files[1];
-				}
-			}
-		}
-
-		$_templates = array_unique($_templates);
-		$templates = array();
-		$ext = Configure::read('BcApp.templateExt');
-		foreach ($_templates as $template) {
-			if ($template != 'installations' . $ext) {
-				$template = basename($template, $ext);
-				$templates[$template] = $template;
-			}
-		}
-		return $templates;
-	}
-
-/**
  * フォームテンプレートを取得
  * 
  * コンボボックスのソースとして利用
@@ -103,10 +62,15 @@ class MailHelper extends AppHelper {
  * @return array フォームテンプレート一覧データ
  * @todo 他のヘルパーに移動する
  */
-	public function getFormTemplates() {
+	public function getFormTemplates($siteId = 0) {
+		$site = BcSite::findById($siteId);
+		$theme = $this->BcBaser->siteConfig['theme'];
+		if($site->theme) {
+			$theme = $site->theme;
+		}
 		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
 		$_templates = array();
@@ -143,10 +107,15 @@ class MailHelper extends AppHelper {
  * @return array メールテンプレート一覧データ
  * @todo 他のヘルパに移動する
  */
-	public function getMailTemplates() {
+	public function getMailTemplates($siteId = 0) {
+		$site = BcSite::findById($siteId);
+		$theme = $this->BcBaser->siteConfig['theme'];
+		if($site->theme) {
+			$theme = $site->theme;
+		}
 		$templatesPathes = array_merge(App::path('View', 'Mail'), App::path('View'));
-		if ($this->BcBaser->siteConfig['theme']) {
-			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS);
+		if ($theme) {
+			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
 		$_templates = array();

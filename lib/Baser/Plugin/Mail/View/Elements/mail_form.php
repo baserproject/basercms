@@ -31,9 +31,9 @@ $(function(){
 
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . '/confirm', 'type' => 'file')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . 'confirm', 'type' => 'file')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url']  . '/submit')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url']  . 'submit')) ?>
 <?php endif; ?>
 <?php /* フォーム本体 */ ?>
 
@@ -47,12 +47,10 @@ $(function(){
 <?php if ($mailContent['MailContent']['auth_captcha']): ?>
 	<?php if (!$freezed): ?>
 		<div class="auth-captcha clearfix">
-			<?php $captchaId = mt_rand(0, 99999999) ?>
-			<?php $this->BcBaser->img($this->request->params['Content']['url'] . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => 'auth-captcha-image')) ?>
-			<?php echo $this->Mailform->text('MailMessage.auth_captcha') ?><br />
+			<?php echo $this->Mailform->authCaptcha('MailMessage.auth_captcha') ?>
+			<br />
 			&nbsp;画像の文字を入力してください<br clear="all" />
 			<?php echo $this->Mailform->error('MailMessage.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
-			<?php echo $this->Mailform->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 		</div>
 	<?php else: ?>
 		<?php echo $this->Mailform->hidden('MailMessage.auth_captcha') ?>

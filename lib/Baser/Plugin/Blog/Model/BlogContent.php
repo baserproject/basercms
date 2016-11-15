@@ -237,6 +237,7 @@ class BlogContent extends BlogAppModel {
 			$result['BlogContent']['id'] = $this->getInsertID();
 			$blogPosts = $this->BlogPost->find('all', ['conditions' => ['BlogPost.blog_content_id' => $id], 'order' => 'BlogPost.id', 'recursive' => -1]);
 			foreach ($blogPosts as $blogPost) {
+				$blogPost['BlogPost']['blog_category_id'] = null;
 				$blogPost['BlogPost']['blog_content_id'] = $result['BlogContent']['id'];
 				$this->BlogPost->copy(null, $blogPost);
 			}

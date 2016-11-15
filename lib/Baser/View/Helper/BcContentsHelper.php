@@ -14,6 +14,8 @@
  * コンテンツヘルパ
  *
  * @package Baser.View.Helper
+ * @property Content $_Content
+ * @property Permission $_Permission
  */
 class BcContentsHelper extends AppHelper {
 
@@ -30,6 +32,7 @@ class BcContentsHelper extends AppHelper {
  * @var Content
  */
 	protected $_Content = null;
+	protected $_Permission = null;
 	
 /**
  * Constructor.
@@ -40,6 +43,7 @@ class BcContentsHelper extends AppHelper {
 	public function __construct(View $View, $settings = array()) {
 		parent::__construct($View, $settings);
 		$this->_Content = ClassRegistry::init('Content');
+		$this->_Permission = ClassRegistry::init('Permission');
 		if(BcUtil::isAdminSystem()) {
 			$this->setup();
 		}
@@ -56,7 +60,6 @@ class BcContentsHelper extends AppHelper {
 		
 		$existsTitles = $this->_getExistsTitles();
 		$user = BcUtil::loginUser('admin');
-		$Permission = ClassRegistry::init('Permission');
 		
 		foreach($settings as $type => $setting) {
 
@@ -96,26 +99,19 @@ class BcContentsHelper extends AppHelper {
 				if (!empty($setting['routes'][$method])) {
 					$route = $setting['routes'][$method];
 					$setting['url'][$method] = Router::url($route);
-					// index アクションの際、index が省略されてしまうので強制的に補完
-					if ($route['action'] == 'index') {
-						// 規定以外の引数がないかチェック
-						unset($route['admin'], $route['plugin'], $route['prefix'], $route['controller'], $route['action']);
-						if (count($route) == 0) {
-							$setting['url'][$method] .= '/index';
-						}
-					}
 				}
 			}
 			// disabled
-			$setting['addDisabled'] = !($Permission->check($setting['url']['add'], $user['user_group_id']));
-			$setting['editDisabled'] = !($Permission->check($setting['url']['edit'], $user['user_group_id']));
-			$setting['manageDisabled'] = false;
-			if (!empty($setting['routes']['manage'])) {
-				$setting['manageDisabled'] = !($Permission->check($setting['url']['manage'], $user['user_group_id']));
-			}
+			$setting['addDisabled'] = !($this->_Permission->check($setting['url']['add'], $user['user_group_id']));
 			$settings[$type] = $setting;
 		}
 		$this->settings = $settings;
+	}
+	
+	public function isActionAvailable($type, $action, $entityId) {
+		$user = BcUtil::loginUser('admin');
+		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
+		return $this->_Permission->check($url, $user['user_group_id']);
 	}
 
 /**
@@ -234,11 +230,8 @@ class BcContentsHelper extends AppHelper {
  * @param string $alias
  * @return mixed
  */
-	public function getPureUrl($url, $prefix, $alias) {
-		if($alias) {
-			$prefix = $alias;
-		}
-		return preg_replace('/^\/' . preg_quote($prefix, '/') . '\//', '/', $url);
+	public function getPureUrl($url, $siteId) {
+		return $this->_Content->pureUrl($url, $siteId);
 	}
 
 /**
@@ -251,7 +244,7 @@ class BcContentsHelper extends AppHelper {
 		if(empty($this->request->params['Site'])) {
 			return '';
 		}
-		$url = $this->getPureUrl('/' . $this->request->url, $this->request->params['Site']['name'], $this->request->params['Site']['alias']);
+		$url = $this->getPureUrl('/' . $this->request->url, $this->request->params['Site']['id']);
 		$Site = ClassRegistry::init('Site');
 		$site = $Site->find('first', ['conditions' => ['Site.name' => $siteName], 'recursive' => -1]);
 		if(!$site) {
@@ -388,6 +381,19 @@ class BcContentsHelper extends AppHelper {
  */
 	public function getContentFolderList($siteId = null, $options = array()) {
 		return $this->_Content->getContentFolderList($siteId, $options);
+	}
+	
+	public function getSiteRoot($siteId) {
+		return $this->_Content->getSiteRoot($siteId);
+	}
+	
+	public function getSiteRootId($siteId) {
+		$content = $this->getSiteRoot($siteId);
+		if($content) {
+			return $content['Content']['id'];
+		} else {
+			return false;
+		}
 	}
 	
 }
