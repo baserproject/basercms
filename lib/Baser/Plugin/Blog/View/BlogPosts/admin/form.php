@@ -55,14 +55,9 @@ $(function(){
 			success: function(result){
 				if(result) {
 					$("#LinkPreview").trigger("click");
-					// CUSTOMIZE ADD 2016/11/18 abe
-					// 保存前確認ボタンの調整
-					// >>>
 					$.bcToken.update(function(){
 						$("input[name='data[_Token][key]']").val($.bcToken.key);
 					}, {loaderType: 'none'});
-					// <<<
-
 				} else {
 					alert('プレビューの読み込みに失敗しました。');
 				}
