@@ -55,6 +55,9 @@ $(function(){
 			success: function(result){
 				if(result) {
 					$("#LinkPreview").trigger("click");
+					$.bcToken.update(function(){
+						$("input[name='data[_Token][key]']").val($.bcToken.key);
+					}, {loaderType: 'none'});
 				} else {
 					alert('プレビューの読み込みに失敗しました。');
 				}
