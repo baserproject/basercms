@@ -312,7 +312,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * サイト連携データかどうか確認する
  * 
- * @param array $data
+ * @param array $data コンテンツデータ
  * @return bool
  */
 	public function isSiteRelated($data) {

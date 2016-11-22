@@ -29,6 +29,7 @@ class BcContentsHelperTest extends BaserTestCase {
 	public $fixtures = array(
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 		'baser.Default.Site',
+		'baser.Default.User',
 	);
 
 /**
@@ -123,6 +124,24 @@ class BcContentsHelperTest extends BaserTestCase {
 			array(3, 1, 7, 'トップページ', 'スマホ版１階層目のデータが正常に取得できません'),
 			array(3, 2, 1, 'サービス１', 'スマホ版２階層目のデータが正常に取得できません')
 		);
+	}
+
+/**
+ * @dataProvider isSiteRelatedDataProvider
+ */
+	public function testIsSiteRelated($expect, $data) {
+		$result = $this->BcContents->isSiteRelated($data);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function isSiteRelatedDataProvider() {
+		return [
+			[true, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => 1, 'type' => 'BlogContent']]],
+			[false, ['Site' => ['relate_main_site' => false], 'Content' => ['main_site_content_id' => 1, 'alias_id' => 1, 'type' => 'BlogContent']]],
+			[false, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => null, 'alias_id' => 1, 'type' => 'BlogContent']]],
+			[false, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => null, 'type' => 'BlogContent']]],
+			[true, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => null, 'type' => 'ContentFolder']]]
+		];
 	}
 
 }
