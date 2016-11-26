@@ -5,7 +5,7 @@ class UploaderCategoriesSchema extends CakeSchema {
 
 	public $file = 'uploader_categories.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

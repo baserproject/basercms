@@ -5,7 +5,7 @@ class UploaderFilesSchema extends CakeSchema {
 
 	public $file = 'uploader_files.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

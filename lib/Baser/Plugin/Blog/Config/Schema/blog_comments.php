@@ -8,7 +8,7 @@ class BlogCommentsSchema extends CakeSchema {
 
 	public $file = 'blog_comments.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

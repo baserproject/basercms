@@ -8,7 +8,7 @@ class BlogTagsSchema extends CakeSchema {
 
 	public $file = 'blog_tags.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

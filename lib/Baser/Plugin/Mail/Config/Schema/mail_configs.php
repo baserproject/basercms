@@ -8,7 +8,7 @@ class MailConfigsSchema extends CakeSchema {
 
 	public $file = 'mail_configs.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;
