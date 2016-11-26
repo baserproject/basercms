@@ -3,45 +3,72 @@
 //
 @import '../vender/Font-Awesome/font-awesome';
 
-
-[class^="bca-icon--"],
-[class*=" bca-icon--"],
-[class*="
-bca-icon--"],
-[class*="	bca-icon--"]{
-	@extend .#{$fa-css-prefix};
-}
-
 .bca-icon {
+
+	@mixin fa-common {
+		&::before {
+			@extend .#{$fa-css-prefix};
+		}
+	}
+
 	// 公開
 	&--publish {
-		//@extend .#{$fa-css-prefix};
 		@extend .#{$fa-css-prefix}-play-circle-o;
+		@include fa-common;
 	}
 
 	// 非公開
 	&--unpublish {
 		@extend .#{$fa-css-prefix}-pause-circle-o;
+		@include fa-common;
 	}
 
 	// 確認
 	&--preview {
 		@extend .#{$fa-css-prefix}-eye;
+		@include fa-common;
 	}
 
 	// 編集
 	&--edit {
 		@extend .#{$fa-css-prefix}-pencil;
+		@include fa-common;
 	}
 
 	// 複製
 	&--copy {
 		@extend .#{$fa-css-prefix}-copy;
+		@include fa-common;
 	}
 
 	// 削除
 	&--delete {
 		@extend .#{$fa-css-prefix}-trash;
+		@include fa-common;
+	}
+
+	// お気に入り
+	&--favorite {
+		@extend .#{$fa-css-prefix}-heart;
+		@include fa-common;
+	}
+
+	// メニューアイテム
+	&--menuitem {
+		@extend .#{$fa-css-prefix}-angle-right;
+		@include fa-common;
+	}
+
+	// 追加
+	&--add {
+		@extend .#{$fa-css-prefix}-plus-circle;
+		@include fa-common;
+	}
+
+	// 追加
+	&--help {
+		@extend .#{$fa-css-prefix}-life-ring;
+		@include fa-common;
 	}
 
 }
