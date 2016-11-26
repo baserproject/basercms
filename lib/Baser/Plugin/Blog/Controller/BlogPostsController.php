@@ -85,9 +85,6 @@ class BlogPostsController extends BlogAppController {
 			$this->blogContent = $this->BlogContent->read(null, $this->request->params['pass'][0]);
 			$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_contents', 'action' => 'edit', $this->request->params['pass'][0]));
 			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
-			if ($this->request->params['prefix'] == 'admin') {
-				$this->subMenuElements = ['blog_posts'];
-			}
 			if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
 				$this->helpers[] = $this->siteConfigs['editor'];
 			}

@@ -53,18 +53,6 @@ class BlogContentsController extends BlogAppController {
 	public $subMenuElements = array();
 
 /**
- * before_filter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-		if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_common');
-		}
-	}
-
-/**
  * ブログ登録
  *
  * @return mixed json|false
@@ -155,7 +143,6 @@ class BlogContentsController extends BlogAppController {
 		$this->set('publishLink', $this->request->data['Content']['url']);
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('blogContent', $this->request->data);
-		$this->subMenuElements = ['blog_posts'];
 		$this->set('themes', $this->SiteConfig->getThemes());
 		$this->pageTitle = 'ブログ設定編集：' . $this->request->data['Content']['title'];
 		$this->help = 'blog_contents_form';
