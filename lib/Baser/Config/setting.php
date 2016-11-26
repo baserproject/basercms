@@ -13,7 +13,7 @@
 /**
  * アプリケーション基本設定
  */
-$config['BcApp'] = array(
+$config['BcApp'] = [
 	// デフォルトタイトル設定（インストールの際のエラー時等DB接続まえのエラーで利用）
 	'title' => 'コーポレートサイトにちょうどいいCMS - baserCMS - ',
 	// 初期テーマ
@@ -23,38 +23,68 @@ $config['BcApp'] = array(
 	// テンプレートの基本となる拡張子（.php 推奨）
 	'templateExt' => '.php',
 	// システムナビ
-	'adminNavi' => array('core' => array(
-			'name' => 'baserCMSコア',
-			'contents' => array(
-				array('name' => 'コンテンツ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index')),
-				array('name' => 'ウィジェット管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')),
-				array('name' => 'テーマ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index')),
-				array('name' => 'プラグイン管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index')),
-				array('name' => 'システム設定', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form')),
-				array('name' => 'ユーザー管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index')),
-				array('name' => 'ユーザーグループ管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index')),
-				array('name' => '検索インデックス管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index')),
-				array('name' => 'エディタテンプレート管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index')),
-				array('name' => 'サブサイト管理', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index')),
-				array('name' => 'ユーティリティ', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index')),
-				array('name' => 'サーバーキャッシュ削除', 'url' => array('admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'), 'options' => array('confirm' => 'サーバーキャッシュを削除します。いいですか？'))
-			))),
+	'adminNavi' => [
+		'Contents' => [
+			'Default' => [
+				'title' => 'コンテンツ管理',
+				'type' => 'contents',
+				'menus' => [
+					'Contents' => ['title' => 'コンテンツ一覧', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'index']],
+					'ContentsTrash' => ['title' => 'ゴミ箱', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'contents', 'action' => 'trash_index']],
+				]
+			],
+		],
+		'Theme' => [
+			'title' => 'テーマ管理',
+			'type' => 'theme',
+			'menus' => [
+				['name' => 'Themes', 'title' => 'テーマ管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'index']],
+				['name' => 'ThemesAdd', 'title' => 'テーマ新規追加', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'add']],
+				['name' => 'ThemeConfigs', 'title' => 'テーマ設定', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_configs', 'action' => 'form']],
+				['name' => 'ThemeFilesCore', 'title' => 'コアテンプレート確認', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'theme_files', 'action' => 'index', 'core']],
+				['name' => 'ThemesDownloadDefaultDataPattern', 'title' => 'テーマ用初期データダウンロード', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'download_default_data_pattern']],
+				['name' => 'ThemesResetData', 'title' => 'データリセット', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'themes', 'action' => 'reset_data']],
+			]
+		],
+		'Plugin' => [
+			'title' => 'プラグイン設定',
+			'type' => 'plugin',
+			'menus' => [
+				['name' => 'Plugins', 'title' => 'プラグイン管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'plugins', 'action' => 'index']],
+			]
+		],
+		'System' => [
+			'title' => 'システム設定',
+			'type' => 'system',
+			'menus' => [
+				'SiteConfigs' => ['title' => 'サイト基本設定', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'form']],
+				'WidgetAreas' => ['title' => 'ウィジェット管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'widget_areas', 'action' => 'index']],
+				'Users' => ['title' => 'ユーザー管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'index']],
+				'UserGroups' => ['title' => 'ユーザーグループ管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'user_groups', 'action' => 'index']],
+				'SearchIndices' => ['title' => '検索インデックス管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'search_indices', 'action' => 'index']],
+				'EditorTemplates' => ['title' => 'エディタテンプレート管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'index']],
+				'Sites' => ['title' => 'サブサイト管理', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'sites', 'action' => 'index']],
+				'Tools' => ['title' => 'ユーティリティ', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'tools', 'action' => 'index']],
+				'SiteConfigsDelCache' => ['title' => 'サーバーキャッシュ削除', 'url' => ['admin' => true, 'plugin' => null, 'controller' => 'site_configs', 'action' => 'del_cache'], 'options' => ['confirm' => 'サーバーキャッシュを削除します。いいですか？']]
+			]
+		]
+	],
 	// コアプラグイン
-	'corePlugins' => array('Blog', 'Feed', 'Mail', 'Uploader'),
+	'corePlugins' => ['Blog', 'Feed', 'Mail', 'Uploader'],
 	// アップデートキー
 	'updateKey' => 'update',
 	// 管理者グループID
 	'adminGroupId' => 1,
 	// エディター
-	'editors' => array(
+	'editors' => [
 		'none' => 'なし',
 		'BcCkeditor' => 'CKEditor'
-	),
+	],
 	'testTheme' => 'nada-icons',
 	'marketThemeRss' => 'https://market.basercms.net/themes.rss',
 	'marketPluginRss' => 'https://market.basercms.net/plugins.rss',
 	'specialThanks'	=> 'http://basercms.net/special_thanks/special_thanks/ajax_users'
-);
+];
 
 /**
  * システム要件 

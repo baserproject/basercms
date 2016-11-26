@@ -16,6 +16,11 @@
 ?>
 
 
+<script id="AdminMenu" type="application/json">
+<?php echo $this->BcAdmin->getJsonMenu() ?>
+</script>
+
+
 <div id="SideBar">
 	<div id="BtnSideBarOpener">＜</div>
 	<div id="FavoriteArea">

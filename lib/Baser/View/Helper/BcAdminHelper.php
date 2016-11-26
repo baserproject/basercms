@@ -23,6 +23,13 @@ App::uses('AppHelper', 'View/Helper');
 class BcAdminHelper extends AppHelper {
 
 /**
+ * ヘルパー
+ *
+ * @var array
+ */
+	public $helpers = ['BcBaser'];
+
+/**
  * 管理システムグローバルメニューの利用可否確認
  * 
  * @return boolean
@@ -56,6 +63,46 @@ class BcAdminHelper extends AppHelper {
 			return true;
 		}
 		return false;
+	}
+
+	public function getJsonMenu() {
+		ini_set('xdebug.var_display_max_children', -1);
+		ini_set('xdebug.var_display_max_data', -1);
+		ini_set('xdebug.var_display_max_depth', -1);
+
+		$adminMenuGroups = Configure::read('BcApp.adminNavi');
+		if(!$adminMenuGroups) {
+			return null;
+		}
+		if(empty($this->_View->viewVars['user']['user_group_id'])) {
+			return null;
+		}
+		$contents = $adminMenuGroups['Contents'];
+		unset($adminMenuGroups['Contents']);
+		$adminMenuGroups = $contents + $adminMenuGroups;
+		$Permission = ClassRegistry::init('Permission');
+		$covertedAdminMenuGroups = [];
+		foreach($adminMenuGroups as $group => $adminMenuGroup) {
+			if(!isset($adminMenuGroup['siteId'])) {
+				$adminMenuGroup = array_merge(['siteId' => null], $adminMenuGroup);
+			}
+			$adminMenuGroup = array_merge(['name' => $group], $adminMenuGroup);
+			$covertedAdminMenus = [];
+			if(!empty($adminMenuGroup['menus'])) {
+				foreach($adminMenuGroup['menus'] as $menu => $adminMenu) {
+					$adminMenu['name'] = $menu;
+					$url = $this->BcBaser->getUrl($adminMenu['url']);
+					$url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
+					if ($Permission->check($url, $this->_View->viewVars['user']['user_group_id'])) {
+						$adminMenu['url'] = $url;
+						$covertedAdminMenus[] = $adminMenu;
+					}
+				}
+			}
+			$adminMenuGroup['menus'] = $covertedAdminMenus;
+			$covertedAdminMenuGroups[] = $adminMenuGroup;
+		}
+		return json_encode($covertedAdminMenuGroups);
 	}
 
 }
