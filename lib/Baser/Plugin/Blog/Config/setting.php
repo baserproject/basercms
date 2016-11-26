@@ -29,7 +29,7 @@ foreach ($blogContents as $blogContent) {
 	$config['BcApp.adminNavi.Contents.' . 'BlogContent' . $blog['id']] = [
 		'siteId' => $content['site_id'],
 		'title' => $content['title'],
-		'type' => 'mail-content',
+		'type' => 'blog-content',
 		'menus' => [
 			'BlogPostsAdd' . $blog['id'] => ['title' => '記事登録', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'add', $blog['id']]],
 			'BlogPosts' . $blog['id'] => ['title' => '記事一覧', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', $blog['id']]],
