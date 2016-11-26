@@ -44,5 +44,29 @@ bca-icon--"],
 		@extend .#{$fa-css-prefix}-trash;
 	}
 
+	// お気に入り
+	&--favorite {
+		@extend .#{$fa-css-prefix}-heart;
+		&::before { @extend .#{$fa-css-prefix}; }
+	}
+
+	// メニューアイテム
+	&--menuitem {
+		@extend .#{$fa-css-prefix}-angle-right;
+		&::before { @extend .#{$fa-css-prefix}; }
+	}
+
+	// 追加
+	&--add {
+		@extend .#{$fa-css-prefix}-plus-circle;
+		&::before { @extend .#{$fa-css-prefix}; }
+	}
+
+	// 追加
+	&--help {
+		@extend .#{$fa-css-prefix}-life-ring;
+		&::before { @extend .#{$fa-css-prefix}; }
+	}
+
 }
 
