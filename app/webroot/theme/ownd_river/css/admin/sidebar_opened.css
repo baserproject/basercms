@@ -1,0 +1,11 @@
+#Contents {
+	margin-left:220px;
+}
+#FavoriteMenu ul {
+	display:block;
+}
+#SideBar {
+	position:relative;
+	left:0;
+	cursor:auto;
+}
