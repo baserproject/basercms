@@ -17,8 +17,8 @@ if (!empty($user)) {
 	$elementPath = 'submenus' . DS;
 	if (!empty($subMenuElements)) {
 		?>
-		<div id="SubMenu" class="clearfix">
-			<table class="sub-menu">
+		<div id="SubMenu" class="bca-submenu">
+			<table class="sub-menu bca-table-submenu">
 				<?php
 				foreach ($subMenuElements as $subMenuElement) {
 					$plugin = '';

@@ -38,10 +38,19 @@ if (!empty($crumbs)) {
 ?>
 
 
-<div id="Crumb">
+<div id="Crumb" class="bca-crumb">
 	<?php if (!empty($user)): ?>
-		<?php $this->BcBaser->crumbs(' &gt; ') ?>&nbsp;
+		<?php $this->BcBaser->crumbs() ?>
 	<?php else: ?>
 		&nbsp;
 	<?php endif ?>
-<!-- / #Crumb  --></div>
+<!-- / .bca-crumb  --></div>
+
+<nav id="Crumb" class="bca-crumb">
+	<ol>
+		<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="#" itemprop="url"><span itemprop="title" class="bca-icon--home"><span class="bca-icon-label">ホーム</span></span></a></li>
+		<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="#" itemprop="url"><span itemprop="title">コンテンツ一覧</span></a></li>
+		<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="#" itemprop="url"><span itemprop="title">新着情報設定</span></a></li>
+		<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title">[新着情報] 記事一覧</span></li>
+	</ol>
+<!-- / .bca-crumb  --></nav>

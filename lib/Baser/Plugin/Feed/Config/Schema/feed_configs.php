@@ -8,7 +8,7 @@ class FeedConfigsSchema extends CakeSchema {
 
 	public $file = 'feed_configs.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

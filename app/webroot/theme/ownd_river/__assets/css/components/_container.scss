@@ -1,0 +1,25 @@
+/* bca-container
+----------------------------------------------- */
+
+///* ==================================================================== */
+///*    Wrap
+///* ==================================================================== */
+//
+//
+//#Wrap{
+//	min-width:960px;
+//	background-color:#E8E8E8;
+//	padding: 1px 40px 290px 40px;
+//	background-repeat: repeat-x;
+//}
+
+
+
+.bca-container {
+	position: relative;
+	height: auto;
+	min-height: 100%;
+	width: 100%;
+	min-width:960px;
+	padding: 0 0 290px 0;
+}

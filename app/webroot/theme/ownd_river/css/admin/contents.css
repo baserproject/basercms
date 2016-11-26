@@ -44,29 +44,6 @@
 
 }
 
-/* Crumb
------------------------------------------------ */
-#Crumb{
-	color: #CCC;
-	vertical-align: middle;
-	background-color: #333;
-	padding: 8px 10px 7px;
-	vertical-align:middle;
-	font-size:11px;
-	line-height:15px;
-}
-#Crumb  a{
-	color: #BBB;
-	text-decoration: none;
-	vertical-align:baseline;
-}
-#Crumb a:hover{
-	color: #EEE;
-}
-#Crumb strong {
-	color:#FFF;
-}
-
 /* ContentsMenu
 ----------------------------------------------- */
 #ContentsMenu{
@@ -1558,17 +1535,19 @@ ul.jstree-contextmenu li .icon-add-layerd {
 	position: absolute;
     cursor: pointer;
 }
-div.jstree-unpublish-odd{
-    background-color: #BBB;
+div.jstree-unpublish-odd,
+div.jstree-unpublish-even {
+    background-color: #fff;
+
 }
-div.jstree-unpublish-even{
-    background-color: #CBCBCB;
+div.jstree-unpublish-even {
+
 }
 div.jstree-publish-odd{
     background-color: #FFF;
 }
 div.jstree-publish-even{
-    background-color: #F2F2F2;
+    /*background-color: #F2F2F2;*/
 }
 #RelatedContentsSetting .icon-add-layerd {
 	display:inline-block;

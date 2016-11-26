@@ -103,7 +103,6 @@ class MailFieldsController extends MailAppController {
 			$this->render('ajax_index');
 			return;
 		}
-		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] メールフィールド一覧';
 		$this->help = 'mail_fields_index';
 	}
@@ -169,7 +168,6 @@ class MailFieldsController extends MailAppController {
 			}
 		}
 
-		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] 新規メールフィールド登録';
 		$this->help = 'mail_fields_form';
 		$this->render('form');
@@ -221,7 +219,6 @@ class MailFieldsController extends MailAppController {
 		}
 
 		/* 表示設定 */
-		$this->subMenuElements = array('mail_fields');
 		$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] メールフィールド編集： ' . $this->request->data['MailField']['name'];
 		$this->help = 'mail_fields_form';
 		$this->render('form');

@@ -66,10 +66,6 @@ class BcAdminHelper extends AppHelper {
 	}
 
 	public function getJsonMenu() {
-		ini_set('xdebug.var_display_max_children', -1);
-		ini_set('xdebug.var_display_max_data', -1);
-		ini_set('xdebug.var_display_max_depth', -1);
-
 		$adminMenuGroups = Configure::read('BcApp.adminNavi');
 		if(!$adminMenuGroups) {
 			return null;

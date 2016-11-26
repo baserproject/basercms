@@ -55,7 +55,7 @@ class WidgetAreasController extends AppController {
  *
  * @var array
  */
-	public $subMenuElements = array('widget_areas');
+	public $subMenuElements = [];
 
 /**
  * beforeFilter
