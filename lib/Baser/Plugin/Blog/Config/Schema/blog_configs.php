@@ -8,7 +8,7 @@ class BlogConfigsSchema extends CakeSchema {
 
 	public $file = 'blog_configs.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

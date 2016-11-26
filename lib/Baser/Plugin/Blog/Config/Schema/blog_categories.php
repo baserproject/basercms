@@ -8,7 +8,7 @@ class BlogCategoriesSchema extends CakeSchema {
 
 	public $file = 'blog_categories.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;
