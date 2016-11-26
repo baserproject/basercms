@@ -316,20 +316,13 @@ body > #Page {
 	padding: 65px 0;
 }
 
-/* FooterMenu / FooterLink
+/* FooterLink
 ----------------------------------------------- */
 
-#FooterMenu{
-	float: left;
-	background-image: url(../../img/admin/bg_border_2.png);
-	background-repeat: repeat-y;
-	padding:0 30px 0 15px;
-}
-#FooterMenu h2,
 #FooterLink h2{
 	margin-bottom:15px;
 }
-#FooterMenu li,
+
 #FooterLink li{
 /*	padding-right:30px;*/
 	margin:5px 0;
