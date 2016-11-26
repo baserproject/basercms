@@ -1,0 +1,12 @@
+//
+// # アイコン
+//
+@import '../vender/Font-Awesome/font-awesome';
+
+.bca-icon {
+
+	&--edit {
+		@extend .#{$fa-css-prefix}-edit;
+	}
+
+}
