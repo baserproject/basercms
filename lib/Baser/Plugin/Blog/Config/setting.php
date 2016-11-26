@@ -61,7 +61,13 @@ $config['BcContents']['items']['Blog'] = [
 				'plugin'	=> 'blog',
 				'controller'=> 'blog_contents',
 				'action'	=> 'ajax_copy'
-			]
+			],
+            'dblclick'	=> [
+                'admin' => true,
+                'plugin'	=> 'blog',
+                'controller'=> 'blog_posts',
+                'action'	=> 'index'
+            ],
 		]
 	]
 ];
