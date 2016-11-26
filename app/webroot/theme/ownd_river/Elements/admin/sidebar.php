@@ -22,11 +22,63 @@
 
 
 <div id="SideBar">
-	<div id="BtnSideBarOpener">＜</div>
 	<div id="FavoriteArea">
 		<?php $this->BcBaser->element('favorite_menu') ?>
 		<?php $this->BcBaser->element('permission') ?>
-	<!-- / .cbb .clearfix --></div>
+	</div>
+
+	<nav class="bca-nav-main">
+		<h2>管理メニュー</h2>
+		<div class="bca-nav-sub" data-nav-icon="contents" data-nav-closed="false">
+			<h3>コンテンツ管理</h3>
+			<ul aria-hidden="false">
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">コンテンツ一覧</span>
+					</a>
+				</li>
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">新規追加</span>
+					</a>
+				</li>
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">コンテンツ一覧</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="bca-nav-sub" data-nav-icon="mail" data-nav-closed="true">
+			<h3>お問い合わせ</h3>
+			<ul aria-hidden="true">
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">受信メール</span>
+					</a>
+				</li>
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">メールフィールド</span>
+					</a>
+				</li>
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">お問い合わせ設定</span>
+					</a>
+				</li>
+				<li class="bca-nav-item">
+					<a href="#">
+						<span class="bca-nav-item-title">公開ページ</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="bca-nav-sub" data-nav-icon="mail" data-nav-closed="true">
+			<h3>資料請求</h3>
+			<ul aria-hidden="true"></ul>
+		</div>
+	</nav>
 
 <?php if(!empty($this->BcBaser->siteConfig['admin_side_banner'])): ?>
 	<div id="BannerArea">
@@ -36,5 +88,5 @@
 		</ul>
 	</div>
 <?php endif ?>
-
 <!-- / #SideBar --></div>
+
