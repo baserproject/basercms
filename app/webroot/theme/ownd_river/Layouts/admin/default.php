@@ -88,17 +88,15 @@
 			<?php $this->BcBaser->element('sidebar') ?>
 <?php endif ?>
 
-				<div id="Contents" class="clearfix">
+				<div id="Contents" class="bca-content">
+					<div class="cbb bca-content-inner">
+						<?php $this->BcBaser->element('crumbs') ?>
 
-					<div class="cbb">
-
-								<?php $this->BcBaser->element('crumbs') ?>
-
-						<div id="ContentsBody" class="contents-body clearfix">
-
-							<div class="clearfix">
-							<?php $this->BcBaser->element('contents_menu') ?>
-								<h1><?php $this->BcBaser->contentsTitle() ?></h1>
+						<div id="ContentsBody" class="contents-body bca-content-body">
+							<div class="bca-content-body-header">
+								<?php $this->BcBaser->element('contents_menu') ?>
+								<h1 class="bca-content-title"><?php $this->BcBaser->contentsTitle() ?></h1>
+								<a href="" class="bca-btn-add">新規記事追加</a>
 							</div>
 
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
