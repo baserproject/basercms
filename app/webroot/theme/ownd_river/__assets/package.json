@@ -1,0 +1,16 @@
+{
+  "name": "basercms4-theme",
+  "version": "1.0.0",
+  "description": "baserCMS4 Theme",
+  "author": "baserCMS Users Community",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^6.5.3",
+    "browser-sync": "2.18.2",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-postcss": "^6.2.0",
+    "gulp-sass": "^2.3.2",
+    "run-sequence": "^1.2.2"
+  }
+}
