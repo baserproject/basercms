@@ -42,13 +42,14 @@ if(!isset($currentId)) {
                         $options = ['target' => '_blank'];
                     }
                     ?>
-                    <!-- カテゴリのindexページは表示しない -->
+                    <?php
+                    /**
+                     * カテゴリのindexページは表示しない
+                     * ２階層目移行は再帰処理を行わない
+                     */
+                    ?>
                     <?php if ($content['Content']['name'] !== 'index'): ?>
-                        <li><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url'], $options) ?>
-                            <?php if (!empty($content['children'])): ?>
-                                <?php $this->BcBaser->element('contents_menu_head', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
-                            <?php endif ?>
-                        </li>
+                        <li><?php $this->BcBaser->link($content['Content']['title'], $content['Content']['url'], $options) ?></li>
                     <?php endif ?>
                 <?php endif ?>
             <?php endforeach; ?>
