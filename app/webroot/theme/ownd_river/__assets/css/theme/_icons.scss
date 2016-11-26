@@ -70,12 +70,6 @@
 		@include fa-common;
 	}
 
-	// 追加
-	&--help {
-		@extend .#{$fa-css-prefix}-life-ring;
-		@include fa-common;
-	}
-
 	// 制限（鍵)
 	&--permission {
 		@extend .#{$fa-css-prefix}-lock;
@@ -85,6 +79,42 @@
 	// ヘルプ
 	&--help {
 		@extend .#{$fa-css-prefix}-life-ring;
+		@include fa-common;
+	}
+
+	// 一覧
+	&--list {
+		@extend .#{$fa-css-prefix}-list-ul;
+		@include fa-common;
+	}
+
+	// ブログ
+	&--blog {
+		@extend .#{$fa-css-prefix}-file-text-o;
+		@include fa-common;
+	}
+
+	// メール
+	&--mail {
+		@extend .#{$fa-css-prefix}-envelope-o;
+		@include fa-common;
+	}
+
+	// テーマ
+	&--theme {
+		@extend .#{$fa-css-prefix}-paint-brush;
+		@include fa-common;
+	}
+
+	// プラグイン
+	&--plugin {
+		@extend .#{$fa-css-prefix}-puzzle-piece;
+		@include fa-common;
+	}
+
+	// 設定
+	&--setting {
+		@extend .#{$fa-css-prefix}-cog;
 		@include fa-common;
 	}
 

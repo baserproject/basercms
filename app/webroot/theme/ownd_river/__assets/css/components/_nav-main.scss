@@ -1,3 +1,6 @@
 .bca-nav-main {
 	background: $color_background_primary;
+	&-title {
+		display: none;
+	}
 }
