@@ -1,83 +1,12 @@
-/* FavoriteMenu
------------------------------------------------ */
-// #FavoriteArea {
-// 	margin-bottom: 14px;
-//     float: left;
-//     width: 100%;
-//     padding: 0 4px;
-//     -webkit-box-sizing: border-box;
-//     -moz-box-sizing: border-box;
-//     box-sizing: border-box;
-// }
-// #FavoriteMenu {
-//     width: 100%;
-// }
-
-// #FavoriteMenu h2{
-// 	color: #FFF;
-//     background: #333333;
-// 	padding: 6px 10px 0;
-// }
-
-// #FavoriteMenu h2 img {
-//     margin: 0 0 -9px;
-// }
-
-// ul.favorite-menu-list a{
-// 	color: #535A62;
-// 	text-decoration: none;
-// 	display: block;
-// 	padding-top:3px;
-// 	padding-bottom: 3px;
-// 	padding-right: 5px;
-// 	padding-left: 22px;
-// 	background: url(../../img/admin/blt_favorite.png) no-repeat 5px 5px;
-// }
-// #FavoriteMenu a:hover{
-// 	color: #AAA;
-// 	text-decoration: none;
-// }
-// ul.favorite-menu-list{
-// 	padding: 10px 15px;
-// }
-// ul.favorite-menu-list li{
-// 	list-style: none;
-// 	list-style-position: inside;
-// 	margin: 0;
-// 	border:2px solid #FFF;
-// 	background-color:#FFF;
-// 	-webkit-border-radius: 10px;
-// 	-moz-border-radius: 10px;
-// 	border-radius: 10px;
-// }
-// ul.favorite-menu-list li.selected{
-// 	border:2px solid #690;
-// }
-// ul.favorite-menu-list li.ui-sortable-helper {
-// 	border:2px solid #CCC;
-// }
-// .favolite-menu-tools li{
-// 	padding: 50px 0 10px 15px;
-// 	float: left;
-// 	margin-right:5px;
-// }
-// #FavoriteMenu .no-data {
-// 	padding:10px 10px;
-// 	border:3px dotted #CCC;
-// 	background: none;
-// }
-
 .bca-nav-favorite {
-	$base_padding: 12px;
-	$item_padding: 4px;
-	padding: $base_padding;
+	padding: $nav_base_padding;
 	border: 5px solid $color_lightest;
 	background: $color_background_menu;
 	&-title {
 		@extend .bca-icon--favorite;
 		font-size: 16px;
 		font-weight: bold;
-		padding-bottom: #{$base_padding - 4px};
+		padding-bottom: #{$nav_base_padding - 4px};
 		border-bottom: 1px solid $color_border;
 		&-label {
 			display: inline-block;
@@ -87,13 +16,13 @@
 	}
 	&-list {
 		list-style: none;
-		padding: $item_padding 0 $item_padding #{$base_padding - $item_padding};
+		padding: $nav_item_padding 0 $nav_item_padding #{$nav_base_padding - $nav_item_padding};
 		&-item {
 			font-size: 14px;
 			display: block;
 			a {
 				display: block;
-				padding: $item_padding 0 $item_padding $item_padding;
+				padding: $nav_item_padding 0 $nav_item_padding $nav_item_padding;
 				color: $color_text_secondary;
 				@extend .bca-icon--menuitem;
 				&:link,
@@ -114,7 +43,7 @@
 	}
 	&-functions {
 		list-style: none;
-		padding-left: #{$base_padding - $item_padding};
+		padding-left: #{$nav_base_padding - $nav_item_padding};
 		&-add {
 			@extend .bca-icon--add;
 			display: inline-block;

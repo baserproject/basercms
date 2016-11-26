@@ -7,12 +7,12 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../fonts/fontawesome-webfont.eot?v=4.7.0");
-  src: url("../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0") format("embedded-opentype"), url("../fonts/fontawesome-webfont.woff2?v=4.7.0") format("woff2"), url("../fonts/fontawesome-webfont.woff?v=4.7.0") format("woff"), url("../fonts/fontawesome-webfont.ttf?v=4.7.0") format("truetype"), url("../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular") format("svg");
+  src: url("../../fonts/fontawesome-webfont.eot?v=4.7.0");
+  src: url("../../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0") format("embedded-opentype"), url("../../fonts/fontawesome-webfont.woff2?v=4.7.0") format("woff2"), url("../../fonts/fontawesome-webfont.woff?v=4.7.0") format("woff"), url("../../fonts/fontawesome-webfont.ttf?v=4.7.0") format("truetype"), url("../../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular") format("svg");
   font-weight: normal;
   font-style: normal; }
 
-.fa {
+.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -69,10 +69,10 @@
 .fa-pull-right {
   float: right; }
 
-.fa.fa-pull-left {
+.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before {
   margin-right: .3em; }
 
-.fa.fa-pull-right {
+.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before {
   margin-left: .3em; }
 
 /* Deprecated as of 4.4.0 */
@@ -82,10 +82,10 @@
 .pull-left {
   float: left; }
 
-.fa.pull-left {
+.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before {
   margin-right: .3em; }
 
-.fa.pull-right {
+.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before {
   margin-left: .3em; }
 
 .fa-spin {
@@ -161,10 +161,10 @@
 .fa-search:before {
   content: ""; }
 
-.fa-envelope-o:before {
+.fa-envelope-o:before, .bca-icon--mail:before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title:before {
   content: ""; }
 
-.fa-heart:before {
+.fa-heart:before, .bca-icon--favorite:before, .bca-nav-favorite-title:before {
   content: ""; }
 
 .fa-star:before {
@@ -209,7 +209,9 @@
   content: ""; }
 
 .fa-gear:before,
-.fa-cog:before {
+.fa-cog:before,
+.bca-icon--setting:before,
+.bca-nav-sub[data-content-type="system"] .bca-nav-sub-title:before {
   content: ""; }
 
 .fa-trash-o:before {
@@ -239,7 +241,7 @@
 .fa-inbox:before {
   content: ""; }
 
-.fa-play-circle-o:before {
+.fa-play-circle-o:before, .bca-icon--publish:before {
   content: ""; }
 
 .fa-rotate-right:before,
@@ -339,7 +341,7 @@
 .fa-picture-o:before {
   content: ""; }
 
-.fa-pencil:before {
+.fa-pencil:before, .bca-icon--edit:before {
   content: ""; }
 
 .fa-map-marker:before {
@@ -351,7 +353,7 @@
 .fa-tint:before {
   content: ""; }
 
-.fa-edit:before, .bca-icon--edit:before,
+.fa-edit:before,
 .fa-pencil-square-o:before {
   content: ""; }
 
@@ -400,7 +402,7 @@
 .fa-chevron-right:before {
   content: ""; }
 
-.fa-plus-circle:before {
+.fa-plus-circle:before, .bca-icon--add:before, .bca-nav-favorite-functions-add:before {
   content: ""; }
 
 .fa-minus-circle:before {
@@ -473,7 +475,7 @@
 .fa-fire:before {
   content: ""; }
 
-.fa-eye:before {
+.fa-eye:before, .bca-icon--preview:before {
   content: ""; }
 
 .fa-eye-slash:before {
@@ -688,7 +690,7 @@
 .fa-scissors:before {
   content: ""; }
 
-.fa-copy:before,
+.fa-copy:before, .bca-icon--copy:before,
 .fa-files-o:before {
   content: ""; }
 
@@ -707,7 +709,7 @@
 .fa-bars:before {
   content: ""; }
 
-.fa-list-ul:before {
+.fa-list-ul:before, .bca-icon--list:before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title:before {
   content: ""; }
 
 .fa-list-ol:before {
@@ -838,7 +840,7 @@
 .fa-cutlery:before {
   content: ""; }
 
-.fa-file-text-o:before {
+.fa-file-text-o:before, .bca-icon--blog:before, .bca-nav-sub[data-content-type="blog"] .bca-nav-sub-title:before {
   content: ""; }
 
 .fa-building-o:before {
@@ -880,7 +882,7 @@
 .fa-angle-left:before {
   content: ""; }
 
-.fa-angle-right:before {
+.fa-angle-right:before, .bca-icon--menuitem:before, .bca-nav-favorite-list-item a:before, .bca-nav-sub-list-item a:before {
   content: ""; }
 
 .fa-angle-up:before {
@@ -997,7 +999,7 @@
 .fa-eraser:before {
   content: ""; }
 
-.fa-puzzle-piece:before {
+.fa-puzzle-piece:before, .bca-icon--plugin:before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title:before {
   content: ""; }
 
 .fa-microphone:before {
@@ -1474,7 +1476,9 @@
 .fa-life-buoy:before,
 .fa-life-saver:before,
 .fa-support:before,
-.fa-life-ring:before {
+.fa-life-ring:before,
+.bca-icon--help:before,
+.bca-nav-favorite-functions-help:before {
   content: ""; }
 
 .fa-circle-o-notch:before {
@@ -1603,7 +1607,7 @@
 .fa-bell-slash-o:before {
   content: ""; }
 
-.fa-trash:before {
+.fa-trash:before, .bca-icon--delete:before {
   content: ""; }
 
 .fa-copyright:before {
@@ -1615,7 +1619,7 @@
 .fa-eyedropper:before {
   content: ""; }
 
-.fa-paint-brush:before {
+.fa-paint-brush:before, .bca-icon--theme:before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title:before {
   content: ""; }
 
 .fa-birthday-cake:before {
@@ -2031,7 +2035,7 @@
 .fa-pause-circle:before {
   content: ""; }
 
-.fa-pause-circle-o:before {
+.fa-pause-circle-o:before, .bca-icon--unpublish:before {
   content: ""; }
 
 .fa-stop-circle:before {
@@ -2309,8 +2313,97 @@
 .bca-header {
   hoge: hoge; }
 
-.bca-nav-sidemenu {
-  hoge: hoge; }
+.bca-nav-favorite {
+  padding: 12px;
+  border: 5px solid #fff;
+  background: #fafafa; }
+  .bca-nav-favorite-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #cccccc; }
+    .bca-nav-favorite-title-label {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 6px; }
+  .bca-nav-favorite-list {
+    list-style: none;
+    padding: 4px 0 4px 8px; }
+    .bca-nav-favorite-list-item {
+      font-size: 14px;
+      display: block; }
+      .bca-nav-favorite-list-item a {
+        display: block;
+        padding: 4px 0 4px 4px;
+        color: #656565; }
+        .bca-nav-favorite-list-item a:link, .bca-nav-favorite-list-item a:visited {
+          color: #656565; }
+        .bca-nav-favorite-list-item a:hover {
+          text-decoration: none; }
+      .bca-nav-favorite-list-item-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 4px; }
+  .bca-nav-favorite-functions {
+    list-style: none;
+    padding-left: 8px; }
+    .bca-nav-favorite-functions-add {
+      display: inline-block;
+      vertical-align: middle;
+      cursor: pointer;
+      color: #61a82e; }
+    .bca-nav-favorite-functions-help {
+      display: inline-block;
+      vertical-align: middle;
+      cursor: pointer;
+      color: #61a82e;
+      margin-left: 15px; }
+
+.bca-nav-main {
+  background: #f4f5f1; }
+  .bca-nav-main-title {
+    display: none; }
+
+.bca-nav-sub {
+  position: relative;
+  padding: 12px;
+  background: #fafafa; }
+  .bca-nav-sub-title {
+    font-size: 16px;
+    font-weight: bold; }
+    .bca-nav-sub-title-label {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 6px; }
+  .bca-nav-sub:hover .bca-nav-sub-list {
+    display: block; }
+  .bca-nav-sub-list {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 200px;
+    list-style: none;
+    margin-top: 8px;
+    padding: 4px 0 4px 8px;
+    border-top: 1px solid #cccccc;
+    background: #f4f5f1; }
+    .bca-nav-sub-list-item {
+      font-size: 14px;
+      display: block; }
+      .bca-nav-sub-list-item a {
+        display: block;
+        padding: 4px 0 4px 4px;
+        color: #656565; }
+        .bca-nav-sub-list-item a:link, .bca-nav-sub-list-item a:visited {
+          color: #656565; }
+        .bca-nav-sub-list-item a:hover {
+          text-decoration: none;
+          background: #ffffe6; }
+      .bca-nav-sub-list-item-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 4px; }
 
 .bca-table-listup {
   hoge: hoge; }

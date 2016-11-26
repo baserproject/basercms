@@ -1,2 +1,93 @@
 .bca-nav-sub {
+	position: relative;
+	padding: $nav_base_padding;
+	background: $color_background_menu;
+	&-title {
+		font-size: 16px;
+		font-weight: bold;
+		&-label {
+			display: inline-block;
+			vertical-align: middle;
+			margin-left: 6px;
+		}
+	}
+	&:hover &-list {
+		display: block;
+	}
+	&-list {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 100%;
+		width: 200px;
+		list-style: none;
+		margin-top: #{$nav_base_padding - 4px};
+		padding: $nav_item_padding 0 $nav_item_padding #{$nav_base_padding - $nav_item_padding};
+		border-top: 1px solid $color_border;
+		background: $color_background_primary;
+		&-item {
+			font-size: 14px;
+			display: block;
+			a {
+				display: block;
+				padding: $nav_item_padding 0 $nav_item_padding $nav_item_padding;
+				color: $color_text_secondary;
+				@extend .bca-icon--menuitem;
+				&:link,
+				&:visited {
+					// a:link のデフォルト設定を消すまで有効
+					color: $color_text_secondary;
+				}
+				&:hover {
+					text-decoration: none;
+					background: $color_light_primary;
+				}
+			}
+			&-label {
+				display: inline-block;
+				vertical-align: middle;
+				margin-left: 4px;
+			}
+		}
+	}
+
+	&[data-content-type] {
+	}
+
+	&[data-content-type="contents"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--list;
+		}
+	}
+
+	&[data-content-type="blog"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--blog;
+		}
+	}
+
+	&[data-content-type="mail-content"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--mail;
+		}
+	}
+
+	&[data-content-type="theme"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--theme;
+		}
+	}
+
+	&[data-content-type="plugin"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--plugin;
+		}
+	}
+
+	&[data-content-type="system"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--setting;
+		}
+	}
+
 }
