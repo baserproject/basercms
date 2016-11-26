@@ -37,6 +37,7 @@
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
+			'//cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js',
 			'admin/vendors/jquery-2.1.4.min',
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
@@ -54,6 +55,7 @@
 			'admin/libs/adjust_scroll',
 			'admin/libs/jquery.bcUtil',
 			'admin/libs/jquery.bcToken',
+			'admin/sidebar',
 			'admin/startup',
 			'admin/favorite',
 			'admin/permission',

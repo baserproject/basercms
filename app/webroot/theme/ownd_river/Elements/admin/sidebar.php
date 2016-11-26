@@ -15,68 +15,23 @@
  */
 ?>
 
-
-<script id="AdminMenu" type="application/json">
-<?php echo $this->BcAdmin->getJsonMenu() ?>
-</script>
-
-
 <div id="SideBar">
 	<div id="FavoriteArea">
 		<?php $this->BcBaser->element('favorite_menu') ?>
 		<?php $this->BcBaser->element('permission') ?>
 	</div>
 
-	<nav class="bca-nav-main">
-		<h2>管理メニュー</h2>
-		<div class="bca-nav-sub" data-nav-icon="contents" data-nav-closed="false">
-			<h3>コンテンツ管理</h3>
-			<ul aria-hidden="false">
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">コンテンツ一覧</span>
-					</a>
-				</li>
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">新規追加</span>
-					</a>
-				</li>
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">コンテンツ一覧</span>
+	<nav class="bca-nav-main" data-js-tmpl="AdminMenu" hidden>
+		<h2 class="bca-nav-main-title">管理メニュー</h2>
+		<div v-for="content in contentList" class="bca-nav-sub" v-bind:data-content-type="content.type">
+			<h3 class="bca-nav-sub-title"><span class="bca-nav-favorite-title-label">{{ content.title }}</span></h3>
+			<ul class="bca-nav-sub-list">
+				<li v-for="subContent in content.menus" class="bca-nav-sub-list-item">
+					<a v-bind:href="baseURL + subContent.url">
+						<span class="bca-nav-sub-list-item-title">{{ subContent.title }}</span>
 					</a>
 				</li>
 			</ul>
-		</div>
-		<div class="bca-nav-sub" data-nav-icon="mail" data-nav-closed="true">
-			<h3>お問い合わせ</h3>
-			<ul aria-hidden="true">
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">受信メール</span>
-					</a>
-				</li>
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">メールフィールド</span>
-					</a>
-				</li>
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">お問い合わせ設定</span>
-					</a>
-				</li>
-				<li class="bca-nav-item">
-					<a href="#">
-						<span class="bca-nav-item-title">公開ページ</span>
-					</a>
-				</li>
-			</ul>
-		</div>
-		<div class="bca-nav-sub" data-nav-icon="mail" data-nav-closed="true">
-			<h3>資料請求</h3>
-			<ul aria-hidden="true"></ul>
 		</div>
 	</nav>
 
@@ -90,3 +45,6 @@
 <?php endif ?>
 <!-- / #SideBar --></div>
 
+<script id="AdminMenu" type="application/json">
+<?php echo $this->BcAdmin->getJsonMenu() ?>
+</script>
