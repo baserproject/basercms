@@ -57,7 +57,6 @@ class MailMessagesController extends MailAppController {
  *
  * @var array
  */
-	public $subMenuElements = array('mail_fields');
 
 /**
  * beforeFilter
