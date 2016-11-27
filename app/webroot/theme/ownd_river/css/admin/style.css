@@ -4627,12 +4627,13 @@
   clip: auto; }
 
 .bca-btn--publish {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--publish::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--publish:hover {
     text-decoration: none;
@@ -4640,12 +4641,13 @@
     background-color: #fafafa; }
 
 .bca-btn--unpublish {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--unpublish::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--unpublish:hover {
     text-decoration: none;
@@ -4653,12 +4655,13 @@
     background-color: #fafafa; }
 
 .bca-btn--preview {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--preview::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--preview:hover {
     text-decoration: none;
@@ -4666,12 +4669,13 @@
     background-color: #fafafa; }
 
 .bca-btn--edit {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--edit::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--edit:hover {
     text-decoration: none;
@@ -4679,12 +4683,13 @@
     background-color: #fafafa; }
 
 .bca-btn--copy {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--copy::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--copy:hover {
     text-decoration: none;
@@ -4692,12 +4697,13 @@
     background-color: #fafafa; }
 
 .bca-btn--delete {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--delete::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--delete:hover {
     text-decoration: none;
@@ -4705,12 +4711,13 @@
     background-color: #fafafa; }
 
 .bca-btn--favorite {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--favorite::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--favorite:hover {
     text-decoration: none;
@@ -4718,12 +4725,13 @@
     background-color: #fafafa; }
 
 .bca-btn--menuitem {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--menuitem::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--menuitem:hover {
     text-decoration: none;
@@ -4731,12 +4739,13 @@
     background-color: #fafafa; }
 
 .bca-btn--add {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--add::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--add:hover {
     text-decoration: none;
@@ -4747,12 +4756,13 @@
     color: #fff; }
 
 .bca-btn--help {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--help::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--help:hover {
     text-decoration: none;
@@ -4760,12 +4770,13 @@
     background-color: #fafafa; }
 
 .bca-btn--permission {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--permission::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--permission:hover {
     text-decoration: none;
@@ -4773,12 +4784,13 @@
     background-color: #fafafa; }
 
 .bca-btn--help {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--help::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--help:hover {
     text-decoration: none;
@@ -4786,12 +4798,13 @@
     background-color: #fafafa; }
 
 .bca-btn--home {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
-  line-height: 1.4; }
+  line-height: 1.4;
+  text-decoration: none; }
   .bca-btn--home::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--home:hover {
     text-decoration: none;
@@ -4799,15 +4812,16 @@
     background-color: #fafafa; }
 
 .bca-btn--small {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
   line-height: 1.4;
+  text-decoration: none;
   font-size: 13px;
   padding: .5em .8em .4em;
   line-height: 1.2; }
   .bca-btn--small::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--small:hover {
     text-decoration: none;
@@ -4817,14 +4831,15 @@
     font-size: 16px !important; }
 
 .bca-btn--primary {
+  display: inline-block;
   font-size: 14px;
   border-radius: 2px;
   padding: 1em 1em;
   line-height: 1.4;
+  text-decoration: none;
   color: #fff;
   background-color: #61a82e; }
   .bca-btn--primary::before {
-    font-size: 16px;
     margin-right: 4px; }
   .bca-btn--primary:hover {
     text-decoration: none;
