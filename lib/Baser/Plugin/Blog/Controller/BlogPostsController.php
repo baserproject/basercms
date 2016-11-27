@@ -153,6 +153,11 @@ class BlogPostsController extends BlogAppController {
 			return;
 		}
 
+		$this->mainBodyHeaderLinks[] = [
+			'url' => ['action' => 'add', $blogContentId],
+			'title' => '新規記事追加',
+			'class' => 'bca-btn--primary bca-btn--small bca-btn--add',
+		];
 		$this->pageTitle = '[' . strip_tags($this->request->params['Content']['title']) . '] 記事一覧';
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
