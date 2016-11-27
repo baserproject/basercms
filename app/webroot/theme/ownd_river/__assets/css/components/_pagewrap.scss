@@ -1,0 +1,33 @@
+/* bca-pagewrap
+----------------------------------------------- */
+
+///* ==================================================================== */
+///*    Page
+///* ==================================================================== */
+//
+//* html div#Page{
+//	height:100%;
+//}
+//div#Page {
+//	margin:0px auto;
+//	position:relative;
+//	min-height: 100%;
+//	background-color: #E8E8E8;
+//}
+//body > #Page {
+//	height: auto;
+//}
+
+.bca-pagewrap {
+	margin:0px auto;
+	position:relative;
+	min-height: 100%;
+
+	* html & {
+		height:100%;
+	}
+
+	body > & {
+		height: auto;
+	}
+}

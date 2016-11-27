@@ -3,6 +3,11 @@
 //
 @import '../vender/Font-Awesome/font-awesome';
 
+// ラベルテキスト：デフォルトは非表示
+[class*="bca-icon"] .bca-icon-label {
+	display: none;
+}
+
 .bca-icon {
 
 	@mixin fa-common {
@@ -65,6 +70,12 @@
 		@include fa-common;
 	}
 
+	// 制限（鍵)
+	&--permission {
+		@extend .#{$fa-css-prefix}-lock;
+		@include fa-common;
+	}
+
 	// ヘルプ
 	&--help {
 		@extend .#{$fa-css-prefix}-life-ring;
@@ -107,5 +118,10 @@
 		@include fa-common;
 	}
 
-}
+	// HOME
+	&--home {
+		@extend .#{$fa-css-prefix}-home;
+		@include fa-common;
+	}
 
+}

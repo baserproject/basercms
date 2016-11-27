@@ -65,8 +65,7 @@
 	</head>
 
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
-
-		<div id="Page">
+		<div id="Page" class="bca-pagewrap">
 			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box')) ?></div>
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
@@ -82,30 +81,26 @@
 				</div>
 			</div>
 
-				<?php $this->BcBaser->header() ?>
+			<?php $this->BcBaser->header() ?>
 
-			<div id="Wrap" class="clearfix">
+			<div id="Wrap" class="bca-container">
 
 <?php if ($this->name != 'Installations' && $this->name != 'Updaters' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction')) && !empty($user)): ?>
 			<?php $this->BcBaser->element('sidebar') ?>
 <?php endif ?>
 
-				<div id="Contents" class="clearfix">
 
-					<div class="cbb">
+				<main id="Contents" class="bca-main">
+					<div class="cbb bca-main-inner">
+						<?php $this->BcBaser->element('crumbs') ?>
 
-								<?php $this->BcBaser->element('crumbs') ?>
+						<article id="ContentsBody" class="contents-body bca-main-body">
+							<div class="bca-main-body-header">
+								<?php $this->BcBaser->element('contents_menu') ?>
+								<h1 class="bca-main-body-header-title"><?php $this->BcBaser->contentsTitle() ?></h1>
+								<a href="" class="bca-btn--primary bca-btn--small  bca-btn--add">新規記事追加</a>
+							</div>
 
-						
-                        <div id="ContentsBody" class="contents-body bca-content-body">
-                            <div class="bca-content-body-header">
-                                <?php $this->BcBaser->element('contents_menu') ?>
-                                <h1 class="bca-content-title"><?php $this->BcBaser->contentsTitle() ?></h1>
-								<!--
-                                <a href="" class="bca-btn-add">新規記事追加</a>
-								-->
-                            </div>
-							
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
 								<div id="FirstMessage" class="em-box" style="text-align:left">
 									baserCMSへようこそ。<br />
@@ -131,19 +126,17 @@
 
 							<?php $this->BcBaser->content() ?>
 
+						<!-- / bca-main-body --></article>
 
+						<?php if (!empty($user)): ?>
+						<div id="ToTop"><?php $this->BcBaser->link('▲ トップへ', '#Header') ?></div>
+						<?php endif ?>
 
-							<!-- / #ContentsBody .contents-body .clarfix --></div>
+						<!-- / .bca-main-inner --></div>
 
-							<?php if (!empty($user)): ?>
-							<div id="ToTop"><?php $this->BcBaser->link('▲ トップへ', '#Header') ?></div>
-							<?php endif ?>
+				<!-- / .bca-main --></main>
 
-						<!-- / .cbb --></div>
-
-					<!-- / #Contents --></div>
-
-				<!-- / #Wrap .clearfix --></div>
+			<!-- / #Wrap --></div>
 
 <?php $this->BcBaser->footer([], ['cache' => ['key' => '_admin_footer']]) ?>
 

@@ -1,0 +1,141 @@
+//
+// # ボタン
+//
+@import '../vender/Font-Awesome/font-awesome';
+
+.bca-btn {
+
+	@mixin btn-common {
+		font-size:14px;
+		border-radius: 2px;
+		padding: 1em 1em;
+		line-height:1.4;
+		&::before {
+			@extend .#{$fa-css-prefix};
+			font-size: 16px;
+			margin-right: 4px;
+		}
+		&:hover {
+			text-decoration: none;
+			color: $color_text_primary;
+			background-color: $color_background_menu;
+		}
+	}
+
+
+	// 公開
+	&--publish {
+		@extend .#{$fa-css-prefix}-play-circle-o;
+		@include btn-common;
+	}
+
+	// 非公開
+	&--unpublish {
+		@extend .#{$fa-css-prefix}-pause-circle-o;
+		@include btn-common;
+	}
+
+	// 確認
+	&--preview {
+		@extend .#{$fa-css-prefix}-eye;
+		@include btn-common;
+	}
+
+	// 編集
+	&--edit {
+		@extend .#{$fa-css-prefix}-pencil;
+		@include btn-common;
+	}
+
+	// 複製
+	&--copy {
+		@extend .#{$fa-css-prefix}-copy;
+		@include btn-common;
+	}
+
+	// 削除
+	&--delete {
+		@extend .#{$fa-css-prefix}-trash;
+		@include btn-common;
+	}
+
+	// お気に入り
+	&--favorite {
+		@extend .#{$fa-css-prefix}-heart;
+		@include btn-common;
+	}
+
+	// メニューアイテム
+	&--menuitem {
+		@extend .#{$fa-css-prefix}-angle-right;
+		@include btn-common;
+	}
+
+	// 追加
+	&--add {
+		@extend .#{$fa-css-prefix}-plus-circle;
+		@include btn-common;
+		&::before {
+			font-size: 16px;
+			color: #fff;
+		}
+	}
+
+	// 追加
+	&--help {
+		@extend .#{$fa-css-prefix}-life-ring;
+		@include btn-common;
+	}
+
+	// 制限（鍵)
+	&--permission {
+		@extend .#{$fa-css-prefix}-lock;
+		@include btn-common;
+	}
+
+	// ヘルプ
+	&--help {
+		@extend .#{$fa-css-prefix}-life-ring;
+		@include btn-common;
+	}
+
+	// HOME
+	&--home {
+		@extend .#{$fa-css-prefix}-home;
+		@include btn-common;
+	}
+
+	// サイズ
+	// ===========================
+
+	// small
+	&--small {
+		@include btn-common;
+		font-size:13px;
+		padding: .5em .8em .4em;
+		line-height:1.2;
+		&::before {
+			@extend .#{$fa-css-prefix};
+			font-size: 16px !important;
+		}
+	}
+
+	// ステータス
+	// ===========================
+
+	// プライマリー
+	&--primary {
+		@include btn-common;
+		color: #fff;
+		background-color: $color_primary;
+		&::before {
+			@extend .#{$fa-css-prefix};
+			font-size: 16px !important;
+			color: #fff;
+		}
+		&:hover {
+			background-color: $color_secondary;
+		}
+	}
+
+}
