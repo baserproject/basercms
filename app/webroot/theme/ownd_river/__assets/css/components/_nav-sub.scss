@@ -20,6 +20,15 @@
 			display: inline-block;
 			vertical-align: middle;
 			margin-left: 6px;
+			&:link,
+			&:visited {
+				// a:link のデフォルト設定を消すまで有効
+				color: $color_text_secondary;
+			}
+			&:hover {
+				text-decoration: none;
+				color: $color_secondary;
+			}
 		}
 	}
 	&:hover {
@@ -111,6 +120,12 @@
 					}
 				}
 			}
+		}
+	}
+
+	&[data-content-type="dashboard"] {
+		.bca-nav-sub-title {
+			@extend .bca-icon--home;
 		}
 	}
 
