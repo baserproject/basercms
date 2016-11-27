@@ -14,12 +14,11 @@
  * [ADMIN] レイアウト
  */
 ?>
-<?php $this->BcBaser->xmlHeader() ?>
-<?php $this->BcBaser->docType() ?>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 	<head>
+		<meta charset="UTF-8">
 		<meta name="robots" content="noindex,nofollow" />
-		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
 		<?php
 		$this->BcBaser->css(array(

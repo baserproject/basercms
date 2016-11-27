@@ -3,7 +3,7 @@
 	padding: $nav_base_padding;
 	background: $color_background_menu;
 	&-title {
-		font-size: 16px;
+		font-size: 1rem;
 		font-weight: bold;
 		&-label {
 			display: inline-block;
@@ -26,7 +26,7 @@
 		border-top: 1px solid $color_border;
 		background: $color_background_primary;
 		&-item {
-			font-size: 14px;
+			font-size: 0.875rem;
 			display: block;
 			a {
 				display: block;

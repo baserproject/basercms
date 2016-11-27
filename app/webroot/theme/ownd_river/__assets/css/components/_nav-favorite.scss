@@ -4,7 +4,7 @@
 	background: $color_background_menu;
 	&-title {
 		@extend .bca-icon--favorite;
-		font-size: 16px;
+		font-size: 1rem;
 		font-weight: bold;
 		padding-bottom: #{$nav_base_padding - 4px};
 		border-bottom: 1px solid $color_border;
@@ -18,7 +18,7 @@
 		list-style: none;
 		padding: $nav_item_padding 0 $nav_item_padding #{$nav_base_padding - $nav_item_padding};
 		&-item {
-			font-size: 14px;
+			font-size: 0.875rem;
 			display: block;
 			a {
 				display: block;

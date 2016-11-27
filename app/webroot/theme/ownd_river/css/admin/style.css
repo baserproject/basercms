@@ -4836,6 +4836,9 @@
   .bca-btn--primary:hover {
     background-color: #1b6123; }
 
+:root {
+  font-size: 16px; }
+
 /* bca-pagewrap
 ----------------------------------------------- */
 .bca-pagewrap {
@@ -4887,7 +4890,7 @@
   border: 5px solid #fff;
   background: #fafafa; }
   .bca-nav-favorite-title {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     padding-bottom: 8px;
     border-bottom: 1px solid #cccccc; }
@@ -4899,7 +4902,7 @@
     list-style: none;
     padding: 4px 0 4px 8px; }
     .bca-nav-favorite-list-item {
-      font-size: 14px;
+      font-size: 0.875rem;
       display: block; }
       .bca-nav-favorite-list-item a {
         display: block;
@@ -4929,6 +4932,8 @@
       margin-left: 15px; }
 
 .bca-nav-main {
+  position: relative;
+  z-index: 9000;
   background: #f4f5f1; }
   .bca-nav-main-title {
     display: none; }
@@ -4938,7 +4943,7 @@
   padding: 12px;
   background: #fafafa; }
   .bca-nav-sub-title {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold; }
     .bca-nav-sub-title-label {
       display: inline-block;
@@ -4958,7 +4963,7 @@
     border-top: 1px solid #cccccc;
     background: #f4f5f1; }
     .bca-nav-sub-list-item {
-      font-size: 14px;
+      font-size: 0.875rem;
       display: block; }
       .bca-nav-sub-list-item a {
         display: block;
