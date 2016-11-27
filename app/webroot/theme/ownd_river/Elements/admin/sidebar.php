@@ -15,7 +15,7 @@
  */
 ?>
 
-<div id="SideBar">
+<div id="SideBar" class="bca-navigations">
 	<div id="FavoriteArea">
 		<?php $this->BcBaser->element('favorite_menu') ?>
 		<?php $this->BcBaser->element('permission') ?>

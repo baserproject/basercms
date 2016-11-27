@@ -4839,26 +4839,12 @@
 :root {
   font-size: 16px; }
 
-/* bca-pagewrap
------------------------------------------------ */
-.bca-pagewrap {
-  margin: 0px auto;
-  position: relative;
-  min-height: 100%; }
-  * html .bca-pagewrap {
-    height: 100%; }
-  body > .bca-pagewrap {
-    height: auto; }
-
 /* bca-container
 ----------------------------------------------- */
 .bca-container {
   position: relative;
   height: auto;
-  min-height: 100%;
-  width: 100%;
-  min-width: 960px;
-  padding: 0 0 290px 0; }
+  display: flex; }
 
 /* bca-main
 ----------------------------------------------- */
@@ -4867,10 +4853,13 @@
 /* ==================================================================== */
 .bca-main {
   position: relative;
-  height: 100%;
-  margin-left: 208px; }
+  height: 100%; }
   .bca-main-inner {
     padding: 0 30px 0 30px; }
+    .bca-main-inner::after {
+      content: "";
+      display: block;
+      clear: both; }
   .bca-main-body-header {
     padding: 20px 20px;
     background-color: #F4F5F1; }
@@ -4884,6 +4873,75 @@
 
 .bca-header {
   hoge: hoge; }
+
+/* ==================================================================== */
+/*    Footer
+/* ==================================================================== */
+/* Footer
+----------------------------------------------- */
+#FooterInner {
+  background-image: url(../../img/admin/bg_footer.png);
+  background-repeat: repeat-x;
+  background-color: #333;
+  color: #EEE;
+  padding: 40px 30px 60px;
+  margin: 0;
+  min-width: 960px; }
+
+#FooterInner a {
+  color: #BBB;
+  text-decoration: none; }
+
+#FooterInner a:hover {
+  color: #EEE; }
+
+/* FooterLogo
+----------------------------------------------- */
+#FooterLogo {
+  width: 190px;
+  float: left;
+  padding: 65px 0; }
+
+/* FooterLink
+----------------------------------------------- */
+#FooterLink h2 {
+  margin-bottom: 15px; }
+
+#FooterLink li {
+  /*	padding-right:30px;*/
+  margin: 5px 0;
+  background: url(../../img/admin/blt_list_2.png) no-repeat left center;
+  padding-left: 15px;
+  line-height: 18px; }
+
+#FooterLink {
+  float: left;
+  background-image: url(../../img/admin/bg_border_2.png);
+  background-repeat: repeat-y;
+  padding-left: 15px; }
+
+/* FooterBanner
+----------------------------------------------- */
+#FooterBanner {
+  padding-top: 5px;
+  margin-bottom: 15px; }
+
+#FooterBanner li {
+  text-align: right;
+  padding: 0px 20px; }
+
+#FooterBanner li img {
+  vertical-align: bottom; }
+
+#FooterBanner li.lastChild {
+  margin-top: 7px; }
+
+.bca-footer {
+  width: 100%;
+  min-width: 960px; }
+
+.bca-navigations {
+  flex-basis: 208px; }
 
 .bca-nav-favorite {
   padding: 12px;

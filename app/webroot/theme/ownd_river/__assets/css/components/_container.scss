@@ -13,13 +13,10 @@
 //	background-repeat: repeat-x;
 //}
 
-
-
 .bca-container {
 	position: relative;
 	height: auto;
-	min-height: 100%;
-	width: 100%;
-	min-width:960px;
-	padding: 0 0 290px 0;
+	display: flex;
+	// width: 100%;
+	// min-width:960px;
 }
