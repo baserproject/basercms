@@ -125,7 +125,7 @@ class BcAppHelper extends Helper {
 					if (property_exists($this->_View, 'adminTheme') && $this->_View->adminTheme) {
 						if (file_exists($themePath = Configure::read('App.www_root') . 'theme' . DS . $this->_View->adminTheme . DS . $file)) {
 							$adminTheme = $this->_View->adminTheme . '/';
-							if ($baseUrl) {
+							if (!empty($baseUrl)) {
 								// スマートURLオフ
 								$webPath = Configure::read('App.baseUrl') . "/theme/" . $adminTheme . $asset[0];
 							} else {
