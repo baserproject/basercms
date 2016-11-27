@@ -6,7 +6,7 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.View
- * @since			baserCMS v 2.0.0
+ * @since			baserCMS v 4.1.0
  * @license			http://basercms.net/license/index.html
  */
 
@@ -99,37 +99,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				</li>
 				<?php if (!empty($user) && in_array('admin', $currentUserAuthPrefixes)): ?>
 					<li>
-						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
-						<div id="SystemMenu"><div>
-								<?php 
-								$adminSitemap = Configure::read('BcApp.adminNavi');
-								$isAdminGlobalmenuUsed = $this->BcAdmin->isAdminGlobalmenuUsed();
-								?>
-								<?php foreach ($adminSitemap as $key => $package): ?>
-									<?php 
-									if(!$isAdminGlobalmenuUsed && $key == 'core') {
-										continue;
-									}
-									?>
-									<?php if (empty($package['name'])): ?>
-										<?php $package['name'] = $key ?>
-									<?php endif ?>
-									<h2><?php echo $package['name'] ?></h2>
-									<?php if (!empty($package['contents'])): ?>
-										<ul class="clearfix">
-											<?php foreach ($package['contents'] as $contents): ?>
-												<?php
-												$options =  ['title' => $contents['name']];
-												if(!empty($contents['options'])){
-													$options = array_merge($options, $contents['options']);
-												}
-												?>
-												<li><?php $this->BcBaser->link($contents['name'], $contents['url'], $options) ?></li>
-											<?php endforeach ?>
-										</ul>
-									<?php endif ?>
-								<?php endforeach ?>
-							</div></div>
+						<?php $this->BcBaser->link('キャッシュクリア', array('controller' => 'site_configs', 'action' => 'del_cache'), array('confirm' => "キャッシュクリアします。いいですか？")) ?>　
 					</li>
 				<?php endif ?>
 			</ul>
