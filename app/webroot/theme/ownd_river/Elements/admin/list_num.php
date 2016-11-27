@@ -38,7 +38,7 @@ if ($links) {
 
 
 <?php if ($link): ?>
-	<div class="list-num">
+	<div class="list-num bca-list-num">
 		<strong>表示件数</strong><p><?php echo $link ?></p>
 	</div>
 <?php endif ?>

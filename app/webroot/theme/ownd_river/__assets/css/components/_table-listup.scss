@@ -128,8 +128,12 @@
 .bca-table-listup {
 	border-top: 1px solid #ccc;
 	border-collapse: collapse;
-	margin-bottom:15px;
 	width:100%;
+	.bca-main-body & {
+		margin-top:15px;
+		margin-bottom:15px;
+	}
+
 	thead {
 		th {
 			vertical-align:middle;
@@ -146,7 +150,7 @@
 	tbody {
 		th,td {
 			border: none;
-			border-bottom: 1px solid #ccc;
+			border-bottom: 1px solid #ccc !important;
 		}
 		td {
 			padding:10px 20px;
