@@ -62,7 +62,19 @@
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
-			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span>
+			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span
+			<?php if ( !empty($data['Content']['name']) ) : ?>
+			<span class="jstree-url"><?php
+				$name = urldecode($data['Content']['name']);
+				$prefix = $this->Text->truncate($name, 20);
+                $safix =  $this->Text->tail($name, 20);
+                if ( $prefix == $safix ) {
+                    echo $prefix;
+                } else {
+                    echo $prefix.$safix;
+                }
+            ?></span>
+			<?php endif; ?>
 			<?php if(!empty($data['children'])): ?>
 				<?php $this->BcBaser->element('admin/contents/index_list_tree', array('datas' => $data['children'])) ?>
 			<?php endif ?>
