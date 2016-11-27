@@ -38,8 +38,10 @@ if (!empty($crumbs)) {
 }
 ?>
 
+<?php if (!empty($user)): ?>
 <nav id="Crumb" class="bca-crumb">
 	<ol>
 		<?php $this->BcBaser->crumbs("\n", false, true) ?>
 	</ol>
 <!-- / .bca-crumb  --></nav>
+<?php endif; ?>

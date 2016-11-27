@@ -29,10 +29,12 @@
 ?>
 
 <!-- 新規追加 -->
+<!--
 <div class="">
 	<?php $this->BcBaser->link(
 		'新規記事追加', array('action' => 'add', $blogContent['BlogContent']['id']), array('class'=>'bca-btn--small  bca-btn--add')) ?>
 </div>
+-->
 
 <!-- 一括処理 -->
 <?php if ($this->BcBaser->isAdminUser()): ?>

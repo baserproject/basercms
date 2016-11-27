@@ -526,8 +526,8 @@ class UsersController extends AppController {
 				$this->setMessage('メール送信時にエラーが発生しました。', true, false);
 				return;
 			}
-			$this->setMessage('$email . \' 宛に新しいパスワードを送信しました。', true, false);
-			$this->request->data = array();
+			$this->setMessage($email. '宛に新しいパスワードを送信しました。', true, false);
+			$this->redirect(['action' => 'login']);
 		}
 	}
 
