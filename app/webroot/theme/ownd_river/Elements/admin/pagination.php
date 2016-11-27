@@ -29,16 +29,20 @@ if (isset($this->Paginator->params['paging'][$this->Paginator->defaultModel()]['
 ?>
 
 
-<div class="pagination">
+<div class="pagination bca-pagination">
 
 	<?php if ($pageCount > 1): ?>
-		<div class="page-numbers">
-			<?php echo $this->Paginator->prev('< 前へ', array_merge(array('class' => 'prev'), $options), null, array('class' => 'prev disabled')) ?>
+		<div class="page-numbers bca-page-numbers">
+			<?php echo $this->Paginator->prev(' < ', array_merge(array('class' => 'prev'), $options), null, array('class' => 'prev disabled')) ?>
+			<?php // ToDo : 我流 アイコンのリンクがHTMLで指定できるように
+			//echo $this->Paginator->prev('<span class="bca-icon--arrow-left"><span class="bca-icon-label">前へ</span>', array_merge(array('class' => 'prev'), $options), null, array('class' => 'prev disabled')) ?>
 			<?php echo $this->Html->tag('span', $this->Paginator->numbers(array_merge(array('separator' => '', 'class' => 'number', 'modulus' => $modules), $options), array('class' => 'page-numbers'))) ?>
-			<?php echo $this->Paginator->next('次へ >', array_merge(array('class' => 'next'), $options), null, array('class' => 'next disabled')) ?>
+			<?php echo $this->Paginator->next(' > ', array_merge(array('class' => 'next'), $options), null, array('class' => 'next disabled')) ?>
+			<?php // ToDo : 我流 アイコンのリンクがHTMLで指定できるように
+			//echo $this->Paginator->next('<span class="bca-icon--arrow-right"><span class="bca-icon-label">次へ</span>', array_merge(array('class' => 'next'), $options), null, array('class' => 'next disabled')) ?>
 		</div>
 	<?php endif ?>
-	<div class="page-result">
+	<div class="page-result bca-page-result">
 		<?php echo $this->Paginator->counter(array('format' => '<span class="page-start-num">%start%</span>～<span class="page-end-num">%end%</span> 件 ／ <span class="page-total-num">%count%</span> 件')) ?>
 	</div>
 </div>

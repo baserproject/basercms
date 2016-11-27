@@ -124,4 +124,14 @@
 		@include fa-common;
 	}
 
+	// 矢印　右
+	&--arrow-right {
+		@extend .#{$fa-css-prefix}-angle-right;
+		@include fa-common;
+	}
+	// 矢印　左
+	&--arrow-left {
+		@extend .#{$fa-css-prefix}-angle-left;
+		@include fa-common;
+	}
 }

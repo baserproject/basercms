@@ -7,21 +7,34 @@
 
 	@mixin btn-common {
 		display: inline-block;
+		//margin:0 0.6em;
 		font-size: 14px;
-		border-radius: 2px;
-		padding: 1em 1em;
-		line-height:1.4;
+		font-size: 0.88rem; // 16px × 0.88 = 14.08 ;
+		border-radius: 3px;
+		padding: 0.9558em 1em 0.76em;
+		line-height:1.2;
+		border: 1px solid #ccc;
+
+		color: $color_text_primary;
 		text-decoration: none;
+		background-image:linear-gradient(rgb(255,255,255) 10%,rgb(244,245,241) 100%);
+		transition: all .5s ease-out 0s;
+
 		&::before {
 			@extend .#{$fa-css-prefix};
 			margin-right: 4px;
+			color: $color_text_primary;
 		}
 		&:hover {
 			text-decoration: none;
 			color: $color_text_primary;
 			background-color: $color_background_menu;
+			background-image:linear-gradient(rgb(255,255,255) 100%,rgb(255,255,255) 100%);
 		}
 	}
+
+	// デフォルトボタン
+	@include btn-common;
 
 	// 公開
 	&--publish {
@@ -75,13 +88,21 @@
 	&--add {
 		@extend .#{$fa-css-prefix}-plus-circle;
 		@include btn-common;
+		color: #fff;
+		border: none;
+		background: $color_primary;
 		&::before {
-			font-size: 16px;
+			@extend .#{$fa-css-prefix};
+			//font-size: 16px !important;
 			color: #fff;
+		}
+		&:hover {
+			color: #fff;
+			background: $color_secondary;
 		}
 	}
 
-	// 追加
+	// ヘルプ
 	&--help {
 		@extend .#{$fa-css-prefix}-life-ring;
 		@include btn-common;
@@ -108,12 +129,34 @@
 	// サイズ
 	// ===========================
 
+	// large
+	&--large {
+		font-size: 1.1rem; // 16px *
+		//padding: .5em .8em .4em;
+		&::before {
+			@extend .#{$fa-css-prefix};
+			font-size: 16px !important;
+		}
+	}
+
 	// small
 	&--small {
-		@include btn-common;
-		font-size:13px;
-		padding: .5em .8em .4em;
-		line-height:1.2;
+		font-size:14px;
+		font-size: 0.91rem;
+		padding: .4em .8em .5em;
+
+		&::before {
+			@extend .#{$fa-css-prefix};
+			font-size: 16px !important;
+		}
+	}
+
+	// xsmall
+	&--xsmall {
+		font-size:12px;
+		font-size: 0.78rem;
+		padding: .4em .8em .5em;
+
 		&::before {
 			@extend .#{$fa-css-prefix};
 			font-size: 16px !important;
@@ -127,15 +170,20 @@
 	&--primary {
 		@include btn-common;
 		color: #fff;
-		background-color: $color_primary;
+		background: $color_primary;
 		&::before {
 			@extend .#{$fa-css-prefix};
-			font-size: 16px !important;
 			color: #fff;
 		}
 		&:hover {
-			background-color: $color_secondary;
+			background: $color_secondary;
 		}
 	}
 
+	// disabled
+	&[disabled] {
+		color: #aaa;
+		border-color: #ddd;
+		//background: #eee;
+	}
 }
