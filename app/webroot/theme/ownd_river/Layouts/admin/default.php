@@ -96,7 +96,7 @@
 							<div class="bca-main-body-header">
 								<?php $this->BcBaser->element('contents_menu') ?>
 								<h1 class="bca-main-body-header-title"><?php $this->BcBaser->contentsTitle() ?></h1>
-								<a href="" class="bca-btn--primary bca-btn--small  bca-btn--add">新規記事追加</a>
+								<a href="" class="bca-btn--small  bca-btn--add">新規記事追加</a>
 							</div>
 
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>

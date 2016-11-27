@@ -18,7 +18,7 @@
 		color: $color_text_primary;
 		text-decoration: none;
 		background-image:linear-gradient(rgb(255,255,255) 10%,rgb(244,245,241) 100%);
-		transition: all 1s ease-out 0s;
+		transition: all .5s ease-out 0s;
 
 		&::before {
 			@extend .#{$fa-css-prefix};
@@ -29,7 +29,7 @@
 			text-decoration: none;
 			color: $color_text_primary;
 			background-color: $color_background_menu;
-			background-image: none;
+			background-image:linear-gradient(rgb(255,255,255) 100%,rgb(255,255,255) 100%);
 		}
 	}
 
@@ -89,6 +89,7 @@
 		@extend .#{$fa-css-prefix}-plus-circle;
 		@include btn-common;
 		color: #fff;
+		border: none;
 		background: $color_primary;
 		&::before {
 			@extend .#{$fa-css-prefix};
@@ -96,6 +97,7 @@
 			color: #fff;
 		}
 		&:hover {
+			color: #fff;
 			background: $color_secondary;
 		}
 	}
@@ -139,6 +141,18 @@
 
 	// small
 	&--small {
+		font-size:14px;
+		font-size: 0.91rem;
+		padding: .4em .8em .5em;
+
+		&::before {
+			@extend .#{$fa-css-prefix};
+			font-size: 16px !important;
+		}
+	}
+
+	// xsmall
+	&--xsmall {
 		font-size:12px;
 		font-size: 0.78rem;
 		padding: .4em .8em .5em;
@@ -166,4 +180,10 @@
 		}
 	}
 
+	// disabled
+	&[disabled] {
+		color: #aaa;
+		border-color: #ddd;
+		//background: #eee;
+	}
 }

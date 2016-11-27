@@ -29,16 +29,16 @@
 ?>
 
 <!-- 新規追加 -->
-<div>
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
+<div class="">
+	<?php $this->BcBaser->link(
+		'新規記事追加', array('action' => 'add', $blogContent['BlogContent']['id']), array('class'=>'bca-btn--small  bca-btn--add')) ?>
 </div>
 
 <!-- 一括処理 -->
 <?php if ($this->BcBaser->isAdminUser()): ?>
-	<div>
-
+	<div class="bca-action-table-listup">
 		<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '公開', 'unpublish' => '非公開', 'del' => '削除'), 'empty' => '一括処理')) ?>
-		<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+		<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled' , 'class' => 'bca-btn bca-btn--small')) ?>
 	</div>
 <?php endif ?>
 
