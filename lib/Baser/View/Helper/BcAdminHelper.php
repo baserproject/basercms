@@ -81,6 +81,11 @@ class BcAdminHelper extends AppHelper {
 		foreach($adminMenuGroups as $group => $adminMenuGroup) {
 			if(!isset($adminMenuGroup['siteId'])) {
 				$adminMenuGroup = array_merge(['siteId' => null], $adminMenuGroup);
+			} else {
+				$adminMenuGroup['siteId'] = (int) $adminMenuGroup['siteId'];
+			}
+			if(!isset($adminMenuGroup['type'])) {
+				$adminMenuGroup = array_merge(['type' => null], $adminMenuGroup);
 			}
 			$adminMenuGroup = array_merge(['name' => $group], $adminMenuGroup);
 			$covertedAdminMenus = [];
@@ -98,7 +103,15 @@ class BcAdminHelper extends AppHelper {
 			$adminMenuGroup['menus'] = $covertedAdminMenus;
 			$covertedAdminMenuGroups[] = $adminMenuGroup;
 		}
-		return json_encode($covertedAdminMenuGroups);
+		$menuSettings = [
+			'currentSiteId' => null,
+			'menuList' => $adminMenuGroups
+		];
+//		ini_set('xdebug.var_display_max_children', -1);
+//		ini_set('xdebug.var_display_max_data', -1);
+//		ini_set('xdebug.var_display_max_depth', -1);
+//		var_dump($menuSettings);
+		return json_encode($menuSettings);
 	}
 
 }
