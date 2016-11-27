@@ -20,25 +20,16 @@ if (!empty($this->request->params['prefix'])) {
 }
 ?>
 
-
-<div id="Header" class="clearfix">
+<header id="Header" class="bca-header clearfix">
 	<?php $this->BcBaser->element('toolbar') ?>
 	<?php if ($this->name == 'Installations' || ('/' . $this->request->url == Configure::read('BcAuthPrefix.admin.loginAction')) || (@$this->request->params['prefix'] == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>
-		<div class="clearfix" id="HeaderInner">
+		<div class="clearfix" id="HeaderInner" hidden>
 
 			<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>
-				<div id="GlobalMenu">
-					<ul class="clearfix">
-						<li id="GlobalMenu1"><?php $this->BcBaser->link('コンテンツ管理', array('plugin' => '', 'controller' => 'contents', 'action' => 'index')) ?></li>
-						<li id="GlobalMenu2"><?php $this->BcBaser->link('ウィジェット管理', array('plugin' => '', 'controller' => 'widget_areas', 'action' => 'index')) ?></li>
-						<li id="GlobalMenu3"><?php $this->BcBaser->link('テーマ管理', array('plugin' => '', 'controller' => 'themes', 'action' => 'index')) ?></li>
-						<li id="GlobalMenu4"><?php $this->BcBaser->link('プラグイン管理', array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')) ?></li>
-						<li id="GlobalMenu5"><?php $this->BcBaser->link('システム管理', array('plugin' => '', 'controller' => 'site_configs', 'action' => 'form')) ?></li>
-					</ul>
-				</div>
+				<div id="GlobalMenu" hidden></div>
 			<?php endif ?>
 
-			<div id="Logo">
+			<div id="Logo" hidden>
 				<?php if (!empty($user)): ?>
 					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_header.png', array('width' => 153, 'height' => 30, 'alt' => 'baserCMS')), array('plugin' => null, 'controller' => 'dashboard', 'action' => 'index')) ?>
 				<?php else: ?>
@@ -48,4 +39,4 @@ if (!empty($this->request->params['prefix'])) {
 
 		</div>
 	<?php endif ?>
-<!-- / #Header .clearfix --></div>
+</header>
