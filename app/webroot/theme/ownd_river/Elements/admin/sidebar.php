@@ -29,7 +29,9 @@
 			</h3>
 		</div>
 		<div v-for="content in contentList" class="bca-nav-sub" v-bind:data-content-type="content.type" v-bind:data-content-is-current="content.current">
-			<h3 class="bca-nav-sub-title"><span class="bca-nav-sub-title-label">{{ content.title }}</span></h3>
+			<h3 class="bca-nav-sub-title">
+				<a v-bind:href="baseURL + content.url" class="bca-nav-sub-title-label">{{ content.title }}</a>
+			</h3>
 			<ul class="bca-nav-sub-list">
 				<li v-for="subContent in content.menus" class="bca-nav-sub-list-item" v-bind:data-sub-content-is-current="subContent.current">
 					<a v-bind:href="baseURL + subContent.url">

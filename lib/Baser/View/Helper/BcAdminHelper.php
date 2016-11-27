@@ -111,6 +111,9 @@ class BcAdminHelper extends AppHelper {
 					$url = $this->BcBaser->getUrl($adminMenu['url']);
 					$url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
 					if ($Permission->check($url, $this->_View->viewVars['user']['user_group_id'])) {
+						if(empty($adminMenuGroup['url'])) {
+							$adminMenuGroup['url'] = $url;
+						}
 						$adminMenu['url'] = $url;
 						$current = false;
 						if(preg_match('/^' . preg_quote($url, '/') . '/', $currentUrl)) {
@@ -133,11 +136,6 @@ class BcAdminHelper extends AppHelper {
 			'currentSiteId' => $currentSiteId,
 			'menuList' => $covertedAdminMenuGroups
 		];
-
-//		ini_set('xdebug.var_display_max_children', -1);
-//		ini_set('xdebug.var_display_max_data', -1);
-//		ini_set('xdebug.var_display_max_depth', -1);
-//		var_dump($menuSettings);
 		return json_encode($menuSettings);
 	}
 
