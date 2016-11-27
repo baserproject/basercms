@@ -22,9 +22,6 @@ list(, $userModel) = pluginSplit($userModel);
 $userController = Inflector::tableize($userModel);
 $this->append('script', <<< CSS_END
 <style type="text/css">
-#Contents {
-	display: none;
-}
 #CreditScroller,#CreditScroller a{
 	color:#333!important;
 }
@@ -40,29 +37,33 @@ html {
 #ToolBar {
 	position:relative;
 }
+.bca-crumb,
+.bca-main-body-header {
+	display: none;
+}
 </style>
 CSS_END
 );
 ?>
 
 <script type="text/javascript">
-	
+
 $(function(){
 
 	if($("#LoginCredit").html() == 1) {
 		$("body").hide();
 	}
-	$("body").prepend($("#Login"));
+	// $("body").prepend($("#Login"));
 	changeNavi("#"+$("#UserModel").html()+"Name");
 	changeNavi("#"+$("#UserModel").html()+"Password");
 
-	$("#"+$("#UserModel").html()+"Name,#"+$("#UserModel").html()+"Password").bind('keyup', function(){
-		if($(this).val()) {
-			$(this).prev().hide();
-		} else {
-			$(this).prev().show();
-		}
-	});
+	// $("#"+$("#UserModel").html()+"Name,#"+$("#UserModel").html()+"Password").bind('keyup', function(){
+	// 	if($(this).val()) {
+	// 		$(this).prev().hide();
+	// 	} else {
+	// 		$(this).prev().show();
+	// 	}
+	// });
 
 	$("#Login").click(function(){
 		changeView(false);
@@ -129,7 +130,7 @@ $(function(){
 
 <div id="UserModel" style="display:none"><?php echo $userModel ?></div>
 <div id="LoginCredit" style="display:none"><?php echo $this->BcBaser->siteConfig['login_credit'] ?></div>
-<div id="Login">
+<div id="Login" class="bca-login">
 
 	<div id="LoginInner">
 		<?php $this->BcBaser->flash() ?>

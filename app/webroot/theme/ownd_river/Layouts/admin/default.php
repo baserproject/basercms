@@ -63,7 +63,7 @@
 	</head>
 
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal">
-		<div id="Page" class="bca-pagewrap">
+		<div id="Page">
 			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
 			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box')) ?></div>
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>

@@ -1,0 +1,71 @@
+/* ==================================================================== */
+/*    Login
+/* ==================================================================== */
+
+#Login {
+
+}
+#LoginInner {
+	margin:119px auto auto 50px;
+	color:#333;
+	padding:50px 50px 94px 50px;
+	width:460px;
+}
+#Login input[type=text],#Login input[type=password] {
+	font-size:18px;
+}
+.login-input {
+	margin-bottom: 5px;
+	margin-right:3px;
+}
+.login-input label {
+	position: absolute;
+	z-index: 1;
+	margin:2px;
+	padding:6px 10px;
+	color:#CCC;
+	font-size:16px;
+	cursor: text;
+}
+#LoginInner .logo {
+	margin-bottom: 20px;
+}
+#LoginInner h1 {
+	font-size:20px;
+	font-weight: bold;
+	margin-bottom:20px;
+}
+#Login .submit {
+	text-align: left;
+}
+#Login .submit input[type=submit] {
+	margin: 4px 2px;
+	padding:3px 10px 4px;
+}
+#Login .login-etc a {
+	color:#999;
+}
+#Login input[type=text], #Login input[type=password] {
+	width:170px;
+	height: 26px;
+}
+
+#Login #flashMessage {
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+}
+#Login #MessageBox .notice-message{
+	border:5px solid #5C8A01;
+	background-color: transparent;
+}
+#Login #MessageBox .alert-message{
+	border:5px solid #F23561;
+	background-color: transparent;
+}
+
+.bca-login {
+	position: relative;
+	z-index: 10000;
+	margin-top: 31px;
+}

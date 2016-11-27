@@ -16,7 +16,7 @@
 ?>
 
 
-<div id="Footer">
+<div id="Footer" class="bca-footer">
 
 	<div id="FooterInner" class="clearfix">
 
