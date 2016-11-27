@@ -553,6 +553,25 @@ class InstallationsController extends AppController {
 		$db = $this->BcManager->connectDb($config);
 
 		if ($db->connected) {
+			//version check
+
+			switch (get_class($db)) {
+				case 'BcMysql' :
+					$result = $db->query("SELECT version() as version");
+					if( version_compare($result[0][0]['version'], '5.0.0') == -1 ) {
+						$this->setMessage("データベースのバージョンを確認してください。", true);
+						return false ;
+					}
+					break;
+				case 'BcPostgres' :
+					$result = $db->query("SELECT version() as version");
+					list(,$version) = explode(" ",$result[0][0]['version']);
+					if( version_compare( trim($version), '8.4.0') == -1 ) {
+						$this->setMessage("データベースのバージョンを確認してください。", true);
+						return false ;
+					}
+					break;
+			}
 
 			/* 一時的にテーブルを作成できるかテスト */
 			$randomtablename = 'deleteme' . rand(100, 100000);
