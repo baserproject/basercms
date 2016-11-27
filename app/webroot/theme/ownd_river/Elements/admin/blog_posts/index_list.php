@@ -28,11 +28,6 @@
  */
 ?>
 
-<!-- 新規追加 -->
-<div>
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
-</div>
-
 <!-- 一括処理 -->
 <?php if ($this->BcBaser->isAdminUser()): ?>
 	<div>
