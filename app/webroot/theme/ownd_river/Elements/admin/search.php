@@ -19,6 +19,11 @@ if (empty($search)) {
 ?>
 
 
+
+<?php if (!empty($search)): ?>
+	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_menu_search.png', array('alt' => '検索', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuSearch')) ?>
+<?php endif ?>
+
 <div id="Search" class="clearfix">
 
 	<h2 class="head">

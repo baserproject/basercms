@@ -48,12 +48,6 @@ a:hover{
 /* head
 ----------------------------------------------- */
 
-.contents-body h1{
-	font-size: 18px;
-	line-height: 22px;
-	font-weight: bold;
-	padding: 15px 0;
-}
 .contents-body h2 {
 	font-size:16px;
 	margin-bottom:15px;
@@ -101,7 +95,7 @@ a:hover{
 ----------------------------------------------- */
 
 .contents-body table {
-	clear:both;
+	/*clear:both;*/
 	padding: 0;
 	margin: 0;
 	white-space: normal;

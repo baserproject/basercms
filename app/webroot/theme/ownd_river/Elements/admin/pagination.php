@@ -29,7 +29,7 @@ if (isset($this->Paginator->params['paging'][$this->Paginator->defaultModel()]['
 ?>
 
 
-<div class="pagination clearfix">
+<div class="pagination">
 
 	<?php if ($pageCount > 1): ?>
 		<div class="page-numbers">

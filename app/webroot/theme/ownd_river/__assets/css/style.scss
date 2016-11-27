@@ -3,9 +3,15 @@
 @import 'theme/var/colors';
 @import 'theme/var/dimensions';
 @import 'theme/icons';
+@import 'theme/btns';
+
+@import 'components/pagewrap';
+@import 'components/container';
+@import 'components/main';
 
 @import 'components/header';
 @import 'components/nav-favorite';
 @import 'components/nav-main';
 @import 'components/nav-sub';
 @import 'components/table-listup';
+@import 'components/crumb';
