@@ -1,4 +1,6 @@
 .bca-nav-main {
+	position: relative;
+	z-index: 9000;
 	background: $color_background_primary;
 	&-title {
 		display: none;
