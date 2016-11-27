@@ -57,8 +57,7 @@
 			'admin/sidebar',
 			'admin/startup',
 			'admin/favorite',
-			'admin/permission',
-			'admin/vendors/yuga'))
+			'admin/permission'))
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>
