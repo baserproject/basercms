@@ -62,7 +62,7 @@
 	"editDisabled":"<?php echo $editDisabled ?>",
 	"manageDisabled":"<?php echo $manageDisabled ?>"
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
-			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span
+			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span>
 			<?php if ( !empty($data['Content']['name']) ) : ?>
 			<span class="jstree-url"><?php
 				$name = urldecode($data['Content']['name']);
