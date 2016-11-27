@@ -14,12 +14,11 @@
  * [ADMIN] レイアウト
  */
 ?>
-<?php $this->BcBaser->xmlHeader() ?>
-<?php $this->BcBaser->docType() ?>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 	<head>
+		<meta charset="UTF-8">
 		<meta name="robots" content="noindex,nofollow" />
-		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
 		<?php
 		$this->BcBaser->css(array(
@@ -58,8 +57,7 @@
 			'admin/sidebar',
 			'admin/startup',
 			'admin/favorite',
-			'admin/permission',
-			'admin/vendors/yuga'))
+			'admin/permission'))
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>
@@ -88,6 +86,7 @@
 <?php if ($this->name != 'Installations' && $this->name != 'Updaters' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction')) && !empty($user)): ?>
 			<?php $this->BcBaser->element('sidebar') ?>
 <?php endif ?>
+
 
 				<main id="Contents" class="bca-main">
 					<div class="cbb bca-main-inner">

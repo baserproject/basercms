@@ -6,13 +6,14 @@
 .bca-btn {
 
 	@mixin btn-common {
-		font-size:14px;
+		display: inline-block;
+		font-size: 14px;
 		border-radius: 2px;
 		padding: 1em 1em;
 		line-height:1.4;
+		text-decoration: none;
 		&::before {
 			@extend .#{$fa-css-prefix};
-			font-size: 16px;
 			margin-right: 4px;
 		}
 		&:hover {
@@ -21,7 +22,6 @@
 			background-color: $color_background_menu;
 		}
 	}
-
 
 	// 公開
 	&--publish {

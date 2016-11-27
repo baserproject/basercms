@@ -136,7 +136,7 @@ strong {
 ----------------------------------------------- */
 .contents-body .section {
 	margin-bottom:60px;
-	clear: both;
+	/*clear: both;*/
 }
 .contents-body .section p {
 	margin-bottom:15px;
