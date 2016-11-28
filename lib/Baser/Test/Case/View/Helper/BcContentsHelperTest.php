@@ -180,8 +180,6 @@ class BcContentsHelperTest extends BaserTestCase {
                 $this->BcContents->settings = $this->loadFixtures('ContentBcContentsHelper');
                 var_dump($this->BcContents->settings);
 		$result = $this->BcContents->isActionAvailable($type, $action, $entityId);
-                var_dump($result);
-                var_dump($expect);
                 $this->assertEquals($expect, $result);
                 }
 
@@ -195,5 +193,34 @@ class BcContentsHelperTest extends BaserTestCase {
 			array('huga', 'hoge', -1, true),
 		);
 	}
+
+
+        
+/**
+ * コンテンツIDよりURLを取得する
+ * getUrlById
+ *
+ * @param $id
+ * @return string
+ * @dataProvider getUrlByIdDataProvider
+ */
+	public function testGetUrlById($id, $full, $expect) {
+//		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
+//		return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
+		$result = $this->BcContents->getUrlById($id, $full);
+                var_dump($result);
+                var_dump($expect);
+                $this->assertEquals($expect, $result);
+                 
+	}
+        public function getUrlByIdDataProvider() {
+		return array(
+			array(1, false, '/'),
+			array(1, true, 'http://localhost/'),
+			array(2, false, '/m/'),
+			array(2, true, 'http://localhost/m/'),
+			array(9, true, 'http://localhost/m/index'),
+		);
+	}               
 
 }
