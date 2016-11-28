@@ -40,7 +40,7 @@
 
 <body id="<?php $this->BcBaser->contentsName(true) ?>">
 <div id="Wrapper">	
-<?php $this->BcBaser->contentsMenu(); ?>
+<?php $this->BcBaser->header() ?>
 
 	<?php if ($this->BcBaser->isHome()): ?>
     <div id="PCMainImage" class="forPC">
