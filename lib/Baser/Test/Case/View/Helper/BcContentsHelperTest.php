@@ -28,8 +28,13 @@ class BcContentsHelperTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
+		'baser.Default.SiteConfig',
 		'baser.Default.Site',
 		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'baser.Default.Permission',
+		'baser.Default.ThemeConfig',
 	);
 
 /**
@@ -38,6 +43,18 @@ class BcContentsHelperTest extends BaserTestCase {
  * @var View
  */
 	protected $_View;
+
+/**
+ * __construct
+ * 
+ * @param string $name
+ * @param array $data
+ * @param string $dataName
+ */
+	public function __construct($name = null, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
+	}
+
 	
 /**
  * setUp
@@ -49,6 +66,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$this->_View = new BcAppView();
 		$this->_View->helpers = array('BcContents');
 		$this->_View->loadHelpers();
+		$this->Page = ClassRegistry::init('BcContent');
 		$this->BcContents  = $this->_View->BcContents;
 	}
 
@@ -126,6 +144,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		);
 	}
 
+      
 /**
  * @dataProvider isSiteRelatedDataProvider
  */
@@ -142,6 +161,39 @@ class BcContentsHelperTest extends BaserTestCase {
 			[false, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => null, 'type' => 'BlogContent']]],
 			[true, ['Site' => ['relate_main_site' => true], 'Content' => ['main_site_content_id' => 1, 'alias_id' => null, 'type' => 'ContentFolder']]]
 		];
+	}
+
+/**
+ * アクションが利用可能かどうか確認する
+ * isActionAvailable
+ *
+ * @param string $type コンテンツタイプ
+ * @param string $action アクション
+ * @param string $type コンテンツを特定するID
+ * @return bool
+ * @dataProvider isActionAvailableDataProvider
+*/
+	public function testIsActionAvailable($type, $action, $entityId, $expect) {
+//		$user = BcUtil::loginUser('admin');
+//		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
+//		return $this->_Permission->check($url, $user['user_group_id']);
+                $this->BcContents->settings = $this->loadFixtures('ContentBcContentsHelper');
+                var_dump($this->BcContents->settings);
+		$result = $this->BcContents->isActionAvailable($type, $action, $entityId);
+                var_dump($result);
+                var_dump($expect);
+                $this->assertEquals($expect, $result);
+                }
+
+        public function isActionAvailableDataProvider() {
+		return array(
+			array('Default', 'admin_index', 1, true),
+			array('ContentFolder', 'admin_index', 2, true),
+			array('Page', 'admin_delete', 2, true),
+			array('MailContent', '_batch_del', 2, true),
+			array('', 'settingForm', '', true),
+			array('huga', 'hoge', -1, true),
+		);
 	}
 
 }
