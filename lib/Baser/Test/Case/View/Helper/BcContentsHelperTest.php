@@ -65,6 +65,7 @@ class BcContentsHelperTest extends BaserTestCase {
         $this->_View->helpers = array('BcContents');
         $this->_View->loadHelpers();
         $this->Page = ClassRegistry::init('BcContent');
+        $this->Site = ClassRegistry::init('Sites');
         $this->BcContents = $this->_View->BcContents;
     }
 
@@ -297,5 +298,26 @@ class BcContentsHelperTest extends BaserTestCase {
         );
     }
 
+    /**
+     * 現在のURLを元に指定したサブサイトのURLを取得する
+     * getCurrentRelatedSiteUrl
+     * フロントエンド専用メソッド
+     * @param string $siteName
+     * @return mixed|string
+     * @dataProvider getCurrentRelatedSiteUrlDataProvider
+     */
+    public function testGetCurrentRelatedSiteUrl($siteName, $expect) {
+        $this->BcContents->request = $this->_getRequest('/');  
+        $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
+        $result = $this->BcContents->getCurrentRelatedSiteUrl($siteName);
+        $this->assertEquals($expect, $result);
+    }
+
+    public function getCurrentRelatedSiteUrlDataProvider() {
+        return [
+            ['smartphone', '/s/'],
+            ['/', ''],
+        ];
+    }
 
 }
