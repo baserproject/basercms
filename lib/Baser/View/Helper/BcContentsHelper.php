@@ -114,7 +114,7 @@ class BcContentsHelper extends AppHelper {
  *
  * @param string $type コンテンツタイプ
  * @param string $action アクション
- * @param string $type コンテンツを特定するID
+ * @param string $entityId コンテンツを特定するID
  * @return bool
  */
         public function isActionAvailable($type, $action, $entityId) {
@@ -238,8 +238,7 @@ class BcContentsHelper extends AppHelper {
  * プレフィックスなしのURLを取得する
  *
  * @param string $url
- * @param string $prefix
- * @param string $alias
+ * @param string $siteId
  * @return mixed
  */
 	public function getPureUrl($url, $siteId) {
@@ -272,8 +271,8 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツリストをツリー構造で取得する
  * 
- * @param $id
- * @param null $level
+ * @param int $id カテゴリID
+ * @param int $level 関連データの階層
  * @param array $options
  * @return array
  */
