@@ -337,5 +337,25 @@ class BcContentsHelperTest extends BaserTestCase {
             ['1',[], False],
         ];
     }
-       
+
+	/**
+	 * 関連サイトのリンク情報を取得する
+	 * フロントエンド専用メソッド
+	 * getRelatedSiteLinks
+	 * @param int $id
+	 * @return array
+	 * @dataProvider getRelatedSiteLinksDataProvider
+	*/
+	public function testGetRelatedSiteLinks($id, $options, $expect) {
+        $this->BcContents->request = $this->_getRequest('/');
+        $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
+        $result = $this->BcContents->getRelatedSiteLinks($id, $options);
+        $this->assertEquals($expect, $result);      
+		}	
+    public function getRelatedSiteLinksDataProvider() {
+        return [
+            [null,['Content'],[['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
+            [1,['Content'], []],
+        ];
+    }	
 }
