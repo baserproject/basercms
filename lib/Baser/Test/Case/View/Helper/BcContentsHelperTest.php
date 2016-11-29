@@ -328,27 +328,9 @@ class BcContentsHelperTest extends BaserTestCase {
      * @dataProvider getRelatedSiteContentsDataProvider
     */
     public function testGetRelatedSiteContents($id, $options, $expect) {
-//            $options = array_merge([
-//                    'excludeIds' => []
-//            ], $options);
-//            $this->_Content->unbindModel(['belongsTo' => ['User']]);
-//            if(!$id && !empty($this->request->params['Content'])) {
-//                    $content = $this->request->params['Content'];
-//                    if($content['main_site_content_id']) {
-//                            $id = $content['main_site_content_id'];
-//                    } else {
-//                            $id = $content['id'];
-//                    }
-//            } else {
-//                    return false;
-//            }
-//            return $this->_Content->getRelatedSiteContents($id, $options);
         $this->BcContents->request = $this->_getRequest('/');
-//        print_r($this->BcContents->request);
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $result = $this->BcContents->getRelatedSiteContents($id, $options);
-        print_r($result);
-        var_dump($expect);
         $this->assertEquals($expect, $result);            
             
     }
