@@ -64,8 +64,6 @@ class BcContentsHelperTest extends BaserTestCase {
         $this->_View = new BcAppView();
         $this->_View->helpers = array('BcContents');
         $this->_View->loadHelpers();
-        $this->Page = ClassRegistry::init('BcContent');
-        $this->Site = ClassRegistry::init('Sites');
         $this->BcContents = $this->_View->BcContents;
     }
 
@@ -315,7 +313,7 @@ class BcContentsHelperTest extends BaserTestCase {
     public function getCurrentRelatedSiteUrlDataProvider() {
         return [
             ['smartphone', '/s/'],
-            ['/', ''],
+            ['hoge', ''],
         ];
     }
     
@@ -331,182 +329,11 @@ class BcContentsHelperTest extends BaserTestCase {
         $this->BcContents->request = $this->_getRequest('/');
         $_SERVER['HTTP_USER_AGENT'] = 'iPhone';
         $result = $this->BcContents->getRelatedSiteContents($id, $options);
-        $this->assertEquals($expect, $result);            
-            
+        $this->assertEquals($expect, $result[0]['Content']['id']);                       
     }
-
     public function getRelatedSiteContentsDataProvider() {
         return [
-            [null,
-                ['Content'],
-                [
-                    ['Content' => ['id' => 4,
-                                'name' => 'index',
-                                'plugin' => 'Core',
-                                'type' => 'Page',
-                                'entity_id' => 1,
-                                'url' => '/index',
-                                'site_id' => 0,
-                                'alias_id' => '',
-                                'main_site_content_id' => '',
-                                'parent_id' => 1,
-                                'lft' => 28,
-                                'rght' => 29,
-                                'level' => 1,
-                                'title' => 'トップページ',
-                                'description' => '',
-                                'eyecatch' => '',
-                                'author_id' => 1,
-                                'layout_template' => '',
-                                'status' => 1,
-                                'publish_begin' => '',
-                                'publish_end' => '',
-                                'self_status' => 1,
-                                'self_publish_begin' => '',
-                                'self_publish_end' => '',
-                                'exclude_search' => '',
-                                'created_date' => '2016-07-29 18:13:03',
-                                'modified_date' => '',
-                                'site_root' => '',
-                                'deleted_date' => '',
-                                'deleted' => '',
-                                'exclude_menu' => '',
-                                'blank_link' => '',
-                                'created' => '2016-07-29 18:13:03',
-                                'modified' => '2016-08-06 17:55:00'
-                                ],
-                      'Site' => ['id' => 0,
-                                'main_site_id' => '',
-                                'name' => '',
-                                'display_name' => 'パソコン',
-                                'title' => 'baserCMS inc. [デモ]',
-                                'alias' => '',
-                                'theme' => 'nada-icons',
-                                'status' => 1,
-                                'use_subdomain' => '',
-                                'domain_type' => '',
-                                'relate_main_site' => '',
-                                'device' => '',
-                                'same_main_url' => '',
-                                'auto_redirect' => '',
-                                'auto_link' => '',
-                                'lang' => '',
-                                'created' => '',
-                                'modified' => ''
-                                ]
-                    ],
-                    ['Content' => ['id' => 9,
-                                'name' => 'index',
-                                'plugin' => 'Core',
-                                'type' => 'Page',
-                                'entity_id' => 6,
-                                'url' => '/m/index',
-                                'site_id' => 1,
-                                'alias_id' => '',
-                                'main_site_content_id' => 4,
-                                'parent_id' => 2,
-                                'lft' => 3,
-                                'rght' => 4,
-                                'level' => 2,
-                                'title' => 'トップページ',
-                                'description' => '',
-                                'eyecatch' => '',
-                                'author_id' => 1,
-                                'layout_template' => '',
-                                'status' => 1,
-                                'publish_begin' => '',
-                                'publish_end' => '',
-                                'self_status' => 1,
-                                'self_publish_begin' => '',
-                                'self_publish_end' => '',
-                                'exclude_search' => '',
-                                'created_date' => '2016-07-29 18:18:05',
-                                'modified_date' => '',
-                                'site_root' => '',
-                                'deleted_date' => '',
-                                'deleted' => '',
-                                'exclude_menu' => '',
-                                'blank_link' => '',
-                                'created' => '2016-07-29 18:18:06',
-                                'modified' => '2016-08-06 17:55:00'
-                                ],
-                      'Site' => ['id' => 1,
-                                'main_site_id' => 0,
-                                'name' => 'mobile',
-                                'display_name' => 'ケータイ',
-                                'title' => 'baserCMS inc.｜ケータイ',
-                                'alias' => 'm',
-                                'theme' => '',
-                                'status' => 1,
-                                'use_subdomain' => '',
-                                'relate_main_site' => '',
-                                'device' => 'mobile',
-                                'lang' => '',
-                                'same_main_url' => '',
-                                'auto_redirect' => 1,
-                                'auto_link' => 1,
-                                'domain_type' => 0,
-                                'created' => '2016-08-01 21:20:15',
-                                'modified' => ''
-                                ]
-                    ],
-                    ['Content' => ['id' => 10,
-                                'name' => 'index',
-                                'plugin' => 'Core',
-                                'type' => 'Page',
-                                'entity_id' => 7,
-                                'url' => '/s/index',
-                                'site_id' => 2,
-                                'alias_id' => '',
-                                'main_site_content_id' => 4,
-                                'parent_id' => 3,
-                                'lft' => 11,
-                                'rght' => 12,
-                                'level' => 2,
-                                'title' => 'トップページ',
-                                'description' => '',
-                                'eyecatch' => '',
-                                'author_id' => 1,
-                                'layout_template' => '',
-                                'status' => 1,
-                                'publish_begin' => '',
-                                'publish_end' => '',
-                                'self_status' => 1,
-                                'self_publish_begin' => '',
-                                'self_publish_end' => '',
-                                'exclude_search' => '',
-                                'created_date' => '2016-07-29 18:19:54',
-                                'modified_date' => '',
-                                'site_root' => '',
-                                'deleted_date' => '',
-                                'deleted' => '',
-                                'exclude_menu' => '',
-                                'blank_link' => '',
-                                'created' => '2016-07-29 18:19:54',
-                                'modified' => '2016-08-06 17:55:00'
-                                ],
-                      'Site' => ['id' => 2,
-                                'main_site_id' => 0,
-                                'name' => 'smartphone',
-                                'display_name' => 'スマートフォン',
-                                'title' => 'baserCMS inc.｜スマホ',
-                                'alias' => 's',
-                                'theme' => '',
-                                'status' => 1,
-                                'use_subdomain' => '',
-                                'relate_main_site' => '',
-                                'device' => 'smartphone',
-                                'lang' => '',
-                                'same_main_url' => '',
-                                'auto_redirect' => 1,
-                                'auto_link' => 1,
-                                'domain_type' => 0,
-                                'created' => '2016-08-01 21:20:15',
-                                'modified' => ''
-                                ]
-                        ]
-                ]
-            ],
+            [null,['Content'],4],
             ['1',[], False],
         ];
     }
