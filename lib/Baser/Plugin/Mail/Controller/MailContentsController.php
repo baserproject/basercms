@@ -67,7 +67,6 @@ class MailContentsController extends MailAppController {
 	public function admin_index() {
 		$listDatas = $this->MailContent->find('all');
 		$this->set('listDatas', $listDatas);
-		$this->subMenuElements = array('mail_common');
 		$this->pageTitle = 'メールフォーム一覧';
 		$this->help = 'mail_contents_index';
 	}
@@ -128,7 +127,6 @@ class MailContentsController extends MailAppController {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
-		$this->subMenuElements = array('mail_common');
 		$this->help = 'mail_contents_form';
 		$this->render('form');
 	}
@@ -174,7 +172,6 @@ class MailContentsController extends MailAppController {
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('publishLink', $this->request->params['Content']['url']);
 		$this->set('mailContent', $this->request->data);
-		$this->subMenuElements = ['mail_fields'];
 		$this->pageTitle = 'メールフォーム設定編集：' . $this->request->data['Content']['title'];
 		$this->help = 'mail_contents_form';
 		$this->render('form');

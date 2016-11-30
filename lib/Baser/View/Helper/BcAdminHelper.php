@@ -23,6 +23,13 @@ App::uses('AppHelper', 'View/Helper');
 class BcAdminHelper extends AppHelper {
 
 /**
+ * ヘルパー
+ *
+ * @var array
+ */
+	public $helpers = ['BcBaser', 'Session'];
+
+/**
  * 管理システムグローバルメニューの利用可否確認
  * 
  * @return boolean
@@ -56,6 +63,80 @@ class BcAdminHelper extends AppHelper {
 			return true;
 		}
 		return false;
+	}
+
+	public function getJsonMenu() {
+		$adminMenuGroups = Configure::read('BcApp.adminNavi');
+		$currentSiteId = $this->Session->read('ContentsAdminIndex.named.site_id');
+		if(!$adminMenuGroups) {
+			return null;
+		}
+		if(empty($this->_View->viewVars['user']['user_group_id'])) {
+			return null;
+		}
+		if(!is_null($currentSiteId)) {
+			$currentSiteId = (int) $currentSiteId;
+		} else {
+			$currentSiteId = 0;
+		}
+		$currentUrl = '/' . $this->request->url;
+		$params = null;
+		if(strpos($currentUrl, '?') !== false) {
+			list($currentUrl, $params) = explode('?', $currentUrl);
+		}
+		$currentUrl = preg_replace('/\/index$/', '/', $currentUrl);
+		if($params) {
+			$currentUrl .= '?' . $params;
+		}
+		$contents = $adminMenuGroups['Contents'];
+		unset($adminMenuGroups['Contents']);
+		$adminMenuGroups = $contents + $adminMenuGroups;
+		$Permission = ClassRegistry::init('Permission');
+		$covertedAdminMenuGroups = [];
+		foreach($adminMenuGroups as $group => $adminMenuGroup) {
+			$adminMenuGroup = array_merge(['current' => false], $adminMenuGroup);
+			if(!isset($adminMenuGroup['siteId'])) {
+				$adminMenuGroup = array_merge(['siteId' => null], $adminMenuGroup);
+			} else {
+				$adminMenuGroup['siteId'] = (int) $adminMenuGroup['siteId'];
+			}
+			if(!isset($adminMenuGroup['type'])) {
+				$adminMenuGroup = array_merge(['type' => null], $adminMenuGroup);
+			}
+			$adminMenuGroup = array_merge(['name' => $group], $adminMenuGroup);
+			$covertedAdminMenus = [];
+			if(!empty($adminMenuGroup['menus'])) {
+				foreach($adminMenuGroup['menus'] as $menu => $adminMenu) {
+					$adminMenu['name'] = $menu;
+					$url = $this->BcBaser->getUrl($adminMenu['url']);
+					$url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
+					if ($Permission->check($url, $this->_View->viewVars['user']['user_group_id'])) {
+						if(empty($adminMenuGroup['url'])) {
+							$adminMenuGroup['url'] = $url;
+						}
+						$adminMenu['url'] = $url;
+						$current = false;
+						if(preg_match('/^' . preg_quote($url, '/') . '/', $currentUrl)) {
+							$current = true;
+						}
+						if($current) {
+							$adminMenu['current'] = true;
+							$adminMenuGroup['current'] = true;
+						} else {
+							$adminMenu['current'] = false;
+						}
+						$covertedAdminMenus[] = $adminMenu;
+					}
+				}
+			}
+			$adminMenuGroup['menus'] = $covertedAdminMenus;
+			$covertedAdminMenuGroups[] = $adminMenuGroup;
+		}
+		$menuSettings = [
+			'currentSiteId' => $currentSiteId,
+			'menuList' => $covertedAdminMenuGroups
+		];
+		return json_encode($menuSettings);
 	}
 
 }

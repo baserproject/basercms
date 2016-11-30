@@ -1,0 +1,36 @@
+/* bca-content-menu
+----------------------------------------------- */
+
+
+///* ContentsMenu
+//----------------------------------------------- */
+//#ContentsMenu{
+//	float: right;
+//	padding: 15px 0;
+//}
+//#ContentsMenu ul{
+//	float: left;
+//}
+//#ContentsMenu ul li{
+//	float: left;
+//	margin-left: 10px;
+//	padding:0;
+//	background: none;
+//}
+
+.bca-content-menu {
+	float: right;
+	padding: 0;
+	ul {
+		li {
+			float: left;
+			margin-left: 1em;
+			font-size: 0.8rem;
+			padding:0;
+			background: none;
+			a {
+				color: $color_text_secondary;
+			}
+		}
+	}
+}

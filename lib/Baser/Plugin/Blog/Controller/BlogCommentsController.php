@@ -46,7 +46,6 @@ class BlogCommentsController extends BlogAppController {
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
 
 		if (BcUtil::isAdminSystem()) {
-			$this->subMenuElements = array('blog_posts');
 			$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
 			$this->Security->enabled = true;
 			$this->Security->requireAuth('add');

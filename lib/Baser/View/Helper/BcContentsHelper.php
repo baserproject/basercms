@@ -93,8 +93,8 @@ class BcContentsHelper extends AppHelper {
 				$setting['url']['icon'] = $this->_getIconUrl($setting['plugin'], $setting['type'], null);
 			}
 			// routes
-			foreach (['manage', 'add', 'edit', 'delete', 'copy'] as $method) {
-				if (empty($setting['routes'][$method]) && !in_array($method, ['copy', 'manage'])) {
+			foreach (['manage', 'add', 'edit', 'delete', 'copy', 'dblclick'] as $method) {
+				if (empty($setting['routes'][$method]) && !in_array($method, ['copy', 'manage', 'dblclick'])) {
 					$setting['routes'][$method] = ['admin' => true, 'controller' => 'contents', 'action' => $method];
 				}
 				if (!empty($setting['routes'][$method])) {
@@ -238,7 +238,7 @@ class BcContentsHelper extends AppHelper {
  * プレフィックスなしのURLを取得する
  *
  * @param string $url
- * @param string $siteId
+ * @param int $siteId
  * @return mixed
  */
 	public function getPureUrl($url, $siteId) {
