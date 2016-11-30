@@ -50,8 +50,7 @@ if(!isset($currentId)) {
                     <?php // ３階層以降は再帰処理を行わない ?>
                     <?php if ($level <= 2): ?>
                         <?php // ２階層目ではカテゴリのindexページを表示しない ?>
-                        <?php if ($level == 2 && $content['Content']['name'] == 'index'): ?>
-                        <?php else: ?>
+                        <?php if (!($level == 2 && $content['Content']['name'] == 'index')): ?>
                             <?php if (!empty($content['children'])): ?>
                                 <li class="dropdown-item">
                             <?php else:?>
