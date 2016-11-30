@@ -397,7 +397,12 @@ class BcContentsHelper extends AppHelper {
 	public function getSiteRoot($siteId) {
 		return $this->_Content->getSiteRoot($siteId);
 	}
-	
+/**
+ * サイトIDからコンテンツIDを取得する
+ * 
+ * @param int $siteId
+ * @return string|bool
+ */		
 	public function getSiteRootId($siteId) {
 		$content = $this->getSiteRoot($siteId);
 		if($content) {

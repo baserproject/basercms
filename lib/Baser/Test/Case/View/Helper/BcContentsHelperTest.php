@@ -340,5 +340,59 @@ class BcContentsHelperTest extends BaserTestCase {
 			['無所属コンテンツ'],
 		];
 	}
+
+/**
+ * データが公開状態にあるか確認する
+ *
+ * @param array $data コンテンツデータ
+ * @param bool $self コンテンツ自身の公開状態かどうか 
+ * @return mixed
+ */
+	public function isAllowPublish() {
+		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	}
+
+/**
+ * 親コンテンツを取得する
+ * 
+ * @param int $contentId
+ * @return mixed
+ */
+	public function getParent() {
+		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	}	
+/**
+ * フォルダリストを取得する
+ * 
+ * @param int $siteId
+ * @param array $options
+ * @return array|bool
+ */	
+	public function getContentFolderList() {
+		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	}
 	
+	public function getSiteRoot() {
+		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
+	}
+	
+/**
+ * サイトIDからコンテンツIDを取得する
+ * getSiteRootId
+ * 
+ * @param int $siteId
+ * @return string|bool
+ * @dataProvider getSiteRootIdDataProvider
+ */	
+	public function testGetSiteRootId($siteId,$expect) {
+		$result = $this->BcContents->getSiteRootId($siteId);
+		$this->assertEquals($expect, $result);                       
+	}
+	public function getSiteRootIdDataProvider() {
+		return [
+			[1,2],
+			// 存在しないサイトIDを指定した場合
+			[4,false],
+		];
+	}
 }
