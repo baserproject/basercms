@@ -25,57 +25,46 @@ class BcContentsHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-    public $fixtures = array(
-        'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-        'baser.Default.SiteConfig',
-        'baser.Default.Site',
-        'baser.Default.User',
-        'baser.Default.UserGroup',
-        'baser.Default.Favorite',
-        'baser.Default.Permission',
-        'baser.Default.ThemeConfig',
-    );
+	public $fixtures = array(
+		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
+		'baser.Default.SiteConfig',
+		'baser.Default.Site',
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'baser.Default.Permission',
+		'baser.Default.ThemeConfig',
+	);
 
 /**
  * View
  * 
  * @var View
  */
-    protected $_View;
-
-/**
- * __construct
- * 
- * @param string $name
- * @param array $data
- * @param string $dataName
- */
-    public function __construct($name = null, array $data = array(), $dataName = '') {
-        parent::__construct($name, $data, $dataName);
-    }
+	protected $_View;
 
 /**
  * setUp
  *
  * @return void
  */
-    public function setUp() {
-        parent::setUp();
-        $this->_View = new BcAppView();
-        $this->_View->helpers = array('BcContents');
-        $this->_View->loadHelpers();
-        $this->BcContents = $this->_View->BcContents;
-    }
+	public function setUp() {
+		parent::setUp();
+		$this->_View = new BcAppView();
+		$this->_View->helpers = array('BcContents');
+		$this->_View->loadHelpers();
+		$this->BcContents = $this->_View->BcContents;
+	}
 
 /**
  * tearDown
  *
  * @return void
  */
-    public function tearDown() {
-        Router::reload();
-        parent::tearDown();
-    }
+	public function tearDown() {
+		Router::reload();
+		parent::tearDown();
+	}
 
 /**
  * ページリストを取得する
@@ -170,10 +159,6 @@ class BcContentsHelperTest extends BaserTestCase {
  * @dataProvider isActionAvailableDataProvider
  */
 	public function testIsActionAvailable($type, $action, $entityId, $userGroup, $expect) {
-//	$user = BcUtil::loginUser('admin');
-//	$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
-//	return $this->_Permission->check($url, $user['user_group_id']);
-		//$this->BcContents->settings = $this->loadFixtures('ContentBcContentsHelper');
 		$_SESSION['Auth'][BcUtil::authSessionKey('admin')]['user_group_id'] = $userGroup;
 		App::uses('BcContentsComponent', 'Controller/Component');
 		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
@@ -183,7 +168,6 @@ class BcContentsHelperTest extends BaserTestCase {
 		$View->helpers = array('BcContents');
 		$View->loadHelpers();
 		$View->BcContents->setup();
-//		print_r($View->BcContents->settings);
 		$result = $View->BcContents->isActionAvailable($type, $action, $entityId);
 		$this->assertEquals($expect, $result);
 	}
@@ -219,26 +203,10 @@ class BcContentsHelperTest extends BaserTestCase {
  *
  * @param $id
  * @return string
- * @dataProvider getUrlByIdDataProvider
+ * 
  */
-	public function testGetUrlById($id, $full, $expect) {
+	public function testGetUrlById() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
-//		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-//		return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
-		$result = $this->BcContents->getUrlById($id, $full);
-//		var_dump($result);
-//		var_dump($expect);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function getUrlByIdDataProvider() {
-		return array(
-			array(1, false, '/'),
-			array(1, true, 'http://localhost/'),
-			array(2, false, '/m/'),
-            array(2, true, 'http://localhost/m/'),
-			array(9, true, 'http://localhost/m/index'),
-		);
 	}
 
 /**
@@ -249,25 +217,10 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param bool $prefix
  * @param bool $useSubDomain
  * @return mixed
- * @dataProvider getUrlDataProvider
+ * 
  */
-	public function testGetUrl($url, $full, $useSubDomain, $expect) {
+	public function testGetUrl() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
-//		return $this->_Content->getUrl($url, $full, $useSubDomain);
-		$result = $this->BcContents->getUrl($url, $full, $useSubDomain);
-//		var_dump($result);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function getUrlDataProvider() {
-		return array(
-			['/', false, false, '/'],
-			['/', true, false, 'http://localhost/'],
-			['/', true, true, 'http://localhost/'],
-			['/admin/', true, true, 'http://localhost/admin/'],
-			['/admin/', false, true, '/admin/'],
-			['/admin/', false, false, '/admin/'],
-		);
 	}
 
 /**
@@ -277,22 +230,10 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param string $url
  * @param int $siteId
  * @return mixed
- * @dataProvider getPureUrlDataProvider
+ * 
  */
-	public function testGetPureUrl($url, $siteId, $expect) {
+	public function testGetPureUrl() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
-//		return $this->_Content->pureUrl($url, $siteId);
-		$result = $this->BcContents->getPureUrl($url, $siteId);
-		$this->assertEquals($expect, $result);
-	}
-
-	public function getPureUrlDataProvider() {
-		return array(
-			['/', 1, '/'],
-			['', '', '/'],
-			['http://192.168.33.10/admin/contents/', 1, '/http://192.168.33.10/admin/contents/'],
-			['admin/contents/', 1, '/admin/contents/'],
-		);
 	}
 
 /**
@@ -313,7 +254,7 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function getCurrentRelatedSiteUrlDataProvider() {
 		return [
 			['smartphone', '/s/'],
-			['/', ''],
+			['hoge', ''],
 		];
 	}
 
@@ -351,7 +292,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$_SERVER['HTTP_USER_AGENT'] = 'iPhone';
 		$result = $this->BcContents->getRelatedSiteLinks($id, $options);
 		$this->assertEquals($expect, $result);      
-		}	
+	}	
 	public function getRelatedSiteLinksDataProvider() {
 		return [
 			[null,['Content'],[['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
@@ -365,7 +306,6 @@ class BcContentsHelperTest extends BaserTestCase {
  * @return string 
 */
 	public function testGetJsonSettings() {
-//		return json_encode($this->settings);
 		App::uses('BcContentsComponent', 'Controller/Component');
 		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
 		$BcContentsComponent->setupAdmin();
@@ -375,10 +315,8 @@ class BcContentsHelperTest extends BaserTestCase {
 		$View->loadHelpers();
 		$View->BcContents->setup();
 		$result = $View->BcContents->getJsonSettings();
-		// JSON形式が正しいかどうか
-		function is_json($result){
-			return is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
-		}
+		// JSON形式が正しいかどうか		
+		return is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;		
 	}
 /**
  * @dataProvider getJsonSettingsDataProvider
