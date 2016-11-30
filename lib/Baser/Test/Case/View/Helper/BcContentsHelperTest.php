@@ -165,7 +165,7 @@ class BcContentsHelperTest extends BaserTestCase {
  *
  * @param string $type コンテンツタイプ
  * @param string $action アクション
- * @param string $entityId コンテンツを特定するID
+ * @param int $entityId コンテンツを特定するID
  * @return bool
  * @dataProvider isActionAvailableDataProvider
  */
@@ -275,7 +275,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * getPureUrl
  *
  * @param string $url
- * @param string $siteId
+ * @param int $siteId
  * @return mixed
  * @dataProvider getPureUrlDataProvider
  */
@@ -358,4 +358,49 @@ class BcContentsHelperTest extends BaserTestCase {
 			[1,['Content'], []],
 		];
 	}	
+
+/**
+ * コンテンツ設定を Json 形式で取得する
+ * getJsonSettings
+ * @return string 
+*/
+	public function testGetJsonSettings() {
+//		return json_encode($this->settings);
+		App::uses('BcContentsComponent', 'Controller/Component');
+		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
+		$BcContentsComponent->setupAdmin();
+		$View = new BcAppView();
+		$View->set('contentsSettings', $BcContentsComponent->settings['items']);
+		$View->helpers = array('BcContents');
+		$View->loadHelpers();
+		$View->BcContents->setup();
+		$result = $View->BcContents->getJsonSettings();
+		// JSON形式が正しいかどうか
+		function is_json($result){
+			return is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+		}
+	}
+/**
+ * @dataProvider getJsonSettingsDataProvider
+*/
+	public function testGetJsonSettingsEquals($expect) {
+		App::uses('BcContentsComponent', 'Controller/Component');
+		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
+		$BcContentsComponent->setupAdmin();
+		$View = new BcAppView();
+		$View->set('contentsSettings', $BcContentsComponent->settings['items']);
+		$View->helpers = array('BcContents');
+		$View->loadHelpers();
+		$View->BcContents->setup();
+		// 　getJsonSettingsで取得した値がsettingsの値と等しいかどうか
+		$result = json_decode($View->BcContents->getJsonSettings(),true);
+		$result = $result['Default']['title'];
+		$this->assertEquals($expect, $result);      
+	}
+	public function getJsonSettingsDataProvider() {
+		return [
+			['無所属コンテンツ'],
+		];
+	}
+	
 }

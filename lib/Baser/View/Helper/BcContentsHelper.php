@@ -114,7 +114,7 @@ class BcContentsHelper extends AppHelper {
  *
  * @param string $type コンテンツタイプ
  * @param string $action アクション
- * @param string $entityId コンテンツを特定するID
+ * @param int $entityId コンテンツを特定するID
  * @return bool
  */
         public function isActionAvailable($type, $action, $entityId) {
@@ -217,7 +217,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツIDよりフルURLを取得する
  *
- * @param $id
+ * @param int $id コンテンツID
  * @return mixed
  */
 	public function getUrlById($id, $full = false) {
@@ -227,7 +227,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * フルURLを取得する
  *
- * @param $url
+ * @param string $url
  * @param bool $useSubDomain
  */
 	public function getUrl($url, $full = false, $useSubDomain = false) {
@@ -238,7 +238,7 @@ class BcContentsHelper extends AppHelper {
  * プレフィックスなしのURLを取得する
  *
  * @param string $url
- * @param string $siteId
+ * @param int $siteId
  * @return mixed
  */
 	public function getPureUrl($url, $siteId) {
@@ -313,7 +313,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * 親コンテンツを取得する
  * 
- * @param $contentId
+ * @param int $contentId
  * @return mixed
  */
 	public function getParent($contentId) {
