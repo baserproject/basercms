@@ -1,0 +1,21 @@
+//
+// # カラー
+//
+// グラデーションで明暗を使う場合は、
+// SASSの関数で明度を変更することを推奨する。
+//
+
+$color_primary: #61a82e;
+$color_secondary: #1b6123;
+$color_light_primary: #ffffe6;
+$color_lightest: #fff;
+$color_darkest: #343434;
+$color_danger: #ce0000;
+$color_warning: #ffd24d;
+$color_warning_low: #fff6af;
+$color_text_primary: $color_darkest;
+$color_text_secondary: #656565;
+$color_text_link: $color_primary;
+$color_border: #cccccc;
+$color_background_primary: #f4f5f1;
+$color_background_menu: #fafafa;

@@ -1,0 +1,17 @@
+/* bca-action-table-listup
+----------------------------------------------- */
+
+.bca-action-table-listup {
+	float: left;
+	//margin-top:15px;
+	margin-bottom: 10px;
+	select {
+		margin-top:0;
+		margin-bottom:0;
+		height:32px;
+	}
+	select + button {
+		position: relative;
+		top:-2px;
+	}
+}

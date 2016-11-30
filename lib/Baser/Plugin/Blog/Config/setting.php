@@ -13,13 +13,33 @@
 /**
  * システムナビ
  */
-$config['BcApp.adminNavi.blog'] = array(
-	'name' => 'ブログプラグイン',
-	'contents' => array(
-		array('name' => 'タグ一覧', 'url' => array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index')),
-		array('name' => 'タグ登録', 'url' => array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'add')),
-	)
-);
+$config['BcApp.adminNavi'] = [
+	'Plugin' => [
+		'menus' => [
+			'Blog' => ['title' => 'ブログ設定', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
+		]
+	]
+];
+
+$BlogContent = ClassRegistry::init('Blog.BlogContent');
+$blogContents = $BlogContent->find('all', ['recursive' => 0]);
+foreach ($blogContents as $blogContent) {
+	$blog = $blogContent['BlogContent'];
+	$content = $blogContent['Content'];
+	$config['BcApp.adminNavi.Contents.' . 'BlogContent' . $blog['id']] = [
+		'siteId' => $content['site_id'],
+		'title' => $content['title'],
+		'type' => 'blog-content',
+		'menus' => [
+			'BlogPostsAdd' . $blog['id'] => ['title' => '記事登録', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'add', $blog['id']]],
+			'BlogPosts' . $blog['id'] => ['title' => '記事一覧', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', $blog['id']]],
+			'BlogCategories' . $blog['id'] => ['title' => 'カテゴリ一覧', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'index', $blog['id']]],
+			'BlogComments' . $blog['id'] => ['title' => 'コメント一覧', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_comments', 'action' => 'index', $blog['id']]],
+			'BlogContentsEdit' . $blog['id'] => ['title' => '設定', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $blog['id']]],
+			'Blog' . $blog['id'] => ['title' => '公開ページ', 'url' => $content['url']],
+		]
+	];
+}
 $config['BcContents']['items']['Blog'] = [
 	'BlogContent'	=> [
 		'title' => 'ブログ',

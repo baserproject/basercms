@@ -54,6 +54,7 @@ class BcContentsHelper extends AppHelper {
  */
 	public function setup() {
 		$settings = $this->_View->get('contentsSettings');
+                
 		if(!$settings) {
 			return;
 		}
@@ -108,8 +109,19 @@ class BcContentsHelper extends AppHelper {
 		$this->settings = $settings;
 	}
 	
-	public function isActionAvailable($type, $action, $entityId) {
+/**
+ * アクションが利用可能かどうか確認する
+ *
+ * @param string $type コンテンツタイプ
+ * @param string $action アクション
+ * @param string $entityId コンテンツを特定するID
+ * @return bool
+ */
+        public function isActionAvailable($type, $action, $entityId) {
 		$user = BcUtil::loginUser('admin');
+                if(!isset($this->settings[$type]['url'][$action])) {
+                    return false;
+                }
 		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
 		return $this->_Permission->check($url, $user['user_group_id']);
 	}
@@ -226,8 +238,7 @@ class BcContentsHelper extends AppHelper {
  * プレフィックスなしのURLを取得する
  *
  * @param string $url
- * @param string $prefix
- * @param string $alias
+ * @param int $siteId
  * @return mixed
  */
 	public function getPureUrl($url, $siteId) {
@@ -260,8 +271,8 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツリストをツリー構造で取得する
  * 
- * @param $id
- * @param null $level
+ * @param int $id カテゴリID
+ * @param int $level 関連データの階層
  * @param array $options
  * @return array
  */
@@ -395,5 +406,5 @@ class BcContentsHelper extends AppHelper {
 			return false;
 		}
 	}
-	
+
 }

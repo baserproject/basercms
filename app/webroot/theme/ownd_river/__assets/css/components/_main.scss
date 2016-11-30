@@ -1,0 +1,57 @@
+/* bca-main
+----------------------------------------------- */
+
+//#Contents {
+//	margin-left:220px;
+//}
+
+///* contents background
+//----------------------------------------------- */
+//.cbb {
+//	margin:1em 0;
+//	border:1px solid #DDD;
+//	background:#FFF;
+//	float: right;
+//	overflow: hidden;
+//	width: 100%;
+//}
+
+/* ==================================================================== */
+/*    ContentsBody
+/* ==================================================================== */
+//
+///* ContentsBody
+//----------------------------------------------- */
+//#ContentsBody{
+//	padding: 0 20px 40px;
+//}
+
+
+.bca-main {
+	position: relative;
+	height:100%;
+	&-inner {
+		padding: 0 30px 0 30px;
+		&::after {
+			content: "";
+			display: block;
+			clear: both;
+		}
+	}
+	&-body {
+		&-header {
+			margin-bottom:30px;
+			padding:20px 20px;
+			background-color:#F4F5F1;
+			&-title {
+				display: inline-block;
+				margin-right:0.5em;
+				font-size: 22px;
+				font-weight: bold;
+				color: $color_secondary;
+				line-height:1;
+			}
+		}
+
+	}
+}

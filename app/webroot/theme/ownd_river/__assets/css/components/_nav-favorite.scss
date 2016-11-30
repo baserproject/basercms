@@ -1,0 +1,66 @@
+.bca-nav-favorite {
+	font-size: 0.75rem;
+	padding: $nav_base_padding;
+	border: 5px solid $color_lightest;
+	background: $color_background_menu;
+	&-title {
+		@extend .bca-icon--favorite;
+		font-size: 1rem;
+		font-weight: bold;
+		padding-bottom: #{$nav_base_padding - 4px};
+		border-bottom: 1px solid $color_border;
+		&-label {
+			display: inline-block;
+			vertical-align: middle;
+			margin-left: 6px;
+		}
+	}
+	&-list {
+		list-style: none;
+		padding: $nav_item_padding 0 $nav_item_padding #{$nav_base_padding - $nav_item_padding};
+		&-item {
+			font-size: 0.875rem;
+			display: block;
+			a {
+				display: block;
+				padding: $nav_item_padding 0 $nav_item_padding $nav_item_padding;
+				color: $color_text_secondary;
+				@extend .bca-icon--menuitem;
+				&:link,
+				&:visited {
+					// a:link のデフォルト設定を消すまで有効
+					color: $color_text_secondary;
+				}
+				&:hover {
+					font-weight: bold;
+					color: $color_secondary;
+					text-decoration: none;
+				}
+			}
+			&-label {
+				display: inline-block;
+				vertical-align: middle;
+				margin-left: 4px;
+			}
+		}
+	}
+	&-functions {
+		list-style: none;
+		padding-left: #{$nav_base_padding - $nav_item_padding};
+		&-add {
+			@extend .bca-icon--add;
+			display: inline-block;
+			vertical-align: middle;
+			cursor: pointer;
+			color: $color_text_link;
+		}
+		&-help {
+			@extend .bca-icon--help;
+			display: inline-block;
+			vertical-align: middle;
+			cursor: pointer;
+			color: $color_text_link;
+			margin-left: 15px;
+		}
+	}
+}

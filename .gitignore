@@ -41,3 +41,5 @@ composer.lock
 gulpfile.js
 node_modules/
 package.json
+!app/webroot/theme/ownd_river
+

@@ -67,10 +67,6 @@ class BlogCategoriesController extends BlogAppController {
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 
-		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_posts');
-		}
-
 		// バリデーション設定
 		$this->BlogCategory->validationParams['blogContentId'] = $this->blogContent['BlogContent']['id'];
 	}
