@@ -348,7 +348,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param bool $self コンテンツ自身の公開状態かどうか 
  * @return mixed
  */
-	public function isAllowPublish() {
+	public function testIsAllowPublish() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
 
@@ -358,7 +358,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param int $contentId
  * @return mixed
  */
-	public function getParent() {
+	public function testGetParent() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}	
 /**
@@ -368,11 +368,11 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param array $options
  * @return array|bool
  */	
-	public function getContentFolderList() {
+	public function testGetContentFolderList() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
 	
-	public function getSiteRoot() {
+	public function testGetSiteRoot() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
 	
