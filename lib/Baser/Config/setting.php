@@ -91,7 +91,9 @@ $config['BcApp'] = [
  */
 $config['BcRequire'] = array(
 	'phpVersion' => "5.4.0",
-	'phpMemory' => "128"
+	'phpMemory' => "128",
+	'MySQLVersion' => "5.0.0",
+	'PostgreSQLVersion' => "8.4.0"
 );
 
 /**
