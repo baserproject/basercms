@@ -37,6 +37,10 @@ html {
 #ToolBar {
 	position:relative;
 }
+.bca-container {
+	height: auto !important;
+	background: #F4F5F1;
+}
 .bca-crumb,
 .bca-main-body-header {
 	display: none;
@@ -79,7 +83,7 @@ $(function(){
 
 	if($("#LoginCredit").html() == 1) {
 		$("body").append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
-		$("#LoginInner").css('color', '#FFF');
+		// $("#LoginInner").css('color', '#FFF');
 		$("#HeaderInner").css('height', '50px');
 		$("#Logo").css('position', 'absolute');
 		$("#Logo").css('z-index', '10000');
@@ -108,7 +112,7 @@ $(function(){
 			return;
 		}
 
-		$("#LoginInner").css('color', '#333');
+		// $("#LoginInner").css('color', '#333');
 		$("#HeaderInner").css('height', 'auto');
 		$("#Logo").css('position', 'relative');
 		$("#Logo").css('z-index', '0');
@@ -137,25 +141,30 @@ $(function(){
 		<h1><?php $this->BcBaser->contentsTitle() ?></h1>
 		<div id="AlertMessage" class="message" style="display:none"></div>
 		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'login']]) ?>
-		<div class="float-left login-input">
-			<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
-			<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'size' => 16, 'tabindex' => 1, 'autofocus' => true)) ?>
-		</div>
-		<div class="float-left login-input">
-			<?php echo $this->BcForm->label($userModel . '.password', 'パスワード') ?>
-			<?php echo $this->BcForm->input($userModel . '.password', array('type' => 'password', 'size' => 16, 'tabindex' => 2)) ?>
-		</div>
-		<div class="float-left submit">
-			<?php echo $this->BcForm->submit('ログイン', array('div' => false, 'class' => 'btn-red button', 'id' => 'BtnLogin', 'tabindex' => 4)) ?>
-		</div>
-		<div class="clear login-etc">
-			<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'label' => 'ログイン状態を保存する', 'tabindex' => 3)) ?>　
-			<?php if ($currentPrefix == 'front'): ?>
-				<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password'), array('rel' => 'popup')) ?>
-			<?php else: ?>
-				<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->request->params['prefix'] => true), array('rel' => 'popup')) ?>
-			<?php endif ?>
-		</div>
+			<div class="login-input bca-login-form-item">
+				<?php echo $this->BcForm->label($userModel . '.name', 'アカウント名') ?>
+				<?php echo $this->BcForm->input($userModel . '.name', array('type' => 'text', 'tabindex' => 1, 'autofocus' => true)) ?>
+			</div>
+			<div class="login-input bca-login-form-item">
+				<?php echo $this->BcForm->label($userModel . '.password', 'パスワード') ?>
+				<?php echo $this->BcForm->input($userModel . '.password', array('type' => 'password', 'tabindex' => 2)) ?>
+			</div>
+			<div class="submit bca-login-form-btn-group">
+				<?php echo $this->BcForm->button('ログイン', array('type' => 'submit', 'div' => false, 'class' => 'bca-btn--login', 'id' => 'BtnLogin', 'tabindex' => 4)) ?>
+			</div>
+			<div class="clear login-etc bca-login-form-ctrl">
+				<div class="bca-login-form-checker">
+					<?php echo $this->BcForm->input($userModel . '.saved', array('type' => 'checkbox', 'class' => 'bca-login-form-checkbox', 'tabindex' => 3)) ?>
+					<?php echo $this->BcForm->label($userModel . '.saved', 'ログイン状態を保存する') ?>
+				</div>
+				<div class="bca-login-forgot-pass">
+					<?php if ($currentPrefix == 'front'): ?>
+						<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password')) ?>
+					<?php else: ?>
+						<?php $this->BcBaser->link('パスワードを忘れた場合はこちら', array('action' => 'reset_password', $this->request->params['prefix'] => true)) ?>
+					<?php endif ?>
+				</div>
+			</div>
 		<?php echo $this->BcForm->end() ?>
 	</div>
 

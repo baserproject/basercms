@@ -14,6 +14,7 @@
 		padding: 0.9558em 1em 0.76em;
 		line-height:1.2;
 		border: 1px solid #ccc;
+		cursor: pointer;
 
 		color: $color_text_primary;
 		text-decoration: none;
@@ -124,6 +125,20 @@
 	&--home {
 		@extend .#{$fa-css-prefix}-home;
 		@include btn-common;
+	}
+
+	// HOME
+	&--login {
+		@include btn-common;
+		color: $color_lightest;
+		$color_darken: darken($color_primary, 5%);
+		border: 1px solid $color_darken;
+		background-image: linear-gradient($color_primary 10%, $color_darken 100%);
+		&:hover,
+		&:focus {
+			color: $color_lightest;
+			background-image: linear-gradient($color_darken 10%, $color_darken 100%);
+		}
 	}
 
 	// サイズ
