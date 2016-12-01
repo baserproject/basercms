@@ -248,13 +248,14 @@ function changeSidebar(open) {
  * 検索ボックスの開閉切り替え
  */
 function changeSearchBox(open) {
-
+	
 	if(open){
-		$('#Search').fadeIn(300);
+		// $('#Search').fadeIn(300);
+		$('#Search').slideDown(300);
 	} else {
-		$('#Search').fadeOut(300);
+		// $('#Search').fadeOut(300);
+		$('#Search').slideUp(300);
 	}
-
 }
 /**
  * アラートボックスを表示する

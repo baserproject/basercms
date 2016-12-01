@@ -134,4 +134,15 @@
 		@extend .#{$fa-css-prefix}-angle-left;
 		@include fa-common;
 	}
+
+	// プラス
+	&--plus-square {
+		@extend .#{$fa-css-prefix}-plus-square;
+		@include fa-common;
+	}
+	// マイナス
+	&--minus-square {
+		@extend .#{$fa-css-prefix}-minus-square;
+		@include fa-common;
+	}
 }

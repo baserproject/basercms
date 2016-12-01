@@ -19,25 +19,18 @@ if (empty($search)) {
 ?>
 
 
-
 <?php if (!empty($search)): ?>
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_menu_search.png', array('alt' => '検索', 'width' => 50, 'height' => '18', 'class' => 'btn')), 'javascript:void(0)', array('id' => 'BtnMenuSearch')) ?>
-<?php endif ?>
-
-<div id="Search" class="clearfix">
-
-	<h2 class="head">
-		<?php $this->BcBaser->img('admin/head_search.png', array('width' => 53, 'height' => 16, 'alt' => '検索')) ?>
-	</h2>
-
-	<div class="body">
+<div class="bca-search">
+	<h2 class="head bca-search-head"><a href="javascript:void(0)" id="BtnMenuSearch" class="bca-icon--plus-square"> 絞り込み検索</a></h2>
+	<div id="Search" class="body bca-search-body">
 		<?php $this->BcBaser->element('searches/' . $search) ?>
 	</div>
-
+	<!--
 	<div class="clearfix close">
 		<div id="CloseSearch">
 			<a><?php $this->BcBaser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
 		</div>
 	</div>
-
-	<!-- / #Search clearfix --></div>
+	-->
+<!-- / #Search clearfix --></div>
+<?php endif ?>
