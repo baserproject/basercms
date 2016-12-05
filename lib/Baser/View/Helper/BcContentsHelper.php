@@ -54,6 +54,7 @@ class BcContentsHelper extends AppHelper {
  */
 	public function setup() {
 		$settings = $this->_View->get('contentsSettings');
+                
 		if(!$settings) {
 			return;
 		}
@@ -108,8 +109,18 @@ class BcContentsHelper extends AppHelper {
 		$this->settings = $settings;
 	}
 	
-	public function isActionAvailable($type, $action, $entityId) {
+/**
+ * アクションが利用可能かどうか確認する
+ *
+ * @param string $type コンテンツタイプ
+ * @param string $action アクション
+ * @param int $entityId コンテンツを特定するID
+  */
+        public function isActionAvailable($type, $action, $entityId) {
 		$user = BcUtil::loginUser('admin');
+                if(!isset($this->settings[$type]['url'][$action])) {
+                    return false;
+                }
 		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
 		return $this->_Permission->check($url, $user['user_group_id']);
 	}
@@ -205,7 +216,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツIDよりフルURLを取得する
  *
- * @param $id
+ * @param int $id コンテンツID
  * @return mixed
  */
 	public function getUrlById($id, $full = false) {
@@ -215,7 +226,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * フルURLを取得する
  *
- * @param $url
+ * @param string $url
  * @param bool $useSubDomain
  */
 	public function getUrl($url, $full = false, $useSubDomain = false) {
@@ -226,8 +237,7 @@ class BcContentsHelper extends AppHelper {
  * プレフィックスなしのURLを取得する
  *
  * @param string $url
- * @param string $prefix
- * @param string $alias
+ * @param int $siteId
  * @return mixed
  */
 	public function getPureUrl($url, $siteId) {
@@ -260,8 +270,8 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツリストをツリー構造で取得する
  * 
- * @param $id
- * @param null $level
+ * @param int $id カテゴリID
+ * @param int $level 関連データの階層
  * @param array $options
  * @return array
  */
@@ -302,7 +312,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * 親コンテンツを取得する
  * 
- * @param $contentId
+ * @param int $contentId
  * @return mixed
  */
 	public function getParent($contentId) {
@@ -383,10 +393,21 @@ class BcContentsHelper extends AppHelper {
 		return $this->_Content->getContentFolderList($siteId, $options);
 	}
 	
+/**
+ * サイトIDからサイトルートとなるコンテンツを取得する
+ * 
+ * @param int $siteId
+ * @return array
+ */	
 	public function getSiteRoot($siteId) {
 		return $this->_Content->getSiteRoot($siteId);
 	}
-	
+/**
+ * サイトIDからサイトルートとなるコンテンツIDを取得する
+ * 
+ * @param int $siteId
+ * @return string|bool
+ */		
 	public function getSiteRootId($siteId) {
 		$content = $this->getSiteRoot($siteId);
 		if($content) {
@@ -395,5 +416,5 @@ class BcContentsHelper extends AppHelper {
 			return false;
 		}
 	}
-	
+
 }
