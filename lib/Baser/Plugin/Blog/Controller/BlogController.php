@@ -1012,7 +1012,7 @@ class BlogController extends BlogAppController {
 					'BlogContent.id' => $blogContentId,
 				)
 		));
-		$this->render($this->blogContent['BlogContent']['template'] . DS . $template);
+		$this->render($blogContent['BlogContent']['template'] . DS . $template);
 	}
 
 /**
