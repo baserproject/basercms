@@ -115,8 +115,7 @@ class BcContentsHelper extends AppHelper {
  * @param string $type コンテンツタイプ
  * @param string $action アクション
  * @param int $entityId コンテンツを特定するID
- * @return bool
- */
+  */
         public function isActionAvailable($type, $action, $entityId) {
 		$user = BcUtil::loginUser('admin');
                 if(!isset($this->settings[$type]['url'][$action])) {
@@ -395,7 +394,7 @@ class BcContentsHelper extends AppHelper {
 	}
 	
 /**
- * サイトIDからコンテンツを取得する
+ * サイトIDからサイトルートとなるコンテンツを取得する
  * 
  * @param int $siteId
  * @return array
@@ -404,7 +403,7 @@ class BcContentsHelper extends AppHelper {
 		return $this->_Content->getSiteRoot($siteId);
 	}
 /**
- * サイトIDからコンテンツIDを取得する
+ * サイトIDからサイトルートとなるコンテンツIDを取得する
  * 
  * @param int $siteId
  * @return string|bool

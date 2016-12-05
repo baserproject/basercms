@@ -155,7 +155,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param string $type コンテンツタイプ
  * @param string $action アクション
  * @param int $entityId コンテンツを特定するID
- * @return bool
+ * @param bool $expect 期待値
  * @dataProvider isActionAvailableDataProvider
  */
 	public function testIsActionAvailable($type, $action, $entityId, $userGroup, $expect) {
@@ -201,8 +201,6 @@ class BcContentsHelperTest extends BaserTestCase {
  * コンテンツIDよりURLを取得する
  * getUrlById
  *
- * @param $id
- * @return string
  * 
  */
 	public function testGetUrlById() {
@@ -213,10 +211,6 @@ class BcContentsHelperTest extends BaserTestCase {
  * フルURLを取得する
  * getUrl
  *
- * @param string $url
- * @param bool $prefix
- * @param bool $useSubDomain
- * @return mixed
  * 
  */
 	public function testGetUrl() {
@@ -227,9 +221,6 @@ class BcContentsHelperTest extends BaserTestCase {
  * プレフィックスなしのURLを取得する
  * getPureUrl
  *
- * @param string $url
- * @param int $siteId
- * @return mixed
  * 
  */
 	public function testGetPureUrl() {
@@ -240,8 +231,8 @@ class BcContentsHelperTest extends BaserTestCase {
  * 現在のURLを元に指定したサブサイトのURLを取得する
  * getCurrentRelatedSiteUrl
  * フロントエンド専用メソッド
- * @param string $siteName
- * @return mixed|string
+ * @param string $siteName 
+ * @param mixed|string $expect 期待値
  * @dataProvider getCurrentRelatedSiteUrlDataProvider
  */
 	public function testGetCurrentRelatedSiteUrl($siteName, $expect) {
@@ -253,7 +244,11 @@ class BcContentsHelperTest extends BaserTestCase {
 
 	public function getCurrentRelatedSiteUrlDataProvider() {
 		return [
+			// 戻り値が空でないもの（）
 			['smartphone', '/s/'],
+			['mobile', '/m/'],
+			// $siteNameの値が空の場合、返り値も空
+			['', ''],
 			['hoge', ''],
 		];
 	}
@@ -263,19 +258,29 @@ class BcContentsHelperTest extends BaserTestCase {
  * getRelatedSiteContents
  * フロントエンド専用メソッド
  * @param int $id コンテンツID = Null
- * @return array | false
+ * @param array $options
+ * @param array | false $expect 期待値
  * @dataProvider getRelatedSiteContentsDataProvider
 */
 	public function testGetRelatedSiteContents($id, $options, $expect) {
 		$this->BcContents->request = $this->_getRequest('/');
 		$_SERVER['HTTP_USER_AGENT'] = 'iPhone';
 		$result = $this->BcContents->getRelatedSiteContents($id, $options);
-		$this->assertEquals($expect, $result[0]['Content']['id']);                       
+		$this->assertEquals($expect, $result[1]['Content']['id']);                       
 	}
 	public function getRelatedSiteContentsDataProvider() {
 		return [
-			[null,['Content'],4],
-			['1',[], False],
+			// コンテンツIDが空 オプションも空
+			[null, [], 9],
+			// コンテンツIDが空  オプション excludeIds 0~1
+			['', ['excludeIds' => [0]], 10],
+			['', ['excludeIds' => [1]], 10],
+			// コンテンツIDが空  オプション excludeIds 2~
+			['', ['excludeIds' => [2]], 9],
+			['', ['excludeIds' => [99]], 9],
+			// コンテンツIDに値が入っていれば、false
+			['1', ['excludeIds' => [1]], false],
+			['hoge', [], false],
 		];
 	}
 
@@ -284,7 +289,8 @@ class BcContentsHelperTest extends BaserTestCase {
  * フロントエンド専用メソッド
  * getRelatedSiteLinks
  * @param int $id
- * @return array
+ * @param array $options
+ * @param array $expect 期待値
  * @dataProvider getRelatedSiteLinksDataProvider
 */
 	public function testGetRelatedSiteLinks($id, $options, $expect) {
@@ -295,15 +301,24 @@ class BcContentsHelperTest extends BaserTestCase {
 	}	
 	public function getRelatedSiteLinksDataProvider() {
 		return [
-			[null,['Content'],[['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
-			[1,['Content'], []],
+			// IDが空 オプションも空
+			[null, [], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
+			// IDが空  オプション excludeIds 0~2
+			['', ['excludeIds' => [0]], [ 0 => ['prefix' => 'mobile', 'name' => 'ケータイ', 'url' => '/m/index'],1 =>['prefix' => 'smartphone', 'name' => 'スマートフォン', 'url' => '/s/index'] ] ],
+			[false, ['excludeIds' => [1]], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
+			[0, ['excludeIds' => [2]], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index']]],
+			// IDが空  オプション excludeIds 3~
+			[0, ['excludeIds' => [3]], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
+			[0, ['excludeIds' => [99]], [['prefix' => '','name' => 'パソコン', 'url'=>'/index'],['prefix' => 'mobile','name' => 'ケータイ', 'url'=>'/m/index'],['prefix' => 'smartphone','name' => 'スマートフォン', 'url'=>'/s/index']]],
+			// IDに値が入っていれば、false
+			[1, ['excludeIds' => [0]], []],
+			['hoge', [], []],
 		];
 	}	
 
 /**
  * コンテンツ設定を Json 形式で取得する
  * getJsonSettings
- * @return string 
 */
 	public function testGetJsonSettings() {
 		App::uses('BcContentsComponent', 'Controller/Component');
@@ -316,12 +331,14 @@ class BcContentsHelperTest extends BaserTestCase {
 		$View->BcContents->setup();
 		$result = $View->BcContents->getJsonSettings();
 		// JSON形式が正しいかどうか		
-		return is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;		
+		$this->assertTrue(is_string($result) && is_array(json_decode($result, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false);
 	}
 /**
+ * @param string $expect 期待値
+ * @param string $no
  * @dataProvider getJsonSettingsDataProvider
 */
-	public function testGetJsonSettingsEquals($expect) {
+	public function testGetJsonSettingsEquals($expect,$no) {
 		App::uses('BcContentsComponent', 'Controller/Component');
 		$BcContentsComponent = new BcContentsComponent(new ComponentCollection());
 		$BcContentsComponent->setupAdmin();
@@ -332,21 +349,20 @@ class BcContentsHelperTest extends BaserTestCase {
 		$View->BcContents->setup();
 		// 　getJsonSettingsで取得した値がsettingsの値と等しいかどうか
 		$result = json_decode($View->BcContents->getJsonSettings(),true);
-		$result = $result['Default']['title'];
+		$result = $result[$no]['title'];
 		$this->assertEquals($expect, $result);      
 	}
 	public function getJsonSettingsDataProvider() {
 		return [
-			['無所属コンテンツ'],
+			['無所属コンテンツ','Default'],
+			['フォルダー','ContentFolder'],
+			['ブログ','BlogContent'],
 		];
 	}
 
 /**
  * データが公開状態にあるか確認する
  *
- * @param array $data コンテンツデータ
- * @param bool $self コンテンツ自身の公開状態かどうか 
- * @return mixed
  */
 	public function testIsAllowPublish() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
@@ -355,8 +371,6 @@ class BcContentsHelperTest extends BaserTestCase {
 /**
  * 親コンテンツを取得する
  * 
- * @param int $contentId
- * @return mixed
  */
 	public function testGetParent() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
@@ -364,14 +378,15 @@ class BcContentsHelperTest extends BaserTestCase {
 /**
  * フォルダリストを取得する
  * 
- * @param int $siteId
- * @param array $options
- * @return array|bool
  */	
 	public function testGetContentFolderList() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
 	
+/**
+ * サイトIDからサイトルートとなるコンテンツを取得する
+ * 
+ */	
 	public function testGetSiteRoot() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
@@ -381,18 +396,22 @@ class BcContentsHelperTest extends BaserTestCase {
  * getSiteRootId
  * 
  * @param int $siteId
- * @return string|bool
+ * @param string|bool $expect 期待値
  * @dataProvider getSiteRootIdDataProvider
  */	
-	public function testGetSiteRootId($siteId,$expect) {
+	public function testGetSiteRootId($siteId, $expect) {
 		$result = $this->BcContents->getSiteRootId($siteId);
 		$this->assertEquals($expect, $result);                       
 	}
 	public function getSiteRootIdDataProvider() {
 		return [
-			[1,2],
+			// 存在するサイトID（0~2）を指定した場合
+			[0, 1],
+			[1, 2],
+			[2, 3],
 			// 存在しないサイトIDを指定した場合
-			[4,false],
+			[3, false],
+			[99, false],
 		];
 	}
 }
