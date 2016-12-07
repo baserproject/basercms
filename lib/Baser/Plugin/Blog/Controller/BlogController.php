@@ -1007,8 +1007,16 @@ class BlogController extends BlogAppController {
 		$datas = $this->_getBlogPosts(array('listCount' => $limit));
 
 		$this->set('posts', $datas);
-
-		$this->render($this->blogContent['BlogContent']['template'] . DS . $template);
+		if ($blogContentId != $this->blogContent['BlogContent']['id']) {
+			$blogContent = $this->BlogContent->find("first", array(
+				"conditions" => array(
+					'BlogContent.id' => $blogContentId,
+				)
+			));
+			$this->render($blogContent['BlogContent']['template'] . DS . $template);
+		} else {
+			$this->render($this->blogContent['BlogContent']['template'] . DS . $template);
+		}
 	}
 
 /**
