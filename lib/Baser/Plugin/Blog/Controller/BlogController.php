@@ -718,7 +718,7 @@ class BlogController extends BlogAppController {
 					break;
 			}
 		} else {
-			$order = "BlogPost.{$sort} {$direction}, BlogPost.id";
+			$order = "BlogPost.{$sort} {$direction}, BlogPost.id {$direction}";
 		}
 
 		// 毎秒抽出条件が違うのでキャッシュしない
