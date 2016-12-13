@@ -343,7 +343,7 @@ class InstallationsController extends AppController {
 			}
 
 			$Db = ConnectionManager::getDataSource('default');
-			if($Db->config['datasource'] == 'Database/BcPostgres') {
+			if($Db->config['datasource'] == 'Database/BcPostgre') {
 				$Db->updateSequence();
 			}
 
