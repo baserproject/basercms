@@ -111,19 +111,20 @@ class BcManagerComponentTest extends BaserTestCase {
 		$result = $this->BcManager->connectDb($config, $name);
 		$sources = $result->listSources();
 		$prefix = $result->config['prefix'];
+
 		$this->assertContains($expected, $sources, 'datasourceを正しく取得できません');
 
 		if ($name == 'plugin') {
-			$this->assertEquals('pg_', $prefix, 'プラグイン用テーブルのprefixが正しく取得できません');
+			$this->assertEquals('mysite_pg_', $prefix, 'プラグイン用テーブルのprefixが正しく取得できません');
 		}
 	}
 
 	public function connectDbDataProvider() {
 		return array(
-			array('mysql', 'baser', 'pages'),
-			array('hoge', 'baser', 'pages'),
-			array('mysql', 'plugin', 'pages'),
-			array('postgres', 'baser', 'pages'),
+			array('mysql', 'baser', 'mysite_pages'),
+			array('hoge', 'baser', 'mysite_pages'),
+			array('mysql', 'plugin', 'mysite_pages'),
+			array('postgres', 'baser', 'mysite_pages'),
 		);
 	}
 
@@ -553,8 +554,8 @@ class BcManagerComponentTest extends BaserTestCase {
 
 	public function _getDataSourceDataProvider() {
 		return array(
-			array('baser', 'pages'),
-			array('plugin', 'pages'),
+			array('baser', 'mysite_pages'),
+			array('plugin', 'mysite_pages'),
 		);
 	}
 
