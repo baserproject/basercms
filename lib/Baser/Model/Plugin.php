@@ -420,6 +420,10 @@ class Plugin extends AppModel {
 		}
 
 		$adminLinkUrl = Router::url($pluginInfo['Plugin']['admin_link']);
+		if (isset($pluginInfo['Plugin']['admin_link']['action']) && 
+			$pluginInfo['Plugin']['admin_link']['action'] == 'index') {
+			$adminLinkUrl .= '/';
+		}
 		$baseUrl = Configure::read('App.baseUrl');
 		if ($baseUrl) {
 			$adminLinkUrl = preg_replace('/^' . preg_quote($baseUrl, '/') . '/', '', $adminLinkUrl);
