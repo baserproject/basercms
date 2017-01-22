@@ -1489,7 +1489,7 @@ class BcAppController extends Controller {
  * @param mixed $message エラーメッセージ
  * @return void
  */
-	protected function ajaxError($errorNo = 500, $message = '') {
+	public function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 ' . $errorNo);
 		if ($message) {
 			if (is_array($message)) {
