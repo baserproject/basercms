@@ -185,10 +185,10 @@ class BcAppHelper extends Helper {
 			$url = array_merge($url, array('admin' => true));
 		}
 
-		if (!is_array($url) && preg_match('/\/(img|css|js|files)\//', $url)) {
-			return $this->webroot($url);
-		} elseif (!is_array($url) && preg_match('/^javascript:/', $url)) {
+		if (!is_array($url) && preg_match('/^(javascript|https?|ftp):/', $url)) {
 			return $url;
+		} elseif (!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
+			return $this->webroot($url);
 		} else {
 			if(!BcUtil::isAdminSystem() && !is_array($url) && !empty($this->request->params['Content'])) {
 				$Content = ClassRegistry::init('Content');
