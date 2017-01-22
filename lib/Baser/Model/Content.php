@@ -671,18 +671,26 @@ class Content extends AppModel {
  * @param int $id コンテンツID
  * @param string $plugin プラグイン
  * @param string $type タイプ
- * @return string URL
+ * @return mixed URL | false
  */
-	public function createUrl($id, $plugin, $type) {
+	public function createUrl($id, $plugin = null, $type = null) {
+		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
 		if($id == 1) {
 			$url = '/';
 		} else {
-			$parents = $this->getPath($id, ['name'], -1);
+			$parents = $this->getPath($id, ['name', 'plugin', 'type'], -1);
 			unset($parents[0]);
-			$names = array();
+			if(!$parents) {
+				return false;
+			}
+			$names = [];
+			$content = null;
 			foreach($parents as $parent) {
 				$names[] = $parent['Content']['name'];
+				$content = $parent;
 			}
+			$plugin = $content['Content']['plugin'];
+			$type = $content['Content']['type'];
 			$url = '/' . implode('/', $names);
 			$setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
 			if($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
