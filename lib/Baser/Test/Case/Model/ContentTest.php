@@ -68,22 +68,28 @@ class ContentTest extends BaserTestCase {
 		return [
 			// ノーマルURL
 			['main.com', '', '/', false, false, '/'],
+			['main.com', '', '/index', false, false, '/'],
 			['main.com', '', '/news/archives/1', false, false, '/news/archives/1'],
 			['main.com', 'SoftBank', '/m/news/archives/1', false, false, '/m/news/archives/1'],
 			['main.com', 'iPhone', '/news/archives/1', false, false, '/news/archives/1'],	// 同一URL
 			['sub.main.com', '', '/sub/', false, true, '/'],
+			['sub.main.com', '', '/sub/index', false, true, '/'],
 			['sub.main.com', '', '/sub/news/archives/1', false, true, '/news/archives/1'],
 			['another.com', '', '/another.com/', false, true, '/'],
+			['another.com', '', '/another.com/index', false, true, '/'],
 			['another.com', '', '/another.com/news/archives/1', false, true, '/news/archives/1'],
 			['another.com', 'iPhone', '/another.com/s/news/archives/1', false, true, '/news/archives/1'],
 			// フルURL
 			['main.com', '', '/', true, false, 'http://main.com/'],
+			['main.com', '', '/index', true, false, 'http://main.com/'],
 			['main.com', '', '/news/archives/1', true, false, 'http://main.com/news/archives/1'],
 			['main.com', 'SoftBank', '/m/news/archives/1', true, false, 'http://main.com/m/news/archives/1'],
 			['main.com', 'iPhone', '/news/archives/1', true, false, 'http://main.com/news/archives/1'],	// 同一URL
 			['sub.main.com', '', '/sub/', true, true, 'http://sub.main.com/'],
+			['sub.main.com', '', '/sub/index', true, true, 'http://sub.main.com/'],
 			['sub.main.com', '', '/sub/news/archives/1', true, true, 'http://sub.main.com/news/archives/1'],
 			['another.com', '', '/another.com/', true, true, 'http://another.com/'],
+			['another.com', '', '/another.com/index', true, true, 'http://another.com/'],
 			['another.com', '', '/another.com/news/archives/1', true, true, 'http://another.com/news/archives/1'],
 			['another.com', 'iPhone', '/another.com/s/news/archives/1', true, true, 'http://another.com/news/archives/1'],
 		];

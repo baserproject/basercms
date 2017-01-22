@@ -1070,7 +1070,7 @@ class Content extends AppModel {
 				if (BcUtil::isAdminSystem()) {
 					if($site->domainType == 1) {
 						$fullUrlArray = explode('//', $fullUrl);
-						return $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
+						$url = $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
 					} elseif($site->domainType == 2) {
 						$fullUrlArray = explode('//', $fullUrl);
 						$urlArray = explode('/', $fullUrlArray[1]);
@@ -1079,13 +1079,13 @@ class Content extends AppModel {
 							$mainSite = BcSite::findById($site->mainSiteId);
 							$subDomain = $mainSite->alias;
 						}
-						return $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
+						$url = $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
 					}
 				} else {
-					return $fullUrl;
+					$url = $fullUrl;
 				}
 			} else {
-				return Router::url($originUrl);
+				$url = Router::url($originUrl);
 			}
 		} else {
 			if(BC_INSTALLED) {
@@ -1101,12 +1101,15 @@ class Content extends AppModel {
 					}
 				}
 			}
+			
 			if($full) {
-				return fullUrl($url);
+				$url = fullUrl($url);
 			} else {
-				return Router::url($url);
+				$url = Router::url($url);
 			}
 		}
+
+		return preg_replace('/\/index$/', '/', $url);
 	}
 
 /**
