@@ -1,16 +1,18 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: cakephp 1.2.0.7692 RC3\n"
-"POT-Creation-Date: 2013-11-10 14:57+0100\n"
+"Project-Id-Version: baserCMS\n"
+"POT-Creation-Date: 2017-01-22 15:56+0900\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: catchup <info@e-catchup.jp>\n"
+"Last-Translator: ryuring\n"
+"Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: Cache/Cache.php:173
 msgid "Cache engine %s is not available."
@@ -352,13 +354,11 @@ msgstr "フィールド %s でエラーです"
 msgid "Invalid schema object"
 msgstr "無効なスキーマオブジェクト"
 
-#: Model/Datasource/DboSource.php:3076
-#: Model/Datasource/Database/Sqlite.php:403
+#: Model/Datasource/DboSource.php:3076 Model/Datasource/Database/Sqlite.php:403
 msgid "Column name or type not defined in schema"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:3081
-#: Model/Datasource/Database/Sqlite.php:408
+#: Model/Datasource/DboSource.php:3081 Model/Datasource/Database/Sqlite.php:408
 #, fuzzy
 msgid "Column type %s does not exist"
 msgstr "メソッド %1$s::%2$s が存在しません"
@@ -805,8 +805,7 @@ msgstr "Scaffold エラー"
 #: View/Errors/missing_component.ctp:24;28
 #: View/Errors/missing_connection.ctp:22;33
 #: View/Errors/missing_controller.ctp:24;28
-#: View/Errors/missing_database.ctp:22;26
-#: View/Errors/missing_datasource.ctp:24
+#: View/Errors/missing_database.ctp:22;26 View/Errors/missing_datasource.ctp:24
 #: View/Errors/missing_datasource_config.ctp:22
 #: View/Errors/missing_helper.ctp:24;28 View/Errors/missing_layout.ctp:22;26
 #: View/Errors/missing_plugin.ctp:22;26 View/Errors/missing_table.ctp:22
@@ -1033,9 +1032,8 @@ msgid "JsHelper:: Missing Method %s is undefined"
 msgstr ""
 
 #: View/Helper/MootoolsEngineHelper.php:311
-#, fuzzy
 msgid "%s requires a \"drag\" option to properly function"
-msgstr "%s はデータベースへの接続が必要です"
+msgstr "%s には「ドラッグ」オプションが必要です。"
 
 #: View/Helper/NumberHelper.php:65 View/Helper/TextHelper.php:80
 #: View/Helper/TimeHelper.php:63
@@ -1044,7 +1042,20 @@ msgstr "%s が見つかりません"
 
 #: View/Helper/PaginatorHelper.php:99
 msgid "%s does not implement a %s method, it is incompatible with %s"
-msgstr ""
+msgstr "%s は %s メソッドを実装していないので %s と互換性がありません。"
+
+msgid "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
+msgstr "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
+
+msgid "ryuring"
+msgstr "江頭竜二"
+
+#~ msgid ""
+#~ "Since the version of the program and the database are different, it "
+#~ "forcibly terminates. Adjust the version of the database and try again.\""
+#~ msgstr ""
+#~ "プログラムとデータベースのバージョンが異なるため、強制終了します。データ"
+#~ "ベースのバージョンを調整して、再実行してください。"
 
 #~ msgid "DboCsv::describe : Can't find Connection"
 #~ msgstr "接続を見つける事ができませんでした。"
@@ -1521,8 +1532,8 @@ msgstr ""
 #~ msgstr "scaffold を使用したいですか？"
 
 #~ msgid ""
-#~ "Would you like to include some basic class methods (index(), add(), view"
-#~ "(), edit())?"
+#~ "Would you like to include some basic class methods (index(), add(), "
+#~ "view(), edit())?"
 #~ msgstr ""
 #~ "いくつかの基本的なクラスメソッド（index(), add(), view(), edit()）を読み込"
 #~ "みたいですか？"

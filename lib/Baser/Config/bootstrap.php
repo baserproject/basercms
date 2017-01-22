@@ -286,7 +286,11 @@ if (BC_INSTALLED) {
 	if (preg_match('/^' . $updateKey . '(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	} elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+		if(!isConsole()) {
+			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+		} else {
+			echo __(__d('cake_dev', "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."));
+		}
 		exit();
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
