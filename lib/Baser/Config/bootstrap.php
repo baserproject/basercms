@@ -288,10 +288,10 @@ if (BC_INSTALLED) {
 	} elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
 		if(!isConsole()) {
 			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+			exit();
 		} else {
-			echo __(__d('cake_dev', "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."));
+			throw new BcException(__d('cake_dev', 'Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again.'));
 		}
-		exit();
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
