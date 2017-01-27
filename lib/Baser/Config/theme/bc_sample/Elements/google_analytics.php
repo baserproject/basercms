@@ -1,7 +1,8 @@
 <?php
 /**
- * [PUBLISH] Google Analytics トラッキングコード
- * 
+ * Google Analytics トラッキングコード
+ * 呼出箇所：全ページ
+ *
  * $this->BcBaser->googleAnalytics() で呼び出す
  */
 ?>
@@ -25,4 +26,3 @@
 	<?php endif ?>
 </script>
 <?php endif; ?>
-
