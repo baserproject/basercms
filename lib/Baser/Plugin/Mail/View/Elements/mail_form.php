@@ -17,8 +17,6 @@ $prefix = '';
 if (Configure::read('BcRequest.agent')) {
 	$prefix = '/' . Configure::read('BcRequest.agentAlias');
 }
-// ブラウザのヒストリーバック（戻るボタン）対応
-$this->Mail->token();
 ?>
 
 
