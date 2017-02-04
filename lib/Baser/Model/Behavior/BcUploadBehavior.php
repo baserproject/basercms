@@ -6,7 +6,7 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
- * @since			baserCMS v 4.0.0
+ * @since			baserCMS v 1.5.3
  * @license			http://basercms.net/license/index.html
  */
 
