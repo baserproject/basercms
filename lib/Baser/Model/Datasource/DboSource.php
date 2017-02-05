@@ -4134,22 +4134,24 @@ class DboSource extends DataSource {
  * データベースよりスキーマ情報を読み込む
  *
  * @param string $table
+ * @param array $options オプション
+ *  `cache` キャッシュ利用
+ *  `plugin` プラグイン指定
  * @return array $schema
  */
-	public function readSchema($table, $options = array()) {
+	public function readSchema($table, $options = []) {
 		if (is_array($options)) {
-			$options = array_merge(array(
-				'cache' => true,
+			$options = array_merge([
+				'cache' => false,
 				'plugin' => null
-				), $options);
-			extract($options);
+			], $options);
 		} else {
 			// 後方互換の為
-			$cache = $options;
+			$options['cache'] = $options;
 			$plugin = null;
 		}
 
-		if ($cache) {
+		if (!$options['cache']) {
 			$this->cacheSources = false;
 			ClassRegistry::flush();
 		}
@@ -4158,16 +4160,30 @@ class DboSource extends DataSource {
 			return false;
 		}
 
-		$CakeSchema = ClassRegistry::init(array(array('class' => 'CakeSchema', 'plugin' => $plugin)));
+		$CakeSchema = ClassRegistry::init([
+			'class' => 'CakeSchema', 
+			'plugin' => $options['plugin']
+		]);
 		$CakeSchema->connection = $this->configKeyName;
 
 		$model = Inflector::classify(Inflector::singularize($table));
+		ClassRegistry::init($model);
 		if (!class_exists($model)) {
 			$model = false;
 		} else {
-			$model = array($model);
+			$model = [$model];
 		}
-		return $CakeSchema->read(array('models' => $model));
+		$schema = $CakeSchema->read(['models' => $model]);
+		if($this->configKeyName != 'default' && !empty($schema['tables']['missing'])) {
+			// CakeSchema::read() について、configKeyName が default の場合以外は、
+			// 全て、missing キーに格納されてしまう為の応急策
+			return [
+				'name' => $schema['name'],
+				'tables' => $schema['tables']['missing']
+			];
+		} else {
+			return $schema;
+		}
 	}
 
 /**

@@ -299,7 +299,7 @@ class BcAppModel extends Model {
 			$dbDataPattern = $_SESSION['dbDataPattern'];
 			unset($_SESSION['dbDataPattern']);
 		}	
-		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
+		if ($this->loadSchema($this->useDbConfig, $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
 				if($dbDataPattern) {
@@ -307,7 +307,7 @@ class BcAppModel extends Model {
 				}
 				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
 				if($path) {
-					return $this->loadCsv('default', $path);
+					return $this->loadCsv($this->useDbConfig, $path);
 				} else {
 					return true;
 				}

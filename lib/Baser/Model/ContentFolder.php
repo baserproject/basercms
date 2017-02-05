@@ -44,8 +44,11 @@ class ContentFolder extends AppModel {
 			]]);
 			$_data['Content'] = array_merge($_data['Content'], $data['Content']);
 			$data = $_data;
+			$this->set($data);
+		} else {
+			$this->create($data);
 		}
-		if($this->save($data)) {
+		if($this->save()) {
 			return true;
 		} else {
 			return false;
