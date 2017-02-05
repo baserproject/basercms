@@ -4246,7 +4246,7 @@ class DboSource extends DataSource {
  * @param string $path
  * @return mixed boolean Or array
  */
-	public function loadCsvToArray($path, $encoding) {
+	public function loadCsvToArray($path, $encoding = null) {
 		
 		if(!$encoding) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
@@ -4312,37 +4312,44 @@ class DboSource extends DataSource {
 /**
  * DBのデータをCSVファイルとして書きだす
  *
- * @param array $options [ path / table / encoding ]
+ * @param array $options
+ *  `path` CSVの出力先となるパス
+ *  `encoding` 出力エンコーディング
+ *  `table` テーブル名
+ *  `init` id、created、modified を初期化する（初期値：false）
+ *  `plugin` プラグイン名
  * @return boolean
  */
 	public function writeCsv($options) {
-		$options = array_merge(array(
+		$options = array_merge([
 			'path' => '',
 			'encoding' => '',
 			'table' => '',
 			'init' => false,
 			'plugin' => null
-			), $options);
-
-		extract($options);
-		if (empty($path)) {
+		], $options);
+		
+		if (empty($options['path'])) {
 			return false;
 		}
-		if (empty($encoding)) {
-			$encoding = $this->_dbEncToPhp($this->getEncoding());
+		if (empty($options['encoding'])) {
+			$options['encoding'] = $this->_dbEncToPhp($this->getEncoding());
 		}
-		if (empty($table)) {
-			$table = basename($path, '.csv');
+		if (empty($options['table'])) {
+			$options['table'] = basename($options['path'], '.csv');
 		}
 
-		$schemas = $this->readSchema($table, array('plugin' => $plugin, 'cache' => false));
+		$schemas = $this->readSchema($options['table'], [
+			'plugin' => $options['plugin'], 
+			'cache' => false
+		]);
 
-		if (!isset($schemas['tables'][$table])) {
+		if (!isset($schemas['tables'][$options['table']])) {
 			return false;
 		}
 
-		$_fields = array();
-		foreach ($schemas['tables'][$table] as $key => $schema) {
+		$_fields = [];
+		foreach ($schemas['tables'][$options['table']] as $key => $schema) {
 			if ($key != 'indexes' && $key != 'tableParameters') {
 				$_fields[] = $this->name($key);
 			}
@@ -4350,8 +4357,8 @@ class DboSource extends DataSource {
 		$fields = implode(',', $_fields);
 
 		$appEncoding = Configure::read('App.encoding');
-		$fullTableName = $this->config['prefix'] . $table;
-		$sql = $this->renderStatement('select', array(
+		$fullTableName = $this->config['prefix'] . $options['table'];
+		$sql = $this->renderStatement('select', [
 			'table' => $this->name($fullTableName),
 			'fields' => $fields,
 			'conditions' => 'WHERE 1=1',
@@ -4360,11 +4367,11 @@ class DboSource extends DataSource {
 			'group' => '',
 			'order' => '',
 			'limit' => ''
-		));
+		]);
 
 		$datas = $this->query($sql);
 
-		$fp = fopen($path, 'a');
+		$fp = fopen($options['path'], 'a');
 		ftruncate($fp, 0);
 
 		// ヘッダを書込
@@ -4374,12 +4381,12 @@ class DboSource extends DataSource {
 			} else {
 				$tablekey = 0;
 			}
-			$heads = array();
+			$heads = [];
 			foreach ($datas[0][$tablekey] as $key => $value) {
 				$heads[] = '"' . $key . '"';
 			}
 		} else {
-			$fields = array_keys($schemas['tables'][$table]);
+			$fields = array_keys($schemas['tables'][$options['table']]);
 			foreach ($fields as $field) {
 				if ($field != 'indexes') {
 					$heads[] = '"' . $field . '"';
@@ -4388,23 +4395,23 @@ class DboSource extends DataSource {
 		}
 
 		$head = implode(",", $heads) . "\n";
-		if ($encoding != $this->config['encoding']) {
-			$head = mb_convert_encoding($head, $encoding, $appEncoding);
+		if ($options['encoding'] != $this->config['encoding']) {
+			$head = mb_convert_encoding($head, $options['encoding'], $appEncoding);
 		}
 		fwrite($fp, $head);
 
 		// データを書込
 		foreach ($datas as $data) {
 			$record = $data[$tablekey];
-			if ($init) {
+			if ($options['init']) {
 				$record['id'] = '';
 				$record['modified'] = '';
 				$record['created'] = '';
 			}
 			$record = $this->_convertRecordToCsv($record);
 			$csvRecord = implode(',', $record) . "\n";
-			if ($encoding != $appEncoding) {
-				$csvRecord = mb_convert_encoding($csvRecord, $encoding, $appEncoding);
+			if ($options['encoding'] != $appEncoding) {
+				$csvRecord = mb_convert_encoding($csvRecord, $options['encoding'], $appEncoding);
 			}
 			fwrite($fp, $csvRecord);
 		}
@@ -4455,4 +4462,16 @@ class DboSource extends DataSource {
 	}
 // <<<
 
+// CUSTOMIZE ADD 2017/02/05 ryuring
+// >>>
+/**
+ * Gets the database encoding
+ *
+ * @return string The database encoding
+ */
+	public function getEncoding() {
+		return 'utf8';
+	}
+// <<<
+	
 }
