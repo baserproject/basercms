@@ -46,8 +46,21 @@ CSS_END
 ?>
 
 <script type="text/javascript">
+
+	window.onpageshow = loadInit;
+	$(window).load(loadInit);
+
+	function loadInit(){
+		//$("#BtnLogin").removeAttr('disabled');
+		var getTokenUrl = '<?php echo $this->BcBaser->getUrl('/mail/mail/ajax_get_token') ?>';
+		$.ajaxSetup({cache: false});
+		$.get(getTokenUrl, function(result) {
+			$('input[name="data[_Token][key]"]').val(result);
+			$('input[type="submit"]').removeAttr('disabled');
+		});
+	}
 	
-$(function(){
+	$(function(){
 
 	if($("#LoginCredit").html() == 1) {
 		$("body").hide();
@@ -87,6 +100,11 @@ $(function(){
 		// 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
 		$("body").fadeIn(50);
 	}
+		
+	$("#BtnLogin").click(function(){
+		$("#BtnLogin").attr('disabled', 'disabled');
+		$("#UserLoginForm").submit();
+	});
 
 	function changeNavi(target){
 		if($(target).val()) {

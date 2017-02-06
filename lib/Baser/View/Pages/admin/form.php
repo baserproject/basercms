@@ -59,9 +59,6 @@ $(function(){
 			success: function(result){
 				if(result) {
 					$("#LinkPreview").trigger("click");
-					$.bcToken.update(function(){
-						$("input[name='data[_Token][key]']").val($.bcToken.key);
-					}, {loaderType: 'none'});
 				} else {
 					alert('プレビューの読み込みに失敗しました。');
 				}
@@ -190,7 +187,13 @@ function pageCategoryIdChangeHandler() {
 		previewWidth = '90%';
 	}
 
-	$("#LinkPreview").colorbox({width: previewWidth, height:"90%", iframe:true});
+	$("#LinkPreview").colorbox({width: previewWidth, height:"90%", iframe:true,
+		onCleanup: function() {
+			$.bcToken.update(function(){
+				$("input[name='data[_Token][key]']").val($.bcToken.key);
+			}, {loaderType: 'none'});
+		}
+	});
 	
 }
 

@@ -90,6 +90,10 @@ class BlogPostsController extends BlogAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
+		if(in_array($this->request->params['action'], array('admin_edit', 'admin_add'))) {
+			$this->Security->csrfExpires = '+1 day';
+		}
+		
 		if (isset($this->request->params['pass'][0])) {
 
 			$this->BlogContent->recursive = -1;
