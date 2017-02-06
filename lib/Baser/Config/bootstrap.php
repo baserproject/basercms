@@ -345,11 +345,6 @@ if (Configure::read('debug') == 0) {
 			Configure::write('Cache.check', false);
 		}
 	}
-	Configure::write('Exception', array(
-		'handler' => 'ErrorHandler::handleException',
-		'renderer' => 'ExceptionRenderer',
-		'log' => false
-	));
 } else {
 	Configure::write('Cache.check', false);
 	clearViewCache();

@@ -252,7 +252,10 @@ class BlogHelper extends AppHelper {
 		if ($moreLink === true) {
 			$moreLink = '≫ 続きを読む';
 		}
-		$out = '<div class="post-body">' . $post['BlogPost']['content'] . '</div>';
+		$out = '';
+		if ($this->blogContent['use_content']) {
+			$out .= '<div class="post-body">' . $post['BlogPost']['content'] . '</div>';
+		}
 		if ($moreText && $post['BlogPost']['detail']) {
 			$out .= '<div id="post-detail">' . $post['BlogPost']['detail'] . '</div>';
 		}
