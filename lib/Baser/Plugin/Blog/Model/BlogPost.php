@@ -575,6 +575,9 @@ class BlogPost extends BlogAppModel {
 			$data = $data['BlogPost'];
 		}
 		$content = $this->BlogContent->Content->findByType('Blog.BlogContent', $data['blog_content_id']);
+		if(!$content) {
+			return [];
+		}
 		$_data = [];
 		$_data['SearchIndex']['type'] = 'ブログ';
 		$_data['SearchIndex']['model_id'] = $this->id;
