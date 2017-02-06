@@ -14,7 +14,13 @@
  * [ADMIN] データメンテナンス
  */
 ?>
-
+<script>
+	$(function(){
+		$("#BtnUpload").click(function(){
+			$.bcUtil.showLoader();
+		});
+	});
+</script>
 
 <div class="section">
 	<h2>データのバックアップ</h2>
@@ -29,6 +35,6 @@
 	<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>
 	<p><?php echo $this->BcForm->input('Tool.backup', array('type' => 'file')) ?>
 	<?php echo $this->BcForm->error('Tool.backup') ?></p>
-	<p><?php echo $this->BcForm->submit('アップロード', array('div' => false, 'class' => 'button-small')) ?></p>
+	<p><?php echo $this->BcForm->submit('アップロード', array('div' => false, 'class' => 'button-small', 'id' => 'BtnUpload')) ?></p>
 	<?php echo $this->BcForm->end() ?>
 </div>
