@@ -3782,7 +3782,9 @@ class DboSource extends DataSource {
 		$CakeSchema->connection = $this->configKeyName;
 
 		$schema = $CakeSchema->load(array('name' => $name, 'path' => $dir, 'file' => $file));
-
+		if(!$schema) {
+			return false;
+		}
 		return $this->createTable(array('schema' => $schema));
 	}
 
@@ -3879,10 +3881,13 @@ class DboSource extends DataSource {
 		}
 
 		// SQLを生成して実行
-		$sql = $this->createSchema($schema);
-		if($return = $this->execute($sql)){
-			if(method_exists($schema, 'after')){
-				$schema->after(['create'=> strtolower($schema->name),'errors'=>null]);
+		$return = true;
+		if($schema) {
+			$sql = $this->createSchema($schema);
+			if($return = $this->execute($sql)){
+				if(method_exists($schema, 'after')){
+					$schema->after(['create'=> strtolower($schema->name),'errors'=>null]);
+				}
 			}
 		}
 		// とりあえずキャッシュを全て削除
@@ -3960,9 +3965,11 @@ class DboSource extends DataSource {
 				$table => $schema);
 			$schema = new CakeSchema($options);
 		}
-
-		$sql = $this->dropSchema($schema);
-		$return = $this->execute($sql);
+		$return = true;
+		if($schema) {
+			$sql = $this->dropSchema($schema);
+			$return = $this->execute($sql);
+		}
 		// とりあえずキャッシュを全て削除
 		clearCache(null, 'models');
 		return $return;
