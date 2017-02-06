@@ -136,14 +136,19 @@ class ToolsController extends AppController {
 		@unlink($targetPath);
 
 		$result = true;
-		
+		$db = ConnectionManager::getDataSource('default');
+		$db->begin();
 		if (!$this->_loadBackup($tmpPath . 'core' . DS)) {
 			$result = false;
 		}
 		if (!$this->_loadBackup($tmpPath . 'plugin' . DS)) {
 			$result = false;
 		}
-
+		if($result) {
+			$db->commit();
+		} else {
+			$db->rollback();
+		}
 		$this->_resetTmpSchemaFolder();
 		clearAllCache();
 		
@@ -169,9 +174,14 @@ class ToolsController extends AppController {
 		/* テーブルを削除する */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
-				if (!$db->loadSchema(array('type' => 'drop', 'path' => $path, 'file' => $file))) {
+				try {
+					if (!$db->loadSchema(array('type' => 'drop', 'path' => $path, 'file' => $file))) {
+						$result = false;
+						continue;
+					}
+				} catch (Exception $e) {
 					$result = false;
-					continue;
+					$this->log($e->getMessage());
 				}
 			}
 		}
@@ -179,9 +189,14 @@ class ToolsController extends AppController {
 		/* テーブルを読み込む */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
-				if (!$db->loadSchema(array('type' => 'create', 'path' => $path, 'file' => $file))) {
+				try {
+					if (!$db->loadSchema(array('type' => 'create', 'path' => $path, 'file' => $file))) {
+						$result = false;
+						continue;
+					}
+				} catch (Exception $e) {
 					$result = false;
-					continue;
+					$this->log($e->getMessage());
 				}
 			}
 		}
@@ -189,9 +204,14 @@ class ToolsController extends AppController {
 		/* CSVファイルを読み込む */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.csv$/", $file)) {
-				if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => 'SJIS'))) {
+				try {
+					if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => 'SJIS'))) {
+						$result = false;
+						continue;
+					}
+				} catch (Exception $e) {
 					$result = false;
-					continue;
+					$this->log($e->getMessage());
 				}
 			}
 		}
