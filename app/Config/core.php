@@ -404,7 +404,6 @@ $prefix = 'myapp_';
 	'engine' => $engine,
 	'prefix' => $prefix . 'cake_core_',
 	'path' => CACHE . 'persistent' . DS,
-	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));*/
 // <<<
@@ -419,7 +418,6 @@ $prefix = 'myapp_';
 	'engine' => $engine,
 	'prefix' => $prefix . 'cake_model_',
 	'path' => CACHE . 'models' . DS,
-	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));*/
 // <<<
