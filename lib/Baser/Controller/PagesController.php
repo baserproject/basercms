@@ -65,10 +65,6 @@ class PagesController extends AppController {
 		
 		parent::beforeFilter();
 
-		if(in_array($this->request->params['action'], array('admin_edit', 'admin_add'))) {
-			$this->Security->csrfExpires = '+1 day';
-		}
-		
 		// 認証設定
 		$this->BcAuth->allow('display', 'mobile_display', 'smartphone_display');
 

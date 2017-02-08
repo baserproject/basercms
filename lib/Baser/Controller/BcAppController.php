@@ -425,6 +425,7 @@ class BcAppController extends Controller {
 
 		//Securityコンポーネント設定
 		$this->Security->blackHoleCallback = '_blackHoleCallback';
+		$this->Security->csrfExpires = '+1 day';
 
 		// SSLリダイレクト設定
 		if (Configure::read('BcApp.adminSsl') && !empty($this->request->params['admin'])) {
