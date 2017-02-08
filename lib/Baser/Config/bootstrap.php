@@ -221,7 +221,6 @@ if (BC_INSTALLED) {
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_model_',
 		'path' => CACHE . 'models' . DS,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// コア環境
@@ -229,7 +228,6 @@ if (BC_INSTALLED) {
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_core_',
 		'path' => CACHE . 'persistent' . DS,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// DBデータキャッシュ
@@ -239,7 +237,6 @@ if (BC_INSTALLED) {
 		'probability' => 100,
 		'prefix' => $cachePrefix . 'cake_data_',
 		'lock' => true,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// エレメントキャッシュ
@@ -249,7 +246,6 @@ if (BC_INSTALLED) {
 		'probability' => 100,
 //		'prefix' => $cachePrefix . 'cake_data_',
 		'lock' => true,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => Configure::read('BcCache.viewDuration')
 	));
 	// 環境情報キャッシュ
@@ -259,7 +255,6 @@ if (BC_INSTALLED) {
 		'path' => CACHE . 'environment',
 		'prefix' => $cachePrefix . 'cake_env_',
 		'lock' => false,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 
