@@ -246,10 +246,14 @@ class ToolsController extends AppController {
 				if ($plugin) {
 					if (!preg_match('/^' . $pluginPrefix . '([^_].+)$/', $table)) {
 						// メールプラグインの場合、先頭に、「mail_」 がなくとも 末尾にmessagesがあれば対象とする
-						if ($plugin != 'Mail') {
-							continue;
-						} elseif (!preg_match("/messages$/", $table)) {
-							continue;
+						if ($plugin == 'Mail') {
+							if (!preg_match("/messages$/", $table)) {
+								continue;
+							}
+						} else {
+							if(Inflector::tableize($plugin) != $table) {
+								continue;
+							}
 						}
 					}
 				}
