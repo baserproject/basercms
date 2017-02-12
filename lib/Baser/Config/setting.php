@@ -193,3 +193,10 @@ $config['BcAgent'] = array(
 		)
 	)
 );
+
+/**
+ * セキュリティ設定
+ */
+$config['BcSecurity'] = array(
+	'csrfExpires' => '+4 hours'
+);
