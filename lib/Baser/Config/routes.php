@@ -32,13 +32,8 @@ Configure::write('BcRequest.routerLoaded', true);
 App::uses('BaserPluginApp', 'Controller');
 App::uses('BaserPluginAppModel', 'Model');
 
-$request = null;
-if (!empty(self::$_requests[0])) {
-	$request = self::$_requests[0];
-}
 // パラメータ取得
-$parameter = getPureUrl($request);
-
+$parameter = getPureUrl(Router::getRequest(true));
 Configure::write('BcRequest.pureUrl', $parameter); // requestAction の場合、bootstrapが実行されないので、urlParamを書き換える
 $agent = Configure::read('BcRequest.agent');
 $agentAlias = Configure::read('BcRequest.agentAlias');
