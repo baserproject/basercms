@@ -1402,6 +1402,7 @@ DOC_END;
 
 		if ($value) {
 			$value = str_replace('-', '/', $value);
+			$value = str_replace('-', '/', $value);
 			list($attributes['value'],) = explode(" ", $value);
 		} else {
 			unset($attributes['value']);
