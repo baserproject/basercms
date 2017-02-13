@@ -283,6 +283,11 @@ class BcAppController extends Controller {
 
 		// セキュリティ設定
 		$this->Security->blackHoleCallback = '_blackHoleCallback';
+		$csrfExpires = Configure::read('BcSecurity.csrfExpires');
+		if(!$csrfExpires) {
+			$csrfExpires = "+4 hours";
+		}
+		$this->Security->csrfExpires = $csrfExpires;
 		if (!BC_INSTALLED || $isUpdate) {
 			$this->Security->validatePost = false;
 		}

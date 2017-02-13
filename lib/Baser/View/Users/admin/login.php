@@ -46,7 +46,18 @@ CSS_END
 ?>
 
 <script type="text/javascript">
-	
+window.onunload = function(){};	// safariのキャッシュ対策だが、safari 10.0.3 では効かない
+if (typeof window.onpageshow != "undefined") {
+	window.onpageshow = loadInit;	
+} else {
+	$(window).load(loadInit);	
+}
+function loadInit(){
+	$.bcToken.setTokenUrl('/mail/mail/ajax_get_token');
+	$.bcToken.check(function() {
+		$('input[type="submit"]').removeAttr('disabled');
+	}, {loaderType: "none"});	
+}
 $(function(){
 
 	if($("#LoginCredit").html() == 1) {
@@ -68,6 +79,11 @@ $(function(){
 		changeView(false);
 	});
 
+	$("#BtnLogin").click(function(){
+		$("#BtnLogin").attr('disabled', 'disabled');
+		$("#UserLoginForm").submit();
+	});
+	
 	$("#LoginInner").click(function(e){
 		if (e && e.stopPropagation) {
 			e.stopPropagation();
