@@ -491,4 +491,66 @@ class Site extends AppModel {
 		}
 		return $devices;
 	}
+
+/**
+ * デバイス設定をリセットする
+ * 
+ * @return bool
+ */
+	public function resetDevice() {
+		$sites = $this->find('all', ['recursive' => -1]);
+		$result = true;
+		if($sites) {
+			$this->getDataSource()->begin();
+			foreach($sites as $site) {
+				$site['Site']['device'] = '';
+				$site['Site']['auto_link'] = false;
+				if(!$site['Site']['lang']) {
+					$site['Site']['same_main_url'] = false;
+					$site['Site']['auto_redirect'] = false;
+				}
+				$this->set($site);
+				if(!$this->save()) {
+					$result = false;
+				}
+			}	
+		}
+		if(!$result) {
+			$this->getDataSource()->rollback();
+		} else {
+			$this->getDataSource()->commit();
+		}
+		return $result;
+	}
+
+/**
+ * 言語設定をリセットする
+ * 
+ * @return bool
+ */
+	public function resetLang() {
+		$sites = $this->find('all', ['recursive' => -1]);
+		$result = true;
+		if($sites) {
+			$this->getDataSource()->begin();
+			foreach($sites as $site) {
+				$site['Site']['lang'] = '';
+				if(!$site['Site']['device']) {
+					$site['Site']['same_main_url'] = false;
+					$site['Site']['auto_redirect'] = false;
+				}
+				$this->set($site);
+				if(!$this->save()) {
+					$result = false;
+				}
+			}
+		}
+		if(!$result) {
+			$this->getDataSource()->rollback();
+		} else {
+			$this->getDataSource()->commit();
+		}
+		return $result;
+	}
+	
 }

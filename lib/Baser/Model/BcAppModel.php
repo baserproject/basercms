@@ -21,8 +21,9 @@ App::uses('AppController', 'Controller');
  *
  * 既存のCakePHPプロジェクトで、設置済のAppModelと共存できるように、AppModelとは別にした。
  *
- * @package			Baser.Model
+ * @package Baser.Model
  * @property Content $Content
+ * @property BehaviorCollection $Behaviors
  */
 class BcAppModel extends Model {
 
@@ -961,13 +962,12 @@ class BcAppModel extends Model {
 		if (isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
-
-		$result = true;
-
-		if ($this->Behaviors->attached('BcCache')) {
+		
+		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->disable('BcCache');
 		}
 
+		$result = true;
 		foreach ($data as $key => $value) {
 
 			if ($this->find('count', ['conditions' => ['name' => $key]]) > 1) {
@@ -993,12 +993,12 @@ class BcAppModel extends Model {
 			}
 		}
 
-		if ($this->Behaviors->attached('BcCache')) {
+		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->enable('BcCache');
 			$this->delCache();
 		}
 
-		return true;
+		return $result;
 	}
 
 /**

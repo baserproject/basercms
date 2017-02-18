@@ -159,4 +159,20 @@ class SiteConfig extends AppModel {
 		$this->saveKeyValue($siteConfigs);
 	}
 
+/**
+ * 指定したフィールドの値がDBのデータと比較して変更状態か確認
+ * 
+ * @param string $field フィールド名
+ * @param string $value 値
+ * @return bool
+ */
+	public function isChange($field, $value) {
+		$siteConfig = $this->findExpanded();
+		if(isset($siteConfig[$field])) {
+			return !($siteConfig[$field] === $value);
+		} else {
+			return false;
+		}
+	}
+
 }
