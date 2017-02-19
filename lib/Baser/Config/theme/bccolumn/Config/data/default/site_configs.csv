@@ -1,8 +1,8 @@
-"id","name","value","created","modified"
+ï»¿"id","name","value","created","modified"
 "","name","baser company","",""
-"","keyword","baser,CMS,ƒRƒ“ƒeƒ“ƒcƒ}ƒlƒWƒƒ“ƒgƒVƒXƒeƒ€,ŠJ”­x‰‡","",""
-"","description","baserCMS ‚ÍACakePHP‚ğ—˜—p‚µAŠÂ‹«€”õ‚Ì‘f‘‚³‚Éd“_‚ğ’u‚¢‚½Šî–{ŠJ”­x‰‡ƒvƒƒWƒFƒNƒg‚Å‚·BWEBƒTƒCƒg‚ÉÅ’áŒÀ•K—v‚Æ‚È‚éƒvƒ‰ƒOƒCƒ“A‚»‚µ‚Ä‚»‚Ìƒvƒ‰ƒOƒCƒ“‚ğ‘g‚İ‚İ‚â‚·‚¢ŠÇ—‰æ–ÊA”FØ•t‚«‚Ìƒƒ“ƒo[ƒ}ƒCƒy[ƒW‚ğÅ‰‚©‚ç‘•”õ‚µ‚Ä‚¢‚Ü‚·B","",""
-"","address","•Ÿ‰ªŒ§","",""
+"","keyword","baser,CMS,ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ãƒãƒã‚¸ãƒ¡ãƒ³ãƒˆã‚·ã‚¹ãƒ†ãƒ ,é–‹ç™ºæ”¯æ´","",""
+"","description","baserCMS ã¯ã€CakePHPã‚’åˆ©ç”¨ã—ã€ç’°å¢ƒæº–å‚™ã®ç´ æ—©ã•ã«é‡ç‚¹ã‚’ç½®ã„ãŸåŸºæœ¬é–‹ç™ºæ”¯æ´ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã§ã™ã€‚WEBã‚µã‚¤ãƒˆã«æœ€ä½é™å¿…è¦ã¨ãªã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã€ãã—ã¦ãã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚’çµ„ã¿è¾¼ã¿ã‚„ã™ã„ç®¡ç†ç”»é¢ã€èªè¨¼ä»˜ãã®ãƒ¡ãƒ³ãƒãƒ¼ãƒã‚¤ãƒšãƒ¼ã‚¸ã‚’æœ€åˆã‹ã‚‰è£…å‚™ã—ã¦ã„ã¾ã™ã€‚","",""
+"","address","ç¦å²¡çœŒ","",""
 "","theme","bccolumn","",""
 "","email","","",""
 "","widget_area","1","",""
@@ -21,35 +21,35 @@
 "","login_credit","1","",""
 "","first_access","","",""
 "","editor","BcCkeditor","",""
-"","editor_styles","#ÂŒ©o‚µ
+"","editor_styles","#é’è¦‹å‡ºã—
 h3 {
 color:Blue;
 }
-#ÔŒ©o‚µ
+#èµ¤è¦‹å‡ºã—
 h3 {
 color:Red;
 }
-#‰©ƒ}[ƒJ[
+#é»„ãƒãƒ¼ã‚«ãƒ¼
 span {
 background-color:Yellow;
 }
-#—Îƒ}[ƒJ[
+#ç·‘ãƒãƒ¼ã‚«ãƒ¼
 span {
 background-color:Lime;
 }
-#‘å•¶š
+#å¤§æ–‡å­—
 big {}
-#¬•¶š
+#å°æ–‡å­—
 small {}
-#ƒR[ƒh
+#ã‚³ãƒ¼ãƒ‰
 code {}
-#íœ•¶
+#å‰Šé™¤æ–‡
 del {}
-#‘}“ü•¶
+#æŒ¿å…¥æ–‡
 ins {}
-#ˆø—p
+#å¼•ç”¨
 cite {}
-#ƒCƒ“ƒ‰ƒCƒ“
+#ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³
 q {}","",""
 "","editor_enter_br","0","",""
 "","admin_side_banner","1","",""
@@ -57,4 +57,4 @@ q {}","",""
 "","use_universal_analytics","1","",""
 "","version","","",""
 "","google_maps_api_key","","",""
-"","main_site_display_name","ƒpƒ\ƒRƒ“","",""
+"","main_site_display_name","ãƒ‘ã‚½ã‚³ãƒ³","",""

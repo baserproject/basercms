@@ -39,7 +39,7 @@
 	<p>バックアップファイルをアップロードし、データベースのデータを復元します。<br />
 		<small>ダウンロードしたバックアップファイルをZIPファイルのままアップロードします。</small></p>
 	<?php echo $this->BcForm->create('Tool', ['url' => ['action' => 'maintenance', 'restore'], 'type' => 'file']) ?>	
-	<p><?php echo $this->BcForm->input('Tool.encoding', ['type' => 'radio', 'options' => ['UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'UTF-8']) ?>
+	<p><?php echo $this->BcForm->input('Tool.encoding', ['type' => 'radio', 'options' => ['auto' => '自動判別', 'UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'], 'value' => 'auto']) ?>
 		<?php echo $this->BcForm->error('Tool.encoding') ?></p>
 	<p><?php echo $this->BcForm->input('Tool.backup', ['type' => 'file']) ?>
 	<?php echo $this->BcForm->error('Tool.backup') ?></p>

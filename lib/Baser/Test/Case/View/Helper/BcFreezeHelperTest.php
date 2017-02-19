@@ -278,7 +278,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 	public function radioDataProvider() {
 		return array(
 			array(false, 'baser', array(), array(), "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"\""),
-			array(false, 'baser', array('test1' => 'testValue1'), array(), 'for="baserTest1".*id="baserTest1".*testValue1'),
+			array(false, 'baser', array('test1' => 'testValue1'), array(), 'id="baserTest1".*for="baserTest1">testValue1'),
 			array(false, 'baser', array('test1' => 'testValue1'), array('class' => 'bcclass'), 'class="bcclass"'),
 			array(true, 'baser.freezed', array(), array(), 'type="hidden"'),
 			array(true, 'baser.freezed', array('test1' => 'testValue1'), array('class' => 'bcclass'), 'class="bcclass"'),
