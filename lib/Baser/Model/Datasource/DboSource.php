@@ -4266,6 +4266,11 @@ class DboSource extends DataSource {
 		if(!$encoding) {
 			$encoding = $this->_dbEncToPhp($this->getEncoding());
 		}
+		if($encoding == 'auto') {
+			$data = file_get_contents($path);
+			$encoding = mb_detect_encoding($data);
+			$data = null;
+		}
 		$appEncoding = Configure::read('App.encoding');
 		
 		// ヘッダ取得
