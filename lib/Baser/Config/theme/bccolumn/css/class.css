@@ -32,7 +32,7 @@
 
 @font-face {
   font-family: "oswald";
-	src: url('font/Oswald/Oswald-Regular.ttf') format('truetype');
+  src: url('font/Oswald/Oswald-Regular.ttf') format('truetype');
 }
 .oswald {
     font-family: 'Oswald', sans-serif;
@@ -113,7 +113,7 @@ img.left {
 }
 
 .pink {
-	color: #C60070 !important;
+  color: #C60070 !important;
 }
 
 .peach {
@@ -315,8 +315,31 @@ img.left {
 
 /* @status font color
 -------------------------------- */
-.required {
-  color: #c00;
+#MailMessageIndexForm .required{
+    color:#FFF;
+    font-size:10px;
+    background-color: #C30;
+    padding:4px 5px;
+    font-weight: normal;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left:5px;
+    margin-right:5px;
+    vertical-align: middle;
+}
+#MailMessageIndexForm .normal{
+    color:#FFF;
+    font-size:10px;
+    background-color: #CCC;
+    padding:4px 5px;
+    font-weight: normal;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left:5px;
+    margin-right:5px;
+    vertical-align: middle;
 }
 
 .error-message {

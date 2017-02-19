@@ -38,7 +38,9 @@ if (!empty($mailFields)) {
 				}
 				echo '>' . "\n" . '        <th class="col-head" width="150">' . $this->Mailform->label("MailMessage." . $field['field_name'] . "", $field['head']);
 				if ($field['not_empty']) {
-					echo '<span class="required">*</span>';
+					echo '<span class="required">必須</span>';
+				} else {
+					echo '<span class="normal">任意</span>';
 				}
 				echo '</th>' . "\n" . '        <td class="col-input">';
 			}
