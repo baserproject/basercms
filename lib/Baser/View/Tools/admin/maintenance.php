@@ -18,7 +18,21 @@
 
 <p>データベースのデータをバックアップファイルとしてPCにダウンロードします。</p>
 
-<div class="submit"><?php $this->BcBaser->link('ダウンロード', array('backup'), array('class' => 'btn-red button')) ?> </div>
+<?php echo $this->BcForm->create('Tool', array('type' => 'get', 'url' => array('action' => 'maintenance', 'backup'))) ?>
+
+	<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
+		<tr>
+			<th class="col-head" style="width:200px"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.encoding', '文字コード') ?></th>
+			<td class="col-input">
+				<?php echo $this->BcForm->input('Tool.encoding', array('type' => 'radio', 'options' => array('UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'), 'value' => 'UTF-8')) ?>
+				<?php echo $this->BcForm->error('Tool.encoding') ?>
+			</td>
+		</tr>
+	</table>
+
+	<div class="submit"><?php echo $this->BcForm->submit('ダウンロード', array('div' => false, 'class' => 'btn-red button')) ?></div>
+
+<?php echo $this->BcForm->end() ?>
 
 <h2>データの復元</h2>
 
@@ -29,6 +43,13 @@
 <?php echo $this->BcForm->create('Tool', array('action' => 'maintenance', 'url' => array('restore'), 'type' => 'file')) ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
+	<tr>
+		<th class="col-head" style="width:200px"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.encoding', '文字コード') ?></th>
+		<td class="col-input">
+			<?php echo $this->BcForm->input('Tool.encoding', array('type' => 'radio', 'options' => array('UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'), 'value' => 'UTF-8')) ?>
+			<?php echo $this->BcForm->error('Tool.encoding') ?>
+		</td>
+	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.backup', 'バックアップファイル') ?></th>
 		<td class="col-input">
