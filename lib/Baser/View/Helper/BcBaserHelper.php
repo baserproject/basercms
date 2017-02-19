@@ -337,8 +337,12 @@ class BcBaserHelper extends AppHelper {
 		$contentsTitle = $this->getContentsTitle();
 		$useCurrent = false;
 		if ($contentsTitle) {
-			if($this->request->params['Content']['type'] != 'ContentFolder' && $this->request->params['Content']['name'] == 'index') {
-				if($this->_categoryTitleOn === false) {
+			if(!empty($this->request->params['Content'])) {
+				if($this->request->params['Content']['type'] != 'ContentFolder' && $this->request->params['Content']['name'] == 'index') {
+					if($this->_categoryTitleOn === false) {
+						$useCurrent = true;
+					}
+				} else {
 					$useCurrent = true;
 				}
 			} else {

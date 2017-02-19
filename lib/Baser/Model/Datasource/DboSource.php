@@ -4288,6 +4288,8 @@ class DboSource extends DataSource {
 		}
 
 		$head = fgetcsv($fp, 10240);
+		// UTF-8（BOM付）で何故か、配列の最初のキーに""が付加されてしまう
+		$head[0] = preg_replace('/^﻿"(.+)"$/', "$1", $head[0]);
 		
 		$datas = array();
 		while (($record = fgetcsvReg($fp, 10240)) !== false) {
