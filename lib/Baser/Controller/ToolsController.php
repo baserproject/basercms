@@ -77,7 +77,7 @@ class ToolsController extends AppController {
 		switch ($mode) {
 			case 'backup':
 				set_time_limit(0);
-				$this->_backupDb();
+				$this->_backupDb($this->request->query['backup_encoding']);
 				break;
 			case 'restore':
 				set_time_limit(0);
@@ -138,10 +138,10 @@ class ToolsController extends AppController {
 		$result = true;
 		$db = ConnectionManager::getDataSource('default');
 		$db->begin();
-		if (!$this->_loadBackup($tmpPath . 'core' . DS)) {
+		if (!$this->_loadBackup($tmpPath . 'core' . DS, $data['Tool']['encoding'])) {
 			$result = false;
 		}
-		if (!$this->_loadBackup($tmpPath . 'plugin' . DS)) {
+		if (!$this->_loadBackup($tmpPath . 'plugin' . DS, $data['Tool']['encoding'])) {
 			$result = false;
 		}
 		if($result) {
@@ -162,7 +162,7 @@ class ToolsController extends AppController {
  * @param string $configKeyName DB接続名
  * @return boolean
  */
-	protected function _loadBackup($path) {
+	protected function _loadBackup($path, $encoding) {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if (!is_array($files[1])) {
@@ -205,7 +205,7 @@ class ToolsController extends AppController {
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.csv$/", $file)) {
 				try {
-					if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => 'SJIS'))) {
+					if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => $encoding))) {
 						$result = false;
 						continue;
 					}
@@ -224,16 +224,16 @@ class ToolsController extends AppController {
  *
  * @return void
  */
-	protected function _backupDb() {
+	protected function _backupDb($encoding) {
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
-		$this->_writeBackup($tmpDir . 'core' . DS);
+		$this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
 		if ($plugins) {
 			foreach ($plugins as $plugin) {
-				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
+				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name'], $encoding);
 			}
 		}
 		// ZIP圧縮して出力
@@ -252,7 +252,7 @@ class ToolsController extends AppController {
  * @param string $path
  * @return boolean
  */
-	protected function _writeBackup($path, $plugin = '') {
+	protected function _writeBackup($path, $plugin = '', $encoding) {
 		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
@@ -264,7 +264,7 @@ class ToolsController extends AppController {
 				if (!$db->writeSchema(array('path' => $path, 'model' => $model, 'plugin' => $plugin))) {
 					return false;
 				}
-				if (!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding' => 'SJIS'))) {
+				if (!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding' => $encoding))) {
 					return false;
 				}
 			}
