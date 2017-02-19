@@ -164,7 +164,7 @@ class MailController extends MailAppController {
 
 			// SSL設定
 			if ($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
-				$this->Security->blackHoleCallback = '_sslFail';
+				$this->Security->blackHoleCallback = 'sslFail';
 				$this->Security->requireSecure = am($this->Security->requireSecure, array('index', 'confirm', 'submit'));
 			}
 		}
