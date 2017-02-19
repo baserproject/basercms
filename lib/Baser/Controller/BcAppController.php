@@ -564,7 +564,7 @@ class BcAppController extends Controller {
 	public function _blackHoleCallback($err) {
 		//SSL制限違反は別処理
 		if ($err === 'secure') {
-			$this->_sslFail($err);
+			$this->sslFail($err);
 			return;
 		}
 
@@ -596,7 +596,7 @@ class BcAppController extends Controller {
  * @return	void
  * @access	protected
  */
-	protected function _sslFail($err) {
+	public function sslFail($err) {
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
 			$url = $this->request->url;
