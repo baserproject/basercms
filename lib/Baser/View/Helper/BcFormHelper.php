@@ -457,11 +457,13 @@ class BcFormHelper extends FormHelper {
 		// label を追加
 		// CUSTOMIZE MODIRY 2014/10/27 ryuring
 		// チェックボックスをラベルで囲う仕様に変更
+		// CUSTOMIZE MODIRY 2017/2/19 ryuring
+		// チェックボックスをラベルタグで囲わない仕様に変更した
 		// >>> 
 		//return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
 		// ---
 		if (!empty($options['label'])) {
-			return $output . parent::label($fieldName, $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null))) . $options['label']);
+			return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null))) . parent::label($fieldName, $options['label']);
 		} else {
 			return $output . $this->Html->useTag('checkbox', $options['name'], array_diff_key($options, array('name' => null)));
 		}
@@ -765,12 +767,14 @@ class BcFormHelper extends FormHelper {
 						// checkboxのdivを外せるオプションを追加
 						// CUSTOMIZE MODIFY 2014/10/27 ryuring
 						// チェックボックスをラベルタグで囲う仕様に変更した
+						// CUSTOMIZE MODIFY 2017/2/19 ryuring
+						// チェックボックスをラベルタグで囲わない仕様に変更した
 						// >>>
 						// $label = $this->label(null, $title, $label);
 						// $item = $this->Html->useTag('checkboxmultiple', $name, $htmlOptions);
 						// $select[] = $this->Html->div($attributes['class'], $item . $label);
 						// ---
-						$item = $this->label(null, $this->Html->useTag('checkboxmultiple', $name, $htmlOptions) . $title, $label);
+						$item = $this->Html->useTag('checkboxmultiple', $name, $htmlOptions) . $this->label(null, $title, $label);
 						if (isset($attributes['div']) && $attributes['div'] === false) {
 							$select[] = $item;
 						} else {
@@ -1677,188 +1681,6 @@ DOC_END;
 					$out .= "</tr>";
 				}
 			}
-		}
-		return $out;
-	}
-
-/**
- * Creates a set of radio widgets. Will create a legend and fieldset
- * by default. Use $options to control this
- *
- * You can also customize each radio input element using an array of arrays:
- *
- * ```
- * $options = array(
- *  array('name' => 'United states', 'value' => 'US', 'title' => 'My title'),
- *  array('name' => 'Germany', 'value' => 'DE', 'class' => 'de-de', 'title' => 'Another title'),
- * );
- * ```
- *
- * ### Attributes:
- *
- * - `separator` - define the string in between the radio buttons
- * - `between` - the string between legend and input set or array of strings to insert
- *    strings between each input block
- * - `legend` - control whether or not the widget set has a fieldset & legend
- * - `fieldset` - sets the class of the fieldset. Fieldset is only generated if legend attribute is provided
- * - `value` - indicate a value that is should be checked
- * - `label` - boolean to indicate whether or not labels for widgets show be displayed
- * - `hiddenField` - boolean to indicate if you want the results of radio() to include
- *    a hidden input with a value of ''. This is useful for creating radio sets that non-continuous
- * - `disabled` - Set to `true` or `disabled` to disable all the radio buttons.
- * - `empty` - Set to `true` to create an input with the value '' as the first option. When `true`
- *   the radio label will be 'empty'. Set this option to a string to control the label value.
- *
- * @param string $fieldName Name of a field, like this "Modelname.fieldname"
- * @param array $options Radio button options array.
- * @param array $attributes Array of HTML attributes, and special attributes above.
- * @return string Completed radio widget set.
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#options-for-select-checkbox-and-radio-inputs
- */
-	public function radio($fieldName, $options = array(), $attributes = array()) {
-		$attributes['options'] = $options;
-		$attributes = $this->_initInputField($fieldName, $attributes);
-		unset($attributes['options']);
-
-		$showEmpty = $this->_extractOption('empty', $attributes);
-		if ($showEmpty) {
-			$showEmpty = ($showEmpty === true) ? __d('cake', 'empty') : $showEmpty;
-			$options = array('' => $showEmpty) + $options;
-		}
-		unset($attributes['empty']);
-
-		$legend = false;
-		if (isset($attributes['legend'])) {
-			$legend = $attributes['legend'];
-			unset($attributes['legend']);
-		} elseif (count($options) > 1) {
-			$legend = __(Inflector::humanize($this->field()));
-		}
-
-		$fieldsetAttrs = '';
-		if (isset($attributes['fieldset'])) {
-			$fieldsetAttrs = array('class' => $attributes['fieldset']);
-			unset($attributes['fieldset']);
-		}
-
-		$label = true;
-		if (isset($attributes['label'])) {
-			$label = $attributes['label'];
-			unset($attributes['label']);
-		}
-
-		$separator = null;
-		if (isset($attributes['separator'])) {
-			$separator = $attributes['separator'];
-			unset($attributes['separator']);
-		}
-
-		$between = null;
-		if (isset($attributes['between'])) {
-			$between = $attributes['between'];
-			unset($attributes['between']);
-		}
-
-		$value = null;
-		if (isset($attributes['value'])) {
-			$value = $attributes['value'];
-		} else {
-			$value = $this->value($fieldName);
-		}
-
-		$disabled = array();
-		if (isset($attributes['disabled'])) {
-			$disabled = $attributes['disabled'];
-		}
-
-		$out = array();
-
-		$hiddenField = isset($attributes['hiddenField']) ? $attributes['hiddenField'] : true;
-		unset($attributes['hiddenField']);
-
-		if (isset($value) && is_bool($value)) {
-			$value = $value ? 1 : 0;
-		}
-
-		$this->_domIdSuffixes = array();
-		foreach ($options as $optValue => $optTitle) {
-			$optionsHere = array('value' => $optValue, 'disabled' => false);
-			if (is_array($optTitle)) {
-				if (isset($optTitle['value'])) {
-					$optionsHere['value'] = $optTitle['value'];
-				}
-
-				$optionsHere += $optTitle;
-				$optTitle = $optionsHere['name'];
-				unset($optionsHere['name']);
-			}
-
-			if (isset($value) && strval($optValue) === strval($value)) {
-				$optionsHere['checked'] = 'checked';
-			}
-			$isNumeric = is_numeric($optValue);
-			if ($disabled && (!is_array($disabled) || in_array((string)$optValue, $disabled, !$isNumeric))) {
-				$optionsHere['disabled'] = true;
-			}
-			$tagName = $attributes['id'] . $this->domIdSuffix($optValue);
-
-			// CUSTOMIZE MODIFY 2014/10/27 ryuring
-			// >>>
-			/*if ($label) {
-				$labelOpts = is_array($label) ? $label : array();
-				$labelOpts += array('for' => $tagName);
-				$optTitle = $this->label($tagName, $optTitle, $labelOpts);
-			}
-
-			if (is_array($between)) {
-				$optTitle .= array_shift($between);
-			}
-			$allOptions = $optionsHere + $attributes;
-			$out[] = $this->Html->useTag('radio', $attributes['name'], $tagName,
-				array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
-				$optTitle
-			);*/
-			// ---
-			if (is_array($between)) {
-				$optTitle .= array_shift($between);
-			}
-			$allOptions = $optionsHere + $attributes;
-			if ($label) {
-				$labelOpts = is_array($label) ? $label : array();
-				$labelOpts += array('for' => $tagName);
-				$out[] = $this->label($tagName, $this->Html->useTag('radio', $attributes['name'], $tagName,
-					array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
-					$optTitle
-				), $labelOpts);
-			} else {
-				$out[] = $this->Html->useTag('radio', $attributes['name'], $tagName,
-					array_diff_key($allOptions, array('name' => null, 'type' => null, 'id' => null)),
-					$between
-				);
-			}
-			// <<<
-		}
-		$hidden = null;
-
-		if ($hiddenField) {
-			if (!isset($value) || $value === '') {
-				$hidden = $this->hidden($fieldName, array(
-					'form' => isset($attributes['form']) ? $attributes['form'] : null,
-					'id' => $attributes['id'] . '_',
-					'value' => '',
-					'name' => $attributes['name']
-				));
-			}
-		}
-		$out = $hidden . implode($separator, $out);
-
-		if (is_array($between)) {
-			$between = '';
-		}
-
-		if ($legend) {
-			$out = $this->Html->useTag('legend', $legend) . $between . $out;
-			$out = $this->Html->useTag('fieldset', $fieldsetAttrs, $out);
 		}
 		return $out;
 	}
