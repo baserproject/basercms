@@ -335,10 +335,19 @@ class BcBaserHelper extends AppHelper {
 
 		// カレントのページを追加
 		$contentsTitle = $this->getContentsTitle();
+		$useCurrent = false;
 		if ($contentsTitle) {
+			if($this->request->params['Content']['type'] != 'ContentFolder' && $this->request->params['Content']['name'] == 'index') {
+				if($this->_categoryTitleOn === false) {
+					$useCurrent = true;
+				}
+			} else {
+				$useCurrent = true;
+			}
+		}
+		if($useCurrent) {
 			$crumbs[] = array('name' => $contentsTitle, 'url' => '');
 		}
-
 		return $crumbs;
 	}
 
@@ -1659,6 +1668,7 @@ EOD;
 			'tree' => $this->BcContents->getTree($id, $level),
 			'currentId' => $currentId
 		];
+		$params['tree'] = $this->_unsetIndexInContentsMenu($params['tree']);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$params = array_merge($params, [
 					'cache' => [
@@ -1667,6 +1677,27 @@ EOD;
 			);
 		}
 		return $this->getElement('contents_menu', $params);
+	}
+
+/**
+ * コンテンツメニューにおいてフォルダ内の index ページを除外する
+ * 
+ * @param array $contents コンテンツデータ
+ * @param bool $children 子かどうか
+ * @return mixed コンテンツデータ
+ */
+	public function _unsetIndexInContentsMenu($contents, $children = false) {
+		if($contents) {
+			foreach($contents as $key => $content) {
+				if($children && $content['Content']['type'] != 'ContentFolder' && $content['Content']['name'] == 'index') {
+					unset($contents[$key]);
+				}
+				if($content['children']) {
+					$contents[$key]['children'] = $this->_unsetIndexInContentsMenu($content['children'], true);
+				}
+			}
+		}
+		return $contents;
 	}
 
 /**
