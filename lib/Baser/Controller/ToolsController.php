@@ -76,7 +76,7 @@ class ToolsController extends AppController {
 		switch ($mode) {
 			case 'backup':
 				set_time_limit(0);
-				$this->_backupDb($this->request->query['encoding']);
+				$this->_backupDb($this->request->query['backup_encoding']);
 				break;
 			case 'restore':
 				set_time_limit(0);

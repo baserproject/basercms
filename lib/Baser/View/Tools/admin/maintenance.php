@@ -24,8 +24,8 @@
 		<tr>
 			<th class="col-head" style="width:200px"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.encoding', '文字コード') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Tool.encoding', array('type' => 'radio', 'options' => array('UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'), 'value' => 'UTF-8')) ?>
-				<?php echo $this->BcForm->error('Tool.encoding') ?>
+				<?php echo $this->BcForm->input('Tool.backup_encoding', array('type' => 'radio', 'options' => array('UTF-8' => 'UTF-8', 'SJIS-win' => 'SJIS'), 'value' => 'UTF-8')) ?>
+				<?php echo $this->BcForm->error('Tool.backup_encoding') ?>
 			</td>
 		</tr>
 	</table>
