@@ -8,7 +8,7 @@ class BlogPostsSchema extends CakeSchema {
 
 	public $file = 'blog_posts.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;
@@ -40,7 +40,7 @@ class BlogPostsSchema extends CakeSchema {
 		'detail' => array('type' => 'text', 'null' => true, 'default' => null),
 		'blog_category_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
 		'user_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
-		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 2),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'posts_date' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'content_draft' => array('type' => 'text', 'null' => true, 'default' => null),
 		'detail_draft' => array('type' => 'text', 'null' => true, 'default' => null),

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2013-11-10 14:57+0100\n"
+"POT-Creation-Date: 2017-01-22 15:48+0900\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -13,6 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: Cache/Cache.php:173
 msgid "Cache engine %s is not available."
@@ -54,13 +55,11 @@ msgstr ""
 msgid "Method %s not implemented for compressed cache in %s"
 msgstr ""
 
-#: Configure/IniReader.php:102
-#: Configure/PhpReader.php:64
+#: Configure/IniReader.php:102 Configure/PhpReader.php:64
 msgid "Cannot load configuration files with ../ in them."
 msgstr ""
 
-#: Configure/IniReader.php:107
-#: Configure/PhpReader.php:69
+#: Configure/IniReader.php:107 Configure/PhpReader.php:69
 msgid "Could not load configuration file: %s"
 msgstr ""
 
@@ -237,11 +236,17 @@ msgid "Invalid join model settings in %s. The association parameter has the wron
 msgstr ""
 
 #: Model/Permission.php:87
-msgid "%s - Failed ARO/ACO node lookup in permissions check. Node references:\nAro: %s\nAco: %s"
+msgid ""
+"%s - Failed ARO/ACO node lookup in permissions check. Node references:\n"
+"Aro: %s\n"
+"Aco: %s"
 msgstr ""
 
 #: Model/Permission.php:98
-msgid "%s - Failed ACO node lookup in permissions check. Node references:\nAro: %s\nAco: %s"
+msgid ""
+"%s - Failed ACO node lookup in permissions check. Node references:\n"
+"Aro: %s\n"
+"Aco: %s"
 msgstr ""
 
 #: Model/Permission.php:109
@@ -304,13 +309,11 @@ msgstr ""
 msgid "Invalid schema object"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:3076
-#: Model/Datasource/Database/Sqlite.php:403
+#: Model/Datasource/DboSource.php:3076 Model/Datasource/Database/Sqlite.php:403
 msgid "Column name or type not defined in schema"
 msgstr ""
 
-#: Model/Datasource/DboSource.php:3081
-#: Model/Datasource/Database/Sqlite.php:408
+#: Model/Datasource/DboSource.php:3081 Model/Datasource/Database/Sqlite.php:408
 msgid "Column type %s does not exist"
 msgstr ""
 
@@ -691,23 +694,17 @@ msgstr ""
 msgid "Fatal Error"
 msgstr ""
 
-#: View/Errors/fatal_error.ctp:23
-#: View/Errors/missing_action.ctp:22;26
+#: View/Errors/fatal_error.ctp:23 View/Errors/missing_action.ctp:22;26
 #: View/Errors/missing_behavior.ctp:24;28
 #: View/Errors/missing_component.ctp:24;28
 #: View/Errors/missing_connection.ctp:22;33
 #: View/Errors/missing_controller.ctp:24;28
-#: View/Errors/missing_database.ctp:22;26
-#: View/Errors/missing_datasource.ctp:24
+#: View/Errors/missing_database.ctp:22;26 View/Errors/missing_datasource.ctp:24
 #: View/Errors/missing_datasource_config.ctp:22
-#: View/Errors/missing_helper.ctp:24;28
-#: View/Errors/missing_layout.ctp:22;26
-#: View/Errors/missing_plugin.ctp:22;26
-#: View/Errors/missing_table.ctp:22
-#: View/Errors/missing_view.ctp:22;26
-#: View/Errors/pdo_error.ctp:22
-#: View/Errors/private_action.ctp:22
-#: View/Errors/scaffold_error.ctp:22
+#: View/Errors/missing_helper.ctp:24;28 View/Errors/missing_layout.ctp:22;26
+#: View/Errors/missing_plugin.ctp:22;26 View/Errors/missing_table.ctp:22
+#: View/Errors/missing_view.ctp:22;26 View/Errors/pdo_error.ctp:22
+#: View/Errors/private_action.ctp:22 View/Errors/scaffold_error.ctp:22
 msgid "Error"
 msgstr ""
 
@@ -719,43 +716,27 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: View/Errors/fatal_error.ctp:35
-#: View/Errors/missing_action.ctp:41
-#: View/Errors/missing_behavior.ctp:38
-#: View/Errors/missing_component.ctp:38
-#: View/Errors/missing_connection.ctp:38
-#: View/Errors/missing_controller.ctp:38
-#: View/Errors/missing_database.ctp:30
-#: View/Errors/missing_datasource.ctp:31
+#: View/Errors/fatal_error.ctp:35 View/Errors/missing_action.ctp:41
+#: View/Errors/missing_behavior.ctp:38 View/Errors/missing_component.ctp:38
+#: View/Errors/missing_connection.ctp:38 View/Errors/missing_controller.ctp:38
+#: View/Errors/missing_database.ctp:30 View/Errors/missing_datasource.ctp:31
 #: View/Errors/missing_datasource_config.ctp:26
-#: View/Errors/missing_helper.ctp:38
-#: View/Errors/missing_layout.ctp:30
-#: View/Errors/missing_plugin.ctp:42
-#: View/Errors/missing_table.ctp:26
-#: View/Errors/missing_view.ctp:30
-#: View/Errors/pdo_error.ctp:36
-#: View/Errors/private_action.ctp:26
-#: View/Errors/scaffold_error.ctp:26
+#: View/Errors/missing_helper.ctp:38 View/Errors/missing_layout.ctp:30
+#: View/Errors/missing_plugin.ctp:42 View/Errors/missing_table.ctp:26
+#: View/Errors/missing_view.ctp:30 View/Errors/pdo_error.ctp:36
+#: View/Errors/private_action.ctp:26 View/Errors/scaffold_error.ctp:26
 msgid "Notice"
 msgstr ""
 
-#: View/Errors/fatal_error.ctp:36
-#: View/Errors/missing_action.ctp:42
-#: View/Errors/missing_behavior.ctp:39
-#: View/Errors/missing_component.ctp:39
-#: View/Errors/missing_connection.ctp:39
-#: View/Errors/missing_controller.ctp:39
-#: View/Errors/missing_database.ctp:31
-#: View/Errors/missing_datasource.ctp:32
+#: View/Errors/fatal_error.ctp:36 View/Errors/missing_action.ctp:42
+#: View/Errors/missing_behavior.ctp:39 View/Errors/missing_component.ctp:39
+#: View/Errors/missing_connection.ctp:39 View/Errors/missing_controller.ctp:39
+#: View/Errors/missing_database.ctp:31 View/Errors/missing_datasource.ctp:32
 #: View/Errors/missing_datasource_config.ctp:27
-#: View/Errors/missing_helper.ctp:39
-#: View/Errors/missing_layout.ctp:31
-#: View/Errors/missing_plugin.ctp:43
-#: View/Errors/missing_table.ctp:27
-#: View/Errors/missing_view.ctp:31
-#: View/Errors/pdo_error.ctp:37
-#: View/Errors/private_action.ctp:27
-#: View/Errors/scaffold_error.ctp:27
+#: View/Errors/missing_helper.ctp:39 View/Errors/missing_layout.ctp:31
+#: View/Errors/missing_plugin.ctp:43 View/Errors/missing_table.ctp:27
+#: View/Errors/missing_view.ctp:31 View/Errors/pdo_error.ctp:37
+#: View/Errors/private_action.ctp:27 View/Errors/scaffold_error.ctp:27
 msgid "If you want to customize this error message, create %s"
 msgstr ""
 
@@ -775,17 +756,13 @@ msgstr ""
 msgid "Missing Behavior"
 msgstr ""
 
-#: View/Errors/missing_behavior.ctp:25
-#: View/Errors/missing_component.ctp:25
-#: View/Errors/missing_controller.ctp:25
-#: View/Errors/missing_helper.ctp:25
+#: View/Errors/missing_behavior.ctp:25 View/Errors/missing_component.ctp:25
+#: View/Errors/missing_controller.ctp:25 View/Errors/missing_helper.ctp:25
 msgid "%s could not be found."
 msgstr ""
 
-#: View/Errors/missing_behavior.ctp:29
-#: View/Errors/missing_component.ctp:29
-#: View/Errors/missing_controller.ctp:29
-#: View/Errors/missing_helper.ctp:29
+#: View/Errors/missing_behavior.ctp:29 View/Errors/missing_component.ctp:29
+#: View/Errors/missing_controller.ctp:29 View/Errors/missing_helper.ctp:29
 msgid "Create the class %s below in file: %s"
 msgstr ""
 
@@ -793,8 +770,7 @@ msgstr ""
 msgid "Missing Component"
 msgstr ""
 
-#: View/Errors/missing_connection.ctp:20
-#: View/Errors/missing_database.ctp:20
+#: View/Errors/missing_connection.ctp:20 View/Errors/missing_database.ctp:20
 msgid "Missing Database Connection"
 msgstr ""
 
@@ -818,8 +794,7 @@ msgstr ""
 msgid "Scaffold requires a database connection"
 msgstr ""
 
-#: View/Errors/missing_database.ctp:27
-#: View/Errors/missing_layout.ctp:27
+#: View/Errors/missing_database.ctp:27 View/Errors/missing_layout.ctp:27
 #: View/Errors/missing_view.ctp:27
 msgid "Confirm you have created the file: %s"
 msgstr ""
@@ -940,8 +915,7 @@ msgstr ""
 msgid "%s requires a \"drag\" option to properly function"
 msgstr ""
 
-#: View/Helper/NumberHelper.php:65
-#: View/Helper/TextHelper.php:80
+#: View/Helper/NumberHelper.php:65 View/Helper/TextHelper.php:80
 #: View/Helper/TimeHelper.php:63
 msgid "%s could not be found"
 msgstr ""
@@ -950,3 +924,5 @@ msgstr ""
 msgid "%s does not implement a %s method, it is incompatible with %s"
 msgstr ""
 
+msgid "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
+msgstr ""

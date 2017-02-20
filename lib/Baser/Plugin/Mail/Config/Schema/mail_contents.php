@@ -8,7 +8,7 @@ class MailContentsSchema extends CakeSchema {
 
 	public $file = 'mail_contents.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

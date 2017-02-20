@@ -351,6 +351,9 @@ class MailMessage extends MailAppModel {
 		// チェック
 		// バリデートグループにおけるデータ２つを比較し、違えばエラーとする
 		foreach ($dists as $key => $dist) {
+			if(count($dist) < 2) {
+				continue;
+			}
 			list($a, $b) = $dist;
 			if(count($dist) == 2){
 				if ($a != $b) {

@@ -8,7 +8,7 @@ class FeedDetailsSchema extends CakeSchema {
 
 	public $file = 'feed_details.php';
 
-	public $connection = 'plugin';
+	public $connection = 'default';
 
 	public function before($event = array()) {
 		return true;

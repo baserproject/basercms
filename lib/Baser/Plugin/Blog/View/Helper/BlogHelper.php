@@ -255,7 +255,10 @@ class BlogHelper extends AppHelper {
 		if ($moreLink === true) {
 			$moreLink = '≫ 続きを読む';
 		}
-		$out = '<div class="post-body">' . $post['BlogPost']['content'] . '</div>';
+		$out = '';
+		if ($this->blogContent['use_content']) {
+			$out .= '<div class="post-body">' . $post['BlogPost']['content'] . '</div>';
+		}
 		if ($moreText && $post['BlogPost']['detail']) {
 			$out .= '<div id="post-detail">' . $post['BlogPost']['detail'] . '</div>';
 		}
@@ -551,18 +554,36 @@ class BlogHelper extends AppHelper {
 		$htmlAttributes = am($_htmlAttributes, $htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
+		// 投稿日が年月日時分秒が同一のデータの対応の為、投稿日が同じでIDが大きいデータを検索
 		$conditions = array();
-		$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
-		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
+		$conditions['BlogPost.id <'] = $post['BlogPost']['id'];
+		$conditions['BlogPost.posts_date'] = $post['BlogPost']['posts_date'];
+		$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
+		$order = 'BlogPost.posts_date DESC, BlogPost.id DESC';
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$prevPost = $BlogPost->find('first', array(
 			'conditions' => $conditions,
 			'fields' => array('no', 'name'),
-			'order' => 'posts_date DESC',
-			'recursive' => 0,
+			'order' => $order,
+			'recursive' => -1,
 			'cache' => false
 		));
+		if (empty($prevPost)) {
+			// 投稿日が古いデータを取得
+			$conditions = array();
+			$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
+			$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
+			$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
+			// 毎秒抽出条件が違うのでキャッシュしない
+			$prevPost = $BlogPost->find('first', array(
+				'conditions' => $conditions,
+				'fields' => array('no', 'name'),
+				'order' => $order,
+				'recursive' => -1,
+				'cache' => false
+			));
+		}
 		if ($prevPost) {
 			$no = $prevPost['BlogPost']['no'];
 			if (!$title) {
@@ -587,18 +608,37 @@ class BlogHelper extends AppHelper {
 		$htmlAttributes = am($_htmlAttributes, $htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
+		// 投稿日が年月日時分秒が同一のデータの対応の為、投稿日が同じでIDが小さいデータを検索
 		$conditions = array();
-		$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
-		$conditions["BlogPost.blog_content_id"] = $post['BlogPost']['blog_content_id'];
+		$conditions['BlogPost.id >'] = $post['BlogPost']['id'];
+		$conditions['BlogPost.posts_date'] = $post['BlogPost']['posts_date'];
+		$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
+		$order = 'BlogPost.posts_date, BlogPost.id';
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$nextPost = $BlogPost->find('first', array(
 			'conditions' => $conditions,
 			'fields' => array('no', 'name'),
-			'order' => 'posts_date',
-			'recursive' => 0,
+			'order' => $order,
+			'recursive' => -1,
 			'cache' => false
 		));
+
+		if (empty($nextPost)) {
+			// 投稿日が新しいデータを取得
+			$conditions = array();
+			$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
+			$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
+			$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
+			// 毎秒抽出条件が違うのでキャッシュしない
+			$nextPost = $BlogPost->find('first', array(
+				'conditions' => $conditions,
+				'fields' => array('no', 'name'),
+				'order' => $order,
+				'recursive' => -1,
+				'cache' => false
+			));
+		}
 		if ($nextPost) {
 			$no = $nextPost['BlogPost']['no'];
 			if (!$title) {

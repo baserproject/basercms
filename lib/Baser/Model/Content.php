@@ -671,18 +671,26 @@ class Content extends AppModel {
  * @param int $id コンテンツID
  * @param string $plugin プラグイン
  * @param string $type タイプ
- * @return string URL
+ * @return mixed URL | false
  */
-	public function createUrl($id, $plugin, $type) {
+	public function createUrl($id, $plugin = null, $type = null) {
+		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
 		if($id == 1) {
 			$url = '/';
 		} else {
-			$parents = $this->getPath($id, ['name'], -1);
+			$parents = $this->getPath($id, ['name', 'plugin', 'type'], -1);
 			unset($parents[0]);
-			$names = array();
+			if(!$parents) {
+				return false;
+			}
+			$names = [];
+			$content = null;
 			foreach($parents as $parent) {
 				$names[] = $parent['Content']['name'];
+				$content = $parent;
 			}
+			$plugin = $content['Content']['plugin'];
+			$type = $content['Content']['type'];
 			$url = '/' . implode('/', $names);
 			$setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
 			if($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
@@ -1062,7 +1070,7 @@ class Content extends AppModel {
 				if (BcUtil::isAdminSystem()) {
 					if($site->domainType == 1) {
 						$fullUrlArray = explode('//', $fullUrl);
-						return $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
+						$url = $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
 					} elseif($site->domainType == 2) {
 						$fullUrlArray = explode('//', $fullUrl);
 						$urlArray = explode('/', $fullUrlArray[1]);
@@ -1071,13 +1079,13 @@ class Content extends AppModel {
 							$mainSite = BcSite::findById($site->mainSiteId);
 							$subDomain = $mainSite->alias;
 						}
-						return $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
+						$url = $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
 					}
 				} else {
-					return $fullUrl;
+					$url = $fullUrl;
 				}
 			} else {
-				return Router::url($originUrl);
+				$url = Router::url($originUrl);
 			}
 		} else {
 			if(BC_INSTALLED) {
@@ -1093,12 +1101,15 @@ class Content extends AppModel {
 					}
 				}
 			}
+			
 			if($full) {
-				return fullUrl($url);
+				$url = fullUrl($url);
 			} else {
-				return Router::url($url);
+				$url = Router::url($url);
 			}
 		}
+
+		return preg_replace('/\/index$/', '/', $url);
 	}
 
 /**

@@ -21,8 +21,9 @@ App::uses('AppController', 'Controller');
  *
  * 既存のCakePHPプロジェクトで、設置済のAppModelと共存できるように、AppModelとは別にした。
  *
- * @package			Baser.Model
+ * @package Baser.Model
  * @property Content $Content
+ * @property BehaviorCollection $Behaviors
  */
 class BcAppModel extends Model {
 
@@ -299,7 +300,7 @@ class BcAppModel extends Model {
 			$dbDataPattern = $_SESSION['dbDataPattern'];
 			unset($_SESSION['dbDataPattern']);
 		}	
-		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
+		if ($this->loadSchema($this->useDbConfig, $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
 				if($dbDataPattern) {
@@ -307,7 +308,7 @@ class BcAppModel extends Model {
 				}
 				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
 				if($path) {
-					return $this->loadCsv('default', $path);
+					return $this->loadCsv($this->useDbConfig, $path);
 				} else {
 					return true;
 				}
@@ -961,13 +962,12 @@ class BcAppModel extends Model {
 		if (isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
-
-		$result = true;
-
-		if ($this->Behaviors->attached('BcCache')) {
+		
+		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->disable('BcCache');
 		}
 
+		$result = true;
 		foreach ($data as $key => $value) {
 
 			if ($this->find('count', ['conditions' => ['name' => $key]]) > 1) {
@@ -993,12 +993,12 @@ class BcAppModel extends Model {
 			}
 		}
 
-		if ($this->Behaviors->attached('BcCache')) {
+		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->enable('BcCache');
 			$this->delCache();
 		}
 
-		return true;
+		return $result;
 	}
 
 /**

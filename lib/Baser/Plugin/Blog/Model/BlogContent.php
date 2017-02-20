@@ -129,7 +129,25 @@ class BlogContent extends BlogAppModel {
  * @return array コントロールソース
  */
 	public function getControlSource($field = null, $options = []) {
-		$controlSources['id'] = $this->find('list');
+
+		switch($field) {
+			case 'id':
+				$ContentModel = ClassRegistry::init('Content');
+				$controlSources['id'] = $ContentModel->find('list', array(
+					'fields' => array(
+						'entity_id', 
+						'title',
+					),
+					'conditions' => array(
+						'plugin' => 'Blog',
+						'type' => 'BlogContent',
+					),
+					'recursive' => -1,
+				));
+				break;
+			default:
+				break;
+		}
 
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];

@@ -147,4 +147,26 @@ class SiteConfigTest extends BaserTestCase {
 		);
 	}
 
+/**
+ * testIsChanged
+ * 
+ * @param string $field フィールド名
+ * @param string $value 値
+ * @param bool $expected 期待値
+ * @dataProvider isChangeDataProvider
+ */
+	public function testIsChange($field, $value, $expected) {
+		$result = $this->SiteConfig->isChange($field, $value);
+		$this->assertEquals($expected, $result);
+	}
+	
+	public function isChangeDataProvider() {
+		return [
+			['use_site_device_setting', "1", false],
+			['use_site_lang_setting', "0", false],
+			['use_site_device_setting', "0", true],
+			['use_site_lang_setting', "1", true]
+		];
+	}
+
 }

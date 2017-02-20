@@ -6,7 +6,7 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
- * @since			baserCMS v 4.0.0
+ * @since			baserCMS v 1.5.3
  * @license			http://basercms.net/license/index.html
  */
 
@@ -388,7 +388,7 @@ class BcUploadBehavior extends ModelBehavior {
 			}
 		}
 		$filePath = $this->savePath[$Model->alias] . $fileName;
-
+		$this->rotateImage($file['tmp_name']);
 		if (!$this->tmpId) {
 			if (copy($file['tmp_name'], $filePath)) {
 				chmod($filePath, 0666);
@@ -405,6 +405,66 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 
 		return $ret;
+	}
+
+/**
+ * 画像をExif情報を元に正しい確度に回転する
+ * 
+ * @param $file
+ * @return bool
+ */
+	public function rotateImage($file) {
+		//return true;
+		$exif = @exif_read_data($file) ;
+		if(empty($exif['Orientation'])) {
+			return true;
+		}
+		switch($exif['Orientation']) {
+			case 3:
+				$angle = 180;
+				break;
+			case 6:
+				$angle = 270;
+				break;
+			case 8:
+				$angle = 90;
+				break;
+			default:
+				return true;
+		}
+		$imgInfo = getimagesize($file);
+		$imageType = $imgInfo[2];
+		// 元となる画像のオブジェクトを生成
+		switch($imageType) {
+			case IMAGETYPE_GIF:
+				$srcImage = imagecreatefromgif($file);
+				break;
+			case IMAGETYPE_JPEG:
+				$srcImage = imagecreatefromjpeg($file);
+				break;
+			case IMAGETYPE_PNG:
+				$srcImage = imagecreatefrompng($file);
+				break;
+			default:
+				return false;
+		}
+		$rotate = imagerotate($srcImage, $angle, 0);
+		switch($imageType) {
+			case IMAGETYPE_GIF:
+				imagegif($rotate, $file);
+				break;
+			case IMAGETYPE_JPEG:
+				imagejpeg($rotate, $file, 100);
+				break;
+			case IMAGETYPE_PNG:
+				imagepng($rotate, $file);
+				break;
+			default:
+				return false;
+		}
+		imagedestroy($srcImage);
+		imagedestroy($rotate);
+		return true;
 	}
 
 /**
