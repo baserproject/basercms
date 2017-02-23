@@ -462,11 +462,36 @@ class BcSqlite extends Sqlite {
 			}
 
 			$metaType = false;
+
+			// CUSTOMIZE ADD 2017/02/21 ryuring
+			// 型情報が取得できない問題を改善
+			// >>>
+			$columnMeta = [];
+			// <<<
+
 			try {
 				$metaData = (array)$results->getColumnMeta($j);
 				if (!empty($metaData['sqlite:decl_type'])) {
 					$metaType = trim($metaData['sqlite:decl_type']);
 				}
+
+				// CUSTOMIZE ADD 2017/02/21 ryuring
+				// 型情報が取得できない問題を改善
+				// >>>
+				if($metaData[0] === false) {
+					if (strpos($columnName, '.')) {
+						list($table) = explode('.', $columnName);
+						if(empty($columnMeta[$table])) {
+							$pdo_statement = $this->_connection->query('PRAGMA table_info(' . $this->config['prefix'] . Inflector::tableize($table) . ')');
+							$columnMeta[$table] = $pdo_statement->fetchAll(PDO::FETCH_ASSOC);
+						}
+						if(!empty($columnMeta[$table][$j]['type'])) {
+							$metaType = $columnMeta[$table][$j]['type'];
+						}
+					}
+				}
+				// <<<
+
 			} catch (Exception $e) {
 			}
 
@@ -498,8 +523,21 @@ class BcSqlite extends Sqlite {
 				//pr($index);
 				if (isset($this->map[$index]) && $this->map[$index] != "") {
 					//echo "asdf: ".$this->map[$index];
-					list($table, $column) = $this->map[$index];
+
+					// CUSTOMIZE MODIFY 2017/02/21 ryuring
+					// boolean 型が文字列として認識されてしまう問題を改善
+					// resultSet() に入れている修正内容の存在が前提
+					// >>>
+					//list($table, $column) = $this->map[$index];
+					//$resultRow[$table][$column] = $row[$index];
+					// ---
+					list($table, $column, $type) = $this->map[$index];
 					$resultRow[$table][$column] = $row[$index];
+					if ($type === 'boolean' && $row[$index] !== null) {
+						$resultRow[$table][$column] = $this->boolean($resultRow[$table][$column]);
+					}
+					// <<<
+
 				} else {
 					$resultRow[0][str_replace('"', '', $index)] = $row[$index];
 				}
