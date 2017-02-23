@@ -364,31 +364,10 @@ class BcUploadBehavior extends ModelBehavior {
 			return false;
 		}
 
-		// プレフィックス、サフィックスを取得
-		$prefix = '';
-		$suffix = '';
-		if (!empty($field['prefix'])) {
-			$prefix = $field['prefix'];
-		}
-		if (!empty($field['suffix'])) {
-			$suffix = $field['suffix'];
-		}
-
-		// 保存ファイル名を生成
-		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file['name']);
-
-		if (!$this->tmpId) {
-			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
-		} else {
-			if (!empty($field['namefield'])) {
-				$Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
-				$fileName = $this->getFieldBasename($Model, $field, $field['ext']);
-			} else {
-				$fileName = $this->tmpId . '_' . $field['name'] . '.' . $field['ext'];
-			}
-		}
+		$fileName = $this->getSaveFileName($Model, $field, $file['name']);
 		$filePath = $this->savePath[$Model->alias] . $fileName;
 		$this->rotateImage($file['tmp_name']);
+
 		if (!$this->tmpId) {
 			if (copy($file['tmp_name'], $filePath)) {
 				chmod($filePath, 0666);
@@ -405,6 +384,47 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 
 		return $ret;
+	}
+
+/**
+ * 保存用ファイル名を取得する
+ *
+ * @param Model $Model
+ * @param $field
+ * @param $name
+ * @return mixed|string
+ */
+	public function getSaveFileName(Model $Model, $field, $name) {
+		// プレフィックス、サフィックスを取得
+		$prefix = '';
+		$suffix = '';
+		if (!empty($field['prefix'])) {
+			$prefix = $field['prefix'];
+		}
+		if (!empty($field['suffix'])) {
+			$suffix = $field['suffix'];
+		}
+		// 保存ファイル名を生成
+		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
+		if (!$this->tmpId) {
+			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
+			if(file_exists($this->savePath[$Model->alias] . $fileName)) {
+				if(preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
+					$basename = $matches[1] . ((int) $matches[2] + 1);
+				} else {
+					$basename = $basename . '_1';
+				}
+				$fileName = $this->getSaveFileName($Model, $field, $basename . '.' . $field['ext']);
+			}
+		} else {
+			if (!empty($field['namefield'])) {
+				$Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
+				$fileName = $this->getFieldBasename($Model, $field, $field['ext']);
+			} else {
+				$fileName = $this->tmpId . '_' . $field['name'] . '.' . $field['ext'];
+			}
+		}
+		return $fileName;
 	}
 
 /**
