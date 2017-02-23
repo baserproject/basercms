@@ -13,6 +13,6 @@
 /**
  * [ADMIN] CSVダウンロード
  */
-?>
-<?php $this->BcCsv->addModelDatas('MailMessage' . $mailContent['MailContent']['id'], $messages) ?>
-<?php $this->BcCsv->download($contentName) ?>
+$this->BcCsv->encoding = $encoding;
+$this->BcCsv->addModelDatas('MailMessage' . $mailContent['MailContent']['id'], $messages);
+$this->BcCsv->download($contentName);
