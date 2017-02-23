@@ -408,7 +408,7 @@ class BcAppModel extends Model {
 						continue;
 					}
 
-					if (!$db->loadCsv(array('path' => $path . DS . $file, 'encoding' => 'SJIS'))) {
+					if (!$db->loadCsv(array('path' => $path . DS . $file, 'encoding' => 'auto'))) {
 						return false;
 					}
 				}
