@@ -228,6 +228,7 @@ class ToolsController extends AppController {
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
+		clearAllCache();
 		$this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
@@ -260,8 +261,7 @@ class ToolsController extends AppController {
 		foreach ($tables as $table) {
 			if((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
 				$table = str_replace($db->config['prefix'], '', $table);
-				$model = Inflector::classify(Inflector::singularize($table));
-				if (!$db->writeSchema(array('path' => $path, 'model' => $model, 'plugin' => $plugin))) {
+				if (!$db->writeSchema(array('path' => $path, 'table' => $table, 'plugin' => $plugin))) {
 					return false;
 				}
 				if (!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding' => $encoding))) {
