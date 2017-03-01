@@ -55,8 +55,7 @@ if(is_null($currentSiteId)) {
 	$currentSiteId = 0;
 }
 $disableEdit = false;
-if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] && $this->request->data['Content']['main_site_content_id'] &&
-	($this->request->data['Content']['alias_id'] || $this->request->data['Content']['type'] == 'ContentFolder'))) {
+if($this->BcContents->isEditable()) {
 	$disableEdit = true;
 }
 $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
@@ -119,7 +118,7 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 				<th>
 					<?php echo $this->BcForm->label('Content.title', 'タイトル') ?>&nbsp;<span class="required">*</span></th>
 				<td>
-					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->input('Content.title', array('size' => 50)) ?>　
 						<?php echo $this->BcForm->error('Content.title') ?>
 					<?php else: ?>
@@ -141,14 +140,14 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('Content.self_status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 				<td class="col-input">
-					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->input('Content.self_status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
 						<?php echo $this->BcForm->hidden('Content.self_status') ?>
 					<?php endif ?>
 					&nbsp;&nbsp;
-					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 						&nbsp;〜&nbsp;
 						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
