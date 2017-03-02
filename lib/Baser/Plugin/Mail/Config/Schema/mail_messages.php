@@ -17,7 +17,7 @@ class MailMessagesSchema extends CakeSchema {
 	public function after($event = array()) {
 	}
 
-	public $mail_configs = array(
+	public $mail_messages = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
