@@ -3692,8 +3692,12 @@ class DboSource extends DataSource {
 		//App::uses('CakeSchema', 'Model');
 		extract($options);
 
-		if (!isset($model)) {
+		if (!isset($model) && !isset($table)) {
 			return false;
+		}
+
+		if (!isset($model)) {
+			$model = Inflector::camelize($table);
 		}
 
 		// 登録済のクラスをクリアする
@@ -3705,7 +3709,11 @@ class DboSource extends DataSource {
 			if (is_array($model)) {
 				$basename = $this->configKeyName;
 			} else {
-				$basename = Inflector::tableize($model);
+				if(isset($table)) {
+					$basename = $table;
+				} else {
+					$basename = Inflector::tableize($model);
+				}
 				$model = array($model);
 			}
 			$file = $basename . '.php';
