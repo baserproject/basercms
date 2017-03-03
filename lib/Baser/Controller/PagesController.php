@@ -291,8 +291,16 @@ class PagesController extends AppController {
 
 		$previewCreated = false;
 		if($this->request->data) {
-			if($this->BcContents->preview == 'default') {
+			if($this->BcContents->preview == 'default' || $this->BcContents->preview == 'draft') {
 				$uuid = $this->_createPreviewTemplate($this->request->data);
+				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
+				$previewCreated = true;
+			}
+		} else {
+			// 草稿アクセス
+			if($this->BcContents->preview == 'draft') {
+				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
+				$uuid = $this->_createDraftPreviewTemplate($data);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
@@ -337,6 +345,26 @@ class PagesController extends AppController {
 		// 一時ファイルとしてビューを保存
 		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
 		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
+		$uuid = CakeText::uuid();
+		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
+		$file = new File($path);
+		$file->open('w');
+		$file->append($contents);
+		$file->close();
+		unset($file);
+		@chmod($path, 0666);
+		return $uuid;
+	}
+/**
+ * 草稿プレビュー用テンプレートを生成する
+ *
+ * @param mixed	$id 固定ページID
+ * @return string uuid
+ */
+	protected function _createDraftPreviewTemplate($data) {
+		// 一時ファイルとしてビューを保存
+		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
+		$contents = $this->Page->addBaserPageTag(null, $data['Page']['draft'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
 		$file = new File($path);
