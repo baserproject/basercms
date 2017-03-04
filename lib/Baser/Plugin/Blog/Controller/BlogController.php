@@ -328,12 +328,12 @@ class BlogController extends BlogAppController {
 					if (!empty($this->request->data['BlogPost'])) {
 						$post = $this->BlogPost->createPreviewData($this->request->data);
 					} else { 
-						$post = $this->_getBlogPosts(array('preview' => (bool) $this->BcContents->preview, 'conditions' => array('id' => $id)));
+						$post = $this->_getBlogPosts(['preview' => true, 'conditions' => ['id' => $id]]);
 						if (isset($post[0])) {
 							$post = $post[0];
-						}
-						if ($this->BcContents->preview == 'draft') {
-							$post['BlogPost']['detail'] = $post['BlogPost']['detail_draft'];
+							if ($this->BcContents->preview == 'draft') {
+								$post['BlogPost']['detail'] = $post['BlogPost']['detail_draft'];
+							}
 						}
 					}
 					
