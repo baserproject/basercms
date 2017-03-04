@@ -324,8 +324,19 @@ class BlogController extends BlogAppController {
 			default:
 
 				// プレビュー
-				if ($this->BcContents->preview && !empty($this->request->data['BlogPost'])) {
-					$post = $this->BlogPost->createPreviewData($this->request->data);
+				if ($this->BcContents->preview) {
+					if (!empty($this->request->data['BlogPost'])) {
+						$post = $this->BlogPost->createPreviewData($this->request->data);
+					} else { 
+						$post = $this->_getBlogPosts(['preview' => true, 'conditions' => ['id' => $id]]);
+						if (isset($post[0])) {
+							$post = $post[0];
+							if ($this->BcContents->preview == 'draft') {
+								$post['BlogPost']['detail'] = $post['BlogPost']['detail_draft'];
+							}
+						}
+					}
+					
 				} else {
 					if (!empty($pass[0])) {
 						$id = $pass[0];
