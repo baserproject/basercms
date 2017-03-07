@@ -1069,8 +1069,11 @@ class Content extends AppModel {
 				$fullUrl = fullUrl($originUrl);
 				if (BcUtil::isAdminSystem()) {
 					if($site->domainType == 1) {
+						$mainDomain = BcUtil::getMainDomain();
 						$fullUrlArray = explode('//', $fullUrl);
-						$url = $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
+						$fullPassArray = explode('/', $fullUrlArray[1]);
+						unset($fullPassArray[0]);
+						$url = $fullUrlArray[0] . '//' . $subDomain . '.' . $mainDomain . '/' . implode('/', $fullPassArray);
 					} elseif($site->domainType == 2) {
 						$fullUrlArray = explode('//', $fullUrl);
 						$urlArray = explode('/', $fullUrlArray[1]);
