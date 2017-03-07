@@ -101,12 +101,8 @@ class BcUploadBehavior extends ModelBehavior {
 				'saveDir' => '',
 				'fields' => array()
 				), $settings);
-
-		if ($this->settings[$Model->alias]['saveDir']) {
-			$this->savePath[$Model->alias] = WWW_ROOT . 'files' . DS . $this->settings[$Model->alias]['saveDir'] . DS;
-		} else {
-			$this->savePath[$Model->alias] = WWW_ROOT . 'files' . DS;
-		}
+		
+		$this->savePath[$Model->alias] = $this->getSaveDir($Model);
 
 		if (!is_dir($this->savePath[$Model->alias])) {
 			$Folder = new Folder();
@@ -661,8 +657,15 @@ class BcUploadBehavior extends ModelBehavior {
 
 			if (!empty($setting['namefield']) && !empty($Model->data[$Model->alias][$setting['name']])) {
 				$oldName = $Model->data[$Model->alias][$setting['name']];
-
-				if (file_exists($this->savePath[$Model->alias] . $oldName)) {
+				$saveDir = $this->savePath[$Model->alias];
+				$saveDirInTheme = $this->getSaveDir($Model, true);
+				$oldSaveDir = '';
+				if(file_exists($saveDir . $oldName)) {
+					$oldSaveDir = $saveDir;
+				} elseif(file_exists($saveDirInTheme . $oldName)) {
+					$oldSaveDir = $saveDirInTheme;
+				}
+				if (file_exists($oldSaveDir . $oldName)) {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($Model, $setting, $pathinfo['extension']);
@@ -679,9 +682,9 @@ class BcUploadBehavior extends ModelBehavior {
 						}
 
 						if (!$copy) {
-							rename($this->savePath[$Model->alias] . $oldName, $this->savePath[$Model->alias] . $newName);
+							rename($oldSaveDir . $oldName, $saveDir . $newName);
 						} else {
-							copy($this->savePath[$Model->alias] . $oldName, $this->savePath[$Model->alias] . $newName);
+							copy($oldSaveDir . $oldName, $saveDir . $newName);
 						}
 
 						$Model->data[$Model->alias][$setting['name']] = str_replace(DS, '/', $newName);
@@ -689,12 +692,12 @@ class BcUploadBehavior extends ModelBehavior {
 						if (!empty($setting['imagecopy'])) {
 							foreach ($setting['imagecopy'] as $copysetting) {
 								$oldCopyname = $this->getFileName($Model, $copysetting, $oldName);
-								if (file_exists($this->savePath[$Model->alias] . $oldCopyname)) {
+								if (file_exists($oldSaveDir . $oldCopyname)) {
 									$newCopyname = $this->getFileName($Model, $copysetting, $newName);
 									if (!$copy) {
-										rename($this->savePath[$Model->alias] . $oldCopyname, $this->savePath[$Model->alias] . $newCopyname);
+										rename($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
 									} else {
-										copy($this->savePath[$Model->alias] . $oldCopyname, $this->savePath[$Model->alias] . $newCopyname);
+										copy($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
 									}
 								}
 							}
@@ -858,4 +861,30 @@ class BcUploadBehavior extends ModelBehavior {
 		
 	}
 
+/**
+ * 保存先のフォルダを取得する
+ * 
+ * @param Model $Model
+ * @param bool $isTheme
+ * @return string $saveDir
+ */
+	public function getSaveDir(Model $Model, $isTheme = false) {
+		if(!$isTheme) {
+			$basePath = WWW_ROOT . 'files' . DS;
+		} else {
+			$siteConfig = Configure::read('BcSite');
+			$theme = $siteConfig['theme'];
+			if($theme) {
+				$basePath = WWW_ROOT . 'theme' . DS . $theme . DS . 'files' . DS;
+			} else {
+				$basePath = getViewPath() . 'files' . DS;
+			}
+		}
+		if ($this->settings[$Model->alias]['saveDir']) {
+			$saveDir = $basePath . $this->settings[$Model->alias]['saveDir'] . DS;
+		} else {
+			$saveDir = $basePath;
+		}
+		return $saveDir;
+	}
 }

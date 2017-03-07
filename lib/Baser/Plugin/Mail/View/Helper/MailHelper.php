@@ -10,6 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
+App::uses('AppHelper','View/Helper');
+
 /**
  * メールヘルパー
  *
@@ -46,7 +48,7 @@ class MailHelper extends AppHelper {
 			return;
 		}
 		if ($mailContentId) {
-			$MailContent = ClassRegistry::getObject('MailContent');
+			$MailContent = ClassRegistry::init('Mail.MailContent');
 			$MailContent->expects(array());
 			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
