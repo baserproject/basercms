@@ -101,8 +101,28 @@ class MailHelperTest extends BaserTestCase {
                         'mobile' => 'mobile',
                         'smartphone' => 'smartphone'
                     );
-        $this->assertEquals($result, $expected, 'テンプレートの取得結果が違います。');
+        $this->assertEquals($result, $expected, 'フォームテンプレートの取得結果が違います。');
     }
 
+/**
+ * レイアウトテンプレートを取得
+ */
+    public function testGetLayoutTemplates() {
 
+    }
+
+/**
+ * メールテンプレートを取得
+ */
+    public function testGetMailTemplates() {
+        $View = new View(null);
+        $View->set('siteConfig', Configure::read('BcSite'));
+        $this->Mail->BcBaser = new BcBaserHelper($View);
+        $result = $this->Mail->getMailTemplates();
+        $expected = array (
+            'mail_default' => 'mail_default',
+            'default' => 'default',
+        );
+        $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
+    }
 }
