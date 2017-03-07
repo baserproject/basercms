@@ -11,6 +11,7 @@
  */
 
 App::uses('MailHelper', 'Mail.View/Helper');
+App::uses('BcBaserHelper', 'View/Helper');
 
 /**
  * Class MailHelperTest
@@ -92,9 +93,16 @@ class MailHelperTest extends BaserTestCase {
  */
 
     public function testGetFormTemplates() {
+        $View = new View(null);
+        $View->set('siteConfig', Configure::read('BcSite'));
+        $this->Mail->BcBaser = new BcBaserHelper($View);
         $result = $this->Mail->getFormTemplates();
-
-        print_r($result);
+        $expected = array (
+                        'default' => 'default',
+                        'mobile' => 'mobile',
+                        'smartphone' => 'smartphone'
+                    );
+        $this->assertEquals($result, $expected, 'テンプレートの取得結果が違います。');
     }
 
 
