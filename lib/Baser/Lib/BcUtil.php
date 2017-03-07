@@ -355,7 +355,7 @@ class BcUtil extends Object {
 		if(strpos($host, '.') === false) {
 			return '';
 		}
-		$mainHost = BcUtil::getMainFullDomain();
+		$mainHost = BcUtil::getMainDomain();
 		if($host == $mainHost) {
 			return '';
 		}
@@ -369,7 +369,13 @@ class BcUtil extends Object {
 		return '';
 
 	}
-	
+
+/**
+ * 指定したURLのドメインを取得する
+ *
+ * @param $url URL
+ * @return string
+ */
 	public static function getDomain($url) {
 		$mainUrlInfo = parse_url($url);
 		$host = $mainUrlInfo['host'];
@@ -378,12 +384,27 @@ class BcUtil extends Object {
 		}
 		return $host;
 	}
-	
-	public static function getMainFullDomain() {
-		return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
+
+/**
+ * メインとなるドメインを取得する
+ *
+ * @return string
+ */
+	public static function getMainDomain() {
+		$mainDomain = Configure::read('BcEnv.mainDomain');
+		if($mainDomain) {
+			return $mainDomain;
+		} else {
+			return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
+		}
 	}
-	
-	public static function getFullDomain() {
+
+/**
+ * 現在のドメインを取得する
+ *
+ * @return string
+ */
+	public static function getCurrentDomain() {
 		if(isConsole() && empty($_SERVER['HTTP_HOST'])) {
 			return '';
 		}
