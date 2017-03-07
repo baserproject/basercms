@@ -53,4 +53,9 @@ class MailHelperTest extends BaserTestCase {
         $this->assertEquals($result, $expected, "説明文の内容が変更されています。");
     }
 
+    public function testDescriptionExists() {
+        $this->Mail->setMailContent(1);
+        $result = $this->Mail->descriptionExists();
+        $this->assertTrue($result,"メールの説明文が指定されていません。");
+    }
 }
