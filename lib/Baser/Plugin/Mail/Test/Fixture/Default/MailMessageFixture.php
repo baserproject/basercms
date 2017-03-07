@@ -19,13 +19,6 @@ class MailMessageFixture extends BaserTestFixture {
   public $name = 'MailMessage';
 
 /**
- * table
- *
- * @var string
- */
-  public $table = 'mail_message_1';
-
-/**
  * Fields
  *
  * @var array
