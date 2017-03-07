@@ -131,14 +131,33 @@ class MailHelperTest extends BaserTestCase {
         $this->assertRegExp($expected, $result, 'スクリプトが取得できません。');
     }
 
+/**
+ * メールフォームへのリンクを取得
+ */
     public function testLink() {
-
+        //$this->Mail->link();
     }
 
-    public function testSetMailContent() {
-
+/**
+ * メールコンテンツデータをセット
+ * @dataProvider setMailContentDataProvider
+ */
+    public function testSetMailContent($id, $expect) {
+        unset($this->Mail->mailContent);
+        $this->Mail->setMailContent($id);
+        $this->assertEquals((bool)($this->Mail->mailContent), $expect);
     }
 
+    public function setMailContentDataProvider() {
+        return [
+          [1, true],
+          [2, false]
+        ];
+    }
+    
+/**
+ * ブラウザの戻るボタンの生成結果取得
+ */
     public function testToken() {
         $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドの為スキップします。');
     }
