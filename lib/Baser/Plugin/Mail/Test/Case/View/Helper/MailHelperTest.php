@@ -43,6 +43,13 @@ class MailHelperTest extends BaserTestCase {
     }
 
 /**
+ * 説明文の取得結果
+ */
+    public function testDescription() {
+        $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドの為スキップします。');
+    }
+
+/**
  * 説明文を取得する
  */
     public function testGetDescription() {
@@ -50,7 +57,16 @@ class MailHelperTest extends BaserTestCase {
         $this->Mail->setMailContent(1);
         $expected = '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>';
         $result = $this->Mail->getDescription();
-        $this->assertEquals($result, $expected, "説明文の内容が変更されています。");
+        $this->assertEquals($result, $expected, "説明文の取得結果が違います。");
+    }
+
+/**
+ * 説明文の存在確認
+ */
+    public function testDescriptionExists() {
+        $this->Mail->setMailContent(1);
+        $result = $this->Mail->descriptionExists();
+        $this->assertTrue($result, "メールの説明文が指定されていません。");
     }
 
 }
