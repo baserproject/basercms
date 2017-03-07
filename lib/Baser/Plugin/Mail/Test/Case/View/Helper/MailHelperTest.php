@@ -89,9 +89,8 @@ class MailHelperTest extends BaserTestCase {
     }
 
 /**
- * メール
+ * メールフォームテンプレートを取得
  */
-
     public function testGetFormTemplates() {
         $View = new View(null);
         $View->set('siteConfig', Configure::read('BcSite'));
