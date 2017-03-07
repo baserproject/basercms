@@ -14,7 +14,10 @@
  * [ADMIN] 統合コンテンツフォーム
  */
 $urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
-unset($urlArray[count($urlArray) -1]);
+if($this->request->data['Content']['type'] != 'ContentFolder') {
+	unset($urlArray[count($urlArray) -1]);
+}
+// 同一URL
 if($this->request->data['Site']['same_main_url']) {
 	$site = BcSite::findById($this->request->data['Site']['main_site_id']);
 	array_shift($urlArray);
@@ -22,11 +25,18 @@ if($this->request->data['Site']['same_main_url']) {
 		$urlArray = explode('/', $site->alias) + $urlArray;
 	}
 }
+// サブドメイン
 if($this->request->data['Site']['use_subdomain']) {
-	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
+	if($urlArray) {
+		$hostUrl = '/' . $urlArray[0] . '/';
+		array_shift($urlArray);
+	} else {
+		$hostUrl = '/';
+	}
+	$hostUrl = $this->BcContents->getUrl($hostUrl, true, true);
 	array_shift($urlArray);
 } else {
-	$host = $this->BcContents->getUrl('/', true, $this->request->data['Site']['use_subdomain']);
+	$hostUrl = $this->BcContents->getUrl('/', true, false);
 }
 if($this->request->data['Site']['alias']) {
 	$checkUrl = '/' . $this->request->data['Site']['alias'] . '/';
@@ -43,7 +53,7 @@ $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
-$baseUrl = $host . $baseUrl;
+$baseUrl = $hostUrl . $baseUrl;
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),

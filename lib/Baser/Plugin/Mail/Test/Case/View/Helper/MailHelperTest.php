@@ -69,5 +69,4 @@ class MailHelperTest extends BaserTestCase {
         $this->assertTrue($result, "メールの説明文が指定されていません。");
     }
 
-
 }
