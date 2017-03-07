@@ -1600,13 +1600,14 @@ class BcAppController extends Controller {
  * @return bool
  */
 	protected function _checkReferer() {
-		$siteDomain = BcUtil::getFullDomain();
+		$siteDomain = BcUtil::getCurrentDomain();
 		if(empty($_SERVER['HTTP_REFERER'])) {
-			return;
+			return false;
 		}
 		$refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
 		if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
 			throw new NotFoundException();
 		}
+		return true;
 	}
 }

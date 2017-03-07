@@ -104,5 +104,4 @@ class MailHelperTest extends BaserTestCase {
         $this->assertEquals($result, $expected, 'テンプレートの取得結果が違います。');
     }
 
-
 }
