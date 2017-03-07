@@ -25,16 +25,14 @@ class MailHelperTest extends BaserTestCase {
  * @var array
  */
     public $fixtures = array (
-        'plugin.Mail.Default/MailContent',
         'baser.Default.Content',
         'baser.Default.Site',
         'baser.Default.User',
         'baser.Default.SiteConfig',
-
+        'plugin.Mail.Default/MailContent',
         'plugin.Mail.Default/MailField',
         'plugin.Mail.Default/MailMessage',
         'plugin.Mail.Default/MailConfig'
-
     );
 
 /**
@@ -85,12 +83,18 @@ class MailHelperTest extends BaserTestCase {
  */
     public function testGetForm() {
         $result = $this->Mail->getForm();
-        $expected = '{.*<form.*/form.*}';
+        $expected = '/.*<form.*<\/form>.*/s';
         $this->assertRegExp($expected, $result, "メールフォームが取得できません。");
     }
 
-    public function testGetFormTemplates() {
+/**
+ * メール
+ */
 
+    public function testGetFormTemplates() {
+        $result = $this->Mail->getFormTemplates();
+
+        print_r($result);
     }
 
 
