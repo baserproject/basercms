@@ -69,5 +69,13 @@ class MailHelperTest extends BaserTestCase {
         $this->assertTrue($result, "メールの説明文が指定されていません。");
     }
 
+/**
+ * メールフォームを取得
+ */
+    public function testGetForm() {
+        //$result = $this->Mail->getForm();
+        //var_dump($result);
+    }
+
 
 }
