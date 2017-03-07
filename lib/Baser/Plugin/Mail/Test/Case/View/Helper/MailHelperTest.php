@@ -11,6 +11,7 @@
  */
 
 App::uses('MailHelper', 'Mail.View/Helper');
+App::uses('BcBaserHelper', 'View/Helper');
 
 /**
  * Class MailHelperTest
@@ -25,11 +26,11 @@ class MailHelperTest extends BaserTestCase {
  * @var array
  */
     public $fixtures = array (
-        'plugin.Mail.Default/MailContent',
         'baser.Default.Content',
         'baser.Default.Site',
         'baser.Default.User',
         'baser.Default.SiteConfig',
+        'plugin.Mail.Default/MailContent',
         'plugin.Mail.Default/MailField',
         'plugin.Mail.Default/MailMessage',
         'plugin.Mail.Default/MailConfig'
@@ -82,15 +83,25 @@ class MailHelperTest extends BaserTestCase {
  * メールフォームを取得
  */
     public function testGetForm() {
-    	$MailMessage = ClassRegistry::init('Mail.MailMessage');
-    	$MailMessage->createTable(1);
         $result = $this->Mail->getForm();
-        $expected = '{.*<form.*/form.*}';
+        $expected = '/.*<form.*<\/form>.*/s';
         $this->assertRegExp($expected, $result, "メールフォームが取得できません。");
     }
 
+/**
+ * メールフォームテンプレートを取得
+ */
     public function testGetFormTemplates() {
-
+        $View = new View(null);
+        $View->set('siteConfig', Configure::read('BcSite'));
+        $this->Mail->BcBaser = new BcBaserHelper($View);
+        $result = $this->Mail->getFormTemplates();
+        $expected = array (
+                        'default' => 'default',
+                        'mobile' => 'mobile',
+                        'smartphone' => 'smartphone'
+                    );
+        $this->assertEquals($result, $expected, 'テンプレートの取得結果が違います。');
     }
 
 }
