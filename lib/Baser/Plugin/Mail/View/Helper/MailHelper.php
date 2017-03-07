@@ -223,7 +223,7 @@ class MailHelper extends AppHelper {
  * @return mixed
  */
 	public function getForm($id = null) {
-		$MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('Mail.MailContent');
 		$conditions = [];
 		if($id) {
 			$conditions = [

@@ -9,7 +9,7 @@ class ContentFixture extends BaserTestFixture {
  *
  * @var string
  */
-	public $name = 'Content';
+public $name = 'Content';
 	
 /**
  * Records
