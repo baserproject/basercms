@@ -149,7 +149,6 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームの説明文を取得する
- * 
  * @return string メールフォームの説明文
  */
 	public function getDescription() {
@@ -204,7 +203,7 @@ class MailHelper extends AppHelper {
  * @return string
  */
 	public function getToken() {
-		return $this->BcBaser->element('mail_token');
+		return $this->BcBaser->getElement('Mail.mail_token');
 	}
 
 /**

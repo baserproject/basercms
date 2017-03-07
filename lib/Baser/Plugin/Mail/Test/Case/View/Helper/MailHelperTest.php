@@ -12,6 +12,7 @@
 
 App::uses('MailHelper', 'Mail.View/Helper');
 App::uses('BcBaserHelper', 'View/Helper');
+App::uses('BcAppView', 'View');
 
 /**
  * Class MailHelperTest
@@ -41,7 +42,9 @@ class MailHelperTest extends BaserTestCase {
  */
     public function setUp() {
         parent::setUp();
-        $this->Mail = new MailHelper(new View(null));
+        $this->View = new BcAppView(null);
+        $this->View->request = $this->_getRequest('/');
+        $this->Mail = new MailHelper($this->View);
     }
 
 /**
@@ -105,13 +108,6 @@ class MailHelperTest extends BaserTestCase {
     }
 
 /**
- * レイアウトテンプレートを取得
- */
-    public function testGetLayoutTemplates() {
-
-    }
-
-/**
  * メールテンプレートを取得
  */
     public function testGetMailTemplates() {
@@ -124,5 +120,26 @@ class MailHelperTest extends BaserTestCase {
             'default' => 'default',
         );
         $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
+    }
+
+/**
+ * ブラウザの戻るボタンを取得
+ */
+    public function testGetToken() {
+        $result = $this->Mail->getToken();
+        $expected = '/<script.*<\/script>.*/s';
+        $this->assertRegExp($expected, $result, 'スクリプトが取得できません。');
+    }
+
+    public function testLink() {
+
+    }
+
+    public function testSetMailContent() {
+
+    }
+
+    public function testToken() {
+        $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドの為スキップします。');
     }
 }
