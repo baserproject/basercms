@@ -30,11 +30,9 @@ class MailHelperTest extends BaserTestCase {
         'baser.Default.Site',
         'baser.Default.User',
         'baser.Default.SiteConfig',
-
         'plugin.Mail.Default/MailField',
         'plugin.Mail.Default/MailMessage',
         'plugin.Mail.Default/MailConfig'
-
     );
 
 /**
@@ -92,6 +90,5 @@ class MailHelperTest extends BaserTestCase {
     public function testGetFormTemplates() {
 
     }
-
 
 }

@@ -159,7 +159,7 @@ class BcSite {
 					if($site->domainType == 1) {
 						$domainKey = BcUtil::getSubDomain() . '/';
 					} elseif($site->domainType == 2) {
-						$domainKey = BcUtil::getFullDomain() . '/';
+						$domainKey = BcUtil::getCurrentDomain() . '/';
 					}
 				}
 				$regex = '/^' . preg_quote($site->alias, '/') . '\//';
