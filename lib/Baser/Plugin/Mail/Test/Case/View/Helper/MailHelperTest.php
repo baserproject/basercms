@@ -88,6 +88,7 @@ class MailHelperTest extends BaserTestCase {
     public function testGetForm() {
 		$MailMessage = ClassRegistry::init('Mail.MailMessage');
 		$MailMessage->createTable(1);
+		ClassRegistry::flush();
         $result = $this->Mail->getForm();
         $expected = '/.*<form.*<\/form>.*/s';
         $this->assertRegExp($expected, $result, "メールフォームが取得できません。");
