@@ -43,11 +43,26 @@ class MaildataHelperTest extends BaserTestCase {
         $result = $this->Maildata->toDisplayString($type, $value, $options = "");
         $this->assertEquals($result,$expected);
 
+        print_r($result);
+
     }
 
     public function toDisplayStringProvider() {
         return [
-            ['text','ほげほげ','ほげほげ']
+            ['text', 'hoge', 'hoge'],
+            ['textarea', 'hoge', 'hoge'],
+            ['email', 'hoge', 'hoge'],
+            ['hidden', 'hoge', 'hoge'],
+            ['radio', 'hoge', ''],
+            ['select', 'hoge', ''],
+            ['pref', 'hoge', ''],
+            ['check', 'hoge', ''],
+            ['multi_check', 'hoge', ''],
+            ['fire', 'hoge', 'hoge'],
+            ['date_time_calender', 'hoge', '1970年 01月 01日'],
+            ['date_time', 'hoge', 'hoge'],
+            ['autozip', 'hoge', 'hoge'],
+            ['', 'hoge', 'hoge']
         ];
     }
 }
