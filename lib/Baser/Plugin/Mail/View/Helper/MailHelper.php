@@ -10,6 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
+App::uses('AppHelper','View/Helper');
+
 /**
  * メールヘルパー
  *
@@ -46,7 +48,7 @@ class MailHelper extends AppHelper {
 			return;
 		}
 		if ($mailContentId) {
-			$MailContent = ClassRegistry::getObject('MailContent');
+			$MailContent = ClassRegistry::init('Mail.MailContent');
 			$MailContent->expects(array());
 			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
@@ -147,7 +149,6 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームの説明文を取得する
- * 
  * @return string メールフォームの説明文
  */
 	public function getDescription() {
@@ -202,7 +203,7 @@ class MailHelper extends AppHelper {
  * @return string
  */
 	public function getToken() {
-		return $this->BcBaser->element('mail_token');
+		return $this->BcBaser->getElement('Mail.mail_token');
 	}
 
 /**
@@ -221,7 +222,7 @@ class MailHelper extends AppHelper {
  * @return mixed
  */
 	public function getForm($id = null) {
-		$MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('Mail.MailContent');
 		$conditions = [];
 		if($id) {
 			$conditions = [
