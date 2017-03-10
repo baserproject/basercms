@@ -194,7 +194,7 @@ class MailHelper extends AppHelper {
 			}
 		}
 		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
-		$this->BcBaser->link($title, $link, $options);
+        $this->BcBaser->link($title, $link, $options);
 	}
 
 /**
