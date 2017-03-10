@@ -4,7 +4,7 @@ App::uses('MaildataHelper', 'Mail.View/Helper');
 App::uses('BcAppView', 'View');
 
 class MaildataHelperTest extends BaserTestCase {
-
+    public $View = null;
     public $fixtures = array(
         'baser.Default.Content',
         'baser.Default.Site',
@@ -39,30 +39,60 @@ class MaildataHelperTest extends BaserTestCase {
  * メール表示用のデータを出力する
  * @dataProvider toDisplayStringProvider
  */
-    public function testToDisplayString ($type, $value,$expected) {
-        $result = $this->Maildata->toDisplayString($type, $value, $options = "");
+    public function testToDisplayString ($type, $value, $options, $expected) {
+        if($type == 'file') {
+            $this->View->set('mailContent', ['MailContent' => ['id' => 1]]);
+        }
+
+        $result = $this->Maildata->toDisplayString($type, $value, $options);
+        var_dump($result);
         $this->assertEquals($result,$expected);
-
-        print_r($result);
-
     }
 
     public function toDisplayStringProvider() {
+        $options = [
+            'hoge' => '資料請求',
+            'hello' => 'お問い合わせ',
+            'world' => 'その他'
+        ];
+        $get = [
+            'hoge',
+            'hello',
+            'world'
+        ];
         return [
-            ['text', 'hoge', 'hoge'],
-            ['textarea', 'hoge', 'hoge'],
-            ['email', 'hoge', 'hoge'],
-            ['hidden', 'hoge', 'hoge'],
-            ['radio', 'hoge', ''],
-            ['select', 'hoge', ''],
-            ['pref', 'hoge', ''],
-            ['check', 'hoge', ''],
-            ['multi_check', 'hoge', ''],
-            ['fire', 'hoge', 'hoge'],
-            ['date_time_calender', 'hoge', '1970年 01月 01日'],
-            ['date_time', 'hoge', 'hoge'],
-            ['autozip', 'hoge', 'hoge'],
-            ['', 'hoge', 'hoge']
+//            ['text', 'hoge', '', 'hoge'],
+//            ['textarea', 'hoge', '', 'hoge'],
+//            ['email', 'hoge', '', 'hoge'],
+//            ['hidden', 'hoge', '', 'hoge'],
+//            ['radio', 'hoge', '',''],
+//            ['radio', 'hoge',  $options, '資料請求'],
+//            ['radio', 'h', $options, ''],
+//            ['select', 'hoge', '',''],
+//            ['select', 'hoge',  $options, '資料請求'],
+//            ['select', 'h', $options, ''],
+//            ['pref', '35', '','山口県'],
+//            ['pref', '0', '',''],
+//            ['pref', '', '','都道府県']
+            //hogeなのにhogeが返ってこない
+//            ['check', 'hoge', '', ''],
+//            ['check', 'hoge', $options, '資料請求'],
+//            ['check', '', $options, ''],
+//            ['multi_check', '', $options, ''],
+//            ['multi_check', $get, $options,  "・資料請求\n ・お問い合わせ\n ・その他\n"],
+//            ['file', 'hoge', $options, 'hoge'],
+//            ['file', 'test/hoge.jpg', $options, '<a href="/admin/mail_messages/attachment/1/test/hoge.jpg" target="_blank"><img src="/admin/mail_messages/attachment/1/test/hoge.jpg" width="400" alt=""/></a>'],
+//            ['date_time_calender', 'hoge', $options, '1970年 01月 01日'],
+//            ['date_time_calender', '21000828', $options, '2100年 08月 28日'],
+            ['date_time_calender', '2100/08/32', $options, '1970年 01月 01日'],
+//            ['date_time_calender', '', $options, ''],
+//            ['date_time_wareki', 'hoge', $options, ''],
+//            ['date_time_wareki', '19950828', $options, '平成 7年 08月 28日'],
+//            ['date_time_wareki', '19500828', $options, '昭和 25年 08月 28日'],
+//            ['date_time_wareki', '1950/08/28', $options, '昭和 25年 08月 28日'],
+//            ['autozip', '888-0000', $options, '888-0000'],
+//            ['autozip', '8880000', $options, '888-0000'],
+//            ['', 'hoge', $options, 'hoge']
         ];
     }
 }
