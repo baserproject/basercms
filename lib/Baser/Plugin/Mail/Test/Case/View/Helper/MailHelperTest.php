@@ -136,7 +136,7 @@ class MailHelperTest extends BaserTestCase {
 
 /**
  * メールフォームへのリンクを取得
- * @dataProvider LinkProvider
+ * @dataProvider linkProvider
  */
     public function testLink($title,$contentsName,$expected) {
         $this->expectOutputString($expected);
