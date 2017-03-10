@@ -46,12 +46,10 @@ class MaildataHelper extends BcTextHelper {
  */
 	public function toDisplayString($type, $value, $options = "") {
 		// コントロールソースの配列変換
-
         if (!is_array($options)) {
             $options = explode("|", $options);
         }
         $options = am(array(0 => ""), $options);
-
 
 		switch ($type) {
 			case 'text':
