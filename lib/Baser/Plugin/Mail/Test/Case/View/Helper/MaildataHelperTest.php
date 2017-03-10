@@ -1,6 +1,16 @@
 <?php
 
+App::uses('MaildataHelper', 'Mail.View/Helper');
+App::uses('BcAppView', 'View');
+
 class MaildataHelperTest extends BaserTestCase {
+
+    public $fixtures = array(
+        'baser.Default.Content',
+        'baser.Default.Site',
+        'baser.Default.User',
+        'baser.Default.SiteConfig'
+    );
 /**
  * set up
  */
@@ -29,11 +39,15 @@ class MaildataHelperTest extends BaserTestCase {
  * メール表示用のデータを出力する
  * @dataProvider toDisplayStringProvider
  */
-    public function testToDisplayString () {
-        $this->toDisplayString($type, $value, $options = "");
+    public function testToDisplayString ($type, $value,$expected) {
+        $result = $this->Maildata->toDisplayString($type, $value, $options = "");
+        $this->assertEquals($result,$expected);
 
     }
 
     public function toDisplayStringProvider() {
+        return [
+            ['text','ほげほげ','ほげほげ']
+        ];
     }
 }
