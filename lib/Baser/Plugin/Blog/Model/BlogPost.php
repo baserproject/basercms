@@ -697,4 +697,43 @@ class BlogPost extends BlogAppModel {
 		return $post;
 	}
 
+/**
+ * Before Find
+ *
+ * @param array $options
+ * @return array
+ */
+	public function beforeFind($options) {
+		// 日付等全く同じ値のレコードが複数存在する場合の並び替え処理を安定する為、
+		// IDが order に入っていない場合、IDを追加する
+		$idExist = false;
+		if(isset($options['order'])) {
+			if(is_array($options['order'])) {
+				$idExist = false;
+				foreach($options['order'] as $key => $value) {
+					if(strpos($value, ',') !== false) {
+						$orders = explode(',', $value);
+						foreach($orders as $order) {
+							if(strpos($order, 'BlogPost.id') !== false) {
+								$idExist = true;
+							}
+						}
+					} else {
+						if(strpos($key, 'BlogPost.id') !== false) {
+							$idExist = true;
+						}
+					}
+				}
+			} else {
+				if(strpos('BlogPost.id', $options['sort']) === false) {
+					$idExist = true;
+				}
+			}
+		}
+		if(!$idExist) {
+			$options['order']['BlogPost.id'] = 'DESC';
+		}
+		return $options;
+	}
+
 }

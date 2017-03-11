@@ -107,46 +107,45 @@ class BlogPostsController extends BlogAppController {
 /**
  * [ADMIN] 一覧表示
  *
+ * @param int $blogContentId
  * @return void
  */
 	public function admin_index($blogContentId) {
 		if (!$blogContentId || !$this->blogContent) {
 			$this->setMessage('無効な処理です。', true);
-			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
+			$this->redirect(['plugin' => '', 'controller' => 'contents', 'action' => 'index']);
 		}
 
-		/* 画面情報設定 */
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
+		$default = ['named' => [
+			'num' => $this->siteConfigs['admin_list_num']],
+			'sort' => 'BlogPost.no DESC'
+		];
+		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
-		/* 検索条件生成 */
-		$joins = array();
-
+		$joins = [];
 		if (!empty($this->request->data['BlogPost']['blog_tag_id'])) {
 			$db = ConnectionManager::getDataSource($this->BlogPost->useDbConfig);
-			$datasouce = strtolower(preg_replace('/^Database\/Bc/', '', $db->config['datasource']));
-			if ($datasouce != 'csv') {
-				$joins = array(
-					array(
-						'table' => $db->config['prefix'] . 'blog_posts_blog_tags',
-						'alias' => 'BlogPostsBlogTag',
-						'type' => 'inner',
-						'conditions' => array('BlogPostsBlogTag.blog_post_id = BlogPost.id')
-					),
-					array(
-						'table' => $db->config['prefix'] . 'blog_tags',
-						'alias' => 'BlogTag',
-						'type' => 'inner',
-						'conditions' => array('BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id'])
-				));
-			}
+			$joins = [
+				[
+					'table' => $db->config['prefix'] . 'blog_posts_blog_tags',
+					'alias' => 'BlogPostsBlogTag',
+					'type' => 'inner',
+					'conditions' => ['BlogPostsBlogTag.blog_post_id = BlogPost.id']
+				],
+				[
+					'table' => $db->config['prefix'] . 'blog_tags',
+					'alias' => 'BlogTag',
+					'type' => 'inner',
+					'conditions' => ['BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id']]
+			]];
 		}
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
-		$this->paginate = array('conditions' => $conditions,
+		$this->paginate = [
+			'conditions' => $conditions,
 			'joins' => $joins,
-			'order' => 'BlogPost.no DESC',
+			'order' => 'BlogPost.' . $this->passedArgs['sort'],
 			'limit' => $this->passedArgs['num']
-		);
+		];
 		$this->set('posts', $this->paginate('BlogPost'));
 
 		$this->_setAdminIndexViewData();
@@ -179,7 +178,7 @@ class BlogPostsController extends BlogAppController {
 /**
  * ページ一覧用の検索条件を生成する
  *
- * @param array $blogContentId
+ * @param int $blogContentId
  * @param array $data
  * @return array $conditions
  */
