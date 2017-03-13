@@ -33,7 +33,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 ?>
 <script type="text/javascript">
 $(function(){
-	$('#UserMenu').fixedMenu();
+	$('#BcUserMenu').fixedMenu();
 	$('#SystemMenu h2').click(function(){
 		if($(this).next().css('display')=='none') {
 			$(this).next().slideDown(200);
@@ -42,12 +42,12 @@ $(function(){
 		}
 	});
 	$('#SystemMenu ul:first').show();
-	$("#UserMenu ul li div ul li").each(function(){
+	$("#BcUserMenu ul li div ul li").each(function(){
 		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
 			$(this).remove();
 		}
 	});
-	$("#UserMenu ul li div ul").each(function(){
+	$("#BcUserMenu ul li div ul").each(function(){
 		if(!$(this).html().replace(/(^\s+)|(\s+$)/g, "")) {
 			$(this).prev().remove();
 			$(this).remove();
@@ -88,7 +88,7 @@ $(function(){
 				<?php endif ?>
 			</ul>
 		</div>
-		<div id="UserMenu">
+		<div id="BcUserMenu">
 			<ul class="clearfix">
 				<li>
 					<?php if (!empty($user)): ?>
