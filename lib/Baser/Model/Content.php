@@ -546,6 +546,9 @@ class Content extends AppModel {
 		// 同階層に同名のコンテンツがあるか確認
 		$result = true;
 		foreach($sites as $site) {
+			if(!$site['Site']['status']) {
+				continue;
+			}
 			$url = $pureUrl;
 			$prefix = $this->Site->getPrefix($site);
 			if($prefix) {
