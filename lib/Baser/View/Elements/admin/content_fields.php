@@ -34,7 +34,6 @@ if($this->request->data['Site']['use_subdomain']) {
 		$hostUrl = '/';
 	}
 	$hostUrl = $this->BcContents->getUrl($hostUrl, true, true);
-	array_shift($urlArray);
 } else {
 	$hostUrl = $this->BcContents->getUrl('/', true, false);
 }
