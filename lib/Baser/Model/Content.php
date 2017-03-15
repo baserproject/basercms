@@ -382,7 +382,7 @@ class Content extends AppModel {
 		}
 		$assoc = $data['Content']['type'];
 		if($data['Content']['plugin'] != 'Core') {
-			if(!CakePlugin::loaded($assoc = $data['Content']['plugin'])) {
+			if(!CakePlugin::loaded($data['Content']['plugin'])) {
 				return;
 			}
 			$assoc = $data['Content']['plugin'] . '.' . $assoc;
