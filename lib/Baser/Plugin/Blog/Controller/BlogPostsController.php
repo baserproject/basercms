@@ -117,9 +117,9 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$default = ['named' => [
-			'num' => $this->siteConfigs['admin_list_num']],
-			'sort' => 'BlogPost.no DESC'
-		];
+			'num' => $this->siteConfigs['admin_list_num'],
+			'sort' => 'no DESC'
+		]];
 		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
 		$joins = [];
@@ -139,6 +139,7 @@ class BlogPostsController extends BlogAppController {
 					'conditions' => ['BlogTag.id = BlogPostsBlogTag.blog_tag_id', 'BlogTag.id' => $this->request->data['BlogPost']['blog_tag_id']]
 			]];
 		}
+
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
 		$this->paginate = [
 			'conditions' => $conditions,
@@ -335,11 +336,15 @@ class BlogPostsController extends BlogAppController {
 	public function admin_edit($blogContentId, $id) {
 		if (!$blogContentId || !$id) {
 			$this->setMessage('無効な処理です。', true);
-			$this->redirect(array('controller' => 'blog_contents', 'action' => 'index'));
+			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 		}
 
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogPost->read(null, $id);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
+			}
 		} else {
 			if (!empty($this->request->data['BlogPost']['posts_date'])) {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
