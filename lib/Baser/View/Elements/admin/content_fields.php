@@ -13,10 +13,13 @@
 /**
  * [ADMIN] 統合コンテンツフォーム
  */
-$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
-if($this->request->data['Content']['type'] != 'ContentFolder') {
-	unset($urlArray[count($urlArray) -1]);
+$isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
+if($this->request->data['Content']['url'] == '/') {
+	$urlArray = [];
+} else {
+	$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
 }
+
 // 同一URL
 if($this->request->data['Site']['same_main_url']) {
 	$site = BcSite::findById($this->request->data['Site']['main_site_id']);
@@ -29,30 +32,46 @@ if($this->request->data['Site']['same_main_url']) {
 if($this->request->data['Site']['use_subdomain']) {
 	if($urlArray) {
 		$hostUrl = '/' . $urlArray[0] . '/';
-		array_shift($urlArray);
 	} else {
 		$hostUrl = '/';
 	}
 	$hostUrl = $this->BcContents->getUrl($hostUrl, true, true);
+	$contentsName = '';
+	if(!$this->request->data['Content']['site_root']) {
+		$contentsName = $this->BcForm->value('Content.name');
+		if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/') {
+			$contentsName .= '/';
+		}
+	}
 } else {
+	if($this->request->data['Site']['same_main_url'] && $this->request->data['Content']['site_root']) {
+		$contentsName = '';
+	} else {
+		$contentsName = $this->BcForm->value('Content.name');
+	}
+	if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/' && $contentsName) {
+		$contentsName .= '/';
+	}
 	$hostUrl = $this->BcContents->getUrl('/', true, false);
 }
-if($this->request->data['Site']['alias']) {
-	$checkUrl = '/' . $this->request->data['Site']['alias'] . '/';
-} else {
-	$checkUrl = '/';
-}
+
+$checkUrl = '/';
 $Content = ClassRegistry::init('Content');
 foreach($urlArray as $key => $value) {
 	$checkUrl .= $value . '/';
 	$entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);
 	$urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
 }
+if($urlArray && $this->request->data['Site']['use_subdomain']) {
+	array_shift($urlArray);
+}
+unset($urlArray[count($urlArray) -1]);
 $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
 $baseUrl = $hostUrl . $baseUrl;
+
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),
@@ -67,7 +86,6 @@ $disableEdit = false;
 if($this->BcContents->isEditable()) {
 	$disableEdit = true;
 }
-$isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
 ?>
 
 
@@ -111,13 +129,7 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20, 'autofocus' => true)) ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->error('Content.name') ?>
 						<?php else: ?>
-							<?php
-							$contentName = '';
-							if(!$this->request->data['Site']['use_subdomain']){
-								$contentName = $this->BcForm->value('Content.name');
-							}
-							?>
-							<?php echo $baseUrl ?><?php echo $contentName ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/' && !$this->request->data['Site']['use_subdomain']): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
+							<?php echo $baseUrl ?><?php echo $contentsName ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->hidden('Content.name') ?>
 						<?php endif ?>
 					</span>

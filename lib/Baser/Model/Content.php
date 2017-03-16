@@ -410,13 +410,8 @@ class Content extends AppModel {
 			'conditions' => array($this->alias . '.id' => $this->id)
 		));
 		$this->__deleteTarget = $data;
-		
 		if(!$this->softDelete(null)) {
 			return true;
-		}
-		if($data) {
-			$this->deleteRelateSubSiteContent($data);
-			$this->deleteAlias($data);
 		}
 		return true;
 	}
@@ -428,8 +423,13 @@ class Content extends AppModel {
  */
 	public function afterDelete() {
 		parent::afterDelete();
-		$this->deleteAssocCache($this->__deleteTarget);
+		$data = $this->__deleteTarget;
 		$this->__deleteTarget = null;
+		if($data) {
+			$this->deleteRelateSubSiteContent($data);
+			$this->deleteAlias($data);
+		}
+		$this->deleteAssocCache($data);
 	}
 
 /**
@@ -535,6 +535,11 @@ class Content extends AppModel {
 		$_data = $this->find('first', ['conditions' => ['Content.id' => $data['Content']['id']], 'recursive' => -1]);
 		if($_data) {
 			$data = ['Content' => array_merge($_data['Content'], $data['Content'])];
+		}
+
+		// URLが空の場合はゴミ箱へ移動する処理の為、連携更新を行わない
+		if(!$data['Content']['url']) {
+			return true;
 		}
 
 		$CreateModel = $this;
@@ -907,6 +912,8 @@ class Content extends AppModel {
 /**
  * 再帰的に削除
  *
+ * エイリアスの場合
+ *
  * @param $id
  * @return bool
  */
@@ -924,17 +931,23 @@ class Content extends AppModel {
 			}
 		}
 		if($result) {
-			$content = $this->find('first', array('conditions' => array('Content.id' => $id), 'recursive' => -1));
+			$content = $this->find('first', [
+				'conditions' => ['Content.id' => $id],
+				'recursive' => -1
+			]);
 			if(empty($content['Content']['alias_id'])) {
+				// エイリアス以外の場合
+				// 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
 				$content['Content']['parent_id'] = null;
 				$content['Content']['url'] = '';
 				$content['Content']['status'] = false;
 				$content['Content']['self_status'] = false;
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
-				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は必要（default: true）
 				$this->updatingSystemData = false;
-				$this->save($content, array('validate' => false));
+				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
+				$this->clear();
+				$this->save($content, ['validate' => false]);
 				$this->updatingSystemData = true;
 				$result = $this->delete($id);
 				// =====================================================================
@@ -944,6 +957,7 @@ class Content extends AppModel {
 				$this->deleteAssocCache($content);
 				return $result;
 			} else {
+				// エイリアスの場合、直接削除
 				$softDelete = $this->softDelete(null);
 				$this->softDelete(false);
 				$result = $this->removeFromTree($content['Content']['id'], true);
@@ -1070,7 +1084,7 @@ class Content extends AppModel {
 			}
 			if($full) {
 				$fullUrl = fullUrl($originUrl);
-				if (BcUtil::isAdminSystem()) {
+				if (BcUtil::isAdminSystem() && $site) {
 					if($site->domainType == 1) {
 						$mainDomain = BcUtil::getMainDomain();
 						$fullUrlArray = explode('//', $fullUrl);
