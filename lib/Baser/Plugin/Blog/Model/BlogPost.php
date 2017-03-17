@@ -704,10 +704,15 @@ class BlogPost extends BlogAppModel {
  * @return array
  */
 	public function beforeFind($options) {
+		// ================================================================
 		// 日付等全く同じ値のレコードが複数存在する場合の並び替え処理を安定する為、
 		// IDが order に入っていない場合、IDを追加する
-		$idExist = false;
-		if(isset($options['order'])) {
+		// PostgreSQLの場合、max min count sum を利用している際に、order を
+		// 指定するとエラーとなってしまうので、追加するのは最小限にする
+		// ================================================================
+		$idRequire = false;
+		if(!empty($options['order'])) {
+			$idRequire = true;
 			if(is_array($options['order'])) {
 				$idExist = false;
 				foreach($options['order'] as $key => $value) {
@@ -715,22 +720,22 @@ class BlogPost extends BlogAppModel {
 						$orders = explode(',', $value);
 						foreach($orders as $order) {
 							if(strpos($order, 'BlogPost.id') !== false) {
-								$idExist = true;
+								$idRequire = false;
 							}
 						}
 					} else {
 						if(strpos($key, 'BlogPost.id') !== false) {
-							$idExist = true;
+							$idRequire = false;
 						}
 					}
 				}
 			} else {
 				if(strpos('BlogPost.id', $options['sort']) === false) {
-					$idExist = true;
+					$idRequire = false;
 				}
 			}
 		}
-		if(!$idExist) {
+		if($idRequire) {
 			$options['order']['BlogPost.id'] = 'DESC';
 		}
 		return $options;
