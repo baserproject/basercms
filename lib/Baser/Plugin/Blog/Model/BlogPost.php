@@ -714,7 +714,6 @@ class BlogPost extends BlogAppModel {
 		if(!empty($options['order'])) {
 			$idRequire = true;
 			if(is_array($options['order'])) {
-				$idExist = false;
 				foreach($options['order'] as $key => $value) {
 					if(strpos($value, ',') !== false) {
 						$orders = explode(',', $value);
