@@ -267,8 +267,10 @@ if (BC_INSTALLED) {
 	if (preg_match('/^' . $updateKey . '(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	} elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
-		exit();
+		if($parameter != 'mail/mail/ajax_get_token') {
+			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+			exit();
+		}
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }

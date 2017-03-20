@@ -303,11 +303,13 @@ class BcAppController extends Controller {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
 			} else {
-				$redirectUrl = '/maintenance';
-				if (Configure::read('BcRequest.agentAlias')) {
-					$redirectUrl = '/' . Configure::read('BcRequest.agentAlias') . $redirectUrl;
-				}
-				$this->redirect($redirectUrl);
+				if($this->request->url != 'mail/mail/ajax_get_token') {
+					$redirectUrl = '/maintenance';
+					if (Configure::read('BcRequest.agentAlias')) {
+						$redirectUrl = '/' . Configure::read('BcRequest.agentAlias') . $redirectUrl;
+					}
+					$this->redirect($redirectUrl);
+				}	
 			}
 		}
 
