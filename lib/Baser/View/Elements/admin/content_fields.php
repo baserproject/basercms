@@ -229,7 +229,7 @@ if($this->BcContents->isEditable()) {
 				<th><?php echo $this->BcForm->label('Content.author_id', '作成者') ?></th>
 				<td>
 					<?php if(!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.author_id', array('type' => 'select', 'options' => $authors)) ?>　
+					<?php echo $this->BcForm->input('Content.author_id', array('type' => 'select', 'options' => $authors)) ?><br>
 					<small>[作成日]</small> <?php echo $this->BcForm->dateTimePicker('Content.created_date', array('size' => 12, 'maxlength' => 10), true) ?>　
 					<small>[更新日]</small> <?php echo $this->BcForm->dateTimePicker('Content.modified_date', array('size' => 12, 'maxlength' => 10), true) ?>
 					<?php else: ?>
