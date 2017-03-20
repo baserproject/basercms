@@ -146,21 +146,38 @@ class Site extends AppModel {
 		if(!is_null($mainSiteId)) {
 			$conditions['Site.main_site_id'] = $mainSiteId;
 		}
+		
 		$rootMain = [];
-		$key = false;
+		$excludeKey = false;
+		$includeKey = false;
+		
 		if(isset($options['excludeIds'])) {
 			if(!is_array($options['excludeIds'])) {
 				$options['excludeIds'] = [$options['excludeIds']];
 			}
-			$key = array_search(0, $options['excludeIds']);
-			if($key !== false) {
-				unset($options['excludeIds'][$key]);
+			$excludeKey = array_search(0, $options['excludeIds']);
+			if($excludeKey !== false) {
+				unset($options['excludeIds'][$excludeKey]);
 			}
 			if($options['excludeIds']) {
 				$conditions[]['NOT']['Site.id'] = $options['excludeIds'];	
 			}
 		}
-		if($key === false && is_null($mainSiteId)) {
+
+		if(isset($options['includeIds'])) {
+			if(!is_array($options['includeIds'])) {
+				$options['includeIds'] = [$options['includeIds']];
+			}
+			$includeKey = array_search(0, $options['includeIds']);
+			if($includeKey !== false) {
+				unset($options['includeIds'][$includeKey]);
+			}
+			if($options['includeIds']) {
+				$conditions[]['Site.id'] = $options['includeIds'];
+			}
+		}
+		
+		if($includeKey !== false && $excludeKey === false && is_null($mainSiteId)) {
 			$rootMainTmp = $this->getRootMain();
 			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
 		}

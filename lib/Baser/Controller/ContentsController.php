@@ -83,7 +83,8 @@ class ContentsController extends AppController {
 		$sites = $this->Site->getSiteList();
 		if($sites) {
 			if(!$this->passedArgs['site_id'] || !in_array($this->passedArgs['site_id'], array_keys($sites))) {
-				$this->passedArgs['site_id'] = key(array_slice($sites, 0, 1));
+				reset($sites);
+				$this->passedArgs['site_id'] = key($sites);
 			}
 		} else {
 			$this->passedArgs['site_id'] = null;
