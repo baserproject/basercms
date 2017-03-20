@@ -124,22 +124,47 @@ class Site extends AppModel {
 /**
  * サイトリストを取得
  *
- * @param bool $mainOnly
+ * @param bool $mainSiteId メインサイトID
+ * @param array $options
+ * 	`excludeIds` 除外するID（初期値：なし）
  * @return array
  */
     public function getSiteList($mainSiteId = null, $options = []) {
 		$options = array_merge([
 			'excludeIds' => []
 		], $options);
-    	$conditions = ['Site.status' => true];
-    	if(!is_null($mainSiteId)) {
-    		$conditions['Site.main_site_id'] = $mainSiteId;
-    	}
-		if($options['excludeIds']) {
-			$conditions[]['Site.id <>'] = $options['excludeIds']; 
+
+		// EVENT Site.beforeGetSiteList
+		$event = $this->dispatchEvent('beforeGetSiteList', [
+			'options' => $options
+		]);
+		if ($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
-		$main = $this->getRootMain();
-    	return [$main['Site']['id'] => $main['Site']['display_name']] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
+		
+		$conditions = ['Site.status' => true];
+		if(!is_null($mainSiteId)) {
+			$conditions['Site.main_site_id'] = $mainSiteId;
+		}
+		$rootMain = [];
+		$key = false;
+		if(isset($options['excludeIds'])) {
+			if(!is_array($options['excludeIds'])) {
+				$options['excludeIds'] = [$options['excludeIds']];
+			}
+			$key = array_search(0, $options['excludeIds']);
+			if($key !== false) {
+				unset($options['excludeIds'][$key]);
+			}
+			if($options['excludeIds']) {
+				$conditions[]['NOT']['Site.id'] = $options['excludeIds'];	
+			}
+		}
+		if($key === false && is_null($mainSiteId)) {
+			$rootMainTmp = $this->getRootMain();
+			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
+		}
+		return $rootMain + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
 	
 /**
@@ -431,7 +456,14 @@ class Site extends AppModel {
 			'Site.main_site_id' => $mainSiteId
 		], 'recursive' => -1]);
 	}
-	
+
+/**
+ * After Find
+ * 
+ * @param mixed $results
+ * @param bool $primary
+ * @return mixed
+ */
 	public function afterFind($results, $primary = false) {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {
