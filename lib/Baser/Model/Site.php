@@ -149,7 +149,7 @@ class Site extends AppModel {
 		
 		$rootMain = [];
 		$excludeKey = false;
-		$includeKey = false;
+		$includeKey = true;
 		
 		if(isset($options['excludeIds'])) {
 			if(!is_array($options['excludeIds'])) {
