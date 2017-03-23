@@ -13,8 +13,14 @@
 /**
  * [ADMIN] 統合コンテンツフォーム
  */
-$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
-unset($urlArray[count($urlArray) -1]);
+$isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
+if($this->request->data['Content']['url'] == '/') {
+	$urlArray = [];
+} else {
+	$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $this->request->data['Content']['url']));
+}
+
+// 同一URL
 if($this->request->data['Site']['same_main_url']) {
 	$site = BcSite::findById($this->request->data['Site']['main_site_id']);
 	array_shift($urlArray);
@@ -22,28 +28,50 @@ if($this->request->data['Site']['same_main_url']) {
 		$urlArray = explode('/', $site->alias) + $urlArray;
 	}
 }
+// サブドメイン
 if($this->request->data['Site']['use_subdomain']) {
-	$host = $this->BcContents->getUrl('/' . $urlArray[0] . '/', true, $this->request->data['Site']['use_subdomain']);
-	array_shift($urlArray);
+	if($urlArray) {
+		$hostUrl = '/' . $urlArray[0] . '/';
+	} else {
+		$hostUrl = '/';
+	}
+	$hostUrl = $this->BcContents->getUrl($hostUrl, true, true);
+	$contentsName = '';
+	if(!$this->request->data['Content']['site_root']) {
+		$contentsName = $this->BcForm->value('Content.name');
+		if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/') {
+			$contentsName .= '/';
+		}
+	}
 } else {
-	$host = $this->BcContents->getUrl('/', true, $this->request->data['Site']['use_subdomain']);
+	if($this->request->data['Site']['same_main_url'] && $this->request->data['Content']['site_root']) {
+		$contentsName = '';
+	} else {
+		$contentsName = $this->BcForm->value('Content.name');
+	}
+	if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/' && $contentsName) {
+		$contentsName .= '/';
+	}
+	$hostUrl = $this->BcContents->getUrl('/', true, false);
 }
-if($this->request->data['Site']['alias']) {
-	$checkUrl = '/' . $this->request->data['Site']['alias'] . '/';
-} else {
-	$checkUrl = '/';
-}
+
+$checkUrl = '/';
 $Content = ClassRegistry::init('Content');
 foreach($urlArray as $key => $value) {
 	$checkUrl .= $value . '/';
 	$entityId = $Content->field('entity_id', ['Content.url' => $checkUrl]);
 	$urlArray[$key] = $this->BcBaser->getLink(urldecode($value), ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $entityId], ['forceTitle' => true]);
 }
+if($urlArray && $this->request->data['Site']['use_subdomain']) {
+	array_shift($urlArray);
+}
+unset($urlArray[count($urlArray) -1]);
 $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
-$baseUrl = $host . $baseUrl;
+$baseUrl = $hostUrl . $baseUrl;
+
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),
@@ -55,11 +83,9 @@ if(is_null($currentSiteId)) {
 	$currentSiteId = 0;
 }
 $disableEdit = false;
-if(!BcUtil::isAdminUser() || ($this->request->data['Site']['relate_main_site'] && $this->request->data['Content']['main_site_content_id'] &&
-	($this->request->data['Content']['alias_id'] || $this->request->data['Content']['type'] == 'ContentFolder'))) {
+if($this->BcContents->isEditable()) {
 	$disableEdit = true;
 }
-$isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
 ?>
 
 
@@ -103,13 +129,7 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 							<?php echo $baseUrl ?><?php echo $this->BcForm->input('Content.name', array('type' => 'text', 'size' => 20, 'autofocus' => true)) ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/'): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->error('Content.name') ?>
 						<?php else: ?>
-							<?php
-							$contentName = '';
-							if(!$this->request->data['Site']['use_subdomain']){
-								$contentName = $this->BcForm->value('Content.name');
-							}
-							?>
-							<?php echo $baseUrl ?><?php echo $contentName ?><?php if(!$isOmitViewAction && $this->request->data['Content']['url'] != '/' && !$this->request->data['Site']['use_subdomain']): ?>/<?php endif ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
+							<?php echo $baseUrl ?><?php echo $contentsName ?>　<?php echo $this->BcForm->button('URLコピー', ['id' => 'BtnCopyUrl', 'class' => 'small-button', 'style' => 'font-weight:normal']) ?>
 							<?php echo $this->BcForm->hidden('Content.name') ?>
 						<?php endif ?>
 					</span>
@@ -119,7 +139,7 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 				<th>
 					<?php echo $this->BcForm->label('Content.title', 'タイトル') ?>&nbsp;<span class="required">*</span></th>
 				<td>
-					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->input('Content.title', array('size' => 50)) ?>　
 						<?php echo $this->BcForm->error('Content.title') ?>
 					<?php else: ?>
@@ -141,14 +161,14 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('Content.self_status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
 				<td class="col-input">
-					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->input('Content.self_status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
 						<?php echo $this->BcForm->hidden('Content.self_status') ?>
 					<?php endif ?>
 					&nbsp;&nbsp;
-					<?php if(!$this->request->data['Content']['site_root'] && !$disableEdit): ?>
+					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 						&nbsp;〜&nbsp;
 						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
@@ -209,7 +229,7 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 				<th><?php echo $this->BcForm->label('Content.author_id', '作成者') ?></th>
 				<td>
 					<?php if(!$disableEdit): ?>
-					<?php echo $this->BcForm->input('Content.author_id', array('type' => 'select', 'options' => $authors)) ?>　
+					<?php echo $this->BcForm->input('Content.author_id', array('type' => 'select', 'options' => $authors)) ?><br>
 					<small>[作成日]</small> <?php echo $this->BcForm->dateTimePicker('Content.created_date', array('size' => 12, 'maxlength' => 10), true) ?>　
 					<small>[更新日]</small> <?php echo $this->BcForm->dateTimePicker('Content.modified_date', array('size' => 12, 'maxlength' => 10), true) ?>
 					<?php else: ?>
@@ -286,7 +306,7 @@ $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content'][
 							}
 							$editUrl .= '/content_id:' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
 						} else {
-							$editUrl = '/admin/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
+							$editUrl = '/' . BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
 						}
 						if($this->request->data['Content']['id'] == $relatedContent['Content']['id']) {
 							$current = true;

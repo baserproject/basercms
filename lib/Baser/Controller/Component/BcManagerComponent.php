@@ -489,6 +489,7 @@ class BcManagerComponent extends Component {
 			"Configure::write('Session.save', 'session');",
 			"Configure::write('BcEnv.siteUrl', '{$siteUrl}');",
 			"Configure::write('BcEnv.sslUrl', '');",
+			"Configure::write('BcEnv.mainDomain', '');",
 			"Configure::write('BcApp.adminSsl', false);",
 			"Cache::config('default', array('engine' => 'File'));",
 			"Configure::write('debug', 0);"
@@ -1459,7 +1460,7 @@ class BcManagerComponent extends Component {
 	}
 	
 /**
- * テーマに管理システム用アセットを配置する
+ * サイトルートに管理システム用アセットを配置する
  * 
  * @return boolean
  */
@@ -1496,7 +1497,31 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
-	
+
+/**
+ * サイトルートの管理システム用アセットを削除する
+ *
+ * @return bool
+ */
+	public function deleteAdminAssets() {
+		$viewPath = WWW_ROOT;
+		$css = $viewPath . 'css' . DS . 'admin';
+		$js = $viewPath . 'js' . DS . 'admin';
+		$img = $viewPath . 'img' . DS . 'admin';
+		$result = true;
+		$Folder = new Folder();
+		if(!$Folder->delete($css)) {
+			$result = false;
+		}
+		if(!$Folder->delete($js)) {
+			$result = false;
+		}
+		if(!$Folder->delete($img)) {
+			$result = false;
+		}
+		return $result;
+	}
+
 /**
  * プラグインをインストールする
  * 

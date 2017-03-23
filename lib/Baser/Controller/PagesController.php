@@ -116,11 +116,15 @@ class PagesController extends AppController {
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(['action' => 'index']);
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
 			$this->request->data = $this->Page->read(null, $id);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
 			if (empty($this->request->data['Page']['page_type'])) {
@@ -291,8 +295,16 @@ class PagesController extends AppController {
 
 		$previewCreated = false;
 		if($this->request->data) {
-			if($this->BcContents->preview == 'default') {
+			if($this->BcContents->preview == 'default' || $this->BcContents->preview == 'draft') {
 				$uuid = $this->_createPreviewTemplate($this->request->data);
+				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
+				$previewCreated = true;
+			}
+		} else {
+			// 草稿アクセス
+			if($this->BcContents->preview == 'draft') {
+				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
+				$uuid = $this->_createPreviewTemplate($data, true);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
@@ -329,13 +341,20 @@ class PagesController extends AppController {
 
 /**
  * プレビュー用テンプレートを生成する
+ * 
+ * 一時ファイルとしてビューを保存
+ * タグ中にPHPタグが入る為、ファイルに保存する必要がある
  *
  * @param mixed	$id 固定ページID
  * @return string uuid
  */
-	protected function _createPreviewTemplate($data) {
-		// 一時ファイルとしてビューを保存
-		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
+	protected function _createPreviewTemplate($data, $isDraft = false) {
+		if(!$isDraft) {
+			// postで送信される前提
+			$contents = $data['Page']['contents_tmp'];
+		} else {
+			$contents = $data['Page']['draft'];
+		}
 		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;

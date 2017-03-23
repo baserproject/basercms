@@ -1007,33 +1007,56 @@ function checktime($hour, $min, $sec = null) {
 	return true;
 }
 
+/**
+ * 関連するテーブルリストを取得する
+ *
+ * @return array
+ */
 function getTableList() {
 	$list = Cache::read('table_list', '_cake_core_');
 	if($list !== false) {
 		return $list;
 	}
 	$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+	$tables = ConnectionManager::getDataSource('default')->listSources();
 	$Folder = new Folder(BASER_CONFIGS . 'Schema');
 	$files = $Folder->read(true, true);
 	$list = [];
 	if($files[1]) {
-		foreach($files[1] as $file) {
-			$list['core'][] = $prefix . basename($file, '.php');
+		foreach($tables as $key => $table) {
+			foreach($files[1] as $file) {
+				if($table == $prefix . basename($file, '.php')) {
+					$list['core'][] = $table;
+					unset($tables[$key]);
+				}
+			}
 		}
 	}
 	$plugins = CakePlugin::loaded();
+	$pluginFiles = [];
 	foreach($plugins as $plugin) {
 		$path = null;
-		if(is_dir(APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema')){
-			$path = APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema';
-		} elseif(is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
+		if (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+			$path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
+		} elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
 		}
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
-		if($files[1]) {
-			foreach($files[1] as $file) {
-				$list['plugin'][] = $prefix . basename($file, '.php');
+		if ($files[1]) {
+			$pluginFiles = array_merge($pluginFiles, $files[1]);
+		}
+	}
+	foreach($tables as $table) {
+		foreach($pluginFiles as $file) {
+			if($prefix . basename($file, '.php') == 'mail_message') {
+				$test = '';
+			}
+			$file = $prefix . basename($file, '.php');
+			$singularize = Inflector::singularize($file);
+			if(preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+				$list['plugin'][] = $table;
+				unset($tables[$key]);
 			}
 		}
 	}

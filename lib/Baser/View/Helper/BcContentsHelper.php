@@ -417,4 +417,47 @@ class BcContentsHelper extends AppHelper {
 		}
 	}
 
+/**
+ * コンテンツが編集可能かどうか確認
+ *
+ * @param array $data コンテンツ、サイト情報を格納した配列
+ * @return bool
+ */
+	public function isEditable($data = null) {
+		if(!$data) {
+			if(!isset($this->request->data['Content']) && !isset($this->request->data['Site'])) {
+				return false;
+			}
+			$content = $this->request->data['Content'];
+			$site = $this->request->data['Site'];
+		} else {
+			if(isset($data['Content'])) {
+				$content = $data['Content'];
+			} else {
+				return false;
+			}
+			if(isset($data['Site'])) {
+				$site = $data['Site'];
+			} else {
+				return false;
+			}
+		}
+		// サイトルートの場合は編集不可
+		if(empty($content['site_root'])) {
+			return false;
+		}
+		// サイトルート以外で、管理ユーザーの場合は、強制的に編集可
+		if(BcUtil::isAdminUser()) {
+			return true;
+		}
+		// エイリアスを利用してメインサイトと自動連携する場合、親サイトに関連しているコンテンツ（＝子サイト）
+		if($site['relate_main_site'] && $content['main_site_content_id']) {
+			// エイリアス、または、フォルダの場合は編集不可
+			if($content['alias_id'] || $content['type'] == 'ContentFolder') {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
