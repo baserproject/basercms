@@ -306,7 +306,7 @@ if($this->BcContents->isEditable()) {
 							}
 							$editUrl .= '/content_id:' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
 						} else {
-							$editUrl = '/admin/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
+							$editUrl = '/' . BcUtil::getAdminPrefix() . '/contents/edit_alias/' . $relatedContent['Content']['id'] . '#RelatedContentsSetting';
 						}
 						if($this->request->data['Content']['id'] == $relatedContent['Content']['id']) {
 							$current = true;

@@ -19,7 +19,7 @@ if((!empty($this->BcContents->settings[$srcContent['type']]))) {
 	]);
 } else {
 	$title = '無所属コンテンツ';
-	$editLink = '/admin/contents/edit';
+	$editLink = '/' . BcUtil::getAdminPrefix() . '/contents/edit';
 	if($srcContent['entity_id']) {
 		$editLink .= '/' . $srcContent['entity_id'];
 		$editLink .= '/content_id:' . $srcContent['id'] . '/parent_id:' . $srcContent['parent_id'];
