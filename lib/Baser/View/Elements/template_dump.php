@@ -15,7 +15,7 @@
  *
  * デバッグモード２以上で表示
  */
- if(!$this->_viewFilesLog) return;
+ if(empty($this->_viewFilesLog)) return;
  ?>
 
 
