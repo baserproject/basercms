@@ -48,7 +48,7 @@ class ContentFolder extends AppModel {
 		} else {
 			$this->create($data);
 		}
-		if($this->save()) {
+		if($this->save(null, ['callbacks' => false])) {
 			return true;
 		} else {
 			return false;
