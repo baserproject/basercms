@@ -122,6 +122,9 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  */
 	public function beforeSave(Model $Model, $options = array()) {
+		if($Model->exists()) {
+			$this->deleteExistingFiles($Model);	
+		}
 		return $this->saveFiles($Model);
 	}
 
@@ -887,4 +890,20 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 		return $saveDir;
 	}
+
+/**
+ * 既に存在するデータのファイルを削除する
+ * 
+ * @param Model $Model
+ */
+	public function deleteExistingFiles(Model $Model) {
+		$dataTmp = $Model->data[$Model->alias];
+		$Model->set($Model->find('first', [
+			'conditions' => [$Model->alias . '.id' => $Model->data[$Model->alias]['id']],
+			'recursive' => -1
+		]));
+		$this->delFiles($Model);
+		$Model->set($dataTmp);
+	}
+	
 }
