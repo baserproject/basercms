@@ -433,8 +433,10 @@ class BcUploadBehavior extends ModelBehavior {
  * @return bool
  */
 	public function rotateImage($file) {
-		//return true;
-		$exif = @exif_read_data($file) ;
+		if(!function_exists('exif_read_data')) {
+			return false;
+		}
+		$exif = exif_read_data($file);
 		if(empty($exif['Orientation'])) {
 			return true;
 		}
