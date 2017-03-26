@@ -446,6 +446,26 @@ class BcSqlite extends Sqlite {
 		} elseif (strpos($querystring, 'PRAGMA index_info') === 0) {
 			$selects = array('seqno', 'cid', 'name');
 		}
+
+		$columnMeta = [];
+		foreach($selects as $select) {
+			if (preg_match('/\bAS(?!.*\bAS\b)\s+(.*)/i', $select, $matches)) {
+				$columnName = trim($matches[1], '"');
+			} else {
+				$columnName = trim(str_replace('"', '', $select));
+			}
+			if (strpos($columnName, '.')) {
+				list($table) = explode('.', $columnName);
+				if(empty($columnMeta[$table])) {
+					$pdo_statement = $this->_connection->query('PRAGMA table_info(' . $this->config['prefix'] . Inflector::tableize($table) . ')');
+					$fields = $pdo_statement->fetchAll(PDO::FETCH_ASSOC);
+					foreach($fields as $field) {
+						$columnMeta[$table][$field['name']] = $field;
+					}
+				}
+			}
+		}
+
 		while ($j < $numFields) {
 			if (!isset($selects[$j])) {
 				$j++;
@@ -462,13 +482,6 @@ class BcSqlite extends Sqlite {
 			}
 
 			$metaType = false;
-
-			// CUSTOMIZE ADD 2017/02/21 ryuring
-			// 型情報が取得できない問題を改善
-			// >>>
-			$columnMeta = [];
-			// <<<
-
 			try {
 				$metaData = (array)$results->getColumnMeta($j);
 				if (!empty($metaData['sqlite:decl_type'])) {
@@ -480,13 +493,9 @@ class BcSqlite extends Sqlite {
 				// >>>
 				if($metaData[0] === false) {
 					if (strpos($columnName, '.')) {
-						list($table) = explode('.', $columnName);
-						if(empty($columnMeta[$table])) {
-							$pdo_statement = $this->_connection->query('PRAGMA table_info(' . $this->config['prefix'] . Inflector::tableize($table) . ')');
-							$columnMeta[$table] = $pdo_statement->fetchAll(PDO::FETCH_ASSOC);
-						}
-						if(!empty($columnMeta[$table][$j]['type'])) {
-							$metaType = $columnMeta[$table][$j]['type'];
+						list($table, $column) = explode('.', $columnName);
+						if(!empty($columnMeta[$table][$column]['type'])) {
+							$metaType = $columnMeta[$table][$column]['type'];
 						}
 					}
 				}

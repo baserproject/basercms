@@ -24,6 +24,14 @@
 	<?php $this->BcBaser->link('固定ページテンプレート書出', array('controller' => 'pages', 'action' => 'write_page_files'), array('class' => 'submit-token button-small', 'confirm' => "データベース内のページデータを、ページテンプレートとして /app/View/Pages 内に全て書出します。本当によろしいですか？")) ?>　
 	<?php $this->BcBaser->link('固定ページテンプレート読込', array('controller' => 'pages', 'action' => 'entry_page_files'), array('class' => 'submit-token button-small', 'confirm' => "/app/View/Pages フォルダ内のページテンプレートを全て読み込みます。本当によろしいですか？")) ?>　
 </div>
+
+<div class="section">
+	<h2>アセットファイル</h2>
+	<p>管理システム用のアセットファイル（画像、CSS、Javascript）を削除したり、コアパッケージよりサイトルートフォルダに再配置します。<br>削除した場合、直接コアパッケージのアセットファイルを参照する事になりますが、表示速度が遅くなりますので注意が必要です。</p>
+	<?php $this->BcBaser->link('アセットファイル削除', array('controller' => 'tools', 'action' => 'delete_admin_assets'), array('class' => 'submit-token button-small', 'confirm' => "サイトルートに配置された、管理システム用のアセットファイルを削除します。本当によろしいですか？")) ?>　
+	<?php $this->BcBaser->link('アセットファイル再配置', array('controller' => 'tools', 'action' => 'deploy_admin_assets'), array('class' => 'submit-token button-small', 'confirm' => "管理システム用のアセットファイルをサイトルートに再配置します。本当によろしいですか？")) ?>　
+</div>
+
 <div class="section">
 	<h2>スペシャルサンクスクレジット</h2>
 	<p>baserCMSの開発や運営、普及にご協力頂いた方々をご紹介します。</p>

@@ -16,6 +16,9 @@ App::uses('Simplezip', 'Vendor');
  * ツールコントローラー
  *
  * @package Baser.Controller
+ * @property Tool $Tool
+ * @property Page $Page
+ * @property BcManagerComponent $BcManager
  */
 class ToolsController extends AppController {
 
@@ -26,6 +29,11 @@ class ToolsController extends AppController {
  */
 	public $name = 'Tools';
 
+/**
+ * モデル
+ *
+ * @var array
+ */
 	public $uses = array('Tool', 'Page');
 
 /**
@@ -33,7 +41,7 @@ class ToolsController extends AppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
 
 /**
  * ヘルパ
@@ -397,11 +405,11 @@ class ToolsController extends AppController {
 		$this->set('fileSize', $fileSize);
 	}
 
-	/**
-	 * ログフォルダを圧縮ダウンロードする
-	 *
-	 * @return bool
-	 */
+/**
+ * ログフォルダを圧縮ダウンロードする
+ *
+ * @return bool
+ */
 	protected function _downloadErrorLog() {
 		$tmpDir = TMP . 'logs' . DS;
 		$Folder = new Folder($tmpDir);
@@ -416,4 +424,29 @@ class ToolsController extends AppController {
 		$Simplezip->download($fileName);
 		return true;
 	}
+
+/**
+ * 管理システム用アセットファイルを削除する
+ */
+	public function admin_delete_admin_assets() {
+		if($this->BcManager->deleteAdminAssets()) {
+			$this->setMessage('管理システム用のアセットファイルを削除しました。', false, true);
+		} else {
+			$this->setMessage('管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。', true);
+		}
+		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+	}
+
+/**
+ * 管理システム用アセットファイルを再配置する
+ */
+	public function admin_deploy_admin_assets() {
+		if($this->BcManager->deployAdminAssets()) {
+			$this->setMessage('管理システム用のアセットファイルを再配置しました。', false, true);
+		} else {
+			$this->setMessage('管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。', true);
+		}
+		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+	}
+
 }

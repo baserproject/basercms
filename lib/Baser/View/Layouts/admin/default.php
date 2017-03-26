@@ -58,6 +58,12 @@
 			'admin/permission',
 			'admin/vendors/yuga'))
 		?>
+	<script>
+		$.bcUtil.init({
+			baseUrl: '<?php echo $this->request->base ?>',
+			adminPrefix: '<?php echo BcUtil::getAdminPrefix() ?>'
+		});
+	</script>
 <?php $this->BcBaser->scripts() ?>
 	</head>
 
@@ -69,7 +75,7 @@
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 			<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.' . $this->BcBaser->getContentsName(true)) ?></div>
 			<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
-			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/admin/dashboard/index' : '/' . $this->request->url; ?></div>
+			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/' . BcUtil::getAdminPrefix() . '/dashboard/index' : '/' . $this->request->url; ?></div>
 
 			<!-- Waiting -->
 			<div id="Waiting" class="waiting-box" style="display:none">

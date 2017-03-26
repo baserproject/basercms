@@ -425,5 +425,9 @@ class BcUtil extends Object {
 		}
 		return $_SERVER['HTTP_HOST'];
 	}
+
+	public static function getAdminPrefix() {
+		return Configure::read('BcAuthPrefix.admin.alias');
+	}
 	
 }
