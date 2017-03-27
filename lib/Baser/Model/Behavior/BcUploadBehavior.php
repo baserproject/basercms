@@ -583,6 +583,7 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像ファイル群を削除する
  * 
  * @param Model $Model
+ * @param string $fieldName フィールド名
  * @return boolean
  */
 	public function delFiles(Model $Model, $fieldName = null) {
@@ -590,9 +591,11 @@ class BcUploadBehavior extends ModelBehavior {
 			if (empty($field['name'])) {
 				$field['name'] = $key;
 			}
-			if(!empty($Model->data[$Model->name][$field['name']])) {
-				$file = $Model->data[$Model->name][$field['name']];
-				$this->delFile($Model, $file, $field);
+			if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
+				if (!empty($Model->data[$Model->name][$field['name']])) {
+					$file = $Model->data[$Model->name][$field['name']];
+					$this->delFile($Model, $file, $field);
+				}
 			}
 		}
 	}
@@ -904,7 +907,13 @@ class BcUploadBehavior extends ModelBehavior {
 			'conditions' => [$Model->alias . '.id' => $Model->data[$Model->alias]['id']],
 			'recursive' => -1
 		]));
-		$this->delFiles($Model);
+		$uploadFields = array_keys($this->settings[$Model->alias]['fields']);
+		$targetFields = array_keys($dataTmp);
+		foreach($targetFields as $field) {
+			if(in_array($field, $uploadFields) && !empty($dataTmp[$field]['tmp_name'])) {
+				$this->delFiles($Model, $field);
+			}
+		}
 		$Model->set($dataTmp);
 	}
 	
