@@ -71,7 +71,7 @@ class BcManagerComponent extends Component {
 					break;
 			}
 			$Folder = new Folder();
-			if (!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 00777)) {
+			if (!is_writable($dbFolderPath) && !$Folder->create($dbFolderPath, 0777)) {
 				$this->log('データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。');
 				$result = false;
 			}
@@ -799,7 +799,7 @@ class BcManagerComponent extends Component {
 			return false;
 		} elseif ($datasource == 'csv') {
 			// CSVの場合はフォルダを作成する
-			$Folder = new Folder($db->config['database'], true, 00777);
+			$Folder = new Folder($db->config['database'], true, 0777);
 		} elseif ($datasource == 'sqlite') {
 			$db->connect();
 			chmod($db->config['database'], 0666);
@@ -1029,8 +1029,8 @@ class BcManagerComponent extends Component {
 		foreach ($sources as $theme) {
 			$targetPath = WWW_ROOT . 'theme' . DS . $theme;
 			$sourcePath = BASER_CONFIGS . 'theme' . DS . $theme;
-			if ($Folder->copy(array('to' => $targetPath, 'from' => $sourcePath, 'mode' => 00777, 'skip' => array('_notes')))) {
-				if (!$Folder->create($targetPath . DS . 'Pages', 00777)) {
+			if ($Folder->copy(array('to' => $targetPath, 'from' => $sourcePath, 'mode' => 0777, 'skip' => array('_notes')))) {
+				if (!$Folder->create($targetPath . DS . 'Pages', 0777)) {
 					$result = false;
 				}
 			} else {
@@ -1460,7 +1460,7 @@ class BcManagerComponent extends Component {
 	}
 	
 /**
- * テーマに管理システム用アセットを配置する
+ * サイトルートに管理システム用アセットを配置する
  * 
  * @return boolean
  */
@@ -1497,7 +1497,31 @@ class BcManagerComponent extends Component {
 		}
 		return $result;
 	}
-	
+
+/**
+ * サイトルートの管理システム用アセットを削除する
+ *
+ * @return bool
+ */
+	public function deleteAdminAssets() {
+		$viewPath = WWW_ROOT;
+		$css = $viewPath . 'css' . DS . 'admin';
+		$js = $viewPath . 'js' . DS . 'admin';
+		$img = $viewPath . 'img' . DS . 'admin';
+		$result = true;
+		$Folder = new Folder();
+		if(!$Folder->delete($css)) {
+			$result = false;
+		}
+		if(!$Folder->delete($js)) {
+			$result = false;
+		}
+		if(!$Folder->delete($img)) {
+			$result = false;
+		}
+		return $result;
+	}
+
 /**
  * プラグインをインストールする
  * 
