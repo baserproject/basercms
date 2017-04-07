@@ -45,9 +45,7 @@ class MaildataHelper extends BcTextHelper {
  * @return string メール用データ
  */
 	public function toDisplayString($type, $value, $options = "") {
-
         // コントロールソースの配列変換
-
         if (!is_array($options)) {
             $options = explode("|", $options);
         }
