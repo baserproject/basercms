@@ -58,9 +58,9 @@ class MailHelper extends AppHelper {
 
 /**
  * フォームテンプレートを取得
- * 
+ *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array フォームテンプレート一覧データ
  * @todo 他のヘルパーに移動する
  */
@@ -103,9 +103,9 @@ class MailHelper extends AppHelper {
 
 /**
  * メールテンプレートを取得
- * 
+ *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array メールテンプレート一覧データ
  * @todo 他のヘルパに移動する
  */
@@ -157,7 +157,7 @@ class MailHelper extends AppHelper {
 
 /**
  * メールの説明文を出力する
- * 
+ *
  * @return void
  */
 	public function description() {
@@ -179,7 +179,7 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームへのリンクを生成する
- * 
+ *
  * @param string $title リンクのタイトル
  * @param string $contentsName メールフォームのコンテンツ名
  * @param array $datas メールフォームに引き継ぐデータ（初期値 : array()）
@@ -194,12 +194,12 @@ class MailHelper extends AppHelper {
 			}
 		}
 		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
-        $this->BcBaser->link($title, $link, $options);
+		$this->BcBaser->link($title, $link, $options);
 	}
 
 /**
  * ブラウザの戻るボタン対応コードを作成
- * 
+ *
  * @return string
  */
 	public function getToken() {
@@ -208,7 +208,7 @@ class MailHelper extends AppHelper {
 
 /**
  * ブラウザの戻るボタン対応コードを出力
- * 
+ *
  * @return void
  */
 	public function token() {
@@ -217,7 +217,7 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームを取得する
- * 
+ *
  * @param $id
  * @return mixed
  */
@@ -236,5 +236,5 @@ class MailHelper extends AppHelper {
 		$url = $mailContent['Content']['url'];
 		return $this->requestAction($url, ['return' => true]);
 	}
-	
+
 }
