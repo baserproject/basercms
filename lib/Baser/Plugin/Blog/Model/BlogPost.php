@@ -176,7 +176,7 @@ class BlogPost extends BlogAppModel {
 
 		$settings = $this->Behaviors->BcUpload->settings['BlogPost'];
 		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['Content']['name'], '/') . '\//', $settings['saveDir'])) {
-			$settings['saveDir'] = "blog" . DS . $data['Content']['name'] . DS . "blog_posts";
+			$settings['saveDir'] = "blog" . DS . $blogContent['id'] . DS . "blog_posts";
 		}
 
 		$settings['fields']['eye_catch']['imagecopy'] = $imagecopy;
@@ -695,6 +695,49 @@ class BlogPost extends BlogAppModel {
 			}
 		}
 		return $post;
+	}
+
+/**
+ * Before Find
+ *
+ * @param array $options
+ * @return array
+ */
+	public function beforeFind($options) {
+		// ================================================================
+		// 日付等全く同じ値のレコードが複数存在する場合の並び替え処理を安定する為、
+		// IDが order に入っていない場合、IDを追加する
+		// PostgreSQLの場合、max min count sum を利用している際に、order を
+		// 指定するとエラーとなってしまうので、追加するのは最小限にする
+		// ================================================================
+		$idRequire = false;
+		if(!empty($options['order']) && $options['order'][0] !== false) {
+			$idRequire = true;
+			if(is_array($options['order'])) {
+				foreach($options['order'] as $key => $value) {
+					if(strpos($value, ',') !== false) {
+						$orders = explode(',', $value);
+						foreach($orders as $order) {
+							if(strpos($order, 'BlogPost.id') !== false) {
+								$idRequire = false;
+							}
+						}
+					} else {
+						if(strpos($key, 'BlogPost.id') !== false) {
+							$idRequire = false;
+						}
+					}
+				}
+			} else {
+				if(strpos('BlogPost.id', $options['sort']) === false) {
+					$idRequire = false;
+				}
+			}
+		}
+		if($idRequire) {
+			$options['order']['BlogPost.id'] = 'DESC';
+		}
+		return $options;
 	}
 
 }

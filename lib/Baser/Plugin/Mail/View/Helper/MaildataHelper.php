@@ -26,7 +26,7 @@ class MaildataHelper extends BcTextHelper {
 /**
  * メール表示用のデータを出力する
  * ※互換性維持用
- * 
+ *
  * @param string $type コントロールタイプ
  * @param mixed $value 変換前の値
  * @param array|string $options コントロールソース
@@ -45,7 +45,9 @@ class MaildataHelper extends BcTextHelper {
  * @return string メール用データ
  */
 	public function toDisplayString($type, $value, $options = "") {
-		// コントロールソースの配列変換
+
+        // コントロールソースの配列変換
+
         if (!is_array($options)) {
             $options = explode("|", $options);
         }

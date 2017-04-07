@@ -71,6 +71,10 @@ class ContentFoldersController extends AppController {
 		$this->pageTitle = 'フォルダ編集';
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentFolder->read(null, $entityId);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			if ($this->ContentFolder->save($this->request->data)) {
 				clearViewCache();

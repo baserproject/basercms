@@ -64,6 +64,10 @@ class ContentLinksController extends AppController {
 		$this->pageTitle = 'リンク編集';
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentLink->read(null, $entityId);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			if ($this->ContentLink->save($this->request->data)) {
 				clearViewCache();

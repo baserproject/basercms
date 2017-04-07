@@ -13,6 +13,7 @@
 /**
  * [EMAIL] メール送信
  */
+$adminPrefix = BcUtil::getAdminPrefix();
 ?>
 
                                            <?php echo date('Y-m-d H:i:s') ?> 
@@ -37,6 +38,6 @@
 <?php echo ($BlogComment['message']) ?>　
 
 コメントの公開状態を変更する場合は次のURLよりご確認ください。
-<?php echo $this->BcBaser->getUri('/admin/blog/blog_comments/index/' . $BlogContent['id'], false) ?>　
+<?php echo $this->BcBaser->getUri('/' . $adminPrefix . '/blog/blog_comments/index/' . $BlogContent['id'], false) ?>　
 　
 　

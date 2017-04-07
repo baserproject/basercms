@@ -116,11 +116,15 @@ class PagesController extends AppController {
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(['action' => 'index']);
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
 			$this->request->data = $this->Page->read(null, $id);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
 			if (empty($this->request->data['Page']['page_type'])) {

@@ -43,7 +43,7 @@ $(function(){
  * マーケットのデータを取得
  */
 	$.ajax({
-		url: $.baseUrl + '/admin/plugins/ajax_get_market_plugins',
+		url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/plugins/ajax_get_market_plugins',
 		type: "GET",
 		success: function(result) {
 			$("#BaserMarket").html(result);

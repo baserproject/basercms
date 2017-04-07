@@ -14,7 +14,7 @@
 
 <script>
 $(function(){
-	$.bcDashboard.ajax('/admin/contents/ajax_contents_info', '#ContentInfo');
+	$.bcDashboard.ajax('/' + $.bcUtil.adminPrefix + '/contents/ajax_contents_info', '#ContentInfo');
 });
 </script>
 

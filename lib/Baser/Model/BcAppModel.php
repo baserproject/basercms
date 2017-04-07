@@ -1587,6 +1587,7 @@ class BcAppModel extends Model {
 	public function delete($id = null, $cascade = true) {
 		$result = parent::delete($id, $cascade);
 		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
+			$this->getEventManager()->dispatch(new CakeEvent('Model.afterDelete', $this));
 			return (bool)$this->field('deleted', ['deleted' => 1]);
 		}
 		return $result;
