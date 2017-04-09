@@ -564,7 +564,7 @@ class BlogHelperTest extends BaserTestCase {
 			'eye_catch' => 'test-eye_catch.jpg'
 		));
 		$result = $this->Blog->getEyeCatch($post);
-		$expected = '/\/files\/blog\/news\/blog_posts\/test-eye_catch.jpg/';
+		$expected = '/\/files\/blog\/1\/blog_posts\/test-eye_catch.jpg/';
 
 		$this->assertRegExp($expected, $result, 'アイキャッチ画像を正しく取得できません');
 	}
