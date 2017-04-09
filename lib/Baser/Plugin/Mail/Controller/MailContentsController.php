@@ -140,7 +140,7 @@ class MailContentsController extends MailAppController {
 			$this->redirect(array('action' => 'index'));
 		}
 
-		if (empty($this->request->data)) {
+		if (empty($this->request->data['MailContent']['id'])) {
 			$this->request->data = $this->MailContent->read(null, $id);
 		} else {
 			$old = $this->MailContent->read(null, $id);
