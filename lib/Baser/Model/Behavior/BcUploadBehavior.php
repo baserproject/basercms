@@ -436,8 +436,8 @@ class BcUploadBehavior extends ModelBehavior {
 		if(!function_exists('exif_read_data')) {
 			return false;
 		}
-		$exif = exif_read_data($file);
-		if(empty($exif['Orientation'])) {
+		$exif = @exif_read_data($file);
+		if(empty($exif) || empty($exif['Orientation'])) {
 			return true;
 		}
 		switch($exif['Orientation']) {
