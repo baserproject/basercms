@@ -146,7 +146,7 @@ class MailContentsController extends MailAppController {
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
-		if (empty($this->request->data)) {
+		if (empty($this->request->data['MailContent']['id'])) {
 			$this->request->data = $this->MailContent->read(null, $id);
 			if(!$this->request->data) {
 				$this->setMessage('無効な処理です。', true);

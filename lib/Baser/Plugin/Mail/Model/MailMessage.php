@@ -77,7 +77,7 @@ class MailMessage extends MailAppModel {
 			}
 		}
 		// アップロード設定
-		$this->setupUpload($mailContent['Content']['name']);
+		$this->setupUpload($mailContentId);
 		return true;
 		
 	}

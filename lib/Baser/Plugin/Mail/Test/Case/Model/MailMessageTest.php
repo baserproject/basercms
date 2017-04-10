@@ -53,7 +53,7 @@ class MailMessageTest extends BaserTestCase {
 
 		// setupUpload
 		$saveDir = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage']['saveDir'];
-		$expected = "mail" . DS . "limited" . DS . 'contact' . DS . "messages";
+		$expected = "mail" . DS . "limited" . DS . '1' . DS . "messages";
 		$this->assertEquals($expected, $saveDir, 'アップロード設定を正しく設定できません');
 	}
 	
