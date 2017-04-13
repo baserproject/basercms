@@ -20,10 +20,10 @@ if (!empty($this->request->params['prefix'])) {
 }
 ?>
 
-<header id="Header" class="bca-header clearfix">
+<header id="Header" class="bca-header">
 	<?php $this->BcBaser->element('toolbar') ?>
 	<?php if ($this->name == 'Installations' || ('/' . $this->request->url == Configure::read('BcAuthPrefix.admin.loginAction')) || (@$this->request->params['prefix'] == 'admin' && $this->BcAdmin->isAdminGlobalmenuUsed())): ?>
-		<div class="clearfix" id="HeaderInner" hidden>
+		<div id="HeaderInner" hidden>
 
 			<?php if ($this->name != 'Installations' && ('/' . $this->request->url != Configure::read('BcAuthPrefix.admin.loginAction'))): ?>
 				<div id="GlobalMenu" hidden></div>

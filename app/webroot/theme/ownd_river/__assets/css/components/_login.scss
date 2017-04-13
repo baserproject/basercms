@@ -2,53 +2,53 @@
 /*    Login
 /* ==================================================================== */
 
-#Login {
+// #Login {
 
-}
-#LoginInner {
-	margin:119px auto auto 50px;
-	color:#333;
-	padding:50px 50px 94px 50px;
-	width:460px;
-}
-#Login input[type=text],#Login input[type=password] {
-	font-size:18px;
-}
-.login-input {
-	margin-bottom: 5px;
-	margin-right:3px;
-}
-.login-input label {
-	position: absolute;
-	z-index: 1;
-	margin:2px;
-	padding:6px 10px;
-	color:#CCC;
-	font-size:16px;
-	cursor: text;
-}
-#LoginInner .logo {
-	margin-bottom: 20px;
-}
-#LoginInner h1 {
-	font-size:20px;
-	font-weight: bold;
-	margin-bottom:20px;
-}
-#Login .submit {
-	text-align: left;
-}
-#Login .submit input[type=submit] {
-	margin: 4px 2px;
-	padding:3px 10px 4px;
-}
-#Login .login-etc a {
-	color:#999;
-}
-#Login input[type=text], #Login input[type=password] {
-	width:170px;
-	height: 26px;
-}
+// }
+// #LoginInner {
+// 	margin:119px auto auto 50px;
+// 	color:#333;
+// 	padding:50px 50px 94px 50px;
+// 	width:460px;
+// }
+// #Login input[type=text],#Login input[type=password] {
+// 	font-size:18px;
+// }
+// .login-input {
+// 	margin-bottom: 5px;
+// 	margin-right:3px;
+// }
+// .login-input label {
+// 	position: absolute;
+// 	z-index: 1;
+// 	margin:2px;
+// 	padding:6px 10px;
+// 	color:#CCC;
+// 	font-size:16px;
+// 	cursor: text;
+// }
+// #LoginInner .logo {
+// 	margin-bottom: 20px;
+// }
+// #LoginInner h1 {
+// 	font-size:20px;
+// 	font-weight: bold;
+// 	margin-bottom:20px;
+// }
+// #Login .submit {
+// 	text-align: left;
+// }
+// #Login .submit input[type=submit] {
+// 	margin: 4px 2px;
+// 	padding:3px 10px 4px;
+// }
+// #Login .login-etc a {
+// 	color:#999;
+// }
+// #Login input[type=text], #Login input[type=password] {
+// 	width:170px;
+// 	height: 26px;
+// }
 
 #Login #flashMessage {
     border-radius: 0px;
@@ -65,7 +65,74 @@
 }
 
 .bca-login {
+	&,
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
 	position: relative;
-	z-index: 10000;
-	margin-top: 31px;
+	z-index: 100000;
+	max-width: 500px;
+	margin: 30px auto;
+	padding: #{25px + 40px} 25px 25px;
+	border-radius: 5px;
+	background: $color_lightest url("../../img/admin/logo_header.png") no-repeat center 25px;
+	h1 {
+		color: $color_text_primary;
+		font-weight: bold;
+	}
+	&-form-item {
+		position: relative;
+		label {
+			color: $color_text_secondary;
+			font-size: 0.875rem;
+			display: block;
+			position: absolute;
+			top: 50%;
+			right: 1em;
+			transform: translate(0, -50%);
+			pointer-events: none;
+		}
+		input {
+			&[type="text"],
+			&[type="password"] {
+				color: $color_text_primary;
+				font-size: 1.125rem;
+				font-weight: bold;
+				line-height: 1;
+				appearance: none;
+				display: block;
+				width: 100%;
+				border: 4px solid $color_disabled;
+				margin: 0 0 20px;
+				padding: #{0.9558em + 0.5em} 1em #{0.76em + 0.5em};
+				&:focus {
+					border-color: $color_primary;
+					outline: none;
+				}
+			}
+		}
+	}
+	button.bca-btn--login {
+		font-size: 1.125rem;
+		line-height: 1;
+		display: block;
+		width: 100%;
+	}
+	.bca-login-form-ctrl {
+		margin-top: 10px;
+		overflow: hidden;
+	}
+	.bca-login-form-checker {
+		float: left;
+	}
+	.bca-login-forgot-pass {
+		float: right;
+	}
+	.bca-login-form-checkbox {
+		display: inline-block;
+		vertical-align: middle;
+		line-height: 1;
+	}
 }

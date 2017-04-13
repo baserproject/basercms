@@ -12,7 +12,7 @@
   font-weight: normal;
   font-style: normal; }
 
-.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--permission::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before, .bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .bca-nav-sub-title::before, .bca-icon--arrow-right::before, .bca-icon--arrow-left::before, .bca-icon--plus-square::before, .bca-icon--minus-square::before, .bca-btn::before, .bca-btn--publish::before, .bca-btn--unpublish::before, .bca-btn--preview::before, .bca-btn--edit::before, .bca-btn--copy::before, .bca-btn--delete::before, .bca-btn--favorite::before, .bca-btn--menuitem::before, .bca-btn--add::before, .bca-btn--help::before, .bca-btn--permission::before, .bca-btn--home::before, .bca-btn--large::before, .bca-btn--small::before, .bca-btn--xsmall::before, .bca-btn--primary::before, .bca-crumb ol li a {
+.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--permission::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before, .bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .bca-nav-sub-title::before, .bca-icon--arrow-right::before, .bca-icon--arrow-left::before, .bca-btn::before, .bca-btn--publish::before, .bca-btn--unpublish::before, .bca-btn--preview::before, .bca-btn--edit::before, .bca-btn--copy::before, .bca-btn--delete::before, .bca-btn--favorite::before, .bca-btn--menuitem::before, .bca-btn--add::before, .bca-btn--help::before, .bca-btn--permission::before, .bca-btn--home::before, .bca-btn--login::before, .bca-btn--large::before, .bca-btn--small::before, .bca-btn--xsmall::before, .bca-btn--primary::before, .bca-crumb ol li a {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -69,10 +69,10 @@
 .fa-pull-right {
   float: right; }
 
-.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-icon--plus-square::before, .fa-pull-left.bca-icon--minus-square::before, .fa-pull-left.bca-btn::before, .fa-pull-left.bca-btn--publish::before, .fa-pull-left.bca-btn--unpublish::before, .fa-pull-left.bca-btn--preview::before, .fa-pull-left.bca-btn--edit::before, .fa-pull-left.bca-btn--copy::before, .fa-pull-left.bca-btn--delete::before, .fa-pull-left.bca-btn--favorite::before, .fa-pull-left.bca-btn--menuitem::before, .fa-pull-left.bca-btn--add::before, .fa-pull-left.bca-btn--help::before, .fa-pull-left.bca-btn--permission::before, .fa-pull-left.bca-btn--home::before, .fa-pull-left.bca-btn--large::before, .fa-pull-left.bca-btn--small::before, .fa-pull-left.bca-btn--xsmall::before, .fa-pull-left.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-left {
+.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-btn::before, .fa-pull-left.bca-btn--publish::before, .fa-pull-left.bca-btn--unpublish::before, .fa-pull-left.bca-btn--preview::before, .fa-pull-left.bca-btn--edit::before, .fa-pull-left.bca-btn--copy::before, .fa-pull-left.bca-btn--delete::before, .fa-pull-left.bca-btn--favorite::before, .fa-pull-left.bca-btn--menuitem::before, .fa-pull-left.bca-btn--add::before, .fa-pull-left.bca-btn--help::before, .fa-pull-left.bca-btn--permission::before, .fa-pull-left.bca-btn--home::before, .fa-pull-left.bca-btn--login::before, .fa-pull-left.bca-btn--large::before, .fa-pull-left.bca-btn--small::before, .fa-pull-left.bca-btn--xsmall::before, .fa-pull-left.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-left {
   margin-right: .3em; }
 
-.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-icon--plus-square::before, .fa-pull-right.bca-icon--minus-square::before, .fa-pull-right.bca-btn::before, .fa-pull-right.bca-btn--publish::before, .fa-pull-right.bca-btn--unpublish::before, .fa-pull-right.bca-btn--preview::before, .fa-pull-right.bca-btn--edit::before, .fa-pull-right.bca-btn--copy::before, .fa-pull-right.bca-btn--delete::before, .fa-pull-right.bca-btn--favorite::before, .fa-pull-right.bca-btn--menuitem::before, .fa-pull-right.bca-btn--add::before, .fa-pull-right.bca-btn--help::before, .fa-pull-right.bca-btn--permission::before, .fa-pull-right.bca-btn--home::before, .fa-pull-right.bca-btn--large::before, .fa-pull-right.bca-btn--small::before, .fa-pull-right.bca-btn--xsmall::before, .fa-pull-right.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-right {
+.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-btn::before, .fa-pull-right.bca-btn--publish::before, .fa-pull-right.bca-btn--unpublish::before, .fa-pull-right.bca-btn--preview::before, .fa-pull-right.bca-btn--edit::before, .fa-pull-right.bca-btn--copy::before, .fa-pull-right.bca-btn--delete::before, .fa-pull-right.bca-btn--favorite::before, .fa-pull-right.bca-btn--menuitem::before, .fa-pull-right.bca-btn--add::before, .fa-pull-right.bca-btn--help::before, .fa-pull-right.bca-btn--permission::before, .fa-pull-right.bca-btn--home::before, .fa-pull-right.bca-btn--login::before, .fa-pull-right.bca-btn--large::before, .fa-pull-right.bca-btn--small::before, .fa-pull-right.bca-btn--xsmall::before, .fa-pull-right.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-right {
   margin-left: .3em; }
 
 /* Deprecated as of 4.4.0 */
@@ -82,10 +82,10 @@
 .pull-left {
   float: left; }
 
-.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--permission::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--arrow-right::before, .pull-left.bca-icon--arrow-left::before, .pull-left.bca-icon--plus-square::before, .pull-left.bca-icon--minus-square::before, .pull-left.bca-btn::before, .pull-left.bca-btn--publish::before, .pull-left.bca-btn--unpublish::before, .pull-left.bca-btn--preview::before, .pull-left.bca-btn--edit::before, .pull-left.bca-btn--copy::before, .pull-left.bca-btn--delete::before, .pull-left.bca-btn--favorite::before, .pull-left.bca-btn--menuitem::before, .pull-left.bca-btn--add::before, .pull-left.bca-btn--help::before, .pull-left.bca-btn--permission::before, .pull-left.bca-btn--home::before, .pull-left.bca-btn--large::before, .pull-left.bca-btn--small::before, .pull-left.bca-btn--xsmall::before, .pull-left.bca-btn--primary::before, .bca-crumb ol li a.pull-left {
+.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--permission::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--arrow-right::before, .pull-left.bca-icon--arrow-left::before, .pull-left.bca-btn::before, .pull-left.bca-btn--publish::before, .pull-left.bca-btn--unpublish::before, .pull-left.bca-btn--preview::before, .pull-left.bca-btn--edit::before, .pull-left.bca-btn--copy::before, .pull-left.bca-btn--delete::before, .pull-left.bca-btn--favorite::before, .pull-left.bca-btn--menuitem::before, .pull-left.bca-btn--add::before, .pull-left.bca-btn--help::before, .pull-left.bca-btn--permission::before, .pull-left.bca-btn--home::before, .pull-left.bca-btn--login::before, .pull-left.bca-btn--large::before, .pull-left.bca-btn--small::before, .pull-left.bca-btn--xsmall::before, .pull-left.bca-btn--primary::before, .bca-crumb ol li a.pull-left {
   margin-right: .3em; }
 
-.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--permission::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--arrow-right::before, .pull-right.bca-icon--arrow-left::before, .pull-right.bca-icon--plus-square::before, .pull-right.bca-icon--minus-square::before, .pull-right.bca-btn::before, .pull-right.bca-btn--publish::before, .pull-right.bca-btn--unpublish::before, .pull-right.bca-btn--preview::before, .pull-right.bca-btn--edit::before, .pull-right.bca-btn--copy::before, .pull-right.bca-btn--delete::before, .pull-right.bca-btn--favorite::before, .pull-right.bca-btn--menuitem::before, .pull-right.bca-btn--add::before, .pull-right.bca-btn--help::before, .pull-right.bca-btn--permission::before, .pull-right.bca-btn--home::before, .pull-right.bca-btn--large::before, .pull-right.bca-btn--small::before, .pull-right.bca-btn--xsmall::before, .pull-right.bca-btn--primary::before, .bca-crumb ol li a.pull-right {
+.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--permission::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--arrow-right::before, .pull-right.bca-icon--arrow-left::before, .pull-right.bca-btn::before, .pull-right.bca-btn--publish::before, .pull-right.bca-btn--unpublish::before, .pull-right.bca-btn--preview::before, .pull-right.bca-btn--edit::before, .pull-right.bca-btn--copy::before, .pull-right.bca-btn--delete::before, .pull-right.bca-btn--favorite::before, .pull-right.bca-btn--menuitem::before, .pull-right.bca-btn--add::before, .pull-right.bca-btn--help::before, .pull-right.bca-btn--permission::before, .pull-right.bca-btn--home::before, .pull-right.bca-btn--login::before, .pull-right.bca-btn--large::before, .pull-right.bca-btn--small::before, .pull-right.bca-btn--xsmall::before, .pull-right.bca-btn--primary::before, .bca-crumb ol li a.pull-right {
   margin-left: .3em; }
 
 .fa-spin {
@@ -864,7 +864,7 @@
 .fa-h-square:before {
   content: ""; }
 
-.fa-plus-square:before, .bca-icon--plus-square:before {
+.fa-plus-square:before {
   content: ""; }
 
 .fa-angle-double-left:before {
@@ -1065,7 +1065,7 @@
 .fa-ticket:before {
   content: ""; }
 
-.fa-minus-square:before, .bca-icon--minus-square:before {
+.fa-minus-square:before {
   content: ""; }
 
 .fa-minus-square-o:before {
@@ -2327,7 +2327,7 @@
   font-weight: normal;
   font-style: normal; }
 
-.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--permission::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before, .bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .bca-nav-sub-title::before, .bca-icon--arrow-right::before, .bca-icon--arrow-left::before, .bca-icon--plus-square::before, .bca-icon--minus-square::before, .bca-btn::before, .bca-btn--publish::before, .bca-btn--unpublish::before, .bca-btn--preview::before, .bca-btn--edit::before, .bca-btn--copy::before, .bca-btn--delete::before, .bca-btn--favorite::before, .bca-btn--menuitem::before, .bca-btn--add::before, .bca-btn--help::before, .bca-btn--permission::before, .bca-btn--home::before, .bca-btn--large::before, .bca-btn--small::before, .bca-btn--xsmall::before, .bca-btn--primary::before, .bca-crumb ol li a {
+.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--permission::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before, .bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .bca-nav-sub-title::before, .bca-icon--arrow-right::before, .bca-icon--arrow-left::before, .bca-btn::before, .bca-btn--publish::before, .bca-btn--unpublish::before, .bca-btn--preview::before, .bca-btn--edit::before, .bca-btn--copy::before, .bca-btn--delete::before, .bca-btn--favorite::before, .bca-btn--menuitem::before, .bca-btn--add::before, .bca-btn--help::before, .bca-btn--permission::before, .bca-btn--home::before, .bca-btn--login::before, .bca-btn--large::before, .bca-btn--small::before, .bca-btn--xsmall::before, .bca-btn--primary::before, .bca-crumb ol li a {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -2384,10 +2384,10 @@
 .fa-pull-right {
   float: right; }
 
-.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-icon--plus-square::before, .fa-pull-left.bca-icon--minus-square::before, .fa-pull-left.bca-btn::before, .fa-pull-left.bca-btn--publish::before, .fa-pull-left.bca-btn--unpublish::before, .fa-pull-left.bca-btn--preview::before, .fa-pull-left.bca-btn--edit::before, .fa-pull-left.bca-btn--copy::before, .fa-pull-left.bca-btn--delete::before, .fa-pull-left.bca-btn--favorite::before, .fa-pull-left.bca-btn--menuitem::before, .fa-pull-left.bca-btn--add::before, .fa-pull-left.bca-btn--help::before, .fa-pull-left.bca-btn--permission::before, .fa-pull-left.bca-btn--home::before, .fa-pull-left.bca-btn--large::before, .fa-pull-left.bca-btn--small::before, .fa-pull-left.bca-btn--xsmall::before, .fa-pull-left.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-left {
+.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-btn::before, .fa-pull-left.bca-btn--publish::before, .fa-pull-left.bca-btn--unpublish::before, .fa-pull-left.bca-btn--preview::before, .fa-pull-left.bca-btn--edit::before, .fa-pull-left.bca-btn--copy::before, .fa-pull-left.bca-btn--delete::before, .fa-pull-left.bca-btn--favorite::before, .fa-pull-left.bca-btn--menuitem::before, .fa-pull-left.bca-btn--add::before, .fa-pull-left.bca-btn--help::before, .fa-pull-left.bca-btn--permission::before, .fa-pull-left.bca-btn--home::before, .fa-pull-left.bca-btn--login::before, .fa-pull-left.bca-btn--large::before, .fa-pull-left.bca-btn--small::before, .fa-pull-left.bca-btn--xsmall::before, .fa-pull-left.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-left {
   margin-right: .3em; }
 
-.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-icon--plus-square::before, .fa-pull-right.bca-icon--minus-square::before, .fa-pull-right.bca-btn::before, .fa-pull-right.bca-btn--publish::before, .fa-pull-right.bca-btn--unpublish::before, .fa-pull-right.bca-btn--preview::before, .fa-pull-right.bca-btn--edit::before, .fa-pull-right.bca-btn--copy::before, .fa-pull-right.bca-btn--delete::before, .fa-pull-right.bca-btn--favorite::before, .fa-pull-right.bca-btn--menuitem::before, .fa-pull-right.bca-btn--add::before, .fa-pull-right.bca-btn--help::before, .fa-pull-right.bca-btn--permission::before, .fa-pull-right.bca-btn--home::before, .fa-pull-right.bca-btn--large::before, .fa-pull-right.bca-btn--small::before, .fa-pull-right.bca-btn--xsmall::before, .fa-pull-right.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-right {
+.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-btn::before, .fa-pull-right.bca-btn--publish::before, .fa-pull-right.bca-btn--unpublish::before, .fa-pull-right.bca-btn--preview::before, .fa-pull-right.bca-btn--edit::before, .fa-pull-right.bca-btn--copy::before, .fa-pull-right.bca-btn--delete::before, .fa-pull-right.bca-btn--favorite::before, .fa-pull-right.bca-btn--menuitem::before, .fa-pull-right.bca-btn--add::before, .fa-pull-right.bca-btn--help::before, .fa-pull-right.bca-btn--permission::before, .fa-pull-right.bca-btn--home::before, .fa-pull-right.bca-btn--login::before, .fa-pull-right.bca-btn--large::before, .fa-pull-right.bca-btn--small::before, .fa-pull-right.bca-btn--xsmall::before, .fa-pull-right.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-right {
   margin-left: .3em; }
 
 /* Deprecated as of 4.4.0 */
@@ -2397,10 +2397,10 @@
 .pull-left {
   float: left; }
 
-.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--permission::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--arrow-right::before, .pull-left.bca-icon--arrow-left::before, .pull-left.bca-icon--plus-square::before, .pull-left.bca-icon--minus-square::before, .pull-left.bca-btn::before, .pull-left.bca-btn--publish::before, .pull-left.bca-btn--unpublish::before, .pull-left.bca-btn--preview::before, .pull-left.bca-btn--edit::before, .pull-left.bca-btn--copy::before, .pull-left.bca-btn--delete::before, .pull-left.bca-btn--favorite::before, .pull-left.bca-btn--menuitem::before, .pull-left.bca-btn--add::before, .pull-left.bca-btn--help::before, .pull-left.bca-btn--permission::before, .pull-left.bca-btn--home::before, .pull-left.bca-btn--large::before, .pull-left.bca-btn--small::before, .pull-left.bca-btn--xsmall::before, .pull-left.bca-btn--primary::before, .bca-crumb ol li a.pull-left {
+.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--permission::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--arrow-right::before, .pull-left.bca-icon--arrow-left::before, .pull-left.bca-btn::before, .pull-left.bca-btn--publish::before, .pull-left.bca-btn--unpublish::before, .pull-left.bca-btn--preview::before, .pull-left.bca-btn--edit::before, .pull-left.bca-btn--copy::before, .pull-left.bca-btn--delete::before, .pull-left.bca-btn--favorite::before, .pull-left.bca-btn--menuitem::before, .pull-left.bca-btn--add::before, .pull-left.bca-btn--help::before, .pull-left.bca-btn--permission::before, .pull-left.bca-btn--home::before, .pull-left.bca-btn--login::before, .pull-left.bca-btn--large::before, .pull-left.bca-btn--small::before, .pull-left.bca-btn--xsmall::before, .pull-left.bca-btn--primary::before, .bca-crumb ol li a.pull-left {
   margin-right: .3em; }
 
-.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--permission::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--arrow-right::before, .pull-right.bca-icon--arrow-left::before, .pull-right.bca-icon--plus-square::before, .pull-right.bca-icon--minus-square::before, .pull-right.bca-btn::before, .pull-right.bca-btn--publish::before, .pull-right.bca-btn--unpublish::before, .pull-right.bca-btn--preview::before, .pull-right.bca-btn--edit::before, .pull-right.bca-btn--copy::before, .pull-right.bca-btn--delete::before, .pull-right.bca-btn--favorite::before, .pull-right.bca-btn--menuitem::before, .pull-right.bca-btn--add::before, .pull-right.bca-btn--help::before, .pull-right.bca-btn--permission::before, .pull-right.bca-btn--home::before, .pull-right.bca-btn--large::before, .pull-right.bca-btn--small::before, .pull-right.bca-btn--xsmall::before, .pull-right.bca-btn--primary::before, .bca-crumb ol li a.pull-right {
+.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--permission::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--arrow-right::before, .pull-right.bca-icon--arrow-left::before, .pull-right.bca-btn::before, .pull-right.bca-btn--publish::before, .pull-right.bca-btn--unpublish::before, .pull-right.bca-btn--preview::before, .pull-right.bca-btn--edit::before, .pull-right.bca-btn--copy::before, .pull-right.bca-btn--delete::before, .pull-right.bca-btn--favorite::before, .pull-right.bca-btn--menuitem::before, .pull-right.bca-btn--add::before, .pull-right.bca-btn--help::before, .pull-right.bca-btn--permission::before, .pull-right.bca-btn--home::before, .pull-right.bca-btn--login::before, .pull-right.bca-btn--large::before, .pull-right.bca-btn--small::before, .pull-right.bca-btn--xsmall::before, .pull-right.bca-btn--primary::before, .bca-crumb ol li a.pull-right {
   margin-left: .3em; }
 
 .fa-spin {
@@ -3179,7 +3179,7 @@
 .fa-h-square:before {
   content: ""; }
 
-.fa-plus-square:before, .bca-icon--plus-square:before {
+.fa-plus-square:before {
   content: ""; }
 
 .fa-angle-double-left:before {
@@ -3380,7 +3380,7 @@
 .fa-ticket:before {
   content: ""; }
 
-.fa-minus-square:before, .bca-icon--minus-square:before {
+.fa-minus-square:before {
   content: ""; }
 
 .fa-minus-square-o:before {
@@ -4634,6 +4634,7 @@
   padding: 0.9558em 1em 0.76em;
   line-height: 1.2;
   border: 1px solid #ccc;
+  cursor: pointer;
   color: #343434;
   text-decoration: none;
   background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4654,6 +4655,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4674,6 +4676,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4694,6 +4697,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4714,6 +4718,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4734,6 +4739,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4754,6 +4760,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4774,6 +4781,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4794,6 +4802,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4814,6 +4823,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4842,6 +4852,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4862,6 +4873,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4882,6 +4894,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4902,6 +4915,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4914,6 +4928,33 @@
       color: #343434;
       background-color: #fafafa;
       background-image: linear-gradient(white 100%, white 100%); }
+  .bca-btn--login {
+    display: inline-block;
+    font-size: 14px;
+    font-size: 0.88rem;
+    border-radius: 3px;
+    padding: 0.9558em 1em 0.76em;
+    line-height: 1.2;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    color: #343434;
+    text-decoration: none;
+    background-image: linear-gradient(white 10%, #f4f5f1 100%);
+    transition: all .5s ease-out 0s;
+    color: #fff;
+    border: 1px solid #559429;
+    background-image: linear-gradient(#61a82e 10%, #559429 100%); }
+    .bca-btn--login::before {
+      margin-right: 4px;
+      color: #343434; }
+    .bca-btn--login:hover {
+      text-decoration: none;
+      color: #343434;
+      background-color: #fafafa;
+      background-image: linear-gradient(white 100%, white 100%); }
+    .bca-btn--login:hover, .bca-btn--login:focus {
+      color: #fff;
+      background-image: linear-gradient(#559429 10%, #559429 100%); }
   .bca-btn--large {
     font-size: 1.1rem; }
     .bca-btn--large::before {
@@ -4938,6 +4979,7 @@
     padding: 0.9558em 1em 0.76em;
     line-height: 1.2;
     border: 1px solid #ccc;
+    cursor: pointer;
     color: #343434;
     text-decoration: none;
     background-image: linear-gradient(white 10%, #f4f5f1 100%);
@@ -4980,7 +5022,7 @@
 /* ==================================================================== */
 .bca-main {
   position: relative;
-  height: 100%; }
+  flex-basis: 100%; }
   .bca-main-inner {
     padding: 0 30px 0 30px; }
     .bca-main-inner::after {
@@ -5359,7 +5401,7 @@
   font-weight: normal;
   font-style: normal; }
 
-.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--permission::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before, .bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .bca-nav-sub-title::before, .bca-icon--arrow-right::before, .bca-icon--arrow-left::before, .bca-icon--plus-square::before, .bca-icon--minus-square::before, .bca-btn::before, .bca-btn--publish::before, .bca-btn--unpublish::before, .bca-btn--preview::before, .bca-btn--edit::before, .bca-btn--copy::before, .bca-btn--delete::before, .bca-btn--favorite::before, .bca-btn--menuitem::before, .bca-btn--add::before, .bca-btn--help::before, .bca-btn--permission::before, .bca-btn--home::before, .bca-btn--large::before, .bca-btn--small::before, .bca-btn--xsmall::before, .bca-btn--primary::before, .bca-crumb ol li a {
+.fa, .bca-icon--publish::before, .bca-icon--unpublish::before, .bca-icon--preview::before, .bca-icon--edit::before, .bca-icon--copy::before, .bca-icon--delete::before, .bca-icon--favorite::before, .bca-nav-favorite-title::before, .bca-icon--menuitem::before, .bca-nav-favorite-list-item a::before, .bca-nav-sub-list-item a::before, .bca-icon--add::before, .bca-nav-favorite-functions-add::before, .bca-icon--permission::before, .bca-icon--help::before, .bca-nav-favorite-functions-help::before, .bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .bca-nav-sub-title::before, .bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .bca-nav-sub-title::before, .bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .bca-nav-sub-title::before, .bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .bca-nav-sub-title::before, .bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .bca-nav-sub-title::before, .bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .bca-nav-sub-title::before, .bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .bca-nav-sub-title::before, .bca-icon--arrow-right::before, .bca-icon--arrow-left::before, .bca-btn::before, .bca-btn--publish::before, .bca-btn--unpublish::before, .bca-btn--preview::before, .bca-btn--edit::before, .bca-btn--copy::before, .bca-btn--delete::before, .bca-btn--favorite::before, .bca-btn--menuitem::before, .bca-btn--add::before, .bca-btn--help::before, .bca-btn--permission::before, .bca-btn--home::before, .bca-btn--login::before, .bca-btn--large::before, .bca-btn--small::before, .bca-btn--xsmall::before, .bca-btn--primary::before, .bca-crumb ol li a {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -5416,10 +5458,10 @@
 .fa-pull-right {
   float: right; }
 
-.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-icon--plus-square::before, .fa-pull-left.bca-icon--minus-square::before, .fa-pull-left.bca-btn::before, .fa-pull-left.bca-btn--publish::before, .fa-pull-left.bca-btn--unpublish::before, .fa-pull-left.bca-btn--preview::before, .fa-pull-left.bca-btn--edit::before, .fa-pull-left.bca-btn--copy::before, .fa-pull-left.bca-btn--delete::before, .fa-pull-left.bca-btn--favorite::before, .fa-pull-left.bca-btn--menuitem::before, .fa-pull-left.bca-btn--add::before, .fa-pull-left.bca-btn--help::before, .fa-pull-left.bca-btn--permission::before, .fa-pull-left.bca-btn--home::before, .fa-pull-left.bca-btn--large::before, .fa-pull-left.bca-btn--small::before, .fa-pull-left.bca-btn--xsmall::before, .fa-pull-left.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-left {
+.fa.fa-pull-left, .fa-pull-left.bca-icon--publish::before, .fa-pull-left.bca-icon--unpublish::before, .fa-pull-left.bca-icon--preview::before, .fa-pull-left.bca-icon--edit::before, .fa-pull-left.bca-icon--copy::before, .fa-pull-left.bca-icon--delete::before, .fa-pull-left.bca-icon--favorite::before, .fa-pull-left.bca-nav-favorite-title::before, .fa-pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-left::before, .bca-nav-sub-list-item a.fa-pull-left::before, .fa-pull-left.bca-icon--add::before, .fa-pull-left.bca-nav-favorite-functions-add::before, .fa-pull-left.bca-icon--permission::before, .fa-pull-left.bca-icon--help::before, .fa-pull-left.bca-nav-favorite-functions-help::before, .fa-pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-left.bca-nav-sub-title::before, .fa-pull-left.bca-icon--arrow-right::before, .fa-pull-left.bca-icon--arrow-left::before, .fa-pull-left.bca-btn::before, .fa-pull-left.bca-btn--publish::before, .fa-pull-left.bca-btn--unpublish::before, .fa-pull-left.bca-btn--preview::before, .fa-pull-left.bca-btn--edit::before, .fa-pull-left.bca-btn--copy::before, .fa-pull-left.bca-btn--delete::before, .fa-pull-left.bca-btn--favorite::before, .fa-pull-left.bca-btn--menuitem::before, .fa-pull-left.bca-btn--add::before, .fa-pull-left.bca-btn--help::before, .fa-pull-left.bca-btn--permission::before, .fa-pull-left.bca-btn--home::before, .fa-pull-left.bca-btn--login::before, .fa-pull-left.bca-btn--large::before, .fa-pull-left.bca-btn--small::before, .fa-pull-left.bca-btn--xsmall::before, .fa-pull-left.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-left {
   margin-right: .3em; }
 
-.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-icon--plus-square::before, .fa-pull-right.bca-icon--minus-square::before, .fa-pull-right.bca-btn::before, .fa-pull-right.bca-btn--publish::before, .fa-pull-right.bca-btn--unpublish::before, .fa-pull-right.bca-btn--preview::before, .fa-pull-right.bca-btn--edit::before, .fa-pull-right.bca-btn--copy::before, .fa-pull-right.bca-btn--delete::before, .fa-pull-right.bca-btn--favorite::before, .fa-pull-right.bca-btn--menuitem::before, .fa-pull-right.bca-btn--add::before, .fa-pull-right.bca-btn--help::before, .fa-pull-right.bca-btn--permission::before, .fa-pull-right.bca-btn--home::before, .fa-pull-right.bca-btn--large::before, .fa-pull-right.bca-btn--small::before, .fa-pull-right.bca-btn--xsmall::before, .fa-pull-right.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-right {
+.fa.fa-pull-right, .fa-pull-right.bca-icon--publish::before, .fa-pull-right.bca-icon--unpublish::before, .fa-pull-right.bca-icon--preview::before, .fa-pull-right.bca-icon--edit::before, .fa-pull-right.bca-icon--copy::before, .fa-pull-right.bca-icon--delete::before, .fa-pull-right.bca-icon--favorite::before, .fa-pull-right.bca-nav-favorite-title::before, .fa-pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.fa-pull-right::before, .bca-nav-sub-list-item a.fa-pull-right::before, .fa-pull-right.bca-icon--add::before, .fa-pull-right.bca-nav-favorite-functions-add::before, .fa-pull-right.bca-icon--permission::before, .fa-pull-right.bca-icon--help::before, .fa-pull-right.bca-nav-favorite-functions-help::before, .fa-pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .fa-pull-right.bca-nav-sub-title::before, .fa-pull-right.bca-icon--arrow-right::before, .fa-pull-right.bca-icon--arrow-left::before, .fa-pull-right.bca-btn::before, .fa-pull-right.bca-btn--publish::before, .fa-pull-right.bca-btn--unpublish::before, .fa-pull-right.bca-btn--preview::before, .fa-pull-right.bca-btn--edit::before, .fa-pull-right.bca-btn--copy::before, .fa-pull-right.bca-btn--delete::before, .fa-pull-right.bca-btn--favorite::before, .fa-pull-right.bca-btn--menuitem::before, .fa-pull-right.bca-btn--add::before, .fa-pull-right.bca-btn--help::before, .fa-pull-right.bca-btn--permission::before, .fa-pull-right.bca-btn--home::before, .fa-pull-right.bca-btn--login::before, .fa-pull-right.bca-btn--large::before, .fa-pull-right.bca-btn--small::before, .fa-pull-right.bca-btn--xsmall::before, .fa-pull-right.bca-btn--primary::before, .bca-crumb ol li a.fa-pull-right {
   margin-left: .3em; }
 
 /* Deprecated as of 4.4.0 */
@@ -5429,10 +5471,10 @@
 .pull-left {
   float: left; }
 
-.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--permission::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--arrow-right::before, .pull-left.bca-icon--arrow-left::before, .pull-left.bca-icon--plus-square::before, .pull-left.bca-icon--minus-square::before, .pull-left.bca-btn::before, .pull-left.bca-btn--publish::before, .pull-left.bca-btn--unpublish::before, .pull-left.bca-btn--preview::before, .pull-left.bca-btn--edit::before, .pull-left.bca-btn--copy::before, .pull-left.bca-btn--delete::before, .pull-left.bca-btn--favorite::before, .pull-left.bca-btn--menuitem::before, .pull-left.bca-btn--add::before, .pull-left.bca-btn--help::before, .pull-left.bca-btn--permission::before, .pull-left.bca-btn--home::before, .pull-left.bca-btn--large::before, .pull-left.bca-btn--small::before, .pull-left.bca-btn--xsmall::before, .pull-left.bca-btn--primary::before, .bca-crumb ol li a.pull-left {
+.fa.pull-left, .pull-left.bca-icon--publish::before, .pull-left.bca-icon--unpublish::before, .pull-left.bca-icon--preview::before, .pull-left.bca-icon--edit::before, .pull-left.bca-icon--copy::before, .pull-left.bca-icon--delete::before, .pull-left.bca-icon--favorite::before, .pull-left.bca-nav-favorite-title::before, .pull-left.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-left::before, .bca-nav-sub-list-item a.pull-left::before, .pull-left.bca-icon--add::before, .pull-left.bca-nav-favorite-functions-add::before, .pull-left.bca-icon--permission::before, .pull-left.bca-icon--help::before, .pull-left.bca-nav-favorite-functions-help::before, .pull-left.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-left.bca-nav-sub-title::before, .pull-left.bca-icon--arrow-right::before, .pull-left.bca-icon--arrow-left::before, .pull-left.bca-btn::before, .pull-left.bca-btn--publish::before, .pull-left.bca-btn--unpublish::before, .pull-left.bca-btn--preview::before, .pull-left.bca-btn--edit::before, .pull-left.bca-btn--copy::before, .pull-left.bca-btn--delete::before, .pull-left.bca-btn--favorite::before, .pull-left.bca-btn--menuitem::before, .pull-left.bca-btn--add::before, .pull-left.bca-btn--help::before, .pull-left.bca-btn--permission::before, .pull-left.bca-btn--home::before, .pull-left.bca-btn--login::before, .pull-left.bca-btn--large::before, .pull-left.bca-btn--small::before, .pull-left.bca-btn--xsmall::before, .pull-left.bca-btn--primary::before, .bca-crumb ol li a.pull-left {
   margin-right: .3em; }
 
-.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--permission::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--arrow-right::before, .pull-right.bca-icon--arrow-left::before, .pull-right.bca-icon--plus-square::before, .pull-right.bca-icon--minus-square::before, .pull-right.bca-btn::before, .pull-right.bca-btn--publish::before, .pull-right.bca-btn--unpublish::before, .pull-right.bca-btn--preview::before, .pull-right.bca-btn--edit::before, .pull-right.bca-btn--copy::before, .pull-right.bca-btn--delete::before, .pull-right.bca-btn--favorite::before, .pull-right.bca-btn--menuitem::before, .pull-right.bca-btn--add::before, .pull-right.bca-btn--help::before, .pull-right.bca-btn--permission::before, .pull-right.bca-btn--home::before, .pull-right.bca-btn--large::before, .pull-right.bca-btn--small::before, .pull-right.bca-btn--xsmall::before, .pull-right.bca-btn--primary::before, .bca-crumb ol li a.pull-right {
+.fa.pull-right, .pull-right.bca-icon--publish::before, .pull-right.bca-icon--unpublish::before, .pull-right.bca-icon--preview::before, .pull-right.bca-icon--edit::before, .pull-right.bca-icon--copy::before, .pull-right.bca-icon--delete::before, .pull-right.bca-icon--favorite::before, .pull-right.bca-nav-favorite-title::before, .pull-right.bca-icon--menuitem::before, .bca-nav-favorite-list-item a.pull-right::before, .bca-nav-sub-list-item a.pull-right::before, .pull-right.bca-icon--add::before, .pull-right.bca-nav-favorite-functions-add::before, .pull-right.bca-icon--permission::before, .pull-right.bca-icon--help::before, .pull-right.bca-nav-favorite-functions-help::before, .pull-right.bca-icon--list::before, .bca-nav-sub[data-content-type="contents"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--blog::before, .bca-nav-sub[data-content-type="blog-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--mail::before, .bca-nav-sub[data-content-type="mail-content"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--theme::before, .bca-nav-sub[data-content-type="theme"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--plugin::before, .bca-nav-sub[data-content-type="plugin"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--setting::before, .bca-nav-sub[data-content-type="system"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--home::before, .bca-nav-sub[data-content-type="dashboard"] .pull-right.bca-nav-sub-title::before, .pull-right.bca-icon--arrow-right::before, .pull-right.bca-icon--arrow-left::before, .pull-right.bca-btn::before, .pull-right.bca-btn--publish::before, .pull-right.bca-btn--unpublish::before, .pull-right.bca-btn--preview::before, .pull-right.bca-btn--edit::before, .pull-right.bca-btn--copy::before, .pull-right.bca-btn--delete::before, .pull-right.bca-btn--favorite::before, .pull-right.bca-btn--menuitem::before, .pull-right.bca-btn--add::before, .pull-right.bca-btn--help::before, .pull-right.bca-btn--permission::before, .pull-right.bca-btn--home::before, .pull-right.bca-btn--login::before, .pull-right.bca-btn--large::before, .pull-right.bca-btn--small::before, .pull-right.bca-btn--xsmall::before, .pull-right.bca-btn--primary::before, .bca-crumb ol li a.pull-right {
   margin-left: .3em; }
 
 .fa-spin {
@@ -6211,7 +6253,7 @@
 .fa-h-square:before {
   content: ""; }
 
-.fa-plus-square:before, .bca-icon--plus-square:before {
+.fa-plus-square:before {
   content: ""; }
 
 .fa-angle-double-left:before {
@@ -6412,7 +6454,7 @@
 .fa-ticket:before {
   content: ""; }
 
-.fa-minus-square:before, .bca-icon--minus-square:before {
+.fa-minus-square:before {
   content: ""; }
 
 .fa-minus-square-o:before {
@@ -7700,37 +7742,6 @@
     .bca-content-menu ul li a {
       color: #656565; }
 
-/* search
------------------------------------------------ */
-.bca-search {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-bottom: 40px; }
-  .bca-search .bca-search-head {
-    margin: 0;
-    padding: 0;
-    border: none; }
-    .bca-search .bca-search-head a {
-      display: block;
-      padding: 10px; }
-      .bca-search .bca-search-head a:hover {
-        text-decoration: none; }
-  .bca-search-body {
-    margin: 0;
-    padding: 0 10px 10px; }
-    .bca-search-body p {
-      display: table;
-      width: 100%; }
-      .bca-search-body p span {
-        display: table-cell;
-        padding-right: 20px; }
-        .bca-search-body p span:last-child {
-          padding-right: 0; }
-        .bca-search-body p span label {
-          display: block; }
-        .bca-search-body p span input, .bca-search-body p span select {
-          width: 98%; }
-
 /* bca-pagination
 ----------------------------------------------- */
 /* pagination
@@ -7806,3 +7817,79 @@
     .bca-totop a:hover {
       background-color: #1b6123;
       color: #fff; }
+
+/* ==================================================================== */
+/*    Login
+/* ==================================================================== */
+#Login #flashMessage {
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px; }
+
+#Login #MessageBox .notice-message {
+  border: 5px solid #5C8A01;
+  background-color: transparent; }
+
+#Login #MessageBox .alert-message {
+  border: 5px solid #F23561;
+  background-color: transparent; }
+
+.bca-login {
+  position: relative;
+  z-index: 100000;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 65px 25px 25px;
+  border-radius: 5px;
+  background: #fff url("../../img/admin/logo_header.png") no-repeat center 25px; }
+  .bca-login,
+  .bca-login *,
+  .bca-login *::before,
+  .bca-login *::after {
+    box-sizing: border-box; }
+  .bca-login h1 {
+    color: #343434;
+    font-weight: bold; }
+  .bca-login-form-item {
+    position: relative; }
+    .bca-login-form-item label {
+      color: #656565;
+      font-size: 0.875rem;
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 1em;
+      transform: translate(0, -50%);
+      pointer-events: none; }
+    .bca-login-form-item input[type="text"], .bca-login-form-item input[type="password"] {
+      color: #343434;
+      font-size: 1.125rem;
+      font-weight: bold;
+      line-height: 1;
+      -webkit-appearance: none;
+         -moz-appearance: none;
+              appearance: none;
+      display: block;
+      width: 100%;
+      border: 4px solid #CCCCCC;
+      margin: 0 0 20px;
+      padding: 1.4558em 1em 1.26em; }
+      .bca-login-form-item input[type="text"]:focus, .bca-login-form-item input[type="password"]:focus {
+        border-color: #61a82e;
+        outline: none; }
+  .bca-login button.bca-btn--login {
+    font-size: 1.125rem;
+    line-height: 1;
+    display: block;
+    width: 100%; }
+  .bca-login .bca-login-form-ctrl {
+    margin-top: 10px;
+    overflow: hidden; }
+  .bca-login .bca-login-form-checker {
+    float: left; }
+  .bca-login .bca-login-forgot-pass {
+    float: right; }
+  .bca-login .bca-login-form-checkbox {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1; }
