@@ -428,9 +428,9 @@ class BcSqlite extends Sqlite {
 		// PDO::getColumnMeta is experimental and does not work with sqlite3,
 		// so try to figure it out based on the querystring
 		$querystring = $results->queryString;
+		$selects = array();
 		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
 			$selectpart = substr($querystring, 7);
-			$selects = array();
 			foreach (CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
 				$fromPos = stripos($part, ' FROM ');
 				if ($fromPos !== false) {
@@ -446,6 +446,26 @@ class BcSqlite extends Sqlite {
 		} elseif (strpos($querystring, 'PRAGMA index_info') === 0) {
 			$selects = array('seqno', 'cid', 'name');
 		}
+
+		$columnMeta = [];
+		foreach($selects as $select) {
+			if (preg_match('/\bAS(?!.*\bAS\b)\s+(.*)/i', $select, $matches)) {
+				$columnName = trim($matches[1], '"');
+			} else {
+				$columnName = trim(str_replace('"', '', $select));
+			}
+			if (strpos($columnName, '.')) {
+				list($table) = explode('.', $columnName);
+				if(empty($columnMeta[$table])) {
+					$pdo_statement = $this->_connection->query('PRAGMA table_info(' . $this->config['prefix'] . Inflector::tableize($table) . ')');
+					$fields = $pdo_statement->fetchAll(PDO::FETCH_ASSOC);
+					foreach($fields as $field) {
+						$columnMeta[$table][$field['name']] = $field;
+					}
+				}
+			}
+		}
+
 		while ($j < $numFields) {
 			if (!isset($selects[$j])) {
 				$j++;
@@ -467,6 +487,20 @@ class BcSqlite extends Sqlite {
 				if (!empty($metaData['sqlite:decl_type'])) {
 					$metaType = trim($metaData['sqlite:decl_type']);
 				}
+
+				// CUSTOMIZE ADD 2017/02/21 ryuring
+				// 型情報が取得できない問題を改善
+				// >>>
+				if($metaData[0] === false) {
+					if (strpos($columnName, '.')) {
+						list($table, $column) = explode('.', $columnName);
+						if(!empty($columnMeta[$table][$column]['type'])) {
+							$metaType = $columnMeta[$table][$column]['type'];
+						}
+					}
+				}
+				// <<<
+
 			} catch (Exception $e) {
 			}
 
@@ -498,8 +532,21 @@ class BcSqlite extends Sqlite {
 				//pr($index);
 				if (isset($this->map[$index]) && $this->map[$index] != "") {
 					//echo "asdf: ".$this->map[$index];
-					list($table, $column) = $this->map[$index];
+
+					// CUSTOMIZE MODIFY 2017/02/21 ryuring
+					// boolean 型が文字列として認識されてしまう問題を改善
+					// resultSet() に入れている修正内容の存在が前提
+					// >>>
+					//list($table, $column) = $this->map[$index];
+					//$resultRow[$table][$column] = $row[$index];
+					// ---
+					list($table, $column, $type) = $this->map[$index];
 					$resultRow[$table][$column] = $row[$index];
+					if ($type === 'boolean' && $row[$index] !== null) {
+						$resultRow[$table][$column] = $this->boolean($resultRow[$table][$column]);
+					}
+					// <<<
+
 				} else {
 					$resultRow[0][str_replace('"', '', $index)] = $row[$index];
 				}

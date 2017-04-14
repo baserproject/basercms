@@ -6,7 +6,7 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Baser.Model.Behavior
- * @since			baserCMS v 4.0.0
+ * @since			baserCMS v 1.5.3
  * @license			http://basercms.net/license/index.html
  */
 
@@ -101,12 +101,8 @@ class BcUploadBehavior extends ModelBehavior {
 				'saveDir' => '',
 				'fields' => array()
 				), $settings);
-
-		if ($this->settings[$Model->alias]['saveDir']) {
-			$this->savePath[$Model->alias] = WWW_ROOT . 'files' . DS . $this->settings[$Model->alias]['saveDir'] . DS;
-		} else {
-			$this->savePath[$Model->alias] = WWW_ROOT . 'files' . DS;
-		}
+		
+		$this->savePath[$Model->alias] = $this->getSaveDir($Model);
 
 		if (!is_dir($this->savePath[$Model->alias])) {
 			$Folder = new Folder();
@@ -126,6 +122,9 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  */
 	public function beforeSave(Model $Model, $options = array()) {
+		if($Model->exists()) {
+			$this->deleteExistingFiles($Model);	
+		}
 		return $this->saveFiles($Model);
 	}
 
@@ -364,30 +363,9 @@ class BcUploadBehavior extends ModelBehavior {
 			return false;
 		}
 
-		// プレフィックス、サフィックスを取得
-		$prefix = '';
-		$suffix = '';
-		if (!empty($field['prefix'])) {
-			$prefix = $field['prefix'];
-		}
-		if (!empty($field['suffix'])) {
-			$suffix = $field['suffix'];
-		}
-
-		// 保存ファイル名を生成
-		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $file['name']);
-
-		if (!$this->tmpId) {
-			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
-		} else {
-			if (!empty($field['namefield'])) {
-				$Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
-				$fileName = $this->getFieldBasename($Model, $field, $field['ext']);
-			} else {
-				$fileName = $this->tmpId . '_' . $field['name'] . '.' . $field['ext'];
-			}
-		}
+		$fileName = $this->getSaveFileName($Model, $field, $file['name']);
 		$filePath = $this->savePath[$Model->alias] . $fileName;
+		$this->rotateImage($file['tmp_name']);
 
 		if (!$this->tmpId) {
 			if (copy($file['tmp_name'], $filePath)) {
@@ -405,6 +383,109 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 
 		return $ret;
+	}
+
+/**
+ * 保存用ファイル名を取得する
+ *
+ * @param Model $Model
+ * @param $field
+ * @param $name
+ * @return mixed|string
+ */
+	public function getSaveFileName(Model $Model, $field, $name) {
+		// プレフィックス、サフィックスを取得
+		$prefix = '';
+		$suffix = '';
+		if (!empty($field['prefix'])) {
+			$prefix = $field['prefix'];
+		}
+		if (!empty($field['suffix'])) {
+			$suffix = $field['suffix'];
+		}
+		// 保存ファイル名を生成
+		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
+		if (!$this->tmpId) {
+			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
+			if(file_exists($this->savePath[$Model->alias] . $fileName)) {
+				if(preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
+					$basename = $matches[1] . ((int) $matches[2] + 1);
+				} else {
+					$basename = $basename . '_1';
+				}
+				$fileName = $this->getSaveFileName($Model, $field, $basename . '.' . $field['ext']);
+			}
+		} else {
+			if (!empty($field['namefield'])) {
+				$Model->data[$Model->alias][$field['namefield']] = $this->tmpId;
+				$fileName = $this->getFieldBasename($Model, $field, $field['ext']);
+			} else {
+				$fileName = $this->tmpId . '_' . $field['name'] . '.' . $field['ext'];
+			}
+		}
+		return $fileName;
+	}
+
+/**
+ * 画像をExif情報を元に正しい確度に回転する
+ * 
+ * @param $file
+ * @return bool
+ */
+	public function rotateImage($file) {
+		if(!function_exists('exif_read_data')) {
+			return false;
+		}
+		$exif = @exif_read_data($file);
+		if(empty($exif) || empty($exif['Orientation'])) {
+			return true;
+		}
+		switch($exif['Orientation']) {
+			case 3:
+				$angle = 180;
+				break;
+			case 6:
+				$angle = 270;
+				break;
+			case 8:
+				$angle = 90;
+				break;
+			default:
+				return true;
+		}
+		$imgInfo = getimagesize($file);
+		$imageType = $imgInfo[2];
+		// 元となる画像のオブジェクトを生成
+		switch($imageType) {
+			case IMAGETYPE_GIF:
+				$srcImage = imagecreatefromgif($file);
+				break;
+			case IMAGETYPE_JPEG:
+				$srcImage = imagecreatefromjpeg($file);
+				break;
+			case IMAGETYPE_PNG:
+				$srcImage = imagecreatefrompng($file);
+				break;
+			default:
+				return false;
+		}
+		$rotate = imagerotate($srcImage, $angle, 0);
+		switch($imageType) {
+			case IMAGETYPE_GIF:
+				imagegif($rotate, $file);
+				break;
+			case IMAGETYPE_JPEG:
+				imagejpeg($rotate, $file, 100);
+				break;
+			case IMAGETYPE_PNG:
+				imagepng($rotate, $file);
+				break;
+			default:
+				return false;
+		}
+		imagedestroy($srcImage);
+		imagedestroy($rotate);
+		return true;
 	}
 
 /**
@@ -502,6 +583,7 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像ファイル群を削除する
  * 
  * @param Model $Model
+ * @param string $fieldName フィールド名
  * @return boolean
  */
 	public function delFiles(Model $Model, $fieldName = null) {
@@ -509,9 +591,11 @@ class BcUploadBehavior extends ModelBehavior {
 			if (empty($field['name'])) {
 				$field['name'] = $key;
 			}
-			if(!empty($Model->data[$Model->name][$field['name']])) {
-				$file = $Model->data[$Model->name][$field['name']];
-				$this->delFile($Model, $file, $field);
+			if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
+				if (!empty($Model->data[$Model->name][$field['name']])) {
+					$file = $Model->data[$Model->name][$field['name']];
+					$this->delFile($Model, $file, $field);
+				}
 			}
 		}
 	}
@@ -581,8 +665,15 @@ class BcUploadBehavior extends ModelBehavior {
 
 			if (!empty($setting['namefield']) && !empty($Model->data[$Model->alias][$setting['name']])) {
 				$oldName = $Model->data[$Model->alias][$setting['name']];
-
-				if (file_exists($this->savePath[$Model->alias] . $oldName)) {
+				$saveDir = $this->savePath[$Model->alias];
+				$saveDirInTheme = $this->getSaveDir($Model, true);
+				$oldSaveDir = '';
+				if(file_exists($saveDir . $oldName)) {
+					$oldSaveDir = $saveDir;
+				} elseif(file_exists($saveDirInTheme . $oldName)) {
+					$oldSaveDir = $saveDirInTheme;
+				}
+				if (file_exists($oldSaveDir . $oldName)) {
 
 					$pathinfo = pathinfo($oldName);
 					$newName = $this->getFieldBasename($Model, $setting, $pathinfo['extension']);
@@ -599,9 +690,9 @@ class BcUploadBehavior extends ModelBehavior {
 						}
 
 						if (!$copy) {
-							rename($this->savePath[$Model->alias] . $oldName, $this->savePath[$Model->alias] . $newName);
+							rename($oldSaveDir . $oldName, $saveDir . $newName);
 						} else {
-							copy($this->savePath[$Model->alias] . $oldName, $this->savePath[$Model->alias] . $newName);
+							copy($oldSaveDir . $oldName, $saveDir . $newName);
 						}
 
 						$Model->data[$Model->alias][$setting['name']] = str_replace(DS, '/', $newName);
@@ -609,12 +700,12 @@ class BcUploadBehavior extends ModelBehavior {
 						if (!empty($setting['imagecopy'])) {
 							foreach ($setting['imagecopy'] as $copysetting) {
 								$oldCopyname = $this->getFileName($Model, $copysetting, $oldName);
-								if (file_exists($this->savePath[$Model->alias] . $oldCopyname)) {
+								if (file_exists($oldSaveDir . $oldCopyname)) {
 									$newCopyname = $this->getFileName($Model, $copysetting, $newName);
 									if (!$copy) {
-										rename($this->savePath[$Model->alias] . $oldCopyname, $this->savePath[$Model->alias] . $newCopyname);
+										rename($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
 									} else {
-										copy($this->savePath[$Model->alias] . $oldCopyname, $this->savePath[$Model->alias] . $newCopyname);
+										copy($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
 									}
 								}
 							}
@@ -778,4 +869,52 @@ class BcUploadBehavior extends ModelBehavior {
 		
 	}
 
+/**
+ * 保存先のフォルダを取得する
+ * 
+ * @param Model $Model
+ * @param bool $isTheme
+ * @return string $saveDir
+ */
+	public function getSaveDir(Model $Model, $isTheme = false) {
+		if(!$isTheme) {
+			$basePath = WWW_ROOT . 'files' . DS;
+		} else {
+			$siteConfig = Configure::read('BcSite');
+			$theme = $siteConfig['theme'];
+			if($theme) {
+				$basePath = WWW_ROOT . 'theme' . DS . $theme . DS . 'files' . DS;
+			} else {
+				$basePath = getViewPath() . 'files' . DS;
+			}
+		}
+		if ($this->settings[$Model->alias]['saveDir']) {
+			$saveDir = $basePath . $this->settings[$Model->alias]['saveDir'] . DS;
+		} else {
+			$saveDir = $basePath;
+		}
+		return $saveDir;
+	}
+
+/**
+ * 既に存在するデータのファイルを削除する
+ * 
+ * @param Model $Model
+ */
+	public function deleteExistingFiles(Model $Model) {
+		$dataTmp = $Model->data[$Model->alias];
+		$Model->set($Model->find('first', [
+			'conditions' => [$Model->alias . '.id' => $Model->data[$Model->alias]['id']],
+			'recursive' => -1
+		]));
+		$uploadFields = array_keys($this->settings[$Model->alias]['fields']);
+		$targetFields = array_keys($dataTmp);
+		foreach($targetFields as $field) {
+			if(in_array($field, $uploadFields) && !empty($dataTmp[$field]['tmp_name'])) {
+				$this->delFiles($Model, $field);
+			}
+		}
+		$Model->set($dataTmp);
+	}
+	
 }

@@ -366,3 +366,9 @@ $config['BcShortCode']['Core'] = [
 	'BcBaser.getUpdateInfo'
 ];
 
+/**
+ * セキュリティ設定
+ */
+$config['BcSecurity'] = [
+	'csrfExpires' => '+4 hours'
+];

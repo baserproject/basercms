@@ -159,7 +159,7 @@ class BcSite {
 					if($site->domainType == 1) {
 						$domainKey = BcUtil::getSubDomain() . '/';
 					} elseif($site->domainType == 2) {
-						$domainKey = BcUtil::getFullDomain() . '/';
+						$domainKey = BcUtil::getCurrentDomain() . '/';
 					}
 				}
 				$regex = '/^' . preg_quote($site->alias, '/') . '\//';
@@ -219,12 +219,14 @@ class BcSite {
 		if(!$agent) {
 			$agent = BcAgent::findCurrent();	
 		}
-		
-		
+
 		// 言語の一致するサブサイト候補に絞り込む
 		$subSites = [];
-		if($lang) {
+		if($lang && Configure::read('BcSite.use_site_lang_setting')) {
 			foreach($sites as $site) {
+				if(!$site->enabled) {
+					continue;
+				}
 				if (!$sameMainUrl || ($sameMainUrl && $site->sameMainUrl)) {
 					if($site->lang == $lang->name && $currentSite->id == $site->mainSiteId) {
 						$subSites[] = $site;
@@ -236,8 +238,11 @@ class BcSite {
 		if(!$subSites) {
 			$subSites = $sites;
 		}
-		if($agent) {
+		if($agent && Configure::read('BcSite.use_site_device_setting')) {
 			foreach($subSites as $subSite) {
+				if(!$subSite->enabled) {
+					continue;
+				}
 				if (!$sameMainUrl || ($sameMainUrl && $subSite->sameMainUrl)) {
 					if($subSite->device == $agent->name && $currentSite->id == $subSite->mainSiteId) {
 						return $subSite;

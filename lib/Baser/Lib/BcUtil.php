@@ -74,6 +74,21 @@ class BcUtil extends Object {
 	}
 
 /**
+ * 現在ログインしているユーザーのユーザーグループ情報を取得する
+ * 
+ * @param string $prefix ログイン認証プレフィックス
+ * @return bool|mixed ユーザーグループ情報
+ */
+	public static function loginUserGroup($prefix = 'admin') {
+		$loginUser = self::loginUser($prefix);
+		if(!empty($loginUser['UserGroup'])) {
+			return $loginUser['UserGroup'];	
+		} else {
+			return false;
+		}
+	}
+
+/**
  * 認証用のキーを取得
  * 
  * @param string $prefix
@@ -355,7 +370,7 @@ class BcUtil extends Object {
 		if(strpos($host, '.') === false) {
 			return '';
 		}
-		$mainHost = BcUtil::getMainFullDomain();
+		$mainHost = BcUtil::getMainDomain();
 		if($host == $mainHost) {
 			return '';
 		}
@@ -369,7 +384,13 @@ class BcUtil extends Object {
 		return '';
 
 	}
-	
+
+/**
+ * 指定したURLのドメインを取得する
+ *
+ * @param $url URL
+ * @return string
+ */
 	public static function getDomain($url) {
 		$mainUrlInfo = parse_url($url);
 		$host = $mainUrlInfo['host'];
@@ -378,16 +399,35 @@ class BcUtil extends Object {
 		}
 		return $host;
 	}
-	
-	public static function getMainFullDomain() {
-		return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
+
+/**
+ * メインとなるドメインを取得する
+ *
+ * @return string
+ */
+	public static function getMainDomain() {
+		$mainDomain = Configure::read('BcEnv.mainDomain');
+		if($mainDomain) {
+			return $mainDomain;
+		} else {
+			return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
+		}
 	}
-	
-	public static function getFullDomain() {
+
+/**
+ * 現在のドメインを取得する
+ *
+ * @return string
+ */
+	public static function getCurrentDomain() {
 		if(isConsole() && empty($_SERVER['HTTP_HOST'])) {
 			return '';
 		}
 		return $_SERVER['HTTP_HOST'];
+	}
+
+	public static function getAdminPrefix() {
+		return Configure::read('BcAuthPrefix.admin.alias');
 	}
 	
 }

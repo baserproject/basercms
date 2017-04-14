@@ -55,4 +55,8 @@ require BASER_CONFIGS . 'routes.php';
  * Load the CakePHP default routes. Only remove this if you do not want to use
  * the built-in default routes.
  */
+// @deprecated 5.0.0 since 4.0.3
+// baserCMSコアの routes にて同様の処理をしている為、将来的に除外する
+// 下記を読み込んでいる場合、AdminPrefix を変更したとしても、/admin/~ でアクセスできてしまう。
+// コメントアウトした上での動作確認が必要
 	require CAKE . 'Config' . DS . 'routes.php';

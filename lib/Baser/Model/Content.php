@@ -382,7 +382,7 @@ class Content extends AppModel {
 		}
 		$assoc = $data['Content']['type'];
 		if($data['Content']['plugin'] != 'Core') {
-			if(!CakePlugin::loaded($assoc = $data['Content']['plugin'])) {
+			if(!CakePlugin::loaded($data['Content']['plugin'])) {
 				return;
 			}
 			$assoc = $data['Content']['plugin'] . '.' . $assoc;
@@ -410,13 +410,8 @@ class Content extends AppModel {
 			'conditions' => array($this->alias . '.id' => $this->id)
 		));
 		$this->__deleteTarget = $data;
-		
 		if(!$this->softDelete(null)) {
 			return true;
-		}
-		if($data) {
-			$this->deleteRelateSubSiteContent($data);
-			$this->deleteAlias($data);
 		}
 		return true;
 	}
@@ -428,8 +423,13 @@ class Content extends AppModel {
  */
 	public function afterDelete() {
 		parent::afterDelete();
-		$this->deleteAssocCache($this->__deleteTarget);
+		$data = $this->__deleteTarget;
 		$this->__deleteTarget = null;
+		if($data) {
+			$this->deleteRelateSubSiteContent($data);
+			$this->deleteAlias($data);
+		}
+		$this->deleteAssocCache($data);
 	}
 
 /**
@@ -537,6 +537,11 @@ class Content extends AppModel {
 			$data = ['Content' => array_merge($_data['Content'], $data['Content'])];
 		}
 
+		// URLが空の場合はゴミ箱へ移動する処理の為、連携更新を行わない
+		if(!$data['Content']['url']) {
+			return true;
+		}
+
 		$CreateModel = $this;
 		if($isContentFolder) {
 			$CreateModel = ClassRegistry::init('ContentFolder');
@@ -546,6 +551,9 @@ class Content extends AppModel {
 		// 同階層に同名のコンテンツがあるか確認
 		$result = true;
 		foreach($sites as $site) {
+			if(!$site['Site']['status']) {
+				continue;
+			}
 			$url = $pureUrl;
 			$prefix = $this->Site->getPrefix($site);
 			if($prefix) {
@@ -671,18 +679,26 @@ class Content extends AppModel {
  * @param int $id コンテンツID
  * @param string $plugin プラグイン
  * @param string $type タイプ
- * @return string URL
+ * @return mixed URL | false
  */
-	public function createUrl($id, $plugin, $type) {
+	public function createUrl($id, $plugin = null, $type = null) {
+		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
 		if($id == 1) {
 			$url = '/';
 		} else {
-			$parents = $this->getPath($id, ['name'], -1);
+			$parents = $this->getPath($id, ['name', 'plugin', 'type'], -1);
 			unset($parents[0]);
-			$names = array();
+			if(!$parents) {
+				return false;
+			}
+			$names = [];
+			$content = null;
 			foreach($parents as $parent) {
 				$names[] = $parent['Content']['name'];
+				$content = $parent;
 			}
+			$plugin = $content['Content']['plugin'];
+			$type = $content['Content']['type'];
 			$url = '/' . implode('/', $names);
 			$setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
 			if($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
@@ -896,6 +912,8 @@ class Content extends AppModel {
 /**
  * 再帰的に削除
  *
+ * エイリアスの場合
+ *
  * @param $id
  * @return bool
  */
@@ -913,17 +931,23 @@ class Content extends AppModel {
 			}
 		}
 		if($result) {
-			$content = $this->find('first', array('conditions' => array('Content.id' => $id), 'recursive' => -1));
+			$content = $this->find('first', [
+				'conditions' => ['Content.id' => $id],
+				'recursive' => -1
+			]);
 			if(empty($content['Content']['alias_id'])) {
+				// エイリアス以外の場合
+				// 一旦階層構造から除外しリセットしてゴミ箱に移動（論理削除）
 				$content['Content']['parent_id'] = null;
 				$content['Content']['url'] = '';
 				$content['Content']['status'] = false;
 				$content['Content']['self_status'] = false;
 				unset($content['Content']['lft']);
 				unset($content['Content']['rght']);
-				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は必要（default: true）
 				$this->updatingSystemData = false;
-				$this->save($content, array('validate' => false));
+				// ここでは callbacks を false にすると lft rght が更新されないので callbacks は true に設定する（default: true）
+				$this->clear();
+				$this->save($content, ['validate' => false]);
 				$this->updatingSystemData = true;
 				$result = $this->delete($id);
 				// =====================================================================
@@ -933,6 +957,7 @@ class Content extends AppModel {
 				$this->deleteAssocCache($content);
 				return $result;
 			} else {
+				// エイリアスの場合、直接削除
 				$softDelete = $this->softDelete(null);
 				$this->softDelete(false);
 				$result = $this->removeFromTree($content['Content']['id'], true);
@@ -1059,10 +1084,13 @@ class Content extends AppModel {
 			}
 			if($full) {
 				$fullUrl = fullUrl($originUrl);
-				if (BcUtil::isAdminSystem()) {
+				if (BcUtil::isAdminSystem() && $site) {
 					if($site->domainType == 1) {
+						$mainDomain = BcUtil::getMainDomain();
 						$fullUrlArray = explode('//', $fullUrl);
-						return $fullUrlArray[0] . '//' . $subDomain . '.' . $fullUrlArray[1];
+						$fullPassArray = explode('/', $fullUrlArray[1]);
+						unset($fullPassArray[0]);
+						$url = $fullUrlArray[0] . '//' . $subDomain . '.' . $mainDomain . '/' . implode('/', $fullPassArray);
 					} elseif($site->domainType == 2) {
 						$fullUrlArray = explode('//', $fullUrl);
 						$urlArray = explode('/', $fullUrlArray[1]);
@@ -1071,13 +1099,13 @@ class Content extends AppModel {
 							$mainSite = BcSite::findById($site->mainSiteId);
 							$subDomain = $mainSite->alias;
 						}
-						return $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
+						$url = $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
 					}
 				} else {
-					return $fullUrl;
+					$url = $fullUrl;
 				}
 			} else {
-				return Router::url($originUrl);
+				$url = Router::url($originUrl);
 			}
 		} else {
 			if(BC_INSTALLED) {
@@ -1093,12 +1121,15 @@ class Content extends AppModel {
 					}
 				}
 			}
+			
 			if($full) {
-				return fullUrl($url);
+				$url = fullUrl($url);
 			} else {
-				return Router::url($url);
+				$url = Router::url($url);
 			}
 		}
+
+		return preg_replace('/\/index$/', '/', $url);
 	}
 
 /**

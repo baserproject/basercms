@@ -594,9 +594,31 @@ table.cake-sql-log tr td {
 	font-weight:bold;
 	border:5px solid #FF0033;
 }
-.required {
-	color:#FF0033!important;
-	font-size:16px;
+#MailMessageIndexForm .required{
+    color:#FFF;
+    font-size:10px;
+    background-color: #C30;
+    padding:4px 5px;
+    font-weight: normal;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left:5px;
+    margin-right:5px;
+    vertical-align: middle;
+}
+#MailMessageIndexForm .normal{
+    color:#FFF;
+    font-size:10px;
+    background-color: #CCC;
+    padding:4px 5px;
+    font-weight: normal;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    white-space: nowrap;
+    margin-left:5px;
+    margin-right:5px;
+    vertical-align: middle;
 }
 .form-error {
 	background-color:#FCF5EB;

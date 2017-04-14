@@ -1308,6 +1308,8 @@ background: #888;
 }
 #AdminDashboard .panel-box {
 	margin:10px;
+    height:300px;
+    overflow: scroll;
 }
 #AdminDashboard .panel-box li{
 	margin-bottom: 5px;

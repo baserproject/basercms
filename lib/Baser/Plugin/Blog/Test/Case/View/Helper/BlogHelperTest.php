@@ -372,13 +372,15 @@ class BlogHelperTest extends BaserTestCase {
  * 前の記事へのリンクを出力する
  * 
  * @param int $blogContentId ブログコンテンツID
+ * @param int $id 記事ID
  * @param int $posts_date 日付
  * @dataProvider prevLinkDataProvider
  */
-	public function testPrevLink($blogContentId, $posts_date, $expected) {
+	public function testPrevLink($blogContentId, $id, $posts_date, $expected) {
 		$this->expectOutputString($expected);
 		$post = array('BlogPost' => array(
 			'blog_content_id' => $blogContentId,
+			'id' => $id,
 			'posts_date' => $posts_date
 		));
 		$this->Blog->prevLink($post);
@@ -386,10 +388,10 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function prevLinkDataProvider() {
 		return array(
-			array(1, '9000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ ホームページをオープンしました</a>'),
-			array(1, '1000-08-10 18:58:07', ''),
-			array(2, '9000-08-10 18:58:07', '<a href="/news/archives/3" class="prev-link">≪ 新商品を販売を開始しました。</a>'),
-			array(2, '1000-08-10 18:58:07', ''),
+			array(1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ ホームページをオープンしました</a>'),
+			array(1, 3, '1000-08-10 18:58:07', ''),
+			array(2, 2, '9000-08-10 18:58:07', '<a href="/news/archives/3" class="prev-link">≪ 新商品を販売を開始しました。</a>'),
+			array(2, 1, '1000-08-10 18:58:07', ''),
 		);
 	}
 
@@ -397,13 +399,15 @@ class BlogHelperTest extends BaserTestCase {
  * 次の記事へのリンクを出力する
  *
  * @param int $blogContentId ブログコンテンツID
+ * @param int $id 記事ID
  * @param int $posts_date 日付
  * @dataProvider nextLinkDataProvider
  */
-	public function testNextLink($blogContentId, $posts_date, $expected) {
+	public function testNextLink($blogContentId, $id, $posts_date, $expected) {
 		$this->expectOutputString($expected);
 		$post = array('BlogPost' => array(
 			'blog_content_id' => $blogContentId,
+			'id' => $id,
 			'posts_date' => $posts_date
 		));
 		$this->Blog->nextLink($post);
@@ -411,10 +415,10 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function nextLinkDataProvider() {
 		return array(
-			array(1, '9000-08-10 18:58:07', ''),
-			array(1, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'),
-			array(2, '9000-08-10 18:58:07', ''),
-			array(2, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">新商品を販売を開始しました。 ≫</a>'),
+			array(1, 1, '9000-08-10 18:58:07', ''),
+			array(1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'),
+			array(2, 3, '9000-08-10 18:58:07', ''),
+			array(2, 4, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">新商品を販売を開始しました。 ≫</a>'),
 		);
 	}
 
@@ -560,7 +564,7 @@ class BlogHelperTest extends BaserTestCase {
 			'eye_catch' => 'test-eye_catch.jpg'
 		));
 		$result = $this->Blog->getEyeCatch($post);
-		$expected = '/\/files\/blog\/news\/blog_posts\/test-eye_catch.jpg/';
+		$expected = '/\/files\/blog\/1\/blog_posts\/test-eye_catch.jpg/';
 
 		$this->assertRegExp($expected, $result, 'アイキャッチ画像を正しく取得できません');
 	}

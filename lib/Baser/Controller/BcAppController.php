@@ -298,6 +298,11 @@ class BcAppController extends Controller {
 
 		// セキュリティ設定
 		$this->Security->blackHoleCallback = '_blackHoleCallback';
+		$csrfExpires = Configure::read('BcSecurity.csrfExpires');
+		if(!$csrfExpires) {
+			$csrfExpires = "+4 hours";
+		}
+		$this->Security->csrfExpires = $csrfExpires;
 		if (!BC_INSTALLED || $isUpdate) {
 			$this->Security->validatePost = false;
 		}
@@ -574,7 +579,7 @@ class BcAppController extends Controller {
 	public function _blackHoleCallback($err) {
 		//SSL制限違反は別処理
 		if ($err === 'secure') {
-			$this->_sslFail($err);
+			$this->sslFail($err);
 			return;
 		}
 
@@ -606,7 +611,7 @@ class BcAppController extends Controller {
  * @return	void
  * @access	protected
  */
-	protected function _sslFail($err) {
+	public function sslFail($err) {
 		if ($err === 'secure') {
 			// 共用SSLの場合、設置URLがサブディレクトリになる場合があるので、$this->request->here は利用せずURLを生成する
 			$url = $this->request->url;
@@ -1505,7 +1510,7 @@ class BcAppController extends Controller {
  * @param mixed $message エラーメッセージ
  * @return void
  */
-	protected function ajaxError($errorNo = 500, $message = '') {
+	public function ajaxError($errorNo = 500, $message = '') {
 		header('HTTP/1.1 ' . $errorNo);
 		if ($message) {
 			if (is_array($message)) {
@@ -1611,13 +1616,14 @@ class BcAppController extends Controller {
  * @return bool
  */
 	protected function _checkReferer() {
-		$siteDomain = BcUtil::getFullDomain();
+		$siteDomain = BcUtil::getCurrentDomain();
 		if(empty($_SERVER['HTTP_REFERER'])) {
-			return;
+			return false;
 		}
 		$refererDomain = BcUtil::getDomain($_SERVER['HTTP_REFERER']);
 		if (!preg_match('/^' . preg_quote($siteDomain, '/') . '/', $refererDomain)) {
 			throw new NotFoundException();
 		}
+		return true;
 	}
 }

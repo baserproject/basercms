@@ -121,15 +121,16 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSetTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
-		$this->BcBaser->request = $this->_getRequest('/company');
+		$this->BcBaser->request = $this->_getRequest('/about');
 		// カテゴリがない場合
 		$this->BcBaser->setTitle('会社案内');
 		$this->assertEquals("会社案内{$topTitle}", $this->BcBaser->getTitle());
-
+		
 		// カテゴリがある場合
+		$this->BcBaser->request = $this->_getRequest('/service/service2');
 		$this->BcBaser->_View->set('crumbs', array(
-			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data')
+			array('name' => '会社案内', 'url' => '/service/index'),
+			array('name' => '会社データ', 'url' => '/service/data')
 		));
 		$this->BcBaser->setTitle('会社沿革');
 		$this->assertEquals("会社沿革｜会社データ｜会社案内{$topTitle}", $this->BcBaser->getTitle());
@@ -176,7 +177,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testSetCategoryTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
-		$this->BcBaser->request = $this->_getRequest('/company');
+		$this->BcBaser->request = $this->_getRequest('/about');
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
 			array('name' => '会社データ', 'url' => '/company/data')
@@ -265,7 +266,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetTitle() {
 		$topTitle = 'baserCMS inc. [デモ]';
-		$this->BcBaser->request = $this->_getRequest('/company');
+		$this->BcBaser->request = $this->_getRequest('/about');
 		// 通常
 		$this->BcBaser->_View->set('crumbs', array(
 			array('name' => '会社案内', 'url' => '/company/index'),
@@ -322,8 +323,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setTitle('会社沿革');
 		$expected = array(
 			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data'),
-			array('name' => '会社沿革', 'url' => '')
+			array('name' => '会社データ', 'url' => '/company/data')
 		);
 		$this->assertEquals($expected, $this->BcBaser->getCrumbs(true));
 
@@ -367,7 +367,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testTitle() {
 		$topTitle = 'baserCMS inc. [デモ]';
 		$title = '会社データ';
-		$this->BcBaser->request = $this->_getRequest('/company');
+		$this->BcBaser->request = $this->_getRequest('/about');
 		$this->expectOutputString('<title>' . $title . '｜' . $topTitle . '</title>' . PHP_EOL);
 		$this->BcBaser->setTitle($title);
 		$this->BcBaser->title();

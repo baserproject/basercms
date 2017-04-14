@@ -117,12 +117,15 @@ class BlogContentsController extends BlogAppController {
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
-			$this->request->data = $this->BlogContent->read(null, $id);
-			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
+			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->read(null, $id));
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			$this->request->data = $this->BlogContent->deconstructEyeCatchSize($this->request->data);
 			$this->BlogContent->set($this->request->data);

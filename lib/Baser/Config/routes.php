@@ -108,6 +108,7 @@ if($isUpdater) {
 	/**
 	 * サブサイト標準ルーティング
 	 */
+	try {
 		$Site = ClassRegistry::init('Site');
 		$request = new CakeRequest();
 		$site = $Site->findByUrl($request->url);
@@ -125,7 +126,8 @@ if($isUpdater) {
 			Router::connect("/{$siteAlias}/:controller/:action/*", array('prefix' => $sitePrefix));
 			Router::connect("/{$siteAlias}/:controller", array('prefix' => $sitePrefix, 'action' => 'index'));
 		}
-
+	} catch (Exception $e) {}
+		
 	/**
 	 * フィード出力
 	 * 拡張子rssの場合は、rssディレクトリ内のビューを利用する

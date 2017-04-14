@@ -360,6 +360,7 @@ class MailFieldsController extends MailAppController {
 		$this->MailMessage->cacheSources = false;
 		$this->MailMessage->setUseTable($mailContentId);
 		$messages = $this->MailMessage->convertMessageToCsv($mailContentId, $this->MailMessage->find('all'));
+		$this->set('encoding', $this->request->query['encoding']);
 		$this->set('messages', $messages);
 		$this->set('contentName', $this->request->params['Content']['name']);
 	}

@@ -1,4 +1,4 @@
-"id","name","value","created","modified"
+ï»¿"id","name","value","created","modified"
 "","name","baserCMS inc.","",""
 "","keyword","","",""
 "","description","","",""
@@ -23,51 +23,51 @@
 "","login_credit","1","",""
 "","first_access","1","",""
 "","editor","BcCkeditor","",""
-"","editor_styles","#ÂŒ©o‚µ(h3)
+"","editor_styles","#é’è¦‹å‡ºã—(h3)
 h3 {
 	color:Blue;
 }
 
-#ÔŒ©o‚µ(h3)
+#èµ¤è¦‹å‡ºã—(h3)
 h3 {
 	color:Red;
 }
 
-#‰©ƒ}[ƒJ[(span)
+#é»„ãƒãƒ¼ã‚«ãƒ¼(span)
 span {
 	background-color:Yellow;
 }
 
-#—Îƒ}[ƒJ[(span)
+#ç·‘ãƒãƒ¼ã‚«ãƒ¼(span)
 span {
 	background-color:Lime;
 }
 
-#‘å•¶š(big)
+#å¤§æ–‡å­—(big)
 big {}
 
-#¬•¶š(small)
+#å°æ–‡å­—(small)
 small {}
 
-#ƒR[ƒh(code)
+#ã‚³ãƒ¼ãƒ‰(code)
 code {}
 
-#íœ•¶(del)
+#å‰Šé™¤æ–‡(del)
 del {}
 
-#‘}“ü•¶(ins)
+#æŒ¿å…¥æ–‡(ins)
 ins {}
 
-#ˆø—p(cite)
+#å¼•ç”¨(cite)
 cite {}
 
-#ƒCƒ“ƒ‰ƒCƒ“(q)
+#ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³(q)
 q {}","",""
 "","editor_enter_br","0","",""
 "","admin_side_banner","1","",""
 "","smtp_tls","0","",""
 "","use_universal_analytics","1","",""
 "","google_maps_api_key","","",""
-"","main_site_display_name","ƒpƒ\ƒRƒ“","",""
+"","main_site_display_name","ãƒ‘ã‚½ã‚³ãƒ³","",""
 "","use_site_device_setting","1","",""
 "","use_site_lang_setting","0","",""

@@ -81,8 +81,13 @@ class ContentsController extends AppController {
 		}
 		
 		$sites = $this->Site->getSiteList();
-		if(!in_array($this->passedArgs['site_id'], array_keys($sites))) {
-			$this->passedArgs['site_id'] = 0;
+		if($sites) {
+			if(!$this->passedArgs['site_id'] || !in_array($this->passedArgs['site_id'], array_keys($sites))) {
+				reset($sites);
+				$this->passedArgs['site_id'] = key($sites);
+			}
+		} else {
+			$this->passedArgs['site_id'] = null;
 		}
 		
 		$this->request->data['ViewSetting']['site_id'] = $currentSiteId = $this->passedArgs['site_id'];
@@ -303,6 +308,10 @@ class ContentsController extends AppController {
 		$this->pageTitle = 'コンテンツ編集';
 		if(!$this->request->data) {
 			$this->request->data = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->params['named']['content_id'])));
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			if($this->Content->save($this->request->data)) {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を更新しました。';
@@ -332,6 +341,10 @@ class ContentsController extends AppController {
 		$this->pageTitle = 'エイリアス編集';
 		if(!$this->request->data) {
 			$this->request->data = $this->Content->find('first', array('conditions' => array('Content.id' => $id)));
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 			$srcContent = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->data['Content']['alias_id']), 'recursive' => -1));
 			$srcContent = $srcContent['Content'];
 		} else {

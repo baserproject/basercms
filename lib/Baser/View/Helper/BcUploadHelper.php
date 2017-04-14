@@ -216,7 +216,9 @@ class BcUploadHelper extends BcAppHelper {
 		}
 
 		$fileUrl = $this->getBasePath($settings);
-		$filePath = WWW_ROOT . 'files' . DS . $settings['saveDir'] . DS;
+		$Model = $this->getUploadModel();
+		$saveDir = $Model->getSaveDir();
+		$saveDirInTheme = $Model->getSaveDir(true);
 
 		if (isset($settings['fields'][$field]['imagecopy'])) {
 			$copySettings = $settings['fields'][$field]['imagecopy'];
@@ -274,7 +276,8 @@ class BcUploadHelper extends BcAppHelper {
 					$basename = basename($fileName, '.' . $ext);
 
 					$subdir = str_replace($basename . '.' . $ext, '', $fileName);
-					if (file_exists($filePath . str_replace('/', DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext) || $force) {
+					$file = str_replace('/', DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
+					if ((file_exists($saveDir . $file) || file_exists($saveDirInTheme . $file)) || $force) {
 						if ($check && !$mostSizeExists) {
 							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
 							$mostSizeExists = true;
@@ -332,11 +335,17 @@ class BcUploadHelper extends BcAppHelper {
  * @return array
  */
 	protected function getBcUploadSetting(){
+		$Model = $this->getUploadModel();
+		return $Model->Behaviors->BcUpload->settings[$Model->name];
+	}
+	
+	protected function getUploadModel() {
 		$modelName = $this->model();
 		$Model = ClassRegistry::init($modelName);
 		if (empty($Model->Behaviors->BcUpload)) {
 			throw new BcException('BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。');
 		}
-		return $Model->Behaviors->BcUpload->settings[$modelName];
+		return $Model;
 	}
+	
 }

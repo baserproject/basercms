@@ -36,5 +36,19 @@ class BcControllerEventListener extends BcEventListener {
  * @var string
  */
 	public $layer = 'Controller';
-
+	
+/**
+ * 管理システムの現在のサイトをセットする
+ * 
+ * @param \Controller $controller
+ * @param $siteId
+ */
+	public function setAdminCurrentSite(Controller $controller, $siteId) {
+		if(!BcUtil::isAdminSystem()) {
+			return false;
+		}
+		$controller->passedArgs['site_id'] = $siteId;
+		return true;
+	}
+	
 }

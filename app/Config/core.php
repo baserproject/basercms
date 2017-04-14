@@ -19,7 +19,7 @@
  */
 
 //setLocale(LC_ALL, 'deu');
-//Configure::write('Config.language', 'deu');
+Configure::write('Config.language', 'jpn');
 
 /**
  * CakePHP Debug Level:

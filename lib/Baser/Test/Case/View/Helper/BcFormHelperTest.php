@@ -139,7 +139,7 @@ class BcFormHelperTest extends BaserTestCase {
 	public function checkboxDataProvider() {
 		return array(
 			array('test', array(), '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'),
-			array('test', array('label' => 'testLabel'), '<label for="test"><input type="checkbox".*label="testLabel"', '属性を付与できません'),
+			array('test', array('label' => 'testLabel'), '<input type="checkbox".*label="testLabel"', '属性を付与できません'),
 		);
 	}
 
@@ -445,14 +445,14 @@ class BcFormHelperTest extends BaserTestCase {
 	public function selectTextDataProvider() {
 		return array(
 			array('baser', array(), null, array(), '', '<div id="baser_"><input type="hidden" name="data\[baser_\]" value="" id="baser_"', 'selectText()を出力できません'), 
-			array('baser', array('BaserCMS1'), null, array(), '', '<label for="Baser0">.*id="Baser0".*BaserCMS1', 'optionを出力できません'), 
+			array('baser', array('BaserCMS1'), null, array(), '', 'id="Baser0".*<label for="Baser0">BaserCMS1', 'optionを出力できません'), 
 			array('baser', array('BaserCMS1', 'BaserCMS2'), null, array(), '', '<label for="Baser0">.*BaserCMS1.*<label for="Baser1">.*BaserCMS2', 'optionを複数出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), '1', array(), '', 'for="Baser1" class="selected".*checked="checked".*BaserCMS2', 'checkboxを選択状態にできません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), '1', array(), '', 'checked="checked".*for="Baser1" class="selected">BaserCMS2', 'checkboxを選択状態にできません'), 
 			array('baser', array('BaserCMS1'), '1', array('class'=>'bcclass'), '', 'div class="bcclass"', '要素に属性を付与できません'), 
 			array('baser', array('BaserCMS1'), '1', array('multiple'=>'select'), '', '<select', 'selectを出力できません'), 
-			array('baser', array('BaserCMS1'), '1', array(), true, '<label for="Baser">.*value="".*>&nbsp;<', '空要素を出力できません'), 
-			array('baser', array('BaserCMS1'), '1', array(), '選択してください', 'value="" id="Baser" \/>&nbsp;選択してください', '空要素のテキストを指定できません'), 
-			array('baser', array('BaserCMS1'), '1', array(), array('未選択' => '選択してください'), ' value="未選択" id="Baser未選択" \/>&nbsp;選択してください', '空要素のテキストと値を指定できません'), 
+			array('baser', array('BaserCMS1'), '1', array(), true, 'value="".*>&nbsp;<label for="Baser">', '空要素を出力できません'), 
+			array('baser', array('BaserCMS1'), '1', array(), '選択してください', 'value="" id="Baser" \/>&nbsp;<.*選択してください', '空要素のテキストを指定できません'), 
+			array('baser', array('BaserCMS1'), '1', array(), array('未選択' => '選択してください'), ' value="未選択" id="Baser未選択" \/>&nbsp;<.+選択してください', '空要素のテキストと値を指定できません'), 
 		);
 	}
 
@@ -508,10 +508,10 @@ class BcFormHelperTest extends BaserTestCase {
 	public function radioDataProvider() {
 		return array(
 			array('baser', array(), array(), '<input type="hidden" name="data\[baser\]" id="baser_" value=""', 'radio()を出力できません'), 
-			array('baser', array('BaserCMS1'), array(), '<label for="baser0">.*id="baser0" value="0" \/>BaserCMS1<', 'optionを出力できません'), 
+			array('baser', array('BaserCMS1'), array(), 'id="baser0" value="0" \/><label for="baser0">BaserCMS1<', 'optionを出力できません'), 
 			array('baser', array('BaserCMS1', 'BaserCMS2'), array(), '<legend>Baser.*value="0".*BaserCMS1.*value="1".*BaserCMS2', 'optionを複数出力できません'), 
 			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => 'test'), '<\/legend>test', ' legend と最初の要素の間に挿入されるコンテンツを出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => array('test1', 'test2')), 'BaserCMS1test1.*BaserCMS2test2', '要素の後に挿入されるコンテンツを出力できません'), 
+			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => array('test1', 'test2')), 'BaserCMS1<\/label>test1.*BaserCMS2<\/label>test2', '要素の後に挿入されるコンテンツを出力できません'), 
 			array('baser', array('BaserCMS1'), array('label' => array('class'=>'bcclass')), 'class="bcclass"', 'labelに属性を付与できません'), 
 		);
 	}
