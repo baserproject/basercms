@@ -6,7 +6,7 @@ const sass = require('gulp-sass');
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 
-const BROWSER_SYNC_PROXY = '192.168.33.10';
+const BROWSER_SYNC_PROXY = 'localhost:8888';
 
 const CSS_DEV_DIR = 'css/';
 const CSS_MAIN_SCSS_FILENAME = 'style.scss';
