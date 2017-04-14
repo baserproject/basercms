@@ -323,6 +323,9 @@ class BlogController extends BlogAppController {
 			/* 単ページ */
 			default:
 
+				if (!empty($pass[0])) {
+					$id = $pass[0];
+				}
 				// プレビュー
 				if ($this->BcContents->preview) {
 					if (!empty($this->request->data['BlogPost'])) {
@@ -338,9 +341,7 @@ class BlogController extends BlogAppController {
 					}
 					
 				} else {
-					if (!empty($pass[0])) {
-						$id = $pass[0];
-					} else {
+					if (empty($pass[0])) {
 						$this->notFound();
 					}
 
@@ -349,7 +350,7 @@ class BlogController extends BlogAppController {
 						$this->add_comment($id);
 					}
 
-					$post = $this->_getBlogPosts(array('preview' => (bool) $this->BcContents->preview, 'conditions' => array('id' => $id)));
+					$post = $this->_getBlogPosts(['conditions' => ['id' => $id]]);
 					if (!empty($post[0])) {
 						$post = $post[0];
 					} else {
