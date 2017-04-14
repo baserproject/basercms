@@ -115,12 +115,6 @@
 		@include btn-common;
 	}
 
-	// ヘルプ
-	&--help {
-		@extend .#{$fa-css-prefix}-life-ring;
-		@include btn-common;
-	}
-
 	// HOME
 	&--home {
 		@extend .#{$fa-css-prefix}-home;

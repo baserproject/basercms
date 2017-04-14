@@ -6,6 +6,8 @@ const sass = require('gulp-sass');
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 
+const sceg = require('gulp-sceg');
+
 const BROWSER_SYNC_PROXY = 'localhost:8888';
 
 const CSS_DEV_DIR = 'css/';
@@ -29,6 +31,16 @@ gulp.task('css', () => {
 	]))
 	.pipe(gulp.dest(CSS_DIST_DIR))
 	.pipe(browserSync.stream());
+});
+
+gulp.task('guide', () => {
+	return gulp
+	.src(`./guide/elements/*`)
+	.pipe(sceg({
+		layout: `./guide/index.hbs`,
+		filename: `guide.html`,
+	}))
+	.pipe(gulp.dest(`../`))
 });
 
 gulp.task('watch', () => {

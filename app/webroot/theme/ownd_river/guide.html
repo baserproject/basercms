@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex,nofollow" />
+	<title>コンテンツ一覧｜baserCMS inc.</title>
+
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/admin/style.css" />
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/admin/jquery-ui/jquery-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/admin/import.css" />
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/admin/colorbox/colorbox-1.6.1.css" />
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/admin/toolbar.css" />
+	<link rel="stylesheet" type="text/css" href="/theme/ownd_river/css/admin/sidebar_opened.css" />
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery-ui-1.11.4.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/i18n/ui.datepicker-ja.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery.bt.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery.form-2.94.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery.colorbox-1.6.1.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/jquery.mScroll.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/jquery.baseUrl.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/jquery.bcConfirm.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/credit.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/validate_messages_ja.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/functions.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/adjust_scroll.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/jquery.bcUtil.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/jquery.bcToken.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/sidebar.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/startup.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/favorite.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/permission.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery.jstree-3.3.1/jstree.min.js"></script>
+	<script type="text/javascript" src="/theme/ownd_river/js/admin/libs/jquery.bcTree.js"></script>
+</head>
+
+<body id="AdminContents" class="normal">
+	<div id="Page">
+		<div id="BaseUrl" style="display: none"></div>
+		<div id="SaveFavoriteBoxUrl" style="display:none">/admin/dashboard/ajax_save_favorite_box</div>
+		<div id="SaveSearchBoxUrl" style="display:none">/admin/dashboard/ajax_save_search_box/AdminContentsIndex</div>
+		<div id="SearchBoxOpened" style="display:none"></div>
+		<div id="CurrentPageName" style="display: none">コンテンツ一覧</div>
+		<div id="CurrentPageUrl" style="display: none">/admin/contents/</div>
+
+		<header id="Header" class="bca-header">
+			<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/outerClick.js"></script>
+			<script type="text/javascript" src="/theme/ownd_river/js/admin/vendors/jquery.fixedMenu.js"></script>
+			<script type="text/javascript" src="/theme/ownd_river/js/admin/toolbar.js"></script>
+
+			<div id="ToolBar">
+				<div id="ToolbarInner" class="clearfix">
+					<div id="ToolMenu">
+						<ul>
+							<li><a href="/">baserCMS inc.</a></li>
+						</ul>
+					</div>
+					<div id="UserMenu">
+						<ul class="clearfix">
+							<li>
+								<a href="javascript:void(0)" class="title">admin <img src="/theme/ownd_river/img/admin/btn_dropdown.png" width="8" height="11" class="bc-btn" alt=""/></a>
+								<ul>
+									<li><a href="/admin/users/edit/1">アカウント設定</a></li>
+									<li><a href="/admin/users/logout">ログアウト</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="/admin/site_configs/del_cache" onclick="if (confirm(&quot;\u30ad\u30e3\u30c3\u30b7\u30e5\u30af\u30ea\u30a2\u3057\u307e\u3059\u3002\u3044\u3044\u3067\u3059\u304b\uff1f&quot;)) { return true; } return false;">キャッシュクリア</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="HeaderInner" hidden>
+				<div id="GlobalMenu" hidden></div>
+				<div id="Logo" hidden>
+					<a href="/admin"><img src="/theme/ownd_river/img/admin/logo_header.png" width="153" height="30" alt="baserCMS" /></a>
+				</div>
+			</div>
+		</header>
+
+		<div id="Wrap" class="bca-container">
+			<div id="SideBar" class="bca-navigations">
+				<div id="FavoriteArea">
+					<nav id="FavoriteMenu" class="bca-nav-favorite">
+
+						<h2 class="bca-nav-favorite-title"><span class="bca-nav-favorite-title-label">お気に入り</span></h2>
+
+						<ul class="favorite-menu-list bca-nav-favorite-list">
+
+
+							<li id="FavoriteRowコンテンツ管理" class="bca-nav-favorite-list-item">
+								<a href="/admin/contents/" title="http://localhost:8888/admin/contents/index"><span class="bca-nav-favorite-list-item-label">コンテンツ管理</span></a>								<input type="hidden" name="data[Favorite][id][1]" value="1" class="favorite-id" id="FavoriteId1" /> <input type="hidden"
+								 name="data[Favorite][name][1]" value="コンテンツ管理" class="favorite-name" id="FavoriteName1" /> <input type="hidden" name="data[Favorite][url][1]"
+								 value="/admin/contents/index" class="favorite-url" id="FavoriteUrl1" /></li>
+
+							<li id="FavoriteRow新着情報管理" class="bca-nav-favorite-list-item">
+								<a href="/admin/blog/blog_posts/index/1" title="http://localhost:8888/admin/blog/blog_posts/index/1"><span class="bca-nav-favorite-list-item-label">新着情報管理</span></a>								<input type="hidden" name="data[Favorite][id][2]" value="2" class="favorite-id" id="FavoriteId2" /> <input type="hidden"
+								 name="data[Favorite][name][2]" value="新着情報管理" class="favorite-name" id="FavoriteName2" /> <input type="hidden" name="data[Favorite][url][2]"
+								 value="/admin/blog/blog_posts/index/1" class="favorite-url" id="FavoriteUrl2" /></li>
+
+							<li id="FavoriteRow新着情報コメント一覧" class="bca-nav-favorite-list-item">
+								<a href="/admin/blog/blog_comments/index/1" title="http://localhost:8888/admin/blog/blog_comments/index/1"><span class="bca-nav-favorite-list-item-label">新着情報コメント一覧</span></a>								<input type="hidden" name="data[Favorite][id][3]" value="3" class="favorite-id" id="FavoriteId3" /> <input type="hidden"
+								 name="data[Favorite][name][3]" value="新着情報コメント一覧" class="favorite-name" id="FavoriteName3" /> <input type="hidden"
+								 name="data[Favorite][url][3]" value="/admin/blog/blog_comments/index/1" class="favorite-url" id="FavoriteUrl3" /></li>
+
+							<li id="FavoriteRowお問い合わせ設定" class="bca-nav-favorite-list-item">
+								<a href="/admin/mail/mail_fields/index/1" title="http://localhost:8888/admin/mail/mail_fields/index/1"><span class="bca-nav-favorite-list-item-label">お問い合わせ設定</span></a>								<input type="hidden" name="data[Favorite][id][4]" value="4" class="favorite-id" id="FavoriteId4" /> <input type="hidden"
+								 name="data[Favorite][name][4]" value="お問い合わせ設定" class="favorite-name" id="FavoriteName4" /> <input type="hidden"
+								 name="data[Favorite][url][4]" value="/admin/mail/mail_fields/index/1" class="favorite-url" id="FavoriteUrl4" /></li>
+
+							<li id="FavoriteRowお問い合わせ一覧" class="bca-nav-favorite-list-item">
+								<a href="/admin/mail/mail_messages/index/1" title="http://localhost:8888/admin/mail/mail_messages/index/1"><span class="bca-nav-favorite-list-item-label">お問い合わせ一覧</span></a>								<input type="hidden" name="data[Favorite][id][5]" value="5" class="favorite-id" id="FavoriteId5" /> <input type="hidden"
+								 name="data[Favorite][name][5]" value="お問い合わせ一覧" class="favorite-name" id="FavoriteName5" /> <input type="hidden"
+								 name="data[Favorite][url][5]" value="/admin/mail/mail_messages/index/1" class="favorite-url" id="FavoriteUrl5" /></li>
+
+							<li id="FavoriteRowアップロード管理" class="bca-nav-favorite-list-item">
+								<a href="/admin/uploader/uploader_files/" title="http://localhost:8888/admin/uploader/uploader_files/"><span class="bca-nav-favorite-list-item-label">アップロード管理</span></a>								<input type="hidden" name="data[Favorite][id][6]" value="6" class="favorite-id" id="FavoriteId6" /> <input type="hidden"
+								 name="data[Favorite][name][6]" value="アップロード管理" class="favorite-name" id="FavoriteName6" /> <input type="hidden"
+								 name="data[Favorite][url][6]" value="/admin/uploader/uploader_files/" class="favorite-url" id="FavoriteUrl6" /></li>
+
+							<li id="FavoriteRowクレジット" class="bca-nav-favorite-list-item">
+								<a href="javascript:credit();" title="javascript:credit();"><span class="bca-nav-favorite-list-item-label">クレジット</span></a>								<input type="hidden" name="data[Favorite][id][7]" value="7" class="favorite-id" id="FavoriteId7" /> <input type="hidden"
+								 name="data[Favorite][name][7]" value="クレジット" class="favorite-name" id="FavoriteName7" /> <input type="hidden" name="data[Favorite][url][7]"
+								 value="javascript:credit();" class="favorite-url" id="FavoriteUrl7" /></li>
+						</ul>
+
+						<ul class="favolite-menu-tools clearfix bca-nav-favorite-functions">
+							<li class="bca-nav-favorite-functions-add">
+								<span id="BtnFavoriteAdd" class="btn">新規追加</span>
+							</li>
+							<li class="bca-nav-favorite-functions-help">
+								<span id="BtnFavoriteHelp" class="btn help">ヘルプ</span>
+								<div class="helptext">
+									<p>よく使う項目では、新規登録ボタンで現在開いているページへのリンクを簡単にする事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えます。</p>
+								</div>
+							</li>
+						</ul>
+
+					</nav>
+				</div>
+
+				<nav class="bca-nav-main" data-js-tmpl="AdminMenu" hidden>
+					<h2 class="bca-nav-main-title">管理メニュー</h2>
+					<div class="bca-nav-sub" data-content-type="dashboard">
+						<h3 class="bca-nav-sub-title">
+							<a v-bind:href="baseURL" class="bca-nav-sub-title-label">ダッシュボード</a>
+						</h3>
+					</div>
+					<div v-for="content in contentList" class="bca-nav-sub" v-bind:data-content-type="content.type" v-bind:data-content-is-current="content.current">
+						<h3 class="bca-nav-sub-title">
+							<a v-bind:href="baseURL + content.url" class="bca-nav-sub-title-label" v-html="content.title"></a>
+						</h3>
+						<ul class="bca-nav-sub-list">
+							<li v-for="subContent in content.menus" class="bca-nav-sub-list-item" v-bind:data-sub-content-is-current="subContent.current">
+								<a v-bind:href="baseURL + subContent.url">
+									<span class="bca-nav-sub-list-item-title" v-html="content.title"></span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+
+				<nav class="bca-nav-main" data-js-container="AdminMenu" hidden></nav>
+
+				<div id="BannerArea">
+					<ul>
+						<li>
+							<a href="https://market.basercms.net/" target="_blank"><img src="http://basercms.net/img/banner_baser_market.png" width="205" alt="baserマーケット" title="baserマーケット" /></a>
+						</li>
+						<li>
+							<a href="http://magazine.basercms.net/" target="_blank"><img src="http://basercms.net/img/banner_basers_magazine.png" width="205" alt="basersマガジン" title="baserマーケット" /></a>
+						</li>
+					</ul>
+				</div>
+				<!-- / #SideBar -->
+			</div>
+
+			<script id="AdminMenu" type="application/json">
+				{"currentSiteId":0,"menuList":[{"name":"Default","siteId":null,"current":true,"title":"\u30b3\u30f3\u30c6\u30f3\u30c4\u7ba1\u7406","type":"contents","menus":[{"title":"\u30b3\u30f3\u30c6\u30f3\u30c4\u4e00\u89a7","url":"\/admin\/contents\/","name":"Contents","current":true},{"title":"\u30b4\u30df\u7bb1","url":"\/admin\/contents\/trash_index","name":"ContentsTrash","current":false}],"url":"\/admin\/contents\/"},{"name":"BlogContent1","current":false,"siteId":0,"title":"\u65b0\u7740\u60c5\u5831","type":"blog-content","menus":[{"title":"\u8a18\u4e8b\u767b\u9332","url":"\/admin\/blog\/blog_posts\/add\/1","name":"BlogPostsAdd1","current":false},{"title":"\u8a18\u4e8b\u4e00\u89a7","url":"\/admin\/blog\/blog_posts\/index\/1","name":"BlogPosts1","current":false},{"title":"\u30ab\u30c6\u30b4\u30ea\u4e00\u89a7","url":"\/admin\/blog\/blog_categories\/index\/1","name":"BlogCategories1","current":false},{"title":"\u30b3\u30e1\u30f3\u30c8\u4e00\u89a7","url":"\/admin\/blog\/blog_comments\/index\/1","name":"BlogComments1","current":false},{"title":"\u8a2d\u5b9a","url":"\/admin\/blog\/blog_contents\/edit\/1","name":"BlogContentsEdit1","current":false},{"title":"\u516c\u958b\u30da\u30fc\u30b8","url":"\/news\/","name":"Blog1","current":false}],"url":"\/admin\/blog\/blog_posts\/add\/1"},{"name":"MailContent1","current":false,"siteId":0,"title":"\u304a\u554f\u3044\u5408\u308f\u305b","type":"mail-content","menus":[{"title":"\u53d7\u4fe1\u30e1\u30fc\u30eb\u4e00\u89a7","url":"\/admin\/mail\/mail_messages\/index\/1","name":"MailMessages1","current":false},{"title":"\u30d5\u30a3\u30fc\u30eb\u30c9","url":"\/admin\/mail\/mail_fields\/index\/1","name":"MailFields1","current":false},{"title":"\u8a2d\u5b9a","url":"\/admin\/mail\/mail_contents\/edit\/1","name":"MailContents1","current":false},{"title":"\u516c\u958b\u30da\u30fc\u30b8","url":"\/contact\/","name":"Mail1","current":false}],"url":"\/admin\/mail\/mail_messages\/index\/1"},{"name":"Theme","siteId":null,"current":false,"title":"\u30c6\u30fc\u30de\u7ba1\u7406","type":"theme","menus":[{"name":0,"title":"\u30c6\u30fc\u30de\u7ba1\u7406","url":"\/admin\/themes\/","current":false},{"name":1,"title":"\u30c6\u30fc\u30de\u65b0\u898f\u8ffd\u52a0","url":"\/admin\/themes\/add","current":false},{"name":2,"title":"\u30c6\u30fc\u30de\u8a2d\u5b9a","url":"\/admin\/theme_configs\/form","current":false},{"name":3,"title":"\u30b3\u30a2\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8\u78ba\u8a8d","url":"\/admin\/theme_files\/index\/core","current":false},{"name":4,"title":"\u30c6\u30fc\u30de\u7528\u521d\u671f\u30c7\u30fc\u30bf\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9","url":"\/admin\/themes\/download_default_data_pattern","current":false},{"name":5,"title":"\u30c7\u30fc\u30bf\u30ea\u30bb\u30c3\u30c8","url":"\/admin\/themes\/reset_data","current":false}],"url":"\/admin\/themes\/"},{"name":"Plugin","siteId":null,"current":false,"title":"\u30d7\u30e9\u30b0\u30a4\u30f3\u8a2d\u5b9a","type":"plugin","menus":[{"name":0,"title":"\u30d7\u30e9\u30b0\u30a4\u30f3\u7ba1\u7406","url":"\/admin\/plugins\/","current":false},{"title":"\u30d6\u30ed\u30b0\u8a2d\u5b9a","url":"\/admin\/blog\/blog_tags\/","name":"Blog","current":false},{"title":"\u30d5\u30a3\u30fc\u30c9\u8a2d\u5b9a","url":"\/admin\/feed\/feed_configs\/add","name":"Feed","current":false},{"title":"\u30e1\u30fc\u30eb\u8a2d\u5b9a","url":"\/admin\/mail\/mail_configs\/form","name":"Mail","current":false},{"title":"\u30a2\u30c3\u30d7\u30ed\u30fc\u30c9\u30d5\u30a1\u30a4\u30eb\u4e00\u89a7","url":"\/admin\/uploader\/uploader_files\/","name":"Uploader","current":false}],"url":"\/admin\/plugins\/"},{"name":"System","siteId":null,"current":false,"title":"\u30b7\u30b9\u30c6\u30e0\u8a2d\u5b9a","type":"system","menus":[{"title":"\u30b5\u30a4\u30c8\u57fa\u672c\u8a2d\u5b9a","url":"\/admin\/site_configs\/form","name":"SiteConfigs","current":false},{"title":"\u30a6\u30a3\u30b8\u30a7\u30c3\u30c8\u7ba1\u7406","url":"\/admin\/widget_areas\/","name":"WidgetAreas","current":false},{"title":"\u30e6\u30fc\u30b6\u30fc\u7ba1\u7406","url":"\/admin\/users\/","name":"Users","current":false},{"title":"\u30e6\u30fc\u30b6\u30fc\u30b0\u30eb\u30fc\u30d7\u7ba1\u7406","url":"\/admin\/user_groups\/","name":"UserGroups","current":false},{"title":"\u691c\u7d22\u30a4\u30f3\u30c7\u30c3\u30af\u30b9\u7ba1\u7406","url":"\/admin\/search_indices\/","name":"SearchIndices","current":false},{"title":"\u30a8\u30c7\u30a3\u30bf\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8\u7ba1\u7406","url":"\/admin\/editor_templates\/","name":"EditorTemplates","current":false},{"title":"\u30b5\u30d6\u30b5\u30a4\u30c8\u7ba1\u7406","url":"\/admin\/sites\/","name":"Sites","current":false},{"title":"\u30e6\u30fc\u30c6\u30a3\u30ea\u30c6\u30a3","url":"\/admin\/tools\/","name":"Tools","current":false},{"title":"\u30b5\u30fc\u30d0\u30fc\u30ad\u30e3\u30c3\u30b7\u30e5\u524a\u9664","url":"\/admin\/site_configs\/del_cache","options":{"confirm":"\u30b5\u30fc\u30d0\u30fc\u30ad\u30e3\u30c3\u30b7\u30e5\u3092\u524a\u9664\u3057\u307e\u3059\u3002\u3044\u3044\u3067\u3059\u304b\uff1f"},"name":"SiteConfigsDelCache","current":false}],"url":"\/admin\/site_configs\/form"}]}
+			</script>
+
+			<main id="Contents" class="bca-main">
+				<div class="cbb bca-main-inner">
+
+					<nav id="Crumb" class="bca-crumb">
+						<ol>
+							<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+								<a href="/admin" itemprop="item"><span itemprop="name"><span itemprop="title" class="bca-icon--home"><span class="bca-icon-label">ホーム</span></span></span></a>
+								<span
+								 class="separator">
+									</span>
+									<meta itemprop="position" content="1" />
+							</li>
+							<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+								<span itemprop="name">スタイルガイド</span>
+								<meta itemprop="position" content="2" />
+							</li>
+						</ol>
+					</nav>
+
+					<article id="ContentsBody" class="contents-body bca-main-body">
+						<div class="bca-main-body-header">
+							<h1 class="bca-main-body-header-title">スタイルガイド</h1>
+						</div>
+
+						<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.min.css" rel="stylesheet" />
+						<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreRDark.min.css" rel="stylesheet" />
+						<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeRDark.css" rel="stylesheet" />
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushXml.min.js"></script>
+						<script>
+							addEventListener('DOMContentLoaded', function() {
+								SyntaxHighlighter.all();
+							});
+						</script>
+
+							<section>
+								<h1><a id="sceg-cat-heading">heading</a></h1>
+									<section>
+										<h2>ページタイトル</h2>
+										<h5>Preview</h5>
+										
+<div class="bca-main-body-header">
+	<h1 class="bca-main-body-header-title">ページタイトル</h1>
+</div>
+
+
+										<h5>Code</h5>
+										<pre class="brush: html;">
+<div class="bca-main-body-header">
+	<h1 class="bca-main-body-header-title">ページタイトル</h1>
+</div>
+</pre>
+										<small><p>ページタイトル</p>
+</small>
+									</section>
+							</section>
+							<section>
+								<h1><a id="sceg-cat-button">button</a></h1>
+									<section>
+										<h2>ボタン</h2>
+										<h5>Preview</h5>
+										
+<a href="#" class="bca-btn--publish">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish">非公開ボタン</a>
+<a href="#" class="bca-btn--preview">確認ボタン</a>
+<a href="#" class="bca-btn--edit">編集ボタン</a>
+<a href="#" class="bca-btn--copy">複製ボタン</a>
+<a href="#" class="bca-btn--delete">削除ボタン</a>
+<a href="#" class="bca-btn--favorite">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add">追加ボタン</a>
+<a href="#" class="bca-btn--help">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission">権限ボタン</a>
+<a href="#" class="bca-btn--home">ホームボタン</a>
+<a href="#" class="bca-btn--login">ログインボタン</a>
+
+
+										<h5>Code</h5>
+										<pre class="brush: html;">
+<a href="#" class="bca-btn--publish">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish">非公開ボタン</a>
+<a href="#" class="bca-btn--preview">確認ボタン</a>
+<a href="#" class="bca-btn--edit">編集ボタン</a>
+<a href="#" class="bca-btn--copy">複製ボタン</a>
+<a href="#" class="bca-btn--delete">削除ボタン</a>
+<a href="#" class="bca-btn--favorite">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add">追加ボタン</a>
+<a href="#" class="bca-btn--help">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission">権限ボタン</a>
+<a href="#" class="bca-btn--home">ホームボタン</a>
+<a href="#" class="bca-btn--login">ログインボタン</a>
+</pre>
+										<small><p>ページタイトル</p>
+</small>
+									</section>
+									<section>
+										<h2>ボタン（サイズ）</h2>
+										<h5>Preview</h5>
+										
+<a href="#" class="bca-btn--publish bca-btn--large">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish bca-btn--large">非公開ボタン</a>
+<a href="#" class="bca-btn--preview bca-btn--large">確認ボタン</a>
+<a href="#" class="bca-btn--edit bca-btn--large">編集ボタン</a>
+<a href="#" class="bca-btn--copy bca-btn--large">複製ボタン</a>
+<a href="#" class="bca-btn--delete bca-btn--large">削除ボタン</a>
+<a href="#" class="bca-btn--favorite bca-btn--large">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem bca-btn--large">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add bca-btn--large">追加ボタン</a>
+<a href="#" class="bca-btn--help bca-btn--large">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission bca-btn--large">権限ボタン</a>
+<a href="#" class="bca-btn--home bca-btn--large">ホームボタン</a>
+<a href="#" class="bca-btn--login bca-btn--large">ログインボタン</a>
+
+<hr>
+
+<a href="#" class="bca-btn--publish bca-btn--small">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish bca-btn--small">非公開ボタン</a>
+<a href="#" class="bca-btn--preview bca-btn--small">確認ボタン</a>
+<a href="#" class="bca-btn--edit bca-btn--small">編集ボタン</a>
+<a href="#" class="bca-btn--copy bca-btn--small">複製ボタン</a>
+<a href="#" class="bca-btn--delete bca-btn--small">削除ボタン</a>
+<a href="#" class="bca-btn--favorite bca-btn--small">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem bca-btn--small">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add bca-btn--small">追加ボタン</a>
+<a href="#" class="bca-btn--help bca-btn--small">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission bca-btn--small">権限ボタン</a>
+<a href="#" class="bca-btn--home bca-btn--small">ホームボタン</a>
+<a href="#" class="bca-btn--login bca-btn--small">ログインボタン</a>
+
+<hr>
+
+<a href="#" class="bca-btn--publish bca-btn--xsmall">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish bca-btn--xsmall">非公開ボタン</a>
+<a href="#" class="bca-btn--preview bca-btn--xsmall">確認ボタン</a>
+<a href="#" class="bca-btn--edit bca-btn--xsmall">編集ボタン</a>
+<a href="#" class="bca-btn--copy bca-btn--xsmall">複製ボタン</a>
+<a href="#" class="bca-btn--delete bca-btn--xsmall">削除ボタン</a>
+<a href="#" class="bca-btn--favorite bca-btn--xsmall">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem bca-btn--xsmall">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add bca-btn--xsmall">追加ボタン</a>
+<a href="#" class="bca-btn--help bca-btn--xsmall">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission bca-btn--xsmall">権限ボタン</a>
+<a href="#" class="bca-btn--home bca-btn--xsmall">ホームボタン</a>
+<a href="#" class="bca-btn--login bca-btn--xsmall">ログインボタン</a>
+
+
+										<h5>Code</h5>
+										<pre class="brush: html;">
+<a href="#" class="bca-btn--publish bca-btn--large">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish bca-btn--large">非公開ボタン</a>
+<a href="#" class="bca-btn--preview bca-btn--large">確認ボタン</a>
+<a href="#" class="bca-btn--edit bca-btn--large">編集ボタン</a>
+<a href="#" class="bca-btn--copy bca-btn--large">複製ボタン</a>
+<a href="#" class="bca-btn--delete bca-btn--large">削除ボタン</a>
+<a href="#" class="bca-btn--favorite bca-btn--large">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem bca-btn--large">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add bca-btn--large">追加ボタン</a>
+<a href="#" class="bca-btn--help bca-btn--large">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission bca-btn--large">権限ボタン</a>
+<a href="#" class="bca-btn--home bca-btn--large">ホームボタン</a>
+<a href="#" class="bca-btn--login bca-btn--large">ログインボタン</a>
+
+<hr>
+
+<a href="#" class="bca-btn--publish bca-btn--small">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish bca-btn--small">非公開ボタン</a>
+<a href="#" class="bca-btn--preview bca-btn--small">確認ボタン</a>
+<a href="#" class="bca-btn--edit bca-btn--small">編集ボタン</a>
+<a href="#" class="bca-btn--copy bca-btn--small">複製ボタン</a>
+<a href="#" class="bca-btn--delete bca-btn--small">削除ボタン</a>
+<a href="#" class="bca-btn--favorite bca-btn--small">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem bca-btn--small">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add bca-btn--small">追加ボタン</a>
+<a href="#" class="bca-btn--help bca-btn--small">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission bca-btn--small">権限ボタン</a>
+<a href="#" class="bca-btn--home bca-btn--small">ホームボタン</a>
+<a href="#" class="bca-btn--login bca-btn--small">ログインボタン</a>
+
+<hr>
+
+<a href="#" class="bca-btn--publish bca-btn--xsmall">公開ボタン</a>
+<a href="#" class="bca-btn--unpublish bca-btn--xsmall">非公開ボタン</a>
+<a href="#" class="bca-btn--preview bca-btn--xsmall">確認ボタン</a>
+<a href="#" class="bca-btn--edit bca-btn--xsmall">編集ボタン</a>
+<a href="#" class="bca-btn--copy bca-btn--xsmall">複製ボタン</a>
+<a href="#" class="bca-btn--delete bca-btn--xsmall">削除ボタン</a>
+<a href="#" class="bca-btn--favorite bca-btn--xsmall">お気に入りボタン</a>
+<a href="#" class="bca-btn--menuitem bca-btn--xsmall">メニューアイテムボタン</a>
+<a href="#" class="bca-btn--add bca-btn--xsmall">追加ボタン</a>
+<a href="#" class="bca-btn--help bca-btn--xsmall">ヘルプボタン</a>
+<a href="#" class="bca-btn--permission bca-btn--xsmall">権限ボタン</a>
+<a href="#" class="bca-btn--home bca-btn--xsmall">ホームボタン</a>
+<a href="#" class="bca-btn--login bca-btn--xsmall">ログインボタン</a>
+</pre>
+										<small><p>ページタイトル</p>
+</small>
+									</section>
+							</section>
+
+					</article>
+
+					<div id="ToTop" class="bca-totop"><a href="#Header">▲ トップへ</a></div>
+				</div>
+			</main>
+		</div>
+
+
+
+		<div id="Footer" class="bca-footer">
+
+			<div id="FooterInner" class="clearfix">
+
+				<div id="FooterLogo">
+					<a href="/admin"><img src="/theme/ownd_river/img/admin/logo_footer.png" width="155" height="30" alt="baserCMSロゴ" /></a>
+				</div>
+
+				<div id="FooterLink">
+					<h2><img src="/theme/ownd_river/img/admin/head_link.png" width="36" height="16" alt="LINK" /></h2>
+					<ul>
+						<li><a href="http://basercms.net/" target="_blank">baserCMS 公式サイト</a></li>
+						<li><a href="http://sites.google.com/site/baserusers/" target="_blank">baserCMS ユーザー会</a></li>
+						<li><a href="http://forum.basercms.net/" target="_blank">baserCMS ユーザーズフォーラム</a></li>
+						<li><a href="http://project.e-catchup.jp/projects/basercms" target="_blank">baserCMS コア開発プロジェクト</a></li>
+						<li><a href="http://www.facebook.com/basercms" target="_blank">baserCMS Facebook</a></li>
+						<li><a href="http://twitter.com/basercms" target="_blank">baserCMS Twitter</a></li>
+					</ul>
+				</div>
+
+				<div class="float-right">
+					<ul id="FooterBanner">
+						<li>
+							<a href="http://basercms.net/" target="_blank" title="baserCMS Power"><img src="/theme/ownd_river/img/baser.power.gif" alt="baserCMS Power" /></a>
+						</li>
+						<li>
+							<a href="http://cakephp.jp/" target="_blank" title="CakePHP Power"><img src="/theme/ownd_river/img/cake.power.gif" alt="CakePHP Power" /></a>
+						</li>
+					</ul>
+					<p id="BaserVersion">baserCMS 4.0.4-dev</p>
+					<div id="Copyright">Copyright (C) baserCMS Users Community 2009 - 2017 All rights reserved.</div>
+				</div>
+
+				<!-- / #FooterInner -->
+			</div>
+
+			<!-- / #Footer -->
+		</div>
+		<!-- / #Page -->
+	</div>
+
+</body>
+
+</html>
