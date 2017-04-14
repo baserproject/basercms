@@ -30,7 +30,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 		echo $this->BcForm->input('Content.priority' . '_' . $data['Content']['id'], array(
 			'type' => 'select',
 			'options' => $priorities,
-			'empty' => '優先度',
+			'empty' => false,
 			'class' => 'priority',
 			'value' => $data['Content']['priority']))
 		?>
