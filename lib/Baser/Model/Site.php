@@ -180,6 +180,9 @@ class Site extends AppModel {
 		if($includeKey !== false && $excludeKey === false && is_null($mainSiteId)) {
 			$rootMainTmp = $this->getRootMain();
 			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
+		} else {
+			$rootMainTmp = $this->getMain($mainSiteId);
+			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
 		}
 		return $rootMain + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
