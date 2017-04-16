@@ -412,6 +412,7 @@ class BlogController extends BlogAppController {
 		$this->set('posts', $posts);
 		$this->set('year', $year);
 		$this->set('month', $month);
+		$this->set('day', $day);
 		$this->layout = $this->blogContent['BlogContent']['layout'];
 		$this->render($template);
 	}
