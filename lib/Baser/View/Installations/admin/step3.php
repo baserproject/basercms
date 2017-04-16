@@ -25,11 +25,11 @@ $(document).ready( function() {
 	$('#checkdb,#btnnext,#btnback').click( function array() {
 
 		if (this.id=='btnnext') {
-			$("#buttonclicked").val('createdb');
+			$("#InstallationButtonClicked").val('createdb');
 		} else if (this.id == 'btnback') {
-			$("#buttonclicked").val('back');
+			$("#InstallationButtonClicked").val('back');
 		} else if (this.id == 'checkdb'){
-			$("#buttonclicked").val('checkdb');
+			$("#InstallationButtonClicked").val('checkdb');
 		}
 		
 		if (this.id != 'btnback' &&
@@ -43,6 +43,9 @@ $(document).ready( function() {
 				return false;
 			} else if ($("#InstallationDbName").val() == "") {
 				alert("データベース名を入力してください。");
+				return false;
+			} else if (!$("#InstallationDbName").val().match(/^[a-zA-z0-9_\-]+$/)) {
+				alert("データベース名は英数字とハイフン・アンダースコアの組み合わせにしてください。（例）basercms");
 				return false;
 			} else if ($("#InstallationDbPrefix").val() == "") {
 				alert("他のアプリケーションと重複しないプレフィックスを入力してください。（例）mysite_");
@@ -180,7 +183,7 @@ $(document).ready( function() {
 						<small>プレフィックス</small> </div>
 					<div class="float-left"> <?php echo $this->BcForm->input('Installation.dbPort', array('type' => 'text', 'maxlength' => '5', 'size' => 5)); ?><br />
 						<small>ポート</small> </div>
-					<?php echo $this->BcForm->input('buttonclicked', array('style' => 'display:none', 'type' => 'hidden')); ?>
+					<?php echo $this->BcForm->input('Installation.buttonClicked', array('style' => 'display:none', 'type' => 'hidden')); ?>
 					<br style="clear:both" /><br />
 					<small>※ プレフィックスは英数字とアンダースコアの組み合わせとし末尾はアンダースコアにしてください。<br />
 						※ ホスト名、データベース名、ポートは実際の環境に合わせて書き換えてください。</small></li>

@@ -173,47 +173,67 @@ class InstallationsController extends AppController {
  * @access public
  */
 	public function step3() {
-		$dbsource = $this->_getDbSource();
+		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
+		$this->set('dbDataPatterns', $this->BcManager->getAllDefaultDataPatterns());
+		$this->set('dbsource', $this->_getDbSource());
 
+		/* 初期表示 */
 		if (!$this->request->data) {
 			clearAllCache();
 			$this->request->data = $this->_getDefaultValuesStep3();
-		} else {
-
-			$this->_writeDbSettingToSession($this->request->data['Installation']);
-
-			/* 戻るボタンクリック時 */
-			if ($this->request->data['buttonclicked'] == 'back') {
-				$this->redirect('step2');
-
-				/* 接続テスト */
-			} elseif ($this->request->data['buttonclicked'] == 'checkdb') {
-
-				$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
-
-				/* 「次のステップへ」クリック時 */
-			} elseif ($this->request->data['buttonclicked'] == 'createdb') {
-
-				ini_set("max_execution_time", 180);
-
-				$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
-				if (isset($this->request->data['Installation']['dbDataPattern'])) {
-					$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
-				}
-				$this->deleteAllTables();
-				if ($this->_constructionDb($dbDataPattern)) {
-					$this->setMessage("データベースの構築に成功しました。");
-					$this->redirect('step4');
-				} else {
-					$this->setMessage("データベースの構築中にエラーが発生しました。", true);
-				}
-			}
+			return;
 		}
 
-		$dbDataPatterns = $this->BcManager->getAllDefaultDataPatterns();
-		$this->set('dbDataPatterns', $dbDataPatterns);
-		$this->pageTitle = 'baserCMSのインストール [ステップ３]';
-		$this->set('dbsource', $dbsource);
+		$buttonClicked = $this->request->data['Installation']['buttonClicked'];
+
+		/* 戻るボタンクリック時 */
+		if ($buttonClicked == 'back') {
+			$this->redirect('step2');
+			return;
+		}
+
+		if (ClassRegistry::isKeySet('Installation')) {
+			$Installation = ClassRegistry::getObject('Installation');
+
+		} else {
+			$Installation = ClassRegistry::init('Installation');
+		}
+
+		$Installation->set($this->request->data['Installation']);
+
+		/* データバリデーション失敗時 */
+		if (in_array($buttonClicked, array('checkdb', 'createdb')) &&
+			!$Installation->validates()) {
+			$this->set('blDBSettingsOK', false);
+			return;
+		}
+
+		/* 接続テスト */
+		if ($buttonClicked === 'checkdb') {
+			$this->_writeDbSettingToSession($this->request->data['Installation']);
+			$this->set('blDBSettingsOK', $this->_testConnectDb($this->_readDbSetting()));
+			return;
+		}
+
+		/* 「次のステップへ」クリック時 */
+		if ($buttonClicked === 'createdb') {
+			$this->_writeDbSettingToSession($this->request->data['Installation']);
+			ini_set("max_execution_time", 180);
+
+			$dbDataPattern = Configure::read('BcApp.defaultTheme') . '.default';
+			if (isset($this->request->data['Installation']['dbDataPattern'])) {
+				$dbDataPattern = $this->request->data['Installation']['dbDataPattern'];
+			}
+			$this->deleteAllTables();
+			if ($this->_constructionDb($dbDataPattern)) {
+				$this->setMessage("データベースの構築に成功しました。");
+				$this->redirect('step4');
+				return;
+			}
+
+			$this->setMessage("データベースの構築中にエラーが発生しました。", true);
+			return;
+		}
 	}
 
 /**
