@@ -31,7 +31,7 @@
 		<?php endif; ?>
 	</td>
 	<td><?php echo $data['category_filter'] ?></td>
-	<td><?php echo $this->BcText->listValue('FeedDetail.cache_time', $data['cache_time']) ?></td>
+	<td><?php echo $this->BcText->listValue('Feed.FeedDetail.cache_time', $data['cache_time']) ?></td>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['modified']) ?></td>
 </tr>
