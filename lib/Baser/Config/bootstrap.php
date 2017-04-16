@@ -288,7 +288,7 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	}
 	$plugins = Hash::extract($plugins, '{n}.Plugin.name');
 	Configure::write('BcStatus.enablePlugins', $plugins);
-
+	$dump = App::paths();
 /**
  * イベント登録
  */
@@ -360,3 +360,5 @@ if (BC_INSTALLED || isConsole()) {
 		'View/Helper' => array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS)
 	), App::PREPEND);
 }
+$dump = App::paths();
+$test = 7;
