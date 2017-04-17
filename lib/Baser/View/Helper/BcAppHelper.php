@@ -185,7 +185,7 @@ class BcAppHelper extends Helper {
 			$url = array_merge($url, array('admin' => true));
 		}
 
-		if (!is_array($url) && preg_match('/^(javascript|https?|ftp):/', $url)) {
+		if (!is_array($url) && preg_match('/^(javascript|https?|ftp|tel):/', $url)) {
 			return $url;
 		} elseif (!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
 			return $this->webroot($url);
