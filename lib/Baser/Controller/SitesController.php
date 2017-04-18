@@ -94,7 +94,7 @@ class SitesController extends AppController {
 		if(in_array($this->siteConfigs['theme'], $themes)) {
 			unset($themes[$this->siteConfigs['theme']]);
 		}
-		$this->set('mainSites', $this->Site->getSiteList(0));
+		$this->set('mainSites', $this->Site->getSiteList());
 		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 		$this->help = 'sites_form';
 	}
@@ -141,7 +141,7 @@ class SitesController extends AppController {
 		if(in_array($this->siteConfigs['theme'], $themes)) {
 			unset($themes[$this->siteConfigs['theme']]);
 		}
-		$this->set('mainSites', $this->Site->getSiteList(0, ['excludeIds' => $this->request->data['Site']['id']]));
+		$this->set('mainSites', $this->Site->getSiteList(null, ['excludeIds' => $this->request->data['Site']['id']]));
 		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 		$this->help = 'sites_form';
 	}
