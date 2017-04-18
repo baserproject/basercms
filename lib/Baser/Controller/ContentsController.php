@@ -222,7 +222,7 @@ class ContentsController extends AppController {
 		$conditions = am($conditions, $this->Page->getConditionAllowPublish());
 		$pages = $this->Page->find('all', array(
 			'conditions' => $conditions,
-			'fields' => array('name', 'title', 'url'),
+			'fields' => array('id', 'sort', 'name', 'title', 'url', 'page_category_id', 'author_id'),
 			'order' => 'Page.sort',
 			'recursive' => -1,
 			'cache' => false
@@ -246,7 +246,7 @@ class ContentsController extends AppController {
 
 			$pageCategories = $this->Page->PageCategory->find('all', array(
 				'conditions' => $conditions,
-				'fields' => array('id', 'title'),
+				'fields' => array('id', 'name', 'title', 'parent_id', 'lft', 'rght'),
 				'order' => 'PageCategory.lft',
 				'recursive' => -1
 			));
