@@ -28,9 +28,11 @@
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/colorbox/colorbox-1.6.1'))
 		?>
-		<?php if($favoriteBoxOpened): ?>
-			<?php $this->BcBaser->css('admin/sidebar_opened') ?>
-		<?php endif ?>
+
+		<?php # if($favoriteBoxOpened): ?>
+			<?php # $this->BcBaser->css('admin/sidebar_opened') ?>
+		<?php # endif ?>
+
 		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
 		<?php
 		$this->BcBaser->js(array(
