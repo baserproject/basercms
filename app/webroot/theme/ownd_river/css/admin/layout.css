@@ -15,14 +15,14 @@
 /*    Contents
 /* ==================================================================== */
 
-.cb {
+/*.cb {
 	float: left;
 	width: 100%;
-}
+}*/
 
 /* contents border top
 ----------------------------------------------- */
-.bt{
+/*.bt{
 	background: url(../../img/admin/bg_box_2.png) no-repeat 100% 0;
     height: 10px;
 	margin:0 0 0 11px;
@@ -35,11 +35,11 @@
 	background:url(../../img/admin/bg_box_2.png) no-repeat 0 0;
 	font-size:0;
 	line-height:0;
-}
+}*/
 
 /* contents border bottom
 ----------------------------------------------- */
-.bb{
+/*.bb{
 	background: url(../../img/admin/bg_box_1.png) no-repeat scroll 100% 100% transparent;
     height:10px;
 	margin:0 0 0 12px;
@@ -53,25 +53,25 @@
 	line-height:0;
 	position:relative;
 	width:12px;
-}
+}*/
 
 /* contents border left
 ----------------------------------------------- */
-.i1 {
+/*.i1 {
 	padding: 0 0 0 4px;
 	background:url(../../img/admin/bg_borders.png) repeat-y 0 0;
-}
+}*/
 
 /* contents border right
 ----------------------------------------------- */
-.i2 {
+/*.i2 {
 	padding: 0 4px 0 0 ;
 	background:url(../../img/admin/bg_borders.png) repeat-y 100% 0;
-}
+}*/
 
 /* contents border inner
 ----------------------------------------------- */
-.i3 {
+/*.i3 {
 	display: block;
 	margin: 0;
 	background-color: #FFF;
@@ -84,4 +84,4 @@
 	visibility: hidden;
 }
 .i3 {display: inline-block;}
-.i3 {display: block;}
+.i3 {display: block;}*/
