@@ -1,3 +1,203 @@
+// 旧CSSここから
+
+/* ==================================================================== */
+/*    T A G S
+/* ==================================================================== */
+* {
+	margin:0px;
+	padding:0px;
+}
+html {
+	color: #535A62;
+	background: #FFF;
+}
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+select,
+p,
+blockquote,
+th,
+td {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: Arial,Geneva,sans-serif,"メイリオ",Verdana,"Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","ＭＳ Ｐゴシック";
+	text-align:center;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+p {
+	line-height: 150%;
+}
+fieldset,
+img {
+	border: 0;
+}
+img {
+	margin:auto;
+}
+address,
+button,
+caption,
+cite,
+code,
+dfn,
+em,
+input,
+optgroup,
+option,
+select,
+strong,
+textarea,
+th,
+var {
+    font:inherit;
+}
+small {
+	color:#666;
+}
+strong {
+}
+em {
+}
+del,
+ins {
+	text-decoration: none;
+}
+ul,
+dl {
+	line-height:normal;
+}
+dl {
+}
+dt {
+}
+dd {
+}
+li {
+	/*zoom: 1;*/
+	list-style: none;
+}
+li a {
+	zoom: 1;
+}
+caption,
+th {
+	text-align: left;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before,
+q:after {
+	content: '';
+}
+abbr,
+acronym {
+	border: 0;
+	font-variant: normal;
+}
+sup {
+	vertical-align: baseline;
+}
+sub {
+	vertical-align: baseline;
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color: #000;
+}
+pre {
+	background-color:#F3F3F3;
+	text-align:left;
+	padding:10px 20px;
+	margin-bottom: 20px;
+	overflow:auto;
+	border:1px solid #E2E2E2;
+}
+form {
+	display:inline;
+}
+input, textarea, select, option {
+	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif;
+}
+input[type=text], textarea, select, input[type=password] {
+	margin:3px 2px;
+	padding: 3px 1px;
+	border:1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color:#fff;
+	color:#535A62;
+}
+input[type=checkbox] {
+	vertical-align: middle;
+}
+input[type=radio],
+input[type=checkbox] {
+	margin-left:5px;
+	margin-right:5px;
+}
+input[type=submit],
+input[type=reset],
+input[type=button] {
+	font-family: "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, "メイリオ", "MS PGothic", "ＭＳ Ｐゴシック", Sans-Serif;
+}
+input[type=text], textarea, input[type=password] {
+	font-size: 1.2em;
+	color:#535A62;
+	padding: 3px 3px;
+}
+input[type=text], input[type=password] {
+	height:1.4em;
+}
+select[disabled],
+input[type="text"][disabled],
+input[type="radio"][disabled]{
+    background:#EFEFEF;
+    cursor:not-allowed; /* 禁止カーソル */
+}
+select {
+	font-size: 1.2em!important;
+	padding: 1px;
+    height:1.8em;
+}
+optgroup option{
+	padding-left:20px;
+}
+
+// 旧CSSここまで
+
 //
 // 要素の基本設定
 //
