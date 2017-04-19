@@ -17,39 +17,41 @@
 
 
 <script>
-// 《一覧のロード時にイベント登録を行う為、外部ファイルに分けない》
-// 本来であれば、一覧のロード完了イベントを作成し、
-// そのタイミングでイベント登録をすべきだが、ロード完了イベントがないので応急措置とする
-$(".priority").change(function() {
-	var id = this.id.replace('SearchIndexPriority', '');
-	var priority = $(this).val();
-	$.bcToken.check(function(){
-		var data = {
-			'data[SearchIndex][id]':id,
-			'data[SearchIndex][priority]': priority,
-			'data[_Token][key]': $.bcToken.key
-		};
-		$.ajax({
-			type: "POST",
-			url: $("#AjaxChangePriorityUrl").html()+'/'+id,
-			data: data,
-			beforeSend: function() {
-				$("#flashMessage").slideUp();
-				$("#PriorityAjaxLoader"+id).show();
-			},
-			success: function(result){
-				if(!result) {
+$(function(){
+	// 《一覧のロード時にイベント登録を行う為、外部ファイルに分けない》
+	// 本来であれば、一覧のロード完了イベントを作成し、
+	// そのタイミングでイベント登録をすべきだが、ロード完了イベントがないので応急措置とする
+	$(".priority").change(function() {
+		var id = this.id.replace('SearchIndexPriority', '');
+		var priority = $(this).val();
+		$.bcToken.check(function(){
+			var data = {
+				'data[SearchIndex][id]':id,
+				'data[SearchIndex][priority]': priority,
+				'data[_Token][key]': $.bcToken.key
+			};
+			$.ajax({
+				type: "POST",
+				url: $("#AjaxChangePriorityUrl").html()+'/'+id,
+				data: data,
+				beforeSend: function() {
+					$("#flashMessage").slideUp();
+					$("#PriorityAjaxLoader"+id).show();
+				},
+				success: function(result){
+					if(!result) {
+						$("#flashMessage").html('処理中にエラーが発生しました。');
+						$("#flashMessage").slideDown();
+					}
+				},
+				error: function() {
 					$("#flashMessage").html('処理中にエラーが発生しました。');
 					$("#flashMessage").slideDown();
+				},
+				complete: function() {
+					$("#PriorityAjaxLoader"+id).hide();
 				}
-			},
-			error: function() {
-				$("#flashMessage").html('処理中にエラーが発生しました。');
-				$("#flashMessage").slideDown();
-			},
-			complete: function() {
-				$("#PriorityAjaxLoader"+id).hide();
-			}
+			});
 		});
 	});
 });
