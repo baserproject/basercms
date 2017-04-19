@@ -180,12 +180,14 @@ class BlogPostTest extends BaserTestCase {
 			'thumb' => array(
 				'suffix' => '__thumb',
 				'width' => '300',
-				'height' => '300'
+				'height' => '300',
+				'sameratio' => false,
 			),
 			'mobile_thumb' => array(
 				'suffix' => '__mobile_thumb',
 				'width' => '100',
-				'height' => '100'
+				'height' => '100',
+				'sameratio' => false,
 			)
 		);
 

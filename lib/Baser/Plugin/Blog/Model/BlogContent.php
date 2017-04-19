@@ -277,8 +277,10 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['status'] = false;
 		$data['BlogContent']['eye_catch_size_thumb_width'] = 600;
 		$data['BlogContent']['eye_catch_size_thumb_height'] = 600;
+		$data['BlogContent']['eye_catch_size_thumb_sameratio'] = false;
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = 150;
 		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = 150;
+		$data['BlogContent']['eye_catch_size_mobile_thumb_sameratio'] = false;
 		$data['BlogContent']['use_content'] = true;
 
 		return $data;
@@ -294,13 +296,17 @@ class BlogContent extends BlogAppModel {
 		$data['BlogContent']['eye_catch_size'] = BcUtil::serialize(array(
 			'thumb_width' => $data['BlogContent']['eye_catch_size_thumb_width'],
 			'thumb_height' => $data['BlogContent']['eye_catch_size_thumb_height'],
+			'thumb_sameratio' => $data['BlogContent']['eye_catch_size_thumb_sameratio'],
 			'mobile_thumb_width' => $data['BlogContent']['eye_catch_size_mobile_thumb_width'],
 			'mobile_thumb_height' => $data['BlogContent']['eye_catch_size_mobile_thumb_height'],
+			'mobile_thumb_sameratio' => $data['BlogContent']['eye_catch_size_mobile_thumb_sameratio'],
 		));
 		unset($data['BlogContent']['eye_catch_size_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_thumb_height']);
+		unset($data['BlogContent']['eye_catch_size_thumb_sameratio']);
 		unset($data['BlogContent']['eye_catch_size_mobile_thumb_width']);
 		unset($data['BlogContent']['eye_catch_size_mobile_thumb_height']);
+		unset($data['BlogContent']['eye_catch_size_mobile_thumb_sameratio']);
 
 		return $data;
 	}
@@ -315,8 +321,10 @@ class BlogContent extends BlogAppModel {
 		$eyeCatchSize = BcUtil::unserialize($data['BlogContent']['eye_catch_size']);
 		$data['BlogContent']['eye_catch_size_thumb_width'] = $eyeCatchSize['thumb_width'];
 		$data['BlogContent']['eye_catch_size_thumb_height'] = $eyeCatchSize['thumb_height'];
+		$data['BlogContent']['eye_catch_size_thumb_sameratio'] = $eyeCatchSize['thumb_sameratio'];
 		$data['BlogContent']['eye_catch_size_mobile_thumb_width'] = $eyeCatchSize['mobile_thumb_width'];
 		$data['BlogContent']['eye_catch_size_mobile_thumb_height'] = $eyeCatchSize['mobile_thumb_height'];
+		$data['BlogContent']['eye_catch_size_mobile_thumb_sameratio'] = $eyeCatchSize['mobile_thumb_sameratio'];
 		return $data;
 	}
 

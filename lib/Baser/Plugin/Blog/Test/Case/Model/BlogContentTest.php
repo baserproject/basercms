@@ -164,6 +164,8 @@ class BlogContentTest extends BaserTestCase {
 			'thumb_height' => 1,
 			'mobile_thumb_width' => 1,
 			'mobile_thumb_height' => 1,
+			'thumb_sameratio' => false,
+			'mobile_thumb_sameratio' => false,
 		);
 
 		$this->BlogContent->create(array(

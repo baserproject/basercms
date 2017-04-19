@@ -551,12 +551,13 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * 
  * @param int $width 横幅
  * @param int $height 高さ
- * @param boolean $$thumb サムネイルとしてコピーするか
+ * @param boolean $thumb サムネイルとしてコピーするか
+ * @param boolean $sameRatio サムネイルを指定サイズにトリミングする
  * @param array $expected 期待値
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider resizeImageDataProvider
  */
-	public function testResizeImage($width, $height, $thumb, $expected, $message = null) {
+	public function testResizeImage($width, $height, $thumb, $sameRatio, $expected, $message = null) {
 
 		$imgPath = ROOT . '/lib/Baser/webroot/img/';
 		$source = $imgPath . 'baser.power.gif';
@@ -566,7 +567,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 
 		// コピー実行
-		$this->BcUploadBehavior->resizeImage($source, $distination, $width, $height, $thumb);
+		$this->BcUploadBehavior->resizeImage($source, $distination, $width, $height, $thumb, $sameRatio);
 			
 		if (!$width && !$height) {
 			$this->assertFileExists($distination, $message);
