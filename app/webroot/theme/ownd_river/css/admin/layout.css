@@ -85,12 +85,3 @@
 }
 .i3 {display: inline-block;}
 .i3 {display: block;}
-
-/* Copyright
------------------------------------------------ */
-
-#Copyright {
-	text-align:right;
-	font-size:10px;
-	padding-right:20px;
-}
