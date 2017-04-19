@@ -196,6 +196,46 @@ optgroup option{
 	padding-left:20px;
 }
 
+
+
+/* ==================================================================== */
+/*    T A G S
+/* ==================================================================== */
+
+/* html
+----------------------------------------------- */
+
+html{
+    /*height:100%;*/
+}
+
+/* body
+----------------------------------------------- */
+
+body{
+	font-size: 12px;
+	text-align: left;
+	min-width: 960px;
+	width : expression(document.body.clientWidth < 940? "900px" : "auto"); /* IE */
+	line-height:2em;
+	height:100%;
+}
+
+/* anchor
+----------------------------------------------- */
+
+a{
+	color: #9C0;
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+}
+
+strong {
+	font-weight: bold;
+}
+
 // 旧CSSここまで
 
 //

@@ -11,40 +11,6 @@
  * @license			http://basercms.net/license/index.html
  */
 
-/* ==================================================================== */
-/*    T A G S
-/* ==================================================================== */
-
-/* html
------------------------------------------------ */
-
-html{
-    /*height:100%;*/
-}
-
-/* body
------------------------------------------------ */
-
-body{
-	font-size: 12px;
-	text-align: left;
-	min-width: 960px;
-	width : expression(document.body.clientWidth < 940? "900px" : "auto"); /* IE */
-	line-height:2em;
-	height:100%;
-}
-
-/* anchor
------------------------------------------------ */
-
-a{
-	color: #9C0;
-	text-decoration: none;
-}
-a:hover{
-	text-decoration: underline;
-}
-
 /* head
 ----------------------------------------------- */
 
@@ -121,10 +87,6 @@ a:hover{
 }
 .contents-body p small{
 	line-height:14px;
-}
-
-strong {
-	font-weight: bold;
 }
 
 /* ==================================================================== */
