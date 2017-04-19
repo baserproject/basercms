@@ -1,3 +1,80 @@
+// /* GlobalMenu
+// ----------------------------------------------- */
+
+// #GlobalMenu{
+// 	float: right;
+// }
+// #GlobalMenu ul{
+// 	padding: 12px 35px 10px;
+// }
+// #GlobalMenu ul li{
+// 	padding:0;
+// 	list-style:none;
+// 	float:left;
+// 	background-position: 5px;
+// 	background-repeat: no-repeat;
+// }
+// #GlobalMenu ul li a{
+// 	font-weight: bold;
+// 	color:#535A62;
+// 	display:block;
+// 	padding:3px 20px 3px 35px;
+// 	background-repeat: no-repeat;
+// 	background-position: 5px;
+// }
+// #GlobalMenu ul li a:hover{
+// 	text-decoration: none;
+// 	color:#AAA;
+// }
+// #GlobalMenu ul li.firstChild{
+// 	background-image: none;
+// }
+// #GlobalMenu1{
+// 	background-image: url(../../img/admin/btn_header_menu_1_on.png);
+// }
+// #GlobalMenu2{
+// 	background-image: url(../../img/admin/btn_header_menu_2_on.png);
+// }
+// #GlobalMenu3{
+// 	background-image: url(../../img/admin/btn_header_menu_3_on.png);
+// }
+// #GlobalMenu4{
+// 	background-image: url(../../img/admin/btn_header_menu_4_on.png);
+// }
+// #GlobalMenu5{
+// 	background-image: url(../../img/admin/btn_header_menu_5_on.png);
+// }
+// #GlobalMenu1 a{
+// 	background-image: url(../../img/admin/btn_header_menu_1.png);
+// }
+// #GlobalMenu2 a{
+// 	background-image: url(../../img/admin/btn_header_menu_2.png);
+// }
+// #GlobalMenu3 a{
+// 	background-image: url(../../img/admin/btn_header_menu_3.png);
+// }
+// #GlobalMenu4 a{
+// 	background-image: url(../../img/admin/btn_header_menu_4.png);
+// }
+// #GlobalMenu5 a{
+// 	background-image: url(../../img/admin/btn_header_menu_5.png);
+// }
+// #GlobalMenu1 a:hover{
+// 	background-image: url(../../img/admin/btn_header_menu_1_on.png);
+// }
+// #GlobalMenu2 a:hover{
+// 	background-image: url(../../img/admin/btn_header_menu_2_on.png);
+// }
+// #GlobalMenu3 a:hover{
+// 	background-image: url(../../img/admin/btn_header_menu_3_on.png);
+// }
+// #GlobalMenu4 a:hover{
+// 	background-image: url(../../img/admin/btn_header_menu_4_on.png);
+// }
+// #GlobalMenu5 a:hover{
+// 	background-image: url(../../img/admin/btn_header_menu_5_on.png);
+// }
+
 .bca-navigations {
 	flex-basis: 208px;
 	background: $color_background_menu;
