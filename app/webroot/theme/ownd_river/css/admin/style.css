@@ -1,4 +1,86 @@
 @charset "UTF-8";
+/* display
+----------------------------------------------- */
+.display-none {
+  display: none; }
+
+/* text
+----------------------------------------------- */
+.weight-normal {
+  font-weight: normal !important; }
+
+.weight-bold {
+  font-weight: bold !important; }
+
+.size-small {
+  font-size: small !important; }
+
+.size-smaller {
+  font-size: x-small !important; }
+
+.size-medium {
+  font-size: medium !important; }
+
+.size-large {
+  font-size: large !important; }
+
+.size-larger {
+  font-size: x-large !important; }
+
+.align-left {
+  text-align: left !important; }
+
+.align-right {
+  text-align: right !important; }
+
+.align-center {
+  text-align: center !important; }
+
+/* float
+----------------------------------------------- */
+.float-left {
+  float: left; }
+
+.float-right {
+  float: right; }
+
+.img-right {
+  float: right;
+  margin-left: 10px;
+  margin-bottom: 10px; }
+
+.img-left {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px; }
+
+/* clear
+----------------------------------------------- */
+.clear {
+  clear: both; }
+
+.clearfix:after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 0; }
+
+.clearfix {
+  display: inline-block; }
+
+.clearfix {
+  display: block; }
+
+/* 縦方向中央揃え
+----------------------------------------------- */
+.vertical-middle {
+  position: relative !important; }
+
+.vertical-middle .inner {
+  position: absolute !important;
+  top: 50% !important;
+  margin-top: -1em !important; }
+
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -5213,91 +5295,6 @@ strong {
   background-color: #F1F1F1;
   display: inline-block; }
 
-/* ==================================================================== */
-/*    C L A S S E S
-/* ==================================================================== */
-/* display
------------------------------------------------ */
-.display-none {
-  display: none; }
-
-/* text
------------------------------------------------ */
-.weight-normal {
-  font-weight: normal !important; }
-
-.weight-bold {
-  font-weight: bold !important; }
-
-.size-small {
-  font-size: small !important; }
-
-.size-smaller {
-  font-size: x-small !important; }
-
-.size-medium {
-  font-size: medium !important; }
-
-.size-large {
-  font-size: large !important; }
-
-.size-larger {
-  font-size: x-large !important; }
-
-.align-left {
-  text-align: left !important; }
-
-.align-right {
-  text-align: right !important; }
-
-.align-center {
-  text-align: center !important; }
-
-/* float
------------------------------------------------ */
-.float-left {
-  float: left; }
-
-.float-right {
-  float: right; }
-
-.img-right {
-  float: right;
-  margin-left: 10px;
-  margin-bottom: 10px; }
-
-.img-left {
-  float: left;
-  margin-right: 10px;
-  margin-bottom: 10px; }
-
-/* clear
------------------------------------------------ */
-.clear {
-  clear: both; }
-
-.clearfix:after {
-  content: " ";
-  display: block;
-  clear: both;
-  height: 0; }
-
-.clearfix {
-  display: inline-block; }
-
-.clearfix {
-  display: block; }
-
-/* 縦方向中央揃え
------------------------------------------------ */
-.vertical-middle {
-  position: relative !important; }
-
-.vertical-middle .inner {
-  position: absolute !important;
-  top: 50% !important;
-  margin-top: -1em !important; }
-
 /* BaserCMS parts
 ----------------------------------------------- */
 .edit-link {
@@ -6533,8 +6530,10 @@ div.jstree-publish-even {
 /* ==================================================================== */
 /*    ContentsBody
 /* ==================================================================== */
-/* head
------------------------------------------------ */
+#ContentsBody li img,
+#ContentsBody p img {
+  vertical-align: middle; }
+
 .contents-body h2 {
   font-size: 16px;
   margin-bottom: 15px;
@@ -6572,13 +6571,6 @@ div.jstree-publish-even {
   line-height: 18px;
   margin-bottom: 15px; }
 
-.contents-body h7 {
-  font-size: 12px;
-  line-height: 16px;
-  margin-bottom: 15px; }
-
-/* table
------------------------------------------------ */
 .contents-body table {
   /*clear:both;*/
   padding: 0;
@@ -6597,29 +6589,11 @@ div.jstree-publish-even {
   vertical-align: top;
   border: none; }
 
-/* paragraph
------------------------------------------------ */
 .contents-body p {
   margin-bottom: 10px; }
 
 .contents-body p small {
   line-height: 14px; }
-
-/* ==================================================================== */
-/*    C L A S S E S
-/* ==================================================================== */
-/* section
------------------------------------------------ */
-.contents-body .section {
-  margin-bottom: 60px;
-  /*clear: both;*/ }
-
-.contents-body .section p {
-  margin-bottom: 15px; }
-
-#ContentsBody li img,
-#ContentsBody p img {
-  vertical-align: middle; }
 
 .contents-body ul {
   /*margin-bottom:20px;*/ }
@@ -6631,91 +6605,21 @@ div.jstree-publish-even {
   padding-left: 15px;
   line-height: 1.8em; }
 
-.contents-body .form-table {
-  border: 1px solid #DDD;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-  width: 100%; }
+/* section
+😣 マージン用のユーティリティクラス扱いなので破棄予定
+----------------------------------------------- */
+.contents-body .section {
+  margin-bottom: 60px;
+  /*clear: both;*/ }
 
-.contents-body .form-table th {
-  vertical-align: middle;
-  text-align: left;
-  background-repeat: repeat-x;
-  background-color: #EFEFEF;
-  padding: 5px 10px;
-  white-space: nowrap;
-  width: 20%;
-  border: 1px solid #DDD; }
-
-.contents-body .form-table th a {
-  text-decoration: none;
-  white-space: nowrap; }
-
-.contents-body .form-table th a:hover {
-  color: #9C0; }
-
-.contents-body .form-table th img {
-  vertical-align: middle; }
-
-.contents-body .form-table th a {
-  line-height: 20px; }
-
-.contents-body .form-table td {
-  padding: 5px 10px;
-  border-left: 1px solid #DDD;
-  border-right: 1px solid #DDD;
-  border-top: 1px dotted #DDD;
-  border-bottom: 1px dotted #DDD;
-  vertical-align: middle;
-  background-color: #FFF; }
-
-.contents-body .form-table td textarea {
-  width: 86%; }
-
-.contents-body .form-table input.full-width {
-  width: 86%; }
-
-.contents-body .form-table td img {
-  vertical-align: baseline;
-  max-width: 100%; }
-
-.contents-body .form-table .checkbox {
-  float: left; }
-
-.contents-body .form-table .error-message {
-  border-radius: 10px; }
-
-.contents-body .form-table input.active,
-.contents-body .form-table textarea.active,
-.contents-body .form-table select.active {
-  background-color: #ffffde; }
-
-.contents-body .form-table button {
-  padding: 0px 7px;
-  cursor: pointer; }
-
-.contents-body .form-table th {
-  font-size: 12px; }
+.contents-body .section p {
+  margin-bottom: 15px; }
 
 #AdminUpdaters .contents-body .version {
   font-size: 14px; }
 
 #AdminUpdaters .contents-body .version strong {
   font-size: 20px; }
-
-.contents-body .btn-slide-form {
-  border: 1px solid #CCC;
-  text-align: center;
-  margin-left: auto;
-  margin-right: 0;
-  padding: 0 !important;
-  /*position: absolute;*/
-  margin-top: -61px;
-  width: 140px;
-  font-size: 14px; }
-
-.contents-body li.jstree-closed {
-  /*background-color:#F9F9F9;*/ }
 
 .bca-main {
   position: relative;
@@ -9873,6 +9777,83 @@ span#DebugMode {
     display: inline-block;
     vertical-align: middle;
     line-height: 1; }
+
+.contents-body .form-table {
+  border: 1px solid #DDD;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  width: 100%; }
+
+.contents-body .form-table th {
+  vertical-align: middle;
+  text-align: left;
+  background-repeat: repeat-x;
+  background-color: #EFEFEF;
+  padding: 5px 10px;
+  white-space: nowrap;
+  width: 20%;
+  border: 1px solid #DDD; }
+
+.contents-body .form-table th a {
+  text-decoration: none;
+  white-space: nowrap; }
+
+.contents-body .form-table th a:hover {
+  color: #9C0; }
+
+.contents-body .form-table th img {
+  vertical-align: middle; }
+
+.contents-body .form-table th a {
+  line-height: 20px; }
+
+.contents-body .form-table td {
+  padding: 5px 10px;
+  border-left: 1px solid #DDD;
+  border-right: 1px solid #DDD;
+  border-top: 1px dotted #DDD;
+  border-bottom: 1px dotted #DDD;
+  vertical-align: middle;
+  background-color: #FFF; }
+
+.contents-body .form-table td textarea {
+  width: 86%; }
+
+.contents-body .form-table input.full-width {
+  width: 86%; }
+
+.contents-body .form-table td img {
+  vertical-align: baseline;
+  max-width: 100%; }
+
+.contents-body .form-table .checkbox {
+  float: left; }
+
+.contents-body .form-table .error-message {
+  border-radius: 10px; }
+
+.contents-body .form-table input.active,
+.contents-body .form-table textarea.active,
+.contents-body .form-table select.active {
+  background-color: #ffffde; }
+
+.contents-body .form-table button {
+  padding: 0px 7px;
+  cursor: pointer; }
+
+.contents-body .form-table th {
+  font-size: 12px; }
+
+.contents-body .btn-slide-form {
+  border: 1px solid #CCC;
+  text-align: center;
+  margin-left: auto;
+  margin-right: 0;
+  padding: 0 !important;
+  /*position: absolute;*/
+  margin-top: -61px;
+  width: 140px;
+  font-size: 14px; }
 
 .bt-content li {
   padding: 0 20px;
