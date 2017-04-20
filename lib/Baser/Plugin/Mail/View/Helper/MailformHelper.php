@@ -125,6 +125,13 @@ class MailformHelper extends BcFreezeHelper {
 				$attributes['multiple'] = 'checkbox';
 				$attributes['value'] = null;
 				$attributes['empty'] = false;
+				if (!isset($attributes['textSpace'])) {
+					$attributes['textSpace'] = '&nbsp;';
+				}
+				function add_space ($option, $textSpace) {
+					return $textSpace . $option;
+				}
+				$options = array_map('add_space', $options, array($attributes['textSpace']));
 				$out = $this->select($fieldName, $options, $attributes);
 				break;
 			case 'file':

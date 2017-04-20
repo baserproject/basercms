@@ -30,7 +30,7 @@ class BcAppHelper extends Helper {
 		parent::__construct($View, $settings);
 
 		if (get_class($this) == 'BcHtmlHelper' || get_class($this) == 'HtmlHelper') {
-			$this->_tags['checkboxmultiple'] = '<input type="checkbox" name="%s[]"%s />&nbsp;';
+			$this->_tags['checkboxmultiple'] = '<input type="checkbox" name="%s[]"%s />';
 			$this->_tags['hiddenmultiple'] = '<input type="hidden" name="%s[]" %s />';
 		}
 	}
