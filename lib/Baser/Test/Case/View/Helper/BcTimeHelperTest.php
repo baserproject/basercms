@@ -54,14 +54,14 @@ class BcTimeHelperTest extends BaserTestCase {
  * @dataProvider warekiDataProvider
  */
 	public function testWareki($data, $expects) {
-		$data = 's-48/5/10';
+		$data = 's-48/05/10';
 		$result = $this->Helper->wareki($data);
 		$this->assertSame($expects, $result);
 	}
 
 	public function warekiDataProvider() {
 		return array(
-			array('s-48/5/10', 's'),
+			array('s-48/05/10', 's'),
 		);
 	}
 
@@ -77,7 +77,7 @@ class BcTimeHelperTest extends BaserTestCase {
 
 	public function wyearDataProvider() {
 		return array(
-			array('s-48/5/10', '48'),
+			array('s-48/05/10', '48'),
 		);
 	}
 
@@ -95,13 +95,13 @@ class BcTimeHelperTest extends BaserTestCase {
 	public function convertToWarekiYearDataProvider() {
 		return array(
 			array(1867, false, '明治以前'),
-			array(1868, array('m-1'), '明治元年'),
-			array(1912, array('m-45', 't-1'), '大正元年'),
-			array(1913, array('t-2'), '大正2年'),
-			array(1926, array('t-15', 's-1'), '昭和元年'),
-			array(1927, array('s-2'), '昭和2年'),
-			array(1989, array('s-64', 'h-1'), '平成元年'),
-			array(1990, array('h-2'), '平成2年'),
+			array(1868, array('m-01'), '明治元年'),
+			array(1912, array('m-45', 't-01'), '大正元年'),
+			array(1913, array('t-02'), '大正2年'),
+			array(1926, array('t-15', 's-01'), '昭和元年'),
+			array(1927, array('s-02'), '昭和2年'),
+			array(1989, array('s-64', 'h-01'), '平成元年'),
+			array(1990, array('h-02'), '平成2年'),
 		);
 	}
 
@@ -118,16 +118,16 @@ class BcTimeHelperTest extends BaserTestCase {
 
 	public function convertToSeirekiYearDataProvider() {
 		return array(
-			array('m-1', 1868, '明治元年'),
+			array('m-01', 1868, '明治元年'),
 			array('m-45', 1912, '明治45年'),
-			array('t-1', 1912, '大正元年'),
-			array('t-2', 1913, '大正2年'),
+			array('t-01', 1912, '大正元年'),
+			array('t-02', 1913, '大正2年'),
 			array('t-15', 1926, '大正15年'),
-			array('s-1', 1926, '昭和元年'),
-			array('s-2', 1927, '昭和2年'),
+			array('s-01', 1926, '昭和元年'),
+			array('s-02', 1927, '昭和2年'),
 			array('s-64', 1989, '昭和64年'),
-			array('h-1', 1989, '平成元年'),
-			array('h-2', 1990, '平成2年'),
+			array('h-01', 1989, '平成元年'),
+			array('h-02', 1990, '平成2年'),
 		);
 	}
 
@@ -146,11 +146,11 @@ class BcTimeHelperTest extends BaserTestCase {
 			array(null, '', '未入力'),
 			array('invalid date', '', '不正な日付形式'),
 			array('19120729', array('wareki' => true, 'year' => 'm-45', 'month' => '07', 'day' => '29'), '明治45年7月29日'),
-			array('19120730', array('wareki' => true, 'year' => 't-1', 'month' => '07', 'day' => '30'), '大正元年7月30日'),
+			array('19120730', array('wareki' => true, 'year' => 't-01', 'month' => '07', 'day' => '30'), '大正元年7月30日'),
 			array('19261224', array('wareki' => true, 'year' => 't-15', 'month' => '12', 'day' => '24'), '大正15年12月24日'),
-			array('19261225', array('wareki' => true, 'year' => 's-1', 'month' => '12', 'day' => '25'), '昭和元年12月25日'),
+			array('19261225', array('wareki' => true, 'year' => 's-01', 'month' => '12', 'day' => '25'), '昭和元年12月25日'),
 			array('19890107', array('wareki' => true, 'year' => 's-64', 'month' => '01', 'day' => '07'), '昭和64年1月7日'),
-			array('19890108', array('wareki' => true, 'year' => 'h-1', 'month' => '01', 'day' => '08'), '平成元年1月8日'),
+			array('19890108', array('wareki' => true, 'year' => 'h-01', 'month' => '01', 'day' => '08'), '平成元年1月8日'),
 		);
 	}
 
@@ -169,11 +169,11 @@ class BcTimeHelperTest extends BaserTestCase {
 			array(null, '', '未入力'),
 			array('invalid date', '', '不正な日付形式'),
 			array('19120729', 'm-45/07/29', '明治45年7月29日'),
-			array('19120730', 't-1/07/30', '大正元年7月30日'),
+			array('19120730', 't-01/07/30', '大正元年7月30日'),
 			array('19261224', 't-15/12/24', '大正15年12月24日'),
-			array('19261225', 's-1/12/25', '昭和元年12月25日'),
+			array('19261225', 's-01/12/25', '昭和元年12月25日'),
 			array('19890107', 's-64/01/07', '昭和64年1月7日'),
-			array('19890108', 'h-1/01/08', '平成元年1月8日'),
+			array('19890108', 'h-01/01/08', '平成元年1月8日'),
 		);
 	}
 
