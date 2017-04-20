@@ -93,19 +93,29 @@ class BcTimeHelper extends TimeHelper {
  */
 	public function convertToWarekiYear($year) {
 		if ($year >= 1868 && $year <= 1911) {
-			return array('m-' . ($year - 1867));
+			$stringYear = sprintf('%02d', ($year - 1867));
+			return array('m-' . $stringYear);
 		} elseif ($year == 1912) {
-			return array('m-' . ($year - 1867), 't-' . ($year - 1911));
+			$mStringYear = sprintf('%02d', ($year - 1867));
+			$tStringYear = sprintf('%02d', ($year - 1911));
+			return array('m-' . $mStringYear, 't-' . $tStringYear);
 		} elseif ($year >= 1913 && $year <= 1925) {
-			return array('t-' . ($year - 1911));
+			$stringYear = sprintf('%02d', ($year - 1911));
+			return array('t-' . $stringYear);
 		} elseif ($year == 1926) {
-			return array('t-' . ($year - 1911), 's-' . ($year - 1925));
+			$tStringYear = sprintf('%02d', ($year - 1911));
+			$sStringYear = sprintf('%02d', ($year - 1925));
+			return array('t-' . $tStringYear, 's-' . $sStringYear);
 		} elseif ($year >= 1927 && $year <= 1988) {
-			return array('s-' . ($year - 1925));
+			$stringYear = sprintf('%02d', ($year - 1925));
+			return array('s-' . $stringYear);
 		} elseif ($year == 1989) {
-			return array('s-' . ($year - 1925), 'h-' . ($year - 1988));
+			$sStringYear = sprintf('%02d', ($year - 1925));
+			$hStringYear = sprintf('%02d', ($year - 1988));
+			return array('s-' . $sStringYear, 'h-' . $hStringYear);
 		} elseif ($year >= 1990) {
-			return array('h-' . ($year - 1988));
+			$stringYear = sprintf('%02d', ($year - 1988));
+			return array('h-' . $stringYear);
 		} else {
 			return false;
 		}
@@ -180,7 +190,7 @@ class BcTimeHelper extends TimeHelper {
 
 		$dataWareki = array(
 			'wareki' => true,
-			'year' => $w . '-' . $y,
+			'year' => $w . '-' . sprintf('%02d', $y),
 			'month' => $m,
 			'day' => $d
 		);
@@ -312,6 +322,4 @@ class BcTimeHelper extends TimeHelper {
 		echo $this->getJpWeek($dateStr, $suffix);
 	}
 
-
-// <<<
 }
