@@ -115,6 +115,7 @@ class MailField extends MailAppModel {
 			'autozip'			=> '自動補完郵便番号',
 			'pref'				=> '都道府県リスト',
 			'date_time_wareki'	=> '和暦日付',
+			'date_time_seireki'	=> '西暦日付',
 			'date_time_calender'=> 'カレンダー',
 			'hidden'			=> '隠しフィールド'
 		);
