@@ -25,11 +25,10 @@
 //#ContentsBody{
 //	padding: 0 20px 40px;
 //}
-
-
-/* head
------------------------------------------------ */
-
+#ContentsBody li img,
+#ContentsBody p img {
+	vertical-align:middle;
+}
 .contents-body h2 {
 	font-size:16px;
 	margin-bottom:15px;
@@ -67,15 +66,6 @@
 	line-height: 18px;
 	margin-bottom:15px;
 }
-.contents-body h7 {
-	font-size:12px;
-	line-height: 16px;
-	margin-bottom:15px;
-}
-
-/* table
------------------------------------------------ */
-
 .contents-body table {
 	/*clear:both;*/
 	padding: 0;
@@ -94,38 +84,12 @@
 	vertical-align:top;
 	border:none;
 }
-
-/* paragraph
------------------------------------------------ */
-
 .contents-body p {
 	margin-bottom:10px;
 }
 .contents-body p small{
 	line-height:14px;
 }
-
-/* ==================================================================== */
-/*    C L A S S E S
-/* ==================================================================== */
-
-
-/* section
------------------------------------------------ */
-.contents-body .section {
-	margin-bottom:60px;
-	/*clear: both;*/
-}
-.contents-body .section p {
-	margin-bottom:15px;
-}
-
-
-#ContentsBody li img,
-#ContentsBody p img {
-	vertical-align:middle;
-}
-
 .contents-body ul{
 	/*margin-bottom:20px;*/
 }
@@ -136,96 +100,23 @@
 	padding-left:15px;
 	line-height: 1.8em;
 }
-.contents-body .form-table{
-	border: 1px solid #DDD;
-	border-collapse: collapse;
-	margin-bottom:30px;
-	width:100%;
+/* section
+😣 マージン用のユーティリティクラス扱いなので破棄予定
+----------------------------------------------- */
+.contents-body .section {
+	margin-bottom:60px;
+	/*clear: both;*/
 }
-.contents-body .form-table th{
-	vertical-align:middle;
-	text-align: left;
-	background-repeat: repeat-x;
-	background-color: #EFEFEF;
-	padding:5px 10px;
-	white-space: nowrap;
-	width:20%;
-	border: 1px solid #DDD;
-}
-.contents-body .form-table th a{
-	text-decoration:none;
-	white-space: nowrap;
-}
-.contents-body .form-table th a:hover{
-	color:#9C0;
-}
-.contents-body .form-table th img {
-	vertical-align:middle;
-}
-.contents-body .form-table th a {
-	line-height: 20px;
-}
-.contents-body .form-table td{
-	padding: 5px 10px;
-	border-left: 1px solid #DDD;
-	border-right: 1px solid #DDD;
-	border-top: 1px dotted #DDD;
-	border-bottom: 1px dotted #DDD;
-	vertical-align: middle;
-	background-color:#FFF;
-}
-.contents-body .form-table td textarea {
-	width: 86%;
-}
-.contents-body .form-table input.full-width {
-	width:86%;
-}
-.contents-body .form-table td img {
-	vertical-align: baseline;
-	max-width: 100%;
-}
-.contents-body .form-table .checkbox {
-	float:left;
-}
-.contents-body .form-table .error-message{
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-}
-.contents-body .form-table input.active,
-.contents-body .form-table textarea.active,
-.contents-body .form-table select.active {
-	background-color:#ffffde;
-}
-.contents-body .form-table button {
-	padding:0px 7px;
-	cursor: pointer;
+.contents-body .section p {
+	margin-bottom:15px;
 }
 
-.contents-body .form-table th {
-    font-size: 12px;
-}
-
+// ページ専用要素 HTML側を先に整理
 #AdminUpdaters .contents-body .version{
 	font-size: 14px;
 }
 #AdminUpdaters .contents-body .version strong {
 	font-size: 20px;
-}
-
-.contents-body .btn-slide-form{
-	border:1px solid #CCC;
-	text-align: center;
-	margin-left:auto;
-	margin-right:0;
-	padding:0!important;
-	/*position: absolute;*/
-	margin-top:-61px;
-	width:140px;
-	font-size:14px;
-}
-.contents-body li.jstree-closed {
-	/*background-color:#F9F9F9;*/
 }
 
 .bca-main {
