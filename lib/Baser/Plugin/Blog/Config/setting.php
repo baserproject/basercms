@@ -71,3 +71,11 @@ $config['BcContents']['items']['Blog'] = [
 		]
 	]
 ];
+
+$config['Blog'] = [
+	// ブログアイキャッチサイズの初期値
+	'eye_catch_size_thumb_width' => 600,
+	'eye_catch_size_thumb_height' => 600,
+	'eye_catch_size_mobile_thumb_width' => 150,
+	'eye_catch_size_mobile_thumb_height' => 150,
+];
