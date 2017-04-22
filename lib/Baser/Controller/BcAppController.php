@@ -307,6 +307,10 @@ class BcAppController extends Controller {
 				}
 			}
 		}
+
+		// CSRFトークンの再利用可能（ブラウザの戻るボタン対策）
+		$this->Security->csrfUseOnce = false;
+
 		//$this->Security->validatePost = false;
 		// 送信データの文字コードを内部エンコーディングに変換
 		$this->__convertEncodingHttpInput();
@@ -582,6 +586,15 @@ class BcAppController extends Controller {
 		if (array_key_exists($err, $errorMessages)) {
 			$message .= "(type:{$err})" . $errorMessages[$err];
 		}
+
+		// handle errors.
+		$this->log('--- _blackHoleCallback ---------------------------------');
+		$this->log($err);
+		$this->log($message);
+		$this->log($this->request->here());
+		$this->log($this->request->params);
+		$this->log($this->request->data);
+		$this->log('--------------------------------------------------------');
 
 		throw new BadRequestException($message);
 	}
