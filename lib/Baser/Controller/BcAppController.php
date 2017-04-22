@@ -259,6 +259,9 @@ class BcAppController extends Controller {
 		// テーマを設定
 		$this->setTheme();
 
+		// CSRFトークンの再利用可能（ブラウザの戻るボタン対策）
+		$this->Security->csrfUseOnce = false;
+
 		// TODO 管理画面は送信データチェックを行わない（全て対応させるのは大変なので暫定処置）
 		if (!empty($this->request->params['admin'])) {
 			$this->Security->validatePost = false;
@@ -578,6 +581,15 @@ class BcAppController extends Controller {
 		if (array_key_exists($err, $errorMessages)) {
 			$message .= "(type:{$err})" . $errorMessages[$err];
 		}
+
+		// handle errors.
+		$this->log('--- _blackHoleCallback ---------------------------------');
+		$this->log($err);
+		$this->log($message);
+		$this->log($this->request->here());
+		$this->log($this->request->params);
+		$this->log($this->request->data);
+		$this->log('--------------------------------------------------------');
 
 		throw new BadRequestException($message);
 	}
