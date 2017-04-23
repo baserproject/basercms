@@ -733,7 +733,8 @@ class Page extends AppModel {
 			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
 		$this->getDataSource()->begin();
-		if ($data = $this->save($data)) {
+		$this->create($data);
+		if ($data = $this->save()) {
 			$this->getDataSource()->commit();
 			return $data;
 		}
