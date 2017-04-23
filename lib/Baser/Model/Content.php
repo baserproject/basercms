@@ -691,13 +691,18 @@ class Content extends AppModel {
 			// サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、
 			// DataSource::query() を利用する
 			$db = $this->getDataSource();
-			$sql = "SELECT lft, rght FROM {$this->tablePrefix}contents WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
-			$content = $this->query($sql);
+			$sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
+			$content = $db->query($sql);
 			if(!$content) {
 				return false;
 			}
-			$sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents " . 
-					"WHERE lft <= {$db->value($content[0][0]['lft'], 'integer')} AND rght >= {$db->value($content[0][0]['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " . 
+			if(isset($content[0]['Content'])) {
+				$content = $content[0]['Content'];
+			} else {
+				$content = $content[0][0];
+			}
+			$sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " . 
+					"WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " . 
 					"ORDER BY lft ASC";
 			$parents = $db->query($sql, false);
 			unset($parents[0]);
@@ -707,11 +712,16 @@ class Content extends AppModel {
 			$names = [];
 			$content = null;
 			foreach($parents as $parent) {
-				$names[] = $parent[0]['name'];
+				if(isset($parent['Content'])) {
+					$parent = $parent['Content'];
+				} else {
+					$parent = $parent[0];
+				}
+				$names[] = $parent['name'];
 				$content = $parent;
 			}
-			$plugin = $content[0]['plugin'];
-			$type = $content[0]['type'];
+			$plugin = $content['plugin'];
+			$type = $content['type'];
 			$url = '/' . implode('/', $names);
 			$setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
 			if($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
