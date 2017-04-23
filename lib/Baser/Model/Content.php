@@ -686,7 +686,18 @@ class Content extends AppModel {
 		if($id == 1) {
 			$url = '/';
 		} else {
-			$parents = $this->getPath($id, ['name', 'plugin', 'type'], -1);
+			// サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、
+			// DataSource::query() を利用する
+			$db = $this->getDataSource();
+			$sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id}";
+			$content = $db->query($sql);
+			if(!$content) {
+				return false;
+			}
+			$sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " . 
+					"WHERE lft <= {$content[0]['Content']['lft']} AND rght >= {$content[0]['Content']['rght']} " . 
+					"ORDER BY lft ASC";
+			$parents = $db->query($sql);
 			unset($parents[0]);
 			if(!$parents) {
 				return false;
@@ -1699,6 +1710,28 @@ class Content extends AppModel {
 		$this->updatingRelated = $updatingRelated;
 		$this->updatingSystemData = $updatingSystemData;
 		return $result;
+	}
+
+/**
+ * 指定したコンテンツ配下のコンテンツのURLを一括更新する
+ * @param $id
+ */
+	public function updateChildrenUrl($id) {
+		set_time_limit(0);
+		$children = $this->children($id, false, ['url', 'id'], 'Content.lft', null, null, -1);
+		$db = $this->getDataSource();
+		$sql = 'UPDATE ' . $this->tablePrefix . 'contents SET url = :url WHERE id = :id';
+		if($children) {
+			foreach($children as $key => $child) {
+				$child['Content']['url'] = $this->createUrl($child['Content']['id']);
+				if(!$db->execute($sql, [], $child['Content'])) {
+					$this->getDataSource()->rollback();
+					return false;
+				}
+			}
+		}
+		$this->getDataSource()->commit();
+		return true;
 	}
 	
 }

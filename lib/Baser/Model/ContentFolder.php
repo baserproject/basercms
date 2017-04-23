@@ -29,15 +29,18 @@ class ContentFolder extends AppModel {
  *
  * @param null $siteId
  * @param array $data
+ * @param bool $isUpdateChildrenUrl 子のコンテンツのURLを一括更新するかどうか
  * @return bool
  */
-	public function saveSiteRoot($siteId = null, $data = []) {
+	public function saveSiteRoot($siteId = null, $data = [], $isUpdateChildrenUrl = false) {
 		if(!isset($data['Content'])) {
 			$_data = $data;
 			unset($data);
 			$data['Content'] = $_data;
 		}
 		if(!is_null($siteId)) {
+			
+			// エイリアスが変更となっているかどうかの判定が必要
 			$_data = $this->find('first', ['conditions' => [
 				'Content.site_id' => $siteId,
 				'Content.site_root' => true
@@ -48,7 +51,12 @@ class ContentFolder extends AppModel {
 		} else {
 			$this->create($data);
 		}
-		if($this->save(null, ['callbacks' => false])) {
+		$this->Content->updatingRelated = false;
+		if($this->save()) {
+			// エイリアスを変更した場合だけ更新
+			if($isUpdateChildrenUrl) {
+				$this->Content->updateChildrenUrl($data['Content']['id']);				
+			}
 			return true;
 		} else {
 			return false;
