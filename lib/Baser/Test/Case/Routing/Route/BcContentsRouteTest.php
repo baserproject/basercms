@@ -120,7 +120,7 @@ class BcContentsRouteTest extends BaserTestCase {
 			$_SERVER['HTTP_USER_AGENT'] = $ua;
 		}
 		if($host) {
-			$_SERVER['HTTP_HOST'] = $host;
+			Configure::write('BcEnv.host', $host);
 		}
 		Router::setRequestInfo($this->_getRequest($url));
 		$this->assertEquals($expects, Router::parse($url));

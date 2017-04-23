@@ -1536,7 +1536,7 @@ EOD;
 		} else {
 			$protocol = 'https';
 		}
-		return $protocol . '://' . $_SERVER['HTTP_HOST'] . $this->getUrl($url, false, $sessionId);
+		return $protocol . '://' . Configure::read('BcEnv.host') . $this->getUrl($url, false, $sessionId);
 	}
 
 /**

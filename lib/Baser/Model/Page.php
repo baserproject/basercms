@@ -215,16 +215,22 @@ class Page extends AppModel {
 		} else {
 			$modelId = $this->id;
 		}
-
-		// =================================================================================================
-		// 2016/11/10 ryuring
-		// パラメーターでリクエストアクションを送った場合、 BcContentsRoute::match() にて、ホスト情報が消されてしまい、
-		// 別ドメインの際に、BcContentsRoute::parse() にて正しいホストを特定できず、プレビュー用URLの解決ができない。
-		// そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
-		// =================================================================================================
-		//$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
-		//$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => ['force' => 'true'], 'pass' => $parameters, 'return']);
-		$detail = $this->requestAction($content['url'] . '?force=true', ['return']);
+		
+		$host = '';
+		$url = $content['url'];
+		$site = BcSite::findById($content['site_id']);
+		if($site->useSubDomain) {
+			$host = $site->alias;
+			if($site->domainType == 1) {
+				$host .= '.'  . BcUtil::getMainDomain();
+			}
+			$url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '/', '', $url);
+		}
+		$parameters = explode('/', preg_replace("/^\//", '', $url));
+		$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => [
+			'force' => 'true',
+			'host' => $host
+		], 'pass' => $parameters, 'return']);
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$description = '';
@@ -238,7 +244,7 @@ class Page extends AppModel {
 			'site_id'=> $content['site_id'],
 			'title'		=> $content['title'],
 			'detail'	=> $description . ' ' . $detail,
-			'url'		=> $content['url'],
+			'url'		=> $url,
 			'status'	=> $this->isPublish($content['status'], $content['publish_begin'], $content['publish_end'])
 		]];
 		return $searchIndex;
