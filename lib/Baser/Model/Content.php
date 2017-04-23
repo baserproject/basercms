@@ -692,7 +692,7 @@ class Content extends AppModel {
 			// DataSource::query() を利用する
 			$db = $this->getDataSource();
 			$sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
-			$content = $db->query($sql);
+			$content = $db->query($sql, false);
 			if(!$content) {
 				return false;
 			}
