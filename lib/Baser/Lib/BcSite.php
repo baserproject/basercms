@@ -82,12 +82,32 @@ class BcSite {
  * @var int
  */
 	public $mainSiteId;
-	
+
+/**
+ * サブドメインを利用するかどうか
+ * @var bool
+ */
 	public $useSubDomain;
-	
+
+/**
+ * ドメインタイプ
+ * 	1:サブドメイン
+ * 	2:別ドメイン
+ * @var int
+ */
 	public $domainType;
-	
+
+/**
+ * テーマ名
+ * @var string
+ */
 	public $theme;
+
+/**
+ * ホスト名
+ * @var string
+ */
+	public $host;
 
 /**
  * コンストラクタ
@@ -132,6 +152,7 @@ class BcSite {
 		} else {
 			$this->domainType = 0;
 		}
+		$this->host = BcSite::getHost($this);
 	}
 
 /**
@@ -414,8 +435,28 @@ class BcSite {
 		return '/' . $url;
 	}
 
+/**
+ * 初期状態に戻す
+ */
 	public static function flash() {
 		self::$_sites = null;
+	}
+
+/**
+ * ホストを取得する
+ *
+ * @param BcSite $site
+ * @return string
+ */
+	public function getHost(BcSite $site) {
+		if($site->useSubDomain) {
+			if($site->domainType == 1) {
+				return $site->alias . '.' . BcUtil::getMainDomain();
+			} elseif($site->domainType == 2) {
+				return $site->alias;
+			}
+		}
+		return BcUtil::getMainDomain();
 	}
 
 }
