@@ -1377,7 +1377,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetUri($url, $sessionId, $host, $https, $expected) {
 		$_SERVER['HTTPS'] = $https;
-		$_SERVER['HTTP_HOST'] = $host;
+		Configure::write('BcEnv.host', $host);
 
 		$result = $this->BcBaser->getUri($url, $sessionId);
 		$this->assertEquals($expected, $result);

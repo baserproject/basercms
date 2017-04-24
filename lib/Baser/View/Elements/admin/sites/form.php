@@ -28,13 +28,14 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 ?>
 
 
+<?php echo $this->BcForm->hidden('Site.id') ?>
+
 <table class="form-table">
 <?php if($this->request->action == 'admin_edit'): ?>
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.id', 'NO') ?></th>
 		<td>
 			<?php echo $this->BcForm->value('Site.id') ?>
-			<?php echo $this->BcForm->hidden('Site.id') ?>
 		</td>
 	</tr>
 <?php endif ?>
