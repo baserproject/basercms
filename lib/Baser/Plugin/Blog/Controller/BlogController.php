@@ -329,8 +329,10 @@ class BlogController extends BlogAppController {
 				// プレビュー
 				if ($this->BcContents->preview) {
 					if (!empty($this->request->data['BlogPost'])) {
+						$this->request->data = $this->BlogPost->saveTmpFiles($this->request->data, mt_rand(0, 99999999));
 						$post = $this->BlogPost->createPreviewData($this->request->data);
-					} else { 
+
+					} else {
 						$post = $this->_getBlogPosts(['preview' => true, 'conditions' => ['id' => $id]]);
 						if (isset($post[0])) {
 							$post = $post[0];
