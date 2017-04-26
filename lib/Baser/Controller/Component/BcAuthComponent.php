@@ -147,7 +147,7 @@ class BcAuthComponent extends AuthComponent {
 		$UserModel->schema(true);
 		$user = $UserModel->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
 		$this->authenticate['Form']['passwordHasher'] = 'BcNo';
-		$this->request->data = $user;
+		$this->request->data['User'] = $user['User'];
 		$result = $this->login();
 		return $result;
 	
