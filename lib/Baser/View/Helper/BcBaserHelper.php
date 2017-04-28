@@ -1737,7 +1737,8 @@ EOD;
 		}
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
-			'currentId' => $currentId
+			'currentId' => $currentId,
+			'data' => []
 		], $options);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$options = array_merge($options, [
@@ -1746,9 +1747,12 @@ EOD;
 						'key' => $id]]
 			);
 		}
-		return $this->getElement('global_menu', $options);
+		$data = $options['data'];
+		unset($options['tree']);
+		unset($options['currentId']);
+		unset($options['data']);
+		return $this->getElement('global_menu', $data, $options);
 	}
-
 /**
  * サイトマップを出力する
  *
