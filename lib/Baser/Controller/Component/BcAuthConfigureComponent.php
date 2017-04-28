@@ -164,11 +164,11 @@ class BcAuthConfigureComponent extends Component {
 						$Controller->request->data[$config['userModel']] = $cookie;
 						$loginResult = $BcAuth->login();
 						unset($Controller->request->data[$config['userModel']]);
+						if(!empty($requestData)) {
+							$Controller->request->data[$config['userModel']] = $requestData;
+						}
 						if ($loginResult) {
 							return true;
-						}
-						if(!empty($requestData)) {
-							$Controller->request->data[$config['userModel']] = $requestData;	
 						}
 					}
 					$Controller->Cookie->write($cookieKey, null);

@@ -70,10 +70,19 @@ $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
+
 $baseUrl = $hostUrl . $baseUrl;
+
+if($this->request->data['Site']['use_subdomain']) {
+	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
+	$previewUrl = $targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host;
+} else {
+	$previewUrl = $this->request->data['Content']['url'];
+}
 
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
+	'data-previewurl' => $previewUrl,
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),
 	'data-current' => json_encode($this->request->data),
 	'data-settings' => $this->BcContents->getJsonSettings()
@@ -341,7 +350,7 @@ if($this->BcContents->isEditable()) {
 				</td>
 				<td style="width:15%"><?php echo $relatedContent['Site']['display_name'] ?></td>
 				<td style="width:15%">
-					<?php echo $sites[$relatedContent['Site']['main_site_id']] ?>
+					<?php echo $this->BcText->arrayValue($relatedContent['Site']['main_site_id'], $sites,  $mainSiteDisplayName) ?>
 				</td>
 				<td>
 					<?php if(!empty($relatedContent['Content'])): ?>

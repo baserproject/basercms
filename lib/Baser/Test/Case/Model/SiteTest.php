@@ -19,18 +19,30 @@ App::uses('Site', 'Model');
  */
 class SiteTest extends BaserTestCase {
 
+/**
+ * Fixtures
+ * 
+ * @var array
+ */
 	public $fixtures = array(
 		'baser.Default.Site',
 		'baser.Default.ContentFolder',
 		'baser.Default.Content',
-		'baser.Default.User'
+		'baser.Default.User',
+		'baser.Default.SiteConfig'
 	);
 
+/**
+ * Set Up 
+ */
 	public function setUp() {
 		parent::setUp();
 		$this->Site = ClassRegistry::init('Site');
 	}
 
+/**
+ * Tear Down
+ */
 	public function tearDown() {
 		unset($this->Site);
 		parent::tearDown();
@@ -62,4 +74,32 @@ class SiteTest extends BaserTestCase {
 			$this->assertTrue($site['Site']['auto_redirect']);
 		}
 	}
+
+/**
+ * サイトリストを取得 
+ * 
+ * @param int $mainSiteId メインサイトID
+ * @param array $options
+ * @param array $expects
+ * @param string $message
+ * @dataProvider getSiteListDataProvider
+ */
+	public function testGetSiteList($mainSiteId, $options, $expects, $message) {
+		$result = $this->Site->getSiteList($mainSiteId, $options);
+		$this->assertEquals($expects, $result, $message);
+	}
+	
+	public function getSiteListDataProvider() {
+		return [
+			[null, [], [0 => 'パソコン', 1 => 'ケータイ', 2 => 'スマートフォン'], '全てのサイトリストの取得ができません。'],
+			[0, [], [1 => 'ケータイ', 2 => 'スマートフォン'], 'メインサイトの指定ができません。'],
+			[1, [], [], 'メインサイトの指定ができません。'],
+			[null, ['excludeIds' => [0,2]], [1 => 'ケータイ'], '除外指定ができません。'],
+			[null, ['excludeIds' => 1], [0 => 'パソコン', 2 => 'スマートフォン'], '除外指定ができません。'],
+			[null, ['excludeIds' => 0], [1 => 'ケータイ', 2 => 'スマートフォン'], '除外指定ができません。'],
+			[null, ['includeIds' => [0, 2]], [0 => 'パソコン', 2 => 'スマートフォン'], 'ID指定ができません。'],
+			[null, ['includeIds' => 1], [1 => 'ケータイ'], 'ID指定ができません。'],
+		];
+	}
+	
 }

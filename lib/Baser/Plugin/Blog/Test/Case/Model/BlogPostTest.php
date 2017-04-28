@@ -194,7 +194,7 @@ class BlogPostTest extends BaserTestCase {
 			)
 		);
 
-		$this->assertEquals($result['saveDir'], 'blog/news/blog_posts');
+		$this->assertEquals($result['saveDir'], 'blog/1/blog_posts');
 		$this->assertEquals($imagecopy, $expected);
 	}
 

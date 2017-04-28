@@ -43,7 +43,11 @@ class BcContentsRoute extends CakeRoute {
 		if(!empty($request->query['preview']) || !empty($request->query['force'])) {
 			$publish = false;
 		}
-
+		
+		if(!empty($request->query['host'])) {
+			Configure::write('BcEnv.host', $request->query['host']);
+		}
+		
 		$sameUrl = false;
 		$site = BcSite::findCurrentSub(true);
 		if($site) {

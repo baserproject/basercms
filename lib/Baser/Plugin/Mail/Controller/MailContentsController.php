@@ -146,7 +146,7 @@ class MailContentsController extends MailAppController {
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
-		if (empty($this->request->data)) {
+		if (empty($this->request->data['MailContent']['id'])) {
 			$this->request->data = $this->MailContent->read(null, $id);
 			if(!$this->request->data) {
 				$this->setMessage('無効な処理です。', true);
@@ -176,7 +176,9 @@ class MailContentsController extends MailAppController {
 		}
 
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
-		$this->set('publishLink', $this->request->params['Content']['url']);
+		if($this->request->data['Content']['status']) {
+			$this->set('publishLink', $this->request->data['Content']['url']);
+		}
 		$this->set('mailContent', $this->request->data);
 		$this->subMenuElements = ['mail_fields'];
 		$this->pageTitle = 'メールフォーム設定編集：' . $this->request->data['Content']['title'];

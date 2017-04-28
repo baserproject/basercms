@@ -428,9 +428,9 @@ class BcSqlite extends Sqlite {
 		// PDO::getColumnMeta is experimental and does not work with sqlite3,
 		// so try to figure it out based on the querystring
 		$querystring = $results->queryString;
+		$selects = array();
 		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
 			$selectpart = substr($querystring, 7);
-			$selects = array();
 			foreach (CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
 				$fromPos = stripos($part, ' FROM ');
 				if ($fromPos !== false) {

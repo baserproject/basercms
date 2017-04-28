@@ -237,7 +237,7 @@ class BcUploadHelper extends BcAppHelper {
 		if ($fileName == $noimage) {
 			$mostSizeUrl = $fileName;
 		} elseif ($tmp) {
-			$mostSizeUrl = $fileUrl . $fileName;
+			$mostSizeUrl = $fileUrl . str_replace(array('.', '/'), array('_', '_'), $fileName);
 		} else {
 			$check = false;
 			$maxSizeExists = false;

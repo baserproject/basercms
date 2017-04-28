@@ -683,10 +683,28 @@ class Content extends AppModel {
  */
 	public function createUrl($id, $plugin = null, $type = null) {
 		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
-		if($id == 1) {
+		if(!$id) {
+			return false;
+		} elseif($id == 1) {
 			$url = '/';
 		} else {
-			$parents = $this->getPath($id, ['name', 'plugin', 'type'], -1);
+			// サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、
+			// DataSource::query() を利用する
+			$db = $this->getDataSource();
+			$sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
+			$content = $db->query($sql, false);
+			if(!$content) {
+				return false;
+			}
+			if(isset($content[0]['Content'])) {
+				$content = $content[0]['Content'];
+			} else {
+				$content = $content[0][0];
+			}
+			$sql = "SELECT name, plugin, type FROM {$this->tablePrefix}contents AS Content " . 
+					"WHERE lft <= {$db->value($content['lft'], 'integer')} AND rght >= {$db->value($content['rght'], 'integer')} AND deleted =  " . $db->value(false, 'boolean') . " " . 
+					"ORDER BY lft ASC";
+			$parents = $db->query($sql, false);
 			unset($parents[0]);
 			if(!$parents) {
 				return false;
@@ -694,11 +712,16 @@ class Content extends AppModel {
 			$names = [];
 			$content = null;
 			foreach($parents as $parent) {
-				$names[] = $parent['Content']['name'];
+				if(isset($parent['Content'])) {
+					$parent = $parent['Content'];
+				} else {
+					$parent = $parent[0];
+				}
+				$names[] = $parent['name'];
 				$content = $parent;
 			}
-			$plugin = $content['Content']['plugin'];
-			$type = $content['Content']['type'];
+			$plugin = $content['plugin'];
+			$type = $content['type'];
 			$url = '/' . implode('/', $names);
 			$setting = $omitViewAction = Configure::read('BcContents.items.' . $plugin . '.' . $type);
 			if($type == 'ContentFolder' || empty($setting['omitViewAction'])) {
@@ -1699,6 +1722,28 @@ class Content extends AppModel {
 		$this->updatingRelated = $updatingRelated;
 		$this->updatingSystemData = $updatingSystemData;
 		return $result;
+	}
+
+/**
+ * 指定したコンテンツ配下のコンテンツのURLを一括更新する
+ * @param $id
+ */
+	public function updateChildrenUrl($id) {
+		set_time_limit(0);
+		$children = $this->children($id, false, ['url', 'id'], 'Content.lft', null, null, -1);
+		$db = $this->getDataSource();
+		if($children) {
+			foreach($children as $key => $child) {
+				// サイト全体を更新する為、サイト規模によってはかなり時間がかかる為、SQLを利用
+				$sql = 'UPDATE ' . $this->tablePrefix . 'contents SET url = ' . $db->value($this->createUrl($child['Content']['id']), 'integer') . ' WHERE id = ' . $db->value($child['Content']['id'], 'integer');
+				if(!$db->execute($sql)) {
+					$this->getDataSource()->rollback();
+					return false;
+				}
+			}
+		}
+		$this->getDataSource()->commit();
+		return true;
 	}
 	
 }

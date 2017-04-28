@@ -532,14 +532,15 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
-	if (isConsole() && empty($_SERVER['HTTP_HOST'])) {
+	
+	if (isConsole() && !Configure::check('BcEnv.host')) {
 		return Configure::read('App.fullBaseUrl');
 	}
 	$protocol = 'http://';
 	if (!empty($_SERVER['HTTPS'])) {
 		$protocol = 'https://';
 	}
-	$host = $_SERVER['HTTP_HOST'];
+	$host = Configure::read('BcEnv.host');
 	$url = $protocol . $host;
 	if ($lastSlash) {
 		$url .= '/';

@@ -268,4 +268,42 @@ class BcUtilTest extends BaserTestCase {
 
 	}
 
+/**
+ * 現在のドメインを取得する 
+ */
+	public function testGetCurrentDomain() {
+		$this->assertEmpty(BcUtil::getCurrentDomain(), '$_SERVER[HTTP_HOST] の値が間違っています。');
+		Configure::write('BcEnv.host', 'hoge');
+		$this->assertEquals('hoge', BcUtil::getCurrentDomain(), 'ホストを変更できません。');
+	}
+
+/**
+ * サブドメインを取得する
+ * 
+ * @param string $host
+ * @param string $currentHost
+ * @param string $expects
+ * @dataProvider getSubDomainDataProvider
+ */
+	public function testGetSubDomain($host, $currentHost, $expects, $message) {
+		Configure::write('BcEnv.mainDomain', 'localhost');
+		if($currentHost) {
+			Configure::write('BcEnv.host', $currentHost);	
+		} else {
+			Configure::write('BcEnv.host', '');
+		}
+		$this->assertEquals($expects, BcUtil::getSubDomain($host), $message);
+	}
+	
+	public function getSubDomainDataProvider() {
+		return [
+			['', '', '', '現在のサブドメイン名が不正です。'],
+			['', 'hoge.localhost', 'hoge', '現在のサブドメイン名が取得できません。'],
+			['', 'test.localhost', 'test', '現在のサブドメイン名が取得できません。'],
+			['hoge.localhost', '', 'hoge', '引数を指定してサブドメイン名が取得できません。'],
+			['test.localhost', '', 'test', '引数を指定してサブドメイン名が取得できません。'],
+			['localhost', '', '', '引数を指定してサブドメイン名が取得できません。'],
+		];
+	}
+	
 }

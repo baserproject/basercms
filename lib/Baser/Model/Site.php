@@ -23,7 +23,15 @@ class Site extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcCache'];
-		
+
+
+/**
+ * 保存時にエイリアスが変更されたかどうか
+ *
+ * @var bool
+ */
+	private $__changedAlias = false;
+	
 /**
  * バリデーション
  *
@@ -124,22 +132,64 @@ class Site extends AppModel {
 /**
  * サイトリストを取得
  *
- * @param bool $mainOnly
+ * @param bool $mainSiteId メインサイトID
+ * @param array $options
+ * 	`excludeIds` 除外するID（初期値：なし）
  * @return array
  */
     public function getSiteList($mainSiteId = null, $options = []) {
 		$options = array_merge([
 			'excludeIds' => []
 		], $options);
-    	$conditions = ['Site.status' => true];
-    	if(!is_null($mainSiteId)) {
-    		$conditions['Site.main_site_id'] = $mainSiteId;
-    	}
-		if($options['excludeIds']) {
-			$conditions[]['Site.id <>'] = $options['excludeIds']; 
+
+		// EVENT Site.beforeGetSiteList
+		$event = $this->dispatchEvent('beforeGetSiteList', [
+			'options' => $options
+		]);
+		if ($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
-		$main = $this->getRootMain();
-    	return [$main['Site']['id'] => $main['Site']['display_name']] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
+		
+		$conditions = ['Site.status' => true];
+		if(!is_null($mainSiteId)) {
+			$conditions['Site.main_site_id'] = $mainSiteId;
+		}
+		
+		$rootMain = [];
+		$excludeKey = false;
+		$includeKey = true;
+		
+		if(isset($options['excludeIds'])) {
+			if(!is_array($options['excludeIds'])) {
+				$options['excludeIds'] = [$options['excludeIds']];
+			}
+			$excludeKey = array_search(0, $options['excludeIds']);
+			if($excludeKey !== false) {
+				unset($options['excludeIds'][$excludeKey]);
+			}
+			if($options['excludeIds']) {
+				$conditions[]['NOT']['Site.id'] = $options['excludeIds'];	
+			}
+		}
+
+		if(isset($options['includeIds'])) {
+			if(!is_array($options['includeIds'])) {
+				$options['includeIds'] = [$options['includeIds']];
+			}
+			$includeKey = array_search(0, $options['includeIds']);
+			if($includeKey !== false) {
+				unset($options['includeIds'][$includeKey]);
+			}
+			if($options['includeIds']) {
+				$conditions[]['Site.id'] = $options['includeIds'];
+			}
+		}
+		
+		if($includeKey !== false && $excludeKey === false && is_null($mainSiteId)) {
+			$rootMainTmp = $this->getRootMain();
+			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
+		}
+		return $rootMain + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
 	
 /**
@@ -306,7 +356,7 @@ class Site extends AppModel {
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'title'		=> $this->data['Site']['title'],
 				'self_status'	=> $this->data['Site']['status'],
-		  ]);
+			], $this->__changedAlias);
 		}
 		if(!empty($this->data['Site']['main'])) {
 			$data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
@@ -315,6 +365,7 @@ class Site extends AppModel {
 				$this->save($data, array('validate' => false, 'callbacks' => false));
 			}
 		}
+		$this->__changedAlias = false;
 	}
 
 /**
@@ -431,7 +482,14 @@ class Site extends AppModel {
 			'Site.main_site_id' => $mainSiteId
 		], 'recursive' => -1]);
 	}
-	
+
+/**
+ * After Find
+ * 
+ * @param mixed $results
+ * @param bool $primary
+ * @return mixed
+ */
 	public function afterFind($results, $primary = false) {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {
@@ -551,6 +609,20 @@ class Site extends AppModel {
 			$this->getDataSource()->commit();
 		}
 		return $result;
+	}
+
+/**
+ * Before Save
+ * 
+ * @param array $options
+ */
+	public function beforeSave($options = array()) {
+		if(!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
+			$oldAlias = $this->field('alias', ['Site.id' => $this->data[$this->alias]['id']]);
+			if($oldAlias != $this->data[$this->alias]['alias']) {
+				$this->__changedAlias = true;
+			}
+		}
 	}
 	
 }

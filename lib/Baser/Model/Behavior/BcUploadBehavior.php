@@ -122,6 +122,9 @@ class BcUploadBehavior extends ModelBehavior {
  * @return boolean
  */
 	public function beforeSave(Model $Model, $options = array()) {
+		if($Model->exists()) {
+			$this->deleteExistingFiles($Model);	
+		}
 		return $this->saveFiles($Model);
 	}
 
@@ -430,9 +433,11 @@ class BcUploadBehavior extends ModelBehavior {
  * @return bool
  */
 	public function rotateImage($file) {
-		//return true;
-		$exif = @exif_read_data($file) ;
-		if(empty($exif['Orientation'])) {
+		if(!function_exists('exif_read_data')) {
+			return false;
+		}
+		$exif = @exif_read_data($file);
+		if(empty($exif) || empty($exif['Orientation'])) {
 			return true;
 		}
 		switch($exif['Orientation']) {
@@ -578,6 +583,7 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像ファイル群を削除する
  * 
  * @param Model $Model
+ * @param string $fieldName フィールド名
  * @return boolean
  */
 	public function delFiles(Model $Model, $fieldName = null) {
@@ -585,9 +591,11 @@ class BcUploadBehavior extends ModelBehavior {
 			if (empty($field['name'])) {
 				$field['name'] = $key;
 			}
-			if(!empty($Model->data[$Model->name][$field['name']])) {
-				$file = $Model->data[$Model->name][$field['name']];
-				$this->delFile($Model, $file, $field);
+			if (!$fieldName || ($fieldName && $fieldName == $field['name'])) {
+				if (!empty($Model->data[$Model->name][$field['name']])) {
+					$file = $Model->data[$Model->name][$field['name']];
+					$this->delFile($Model, $file, $field);
+				}
 			}
 		}
 	}
@@ -887,4 +895,26 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 		return $saveDir;
 	}
+
+/**
+ * 既に存在するデータのファイルを削除する
+ * 
+ * @param Model $Model
+ */
+	public function deleteExistingFiles(Model $Model) {
+		$dataTmp = $Model->data[$Model->alias];
+		$Model->set($Model->find('first', [
+			'conditions' => [$Model->alias . '.id' => $Model->data[$Model->alias]['id']],
+			'recursive' => -1
+		]));
+		$uploadFields = array_keys($this->settings[$Model->alias]['fields']);
+		$targetFields = array_keys($dataTmp);
+		foreach($targetFields as $field) {
+			if(in_array($field, $uploadFields) && !empty($dataTmp[$field]['tmp_name'])) {
+				$this->delFiles($Model, $field);
+			}
+		}
+		$Model->set($dataTmp);
+	}
+	
 }
