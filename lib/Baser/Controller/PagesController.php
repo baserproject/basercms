@@ -165,7 +165,7 @@ class PagesController extends AppController {
 
 		// 公開リンク
 		$publishLink = '';
-		if ($this->request->data['Content']['url']) {
+		if ($this->request->data['Content']['status']) {
 			$publishLink = $this->request->data['Content']['url'];
 		}
 		// エディタオプション

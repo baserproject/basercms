@@ -1180,11 +1180,7 @@ class BcBaserHelper extends AppHelper {
  */
 	public function publishLink() {
 		if ($this->existsPublishLink()) {
-			if(isset($this->_View->BcContents) && isset($this->request->data['Site']['use_subdomain'])) {
-				$url = $this->_View->BcContents->getUrl($this->_View->viewVars['publishLink'], true, $this->request->data['Site']['use_subdomain']);
-			} else {
-				$url = $this->_View->viewVars['publishLink'];
-			}
+			$url = BcSite::getFullUrl($this->_View->viewVars['publishLink']);
 			$this->link('公開ページ', $url, array('class' => 'tool-menu'));
 		}
 	}

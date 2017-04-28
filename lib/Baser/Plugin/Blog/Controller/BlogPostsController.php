@@ -156,6 +156,9 @@ class BlogPostsController extends BlogAppController {
 			return;
 		}
 
+		if ($this->request->params['Content']['status']) {
+			$this->set('publishLink', $this->request->params['Content']['url']);
+		}
 		$this->pageTitle = '[' . strip_tags($this->request->params['Content']['title']) . '] 記事一覧';
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
@@ -390,7 +393,7 @@ class BlogPostsController extends BlogAppController {
 		));
 
 		if ($this->request->data['BlogPost']['status']) {
-			$this->set('publishLink', $this->request->params['Content']['url'] . '/archives/' . $this->request->data['BlogPost']['no']);
+			$this->set('publishLink', $this->request->params['Content']['url'] . 'archives/' . $this->request->data['BlogPost']['no']);
 		}
 
 		$editorOptions = array('editorDisableDraft' => false);
