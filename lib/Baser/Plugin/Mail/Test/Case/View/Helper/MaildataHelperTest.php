@@ -45,7 +45,6 @@ class MaildataHelperTest extends BaserTestCase {
         }
 
         $result = $this->Maildata->toDisplayString($type, $value, $options);
-        var_dump($result);
         $this->assertEquals($result,$expected);
     }
 

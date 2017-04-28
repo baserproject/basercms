@@ -60,7 +60,7 @@ class MailHelper extends AppHelper {
  * フォームテンプレートを取得
  *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array フォームテンプレート一覧データ
  * @todo 他のヘルパーに移動する
  */
