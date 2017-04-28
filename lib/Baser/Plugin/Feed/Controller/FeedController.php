@@ -101,7 +101,7 @@ class FeedController extends FeedAppController {
 					$protocol = 'https';
 				}
 				if ($protocol) {
-					$url = $protocol . '://' . $_SERVER['HTTP_HOST'] . $this->base . $feedDetail['FeedDetail']['url'];
+					$url = $protocol . '://' . Configure::read('BcEnv.host') . $this->base . $feedDetail['FeedDetail']['url'];
 				}
 			}
 

@@ -56,7 +56,7 @@ class ContentTest extends BaserTestCase {
 			$_SERVER['HTTP_USER_AGENT'] = $ua;
 		}
 		if($host) {
-			$_SERVER['HTTP_HOST'] = $host;
+			Configure::write('BcEnv.host', $host);
 		}
 		Router::setRequestInfo($this->_getRequest('/m/'));
 		$result = $this->Content->getUrl($url, $full, $useSubDomain);

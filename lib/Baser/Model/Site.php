@@ -23,7 +23,15 @@ class Site extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcCache'];
-		
+
+
+/**
+ * 保存時にエイリアスが変更されたかどうか
+ *
+ * @var bool
+ */
+	private $__changedAlias = false;
+	
 /**
  * バリデーション
  *
@@ -348,7 +356,7 @@ class Site extends AppModel {
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'title'		=> $this->data['Site']['title'],
 				'self_status'	=> $this->data['Site']['status'],
-		  ]);
+			], $this->__changedAlias);
 		}
 		if(!empty($this->data['Site']['main'])) {
 			$data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
@@ -357,6 +365,7 @@ class Site extends AppModel {
 				$this->save($data, array('validate' => false, 'callbacks' => false));
 			}
 		}
+		$this->__changedAlias = false;
 	}
 
 /**
@@ -600,6 +609,20 @@ class Site extends AppModel {
 			$this->getDataSource()->commit();
 		}
 		return $result;
+	}
+
+/**
+ * Before Save
+ * 
+ * @param array $options
+ */
+	public function beforeSave($options = array()) {
+		if(!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
+			$oldAlias = $this->field('alias', ['Site.id' => $this->data[$this->alias]['id']]);
+			if($oldAlias != $this->data[$this->alias]['alias']) {
+				$this->__changedAlias = true;
+			}
+		}
 	}
 	
 }

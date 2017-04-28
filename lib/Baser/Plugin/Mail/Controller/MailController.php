@@ -490,6 +490,10 @@ class MailController extends MailAppController {
 
 		// 管理者に送信
 		if (!empty($adminMail)) {
+			// カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
+			if (strpos($userMail, ',') !== false) {
+				list($userMail) = explode(',', $userMail);
+			}
 			$data['other']['mode'] = 'admin';
 			$options = array(
 				'fromName' => $mailContent['sender_name'],

@@ -23,5 +23,5 @@ $this->BcBaser->js('admin/sites/edit', false);
 
 <div class="submit">
 	<?php echo $this->BcHtml->link('一覧に戻る', array('plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'), array('class' => 'button')) ?>
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
+	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 </div>

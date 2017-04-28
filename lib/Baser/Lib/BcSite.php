@@ -82,12 +82,32 @@ class BcSite {
  * @var int
  */
 	public $mainSiteId;
-	
+
+/**
+ * サブドメインを利用するかどうか
+ * @var bool
+ */
 	public $useSubDomain;
-	
+
+/**
+ * ドメインタイプ
+ * 	1:サブドメイン
+ * 	2:別ドメイン
+ * @var int
+ */
 	public $domainType;
-	
+
+/**
+ * テーマ名
+ * @var string
+ */
 	public $theme;
+
+/**
+ * ホスト名
+ * @var string
+ */
+	public $host;
 
 /**
  * コンストラクタ
@@ -132,6 +152,7 @@ class BcSite {
 		} else {
 			$this->domainType = 0;
 		}
+		$this->host = BcSite::getHost();
 	}
 
 /**
@@ -414,8 +435,43 @@ class BcSite {
 		return '/' . $url;
 	}
 
+/**
+ * 初期状態に戻す
+ */
 	public static function flash() {
 		self::$_sites = null;
+	}
+
+/**
+ * ホストを取得する
+ *
+ * @param BcSite $site
+ * @return string
+ */
+	public function getHost() {
+		if($this->useSubDomain) {
+			if($this->domainType == 1) {
+				return $this->alias . '.' . BcUtil::getMainDomain();
+			} elseif($this->domainType == 2) {
+				return $this->alias;
+			}
+		}
+		return BcUtil::getMainDomain();
+	}
+
+/**
+ * フルURLを取得する
+ *
+ * @param string $url
+ * @return string full URL
+ */
+	public function getFullUrl($url) {
+		// TODO サブサイトの場合に正常なプロトコルを取得できるようにする 2017/04/26 ryuring
+		// サブサイトの場合、プロトコルを判定できないので、暫定措置として、site url より取得
+		// サブサイトの場合判定
+		// 将来的には、サブサイトに設定できるようにしておく
+		$urlinfo = parse_url(Configure::read('BcEnv.siteUrl'));
+		return $urlinfo['scheme'] . '://' . $this->getHost() . $this->getPureUrl($url);
 	}
 
 }

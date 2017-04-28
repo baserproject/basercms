@@ -360,13 +360,13 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function getSubDomain($host = null) {
-		if(isConsole() && empty($_SERVER['HTTP_HOST']) && !$host) {
+		$currentDomain = BcUtil::getCurrentDomain();
+		if(!$currentDomain && !$host) {
 			return '';
 		}
 		if(!$host) {
-			$host = $_SERVER['HTTP_HOST'];
+			$host = $currentDomain;
 		}
-
 		if(strpos($host, '.') === false) {
 			return '';
 		}
@@ -382,7 +382,6 @@ class BcUtil extends Object {
 			return preg_replace('/\.$/', '', $subDomain);
 		}
 		return '';
-
 	}
 
 /**
@@ -420,12 +419,14 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function getCurrentDomain() {
-		if(isConsole() && empty($_SERVER['HTTP_HOST'])) {
-			return '';
-		}
-		return $_SERVER['HTTP_HOST'];
+		return Configure::read('BcEnv.host');
 	}
 
+/**
+ * 管理画面用のプレフィックスを取得する
+ * 
+ * @return string
+ */
 	public static function getAdminPrefix() {
 		return Configure::read('BcAuthPrefix.admin.alias');
 	}
