@@ -459,23 +459,4 @@ class BcSite {
 		return BcUtil::getMainDomain();
 	}
 
-/**
- * フルURLを取得する
- *
- * @param string $url
- * @return string full URL
- */
-	public static function getFullUrl($url) {
-		$site = BcSite::findByUrl($url);
-		if($site) {
-			// TODO サブサイトの場合に正常なプロトコルを取得できるようにする 2017/04/26 ryuring
-			// サブサイトの場合、プロトコルを判定できないので、暫定措置として、site url より取得
-			// 将来的には、サブサイトに設定できるようにしておく
-			$urlinfo = parse_url(Configure::read('BcEnv.siteUrl'));
-			return $urlinfo['scheme'] . '://' . $site->getHost() . $site->getPureUrl($url);
-		} else {
-			return fullUrl($url);
-		}
-	}
-
 }

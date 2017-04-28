@@ -1180,7 +1180,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function publishLink() {
 		if ($this->existsPublishLink()) {
-			$url = BcSite::getFullUrl($this->_View->viewVars['publishLink']);
+			$site = BcSite::findByUrl($this->_View->viewVars['publishLink']);
+			$useSubdomain = $fullUrl = false;
+			if($site) {
+				$useSubdomain = $site->useSubDomain;
+				$fullUrl = true;
+			}
+			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain);
 			$this->link('公開ページ', $url, array('class' => 'tool-menu'));
 		}
 	}
@@ -1743,10 +1749,11 @@ EOD;
 						'key' => $id]]
 			);
 		}
-		$data = $options['data'];
-		unset($options['tree']);
-		unset($options['currentId']);
-		unset($options['data']);
+		$data = array_merge([
+			'tree' => $options['tree'],
+			'currentId' => $options['currentId']
+		], $options['data']);
+		unset($options['tree'], $options['currentId'], $options['data']);
 		return $this->getElement('global_menu', $data, $options);
 	}
 /**
