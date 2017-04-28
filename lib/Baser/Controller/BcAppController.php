@@ -803,7 +803,7 @@ class BcAppController extends Controller {
  * @param array $options オプション
  * @return bool 送信結果
  */
-	protected function sendMail($to, $title = '', $body = '', $options = array()) {
+		public function sendMail($to, $title = '', $body = '', $options = array()) {
 		$options = array_merge(array(
 			'agentTemplate' => true,
 			'template' => 'default'
