@@ -1182,7 +1182,7 @@ class BcBaserHelper extends AppHelper {
 		if ($this->existsPublishLink()) {
 			$site = BcSite::findByUrl($this->_View->viewVars['publishLink']);
 			$useSubdomain = $fullUrl = false;
-			if($site->name) {
+			if($site && $site->name) {
 				$useSubdomain = $site->useSubDomain;
 				$fullUrl = true;
 			}
