@@ -106,6 +106,7 @@ $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site'
 	<td style="width:8%;text-align:center">
 		<?php echo $this->BcText->arrayValue($data['Content']['author_id'], $authors); ?>
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:8%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Content']['created_date']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Content']['modified_date']) ?>
