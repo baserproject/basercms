@@ -25,7 +25,10 @@ class BlogPostsSchema extends CakeSchema {
 			switch ($event['create']) {
 				case 'blogposts':
 					$tableName = $db->config['prefix'] . 'blog_posts';
-					$db->query("ALTER TABLE {$tableName} CHANGE detail detail MEDIUMTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE content content LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE content_draft content_draft LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE detail detail LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE detail_draft detail_draft LONGTEXT");
 					break;
 			}
 		}
