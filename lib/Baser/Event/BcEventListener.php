@@ -100,7 +100,7 @@ class BcEventListener extends Object implements CakeEventListener {
 	public function isAction($action,  $isContainController = true, $currentRequest = false) {
 		$request = Router::getRequest($currentRequest);
 		$currentAction = Inflector::camelize($request->params['action']);
-		if($containController) {
+		if($isContainController) {
 			$currentAction = Inflector::camelize($request->params['controller']) . '.' . $currentAction;
 		}
 		return ($currentAction == $action);
