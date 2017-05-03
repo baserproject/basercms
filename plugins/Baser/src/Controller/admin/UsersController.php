@@ -1,5 +1,5 @@
 <?php
-namespace Baser\Controller;
+namespace Baser\Controller\Admin;
 
 use Baser\Controller\AppController;
 
