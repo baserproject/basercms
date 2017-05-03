@@ -1,7 +1,7 @@
 {
-    "name": "cakephp/app",
-    "description": "CakePHP skeleton app",
-    "homepage": "http://cakephp.org",
+    "name": "ryuring/basercake3",
+    "description": "Project to migrate baserCMS to CakePHP3",
+    "homepage": "http://ryuring.com",
     "type": "project",
     "license": "MIT",
     "require": {
