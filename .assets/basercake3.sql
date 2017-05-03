@@ -11,7 +11,7 @@
  Target Server Version : 50542
  File Encoding         : utf-8
 
- Date: 05/03/2017 19:29:11 PM
+ Date: 05/03/2017 20:00:35 PM
 */
 
 SET NAMES utf8;
@@ -154,7 +154,7 @@ CREATE TABLE `users` (
 --  Records of `users`
 -- ----------------------------
 BEGIN;
-INSERT INTO `users` VALUES ('1', 'basercake3', '$2y$10$L1iqgdCeizllEtWthMx1gekG9NkeLCEJCmyXcRHuDrlcW4VLlwBd.', 'ryuring', '', 'ryuring55@gmail.com', '1', '', '2017-05-03 14:22:08', '2017-05-03 10:05:27');
+INSERT INTO `users` VALUES ('1', 'basercake3', '$2y$10$QJANUS5uCoqk0msOXu0MjeE8DindYSrv6zWkDdMSXvKU0dZd35BOu', 'basercake3', '', 'basercake3@example.com', '1', '', '2017-05-03 14:22:08', '2017-05-03 10:59:12');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
