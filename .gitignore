@@ -2,4 +2,5 @@
 /config/app.php
 /tmp/*
 /logs/*
+composer.lock
 .idea
