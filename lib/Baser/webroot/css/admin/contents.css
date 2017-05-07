@@ -1482,6 +1482,9 @@ background: #888;
 /*    Contents
 /* ==================================================================== */
 
+#AdminContents #ViewSetting button {
+    vertical-align: top;
+}
 #ContentsTreeList li {
     margin: 0;
     padding: 0;
