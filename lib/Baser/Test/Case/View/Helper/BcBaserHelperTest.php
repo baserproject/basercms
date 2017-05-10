@@ -1571,9 +1571,29 @@ class BcBaserHelperTest extends BaserTestCase {
  * ページをエレメントとして読み込む
  *
  * @return void
+ * @dataProvider PageProvider
  */
-	public function testPage() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testPage($input, $pageRecursive, $recursive, $expected) {
+		$this->expectOutputRegex($expected);
+		$this->_View->set('pageRecursive', $pageRecursive);
+		$options = [
+			'recursive' => $recursive
+		];
+		$this->BcBaser->page($input, [], $options);
+		//$result = ob_get_clean();
+
+	}
+
+	public function PageProvider() {
+		return array(
+			array('/service', false, false, '/^$/'),
+			array('/service', true, false, '/<!-- BaserPageTagBegin -->.*/'),
+			array('/service', true, true, '/<!-- BaserPageTagBegin -->.*/'),
+			array('/about', true, true, '/<!-- BaserPageTagBegin -->.*/'),
+			array('/company', true, true, '/^$/'),
+			array('/hoge', true, true, '/^$/'),
+			array('/icons', true, true, '/<!-- BaserPageTagBegin -->.*/')
+		);
 	}
 
 /**
