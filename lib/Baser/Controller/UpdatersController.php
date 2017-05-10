@@ -432,8 +432,6 @@ class UpdatersController extends AppController {
 			asort($updaters);
 			foreach ($updaters as $version => $updateVerPoint) {
 				$this->setUpdateLog('アップデートプログラム ' . $version . ' を実行します。');
-				ClassRegistry::flush();
-				BcSite::flash();
 				$this->_execScript($plugin, $version);
 			}
 		}
@@ -478,6 +476,8 @@ class UpdatersController extends AppController {
  * @return void
  */
 	public function _execScript($__plugin, $__version) {
+		ClassRegistry::flush();
+		BcSite::flash();
 		$__path = $this->_getUpdateFolder($__plugin) . $__version . DS . 'updater.php';
 
 		if (!file_exists($__path)) {

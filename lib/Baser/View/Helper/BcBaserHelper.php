@@ -1180,11 +1180,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function publishLink() {
 		if ($this->existsPublishLink()) {
-			if(isset($this->_View->BcContents) && isset($this->request->data['Site']['use_subdomain'])) {
-				$url = $this->_View->BcContents->getUrl($this->_View->viewVars['publishLink'], true, $this->request->data['Site']['use_subdomain']);
-			} else {
-				$url = $this->_View->viewVars['publishLink'];
+			$site = BcSite::findByUrl($this->_View->viewVars['publishLink']);
+			$useSubdomain = $fullUrl = false;
+			if($site && $site->name) {
+				$useSubdomain = $site->useSubDomain;
+				$fullUrl = true;
 			}
+			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain);
 			$this->link('公開ページ', $url, array('class' => 'tool-menu'));
 		}
 	}
@@ -1737,7 +1739,8 @@ EOD;
 		}
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
-			'currentId' => $currentId
+			'currentId' => $currentId,
+			'data' => []
 		], $options);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$options = array_merge($options, [
@@ -1746,9 +1749,13 @@ EOD;
 						'key' => $id]]
 			);
 		}
-		return $this->getElement('global_menu', $options);
+		$data = array_merge([
+			'tree' => $options['tree'],
+			'currentId' => $options['currentId']
+		], $options['data']);
+		unset($options['tree'], $options['currentId'], $options['data']);
+		return $this->getElement('global_menu', $data, $options);
 	}
-
 /**
  * サイトマップを出力する
  *
