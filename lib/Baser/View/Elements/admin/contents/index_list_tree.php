@@ -37,7 +37,7 @@
 			$alias = true;
 		}
 		$status = $this->BcContents->isAllowPublish($data, true);
-		if(in_array($data['Content']['parent_id'], array(0,1))) {
+		if($data['Content']['site_root']) {
 			$open = true;
 		}
 		$editDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'edit', $data['Content']['entity_id']);

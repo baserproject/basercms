@@ -176,7 +176,9 @@ class MailContentsController extends MailAppController {
 		}
 
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
-		$this->set('publishLink', $this->request->params['Content']['url']);
+		if($this->request->data['Content']['status']) {
+			$this->set('publishLink', $this->request->data['Content']['url']);
+		}
 		$this->set('mailContent', $this->request->data);
 		$this->subMenuElements = ['mail_fields'];
 		$this->pageTitle = 'メールフォーム設定編集：' . $this->request->data['Content']['title'];

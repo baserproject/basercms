@@ -241,23 +241,32 @@ class UsersController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		/* データ取得 */
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('User', array('default' => $default));
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('User', ['default' => $default]);
 		$conditions = $this->_createAdminIndexConditions($this->request->data);
-		$this->paginate = array(
+		$options = [
 			'conditions' => $conditions,
-			'fields' => array(),
+			'fields' => [],
 			'order' => 'User.user_group_id,User.id',
 			'limit' => $this->passedArgs['num']
-		);
+		];
+
+		// EVENT Users.searchIndex
+		$event = $this->getEventManager()->dispatch(new CakeEvent('Controller.Users.searchIndex', $this, [
+			'options' => $options
+		]));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$this->paginate = $options;
 		$dbDatas = $this->paginate();
 
 		if ($dbDatas) {
 			$this->set('users', $dbDatas);
 		}
 
-		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
+		if ($this->request->is('ajax') || !empty($this->request->query['ajax'])) {
 			$this->render('ajax_index');
 			return;
 		}
@@ -275,15 +284,14 @@ class UsersController extends AppController {
  * @return array $conditions
  */
 	protected function _createAdminIndexConditions($data) {
-		unset($data['_Token']);
-		if (isset($data['User']['user_group_id']) && $data['User']['user_group_id'] === '') {
-			unset($data['User']['user_group_id']);
+		$conditions = [];
+		if (isset($data['User']['user_group_id']) && $data['User']['user_group_id'] !== '') {
+			$conditions['User.user_group_id'] = $data['User']['user_group_id'];
 		}
-		$conditions = $this->postConditions($data);
 		if ($conditions) {
 			return $conditions;
 		} else {
-			return array();
+			return [];
 		}
 	}
 

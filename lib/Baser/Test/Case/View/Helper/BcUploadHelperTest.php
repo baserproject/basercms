@@ -106,7 +106,7 @@ class BcUploadHelperTest extends BaserTestCase {
 			'tmp' => true
 		);
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
-		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt=""/>';
+		$expects = '<img src="/uploads/tmp/medium/template1_jpg" alt=""/>';
 		$this->assertEquals($expects, $result);
 
 		// output を tag で、linkをtrue (無視される)

@@ -25,7 +25,8 @@ class PagesSchema extends CakeSchema {
 			switch ($event['create']) {
 				case 'pages':
 					$tableName = $db->config['prefix'] . 'pages';
-					$db->query("ALTER TABLE {$tableName} CHANGE contents contents MEDIUMTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE contents contents LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE draft draft LONGTEXT");
 					break;
 			}
 		}
