@@ -193,7 +193,7 @@ if($this->BcContents->isEditable()) {
 					<?php echo $this->BcForm->error('Content.self_publish_begin') ?>
 					<?php echo $this->BcForm->error('Content.self_publish_end') ?>
 					<?php if($this->BcForm->value('Content.status') != $this->BcForm->value('Content.self_status')): ?>
-						<p>※ 親フォルダの設定を継承し非公開状態となっています</p>
+						<p class="parents-disable">※ 親フォルダの設定を継承し非公開状態となっています</p>
 					<?php endif ?>
 					<?php if(($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) || 
 							($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
