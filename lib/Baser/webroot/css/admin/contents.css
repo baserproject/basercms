@@ -1644,6 +1644,11 @@ div.jstree-publish-even{
 	padding-left:5px;
 	padding-right:5px;
 }
+#BasicSetting .parents-disable {
+	font-weight:bold;
+	font-size:14px;
+	color: #F00;
+}
 #SectionLangAccessType label, #SectionDeviceAccessType label {
     white-space: nowrap;
 }
