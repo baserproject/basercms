@@ -39,19 +39,19 @@ class BcFormHelper extends FormHelper {
 // >>>
 /**
  * sizeCounter用の関数読み込み可否
- * 
+ *
  * @var boolean
  */
 	public $sizeCounterFunctionLoaded = false;
 
 /**
  * フォームID
- * 
+ *
  * @var string
  */
 	private $__id = null;
 // <<<
-	
+
 /**
  * Returns a set of SELECT elements for a full datetime setup: day, month and year, and then time.
  *
@@ -199,7 +199,7 @@ class BcFormHelper extends FormHelper {
 				// <<<
 				case 'Y':
 					$attrs['Year']['value'] = $year;
-					
+
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->year(
 						$fieldName, $minYear, $maxYear, $attrs['Year']
@@ -215,18 +215,18 @@ class BcFormHelper extends FormHelper {
 				case 'M':
 					$attrs['Month']['value'] = $month;
 					$attrs['Month']['monthNames'] = $monthNames;
-					
+
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->month($fieldName, $attrs['Month']); */
 					// ---
 					$suffix = (preg_match('/^W/', $dateFormat)) ? '月' : '';
 					$selects[] = $this->month($fieldName, $attrs['Month']) . $suffix;
 					// <<<
-					
+
 					break;
 				case 'D':
 					$attrs['Day']['value'] = $day;
-					
+
 					// >>> CUSTOMIZE MODIFY 2011/01/11 ryuring	日本対応
 					/* $selects[] = $this->day($fieldName, $attrs['Day']); */
 					// ---
@@ -452,7 +452,7 @@ class BcFormHelper extends FormHelper {
 			$output = $this->hidden($fieldName, $hiddenOptions);
 		}
 		unset($options['hiddenField']);
-		
+
 		// CUSTOMIZE MODIFY 2011/05/07 ryuring
 		// label を追加
 		// CUSTOMIZE MODIRY 2014/10/27 ryuring
@@ -656,7 +656,7 @@ class BcFormHelper extends FormHelper {
 		$select[] = $this->Html->useTag($template);
 		return implode("\n", $select);
 	}
-	
+
 /**
  * Returns an array of formatted OPTION/OPTGROUP elements
  *
@@ -679,7 +679,7 @@ class BcFormHelper extends FormHelper {
 		if ($attributes['value'] === false) {
 			$attributes['value'] = 0;
 		}
-		
+
 		$this->_domIdSuffixes = array();
 		foreach ($elements as $name => $title) {
 			$htmlOptions = array();
@@ -762,7 +762,7 @@ class BcFormHelper extends FormHelper {
 						} elseif ($attributes['class'] === 'form-error') {
 							$attributes['class'] = 'checkbox ' . $attributes['class'];
 						}
-						
+
 						// CUSTOMIZE MODIFY 2014/02/24 ryuring
 						// checkboxのdivを外せるオプションを追加
 						// CUSTOMIZE MODIFY 2014/10/27 ryuring
@@ -781,7 +781,7 @@ class BcFormHelper extends FormHelper {
 							$select[] = $this->Html->div($attributes['class'], $item);
 						}
 						// <<<
-						
+
 					} else {
 						if ($attributes['escape']) {
 							$name = h($name);
@@ -875,7 +875,7 @@ class BcFormHelper extends FormHelper {
 /**
  * create
  * フック用にラッピング
- * 
+ *
  * @param array $model
  * @param array $options
  * @return string
@@ -887,7 +887,7 @@ class BcFormHelper extends FormHelper {
 		// >>>
 		$options = array_merge(array(
 			'novalidate' => true
-			), $options);
+		), $options);
 
 		$this->__id = $this->_getId($model, $options);
 
@@ -900,7 +900,7 @@ class BcFormHelper extends FormHelper {
 			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 		// <<<
-		
+
 		$out = parent::create($model, $options);
 
 		// CUSTOMIZE ADD 2014/07/03 ryuring
@@ -916,7 +916,7 @@ class BcFormHelper extends FormHelper {
 
 		return $out;
 		// <<<
-		
+
 	}
 
 /**
@@ -943,7 +943,7 @@ class BcFormHelper extends FormHelper {
 			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 		}
 		// <<<
-		
+
 		$out = parent::end($options);
 
 		// CUSTOMIZE ADD 2014/07/03 ryuring
@@ -1020,7 +1020,7 @@ class BcFormHelper extends FormHelper {
 				break;
 		}
 		// <<<
-		
+
 		$this->setEntity($fieldName);
 		$options = $this->_parseOptions($options);
 
@@ -1086,7 +1086,7 @@ class BcFormHelper extends FormHelper {
 			$options['between'] = $out['between'];
 			$out['between'] = null;
 		}
-		
+
 		$out['input'] = $this->_getInput(compact('type', 'fieldName', 'options', 'radioOptions', 'selected', 'dateFormat', 'timeFormat'));
 
 		$output = '';
@@ -1104,7 +1104,7 @@ class BcFormHelper extends FormHelper {
 		// >>>
 		// return $output;
 		// ---
-		
+
 		/* カウンター */
 		if (!empty($options['counter'])) {
 			$domId = $this->domId($fieldName, $options);
@@ -1144,7 +1144,7 @@ DOC_END;
 /**
  * フォームのIDを取得する
  * BcForm::create より呼出される事が前提
- * 
+ *
  * @param string $model
  * @param array $options
  * @return string
@@ -1169,7 +1169,7 @@ DOC_END;
 
 		return $id;
 	}
-	
+
 /**
  * CKEditorを出力する
  *
@@ -1185,10 +1185,10 @@ DOC_END;
 		$options = array_merge(array('type' => 'textarea'), $options);
 		return $this->BcCkeditor->editor($fieldName, $options);
 	}
-	
+
 /**
  * エディタを表示する
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -1230,7 +1230,7 @@ DOC_END;
 		$attributes['empty'] = false;
 		return $this->select($fieldName, $options, $attributes);
 	}
-	
+
 /**
  * 和暦年
  *
@@ -1292,7 +1292,7 @@ DOC_END;
 		return $this->hidden($fieldName . ".wareki", array('value' => true)) .
 			$this->select($fieldName . ".year", $this->_generateOptions('wyear', $yearOptions), $attributes);
 	}
-	
+
 /**
  * コントロールソースを取得する
  * Model側でメソッドを用意しておく必要がある
@@ -1324,7 +1324,7 @@ DOC_END;
 			return false;
 		}
 	}
-	
+
 /**
  * モデルよりリストを生成する
  *
@@ -1354,7 +1354,7 @@ DOC_END;
 			return null;
 		}
 	}
-	
+
 /**
  * JsonList
  *
@@ -1435,7 +1435,7 @@ DOC_END;
 
 /**
  * 日付カレンダーと時間フィールド
- * 
+ *
  * @param string $fieldName
  * @param array $attributes
  * @return string
@@ -1484,13 +1484,13 @@ DOC_END;
 		$script = $this->_View->append('script', $_script);
 		return $dateTag . $timeTag . $hiddenTag;
 	}
-	
+
 /**
  * 文字列保存用複数選択コントロール
- * 
+ *
  * @param string $fieldName id,nameなどの名前
  * @param array $options optionタグの値
- * @param mixed $selected selectedを付与する要素	
+ * @param mixed $selected selectedを付与する要素
  * @param array $attributes htmlの属性
  * @param mixed $showEmpty 空要素の表示/非表示、初期値
  * @return string
@@ -1538,13 +1538,13 @@ DOC_END;
 		$out .= $this->Js->buffer($script);
 		return $out;
 	}
-	
+
 /**
  * ファイルインプットボックス出力
- * 
+ *
  * 画像の場合は画像タグ、その他の場合はファイルへのリンク
  * そして削除用のチェックボックスを表示する
- * 
+ *
  * 《オプション》
  * imgsize	画像のサイズを指定する
  * rel		A タグの rel 属性を指定
@@ -1552,7 +1552,7 @@ DOC_END;
  * link		大きいサイズへの画像へのリンク有無
  * delCheck	削除用チェックボックスの利用可否
  * force	ファイルの存在有無に関わらず強制的に画像タグを表示するかどうか
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @return string
@@ -1627,7 +1627,7 @@ DOC_END;
 				$hiddenTag = $this->hidden($fieldName . '_', array('value' => $fileValue));
 			}
 		}
-		
+
 		$out = $fileTag;
 
 		if ($fileLinkTag) {
@@ -1636,24 +1636,24 @@ DOC_END;
 
 		return '<div class="upload-file">' . $out . '</div>';
 	}
-	
+
 /**
  * フォームの最後のフィールドの後に発動する前提としてイベントを発動する
- * 
+ *
  * ### 発動側
  * フォームの</table>の直前に記述して利用する
- * 
+ *
  * ### コールバック処理
- * プラグインのコールバック処理で CakeEvent::data['fields'] に 
+ * プラグインのコールバック処理で CakeEvent::data['fields'] に
  * 配列で行データを追加する事でフォームの最後に行を追加する事ができる。
- * 
+ *
  * ### イベント名
  * コントローラー名.Form.afterForm Or コントローラー名.Form.afterOptionForm
  *
  * ### 行データのキー（配列）
  * - title：見出欄
  * - input：入力欄
- * 
+ *
  * ### 行データの追加例
  * $View = $event->subject();	// $event は、CakeEvent
  * $input = $View->BcForm->input('Page.add_field', array('type' => 'input'));
@@ -1661,7 +1661,7 @@ DOC_END;
  *		'title'	=> '追加フィールド',
  *		'input'	=> $input
  * );
- * 
+ *
  * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
  * @return string 行データ
  */
@@ -1669,7 +1669,7 @@ DOC_END;
 		if($type) {
 			$type = Inflector::camelize($type);
 		}
-		
+
 		$event = $this->dispatchEvent('after' . $type . 'Form', array('fields' => array(), 'id' => $this->__id), array('class' => 'Form', 'plugin' => ''));
 		$out = '';
 		if ($event !== false) {
@@ -1761,4 +1761,4 @@ DOC_END;
 
 	  } */
 
-}
+/**/}
