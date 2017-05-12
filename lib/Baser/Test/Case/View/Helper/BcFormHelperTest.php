@@ -176,7 +176,8 @@ class BcFormHelperTest extends BaserTestCase {
  * @return string
  */
 	public function testCreate() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcForm->create();
+		$this->assertRegExp('/<form action="\/contacts\/add" novalidate="novalidate" id="addForm" method="post" accept-charset="utf-8"><div style="display:none;">.*/',$result);
 	}
 
 
