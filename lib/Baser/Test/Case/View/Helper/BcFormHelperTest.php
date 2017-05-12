@@ -188,9 +188,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @param	array	$options
  * @return	string
  * @access	public
+ * @dataProvider endProvider
  */
-	public function testEnd() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testEnd($array1, $array2, $expected) {
+		$result = $this->BcForm->end($array1, $array2);
+		$this->assertEquals($expected,$result);
+	}
+
+	public function endProvider() {
+		return array(
+			array(null, null, '</form>'),
+			array(array(1,2), null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'),
+			array(null, array(1,2), '</form>'),
+			array(array(1,2), array(1,2), '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>')
+		);
 	}
 
 
