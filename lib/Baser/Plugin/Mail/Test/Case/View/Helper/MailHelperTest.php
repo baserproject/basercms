@@ -141,18 +141,19 @@ class MailHelperTest extends BaserTestCase {
     public function testLink($title,$contentsName,$expected) {
         $this->expectOutputString($expected);
         $this->Mail->link($title, $contentsName, $datas = array(), $options = array());
-        print_r($title);
-		print_r($expected);
-
 	}
 
     public function linkProvider() {
         return[
-          ['タイトル','Members','<a href="/Members">タイトル</a>'],
-          [' ','a','2'],
-		  ['a',' ','3'],
-		  [' ',' ','4']
-
+        	['タイトル','Members','<a href="/Members">タイトル</a>'],
+			[' ','a','<a href="/a"> </a>'],
+			[' ',' ','<a href="/ "> </a>'],
+			[' ','///','<a href="/"> </a>'],
+			[' ','////a','<a href="/a"> </a>'],
+			[' ','////a//a/aa','<a href="/a/a/aa"> </a>'],
+			[' ','/../../../../a','<a href="/../../../../a"> </a>'],
+			['','javascript:void(0);','<a href="/javascript:void(0);"></a>'],
+			['<script>alert(1)</script>','////a','<a href="/a"><script>alert(1)</script></a>']
 		];
     }
 
