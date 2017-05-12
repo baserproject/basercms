@@ -1580,19 +1580,30 @@ class BcBaserHelperTest extends BaserTestCase {
 			'recursive' => $recursive
 		];
 		$this->BcBaser->page($input, [], $options);
-		//$result = ob_get_clean();
-
 	}
 
 	public function PageProvider() {
 		return array(
-			array('/service', false, false, '/^$/'),
-			array('/service', true, false, '/<!-- BaserPageTagBegin -->.*/'),
-			array('/service', true, true, '/<!-- BaserPageTagBegin -->.*/'),
-			array('/about', true, true, '/<!-- BaserPageTagBegin -->.*/'),
+			array('aaa', false, false, '/^$/'),
+			array('aaa', false, true, '/^$/'),
+			array('', false, false, '/^$/'),
+			array('/about', false, false, '/^$/'),
+			array('/about', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<div class="articleArea" id="company">.*/'),
+			array('/about', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<div class="articleArea" id="company">.*/'),
+			array('/company', false, false, '/^$/'),
+			array('/company', true, false, '/^$/'),
 			array('/company', true, true, '/^$/'),
+			array('/hoge', false, false, '/^$/'),
+			array('/hoge', true, false, '/^$/'),
 			array('/hoge', true, true, '/^$/'),
-			array('/icons', true, true, '/<!-- BaserPageTagBegin -->.*/')
+			array('/icons', false, false, '/^$/'),
+			array('/icons', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<div class="articleArea" id="recruit">.*/'),
+			array('/icons', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<div class="articleArea" id="recruit">.*/'),
+			array('/index', false, false, '/^$/'),
+			array('/service', false, false, '/^$/'),
+			array('/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<div class="articleArea bgGray" id="service">.*/'),
+			array('/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<div class="articleArea bgGray" id="service">.*/'),
+			array('/sitemap', false, false, '/^$/')
 		);
 	}
 
