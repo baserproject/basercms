@@ -355,10 +355,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @param mixed $fields
  * @param mixed $order
  * @return mixed リストまたは、false
+ * @dataProvider generateListProvider
 */
-	public function testGenerateList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGenerateList($modelName, $expected) {
+		$result = $this->BcForm->generateList($modelName);
+		$this->assertEquals($result, $expected);
 	}
+
+	public function generateListProvider() {
+		return array(
+			array('hoge', ''),
+			array('Page', '')
+		);
+	}
+
 
 /**
  * JsonList
