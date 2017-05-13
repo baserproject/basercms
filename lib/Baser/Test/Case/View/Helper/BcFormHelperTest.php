@@ -188,9 +188,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @param	array	$options
  * @return	string
  * @access	public
+ * @dataProvider endProvider
  */
-	public function testEnd() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testEnd($array1, $array2, $expected) {
+		$result = $this->BcForm->end($array1, $array2);
+		$this->assertEquals($expected,$result);
+	}
+
+	public function endProvider() {
+		return array(
+			array(null, null, '</form>'),
+			array(array(1,2), null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'),
+			array(null, array(1,2), '</form>'),
+			array(array(1,2), array(1,2), '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>')
+		);
 	}
 
 
@@ -459,9 +470,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 /**
  * ファイルインプットボックス出力
- * 
- * MEMO: $optionsの link, delCheck, force のテストが未実装
- * 
+ *
  * @param string $fieldName
  * @param array $options
  * @param string $expected 期待値
@@ -476,7 +485,16 @@ class BcFormHelperTest extends BaserTestCase {
 	public function fileDataProvider() {
 		return array(
 			array('hoge', array(), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'), 
-			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'), 
+			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('link' => 'page'), 'link="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('delCheck' => 'page'), 'delCheck="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('force' => 'page'), 'force="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('rel' => 'page'), 'rel="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('title' => 'page'), 'title="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('width' => 'page'), 'width="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('height' => 'page'), 'height="page"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('value' => 'page'), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'),
+			array('hoge', array('hoge' => 'page'), 'hoge="page"', 'ファイルインプットボックス出力できません')
 		);
 	}
 
