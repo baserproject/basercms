@@ -1336,14 +1336,14 @@ DOC_END;
  */
 	public function generateList($modelName, $conditions = array(), $fields = array(), $order = array()) {
 
-		$model = ClassRegistry::getObject($modelName);
-
+		$model = ClassRegistry::init($modelName);
+		if(!$model) {
+			return 'aaa';
+		}
 		if ($fields) {
 			list($idField, $displayField) = $fields;
 		} else {
-			$idField = 'id';
-			$displayField = $model->getDisplayField();
-			$fields = array($idField, $displayField);
+			return false;
 		}
 
 		$list = $model->find('all', array('conditions' => $conditions, 'fields' => $fields, 'order' => $order));

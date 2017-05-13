@@ -343,7 +343,8 @@ class BcFormHelperTest extends BaserTestCase {
  * @return array コントロールソース
  */
 	public function testGetControlSource() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcForm->getControlSource('hoge');
+		self::assertEquals(array(), $result);
 	}
 
 /**
@@ -354,10 +355,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @param mixed $fields
  * @param mixed $order
  * @return mixed リストまたは、false
- */
-	public function testGenerateList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+ * @dataProvider generateListProvider
+*/
+	public function testGenerateList($modelName, $expected) {
+		$result = $this->BcForm->generateList($modelName);
+		$this->assertEquals($result, $expected);
 	}
+
+	public function generateListProvider() {
+		return array(
+			array('hoge', ''),
+			array('Page', '')
+		);
+	}
+
 
 /**
  * JsonList
