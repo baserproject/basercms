@@ -43,6 +43,7 @@ class BlogBaserHelperTest extends BaserTestCase {
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
+		'baser.Default.UserGroup',
 		'baser.Default.Plugin',
 		'baser.Default.BlogComment',
 		'baser.Default.BlogContent',
