@@ -108,13 +108,22 @@ class ContentsController extends AppController {
 							break;
 						case 2:
 							$conditions = $this->_createAdminIndexConditionsByTable($currentSiteId, $this->request->data);
-							$sort = 'Content.' . $this->passedArgs['sort'] . ' ' . $this->passedArgs['direction'];
-							$this->paginate = [
-								'order' => $sort, 
+							$options = [
+								'order' => 'Content.' . $this->passedArgs['sort'] . ' ' . $this->passedArgs['direction'],
 								'conditions' => $conditions,
 								'limit' => $this->passedArgs['num'],
 								'recursive' => 0
 							];
+
+							// EVENT Contents.searchIndex
+							$event = $this->getEventManager()->dispatch(new CakeEvent('Controller.Contents.searchIndex', $this, [
+								'options' => $options
+							]));
+							if ($event !== false) {
+								$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+							}
+
+							$this->paginate = $options;
 							$datas = $this->paginate('Content');
 							$this->set('authors', $this->User->getUserList());
 							$template = 'ajax_index_table';
