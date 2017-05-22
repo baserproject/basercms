@@ -13,6 +13,7 @@
 /**
  * コンテンツ一覧 テーブル
  */
+$this->BcListTable->setColumnNumber(7);
 ?>
 
 
@@ -57,7 +58,7 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="7"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
 	</tbody>
