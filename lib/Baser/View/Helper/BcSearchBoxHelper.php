@@ -30,12 +30,14 @@ class BcSearchBoxHelper extends AppHelper {
 		if ($event !== false) {
 			if(!empty($event->data['fields'])) {
 				foreach($event->data['fields'] as $field) {
+					$output .= "<span>";
 					if(!empty($field['title'])) {
-						$output .= "<span>" . $field['title'] . "</span>\n";
+						$output .= $field['title'] . "&nbsp;";
 					}
 					if(!empty($field['input'])) {
-						$output .= "<span>" . $field['input'] . "</span>　\n";
+						$output .= $field['input'] . "&nbsp;";
 					}
+					$output .= "</span>　\n";
 				}
 			}
 		}
