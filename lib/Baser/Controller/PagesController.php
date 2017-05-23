@@ -355,7 +355,7 @@ class PagesController extends AppController {
 		} else {
 			$contents = $data['Page']['draft'];
 		}
-		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
+		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], @$data['Page']['code']);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
 		$file = new File($path);
