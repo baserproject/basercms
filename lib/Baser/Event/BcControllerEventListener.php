@@ -50,5 +50,22 @@ class BcControllerEventListener extends BcEventListener {
 		$controller->passedArgs['site_id'] = $siteId;
 		return true;
 	}
+
+/**
+ * コントローラーにヘルパーを追加する
+ *
+ * @param Controller $controller
+ * @param string $helper
+ */
+	public function addHelper(Controller $controller, $helper) {
+		if(!is_array($helper)) {
+			$helper = [$helper];
+		}
+		foreach($helper as $value) {
+			if(!in_array($value, $controller->helpers)) {
+				$controller->helpers[] = $value;
+			}
+		}
+	}
 	
 }
