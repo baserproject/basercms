@@ -116,3 +116,15 @@
 	-o-transition:background-position .1s linear;
 	transition:background-position .1s linear;
 }
+
+
+// .btnとセットで使われる
+.help{
+	cursor: pointer;
+	vertical-align:middle;
+}
+
+// HTML上存在するが、スタイルはない
+.btn {
+
+}
