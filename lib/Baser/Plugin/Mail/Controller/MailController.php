@@ -169,9 +169,11 @@ class MailController extends MailAppController {
 		}
 		
 		// キャッシュ対策
-		header("Cache-Control: no-cache, no-store, must-revalidate");
-		header("Pragma: no-cache");
-		header("Expires: ". date(DATE_RFC1123, strtotime("-1 day")));
+		if (!isConsole()) {
+			header("Cache-Control: no-cache, no-store, must-revalidate");
+			header("Pragma: no-cache");
+			header("Expires: ". date(DATE_RFC1123, strtotime("-1 day")));
+		}
 	}
 
 /**
