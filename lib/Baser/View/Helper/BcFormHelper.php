@@ -984,6 +984,7 @@ class BcFormHelper extends FormHelper {
 		/*** beforeInput ***/
 		$event = $this->dispatchEvent('beforeInput', array(
 			'formId' => $this->__id,
+			'data' => $this->request->data,
 			'fieldName' => $fieldName,
 			'options' => $options
 			), array('class' => 'Form', 'plugin' => ''));
@@ -1130,6 +1131,7 @@ DOC_END;
 		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
 			'formId' => $this->__id,
+			'data' => $this->request->data,
 			'fieldName' => $fieldName,
 			'out' => $output
 			), array('class' => 'Form', 'plugin' => ''));
