@@ -1128,6 +1128,7 @@ DOC_END;
 
 		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
+			'formId' => $this->__id,
 			'fieldName' => $fieldName,
 			'out' => $output
 			), array('class' => 'Form', 'plugin' => ''));
