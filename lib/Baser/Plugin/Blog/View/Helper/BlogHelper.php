@@ -200,9 +200,10 @@ class BlogHelper extends AppHelper {
 
 		// EVENT beforeGetPostLink
 		$event = $this->dispatchEvent('beforeGetPostLink', [
+			'post' => $post,
 			'title' => $title,
+			'options' => $options,
 			'url' => $url,
-			'options' => $options
 		], ['class' => 'Blog', 'plugin' => 'Blog']);
 		if ($event !== false) {
 			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
@@ -212,8 +213,10 @@ class BlogHelper extends AppHelper {
 
 		// EVENT afterGetPostLink
 		$event = $this->dispatchEvent('afterGetPostLink', [
+			'post' => $post,
+			'title' => $title,
+			'out' => $out,
 			'url' => $url,
-			'out' => $out
 		], ['class' => 'Blog', 'plugin' => 'Blog']);
 		if ($event !== false) {
 			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
