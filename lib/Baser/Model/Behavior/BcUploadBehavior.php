@@ -123,7 +123,7 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	public function beforeSave(Model $Model, $options = array()) {
 		if($Model->exists()) {
-			$this->deleteExistingFiles($Model);	
+			$this->deleteExistingFiles($Model);
 		}
 		return $this->saveFiles($Model);
 	}
@@ -903,16 +903,22 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	public function deleteExistingFiles(Model $Model) {
 		$dataTmp = $Model->data[$Model->alias];
+		$uploadFields = array_keys($this->settings[$Model->alias]['fields']);
+		$targetFields = [];
+		foreach($uploadFields as $field) {
+			if(!empty($dataTmp[$field]['tmp_name'])) {
+				$targetFields[] = $field;
+			}
+		}
+		if(!$targetFields) {
+			return;
+		}
 		$Model->set($Model->find('first', [
 			'conditions' => [$Model->alias . '.id' => $Model->data[$Model->alias]['id']],
 			'recursive' => -1
 		]));
-		$uploadFields = array_keys($this->settings[$Model->alias]['fields']);
-		$targetFields = array_keys($dataTmp);
 		foreach($targetFields as $field) {
-			if(in_array($field, $uploadFields) && !empty($dataTmp[$field]['tmp_name'])) {
-				$this->delFiles($Model, $field);
-			}
+			$this->delFiles($Model, $field);
 		}
 		$Model->set($dataTmp);
 	}
