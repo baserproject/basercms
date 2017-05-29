@@ -41,6 +41,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 	<?php echo $this->BcForm->hidden('BlogPost.content') ?>
 <?php endif ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <!-- form -->
 <div class="section">
@@ -107,7 +108,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 
 <div class="section" style="text-align: center">
 	<?php
-	echo $this->BcForm->editor('BlogPost.detail', array_merge(array(
+	echo $this->BcForm->input('BlogPost.detail', array_merge(array(
+        'type' => 'editor',
 		'editor' => @$siteConfig['editor'],
 		'editorUseDraft' => true,
 		'editorDraftField' => 'detail_draft',
@@ -176,6 +178,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

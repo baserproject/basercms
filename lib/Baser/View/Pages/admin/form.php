@@ -26,8 +26,11 @@ $this->BcBaser->js('admin/pages/edit', false);
 <?php echo $this->BcForm->input('Page.mode', array('type' => 'hidden')) ?>
 <?php echo $this->BcForm->input('Page.id', array('type' => 'hidden')) ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <div class="section editor-area">
-	<?php echo $this->BcForm->editor('Page.contents', array_merge(array(
+	<?php echo $this->BcForm->input('Page.contents', array_merge(array(
+        'type' => 'editor',
 		'editor' => @$siteConfig['editor'],
 		'editorUseDraft' => true,
 		'editorDraftField' => 'draft',
@@ -72,6 +75,8 @@ $this->BcBaser->js('admin/pages/edit', false);
 	</table>
 </div>
 <?php endif ?>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
