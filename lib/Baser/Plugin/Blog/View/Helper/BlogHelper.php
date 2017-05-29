@@ -592,11 +592,10 @@ class BlogHelper extends AppHelper {
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
 		if ($prevPost) {
-			$no = $prevPost['BlogPost']['no'];
 			if (!$title) {
 				$title = $arrow . $prevPost['BlogPost']['name'];
 			}
-			$this->BcBaser->link($title, $this->request->params['Content']['url'] . 'archives/' .$no, $htmlAttributes);
+			echo $this->getPostLink($prevPost, $title, $htmlAttributes);
 		}
 	}
 
@@ -630,11 +629,10 @@ class BlogHelper extends AppHelper {
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
 		if ($nextPost) {
-			$no = $nextPost['BlogPost']['no'];
 			if (!$title) {
 				$title = $nextPost['BlogPost']['name'] . $arrow;
 			}
-			$this->BcBaser->link($title, $this->request->params['Content']['url'] . 'archives/' . $no, $htmlAttributes);
+			echo $this->getPostLink($nextPost, $title, $htmlAttributes);
 		}
 	}
 	
@@ -1064,9 +1062,8 @@ class BlogHelper extends AppHelper {
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$nextPost = $BlogPost->find('first', array(
 			'conditions' => $conditions,
-			'fields' => array('no', 'name'),
 			'order' => $order,
-			'recursive' => -1,
+			'recursive' => 0,
 			'cache' => false
 		));
 
@@ -1079,9 +1076,8 @@ class BlogHelper extends AppHelper {
 			// 毎秒抽出条件が違うのでキャッシュしない
 			$nextPost = $BlogPost->find('first', array(
 				'conditions' => $conditions,
-				'fields' => array('no', 'name'),
 				'order' => $order,
-				'recursive' => -1,
+				'recursive' => 0,
 				'cache' => false
 			));
 		}
@@ -1106,9 +1102,8 @@ class BlogHelper extends AppHelper {
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$prevPost = $BlogPost->find('first', array(
 			'conditions' => $conditions,
-			'fields' => array('no', 'name'),
 			'order' => $order,
-			'recursive' => -1,
+			'recursive' => 0,
 			'cache' => false
 		));
 		if (empty($prevPost)) {
@@ -1120,9 +1115,8 @@ class BlogHelper extends AppHelper {
 			// 毎秒抽出条件が違うのでキャッシュしない
 			$prevPost = $BlogPost->find('first', array(
 				'conditions' => $conditions,
-				'fields' => array('no', 'name'),
 				'order' => $order,
-				'recursive' => -1,
+				'recursive' => 0,
 				'cache' => false
 			));
 		}
