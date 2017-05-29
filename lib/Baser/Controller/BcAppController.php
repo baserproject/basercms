@@ -51,7 +51,8 @@ class BcAppController extends Controller {
 	// TODO 見直し
 	public $helpers = array(
 		'Session', 'BcHtml', 'Form', 'BcForm', 'BcWidgetArea',
-		'Js' => array('Jquery'), 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin', 'BcListTable', 'BcSearchBox'
+		'Js' => array('Jquery'), 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin', 
+		'BcListTable', 'BcSearchBox', 'BcFormTable', 'BcLayout'
 	);
 
 /**
