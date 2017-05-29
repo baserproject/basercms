@@ -120,6 +120,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision :chef_solo do |chef|
+   	chef.version = "12.16.42"
     chef.cookbooks_path = "./vagrant_cookbooks"
     chef.json = {
       :centos => {
