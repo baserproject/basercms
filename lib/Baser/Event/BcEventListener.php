@@ -103,7 +103,10 @@ class BcEventListener extends Object implements CakeEventListener {
 		if($isContainController) {
 			$currentAction = Inflector::camelize($request->params['controller']) . '.' . $currentAction;
 		}
-		return ($currentAction == $action);
+		if(!is_array($action)) {
+			$action = [$action];
+		}
+		return in_array($currentAction, $action);
 	}
 
 }
