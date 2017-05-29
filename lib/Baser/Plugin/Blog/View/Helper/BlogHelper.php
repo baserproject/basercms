@@ -212,14 +212,14 @@ class BlogHelper extends AppHelper {
 			$url = $event->data['url'];
 		}
 
-		$out = $this->BcBaser->getLink($title, $url, $options);
+		$out = $this->BcBaser->getLink($event->data['title'], $event->data['url'], $options);
 
 		// EVENT afterGetPostLink
 		$event = $this->dispatchEvent('afterGetPostLink', [
-			'post' => $post,
-			'title' => $title,
+			'post' => $event->data['post'],
+			'title' => $event->data['title'],
 			'out' => $out,
-			'url' => $url,
+			'url' => $event->data['url'],
 		], ['class' => 'Blog', 'plugin' => 'Blog']);
 		if ($event !== false) {
 			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
