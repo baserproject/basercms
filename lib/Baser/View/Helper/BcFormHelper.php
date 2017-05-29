@@ -1144,6 +1144,7 @@ DOC_END;
 		// <<<
 	}
 
+	
 // CUSTOMIZE ADD 2014/07/02 ryuring
 /**
  * フォームのIDを取得する
@@ -1172,6 +1173,17 @@ DOC_END;
 		}
 
 		return $id;
+	}
+
+/**
+ * フォームのIDを取得する
+ *
+ * BcFormHelper::create() の後に呼び出される事を前提とする
+ * 
+ * @return string フォームID 
+ */
+	public function getId() {
+		return $this->__id;
 	}
 
 /**
