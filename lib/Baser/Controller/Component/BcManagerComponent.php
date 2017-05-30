@@ -1615,6 +1615,7 @@ class BcManagerComponent extends Component {
 		ClassRegistry::flush();
 		if (file_exists($_path)) {
 			try {
+				set_time_limit(0);
 				include $_path;
 			} catch (Exception $e) {
 				$this->log($e->getMessage());
