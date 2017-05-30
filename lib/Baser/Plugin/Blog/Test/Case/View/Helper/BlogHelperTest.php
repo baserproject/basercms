@@ -389,7 +389,7 @@ class BlogHelperTest extends BaserTestCase {
 		return array(
 			array(1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ ホームページをオープンしました</a>'),
 			array(1, 3, '1000-08-10 18:58:07', ''),
-			array(2, 2, '9000-08-10 18:58:07', '<a href="/news/archives/3" class="prev-link">≪ 新商品を販売を開始しました。</a>'),
+			array(2, 2, '9000-08-10 18:58:07', '<a href="/news2/archives/3" class="prev-link">≪ 新商品を販売を開始しました。</a>'),
 			array(2, 1, '1000-08-10 18:58:07', ''),
 		);
 	}
@@ -417,7 +417,7 @@ class BlogHelperTest extends BaserTestCase {
 			array(1, 1, '9000-08-10 18:58:07', ''),
 			array(1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'),
 			array(2, 3, '9000-08-10 18:58:07', ''),
-			array(2, 4, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">新商品を販売を開始しました。 ≫</a>'),
+			array(2, 4, '1000-08-10 18:58:07', '<a href="/news2/archives/2" class="next-link">新商品を販売を開始しました。 ≫</a>'),
 		);
 	}
 
