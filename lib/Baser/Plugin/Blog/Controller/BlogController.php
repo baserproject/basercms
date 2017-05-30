@@ -727,9 +727,18 @@ class BlogController extends BlogAppController {
 			'fields' => array(),
 			'order' => $order,
 			'limit' => $num,
-			'recursive' => 1,
+			'recursive' => 2,
 			'cache' => false
 		);
+		$this->BlogPost->BlogContent->unbindModel(array(
+			'hasMany' => array('BlogPost', 'BlogCategory'),
+		));
+		$this->BlogPost->BlogCategory->unbindModel(array(
+			'hasMany' => array('BlogPost'),
+		));
+		$this->BlogPost->User->unbindModel(array(
+			'hasMany' => array('Favorite'),
+		));
 
 		return $this->paginate('BlogPost');
 	}
@@ -968,18 +977,21 @@ class BlogController extends BlogAppController {
 		if ($limit === '0') {
 			$limit = false;
 		}
-		$this->BlogContent->recursive = -1;
-		$data['blogContent'] = $this->BlogContent->read(null, $id);
-		$this->BlogPost->recursive = -1;
-		$conditions = array('BlogPost.blog_content_id' => $id);
-		$conditions = am($conditions, $this->BlogPost->getConditionAllowPublish());
+		$data['blogContent'] = $this->BlogContent->find('first', array('conditions' => array('BlogContent.id' => $id), 'recursive' => 0));
+		$conditions = array_merge(array('BlogPost.blog_content_id' => $id), $this->BlogPost->getConditionAllowPublish());
+		$this->BlogPost->unbindModel(array(
+			'belongsTo' => array('BlogCategory', 'User'),
+			'hasAndBelongsToMany' => array('BlogTag'),
+		));
+		$this->BlogPost->BlogContent->unbindModel(array(
+			'hasMany' => array('BlogPost', 'BlogCategory'),
+		));
 		// 毎秒抽出条件が違うのでキャッシュしない
 		$data['recentEntries'] = $this->BlogPost->find('all', array(
-			'fields' => array('id', 'no', 'name', 'blog_category_id', 'user_id', 'posts_date'),
 			'conditions' => $conditions,
 			'limit' => $limit,
 			'order' => 'posts_date DESC',
-			'recursive' => -1,
+			'recursive' => 2,
 			'cache' => false
 		));
 		return $data;
