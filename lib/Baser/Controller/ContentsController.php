@@ -112,13 +112,13 @@ class ContentsController extends AppController {
 								'order' => 'Content.' . $this->passedArgs['sort'] . ' ' . $this->passedArgs['direction'],
 								'conditions' => $conditions,
 								'limit' => $this->passedArgs['num'],
-								'recursive' => 0
+								'recursive' => 2
 							];
 
 							// EVENT Contents.searchIndex
-							$event = $this->getEventManager()->dispatch(new CakeEvent('Controller.Contents.searchIndex', $this, [
+							$event = $this->dispatchEvent('searchIndex', array(
 								'options' => $options
-							]));
+							));
 							if ($event !== false) {
 								$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 							}

@@ -141,12 +141,24 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
-		$this->paginate = [
+		$options = [
 			'conditions' => $conditions,
 			'joins' => $joins,
 			'order' => 'BlogPost.' . $this->passedArgs['sort'],
-			'limit' => $this->passedArgs['num']
+			'limit' => $this->passedArgs['num'],
+			'recursive' => 2
 		];
+
+		// EVENT BlogPosts.searchIndex
+		$event = $this->dispatchEvent('searchIndex', array(
+			'options' => $options
+		));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$this->paginate = $options;
+		$posts = $this->paginate('BlogPost');
 		$this->set('posts', $this->paginate('BlogPost'));
 
 		$this->_setAdminIndexViewData();
@@ -267,8 +279,8 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', array('BlogPost.blog_content_id' => $blogContentId)) + 1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
-			
-			/*			 * * BlogPosts.beforeAdd ** */
+
+			// EVENT BlogPosts.beforeAdd
 			$event = $this->dispatchEvent('beforeAdd', array(
 				'data' => $this->request->data
 			));
@@ -353,7 +365,7 @@ class BlogPostsController extends BlogAppController {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
 			}
 
-			/*			 * * BlogPosts.beforeEdit ** */
+			// EVENT BlogPosts.beforeEdit
 			$event = $this->dispatchEvent('beforeEdit', array(
 				'data' => $this->request->data
 			));
