@@ -38,14 +38,6 @@ if(!empty($this->BcContents->settings[$type]['icon'])) {
 if($data['Content']['plugin'] != 'Core' && $type != 'Default') {
 	$iconPath = $data['Content']['plugin'] . '.' . $iconPath;
 }
-if (!$isPublish) {
-	$toStatus = 'publish';
-	$classies = ['unpublish', 'disablerow'];
-} else {
-	$toStatus = 'unpublish';
-	$classies = ['publish'];
-}
-$class = ' class="' . implode(' ', $classies) . '"';
 $urlParams = ['content_id' => $data['Content']['id']];
 if($data['Content']['entity_id']) {
 	$urlParams = array_merge($urlParams, [$data['Content']['entity_id']]);

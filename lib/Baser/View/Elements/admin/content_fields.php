@@ -102,7 +102,6 @@ if($this->BcContents->isEditable()) {
 <?php echo $this->BcForm->hidden('Content.plugin') ?>
 <?php echo $this->BcForm->hidden('Content.type') ?>
 <?php echo $this->BcForm->hidden('Content.entity_id') ?>
-<?php echo $this->BcForm->hidden('Content.parent_id') ?>
 <?php echo $this->BcForm->hidden('Content.url') ?>
 <?php echo $this->BcForm->hidden('Content.alias_id') ?>
 <?php echo $this->BcForm->hidden('Content.site_root') ?>
