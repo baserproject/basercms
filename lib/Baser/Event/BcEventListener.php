@@ -98,15 +98,28 @@ class BcEventListener extends Object implements CakeEventListener {
  * @return bool
  */
 	public function isAction($action,  $isContainController = true, $currentRequest = false) {
-		$request = Router::getRequest($currentRequest);
-		$currentAction = Inflector::camelize($request->params['action']);
-		if($isContainController) {
-			$currentAction = Inflector::camelize($request->params['controller']) . '.' . $currentAction;
-		}
+		$currentAction = $this->getAction($isContainController, $currentRequest);
 		if(!is_array($action)) {
 			$action = [$action];
 		}
 		return in_array($currentAction, $action);
 	}
 
+/**
+ * 現在のアクションを特定する文字列を取得する
+ *
+ * @param bool $isContainController コントローラー名を含むかどうか（初期値：true）
+ * @param bool $currentRequest 現在のリクエストかどうか（初期値：false）
+ * 		※ Controller::requestAction() を利用時に、その対象のリクエストについて判定する場合は、trueを指定する
+ * @return string
+ */
+	public function getAction($isContainController = true, $currentRequest = false) {
+		$request = Router::getRequest($currentRequest);
+		$currentAction = Inflector::camelize($request->params['action']);
+		if($isContainController) {
+			$currentAction = Inflector::camelize($request->params['controller']) . '.' . $currentAction;
+		}
+		return $currentAction;
+	}
+	
 }
