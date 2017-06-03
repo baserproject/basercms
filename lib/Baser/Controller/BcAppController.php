@@ -76,7 +76,7 @@ class BcAppController extends Controller {
  * @var		array
  * @access	public
  */
-	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash');
+	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail');
 
 /**
  * サブディレクトリ
