@@ -13,17 +13,10 @@
 /**
  * [ADMIN] ブログ記事 一覧　行
  */
-$classies = array();
-if (!$this->Blog->allowPublish($data)) {
-	$classies = array('unpublish', 'disablerow');
-} else {
-	$classies = array('publish');
-}
-$class = ' class="' . implode(' ', $classies) . '"';
 ?>
 
 
-<tr<?php echo $class; ?>>
+<tr<?php $this->BcListTable->rowClass($this->Blog->allowPublish($data), $data) ?>>
 	<td class="row-tools">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['BlogPost']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['BlogPost']['id'])) ?>
@@ -36,7 +29,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogContent']['id'], $data['BlogPost']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['BlogPost']['no']; ?></td>
-	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['posts_date']); ?></td>
+	<td style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['posts_date']); ?></td>
 	<td class="eye_catch"><?php echo $this->BcUpload->uploadImage('BlogPost.eye_catch',  $data['BlogPost']['eye_catch'], array('imgsize' => 'mobile_thumb')) ?></td>
 	<td>
 		<?php if (!empty($data['BlogCategory']['title'])): ?>
@@ -49,20 +42,22 @@ $class = ' class="' . implode(' ', $classies) . '"';
 		<br />
 		<?php $this->BcBaser->link($data['BlogPost']['name'], array('action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
 	</td>
-	<td>
-		<?php echo $this->BcBaser->getUserName($data['User']) ?>
+	<td style="text-align:center" class="status">
+		<?php echo $this->BcBaser->getUserName($data['User']) ?><br>
+        <?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?>
 	</td>
-	<td style="text-align:center" class="status"><?php echo $this->BcText->booleanMark($data['BlogPost']['status']); ?></td>
+	
 	<?php if ($data['BlogContent']['comment_use']): ?>
-		<td>
-			<?php $comment = count($data['BlogComment']) ?>
-			<?php if ($comment): ?>
-				<?php $this->BcBaser->link($comment, array('controller' => 'blog_comments', 'action' => 'index', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
-			<?php else: ?>
-				<?php echo $comment ?>
-			<?php endif ?>
-		</td>
+    <td>
+        <?php $comment = count($data['BlogComment']) ?>
+        <?php if ($comment): ?>
+            <?php $this->BcBaser->link($comment, array('controller' => 'blog_comments', 'action' => 'index', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>
+        <?php else: ?>
+            <?php echo $comment ?>
+        <?php endif ?>
+	</td>
 	<?php endif ?>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="white-space:nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogPost']['modified']); ?>
