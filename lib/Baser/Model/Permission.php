@@ -174,25 +174,17 @@ class Permission extends AppModel {
  * @return boolean
  */
 	public function check($url, $userGroupId) {
-		if ($this->permissionsTmp === -1) {
-			$conditions = array('Permission.user_group_id' => $userGroupId);
-			$permissions = $this->find('all', array('conditions' => $conditions, 'order' => 'sort', 'recursive' => -1));
-			if ($permissions) {
-				$this->permissionsTmp = $permissions;
-			} else {
-				$this->permissionsTmp = array();
-				return true;
-			}
+		if($userGroupId == Configure::read('BcApp.adminGroupId')) {
+			return true;
 		}
-
+		
+		$this->setCheck($userGroupId);
 		$permissions = $this->permissionsTmp;
 
 		if ($url != '/') {
 			$url = preg_replace('/^\//is', '', $url);
 		}
-
 		$adminPrefix = Configure::read('Routing.prefixes.0');
-
 		$url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
 
 		// ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
@@ -271,6 +263,45 @@ class Permission extends AppModel {
 		} else {
 			return false;
 		}
+	}
+
+/**
+ * 権限チェックの準備をする
+ * 
+ * @param $userGroupId
+ */
+	public function setCheck($userGroupId) {
+		if ($this->permissionsTmp === -1) {
+			$conditions = array('Permission.user_group_id' => $userGroupId);
+			$permissions = $this->find('all', [
+				'fields' => ['url', 'auth', 'status'],
+				'conditions' => $conditions,
+				'order' => 'sort',
+				'recursive' => -1
+			]);
+			if ($permissions) {
+				$this->permissionsTmp = $permissions;
+			} else {
+				$this->permissionsTmp = [];
+			}
+		}
+	}
+
+/**
+ * 権限チェック対象を追加する
+ * 
+ * @param string $url
+ * @param bool $auth
+ */
+	public function addCheck($url, $auth) {
+		$this->setCheck(BcUtil::loginUser('admin')['user_group_id']);
+		$this->permissionsTmp[] = [
+			'Permission' => [
+				'url' => $url,
+				'auth' => $auth,
+				'status' => true
+			]
+		];
 	}
 
 }
