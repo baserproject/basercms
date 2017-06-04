@@ -138,7 +138,7 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	public function afterSave(Model $Model, $created, $options = array()) {
 		if($this->uploaded) {
-			$this->renameToFieldBasename($Model);
+			$Model->data = $this->renameToBasenameFields($Model);
 			$Model->data = $Model->save($Model->data, array('callbacks' => false, 'validate' => false));
 			$this->uploaded = false;
 		}
@@ -651,72 +651,82 @@ class BcUploadBehavior extends ModelBehavior {
 	}
 
 /**
- * ファイル名をフィールド値ベースのファイル名に変更する
+ * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
  * 
  * @param Model $Model
  * @return boolean
  */
-	public function renameToFieldBasename(Model $Model, $copy = false) {
+	public function renameToBasenameFields(Model $Model, $copy = false) {
+		$data = $Model->data;
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $setting) {
-
 			if (empty($setting['name'])) {
 				$setting['name'] = $key;
 			}
+			$value = $this->renameToBasenameField($Model, $setting, $copy);
+			if($value !== false) {
+				$data[$Model->alias][$setting['name']] = $value;	
+			}
+		}
+		return $data;
+	}
 
-			if (!empty($setting['namefield']) && !empty($Model->data[$Model->alias][$setting['name']])) {
-				$oldName = $Model->data[$Model->alias][$setting['name']];
-				$saveDir = $this->savePath[$Model->alias];
-				$saveDirInTheme = $this->getSaveDir($Model, true);
-				$oldSaveDir = '';
-				if(file_exists($saveDir . $oldName)) {
-					$oldSaveDir = $saveDir;
-				} elseif(file_exists($saveDirInTheme . $oldName)) {
-					$oldSaveDir = $saveDirInTheme;
-				}
-				if (file_exists($oldSaveDir . $oldName)) {
+/**
+ * ファイル名をフィールド値ベースのファイル名に変更する
+ * 
+ * @param \Model $Model
+ * @param array $setting
+ * @param bool $copy
+ * @return bool|mixed
+ */
+	public function renameToBasenameField(Model $Model, $setting, $copy = false) {
+		if (empty($setting['namefield']) || empty($Model->data[$Model->alias][$setting['name']])) {
+			return false;
+		}	
+		$oldName = $Model->data[$Model->alias][$setting['name']];
+		$saveDir = $this->savePath[$Model->alias];
+		$saveDirInTheme = $this->getSaveDir($Model, true);
+		$oldSaveDir = '';
+		if(file_exists($saveDir . $oldName)) {
+			$oldSaveDir = $saveDir;
+		} elseif(file_exists($saveDirInTheme . $oldName)) {
+			$oldSaveDir = $saveDirInTheme;
+		}
+		if (!file_exists($oldSaveDir . $oldName)) {
+			return '';
+		}	
+		$pathinfo = pathinfo($oldName);
+		$newName = $this->getFieldBasename($Model, $setting, $pathinfo['extension']);
+		if (!$newName) {
+			return false;
+		}
+		if ($oldName == $newName) {
+			return false;
+		}
+		if (!empty($setting['imageresize'])) {
+			$newName = $this->getFileName($Model, $setting['imageresize'], $newName);
+		} else {
+			$newName = $this->getFileName($Model, null, $newName);
+		}
 
-					$pathinfo = pathinfo($oldName);
-					$newName = $this->getFieldBasename($Model, $setting, $pathinfo['extension']);
-
-					if (!$newName) {
-						return true;
+		if (!$copy) {
+			rename($oldSaveDir . $oldName, $saveDir . $newName);
+		} else {
+			copy($oldSaveDir . $oldName, $saveDir . $newName);
+		}
+		if (!empty($setting['imagecopy'])) {
+			foreach ($setting['imagecopy'] as $copysetting) {
+				$oldCopyname = $this->getFileName($Model, $copysetting, $oldName);
+				if (file_exists($oldSaveDir . $oldCopyname)) {
+					$newCopyname = $this->getFileName($Model, $copysetting, $newName);
+					if (!$copy) {
+						rename($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
+					} else {
+						copy($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
 					}
-					if ($oldName != $newName) {
-
-						if (!empty($setting['imageresize'])) {
-							$newName = $this->getFileName($Model, $setting['imageresize'], $newName);
-						} else {
-							$newName = $this->getFileName($Model, null, $newName);
-						}
-
-						if (!$copy) {
-							rename($oldSaveDir . $oldName, $saveDir . $newName);
-						} else {
-							copy($oldSaveDir . $oldName, $saveDir . $newName);
-						}
-
-						$Model->data[$Model->alias][$setting['name']] = str_replace(DS, '/', $newName);
-
-						if (!empty($setting['imagecopy'])) {
-							foreach ($setting['imagecopy'] as $copysetting) {
-								$oldCopyname = $this->getFileName($Model, $copysetting, $oldName);
-								if (file_exists($oldSaveDir . $oldCopyname)) {
-									$newCopyname = $this->getFileName($Model, $copysetting, $newName);
-									if (!$copy) {
-										rename($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
-									} else {
-										copy($oldSaveDir . $oldCopyname, $saveDir . $newCopyname);
-									}
-								}
-							}
-						}
-					}
-				} else {
-					$Model->data[$Model->alias][$setting['name']] = '';
 				}
 			}
 		}
-		return true;
+		return str_replace(DS, '/', $newName);
 	}
 
 /**
@@ -756,7 +766,7 @@ class BcUploadBehavior extends ModelBehavior {
 
 		$subdir = '';
 		if (!empty($this->settings[$Model->alias]['subdirDateFormat'])) {
-			$subdir = date($this->settings[$Model->alias]['subdirDateFormat']);
+			$subdir .= date($this->settings[$Model->alias]['subdirDateFormat']);
 			if (!preg_match('/\/$/', $subdir)) {
 				$subdir .= '/';
 			}
