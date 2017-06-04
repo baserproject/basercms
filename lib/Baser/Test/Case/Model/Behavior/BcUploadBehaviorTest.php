@@ -735,7 +735,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 
 		// テスト実行
-		$this->EditorTemplate->renameToFieldBasename($copy);
+		$this->EditorTemplate->renameToBasenameFields($copy);
 		$this->assertFileExists($newPath, $message);
 
 

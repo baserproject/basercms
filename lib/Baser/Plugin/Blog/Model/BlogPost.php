@@ -175,7 +175,7 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$settings = $this->Behaviors->BcUpload->settings['BlogPost'];
-		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $data['Content']['name'], '/') . '\//', $settings['saveDir'])) {
+		if (empty($settings['saveDir']) || !preg_match('/^' . preg_quote("blog" . DS . $blogContent['id'], '/') . '\//', $settings['saveDir'])) {
 			$settings['saveDir'] = "blog" . DS . $blogContent['id'] . DS . "blog_posts";
 		}
 
@@ -646,7 +646,7 @@ class BlogPost extends BlogAppModel {
 				$data['BlogPost']['id'] = $this->getLastInsertID();
 				$data['BlogPost']['eye_catch'] = $eyeCatch;
 				$this->set($data);
-				$this->renameToFieldBasename(true); // 内部でリネームされたデータが再セットされる
+				$this->data = $this->renameToBasenameFields(true); // 内部でリネームされたデータが再セットされる
 				$result = $this->save();
 			}
 			return $result;
@@ -666,7 +666,9 @@ class BlogPost extends BlogAppModel {
  */
 	public function createPreviewData($data) {
 		$post['BlogPost'] = $data['BlogPost'];
-		$post['BlogPost']['detail'] = $post['BlogPost']['detail_tmp'];
+		if(isset($post['BlogPost']['detail_tmp'])) {
+			$post['BlogPost']['detail'] = $post['BlogPost']['detail_tmp'];
+		}
 
 		if ($data['BlogPost']['blog_category_id']) {
 			$blogCategory = $this->BlogCategory->find('first', [
