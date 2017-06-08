@@ -185,6 +185,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "basercms"
   end
 
+	# ホスト・ゲスト間の共有ディレクトリをマウントした後にhttpdを起動
+	config.vm.provision "shell", run: "always", inline: <<-SHELL
+		sudo /etc/init.d/httpd start
+	SHELL
+	
   # Vagrant環境の使い方は「/vagrant_cookbooks/readme.txt」をご覧ください
 
 end
