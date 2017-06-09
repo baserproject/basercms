@@ -84,13 +84,32 @@ class BcListTableHelper extends AppHelper {
 		return $output;
 	}
 
-	public function rowClass($isPublish, $record = []) {
+/**
+ * Row Class
+ *
+ * @param bool $isPublish 公開しているかどうか
+ * @param array $record レコード
+ * @param array $options オプション
+ * 	- `class` : 追加するクラス
+ */
+	public function rowClass($isPublish, $record = [], $options = []) {
+		$options = array_merge([
+			'class' => []
+		], $options);
 		if (!$isPublish) {
 			$classies = ['unpublish', 'disablerow'];
 		} else {
 			$classies = ['publish'];
 		}
-		$event = $this->dispatchEvent('rowClass', ['classies' => $classies, 'record' => $record], ['class' => 'BcListTable', 'plugin' => '']);
+		if(!empty($options['class'])) {
+			$options = array_merge($classies, $options['class']);
+		}
+
+		// EVENT BcListTable.rowClass
+		$event = $this->dispatchEvent('rowClass', [
+			'classies' => $classies,
+			'record' => $record
+		], ['class' => 'BcListTable', 'plugin' => '']);
 		if ($event !== false) {
 			$classies = ($event->result === null || $event->result === true) ? $event->data['classies'] : $event->result;
 		}
