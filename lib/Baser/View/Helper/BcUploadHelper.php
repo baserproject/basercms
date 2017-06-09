@@ -61,6 +61,20 @@ class BcUploadHelper extends BcAppHelper {
 			throw $e ;
 		}
 
+		// EVENT BcUpload.beforeFileLInk
+		$event = $this->dispatchEvent('beforeFileLink', [
+			'formId' => $this->__id,
+			'settings' => $settings,
+			'fieldName' => $fieldName,
+			'options' => $options
+		], ['class' => 'BcUpload', 'plugin' => '']);
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+			$settings = $event->data['settings'];
+		}
+
+		$this->setBcUploadSetting($settings);
+
 		$basePath = '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
 
 		if (empty($options['value'])) {
@@ -107,18 +121,29 @@ class BcUploadHelper extends BcAppHelper {
 					if ($tmp) {
 						$options['tmp'] = true;
 					}
-					$fileLinkTag = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
+					$out = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				} else {
 					$filePath = $basePath . $value;
-					$fileLinkTag = $this->Html->link('ダウンロード ≫', $filePath, array('target' => '_blank')) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
+					$out = $this->Html->link('ダウンロード ≫', $filePath, array('target' => '_blank')) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				}
 			} else {
-				$fileLinkTag = $value;
+				$out = $value;
 			}
 		} else {
-			return false;
+			$out = false;
 		}
-		return $fileLinkTag;
+
+		// EVENT BcUpload.afterFileLink
+		$event = $this->dispatchEvent('afterFileLink', [
+			'data' => $this->request->data,
+			'fieldName' => $fieldName,
+			'out' => $out
+		], ['class' => 'BcUpload', 'plugin' => '']);
+		if ($event !== false) {
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+
+		return $out;
 	}
 
 /**
@@ -167,8 +192,9 @@ class BcUploadHelper extends BcAppHelper {
 		if ($event !== false) {
 			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 			$settings = $event->data['settings'];
-			$this->setBcUploadSetting($settings);
 		}
+
+		$this->setBcUploadSetting($settings);
 		
 		$imgOptions = [
 			'alt' => $options['alt'],
