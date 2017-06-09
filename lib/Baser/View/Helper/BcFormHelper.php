@@ -1166,7 +1166,7 @@ DOC_END;
                 list(, $model) = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
-			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
+			$domId = isset($options['url']['action']) ? $options['url']['action'] : $this->request->params['action'];
 			$id = $this->domId($domId . 'Form');
 		} else {
 			$id = $options['id'];
