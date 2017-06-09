@@ -158,7 +158,6 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$this->paginate = $options;
-		$posts = $this->paginate('BlogPost');
 		$this->set('posts', $this->paginate('BlogPost'));
 
 		$this->_setAdminIndexViewData();
