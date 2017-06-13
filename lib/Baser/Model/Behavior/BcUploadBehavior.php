@@ -84,26 +84,39 @@ class BcUploadBehavior extends ModelBehavior {
  * アップロードしたかどうか
  *
  * afterSave のリネーム判定に利用
+ * モデルごとに設定する
  *
- * @var bool
+ * @var array
  */
-	public $uploaded = false;
+	public $uploaded = [];
 
 /**
  * セットアップ
  * 
  * @param Model	$Model
- * @param array	actsAsの設定
- * @return void
+ * @param array	$settings actsAsの設定
  */
 	public function setup(Model $Model, $settings = array()) {
-		$this->settings[$Model->alias] = Hash::merge(array(
-				'saveDir' => '',
-				'fields' => array()
-				), $settings);
-		
+		$this->settings[$Model->alias] = Hash::merge([
+			'saveDir' => '',
+			'fields' => []
+		], $settings);
+		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
+			if (empty($field['name'])) {
+				$this->settings[$Model->alias]['fields'][$key]['name'] = $field['name'] = $key;
+			}
+			if (!empty($field['imageresize'])) {
+				if (empty($field['imageresize']['thumb'])) {
+					$this->settings[$Model->alias]['fields'][$key]['imageresize']['thumb'] = false;
+				}
+			} else {
+				$this->settings[$Model->alias]['fields'][$key]['imageresize'] = false;
+			}
+			if(!isset($field['getUniqueFileName'])) {
+				$this->settings[$Model->alias]['fields'][$key]['getUniqueFileName'] = true;
+			}
+		}
 		$this->savePath[$Model->alias] = $this->getSaveDir($Model);
-
 		if (!is_dir($this->savePath[$Model->alias])) {
 			$Folder = new Folder();
 			$Folder->create($this->savePath[$Model->alias]);
@@ -112,6 +125,18 @@ class BcUploadBehavior extends ModelBehavior {
 
 		App::uses('SessionComponent', 'Controller/Component');
 		$this->Session = new SessionComponent(new ComponentCollection());
+	}
+
+/**
+ * Before Validate
+ *
+ * @param Model $Model
+ * @param array $options
+ * @return mixed
+ */
+	public function beforeValidate(Model $Model, $options = array()) {
+		$this->setupRequestData($Model);
+		return parent::beforeValidate($Model, $options);
 	}
 
 /**
@@ -125,7 +150,67 @@ class BcUploadBehavior extends ModelBehavior {
 		if($Model->exists()) {
 			$this->deleteExistingFiles($Model);
 		}
-		return $this->saveFiles($Model);
+		$Model->data = $this->deleteFiles($Model, $Model->data);
+		$result = $this->saveFiles($Model, $Model->data);
+		if ($result) {
+			$Model->data = $result;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+/**
+ * リクエストされたデータを処理しやすいようにセットアップする
+ *
+ * @param Model $Model
+ */
+	public function setupRequestData(Model $Model) {
+		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
+			$data = [];
+			if(!empty($Model->data[$Model->name])) {
+				$data = $Model->data[$Model->name];
+			}
+			if (!empty($data[$field['name']]) && is_array($data[$field['name']]) && $data[$field['name']]['size'] != 0) {
+				if (!empty($data[$field['name']]['name'])) {
+					$upload = true;
+				} else {
+					unset($Model->data[$Model->name][$field['name']]);
+					$upload = false;
+				}
+			} else {
+				$upload = false;
+				if (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
+					// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
+					$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
+					unset($Model->data[$Model->name][$field['name'] . '_']);
+				} else {
+					unset($Model->data[$Model->name][$field['name']]);
+				}
+			}
+			if ($upload) {
+				// 拡張子を取得
+				$this->settings[$Model->alias]['fields'][$key]['ext'] = $field['ext'] = decodeContent($data[$field['name']]['type'], $data[$field['name']]['name']);
+				// タイプ別除外
+				$targets = [];
+				if ($field['type'] == 'image') {
+					$targets = $this->imgExts;
+				} elseif (is_array($field['type'])) {
+					$targets = $field['type'];
+				} elseif ($field['type'] != 'all') {
+					$targets = [$field['type']];
+				}
+				if ($targets && !in_array($field['ext'], $targets)) {
+					unset($Model->data[$Model->name][$field['name']]);
+					$upload = false;
+				}
+			}
+			if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
+				// セッションに一時ファイルが保存されている場合は復元する
+				$this->moveFileSessionToTmp($Model, $field['name']);
+			}
+			$this->settings[$Model->alias]['fields'][$key]['upload'] = $upload;
+		}
 	}
 
 /**
@@ -134,13 +219,15 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param Model $created
  * @param Model $options
- * @return boolean
  */
 	public function afterSave(Model $Model, $created, $options = array()) {
-		if($this->uploaded) {
+		if($this->uploaded[$Model->name]) {
 			$Model->data = $this->renameToBasenameFields($Model);
 			$Model->data = $Model->save($Model->data, array('callbacks' => false, 'validate' => false));
-			$this->uploaded = false;
+			$this->uploaded[$Model->name] = false;
+		}
+		foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
+			$this->settings[$Model->alias]['fields'][$key]['upload'] = false;
 		}
 	}
 
@@ -150,13 +237,16 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param array $data
  * @param string $tmpId
- * @return boolean
+ * @return mixed false|array
  */
 	public function saveTmpFiles(Model $Model, $data, $tmpId) {
 		$this->Session->delete('Upload');
 		$Model->data = $data;
 		$this->tmpId = $tmpId;
-		if ($this->saveFiles($Model)) {
+		$Model->data = $this->deleteFiles($Model, $Model->data);
+		$result = $this->saveFiles($Model, $Model->data);
+		if ($result) {
+			$Model->data = $result;
 			return $Model->data;
 		} else {
 			return false;
@@ -164,140 +254,107 @@ class BcUploadBehavior extends ModelBehavior {
 	}
 
 /**
+ * 削除対象かチェックしながらファイル群を削除する
+ *
+ * @param Model $Model
+ * @param array $requestData
+ * @return array
+ */
+	public function deleteFiles(Model $Model, $requestData) {
+		$oldData = $Model->findById($Model->id);
+		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
+			if($oldData && $oldData[$Model->name][$field['name']]) {
+				$oldValue = $oldData[$Model->name][$field['name']];
+			} else {
+				$oldValue = '';
+			}
+			$requestData = $this->deleteFileWhileChecking($Model, $field, $requestData, $oldValue);
+		}
+		return $requestData;
+	}
+
+/**
+ * 削除対象かチェックしながらファイルを削除する
+ *
+ * @param Model $Model
+ * @param array $fieldSetting
+ * @param array $requestData
+ * @param string $oldValue
+ * @return array $requestData
+ */
+	public function deleteFileWhileChecking(Model $Model, $fieldSetting, $requestData, $oldValue) {
+		$fieldName = $fieldSetting['name'];
+		if (!empty($requestData[$Model->name][$fieldName . '_delete'])) {
+			if (!$this->tmpId) {
+				$this->delFile($Model, $oldValue, $fieldSetting);
+				$requestData[$Model->name][$fieldName] = '';
+			} else {
+				$requestData[$Model->name][$fieldName] = $oldValue;
+			}
+		}
+		return $requestData;
+	}
+
+/**
  * ファイル群を保存する
  * 
  * @param Model $Model
- * @return boolean
+ * @param array $requestData
+ * @return mixed false|array
  */
-	public function saveFiles(Model $Model) {
-		$serverData = $Model->findById($Model->id);
-
-		$this->uploaded = false;
+	public function saveFiles(Model $Model, $requestData) {
+		$this->uploaded[$Model->name] = false;
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
-
-			if (empty($field['name'])) {
-				$field['name'] = $key;
-			}
-
-			if (!empty($Model->data[$Model->name][$field['name'] . '_delete'])) {
-				$file = $serverData[$Model->name][$field['name']];
-				if (!$this->tmpId) {
-					$this->delFile($Model, $file, $field);
-					$Model->data[$Model->name][$field['name']] = '';
-				} else {
-					$Model->data[$Model->name][$field['name']] = $file;
-				}
-				continue;
-			}
-			if (empty($Model->data[$Model->name][$field['name']]['name']) && !empty($Model->data[$Model->name][$field['name'] . '_'])) {
-				// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
-				$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
-				unset($Model->data[$Model->name][$field['name'] . '_']);
-			} elseif (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
-				// セッションに一時ファイルが保存されている場合は復元する
-				$this->moveFileSessionToTmp($Model, $field['name']);
-			} elseif (!isset($Model->data[$Model->name][$field['name']]) ||
-				!is_array($Model->data[$Model->name][$field['name']])) {
-				continue;
-			}
-
-			if (!empty($Model->data[$Model->name][$field['name']]) && is_array($Model->data[$Model->name][$field['name']])) {
-
-				if ($Model->data[$Model->name][$field['name']]['size'] == 0) {
-					unset($Model->data[$Model->name][$field['name']]);
-					continue;
-				}
-
-				// 拡張子を取得
-				$field['ext'] = decodeContent($Model->data[$Model->name][$field['name']]['type'], $Model->data[$Model->name][$field['name']]['name']);
-
-				/* タイプ別除外 */
-				if ($field['type'] == 'image') {
-					if (!in_array($field['ext'], $this->imgExts)) {
-						unset($Model->data[$Model->name][$field['name']]);
-						continue;
-					}
-				} else {
-					if (is_array($field['type'])) {
-						if (!in_array($field['ext'], $field['type'])) {
-							unset($Model->data[$Model->name][$field['name']]);
-							continue;
-						}
-					} else {
-						if ($field['type'] != 'all' && $field['type'] != $field['ext']) {
-							unset($Model->data[$Model->name][$field['name']]);
-							continue;
-						}
-					}
-				}
-
-				if (empty($Model->data[$Model->name][$field['name']]['name'])) {
-
-					/* フィールドに値がない場合はスキップ */
-					unset($Model->data[$Model->name][$field['name']]);
-					continue;
-				} else {
-
-					/* アップロードしたファイルを保存する */
-					// ファイル名が重複していた場合は変更する
-					$Model->data[$Model->name][$field['name']]['name'] = $this->getUniqueFileName($Model, $field['name'], $Model->data[$Model->name][$field['name']]['name'], $field);
-
-					// 画像を保存
-					$fileName = $this->saveFile($Model, $field);
-					if ($fileName) {
-						if (!$this->tmpId && ($field['type'] == 'all' || $field['type'] == 'image') && !empty($field['imagecopy']) && in_array($field['ext'], $this->imgExts)) {
-							/* 画像をコピーする */
-							foreach ($field['imagecopy'] as $copy) {
-								// コピー画像が元画像より大きい場合はスキップして作成しない
-								$size = $this->getImageSize($this->savePath[$Model->alias] . $fileName);
-								if ($size && $size['width'] < $copy['width'] && $size['height'] < $copy['height']) {
-									if (isset($copy['smallskip']) && $copy['smallskip'] === false) {
-										$copy['width'] = $size['width'];
-										$copy['height'] = $size['height'];
-									} else {
-										continue;
-									}
-								}
-
-								$copy['name'] = $field['name'];
-								$copy['ext'] = $field['ext'];
-								$ret = $this->copyImage($Model, $copy);
-								if (!$ret) {
-									// 失敗したら処理を中断してfalseを返す
-									return false;
-								}
-							}
-						}
-
-						// ファイルをリサイズ
-						if (!$this->tmpId && !empty($field['imageresize']) && in_array($field['ext'], $this->imgExts)) {
-							if (!empty($field['imageresize']['thumb'])) {
-								$thumb = $field['imageresize']['thumb'];
-							} else {
-								$thumb = false;
-							}
-							$filePath = $this->savePath[$Model->alias] . $fileName;
-							$this->resizeImage($filePath, $filePath, $field['imageresize']['width'], $field['imageresize']['height'], $thumb);
-						}
-
-						// 一時ファイルを削除
-						@unlink($Model->data[$Model->name][$field['name']]['tmp_name']);
-						// フィールドの値をファイル名に更新
-						if (!$this->tmpId) {
-							$Model->data[$Model->name][$field['name']] = $fileName;
-						} else {
-							$Model->data[$Model->name][$field['name']]['session_key'] = $fileName;
-						}
-						$this->uploaded = true;
-					} else {
-						// 失敗したら処理を中断してfalseを返す
-						return false;
-					}
-				}
+			$result = $this->saveFileWhileChecking($Model, $field, $requestData);
+			if($result) {
+				$requestData = $result;
+			} else {
+				// 失敗したら処理を中断してfalseを返す
+				return false;
 			}
 		}
+		return $requestData;
+	}
 
-		return true;
+/**
+ * 保存対象かチェックしながらファイルを保存する
+ *
+ * @param Model $Model
+ * @param array $fieldSetting
+ * @param array $requestData
+ * @return mixed bool|$requestData
+ */
+	public function saveFileWhileChecking(Model $Model, $fieldSetting, $requestData) {
+		if(!$this->tmpId && empty($fieldSetting['upload'])) {
+			return $requestData;
+		}
+		// ファイル名が重複していた場合は変更する
+		if($fieldSetting['getUniqueFileName'] && !$this->tmpId) {
+			$requestData[$Model->name][$fieldSetting['name']]['name'] = $this->getUniqueFileName($Model, $fieldSetting['name'], $requestData[$Model->name][$fieldSetting['name']]['name'], $fieldSetting);
+		}
+		// 画像を保存
+		$fileName = $this->saveFile($Model, $fieldSetting);
+		if ($fileName) {
+			if(!$this->copyImages($Model, $fieldSetting, $fileName)) {
+				return false;
+			}
+			// ファイルをリサイズ
+			if (!$this->tmpId) {
+				if(!empty($fieldSetting['imageresize'])) {
+					$filePath = $this->savePath[$Model->alias] . $fileName;
+					$this->resizeImage($filePath, $filePath, $fieldSetting['imageresize']['width'], $fieldSetting['imageresize']['height'], $fieldSetting['imageresize']['thumb']);
+				}
+				$requestData[$Model->name][$fieldSetting['name']] = $fileName;
+			} else {
+				$requestData[$Model->name][$fieldSetting['name']]['session_key'] = $fileName;
+			}
+			// 一時ファイルを削除
+			@unlink($requestData[$Model->name][$fieldSetting['name']]['tmp_name']);
+			$this->uploaded[$Model->name] = true;
+		} else {
+			return false;
+		}
+		return $requestData;
 	}
 
 /**
@@ -931,6 +988,39 @@ class BcUploadBehavior extends ModelBehavior {
 			$this->delFiles($Model, $field);
 		}
 		$Model->set($dataTmp);
+	}
+
+/**
+ * 画像をコピーする
+ *
+ * @param Model $Model
+ * @param string $fileName
+ * @param array $field
+ * @return bool
+ */
+	public function copyImages(Model $Model, $field, $fileName) {
+		if (!$this->tmpId && ($field['type'] == 'all' || $field['type'] == 'image') && !empty($field['imagecopy']) && in_array($field['ext'], $this->imgExts)) {
+			foreach ($field['imagecopy'] as $copy) {
+				// コピー画像が元画像より大きい場合はスキップして作成しない
+				$size = $this->getImageSize($this->savePath[$Model->alias] . $fileName);
+				if ($size && $size['width'] < $copy['width'] && $size['height'] < $copy['height']) {
+					if (isset($copy['smallskip']) && $copy['smallskip'] === false) {
+						$copy['width'] = $size['width'];
+						$copy['height'] = $size['height'];
+					} else {
+						continue;
+					}
+				}
+				$copy['name'] = $field['name'];
+				$copy['ext'] = $field['ext'];
+				$ret = $this->copyImage($Model, $copy);
+				if (!$ret) {
+					// 失敗したら処理を中断してfalseを返す
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 }

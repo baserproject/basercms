@@ -101,7 +101,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// ダミーファイルを生成
 		copy($tmpSourcePath, $tmpPath);
-
+		$this->EditorTemplate->setupRequestData();
 	}
 
 
@@ -148,22 +148,15 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param Model $Model
  * @param array $data
  * @param string $tmpId
- * @return boolean
  */
 	public function testSaveTmpFiles() {
-
 		$this->initTestSaveFiles();
-
-		$data = $this->EditorTemplate->saveTmpFiles(array('hoge'), 1);
+		$data = $this->EditorTemplate->saveTmpFiles($this->EditorTemplate->data, 1);
 		$tmpId = $this->BcUploadBehavior->tmpId;
-
-		$this->assertEquals(array('hoge'), $data, 'saveTmpFiles()の返り値が正しくありません');
+		$this->assertEquals('1.gif', $data['EditorTemplate']['image']['session_key'], 'saveTmpFiles()の返り値が正しくありません');
 		$this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
-
 		$this->deleteDummyOnTestSaveFiles();
-
 	}
-
 
 /**
  * saveFilesのテスト
@@ -184,18 +177,15 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$targetPath = $savePath . 'basename.gif';
 
 		// 保存を実行
-		$this->EditorTemplate->saveFiles();
+		$data = $this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 
 		if (!$tmpId) {
 			$this->assertFileExists($targetPath, 'saveFiles()でファイルを保存できません');
-			$data = $this->EditorTemplate->data['EditorTemplate']['image'];
-			$this->assertEquals('basename.gif', $data, $message);
+			$this->assertEquals('basename.gif', $data['EditorTemplate']['image'], $message);
 
 		} else {
 			$this->assertFileNotExists($targetPath, 'saveFiles()でファイルを正しく保存できません');
-			$data = $this->EditorTemplate->data['EditorTemplate']['image']['session_key'];
-			$this->assertEquals('1.gif', $data, $message);
-
+			$this->assertEquals('1.gif', $data['EditorTemplate']['image']['session_key'], $message);
 		}
 
 		// 生成されたファイルを削除
@@ -206,19 +196,19 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	public function saveFilesCanSaveDataProvider() {
 		return array(
-			array(null, 'saveFiles()でファイルを削除できません'),
-			array(1, 'saveFiles()でファイルを削除できません'),
+			array(null, 'saveFiles()でファイルを保存できません'),
+			array(1, 'saveFiles()でファイルを保存できません'),
 		);
 	}
 
 /**
- * saveFilesのテスト
+ * deleteFiles のテスト
  * ファイルを削除する
  * 
  * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider saveFilesCanDeleteDataProvider
+ * @dataProvider deleteFilesDataProvider
  */
-	public function testSaveFilesCanDelete($id, $message) {
+	public function testDeleteFiles($id, $message) {
 
 		$this->initTestSaveFiles($id);
 
@@ -233,7 +223,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		touch($templatePath);
 
 		// 削除を実行
-		$this->EditorTemplate->saveFiles();
+		$this->EditorTemplate->deleteFiles($this->EditorTemplate->data);
 
 		$this->assertFileNotExists($templatePath, $message);
 
@@ -242,7 +232,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	}
 
-	public function saveFilesCanDeleteDataProvider() {
+	public function deleteFilesDataProvider() {
 		return array(
 			array(1, 'saveFiles()でファイルを削除できません'),
 			array(2, 'saveFiles()でファイルを削除できません'),
@@ -268,7 +258,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imagecopy'] = $imagecopy;
 
 		// 保存を実行
-		$this->EditorTemplate->saveFiles();
+		$this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 		$this->assertFileExists($targetPath, $message);
 
 		// 生成されたファイルを削除
@@ -311,7 +301,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imageresize'] = $imageresize;
 
 		// 保存を実行
-		$this->EditorTemplate->saveFiles();
+		$this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 
 		$result = $this->BcUploadBehavior->getImageSize($targetPath);
 		$expected = array(
@@ -328,8 +318,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	public function saveFilesCanResizeDataProvider() {
 		return array(
-			array(array('width' => 8, 'height' => 1), 'saveFiles()でファイルをリサイズできません'),
-			array(array('width' => 8, 'height' => 1, 'thub' => true), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 8, 'height' => 1, 'thumb' => false), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 8, 'height' => 1, 'thumb' => true), 'saveFiles()でファイルをリサイズできません'),
 		);
 	}
 
