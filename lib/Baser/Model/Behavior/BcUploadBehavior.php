@@ -48,9 +48,9 @@ class BcUploadBehavior extends ModelBehavior {
 /**
  * 保存ディレクトリ
  * 
- * @var string
+ * @var string[]
  */
-	public $savePath = '';
+	public $savePath = [];
 
 /**
  * 設定
