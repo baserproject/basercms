@@ -289,7 +289,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider saveFilesCanResizeDataProvider
  */
-	public function testSaveFilesCanResize($imageresize, $message) {
+	public function testSaveFilesCanResize($imageresize, $expected, $message) {
 
 		$this->initTestSaveFiles();
 
@@ -304,10 +304,6 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 
 		$result = $this->BcUploadBehavior->getImageSize($targetPath);
-		$expected = array(
-			'width' => 7,
-			'height' => 1,
-		);
 		$this->assertEquals($expected, $result, $message);
 
 		// 生成されたファイルを削除
@@ -318,8 +314,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	public function saveFilesCanResizeDataProvider() {
 		return array(
-			array(array('width' => 8, 'height' => 1, 'thumb' => false), 'saveFiles()でファイルをリサイズできません'),
-			array(array('width' => 8, 'height' => 1, 'thumb' => true), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 20, 'height' => 10, 'thumb' => false), array('width' => 20,'height' => 2), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 20, 'height' => 10, 'thumb' => true), array('width' => 20,'height' => 10), 'saveFiles()でファイルをリサイズできません'),
 		);
 	}
 

@@ -168,6 +168,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function setupRequestData(Model $Model) {
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
 			$data = [];
+			$upload = false;
 			if(!empty($Model->data[$Model->name])) {
 				$data = $Model->data[$Model->name];
 			}
@@ -176,11 +177,15 @@ class BcUploadBehavior extends ModelBehavior {
 					$upload = true;
 				} else {
 					unset($Model->data[$Model->name][$field['name']]);
-					$upload = false;
 				}
 			} else {
-				$upload = false;
-				if (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
+				if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
+					// セッションに一時ファイルが保存されている場合は復元する
+					if($this->moveFileSessionToTmp($Model, $field['name'])) {
+						$data = $Model->data[$Model->name];
+						$upload = true;
+					}
+				} elseif (!empty($Model->data[$Model->name][$field['name'] . '_'])) {
 					// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
 					$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
 					unset($Model->data[$Model->name][$field['name'] . '_']);
@@ -204,10 +209,6 @@ class BcUploadBehavior extends ModelBehavior {
 					unset($Model->data[$Model->name][$field['name']]);
 					$upload = false;
 				}
-			}
-			if (!empty($Model->data[$Model->name][$field['name'] . '_tmp'])) {
-				// セッションに一時ファイルが保存されている場合は復元する
-				$this->moveFileSessionToTmp($Model, $field['name']);
 			}
 			$this->settings[$Model->alias]['fields'][$key]['upload'] = $upload;
 		}
@@ -333,6 +334,7 @@ class BcUploadBehavior extends ModelBehavior {
 			$requestData[$Model->name][$fieldSetting['name']]['name'] = $this->getUniqueFileName($Model, $fieldSetting['name'], $requestData[$Model->name][$fieldSetting['name']]['name'], $fieldSetting);
 		}
 		// 画像を保存
+		$tmpName = $requestData[$Model->name][$fieldSetting['name']]['tmp_name'];
 		$fileName = $this->saveFile($Model, $fieldSetting);
 		if ($fileName) {
 			if(!$this->copyImages($Model, $fieldSetting, $fileName)) {
@@ -349,7 +351,7 @@ class BcUploadBehavior extends ModelBehavior {
 				$requestData[$Model->name][$fieldSetting['name']]['session_key'] = $fileName;
 			}
 			// 一時ファイルを削除
-			@unlink($requestData[$Model->name][$fieldSetting['name']]['tmp_name']);
+			@unlink($tmpName);
 			$this->uploaded[$Model->name] = true;
 		} else {
 			return false;
@@ -362,7 +364,7 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param Model $Model
  * @param string $fieldName
- * @return void
+ * @return boolean
  */
 	public function moveFileSessionToTmp(Model $Model, $fieldName) {
 		$fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
@@ -400,6 +402,7 @@ class BcUploadBehavior extends ModelBehavior {
 		$uploadInfo['type'] = $fileType;
 		$Model->data[$Model->alias][$fieldName] = $uploadInfo;
 		unset($Model->data[$Model->alias][$fieldName . '_tmp']);
+		return true;
 	}
 
 /**

@@ -921,23 +921,28 @@ class BcAppController extends Controller {
 			unset($cc);
 		}
 
-		// to 送信先アドレス (最初の1人がTOで残りがBCC)
-		if (strpos($to, ',') !== false) {
-			$_to = explode(',', $to);
-			$i = 0;
-			if (count($_to) >= 1) {
-				foreach ($_to as $val) {
-					if ($i == 0) {
-						$cakeEmail->addTo($val);
-						$toAddress = $val;
-					} else {
-						$cakeEmail->addBcc($val);
+		try {
+			// to 送信先アドレス (最初の1人がTOで残りがBCC)
+			if (strpos($to, ',') !== false) {
+				$_to = explode(',', $to);
+				$i = 0;
+				if (count($_to) >= 1) {
+					foreach($_to as $val) {
+						if ($i == 0) {
+							$cakeEmail->addTo($val);
+							$toAddress = $val;
+						} else {
+							$cakeEmail->addBcc($val);
+						}
+						++$i;
 					}
-					++$i;
 				}
+			} else {
+				$cakeEmail->addTo($to);
 			}
-		} else {
-			$cakeEmail->addTo($to);
+		} catch(Exception $e) {
+			$this->setMessage($e->getMessage() . ' 送信先のメールアドレスが不正です。',true, false, true);
+			return false;
 		}
 
 		// 件名
