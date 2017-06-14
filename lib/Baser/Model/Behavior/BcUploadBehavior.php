@@ -241,6 +241,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @return mixed false|array
  */
 	public function saveTmpFiles(Model $Model, $data, $tmpId) {
+		$this->setupRequestData($Model);
 		$this->Session->delete('Upload');
 		$Model->data = $data;
 		$this->tmpId = $tmpId;
@@ -335,6 +336,9 @@ class BcUploadBehavior extends ModelBehavior {
 		}
 		// 画像を保存
 		$tmpName = $requestData[$Model->name][$fieldSetting['name']]['tmp_name'];
+		if(!$tmpName) {
+			return $requestData;
+		}
 		$fileName = $this->saveFile($Model, $fieldSetting);
 		if ($fileName) {
 			if(!$this->copyImages($Model, $fieldSetting, $fileName)) {
