@@ -617,7 +617,7 @@ class BcAppController extends Controller {
  * @return	void
  * @throws	NotFoundException
  */
-	protected function notFound() {
+	public function notFound() {
 		throw new NotFoundException('見つかりませんでした。');
 	}
 
