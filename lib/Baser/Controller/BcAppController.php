@@ -614,7 +614,6 @@ class BcAppController extends Controller {
 /**
  * NOT FOUNDページを出力する
  *
- * @access	public
  * @return	void
  * @throws	NotFoundException
  */
