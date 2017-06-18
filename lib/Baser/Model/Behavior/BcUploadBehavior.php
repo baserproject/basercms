@@ -241,10 +241,10 @@ class BcUploadBehavior extends ModelBehavior {
  * @return mixed false|array
  */
 	public function saveTmpFiles(Model $Model, $data, $tmpId) {
-		$this->setupRequestData($Model);
 		$this->Session->delete('Upload');
 		$Model->data = $data;
 		$this->tmpId = $tmpId;
+		$this->setupRequestData($Model);
 		$Model->data = $this->deleteFiles($Model, $Model->data);
 		$result = $this->saveFiles($Model, $Model->data);
 		if ($result) {
@@ -263,7 +263,10 @@ class BcUploadBehavior extends ModelBehavior {
  * @return array
  */
 	public function deleteFiles(Model $Model, $requestData) {
-		$oldData = $Model->findById($Model->id);
+		$oldData = false;
+		if ($this->tmpId) {
+			$oldData = $Model->findById($Model->id);
+		}
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
 			if($oldData && $oldData[$Model->name][$field['name']]) {
 				$oldValue = $oldData[$Model->name][$field['name']];
@@ -358,7 +361,11 @@ class BcUploadBehavior extends ModelBehavior {
 			@unlink($tmpName);
 			$this->uploaded[$Model->name] = true;
 		} else {
-			return false;
+			if($this->tmpId) {
+				return $requestData;
+			} else {
+				return false;	
+			}
 		}
 		return $requestData;
 	}
@@ -468,8 +475,8 @@ class BcUploadBehavior extends ModelBehavior {
 			$suffix = $field['suffix'];
 		}
 		// 保存ファイル名を生成
-		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
 		if (!$this->tmpId) {
+			$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
 			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
 			if(file_exists($this->savePath[$Model->alias] . $fileName)) {
 				if(preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
