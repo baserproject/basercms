@@ -263,15 +263,13 @@ class BcUploadBehavior extends ModelBehavior {
  * @return array
  */
 	public function deleteFiles(Model $Model, $requestData) {
-		$oldData = false;
-		if ($this->tmpId) {
-			$oldData = $Model->findById($Model->id);
-		}
+		$oldData = $Model->findById($Model->id);
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
+			$oldValue = '';
 			if($oldData && $oldData[$Model->name][$field['name']]) {
 				$oldValue = $oldData[$Model->name][$field['name']];
-			} else {
-				$oldValue = '';
+			} elseif(!empty($Model->data[$Model->name][$field['name']]) && !is_array($Model->data[$Model->name][$field['name']])) {
+				$oldValue = $Model->data[$Model->name][$field['name']];
 			}
 			$requestData = $this->deleteFileWhileChecking($Model, $field, $requestData, $oldValue);
 		}
