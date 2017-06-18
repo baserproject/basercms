@@ -353,6 +353,7 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 		}
 
+		$this->BlogPost->recursive = 2;
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogPost->read(null, $id);
 			if(!$this->request->data) {
