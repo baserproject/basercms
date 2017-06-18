@@ -143,7 +143,7 @@ class BcAuthConfigureComponent extends Component {
 		if (!$BcAuth->user()) {
 
 			// クッキーがある場合にはクッキーで認証
-			if (!empty($Controller->Cookie)) {
+			if (!empty($Controller->Cookie) && $Controller->request->is('requestview') !== false) {
 				$cookieKey = Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey));
 				$cookie = $Controller->Cookie->read($cookieKey);
 				
