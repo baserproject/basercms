@@ -142,7 +142,8 @@ class ContentsController extends AppController {
 			$this->render($template);
 			return;
 		}
-		
+
+		$this->set('editInIndexDisabled', false);
 		$this->set('contentTypes', $this->BcContents->getTypes());
 		$this->set('authors', $this->User->getUserList());
 		$this->set('folders', $this->Content->getContentFolderList((int) $currentSiteId, ['conditions' => ['Content.site_root' => false]]));
