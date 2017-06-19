@@ -25,6 +25,69 @@ class ContentFolder extends AppModel {
 	public $actsAs = array('BcContents');
 
 /**
+ * 変更前情報
+ * 
+ * @var array
+ */
+	public $oldContentFolder = null;
+
+/**
+ * beforeSave
+ * 
+ * @param type $options
+ */
+	public function beforeSave($options = array()) {
+
+		// 変更前の情報を取得
+		$this->oldContentFolder = $this->read(null, $this->data['ContentFolder']['id']);
+
+	}
+
+/**
+ * afterSave
+ * 
+ * @param type $created
+ * @param type $options
+ */
+	public function afterSave($created, $options = array()) {
+
+		if (isset($this->oldContentFolder['Content']['name']) && 
+			!empty($this->oldContentFolder['Content']['name']) && 
+			$this->oldContentFolder['Content']['name'] != $this->data['Content']['name']) {
+
+			// 変更後フォルダ配下の固定ページを抽出・ファイル作成
+			$contentId = $this->data['Content']['id'];
+			$contents = $this->Content->children($contentId);
+			$contentIds = Hash::extract($contents, '{n}.Content.id');
+			$this->Content->expects(['Content']);
+			$this->Content->bindModel([
+				'belongsTo' => [
+					'Page' => [
+						'className' => 'Page',
+						'foreignKey' => 'entity_id',
+					],
+				],
+			]);
+			$newContents = $this->Content->find('all', [
+				'conditions' => [
+					'Content.plugin' => 'Core',
+					'Content.type' => 'Page',
+					'Content.id' => $contentIds,
+				],
+			]);
+			foreach($newContents as $newContent) {
+				$this->Content->Page->createPageTemplate($newContent);
+			}
+
+			// 変更前フォルダを削除
+			$path = APP . 'View' . DS . 'Pages';
+			$oldFolder = $path . str_replace('/', DS, $this->oldContentFolder['Content']['url']);
+			$fd = new Folder($oldFolder);
+			$fd->delete();
+		}
+	}
+
+/**
  * サイトルートフォルダを保存
  *
  * @param null $siteId
