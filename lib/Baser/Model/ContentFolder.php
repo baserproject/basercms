@@ -15,7 +15,7 @@
  *
  * @package Baser.Model
  */
-class ContentFolder extends AppModel {
+class ContentFolder extends AppModel implements CakeEventListener {
 
 /**
  * Behavior Setting
@@ -25,66 +25,114 @@ class ContentFolder extends AppModel {
 	public $actsAs = array('BcContents');
 
 /**
- * 変更前情報
+ * 変更前URL
  * 
  * @var array
  */
-	public $oldContentFolder = null;
+	public $beforeUrl = null;
 
 /**
- * beforeSave
+ * テンプレートを移動可能かどうか
  * 
- * @param type $options
+ * @var bool
  */
-	public function beforeSave($options = array()) {
+	public $isMovableTemplate = true;
 
-		// 変更前の情報を取得
-		$this->oldContentFolder = $this->read(null, $this->data['ContentFolder']['id']);
-
+/**
+ * Implemented Events
+ *
+ * @return array
+ */
+	public function implementedEvents() {
+		return array_merge(parent::implementedEvents(), [
+			'Controller.Contents.beforeMove' => ['callable' => 'beforeMove'],
+			'Controller.Contents.afterMove' => ['callable' => 'afterMove']
+		]);
 	}
 
 /**
- * afterSave
+ * Before Move
  * 
- * @param type $created
- * @param type $options
+ * @param \CakeEvent $event
+ */
+	public function beforeMove(CakeEvent $event) {
+		if($event->data['data']['currentType'] == 'ContentFolder') {
+			$this->setBeforeUrl($event->data['data']['entityId']);
+		}
+	}
+
+/**
+ * After Move
+ * 
+ * @param \CakeEvent $event
+ */
+	public function afterMove(CakeEvent $event) {
+		if(!empty($event->data['data']['Content']) && $event->data['data']['Content']['type'] == 'ContentFolder') {
+			$this->movePageTemplates($event->data['data']['Content']['url']);			
+		}
+	}
+	
+/**
+ * Before Save
+ * 
+ * @param array $options
+ */
+	public function beforeSave($options = []) {
+		// 変更前のURLを取得
+		if(!empty($this->data['ContentFolder']['id']) && $this->isMovableTemplate) {
+			$this->isMovableTemplate = false;
+			$this->setBeforeUrl($this->data['ContentFolder']['id']);
+		}
+		return parent::beforeSave($options);
+	}
+
+/**
+ * After Save
+ * 
+ * @param bool $created
+ * @param array $options
+ * @param bool
  */
 	public function afterSave($created, $options = array()) {
-
-		if (isset($this->oldContentFolder['Content']['name']) && 
-			!empty($this->oldContentFolder['Content']['name']) && 
-			$this->oldContentFolder['Content']['name'] != $this->data['Content']['name']) {
-
-			// 変更後フォルダ配下の固定ページを抽出・ファイル作成
-			$contentId = $this->data['Content']['id'];
-			$contents = $this->Content->children($contentId);
-			$contentIds = Hash::extract($contents, '{n}.Content.id');
-			$this->Content->expects(['Content']);
-			$this->Content->bindModel([
-				'belongsTo' => [
-					'Page' => [
-						'className' => 'Page',
-						'foreignKey' => 'entity_id',
-					],
-				],
-			]);
-			$newContents = $this->Content->find('all', [
-				'conditions' => [
-					'Content.plugin' => 'Core',
-					'Content.type' => 'Page',
-					'Content.id' => $contentIds,
-				],
-			]);
-			foreach($newContents as $newContent) {
-				$this->Content->Page->createPageTemplate($newContent);
-			}
-
-			// 変更前フォルダを削除
-			$path = APP . 'View' . DS . 'Pages';
-			$oldFolder = $path . str_replace('/', DS, $this->oldContentFolder['Content']['url']);
-			$fd = new Folder($oldFolder);
-			$fd->delete();
+		parent::afterSave($created, $options);
+		if(!empty($this->data['Content']['url']) && $this->beforeUrl) {
+			$this->movePageTemplates($this->data['Content']['url']);
+			$this->isMovableTemplate = true;
 		}
+		return true;
+	}
+
+/**
+ * 保存前のURLをセットする
+ *
+ * @param int $id
+ */
+	public function setBeforeUrl($id) {
+		$record = $this->find('first', ['fields' => ['Content.url'], 'conditions' => ['ContentFolder.id' => $id], 'recursive' => 0]);
+		if($record['Content']['url']) {
+			$this->beforeUrl = $record['Content']['url'];
+		}
+	}
+	
+/**
+ * 固定ページテンプレートを移動する
+ * 
+ * @param string $afterUrl
+ * @return bool
+ */
+	public function movePageTemplates($afterUrl) {
+		if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
+			$basePath = APP . 'View' . DS . 'Pages' . DS;
+			if(is_dir($basePath . $this->beforeUrl)) {
+				(new Folder())->move([
+					'to' => $basePath . $afterUrl,
+					'from' => $basePath . $this->beforeUrl,
+					'chmod' => 0777
+				]);
+			}
+		}
+		$this->beforeUrl = null;
+		return true;
 	}
 
 /**
