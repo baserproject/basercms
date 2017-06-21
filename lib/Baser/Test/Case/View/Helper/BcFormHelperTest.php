@@ -350,10 +350,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
+ * @dataProvider getControlSourceProvider
  */
-	public function testGetControlSource() {
-		$result = $this->BcForm->getControlSource('hoge');
-		self::assertEquals(array(), $result);
+	public function testGetControlSource($field, $expected) {
+		$result = $this->BcForm->getControlSource($field);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getControlSourceProvider() {
+		return array(
+			array('hoge', array()),
+			array('', array())
+		);
 	}
 
 /**
@@ -374,9 +382,9 @@ class BcFormHelperTest extends BaserTestCase {
 	public function generateListProvider() {
 		return array(
 			array('hoge', '', '', ''),
-			array('User', '', ['id','name'], Array (1 => 'basertest', 2 => 'basertest2')),
-			array('User', '', ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
-			array('User', true, ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', '', ['id','name'], Array(1 => 'basertest', 2 => 'basertest2')),
+			array('User', '', ['name','id'], Array('basertest' => 1, 'basertest2' => 2)),
+			array('User', true, ['name','id'], Array('basertest' => 1, 'basertest2' => 2)),
 			array('User', false, ['name','id'], null)
 		);
 	}
@@ -528,7 +536,9 @@ class BcFormHelperTest extends BaserTestCase {
  * @return string 行データ
  */
 	public function testDispatchAfterForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcForm->dispatchAfterForm();
+		$expected = '';
+		$this->assertEquals($result, $expected);
 	}
 
 /**
