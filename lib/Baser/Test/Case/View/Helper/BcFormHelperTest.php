@@ -366,15 +366,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @return mixed リストまたは、false
  * @dataProvider generateListProvider
 */
-	public function testGenerateList($modelName, $expected) {
-		$result = $this->BcForm->generateList($modelName);
+	public function testGenerateList($modelName, $conditions, $fields, $expected) {
+		$result = $this->BcForm->generateList($modelName, $conditions, $fields);
 		$this->assertEquals($result, $expected);
 	}
 
 	public function generateListProvider() {
 		return array(
-			array('hoge', ''),
-			array('Page', '')
+			array('hoge', '', '', ''),
+			array('User', '', ['id','name'], Array (1 => 'basertest', 2 => 'basertest2')),
+			array('User', '', ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', true, ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', false, ['name','id'], null)
 		);
 	}
 
