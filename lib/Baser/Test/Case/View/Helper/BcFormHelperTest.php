@@ -211,11 +211,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $fieldName This should be "Modelname.fieldname"
  * @param array $options Each type of input takes different options.
  * @return string Completed form widget
+ * @dataProvider inputDataProvider
  */
-	public function testInput() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testInput($fieldName, $options, $expected) {
+		$result = $this->BcForm->Input($fieldName, $options);
+		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
+	public function inputDataProvider() {
+		return array(
+			array('BlogTag.BlogTag', '', '<input type="hidden"'),
+			array('hoge', '', '<input name="data\[hoge\]"'),
+			array('hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege"')
+		);
+	}
 
 /**
  * CKEditorを出力する
