@@ -213,16 +213,29 @@ class BcFormHelperTest extends BaserTestCase {
  * @return string Completed form widget
  * @dataProvider inputDataProvider
  */
-	public function testInput($fieldName, $options, $expected) {
+
+	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
+		$event = $this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
+			$event->data['options'][$optionsField] = $optionsData;
+		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
-		$this->assertRegExp('/' . $expected . '/s', $result);
+		pr($result);
+		$this->assertEquals($expected, $result);
+
+		$EventManager = CakeEventManager::instance();
+		$EventManager->detach($event);
 	}
 
 	public function inputDataProvider() {
 		return array(
-			array('BlogTag.BlogTag', '', '<input type="hidden"'),
-			array('hoge', '', '<input name="data\[hoge\]"'),
-			array('hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege"')
+			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
+
+			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data[BlogTag][BlogTag]" value="" id="BlogTagBlogTag_"/>
+<select name="data[BlogTag][BlogTag][]" ="" multiple="multiple" id="BlogTagBlogTag">
+</select>'),
+			array('', '', 'hoge', '', '<input name="data[hoge]" value="hoge" ="" type="text" id="hoge"/>'),
+			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data[hoge]" a="hogege" value="hoge" ="" type="text" id="hoge"/>')
 		);
 	}
 
@@ -350,10 +363,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
+ * @dataProvider getControlSourceProvider
  */
-	public function testGetControlSource() {
-		$result = $this->BcForm->getControlSource('hoge');
-		self::assertEquals(array(), $result);
+	public function testGetControlSource($field, $expected) {
+		$result = $this->BcForm->getControlSource($field);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getControlSourceProvider() {
+		return array(
+			array('hoge', array()),
+			array('', array())
+		);
 	}
 
 /**
@@ -528,7 +549,9 @@ class BcFormHelperTest extends BaserTestCase {
  * @return string 行データ
  */
 	public function testDispatchAfterForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcForm->dispatchAfterForm();
+		$expected = '';
+		$this->assertEquals($result, $expected);
 	}
 
 /**
