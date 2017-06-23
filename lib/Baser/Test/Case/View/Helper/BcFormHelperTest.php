@@ -220,22 +220,32 @@ class BcFormHelperTest extends BaserTestCase {
 		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
 		pr($result);
-		$this->assertEquals($expected, $result);
-
 		$EventManager = CakeEventManager::instance();
-		$EventManager->detach($event);
+		$this->assertEquals($expected, $result);
+		$reflectionClass = new ReflectionClass(get_class($EventManager));
+		$property = $reflectionClass->getProperty('_listeners');
+		$property->setAccessible(true);
+		$property->setValue($EventManager, []);
 	}
 
 	public function inputDataProvider() {
 		return array(
 			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data[User][id]" div="true" value="hoge" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data[User][id]" value="hoge" maxlength="11" type="text" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1</label><input name="data[User][id]" value="hoge" maxlength="11" type="text" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => []], ''),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2, 3]], '<input type="radio" name="data[User][id]" id="UserId0" value="0" /><label for="UserId0">1</label>　<input type="radio" name="data[User][id]" id="UserId1" value="1" /><label for="UserId1">2</label>　<input type="radio" name="data[User][id]" id="UserId2" value="2" /><label for="UserId2">3</label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2, 3], 'value' => ['a', 'b', 'c']], '<input type="radio" name="data[User][id]" id="UserId0" value="0" /><label for="UserId0">1</label>　<input type="radio" name="data[User][id]" id="UserId1" value="1" /><label for="UserId1">2</label>　<input type="radio" name="data[User][id]" id="UserId2" value="2" /><label for="UserId2">3</label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1</legend></fieldset>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'separator' => true], ''),
 
 			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data[BlogTag][BlogTag]" value="" id="BlogTagBlogTag_"/>
 <select name="data[BlogTag][BlogTag][]" ="" multiple="multiple" id="BlogTagBlogTag">
 </select>'),
-			array('', '', 'hoge', '', '<input name="data[hoge]" value="hoge" ="" type="text" id="hoge"/>'),
-			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data[hoge]" a="hogege" value="hoge" ="" type="text" id="hoge"/>')
+			array('', '', 'hoge', '', '<input name="data[hoge]" ="" type="text" id="hoge"/>'),
+			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data[hoge]" a="hogege" ="" type="text" id="hoge"/>')
 		);
 	}
 
