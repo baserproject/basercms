@@ -382,9 +382,9 @@ class BcFormHelperTest extends BaserTestCase {
 	public function generateListProvider() {
 		return array(
 			array('hoge', '', '', ''),
-			array('User', '', ['id','name'], Array(1 => 'basertest', 2 => 'basertest2')),
-			array('User', '', ['name','id'], Array('basertest' => 1, 'basertest2' => 2)),
-			array('User', true, ['name','id'], Array('basertest' => 1, 'basertest2' => 2)),
+			array('User', '', ['id','name'], Array (1 => 'basertest', 2 => 'basertest2')),
+			array('User', '', ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', true, ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
 			array('User', false, ['name','id'], null)
 		);
 	}
