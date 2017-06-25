@@ -1144,4 +1144,32 @@ class BlogHelper extends AppHelper {
 		}
 		return $prevPost;
 	}
+
+/**
+ * 記事が属するカテゴリ名を取得
+ * 
+ * @param array $post
+ * @return string
+ */
+	public function getCategoryName($post) {
+		if (empty($post['BlogCategory']['name'])) {
+			return '';
+		} else {
+			return $post['BlogCategory']['name'];
+		}
+	}
+
+/**
+ * 記事が属するカテゴリタイトルを取得
+ * 
+ * @param $post
+ * @return string
+ */
+	public function getCategoryTitle($post) {
+		if (empty($post['BlogCategory']['title'])) {
+			return '';
+		} else {
+			return $post['BlogCategory']['title'];
+		}
+	}
 }
