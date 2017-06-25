@@ -1745,5 +1745,69 @@ class Content extends AppModel {
 		$this->getDataSource()->commit();
 		return true;
 	}
+
+/**
+ * コンテンツ管理のツリー構造をリセットする
+ */
+	public function resetTree() {
+		$this->Behaviors->unload('Tree');
+		$this->updatingRelated = false;
+		$siteRoots = $this->find('all', ['conditions' => ['Content.site_root' => true], 'order' => 'lft', 'recursive' => -1]);
+		$count = 0;
+		$mainSite = [];
+		foreach($siteRoots as $siteRoot) {
+			$count++;
+			$siteRoot['Content']['lft'] = $count;
+			$siteRoot['Content']['level'] = ($siteRoot['Content']['id'] == 1)? 0 : 1;
+			$siteRoot['Content']['parent_id'] = ($siteRoot['Content']['id'] == 1)? null : 1;
+			$contents = $this->find('all', ['conditions' => ['Content.site_id' => $siteRoot['Content']['site_id'], 'Content.site_root' => false], 'order' => 'lft', 'recursive' => -1]);
+			if($contents) {
+				foreach($contents as $content) {
+					$count++;
+					$content['Content']['lft'] = $count;
+					$count++;
+					$content['Content']['rght'] = $count;
+					$content['Content']['level'] = $siteRoot['Content']['level'] + 1;
+					$content['Content']['parent_id'] = $siteRoot['Content']['id'];
+					$this->save($content, false);
+				}
+			}
+			if($siteRoot['Content']['id'] == 1) {
+				$mainSite = $siteRoot;
+			} else {
+				$count++;
+				$siteRoot['Content']['rght'] = $count;
+				$this->save($siteRoot, false);
+			}
+		}
+		$count++;
+		$mainSite['Content']['rght'] = $count;
+		$this->save($mainSite, false);
+		// ゴミ箱
+		$this->Behaviors->unload('SoftDelete');
+		$contents = $this->find('all', ['conditions' => ['Content.deleted' => true], 'order' => 'lft', 'recursive' => -1]);
+		if($contents) {
+			foreach($contents as $content) {
+				$count++;
+				$content['Content']['lft'] = $count;
+				$count++;
+				$content['Content']['rght'] = $count;
+				$content['Content']['level'] = 0;
+				$content['Content']['parent_id'] = null;
+				$content['Content']['site_id'] = null;
+				$this->save($content, false);
+			}
+		}
+		// 関連データ更新機能をオンにした状態で再度更新
+		$this->Behaviors->load('Tree');
+		$this->updatingRelated = true;
+		$contents = $this->find('all', ['order' => 'lft', 'recursive' => -1]);
+		if($contents) {
+			foreach($contents as $content) {
+				$this->save($content, false);
+			}
+		}
+		return true;
+	}
 	
 }
