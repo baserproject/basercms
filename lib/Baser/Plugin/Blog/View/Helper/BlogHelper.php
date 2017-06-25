@@ -427,9 +427,10 @@ class BlogHelper extends AppHelper {
  * @return mixed ''|string|array
  */
 	public function getTag($post, $options = []) {
-		if(is_string($options)) {
+		if($options && is_string($options)) {
+			$separator = $options;
 			$options = [];
-			$options['separator'] = $options;
+			$options['separator'] = $separator;
 		}
 		$options = array_merge([
 			'separator' => ' , ',

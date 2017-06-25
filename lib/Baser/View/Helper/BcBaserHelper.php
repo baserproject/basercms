@@ -2514,7 +2514,8 @@ END_FLASH;
 		$datas = $BlogContent->find('all', array(
 				'conditions' => $conditions,
 				'order' => $options['sort'],
-				'cache' => false
+				'cache' => false,
+				'recursive' => 0
 			)
 		);
 		if(!$datas) {
