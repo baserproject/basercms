@@ -420,19 +420,41 @@ class BlogHelper extends AppHelper {
  * 複数所属する場合は複数取得する
  *
  * @param array $post 記事データ
- * @param string $separator 区切り文字（初期値 :  , ）
- * @return void
+ * @param string $options 
+ * 	- `separator` : 区切り文字（初期値 :  , ）
+ * 	- `tag` : タグで出力するかどうか（初期値 : true）
+ * 	※ 文字列で指定した場合は、separator として扱う
+ * @return mixed ''|string|array
  */
-	public function getTag($post, $separator = ' , ') {
-		$tagLinks = array();
+	public function getTag($post, $options = []) {
+		if(is_string($options)) {
+			$options = [];
+			$options['separator'] = $options;
+		}
+		$options = array_merge([
+			'separator' => ' , ',
+			'tag' => true
+		], $options);
+		$tags = [];
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
 				$url = $this->request->params['Content']['url'] . 'archives/tag/' . $tag['name'];
-				$tagLinks[] = $this->BcBaser->getLink($tag['name'], $url);
+				if($options['tag']) {
+					$tags[] = $this->BcBaser->getLink($tag['name'], $url);	
+				} else {
+					$tags[] = [
+						'name' => $tag['name'],
+						'url' => $url
+					];
+				}
 			}
 		}
-		if ($tagLinks) {
-			return implode($separator, $tagLinks);
+		if ($tags) {
+			if($options['tag']) {
+				return implode($options['separator'], $tags);
+			} else {
+				return $tags;
+			}	
 		} else {
 			return '';
 		}

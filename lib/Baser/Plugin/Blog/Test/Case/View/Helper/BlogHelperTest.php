@@ -290,8 +290,10 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * タグを取得する
+ * 
+ * @dataProvider getTagDataProvider
  */
-	public function testGetTag() {
+	public function testGetTag($options, $expects) {
 		$post = array(
 			'BlogTag' => array(
 				array('name' => 'test1'),
@@ -301,10 +303,18 @@ class BlogHelperTest extends BaserTestCase {
 				'name' => 'news'
 			)
 		);
-
-		$result = $this->Blog->getTag($post);
-		$expected = '<a href="/news/archives/tag/test1">test1</a> , <a href="/news/archives/tag/test2">test2</a>';
-		$this->assertEquals($expected, $result, 'タグを正しく取得できません');
+		$result = $this->Blog->getTag($post, $options);
+		$this->assertEquals($expects, $result, 'タグを正しく取得できません');
+	}
+	
+	public function getTagDataProvider() {
+		return [
+			[['separator' => ' , '], '<a href="/news/archives/tag/test1">test1</a> , <a href="/news/archives/tag/test2">test2</a>'],
+			[['tag' => false], [
+				['name' => 'test1', 'url' => '/news/archives/tag/test1'],
+				['name' => 'test2', 'url' => '/news/archives/tag/test2']
+			]]	
+		];
 	}
 
 /**
