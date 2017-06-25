@@ -1162,7 +1162,7 @@ class BlogHelper extends AppHelper {
 /**
  * 記事が属するカテゴリタイトルを取得
  * 
- * @param $post
+ * @param array $post
  * @return string
  */
 	public function getCategoryTitle($post) {
@@ -1172,4 +1172,19 @@ class BlogHelper extends AppHelper {
 			return $post['BlogCategory']['title'];
 		}
 	}
+
+/**
+ * 記事のIDを取得
+ * 
+ * @param array $post
+ * @return string
+ */
+	public function getPostId($post) {
+		if (empty($post['BlogPost']['id'])) {
+			return '';
+		} else {
+			return $post['BlogPost']['id'];
+		}
+	}
+	
 }
