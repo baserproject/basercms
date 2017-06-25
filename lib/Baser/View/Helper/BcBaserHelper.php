@@ -1860,7 +1860,7 @@ END_FLASH;
  * @return bool
  */
 	public function isBlog() {
-		return ($this->request->params['Content']['plugin'] == 'Blog');
+		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
 	}
 
 /**
@@ -1869,7 +1869,7 @@ END_FLASH;
  * @return bool
  */
 	public function isMail() {
-		return ($this->request->params['Content']['plugin'] == 'Mail');
+		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Mail');
 	}
 
 /**
