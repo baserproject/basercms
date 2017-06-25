@@ -167,7 +167,7 @@ class BcContentsRoute extends CakeRoute {
 			];	
 		}
 		if($publish) {
-			$conditions = $conditions + $Content->getConditionAllowPublish();
+			$conditions = array_merge($conditions, $Content->getConditionAllowPublish());
 		}
 		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
 		if(!$content) {
