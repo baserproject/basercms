@@ -335,6 +335,7 @@ class BcUploadBehavior extends ModelBehavior {
 			'deleteTmpFiles' => true
 		], $options);
 		if(!$this->tmpId && empty($fieldSetting['upload'])) {
+			unset($requestData[$Model->name][$fieldSetting['name']]);
 			return $requestData;
 		}
 		// ファイル名が重複していた場合は変更する
