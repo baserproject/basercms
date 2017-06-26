@@ -206,7 +206,6 @@ class BcUploadBehavior extends ModelBehavior {
 					$targets = [$field['type']];
 				}
 				if ($targets && !in_array($field['ext'], $targets)) {
-					unset($Model->data[$Model->name][$field['name']]);
 					$upload = false;
 				}
 			}
@@ -764,6 +763,9 @@ class BcUploadBehavior extends ModelBehavior {
 			return false;
 		}	
 		$oldName = $Model->data[$Model->alias][$setting['name']];
+		if(is_array($oldName)) {
+			return false;
+		}
 		$saveDir = $this->savePath[$Model->alias];
 		$saveDirInTheme = $this->getSaveDir($Model, true);
 		$oldSaveDir = '';
@@ -912,10 +914,8 @@ class BcUploadBehavior extends ModelBehavior {
 /**
  * 一意のファイル名を取得する
  * 
- * @param Model $Model
  * @param string $fieldName 一意の名前を取得する元となるフィールド名
  * @param string $fileName 対象のファイル名
- * @param array $setting
  * @return string
  */
 	public function getUniqueFileName(Model $Model, $fieldName, $fileName, $setting = null) {
@@ -967,7 +967,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param Model $Model
  * @param bool $isTheme
- * @param bool $limited
  * @return string $saveDir
  */
 	public function getSaveDir(Model $Model, $isTheme = false, $limited = false) {
