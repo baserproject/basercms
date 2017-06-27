@@ -195,6 +195,7 @@ class Site extends AppModel {
 /**
  * メインサイトのデータを取得する
  * 
+ * @param mixed $options 取得するフィールド
  * @return array
  */
 	public function getRootMain($options = []) {
@@ -504,6 +505,7 @@ class Site extends AppModel {
  * 選択可能なデバイスの一覧を取得する
  *
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return array
  */
 	public function getSelectableDevices($mainSiteId, $currentSiteId) {
@@ -529,6 +531,7 @@ class Site extends AppModel {
  * 選択可能が言語の一覧を取得する
  * 
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return array
  */
 	public function getSelectableLangs($mainSiteId, $currentSiteId) {
@@ -615,6 +618,7 @@ class Site extends AppModel {
  * Before Save
  * 
  * @param array $options
+ * @return bool
  */
 	public function beforeSave($options = array()) {
 		if(!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
@@ -623,6 +627,7 @@ class Site extends AppModel {
 				$this->__changedAlias = true;
 			}
 		}
+		return true;
 	}
 	
 }

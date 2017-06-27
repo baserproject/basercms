@@ -297,7 +297,7 @@ class BlogPostsController extends BlogAppController {
 				// recursiveを設定
 				$this->BlogPost->recursive = 1;
 
-				/*				 * * afterAdd ** */
+				// EVENT BlogPosts.afterAdd
 				$this->dispatchEvent('afterAdd', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));
@@ -353,6 +353,7 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 		}
 
+		$this->BlogPost->recursive = 2;
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogPost->read(null, $id);
 			if(!$this->request->data) {
@@ -376,7 +377,7 @@ class BlogPostsController extends BlogAppController {
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
 
-				/*				 * * BlogPosts.afterEdit ** */
+				// EVENT BlogPosts.afterEdit
 				$this->dispatchEvent('afterEdit', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));

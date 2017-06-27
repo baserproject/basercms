@@ -62,8 +62,6 @@ class SitesController extends AppController {
 
 /**
  * サブサイト追加
- *
- * @param $id
  */
 	public function admin_add() {
 
@@ -214,8 +212,6 @@ class SitesController extends AppController {
 
 /**
  * 削除する
- *
- * @param $id
  */
 	public function admin_delete() {
 		if(empty($this->request->data['Site']['id'])) {

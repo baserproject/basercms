@@ -234,8 +234,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	public function deleteFilesDataProvider() {
 		return array(
-			array(1, 'saveFiles()でファイルを削除できません'),
-			array(2, 'saveFiles()でファイルを削除できません'),
+			array(1, 'deleteFiles()でファイルを削除できません'),
+			array(2, 'deleteFiles()でファイルを削除できません'),
 		);
 	}
 

@@ -32,7 +32,7 @@ class ContentsController extends AppController {
  *
  * @var array
  */
-	public $uses = ['Content', 'Site', 'SiteConfig'];
+	public $uses = ['Content', 'Site', 'SiteConfig', 'ContentFolder'];
 
 /**
  * コンポーネント
@@ -142,7 +142,8 @@ class ContentsController extends AppController {
 			$this->render($template);
 			return;
 		}
-		
+		$this->ContentFolder->getEventManager()->attach($this->ContentFolder);
+		$this->set('editInIndexDisabled', false);
 		$this->set('contentTypes', $this->BcContents->getTypes());
 		$this->set('authors', $this->User->getUserList());
 		$this->set('folders', $this->Content->getContentFolderList((int) $currentSiteId, ['conditions' => ['Content.site_root' => false]]));

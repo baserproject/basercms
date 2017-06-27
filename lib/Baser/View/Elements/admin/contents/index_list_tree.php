@@ -42,6 +42,7 @@
 		}
 		$editDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'edit', $data['Content']['entity_id']);
 		$manageDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'manage', $data['Content']['entity_id']);
+		$editInIndexDisabled
 		?>
 <li id="node-<?php echo $data['Content']['id'] ?>" data-jstree='{
 	"icon":"<?php echo $iconPath ?>",

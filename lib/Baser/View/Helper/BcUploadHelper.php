@@ -170,7 +170,8 @@ class BcUploadHelper extends BcAppHelper {
 			'noimage' => '', // 画像がなかった場合に表示する画像
 			'tmp' => false,
 			'force' => false,
-			'output' => '' // 出力タイプ tag ,url を指定、未指定(or false)の場合は、tagで出力(互換性のため)
+			'output' => '', // 出力タイプ tag ,url を指定、未指定(or false)の場合は、tagで出力(互換性のため)
+			'limited' => false // 公開制限フォルダを利用する場合にフォルダ名を設定する
 		], $options);
 
 		$this->setEntity($fieldName);
@@ -238,8 +239,8 @@ class BcUploadHelper extends BcAppHelper {
 
 		$fileUrl = $this->getBasePath($settings);
 		$Model = $this->getUploadModel();
-		$saveDir = $Model->getSaveDir();
-		$saveDirInTheme = $Model->getSaveDir(true);
+		$saveDir = $Model->getSaveDir(false, $options['limited']);
+		$saveDirInTheme = $Model->getSaveDir(true, $options['limited']);
 
 		if (isset($settings['fields'][$field]['imagecopy'])) {
 			$copySettings = $settings['fields'][$field]['imagecopy'];

@@ -211,11 +211,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $fieldName This should be "Modelname.fieldname"
  * @param array $options Each type of input takes different options.
  * @return string Completed form widget
+ * @dataProvider inputDataProvider
  */
-	public function testInput() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testInput($fieldName, $options, $expected) {
+		$result = $this->BcForm->Input($fieldName, $options);
+		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
+	public function inputDataProvider() {
+		return array(
+			array('BlogTag.BlogTag', '', '<input type="hidden"'),
+			array('hoge', '', '<input name="data\[hoge\]"'),
+			array('hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege"')
+		);
+	}
 
 /**
  * CKEditorを出力する
@@ -357,15 +366,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @return mixed リストまたは、false
  * @dataProvider generateListProvider
 */
-	public function testGenerateList($modelName, $expected) {
-		$result = $this->BcForm->generateList($modelName);
+	public function testGenerateList($modelName, $conditions, $fields, $expected) {
+		$result = $this->BcForm->generateList($modelName, $conditions, $fields);
 		$this->assertEquals($result, $expected);
 	}
 
 	public function generateListProvider() {
 		return array(
-			array('hoge', ''),
-			array('Page', '')
+			array('hoge', '', '', ''),
+			array('User', '', ['id','name'], Array (1 => 'basertest', 2 => 'basertest2')),
+			array('User', '', ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', true, ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', false, ['name','id'], null)
 		);
 	}
 

@@ -534,7 +534,7 @@ class UsersController extends AppController {
 				$this->setMessage('メール送信時にエラーが発生しました。', true, false);
 				return;
 			}
-			$this->setMessage('$email . \' 宛に新しいパスワードを送信しました。', true, false);
+			$this->setMessage($email . ' 宛に新しいパスワードを送信しました。', false, true);
 			$this->request->data = array();
 		}
 	}

@@ -82,6 +82,7 @@ class ToolsController extends AppController {
  * @return void
  */
 	public function admin_maintenance($mode = '') {
+		$this->_checkReferer();
 		switch ($mode) {
 			case 'backup':
 				set_time_limit(0);
@@ -429,6 +430,7 @@ class ToolsController extends AppController {
  * 管理システム用アセットファイルを削除する
  */
 	public function admin_delete_admin_assets() {
+		$this->_checkReferer();
 		if($this->BcManager->deleteAdminAssets()) {
 			$this->setMessage('管理システム用のアセットファイルを削除しました。', false, true);
 		} else {
@@ -441,6 +443,7 @@ class ToolsController extends AppController {
  * 管理システム用アセットファイルを再配置する
  */
 	public function admin_deploy_admin_assets() {
+		$this->_checkReferer();
 		if($this->BcManager->deployAdminAssets()) {
 			$this->setMessage('管理システム用のアセットファイルを再配置しました。', false, true);
 		} else {
@@ -449,4 +452,36 @@ class ToolsController extends AppController {
 		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
 	}
 
+/**
+ * コンテンツ管理のツリー構造をリセットする 
+ */
+	public function admin_reset_contents_tree() {
+		$this->_checkReferer();
+		$Content = ClassRegistry::init('Content');
+		if($Content->resetTree()) {
+			$this->setMessage('コンテンツのツリー構造をリセットしました。', false, true);
+		} else {
+			$this->setMessage('コンテンツのツリー構造のリセットに失敗しました。', true);
+		}
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
+	}
+
+/**
+ * コンテンツ管理のツリー構造のチェックを行う
+ * 
+ * 問題がある場合にはログを出力する
+ */
+	public function admin_verity_contents_tree() {
+		$this->_checkReferer();
+		$Content = ClassRegistry::init('Content');
+		$Content->Behaviors->unload('SoftDelete');
+		$result = $Content->verify();
+		if($result === true) {
+			$this->setMessage('コンテンツのツリー構造に問題はありません。', false, true);
+		} else {
+			$this->log($result);
+			$this->setMessage('コンテンツのツリー構造に問題があります。ログを確認してください。', true);
+		}
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
+	}
 }

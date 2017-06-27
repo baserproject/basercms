@@ -69,7 +69,7 @@ class BcUploadBehavior extends ModelBehavior {
 /**
  * Session
  * 
- * @var Session
+ * @var \SessionComponent
  */
 	public $Session = null;
 
@@ -143,7 +143,7 @@ class BcUploadBehavior extends ModelBehavior {
  * Before save
  * 
  * @param Model $Model
- * @param Model $options
+ * @param array $options
  * @return boolean
  */
 	public function beforeSave(Model $Model, $options = array()) {
@@ -206,7 +206,6 @@ class BcUploadBehavior extends ModelBehavior {
 					$targets = [$field['type']];
 				}
 				if ($targets && !in_array($field['ext'], $targets)) {
-					unset($Model->data[$Model->name][$field['name']]);
 					$upload = false;
 				}
 			}
@@ -218,10 +217,11 @@ class BcUploadBehavior extends ModelBehavior {
  * After save
  * 
  * @param Model $Model
- * @param Model $created
- * @param Model $options
+ * @param bool $created
+ * @param array $options
+ * @return bool
  */
-	public function afterSave(Model $Model, $created, $options = array()) {
+	public function afterSave(Model $Model, $created, $options = []) {
 		if($this->uploaded[$Model->name]) {
 			$Model->data = $this->renameToBasenameFields($Model);
 			$Model->data = $Model->save($Model->data, array('callbacks' => false, 'validate' => false));
@@ -230,6 +230,7 @@ class BcUploadBehavior extends ModelBehavior {
 		foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
 			$this->settings[$Model->alias]['fields'][$key]['upload'] = false;
 		}
+		return true;
 	}
 
 /**
@@ -241,10 +242,10 @@ class BcUploadBehavior extends ModelBehavior {
  * @return mixed false|array
  */
 	public function saveTmpFiles(Model $Model, $data, $tmpId) {
-		$this->setupRequestData($Model);
 		$this->Session->delete('Upload');
 		$Model->data = $data;
 		$this->tmpId = $tmpId;
+		$this->setupRequestData($Model);
 		$Model->data = $this->deleteFiles($Model, $Model->data);
 		$result = $this->saveFiles($Model, $Model->data);
 		if ($result) {
@@ -265,10 +266,11 @@ class BcUploadBehavior extends ModelBehavior {
 	public function deleteFiles(Model $Model, $requestData) {
 		$oldData = $Model->findById($Model->id);
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
-			if($oldData && $oldData[$Model->name][$field['name']]) {
+			$oldValue = '';
+			if($oldData && !empty($oldData[$Model->name][$field['name']])) {
 				$oldValue = $oldData[$Model->name][$field['name']];
-			} else {
-				$oldValue = '';
+			} elseif(!empty($Model->data[$Model->name][$field['name']]) && !is_array($Model->data[$Model->name][$field['name']])) {
+				$oldValue = $Model->data[$Model->name][$field['name']];
 			}
 			$requestData = $this->deleteFileWhileChecking($Model, $field, $requestData, $oldValue);
 		}
@@ -324,10 +326,16 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model $Model
  * @param array $fieldSetting
  * @param array $requestData
+ * @param array $options
+ * 	- deleteTmpFiles : 一時ファイルを削除するかどうか
  * @return mixed bool|$requestData
  */
-	public function saveFileWhileChecking(Model $Model, $fieldSetting, $requestData) {
+	public function saveFileWhileChecking(Model $Model, $fieldSetting, $requestData, $options = []) {
+		$options = array_merge([
+			'deleteTmpFiles' => true
+		], $options);
 		if(!$this->tmpId && empty($fieldSetting['upload'])) {
+			unset($requestData[$Model->name][$fieldSetting['name']]);
 			return $requestData;
 		}
 		// ファイル名が重複していた場合は変更する
@@ -335,7 +343,7 @@ class BcUploadBehavior extends ModelBehavior {
 			$requestData[$Model->name][$fieldSetting['name']]['name'] = $this->getUniqueFileName($Model, $fieldSetting['name'], $requestData[$Model->name][$fieldSetting['name']]['name'], $fieldSetting);
 		}
 		// 画像を保存
-		$tmpName = $requestData[$Model->name][$fieldSetting['name']]['tmp_name'];
+		$tmpName = (!empty($requestData[$Model->name][$fieldSetting['name']]['tmp_name'])) ? $requestData[$Model->name][$fieldSetting['name']]['tmp_name'] : false;
 		if(!$tmpName) {
 			return $requestData;
 		}
@@ -355,10 +363,16 @@ class BcUploadBehavior extends ModelBehavior {
 				$requestData[$Model->name][$fieldSetting['name']]['session_key'] = $fileName;
 			}
 			// 一時ファイルを削除
-			@unlink($tmpName);
+			if($options['deleteTmpFiles']) {
+				@unlink($tmpName);
+			}
 			$this->uploaded[$Model->name] = true;
 		} else {
-			return false;
+			if($this->tmpId) {
+				return $requestData;
+			} else {
+				return false;	
+			}
 		}
 		return $requestData;
 	}
@@ -413,8 +427,8 @@ class BcUploadBehavior extends ModelBehavior {
  * ファイルを保存する
  * 
  * @param Model $Model
- * @param array 画像保存対象フィールドの設定
- * @return ファイル名 Or false
+ * @param array $field 画像保存対象フィールドの設定
+ * @return mixed false|ファイル名
  */
 	public function saveFile(Model $Model, $field) {
 		// データを取得
@@ -468,8 +482,8 @@ class BcUploadBehavior extends ModelBehavior {
 			$suffix = $field['suffix'];
 		}
 		// 保存ファイル名を生成
-		$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
 		if (!$this->tmpId) {
+			$basename = preg_replace("/\." . $field['ext'] . "$/is", '', $name);
 			$fileName = $prefix . $basename . $suffix . '.' . $field['ext'];
 			if(file_exists($this->savePath[$Model->alias] . $fileName)) {
 				if(preg_match('/(.+_)([0-9]+)$/', $basename, $matches)) {
@@ -556,7 +570,7 @@ class BcUploadBehavior extends ModelBehavior {
  * 画像をコピーする
  * 
  * @param Model $Model
- * @param array 画像保存対象フィールドの設定
+ * @param array $field 画像保存対象フィールドの設定
  * @return boolean
  */
 	public function copyImage(Model $Model, $field) {
@@ -596,7 +610,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param string $distination コピー先のパス
  * @param int $width 横幅
  * @param int $height 高さ
- * @param boolean $$thumb サムネイルとしてコピーするか
+ * @param boolean $thumb サムネイルとしてコピーするか
  * @return boolean
  */
 	public function resizeImage($source, $distination, $width = 0, $height = 0, $thumb = false) {
@@ -636,6 +650,8 @@ class BcUploadBehavior extends ModelBehavior {
  * 削除に失敗してもデータの削除は行う
  * 
  * @param Model $Model
+ * @param bool $cascade
+ * @return bool
  */
 	public function beforeDelete(Model $Model, $cascade = true) {
 		$Model->data = $Model->findById($Model->id);
@@ -648,7 +664,6 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @param Model $Model
  * @param string $fieldName フィールド名
- * @return boolean
  */
 	public function delFiles(Model $Model, $fieldName = null) {
 		foreach ($this->settings[$Model->alias]['fields'] as $key => $field) {
@@ -668,6 +683,7 @@ class BcUploadBehavior extends ModelBehavior {
  * ファイルを削除する
  * 
  * @param Model $Model
+ * @param string $file
  * @param array $field 保存対象フィールドの設定
  * - ext 対象のファイル拡張子
  * - prefix 対象のファイルの接頭辞
@@ -718,7 +734,8 @@ class BcUploadBehavior extends ModelBehavior {
  * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
  * 
  * @param Model $Model
- * @return boolean
+ * @param bool $copy
+ * @return array
  */
 	public function renameToBasenameFields(Model $Model, $copy = false) {
 		$data = $Model->data;
@@ -747,6 +764,9 @@ class BcUploadBehavior extends ModelBehavior {
 			return false;
 		}	
 		$oldName = $Model->data[$Model->alias][$setting['name']];
+		if(is_array($oldName)) {
+			return false;
+		}
 		$saveDir = $this->savePath[$Model->alias];
 		$saveDirInTheme = $this->getSaveDir($Model, true);
 		$oldSaveDir = '';
@@ -950,7 +970,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param bool $isTheme
  * @return string $saveDir
  */
-	public function getSaveDir(Model $Model, $isTheme = false) {
+	public function getSaveDir(Model $Model, $isTheme = false, $limited = false) {
 		if(!$isTheme) {
 			$basePath = WWW_ROOT . 'files' . DS;
 		} else {
@@ -961,6 +981,9 @@ class BcUploadBehavior extends ModelBehavior {
 			} else {
 				$basePath = getViewPath() . 'files' . DS;
 			}
+		}
+		if($limited) {
+			$basePath = $basePath . $limited . DS;
 		}
 		if ($this->settings[$Model->alias]['saveDir']) {
 			$saveDir = $basePath . $this->settings[$Model->alias]['saveDir'] . DS;
