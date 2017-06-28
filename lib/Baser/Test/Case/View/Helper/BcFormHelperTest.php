@@ -212,6 +212,8 @@ class BcFormHelperTest extends BaserTestCase {
  * @param array $options Each type of input takes different options.
  * @return string Completed form widget
  * @dataProvider inputDataProvider
+ *
+ * maxlength値がsqliteでは8、その他は11と返り値が異なるため、4,5番目のテストでは.*を使用
  */
 
 	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
@@ -220,7 +222,7 @@ class BcFormHelperTest extends BaserTestCase {
 		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
 		$EventManager = CakeEventManager::instance();
-		$this->assertEquals($expected, $result);
+		$this->assertRegExp('/' . $expected . '/s', $result);
 		$reflectionClass = new ReflectionClass(get_class($EventManager));
 		$property = $reflectionClass->getProperty('_listeners');
 		$property->setAccessible(true);
@@ -229,374 +231,29 @@ class BcFormHelperTest extends BaserTestCase {
 
 	public function inputDataProvider() {
 		return array(
-			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data[User][id]" div="true" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data[User][id]" value="hoge" maxlength="11" type="text" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1</label><input name="data[User][id]" value="hoge" maxlength="11" type="text" id="UserId"/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1<\/label><input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
 			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => []], ''),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2, 3]], '<input type="radio" name="data[User][id]" id="UserId0" value="0" /><label for="UserId0">1</label>　<input type="radio" name="data[User][id]" id="UserId1" value="1" /><label for="UserId1">2</label>　<input type="radio" name="data[User][id]" id="UserId2" value="2" /><label for="UserId2">3</label>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2, 3], 'value' => ['a', 'b', 'c']], '<input type="radio" name="data[User][id]" id="UserId0" value="0" /><label for="UserId0">1</label>　<input type="radio" name="data[User][id]" id="UserId1" value="1" /><label for="UserId1">2</label>　<input type="radio" name="data[User][id]" id="UserId2" value="2" /><label for="UserId2">3</label>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1</legend></fieldset>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*2<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2], 'value' => ['a', 'b']], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*"radio" name="data\[User\]\[id\]" id="UserId1" value="1" \/><label for="UserId1">2<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1<\/legend><\/fieldset>'),
 			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'separator' => 'aaa'], ''),
-			array('value', 'hoge', 'User.id', ['type' => 'checkbox', 'options' => []], '<input type="hidden" name="data[User][id]" id="UserId_" value="0"/><input type="checkbox" name="data[User][id]" options="" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data[User][id]" value="hoge" id="UserId"/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data[User][id][month]" options="" id="UserIdMonth">
-<option value="01">01</option>
-<option value="02">02</option>
-<option value="03">03</option>
-<option value="04">04</option>
-<option value="05">05</option>
-<option value="06">06</option>
-<option value="07">07</option>
-<option value="08">08</option>
-<option value="09">09</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-</select> <select name="data[User][id][day]" options="" id="UserIdDay">
-<option value="01">1</option>
-<option value="02">2</option>
-<option value="03">3</option>
-<option value="04">4</option>
-<option value="05">5</option>
-<option value="06">6</option>
-<option value="07">7</option>
-<option value="08">8</option>
-<option value="09">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-</select> <select name="data[User][id][year]" options="" id="UserIdYear">
-<option value="2037">2037</option>
-<option value="2036">2036</option>
-<option value="2035">2035</option>
-<option value="2034">2034</option>
-<option value="2033">2033</option>
-<option value="2032">2032</option>
-<option value="2031">2031</option>
-<option value="2030">2030</option>
-<option value="2029">2029</option>
-<option value="2028">2028</option>
-<option value="2027">2027</option>
-<option value="2026">2026</option>
-<option value="2025">2025</option>
-<option value="2024">2024</option>
-<option value="2023">2023</option>
-<option value="2022">2022</option>
-<option value="2021">2021</option>
-<option value="2020">2020</option>
-<option value="2019">2019</option>
-<option value="2018">2018</option>
-<option value="2017">2017</option>
-<option value="2016">2016</option>
-<option value="2015">2015</option>
-<option value="2014">2014</option>
-<option value="2013">2013</option>
-<option value="2012">2012</option>
-<option value="2011">2011</option>
-<option value="2010">2010</option>
-<option value="2009">2009</option>
-<option value="2008">2008</option>
-<option value="2007">2007</option>
-<option value="2006">2006</option>
-<option value="2005">2005</option>
-<option value="2004">2004</option>
-<option value="2003">2003</option>
-<option value="2002">2002</option>
-<option value="2001">2001</option>
-<option value="2000">2000</option>
-<option value="1999">1999</option>
-<option value="1998">1998</option>
-<option value="1997">1997</option>
-</select>'),
-			array('value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data[User][id][hour]" options="" id="UserIdHour">
-<option value="01">1</option>
-<option value="02">2</option>
-<option value="03">3</option>
-<option value="04">4</option>
-<option value="05">5</option>
-<option value="06">6</option>
-<option value="07">7</option>
-<option value="08">8</option>
-<option value="09">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-</select>:<select name="data[User][id][min]" options="" id="UserIdMin">
-<option value="00">00</option>
-<option value="01">01</option>
-<option value="02">02</option>
-<option value="03">03</option>
-<option value="04">04</option>
-<option value="05">05</option>
-<option value="06">06</option>
-<option value="07">07</option>
-<option value="08">08</option>
-<option value="09">09</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-</select> <select name="data[User][id][meridian]" options="" id="UserIdMeridian">
-<option value="am" selected="selected">am</option>
-<option value="pm">pm</option>
-</select>'),
-			array('value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data[User][id][month]" options="" id="UserIdMonth">
-<option value="01">01</option>
-<option value="02">02</option>
-<option value="03">03</option>
-<option value="04">04</option>
-<option value="05">05</option>
-<option value="06">06</option>
-<option value="07">07</option>
-<option value="08">08</option>
-<option value="09">09</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-</select> <select name="data[User][id][day]" options="" id="UserIdDay">
-<option value="01">1</option>
-<option value="02">2</option>
-<option value="03">3</option>
-<option value="04">4</option>
-<option value="05">5</option>
-<option value="06">6</option>
-<option value="07">7</option>
-<option value="08">8</option>
-<option value="09">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-</select> <select name="data[User][id][year]" options="" id="UserIdYear">
-<option value="2037">2037</option>
-<option value="2036">2036</option>
-<option value="2035">2035</option>
-<option value="2034">2034</option>
-<option value="2033">2033</option>
-<option value="2032">2032</option>
-<option value="2031">2031</option>
-<option value="2030">2030</option>
-<option value="2029">2029</option>
-<option value="2028">2028</option>
-<option value="2027">2027</option>
-<option value="2026">2026</option>
-<option value="2025">2025</option>
-<option value="2024">2024</option>
-<option value="2023">2023</option>
-<option value="2022">2022</option>
-<option value="2021">2021</option>
-<option value="2020">2020</option>
-<option value="2019">2019</option>
-<option value="2018">2018</option>
-<option value="2017">2017</option>
-<option value="2016">2016</option>
-<option value="2015">2015</option>
-<option value="2014">2014</option>
-<option value="2013">2013</option>
-<option value="2012">2012</option>
-<option value="2011">2011</option>
-<option value="2010">2010</option>
-<option value="2009">2009</option>
-<option value="2008">2008</option>
-<option value="2007">2007</option>
-<option value="2006">2006</option>
-<option value="2005">2005</option>
-<option value="2004">2004</option>
-<option value="2003">2003</option>
-<option value="2002">2002</option>
-<option value="2001">2001</option>
-<option value="2000">2000</option>
-<option value="1999">1999</option>
-<option value="1998">1998</option>
-<option value="1997">1997</option>
-</select><select name="data[User][id][hour]" options="" id="UserIdHour">
-<option value="01">1</option>
-<option value="02">2</option>
-<option value="03">3</option>
-<option value="04">4</option>
-<option value="05">5</option>
-<option value="06">6</option>
-<option value="07">7</option>
-<option value="08">8</option>
-<option value="09">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-</select>:<select name="data[User][id][min]" options="" id="UserIdMin">
-<option value="00">00</option>
-<option value="01">01</option>
-<option value="02">02</option>
-<option value="03">03</option>
-<option value="04">04</option>
-<option value="05">05</option>
-<option value="06">06</option>
-<option value="07">07</option>
-<option value="08">08</option>
-<option value="09">09</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-</select> <select name="data[User][id][meridian]" options="" id="UserIdMeridian">
-<option value="am" selected="selected">am</option>
-<option value="pm">pm</option>
-</select>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data[User][id]" id="UserId0" value="0" /><label for="UserId0">1</label>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data[User][id]" div="true" value="hoge" id="UserId"/></div>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data[User][id]" counter="true" value="hoge" id="UserId"/><span id="UserIdCounter" class="size-counter"></span><script type="text/javascript">
-//<![CDATA[
-$("#UserId").keyup(countSize);$("#UserId").keyup();function countSize() {
-	var len = $(this).val().length;
-	var maxlen = $(this).attr(\'maxlength\');
-	if(!maxlen || maxlen == -1){
-		maxlen = \'-\';
-	}
-	$("#"+$(this).attr(\'id\')+\'Counter\').html(len+\'/<small>\'+maxlen+\'</small>\');
-}
-//]]>
-</script><span id="UserIdCounter" class="size-counter"></span><script type="text/javascript">
-//<![CDATA[
-$("#UserId").keyup(countSize);$("#UserId").keyup();
-//]]>
-</script>'),
-			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data[BlogTag][BlogTag]" value="" id="BlogTagBlogTag_"/>
-<select name="data[BlogTag][BlogTag][]" ="" multiple="multiple" id="BlogTagBlogTag">
-</select>'),
-			array('', '', 'hoge', '', '<input name="data[hoge]" ="" type="text" id="hoge"/>'),
-			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data[hoge]" a="hogege" ="" type="text" id="hoge"/>')
+			array('value', 'hoge', 'User.id', ['type' => 'checkbox', 'options' => []], '<input type="hidden" name="data\[User\]\[id\]" id="UserId_" value="0"\/>.*"checkbox" name="data\[User\]\[id\]" options="" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/option>\n<\/select>'),
+			array('value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data\[User\]\[id\]\[hour\].*id="UserIdHour".*1<\/op.*12<\/op.*\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*value="pm">pm<\/option>\n<\/select>'),
+			array('value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'),
+			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data\[BlogTag\]\[BlogTag\]" value="" id="BlogTagBlogTag_"\/>\n<select name="data\[BlogTag\]\[BlogTag\]\[\]" ="" multiple="multiple" id="BlogTagBlogTag">\n<\/select>'),
+			array('', '', 'hoge', '', '<input name="data\[hoge\]" ="" type="text" id="hoge"\/>'),
+			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege" ="" type="text" id="hoge"\/>')
 		);
 	}
 
