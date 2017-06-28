@@ -1528,7 +1528,7 @@ class BcAppController extends Controller {
  * @param bool $setFlash flash message に保存するか
  * @return void
  */
-	protected function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
+	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
 		if (!isset($this->Session)) {
 			return;
 		}

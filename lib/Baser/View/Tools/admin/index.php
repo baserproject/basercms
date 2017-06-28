@@ -19,6 +19,13 @@
 </div>
 
 <div class="section">
+    <h2>コンテンツ管理</h2>
+    <p>コンテンツ管理のツリー構造で並べ替えがうまくいかなくなった場合に、ツリー構造をリセットして正しいデータの状態に戻します。リセットを実行した場合、階層構造はリセットされてしまうのでご注意ください。</p>
+	<?php $this->BcBaser->link('ツリー構造をチェックする', array('controller' => 'tools', 'action' => 'verity_contents_tree'), array('class' => 'submit-token button-small')) ?>　
+	<?php $this->BcBaser->link('ツリー構造リセット', array('controller' => 'tools', 'action' => 'reset_contents_tree'), array('class' => 'submit-token button-small', 'confirm' => "コンテンツ管理のツリー構造をリセットします。本当によろしいですか？")) ?>　
+</div>
+
+<div class="section">
 	<h2>固定ページテンプレート</h2>
 	<p>別サーバーへの移設時には、固定ページ機能を正常動作させる為、固定ページテンプレート書出を実行してください。<br>また、固定ページテンプレートを直接編集した場合、データベースに反映する為には、固定ページテンプレート読込を実行します。</p>
 	<?php $this->BcBaser->link('固定ページテンプレート書出', array('controller' => 'pages', 'action' => 'write_page_files'), array('class' => 'submit-token button-small', 'confirm' => "データベース内のページデータを、ページテンプレートとして /app/View/Pages 内に全て書出します。本当によろしいですか？")) ?>　
