@@ -1039,8 +1039,11 @@ class BlogHelper extends AppHelper {
 			'class' => 'img-eye-catch',
 			'output' => '', // 出力形式 tag or url
 		), $options);
-
-		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $post['BlogPost']['eye_catch'], $options);
+		$eyecatch = null;
+		if(!empty($post['BlogPost']['eye_catch'])) {
+			$eyecatch = $post['BlogPost']['eye_catch'];
+		}
+		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $eyecatch, $options);
 	}
 
 /**
