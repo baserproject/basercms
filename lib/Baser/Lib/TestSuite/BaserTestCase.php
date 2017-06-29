@@ -87,4 +87,35 @@ class BaserTestCase extends CakeTestCase {
 		$_SESSION['Auth'][$key] = $user['User'];
 	}
 
+/**
+ *
+ * @param $events
+ */
+	public function attachEvent($events) {
+		$EventManager = CakeEventManager::instance();
+		$event = new BcEventListenerMock($events);
+		$EventManager->attach($event);
+		return $event;
+	}
+}
+
+/**
+ * Class BcEventListenerMock
+ */
+class BcEventListenerMock extends Object implements CakeEventListener {
+	public $events = [];
+	/**
+	 * BcEventListenerMock constructor.
+	 * @param $events
+	 */
+	public function __construct($events) {
+		$this->events = $events;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function implementedEvents() {
+		return $this->events;
+	}
 }

@@ -212,17 +212,48 @@ class BcFormHelperTest extends BaserTestCase {
  * @param array $options Each type of input takes different options.
  * @return string Completed form widget
  * @dataProvider inputDataProvider
+ *
+ * maxlength値がsqliteでは8、その他は11と返り値が異なるため、4,5番目のテストでは.*を使用
  */
-	public function testInput($fieldName, $options, $expected) {
+
+	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
+		$event = $this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
+			$event->data['options'][$optionsField] = $optionsData;
+		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
+		$EventManager = CakeEventManager::instance();
 		$this->assertRegExp('/' . $expected . '/s', $result);
+		$reflectionClass = new ReflectionClass(get_class($EventManager));
+		$property = $reflectionClass->getProperty('_listeners');
+		$property->setAccessible(true);
+		$property->setValue($EventManager, []);
 	}
 
 	public function inputDataProvider() {
 		return array(
-			array('BlogTag.BlogTag', '', '<input type="hidden"'),
-			array('hoge', '', '<input name="data\[hoge\]"'),
-			array('hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege"')
+			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1<\/label><input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => []], ''),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*2<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2], 'value' => ['a', 'b']], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*"radio" name="data\[User\]\[id\]" id="UserId1" value="1" \/><label for="UserId1">2<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1<\/legend><\/fieldset>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'separator' => 'aaa'], ''),
+			array('value', 'hoge', 'User.id', ['type' => 'checkbox', 'options' => []], '<input type="hidden" name="data\[User\]\[id\]" id="UserId_" value="0"\/>.*"checkbox" name="data\[User\]\[id\]" options="" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/option>\n<\/select>'),
+			array('value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data\[User\]\[id\]\[hour\].*id="UserIdHour".*1<\/op.*12<\/op.*\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*value="pm">pm<\/option>\n<\/select>'),
+			array('value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'),
+			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data\[BlogTag\]\[BlogTag\]" value="" id="BlogTagBlogTag_"\/>\n<select name="data\[BlogTag\]\[BlogTag\]\[\]" ="" multiple="multiple" id="BlogTagBlogTag">\n<\/select>'),
+			array('', '', 'hoge', '', '<input name="data\[hoge\]" ="" type="text" id="hoge"\/>'),
+			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege" ="" type="text" id="hoge"\/>')
 		);
 	}
 
@@ -350,10 +381,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
+ * @dataProvider getControlSourceProvider
  */
-	public function testGetControlSource() {
-		$result = $this->BcForm->getControlSource('hoge');
-		self::assertEquals(array(), $result);
+	public function testGetControlSource($field, $expected) {
+		$result = $this->BcForm->getControlSource($field);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getControlSourceProvider() {
+		return array(
+			array('hoge', array()),
+			array('', array())
+		);
 	}
 
 /**
@@ -528,7 +567,9 @@ class BcFormHelperTest extends BaserTestCase {
  * @return string 行データ
  */
 	public function testDispatchAfterForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcForm->dispatchAfterForm();
+		$expected = '';
+		$this->assertEquals($result, $expected);
 	}
 
 /**
