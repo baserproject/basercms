@@ -474,9 +474,23 @@ class BcFreezeHelperTest extends BaserTestCase {
 		);
 	}
 
-
-	public function upload($freezed, $fieldName, $options, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+/**
+ * @param $fieldName
+ * @param $options
+ * @param $expected
+ * @dataProvider uploadProvider
+ */
+	public function testUpload($fieldName, $options, $expected) {
+		$result = $this->BcFreeze->upload($fieldName, $options);
+		pr($result);
+		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
+	public function uploadProvider() {
+		return array(
+			array('hoge', array(), '<input name="data\[hoge\]" type="upload" id="hoge"\/>'),
+			array('hoge', array('type' => 'gege'), '<input name="data\[hoge\]" type="gege" id="hoge"\/>'),
+			array('hoge', array('class' => 'gege'), '<input name="data\[hoge\]" class="gege" type="upload" id="hoge"\/>')
+		);
+	}
 }
