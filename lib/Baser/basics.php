@@ -53,7 +53,7 @@ function baseUrl() {
 			// ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
 			$baseUrl = preg_replace('/index\.php/', '', $baseUrl);
 		} elseif (BC_DEPLOY_PATTERN == 2) {
-			$baseUrl = preg_replace('/index\.php/', '', $script);
+			$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '/', '', $script);
 		}
 		$baseUrl = preg_replace("/index$/", '', $baseUrl);
 	}
@@ -556,7 +556,7 @@ function topLevelUrl($lastSlash = true) {
  * @return	string
  */
 function siteUrl() {
-	$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
+	$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '\/$/', '', baseUrl());
 	$topLevelUrl = topLevelUrl(false);
 	if($topLevelUrl) {
 		return $topLevelUrl . $baseUrl;

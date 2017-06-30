@@ -470,7 +470,6 @@ class BcFreezeHelperTest extends BaserTestCase {
 			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'),
 			array('baser.freezed', array('1' => 'BaserCMS1'), array('value' => 1), '<input type="hidden" name="data\[baser\]\[freezed\]" class="" value="1" id="baserFreezed"\/>BaserCMS1'),
 			array('baser.freezed.hoge', array('1' => 'BaserCMS1'), array('value' => 1),'<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'),
-			array('baser.freezed.hoge', array('1' => 'BaserCMS1'), array('value' => 1),'<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'),
 		);
 	}
 }
