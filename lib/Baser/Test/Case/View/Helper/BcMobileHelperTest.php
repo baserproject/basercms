@@ -61,6 +61,9 @@ class BcMobileHelperTest extends BaserTestCase {
  */
 	public function testAfterLayout() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$expected = '';
+		$result = $this->BcMobile->afterLayout('');
+		$this->assertEquals($expected, $result);
 	}
 
 

@@ -221,12 +221,8 @@ class BcFormHelperTest extends BaserTestCase {
 			$event->data['options'][$optionsField] = $optionsData;
 		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
-		$EventManager = CakeEventManager::instance();
 		$this->assertRegExp('/' . $expected . '/s', $result);
-		$reflectionClass = new ReflectionClass(get_class($EventManager));
-		$property = $reflectionClass->getProperty('_listeners');
-		$property->setAccessible(true);
-		$property->setValue($EventManager, []);
+		$this->resetEvent();
 	}
 
 	public function inputDataProvider() {
@@ -566,11 +562,26 @@ class BcFormHelperTest extends BaserTestCase {
  * 
  * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
  * @return string 行データ
+ * @dataProvider dispatchAfterFormDataProvider
  */
-	public function testDispatchAfterForm() {
-		$result = $this->BcForm->dispatchAfterForm();
-		$expected = '';
-		$this->assertEquals($result, $expected);
+	public function testDispatchAfterForm($type, $fields, $res, $expected)
+	{
+		$event = $this->attachEvent(['Helper.Form.after' .  $type . 'Form' => ['callable' => function (CakeEvent $event) use ($fields, $res) {
+			$event->data['fields'] = $fields;
+			return $res;
+		}]]);
+		$result = $this->BcForm->dispatchAfterForm($type);
+		$this->assertRegExp('/' . $expected . '/s', $result);
+		$this->resetEvent();
+	}
+
+	public function dispatchAfterFormDataProvider() {
+		return array(
+			array('Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'),
+			array('Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'),
+			array('Hoge', '', true, ''),
+			array('Hoge', '', false, ''),
+		);
 	}
 
 /**

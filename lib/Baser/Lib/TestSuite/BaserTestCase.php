@@ -97,6 +97,14 @@ class BaserTestCase extends CakeTestCase {
 		$EventManager->attach($event);
 		return $event;
 	}
+
+	public function resetEvent() {
+		$EventManager = CakeEventManager::instance();
+		$reflectionClass = new ReflectionClass(get_class($EventManager));
+		$property = $reflectionClass->getProperty('_listeners');
+		$property->setAccessible(true);
+		$property->setValue($EventManager, []);
+	}
 }
 
 /**
