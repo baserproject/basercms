@@ -120,6 +120,7 @@ class PagesController extends AppController {
 		}
 
 		if (empty($this->request->data)) {
+			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
 			if(!$this->request->data) {
 				$this->setMessage('無効な処理です。', true);
@@ -181,7 +182,12 @@ class PagesController extends AppController {
 			]);
 		}
 		// ページテンプレートリスト
-		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']);
+		$theme = [$this->siteConfigs['theme']];
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		if(!empty($site) && $site->theme != $this->siteConfigs['theme']) {
+			$theme[] = $site->theme;
+		}
+		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 		
 		if (!empty($this->request->data['Content']['title'])) {

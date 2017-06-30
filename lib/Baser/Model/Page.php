@@ -797,7 +797,14 @@ class Page extends AppModel {
  * @return array
  */
 	public function getPageTemplateList($contentId, $theme) {
-		$pageTemplates = BcUtil::getTemplateList('Pages/templates', '', $theme);
+		if(!is_array($theme)) {
+			$theme = [$theme];
+		}
+		$pageTemplates = [];
+		foreach($theme as $value) {
+			$pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('Pages/templates', '', $value));
+		}
+
 		if($contentId != 1) {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
 			$parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
@@ -805,7 +812,7 @@ class Page extends AppModel {
 			if ($searchKey !== false) {
 				unset($pageTemplates[$searchKey]);
 			}
-			array_unshift($pageTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+			$pageTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $pageTemplates;
 		}
 		return $pageTemplates;
 	}
