@@ -464,18 +464,33 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 	public function freezeControllDataProvider() {
 		return array(
-			array('baser.freezed', array(), array(), '<input type="hidden" name="data\[baser\]\[freezed\]" class="" id="baserFreezed"'), 
+			array('baser.freezed', array(), array(), '<input type="hidden" name="data\[baser\]\[freezed\]" class="" id="baserFreezed"'),
 			array('baser.freezed', array(), array('value' => 'BaserCMS'), 'value="BaserCMS"'),
-			array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'select'), 'value="BaserCMS"\/>BaserCMS'), 
-			// array('baser.freezed', array('1' => 'BaserCMS'), array('value' => array('id' => '1',),'multiple' => 'select',), 'value="1".*<li>BaserCMS'), 
-			array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'checkbox'), 'value="BaserCMS"\/>BaserCMS'), 
-			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'), 
+			array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'select'), 'value="BaserCMS"\/>BaserCMS'),
+			array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'checkbox'), 'value="BaserCMS"\/>BaserCMS'),
+			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'),
+			array('baser.freezed', array('1' => 'BaserCMS1'), array('value' => array(1), 'multiple' => 'hoge'), '<input type="hidden" name="data\[baser\]\[freezed\]\[\]"  class="" value="1" \/><ul class="" value="1"  ><\/ul>'),
+			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"')
 		);
 	}
 
-
-	public function upload($freezed, $fieldName, $options, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+/**
+ * @param $fieldName
+ * @param $options
+ * @param $expected
+ * @dataProvider uploadProvider
+ */
+	public function testUpload($fieldName, $options, $expected) {
+		$result = $this->BcFreeze->upload($fieldName, $options);
+		pr($result);
+		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 
+	public function uploadProvider() {
+		return array(
+			array('hoge', array(), '<input name="data\[hoge\]" type="upload" id="hoge"\/>'),
+			array('hoge', array('type' => 'gege'), '<input name="data\[hoge\]" type="gege" id="hoge"\/>'),
+			array('hoge', array('class' => 'gege'), '<input name="data\[hoge\]" class="gege" type="upload" id="hoge"\/>')
+		);
+	}
 }

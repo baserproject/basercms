@@ -485,17 +485,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider dateTimePickerDataProvider
  */
 	public function testDateTimePicker($fieldName, $attributes, $expected, $message) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$result = $this->BcForm->dateTimePicker($fieldName, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
 	public function dateTimePickerDataProvider() {
 		return array(
-			array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'), 
-			array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/04\/01".* value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'), 
-			array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01".*value="00:00:00".* value="2010-4-1"', '時間を指定いない場合出力できません'), 
-			array('baser', array('value' => '2010-'), 'value="1970\/01\/01".*value="09:00:00".*value="2010-"', '時間指定が不適切でない場合出力できません'), 
+			array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'),
+			array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/4\/1".*value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'),
+			array('baser', array('value' => '2010-04-01 11:22:33'), 'value="2010\/04\/01".*value="11:22:33".*value="2010-04-01 11:22:33"', '時間指定が正しく出力できません'),
+			array('baser', array('value' => '2010-4-1 '), 'value="2010\/4\/1".*value="".* value="2010-4-1 "', '時間を指定いない場合出力できません'),
+			array('baser', array('value' => '2010 hogehoge'), 'value="2010".*value="hogehoge".*value="2010 hogehoge"', '時間指定が不適切でない場合出力できません'),
+			array('baser', array('value' => 'hoge hogehoge'), 'value="hoge".*value="hogehoge".*value="hoge hogehoge"', '時間指定が不適切でない場合出力できません')
 		);
 	}
 
