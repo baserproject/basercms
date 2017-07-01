@@ -189,7 +189,7 @@ class BcUploadBehavior extends ModelBehavior {
 					// 新しいデータが送信されず、既存データを引き継ぐ場合は、元のフィールド名に戻す
 					$Model->data[$Model->name][$field['name']] = $Model->data[$Model->name][$field['name'] . '_'];
 					unset($Model->data[$Model->name][$field['name'] . '_']);
-				} else {
+				} elseif(!empty($Model->data[$Model->name][$field['name']]) && is_array($Model->data[$Model->name][$field['name']])) {
 					unset($Model->data[$Model->name][$field['name']]);
 				}
 			}
@@ -335,7 +335,9 @@ class BcUploadBehavior extends ModelBehavior {
 			'deleteTmpFiles' => true
 		], $options);
 		if(!$this->tmpId && empty($fieldSetting['upload'])) {
-			unset($requestData[$Model->name][$fieldSetting['name']]);
+			if(!empty($requestData[$Model->name][$fieldSetting['name']]) && is_array($requestData[$Model->name][$fieldSetting['name']])) {
+				unset($requestData[$Model->name][$fieldSetting['name']]);
+			}
 			return $requestData;
 		}
 		// ファイル名が重複していた場合は変更する

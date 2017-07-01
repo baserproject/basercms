@@ -646,7 +646,7 @@ class BlogPost extends BlogAppModel {
 				$data['BlogPost']['id'] = $this->getLastInsertID();
 				$data['BlogPost']['eye_catch'] = $eyeCatch;
 				$this->set($data);
-				$this->data = $this->renameToBasenameFields(true); // 内部でリネームされたデータが再セットされる
+				$this->set($this->renameToBasenameFields(true));	// 内部でリネームされたデータが再セットされる
 				$result = $this->save();
 			}
 			return $result;
