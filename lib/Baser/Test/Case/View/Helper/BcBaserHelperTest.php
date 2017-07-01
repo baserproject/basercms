@@ -2028,4 +2028,14 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals('?name=value', $params['url']);
 		$this->assertEquals('/?name=value', $params['here']);
 	}
+
+/**
+ * プラグインの Baser ヘルパを取得する
+ */
+	public function testGetPluginBaser() {
+		$PluginBaser = $this->BcBaser->getPluginBaser('Blog');
+		$this->assertEquals('BlogBaserHelper', get_class($PluginBaser));
+		$this->assertFalse($this->BcBaser->getPluginBaser('hoge'));
+	}
+	
 }
