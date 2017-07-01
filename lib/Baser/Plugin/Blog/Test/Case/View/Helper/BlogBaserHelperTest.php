@@ -12,15 +12,7 @@
  * @license     http://basercms.net/license/index.html
  */
 
-App::uses('View', 'View');
-App::uses('Helper', 'View');
-App::uses('HtmlHelper', 'View.Helper');
-App::uses('BcTimeHelper', 'View.Helper');
-App::uses('BlogHelper', 'Blog.View/Helper');
-App::uses('BlogBaserHelper', 'Blog.View/Helper');
-App::uses('BlogPost', 'Blog.Model');
-App::uses('BlogContent', 'Blog.Model');
-App::uses('BlogCategory', 'Blog.Model');
+App::uses('BcBaserHelper', 'View/Helper');
 
 /**
  * Blog helper library.
@@ -37,67 +29,39 @@ class BlogBaserHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
-		'baser.Default.User',
-		'baser.Default.Page',
+		'plugin.blog.View/Helper/BlogBaserHelper/ContentMultiBlog',	// テスト内で読み込む
 		'baser.Default.Content', 
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
 		'baser.Default.UserGroup',
-		'baser.Default.Plugin',
-		'baser.Default.BlogComment',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogTag',
 		'baser.Default.BlogPostsBlogTag',
 		'plugin.blog.Model/BlogCategoryModel',
-		'plugin.blog.Model/BlogPostModel',
-		'plugin.blog.View/Helper/BlogPostBlogBaserHelper',
+		'plugin.blog.View/Helper/BlogBaserHelper/BlogPostBlogBaserHelper',
 	);
-
-/**
- * View
- * 
- * @var View
- */
-  protected $_View;
-
-/**
- * __construct
- * 
- * @param string $name
- * @param array $data
- * @param string $dataName
- */
-  public function __construct($name = null, array $data = array(), $dataName = '') {
-    parent::__construct($name, $data, $dataName);
-  }
-
+	
 /**
  * setUp
  *
  * @return void
  */
-  public function setUp() {
-    parent::setUp();
-    $View = new View();
-    $this->BlogBaser = new BlogBaserHelper($View);
-
-    $this->BlogContent = ClassRegistry::init('Blog.BlogContent');
-    $this->BlogContent->expects(array());
-    $this->BlogBaser->blogContent = Hash::extract($this->BlogContent->read(null, 1), 'BlogContent');
-  }
+	public function setUp() {
+		parent::setUp();
+		$this->BcBaser = new BcBaserHelper(new View());
+	}
 
 /**
  * tearDown
  *
  * @return void
  */
-  public function tearDown() {
-    unset($this->BlogBaser);
-    unset($this->BlogContent);
-    Router::reload();
-    parent::tearDown();
-  }
+	public function tearDown() {
+		unset($this->BcBaser);
+		Router::reload();
+		parent::tearDown();
+	}
 
 /**
  * ブログ記事一覧出力
@@ -110,9 +74,10 @@ class BlogBaserHelperTest extends BaserTestCase {
  * @dataProvider blogPostsProvider
  */
 	public function testBlogPosts($contentsName, $num, $options, $expected, $message = null) {
-		$this->BlogBaser->request = $this->_getRequest('/');
+		$BlogBaser = $this->BcBaser->getPluginBaser('Blog');
+		$BlogBaser->request = $this->_getRequest('/');
 		$this->expectOutputRegex($expected, $message);
-		$this->BlogBaser->blogPosts($contentsName, $num, $options);
+		$this->BcBaser->blogPosts($contentsName, $num, $options);
 	}
 
 	public function blogPostsProvider() {
@@ -143,5 +108,74 @@ class BlogBaserHelperTest extends BaserTestCase {
 //			array('news', 2, array('page' => 2), '/^(?!.*name1).*(?!.*name2).*(?=name3).*/s', 'pageを正しく指定できません'), // ページ指定
 		);
 	}
+	
+/**
+ * 全ブログコンテンツの基本情報を取得する
+ *
+ * @return void
+ */
+	public function testGetBlogs() {
+		// 復数ブログのデータを取得
+		$this->loadFixtures('ContentMultiBlog');
+		
+		// 全件取得
+		$blogs = $this->BcBaser->getBlogs();
+		$this->assertEquals(3, count($blogs));
+		$this->assertEquals(2, $blogs[0]['Content']['id']);
 
+		// ソート順を変更
+		$options = array(
+			'sort' => 'Content.id DESC',
+			'siteId' => 0
+		);
+		$blogs = $this->BcBaser->getBlogs('', $options);
+		$this->assertEquals(4, $blogs[0]['Content']['id']);
+
+		// ブログ指定 1つなので、配列に梱包されてない
+		$blogs = $this->BcBaser->getBlogs('news');
+		$this->assertEquals('news', $blogs['Content']['name']);
+		
+		// IDで取得
+		$blogs = $this->BcBaser->getBlogs(2);
+		$this->assertEquals('topics', $blogs['Content']['name']);
+		
+		// 復数指定取得
+		$blogs = $this->BcBaser->getBlogs(['topics', 'news']);
+		$this->assertEquals(2, count($blogs));
+	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @param bool $expected 期待値
+ * @param string $url リクエストURL
+ * @return void
+ * @dataProvider isBlogDataProvider
+ */
+	public function testIsBlog($expected, $url) {
+		$BlogBaser = $this->BcBaser->getPluginBaser('Blog');
+		$BlogBaser->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->BcBaser->isBlog());
+	}
+
+	public function isBlogDataProvider() {
+		return array(
+			//PC
+			array(false, '/'),
+			array(false, '/index'),
+			array(false, '/contact/index'),
+			array(true, '/news/index'),
+			// モバイルページ
+			array(false, '/m/'),
+			array(false, '/m/index'),
+			array(false, '/m/contact/index'),
+			array(true, '/m/news/index'),
+			// スマートフォンページ
+			array(false, '/s/'),
+			array(false, '/s/index'),
+			array(false, '/s/contact/index'),
+			array(true, '/s/news/index')
+		);
+	}
+	
 }

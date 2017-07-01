@@ -466,76 +466,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * 現在のページがブログプラグインかどうかを判定する
- *
- * @param bool $expected 期待値
- * @param string $url リクエストURL
- * @return void
- * @dataProvider isBlogDataProvider
- */
-	public function testIsBlog($expected, $url) {
-		$this->BcBaser->request = $this->_getRequest($url);
-		$this->assertEquals($expected, $this->BcBaser->isBlog());
-	}
-
-	public function isBlogDataProvider() {
-		return array(
-			//PC
-			array(false, '/'),
-			array(false, '/index'),
-			array(false, '/contact/index'),
-			array(true, '/news/index'),
-
-			// モバイルページ
-			array(false, '/m/'),
-			array(false, '/m/index'),
-			array(false, '/m/contact/index'),
-			array(true, '/m/news/index'),
-
-			// スマートフォンページ
-			array(false, '/s/'),
-			array(false, '/s/index'),
-			array(false, '/s/contact/index'),
-			array(true, '/s/news/index')
-		);
-	}
-
-	/**
-	 * 現在のページがメールプラグインかどうかを判定する
-	 *
-	 * @param bool $expected 期待値
-	 * @param string $url リクエストURL
-	 * @return void
-	 * @dataProvider isMailDataProvider
-	 */
-	public function testIsMail($expected, $url) {
-		$this->BcBaser->request = $this->_getRequest($url);
-		$this->assertEquals($expected, $this->BcBaser->isMail());
-	}
-
-	public function isMailDataProvider() {
-		return array(
-			//PC
-			array(false, '/'),
-			array(false, '/index'),
-			array(false, '/news/index'),
-			array(true, '/contact/index'),
-
-			// モバイルページ
-			array(false, '/m/'),
-			array(false, '/m/index'),
-			array(false, '/m/news/index'),
-			array(true, '/m/contact/index'),
-
-			// スマートフォンページ
-			array(false, '/s/'),
-			array(false, '/s/index'),
-			array(false, '/s/news/index'),
-			array(true, '/s/contact/index')
-		);
-	}
-
-/**
  * baserCMSが設置されているパスを出力する
  *
  * @param string $expected 期待値
@@ -2071,31 +2001,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals('http://basercms.net/', $this->BcBaser->getSiteUrl());
 		//https
 		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
-	}
-
-/**
- * 全ブログコンテンツの基本情報を取得する
- *
- * @return void
- */
-	public function testGetBlogs() {
-		$blogs = $this->BcBaser->getBlogs();
-		$this->assertEquals(1, count($blogs));
-		$this->assertEquals(16, $blogs[0]['Content']['id']);
-
-		//ソート順を変更
-		// TODO テストデータの見直し要
-		// 該当するデータが一つしかないので sort の意味がない
-		$options = array(
-			'sort' => 'Content.id DESC',
-			'siteId' => ''
-		);
-		$blogs = $this->BcBaser->getBlogs('', $options);
-		$this->assertEquals(16, $blogs[0]['Content']['id']);
-
-		//ブログ指定 1つなので、配列に梱包されてない
-		$blogs = $this->BcBaser->getBlogs('news');
-		$this->assertEquals('news', $blogs['Content']['name']);
 	}
 
 /**
