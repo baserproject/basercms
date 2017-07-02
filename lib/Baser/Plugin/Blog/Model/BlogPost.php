@@ -202,7 +202,7 @@ class BlogPost extends BlogAppModel {
  * @param array $options オプション
  * @return array 月別リストデータ
  */
-	public function getPostedDates($blogContentId, $options) {
+	public function getPostedDates($blogContentId = null, $options = []) {
 		$options = array_merge([
 			'category' => false,
 			'limit' => false,
@@ -211,8 +211,10 @@ class BlogPost extends BlogAppModel {
 			], $options);
 
 		extract($options);
-		$conditions = ['BlogPost.blog_content_id' => $blogContentId];
-		$conditions = am($conditions, $this->getConditionAllowPublish());
+		if($blogContentId) {
+			$conditions = ['BlogPost.blog_content_id' => $blogContentId];	
+		}
+		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		// TODO CSVDBではGROUP BYが実装されていない為、取り急ぎPHPで処理
 		/* $dates = $this->find('all',array('fields'=>array('YEAR(posts_date) as year','MONTH(posts_date) as month','COUNT(id)' as count),
 		  $conditions,

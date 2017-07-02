@@ -816,4 +816,46 @@ class Page extends AppModel {
 		}
 		return $pageTemplates;
 	}
+
+/**
+ * URLより固定ページデータを探す
+ * 
+ * @param string $url
+ * @param bool $publish
+ * @return array|bool
+ */
+	public function findByUrl($url, $publish = true) {
+		$url = preg_replace('/^\//', '', $url);
+		$conditions = [
+			'Content.url' => $this->getUrlPattern($url),
+			'Content.type' => 'Page',
+			['or' => [
+				['Site.status' => true],
+				['Site.status' => null]
+			]]
+		];
+		if($publish) {
+			$conditions = array_merge($conditions, $this->Content->getConditionAllowPublish());
+		}
+		$record = $this->find('first', [
+			'conditions' => $conditions, 
+			'order' => 'Content.url DESC', 
+			'cache' => false,
+			'joins' => [[
+				'type' => 'LEFT',
+				'table' => 'sites',
+				'alias' => 'Site',
+				'conditions' => "`Content`.`site_id`=`Site`.`id`",
+				]
+			]
+		]);
+		if(!$record) {
+			return false;
+		}
+		if($record && empty($record['Site']['id'])) {
+			$record['Site'] = $this->Content->Site->getRootMain()['Site'];
+		}
+		return $record;
+	}
+	
 }

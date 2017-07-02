@@ -1190,5 +1190,32 @@ class BlogHelper extends AppHelper {
 			return $post['BlogPost']['id'];
 		}
 	}
+
+/**
+ * カテゴリを取得する
+ * 
+ * @param array $options
+ * @return mixed
+ */
+	public function getCategories($options = []) {
+		$options = array_merge([
+			'blogContentId' => null
+		], $options);
+		$blogContentId = $options['blogContentId'];
+		unset($options['blogContentId']);
+		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+		return $BlogCategory->getCategoryList($blogContentId, $options);
+	}
+
+/**
+ * 子カテゴリを持っているかどうか
+ * 
+ * @param int $id
+ * @return mixed
+ */
+	public function hasChildCategory($id) {
+		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
+		return $BlogCategory->hasChild($id);
+	}
 	
 }

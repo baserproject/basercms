@@ -26,6 +26,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
+		'baser.Default.Page',	// メソッド内で読み込む
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
 		'baser.Default.SearchIndex',
@@ -1495,8 +1496,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		);
 	}
 
-
-
 /**
  * ページをエレメントとして読み込む
  *
@@ -1504,6 +1503,12 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider PageProvider
  */
 	public function testPage($input, $pageRecursive, $recursive, $expected) {
+		$this->loadFixtures('Page');
+		$Page = ClassRegistry::init('Page');
+		$record = $Page->findByUrl($input);
+		if($record) {
+			$Page->createPageTemplate($record);
+		}
 		$this->expectOutputRegex($expected);
 		$this->_View->set('pageRecursive', $pageRecursive);
 		$options = [
@@ -1518,15 +1523,15 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('aaa', false, true, '/^$/'),
 			array('', false, false, '/^$/'),
 			array('/about', false, false, '/^$/'),
-			array('/about', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<h2 class="contents-head">会社案内<\/h2>.*/'),
-			array('/about', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<h2 class="contents-head">会社案内<\/h2>.*/'),
+			array('/about', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?会社案内.*?<\/h2>.*/s'),
+			array('/about', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?会社案内.*?<\/h2>.*/s'),
 			array('/icons', false, false, '/^$/'),
-			array('/icons', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<h2>アイコンの使い方<\/h2>.*/'),
-			array('/icons', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<h2>アイコンの使い方<\/h2>.*/'),
+			array('/icons', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'),
+			array('/icons', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'),
 			array('/index', false, false, '/^$/'),
 			array('/service', false, false, '/^$/'),
-			array('/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<h2 class="contents-head">サービス<\/h2>.*/'),
-			array('/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->\n\n<h2 class="contents-head">サービス<\/h2>.*/'),
+			array('/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?サービス.*?<\/h2>.*/s'),
+			array('/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?サービス.*?<\/h2>.*/s'),
 			array('/sitemap', false, false, '/^$/')
 		);
 	}

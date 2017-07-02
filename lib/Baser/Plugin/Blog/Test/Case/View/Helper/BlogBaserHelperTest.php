@@ -37,6 +37,7 @@ class BlogBaserHelperTest extends BaserTestCase {
 		'baser.Default.UserGroup',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogTag',
+		'baser.Default.BlogComment',
 		'baser.Default.BlogPostsBlogTag',
 		'plugin.blog.Model/BlogCategoryModel',
 		'plugin.blog.View/Helper/BlogBaserHelper/BlogPostBlogBaserHelper',
@@ -129,7 +130,7 @@ class BlogBaserHelperTest extends BaserTestCase {
 			'siteId' => 0
 		);
 		$blogs = $this->BcBaser->getBlogs('', $options);
-		$this->assertEquals(4, $blogs[0]['Content']['id']);
+		$this->assertEquals(3, $blogs[0]['Content']['id']);
 
 		// ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');
@@ -177,5 +178,23 @@ class BlogBaserHelperTest extends BaserTestCase {
 			array(true, '/s/news/index')
 		);
 	}
+
+/**
+ * ブログのカテゴリ取得
+ * 
+ * BlogHelper::getCategories() のラッピングの為、呼び出せるかどうかだけテストし、
+ * 詳細なテストは、BlogHelper::getCategories() に委ねる
+ */
+	public function testGetBlogCategories() {
+		$categories = $this->BcBaser->getBlogCategories();
+		$this->assertEquals(2, count($categories));
+	}
+
+/**
+ * ブログの子カテゴリを持っているかどうか
+ *
+ * BlogHelper::hasChildCategory() のラッピングの為、テストはスルー
+ */
+	//	public function testHasChildBlogCategory() {}
 	
 }

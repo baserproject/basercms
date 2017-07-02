@@ -21,6 +21,7 @@ App::uses('Content', 'Model');
 class ContentTest extends BaserTestCase {
 
 	public $fixtures = array(
+		'baser.Model.Content.ContentStatusCheck',
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
 		'baser.Default.SiteConfig',
@@ -150,6 +151,37 @@ class ContentTest extends BaserTestCase {
 			[40, '/another.com/s/service/'],
 			[41, '/another.com/s/service/service1'],
 			[42, '/another.com/s/service/contact/'],
+		];
+	}
+
+/**
+ * URLからコンテンツを取得する
+ *
+ * TODO sameUrl / useSubDomain のテストが書けていない
+ * Siteのデータを用意する必要がある
+ * 
+ * @param string $url
+ * @param string $publish
+ * @param bool $extend
+ * @param bool $sameUrl
+ * @param bool $useSubDomain
+ * @param bool $expected
+ * @dataProvider findByUrlDataProvider
+ */
+	public function testFindByUrl($expected, $url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false) {
+		$this->loadFixtures('ContentStatusCheck');
+		$result = (bool) $this->Content->findByUrl($url, $publish, $extend, $sameUrl, $useSubDomain);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function findByUrlDataProvider() {
+		return [
+			[true, '/about', true],
+			[false, '/service', true],
+			[true, '/service', false],
+			[false, '/hoge', false],
+			[true, '/news/archives/1', true, true],
+			[false, '/news/archives/1', true, false],
 		];
 	}
 

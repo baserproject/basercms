@@ -19,7 +19,7 @@
  * $this->BcBaser->blogPosts('news')
  *
  * @package Blog.View.Helper
- *
+ * @property BlogHelper $Blog
  */
 class BlogBaserHelper extends AppHelper {
 
@@ -275,6 +275,26 @@ class BlogBaserHelper extends AppHelper {
  */
 	public function isBlog() {
 		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
+	}
+
+/**
+ * ブログカテゴリを取得する
+ * 
+ * @param array $options
+ * @return mixed
+ */
+	public function getBlogCategories($options = []) {
+		return $this->Blog->getCategories($options);
+	}
+
+/**
+ * 子カテゴリを持っているかどうか
+ * 
+ * @param int $id
+ * @return mixed
+ */
+	public function hasChildBlogCategory($id) {
+		return $this->Blog->hasChildCategory($id);
 	}
 	
 }

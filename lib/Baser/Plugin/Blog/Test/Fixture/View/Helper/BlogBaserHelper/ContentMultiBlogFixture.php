@@ -127,7 +127,7 @@ public $name = 'Content';
 		),
 		array(
 			'id' => '4',
-			'site_id' => '0',
+			'site_id' => '3',
 			'name' => 'event',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
