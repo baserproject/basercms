@@ -773,7 +773,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider getUrlPatternDataProvider
  */
 	public function testGetUrlPattern($url, $expects) {
-		$this->assertEquals($expects, $this->Content->getUrlPattern($url));
+		$this->assertEquals($expects, $this->BcApp->getUrlPattern($url));
 	}
 
 	public function getUrlPatternDataProvider() {
