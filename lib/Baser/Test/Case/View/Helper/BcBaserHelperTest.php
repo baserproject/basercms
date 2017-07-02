@@ -1165,33 +1165,45 @@ class BcBaserHelperTest extends BaserTestCase {
  * 
  * http://192.168.33.10/test.php?case=View%2FHelper%2FBcBaserHelper&baser=true&filter=testGetContentsName
  */
-	public function testGetContentsName($url, $expects) {
-		//Configure周りの設定を全てOFF状態に
+	public function testGetContentsName($expects, $url, $detail = false, $options =[]) {
 		$this->BcBaser->request = $this->_getRequest($url);
-		$this->assertEquals($expects, $this->BcBaser->getContentsName());
+		if(!empty($options['error'])) {
+			$this->_View->name = 'CakeError';
+		}
+		$this->assertEquals($expects, $this->BcBaser->getContentsName($detail, $options));
 	}
 
 	public function getContentsNameDataProvider() {
-		return array(
+		return [
 			//PC
-			array('/', 'Home'),
-			array('/news', 'News'),
-			array('/contact', 'Contact'),
-			array('/about', 'Default'),
-
+			['Home', '/'],
+			['News', '/news'],
+			['Contact', '/contact'],
+			['Default', '/about'],
+			['Service', '/service/'],
+			['Service', '/service/service1'],
+			['Home', '/', true],
+			['NewsIndex', '/news', true],
+			['ContactIndex', '/contact', true],
+			['About', '/about', true],
+			['ServiceIndex', '/service/', true],
+			['ServiceService1', '/service/service1', true],
+			['Hoge', '/', false, ['home' => 'Hoge']],
+			['Hoge', '/about', false, ['default' => 'Hoge']],
+			['service_service1', '/service/service1', true, ['underscore' => true]],
+			['Error!!!', '/', false, ['error' => 'Error!!!']],
 			//モバイル　対応ON 連動OFF
-			array('/m/', 'Home'),
-			array('/m/news', 'News'),
-			array('/m/contact', 'Contact'),
-			array('/m/hoge', 'M'),	// 存在しないページ
-
+			['Home', '/m/'],
+			['News', '/m/news'],
+			['Contact', '/m/contact'],
+			['M', '/m/hoge'],	// 存在しないページ
 			//スマートフォン 対応ON　連動OFF
-			array('/s/', 'Home'),
-			array('/s/news', 'News'),
-			array('/s/contact', 'Contact'),
-			array('/s/about', 'Default'),
-			array('/s/hoge', 'S'),	// 存在しないページ
-		);
+			['Home', '/s/'],
+			['News', '/s/news'],
+			['Contact', '/s/contact'],
+			['Default', '/s/about'],
+			['S', '/s/hoge'],	// 存在しないページ
+		];
 	}
 
 /**
