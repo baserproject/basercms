@@ -34,6 +34,7 @@ class BlogHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
+		'plugin.blog.View/Helper/BlogBaserHelper/BlogCategoryTree',	// テスト内で読み込む
 		'baser.Default.User',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
@@ -587,4 +588,45 @@ class BlogHelperTest extends BaserTestCase {
 		$this->Blog->mailFormLink('test-title', 'test-contentsName');
 	}
 
+/**
+ * カテゴリ取得
+ */
+	public function testGetCategories() {
+		$this->loadFixtures('BlogCategoryTree');
+		// １階層、かつ、siteId=0
+		$categories = $this->Blog->getCategories();
+		$this->assertEquals(1, count($categories));
+		// サイトフィルター解除
+		$categories = $this->Blog->getCategories(['siteId' => false]);
+		$this->assertEquals(2, count($categories));
+		// 深さ指定（子）
+		$categories = $this->Blog->getCategories(['depth' => 2]);
+		$this->assertEquals(1, count($categories[0]['BlogCategory']['children']));
+		// 深さ指定（孫）
+		$categories = $this->Blog->getCategories(['depth' => 3]);
+		$this->assertEquals(1, count($categories[0]['BlogCategory']['children'][0]['BlogCategory']['children']));
+		// ブログコンテンツID指定
+		$categories = $this->Blog->getCategories(['siteId' => null, 'blogContentId' => 1]);
+		$this->assertEquals(1, count($categories));
+		// 並べ替え指定
+		$categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'name']);
+		$this->assertEquals(4, $categories[0]['BlogCategory']['id']);
+		// 親指定
+		$categories = $this->Blog->getCategories(['parentId' => 2]);
+		$this->assertEquals(3, $categories[0]['BlogCategory']['id']);
+		// スレッド形式
+		$categories = $this->Blog->getCategories(['threaded' => true]);
+		$this->assertEquals(3, $categories[0]['children'][0]['children'][0]['BlogCategory']['id']);
+		// ID指定
+		$categories = $this->Blog->getCategories(['id' => 3]);
+		$this->assertEquals('孫カテゴリ', $categories[0]['BlogCategory']['title']);
+	}
+
+/**
+ * 子カテゴリを持っているかどうか
+ *
+ * BlogCategory::hasChild() のラッピングの為、テストはスルー 
+ */
+//	public function testHasChildCategory() {}
+	
 }

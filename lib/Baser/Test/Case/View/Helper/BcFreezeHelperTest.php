@@ -482,7 +482,6 @@ class BcFreezeHelperTest extends BaserTestCase {
  */
 	public function testUpload($fieldName, $options, $expected) {
 		$result = $this->BcFreeze->upload($fieldName, $options);
-		pr($result);
 		$this->assertRegExp('/' . $expected . '/s', $result);
 	}
 

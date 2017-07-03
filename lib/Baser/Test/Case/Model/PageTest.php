@@ -20,6 +20,7 @@ App::uses('Page', 'Model');
 class PageTest extends BaserTestCase {
 
 	public $fixtures = array(
+		'baser.Model.Content.ContentStatusCheck',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogPost',
@@ -623,4 +624,28 @@ class PageTest extends BaserTestCase {
 			[2, ['nada-icons', 'bc_sample'], ['' => '親フォルダの設定に従う（default）', 'hoge' => 'hoge']]
 		];
 	}
+
+/**
+ * URLからページを取得する
+ * 
+ * @param string $url
+ * @param string $publish
+ * @param bool $expected
+ * @dataProvider findByUrlDataProvider
+ */
+	public function testFindByUrl($url, $publish, $expected) {
+		$this->loadFixtures('ContentStatusCheck');
+		$result = (bool) $this->Page->findByUrl($url, $publish);
+		$this->assertEquals($expected, $result);
+	}
+	
+	public function findByUrlDataProvider() {
+		return [
+			['/about', true, true],
+			['/service', true, false],
+			['/service', false, true],
+			['/hoge', false, false],
+		];
+	}
+	
 }
