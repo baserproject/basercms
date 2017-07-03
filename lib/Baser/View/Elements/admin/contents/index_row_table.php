@@ -43,6 +43,10 @@ if($data['Content']['entity_id']) {
 	$urlParams = array_merge($urlParams, [$data['Content']['entity_id']]);
 }
 $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site']['use_subdomain']);
+$toStatus = 'publish';
+if($data['Content']['self_status']) {
+	$toStatus = 'unpublish';
+}
 ?>
 
 
