@@ -17,7 +17,7 @@ if($this->request->params['Site']['use_subdomain']) {
 	$targetSite = BcSite::findByUrl($this->request->params['Content']['url']);
 	$previewUrl = $targetSite->getPureUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no')) . '?host=' . $targetSite->host;
 } else {
-	$previewUrl = $this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no');
+	$previewUrl = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no');
 }
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $statuses = array(0 => '非公開', 1 => '公開');
