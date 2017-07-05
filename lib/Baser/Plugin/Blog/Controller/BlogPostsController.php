@@ -376,13 +376,13 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
+				$this->setMessage('記事「' . $this->request->data['BlogPost']['name'] . '」を更新しました。', false, true);
 
 				// EVENT BlogPosts.afterEdit
 				$this->dispatchEvent('afterEdit', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));
 
-				$this->setMessage('記事「' . $this->request->data['BlogPost']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
