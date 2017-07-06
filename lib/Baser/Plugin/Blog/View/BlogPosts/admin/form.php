@@ -17,13 +17,13 @@ if($this->request->params['Site']['use_subdomain']) {
 	$targetSite = BcSite::findByUrl($this->request->params['Content']['url']);
 	$previewUrl = $targetSite->getPureUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no')) . '?host=' . $targetSite->host;
 } else {
-	$previewUrl = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no');
+	$previewUrl = $this->BcContents->getUrl($this->request->params['Content']['url'], false) . 'archives/' . $this->BcForm->value('BlogPost.no');
 }
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $statuses = array(0 => '非公開', 1 => '公開');
 $this->BcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlogBLogPostsEditScript',
-	'data-fullurl' => $this->BcContents->getUrl($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no'), true, $this->request->params['Site']['use_subdomain']),
+	'data-fullurl' => $this->BcContents->getUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no'), true, $this->request->params['Site']['use_subdomain']),
 	'data-previewurl' => $previewUrl
 ));
 ?>
