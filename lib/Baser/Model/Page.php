@@ -845,7 +845,7 @@ class Page extends AppModel {
 				'type' => 'LEFT',
 				'table' => 'sites',
 				'alias' => 'Site',
-				'conditions' => "`Content`.`site_id`=`Site`.`id`",
+				'conditions' => "Content.site_id=Site.id",
 				]
 			]
 		]);

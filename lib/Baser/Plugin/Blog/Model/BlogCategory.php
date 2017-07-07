@@ -296,13 +296,13 @@ class BlogCategory extends BlogAppModel {
 				'type' => 'LEFT',
 				'table' => 'blog_contents',
 				'alias' => 'BlogContent',
-				'conditions' => "`BlogCategory`.`blog_content_id`=`BlogContent`.`id`",
+				'conditions' => "BlogCategory.blog_content_id=BlogContent.id",
 			],
 				[
 					'type' => 'LEFT',
 					'table' => 'contents',
 					'alias' => 'Content',
-					'conditions' => "`Content`.`entity_id`=`BlogContent`.`id` AND `Content`.`type`='BlogContent'",
+					'conditions' => "Content.entity_id=BlogContent.id AND Content.type='BlogContent'",
 				]
 			]
 		];
