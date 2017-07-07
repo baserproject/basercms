@@ -700,4 +700,24 @@ class ThemesController extends AppController {
 		return $result;
 	}
 
+/**
+ * ダウンロード
+ */
+	public function admin_download() {
+		$this->autoRender = false;
+		$tmpDir = TMP . 'theme' . DS;
+		$Folder = new Folder();
+		$Folder->create($tmpDir);
+		$path = BASER_THEMES . $this->siteConfigs['theme'] . DS;
+		$Folder->move([
+			'from' => $path,
+			'to' => $tmpDir . $this->siteConfigs['theme'],
+			'chmod' => 0777
+		]);
+		$Simplezip = new Simplezip();
+		$Simplezip->addFolder($tmpDir);
+		$Simplezip->download($this->siteConfigs['theme']);
+		$Folder->delete($tmpDir);
+	}
+
 }
