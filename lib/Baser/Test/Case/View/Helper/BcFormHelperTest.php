@@ -67,7 +67,9 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
-		'baser.Default.User'
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite'
 	);
 	
 /**
@@ -650,9 +652,9 @@ class BcFormHelperTest extends BaserTestCase {
 		// 通常
 		$result = $this->BcForm->file($fieldName);
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			'span'	=> array('class' => 'upload-file'),
 			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload')), 
-			'/div'
+			'/span'
 		);
 		$this->assertTags($result, $expected);
 
@@ -678,7 +680,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 		$result = $this->BcForm->file($fieldName);
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			array('span'	=> array('class' => 'upload-file')),
 			array('input' => array('type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch')),
 			'&nbsp;',
 			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0')),
@@ -692,10 +694,10 @@ class BcFormHelperTest extends BaserTestCase {
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
 			'/a',
 			array('br' => true),
-			'span' => array('class' => 'file-name'),
+			array('span' => array('class' => 'file-name')),
 			'template1.jpg',
 			'/span',
-			'/div'
+			'/span'
 		);
 
 		$this->assertTags($result, $expected);
@@ -714,9 +716,9 @@ class BcFormHelperTest extends BaserTestCase {
 		$result = $this->BcForm->file($fieldName);
 
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			'span'	=> array('class' => 'upload-file'),
 			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][0][upload]', 'id' => 'Contact0Upload')),
-			'/div'
+			'/span'
 		);
 		$this->assertTags($result, $expected);
 	}
@@ -744,7 +746,7 @@ class BcFormHelperTest extends BaserTestCase {
 		$result = $this->BcForm->file($fieldName);
 
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			array('span' => array('class' => 'upload-file')),
 			array('input' => array('type' => 'file', 'name' => 'data[Contact][0][eye_catch]', 'id' => 'Contact0EyeCatch')),
 			'&nbsp;',
 			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_delete]', 'id' => 'Contact0EyeCatchDelete_', 'value' => '0')),
@@ -758,10 +760,10 @@ class BcFormHelperTest extends BaserTestCase {
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
 			'/a',
 			array('br' => true),
-			'span' => array('class' => 'file-name'),
+			array('span' => array('class' => 'file-name')),
 			'template1.jpg',
 			'/span',
-			'/div'
+			'/span'
 		);
 
 		$this->assertTags($result, $expected);
