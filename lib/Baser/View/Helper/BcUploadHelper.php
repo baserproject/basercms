@@ -248,6 +248,9 @@ class BcUploadHelper extends BcAppHelper {
 			$copySettings = "";
 		}
 
+		if(!$options['imgsize']) {
+			$options['imgsize'] = 'default';
+		}
 		if ($options['tmp']) {
 			$options['link'] = false;
 			$fileUrl = '/uploads/tmp/';
@@ -265,7 +268,7 @@ class BcUploadHelper extends BcAppHelper {
 			$maxSizeExists = false;
 			$mostSizeExists = false;
 
-			if ($copySettings) {
+			if ($copySettings && ($options['imgsize'] != 'default')) {
 
 				foreach ($copySettings as $key => $copySetting) {
 
