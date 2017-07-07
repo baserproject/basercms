@@ -1650,7 +1650,7 @@ DOC_END;
 			$out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
 		}
 
-		return '<div class="upload-file">' . $out . '</div>';
+		return '<span class="upload-file">' . $out . '</span>';
 	}
 
 /**
