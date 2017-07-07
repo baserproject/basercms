@@ -609,7 +609,7 @@ class BlogHelperTest extends BaserTestCase {
 		$categories = $this->Blog->getCategories(['siteId' => null, 'blogContentId' => 1]);
 		$this->assertEquals(1, count($categories));
 		// 並べ替え指定
-		$categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'name']);
+		$categories = $this->Blog->getCategories(['siteId' => null, 'order' => 'BlogCategory.name']);
 		$this->assertEquals(4, $categories[0]['BlogCategory']['id']);
 		// 親指定
 		$categories = $this->Blog->getCategories(['parentId' => 2]);

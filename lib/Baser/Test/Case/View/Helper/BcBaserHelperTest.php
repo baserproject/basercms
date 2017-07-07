@@ -42,6 +42,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.BlogPost',
 		'baser.Default.BlogCategory',
 		'baser.Default.Site',
+		'baser.Default.BlogComment',
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 	);
 
@@ -1562,6 +1563,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider widgetAreaDataProvider
  */
 	public function testWidgetArea($url, $no, $expected) {
+		App::uses('BlogHelper', 'Blog.View/Helper');
 		$this->BcBaser->request = $this->_getRequest($url);
 		ob_start();
 		$this->BcBaser->widgetArea($no);
