@@ -1393,6 +1393,9 @@ class BcBaserHelper extends AppHelper {
  * @return mixed
  */
 	public function getSitePrefix() {
+		if(!BC_INSTALLED) {
+			return '';
+		}
 		$site = null;
 		if(!empty($this->request->params['Site'])) {
 			$site = $this->request->params['Site'];

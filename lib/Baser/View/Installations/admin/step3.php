@@ -157,8 +157,10 @@ $(document).ready( function() {
 <div class="step-3">
 
 	<div class="em-box">
-		データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br />
-		<strong>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。</strong>
+		データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br>
+		MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。<br>
+		<strong>既に用意したデータベースにデータが存在する場合は、初期データで上書きされてしまうので注意してください。<br>
+		プレフィックスを活用しましょう。</strong>
 	</div>
 	<h2>データベース設定</h2>
 	<div class="panel-box corner10">

@@ -661,6 +661,9 @@ table.sub-menu{
 	text-align: center;
 	line-height: 24px;
 }
+.em-box strong{
+	color:#FF3300;
+}
 .em-box a{
 	color:#690;
 }
