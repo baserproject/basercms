@@ -1809,5 +1809,78 @@ class Content extends AppModel {
 		}
 		return true;
 	}
+
+/**
+ * URLに関連するコンテンツ情報を取得する
+ *
+ * @param string $url
+ * @param bool $publish
+ * @param bool $extend
+ * @param bool $sameUrl
+ * @param bool $useSubDomain
+ * @return mixed false|array
+ */
+	public function findByUrl($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false) {
+		$url = preg_replace('/^\//', '', $url);
+		if($extend) {
+			$params = explode('/', $url);
+			$condUrls = [];
+			$condUrls[] = '/' . implode('/', $params);
+			$count = count($params);
+			for ($i = $count; $i > 1; $i--) {
+				unset($params[$i - 1]);
+				$path = implode('/', $params);
+				$condUrls[] = '/' . $path . '/';
+				$condUrls[] = '/' . $path;
+			}
+			// 固定ページはURL拡張はしない
+			$conditions = [
+				'Content.type <>' => 'Page',
+				'Content.url' => $condUrls,
+				['or' => [
+					['Site.status' => true],
+					['Site.status' => null]
+				]],
+				['or' => [
+					['Site.same_main_url' => $sameUrl],
+					['Site.same_main_url' => null]
+				]],
+				['or' => [
+					['Site.use_subdomain' => $useSubDomain],
+					['Site.use_subdomain' => null]
+				]]
+			];
+		} else {
+			$conditions = [
+				'Content.url' => $this->getUrlPattern($url),
+				['or' => [
+					['Site.status' => true],
+					['Site.status' => null]
+				]],
+				['or' => [
+					['Site.same_main_url' => $sameUrl],
+					['Site.same_main_url' => null]
+				]],
+				['or' => [
+					['Site.use_subdomain' => $useSubDomain],
+					['Site.use_subdomain' => null]
+				]]
+			];
+		}
+		if($publish) {
+			$conditions = array_merge($conditions, $this->getConditionAllowPublish());
+		}
+		$content = $this->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
+		if(!$content) {
+			return false;
+		}
+		if($extend && $content['Content']['type'] == 'ContentFolder') {
+			return false;
+		}
+		if($content && empty($content['Site']['id'])) {
+			$content['Site'] = $this->Site->getRootMain()['Site'];
+		}
+		return $content;
+	}
 	
 }

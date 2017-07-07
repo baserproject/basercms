@@ -733,7 +733,7 @@ class Page extends AppModel {
 			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
 		$this->getDataSource()->begin();
-		$this->create($data);
+		$this->create(['Content' => $data['Content'], 'Page' => $data['Page']]);
 		if ($data = $this->save()) {
 			$this->getDataSource()->commit();
 			return $data;
@@ -797,7 +797,14 @@ class Page extends AppModel {
  * @return array
  */
 	public function getPageTemplateList($contentId, $theme) {
-		$pageTemplates = BcUtil::getTemplateList('Pages/templates', '', $theme);
+		if(!is_array($theme)) {
+			$theme = [$theme];
+		}
+		$pageTemplates = [];
+		foreach($theme as $value) {
+			$pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('Pages/templates', '', $value));
+		}
+
 		if($contentId != 1) {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
 			$parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
@@ -805,8 +812,50 @@ class Page extends AppModel {
 			if ($searchKey !== false) {
 				unset($pageTemplates[$searchKey]);
 			}
-			array_unshift($pageTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+			$pageTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $pageTemplates;
 		}
 		return $pageTemplates;
 	}
+
+/**
+ * URLより固定ページデータを探す
+ * 
+ * @param string $url
+ * @param bool $publish
+ * @return array|bool
+ */
+	public function findByUrl($url, $publish = true) {
+		$url = preg_replace('/^\//', '', $url);
+		$conditions = [
+			'Content.url' => $this->getUrlPattern($url),
+			'Content.type' => 'Page',
+			['or' => [
+				['Site.status' => true],
+				['Site.status' => null]
+			]]
+		];
+		if($publish) {
+			$conditions = array_merge($conditions, $this->Content->getConditionAllowPublish());
+		}
+		$record = $this->find('first', [
+			'conditions' => $conditions, 
+			'order' => 'Content.url DESC', 
+			'cache' => false,
+			'joins' => [[
+				'type' => 'LEFT',
+				'table' => 'sites',
+				'alias' => 'Site',
+				'conditions' => "`Content`.`site_id`=`Site`.`id`",
+				]
+			]
+		]);
+		if(!$record) {
+			return false;
+		}
+		if($record && empty($record['Site']['id'])) {
+			$record['Site'] = $this->Content->Site->getRootMain()['Site'];
+		}
+		return $record;
+	}
+	
 }

@@ -19,7 +19,7 @@
  * $this->BcBaser->blogPosts('news')
  *
  * @package Blog.View.Helper
- *
+ * @property BlogHelper $Blog
  */
 class BlogBaserHelper extends AppHelper {
 
@@ -141,7 +141,7 @@ class BlogBaserHelper extends AppHelper {
 		unset($options['contentsTemplate']);
 
 		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
-		if($this->request->params['Site']['device']) {
+		if(!empty($this->request->params['Site']['device'])) {
 			$url['prefix'] = $this->request->params['Site']['device'];
 		}
 		echo $this->requestAction($url, array('return', 'pass' => array($blogContentId, $num), 'entityId' => $blogContentId, 'named' => $options));
@@ -210,4 +210,91 @@ class BlogBaserHelper extends AppHelper {
 		return $this->Blog->isHome();
 	}
 
+/**
+ * Blogの基本情報を全て取得する
+ *
+ * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
+ * @param array $options オプション（初期値 :array()）
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
+ * @return mixed false|array Blogの基本情報
+ */
+	public function getBlogs($name = '', $options = array()) {
+		$options = array_merge(array(
+			'sort' => 'BlogContent.id',
+			'siteId' => null
+		), $options);
+		$conditions['Content.status'] = true;
+		if(!empty($name)){
+			if(is_int($name)) {
+				$conditions['BlogContent.id'] = $name;
+			} else {
+				$conditions['Content.name'] = $name;
+			}
+		}
+		if($options['siteId'] !== '' && !is_null($options['siteId']) && $options['siteId'] !== false) {
+			$conditions['Content.site_id'] = $options['siteId'];
+		}
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$BlogContent->unbindModel(
+			['hasMany' => ['BlogPost', 'BlogCategory']]
+		);
+		$datas = $BlogContent->find('all', array(
+				'conditions' => $conditions,
+				'order' => $options['sort'],
+				'cache' => false,
+				'recursive' => 0
+			)
+		);
+		if(!$datas) {
+			return false;
+		}
+		$contents = array();
+		if( count($datas) === 1 ){
+			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
+			unset($datas['BlogContent']['eye_catch_size']);
+			$contents[] = $datas;
+		} else {
+			foreach($datas as $val){
+				$val = $BlogContent->constructEyeCatchSize($val);
+				unset($val['BlogContent']['eye_catch_size']);
+				$contents[] = $val;
+			}
+		}
+		if($name && !is_array($name)) {
+			$contents = $contents[0];
+		}
+		return $contents;
+	}
+
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isBlog() {
+		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
+	}
+
+/**
+ * ブログカテゴリを取得する
+ * 
+ * @param array $options
+ * @return mixed
+ */
+	public function getBlogCategories($options = []) {
+		return $this->Blog->getCategories($options);
+	}
+
+/**
+ * 子カテゴリを持っているかどうか
+ * 
+ * @param int $id
+ * @return mixed
+ */
+	public function hasChildBlogCategory($id) {
+		return $this->Blog->hasChildCategory($id);
+	}
+	
 }

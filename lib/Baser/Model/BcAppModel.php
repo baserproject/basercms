@@ -1633,4 +1633,27 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * コンテンツのURLにマッチする候補を取得する
+ *
+ * @param $url
+ * @return array
+ */
+	public function getUrlPattern($url) {
+		$parameter = preg_replace('/^\//', '', $url);
+		$paths = [];
+		$paths[] = '/' . $parameter;
+		if(preg_match('/\/$/', $paths[0])) {
+			$paths[] = $paths[0] . 'index';
+		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
+				$paths[] = $matches[1];
+			}
+		}
+		return $paths;
+	}
+
 }
