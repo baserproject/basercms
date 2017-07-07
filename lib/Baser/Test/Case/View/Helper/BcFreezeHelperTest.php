@@ -447,10 +447,7 @@ class BcFreezeHelperTest extends BaserTestCase {
 
 /**
  * 凍結時用のコントロールを取得する
- * 
- * MEMO : freezeControlの547行目~559行目あたりのテストが実装されていません。
- * if (!empty($attributes["multiple"]) && $attributes["multiple"] !== 'checkbox') { ...
- * 
+ *
  * @param	string	フィールド文字列
  * @param	array	コントロールソース
  * @param	array	html属性
@@ -470,26 +467,9 @@ class BcFreezeHelperTest extends BaserTestCase {
 			array('baser.freezed', array(), array('value' => 'BaserCMS', 'multiple' => 'checkbox'), 'value="BaserCMS"\/>BaserCMS'),
 			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'),
 			array('baser.freezed', array('1' => 'BaserCMS1'), array('value' => array(1), 'multiple' => 'hoge'), '<input type="hidden" name="data\[baser\]\[freezed\]\[\]"  class="" value="1" \/><ul class="" value="1"  ><\/ul>'),
-			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"')
-		);
-	}
-
-/**
- * @param $fieldName
- * @param $options
- * @param $expected
- * @dataProvider uploadProvider
- */
-	public function testUpload($fieldName, $options, $expected) {
-		$result = $this->BcFreeze->upload($fieldName, $options);
-		$this->assertRegExp('/' . $expected . '/s', $result);
-	}
-
-	public function uploadProvider() {
-		return array(
-			array('hoge', array(), '<input name="data\[hoge\]" type="upload" id="hoge"\/>'),
-			array('hoge', array('type' => 'gege'), '<input name="data\[hoge\]" type="gege" id="hoge"\/>'),
-			array('hoge', array('class' => 'gege'), '<input name="data\[hoge\]" class="gege" type="upload" id="hoge"\/>')
+			array('baser.freezed', array('1' => 'BaserCMS1','2' => 'BaserCMS2','3' => 'BaserCMS3',), array('value' => array(1,2,3), 'multiple' => 'checkbox'), '<li>BaserCMS1.*<li>BaserCMS2.*<li>BaserCMS3.*value="1".*value="2".*value="3"'),
+			array('baser.freezed', array('1' => 'BaserCMS1'), array('value' => 1), '<input type="hidden" name="data\[baser\]\[freezed\]" class="" value="1" id="baserFreezed"\/>BaserCMS1'),
+			array('baser.freezed.hoge', array('1' => 'BaserCMS1'), array('value' => 1),'<input type="hidden" name="data\[baser\]\[freezed\]\[hoge\]".*value="1" id="baserFreezedHoge"\/>'),
 		);
 	}
 }
