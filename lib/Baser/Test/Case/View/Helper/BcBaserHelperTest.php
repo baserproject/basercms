@@ -1178,14 +1178,14 @@ class BcBaserHelperTest extends BaserTestCase {
 		return [
 			//PC
 			['Home', '/'],
-			['News', '/news'],
-			['Contact', '/contact'],
+			['News', '/news/'],
+			['Contact', '/contact/'],
 			['Default', '/about'],
 			['Service', '/service/'],
 			['Service', '/service/service1'],
 			['Home', '/', true],
-			['NewsIndex', '/news', true],
-			['ContactIndex', '/contact', true],
+			['NewsIndex', '/news/', true],
+			['ContactIndex', '/contact/', true],
 			['About', '/about', true],
 			['ServiceIndex', '/service/', true],
 			['ServiceService1', '/service/service1', true],
@@ -1195,13 +1195,13 @@ class BcBaserHelperTest extends BaserTestCase {
 			['Error!!!', '/', false, ['error' => 'Error!!!']],
 			//モバイル　対応ON 連動OFF
 			['Home', '/m/'],
-			['News', '/m/news'],
-			['Contact', '/m/contact'],
+			['News', '/m/news/'],
+			['Contact', '/m/contact/'],
 			['M', '/m/hoge'],	// 存在しないページ
 			//スマートフォン 対応ON　連動OFF
 			['Home', '/s/'],
-			['News', '/s/news'],
-			['Contact', '/s/contact'],
+			['News', '/s/news/'],
+			['Contact', '/s/contact/'],
 			['Default', '/s/about'],
 			['S', '/s/hoge'],	// 存在しないページ
 		];

@@ -1319,23 +1319,17 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if ($controller == 'pages' && $action == 'display') {
-
-			if (strpos($pass[0], 'pages/') !== false) {
-				$pageUrl = str_replace('pages/', '', $pass[0]);
+		if (!BcUtil::isAdminSystem()) {
+			$pageUrl = h($this->request->url);
+			if($pageUrl === false) {
+				$pageUrl = '/';
 			} else {
-				if (empty($pass)) {
-					$pageUrl = h($this->request->url);
-				} else {
-					$pageUrl = implode('/', $pass);
-				}
+				$pageUrl = '/' . $pageUrl;
 			}
-			
 			$sitePrefix = $this->getSitePrefix();
 			if($sitePrefix) {
-				$pageUrl = preg_replace('/^' . preg_quote($sitePrefix, '/') . '\//', '', $pageUrl);
+				$pageUrl = preg_replace('/^\/' . preg_quote($sitePrefix, '/') . '\//', '/', $pageUrl);
 			}
-			
 			if (preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
@@ -1343,7 +1337,6 @@ class BcBaserHelper extends AppHelper {
 			$pageUrl = preg_replace('/^\//', '', $pageUrl);
 			$aryUrl = explode('/', $pageUrl);
 		} else {
-
 			// プラグインルーティングの場合
 			if ((($url1 == '' && in_array($action, array('index', 'mobile_index', 'smartphone_index'))) || ($url1 == $action)) && $url2 != $action && $plugin) {
 				$prefix = '';
@@ -1393,10 +1386,15 @@ class BcBaserHelper extends AppHelper {
 
 		return $contentsName;
 	}
-	
+
+/**
+ * 現在のサイトのプレフィックスを取得する
+ *
+ * @return mixed
+ */
 	public function getSitePrefix() {
 		$site = null;
-		if($this->request->params['Site']) {
+		if(!empty($this->request->params['Site'])) {
 			$site = $this->request->params['Site'];
 		}
 		$Site = ClassRegistry::init('Site');
