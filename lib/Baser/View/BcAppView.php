@@ -179,9 +179,9 @@ class BcAppView extends View {
 		if ($this->name == 'CakeError' && $this->viewPath == 'Errors') {
 			$subDir = $this->subDir;
 			$this->subDir = null;
-			$fileName = parent::_getViewFileName($name);
-			$this->subDir = $subDir;
-			return $fileName;
+			if($name == 'missingConnection') {
+				$this->layout = 'missing_connection';
+			}
 		}
 		// <<<
 		// CUSTOMIZE ADD 2013/08/25 ryuring
@@ -204,7 +204,7 @@ class BcAppView extends View {
 			//$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
 			// ---
 			$name = array(
-				$this->viewPath . DS . $subDir . Inflector::underscore($name),
+				$this->viewPath . DS . $subDir . DS . Inflector::underscore($name),
 				$this->viewPath . DS . Inflector::underscore($name),
 			);
 			// <<<
@@ -228,7 +228,7 @@ class BcAppView extends View {
 			// ---
 			} else {
 				$name = array(
-					$this->viewPath . DS . $subDir . $name,
+					$this->viewPath . DS . $subDir . DS . $name,
 					$this->viewPath . DS . $name
 				);
 			// <<<
