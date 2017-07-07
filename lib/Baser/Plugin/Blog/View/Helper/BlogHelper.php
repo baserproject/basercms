@@ -986,7 +986,7 @@ class BlogHelper extends AppHelper {
  *
  * @param array $post ブログ記事
  * @param array $options オプション（初期値 : array()）
- *	- `imgsize` : 画像サイズ[thumb|small|medium|large]（初期値 : thumb）
+ *	- `imgsize` : 画像サイズ[thumb|mobile_thumb]（初期値 : thumb）
  *  - `link` : 大きいサイズの画像へのリンク有無（初期値 : true）
  *  - `escape` : タイトルについてエスケープする場合に true を指定（初期値 : false）
  *	- `mobile` : モバイルの画像を表示する場合に true を指定（初期値 : false）
@@ -1009,7 +1009,7 @@ class BlogHelper extends AppHelper {
  *
  * @param array $post ブログ記事
  * @param array $options オプション（初期値 : array()）
- *	- `imgsize` : 画像サイズ[thumb|small|medium|large]（初期値 : thumb）
+ *	- `imgsize` : 画像サイズ[thumb|mobile_thumb]（初期値 : thumb）
  *  - `link` : 大きいサイズの画像へのリンク有無（初期値 : true）
  *  - `escape` : タイトルについてエスケープする場合に true を指定（初期値 : false）
  *	- `mobile` : モバイルの画像を表示する場合に true を指定（初期値 : false）
