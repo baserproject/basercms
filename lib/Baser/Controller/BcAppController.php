@@ -802,6 +802,7 @@ class BcAppController extends Controller {
  * @param string $title タイトル
  * @param mixed $body 本文
  * @param array $options オプション
+ * 	- bool agentTemplate : テンプレートの配置場所についてサイト名をサブフォルダとして利用するかどうか（初期値：true）
  * @return bool 送信結果
  */
 		public function sendMail($to, $title = '', $body = '', $options = array()) {

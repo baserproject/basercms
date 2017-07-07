@@ -27,6 +27,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'baser.Default.Page',	// メソッド内で読み込む
+		'baser.Default.Content',	// メソッド内で読み込む
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
 		'baser.Default.SearchIndex',
@@ -1516,6 +1517,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testPage($input, $pageRecursive, $recursive, $expected) {
 		$this->loadFixtures('Page');
+		$this->loadFixtures('Content');
 		$Page = ClassRegistry::init('Page');
 		$record = $Page->findByUrl($input);
 		if($record) {
@@ -1542,8 +1544,8 @@ class BcBaserHelperTest extends BaserTestCase {
 			array('/icons', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'),
 			array('/index', false, false, '/^$/'),
 			array('/service', false, false, '/^$/'),
-			array('/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?サービス.*?<\/h2>.*/s'),
-			array('/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?サービス.*?<\/h2>.*/s'),
+			array('/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?事業案内.*?<\/h2>.*/s'),
+			array('/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?事業案内.*?<\/h2>.*/s'),
 			array('/sitemap', false, false, '/^$/')
 		);
 	}

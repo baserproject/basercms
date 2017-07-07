@@ -640,7 +640,11 @@ class BlogPost extends BlogAppModel {
 			}
 		}
 
-		$this->create(['BlogPost' => $data['BlogPost'], 'BlogTag' => $data['BlogTag']]);
+		$saveData = ['BlogPost' => $data['BlogPost']];
+		if(!empty($data['BlogTag'])) {
+			$saveData['BlogTag'] = $data['BlogTag'];
+		}
+		$this->create($saveData);
 		$result = $this->save();
 
 		if ($result) {
