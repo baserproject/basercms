@@ -168,7 +168,9 @@ $(document).ready( function() {
 			<h3>接続情報</h3>
 			<ul>
 				<li id="dbType"> <?php echo $this->BcForm->label('Installation.dbType', 'データベースタイプ'); ?><br />
-					<?php echo $this->BcForm->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?> </li>
+					<?php echo $this->BcForm->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?><br>
+					<small>※ MySQL・PostgreSQL・SQLiteの中で、このサーバーで利用できるものが表示されています。</small>
+					</li>
 				<li id="dbHost"> <?php echo $this->BcForm->label('Installation.dbHost', 'データベースホスト名'); ?><br />
 					<?php echo $this->BcForm->input('Installation.dbHost', array('type' => 'text', 'maxlength' => '300', 'size' => 45)); ?> </li>
 				<li id="dbUser" class="clearfix">
