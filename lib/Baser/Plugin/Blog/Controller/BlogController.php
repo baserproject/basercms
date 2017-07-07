@@ -110,7 +110,9 @@ class BlogController extends BlogAppController {
 			$this->request->params['Site'] = $content['Site'];
 		}
 
-		$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
+		if(!empty($this->blogContent['BlogContent']['id'])) {
+			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
+		}
 
 		$this->subMenuElements = array('default');
 
@@ -155,20 +157,34 @@ class BlogController extends BlogAppController {
  * @return void
  */
 	public function index() {
-
 		if($this->BcContents->preview == 'default' && $this->request->data) {
 			$this->blogContent['BlogContent'] = $this->request->data['BlogContent'];
 		}
 		if ($this->RequestHandler->isRss()) {
 			Configure::write('debug', 0);
-			$this->set('channel', array(
-				'title' => h($this->request->params['Content']['title'] . '｜' . $this->siteConfigs['name']),
-				'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
-			));
+			if($this->blogContent) {
+				$channel = [
+					'title' => h($this->request->params['Content']['title'] . '｜' . $this->siteConfigs['name']),
+					'description' => h(strip_tags($this->blogContent['BlogContent']['description']))
+				];
+				$listCount = $this->blogContent['BlogContent']['feed_count'];
+			} else {
+				$channel = [
+					'title' => $this->siteConfigs['name'],
+					'description' => $this->siteConfigs['description']
+				];
+				// TODO 暫定的に一番最初に登録したブログコンテンツの表示件数を利用
+				// BlogConfig で設定できるようにする
+				$blogContent = $this->BlogContent->find('first', ['order' => 'BlogContent.id', 'recirsive' => -1]);
+				$listCount = $blogContent['BlogContent']['feed_count'];
+			}
+			$this->set('channel', $channel);
 			$this->layout = 'default';
 			$template = 'index';
-			$listCount = $this->blogContent['BlogContent']['feed_count'];
 		} else {
+			if($this->request->url == 'rss/index') {
+				$this->notFound();
+			}
 			$template = $this->blogContent['BlogContent']['template'] . DS . 'index';
 			$listCount = $this->blogContent['BlogContent']['list_count'];
 		}
