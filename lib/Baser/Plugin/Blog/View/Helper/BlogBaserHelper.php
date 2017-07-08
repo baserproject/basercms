@@ -255,7 +255,7 @@ class BlogBaserHelper extends AppHelper {
 
 		// 公開記事数のカウントを追加
 		if ($options['postCount']) {
-			$datas = $this->_mergePostCountToBlogContentsData($datas);
+			$datas = $this->_mergePostCountToBlogsData($datas);
 		}
 
 		$contents = array();
@@ -279,15 +279,15 @@ class BlogBaserHelper extends AppHelper {
 /**
  * Blogの基本情報に公開記事数を追加する
  *
- * @param array $blogContentsData BlogContentのデータの配列
- * @return array Blogの基本情報
+ * @param array $blogsData Blogの基本情報の配列
+ * @return array
  */
-	private function _mergePostCountToBlogContentsData(array $blogContentsData) {
+	private function _mergePostCountToBlogsData(array $blogsData) {
 
 		/** @var BlogPost $BlogPost */
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
-		$blogContentIds = Hash::extract($blogContentsData, "{n}.BlogContent.id");
+		$blogContentIds = Hash::extract($blogsData, "{n}.BlogContent.id");
 		$conditions = array_merge(
 			['BlogPost.blog_content_id' => $blogContentIds],
 			$BlogPost->getConditionAllowPublish()
@@ -304,28 +304,28 @@ class BlogBaserHelper extends AppHelper {
 		]);
 
 		if(empty($postCountsData)) {
-			foreach ($blogContentsData as $blogContentData) {
-				$blogContentData['BlogContent']['post_count'] = 0;
+			foreach ($blogsData as $blogData) {
+				$blogData['BlogContent']['post_count'] = 0;
 			}
-			return $blogContentsData;
+			return $blogsData;
 		}
 
-		foreach($blogContentsData as $index => $blogContentData) {
+		foreach($blogsData as $index => $blogData) {
 
-			$blogContentId = $blogContentData['BlogContent']['id'];
+			$blogContentId = $blogData['BlogContent']['id'];
 			$countData = array_values(array_filter($postCountsData, function(array $data) use ($blogContentId) {
 				return $data['BlogPost']['blog_content_id'] == $blogContentId;
 			}));
 
 			if(empty($countData)) {
-				$blogContentsData[$index]['BlogContent']['post_count'] = 0;
+				$blogsData[$index]['BlogContent']['post_count'] = 0;
 				continue;
 			}
 
-			$blogContentsData[$index]['BlogContent']['post_count'] = intval($countData[0][0]['post_count']);
+			$blogsData[$index]['BlogContent']['post_count'] = intval($countData[0][0]['post_count']);
 		}
 
-		return $blogContentsData;
+		return $blogsData;
 	}
 
 
