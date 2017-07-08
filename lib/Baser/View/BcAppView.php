@@ -14,6 +14,36 @@
  * view 拡張クラス
  *
  * @package Baser.View
+ * @property \BcAdminHelper $BcAdmin
+ * @property \BcArrayHelper $BcArray
+ * @property \BcBaserHelper $BcBaser
+ * @property \BcCacheHelper $BcCache
+ * @property \BcCkeditorHelper $BcCkeditor
+ * @property \BcContentsHelper $BcContents
+ * @property \BcCsvHelper $BcCsv
+ * @property \BcFormHelper $BcForm
+ * @property \BcFormTableHelper $BcFormTable
+ * @property \BcFreezeHelper $BcFreeze
+ * @property \BcGooglemapsHelper $BcGooglemaps
+ * @property \BcHtmlHelper $BcHtml
+ * @property \BcLayoutHelper $BcLayout
+ * @property \BcListTableHelper $BcListTable
+ * @property \BcMobileHelper $BcMobile
+ * @property \BcPageHelper $BcPage
+ * @property \BcSearchBoxHelper $BcSearchBox
+ * @property \BcSmartphoneHelper $BcSmartphone
+ * @property \BcTextHelper $BcText
+ * @property \BcTimeHelper $BcTime
+ * @property \BcUploadHelper $BcUpload
+ * @property \BcWidgetAreaHelper $BcWidgetArea
+ * @property \BcXmlHelper $BcXml
+ * @property \BlogHelper $BlogHelper
+ * @property \FeedHelper $Feed
+ * @property \MaildataHelper $Maildata
+ * @property \MailfieldHelper $Mailfield
+ * @property \MailformHelper $Mailform
+ * @property \MailHelper $Mail
+ * @property \UploaderHelper $Uploader
  */
 class BcAppView extends View {
 

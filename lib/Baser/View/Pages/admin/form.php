@@ -12,6 +12,8 @@
 
 /**
  * [ADMIN] ページ登録・編集フォーム
+ * 
+ * @var BcAppView $this
  */
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $this->BcBaser->js('admin/pages/edit', false);
