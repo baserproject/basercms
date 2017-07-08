@@ -28,9 +28,13 @@ class BlogPostTest extends BaserTestCase {
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
 		'baser.Default.Site',
-		'baser.Default.Content',
-		'plugin.blog.Model/BlogPostModel',
-		'plugin.blog.Model/BlogCategoryModel',
+		'plugin.blog.Model/BlogPost/ContentBlogPost',
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite',
+		'plugin.blog.Model/BlogPost/BlogPostModel',
+		'plugin.blog.Model/BlogPost/BlogCategoryModel',
+		'plugin.blog.Model/BlogPost/BlogPostsBlogTagModel',
 	);
 
 	public function setUp() {
@@ -212,23 +216,20 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 	public function getPostedDatesDataProvider() {
-		return array(
-			array(1, array(), array(
-					array('year' => '2015', 'month' => '01')
-				)),
-			array(2, array(), array(
-					array('year' => '2016', 'month' => '02'),
-					array('year' => '2015', 'month' => '01')
-				)),
-			array(1, array('category' => true), array(
-					array(
-						'year' => '2015', 'month' => '01',
-						'BlogCategory' => array('id' => '1', 'name' => 'release', 'title' => 'プレスリリース'))
-				)),
-			array(1, array('viewCount' => true, 'type' => 'year'), array(
-					array('year' => '2015', 'count' => 1)
-				)),
-		);
+		return [
+			[1, [], [['year' => '2016', 'month' => '02'], ['year' => '2015', 'month' => '01']]],
+			[2, [], [['year' => '2016', 'month' => '02']]],
+			[1, ['category' => true], [
+				['year' => '2016', 'month' => '02', 'BlogCategory' => ['id' => null, 'name' => null, 'title' => null]], 
+				['year' => '2016', 'month' => '02', 'BlogCategory' => ['id' => '2', 'name' => 'child', 'title' => '子カテゴリ']],
+				['year' => '2015', 'month' => '01', 'BlogCategory' => ['id' => '2', 'name' => 'child', 'title' => '子カテゴリ']],
+				['year' => '2015', 'month' => '01', 'BlogCategory' => ['id' => '1', 'name' => 'release', 'title' => 'プレスリリース']],
+			]],
+			[1, ['viewCount' => true, 'type' => 'year'], [
+				['year' => '2016', 'count' => 2],
+				['year' => '2015', 'count' => 2]
+			]],
+		];
 	}
 
 /**
@@ -253,9 +254,9 @@ class BlogPostTest extends BaserTestCase {
 
 	public function getEntryDatesDataProvider() {
 		return array(
-			array(1, 2015, 1, array('2015-01-27')),
-			array(1, 2016, 1, array()),
-			array(2, 2016, 2, array('2016-02-10')),
+			[1, 2015, 1, ['2015-01-27', '2015-01-27']],
+			[1, 2016, 1, []],
+			[2, 2016, 2, ['2016-02-10', '2016-02-10']],
 		);
 	}
 
@@ -266,13 +267,13 @@ class BlogPostTest extends BaserTestCase {
 		$message = '投稿者一覧を正しく取得できません';
 		$result = $this->BlogPost->getAuthors(1, array());
 		$this->assertEquals($result[0]['User']['name'], 'basertest', $message);
-
+		$this->assertEquals($result[1]['User']['name'], 'basertest2', $message);
+		
 		$result = $this->BlogPost->getAuthors(2, array());
 		$this->assertEquals($result[0]['User']['name'], 'basertest', $message);
-		$this->assertEquals($result[1]['User']['name'], 'basertest2', $message);
 
 		$result = $this->BlogPost->getAuthors(2, array('viewCount' => true));
-		$this->assertEquals($result[0]['count'], 1, $message);
+		$this->assertEquals($result[0]['count'], 2, $message);
 	}
 
 /**
@@ -283,8 +284,6 @@ class BlogPostTest extends BaserTestCase {
 		if ($datasource === 'Database/BcSqlite') {
 			$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		}
-
-		$message = '指定した月の記事が存在するか正しくチェックできません';
 		$result = $this->BlogPost->existsEntry(1, 2015, 1);
 		$this->assertTrue($result);
 
@@ -292,10 +291,10 @@ class BlogPostTest extends BaserTestCase {
 		$this->assertFalse($result);
 
 		$result = $this->BlogPost->existsEntry(2, 2015, 1);
-		$this->assertTrue($result);
-
-		$result = $this->BlogPost->existsEntry(2, 2016, 1);
 		$this->assertFalse($result);
+
+		$result = $this->BlogPost->existsEntry(2, 2016, 2);
+		$this->assertTrue($result);
 	}
 
 /**
@@ -312,8 +311,8 @@ class BlogPostTest extends BaserTestCase {
 
 	public function getControlSourceDataProvider() {
 		return array(
-			array(array('blogContentId' => 1), array(1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ')),
-			array(array('blogContentId' => 2), array())
+			[['blogContentId' => 1], [1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ']],
+			[['blogContentId' => 2], [4 => 'プレスリリース']]
 		);
 	}
 
@@ -324,7 +323,7 @@ class BlogPostTest extends BaserTestCase {
 		$message = '正しく公開状態の記事を取得できません';
 		
 		$result = count($this->BlogPost->getPublishes(array()));
-		$this->assertEquals($result, 3, $message);
+		$this->assertEquals($result, 6, $message);
 
 		$options = array('conditions' => array(
 			'publish_begin' => '9000-01-27 12:00:00'
@@ -380,9 +379,6 @@ class BlogPostTest extends BaserTestCase {
 
 /**
  * 検索用データを生成する
- *
- * @param array $data
- * @return array
  */
 	public function testCreateSearchIndex() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -424,7 +420,6 @@ class BlogPostTest extends BaserTestCase {
  * 
  * @param int $id
  * @param array $data
- * @return mixed page Or false
  */
 	public function testCopy() {
 		$this->BlogPost->copy(1);
@@ -432,6 +427,58 @@ class BlogPostTest extends BaserTestCase {
 			'conditions' => array('BlogPost.id' => $this->BlogPost->getLastInsertID())
 		));
 		$this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
+	}
+
+/**
+ * カスタムファインダー　customParams
+ * 
+ * @param array $options
+ * @param mixed $expected
+ * @dataProvider findCustomParamsDataProvider
+ */
+	public function testFindCustomParams($type, $options, $expected) {
+		set_error_handler(function($no, $str, $file, $line, $context) {});
+		$result = $this->BlogPost->find('customParams', $options);
+		if($type == 'count') {
+			$this->assertEquals($expected, count($result));	
+		} elseif($type == 'name') {
+			$this->assertEquals($expected, $result[0]['BlogPost']['name']);
+		} elseif($type == 'id') {
+			$id = Hash::extract($result, '{n}.BlogPost.id');
+			$this->assertEquals($expected, $id);
+		}
+	}
+	
+	public function findCustomParamsDataProvider() {
+		return [
+			['count', [], 6],											// 公開状態全件取得
+			['count', ['preview' => true], 8],							// 非公開も含めて全件取得
+			['count', ['contentId' => 1, 'category' => 'release'], 3],	// 親カテゴリ
+			['count', ['contentId' => 1, 'category' => 'child'], 2],	// 子カテゴリ
+			['count', ['category' => 'release', 'force' => true], 3],	// 親カテゴリ contentId指定なし、強制取得（カテゴリ名に最初にマッチしたカテゴリIDに紐づくデータを取得）
+			['count', ['category' => 'hoge'], 0],						// 存在しないカテゴリ
+			['count', ['num' => 2], 2],									// 件数指定
+			['count', ['listCount' => 3], 3],							// 件数指定（非推奨）
+			['count', ['listCount' => 3, 'num' => 4], 4],				// 件数指定（num優先）
+			['count', ['tag' => '新製品'], 3],							// タグ
+			['count', ['tag' => 'hoge'], 0],							// 存在しないタグ
+			['count', ['year' => 2016], 4],								// 年
+			['count', ['year' => 2016, 'month' => 2], 4],				// 年月
+			['count', ['year' => 2016, 'month' => 2, 'day' => 10], 4],	// 年月日
+			['count', ['year' => 2016, 'month' => 2, 'day' => 1], 0],	// 年月日（対象なし）
+			['name', ['id' => 4], '４記事目'],							// id（no）指定
+			['name', ['keyword' => '４記事'], '４記事目'],				// キーワード（１件ヒット）
+			['count', ['keyword' => '新商品を販売'], 5],					// キーワード（復数件ヒット）
+			['name', ['keyword' => 'hoge 新商品'], '３記事目'],			// キーワード（復数キーワード）
+			['count', ['author' => 'basertest'], 5],					// 作成者
+			['count', ['author' => 'admin'], 0],						// 存在しない作成者
+			['id', ['sort' => 'id', 'category' => 'release', 'contentId' => 1], [3,2,1]],	// 並べ替え昇順
+			['id', ['sort' => 'id', 'direction' => 'DESC', 'category' => 'release', 'contentId' => 1], [3,2,1]],	// 並べ替え降順
+			['name', ['num' => 2, 'page' => 2], '４記事目'],				// ページ指定
+			['count', ['siteId' => 0], 6],								// サイトID
+			['count', ['contentUrl' => '/news/'], 4],					// コンテンツURL
+			['count', ['contentUrl' => ['/news/', '/topics/']], 6]		// コンテンツURL（復数）
+		];
 	}
 
 }

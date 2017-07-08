@@ -345,7 +345,15 @@ class BcAppView extends View {
 		// >>>
 		$names = array($name);
 		if ($this->subDir) {
-			array_unshift($names, $this->subDir . DS . $name);
+			if(preg_match('/^\.\.\/([^\/]+)\/(.+)$/', $name, $matches)) {
+				// Elements ではなく、コントローラー内のテンプレートを参照する場合の処理
+				// BlogBaserHelper::blogPosts() で、ブログコントローラー内のテンプレートを参照している為（posts等）
+				// TODO テンプレートの場所を Elements 内に移動するべき
+				$name = '..' . DS . $matches[1] . DS . $this->subDir . DS . $matches[2]; 
+			} else {
+				$name = $this->subDir . DS . $name;
+			}
+			array_unshift($names, $name);
 		}
 		// <<<
 

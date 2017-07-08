@@ -44,9 +44,9 @@ class BlogHelperTest extends BaserTestCase {
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.BlogTag',
-		'plugin.blog.Model/BlogCategoryModel',
-		'plugin.blog.Model/BlogPostModel',
-		'plugin.blog.Model/BlogPostsBlogTagModel',
+		'plugin.blog.Model/BlogPost/BlogCategoryModel',
+		'plugin.blog.Model/BlogPost/BlogPostModel',
+		'plugin.blog.Model/BlogPost/BlogPostsBlogTagModel',
 	);
 
 /**
@@ -218,10 +218,10 @@ class BlogHelperTest extends BaserTestCase {
 /**
  * 記事の本文を取得する
  *
- * @param array $post ブログ記事データ
- * @param boolean $moreText 詳細データを表示するかどうか
- * @param mixied $moreLink 詳細ページへのリンクを表示するかどうか
+ * @param bool $moreText 詳細データを表示するかどうか
+ * @param bool $moreLink 詳細ページへのリンクを表示するかどうか
  * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力
+ * @param string $expected
  * @dataProvider getPostContentDataProvider
  */
 	public function testGetPostContent($moreText, $moreLink, $cut, $expected) {
@@ -281,12 +281,13 @@ class BlogHelperTest extends BaserTestCase {
  * 記事が属するカテゴリ名を取得する
  */
 	public function testGetCategory() {
-		$post = array('BlogCategory' => array(
-			'id' => 1,
-			'name' => 'release',
-			'title' => 'プレスリリース',
-		));
-		$result = $this->Blog->getCategory($post);
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+//		$post = array('BlogCategory' => array(
+//			'id' => 1,
+//			'name' => 'release',
+//			'title' => 'プレスリリース',
+//		));
+//		$this->Blog->getCategory($post);
 	}
 
 /**
@@ -399,9 +400,9 @@ class BlogHelperTest extends BaserTestCase {
 
 	public function prevLinkDataProvider() {
 		return array(
-			array(1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/1" class="prev-link">≪ ホームページをオープンしました</a>'),
+			array(1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/4" class="prev-link">≪ ４記事目</a>'),
 			array(1, 3, '1000-08-10 18:58:07', ''),
-			array(2, 2, '9000-08-10 18:58:07', '<a href="/news/archives/3" class="prev-link">≪ 新商品を販売を開始しました。</a>'),
+			array(2, 2, '9000-08-10 18:58:07', '<a href="/news/archives/8" class="prev-link">≪ ８記事目</a>'),
 			array(2, 1, '1000-08-10 18:58:07', ''),
 		);
 	}
@@ -429,7 +430,7 @@ class BlogHelperTest extends BaserTestCase {
 			array(1, 1, '9000-08-10 18:58:07', ''),
 			array(1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'),
 			array(2, 3, '9000-08-10 18:58:07', ''),
-			array(2, 4, '1000-08-10 18:58:07', '<a href="/news/archives/2" class="next-link">新商品を販売を開始しました。 ≫</a>'),
+			array(2, 4, '1000-08-10 18:58:07', '<a href="/news/archives/7" class="next-link">７記事目 ≫</a>'),
 		);
 	}
 
@@ -537,26 +538,23 @@ class BlogHelperTest extends BaserTestCase {
 		$post = array(
 			'BlogPost' => array(
 				'id' => 1,
-				'blog_content_id' => 2,
+				'blog_content_id' => 1,
 			),
 			'BlogTag' => array(
 				array('name' => '新製品')
 			)
 		);
 		$result = $this->Blog->getRelatedPosts($post);
-		$this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません
-			');
-		$this->assertEquals($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません
-			');
+		$this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません');
+		$this->assertEquals($result[1]['BlogPost']['id'], 2, '同じタグの関連投稿を正しく取得できません');
 
 		$post['BlogPost']['id'] = 2;
 		$post['BlogPost']['blog_content_id'] = 1;
 		$result = $this->Blog->getRelatedPosts($post);
-		$this->assertEquals($result[0]['BlogPost']['id'], 1, '同じタグの関連投稿を正しく取得できません
-			');
+		$this->assertEquals($result[0]['BlogPost']['id'], 3, '同じタグの関連投稿を正しく取得できません');
 
-		$post['BlogPost']['id'] = 1;
-		$post['BlogPost']['blog_content_id'] = 1;
+		$post['BlogPost']['id'] = 7;
+		$post['BlogPost']['blog_content_id'] = 2;
 		$result = $this->Blog->getRelatedPosts($post);
 		$this->assertEmpty($result, '関連していない投稿を取得しています');
 

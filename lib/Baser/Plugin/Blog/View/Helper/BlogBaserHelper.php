@@ -27,7 +27,7 @@ class BlogBaserHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-	public $helpers = array('Blog.Blog');
+	public $helpers = array('Blog.Blog', 'BcBaser');
 
 /**
  * ブログ記事一覧出力
@@ -50,101 +50,157 @@ class BlogBaserHelper extends AppHelper {
  * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）２階層目以降はURLで指定
  * @param int $num 記事件数（初期値 : 5）
  * @param array $options オプション（初期値 : array()）
- *	- `category` : カテゴリで絞り込む場合にアルファベットのカテゴリ名指定（初期値 : null）
- *	- `tag` : タグで絞り込む場合にタグ名を指定（初期値 : null）
- *	- `year` : 年で絞り込む場合に年を指定（初期値 : null）
- *	- `month` : 月で絞り込む場合に月を指定（初期値 : null）
- *	- `day` : 日で絞り込む場合に日を指定（初期値 : null）
- *	- `id` : id で絞り込む場合に id を指定（初期値 : null）
+ * 	- `conditions` : CakePHP形式の検索条件（初期値 : array()）
+ *	- `category` : カテゴリで絞り込む（初期値 : null）
+ *	- `tag` : タグで絞り込む（初期値 : null）
+ *	- `year` : 年で絞り込む（初期値 : null）
+ *	- `month` : 月で絞り込む（初期値 : null）
+ *	- `day` : 日で絞り込む（初期値 : null）
+ *	- `id` : 記事NO で絞り込む（初期値 : null）※ 後方互換の為 id を維持
+ * 	- `no` : 記事NO で絞り込む（初期値 : null）
  *	- `keyword` : キーワードで絞り込む場合にキーワードを指定（初期値 : null）
+ *  - `postId` : 記事ID で絞り込む（初期値 : null）
+ *  - `siteId` : サイトID で絞り込む（初期値 : null）
+ *  - `preview` : 非公開の記事も見る場合に指定（初期値 : false）
  *	- `contentsTemplate` : コンテンツテンプレート名を指定（初期値 : null）
  *	- `template` : 読み込むテンプレート名を指定する場合にテンプレート名を指定（初期値 : null）
  *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC or ランダム:RANDOM]（初期値 : null）
- *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `page` : ページ数を指定（初期値 : null）
+ *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
+ *	- `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
  * @return void
  */
-	public function blogPosts($contentsName = null, $num = 5, $options = array()) {
-		$options = array_merge(array(
+	public function blogPosts($contentsName = [], $num = 5, $options = []) {
+		/**
+		 * @var BlogContent $BlogContent
+		 */
+		$this->_View->loadHelper('Blog.Blog');
+		$options = array_merge([
+			'conditions' => [],
 			'category' => null,
 			'tag' => null,
 			'year' => null,
 			'month' => null,
 			'day' => null,
 			'id' => null,
+			'no' => null,
 			'keyword' => null,
+			'author' => null,
+			'postId' => null,
+			'siteId' => null,
+			'preview' => false,
 			'contentsTemplate' => null,
-			'template' => null,
-			'direction' => null,
-			'page' => null,
-			'sort' => null
-		), $options);
-
-			if(!$contentsName && empty($options['contentsTemplate'])) {
-			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
-			return;
-		}
+			'template' => 'posts',
+			'direction' => 'DESC',
+			'page' => 1,
+			'sort' => 'posts_date',
+			'autoSetCurrentBlog' => true
+		], $options);
 		
-		// コンテンツ名を配列に
-		if (empty($contentsName)) {
-			$contentsName = [];
-		} elseif (!is_array($contentsName)) {
-			$contentsName = [$contentsName];
-		}
-		
-		// URL形式に変換
-		foreach($contentsName as $key => $value) {
-			$contentsName[$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
-		}
-		
-		// ブログコンテンツの条件生成
-		$Content = ClassRegistry::init('Content');
-		$conditions = [];
-		if($contentsName) {
-			$conditions['Content.url'] = $contentsName;
-		}
-		$conditions = array_merge($conditions, $Content->getConditionAllowPublish());
-		$conditions['Content.type'] = "BlogContent";
-		
-		// 有効ブログを取得
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$blogContents = $BlogContent->find('all', [
-			'fields' => ['BlogContent.id', 'BlogContent.template', 'Content.name', 'Content.status'],
-			'conditions' => $conditions,
-			'recursive' => 0,
-			'cache' => false
-		]);
-		
-		if (empty($blogContents)) {
-			trigger_error('指定されたコンテンツが見つかりません。（' . implode(', ', $contentsName) . '）', E_USER_NOTICE);
+		if(!$contentsName && empty($options['contentsTemplate'])) {
+			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。', E_USER_WARNING);
 			return;
 		}
 
-		$options['contentId'] = Hash::extract($blogContents, "{n}.BlogContent.id");
+		$contentsTemplate = $options['contentsTemplate'];
+		$template = $options['template'];
+		unset($options['contentsTemplate'], $options['template']);
+
+		$blogPosts = $this->getBlogPosts($contentsName, $num, $options);
 		
-		// 指定したコンテンツテンプレートに紐づくブログIDを特定
-		// 指定したコンテンツネームに紐づくブログIDを取得
-		$blogContentId = null;
-		foreach($blogContents as $key => $blogContent) {
-			if(!empty($options['contentsTemplate']) && $options['contentsTemplate'] == $blogContent['BlogContent']['template']) {
-				$blogContentId = $blogContent['BlogContent']['id'];	
-				break;
+		// テンプレートの決定
+		$options = $this->parseContentName($contentsName, $options);
+		if(!$contentsTemplate) {
+			$BlogContent = ClassRegistry::init('Blog.BlogContent');
+			$conditions['Content.url'] = $options['contentUrl'];
+			$conditions = array_merge($conditions, $BlogContent->Content->getConditionAllowPublish());
+			$blogContent = $BlogContent->find('first', [
+				'fields' => ['BlogContent.template'],
+				'conditions' => $conditions,
+				'recursive' => 0,
+				'cache' => false
+			]);
+			if($blogContent) {
+				$contentsTemplate = $blogContent['BlogContent']['template'];
+			} else {
+				$contentsTemplate = 'default';
 			}
 		}
-		
-		// コンテンツテンプレートに紐づくブログIDを特定できない場合は
-		// 対象ブログの先頭のブログIDとする
-		if (!$blogContentId) {
-			$blogContentId = current($options['contentId']);
-		}
-		
-		unset($options['contentsTemplate']);
-
-		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
+		$template = 'Blog...' . DS . 'Blog' . DS . $contentsTemplate . DS . $template;
+		$params = [];
 		if(!empty($this->request->params['Site']['device'])) {
-			$url['prefix'] = $this->request->params['Site']['device'];
+			$this->_View->subDir = $this->request->params['Site']['device'];
 		}
-		echo $this->requestAction($url, array('return', 'pass' => array($blogContentId, $num), 'entityId' => $blogContentId, 'named' => $options));
+		$this->BcBaser->element($template, ['posts' => $blogPosts], $params);
+	}
+
+/**
+ * ブログ記事を取得する
+ * 
+ * @param array $contentsName
+ * @param int $num
+ * @param array $options
+ * 	※ パラメーターは、contentTemplate / template 以外、BlogBaserHelper::blogPosts() に準ずる
+ * @return mixed
+ */
+	public function getBlogPosts($contentsName = [], $num = 5, $options = array()) {
+		/**
+		 * @var BlogContent $BlogContent
+		 */
+		$this->_View->loadHelper('Blog.Blog');
+		$options = array_merge([
+			'conditions' => [],
+			'category' => null,
+			'tag' => null,
+			'year' => null,
+			'month' => null,
+			'day' => null,
+			'id' => null,
+			'no' => null,
+			'keyword' => null,
+			'author' => null,
+			'postId' => null,
+			'siteId' => null,
+			'preview' => false,
+			'direction' => 'DESC',
+			'page' => 1,
+			'sort' => 'posts_date',
+			'autoSetCurrentBlog' => true
+		], $options);
+		
+		$options = $this->parseContentName($contentsName, $options);
+		$options['num'] = $num;
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+		return $BlogPost->find('customParams', $options);
+	}
+
+/**
+ * コンテンツ名を解析して検索条件を設定する
+ * 
+ * @param mixed $contentsName
+ * @param array $options
+ * @return mixed
+ */
+	public function parseContentName($contentsName, $options) {
+		if ($contentsName && !is_array($contentsName)) {
+			$contentsName = [$contentsName];
+		}
+		// 対象ブログを指定する条件を設定
+		$options['contentUrl'] = $options['contentId'] = [];
+		if($contentsName) {
+			foreach($contentsName as $key => $value) {
+				if(is_int($value)) {
+					$options['contentId'] = $value;
+				} else {
+					$options['contentUrl'][$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
+				}
+			}
+		}
+		if($options['autoSetCurrentBlog'] && !$options['contentUrl'] && !empty($this->request->params['Content']['url'])) {
+			$options['contentUrl'] = $this->request->params['Content']['url'];
+			$options['contentId'] = $this->request->params['Content']['entity_id'];
+		}
+		return $options;
 	}
 
 /**

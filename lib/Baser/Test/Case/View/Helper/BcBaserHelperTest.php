@@ -1194,12 +1194,12 @@ class BcBaserHelperTest extends BaserTestCase {
 			['Hoge', '/about', false, ['default' => 'Hoge']],
 			['service_service1', '/service/service1', true, ['underscore' => true]],
 			['Error!!!', '/', false, ['error' => 'Error!!!']],
-			//モバイル　対応ON 連動OFF
+			// モバイル　対応ON 連動OFF
 			['Home', '/m/'],
 			['News', '/m/news/'],
 			['Contact', '/m/contact/'],
 			['M', '/m/hoge'],	// 存在しないページ
-			//スマートフォン 対応ON　連動OFF
+			// スマートフォン 対応ON　連動OFF
 			['Home', '/s/'],
 			['News', '/s/news/'],
 			['Contact', '/s/contact/'],

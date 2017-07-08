@@ -101,7 +101,6 @@ class BcContentsRoute extends CakeRoute {
 		}
 		$request->params['Content'] = $content['Content'];
 		$request->params['Site'] = $content['Site'];
-
 		$url = $site->getPureUrl($url);
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
 		if($params) {
@@ -118,7 +117,7 @@ class BcContentsRoute extends CakeRoute {
  * @param $plugin
  * @param $type
  * @param $entityId
- * @return array
+ * @return mixed false|array
  */
 	public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias) {
 		$viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');

@@ -77,6 +77,7 @@ class BaserTestCase extends CakeTestCase {
 
 /**
  * 管理画面にログインする
+ * 
  * @param string $group
  */
 	protected function _loginAdmin($id = 1) {
@@ -88,7 +89,8 @@ class BaserTestCase extends CakeTestCase {
 	}
 
 /**
- *
+ * イベントを設定する
+ * 
  * @param $events
  */
 	public function attachEvent($events) {
@@ -98,6 +100,9 @@ class BaserTestCase extends CakeTestCase {
 		return $event;
 	}
 
+/**
+ * イベントをリセットする 
+ */
 	public function resetEvent() {
 		$EventManager = CakeEventManager::instance();
 		$reflectionClass = new ReflectionClass(get_class($EventManager));
@@ -105,6 +110,7 @@ class BaserTestCase extends CakeTestCase {
 		$property->setAccessible(true);
 		$property->setValue($EventManager, []);
 	}
+	
 }
 
 /**
@@ -126,4 +132,5 @@ class BcEventListenerMock extends Object implements CakeEventListener {
 	public function implementedEvents() {
 		return $this->events;
 	}
+	
 }
