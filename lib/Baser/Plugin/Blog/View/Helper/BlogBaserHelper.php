@@ -217,12 +217,14 @@ class BlogBaserHelper extends AppHelper {
  * @param array $options オプション（初期値 :array()）
  *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
  *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
+ *  - `postCount` : 公開記事数を取得するかどうか (初期値:false)
  * @return mixed false|array Blogの基本情報
  */
 	public function getBlogs($name = '', $options = array()) {
 		$options = array_merge(array(
 			'sort' => 'BlogContent.id',
-			'siteId' => null
+			'siteId' => null,
+			'postCount' => false,
 		), $options);
 		$conditions['Content.status'] = true;
 		if(!empty($name)){
@@ -235,6 +237,7 @@ class BlogBaserHelper extends AppHelper {
 		if($options['siteId'] !== '' && !is_null($options['siteId']) && $options['siteId'] !== false) {
 			$conditions['Content.site_id'] = $options['siteId'];
 		}
+		/** @var BlogContent $BlogContent */
 		$BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$BlogContent->unbindModel(
 			['hasMany' => ['BlogPost', 'BlogCategory']]
@@ -249,6 +252,12 @@ class BlogBaserHelper extends AppHelper {
 		if(!$datas) {
 			return false;
 		}
+
+		// 公開記事数のカウントを追加
+		if ($options['postCount']) {
+			$datas = $this->_mergePostCountToBlogContentsData($datas);
+		}
+
 		$contents = array();
 		if( count($datas) === 1 ){
 			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
@@ -265,6 +274,58 @@ class BlogBaserHelper extends AppHelper {
 			$contents = $contents[0];
 		}
 		return $contents;
+	}
+
+/**
+ * Blogの基本情報に公開記事数を追加する
+ *
+ * @param array $blogContentsData BlogContentのデータの配列
+ * @return array Blogの基本情報
+ */
+	private function _mergePostCountToBlogContentsData(array $blogContentsData) {
+
+		/** @var BlogPost $BlogPost */
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+
+		$blogContentIds = Hash::extract($blogContentsData, "{n}.BlogContent.id");
+		$conditions = array_merge(
+			array('BlogPost.blog_content_id' => $blogContentIds),
+			$BlogPost->getConditionAllowPublish()
+		);
+
+		$postCountsData = $BlogPost->find('all', array(
+			'fields' => array(
+				'BlogPost.blog_content_id',
+				'COUNT(BlogPost.id) as `post_count`',
+			),
+			'conditions' => $conditions,
+			'group' => array('BlogPost.blog_content_id'),
+			'recursive' => -1,
+		));
+
+		if(empty($postCountsData)) {
+			foreach ($blogContentsData as $blogContentData) {
+				$blogContentData['BlogContent']['post_count'] = 0;
+			}
+			return $blogContentsData;
+		}
+
+		foreach($blogContentsData as $index => $blogContentData) {
+
+			$blogContentId = $blogContentData['BlogContent']['id'];
+			$countData = array_values(array_filter($postCountsData, function(array $data) use ($blogContentId) {
+				return $data['BlogPost']['blog_content_id'] == $blogContentId;
+			}));
+
+			if(empty($countData)) {
+				$blogContentsData[$index]['BlogContent']['post_count'] = 0;
+				continue;
+			}
+
+			$blogContentsData[$index]['BlogContent']['post_count'] = intval($countData[0][0]['post_count']);
+		}
+
+		return $blogContentsData;
 	}
 
 
