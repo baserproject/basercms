@@ -296,7 +296,7 @@ class BlogBaserHelper extends AppHelper {
 		$postCountsData = $BlogPost->find('all', [
 			'fields' => [
 				'BlogPost.blog_content_id',
-				'COUNT(BlogPost.id) as `post_count`',
+				'COUNT(BlogPost.id) as post_count',
 			],
 			'conditions' => $conditions,
 			'group' => ['BlogPost.blog_content_id'],
