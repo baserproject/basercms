@@ -127,17 +127,17 @@ class BlogBaserHelperTest extends BaserTestCase {
 		$this->assertFalse(isset($blogs[0]['BlogContent']['post_count']));
 
 		// ソート順を変更
-		$options = array(
+		$options = [
 			'sort' => 'Content.id DESC',
 			'siteId' => 0
-		);
+		];
 		$blogs = $this->BcBaser->getBlogs('', $options);
 		$this->assertEquals(3, $blogs[0]['Content']['id']);
 
 		// 記事数を取得
-		$options = array(
+		$options = [
 			'postCount' => true,
-		);
+		];
 		$blogs = $this->BcBaser->getBlogs('', $options);
 		$this->assertEquals(3, $blogs[0]['BlogContent']['post_count']);
 		$this->assertEquals(0, $blogs[1]['BlogContent']['post_count']);

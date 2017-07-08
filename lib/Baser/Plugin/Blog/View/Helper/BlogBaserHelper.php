@@ -289,19 +289,19 @@ class BlogBaserHelper extends AppHelper {
 
 		$blogContentIds = Hash::extract($blogContentsData, "{n}.BlogContent.id");
 		$conditions = array_merge(
-			array('BlogPost.blog_content_id' => $blogContentIds),
+			['BlogPost.blog_content_id' => $blogContentIds],
 			$BlogPost->getConditionAllowPublish()
 		);
 
-		$postCountsData = $BlogPost->find('all', array(
-			'fields' => array(
+		$postCountsData = $BlogPost->find('all', [
+			'fields' => [
 				'BlogPost.blog_content_id',
 				'COUNT(BlogPost.id) as `post_count`',
-			),
+			],
 			'conditions' => $conditions,
-			'group' => array('BlogPost.blog_content_id'),
+			'group' => ['BlogPost.blog_content_id'],
 			'recursive' => -1,
-		));
+		]);
 
 		if(empty($postCountsData)) {
 			foreach ($blogContentsData as $blogContentData) {
