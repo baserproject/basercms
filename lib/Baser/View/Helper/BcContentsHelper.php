@@ -312,6 +312,10 @@ class BcContentsHelper extends AppHelper {
 /**
  * 親コンテンツを取得する
  *
+ * - 引数なしで現在のコンテンツの親情報を取得
+ * - $id を指定して取得する事ができる
+ * - $direct を false に設定する事で、最上位までの親情報を取得
+ * 
  * @param bool $direct 直接の親かどうか
  * @return mixed false|array
  */
