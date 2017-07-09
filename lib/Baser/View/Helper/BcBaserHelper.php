@@ -2686,4 +2686,15 @@ END_FLASH;
 		return false;
 	}
 
+/**
+ * 親フォルダを取得する
+ * 
+ * @param int $id
+ * @param bool $direct
+ * @return mixed false|array
+ */
+	public function getParentFolder($id, $direct = true) {
+		return $this->BcContents->getParent($id, $direct);
+	}
+
 }

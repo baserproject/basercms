@@ -2058,5 +2058,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals('BlogBaserHelper', get_class($PluginBaser));
 		$this->assertFalse($this->BcBaser->getPluginBaser('hoge'));
 	}
+
+/**
+ * 親フォルダを取得する 
+ */
+	public function testGetParentFolder() {
+		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');	
+	}
 	
 }

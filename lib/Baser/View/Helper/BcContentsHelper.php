@@ -311,12 +311,43 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * 親コンテンツを取得する
- * 
- * @param int $contentId
- * @return mixed
+ *
+ * @param bool $direct 直接の親かどうか
+ * @return mixed false|array
  */
-	public function getParent($contentId) {
-		return $this->_Content->getParentNode($contentId);
+	public function getParent($id, $direct) {
+		if(!$id && !empty($this->request->params['Content']['id'])) {
+			$id = $this->request->params['Content']['id'];
+		}
+		if(!$id){
+			return false;
+		}
+		$siteId = $this->_Content->field('site_id', ['Content.id' => $id]);
+		if($direct) {
+			$parent = $this->_Content->getParentNode($id);
+			if($parent && $parent['Content']['site_id'] == $siteId) {
+				return $parent;
+			} else {
+				return false;
+			}
+		} else {
+			$parents = $this->_Content->getPath($id);
+			if($parents) {
+				$result = [];
+				foreach ($parents as $parent) {
+					if($parent['Content']['id'] != $id && $parent['Content']['site_id'] == $siteId) {
+						$result[] = $parent;
+					}
+				}
+				if($result) {
+					return $result;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
 	}
 
 /**
@@ -459,5 +490,5 @@ class BcContentsHelper extends AppHelper {
 		}
 		return true;
 	}
-
+	
 }
