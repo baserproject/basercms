@@ -143,6 +143,8 @@ class BlogBaserHelperTest extends BaserTestCase {
 		$blogs = $this->BcBaser->getBlogs();
 		$this->assertEquals(3, count($blogs));
 		$this->assertEquals(2, $blogs[0]['Content']['id']);
+		// デフォルトでは記事数を取得しない
+		$this->assertFalse(isset($blogs[0]['BlogContent']['post_count']));
 
 		// ソート順を変更
 		$options = [
@@ -151,6 +153,14 @@ class BlogBaserHelperTest extends BaserTestCase {
 		];
 		$blogs = $this->BcBaser->getBlogs('', $options);
 		$this->assertEquals(3, $blogs[0]['Content']['id']);
+
+		// 記事数を取得
+		$options = [
+			'postCount' => true,
+		];
+		$blogs = $this->BcBaser->getBlogs('', $options);
+		$this->assertEquals(3, $blogs[0]['BlogContent']['post_count']);
+		$this->assertEquals(0, $blogs[1]['BlogContent']['post_count']);
 
 		// ブログ指定 1つなので、配列に梱包されてない
 		$blogs = $this->BcBaser->getBlogs('news');
