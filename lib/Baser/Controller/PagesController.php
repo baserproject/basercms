@@ -184,7 +184,7 @@ class PagesController extends AppController {
 		// ページテンプレートリスト
 		$theme = [$this->siteConfigs['theme']];
 		$site = BcSite::findById($this->request->data['Content']['site_id']);
-		if(!empty($site) && $site->theme != $this->siteConfigs['theme']) {
+		if(!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
 			$theme[] = $site->theme;
 		}
 		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);

@@ -182,14 +182,20 @@ class ContentFolder extends AppModel implements CakeEventListener {
  * @return array
  */
 	public function getFolderTemplateList($contentId, $theme) {
-		$folderTemplates = BcUtil::getTemplateList('ContentFolders', '', $theme);
+		if(!is_array($theme)) {
+			$theme = [$theme];
+		}
+		$folderTemplates = [];
+		foreach($theme as $value) {
+			$folderTemplates = array_merge($folderTemplates, BcUtil::getTemplateList('ContentFolders', '', $value));
+		}
 		if($contentId != 1) {
 			$parentTemplate = $this->getParentTemplate($contentId, 'folder');
 			$searchKey = array_search($parentTemplate, $folderTemplates);
 			if($searchKey !== false) {
 				unset($folderTemplates[$searchKey]);
 			}
-			array_unshift($folderTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+			$folderTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $folderTemplates;
 		}
 		return $folderTemplates;
 	}
