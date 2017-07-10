@@ -2063,7 +2063,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * 親フォルダを取得する 
  */
 	public function testGetParentFolder() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');	
+		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');
 	}
 	
 }

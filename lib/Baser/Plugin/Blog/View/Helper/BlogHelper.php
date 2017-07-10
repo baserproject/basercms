@@ -54,22 +54,35 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function setContent($blogContentId = null) {
+		$blogContentUpdated = false;
 		if(empty($this->blogContent) || ($blogContentId != $this->blogContent['id'])) {
 			if ($blogContentId) {
 				if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
 					if(!empty($this->request->data['BlogContent'])) {
 						$this->blogContent = $this->request->data['BlogContent'];
+						$blogContentUpdated = true;
 					}
 				} else {
 					$BlogContent = ClassRegistry::init('Blog.BlogContent');
 					$BlogContent->unbindModel(['hasMany' => ['BlogPost', 'BlogCategory']]);
-					$this->blogContent = Hash::extract($BlogContent->read(null, $blogContentId), 'BlogContent');
+					$blogContent = $BlogContent->find('first', ['conditions' => ['BlogContent.id' => $blogContentId], 'recursive' => -1]);
+					$this->blogContent = Hash::extract($blogContent, 'BlogContent');
+					$blogContentUpdated = true;
 				}
 			} elseif (isset($this->_View->viewVars['blogContent']['BlogContent'])) {
 				$this->blogContent = $this->_View->viewVars['blogContent']['BlogContent'];
+				$blogContentUpdated = true;
 			}
 		}
 		if ($this->blogContent) {
+			if($blogContentUpdated) {
+				$Content = ClassRegistry::init('Content');
+				$content = $Content->find('first', ['conditions' => [
+					'Content.entity_id' => $this->blogContent['id'],
+					'Content.type' => 'BlogContent'
+				], 'recursive' => -1]);
+				$this->content = Hash::extract($content, 'Content');
+			}
 			$BlogPost = ClassRegistry::init('Blog.BlogPost');
 			$BlogPost->setupUpload($this->blogContent['id']);
 		}
@@ -267,7 +280,7 @@ class BlogHelper extends AppHelper {
  *
  * @param array $post ブログ記事データ
  * @param boolean $moreText 詳細データを表示するかどうか（初期値 : true）
- * @param mixied $moreLink 詳細ページへのリンクを表示するかどうか。true に指定した場合、
+ * @param mixed $moreLink 詳細ページへのリンクを表示するかどうか。true に指定した場合、
  *	「≫ 続きを読む」という文字列がリンクとして表示される。（初期値 : false）
  * また、文字列を指定するとその文字列がリンクとなる
  * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
@@ -282,7 +295,7 @@ class BlogHelper extends AppHelper {
  *
  * @param array $post ブログ記事データ
  * @param boolean $moreText 詳細データを表示するかどうか（初期値 : true）
- * @param mixied $moreLink 詳細ページへのリンクを表示するかどうか。true に指定した場合、
+ * @param mixed $moreLink 詳細ページへのリンクを表示するかどうか。true に指定した場合、
  *	「≫ 続きを読む」という文字列がリンクとして表示される。（初期値 : false）
  * また、文字列を指定するとその文字列がリンクとなる
  * @param mixed $cut 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
@@ -309,7 +322,7 @@ class BlogHelper extends AppHelper {
 				App::uses('HtmlHelper', 'View/Helper');
 				$this->Html = new HtmlHelper($this->_View);
 			}
-			$out .= '<p class="more">' . $this->Html->link($moreLink, $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no'] . '#post-detail', null, null, false) . '</p>';
+			$out .= '<p class="more">' . $this->Html->link($moreLink, $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no'] . '#post-detail', null, null) . '</p>';
 		}
 		return $out;
 	}
@@ -334,20 +347,15 @@ class BlogHelper extends AppHelper {
  * @return string 記事本文
  */
 	public function getPostDetail($post, $options = array()) {
-
 		$options = array_merge(array(
 			'cut' => false
 		), $options);
-		extract($options);
-
+		$cut = $options['cut'];
 		unset($options['cut']);
-
 		$out = $post['BlogPost']['detail'];
-
 		if ($cut) {
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
 		}
-
 		return $out;
 	}
 
@@ -392,7 +400,7 @@ class BlogHelper extends AppHelper {
 					App::uses('HtmlHelper', 'View/Helper');
 					$this->Html = new HtmlHelper($this->_View);
 				}
-				return $this->Html->link($post['BlogCategory']['title'], $this->getCategoryUrl($post['BlogCategory']['id'], $options), $options, null, false);
+				return $this->Html->link($post['BlogCategory']['title'], $this->getCategoryUrl($post['BlogCategory']['id'], $options), $options, null);
 			} else {
 				return $post['BlogCategory']['title'];
 			}
@@ -434,12 +442,18 @@ class BlogHelper extends AppHelper {
 		}
 		$options = array_merge([
 			'separator' => ' , ',
-			'tag' => true
+			'tag' => true,
+			'crossing' => false
 		], $options);
 		$tags = [];
+		if($options['crossing']) {
+			$crossingId = null;
+		} else {
+			$crossingId = $this->blogContent['id'];
+		}
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
-				$url = $this->request->params['Content']['url'] . 'archives/tag/' . $tag['name'];
+				$url = $this->getTagLinkUrl($crossingId, $tag);
 				if($options['tag']) {
 					$tags[] = $this->BcBaser->getLink($tag['name'], $url);	
 				} else {
@@ -475,8 +489,6 @@ class BlogHelper extends AppHelper {
 		$options = array_merge(array(
 			'named' => array()
 		), $options);
-		extract($options);
-
 		if (!isset($this->BlogCategory)) {
 			$this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		}
@@ -490,9 +502,8 @@ class BlogHelper extends AppHelper {
 				$path[] = urldecode($category['BlogCategory']['name']);
 			}
 		}
-
-		if ($named) {
-			$path = array_merge($path, $named);
+		if ($options['named']) {
+			$path = array_merge($path, $options['named']);
 		}
 
 		$url = Router::url($this->request->params['Content']['url'] . 'archives/' . implode('/', $path));
@@ -767,9 +778,8 @@ class BlogHelper extends AppHelper {
 			'link' => true,
 			'alt' => $post['BlogPost']['name']
 			), $options);
-
-		extract($options);
-
+		$num = $options['num'];
+		$link = $options['link'];
 		unset($options['num']);
 		unset($options['link']);
 
@@ -802,8 +812,6 @@ class BlogHelper extends AppHelper {
  */
 	public function getHtmlById($post, $id) {
 		$content = $post['BlogPost']['content'] . $post['BlogPost']['detail'];
-
-		$values = array();
 		$pattern = '/<([^\s]+)\s[^>]*?id="' . $id . '"[^>]*>(.*?)<\/\1>/is';
 		if (preg_match($pattern, $content, $matches)) {
 			return $matches[2];
@@ -1075,7 +1083,7 @@ class BlogHelper extends AppHelper {
  * 次の記事を取得する
  *
  * @param array $post ブログ記事
- * @return mixid 
+ * @return array
  */
 	private function getNextPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
@@ -1115,7 +1123,7 @@ class BlogHelper extends AppHelper {
  * 前の記事を取得する
  *
  * @param array $post ブログ記事
- * @return mixid 
+ * @return array 
  */
 	private function getPrevPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
@@ -1218,5 +1226,484 @@ class BlogHelper extends AppHelper {
 		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
 		return $BlogCategory->hasChild($id);
 	}
-	
+
+/**
+ * ブログタグリストを取得する
+ * 
+ * @param mixed $name
+ * @param array $options
+ * 	- `conditions` : CakePHP形式の検索条件
+ *  - `direction` : 並び順の方向
+ *  - `sort` : 並び順の対象フィールド
+ *  - `siteId` : サイトIDでフィルタリングする場合に指定する
+ *  - `postCount` : 記事件数を表示するかどうか
+ * @return array|null
+ */
+	public function getTagList($name, $options = []) {
+		$options = array_merge([
+			'conditions' => [],
+			'direction' => 'ASC',
+			'sort' => 'name',
+			'siteId' => null,
+			'postCount' => false
+		], $options);
+		if($name && !is_array($name)) {
+			$name = [$name];
+		}
+		$options['contentId'] = $options['contentUrl'] = [];
+		if($name) {
+			foreach($name as $value) {
+				if(is_int($value)) {
+					$options['contentId'][] = $value;
+				} else {
+					$options['contentUrl'][] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
+				}
+			}
+		}
+		/** @var \BlogTag $BlogTag */
+		$BlogTag = ClassRegistry::init('Blog.BlogTag');
+		$tags = $BlogTag->find('customParams', $options);
+		// 公開記事数のカウントを追加
+		if ($options['postCount']) {
+			$tags = $this->_mergePostCountToTagsData($tags);
+		}
+		return $tags;
+	}
+
+/**
+ * タグリストを出力する
+ * 
+ * @param mixed $name
+ * @param array $options
+ * 	※ オプションのパラーメーターは、BlogHelper::getTagList() に準ずる
+ */
+	public function tagList($name, $options = []) {
+		$options = array_merge([
+			'postCount' => false
+		], $options);
+		$tags = $this->getTagList($name, $options);
+		if($name && !is_array($name)) {
+			$name = [$name];
+		}
+		$blogContentId = null;
+		if(!empty($name[0])) {
+			if(is_int($name[0])) {
+				$blogContentId = $name[0];
+			} else {
+				/** @var \Content $Content */
+				$Content = ClassRegistry::init('Content');
+				$url = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $name[0]) . '/';
+				$blogContentId = $Content->field('entity_id', ['Content.url' => $url]);
+			}
+		}
+		$this->BcBaser->element('Blog.blog_tag_list', ['tags' => $tags, 'blogContentId' => $blogContentId, 'postCount' => $options['postCount']]);
+	}
+
+/**
+ * タグ一覧へのURLを取得する
+ *
+ * @param int $blogContentId
+ * @param array $tag
+ * @param bool $base
+ * @return string
+ */
+	public function getTagLinkUrl($blogContentId, $tag, $base = true) {
+		$url = null;
+		if(isset($tag['BlogTag'])) {
+			$tag = $tag['BlogTag'];
+		}
+		if($blogContentId) {
+			$this->setContent($blogContentId);
+			if(!empty($this->content['url'])) {
+				$url = $this->content['url'] . 'archives/tag/' . $tag['name'];
+			}
+		}
+		if(!$url) {
+			$url = '/tags/' . $tag['name'];
+			$site = BcSite::findCurrent(true);
+			if($site && $site->alias && !$site->useSubDomain) {
+				$url = '/' . $site->alias . $url;
+			}
+		}
+		if($base) {
+			return $this->url($url);
+		}  else {
+			return $url;
+		}
+	}
+
+/**
+ * タグ一覧へのリンクタグを取得する
+ *
+ * @param int $blogContentId
+ * @param array $tag
+ * @param array $options
+ * @return string
+ */
+	public function getTagLink($blogContentId, $tag, $options = []) {
+		$url = $this->getTagLinkUrl($blogContentId, $tag, false);
+		return $this->BcBaser->getLink($tag['BlogTag']['name'], $url, $options);
+	}
+
+/**
+ * タグ一覧へのリンクタグを出力する
+ *
+ * @param int $blogContentId
+ * @param array $tag
+ * @param array $options
+ */
+	public function tagLink($blogContentId, $tag, $options = []) {
+		echo $this->getTagLink($blogContentId, $tag, $options);
+	}
+
+/**
+ * ブログタグリストに公開記事数を追加する
+ *
+ * @param array $tags BlogTagの基本情報の配列
+ * @return array
+ */
+	private function _mergePostCountToTagsData(array $tags) {
+
+		/** @var BlogPost $BlogPost */
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+		$blogTagIds = Hash::extract($tags, "{n}.BlogTag.id");
+		$conditions = array_merge(
+			['BlogTag.id' => $blogTagIds],
+			$BlogPost->getConditionAllowPublish()
+		);
+
+		$postCountsData = $BlogPost->find('all', [
+			'fields' => [
+				'BlogTag.id',
+				'COUNT(BlogPost.id) as post_count',
+			],
+			'conditions' => $conditions,
+			'group' => ['BlogTag.id'],
+			'recursive' => -1,
+			'joins' => [
+					[
+						'type' => 'INNER',
+						'table' => 'blog_posts_blog_tags',
+						'alias' => 'BlogPostsBlogTag',
+						'conditions' => "BlogPostsBlogTag.blog_post_id=BlogPost.id"
+					],
+					[
+						'type' => 'INNER',
+						'table' => 'blog_tags',
+						'alias' => 'BlogTag',
+						'conditions' => "BlogPostsBlogTag.blog_tag_id=BlogTag.id"
+					],
+		]]);
+
+		if(empty($postCountsData)) {
+			foreach ($tags as $tag) {
+				$tag['BlogTag']['post_count'] = 0;
+			}
+			return $tags;
+		}
+
+		foreach($tags as $index => $tag) {
+			$blogTagId = $tag['BlogTag']['id'];
+			$countData = array_values(array_filter($postCountsData, function(array $data) use ($blogTagId) {
+				return $data['BlogTag']['id'] == $blogTagId;
+			}));
+			if(empty($countData)) {
+				$tags[$index]['BlogTag']['post_count'] = 0;
+				continue;
+			}
+			$tags[$index]['BlogTag']['post_count'] = intval($countData[0][0]['post_count']);
+		}
+		return $tags;
+	}
+
+/**
+ * ブログ記事一覧出力
+ *
+ * ページ編集画面等で利用する事ができる。
+ * ビュー: lib/Baser/Plugin/Blog/View/blog/{コンテンツテンプレート名}/posts.php
+ *
+ * 《利用例》
+ * $this->BcBaser->blogPosts('news', 3)
+ *
+ * 複数のコンテンツを指定する場合：配列にて複数のコンテンツ名を指定
+ *									コンテンツテンプレート名は配列の先頭を利用する
+ * $this->BcBaser->blogPosts(array('news', 'work'), 3)
+ *
+ * 全てのコンテンツを指定する場合：nullを指定
+ *									contentsTemplateオプションにて
+ *									コンテンツテンプレート名を指定する（必須）
+ * $this->BcBaser->blogPosts(null, 3, array('contentsTemplate' => 'news'))
+ *
+ * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）２階層目以降はURLで指定
+ * @param int $num 記事件数（初期値 : 5）
+ * @param array $options オプション（初期値 : array()）
+ * 	- `conditions` : CakePHP形式の検索条件（初期値 : array()）
+ *	- `category` : カテゴリで絞り込む（初期値 : null）
+ *	- `tag` : タグで絞り込む（初期値 : null）
+ *	- `year` : 年で絞り込む（初期値 : null）
+ *	- `month` : 月で絞り込む（初期値 : null）
+ *	- `day` : 日で絞り込む（初期値 : null）
+ *	- `id` : 記事NO で絞り込む（初期値 : null）※ 後方互換の為 id を維持
+ * 	- `no` : 記事NO で絞り込む（初期値 : null）
+ *	- `keyword` : キーワードで絞り込む場合にキーワードを指定（初期値 : null）
+ *  - `postId` : 記事ID で絞り込む（初期値 : null）
+ *  - `siteId` : サイトID で絞り込む（初期値 : null）
+ *  - `preview` : 非公開の記事も見る場合に指定（初期値 : false）
+ *	- `contentsTemplate` : コンテンツテンプレート名を指定（初期値 : null）
+ *	- `template` : 読み込むテンプレート名を指定する場合にテンプレート名を指定（初期値 : null）
+ *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC or ランダム:RANDOM]（初期値 : null）
+ *	- `page` : ページ数を指定（初期値 : null）
+ *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
+ *	- `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
+ * @return void
+ */
+	public function posts($contentsName = [], $num = 5, $options = []) {
+		/** @var BlogContent $BlogContent */
+		$this->_View->loadHelper('Blog.Blog');
+		$options = array_merge([
+			'conditions' => [],
+			'category' => null,
+			'tag' => null,
+			'year' => null,
+			'month' => null,
+			'day' => null,
+			'id' => null,
+			'no' => null,
+			'keyword' => null,
+			'author' => null,
+			'postId' => null,
+			'siteId' => null,
+			'preview' => false,
+			'contentsTemplate' => null,
+			'template' => 'posts',
+			'direction' => 'DESC',
+			'page' => 1,
+			'sort' => 'posts_date',
+			'autoSetCurrentBlog' => true
+		], $options);
+
+		if(!$contentsName && empty($options['contentsTemplate'])) {
+			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。', E_USER_WARNING);
+			return;
+		}
+
+		$contentsTemplate = $options['contentsTemplate'];
+		$template = $options['template'];
+		unset($options['contentsTemplate'], $options['template']);
+
+		$blogPosts = $this->getPosts($contentsName, $num, $options);
+
+		// テンプレートの決定
+		$options = $this->parseContentName($contentsName, $options);
+		if(!$contentsTemplate) {
+			$BlogContent = ClassRegistry::init('Blog.BlogContent');
+			$conditions['Content.url'] = $options['contentUrl'];
+			$conditions = array_merge($conditions, $BlogContent->Content->getConditionAllowPublish());
+			$blogContent = $BlogContent->find('first', [
+				'fields' => ['BlogContent.template'],
+				'conditions' => $conditions,
+				'recursive' => 0,
+				'cache' => false
+			]);
+			if($blogContent) {
+				$contentsTemplate = $blogContent['BlogContent']['template'];
+			} else {
+				$contentsTemplate = 'default';
+			}
+		}
+		$template = 'Blog...' . DS . 'Blog' . DS . $contentsTemplate . DS . $template;
+		$params = [];
+		if(!empty($this->request->params['Site']['device'])) {
+			$this->_View->subDir = $this->request->params['Site']['device'];
+		}
+		$this->BcBaser->element($template, ['posts' => $blogPosts], $params);
+	}
+
+/**
+ * ブログ記事を取得する
+ *
+ * @param array $contentsName
+ * @param int $num
+ * @param array $options
+ * 	※ パラメーターは、contentTemplate / template 以外、BlogBaserHelper::blogPosts() に準ずる
+ * @return mixed
+ */
+	public function getPosts($contentsName = [], $num = 5, $options = array()) {
+		/** @var BlogContent $BlogContent */
+		$this->_View->loadHelper('Blog.Blog');
+		$options = array_merge([
+			'conditions' => [],
+			'category' => null,
+			'tag' => null,
+			'year' => null,
+			'month' => null,
+			'day' => null,
+			'id' => null,
+			'no' => null,
+			'keyword' => null,
+			'author' => null,
+			'postId' => null,
+			'siteId' => null,
+			'preview' => false,
+			'direction' => 'DESC',
+			'page' => 1,
+			'sort' => 'posts_date',
+			'autoSetCurrentBlog' => true
+		], $options);
+
+		$options = $this->parseContentName($contentsName, $options);
+		$options['num'] = $num;
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+		return $BlogPost->find('customParams', $options);
+	}
+
+/**
+ * コンテンツ名を解析して検索条件を設定する
+ *
+ * @param mixed $contentsName
+ * @param array $options
+ * @return mixed
+ */
+	public function parseContentName($contentsName, $options) {
+		if ($contentsName && !is_array($contentsName)) {
+			$contentsName = [$contentsName];
+		}
+		// 対象ブログを指定する条件を設定
+		$options['contentUrl'] = $options['contentId'] = [];
+		if($contentsName) {
+			foreach($contentsName as $value) {
+				if(is_int($value)) {
+					$options['contentId'][] = $value;
+				} else {
+					$options['contentUrl'][] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
+				}
+			}
+		}
+		if($options['autoSetCurrentBlog'] && !$options['contentUrl'] && !empty($this->request->params['Content']['url'])) {
+			$options['contentUrl'] = $this->request->params['Content']['url'];
+		}
+		if($options['autoSetCurrentBlog'] && !$options['contentId'] && !empty($this->request->params['Content']['entity_id'])) {
+			$options['contentId'] = $this->request->params['Content']['entity_id'];
+		}
+		return $options;
+	}
+
+/**
+ * Blogの基本情報を全て取得する
+ *
+ * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
+ * @param array $options オプション（初期値 :array()）
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
+ *  - `postCount` : 公開記事数を取得するかどうか (初期値:false)
+ * @return mixed false|array Blogの基本情報
+ */
+	public function getContents($name = '', $options = array()) {
+		$options = array_merge(array(
+			'sort' => 'BlogContent.id',
+			'siteId' => null,
+			'postCount' => false,
+		), $options);
+		$conditions['Content.status'] = true;
+		if(!empty($name)){
+			if(is_int($name)) {
+				$conditions['BlogContent.id'] = $name;
+			} else {
+				$conditions['Content.name'] = $name;
+			}
+		}
+		if($options['siteId'] !== '' && !is_null($options['siteId']) && $options['siteId'] !== false) {
+			$conditions['Content.site_id'] = $options['siteId'];
+		}
+		/** @var BlogContent $BlogContent */
+		$BlogContent = ClassRegistry::init('Blog.BlogContent');
+		$BlogContent->unbindModel(
+			['hasMany' => ['BlogPost', 'BlogCategory']]
+		);
+		$datas = $BlogContent->find('all', array(
+				'conditions' => $conditions,
+				'order' => $options['sort'],
+				'cache' => false,
+				'recursive' => 0
+			)
+		);
+		if(!$datas) {
+			return false;
+		}
+
+		// 公開記事数のカウントを追加
+		if ($options['postCount']) {
+			$datas = $this->_mergePostCountToBlogsData($datas);
+		}
+
+		$contents = array();
+		if( count($datas) === 1 ){
+			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
+			unset($datas['BlogContent']['eye_catch_size']);
+			$contents[] = $datas;
+		} else {
+			foreach($datas as $val){
+				$val = $BlogContent->constructEyeCatchSize($val);
+				unset($val['BlogContent']['eye_catch_size']);
+				$contents[] = $val;
+			}
+		}
+		if($name && !is_array($name)) {
+			$contents = $contents[0];
+		}
+		return $contents;
+	}
+
+/**
+ * Blogの基本情報に公開記事数を追加する
+ *
+ * @param array $blogsData Blogの基本情報の配列
+ * @return array
+ */
+	private function _mergePostCountToBlogsData(array $blogsData) {
+
+		/** @var BlogPost $BlogPost */
+		$BlogPost = ClassRegistry::init('Blog.BlogPost');
+
+		$blogContentIds = Hash::extract($blogsData, "{n}.BlogContent.id");
+		$conditions = array_merge(
+			['BlogPost.blog_content_id' => $blogContentIds],
+			$BlogPost->getConditionAllowPublish()
+		);
+
+		$postCountsData = $BlogPost->find('all', [
+			'fields' => [
+				'BlogPost.blog_content_id',
+				'COUNT(BlogPost.id) as post_count',
+			],
+			'conditions' => $conditions,
+			'group' => ['BlogPost.blog_content_id'],
+			'recursive' => -1,
+		]);
+
+		if(empty($postCountsData)) {
+			foreach ($blogsData as $blogData) {
+				$blogData['BlogContent']['post_count'] = 0;
+			}
+			return $blogsData;
+		}
+
+		foreach($blogsData as $index => $blogData) {
+
+			$blogContentId = $blogData['BlogContent']['id'];
+			$countData = array_values(array_filter($postCountsData, function(array $data) use ($blogContentId) {
+				return $data['BlogPost']['blog_content_id'] == $blogContentId;
+			}));
+
+			if(empty($countData)) {
+				$blogsData[$index]['BlogContent']['post_count'] = 0;
+				continue;
+			}
+
+			$blogsData[$index]['BlogContent']['post_count'] = intval($countData[0][0]['post_count']);
+		}
+
+		return $blogsData;
+	}
+
 }

@@ -17,6 +17,9 @@
  * 
  * 《利用例》
  * $this->BcBaser->blogPosts('news')
+ * 
+ * BcBaserHeleper へのインターフェイスを提供する役割だけとし、
+ * 実装をできるだけこのクラスで持たないようにし、BlogHelper 等で実装する
  *
  * @package Blog.View.Helper
  * @property BlogHelper $Blog
@@ -71,67 +74,7 @@ class BlogBaserHelper extends AppHelper {
  * @return void
  */
 	public function blogPosts($contentsName = [], $num = 5, $options = []) {
-		/**
-		 * @var BlogContent $BlogContent
-		 */
-		$this->_View->loadHelper('Blog.Blog');
-		$options = array_merge([
-			'conditions' => [],
-			'category' => null,
-			'tag' => null,
-			'year' => null,
-			'month' => null,
-			'day' => null,
-			'id' => null,
-			'no' => null,
-			'keyword' => null,
-			'author' => null,
-			'postId' => null,
-			'siteId' => null,
-			'preview' => false,
-			'contentsTemplate' => null,
-			'template' => 'posts',
-			'direction' => 'DESC',
-			'page' => 1,
-			'sort' => 'posts_date',
-			'autoSetCurrentBlog' => true
-		], $options);
-		
-		if(!$contentsName && empty($options['contentsTemplate'])) {
-			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。', E_USER_WARNING);
-			return;
-		}
-
-		$contentsTemplate = $options['contentsTemplate'];
-		$template = $options['template'];
-		unset($options['contentsTemplate'], $options['template']);
-
-		$blogPosts = $this->getBlogPosts($contentsName, $num, $options);
-		
-		// テンプレートの決定
-		$options = $this->parseContentName($contentsName, $options);
-		if(!$contentsTemplate) {
-			$BlogContent = ClassRegistry::init('Blog.BlogContent');
-			$conditions['Content.url'] = $options['contentUrl'];
-			$conditions = array_merge($conditions, $BlogContent->Content->getConditionAllowPublish());
-			$blogContent = $BlogContent->find('first', [
-				'fields' => ['BlogContent.template'],
-				'conditions' => $conditions,
-				'recursive' => 0,
-				'cache' => false
-			]);
-			if($blogContent) {
-				$contentsTemplate = $blogContent['BlogContent']['template'];
-			} else {
-				$contentsTemplate = 'default';
-			}
-		}
-		$template = 'Blog...' . DS . 'Blog' . DS . $contentsTemplate . DS . $template;
-		$params = [];
-		if(!empty($this->request->params['Site']['device'])) {
-			$this->_View->subDir = $this->request->params['Site']['device'];
-		}
-		$this->BcBaser->element($template, ['posts' => $blogPosts], $params);
+		$this->Blog->posts($contentsName, $num, $options);
 	}
 
 /**
@@ -144,63 +87,7 @@ class BlogBaserHelper extends AppHelper {
  * @return mixed
  */
 	public function getBlogPosts($contentsName = [], $num = 5, $options = array()) {
-		/**
-		 * @var BlogContent $BlogContent
-		 */
-		$this->_View->loadHelper('Blog.Blog');
-		$options = array_merge([
-			'conditions' => [],
-			'category' => null,
-			'tag' => null,
-			'year' => null,
-			'month' => null,
-			'day' => null,
-			'id' => null,
-			'no' => null,
-			'keyword' => null,
-			'author' => null,
-			'postId' => null,
-			'siteId' => null,
-			'preview' => false,
-			'direction' => 'DESC',
-			'page' => 1,
-			'sort' => 'posts_date',
-			'autoSetCurrentBlog' => true
-		], $options);
-		
-		$options = $this->parseContentName($contentsName, $options);
-		$options['num'] = $num;
-		$BlogPost = ClassRegistry::init('Blog.BlogPost');
-		return $BlogPost->find('customParams', $options);
-	}
-
-/**
- * コンテンツ名を解析して検索条件を設定する
- * 
- * @param mixed $contentsName
- * @param array $options
- * @return mixed
- */
-	public function parseContentName($contentsName, $options) {
-		if ($contentsName && !is_array($contentsName)) {
-			$contentsName = [$contentsName];
-		}
-		// 対象ブログを指定する条件を設定
-		$options['contentUrl'] = $options['contentId'] = [];
-		if($contentsName) {
-			foreach($contentsName as $key => $value) {
-				if(is_int($value)) {
-					$options['contentId'] = $value;
-				} else {
-					$options['contentUrl'][$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
-				}
-			}
-		}
-		if($options['autoSetCurrentBlog'] && !$options['contentUrl'] && !empty($this->request->params['Content']['url'])) {
-			$options['contentUrl'] = $this->request->params['Content']['url'];
-			$options['contentId'] = $this->request->params['Content']['entity_id'];
-		}
-		return $options;
+		return $this->Blog->getPosts($contentsName, $num, $options);
 	}
 
 /**
@@ -277,113 +164,8 @@ class BlogBaserHelper extends AppHelper {
  * @return mixed false|array Blogの基本情報
  */
 	public function getBlogs($name = '', $options = array()) {
-		$options = array_merge(array(
-			'sort' => 'BlogContent.id',
-			'siteId' => null,
-			'postCount' => false,
-		), $options);
-		$conditions['Content.status'] = true;
-		if(!empty($name)){
-			if(is_int($name)) {
-				$conditions['BlogContent.id'] = $name;
-			} else {
-				$conditions['Content.name'] = $name;
-			}
-		}
-		if($options['siteId'] !== '' && !is_null($options['siteId']) && $options['siteId'] !== false) {
-			$conditions['Content.site_id'] = $options['siteId'];
-		}
-		/** @var BlogContent $BlogContent */
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$BlogContent->unbindModel(
-			['hasMany' => ['BlogPost', 'BlogCategory']]
-		);
-		$datas = $BlogContent->find('all', array(
-				'conditions' => $conditions,
-				'order' => $options['sort'],
-				'cache' => false,
-				'recursive' => 0
-			)
-		);
-		if(!$datas) {
-			return false;
-		}
-
-		// 公開記事数のカウントを追加
-		if ($options['postCount']) {
-			$datas = $this->_mergePostCountToBlogsData($datas);
-		}
-
-		$contents = array();
-		if( count($datas) === 1 ){
-			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
-			unset($datas['BlogContent']['eye_catch_size']);
-			$contents[] = $datas;
-		} else {
-			foreach($datas as $val){
-				$val = $BlogContent->constructEyeCatchSize($val);
-				unset($val['BlogContent']['eye_catch_size']);
-				$contents[] = $val;
-			}
-		}
-		if($name && !is_array($name)) {
-			$contents = $contents[0];
-		}
-		return $contents;
+		return $this->Blog->getContents($name, $options);
 	}
-
-/**
- * Blogの基本情報に公開記事数を追加する
- *
- * @param array $blogsData Blogの基本情報の配列
- * @return array
- */
-	private function _mergePostCountToBlogsData(array $blogsData) {
-
-		/** @var BlogPost $BlogPost */
-		$BlogPost = ClassRegistry::init('Blog.BlogPost');
-
-		$blogContentIds = Hash::extract($blogsData, "{n}.BlogContent.id");
-		$conditions = array_merge(
-			['BlogPost.blog_content_id' => $blogContentIds],
-			$BlogPost->getConditionAllowPublish()
-		);
-
-		$postCountsData = $BlogPost->find('all', [
-			'fields' => [
-				'BlogPost.blog_content_id',
-				'COUNT(BlogPost.id) as post_count',
-			],
-			'conditions' => $conditions,
-			'group' => ['BlogPost.blog_content_id'],
-			'recursive' => -1,
-		]);
-
-		if(empty($postCountsData)) {
-			foreach ($blogsData as $blogData) {
-				$blogData['BlogContent']['post_count'] = 0;
-			}
-			return $blogsData;
-		}
-
-		foreach($blogsData as $index => $blogData) {
-
-			$blogContentId = $blogData['BlogContent']['id'];
-			$countData = array_values(array_filter($postCountsData, function(array $data) use ($blogContentId) {
-				return $data['BlogPost']['blog_content_id'] == $blogContentId;
-			}));
-
-			if(empty($countData)) {
-				$blogsData[$index]['BlogContent']['post_count'] = 0;
-				continue;
-			}
-
-			$blogsData[$index]['BlogContent']['post_count'] = intval($countData[0][0]['post_count']);
-		}
-
-		return $blogsData;
-	}
-
 
 /**
  * 現在のページがブログプラグインかどうかを判定する
@@ -412,6 +194,32 @@ class BlogBaserHelper extends AppHelper {
  */
 	public function hasChildBlogCategory($id) {
 		return $this->Blog->hasChildCategory($id);
+	}
+
+/**
+ * ブログタグリストを取得する
+ *
+ * @param mixed $name
+ * @param array $options
+ * 	- `conditions` : CakePHP形式の検索条件
+ *  - `direction` : 並び順の方向
+ *  - `sort` : 並び順の対象フィールド
+ *  - `siteId` : サイトIDでフィルタリングする場合に指定する
+ * @return array|null
+ */
+	public function getBlogTagList($name, $options = []) {
+		return $this->Blog->getTagList($name, $options);
+	}
+
+/**
+ * ブログタグリストを出力する
+ * 
+ * @param mixed $name
+ * @param array $options
+ * 	オプションは、BlogBaserHelper::getBlogTagList() と同じ
+ */
+	public function blogTagList($name, $options = []) {
+		$this->Blog->tagList($name, $options);
 	}
 	
 }

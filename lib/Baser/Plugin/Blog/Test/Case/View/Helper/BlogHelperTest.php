@@ -10,7 +10,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('View', 'View');
+App::uses('BcAppView', 'View');
 App::uses('Helper', 'View');
 App::uses('HtmlHelper', 'View.Helper');
 App::uses('BcTimeHelper', 'View.Helper');
@@ -35,7 +35,16 @@ class BlogHelperTest extends BaserTestCase {
  */
 	public $fixtures = array(
 		'plugin.blog.View/Helper/BlogBaserHelper/BlogCategoryTree',	// テスト内で読み込む
+		'plugin.blog.Model/BlogTag/BlogPostBlogTagFindCustomPrams',	// テスト内で読み込む
+		'plugin.blog.Model/BlogTag/BlogPostsBlogTagBlogTagFindCustomPrams',	// テスト内で読み込む
+		'plugin.blog.Model/BlogTag/BlogTagBlogTagFindCustomPrams',	// テスト内で読み込む
+		'plugin.blog.Model/BlogTag/BlogContentBlogTagFindCustomPrams',	// テスト内で読み込む
+		'plugin.blog.Model/BlogTag/ContentBlogTagFindCustomPrams',	// テスト内で読み込む
+		'plugin.blog.View/Helper/BlogBaserHelper/BlogPostBlogBaserHelper',// テスト内で読み込む
+		'baser.Default.BlogPostsBlogTag',// テスト内で読み込む
+		'plugin.blog.View/Helper/BlogBaserHelper/ContentMultiBlog',	// テスト内で読み込む
 		'baser.Default.User',
+		'baser.Default.UserGroup',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
 		'baser.Default.BlogComment',
@@ -74,22 +83,22 @@ class BlogHelperTest extends BaserTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$View = new View();
-		$View->request->params['Site'] = array(
+		$this->View = new BcAppView();
+		$this->View->request->params['Site'] = array(
 			'use_subdomain' => null,
 			'name' => null,
 			'alias' => null,
 		);
-		$View->request->params['Content'] = [
+		$this->View->request->params['Content'] = [
 			'url' => '/news/',
 			'name' => 'news',
 			'title' => '新着情報'
 		];
-		$this->Blog = new BlogHelper($View);
+		$this->Blog = new BlogHelper($this->View);
 
 		$this->BlogContent = ClassRegistry::init('Blog.BlogContent');
 		$this->BlogContent->expects(array());
-		$this->Blog->blogContent = Hash::extract($this->BlogContent->read(null, 1), 'BlogContent');
+		$this->Blog->setContent(1);
 	}
 
 /**
@@ -308,7 +317,7 @@ class BlogHelperTest extends BaserTestCase {
 		$result = $this->Blog->getTag($post, $options);
 		$this->assertEquals($expects, $result, 'タグを正しく取得できません');
 	}
-	
+
 	public function getTagDataProvider() {
 		return [
 			[['separator' => ' , '], '<a href="/news/archives/tag/test1">test1</a> , <a href="/news/archives/tag/test2">test2</a>'],
@@ -625,6 +634,235 @@ class BlogHelperTest extends BaserTestCase {
  *
  * BlogCategory::hasChild() のラッピングの為、テストはスルー 
  */
-//	public function testHasChildCategory() {}
+	public function testHasChildCategory() {
+		$this->markTestIncomplete('このメソッドは、BlogCategory::hasChild() をラッピングしているメソッドの為スキップします。');
+	}
+
+/**
+ * タグリストを取得する
+ * 
+ * @param mixed $expected
+ * @param mixed $name
+ * @param array $options
+ * @dataProvider getTagListDataProvider
+ */
+	public function testGetTagList($expected, $name, $options = []) {
+		$this->loadFixtures('BlogPostBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogContentBlogTagFindCustomPrams');
+		$this->loadFixtures('ContentBlogTagFindCustomPrams');
+		$result = $this->Blog->getTagList($name, $options);
+		if($result) {
+			$result = Hash::extract($result, '{n}.BlogTag.name');	
+		}
+		$this->assertEquals($expected, $result);
+	}
+	
+	public function getTagListDataProvider() {
+		return [
+			[['タグ１'], 'blog1'],
+			[['タグ１', 'タグ２'], 'blog2'],
+			[['タグ１', 'タグ２', 'タグ３', 'タグ４', 'タグ５'], null],
+			[['タグ１', 'タグ２', 'タグ３'], null, ['siteId' => 2]],
+			[['タグ１', 'タグ２', 'タグ３'], ['/s/blog3/']],
+		];
+	}
+
+/**
+ * タグリストを出力する
+ * 
+ * @param string $expected
+ * @param mixed $name
+ * @param array $options
+ * @dataProvider tagListDataProvider
+ */
+	public function testTagList($expected, $name, $options = []) {
+		$this->loadFixtures('BlogPostBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogContentBlogTagFindCustomPrams');
+		$this->loadFixtures('ContentBlogTagFindCustomPrams');
+		$this->expectOutputRegex($expected);
+		$this->Blog->tagList($name, $options);
+	}
+	
+	public function tagListDataProvider() {
+		return [
+			['/(?=\/tag\/タグ１).*?(?!.*\/tag\/タグ２).*?(?!.*\/tag\/タグ３)/s', 'blog1'],
+			['/(?=\/tag\/タグ１).*?(?=\/tag\/タグ２).*?(?=\/tag\/タグ３)/s', '/s/blog3/'],
+			['/(?=\/tags\/タグ１).*?(?=\/tags\/タグ２).*?(?=\/tags\/タグ３).*?(?=\/tags\/タグ４).*?(?=\/tags\/タグ５)/s', null],
+			['/(?=\/tag\/タグ１).*?\(4\)/s', 'blog1', ['postCount' => true]],
+		];
+	}
+
+/**
+ * ブログタグ記事一覧へのリンクURLを取得する
+ *
+ * @param string $expected
+ * @param int $blogContentId
+ * @param string $name
+ * @dataProvider getTagLinkUrlDataProvider
+ */
+	public function testGetTagLinkUrl($expected, $currentUrl, $blogContentId, $name) {
+		$this->Blog->request = $this->_getRequest($currentUrl);
+		$this->loadFixtures('BlogPostBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogContentBlogTagFindCustomPrams');
+		$this->loadFixtures('ContentBlogTagFindCustomPrams');
+		$url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]]);
+		$this->assertEquals($expected, $url);
+	}
+
+	public function getTagLinkUrlDataProvider() {
+		return [
+			['/news/archives/tag/タグ１', '/', 1, 'タグ１'],
+			['/s/blog3/archives/tag/タグ２', '/s/', 3, 'タグ２'],
+			['/tags/タグ１', '/', null, 'タグ１'],
+			['/s/tags/タグ２', '/s/', null, 'タグ２']
+		];
+	}
+
+/**
+ * タグ記事一覧へのリンクタグを取得する
+ *
+ * @param string $expected
+ * @param string $currentUrl
+ * @param int $blogContentId
+ * @param $name
+ * @dataProvider getTagLinkDataProvider
+ */
+	public function testGetTagLink($expected, $currentUrl, $blogContentId, $name) {
+		$this->Blog->request = $this->_getRequest($currentUrl);
+		$this->loadFixtures('BlogPostBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogTagBlogTagFindCustomPrams');
+		$this->loadFixtures('BlogContentBlogTagFindCustomPrams');
+		$this->loadFixtures('ContentBlogTagFindCustomPrams');
+		$url = $this->Blog->getTagLink($blogContentId, ['BlogTag' => ['name' => $name]]);
+		$this->assertEquals($expected, $url);
+	}
+
+	public function getTagLinkDataProvider() {
+		return [
+			['<a href="/news/archives/tag/タグ１">タグ１</a>', '/', 1, 'タグ１'],
+			['<a href="/s/blog3/archives/tag/タグ２">タグ２</a>', '/s/', 3, 'タグ２'],
+			['<a href="/tags/タグ１">タグ１</a>', '/', null, 'タグ１'],
+			['<a href="/s/tags/タグ２">タグ２</a>', '/s/', null, 'タグ２']
+		];
+	}
+
+/**
+ * タグ記事一覧へのリンクタグを出力する
+ */
+	public function testTagLink() {
+		$this->markTestIncomplete('このメソッドは、BlogHelper::getTagLink() をラッピングしているメソッドの為スキップします。');
+	}
+
+/**
+ * ブログ記事一覧出力
+ *
+ * @param string | array $contentsName 管理システムで指定したコンテンツ名
+ * @param int $num 記事件数
+ * @param array $options オプション
+ * @param expected string 期待値
+ * @param message string テスト失敗時に表示されるメッセージ
+ * @dataProvider blogPostsProvider
+ */
+	public function testPosts($device, $contentsName, $num, $options, $expected, $message = null) {
+		$this->loadFixtures('BlogPostBlogBaserHelper', 'BlogPostsBlogTag');
+		$this->View->loadHelper('BcTime');
+		$url = null;
+		if($contentsName) {
+			if(!is_array($contentsName)) {
+				$contentsName = [$contentsName];
+			}
+			$url = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $contentsName[0]) . '/';
+		}
+		if($url && $device) {
+			$url = '/' . $device . $url;
+		}
+		if($url) {
+			$this->Blog->request = $this->_getRequest($url);
+		}
+		$this->expectOutputRegex($expected);
+		$this->Blog->posts($contentsName, $num, $options);
+	}
+
+	public function blogPostsProvider() {
+		return [
+			['', 'news', 5, [], '/name1.*name2.*name3/s', '記事が出力されません'], // 通常
+			['', 'news2', 5, [], '/(?=no-data)/', '存在しないコンテンツが存在しています'],	// 存在しないコンテンツ
+			['', 'news', 2, [], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // 件数指定
+			['', 'news', 5, ['category' => 'release'], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定（子カテゴリあり）
+			['', 'news', 5, ['category' => 'child'], '/^(?!.*name3).*(?!.*name1).*(?=name2).*/s', '記事のカテゴリを正しく指定できません'], // カテゴリ指定(子カテゴリなし)
+			['', 'news', 5, ['tag' => '新製品'], '/^(?!.*name3).*(?!.*name1).*(?=name2).*/s', '記事のタグを正しく指定できません'], // tag指定
+			['', 'news', 5, ['tag' => 'テスト'], '/記事がありません/', '記事のタグを正しく指定できません'], // 存在しないtag指定
+			['', 'news', 5, ['year' => '2016'], '/^(?!.*name1).*(?=name2).*(?=name3).*/s', '記事の年を正しく指定できません'], // 年指定
+			['', 'news', 5, ['year' => '2017'], '/^(?!.*name3).*(?!.*name2).*(?=name1).*/s', '記事の年を正しく指定できません'], // 年指定
+			['', 'news', 5, ['year' => '2999'], '/記事がありません/', '記事の年を正しく指定できません'], // 記事がない年指定
+			['', 'news', 5, ['month' => '2'], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の月を正しく指定できません'], // 月指定
+			['', 'news', 5, ['day' => '2'], '/^(?!.*name1).*(?=name2).*(?=name3).*/s', '記事の日を正しく指定できません'], // 日指定
+			['', 'news', 5, ['year' => '2016', 'month' => '02', 'day' => '02'], '/^(?!.*name1).*(?!.*name3).*(?=name2).*/s', '記事の年月日を正しく指定できません'], // 年月日指定
+			['', 'news', 5, ['id' => 2], '/^(?!.*name1).*(?!.*name3).*(?=name2).*/s', '記事のIDを正しく指定できません'], // ID指定
+			['', 'news', 5, ['id' => 99], '/記事がありません/', '記事のIDを正しく指定できません'], // 存在しないID指定
+			['', 'news', 5, ['keyword' => '1'], '/^(?!.*name2).*(?!.*name3).*(?=name1).*/s', '記事のキーワードを正しく指定できません'], // キーワード指定
+			['', 'news', 5, ['keyword' => 'content'], '/name1.*name2.*name3/s', '記事のキーワードを正しく指定できません'], // キーワード指定
+			['', null, 5, ['contentsTemplate' => 'default'], '/name1.*name2.*name3/s', 'contentsTemplateを正しく指定できません'], // contentsTemplateを指定
+			['', 'news', 5, ['template' => 'archives'], '/プレスリリース/s', 'templateを正しく指定できません'], // template指定
+			['', 'news', 5, ['direction' => 'ASC'], '/name3.*name2.*name1/s', 'templateを正しく指定できません'], // 昇順指定
+			['', 'news', 5, ['direction' => 'DESC'], '/name1.*name2.*name3/s', 'templateを正しく指定できません'], // 降順指定
+			['', 'news', 5, ['sort' => 'posts_date', 'direction' => 'ASC'], '/name3.*name2.*name1/s', 'sortを正しく指定できません'], // modifiedでソート
+			['', 'news', 2, ['page' => 1], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', 'pageを正しく指定できません'], // ページ指定
+			['', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">(?!.*name1).*(?!.*name2).*(?=name3).*/s', 'pageを正しく指定できません'], // ページ指定
+			['s', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">name3<\/span>.*/s', 'pageを正しく指定できません'], // ページ指定
+		];
+	}
+
+/**
+ * 全ブログコンテンツの基本情報を取得する
+ *
+ * @return void
+ */
+	public function testGetContents() {
+		// 復数ブログのデータを取得
+		$this->loadFixtures('ContentMultiBlog', 'BlogPostBlogBaserHelper');
+
+		// 全件取得
+		$blogs = $this->Blog->getContents();
+		$this->assertEquals(3, count($blogs));
+		$this->assertEquals(2, $blogs[0]['Content']['id']);
+		// デフォルトでは記事数を取得しない
+		$this->assertFalse(isset($blogs[0]['BlogContent']['post_count']));
+
+		// ソート順を変更
+		$options = [
+			'sort' => 'Content.id DESC',
+			'siteId' => 0
+		];
+		$blogs = $this->Blog->getContents('', $options);
+		$this->assertEquals(3, $blogs[0]['Content']['id']);
+
+		// 記事数を取得
+		$options = [
+			'postCount' => true,
+		];
+		$blogs = $this->Blog->getContents('', $options);
+		$this->assertEquals(3, $blogs[0]['BlogContent']['post_count']);
+		$this->assertEquals(0, $blogs[1]['BlogContent']['post_count']);
+
+		// ブログ指定 1つなので、配列に梱包されてない
+		$blogs = $this->Blog->getContents('news');
+		$this->assertEquals('news', $blogs['Content']['name']);
+
+		// IDで取得
+		$blogs = $this->Blog->getContents(2);
+		$this->assertEquals('topics', $blogs['Content']['name']);
+
+		// 復数指定取得
+		$blogs = $this->Blog->getContents(['topics', 'news']);
+		$this->assertEquals(2, count($blogs));
+	}
 	
 }

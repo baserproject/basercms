@@ -794,7 +794,16 @@ class BlogPost extends BlogAppModel {
 			}
 			// 並び順
 			if($query['sort']) {
-				$query['order'] = $this->createOrder($query['sort'], $query['direction']);
+				$order = $this->createOrder($query['sort'], $query['direction']);
+				if(empty($query['order'])) {
+					$query['order'] = $order;
+				} else {
+					if(is_array($query['order'])) {
+						$query['order'] = array_merge([$order], $query['order']);
+					} else {
+						$query['order'] = $order . ',' . $query['order'];
+					}
+				}
 			}
 			
 			if(is_null($query['conditions'])) {

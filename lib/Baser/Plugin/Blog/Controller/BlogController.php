@@ -86,28 +86,50 @@ class BlogController extends BlogAppController {
 
 		/* 認証設定 */
 		$this->BcAuth->allow(
-			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives', 'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months', 'get_posted_years', 'get_recent_entries', 'get_authors'
+			'index', 'mobile_index', 'smartphone_index', 'archives', 'mobile_archives', 'smartphone_archives',
+			'posts', 'mobile_posts', 'smartphone_posts', 'get_calendar', 'get_categories', 'get_posted_months',
+			'get_posted_years', 'get_recent_entries', 'get_authors', 'tags'
 		);
 		$blogContentId = null;
-		if(!empty($this->request->params['entityId'])) {
-			$blogContentId = $this->request->params['entityId'];	
-		} elseif(!empty($this->request->params['pass'])) {
-			// 後方互換の為 pass もチェック
-			$blogContentId = $this->request->params['pass'];
-		}
-		$this->BlogContent->recursive = -1;
-		if ($this->contentId) {
-			$this->blogContent = $this->BlogContent->read(null, $this->contentId);
+
+		if(preg_match('/tags$/', $this->request->params['action'])) {
+			$Content = ClassRegistry::init('Content');
+			$currentSite = BcSite::findCurrent(true);
+			$url = '/';
+			if($this->request->params['action'] != 'tags') {
+				$prefix = str_replace('_tags', '', $this->request->params['action']);
+				if($prefix == $currentSite->name) {
+					$url = '/' . $currentSite->alias . '/';
+					$this->request->params['action'] = 'tags';
+					$this->action = 'tags';
+				}
+			}
+			$content = $Content->find('first', ['conditions' => ['Content.url' => $url], 'recursive' => 0]);
+			$this->request->params['Content'] = $content['Content'];
+			$this->request->params['Site'] = $content['Site'];
 		} else {
-			$this->blogContent = $this->BlogContent->read(null, $blogContentId);
-			$this->contentId = $blogContentId;
+			if(!empty($this->request->params['entityId'])) {
+				$blogContentId = $this->request->params['entityId'];
+			} elseif(!empty($this->request->params['pass'])) {
+				// 後方互換の為 pass もチェック
+				$blogContentId = $this->request->params['pass'];
+			}
+			$this->BlogContent->recursive = -1;
+			if ($this->contentId) {
+				$this->blogContent = $this->BlogContent->read(null, $this->contentId);
+			} else {
+				$this->blogContent = $this->BlogContent->read(null, $blogContentId);
+				$this->contentId = $blogContentId;
+			}
 		}
-		
+
 		if(empty($this->request->params['Content'])) {
 			// ウィジェット系の際にコンテンツ管理上のURLでないので自動取得できない
 			$content = $this->BcContents->getContent($blogContentId);
-			$this->request->params['Content'] = $content['Content'];
-			$this->request->params['Site'] = $content['Site'];
+			if($content) {
+				$this->request->params['Content'] = $content['Content'];
+				$this->request->params['Site'] = $content['Site'];
+			}
 		}
 
 		if(!empty($this->blogContent['BlogContent']['id'])) {
@@ -120,8 +142,10 @@ class BlogController extends BlogAppController {
 		// コンテンツ名を変更している際、以下の設定を行わないとプラグイン名がURLに付加されてしまう
 		// Viewで $paginator->options = array('url' => $this->passedArgs) を行う事が前提
 		if (!isset($this->request->params['admin'])) {
-			$this->passedArgs['controller'] = $this->request->params['Content']['name'];
-			$this->passedArgs['plugin'] = $this->request->params['Content']['name'];
+			if(!empty($this->request->params['Content'])) {
+				$this->passedArgs['controller'] = $this->request->params['Content']['name'];
+				$this->passedArgs['plugin'] = $this->request->params['Content']['name'];
+			}
 			$this->passedArgs['action'] = $this->action;
 		}
 
@@ -143,10 +167,8 @@ class BlogController extends BlogAppController {
  */
 	public function beforeRender() {
 		parent::beforeRender();
-
 		$this->set('blogContent', $this->blogContent);
-
-		if ($this->blogContent['BlogContent']['widget_area']) {
+		if (!empty($this->blogContent['BlogContent']['widget_area'])) {
 			$this->set('widgetArea', $this->blogContent['BlogContent']['widget_area']);
 		}
 	}
@@ -366,7 +388,7 @@ class BlogController extends BlogAppController {
 						$this->add_comment($id);
 					}
 
-					$post = $this->_getBlogPosts(['conditions' => ['BlogPost.id' => $id]]);
+					$post = $this->_getBlogPosts(['no' => $id]);
 					if (!empty($post[0])) {
 						$post = $post[0];
 					} else {
@@ -747,6 +769,27 @@ class BlogController extends BlogAppController {
  */
 	public function smartphone_posts($blogContentId, $limit = 5) {
 		$this->setAction('posts', $blogContentId, $limit);
+	}
+
+/**
+ * 全体タグ一覧
+ * @param $name
+ */
+	public function tags($name) {
+		if (empty($name)) {
+			$this->notFound();
+		}
+		$num = 10;
+		if(!empty($this->request->params['named']['num'])) {
+			$num = $this->request->params['named']['num'];
+		}
+		$tag = h($name);
+		$posts = $this->_getBlogPosts([
+			'tag' => $tag,
+			'num' => $num
+		]);
+		$this->pageTitle = urldecode($tag);
+		$this->set('posts', $posts);
 	}
 
 }

@@ -37,7 +37,7 @@
  * @property \BcUploadHelper $BcUpload
  * @property \BcWidgetAreaHelper $BcWidgetArea
  * @property \BcXmlHelper $BcXml
- * @property \BlogHelper $BlogHelper
+ * @property \BlogHelper $Blog
  * @property \FeedHelper $Feed
  * @property \MaildataHelper $Maildata
  * @property \MailfieldHelper $Mailfield
