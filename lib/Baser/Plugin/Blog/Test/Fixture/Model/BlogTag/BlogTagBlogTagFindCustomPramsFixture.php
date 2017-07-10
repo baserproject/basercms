@@ -42,7 +42,7 @@ class BlogTagBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'modified' => '2017-07-09 19:41:30'
 		),
 		array(
-			'id' => '５',
+			'id' => '5',
 			'name' => 'タグ５',
 			'created' => '2017-07-09 19:41:30',
 			'modified' => '2017-07-09 19:41:30'

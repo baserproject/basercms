@@ -144,7 +144,12 @@ class BlogTag extends BlogAppModel {
 						$query['fields'] = 'DISTINCT ' . $query['fields'];
 					}
 				} else {
-					$query['fields'] = 'DISTINCT *';
+					//============================================================
+					// 全フィールド前提で、DISTINCT を付けたいが、PostgresSQL の場合に
+					// DISTINCT * と指定するとSQLの解析でけされてしまっていたので
+					// フィールドを明示的に指定
+					//============================================================
+					$query['fields'] = ['DISTINCT BlogTag.id', 'BlogTag.name'];
 				}
 			}
 			$order = "BlogTag.{$query['sort']} {$query['direction']}";

@@ -462,8 +462,8 @@ class BlogPostTest extends BaserTestCase {
 			['count', ['listCount' => 3, 'num' => 4], 4],				// 件数指定（num優先）
 			['count', ['tag' => '新製品'], 3],							// タグ
 			['count', ['tag' => 'hoge'], 0],							// 存在しないタグ
-			['count', ['year' => 2016], 4],								// 年
-			['count', ['year' => 2016, 'month' => 2], 4],				// 年月
+			['count', ['year' => '2016'], 4],								// 年
+			['count', ['year' => '2016', 'month' => 2], 4],				// 年月
 			['count', ['year' => 2016, 'month' => 2, 'day' => 10], 4],	// 年月日
 			['count', ['year' => 2016, 'month' => 2, 'day' => 1], 0],	// 年月日（対象なし）
 			['name', ['id' => 4], '４記事目'],							// id（no）指定

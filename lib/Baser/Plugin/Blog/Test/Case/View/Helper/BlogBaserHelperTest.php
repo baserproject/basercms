@@ -77,9 +77,8 @@ class BlogBaserHelperTest extends BaserTestCase {
  * @param array $options オプション
  * @param expected string 期待値
  * @param message string テスト失敗時に表示されるメッセージ
- * @dataProvider blogPostsProvider
  */
-	public function testBlogPosts($device, $contentsName, $num, $options, $expected, $message = null) {
+	public function testBlogPosts() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::posts() をラッピングしているメソッドの為スキップします。');
 	}
 
