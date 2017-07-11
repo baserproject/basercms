@@ -192,6 +192,12 @@ class MailMessage extends MailAppModel {
 							'message' => '形式が不正です。'
 					));
 				// 半角数字
+				} elseif ($mailField['valid'] == '/^(|[0-9]+)$/') {
+					$this->validate[$mailField['field_name']] = array(
+							'rule' => '/^(|[0-9]+)$/',
+							'message' => '半角数字で入力してください。'
+				);
+				// 半角数字（入力必須）
 				} elseif ($mailField['valid'] == '/^([0-9]+)$/') {
 					$this->validate[$mailField['field_name']] = array(
 							'rule' => '/^([0-9]+)$/',
