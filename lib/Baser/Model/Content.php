@@ -1395,6 +1395,9 @@ class Content extends AppModel {
 		
 		// 移動先に同一コンテンツが存在する
 		$movedUrl = $parentCuntent['Content']['url'] . $currentContent['Content']['name'];
+		if(preg_match('/\/$/', $currentContent['Content']['url'])) {
+			$movedUrl .= '/';
+		}
 		$movedContent = $this->find('first', [
 			'conditions' => [
 				'url' => $movedUrl,
