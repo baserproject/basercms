@@ -1567,6 +1567,19 @@ ul.jstree-contextmenu li .icon-add-layerd {
 	position: absolute;
     cursor: pointer;
 }
+#ContentsTreeList li .content-name{
+    position: relative;
+    padding-left:5px;
+    padding-right:5px;
+    color:#AAA;
+    font-size:8px;
+}
+#ContentsTreeList li .jstree-clicked + .content-name {
+    color:#fff;
+}
+#ContentsTreeList li .jstree-hovered + .content-name {
+    color:#fff;
+}
 div.jstree-unpublish-odd{
     background-color: #BBB;
 }
