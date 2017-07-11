@@ -319,7 +319,7 @@ class BcContentsHelper extends AppHelper {
  * @param bool $direct 直接の親かどうか
  * @return mixed false|array
  */
-	public function getParent($id, $direct) {
+	public function getParent($id = null, $direct = true) {
 		if(!$id && !empty($this->request->params['Content']['id'])) {
 			$id = $this->request->params['Content']['id'];
 		}
