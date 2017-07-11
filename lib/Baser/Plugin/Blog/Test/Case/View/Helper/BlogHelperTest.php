@@ -662,10 +662,10 @@ class BlogHelperTest extends BaserTestCase {
 	public function getTagListDataProvider() {
 		return [
 			[['タグ１'], 'blog1'],
-//			[['タグ１', 'タグ２'], 'blog2'],
-//			[['タグ１', 'タグ２', 'タグ３', 'タグ４', 'タグ５'], null],
-//			[['タグ１', 'タグ２', 'タグ３'], null, ['siteId' => 2]],
-//			[['タグ１', 'タグ２', 'タグ３'], ['/s/blog3/']],
+			[['タグ１', 'タグ２'], 'blog2'],
+			[['タグ１', 'タグ２', 'タグ３', 'タグ４', 'タグ５'], null],
+			[['タグ１', 'タグ２', 'タグ３'], null, ['siteId' => 2]],
+			[['タグ１', 'タグ２', 'タグ３'], ['/s/blog3/']],
 		];
 	}
 

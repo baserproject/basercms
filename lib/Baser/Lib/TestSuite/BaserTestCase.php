@@ -45,6 +45,7 @@ class BaserTestCase extends CakeTestCase {
 	protected function _getRequest($url) {
 		Router::$initialized = false;
 		Router::reload();
+		BcSite::flash();
 		$request = new CakeRequest($url);
 		
 		// コンソールからのテストの場合、requestのパラメーターが想定外のものとなってしまうので調整
