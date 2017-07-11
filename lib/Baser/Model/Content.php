@@ -1807,7 +1807,10 @@ class Content extends AppModel {
 		$contents = $this->find('all', ['order' => 'lft', 'recursive' => -1]);
 		if($contents) {
 			foreach($contents as $content) {
-				$this->save($content, false);
+				// バリデーションをオンにする事で同名コンテンツを強制的にリネームする
+				// beforeValidate でリネーム処理を入れている為
+				// （第二引数を false に設定しない）
+				$this->save($content);
 			}
 		}
 		return true;
