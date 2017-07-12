@@ -18,6 +18,7 @@ App::uses('BcWidgetAreaHelper', 'View/Helper');
  *
  * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
+ * @property BcWidgetAreaHelper $BcWidgetArea
  */
 class BcWidgetAreaHelperTest extends BaserTestCase {
 
@@ -49,6 +50,7 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  */
 	public function testShow () {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->BcWidgetArea->show(1);
 	}
 
 }

@@ -17,6 +17,8 @@ App::uses('Helper', 'View');
  *
  * @package Baser.View.Helper
  * @property BcContentsHelper $BcContents
+ * @property BcBaserHelper $BcBaser
+ * @property BcAppView $_View
  */
 class BcPageHelper extends Helper {
 
@@ -256,7 +258,7 @@ class BcPageHelper extends Helper {
 	public function content() {
 		$previewTemplate = $this->_View->get('previewTemplate');
 		if($previewTemplate) {
-			$path = $previewTemplate;	
+			$path = $previewTemplate;
 		} else {
 			$path = APP . 'View' . DS . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->ext;
 		}
