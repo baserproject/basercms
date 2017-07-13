@@ -276,6 +276,8 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * treeList
+ *
+ * 使われていないメソッドの可能性あり。pages/index_tree_listが存在しないためテスト不可。
  */
 	public function testTreeList() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
