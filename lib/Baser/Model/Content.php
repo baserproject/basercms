@@ -1395,6 +1395,9 @@ class Content extends AppModel {
 		
 		// 移動先に同一コンテンツが存在する
 		$movedUrl = $parentCuntent['Content']['url'] . $currentContent['Content']['name'];
+		if(preg_match('/\/$/', $currentContent['Content']['url'])) {
+			$movedUrl .= '/';
+		}
 		$movedContent = $this->find('first', [
 			'conditions' => [
 				'url' => $movedUrl,
@@ -1804,7 +1807,10 @@ class Content extends AppModel {
 		$contents = $this->find('all', ['order' => 'lft', 'recursive' => -1]);
 		if($contents) {
 			foreach($contents as $content) {
-				$this->save($content, false);
+				// バリデーションをオンにする事で同名コンテンツを強制的にリネームする
+				// beforeValidate でリネーム処理を入れている為
+				// （第二引数を false に設定しない）
+				$this->save($content);
 			}
 		}
 		return true;
