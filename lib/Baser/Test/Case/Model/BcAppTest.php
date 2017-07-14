@@ -14,6 +14,9 @@ App::uses('BcApp', 'Model');
  * BcAppTest class
  * 
  * @package Baser.Test.Case.Model
+ * @property BcAppModel $BcApp
+ * @property Page $Page
+ * @property SiteConfig $SiteConfig
  */
 
 class BcAppTest extends BaserTestCase {
@@ -85,7 +88,8 @@ class BcAppTest extends BaserTestCase {
 				'recursive' => -1
 			)
 		);
-		var_dump($result);
+
+		$this->BcApp->beforeSave(['type' => 'date']);
 	}
 
 /**

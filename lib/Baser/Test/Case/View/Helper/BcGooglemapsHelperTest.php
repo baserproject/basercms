@@ -19,6 +19,7 @@ App::uses('Component', 'Controller');
  *
  * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
+ * @property BcGooglemapsHelper $BcGooglemaps
  */
 class BcGooglemapsHelperTest extends BaserTestCase {
 
