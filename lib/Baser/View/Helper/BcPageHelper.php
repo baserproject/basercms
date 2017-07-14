@@ -265,11 +265,4 @@ class BcPageHelper extends Helper {
 		echo $this->_View->evaluate($path, $this->_View->viewVars);
 	}
 
-/**
- * treeList
- */
-	public function treeList($datas, $recursive = 0) {
-		return $this->BcBaser->getElement('pages/index_tree_list', array('datas' => $datas, 'recursive' => $recursive));
-	}
-
 }
