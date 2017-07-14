@@ -173,7 +173,7 @@ class BlogBaserHelper extends AppHelper {
  * @return bool
  */
 	public function isBlog() {
-		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
+		return $this->Blog->isBlog();
 	}
 
 /**

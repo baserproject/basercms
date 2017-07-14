@@ -770,7 +770,7 @@ class BlogHelperTest extends BaserTestCase {
  * @param message string テスト失敗時に表示されるメッセージ
  * @dataProvider postsDataProvider
  */
-	public function testPosts($device, $contentsName, $num, $options, $expected, $message = null) {
+	public function testPosts($currentUrl, $contentsName, $num, $options, $expected, $message = null) {
 		$this->loadFixtures('BlogPostBlogBaserHelper', 'BlogPostsBlogTag');
 		$this->View->loadHelper('BcTime');
 		$url = null;
@@ -780,11 +780,8 @@ class BlogHelperTest extends BaserTestCase {
 			}
 			$url = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $contentsName[0]) . '/';
 		}
-		if($url && $device) {
-			$url = '/' . $device . $url;
-		}
-		if($url) {
-			$this->Blog->request = $this->_getRequest($url);
+		if($currentUrl) {
+			$this->Blog->request = $this->_getRequest($currentUrl);
 		}
 		$this->expectOutputRegex($expected);
 		$this->Blog->posts($contentsName, $num, $options);
@@ -816,7 +813,10 @@ class BlogHelperTest extends BaserTestCase {
 			['', 'news', 5, ['sort' => 'posts_date', 'direction' => 'ASC'], '/name3.*name2.*name1/s', 'sortを正しく指定できません'], // modifiedでソート
 			['', 'news', 2, ['page' => 1], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', 'pageを正しく指定できません'], // ページ指定
 			['', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">(?!.*name1).*(?!.*name2).*(?=name3).*/s', 'pageを正しく指定できません'], // ページ指定
-			['s', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">name3<\/span>.*/s', 'pageを正しく指定できません'], // ページ指定
+			['/s/', 'news', 2, ['page' => 2], '/^.+?<span class=\"title\">name3<\/span>.*/s', 'pageを正しく指定できません'], // ページ指定
+			['/service', 'news', 2, [], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 失敗
+			['/news/', '', 2, ['contentsTemplate' => 'default'], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 成功
+			['/s/news/', 'news', 2, [], '/^(?!.*name3).*(?=name1).*(?=name2).*/s', '記事の件数を正しく指定できません'], // autoSetCurrentBlog 成功
 		];
 	}
 
@@ -863,6 +863,39 @@ class BlogHelperTest extends BaserTestCase {
 		// 復数指定取得
 		$blogs = $this->Blog->getContents(['topics', 'news']);
 		$this->assertEquals(2, count($blogs));
+	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @param bool $expected 期待値
+ * @param string $url リクエストURL
+ * @return void
+ * @dataProvider isBlogDataProvider
+ */
+	public function testIsBlog($expected, $url) {
+		$this->Blog->request = $this->_getRequest($url);
+		$this->assertEquals($expected, $this->Blog->isBlog());
+	}
+
+	public function isBlogDataProvider() {
+		return [
+			//PC
+			[false, '/'],
+			[false, '/index'],
+			[false, '/contact/index'],
+			[true, '/news/index'],
+			// モバイルページ
+			[false, '/m/'],
+			[false, '/m/index'],
+			[false, '/m/contact/index'],
+			[true, '/m/news/index'],
+			// スマートフォンページ
+			[false, '/s/'],
+			[false, '/s/index'],
+			[false, '/s/contact/index'],
+			[true, '/s/news/index']
+		];
 	}
 	
 }

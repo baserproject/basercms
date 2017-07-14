@@ -92,40 +92,6 @@ class BlogBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * 現在のページがブログプラグインかどうかを判定する
- *
- * @param bool $expected 期待値
- * @param string $url リクエストURL
- * @return void
- * @dataProvider isBlogDataProvider
- */
-	public function testIsBlog($expected, $url) {
-		$BlogBaser = $this->BcBaser->getPluginBaser('Blog');
-		$BlogBaser->request = $this->_getRequest($url);
-		$this->assertEquals($expected, $this->BcBaser->isBlog());
-	}
-
-	public function isBlogDataProvider() {
-		return [
-			//PC
-			[false, '/'],
-			[false, '/index'],
-			[false, '/contact/index'],
-			[true, '/news/index'],
-			// モバイルページ
-			[false, '/m/'],
-			[false, '/m/index'],
-			[false, '/m/contact/index'],
-			[true, '/m/news/index'],
-			// スマートフォンページ
-			[false, '/s/'],
-			[false, '/s/index'],
-			[false, '/s/contact/index'],
-			[true, '/s/news/index']
-		];
-	}
-
-/**
  * ブログのカテゴリ取得
  * 
  * BlogHelper::getCategories() のラッピングの為、呼び出せるかどうかだけテストし、

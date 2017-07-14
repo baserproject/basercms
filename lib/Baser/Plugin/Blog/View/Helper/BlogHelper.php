@@ -1579,11 +1579,13 @@ class BlogHelper extends AppHelper {
 				}
 			}
 		}
-		if($options['autoSetCurrentBlog'] && !$options['contentUrl'] && !empty($this->request->params['Content']['url'])) {
-			$options['contentUrl'] = $this->request->params['Content']['url'];
-		}
-		if($options['autoSetCurrentBlog'] && !$options['contentId'] && !empty($this->request->params['Content']['entity_id'])) {
-			$options['contentId'] = $this->request->params['Content']['entity_id'];
+		if($options['autoSetCurrentBlog'] && empty($options['contentUrl']) && empty($options['contentId'])) {
+			if($options['autoSetCurrentBlog'] && $this->isBlog() && !empty($this->request->params['Content']['entity_id'])) {
+				$options['contentId'] = $this->request->params['Content']['entity_id'];
+			}
+			if($options['autoSetCurrentBlog'] && $this->isBlog() && !empty($this->request->params['Content']['url'])) {
+				$options['contentUrl'] = $this->request->params['Content']['url'];
+			}
 		}
 		return $options;
 	}
@@ -1704,6 +1706,15 @@ class BlogHelper extends AppHelper {
 		}
 
 		return $blogsData;
+	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isBlog() {
+		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
 	}
 
 }
