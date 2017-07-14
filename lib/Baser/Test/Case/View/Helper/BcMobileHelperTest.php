@@ -10,13 +10,15 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('View', 'View');
+App::uses('BcAppView', 'View');
 App::uses('Helper', 'View');
 App::uses('BcMobileHelper', 'View/Helper');
 
 /**
  * BcMobileHelper Test Case
  *
+ * @property BcMobileHelper $BcMobile
+ * @property BcAppView $View
  */
 class BcMobileHelperTest extends BaserTestCase {
 
@@ -39,8 +41,8 @@ class BcMobileHelperTest extends BaserTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$View = new View();
-		$this->BcMobile = new BcMobileHelper($View);
+		$this->View = new BcAppView();
+		$this->BcMobile = new BcMobileHelper($this->View);
 		$this->BcMobile->request = $this->_getRequest('/m/');
 	}
 
@@ -60,25 +62,30 @@ class BcMobileHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testAfterLayout() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$expected = '';
-		$result = $this->BcMobile->afterLayout('');
+		$_SERVER['HTTP_USER_AGENT'] = 'SoftBank';
+		$site = BcSite::findCurrent(true);
+		$this->View->output = '＞＜＆＆1２＠＠';
+		$expected = '&gt;&lt;&amp;&amp;12@@';
+
+		$this->BcMobile->afterLayout('');
+		$result = $this->View->output;
+
 		$this->assertEquals($expected, $result);
 	}
 
-
 /**
  * コンテンツタイプを出力
- * 
+ *
+ * header()が実行できないためテスト不可
+ * 原因:このメソッド実行前にechoやprintなどのアウトプット or 既にheaderを送信 or UTF-8BOM?
+ * headers_sent() headers_list()で確認可
+ *
  * @return void
  */
 	public function testHeader() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
+		$this->BcMobile->request->params['Site']['device'] = 'mobile';
 		$this->BcMobile->header();
-		$result = xdebug_get_headers();
-		$expected = 'Content-type: application/xhtml+xml';
-		$this->assertEquals($expected, $result[0]);
 
 	}
 

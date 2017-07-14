@@ -17,6 +17,7 @@ App::uses('BcAdminHelper', 'View/Helper');
 /**
  * BcAdminHelper Test Case
  *
+ * @property BcAdminHelper $BcAdmin
  */
 class BcAdminHelperTest extends BaserTestCase {
 
