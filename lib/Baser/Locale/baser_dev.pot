@@ -14,14 +14,14 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: Config/bootstrap.php:288
-msgid "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
+msgid "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
 msgstr ""
 
 #: Configure/BcThemeConfigReader.php:78
-msgid "%s of the theme is not set : %s"
+msgid "テーマの %s が設定されていません : %s"
 msgstr ""
 
 #: Configure/BcThemeConfigReader.php:126
-msgid "A directory with the specified theme name does not exist. : %s"
+msgid "指定されたテーマ名のディレクトリが存在しません: %s"
 msgstr ""
 

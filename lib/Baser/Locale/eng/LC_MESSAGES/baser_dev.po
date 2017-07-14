@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-14 22:17+0900\n"
+"PO-Revision-Date: 2017-07-14 13:05+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "MIME-Version: 1.0\n"
@@ -14,8 +14,12 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 
 #: Config/bootstrap.php:288
-msgid "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
-msgstr "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
+msgid ""
+"プログラムとデータベースのバージョンが異なるため、強制終了します。データベー"
+"スのバージョンを調整して、再実行してください。"
+msgstr ""
+"Since the version of the program and the database are different, it forcibly "
+"terminates. Adjust the version of the database and try again."
 
 #: Configure/BcThemeConfigReader.php:78
 msgid "テーマの %s が設定されていません : %s"

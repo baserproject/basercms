@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-14 22:16+0900\n"
+"PO-Revision-Date: 2017-07-14 13:58+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "MIME-Version: 1.0\n"
@@ -23,12 +23,12 @@ msgstr "Contents List"
 msgid "ゴミ箱"
 msgstr "Trash"
 
-#: Controller/ContentsController.php:140
+#: Controller/ContentsController.php:150
 msgid "ツリー形式"
 msgstr "Tree"
 
-#: Controller/ContentsController.php:140
-msgid "テーブル形式"
+#: Controller/ContentsController.php:150
+msgid "表形式"
 msgstr "Table"
 
 #: View/Elements/admin/footer.php:31 View/Elements/admin/header.php:32
@@ -142,3 +142,6 @@ msgstr "Contents Menu"
 #: View/Elements/admin/submenus/contents.php:25
 msgid "コンテンツ新規登録"
 msgstr "Add Content"
+
+#~ msgid "テーブル形式"
+#~ msgstr "Table"

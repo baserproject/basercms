@@ -15,61 +15,61 @@ msgstr ""
 
 #: Controller/ContentsController.php:59
 #: View/Elements/admin/submenus/contents.php:23
-msgid "Contents List"
+msgid "コンテンツ一覧"
 msgstr ""
 
 #: Controller/ContentsController.php:62
 #: View/Elements/admin/submenus/contents.php:27
-msgid "Trash"
+msgid "ゴミ箱"
 msgstr ""
 
-#: Controller/ContentsController.php:140
-msgid "Tree"
+#: Controller/ContentsController.php:150
+msgid "ツリー形式"
 msgstr ""
 
-#: Controller/ContentsController.php:140
-msgid "Table"
+#: Controller/ContentsController.php:150
+msgid "表形式"
 msgstr ""
 
 #: View/Elements/admin/footer.php:31
 #: View/Elements/admin/header.php:32
-msgid "Contents"
+msgid "コンテンツ管理"
 msgstr ""
 
 #: View/Elements/admin/footer.php:32
 #: View/Elements/admin/header.php:33
-msgid "Widgets"
+msgid "ウィジェット管理"
 msgstr ""
 
 #: View/Elements/admin/footer.php:33
 #: View/Elements/admin/header.php:34
-msgid "Themes"
+msgid "テーマ管理"
 msgstr ""
 
 #: View/Elements/admin/footer.php:34
 #: View/Elements/admin/header.php:35
-msgid "Plugins"
+msgid "プラグイン管理"
 msgstr ""
 
 #: View/Elements/admin/footer.php:35
 #: View/Elements/admin/header.php:36
-msgid "System"
+msgid "システム管理"
 msgstr ""
 
 #: View/Elements/admin/footer.php:43
-msgid "baserCMS Official Site"
+msgid "baserCMS 公式サイト"
 msgstr ""
 
 #: View/Elements/admin/footer.php:44
-msgid "baserCMS Users Community"
+msgid "baserCMS ユーザー会"
 msgstr ""
 
 #: View/Elements/admin/footer.php:45
-msgid "baserCMS Users Forum"
+msgid "baserCMS ユーザーズフォーラム"
 msgstr ""
 
 #: View/Elements/admin/footer.php:46
-msgid "baserCMS Core Development Project"
+msgid "baserCMS コア開発プロジェクト"
 msgstr ""
 
 #: View/Elements/admin/footer.php:47
@@ -81,70 +81,70 @@ msgid "baserCMS Twitter"
 msgstr ""
 
 #: View/Elements/admin/toolbar.php:64
-msgid "Install Mode"
+msgid "インストールモード"
 msgstr ""
 
 #: View/Elements/admin/toolbar.php:66
-msgid "Debug Mode"
+msgid "デバッグモード"
 msgstr ""
 
 #: View/Elements/admin/toolbar.php:102
-msgid "System Navigation"
+msgid "システムナビ"
 msgstr ""
 
 #: View/Elements/admin/contents/index_view_setting.php:23
-msgid "Site"
+msgid "サイト"
 msgstr ""
 
 #: View/Elements/admin/contents/index_view_setting.php:27
-msgid "Display Setting"
+msgid "表示設定"
 msgstr ""
 
 #: View/Elements/admin/contents/index_view_setting.php:30
-msgid "Expand All"
+msgid "全て展開"
 msgstr ""
 
 #: View/Elements/admin/contents/index_view_setting.php:31
-msgid "Close All"
+msgid "全て閉じる"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:23
-msgid "Folder"
+msgid "フォルダ"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:24;32;36;40
-msgid "Not specified"
+msgid "指定しない"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:27
-msgid "Content Name"
+msgid "コンテンツ名"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:31
-msgid "Content Type"
+msgid "コンテンツタイプ"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:35
-msgid "Publish Status"
+msgid "公開状態"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:39
-msgid "Author"
+msgid "作成者"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:45
-msgid "Search"
+msgid "検索"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:46
-msgid "Clear"
+msgid "クリア"
 msgstr ""
 
 #: View/Elements/admin/submenus/contents.php:20
-msgid "Contents Menu"
+msgid "コンテンツメニュー"
 msgstr ""
 
 #: View/Elements/admin/submenus/contents.php:25
-msgid "Add Content"
+msgid "コンテンツ新規登録"
 msgstr ""
 

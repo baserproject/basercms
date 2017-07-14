@@ -40,7 +40,7 @@
 		<div id="FooterLink">
 			<h2><?php $this->BcBaser->img('admin/head_link.png', array('width' => 36, 'height' => 16, 'alt' => 'LINK')) ?></h2>
 			<ul>
-				<li><a href="http://basercms.net/" target="_blank"><?php echo __d('baser', '公式サイト') ?></a></li>
+				<li><a href="http://basercms.net/" target="_blank"><?php echo __d('baser', 'baserCMS 公式サイト') ?></a></li>
 				<li><a href="http://sites.google.com/site/baserusers/" target="_blank"><?php echo __d('baser', 'baserCMS ユーザー会') ?></a></li>
 				<li><a href="http://forum.basercms.net/" target="_blank"><?php echo __d('baser', 'baserCMS ユーザーズフォーラム') ?></a></li>
 				<li><a href="http://project.e-catchup.jp/projects/basercms" target="_blank"><?php echo __d('baser', 'baserCMS コア開発プロジェクト') ?></a></li>

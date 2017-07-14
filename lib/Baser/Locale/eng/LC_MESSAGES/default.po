@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-15 02:29+0900\n"
+"PO-Revision-Date: 2017-07-14 13:13+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "MIME-Version: 1.0\n"
@@ -57,6 +57,7 @@ msgstr "Email will not be published"
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:50
 #: Config/theme/bccolumn/Elements/blog_comments.php:47
+#: Plugin/Blog/View/Elements/blog_comments.php:59
 #: Plugin/Blog/View/Elements/mobile/blog_comments.php:50
 msgid "コメント"
 msgstr "Comment"
@@ -73,6 +74,7 @@ msgid "画像の文字を入力してください"
 msgstr "Please enter the letters of the image"
 
 #: Config/theme/bc_sample/Elements/mail_input.php:39
+#: Plugin/Mail/View/Elements/mail_input.php:41
 msgid "必須"
 msgstr "Required"
 
@@ -83,9 +85,9 @@ msgstr "Any"
 
 #: Config/theme/bc_sample/Elements/mail_input.php:80
 #: Config/theme/bc_sample/Elements/smartphone/mail_input.php:71
-#: Plugin/Mail/Model/MailMessage.php:178;185;251
+#: Plugin/Mail/Model/MailMessage.php:177;184;256
 #: Plugin/Mail/Test/Case/Model/MailMessageTest.php:120;121;124;130
-#: Plugin/Mail/View/Elements/mail_input.php:41;82
+#: Plugin/Mail/View/Elements/mail_input.php:82
 #: Plugin/Mail/View/Elements/mobile/mail_input.php:61;74
 msgid "必須項目です。"
 msgstr "It is required."
@@ -109,7 +111,7 @@ msgstr "Error"
 msgid "アドレス ％s に送信されたリクエストは無効です。"
 msgstr "The request sent to the address %s was invalid."
 
-#: Controller/BcAppController.php:973
+#: Controller/BcAppController.php:980
 msgid "送信元のメールアドレスが不正です。"
 msgstr "The sender's email address is invalid."
 
@@ -130,7 +132,9 @@ msgstr "Please enter comments"
 
 #: Plugin/Blog/View/Elements/blog_comments_scripts.php:10
 msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
-msgstr "Submission has been completed. After confirming the contents we will make it public."
+msgstr ""
+"Submission has been completed. After confirming the contents we will make it "
+"public."
 
 #: Plugin/Blog/View/Elements/blog_comments_scripts.php:11
 msgid "コメントの送信が完了しました。"
@@ -180,37 +184,42 @@ msgstr "Fri"
 msgid "土"
 msgstr "Sat"
 
-#: Plugin/Mail/Controller/MailController.php:225
+#: Plugin/Mail/Controller/MailController.php:232
 msgid "ファイルのアップロードサイズが上限を超えています。"
 msgstr "The upload size of the file exceeds the maximum limit."
 
-#: Plugin/Mail/Controller/MailController.php:260
+#: Plugin/Mail/Controller/MailController.php:267
 msgid "エラー : 入力内容を確認して再度送信してください。"
 msgstr "Error : Confirm your entries and send again."
 
-#: Plugin/Mail/Controller/MailController.php:342
-msgid "Error : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。"
-msgstr "Error : An error occurred during submission. Please wait for a while Please send."
+#: Plugin/Mail/Controller/MailController.php:349
+msgid ""
+"Error : 送信中にエラーが発生しました。しばらくたってから再度送信お願いしま"
+"す。"
+msgstr ""
+"Error : An error occurred during submission. Please wait for a while Please "
+"send."
 
-#: Plugin/Mail/Model/MailMessage.php:193
+#: Plugin/Mail/Model/MailMessage.php:192
 #: Plugin/Mail/Test/Case/Model/MailMessageTest.php:122;123
 #: Plugin/Mail/View/Elements/mobile/mail_input.php:59;71
 msgid "形式が無効です。"
 msgstr "Invalid format"
 
-#: Plugin/Mail/Model/MailMessage.php:199
+#: Plugin/Mail/Model/MailMessage.php:204
 msgid "半角数字で入力してください。"
 msgstr "Please enter in single-byte number."
 
-#: Plugin/Mail/Model/MailMessage.php:216
-msgid "ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。"
+#: Plugin/Mail/Model/MailMessage.php:221
+msgid ""
+"ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。"
 msgstr "File size is over. Please use the file of %s MB or less."
 
-#: Plugin/Mail/Model/MailMessage.php:224
+#: Plugin/Mail/Model/MailMessage.php:229
 msgid "ファイル形式が無効です。"
 msgstr "Invalid file format."
 
-#: Plugin/Mail/Model/MailMessage.php:259
+#: Plugin/Mail/Model/MailMessage.php:264
 msgid "日付の形式が無効です。"
 msgstr "Invalid date format."
 
@@ -221,6 +230,10 @@ msgstr "The entered characters are incorrect. Please try input again."
 #: Plugin/Mail/View/Elements/mail_form.php:64
 msgid "書き直す"
 msgstr "Rewrite"
+
+#: Plugin/Mail/View/Elements/mail_form.php:67
+msgid "クリア"
+msgstr "Clear"
 
 #: Plugin/Mail/View/Elements/mail_form.php:68
 #: Plugin/Mail/View/Elements/mobile/mail_form.php:42
@@ -245,8 +258,10 @@ msgstr "Authentication image"
 #: Plugin/Mail/View/Mail/default/confirm.php:29
 #: Plugin/Mail/View/Mail/mobile/default/confirm.php:32
 #: Plugin/Mail/View/Mail/smartphone/default/confirm.php:30
-msgid "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
-msgstr "If there is no mistake in the contents entered, please click Submit button."
+msgid ""
+"入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
+msgstr ""
+"If there is no mistake in the contents entered, please click Submit button."
 
 #: Plugin/Mail/View/Mail/default/confirm.php:31
 #: Plugin/Mail/View/Mail/default/index.php:24
@@ -266,8 +281,10 @@ msgstr "Completed mail submission"
 #: Plugin/Mail/View/Mail/default/submit.php:29
 #: Plugin/Mail/View/Mail/mobile/default/submit.php:30
 #: Plugin/Mail/View/Mail/smartphone/default/submit.php:29
-msgid "お問い合わせ頂きありがとうございました。<br>確認次第、ご連絡させて頂きます。"
-msgstr "Thank you for your inquiry. As soon as we confirm it, we will contact you."
+msgid ""
+"お問い合わせ頂きありがとうございました。<br>確認次第、ご連絡させて頂きます。"
+msgstr ""
+"Thank you for your inquiry. As soon as we confirm it, we will contact you."
 
 #: Plugin/Mail/View/Mail/default/submit.php:31
 #: Plugin/Mail/View/Mail/smartphone/default/submit.php:31
@@ -294,6 +311,3 @@ msgstr "An Internal Error Has Occurred."
 #: View/Errors/missing_class.php:29
 msgid "注意"
 msgstr "Notice"
-
-msgid "クリア"
-msgstr "Clear"

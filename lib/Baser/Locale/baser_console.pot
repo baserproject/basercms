@@ -14,18 +14,18 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: Console/Command/BaserTestShell.php:130
-msgid "No test cases available \n\n"
+msgid "有効なテストケースがありません。 \n\n"
 msgstr ""
 
 #: Console/Command/BaserTestShell.php:144
-msgid "What test case would you like to run?"
+msgid "何のテストケースを実行したいですか？"
 msgstr ""
 
 #: Console/Command/BaserTestShell.php:289
-msgid "baserCMS Test Shell"
+msgid "baserCMS テストシェル"
 msgstr ""
 
 #: Console/Command/BaserTestShell.php:314
-msgid "<info>Welcome to baserCMS %s Console</info>"
+msgid "<info>baserCMS %s コンソールへようこそ</info>"
 msgstr ""
 

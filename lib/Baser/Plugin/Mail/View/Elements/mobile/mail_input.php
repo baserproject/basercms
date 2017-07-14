@@ -58,7 +58,7 @@ if (!isset($blockEnd)) {
 					<?php if ($this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "_format", "check")): ?>
 						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "_format", __("形式が無効です。"), array('wrap' => false)); ?></font>
 					<?php else: ?>
-						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "", __("It is required."), array('wrap' => false)); ?></font>
+						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['field_name'] . "", __("必須項目です。"), array('wrap' => false)); ?></font>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php /* 説明欄 */ ?>
@@ -71,7 +71,7 @@ if (!isset($blockEnd)) {
 							<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "_format", __("形式が無効です。"), array('wrap' => false)) ?></font>
 						<?php else: ?>
 							<?php if ($record['MailField']['valid']) : ?>
-								<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "", __("It is required."), array('wrap' => false)) ?></font>
+								<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "", __("必須項目です。"), array('wrap' => false)) ?></font>
 							<?php endif; ?>
 						<?php endif; ?>
 						<font color="#FF0000"><?php echo $this->Mailform->error("MailMessage." . $record['MailField']['group_field'] . "_not_same", __("入力データが一致していません"), array('wrap' => false)) ?></font>

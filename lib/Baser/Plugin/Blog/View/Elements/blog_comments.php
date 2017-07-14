@@ -56,7 +56,7 @@
 				<td><?php echo $this->BcForm->input('BlogComment.url', array('type' => 'text', 'size' => 30)) ?></td>
 			</tr>
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.message', __('Comment')) ?><span style="color:red">＊</span></th>
+				<th><?php echo $this->BcForm->label('BlogComment.message', __('コメント')) ?><span style="color:red">＊</span></th>
 				<td><?php echo $this->BcForm->input('BlogComment.message', array('type' => 'textarea', 'rows' => 10, 'cols' => 52)) ?></td>
 			</tr>
 		</table>
