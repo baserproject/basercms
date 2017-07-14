@@ -1580,10 +1580,10 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		if($options['autoSetCurrentBlog'] && empty($options['contentUrl']) && empty($options['contentId'])) {
-			if($options['autoSetCurrentBlog'] && $this->isBlog() && !empty($this->request->params['Content']['entity_id'])) {
+			if($this->isBlog() && !empty($this->request->params['Content']['entity_id'])) {
 				$options['contentId'] = $this->request->params['Content']['entity_id'];
 			}
-			if($options['autoSetCurrentBlog'] && $this->isBlog() && !empty($this->request->params['Content']['url'])) {
+			if($this->isBlog() && !empty($this->request->params['Content']['url'])) {
 				$options['contentUrl'] = $this->request->params['Content']['url'];
 			}
 		}
