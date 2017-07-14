@@ -53,6 +53,8 @@ class Contact extends CakeTestModel {
  *
  * @package Baser.Test.Case.View.Helper
  * @property BcFormHelper $BcForm
+ * @property BcTimeHelper $BcTime
+ * @property BcUploadHelper $BcUpload
  * @property View $_View
  */
 class BcFormHelperTest extends BaserTestCase {

@@ -18,6 +18,7 @@ App::uses('BcCsvHelper', 'View/Helper');
  *
  * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
+ * @property BcCsvHelper $BcCsv
  */
 class BcCsvHelperTest extends BaserTestCase {
 
@@ -164,7 +165,7 @@ class BcCsvHelperTest extends BaserTestCase {
  * CSVファイルをダウンロードする
  *
  * MEMO : header()を扱う場合のテストはエラーがでるため、まだ記述されていません。
- * $debug = true の場合、header()でファイルのダウンロードを実行します。
+ * $debug = false の場合、header()でファイルのダウンロードを実行します。
  *
  * @param string $fileName
  * @param boolean $debug
@@ -172,23 +173,18 @@ class BcCsvHelperTest extends BaserTestCase {
  * @dataProvider downloadDataProvider
  */
 	public function testDownload($fileName, $debug, $expected) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		// csvのデータを作成
 		$modelName = 'sample';
 		$data = array(
 			'sample' => array(
-					'head1' => 'BaserCMS1',
-					'head2' => 'BaserCMS2',
-					'head3' => 'BaserCMS3',
+				'head1' => 'BaserCMS1',
+				'head2' => 'BaserCMS2',
+				'head3' => 'BaserCMS3',
 			)
 		);
 		$this->BcCsv->addModelData($modelName, $data);
-
 		$result = $this->BcCsv->download($fileName, $debug);
-
 		$this->assertEquals($expected, $result);
-
 	}
 
 	public function downloadDataProvider() {
@@ -197,7 +193,7 @@ class BcCsvHelperTest extends BaserTestCase {
 				'"head1","head2","head3"' . "\n" .
 				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
 			),
-			array('testcsv', false,
+			array('', true,
 				'"head1","head2","head3"' . "\n" .
 				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
 			),

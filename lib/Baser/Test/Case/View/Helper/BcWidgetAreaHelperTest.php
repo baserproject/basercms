@@ -47,10 +47,25 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  * @param $no ウィジェットエリアNO
  * @param array $options オプション
  * @param string $expected 期待値
+ * @dataProvider showDataProvider
+ *
+ * MEMO: show()内のelement()の際、$noで指定したwidgetsが存在しないためエラー(1の場合 Elements/Widgets/text.ctp)
+ * テスト中にファイルを準備する必要あり
  */
-	public function testShow () {
+	public function testShow($no, $expected) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->BcWidgetArea->show(1);
+		ob_start();
+		$this->BcWidgetArea->show($no);
+		$result = ob_get_clean();
+
+		$this->assertEquals($expected, $result);
+	}
+
+	public function showDataProvider() {
+		return array(
+			array(1, ''),
+			array(2, '')
+		);
 	}
 
 }

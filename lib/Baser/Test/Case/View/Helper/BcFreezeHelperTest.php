@@ -16,6 +16,7 @@ App::uses('BcFreezeHelper', 'View/Helper');
  * FormHelperTest class
  *
  * @property BcFormHelper $Form
+ * @property BcFreezeHelper $BcFreeze
  */
 class BcFreezeHelperTest extends BaserTestCase {
 
