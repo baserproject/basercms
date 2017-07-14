@@ -38,23 +38,19 @@ if(!empty($this->BcContents->settings[$type]['icon'])) {
 if($data['Content']['plugin'] != 'Core' && $type != 'Default') {
 	$iconPath = $data['Content']['plugin'] . '.' . $iconPath;
 }
-if (!$isPublish) {
-	$toStatus = 'publish';
-	$classies = ['unpublish', 'disablerow'];
-} else {
-	$toStatus = 'unpublish';
-	$classies = ['publish'];
-}
-$class = ' class="' . implode(' ', $classies) . '"';
 $urlParams = ['content_id' => $data['Content']['id']];
 if($data['Content']['entity_id']) {
 	$urlParams = array_merge($urlParams, [$data['Content']['entity_id']]);
 }
 $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site']['use_subdomain']);
+$toStatus = 'publish';
+if($data['Content']['self_status']) {
+	$toStatus = 'unpublish';
+}
 ?>
 
 
-<tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
+<tr id="Row<?php echo $count + 1 ?>"<?php $this->BcListTable->rowClass($isPublish, $data) ?>>
 	<td class="row-tools" style="width:20%">
 		<?php if ($this->BcBaser->isAdminUser() && empty($data['Content']['site_root'])): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Content']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id']]) ?>

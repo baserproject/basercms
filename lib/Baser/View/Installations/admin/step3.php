@@ -157,8 +157,10 @@ $(document).ready( function() {
 <div class="step-3">
 
 	<div class="em-box">
-		データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br />
-		<strong>MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。</strong>
+		データベースサーバーの場合は、データベースの接続情報を入力し接続テストを実行してください。<br>
+		MySQL / PostgreSQLの場合は、データベースが存在し初期化されている必要があります。<br>
+		<strong>既に用意したデータベースにデータが存在する場合は、初期データで上書きされてしまうので注意してください。<br>
+		プレフィックスを活用しましょう。</strong>
 	</div>
 	<h2>データベース設定</h2>
 	<div class="panel-box corner10">
@@ -166,7 +168,9 @@ $(document).ready( function() {
 			<h3>接続情報</h3>
 			<ul>
 				<li id="dbType"> <?php echo $this->BcForm->label('Installation.dbType', 'データベースタイプ'); ?><br />
-					<?php echo $this->BcForm->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?> </li>
+					<?php echo $this->BcForm->input('Installation.dbType', array('type' => 'select', 'options' => $dbsource)) ?><br>
+					<small>※ MySQL・PostgreSQL・SQLiteの中で、このサーバーで利用できるものが表示されています。</small>
+					</li>
 				<li id="dbHost"> <?php echo $this->BcForm->label('Installation.dbHost', 'データベースホスト名'); ?><br />
 					<?php echo $this->BcForm->input('Installation.dbHost', array('type' => 'text', 'maxlength' => '300', 'size' => 45)); ?> </li>
 				<li id="dbUser" class="clearfix">

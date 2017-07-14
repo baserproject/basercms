@@ -1319,23 +1319,17 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if ($controller == 'pages' && $action == 'display') {
-
-			if (strpos($pass[0], 'pages/') !== false) {
-				$pageUrl = str_replace('pages/', '', $pass[0]);
+		if (!BcUtil::isAdminSystem()) {
+			$pageUrl = h($this->request->url);
+			if($pageUrl === false) {
+				$pageUrl = '/';
 			} else {
-				if (empty($pass)) {
-					$pageUrl = h($this->request->url);
-				} else {
-					$pageUrl = implode('/', $pass);
-				}
+				$pageUrl = '/' . $pageUrl;
 			}
-			
 			$sitePrefix = $this->getSitePrefix();
 			if($sitePrefix) {
-				$pageUrl = preg_replace('/^' . preg_quote($sitePrefix, '/') . '\//', '', $pageUrl);
+				$pageUrl = preg_replace('/^\/' . preg_quote($sitePrefix, '/') . '\//', '/', $pageUrl);
 			}
-			
 			if (preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
@@ -1343,7 +1337,6 @@ class BcBaserHelper extends AppHelper {
 			$pageUrl = preg_replace('/^\//', '', $pageUrl);
 			$aryUrl = explode('/', $pageUrl);
 		} else {
-
 			// プラグインルーティングの場合
 			if ((($url1 == '' && in_array($action, array('index', 'mobile_index', 'smartphone_index'))) || ($url1 == $action)) && $url2 != $action && $plugin) {
 				$prefix = '';
@@ -1393,10 +1386,18 @@ class BcBaserHelper extends AppHelper {
 
 		return $contentsName;
 	}
-	
+
+/**
+ * 現在のサイトのプレフィックスを取得する
+ *
+ * @return mixed
+ */
 	public function getSitePrefix() {
+		if(!BC_INSTALLED) {
+			return '';
+		}
 		$site = null;
-		if($this->request->params['Site']) {
+		if(!empty($this->request->params['Site'])) {
 			$site = $this->request->params['Site'];
 		}
 		$Site = ClassRegistry::init('Site');
@@ -1561,23 +1562,16 @@ EOD;
  * @return void
  */
 	protected function _initPluginBasers() {
-		$view = $this->_View;
 		$plugins = Configure::read('BcStatus.enablePlugins');
-
 		if (!$plugins) {
 			return;
 		}
-
-		$pluginBasers = array();
 		foreach ($plugins as $plugin) {
 			$pluginName = Inflector::camelize($plugin);
 			if (App::import('Helper', $pluginName . '.' . $pluginName . 'Baser')) {
-				$pluginBasers[] = $pluginName . 'BaserHelper';
+				$pluginBaser = $pluginName . 'BaserHelper';
+				$this->_pluginBasers[$pluginName] = new $pluginBaser($this->_View);
 			}
-		}
-		foreach ($pluginBasers as $key => $pluginBaser) {
-			$this->_pluginBasers[$key] = new $pluginBaser($view);
-			$this->_pluginBasers[$key]->request = $view->request;
 		}
 	}
 
@@ -1852,24 +1846,6 @@ END_FLASH;
  */
 	public function isPage() {
 		return ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display');
-	}
-
-/**
- * 現在のページがブログプラグインかどうかを判定する
- *
- * @return bool
- */
-	public function isBlog() {
-		return ($this->request->params['Content']['plugin'] == 'Blog');
-	}
-
-/**
- * 現在のページがメールプラグインかどうかを判定する
- *
- * @return bool
- */
-	public function isMail() {
-		return ($this->request->params['Content']['plugin'] == 'Mail');
 	}
 
 /**
@@ -2487,58 +2463,6 @@ END_FLASH;
 	}
 
 /**
- * Blogの基本情報を全て取得する
- *
- * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
- * @param array $options オプション（初期値 :array()）
- *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
- *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
- * @return array サイト基本設定配列
- */
-	public function getBlogs($name = '', $options = array()) {
-		$options = array_merge(array(
-			'sort' => 'BlogContent.id',
-			'siteId' => 0
-		), $options);
-		$conditions['Content.status'] = true;
-		if(! empty($name)){
-			$conditions['Content.name'] = $name;
-		}
-		if($options['siteId'] !== '') {
-			$conditions['Content.site_id'] = $options['siteId'];
-		}
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$BlogContent->unbindModel(
-			['hasMany' => ['BlogPost', 'BlogCategory']]
-		);
-		$datas = $BlogContent->find('all', array(
-				'conditions' => $conditions,
-				'order' => $options['sort'],
-				'cache' => false
-			)
-		);
-		if(!$datas) {
-			return false;
-		}
-		$contents = array();
-		if( count($datas) === 1 ){
-			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
-			unset($datas['BlogContent']['eye_catch_size']);
-			$contents[] = $datas;
-		} else {
-			foreach($datas as $val){
-				$val = $BlogContent->constructEyeCatchSize($val);
-				unset($val['BlogContent']['eye_catch_size']);
-				$contents[] = $val;
-			}
-		}
-		if($name) {
-			$contents = $contents[0];
-		}
-		return $contents;
-	}
-
-/**
  * URLのパラメータ情報を返す
  * 主なreturnデータは
  * http://basercms.net/news/index/example/test?name=value の場合
@@ -2730,5 +2654,51 @@ END_FLASH;
 		}
 		echo '<link rel="' . $rel . '" href="' . Router::url('/' . $fileName, true) . '" />';
 	}
-	
+
+/**
+ * コンテンツ管理用のURLを取得する
+ * 
+ * @param string $url コンテンツ管理用URLの元データ
+ *	省略時は request より現在のデータを取得
+ *	request が取得できない場合は、トップページのURLを設定
+ * @return string
+ */
+	public function getContentsUrl($url = null) {
+		if(empty($url) && !empty($this->request->params['Content']['url'])) {
+			$url = $this->request->params['Content']['url'];
+		} else {
+			$url = '/';
+		}
+		$site = BcSite::findCurrent();
+		return $this->BcContents->getUrl($url, false, $site->useSubDomain);
+	}
+
+/**
+ * Plugin 内の Baserヘルパを取得する
+ *
+ * @param string $name
+ * @return bool|mixed Plugin 内の Baserヘルパ
+ */
+	public function getPluginBaser($name) {
+		if(!empty($this->_pluginBasers[$name])) {
+			return $this->_pluginBasers[$name];
+		}
+		return false;
+	}
+
+/**
+ * 親フォルダを取得する
+ *
+ * - 引数なしで現在のコンテンツの親情報を取得
+ * - $id を指定して取得する事ができる
+ * - $direct を false に設定する事で、最上位までの親情報を取得
+ * 
+ * @param int $id
+ * @param bool $direct
+ * @return mixed false|array
+ */
+	public function getParentFolder($id, $direct = true) {
+		return $this->BcContents->getParent($id, $direct);
+	}
+
 }

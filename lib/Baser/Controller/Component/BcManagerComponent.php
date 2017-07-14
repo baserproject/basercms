@@ -1612,8 +1612,10 @@ class BcManagerComponent extends Component {
 		if($dbDataPattern) {
 			$_SESSION['dbDataPattern'] = $dbDataPattern;
 		}
+		ClassRegistry::flush();
 		if (file_exists($_path)) {
 			try {
+				set_time_limit(0);
 				include $_path;
 			} catch (Exception $e) {
 				$this->log($e->getMessage());

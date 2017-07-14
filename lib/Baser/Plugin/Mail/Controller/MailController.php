@@ -167,6 +167,13 @@ class MailController extends MailAppController {
 		if ($this->dbDatas['mailContent']['MailContent']['widget_area']) {
 			$this->set('widgetArea', $this->dbDatas['mailContent']['MailContent']['widget_area']);
 		}
+		
+		// キャッシュ対策
+		if (!isConsole()) {
+			header("Cache-Control: no-cache, no-store, must-revalidate");
+			header("Pragma: no-cache");
+			header("Expires: ". date(DATE_RFC1123, strtotime("-1 day")));
+		}
 	}
 
 /**

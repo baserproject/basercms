@@ -18,6 +18,31 @@
 class BcListTableHelper extends AppHelper {
 
 /**
+ * カラム数
+ *
+ * @var int
+ */
+	protected $_columnNumber = 0;
+
+/**
+ * カラム数を設定する
+ *
+ * @param int $number カラム数
+ */
+	public function setColumnNumber($number) {
+		$this->_columnNumber = $number;
+	}
+
+/**
+ * カラム数を取得する
+ *
+ * @return int カラム数
+ */
+	public function getColumnNumber() {
+		return $this->_columnNumber;
+	}
+
+/**
  * リスト見出し発火
  *
  * @return string
@@ -32,6 +57,7 @@ class BcListTableHelper extends AppHelper {
 				foreach($event->data['fields'] as $field) {
 					$output .= "<th>" . $field . "</th>\n";
 				}
+				$this->_columnNumber += count($event->data['fields']);
 			}
 		}
 		return $output;
@@ -56,6 +82,38 @@ class BcListTableHelper extends AppHelper {
 			}
 		}
 		return $output;
+	}
+
+/**
+ * Row Class
+ *
+ * @param bool $isPublish 公開しているかどうか
+ * @param array $record レコード
+ * @param array $options オプション
+ * 	- `class` : 追加するクラス
+ */
+	public function rowClass($isPublish, $record = [], $options = []) {
+		$options = array_merge([
+			'class' => []
+		], $options);
+		if (!$isPublish) {
+			$classies = ['unpublish', 'disablerow'];
+		} else {
+			$classies = ['publish'];
+		}
+		if(!empty($options['class'])) {
+			$options = array_merge($classies, $options['class']);
+		}
+
+		// EVENT BcListTable.rowClass
+		$event = $this->dispatchEvent('rowClass', [
+			'classies' => $classies,
+			'record' => $record
+		], ['class' => 'BcListTable', 'plugin' => '']);
+		if ($event !== false) {
+			$classies = ($event->result === null || $event->result === true) ? $event->data['classies'] : $event->result;
+		}
+		echo ' class="' . implode(' ', $classies) . '"';
 	}
 
 }

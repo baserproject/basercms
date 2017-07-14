@@ -13,11 +13,18 @@
 /**
  * [ADMIN] ブログ記事 フォーム
  */
+if($this->request->params['Site']['use_subdomain']) {
+	$targetSite = BcSite::findByUrl($this->request->params['Content']['url']);
+	$previewUrl = $targetSite->getPureUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no')) . '?host=' . $targetSite->host;
+} else {
+	$previewUrl = $this->BcContents->getUrl($this->request->params['Content']['url'], false) . 'archives/' . $this->BcForm->value('BlogPost.no');
+}
 $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
 $statuses = array(0 => '非公開', 1 => '公開');
 $this->BcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
 $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlogBLogPostsEditScript',
-	'data-fullurl' => $this->BcContents->getUrl($this->request->params['Content']['url'] . '/archives/' . $this->BcForm->value('BlogPost.no'), true, $this->request->params['Site']['use_subdomain'])
+	'data-fullurl' => $this->BcContents->getUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no'), true, $this->request->params['Site']['use_subdomain']),
+	'data-previewurl' => $previewUrl
 ));
 ?>
 
@@ -41,6 +48,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 	<?php echo $this->BcForm->hidden('BlogPost.content') ?>
 <?php endif ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <!-- form -->
 <div class="section">
@@ -107,7 +115,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 
 <div class="section" style="text-align: center">
 	<?php
-	echo $this->BcForm->editor('BlogPost.detail', array_merge(array(
+	echo $this->BcForm->input('BlogPost.detail', array_merge(array(
+        'type' => 'editor',
 		'editor' => @$siteConfig['editor'],
 		'editorUseDraft' => true,
 		'editorDraftField' => 'detail_draft',
@@ -177,6 +186,8 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 	</table>
 </div>
 
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <!-- button -->
 <div class="submit">
 	<?php if ($this->action == 'admin_add'): ?>
@@ -185,7 +196,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 	<?php elseif ($this->action == 'admin_edit'): ?>
 		<?php echo $this->BcForm->button('プレビュー', array('div' => false, 'class' => 'button', 'id' => 'BtnPreview')) ?>
 		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
-		<?php $this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。', $this->BcForm->value('BlogPost.name')), false); ?>
+		<?php $this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id')), array('class' => 'submit-token button', 'id' => 'BtnDelete'), sprintf('%s を本当に削除してもいいですか？\n※ ブログ記事はゴミ箱に入らず完全に消去されます。', $this->BcForm->value('BlogPost.name')), false); ?>
 	<?php endif ?>
 </div>
 

@@ -983,6 +983,8 @@ class BcFormHelper extends FormHelper {
 		// >>>
 		/*** beforeInput ***/
 		$event = $this->dispatchEvent('beforeInput', array(
+			'formId' => $this->__id,
+			'data' => $this->request->data,
 			'fieldName' => $fieldName,
 			'options' => $options
 			), array('class' => 'Form', 'plugin' => ''));
@@ -1128,6 +1130,8 @@ DOC_END;
 
 		/*** afterInput ***/
 		$event = $this->dispatchEvent('afterInput', array(
+			'formId' => $this->__id,
+			'data' => $this->request->data,
 			'fieldName' => $fieldName,
 			'out' => $output
 			), array('class' => 'Form', 'plugin' => ''));
@@ -1140,6 +1144,7 @@ DOC_END;
 		// <<<
 	}
 
+	
 // CUSTOMIZE ADD 2014/07/02 ryuring
 /**
  * フォームのIDを取得する
@@ -1161,13 +1166,24 @@ DOC_END;
                 list(, $model) = pluginSplit($model, true);
 				$this->setEntity($model, true);
 			}
-			$domId = isset($options['action']) ? $options['action'] : $this->request['action'];
+			$domId = isset($options['url']['action']) ? $options['url']['action'] : $this->request->params['action'];
 			$id = $this->domId($domId . 'Form');
 		} else {
 			$id = $options['id'];
 		}
 
 		return $id;
+	}
+
+/**
+ * フォームのIDを取得する
+ *
+ * BcFormHelper::create() の後に呼び出される事を前提とする
+ * 
+ * @return string フォームID 
+ */
+	public function getId() {
+		return $this->__id;
 	}
 
 /**
@@ -1634,7 +1650,7 @@ DOC_END;
 			$out .= '&nbsp;' . $delCheckTag . $hiddenTag . '<br />' . $fileLinkTag;
 		}
 
-		return '<div class="upload-file">' . $out . '</div>';
+		return '<span class="upload-file">' . $out . '</span>';
 	}
 
 /**

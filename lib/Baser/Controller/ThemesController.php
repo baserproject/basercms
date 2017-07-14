@@ -64,7 +64,11 @@ class ThemesController extends AppController {
 		$this->subMenuElements = array('themes');
 		if($this->request->data) {
 			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
-				$this->setMessage('ファイルのアップロードに失敗しました。', true);
+				$message = 'ファイルのアップロードに失敗しました。';
+				if($this->request->data['Theme']['file']['error'] == 1) {
+					$message .= 'サーバに設定されているサイズ制限を超えています。';
+				}
+				$this->setMessage($message, true);
 			} else {
 				$name = $this->request->data['Theme']['file']['name'];
 				move_uploaded_file($this->request->data['Theme']['file']['tmp_name'], TMP . $name);
@@ -694,6 +698,26 @@ class ThemesController extends AppController {
 		}
 
 		return $result;
+	}
+
+/**
+ * ダウンロード
+ */
+	public function admin_download() {
+		$this->autoRender = false;
+		$tmpDir = TMP . 'theme' . DS;
+		$Folder = new Folder();
+		$Folder->create($tmpDir);
+		$path = BASER_THEMES . $this->siteConfigs['theme'] . DS;
+		$Folder->move([
+			'from' => $path,
+			'to' => $tmpDir . $this->siteConfigs['theme'],
+			'chmod' => 0777
+		]);
+		$Simplezip = new Simplezip();
+		$Simplezip->addFolder($tmpDir);
+		$Simplezip->download($this->siteConfigs['theme']);
+		$Folder->delete($tmpDir);
 	}
 
 }

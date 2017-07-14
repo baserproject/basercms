@@ -124,12 +124,6 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		if (!empty($this->params['core'])) {
 			$show['core'] = $query['core'] = 'true';
 		}
-		// CUSTOMIZE ADD 2014/07/02 ryuring
-		// >>>
-		if (!empty($this->params['baser'])) {
-			$show['baser'] = $query['baser'] = 'true';
-		}
-		// <<<
 		if (!empty($this->params['plugin'])) {
 			$show['plugin'] = $query['plugin'] = $this->params['plugin'];
 		}
@@ -162,6 +156,40 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		if (ob_get_length()) {
 			ob_end_flush();
 		}
+	}
+
+/**
+ * Returns the query string formatted for ouput in links
+ *
+ * @return array
+ */
+	protected function _getQueryLink() {
+		$show = $query = array();
+		if (!empty($this->params['case'])) {
+			$show['show'] = 'cases';
+		}
+
+		if (!empty($this->params['core'])) {
+			$show['core'] = $query['core'] = 'true';
+		}
+		if (!empty($this->params['plugin'])) {
+			$show['plugin'] = $query['plugin'] = $this->params['plugin'];
+		}
+		if (!empty($this->params['case'])) {
+			$query['case'] = $this->params['case'];
+		}
+		if (!empty($this->params['filter'])) {
+			$query['filter'] = $this->params['filter'];
+		}
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
+		if (!empty($this->params['baser'])) {
+			$show['baser'] = $query['baser'] = 'true';
+		}
+		// <<<
+		$show = $this->_queryString($show);
+		$query = $this->_queryString($query);
+		return array($show, $query);
 	}
 
 }

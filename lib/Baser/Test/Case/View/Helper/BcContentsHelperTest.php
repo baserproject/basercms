@@ -368,13 +368,47 @@ class BcContentsHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
 
+
 /**
- * 親コンテンツを取得する
- * 
+ * 親フォルダを取得する
+ *
+ * @param $expected
+ * @param $id
+ * @param $direct
+ * @dataProvider getParentDataProvider
  */
-	public function testGetParent() {
-		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
-	}	
+	public function testGetParent($expected, $id, $direct) {
+		if(is_string($id)) {
+			$this->BcContents->request = $this->_getRequest($id);
+			$id = null;
+		}
+		$result = $this->BcContents->getParent($id, $direct);
+		if($direct) {
+			if($result) {
+				$result = $result['Content']['id'];
+			}
+		} else {
+			if($result) {
+				$result = Hash::extract($result, '{n}.Content.id');
+			}
+		}
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getParentDataProvider() {
+		return [
+			[1, 4, true],			// ダイレクト ROOT直下
+			[21, 22, true],			// ダイレクト フォルダ内
+			[false, 1, true],		// ダイレクト ルートフォルダ
+			[false, 100, true],		// ダイレクト 存在しないコンテンツ
+			[[1,21], 24, false],	// パス ２階層配下
+			[[1,21,24], 25, false],	// パス ３階層配下
+			[[3,26], 12, false],	// パス スマホ２階層配下
+			[false, 100, false],	// パス 存在しないコンテンツ
+			[[1,21,24], '/service/sub_service/sub_service_1', false] // パス URLで解決
+		];
+	}
+	
 /**
  * フォルダリストを取得する
  * 
@@ -403,6 +437,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$result = $this->BcContents->getSiteRootId($siteId);
 		$this->assertEquals($expect, $result);                       
 	}
+	
 	public function getSiteRootIdDataProvider() {
 		return [
 			// 存在するサイトID（0~2）を指定した場合
@@ -414,4 +449,5 @@ class BcContentsHelperTest extends BaserTestCase {
 			[99, false],
 		];
 	}
+
 }

@@ -49,6 +49,12 @@ class SitesController extends AppController {
 	public function admin_index() {
 		$this->pageTitle = 'サブサイト一覧';
 		$this->paginate = ['order' => 'id'];
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('Site', ['default' => $default, 'action' => 'admin_index']);
+		$this->paginate = [
+			'order' => ['Site.id' => 'ASC'],
+			'limit' => $this->passedArgs['num']
+		];
 		$datas = $this->paginate('Site');
 		$this->set('mainSites', $this->Site->getSiteList());
 		$this->set('datas', $datas);
@@ -56,8 +62,6 @@ class SitesController extends AppController {
 
 /**
  * サブサイト追加
- *
- * @param $id
  */
 	public function admin_add() {
 
@@ -208,8 +212,6 @@ class SitesController extends AppController {
 
 /**
  * 削除する
- *
- * @param $id
  */
 	public function admin_delete() {
 		if(empty($this->request->data['Site']['id'])) {

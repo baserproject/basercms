@@ -1395,6 +1395,9 @@ class Content extends AppModel {
 		
 		// 移動先に同一コンテンツが存在する
 		$movedUrl = $parentCuntent['Content']['url'] . $currentContent['Content']['name'];
+		if(preg_match('/\/$/', $currentContent['Content']['url'])) {
+			$movedUrl .= '/';
+		}
 		$movedContent = $this->find('first', [
 			'conditions' => [
 				'url' => $movedUrl,
@@ -1744,6 +1747,146 @@ class Content extends AppModel {
 		}
 		$this->getDataSource()->commit();
 		return true;
+	}
+
+/**
+ * コンテンツ管理のツリー構造をリセットする
+ */
+	public function resetTree() {
+		$this->Behaviors->unload('Tree');
+		$this->updatingRelated = false;
+		$siteRoots = $this->find('all', ['conditions' => ['Content.site_root' => true], 'order' => 'lft', 'recursive' => -1]);
+		$count = 0;
+		$mainSite = [];
+		foreach($siteRoots as $siteRoot) {
+			$count++;
+			$siteRoot['Content']['lft'] = $count;
+			$siteRoot['Content']['level'] = ($siteRoot['Content']['id'] == 1)? 0 : 1;
+			$siteRoot['Content']['parent_id'] = ($siteRoot['Content']['id'] == 1)? null : 1;
+			$contents = $this->find('all', ['conditions' => ['Content.site_id' => $siteRoot['Content']['site_id'], 'Content.site_root' => false], 'order' => 'lft', 'recursive' => -1]);
+			if($contents) {
+				foreach($contents as $content) {
+					$count++;
+					$content['Content']['lft'] = $count;
+					$count++;
+					$content['Content']['rght'] = $count;
+					$content['Content']['level'] = $siteRoot['Content']['level'] + 1;
+					$content['Content']['parent_id'] = $siteRoot['Content']['id'];
+					$this->save($content, false);
+				}
+			}
+			if($siteRoot['Content']['id'] == 1) {
+				$mainSite = $siteRoot;
+			} else {
+				$count++;
+				$siteRoot['Content']['rght'] = $count;
+				$this->save($siteRoot, false);
+			}
+		}
+		$count++;
+		$mainSite['Content']['rght'] = $count;
+		$this->save($mainSite, false);
+		// ゴミ箱
+		$this->Behaviors->unload('SoftDelete');
+		$contents = $this->find('all', ['conditions' => ['Content.deleted' => true], 'order' => 'lft', 'recursive' => -1]);
+		if($contents) {
+			foreach($contents as $content) {
+				$count++;
+				$content['Content']['lft'] = $count;
+				$count++;
+				$content['Content']['rght'] = $count;
+				$content['Content']['level'] = 0;
+				$content['Content']['parent_id'] = null;
+				$content['Content']['site_id'] = null;
+				$this->save($content, false);
+			}
+		}
+		// 関連データ更新機能をオンにした状態で再度更新
+		$this->Behaviors->load('Tree');
+		$this->updatingRelated = true;
+		$contents = $this->find('all', ['order' => 'lft', 'recursive' => -1]);
+		if($contents) {
+			foreach($contents as $content) {
+				// バリデーションをオンにする事で同名コンテンツを強制的にリネームする
+				// beforeValidate でリネーム処理を入れている為
+				// （第二引数を false に設定しない）
+				$this->save($content);
+			}
+		}
+		return true;
+	}
+
+/**
+ * URLに関連するコンテンツ情報を取得する
+ *
+ * @param string $url
+ * @param bool $publish
+ * @param bool $extend
+ * @param bool $sameUrl
+ * @param bool $useSubDomain
+ * @return mixed false|array
+ */
+	public function findByUrl($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false) {
+		$url = preg_replace('/^\//', '', $url);
+		if($extend) {
+			$params = explode('/', $url);
+			$condUrls = [];
+			$condUrls[] = '/' . implode('/', $params);
+			$count = count($params);
+			for ($i = $count; $i > 1; $i--) {
+				unset($params[$i - 1]);
+				$path = implode('/', $params);
+				$condUrls[] = '/' . $path . '/';
+				$condUrls[] = '/' . $path;
+			}
+			// 固定ページはURL拡張はしない
+			$conditions = [
+				'Content.type <>' => 'Page',
+				'Content.url' => $condUrls,
+				['or' => [
+					['Site.status' => true],
+					['Site.status' => null]
+				]],
+				['or' => [
+					['Site.same_main_url' => $sameUrl],
+					['Site.same_main_url' => null]
+				]],
+				['or' => [
+					['Site.use_subdomain' => $useSubDomain],
+					['Site.use_subdomain' => null]
+				]]
+			];
+		} else {
+			$conditions = [
+				'Content.url' => $this->getUrlPattern($url),
+				['or' => [
+					['Site.status' => true],
+					['Site.status' => null]
+				]],
+				['or' => [
+					['Site.same_main_url' => $sameUrl],
+					['Site.same_main_url' => null]
+				]],
+				['or' => [
+					['Site.use_subdomain' => $useSubDomain],
+					['Site.use_subdomain' => null]
+				]]
+			];
+		}
+		if($publish) {
+			$conditions = array_merge($conditions, $this->getConditionAllowPublish());
+		}
+		$content = $this->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
+		if(!$content) {
+			return false;
+		}
+		if($extend && $content['Content']['type'] == 'ContentFolder') {
+			return false;
+		}
+		if($content && empty($content['Site']['id'])) {
+			$content['Site'] = $this->Site->getRootMain()['Site'];
+		}
+		return $content;
 	}
 	
 }

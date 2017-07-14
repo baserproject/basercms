@@ -20,21 +20,56 @@ class UploaderFile extends AppModel {
 /**
  * プラグイン名
  *
- * @var		string
- * @access 	public
+ * @var string
  */
 	public $plugin = 'Uploader';
+
 /**
  * behaviors
  *
- * @var 	array
- * @access 	public
+ * @var array
  */
-	public $actsAs = array('BcUpload' => array(
-		'saveDir'	=> "uploads",
-		'fields'	=> array(
-				'name'	=> array('type'	=> 'all')
-	)));
+	public $actsAs = [
+		'BcUpload' => [
+			'saveDir' => "uploads",
+			'fields' => [
+				'name' => ['type'	=> 'all']
+	]]];
+
+/**
+ * バリデーション
+ *
+ * @var array
+ */
+	public $validate = [
+		'publish_begin' => [
+			'checkPeriod' => [
+				'rule' => 'checkPeriod',
+				'message' => '公開期間が不正です。'
+			]
+		],
+		'publish_end' => [
+			'checkPeriod' => [
+				'rule' => 'checkPeriod',
+				'message' => '公開期間が不正です。'
+			]
+		]
+	];
+
+/**
+ * 公開期間をチェックする
+ *
+ * @return bool
+ */
+	public function checkPeriod() {
+		if(!empty($this->data['UploaderFile']['publish_begin']) && !empty($this->data['UploaderFile']['publish_end'])) {
+			if(strtotime($this->data['UploaderFile']['publish_begin']) > strtotime($this->data['UploaderFile']['publish_end'])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 /**
  * コンストラクタ
  *
@@ -43,7 +78,6 @@ class UploaderFile extends AppModel {
  * @param	string	$ds
  */
 	public function __construct($id = false, $table = null, $ds = null) {
-		
 		parent::__construct($id, $table, $ds);
 		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
 		$UploaderConfig = ClassRegistry::init('Uploader.UploaderConfig');
@@ -65,10 +99,15 @@ class UploaderFile extends AppModel {
 		$settings = $this->actsAs['BcUpload'];
 		$settings['fields']['name']['imagecopy'] = $imagecopy;
 		$this->Behaviors->attach('BcUpload', $settings);
-
 	}
+
+/**
+ * Before Save
+ *
+ * @param array $options
+ * @return bool
+ */
 	public function beforeSave($options = array()) {
-		
 		parent::beforeSave($options);
 		
 		if(!empty($this->data['UploaderFile']['id'])) {
@@ -101,14 +140,13 @@ class UploaderFile extends AppModel {
 		}
 		
 		return true;
-		
 	}
+
 /**
  * ファイルの存在チェックを行う
  *
  * @param	string	$fileName
- * @return	void
- * @access	boolean
+ * @return	bool
  */
 	public function fileExists($fileName, $limited = false) {
 		
@@ -120,15 +158,14 @@ class UploaderFile extends AppModel {
 		return file_exists($savePath);
 
 	}
+
 /**
  * 複数のファイルの存在チェックを行う
  * 
  * @param	string	$fileName
  * @return	array
- * @access	void
  */
 	public function filesExists($fileName, $limited = null) {
-
 		if(is_null($limited)) {
 			$data = $this->find('first', array('conditions' => array('UploaderFile.name' => $fileName), 'recursive' => -1));
 			$limited = false;
@@ -143,18 +180,16 @@ class UploaderFile extends AppModel {
 		$files['midium'] = $this->fileExists($basename.'__midium'.'.'.$ext, $limited);
 		$files['large'] = $this->fileExists($basename.'__large'.'.'.$ext, $limited);
 		return $files;
-
 	}
+
 /**
  * コントロールソースを取得する
  *
  * @param	string	$field			フィールド名
  * @param	array	$options
  * @return	mixed	$controlSource	コントロールソース
- * @access	public
  */
 	public function getControlSource($field = null, $options = array()) {
-
 		switch ($field) {
 			case 'user_id':
 				$User = ClassRegistry::getObject('User');
@@ -164,26 +199,32 @@ class UploaderFile extends AppModel {
 				return $UploaderCategory->find('list', array('order' => 'UploaderCategory.id'));
 		}
 		return false;
-
 	}
+
+/**
+ * ソースファイルの名称を取得する
+ * @param $fileName
+ * @return mixed
+ */
 	public function getSourceFileName($fileName) {
-		
 		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
 		return preg_replace('/__(' . implode('|', $sizes) . ')\./', '.', $fileName);
-		
 	}
+
+/**
+ * Before Delete
+ *
+ * @param bool $cascade
+ * @return bool
+ */
 	public function beforeDelete($cascade = true) {
-		
 		$data = $this->read(null, $this->id);
 		if(!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
 			$this->Behaviors->BcUpload->savePath .= 'limited' . DS;
 		} else {
 			$this->Behaviors->BcUpload->savePath = preg_replace('/' . preg_quote('limited' . DS, '/') . '$/', '', $this->Behaviors->BcUpload->savePath);
 		}
-		parent::beforeDelete($cascade);
-		
-		return true;
-		
+		return parent::beforeDelete($cascade);
 	}
 	
 }

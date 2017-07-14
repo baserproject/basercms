@@ -67,7 +67,9 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
-		'baser.Default.User'
+		'baser.Default.User',
+		'baser.Default.UserGroup',
+		'baser.Default.Favorite'
 	);
 	
 /**
@@ -211,11 +213,47 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $fieldName This should be "Modelname.fieldname"
  * @param array $options Each type of input takes different options.
  * @return string Completed form widget
+ * @dataProvider inputDataProvider
+ *
+ * maxlength値がsqliteでは8、その他は11と返り値が異なるため、4,5番目のテストでは.*を使用
  */
-	public function testInput() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
+		$event = $this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
+			$event->data['options'][$optionsField] = $optionsData;
+		}]]);
+		$result = $this->BcForm->Input($fieldName, $options);
+		$this->assertRegExp('/' . $expected . '/s', $result);
+		$this->resetEvent();
 	}
 
+	public function inputDataProvider() {
+		return array(
+			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1<\/label><input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => []], ''),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*2<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2], 'value' => ['a', 'b']], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*"radio" name="data\[User\]\[id\]" id="UserId1" value="1" \/><label for="UserId1">2<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1<\/legend><\/fieldset>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'separator' => 'aaa'], ''),
+			array('value', 'hoge', 'User.id', ['type' => 'checkbox', 'options' => []], '<input type="hidden" name="data\[User\]\[id\]" id="UserId_" value="0"\/>.*"checkbox" name="data\[User\]\[id\]" options="" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
+			array('value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/option>\n<\/select>'),
+			array('value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data\[User\]\[id\]\[hour\].*id="UserIdHour".*1<\/op.*12<\/op.*\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*value="pm">pm<\/option>\n<\/select>'),
+			array('value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'),
+			array('value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'),
+			array('value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'),
+			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data\[BlogTag\]\[BlogTag\]" value="" id="BlogTagBlogTag_"\/>\n<select name="data\[BlogTag\]\[BlogTag\]\[\]" ="" multiple="multiple" id="BlogTagBlogTag">\n<\/select>'),
+			array('', '', 'hoge', '', '<input name="data\[hoge\]" ="" type="text" id="hoge"\/>'),
+			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege" ="" type="text" id="hoge"\/>')
+		);
+	}
 
 /**
  * CKEditorを出力する
@@ -341,10 +379,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @param string $field フィールド名
  * @param array $options
  * @return array コントロールソース
+ * @dataProvider getControlSourceProvider
  */
-	public function testGetControlSource() {
-		$result = $this->BcForm->getControlSource('hoge');
-		self::assertEquals(array(), $result);
+	public function testGetControlSource($field, $expected) {
+		$result = $this->BcForm->getControlSource($field);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getControlSourceProvider() {
+		return array(
+			array('hoge', array()),
+			array('', array())
+		);
 	}
 
 /**
@@ -357,15 +403,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @return mixed リストまたは、false
  * @dataProvider generateListProvider
 */
-	public function testGenerateList($modelName, $expected) {
-		$result = $this->BcForm->generateList($modelName);
+	public function testGenerateList($modelName, $conditions, $fields, $expected) {
+		$result = $this->BcForm->generateList($modelName, $conditions, $fields);
 		$this->assertEquals($result, $expected);
 	}
 
 	public function generateListProvider() {
 		return array(
-			array('hoge', ''),
-			array('Page', '')
+			array('hoge', '', '', ''),
+			array('User', '', ['id','name'], Array (1 => 'basertest', 2 => 'basertest2')),
+			array('User', '', ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', true, ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
+			array('User', false, ['name','id'], null)
 		);
 	}
 
@@ -434,17 +483,18 @@ class BcFormHelperTest extends BaserTestCase {
  * @dataProvider dateTimePickerDataProvider
  */
 	public function testDateTimePicker($fieldName, $attributes, $expected, $message) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$result = $this->BcForm->dateTimePicker($fieldName, $attributes);
 		$this->assertRegExp('/' . $expected . '/s', $result, $message);
 	}
 
 	public function dateTimePickerDataProvider() {
 		return array(
-			array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'), 
-			array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/04\/01".* value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'), 
-			array('baser', array('value' => '2010-4-1'), 'value="2010\/04\/01".*value="00:00:00".* value="2010-4-1"', '時間を指定いない場合出力できません'), 
-			array('baser', array('value' => '2010-'), 'value="1970\/01\/01".*value="09:00:00".*value="2010-"', '時間指定が不適切でない場合出力できません'), 
+			array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'),
+			array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/4\/1".*value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'),
+			array('baser', array('value' => '2010-04-01 11:22:33'), 'value="2010\/04\/01".*value="11:22:33".*value="2010-04-01 11:22:33"', '時間指定が正しく出力できません'),
+			array('baser', array('value' => '2010-4-1 '), 'value="2010\/4\/1".*value="".* value="2010-4-1 "', '時間を指定いない場合出力できません'),
+			array('baser', array('value' => '2010 hogehoge'), 'value="2010".*value="hogehoge".*value="2010 hogehoge"', '時間指定が不適切でない場合出力できません'),
+			array('baser', array('value' => 'hoge hogehoge'), 'value="hoge".*value="hogehoge".*value="hoge hogehoge"', '時間指定が不適切でない場合出力できません')
 		);
 	}
 
@@ -514,9 +564,26 @@ class BcFormHelperTest extends BaserTestCase {
  * 
  * @param string $type フォームのタイプ タイプごとにイベントの登録ができる
  * @return string 行データ
+ * @dataProvider dispatchAfterFormDataProvider
  */
-	public function testDispatchAfterForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testDispatchAfterForm($type, $fields, $res, $expected)
+	{
+		$event = $this->attachEvent(['Helper.Form.after' .  $type . 'Form' => ['callable' => function (CakeEvent $event) use ($fields, $res) {
+			$event->data['fields'] = $fields;
+			return $res;
+		}]]);
+		$result = $this->BcForm->dispatchAfterForm($type);
+		$this->assertRegExp('/' . $expected . '/s', $result);
+		$this->resetEvent();
+	}
+
+	public function dispatchAfterFormDataProvider() {
+		return array(
+			array('Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'),
+			array('Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'),
+			array('Hoge', '', true, ''),
+			array('Hoge', '', false, ''),
+		);
 	}
 
 /**
@@ -585,9 +652,9 @@ class BcFormHelperTest extends BaserTestCase {
 		// 通常
 		$result = $this->BcForm->file($fieldName);
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			'span'	=> array('class' => 'upload-file'),
 			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload')), 
-			'/div'
+			'/span'
 		);
 		$this->assertTags($result, $expected);
 
@@ -613,7 +680,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 		$result = $this->BcForm->file($fieldName);
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			array('span'	=> array('class' => 'upload-file')),
 			array('input' => array('type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch')),
 			'&nbsp;',
 			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0')),
@@ -627,10 +694,10 @@ class BcFormHelperTest extends BaserTestCase {
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
 			'/a',
 			array('br' => true),
-			'span' => array('class' => 'file-name'),
+			array('span' => array('class' => 'file-name')),
 			'template1.jpg',
 			'/span',
-			'/div'
+			'/span'
 		);
 
 		$this->assertTags($result, $expected);
@@ -649,9 +716,9 @@ class BcFormHelperTest extends BaserTestCase {
 		$result = $this->BcForm->file($fieldName);
 
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			'span'	=> array('class' => 'upload-file'),
 			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][0][upload]', 'id' => 'Contact0Upload')),
-			'/div'
+			'/span'
 		);
 		$this->assertTags($result, $expected);
 	}
@@ -679,7 +746,7 @@ class BcFormHelperTest extends BaserTestCase {
 		$result = $this->BcForm->file($fieldName);
 
 		$expected = array(
-			'div'	=> array('class' => 'upload-file'),
+			array('span' => array('class' => 'upload-file')),
 			array('input' => array('type' => 'file', 'name' => 'data[Contact][0][eye_catch]', 'id' => 'Contact0EyeCatch')),
 			'&nbsp;',
 			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_delete]', 'id' => 'Contact0EyeCatchDelete_', 'value' => '0')),
@@ -693,10 +760,10 @@ class BcFormHelperTest extends BaserTestCase {
 			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
 			'/a',
 			array('br' => true),
-			'span' => array('class' => 'file-name'),
+			array('span' => array('class' => 'file-name')),
 			'template1.jpg',
 			'/span',
-			'/div'
+			'/span'
 		);
 
 		$this->assertTags($result, $expected);

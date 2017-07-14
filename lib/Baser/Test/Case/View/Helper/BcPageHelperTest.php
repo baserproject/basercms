@@ -20,6 +20,8 @@ App::uses('BcPageHelper', 'View/Helper');
  *
  * @package Baser.Test.Case
  * @property BcPageHelper $BcPage
+ * @property BcAppView $_View
+ * @property BcBaserHelper $BcBaser
  */
 class BcPageHelperTest extends BaserTestCase {
 	
@@ -262,6 +264,8 @@ class BcPageHelperTest extends BaserTestCase {
  */
 	public function testContent($agent, $expected, $message = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		//service.phpはあるが、service.ctpを探しているためエラーになる。
+		//テスト中にファイルを作成し削除するようにしたい
 		$this->BcPage->_View->viewVars['pagePath'] = 'service';
 		$this->expectOutputRegex('/' . $expected . '/', $message);
 		$this->BcPage->content();
@@ -276,6 +280,8 @@ class BcPageHelperTest extends BaserTestCase {
 
 /**
  * treeList
+ *
+ * 使われていないメソッドの可能性あり。pages/index_tree_listが存在しないためテスト不可。
  */
 	public function testTreeList() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');

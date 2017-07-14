@@ -15,7 +15,7 @@
  *
  * @package Baser.Model
  */
-class ContentFolder extends AppModel {
+class ContentFolder extends AppModel implements CakeEventListener {
 
 /**
  * Behavior Setting
@@ -23,6 +23,117 @@ class ContentFolder extends AppModel {
  * @var array
  */
 	public $actsAs = array('BcContents');
+
+/**
+ * 変更前URL
+ * 
+ * @var array
+ */
+	public $beforeUrl = null;
+
+/**
+ * テンプレートを移動可能かどうか
+ * 
+ * @var bool
+ */
+	public $isMovableTemplate = true;
+
+/**
+ * Implemented Events
+ *
+ * @return array
+ */
+	public function implementedEvents() {
+		return array_merge(parent::implementedEvents(), [
+			'Controller.Contents.beforeMove' => ['callable' => 'beforeMove'],
+			'Controller.Contents.afterMove' => ['callable' => 'afterMove']
+		]);
+	}
+
+/**
+ * Before Move
+ * 
+ * @param \CakeEvent $event
+ */
+	public function beforeMove(CakeEvent $event) {
+		if($event->data['data']['currentType'] == 'ContentFolder') {
+			$this->setBeforeUrl($event->data['data']['entityId']);
+		}
+	}
+
+/**
+ * After Move
+ * 
+ * @param \CakeEvent $event
+ */
+	public function afterMove(CakeEvent $event) {
+		if(!empty($event->data['data']['Content']) && $event->data['data']['Content']['type'] == 'ContentFolder') {
+			$this->movePageTemplates($event->data['data']['Content']['url']);			
+		}
+	}
+	
+/**
+ * Before Save
+ * 
+ * @param array $options
+ */
+	public function beforeSave($options = []) {
+		// 変更前のURLを取得
+		if(!empty($this->data['ContentFolder']['id']) && $this->isMovableTemplate) {
+			$this->isMovableTemplate = false;
+			$this->setBeforeUrl($this->data['ContentFolder']['id']);
+		}
+		return parent::beforeSave($options);
+	}
+
+/**
+ * After Save
+ * 
+ * @param bool $created
+ * @param array $options
+ * @param bool
+ */
+	public function afterSave($created, $options = array()) {
+		parent::afterSave($created, $options);
+		if(!empty($this->data['Content']['url']) && $this->beforeUrl) {
+			$this->movePageTemplates($this->data['Content']['url']);
+			$this->isMovableTemplate = true;
+		}
+		return true;
+	}
+
+/**
+ * 保存前のURLをセットする
+ *
+ * @param int $id
+ */
+	public function setBeforeUrl($id) {
+		$record = $this->find('first', ['fields' => ['Content.url'], 'conditions' => ['ContentFolder.id' => $id], 'recursive' => 0]);
+		if($record['Content']['url']) {
+			$this->beforeUrl = $record['Content']['url'];
+		}
+	}
+	
+/**
+ * 固定ページテンプレートを移動する
+ * 
+ * @param string $afterUrl
+ * @return bool
+ */
+	public function movePageTemplates($afterUrl) {
+		if ($this->beforeUrl && $this->beforeUrl != $afterUrl) {
+			$basePath = APP . 'View' . DS . 'Pages' . DS;
+			if(is_dir($basePath . $this->beforeUrl)) {
+				(new Folder())->move([
+					'to' => $basePath . $afterUrl,
+					'from' => $basePath . $this->beforeUrl,
+					'chmod' => 0777
+				]);
+			}
+		}
+		$this->beforeUrl = null;
+		return true;
+	}
 
 /**
  * サイトルートフォルダを保存
@@ -71,14 +182,20 @@ class ContentFolder extends AppModel {
  * @return array
  */
 	public function getFolderTemplateList($contentId, $theme) {
-		$folderTemplates = BcUtil::getTemplateList('ContentFolders', '', $theme);
+		if(!is_array($theme)) {
+			$theme = [$theme];
+		}
+		$folderTemplates = [];
+		foreach($theme as $value) {
+			$folderTemplates = array_merge($folderTemplates, BcUtil::getTemplateList('ContentFolders', '', $value));
+		}
 		if($contentId != 1) {
 			$parentTemplate = $this->getParentTemplate($contentId, 'folder');
 			$searchKey = array_search($parentTemplate, $folderTemplates);
 			if($searchKey !== false) {
 				unset($folderTemplates[$searchKey]);
 			}
-			array_unshift($folderTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+			$folderTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $folderTemplates;
 		}
 		return $folderTemplates;
 	}

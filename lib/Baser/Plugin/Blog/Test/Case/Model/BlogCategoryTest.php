@@ -33,7 +33,7 @@ class BlogCategoryTest extends BaserTestCase {
 		'baser.Default.BlogTag',
 		'baser.Default.Content',
 		'baser.Default.Site',
-		'plugin.blog.Model/BlogCategoryModel',
+		'plugin.blog.Model/BlogPost/BlogCategoryModel',
 	);
 
 	public function setUp() {
@@ -223,8 +223,7 @@ class BlogCategoryTest extends BaserTestCase {
  */
 	public function testHasNewCategoryAddablePermission() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
-		
+//		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
 	}
 
 

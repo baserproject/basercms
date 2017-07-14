@@ -50,7 +50,7 @@ class BlogPostsSchema extends CakeSchema {
 		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'eye_catch' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 30),
+		'eye_catch' => array('type' => 'text', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

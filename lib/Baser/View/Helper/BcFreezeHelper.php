@@ -602,10 +602,5 @@ class BcFreezeHelper extends BcFormHelper {
 
 		return $out;
 	}
-	
-	public function upload($fieldName, $options = array()) {
-		return parent::upload($fieldName, $options);
-		echo 'test';
-	}
 
 }
