@@ -50,9 +50,9 @@ $baseCurrentUrl = $this->params['Content']['name'] . '/archives/date/';
 					<?php $class = '' ?>
 				<?php endif ?>
 				<?php if ($view_count): ?>
-					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' . '(' . $postedDate['count'] . ')' ?>
+					<?php $title = $postedDate['year'] . '/' . $postedDate['month'] . '(' . $postedDate['count'] . ')' ?>
 				<?php else: ?>
-					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' ?>
+					<?php $title = $postedDate['year'] . '/' . $postedDate['month'] ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
 					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>

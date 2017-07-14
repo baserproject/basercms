@@ -225,7 +225,7 @@ class MailformHelper extends BcFreezeHelper {
 		if(!empty($this->request->params['Site']['same_main_url'])) {
 			$url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
 		}
-		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => $options['class']));
+		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => __('認証画像'), 'class' => $options['class']));
 		$output .= $options['separate'] . $this->text($fieldName);
 		$output .= $this->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
 		echo $output;

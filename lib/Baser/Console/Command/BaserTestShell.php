@@ -127,7 +127,7 @@ class BaserTestShell extends TestShell {
 		}
 
 		if (empty($testCases)) {
-			$this->out(__d('cake_console', "No test cases available \n\n"));
+			$this->out(__d('baser_console', "No test cases available \n\n"));
 			return $this->out($this->OptionParser->help());
 		}
 
@@ -141,7 +141,7 @@ class BaserTestShell extends TestShell {
 			$i++;
 		}
 
-		while ($choice = $this->in(__d('cake_console', 'What test case would you like to run?'), null, 'q')) {
+		while ($choice = $this->in(__d('baser_console', 'What test case would you like to run?'), null, 'q')) {
 			if (is_numeric($choice) && isset($cases[$choice])) {
 				$this->args[0] = $category;
 				$this->args[1] = $cases[$choice];
@@ -286,7 +286,7 @@ class BaserTestShell extends TestShell {
 		// >>>
 		//$this->out(__d('cake_console', 'CakePHP Test Shell'));
 		// ---
-		$this->out(__d('cake_console', 'baserCMS Test Shell'));
+		$this->out(__d('baser_console', 'baserCMS Test Shell'));
 		// <<<
 		
 		$this->hr();
@@ -311,7 +311,7 @@ class BaserTestShell extends TestShell {
 		// >>>
 		//$this->out(__d('cake_console', '<info>Welcome to CakePHP %s Console</info>', 'v' . Configure::version()));
 		// ---
-		$this->out(__d('cake_console', '<info>Welcome to baserCMS %s Console</info>', 'v' . getVersion()));
+		$this->out(__d('baser_console', '<info>Welcome to baserCMS %s Console</info>', 'v' . getVersion()));
 		// <<<
 		
 		$this->hr();

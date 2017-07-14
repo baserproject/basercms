@@ -14,7 +14,7 @@
 <?php if ($blogContent['BlogContent']['comment_use']): ?>
 	<div id="BlogComment">
 
-		<h4 class="contents-head">この記事へのコメント</h4>
+		<h4 class="contents-head"><?php __('この記事へのコメント') ?></h4>
 
 		<div id="BlogCommentList">
 			<?php if (!empty($post['BlogComment'])): ?>
@@ -25,21 +25,21 @@
 			<?php endif ?>
 		</div>
 
-		<h4 class="contents-head">コメントを送る</h4>
+		<h4 class="contents-head"><?php echo __('コメントを送る') ?></h4>
 
 		<?php echo $this->BcForm->create('BlogComment', array('url' => '/blog/blog_comments/add/' . $blogContent['BlogContent']['id'] . '/' . $post['BlogPost']['id'], 'id' => 'BlogCommentAddForm')) ?>
 		<?php echo $this->BcForm->input('BlogComment.captcha_id', ['type' => 'hidden', 'value' => $captchaId]) ?>
 		
 		<table cellpadding="0" cellspacing="0" class="row-table-01">
 			<tr>
-				<th><?php echo $this->BcForm->label('BlogComment.name', 'お名前') ?></th>
+				<th><?php echo $this->BcForm->label('BlogComment.name', __('お名前')) ?></th>
 				<td><?php echo $this->BcForm->input('BlogComment.name', array('type' => 'text', 'size' => 12)) ?></td>
 			</tr>
 			<tr>
 				<th><?php echo $this->BcForm->label('BlogComment.email', 'Eメール') ?></th>
 				<td>
 					<?php echo $this->BcForm->input('BlogComment.email', array('type' => 'text', 'size' => 12)) ?>&nbsp;
-					<br><small>※ メールは公開されません</small>
+					<br><small>※ <?php echo __('Eメールは公開されません') ?></small>
 				</td>
 			</tr>
 			<tr>
@@ -57,7 +57,7 @@
 				<img src="" alt="認証画象" class="auth-captcha-image" id="AuthCaptchaImage" style="display:none">
 				<?php $this->BcBaser->img('admin/captcha_loader.gif', array('alt' => 'Loading...', 'class' => 'auth-captcha-image', 'id' => 'CaptchaLoader')) ?>
 				<?php echo $this->BcForm->text('BlogComment.auth_captcha') ?><br>
-				&nbsp;画像の文字を入力してください<br>
+				&nbsp;<?php echo __('画像の文字を入力してください') ?><br>
 			</div>
 		<?php endif ?>
 

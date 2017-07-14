@@ -1,7 +1,16 @@
 <?php $this->BcBaser->js('admin/libs/jquery.baseUrl.js', false, ['once' => true]); ?>
 <?php $this->BcBaser->js('admin/libs/jquery.bcUtil.js', false, ['once' => true]); ?>
 <?php $this->BcBaser->js('admin/libs/jquery.bcToken.js', false, ['once' => true]); ?>
-<?php $this->BcBaser->js('Blog.blog_comments_scripts.js', false, ['once' => true]); ?>
+<?php $this->BcBaser->js('Blog.blog_comments_scripts.js', false, [
+	'once' => true,
+	'id' => 'BlogCommentsScripts',
+	'data-alertMessageName' => __('お名前を入力してください'),
+	'data-alertMessageComment' => __('コメントを入力してください'),
+	'data-alertMessageAuthImage' => __('画像の文字を入力してください'),
+	'data-alertMessageAuthComplate' => __('送信が完了しました。送信された内容は確認後公開させて頂きます。'),
+	'data-alertMessageComplate' => __('コメントの送信が完了しました。'),
+	'data-alertMessageError' => __('コメントの送信に失敗しました。入力内容を見なおしてください。'),
+]); ?>
 <div id="BaseUrl" style="display: none"><?php echo $this->request->base; ?></div>
 
 <script>

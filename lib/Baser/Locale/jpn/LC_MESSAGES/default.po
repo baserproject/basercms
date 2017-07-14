@@ -1,0 +1,299 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: baserCMS\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2017-05-15 02:29+0900\n"
+"Last-Translator: \n"
+"Language-Team: baserCMS Users Community <info@basercms.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:17
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:17
+#: Plugin/Blog/View/Elements/blog_comments.php:27
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:23
+msgid "この記事へのコメント"
+msgstr "Comment on this article"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:28
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:28
+#: Plugin/Blog/View/Elements/blog_comments.php:37
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:38
+msgid "コメントを送る"
+msgstr "Send comments"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:35
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:35
+#: Config/theme/bccolumn/Elements/blog_comments.php:32
+#: Plugin/Blog/View/Elements/blog_comments.php:44
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:41
+msgid "お名前"
+msgstr "Name"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:35
+#: Config/theme/bccolumn/Elements/blog_comments.php:32
+#: Plugin/Blog/View/Elements/blog_comments.php:44
+msgid "ニックネーム"
+msgstr "Nickname"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:39
+#: Config/theme/bccolumn/Elements/blog_comments.php:36
+#: Plugin/Blog/View/Elements/blog_comments.php:48
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
+msgid "Eメール"
+msgstr "Email"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:42
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:42
+#: Config/theme/bccolumn/Elements/blog_comments.php:39
+#: Plugin/Blog/View/Elements/blog_comments.php:51
+msgid "Eメールは公開されません"
+msgstr "Email will not be published"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:50
+#: Config/theme/bccolumn/Elements/blog_comments.php:47
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:50
+msgid "コメント"
+msgstr "Comment"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:60
+#: Config/theme/bc_sample/Elements/mail_form.php:41
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:60
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:37
+#: Config/theme/bccolumn/Elements/blog_comments.php:58
+#: Plugin/Blog/View/Elements/blog_comments.php:69
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:9
+#: Plugin/Mail/View/Elements/mail_form.php:52
+msgid "画像の文字を入力してください"
+msgstr "Please enter the letters of the image"
+
+#: Config/theme/bc_sample/Elements/mail_input.php:39
+msgid "必須"
+msgstr "Required"
+
+#: Config/theme/bc_sample/Elements/mail_input.php:41
+#: Plugin/Mail/View/Elements/mail_input.php:43
+msgid "任意"
+msgstr "Any"
+
+#: Config/theme/bc_sample/Elements/mail_input.php:80
+#: Config/theme/bc_sample/Elements/smartphone/mail_input.php:71
+#: Plugin/Mail/Model/MailMessage.php:178;185;251
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:120;121;124;130
+#: Plugin/Mail/View/Elements/mail_input.php:41;82
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:61;74
+msgid "必須項目です。"
+msgstr "It is required."
+
+#: Config/theme/bc_sample/Elements/mail_input.php:82
+#: Plugin/Mail/View/Elements/mail_input.php:84
+msgid "入力データが一致していません。"
+msgstr "Input data do not match."
+
+#: Config/theme/bc_sample/Elements/mail_input.php:83
+#: Plugin/Mail/View/Elements/mail_input.php:85
+msgid "入力データが不完全です。"
+msgstr "Input data is incomplete."
+
+#: Config/theme/bc_sample/Errors/error400.php:11 View/Errors/error400.php:17
+#: View/Errors/error500.php:17 View/Errors/missing_class.php:22;25
+msgid "エラー"
+msgstr "Error"
+
+#: Config/theme/bc_sample/Errors/error400.php:13 View/Errors/error400.php:19
+msgid "アドレス ％s に送信されたリクエストは無効です。"
+msgstr "The request sent to the address %s was invalid."
+
+#: Controller/BcAppController.php:973
+msgid "送信元のメールアドレスが不正です。"
+msgstr "The sender's email address is invalid."
+
+#: Plugin/Blog/View/Elements/blog_comments.php:73
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
+#: Plugin/Mail/View/Elements/mail_form.php:65
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
+msgid "送信する"
+msgstr "Submit"
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:7
+msgid "お名前を入力してください"
+msgstr "Please enter your name"
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:8
+msgid "コメントを入力してください"
+msgstr "Please enter comments"
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:10
+msgid "送信が完了しました。送信された内容は確認後公開させて頂きます。"
+msgstr "Submission has been completed. After confirming the contents we will make it public."
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:11
+msgid "コメントの送信が完了しました。"
+msgstr "Comment submission has been completed."
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:12
+msgid "コメントの送信に失敗しました。入力内容を見なおしてください。"
+msgstr "Failed to submit comment. Please check the input contents."
+
+#: Plugin/Blog/View/Elements/blog_related_posts.php:22
+msgid "関連記事"
+msgstr "Related article"
+
+#: Plugin/Blog/View/Elements/blog_tag.php:21
+msgid "タグ"
+msgstr "Tag"
+
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
+msgid "非公開"
+msgstr "Do not publish"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;120
+msgid "日"
+msgstr "Sun"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;121
+msgid "月"
+msgstr "Mon"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;122
+msgid "火"
+msgstr "Tue"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;123
+msgid "水"
+msgstr "Wed"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;124
+msgid "木"
+msgstr "Thu"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;125
+msgid "金"
+msgstr "Fri"
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;126
+msgid "土"
+msgstr "Sat"
+
+#: Plugin/Mail/Controller/MailController.php:225
+msgid "ファイルのアップロードサイズが上限を超えています。"
+msgstr "The upload size of the file exceeds the maximum limit."
+
+#: Plugin/Mail/Controller/MailController.php:260
+msgid "エラー : 入力内容を確認して再度送信してください。"
+msgstr "Error : Confirm your entries and send again."
+
+#: Plugin/Mail/Controller/MailController.php:342
+msgid "Error : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。"
+msgstr "Error : An error occurred during submission. Please wait for a while Please send."
+
+#: Plugin/Mail/Model/MailMessage.php:193
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:122;123
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:59;71
+msgid "形式が無効です。"
+msgstr "Invalid format"
+
+#: Plugin/Mail/Model/MailMessage.php:199
+msgid "半角数字で入力してください。"
+msgstr "Please enter in single-byte number."
+
+#: Plugin/Mail/Model/MailMessage.php:216
+msgid "ファイルサイズがオーバーしています。 %s MB以内のファイルをご利用ください。"
+msgstr "File size is over. Please use the file of %s MB or less."
+
+#: Plugin/Mail/Model/MailMessage.php:224
+msgid "ファイル形式が無効です。"
+msgstr "Invalid file format."
+
+#: Plugin/Mail/Model/MailMessage.php:259
+msgid "日付の形式が無効です。"
+msgstr "Invalid date format."
+
+#: Plugin/Mail/View/Elements/mail_form.php:53
+msgid "入力された文字が間違っています。入力をやり直してください。"
+msgstr "The entered characters are incorrect. Please try input again."
+
+#: Plugin/Mail/View/Elements/mail_form.php:64
+msgid "書き直す"
+msgstr "Rewrite"
+
+#: Plugin/Mail/View/Elements/mail_form.php:68
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:42
+#: Plugin/Mail/View/Mail/default/confirm.php:28
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:30
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:29
+msgid "入力内容を確認する"
+msgstr "Confirm"
+
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:77
+msgid "入力データが一致していません"
+msgstr "Input data does not match"
+
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:78
+msgid "入力データが不完全です"
+msgstr "Input data is incomplete"
+
+#: Plugin/Mail/View/Helper/MailformHelper.php:228
+msgid "認証画像"
+msgstr "Authentication image"
+
+#: Plugin/Mail/View/Mail/default/confirm.php:29
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:30
+msgid "入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。"
+msgstr "If there is no mistake in the contents entered, please click Submit button."
+
+#: Plugin/Mail/View/Mail/default/confirm.php:31
+#: Plugin/Mail/View/Mail/default/index.php:24
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:34
+#: Plugin/Mail/View/Mail/mobile/default/index.php:25
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/index.php:25
+msgid "入力フォーム"
+msgstr "Input form"
+
+#: Plugin/Mail/View/Mail/default/submit.php:26
+#: Plugin/Mail/View/Mail/mobile/default/submit.php:28
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:26
+msgid "メール送信完了"
+msgstr "Completed mail submission"
+
+#: Plugin/Mail/View/Mail/default/submit.php:29
+#: Plugin/Mail/View/Mail/mobile/default/submit.php:30
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:29
+msgid "お問い合わせ頂きありがとうございました。<br>確認次第、ご連絡させて頂きます。"
+msgstr "Thank you for your inquiry. As soon as we confirm it, we will contact you."
+
+#: Plugin/Mail/View/Mail/default/submit.php:31
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:31
+msgid "%s 秒後にトップページへ自動的に移動します。"
+msgstr "It moves automatically to the top page after %s seconds."
+
+#: Plugin/Mail/View/Mail/default/submit.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:32
+msgid "移動しない場合はこちらをクリックしてください。"
+msgstr "If you can not move, please click here."
+
+#: Plugin/Mail/View/Mail/default/unpublish.php:22
+msgid "受付停止中"
+msgstr "The reception is suspended."
+
+#: Plugin/Mail/View/Mail/default/unpublish.php:25
+msgid "現在、受付を停止しています。"
+msgstr "The reception is suspended now."
+
+#: View/Errors/error500.php:18
+msgid "内部エラーが発生しました。"
+msgstr "An Internal Error Has Occurred."
+
+#: View/Errors/missing_class.php:29
+msgid "注意"
+msgstr "Notice"
+
+msgid "クリア"
+msgstr "Clear"

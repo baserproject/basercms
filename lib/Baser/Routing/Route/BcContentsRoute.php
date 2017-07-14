@@ -104,6 +104,14 @@ class BcContentsRoute extends CakeRoute {
 
 		$url = $site->getPureUrl($url);
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
+
+		if(!$site->lang) {
+			$lang = 'jpn';
+		} else {
+			$lang = Configure::read('BcLang.' . $site->lang . '.langs.0');
+		}
+		Configure::write('Config.language', $lang);
+
 		if($params) {
 			return $params;
 		}

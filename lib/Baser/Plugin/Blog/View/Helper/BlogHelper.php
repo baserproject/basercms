@@ -54,7 +54,7 @@ class BlogHelper extends AppHelper {
  * @return void
  */
 	public function setContent($blogContentId = null) {
-		if(empty($this->blogContent)) {
+		if(empty($this->blogContent) || ($blogContentId != $this->blogContent['id'])) {
 			if ($blogContentId) {
 				if(!empty($this->request->query['preview']) && $this->request->query['preview'] == 'default' && $this->request->data) {
 					if(!empty($this->request->data['BlogContent'])) {
@@ -195,21 +195,52 @@ class BlogHelper extends AppHelper {
  *	※ オプションについては、 HtmlHelper::link() を参照
  * @return string 記事へのリンク
  */
-	public function getPostLink($post, $title, $options = array()) {
-		$this->setContent($post['BlogPost']['blog_content_id']);
-		$url = $this->request->params['Content']['url'] . 'archives/' . $post['BlogPost']['no'];
-		return $this->BcBaser->getLink($title, $url, $options);
+	public function getPostLink($post, $title, $options = []) {
+		$url = $this->getPostLinkUrl($post, false);
+
+		// EVENT beforeGetPostLink
+		$event = $this->dispatchEvent('beforeGetPostLink', [
+			'title' => $title,
+			'url' => $url,
+			'options' => $options
+		], ['class' => 'Blog', 'plugin' => 'Blog']);
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$out = $this->BcBaser->getLink($title, $url, $options);
+
+		// EVENT afterGetPostLink
+		$event = $this->dispatchEvent('afterGetPostLink', [
+			'url' => $url,
+			'out' => $out
+		], ['class' => 'Blog', 'plugin' => 'Blog']);
+		if ($event !== false) {
+			$out = ($event->result === null || $event->result === true) ? $event->data['out'] : $event->result;
+		}
+		return $out;
 	}
 
 /**
  * ブログ記事のURLを取得する
  *
  * @param array $post ブログ記事データ
+ * @param bool $base ベースとなるURLを付与するかどうか
  * @return string ブログ記事のURL
  */
-	public function getPostLinkUrl($post) {
+	public function getPostLinkUrl($post, $base = true) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		return $this->url($this->request->params['Content']['url'].  'archives/' . $post['BlogPost']['no']);
+		if(!empty($post['BlogContent']['Content'])) {
+			$content = $post['BlogContent']['Content'];
+		} else {
+			$content = $this->request->params['Content'];
+		}
+		$url = $content['url'] . 'archives/' . $post['BlogPost']['no'];
+		if($base) {
+			return $this->url($url);
+		}  else {
+			return $url;
+		}
 	}
 
 /**

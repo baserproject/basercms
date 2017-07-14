@@ -1,0 +1,27 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Config/bootstrap.php:288
+msgid "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
+msgstr ""
+
+#: Configure/BcThemeConfigReader.php:78
+msgid "%s of the theme is not set : %s"
+msgstr ""
+
+#: Configure/BcThemeConfigReader.php:126
+msgid "A directory with the specified theme name does not exist. : %s"
+msgstr ""
+

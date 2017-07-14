@@ -38,7 +38,7 @@ $this->Mail->token();
 		<div class="auth-captcha clearfix">
 			<?php echo $this->Mailform->authCaptcha('MailMessage.auth_captcha') ?>
 			<br />
-			&nbsp;画像の文字を入力してください<br clear="all" />
+			&nbsp;<?php echo __('画像の文字を入力してください') ?><br clear="all" />
 			<?php echo $this->Mailform->error('MailMessage.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
 		</div>
 	<?php else: ?>

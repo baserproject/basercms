@@ -117,17 +117,17 @@ class MailMessageTest extends BaserTestCase {
 				'name_1' => '', 'name_2' => '', // バリデートグループエラーチェック
 			),
 			array(
-				'name_1' => array('必須項目です。'),
-				'name_2' => array('必須項目です。'),
-				'email_1' => array('形式が不正です。',true),
-				'email_2' => array('形式が不正です。',true),
-				'root' => array('必須項目です。'),
+				'name_1' => array(__('It is required.')),
+				'name_2' => array(__('It is required.')),
+				'email_1' => array(__('形式が無効です。'), true),
+				'email_2' => array(__('形式が無効です。'), true),
+				'root' => array(__('It is required.')),
 				'email_not_same' => array(true),
 				'tel_not_complate' => array(true),
 				'tel_1' => array(true),
 				'tel_2' => array(true),
 				'tel_3' => array(true),
-				'category' => array('必須項目です。'),
+				'category' => array(__('It is required.')),
 				'name' => array(true, true),
 				'email' => array(true, true)
 			), 'バリデーションチェックが正しく行われていません'),

@@ -285,7 +285,7 @@ if (BC_INSTALLED) {
 			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
 			exit();
 		} else {
-			throw new BcException(__d('cake_dev', 'Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again.'));
+			throw new BcException(__d('baser_dev', 'プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。'));
 		}
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);

@@ -1,0 +1,300 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:17
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:17
+#: Plugin/Blog/View/Elements/blog_comments.php:27
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:23
+msgid "Comment on this article"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:28
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:28
+#: Plugin/Blog/View/Elements/blog_comments.php:37
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:38
+msgid "Send comments"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:35
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:35
+#: Config/theme/bccolumn/Elements/blog_comments.php:32
+#: Plugin/Blog/View/Elements/blog_comments.php:44
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:41
+msgid "Name"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:35
+#: Config/theme/bccolumn/Elements/blog_comments.php:32
+#: Plugin/Blog/View/Elements/blog_comments.php:44
+msgid "Nickname"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:39
+#: Config/theme/bccolumn/Elements/blog_comments.php:36
+#: Plugin/Blog/View/Elements/blog_comments.php:48
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
+msgid "Email"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:42
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:42
+#: Config/theme/bccolumn/Elements/blog_comments.php:39
+#: Plugin/Blog/View/Elements/blog_comments.php:51
+msgid "Email will not be published"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:50
+#: Config/theme/bccolumn/Elements/blog_comments.php:47
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:50
+msgid "Comment"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:60
+#: Config/theme/bc_sample/Elements/mail_form.php:41
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:60
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:37
+#: Config/theme/bccolumn/Elements/blog_comments.php:58
+#: Plugin/Blog/View/Elements/blog_comments.php:69
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:9
+#: Plugin/Mail/View/Elements/mail_form.php:52
+msgid "Please enter the letters of the image"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:39
+msgid "Required"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:41
+#: Plugin/Mail/View/Elements/mail_input.php:43
+msgid "Any"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:80
+#: Config/theme/bc_sample/Elements/smartphone/mail_input.php:71
+#: Plugin/Mail/Model/MailMessage.php:178;185;251
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:120;121;124;130
+#: Plugin/Mail/View/Elements/mail_input.php:41;82
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:61;74
+msgid "It is required."
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:82
+#: Plugin/Mail/View/Elements/mail_input.php:84
+msgid "Input data do not match."
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/mail_input.php:83
+#: Plugin/Mail/View/Elements/mail_input.php:85
+msgid "Input data is incomplete."
+msgstr ""
+
+#: Config/theme/bc_sample/Errors/error400.php:11
+#: View/Errors/error400.php:17
+#: View/Errors/error500.php:17
+#: View/Errors/missing_class.php:22;25
+msgid "Error"
+msgstr ""
+
+#: Config/theme/bc_sample/Errors/error400.php:13
+#: View/Errors/error400.php:19
+msgid "The request sent to the address %s was invalid."
+msgstr ""
+
+#: Controller/BcAppController.php:973
+msgid "The sender's email address is invalid."
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments.php:73
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
+#: Plugin/Mail/View/Elements/mail_form.php:65
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
+msgid "Submit"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:7
+msgid "Please enter your name"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:8
+msgid "Please enter comments"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:10
+msgid "Submission has been completed. After confirming the contents we will make it public."
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:11
+msgid "Comment submission has been completed."
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_comments_scripts.php:12
+msgid "Failed to submit comment. Please check the input contents."
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_related_posts.php:22
+msgid "Related article"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/blog_tag.php:21
+msgid "Tag"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
+msgid "Do not publish"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;120
+msgid "Sun"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;121
+msgid "Mon"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;122
+msgid "Tue"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;123
+msgid "Wed"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;124
+msgid "Thu"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;125
+msgid "Fri"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;126
+msgid "Sat"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:225
+msgid "The upload size of the file exceeds the maximum limit."
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:260
+msgid "Error : Confirm your entries and send again."
+msgstr ""
+
+#: Plugin/Mail/Controller/MailController.php:342
+msgid "Error : An error occurred during submission. Please wait for a while Please send."
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:193
+#: Plugin/Mail/Test/Case/Model/MailMessageTest.php:122;123
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:59;71
+msgid "Invalid format"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:199
+msgid "Please enter in single-byte number."
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:216
+msgid "File size is over. Please use the file of %s MB or less."
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:224
+msgid "Invalid file format."
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:259
+msgid "Invalid date format."
+msgstr ""
+
+#: Plugin/Mail/View/Elements/mail_form.php:53
+msgid "The entered characters are incorrect. Please try input again."
+msgstr ""
+
+#: Plugin/Mail/View/Elements/mail_form.php:64
+msgid "Rewrite"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/mail_form.php:68
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:42
+#: Plugin/Mail/View/Mail/default/confirm.php:28
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:30
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:29
+msgid "Confirm"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:77
+msgid "Input data does not match"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/mobile/mail_input.php:78
+msgid "Input data is incomplete"
+msgstr ""
+
+#: Plugin/Mail/View/Helper/MailformHelper.php:228
+msgid "Authentication image"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/confirm.php:29
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:30
+msgid "If there is no mistake in the contents entered, please click Submit button."
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/confirm.php:31
+#: Plugin/Mail/View/Mail/default/index.php:24
+#: Plugin/Mail/View/Mail/mobile/default/confirm.php:34
+#: Plugin/Mail/View/Mail/mobile/default/index.php:25
+#: Plugin/Mail/View/Mail/smartphone/default/confirm.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/index.php:25
+msgid "Input form"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/submit.php:26
+#: Plugin/Mail/View/Mail/mobile/default/submit.php:28
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:26
+msgid "Completed mail submission"
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/submit.php:29
+#: Plugin/Mail/View/Mail/mobile/default/submit.php:30
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:29
+msgid "Thank you for your inquiry. As soon as we confirm it, we will contact you."
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/submit.php:31
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:31
+msgid "It moves automatically to the top page after %s seconds."
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/submit.php:32
+#: Plugin/Mail/View/Mail/smartphone/default/submit.php:32
+msgid "If you can not move, please click here."
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/unpublish.php:22
+msgid "The reception is suspended."
+msgstr ""
+
+#: Plugin/Mail/View/Mail/default/unpublish.php:25
+msgid "The reception is suspended now."
+msgstr ""
+
+#: View/Errors/error500.php:18
+msgid "An Internal Error Has Occurred."
+msgstr ""
+
+#: View/Errors/missing_class.php:29
+msgid "Notice"
+msgstr ""
+

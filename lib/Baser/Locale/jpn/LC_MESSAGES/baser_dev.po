@@ -1,0 +1,26 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: baserCMS\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2017-05-14 22:17+0900\n"
+"Last-Translator: \n"
+"Language-Team: baserCMS Users Community <info@basercms.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: Config/bootstrap.php:288
+msgid "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
+msgstr "Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again."
+
+#: Configure/BcThemeConfigReader.php:78
+msgid "テーマの %s が設定されていません : %s"
+msgstr "%s of the theme is not set : %s"
+
+#: Configure/BcThemeConfigReader.php:126
+msgid "指定されたテーマ名のディレクトリが存在しません: %s"
+msgstr "A directory with the specified theme name does not exist. : %s"

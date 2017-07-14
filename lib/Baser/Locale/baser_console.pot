@@ -1,0 +1,31 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Console/Command/BaserTestShell.php:130
+msgid "No test cases available \n\n"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:144
+msgid "What test case would you like to run?"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:289
+msgid "baserCMS Test Shell"
+msgstr ""
+
+#: Console/Command/BaserTestShell.php:314
+msgid "<info>Welcome to baserCMS %s Console</info>"
+msgstr ""
+
