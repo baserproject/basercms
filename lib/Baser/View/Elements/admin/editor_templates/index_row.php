@@ -16,7 +16,7 @@
 ?>
 
 
-<tr>
+<tr<?php $this->BcListTable->rowClass(true, $data) ?>>
 	<td class="row-tools">
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['EditorTemplate']['id']), array('title' => '編集')) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['EditorTemplate']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
@@ -29,6 +29,7 @@
 		<?php $this->BcBaser->link($data['EditorTemplate']['name'], array('action' => 'edit', $data['EditorTemplate']['id'])) ?>
 	</td>
 	<td><?php echo $data['EditorTemplate']['description']; ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="white-space:nowrap"><?php echo $this->BcTime->format('Y-m-d', $data['EditorTemplate']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['EditorTemplate']['modified']) ?></td>
 </tr>

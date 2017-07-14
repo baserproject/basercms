@@ -51,7 +51,8 @@ class BcAppController extends Controller {
 	// TODO 見直し
 	public $helpers = array(
 		'Session', 'BcHtml', 'Form', 'BcForm', 'BcWidgetArea',
-		'Js' => array('Jquery'), 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin'
+		'Js' => array('Jquery'), 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin', 
+		'BcListTable', 'BcSearchBox', 'BcFormTable', 'BcLayout'
 	);
 
 /**
@@ -75,7 +76,7 @@ class BcAppController extends Controller {
  * @var		array
  * @access	public
  */
-	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash');
+	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail');
 
 /**
  * サブディレクトリ
@@ -616,7 +617,7 @@ class BcAppController extends Controller {
  * @return	void
  * @throws	NotFoundException
  */
-	protected function notFound() {
+	public function notFound() {
 		throw new NotFoundException('見つかりませんでした。');
 	}
 
@@ -801,6 +802,7 @@ class BcAppController extends Controller {
  * @param string $title タイトル
  * @param mixed $body 本文
  * @param array $options オプション
+ * 	- bool agentTemplate : テンプレートの配置場所についてサイト名をサブフォルダとして利用するかどうか（初期値：true）
  * @return bool 送信結果
  */
 		public function sendMail($to, $title = '', $body = '', $options = array()) {
@@ -920,23 +922,28 @@ class BcAppController extends Controller {
 			unset($cc);
 		}
 
-		// to 送信先アドレス (最初の1人がTOで残りがBCC)
-		if (strpos($to, ',') !== false) {
-			$_to = explode(',', $to);
-			$i = 0;
-			if (count($_to) >= 1) {
-				foreach ($_to as $val) {
-					if ($i == 0) {
-						$cakeEmail->addTo($val);
-						$toAddress = $val;
-					} else {
-						$cakeEmail->addBcc($val);
+		try {
+			// to 送信先アドレス (最初の1人がTOで残りがBCC)
+			if (strpos($to, ',') !== false) {
+				$_to = explode(',', $to);
+				$i = 0;
+				if (count($_to) >= 1) {
+					foreach($_to as $val) {
+						if ($i == 0) {
+							$cakeEmail->addTo($val);
+							$toAddress = $val;
+						} else {
+							$cakeEmail->addBcc($val);
+						}
+						++$i;
 					}
-					++$i;
 				}
+			} else {
+				$cakeEmail->addTo($to);
 			}
-		} else {
-			$cakeEmail->addTo($to);
+		} catch(Exception $e) {
+			$this->setMessage($e->getMessage() . ' 送信先のメールアドレスが不正です。',true, false, true);
+			return false;
 		}
 
 		// 件名
@@ -1108,17 +1115,17 @@ class BcAppController extends Controller {
 
 		foreach ($filterModels as $model) {
 			if (isset($this->request->data[$model])) {
-				$this->Session->write("{$contentsName}.filter.{$model}", $this->request->data[$model]);
+				$this->Session->write("Baser.viewConditions.{$contentsName}.filter.{$model}", $this->request->data[$model]);
 			}
 		}
 
 		if (!empty($this->request->params['named'])) {
-			if($this->Session->check("{$contentsName}.named")) {
-				$named = array_merge($this->Session->read("{$contentsName}.named"), $this->request->params['named']);	
+			if($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
+				$named = array_merge($this->Session->read("Baser.viewConditions.{$contentsName}.named"), $this->request->params['named']);
 			} else {
 				$named = $this->request->params['named'];
 			}
-			$this->Session->write("{$contentsName}.named", $named);
+			$this->Session->write("Baser.viewConditions.{$contentsName}.named", $named);
 		}
 	}
 
@@ -1155,8 +1162,8 @@ class BcAppController extends Controller {
 
 		if ($type == 'post' && $session) {
 			foreach ($filterModels as $model) {
-				if ($this->Session->check("{$contentsName}.filter.{$model}")) {
-					$filter = $this->Session->read("{$contentsName}.filter.{$model}");
+				if ($this->Session->check("Baser.viewConditions.{$contentsName}.filter.{$model}")) {
+					$filter = $this->Session->read("Baser.viewConditions.{$contentsName}.filter.{$model}");
 				} elseif (!empty($default[$model])) {
 					$filter = $default[$model];
 				} else {
@@ -1168,8 +1175,8 @@ class BcAppController extends Controller {
 			if (!empty($default['named'])) {
 				$named = $default['named'];
 			}
-			if ($this->Session->check("{$contentsName}.named")) {
-				$named = array_merge($named, $this->Session->read("{$contentsName}.named"));
+			if ($this->Session->check("Baser.viewConditions.{$contentsName}.named")) {
+				$named = array_merge($named, $this->Session->read("Baser.viewConditions.{$contentsName}.named"));
 			}
 		} elseif ($type == 'get') {
 			if (!empty($this->request->query)) {
@@ -1522,7 +1529,7 @@ class BcAppController extends Controller {
  * @param bool $setFlash flash message に保存するか
  * @return void
  */
-	protected function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
+	public function setMessage($message, $alert = false, $saveDblog = false, $setFlash = true) {
 		if (!isset($this->Session)) {
 			return;
 		}

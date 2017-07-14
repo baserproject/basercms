@@ -15,11 +15,14 @@ App::uses('BcBaserHelper', 'View/Helper');
 App::uses('BcPageHelper', 'View/Helper');
 
 
+
 /**
  * BcPage helper library.
  *
  * @package Baser.Test.Case
  * @property BcPageHelper $BcPage
+ * @property BcAppView $_View
+ * @property BcBaserHelper $BcBaser
  */
 class BcPageHelperTest extends BaserTestCase {
 	
@@ -262,9 +265,21 @@ class BcPageHelperTest extends BaserTestCase {
  */
 	public function testContent($agent, $expected, $message = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+//		service.phpはあるが、service.ctpを探しているためエラーになる。
+//		テスト中にファイルを作成し削除するようにしたい
+//		vfsStreamをcomposer.jsonで追加したが、使い方不明のため保留
+		App::uses('vfsStream', 'org/bovigo/vfs/vfsStream');
+		vfsStream::setup();
+		$fh = tmpfile();
+		$path = stream_get_meta_data($fh)['uri'];
+		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
+
 		$this->BcPage->_View->viewVars['pagePath'] = 'service';
 		$this->expectOutputRegex('/' . $expected . '/', $message);
-		$this->BcPage->content();
+		$result = $this->BcPage->content();
+		$expected = ['東京' . PHP_EOL, '埼玉' . PHP_EOL, '大阪' . PHP_EOL];
+
+		$this->assertEquals($expected, $result);
 	}
 
 	public function contentDataProvider() {
@@ -272,13 +287,6 @@ class BcPageHelperTest extends BaserTestCase {
 			array('', '<h2 class="fontawesome-circle-arrow-down">Service <span>事業案内<\/span><\/h2>', '固定ページのコンテンツを出力できません'),
 			array('smartphone', '<h2 class="contents-head">サービス<\/h2>', 'smartphoneで固定ページのコンテンツを出力できません'),
 		);
-	}
-
-/**
- * treeList
- */
-	public function testTreeList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

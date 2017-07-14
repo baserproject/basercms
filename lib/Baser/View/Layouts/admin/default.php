@@ -128,10 +128,12 @@
 							<?php endif ?>
 							
 							<?php $this->BcBaser->element('search') ?>
-
+                            
+                            <?php echo $this->BcLayout->dispatchContentsHeader() ?>
+                            
 							<?php $this->BcBaser->content() ?>
 
-
+							<?php echo $this->BcLayout->dispatchContentsFooter() ?>
 
 							<!-- / #ContentsBody .contents-body .clarfix --></div>
 

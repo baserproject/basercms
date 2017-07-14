@@ -17,9 +17,12 @@
  * 
  * 《利用例》
  * $this->BcBaser->blogPosts('news')
+ * 
+ * BcBaserHeleper へのインターフェイスを提供する役割だけとし、
+ * 実装をできるだけこのクラスで持たないようにし、BlogHelper 等で実装する
  *
  * @package Blog.View.Helper
- *
+ * @property BlogHelper $Blog
  */
 class BlogBaserHelper extends AppHelper {
 
@@ -27,7 +30,7 @@ class BlogBaserHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-	public $helpers = array('Blog.Blog');
+	public $helpers = array('Blog.Blog', 'BcBaser');
 
 /**
  * ブログ記事一覧出力
@@ -50,101 +53,41 @@ class BlogBaserHelper extends AppHelper {
  * @param string | array $contentsName 管理システムで指定したコンテンツ名（初期値 : null）２階層目以降はURLで指定
  * @param int $num 記事件数（初期値 : 5）
  * @param array $options オプション（初期値 : array()）
- *	- `category` : カテゴリで絞り込む場合にアルファベットのカテゴリ名指定（初期値 : null）
- *	- `tag` : タグで絞り込む場合にタグ名を指定（初期値 : null）
- *	- `year` : 年で絞り込む場合に年を指定（初期値 : null）
- *	- `month` : 月で絞り込む場合に月を指定（初期値 : null）
- *	- `day` : 日で絞り込む場合に日を指定（初期値 : null）
- *	- `id` : id で絞り込む場合に id を指定（初期値 : null）
+ * 	- `conditions` : CakePHP形式の検索条件（初期値 : array()）
+ *	- `category` : カテゴリで絞り込む（初期値 : null）
+ *	- `tag` : タグで絞り込む（初期値 : null）
+ *	- `year` : 年で絞り込む（初期値 : null）
+ *	- `month` : 月で絞り込む（初期値 : null）
+ *	- `day` : 日で絞り込む（初期値 : null）
+ *	- `id` : 記事NO で絞り込む（初期値 : null）※ 後方互換の為 id を維持
+ * 	- `no` : 記事NO で絞り込む（初期値 : null）
  *	- `keyword` : キーワードで絞り込む場合にキーワードを指定（初期値 : null）
+ *  - `postId` : 記事ID で絞り込む（初期値 : null）
+ *  - `siteId` : サイトID で絞り込む（初期値 : null）
+ *  - `preview` : 非公開の記事も見る場合に指定（初期値 : false）
  *	- `contentsTemplate` : コンテンツテンプレート名を指定（初期値 : null）
  *	- `template` : 読み込むテンプレート名を指定する場合にテンプレート名を指定（初期値 : null）
  *	- `direction` : 並び順の方向を指定 [昇順:ASC or 降順:DESC or ランダム:RANDOM]（初期値 : null）
- *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
  *	- `page` : ページ数を指定（初期値 : null）
+ *	- `sort` : 並び替えの基準となるフィールドを指定（初期値 : null）
+ *	- `autoSetCurrentBlog` : $contentsName を指定していない場合、現在のコンテンツより自動でブログを指定する（初期値：true）
  * @return void
  */
-	public function blogPosts($contentsName = null, $num = 5, $options = array()) {
-		$options = array_merge(array(
-			'category' => null,
-			'tag' => null,
-			'year' => null,
-			'month' => null,
-			'day' => null,
-			'id' => null,
-			'keyword' => null,
-			'contentsTemplate' => null,
-			'template' => null,
-			'direction' => null,
-			'page' => null,
-			'sort' => null
-		), $options);
+	public function blogPosts($contentsName = [], $num = 5, $options = []) {
+		$this->Blog->posts($contentsName, $num, $options);
+	}
 
-			if(!$contentsName && empty($options['contentsTemplate'])) {
-			trigger_error('$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定していください。', E_USER_WARNING);
-			return;
-		}
-		
-		// コンテンツ名を配列に
-		if (empty($contentsName)) {
-			$contentsName = [];
-		} elseif (!is_array($contentsName)) {
-			$contentsName = [$contentsName];
-		}
-		
-		// URL形式に変換
-		foreach($contentsName as $key => $value) {
-			$contentsName[$key] = '/' . preg_replace("/^\/?(.*?)\/?$/", "$1", $value) . '/';
-		}
-		
-		// ブログコンテンツの条件生成
-		$Content = ClassRegistry::init('Content');
-		$conditions = [];
-		if($contentsName) {
-			$conditions['Content.url'] = $contentsName;
-		}
-		$conditions = array_merge($conditions, $Content->getConditionAllowPublish());
-		$conditions['Content.type'] = "BlogContent";
-		
-		// 有効ブログを取得
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$blogContents = $BlogContent->find('all', [
-			'fields' => ['BlogContent.id', 'BlogContent.template', 'Content.name', 'Content.status'],
-			'conditions' => $conditions,
-			'recursive' => 0,
-			'cache' => false
-		]);
-		
-		if (empty($blogContents)) {
-			trigger_error('指定されたコンテンツが見つかりません。（' . implode(', ', $contentsName) . '）', E_USER_NOTICE);
-			return;
-		}
-
-		$options['contentId'] = Hash::extract($blogContents, "{n}.BlogContent.id");
-		
-		// 指定したコンテンツテンプレートに紐づくブログIDを特定
-		// 指定したコンテンツネームに紐づくブログIDを取得
-		$blogContentId = null;
-		foreach($blogContents as $key => $blogContent) {
-			if(!empty($options['contentsTemplate']) && $options['contentsTemplate'] == $blogContent['BlogContent']['template']) {
-				$blogContentId = $blogContent['BlogContent']['id'];	
-				break;
-			}
-		}
-		
-		// コンテンツテンプレートに紐づくブログIDを特定できない場合は
-		// 対象ブログの先頭のブログIDとする
-		if (!$blogContentId) {
-			$blogContentId = current($options['contentId']);
-		}
-		
-		unset($options['contentsTemplate']);
-
-		$url = array('admin' => false, 'plugin' => 'blog', 'controller' => 'blog', 'action' => 'posts');
-		if($this->request->params['Site']['device']) {
-			$url['prefix'] = $this->request->params['Site']['device'];
-		}
-		echo $this->requestAction($url, array('return', 'pass' => array($blogContentId, $num), 'entityId' => $blogContentId, 'named' => $options));
+/**
+ * ブログ記事を取得する
+ * 
+ * @param array $contentsName
+ * @param int $num
+ * @param array $options
+ * 	※ パラメーターは、contentTemplate / template 以外、BlogBaserHelper::blogPosts() に準ずる
+ * @return mixed
+ */
+	public function getBlogPosts($contentsName = [], $num = 5, $options = array()) {
+		return $this->Blog->getPosts($contentsName, $num, $options);
 	}
 
 /**
@@ -210,4 +153,73 @@ class BlogBaserHelper extends AppHelper {
 		return $this->Blog->isHome();
 	}
 
+/**
+ * Blogの基本情報を全て取得する
+ *
+ * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
+ * @param array $options オプション（初期値 :array()）
+ *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
+ *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
+ *  - `postCount` : 公開記事数を取得するかどうか (初期値:false)
+ * @return mixed false|array Blogの基本情報
+ */
+	public function getBlogs($name = '', $options = array()) {
+		return $this->Blog->getContents($name, $options);
+	}
+
+/**
+ * 現在のページがブログプラグインかどうかを判定する
+ *
+ * @return bool
+ */
+	public function isBlog() {
+		return $this->Blog->isBlog();
+	}
+
+/**
+ * ブログカテゴリを取得する
+ * 
+ * @param array $options
+ * @return mixed
+ */
+	public function getBlogCategories($options = []) {
+		return $this->Blog->getCategories($options);
+	}
+
+/**
+ * 子カテゴリを持っているかどうか
+ * 
+ * @param int $id
+ * @return mixed
+ */
+	public function hasChildBlogCategory($id) {
+		return $this->Blog->hasChildCategory($id);
+	}
+
+/**
+ * ブログタグリストを取得する
+ *
+ * @param mixed $name
+ * @param array $options
+ * 	- `conditions` : CakePHP形式の検索条件
+ *  - `direction` : 並び順の方向
+ *  - `sort` : 並び順の対象フィールド
+ *  - `siteId` : サイトIDでフィルタリングする場合に指定する
+ * @return array|null
+ */
+	public function getBlogTagList($name, $options = []) {
+		return $this->Blog->getTagList($name, $options);
+	}
+
+/**
+ * ブログタグリストを出力する
+ * 
+ * @param mixed $name
+ * @param array $options
+ * 	オプションは、BlogBaserHelper::getBlogTagList() と同じ
+ */
+	public function blogTagList($name, $options = []) {
+		$this->Blog->tagList($name, $options);
+	}
+	
 }

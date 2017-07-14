@@ -89,8 +89,14 @@ class ContentFoldersController extends AppController {
 				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
 			}
 		}
-		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
-		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']));
+
+		$theme = [$this->siteConfigs['theme']];
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		if(!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+			$theme[] = $site->theme;
+		}
+		$this->set('folderTemplateList', $this->ContentFolder->getFolderTemplateList($this->request->data['Content']['id'], $theme));
+		$this->set('pageTemplateList', $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme));
 		$this->set('publishLink', $this->request->data['Content']['url']);
 	}
 

@@ -25,7 +25,10 @@ class BlogPostsSchema extends CakeSchema {
 			switch ($event['create']) {
 				case 'blogposts':
 					$tableName = $db->config['prefix'] . 'blog_posts';
-					$db->query("ALTER TABLE {$tableName} CHANGE detail detail MEDIUMTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE content content LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE content_draft content_draft LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE detail detail LONGTEXT");
+					$db->query("ALTER TABLE {$tableName} CHANGE detail_draft detail_draft LONGTEXT");
 					break;
 			}
 		}
@@ -47,7 +50,7 @@ class BlogPostsSchema extends CakeSchema {
 		'publish_begin' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'publish_end' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'exclude_search' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'eye_catch' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 30),
+		'eye_catch' => array('type' => 'text', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),

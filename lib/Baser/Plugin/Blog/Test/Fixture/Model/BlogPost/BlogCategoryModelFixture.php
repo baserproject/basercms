@@ -59,6 +59,20 @@ class BlogCategoryModelFixture extends BaserTestFixture {
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
 		),
+		array(
+			'id' => '4',
+			'blog_content_id' => '2',
+			'no' => '1',
+			'name' => 'release',
+			'title' => 'プレスリリース',
+			'status' => '1',
+			'parent_id' => null,
+			'lft' => '7',
+			'rght' => '8',
+			'owner_id' => '1',
+			'created' => '2015-01-27 12:56:53',
+			'modified' => null
+		),
 	);
 
 }

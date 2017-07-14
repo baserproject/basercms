@@ -118,10 +118,12 @@ class ThemeConfigTest extends BaserTestCase {
  * @dataProvider updateColorConfigDataProvider
  */
 	public function testUpdateColorConfig($data, $expected, $message = null) {
+		$theme = Configure::read('BcSite.theme');
+		Configure::write('BcSite.theme', 'nada-icons');
 
 		// 設定元のファイル(config.css)を取得($dataが設定されてない場合、元のファイルが削除されるので、再生成するため)
 		$configCssPathOriginal = getViewPath() . 'css' . DS . 'config.css';
-		$FileOriginal = new File($configCssPathOriginal);  
+		$FileOriginal = new File($configCssPathOriginal);
 		$configOriginal = $FileOriginal->read();
 
 		// 設定ファイルの取得
@@ -142,7 +144,7 @@ class ThemeConfigTest extends BaserTestCase {
 		unlink($configCssPath);
 
 		$this->assertRegExp('/' . $expected . '/s', $setting, $message);
-
+		Configure::write('BcSite.theme', $theme);
 	}
 
 	public function updateColorConfigDataProvider() {

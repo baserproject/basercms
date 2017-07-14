@@ -37,14 +37,16 @@
 			$alias = true;
 		}
 		$status = $this->BcContents->isAllowPublish($data, true);
-		if(in_array($data['Content']['parent_id'], array(0,1))) {
+		if($data['Content']['site_root']) {
 			$open = true;
 		}
 		$editDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'edit', $data['Content']['entity_id']);
 		$manageDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'manage', $data['Content']['entity_id']);
+		$editInIndexDisabled
 		?>
 <li id="node-<?php echo $data['Content']['id'] ?>" data-jstree='{
 	"icon":"<?php echo $iconPath ?>",
+	"name":"<?php echo urldecode($data['Content']['name']) ?>",
 	"type":"<?php echo $treeItemType ?>",
 	"status":"<?php echo (bool) $status ?>",
 	"alias":"<?php echo (bool) $alias ?>",

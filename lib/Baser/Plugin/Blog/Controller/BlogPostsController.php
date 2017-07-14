@@ -141,12 +141,23 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
-		$this->paginate = [
+		$options = [
 			'conditions' => $conditions,
 			'joins' => $joins,
 			'order' => 'BlogPost.' . $this->passedArgs['sort'],
-			'limit' => $this->passedArgs['num']
+			'limit' => $this->passedArgs['num'],
+			'recursive' => 2
 		];
+
+		// EVENT BlogPosts.searchIndex
+		$event = $this->dispatchEvent('searchIndex', array(
+			'options' => $options
+		));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$this->paginate = $options;
 		$this->set('posts', $this->paginate('BlogPost'));
 
 		$this->_setAdminIndexViewData();
@@ -267,8 +278,8 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', array('BlogPost.blog_content_id' => $blogContentId)) + 1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
-			
-			/*			 * * BlogPosts.beforeAdd ** */
+
+			// EVENT BlogPosts.beforeAdd
 			$event = $this->dispatchEvent('beforeAdd', array(
 				'data' => $this->request->data
 			));
@@ -286,7 +297,7 @@ class BlogPostsController extends BlogAppController {
 				// recursiveを設定
 				$this->BlogPost->recursive = 1;
 
-				/*				 * * afterAdd ** */
+				// EVENT BlogPosts.afterAdd
 				$this->dispatchEvent('afterAdd', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));
@@ -342,6 +353,7 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 		}
 
+		$this->BlogPost->recursive = 2;
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogPost->read(null, $id);
 			if(!$this->request->data) {
@@ -353,7 +365,7 @@ class BlogPostsController extends BlogAppController {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
 			}
 
-			/*			 * * BlogPosts.beforeEdit ** */
+			// EVENT BlogPosts.beforeEdit
 			$event = $this->dispatchEvent('beforeEdit', array(
 				'data' => $this->request->data
 			));
@@ -364,13 +376,13 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
+				$this->setMessage('記事「' . $this->request->data['BlogPost']['name'] . '」を更新しました。', false, true);
 
-				/*				 * * BlogPosts.afterEdit ** */
+				// EVENT BlogPosts.afterEdit
 				$this->dispatchEvent('afterEdit', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));
 
-				$this->setMessage('記事「' . $this->request->data['BlogPost']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);

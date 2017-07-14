@@ -39,7 +39,7 @@ $(function(){
 		<?php $this->Blog->author($post) ?>
 				</span>
 		    </div>
-		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('Blog.blog_tag', array('post' => $post)) ?>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>

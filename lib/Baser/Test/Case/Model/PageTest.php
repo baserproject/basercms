@@ -20,6 +20,7 @@ App::uses('Page', 'Model');
 class PageTest extends BaserTestCase {
 
 	public $fixtures = array(
+		'baser.Model.Content.ContentStatusCheck',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogPost',
@@ -600,4 +601,51 @@ class PageTest extends BaserTestCase {
 		);
 	}
 
+/**
+ * 固定ページテンプレートリストを取得する
+ *
+ * @param int $contetnId
+ * @param mixed $theme
+ * @param $expected
+ * @dataProvider getPageTemplateListDataProvider
+ */
+	public function testGetPageTemplateList($contetnId, $theme, $expected) {
+		$templates = BASER_THEMES . 'bc_sample' . DS . 'Pages' . DS . 'templates' . DS . 'hoge.php';
+		touch($templates);
+		$result = $this->Page->getPageTemplateList($contetnId, $theme);
+		$this->assertEquals($expected, $result);
+		unlink($templates);
+	}
+
+	public function getPageTemplateListDataProvider() {
+		return [
+			[1, 'nada-icons', ['default' => 'default']],
+			[2, 'nada-icons', ['' => '親フォルダの設定に従う（default）']],
+			[2, ['nada-icons', 'bc_sample'], ['' => '親フォルダの設定に従う（default）', 'hoge' => 'hoge']]
+		];
+	}
+
+/**
+ * URLからページを取得する
+ * 
+ * @param string $url
+ * @param string $publish
+ * @param bool $expected
+ * @dataProvider findByUrlDataProvider
+ */
+	public function testFindByUrl($url, $publish, $expected) {
+		$this->loadFixtures('ContentStatusCheck');
+		$result = (bool) $this->Page->findByUrl($url, $publish);
+		$this->assertEquals($expected, $result);
+	}
+	
+	public function findByUrlDataProvider() {
+		return [
+			['/about', true, true],
+			['/service', true, false],
+			['/service', false, true],
+			['/hoge', false, false],
+		];
+	}
+	
 }

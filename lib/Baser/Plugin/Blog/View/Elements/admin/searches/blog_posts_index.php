@@ -29,6 +29,7 @@ $users = $this->BcForm->getControlSource("BlogPost.user_id");
 	<?php endif ?>
 	<span><?php echo $this->BcForm->label('BlogPost.status', '公開設定') ?> <?php echo $this->BcForm->input('BlogPost.status', array('type' => 'select', 'options' => $this->BcText->booleanMarkList(), 'empty' => '指定なし')) ?></span>　
 	<span><?php echo $this->BcForm->label('BlogPost.user_id', '作成者') ?> <?php echo $this->BcForm->input('BlogPost.user_id', array('type' => 'select', 'options' => $users, 'empty' => '指定なし')) ?></span>　
+	<?php echo $this->BcSearchBox->dispatchShowField() ?>
 </p>
 <div class="button">
 	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 

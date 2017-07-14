@@ -163,7 +163,6 @@ class MailMessage extends MailAppModel {
  * VALID_EMAIL		メール形式チェック
  *
  * @return void
- * TODO Cake1.2に対応させる
  */
 	protected function _setValidate() {
 		foreach ($this->mailFields as $mailField) {
@@ -193,6 +192,12 @@ class MailMessage extends MailAppModel {
 							'message' => '形式が不正です。'
 					));
 				// 半角数字
+				} elseif ($mailField['valid'] == '/^(|[0-9]+)$/') {
+					$this->validate[$mailField['field_name']] = array(
+							'rule' => '/^(|[0-9]+)$/',
+							'message' => '半角数字で入力してください。'
+				);
+				// 半角数字（入力必須）
 				} elseif ($mailField['valid'] == '/^([0-9]+)$/') {
 					$this->validate[$mailField['field_name']] = array(
 							'rule' => '/^([0-9]+)$/',
@@ -257,6 +262,10 @@ class MailMessage extends MailAppModel {
 						empty($data['MailMessage'][$mailField['field_name']]['month']) ||
 						empty($data['MailMessage'][$mailField['field_name']]['day'])) {
 						$this->invalidate($mailField['field_name'], '日付の形式が不正です。');
+					}
+				} elseif (in_array('VALID_ZENKAKU_KATAKANA', $valids)) {
+					if(!preg_match('/^(|[ァ-ヾ]+)$/u', $data['MailMessage'][$mailField['field_name']])) {
+						$this->invalidate($mailField['field_name'], '全て全角カタカナで入力してください。');
 					}
 				}
 			}

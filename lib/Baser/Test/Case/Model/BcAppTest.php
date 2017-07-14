@@ -14,6 +14,9 @@ App::uses('BcApp', 'Model');
  * BcAppTest class
  * 
  * @package Baser.Test.Case.Model
+ * @property BcAppModel $BcApp
+ * @property Page $Page
+ * @property SiteConfig $SiteConfig
  */
 
 class BcAppTest extends BaserTestCase {
@@ -85,7 +88,8 @@ class BcAppTest extends BaserTestCase {
 				'recursive' => -1
 			)
 		);
-		var_dump($result);
+
+		$this->BcApp->beforeSave(['type' => 'date']);
 	}
 
 /**
@@ -764,5 +768,26 @@ class BcAppTest extends BaserTestCase {
 		);
 	}
 
+/**
+ * BcContentsRoute::getUrlPattern
+ *
+ * @param string $url URL文字列
+ * @param string $expect 期待値
+ * @return void
+ * @dataProvider getUrlPatternDataProvider
+ */
+	public function testGetUrlPattern($url, $expects) {
+		$this->assertEquals($expects, $this->BcApp->getUrlPattern($url));
+	}
+
+	public function getUrlPatternDataProvider() {
+		return [
+			['/news', ['/news']],
+			['/news/', ['/news/', '/news/index']],
+			['/news/index', ['/news/index', '/news/']],
+			['/news/archives/1', ['/news/archives/1']],
+			['/news/archives/index', ['/news/archives/index', '/news/archives/']]
+		];
+	}
 
 }

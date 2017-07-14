@@ -18,8 +18,9 @@
 
 <?php echo $this->BcForm->create('User', array('url' => array('action' => 'index'))) ?>
 <p>
-	<?php echo $this->BcForm->label('User.user_group_id', 'ユーザーグループ') ?> 
-	<?php echo $this->BcForm->input('User.user_group_id', array('type' => 'select', 'options' => $this->BcForm->getControlSource('User.user_group_id'), 'empty' => '指定なし')) ?>
+	<span><?php echo $this->BcForm->label('User.user_group_id', 'ユーザーグループ') ?></span>
+	<span><?php echo $this->BcForm->input('User.user_group_id', array('type' => 'select', 'options' => $this->BcForm->getControlSource('User.user_group_id'), 'empty' => '指定なし')) ?></span>　
+	<?php echo $this->BcSearchBox->dispatchShowField() ?>
 </p>
 <div class="button">
 	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 

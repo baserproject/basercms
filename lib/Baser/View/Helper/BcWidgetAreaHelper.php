@@ -14,6 +14,7 @@
  * ウィジェットエリアヘルパー
  *
  * @package Baser.View.Helper
+ * @property BcAppView $_View
  */
 class BcWidgetAreaHelper extends AppHelper {
 

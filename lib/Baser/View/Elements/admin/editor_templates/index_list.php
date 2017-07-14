@@ -27,6 +27,7 @@
 			<th>NO</th>
 			<th>テンプレート名</th>
 			<th>説明文</th>
+			<?php echo $this->BcListTable->dispatchShowHead() ?>
 			<th>登録日<br />
 				更新日</th>
 		</tr>
