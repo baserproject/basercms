@@ -201,3 +201,33 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 </div>
 
 <?php echo $this->BcForm->end() ?>
+
+<div id="AddBlogCategoryForm" style="display:none">
+    <h3>新しいブログカテゴリを入力してください。</h3>
+    <table>
+        <tr>
+            <th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', 'カテゴリタイトル') ?>&nbsp;<span class="required">*</span></th>
+            <td class="col-input">
+                <?php echo $this->BcForm->input('BlogCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+            </td>
+        </tr>
+        <tr>
+            <th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', 'カテゴリ名') ?>&nbsp</th>
+            <td class="col-input">
+                <?php echo $this->BcForm->input('BlogCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
+                <?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+                <div id="helptextName" class="helptext">
+                    <ul>
+                        <li>URLに利用されます</li>
+                        <li>半角のみで入力してください</li>
+                        <li>空の場合はブログカテゴリタイトルから値が自動で設定されます</li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="submit">
+        <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnBlogCategorySave')) ?>
+        <?php echo $this->BcForm->button('キャンセル', array('div' => false, 'class' => 'button', 'id' => 'BtnBlogCategoryCancel')) ?>
+    </div>
+</div>
