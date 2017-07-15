@@ -304,31 +304,31 @@ class BlogCategoriesController extends BlogAppController {
  */
 	public function admin_ajax_add($blogContentId) {
 
-	    if (empty($this->request->data)) {
-            $this->ajaxError(500, '無効な処理です。');
-            return;
-        }
+		if (empty($this->request->data)) {
+			$this->ajaxError(500, '無効な処理です。');
+			return;
+		}
 
-        // カテゴリ名が空の場合タイトルから取る
-        if(empty($this->request->data['BlogCategory']['name'])) {
-            $this->request->data['BlogCategory']['name'] = $this->request->data['BlogCategory']['title'];
-        }
+		// カテゴリ名が空の場合タイトルから取る
+		if(empty($this->request->data['BlogCategory']['name'])) {
+			$this->request->data['BlogCategory']['name'] = $this->request->data['BlogCategory']['title'];
+		}
 
-        // マルチバイトを含む場合はエンコードしておく
-        if (strlen($this->request->data['BlogCategory']['name']) !== mb_strlen($this->request->data['BlogCategory']['name'])) {
-            $this->request->data['BlogCategory']['name'] = substr(urlencode($this->request->data['BlogCategory']['name']), 0, 49);
-        }
+		// マルチバイトを含む場合はエンコードしておく
+		if (strlen($this->request->data['BlogCategory']['name']) !== mb_strlen($this->request->data['BlogCategory']['name'])) {
+			$this->request->data['BlogCategory']['name'] = substr(urlencode($this->request->data['BlogCategory']['name']), 0, 49);
+		}
 
-        $this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
-        $this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no', array('BlogCategory.blog_content_id' => $blogContentId)) + 1;
-        $this->BlogCategory->create($this->request->data);
+		$this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
+		$this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no', array('BlogCategory.blog_content_id' => $blogContentId)) + 1;
+		$this->BlogCategory->create($this->request->data);
 
-        if (!$this->BlogCategory->save()) {
-            $this->ajaxError(500, $this->BlogCategory->validationErrors);
-        }
+		if (!$this->BlogCategory->save()) {
+			$this->ajaxError(500, $this->BlogCategory->validationErrors);
+		}
 
-        echo $this->BlogCategory->getInsertID();
-        exit();
+		echo $this->BlogCategory->getInsertID();
+		exit();
 	}
 
 }
