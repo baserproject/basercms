@@ -12,6 +12,11 @@
 
 App::uses('Feed', 'Feed.Model');
 
+/**
+ * Class FeedTest
+ *
+ * @property Feed $Feed
+ */
 class FeedTest extends BaserTestCase {
 
 	public $fixtures = array(

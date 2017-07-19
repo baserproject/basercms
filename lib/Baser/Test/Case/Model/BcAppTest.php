@@ -198,10 +198,26 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
- * データベースを初期化
+ * データベース初期化
+ *
+ * @param $pluginName
+ * @param $options
+ * @param $expected
+ *
+ * @dataProvider initDbDataProvider
+ *
+ * MEMO: pluginNameが実在する場合が未実装
  */
-	public function testInitDb() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testInitDb($pluginName, $options, $expected) {
+		$result = $this->BcApp->initDb($pluginName, $options);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function initDbDataProvider() {
+		return array(
+			array('', [], ''),
+			array('hoge', ['dbDataPattern' => true], 1)
+		);
 	}
 
 /**
@@ -210,9 +226,10 @@ class BcAppTest extends BaserTestCase {
 	public function testLoadSchema() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$path = BASER_CONFIGS . 'Schema';
-		$this->BcApp->loadSchema('test', $path);
+		$result = $this->BcApp->loadSchema('test', $path);
+		$expected = true;
 		var_dump($result);
-		// $this->assertEquals($expect, $result);
+		 $this->assertEquals($expected, $result);
 	}
 
 /**
@@ -220,6 +237,7 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->loadCsv('test','test');
 	}
 
 /**
