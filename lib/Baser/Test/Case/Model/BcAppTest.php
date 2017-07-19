@@ -239,6 +239,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider loadCsvDataProvider
  * MEMO: result = falseの場合が未実装
  */
+<<<<<<< HEAD
 	public function testLoadCsv($dbConfigName, $path, $expected) {
 		$result = $this->BcApp->loadCsv($dbConfigName, $path);
 		$this->assertEquals($expected, $result);
@@ -248,6 +249,11 @@ class BcAppTest extends BaserTestCase {
 		return array(
 			array('test', 'test', true)
 		);
+=======
+	public function testLoadCsv() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->loadCsv('test','test');
+>>>>>>> dev-4
 	}
 
 /**
