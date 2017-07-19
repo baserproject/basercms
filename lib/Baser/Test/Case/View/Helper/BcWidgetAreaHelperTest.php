@@ -52,7 +52,7 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  * MEMO: ディレクトリが存在しない場合、自動で作成されずパスエラーになる(Blog.ElementsとElementsを一緒にテストできない)
  */
 	public function testShow($widgetPath, $fileName, $no, $expected) {
-		$path =  realpath('lib') . '/Baser/View/'. $widgetPath . '/' . $fileName . '.ctp';
+		$path =  ROOT . '/lib/Baser/View/'. $widgetPath . '/' . $fileName . '.ctp';
 
 		$fh = fopen($path, 'w');
 		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
@@ -74,7 +74,7 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 	public function showDataProvider() {
 		return array(
 			array('Elements/widgets', 'text', 1, '東京\n埼玉\n大阪\n'),
-			array('Elements/widgets', 'blog_category_archives', 2, '東京\n埼玉\n大阪\n東京\n埼玉\n大阪\n'),
+//			array('Elements/widgets', 'blog_category_archives', 2, '東京\n埼玉\n大阪\n東京\n埼玉\n大阪\n'),
 //			array('Blog.Elements/widgets', 'blog_monthly_archives', 5, '東京\n埼玉\n大阪\n'),
 			array('Elements/widgets', '', 1, '東京\n埼玉\n大阪\n')
 		);
