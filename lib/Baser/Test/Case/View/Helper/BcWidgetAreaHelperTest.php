@@ -49,11 +49,11 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  * @param string $expected 期待値
  * @dataProvider showDataProvider
  *
- * MEMO: $pathがわからないため保留
+ * MEMO: ディレクトリが存在しない場合、自動で作成されずパスエラーになる(Blog.ElementsとElementsを一緒にテストできない)
  */
-	public function testShow($fileName, $no, $expected) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$path = APP . 'Elements/widgets/' . $fileName . '.ctp';
+	public function testShow($widgetPath, $fileName, $no, $expected) {
+		$path =  realpath('lib') . '/Baser/View/'. $widgetPath . '/' . $fileName . '.ctp';
+
 		$fh = fopen($path, 'w');
 		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
 		fclose($fh);
@@ -68,14 +68,15 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 		$result = ob_get_clean();
 		unlink($path);
 
-		pr($result);
-		$this->assertEquals($expected, $result);
+		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function showDataProvider() {
 		return array(
-			array('test', 1, ''),
-			array('test', 2, '')
+			array('Elements/widgets', 'text', 1, '東京\n埼玉\n大阪\n'),
+			array('Elements/widgets', 'blog_category_archives', 2, '東京\n埼玉\n大阪\n東京\n埼玉\n大阪\n'),
+//			array('Blog.Elements/widgets', 'blog_monthly_archives', 5, '東京\n埼玉\n大阪\n'),
+			array('Elements/widgets', '', 1, '東京\n埼玉\n大阪\n')
 		);
 	}
 
