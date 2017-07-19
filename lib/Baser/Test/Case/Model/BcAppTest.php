@@ -235,10 +235,19 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * CSVを読み込む
+ *
+ * @dataProvider loadCsvDataProvider
+ * MEMO: result = falseの場合が未実装
  */
-	public function testLoadCsv() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$result = $this->BcApp->loadCsv('test','test');
+	public function testLoadCsv($dbConfigName, $path, $expected) {
+		$result = $this->BcApp->loadCsv($dbConfigName, $path);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function loadCsvDataProvider() {
+		return array(
+			array('test', 'test', true)
+		);
 	}
 
 /**
@@ -348,9 +357,10 @@ class BcAppTest extends BaserTestCase {
 			),
 			'table' => 'pages',
 		);
-		$this->Page->addField($options);
+		$result = $this->Page->addField($options);
 		$columns = $this->Page->getColumnTypes();
-		var_dump($columns);
+		pr($columns);
+		pr($result);
 	}
 
 /**
@@ -763,7 +773,10 @@ class BcAppTest extends BaserTestCase {
  * ツリーより再帰的に削除する
  */
 	public function testRemoveFromTreeRecursive() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+//		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->removeFromTreeRecursive(1);
+		$expected = '';
+		$this->assertEquals($expected, $result);
 	}
 
 /**
