@@ -508,22 +508,11 @@ class BlogController extends BlogAppController {
 			'direction' => $listDirection,
 			'listCount' => $listCount,
 			'num' => $listCount,
-			'limit' => $listCount,
 			'contentId' => $contentId,
 			'page' => 1,
-			'sort' => 'posts_date',
 			'cache' => false,
 		], $options);
 		
-		// 取得件数
-		// TODO num に統一する
-		if($options['listCount'] && !$options['num']) {
-			$options['num'] = $options['listCount'];
-		}
-		if($options['num']) {
-			$options['limit'] = $options['num'];
-		}
-		unset($options['listCount'], $options['num']);
 		
 		$named = [];
 		if (!empty($this->request->params['named'])) {
@@ -542,10 +531,6 @@ class BlogController extends BlogAppController {
 			if (!empty($named['no'])) $options['no'] = $named['no'];
 			if (!empty($named['keyword'])) $options['keyword'] = $named['keyword'];
 			if (!empty($named['author'])) $options['author'] = $named['author'];
-			if (empty($named['page'])) $this->request->params['named']['page'] = $options['page'];
-			if (empty($named['sort'])) $this->request->params['named']['sort'] = $options['sort'];
-			if (empty($named['limit'])) $this->request->params['named']['limit'] = $options['limit'];
-			if (empty($named['direction'])) $this->request->params['named']['direction'] = $options['direction'];
 		}
 		$this->paginate = $options;
 		return $this->paginate('BlogPost');
