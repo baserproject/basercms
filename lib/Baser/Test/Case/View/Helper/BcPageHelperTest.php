@@ -15,7 +15,6 @@ App::uses('BcBaserHelper', 'View/Helper');
 App::uses('BcPageHelper', 'View/Helper');
 
 
-
 /**
  * BcPage helper library.
  *
@@ -49,7 +48,6 @@ class BcPageHelperTest extends BaserTestCase {
  * @var View
  */
 	protected $_View;
-	
 /**
  * __construct
  * 
@@ -263,29 +261,30 @@ class BcPageHelperTest extends BaserTestCase {
  * @param string $message テスト失敗時、表示するメッセージ
  * @dataProvider contentDataProvider
  */
-	public function testContent($agent, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-//		service.phpはあるが、service.ctpを探しているためエラーになる。
-//		テスト中にファイルを作成し削除するようにしたい
-//		vfsStreamをcomposer.jsonで追加したが、使い方不明のため保留
-		App::uses('vfsStream', 'org/bovigo/vfs/vfsStream');
-		vfsStream::setup();
-		$fh = tmpfile();
-		$path = stream_get_meta_data($fh)['uri'];
+	public function testContent($fileName, $expected) {
+		$path = APP . 'View/Pages/' . $fileName . '.ctp';
+		$fh = fopen($path, 'w');
 		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
+		fclose($fh);
+		$this->BcPage->_View->viewVars['pagePath'] = $fileName;
 
-		$this->BcPage->_View->viewVars['pagePath'] = 'service';
-		$this->expectOutputRegex('/' . $expected . '/', $message);
-		$result = $this->BcPage->content();
-		$expected = ['東京' . PHP_EOL, '埼玉' . PHP_EOL, '大阪' . PHP_EOL];
+		ob_start();
+		//エラーでファイルが残留するため,tryで確実に削除を実行
+		try {
+			$this->BcPage->content();
+		}catch (Exception $e) {
+			echo 'error: ',  $e->getMessage(), "\n";
+		}
+		$result = ob_get_clean();
+		unlink($path);
 
-		$this->assertEquals($expected, $result);
+		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function contentDataProvider() {
 		return array(
-			array('', '<h2 class="fontawesome-circle-arrow-down">Service <span>事業案内<\/span><\/h2>', '固定ページのコンテンツを出力できません'),
-			array('smartphone', '<h2 class="contents-head">サービス<\/h2>', 'smartphoneで固定ページのコンテンツを出力できません'),
+			array('service', '東京\n埼玉\n大阪\n'),
+			array('service.php', '東京\n埼玉\n大阪\n')
 		);
 	}
 

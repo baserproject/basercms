@@ -762,7 +762,7 @@ class Content extends AppModel {
 		if(array_key_exists('self_publish_end', $data['Content'])) {
 			$data['Content']['publish_end'] = $data['Content']['self_publish_end'];
 		}
-		if($data['Content']['parent_id']) {
+		if(!empty($data['Content']['parent_id'])) {
 			$parent = $this->find('first', [
 				'fields' => ['name', 'status', 'publish_begin', 'publish_end'], 
 				'conditions' => ['Content.id' => $data['Content']['parent_id']], 
