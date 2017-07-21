@@ -167,12 +167,40 @@ class PageTest extends BaserTestCase {
  * @param boolean $created
  * @param array $options
  * @return boolean
+ *
+ * @dataProvider afterSaveDataProvider
+ *
+ * MEMO: afterSaveを呼び出さなくてもいい？他のafterSaveと同仕様にするかどうか悩み中
  */
-	public function testAfterSave() {
+	public function testAfterSave($data, $expected) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		// 初期化
+		$this->Page->data = ['Page' => [
+				'id' => 1,
+				'name' => 'hoge',
+				'page_category_id' => '1',
+				'title' => 'hogeTitle',
+				'url' => '/hoge',
+				'description' => '',
+				'publish_begin' => '',
+				'publish_end' => '',
+				'status' => '1'
+			]
+		];
+
+		$this->Page->save();
+		$this->SearchIndex = ClassRegistry::init('SearchIndex');
+		$result = $this->SearchIndex->find('count', ['Page' => ['name' => 'hoge', 'title' => 'hogeTitle']]);
+		pr($result);
 
 	}
 
+	public function afterSaveDataProvider() {
+		return array(
+			array('', '')
+		);
+	}
 /**
  * 関連ページに反映する
  * 
@@ -465,6 +493,7 @@ class PageTest extends BaserTestCase {
  */
 	public function testEntryPageFiles() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+//		$this->Page->entryPageFiles();
 	}
 
 /**

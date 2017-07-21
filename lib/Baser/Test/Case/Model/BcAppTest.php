@@ -84,12 +84,17 @@ class BcAppTest extends BaserTestCase {
 		$LastID = $this->Page->getLastInsertID();
 		$result = $this->Page->find('first', array(
 				'conditions' => array('id' => $LastID),
-				'fields' => array('created'),
+//				'fields' => array('created'),
 				'recursive' => -1
 			)
 		);
 
-		$this->BcApp->beforeSave(['type' => 'date']);
+		pr($result);
+		$result = $this->BcApp->beforeSave(['type' => 'date']);
+
+		$this->assertEquals($expected = 0, $result);
+
+
 	}
 
 /**
@@ -235,12 +240,20 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * CSVを読み込む
+ *
+ * @dataProvider loadCsvDataProvider
+ * MEMO: result = falseの場合が未実装
  */
-	public function testLoadCsv() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$result = $this->BcApp->loadCsv('test','test');
+	public function testLoadCsv($dbConfigName, $path, $expected) {
+		$result = $this->BcApp->loadCsv($dbConfigName, $path);
+		$this->assertEquals($expected, $result);
 	}
 
+	public function loadCsvDataProvider() {
+		return array(
+			array('test', 'test', true)
+		);
+	}
 /**
  * 最短の長さチェック
  *
@@ -348,9 +361,10 @@ class BcAppTest extends BaserTestCase {
 			),
 			'table' => 'pages',
 		);
-		$this->Page->addField($options);
+		$result = $this->Page->addField($options);
 		$columns = $this->Page->getColumnTypes();
-		var_dump($columns);
+		pr($columns);
+		pr($result);
 	}
 
 /**
@@ -763,7 +777,10 @@ class BcAppTest extends BaserTestCase {
  * ツリーより再帰的に削除する
  */
 	public function testRemoveFromTreeRecursive() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+//		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->removeFromTreeRecursive(1);
+		$expected = '';
+		$this->assertEquals($expected, $result);
 	}
 
 /**

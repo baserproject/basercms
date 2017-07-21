@@ -21,6 +21,7 @@ App::uses('Plugin', 'Model');
  * }
  * 
  * @package Baser.Test.Case.Model
+ * @property Plugin $Plugin
  */
 class PluginTest extends BaserTestCase {
 
@@ -114,9 +115,21 @@ class PluginTest extends BaserTestCase {
  * @param string $filterTable テーブル指定
  * @param string $filterType 更新タイプ指定
  * @return bool
+ * @dataProvider initDbDataProvider
  */
-	public function testInitDb() {
+	public function testInitDb($pluginName, $expected) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		$result = $this->Plugin->initDb($pluginName);
+		pr($result);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function initDbDataProvider() {
+		return array(
+			array('', ''),
+			array('hoge', '1'),
+		);
 	}
 
 /**
