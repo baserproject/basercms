@@ -53,7 +53,7 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  */
 	public function testShow($widgetPath, $fileName, $no, $expected) {
 		$path =  ROOT . '/lib/Baser/View/'. $widgetPath . '/' . $fileName . '.ctp';
-
+    
 		$fh = fopen($path, 'w');
 		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
 		fclose($fh);

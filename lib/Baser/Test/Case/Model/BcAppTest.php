@@ -244,6 +244,7 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider loadCsvDataProvider
  * MEMO: result = falseの場合が未実装
  */
+
 	public function testLoadCsv($dbConfigName, $path, $expected) {
 		$result = $this->BcApp->loadCsv($dbConfigName, $path);
 		$this->assertEquals($expected, $result);
