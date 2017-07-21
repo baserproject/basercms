@@ -97,7 +97,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 						</ul>
 					<?php endif ?>
 				</li>
-				<?php if (!empty($user) && in_array('admin', $currentUserAuthPrefixes)): ?>
+				<?php if (!empty($user) && in_array('admin', $currentUserAuthPrefixes) && Configure::read('BcApp.adminNavi')): ?>
 					<li>
 						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<div id="SystemMenu"><div>
