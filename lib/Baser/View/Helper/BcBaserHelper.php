@@ -1074,6 +1074,9 @@ class BcBaserHelper extends AppHelper {
 			$options = array();
 		}
 
+		if(!is_array($url)) {
+			$url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
+		}
 		$out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
 		/*** afterGetLink ***/
