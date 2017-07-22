@@ -507,7 +507,7 @@ class BlogController extends BlogAppController {
 			'findType' => 'customParams',
 			'direction' => $listDirection,
 			'listCount' => $listCount,
-			'num' => $listCount,
+			'num' => null,
 			'contentId' => $contentId,
 			'page' => 1,
 			'cache' => false,
