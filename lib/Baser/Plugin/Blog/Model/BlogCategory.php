@@ -68,7 +68,7 @@ class BlogCategory extends BlogAppModel {
 			['rule' => 'halfText',
 				'message' => 'ブログカテゴリ名は半角のみで入力してください。'],
 			['rule' => ['duplicateBlogCategory'],
-				'message' => '入力されたブログカテゴリは既に登録されています。'],
+				'message' => '入力されたブログカテゴリ名は既に登録されています。'],
 			['rule' => ['maxLength', 255],
 				'message' => 'ブログカテゴリ名は255文字以内で入力してください。']
 		],
@@ -77,7 +77,7 @@ class BlogCategory extends BlogAppModel {
 				'message' => "ブログカテゴリタイトルを入力してください。",
 				'required' => true],
 			['rule' => ['maxLength', 255],
-				'message' => 'ブログカテゴリ名は255文字以内で入力してください。']
+				'message' => 'ブログカテゴリタイトルは255文字以内で入力してください。']
 		]
 	];
 
