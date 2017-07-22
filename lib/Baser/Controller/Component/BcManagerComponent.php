@@ -1389,19 +1389,25 @@ class BcManagerComponent extends Component {
 /**
  * DB接続チェック
  * 
- * @param	string	$datasource 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
- * @param	string	$database データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
- * @param	string	$host テキストDB or localhostの場合は不要
- * @param	string	$port 接続ポート テキストDBの場合は不要
- * @param	string	$login 接続ユーザ名 テキストDBの場合は不要
- * @param	string	$password 接続パスワード テキストDBの場合は不要
+ * @param string[] $config
+ *   'datasource' 'MySQL' or 'Postgres' or 'SQLite' or 'CSV'
+ *   'database' データベース名 SQLiteの場合はファイルパス CSVの場合はディレクトリへのパス
+ *   'host' テキストDB or localhostの場合は不要
+ *   'port' 接続ポート テキストDBの場合は不要
+ *   'login' 接続ユーザ名 テキストDBの場合は不要
+ *   'password' 接続パスワード テキストDBの場合は不要
  * 
  * @throws Exception
  * @throws PDOException
  * @return boolean
  */
 	public function checkDbConnection($config) {
-		extract($config);
+		$datasource = Hash::get($config, 'datasource');
+		$database = Hash::get($config, 'database');
+		$host = Hash::get($config, 'host');
+		$port = Hash::get($config, 'port');
+		$login = Hash::get($config, 'login');
+		$password = Hash::get($config, 'password');
 
 		$datasource = strtolower($datasource);
 
