@@ -564,12 +564,12 @@ class BlogHelperTest extends BaserTestCase {
 
 		$post['BlogPost']['id'] = 7;
 		$post['BlogPost']['blog_content_id'] = 2;
-		$result = $this->Blog->getRelatedPosts($post);
+		$result = $this->Blog->getRelatedPosts($post, array('recursive'=>-1, 'limit'=>7, 'excludeTags'=>['新製品']));
 		$this->assertEmpty($result, '関連していない投稿を取得しています');
 
 		$post['BlogPost']['id'] = 2;
 		$post['BlogPost']['blog_content_id'] = 3;
-		$result = $this->Blog->getRelatedPosts($post);
+		$result = $this->Blog->getRelatedPosts($post, array('recursive'=>-1, 'limit'=>7, 'excludeTags'=>['人気記事'], 'isCross'=>false));
 		$this->assertEmpty($result, '関連していない投稿を取得しています');
 	}
 
