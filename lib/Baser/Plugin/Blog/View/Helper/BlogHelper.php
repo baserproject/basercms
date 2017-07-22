@@ -863,7 +863,7 @@ class BlogHelper extends AppHelper {
 			'limit' => 5,
 			'order' => 'BlogPost.posts_date DESC',
 			'excludeTags' => [],
-			'isCross' => true,
+			'isCross' => false,
 			), $options);
 
 		$tagNames = array();
