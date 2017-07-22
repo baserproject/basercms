@@ -2065,5 +2065,47 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testGetParentFolder() {
 		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');
 	}
+
+/**
+ * アクションを判定する(メールの場合BackとSubmitも判定する)
+ *
+* @param string $name :メールアクションは'index','Confirm','Back','Submit'(固定ページは'display')
+* @return bool or string
+*/
+	public function testIsAction() {
+		$this->BcBaser->request = $this->_getRequest('/contact/index');
+		$params = $this->BcBaser->isAction('index');
+		$this->assertEquals('index', $params);
+
+		$this->BcBaser->request = $this->_getRequest('/contact/submit');
+		$params = $this->BcBaser->isAction('submit');
+		$this->assertEquals('submit', $params);
+
+		$this->BcBaser->request = $this->_getRequest('/');
+		$params = $this->BcBaser->isAction('page');
+		$this->assertEquals(false, $params);	
+	}
+/**
+ * アクションを取得する(メールの場合BackとSubmitも取得する)
+ *
+ * @return string メール送信完了の時は 'Submit'を返す
+ */
+	public function testGetAction() {
+		$this->BcBaser->request = $this->_getRequest('/contact/index');
+		$params = $this->BcBaser->getAction();
+
+		$this->assertEquals('index', $params);
+
+		$this->BcBaser->request = $this->_getRequest('/contact/submit');
+		$params = $this->BcBaser->getAction();
+
+		$this->assertEquals('submit', $params);
+
+		$this->BcBaser->request = $this->_getRequest('/');
+		$params = $this->BcBaser->getAction();
+
+		$this->assertEquals('display', $params);
+		
+	}
 	
 }
