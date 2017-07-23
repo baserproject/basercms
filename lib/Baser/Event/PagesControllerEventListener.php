@@ -52,7 +52,10 @@ class PagesControllerEventListener extends BcControllerEventListener {
  */
 	public function __construct() {
 		parent::__construct();
-		$this->Page = ClassRegistry::init('Page'); 
+		// DB接続ができない場合、処理がコントローラーまで行き着かない為、try で実行
+		try {
+			$this->Page = ClassRegistry::init('Page');	
+		} catch (Exception $e) {}
 	}
 
 /**

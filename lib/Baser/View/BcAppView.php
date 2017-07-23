@@ -209,7 +209,8 @@ class BcAppView extends View {
 		if ($this->name == 'CakeError' && $this->viewPath == 'Errors') {
 			$subDir = $this->subDir;
 			$this->subDir = null;
-			if($name == 'missingConnection') {
+			$exception = $this->get('error');
+			if($exception && $exception instanceof MissingConnectionException) {
 				$this->layout = 'missing_connection';
 			}
 		}

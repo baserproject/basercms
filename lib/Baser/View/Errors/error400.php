@@ -10,7 +10,7 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
-Core
+
 
 <h2><?php echo $message; ?></h2>
 <p class="error">
