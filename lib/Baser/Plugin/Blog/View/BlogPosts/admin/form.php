@@ -220,7 +220,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 					<ul>
 						<li>URLに利用されます</li>
 						<li>半角のみで入力してください</li>
-						<li>空の場合はブログカテゴリタイトルから値が自動で設定されます</li>
+						<li>空の場合はカテゴリタイトルから値が自動で設定されます</li>
 					</ul>
 				</div>
 			</td>
