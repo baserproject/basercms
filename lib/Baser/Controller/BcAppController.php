@@ -415,7 +415,7 @@ class BcAppController extends Controller {
 		if($isRequestView) {
 			// テーマ、レイアウトとビュー用サブディレクトリの設定
 			$this->setTheme();
-			if (isset($this->request->params['prefix'])) {
+			if (isset($this->request->params['prefix']) && $this->name != 'CakeError') {
 				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
 				$this->subDir = str_replace('_', '/', $this->request->params['prefix']);
 			}
