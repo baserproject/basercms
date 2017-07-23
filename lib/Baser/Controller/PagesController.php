@@ -301,12 +301,42 @@ class PagesController extends AppController {
 
 		$previewCreated = false;
 		if($this->request->data) {
-			if($this->BcContents->preview == 'default' || $this->BcContents->preview == 'draft') {
+
+			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
+			// 一度データをセッションに退避する
+			if($this->BcContents->preview === 'default') {
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
+				$this->Session->write($sessionKey,  $this->request->data);
+				$this->redirect([
+					'controller'=>'pages',
+					'action'=>'display',
+					$this->request->data['Content']['url'],
+					'?' => ['preview' => 'default'],
+				]);
+				return;
+			}
+
+			if($this->BcContents->preview == 'draft') {
 				$uuid = $this->_createPreviewTemplate($this->request->data);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
+
 		} else {
+
+			// プレビューアクセス
+			if($this->BcContents->preview === 'default') {
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
+				$previewData = $this->Session->read($sessionKey);
+
+				if(!is_null($previewData)) {
+					$this->Session->delete($sessionKey);
+					$uuid = $this->_createPreviewTemplate($previewData);
+					$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
+					$previewCreated = true;
+				}
+			}
+
 			// 草稿アクセス
 			if($this->BcContents->preview == 'draft') {
 				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
