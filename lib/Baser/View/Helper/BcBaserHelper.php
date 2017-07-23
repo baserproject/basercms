@@ -2704,4 +2704,32 @@ END_FLASH;
 		return $this->BcContents->getParent($id, $direct);
 	}
 
+/**
+* アクションを判定する(メールの場合BackとSubmitも判定する)
+*
+* @param string $name :メールアクションは'index','confirm','back','submit'(固定ページは'display')
+* @return bool or string 
+*/
+    public function isAction( $name ) {  
+		$getAction = $this->getAction();
+		if($name == $getAction) {
+			return $getAction;
+		} else {
+			return false;			
+		}
+	}
+
+/**
+* アクションを取得する(メールの場合BackとSubmitも取得する)
+*
+* @return string メール送信完了の時は 'Submit'を返す
+*/
+    public function getAction() {  
+		if(!empty($this->request->data['MailMessage'])) {
+			return $this->request->data['MailMessage']['mode'];
+		} else {
+			return $this->request->action;
+		} 
+	}
+	
 }
