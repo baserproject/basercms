@@ -513,6 +513,15 @@ class BlogController extends BlogAppController {
 			'cache' => false,
 		], $options);
 		
+		// 取得件数
+		// TODO num に統一する
+		if($options['listCount'] && !$options['num']) {
+			$options['num'] = $options['listCount'];
+		}
+		if($options['num']) {
+			$options['limit'] = $options['num'];
+		}
+		unset($options['listCount'], $options['num']);		
 		
 		$named = [];
 		if (!empty($this->request->params['named'])) {
