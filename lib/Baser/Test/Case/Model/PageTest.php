@@ -19,7 +19,7 @@ App::uses('Page', 'Model');
  */
 class PageTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Model.Content.ContentStatusCheck',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogCategory',
@@ -37,7 +37,7 @@ class PageTest extends BaserTestCase {
 		'baser.Default.ContentFolder',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite'
-	);
+	];
 
 /**
  * Page
@@ -67,33 +67,33 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function test既存ページチェック正常() {
-		$this->Page->create(array(
-			'Page' => array(
+		$this->Page->create([
+			'Page' => [
 				'name' => 'test',
 				'page_category_id' => '1',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->Page->validates());
 	}
 
 	public function testPHP構文チェック正常系() {
-		$this->Page->create(array(
-			'Page' => array(
+		$this->Page->create([
+			'Page' => [
 				'name' => 'test',
 				'contents' => '<?php echo "正しい"; ?>',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->Page->validates());
 	}
 
 	public function testPHP構文チェック異常系() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->Page->create(array(
-			'Page' => array(
+		$this->Page->create([
+			'Page' => [
 				'name' => 'test',
 				'contents' => '<?php ??>',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Page->validates());
 		$this->assertArrayHasKey('contents', $this->Page->validationErrors);
 		$this->assertEquals("PHPの構文エラーです： \nPHP Parse error:  syntax error, unexpected '?' in - on line 1 \nErrors parsing -", current($this->Page->validationErrors['contents']));
@@ -113,16 +113,16 @@ class PageTest extends BaserTestCase {
  * 最終登録IDを取得する
  */
 	public function testGetInsertID() {
-		$this->Page->save(array(
-			'Page' => array(
+		$this->Page->save([
+			'Page' => [
 				'name' => 'hoge',
 				'title' => 'hoge',
 				'url' => '/hoge',
 				'description' => 'hoge',
 				'status' => 1,
 				'page_category_id' => null,
-			)
-		));
+			]
+		]);
 		$result = $this->Page->getInsertID();
 		$this->assertEquals(16, $result, '正しく最終登録IDを取得できません');
 	}
@@ -149,16 +149,16 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function checkOpenPageFileDataProvider() {
-		return array(
-			array('index', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array('company', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array('index', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array('index', 2, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array('hoge', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array(null, 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array('index', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-			array('hoge', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'),
-		);
+		return [
+			['index', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['company', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', 2, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['hoge', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			[null, 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['hoge', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+		];
 	}
 
 /**
@@ -204,8 +204,8 @@ class PageTest extends BaserTestCase {
 	public function testCreateSearchIndex($id, $name, $categoryId, $title, $url, $description, $publish_begin, $publish_end, $status, $message = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		
-		$data = array(
-			'Page' => array(
+		$data = [
+			'Page' => [
 				'id' => $id,
 				'name' => $name,
 				'page_category_id' => $categoryId,
@@ -215,10 +215,10 @@ class PageTest extends BaserTestCase {
 				'publish_begin' => $publish_begin,
 				'publish_end' => $publish_end,
 				'status' => $status,
-			)
-		);
+			]
+		];
 
-		$expected = array('Content' => array(
+		$expected = ['Content' => [
 				'model_id' => $id,
 				'type' => 'ページ',
 				'category' => '',
@@ -226,18 +226,18 @@ class PageTest extends BaserTestCase {
 				'detail' => '',
 				'url' => $url,
 				'status' => $status,
-			)
-		);
+			]
+		];
 		$result = $this->Page->createContent($data);
 		$this->assertEquals($expected, $result, $message);
 	}
 
 
 	public function createContentDataProvider() {
-		return array(
-			array(1, 'index', null, 'index', '/index', '', null, null, true, '検索用データを正しく生成できません'),
-			array(1, 'index', null, 'タイトル', '/index', '', null, null, true, '検索用データを正しく生成できません'),
-		);
+		return [
+			[1, 'index', null, 'index', '/index', '', null, null, true, '検索用データを正しく生成できません'],
+			[1, 'index', null, 'タイトル', '/index', '', null, null, true, '検索用データを正しく生成できません'],
+		];
 	}
 
 
@@ -276,9 +276,9 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function beforeDeleteDataProvider() {
-		return array(
-			array(2, 'PageモデルのbeforeDeleteが機能していません'),
-		);
+		return [
+			[2, 'PageモデルのbeforeDeleteが機能していません'],
+		];
 	}
 
 /**
@@ -315,17 +315,17 @@ class PageTest extends BaserTestCase {
  */
 	public function testCreatePageTemplate($name, $categoryId, $expected, $message = null) {
 
-		$data = array(
-			'Page' => array(
+		$data = [
+			'Page' => [
 				'contents' => '',
-			),
-			'Content' => array(
+			],
+			'Content' => [
 				'name' => $name,
 				'parent_id' => $categoryId,
 				'site_id' => 0,
 				'title' => ''
-			)
-		);
+			]
+		];
 		$path = $this->Page->getPageFilePath($data);
 
 		// ファイル生成
@@ -341,11 +341,11 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function createPageTemplateDataProvider() {
-		return array(
-			array('hoge.php', null, true, 'ページテンプレートを生成できません'),
-			array('hoge.php', 1, true, 'ページテンプレートを生成できません'),
-			array('hoge.php', 2, true, 'ページテンプレートを生成できません'),
-		);
+		return [
+			['hoge.php', null, true, 'ページテンプレートを生成できません'],
+			['hoge.php', 1, true, 'ページテンプレートを生成できません'],
+			['hoge.php', 2, true, 'ページテンプレートを生成できません'],
+		];
 	}
 
 /**
@@ -359,17 +359,17 @@ class PageTest extends BaserTestCase {
  */
 	public function testDelFile($name, $categoryId, $expected, $message = null) {
 
-		$data = array(
-			'Page' => array(
+		$data = [
+			'Page' => [
 				'contents' => '',
-			),
-			'Content' => array(
+			],
+			'Content' => [
 				'name' => $name,
 				'parent_id' => $categoryId,
 				'site_id' => 0,
 				'title' => ''
-			)
-		);
+			]
+		];
 
 		$path = $this->Page->getPageFilePath($data);
 
@@ -401,11 +401,11 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function delFileDataProvider() {
-		return array(
-			array('index', null, true, 'ページファイルを削除できません'),
-			array('index', 1, true, 'ページファイルを削除できません'),
-			array('index', 2, true, 'ページファイルを削除できません'),
-		);
+		return [
+			['index', null, true, 'ページファイルを削除できません'],
+			['index', 1, true, 'ページファイルを削除できません'],
+			['index', 2, true, 'ページファイルを削除できません'],
+		];
 	}
 
 /**
@@ -426,11 +426,11 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function addBaserPageTagDataProvider() {
-		return array(
-			array(1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
+		return [
+			[1, 'contentdayo', 'titledayo', 'descriptiondayo', 'codedayo',
 						"<!-- BaserPageTagBegin -->.*setTitle\('titledayo'\).*setDescription\('descriptiondayo'\).*setPageEditLink\(1\).*codedayo.*contentdayo",
-						'本文にbaserが管理するタグを追加できません'),
-		);
+						'本文にbaserが管理するタグを追加できません'],
+		];
 	}
 
 /**
@@ -450,9 +450,9 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			array('author_id', array(1 => 'basertest', 2 => 'basertest2'), 'コントロールソースを取得できません'),
-		);
+		return [
+			['author_id', [1 => 'basertest', 2 => 'basertest2'], 'コントロールソースを取得できません'],
+		];
 	}
 
 /**
@@ -481,13 +481,13 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function isPageUrlDataProvider() {
-		return array(
-			array('/service', true),
-			array('/service.html', true),
-			array('/servce.css', false),
-			array('/', true),
-			array('/hoge', false)
-		);
+		return [
+			['/service', true],
+			['/service.html', true],
+			['/servce.css', false],
+			['/', true],
+			['/hoge', false]
+		];
 	}
 
 
@@ -526,9 +526,9 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function deleteDataProvider() {
-		return array(
-			array(1, false, 'ページデータを削除できません'),
-		);
+		return [
+			[1, false, 'ページデータを削除できません'],
+		];
 	}
 
 /**
@@ -557,10 +557,10 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function copyDataProvider() {
-		return array(
-			array(1, 1, 'hoge1', 1, 0, 'ページデータをコピーできません'),
-			array(3, 1, 'hoge', 1, 0, 'ページデータをコピーできません')
-		);
+		return [
+			[1, 1, 'hoge1', 1, 0, 'ページデータをコピーできません'],
+			[3, 1, 'hoge', 1, 0, 'ページデータをコピーできません']
+		];
 	}
 
 /**
@@ -576,9 +576,9 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function phpValidSyntaxDataProvider() {
-		return array(
-			array('<?php $this->BcBaser->setTitle(\'test\');'),
-		);
+		return [
+			['<?php $this->BcBaser->setTitle(\'test\');'],
+		];
 	}
 
 /**
@@ -595,10 +595,10 @@ class PageTest extends BaserTestCase {
 	}
 
 	public function phpValidSyntaxWithInvalidDataProvider() {
-		return array(
-			array(1, '<?php echo \'test'),
-			array(2, '<?php echo \'test\';' . PHP_EOL . 'echo \'hoge')
-		);
+		return [
+			[1, '<?php echo \'test'],
+			[2, '<?php echo \'test\';' . PHP_EOL . 'echo \'hoge']
+		];
 	}
 
 /**
