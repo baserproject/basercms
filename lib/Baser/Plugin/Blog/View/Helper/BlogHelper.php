@@ -847,8 +847,10 @@ class BlogHelper extends AppHelper {
  * @param array $post ブログ記事
  * @param array $options オプション（初期値 : array()）
  *	- `recursive` : 関連データを取得する場合の階層（初期値 : -1）
- *	- `limit` : 件数（初期値 : 5）
+ *	-  `limit` : 件数（初期値 : 5）
  *	- `order` : 並び順指定（初期値 : BlogPost.posts_date DESC）
+ *	- `excludeTags` : （array）含めないタグ名
+ *	- `isCross` : (bool)現在の記事のブログから読み込む場合:false 全てのブログから読み込む場合:true
  * @return array
  */
 	public function getRelatedPosts($post, $options = array()) {
@@ -859,12 +861,16 @@ class BlogHelper extends AppHelper {
 		$options = array_merge(array(
 			'recursive' => -1,
 			'limit' => 5,
-			'order' => 'BlogPost.posts_date DESC'
+			'order' => 'BlogPost.posts_date DESC',
+			'excludeTags' => [],
+			'crossing' => false,
 			), $options);
 
 		$tagNames = array();
 		foreach ($post['BlogTag'] as $tag) {
-			$tagNames[] = urldecode($tag['name']);
+			if(!in_array($tag['name'], $options['excludeTags'])) {
+				 $tagNames[] = urldecode($tag['name']);
+			}
 		}
 		$BlogTag = ClassRegistry::init('Blog.BlogTag');
 		$tags = $BlogTag->find('all', array(
@@ -880,11 +886,15 @@ class BlogHelper extends AppHelper {
 		
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
-		$conditions = array(
-			array('BlogPost.id' => $ids),
-			array('BlogPost.id <>' => $post['BlogPost']['id']),
-			'BlogPost.blog_content_id' => $post['BlogPost']['blog_content_id']
-		);
+		$conditions = [
+			['BlogPost.id' => $ids],
+			['BlogPost.id <>' => $post['BlogPost']['id']],
+		];
+		
+		if(!$options['isCross']){
+			//isCrossではない場合、現在の記事のblog_content_idを$conditionsに追加
+			$conditions = $conditions + ['BlogPost.blog_content_id' => $post['BlogPost']['blog_content_id']];
+		}
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 
 		// 毎秒抽出条件が違うのでキャッシュしない
@@ -898,7 +908,7 @@ class BlogHelper extends AppHelper {
 
 		return $relatedPosts;
 	}
-
+	
 /**
  * ブログのアーカイブタイプを取得する
  *
