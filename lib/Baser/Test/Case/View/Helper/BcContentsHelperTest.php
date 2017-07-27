@@ -449,5 +449,35 @@ class BcContentsHelperTest extends BaserTestCase {
 			[99, false],
 		];
 	}
-
+/**
+ * エンティティIDからコンテンツの情報を取得
+ * getContentByID
+ * 
+ * @param string $ContentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param int $id エンティティID
+ * @param string|bool $expect 期待値
+ * @dataProvider getContentByIDDataProvider
+ */	
+	public function testGetContentByID($expect, $id, $ContentType, $contValue) {
+//		var_dump($this->BcContents->getContentByID('13', 'Page'));
+		$result = $this->BcContents->getContentByID($id, $ContentType, $contValue);
+		$this->assertEquals($expect, $result);                       
+	}
+	
+	public function getContentByIDDataProvider() {
+		return [
+			// 存在するID（0~2）を指定した場合
+			['/news', '1', 'BlogContent', 'url'],
+			['/contact', '1', 'MailContent', 'url'],
+			['/index', '1', 'Page', 'url'],
+			['/service/', '4', 'ContentFolder', 'url'],
+			['/service/sub_service/sub_service_1', '14', 'Page', 'url'],
+			['サービス２', '12', 'Page', 'title'],
+			// 存在しないIDを指定した場合
+			[false, '5', 'BlogContent', 'name'],
+			//指定がおかしい場合
+			[false, '5', 'Blog', 'url'],
+		];
+	}
 }

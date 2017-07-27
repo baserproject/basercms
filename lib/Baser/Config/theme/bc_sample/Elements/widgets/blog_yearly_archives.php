@@ -30,10 +30,18 @@ if ($limit) {
 }
 if ($view_count) {
 	$actionUrl .= '/1';
+} else {
+	$actionUrl .= '/0';	
 }
+
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
+$ContentType = 'BlogContent';
+$blogUrl = $this->BcBaser->getContentByID($id, $ContentType, 'url');
+if($this->request->params['Content']['url'] == $blogUrl){
+	$blogUrl = '';
+}
 $baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/date/';
 ?>
 
@@ -58,7 +66,7 @@ $baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/date/';
 					<?php $title = $postedDate['year'] . '年' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year']) ?>
+					<?php $this->BcBaser->link($title, $blogUrl. $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

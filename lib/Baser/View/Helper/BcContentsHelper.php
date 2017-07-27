@@ -495,4 +495,28 @@ class BcContentsHelper extends AppHelper {
 		return true;
 	}
 	
+/**
+ * エンティティIDからコンテンツの情報を取得
+ *
+ * @param string $ContentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param int $id エンティティID
+ * @param string $contValue 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
+ * @return array or string or bool
+ */
+	public function getContentByID($id, $ContentType, $contValue = null){
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $ContentType, 'entity_id' => $id]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'cache' => false]);
+		if(!empty($content)){
+			if($contValue){
+				return $content ['Content'][$contValue];
+			} else {
+				return $content ['Content'];
+			}
+		} else {
+					return false;		
+		}
+	}	
 }
