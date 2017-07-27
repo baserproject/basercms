@@ -53,7 +53,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 						<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), array('title' => $authName)) ?></li>
 					<?php endif ?>
 				<?php endif ?>
-				<?php if ($this->BcBaser->existsEditLink()): ?>
+				<?php if ($this->BcBaser->existsEditLink() && !isset($this->request->query['preview'])): ?>
 					<li><?php $this->BcBaser->editLink() ?></li>
 				<?php endif ?>
 				<?php if ($this->BcBaser->existsPublishLink()): ?>
@@ -80,7 +80,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 							<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
 								<li><?php $this->BcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 							<?php else: ?>
-                                <?php if ($currentPrefix != 'front'): ?>
+								<?php if ($currentPrefix != 'front'): ?>
 								<li><?php $this->BcBaser->link('アカウント設定', array($currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
 								<?php endif ?>
 							<?php endif ?>
