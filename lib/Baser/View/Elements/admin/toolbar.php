@@ -75,7 +75,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 						<?php $this->BcBaser->link($this->BcBaser->getUserName($user) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<ul>
 							<?php if ($this->Session->check('AuthAgent')): ?>
-								<li><?php $this->BcBaser->link('元のユーザーに戻る', array('admin' => false, 'plugin' => null, 'controller' => 'users', 'action' => 'back_agent')) ?></li>
+								<li><?php $this->BcBaser->link('元のユーザーに戻る', '/users/back_agent') ?></li>
 							<?php endif ?>
 							<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
 								<li><?php $this->BcBaser->link('アカウント設定', array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id'])) ?></li>
