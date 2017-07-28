@@ -163,14 +163,14 @@ class MailField extends MailAppModel {
 
 /**
  * メールフィールドの値として正しい文字列か検証する
- * 半角英数-_\s
+ * 半角英数-_
  *
  * @param array $check
  * @return boolean
  */
 	public function halfTextMailField($check) {
 		$subject = $check[key($check)];
-		$pattern = "/^[a-zA-Z0-9-_\s]*$/";
+		$pattern = "/^[a-zA-Z0-9-_]*$/";
 		return !!(preg_match($pattern, $subject) === 1);
 	}
 
