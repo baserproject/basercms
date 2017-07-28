@@ -25,7 +25,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',	// メソッド内で読み込む
 		'baser.Default.Content',	// メソッド内で読み込む
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
@@ -44,7 +44,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		'baser.Default.Site',
 		'baser.Default.BlogComment',
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
-	);
+	];
 
 /**
  * View
@@ -60,7 +60,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = array(), $dataName = '') {
+	public function __construct($name = null, array $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 	}
 
@@ -77,7 +77,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$siteConfig = $SiteConfig->findExpanded();
 		$this->_View->set('widgetArea', $siteConfig['widget_area']);
 		$this->_View->set('siteConfig', $siteConfig);
-		$this->_View->helpers = array('BcBaser');
+		$this->_View->helpers = ['BcBaser'];
 		$this->_View->loadHelpers();
 		$this->BcBaser = $this->_View->BcBaser;
 	}
@@ -100,7 +100,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	protected function _login() {
 		$User = ClassRegistry::init('User');
-		$user = $User->find('first', array('conditions' => array('User.id' => 1)));
+		$user = $User->find('first', ['conditions' => ['User.id' => 1]]);
 		unset($user['User']['password']);
 		$this->BcBaser->set('user', $user['User']);
 		$user['User']['UserGroup'] = $user['UserGroup'];
@@ -131,10 +131,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		
 		// カテゴリがある場合
 		$this->BcBaser->request = $this->_getRequest('/service/service2');
-		$this->BcBaser->_View->set('crumbs', array(
-			array('name' => '会社案内', 'url' => '/service/index'),
-			array('name' => '会社データ', 'url' => '/service/data')
-		));
+		$this->BcBaser->_View->set('crumbs', [
+			['name' => '会社案内', 'url' => '/service/index'],
+			['name' => '会社データ', 'url' => '/service/data']
+		]);
 		$this->BcBaser->setTitle('会社沿革');
 		$this->assertEquals("会社沿革｜会社データ｜会社案内{$topTitle}", $this->BcBaser->getTitle());
 
@@ -181,10 +181,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testSetCategoryTitle() {
 		$topTitle = '｜baserCMS inc. [デモ]';
 		$this->BcBaser->request = $this->_getRequest('/about');
-		$this->BcBaser->_View->set('crumbs', array(
-			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data')
-		));
+		$this->BcBaser->_View->set('crumbs', [
+			['name' => '会社案内', 'url' => '/company/index'],
+			['name' => '会社データ', 'url' => '/company/data']
+		]);
 		$this->BcBaser->setTitle('会社沿革');
 
 		// カテゴリをオフにした場合
@@ -200,20 +200,20 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals("会社沿革｜店舗案内{$topTitle}", $this->BcBaser->getTitle());
 
 		// パンくず用にリンクも指定した場合
-		$this->BcBaser->setCategoryTitle(array(
+		$this->BcBaser->setCategoryTitle([
 			'name' => '店舗案内',
 			'url' => '/shop/index'
-		));
-		$expected = array(
-			array(
+		]);
+		$expected = [
+			[
 				'name'	=> '店舗案内',
 				'url'	=> '/shop/index'
-			),
-			array(
+			],
+			[
 				'name'	=> '会社沿革',
 				'url'	=> ''
-			)
-		);
+			]
+		];
 		$this->assertEquals($expected, $this->BcBaser->getCrumbs());
 	}
 
@@ -232,11 +232,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getKeywordsDataProvider() {
-		return array(
-			array('baser,CMS,コンテンツマネジメントシステム,開発支援'),
-			array('baser,CMS,コンテンツマネジメントシステム,開発支援', ''),
-			array('baserCMS,国産,オープンソース', 'baserCMS,国産,オープンソース'),
-		);
+		return [
+			['baser,CMS,コンテンツマネジメントシステム,開発支援'],
+			['baser,CMS,コンテンツマネジメントシステム,開発支援', ''],
+			['baserCMS,国産,オープンソース', 'baserCMS,国産,オープンソース'],
+		];
 	}
 
 /**
@@ -255,11 +255,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getDescriptionDataProvider() {
-		return array(
-			array('baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'),
-			array('baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''),
-			array('国産オープンソースのホームページです', '国産オープンソースのホームページです')
-		);
+		return [
+			['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。'],
+			['baserCMS は、CakePHPを利用し、環境準備の素早さに重点を置いた基本開発支援プロジェクトです。WEBサイトに最低限必要となるプラグイン、そしてそのプラグインを組み込みやすい管理画面、認証付きのメンバーマイページを最初から装備しています。', ''],
+			['国産オープンソースのホームページです', '国産オープンソースのホームページです']
+		];
 	}
 
 /**
@@ -271,10 +271,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$topTitle = 'baserCMS inc. [デモ]';
 		$this->BcBaser->request = $this->_getRequest('/about');
 		// 通常
-		$this->BcBaser->_View->set('crumbs', array(
-			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data')
-		));
+		$this->BcBaser->_View->set('crumbs', [
+			['name' => '会社案内', 'url' => '/company/index'],
+			['name' => '会社データ', 'url' => '/company/data']
+		]);
 		$this->BcBaser->setTitle('会社沿革');
 		$this->assertEquals("会社沿革｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle());
 
@@ -293,18 +293,18 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals("会社<br>沿革<center>真ん中</center>｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', true));
 
 		// strip_tagの機能確認 tagを削除
-		$options = array(
+		$options = [
 			'categoryTitleOn' => true,
 			'tag' => false
-		);
+		];
 		$this->assertEquals("会社沿革真ん中｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', $options));
 
 		// 一部タグだけ削除
-		$options = array(
+		$options = [
 			'categoryTitleOn' => true,
 			'tag' => false,
 			'allowableTags' => '<center>'
-		);
+		];
 		$this->assertEquals("会社沿革<center>真ん中</center>｜会社データ｜会社案内｜{$topTitle}", $this->BcBaser->getTitle('｜', $options));
 	}
 
@@ -319,21 +319,21 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEmpty($result);
 
 		// パンくずが設定されている場合
-		$this->BcBaser->_View->set('crumbs', array(
-			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data')
-		));
+		$this->BcBaser->_View->set('crumbs', [
+			['name' => '会社案内', 'url' => '/company/index'],
+			['name' => '会社データ', 'url' => '/company/data']
+		]);
 		$this->BcBaser->setTitle('会社沿革');
-		$expected = array(
-			array('name' => '会社案内', 'url' => '/company/index'),
-			array('name' => '会社データ', 'url' => '/company/data')
-		);
+		$expected = [
+			['name' => '会社案内', 'url' => '/company/index'],
+			['name' => '会社データ', 'url' => '/company/data']
+		];
 		$this->assertEquals($expected, $this->BcBaser->getCrumbs(true));
 
 		// パンくずは設定されているが、オプションでカテゴリをオフにした場合
-		$expected = array(
-			array('name' => '会社沿革', 'url' => '')
-		);
+		$expected = [
+			['name' => '会社沿革', 'url' => '']
+		];
 		$this->assertEquals($expected, $this->BcBaser->getCrumbs(false));
 	}
 
@@ -386,12 +386,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->metaKeywords();
 		$result = ob_get_clean();
-		$excepted = array(
-			'meta' => array(
+		$excepted = [
+			'meta' => [
 				'name'		=> 'keywords',
 				'content'	=> 'baserCMS,国産,オープンソース'
-			)
-		);
+			]
+		];
 
 		$this->assertTags($result, $excepted);
 	}
@@ -406,12 +406,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->metaDescription();
 		$result = ob_get_clean();
-		$excepted = array(
-			'meta' => array(
+		$excepted = [
+			'meta' => [
 				'name'		=> 'description',
 				'content'	=> '国産オープンソースのホームページです'
-			)
-		);
+			]
+		];
 		$this->assertTags($result, $excepted);
 	}
 
@@ -424,14 +424,14 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->rss('ブログ', 'http://localhost/blog/');
 		$result = ob_get_clean();
-		$excepted = array(
-			'link' => array(
+		$excepted = [
+			'link' => [
 				'href'	=> 'http://localhost/blog/',
 				'type'	=> 'application/rss+xml',
 				'rel'	=> 'alternate',
 				'title'	=> 'ブログ'
-			)
-		);
+			]
+		];
 		$this->assertTags($result, $excepted);
 	}
 
@@ -449,23 +449,23 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function isHomeDataProvider() {
-		return array(
+		return [
 			//PC
-			array(true, '/'),
-			array(true, '/index'),
-			array(false, '/news/index'),
+			[true, '/'],
+			[true, '/index'],
+			[false, '/news/index'],
 
 			// モバイルページ
-			array(true, '/m/'),
-			array(true, '/m/index'),
-			array(false, '/m/news/index'),
+			[true, '/m/'],
+			[true, '/m/index'],
+			[false, '/m/news/index'],
 
 			// スマートフォンページ
-			array(true, '/s/'),
-			array(true, '/s/index'),
-			array(false, '/s/news/index'),
-			array(false, '/s/news/index')
-		);
+			[true, '/s/'],
+			[true, '/s/index'],
+			[false, '/s/news/index'],
+			[false, '/s/news/index']
+		];
 	}
 
 /**
@@ -484,11 +484,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function rootDataProvider() {
-		return array(
-			array('/', ''),
-			array('/index.php/', 'index.php'),
-			array('/basercms/index.php/', 'basercms/index.php')
-		);
+		return [
+			['/', ''],
+			['/index.php/', 'index.php'],
+			['/basercms/index.php/', 'basercms/index.php']
+		];
 	}
 
 /**
@@ -538,13 +538,13 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals(Configure::read('App.fullBaseUrl') . '/about', $result);
 
 		// 配列URL
-		$result = $this->BcBaser->getUrl(array(
+		$result = $this->BcBaser->getUrl([
 			'admin'			=> true,
 			'plugin'		=> 'blog',
 			'controller'	=> 'blog_posts',
 			'action'		=> 'edit',
 			1
-		));
+		]);
 		$this->assertEquals('/admin/blog/blog_posts/edit/1', $result);
 
 		// セッションIDを付加する場合
@@ -572,13 +572,13 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals(Configure::read('App.fullBaseUrl') . '/basercms/index.php/about', $result);
 
 		// 配列URL
-		$result = $this->BcBaser->getUrl(array(
+		$result = $this->BcBaser->getUrl([
 			'admin'			=> true,
 			'plugin'		=> 'blog',
 			'controller'	=> 'blog_posts',
 			'action'		=> 'edit',
 			1
-		));
+		]);
 		$this->assertEquals('/basercms/index.php/admin/blog/blog_posts/edit/1', $result);
 	}
 
@@ -601,7 +601,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$result = $this->BcBaser->getElement(('site_search_form'));
 		$this->assertTextContains('<div class="section search-box">', $result);
 		// 強制的にフロントのテンプレートに切り替えた場合
-		$result = $this->BcBaser->getElement('crumbs', array(), array('subDir' => false));
+		$result = $this->BcBaser->getElement('crumbs', [], ['subDir' => false]);
 		$this->assertTextContains('ホーム', $result);
 	}
 
@@ -644,7 +644,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testPagination() {
 		$this->expectOutputRegex('/<div class="pagination">/');
-		$this->BcBaser->request->params['paging']['Model'] = array(
+		$this->BcBaser->request->params['paging']['Model'] = [
 			'count'		=> 100,
 			'pageCount'	=> 3,
 			'page'		=> 2,
@@ -652,9 +652,9 @@ class BcBaserHelperTest extends BaserTestCase {
 			'current'	=> null,
 			'prevPage'	=> 1,
 			'nextPage'	=> 3,
-			'options'	=> array(),
+			'options'	=> [],
 			'paramType'	=> 'named'
-		);
+		];
 		$this->BcBaser->pagination();
 	}
 
@@ -698,7 +698,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$themeConfigTag = '<link rel="stylesheet" type="text/css" href="/files/theme_configs/config.css" />';
 		// CSS
 		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/layout.css"/>';
-		$this->BcBaser->css('admin/layout', array('inline' => false));
+		$this->BcBaser->css('admin/layout', ['inline' => false]);
 		ob_start();
 		$this->BcBaser->scripts();
 		$result = ob_get_clean();
@@ -718,7 +718,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$expected = '<meta name="description" content="説明文"/>';
 		App::uses('BcHtmlHelper', 'View/Helper');
 		$BcHtml = new BcHtmlHelper($this->_View);
-		$BcHtml->meta('description', '説明文', array('inline' => false));
+		$BcHtml->meta('description', '説明文', ['inline' => false]);
 		ob_start();
 		$this->BcBaser->scripts();
 		$result = ob_get_clean();
@@ -727,7 +727,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->_View->assign('meta', '');
 		// ツールバー
 		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/toolbar.css"/>';
-		$this->BcBaser->set('user', array('User'));
+		$this->BcBaser->set('user', ['User']);
 		ob_start();
 		$this->BcBaser->scripts();
 		$result = ob_get_clean();
@@ -753,7 +753,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$expects = '<div id="ToolBar">';
 		$this->_login();
 		$this->BcBaser->set('currentPrefix', 'admin');
-		$this->BcBaser->set('currentUserAuthPrefixes', array('admin'));
+		$this->BcBaser->set('currentUserAuthPrefixes', ['admin']);
 		ob_start();
 		$this->BcBaser->func();
 		$result = ob_get_clean();
@@ -789,14 +789,14 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function setSubMenusDataProvider() {
-		return array(
-			array(array('contents'), array('<th>コンテンツ管理メニュー</th>')),
-			array(array('editor_templates', 'site_configs'), array('<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>')),
-			array(array('tools'), array('<th>ユーティリティメニュー</th>')),
-			array(array('plugins', 'themes'), array('<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>')),
-			array(array('users'), array('<th>ユーザー管理メニュー</th>')),
-			array(array('widget_areas'), array('<th>ウィジェットエリア管理メニュー</th>')),
-		);
+		return [
+			[['contents'], ['<th>コンテンツ管理メニュー</th>']],
+			[['editor_templates', 'site_configs'], ['<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>']],
+			[['tools'], ['<th>ユーティリティメニュー</th>']],
+			[['plugins', 'themes'], ['<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>']],
+			[['users'], ['<th>ユーザー管理メニュー</th>']],
+			[['widget_areas'], ['<th>ウィジェットエリア管理メニュー</th>']],
+		];
 	}
 
 /**
@@ -814,10 +814,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function xmlDataProvider() {
-		return array(
-			array('<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/'),
-			array('<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", '/m/')
-		);
+		return [
+			['<?xml version="1.0" encoding="UTF-8" ?>' . "\n", '/'],
+			['<?xml version="1.0" encoding="Shift-JIS" ?>' . "\n", '/m/']
+		];
 	}
 
 /**
@@ -844,10 +844,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function docTypeDataProvider() {
-		return array(
-			array('xhtml-trans', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'),
-			array('html5', '<!DOCTYPE html>')
-		);
+		return [
+			['xhtml-trans', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'],
+			['html5', '<!DOCTYPE html>']
+		];
 	}
 
 /**
@@ -869,7 +869,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$this->assertEquals($expected, $result);
 		// インラインオフ（array）
-		$this->BcBaser->css('admin/import.css', array('inline' => false));
+		$this->BcBaser->css('admin/import.css', ['inline' => false]);
 		$expected = '<link rel="stylesheet" type="text/css" href="/css/admin/import.css"/>';
 		$result = $this->_View->Blocks->get('css');
 		$this->assertEquals($expected, $result);
@@ -895,10 +895,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function jsDataProvider() {
-		return array(
-			array('<script type="text/javascript" src="/js/admin/startup.js"></script>', 'admin/startup'),
-			array('<script type="text/javascript" src="/js/admin/startup.js"></script>', 'admin/startup.js')
-		);
+		return [
+			['<script type="text/javascript" src="/js/admin/startup.js"></script>', 'admin/startup'],
+			['<script type="text/javascript" src="/js/admin/startup.js"></script>', 'admin/startup.js']
+		];
 	}
 
 /**
@@ -939,10 +939,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getImgDataProvider() {
-		return array(
-			array('baser.power.gif', array('alt' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" alt="baserCMSロゴ"/>'),
-			array('baser.power.gif', array('title' => "baserCMSロゴ"), '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt=""/>')
-		);
+		return [
+			['baser.power.gif', ['alt' => "baserCMSロゴ"], '<img src="/img/baser.power.gif" alt="baserCMSロゴ"/>'],
+			['baser.power.gif', ['title' => "baserCMSロゴ"], '<img src="/img/baser.power.gif" title="baserCMSロゴ" alt=""/>']
+		];
 	}
 
 /**
@@ -981,16 +981,16 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getLinkDataProvider() {
-		return array(
-			array('', '/', array(), '<a href="/"></a>'),
-			array('会社案内', '/about', array(), '<a href="/about">会社案内</a>'),
-			array('会社案内 & 会社データ', '/about', array('escape' => true), '<a href="/about">会社案内 &amp; 会社データ</a>'),	// エスケープ
-			array('固定ページ管理', array('controller' => 'pages', 'action' => 'index'), array('prefix' => true), '<a href="/admin/pages/">固定ページ管理</a>'),	// プレフィックス
-			array('システム設定', array('admin' => true, 'controller' => 'site_configs', 'action' => 'form'), array('forceTitle' => true), '<span>システム設定</span>'),	// 強制タイトル
-			array('会社案内', '/about', array('ssl' => true), '<a href="https://localhost/about">会社案内</a>'), // SSL
-			array('テーマファイル管理', array('controller' => 'themes', 'action' => 'manage', 'jsa'), array('ssl' => true), '<a href="https://localhost/themes/manage/jsa">テーマファイル管理</a>'), // SSL
-			array('画像', '/img/test.jpg', array('ssl' => true), '<a href="https://localhost/img/test.jpg">画像</a>'), // SSL
-		);
+		return [
+			['', '/', [], '<a href="/"></a>'],
+			['会社案内', '/about', [], '<a href="/about">会社案内</a>'],
+			['会社案内 & 会社データ', '/about', ['escape' => true], '<a href="/about">会社案内 &amp; 会社データ</a>'],	// エスケープ
+			['固定ページ管理', ['controller' => 'pages', 'action' => 'index'], ['prefix' => true], '<a href="/admin/pages/">固定ページ管理</a>'],	// プレフィックス
+			['システム設定', ['admin' => true, 'controller' => 'site_configs', 'action' => 'form'], ['forceTitle' => true], '<span>システム設定</span>'],	// 強制タイトル
+			['会社案内', '/about', ['ssl' => true], '<a href="https://localhost/about">会社案内</a>'], // SSL
+			['テーマファイル管理', ['controller' => 'themes', 'action' => 'manage', 'jsa'], ['ssl' => true], '<a href="https://localhost/themes/manage/jsa">テーマファイル管理</a>'], // SSL
+			['画像', '/img/test.jpg', ['ssl' => true], '<a href="https://localhost/img/test.jpg">画像</a>'], // SSL
+		];
 	}
 
 /**
@@ -1024,10 +1024,10 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function charsetDataProvider() {
-		return array(
-			array('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'),
-			array('<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, '/m/')
-		);
+		return [
+			['<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />', 'UTF-8', '/'],
+			['<meta http-equiv="Content-Type" content="text/html; charset=Shift-JIS" />', null, '/m/']
+		];
 	}
 
 /**
@@ -1045,10 +1045,10 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function copyYearDataProvider() {
 		$year = date('Y');
-		return array(
-			array("2000 - {$year}", 2000),
-			array($year, 'はーい')
-		);
+		return [
+			["2000 - {$year}", 2000],
+			[$year, 'はーい']
+		];
 	}
 
 /**
@@ -1068,8 +1068,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		// リンクあり
 		$expected = '<a href="/admin/pages/edit/1" class="tool-menu">編集する</a>';
-		$this->_View->viewVars['user'] = array('User' => array('id' => 1));
-		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
+		$this->_View->viewVars['user'] = ['User' => ['id' => 1]];
+		$this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
 		$this->BcBaser->setPageEditLink(1);
 		ob_start();
 		$this->BcBaser->editLink();
@@ -1087,8 +1087,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setPageEditLink(1);
 		$this->assertEquals(false, $this->BcBaser->existsEditLink());
 		// 存在する
-		$this->_View->viewVars['user'] = array('User' => array('id' => 1));
-		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
+		$this->_View->viewVars['user'] = ['User' => ['id' => 1]];
+		$this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
 		$this->BcBaser->setPageEditLink(1);
 		$this->assertEquals(true, $this->BcBaser->existsEditLink());
 	}
@@ -1107,7 +1107,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 		// リンクあり
 		$expected = '<a href="/" class="tool-menu">公開ページ</a>';
-		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
+		$this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
 		$this->_View->viewVars['publishLink'] = '/';
 		ob_start();
 		$this->BcBaser->publishLink();
@@ -1124,7 +1124,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		// 存在しない
 		$this->assertEquals(false, $this->BcBaser->existsPublishLink());
 		// 存在する
-		$this->_View->viewVars['currentUserAuthPrefixes'] = array(Configure::read('Routing.prefixes.0'));
+		$this->_View->viewVars['currentUserAuthPrefixes'] = [Configure::read('Routing.prefixes.0')];
 		$this->_View->viewVars['publishLink'] = '/';
 		$this->assertEquals(true, $this->BcBaser->existsPublishLink());
 	}
@@ -1145,12 +1145,12 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function checkUpdateDataProvider() {
-		return array(
-			array('1.0.0', '1.0.0', false),
-			array('1.0.1', '1.0.0', true),
-			array('1.0.1-beta', '1.0.0', false),
-			array('1.0.1', '1.0.0-beta', false)
-		);
+		return [
+			['1.0.0', '1.0.0', false],
+			['1.0.1', '1.0.0', true],
+			['1.0.1-beta', '1.0.0', false],
+			['1.0.1', '1.0.0-beta', false]
+		];
 	}
 
 /**
@@ -1219,47 +1219,47 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEmpty($result);
 
 		// パンくずが設定されている場合
-		$crumbs = array(
-			array('name' => '会社案内', 'url' => '/company/'),
-			array('name' => '会社データ', 'url' => '/company/data'),
-			array('name' => '会社沿革', 'url' => '')
-		);
+		$crumbs = [
+			['name' => '会社案内', 'url' => '/company/'],
+			['name' => '会社データ', 'url' => '/company/data'],
+			['name' => '会社沿革', 'url' => '']
+		];
 		foreach ($crumbs as $crumb) {
 			$this->BcBaser->addCrumb($crumb['name'], $crumb['url']);
 		}
 		ob_start();
 		$this->BcBaser->crumbs();
 		$result = ob_get_clean();
-		$expected = array(
-			array('a' => array('href' => '/company/')),
+		$expected = [
+			['a' => ['href' => '/company/']],
 			'会社案内',
 			'/a',
 			'&raquo;',
-			array('a' => array('href' => '/company/data')),
+			['a' => ['href' => '/company/data']],
 			'会社データ',
 			'/a',
 			'&raquo;会社沿革'
-		);
+		];
 		$this->assertTags($result, $expected);
 
 		// 区切り文字を変更、先頭にホームを追加
 		ob_start();
 		$this->BcBaser->crumbs(' | ', 'ホーム');
 		$result = ob_get_clean();
-		$expected = array(
-			array('a' => array('href' => '/')),
+		$expected = [
+			['a' => ['href' => '/']],
 			'ホーム',
 			'/a',
 			' | ',
-			array('a' => array('href' => '/company/')),
+			['a' => ['href' => '/company/']],
 			'会社案内',
 			'/a',
 			' | ',
-			array('a' => array('href' => '/company/data')),
+			['a' => ['href' => '/company/data']],
 			'会社データ',
 			'/a',
 			' | 会社沿革'
-		);
+		];
 		$this->assertTags($result, $expected);
 	}
 
@@ -1273,11 +1273,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		ob_start();
 		$this->BcBaser->crumbs();
 		$result = ob_get_clean();
-		$expected = array(
-			array('a' => array('href' => '/company/')),
+		$expected = [
+			['a' => ['href' => '/company/']],
 			'会社案内',
 			'/a'
-		);
+		];
 		$this->assertTags($result, $expected);
 	}
 
@@ -1303,11 +1303,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function cacheHeaderDataProvider() {
-		return array(
-			array(null, 'html', 'Cache-Control: max-age=14'),
-			array(null, 'css', 'Cache-Control: max-age=14'),
-			array(10, 'html', 'Cache-Control: max-age=10'),
-		);
+		return [
+			[null, 'html', 'Cache-Control: max-age=14'],
+			[null, 'css', 'Cache-Control: max-age=14'],
+			[10, 'html', 'Cache-Control: max-age=10'],
+		];
 	}
 
 /**
@@ -1329,13 +1329,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getUriDataProvider() {
-		return array(
-			array('/', true, 'localhost', '', 'http://localhost/'),
-			array('/about', true, 'localhost', '', 'http://localhost/about'),
-			array('/about', true, 'test', '', 'http://test/about'),
-			array('/about', false, 'localhost', '', 'http://localhost/about'),
-			array('/about', false, 'localhost', 'on', 'https://localhost/about'),
-		);
+		return [
+			['/', true, 'localhost', '', 'http://localhost/'],
+			['/about', true, 'localhost', '', 'http://localhost/about'],
+			['/about', true, 'test', '', 'http://test/about'],
+			['/about', false, 'localhost', '', 'http://localhost/about'],
+			['/about', false, 'localhost', 'on', 'https://localhost/about'],
+		];
 	}
 
 /**
@@ -1355,13 +1355,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function markDataProvider() {
-		return array(
-			array('大切', 'とても大切です', 'strong', array(), false, 'とても<strong>大切</strong>です'),
-			array(array('大切', '本当'), 'とても大切です本当です', 'strong', array(), false, 'とても<strong>大切</strong>です<strong>本当</strong>です'),
-			array('大切', 'とても大切です', 'b', array(), false, 'とても<b>大切</b>です'),
-			array('大切', 'とても大切です', 'b', array('class' => 'truth'), false, 'とても<b class="truth">大切</b>です'),
-			array('<<大切>>', 'とても<<大切>>です', 'b', array(), true, 'とても<b>&lt;&lt;大切&gt;&gt;</b>です'),
-		);
+		return [
+			['大切', 'とても大切です', 'strong', [], false, 'とても<strong>大切</strong>です'],
+			[['大切', '本当'], 'とても大切です本当です', 'strong', [], false, 'とても<strong>大切</strong>です<strong>本当</strong>です'],
+			['大切', 'とても大切です', 'b', [], false, 'とても<b>大切</b>です'],
+			['大切', 'とても大切です', 'b', ['class' => 'truth'], false, 'とても<b class="truth">大切</b>です'],
+			['<<大切>>', 'とても<<大切>>です', 'b', [], true, 'とても<b>&lt;&lt;大切&gt;&gt;</b>です'],
+		];
 	}
 
 /**
@@ -1383,11 +1383,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function sitemapDataProvider() {
-		return array(
-			array(0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'),
-			array(1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'),
-			array(2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>')
-		);
+		return [
+			[0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'],
+			[1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'],
+			[2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>']
+		];
 	}
 
 /**
@@ -1412,12 +1412,12 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function swfDataProvider() {
-		return array(
-			array('test', 300, 300, array(), 'id="test".*theme_test.swf.*"test", "300", "300", "7"', 'Flashを正しく表示できません'),
-			array('test', 300, 300, array('version' => '6'), '"test", "300", "300", "6"', 'Flashを正しく表示できません'),
-			array('test', 300, 300, array('script' => 'hoge'), 'src="\/js\/hoge\.js"', 'Flashを正しく表示できません'),
-			array('test', 300, 300, array('noflash' => 'Flashがインストールされていません'), '<div id="test">Flashがインストールされていません<\/div>', 'Flashを正しく表示できません'),
-		);
+		return [
+			['test', 300, 300, [], 'id="test".*theme_test.swf.*"test", "300", "300", "7"', 'Flashを正しく表示できません'],
+			['test', 300, 300, ['version' => '6'], '"test", "300", "300", "6"', 'Flashを正しく表示できません'],
+			['test', 300, 300, ['script' => 'hoge'], 'src="\/js\/hoge\.js"', 'Flashを正しく表示できません'],
+			['test', 300, 300, ['noflash' => 'Flashがインストールされていません'], '<div id="test">Flashがインストールされていません<\/div>', 'Flashを正しく表示できません'],
+		];
 	}
 
 /**
@@ -1435,11 +1435,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function isAdminUserDataProvider() {
-		return array(
-			array(1, true),
-			array(2, false),
-			array(null, true)
-		);
+		return [
+			[1, true],
+			[2, false],
+			[null, true]
+		];
 	}
 
 /**
@@ -1455,13 +1455,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getIsPageProvider() {
-		return array(
+		return [
 			// PCページ
-			array(true, '/'),
-			array(true, '/index'),
-			array(false, '/news/index'),
-			array(false, '/blog/blog/index'),
-		);
+			[true, '/'],
+			[true, '/index'],
+			[false, '/news/index'],
+			[false, '/blog/blog/index'],
+		];
 	}
 	
 
@@ -1479,12 +1479,12 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getHereDataProvider() {
-		return array(
-			array('/', '/'),
-			array('/index', '/index'),
-			array('/contact/index', '/contact/index'),
-			array('/blog/blog/index', '/blog/blog/index')
-		);
+		return [
+			['/', '/'],
+			['/index', '/index'],
+			['/contact/index', '/contact/index'],
+			['/blog/blog/index', '/blog/blog/index']
+		];
 	}
 
 /**
@@ -1501,13 +1501,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function isCategoryTopDataProvider() {
-		return array(
+		return [
 			// PCページ
-			array('/', false),
-			array('/index', false),
-			array('/contact/index', true),
-			array('/contact/test', false),
-		);
+			['/', false],
+			['/index', false],
+			['/contact/index', true],
+			['/contact/test', false],
+		];
 	}
 
 /**
@@ -1531,27 +1531,27 @@ class BcBaserHelperTest extends BaserTestCase {
 		];
 		$this->BcBaser->page($input, [], $options);
 	}
-
 	public function PageProvider() {
-		return array(
-			array('aaa', false, false, '/^$/'),
-			array('aaa', false, true, '/^$/'),
-			array('', false, false, '/^$/'),
-			array('/about', false, false, '/^$/'),
-			array('/about', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?会社案内.*?<\/h2>.*/s'),
-			array('/about', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?会社案内.*?<\/h2>.*/s'),
-			array('/icons', false, false, '/^$/'),
-			array('/icons', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'),
-			array('/icons', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'),
-			array('/index', false, false, '/^$/'),
-			array('/service', false, false, '/^$/'),
-			array('/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?事業案内.*?<\/h2>.*/s'),
-			array('/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?事業案内.*?<\/h2>.*/s'),
-			array('/sitemap', false, false, '/^$/')
-		);
+		return [
+			['aaa', false, false, '/^$/'],
+			['aaa', false, true, '/^$/'],
+			['', false, false, '/^$/'],
+			['/about', false, false, '/^$/'],
+			['/about', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?会社案内.*?<\/h2>.*/s'],
+			['/about', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?会社案内.*?<\/h2>.*/s'],
+			['/icons', false, false, '/^$/'],
+			['/icons', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'],
+			['/icons', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?採用情報.*?<\/h2>.*/s'],
+			['/index', false, false, '/^$/'],
+			['/service', false, false, '/^$/'],
+			['/service', true, false, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?事業案内.*?<\/h2>.*/s'],
+			['/service', true, true, '/<!-- BaserPageTagBegin -->\n<!-- BaserPageTagEnd -->.*?<h2.*?事業案内.*?<\/h2>.*/s'],
+			['/sitemap', false, false, '/^$/']
+		];
 	}
 
-/**
+
+	/**
  * ウィジェットエリアを出力する
  * 
  * TODO: $noが指定されてない(null)場合のテストを記述する
@@ -1572,11 +1572,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function widgetAreaDataProvider() {
-		return array(
-			array('/company', 1, '<div class="widget-area widget-area-1">'),
-			array('/company', 2, '<div class="widget-area widget-area-2">'),
-			array('/company', null, '<div class="widget-area widget-area-1">'),
-		);
+		return [
+			['/company', 1, '<div class="widget-area widget-area-1">'],
+			['/company', 2, '<div class="widget-area widget-area-2">'],
+			['/company', null, '<div class="widget-area widget-area-1">'],
+		];
 	}
 
 /**
@@ -1599,24 +1599,24 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function isCurrentUrlDataProvider() {
-		return array(
-			array('/', '/', true),
-			array('/index', '/', true),
-			array('/', '/index', true),
-			array('/company', '/company', true),
-			array('/news', '/news', true),
-			array('/news/', '/news', false),
-			array('/news/index', '/news', false),
-			array('/news', '/news/', false),
-			array('/news/', '/news/', true),
-			array('/news/index', '/news/', true),
-			array('/news', '/news/index', false),
-			array('/news/', '/news/index', true),
-			array('/news/index', '/news/index', true),
-			array('/', '/company', false),
-			array('/company', '/', false),
-			array('/news', '/', false)
-		);
+		return [
+			['/', '/', true],
+			['/index', '/', true],
+			['/', '/index', true],
+			['/company', '/company', true],
+			['/news', '/news', true],
+			['/news/', '/news', false],
+			['/news/index', '/news', false],
+			['/news', '/news/', false],
+			['/news/', '/news/', true],
+			['/news/index', '/news/', true],
+			['/news', '/news/index', false],
+			['/news/', '/news/index', true],
+			['/news/index', '/news/index', true],
+			['/', '/company', false],
+			['/company', '/', false],
+			['/news', '/', false]
+		];
 	}
 
 /**
@@ -1631,22 +1631,22 @@ class BcBaserHelperTest extends BaserTestCase {
  * @dataProvider getUserNameDataProvider
  */
 	public function testGetUserName($nickname, $realName1, $realName2, $expect) {
-		$user = array( 'User' => array(
+		$user = [ 'User' => [
 				'nickname' => $nickname,
 				'real_name_1' => $realName1,
 				'real_name_2' => $realName2,
-			)
-		);
+			]
+		];
 		$result = $this->BcBaser->getUserName($user);
 		$this->assertEquals($expect, $result);
 	}
 
 	public function getUserNameDataProvider() {
-		return array(
-			array('aiueo', 'yamada', 'tarou', 'aiueo'),
-			array('', 'yamada', 'tarou', 'yamada tarou'),
-			array('', '', '', ''),
-		);
+		return [
+			['aiueo', 'yamada', 'tarou', 'aiueo'],
+			['', 'yamada', 'tarou', 'yamada tarou'],
+			['', '', '', ''],
+		];
 	}
 
 /**
@@ -1685,11 +1685,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function includeCoreDataProvider() {
-		return array(
-			array(false, 'Elements/footer', array(), array(), '<div id="Footer">', 'コアテンプレートを読み込めません'),
-			array(false, 'Elements/footer', array(), array(), '<div id="Footer">', 'コアテンプレートを読み込めません'),
-			array(true, 'Test.test', array(), array(), 'test', 'コアテンプレートを読み込めません'),
-		);
+		return [
+			[false, 'Elements/footer', [], [], '<div id="Footer">', 'コアテンプレートを読み込めません'],
+			[false, 'Elements/footer', [], [], '<div id="Footer">', 'コアテンプレートを読み込めません'],
+			[true, 'Test.test', [], [], 'test', 'コアテンプレートを読み込めません'],
+		];
 	}
 
 
@@ -1732,18 +1732,18 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return array
  */
 	public function mainImageDataProvider() {
-		return array(
-			array(array(), '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'),
-			array(array('num' => 2), 'main_image_2'),
-			array(array('all' => true, 'num' => 2), '^(.*main_image_1.*main_image_2)'),
-			array(array('all' => true, 'class' => 'test-class', 'id' => 'test-id'), '^(.*id="test-id".*class="test-class")'), 
-			array(array('popup' => true), 'href="\/theme\/nada-icons\/img\/main_image_1.jpg"'),
-			array(array('alt' => 'テスト'), 'alt="テスト"'),
-			array(array('link' => '/test'), 'href="\/test"'),
-			array(array('maxWidth' => '200', 'maxHeight' => '200'), 'width="200"'),
-			array(array('width' => '200', 'height' => '200'), '^(.*width="200".*height="200")'),
-			array(array('hoge' => 'hoge'), 'main_image_1'),
-		);
+		return [
+			[[], '<img src="\/theme\/nada-icons\/img\/main_image_1.jpg" alt="コーポレートサイトにちょうどいい国産CMS"\/>'],
+			[['num' => 2], 'main_image_2'],
+			[['all' => true, 'num' => 2], '^(.*main_image_1.*main_image_2)'],
+			[['all' => true, 'class' => 'test-class', 'id' => 'test-id'], '^(.*id="test-id".*class="test-class")'],
+			[['popup' => true], 'href="\/theme\/nada-icons\/img\/main_image_1.jpg"'],
+			[['alt' => 'テスト'], 'alt="テスト"'],
+			[['link' => '/test'], 'href="\/test"'],
+			[['maxWidth' => '200', 'maxHeight' => '200'], 'width="200"'],
+			[['width' => '200', 'height' => '200'], '^(.*width="200".*height="200")'],
+			[['hoge' => 'hoge'], 'main_image_1'],
+		];
 	}
 
 /**
@@ -1758,27 +1758,27 @@ class BcBaserHelperTest extends BaserTestCase {
 
 		//getMainImageを叩いてULを入手(default)
 		ob_start();
-		$this->BcBaser->mainImage(array('all' => true, 'num' => $num));
+		$this->BcBaser->mainImage(['all' => true, 'num' => $num]);
 		$tags = ob_get_clean();
 		$check = preg_match('|<ul id="MainImage">|', $tags) === 1;
 		$this->assertTrue($check);
 
 		//getMainImageを叩いてULを入手(id指定)
 		ob_start();
-		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => $idName));
+		$this->BcBaser->mainImage(['all' => true, 'num' => $num, 'id' => $idName]);
 		$tags = ob_get_clean();
 		$check = preg_match('|<ul id="' . $idName . '">|', $tags) === 1;
 		$this->assertTrue($check);
 
 		//getMainImageを叩いてULを入手(class指定・id非表示)
 		ob_start();
-		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => false, 'class' => $className));
+		$this->BcBaser->mainImage(['all' => true, 'num' => $num, 'id' => false, 'class' => $className]);
 		$tags = ob_get_clean();
 		$check = preg_match('|<ul class="' . $className . '">|', $tags) === 1;
 		$this->assertTrue($check);
 		//getMainImageを叩いてULを入手(全てなし)
 		ob_start();
-		$this->BcBaser->mainImage(array('all' => true, 'num' => $num, 'id' => false, 'class' => false));
+		$this->BcBaser->mainImage(['all' => true, 'num' => $num, 'id' => false, 'class' => false]);
 		$tags = ob_get_clean();
 		$check = preg_match('|<ul>|', $tags) === 1;
 		$this->assertTrue($check);
@@ -1830,18 +1830,18 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getBaseUrlDataProvider() {
-		return array(
+		return [
 			// ノーマル
-			array('', '/', '/'),
-			array('', '/index', '/'),
-			array('', '/contact/index', '/'),
-			array('', '/blog/blog/index', '/'),
+			['', '/', '/'],
+			['', '/index', '/'],
+			['', '/contact/index', '/'],
+			['', '/blog/blog/index', '/'],
 			// サブフォルダ
-			array('/basercms', '/', '/basercms/'),
-			array('/basercms', '/index', '/basercms/'),
-			array('/basercms', '/contact/index', '/basercms/'),
-			array('/basercms', '/blog/blog/index', '/basercms/'),
-		);
+			['/basercms', '/', '/basercms/'],
+			['/basercms', '/index', '/basercms/'],
+			['/basercms', '/contact/index', '/basercms/'],
+			['/basercms', '/blog/blog/index', '/basercms/'],
+		];
 	}
 
 /**
@@ -1864,28 +1864,28 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function baseUrlDataProvider() {
-		return array(
+		return [
 			// ノーマル
-			array('', '/', '/'),
-			array('', '/index', '/'),
-			array('', '/contact/index', '/'),
-			array('', '/blog/blog/index', '/'),
+			['', '/', '/'],
+			['', '/index', '/'],
+			['', '/contact/index', '/'],
+			['', '/blog/blog/index', '/'],
 			// スマートURLオフ
-			array('index.php', '/', '/index.php/'),
-			array('index.php', '/index', '/index.php/'),
-			array('index.php', '/contact/index', '/index.php/'),
-			array('index.php', '/blog/blog/index', '/index.php/'),
+			['index.php', '/', '/index.php/'],
+			['index.php', '/index', '/index.php/'],
+			['index.php', '/contact/index', '/index.php/'],
+			['index.php', '/blog/blog/index', '/index.php/'],
 			// サブフォルダ+スマートURLオン
-			array('/basercms', '/', '/basercms/'),
-			array('/basercms', '/index', '/basercms/'),
-			array('/basercms', '/contact/index', '/basercms/'),
-			array('/basercms', '/blog/blog/index', '/basercms/'),
+			['/basercms', '/', '/basercms/'],
+			['/basercms', '/index', '/basercms/'],
+			['/basercms', '/contact/index', '/basercms/'],
+			['/basercms', '/blog/blog/index', '/basercms/'],
 			// サブフォルダ+スマートURLオフ
-			array('/basercms/index.php', '/', '/basercms/index.php/'),
-			array('/basercms/index.php', '/index', '/basercms/index.php/'),
-			array('/basercms/index.php', '/contact/index', '/basercms/index.php/'),
-			array('/basercms/index.php', '/blog/blog/index', '/basercms/index.php/')
-		);
+			['/basercms/index.php', '/', '/basercms/index.php/'],
+			['/basercms/index.php', '/index', '/basercms/index.php/'],
+			['/basercms/index.php', '/contact/index', '/basercms/index.php/'],
+			['/basercms/index.php', '/blog/blog/index', '/basercms/index.php/']
+		];
 	}
 
 /**
@@ -1894,7 +1894,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testSubMenu() {
-		$this->BcBaser->setSubMenus(array("default"));
+		$this->BcBaser->setSubMenus(["default"]);
 		$this->expectOutputRegex('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s');
 		$this->BcBaser->subMenu();
 	}
