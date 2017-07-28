@@ -1057,7 +1057,6 @@ class BlogHelper extends AppHelper {
 		if(!empty($post['BlogPost']['eye_catch'])) {
 			$eyecatch = $post['BlogPost']['eye_catch'];
 		}
-		$options['imgsize'] = '';
 		return $this->BcUpload->uploadImage('BlogPost.eye_catch', $eyecatch, $options);
 	}
 
