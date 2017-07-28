@@ -2714,8 +2714,7 @@ END_FLASH;
  * @return array or bool
  */
 	public function getContentByEntityId($id, $contentType, $field = null){
-		$getContentByEntityId = $this->BcContents->getContentByEntityId($id,$contentType, $field);
-		return $getContentByEntityId;
+		return $this->BcContents->getContentByEntityId($id,$contentType, $field);
 	}
 
 }
