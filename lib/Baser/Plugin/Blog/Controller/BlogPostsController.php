@@ -118,7 +118,8 @@ class BlogPostsController extends BlogAppController {
 
 		$default = ['named' => [
 			'num' => $this->siteConfigs['admin_list_num'],
-			'sort' => 'no DESC'
+			'sort' => 'no',
+			'direction' => 'desc',
 		]];
 		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
@@ -141,10 +142,18 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
+		if ($this->passedArgs['sort'] == 'no') {
+			$order = 'BlogPost.' . $this->passedArgs['sort'];
+		} else {
+			$order = $this->passedArgs['sort'];
+		}
+		if ($order && $this->passedArgs['direction']) {
+			$order .= ' ' . $this->passedArgs['direction'];
+		}
 		$options = [
 			'conditions' => $conditions,
 			'joins' => $joins,
-			'order' => 'BlogPost.' . $this->passedArgs['sort'],
+			'order' => $order,
 			'limit' => $this->passedArgs['num'],
 			'recursive' => 2
 		];

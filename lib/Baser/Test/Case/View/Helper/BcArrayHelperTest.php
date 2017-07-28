@@ -29,7 +29,7 @@ class BcArrayHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->Helper = new BcArrayHelper(new View(null));
-		$this->data = array('b' => 'カンジ', 'd' => 'リュウジ', 'a' => 'スナオ', 'c' => 'ゴンチャン');
+		$this->data = ['b' => 'カンジ', 'd' => 'リュウジ', 'a' => 'スナオ', 'c' => 'ゴンチャン'];
 	}
 
 	public function tearDown() {
@@ -62,42 +62,42 @@ class BcArrayHelperTest extends BaserTestCase {
 	public function testAddText() {
 		// prefixとsuffix両方指定
 		$result = $this->Helper->addText($this->data, 'baserCMS開発者:', 'さん');
-		$expect = array(
+		$expect = [
 			'b' => 'baserCMS開発者:カンジさん',
 			'd' => 'baserCMS開発者:リュウジさん',
 			'a' => 'baserCMS開発者:スナオさん',
 			'c' => 'baserCMS開発者:ゴンチャンさん',
-		);
+		];
 		$this->assertEquals($expect, $result);
 
 		// prefixのみ指定
 		$result = $this->Helper->addText($this->data, 'baserCMS開発者:');
-		$expect = array(
+		$expect = [
 			'b' => 'baserCMS開発者:カンジ',
 			'd' => 'baserCMS開発者:リュウジ',
 			'a' => 'baserCMS開発者:スナオ',
 			'c' => 'baserCMS開発者:ゴンチャン',
-		);
+		];
 		$this->assertEquals($expect, $result);
 
 		// suffixのみ指定
 		$result = $this->Helper->addText($this->data, null, 'さん');
-		$expect = array(
+		$expect = [
 			'b' => 'カンジさん',
 			'd' => 'リュウジさん',
 			'a' => 'スナオさん',
 			'c' => 'ゴンチャンさん',
-		);
+		];
 		$this->assertEquals($expect, $result);
 
 		// prefixとsuffix両方指定なし
 		$result = $this->Helper->addText($this->data);
-		$expect = array(
+		$expect = [
 			'b' => 'カンジ',
 			'd' => 'リュウジ',
 			'a' => 'スナオ',
 			'c' => 'ゴンチャン',
-		);
+		];
 		$this->assertEquals($expect, $result);
 	}
 
