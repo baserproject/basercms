@@ -494,11 +494,11 @@ class BcContentsHelper extends AppHelper {
 		}
 		return true;
 	}
-	
+
 /**
  * エンティティIDからコンテンツの情報を取得
  *
- * @param string $ContentType コンテンツタイプ
+ * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param int $id エンティティID
  * @param string $field 取得したい値
@@ -506,8 +506,8 @@ class BcContentsHelper extends AppHelper {
  *  省略した場合配列を取得
  * @return array or string or bool
  */
-	public function getContentByEntityId($id, $ContentType, $field = null){
-		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $ContentType, 'entity_id' => $id]);
+	public function getContentByEntityId($id, $contentType, $field = null){
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
 		$content = $this->_Content->find('first', ['conditions' => $conditions, 'cache' => false]);
 		if(!empty($content)){
 			if($field){
@@ -516,7 +516,8 @@ class BcContentsHelper extends AppHelper {
 				return $content ['Content'];
 			}
 		} else {
-					return false;		
+			return false;
 		}
-	}	
+	}
+
 }

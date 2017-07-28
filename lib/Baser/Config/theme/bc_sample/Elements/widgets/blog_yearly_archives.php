@@ -36,9 +36,9 @@ if ($view_count) {
 
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
-$blogContent = $data['blogContent'];
-$ContentType = 'BlogContent';
-$blogUrl = $this->BcBaser->getContentByEntityId($id, $ContentType, 'url');
+$blogcontent = $data['blogContent'];
+$contentType = 'BlogContent';
+$blogUrl = $this->BcBaser->getContentByEntityId($id, $contentType, 'url');
 if($this->request->params['Content']['url'] == $blogUrl){
 	$blogUrl = '';
 }

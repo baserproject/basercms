@@ -2701,10 +2701,11 @@ END_FLASH;
 	public function getParentFolder($id, $direct = true) {
 		return $this->BcContents->getParent($id, $direct);
 	}
+
 /**
  * エンティティIDからコンテンツの情報を取得
  *
- * @param string $ContentType コンテンツタイプ
+ * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param int $id エンティティID
  * @param string $field 取得したい値
@@ -2712,9 +2713,9 @@ END_FLASH;
  *  省略した場合配列を取得
  * @return array or bool
  */
-	public function getContentByEntityId($id, $ContentType, $field = null){
-		$getContentByEntityId = $this->BcContents->getContentByEntityId($id,$ContentType, $field);
-		return $getContentByEntityId;	
+	public function getContentByEntityId($id, $contentType, $field = null){
+		$getContentByEntityId = $this->BcContents->getContentByEntityId($id,$contentType, $field);
+		return $getContentByEntityId;
 	}
-	
+
 }

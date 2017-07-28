@@ -453,7 +453,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * エンティティIDからコンテンツの情報を取得
  * getContentByEntityId
  * 
- * @param string $ContentType コンテンツタイプ
+ * @param string $contentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param int $id エンティティID
  * @param string $field 取得したい値
@@ -462,8 +462,8 @@ class BcContentsHelperTest extends BaserTestCase {
  * @param string|bool $expect 期待値
  * @dataProvider getContentByEntityIdDataProvider
  */	
-	public function testgetContentByEntityId($expect, $id, $ContentType, $field) {
-		$result = $this->BcContents->getContentByEntityId($id, $ContentType, $field);
+	public function testgetContentByEntityId($expect, $id, $contentType, $field) {
+		$result = $this->BcContents->getContentByEntityId($id, $contentType, $field);
 		$this->assertEquals($expect, $result);                       
 	}
 	
