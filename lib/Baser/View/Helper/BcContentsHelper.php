@@ -513,7 +513,7 @@ class BcContentsHelper extends AppHelper {
 			if($field){
 				return $content ['Content'][$field];
 			} else {
-				return $content ['Content'];
+				return $content;
 			}
 		} else {
 			return false;
