@@ -790,7 +790,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function setSubMenusDataProvider() {
 		return [
-			[['contents'], ['<th>コンテンツ管理メニュー</th>']],
+			[['contents'], ['<th>コンテンツメニュー</th>']],
 			[['editor_templates', 'site_configs'], ['<th>エディタテンプレートメニュー</th>', '<th>システム設定メニュー</th>']],
 			[['tools'], ['<th>ユーティリティメニュー</th>']],
 			[['plugins', 'themes'], ['<th>プラグイン管理メニュー</th>', '<th>テーマ管理メニュー</th>']],
