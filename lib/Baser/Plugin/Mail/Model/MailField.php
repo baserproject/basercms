@@ -66,6 +66,10 @@ class MailField extends MailAppModel {
 			array('rule' => array('maxLength', 255),
 				'message' => '後見出しは255文字以内で入力してください。')
 		),
+		'source' => array(
+			array('rule' => array('sourceMailField'),
+				'message' => '選択リストを入力してください。')
+		),
 		'options' => array(
 			array('rule' => array('maxLength', 255),
 				'message' => 'オプションは255文字以内で入力してください。')
@@ -172,6 +176,28 @@ class MailField extends MailAppModel {
 		$subject = $check[key($check)];
 		$pattern = "/^[a-zA-Z0-9-_]*$/";
 		return !!(preg_match($pattern, $subject) === 1);
+	}
+
+/**
+ * 選択リストの入力チェック
+ * 
+ * @param type $check
+ */
+	public function sourceMailField($check) {
+		switch ($this->data['MailField']['type']) {
+			case 'radio':		// ラジオボタン
+			case 'select':		// セレクトボックス
+			case 'multi_check':	// マルチチェックボックス
+			case 'autozip':		// 自動保管郵便番号
+				// 選択リストのチェックを行う
+				$result = (!empty($check[key($check)]));
+				break;
+			default:
+				// 選択リストが不要のタイプの時はチェックしない
+				$result = true;
+				break;
+		}
+		return $result;
 	}
 
 /**
