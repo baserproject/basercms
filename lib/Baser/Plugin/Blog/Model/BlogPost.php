@@ -715,7 +715,7 @@ class BlogPost extends BlogAppModel {
 		// 指定するとエラーとなってしまうので、追加するのは最小限にする
 		// ================================================================
 		$idRequire = false;
-		if(!empty($options['order']) && $options['order'][0] !== false) {
+		if(!empty($options['order']) && isset($options['order'][0]) && $options['order'][0] !== false) {
 			$idRequire = true;
 			if(is_array($options['order'])) {
 				foreach($options['order'] as $key => $value) {
