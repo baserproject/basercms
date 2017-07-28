@@ -750,18 +750,14 @@ class BcBaserHelper extends AppHelper {
 			$toolbar = $authPrefix['toolbar'];
 		}
 
-		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
-		echo $scripts;
-
 		// ### ツールバー用CSS出力
 		// 《表示条件》
 		// - プレビューでない
 		// - auth prefix の設定で、利用するように定義されている
-		// - モバイルでない
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->css('admin/toolbar');
@@ -776,6 +772,9 @@ class BcBaserHelper extends AppHelper {
 		if (!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
 			$this->css('/files/theme_configs/config');
 		}
+
+		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
+		echo $scripts;
 	}
 
 /**
@@ -798,11 +797,10 @@ class BcBaserHelper extends AppHelper {
 		// 《表示条件》
 		// - プレビューでない
 		// - auth prefix の設定で、利用するように定義されている
-		// - モバイルでない
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->element('admin/toolbar', array(), array('subDir' => false));
@@ -1074,6 +1072,9 @@ class BcBaserHelper extends AppHelper {
 			$options = array();
 		}
 
+		if(!is_array($url)) {
+			$url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
+		}
 		$out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
 		/*** afterGetLink ***/

@@ -49,22 +49,33 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  * @param string $expected 期待値
  * @dataProvider showDataProvider
  *
- * MEMO: show()内のelement()の際、$noで指定したwidgetsが存在しないためエラー(1の場合 Elements/Widgets/text.ctp)
- * テスト中にファイルを準備する必要あり
+ * MEMO: $pathがわからないため保留
  */
-	public function testShow($no, $expected) {
+	public function testShow($fileName, $no, $expected) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		ob_start();
-		$this->BcWidgetArea->show($no);
-		$result = ob_get_clean();
+		$path = APP . 'Elements/widgets/' . $fileName . '.ctp';
+		$fh = fopen($path, 'w');
+		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
+		fclose($fh);
 
+		ob_start();
+		//エラーでファイルが残留するため,tryで確実に削除を実行
+		try {
+			$this->BcWidgetArea->show($no);
+		}catch (Exception $e) {
+			echo 'error: ',  $e->getMessage(), "\n";
+		}
+		$result = ob_get_clean();
+		unlink($path);
+
+		pr($result);
 		$this->assertEquals($expected, $result);
 	}
 
 	public function showDataProvider() {
 		return array(
-			array(1, ''),
-			array(2, '')
+			array('test', 1, ''),
+			array('test', 2, '')
 		);
 	}
 

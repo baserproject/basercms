@@ -430,7 +430,9 @@ class BlogHelper extends AppHelper {
  * @param array $post 記事データ
  * @param string $options 
  * 	- `separator` : 区切り文字（初期値 :  , ）
- * 	- `tag` : タグで出力するかどうか（初期値 : true）
+ * 	- `tag` : リンク付きのタグで出力するかどうか（初期値 : true）
+ * 		※ link に統合予定
+ * 	- `link` : リンク付きのタグで出力するかどうか（初期値 : true）
  * 	※ 文字列で指定した場合は、separator として扱う
  * @return mixed ''|string|array
  */
@@ -443,7 +445,8 @@ class BlogHelper extends AppHelper {
 		$options = array_merge([
 			'separator' => ' , ',
 			'tag' => true,
-			'crossing' => false
+			'crossing' => false,
+			'link' => true
 		], $options);
 		$tags = [];
 		if($options['crossing']) {
@@ -451,10 +454,13 @@ class BlogHelper extends AppHelper {
 		} else {
 			$crossingId = $this->blogContent['id'];
 		}
+		if($options['tag'] === false) {
+			$options['link'] = false;
+		}
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
 				$url = $this->getTagLinkUrl($crossingId, $tag);
-				if($options['tag']) {
+				if($options['link']) {
 					$tags[] = $this->BcBaser->getLink($tag['name'], $url);	
 				} else {
 					$tags[] = [
@@ -465,7 +471,7 @@ class BlogHelper extends AppHelper {
 			}
 		}
 		if ($tags) {
-			if($options['tag']) {
+			if($options['link']) {
 				return implode($options['separator'], $tags);
 			} else {
 				return $tags;

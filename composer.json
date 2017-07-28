@@ -22,8 +22,7 @@
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
-		"cakephp/debug_kit" : "2.2.*",
-		"mikey179/vfsStream": "v1.6.4"
+		"cakephp/debug_kit" : "2.2.*"
 	},
 	"bin": [
 		"lib/Cake/Console/cake"

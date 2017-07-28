@@ -21,7 +21,7 @@ App::uses('BcApp', 'Model');
 
 class BcAppTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Dblog',
 		'baser.Default.SiteConfig',
@@ -31,7 +31,7 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.SearchIndex',
 		'baser.Default.Content'
-	);
+	];
 
 /**
  * setUp
@@ -69,8 +69,8 @@ class BcAppTest extends BaserTestCase {
 	public function testBeforeSave() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$this->Page->save(array(
-			'Page' => array(
+		$this->Page->save([
+			'Page' => [
 				'name' => 'test',
 				'page_category_id' => null,
 				'title' => '',
@@ -78,15 +78,15 @@ class BcAppTest extends BaserTestCase {
 				'description' => '',
 				'status' => 1,
 				'modified' => '',
-			)
-		));
+			]
+		]);
 
 		$LastID = $this->Page->getLastInsertID();
-		$result = $this->Page->find('first', array(
-				'conditions' => array('id' => $LastID),
-				'fields' => array('created'),
+		$result = $this->Page->find('first', [
+				'conditions' => ['id' => $LastID],
+				'fields' => ['created'],
 				'recursive' => -1
-			)
+			]
 		);
 
 		$this->BcApp->beforeSave(['type' => 'date']);
@@ -100,12 +100,12 @@ class BcAppTest extends BaserTestCase {
  * @param	array	$fieldList List of fields to allow to be written
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
-	public function testSave($data = null, $validate = true, $fieldList = array()) {
+	public function testSave($data = null, $validate = true, $fieldList = []) {
 
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$this->Page->save(array(
-			'Page' => array(
+		$this->Page->save([
+		'Page' => [
 				'name' => 'test',
 				'page_category_id' => null,
 				'title' => '',
@@ -113,16 +113,16 @@ class BcAppTest extends BaserTestCase {
 				'description' => '',
 				'status' => 1,
 				'modified' => '',
-			)
-		));
+			]
+		]);
 		$now = date('Y-m-d H');
 
 		$LastID = $this->Page->getLastInsertID();
-		$result = $this->Page->find('first', array(
-				'conditions' => array('id' => $LastID),
-				'fields' => array('created','modified'),
+		$result = $this->Page->find('first', [
+				'conditions' => ['id' => $LastID],
+				'fields' => ['created','modified'],
 				'recursive' => -1
-			)
+			]
 		);
 		$created = date('Y-m-d H', strtotime($result['Page']['created']));
 		$modified = date('Y-m-d H', strtotime($result['Page']['modified']));
@@ -149,11 +149,11 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function convertEncodingByArrayDataProvider() {
-		return array(
-			array(array("テスト1"), "ASCII", "SJIS"),
-			array(array("テスト1", "テスト2"), "UTF-8", "SJIS"),
-			array(array("テスト1", "テスト2"), "SJIS-win", "UTF-8"),
-		);
+		return [
+			[["テスト1"], "ASCII", "SJIS"],
+			[["テスト1", "テスト2"], "UTF-8", "SJIS"],
+			[["テスト1", "テスト2"], "SJIS-win", "UTF-8"],
+		];
 	}
 
 /**
@@ -167,10 +167,10 @@ class BcAppTest extends BaserTestCase {
 
 		// 最後に追加したログを取得
 		$LastID = $this->Dblog->getLastInsertID();
-		$result = $this->Dblog->find('first', array(
-				'conditions' => array('Dblog.id' => $LastID),
+		$result = $this->Dblog->find('first', [
+				'conditions' => ['Dblog.id' => $LastID],
 				'fields' => 'name',
-			)
+			]
 		);
 		$this->assertEquals($message, $result['Dblog']['name']);
 
@@ -189,19 +189,36 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function replaceTextDataProvider() {
-		return array(
-			array("\xE2\x85\xA0", "I"),
-			array("\xE2\x91\xA0", "(1)"),
-			array("\xE3\x8D\x89", "ミリ"),
-			array("\xE3\x88\xB9", "(代)"),
-		);
+		return [
+			["\xE2\x85\xA0", "I"],
+			["\xE2\x91\xA0", "(1)"],
+			["\xE3\x8D\x89", "ミリ"],
+			["\xE3\x88\xB9", "(代)"],
+		];
 	}
 
 /**
- * データベースを初期化
+ * データベース初期化
+ *
+ * @param $pluginName
+ * @param $options
+ * @param $expected
+ *
+ * @dataProvider initDbDataProvider
+ *
+ * MEMO: pluginNameが実在する場合が未実装
  */
-	public function testInitDb() {
+	public function testInitDb($pluginName, $options, $expected) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->initDb($pluginName, $options);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function initDbDataProvider() {
+		return [
+			['', [], true],
+			['hoge', ['dbDataPattern' => true], 1]
+		];
 	}
 
 /**
@@ -210,9 +227,10 @@ class BcAppTest extends BaserTestCase {
 	public function testLoadSchema() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$path = BASER_CONFIGS . 'Schema';
-		$this->BcApp->loadSchema('test', $path);
+		$result = $this->BcApp->loadSchema('test', $path);
+		$expected = true;
 		var_dump($result);
-		// $this->assertEquals($expect, $result);
+		 $this->assertEquals($expected, $result);
 	}
 
 /**
@@ -220,6 +238,7 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testLoadCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->loadCsv('test','test');
 	}
 
 /**
@@ -236,11 +255,11 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function minLengthDataProvider() {
-		return array(
-			array("あいう", 4, false),
-			array("あいう", 3, true),
-			array(array("あいう", "あいうえお"), 4, false),
-		);
+		return [
+			["あいう", 4, false],
+			["あいう", 3, true],
+			[["あいう", "あいうえお"], 4, false],
+		];
 	}
 /**
  * 最長の長さチェック
@@ -256,12 +275,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function maxLengthDataProvider() {
-		return array(
-			array("あいう", 4, true),
-			array("あいう", 3, true),
-			array("あいう", 2, false),
-			array(array("あいう", "あいうえお"), 4, true),
-		);
+		return [
+			["あいう", 4, true],
+			["あいう", 3, true],
+			["あいう", 2, false],
+			[["あいう", "あいうえお"], 4, true],
+		];
 	}
 
 /**
@@ -278,11 +297,11 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function maxByteDataProvider() {
-		return array(
-			array("あいう", 10, true),
-			array("あいう", 9, true),
-			array("あいう", 8, false)
-		);
+		return [
+			["あいう", 10, true],
+			["あいう", 9, true],
+			["あいう", 8, false]
+		];
 	}
 
 /**
@@ -300,12 +319,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function betweenDataProvider() {
-		return array(
-			array("あいう", 2, 4, true),
-			array("あいう", 3, 3, true),
-			array("あいう", 4, 3, false),
-			array(array("あいう", "あいうえお"), 2, 4, true),
-		);
+		return [
+			["あいう", 2, 4, true],
+			["あいう", 3, 3, true],
+			["あいう", 4, 3, false],
+			[["あいう", "あいうえお"], 2, 4, true],
+		];
 	}
 
 /**
@@ -322,13 +341,13 @@ class BcAppTest extends BaserTestCase {
 	public function testAddField() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$options = array(
+		$options = [
 			'field' => 'testField',
-			'column' => array(
+			'column' => [
 				'name' => 'testColumn',
-			),
+			],
 			'table' => 'pages',
-		);
+		];
 		$this->Page->addField($options);
 		$columns = $this->Page->getColumnTypes();
 		var_dump($columns);
@@ -339,12 +358,12 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testEditField() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$options = array(
+		$options = [
 			'field' => 'testField',
-			'column' => array(
+			'column' => [
 				'name' => 'testColumn',
-			),
-		);
+			],
+		];
 		$this->BcApp->editField($options);
 		$columns = $this->Page->getColumnTypes();
 	}
@@ -380,10 +399,10 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function tableExistsDataProvider() {
-		return array(
-			array("users", true),
-			array("notexist", false),
-		);
+		return [
+			["users", true],
+			["notexist", false],
+		];
 	}
 
 /**
@@ -399,22 +418,22 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function alphaNumericDataProvider() {
-		return array(
-			array(array("aiueo"), true),
-			array(array("12345"), true),
-			array(array("あいうえお"), false),
-		);
+		return [
+			[["aiueo"], true],
+			[["12345"], true],
+			[["あいうえお"], false],
+		];
 	}
 
 /**
  * データの重複チェックを行う
  */
 	public function testDuplicate() {
-		$check = array('id' => 1);
+		$check = ['id' => 1];
 		$result = $this->Page->duplicate($check);
 		$this->assertEquals(false, $result);
 
-		$check = array('id' => 100);
+		$check = ['id' => 100];
 		$result = $this->Page->duplicate($check);
 		$this->assertEquals(true, $result);
 	}
@@ -428,12 +447,11 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider fileSizeDataProvider
  */
 	public function testFileSize($fileName, $fileSize, $expect) {
-		$check = array(
-			array (
+		$check = [[
 				"name" => $fileName,
 				"size" => $fileSize,
-			)
-		);
+			]
+		];
 		$size = 1000;
 
 		$result = $this->BcApp->fileSize($check, $size);
@@ -441,12 +459,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function fileSizeDataProvider() {
-		return array(
-			array("test.jpg", 1000, true),
-			array("test.jpg", 1001, false),
-			array("", 1000, true),
-			array("test.jpg", null, false),
-		);
+		return [
+			["test.jpg", 1000, true],
+			["test.jpg", 1001, false],
+			["", 1000, true],
+			["test.jpg", null, false],
+		];
 	}
 
 /**
@@ -458,12 +476,11 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider fileExtDataProvider
  */
 	public function testFileExt($fileName, $fileType, $expect) {
-		$check = array(
-			array (
+		$check = [[
 				"name" => $fileName,
 				"type" => $fileType,
-			)
-		);
+			]
+		];
 		$ext = "jpg,png";
 
 		$result = $this->BcApp->fileExt($check, $ext);
@@ -471,12 +488,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function fileExtDataProvider() {
-		return array(
-			array("test.jpg", "image/jpeg", true),
-			array("test.png", "image/png", true),
-			array("test.gif", "image/gif", false),
-			array("test", "image/png", true),
-		);
+		return [
+			["test.jpg", "image/jpeg", true],
+			["test.png", "image/png", true],
+			["test.gif", "image/gif", false],
+			["test", "image/png", true],
+		];
 	}
 
 /**
@@ -492,12 +509,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function halfTextDataProvider() {
-		return array(
-			array(array("test"), true),
-			array(array("テスト"), false),
-			array(array("test", "テスト"), true),
-			array(array("テスト", "test"), false),
-		);
+		return [
+			[["test"], true],
+			[["テスト"], false],
+			[["test", "テスト"], true],
+			[["テスト", "test"], false],
+		];
 	}
 
 /**
@@ -534,12 +551,12 @@ class BcAppTest extends BaserTestCase {
  * Key Value 形式のテーブルにデータを保存する
  */
 	public function testSaveKeyValue() {
-		$data = array(
-			'SiteConfig' => array(
+		$data = [
+			'SiteConfig' => [
 				'test1' => 'テストです1',
 				'test2' => 'テストです2',
-			)
-		);
+			]
+		];
 		$this->SiteConfig->saveKeyValue($data);
 		$result = $this->SiteConfig->findExpanded();
 
@@ -564,10 +581,10 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function notInListDataProvider() {
-		return array(
-			array(array("test1"), array("test1", "test2"), false),
-			array(array("test3"), array("test1", "test2"), true),
-		);
+		return [
+			[["test1"], ["test1", "test2"], false],
+			[["test3"], ["test1", "test2"], true],
+		];
 	}
 
 /**
@@ -575,16 +592,16 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testDeconstruct() {
 		$field = 'Page.contents';
-		$data = array(
+		$data = [
 			'wareki' => true,
 			'year' => 'h-27',
-		);
+		];
 		$result = $this->Page->deconstruct($field, $data);
 
-		$expected = array(
+		$expected = [
 			'wareki' => true,
 			'year' => 2015
-		);
+		];
 
 		$this->assertEquals($expected, $result, 'deconstruct が 和暦に対応していません');
 	}
@@ -607,12 +624,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function confirmDataProvider() {
-		return array(
-			array('', array('test1', 'test2'), array('test1' => 'value','test2' => 'value'), true, '2つのフィールドが同じ値の場合の判定が正しくありません'),
-			array('', array('test1', 'test2'), array('test1' => 'value','test2' => 'other_value'), false, '2つのフィールドが異なる値の場合の判定が正しくありません'),
-			array(array('value'=>'value'), 'test', array('test' => 'value'), true, 'フィールド名が一つで同じ値の場合の判定が正しくありません'),
-			array(array('value'=>'value'), 'test', array('test' => 'other_value'), false, 'フィールド名が一つで異なる値の場合の判定が正しくありません'),
-		);
+		return [
+			['', ['test1', 'test2'], ['test1' => 'value','test2' => 'value'], true, '2つのフィールドが同じ値の場合の判定が正しくありません'],
+			['', ['test1', 'test2'], ['test1' => 'value','test2' => 'other_value'], false, '2つのフィールドが異なる値の場合の判定が正しくありません'],
+			[['value'=>'value'], 'test', ['test' => 'value'], true, 'フィールド名が一つで同じ値の場合の判定が正しくありません'],
+			[['value'=>'value'], 'test', ['test' => 'other_value'], false, 'フィールド名が一つで異なる値の場合の判定が正しくありません'],
+		];
 	}
 
 /**
@@ -639,10 +656,10 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function expectsDataProvider() {
-		return array(
-			array(array(), array('User'), array('UserGroup', 'Favorite')),
-			array(array('UserGroup'), array('User', 'UserGroup'), array('Favorite')),
-		);
+		return [
+			[[], ['User'], ['UserGroup', 'Favorite']],
+			[['UserGroup'], ['User', 'UserGroup'], ['Favorite']],
+		];
 	}
 
 /**
@@ -659,12 +676,12 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function emailsDataProvider() {
-		return array(
-			array(array("test1@co.jp"), true),
-			array(array("test1@co.jp,test2@cp.jp"), true),
-			array(array("test1@cojp,test2@cp.jp"), false),
-			array(array("test1@co.jp,test2@cpjp"), false),
-		);
+		return [
+			[["test1@co.jp"], true],
+			[["test1@co.jp,test2@cp.jp"], true],
+			[["test1@cojp,test2@cp.jp"], false],
+			[["test1@co.jp,test2@cpjp"], false],
+		];
 	}
 
 /**
@@ -705,16 +722,16 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function isPublishDataProvider() {
-		return array(
-			array(true, null, null, true),
-			array(false, null, null, false),
-			array(true, '2015-01-01 00:00:00', null, true),
-			array(true, '3000-01-01 00:00:00', null, false),
-			array(true, null, '2015-01-01 00:00:00', false),
-			array(true, null, '3000-01-01 00:00:00', true),
-			array(true, '2015-01-01 00:00:00', '3000-01-01 00:00:00', true),
-			array(true, '2015-01-01 00:00:00', '2015-01-02 00:00:00', false),
-		);
+		return [
+			[true, null, null, true],
+			[false, null, null, false],
+			[true, '2015-01-01 00:00:00', null, true],
+			[true, '3000-01-01 00:00:00', null, false],
+			[true, null, '2015-01-01 00:00:00', false],
+			[true, null, '3000-01-01 00:00:00', true],
+			[true, '2015-01-01 00:00:00', '3000-01-01 00:00:00', true],
+			[true, '2015-01-01 00:00:00', '2015-01-02 00:00:00', false],
+		];
 	}
 
 /**
@@ -730,13 +747,13 @@ class BcAppTest extends BaserTestCase {
 	}
 
 	public function checkDateDataProvider() {
-		return array(
-			array(array('2015-01-01'), true),
-			array(array('201511'), false),
-			array(array('2015-01-01 00:00:00'), true),
-			array(array('2015-0101 00:00:00'), false),
-			array(array('1970-01-01 09:00:00'), false),
-		);
+		return [
+			[['2015-01-01'], true],
+			[['201511'], false],
+			[['2015-01-01 00:00:00'], true],
+			[['2015-0101 00:00:00'], false],
+			[['1970-01-01 09:00:00'], false],
+		];
 	}
 
 
@@ -755,17 +772,17 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider notFileEmptyDataProvider
  */
 	public function testNotFileEmpty($check,$expect) {
-		$file = array($check);
+		$file = [$check];
 		$result = $this->BcApp->notFileEmpty($file);
 		$this->assertEquals($expect, $result);
 	}
 
 	public function notFileEmptyDataProvider() {
-		return array(
-			array(array('size' => 0), false),
-			array(array('size' => 100), true),
-			array(array(), false),
-		);
+		return [
+			[['size' => 0], false],
+			[['size' => 100], true],
+			[[], false],
+		];
 	}
 
 /**

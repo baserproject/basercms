@@ -267,6 +267,19 @@ $config['BcContents'] = [
 				'multiple' => true,
 				'title' => 'エイリアス',
 				'icon'	=> 'admin/icon_alias.png',
+				'routes' => [
+					'add'	=> [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'add',
+						1
+					],
+					'edit'	=> [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'edit_alias'
+					]
+				],
 			],
 			'ContentLink'	=> [
 				'multiple' => true,

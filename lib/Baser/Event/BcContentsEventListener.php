@@ -76,12 +76,12 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  */
 	public function formAfterSubmit(CakeEvent $event) {
 		if(!BcUtil::isAdminSystem()) {
-			return;
+			return $event->data['out'];
 		}
 		$View = $event->subject();
 		$data = $View->request->data;
 		if(!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
-			return;
+			return $event->data['out'];
 		}
 		$output = $View->BcHtml->link('一覧に戻る', array('plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'), array('class' => 'button'));
 		$setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
@@ -97,6 +97,7 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 			}
 			$output .= $View->BcForm->button($deleteText, array('class' => 'button', 'id' => 'BtnDelete'));
 		}
+		$event->data['out'] = $output;
 		return $output;
 	}
 

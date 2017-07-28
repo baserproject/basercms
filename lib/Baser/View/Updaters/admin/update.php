@@ -44,6 +44,13 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	text-align:left;
 }
 </style>
+<script>
+$(function(){
+	$("#BtnUpdate").click(function(){
+		$.bcUtil.showLoader();
+	});
+});
+</script>
 <?php $this->end('script') ?>
 
 
@@ -110,7 +117,7 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 			<?php if (!$plugin): ?>
 			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $this->BcBaser->link('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', array('target' => '_blank')) ?>にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
 			<?php if (!$requireUpdate): ?>
-				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/admin') ?>
+				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/' . BcUtil::getAdminPrefix()) ?>
 			<?php endif ?>
 		<?php else: ?>
 			<?php $this->BcBaser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
