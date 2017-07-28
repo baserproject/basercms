@@ -2707,14 +2707,14 @@ END_FLASH;
  * @param string $ContentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param int $id エンティティID
- * @param string $contValue 取得したい値
+ * @param string $field 取得したい値
  *  'name','url','title'など　初期値：Null 
  *  省略した場合配列を取得
  * @return array or bool
  */
-	public function getContentByID($id, $ContentType, $contValue = null){
-		$getContentByID = $this->BcContents->getContentByID($id,$ContentType, $contValue);
-		return $getContentByID;	
+	public function getContentByEntityId($id, $ContentType, $field = null){
+		$getContentByEntityId = $this->BcContents->getContentByEntityId($id,$ContentType, $field);
+		return $getContentByEntityId;	
 	}
 	
 }

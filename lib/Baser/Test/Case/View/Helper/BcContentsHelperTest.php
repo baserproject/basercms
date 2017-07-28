@@ -451,21 +451,23 @@ class BcContentsHelperTest extends BaserTestCase {
 	}
 /**
  * エンティティIDからコンテンツの情報を取得
- * getContentByID
+ * getContentByEntityId
  * 
  * @param string $ContentType コンテンツタイプ
  * ('Page','MailContent','BlogContent','ContentFolder')
  * @param int $id エンティティID
+ * @param string $field 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
  * @param string|bool $expect 期待値
- * @dataProvider getContentByIDDataProvider
+ * @dataProvider getContentByEntityIdDataProvider
  */	
-	public function testGetContentByID($expect, $id, $ContentType, $contValue) {
-//		var_dump($this->BcContents->getContentByID('13', 'Page'));
-		$result = $this->BcContents->getContentByID($id, $ContentType, $contValue);
+	public function testgetContentByEntityId($expect, $id, $ContentType, $field) {
+		$result = $this->BcContents->getContentByEntityId($id, $ContentType, $field);
 		$this->assertEquals($expect, $result);                       
 	}
 	
-	public function getContentByIDDataProvider() {
+	public function getContentByEntityIdDataProvider() {
 		return [
 			// 存在するID（0~2）を指定した場合
 			['/news', '1', 'BlogContent', 'url'],

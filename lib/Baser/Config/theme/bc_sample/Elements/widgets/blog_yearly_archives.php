@@ -38,7 +38,7 @@ $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
 $ContentType = 'BlogContent';
-$blogUrl = $this->BcBaser->getContentByID($id, $ContentType, 'url');
+$blogUrl = $this->BcBaser->getContentByEntityId($id, $ContentType, 'url');
 if($this->request->params['Content']['url'] == $blogUrl){
 	$blogUrl = '';
 }
