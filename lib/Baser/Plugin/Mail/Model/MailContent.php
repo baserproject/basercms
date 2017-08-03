@@ -224,6 +224,7 @@ class MailContent extends MailAppModel {
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['MailContent']['id']);
 		unset($data['MailContent']['created']);
 		unset($data['MailContent']['modified']);
@@ -252,6 +253,15 @@ class MailContent extends MailAppModel {
 			$MailMessage->setup($result['MailContent']['id']);
 			$MailMessage->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 			$MailMessage->construction($result['MailContent']['id']);
+			if ($eyeCatch) {
+				$result['Content']['id'] = $this->Content->getLastInsertID();
+				$result['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $result['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
 			$this->getDataSource()->commit();
 			return $result;
 		}
