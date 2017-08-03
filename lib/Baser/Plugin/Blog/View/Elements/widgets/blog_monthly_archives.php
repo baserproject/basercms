@@ -55,7 +55,7 @@ $baseCurrentUrl = $this->params['Content']['name'] . '/archives/date/';
 					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>
+					<?php $this->BcBaser->link($title, $this->BcBaser->getContentByEntityId($id, 'BlogContent', 'url') . '/archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
