@@ -24,6 +24,7 @@ if (isset($blogContent)) {
 } else {
 	$id = $blog_content_id;
 }
+
 $actionUrl = '/blog/blog/get_posted_years/' . $id;
 if ($limit) {
 	$actionUrl .= '/' . $limit;
@@ -32,7 +33,10 @@ if ($limit) {
 }
 if ($view_count) {
 	$actionUrl .= '/1';
+} else {
+	$actionUrl .= '/0';	
 }
+
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
@@ -60,7 +64,7 @@ $baseCurrentUrl = $this->request->params['Content']['name'] . '/archives/date/';
 					<?php $title = $postedDate['year'] . '年' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year']) ?>
+					<?php $this->BcBaser->link($title, $this->BcBaser->getContentByEntityId($id, 'BlogContent', 'url') . '/archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
