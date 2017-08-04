@@ -233,6 +233,7 @@ class BlogContent extends BlogAppModel {
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['BlogContent']['id']);
 		unset($data['BlogContent']['created']);
 		unset($data['BlogContent']['modified']);
@@ -258,6 +259,15 @@ class BlogContent extends BlogAppModel {
 				$blogPost['BlogPost']['blog_category_id'] = null;
 				$blogPost['BlogPost']['blog_content_id'] = $result['BlogContent']['id'];
 				$this->BlogPost->copy(null, $blogPost);
+			}
+			if ($eyeCatch) {
+				$result['Content']['id'] = $this->Content->getLastInsertID();
+				$result['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $result['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
 			}
 			$this->getDataSource()->commit();
 			return $result;

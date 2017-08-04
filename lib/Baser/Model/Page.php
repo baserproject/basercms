@@ -716,6 +716,7 @@ class Page extends AppModel {
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
@@ -735,6 +736,15 @@ class Page extends AppModel {
 		$this->getDataSource()->begin();
 		$this->create(['Content' => $data['Content'], 'Page' => $data['Page']]);
 		if ($data = $this->save()) {
+			if ($eyeCatch) {
+				$data['Content']['id'] = $this->Content->getLastInsertID();
+				$data['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $data['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
 			$this->getDataSource()->commit();
 			return $data;
 		}
