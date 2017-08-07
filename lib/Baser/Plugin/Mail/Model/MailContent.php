@@ -221,6 +221,16 @@ class MailContent extends MailAppModel {
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
 		$data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT MailContent.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
@@ -243,6 +253,7 @@ class MailContent extends MailAppModel {
 		$this->getDataSource()->begin();
 		if ($result = $this->save($data)) {
 			$result['MailContent']['id'] = $this->id;
+			$data = $result;
 			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
 			foreach ($mailFields as $mailField) {
 				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
@@ -262,6 +273,15 @@ class MailContent extends MailAppModel {
 				$result = $this->Content->save();
 				$data['Content'] = $result['Content'];
 			}
+
+			// EVENT MailContent.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['MailContent']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $result;
 		}

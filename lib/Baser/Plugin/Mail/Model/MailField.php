@@ -217,11 +217,22 @@ class MailField extends MailAppModel {
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
 		}
+		$oldData = $data;
 
 		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
 			$data['MailField']['name'] .= '_copy';
 			$data['MailField']['field_name'] .= '_copy';
 			return $this->copy(null, $data, $options); // 再帰処理
+		}
+
+		// EVENT MailField.beforeCopy
+		if (!$sortUpdateOff) {
+			$event = $this->dispatchEvent('beforeCopy', [
+				'data' => $data
+			]);
+			if ($event !== false) {
+				$data = $event->result === true ? $event->data['data'] : $event->result;
+			}
 		}
 
 		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
@@ -238,6 +249,18 @@ class MailField extends MailAppModel {
 		$result = $this->save();
 		if ($result) {
 			$result['MailField']['id'] = $this->getInsertID();
+			$data = $result;
+
+			// EVENT MailField.afterCopy
+			if (!$sortUpdateOff) {
+				$event = $this->dispatchEvent('afterCopy', [
+					'id' => $data['MailField']['id'],
+					'data' => $data,
+					'oldId' => $id,
+					'oldData' => $oldData,
+				]);
+			}
+
 			return $result;
 		} else {
 			return false;
