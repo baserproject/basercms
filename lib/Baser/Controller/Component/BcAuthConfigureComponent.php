@@ -121,6 +121,10 @@ class BcAuthConfigureComponent extends Component {
 		} elseif ($config['userScope']) {
 			$BcAuth->authenticate['Form']['scope'] = $config['userScope'];
 		}
+		// 認証プレフィックスによるパスワードハッシャー設定
+		if (isset($config['passwordHasher'])) {
+			$BcAuth->authenticate['Form']['passwordHasher'] = $config['passwordHasher'];
+		}
 
 		// セッション識別
 		// TODO 2013/05/27 ryuring
