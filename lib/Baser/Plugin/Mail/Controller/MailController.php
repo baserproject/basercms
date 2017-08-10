@@ -284,6 +284,11 @@ class MailController extends MailAppController {
 			// 入力データを整形し、モデルに引き渡す
 			$this->request->data = $this->Message->create($this->Message->autoConvert($this->request->data));
 
+			// fileタイプへの送信データ検証
+			if (!$this->_checkDirectoryRraversal()) {
+				$this->redirect(array('action' => 'index', $id));
+			}
+
 			// 画像認証を行う
 			if (Configure::read('BcRequest.agent') != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
 				$captchaResult = $this->BcCaptcha->check($this->request->data['Message']['auth_captcha']);
@@ -374,6 +379,11 @@ class MailController extends MailAppController {
 				} else {
 					unset($this->request->data['Message']['auth_captcha']);
 				}
+			}
+
+			// fileタイプへの送信データ検証
+			if (!$this->_checkDirectoryRraversal()) {
+				$this->redirect(array('action' => 'index', $id));
 			}
 
 			$this->Message->create($this->request->data);
@@ -590,6 +600,31 @@ class MailController extends MailAppController {
 			);
 			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
 		}
+	}
+
+/**
+ * ファイルフィールドのデータがアップロードされたファイルパスであることを検証する
+ * 
+ * @return boolean
+ */
+	private function _checkDirectoryRraversal() {
+		if (!isset($this->dbDatas['mailFields']) 
+			|| !is_array($this->dbDatas['mailFields'])
+			|| empty($this->Message->Behaviors->BcUpload->settings['Message'])) {
+			return false;
+		}
+		
+		$settings = $this->Message->Behaviors->BcUpload->settings['Message'];
+		
+		foreach($this->dbDatas['mailFields'] as $mailField) {
+			if ($mailField['MailField']['type'] == 'file' &&
+				!empty($this->request->data['Message'][$mailField['MailField']['field_name']]['tmp_name'])) {
+				if (!is_uploaded_file($this->request->data['Message'][$mailField['MailField']['field_name']]['tmp_name'])) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 /**
