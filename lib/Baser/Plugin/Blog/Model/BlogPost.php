@@ -613,6 +613,17 @@ class BlogPost extends BlogAppModel {
 		if ($id) {
 			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id], 'recursive' => 1]);
 		}
+		$oldData = $data;
+
+		// EVENT BlogPost.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
 		if (!empty($_SESSION['Auth'][$sessionKey])) {
 			$data['BlogPost']['user_id'] = $_SESSION['Auth'][$sessionKey]['id'];
@@ -644,13 +655,24 @@ class BlogPost extends BlogAppModel {
 		$result = $this->save();
 
 		if ($result) {
+			$data['BlogPost']['id'] = $this->getLastInsertID();
+
 			if ($eyeCatch) {
-				$data['BlogPost']['id'] = $this->getLastInsertID();
 				$data['BlogPost']['eye_catch'] = $eyeCatch;
 				$this->set($data);
-				$this->set($this->renameToBasenameFields(true));	// 内部でリネームされたデータが再セットされる
+				$data = $this->renameToBasenameFields(true);
+				$this->set($data);	// 内部でリネームされたデータが再セットされる
 				$result = $this->save();
 			}
+
+			// EVENT BlogPost.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['BlogPost']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			return $result;
 		} else {
 			if (isset($this->validationErrors['name'])) {

@@ -713,6 +713,17 @@ class Page extends AppModel {
  */
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 		$data = $this->find('first', ['conditions' => ['Page.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT Page.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
@@ -745,6 +756,17 @@ class Page extends AppModel {
 				$result = $this->Content->save();
 				$data['Content'] = $result['Content'];
 			}
+
+			$data['Page']['id'] = $this->getLastInsertID();
+
+			// EVENT Page.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'data' => $data,
+				'id' => $data['Page']['id'],
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $data;
 		}
