@@ -45,12 +45,21 @@ class UploaderCategory extends AppModel {
  * @return mixed page Or false
  */
 	public function copy($id = null, $data = array()) {
-		
-		$data = array();
+
 		if($id) {
 			$data = $this->find('first', array('conditions' => array('UploaderCategory.id' => $id)));
 		}
-		
+		$oldData = $data;
+
+		// EVENT UploaderCategory.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$data['UploaderCategory']['name'] .= '_copy';
 		$data['UploaderCategory']['id'] = $this->getMax('id', array('UploaderCategory.id' => $data['UploaderCategory']['id'])) + 1;
 		
@@ -61,6 +70,17 @@ class UploaderCategory extends AppModel {
 		$this->create($data);
 		$result = $this->save();
 		if($result) {
+			$result['UploaderCategory']['id'] = $this->getLastInsertID();
+			$data = $result;
+
+			// EVENT UploaderCategory.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['UploaderCategory']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			return $result;
 		} else {
 			if(isset($this->validationErrors['name'])) {
