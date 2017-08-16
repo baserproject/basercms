@@ -207,7 +207,7 @@ class BcAppView extends View {
 		// CakeErrorの場合はサブフォルダを除外
 		// >>>
 		if ($this->name == 'CakeError' && $this->viewPath == 'Errors') {
-			$subDir = $this->subDir;
+			$subDir = $this->subDir . DS;
 			$this->subDir = null;
 			$exception = $this->get('error');
 			if($exception && $exception instanceof MissingConnectionException) {
@@ -235,7 +235,7 @@ class BcAppView extends View {
 			//$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
 			// ---
 			$name = array(
-				$this->viewPath . DS . $subDir . DS . Inflector::underscore($name),
+				$this->viewPath . DS . $subDir . Inflector::underscore($name),
 				$this->viewPath . DS . Inflector::underscore($name),
 			);
 			// <<<
@@ -259,7 +259,7 @@ class BcAppView extends View {
 			// ---
 			} else {
 				$name = array(
-					$this->viewPath . DS . $subDir . DS . $name,
+					$this->viewPath . DS . $subDir . $name,
 					$this->viewPath . DS . $name
 				);
 			// <<<

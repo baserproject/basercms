@@ -221,9 +221,21 @@ class MailContent extends MailAppModel {
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
 		$data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT MailContent.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['MailContent']['id']);
 		unset($data['MailContent']['created']);
 		unset($data['MailContent']['modified']);
@@ -242,6 +254,7 @@ class MailContent extends MailAppModel {
 		$this->getDataSource()->begin();
 		if ($result = $this->save($data)) {
 			$result['MailContent']['id'] = $this->id;
+			$data = $result;
 			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
 			foreach ($mailFields as $mailField) {
 				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
@@ -252,6 +265,24 @@ class MailContent extends MailAppModel {
 			$MailMessage->setup($result['MailContent']['id']);
 			$MailMessage->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 			$MailMessage->construction($result['MailContent']['id']);
+			if ($eyeCatch) {
+				$result['Content']['id'] = $this->Content->getLastInsertID();
+				$result['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $result['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
+
+			// EVENT MailContent.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['MailContent']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $result;
 		}

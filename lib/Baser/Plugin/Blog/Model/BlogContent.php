@@ -230,9 +230,21 @@ class BlogContent extends BlogAppModel {
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
 		$data = $this->find('first', ['conditions' => ['BlogContent.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT BlogContent.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['BlogContent']['id']);
 		unset($data['BlogContent']['created']);
 		unset($data['BlogContent']['modified']);
@@ -253,12 +265,32 @@ class BlogContent extends BlogAppModel {
 		$this->create($data);
 		if ($result = $this->save()) {
 			$result['BlogContent']['id'] = $this->getInsertID();
+			$data = $result;
+
 			$blogPosts = $this->BlogPost->find('all', ['conditions' => ['BlogPost.blog_content_id' => $id], 'order' => 'BlogPost.id', 'recursive' => -1]);
 			foreach ($blogPosts as $blogPost) {
 				$blogPost['BlogPost']['blog_category_id'] = null;
 				$blogPost['BlogPost']['blog_content_id'] = $result['BlogContent']['id'];
 				$this->BlogPost->copy(null, $blogPost);
 			}
+			if ($eyeCatch) {
+				$result['Content']['id'] = $this->Content->getLastInsertID();
+				$result['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $result['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
+
+			// EVENT BlogContent.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['BlogContent']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $result;
 		}
