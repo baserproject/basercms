@@ -417,7 +417,7 @@ class BcManagerComponent extends Component {
 
 		// 入力された文字列よりPHPプログラムファイルを生成するため'(シングルクオート)をサニタイズ
 		foreach($options as $key => $option) {
-			$options[$key] = str_replace("'", "\\'", $option);
+			$options[$key] = addcslashes($option, '\'\\');
 		}
 		
 		extract($options);
