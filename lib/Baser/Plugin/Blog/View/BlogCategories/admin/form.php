@@ -31,6 +31,8 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 	<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false))) ?>
 <?php endif; ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('BlogCategory.id', array('type' => 'hidden')) ?>
 
 <!-- form -->
@@ -111,6 +113,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 	</table>
 </div>
 
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

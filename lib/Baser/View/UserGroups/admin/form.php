@@ -33,6 +33,9 @@ $(window).load(function() {
 
 <!-- form -->
 <?php echo $this->BcForm->create('UserGroup') ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<?php if ($this->request->action == 'admin_edit'): ?>
@@ -120,6 +123,9 @@ $(window).load(function() {
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit align-center section">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->request->action == 'admin_edit'): ?>

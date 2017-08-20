@@ -21,6 +21,9 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 
 
 <?php echo $this->BcForm->create('BlogContent') ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('BlogContent.id', array('type' => 'hidden')) ?>
 
 <div class="section">
@@ -195,6 +198,9 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <!-- button -->
 <div class="submit">
 <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
