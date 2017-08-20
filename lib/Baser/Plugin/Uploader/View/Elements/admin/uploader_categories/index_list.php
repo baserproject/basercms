@@ -9,6 +9,11 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * @var \BcAppView $this
+ */
+$this->BcListTable->setColumnNumber(4);
 ?>
 
 
@@ -39,6 +44,7 @@
 					'asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) .' カテゴリ名',
 					'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) .' カテゴリ名'), array('escape' => false, 'class' => 'btn-direction')) ?>
 			</th>
+			<?php echo $this->BcListTable->dispatchShowHead() ?>
 			<th style="white-space: nowrap">
 				<?php echo $this->Paginator->sort('created', array(
 					'asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) .' 登録日',
@@ -57,7 +63,7 @@
 			<?php endforeach; ?>
 		<?php else: ?>
 		<tr>
-			<td colspan="4"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 		<?php endif; ?>
 	</tbody>

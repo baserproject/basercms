@@ -44,6 +44,7 @@ if (isset($user['user_group_id'])) {
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['BlogCategory']['title'] ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogCategory']['modified']); ?></td>
 </tr>

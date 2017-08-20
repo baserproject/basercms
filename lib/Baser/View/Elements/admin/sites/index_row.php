@@ -48,6 +48,7 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 	<td><?php echo $this->BcText->arrayValue($data['Site']['main_site_id'], $mainSites, ''); ?><br>
 		<?php echo $this->BcText->noValue($data['Site']['theme'], $this->BcBaser->siteConfig['theme']) ?>
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:10%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Site']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Site']['modified']) ?>
