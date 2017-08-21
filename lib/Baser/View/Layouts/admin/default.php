@@ -147,7 +147,11 @@
 
 				<!-- / #Wrap .clearfix --></div>
 
-<?php $this->BcBaser->footer([], ['cache' => ['key' => '_admin_footer']]) ?>
+<?php if (!empty($user)): ?>
+	<?php $this->BcBaser->footer([], ['cache' => ['key' => '_admin_footer']]) ?>
+<?php else: ?>
+	<?php $this->BcBaser->footer() ?>
+<?php endif ?>
 
 			<!-- / #Page --></div>
 
