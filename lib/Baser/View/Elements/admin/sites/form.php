@@ -56,7 +56,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.display_name', 'サイト名') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.display_name', array('type' => 'input', 'size' => '60')) ?>
+			<?php echo $this->BcForm->input('Site.display_name', array('type' => 'input', 'size' => '60', 'counter' => true)) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<div class="helptext">サブサイト名を入力します。管理システムでの表示に利用されます。日本語の入力が可能ですのでわかりやすい名前をつけてください。</div>
 			<?php echo $this->BcForm->error('Site.display_name') ?>
@@ -65,10 +65,28 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.title', 'サイトタイトル') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.title', array('type' => 'input', 'size' => '60')) ?>
+			<?php echo $this->BcForm->input('Site.title', array('type' => 'input', 'size' => '60', 'counter' => true)) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 			<div class="helptext">サブサイトのタイトルを入力します。タイトルタグに利用されます。</div>
 			<?php echo $this->BcForm->error('Site.title') ?>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('Site.keyword', 'サイト基本キーワード') ?></th>
+		<td class="col-input"><?php echo $this->BcForm->input('Site.keyword', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpKeyword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->error('Site.keyword') ?>
+			<div id="helptextKeyword" class="helptext">テンプレートで利用する場合は、<br />
+				&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('Site.description', 'サイト基本説明文') ?></th>
+		<td class="col-input"><?php echo $this->BcForm->input('Site.description', array('type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true)) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->error('Site.description') ?>
+			<div id="helptextDescription" class="helptext">テンプレートで利用する場合は、<br />
+				&lt;?php $this->BcBaser->description() ?&gt; で出力します。</div>
 		</td>
 	</tr>
 	<tr>
