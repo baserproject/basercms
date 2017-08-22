@@ -536,8 +536,9 @@ function topLevelUrl($lastSlash = true) {
 	if (isConsole() && !Configure::check('BcEnv.host')) {
 		return Configure::read('App.fullBaseUrl');
 	}
+	$request = Router::getRequest();
 	$protocol = 'http://';
-	if (!empty($_SERVER['HTTPS'])) {
+	if (!empty($request) && $request->is('ssl')) {
 		$protocol = 'https://';
 	}
 	$host = Configure::read('BcEnv.host');
