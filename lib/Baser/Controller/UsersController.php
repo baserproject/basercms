@@ -113,6 +113,10 @@ class UsersController extends AppController {
 			$this->notFound();
 		}
 
+		if (BcUtil::loginUser()) {
+			$this->redirect($this->BcAuth->redirect());
+		}
+		
 		if ($this->request->data) {
 			$this->BcAuth->login();
 			$user = $this->BcAuth->user();
