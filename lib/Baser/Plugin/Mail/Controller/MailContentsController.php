@@ -157,21 +157,21 @@ class MailContentsController extends MailAppController {
 				$this->request->data['MailContent']['sender_1'] = '';
 			}
 			$this->MailContent->set($this->request->data);
-			if ($this->MailContent->validates()) {
-				if ($this->MailContent->save(null, false)) {
-					$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
-					if ($this->request->data['MailContent']['edit_mail_form']) {
-						$this->redirectEditForm($this->request->data['MailContent']['form_template']);
-					} elseif ($this->request->data['MailContent']['edit_mail']) {
-						$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
-					} else {
-						$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
-					}
+			if ($this->MailContent->save()) {
+				$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
+				if ($this->request->data['MailContent']['edit_mail_form']) {
+					$this->redirectEditForm($this->request->data['MailContent']['form_template']);
+				} elseif ($this->request->data['MailContent']['edit_mail']) {
+					$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
+				} else {
+					$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
+				}
+			} else {
+				if ($this->MailContent->validationErrors || $this->MailContent->Content->validationErrors) {
+					$this->setMessage('入力エラーです。内容を修正してください。', true);
 				} else {
 					$this->setMessage('データベース処理中にエラーが発生しました。', true);
 				}
-			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
