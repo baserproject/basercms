@@ -107,6 +107,12 @@ class MailMessagesController extends MailAppController {
 		));
 		$this->set(compact('mailFields'));
 		$this->set(compact('messages'));
+
+		if ($this->RequestHandler->isAjax() || !empty($this->request->query['ajax'])) {
+			$this->render('ajax_index');
+			return;
+		}
+
 		$this->pageTitle = '受信メール一覧';
 		$this->help = 'mail_messages_index';
 	}
