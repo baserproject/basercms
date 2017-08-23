@@ -143,4 +143,5 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 			<?php echo $this->BcForm->error('Site.status') ?>
 		</td>
 	</tr>
+	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>

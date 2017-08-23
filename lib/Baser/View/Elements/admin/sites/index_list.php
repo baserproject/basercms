@@ -12,7 +12,9 @@
 
 /**
  * サブサイト一覧
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(8);
 $agents = Configure::read('BcAgent');
 $devices = [];
 foreach($agents as $key => $agent) {
@@ -47,6 +49,7 @@ foreach($languages as $key => $lang) {
 	<?php echo $this->Paginator->sort('lang', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 言語', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 言語'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
 	<th><?php echo $this->Paginator->sort('main_site_id', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' メインサイト', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' メインサイト'), array('escape' => false, 'class' => 'btn-direction')) ?><br>
 		<?php echo $this->Paginator->sort('theme', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' テーマ', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' テーマ'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
+    <?php echo $this->BcListTable->dispatchShowHead() ?>        
 	<th>
 		<?php echo $this->Paginator->sort('created', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 登録日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 登録日'), array('escape' => false, 'class' => 'btn-direction')) ?><br />
 		<?php echo $this->Paginator->sort('modified', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 更新日', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 更新日'), array('escape' => false, 'class' => 'btn-direction')) ?>
@@ -60,7 +63,7 @@ foreach($languages as $key => $lang) {
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="8"><p class="no-data">データがありません。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データがありません。</p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

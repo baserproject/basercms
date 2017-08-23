@@ -24,6 +24,8 @@ matrix:
 #MEMO: travisのOSを固定、テスト失敗が出る箇所があるため
 dist: precise
 
+dist: precise
+
 sudo: false
 
 cache:

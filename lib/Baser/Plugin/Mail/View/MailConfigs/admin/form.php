@@ -18,6 +18,9 @@
 <h2>基本項目</h2>
 
 <?php echo $this->BcForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('MailConfig.id', array('type' => 'hidden')) ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
@@ -74,6 +77,9 @@
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit"><?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?></div>
 
 <?php echo $this->BcForm->end() ?>

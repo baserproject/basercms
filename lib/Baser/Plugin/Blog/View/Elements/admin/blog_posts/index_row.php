@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] ブログ記事 一覧　行
+ * @var \BcAppView $this
  */
 ?>
 

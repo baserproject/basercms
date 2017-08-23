@@ -28,6 +28,8 @@ $params = explode('/', $path);
 	<?php echo $this->BcForm->create('ThemeFolder', array('id' => 'TemplateForm', 'url' => array_merge(array('controller' => 'theme_files', 'action' => 'edit_folder', $theme, $type), $params))) ?>
 <?php endif ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php if($theme	!= 'core' && !$isWritable): ?>
 	<div id="AlertMessage">ファイルに書き込み権限がないので編集できません。</div>
 <?php endif ?>
@@ -55,8 +57,12 @@ $params = explode('/', $path);
 				<?php endif ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit">
 	<?php if ($this->request->action == 'admin_add_folder'): ?>
 		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), explode('/', $path)), array('class' => 'btn-gray button')); ?>

@@ -48,6 +48,7 @@ $priorities = array('0.1' => '0.1', '0.2' => '0.2', '0.3' => '0.3', '0.4' => '0.
 	<td style="width:10%;text-align:center">
 		<?php echo $this->BcText->booleanMark($data['SearchIndex']['status']); ?><br />
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:10%;white-space: nowrap">
 <?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['created']) ?><br />
 <?php echo $this->BcTime->format('Y-m-d', $data['SearchIndex']['modified']) ?>

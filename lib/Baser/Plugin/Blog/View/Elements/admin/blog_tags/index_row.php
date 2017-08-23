@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] ブログタグ一覧　行
+ * @var \BcAppView $this
  */
 ?>
 
@@ -26,6 +27,7 @@
 	</td>
 	<td><?php echo $data['BlogTag']['id'] ?></td>
 	<td><?php $this->BcBaser->link($data['BlogTag']['name'], array('action' => 'edit', $data['BlogTag']['id'])) ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['modified']); ?></td>
 </tr>
