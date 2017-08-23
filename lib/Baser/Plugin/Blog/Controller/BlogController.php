@@ -676,25 +676,6 @@ class BlogController extends BlogAppController {
 			$num = 1;
 		}
 
-		unset($_conditions['author']);
-		unset($_conditions['category']);
-		unset($_conditions['tag']);
-		unset($_conditions['keyword']);
-		unset($_conditions['year']);
-		unset($_conditions['month']);
-		unset($_conditions['day']);
-		unset($_conditions['id']);
-		unset($_conditions['page']);
-		unset($_conditions['num']);
-		unset($_conditions['sort']);
-		unset($_conditions['direction']);
-		unset($_conditions['contentId']);
-
-		if ($_conditions) {
-			// とりあえず BlogPost のフィールド固定
-			$conditions = array_merge($conditions, $this->postConditions(array('BlogPost' => $_conditions)));
-		}
-
 		// プレビューの場合は公開ステータスを条件にしない
 		if (!$this->preview) {
 			$conditions = array_merge($conditions, array('BlogContent.status' => true));

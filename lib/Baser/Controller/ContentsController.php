@@ -156,18 +156,16 @@ class ContentsController extends AppController {
 		}
 		if (isset($data['Content']['c'])) {
 			if ($data['Content']['c']) {
-				$data['Content']['category'] = $data['Content']['c'];
+				$conditions['Content.category'] = $data['Content']['c'];
 			}
 			unset($data['Content']['c']);
 		}
 		if (isset($data['Content']['m'])) {
 			if ($data['Content']['m']) {
-				$data['Content']['model'] = $data['Content']['m'];
+				$conditions['Content.model'] = $data['Content']['m'];
 			}
 			unset($data['Content']['m']);
 		}
-
-		$conditions = am($conditions, $this->postConditions($data));
 
 		if ($query) {
 			$query = $this->_parseQuery($query);
