@@ -483,6 +483,11 @@ class MailController extends MailAppController {
 
 		// ユーザーに送信
 		if (!empty($userMail)) {
+			$site = BcSite::findCurrent();
+			$agentTemplate = false;
+			if($site && $site->device) {
+				$agentTemplate = true;
+			}
 			$data['other']['mode'] = 'user';
 			$options = array(
 				'fromName'	=> $mailContent['sender_name'],
@@ -490,6 +495,7 @@ class MailController extends MailAppController {
 				'template'	=> 'Mail.' . $mailContent['mail_template'],
 				'replyTo'		=> $fromAdmin,
 				'attachments'	=> $attachments,
+				'agentTemplate' => $agentTemplate,
 				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);

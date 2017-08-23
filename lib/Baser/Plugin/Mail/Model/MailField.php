@@ -66,6 +66,10 @@ class MailField extends MailAppModel {
 			array('rule' => array('maxLength', 255),
 				'message' => '後見出しは255文字以内で入力してください。')
 		),
+		'source' => array(
+			array('rule' => array('sourceMailField'),
+				'message' => '選択リストを入力してください。')
+		),
 		'options' => array(
 			array('rule' => array('maxLength', 255),
 				'message' => 'オプションは255文字以内で入力してください。')
@@ -163,15 +167,37 @@ class MailField extends MailAppModel {
 
 /**
  * メールフィールドの値として正しい文字列か検証する
- * 半角英数-_\s
+ * 半角英数-_
  *
  * @param array $check
  * @return boolean
  */
 	public function halfTextMailField($check) {
 		$subject = $check[key($check)];
-		$pattern = "/^[a-zA-Z0-9-_\s]*$/";
+		$pattern = "/^[a-zA-Z0-9-_]*$/";
 		return !!(preg_match($pattern, $subject) === 1);
+	}
+
+/**
+ * 選択リストの入力チェック
+ * 
+ * @param type $check
+ */
+	public function sourceMailField($check) {
+		switch ($this->data['MailField']['type']) {
+			case 'radio':		// ラジオボタン
+			case 'select':		// セレクトボックス
+			case 'multi_check':	// マルチチェックボックス
+			case 'autozip':		// 自動保管郵便番号
+				// 選択リストのチェックを行う
+				$result = (!empty($check[key($check)]));
+				break;
+			default:
+				// 選択リストが不要のタイプの時はチェックしない
+				$result = true;
+				break;
+		}
+		return $result;
 	}
 
 /**
@@ -191,11 +217,23 @@ class MailField extends MailAppModel {
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
 		}
+		$oldData = $data;
 
 		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
 			$data['MailField']['name'] .= '_copy';
 			$data['MailField']['field_name'] .= '_copy';
 			return $this->copy(null, $data, $options); // 再帰処理
+		}
+
+		// EVENT MailField.beforeCopy
+		if (!$sortUpdateOff) {
+			$event = $this->dispatchEvent('beforeCopy', [
+				'data' => $data,
+				'id' => $id,
+			]);
+			if ($event !== false) {
+				$data = $event->result === true ? $event->data['data'] : $event->result;
+			}
 		}
 
 		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
@@ -212,6 +250,18 @@ class MailField extends MailAppModel {
 		$result = $this->save();
 		if ($result) {
 			$result['MailField']['id'] = $this->getInsertID();
+			$data = $result;
+
+			// EVENT MailField.afterCopy
+			if (!$sortUpdateOff) {
+				$event = $this->dispatchEvent('afterCopy', [
+					'id' => $data['MailField']['id'],
+					'data' => $data,
+					'oldId' => $id,
+					'oldData' => $oldData,
+				]);
+			}
+
 			return $result;
 		} else {
 			return false;

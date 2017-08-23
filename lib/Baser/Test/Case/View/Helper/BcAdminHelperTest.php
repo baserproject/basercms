@@ -23,11 +23,11 @@ class BcAdminHelperTest extends BaserTestCase {
 
 /**
  * Fixtures
- * @var array 
+ * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.UserGroup',
-	);
+	];
 
 /**
  * setUp method
@@ -62,22 +62,22 @@ class BcAdminHelperTest extends BaserTestCase {
 	public function testIsAdminGlobalmenuUsed($admin, $groupId, $expected, $message = null) {
 
 		$this->BcAdmin->request->params['admin'] = $admin;
-		$this->BcAdmin->_View->viewVars['user'] = array(
+		$this->BcAdmin->_View->viewVars['user'] = [
 			'user_group_id' => $groupId
-		);
+		];
 
 		$result = $this->BcAdmin->isAdminGlobalmenuUsed();
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function isAdminGlobalmenuUsedDataProvider() {
-		return array(
-			array('', null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
-			array(1, null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'),
-			array('', 1, true, '管理システムグローバルメニューの利用可否確認が正しくありません'),
-			array('1', 1, true, '管理ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'),
-			array('1', 2, 0, '運営ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'),
-		);
+		return [
+			['', null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'],
+			[1, null, false, '管理システムグローバルメニューの利用可否確認が正しくありません'],
+			['', 1, true, '管理システムグローバルメニューの利用可否確認が正しくありません'],
+			['1', 1, true, '管理ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'],
+			['1', 2, 0, '運営ユーザーの管理システムグローバルメニューの利用可否確認が正しくありません'],
+		];
 	}
 
 /**
@@ -91,21 +91,21 @@ class BcAdminHelperTest extends BaserTestCase {
  */
 	public function testIsSystemAdmin($admin, $groupId, $expected, $message = null) {
 		$this->BcAdmin->request->params['admin'] = $admin;
-		$this->BcAdmin->_View->viewVars['user'] = array(
+		$this->BcAdmin->_View->viewVars['user'] = [
 			'user_group_id' => $groupId
-		);
+		];
 
 		$result = $this->BcAdmin->isSystemAdmin();
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function isSystemAdminDataProvider() {
-		return array(
-			array('', null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'),
-			array(1, null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'),
-			array('', 1, false, 'ログインユーザーのシステム管理者チェックが正しくありません'),
-			array('1', 1, true, '管理ユーザーのシステム管理者チェックが正しくありません'),
-			array('1', 2, false, '運営ユーザーのシステム管理者チェックが正しくありません'),
-		);
+		return [
+			['', null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'],
+			[1, null, false, 'ログインユーザーのシステム管理者チェックが正しくありません'],
+			['', 1, false, 'ログインユーザーのシステム管理者チェックが正しくありません'],
+			['1', 1, true, '管理ユーザーのシステム管理者チェックが正しくありません'],
+			['1', 2, false, '運営ユーザーのシステム管理者チェックが正しくありません'],
+		];
 	}
 }

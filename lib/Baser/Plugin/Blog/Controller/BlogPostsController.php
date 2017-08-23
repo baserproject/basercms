@@ -118,7 +118,8 @@ class BlogPostsController extends BlogAppController {
 
 		$default = ['named' => [
 			'num' => $this->siteConfigs['admin_list_num'],
-			'sort' => 'no DESC'
+			'sort' => 'no',
+			'direction' => 'desc',
 		]];
 		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
@@ -141,10 +142,18 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
+		if ($this->passedArgs['sort'] == 'no') {
+			$order = 'BlogPost.' . $this->passedArgs['sort'];
+		} else {
+			$order = $this->passedArgs['sort'];
+		}
+		if ($order && $this->passedArgs['direction']) {
+			$order .= ' ' . $this->passedArgs['direction'];
+		}
 		$options = [
 			'conditions' => $conditions,
 			'joins' => $joins,
-			'order' => 'BlogPost.' . $this->passedArgs['sort'],
+			'order' => $order,
 			'limit' => $this->passedArgs['num'],
 			'recursive' => 2
 		];
@@ -247,9 +256,11 @@ class BlogPostsController extends BlogAppController {
 			unset($data['BlogPost']['blog_category_id']);
 		}
 
-		$_conditions = $this->postConditions($data);
-		if ($_conditions) {
-			$conditions = am($conditions, $_conditions);
+		if(isset($data['BlogPost']['status'])) {
+			$conditions['BlogPost.status'] = $data['BlogPost']['status'];
+		}
+		if(isset($data['BlogPost']['user_id'])) {
+			$conditions['BlogPost.user_id'] = $data['BlogPost']['user_id'];
 		}
 
 		if ($name) {

@@ -211,7 +211,7 @@ class BlogController extends BlogAppController {
 			$listCount = $this->blogContent['BlogContent']['list_count'];
 		}
 
-		$datas = $this->_getBlogPosts(array('listCount' => $listCount));
+		$datas = $this->_getBlogPosts(['num' => $listCount]);
 		$this->set('editLink', array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_contents', 'action' => 'edit', $this->blogContent['BlogContent']['id']));
 		$this->set('posts', $datas);
 		$this->set('single', false);
@@ -506,23 +506,13 @@ class BlogController extends BlogAppController {
 		$options = array_merge([
 			'findType' => 'customParams',
 			'direction' => $listDirection,
-			'listCount' => $listCount,
+			'listCount' => $listCount,		// @deprecated 5.0.0 since 4.0.0
 			'num' => null,
 			'contentId' => $contentId,
 			'page' => 1,
 			'cache' => false,
 		], $options);
-		
-		// 取得件数
-		// TODO num に統一する
-		if($options['listCount'] && !$options['num']) {
-			$options['num'] = $options['listCount'];
-		}
-		if($options['num']) {
-			$options['limit'] = $options['num'];
-		}
-		unset($options['listCount'], $options['num']);		
-		
+
 		$named = [];
 		if (!empty($this->request->params['named'])) {
 			$named = $this->request->params['named'];
@@ -541,6 +531,15 @@ class BlogController extends BlogAppController {
 			if (!empty($named['keyword'])) $options['keyword'] = $named['keyword'];
 			if (!empty($named['author'])) $options['author'] = $named['author'];
 		}
+
+		if($options['listCount'] && !$options['num']) {
+			$options['num'] = $options['listCount'];
+		}
+		if($options['num']) {
+			$options['limit'] = $options['num'];
+		}
+		unset($options['listCount'], $options['num']);
+
 		$this->paginate = $options;
 		return $this->paginate('BlogPost');
 	}
@@ -734,7 +733,7 @@ class BlogController extends BlogAppController {
 		$this->layout = null;
 		$this->contentId = $blogContentId;
 
-		$datas = $this->_getBlogPosts(array('listCount' => $limit));
+		$datas = $this->_getBlogPosts(['num' => $limit]);
 
 		$this->set('posts', $datas);
 

@@ -713,9 +713,21 @@ class Page extends AppModel {
  */
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 		$data = $this->find('first', ['conditions' => ['Page.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT Page.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
@@ -735,6 +747,26 @@ class Page extends AppModel {
 		$this->getDataSource()->begin();
 		$this->create(['Content' => $data['Content'], 'Page' => $data['Page']]);
 		if ($data = $this->save()) {
+			if ($eyeCatch) {
+				$data['Content']['id'] = $this->Content->getLastInsertID();
+				$data['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $data['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
+
+			$data['Page']['id'] = $this->getLastInsertID();
+
+			// EVENT Page.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'data' => $data,
+				'id' => $data['Page']['id'],
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $data;
 		}
