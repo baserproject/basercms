@@ -415,6 +415,11 @@ class BcManagerComponent extends Component {
 			'encoding'		=> 'utf8'
 			), $options);
 
+		// 入力された文字列よりPHPプログラムファイルを生成するため'(シングルクオート)をサニタイズ
+		foreach($options as $key => $option) {
+			$options[$key] = addcslashes($option, '\'\\');
+		}
+		
 		extract($options);
 
 		$datasource = $this->getDatasourceName($datasource);

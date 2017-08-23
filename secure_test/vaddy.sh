@@ -26,11 +26,8 @@ do
     fi
 done
 
-# デプロイ
-openssl aes-256-cbc -k "$SERVER_KEY" -in deploy_key.enc -d -a -out deploy.key
-cp deploy.key ~/.ssh/
-chmod 600 ~/.ssh/deploy.key
-ssh -i ~/.ssh/deploy.key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TEST_SERVER 'bash -s' < deploy.sh
+# Vaddyクライアント取得
+git clone https://github.com/vaddy/go-vaddy.git;
 
 #Vaddy実行
 curl -Ss https://api.vaddy.net/v1/scan -X POST -d "action=start" -d "user=$VADDY_USER" -d "auth_key=$VADDY_AUTH_KEY" -d "fqdn=$VADDY_FQDN" | tee result.txt
