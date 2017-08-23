@@ -1,3 +1,0 @@
-==== Start VAddy Scan (Version 1.0.3)====
-Network/Auth error
-{"error_message":"Scan has already been running"}
