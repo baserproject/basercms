@@ -6,7 +6,7 @@ php:
   - 5.6
   - 7.0
   - hhvm
-  
+
 env:
   - DB=mysql
 
@@ -49,6 +49,17 @@ before_script:
 
 script:
   - php ./Console/cake.php baser_test baser BcAll
+
+after_success:
+    #Vaddyテスト
+  - cd ../secure_test/
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "dev-4" ]; then
+    ./vaddy.sh;
+    fi;
+
+#after_failure:
+#  - cd ../secure_test/ &&
+#    echo "Travis Failed." | ./slack_webhooks.sh
 
 notifications:
   email: false

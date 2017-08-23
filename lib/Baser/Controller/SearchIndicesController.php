@@ -169,31 +169,19 @@ class SearchIndicesController extends AppController {
 			$query = $data['SearchIndex']['q'];
 		}
 		if (!empty($data['SearchIndex']['cf'])) {
-			$data['SearchIndex']['content_filter_id'] = $data['SearchIndex']['cf'];
+			$conditions['SearchIndex.content_filter_id'] = $data['SearchIndex']['cf'];
 		}
 		if (!empty($data['SearchIndex']['m'])) {
-			$data['SearchIndex']['model'] = $data['SearchIndex']['m'];
+			$conditions['SearchIndex.model'] = $data['SearchIndex']['m'];
 		}
 		if (isset($data['SearchIndex']['s'])) {
-			$data['SearchIndex']['site_id'] = $data['SearchIndex']['s'];
+			$conditions['SearchIndex.site_id'] = $data['SearchIndex']['s'];
 		}
 		if (!empty($data['SearchIndex']['f'])) {
 			$content = $this->Content->find('first', ['fields' => ['lft', 'rght'], 'conditions' => ['Content.id' => $data['SearchIndex']['f']], 'recursive' => -1]);
-			$data['SearchIndex']['rght <'] = $content['Content']['rght'];
-			$data['SearchIndex']['lft >'] = $content['Content']['lft'];
+			$conditions['SearchIndex.rght <'] = $data['SearchIndex']['rght'];
+			$conditions['SearchIndex.lft >'] = $data['SearchIndex']['lft'];
 		}
-		
-		unset($data['SearchIndex']['key']);
-		unset($data['SearchIndex']['fields']);
-		unset($data['SearchIndex']['_Token']);
-		unset($data['SearchIndex']['q']);
-		unset($data['SearchIndex']['cf']);
-		unset($data['SearchIndex']['m']);
-		unset($data['SearchIndex']['f']);
-		unset($data['SearchIndex']['s']);
-		
-		$conditions = am($conditions, $this->postConditions($data));
-
 		if ($query) {
 			$query = $this->_parseQuery($query);
 			foreach ($query as $key => $value) {
@@ -430,8 +418,8 @@ class SearchIndicesController extends AppController {
 				unset($data['SearchIndex'][$key]);
 			}
 		}
-		if ($data['SearchIndex']) {
-			$conditions = $this->postConditions($data);
+		if(isset($data['SearchIndex']['priority'])) {
+			$conditions['SearchIndex.priority'] = $data['SearchIndex']['priority'];
 		}
 		if ($type) {
 			$conditions['SearchIndex.type'] = $type;
