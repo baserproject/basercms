@@ -112,7 +112,7 @@ class UsersController extends AppController {
 		if ($this->BcAuth->loginAction != ('/' . $this->request->url)) {
 			$this->notFound();
 		}
-
+		
 		if ($this->request->data) {
 			$this->BcAuth->login();
 			$user = $this->BcAuth->user();
@@ -133,8 +133,13 @@ class UsersController extends AppController {
 				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 				$this->redirect($this->BcAuth->redirect());
 			} else {
-                $this->setMessage('アカウント名、パスワードが間違っています。', true);
-            }
+				$this->setMessage('アカウント名、パスワードが間違っています。', true);
+			}
+		} else {
+			$user = $this->BcAuth->user();
+			if ($user && $this->isAuthorized($user)) {
+				$this->redirect($this->BcAuth->redirectUrl());
+			}
 		}
 		
 		$pageTitle = 'ログイン';
