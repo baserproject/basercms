@@ -17,6 +17,7 @@
 
 
 <?php echo $this->BcForm->create('Permission') ?>
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcForm->input('Permission.id', array('type' => 'hidden')) ?>
 
 <!-- form -->
@@ -82,6 +83,9 @@
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->request->action == 'admin_edit'): ?>

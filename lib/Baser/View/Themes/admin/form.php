@@ -26,6 +26,8 @@
 
 <?php echo $this->BcForm->create('Theme', array('url' => array('action' => 'edit', $theme))) ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <!-- form -->
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
@@ -76,6 +78,9 @@
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <?php if (!$folderDisabled && $siteConfig['theme'] != $this->BcForm->value('Theme.name')): ?>
 	<div class="submit">
 		<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>

@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] メールフィールド 一覧　行
+ * @var \BcAppView $this
  */
 if (!$data['MailField']['use_field']) {
 	$class = ' class="unpublish disablerow sortable"';
@@ -44,6 +45,7 @@ if (!$data['MailField']['use_field']) {
 	<td style="width:15%"><?php echo $this->BcText->listValue('MailField.type', $data['MailField']['type']) ?></td>
 	<td style="width:10%"><?php echo $data['MailField']['group_field'] ?></td>
 	<td style="width:8%;text-align:center"><?php echo $this->BcText->booleanMark($data['MailField']['not_empty']) ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:12%;white-space:nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['MailField']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['MailField']['modified']) ?>

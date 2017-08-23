@@ -12,6 +12,8 @@
 
 /**
  * [ADMIN] エディタテンプレートー登録・編集
+ * 
+ * @var \BcAppView $this
  */
 ?>
 

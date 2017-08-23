@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] ブログ記事 一覧　テーブル
+ * @var \BcAppView $this
  */
 $this->BcListTable->setColumnNumber(9);
 ?>

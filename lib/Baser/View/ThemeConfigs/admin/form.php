@@ -43,6 +43,8 @@ $(function(){
 
 <?php echo $this->BcForm->create('ThemeConfig', array('type' => 'file')) ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <table class="form-table">
 	<tr>
 		<th>テーマカラー</th>
@@ -109,6 +111,8 @@ $(function(){
 	</tr>
 	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('class' => 'button')) ?>

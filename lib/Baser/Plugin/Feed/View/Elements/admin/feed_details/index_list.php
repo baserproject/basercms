@@ -12,7 +12,9 @@
 
 /**
  * [ADMIN] フィード設定一覧
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(5);
 ?>
 
 
@@ -91,6 +93,7 @@ $(function(){
 			<th scope="col">フィード名</th>
 			<th scope="col">カテゴリフィルター</th>
 			<th scope="col">キャッシュ時間</th>
+			<?php echo $this->BcListTable->dispatchShowHead() ?>
 			<th scope="col">登録日<br />更新日</th>
 			</tr>
 			</thead>
@@ -101,7 +104,7 @@ $(function(){
 					<?php endforeach; ?>
 				<?php else: ?>
 					<tr>
-						<td colspan="6"><p class="no-data">データが見つかりませんでした。「追加する」ボタンをクリックしてフィード詳細を登録してください。</p></td>
+						<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。「追加する」ボタンをクリックしてフィード詳細を登録してください。</p></td>
 					</tr>
 				<?php endif; ?>
 			</tbody>

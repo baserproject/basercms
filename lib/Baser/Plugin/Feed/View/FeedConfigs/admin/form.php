@@ -29,6 +29,8 @@ $(function(){
 
 <?php echo $this->BcForm->create('FeedConfig') ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <div class="section">
 
 	<h2>基本項目</h2>
@@ -122,6 +124,8 @@ $(function(){
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

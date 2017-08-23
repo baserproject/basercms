@@ -13,6 +13,8 @@
 <!-- form -->
 <?php echo $this->BcForm->create('UploaderConfig', ['url' => ['action' => 'index']]) ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <h2>画像サイズ設定</h2>
 
 <div class="section">
@@ -76,6 +78,7 @@
 				<?php echo $this->BcForm->error('UploaderConfig.mobile_small_thumb') ?>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
 
@@ -103,9 +106,12 @@
 				</div>
 			</td>
 		</tr>
+		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
 <?php endif ?>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">
