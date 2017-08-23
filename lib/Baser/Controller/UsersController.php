@@ -112,10 +112,6 @@ class UsersController extends AppController {
 		if ($this->BcAuth->loginAction != ('/' . $this->request->url)) {
 			$this->notFound();
 		}
-
-		if (BcUtil::loginUser()) {
-			$this->redirect($this->BcAuth->redirect());
-		}
 		
 		if ($this->request->data) {
 			$this->BcAuth->login();
@@ -139,7 +135,12 @@ class UsersController extends AppController {
 			} else {
                 $this->setMessage('アカウント名、パスワードが間違っています。', true);
             }
-		}
+		} else {
+            $user = $this->BcAuth->user();
+            if ($user && $this->isAuthorized($user)) {
+                $this->redirect($this->BcAuth->redirectUrl());
+            }
+        }
 		
 		$pageTitle = 'ログイン';
 		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
