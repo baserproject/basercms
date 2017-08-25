@@ -34,19 +34,19 @@ class BcSiteTest extends BaserTestCase {
 		$this->assertEquals($expect, $this->agent->shouldRedirects($request));
 	}
 
-	public function shouldRedirectsDataProvider() {
-		return array(
-			array(false, '/s/'),
-			array(false, '/s/news/index'),
-			array(false, '/s/service', array('smartphone' => 'on')),
-			array(true, '/'),
-			array(true, '/news/index'),
-			array(true, '/service'),
-			array(false, '/news/index', array('smartphone' => 'off')),
-			array(true, '/m/'),
-			array(true, '/m/service/index'),
-			array(false, '/m/service/index', array('smartphone' => 'off'))
-		);
+	public function shouldRedirectsDataProvider()
+	{
+		return [
+			[false, '/s/'],
+			[false, '/s/news/index'],
+			[false, '/s/service', ['smartphone' => 'on']],
+			[true, '/'],
+			[true, '/news/index'],
+			[true, '/service'],
+			[false, '/news/index', ['smartphone' => 'off']],
+			[true, '/m/'],
+			[true, '/m/service/index'],
+			[false, '/m/service/index', ['smartphone' => 'off']]
+		];
 	}
-	
 }
