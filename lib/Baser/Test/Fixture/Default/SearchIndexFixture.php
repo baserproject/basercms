@@ -9,8 +9,8 @@ class SearchIndexFixture extends BaserTestFixture {
  *
  * @var array
  */
-  public $records = array(
-    array(
+  public $records = [
+    [
       'id' => 1,
       'type' => 'ページ',
       'model' => 'Page',
@@ -27,8 +27,8 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-    array(
+    ],
+    [
       'id' => 2,
       'type' => 'ページ',
       'model' => 'Page',
@@ -45,8 +45,8 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-    array(
+    ],
+    [
       'id' => 3,
       'type' => 'ページ',
       'model' => 'Page',
@@ -63,8 +63,8 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-    array(
+    ],
+    [
       'id' => 4,
       'type' => 'ブログ',
       'model' => 'BlogContent',
@@ -81,8 +81,8 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-    array(
+    ],
+    [
       'id' => 5,
       'type' => 'メール',
       'model' => 'MailContent',
@@ -99,8 +99,8 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-    array(
+    ],
+    [
       'id' => 6,
       'type' => 'ページ',
       'model' => 'Page',
@@ -117,8 +117,8 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-    array(
+    ],
+    [
       'id' => 7,
       'type' => 'ページ',
       'model' => 'Page',
@@ -135,7 +135,7 @@ class SearchIndexFixture extends BaserTestFixture {
       'priority' => 0.5,
       'created' => '2016-07-21 11:49:19',
       'modified' => NULL,
-    ),
-  );
+    ],
+  ];
 
 }
