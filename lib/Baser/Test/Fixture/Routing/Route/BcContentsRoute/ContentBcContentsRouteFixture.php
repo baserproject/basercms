@@ -16,8 +16,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => '',
 			'plugin' => 'Core',
@@ -52,8 +52,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:02:53',
 			'modified' => '2016-07-29 18:04:23'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'name' => 'm',
 			'plugin' => 'Core',
@@ -88,8 +88,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:02:53',
 			'modified' => '2016-11-04 16:39:37'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'name' => 's',
 			'plugin' => 'Core',
@@ -124,8 +124,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:02:53',
 			'modified' => '2016-11-04 16:42:25'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -160,8 +160,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:13:03',
 			'modified' => '2016-11-04 16:56:43'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -196,8 +196,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:14:33',
 			'modified' => '2016-07-29 18:14:54'
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -232,8 +232,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:18:06',
 			'modified' => '2017-01-22 17:31:39'
-		),
-		array(
+		],
+		[
 			'id' => '7',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -268,8 +268,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-30 21:51:49',
 			'modified' => '2017-01-22 17:31:59'
-		),
-		array(
+		],
+		[
 			'id' => '8',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -304,8 +304,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-31 15:01:41',
 			'modified' => '2016-07-31 15:02:16'
-		),
-		array(
+		],
+		[
 			'id' => '9',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -340,8 +340,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-31 16:46:32',
 			'modified' => '2017-01-22 17:32:09'
-		),
-		array(
+		],
+		[
 			'id' => '10',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -376,8 +376,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-08-12 00:55:34',
 			'modified' => '2017-01-22 17:32:18'
-		),
-		array(
+		],
+		[
 			'id' => '11',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -412,8 +412,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-08-12 00:55:48',
 			'modified' => '2017-01-22 17:32:28'
-		),
-		array(
+		],
+		[
 			'id' => '12',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -448,8 +448,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-08-12 00:55:57',
 			'modified' => '2017-01-22 17:32:35'
-		),
-		array(
+		],
+		[
 			'id' => '13',
 			'name' => 'en',
 			'plugin' => 'Core',
@@ -484,8 +484,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:35:39',
 			'modified' => '2016-11-04 16:40:34'
-		),
-		array(
+		],
+		[
 			'id' => '14',
 			'name' => 'sub',
 			'plugin' => 'Core',
@@ -520,8 +520,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:36:38',
 			'modified' => '2016-11-04 16:41:14'
-		),
-		array(
+		],
+		[
 			'id' => '15',
 			'name' => 'another.com',
 			'plugin' => 'Core',
@@ -556,8 +556,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:38:36',
 			'modified' => '2016-11-04 16:42:02'
-		),
-		array(
+		],
+		[
 			'id' => '16',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -592,8 +592,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:44:28',
 			'modified' => '2017-01-22 17:32:58'
-		),
-		array(
+		],
+		[
 			'id' => '17',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -628,8 +628,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:45:50',
 			'modified' => '2017-01-22 17:33:11'
-		),
-		array(
+		],
+		[
 			'id' => '18',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -664,8 +664,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:47:27',
 			'modified' => '2017-01-22 17:33:18'
-		),
-		array(
+		],
+		[
 			'id' => '19',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -700,8 +700,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:47:51',
 			'modified' => '2017-01-22 17:33:36'
-		),
-		array(
+		],
+		[
 			'id' => '20',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -736,8 +736,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:48:33',
 			'modified' => '2017-01-22 17:33:38'
-		),
-		array(
+		],
+		[
 			'id' => '21',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -772,8 +772,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:17',
 			'modified' => '2017-01-22 17:33:50'
-		),
-		array(
+		],
+		[
 			'id' => '22',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -808,8 +808,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:18',
 			'modified' => '2017-01-22 17:33:56'
-		),
-		array(
+		],
+		[
 			'id' => '23',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -844,8 +844,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:33',
 			'modified' => '2017-01-22 17:34:04'
-		),
-		array(
+		],
+		[
 			'id' => '24',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -880,8 +880,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:34',
 			'modified' => '2017-01-22 17:34:09'
-		),
-		array(
+		],
+		[
 			'id' => '25',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -916,8 +916,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:50:11',
 			'modified' => '2017-01-22 17:34:20'
-		),
-		array(
+		],
+		[
 			'id' => '26',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -952,8 +952,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:09',
 			'modified' => '2017-01-22 17:34:30'
-		),
-		array(
+		],
+		[
 			'id' => '27',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -988,8 +988,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:09',
 			'modified' => '2017-01-22 17:34:37'
-		),
-		array(
+		],
+		[
 			'id' => '28',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -1024,8 +1024,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:22',
 			'modified' => '2017-01-22 17:34:49'
-		),
-		array(
+		],
+		[
 			'id' => '29',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -1060,8 +1060,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:39',
 			'modified' => '2017-01-22 17:35:18'
-		),
-		array(
+		],
+		[
 			'id' => '30',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -1096,8 +1096,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:56',
 			'modified' => '2017-01-22 17:35:41'
-		),
-		array(
+		],
+		[
 			'id' => '31',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -1132,8 +1132,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:54:55',
 			'modified' => '2017-01-22 17:35:55'
-		),
-		array(
+		],
+		[
 			'id' => '32',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -1168,8 +1168,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:55:12',
 			'modified' => '2017-01-22 17:36:09'
-		),
-		array(
+		],
+		[
 			'id' => '33',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -1204,8 +1204,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:55:40',
 			'modified' => '2017-01-22 17:36:18'
-		),
-		array(
+		],
+		[
 			'id' => '34',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -1240,8 +1240,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:56:53',
 			'modified' => '2017-01-22 17:36:43'
-		),
-		array(
+		],
+		[
 			'id' => '35',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -1276,8 +1276,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:57:11',
 			'modified' => '2017-01-22 17:37:10'
-		),
-		array(
+		],
+		[
 			'id' => '36',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -1312,8 +1312,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:57:26',
 			'modified' => '2017-01-22 17:37:19'
-		),
-		array(
+		],
+		[
 			'id' => '37',
 			'name' => 'another.com/s',
 			'plugin' => 'Core',
@@ -1348,8 +1348,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:41:47',
 			'modified' => '2016-11-04 19:41:48'
-		),
-		array(
+		],
+		[
 			'id' => '38',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -1384,8 +1384,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:42:43',
 			'modified' => '2017-01-22 17:37:27'
-		),
-		array(
+		],
+		[
 			'id' => '39',
 			'name' => 'news',
 			'plugin' => 'Blog',
@@ -1420,8 +1420,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:43:45',
 			'modified' => '2017-01-22 17:37:36'
-		),
-		array(
+		],
+		[
 			'id' => '40',
 			'name' => 'service',
 			'plugin' => 'Core',
@@ -1456,8 +1456,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:44:11',
 			'modified' => '2017-01-22 17:37:39'
-		),
-		array(
+		],
+		[
 			'id' => '41',
 			'name' => 'service1',
 			'plugin' => 'Core',
@@ -1492,8 +1492,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:44:11',
 			'modified' => '2017-01-22 17:37:41'
-		),
-		array(
+		],
+		[
 			'id' => '42',
 			'name' => 'contact',
 			'plugin' => 'Mail',
@@ -1528,7 +1528,6 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:44:33',
 			'modified' => '2017-01-22 17:37:47'
-		),
-	);
-
+		],
+	];
 }
