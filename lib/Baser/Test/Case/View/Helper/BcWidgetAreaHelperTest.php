@@ -74,7 +74,7 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 
 	public function showDataProvider() {
 		return [
-			['test', 1, '']s,
+			['test', 1, ''],
 			['test', 2, '']
 		];
 	}
