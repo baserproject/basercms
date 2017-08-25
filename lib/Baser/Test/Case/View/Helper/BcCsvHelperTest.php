@@ -26,10 +26,10 @@ class BcCsvHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -61,53 +61,51 @@ class BcCsvHelperTest extends BaserTestCase {
 	}
 
 	public function addModelDataDataProvider() {
-		return array(
-
-			array(
+		return [
+			[
 				'model1',
-				array('model1' => array(
+				['model1' => [
 					'head' => 'BaserCMS'
-					)
-				),
+					]
+				],
 				'"head"' . "\n",
 				'"BaserCMS"' . "\n"
-			),
+			],
 
-			array(
+			[
 				'model1',
-				array('model100' => array(
+				['model100' => [
 					'head' => 'BaserCMS'
-					)
-				),
+					]
+				],
 				'',
 				''
-			),
+			],
 
-			array(
+			[
 				'model1',
-				array( 'model1' => array(
+				['model1' => [
 					'head' => 'BaserCMS',
 					'BaserCMS2',
 					'BaserCMS3',
-					)
-				),
+					]
+				],
 				'"head","0","1"' . "\n",
 				'"BaserCMS","BaserCMS2","BaserCMS3"' . "\n"
-			),
+			],
 
-			array(
+			[
 				'model1',
-				array( 'model1' => array(
+				['model1' => [
 					'head' => 'BaserCMS',
 					'test1' => 'BaserCMS2',
 					'test2' => 'BaserCMS3',
-					)
-				),
+					]
+				],
 				'"head","test1","test2"' . "\n",
 				'"BaserCMS","BaserCMS2","BaserCMS3"' . "\n"
-			),
-
-		);
+			],
+		];
 	}
 
 
@@ -121,44 +119,43 @@ class BcCsvHelperTest extends BaserTestCase {
  * @dataProvider addModelDatasDataProvider
  */
 	public function testAddModelDatas($modelName, $datas, $expectedHead, $expectedBody) {
-		$datas = array($datas);
+		$datas = [$datas];
 		$this->BcCsv->addModelDatas($modelName, $datas);
 		$this->assertEquals($expectedHead, $this->BcCsv->csvHead);
 		$this->assertEquals($expectedBody, $this->BcCsv->csvBody);
 	}
 
 	public function addModelDatasDataProvider() {
-		return array(
-
-			array(
+		return [
+			[
 				'model1',
-				array(
-					'model1' => array(
+				[
+					'model1' => [
 						'head1' => 'BaserCMS1'
-					),
-					'model1' => array(
+					],
+					'model1' => [
 						'head2' => 'BaserCMS2'
-					),
-				),
+					],
+				],
 				'"head2"' . "\n",
 				'"BaserCMS2"' . "\n"
-			),
-			array(
+			],
+
+			[
 				'model1',
-				array(
-					'model1' => array(
+				[
+					'model1' => [
 						'head1' => 'BaserCMS1'
-					),
-					'model2' => array(
+					],
+					'model2' => [
 						'head2' => 'BaserCMS2'
-					),
-				),
+					],
+				],
 				'"head1"' . "\n",
 				'"BaserCMS1"' . "\n"
-			),
+			],
 
-
-		);
+		];
 	}
 
 /**
@@ -175,29 +172,29 @@ class BcCsvHelperTest extends BaserTestCase {
 	public function testDownload($fileName, $debug, $expected) {
 		// csvのデータを作成
 		$modelName = 'sample';
-		$data = array(
-			'sample' => array(
+		$data = [
+			'sample' => [
 				'head1' => 'BaserCMS1',
 				'head2' => 'BaserCMS2',
 				'head3' => 'BaserCMS3',
-			)
-		);
+			]
+		];
 		$this->BcCsv->addModelData($modelName, $data);
 		$result = $this->BcCsv->download($fileName, $debug);
 		$this->assertEquals($expected, $result);
 	}
 
 	public function downloadDataProvider() {
-		return array(
-			array('testcsv', true,
+		return [
+			['testcsv', true,
 				'"head1","head2","head3"' . "\n" .
 				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
-			),
-			array('', true,
+			],
+			['', true,
 				'"head1","head2","head3"' . "\n" .
 				'"BaserCMS1","BaserCMS2","BaserCMS3"' . "\n"
-			),
-		);
+			],
+		];
 	}
 
 
@@ -210,13 +207,13 @@ class BcCsvHelperTest extends BaserTestCase {
 
 		// csvのデータを作成
 		$modelName = 'sample';
-		$data = array(
-			'sample' => array(
+		$data = [
+			'sample' => [
 					'head1' => 'BaserCMS1',
 					'head2' => 'BaserCMS2',
 					'head3' => 'BaserCMS3',
-			)
-		);
+			]
+		];
 		$this->BcCsv->addModelData($modelName, $data);
 
 		$fileName = "test.csv";
