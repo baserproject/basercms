@@ -20,13 +20,13 @@ App::uses('Content', 'Model');
  */
 class ContentTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Model.Content.ContentStatusCheck',
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-	);
+	];
 
 /**
  * set up
