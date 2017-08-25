@@ -197,6 +197,10 @@ class BcBaserHelper extends AppHelper {
 			return $keywords;
 		}
 
+		if(!empty($this->request->params['Site']['keyword'])) {
+			return $this->request->params['Site']['keyword'];
+		}
+
 		if(!empty($this->siteConfig['keyword'])) {
 			return $this->siteConfig['keyword'];
 		}
@@ -214,6 +218,10 @@ class BcBaserHelper extends AppHelper {
 
 		if (!empty($description)) {
 			return $description;
+		}
+
+		if(!empty($this->request->params['Site']['description'])) {
+			return $this->request->params['Site']['description'];
 		}
 
 		if(!empty($this->siteConfig['description'])) {
