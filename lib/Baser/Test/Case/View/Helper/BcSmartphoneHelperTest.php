@@ -21,12 +21,12 @@ App::uses('BcSmartphoneHelper', 'View/Helper');
  */
 class BcSmartphoneHelperTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Content',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
 		'baser.Default.Site',
-	);
+	];
 
 
 /**
