@@ -16,8 +16,8 @@ class BlogContentFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'description' => 'baserCMS inc. [デモ] の最新の情報をお届けします。',
 			'template' => 'default',
@@ -33,8 +33,8 @@ class BlogContentFixture extends BaserTestFixture {
 			'use_content' => '1',
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'description' => 'ディスクリプション',
 			'template' => 'default',
@@ -50,8 +50,8 @@ class BlogContentFixture extends BaserTestFixture {
 			'use_content' => '1',
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'description' => 'description3',
 			'template' => 'default',
@@ -67,7 +67,7 @@ class BlogContentFixture extends BaserTestFixture {
 			'use_content' => '1',
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,
-		),
-	);
+		],
+	];
 
 }
