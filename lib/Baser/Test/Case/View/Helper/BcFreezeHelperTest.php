@@ -71,15 +71,15 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function textDataProvider() {
-		return array(
-			array(false, 'baser', array(), '<input name="data[baser]" type="text" id="baser"/>'),
-			array(false, 'baser', array('class' => 'bcclass'), '<input name="data[baser]" class="bcclass" type="text" id="baser"/>'),
-			array(false, 'baser', array('class' => 'bcclass', 'id' => 'bcid'), '<input name="data[baser]" class="bcclass" id="bcid" type="text"/>'),
-			array(false, 'baser', array('type' => 'hidden'), '<input name="data[baser]" type="hidden" id="baser"/>'),
-			array(true, 'baser.freezed', array(), '<input name="data[baser][freezed]" type="hidden" value="BaserCMS" id="baserFreezed"/>BaserCMS'),
-			array(true, 'baser.freezed', array('value' => 'BaserCMS2'), '<input name="data[baser][freezed]" value="BaserCMS2" type="hidden" id="baserFreezed"/>BaserCMS2'),
-			array(true, 'baser.freezed', array('type' => 'hidden'), '<input name="data[baser][freezed]" type="hidden" value="BaserCMS" id="baserFreezed"/>BaserCMS'),
-		);
+		return [
+			[false, 'baser', [], '<input name="data[baser]" type="text" id="baser"/>'],
+			[false, 'baser', ['class' => 'bcclass'], '<input name="data[baser]" class="bcclass" type="text" id="baser"/>'],
+			[false, 'baser', ['class' => 'bcclass', 'id' => 'bcid'], '<input name="data[baser]" class="bcclass" id="bcid" type="text"/>'],
+			[false, 'baser', ['type' => 'hidden'], '<input name="data[baser]" type="hidden" id="baser"/>'],
+			[true, 'baser.freezed', [], '<input name="data[baser][freezed]" type="hidden" value="BaserCMS" id="baserFreezed"/>BaserCMS'],
+			[true, 'baser.freezed', ['value' => 'BaserCMS2'], '<input name="data[baser][freezed]" value="BaserCMS2" type="hidden" id="baserFreezed"/>BaserCMS2'],
+			[true, 'baser.freezed', ['type' => 'hidden'], '<input name="data[baser][freezed]" type="hidden" value="BaserCMS" id="baserFreezed"/>BaserCMS'],
+		];
 	}
 
 /**
@@ -105,15 +105,15 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function selectDataProvider() {
-		return array(
-			array(false, 'baser', array(), array(), "<select name=\"data\[baser\]\" id=\"baser\">.<option value=\"\">"),
-			array(false, 'baser', array('1' => 'ラーメン'), array(), '<option value="1">ラーメン'),
-			array(false, 'baser', array('1' => 'ラーメン', '2' => '寿司'), array(), '<option value="1">ラーメン.*<option value="2">寿司'),
-			array(false, 'baser', array(), array('class' => 'bcclass'), "<select name=\"data\[baser\]\" class=\"bcclass\" id=\"baser\">"),
-			array(false, 'baser', array('1' => 'ラーメン'), array('class' => 'bcclass'), 'class="bcclass".*<option value="1">ラーメン'),
-			array(false, 'baser', array('1' => 'ラーメン', '2' => '寿司'), array('cols' => 10), 'cols="10".*<option value="1">ラーメン　　　　　　.*<option value="2">寿司　　　　　　　　'),
-			array(true, 'baser.freezed', array('1' => 'ラーメン'), array('class' => 'bcclass'), "<input type=\"hidden\" name=\"data\[baser\]\[freezed\]\" class=\"bcclass\" id=\"baserFreezed\""),
-	 );
+		return [
+			[false, 'baser', [], [], "<select name=\"data\[baser\]\" id=\"baser\">.<option value=\"\">"],
+			[false, 'baser', ['1' => 'ラーメン'], [], '<option value="1">ラーメン'],
+			[false, 'baser', ['1' => 'ラーメン', '2' => '寿司'], [], '<option value="1">ラーメン.*<option value="2">寿司'],
+			[false, 'baser', [], ['class' => 'bcclass'], "<select name=\"data\[baser\]\" class=\"bcclass\" id=\"baser\">"],
+			[false, 'baser', ['1' => 'ラーメン'], ['class' => 'bcclass'], 'class="bcclass".*<option value="1">ラーメン'],
+			[false, 'baser', ['1' => 'ラーメン', '2' => '寿司'], ['cols' => 10], 'cols="10".*<option value="1">ラーメン　　　　　　.*<option value="2">寿司　　　　　　　　'],
+			[true, 'baser.freezed', ['1' => 'ラーメン'], ['class' => 'bcclass'], "<input type=\"hidden\" name=\"data\[baser\]\[freezed\]\" class=\"bcclass\" id=\"baserFreezed\""],
+	 ];
 	}
 
 
@@ -140,19 +140,19 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function dateTimeDataProvider() {
-		return array(
-			array(false, 'test', 'YMD', '12', array(), 'id="testYear".*id="testMonth".*id="testDay".*id="testHour".*id="testMin".*id="testMeridian"'),
-			array(false, 'test', 'DMY', '12', array(), 'id="testDay".*id="testMonth".*id="testYear"'),
-			array(false, 'test', 'YMD', '24', array(), '59<\/option>.<\/select>$'),
-			array(false, 'test', 'YMD', '12', array('class' => 'bcclass'), 'class="bcclass"'),
-			array(false, 'test', 'YMD', '12', array('empty' => false), '^(?!value="").*$'),
-			array(false, 'test', 'YMD', '12', array('empty' => array('day' => '選択されていません')), '<option value="">選択されていません'),
-			array(true, 'test', 'YMD', '12', array(), 'type="hidden"'),
-			array(true, 'test', 'YMD', '12', array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1')), '2010年.*4月.*1日'),
-			array(true, 'test', 'YMD', '12', array('selected' => '2010-4-1 11:22:33'), '2010年.*4月.*1日.*11時.*22分'),
-			array(true, 'test', 'YMD', '12', array('selected' => array('day' => '100')), 'value="100"'),
-			array(true, 'test', 'YMD', '12', array('empty' => true), '^((?!value="").)*$'),
-		);
+		return [
+			[false, 'test', 'YMD', '12', [], 'id="testYear".*id="testMonth".*id="testDay".*id="testHour".*id="testMin".*id="testMeridian"'],
+			[false, 'test', 'DMY', '12', [], 'id="testDay".*id="testMonth".*id="testYear"'],
+			[false, 'test', 'YMD', '24', [], '59<\/option>.<\/select>$'],
+			[false, 'test', 'YMD', '12', ['class' => 'bcclass'], 'class="bcclass"'],
+			[false, 'test', 'YMD', '12', ['empty' => false], '^(?!value="").*$'],
+			[false, 'test', 'YMD', '12', ['empty' => ['day' => '選択されていません']], '<option value="">選択されていません'],
+			[true, 'test', 'YMD', '12', [], 'type="hidden"'],
+			[true, 'test', 'YMD', '12', ['selected' => ['year' => '2010', 'month' => '4', 'day' => '1']], '2010年.*4月.*1日'],
+			[true, 'test', 'YMD', '12', ['selected' => '2010-4-1 11:22:33'], '2010年.*4月.*1日.*11時.*22分'],
+			[true, 'test', 'YMD', '12', ['selected' => ['day' => '100']], 'value="100"'],
+			[true, 'test', 'YMD', '12', ['empty' => true], '^((?!value="").)*$'],
+		];
 	}
 
 /**
@@ -181,16 +181,16 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function wyearDataProvider() {
-		return array(
-			array(false, 'test', null, null, null, array(), true, 'id="testYear">.*<option value="h-47">'),
-			array(false, 'test', 2010, null, null, array(), true, '<option value="h-22">平成 22<\/option>.<\/select>$'),
-			array(false, 'test', null, 2010, null, array(), true, '<option value=""><\/option>.<option value="h-22">'),
-			array(false, 'test', null, null, 'h-47', array(), true, 'value="h-47" selected="selected"'),
-			array(false, 'test', null, null, null, array('type' => 'hidden'), true, 'type="hidden"'),
-			array(false, 'test', null, null, null, array(), false, 'id="testYear">.*<option value="h-47">'),
-			array(true, 'test', null, null, null, array(), true, 'type="hidden"'),
-			array(true, 'test', null, null, '2035-1-1', array(), true, '平成 47'),
-		);
+		return [
+			[false, 'test', null, null, null, [], true, 'id="testYear">.*<option value="h-47">'],
+			[false, 'test', 2010, null, null, [], true, '<option value="h-22">平成 22<\/option>.<\/select>$'],
+			[false, 'test', null, 2010, null, [], true, '<option value=""><\/option>.<option value="h-22">'],
+			[false, 'test', null, null, 'h-47', [], true, 'value="h-47" selected="selected"'],
+			[false, 'test', null, null, null, ['type' => 'hidden'], true, 'type="hidden"'],
+			[false, 'test', null, null, null, [], false, 'id="testYear">.*<option value="h-47">'],
+			[true, 'test', null, null, null, [], true, 'type="hidden"'],
+			[true, 'test', null, null, '2035-1-1', [], true, '平成 47'],
+		];
 	}
 
 /**
@@ -215,12 +215,12 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function checkboxDataProvider() {
-		return array(
-			array(false, 'baser', array(), "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"0\"\/><input type=\"checkbox\" name=\"data\[baser\]\" value=\"1\" id=\"baser\""),
-			array(false, 'baser', array('class' => 'bcclass'), 'class="bcclass"'),
-			array(true, 'baser.freezed', array(), "name=\"data\[baser\]\[freezed\]\".*id=\"baserFreezed\""),
-			array(true, 'baser.freezed', array('label' => 'test'), 'label="test"'),
-		);
+		return [
+			[false, 'baser', [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"0\"\/><input type=\"checkbox\" name=\"data\[baser\]\" value=\"1\" id=\"baser\""],
+			[false, 'baser', ['class' => 'bcclass'], 'class="bcclass"'],
+			[true, 'baser.freezed', [], "name=\"data\[baser\]\[freezed\]\".*id=\"baserFreezed\""],
+			[true, 'baser.freezed', ['label' => 'test'], 'label="test"'],
+		];
 	}
 
 /**
@@ -246,13 +246,13 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function textareaDataProvider() {
-		return array(
-			array(false, 'baser', array(), "<textarea name=\"data\[baser\]\" id=\"baser\"><\/textarea>"),
-			array(false, 'baser', array('class' => 'bcclass'), 'class="bcclass"'),
-			array(true, 'baser.freezed', array(), 'value="BaserCMS"'),
-			array(true, 'baser.freezed', array('value' => 'BaserCMS2'), 'value="BaserCMS2"'),
-			array(true, 'baser.freezed', array('class' => 'bcclass'), 'class="bcclass"'),
-		);
+		return [
+			[false, 'baser', [], "<textarea name=\"data\[baser\]\" id=\"baser\"><\/textarea>"],
+			[false, 'baser', ['class' => 'bcclass'], 'class="bcclass"'],
+			[true, 'baser.freezed', [], 'value="BaserCMS"'],
+			[true, 'baser.freezed', ['value' => 'BaserCMS2'], 'value="BaserCMS2"'],
+			[true, 'baser.freezed', ['class' => 'bcclass'], 'class="bcclass"'],
+		];
 	}
 
 /**
@@ -277,13 +277,13 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function radioDataProvider() {
-		return array(
-			array(false, 'baser', array(), array(), "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"\""),
-			array(false, 'baser', array('test1' => 'testValue1'), array(), 'id="baserTest1".*for="baserTest1">testValue1'),
-			array(false, 'baser', array('test1' => 'testValue1'), array('class' => 'bcclass'), 'class="bcclass"'),
-			array(true, 'baser.freezed', array(), array(), 'type="hidden"'),
-			array(true, 'baser.freezed', array('test1' => 'testValue1'), array('class' => 'bcclass'), 'class="bcclass"'),
-		);
+		return [
+			[false, 'baser', [], [], "<input type=\"hidden\" name=\"data\[baser\]\" id=\"baser_\" value=\"\""],
+			[false, 'baser', ['test1' => 'testValue1'], [], 'id="baserTest1".*for="baserTest1">testValue1'],
+			[false, 'baser', ['test1' => 'testValue1'], ['class' => 'bcclass'], 'class="bcclass"'],
+			[true, 'baser.freezed', [], [], 'type="hidden"'],
+			[true, 'baser.freezed', ['test1' => 'testValue1'], ['class' => 'bcclass'], 'class="bcclass"'],
+		];
 	}
 
 /**
@@ -319,11 +319,11 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function fileDataProvider() {
-		return array(
-			array(false, 'baser', array(), '<input type="file" name="data\[baser\]" id="baser"'),
-			array(false, 'baser', array('size' => 100), 'size="100"'),
-			array(true, 'baser.freezed', array(), '<input type="file" name="data\[baser\]\[freezed\]" id="baserFreezed"\/>'),
-		);
+		return [
+			[false, 'baser', [], '<input type="file" name="data\[baser\]" id="baser"'],
+			[false, 'baser', ['size' => 100], 'size="100"'],
+			[true, 'baser.freezed', [], '<input type="file" name="data\[baser\]\[freezed\]" id="baserFreezed"\/>'],
+		];
 	}
 
 /**
@@ -356,17 +356,17 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function imageDataProvider() {
-		return array(
-			array(false, null, null, 'test.image', array(), array(), '<input type="file" name="data\[test\]\[image\]" id="testImage"'),
-			array(false, null, null, 'test.image', array('size' => 100), array(), 'size="100"'),
-			array(false, null, 'testexist', 'test.image', array(), array(), 'src="\/\/tests.*label="削除する"'),
-			array(false, null, 'testexist', 'test.image', array(), array('dir'=>'testdir'), 'src="\/testdir\/tests'),
-			array(true, null, null, 'test.image', array(), array(), '&nbsp;'),
-			array(true, 'testname', null, 'test.image', array(), array(), 'id="testImageExists".*src="tmp\/test\/img'),
-			array(true, null, null, 'test.image', array(), array('alt' => 'testalt'), '&nbsp;'),
-			array(true, null, 'testexist', 'test.image', array(), array(), 'dir=""'),
-			array(true, null, 'testexist', 'test.image', array(), array('dir'=>'testdir'), 'dir="testdir"'),
-		);
+		return [
+			[false, null, null, 'test.image', [], [], '<input type="file" name="data\[test\]\[image\]" id="testImage"'],
+			[false, null, null, 'test.image', ['size' => 100], [], 'size="100"'],
+			[false, null, 'testexist', 'test.image', [], [], 'src="\/\/tests.*label="削除する"'],
+			[false, null, 'testexist', 'test.image', [], ['dir'=>'testdir'], 'src="\/testdir\/tests'],
+			[true, null, null, 'test.image', [], [], '&nbsp;'],
+			[true, 'testname', null, 'test.image', [], [], 'id="testImageExists".*src="tmp\/test\/img'],
+			[true, null, null, 'test.image', [], ['alt' => 'testalt'], '&nbsp;'],
+			[true, null, 'testexist', 'test.image', [], [], 'dir=""'],
+			[true, null, 'testexist', 'test.image', [], ['dir'=>'testdir'], 'dir="testdir"'],
+		];
 	}
 
 /**
@@ -389,11 +389,11 @@ class BcFreezeHelperTest extends BaserTestCase {
 		}
 
 		// indexを作る
-		$attributes_default = array(
+		$attributes_default = [
 			'imgSrc' => null,
 			'ajaxAddAction' => null,
 			'ajaxDelAction' => null,
-		);
+		];
 		$attributes = $attributes + $attributes_default;
 
 		$result = $this->BcFreeze->jsonList($fieldName, $attributes);
@@ -401,14 +401,14 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function jsonListDataProvider() {
-		return array(
-			array(false, null, 'baser', array(), 'id="JsonBaserDb".*jQuery\(function\(\)'), 
-			array(false, array(), 'baser', array('ajaxAddAction' => 'test'), '"ajaxAddAction":"test"'), 
-			array(false, array(), 'baser', array('ajaxDelAction' => 'test'), '"ajaxDelAction":"test"'), 
-			array(true, array(array('name' => 'test')), 'baser', array(), '<li>test'), 
-			array(true, array(array('name' => 'test1'), array('name' =>'test2')), 'baser', array(), '<li>test1.*<li>test2'), 
-			array(true, null, 'baser', array(), '^$'), 
-		);
+		return [
+			[false, null, 'baser', [], 'id="JsonBaserDb".*jQuery\(function\(\)'],
+			[false, [], 'baser', ['ajaxAddAction' => 'test'], '"ajaxAddAction":"test"'],
+			[false, [], 'baser', ['ajaxDelAction' => 'test'], '"ajaxDelAction":"test"'],
+			[true, [['name' => 'test']], 'baser', [], '<li>test'],
+			[true, [['name' => 'test1'], ['name' =>'test2']], 'baser', [], '<li>test1.*<li>test2'],
+			[true, null, 'baser', [], '^$'],
+		];
 	}
 
 
@@ -437,13 +437,13 @@ class BcFreezeHelperTest extends BaserTestCase {
 	}
 
 	public function datepickerDataProvider() {
-		return array(
-			array(false, null, 'baser', array(), 'type="text".*id="baser".*("#baser")'), 
-			array(false, null, 'baser', array('test1' => 'testValue1'), 'test1="testValue1"'),
-			array(true, '2015-4-1', 'baser.freezed', array(), 'type="hidden".*2015\/04\/01'),
-			array(true, null,'baser.freezed', array(), '>$'),
-			array(true, null,'baser.freezed', array('test1' => 'testValue1'), 'test1="testValue1"'),
-		);
+		return [
+			[false, null, 'baser', [], 'type="text".*id="baser".*("#baser")'],
+			[false, null, 'baser', ['test1' => 'testValue1'], 'test1="testValue1"'],
+			[true, '2015-4-1', 'baser.freezed', [], 'type="hidden".*2015\/04\/01'],
+			[true, null,'baser.freezed', [], '>$'],
+			[true, null,'baser.freezed', ['test1' => 'testValue1'], 'test1="testValue1"'],
+		];
 	}
 
 /**

@@ -26,13 +26,13 @@ class BcMobileHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.Content',
 		'baser.Default.User'
-	);
+	];
 
 /**
  * setUp method

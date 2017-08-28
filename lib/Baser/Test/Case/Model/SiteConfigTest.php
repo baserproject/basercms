@@ -18,17 +18,17 @@ App::uses('SiteConfig', 'Model');
  * 
  * class NonAssosiationSiteConfig extends SiteConfig {
  *  public $name = 'SiteConfig';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class SiteConfigTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -44,11 +44,11 @@ class SiteConfigTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック異常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'email' => ''
-				)
-		));
+				]
+		]);
 		$this->assertFalse($this->SiteConfig->validates());
 		$this->assertArrayHasKey('formal_name', $this->SiteConfig->validationErrors);
 		$this->assertEquals('Webサイト名を入力してください。', current($this->SiteConfig->validationErrors['formal_name']));
@@ -63,21 +63,21 @@ class SiteConfigTest extends BaserTestCase {
 	}
 
 	public function test必須チェック正常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'formal_name' => 'hoge',
 					'name' => 'hoge',
 					'email' => 'hoge@ho.ge',
 					'mail_encode' => 'ISO-2022-JP',
 					'site_url' => 'hoge',
-				)
-		));
+				]
+		]);
 		$this->assertTrue($this->SiteConfig->validates());
 	}
 
 	public function testSSLチェック異常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'formal_name' => 'hoge',
 					'name' => 'hoge',
 					'email' => 'hoge@ho.ge',
@@ -85,16 +85,16 @@ class SiteConfigTest extends BaserTestCase {
 					'site_url' => 'hoge',
 					'admin_ssl' => 'hoge',
 					'ssl_url' => '',
-				)
-		));
+				]
+		]);
 		$this->assertFalse($this->SiteConfig->validates());
 		$this->assertArrayHasKey('admin_ssl', $this->SiteConfig->validationErrors);
 		$this->assertEquals('管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。', current($this->SiteConfig->validationErrors['admin_ssl']));
 	}
 
 	public function testSSLチェック正常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'formal_name' => 'hoge',
 					'name' => 'hoge',
 					'email' => 'hoge@ho.ge',
@@ -102,8 +102,8 @@ class SiteConfigTest extends BaserTestCase {
 					'site_url' => 'hoge',
 					'admin_ssl' => 'hoge',
 					'ssl_url' => 'hoge'
-				)
-		));
+				]
+		]);
 		$this->assertTrue($this->SiteConfig->validates());
 	}
 
@@ -135,16 +135,16 @@ class SiteConfigTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			array('mode', array(
+		return [
+			['mode', [
 				-1 => 'インストールモード',
 				0 => 'ノーマルモード',
 				1 => 'デバッグモード１',
 				2 => 'デバッグモード２',
 				3 => 'デバッグモード３',
-				), 'コントロールソースを取得できません'),
-			array('hoge', false, '存在しないキーです'),
-		);
+				], 'コントロールソースを取得できません'],
+			['hoge', false, '存在しないキーです'],
+		];
 	}
 
 /**

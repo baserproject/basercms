@@ -24,9 +24,9 @@ App::uses('ThemeFile', 'Model');
  */
 class ThemeFileTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.ThemeConfig',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -42,33 +42,33 @@ class ThemeFileTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック異常系() {
-		$this->ThemeFile->create(array(
-			'ThemeFile' => array(
+		$this->ThemeFile->create([
+			'ThemeFile' => [
 				'name' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->ThemeFile->validates());
 		$this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
 		$this->assertEquals('テーマファイル名を入力してください。', current($this->ThemeFile->validationErrors['name']));
 	}
 
 	public function test必須チェック正常系() {
-		$this->ThemeFile->create(array(
-			'ThemeFile' => array(
+		$this->ThemeFile->create([
+			'ThemeFile' => [
 				'name' => 'baser',
 				'parent' => 'hoge'
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->ThemeFile->validates());
 	}
 
 	public function test重複チェック異常系() {
-		$this->ThemeFile->create(array(
-			'ThemeFile' => array(
+		$this->ThemeFile->create([
+			'ThemeFile' => [
 				'name' => 'config.php',
 				'parent' => WWW_ROOT . 'theme/nada-icons/',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->ThemeFile->validates());
 		$this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
 		$this->assertEquals('入力されたテーマファイル名は、同一階層に既に存在します。', current($this->ThemeFile->validationErrors['name']));

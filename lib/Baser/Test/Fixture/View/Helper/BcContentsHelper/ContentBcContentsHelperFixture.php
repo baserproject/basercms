@@ -16,8 +16,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'site_id' => '0',
 			'name' => '',
@@ -52,8 +52,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'site_id' => '1',
 			'name' => 'm',
@@ -88,8 +88,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'site_id' => '2',
 			'name' => 's',
@@ -124,8 +124,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'site_id' => '0',
 			'name' => 'index',
@@ -160,8 +160,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'site_id' => '0',
 			'name' => 'about',
@@ -196,8 +196,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'site_id' => '0',
 			'name' => 'index',
@@ -232,8 +232,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '7',
 			'site_id' => '0',
 			'name' => 'icons',
@@ -268,8 +268,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '8',
 			'site_id' => '0',
 			'name' => 'sitemap',
@@ -304,8 +304,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '9',
 			'site_id' => '1',
 			'name' => 'index',
@@ -340,8 +340,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '10',
 			'site_id' => '2',
 			'name' => 'index',
@@ -376,8 +376,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '11',
 			'site_id' => '2',
 			'name' => 'about',
@@ -412,8 +412,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '12',
 			'site_id' => '2',
 			'name' => 'index',
@@ -448,8 +448,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '13',
 			'site_id' => '2',
 			'name' => 'icons',
@@ -484,8 +484,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '14',
 			'site_id' => '2',
 			'name' => 'sitemap',
@@ -520,8 +520,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '15',
 			'site_id' => '0',
 			'name' => 'contact',
@@ -556,8 +556,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '16',
 			'site_id' => '0',
 			'name' => 'news',
@@ -592,8 +592,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '17',
 			'site_id' => '1',
 			'name' => 'contact',
@@ -628,8 +628,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '18',
 			'site_id' => '2',
 			'name' => 'contact',
@@ -664,8 +664,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '19',
 			'site_id' => '1',
 			'name' => 'news',
@@ -700,8 +700,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '20',
 			'site_id' => '2',
 			'name' => 'news',
@@ -736,8 +736,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '21',
 			'site_id' => '0',
 			'name' => 'service',
@@ -772,8 +772,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '22',
 			'site_id' => '0',
 			'name' => 'service2',
@@ -808,8 +808,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '23',
 			'site_id' => '0',
 			'name' => 'service3',
@@ -844,8 +844,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '24',
 			'site_id' => '0',
 			'name' => 'sub_service',
@@ -880,8 +880,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '25',
 			'site_id' => '0',
 			'name' => 'sub_service_1',
@@ -916,8 +916,8 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '26',
 			'site_id' => '2',
 			'name' => 'service',
@@ -952,7 +952,6 @@ class ContentBcContentsHelperFixture extends BaserTestFixture {
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-	);
-
+		],
+	];
 }

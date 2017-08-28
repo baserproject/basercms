@@ -73,13 +73,13 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 	}
 
 	public function loadDataProvider() {
-		return array(
-			array('福岡', null, null, '<div id="map">'),
-			array('福岡', 100, null, '<div id="map" style="width: 100px; height:px">'),
-			array('福岡', null, 100, '<div id="map" style="width: px; height:100px">'),
-			array('福岡', 100, 100, '<div id="map" style="width: 100px; height:100px">'),
-			array('', 100, 100, '^$'),
-		);
+		return [
+			['福岡', null, null, '<div id="map">'],
+			['福岡', 100, null, '<div id="map" style="width: 100px; height:px">'],
+			['福岡', null, 100, '<div id="map" style="width: px; height:100px">'],
+			['福岡', 100, 100, '<div id="map" style="width: 100px; height:100px">'],
+			['', 100, 100, '^$'],
+		];
 	}
 
 /**
@@ -99,10 +99,10 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 	}
 
 	public function loadLocationDataProvider() {
-		return array(
-			array('福岡', true),
-			array('', false)
-		);
+		return [
+			['福岡', true],
+			['', false]
+		];
 	}
 
 /**
@@ -133,12 +133,12 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 	}
 
 	public function getLocationDataProvider() {
-		return array(
-			array('博多駅', array('latitude' => '33.6', 'longitude' => '130.4')),
-			array('fukuoka', array('latitude' => '33.6', 'longitude' => '130.4')),
-			array(8100042, array('latitude' => '33.6', 'longitude' => '130.4')),
-			array('', false)
-		);
+		return [
+			['博多駅', ['latitude' => '33.6', 'longitude' => '130.4']],
+			['fukuoka', ['latitude' => '33.6', 'longitude' => '130.4']],
+			[8100042, ['latitude' => '33.6', 'longitude' => '130.4']],
+			['', false]
+		];
 	}
 
 }

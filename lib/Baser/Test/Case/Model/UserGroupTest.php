@@ -17,15 +17,15 @@ App::uses('Permission', 'Model');
  * 
  * class NonAssosiationUserGroup extends UserGroup {
  *  public $name = 'UserGroup';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class UserGroupTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Permission',
@@ -34,7 +34,7 @@ class UserGroupTest extends BaserTestCase {
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.Content'
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -52,13 +52,13 @@ class UserGroupTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->UserGroup->create(array(
-			'UserGroup' => array(
+		$this->UserGroup->create([
+			'UserGroup' => [
 				'name' => '',
 				'title' => '',
 				'auth_prefix' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->UserGroup->validates());
 
 		$this->assertArrayHasKey('name', $this->UserGroup->validationErrors);
@@ -70,22 +70,22 @@ class UserGroupTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック正常系() {
-		$this->UserGroup->create(array(
-			'UserGroup' => array(
+		$this->UserGroup->create([
+			'UserGroup' => [
 				'name' => '12345678901234567890123456789012345678901234567890',
 				'title' => '12345678901234567890123456789012345678901234567890',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->UserGroup->validates());
 	}
 
 	public function test桁数チェック異常系() {
-		$this->UserGroup->create(array(
-			'UserGroup' => array(
+		$this->UserGroup->create([
+			'UserGroup' => [
 				'name' => '123456789012345678901234567890123456789012345678901',
 				'title' => '123456789012345678901234567890123456789012345678901',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->UserGroup->validates());
 
 		$this->assertArrayHasKey('name', $this->UserGroup->validationErrors);
@@ -95,11 +95,11 @@ class UserGroupTest extends BaserTestCase {
 	}
 
 	public function test半角英数チェック異常系() {
-		$this->UserGroup->create(array(
-			'UserGroup' => array(
+		$this->UserGroup->create([
+			'UserGroup' => [
 				'name' => '１２３ａｂｃ',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->UserGroup->validates());
 
 		$this->assertArrayHasKey('name', $this->UserGroup->validationErrors);
@@ -107,11 +107,11 @@ class UserGroupTest extends BaserTestCase {
 	}
 
 	public function test既存ユーザーグループチェック異常系() {
-		$this->UserGroup->create(array(
-			'UserGroup' => array(
+		$this->UserGroup->create([
+			'UserGroup' => [
 				'name' => 'admins',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->UserGroup->validates());
 
 		$this->assertArrayHasKey('name', $this->UserGroup->validationErrors);
@@ -128,11 +128,11 @@ class UserGroupTest extends BaserTestCase {
 		$this->UserGroup->delete(2);
 
 		// 削除したユーザグループに属していたユーザーを取得
-		$data = $this->UserGroup->User->find('all', array(
-			'conditions' => array('User.id' => 2),
+		$data = $this->UserGroup->User->find('all', [
+			'conditions' => ['User.id' => 2],
 			'fields' => 'User.user_group_id',
 			'recursive' => 'User.user_group_id',
-			)
+			]
 		);
 		$result = $data[0]['User']['user_group_id'];
 		
@@ -161,11 +161,11 @@ class UserGroupTest extends BaserTestCase {
 	}
 
 	public function getAuthPrefixDataProvider() {
-		return array(
-			array(1, 'admin', 'プレフィックスが一致しません'),
-			array(2, 'operator', 'プレフィックスが一致しません'),
-			array(3, false, '存在しないユーザーグループです'),
-		);
+		return [
+			[1, 'admin', 'プレフィックスが一致しません'],
+			[2, 'operator', 'プレフィックスが一致しません'],
+			[3, false, '存在しないユーザーグループです'],
+		];
 	}
 
 /**
@@ -185,24 +185,23 @@ class UserGroupTest extends BaserTestCase {
 		if (!$recursive) {
 
 			$copiedId = $this->UserGroup->getInsertID(); // コピーしたデータのID
-			$result = $this->UserGroup->find('all', array(
-					'conditions' => array(
+			$result = $this->UserGroup->find('all', [
+					'conditions' => [
 						'UserGroup.id' => $copiedId
-					),
+					],
 					'recursive' => 0,
-					'fields' => array('name', 'title')
-
-				)
+					'fields' => ['name', 'title']
+				]
 			);
 		} else {
 			$copiedId = $this->UserGroup->Permission->getInsertID(); // コピーしたデータのID
-			$result = $this->UserGroup->Permission->find('all', array(
-					'conditions' => array(
+			$result = $this->UserGroup->Permission->find('all', [
+					'conditions' => [
 						'Permission.id' => $copiedId
-					),
+					],
 					'recursive' => 0,
-					'fields' => array('Permission.name','Permission.user_group_id')
-				)
+					'fields' => ['Permission.name','Permission.user_group_id']
+				]
 			);
 		};
 		
@@ -210,42 +209,42 @@ class UserGroupTest extends BaserTestCase {
 	}
 
 	public function copyDataProvider() {
-		return array(
-			array(1, array(), false,
-				array(array('UserGroup' => array(
+		return [
+			[1, [], false,
+				[['UserGroup' => [
 						'name' => 'admins_copy',
 						'title' => 'システム管理_copy',
 						'id' => '3'
-					)
-				)
-			), 'id指定でデータをコピーできません'),
-			array(null,
-				array('UserGroup' => array('name' => 'hogename', 'title' => 'hogetitle')),
+					]
+				]
+			], 'id指定でデータをコピーできません'],
+			[null,
+				['UserGroup' => ['name' => 'hogename', 'title' => 'hogetitle']],
 				false,
-				array(array('UserGroup' => array(
+				[['UserGroup' => [
 						'name' => 'hogename_copy',
 						'title' => 'hogetitle_copy',
 						'id' => '3'
-					)
-				)
-			), 'data指定でデータをコピーできません'),
-			array(2, array(), true,
-				array(array('Permission' => array(
+					]
+				]
+			], 'data指定でデータをコピーできません'],
+			[2, [], true,
+				[['Permission' => [
 						'name' => 'エディタテンプレート呼出',
 						'user_group_id' => '3'
-					)
-				)
-			), 'id指定でPermissionのデータをコピーできません'),
-			array(null,
-				array('UserGroup' => array('id' => 2, 'name' => 'hogename', 'title' => 'hogetitle')),
+					]
+				]
+			], 'id指定でPermissionのデータをコピーできません'],
+			[null,
+				['UserGroup' => ['id' => 2, 'name' => 'hogename', 'title' => 'hogetitle']],
 				true,
-				array(array('Permission' => array(
+				[['Permission' => [
 						'name' => 'エディタテンプレート呼出',
 						'user_group_id' => '3'
-					)
-				)
-			), 'data指定でPermissionのデータをコピーできません'),
-		);
+					]
+				]
+			], 'data指定でPermissionのデータをコピーできません'],
+		];
 	}
 
 /**
@@ -262,10 +261,10 @@ class UserGroupTest extends BaserTestCase {
 	}
 
 	public function isAdminGlobalmenuUsedDataProvider() {
-		return array(
-			array(1, true, 'システム管理者がグローバルメニューを利用できません'),
-			array(2, 0, 'システム管理者以外のユーザーがグローバルメニューを利用できます'),
-			array(99, false, '存在しないユーザーグループです'),
-		);
+		return [
+			[1, true, 'システム管理者がグローバルメニューを利用できません'],
+			[2, 0, 'システム管理者以外のユーザーがグローバルメニューを利用できます'],
+			[99, false, '存在しないユーザーグループです'],
+		];
 	}
 }

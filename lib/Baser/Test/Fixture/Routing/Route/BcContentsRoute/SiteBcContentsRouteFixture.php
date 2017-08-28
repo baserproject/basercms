@@ -16,8 +16,8 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'main_site_id' => '0',
 			'name' => 'mobile',
@@ -36,8 +36,8 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
 			'domain_type' => 0,
 			'created' => '2016-11-04 16:33:52',
 			'modified' => '2016-11-04 16:39:36'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'main_site_id' => '0',
 			'name' => 'smartphone',
@@ -56,8 +56,8 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
 			'domain_type' => 0,
 			'created' => '2016-11-04 16:33:52',
 			'modified' => '2016-11-04 16:42:25'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'main_site_id' => '0',
 			'name' => 'english',
@@ -76,8 +76,8 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
 			'domain_type' => 0,
 			'created' => '2016-11-04 16:35:39',
 			'modified' => '2016-11-04 16:40:34'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'main_site_id' => '0',
 			'name' => 'subdomain',
@@ -96,8 +96,8 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
 			'domain_type' => 1,
 			'created' => '2016-11-04 16:36:38',
 			'modified' => '2016-11-04 16:41:14'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'main_site_id' => '0',
 			'name' => 'another',
@@ -116,8 +116,8 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
 			'domain_type' => 2,
 			'created' => '2016-11-04 16:38:36',
 			'modified' => '2016-11-04 16:42:01'
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'main_site_id' => '5',
 			'name' => 'another_smartphone',
@@ -136,7 +136,7 @@ class SiteBcContentsRouteFixture extends BaserTestFixture {
 			'domain_type' => 2,
 			'created' => '2016-11-04 19:41:47',
 			'modified' => '2016-11-04 19:41:47'
-		),
-	);
+		],
+	];
 
 }

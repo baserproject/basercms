@@ -16,17 +16,17 @@ App::uses('ThemeFolder', 'Model');
  * 
  * class NonAssosiationThemeFolder extends ThemeFolder {
  *  public $name = 'ThemeFolder';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class ThemeFolderTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.ThemeConfig',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -42,35 +42,35 @@ class ThemeFolderTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->ThemeFolder->create(array(
-			'ThemeFolder' => array(
+		$this->ThemeFolder->create([
+			'ThemeFolder' => [
 				'name' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->ThemeFolder->validates());
 		$this->assertArrayHasKey('name', $this->ThemeFolder->validationErrors);
 		$this->assertEquals('テーマフォルダ名を入力してください。', current($this->ThemeFolder->validationErrors['name']));
 	}
 
 	public function test半角英数チェック異常系() {
-		$this->ThemeFolder->create(array(
-			'ThemeFolder' => array(
+		$this->ThemeFolder->create([
+			'ThemeFolder' => [
 				'name' => '１２３ａｂｃ',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->ThemeFolder->validates());
 		$this->assertArrayHasKey('name', $this->ThemeFolder->validationErrors);
 		$this->assertEquals('テーマフォルダ名は半角のみで入力してください。', current($this->ThemeFolder->validationErrors['name']));
 	}
 
 	public function test重複チェック異常系() {
-		$this->ThemeFolder->create(array(
-			'ThemeFolder' => array(
+		$this->ThemeFolder->create([
+			'ThemeFolder' => [
 				'name' => 'nada-icons',
 				'pastname' => 'test',
 				'parent' => WWW_ROOT . 'theme/',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->ThemeFolder->validates());
 		$this->assertArrayHasKey('name', $this->ThemeFolder->validationErrors);
 		$this->assertEquals('入力されたテーマフォルダ名は、同一階層に既に存在します。', current($this->ThemeFolder->validationErrors['name']));

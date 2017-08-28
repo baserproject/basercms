@@ -8,8 +8,8 @@ class FeedDetailFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'feed_config_id' => '1',
 			'name' => 'baserCMSニュース',
@@ -18,7 +18,7 @@ class FeedDetailFixture extends BaserTestFixture {
 			'cache_time' => '+30 minutes',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-	);
+		],
+	];
 
 }

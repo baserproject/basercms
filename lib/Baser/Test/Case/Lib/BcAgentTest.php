@@ -21,10 +21,10 @@ class BcAgentTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Site',
-	);
+	];
 
 /**
  * @var BcAgent
@@ -38,12 +38,12 @@ class BcAgentTest extends BaserTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->agent = new BcAgent('smartphone', array(
+		$this->agent = new BcAgent('smartphone', [
 			'alias' => 's',
 			'prefix' => 'smartphone',
 			'autoRedirect' => true,
 			'autoLink' => true,
-			'agents' => array(
+			'agents' => [
 				'iPhone',			// Apple iPhone
 				'iPod',				// Apple iPod touch
 				'Android',			// 1.5+ Android
@@ -57,8 +57,8 @@ class BcAgentTest extends BaserTestCase {
 				'webOS',			// Palm Pre Experimental
 				'incognito',		// Other iPhone browser
 				'webmate'			// Other iPhone browser
-			)
-		));
+			]
+		]);
 
 		Configure::write("BcApp.smartphone", true);
 	}
@@ -81,11 +81,11 @@ class BcAgentTest extends BaserTestCase {
 	}
 
 	public function findDataProvider() {
-		return array(
-			array('mobile'),
-			array('smartphone'),
-			array('hoge'),
-		);
+		return [
+			['mobile'],
+			['smartphone'],
+			['hoge'],
+		];
 	}
 
 /**
@@ -96,12 +96,12 @@ class BcAgentTest extends BaserTestCase {
 	public function testFindAll() {
 		$result = $this->agent->findAll();
 
-		$mobile = new BcAgent('mobile', array(
+		$mobile = new BcAgent('mobile', [
 			'alias' => 'm',
 			'prefix' => 'mobile',
 			'autoRedirect' => true,
 			'autoLink' => true,
-			'agents' => array(
+			'agents' => [
 				'Googlebot-Mobile',
 				'Y!J-SRD',
 				'Y!J-MBS',
@@ -110,14 +110,14 @@ class BcAgentTest extends BaserTestCase {
 				'Vodafone',
 				'J-PHONE',
 				'UP.Browser'
-			),
+			],
 			'sessionId' => true
-		));
+		]);
 
-		$expect = array(
+		$expect = [
 			$mobile,
 			$this->agent
-		);
+		];
 
 		$this->assertEquals($expect, $result, '設定ファイルに存在するすべてのインスタンスを正しく返すことができません');
 	}
@@ -142,12 +142,12 @@ class BcAgentTest extends BaserTestCase {
 	}
 
 	public function findCurrentDataProvider() {
-		return array(
-			array('Googlebot-Mobile', 'mobile'),
-			array('DoCoMo', 'mobile'),
-			array('iPhone', 'smartphone'),
-			array('hoge', null),
-		);
+		return [
+			['Googlebot-Mobile', 'mobile'],
+			['DoCoMo', 'mobile'],
+			['iPhone', 'smartphone'],
+			['hoge', null],
+		];
 	}
 
 /**
@@ -164,13 +164,13 @@ class BcAgentTest extends BaserTestCase {
 	}
 
 	public function isMatchDecisionKeyDataProvider() {
-		return array(
-			array(true, 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4'),
-			array(true, 'iPod'),
-			array(true, 'Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'),
-			array(true, 'Mozilla/5.0 (Linux; U; Android 4.0; en-us; LT28at Build/6.1.C.1.111) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'),
-			array(false, 'DoCoMo')
-		);
+		return [
+			[true, 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4'],
+			[true, 'iPod'],
+			[true, 'Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'],
+			[true, 'Mozilla/5.0 (Linux; U; Android 4.0; en-us; LT28at Build/6.1.C.1.111) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'],
+			[false, 'DoCoMo']
+		];
 	}
 	
 }

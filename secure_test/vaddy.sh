@@ -13,16 +13,14 @@
 # 前回のVaddyが終わっているか、Vaddyが実行できるかを確認
 while :
 do
-    curl -Ss https://api.vaddy.net/v1/scan -X POST -d "action=start" -d "user=$VADDY_USER" -d "auth_key=$VADDY_AUTH_KEY" -d "fqdn=$VADDY_FQDN" | tee result.txt
+    curl -G -d "user=$VADDY_USER&auth_key=$VADDY_AUTH_KEY&fqdn=$VADDY_FQDN" https://api.vaddy.net/v1/scan/runcheck | tee result.txt
     msg=`cat result.txt`
-    if [[ $msg =~ "Scan has already been running" ]]; then
+    if [[ $msg =~ {\"running_process\":0} ]]; then
+        break
+    fi
+    if [[ $msg =~ {\"running_process\":.*} ]]; then
           echo "既に他のテスト実行中のため5分後にもう一度テストリクエストします。"
           sleep 300
-    fi
-    if [[ $msg =~ scan_id\":\"(.*)\" ]]; then
-        SCAN_ID=${BASH_REMATCH[1]}
-        curl -Ss https://api.vaddy.net/v1/scan -X POST -d "action=cancel" -d "user=$VADDY_USER" -d "auth_key=$VADDY_AUTH_KEY" -d "scan_id=$SCAN_ID" -d "fqdn=$VADDY_FQDN"
-        break
     fi
 done
 
@@ -32,23 +30,23 @@ git clone https://github.com/vaddy/go-vaddy.git;
 #Vaddy実行
 curl -Ss https://api.vaddy.net/v1/scan -X POST -d "action=start" -d "user=$VADDY_USER" -d "auth_key=$VADDY_AUTH_KEY" -d "fqdn=$VADDY_FQDN" | tee result.txt
 msg=`cat result.txt`
-echo "$msg"
 if [[ $msg =~ scan_id\":\"(.*)\" ]]; then
     SCAN_ID=${BASH_REMATCH[1]}
-fi;
+fi
 
 #結果取得
 while :
 do
-    echo "$SCAN_ID"
+    echo "ScanID : $SCAN_ID"
     curl -G -d "user=$VADDY_USER&auth_key=$VADDY_AUTH_KEY&fqdn=$VADDY_FQDN&scan_id=$SCAN_ID" https://api.vaddy.net/v1/scan/result | tee result.txt
+
     msg=`cat result.txt`
     if [[ $msg =~ status\":\"scanning ]]; then
         echo "テストが完了していないため、5分後にもう一度確認します。"
         sleep 300
     fi
     if [[ ! $msg =~ status\":\"scanning ]]; then
-        break;
+        break
     fi
 done
 

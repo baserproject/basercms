@@ -27,14 +27,14 @@ App::uses('CookieComponent', 'Controller/Component');
  */
 class FavoriteTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
-	);
+	];
 
-	public $components = array("Auth","Cookie","Session");
+	public $components = ["Auth","Cookie","Session"];
 
 	public function setUp() {
 		@session_start();
@@ -67,11 +67,11 @@ class FavoriteTest extends BaserTestCase {
  * validate
  */
 	public function test権限チェック異常系() {
-		$this->Favorite->create(array(
-			'Favorite' => array(
+		$this->Favorite->create([
+			'Favorite' => [
 				'url' => '/admin/hoge',
-			)
-		));
+			]
+		]);
 
 		$this->login(2);
 
@@ -81,11 +81,11 @@ class FavoriteTest extends BaserTestCase {
 	}
 
 	public function test権限チェックシステム管理者正常系() {
-		$this->Favorite->create(array(
-			'Favorite' => array(
+		$this->Favorite->create([
+			'Favorite' => [
 				'url' => '/admin/hoge',
-			)
-		));
+			]
+		]);
 
 		$this->login(1);
 
@@ -93,11 +93,11 @@ class FavoriteTest extends BaserTestCase {
 	}
 
 	public function test権限チェックサイト運営者正常系() {
-		$this->Favorite->create(array(
-			'Favorite' => array(
+		$this->Favorite->create([
+			'Favorite' => [
 				'url' => '/hoge',
-			)
-		));
+			]
+		]);
 
 		$this->login(2);
 

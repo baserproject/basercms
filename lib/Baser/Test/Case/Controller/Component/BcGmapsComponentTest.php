@@ -20,7 +20,7 @@ App::uses('Controller', 'Controller');
  */
 class BcGmapsTestController extends Controller {
 
-	public $components = array('BcGmaps');
+	public $components = ['BcGmaps'];
 
 }
 
@@ -29,9 +29,9 @@ class BcGmapsTestController extends Controller {
  */
 class BcGmapsComponentTest extends BaserTestCase {
 
-	public $fixtures = array();
+	public $fixtures = [];
 
-	public $components = array('BcGmaps');
+	public $components = ['BcGmaps'];
 
 	public function setUp() {
 		parent::setUp();

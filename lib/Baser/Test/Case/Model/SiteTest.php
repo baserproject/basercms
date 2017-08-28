@@ -24,13 +24,13 @@ class SiteTest extends BaserTestCase {
  * 
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Site',
 		'baser.Default.ContentFolder',
 		'baser.Default.Content',
 		'baser.Default.User',
 		'baser.Default.SiteConfig'
-	);
+	];
 
 /**
  * Set Up 
