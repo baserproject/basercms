@@ -147,7 +147,8 @@
 
 				<!-- / #Wrap .clearfix --></div>
 
-<?php if (!empty(BcUtil::loginUser())): ?>
+<?php $bcUtilLoginUser = BcUtil::loginUser(); ?>
+<?php if (!empty($bcUtilLoginUser)): ?>
 	<?php $this->BcBaser->footer([], ['cache' => ['key' => '_admin_footer']]) ?>
 <?php else: ?>
 	<?php $this->BcBaser->footer() ?>
