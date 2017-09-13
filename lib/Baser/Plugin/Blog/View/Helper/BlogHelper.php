@@ -501,6 +501,8 @@ class BlogHelper extends AppHelper {
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
 		$this->setContent($blogContentId);
+		
+		$contentUrl = (isset($this->content['url']))?$this->content['url']:$this->request->params['Content']['url'];
 
 		$path = array('category');
 		if ($categoryPath) {
@@ -512,7 +514,7 @@ class BlogHelper extends AppHelper {
 			$path = array_merge($path, $options['named']);
 		}
 
-		$url = Router::url($this->request->params['Content']['url'] . 'archives/' . implode('/', $path));
+		$url = Router::url($contentUrl . 'archives/' . implode('/', $path));
 		$baseUrl = preg_replace('/\/$/', '', BC_BASE_URL);
 		return preg_replace('/^' . preg_quote($baseUrl, '/') . '/', '', $url);
 	}
