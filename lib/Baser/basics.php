@@ -1038,7 +1038,10 @@ function getTableList() {
 	$pluginFiles = [];
 	foreach($plugins as $plugin) {
 		$path = null;
-		if (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+		$themePath = BASER_THEMES . Configure::read('BcSite.theme') . DS;
+		if (is_dir($themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+			$path = $themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
+		}elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
 		} elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
