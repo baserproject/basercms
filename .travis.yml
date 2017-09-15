@@ -57,6 +57,7 @@ after_success:
     ./vaddy.sh;
     fi;
 
+#通知用
 #after_failure:
 #  - cd ../secure_test/ &&
 #    echo "Travis Failed." | ./slack_webhooks.sh
