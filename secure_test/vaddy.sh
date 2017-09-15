@@ -14,18 +14,19 @@
 while :
 do
     curl -G -d "user=$VADDY_USER&auth_key=$VADDY_AUTH_KEY&fqdn=$VADDY_FQDN" https://api.vaddy.net/v1/scan/runcheck | tee result.txt
-    msg=`cat result.txt`
-    if [[ $msg =~ {\"running_process\":0} ]]; then
+    msg=`tail -n 1 result.txt`
+    if [[ $msg =~ \"running_process\":0 ]]; then
         break
     fi
-    if [[ $msg =~ {\"running_process\":.*} ]]; then
-          echo "既に他のテスト実行中のため5分後にもう一度テストリクエストします。"
-          sleep 300
+    if [[ $msg =~ \"running_process\":.* ]]; then
+        echo "既に他のテスト実行中のため5分後にもう一度テストリクエストします。"
+        sleep 300
     fi
 done
 
 # Vaddyクライアント取得
-git clone https://github.com/vaddy/go-vaddy.git;
+#現在api仕様のためクライアントは不必要
+#git clone https://github.com/vaddy/go-vaddy.git;
 
 #Vaddy実行
 curl -Ss https://api.vaddy.net/v1/scan -X POST -d "action=start" -d "user=$VADDY_USER" -d "auth_key=$VADDY_AUTH_KEY" -d "fqdn=$VADDY_FQDN" | tee result.txt

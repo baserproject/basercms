@@ -48,15 +48,16 @@ before_script:
   - php ./Console/cake.php bc_manager install "http://localhost" "$DB" "admin" "basercms" "webmaster@example.org" --host "localhost" --database "basercms" --login "basercms" --password "basercms" --prefix "mysite_" --data "nada-icons.default"
 
 script:
-  - php ./Console/cake.php baser_test baser BcAll
-
+#  - php ./Console/cake.php baser_test baser BcAll
+   - echo a
 after_success:
     #Vaddyテスト
   - cd ../secure_test/
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "dev-4" ]; then
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "vaddytest" ]; then
     ./vaddy.sh;
     fi;
 
+#通知用
 #after_failure:
 #  - cd ../secure_test/ &&
 #    echo "Travis Failed." | ./slack_webhooks.sh
