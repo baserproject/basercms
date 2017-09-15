@@ -339,18 +339,18 @@ class BcAppTest extends BaserTestCase {
  * テーブルにフィールドを追加する
  */
 	public function testAddField() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$options = [
 			'field' => 'testField',
 			'column' => [
-				'name' => 'testColumn',
+				'type' => 'text',
+				'null' => true,
+				'default' => null,
 			],
 			'table' => 'pages',
 		];
 		$this->Page->addField($options);
 		$columns = $this->Page->getColumnTypes();
-		var_dump($columns);
+		$this->assertEquals(isset($columns['testField']), true);
 	}
 
 /**
