@@ -25,14 +25,14 @@ class RoutesTest extends BaserTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Config.Routes.PageRoutes',
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-	);
+	];
 
 /**
  * __construct
@@ -41,7 +41,7 @@ class RoutesTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = [], $dataName = '') {
+	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 		// スーパークラスで、自動的に fixtures に、baser.Default.Page を追加する為、
 		// そちらのフィクスチャを読み込ませないようにアンセット
