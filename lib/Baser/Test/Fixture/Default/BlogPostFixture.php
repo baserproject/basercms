@@ -16,8 +16,8 @@ class BlogPostFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'blog_content_id' => '1',
 			'no' => '1',
@@ -41,8 +41,8 @@ class BlogPostFixture extends BaserTestFixture {
 			'eye_catch' => NULL,
 			'created' => '2015-08-10 18:57:47',
 			'modified' => '2015-08-10 18:58:07',
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'blog_content_id' => '1',
 			'no' => '2',
@@ -65,7 +65,7 @@ class BlogPostFixture extends BaserTestFixture {
 			'eye_catch' => NULL,
 			'created' => '2015-08-10 18:57:47',
 			'modified' => '2015-08-10 18:58:08',
-		),
-	);
+		],
+	];
 
 }

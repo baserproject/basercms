@@ -32,20 +32,20 @@ class Contact extends CakeTestModel {
  *
  * @var array
  */
-	public $actsAs = array(
+	public $actsAs = [
 		'BcSearchIndexManager',
 		'BcCache',
-		'BcUpload' => array(
+		'BcUpload' => [
 			'subdirDateFormat' => 'Y/m/',
-			'fields' => array(
-				'eye_catch' => array(
+			'fields' => [
+				'eye_catch' => [
 					'type' => 'image',
 					'namefield' => 'no',
 					'nameformat' => '%08d'
-				)
-			)
-		)
-	);
+				]
+			]
+		]
+	];
 }
 
 /**
@@ -63,7 +63,7 @@ class BcFormHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Plugin',
 		'baser.Default.Content',
@@ -72,7 +72,7 @@ class BcFormHelperTest extends BaserTestCase {
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite'
-	);
+	];
 	
 /**
  * setUp method
@@ -118,12 +118,12 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function dateTimeDataProvider() {
-		return array(
-			array('test', 'W', '12', array('maxYear' => 2010), 'id="testWareki".*<option value="h-22">平成 22', 'datetime()を出力できません'),
-			array('test', 'WY', '12', array(), '年.*年', '年の接尾辞を出力できません'),
-			array('test', 'WM', '12', array(), '月', '月の接尾辞を出力できません'),
-			array('test', 'WD', '12', array(), '日', '日の接尾辞を出力できません'),
-		);
+		return [
+			['test', 'W', '12', ['maxYear' => 2010], 'id="testWareki".*<option value="h-22">平成 22', 'datetime()を出力できません'],
+			['test', 'WY', '12', [], '年.*年', '年の接尾辞を出力できません'],
+			['test', 'WM', '12', [], '月', '月の接尾辞を出力できません'],
+			['test', 'WD', '12', [], '日', '日の接尾辞を出力できません'],
+		];
 	}
 
 /**
@@ -141,10 +141,10 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function checkboxDataProvider() {
-		return array(
-			array('test', array(), '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'),
-			array('test', array('label' => 'testLabel'), '<input type="checkbox".*label="testLabel"', '属性を付与できません'),
-		);
+		return [
+			['test', [], '<input type="checkbox" name="data\[test\]" value="1" id="test"', 'checkbox()を出力できません'],
+			['test', ['label' => 'testLabel'], '<input type="checkbox".*label="testLabel"', '属性を付与できません'],
+		];
 	}
 
 /**
@@ -162,12 +162,12 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function hiddenDataProvider() {
-		return array(
-			array('test', array(), '<input type="hidden" name="data\[test\]" id="test"', 'hidden()を出力できません'),
-			array('test', array('class' => 'bcclass'), 'class="bcclass"', '属性を付与できません'),
-			array('test', array('multiple' => 'checkbox'), 'name="data\[test\]"\/>$', 'セキュリティコンポーネントに対応していません'),
-			array('test', array('multiple' => 'checkbox', 'value' => array('value1','value2')), 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'),
-		);
+		return [
+			['test', [], '<input type="hidden" name="data\[test\]" id="test"', 'hidden()を出力できません'],
+			['test', ['class' => 'bcclass'], 'class="bcclass"', '属性を付与できません'],
+			['test', ['multiple' => 'checkbox'], 'name="data\[test\]"\/>$', 'セキュリティコンポーネントに対応していません'],
+			['test', ['multiple' => 'checkbox', 'value' => ['value1','value2']], 'name="data\[test\]\[\]".* value="value1".*value="value2"', '値を複数追加できません'],
+		];
 	}
 
 
@@ -200,12 +200,12 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function endProvider() {
-		return array(
-			array(null, null, '</form>'),
-			array(array(1,2), null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'),
-			array(null, array(1,2), '</form>'),
-			array(array(1,2), array(1,2), '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>')
-		);
+		return [
+			[null, null, '</form>'],
+			[[1,2], null, '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>'],
+			[null, [1,2], '</form>'],
+			[[1,2], [1,2], '<div class="submit"><input 1="1" 2="2" type="submit" value="Submit"/></div></form>']
+		];
 	}
 
 
@@ -230,31 +230,31 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function inputDataProvider() {
-		return array(
-			array('value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1<\/label><input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => []], ''),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*2<\/label>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2], 'value' => ['a', 'b']], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*"radio" name="data\[User\]\[id\]" id="UserId1" value="1" \/><label for="UserId1">2<\/label>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1<\/legend><\/fieldset>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'separator' => 'aaa'], ''),
-			array('value', 'hoge', 'User.id', ['type' => 'checkbox', 'options' => []], '<input type="hidden" name="data\[User\]\[id\]" id="UserId_" value="0"\/>.*"checkbox" name="data\[User\]\[id\]" options="" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'),
-			array('value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/option>\n<\/select>'),
-			array('value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data\[User\]\[id\]\[hour\].*id="UserIdHour".*1<\/op.*12<\/op.*\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*value="pm">pm<\/option>\n<\/select>'),
-			array('value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'),
-			array('value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'),
-			array('value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'),
-			array('', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data\[BlogTag\]\[BlogTag\]" value="" id="BlogTagBlogTag_"\/>\n<select name="data\[BlogTag\]\[BlogTag\]\[\]" ="" multiple="multiple" id="BlogTagBlogTag">\n<\/select>'),
-			array('', '', 'hoge', '', '<input name="data\[hoge\]" ="" type="text" id="hoge"\/>'),
-			array('', '', 'hoge', array('a' => 'hogege'), '<input name="data\[hoge\]" a="hogege" ="" type="text" id="hoge"\/>')
-		);
+		return [
+			['value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['error' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'text'], '<input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'text', 'label' => true], '<label for="UserId">1<\/label><input name="data\[User\]\[id\]" value="hoge" maxlength=".*" type="text" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'radio', 'options' => []], ''],
+			['value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*2<\/label>'],
+			['value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [1, 2], 'value' => ['a', 'b']], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>.*"radio" name="data\[User\]\[id\]" id="UserId1" value="1" \/><label for="UserId1">2<\/label>'],
+			['value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'legend' => true], '<fieldset><legend>1<\/legend><\/fieldset>'],
+			['value', 'hoge', 'User.id', ['type' => 'radio', 'options' => [], 'separator' => 'aaa'], ''],
+			['value', 'hoge', 'User.id', ['type' => 'checkbox', 'options' => []], '<input type="hidden" name="data\[User\]\[id\]" id="UserId_" value="0"\/>.*"checkbox" name="data\[User\]\[id\]" options="" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
+			['value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/option>\n<\/select>'],
+			['value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data\[User\]\[id\]\[hour\].*id="UserIdHour".*1<\/op.*12<\/op.*\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*value="pm">pm<\/option>\n<\/select>'],
+			['value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'],
+			['value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'],
+			['value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'],
+			['value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'],
+			['', '', 'BlogTag.BlogTag', '', '<input type="hidden" name="data\[BlogTag\]\[BlogTag\]" value="" id="BlogTagBlogTag_"\/>\n<select name="data\[BlogTag\]\[BlogTag\]\[\]" ="" multiple="multiple" id="BlogTagBlogTag">\n<\/select>'],
+			['', '', 'hoge', '', '<input name="data\[hoge\]" ="" type="text" id="hoge"\/>'],
+			['', '', 'hoge', ['a' => 'hogege'], '<input name="data\[hoge\]" a="hogege" ="" type="text" id="hoge"\/>']
+		];
 	}
 
 /**
@@ -274,10 +274,10 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function ckeditorDataProvider() {
-		return array(
-			array('test', array(), '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'),
-			array('test', array('editorLanguage' => 'en'), '"language":"en"', 'オプションを設定できません'),
-		);
+		return [
+			['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
+			['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
+		];
 	}	
 
 /**
@@ -295,10 +295,10 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function editorDataProvider() {
-		return array(
-			array('test', array(), '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'),
-			array('test', array('editorLanguage' => 'en'), '"language":"en"', 'オプションを設定できません'),
-		);
+		return [
+			['test', [], '<textarea name="data\[test\]".*load.*CKEDITOR', 'CKEditorを出力できません'],
+			['test', ['editorLanguage' => 'en'], '"language":"en"', 'オプションを設定できません'],
+		];
 	}
 
 
@@ -318,11 +318,11 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function prefTagDataProvider() {
-		return array(
-			array('test', null, array(), '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'),
-			array('test', '40', array(), '<option value="40" selected="selected">', '要素を選択状態にできません'),
-			array('test', null, array('class' => 'testclass'), ' class="testclass"', '要素に属性を付与できません'),
-		);
+		return [
+			['test', null, [], '<select name="data\[test\]" id="test">.<option value="">都道府県.*<option value="1">北海道.*<option value="47">沖縄県', 'prefTag()を出力できません'],
+			['test', '40', [], '<option value="40" selected="selected">', '要素を選択状態にできません'],
+			['test', null, ['class' => 'testclass'], ' class="testclass"', '要素に属性を付与できません'],
+		];
 	}
 
 
@@ -346,16 +346,16 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function wyearDataProvider() {
-		return array(
-			array('test', null, null, null, array(), true, '<input type="hidden" name="data\[test\]\[wareki\].*<option value="h-', 'wyear()がされません	'),
-			array('test', 2010, null, null, array(), true, '<option value="h-22">平成 22<\/option>.<\/select>$', '最小の年を指定できません'),
-			array('test', null, 2010, null, array(), true, 'id="testYear">.<option value=""><\/option>.<option value="h-22">', '最大の年を指定できません'),
-			array('test', null, null, '2035-1-1', array(), true, 'value="h-47" selected', '要素を選択状態にできません(Y-m-d形式)'),
-			array('test', null, null, 'h-47', array(), true, 'value="h-47" selected', '要素を選択状態にできません(和暦形式)'),
-			array('test', null, null, null, array('class' => 'testclass'), true, 'class="testclass"', '属性を付与できません'),
-			array('test', null, null, null, array('class' => 'testclass', 'size' => '5'), true, 'size="5"', '属性を複数付与できません'),
-			array('test', null, null, null, array(), false, 'id="testYear">.<option value="h-', '空の要素を非表示にできません'),
-		);
+		return [
+			['test', null, null, null, [], true, '<input type="hidden" name="data\[test\]\[wareki\].*<option value="h-', 'wyear()がされません	'],
+			['test', 2010, null, null, [], true, '<option value="h-22">平成 22<\/option>.<\/select>$', '最小の年を指定できません'],
+			['test', null, 2010, null, [], true, 'id="testYear">.<option value=""><\/option>.<option value="h-22">', '最大の年を指定できません'],
+			['test', null, null, '2035-1-1', [], true, 'value="h-47" selected', '要素を選択状態にできません(Y-m-d形式)'],
+			['test', null, null, 'h-47', [], true, 'value="h-47" selected', '要素を選択状態にできません(和暦形式)'],
+			['test', null, null, null, ['class' => 'testclass'], true, 'class="testclass"', '属性を付与できません'],
+			['test', null, null, null, ['class' => 'testclass', 'size' => '5'], true, 'size="5"', '属性を複数付与できません'],
+			['test', null, null, null, [], false, 'id="testYear">.<option value="h-', '空の要素を非表示にできません'],
+		];
 	}
 
 /**
@@ -389,10 +389,10 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function getControlSourceProvider() {
-		return array(
-			array('hoge', array()),
-			array('', array())
-		);
+		return [
+			['hoge', []],
+			['', []]
+		];
 	}
 
 /**
@@ -411,13 +411,13 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function generateListProvider() {
-		return array(
-			array('hoge', '', '', ''),
-			array('User', '', ['id','name'], Array (1 => 'basertest', 2 => 'basertest2')),
-			array('User', '', ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
-			array('User', true, ['name','id'], Array ('basertest' => 1, 'basertest2' => 2)),
-			array('User', false, ['name','id'], null)
-		);
+		return [
+			['hoge', '', '', ''],
+			['User', '', ['id','name'], [1 => 'basertest', 2 => 'basertest2']],
+			['User', '', ['name','id'], ['basertest' => 1, 'basertest2' => 2]],
+			['User', true, ['name','id'], ['basertest' => 1, 'basertest2' => 2]],
+			['User', false, ['name','id'], null]
+		];
 	}
 
 
@@ -431,11 +431,11 @@ class BcFormHelperTest extends BaserTestCase {
  */
 	public function testJsonList($field, $attributes, $expected, $message) {
 
-		$attributes_default = array(
+		$attributes_default = [
 			'imgSrc' => null,
 			'ajaxAddAction' => null,
 			'ajaxDelAction' => null,
-		);
+		];
 
 		$attributes = $attributes + $attributes_default;
 
@@ -444,12 +444,12 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function jsonListDataProvider() {
-		return array(
-			array('test', array(), 'id="JsonTestDb".*jQuery\(function\(\)', 'jsonList()を出力できません'), 
-			array('test', array('imgSrc' => 'test'), '"deleteButtonSrc":"test"', 'imgSrc属性を付与できません'), 
-			array('test', array('ajaxAddAction' => 'test'), '"ajaxAddAction":"test"', 'ajaxAddAction属性を付与できません'), 
-			array('test', array('ajaxDelAction' => 'test'), '"ajaxDelAction":"test"', 'ajaxDelAction属性を付与できません'), 
-		);
+		return [
+			['test', [], 'id="JsonTestDb".*jQuery\(function\(\)', 'jsonList()を出力できません'],
+			['test', ['imgSrc' => 'test'], '"deleteButtonSrc":"test"', 'imgSrc属性を付与できません'],
+			['test', ['ajaxAddAction' => 'test'], '"ajaxAddAction":"test"', 'ajaxAddAction属性を付与できません'],
+			['test', ['ajaxDelAction' => 'test'], '"ajaxDelAction":"test"', 'ajaxDelAction属性を付与できません'],
+		];
 	}
 
 /**
@@ -468,11 +468,11 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function datepickerDataProvider() {
-		return array(
-			array('baser', array(), 'type="text".*id="baser".*("#baser")', 'datepicker()が出力できません'), 
-			array('baser', array('test1' => 'testValue1'), 'test1="testValue1"', '要素に属性を付与できません'),
-			array('baser', array('value' => '2010-4-1'), 'value="2010\/4\/1"', '時間を指定できません'),
-		);
+		return [
+			['baser', [], 'type="text".*id="baser".*("#baser")', 'datepicker()が出力できません'],
+			['baser', ['test1' => 'testValue1'], 'test1="testValue1"', '要素に属性を付与できません'],
+			['baser', ['value' => '2010-4-1'], 'value="2010\/4\/1"', '時間を指定できません'],
+		];
 	}
 
 /**
@@ -490,14 +490,14 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function dateTimePickerDataProvider() {
-		return array(
-			array('baser', array(), 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'),
-			array('baser', array('value' => '2010-4-1 11:22:33'), 'value="2010\/4\/1".*value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'),
-			array('baser', array('value' => '2010-04-01 11:22:33'), 'value="2010\/04\/01".*value="11:22:33".*value="2010-04-01 11:22:33"', '時間指定が正しく出力できません'),
-			array('baser', array('value' => '2010-4-1 '), 'value="2010\/4\/1".*value="".* value="2010-4-1 "', '時間を指定いない場合出力できません'),
-			array('baser', array('value' => '2010 hogehoge'), 'value="2010".*value="hogehoge".*value="2010 hogehoge"', '時間指定が不適切でない場合出力できません'),
-			array('baser', array('value' => 'hoge hogehoge'), 'value="hoge".*value="hogehoge".*value="hoge hogehoge"', '時間指定が不適切でない場合出力できません')
-		);
+		return [
+			['baser', [], 'id="baser_date".*\$\("#baser_date"\)\.datepicker\(\);', 'dateTimePicker()が出力されません'],
+			['baser', ['value' => '2010-4-1 11:22:33'], 'value="2010\/4\/1".*value="11:22:33".*value="2010-4-1 11:22:33"', '時間指定が正しく出力できません'],
+			['baser', ['value' => '2010-04-01 11:22:33'], 'value="2010\/04\/01".*value="11:22:33".*value="2010-04-01 11:22:33"', '時間指定が正しく出力できません'],
+			['baser', ['value' => '2010-4-1 '], 'value="2010\/4\/1".*value="".* value="2010-4-1 "', '時間を指定いない場合出力できません'],
+			['baser', ['value' => '2010 hogehoge'], 'value="2010".*value="hogehoge".*value="2010 hogehoge"', '時間指定が不適切でない場合出力できません'],
+			['baser', ['value' => 'hoge hogehoge'], 'value="hoge".*value="hogehoge".*value="hoge hogehoge"', '時間指定が不適切でない場合出力できません']
+		];
 	}
 
 /**
@@ -518,17 +518,17 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function selectTextDataProvider() {
-		return array(
-			array('baser', array(), null, array(), '', '<div id="baser_"><input type="hidden" name="data\[baser_\]" value="" id="baser_"', 'selectText()を出力できません'), 
-			array('baser', array('BaserCMS1'), null, array(), '', 'id="Baser0".*<label for="Baser0">BaserCMS1', 'optionを出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), null, array(), '', '<label for="Baser0">.*BaserCMS1.*<label for="Baser1">.*BaserCMS2', 'optionを複数出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), '1', array(), '', 'checked="checked".*for="Baser1" class="selected">BaserCMS2', 'checkboxを選択状態にできません'), 
-			array('baser', array('BaserCMS1'), '1', array('class'=>'bcclass'), '', 'div class="bcclass"', '要素に属性を付与できません'), 
-			array('baser', array('BaserCMS1'), '1', array('multiple'=>'select'), '', '<select', 'selectを出力できません'), 
-			array('baser', array('BaserCMS1'), '1', array(), true, 'value="".*>&nbsp;<label for="Baser">', '空要素を出力できません'), 
-			array('baser', array('BaserCMS1'), '1', array(), '選択してください', 'value="" id="Baser" \/>&nbsp;<.*選択してください', '空要素のテキストを指定できません'), 
-			array('baser', array('BaserCMS1'), '1', array(), array('未選択' => '選択してください'), ' value="未選択" id="Baser未選択" \/>&nbsp;<.+選択してください', '空要素のテキストと値を指定できません'), 
-		);
+		return [
+			['baser', [], null, [], '', '<div id="baser_"><input type="hidden" name="data\[baser_\]" value="" id="baser_"', 'selectText()を出力できません'],
+			['baser', ['BaserCMS1'], null, [], '', 'id="Baser0".*<label for="Baser0">BaserCMS1', 'optionを出力できません'],
+			['baser', ['BaserCMS1', 'BaserCMS2'], null, [], '', '<label for="Baser0">.*BaserCMS1.*<label for="Baser1">.*BaserCMS2', 'optionを複数出力できません'],
+			['baser', ['BaserCMS1', 'BaserCMS2'], '1', [], '', 'checked="checked".*for="Baser1" class="selected">BaserCMS2', 'checkboxを選択状態にできません'],
+			['baser', ['BaserCMS1'], '1', ['class'=>'bcclass'], '', 'div class="bcclass"', '要素に属性を付与できません'],
+			['baser', ['BaserCMS1'], '1', ['multiple'=>'select'], '', '<select', 'selectを出力できません'],
+			['baser', ['BaserCMS1'], '1', [], true, 'value="".*>&nbsp;<label for="Baser">', '空要素を出力できません'],
+			['baser', ['BaserCMS1'], '1', [], '選択してください', 'value="" id="Baser" \/>&nbsp;<.*選択してください', '空要素のテキストを指定できません'],
+			['baser', ['BaserCMS1'], '1', [], ['未選択' => '選択してください'], ' value="未選択" id="Baser未選択" \/>&nbsp;<.+選択してください', '空要素のテキストと値を指定できません'],
+		];
 	}
 
 /**
@@ -546,19 +546,19 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function fileDataProvider() {
-		return array(
-			array('hoge', array(), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'), 
-			array('hoge', array('imgsize' => '50'), 'imgsize="50"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('link' => 'page'), 'link="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('delCheck' => 'page'), 'delCheck="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('force' => 'page'), 'force="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('rel' => 'page'), 'rel="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('title' => 'page'), 'title="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('width' => 'page'), 'width="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('height' => 'page'), 'height="page"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('value' => 'page'), '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'),
-			array('hoge', array('hoge' => 'page'), 'hoge="page"', 'ファイルインプットボックス出力できません')
-		);
+		return [
+			['hoge', [], '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['imgsize' => '50'], 'imgsize="50"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['link' => 'page'], 'link="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['delCheck' => 'page'], 'delCheck="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['force' => 'page'], 'force="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['rel' => 'page'], 'rel="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['title' => 'page'], 'title="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['width' => 'page'], 'width="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['height' => 'page'], 'height="page"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['value' => 'page'], '<input type="file" name="data\[hoge\]" id="hoge"', 'ファイルインプットボックス出力できません'],
+			['hoge', ['hoge' => 'page'], 'hoge="page"', 'ファイルインプットボックス出力できません']
+		];
 	}
 
 /**
@@ -580,12 +580,12 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function dispatchAfterFormDataProvider() {
-		return array(
-			array('Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'),
-			array('Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'),
-			array('Hoge', '', true, ''),
-			array('Hoge', '', false, ''),
-		);
+		return [
+			['Hoge', [['title' => '1', 'input' => '2']], true, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'],
+			['Hoge', [['title' => '1', 'input' => '2']], false, '<tr><th class="col-head">1<\/th>\n<td class="col-input">2<\/td>\n<\/tr>'],
+			['Hoge', '', true, ''],
+			['Hoge', '', false, ''],
+		];
 	}
 
 /**
@@ -605,14 +605,14 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function radioDataProvider() {
-		return array(
-			array('baser', array(), array(), '<input type="hidden" name="data\[baser\]" id="baser_" value=""', 'radio()を出力できません'), 
-			array('baser', array('BaserCMS1'), array(), 'id="baser0" value="0" \/><label for="baser0">BaserCMS1<', 'optionを出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), array(), '<legend>Baser.*value="0".*BaserCMS1.*value="1".*BaserCMS2', 'optionを複数出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => 'test'), '<\/legend>test', ' legend と最初の要素の間に挿入されるコンテンツを出力できません'), 
-			array('baser', array('BaserCMS1', 'BaserCMS2'), array('between' => array('test1', 'test2')), 'BaserCMS1<\/label>test1.*BaserCMS2<\/label>test2', '要素の後に挿入されるコンテンツを出力できません'), 
-			array('baser', array('BaserCMS1'), array('label' => array('class'=>'bcclass')), 'class="bcclass"', 'labelに属性を付与できません'), 
-		);
+		return [
+			['baser', [], [], '<input type="hidden" name="data\[baser\]" id="baser_" value=""', 'radio()を出力できません'],
+			['baser', ['BaserCMS1'], [], 'id="baser0" value="0" \/><label for="baser0">BaserCMS1<', 'optionを出力できません'],
+			['baser', ['BaserCMS1', 'BaserCMS2'], [], '<legend>Baser.*value="0".*BaserCMS1.*value="1".*BaserCMS2', 'optionを複数出力できません'],
+			['baser', ['BaserCMS1', 'BaserCMS2'], ['between' => 'test'], '<\/legend>test', ' legend と最初の要素の間に挿入されるコンテンツを出力できません'],
+			['baser', ['BaserCMS1', 'BaserCMS2'], ['between' => ['test1', 'test2']], 'BaserCMS1<\/label>test1.*BaserCMS2<\/label>test2', '要素の後に挿入されるコンテンツを出力できません'],
+			['baser', ['BaserCMS1'], ['label' => ['class'=>'bcclass']], 'class="bcclass"', 'labelに属性を付与できません'],
+		];
 	}
 
 /**
@@ -623,21 +623,20 @@ class BcFormHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testCreateWithSecurity() {
-		$this->BcForm->request['_Token'] = array('key' => 'testKey');
+		$this->BcForm->request['_Token'] = ['key' => 'testKey'];
 		$encoding = strtolower(Configure::read('App.encoding'));
-		$result = $this->BcForm->create('Contact', array('url' => '/contacts/add'));
-		$expected = array(
-			'form' => array('method' => 'post', 'action' => '/contacts/add', 'accept-charset' => $encoding, 'id' => 'ContactAddForm', 'novalidate' => 'novalidate'),
-			'div' => array('style' => 'display:none;'),
-			array('input' => array('type' => 'hidden', 'name' => '_method', 'value' => 'POST')),
-			array('input' => array(
+		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add']);
+		$expected = [
+			'form' => ['method' => 'post', 'action' => '/contacts/add', 'accept-charset' => $encoding, 'id' => 'ContactAddForm', 'novalidate' => 'novalidate'],
+			'div' => ['style' => 'display:none;'],
+			['input' => ['type' => 'hidden', 'name' => '_method', 'value' => 'POST']],
+			['input' => [
 				'type' => 'hidden', 'name' => 'data[_Token][key]', 'value' => 'testKey', 'id'
-			)),
+			]],
 			'/div'
-		);
-		
+		];
 		$this->assertTags($result, $expected);
-		$result = $this->BcForm->create('Contact', array('url' => '/contacts/add', 'id' => 'MyForm'));
+		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
 		$expected['form']['id'] = 'MyForm';
 		$this->assertTags($result, $expected);
 	}
@@ -648,18 +647,16 @@ class BcFormHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testFileUploadField() {
-		
 		$fieldName = 'Contact.upload';
 		$this->BcForm->setEntity($fieldName);
 		// 通常
 		$result = $this->BcForm->file($fieldName);
-		$expected = array(
-			'span'	=> array('class' => 'upload-file'),
-			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload')), 
+		$expected = [
+			'span'	=> ['class' => 'upload-file'],
+			['input' => ['type' => 'file', 'name' => 'data[Contact][upload]', 'id' => 'ContactUpload']],
 			'/span'
-		);
+		];
 		$this->assertTags($result, $expected);
-
 	}
 
 /**
@@ -672,35 +669,35 @@ class BcFormHelperTest extends BaserTestCase {
 	public function testFileUploadFieldWithImageFile() {
 		$fieldName = 'Contact.eye_catch';
 		$this->BcForm->setEntity($fieldName);
-		$this->BcForm->BcUpload->request->data = array(
-			'Contact' => array(
+		$this->BcForm->BcUpload->request->data = [
+			'Contact' => [
 				'id' => '1',
 				'eye_catch' => 'template1.jpg',
 				'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-			)
-		);
+			]
+		];
 
 		$result = $this->BcForm->file($fieldName);
-		$expected = array(
-			array('span'	=> array('class' => 'upload-file')),
-			array('input' => array('type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch')),
+		$expected = [
+			['span'	=> ['class' => 'upload-file']],
+			['input' => ['type' => 'file', 'name' => 'data[Contact][eye_catch]', 'id' => 'ContactEyeCatch']],
 			'&nbsp;',
-			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0')),
-			array('input' => array('type' => 'checkbox', 'name' => 'data[Contact][eye_catch_delete]', 'value' => '1', 'id' => 'ContactEyeCatchDelete')),
-			'label' => array('for' => 'ContactEyeCatchDelete'),
+			['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_delete]', 'id' => 'ContactEyeCatchDelete_', 'value' => '0']],
+			['input' => ['type' => 'checkbox', 'name' => 'data[Contact][eye_catch_delete]', 'value' => '1', 'id' => 'ContactEyeCatchDelete']],
+			'label' => ['for' => 'ContactEyeCatchDelete'],
 			'削除する',
 			'/label',
-			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch')),
-			array('br' => true),
-			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
-			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
+			['input' => ['type' => 'hidden', 'name' => 'data[Contact][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'ContactEyeCatch']],
+			['br' => true],
+			'a' => ['href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''],
+			['img' => ['src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '']],
 			'/a',
-			array('br' => true),
-			array('span' => array('class' => 'file-name')),
+			['br' => true],
+			['span' => ['class' => 'file-name']],
 			'template1.jpg',
 			'/span',
 			'/span'
-		);
+		];
 
 		$this->assertTags($result, $expected);
 	}
@@ -717,11 +714,11 @@ class BcFormHelperTest extends BaserTestCase {
 		// 通常
 		$result = $this->BcForm->file($fieldName);
 
-		$expected = array(
-			'span'	=> array('class' => 'upload-file'),
-			array('input'	=> array('type' => 'file', 'name' => 'data[Contact][0][upload]', 'id' => 'Contact0Upload')),
+		$expected = [
+			'span'	=> ['class' => 'upload-file'],
+			['input' => ['type' => 'file', 'name' => 'data[Contact][0][upload]', 'id' => 'Contact0Upload']],
 			'/span'
-		);
+		];
 		$this->assertTags($result, $expected);
 	}
 
@@ -735,38 +732,38 @@ class BcFormHelperTest extends BaserTestCase {
 	public function testFileUploadFieldHasManyFieldWithImageFile() {
 		$fieldName = 'Contact.0.eye_catch';
 		$this->BcForm->setEntity($fieldName);
-		$this->BcForm->BcUpload->request->data = array(
-			'Contact' => array(
-				array(
+		$this->BcForm->BcUpload->request->data = [
+			'Contact' => [
+				[
 					'id' => '1',
 					'eye_catch' => 'template1.jpg',
 					'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-				),
-			)
-		);
+				],
+			]
+		];
 
 		$result = $this->BcForm->file($fieldName);
 
-		$expected = array(
-			array('span' => array('class' => 'upload-file')),
-			array('input' => array('type' => 'file', 'name' => 'data[Contact][0][eye_catch]', 'id' => 'Contact0EyeCatch')),
+		$expected = [
+			['span' => ['class' => 'upload-file']],
+			['input' => ['type' => 'file', 'name' => 'data[Contact][0][eye_catch]', 'id' => 'Contact0EyeCatch']],
 			'&nbsp;',
-			array('input' => array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_delete]', 'id' => 'Contact0EyeCatchDelete_', 'value' => '0')),
-			array('input' => array('type' => 'checkbox', 'name' => 'data[Contact][0][eye_catch_delete]', 'value' => '1', 'id' => 'Contact0EyeCatchDelete')),
-			'label' => array('for' => 'Contact0EyeCatchDelete'),
+			['input' => ['type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_delete]', 'id' => 'Contact0EyeCatchDelete_', 'value' => '0']],
+			['input' => ['type' => 'checkbox', 'name' => 'data[Contact][0][eye_catch_delete]', 'value' => '1', 'id' => 'Contact0EyeCatchDelete']],
+			'label' => ['for' => 'Contact0EyeCatchDelete'],
 			'削除する',
 			'/label',
-			array('input'	=> array('type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'Contact0EyeCatch')),
-			array('br' => true),
-			'a' => array('href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''),
-			array('img' => array('src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '')),
+			['input' => ['type' => 'hidden', 'name' => 'data[Contact][0][eye_catch_]', 'value' => 'template1.jpg', 'id' => 'Contact0EyeCatch']],
+			['br' => true],
+			'a' => ['href' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'rel' => 'colorbox', 'title' => ''],
+			['img' => ['src' => 'preg:/' . preg_quote('/files/template1.jpg?', '/') . '\d+/', 'alt' => '']],
 			'/a',
-			array('br' => true),
-			array('span' => array('class' => 'file-name')),
+			['br' => true],
+			['span' => ['class' => 'file-name']],
 			'template1.jpg',
 			'/span',
 			'/span'
-		);
+		];
 
 		$this->assertTags($result, $expected);
 	}

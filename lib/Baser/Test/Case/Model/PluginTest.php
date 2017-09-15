@@ -24,14 +24,14 @@ App::uses('Plugin', 'Model');
  */
 class PluginTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Favorite',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
 		'baser.Default.User',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -47,33 +47,33 @@ class PluginTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->Plugin->create(array(
-			'Plugin' => array(
+		$this->Plugin->create([
+			'Plugin' => [
 				'title' => 'baser',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Plugin->validates());
 		$this->assertArrayHasKey('name', $this->Plugin->validationErrors);
 		$this->assertEquals('プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。', current($this->Plugin->validationErrors['name']));
 	}
 
 	public function test桁数チェック正常系() {
-		$this->Plugin->create(array(
-			'Plugin' => array(
+		$this->Plugin->create([
+			'Plugin' => [
 				'name' => '12345678901234567890123456789012345678901234567890',
 				'title' => '12345678901234567890123456789012345678901234567890',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->Plugin->validates());
 	}
 
 	public function test桁数チェック異常系() {
-		$this->Plugin->create(array(
-			'Plugin' => array(
+		$this->Plugin->create([
+			'Plugin' => [
 				'name' => '123456789012345678901234567890123456789012345678901',
 				'title' => '123456789012345678901234567890123456789012345678901',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Plugin->validates());
 		$this->assertArrayHasKey('name', $this->Plugin->validationErrors);
 		$this->assertEquals('プラグイン名は50文字以内としてください。', current($this->Plugin->validationErrors['name']));
@@ -82,22 +82,22 @@ class PluginTest extends BaserTestCase {
 	}
 
 	public function test半角英数チェック異常系() {
-		$this->Plugin->create(array(
-			'Plugin' => array(
+		$this->Plugin->create([
+			'Plugin' => [
 				'name' => '１２３ａｂｃ',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Plugin->validates());
 		$this->assertArrayHasKey('name', $this->Plugin->validationErrors);
 		$this->assertEquals('プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。', current($this->Plugin->validationErrors['name']));
 	}
 
 	public function test重複チェック異常系() {
-		$this->Plugin->create(array(
-			'Plugin' => array(
+		$this->Plugin->create([
+			'Plugin' => [
 				'name' => 'Blog',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Plugin->validates());
 		$this->assertArrayHasKey('name', $this->Plugin->validationErrors);
 		$this->assertEquals('指定のプラグインは既に使用されています。', current($this->Plugin->validationErrors['name']));
@@ -156,11 +156,11 @@ class PluginTest extends BaserTestCase {
 	}
 
 	public function hasDuplicateValueDataProvider() {
-		return array(
-			array('name', false, 'Plugin.nameに重複はありません'),
-			array('version', true, 'Plugin.versionに重複はあります'),
-			array('status', true, 'Plugin.statusに重複はあります'),
-		);
+		return [
+			['name', false, 'Plugin.nameに重複はありません'],
+			['version', true, 'Plugin.versionに重複はあります'],
+			['status', true, 'Plugin.statusに重複はあります'],
+		];
 	}
 
 /**
@@ -204,11 +204,11 @@ class PluginTest extends BaserTestCase {
 	}
 
 	public function getDirectoryPathDataProvider() {
-		return array(
-			array('Blog', 'Blog', 'プラグインのディレクトリパスを取得できません'),
-			array('Feed', 'Feed', 'プラグインのディレクトリパスを取得できません'),
-			array('hoge', null, '存在しないプラグインです'),
-		);
+		return [
+			['Blog', 'Blog', 'プラグインのディレクトリパスを取得できません'],
+			['Feed', 'Feed', 'プラグインのディレクトリパスを取得できません'],
+			['hoge', null, '存在しないプラグインです'],
+		];
 	}
 
 /**
@@ -232,7 +232,7 @@ class PluginTest extends BaserTestCase {
  * @dataProvider addFavoriteAdminLinkDataProvider
  */
 	public function testAddFavoriteAdminLink($pluginName, $userId, $expected, $message = null) {
-		$user = array( 'id' => $userId );
+		$user = ['id' => $userId ];
 		
 		$this->Plugin->addFavoriteAdminLink($pluginName, $user);
 
@@ -243,9 +243,9 @@ class PluginTest extends BaserTestCase {
 		// 追加したお気に入りを取得
 		$this->Plugin->Favorite->cacheQueries = false;
 		$lastId = $this->Plugin->Favorite->getLastInsertID();
-		$result = $this->Plugin->Favorite->find('all', array(
-				'conditions' => array('Favorite.id' => $lastId)
-			)
+		$result = $this->Plugin->Favorite->find('all', [
+				'conditions' => ['Favorite.id' => $lastId]
+			]
 		);
 
 		$result = $result[0]['Favorite']['name'];
@@ -254,12 +254,10 @@ class PluginTest extends BaserTestCase {
 	}
 
 	public function addFavoriteAdminLinkDataProvider() {
-		return array(
-			array('Blog', 1, 'ブログ管理', 'プラグイン管理のリンクを指定したユーザーのお気に入りに追加できません'),
-			array('Blog', 2, 'ブログ管理', 'プラグイン管理のリンクを指定したユーザーのお気に入りに追加できません'),
-			array('Mail', 1, 'メールフォーム管理', 'プラグイン管理のリンクを指定したユーザーのお気に入りに追加できません'),
-		);
+		return [
+			['Blog', 1, 'ブログ管理', 'プラグイン管理のリンクを指定したユーザーのお気に入りに追加できません'],
+			['Blog', 2, 'ブログ管理', 'プラグイン管理のリンクを指定したユーザーのお気に入りに追加できません'],
+			['Mail', 1, 'メールフォーム管理', 'プラグイン管理のリンクを指定したユーザーのお気に入りに追加できません'],
+		];
 	}
-
-
 }

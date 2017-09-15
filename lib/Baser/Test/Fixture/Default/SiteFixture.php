@@ -9,8 +9,8 @@ class SiteFixture extends BaserTestFixture {
  *
  * @var array
  */
-  public $records = array(
-    array(
+  public $records = [
+    [
       'id' => '1',
       'main_site_id' => '0',
       'name' => 'mobile',
@@ -28,8 +28,8 @@ class SiteFixture extends BaserTestFixture {
       'relate_main_site' => 0,
       'created' => '2016-08-01 21:20:15',
       'modified' => null
-    ),
-    array(
+    ],
+    [
       'id' => '2',
       'main_site_id' => '0',
       'name' => 'smartphone',
@@ -47,7 +47,7 @@ class SiteFixture extends BaserTestFixture {
       'relate_main_site' => 0,
       'created' => '2016-08-01 21:20:15',
       'modified' => null
-    ),
-  );
+    ],
+  ];
 
 }

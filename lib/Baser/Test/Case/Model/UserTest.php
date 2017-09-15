@@ -16,19 +16,19 @@ App::uses('User', 'Model');
  * 
  * class NonAssosiationUser extends User {
  *	public $name = 'User';
- *	public $belongsTo = array();
- *	public $hasMany = array();
+ *	public $belongsTo = [];
+ *	public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class UserTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Default.UserGroup',
 		'baser.Default.Favorite',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -44,16 +44,16 @@ class UserTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => '',
 				'real_name_1' => '',
 				'real_name_2' => '',
 				'password' => '',
 				'email' => '',
 				'user_group_id' => ''
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 		$this->assertArrayHasKey('name', $this->User->validationErrors);
 		$this->assertEquals('アカウント名を入力してください。', current($this->User->validationErrors['name']));
@@ -66,15 +66,15 @@ class UserTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'real_name_1' => '１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０1',
 				'real_name_2' => '１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０1',
 				'password' => 'abcde',
 				'email' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 
 		$this->assertArrayHasKey('name', $this->User->validationErrors);
@@ -86,12 +86,12 @@ class UserTest extends BaserTestCase {
 		$this->assertArrayHasKey('password', $this->User->validationErrors);
 		$this->assertEquals('パスワードは6文字以上で入力してください。', current($this->User->validationErrors['password']));
 
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'password' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'email' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789@123.jp',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 		$this->assertArrayHasKey('password', $this->User->validationErrors);
 		$this->assertEquals('パスワードは255文字以内で入力してください。', current($this->User->validationErrors['password']));
@@ -100,26 +100,26 @@ class UserTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック正常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'real_name_1' => '１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０',
 				'real_name_2' => '１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０',
 				'password' => 'abcdef',
 				'email' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789@12.jp',
-			),
-		));
+			],
+		]);
 
 		$this->assertTrue($this->User->validates());
 	}
 
 	public function test半角英数チェック異常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => '１２３ａｂｃ',
 				'password' => '１２３ａｂｃ',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 
 		$this->assertArrayHasKey('name', $this->User->validationErrors);
@@ -130,30 +130,30 @@ class UserTest extends BaserTestCase {
 	}
 
 	public function test半角英数チェック正常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => '123abc',
 				'password' => '123abc',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->User->validates());
 	}
 
 	public function testパスワード記号正常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'password' => '. _-:/()#,@[]+=&;{}!$*',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->User->validates());
 	}
 
 	public function testパスワード記号異常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'password' => '. _-:/()#,@[]+=&;{}!$*^~"',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 
 		$this->assertArrayHasKey('password', $this->User->validationErrors);
@@ -161,11 +161,11 @@ class UserTest extends BaserTestCase {
 	}
 
 	public function test既存ユーザチェック異常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => 'basertest',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 
 		$this->assertArrayHasKey('name', $this->User->validationErrors);
@@ -174,20 +174,20 @@ class UserTest extends BaserTestCase {
 	}
 
 	public function test既存ユーザチェック正常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'name' => 'hoge',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->User->validates());
 	}
 
 	public function testメールアドレス形式チェック異常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'email' => 'abc.co.jp',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->User->validates());
 
 		$this->assertArrayHasKey('email', $this->User->validationErrors);
@@ -195,11 +195,11 @@ class UserTest extends BaserTestCase {
 	}
 
 	public function testメールアドレス形式チェック正常系() {
-		$this->User->create(array(
-			'User' => array(
+		$this->User->create([
+			'User' => [
 				'email' => 'abc@co.jp',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->User->validates());
 	}
 
@@ -218,10 +218,10 @@ class UserTest extends BaserTestCase {
 	}
 
   public function getControlSourceDataProvider() {
-    return array(
-      array('user_group_id', array(1 => 'システム管理', 2 => 'サイト運営'), 'コントロールソースを取得する取得できません'),
-      array('hoge', false, '存在しないフィールド名です'),
-    );
+    return [
+      ['user_group_id', [1 => 'システム管理', 2 => 'サイト運営'], 'コントロールソースを取得する取得できません'],
+      ['hoge', false, '存在しないフィールド名です'],
+    ];
   }
 
 /**
@@ -239,10 +239,10 @@ class UserTest extends BaserTestCase {
 	}
 
   public function getUserListDataProvider() {
-    return array(
-      array(array(), array(1 => 'basertest', 2 => 'basertest2'), 'コントロールソースを取得する取得できません'),
-      array(array('User.id' => 1), array(1 => 'basertest'), 'コントロールソースを取得する取得できません'),
-    );
+    return [
+      [[], [1 => 'basertest', 2 => 'basertest2'], 'コントロールソースを取得する取得できません'],
+      [['User.id' => 1], [1 => 'basertest'], 'コントロールソースを取得する取得できません'],
+    ];
   }
 
 
@@ -251,7 +251,7 @@ class UserTest extends BaserTestCase {
  */
 	public function testGetDefaultValue() {
 		$result = $this->User->getDefaultValue();
-		$expected = array('User' => array('user_group_id' => 1));
+		$expected = ['User' => ['user_group_id' => 1]];
 		$this->assertEquals($expected, $result, 'フォームの初期値が正しくありません');
 	}
 
@@ -294,10 +294,10 @@ class UserTest extends BaserTestCase {
 	}
 
   public function getAuthPrefixDataProvider() {
-    return array(
-      array('basertest', 'admin', 'ユーザーの認証プレフィックスを正しく取得できません'),
-      array('basertest2', 'operator', 'ユーザーの認証プレフィックスを正しく取得できません'),
-    );
+    return [
+      ['basertest', 'admin', 'ユーザーの認証プレフィックスを正しく取得できません'],
+      ['basertest2', 'operator', 'ユーザーの認証プレフィックスを正しく取得できません'],
+    ];
   }
 
 /**
@@ -333,11 +333,11 @@ class UserTest extends BaserTestCase {
 		$result = $this->User->applyDefaultFavorites($userId, $userGroupId);
 
 		$LastId = $this->User->Favorite->getLastInsertID();
-		$LastData = $this->User->Favorite->find('all',array(
-			'conditions' => array('Favorite.id' => $LastId),
-			'fields' => array('Favorite.name'),
+		$LastData = $this->User->Favorite->find('all', [
+			'conditions' => ['Favorite.id' => $LastId],
+			'fields' => ['Favorite.name'],
 			'recursive' => 0,
-			)
+			]
 		);
 
 		$this->assertEquals($expected, $result, $message);
@@ -345,12 +345,12 @@ class UserTest extends BaserTestCase {
 	}
 
   public function applyDefaultFavoritesDataProvider() {
-    return array(
-      array(1, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'),
-      array(2, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'),
-      array(1, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'),
-      array(2, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'),
-    );
+    return [
+      [1, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+      [2, 1, true, 'クレジット', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+      [1, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+      [2, 2, true, 'コメント一覧', 'よく使う項目の初期データをユーザーに正しく適用できません'],
+    ];
   }
 
 /**
@@ -360,7 +360,7 @@ class UserTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->User->Favorite->deleteAll(1);
 		$result = $this->User->Favorite->find('all');
-		$expected = array();
+		$expected = [];
 		$this->assertEquals($expected, $result, 'ユーザーに関連するよく使う項目を削除できません');
 	}
 }

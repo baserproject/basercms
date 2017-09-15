@@ -25,7 +25,7 @@ class BcXmlHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = [];
 
 	public function setUp() {
 		parent::setUp();
@@ -56,28 +56,28 @@ class BcXmlHelperTest extends BaserTestCase {
 	}
 
 	public function headerDataProvider() {
-		return array(
-			array(
-				array('test' => 'testValue'),
+		return [
+			[
+				['test' => 'testValue'],
 				'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)',
 				'<?xml version="1.0" encoding="UTF-8" test="testValue" ?>'
-			),
-			array(
-				array('test1' => 'testValue1', 'test2' => 'testValue2'),
+			],
+			[
+				['test1' => 'testValue1', 'test2' => 'testValue2'],
 				'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)',
 				'<?xml version="1.0" encoding="UTF-8" test1="testValue1" test2="testValue2" ?>'
-			),
-			array(
-				array('test' => 'testValue'),
+			],
+			[
+				['test' => 'testValue'],
 				'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0;)',
 				''
-			),
-			array(
-				array('encoding' => 'SJIS'),
+			],
+			[
+				['encoding' => 'SJIS'],
 				'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1',
 				'<?xml version="1.0" encoding="SJIS" ?>'
-			),
-		);
+			],
+		];
 	}
 
 }

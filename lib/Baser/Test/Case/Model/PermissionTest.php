@@ -24,7 +24,7 @@ App::uses('Permission', 'Model');
  */
 class PermissionTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Model.Permission.PermissionPermissionModel',
 		'baser.Default.UserGroup',
@@ -32,7 +32,7 @@ class PermissionTest extends BaserTestCase {
 		'baser.Default.SiteConfig',
 		'baser.Default.Content',
 		'baser.Default.User'
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -48,12 +48,12 @@ class PermissionTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->Permission->create(array(
-			'Permission' => array(
+		$this->Permission->create([
+			'Permission' => [
 				'name' => '',
 				'url' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Permission->validates());
 		$this->assertArrayHasKey('name', $this->Permission->validationErrors);
 		$this->assertEquals('設定名を入力してください。', current($this->Permission->validationErrors['name']));
@@ -64,24 +64,24 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック正常系() {
-		$this->Permission->create(array(
-			'Permission' => array(
+		$this->Permission->create([
+			'Permission' => [
 				'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'user_group_id' => '1',
 				'url' => '/admin/12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->Permission->validates());
 	}
 
 	public function test桁数チェック異常系() {
-		$this->Permission->create(array(
-			'Permission' => array(
+		$this->Permission->create([
+			'Permission' => [
 				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'user_group_id' => '1',
 				'url' => '/admin/1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Permission->validates());
 		$this->assertArrayHasKey('name', $this->Permission->validationErrors);
 		$this->assertEquals('設定名は255文字以内で入力してください。', current($this->Permission->validationErrors['name']));
@@ -90,23 +90,23 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function testアクセス拒否チェック異常系() {
-		$this->Permission->create(array(
-			'Permission' => array(
+		$this->Permission->create([
+			'Permission' => [
 				'user_group_id' => '1',
 				'url' => '/index',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Permission->validates());
 		$this->assertArrayHasKey('url', $this->Permission->validationErrors);
 		$this->assertEquals('アクセス拒否として設定できるのは認証ページだけです。', current($this->Permission->validationErrors['url']));
 	}
 	public function testアクセス拒否チェック正常系() {
-		$this->Permission->create(array(
-			'Permission' => array(
+		$this->Permission->create([
+			'Permission' => [
 				'user_group_id' => '1',
 				'url' => '/admin/index',
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->Permission->validates());
 	}
 
@@ -125,21 +125,21 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function checkUrlDataProvider() {
-		return array(
-			array(array(1), false, '適当なURLです'),
-			array(array('hoge'), false, '適当なURLです'),
-			array(array('/hoge'), false, '適当なURLです'),
-			array(array('hoge/'), false, '適当なURLです'),
-			array(array('/hoge/'), false, '適当なURLです'),
-			array(array('/hoge/*'), false, '適当なURLです'),
-			array(array('admin'), true, '権限の必要なURLです'),
-			array(array('/admin'), true, '権限の必要なURLです'),
-			array(array('admin/'), true, '権限の必要なURLです'),
-			array(array('admin/*'), true, '権限の必要なURLです'),
-			array(array('/admin/*'), true, '権限の必要なURLです'),
-			array(array('/admin/dashboard/'), true, '権限の必要なURLです'),
-			array(array('/admin/dashboard/*'), true, '権限の必要なURLです'),
-		);
+		return [
+			[[1], false, '適当なURLです'],
+			[['hoge'], false, '適当なURLです'],
+			[['/hoge'], false, '適当なURLです'],
+			[['hoge/'], false, '適当なURLです'],
+			[['/hoge/'], false, '適当なURLです'],
+			[['/hoge/*'], false, '適当なURLです'],
+			[['admin'], true, '権限の必要なURLです'],
+			[['/admin'], true, '権限の必要なURLです'],
+			[['admin/'], true, '権限の必要なURLです'],
+			[['admin/*'], true, '権限の必要なURLです'],
+			[['/admin/*'], true, '権限の必要なURLです'],
+			[['/admin/dashboard/'], true, '権限の必要なURLです'],
+			[['/admin/dashboard/*'], true, '権限の必要なURLです'],
+		];
 	}
 
 
@@ -157,11 +157,11 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function getAuthPrefixDataProvider() {
-		return array(
-			array(1, 'operator', 'プレフィックスが一致しません'),
-			array(16, 'admin', 'プレフィックスが一致しません'),
-			array(99, false, '存在しないユーザーグループです'),
-		);
+		return [
+			[1, 'operator', 'プレフィックスが一致しません'],
+			[16, 'admin', 'プレフィックスが一致しません'],
+			[99, false, '存在しないユーザーグループです'],
+		];
 	}
 
 /**
@@ -169,12 +169,12 @@ class PermissionTest extends BaserTestCase {
  */
 	public function testGetDefaultValue() {
 		$result = $this->Permission->getDefaultValue();
-		$expected = array(
-			'Permission' => array(
+		$expected = [
+			'Permission' => [
 				'auth' => 0,
 				'status' => 1
-			)
-		);
+			]
+		];
 		$this->assertEquals($expected, $result, '初期値が正しくありません');
 	}
 
@@ -192,11 +192,11 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			array('user_group_id', array(2 => 'サイト運営'), '$controlSources["user_group_id"]が取得できません'),
-			array('auth', array(0 => '不可',1 => '可'), '$controlSources["auth"]が取得できません'),
-			array('hoge', false, '存在しないフィールドです'),
-		);
+		return [
+			['user_group_id', [2 => 'サイト運営'], '$controlSources["user_group_id"]が取得できません'],
+			['auth', [0 => '不可',1 => '可'], '$controlSources["auth"]が取得できません'],
+			['hoge', false, '存在しないフィールドです'],
+		];
 	}
 
 /**
@@ -208,29 +208,27 @@ class PermissionTest extends BaserTestCase {
  * @dataProvider beforeSaveDataProvider
  */
 	public function testBeforeSave($url, $expectedUrl, $message = null) {
-		$this->Permission->data = array(
-			'Permission' => array(
+		$this->Permission->data = [
+			'Permission' => [
 				'url' => $url,
-			)
-		);
+			]
+		];
 		$this->Permission->beforeSave();
 		$result = $this->Permission->data;
 
-		$expected = array(
-			'Permission' => array(
+		$expected = [
+			'Permission' => [
 				'url' => $expectedUrl
-			)
-		);
-
+			]
+		];
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function beforeSaveDataProvider() {
-		return array(
-			array('hoge', '/hoge', 'urlが絶対パスになっていません'),
-			array('/hoge', '/hoge', 'urlが絶対パスになっていません'),
-
-		);
+		return [
+			['hoge', '/hoge', 'urlが絶対パスになっていません'],
+			['/hoge', '/hoge', 'urlが絶対パスになっていません'],
+		];
 	}
 
 /**
@@ -248,15 +246,15 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function checkDataProvider() {
-		return array(
-			array('hoge', 1, true, 'システム管理者は権限をもっています'),
-			array('hoge', 2, true, 'サイト運営者は権限をもっています'),
-			array('/admin/*', 1, true, 'サイト運営者は権限をもっています'),
-			array('/admin/*', 2, false, 'サイト運営者は権限をもっていません'),
-			array('/admin/', 2, true, 'サイト運営者は権限をもっています'),
-			array('/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'),
-			array('/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'),
-		);
+		return [
+			['hoge', 1, true, 'システム管理者は権限をもっています'],
+			['hoge', 2, true, 'サイト運営者は権限をもっています'],
+			['/admin/*', 1, true, 'サイト運営者は権限をもっています'],
+			['/admin/*', 2, false, 'サイト運営者は権限をもっていません'],
+			['/admin/', 2, true, 'サイト運営者は権限をもっています'],
+			['/admin/dashboard', 2, false, 'サイト運営者は権限をもっていません'],
+			['/admin/dashboard/', 2, true, 'サイト運営者は権限をもっています'],
+		];
 	}
 
 /**
@@ -274,18 +272,18 @@ class PermissionTest extends BaserTestCase {
 	}
 
 	public function copyDataProvider() {
-		return array(
-			array(1, array(), 'システム管理_copy', 'id指定でデータをコピーできません'),
-			array(null,
-				array('Permission' => array(
+		return [
+			[1, [], 'システム管理_copy', 'id指定でデータをコピーできません'],
+			[null,
+				['Permission' => [
 						'user_group_id' => '3',
 						'name' => 'hoge',
-					)
-				),
-				'hoge', 'data指定でデータをコピーできません'),
-			array(99, array(), false, '存在しないIDです'),
-			array(null, array('Permission'=>array('user_group_id' => '', 'name' => '')), false, 'コピーできないデータです'),
-		);
+					]
+				],
+				'hoge', 'data指定でデータをコピーできません'],
+			[99, [], false, '存在しないIDです'],
+			[null, ['Permission'=>['user_group_id' => '', 'name' => '']], false, 'コピーできないデータです'],
+		];
 	}
 
 }

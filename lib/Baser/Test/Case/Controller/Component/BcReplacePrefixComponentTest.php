@@ -20,9 +20,9 @@ App::uses('Controller', 'Controller');
  */
 class BcReplacePrefixTestController extends Controller {
 
-	public $components = array('BcReplacePrefix');
+	public $components = ['BcReplacePrefix'];
 
-	public $plugin = array('Mail', 'admin');
+	public $plugin = ['Mail', 'admin'];
 
 }
 
@@ -31,7 +31,7 @@ class BcReplacePrefixTestController extends Controller {
  */
 class BcReplacePrefixComponentTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
@@ -45,9 +45,9 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.User',
-	);
+	];
 
-	public $components = array('BcReplacePrefix');
+	public $components = ['BcReplacePrefix'];
 
 	public function setUp() {
 		parent::setUp();
@@ -86,11 +86,11 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
  * @return void
  */
 	public function testAllow() {
-		$this->BcReplacePrefix->allowedPureActions = array( 'a' => 'hoge1', 'b' => 'hoge2');
-		$this->BcReplacePrefix->allow(array('a' => 'hoge3', 'c' => 'hoge4'));
+		$this->BcReplacePrefix->allowedPureActions = ['a' => 'hoge1', 'b' => 'hoge2'];
+		$this->BcReplacePrefix->allow(['a' => 'hoge3', 'c' => 'hoge4']);
 		
 		$result = $this->BcReplacePrefix->allowedPureActions;
-		$expected = array('a' => 'hoge3', 'b' => 'hoge2', 'c' => 'hoge4');
+		$expected = ['a' => 'hoge3', 'b' => 'hoge2', 'c' => 'hoge4'];
 		$this->assertEquals($expected, $result, 'プレフィックスの置き換えを許可するアクションを設定が正しくありません');
 	}
 
@@ -109,9 +109,9 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		// 初期化
 		$this->Controller->params['prefix'] = $pre;
 		$this->Controller->action = $action;
-		$this->Controller->methods = array($methods);
+		$this->Controller->methods = [$methods];
 
-		$this->BcReplacePrefix->allowedPureActions = array('action');
+		$this->BcReplacePrefix->allowedPureActions = ['action'];
 
 		if ($view) {
 			$this->Controller->name = 'Test';
@@ -138,14 +138,14 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 	}
 
 	public function startupDataProvider() {
-		return array(
-			array('pre', 'pre_action', 'admin_action', false, array('admin_action', 'admin', 'admin')),
-			array(null, 'pre_action', 'admin_action', false, array('pre_action', null, null)),
-			array('pre', null, 'admin_action', false, array(null, null, null)),
-			array('pre', 'pre_action', null, false, array('pre_action', null, null)),
-			array('pre', 'pre_action', 'admin_action', true, array('admin_action', 'pre', 'pre')),
-			array(null, 'action', 'admin_action', true, array('admin_action', null, null)),
-		);
+		return [
+			['pre', 'pre_action', 'admin_action', false, ['admin_action', 'admin', 'admin']],
+			[null, 'pre_action', 'admin_action', false, ['pre_action', null, null]],
+			['pre', null, 'admin_action', false, [null, null, null]],
+			['pre', 'pre_action', null, false, ['pre_action', null, null]],
+			['pre', 'pre_action', 'admin_action', true, ['admin_action', 'pre', 'pre']],
+			[null, 'action', 'admin_action', true, ['admin_action', null, null]],
+		];
 	}
 
 /**
@@ -167,13 +167,13 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 		$this->Controller->plugin = 'Mail';
 
 		$result = $this->BcReplacePrefix->getViewPaths($this->Controller);
-		$expected = array(
+		$expected = [
 			ROOT . '/app/webroot/theme/hoge-theme/',
 			ROOT . '/lib/Baser/Plugin/Mail/View/',
 			ROOT . '/app/webroot/',
 			ROOT . '/app/View/',
 			ROOT . '/lib/Baser/View/',
-  	);
+  	];
   	$this->assertEquals($expected, $result, 'Viewのパスを正しく取得できません');
 
 	}

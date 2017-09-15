@@ -24,12 +24,12 @@ class BcUtilTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.User'
-	);
+	];
 
 /**
  * set up
@@ -69,14 +69,14 @@ class BcUtilTest extends BaserTestCase {
  * @return array
  */
 	public function isAdminSystemDataProvider() {
-		return array(
-			array('admin', true),
-			array('admin/hoge', true),
-			array('/admin/hoge', true),
-			array('admin/', true),
-			array('hoge', false),
-			array('hoge/', false),
-		);
+		return [
+			['admin', true],
+			['admin/hoge', true],
+			['/admin/hoge', true],
+			['admin/', true],
+			['hoge', false],
+			['hoge/', false],
+		];
 	}
 
 /**
@@ -100,11 +100,11 @@ class BcUtilTest extends BaserTestCase {
  * @return array
  */
 	public function isAdminUserDataProvider() {
-		return array(
-			array('admins', true),
-			array('hoge', false),
-			array('', false),
-		);
+		return [
+			['admins', true],
+			['hoge', false],
+			['', false],
+		];
 	}
 
 /**
@@ -160,7 +160,7 @@ class BcUtilTest extends BaserTestCase {
 	public function testGetCurrentThemesPlugins() {
 		// プラグインが存在しない場合(デフォルトのbccolumn)
 		$result = BcUtil::getCurrentThemesPlugins();
-		$expect = array();
+		$expect = [];
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
 
 		// プラグインが存在する場合
@@ -175,7 +175,7 @@ class BcUtilTest extends BaserTestCase {
 		// ダミーのプラグインディレクトリを削除
 		$Folder->delete($path);
 
-		$expect = array('dummy1', 'dummy2');
+		$expect = ['dummy1', 'dummy2'];
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
 	}
 	
@@ -242,14 +242,14 @@ class BcUtilTest extends BaserTestCase {
  * @return array
  */
 	public function getDefaultDataPathDataProvider() {
-		return array(
-			array(null, null, null, BASER_CONFIGS . 'data/default'),
-			array(null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'),
-			array(null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default'),
-			array('Blog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'),
-			array('Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'),
-			array('Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'),
-		);
+		return [
+			[null, null, null, BASER_CONFIGS . 'data/default'],
+			[null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'],
+			[null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default'],
+			['Blog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'],
+			['Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'],
+			['Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'],
+		];
 	}
 
 /**

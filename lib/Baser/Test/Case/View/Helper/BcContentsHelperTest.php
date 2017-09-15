@@ -25,7 +25,7 @@ class BcContentsHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 		'baser.Default.SiteConfig',
 		'baser.Default.Site',
@@ -34,7 +34,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
 		'baser.Default.ThemeConfig',
-	);
+	];
 
 /**
  * View
@@ -51,7 +51,7 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
-		$this->_View->helpers = array('BcContents');
+		$this->_View->helpers = ['BcContents'];
 		$this->_View->loadHelpers();
 		$this->BcContents = $this->_View->BcContents;
 	}
@@ -117,17 +117,17 @@ class BcContentsHelperTest extends BaserTestCase {
 	}
 
 	public function getPageListDataProvider() {
-		return array(
+		return [
 			// PC版
-			array(1, 1, 7, 'トップページ', 'PC版１階層目のデータが正常に取得できません'),
-			array(1, 2, 4, 'サービス', 'PC版２階層目のデータが正常に取得できません'),
-			array(1, 3, 1, 'サブサービス１', 'PC版３階層目のデータが正常に取得できません'),
+			[1, 1, 7, 'トップページ', 'PC版１階層目のデータが正常に取得できません'],
+			[1, 2, 4, 'サービス', 'PC版２階層目のデータが正常に取得できません'],
+			[1, 3, 1, 'サブサービス１', 'PC版３階層目のデータが正常に取得できません'],
 			// ケータイ
-			array(2, 1, 3, 'トップページ', 'ケータイ版１階層目のデータが正常に取得できません'),
+			[2, 1, 3, 'トップページ', 'ケータイ版１階層目のデータが正常に取得できません'],
 			// スマホ
-			array(3, 1, 7, 'トップページ', 'スマホ版１階層目のデータが正常に取得できません'),
-			array(3, 2, 1, 'サービス１', 'スマホ版２階層目のデータが正常に取得できません')
-		);
+			[3, 1, 7, 'トップページ', 'スマホ版１階層目のデータが正常に取得できません'],
+			[3, 2, 1, 'サービス１', 'スマホ版２階層目のデータが正常に取得できません']
+		];
 	}
 
 /**

@@ -16,7 +16,6 @@ class DblogFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-	);
+	public $records = [];
 
 }

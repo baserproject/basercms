@@ -19,9 +19,9 @@ App::uses('Controller', 'Controller');
  */
 class BcAuthConfigureTestController extends Controller {
 
-	public $components = array('BcAuthConfigure','BcAuth','Cookie','Session');
+	public $components = ['BcAuthConfigure','BcAuth','Cookie','Session'];
 
-	public $authenticate = array('Form');
+	public $authenticate = ['Form'];
 
 }
 
@@ -29,12 +29,12 @@ class BcAuthConfigureTestController extends Controller {
  * BcAuthConfigureComponentのテスト
  */
 class BcAuthConfigureComponentTest extends BaserTestCase {
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Default.UserGroup',
-	);
+	];
 
-	public $components = array('BcAuthConfigure');
+	public $components = ['BcAuthConfigure'];
 	
 	public function setUp() {
 		@session_start();
@@ -76,12 +76,12 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
  */
 	public function testSettingCheckInitialize() {
 		// 異常系
-		$result = $this->Controller->BcAuthConfigure->setting(array(1));
+		$result = $this->Controller->BcAuthConfigure->setting([1]);
 		$this->assertFalse($result, '初期化がされていない場合にtrueが返ってきます');
 
 		// 正常系
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
-		$result = $this->Controller->BcAuthConfigure->setting(array(1));
+		$result = $this->Controller->BcAuthConfigure->setting([1]);
 		$this->assertTrue($result, '初期化がされている場合にfalseが返ってきます');
 	
 	}
@@ -99,7 +99,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		// 初期化
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
 
-		$config = array(
+		$config = [
 			'loginRedirect'	=> 'login',
 			'logoutRedirect'	=> 'logout',
 			'username' => 'basercms',
@@ -108,7 +108,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 			'loginAction'		=> $loginAction,
 			'userScope'		=> $userScope,
 			'auth_prefix' => $auth_prefix
-		);
+		];
 
 		$this->Controller->params['prefix'] = $requestedPrefix;
 
@@ -116,35 +116,35 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		$this->Controller->BcAuthConfigure->setting($config);
 
 		// 結果取得
-		$result = array(
+		$result = [
 			'loginAction' => $this->Controller->BcAuth->loginAction,
 			'logoutRedirect' => $this->Controller->BcAuth->logoutRedirect,
 			'unauthorizedRedirect' => $this->Controller->BcAuth->unauthorizedRedirect,
 			'authenticate' => $this->Controller->BcAuth->authenticate,
 			'sessionKey' => $this->Controller->BcAuth->sessionKey,
 			'redirect' => $this->Controller->BcAuth->Session->read('Auth.redirect')
-		);
+		];
 
 		// 期待値の代入
-		$expected = array(
+		$expected = [
 			'logoutRedirect' => 'logout',
-			'authenticate' => array(
-				'Form' => array(
+			'authenticate' => [
+				'Form' => [
 					'userModel' => 'User',
-					'fields' => array('username' => 'basercms', 'password' => 'basercms'),
+					'fields' => ['username' => 'basercms', 'password' => 'basercms'],
 					'serial' => 'serial',
-				),
-			),
+				],
+			],
 			'sessionKey' => null,
 			'redirect' => null
-		);
+		];
 
 		// loginAction
 		if (empty($loginAction)) {
 			if ($requestedPrefix) {
-				$expected['loginAction'] = array('prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login');
+				$expected['loginAction'] = ['prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login'];
 			} else {
-				$expected['loginAction'] = array('controller' => 'users', 'action' => 'login');
+				$expected['loginAction'] = ['controller' => 'users', 'action' => 'login'];
 			}
 		} else {
 			$expected['loginAction'] = $loginAction;
@@ -155,7 +155,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		if (!empty($userScope)) {
 			$expected['authenticate']['Form']['scope'] = $userScope;
 		} else if (!empty($auth_prefix)) {
-			$expected['authenticate']['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $auth_prefix .'%');
+			$expected['authenticate']['Form']['scope'] = ['UserGroup.auth_prefix LIKE' => '%' . $auth_prefix .'%'];
 		}
 
 		// 判定
@@ -164,14 +164,14 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	}
 
 	public function settingCheckValueDataProvider() {
-		return array(
-			array('login', 'pre', 'userScope', 'auth_prefix'),
-			array(null, 'pre', 'userScope', 'auth_prefix'),
-			array(null, null, 'userScope', 'auth_prefix'),
-			array('login', 'pre', null, 'auth_prefix'),
-			array('login', 'pre', null, null),
-			array('login', '/admin', 'userScope', 'auth_prefix'),
-		);
+		return [
+			['login', 'pre', 'userScope', 'auth_prefix'],
+			[null, 'pre', 'userScope', 'auth_prefix'],
+			[null, null, 'userScope', 'auth_prefix'],
+			['login', 'pre', null, 'auth_prefix'],
+			['login', 'pre', null, null],
+			['login', '/admin', 'userScope', 'auth_prefix'],
+		];
 	}
 
 /**
@@ -187,7 +187,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		// 初期化
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
 
-		$this->Controller->Cookie->write('AuthUser', array(1));
+		$this->Controller->Cookie->write('AuthUser', [1]);
 		$this->Controller->BcAuth->request = new CakeRequest();
 		$this->Controller->BcAuth->response = new CakeResponse();
 
@@ -196,7 +196,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		$this->Controller->BcAuth->request->data('User.password', $password);
 
 		// 認証設定を設定
-		$this->Controller->BcAuthConfigure->setting(array(1));
+		$this->Controller->BcAuthConfigure->setting([1]);
 
 		// 結果を取得
 		$user = $this->Controller->Session->read('Auth.User');
@@ -205,7 +205,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		// 判定
 		if ($password == 'basercms') {
 			$this->assertContains('basertest', $user, 'ログインでの認証が正しく行えません');
-			$this->assertEquals(array(1), $data, 'ログインでの認証が正しく行えません');
+			$this->assertEquals([1], $data, 'ログインでの認証が正しく行えません');
 		
 		} else {
 			$this->assertNull($user, 'ログインでの認証が正しく行えません');
@@ -216,10 +216,10 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	}
 
 	public function settingCheckLoginModeDataProvider() {
-		return array(
-			array('basercms'),
-			array('hoge'),
-		);
+		return [
+			['basercms'],
+			['hoge'],
+		];
 	}
 
 /**
@@ -232,7 +232,7 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		
 		// 初期化
 		$this->Controller->Session->write('Message.auth', 'Message');
-		$this->Controller->methods = array('method1','method2');
+		$this->Controller->methods = ['method1','method2'];
 
 		$this->Controller->BcAuthConfigure->initialize($this->Controller);
 		$this->Controller->BcAuth->initialize($this->Controller);
@@ -240,26 +240,26 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 		Configure::write('debug', $mode);
 
 		// 認証設定を設定
-		$this->Controller->BcAuthConfigure->setting(array(1));
+		$this->Controller->BcAuthConfigure->setting([1]);
 
 		// 結果を取得
-		$result = array(
+		$result = [
 			'message' => $this->Controller->Session->read('Message.auth'),
 			'allowedActions' => $this->Controller->BcAuth->allowedActions,
-		);
+		];
 
 		// 期待値の代入
 		if ($mode == -1) {
-			$expected = array(
+			$expected = [
 				'message' => null,
-				'allowedActions' => array('method1','method2'),
-			);
+				'allowedActions' => ['method1','method2'],
+			];
 		
 		} else {
-			$expected = array(
+			$expected = [
 				'message' => 'Message',
-				'allowedActions' => array(),
-			);
+				'allowedActions' => [],
+			];
 		}
 
 		$this->assertEquals($expected, $result, 'インストールモードの場合のみに無条件に認証なしになりません');
@@ -267,10 +267,10 @@ class BcAuthConfigureComponentTest extends BaserTestCase {
 	}
 
 	public function settingCheckDebugModeDataProvider() {
-		return array(
-			array(0),
-			array(-1),
-		);
+		return [
+			[0],
+			[-1],
+		];
 	}
 
 

@@ -26,9 +26,9 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.WidgetArea',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -73,10 +73,10 @@ class BcWidgetAreaHelperTest extends BaserTestCase {
 	}
 
 	public function showDataProvider() {
-		return array(
-			array('test', 1, ''),
-			array('test', 2, '')
-		);
+		return [
+			['test', 1, ''],
+			['test', 2, '']
+		];
 	}
 
 }

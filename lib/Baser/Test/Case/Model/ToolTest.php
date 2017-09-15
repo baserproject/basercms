@@ -16,8 +16,8 @@ App::uses('Tool', 'Model');
  * 
  * class NonAssosiationTool extends Tool {
  *  public $name = 'Tool';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
@@ -25,7 +25,7 @@ App::uses('Tool', 'Model');
  */
 class ToolTest extends BaserTestCase {
 
-	public $fixtures = array();
+	public $fixtures = [];
 
 	public function setUp() {
 		parent::setUp();
@@ -51,10 +51,10 @@ class ToolTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			array('core', 'mysite_users', 'モデルリストを取得できません'),
-			array('plugin', 'mysite_blog_categories', 'モデルリストを取得できません'),
-		);
+		return [
+			['core', 'mysite_users', 'モデルリストを取得できません'],
+			['plugin', 'mysite_blog_categories', 'モデルリストを取得できません'],
+		];
 	}
 
 /**
@@ -71,10 +71,10 @@ class ToolTest extends BaserTestCase {
 	}
 
 	public function getListModelsDataProvider() {
-		return array(
-			array('core', 'mysite_users', 'モデルリストを取得できません'),
-			array('plugin', 'mysite_blog_categories', 'モデルリストを取得できません'),
-		);
+		return [
+			['core', 'mysite_users', 'モデルリストを取得できません'],
+			['plugin', 'mysite_blog_categories', 'モデルリストを取得できません'],
+		];
 	}
 
 /**
@@ -89,20 +89,20 @@ class ToolTest extends BaserTestCase {
 	public function testWriteSchema($data, $path, $expected, $message = null) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$data = array(
-			'Tool' => array(
-				'baser' => array(),
-				'plugin' => array(),
-			),
-		);
+		$data = [
+			'Tool' => [
+				'baser' => [],
+				'plugin' => [],
+			],
+		];
 		$result = $this->Tool->writeSchema($data, $path);
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function writeSchemaDataProvider() {
-		return array(
-			array('baser', '/', 'mysite_users', 'モデルリストを取得できません'),
-		);
+		return [
+			['baser', '/', 'mysite_users', 'モデルリストを取得できません'],
+		];
 	}
 
 /**

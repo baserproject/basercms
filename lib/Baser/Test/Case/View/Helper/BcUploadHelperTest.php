@@ -23,12 +23,12 @@ class BcUploadHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.Page',
 		'baser.Default.SiteConfig',
-	);
+	];
 
 /**
  * setUp
@@ -51,15 +51,15 @@ class BcUploadHelperTest extends BaserTestCase {
  * ファイルへのリンクタグを出力する
  */
 	public function testFileLink() {
-		$this->BcUpload->request->data = array(
-			'EditorTemplate' => array(
+		$this->BcUpload->request->data = [
+			'EditorTemplate' => [
 				'id' => '1',
 				'name' => '画像（左）とテキスト',
 				'image' => 'template1.jpg',
 				'description' => '説明文',
 				'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-			)
-		);
+			]
+		];
 		$result = $this->BcUpload->fileLink('EditorTemplate.image');
 		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
 	}
@@ -68,17 +68,17 @@ class BcUploadHelperTest extends BaserTestCase {
  * ファイルへのリンクタグを出力する(hasMany対応)
  */
 	public function testFileLinkHasManyField() {
-		$this->BcUpload->request->data = array(
-			'EditorTemplate' => array(
-				array(
+		$this->BcUpload->request->data = [
+			'EditorTemplate' => [
+				[
 					'id' => '1',
 					'name' => '画像（左）とテキスト',
 					'image' => 'template1.jpg',
 					'description' => '説明文',
 					'modified' => '2013-07-21 01:41:12', 'created' => '2013-07-21 00:53:42',
-				),
-			)
-		);
+				],
+			]
+		];
 		$result = $this->BcUpload->fileLink('EditorTemplate.0.image');
 		$this->assertRegExp('/<a href=\"\/files\/editor\/template1\.jpg/', $result);
 	}
@@ -93,33 +93,33 @@ class BcUploadHelperTest extends BaserTestCase {
 		$this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><\/a>/', $result);
 
 		// サイズ指定あり
-		$options = array(
+		$options = [
 			'width' => '100',
 			'height' => '80',
-		);
+		];
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$expects = '<img src="/uploads/tmp/medium/template1.jpg" alt="" width="100" height="80" />';
 		$this->assertRegExp('/^<a href=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?><img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?alt="" width="100" height="80"[^>]+?><\/a>/', $result);
 
 		// 一時ファイルへのリンク（デフォルトがリンク付だが、Aタグが出力されないのが正しい挙動）
-		$options = array(
+		$options = [
 			'tmp' => true
-		);
+		];
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$expects = '<img src="/uploads/tmp/medium/template1_jpg" alt=""/>';
 		$this->assertEquals($expects, $result);
 
-		$options = array(
+		$options = [
 			'link' => false,
 			'output' => 'tag'
-		);
+		];
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$this->assertRegExp('/^<img src=\"\/files\/editor\/template1\.jpg[^>]+?\"[^>]+?>/', $result);
 
 		// output を urlに
-		$options = array(
+		$options = [
 			'output' => 'url'
-		);
+		];
 		$result = $this->BcUpload->uploadImage('EditorTemplate.image', 'template1.jpg', $options);
 		$this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
 	}

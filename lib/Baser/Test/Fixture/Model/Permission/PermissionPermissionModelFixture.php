@@ -14,8 +14,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'no' => '1',
 			'sort' => '1',
@@ -26,8 +26,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'no' => '2',
 			'sort' => '2',
@@ -38,8 +38,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'no' => '3',
 			'sort' => '3',
@@ -50,8 +50,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'no' => '4',
 			'sort' => '4',
@@ -62,8 +62,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'no' => '5',
 			'sort' => '5',
@@ -74,8 +74,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'no' => '6',
 			'sort' => '6',
@@ -86,8 +86,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '7',
 			'no' => '7',
 			'sort' => '7',
@@ -98,8 +98,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '8',
 			'no' => '8',
 			'sort' => '8',
@@ -110,8 +110,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '9',
 			'no' => '9',
 			'sort' => '9',
@@ -122,8 +122,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '10',
 			'no' => '10',
 			'sort' => '10',
@@ -134,8 +134,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '11',
 			'no' => '11',
 			'sort' => '11',
@@ -146,8 +146,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '12',
 			'no' => '12',
 			'sort' => '12',
@@ -158,8 +158,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '13',
 			'no' => '13',
 			'sort' => '13',
@@ -170,8 +170,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '14',
 			'no' => '14',
 			'sort' => '14',
@@ -182,8 +182,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '15',
 			'no' => '15',
 			'sort' => '15',
@@ -194,8 +194,8 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '16',
 			'no' => '16',
 			'sort' => '16',
@@ -206,7 +206,7 @@ class PermissionPermissionModelFixture extends BaserTestFixture {
 			'status' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-	);
+		],
+	];
 
 }
