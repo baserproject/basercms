@@ -22,7 +22,7 @@ class BlogCommentsSchema extends CakeSchema {
 		'blog_content_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
 		'blog_post_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
 		'no' => array('type' => 'integer', 'null' => true),
-		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 2),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'email' => array('type' => 'string', 'null' => true, 'default' => null),
 		'url' => array('type' => 'string', 'null' => true, 'default' => null),
