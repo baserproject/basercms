@@ -28,7 +28,7 @@ class SessionTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = [], $dataName = '') {
+	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 	}
 	
