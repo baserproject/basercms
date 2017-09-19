@@ -369,10 +369,12 @@ class BcAppController extends Controller {
 					$authConfig['auth_prefix'] = $authPrefixSetting['alias'];
 					break;
 				}
-				if ($key == $currentAuthPrefix) {
-					$authConfig = $authPrefixSetting;
-					$authConfig['auth_prefix'] = $key;
-					break;
+				if ($this->request->params['action'] !== 'back_agent') {
+					if ($key == $currentAuthPrefix) {
+						$authConfig = $authPrefixSetting;
+						$authConfig['auth_prefix'] = $key;
+						break;
+					}
 				}
 			}
 			if ($authConfig) {
