@@ -1102,12 +1102,9 @@ class Content extends AppModel {
 			} else {
 				$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $originUrl));
 			}
-			if(preg_match('/\/$/', $url) && count($urlArray) > 0) {
-				$originUrl .= '/';
-			}
 			if($full) {
 				$fullUrl = fullUrl($originUrl);
-				if (BcUtil::isAdminSystem() && $site) {
+				if ($site) {
 					if($site->domainType == 1) {
 						$mainDomain = BcUtil::getMainDomain();
 						$fullUrlArray = explode('//', $fullUrl);
@@ -1125,7 +1122,7 @@ class Content extends AppModel {
 						$url = $fullUrlArray[0] . '//' . $subDomain . '/' . implode('/', $urlArray);
 					}
 				} else {
-					$url = $fullUrl;
+					$url = preg_replace('/\/$/', '', Configure::read('BcEnv.siteUrl')) . $originUrl;
 				}
 			} else {
 				$url = Router::url($originUrl);

@@ -2662,16 +2662,19 @@ END_FLASH;
  * @param string $url コンテンツ管理用URLの元データ
  *	省略時は request より現在のデータを取得
  *	request が取得できない場合は、トップページのURLを設定
+ * @param bool $full フルパスかどうかを指定
  * @return string
  */
-	public function getContentsUrl($url = null) {
-		if(empty($url) && !empty($this->request->params['Content']['url'])) {
-			$url = $this->request->params['Content']['url'];
-		} else {
-			$url = '/';
+	public function getContentsUrl($url = null, $full = false) {
+		if(!$url) {
+			if(!empty($this->request->params['Content']['url'])) {
+				$url = $this->request->params['Content']['url'];
+			} else {
+				$url = '/';
+			}
 		}
 		$site = BcSite::findCurrent();
-		return $this->BcContents->getUrl($url, false, $site->useSubDomain);
+		return $this->BcContents->getUrl($url, $full, $site->useSubDomain);
 	}
 
 /**

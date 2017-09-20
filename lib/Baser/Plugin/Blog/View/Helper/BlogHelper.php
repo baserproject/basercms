@@ -16,6 +16,7 @@
  * @property BcTimeHelper $BcTime BcTimeヘルパ
  * @property BcBaserHelper $BcBaser BcBaserヘルパ
  * @property BcUploadHelper $BcUpload BcUploadヘルパ
+ * @property BcContentsHelper $BcContents BcContentsヘルパ
  */
 class BlogHelper extends AppHelper {
 
@@ -24,7 +25,7 @@ class BlogHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('Html', 'BcTime', 'BcBaser', 'BcUpload');
+	public $helpers = array('Html', 'BcTime', 'BcBaser', 'BcUpload', 'BcContents');
 
 /**
  * ブログカテゴリモデル
@@ -501,9 +502,7 @@ class BlogHelper extends AppHelper {
 		$categoryPath = $this->BlogCategory->getPath($blogCategoryId);
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
 		$this->setContent($blogContentId);
-		
-		$contentUrl = (isset($this->content['url']))?$this->content['url']:$this->request->params['Content']['url'];
-
+		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId));
 		$path = array('category');
 		if ($categoryPath) {
 			foreach ($categoryPath as $category) {
@@ -1722,6 +1721,34 @@ class BlogHelper extends AppHelper {
  */
 	public function isBlog() {
 		return (!empty($this->request->params['Content']['plugin']) && $this->request->params['Content']['plugin'] == 'Blog');
+	}
+
+/**
+ * ブログコンテンツのURLを取得する
+ *
+ * 別ドメインの場合はフルパスで取得する
+ *
+ * @param $blogContentId ブログコンテンツID
+ * @return string
+ */
+	public function getContentsUrl($blogContentId) {
+		$this->setContent($blogContentId);
+		return $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId));
+	}
+
+/**
+ * 指定したブログコンテンツIDが、現在のサイトと同じかどうか判定する
+ *
+ * @param $blogContentId ブログコンテンツID
+ * @return bool
+ */
+	public function isSameSiteBlogContent($blogContentId) {
+		$Content = ClassRegistry::init('Content');
+		$siteId = $Content->field('site_id', [
+			'Content.entity_id' => $blogContentId,
+			'Content.type' => 'BlogContent'
+		]);
+		return ($this->request->params['Site']['id'] == $siteId);
 	}
 
 }

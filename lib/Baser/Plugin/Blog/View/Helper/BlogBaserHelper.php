@@ -221,5 +221,17 @@ class BlogBaserHelper extends AppHelper {
 	public function blogTagList($name, $options = []) {
 		$this->Blog->tagList($name, $options);
 	}
+
+/**
+ * ブログコンテンツのURLを取得する
+ *
+ * 別ドメインに対応
+ *
+ * @param $blogContentId ブログコンテンツID
+ * @return string
+ */
+	public function getBlogContentsUrl($blogContentId) {
+		return $this->Blog->getContentsUrl($blogContentId);
+	}
 	
 }
