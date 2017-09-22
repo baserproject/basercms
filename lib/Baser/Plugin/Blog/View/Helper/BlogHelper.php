@@ -1748,7 +1748,11 @@ class BlogHelper extends AppHelper {
 			'Content.entity_id' => $blogContentId,
 			'Content.type' => 'BlogContent'
 		]);
-		return ($this->request->params['Site']['id'] == $siteId);
+		$currentSiteId = 0;
+		if(isset($this->request->params['Site']['id'])) {
+			$currentSiteId = $this->request->params['Site']['id'];
+		}
+		return ($currentSiteId == $siteId);
 	}
 
 }

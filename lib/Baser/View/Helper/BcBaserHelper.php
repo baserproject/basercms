@@ -863,7 +863,7 @@ class BcBaserHelper extends AppHelper {
  * 《利用例》
  * $this->BcBaser->css('admin/import')
  * 
- * @param string $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
+ * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
  * @param mixed $options オプション
  *	（配列の場合）
  *	- `rel` : rel属性（初期値 : 'stylesheet'）
