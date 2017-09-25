@@ -45,6 +45,7 @@ class FavoritesController extends AppController {
  * @return void
  */
 	public function admin_ajax_add() {
+		$this->autoRender = false;
 		if ($this->request->data) {
 			$user = $this->BcAuth->user();
 			if (!$user) {
@@ -55,6 +56,7 @@ class FavoritesController extends AppController {
 			$this->Favorite->create($this->request->data);
 			$data = $this->Favorite->save();
 			if ($data) {
+				$this->autoLayout = false;
 				$data['Favorite']['id'] = $this->Favorite->id;
 				$this->set('favorite', $data);
 				$this->render('ajax_form');
@@ -63,7 +65,7 @@ class FavoritesController extends AppController {
 				$this->ajaxError(500, $this->Favorite->validationErrors);
 			}
 		}
-		exit();
+		return;
 	}
 
 /**
