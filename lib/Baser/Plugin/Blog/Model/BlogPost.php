@@ -720,6 +720,12 @@ class BlogPost extends BlogAppModel {
 				$post['BlogTag'] = $tags;
 			}
 		}
+
+		// BlogPostキーのデータは作り直しているため、元データは削除して他のモデルキーのデータとマージする
+		unset($data['BlogPost']);
+		unset($data['BlogTag']); // プレビュー時に、フロントでの利用データの形式と異なるため削除
+		$post = Hash::merge($data, $post);
+
 		return $post;
 	}
 
