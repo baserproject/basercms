@@ -33,7 +33,7 @@ $(function(){
 				'data[SearchIndex][priority]': priority,
 				'data[_Token][key]': $.bcToken.key
 			};
-			$.ajax({
+			return $.ajax({
 				type: "POST",
 				url: $("#AjaxChangePriorityUrl").html()+'/'+id,
 				data: data,
