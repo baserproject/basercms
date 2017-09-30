@@ -238,6 +238,7 @@ class BcUploadHelper extends BcAppHelper {
 		}
 
 		$fileUrl = $this->getBasePath($settings);
+		$fileUrlInTheme = $this->getBasePath($settings, true);
 		$Model = $this->getUploadModel();
 		$saveDir = $Model->getSaveDir(false, $options['limited']);
 		$saveDirInTheme = $Model->getSaveDir(true, $options['limited']);
@@ -302,7 +303,16 @@ class BcUploadHelper extends BcAppHelper {
 
 					$subdir = str_replace($basename . '.' . $ext, '', $fileName);
 					$file = str_replace('/', DS, $subdir) . $imgPrefix . $basename . $imgSuffix . '.' . $ext;
-					if ((file_exists($saveDir . $file) || file_exists($saveDirInTheme . $file)) || $options['force']) {
+					
+					$fileExists = false;
+					if(file_exists($saveDir . $file)) {
+						$fileExists = true;
+					} elseif(file_exists($saveDirInTheme . $file)) {
+						$fileExists = true;
+						$fileUrl = $fileUrlInTheme;
+					}
+					
+					if ($fileExists || $options['force']) {
 						if ($check && !$mostSizeExists) {
 							$mostSizeUrl = $fileUrl . $subdir . $imgPrefix . $basename . $imgSuffix . '.' . $ext . '?' . rand();
 							$mostSizeExists = true;
@@ -368,17 +378,24 @@ class BcUploadHelper extends BcAppHelper {
  * アップロード先のベースパスを取得
  *
  * @param string $fieldName 格納されているDBのフィールド名、ex) BlogPost.eye_catch
+ * @param bool $isTheme テーマ内の初期データのパスとするかどうか
  * @return string パス
  */
-	public function getBasePath($settings = null) {
-		if(! $settings){
+	public function getBasePath($settings = null, $isTheme = false) {
+		if(!$settings){
 			try{
 				$settings = $this->getBcUploadSetting();
 			} catch (BcException $e){
 				throw $e ;
 			}
 		}
-		return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		$siteConfig = Configure::read('BcSite');
+		if(!$isTheme || empty($siteConfig['theme'])) {
+			return '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';	
+		} else {
+			$siteConfig = Configure::read('BcSite');
+			return '/theme/' . $siteConfig['theme'] . '/files/' . str_replace(DS, '/', $settings['saveDir']) . '/';
+		}
 	}
 
 /**
