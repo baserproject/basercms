@@ -611,7 +611,7 @@ class BlogPost extends BlogAppModel {
  */
 	public function copy($id = null, $data = []) {
 		if ($id) {
-			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id], 'recursive' => 1]);
+			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id]]);
 		}
 		$oldData = $data;
 
@@ -641,16 +641,18 @@ class BlogPost extends BlogAppModel {
 		$eyeCatch = $data['BlogPost']['eye_catch'];
 		unset($data['BlogPost']['eye_catch']);
 
+		$saveData = ['BlogPost' => $data['BlogPost']];
 		if (!empty($data['BlogTag'])) {
 			foreach ($data['BlogTag'] as $key => $tag) {
 				$data['BlogTag'][$key] = $tag['id'];
 			}
-		}
-
-		$saveData = ['BlogPost' => $data['BlogPost']];
-		if(!empty($data['BlogTag'])) {
 			$saveData['BlogTag'] = $data['BlogTag'];
 		}
+
+		// BlogPost、BlogTag キーのデータは作り直し、それ以外のキーは破棄されているため、他のモデルキーのデータをマージする
+		$keyDataOtherSaveData = array_diff_key($data, $saveData);
+		$saveData = Hash::merge($data, $keyDataOtherSaveData);
+
 		$this->create($saveData);
 		$result = $this->save();
 
