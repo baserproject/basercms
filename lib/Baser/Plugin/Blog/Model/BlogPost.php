@@ -611,7 +611,7 @@ class BlogPost extends BlogAppModel {
  */
 	public function copy($id = null, $data = []) {
 		if ($id) {
-			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id], 'recursive' => 1]);
+			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id]]);
 		}
 		$oldData = $data;
 
@@ -647,11 +647,7 @@ class BlogPost extends BlogAppModel {
 			}
 		}
 
-		$saveData = ['BlogPost' => $data['BlogPost']];
-		if(!empty($data['BlogTag'])) {
-			$saveData['BlogTag'] = $data['BlogTag'];
-		}
-		$this->create($saveData);
+		$this->create($data);
 		$result = $this->save();
 
 		if ($result) {
