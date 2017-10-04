@@ -200,6 +200,7 @@ class MailFieldsController extends MailAppController {
 			if (is_array($data['MailField']['valid_ex'])) {
 				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
 			}
+
 			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
 				$ret = true;
