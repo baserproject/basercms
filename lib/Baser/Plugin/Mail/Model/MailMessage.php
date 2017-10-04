@@ -609,12 +609,17 @@ class MailMessage extends MailAppModel {
 
 /**
  * テーブル名を生成する
- * 
+ * int型でなかったら強制終了
  * @param $mailContentId
  * @return string
  */
 	public function createTableName($mailContentId) {
-		return 'mail_message_' . $mailContentId;
+		$mailContentId = (int) $mailContentId;
+		if(is_int($mailContentId)) {
+			return 'mail_message_' . $mailContentId;
+		} else {
+			throw new BcException('createTableNameの引数$mailContentIdはint型しか受けつけていません。');
+		}
 	}
 
 /**
