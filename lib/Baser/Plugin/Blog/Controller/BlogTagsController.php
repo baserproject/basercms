@@ -18,6 +18,7 @@
  * @property CookieComponent $Cookie
  * @property BcAuthConfigureComponent $BcAuthConfigure
  * @property BcContentsComponent $BcContents
+ * @property BlogTag $BlogTag
  */
 class BlogTagsController extends BlogAppController {
 
@@ -68,7 +69,7 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_add() {
 		if (!empty($this->request->data)) {
-
+			$this->request->data['BlogTag'] = $this->BlogTag->sanitizeRecord($this->request->data['BlogTag']);
 			$this->BlogTag->create($this->request->data);
 			if ($this->BlogTag->save()) {
 				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を追加しました。', false, true);
@@ -97,7 +98,7 @@ class BlogTagsController extends BlogAppController {
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogTag->read(null, $id);
 		} else {
-
+			$this->request->data['BlogTag'] = $this->BlogTag->sanitizeRecord($this->request->data['BlogTag']);
 			$this->BlogTag->set($this->request->data);
 			if ($this->BlogTag->save()) {
 				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を更新しました。', false, true);
