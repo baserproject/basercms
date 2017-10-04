@@ -806,5 +806,36 @@ class BcAppTest extends BaserTestCase {
 			['/news/archives/index', ['/news/archives/index', '/news/archives/']]
 		];
 	}
+	
+	/**
+	 * 単体データをサニタイズ処理する関数
+	 *
+	 * @param $data
+	 * @param $expect
+	 * @dataProvider sanitizeDataProvider
+	 */
+	public function testSanitize($data, $expect) {
+		$result = $this->BcApp->sanitize($data);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function sanitizeDataProvider() {
+		return[
+			['<', '&lt;'],
+			['>', '&gt;'],
+			['\'', '\''],
+			['\"', '\&quot;'],
+			['\\', '\\']
+		];
+	}
+
+	/**
+	 * レコードデータをサニタイズ処理する関数
+	 *
+	 */
+	public function testSanitizeRecord() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
 
 }
