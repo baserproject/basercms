@@ -111,6 +111,7 @@ class MailContentsController extends MailAppController {
 			if (!$this->request->data['MailContent']['sender_1_']) {
 				$this->request->data['MailContent']['sender_1'] = '';
 			}
+			$this->request->data['Content'] = $this->MailContent->sanitizeRecord($this->request->data['Content']);
 			$this->MailContent->create($this->request->data);
 			if ($this->MailContent->validates()) {
 				if ($this->MailMessage->createTable($this->request->data['MailContent']['id'])) {
@@ -156,6 +157,7 @@ class MailContentsController extends MailAppController {
 			if (!$this->request->data['MailContent']['sender_1_']) {
 				$this->request->data['MailContent']['sender_1'] = '';
 			}
+			$this->request->data['Content'] = $this->MailContent->sanitizeRecord($this->request->data['Content']);
 			$this->MailContent->set($this->request->data);
 			if ($this->MailContent->save()) {
 				$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
