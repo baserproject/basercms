@@ -1677,8 +1677,8 @@ class BcAppModel extends Model {
 		if (!is_array($data)) {
 			// エラー時用のサニタイズ処理を一旦元の形式に復元した上で再度サイニタイズ処理をかける。
 			$data = str_replace("&lt;!--", "<!--", $data);
-
 			$data = htmlspecialchars($data);
+			$data = str_replace("'", "&#39;", $data);
 			//$data = str_replace("\n","<br />",$data);
 			return $data;
 		}else {
