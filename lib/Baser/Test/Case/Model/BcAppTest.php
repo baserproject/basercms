@@ -806,14 +806,14 @@ class BcAppTest extends BaserTestCase {
 			['/news/archives/index', ['/news/archives/index', '/news/archives/']]
 		];
 	}
-	
-	/**
-	 * 単体データをサニタイズ処理する関数
-	 *
-	 * @param $data
-	 * @param $expect
-	 * @dataProvider sanitizeDataProvider
-	 */
+
+/**
+ * 単体データをサニタイズ処理する関数
+ *
+ * @param $data
+ * @param $expect
+ * @dataProvider sanitizeDataProvider
+ */
 	public function testSanitize($data, $expect) {
 		$result = $this->BcApp->sanitize($data);
 		$this->assertEquals($expect, $result);
@@ -829,13 +829,23 @@ class BcAppTest extends BaserTestCase {
 		];
 	}
 
-	/**
-	 * レコードデータをサニタイズ処理する関数
-	 *
-	 */
-	public function testSanitizeRecord() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+/**
+ * レコードデータをサニタイズ処理する関数
+ * @param $data
+ * @param $expect
+ * @dataProvider sanitizeRecordDataProvider
+ */
+	public function testSanitizeRecord($data, $expect) {
+		$result = $this->BcApp->sanitizeRecord($data);
+		$this->assertEquals($expect, $result);
+	}
 
+	public function sanitizeRecordDataProvider() {
+		return[
+			[['aa', '\"', '<', '>'], ['aa', '\&quot;', '&lt;', '&gt;']],
+			[["aa", "\"", "<", ">"], ['aa', '&quot;', '&lt;', '&gt;']],
+			[[["aa", "\"", "<", ">"], '\"', '<', '>'], [['aa', '"', '<', '>'], '\&quot;', '&lt;', '&gt;']],
+		];
 	}
 
 }
