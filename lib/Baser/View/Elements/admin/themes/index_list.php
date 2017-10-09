@@ -36,7 +36,6 @@ $(function(){
 			</div>
 			<p class="row-tools">
 				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('alt' => 'テンプレート編集', 'class' => 'btn')), array('controller' => 'theme_files', 'action' => 'index', $currentTheme['name']), array('title' => 'テンプレート編集')) ?>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => 'テーマ情報設定', 'class' => 'btn')), array('action' => 'edit', $currentTheme['name']), array('title' => 'テーマ情報設定')) ?>
 				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'テーマコピー', 'class' => 'btn')), array('action' => 'ajax_copy', $currentTheme['name']), array('title' => 'テーマコピー', 'class' => 'btn-copy')) ?>
 			</p>
 		</div>

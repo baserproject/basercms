@@ -102,7 +102,14 @@ class BcAppHelper extends Helper {
 			}
 
 			if (file_exists(Configure::read('App.www_root') . 'theme' . DS . $this->theme . DS . $file)) {
-				$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+				// CUSTOMIZE MODIFY 2017/9/27 ryuring
+				// >>>
+				//$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+				// ---
+				if(!preg_match('/^files\//', $file)) {
+					$webPath = "{$this->request->webroot}theme/" . $theme . $asset[0];
+				}
+				// <<<
 			} else {
 				$themePath = App::themePath($this->theme);
 				$path = $themePath . 'webroot' . DS . $file;

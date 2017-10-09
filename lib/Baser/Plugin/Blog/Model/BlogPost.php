@@ -611,7 +611,7 @@ class BlogPost extends BlogAppModel {
  */
 	public function copy($id = null, $data = []) {
 		if ($id) {
-			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id], 'recursive' => 1]);
+			$data = $this->find('first', ['conditions' => ['BlogPost.id' => $id]]);
 		}
 		$oldData = $data;
 
@@ -647,11 +647,7 @@ class BlogPost extends BlogAppModel {
 			}
 		}
 
-		$saveData = ['BlogPost' => $data['BlogPost']];
-		if(!empty($data['BlogTag'])) {
-			$saveData['BlogTag'] = $data['BlogTag'];
-		}
-		$this->create($saveData);
+		$this->create($data);
 		$result = $this->save();
 
 		if ($result) {
@@ -720,6 +716,12 @@ class BlogPost extends BlogAppModel {
 				$post['BlogTag'] = $tags;
 			}
 		}
+
+		// BlogPostキーのデータは作り直しているため、元データは削除して他のモデルキーのデータとマージする
+		unset($data['BlogPost']);
+		unset($data['BlogTag']); // プレビュー時に、フロントでの利用データの形式と異なるため削除
+		$post = Hash::merge($data, $post);
+
 		return $post;
 	}
 

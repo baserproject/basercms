@@ -339,18 +339,18 @@ class BcAppTest extends BaserTestCase {
  * テーブルにフィールドを追加する
  */
 	public function testAddField() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$options = [
 			'field' => 'testField',
 			'column' => [
-				'name' => 'testColumn',
+				'type' => 'text',
+				'null' => true,
+				'default' => null,
 			],
 			'table' => 'pages',
 		];
 		$this->Page->addField($options);
 		$columns = $this->Page->getColumnTypes();
-		var_dump($columns);
+		$this->assertEquals(isset($columns['testField']), true);
 	}
 
 /**
@@ -804,6 +804,47 @@ class BcAppTest extends BaserTestCase {
 			['/news/index', ['/news/index', '/news/']],
 			['/news/archives/1', ['/news/archives/1']],
 			['/news/archives/index', ['/news/archives/index', '/news/archives/']]
+		];
+	}
+
+/**
+ * 単体データをサニタイズ処理する関数
+ *
+ * @param $data
+ * @param $expect
+ * @dataProvider sanitizeDataProvider
+ */
+	public function testSanitize($data, $expect) {
+		$result = $this->BcApp->sanitize($data);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function sanitizeDataProvider() {
+		return[
+			['<', '&lt;'],
+			['>', '&gt;'],
+			["'", '&#39;'],
+			['"', '&quot;'],
+			['\\', '\\']
+		];
+	}
+
+/**
+ * レコードデータをサニタイズ処理する関数
+ * @param $data
+ * @param $expect
+ * @dataProvider sanitizeRecordDataProvider
+ */
+	public function testSanitizeRecord($data, $expect) {
+		$result = $this->BcApp->sanitizeRecord($data);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function sanitizeRecordDataProvider() {
+		return[
+			[['aa', '\"', '<', '>'], ['aa', '\&quot;', '&lt;', '&gt;']],
+			[["aa", "\"", "<", ">"], ['aa', '&quot;', '&lt;', '&gt;']],
+			[[["aa", "\"", "<", ">"], '\"', '<', '>'], [['aa', '"', '<', '>'], '\&quot;', '&lt;', '&gt;']],
 		];
 	}
 

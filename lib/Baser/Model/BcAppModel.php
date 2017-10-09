@@ -1656,4 +1656,34 @@ class BcAppModel extends Model {
 		return $paths;
 	}
 
+/**
+ * レコードデータの消毒をおこなう
+ * @return array
+ */
+	public function sanitizeRecord($datas) {
+		foreach ($datas as $key => $data) {
+				$datas[$key] = $this->sanitize($data);
+		}
+		return $datas;
+	}
+
+/**
+ * 単体データの消毒を行う
+ * 配列には対応しない
+ * @param $data
+ * @return mixed|string
+ */
+	public function sanitize($data) {
+		if (!is_array($data)) {
+			// エラー時用のサニタイズ処理を一旦元の形式に復元した上で再度サイニタイズ処理をかける。
+			$data = str_replace("&lt;!--", "<!--", $data);
+			$data = htmlspecialchars($data);
+			$data = str_replace("'", "&#39;", $data);
+			//$data = str_replace("\n","<br />",$data);
+			return $data;
+		}else {
+			return $data;
+		}
+	}
+
 }

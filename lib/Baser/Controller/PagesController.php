@@ -307,12 +307,13 @@ class PagesController extends AppController {
 			if($this->BcContents->preview === 'default') {
 				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
 				$this->Session->write($sessionKey,  $this->request->data);
-				$this->redirect([
-					'controller'=>'pages',
-					'action'=>'display',
-					$this->request->data['Content']['url'],
-					'?' => ['preview' => 'default'],
-				]);
+				$query = [];
+				if($this->request->query) {
+					foreach($this->request->query as $key => $value) {
+						$query[] = $key . '=' . $value;
+					}
+				}
+				$this->redirect($this->request->here . '?' . implode('&', $query));
 				return;
 			}
 

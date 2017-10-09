@@ -23,7 +23,7 @@ class BlogCategoriesSchema extends CakeSchema {
 		'no' => array('type' => 'integer', 'null' => true, 'length' => 8),
 		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
 		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'status' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 2),
+		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
 		'rght' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),

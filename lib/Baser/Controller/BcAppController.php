@@ -270,7 +270,7 @@ class BcAppController extends Controller {
 		}
 
 		// メンテナンス
-		if (!empty($this->siteConfigs['maintenance']) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
+		if (!$this->request->is('ajax') && !empty($this->siteConfigs['maintenance']) && (Configure::read('debug') < 1) && !$isMaintenance && !$isAdmin && !BcUtil::isAdminUser()) {
 			if (!empty($this->request->params['return']) && !empty($this->request->params['requested'])) {
 				return;
 			} else {
@@ -369,10 +369,12 @@ class BcAppController extends Controller {
 					$authConfig['auth_prefix'] = $authPrefixSetting['alias'];
 					break;
 				}
-				if ($key == $currentAuthPrefix) {
-					$authConfig = $authPrefixSetting;
-					$authConfig['auth_prefix'] = $key;
-					break;
+				if ($this->request->params['action'] !== 'back_agent') {
+					if ($key == $currentAuthPrefix) {
+						$authConfig = $authPrefixSetting;
+						$authConfig['auth_prefix'] = $key;
+						break;
+					}
 				}
 			}
 			if ($authConfig) {
