@@ -54,7 +54,6 @@ class FavoritesController extends AppController {
 			}
 			$this->request->data['Favorite']['sort'] = $this->Favorite->getMax('sort') + 1;
 			$this->request->data['Favorite']['user_id'] = $user['id'];
-			$this->request->data['Favorite']['name'] = $this->Favorite->sanitize($this->request->data['Favorite']['name']);
 
 			$this->Favorite->create($this->request->data);
 			$data = $this->Favorite->save();
@@ -83,7 +82,6 @@ class FavoritesController extends AppController {
 		}
 
 		if ($this->request->data) {
-			$this->request->data['Favorite']['name'] = $this->Favorite->sanitize($this->request->data['Favorite']['name']);
 			$this->Favorite->set($this->request->data);
 			$data = $this->Favorite->save();
 			if ($data) {

@@ -823,7 +823,6 @@ class BcAppTest extends BaserTestCase {
 		return[
 			['<', '&lt;'],
 			['>', '&gt;'],
-			["'", '&#39;'],
 			['"', '&quot;'],
 			['\\', '\\']
 		];
