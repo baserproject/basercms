@@ -109,6 +109,7 @@ class ContentTest extends BaserTestCase {
 	
 	public function createUrlDataProvider() {
 		return [
+			["hogehoge'/@<>1",''],
 			[1, '/'],
 			[2, '/m/'],
 			[3, '/s/'],

@@ -683,7 +683,7 @@ class Content extends AppModel {
  */
 	public function createUrl($id, $plugin = null, $type = null) {
 		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
-		if(!$id) {
+		if(!$id || !intval($id)) {
 			return false;
 		} elseif($id == 1) {
 			$url = '/';
