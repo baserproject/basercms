@@ -26,7 +26,7 @@
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['BlogTag']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
 	</td>
 	<td><?php echo $data['BlogTag']['id'] ?></td>
-	<td><?php $this->BcBaser->link($data['BlogTag']['name'], array('action' => 'edit', $data['BlogTag']['id'])) ?></td>
+	<td><?php $this->BcBaser->link(h($data['BlogTag']['name']), array('action' => 'edit', $data['BlogTag']['id'])) ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogTag']['modified']); ?></td>

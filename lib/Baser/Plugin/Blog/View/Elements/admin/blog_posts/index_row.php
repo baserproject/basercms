@@ -38,7 +38,7 @@
 		<?php endif; ?>
 		<?php if ($data['BlogContent']['tag_use'] && !empty($data['BlogTag'])): ?>
 			<?php $tags = Hash::extract($data['BlogTag'], '{n}.name') ?>
-			<span class="tag"><?php echo implode('</span><span class="tag">', $tags) ?></span>
+			<span class="tag"><?php echo implode('</span><span class="tag">', h($tags)) ?></span>
 		<?php endif ?>
 		<br />
 		<?php $this->BcBaser->link($data['BlogPost']['name'], array('action' => 'edit', $data['BlogContent']['id'], $data['BlogPost']['id'])) ?>

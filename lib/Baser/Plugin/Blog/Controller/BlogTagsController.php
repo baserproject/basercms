@@ -69,7 +69,6 @@ class BlogTagsController extends BlogAppController {
  */
 	public function admin_add() {
 		if (!empty($this->request->data)) {
-			$this->request->data['BlogTag'] = $this->BlogTag->sanitizeRecord($this->request->data['BlogTag']);
 			$this->BlogTag->create($this->request->data);
 			if ($this->BlogTag->save()) {
 				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を追加しました。', false, true);
@@ -78,7 +77,6 @@ class BlogTagsController extends BlogAppController {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 		}
-
 		$this->pageTitle = '新規タグ登録';
 		$this->render('form');
 	}
@@ -94,11 +92,9 @@ class BlogTagsController extends BlogAppController {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('action' => 'index'));
 		}
-
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogTag->read(null, $id);
 		} else {
-			$this->request->data['BlogTag'] = $this->BlogTag->sanitizeRecord($this->request->data['BlogTag']);
 			$this->BlogTag->set($this->request->data);
 			if ($this->BlogTag->save()) {
 				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を更新しました。', false, true);
@@ -107,7 +103,6 @@ class BlogTagsController extends BlogAppController {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
 		}
-
 		$this->pageTitle = 'タグ編集： ' . $this->request->data['BlogTag']['name'];
 		$this->render('form');
 	}
