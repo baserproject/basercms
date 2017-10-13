@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] レイアウト
+ * @var BcAppView $this
  */
 ?>
 <?php $this->BcBaser->xmlHeader() ?>
@@ -74,7 +75,7 @@
 			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box')) ?></div>
 			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
 			<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.' . $this->BcBaser->getContentsName(true)) ?></div>
-			<div id="CurrentPageName" style="display: none"><?php $this->BcBaser->contentsTitle() ?></div>
+			<div id="CurrentPageName" style="display: none"><?php echo h($this->BcBaser->getContentsTitle()) ?></div>
 			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/' . BcUtil::getAdminPrefix() . '/dashboard/index' : '/' . $this->request->url; ?></div>
 
 			<!-- Waiting -->
@@ -103,7 +104,7 @@
 
 							<div class="clearfix">
 							<?php $this->BcBaser->element('contents_menu') ?>
-								<h1><?php $this->BcBaser->contentsTitle() ?></h1>
+								<h1><?php echo h($this->BcBaser->getContentsTitle()) ?></h1>
 							</div>
 
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>

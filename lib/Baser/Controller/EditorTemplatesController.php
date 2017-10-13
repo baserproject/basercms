@@ -81,10 +81,11 @@ class EditorTemplatesController extends AppController {
 
 		if ($this->request->data) {
 			$this->EditorTemplate->create($this->request->data);
-			if ($this->EditorTemplate->save()) {
+			$result = $this->EditorTemplate->save();
+			if ($result) {
 				// EVENT EditorTemplates.afterAdd
 				$this->dispatchEvent('afterAdd', array(
-					'data' => $data
+					'data' => $result
 				));
 				$this->setMessage('保存完了');
 				$this->redirect(array('action' => 'index'));
@@ -108,10 +109,11 @@ class EditorTemplatesController extends AppController {
 			$this->request->data = $this->EditorTemplate->read(null, $id);
 		} else {
 			$this->EditorTemplate->set($this->request->data);
-			if ($data = $this->EditorTemplate->save()) {
+			$result = $this->EditorTemplate->save();
+			if ($result) {
 				// EVENT EditorTemplates.afterEdit
 				$this->dispatchEvent('afterEdit', [
-					'data' => $data
+					'data' => $result
 				]);
 				$this->setMessage('保存完了');
 				$this->redirect(array('action' => 'index'));

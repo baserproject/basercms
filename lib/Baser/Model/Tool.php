@@ -57,15 +57,20 @@ class Tool extends AppModel {
  * @return array
  */
 	public function getListModels($type = 'core') {
-		$db = ConnectionManager::getDataSource('default');
-		$listSources = $db->listSources();
-		if (!$listSources) {
-			return array();
-		}
-		$tableList = getTableList();
-		$sources = array();
-		foreach ($listSources as $source) {
-			if(in_array($source, $tableList[$type])) {
+		$sources = [];
+		$readedTableList = getTableList();
+		if ($type === 'core') {
+			$sources = $readedTableList['core'];
+		} elseif ($type === 'plugin') {
+			$listSources = ConnectionManager::getDataSource('default')->listSources();
+			$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+			foreach($listSources as $source) {
+				if (in_array($source, $readedTableList['core'])) {
+					continue;
+				}
+				if (strpos($source, $prefix) !== 0) {
+					continue;
+				}
 				$sources[] = $source;
 			}
 		}

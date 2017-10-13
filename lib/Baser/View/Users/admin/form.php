@@ -149,7 +149,7 @@ $this->BcBaser->js('admin/users/edit', false);
 			<ul class="clearfix" id="DefaultFavorites">
 				<?php foreach ($this->request->data['Favorite'] as $key => $favorite): ?>
 					<li style="float:left">
-						<?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?>
+						<?php $this->BcBaser->link(h($favorite['name']), $favorite['url']) ?>
 						<?php echo $this->BcForm->input('Favorite.name.' . $key, array('type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name')) ?>
 						<?php echo $this->BcForm->input('Favorite.url.' . $key, array('type' => 'hidden', 'value' => $favorite['url'], 'class' => 'favorite-url')) ?>
 					</li>
