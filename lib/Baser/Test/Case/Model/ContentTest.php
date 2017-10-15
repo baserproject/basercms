@@ -97,6 +97,32 @@ class ContentTest extends BaserTestCase {
 	}
 
 /**
+ * testGetUrl の base テスト
+ * 
+ * @param $url
+ * @param $base
+ * @param $expects
+ * @dataProvider getUrlBaseDataProvider
+ */
+	public function testGetUrlBase($url, $base, $useBase, $expects) {
+		Configure::write('app.baseUrl', $base);
+		$request = $this->_getRequest('/');
+		$request->base = $base;
+		Router::setRequestInfo($request);
+		$result = $this->Content->getUrl($url, false, false, $useBase);
+		$this->assertEquals($result, $expects);
+	}
+	
+	public function getUrlBaseDataProvider() {
+		return [
+			['/news/archives/1', '', true, '/news/archives/1'],
+			['/news/archives/1', '', false, '/news/archives/1'],
+			['/news/archives/1', '/sub', true, '/sub/news/archives/1'],
+			['/news/archives/1', '/sub', false, '/news/archives/1'],
+		];
+	}
+
+/**
  * testCreateUrl
  * 
  * @param int $id コンテンツID

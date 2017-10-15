@@ -470,8 +470,8 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function getContentByEntityIdDataProvider() {
 		return [
 			// 存在するID（0~2）を指定した場合
-			['/news', '1', 'BlogContent', 'url'],
-			['/contact', '1', 'MailContent', 'url'],
+			['/news/', '1', 'BlogContent', 'url'],
+			['/contact/', '1', 'MailContent', 'url'],
 			['/index', '1', 'Page', 'url'],
 			['/service/', '4', 'ContentFolder', 'url'],
 			['/service/sub_service/sub_service_1', '14', 'Page', 'url'],

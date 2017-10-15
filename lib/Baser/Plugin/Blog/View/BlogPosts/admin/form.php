@@ -12,31 +12,28 @@
 
 /**
  * [ADMIN] ブログ記事 フォーム
+ * @var BcAppView $this
  */
-if($this->request->params['Site']['use_subdomain']) {
-	$targetSite = BcSite::findByUrl($this->request->params['Content']['url']);
-	$previewUrl = $targetSite->getPureUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no')) . '?host=' . $targetSite->host;
-} else {
-	$previewUrl = $this->BcContents->getUrl($this->request->params['Content']['url'], false) . 'archives/' . $this->BcForm->value('BlogPost.no');
-}
-$this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
-$statuses = array(0 => '非公開', 1 => '公開');
-$this->BcBaser->link('&nbsp;', array('controller' => 'blog', 'action' => 'preview', $blogContent['BlogContent']['id'], $previewId, 'view'), array('style' => 'display:none', 'id' => 'LinkPreview'));
-$this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlogBLogPostsEditScript',
-	'data-fullurl' => $this->BcContents->getUrl($this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no'), true, $this->request->params['Site']['use_subdomain']),
-	'data-previewurl' => $previewUrl
-));
+$url = $this->request->params['Content']['url'] . 'archives/' . $this->BcForm->value('BlogPost.no');
+$fullUrl = $this->BcBaser->getContentsUrl($url, true, $this->request->params['Site']['use_subdomain']);
+$statuses = [0 => '非公開', 1 => '公開'];
+$this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
+$this->BcBaser->js('Blog.admin/blog_posts/form', false, [
+    'id' => 'AdminBlogBLogPostsEditScript',
+	'data-fullurl' => $fullUrl,
+	'data-previewurl' => $this->Blog->getPreviewUrl($url, $this->request->params['Site']['use_subdomain'])
+]);
 ?>
 
 
-<div id="AddTagUrl" style="display:none"><?php echo $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
-<div id="AddBlogCategoryUrl" style="display:none"><?php echo $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContent['BlogContent']['id'])) ?></div>
+<div id="AddTagUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'ajax_add')) ?></div>
+<div id="AddBlogCategoryUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => 'blog', 'controller' => 'blog_categories', 'action' => 'ajax_add', $blogContent['BlogContent']['id'])) ?></div>
 
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
 	<?php echo $this->BcForm->create('BlogPost', array('type' => 'file', 'url' => array('controller' => 'blog_posts', 'action' => 'add', $blogContent['BlogContent']['id']), 'id' => 'BlogPostForm')) ?>
-	<?php elseif ($this->action == 'admin_edit'): ?>
+<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('BlogPost', array('type' => 'file', 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogPost.id'), 'id' => false), 'id' => 'BlogPostForm')) ?>
 <?php endif; ?>
 <?php echo $this->BcForm->input('BlogPost.id', array('type' => 'hidden')) ?>
@@ -64,7 +61,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, array('id' => 'AdminBlog
 		<tr>
 			<th class="col-head" style="width:53px"><?php echo $this->BcForm->label('BlogPost.url', 'URL') ?></th>
 			<td class="col-input">
-				<span class="url"><?php echo $this->BcBaser->getUri(urldecode($this->request->params['Content']['url']) . '/archives/' . $this->BcForm->value('BlogPost.no')) ?></span>　
+				<span class="url"><?php echo urldecode($this->BcBaser->getUri($fullUrl)) ?></span>　
 				<?php echo $this->BcForm->button('URLコピー', ['class' => 'small-button', 'style' => 'font-weght:normal', 'id' => 'BtnCopyUrl']) ?>
 			</td>
 		</tr>

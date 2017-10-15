@@ -1082,13 +1082,17 @@ class Content extends AppModel {
 	}
 
 /**
- * URLを取得する
+ * コンテンツ管理上のURLを元に正式なURLを取得する
+ * 
+ * サブフォルダ設置時等、baseUrl（サブフォルダまでのパス）は含まない
  *
- * @param $url
- * @param bool $useSubDomain
- * @return string
+ * @param string $url コンテンツ管理上のURL 
+ * @param bool $full http からのフルのURLかどうか 
+ * @param bool $useSubDomain サブドメインを利用しているかどうか
+ * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
+ * @return string URL
  */
-	public function getUrl($url, $full = false, $useSubDomain = false) {
+	public function getUrl($url, $full = false, $useSubDomain = false, $base = false) {
 		if($useSubDomain && !is_array($url)) {
 			$subDomain = '';
 			$site = BcSite::findByUrl($url);
@@ -1097,14 +1101,9 @@ class Content extends AppModel {
 				$subDomain = $site->alias;
 				$originUrl = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/', $url);
 			}
-			if($originUrl == '/') {
-				$urlArray = [];
-			} else {
-				$urlArray = explode('/', preg_replace('/(^\/|\/$)/', '', $originUrl));
-			}
 			if($full) {
-				$fullUrl = fullUrl($originUrl);
 				if ($site) {
+					$fullUrl = topLevelUrl(false) . $originUrl;
 					if($site->domainType == 1) {
 						$mainDomain = BcUtil::getMainDomain();
 						$fullUrlArray = explode('//', $fullUrl);
@@ -1125,7 +1124,7 @@ class Content extends AppModel {
 					$url = preg_replace('/\/$/', '', Configure::read('BcEnv.siteUrl')) . $originUrl;
 				}
 			} else {
-				$url = Router::url($originUrl);
+				$url = $originUrl;
 			}
 		} else {
 			if(BC_INSTALLED) {
@@ -1141,15 +1140,17 @@ class Content extends AppModel {
 					}
 				}
 			}
-			
 			if($full) {
-				$url = fullUrl($url);
-			} else {
-				$url = Router::url($url);
+				$mainDomain = BcUtil::getMainDomain();
+				$fullUrlArray = explode('//', Configure::read('BcEnv.siteUrl'));
+				$url = $fullUrlArray[0] . '//' . $mainDomain . $url;
 			}
 		}
-
-		return preg_replace('/\/index$/', '/', $url);
+		$url = preg_replace('/\/index$/', '/', $url);
+		if(!$full && $base) {
+			$url = Router::url($url);
+		}
+		return $url;
 	}
 
 /**

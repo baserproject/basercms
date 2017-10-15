@@ -205,8 +205,8 @@ class BcPageHelperTest extends BaserTestCase {
 			['/about', '次のページへ', ['overCategory' => true], '<a href="/icons" class="next-link">次のページへ</a>'], // PC
 			['/s/about', '', ['overCategory' => false], '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'], // smartphone
 			['/s/about', '次のページへ', ['overCategory' => false], '<a href="/s/icons" class="next-link">次のページへ</a>'], // smartphone
-			['/s/sitemap', '', ['overCategory' => true], '<a href="/s/contact" class="next-link">お問い合わせ ≫</a>'], // smartphone
-			['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact" class="next-link">次のページへ</a>'], // smartphone
+			['/s/sitemap', '', ['overCategory' => true], '<a href="/s/contact/" class="next-link">お問い合わせ ≫</a>'], // smartphone
+			['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
 		];
 	}
 

@@ -16,6 +16,7 @@
  * @package Blog.Controller
  * @property BlogContent $BlogContent
  * @property BlogCategory $BlogCategory
+ * @property BcContentsComponent $BcContents
  */
 class BlogCategoriesController extends BlogAppController {
 
@@ -63,7 +64,12 @@ class BlogCategoriesController extends BlogAppController {
 		parent::beforeFilter();
 
 		$this->BlogContent->recursive = -1;
-		$this->request->params['Content'] = $this->BcContents->getContent($this->params['pass'][0])['Content'];
+		$content = $this->BcContents->getContent($this->request->params['pass'][0]);
+		if(!$content) {
+			$this->notFound();
+		}
+		$this->request->params['Content'] = $content['Content'];
+		$this->request->params['Site'] = $content['Site'];
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 

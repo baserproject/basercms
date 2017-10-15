@@ -27,6 +27,7 @@ class BcManagerTestController extends Controller {
 
 /**
  * BcManagerComponentのテスト
+ * @property BcManagerComponent $BcManager
  */
 class BcManagerComponentTest extends BaserTestCase {
 
