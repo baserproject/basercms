@@ -246,7 +246,7 @@ class BcBaserHelper extends AppHelper {
 
 		$options = array_merge(array(
 			'categoryTitleOn' => null,
-			'tag' => false,
+			'tag' => true,
 			'allowableTags' => ''
 		), $options);
 
