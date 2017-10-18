@@ -1,0 +1,39 @@
+/* SubMenu
+----------------------------------------------- */
+
+#SubMenu{
+	margin: 0 0 20px;
+}
+table.sub-menu{
+	margin: 0;
+	width:100%;
+}
+#SubMenu .sub-menu th{
+	text-align: left;
+	background-color:#EFEFEF;
+	padding: 5px 10px;
+	font-weight: bold;
+	border: 1px solid #DDD;
+	white-space:nowrap;
+	width:20%;
+}
+#SubMenu .sub-menu td{
+	background-color: #FFF;
+	padding: 5px 10px;
+	border: 1px solid #DDD;
+}
+.sub-menu li{
+	float: left;
+	list-style: none;
+	background: url(../../img/admin/blt_list_2.png) no-repeat left center;
+	padding: 0 20px 0 10px;
+	margin: 1px 0;
+	color: #669900;
+}
+.sub-menu a{
+	color:#535A62;
+}
+.sub-menu a:hover{
+	color:#AAA;
+	text-decoration:none;
+}

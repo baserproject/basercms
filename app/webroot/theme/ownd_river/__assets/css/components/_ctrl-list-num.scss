@@ -1,0 +1,22 @@
+/* list-num
+----------------------------------------------- */
+.list-num{
+	margin: 5px 0;
+	float: right;
+}
+.list-num strong{
+	float:left;
+	padding: 0 10px;
+	font-weight:bold;
+	font-size:12px;
+	display: block;
+}
+.list-num p{
+	float:left;
+	font-size:12px;
+	padding-right:5px;
+}
+.list-num .current {
+	background-color: #E2E2E2;
+	padding:2px 5px;
+}

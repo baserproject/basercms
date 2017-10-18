@@ -85,6 +85,18 @@
   color: #C30;
   font-size: 16px; }
 
+.photo {
+  padding: 5px;
+  background-color: #FFF;
+  border: 1px solid #DDD; }
+
+.outside-link {
+  background: url(../../img/admin/blt_outside_link.png) no-repeat left -1px;
+  padding-left: 18px; }
+
+.full-width {
+  width: 100%; }
+
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -175,35 +187,52 @@
   margin-left: .3em; }
 
 .fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
   animation: fa-spin 2s infinite linear; }
 
 .fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
   animation: fa-spin 1s infinite steps(8); }
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
 
 @keyframes fa-spin {
   0% {
+    -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 .fa-rotate-90 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -webkit-transform: rotate(90deg);
   transform: rotate(90deg); }
 
 .fa-rotate-180 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  -webkit-transform: rotate(180deg);
   transform: rotate(180deg); }
 
 .fa-rotate-270 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+  -webkit-transform: rotate(270deg);
   transform: rotate(270deg); }
 
 .fa-flip-horizontal {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+  -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1); }
 
 .fa-flip-vertical {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(1, -1);
   transform: scale(1, -1); }
 
 :root .fa-rotate-90,
@@ -211,7 +240,8 @@
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
-  filter: none; }
+  -webkit-filter: none;
+          filter: none; }
 
 .fa-stack {
   position: relative;
@@ -2490,35 +2520,52 @@
   margin-left: .3em; }
 
 .fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
   animation: fa-spin 2s infinite linear; }
 
 .fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
   animation: fa-spin 1s infinite steps(8); }
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
 
 @keyframes fa-spin {
   0% {
+    -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 .fa-rotate-90 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -webkit-transform: rotate(90deg);
   transform: rotate(90deg); }
 
 .fa-rotate-180 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  -webkit-transform: rotate(180deg);
   transform: rotate(180deg); }
 
 .fa-rotate-270 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+  -webkit-transform: rotate(270deg);
   transform: rotate(270deg); }
 
 .fa-flip-horizontal {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+  -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1); }
 
 .fa-flip-vertical {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(1, -1);
   transform: scale(1, -1); }
 
 :root .fa-rotate-90,
@@ -2526,7 +2573,8 @@
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
-  filter: none; }
+  -webkit-filter: none;
+          filter: none; }
 
 .fa-stack {
   position: relative;
@@ -5331,139 +5379,6 @@ strong {
   font-style: normal;
   font-weight: bold; }
 
-.submit {
-  position: relative;
-  text-align: center; }
-
-.help {
-  cursor: pointer;
-  vertical-align: middle; }
-
-.photo {
-  padding: 5px;
-  background-color: #FFF;
-  border: 1px solid #DDD; }
-
-.outside-link {
-  background: url(../../img/admin/blt_outside_link.png) no-repeat left -1px;
-  padding-left: 18px; }
-
-/* section
------------------------------------------------ */
-.full-width {
-  width: 100%; }
-
-/* Help,Search,Limit共通設定
------------------------------------------------ */
-#Help .head, #Limit .head {
-  padding: 0;
-  margin: 0; }
-
-#Help .body, #Limit .body {
-  margin: 10px auto;
-  text-align: center;
-  vertical-align: middle; }
-
-#Help .button, #Limit .button {
-  text-align: center; }
-
-#Help .close, #Limit .close {
-  float: right;
-  margin: 0;
-  padding: 0;
-  cursor: pointer; }
-
-#Help h2, #Limit h2 {
-  padding-left: 0;
-  border: none; }
-
-/* Help
------------------------------------------------ */
-#Help {
-  display: none;
-  border: 5px solid #669900;
-  padding: 10px 20px;
-  margin: 0 0 20px;
-  background-color: #FFF; }
-
-#Help .body {
-  text-align: left; }
-
-#Help .example-box {
-  padding: 15px;
-  border: 3px solid #DDD;
-  margin-bottom: 20px;
-  color: #000; }
-
-#Help .example-box .head {
-  font-weight: bold; }
-
-#Help li {
-  padding: 0 20px;
-  margin: 5px 0;
-  background: url(../../img/admin/blt_list_2.png) no-repeat left 1px;
-  padding-left: 15px; }
-
-/* SubMenu
------------------------------------------------ */
-#SubMenu {
-  margin: 0 0 20px; }
-
-table.sub-menu {
-  margin: 0;
-  width: 100%; }
-
-#SubMenu .sub-menu th {
-  text-align: left;
-  background-color: #EFEFEF;
-  padding: 5px 10px;
-  font-weight: bold;
-  border: 1px solid #DDD;
-  white-space: nowrap;
-  width: 20%; }
-
-#SubMenu .sub-menu td {
-  background-color: #FFF;
-  padding: 5px 10px;
-  border: 1px solid #DDD; }
-
-.sub-menu li {
-  float: left;
-  list-style: none;
-  background: url(../../img/admin/blt_list_2.png) no-repeat left center;
-  padding: 0 20px 0 10px;
-  margin: 1px 0;
-  color: #669900; }
-
-.sub-menu a {
-  color: #535A62; }
-
-.sub-menu a:hover {
-  color: #AAA;
-  text-decoration: none; }
-
-/* list-num
------------------------------------------------ */
-.list-num {
-  margin: 5px 0;
-  float: right; }
-
-.list-num strong {
-  float: left;
-  padding: 0 10px;
-  font-weight: bold;
-  font-size: 12px;
-  display: block; }
-
-.list-num p {
-  float: left;
-  font-size: 12px;
-  padding-right: 5px; }
-
-.list-num .current {
-  background-color: #E2E2E2;
-  padding: 2px 5px; }
-
 /* form-table
 ----------------------------------------------- */
 .list-table .error-message {
@@ -5487,91 +5402,6 @@ table.sub-menu {
     ----------------------------------------------- */
 .editor-area {
   text-align: center; }
-
-/* button
------------------------------------------------ */
-.submit .button,
-.ui-widget-content .button {
-  color: #535A62;
-  border: 1px solid #CCC;
-  cursor: pointer;
-  text-shadow: rgba(255, 255, 255, 0.4) 1px 1px 0;
-  border-radius: 2px;
-  -o-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-  background: #F3F3F3;
-  background: -o-linear-gradient(top, #FFF, #F3F3F3);
-  margin: 10px;
-  padding: 3px 40px;
-  font-weight: bold;
-  font-size: 1.2em;
-  white-space: nowrap;
-  line-height: 24px; }
-
-.submit .button:hover,
-.ui-widget-content .button:hover {
-  border: 1px solid #CCC;
-  text-decoration: none;
-  background: #f4f4f4;
-  background: -o-linear-gradient(top, #f4f4f4, #dfdfdf 100%); }
-
-.submit .button:active,
-.ui-widget-content .button:active {
-  border: 1px solid #CCC;
-  text-decoration: none;
-  background: #cdcdcd;
-  background: -o-linear-gradient(top, #cdcdcd, #eee 100%); }
-
-.submit .button[disabled],
-.ui-widget-content .button[disabled] {
-  opacity: .5; }
-
-.submit a.button,
-.ui-widget-content a.button {
-  padding-top: 5px;
-  padding-bottom: 5.5px; }
-
-*:first-child + html .submit a.button,
-.ui-widget-content a.button {
-  position: absolute;
-  top: 1px;
-  padding-top: 3px;
-  padding-bottom: 3px; }
-
-.button-small {
-  text-decoration: none !important;
-  display: inline-block;
-  padding: 4px 10px 4px;
-  margin-bottom: 0;
-  font-size: 13px;
-  line-height: 18px;
-  color: #333 !important;
-  text-align: center;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-  vertical-align: middle;
-  cursor: pointer;
-  background-color: #f5f5f5;
-  background-image: linear-gradient(top, #fff, #e6e6e6);
-  background-image: -moz-linear-gradient(top, #fff, #e6e6e6);
-  background-repeat: repeat-x;
-  border: 1px solid #ccc;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-  border-bottom-color: #b3b3b3;
-  border-radius: 4px;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
-  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  border-color: #ccc;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
-
-.button-small:hover {
-  background-color: #e6e6e6;
-  color: #333;
-  text-decoration: none;
-  background-color: #e6e6e6;
-  background-position: 0 -15px;
-  transition: background-position .1s linear; }
 
 /* waiting-box
 ----------------------------------------------- */
@@ -6431,6 +6261,7 @@ div.jstree-publish-even {
 .bca-container {
   position: relative;
   height: auto;
+  display: -webkit-box;
   display: flex; }
 
 /* bca-main
@@ -6961,7 +6792,8 @@ span#DebugMode {
     min-width: 200px;
     list-style: none;
     background: #f4f5f1;
-    transform: translate(0, -50%); }
+    -webkit-transform: translate(0, -50%);
+            transform: translate(0, -50%); }
     .bca-nav-sub-list-item {
       font-size: 0.875rem;
       display: block; }
@@ -6994,7 +6826,8 @@ span#DebugMode {
     top: auto;
     left: auto;
     width: auto;
-    transform: none; }
+    -webkit-transform: none;
+            transform: none; }
     .bca-nav-sub[data-content-is-current="true"] .bca-nav-sub-list-item[data-sub-content-is-current="true"] {
       background: #1b6123; }
       .bca-nav-sub[data-content-is-current="true"] .bca-nav-sub-list-item[data-sub-content-is-current="true"] a {
@@ -7239,35 +7072,52 @@ span#DebugMode {
   margin-left: .3em; }
 
 .fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
   animation: fa-spin 2s infinite linear; }
 
 .fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
   animation: fa-spin 1s infinite steps(8); }
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
 
 @keyframes fa-spin {
   0% {
+    -webkit-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
+    -webkit-transform: rotate(359deg);
     transform: rotate(359deg); } }
 
 .fa-rotate-90 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -webkit-transform: rotate(90deg);
   transform: rotate(90deg); }
 
 .fa-rotate-180 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
+  -webkit-transform: rotate(180deg);
   transform: rotate(180deg); }
 
 .fa-rotate-270 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
+  -webkit-transform: rotate(270deg);
   transform: rotate(270deg); }
 
 .fa-flip-horizontal {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+  -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1); }
 
 .fa-flip-vertical {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+  -webkit-transform: scale(1, -1);
   transform: scale(1, -1); }
 
 :root .fa-rotate-90,
@@ -7275,7 +7125,8 @@ span#DebugMode {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
-  filter: none; }
+  -webkit-filter: none;
+          filter: none; }
 
 .fa-stack {
   position: relative;
@@ -9651,7 +9502,8 @@ span#DebugMode {
       position: absolute;
       top: 50%;
       right: 1em;
-      transform: translate(0, -50%);
+      -webkit-transform: translate(0, -50%);
+              transform: translate(0, -50%);
       pointer-events: none; }
     .bca-login-form-item input[type="text"], .bca-login-form-item input[type="password"] {
       color: #343434;
@@ -9799,6 +9651,54 @@ span#DebugMode {
 
 #BcMessageBox {
   display: none; }
+
+/* Help,Search,Limit共通設定
+----------------------------------------------- */
+#Help .head, #Limit .head {
+  padding: 0;
+  margin: 0; }
+
+#Help .body, #Limit .body {
+  margin: 10px auto;
+  text-align: center;
+  vertical-align: middle; }
+
+#Help .close, #Limit .close {
+  float: right;
+  margin: 0;
+  padding: 0;
+  cursor: pointer; }
+
+#Help h2, #Limit h2 {
+  padding-left: 0;
+  border: none; }
+
+/* Help
+----------------------------------------------- */
+#Help {
+  display: none;
+  border: 5px solid #669900;
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  background-color: #FFF; }
+
+#Help .body {
+  text-align: left; }
+
+#Help .example-box {
+  padding: 15px;
+  border: 3px solid #DDD;
+  margin-bottom: 20px;
+  color: #000; }
+
+#Help .example-box .head {
+  font-weight: bold; }
+
+#Help li {
+  padding: 0 20px;
+  margin: 5px 0;
+  background: url(../../img/admin/blt_list_2.png) no-repeat left 1px;
+  padding-left: 15px; }
 
 table.cake-sql-log {
   width: 90%;

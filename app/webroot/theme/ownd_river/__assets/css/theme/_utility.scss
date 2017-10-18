@@ -94,3 +94,24 @@
 	color:#C30;
 	font-size:16px;
 }
+
+
+// サムネイル画像用の枠
+//
+.photo {
+	padding:5px;
+	background-color: #FFF;
+	border:1px solid #DDD;
+}
+
+
+// 外部リンク用アイコン付きテキストリンク
+.outside-link {
+	background: url(../../img/admin/blt_outside_link.png) no-repeat left -1px;
+	padding-left:18px;
+}
+
+// たぶん不必要
+.full-width {
+	width:100%;
+}

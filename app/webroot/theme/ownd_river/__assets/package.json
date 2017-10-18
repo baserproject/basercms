@@ -6,18 +6,18 @@
   "author": "baserCMS Users Community",
   "license": "MIT",
   "engines": {
-    "node": ">=7.0.0"
+    "node": ">=8.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.7",
-    "browser-sync": "2.18.8",
+    "autoprefixer": "^7.1.2",
+    "browser-sync": "2.18.13",
     "gulp": "^3.9.1",
     "gulp-plumber": "^1.1.0",
-    "gulp-postcss": "^6.4.0",
+    "gulp-postcss": "^7.0.0",
     "gulp-sass": "^3.1.0",
-    "gulp-sceg": "^0.5.0",
-    "run-sequence": "^1.2.2",
-    "stylelint": "^7.10.1"
+    "gulp-sceg": "^0.6.0",
+    "run-sequence": "^2.1.0",
+    "stylelint": "^8.0.0"
   },
   "dependencies": {}
 }
