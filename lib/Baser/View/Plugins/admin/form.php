@@ -42,9 +42,9 @@ $(function(){
 <?php echo $this->BcForm->input('Plugin.version', array('type' => 'hidden')) ?>
 
 <div class="em-box">
-	<?php echo $this->BcForm->value('Plugin.name') . ' ' . $this->BcForm->value('Plugin.version') ?>
+	<?php echo e($this->BcForm->value('Plugin.name')) . ' ' . $this->BcForm->value('Plugin.version') ?>
 	<?php if ($this->BcForm->value('Plugin.title')): ?>
-		（<?php echo $this->BcForm->value('Plugin.title') ?>）
+		（<?php echo e($this->BcForm->value('Plugin.title')) ?>）
 	<?php endif ?>
 </div>
 
