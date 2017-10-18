@@ -1458,9 +1458,9 @@ DOC_END;
  */
 	public function dateTimePicker($fieldName, $attributes = array()) {
 
-		$this->Html->script('admin/vendors/jquery.timepicker', array('inline' => false));
-		$this->Html->css('admin/jquery.timepicker', 'stylesheet', array('inline' => false));
-		$timeAttributes = array_merge($attributes, array('size' => 8, 'maxlength' => 8));
+		$this->Html->script('admin/vendors/jquery.timepicker', ['inline' => false]);
+		$this->Html->css('admin/jquery.timepicker', 'stylesheet', ['inline' => false]);
+		$timeAttributes = array_merge($attributes, ['size' => 8, 'maxlength' => 8, 'escape' => true]);
 		if (!isset($attributes['value'])) {
 			$value = $this->value($fieldName);
 		} else {
@@ -1497,7 +1497,7 @@ $(function(){
 });
 </script>
 DOC_END;
-		$script = $this->_View->append('script', $_script);
+		$this->_View->append('script', $_script);
 		return $dateTag . $timeTag . $hiddenTag;
 	}
 
