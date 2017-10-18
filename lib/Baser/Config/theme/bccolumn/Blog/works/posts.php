@@ -1,6 +1,7 @@
 <?php
 /**
  * トップページ記事一覧
+ * @var array $posts
  */
 ?>
 
@@ -14,11 +15,9 @@
 			<?php elseif ($this->BcArray->last($posts, $key)): ?>
 				<?php $class[] = 'last' ?>
 			<?php endif ?>
-			<?php $uri = $this->BcBaser->getRoot().$this->request->params['Content']['name'].'/archives/'.$post['BlogPost']['no']; ?>
-
 			<li class="<?php echo implode(' ', $class) ?>">
 				<div class="thumbnail">
-					<a href="<?php echo $uri ?>">
+					<a href="<?php echo $this->Blog->getPostLinkUrl($post) ?>">
 						<?php $this->Blog->eyeCatch($post, array('link'=>false, 'width'=>'280px', 'noimage'=>'/theme/bccolumn/img/blog/works/noimage.png')) ?>
 					</a>
 				</div>

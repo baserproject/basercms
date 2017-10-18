@@ -178,8 +178,9 @@ class FeedDetailsController extends FeedAppController {
 		clearViewCache('/feed/cachetime/' . $feedConfigId);
 		if (strpos($url, 'http') === false) {
 			// 実際のキャッシュではSSLを利用しているかどうかわからないので、両方削除する
-			clearCache($this->Feed->createCacheHash('', 'http://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
-			clearCache($this->Feed->createCacheHash('', 'https://' . $_SERVER['HTTP_HOST'] . $this->base . $url), 'views', '.rss');
+			$host = Configure::read('BcEnv.host');
+			clearCache($this->Feed->createCacheHash('', 'http://' . $host . $this->base . $url), 'views', '.rss');
+			clearCache($this->Feed->createCacheHash('', 'https://' . $host . $this->base . $url), 'views', '.rss');
 		} else {
 			clearCache($this->Feed->createCacheHash('', $url), 'views', '.rss');
 		}

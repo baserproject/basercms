@@ -12,7 +12,9 @@
 
 /**
  * [ADMIN] テーマファイル一覧　テーブル
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(2);
 ?>
 
 
@@ -32,6 +34,7 @@
 			</div>
 		</th>
 		<th>フォルダ名／テーマファイル名</th>
+		<?php echo $this->BcListTable->dispatchShowHead() ?>
 	</tr>
 </thead>
 <tbody>
@@ -41,7 +44,7 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 	<tr>
-		<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
+		<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 	</tr>
 	<?php endif; ?>
 </tbody>

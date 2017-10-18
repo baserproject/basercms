@@ -37,7 +37,7 @@ class BcThemeConfigReaderTest extends BaserTestCase {
  * @return array
  */
 	public function createContentsDataProvider() {
-		$data = array();
+		$data = [];
 		$contents = <<< EOF
 <?php
 \$title = 'タイトル';
@@ -49,15 +49,15 @@ EOF;
 
 		$contents = preg_replace("/\r\n|\r|\n/", PHP_EOL, $contents);
 
-		$data[] = array(
-			array(
+		$data[] = [
+			[
 				'title' => 'タイトル',
 				'description' => "シングルクォーテーションを含む説明'",
 				'author' => '制作者',
 				'url' => 'http://basercms.net'
-			),
+			],
 			$contents
-		);
+		];
 		return $data;
 	}
 }

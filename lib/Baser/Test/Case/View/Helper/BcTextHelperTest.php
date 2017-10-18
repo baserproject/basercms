@@ -29,9 +29,9 @@ class BcTextHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.UserGroup'
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -64,10 +64,10 @@ class BcTextHelperTest extends BaserTestCase {
  * */
 	public function testBooleanMarkList() {
 		$result = $this->Helper->booleanMarkList();
-		$expect = array(
+		$expect = [
 			0 => "―",
 			1 => "○"
-		);
+		];
 		$this->assertEquals($expect, $result);
 	}
 
@@ -76,10 +76,10 @@ class BcTextHelperTest extends BaserTestCase {
  * */
 	public function testBooleanExistsList() {
 		$result = $this->Helper->booleanExistsList();
-		$expect = array(
+		$expect = [
 			0 => "無",
 			1 => "有"
-		);
+		];
 		$this->assertEquals($expect, $result);
 	}
 
@@ -88,10 +88,10 @@ class BcTextHelperTest extends BaserTestCase {
  * */
 	public function testBooleanAllowList() {
 		$result = $this->Helper->booleanAllowList();
-		$expect = array(
+		$expect = [
 			0 => "不可",
 			1 => "可"
-		);
+		];
 		$this->assertEquals($expect, $result);
 	}
 
@@ -100,10 +100,10 @@ class BcTextHelperTest extends BaserTestCase {
  */
 	public function testBooleanDoList() {
 		$result = $this->Helper->booleanDoList('baserCMSを');
-		$expect = array(
+		$expect = [
 			0 => 'baserCMSをしない',
 			1 => 'baserCMSをする'
-		);
+		];
 		$this->assertEquals($expect, $result);
 	}
 
@@ -121,7 +121,7 @@ class BcTextHelperTest extends BaserTestCase {
  * 都道府県のリストを出力するヘルパーのテスト
  */
 	public function testPrefList() {
-		$expect = array(
+		$expect = [
 			'' => '都道府県',
 			1 => "北海道", 2 => "青森県", 3 => "岩手県", 4 => "宮城県", 5 => "秋田県", 6 => "山形県", 7 => "福島県",
 			8 => "茨城県", 9 => "栃木県", 10 => "群馬県", 11 => "埼玉県", 12 => "千葉県", 13 => "東京都", 14 => "神奈川県",
@@ -130,11 +130,11 @@ class BcTextHelperTest extends BaserTestCase {
 			29 => "奈良県", 30 => "和歌山県", 31 => "鳥取県", 32 => "島根県", 33 => "岡山県", 34 => "広島県", 35 => "山口県",
 			36 => "徳島県", 37 => "香川県", 38 => "愛媛県", 39 => "高知県", 40 => "福岡県", 41 => "佐賀県", 42 => "長崎県",
 			43 => "熊本県", 44 => "大分県", 45 => "宮崎県", 46 => "鹿児島県", 47 => "沖縄県"
-		);
+		];
 		$result = $this->Helper->prefList();
 		$this->assertEquals($expect, $result);
 
-		$expect2 = array(
+		$expect2 = [
 			'' => '',
 			1 => "北海道", 2 => "青森県", 3 => "岩手県", 4 => "宮城県", 5 => "秋田県", 6 => "山形県", 7 => "福島県",
 			8 => "茨城県", 9 => "栃木県", 10 => "群馬県", 11 => "埼玉県", 12 => "千葉県", 13 => "東京都", 14 => "神奈川県",
@@ -143,7 +143,7 @@ class BcTextHelperTest extends BaserTestCase {
 			29 => "奈良県", 30 => "和歌山県", 31 => "鳥取県", 32 => "島根県", 33 => "岡山県", 34 => "広島県", 35 => "山口県",
 			36 => "徳島県", 37 => "香川県", 38 => "愛媛県", 39 => "高知県", 40 => "福岡県", 41 => "佐賀県", 42 => "長崎県",
 			43 => "熊本県", 44 => "大分県", 45 => "宮崎県", 46 => "鹿児島県", 47 => "沖縄県"
-		);
+		];
 
 		$result2 = $this->Helper->prefList(false);
 		$this->assertEquals($expect2, $result2);
@@ -231,12 +231,12 @@ class BcTextHelperTest extends BaserTestCase {
  */
 	public function testDateTimeWareki() {
 		// 適当な時間を設定
-		$arrDate = array(
+		$arrDate = [
 			'wareki'=> true,
 			'year' 	=> 'h-27',
 			'month' => 8,
 			'day'	=> 11
-		);
+		];
 
 		$result = $this->Helper->dateTimeWareki($arrDate);
 		$expect = '平成 27年 8月 11日';
@@ -244,12 +244,12 @@ class BcTextHelperTest extends BaserTestCase {
 
 		// 異常系
 		// 存在しない日時（現在は、そのまま出力する仕様となっているので見直し要）
-		$arrDate = array(
+		$arrDate = [
 			'wareki'=> true,
 			'year' 	=> 'g-27',
 			'month' => 14,
 			'day'	=> 35
-		);
+		];
 		$expect = ' 27年 14月 35日';
 		$result = $this->Helper->dateTimeWareki($arrDate);
 		$this->assertEquals($expect, $result);
@@ -287,11 +287,11 @@ class BcTextHelperTest extends BaserTestCase {
 	public function testDateTime() {
 		
 		// 適当な時間を設定
-		$arrDate = array(
+		$arrDate = [
 			'year' 	=> 2015,
 			'month' => 8,
 			'day'	=> 11
-		);
+		];
 		$result = $this->Helper->dateTime($arrDate);
 		$expect = '2015/8/11';
 		$this->assertEquals($expect, $result);
@@ -309,11 +309,11 @@ class BcTextHelperTest extends BaserTestCase {
 
 
 		// 不正な日付（現在はそのまま出力してしまう仕様となっている）
-		$arrDate = array(
+		$arrDate = [
 			'year' 	=> 2015,
 			'month' => 20,
 			'day'	=> 11
-		);
+		];
 		$result = $this->Helper->dateTime($arrDate);
 		$expect = '2015/20/11';
 		$this->assertEquals($expect, $result);
@@ -372,7 +372,7 @@ class BcTextHelperTest extends BaserTestCase {
 	public function testArrayValue() {
 
 		// 適当な配列
-		$array = array("a","i","u","e","o");
+		$array = ["a","i","u","e","o"];
 
 		// $keyが2
 		$result = $this->Helper->arrayValue(2, $array);
@@ -398,16 +398,16 @@ class BcTextHelperTest extends BaserTestCase {
 	public function testArrayValues() {
 
 		// 適当な連想配列とキーのリスト
-		$array = array( "key1" => "apple", "key2" => "lemon",  "key3" => "banana");
+		$array = ["key1" => "apple", "key2" => "lemon",  "key3" => "banana"];
 
 		// キーを指定
-		$keys = array("key1", "key2", "key3");
+		$keys = ["key1", "key2", "key3"];
 		$result = $this->Helper->arrayValues(",", $keys, $array);
 		$expect = "apple,lemon,banana";
 		$this->assertEquals($expect, $result);
 
 		// 指定したキーが空の場合
-		$keys = array();
+		$keys = [];
 		$result = $this->Helper->arrayValues(",", $keys, $array);
 		$expect = "";
 		$this->assertEquals($expect, $result);
@@ -448,7 +448,7 @@ class BcTextHelperTest extends BaserTestCase {
  */
 	public function testBooleanStatusList() {
 		$result = $this->Helper->booleanStatusList();
-		$expect = array(0 => "無効", 1 => "有効");
+		$expect = [0 => "無効", 1 => "有効"];
 		$this->assertEquals($expect, $result);
 	}
 

@@ -14,12 +14,13 @@
  * [ADMIN] ブログカテゴリ フォーム
  */
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
+$fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->value('BlogCategory.name');
 ?>
 
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $this->request->params['Content']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name')), '/' . $this->request->params['Content']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name'), array('target' => '_blank')) ?></strong></p>
+		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($fullUrl, $fullUrl, array('target' => '_blank')) ?></strong></p>
 	</div>
 <?php endif ?>
 
@@ -30,6 +31,8 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false))) ?>
 <?php endif; ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <?php echo $this->BcForm->input('BlogCategory.id', array('type' => 'hidden')) ?>
 
@@ -111,6 +114,7 @@ $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 	</table>
 </div>
 
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

@@ -70,10 +70,19 @@ $baseUrl = '';
 if($urlArray) {
 	$baseUrl = implode('/', $urlArray) . '/';
 }
+
 $baseUrl = $hostUrl . $baseUrl;
+
+if($this->request->data['Site']['use_subdomain']) {
+	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
+	$previewUrl = $targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host;
+} else {
+	$previewUrl = $this->BcContents->getUrl($this->request->data['Content']['url'], false);
+}
 
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
 $this->BcBaser->js('admin/contents/edit', false, array('id' => 'AdminContentsEditScript',
+	'data-previewurl' => $previewUrl,
 	'data-fullurl' => $this->BcContents->getUrl($this->request->data['Content']['url'], true, $this->request->data['Site']['use_subdomain']),
 	'data-current' => json_encode($this->request->data),
 	'data-settings' => $this->BcContents->getJsonSettings()
@@ -93,13 +102,13 @@ if($this->BcContents->isEditable()) {
 <?php echo $this->BcForm->hidden('Content.plugin') ?>
 <?php echo $this->BcForm->hidden('Content.type') ?>
 <?php echo $this->BcForm->hidden('Content.entity_id') ?>
-<?php echo $this->BcForm->hidden('Content.parent_id') ?>
 <?php echo $this->BcForm->hidden('Content.url') ?>
 <?php echo $this->BcForm->hidden('Content.alias_id') ?>
 <?php echo $this->BcForm->hidden('Content.site_root') ?>
 <?php echo $this->BcForm->hidden('Content.site_id') ?>
 <?php echo $this->BcForm->hidden('Content.lft') ?>
 <?php echo $this->BcForm->hidden('Content.rght') ?>
+<?php echo $this->BcForm->hidden('Content.status') ?>
 <?php echo $this->BcForm->hidden('Content.main_site_content_id') ?>
 
 
@@ -120,7 +129,7 @@ if($this->BcContents->isEditable()) {
 					<smalL>[サイト]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?>　
 					<?php if(!$this->request->data['Content']['site_root']): ?>
 					<small>[フォルダ]</small>
-					<?php echo $this->BcForm->input('Content.parent_id', array('type' => 'select', 'options' => $parentContents, 'escape' => false)) ?>　
+					<?php echo $this->BcForm->input('Content.parent_id', array('type' => 'select', 'options' => $parentContents, 'escape' => true)) ?>　
 					<?php echo $this->BcForm->error('Content.parent_id') ?>　
 					<br />
 					<?php endif ?>
@@ -183,8 +192,8 @@ if($this->BcContents->isEditable()) {
 					<?php echo $this->BcForm->error('Content.self_status') ?>
 					<?php echo $this->BcForm->error('Content.self_publish_begin') ?>
 					<?php echo $this->BcForm->error('Content.self_publish_end') ?>
-					<?php if($this->BcForm->value('Content.status') != $this->BcForm->value('Content.self_status')): ?>
-						<p>※ 親フォルダの設定を継承し非公開状態となっています</p>
+					<?php if((bool) $this->BcForm->value('Content.status') != (bool) $this->BcForm->value('Content.self_status')): ?>
+						<p class="parents-disable">※ 親フォルダの設定を継承し非公開状態となっています</p>
 					<?php endif ?>
 					<?php if(($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) || 
 							($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>

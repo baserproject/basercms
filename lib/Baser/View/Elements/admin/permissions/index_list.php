@@ -12,7 +12,10 @@
 
 /**
  * [ADMIN] アクセス制限設定一覧
+ * 
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(5);
 ?>
 
 
@@ -39,6 +42,7 @@
 <th>NO</th>
 <th>ルール名<br />URL設定</th>
 <th>アクセス</th>
+<?php echo $this->BcListTable->dispatchShowHead() ?>
 <th>登録日<br />更新日</th>
 </tr>
 </thead>
@@ -49,7 +53,7 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

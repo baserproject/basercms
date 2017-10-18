@@ -167,6 +167,13 @@ class MailController extends MailAppController {
 		if ($this->dbDatas['mailContent']['MailContent']['widget_area']) {
 			$this->set('widgetArea', $this->dbDatas['mailContent']['MailContent']['widget_area']);
 		}
+		
+		// キャッシュ対策
+		if (!isConsole()) {
+			header("Cache-Control: no-cache, no-store, must-revalidate");
+			header("Pragma: no-cache");
+			header("Expires: ". date(DATE_RFC1123, strtotime("-1 day")));
+		}
 	}
 
 /**
@@ -239,6 +246,11 @@ class MailController extends MailAppController {
 		} else {
 			// 入力データを整形し、モデルに引き渡す
 			$this->request->data = $this->MailMessage->create($this->MailMessage->autoConvert($this->request->data));
+			
+			// fileタイプへの送信データ検証
+			if (!$this->_checkDirectoryRraversal()) {
+				$this->redirect($this->request->params['Content']['url'] . '/index');
+			}
 
 			// 画像認証を行う
 			if ($this->request->params['Site']['name'] != 'mobile' && $this->dbDatas['mailContent']['MailContent']['auth_captcha']) {
@@ -302,7 +314,12 @@ class MailController extends MailAppController {
 					unset($this->request->data['MailMessage']['auth_captcha']);
 				}
 			}
-
+			
+			// fileタイプへの送信データ検証
+			if (!$this->_checkDirectoryRraversal()) {
+				$this->redirect($this->request->params['Content']['url'] . '/index');
+			}
+			
 			$this->MailMessage->create($this->request->data);
 
 			// データの入力チェックを行う
@@ -476,6 +493,11 @@ class MailController extends MailAppController {
 
 		// ユーザーに送信
 		if (!empty($userMail)) {
+			$site = BcSite::findCurrent();
+			$agentTemplate = false;
+			if($site && $site->device) {
+				$agentTemplate = true;
+			}
 			$data['other']['mode'] = 'user';
 			$options = array(
 				'fromName'	=> $mailContent['sender_name'],
@@ -483,6 +505,7 @@ class MailController extends MailAppController {
 				'template'	=> 'Mail.' . $mailContent['mail_template'],
 				'replyTo'		=> $fromAdmin,
 				'attachments'	=> $attachments,
+				'agentTemplate' => $agentTemplate,
 				'additionalParameters'	 => '-f ' . $fromAdmin,
 			);
 			$this->sendMail($userMail, $mailContent['subject_user'], $data, $options);
@@ -490,6 +513,10 @@ class MailController extends MailAppController {
 
 		// 管理者に送信
 		if (!empty($adminMail)) {
+			// カンマ区切りで複数設定されていた場合先頭のアドレスをreplayToに利用
+			if (strpos($userMail, ',') !== false) {
+				list($userMail) = explode(',', $userMail);
+			}
 			$data['other']['mode'] = 'admin';
 			$options = array(
 				'fromName' => $mailContent['sender_name'],
@@ -503,6 +530,31 @@ class MailController extends MailAppController {
 			);
 			$this->sendMail($adminMail, $mailContent['subject_admin'], $data, $options);
 		}
+	}
+	
+/**
+ * ファイルフィールドのデータがアップロードされたファイルパスであることを検証する
+ * 
+ * @return boolean
+ */
+	private function _checkDirectoryRraversal() {
+		if (!isset($this->dbDatas['mailFields']) 
+			|| !is_array($this->dbDatas['mailFields'])
+			|| empty($this->MailMessage->Behaviors->BcUpload->settings['MailMessage'])) {
+			return false;
+		}
+		
+		$settings = $this->MailMessage->Behaviors->BcUpload->settings['MailMessage'];
+		
+		foreach($this->dbDatas['mailFields'] as $mailField) {
+			if ($mailField['MailField']['type'] == 'file' &&
+				!empty($this->request->data['MailMessage'][$mailField['MailField']['field_name']]['tmp_name'])) {
+				if (!is_uploaded_file($this->request->data['MailMessage'][$mailField['MailField']['field_name']]['tmp_name'])) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 /**

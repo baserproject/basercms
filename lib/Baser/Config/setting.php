@@ -102,6 +102,14 @@ $config['BcRequire'] = array(
 $config['BcEnv'] = array(
 	// テストDBプレフィックス
 	'testDbPrefix' => 'test_',
+	// WebサイトURL（インストーラーで install.php 自動設定される、システム設定で変更可）
+	'siteUrl' => '',
+	// SSLのWebサイトURL（システム設定で変更可）
+	'sslUrl' => '',
+	// 復数のWebサイトを管理する場合のメインとなるドメイン
+	'mainDomain' => '',
+	// 現在のリクエストのホスト
+	'host' => @$_SERVER['HTTP_HOST']
 );
 
 /**
@@ -289,6 +297,19 @@ $config['BcContents'] = [
 				'multiple' => true,
 				'title' => 'エイリアス',
 				'icon'	=> 'admin/icon_alias.png',
+				'routes' => [
+					'add'	=> [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'add',
+						1
+					],
+					'edit'	=> [
+						'admin' => true,
+						'controller'=> 'contents',
+						'action'	=> 'edit_alias'
+					]
+				],
 			],
 			'ContentLink'	=> [
 				'multiple' => true,

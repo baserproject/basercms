@@ -66,6 +66,10 @@ class MailField extends MailAppModel {
 			array('rule' => array('maxLength', 255),
 				'message' => '後見出しは255文字以内で入力してください。')
 		),
+		'source' => array(
+			array('rule' => array('sourceMailField'),
+				'message' => '選択リストを入力してください。')
+		),
 		'options' => array(
 			array('rule' => array('maxLength', 255),
 				'message' => 'オプションは255文字以内で入力してください。')
@@ -103,8 +107,7 @@ class MailField extends MailAppModel {
  * @return array source
  */
 	public function getControlSource($field = null) {
-		
-		$source['type'] = array(
+		$source['type'] = [
 			'text'				=> 'テキスト',
 			'textarea'			=> 'テキストエリア',
 			'radio'				=> 'ラジオボタン',
@@ -117,26 +120,23 @@ class MailField extends MailAppModel {
 			'date_time_wareki'	=> '和暦日付',
 			'date_time_calender'=> 'カレンダー',
 			'hidden'			=> '隠しフィールド'
-		);
-
-		$source['valid'] = array(
+		];
+		$source['valid'] = [
 			'VALID_NOT_EMPTY'	=> '入力必須',
-			'VALID_EMAIL'		=> 'Eメールチェック',
+			'VALID_EMAIL'		=> 'Eメールチェック（入力必須）',
 			'/^(|[0-9]+)$/'		=> '数値チェック',
 			'/^([0-9]+)$/'		=> '数値チェック（入力必須）'
-		);
-
-		$source['valid_ex'] = array(
+		];
+		$source['valid_ex'] = [
 			'VALID_EMAIL_CONFIRM'	=> 'Eメール比較チェック',
 			'VALID_GROUP_COMPLATE'	=> 'グループチェック',
 			'VALID_NOT_UNCHECKED'	=> 'チェックボックス未入力チェック',
 			'VALID_DATETIME'		=> '日付チェック',
 			'VALID_MAX_FILE_SIZE'	=> 'ファイルアップロードサイズ制限',
-			'VALID_FILE_EXT'		=> 'ファイル拡張子チェック'
-		);
-
-		$source['auto_convert'] = array('CONVERT_HANKAKU' => '半角変換');
-
+			'VALID_FILE_EXT'		=> 'ファイル拡張子チェック',
+			'VALID_ZENKAKU_KATAKANA' 		=> '全角カタカナチェック'
+		];
+		$source['auto_convert'] = ['CONVERT_HANKAKU' => '半角変換'];
 		if ($field) {
 			return $source[$field];
 		} else {
@@ -167,15 +167,37 @@ class MailField extends MailAppModel {
 
 /**
  * メールフィールドの値として正しい文字列か検証する
- * 半角英数-_\s
+ * 半角英数-_
  *
  * @param array $check
  * @return boolean
  */
 	public function halfTextMailField($check) {
 		$subject = $check[key($check)];
-		$pattern = "/^[a-zA-Z0-9-_\s]*$/";
+		$pattern = "/^[a-zA-Z0-9-_]*$/";
 		return !!(preg_match($pattern, $subject) === 1);
+	}
+
+/**
+ * 選択リストの入力チェック
+ * 
+ * @param type $check
+ */
+	public function sourceMailField($check) {
+		switch ($this->data['MailField']['type']) {
+			case 'radio':		// ラジオボタン
+			case 'select':		// セレクトボックス
+			case 'multi_check':	// マルチチェックボックス
+			case 'autozip':		// 自動保管郵便番号
+				// 選択リストのチェックを行う
+				$result = (!empty($check[key($check)]));
+				break;
+			default:
+				// 選択リストが不要のタイプの時はチェックしない
+				$result = true;
+				break;
+		}
+		return $result;
 	}
 
 /**
@@ -195,11 +217,23 @@ class MailField extends MailAppModel {
 		if ($id) {
 			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
 		}
+		$oldData = $data;
 
 		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
 			$data['MailField']['name'] .= '_copy';
 			$data['MailField']['field_name'] .= '_copy';
 			return $this->copy(null, $data, $options); // 再帰処理
+		}
+
+		// EVENT MailField.beforeCopy
+		if (!$sortUpdateOff) {
+			$event = $this->dispatchEvent('beforeCopy', [
+				'data' => $data,
+				'id' => $id,
+			]);
+			if ($event !== false) {
+				$data = $event->result === true ? $event->data['data'] : $event->result;
+			}
 		}
 
 		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
@@ -216,6 +250,18 @@ class MailField extends MailAppModel {
 		$result = $this->save();
 		if ($result) {
 			$result['MailField']['id'] = $this->getInsertID();
+			$data = $result;
+
+			// EVENT MailField.afterCopy
+			if (!$sortUpdateOff) {
+				$event = $this->dispatchEvent('afterCopy', [
+					'id' => $data['MailField']['id'],
+					'data' => $data,
+					'oldId' => $id,
+					'oldData' => $oldData,
+				]);
+			}
+
 			return $result;
 		} else {
 			return false;

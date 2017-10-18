@@ -12,6 +12,8 @@
 
 /**
  * [ADMIN] ログイン
+ *
+ * @var BcAppView $this
  */
 echo $this->Flash->render('auth');
 $userModel = Configure::read('BcAuthPrefix.' . $currentPrefix . '.userModel');
@@ -20,128 +22,10 @@ if (!$userModel) {
 }
 list(, $userModel) = pluginSplit($userModel);
 $userController = Inflector::tableize($userModel);
-$this->append('script', <<< CSS_END
-<style type="text/css">
-#Contents {
-	display: none;
-}
-#CreditScroller,#CreditScroller a{
-	color:#333!important;
-}
-#Credit {
-	text-align: right;
-}
-#CreditScrollerInner {
-	margin-right:0;
-}
-html {
-	margin-top:0;
-}
-#ToolBar {
-	position:relative;
-}
-</style>
-CSS_END
-);
+$this->BcBaser->css('admin/login', ['inline' => false]);
+$this->BcBaser->js('admin/users/login', false);
 ?>
 
-<script type="text/javascript">
-window.onunload = function(){};	// safariのキャッシュ対策だが、safari 10.0.3 では効かない
-if (typeof window.onpageshow != "undefined") {
-	window.onpageshow = loadInit;	
-} else {
-	$(window).load(loadInit);	
-}
-function loadInit(){
-	$.bcToken.setTokenUrl('/mail/mail/ajax_get_token');
-	$.bcToken.check(function() {
-		$('input[type="submit"]').removeAttr('disabled');
-	}, {loaderType: "none"});	
-}
-$(function(){
-
-	if($("#LoginCredit").html() == 1) {
-		$("body").hide();
-	}
-	$("body").prepend($("#Login"));
-	changeNavi("#"+$("#UserModel").html()+"Name");
-	changeNavi("#"+$("#UserModel").html()+"Password");
-
-	$("#"+$("#UserModel").html()+"Name,#"+$("#UserModel").html()+"Password").bind('keyup', function(){
-		if($(this).val()) {
-			$(this).prev().hide();
-		} else {
-			$(this).prev().show();
-		}
-	});
-
-	$("#Login").click(function(){
-		changeView(false);
-	});
-
-	$("#BtnLogin").click(function(){
-		$("#BtnLogin").attr('disabled', 'disabled');
-		$("#UserLoginForm").submit();
-	});
-	
-	$("#LoginInner").click(function(e){
-		if (e && e.stopPropagation) {
-			e.stopPropagation();
-		} else {
-			window.event.cancelBubble = true;
-		}
-	});
-
-	if($("#LoginCredit").html() == 1) {
-		$("body").append($("<div>&nbsp;</div>").attr('id', 'Credit').show());
-		$("#LoginInner").css('color', '#FFF');
-		$("#HeaderInner").css('height', '50px');
-		$("#Logo").css('position', 'absolute');
-		$("#Logo").css('z-index', '10000');
-		changeView($("#LoginCredit").html());
-		// 本体がない場合にフッターが上にあがってしまうので一旦消してから表示
-		$("body").fadeIn(50);
-	}
-
-	function changeNavi(target){
-		if($(target).val()) {
-			$(target).prev().hide();
-		} else {
-			$(target).prev().show();
-		}
-	}
-	function changeView(creditOn) {
-		if(creditOn) {
-			credit();
-		} else {
-			openCredit();
-		}
-	}
-	function openCredit(completeHandler) {
-
-		if(!$("#Credit").size()) {
-			return;
-		}
-
-		$("#LoginInner").css('color', '#333');
-		$("#HeaderInner").css('height', 'auto');
-		$("#Logo").css('position', 'relative');
-		$("#Logo").css('z-index', '0');
-		$("#Wrap").css('height', '280px');
-		if(completeHandler) {
-			if($("#Credit").length) {
-				$("#Credit").fadeOut(1000, completeHandler);
-			}
-			completeHandler();
-		} else {
-			if($("#Credit").length) {
-				$("#Credit").fadeOut(1000);
-			}
-		}
-	}
-});
-
-</script>
 
 <div id="UserModel" style="display:none"><?php echo $userModel ?></div>
 <div id="LoginCredit" style="display:none"><?php echo $this->BcBaser->siteConfig['login_credit'] ?></div>

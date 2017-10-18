@@ -14,7 +14,8 @@
  * [管理画面] サイト設定 フォーム
  */
 $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteConfigsFormScript',
-	'data-safeModeOn' => (string) $safeModeOn
+	'data-safeModeOn' => (string) $safeModeOn,
+	'data-isAdminSsl' => (string) $this->request->data['SiteConfig']['admin_ssl']
 ));
 ?>
 
@@ -23,7 +24,10 @@ $this->BcBaser->js('admin/site_configs/form', false, array('id' => 'AdminSiteCon
 
 
 <?php echo $this->BcForm->create('SiteConfig', ['url' => ['action' => 'form']]) ?>
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 <?php echo $this->BcForm->hidden('SiteConfig.id') ?>
+
+
 <div class="section">
 <table cellpadding="0" cellspacing="0" class="form-table section">
 	<tr>
@@ -345,6 +349,8 @@ h2 {}
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
 <?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>

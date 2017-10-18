@@ -30,6 +30,8 @@ $params = explode('/', $path);
 	<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileForm', 'url' => array_merge(array('action' => 'edit'), array($theme, $plugin, $type), explode('/', $path)))) ?>
 <?php endif ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('ThemeFile.parent', array('type' => 'hidden')) ?>
 
 <!-- form -->
@@ -80,6 +82,9 @@ $params = explode('/', $path);
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit">
 	<?php if ($this->request->action == 'admin_add'): ?>
 		<?php $this->BcBaser->link('一覧に戻る', array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('class' => 'btn-gray button')); ?>

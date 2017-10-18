@@ -1,0 +1,18 @@
+#Contents {
+	display: none;
+}
+#CreditScroller,#CreditScroller a{
+	color:#333!important;
+}
+#Credit {
+	text-align: right;
+}
+#CreditScrollerInner {
+	margin-right:0;
+}
+html {
+	margin-top:0;
+}
+#ToolBar {
+	position:relative;
+}

@@ -16,8 +16,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => 1,
 			'contents' => '<section class="mainHeadline">
 <h2>シングルページデザインで<br />
@@ -40,8 +40,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 2,
 			'contents' => '<div class="articleArea" id="company">
 <article class="mainWidth">
@@ -85,8 +85,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 3,
 			'contents' => '<div class="articleArea bgGray" id="service">
 <article class="mainWidth">
@@ -105,8 +105,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 4,
 			'contents' => '<div class="articleArea" id="recruit">
 <article class="mainWidth">
@@ -158,8 +158,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 5,
 			'contents' => '<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <div style="text-align:center;background-color:#8ABE08;"> <span style="color:white;">メインメニュー</span> </div>
@@ -181,8 +181,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 6,
 			'contents' => '<div id="news" class="clearfix">
 <div class="news" style="margin-right:28px;">
@@ -202,8 +202,8 @@ class PageBcPageHelperFixture extends BaserTestFixture {
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 7,
 			'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
@@ -225,8 +225,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 8,
 			'contents' => '<h2 class="contents-head">サービス</h2>
 <div class="section">
@@ -257,8 +257,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 9,
 			'contents' => '<h2 class="contents-head">サイトマップ</h2>
 <?php $this->BcBaser->sitemap() ?>
@@ -270,8 +270,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 10,
 			'contents' => '<h2>
 	アイコンの使い方</h2>
@@ -372,8 +372,8 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 11,
 			'contents' => '<h2 class="contents-head">会社案内</h2>
 <h3 class="contents-head">会社データ</h3>
@@ -395,14 +395,14 @@ WEBシステム開発事業（ダミー）</td></tr>
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => 12,
 			'contents' => '<h2 class="contents-head">会社案内</h2>',
 			'draft' => '',
 			'code' => '',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-	);
+		],
+	];
 }

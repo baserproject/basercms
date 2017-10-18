@@ -18,6 +18,9 @@
 
 <!-- form -->
 <?php echo $this->BcForm->create('BlogTag') ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
 		<?php if ($this->action == 'admin_edit'): ?>
@@ -36,10 +39,12 @@
 				<?php echo $this->BcForm->error('BlogTag.name') ?>
 			</td>
 		</tr>
-
 		<?php echo $this->BcForm->dispatchAfterForm() ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <!-- button -->
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>

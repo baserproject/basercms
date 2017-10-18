@@ -9,8 +9,8 @@ class UserFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => 'basertest',
 			'password' => '32b5225591a89829bd165f2883a013bb6764c7d6',
@@ -21,8 +21,8 @@ class UserFixture extends BaserTestFixture {
 			'nickname' => null,
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'name' => 'basertest2',
 			'password' => '47281835ff5f903924455e855517cda7ae8d4523',
@@ -33,7 +33,7 @@ class UserFixture extends BaserTestFixture {
 			'nickname' => null,
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-	);
+		],
+	];
 
 }

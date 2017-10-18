@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] フィード設定一覧　行
+ * @var \BcAppView $this
  */
 ?>
 
@@ -28,6 +29,7 @@
 	<td><?php echo $data['FeedConfig']['id']; ?></td>
 	<td><?php $this->BcBaser->link($data['FeedConfig']['name'], array('action' => 'edit', $data['FeedConfig']['id'])) ?></td>
 	<td><?php echo $data['FeedConfig']['display_number'] ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['modified']); ?></td>
 </tr>

@@ -20,6 +20,9 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <h2>基本項目</h2>
 
 <?php echo $this->BcForm->create('MailContent', array('novalidate' => true)) ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('MailContent.id', array('type' => 'hidden')) ?>
 
 <div class="section">
@@ -219,6 +222,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

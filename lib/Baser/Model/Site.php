@@ -23,7 +23,15 @@ class Site extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcCache'];
-		
+
+
+/**
+ * 保存時にエイリアスが変更されたかどうか
+ *
+ * @var bool
+ */
+	private $__changedAlias = false;
+	
 /**
  * バリデーション
  *
@@ -187,6 +195,7 @@ class Site extends AppModel {
 /**
  * メインサイトのデータを取得する
  * 
+ * @param mixed $options 取得するフィールド
  * @return array
  */
 	public function getRootMain($options = []) {
@@ -348,7 +357,7 @@ class Site extends AppModel {
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'title'		=> $this->data['Site']['title'],
 				'self_status'	=> $this->data['Site']['status'],
-		  ]);
+			], $this->__changedAlias);
 		}
 		if(!empty($this->data['Site']['main'])) {
 			$data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
@@ -357,6 +366,7 @@ class Site extends AppModel {
 				$this->save($data, array('validate' => false, 'callbacks' => false));
 			}
 		}
+		$this->__changedAlias = false;
 	}
 
 /**
@@ -495,6 +505,7 @@ class Site extends AppModel {
  * 選択可能なデバイスの一覧を取得する
  *
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return array
  */
 	public function getSelectableDevices($mainSiteId, $currentSiteId) {
@@ -520,6 +531,7 @@ class Site extends AppModel {
  * 選択可能が言語の一覧を取得する
  * 
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return array
  */
 	public function getSelectableLangs($mainSiteId, $currentSiteId) {
@@ -600,6 +612,22 @@ class Site extends AppModel {
 			$this->getDataSource()->commit();
 		}
 		return $result;
+	}
+
+/**
+ * Before Save
+ * 
+ * @param array $options
+ * @return bool
+ */
+	public function beforeSave($options = array()) {
+		if(!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
+			$oldAlias = $this->field('alias', ['Site.id' => $this->data[$this->alias]['id']]);
+			if($oldAlias != $this->data[$this->alias]['alias']) {
+				$this->__changedAlias = true;
+			}
+		}
+		return true;
 	}
 	
 }

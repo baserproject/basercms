@@ -15,15 +15,19 @@
  */
 ?>
 <?php echo $this->BcForm->input('ResetDbUrl', array('type' => 'hidden', 'value' => $this->BcBaser->getUrl(array('action' => 'reset_db')))) ?>
-<script type="text/javascript">
+<script>
 $(function(){
-  $("#BtnReset").click(function(){
-    if(confirm('プラグインのデータを初期化します。よろしいですか？')) {
-      $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
-    } else {
-      return false;
-    }
-  });
+	$("#BtnReset").click(function(){
+        if(confirm('プラグインのデータを初期化します。よろしいですか？')) {
+            $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
+            $.bcUtil.showLoader();
+        } else {
+            return false;
+        }
+	});
+	$("#BtnSave").click(function(){
+		$.bcUtil.showLoader();
+	});
 });
 </script>
 
@@ -38,9 +42,9 @@ $(function(){
 <?php echo $this->BcForm->input('Plugin.version', array('type' => 'hidden')) ?>
 
 <div class="em-box">
-	<?php echo $this->BcForm->value('Plugin.name') . ' ' . $this->BcForm->value('Plugin.version') ?>
+	<?php echo e($this->BcForm->value('Plugin.name')) . ' ' . $this->BcForm->value('Plugin.version') ?>
 	<?php if ($this->BcForm->value('Plugin.title')): ?>
-		（<?php echo $this->BcForm->value('Plugin.title') ?>）
+		（<?php echo e($this->BcForm->value('Plugin.title')) ?>）
 	<?php endif ?>
 </div>
 

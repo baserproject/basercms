@@ -12,7 +12,10 @@
 
 /**
  * [ADMIN] エディタテンプレート一覧　テーブル
+ * 
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(5);
 ?>
 
 
@@ -27,6 +30,7 @@
 			<th>NO</th>
 			<th>テンプレート名</th>
 			<th>説明文</th>
+			<?php echo $this->BcListTable->dispatchShowHead() ?>
 			<th>登録日<br />
 				更新日</th>
 		</tr>
@@ -38,7 +42,7 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="5"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

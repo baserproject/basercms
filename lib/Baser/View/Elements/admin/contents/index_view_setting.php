@@ -25,5 +25,10 @@ if($this->action == 'admin_index') {
     <?php echo $this->BcForm->input('ViewSetting.site_id', array('type' => 'hidden', 'options' => $sites)) ?>
 <?php endif ?>
     <small>表示</small> <?php echo $this->BcForm->input('ViewSetting.list_type', array('type' => 'radio', 'options' => $listTypes)) ?>
+    <span id="GrpChangeTreeOpenClose">
+        　｜　
+        <button id="BtnOpenTree" class="button-small">全て展開する</button>　
+        <button id="BtnCloseTree" class="button-small">全て閉じる</button>
+    </span>
 </div>
 <?php endif ?>

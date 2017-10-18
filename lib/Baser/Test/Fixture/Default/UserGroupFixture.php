@@ -9,8 +9,8 @@ class UserGroupFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => 'admins',
 			'title' => 'システム管理',
@@ -20,8 +20,8 @@ class UserGroupFixture extends BaserTestFixture {
 			'use_move_contents' => 1,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:53'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'name' => 'operators',
 			'title' => 'サイト運営',
@@ -31,7 +31,7 @@ class UserGroupFixture extends BaserTestFixture {
 			'use_move_contents' => 0,
 			'modified' => null,
 			'created' => '2015-01-27 12:56:53'
-		),
-	);
+		],
+	];
 
 }

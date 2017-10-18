@@ -228,3 +228,21 @@ span#DebugMode{
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+
+
+/* モバイル
+----------------------------------------------- */
+@media screen and (max-width:480px) {
+	html {
+		margin-top: 62px;
+	}
+
+	#ToolbarInner {
+		padding: 0;
+		min-width: unset;
+	}
+
+	#UserMenu ul div#SystemMenu{
+		width:300px;
+	}
+}

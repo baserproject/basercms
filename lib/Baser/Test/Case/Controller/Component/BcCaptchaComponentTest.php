@@ -20,7 +20,7 @@ App::uses('Controller', 'Controller');
  */
 class BcCaptchaTestController extends Controller {
 
-	public $components = array('BcCaptcha', 'Session');
+	public $components = ['BcCaptcha', 'Session'];
 
 }
 
@@ -29,7 +29,7 @@ class BcCaptchaTestController extends Controller {
  */
 class BcCaptchaComponentTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
@@ -43,9 +43,9 @@ class BcCaptchaComponentTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.Plugin',
 		'baser.Default.User',
-	);
+	];
 
-	public $components = array('BcCaptcha');
+	public $components = ['BcCaptcha'];
 
 	public function setUp() {
 		@session_start();
@@ -131,7 +131,7 @@ class BcCaptchaComponentTest extends BaserTestCase {
 	public function testStrSplit() {
 
 		$result = $this->BcCaptcha->strSplit('aiueo');
-		$expected = array('a','i','u','e','o');
+		$expected = ['a','i','u','e','o'];
 		$this->assertEquals($expected, $result, '文字列を１文字づつ分割して配列にする処理が正しくありません');
 
 	}

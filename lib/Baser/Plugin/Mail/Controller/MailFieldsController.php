@@ -68,7 +68,9 @@ class MailFieldsController extends MailAppController {
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
-		$this->set('publishLink', $this->request->params['Content']['url']);
+		if($this->request->params['Content']['status']) {
+			$this->set('publishLink', $this->request->params['Content']['url']);
+		}
 	}
 
 /**
@@ -196,6 +198,7 @@ class MailFieldsController extends MailAppController {
 			if (is_array($data['MailField']['valid_ex'])) {
 				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
 			}
+
 			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
 				$ret = true;

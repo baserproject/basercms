@@ -143,7 +143,9 @@ class BlogContentsController extends BlogAppController {
 			$this->request->data = $this->BlogContent->constructEyeCatchSize($this->request->data);
 		}
 
-		$this->set('publishLink', $this->request->data['Content']['url']);
+		if($this->request->data['Content']['status']) {
+			$this->set('publishLink', $this->request->data['Content']['url']);
+		}
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
 		$this->set('blogContent', $this->request->data);
 		$this->set('themes', $this->SiteConfig->getThemes());

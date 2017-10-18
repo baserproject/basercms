@@ -36,7 +36,7 @@ if (Configure::read('BcRequest.isMaintenance')) {
 				<?php if (empty($this->request->params['Site']['name']) && $this->base == '/index.php' && $globalMenu['Content']['url'] == '/'): ?>
 					<?php /* PC版トップページ */ ?>
 					<li<?php echo $class ?>>
-						<?php echo str_replace('/index.php', '', $this->BcBaser->link($globalMenu['Content']['title'], $globalMenu['Content']['url'])) ?>
+						<?php echo str_replace('/index.php', '', $this->BcBaser->link($globalMenu['Content']['title'], $this->BcBaser->getContentsUrl($globalMenu['Content']['url']))) ?>
 					</li>
 				<?php else: ?>
 					<li<?php echo $class ?>>

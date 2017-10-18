@@ -24,8 +24,7 @@ class BootstrapTest extends BaserTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
-	);
+	public $fixtures = [];
 
 /**
  * __construct
@@ -34,7 +33,7 @@ class BootstrapTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = array(), $dataName = '') {
+	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 	}
 	
@@ -75,11 +74,11 @@ class BootstrapTest extends BaserTestCase {
 	}
 
 	public function getCacheSettingDataProvider() {
-		return array(
-			array('_cake_model_', 	'myapp_cake_model_', 	CACHE . 'models' . DS, 		strtotime("+999 days") - time()),
-			array('_cake_core_', 	'myapp_cake_core_', 	CACHE . 'persistent' . DS, 	strtotime("+999 days") - time()),
-			array('_cake_data_', 	'myapp_cake_data_', 	CACHE . 'datas' . DS, 		strtotime("+999 days") - time()),
-			array('_cake_env_', 	'myapp_cake_env_', 		CACHE . 'environment' . DS, strtotime("+999 days") - time()),
-		);
+		return [
+			['_cake_model_', 	'myapp_cake_model_', 	CACHE . 'models' . DS, 		strtotime("+999 days") - time()],
+			['_cake_core_', 	'myapp_cake_core_', 	CACHE . 'persistent' . DS, 	strtotime("+999 days") - time()],
+			['_cake_data_', 	'myapp_cake_data_', 	CACHE . 'datas' . DS, 		strtotime("+999 days") - time()],
+			['_cake_env_', 	'myapp_cake_env_', 		CACHE . 'environment' . DS, strtotime("+999 days") - time()],
+		];
 	}
 }

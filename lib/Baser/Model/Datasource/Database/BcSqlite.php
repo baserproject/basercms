@@ -456,6 +456,7 @@ class BcSqlite extends Sqlite {
 			}
 			if (strpos($columnName, '.')) {
 				list($table) = explode('.', $columnName);
+				$table = preg_replace('/^DISTINCT\s+/', '', $table);
 				if(empty($columnMeta[$table])) {
 					$pdo_statement = $this->_connection->query('PRAGMA table_info(' . $this->config['prefix'] . Inflector::tableize($table) . ')');
 					$fields = $pdo_statement->fetchAll(PDO::FETCH_ASSOC);

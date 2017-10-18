@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] テーマファイル一覧　行
+ * @var \BcAppView $this
  */
 $writable = true;
 if ((is_dir($fullpath) && !is_writable($fullpath)) || $theme == 'core') {
@@ -30,9 +31,6 @@ array_push($params, $data['name']);
 		<?php if ($data['type'] == 'folder'): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_open_folder.png', array('alt' => '開く', 'class' => 'btn')), array_merge(array('action' => 'index', $theme, $plugin, $type), $params), array('title' => '開く')) ?>
 		<?php endif ?>
-
-
-
 		<?php if ($writable): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array_merge(array('action' => 'ajax_copy', $theme, $type), $params), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
 			<?php if ($data['type'] == 'folder'): ?>
@@ -64,4 +62,5 @@ array_push($params, $data['name']);
 			<?php echo $data['name'] ?>
 		<?php endif ?>
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 </tr>

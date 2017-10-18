@@ -12,6 +12,9 @@
 ?>
 <!-- form -->
 <?php echo $this->BcForm->create('UploaderCategory') ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('UploaderCategory.id', array('type' => 'hidden')) ?>
 
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
@@ -31,7 +34,10 @@
 			<?php echo $this->BcForm->error('UploaderCategory.name') ?>
 		</td>
 	</tr>
+	<?php echo $this->BcForm->dispatchAfterForm() ?>
 </table>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>

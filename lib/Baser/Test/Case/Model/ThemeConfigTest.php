@@ -24,10 +24,10 @@ App::uses('ThemeConfig', 'Model');
  */
 class ThemeConfigTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.ThemeConfig',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -57,13 +57,13 @@ class ThemeConfigTest extends BaserTestCase {
 		copy($sourcePath, $dummyPath);
 		copy($sourcePath, $dummyTmpPath);
 
-		$data = array('ThemeConfig' => array(
-			'logo' => array(
+		$data = ['ThemeConfig' => [
+			'logo' => [
 				'name' => 'logo.png',
 				'tmp_name' => WWW_ROOT . 'files' . DS . 'theme_configs' . DS .'logo_tmp.png',
-				)
-			)
-		);
+				]
+			]
+		];
 		$this->ThemeConfig->saveImage($data);
 
 		// // ダミーの画像を削除
@@ -86,7 +86,7 @@ class ThemeConfigTest extends BaserTestCase {
 		$dummyPath = WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'logo.png';
 		copy($sourcePath, $dummyPath);
 
-		$data = array('ThemeConfig' => $data);
+		$data = ['ThemeConfig' => $data];
 		$this->ThemeConfig->deleteImage($data);
 		
 		// 画像の有無
@@ -102,11 +102,11 @@ class ThemeConfigTest extends BaserTestCase {
 	}
 
 	public function deleteImageDataProvider() {
-		return array(
-			array(array('logo_delete' => true), false, '画像を削除できません'),
-			array(array('logo' => true), true, '画像が削除されています'),
-			array(array(), true, '画像が削除されています'),
-		);
+		return [
+			[['logo_delete' => true], false, '画像を削除できません'],
+			[['logo' => true], true, '画像が削除されています'],
+			[[], true, '画像が削除されています'],
+		];
 	}
 
 /**
@@ -118,10 +118,12 @@ class ThemeConfigTest extends BaserTestCase {
  * @dataProvider updateColorConfigDataProvider
  */
 	public function testUpdateColorConfig($data, $expected, $message = null) {
+		$theme = Configure::read('BcSite.theme');
+		Configure::write('BcSite.theme', 'nada-icons');
 
 		// 設定元のファイル(config.css)を取得($dataが設定されてない場合、元のファイルが削除されるので、再生成するため)
 		$configCssPathOriginal = getViewPath() . 'css' . DS . 'config.css';
-		$FileOriginal = new File($configCssPathOriginal);  
+		$FileOriginal = new File($configCssPathOriginal);
 		$configOriginal = $FileOriginal->read();
 
 		// 設定ファイルの取得
@@ -129,7 +131,7 @@ class ThemeConfigTest extends BaserTestCase {
 		$File = new File($configCssPath);
 
 		// テーマーカラーの設定を実行
-		$data = array('ThemeConfig' => $data);
+		$data = ['ThemeConfig' => $data];
 		$this->ThemeConfig->updateColorConfig($data);
 
 		// 元のファイルを再生成
@@ -142,15 +144,15 @@ class ThemeConfigTest extends BaserTestCase {
 		unlink($configCssPath);
 
 		$this->assertRegExp('/' . $expected . '/s', $setting, $message);
-
+		Configure::write('BcSite.theme', $theme);
 	}
 
 	public function updateColorConfigDataProvider() {
-		return array(
-			array(array( 'color_main' => '000000' ), '#000000', 'テーマカラーを設定できません'),
-			array(array( 'color_main' => '000000', 'color_link' => '111111' ), '#000000.*#111111', 'テーマカラーを複数設定できません'),
-			array(array('hoge' => '000000'), "\{(\n|\r\n)}", '$dataが適切でないのにcssの要素が空ではありません'),
-			array(array(), "\{(\n|\r\n)\}", '$dataがないのにcssの要素が空ではありません'),
-		);
+		return [
+			[['color_main' => '000000' ], '#000000', 'テーマカラーを設定できません'],
+			[['color_main' => '000000', 'color_link' => '111111' ], '#000000.*#111111', 'テーマカラーを複数設定できません'],
+			[['hoge' => '000000'], "\{(\n|\r\n)}", '$dataが適切でないのにcssの要素が空ではありません'],
+			[[], "\{(\n|\r\n)\}", '$dataがないのにcssの要素が空ではありません'],
+		];
 	}
 }

@@ -33,7 +33,7 @@ class BlogCategoryTest extends BaserTestCase {
 		'baser.Default.BlogTag',
 		'baser.Default.Content',
 		'baser.Default.Site',
-		'plugin.blog.Model/BlogCategoryModel',
+		'plugin.blog.Model/BlogPost/BlogCategoryModel',
 	);
 
 	public function setUp() {
@@ -88,7 +88,7 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertEquals('ブログカテゴリ名は255文字以内で入力してください。', current($this->BlogCategory->validationErrors['name']));
 
 		$this->assertArrayHasKey('title', $this->BlogCategory->validationErrors);
-		$this->assertEquals('ブログカテゴリ名は255文字以内で入力してください。', current($this->BlogCategory->validationErrors['title']));
+		$this->assertEquals('ブログカテゴリタイトルは255文字以内で入力してください。', current($this->BlogCategory->validationErrors['title']));
 	}
 
 	public function test桁数チェック正常系() {
@@ -135,7 +135,7 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertFalse($this->BlogCategory->validates());
 
 		$this->assertArrayHasKey('name', $this->BlogCategory->validationErrors);
-		$this->assertEquals('入力されたブログカテゴリは既に登録されています。', current($this->BlogCategory->validationErrors['name']));
+		$this->assertEquals('入力されたブログカテゴリ名は既に登録されています。', current($this->BlogCategory->validationErrors['name']));
 	}
 
 /**
@@ -223,8 +223,7 @@ class BlogCategoryTest extends BaserTestCase {
  */
 	public function testHasNewCategoryAddablePermission() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
-		
+//		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
 	}
 
 

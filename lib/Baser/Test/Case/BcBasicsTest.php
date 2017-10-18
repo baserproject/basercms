@@ -21,14 +21,14 @@ class BcBasicsTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.BlogContent',
 		'baser.Default.Page',
 		'baser.Default.Plugin',
 		'baser.Default.SiteConfig',
 		'baser.Default.Site',
 		'baser.Default.Content',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -60,12 +60,12 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 	public function baseUrlDataProvider() {
-		return array(
-			array('/hoge/test', '/hoge/test/'),
-			array(null, '/'),
-			array('/hoge/test', '/hoge/test/'),
-			array(null, '/'),
-		);
+		return [
+			['/hoge/test', '/hoge/test/'],
+			[null, '/'],
+			['/hoge/test', '/hoge/test/'],
+			[null, '/'],
+		];
 	}
 
 
@@ -127,12 +127,12 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 	public function decodeContentDataProvider() {
-		return array(
-			array('image/jpeg', null, 'jpg'),
-			array(null, 'hoge.png', 'png'),
-			array(null, 'hoge', false),
-			array(null, null, false),
-		);
+		return [
+			['image/jpeg', null, 'jpg'],
+			[null, 'hoge.png', 'png'],
+			[null, 'hoge', false],
+			[null, null, false],
+		];
 	}
 
 /**
@@ -152,9 +152,9 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 	public function getUrlParamFromEnvDataProvider() {
-		return array(
-			array(null, '/s/test/', 's/test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません')
-		);
+		return [
+			[null, '/s/test/', 's/test/', 'URLパラメータのモバイルプレフィックスを正しく除外できません']
+		];
 	}
 
 /**
@@ -178,15 +178,15 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 	public function getUrlFromEnvDataProvider() {
-		return array(
-			array('/get/', null, null, 'get/', '$_GET["url"]からURLを正しく取得できません'),
-			array('/get/url/test', null, null, 'get/url/test', '$_GET["url"]からURLを正しく取得できません'),
-			array(null, '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
-			array(null, '/req/test.php?a=aaa&b=bbb', null, 'req/test.php', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
-			array(null, baseUrl() . '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
-			array(null, '/base/req/', '/base/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
-			array(null, '/base/req/', '/base/url/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'),
-		);
+		return [
+			['/get/', null, null, 'get/', '$_GET["url"]からURLを正しく取得できません'],
+			['/get/url/test', null, null, 'get/url/test', '$_GET["url"]からURLを正しく取得できません'],
+			[null, '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
+			[null, '/req/test.php?a=aaa&b=bbb', null, 'req/test.php', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
+			[null, baseUrl() . '/req/', null, 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
+			[null, '/base/req/', '/base/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
+			[null, '/base/req/', '/base/url/', 'req/', '$_SERVER["REQUEST_URI"]からURLを正しく取得できません'],
+		];
 	}
 
 /**
@@ -246,13 +246,13 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 	public function clearViewCacheDataProvider() {
-		return array(
-			array(null, null),
-			array('/test/', '.ext'),
-			array('/test/index', '.ext'),
-			array('/index.html', '.php'),
-			array('/m/index.html', '.php'),
-		);
+		return [
+			[null, null],
+			['/test/', '.ext'],
+			['/test/index', '.ext'],
+			['/index.html', '.php'],
+			['/m/index.html', '.php'],
+		];
 	}
 
 /**
@@ -347,7 +347,7 @@ class BcBasicsTest extends BaserTestCase {
 	public function testCheckTmpFolders() {
 		checkTmpFolders();
 
-		$paths = array(
+		$paths = [
 			TMP . 'logs',
 			TMP . 'sessions',
 			TMP . 'schemas',
@@ -359,7 +359,7 @@ class BcBasicsTest extends BaserTestCase {
 			CACHE . 'views',
 			CACHE . 'datas',
 			CACHE . 'environment',
-		);
+		];
 
 		// フォルダが生成されているかチェック
 		$result = true;
@@ -378,10 +378,10 @@ class BcBasicsTest extends BaserTestCase {
 	public function testEmptyFolder() {
 
 		$dummyPath = TMP . 'test' . DS;
-		$names = array(
-			'folder' => array('folder1', 'folder2'),
-			'file' => array('file1', 'file2'),
-		);
+		$names = [
+			'folder' => ['folder1', 'folder2'],
+			'file' => ['file1', 'file2'],
+		];
 
 		// ダミーのフォルダとファイルを作成
 		$Folder = new Folder();
@@ -456,12 +456,12 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 	public function fgetcsvRegDataProvider() {
-		return array(
-			array('test1,test2,test3', null, ',', '"', array('test1', 'test2', 'test3'), 'ファイルポインタから行を取得し、CSVフィールドを正しく処理できません'),
-			array('test1,test2,test3', 5, ',', '"', array('test'), '読み込む文字列の長さを指定できません'),
-			array('test1?test2?test3', null, '?', '"', array('test1', 'test2', 'test3\\'), 'デリミタを指定できません'),
-			array('test1,<<test2,test3<<', null, ',', '<<', array('test1', 'test2,test3'), 'enclosureを指定できません'),
-		);
+		return [
+			['test1,test2,test3', null, ',', '"', ['test1', 'test2', 'test3'], 'ファイルポインタから行を取得し、CSVフィールドを正しく処理できません'],
+			['test1,test2,test3', 5, ',', '"', ['test'], '読み込む文字列の長さを指定できません'],
+			['test1?test2?test3', null, '?', '"', ['test1', 'test2', 'test3\\'], 'デリミタを指定できません'],
+			['test1,<<test2,test3<<', null, ',', '<<', ['test1', 'test2,test3'], 'enclosureを指定できません'],
+		];
 	}
 /**
  * httpからのフルURLを取得する
@@ -511,20 +511,20 @@ class BcBasicsTest extends BaserTestCase {
  * 配列を再帰的に上書きする
  */
 	public function testAmr() {
-		$a = array('a1','a2', 'a3');
-		$b = array('b1','b2');
+		$a = ['a1','a2', 'a3'];
+		$b = ['b1','b2'];
 
 		// 1次元配列
-		$this->assertEquals(array('b1','b2', 'a3'), amr($a, $b));
+		$this->assertEquals(['b1','b2', 'a3'], amr($a, $b));
 
 		// 2次元配列	
-		$b = array(array('b1'));
-		$this->assertEquals(array(array('b1'), 'a2', 'a3'), amr($a, $b));
+		$b = [['b1']];
+		$this->assertEquals([['b1'], 'a2', 'a3'], amr($a, $b));
 
 		// 3次元配列
-		$a = array(array('a1'),'a2', 'a3');
-		$b = array(array(array('b1')));
-		$this->assertEquals(array(array(array('b1')), 'a2', 'a3'), amr($a, $b));
+		$a = [['a1'],'a2', 'a3'];
+		$b = [[['b1']]];
+		$this->assertEquals([[['b1']], 'a2', 'a3'], amr($a, $b));
 	}
 
 /**
@@ -542,14 +542,14 @@ class BcBasicsTest extends BaserTestCase {
 		$this->assertEquals('/?id=1&BASERCMS=baser', addSessionId('/?id=1&BASERCMS=1', true), $message);
 		
 		// urlが配列の場合
-		$url = array(
+		$url = [
 			0 => '/',
-			'?' => array('id' => 1, 'BASERCMS' => 1)
-		);
-		$expect = array(
+			'?' => ['id' => 1, 'BASERCMS' => 1]
+		];
+		$expect = [
 			0 => '/',
-			'?' => array('id' => 1, 'BASERCMS' => 'baser')
-		);
+			'?' => ['id' => 1, 'BASERCMS' => 'baser']
+		];
 
 		$this->assertEquals($expect, addSessionId($url, true), $message);
 
@@ -560,12 +560,12 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testGetEnablePlugins() {
 		$result = getEnablePlugins();
-		$pluginNames = array(
+		$pluginNames = [
 			$result[0]['Plugin']['name'],
 			$result[1]['Plugin']['name'],
 			$result[2]['Plugin']['name']
-		);
-		$expect = array('Blog', 'Feed', 'Mail');
+		];
+		$expect = ['Blog', 'Feed', 'Mail'];
 		$this->assertEquals($expect, $pluginNames, '利用可能なプラグインのリストを正しく取得できません');
 	}
 
@@ -609,7 +609,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testP() {
 		ob_start();
-		p(array('test'));
+		p(['test']);
 		$result = ob_get_clean();
 		$expect = 'array.*int.*0.*=&gt; &#039;test&#039;';
 		$this->assertRegExp('/' . $expect . '/s', $result);
@@ -620,7 +620,7 @@ class BcBasicsTest extends BaserTestCase {
  */
 	public function testAa() {
 		$result = aa('a', 'b', 'c');
-		$expect = array('a' => 'b', 'c' => null);
+		$expect = ['a' => 'b', 'c' => null];
 		$this->assertEquals($expect, $result);
 	}
 
@@ -705,11 +705,11 @@ class BlogControllerEventListener extends BcControllerEventListener {
 	}
 
 	public function loadPluginDataProvider() {
-		return array(
-			array('Blog', null, true),
-			array('Blog', 1, true),
-			array('Hoge', null, false),
-		);
+		return [
+			['Blog', null, true],
+			['Blog', 1, true],
+			['Hoge', null, false],
+		];
 	}
 
 /**

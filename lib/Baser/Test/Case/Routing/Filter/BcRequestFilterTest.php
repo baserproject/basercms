@@ -23,13 +23,13 @@ class BcRequestFilterTest extends BaserTestCase {
  * フィクスチャ
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-	);
+	];
 
 /**
  * BcRequestFilter
@@ -66,15 +66,15 @@ class BcRequestFilterTest extends BaserTestCase {
  * @return array
  */
 	public function isAdminDataProvider() {
-		return array(
-			array(true, '/admin'),
-			array(true, '/admin/'),
-			array(true, '/admin/users/login'),
-			array(false, '/'),
-			array(false, '/s/'),
-			array(false, '/news/index'),
-			array(false, '/service')
-		);
+		return [
+			[true, '/admin'],
+			[true, '/admin/'],
+			[true, '/admin/users/login'],
+			[false, '/'],
+			[false, '/s/'],
+			[false, '/news/index'],
+			[false, '/service']
+		];
 	}
 
 /**
@@ -96,22 +96,22 @@ class BcRequestFilterTest extends BaserTestCase {
  * @return array
  */
 	public function isAssetDataProvider() {
-		return array(
-			array(false, '/'),
-			array(false, '/about'),
-			array(false, '/img/test.html' ),
-			array(false, '/js/test.php'),
-			array(false, '/css/file.cgi'),
-			array(true, '/img/image.png'),
-			array(true, '/js/startup.js'),
-			array(true, '/css/main.css'),
-			array(false, '/theme/example_theme/img/test.html'),
-			array(false, '/theme/example_theme/js/test.php'),
-			array(false, '/theme/example_theme/css/file.cgi'),
-			array(true, '/theme/example_theme/img/image.png'),
-			array(true, '/theme/example_theme/js/startup.js'),
-			array(true, '/theme/example_theme/css/main.css')
-		);
+		return [
+			[false, '/'],
+			[false, '/about'],
+			[false, '/img/test.html'],
+			[false, '/js/test.php'],
+			[false, '/css/file.cgi'],
+			[true, '/img/image.png'],
+			[true, '/js/startup.js'],
+			[true, '/css/main.css'],
+			[false, '/theme/example_theme/img/test.html'],
+			[false, '/theme/example_theme/js/test.php'],
+			[false, '/theme/example_theme/css/file.cgi'],
+			[true, '/theme/example_theme/img/image.png'],
+			[true, '/theme/example_theme/js/startup.js'],
+			[true, '/theme/example_theme/css/main.css']
+		];
 	}
 
 /**
@@ -134,14 +134,14 @@ class BcRequestFilterTest extends BaserTestCase {
  * @return array
  */
 	public function isInstallDataProvider() {
-		return array(
-			array(true, '/install'),
-			array(true, '/install/'),
-			array(false, '/install/index'),
-			array(true, '/installations/step2'),
-			array(true, '/'),
-			array(false, '/service')
-		);
+		return [
+			[true, '/install'],
+			[true, '/install/'],
+			[false, '/install/index'],
+			[true, '/installations/step2'],
+			[true, '/'],
+			[false, '/service']
+		];
 	}
 
 /**
@@ -163,14 +163,14 @@ class BcRequestFilterTest extends BaserTestCase {
  * @return array
  */
 	public function isMaintenanceDataProvider() {
-		return array(
-			array(true, '/maintenance'),
-			array(true, '/maintenance/'),
-			array(true, '/maintenance/index'),
-			array(false, '/'),
-			array(false, '/service'),
-			array(false, '/admin/')
-		);
+		return [
+			[true, '/maintenance'],
+			[true, '/maintenance/'],
+			[true, '/maintenance/index'],
+			[false, '/'],
+			[false, '/service'],
+			[false, '/admin/']
+		];
 	}
 
 /**
@@ -193,14 +193,14 @@ class BcRequestFilterTest extends BaserTestCase {
  */
 	public function isUpdateDataProvider() {
 		$slug = Configure::read('BcApp.updateKey');
-		return array(
-			array(true, "/{$slug}"),
-			array(true, "/{$slug}/"),
-			array(true, "/{$slug}/index"),
-			array(false, '/'),
-			array(false, '/service'),
-			array(false, '/admin/')
-		);
+		return [
+			[true, "/{$slug}"],
+			[true, "/{$slug}/"],
+			[true, "/{$slug}/index"],
+			[false, '/'],
+			[false, '/service'],
+			[false, '/admin/']
+		];
 	}
 
 /**
@@ -223,14 +223,14 @@ class BcRequestFilterTest extends BaserTestCase {
  * @return array
  */
 	public function isPageDataProvider() {
-		return array(
-			array(false, '/admin/'),
-			array(false, '/news/index'),
-			array(true, '/'),
-			array(true, '/service'),
-			array(true, '/about'),
-			array(false, '/recruit')
-		);
+		return [
+			[false, '/admin/'],
+			[false, '/news/index'],
+			[true, '/'],
+			[true, '/service'],
+			[true, '/about'],
+			[false, '/recruit']
+		];
 	}
 
 } 

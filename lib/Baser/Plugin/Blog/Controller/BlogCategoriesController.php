@@ -16,6 +16,7 @@
  * @package Blog.Controller
  * @property BlogContent $BlogContent
  * @property BlogCategory $BlogCategory
+ * @property BcContentsComponent $BcContents
  */
 class BlogCategoriesController extends BlogAppController {
 
@@ -63,7 +64,12 @@ class BlogCategoriesController extends BlogAppController {
 		parent::beforeFilter();
 
 		$this->BlogContent->recursive = -1;
-		$this->request->params['Content'] = $this->BcContents->getContent($this->params['pass'][0])['Content'];
+		$content = $this->BcContents->getContent($this->request->params['pass'][0]);
+		if(!$content) {
+			$this->notFound();
+		}
+		$this->request->params['Content'] = $content['Content'];
+		$this->request->params['Site'] = $content['Site'];
 		$this->blogContent = $this->BlogContent->read(null, $this->params['pass'][0]);
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->params['pass'][0]));
 
@@ -299,25 +305,31 @@ class BlogCategoriesController extends BlogAppController {
  * @param int $blogContentId 
  */
 	public function admin_ajax_add($blogContentId) {
-		if (!empty($this->request->data)) {
-			if (strlen($this->request->data['BlogCategory']['name']) == mb_strlen($this->request->data['BlogCategory']['name'])) {
-				$this->request->data['BlogCategory']['title'] = $this->request->data['BlogCategory']['name'];
-			} else {
-				$this->request->data['BlogCategory']['title'] = $this->request->data['BlogCategory']['name'];
-				$this->request->data['BlogCategory']['name'] = substr(urlencode($this->request->data['BlogCategory']['name']), 0, 49);
-			}
-			$this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
-			$this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no', array('BlogCategory.blog_content_id' => $blogContentId)) + 1;
-			$this->BlogCategory->create($this->request->data);
-			if ($this->BlogCategory->save()) {
-				echo $this->BlogCategory->getInsertID();
-			} else {
-				$this->ajaxError(500, $this->BlogCategory->validationErrors);
-			}
-		} else {
+
+		if (empty($this->request->data)) {
 			$this->ajaxError(500, '無効な処理です。');
+			return;
 		}
 
+		// カテゴリ名が空の場合タイトルから取る
+		if(empty($this->request->data['BlogCategory']['name'])) {
+			$this->request->data['BlogCategory']['name'] = $this->request->data['BlogCategory']['title'];
+		}
+
+		// マルチバイトを含む場合はエンコードしておく
+		if (strlen($this->request->data['BlogCategory']['name']) !== mb_strlen($this->request->data['BlogCategory']['name'])) {
+			$this->request->data['BlogCategory']['name'] = substr(urlencode($this->request->data['BlogCategory']['name']), 0, 49);
+		}
+
+		$this->request->data['BlogCategory']['blog_content_id'] = $blogContentId;
+		$this->request->data['BlogCategory']['no'] = $this->BlogCategory->getMax('no', array('BlogCategory.blog_content_id' => $blogContentId)) + 1;
+		$this->BlogCategory->create($this->request->data);
+
+		if (!$this->BlogCategory->save()) {
+			$this->ajaxError(500, $this->BlogCategory->validationErrors);
+		}
+
+		echo $this->BlogCategory->getInsertID();
 		exit();
 	}
 

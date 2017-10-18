@@ -16,8 +16,8 @@ class FavoriteFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'user_id' => '1',
 			'name' => '固定ページ管理',
@@ -25,8 +25,8 @@ class FavoriteFixture extends BaserTestFixture {
 			'sort' => '1',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'user_id' => '1',
 			'name' => '新着情報管理',
@@ -34,8 +34,8 @@ class FavoriteFixture extends BaserTestFixture {
 			'sort' => '2',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'user_id' => '1',
 			'name' => 'お問い合わせ管理',
@@ -43,8 +43,8 @@ class FavoriteFixture extends BaserTestFixture {
 			'sort' => '3',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'user_id' => '1',
 			'name' => '受信メール一覧',
@@ -52,8 +52,8 @@ class FavoriteFixture extends BaserTestFixture {
 			'sort' => '4',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'user_id' => '1',
 			'name' => 'コメント一覧',
@@ -61,8 +61,8 @@ class FavoriteFixture extends BaserTestFixture {
 			'sort' => '5',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'user_id' => '1',
 			'name' => 'クレジット',
@@ -70,7 +70,7 @@ class FavoriteFixture extends BaserTestFixture {
 			'sort' => '6',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-	);
+		],
+	];
 
 }

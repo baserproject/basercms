@@ -805,7 +805,12 @@ class CakeRequest implements ArrayAccess {
 		if ($trustProxy) {
 			return env('HTTP_X_FORWARDED_HOST');
 		}
-		return env('HTTP_HOST');
+		// CUSTOMIZE MODIFY 2017/4/23 ryuring
+		// >>>
+		//return env('HTTP_HOST');
+		// ---
+		return Configure::read('BcEnv.host');
+		// <<<
 	}
 
 /**

@@ -20,6 +20,8 @@ App::uses('BcPageHelper', 'View/Helper');
  *
  * @package Baser.Test.Case
  * @property BcPageHelper $BcPage
+ * @property BcAppView $_View
+ * @property BcBaserHelper $BcBaser
  */
 class BcPageHelperTest extends BaserTestCase {
 	
@@ -27,7 +29,7 @@ class BcPageHelperTest extends BaserTestCase {
  * Fixtures
  * @var array 
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.View.Helper.BcPageHelper.PageBcPageHelper',
 		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
@@ -38,7 +40,7 @@ class BcPageHelperTest extends BaserTestCase {
 		'baser.Default.ThemeConfig',
 		'baser.View.Helper.BcContentsHelper.ContentBcContentsHelper',
 		'baser.Default.Site',
-	);
+	];
 
 /**
  * View
@@ -46,7 +48,6 @@ class BcPageHelperTest extends BaserTestCase {
  * @var View
  */
 	protected $_View;
-	
 /**
  * __construct
  * 
@@ -54,7 +55,7 @@ class BcPageHelperTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = array(), $dataName = '') {
+	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 	}
 
@@ -66,7 +67,7 @@ class BcPageHelperTest extends BaserTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->_View = new BcAppView();
-		$this->_View->helpers = array('BcBaser', 'BcPage');
+		$this->_View->helpers = ['BcBaser', 'BcPage'];
 		$this->_View->loadHelpers();
 		$this->Page = ClassRegistry::init('Page');
 		$this->BcBaser = $this->_View->BcBaser;
@@ -89,12 +90,12 @@ class BcPageHelperTest extends BaserTestCase {
  * 
  * @return array 固定ページのデータ
  */
-	public function getPageData($conditions = array(), $fields = array()) {
-		$options = array(
+	public function getPageData($conditions = [], $fields = []) {
+		$options = [
   			'conditions' => $conditions,
   			'fields' => $fields,
   			'recursive' => 0
-		);
+		];
 		$pages = $this->Page->find('all', $options);
 		if (empty($pages)) {
 			return false;
@@ -113,8 +114,8 @@ class BcPageHelperTest extends BaserTestCase {
  */
 	public function testGetUrl($pageId, $expected, $message = null) {
 		// 固定ページのデータ取得
-		$conditions = array('Page.id' => $pageId);
-		$fields = array('Content.url');
+		$conditions = ['Page.id' => $pageId];
+		$fields = ['Content.url'];
 		$page = $this->getPageData($conditions, $fields);
 
 		$result = $this->BcPage->getUrl($page);
@@ -122,14 +123,14 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 	public function getUrlDataProvider() {
-		return array(
-			array(1, '/index'),
-			array(2, '/about'),
-			array(3, '/service/index'),
-			array(4, '/icons'),
-			array(5, '/sitemap'),
-			array(6, '/m/index'),
-		);
+		return [
+			[1, '/index'],
+			[2, '/about'],
+			[3, '/service/index'],
+			[4, '/icons'],
+			[5, '/sitemap'],
+			[6, '/m/index'],
+		];
 	}
 
 /**
@@ -143,26 +144,26 @@ class BcPageHelperTest extends BaserTestCase {
  * @dataProvider allowPublishDataProvider
  */
 	public function testAllowPublish($status, $begin, $end, $expected, $message) {
-		$data = array(
-			'Page' => array(
+		$data = [
+			'Page' => [
 				'status' => $status,
 				'publish_begin' => $begin,
 				'publish_end' => $end,
-			)
-		);
+			]
+		];
 		$result = $this->BcPage->allowPublish($data);
 		$this->assertEquals($expected, $result, $message);
 	}
 
 	public function allowPublishDataProvider() {
-		return array(
-			array(true, 0, 0, true, 'statusの値がそのままかえってきません'),
-			array(true, '2200-1-1', 0, false, '公開開始日時の前に公開されています'),
-			array(true, 0, '1999-1-1', false, '公開終了日時の後に公開されています'),
-			array(true, '2199-1-1', '2200-1-1', false, '公開開始日時の前に公開されています'),
-			array(true, '1999-1-1', '2000-1-1', false, '公開開始日時の後に公開されています'),
-			array(false, '1999-1-1', 0, false, '非公開になっていません'),
-		);
+		return [
+			[true, 0, 0, true, 'statusの値がそのままかえってきません'],
+			[true, '2200-1-1', 0, false, '公開開始日時の前に公開されています'],
+			[true, 0, '1999-1-1', false, '公開終了日時の後に公開されています'],
+			[true, '2199-1-1', '2200-1-1', false, '公開開始日時の前に公開されています'],
+			[true, '1999-1-1', '2000-1-1', false, '公開開始日時の後に公開されています'],
+			[false, '1999-1-1', 0, false, '非公開になっていません'],
+		];
 	}
 
 /**
@@ -197,16 +198,16 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 	public function getNextLinkDataProvider() {
-		return array(
-			array('/company', '', array('overCategory' => false), false), // PC
-			array('/company', '次のページへ', array('overCategory' => false), false), // PC
-			array('/about', '', array('overCategory' => true), '<a href="/icons" class="next-link">アイコンの使い方 ≫</a>'), // PC
-			array('/about', '次のページへ', array('overCategory' => true), '<a href="/icons" class="next-link">次のページへ</a>'), // PC
-			array('/s/about', '', array('overCategory' => false), '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'), // smartphone
-			array('/s/about', '次のページへ', array('overCategory' => false), '<a href="/s/icons" class="next-link">次のページへ</a>'), // smartphone
-			array('/s/sitemap', '', array('overCategory' => true), '<a href="/s/contact" class="next-link">お問い合わせ ≫</a>'), // smartphone
-			array('/s/sitemap', '次のページへ', array('overCategory' => true), '<a href="/s/contact" class="next-link">次のページへ</a>'), // smartphone
-		);
+		return [
+			['/company', '', ['overCategory' => false], false], // PC
+			['/company', '次のページへ', ['overCategory' => false], false], // PC
+			['/about', '', ['overCategory' => true], '<a href="/icons" class="next-link">アイコンの使い方 ≫</a>'], // PC
+			['/about', '次のページへ', ['overCategory' => true], '<a href="/icons" class="next-link">次のページへ</a>'], // PC
+			['/s/about', '', ['overCategory' => false], '<a href="/s/icons" class="next-link">アイコンの使い方 ≫</a>'], // smartphone
+			['/s/about', '次のページへ', ['overCategory' => false], '<a href="/s/icons" class="next-link">次のページへ</a>'], // smartphone
+			['/s/sitemap', '', ['overCategory' => true], '<a href="/s/contact/" class="next-link">お問い合わせ ≫</a>'], // smartphone
+			['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
+		];
 	}
 
 /**
@@ -241,16 +242,16 @@ class BcPageHelperTest extends BaserTestCase {
 	}
 
 	public function getPrevLinkDataProvider() {
-		return array(
-			array('/company', '', array('overCategory' => false), false), // PC
-			array('/company', '前のページへ', array('overCategory' => false), false), // PC
-			array('/about', '', array('overCategory' => true), '<a href="/" class="prev-link">≪ トップページ</a>'), // PC
-			array('/about', '前のページへ', array('overCategory' => true), '<a href="/" class="prev-link">前のページへ</a>'), // PC
-			array('/s/about', '', array('overCategory' => false), '<a href="/s/" class="prev-link">≪ トップページ</a>'), // smartphone
-			array('/s/about', '前のページへ', array('overCategory' => false), '<a href="/s/" class="prev-link">前のページへ</a>'), // smartphone
-			array('/s/sitemap', '', array('overCategory' => true), '<a href="/s/icons" class="prev-link">≪ アイコンの使い方</a>'), // smartphone
-			array('/s/sitemap', '前のページへ', array('overCategory' => true), '<a href="/s/icons" class="prev-link">前のページへ</a>'), // smartphone
-		);
+		return [
+			['/company', '', ['overCategory' => false], false], // PC
+			['/company', '前のページへ', ['overCategory' => false], false], // PC
+			['/about', '', ['overCategory' => true], '<a href="/" class="prev-link">≪ トップページ</a>'], // PC
+			['/about', '前のページへ', ['overCategory' => true], '<a href="/" class="prev-link">前のページへ</a>'], // PC
+			['/s/about', '', ['overCategory' => false], '<a href="/s/" class="prev-link">≪ トップページ</a>'], // smartphone
+			['/s/about', '前のページへ', ['overCategory' => false], '<a href="/s/" class="prev-link">前のページへ</a>'], // smartphone
+			['/s/sitemap', '', ['overCategory' => true], '<a href="/s/icons" class="prev-link">≪ アイコンの使い方</a>'], // smartphone
+			['/s/sitemap', '前のページへ', ['overCategory' => true], '<a href="/s/icons" class="prev-link">前のページへ</a>'], // smartphone
+		];
 	}
 
 /**
@@ -260,25 +261,31 @@ class BcPageHelperTest extends BaserTestCase {
  * @param string $message テスト失敗時、表示するメッセージ
  * @dataProvider contentDataProvider
  */
-	public function testContent($agent, $expected, $message = null) {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->BcPage->_View->viewVars['pagePath'] = 'service';
-		$this->expectOutputRegex('/' . $expected . '/', $message);
-		$this->BcPage->content();
+	public function testContent($fileName, $expected) {
+		$path = APP . 'View/Pages/' . $fileName . '.ctp';
+		$fh = fopen($path, 'w');
+		fwrite($fh, '東京' . PHP_EOL . '埼玉' . PHP_EOL . '大阪' . PHP_EOL);
+		fclose($fh);
+		$this->BcPage->_View->viewVars['pagePath'] = $fileName;
+
+		ob_start();
+		//エラーでファイルが残留するため,tryで確実に削除を実行
+		try {
+			$this->BcPage->content();
+		}catch (Exception $e) {
+			echo 'error: ',  $e->getMessage(), "\n";
+		}
+		$result = ob_get_clean();
+		unlink($path);
+
+		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
 	public function contentDataProvider() {
-		return array(
-			array('', '<h2 class="fontawesome-circle-arrow-down">Service <span>事業案内<\/span><\/h2>', '固定ページのコンテンツを出力できません'),
-			array('smartphone', '<h2 class="contents-head">サービス<\/h2>', 'smartphoneで固定ページのコンテンツを出力できません'),
-		);
-	}
-
-/**
- * treeList
- */
-	public function testTreeList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		return [
+			['service', '東京\n埼玉\n大阪\n'],
+			['service.php', '東京\n埼玉\n大阪\n']
+		];
 	}
 
 }

@@ -385,7 +385,7 @@ class BcBaserHelper extends AppHelper {
  * @return void
  */
 	public function title($separator = '｜', $categoryTitleOn = null) {
-		echo '<title>' . strip_tags($this->getTitle($separator, $categoryTitleOn)) . "</title>\n";
+		echo '<title>' . h($this->getTitle($separator, $categoryTitleOn)) . "</title>\n";
 	}
 
 /**
@@ -750,18 +750,14 @@ class BcBaserHelper extends AppHelper {
 			$toolbar = $authPrefix['toolbar'];
 		}
 
-		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
-		echo $scripts;
-
 		// ### ツールバー用CSS出力
 		// 《表示条件》
 		// - プレビューでない
 		// - auth prefix の設定で、利用するように定義されている
-		// - モバイルでない
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->css('admin/toolbar');
@@ -776,6 +772,9 @@ class BcBaserHelper extends AppHelper {
 		if (!BcUtil::isAdminSystem() && $this->params['controller'] != 'installations' && file_exists(WWW_ROOT . 'files' . DS . 'theme_configs' . DS . 'config.css')) {
 			$this->css('/files/theme_configs/config');
 		}
+
+		$scripts = $this->_View->fetch('meta') . $this->_View->fetch('css') . $this->_View->fetch('script');
+		echo $scripts;
 	}
 
 /**
@@ -798,11 +797,10 @@ class BcBaserHelper extends AppHelper {
 		// 《表示条件》
 		// - プレビューでない
 		// - auth prefix の設定で、利用するように定義されている
-		// - モバイルでない
 		// - Query String で、toolbar=false に定義されていない
 		// - 管理画面でない
 		// - ログインしている
-		if (empty($this->_View->viewVars['preview']) && $toolbar && !@$this->request->params['Site']['device']) {
+		if (empty($this->_View->viewVars['preview']) && $toolbar) {
 			if (!isset($this->request->query['toolbar']) || ($this->request->query['toolbar'] !== false && $this->request->query['toolbar'] !== 'false')) {
 				if (empty($this->request->params['admin']) && !empty($this->_View->viewVars['user'])) {
 					$this->element('admin/toolbar', array(), array('subDir' => false));
@@ -865,7 +863,7 @@ class BcBaserHelper extends AppHelper {
  * 《利用例》
  * $this->BcBaser->css('admin/import')
  * 
- * @param string $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
+ * @param mixed $path CSSファイルのパス（css フォルダからの相対パス）拡張子は省略可
  * @param mixed $options オプション
  *	（配列の場合）
  *	- `rel` : rel属性（初期値 : 'stylesheet'）
@@ -1043,11 +1041,10 @@ class BcBaserHelper extends AppHelper {
 			}
 		}
 
-		// 現在SSLのURLの場合、フルパスで取得（javascript:とhttpから始まるものは除外）
+		// 現在SSLのURLの場合、プロトコル指定(フルパス)で取得以外
 		// //(スラッシュスラッシュ)から始まるSSL、非SSL共有URLも除外する
 		if (($this->isSSL() || $ssl) 
-			&& !(strpos($_url, 'javascript') === 0)
-			&& !(strpos($_url, 'http') === 0)
+			&& !(preg_match('/^(javascript|https?|ftp|tel):/', $_url))
 			&& !(strpos($_url, '//') === 0)) {
 
 			$_url = preg_replace("/^\//", "", $_url);
@@ -1075,6 +1072,9 @@ class BcBaserHelper extends AppHelper {
 			$options = array();
 		}
 
+		if(!is_array($url)) {
+			$url = preg_replace('/^' . preg_quote($this->request->base, '/') . '\//', '/', $url);
+		}
 		$out = $this->BcHtml->link($title, $url, $options, $confirmMessage);
 
 		/*** afterGetLink ***/
@@ -1181,11 +1181,13 @@ class BcBaserHelper extends AppHelper {
  */
 	public function publishLink() {
 		if ($this->existsPublishLink()) {
-			if(isset($this->_View->BcContents) && isset($this->request->data['Site']['use_subdomain'])) {
-				$url = $this->_View->BcContents->getUrl($this->_View->viewVars['publishLink'], true, $this->request->data['Site']['use_subdomain']);
-			} else {
-				$url = $this->_View->viewVars['publishLink'];
+			$site = BcSite::findByUrl($this->_View->viewVars['publishLink']);
+			$useSubdomain = $fullUrl = false;
+			if($site && $site->name) {
+				$useSubdomain = $site->useSubDomain;
+				$fullUrl = true;
 			}
+			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain);
 			$this->link('公開ページ', $url, array('class' => 'tool-menu'));
 		}
 	}
@@ -1318,23 +1320,17 @@ class BcBaserHelper extends AppHelper {
 		}
 
 		// 固定ページの場合
-		if ($controller == 'pages' && $action == 'display') {
-
-			if (strpos($pass[0], 'pages/') !== false) {
-				$pageUrl = str_replace('pages/', '', $pass[0]);
+		if (!BcUtil::isAdminSystem()) {
+			$pageUrl = h($this->request->url);
+			if($pageUrl === false) {
+				$pageUrl = '/';
 			} else {
-				if (empty($pass)) {
-					$pageUrl = h($this->request->url);
-				} else {
-					$pageUrl = implode('/', $pass);
-				}
+				$pageUrl = '/' . $pageUrl;
 			}
-			
 			$sitePrefix = $this->getSitePrefix();
 			if($sitePrefix) {
-				$pageUrl = preg_replace('/^' . preg_quote($sitePrefix, '/') . '\//', '', $pageUrl);
+				$pageUrl = preg_replace('/^\/' . preg_quote($sitePrefix, '/') . '\//', '/', $pageUrl);
 			}
-			
 			if (preg_match('/\/$/', $pageUrl)) {
 				$pageUrl .= 'index';
 			}
@@ -1342,7 +1338,6 @@ class BcBaserHelper extends AppHelper {
 			$pageUrl = preg_replace('/^\//', '', $pageUrl);
 			$aryUrl = explode('/', $pageUrl);
 		} else {
-
 			// プラグインルーティングの場合
 			if ((($url1 == '' && in_array($action, array('index', 'mobile_index', 'smartphone_index'))) || ($url1 == $action)) && $url2 != $action && $plugin) {
 				$prefix = '';
@@ -1392,10 +1387,18 @@ class BcBaserHelper extends AppHelper {
 
 		return $contentsName;
 	}
-	
+
+/**
+ * 現在のサイトのプレフィックスを取得する
+ *
+ * @return mixed
+ */
 	public function getSitePrefix() {
+		if(!BC_INSTALLED) {
+			return '';
+		}
 		$site = null;
-		if($this->request->params['Site']) {
+		if(!empty($this->request->params['Site'])) {
 			$site = $this->request->params['Site'];
 		}
 		$Site = ClassRegistry::init('Site');
@@ -1537,7 +1540,7 @@ EOD;
 		} else {
 			$protocol = 'https';
 		}
-		return $protocol . '://' . $_SERVER['HTTP_HOST'] . $this->getUrl($url, false, $sessionId);
+		return $protocol . '://' . Configure::read('BcEnv.host') . $this->getUrl($url, false, $sessionId);
 	}
 
 /**
@@ -1560,23 +1563,16 @@ EOD;
  * @return void
  */
 	protected function _initPluginBasers() {
-		$view = $this->_View;
 		$plugins = Configure::read('BcStatus.enablePlugins');
-
 		if (!$plugins) {
 			return;
 		}
-
-		$pluginBasers = array();
 		foreach ($plugins as $plugin) {
 			$pluginName = Inflector::camelize($plugin);
 			if (App::import('Helper', $pluginName . '.' . $pluginName . 'Baser')) {
-				$pluginBasers[] = $pluginName . 'BaserHelper';
+				$pluginBaser = $pluginName . 'BaserHelper';
+				$this->_pluginBasers[$pluginName] = new $pluginBaser($this->_View);
 			}
-		}
-		foreach ($pluginBasers as $key => $pluginBaser) {
-			$this->_pluginBasers[$key] = new $pluginBaser($view);
-			$this->_pluginBasers[$key]->request = $view->request;
 		}
 	}
 
@@ -1738,7 +1734,8 @@ EOD;
 		}
 		$options = array_merge([
 			'tree' => $this->BcContents->getTree($id, $level),
-			'currentId' => $currentId
+			'currentId' => $currentId,
+			'data' => []
 		], $options);
 		if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$options = array_merge($options, [
@@ -1747,9 +1744,13 @@ EOD;
 						'key' => $id]]
 			);
 		}
-		return $this->getElement('global_menu', $options);
+		$data = array_merge([
+			'tree' => $options['tree'],
+			'currentId' => $options['currentId']
+		], $options['data']);
+		unset($options['tree'], $options['currentId'], $options['data']);
+		return $this->getElement('global_menu', $data, $options);
 	}
-
 /**
  * サイトマップを出力する
  *
@@ -1846,24 +1847,6 @@ END_FLASH;
  */
 	public function isPage() {
 		return ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'display');
-	}
-
-/**
- * 現在のページがブログプラグインかどうかを判定する
- *
- * @return bool
- */
-	public function isBlog() {
-		return ($this->request->params['Content']['plugin'] == 'Blog');
-	}
-
-/**
- * 現在のページがメールプラグインかどうかを判定する
- *
- * @return bool
- */
-	public function isMail() {
-		return ($this->request->params['Content']['plugin'] == 'Mail');
 	}
 
 /**
@@ -2481,58 +2464,6 @@ END_FLASH;
 	}
 
 /**
- * Blogの基本情報を全て取得する
- *
- * @param string $name ブログアカウント名を指定するとそのブログのみの基本情報を返す。空指定(default)で、全てのブログの基本情報。 ex) 'news' （初期値 : ''）
- * @param array $options オプション（初期値 :array()）
- *	- `sort` : データのソート順 取得出来るフィールドのどれかでソートができる ex) 'created DESC'（初期値 : 'id'）
- *  - `siteId` : サブサイトIDで絞り込む場合に指定する（初期値：0）
- * @return array サイト基本設定配列
- */
-	public function getBlogs($name = '', $options = array()) {
-		$options = array_merge(array(
-			'sort' => 'BlogContent.id',
-			'siteId' => 0
-		), $options);
-		$conditions['Content.status'] = true;
-		if(! empty($name)){
-			$conditions['Content.name'] = $name;
-		}
-		if($options['siteId'] !== '') {
-			$conditions['Content.site_id'] = $options['siteId'];
-		}
-		$BlogContent = ClassRegistry::init('Blog.BlogContent');
-		$BlogContent->unbindModel(
-			['hasMany' => ['BlogPost', 'BlogCategory']]
-		);
-		$datas = $BlogContent->find('all', array(
-				'conditions' => $conditions,
-				'order' => $options['sort'],
-				'cache' => false
-			)
-		);
-		if(!$datas) {
-			return false;
-		}
-		$contents = array();
-		if( count($datas) === 1 ){
-			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
-			unset($datas['BlogContent']['eye_catch_size']);
-			$contents[] = $datas;
-		} else {
-			foreach($datas as $val){
-				$val = $BlogContent->constructEyeCatchSize($val);
-				unset($val['BlogContent']['eye_catch_size']);
-				$contents[] = $val;
-			}
-		}
-		if($name) {
-			$contents = $contents[0];
-		}
-		return $contents;
-	}
-
-/**
  * URLのパラメータ情報を返す
  * 主なreturnデータは
  * http://basercms.net/news/index/example/test?name=value の場合
@@ -2724,5 +2655,75 @@ END_FLASH;
 		}
 		echo '<link rel="' . $rel . '" href="' . Router::url('/' . $fileName, true) . '" />';
 	}
-	
+
+/**
+ * コンテンツ管理用のURLより、正式なURLを取得する
+ * 
+ * @param string $url コンテンツ管理用URLの元データ
+ *	省略時は request より現在のデータを取得
+ *	request が取得できない場合は、トップページのURLを設定
+ * @param bool $full http からのフルのURLかどうか
+ * @param bool $useSubDomain サブドメインを利用しているかどうか
+ * 	省略時は現在のサイト情報から取得する
+ * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
+ * @return string
+ */
+	public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = false) {
+		if(!$url) {
+			if(!empty($this->request->params['Content']['url'])) {
+				$url = $this->request->params['Content']['url'];
+			} else {
+				$url = '/';
+			}
+		}
+		if(is_null($useSubDomain)) {
+			$site = BcSite::findCurrent();
+			$useSubDomain = $site->useSubDomain;
+		}
+		return $this->BcContents->getUrl($url, $full, $useSubDomain, $base);
+	}
+
+/**
+ * Plugin 内の Baserヘルパを取得する
+ *
+ * @param string $name
+ * @return bool|mixed Plugin 内の Baserヘルパ
+ */
+	public function getPluginBaser($name) {
+		if(!empty($this->_pluginBasers[$name])) {
+			return $this->_pluginBasers[$name];
+		}
+		return false;
+	}
+
+/**
+ * 親フォルダを取得する
+ *
+ * - 引数なしで現在のコンテンツの親情報を取得
+ * - $id を指定して取得する事ができる
+ * - $direct を false に設定する事で、最上位までの親情報を取得
+ * 
+ * @param int $id
+ * @param bool $direct
+ * @return mixed false|array
+ */
+	public function getParentFolder($id, $direct = true) {
+		return $this->BcContents->getParent($id, $direct);
+	}
+
+/**
+ * エンティティIDからコンテンツの情報を取得
+ *
+ * @param string $contentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param int $id エンティティID
+ * @param string $field 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
+ * @return array or bool
+ */
+	public function getContentByEntityId($id, $contentType, $field = null){
+		return $this->BcContents->getContentByEntityId($id,$contentType, $field);
+	}
+
 }

@@ -12,12 +12,16 @@
 
 /**
  * [ADMIN] エディタテンプレートー登録・編集
+ * 
+ * @var \BcAppView $this
  */
 ?>
 
 
 <?php $this->BcBaser->css('admin/ckeditor/editor', array('inline' => true)); ?>
 <?php echo $this->BcForm->create('EditorTemplate', array('type' => 'file')) ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
@@ -63,11 +67,13 @@
 	</table>
 </div>
 
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit section">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
-		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('EditorTemplate.id')), array('class' => 'button submit-token'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false);
+		$this->BcBaser->link('削除', array('action' => 'delete', $this->BcForm->value('EditorTemplate.id')), array('class' => 'button submit-token', 'id' => 'BtnDelete'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('EditorTemplate.name')), false);
 		?>
 	<?php endif ?>
 </div>

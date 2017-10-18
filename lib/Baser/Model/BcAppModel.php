@@ -1633,4 +1633,55 @@ class BcAppModel extends Model {
 		return true;
 	}
 
+/**
+ * コンテンツのURLにマッチする候補を取得する
+ *
+ * @param $url
+ * @return array
+ */
+	public function getUrlPattern($url) {
+		$parameter = preg_replace('/^\//', '', $url);
+		$paths = [];
+		$paths[] = '/' . $parameter;
+		if(preg_match('/\/$/', $paths[0])) {
+			$paths[] = $paths[0] . 'index';
+		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
+				$paths[] = $matches[1];
+			}
+		}
+		return $paths;
+	}
+
+/**
+ * レコードデータの消毒をおこなう
+ * @return array
+ */
+	public function sanitizeRecord($record) {
+		foreach ($record as $key => $value) {
+				$record[$key] = $this->sanitize($value);
+		}
+		return $record;
+	}
+
+/**
+ * 単体データの消毒を行う
+ * 配列には対応しない
+ * @param $data
+ * @return mixed|string
+ */
+	public function sanitize($value) {
+		if (!is_array($value)) {
+			// 既に htmlspecialchars を実行済のものについて一旦元の形式に復元した上で再度サイニタイズ処理をかける。
+			$value = str_replace("&lt;!--", "<!--", $value);
+			$value = htmlspecialchars($value);
+			return $value;
+		}else {
+			return $value;
+		}
+	}
+
 }

@@ -43,7 +43,8 @@
 		<?php $this->BcBaser->link($data['Permission']['name'], array('action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id'])); ?><br />
 		<?php echo $data['Permission']['url']; ?>
 	</td>
-	<td style="width:10%" class="align-center"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], array(0 => '×', 1 => '〇')) ?></td>
+	<td style="width:10%" class="align-center"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], array(0 => '×', 1 => '○')) ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:10%">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['modified']); ?>

@@ -22,7 +22,7 @@ if (isset($blogContent)) {
 $data = $this->requestAction('/blog/blog/get_authors/' . $id . '/' . $view_count, ['entityId' => $id]);
 $authors = $data['authors'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/author/';
+$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/author/';
 ?>
 
 
@@ -46,7 +46,7 @@ $baseCurrentUrl = $this->request->params['Content']['url'] . '/archives/author/'
 				}
 				?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/author/' . $author['User']['name']) ?>
+					<?php $this->BcBaser->link($title, $baseCurrentUrl . $author['User']['name']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

@@ -39,6 +39,7 @@
 		<?php echo $this->BcForm->label('Content.author_id', '作成者') ?>
 		<?php echo $this->BcForm->input('Content.author_id', ['type' => 'select', 'options' => $authors, 'empty' => '指定なし']) ?>　
 	</span>
+	<?php echo $this->BcSearchBox->dispatchShowField() ?>
 </p>
 <div class="button">
 	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', ['alt' => '検索', 'class' => 'btn']), "javascript:void(0)", ['id' => 'BtnSearchSubmit']) ?>

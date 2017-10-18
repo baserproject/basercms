@@ -12,7 +12,9 @@
 
 /**
  * [ADMIN] ブログカテゴリ 一覧　テーブル
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(5);
 ?>
 
 
@@ -21,28 +23,29 @@
 	<thead>
 		<tr>
 			<th style="width:160px" class="list-tool">
-	<div>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
-	</div>
-	<?php if ($this->BcBaser->isAdminUser()): ?>
-		<div>
-			<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-			<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-			<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
-		</div>
-	<?php endif ?>
-</th>
-<th>NO</th>
-<th>ブログカテゴリ名
-	<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-		<br />管理グループ
-	<?php endif ?>
-</th>
-<th>ブログカテゴリタイトル</th>
-<th>登録日<br />更新日</th>
-</tr>
-</thead>
-<tbody>
+                <div>
+                    <?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
+                </div>
+<?php if ($this->BcBaser->isAdminUser()): ?>
+                <div>
+                    <?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
+                    <?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
+                    <?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+                </div>
+<?php endif ?>
+            </th>
+            <th>NO</th>
+            <th>ブログカテゴリ名
+                <?php if ($this->BcBaser->siteConfig['category_permission']): ?>
+                    <br />管理グループ
+                <?php endif ?>
+            </th>
+            <th>ブログカテゴリタイトル</th>
+            <?php echo $this->BcListTable->dispatchShowHead() ?>
+            <th>登録日<br />更新日</th>
+        </tr>
+    </thead>
+    <tbody>
 	<?php if (!empty($dbDatas)): ?>
 		<?php $currentDepth = 0 ?>
 		<?php foreach ($dbDatas as $data): ?>
@@ -68,8 +71,8 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
-</tbody>
+    </tbody>
 </table>

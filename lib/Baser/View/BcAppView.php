@@ -14,6 +14,36 @@
  * view 拡張クラス
  *
  * @package Baser.View
+ * @property \BcAdminHelper $BcAdmin
+ * @property \BcArrayHelper $BcArray
+ * @property \BcBaserHelper $BcBaser
+ * @property \BcCacheHelper $BcCache
+ * @property \BcCkeditorHelper $BcCkeditor
+ * @property \BcContentsHelper $BcContents
+ * @property \BcCsvHelper $BcCsv
+ * @property \BcFormHelper $BcForm
+ * @property \BcFormTableHelper $BcFormTable
+ * @property \BcFreezeHelper $BcFreeze
+ * @property \BcGooglemapsHelper $BcGooglemaps
+ * @property \BcHtmlHelper $BcHtml
+ * @property \BcLayoutHelper $BcLayout
+ * @property \BcListTableHelper $BcListTable
+ * @property \BcMobileHelper $BcMobile
+ * @property \BcPageHelper $BcPage
+ * @property \BcSearchBoxHelper $BcSearchBox
+ * @property \BcSmartphoneHelper $BcSmartphone
+ * @property \BcTextHelper $BcText
+ * @property \BcTimeHelper $BcTime
+ * @property \BcUploadHelper $BcUpload
+ * @property \BcWidgetAreaHelper $BcWidgetArea
+ * @property \BcXmlHelper $BcXml
+ * @property \BlogHelper $Blog
+ * @property \FeedHelper $Feed
+ * @property \MaildataHelper $Maildata
+ * @property \MailfieldHelper $Mailfield
+ * @property \MailformHelper $Mailform
+ * @property \MailHelper $Mail
+ * @property \UploaderHelper $Uploader
  */
 class BcAppView extends View {
 
@@ -177,11 +207,12 @@ class BcAppView extends View {
 		// CakeErrorの場合はサブフォルダを除外
 		// >>>
 		if ($this->name == 'CakeError' && $this->viewPath == 'Errors') {
-			$subDir = $this->subDir;
+			$subDir = $this->subDir . DS;
 			$this->subDir = null;
-			$fileName = parent::_getViewFileName($name);
-			$this->subDir = $subDir;
-			return $fileName;
+			$exception = $this->get('error');
+			if($exception && $exception instanceof MissingConnectionException) {
+				$this->layout = 'missing_connection';
+			}
 		}
 		// <<<
 		// CUSTOMIZE ADD 2013/08/25 ryuring
@@ -315,7 +346,15 @@ class BcAppView extends View {
 		// >>>
 		$names = array($name);
 		if ($this->subDir) {
-			array_unshift($names, $this->subDir . DS . $name);
+			if(preg_match('/^\.\.\/([^\/]+)\/(.+)$/', $name, $matches)) {
+				// Elements ではなく、コントローラー内のテンプレートを参照する場合の処理
+				// BlogBaserHelper::blogPosts() で、ブログコントローラー内のテンプレートを参照している為（posts等）
+				// TODO テンプレートの場所を Elements 内に移動するべき
+				$name = '..' . DS . $matches[1] . DS . $this->subDir . DS . $matches[2]; 
+			} else {
+				$name = $this->subDir . DS . $name;
+			}
+			array_unshift($names, $name);
 		}
 		// <<<
 

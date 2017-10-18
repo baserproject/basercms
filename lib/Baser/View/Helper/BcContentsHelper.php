@@ -224,13 +224,16 @@ class BcContentsHelper extends AppHelper {
 	}
 
 /**
- * フルURLを取得する
+ * コンテンツ管理上のURLを元に正式なURLを取得する
  *
- * @param string $url
- * @param bool $useSubDomain
+ * @param string $url コンテンツ管理上のURL
+ * @param bool $full http からのフルのURLかどうか
+ * @param bool $useSubDomain サブドメインを利用しているかどうか
+ * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
+ * @return string URL
  */
-	public function getUrl($url, $full = false, $useSubDomain = false) {
-		return $this->_Content->getUrl($url, $full, $useSubDomain);
+	public function getUrl($url, $full = false, $useSubDomain = false, $base = false) {
+		return $this->_Content->getUrl($url, $full, $useSubDomain, $base);
 	}
 
 /**
@@ -311,12 +314,47 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * 親コンテンツを取得する
+ *
+ * - 引数なしで現在のコンテンツの親情報を取得
+ * - $id を指定して取得する事ができる
+ * - $direct を false に設定する事で、最上位までの親情報を取得
  * 
- * @param int $contentId
- * @return mixed
+ * @param bool $direct 直接の親かどうか
+ * @return mixed false|array
  */
-	public function getParent($contentId) {
-		return $this->_Content->getParentNode($contentId);
+	public function getParent($id = null, $direct = true) {
+		if(!$id && !empty($this->request->params['Content']['id'])) {
+			$id = $this->request->params['Content']['id'];
+		}
+		if(!$id){
+			return false;
+		}
+		$siteId = $this->_Content->field('site_id', ['Content.id' => $id]);
+		if($direct) {
+			$parent = $this->_Content->getParentNode($id);
+			if($parent && $parent['Content']['site_id'] == $siteId) {
+				return $parent;
+			} else {
+				return false;
+			}
+		} else {
+			$parents = $this->_Content->getPath($id);
+			if($parents) {
+				$result = [];
+				foreach ($parents as $parent) {
+					if($parent['Content']['id'] != $id && $parent['Content']['site_id'] == $siteId) {
+						$result[] = $parent;
+					}
+				}
+				if($result) {
+					return $result;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
 	}
 
 /**
@@ -458,6 +496,31 @@ class BcContentsHelper extends AppHelper {
 			}
 		}
 		return true;
+	}
+
+/**
+ * エンティティIDからコンテンツの情報を取得
+ *
+ * @param string $contentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param int $id エンティティID
+ * @param string $field 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
+ * @return array or string or bool
+ */
+	public function getContentByEntityId($id, $contentType, $field = null){
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'cache' => false]);
+		if(!empty($content)){
+			if($field){
+				return $content ['Content'][$field];
+			} else {
+				return $content;
+			}
+		} else {
+			return false;
+		}
 	}
 
 }

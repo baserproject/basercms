@@ -17,9 +17,9 @@
 </script>
 
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . 'confirm', 'type' => 'file')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->BcBaser->getContentsUrl() . 'confirm', 'type' => 'file')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->request->params['Content']['url'] . 'submit')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->BcBaser->getContentsUrl() . 'submit')) ?>
 <?php endif; ?>
 
 <?php echo $this->Mailform->hidden('MailMessage.mode') ?>

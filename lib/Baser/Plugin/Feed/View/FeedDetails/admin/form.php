@@ -21,6 +21,8 @@
 	<?php echo $this->BcForm->create('FeedDetail', array('url' => array('controller' => 'feed_details', 'action' => 'edit', $this->BcForm->value('FeedDetail.feed_config_id'), $this->BcForm->value('FeedDetail.id'), 'id' => false))) ?>
 <?php endif; ?>
 
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('FeedDetail.feed_config_id', array('type' => 'hidden')) ?>
 
 <div class="section">
@@ -87,6 +89,8 @@
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

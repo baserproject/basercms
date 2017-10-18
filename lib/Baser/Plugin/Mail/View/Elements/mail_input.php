@@ -79,7 +79,7 @@ if (!empty($mailFields)) {
 
 				if ($field['group_valid']) {
 					if ($field['valid']) {
-						echo $this->Mailform->error("MailMessage." . $field['group_field'], "必須項目です。");
+						echo $this->Mailform->error("MailMessage." . $field['field_name']);
 					}
 					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_same", "入力データが一致していません。");
 					echo $this->Mailform->error("MailMessage." . $field['group_field'] . "_not_complate", "入力データが不完全です。");

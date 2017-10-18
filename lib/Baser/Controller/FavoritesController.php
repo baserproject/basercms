@@ -14,6 +14,7 @@
  * よく使う項目　コントローラー
  *
  * @package Baser.Controller
+ * @property Favorite $Favorite
  */
 class FavoritesController extends AppController {
 
@@ -45,6 +46,7 @@ class FavoritesController extends AppController {
  * @return void
  */
 	public function admin_ajax_add() {
+		$this->autoRender = false;
 		if ($this->request->data) {
 			$user = $this->BcAuth->user();
 			if (!$user) {
@@ -52,9 +54,11 @@ class FavoritesController extends AppController {
 			}
 			$this->request->data['Favorite']['sort'] = $this->Favorite->getMax('sort') + 1;
 			$this->request->data['Favorite']['user_id'] = $user['id'];
+
 			$this->Favorite->create($this->request->data);
 			$data = $this->Favorite->save();
 			if ($data) {
+				$this->autoLayout = false;
 				$data['Favorite']['id'] = $this->Favorite->id;
 				$this->set('favorite', $data);
 				$this->render('ajax_form');
@@ -63,7 +67,7 @@ class FavoritesController extends AppController {
 				$this->ajaxError(500, $this->Favorite->validationErrors);
 			}
 		}
-		exit();
+		return;
 	}
 
 /**

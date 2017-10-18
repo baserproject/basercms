@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] ブログ記事コメント 一覧　行
+ * @var \BcAppView $this
  */
 if (!$data['BlogComment']['status']) {
 	$class = ' class="disablerow unpublish"';
@@ -57,6 +58,7 @@ if (!$data['BlogComment']['status']) {
 		</strong><br />
 		<?php echo nl2br($this->BcText->autoLinkUrls($data['BlogComment']['message'])) ?>
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['BlogComment']['modified']); ?>

@@ -120,6 +120,7 @@ class PagesController extends AppController {
 		}
 
 		if (empty($this->request->data)) {
+			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
 			if(!$this->request->data) {
 				$this->setMessage('無効な処理です。', true);
@@ -165,7 +166,7 @@ class PagesController extends AppController {
 
 		// 公開リンク
 		$publishLink = '';
-		if ($this->request->data['Content']['url']) {
+		if ($this->request->data['Content']['status']) {
 			$publishLink = $this->request->data['Content']['url'];
 		}
 		// エディタオプション
@@ -181,7 +182,12 @@ class PagesController extends AppController {
 			]);
 		}
 		// ページテンプレートリスト
-		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']);
+		$theme = [$this->siteConfigs['theme']];
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		if(!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+			$theme[] = $site->theme;
+		}
+		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 		
 		if (!empty($this->request->data['Content']['title'])) {
@@ -295,12 +301,43 @@ class PagesController extends AppController {
 
 		$previewCreated = false;
 		if($this->request->data) {
-			if($this->BcContents->preview == 'default' || $this->BcContents->preview == 'draft') {
+
+			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
+			// 一度データをセッションに退避する
+			if($this->BcContents->preview === 'default') {
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
+				$this->Session->write($sessionKey,  $this->request->data);
+				$query = [];
+				if($this->request->query) {
+					foreach($this->request->query as $key => $value) {
+						$query[] = $key . '=' . $value;
+					}
+				}
+				$this->redirect($this->request->here . '?' . implode('&', $query));
+				return;
+			}
+
+			if($this->BcContents->preview == 'draft') {
 				$uuid = $this->_createPreviewTemplate($this->request->data);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
+
 		} else {
+
+			// プレビューアクセス
+			if($this->BcContents->preview === 'default') {
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
+				$previewData = $this->Session->read($sessionKey);
+
+				if(!is_null($previewData)) {
+					$this->Session->delete($sessionKey);
+					$uuid = $this->_createPreviewTemplate($previewData);
+					$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
+					$previewCreated = true;
+				}
+			}
+
 			// 草稿アクセス
 			if($this->BcContents->preview == 'draft') {
 				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
@@ -351,11 +388,15 @@ class PagesController extends AppController {
 	protected function _createPreviewTemplate($data, $isDraft = false) {
 		if(!$isDraft) {
 			// postで送信される前提
-			$contents = $data['Page']['contents_tmp'];
+			if(!empty($data['Page']['contents_tmp'])) {
+				$contents = $data['Page']['contents_tmp'];
+			} else {
+				$contents = $data['Page']['contents'];
+			}
 		} else {
 			$contents = $data['Page']['draft'];
 		}
-		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
+		$contents = $this->Page->addBaserPageTag(null, $contents, $data['Content']['title'], $data['Content']['description'], @$data['Page']['code']);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
 		$file = new File($path);

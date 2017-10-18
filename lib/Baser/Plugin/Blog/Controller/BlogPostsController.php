@@ -85,6 +85,9 @@ class BlogPostsController extends BlogAppController {
 			$this->blogContent = $this->BlogContent->read(null, $this->request->params['pass'][0]);
 			$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_contents', 'action' => 'edit', $this->request->params['pass'][0]));
 			$this->BlogPost->setupUpload($this->blogContent['BlogContent']['id']);
+			if ($this->request->params['prefix'] == 'admin') {
+				$this->subMenuElements = ['blog_posts'];
+			}
 			if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
 				$this->helpers[] = $this->siteConfigs['editor'];
 			}
@@ -115,7 +118,8 @@ class BlogPostsController extends BlogAppController {
 
 		$default = ['named' => [
 			'num' => $this->siteConfigs['admin_list_num'],
-			'sort' => 'no DESC'
+			'sort' => 'no',
+			'direction' => 'desc',
 		]];
 		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
@@ -138,12 +142,35 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
-		$this->paginate = [
+		if ($this->passedArgs['sort'] == 'no') {
+			$order = 'BlogPost.' . $this->passedArgs['sort'];
+		} else {
+			$order = $this->passedArgs['sort'];
+		}
+		if ($order && $this->passedArgs['direction']) {
+			$order .= ' ' . $this->passedArgs['direction'];
+		}
+		$options = [
 			'conditions' => $conditions,
 			'joins' => $joins,
-			'order' => 'BlogPost.' . $this->passedArgs['sort'],
-			'limit' => $this->passedArgs['num']
+			'order' => $order,
+			'limit' => $this->passedArgs['num'],
+			'recursive' => 2
 		];
+
+		// EVENT BlogPosts.searchIndex
+		$event = $this->dispatchEvent('searchIndex', array(
+			'options' => $options
+		));
+		if ($event !== false) {
+			$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
+		}
+
+		$this->BlogPost->BlogContent->unbindModel(array('hasMany' => array('BlogPost', 'BlogCategory')));
+		$this->BlogPost->BlogCategory->unbindModel(array('hasMany' => array('BlogPost')));
+		$this->BlogPost->User->unbindModel(array('hasMany' => array('Favorite'), 'belongsTo' => array('UserGroup')));
+
+		$this->paginate = $options;
 		$this->set('posts', $this->paginate('BlogPost'));
 
 		$this->_setAdminIndexViewData();
@@ -153,11 +180,9 @@ class BlogPostsController extends BlogAppController {
 			return;
 		}
 
-		$this->mainBodyHeaderLinks[] = [
-			'url' => ['action' => 'add', $blogContentId],
-			'title' => '新規記事追加',
-			'class' => 'bca-btn--primary bca-btn--small bca-btn--add',
-		];
+		if ($this->request->params['Content']['status']) {
+			$this->set('publishLink', $this->request->params['Content']['url']);
+		}
 		$this->pageTitle = '[' . strip_tags($this->request->params['Content']['title']) . '] 記事一覧';
 		$this->search = 'blog_posts_index';
 		$this->help = 'blog_posts_index';
@@ -235,9 +260,11 @@ class BlogPostsController extends BlogAppController {
 			unset($data['BlogPost']['blog_category_id']);
 		}
 
-		$_conditions = $this->postConditions($data);
-		if ($_conditions) {
-			$conditions = am($conditions, $_conditions);
+		if(isset($data['BlogPost']['status'])) {
+			$conditions['BlogPost.status'] = $data['BlogPost']['status'];
+		}
+		if(isset($data['BlogPost']['user_id'])) {
+			$conditions['BlogPost.user_id'] = $data['BlogPost']['user_id'];
 		}
 
 		if ($name) {
@@ -266,8 +293,8 @@ class BlogPostsController extends BlogAppController {
 			$this->request->data['BlogPost']['blog_content_id'] = $blogContentId;
 			$this->request->data['BlogPost']['no'] = $this->BlogPost->getMax('no', array('BlogPost.blog_content_id' => $blogContentId)) + 1;
 			$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
-			
-			/*			 * * BlogPosts.beforeAdd ** */
+
+			// EVENT BlogPosts.beforeAdd
 			$event = $this->dispatchEvent('beforeAdd', array(
 				'data' => $this->request->data
 			));
@@ -285,7 +312,7 @@ class BlogPostsController extends BlogAppController {
 				// recursiveを設定
 				$this->BlogPost->recursive = 1;
 
-				/*				 * * afterAdd ** */
+				// EVENT BlogPosts.afterAdd
 				$this->dispatchEvent('afterAdd', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));
@@ -341,6 +368,7 @@ class BlogPostsController extends BlogAppController {
 			$this->redirect(['plugin' => 'blog', 'admin' => true, 'controller' => 'blog_posts', 'action' => 'index', $blogContentId]);
 		}
 
+		$this->BlogPost->recursive = 2;
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogPost->read(null, $id);
 			if(!$this->request->data) {
@@ -352,7 +380,7 @@ class BlogPostsController extends BlogAppController {
 				$this->request->data['BlogPost']['posts_date'] = str_replace('/', '-', $this->request->data['BlogPost']['posts_date']);
 			}
 
-			/*			 * * BlogPosts.beforeEdit ** */
+			// EVENT BlogPosts.beforeEdit
 			$event = $this->dispatchEvent('beforeEdit', array(
 				'data' => $this->request->data
 			));
@@ -363,13 +391,13 @@ class BlogPostsController extends BlogAppController {
 			// データを保存
 			if ($this->BlogPost->saveAll($this->request->data)) {
 				clearViewCache();
+				$this->setMessage('記事「' . $this->request->data['BlogPost']['name'] . '」を更新しました。', false, true);
 
-				/*				 * * BlogPosts.afterEdit ** */
+				// EVENT BlogPosts.afterEdit
 				$this->dispatchEvent('afterEdit', array(
 					'data' => $this->BlogPost->read(null, $id)
 				));
 
-				$this->setMessage('記事「' . $this->request->data['BlogPost']['name'] . '」を更新しました。', false, true);
 				$this->redirect(array('action' => 'edit', $blogContentId, $id));
 			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
@@ -392,7 +420,7 @@ class BlogPostsController extends BlogAppController {
 		));
 
 		if ($this->request->data['BlogPost']['status']) {
-			$this->set('publishLink', $this->request->params['Content']['url'] . '/archives/' . $this->request->data['BlogPost']['no']);
+			$this->set('publishLink', $this->request->params['Content']['url'] . 'archives/' . $this->request->data['BlogPost']['no']);
 		}
 
 		$editorOptions = array('editorDisableDraft' => false);

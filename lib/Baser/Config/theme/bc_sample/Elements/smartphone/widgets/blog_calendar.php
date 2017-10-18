@@ -164,16 +164,15 @@ $entryDates = $data['entryDates'];
 	 * 特定の日付の場合の処理
 	 */
 	function check($i, $w, $year, $month, $day, $entryDates, $BcBaser, $blogContent) {
-		$content = $BcBaser->getCurrentContent();
 		if (in_array(date('Y-m-d', strtotime($year . '-' . $month . '-' . $i)), $entryDates)) {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {
-				$change = '<td class="today">' . $BcBaser->getLink($i, $content['url'] . '/archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td class="today">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
 			} elseif ($w == 0) {
-				$change = '<td class="sunday">' . $BcBaser->getLink($i, $content['url'] . '/archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td class="sunday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
 			} elseif ($w == 6) {
-				$change = '<td class="saturday">' . $BcBaser->getLink($i, $content['url'] . '/archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td class="saturday">' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
 			} else {
-				$change = '<td>' . $BcBaser->getLink($i, $content['url'] . '/archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
+				$change = '<td>' . $BcBaser->getLink($i, $BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $year . '/' .  $month . '/' . $i, null, false) . '</td>';
 			}
 		} else {
 			if (date('Y-m-d') == date('Y-m-d', strtotime($year . '-' . $month . '-' . $i))) {

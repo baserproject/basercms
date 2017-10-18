@@ -25,13 +25,13 @@ class BcCkeditorHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
 		'baser.Default.Site',
 		'baser.Default.Content',
 		'baser.Default.User'
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -62,12 +62,12 @@ class BcCkeditorHelperTest extends BaserTestCase {
 	}
 
 	public function editorDataProvider() {
-		return array(
-			array('test', array(), 'test'),
-			array('test', array('editorLanguage' => 'en'), '"language":"en"'),
-			array('test', array('editorSkin' => 'office2013'), '"skin":"office2013"'),
-			array('test', array('editorToolbar' => array('test' => '[Anchor]')), '"test":"\[Anchor\]"'),
-		);
+		return [
+			['test', [], 'test'],
+			['test', ['editorLanguage' => 'en'], '"language":"en"'],
+			['test', ['editorSkin' => 'office2013'], '"skin":"office2013"'],
+			['test', ['editorToolbar' => ['test' => '[Anchor]']], '"test":"\[Anchor\]"'],
+		];
 	}
 
 }

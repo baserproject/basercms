@@ -176,9 +176,18 @@ class Plugin extends AppModel {
  * @param string $dbConfigName データベース設定名
  * @param string $filterTable テーブル指定
  * @return bool
+ * @deprecated 5.0.0 since 4.0.0 Plugin::initDb() に統合
  */
-	public function alterDb($plugin, $dbConfigName = 'baser', $filterTable = '') {
-		return parent::initDb($dbConfigName, $plugin, false, $filterTable, 'alter');
+	public function alterDb($plugin, $options = []) {
+		$this->log('メソッド：Plugin::alterDb()は、バージョン 4.0.0 より非推奨となりました。Plugin::initDb() を利用してください。', LOG_ALERT);
+		if(!is_array($options)) {
+			$pluginName = $options;
+			$options = [];
+		}
+		$options = array_merge(array(
+			'filterTable'	=> '',
+		), $options);
+		return $this->initDb($plugin, $options);
 	}
 
 /**

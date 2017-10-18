@@ -69,7 +69,7 @@ class UploadsController extends AppController {
 		$fileInfo = array();
 		if (isset($sessionData['imagecopy'][$size])) {
 			$fileInfo = $sessionData['imagecopy'][$size];
-		} elseif (isset($sessionData['imageresize'])) {
+		} elseif (!empty($sessionData['imageresize'])) {
 			$fileInfo = $sessionData['imageresize'];
 		} else {
 			$size = '';

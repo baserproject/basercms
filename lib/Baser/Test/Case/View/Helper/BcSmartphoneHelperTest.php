@@ -10,15 +10,24 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('View', 'View');
+App::uses('BcAppView', 'View');
 App::uses('Helper', 'View');
 App::uses('BcSmartphoneHelper', 'View/Helper');
 
 /**
  * BcSmartphoneHelper Test Case
  *
+ * @property BcSmartphoneHelper $BcSmartphone
  */
-class BcSmartphoneHelperTest extends CakeTestCase {
+class BcSmartphoneHelperTest extends BaserTestCase {
+
+	public $fixtures = [
+		'baser.Default.Content',
+		'baser.Default.SiteConfig',
+		'baser.Default.User',
+		'baser.Default.Site',
+	];
+
 
 /**
  * setUp method
@@ -27,8 +36,8 @@ class BcSmartphoneHelperTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$View = new View();
-		$this->BcSmartphone = new BcSmartphoneHelper($View);
+		$this->View = new BcAppView();
+		$this->BcSmartphone = new BcSmartphoneHelper($this->View);
 	}
 
 /**
@@ -49,9 +58,13 @@ class BcSmartphoneHelperTest extends CakeTestCase {
  */
 	public function testAfterLayout() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+		//afterLayoutの条件分岐、$this->request->params['Site']をempty以外にしたい
+		$this->_getRequest('/s/');
+		$site = BcSite::findCurrent();
+		pr($site->device);
+		$this->BcSmartphone->afterLayout('');
+
 	}
-
-
-
 
 }

@@ -28,6 +28,9 @@ $this->BcBaser->js('admin/users/edit', false);
 
 
 <?php echo $this->BcForm->create('User') ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->hidden('User.id') ?>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" id="FormTable" class="form-table">
@@ -126,6 +129,8 @@ $this->BcBaser->js('admin/users/edit', false);
 	</table>
 </div>
 
+<?php echo $this->BcFormTable->dispatchAfter() ?>
+
 <div class="submit section">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
 <?php if ($editable): ?>
@@ -144,7 +149,7 @@ $this->BcBaser->js('admin/users/edit', false);
 			<ul class="clearfix" id="DefaultFavorites">
 				<?php foreach ($this->request->data['Favorite'] as $key => $favorite): ?>
 					<li style="float:left">
-						<?php $this->BcBaser->link($favorite['name'], $favorite['url']) ?>
+						<?php $this->BcBaser->link(h($favorite['name']), $favorite['url']) ?>
 						<?php echo $this->BcForm->input('Favorite.name.' . $key, array('type' => 'hidden', 'value' => $favorite['name'], 'class' => 'favorite-name')) ?>
 						<?php echo $this->BcForm->input('Favorite.url.' . $key, array('type' => 'hidden', 'value' => $favorite['url'], 'class' => 'favorite-url')) ?>
 					</li>

@@ -28,7 +28,7 @@ class SessionTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = array(), $dataName = '') {
+	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 	}
 	
@@ -72,7 +72,7 @@ class SessionTest extends BaserTestCase {
 		require APP . 'Config' . DS . 'session.php';
 		CakeSession::start();
 		
-		$this->assertEquals($expects, array(intval(ini_get('session.use_cookies')), intval(ini_get('session.use_trans_sid'))));
+		$this->assertEquals($expects, [intval(ini_get('session.use_cookies')), intval(ini_get('session.use_trans_sid'))]);
 	}
 /**
  * Session設定用データプロバイダ
@@ -80,29 +80,29 @@ class SessionTest extends BaserTestCase {
  * @return array
  */
 	public function sessionConfigureMobileDataProvider(){
-		return array(
+		return [
 			/* iPhone / iOS6 */
-			array(array(1, 1), 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25'),
+			[[1, 1], 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25'],
 			/* iPad / iOS6 */
-			array(array(1, 1), 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25'),
+			[[1, 1], 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25'],
 			/* Android / Android OS 4.x */
-			array(array(1, 1), 'Mozilla/5.0 (Linux; Android 4.1.1; Nexus 7 Build/JRO03S) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Safari/535.19'),
+			[[1, 1], 'Mozilla/5.0 (Linux; Android 4.1.1; Nexus 7 Build/JRO03S) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Safari/535.19'],
 			
 			/* IE11 */
-			array(array(1, 1), 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko'),
+			[[1, 1], 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko'],
 			/* Chrome */
-			array(array(1, 1), 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'),
+			[[1, 1], 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'],
 			
 			
 			/* Docomo */
-			array(array(0, 1), 'P501i	DoCoMo/1.0/P501i'),
-			array(array(0, 1), 'DoCoMo/2.0 F901iC(c100;TJ)'),
+			[[0, 1], 'P501i	DoCoMo/1.0/P501i'],
+			[[0, 1], 'DoCoMo/2.0 F901iC(c100;TJ)'],
 			/* KDDI */
-			array(array(0, 1), 'KDDI-TS25 UP.Browser/6.0.8.3 (GUI) MMP/1.1'),
+			[[0, 1], 'KDDI-TS25 UP.Browser/6.0.8.3 (GUI) MMP/1.1'],
 			
 			/* SoftBank */
-			array(array(0, 1), 'SoftBank/1.0/831SH/SHJ003/SN123456789012345'),
-		);
+			[[0, 1], 'SoftBank/1.0/831SH/SHJ003/SN123456789012345'],
+		];
 	}
 
 
@@ -137,16 +137,16 @@ class SessionTest extends BaserTestCase {
  * @return array
  */
 	public function sessionConfigureUrlDataProvider() {
-		return array(
-			array(0, 'http://basercms.net/', ''),
-			array(0, 'http://basercms.net/', 'https://basercms.net/'),
-			array(0, 'https://basercms.net/', 'http://basercms.net/'),
-			array(0, 'https://basercms.net/', ''),
-			array(1, 'https://basercms.net/', 'https://basercms.net/'),
-			array(0, 'https://basercms.net:10443/', 'https://basercms.net/'),
-			array(1, 'https://basercms.net:10443/', 'https://basercms.net:10443/'),
-			array(0, 'http://basercms.net:10080/', 'https://basercms.net:10443/'),
-		);
+		return [
+			[0, 'http://basercms.net/', ''],
+			[0, 'http://basercms.net/', 'https://basercms.net/'],
+			[0, 'https://basercms.net/', 'http://basercms.net/'],
+			[0, 'https://basercms.net/', ''],
+			[1, 'https://basercms.net/', 'https://basercms.net/'],
+			[0, 'https://basercms.net:10443/', 'https://basercms.net/'],
+			[1, 'https://basercms.net:10443/', 'https://basercms.net:10443/'],
+			[0, 'http://basercms.net:10080/', 'https://basercms.net:10443/'],
+		];
 	}
 
 }

@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] フィード設定　行
+ * @var \BcAppView $this
  */
 ?>
 
@@ -34,6 +35,7 @@
 	</td>
 	<td><?php echo $data['category_filter'] ?></td>
 	<td><?php echo $this->BcText->listValue('FeedDetail.cache_time', $data['cache_time']) ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['modified']) ?></td>
 </tr>

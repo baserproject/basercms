@@ -36,6 +36,7 @@
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['title'] ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['modified']) ?></td>
 </tr>

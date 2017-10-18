@@ -16,8 +16,8 @@ class BlogCommentFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => 1,
 			'blog_content_id' => 1,
 			'blog_post_id' => 1,
@@ -29,7 +29,7 @@ class BlogCommentFixture extends BaserTestFixture {
 			'message' => 'ホームページの開設おめでとうございます。（ダミー）',
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,
-		),
-	);
+		],
+	];
 
 }

@@ -12,7 +12,9 @@
 
 /**
  * [ADMIN] メールフィールド 一覧　テーブル
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(7);
 ?>
 
 
@@ -41,6 +43,7 @@
 <th>タイプ</th>
 <th>グループ名</th>
 <th>必須</th>
+<?php echo $this->BcListTable->dispatchShowHead() ?>
 <th>登録日<br />更新日</th>
 </tr>
 </thead>
@@ -51,7 +54,7 @@
 			<?php $this->BcBaser->element('mail_fields/index_row', array('data' => $data, 'count' => $count)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
-		<tr><td colspan="9"><p class="no-data">データが見つかりませんでした。</p></td></tr>
+		<tr><td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td></tr>
 	<?php endif; ?>
 </tbody>
 </table>

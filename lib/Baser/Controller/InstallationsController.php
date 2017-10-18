@@ -577,9 +577,21 @@ class InstallationsController extends AppController {
 			$randomtablename = 'deleteme' . rand(100, 100000);
 			$result = $db->execute("CREATE TABLE $randomtablename (a varchar(10))");
 
+
 			if ($result) {
 				$db->execute("drop TABLE $randomtablename");
 				$this->setMessage('データベースへの接続に成功しました。');
+
+				// データベースのテーブルをチェック
+				$tableNames = $db->listSources();
+				$prefix = Hash::get($config, 'prefix');
+				$duplicateTableNames = array_filter($tableNames, function($tableName) use ($prefix) {
+					return strpos($tableName, $prefix) === 0;
+				});
+
+				if (count($duplicateTableNames) > 0) {
+					$this->setMessage('データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。' . join(', ', $duplicateTableNames));
+				}
 				return true;
 			} else {
 				$this->setMessage("データベースへの接続でエラーが発生しました。<br />" . $db->error, true);
