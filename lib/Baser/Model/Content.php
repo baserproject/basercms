@@ -907,7 +907,7 @@ class Content extends AppModel {
 		foreach ($nodes as $key => $value) {
 			if (preg_match("/^([_]+)/i", $value, $matches)) {
 				$value = preg_replace("/^[_]+/i", '', $value);
-				$prefix = str_replace('_', '&nbsp;&nbsp;&nbsp;', $matches[1]);
+				$prefix = str_replace('_', '　　　', $matches[1]);
 				$value = $prefix . '└' . $value;
 			}
 			$nodes[$key] = $value;

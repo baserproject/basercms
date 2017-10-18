@@ -129,7 +129,7 @@ if($this->BcContents->isEditable()) {
 					<smalL>[サイト]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?>　
 					<?php if(!$this->request->data['Content']['site_root']): ?>
 					<small>[フォルダ]</small>
-					<?php echo $this->BcForm->input('Content.parent_id', array('type' => 'select', 'options' => $parentContents, 'escape' => false)) ?>　
+					<?php echo $this->BcForm->input('Content.parent_id', array('type' => 'select', 'options' => $parentContents, 'escape' => true)) ?>　
 					<?php echo $this->BcForm->error('Content.parent_id') ?>　
 					<br />
 					<?php endif ?>
