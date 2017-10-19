@@ -146,7 +146,7 @@ class MailController extends MailAppController {
 				}
 			}
 			$this->Security->requireAuth('confirm', 'submit');
-			$this->Security->unlockedFields = array_merge($this->Security->unlockedFields, $disabledFields);
+			$this->set('unlockedFields', array_merge($this->Security->unlockedFields, $disabledFields));
 
 			// SSL設定
 			if ($this->dbDatas['mailContent']['MailContent']['ssl_on']) {
