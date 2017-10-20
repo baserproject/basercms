@@ -68,6 +68,9 @@ class Content extends AppModel {
  * @var array
  */
 	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		],
 		'name' => [
 			['rule' => ['notBlank'],
 				'message' => 'URLを入力してください。'],
