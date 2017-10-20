@@ -40,7 +40,6 @@ class MailContent extends MailAppModel {
 	public $hasMany = array('MailField' =>
 		array('className' => 'Mail.MailField',
 			'order' => 'sort',
-			'limit' => 100,
 			'foreignKey' => 'mail_content_id',
 			'dependent' => true,
 			'exclusive' => false,
