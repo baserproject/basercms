@@ -855,6 +855,9 @@ class BcAppModel extends Model {
 			'conditions' => [$this->alias . '.id' => $id],
 			'fields' => [$this->alias . '.id', $this->alias . '.sort']
 		]);
+		if(!$current) {
+			return false;
+		}
 
 		// 変更相手のデータを取得
 		if ($offset > 0) { // DOWN
