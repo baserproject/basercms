@@ -246,7 +246,7 @@ class MailHelper extends AppHelper {
 		if($this->request->params['controller'] == 'mail' && $this->request->params['action'] == 'index') {
 			// メールフォームをショートコードを利用する際、ショートコードの利用先でキャッシュを利用している場合、
 			// セキュリティコンポーネントで発行するトークンが更新されない為、強制的にキャッシュをオフにする
-			if($this->request->params['requested']) {
+			if (Hash::get($this->request->params, 'requested')) {
 				Configure::write('Cache.disable', true);
 			}
 			$this->_View->BcForm->request->params['_Token']['unlockedFields'] = $this->_View->get('unlockedFields');
