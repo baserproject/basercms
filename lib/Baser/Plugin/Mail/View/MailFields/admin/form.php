@@ -35,7 +35,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('MailField.no', 'NO') ?></th>
 				<td class="col-input">
-					<?php echo $this->BcForm->value('MailField.no') ?>
+					<?php echo h($this->BcForm->value('MailField.no')) ?>
 					<?php echo $this->BcForm->input('MailField.no', array('type' => 'hidden')) ?>
 				</td>
 			</tr>
