@@ -239,7 +239,7 @@ class MailHelper extends AppHelper {
 
 /**
  * beforeRender
- *s
+ *
  * @param string $viewFile
  */
 	public function beforeRender($viewFile) {
