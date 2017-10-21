@@ -29,7 +29,7 @@
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>
 	<td><?php $this->BcBaser->link($data['UserGroup']['name'], array('action' => 'edit', $data['UserGroup']['id'])) ?>
-		<?php if ($data['User']): ?><br />
+		<?php if (!empty($data['User'])): ?><br />
 			<?php foreach ($data['User'] as $user): ?>
 				<span class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), array('controller' => 'users', 'action' => 'edit', $user['id'])) ?></span>
 			<?php endforeach ?>
