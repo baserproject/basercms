@@ -175,7 +175,7 @@ class UserGroup extends AppModel {
 			}
 			return $result;
 		} else {
-			if (isset($this->validationErrors['name'])) {
+			if (!isset($this->validationErrors['name'])) {
 				return $this->copy(null, $data, $recursive);
 			} else {
 				return false;
