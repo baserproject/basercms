@@ -224,6 +224,9 @@ class MailField extends MailAppModel {
 
 		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
 			$data['MailField']['name'] .= '_copy';
+			if(strlen($data['MailField']['name']) >= 64) {
+				return false;
+			}
 			$data['MailField']['field_name'] .= '_copy';
 			return $this->copy(null, $data, $options); // 再帰処理
 		}
