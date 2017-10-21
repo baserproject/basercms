@@ -685,8 +685,9 @@ class Content extends AppModel {
  * @return mixed URL | false
  */
 	public function createUrl($id, $plugin = null, $type = null) {
+		$id = (int) $id;
 		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
-		if(!$id || !intval($id)) {
+		if(!$id) {
 			return false;
 		} elseif($id == 1) {
 			$url = '/';
