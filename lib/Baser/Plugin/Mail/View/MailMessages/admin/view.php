@@ -24,7 +24,7 @@
 	$groupField = null;
 	foreach ($mailFields as $key => $mailField) {
 		$field = $mailField['MailField'];
-		if ($field['use_field'] && $field['type'] != 'hidden') {
+		if ($field['use_field']) {
 			$nextKey = $key + 1;
 			/* 項目名 */
 			if ($groupField != $field['group_field'] || (!$groupField && !$field['group_field'])) {
