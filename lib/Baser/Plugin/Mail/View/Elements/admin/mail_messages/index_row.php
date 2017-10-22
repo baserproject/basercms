@@ -50,7 +50,7 @@
 				?>
 			<?php endif ?>
 		<?php endforeach ?>
-		<?php echo $this->Text->truncate(implode(',', $inData), 170) ?>
+		<?php echo implode(',', $inData) ?>
 	</td>
 	<td>
 		<?php if($fileExists): ?>
