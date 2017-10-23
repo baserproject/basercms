@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] プラグイン　フォーム
+ * @var BcAppView $this
  */
 ?>
 <?php echo $this->BcForm->input('ResetDbUrl', array('type' => 'hidden', 'value' => $this->BcBaser->getUrl(array('action' => 'reset_db')))) ?>
@@ -42,9 +43,9 @@ $(function(){
 <?php echo $this->BcForm->input('Plugin.version', array('type' => 'hidden')) ?>
 
 <div class="em-box">
-	<?php echo $this->BcForm->value('Plugin.name') . ' ' . $this->BcForm->value('Plugin.version') ?>
+	<?php echo h($this->BcForm->value('Plugin.name')) . ' ' . $this->BcForm->value('Plugin.version') ?>
 	<?php if ($this->BcForm->value('Plugin.title')): ?>
-		（<?php echo $this->BcForm->value('Plugin.title') ?>）
+		（<?php echo h($this->BcForm->value('Plugin.title')) ?>）
 	<?php endif ?>
 </div>
 

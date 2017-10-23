@@ -197,12 +197,7 @@ class BcAppHelper extends Helper {
 		} elseif (!is_array($url) && preg_match('/\/(img|css|js|files)/', $url)) {
 			return $this->webroot($url);
 		} else {
-			if(!BcUtil::isAdminSystem() && !is_array($url) && !empty($this->request->params['Content'])) {
-				$Content = ClassRegistry::init('Content');
-				$url = $Content->getUrl($url, $full, @$this->_View->request->params['Site']['use_subdomain']);
-			} else {
-				$url = parent::url($url, $full);
-			}
+			$url = parent::url($url, $full);
 			$params = explode('?', $url);
 			$url = preg_replace('/\/index$/', '/', $params[0]);
 			if(!empty($params[1])) {

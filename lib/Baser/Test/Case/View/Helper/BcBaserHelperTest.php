@@ -28,6 +28,8 @@ class BcBaserHelperTest extends BaserTestCase {
 	public $fixtures = [
 		'baser.Default.Page',	// メソッド内で読み込む
 		'baser.Default.Content',	// メソッド内で読み込む
+		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',	// メソッド内で読み込む
+		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',	// メソッド内で読み込む
 		'baser.View.Helper.BcBaserHelper.PageBcBaserHelper',
 		'baser.View.Helper.BcBaserHelper.SiteConfigBcBaserHelper',
 		'baser.Default.SearchIndex',
@@ -2064,6 +2066,33 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetParentFolder() {
 		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');
+	}
+
+/**
+ * コンテンツ管理用のURLより、正式なURLを取得する 
+ */
+	public function testGetContentsUrl() {
+		BcSite::flash();
+		$this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute');
+		// URLが設定されていない場合
+		$this->BcBaser->request = $this->_getRequest('/news/');
+		$this->assertEquals('/news/', $this->BcBaser->getContentsUrl());
+		// URLの指定がある場合
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->assertEquals('/news/', $this->BcBaser->getContentsUrl('/news/'));
+		// サブドメインの指定がない場合
+		Configure::write('BcEnv.host', 'another.com');
+		$this->BcBaser->request = $this->_getRequest('/news/');
+		$this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl(null, true));
+		// サブドメインの指定がある場合
+		Configure::write('BcEnv.host', 'localhost');
+		$this->BcBaser->request = $this->_getRequest('/');
+		$this->assertEquals('http://another.com/news/', $this->BcBaser->getContentsUrl('/another.com/news/', true, true));
+		// サブドメインの指定がないのに指定ありとした場合
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+		$this->assertEquals('http://main.com/news/', $this->BcBaser->getContentsUrl('/news/', true, true));
+		Configure::write('BcEnv.siteUrl', $siteUrl);
 	}
 	
 }

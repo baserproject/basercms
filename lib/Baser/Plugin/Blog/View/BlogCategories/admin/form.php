@@ -14,12 +14,13 @@
  * [ADMIN] ブログカテゴリ フォーム
  */
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
+$fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->value('BlogCategory.name');
 ?>
 
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($this->BcBaser->getUri('/' . $this->request->params['Content']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name')), '/' . $this->request->params['Content']['name'] . '/archives/category/' . $this->BcForm->value('BlogCategory.name'), array('target' => '_blank')) ?></strong></p>
+		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($fullUrl, $fullUrl, array('target' => '_blank')) ?></strong></p>
 	</div>
 <?php endif ?>
 

@@ -98,7 +98,7 @@ class BlogBaserHelperTest extends BaserTestCase {
  * 詳細なテストは、BlogHelper::getCategories() に委ねる
  */
 	public function testGetBlogCategories() {
-		$categories = $this->BcBaser->getBlogCategories();
+		$categories = $this->BcBaser->getBlogCategories(['siteId' => 0]);
 		$this->assertEquals(2, count($categories));
 	}
 

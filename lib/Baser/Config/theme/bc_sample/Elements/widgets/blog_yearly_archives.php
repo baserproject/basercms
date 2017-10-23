@@ -11,6 +11,11 @@
  * @since			baserCMS v 0.1.0
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * @var BcAppView $this
+ */
+
 if (!isset($view_count)) {
 	$view_count = false;
 }
@@ -37,7 +42,7 @@ if ($view_count) {
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogcontent = $data['blogContent'];
-$baseCurrentUrl = $this->request->params['Content']['name'] . 'archives/date/';
+$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 ?>
 
 
@@ -61,7 +66,7 @@ $baseCurrentUrl = $this->request->params['Content']['name'] . 'archives/date/';
 					<?php $title = $postedDate['year'] . '年' ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->BcBaser->getContentByEntityId($id, 'BlogContent', 'url') . 'archives/date/' . $postedDate['year']) ?>
+					<?php $this->BcBaser->link($title, $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $postedDate['year']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

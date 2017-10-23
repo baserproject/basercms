@@ -78,20 +78,19 @@ class Page extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'contents' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000),
-				'message' => '本稿欄に保存できるデータ量を超えています。')
-		),
-		'draft' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000),
-				'message' => '草稿欄に保存できるデータ量を超えています。')
-		),
-	);
+	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		],
+		'contents' => [
+			['rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'],
+			['rule' => ['maxByte', 64000], 'message' => '本稿欄に保存できるデータ量を超えています。']
+		],
+		'draft' => [
+			['rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'],
+			['rule' => ['maxByte', 64000], 'message' => '草稿欄に保存できるデータ量を超えています。']
+		]
+	];
 
 /**
  * beforeSave

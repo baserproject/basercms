@@ -200,6 +200,7 @@ class BlogCategory extends BlogAppModel {
  */
 	public function getCategoryList($blogContentId = null, $options = []) {
 		$options = array_merge([
+			'siteId' => null,
 			'depth' => 1,
 			'type' => null,
 			'limit' => false,
@@ -250,7 +251,7 @@ class BlogCategory extends BlogAppModel {
 	protected function _getCategoryList($blogContentId = null, $parentId = null, $viewCount = false, $depth = 1, $current = 1, $fields = [], $options = []) {
 		$options = array_merge([
 			'id' => null,
-			'siteId' => 0,
+			'siteId' => null,
 			'order' => 'BlogCategory.id',
 			'conditions' => [],
 			'threaded' => false
@@ -319,7 +320,7 @@ class BlogCategory extends BlogAppModel {
 					]);
 				}
 				if ($current < $depth) {
-					$children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current + 1);
+					$children = $this->_getCategoryList($blogContentId, $data['BlogCategory']['id'], $viewCount, $depth, $current + 1, $fields, $options);
 					if ($children) {
 						$datas[$key]['BlogCategory']['children'] = $children;
 					}

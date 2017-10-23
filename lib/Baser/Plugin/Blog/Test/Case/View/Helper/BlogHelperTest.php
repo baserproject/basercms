@@ -34,6 +34,10 @@ class BlogHelperTest extends BaserTestCase {
  * @var array 
  */
 	public $fixtures = array(
+		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',	// メソッド内で読み込む
+		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',	// メソッド内で読み込む
+		'plugin.blog.View/Helper/BlogHelper/BlogContentMultiSite',	// メソッド内で読み込む
+		'plugin.blog.View/Helper/BlogHelper/BlogCategoryMultiSite',	// メソッド内で読み込む
 		'plugin.blog.View/Helper/BlogBaserHelper/BlogCategoryTree',	// テスト内で読み込む
 		'plugin.blog.Model/BlogTag/BlogPostBlogTagFindCustomPrams',	// テスト内で読み込む
 		'plugin.blog.Model/BlogTag/BlogPostsBlogTagBlogTagFindCustomPrams',	// テスト内で読み込む
@@ -186,7 +190,7 @@ class BlogHelperTest extends BaserTestCase {
  */
 	public function testGetPostTitle() {
 		$post = array('BlogPost' => array(
-			'blog_content_id' => 2,
+			'blog_content_id' => 1,
 			'name' => 'test-name',
 			'no' => 4,
 		));
@@ -205,7 +209,7 @@ class BlogHelperTest extends BaserTestCase {
  */
 	public function testGetPostLink() {
 		$post = array('BlogPost' => array(
-			'blog_content_id' => 2,
+			'blog_content_id' => 1,
 			'no' => 3,
 		));
 		$result = $this->Blog->getPostLink($post, 'test-title');
@@ -214,14 +218,38 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * ブログ記事のURLを取得する
+ * 
+ * @param int $blogContentId ブログコンテンツID
+ * @param int $no ブログ記事NO
+ * @param string $expects 期待値
+ * @dataProvider getPostLinkUrlDataProvider
  */
-	public function testGetPostLinkUrl() {
+	public function testGetPostLinkUrl($blogContentId, $no, $base, $useBase, $expects) {
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+		$this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite');
+		$this->Blog->request = $this->_getRequest('/');
+		$this->Blog->request->base = $base;
 		$post = array('BlogPost' => array(
-			'blog_content_id' => 2,
-			'no' => 3,
+			'blog_content_id' => $blogContentId,
+			'no' => $no,
 		));
-		$result = $this->Blog->getPostLinkUrl($post);
-		$this->assertEquals('/news/archives/3', $result, '記事へのリンクを正しく取得できません');
+		$result = $this->Blog->getPostLinkUrl($post, $useBase);
+		Configure::write('BcEnv.siteUrl', $siteUrl);
+		$this->assertEquals($expects, $result, '記事へのリンクを正しく取得できません');
+	}
+	
+	public function getPostLinkUrlDataProvider() {
+		return [
+			[10, 3, '', false, false],
+			[1, 3, '', false, '/news/archives/3'],
+			[1, 3, '/sub', false, '/news/archives/3'],
+			[1, 3, '/sub', true, '/sub/news/archives/3'],
+			[3, 3, '', false, 'http://main.com/en/news/archives/3'],
+			[4, 3, '', false, 'http://sub.main.com/news/archives/3'],
+			[5, 3, '', false, 'http://another.com/news/archives/3'],
+			[6, 3, '', false, 'http://another.com/news/archives/3']
+		];
 	}
 
 /**
@@ -336,21 +364,33 @@ class BlogHelperTest extends BaserTestCase {
  * @param string $expected 期待値
  * @dataProvider getCategoryUrlDataProvider
  */
-	public function testGetCategoryUrl($blogCategoryId, $named, $expected) {
-		$options = array(
+	public function testGetCategoryUrl($blogCategoryId, $named, $base, $useBase, $expected) {
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+		$this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogCategoryMultiSite');
+		$this->Blog->request = $this->_getRequest('/');
+		$this->Blog->request->base = $base;
+		$options = [
 			'named' => $named,
-		);
+			'base' => $useBase
+		];
 		$result = $this->Blog->getCategoryUrl($blogCategoryId, $options);
+		Configure::write('BcEnv.siteUrl', $siteUrl);
 		$this->assertEquals($result, $expected, 'カテゴリ一覧へのURLを正しく取得できません');
 	}
 
 	public function getCategoryUrlDataProvider() {
-		return array(
-			array(1, array(), '/news/archives/category/release'),
-			array(2, array(), '/news/archives/category/release/child'),
-			array(3, array(), '/news/archives/category/child-no-parent'),
-			array(1, array('test1', 'test2'), '/news/archives/category/release/test1/test2'),
-		);
+		return [
+			[1, [], '', false, '/news/archives/category/release'],
+			[1, [], '/sub', false, '/news/archives/category/release'],
+			[1, [], '/sub', true, '/sub/news/archives/category/release'],
+			[2, [], '', false, '/news/archives/category/release/child'],
+			[3, [], '', false, '/news/archives/category/child-no-parent'],
+			[4, [], '', false, 'http://main.com/m/news/archives/category/release'],
+			[5, [], '', false, 'http://sub.main.com/news/archives/category/release'],
+			[6, [], '', false, 'http://another.com/news/archives/category/release'],
+			[1, ['test1', 'test2'], '', false, '/news/archives/category/release/test1/test2'],
+		];
 	}
 
 /**
@@ -374,8 +414,9 @@ class BlogHelperTest extends BaserTestCase {
  * @dataProvider getCategoryListDataProvider
  */
 	public function testGetCategoryList($depth, $count, $options, $expected) {
+		/* @var BlogCategory $BlogCategory */
 		$BlogCategory = ClassRegistry::init('Blog.BlogCategory');
-		$categories = $BlogCategory->getCategoryList(1, array('viewCount' => true, 'depth' => 3));
+		$categories = $BlogCategory->getCategoryList(1, ['viewCount' => true, 'depth' => 3, 'siteId' => 0]);
 		$result = $this->Blog->getCategoryList($categories, $depth, $count, $options);
 		$this->assertEquals($result, $expected, 'カテゴリーの一覧をリストタグで正しく取得できません');
 	}
@@ -411,7 +452,7 @@ class BlogHelperTest extends BaserTestCase {
 		return array(
 			array(1, 4, '9000-08-10 18:58:07', '<a href="/news/archives/4" class="prev-link">≪ ４記事目</a>'),
 			array(1, 3, '1000-08-10 18:58:07', ''),
-			array(2, 2, '9000-08-10 18:58:07', '<a href="/news/archives/8" class="prev-link">≪ ８記事目</a>'),
+			array(2, 2, '9000-08-10 18:58:07', '<a href="/" class="prev-link">≪ ８記事目</a>'),	// 存在しないブログコンテンツ
 			array(2, 1, '1000-08-10 18:58:07', ''),
 		);
 	}
@@ -439,7 +480,7 @@ class BlogHelperTest extends BaserTestCase {
 			array(1, 1, '9000-08-10 18:58:07', ''),
 			array(1, 2, '1000-08-10 18:58:07', '<a href="/news/archives/1" class="next-link">ホームページをオープンしました ≫</a>'),
 			array(2, 3, '9000-08-10 18:58:07', ''),
-			array(2, 4, '1000-08-10 18:58:07', '<a href="/news/archives/7" class="next-link">７記事目 ≫</a>'),
+			array(2, 4, '1000-08-10 18:58:07', '<a href="/" class="next-link">７記事目 ≫</a>'), // 存在しないブログコンテンツ
 		);
 	}
 
@@ -601,13 +642,13 @@ class BlogHelperTest extends BaserTestCase {
 	public function testGetCategories() {
 		$this->loadFixtures('BlogCategoryTree');
 		// １階層、かつ、siteId=0
-		$categories = $this->Blog->getCategories();
+		$categories = $this->Blog->getCategories(['siteId' => 0]);
 		$this->assertEquals(1, count($categories));
 		// サイトフィルター解除
 		$categories = $this->Blog->getCategories(['siteId' => false]);
 		$this->assertEquals(2, count($categories));
 		// 深さ指定（子）
-		$categories = $this->Blog->getCategories(['depth' => 2]);
+		$categories = $this->Blog->getCategories(['siteId' => 0, 'depth' => 2]);
 		$this->assertEquals(1, count($categories[0]['BlogCategory']['children']));
 		// 深さ指定（孫）
 		$categories = $this->Blog->getCategories(['depth' => 3]);
@@ -704,23 +745,27 @@ class BlogHelperTest extends BaserTestCase {
  * @param string $name
  * @dataProvider getTagLinkUrlDataProvider
  */
-	public function testGetTagLinkUrl($expected, $currentUrl, $blogContentId, $name) {
+	public function testGetTagLinkUrl($currentUrl, $blogContentId, $name, $base, $useBase, $expected) {
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+		$this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite', 'BlogPostBlogTagFindCustomPrams', 'BlogPostsBlogTagBlogTagFindCustomPrams', 'BlogTagBlogTagFindCustomPrams');
+		BcSite::flash();
 		$this->Blog->request = $this->_getRequest($currentUrl);
-		$this->loadFixtures('BlogPostBlogTagFindCustomPrams');
-		$this->loadFixtures('BlogPostsBlogTagBlogTagFindCustomPrams');
-		$this->loadFixtures('BlogTagBlogTagFindCustomPrams');
-		$this->loadFixtures('BlogContentBlogTagFindCustomPrams');
-		$this->loadFixtures('ContentBlogTagFindCustomPrams');
-		$url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]]);
+		$this->Blog->request->base = $base;
+		$url = $this->Blog->getTagLinkUrl($blogContentId, ['BlogTag' => ['name' => $name]], $useBase);
+		Configure::write('BcEnv.siteUrl', $siteUrl);
 		$this->assertEquals($expected, $url);
 	}
 
 	public function getTagLinkUrlDataProvider() {
 		return [
-			['/news/archives/tag/タグ１', '/', 1, 'タグ１'],
-			['/s/blog3/archives/tag/タグ２', '/s/', 3, 'タグ２'],
-			['/tags/タグ１', '/', null, 'タグ１'],
-			['/s/tags/タグ２', '/s/', null, 'タグ２']
+			['/', 1, 'タグ１', '', false, '/news/archives/tag/タグ１'],
+			['/', 1, 'タグ１', '/sub', false, '/news/archives/tag/タグ１'],
+			['/', 1, 'タグ１', '/sub', true, '/sub/news/archives/tag/タグ１'],
+			['/s/', 3, 'タグ２', '', false, 'http://main.com/en/news/archives/tag/タグ２'],
+			['/', 4, 'タグ２', '', false, 'http://sub.main.com/news/archives/tag/タグ２'],
+			['/', null, 'タグ１', '', false, '/tags/タグ１'],
+			['/s/', null, 'タグ２', '', false, '/s/tags/タグ２']
 		];
 	}
 
@@ -895,6 +940,36 @@ class BlogHelperTest extends BaserTestCase {
 			[false, '/s/index'],
 			[false, '/s/contact/index'],
 			[true, '/s/news/index']
+		];
+	}
+
+/**
+ * testGetPreviewUrl
+ * 
+ * @param string $url
+ * @param bool $useSubdomain
+ * @param string $expects
+ * @dataProvider getPreviewUrlDataProvider
+ */
+	public function testGetPreviewUrl($url, $useSubdomain, $base, $expects) {
+		BcSite::flash();
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+		$this->loadFixtures('ContentBcContentsRoute', 'SiteBcContentsRoute', 'BlogContentMultiSite');
+		$this->Blog->request = $this->_getRequest('/');
+		$this->Blog->request->base = $base;
+		$result = $this->Blog->getPreviewUrl($url, $useSubdomain);
+		Configure::write('BcEnv.siteUrl', $siteUrl);
+		$this->assertEquals($expects, $result);
+	}
+	
+	public function getPreviewUrlDataProvider() {
+		return [
+			['/news/', false, '', '/news/'],
+			['/news/', false, '/sub', '/sub/news/'],
+			['/sub/news/', true, '', '/news/?host=sub.main.com'],
+			['/sub/news/', true, '/sub', '/sub/news/?host=sub.main.com'],
+			['/another.com/news/', true, '', '/news/?host=another.com']
 		];
 	}
 	

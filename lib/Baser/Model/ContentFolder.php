@@ -39,6 +39,17 @@ class ContentFolder extends AppModel implements CakeEventListener {
 	public $isMovableTemplate = true;
 
 /**
+ * バリデーション
+ *
+ * @var array
+ */
+	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		]
+	];
+
+/**
  * Implemented Events
  *
  * @return array

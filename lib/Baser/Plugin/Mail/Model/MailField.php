@@ -30,75 +30,78 @@ class MailField extends MailAppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => "項目名を入力してください。"),
-			array('rule' => array('maxLength', 255),
-				'message' => '項目名は255文字以内で入力してください。')
-		),
-		'field_name' => array(
-			array('rule' => array('halfTextMailField'),
+	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		],
+		'name' => [
+			['rule' => ['notBlank'],
+				'message' => "項目名を入力してください。"],
+			['rule' => ['maxLength', 255],
+				'message' => '項目名は255文字以内で入力してください。']
+		],
+		'field_name' => [
+			['rule' => ['halfTextMailField'],
 				'message' => 'フィールド名は半角英数字のみで入力してください。',
-				'allowEmpty' => false),
-			array('rule' => 'duplicateMailField',
-				'message' => '入力されたフィールド名は既に登録されています。'),
-			array('rule' => array('maxLength', 255),
-				'message' => 'フィールド名は255文字以内で入力してください。')
-		),
-		'type' => array(
-			array('rule' => array('notBlank'),
-				'message' => "タイプを入力してください。")
-		),
-		'head' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '項目見出しは255文字以内で入力してください。')
-		),
-		'attention' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '注意書きは255文字以内で入力してください。')
-		),
-		'before_attachment' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '前見出しは255文字以内で入力してください。')
-		),
-		'after_attachment' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '後見出しは255文字以内で入力してください。')
-		),
-		'source' => array(
-			array('rule' => array('sourceMailField'),
-				'message' => '選択リストを入力してください。')
-		),
-		'options' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'オプションは255文字以内で入力してください。')
-		),
-		'class' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'クラス名は255文字以内で入力してください。')
-		),
-		'separator' => array(
-			array('rule' => array('maxLength', 20),
-				'message' => '区切り文字は20文字以内で入力してください。')
-		),
-		'default_value' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '初期値は255文字以内で入力してください。')
-		),
-		'description' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => '説明文は255文字以内で入力してください。')
-		),
-		'group_field' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'グループフィールドは255文字以内で入力してください。')
-		),
-		'group_valid' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'グループ入力チェックは255文字以内で入力してください。')
-		)
-	);
+				'allowEmpty' => false],
+			['rule' => 'duplicateMailField',
+				'message' => '入力されたフィールド名は既に登録されています。'],
+			['rule' => ['maxLength', 255],
+				'message' => 'フィールド名は255文字以内で入力してください。']
+		],
+		'type' => [
+			['rule' => ['notBlank'],
+				'message' => "タイプを入力してください。"]
+		],
+		'head' => [
+			['rule' => ['maxLength', 255],
+				'message' => '項目見出しは255文字以内で入力してください。']
+		],
+		'attention' => [
+			['rule' => ['maxLength', 255],
+				'message' => '注意書きは255文字以内で入力してください。']
+		],
+		'before_attachment' => [
+			['rule' => ['maxLength', 255],
+				'message' => '前見出しは255文字以内で入力してください。']
+		],
+		'after_attachment' => [
+			['rule' => ['maxLength', 255],
+				'message' => '後見出しは255文字以内で入力してください。']
+		],
+		'source' => [
+			['rule' => ['sourceMailField'],
+				'message' => '選択リストを入力してください。']
+		],
+		'options' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'オプションは255文字以内で入力してください。']
+		],
+		'class' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'クラス名は255文字以内で入力してください。']
+		],
+		'separator' => [
+			['rule' => ['maxLength', 20],
+				'message' => '区切り文字は20文字以内で入力してください。']
+		],
+		'default_value' => [
+			['rule' => ['maxLength', 255],
+				'message' => '初期値は255文字以内で入力してください。']
+		],
+		'description' => [
+			['rule' => ['maxLength', 255],
+				'message' => '説明文は255文字以内で入力してください。']
+		],
+		'group_field' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'グループフィールドは255文字以内で入力してください。']
+		],
+		'group_valid' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'グループ入力チェックは255文字以内で入力してください。']
+		]
+	];
 
 /**
  * コントロールソースを取得する
@@ -221,6 +224,9 @@ class MailField extends MailAppModel {
 
 		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
 			$data['MailField']['name'] .= '_copy';
+			if(strlen($data['MailField']['name']) >= 64) {
+				return false;
+			}
 			$data['MailField']['field_name'] .= '_copy';
 			return $this->copy(null, $data, $options); // 再帰処理
 		}
