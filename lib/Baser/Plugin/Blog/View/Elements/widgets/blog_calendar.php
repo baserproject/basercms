@@ -78,7 +78,7 @@ $entryDates = $data['entryDates'];
 	$today = mktime(0, 0, 0, $month, $day, $year);
 
 //曜日の配列
-	$date = array('日', '月', '火', '水', '木', '金', '土');
+	$date = array(__('日'), __('月'), __('火'), __('水'), __('木'), __('金'), __('土'));
 
 //カレンダーを表示する
 //先月の場合
@@ -98,32 +98,32 @@ $entryDates = $data['entryDates'];
 		$year4 = $year;
 		$month4 = $month + 1;
 	}
-
+var_dump(date('M', strtotime(date('Y') . '/' . $month3 . '/1')));
 //カレンダーを表示するHTML
 	print '<table class="blog-calendar"><tr><td colspan=7>';
 	print "<center>";
 	if ($data['prev']) {
-		print $this->BcBaser->getLink($month3 . "月", $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year3 . '/' . $month3, null, false);
+		print $this->BcBaser->getLink(__($month3 . "月"), $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year3 . '/' . $month3, null, false);
 	} else {
-		print $month3 . "月";
+		print __($month3 . "月");
 	}
-	print "　" . $year . "年" . $month . "月　";
+	print "　" . $year . "/" . $month . "　";
 	if ($data['next']) {
-		print $this->BcBaser->getLink($month4 . "月", $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year4 . '/' . $month4, null, false);
+		print $this->BcBaser->getLink(__($month4 . "月"), $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $year4 . '/' . $month4, null, false);
 	} else {
-		print $month4 . "月";
+		print __($month4 . "月");
 	}
 	print "</td></tr>";
 
 	print '
 <tr> 
-<th class="sunday">日</th>
-<th>月</th>
-<th>火</th>
-<th>水</th>
-<th>木</th>
-<th>金</th>
-<th class="saturday">土</th>
+<th class="sunday">' . __('日') . '</th>
+<th>' . __('月') . '</th>
+<th>' . __('火') . '</th>
+<th>' . __('水') . '</th>
+<th>' . __('木') . '</th>
+<th>' . __('金') . '</th>
+<th class="saturday">' . __('土') . '</th>
 </tr>
 ';
 

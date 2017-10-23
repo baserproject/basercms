@@ -3,7 +3,7 @@
  * [PUBLISH] ナビゲーション
  */
 if ($this->viewPath == 'home') {
-	echo '<strong>ホーム</strong>';
+	echo '<strong>'.__('ホーム').'</strong>';
 } else {
 	$crumbs = $this->BcBaser->getCrumbs();
 	if (!empty($crumbs)) {
@@ -19,5 +19,5 @@ if ($this->viewPath == 'home') {
 			}
 		}
 	}
-	$this->BcBaser->crumbs(' &gt; ', 'ホーム');
+	$this->BcBaser->crumbs(' &gt; ', __('ホーム'));
 }

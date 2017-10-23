@@ -9,7 +9,7 @@
 
 <div id="TopPage">
     <div id="Works" class="body-wrap">
-        <h2><span class="main-title1">WORKS</span><br><span class="sub-title">実績</span></h2>
+        <h2><span class="main-title1">WORKS</span><br><span class="sub-title"><?php echo __('実績') ?></span></h2>
         <?php $this->BcBaser->blogPosts('works', 4) ?>
     
     </div>

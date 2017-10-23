@@ -48,9 +48,9 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . '/archives/date/';
 					<?php $class = '' ?>
 				<?php endif ?>
 				<?php if ($view_count): ?>
-					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' . '(' . $postedDate['count'] . ')' ?>
+					<?php $title = $postedDate['year'] . __('年') . $postedDate['month'] . __('月') . '(' . $postedDate['count'] . ')' ?>
 				<?php else: ?>
-					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' ?>
+					<?php $title = $postedDate['year'] . __('年') . $postedDate['month'] . __('月') ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
 					<?php $this->BcBaser->link($title, $this->BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>

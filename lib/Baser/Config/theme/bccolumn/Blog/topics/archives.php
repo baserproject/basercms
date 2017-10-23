@@ -2,7 +2,7 @@
 /**
  * ブログアーカイブ一覧
  */
-$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
+$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() .  __('のアーカイブ一覧です。'));
 ?>
 
 
@@ -26,7 +26,7 @@ $(function(){
 				</a>
 			</div>
 			<?php $this->Blog->postContent($post, true, false, 100) ?>...
-			<p class="more"><a href="<?php echo $uri ?>" class="btn btn-more">詳細ページへ</a></p>
+			<p class="more"><a href="<?php echo $uri ?>" class="btn btn-more"><?php echo __('詳細ページへ') ?></a></p>
 
 
 				<div class="meta"> 
@@ -43,7 +43,7 @@ $(function(){
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __('記事がありません。') ?></p>
 <?php endif; ?>
 <!-- pagination -->
 <?php $this->BcBaser->pagination('simple'); ?>

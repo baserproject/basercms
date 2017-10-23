@@ -61,9 +61,9 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				<?php endif ?>
 				<?php if (!$loginUrl || $this->request->url != $loginUrl): ?>
 					<?php if (Configure::read('debug') == -1 && $this->name != "Installations"): ?>
-						<li>&nbsp;&nbsp;<span id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">インストールモード</span>&nbsp;&nbsp;</li>
+						<li>&nbsp;&nbsp;<span id="DebugMode" title="インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"><?php echo __d('baser', 'インストールモード') ?></span>&nbsp;&nbsp;</li>
 					<?php elseif (Configure::read('debug') > 0): ?>
-						<li>&nbsp;&nbsp;<span id="DebugMode" title="デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。">デバッグモード<?php echo mb_convert_kana(Configure::read('debug'), 'N') ?></span>&nbsp;&nbsp;</li>
+						<li>&nbsp;&nbsp;<span id="DebugMode" title="デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しましょう。"><?php echo __d('baser', 'デバッグモード') ?> <?php echo mb_convert_kana(Configure::read('debug'), 'N') ?></span>&nbsp;&nbsp;</li>
 					<?php endif; ?>
 				<?php endif ?>
 			</ul>
@@ -99,7 +99,7 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 				</li>
 				<?php if (!empty($user) && in_array('admin', $currentUserAuthPrefixes) && Configure::read('BcApp.adminNavi')): ?>
 					<li>
-						<?php $this->BcBaser->link('システムナビ' . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
+						<?php $this->BcBaser->link(__d('baser', 'システムナビ') . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', array('width' => 8, 'height' => 11, 'class' => 'bc-btn')), 'javascript:void(0)', array('class' => 'title')) ?>
 						<div id="SystemMenu"><div>
 								<?php 
 								$adminSitemap = Configure::read('BcApp.adminNavi');

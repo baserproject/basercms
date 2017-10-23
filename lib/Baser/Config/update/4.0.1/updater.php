@@ -32,16 +32,16 @@
 	$Content = ClassRegistry::init('Content');
 	
     if($Content->updateAllUrl()) {
-        $this->setUpdateLog('contents テーブルのデータ更新に成功しました。');
+        $this->setUpdateLog(__d('baser','contents テーブルのデータ更新に成功しました。')); // CHECK
     } else {
-        $this->setUpdateLog('contents テーブルのデータ更新に失敗しました。', true);
+        $this->setUpdateLog(__d('baser','contents テーブルのデータ更新に失敗しました。'), true); // CHECK
     }
 
 /**
  * sites テーブル構造変更
  */
     if($this->loadSchema('4.0.1', '', 'sites', $filterType = 'alter')) {
-        $this->setUpdateLog('sites テーブルの構造変更に成功しました。');
+        $this->setUpdateLog(__d('baser','sites テーブルの構造変更に成功しました。')); // CHECK
     } else {
-        $this->setUpdateLog('sites テーブルの構造変更に失敗しました。', true);
+        $this->setUpdateLog(__d('baser','sites テーブルの構造変更に失敗しました。'), true); // CHECK
     }

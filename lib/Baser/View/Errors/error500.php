@@ -14,8 +14,8 @@
 
 <h2><?php echo $message; ?></h2>
 <p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php echo __d('cake', 'An Internal Error Has Occurred.'); ?>
+	<strong><?php echo __('エラー'); ?>: </strong>
+	<?php echo __('内部エラーが発生しました。'); ?>
 </p>
 <?php
 if (Configure::read('debug') > 0):

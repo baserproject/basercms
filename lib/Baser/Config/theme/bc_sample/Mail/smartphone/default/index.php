@@ -8,7 +8,7 @@
 
 <h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
-<h3>入力フォーム</h3>
+<h3><?php echo __('入力フォーム') ?></h3>
 
 <div class="mail-description"><?php $this->Mail->description() ?></div>
 

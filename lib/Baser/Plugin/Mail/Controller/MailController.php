@@ -229,7 +229,7 @@ class MailController extends MailAppController {
 
 		if ($this->request->is('post')) {
 			if ($_SERVER['CONTENT_LENGTH'] > (8*1024*1024)) {
-				$this->Session->setFlash('ファイルのアップロードサイズが上限を超えています。');
+				$this->setMessage(__('ファイルのアップロードサイズが上限を超えています。'));
 			}
 		}
 		
@@ -269,7 +269,7 @@ class MailController extends MailAppController {
 				$this->set('error', true);
 				$this->request->data['MailMessage']['auth_captcha'] = null;
 				$this->request->data['MailMessage']['captcha_id'] = null;
-				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
+				$this->setMessage(__('エラー : 入力内容を確認して再度送信してください。'), true);
 			}
 			$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
 		}
@@ -356,7 +356,7 @@ class MailController extends MailAppController {
 					));
 				} else {
 
-					$this->setMessage('【送信エラーです】<br />送信中にエラーが発生しました。しばらくたってから再度送信お願いします。', true);
+					$this->setMessage(__('Error : 送信中にエラーが発生しました。しばらくたってから再度送信お願いします。'), true);
 					$this->set('sendError', true);
 				}
 
@@ -368,7 +368,7 @@ class MailController extends MailAppController {
 				$this->set('freezed', false);
 				$this->set('error', true);
 
-				$this->setMessage('【入力エラーです】<br />入力内容を確認して再度送信してください。', true);
+				$this->setMessage('Error : Confirm your entries and send again.', true);
 				$this->request->data['MailMessage']['auth_captcha'] = null;
 				$this->request->data['MailMessage']['captcha_id'] = null;
 				$this->request->data['MailMessage'] = $this->MailMessage->sanitizeData($this->request->data['MailMessage']);
