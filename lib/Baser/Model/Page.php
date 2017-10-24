@@ -337,6 +337,9 @@ class Page extends AppModel {
 		}
 		
 		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'ContentFolder');
+		if(!$url) {
+			return false;
+		}
 		if($url != '/') {
 			if($data['Content']['site_id'] != 0) {
 				$site = BcSite::findByUrl($url);
