@@ -145,14 +145,15 @@ class Page extends AppModel {
  */
 	public function checkOpenPageFile($data) {
 		$path = $this->getPageFilePath($data);
-		$File = new File($path);
-		if ($File->open('w')) {
-			$File->close();
-			$File = null;
-			return true;
-		} else {
-			return false;
+		if($path) {
+			$File = new File($path);
+			if ($File->open('w')) {
+				$File->close();
+				$File = null;
+				return true;
+			}
 		}
+		return false;
 	}
 
 /**
