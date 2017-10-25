@@ -142,7 +142,7 @@ class BlogPostsController extends BlogAppController {
 		}
 
 		$conditions = $this->_createAdminIndexConditions($blogContentId, $this->request->data);
-		if ($this->passedArgs['sort'] !== 'BlogCategory.name') {
+		if (strpos($this->passedArgs['sort'], '.') === false) {
 			$order = 'BlogPost.' . $this->passedArgs['sort'];
 		}
 		if ($order && $this->passedArgs['direction']) {
