@@ -67,8 +67,6 @@ class BcAppTest extends BaserTestCase {
  * @access	public
  */
 	public function testBeforeSave() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->Page->save([
 			'Page' => [
 				'name' => 'test',
@@ -81,15 +79,15 @@ class BcAppTest extends BaserTestCase {
 			]
 		]);
 
-		$LastID = $this->Page->getLastInsertID();
 		$result = $this->Page->find('first', [
-				'conditions' => ['id' => $LastID],
+				'conditions' => ['id' => $this->Page->getLastInsertID()],
 				'fields' => ['created'],
 				'recursive' => -1
 			]
 		);
 
-		$this->BcApp->beforeSave(['type' => 'date']);
+		$expected = true;
+		$this->assertEquals($expected, !empty($result));
 	}
 
 /**
