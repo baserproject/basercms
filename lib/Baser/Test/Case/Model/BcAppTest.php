@@ -695,7 +695,10 @@ class BcAppTest extends BaserTestCase {
  * Queries the datasource and returns a result set array.
  */
 	public function testFind() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->Page->find('first', ['id' <= 1]);
+		$expected = '<section class="mainHeadline">';
+		$this->assertRegExp( '/' . $expected . '.*/s', $result['Page']['contents']);
+
 	}
 
 /**
@@ -703,6 +706,13 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testDispatchEvent() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$name ='hoge';
+		$params=[];
+		$options=[];
+
+		$result = $this->BcApp->dispatchEvent($name, $params, $options);
+
+		var_dump($result);
 	}
 
 /**
