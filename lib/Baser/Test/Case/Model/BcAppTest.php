@@ -67,8 +67,6 @@ class BcAppTest extends BaserTestCase {
  * @access	public
  */
 	public function testBeforeSave() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->Page->save([
 			'Page' => [
 				'name' => 'test',
@@ -81,15 +79,15 @@ class BcAppTest extends BaserTestCase {
 			]
 		]);
 
-		$LastID = $this->Page->getLastInsertID();
 		$result = $this->Page->find('first', [
-				'conditions' => ['id' => $LastID],
+				'conditions' => ['id' => $this->Page->getLastInsertID()],
 				'fields' => ['created'],
 				'recursive' => -1
 			]
 		);
 
-		$this->BcApp->beforeSave(['type' => 'date']);
+		$expected = true;
+		$this->assertEquals($expected, !empty($result));
 	}
 
 /**
@@ -101,9 +99,6 @@ class BcAppTest extends BaserTestCase {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
 	public function testSave($data = null, $validate = true, $fieldList = []) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->Page->save([
 		'Page' => [
 				'name' => 'test',
@@ -115,21 +110,18 @@ class BcAppTest extends BaserTestCase {
 				'modified' => '',
 			]
 		]);
-		$now = date('Y-m-d H');
 
-		$LastID = $this->Page->getLastInsertID();
 		$result = $this->Page->find('first', [
-				'conditions' => ['id' => $LastID],
-				'fields' => ['created','modified'],
+				'conditions' => ['id' => $this->Page->getLastInsertID()],
+				'fields' => ['created'],
 				'recursive' => -1
 			]
 		);
-		$created = date('Y-m-d H', strtotime($result['Page']['created']));
-		$modified = date('Y-m-d H', strtotime($result['Page']['modified']));
+		
+		$expected = true;
+		$message = 'dbを更新できません';
 
-		$message = 'created,modifiedを更新できません';
-		$this->assertEquals($now, $created, $message);
-		$this->assertEquals($now, $modified, $message);
+		$this->assertEquals($expected, !empty($result), $message);
 	}
 
 /**
@@ -697,7 +689,10 @@ class BcAppTest extends BaserTestCase {
  * Queries the datasource and returns a result set array.
  */
 	public function testFind() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->Page->find('first', ['id' <= 1]);
+		$expected = '<section class="mainHeadline">';
+		$this->assertRegExp( '/' . $expected . '.*/s', $result['Page']['contents']);
+
 	}
 
 /**
@@ -705,6 +700,13 @@ class BcAppTest extends BaserTestCase {
  */
 	public function testDispatchEvent() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$name ='hoge';
+		$params=[];
+		$options=[];
+
+		$result = $this->BcApp->dispatchEvent($name, $params, $options);
+
+		var_dump($result);
 	}
 
 /**
