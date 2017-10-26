@@ -301,7 +301,9 @@ class Page extends AppModel {
 
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->getPageFilePath($data);
-
+		if(!$newPath) {
+			return false;
+		}
 		// テーマやファイル名が変更された場合は元ファイルを削除する
 		if ($this->oldPath && ($newPath != $this->oldPath)) {
 			$oldFile = new File($this->oldPath);

@@ -314,7 +314,6 @@ class PageTest extends BaserTestCase {
  * @dataProvider createPageTemplateDataProvider
  */
 	public function testCreatePageTemplate($name, $categoryId, $expected, $message = null) {
-
 		$data = [
 			'Page' => [
 				'contents' => '',
@@ -342,7 +341,7 @@ class PageTest extends BaserTestCase {
 
 	public function createPageTemplateDataProvider() {
 		return [
-			['hoge.php', null, true, 'ページテンプレートを生成できません'],
+			['hoge.php', null, false, 'ページテンプレートを生成できません'],
 			['hoge.php', 1, true, 'ページテンプレートを生成できません'],
 			['hoge.php', 2, true, 'ページテンプレートを生成できません'],
 		];
