@@ -523,4 +523,24 @@ class BcContentsHelper extends AppHelper {
 		}
 	}
 
+/**
+ * IDがコンテンツ自身の親のIDかを判定する
+ *
+ * @param $id コンテンツ自身のID
+ * @param $parentId 親として判定するID
+ * @return bool
+ */
+	public function isParentId($id, $parentId) {
+		$parentIds = $this->_Content->getPath($id, ['id'], -1);
+		if(!$parentIds) {
+			return false;
+		}
+		$parentIds = Hash::extract($parentIds, '{n}.Content.id');
+		if($parentIds && in_array($parentId, $parentIds)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

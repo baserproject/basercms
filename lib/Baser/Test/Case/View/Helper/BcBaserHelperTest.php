@@ -2094,5 +2094,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals('http://main.com/news/', $this->BcBaser->getContentsUrl('/news/', true, true));
 		Configure::write('BcEnv.siteUrl', $siteUrl);
 	}
+
+/**
+ * IDがコンテンツ自身の親のIDかを判定する
+ */
+	public function testIsContentsParentId() {
+		$this->markTestIncomplete('このメソッドは、BcContentsHelper::isContentsParentId() をラッピングしているメソッドの為スキップします。');
+	}
 	
 }
