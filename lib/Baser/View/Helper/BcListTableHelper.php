@@ -102,7 +102,7 @@ class BcListTableHelper extends AppHelper {
 			$classies = ['publish'];
 		}
 		if(!empty($options['class'])) {
-			$options = array_merge($classies, $options['class']);
+			$classies = array_merge($classies, $options['class']);
 		}
 
 		// EVENT BcListTable.rowClass
