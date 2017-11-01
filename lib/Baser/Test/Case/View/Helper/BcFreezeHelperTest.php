@@ -446,6 +446,9 @@ class BcFreezeHelperTest extends BaserTestCase {
 		];
 	}
 
+	public function testFreeze() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 /**
  * 凍結時用のコントロールを取得する
  *

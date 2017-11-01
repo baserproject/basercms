@@ -288,4 +288,12 @@ class BcPageHelperTest extends BaserTestCase {
 		];
 	}
 
+	public function testGetPageList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test__construct() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

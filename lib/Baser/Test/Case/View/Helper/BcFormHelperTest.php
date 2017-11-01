@@ -500,6 +500,9 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
+	public function testSelect() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 /**
  * 文字列保存用複数選択コントロール
  * 
@@ -767,5 +770,7 @@ class BcFormHelperTest extends BaserTestCase {
 
 		$this->assertTags($result, $expected);
 	}
-
+	public function testGetId() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 }
