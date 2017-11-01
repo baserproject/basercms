@@ -145,6 +145,14 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals("会社沿革{$topTitle}", $this->BcBaser->getTitle());
 	}
 
+
+	public function testSetHomeTitle(){
+
+	}
+
+	public function testSetPageEditLink(){
+
+	}
 /**
  * meta タグのキーワードを設定する
  *
@@ -362,6 +370,14 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->expectOutputString('会社データ');
 		$this->BcBaser->setTitle('会社データ');
 		$this->BcBaser->contentsTitle();
+	}
+
+	public function testContentsMenu() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testContentsName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -1208,6 +1224,18 @@ class BcBaserHelperTest extends BaserTestCase {
 			['Default', '/s/about'],
 			['S', '/s/hoge'],	// 存在しないページ
 		];
+	}
+
+	public function testGetContentByEntityId() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetContentCreatedDate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetContentModifiedDate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -2101,5 +2129,80 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testIsContentsParentId() {
 		$this->markTestIncomplete('このメソッドは、BcContentsHelper::isContentsParentId() をラッピングしているメソッドの為スキップします。');
 	}
-	
+
+	public function test__call() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test__construct() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test_unsetIndexInContentsMenu() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testAfterRender() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testCurrentContents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testCurrentPrefix() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetGlobalMenu() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetGoogleMaps() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetRelatedSiteLinks() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetRoot() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetSitemap() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetSitePrefix() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetSiteSearchForm() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetSubMenu() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetUpdateInfo() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetWidgetArea() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testRelatedSiteLinks() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testUpdateInfo() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testWebClipIcon() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 }

@@ -416,7 +416,8 @@ class BcContentsHelperTest extends BaserTestCase {
 	public function testGetContentFolderList() {
 		$this->markTestIncomplete('このメソッドは、モデルをラッピングしているメソッドの為スキップします。');
 	}
-	
+
+
 /**
  * サイトIDからサイトルートとなるコンテンツを取得する
  * 
@@ -501,5 +502,13 @@ class BcContentsHelperTest extends BaserTestCase {
 			[5, 2, false],
 			[6, 21, true]
 		];
+	}
+
+	public function test__construct(){
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test_getIconUrl(){
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 }

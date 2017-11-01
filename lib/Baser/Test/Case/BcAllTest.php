@@ -29,6 +29,7 @@ class BcAllTest extends CakeTestSuite {
 
 		$suite->addTestFile($path . 'BcBasicsTest.php');
 //		$suite->addTestFile($path . 'BcAllConsoleTest.php');
+		$suite->addTestFile($path . 'BcAllAuthTest.php');
 		$suite->addTestFile($path . 'BcAllBehaviorsTest.php');
 //		$suite->addTestFile($path . 'BcAllCacheTest.php');
 		$suite->addTestFile($path . 'BcAllComponentsTest.php');
@@ -49,7 +50,7 @@ class BcAllTest extends CakeTestSuite {
 		$suite->addTestFile($path . 'BcAllNetworkTest.php');
 		$suite->addTestFile($path . 'BcAllPluginTest.php');
 //		$suite->addTestFile($path . 'BcAllUtilityTest.php');
-//		$suite->addTestFile($path . 'BcAllViewTest.php');
+		$suite->addTestFile($path . 'BcAllViewTest.php');
 //		$suite->addTestFile($path . 'BcAllI18nTest.php');
 		return $suite;
 	}
