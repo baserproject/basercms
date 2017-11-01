@@ -124,4 +124,8 @@ class BcUploadHelperTest extends BaserTestCase {
 		$this->assertRegExp('/^\/files\/editor\/template1\.jpg\?[0-9]+/', $result);
 	}
 
+	public function testGetBasePath() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
