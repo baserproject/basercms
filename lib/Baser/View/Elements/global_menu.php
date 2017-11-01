@@ -34,7 +34,7 @@ if(!isset($currentId)) {
 						continue;
 					}
 					$liClass = 'nav-item-' . $i . ' li-level-' . $level;
-					if($content['Content']['id'] == $currentId) {
+					if($content['Content']['id'] == $currentId || $this->BcBaser->isContentsParentId($currentId, $content['Content']['id'])) {
 						$liClass .= ' current';
 					}
 					$options = [];

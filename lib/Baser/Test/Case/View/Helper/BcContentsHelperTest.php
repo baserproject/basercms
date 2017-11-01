@@ -482,4 +482,24 @@ class BcContentsHelperTest extends BaserTestCase {
 			[false, '5', 'Blog', 'url'],
 		];
 	}
+
+/**
+ * IDがコンテンツ自身の親のIDかを判定する
+ * @param $id
+ * @param $parentId
+ * @param $expects
+ * @dataProvider isParentIdDataProvider
+ */
+	public function testIsParentId($id, $parentId, $expects) {
+		$this->assertEquals($expects, $this->BcContents->isParentId($id, $parentId));
+	}
+
+	public function isParentIdDataProvider() {
+		return [
+			[2, 1, true],
+			[5, 1, true],
+			[5, 2, false],
+			[6, 21, true]
+		];
+	}
 }

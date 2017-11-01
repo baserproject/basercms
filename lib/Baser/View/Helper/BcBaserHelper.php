@@ -2726,4 +2726,15 @@ END_FLASH;
 		return $this->BcContents->getContentByEntityId($id,$contentType, $field);
 	}
 
+/**
+ * IDがコンテンツ自身の親のIDかを判定する
+ *
+ * @param $id コンテンツ自身のID
+ * @param $parentId 親として判定するID
+ * @return bool
+ */
+	public function isContentsParentId($id, $parentId) {
+		return $this->BcContents->isParentId($id, $parentId);
+	}
+
 }

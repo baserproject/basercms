@@ -150,14 +150,14 @@ class PageTest extends BaserTestCase {
 
 	public function checkOpenPageFileDataProvider() {
 		return [
-			['index', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['company', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', null, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['company', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
 			['index', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
 			['index', 2, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['hoge', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			[null, 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['index', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['hoge', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['hoge', null, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			[null, 99, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', 99, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['hoge', 99, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
 		];
 	}
 
@@ -314,7 +314,6 @@ class PageTest extends BaserTestCase {
  * @dataProvider createPageTemplateDataProvider
  */
 	public function testCreatePageTemplate($name, $categoryId, $expected, $message = null) {
-
 		$data = [
 			'Page' => [
 				'contents' => '',
@@ -342,7 +341,7 @@ class PageTest extends BaserTestCase {
 
 	public function createPageTemplateDataProvider() {
 		return [
-			['hoge.php', null, true, 'ページテンプレートを生成できません'],
+			['hoge.php', null, false, 'ページテンプレートを生成できません'],
 			['hoge.php', 1, true, 'ページテンプレートを生成できません'],
 			['hoge.php', 2, true, 'ページテンプレートを生成できません'],
 		];
