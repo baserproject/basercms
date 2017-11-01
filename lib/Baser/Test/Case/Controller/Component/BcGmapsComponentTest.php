@@ -73,6 +73,9 @@ class BcGmapsComponentTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, 'APIのURLが正しくありません');
 	}
 
+	public function test_connect() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 /**
  * getInfoLocation
  *
@@ -95,6 +98,15 @@ class BcGmapsComponentTest extends BaserTestCase {
 		$result = $this->BcGmaps->getInfoLocation('');
 		$this->assertFalse($result, 'getInfoLocationに空のアドレスにtrueが返ってきます');
 
+	}
+
+
+	public function testGetLatitude() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetLongitude(){
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }
