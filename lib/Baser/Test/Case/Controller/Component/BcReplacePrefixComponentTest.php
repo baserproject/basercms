@@ -178,4 +178,8 @@ class BcReplacePrefixComponentTest extends BaserTestCase {
 
 	}
 
+	public function testInitialize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

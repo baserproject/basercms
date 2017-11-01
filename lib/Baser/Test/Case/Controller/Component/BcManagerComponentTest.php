@@ -76,6 +76,17 @@ class BcManagerComponentTest extends BaserTestCase {
 		unset($this->BcManager);
 	}
 
+	public function test_getDataSource() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test_updateContents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test_updatePluginStatus() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * baserCMSのインストール
@@ -415,7 +426,11 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
-	
+
+
+	public function testInitPlugin() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 /**
  * システムデータを初期化する
  * 
@@ -658,6 +673,21 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param array $dbConfig 
  */
 	public function testReset() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testResetPage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testResetThema() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testEmptyFolder() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
@@ -922,6 +952,16 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		$this->assertTrue($result, 'config.phpを読み込めません');
 	
+	}
+
+	public function testStartup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testUninstallPlugin() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 	}
 
 }
