@@ -348,6 +348,13 @@ class PageTest extends BaserTestCase {
 	}
 
 /**
+ * ページファイルのパスを取得する
+ */
+	public function testGetPageFilePath() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * ページファイルを削除する
  * 
  * @param array $name ページ名
@@ -598,6 +605,10 @@ class PageTest extends BaserTestCase {
 			[1, '<?php echo \'test'],
 			[2, '<?php echo \'test\';' . PHP_EOL . 'echo \'hoge']
 		];
+	}
+
+	public function testGetParentPageTemplate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
