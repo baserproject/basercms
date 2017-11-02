@@ -61,6 +61,13 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * コンストラクタ
+ */
+	public function test__construct() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * beforeSave
  *
  * @return	boolean
@@ -174,6 +181,20 @@ class BcAppTest extends BaserTestCase {
 		);
 		$this->assertEquals($message, $result['Dblog']['name']);
 
+	}
+
+/**
+ * コントロールソースを取得する
+ */
+	public function testGetControlSource() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 子カテゴリのIDリストを取得する
+ */
+	public function testGetChildIdsList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -305,6 +326,14 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * 最大のバイト数チェック
+ * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+ */
+	public function testCheckDateRenge() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 範囲を指定しての長さチェック
  *
  * @param mixed $check
@@ -426,6 +455,22 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * 英数チェックプラス
+ *
+ * ハイフンアンダースコアを許容
+ */
+	public function testAlphaNumericPlus() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 削除文字チェック
+ */
+	public function testBcUtileUrlencodeBlank() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * データの重複チェックを行う
  */
 	public function testDuplicate() {
@@ -515,6 +560,27 @@ class BcAppTest extends BaserTestCase {
 			[["test", "テスト"], true],
 			[["テスト", "test"], false],
 		];
+	}
+
+/**
+ * 一つ位置を上げる
+ */
+	public function testSortup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 一つ位置を下げる
+ */
+	public function testSortdown() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 並び順を変更する
+ */
+	public function testChangeSort() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -685,6 +751,20 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * Deletes multiple model records based on a set of conditions.
+ */
+	public function testDeleteAll() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Updates multiple model records based on a set of conditions.
+ */
+	public function testUpdateAll() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * Used to report user friendly errors.
  * If there is a file app/error.php or app/app_error.php this file will be loaded
  * error.php is the AppError class it should extend ErrorHandler class.
@@ -783,6 +863,25 @@ class BcAppTest extends BaserTestCase {
 			[['size' => 100], true],
 			[[], false],
 		];
+	}
+
+	public function testExists() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testDataIter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 指定した日付よりも新しい日付かどうかチェックする
+ */
+	public function testCheckDateAfterThan() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
