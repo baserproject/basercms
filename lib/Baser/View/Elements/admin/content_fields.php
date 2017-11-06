@@ -12,6 +12,8 @@
 
 /**
  * [ADMIN] 統合コンテンツフォーム
+ *
+ * @var BcAppView $this
  */
 $isOmitViewAction = $this->BcContents->settings[$this->request->data['Content']['type']]['omitViewAction'];
 if($this->request->data['Content']['url'] == '/') {
@@ -75,9 +77,9 @@ $baseUrl = $hostUrl . $baseUrl;
 
 if($this->request->data['Site']['use_subdomain']) {
 	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
-	$previewUrl = $targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host;
+	$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host);
 } else {
-	$previewUrl = $this->BcContents->getUrl($this->request->data['Content']['url'], false);
+	$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->data['Content']['url'], false));
 }
 
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);

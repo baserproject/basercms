@@ -313,7 +313,14 @@ class PagesController extends AppController {
 						$query[] = $key . '=' . $value;
 					}
 				}
-				$this->redirect($this->request->here . '?' . implode('&', $query));
+				$redirectUrl = '/';
+				if($this->request->url) {
+					$redirectUrl .= $this->request->url;
+				}
+				if($query) {
+					$redirectUrl .= '?' . implode('&', $query);
+				}
+				$this->redirect($redirectUrl);
 				return;
 			}
 
