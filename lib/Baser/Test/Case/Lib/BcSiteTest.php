@@ -19,6 +19,88 @@ App::uses('BcSite', 'Lib');
 class BcSiteTest extends BaserTestCase {
 
 /**
+ * setUp
+ *
+ * @return void
+ */
+	public function setUp() {
+		parent::setUp();
+	}
+
+/**
+ * tearDown
+ *
+ * @return void
+ */
+	public function tearDown() {
+		parent::tearDown();
+	}
+
+
+/**
+ * コンストラクタ
+ */
+	public function test__construct() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * URLからサブサイトを取得する
+ */
+	public function testFindCurrent() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 現在のサイトに関連するメインサイトを取得
+ */
+	public function testFindCurrentMain() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 現在のサイトとユーザーエージェントに関連するサブサイトを取得する
+ */
+	public function testFindCurrentSub() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 関連するサブサイトを全て取得する
+ */
+	public function testFindAll() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * findById
+ */
+	public function testFindById() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * エイリアスからサイトを検索する
+ */
+	public function testFindByAlias() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * findByUrl
+ */
+	public function testFindByUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 設定が有効かどうかを判定
+ */
+	public function testIsEnabled() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 与えられたリクエストに対して自動リダイレクトすべきかどうかを返す
  *
  * @param bool $expect 期待値
@@ -49,4 +131,48 @@ class BcSiteTest extends BaserTestCase {
 			[false, '/m/service/index', ['smartphone' => 'off']]
 		];
 	}
+
+/**
+ * URLが存在するか確認
+ */
+	public function testExistsUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * エイリアスを反映したURLを生成
+ * 同一URL設定のみ利用可
+ */
+	public function testMakeUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * メインサイトを取得
+ */
+	public function testGetMain() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * エイリアスを除外したURLを取得
+ */
+	public function testGetPureUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 初期状態に戻す
+ */
+	public function testFlash() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ホストを取得する
+ */
+	public function testGetHost() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
