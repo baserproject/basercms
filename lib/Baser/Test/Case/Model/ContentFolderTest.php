@@ -18,7 +18,7 @@ App::uses('ContentFolder', 'Model');
  * @package Baser.Test.Case.Model
  * @property ContentFolder $ContentFolder
  */
-class CakeSchemaTest extends BaserTestCase {
+class ContentFolderTest extends BaserTestCase {
 /**
  * set up
  *
