@@ -203,6 +203,12 @@ class UserTest extends BaserTestCase {
 		$this->assertTrue($this->User->validates());
 	}
 
+/**
+ * validates
+ */
+	public function validates() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * コントロールソースを取得する
@@ -277,6 +283,13 @@ class UserTest extends BaserTestCase {
  * @param array 結果セット
  */
 	public function testConvertResults() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * View用のデータを取得する
+ */
+	public function testConvertToView() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
