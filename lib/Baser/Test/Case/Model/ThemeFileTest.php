@@ -73,4 +73,12 @@ class ThemeFileTest extends BaserTestCase {
 		$this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
 		$this->assertEquals('入力されたテーマファイル名は、同一階層に既に存在します。', current($this->ThemeFile->validationErrors['name']));
 	}
+
+/**
+ * ファイルの重複チェック
+ */
+	public function testDuplicateThemeFile() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
