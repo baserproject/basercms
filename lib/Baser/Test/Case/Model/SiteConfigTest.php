@@ -148,6 +148,34 @@ class SiteConfigTest extends BaserTestCase {
 	}
 
 /**
+ * SSL用のURLが設定されているかチェックする
+ */
+	public function testSslUrlExists() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
+ */
+	public function testIsChangedContentsSortLastModified() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ並び順変更時間を更新する
+ */
+	public function testUpdateContentsSortLastModified() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ並び替え順変更時間をリセットする
+ */
+	public function testResetContentsSortLastModified() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * testIsChanged
  * 
  * @param string $field フィールド名
