@@ -124,6 +124,13 @@ class BcUtilTest extends BaserTestCase {
 	}
 
 /**
+ * 現在ログインしているユーザーのユーザーグループ情報を取得する
+ */
+	public function testLoginUserGroup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * ログインしているユーザー名を取得
  */
 	public function testLoginUserName() {
@@ -137,6 +144,13 @@ class BcUtilTest extends BaserTestCase {
 		$Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'hoge');
 		$result = BcUtil::loginUserName();
 		$this->assertEquals('hoge', $result, 'ログインユーザーのデータを正しく取得できません');
+	}
+
+/**
+ * 認証用のキーを取得
+ */
+	public function testAuthSessionKey() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -267,6 +281,59 @@ class BcUtilTest extends BaserTestCase {
 		$this->assertEquals('hoge', $result, 'serializeのみで正しくシリアライズ/アンシリアライズできません');
 
 	}
+
+/**
+ * アンシリアライズ
+ * base64_decode が前提
+ */
+	public function testUnserialize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * URL用に文字列を変換する
+ *
+ * できるだけ可読性を高める為、不要な記号は除外する
+ */
+	public function testUrlencode() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * レイアウトテンプレートのリストを取得する
+ */
+	public function testGetTemplateList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * テーマリストを取得する
+ */
+	public function testGetThemeList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 指定したURLのドメインを取得する
+ */
+	public function testGetDomain() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * メインとなるドメインを取得する
+ */
+	public function testGetMainDomain() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 管理画面用のプレフィックスを取得する
+ */
+	public function testGetAdminPrefix() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 
 /**
  * 現在のドメインを取得する 
