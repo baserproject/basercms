@@ -110,6 +110,14 @@ class BcCacheBehaviorTest extends BaserTestCase {
 		}
 	}
 
+/**
+ * setup
+ */
+	public function testSetup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
 
 /**
  * キャッシュフォルダーを生成する
@@ -173,6 +181,19 @@ class BcCacheBehaviorTest extends BaserTestCase {
 		$this->assertTrue($result);
 	}
 
+/**
+ * afterSave
+ */
+	public function testAfterSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterDelete
+ */
+	public function testAfterDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * 関連モデルを含めてキャッシュを削除する
