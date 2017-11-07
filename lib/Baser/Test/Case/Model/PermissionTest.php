@@ -286,4 +286,18 @@ class PermissionTest extends BaserTestCase {
 		];
 	}
 
+/**
+ * 権限チェックの準備をする
+ */
+	public function testSetCheck() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 権限チェック対象を追加する
+ */
+	public function testAddCheck() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
