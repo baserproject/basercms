@@ -118,4 +118,18 @@ class ThemeTest extends BaserTestCase {
 		$Folder->move(['to' => $path . 'nada-icons']);
 	}
 
+/**
+ * テーマ名の重複チェック
+ */
+	public function testThemeDuplicate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 保存
+ */
+	public function testSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
