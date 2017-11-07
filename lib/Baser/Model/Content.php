@@ -1088,7 +1088,8 @@ class Content extends AppModel {
 /**
  * コンテンツ管理上のURLを元に正式なURLを取得する
  * 
- * サブフォルダ設置時等、baseUrl（サブフォルダまでのパス）は含まない
+ * ドメインからのフルパスでない場合、デフォルトでは、
+ * サブフォルダ設置時等の baseUrl（サブフォルダまでのパス）は含まない
  *
  * @param string $url コンテンツ管理上のURL 
  * @param bool $full http からのフルのURLかどうか 
@@ -1147,7 +1148,7 @@ class Content extends AppModel {
 			if($full) {
 				$mainDomain = BcUtil::getMainDomain();
 				$fullUrlArray = explode('//', Configure::read('BcEnv.siteUrl'));
-				$url = $fullUrlArray[0] . '//' . $mainDomain . $url;
+				$url = $fullUrlArray[0] . '//' . $mainDomain . Router::url($url);
 			}
 		}
 		$url = preg_replace('/\/index$/', '/', $url);
