@@ -49,4 +49,18 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。'); 
 	}
 
+/**
+ * コンテンツデータを削除する
+ */
+	public function testDeleteSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツメタ情報を更新する
+ */
+	public function testUpdateSearchIndexMeta() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
