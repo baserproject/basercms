@@ -32,7 +32,7 @@
 		<div class="section">
 			<h3 class="result-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $data['SearchIndex']['title']), $data['SearchIndex']['url']) ?></h3>
 			<p class="result-body"><?php echo $this->BcBaser->mark($query, $this->Text->truncate($data['SearchIndex']['detail'], 100)) ?></p>
-			<p class="result-link"><small><?php $this->BcBaser->link(fullUrl($data['SearchIndex']['url']), $data['SearchIndex']['url']) ?></small></p>
+			<p class="result-link"><small><?php $this->BcBaser->link(fullUrl(urldecode($data['SearchIndex']['url'])), $data['SearchIndex']['url']) ?></small></p>
 		</div>
 	<?php endforeach ?>
 <?php else: ?>
