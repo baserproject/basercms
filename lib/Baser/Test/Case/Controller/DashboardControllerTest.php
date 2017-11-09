@@ -38,4 +38,11 @@ class DashboardControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * [ADMIN] 管理者ダッシュボードページを表示する
+ */
+	public function testAdmin_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
