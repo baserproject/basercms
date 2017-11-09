@@ -38,4 +38,39 @@ class ContentFoldersControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * Before Filter
+ */
+	public function testBeforeFilter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツを登録する
+ */
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツを更新する
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツを削除する
+ */
+	public function testAdmin_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツを表示する
+ */
+	public function testView() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
