@@ -206,7 +206,7 @@ class UserTest extends BaserTestCase {
 /**
  * validates
  */
-	public function validates() {
+	public function testValidates() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
