@@ -38,4 +38,18 @@ class DblogsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * 一覧を取得
+ */
+	public function testAdmin_ajax_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 最近の動きを削除
+ */
+	public function testAdmin_del() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
