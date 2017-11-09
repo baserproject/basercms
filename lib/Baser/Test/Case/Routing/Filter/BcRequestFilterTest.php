@@ -48,6 +48,27 @@ class BcRequestFilterTest extends BaserTestCase {
 	}
 
 /**
+ * beforeDispatch Event
+ */
+	public function testBeforeDispatch() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * リクエスト検出器の設定を取得
+ */
+	public function testGetDetectorConfigs() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * リクエスト検出器を追加する
+ */
+	public function testAddDetectors() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 管理画面のURLかどうかを判定
  *
  * @param bool $expect 期待値
@@ -231,6 +252,13 @@ class BcRequestFilterTest extends BaserTestCase {
 			[true, '/about'],
 			[false, '/recruit']
 		];
+	}
+
+/**
+ * baserCMSの基本処理を必要とするかどうか
+ */
+	public function testIsRequestView() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 } 
