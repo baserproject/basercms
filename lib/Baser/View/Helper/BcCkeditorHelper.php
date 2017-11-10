@@ -359,7 +359,8 @@ class BcCkeditorHelper extends AppHelper {
 		}
 
 		$jscode .= " });";
-
+		$draftMode = 'publish';
+		$fieldCamelize = Inflector::camelize($field);
 		if ($editorUseDraft) {
 			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
 			if ($editorDisableDraft) {
@@ -369,7 +370,17 @@ class BcCkeditorHelper extends AppHelper {
 			if ($editorDisablePublish) {
 				$jscode .= "editor_{$field}.execCommand('changeDraft');";
 				$jscode .= "editor_{$field}.execCommand('disablePublish');";
+				$draftMode = 'draft';
 			}
+			$jscode .= <<< EOL
+    editor_{$field}.on( 'beforeCommandExec', function( ev ){
+    	if(ev.data.name === 'changePublish' || ev.data.name === 'copyPublish') {
+    		$("#DraftMode{$fieldCamelize}").val('publish');
+    	} else if(ev.data.name === 'changeDraft' || ev.data.name === 'copyDraft') {
+    		$("#DraftMode{$fieldCamelize}").val('draft');
+    	}	
+    });
+EOL;
 			$jscode .= " });";
 		}
 
@@ -391,8 +402,8 @@ EOL;
 		$jscode .= "}";
 		$jscode .= " });";
 		$jscode .= "});";
-		
-		return $this->BcHtml->scriptBlock($jscode);
+
+		return $this->BcHtml->scriptBlock($jscode) . '<input type="hidden" id="DraftMode' . $fieldCamelize . '" value="' . $draftMode . '">';
 	}
 
 /**
