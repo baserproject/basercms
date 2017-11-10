@@ -38,4 +38,18 @@ class BcShortCodeEventListenerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * Implemented Events
+ */
+	public function testImplementedEvents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * After Render
+ */
+	public function testAfterRender() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
