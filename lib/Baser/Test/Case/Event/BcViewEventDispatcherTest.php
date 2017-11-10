@@ -38,4 +38,53 @@ class BcViewEventDispatcherTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * implementedEvents
+ */
+	public function testImplementedEvents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeRenderFile
+ */
+	public function testBeforeRenderFile() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterRenderFile
+ */
+	public function testAfterRenderFile() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeRender
+ */
+	public function testBeforeRender() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterRender
+ */
+	public function testAfterRender() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeLayout
+ */
+	public function testBeforeLayout() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterLayout
+ */
+	public function testAfterLayout() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
