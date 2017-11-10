@@ -38,4 +38,11 @@ class CakeEventManagerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * Dispatches a new event to all configured listeners
+ */
+	public function testDispatch() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
