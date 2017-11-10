@@ -75,4 +75,12 @@ class ThemeFolderTest extends BaserTestCase {
 		$this->assertArrayHasKey('name', $this->ThemeFolder->validationErrors);
 		$this->assertEquals('入力されたテーマフォルダ名は、同一階層に既に存在します。', current($this->ThemeFolder->validationErrors['name']));
 	}
+
+/**
+ * フォルダの重複チェック
+ */
+	public function testDuplicateThemeFolder() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
