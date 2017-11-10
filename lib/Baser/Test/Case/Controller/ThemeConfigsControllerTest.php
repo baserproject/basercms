@@ -38,4 +38,11 @@ class ThemeConfigsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * [ADMIN] 設定編集
+ */
+	public function testAdmin_form() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
