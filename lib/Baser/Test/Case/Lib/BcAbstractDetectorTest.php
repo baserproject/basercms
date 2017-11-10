@@ -5,19 +5,18 @@
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model.Behavior
- * @since			baserCMS v 3.0.6
+ * @package			Baser.Test.Case.Lib
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
+App::uses('BcAbstractDetector', 'Lib');
 
 /**
- * BcSearchIndexManagerBehavioreTest class
- * 
- * @package Baser.Test.Case.Model
+ * BcAbstractDetectorクラスのテスト
+ *
+ * @package Baser.Test.Case.Lib
  */
-class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
-
-	public $fixtures = array();
+class BcAbstractDetectorTest extends BaserTestCase {
 
 /**
  * setUp
@@ -37,29 +36,24 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
-
 /**
- * コンテンツデータを登録する
- *
- * @param Model $model
- * @param array $data
- * @return boolean
+ * 名前をキーとしてインスタンスを探す
  */
-	public function testSaveSearchIndex() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。'); 
-	}
-
-/**
- * コンテンツデータを削除する
- */
-	public function testDeleteSearchIndex() {
+	public function testFind() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * コンテンツメタ情報を更新する
+ * 設定ファイルに存在する全てのインスタンスを返す
  */
-	public function testUpdateSearchIndexMeta() {
+	public function testFindAll() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 現在の環境の判定キーの値に合致するインスタンスを返す
+ */
+	public function testFindCurrent() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

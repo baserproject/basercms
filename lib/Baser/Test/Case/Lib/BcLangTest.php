@@ -5,19 +5,19 @@
  *
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
- * @package			Baser.Test.Case.Model.Behavior
- * @since			baserCMS v 3.0.6
+ * @package			Baser.Lib
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
 
-/**
- * BcSearchIndexManagerBehavioreTest class
- * 
- * @package Baser.Test.Case.Model
- */
-class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
+App::uses('BcLang', 'Lib');
 
-	public $fixtures = array();
+/**
+ * BcLangクラスのテスト
+ *
+ * @package Baser.Test.Case.Lib
+ */
+class BcLangTest extends BaserTestCase {
 
 /**
  * setUp
@@ -37,29 +37,17 @@ class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
-
 /**
- * コンテンツデータを登録する
- *
- * @param Model $model
- * @param array $data
- * @return boolean
+ * 判定用正規表現を取得
  */
-	public function testSaveSearchIndex() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。'); 
-	}
-
-/**
- * コンテンツデータを削除する
- */
-	public function testDeleteSearchIndex() {
+	public function testGetDetectorRegex() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * コンテンツメタ情報を更新する
- */
-	public function testUpdateSearchIndexMeta() {
+* キーワードを含むかどうかを判定
+*/
+	public function testIsMatchDecisionKey() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

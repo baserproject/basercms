@@ -117,6 +117,34 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	}
 
 /**
+ * セットアップ
+ */
+	public function testSetup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Before Validate
+ */
+	public function testBeforeValidate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Before save
+ */
+	public function testBeforeSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * リクエストされたデータを処理しやすいようにセットアップする
+ */
+	public function testSetupRequestData() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * After save
  * 
  * @param Model $Model
@@ -238,6 +266,29 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array(2, 'deleteFiles()でファイルを削除できません'),
 		);
 	}
+
+/**
+ * 削除対象かチェックしながらファイルを削除する
+ */
+	public function testDeleteFileWhileChecking() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ファイル群を保存する
+ */
+	public function testSaveFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 保存対象かチェックしながらファイルを保存する
+ */
+	public function testSaveFileWhileChecking() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
 
 /**
  * saveFilesのテスト
@@ -477,6 +528,20 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array('', '', 'hoge', 1, 'tmpIdとnamefieldに指定がある場合にファイルを保存できません'),
 			array('', '', null, 1, 'tmpIdに指定がある場合にファイルを保存できません'),
 		);
+	}
+
+/**
+ * 保存用ファイル名を取得する
+ */
+	public function testGetSaveFileName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 画像をExif情報を元に正しい確度に回転する
+ */
+	public function testRotateImage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -759,6 +824,20 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	}
 
 /**
+ * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
+ */
+	public function testRenameToBasenameFields() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ファイル名をフィールド値ベースのファイル名に変更する
+ */
+	public function testRenameToBasenameField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
  * フィールドベースのファイル名を取得する
  *
  * @param string $namefield namefieldパラメータの値
@@ -908,6 +987,27 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array('image', 'template.gif', 'template.gif', '一意のファイル名を正しく取得できません'),
 			array('image', 'template1.gif', 'template1__2.gif', '一意のファイル名を正しく取得できません'),
 		);
+	}
+
+/**
+ * 保存先のフォルダを取得する
+ */
+	public function testGetSaveDir() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 既に存在するデータのファイルを削除する
+ */
+	public function testDeleteExistingFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 画像をコピーする
+ */
+	public function testCopyImages() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }
