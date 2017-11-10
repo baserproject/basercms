@@ -38,4 +38,18 @@ class BcControllerEventListenerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * 管理システムの現在のサイトをセットする
+ */
+	public function testSetAdminCurrentSite() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コントローラーにヘルパーを追加する
+ */
+	public function testAddHelper() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
