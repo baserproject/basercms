@@ -38,4 +38,18 @@ class BcEventListenerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * implementedEvents
+ */
+	public function testImplementedEvents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 指定した文字列が現在のアクションとしてみなされるかどうか判定する
+ */
+	public function testIsAction() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
