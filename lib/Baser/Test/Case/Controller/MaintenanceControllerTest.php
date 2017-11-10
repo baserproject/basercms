@@ -38,4 +38,11 @@ class MaintenanceControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * メンテナンス中ページを表示する
+ */
+	public function testIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
