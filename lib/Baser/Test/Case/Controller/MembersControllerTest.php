@@ -38,4 +38,11 @@ class MembersControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * [MYPAGE] メンバー編集
+ */
+	public function testMypage_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
