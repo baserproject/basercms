@@ -38,6 +38,34 @@ class PagesControllerEventListenerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * Contents Before Move
+ */
+	public function testContentsBeforeMove() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Contents After Move
+ */
+	public function testContentsAfterMove() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Contents Before Delete
+ */
+	public function testContentsBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Contents After Trash Return
+ */
+	public function testContentsAfterTrashReturn() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 
 
 }
