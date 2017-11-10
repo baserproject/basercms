@@ -146,12 +146,16 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- *
+ * タイトルをセットする
  */
-	public function testSetHomeTitle() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+	public function testSetHomeTitle(){
+		$this->BcBaser->setHomeTitle();
+		$this->assertEquals(null, $this->_View->viewVars['homeTitle'], 'タイトルをセットできません。');
 
+		$this->BcBaser->setHomeTitle('hoge');
+		$this->assertEquals('hoge', $this->_View->viewVars['homeTitle'], 'タイトルをセットできません。');
+	}
+	
 /**
 * ページにeditLinkを追加する
 */
