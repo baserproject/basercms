@@ -38,4 +38,46 @@ class BcControllerEventDispatcherTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * implementedEvents
+ */
+	public function testImplementedEvents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * initialize
+ */
+	public function testInitialize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * startup
+ */
+	public function testStartup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeRender
+ */
+	public function testBeforeRender() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeRedirect
+ */
+	public function testBeforeRedirect() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * shutdown
+ */
+	public function testShutdown() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
