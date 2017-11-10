@@ -48,6 +48,28 @@ class BcContentsRouteTest extends BaserTestCase {
 	}
 
 /**
+ * Parses a string URL into an array. If a plugin key is found, it will be copied to the
+ * controller parameter
+ */
+	public function testParse() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツに関連するパラメーター情報を取得する
+ */
+	public function testGetParams() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Reverse route
+ */
+	public function testMatch() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * リバースルーティング
  * 
  * @param string $current 現在のURL
