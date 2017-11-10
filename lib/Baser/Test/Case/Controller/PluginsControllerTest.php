@@ -38,4 +38,67 @@ class PluginsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * プラグインをアップロードしてインストールする
+ */
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * プラグインの一覧を表示する
+ */
+	public function testAdmin_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * baserマーケットのプラグインデータを取得する
+ */
+	public function testAdmin_ajax_get_market_plugins() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 並び替えを更新する [AJAX]
+ */
+	public function testAdmin_ajax_update_sort() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] ファイル削除
+ */
+	public function testAdmin_ajax_delete_file() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 登録処理
+ */
+	public function testAdmin_install() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * アクセス制限設定を追加する
+ */
+	public function test_addPermission() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * データベースをリセットする
+ */
+	public function testAdmin_reset_db() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 削除処理　(ajax)
+ */
+	public function testAdmin_ajax_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
