@@ -38,4 +38,67 @@ class BcModelEventDispatcherTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * implementedEvents
+ */
+	public function testImplementedEvents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeFind
+ */
+	public function testBeforeFind() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterFind
+ */
+	public function testAfterFind() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeValidate
+ */
+	public function testBeforeValidate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterValidate
+ */
+	public function testAfterValidate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeSave
+ */
+	public function testBeforeSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterSave
+ */
+	public function testAfterSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * beforeDelete
+ */
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * afterDelete
+ */
+	public function testAfterDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
