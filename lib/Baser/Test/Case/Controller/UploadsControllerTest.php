@@ -38,4 +38,11 @@ class UploadsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * セッションに保存した一時ファイルを出力する
+ */
+	public function testTmp() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
