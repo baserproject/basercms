@@ -38,4 +38,13 @@ class BcEventDispatcherTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * dispatch
+ *
+ * 命名規則に従ったイベント名で、イベントをディスパッチする
+ */
+	public function testDispatch() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
