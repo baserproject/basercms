@@ -38,4 +38,11 @@ class MobileControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * モバイル GoogleAnalytics 用 ライブラリを読み込む
+ */
+	public function testGa() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
