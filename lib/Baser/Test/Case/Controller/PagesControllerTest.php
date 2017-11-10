@@ -38,4 +38,62 @@ class PagesControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * beforeFilter
+ */
+	public function testBeforeFilter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 固定ページ情報登録
+ */
+	public function testAdmin_ajax_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 固定ページ情報編集
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 削除
+ *
+ * Controller::requestAction() で呼び出される
+ */
+	public function testAdmin_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 固定ページファイルを登録する
+ */
+	public function testAdmin_entry_page_files() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 固定ページファイルを登録する
+ */
+	public function testAdmin_write_page_files() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ビューを表示する
+ */
+	public function testDisplay() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コピー
+ */
+	public function testAdmin_ajax_copy() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
