@@ -145,14 +145,27 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals("会社沿革{$topTitle}", $this->BcBaser->getTitle());
 	}
 
-
-	public function testSetHomeTitle(){
-
+/**
+ *
+ */
+	public function testSetHomeTitle() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testSetPageEditLink(){
+/**
+* ページにeditLinkを追加する
+*/
+	public function testSetPageEditLink() {
+		// 存在しない
+		$this->BcBaser->setPageEditLink(1);
+		$this->assertEquals(true, empty($this->_View->viewVars['editLink']));
 
+		// 存在する
+		$this->_View->viewVars['user'] = ['User' => ['id' => 1]];
+		$this->BcBaser->setPageEditLink(1);
+		$this->assertEquals(['admin' => true, 'controller' => 'pages', 'action' => 'edit', '0' => '1'], $this->_View->viewVars['editLink']);
 	}
+	
 /**
  * meta タグのキーワードを設定する
  *
