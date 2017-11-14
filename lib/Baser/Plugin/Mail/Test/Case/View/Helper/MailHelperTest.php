@@ -181,4 +181,11 @@ class MailHelperTest extends BaserTestCase {
         $this->markTestIncomplete('このメソッドは、同一クラス内のメソッドをラッピングしているメソッドの為スキップします。');
     }
 
+/**
+ * beforeRender
+ */
+	public function testBeforeRender() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
