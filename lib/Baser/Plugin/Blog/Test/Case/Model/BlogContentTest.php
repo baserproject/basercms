@@ -132,6 +132,27 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 /**
+ * アイキャッチ画像サイズバリデーション
+ */
+	public function testCheckEyeCatchSize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 英数チェック
+ */
+	public function testAlphaNumeric() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コントロールソースを取得する
+ */
+	public function testGetControlSource() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * afterSave
  *
  * @param mixed $id 
@@ -186,6 +207,13 @@ class BlogContentTest extends BaserTestCase {
 	}
 
 /**
+ * beforeDelete
+ */
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 検索用データを生成する
  */
 	public function testCreateSearchIndex() {
@@ -226,6 +254,27 @@ class BlogContentTest extends BaserTestCase {
 			'conditions' => array('BlogContent.id' => $this->BlogContent->getLastInsertID())
 		));
 		$this->assertEquals($result['Content']['title'], 'test-title');
+	}
+
+/**
+ * フォームの初期値を取得する
+ */
+	public function testGetDefaultValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * アイキャッチサイズフィールドの値をDB用に変換する
+ */
+	public function testDeconstructEyeCatchSize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * アイキャッチサイズフィールドの値をフォーム用に変換する
+ */
+	public function testConstructEyeCatchSize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }
