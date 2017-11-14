@@ -38,4 +38,11 @@ class BlogConfigsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * before_filter
+ */
+	public function testBeforeFilter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
