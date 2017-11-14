@@ -203,6 +203,13 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 /**
+ * コントロールソースを取得する
+ */
+public function getDefaultValue() {
+	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+}
+
+/**
  * ブログの月別一覧を取得する
  *
  * @param int $blogContentId ブログコンテンツID
@@ -317,6 +324,20 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 /**
+ * 公開状態を取得する
+ */
+	public function testAllowPublish() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 公開済の conditions を取得
+ */
+	public function testGetConditionAllowPublish() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 公開状態の記事を取得する
  */
 	public function testGetPublishes() {
@@ -416,6 +437,13 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 /**
+ * beforeDelete
+ */
+public function testBeforeDelete() {
+	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+}
+
+/**
  * コピーする
  * 
  * @param int $id
@@ -427,6 +455,13 @@ class BlogPostTest extends BaserTestCase {
 			'conditions' => array('BlogPost.id' => $this->BlogPost->getLastInsertID())
 		));
 		$this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
+	}
+
+/**
+ * プレビュー用のデータを生成する
+ */
+	public function testCreatePreviewData() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -479,6 +514,48 @@ class BlogPostTest extends BaserTestCase {
 			['count', ['contentUrl' => '/news/'], 4],					// コンテンツURL
 			['count', ['contentUrl' => ['/news/', '/topics/']], 6]		// コンテンツURL（復数）
 		];
+	}
+
+/**
+ * カテゴリ条件を生成する
+ */
+	public function testCreateCategoryCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * タグ条件を生成する
+ */
+	public function testCreateTagCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * キーワード条件を生成する
+ */
+	public function testCreateKeywordCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 年月日条件を生成する
+ */
+	public function testCreateYearMonthDayCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 作成者の条件を作成する
+ */
+	public function testCreateAuthorCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 並び替え設定を生成する
+ */
+	public function testCreateOrder() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }
