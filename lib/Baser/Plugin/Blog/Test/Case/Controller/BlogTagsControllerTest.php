@@ -38,4 +38,46 @@ class BlogTagsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * [ADMIN] タグ一覧
+ */
+	public function testAdmin_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] タグ登録
+ */
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] タグ編集
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 削除処理
+ */
+	public function testAdmin_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 削除処理　(ajax)
+ */
+	public function testAdmin_ajax_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] AJAXタグ登録
+ */
+	public function testAdmin_ajax_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
