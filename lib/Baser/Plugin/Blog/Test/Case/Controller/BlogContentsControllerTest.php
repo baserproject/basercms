@@ -38,4 +38,48 @@ class BlogContentsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * before_filter
+ */
+	public function testBeforeFilter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ブログ登録
+ */
+	public function testAdmin_ajax_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] ブログコンテンツ追加
+ */
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 編集処理
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 削除
+ *
+ * Controller::requestAction() で呼び出される
+ */
+	public function testAdmin_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コピー
+ */
+	public function testAdmin_ajax_copy() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
