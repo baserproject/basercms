@@ -637,6 +637,13 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
+ * 文字列から制御文字を取り除く
+ */
+	public function testRemoveCtrlChars() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * カテゴリ取得
  */
 	public function testGetCategories() {
@@ -866,6 +873,20 @@ class BlogHelperTest extends BaserTestCase {
 	}
 
 /**
+ * ブログ記事を取得する
+ */
+	public function testGetPosts() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ名を解析して検索条件を設定する
+ */
+	public function testParseContentName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 全ブログコンテンツの基本情報を取得する
  *
  * @return void
@@ -941,6 +962,22 @@ class BlogHelperTest extends BaserTestCase {
 			[false, '/s/contact/index'],
 			[true, '/s/news/index']
 		];
+	}
+
+/**
+ * ブログコンテンツのURLを取得する
+ *
+ * 別ドメインの場合はフルパスで取得する
+ */
+	public function testGetContentsUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 指定したブログコンテンツIDが、現在のサイトと同じかどうか判定する
+ */
+	public function testIsSameSiteBlogContent() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
