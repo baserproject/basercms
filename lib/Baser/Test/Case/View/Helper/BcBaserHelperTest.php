@@ -1914,8 +1914,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetSubMenu() {
 		$this->BcBaser->setSubMenus(["default"]);
-		$this->expectOutputRegex('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s');
-		$this->BcBaser->getSubMenu();
+		$this->assertRegExp('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s', $this->BcBaser->getSubMenu());
 	}
 
 /**
@@ -1952,8 +1951,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetGlobalMenu() {
-		$this->expectOutputRegex('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
-		$this->BcBaser->getGlobalMenu();
+		$this->assertRegExp('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s', $this->BcBaser->getGlobalMenu());
 	}
 
 /**
@@ -1969,8 +1967,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s');
-		$this->BcBaser->googleAnalytics();
+		$this->assertRegExp('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s', $this->BcBaser->googleAnalytics());
 	}
 
 /**
@@ -2011,8 +2008,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s');
-		$this->BcBaser->getSiteSearchForm();
+		$this->assertRegExp('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s', $this->BcBaser->getSiteSearchForm());
 	}
 
 /**
