@@ -2163,7 +2163,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * public function testRelatedSiteLinks() {}
  */
 
-
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
