@@ -1879,40 +1879,6 @@ class BcBaserHelperTest extends BaserTestCase {
 			['', '/index', '/'],
 			['', '/contact/index', '/'],
 			['', '/blog/blog/index', '/'],
-			// サブフォルダ
-			['/basercms', '/', '/basercms/'],
-			['/basercms', '/index', '/basercms/'],
-			['/basercms', '/contact/index', '/basercms/'],
-			['/basercms', '/blog/blog/index', '/basercms/'],
-		];
-	}
-
-/**
- * ベースとなるURLを出力する
- *
- * @param string $smartUrl スマートURLのオン・オフ、サブディレクトリ配置のスマートURLのオン・オフ
- * @param string $url アクセスした時のURL
- * @param string $expects 期待値
- * @return void
- * 
- * @dataProvider baseUrlDataProvider
- */
-	public function testBaseUrl($smartUrl, $url, $expects) {
-		Configure::write('App.baseUrl', $smartUrl);
-		$this->BcBaser->request = $this->_getRequest($url);
-		ob_start();
-		$this->BcBaser->baseUrl();
-		$result = ob_get_clean();
-		$this->assertEquals($expects, $result);
-	}
-
-	public function baseUrlDataProvider() {
-		return [
-			// ノーマル
-			['', '/', '/'],
-			['', '/index', '/'],
-			['', '/contact/index', '/'],
-			['', '/blog/blog/index', '/'],
 			// スマートURLオフ
 			['index.php', '/', '/index.php/'],
 			['index.php', '/index', '/index.php/'],
@@ -1930,6 +1896,12 @@ class BcBaserHelperTest extends BaserTestCase {
 			['/basercms/index.php', '/blog/blog/index', '/basercms/index.php/']
 		];
 	}
+
+/**
+ * ベースとなるURLを出力する
+ *　BcBaserHelper:getBaserUrl()のラッパーの為、テスト不要
+ */
+	public function testBaseUrl() {}
 
 /**
  * サブメニューを出力する
