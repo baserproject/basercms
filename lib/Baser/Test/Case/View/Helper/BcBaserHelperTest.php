@@ -544,16 +544,11 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
  * 
- * BcBaserHelper::getUrl() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getUrl() のラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testUrl() {
-		$this->expectOutputString('/basercms/index.php/about');
-		Configure::write('App.baseUrl', '/basercms/index.php');
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->url('/about');
-	}
+	public function testUrl() {}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを取得する
@@ -644,14 +639,11 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * エレメントテンプレートを出力する
  * 
- * BcBaserHelper::getElement() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getElement() をラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testElement() {
-		$this->expectOutputRegex('/<div id="Footer">/s');
-		$this->BcBaser->element(('footer'));
-	}
+	public function testElement() {}
 
 /**
  * ヘッダーテンプレートを出力する
@@ -2143,10 +2135,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * IDがコンテンツ自身の親のIDかを判定する
+ * BcContentsHelper::isContentsParentId()のラッパーなのでテスト不要
  */
-	public function testIsContentsParentId() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::isContentsParentId() をラッピングしているメソッドの為スキップします。');
-	}
+	public function testIsContentsParentId() {}
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
