@@ -2195,8 +2195,15 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-
 	public function testWebClipIcon() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		ob_start();
+		$this->BcBaser->webClipIcon('', false);
+		$result = ob_get_clean();
+		$this->assertRegExp('/<link rel="apple-touch-icon-precomposed/s', $result);
+
+		ob_start();
+		$this->BcBaser->webClipIcon('', true);
+		$result = ob_get_clean();
+		$this->assertRegExp('/<link rel="apple-touch-icon/s', $result);
 	}
 }
