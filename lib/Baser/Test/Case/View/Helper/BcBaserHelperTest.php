@@ -544,16 +544,11 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
  * 
- * BcBaserHelper::getUrl() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getUrl() のラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testUrl() {
-		$this->expectOutputString('/basercms/index.php/about');
-		Configure::write('App.baseUrl', '/basercms/index.php');
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->url('/about');
-	}
+	public function testUrl() {}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを取得する
@@ -644,14 +639,11 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * エレメントテンプレートを出力する
  * 
- * BcBaserHelper::getElement() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getElement() をラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testElement() {
-		$this->expectOutputRegex('/<div id="Footer">/s');
-		$this->BcBaser->element(('footer'));
-	}
+	public function testElement() {}
 
 /**
  * ヘッダーテンプレートを出力する
@@ -983,13 +975,11 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * アンカータグを出力する
+ * BcBaserHelper:getLink()のラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testLink() {
-		$this->expectOutputString('<a href="/about">会社案内</a>');
-		$this->BcBaser->link('会社案内', '/about');
-	}
+	public function testLink() {}
 
 /**
  * アンカータグを取得する
@@ -1244,9 +1234,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		];
 	}
 
-	public function testGetContentByEntityId() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+/**
+ * エンティティIDからコンテンツの情報を取得
+ * BcContents:getContentByEntityId()のラッパーの為、テスト不要
+ */
+	public function testGetContentByEntityId() {}
 
 	public function testGetContentCreatedDate() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -1422,15 +1414,16 @@ class BcBaserHelperTest extends BaserTestCase {
  *	- null : 仕様確認要
  * @param string $recursive 取得する階層
  * @param boolean $expected 期待値
- * @dataProvider sitemapDataProvider
+ * @dataProvider getSitemapDataProvider
  */
-	public function testSitemap($siteId, $expected) {
+
+	public function testGetSitemap($siteId, $expected) {
 		$message = 'サイトマップを正しく出力できません';
 		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->sitemap($siteId);
+		$this->BcBaser->getSitemap($siteId);
 	}
 
-	public function sitemapDataProvider() {
+	public function getSitemapDataProvider() {
 		return [
 			[0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'],
 			[1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'],
@@ -1438,6 +1431,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		];
 	}
 
+/**
+ * BcBaserHelper:getSitemapのラッパーの為、テスト不要
+ */
+	public function testSitemap() {}
+	
 /**
  * Flashを表示する
  *
@@ -2143,10 +2141,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * IDがコンテンツ自身の親のIDかを判定する
+ * BcContentsHelper::isContentsParentId()のラッパーなのでテスト不要
  */
-	public function testIsContentsParentId() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::isContentsParentId() をラッピングしているメソッドの為スキップします。');
-	}
+	public function testIsContentsParentId() {}
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -2185,10 +2182,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function testGetRoot() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetSitemap() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
