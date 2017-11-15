@@ -395,8 +395,9 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * コンテンツを特定する文字列を出力する
  * BcBaserHelper::getContentsName() のラッパーの為、テスト不要
+ *
+ * public function testContentsName() {}
  */
-	public function testContentsName() {}
 
 /**
  * タイトルタグを出力する
@@ -505,21 +506,20 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * baserCMSが設置されているパスを出力する
+ * baserCMSが設置されているパスを取得する
  *
  * @param string $expected 期待値
  * @param string $baseUrl App.baseUrl
  * @return void
- * @dataProvider rootDataProvider
+ * @dataProvider getRootDataProvider
  */
-	public function testRoot($expected, $baseUrl) {
-		$this->expectOutputString($expected);
+	public function testGetRoot($expected, $baseUrl) {
 		Configure::write('App.baseUrl', $baseUrl);
 		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->root();
+		$this->assertEquals($expected, $this->BcBaser->getRoot());
 	}
 
-	public function rootDataProvider() {
+	public function getRootDataProvider() {
 		return [
 			['/', ''],
 			['/index.php/', 'index.php'],
@@ -528,32 +528,20 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * baserCMSが設置されているパスを取得する
- *
- * @param string $expected 期待値
- * @param string $baseUrl App.baseUrl
- * @return void
- * @dataProvider rootDataProvider
+ * baserCMSが設置されているパスを出力する
+ * BcBaserHelper:rootのラッパーの為、テスト不要
+ * 
+ * public function testRoot($expected, $baseUrl) {}
  */
-	public function getRoot($expected, $baseUrl) {
-		Configure::write('App.baseUrl', $baseUrl);
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->assertEquals($expected, $this->BcBaser->getRoot());
-	}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
- * 
- * BcBaserHelper::getUrl() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getUrl() のラッパーの為、テスト不要
  *
  * @return void
+ *
+ * public function testUrl() {}
  */
-	public function testUrl() {
-		$this->expectOutputString('/basercms/index.php/about');
-		Configure::write('App.baseUrl', '/basercms/index.php');
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->url('/about');
-	}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを取得する
@@ -644,14 +632,12 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * エレメントテンプレートを出力する
  * 
- * BcBaserHelper::getElement() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getElement() をラッパーの為、テスト不要
  *
  * @return void
+ *
+ * public function testElement() {}
  */
-	public function testElement() {
-		$this->expectOutputRegex('/<div id="Footer">/s');
-		$this->BcBaser->element(('footer'));
-	}
 
 /**
  * ヘッダーテンプレートを出力する
@@ -983,13 +969,12 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * アンカータグを出力する
+ * BcBaserHelper:getLink()のラッパーの為、テスト不要
  *
  * @return void
+ *
+ * public function testLink() {}
  */
-	public function testLink() {
-		$this->expectOutputString('<a href="/about">会社案内</a>');
-		$this->BcBaser->link('会社案内', '/about');
-	}
 
 /**
  * アンカータグを取得する
@@ -1244,9 +1229,12 @@ class BcBaserHelperTest extends BaserTestCase {
 		];
 	}
 
-	public function testGetContentByEntityId() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+/**
+ * エンティティIDからコンテンツの情報を取得
+ * BcContents:getContentByEntityId()のラッパーの為、テスト不要
+ *
+ * public function testGetContentByEntityId() {}
+ */
 
 	public function testGetContentCreatedDate() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -1422,21 +1410,27 @@ class BcBaserHelperTest extends BaserTestCase {
  *	- null : 仕様確認要
  * @param string $recursive 取得する階層
  * @param boolean $expected 期待値
- * @dataProvider sitemapDataProvider
+ * @dataProvider getSitemapDataProvider
  */
-	public function testSitemap($siteId, $expected) {
+
+	public function testGetSitemap($siteId, $expected) {
 		$message = 'サイトマップを正しく出力できません';
-		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->sitemap($siteId);
+		$this->assertRegExp('/' . $expected . '/s', $this->BcBaser->getSitemap($siteId));
 	}
 
-	public function sitemapDataProvider() {
+	public function getSitemapDataProvider() {
 		return [
 			[0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'],
 			[1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'],
 			[2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>']
 		];
 	}
+
+/**
+ * BcBaserHelper:getSitemapのラッパーの為、テスト不要
+ *
+ * public function testSitemap() {}
+ */
 
 /**
  * Flashを表示する
@@ -1608,24 +1602,28 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param string $url 現在のURL
  * @param int $no 
  * @param string $expected 期待値
- * @dataProvider widgetAreaDataProvider
+ * @dataProvider getWidgetAreaDataProvider
  */
-	public function testWidgetArea($url, $no, $expected) {
+	public function testGetWidgetArea($url, $no, $expected) {
 		App::uses('BlogHelper', 'Blog.View/Helper');
 		$this->BcBaser->request = $this->_getRequest($url);
-		ob_start();
-		$this->BcBaser->widgetArea($no);
-		$result = ob_get_clean();
-		$this->assertRegExp('/' . $expected . '/', $result);
+		$this->assertRegExp('/' . $expected . '/', $this->BcBaser->getWidgetArea($no));
 	}
 
-	public function widgetAreaDataProvider() {
+	public function getWidgetAreaDataProvider() {
 		return [
 			['/company', 1, '<div class="widget-area widget-area-1">'],
 			['/company', 2, '<div class="widget-area widget-area-2">'],
 			['/company', null, '<div class="widget-area widget-area-1">'],
 		];
 	}
+
+/**
+ * ウィジェットエリアを出力する
+ * BcBaserHelper:getWidgetAreaのラッパーの為、テスト不要
+ *
+ * public function testWidgetArea() {}
+ */
 
 /**
  * 指定したURLが現在のURLかどうか判定する
@@ -1847,19 +1845,11 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * テーマのURLを出力する
- *
+ * BcBaserHelper:getThemeUrl()のラッパーの為、テスト不要
  * @return void
+ *
+ * public function testThemeUrl() {}
  */
-	public function testThemeUrl() {
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->request->webroot = '/';
-		$this->siteConfig['theme'] = 'nada-icons';
-		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
-		ob_start();
-		$this->BcBaser->themeUrl();
-		$result = ob_get_clean();
-		$this->assertEquals($expects, $result);
-	}
 
 /**
  * ベースとなるURLを取得する
@@ -1878,40 +1868,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function getBaseUrlDataProvider() {
-		return [
-			// ノーマル
-			['', '/', '/'],
-			['', '/index', '/'],
-			['', '/contact/index', '/'],
-			['', '/blog/blog/index', '/'],
-			// サブフォルダ
-			['/basercms', '/', '/basercms/'],
-			['/basercms', '/index', '/basercms/'],
-			['/basercms', '/contact/index', '/basercms/'],
-			['/basercms', '/blog/blog/index', '/basercms/'],
-		];
-	}
-
-/**
- * ベースとなるURLを出力する
- *
- * @param string $smartUrl スマートURLのオン・オフ、サブディレクトリ配置のスマートURLのオン・オフ
- * @param string $url アクセスした時のURL
- * @param string $expects 期待値
- * @return void
- * 
- * @dataProvider baseUrlDataProvider
- */
-	public function testBaseUrl($smartUrl, $url, $expects) {
-		Configure::write('App.baseUrl', $smartUrl);
-		$this->BcBaser->request = $this->_getRequest($url);
-		ob_start();
-		$this->BcBaser->baseUrl();
-		$result = ob_get_clean();
-		$this->assertEquals($expects, $result);
-	}
-
-	public function baseUrlDataProvider() {
 		return [
 			// ノーマル
 			['', '/', '/'],
@@ -1937,15 +1893,28 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * サブメニューを出力する
+ * ベースとなるURLを出力する
+ *　BcBaserHelper:getBaserUrl()のラッパーの為、テスト不要
+ *
+ * public function testBaseUrl() {}
+ */
+
+/**
+ * サブメニューを取得する
  *
  * @return void
  */
-	public function testSubMenu() {
+	public function testGetSubMenu() {
 		$this->BcBaser->setSubMenus(["default"]);
-		$this->expectOutputRegex('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s');
-		$this->BcBaser->subMenu();
+		$this->assertRegExp('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s', $this->BcBaser->getSubMenu());
 	}
+
+/**
+ * サブメニューを出力する
+ * BcBaserHelper:getSubMenuのラッパーの為、テスト不要
+ *
+ * public function testSubMenu() {}
+ * /
 
 /**
  * コンテンツナビを出力する
@@ -1969,14 +1938,20 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * グローバルメニューを出力する
+ * グローバルメニューを取得する
  *
  * @return void
  */
-	public function testGlobalMenu() {
-		$this->expectOutputRegex('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
-		$this->BcBaser->globalMenu();
+	public function testGetGlobalMenu() {
+		$this->assertRegExp('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s', $this->BcBaser->getGlobalMenu());
 	}
+
+/**
+ * グローバルメニューを出力する
+ * BcBaserHelper:getGlobalMenu()のラッパーの為、テスト不要
+ *
+ * 	public function testGlobalMenu() {}
+ */
 
 /**
  * Google Analytics のトラッキングコードを出力する
@@ -1984,20 +1959,26 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s');
-		$this->BcBaser->googleAnalytics();
+		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s', $this->BcBaser->googleAnalytics());
+	}
+
+/**
+ * Google Maps を取得する
+ *
+ * @return void
+ */
+	public function testGetGoogleMaps() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->expectOutputRegex('/<div id="map"/');
+		$this->BcBaser->getGoogleMaps();
 	}
 
 /**
  * Google Maps を出力する
+ * BcBaserHelper:getGoogleMapsのラッパーの為、テスト不要
  *
- * @return void
+ * public function testGoogleMaps() {}
  */
-	public function testGoogleMaps() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->expectOutputRegex('/<div id="map"/');
-		$this->BcBaser->googleMaps();
-	}
 
 /**
  * 表示件数設定機能を出力する
@@ -2014,24 +1995,20 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * サイト内検索フォームを出力
+ * サイト内検索フォームを取得
  *
  * @return void
  */
-	public function testSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s');
-		$this->BcBaser->siteSearchForm();
+	public function testGetSiteSearchForm() {
+		$this->assertRegExp('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s', $this->BcBaser->getSiteSearchForm());
 	}
 
 /**
- * WEBサイト名を出力する
+ * サイト内検索フォームを出力
+ * BcBaserHelper:getSiteSearchForm()のラッパーの為、テスト不要
  *
- * @return void
+ * public function testSiteSearchForm() {}
  */
-	public function testSiteName() {
-		$this->expectOutputString('baserCMS inc. [デモ]');
-		$this->BcBaser->siteName();
-	}
 
 /**
  * WEBサイト名を取得する
@@ -2043,18 +2020,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * WEBサイトURLを出力する
+ * WEBサイト名を出力する
+ * BcBaserHelper:getSiteName()のラッパーのため、テスト不要
  *
  * @return void
+ *
+ * public function testSiteName() {}
  */
-	public function testSiteUrl() {
-
-		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
-		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
-
-		$this->expectOutputString('http://basercms.net/');
-		$this->BcBaser->siteUrl();
-	}
 
 /**
  * WEBサイトURLを取得する
@@ -2071,6 +2043,15 @@ class BcBaserHelperTest extends BaserTestCase {
 		//https
 		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
 	}
+
+
+/**
+ * WEBサイトURLを出力する
+ * BcBaserHelper:getSiteUrl()のラッパーの為、テスト不要
+ * @return void
+ *
+ * public function testSiteUrl() {}
+ */
 
 /**
  * URLのパラメータ情報を返す
@@ -2108,11 +2089,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * 親フォルダを取得する 
+ * 親フォルダを取得する
+ * BcContentsHelper::getParent()のラッパーの為、テスト不要
+ *
+ * public function testGetParentFolder() {}
  */
-	public function testGetParentFolder() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');
-	}
 
 /**
  * コンテンツ管理用のURLより、正式なURLを取得する 
@@ -2143,10 +2124,33 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * IDがコンテンツ自身の親のIDかを判定する
+ * BcContentsHelper::isContentsParentId()のラッパーの為、テスト不要
+ *
+ * 	public function testIsContentsParentId() {}
  */
-	public function testIsContentsParentId() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::isContentsParentId() をラッピングしているメソッドの為スキップします。');
+
+	public function testGetUpdateInfo() {
+		$this->assertRegExp('//',$this->BcBaser->getUpdateInfo());
 	}
+
+/**
+ * 関連サイトのリンク一覧を取得
+ * BcBaserHelper:getUpdateInfo()のラッパーの為、テスト不要
+ *
+ * public function testUpdateInfo() {}
+ */
+
+	public function testGetRelatedSiteLinks() {
+		$this->assertRegExp('/<ul class="related-site-links">/s', $this->BcBaser->getRelatedSiteLinks());
+	}
+
+/**
+ * 関連サイトのリンク一覧を出力
+ * BcBaserHelper:testGetRelatadStimenksのラッパーの為、テスト不要
+ *
+ * public function testRelatedSiteLinks() {}
+ */
+
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -2172,53 +2176,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testGetGlobalMenu() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetGoogleMaps() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetRoot() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetSitemap() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 	public function testGetSitePrefix() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testGetSiteSearchForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetSubMenu() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetUpdateInfo() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetWidgetArea() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testUpdateInfo() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
 
 	public function testWebClipIcon() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
