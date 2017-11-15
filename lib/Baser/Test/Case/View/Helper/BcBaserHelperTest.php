@@ -1904,15 +1904,22 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testBaseUrl() {}
 
 /**
- * サブメニューを出力する
+ * サブメニューを取得する
  *
  * @return void
  */
-	public function testSubMenu() {
+	public function testGetSubMenu() {
 		$this->BcBaser->setSubMenus(["default"]);
 		$this->expectOutputRegex('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s');
-		$this->BcBaser->subMenu();
+		$this->BcBaser->getSubMenu();
 	}
+
+/**
+ * サブメニューを出力する
+ * BcBaserHelper:getSubMenuのラッパーの為、テスト不要
+ *
+ * public function testSubMenu() {}
+ * /
 
 /**
  * コンテンツナビを出力する
@@ -2159,10 +2166,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function testGetSiteSearchForm() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetSubMenu() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
