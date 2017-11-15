@@ -155,14 +155,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setHomeTitle('hoge');
 		$this->assertEquals('hoge', $this->_View->viewVars['homeTitle'], 'タイトルをセットできません。');
 	}
-	
-/**
-* ページにeditLinkを追加する
-*/
-	public function testSetPageEditLink() {
-		// 存在しない
-		$this->BcBaser->setPageEditLink(1);
-		$this->assertEquals(true, empty($this->_View->viewVars['editLink']));
 
 /**
 * ページにeditLinkを追加する
@@ -400,9 +392,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testContentsName() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+/**
+ * コンテンツを特定する文字列を出力する
+ * BcBaserHelper::getContentsName() のラッパーの為、テスト不要
+ */
+	public function testContentsName() {}
 
 /**
  * タイトルタグを出力する
