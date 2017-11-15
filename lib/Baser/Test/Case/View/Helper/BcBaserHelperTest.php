@@ -1249,7 +1249,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 
 	public function testGetContentCreatedDate() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertEquals('2016/07/29 18:13', $this->BcBaser->getContentCreatedDate());
 	}
 
 	public function testGetContentModifiedDate() {
