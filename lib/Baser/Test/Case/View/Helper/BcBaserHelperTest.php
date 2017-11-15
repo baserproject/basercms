@@ -1435,7 +1435,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * BcBaserHelper:getSitemapのラッパーの為、テスト不要
  */
 	public function testSitemap() {}
-	
+
 /**
  * Flashを表示する
  *
@@ -1606,24 +1606,30 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param string $url 現在のURL
  * @param int $no 
  * @param string $expected 期待値
- * @dataProvider widgetAreaDataProvider
+ * @dataProvider getWidgetAreaDataProvider
  */
-	public function testWidgetArea($url, $no, $expected) {
+	public function testGetWidgetArea($url, $no, $expected) {
 		App::uses('BlogHelper', 'Blog.View/Helper');
 		$this->BcBaser->request = $this->_getRequest($url);
 		ob_start();
-		$this->BcBaser->widgetArea($no);
+		$this->BcBaser->getWidgetArea($no);
 		$result = ob_get_clean();
 		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
-	public function widgetAreaDataProvider() {
+	public function getWidgetAreaDataProvider() {
 		return [
 			['/company', 1, '<div class="widget-area widget-area-1">'],
 			['/company', 2, '<div class="widget-area widget-area-2">'],
 			['/company', null, '<div class="widget-area widget-area-1">'],
 		];
 	}
+
+/**
+ * ウィジェットエリアを出力する
+ * BcBaserHelper:getWidgetAreaのラッパーの為、テスト不要
+ */
+	public function testWidgetArea() {}
 
 /**
  * 指定したURLが現在のURLかどうか判定する
@@ -2198,10 +2204,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function testGetUpdateInfo() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetWidgetArea() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
