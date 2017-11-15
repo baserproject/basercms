@@ -544,16 +544,11 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
  * 
- * BcBaserHelper::getUrl() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getUrl() のラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testUrl() {
-		$this->expectOutputString('/basercms/index.php/about');
-		Configure::write('App.baseUrl', '/basercms/index.php');
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->url('/about');
-	}
+	public function testUrl() {}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを取得する
@@ -644,14 +639,11 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * エレメントテンプレートを出力する
  * 
- * BcBaserHelper::getElement() をラッピングしているだけなので、最低限のテストのみ
+ * BcBaserHelper::getElement() をラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testElement() {
-		$this->expectOutputRegex('/<div id="Footer">/s');
-		$this->BcBaser->element(('footer'));
-	}
+	public function testElement() {}
 
 /**
  * ヘッダーテンプレートを出力する
@@ -983,13 +975,11 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * アンカータグを出力する
+ * BcBaserHelper:getLink()のラッパーの為、テスト不要
  *
  * @return void
  */
-	public function testLink() {
-		$this->expectOutputString('<a href="/about">会社案内</a>');
-		$this->BcBaser->link('会社案内', '/about');
-	}
+	public function testLink() {}
 
 /**
  * アンカータグを取得する
@@ -1244,9 +1234,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		];
 	}
 
-	public function testGetContentByEntityId() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+/**
+ * エンティティIDからコンテンツの情報を取得
+ * BcContents:getContentByEntityId()のラッパーの為、テスト不要
+ */
+	public function testGetContentByEntityId() {}
 
 	public function testGetContentCreatedDate() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -1422,21 +1414,27 @@ class BcBaserHelperTest extends BaserTestCase {
  *	- null : 仕様確認要
  * @param string $recursive 取得する階層
  * @param boolean $expected 期待値
- * @dataProvider sitemapDataProvider
+ * @dataProvider getSitemapDataProvider
  */
-	public function testSitemap($siteId, $expected) {
+
+	public function testGetSitemap($siteId, $expected) {
 		$message = 'サイトマップを正しく出力できません';
 		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->sitemap($siteId);
+		$this->BcBaser->getSitemap($siteId);
 	}
 
-	public function sitemapDataProvider() {
+	public function getSitemapDataProvider() {
 		return [
 			[0, '<li class="menu-content li-level-1">.*?<a href="\/">トップページ<\/a>.*?<\/li>'],
 			[1, '<a href="\/m\/">トップページ.*<\/li>.*<\/ul>'],
 			[2, '<a href="\/s\/">トップページ.*<\/li>.*<\/ul>']
 		];
 	}
+
+/**
+ * BcBaserHelper:getSitemapのラッパーの為、テスト不要
+ */
+	public function testSitemap() {}
 
 /**
  * Flashを表示する
@@ -1608,24 +1606,30 @@ class BcBaserHelperTest extends BaserTestCase {
  * @param string $url 現在のURL
  * @param int $no 
  * @param string $expected 期待値
- * @dataProvider widgetAreaDataProvider
+ * @dataProvider getWidgetAreaDataProvider
  */
-	public function testWidgetArea($url, $no, $expected) {
+	public function testGetWidgetArea($url, $no, $expected) {
 		App::uses('BlogHelper', 'Blog.View/Helper');
 		$this->BcBaser->request = $this->_getRequest($url);
 		ob_start();
-		$this->BcBaser->widgetArea($no);
+		$this->BcBaser->getWidgetArea($no);
 		$result = ob_get_clean();
 		$this->assertRegExp('/' . $expected . '/', $result);
 	}
 
-	public function widgetAreaDataProvider() {
+	public function getWidgetAreaDataProvider() {
 		return [
 			['/company', 1, '<div class="widget-area widget-area-1">'],
 			['/company', 2, '<div class="widget-area widget-area-2">'],
 			['/company', null, '<div class="widget-area widget-area-1">'],
 		];
 	}
+
+/**
+ * ウィジェットエリアを出力する
+ * BcBaserHelper:getWidgetAreaのラッパーの為、テスト不要
+ */
+	public function testWidgetArea() {}
 
 /**
  * 指定したURLが現在のURLかどうか判定する
@@ -1847,19 +1851,10 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * テーマのURLを出力する
- *
+ * BcBaserHelper:getThemeUrl()のラッパーの為、テスト不要
  * @return void
  */
-	public function testThemeUrl() {
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->request->webroot = '/';
-		$this->siteConfig['theme'] = 'nada-icons';
-		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
-		ob_start();
-		$this->BcBaser->themeUrl();
-		$result = ob_get_clean();
-		$this->assertEquals($expects, $result);
-	}
+	public function testThemeUrl() {}
 
 /**
  * ベースとなるURLを取得する
@@ -2143,10 +2138,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * IDがコンテンツ自身の親のIDかを判定する
+ * BcContentsHelper::isContentsParentId()のラッパーなのでテスト不要
  */
-	public function testIsContentsParentId() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::isContentsParentId() をラッピングしているメソッドの為スキップします。');
-	}
+	public function testIsContentsParentId() {}
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -2188,10 +2182,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testGetSitemap() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 	public function testGetSitePrefix() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
@@ -2205,10 +2195,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function testGetUpdateInfo() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetWidgetArea() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
