@@ -2141,6 +2141,17 @@ class BcBaserHelperTest extends BaserTestCase {
  * 	public function testIsContentsParentId() {}
  */
 
+	public function testGetUpdateInfo() {
+		$this->assertRegExp('//',$this->BcBaser->getUpdateInfo());
+	}
+
+/**
+ *
+ * BcBaserHelper:getUpdateInfo()のラッパーの為、テスト不要
+ *
+ * public function testUpdateInfo() {}
+ */
+
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
@@ -2177,15 +2188,7 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testGetUpdateInfo() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 	public function testRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testUpdateInfo() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
