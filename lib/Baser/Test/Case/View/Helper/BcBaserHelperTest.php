@@ -506,21 +506,20 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * baserCMSが設置されているパスを出力する
+ * baserCMSが設置されているパスを取得する
  *
  * @param string $expected 期待値
  * @param string $baseUrl App.baseUrl
  * @return void
- * @dataProvider rootDataProvider
+ * @dataProvider getRootDataProvider
  */
-	public function testRoot($expected, $baseUrl) {
-		$this->expectOutputString($expected);
+	public function testGetRoot($expected, $baseUrl) {
 		Configure::write('App.baseUrl', $baseUrl);
 		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->root();
+		$this->assertEquals($expected, $this->BcBaser->getRoot());
 	}
 
-	public function rootDataProvider() {
+	public function getRootDataProvider() {
 		return [
 			['/', ''],
 			['/index.php/', 'index.php'],
@@ -529,18 +528,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * baserCMSが設置されているパスを取得する
- *
- * @param string $expected 期待値
- * @param string $baseUrl App.baseUrl
- * @return void
- * @dataProvider rootDataProvider
+ * baserCMSが設置されているパスを出力する
+ * BcBaserHelper:rootのラッパーの為、テスト不要
+ * 
+ * public function testRoot($expected, $baseUrl) {}
  */
-	public function getRoot($expected, $baseUrl) {
-		Configure::write('App.baseUrl', $baseUrl);
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->assertEquals($expected, $this->BcBaser->getRoot());
-	}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
@@ -1914,8 +1906,7 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 	public function testGetSubMenu() {
 		$this->BcBaser->setSubMenus(["default"]);
-		$this->expectOutputRegex('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s');
-		$this->BcBaser->getSubMenu();
+		$this->assertRegExp('/<div class="sub-menu-contents">.*<a href="\/admin\/users\/login" target="_blank">管理者ログイン<\/a>.*<\/li>.*<\/ul>.*<\/div>/s', $this->BcBaser->getSubMenu());
 	}
 
 /**
@@ -1952,8 +1943,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetGlobalMenu() {
-		$this->expectOutputRegex('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
-		$this->BcBaser->getGlobalMenu();
+		$this->assertRegExp('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s', $this->BcBaser->getGlobalMenu());
 	}
 
 /**
@@ -1969,8 +1959,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s');
-		$this->BcBaser->googleAnalytics();
+		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s', $this->BcBaser->googleAnalytics());
 	}
 
 /**
@@ -2011,8 +2000,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetSiteSearchForm() {
-		$this->expectOutputRegex('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s');
-		$this->BcBaser->getSiteSearchForm();
+		$this->assertRegExp('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s', $this->BcBaser->getSiteSearchForm());
 	}
 
 /**
@@ -2146,11 +2134,23 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- *
+ * 関連サイトのリンク一覧を取得
  * BcBaserHelper:getUpdateInfo()のラッパーの為、テスト不要
  *
  * public function testUpdateInfo() {}
  */
+
+	public function testGetRelatedSiteLinks() {
+		$this->assertRegExp('/<ul class="related-site-links">/s', $this->BcBaser->getRelatedSiteLinks());
+	}
+
+/**
+ * 関連サイトのリンク一覧を出力
+ * BcBaserHelper:testGetRelatadStimenksのラッパーの為、テスト不要
+ *
+ * public function testRelatedSiteLinks() {}
+ */
+
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -2176,21 +2176,10 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testGetRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetRoot() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 	public function testGetSitePrefix() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
 
 	public function testWebClipIcon() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
