@@ -1967,7 +1967,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGoogleAnalytics() {
-		$this->assertRegExp('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s', $this->BcBaser->googleAnalytics());
+		$this->expectOutputRegex('/<script>.*ga\(\'create\', \'hoge\', \'auto\'\)\;/s', $this->BcBaser->googleAnalytics());
 	}
 
 /**
@@ -2142,11 +2142,23 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- *
+ * 関連サイトのリンク一覧を取得
  * BcBaserHelper:getUpdateInfo()のラッパーの為、テスト不要
  *
  * public function testUpdateInfo() {}
  */
+
+	public function testGetRelatedSiteLinks() {
+		$this->assertRegExp('/<ul class="related-site-links">/s', $this->BcBaser->getRelatedSiteLinks());
+	}
+
+/**
+ * 関連サイトのリンク一覧を出力
+ * BcBaserHelper:testGetRelatadStimenksのラッパーの為、テスト不要
+ *
+ * public function testRelatedSiteLinks() {}
+ */
+
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -2172,10 +2184,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testGetRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 	public function testGetRoot() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
@@ -2184,9 +2192,6 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testRelatedSiteLinks() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
 
 	public function testWebClipIcon() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
