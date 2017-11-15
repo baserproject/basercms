@@ -2168,8 +2168,11 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-	public function testCurrentContents() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetCurrentContent() {
+		$result = $this->BcBaser->getCurrentContent();
+		$this->assertEquals($this->BcBaser->getContentByEntityId($result['entity_id'], 'Page')['Content'], $result);
+		$this->BcBaser->request->params['Content'] = '';
+		$this->assertEquals('', $this->BcBaser->getCurrentContent());
 	}
 
 	public function testCurrentPrefix() {
