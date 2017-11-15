@@ -395,8 +395,9 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * コンテンツを特定する文字列を出力する
  * BcBaserHelper::getContentsName() のラッパーの為、テスト不要
+ *
+ * public function testContentsName() {}
  */
-	public function testContentsName() {}
 
 /**
  * タイトルタグを出力する
@@ -543,12 +544,12 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * baserCMSの設置フォルダを考慮したURLを出力する
- * 
  * BcBaserHelper::getUrl() のラッパーの為、テスト不要
  *
  * @return void
+ *
+ * public function testUrl() {}
  */
-	public function testUrl() {}
 
 /**
  * baserCMSの設置フォルダを考慮したURLを取得する
@@ -642,8 +643,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * BcBaserHelper::getElement() をラッパーの為、テスト不要
  *
  * @return void
+ *
+ * public function testElement() {}
  */
-	public function testElement() {}
 
 /**
  * ヘッダーテンプレートを出力する
@@ -978,8 +980,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * BcBaserHelper:getLink()のラッパーの為、テスト不要
  *
  * @return void
+ *
+ * public function testLink() {}
  */
-	public function testLink() {}
 
 /**
  * アンカータグを取得する
@@ -1237,8 +1240,9 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * エンティティIDからコンテンツの情報を取得
  * BcContents:getContentByEntityId()のラッパーの為、テスト不要
+ *
+ * public function testGetContentByEntityId() {}
  */
-	public function testGetContentByEntityId() {}
 
 	public function testGetContentCreatedDate() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -1419,8 +1423,7 @@ class BcBaserHelperTest extends BaserTestCase {
 
 	public function testGetSitemap($siteId, $expected) {
 		$message = 'サイトマップを正しく出力できません';
-		$this->expectOutputRegex('/' . $expected . '/s', $message);
-		$this->BcBaser->getSitemap($siteId);
+		$this->assertRegExp('/' . $expected . '/s', $this->BcBaser->getSitemap($siteId));
 	}
 
 	public function getSitemapDataProvider() {
@@ -1433,8 +1436,9 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * BcBaserHelper:getSitemapのラッパーの為、テスト不要
+ *
+ * public function testSitemap() {}
  */
-	public function testSitemap() {}
 
 /**
  * Flashを表示する
@@ -1611,10 +1615,7 @@ class BcBaserHelperTest extends BaserTestCase {
 	public function testGetWidgetArea($url, $no, $expected) {
 		App::uses('BlogHelper', 'Blog.View/Helper');
 		$this->BcBaser->request = $this->_getRequest($url);
-		ob_start();
-		$this->BcBaser->getWidgetArea($no);
-		$result = ob_get_clean();
-		$this->assertRegExp('/' . $expected . '/', $result);
+		$this->assertRegExp('/' . $expected . '/', $this->BcBaser->getWidgetArea($no));
 	}
 
 	public function getWidgetAreaDataProvider() {
@@ -1628,8 +1629,9 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * ウィジェットエリアを出力する
  * BcBaserHelper:getWidgetAreaのラッパーの為、テスト不要
+ *
+ * public function testWidgetArea() {}
  */
-	public function testWidgetArea() {}
 
 /**
  * 指定したURLが現在のURLかどうか判定する
@@ -1853,8 +1855,9 @@ class BcBaserHelperTest extends BaserTestCase {
  * テーマのURLを出力する
  * BcBaserHelper:getThemeUrl()のラッパーの為、テスト不要
  * @return void
+ *
+ * public function testThemeUrl() {}
  */
-	public function testThemeUrl() {}
 
 /**
  * ベースとなるURLを取得する
@@ -1900,8 +1903,9 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * ベースとなるURLを出力する
  *　BcBaserHelper:getBaserUrl()のラッパーの為、テスト不要
+ *
+ * public function testBaseUrl() {}
  */
-	public function testBaseUrl() {}
 
 /**
  * サブメニューを取得する
@@ -1983,6 +1987,7 @@ class BcBaserHelperTest extends BaserTestCase {
 /**
  * Google Maps を出力する
  * BcBaserHelper:getGoogleMapsのラッパーの為、テスト不要
+ *
  * public function testGoogleMaps() {}
  */
 
@@ -2096,11 +2101,11 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * 親フォルダを取得する 
+ * 親フォルダを取得する
+ * BcContentsHelper::getParent()のラッパーの為、テスト不要
+ *
+ * public function testGetParentFolder() {}
  */
-	public function testGetParentFolder() {
-		$this->markTestIncomplete('このメソッドは、BcContentsHelper::getParent() をラッピングしているメソッドの為スキップします。');
-	}
 
 /**
  * コンテンツ管理用のURLより、正式なURLを取得する 
@@ -2131,9 +2136,10 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * IDがコンテンツ自身の親のIDかを判定する
- * BcContentsHelper::isContentsParentId()のラッパーなのでテスト不要
+ * BcContentsHelper::isContentsParentId()のラッパーの為、テスト不要
+ *
+ * 	public function testIsContentsParentId() {}
  */
-	public function testIsContentsParentId() {}
 
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
