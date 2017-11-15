@@ -2001,24 +2001,21 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * サイト内検索フォームを出力
+ * サイト内検索フォームを取得
  *
  * @return void
  */
-	public function testSiteSearchForm() {
+	public function testGetSiteSearchForm() {
 		$this->expectOutputRegex('/<div class="section search-box">.*<input.*?type="submit" value="検索"\/>.*<\/form><\/div>/s');
-		$this->BcBaser->siteSearchForm();
+		$this->BcBaser->getSiteSearchForm();
 	}
 
 /**
- * WEBサイト名を出力する
+ * サイト内検索フォームを出力
+ * BcBaserHelper:getSiteSearchForm()のラッパーの為、テスト不要
  *
- * @return void
+ * public function testSiteSearchForm() {}
  */
-	public function testSiteName() {
-		$this->expectOutputString('baserCMS inc. [デモ]');
-		$this->BcBaser->siteName();
-	}
 
 /**
  * WEBサイト名を取得する
@@ -2030,18 +2027,13 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * WEBサイトURLを出力する
+ * WEBサイト名を出力する
+ * BcBaserHelper:getSiteName()のラッパーのため、テスト不要
  *
  * @return void
+ *
+ * public function testSiteName() {}
  */
-	public function testSiteUrl() {
-
-		Configure::write('BcEnv.siteUrl', 'http://basercms.net/');
-		Configure::write('BcEnv.sslUrl', 'https://basercms.net/');
-
-		$this->expectOutputString('http://basercms.net/');
-		$this->BcBaser->siteUrl();
-	}
 
 /**
  * WEBサイトURLを取得する
@@ -2058,6 +2050,15 @@ class BcBaserHelperTest extends BaserTestCase {
 		//https
 		$this->assertEquals('https://basercms.net/', $this->BcBaser->getSiteUrl(true));
 	}
+
+
+/**
+ * WEBサイトURLを出力する
+ * BcBaserHelper:getSiteUrl()のラッパーの為、テスト不要
+ * @return void
+ *
+ * public function testSiteUrl() {}
+ */
 
 /**
  * URLのパラメータ情報を返す
@@ -2167,10 +2168,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function testGetSitePrefix() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetSiteSearchForm() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
