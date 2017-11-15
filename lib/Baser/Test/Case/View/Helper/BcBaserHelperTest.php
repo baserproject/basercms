@@ -388,9 +388,21 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->contentsTitle();
 	}
 
-	public function testContentsMenu() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	/**
+	 * コンテンツメニューを取得する
+	 */
+	public function testGetContentsMenu() {
+		$this->assertRegExp('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu());
+		$this->assertRegExp('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu(1, 1));
+		$this->assertRegExp('/<ul class="menu ul-level-1">/s', $this->BcBaser->getContentsMenu(1, 1, 1));
 	}
+
+	/**
+	 * コンテンツメニューを出力する
+	 * BcBaserHelper:getContentsMenuのラッパーの為、テスト不要
+	 *
+	 * public function testContentsMenu() {}
+	 */
 
 /**
  * コンテンツを特定する文字列を出力する
