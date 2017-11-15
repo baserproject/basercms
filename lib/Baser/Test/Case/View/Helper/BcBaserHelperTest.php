@@ -164,6 +164,14 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->BcBaser->setPageEditLink(1);
 		$this->assertEquals(true, empty($this->_View->viewVars['editLink']));
 
+/**
+* ページにeditLinkを追加する
+*/
+	public function testSetPageEditLink() {
+		// 存在しない
+		$this->BcBaser->setPageEditLink(1);
+		$this->assertEquals(true, empty($this->_View->viewVars['editLink']));
+
 		// 存在する
 		$this->_View->viewVars['user'] = ['User' => ['id' => 1]];
 		$this->BcBaser->setPageEditLink(1);
