@@ -1249,11 +1249,11 @@ class BcBaserHelperTest extends BaserTestCase {
  */
 
 	public function testGetContentCreatedDate() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertEquals('2016/07/29 18:13', $this->BcBaser->getContentCreatedDate());
 	}
 
 	public function testGetContentModifiedDate() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertEquals('', $this->BcBaser->getContentModifiedDate());
 	}
 
 /**
@@ -2163,7 +2163,6 @@ class BcBaserHelperTest extends BaserTestCase {
  * public function testRelatedSiteLinks() {}
  */
 
-
 	public function test__call() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
@@ -2195,8 +2194,15 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-
 	public function testWebClipIcon() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		ob_start();
+		$this->BcBaser->webClipIcon('', false);
+		$result = ob_get_clean();
+		$this->assertRegExp('/<link rel="apple-touch-icon-precomposed/s', $result);
+
+		ob_start();
+		$this->BcBaser->webClipIcon('', true);
+		$result = ob_get_clean();
+		$this->assertRegExp('/<link rel="apple-touch-icon/s', $result);
 	}
 }
