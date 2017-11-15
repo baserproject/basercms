@@ -1851,19 +1851,10 @@ class BcBaserHelperTest extends BaserTestCase {
 
 /**
  * テーマのURLを出力する
- *
+ * BcBaserHelper:getThemeUrl()のラッパーの為、テスト不要
  * @return void
  */
-	public function testThemeUrl() {
-		$this->BcBaser->request = $this->_getRequest('/');
-		$this->BcBaser->request->webroot = '/';
-		$this->siteConfig['theme'] = 'nada-icons';
-		$expects = $this->BcBaser->request->webroot . 'theme' . '/' . $this->siteConfig['theme'] . '/';
-		ob_start();
-		$this->BcBaser->themeUrl();
-		$result = ob_get_clean();
-		$this->assertEquals($expects, $result);
-	}
+	public function testThemeUrl() {}
 
 /**
  * ベースとなるURLを取得する
