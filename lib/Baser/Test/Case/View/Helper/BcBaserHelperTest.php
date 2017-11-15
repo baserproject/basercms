@@ -1943,14 +1943,21 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * グローバルメニューを出力する
+ * グローバルメニューを取得する
  *
  * @return void
  */
-	public function testGlobalMenu() {
+	public function testGetGlobalMenu() {
 		$this->expectOutputRegex('/<ul class="global-menu .*?">.*<a href="\/sitemap">サイトマップ<\/a>.*<\/li>.*<\/ul>/s');
-		$this->BcBaser->globalMenu();
+		$this->BcBaser->getGlobalMenu();
 	}
+
+/**
+ * グローバルメニューを出力する
+ * BcBaserHelper:getGlobalMenu()のラッパーの為、テスト不要
+ *
+ * 	public function testGlobalMenu() {}
+ */
 
 /**
  * Google Analytics のトラッキングコードを出力する
@@ -1963,15 +1970,21 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 /**
- * Google Maps を出力する
+ * Google Maps を取得する
  *
  * @return void
  */
-	public function testGoogleMaps() {
+	public function testGetGoogleMaps() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$this->expectOutputRegex('/<div id="map"/');
-		$this->BcBaser->googleMaps();
+		$this->BcBaser->getGoogleMaps();
 	}
+
+/**
+ * Google Maps を出力する
+ * BcBaserHelper:getGoogleMapsのラッパーの為、テスト不要
+ * public function testGoogleMaps() {}
+ */
 
 /**
  * 表示件数設定機能を出力する
@@ -2142,14 +2155,6 @@ class BcBaserHelperTest extends BaserTestCase {
 	}
 
 	public function testCurrentPrefix() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetGlobalMenu() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-	public function testGetGoogleMaps() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
