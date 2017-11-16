@@ -6,14 +6,11 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Blog.Test.Case
- * @since			baserCMS v 3.0.0
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
 
-/**
- * @package Blog.Test.Case
- */
-class BlogAllTest extends CakeTestSuite {
+class BlogAllControllerTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
@@ -21,13 +18,8 @@ class BlogAllTest extends CakeTestSuite {
  * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new CakeTestSuite('Baser Blog All Tests');
-
-		$path = dirname(__FILE__) . DS;
-		$suite->addTestFile($path . 'BlogAllControllerTest.php');
-		$suite->addTestFile($path . 'BlogAllModelTest.php');
-		$suite->addTestFile($path . 'BlogAllHelpersTest.php');
-
+		$suite = new CakeTestSuite('All Controller tests');
+		$suite->addTestDirectory(dirname(__FILE__) . DS . 'Controller' . DS);
 		return $suite;
 	}
 

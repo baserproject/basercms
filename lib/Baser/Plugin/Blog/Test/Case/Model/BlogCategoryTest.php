@@ -171,6 +171,14 @@ class BlogCategoryTest extends BaserTestCase {
 	}
 
 /**
+ * 同じニックネームのカテゴリがないかチェックする
+ * 同じブログコンテンツが条件
+ */
+	public function testDuplicateBlogCategory() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 関連する記事データをカテゴリ無所属に変更し保存する
  */
 	public function testBeforeDelete() {
@@ -226,5 +234,11 @@ class BlogCategoryTest extends BaserTestCase {
 //		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
 	}
 
+/**
+ * 子カテゴリを持っているかどうか
+ */
+	public function testHasChild() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 }

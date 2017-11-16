@@ -100,6 +100,12 @@ class BlogCommentTest extends BaserTestCase {
 		$this->assertEquals('URLの形式が不正です。', current($this->BlogComment->validationErrors['url']));
 	}
 
+/**
+ * 初期値を取得する
+ */
+	public function testGetDefaultValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * コメントを追加する
