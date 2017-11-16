@@ -6,99 +6,87 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Test.Case.Controller
- * @since			baserCMS v 3.0.0
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('MailController', 'Mail.Controller');
-App::uses('MailMessage', 'Mail.Model');
+App::uses('MailContentsController', 'Mail.Controller');
 
-class MailControllerTest extends BaserTestCase {
+class MailContentsControllerTest extends BaserTestCase {
 
-	public $fixtures = array(
-		'baser.Default.SiteConfig',
-		'baser.Default.Page',
-		'plugin.mail.Default/MailMessage',
-	);
-
+/**
+ * set up
+ *
+ * @return void
+ */
 	public function setUp() {
 		parent::setUp();
 	}
 
+/**
+ * tearDown
+ *
+ * @return void
+ */
 	public function tearDown() {
 		parent::tearDown();
 	}
 
 /**
- * beforeFilter.
+ * [ADMIN] メールフォーム一覧
  */
-	public function testBeforeFilter() {
+	public function testAdmin_index() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * beforeRender
+ * メールフォーム登録
  */
-	public function testBeforeRender() {
+	public function testAdmin_ajax_add() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [test_index description]
- * @return [type] [description]
+ * [ADMIN] メールフォーム追加
  */
-	public function test_index() {
-		// $result = $this->testAction('/contact/index');
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [PUBIC] フォームを表示する
+ * [ADMIN] 編集処理
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 削除
  *
- * @return void
+ * Controller::requestAction() で呼び出される
  */
-	public function testIndex() {
+	public function testAdmin_delete() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [PUBIC] データの確認画面を表示
+ * メール編集画面にリダイレクトする
  */
-	public function testConfirm() {
+	public function testRedirectEditMail() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [PUBIC] データ送信
+ * メールフォーム編集画面にリダイレクトする
  */
-	public function testSubmit() {
+	public function testRedirectEditForm() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [private] 確認画面から戻る
+ * コピー
  */
-	public function test_back() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * 認証用のキャプチャ画像を表示する
- */
-	public function testCaptcha() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * [ajax] Tokenのkeyを取得
- */
-	public function testAjax_get_token() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * [ajax] Tokenのkeyを取得
- */
-	public function testSmartphone_ajax_get_token() {
+	public function testAdmin_ajax_copy() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

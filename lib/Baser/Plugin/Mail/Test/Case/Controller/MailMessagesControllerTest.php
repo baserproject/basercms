@@ -6,31 +6,34 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Mail.Test.Case.Controller
- * @since			baserCMS v 3.0.0
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
 
-App::uses('MailController', 'Mail.Controller');
-App::uses('MailMessage', 'Mail.Model');
+App::uses('MailMessagesController', 'Mail.Controller');
 
-class MailControllerTest extends BaserTestCase {
+class MailMessagesControllerTest extends BaserTestCase {
 
-	public $fixtures = array(
-		'baser.Default.SiteConfig',
-		'baser.Default.Page',
-		'plugin.mail.Default/MailMessage',
-	);
-
+	/**
+	 * set up
+	 *
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 	}
 
+	/**
+	 * tearDown
+	 *
+	 * @return void
+	 */
 	public function tearDown() {
 		parent::tearDown();
 	}
 
 /**
- * beforeFilter.
+ * beforeFilter
  */
 	public function testBeforeFilter() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -44,61 +47,37 @@ class MailControllerTest extends BaserTestCase {
 	}
 
 /**
- * [test_index description]
- * @return [type] [description]
+ * [ADMIN] 受信メール一覧
  */
-	public function test_index() {
-		// $result = $this->testAction('/contact/index');
-	}
-
-/**
- * [PUBIC] フォームを表示する
- *
- * @return void
- */
-	public function testIndex() {
+	public function testAdmin_index() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [PUBIC] データの確認画面を表示
+ * [ADMIN] 受信メール詳細
  */
-	public function testConfirm() {
+	public function testAdmin_view() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [PUBIC] データ送信
+ * [ADMIN] 受信メール削除　(ajax)
  */
-	public function testSubmit() {
+	public function testAdmin_ajax_delete() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * [private] 確認画面から戻る
+ * [ADMIN] 受信メール削除
  */
-	public function test_back() {
+	public function testAdmin_delete() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
- * 認証用のキャプチャ画像を表示する
+ * メールフォームに添付したファイルを開く
  */
-	public function testCaptcha() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * [ajax] Tokenのkeyを取得
- */
-	public function testAjax_get_token() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * [ajax] Tokenのkeyを取得
- */
-	public function testSmartphone_ajax_get_token() {
+	public function testAdmin_attachment() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 

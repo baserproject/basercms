@@ -149,6 +149,36 @@ class MailFieldTest extends BaserTestCase {
 	}
 
 /**
+ * コントロールソースを取得する
+ */
+	public function testGetControlSource() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 同じ名称のフィールド名がないかチェックする
+ * 同じメールコンテンツが条件
+ */
+	public function testDuplicateMailField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * メールフィールドの値として正しい文字列か検証する
+ * 半角英数-_
+ */
+	public function testHalfTextMailField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 選択リストの入力チェック
+ */
+	public function testSourceMailField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * フィールドデータをコピーする
  *
  * @param int $id
@@ -196,6 +226,20 @@ class MailFieldTest extends BaserTestCase {
 				'sort' => 999,
 			)), true),
 		);
+	}
+
+/**
+ * After Delete
+ */
+	public function testAfterDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * After Save
+ */
+	public function testAfterSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }
