@@ -1980,9 +1980,7 @@ class BcBaserHelperTest extends BaserTestCase {
  * @return void
  */
 	public function testGetGoogleMaps() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->expectOutputRegex('/<div id="map"/');
-		$this->BcBaser->getGoogleMaps();
+		$this->assertRegExp('/<div id="map"/', $this->BcBaser->getGoogleMaps());
 	}
 
 /**
