@@ -38,4 +38,41 @@ class FeedDetailsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * beforeFilter
+ */
+	public function testBeforeFilter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 登録
+ */
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 編集
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 削除　(ajax)
+ */
+	public function testAdmin_ajax_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 削除
+ */
+	public function testAdmin_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
+
 }
