@@ -38,4 +38,60 @@ class UploaderCategoriesControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * ファイルカテゴリ一覧
+ */
+	public function testAdmin_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 新規登録
+ */
+	public function testAdmin_add() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 編集
+ */
+	public function testAdmin_edit() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 削除
+ */
+	public function testAdmin_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] 削除処理　(ajax)
+ */
+	public function testAdmin_ajax_delete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 一括削除
+ */
+	public function test_batch_del() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * データを削除する
+ */
+	public function test_del() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [ADMIN] コピー
+ */
+	public function testAdmin_ajax_copy() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
