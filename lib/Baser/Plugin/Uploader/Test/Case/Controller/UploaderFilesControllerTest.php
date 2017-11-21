@@ -15,7 +15,7 @@ App::uses('UploaderFilesController', 'Uploader.Controller');
 /**
  * UploaderFilesControllerTest class
  *
- * @package Feed.Test.Case.View.Helper
+ * @package Uploader.Test.Case.Controller
  * @property  UploaderFilesController $UploaderFilesController
  */
 class UploaderFilesControllerTest extends BaserTestCase {
