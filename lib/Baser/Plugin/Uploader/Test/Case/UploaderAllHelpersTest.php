@@ -6,14 +6,11 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Uploader.Test.Case
- * @since			baserCMS v 3.0.10
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
 
-/**
- * @package Uploader.Test.Case
- */
-class UploaderAllTest extends CakeTestSuite {
+class UploaderAllHelpersTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
@@ -21,12 +18,8 @@ class UploaderAllTest extends CakeTestSuite {
  * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new CakeTestSuite('Baser Uploader All Tests');
-		$path = dirname(__FILE__) . DS;
-		$suite->addTestFile($path . 'UploaderAllControllerTest.php');
-		$suite->addTestFile($path . 'UploaderAllEventTest.php');
-		$suite->addTestFile($path . 'UploaderAllHelpersTest.php');
-		$suite->addTestFile($path . 'UploaderAllModelTest.php');
+		$suite = new CakeTestSuite('All Uploader Helper tests');
+		$suite->addTestDirectory(dirname(__FILE__) . DS . 'View' . DS . 'Helper' . DS);
 		return $suite;
 	}
 
