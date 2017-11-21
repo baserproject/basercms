@@ -124,4 +124,11 @@ class FeedConfigTest extends BaserTestCase {
 		$this->assertEquals('テンプレート名は半角のみで入力してください。', current($this->FeedConfig->validationErrors['template']));
 	}
 
+/**
+ * 初期値を取得
+ */
+	public function testGetDefaultValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
