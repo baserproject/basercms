@@ -38,4 +38,25 @@ class FeedControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * beforeFilter
+ */
+	public function testBeforeFilter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [PUBLIC] フィードを一覧表示する
+ */
+	public function testIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * [PUBLIC] フィードをAJAXで読み込む為のJavascriptを生成する
+ */
+	public function testAjax() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
