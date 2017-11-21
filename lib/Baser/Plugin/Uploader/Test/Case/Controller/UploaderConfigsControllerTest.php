@@ -38,4 +38,11 @@ class UploaderConfigsControllerTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
+/**
+ * [ADMIN] アップローダー設定
+ */
+	public function testAdmin_index() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }
