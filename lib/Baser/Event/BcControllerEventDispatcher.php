@@ -28,13 +28,13 @@ class BcControllerEventDispatcher extends Object implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-		return array(
-			'Controller.initialize' => array('callable' => 'initialize'),
-			'Controller.startup' => array('callable' => 'startup'),
-			'Controller.beforeRender' => array('callable' => 'beforeRender'),
-			'Controller.beforeRedirect' => array('callable' => 'beforeRedirect'),
-			'Controller.shutdown' => array('callable' => 'shutdown'),
-		);
+		return [
+			'Controller.initialize' => ['callable' => 'initialize'],
+			'Controller.startup' => ['callable' => 'startup'],
+			'Controller.beforeRender' => ['callable' => 'beforeRender'],
+			'Controller.beforeRedirect' => ['callable' => 'beforeRedirect'],
+			'Controller.shutdown' => ['callable' => 'shutdown'],
+		];
 	}
 
 /**

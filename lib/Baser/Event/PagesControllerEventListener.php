@@ -75,9 +75,9 @@ class PagesControllerEventListener extends BcControllerEventListener {
 			'Content.id' => $event->data['data']['currentId']
 		]);
 		$this->oldPath = $this->Page->getPageFilePath(
-			$this->Page->find('first', array(
-					'conditions' => array('Page.id' => $entityId),
-					'recursive' => 0)
+			$this->Page->find('first', [
+					'conditions' => ['Page.id' => $entityId],
+					'recursive' => 0]
 			)
 		);
 		return true;
