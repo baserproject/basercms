@@ -136,7 +136,7 @@ class BcUtil extends Object {
 				return $files[0];
 			}
 		}
-		return array();
+		return [];
 	}
 	
 /**
@@ -196,16 +196,16 @@ class BcUtil extends Object {
 		}
 		
 		if($plugin == 'Core') {
-			$paths = array(BASER_CONFIGS . 'data' . DS . $pattern);
+			$paths = [BASER_CONFIGS . 'data' . DS . $pattern];
 			if($theme != 'core') {
-				$paths = array_merge(array(
+				$paths = array_merge([
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
-				), $paths);
+				], $paths);
 			}
 		} else {
 			$pluginPaths = App::path('Plugin');
@@ -219,23 +219,23 @@ class BcUtil extends Object {
 			if(!$pluginPath) {
 				return false;
 			}
-			$paths = array(
+			$paths = [
 				$pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 				$pluginPath . DS . 'sql',
 				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
-			);
+			];
 			if($theme != 'core') {
-				$paths = array_merge(array(
+				$paths = array_merge([
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
-				), $paths);
+				], $paths);
 			}
 		}
 		
@@ -284,10 +284,10 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function urlencode($value) {
-		$value = str_replace(array(
+		$value = str_replace([
 			' ', '　', '\\', '\'','|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
 			'/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
-		), '_', $value);
+		], '_', $value);
 		$value = preg_replace('/\_{2,}/', '_', $value);
 		$value = preg_replace('/(^_|_$)/', '', $value);
 		return urlencode($value);
@@ -311,7 +311,7 @@ class BcUtil extends Object {
 				array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 			}
 		}
-		$_templates = array();
+		$_templates = [];
 		foreach ($templatesPathes as $templatesPath) {
 			$templatesPath .= $path . DS;
 			$folder = new Folder($templatesPath);
@@ -325,7 +325,7 @@ class BcUtil extends Object {
 				}
 			}
 		}
-		$templates = array();
+		$templates = [];
 		foreach ($_templates as $template) {
 			$ext = Configure::read('BcApp.templateExt');
 			if ($template != 'installations' . $ext) {
@@ -345,7 +345,7 @@ class BcUtil extends Object {
 		$path = WWW_ROOT . 'theme';
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
-		$themes = array();
+		$themes = [];
 		foreach ($files[0] as $theme) {
 			if ($theme != 'core' && $theme != '_notes') {
 				$themes[$theme] = $theme;

@@ -30,7 +30,7 @@ class BaserTestLoader extends CakeTestLoader {
 	public static function generateTestList($params) {
 		$directory = self::_basePath($params);
 		$fileList = self::_getRecursiveFileList($directory);
-		$testCases = array();
+		$testCases = [];
 		foreach ($fileList as $testCaseFile) {
 			$case = str_replace($directory . DS, '', $testCaseFile);
 			$case = str_replace('Test.php', '', $case);

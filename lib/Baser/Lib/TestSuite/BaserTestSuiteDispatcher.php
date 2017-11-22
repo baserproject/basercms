@@ -25,7 +25,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
  *
  * @var array
  */
-	public $params = array(
+	public $params = [
 		'codeCoverage' => false,
 		'case' => null,
 		'core' => false,
@@ -40,7 +40,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		'show_passes' => false,
 		'filter' => false,
 		'fixture' => null
-	);
+	];
 
 /**
  * Static method to initialize the test runner, keeps global space clean
@@ -82,7 +82,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
  * @return void
  */
 	protected function _runTestCase() {
-		$commandArgs = array(
+		$commandArgs = [
 			'case' => $this->params['case'],
 			'core' => $this->params['core'],
 			// CUSTOMIZE ADD 2014/07/02 ryuring
@@ -95,13 +95,13 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 			'showPasses' => !empty($this->params['show_passes']),
 			'baseUrl' => $this->_baseUrl,
 			'baseDir' => $this->_baseDir,
-		);
+		];
 
-		$options = array(
+		$options = [
 			'--filter', $this->params['filter'],
 			'--output', $this->params['output'],
 			'--fixture', $this->params['fixture']
-		);
+		];
 		restore_error_handler();
 
 		try {
