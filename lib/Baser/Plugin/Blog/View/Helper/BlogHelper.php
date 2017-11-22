@@ -25,7 +25,7 @@ class BlogHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('Html', 'BcTime', 'BcBaser', 'BcUpload', 'BcContents');
+	public $helpers = ['Html', 'BcTime', 'BcBaser', 'BcUpload', 'BcContents'];
 
 /**
  * ブログカテゴリモデル
@@ -48,7 +48,7 @@ class BlogHelper extends AppHelper {
  * @param array $settings 設定
  * @return void
  */
-	public function __construct(View $View, $settings = array()) {
+	public function __construct(View $View, $settings = []) {
 		parent::__construct($View, $settings);
 		$this->setContent();
 	}
@@ -281,7 +281,7 @@ class BlogHelper extends AppHelper {
  *	※ オプションについては、 HtmlHelper::link() を参照
  * @return void
  */
-	public function postLink($post, $title, $options = array()) {
+	public function postLink($post, $title, $options = []) {
 		echo $this->getPostLink($post, $title, $options);
 	}
 
@@ -323,7 +323,7 @@ class BlogHelper extends AppHelper {
 			$out .= '<div id="post-detail">' . $post['BlogPost']['detail'] . '</div>';
 		}
 		if ($cut) {
-			$out = str_replace(array("\r\n", "\r", "\n"), '', $out);
+			$out = str_replace(["\r\n", "\r", "\n"], '', $out);
 			$out = html_entity_decode($out, ENT_QUOTES, 'UTF-8');
 			$out = mb_substr(strip_tags($out), 0, $cut, 'UTF-8');
 		}
@@ -344,7 +344,7 @@ class BlogHelper extends AppHelper {
  * @param array $options オプション（初期値 : array()）getPostDetailを参照
  * @return void
  */
-	public function postDetail($post, $options = array()) {
+	public function postDetail($post, $options = []) {
 		echo $this->getPostDetail($post, $options);
 	}
 
@@ -356,10 +356,10 @@ class BlogHelper extends AppHelper {
  *	- `cut` : 文字をカットするかどうかを真偽値で指定。カットする場合、文字数を数値で入力（初期値 : false）
  * @return string 記事本文
  */
-	public function getPostDetail($post, $options = array()) {
-		$options = array_merge(array(
+	public function getPostDetail($post, $options = []) {
+		$options = array_merge([
 			'cut' => false
-		), $options);
+		], $options);
 		$cut = $options['cut'];
 		unset($options['cut']);
 		$out = $post['BlogPost']['detail'];
@@ -379,7 +379,7 @@ class BlogHelper extends AppHelper {
  *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return void
  */
-	public function category($post, $options = array()) {
+	public function category($post, $options = []) {
 		echo $this->getCategory($post, $options);
 	}
 
@@ -393,10 +393,10 @@ class BlogHelper extends AppHelper {
  *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return string カテゴリ名
  */
-	public function getCategory($post, $options = array()) {
+	public function getCategory($post, $options = []) {
 		if (!empty($post['BlogCategory']['name'])) {
 
-			$options = am(array('link' => true), $options);
+			$options = am(['link' => true], $options);
 			$link = false;
 
 			if ($options['link']) {
@@ -502,7 +502,7 @@ class BlogHelper extends AppHelper {
  *	`named` : URLの名前付きパラメーター
  * @return string カテゴリ一覧へのURL
  */
-	public function getCategoryUrl($blogCategoryId, $options = array()) {
+	public function getCategoryUrl($blogCategoryId, $options = []) {
 		$options = array_merge([
 			'named' => [],
 			'base' => false
@@ -515,7 +515,7 @@ class BlogHelper extends AppHelper {
 		$this->setContent($blogContentId);
 		$site = BcSite::findByUrl($this->content['url']);
 		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain));
-		$path = array('category');
+		$path = ['category'];
 		if ($categoryPath) {
 			foreach ($categoryPath as $category) {
 				$path[] = urldecode($category['BlogCategory']['name']);
@@ -579,7 +579,7 @@ class BlogHelper extends AppHelper {
  *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return string HTMLのカテゴリ一覧
  */
-	public function getCategoryList($categories, $depth = 3, $count = false, $options = array()) {
+	public function getCategoryList($categories, $depth = 3, $count = false, $options = []) {
 		return $this->_getCategoryList($categories, $depth, 1, $count, $options);
 	}
 
@@ -596,7 +596,7 @@ class BlogHelper extends AppHelper {
  *	生成されるa要素の属性設定となる。（HtmlHelper::link() を参照）
  * @return string HTMLのカテゴリ一覧
  */
-	protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = array()) {
+	protected function _getCategoryList($categories, $depth = 3, $current = 1, $count = false, $options = []) {
 		if ($depth < $current) {
 			return '';
 		}
@@ -640,9 +640,9 @@ class BlogHelper extends AppHelper {
  *	※ HTML属性は、HtmlHelper::link() 参照
  * @return void
  */
-	public function prevLink($post, $title = '', $htmlAttributes = array()) {
+	public function prevLink($post, $title = '', $htmlAttributes = []) {
 		$prevPost = $this->getPrevPost($post);
-		$_htmlAttributes = array('class' => 'prev-link', 'arrow' => '≪ ');
+		$_htmlAttributes = ['class' => 'prev-link', 'arrow' => '≪ '];
 		$htmlAttributes = am($_htmlAttributes, $htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
@@ -677,9 +677,9 @@ class BlogHelper extends AppHelper {
  *	※ HTML属性は、HtmlHelper::link() 参照
  * @return void
  */
-	public function nextLink($post, $title = '', $htmlAttributes = array()) {
+	public function nextLink($post, $title = '', $htmlAttributes = []) {
 		$nextPost = $this->getNextPost($post);
-		$_htmlAttributes = array('class' => 'next-link', 'arrow' => ' ≫');
+		$_htmlAttributes = ['class' => 'next-link', 'arrow' => ' ≫'];
 		$htmlAttributes = am($_htmlAttributes, $htmlAttributes);
 		$arrow = $htmlAttributes['arrow'];
 		unset($htmlAttributes['arrow']);
@@ -724,7 +724,7 @@ class BlogHelper extends AppHelper {
 			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
-		$_templates = array();
+		$_templates = [];
 		foreach ($templatesPathes as $templatePath) {
 			$templatePath .= 'Blog' . DS;
 			$folder = new Folder($templatePath);
@@ -743,7 +743,7 @@ class BlogHelper extends AppHelper {
 		$excludes = array_keys($excludes);
 
 		$excludes[] = 'rss';
-		$templates = array();
+		$templates = [];
 		foreach ($_templates as $template) {
 			if (!in_array($template, $excludes)) {
 				$templates[$template] = $template;
@@ -778,7 +778,7 @@ class BlogHelper extends AppHelper {
  *	- `alt` : ALT属性（初期値 : ブログ記事のタイトル）
  * @return void
  */
-	public function postImg($post, $options = array()) {
+	public function postImg($post, $options = []) {
 		echo $this->getPostImg($post, $options);
 	}
 
@@ -792,13 +792,13 @@ class BlogHelper extends AppHelper {
  *	- `alt` : ALT属性（初期値 : ブログ記事のタイトル）
  * @return string
  */
-	public function getPostImg($post, $options = array()) {
+	public function getPostImg($post, $options = []) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		$options = array_merge($_options = array(
+		$options = array_merge($_options = [
 			'num' => 1,
 			'link' => true,
 			'alt' => $post['BlogPost']['name']
-			), $options);
+			], $options);
 		$num = $options['num'];
 		$link = $options['link'];
 		unset($options['num']);
@@ -866,50 +866,50 @@ class BlogHelper extends AppHelper {
  *	- `order` : 並び順指定（初期値 : BlogPost.posts_date DESC）
  * @return array
  */
-	public function getRelatedPosts($post, $options = array()) {
+	public function getRelatedPosts($post, $options = []) {
 		if (empty($post['BlogTag'])) {
-			return array();
+			return [];
 		}
 
-		$options = array_merge(array(
+		$options = array_merge([
 			'recursive' => -1,
 			'limit' => 5,
 			'order' => 'BlogPost.posts_date DESC'
-			), $options);
+			], $options);
 
-		$tagNames = array();
+		$tagNames = [];
 		foreach ($post['BlogTag'] as $tag) {
 			$tagNames[] = urldecode($tag['name']);
 		}
 		$BlogTag = ClassRegistry::init('Blog.BlogTag');
-		$tags = $BlogTag->find('all', array(
-			'conditions' => array('BlogTag.name' => $tagNames),
+		$tags = $BlogTag->find('all', [
+			'conditions' => ['BlogTag.name' => $tagNames],
 			'recursive' => 1
-		));
+		]);
 		
 		if (!isset($tags[0]['BlogPost'][0]['id'])) {
-			return array();
+			return [];
 		}
 
 		$ids = array_unique(Hash::extract($tags, '{n}.BlogPost.{n}.id'));
 		
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 
-		$conditions = array(
-			array('BlogPost.id' => $ids),
-			array('BlogPost.id <>' => $post['BlogPost']['id']),
+		$conditions = [
+			['BlogPost.id' => $ids],
+			['BlogPost.id <>' => $post['BlogPost']['id']],
 			'BlogPost.blog_content_id' => $post['BlogPost']['blog_content_id']
-		);
+		];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 
 		// 毎秒抽出条件が違うのでキャッシュしない
-		$relatedPosts = $BlogPost->find('all', array(
+		$relatedPosts = $BlogPost->find('all', [
 			'conditions' => $conditions,
 			'recursive' => $options['recursive'],
 			'order' => $options['order'],
 			'limit' => $options['limit'],
 			'cache' => false
-		));
+		]);
 
 		return $relatedPosts;
 	}
@@ -1029,7 +1029,7 @@ class BlogHelper extends AppHelper {
  *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
  * @return void
  */
-	public function eyeCatch($post, $options = array()) {
+	public function eyeCatch($post, $options = []) {
 		echo $this->getEyeCatch($post, $options);
 	}
 
@@ -1053,9 +1053,9 @@ class BlogHelper extends AppHelper {
  *  ※ その他のオプションについては、リンクをつける場合、HtmlHelper::link() を参照、つけない場合、Html::image() を参照
  * @return string アイキャッチ画像のHTML
  */
-	public function getEyeCatch($post, $options = array()) {
+	public function getEyeCatch($post, $options = []) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
-		$options = array_merge(array(
+		$options = array_merge([
 			'imgsize' => 'thumb',
 			'link' => true, // 大きいサイズの画像へのリンク有無
 			'escape' => false, // エスケープ
@@ -1067,7 +1067,7 @@ class BlogHelper extends AppHelper {
 			'tmp' => false,
 			'class' => 'img-eye-catch',
 			'output' => '', // 出力形式 tag or url
-		), $options);
+		], $options);
 		$eyecatch = null;
 		if(!empty($post['BlogPost']['eye_catch'])) {
 			$eyecatch = $post['BlogPost']['eye_catch'];
@@ -1085,7 +1085,7 @@ class BlogHelper extends AppHelper {
  *	※ オプションについては、HtmlHelper::link() を参照
  * @return void
  */
-	public function mailFormLink($title, $contentsName, $datas = array(), $options = array()) {
+	public function mailFormLink($title, $contentsName, $datas = [], $options = []) {
 		App::uses('MailHelper', 'Mail.View/Helper');
 		$MailHelper = new MailHelper($this->_View);
 		$MailHelper->link($title, $contentsName, $datas, $options);
@@ -1108,33 +1108,33 @@ class BlogHelper extends AppHelper {
 	private function getNextPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		// 投稿日が年月日時分秒が同一のデータの対応の為、投稿日が同じでIDが小さいデータを検索
-		$conditions = array();
+		$conditions = [];
 		$conditions['BlogPost.id >'] = $post['BlogPost']['id'];
 		$conditions['BlogPost.posts_date'] = $post['BlogPost']['posts_date'];
 		$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 		$order = 'BlogPost.posts_date, BlogPost.id';
 		// 毎秒抽出条件が違うのでキャッシュしない
-		$nextPost = $BlogPost->find('first', array(
+		$nextPost = $BlogPost->find('first', [
 			'conditions' => $conditions,
 			'order' => $order,
 			'recursive' => 0,
 			'cache' => false
-		));
+		]);
 
 		if (empty($nextPost)) {
 			// 投稿日が新しいデータを取得
-			$conditions = array();
+			$conditions = [];
 			$conditions['BlogPost.posts_date >'] = $post['BlogPost']['posts_date'];
 			$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 			$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 			// 毎秒抽出条件が違うのでキャッシュしない
-			$nextPost = $BlogPost->find('first', array(
+			$nextPost = $BlogPost->find('first', [
 				'conditions' => $conditions,
 				'order' => $order,
 				'recursive' => 0,
 				'cache' => false
-			));
+			]);
 		}
 		return $nextPost;
 	}
@@ -1148,32 +1148,32 @@ class BlogHelper extends AppHelper {
 	private function getPrevPost($post) {
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
 		// 投稿日が年月日時分秒が同一のデータの対応の為、投稿日が同じでIDが大きいデータを検索
-		$conditions = array();
+		$conditions = [];
 		$conditions['BlogPost.id <'] = $post['BlogPost']['id'];
 		$conditions['BlogPost.posts_date'] = $post['BlogPost']['posts_date'];
 		$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 		$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 		$order = 'BlogPost.posts_date DESC, BlogPost.id DESC';
 		// 毎秒抽出条件が違うのでキャッシュしない
-		$prevPost = $BlogPost->find('first', array(
+		$prevPost = $BlogPost->find('first', [
 			'conditions' => $conditions,
 			'order' => $order,
 			'recursive' => 0,
 			'cache' => false
-		));
+		]);
 		if (empty($prevPost)) {
 			// 投稿日が古いデータを取得
-			$conditions = array();
+			$conditions = [];
 			$conditions['BlogPost.posts_date <'] = $post['BlogPost']['posts_date'];
 			$conditions['BlogPost.blog_content_id'] = $post['BlogPost']['blog_content_id'];
 			$conditions = am($conditions, $BlogPost->getConditionAllowPublish());
 			// 毎秒抽出条件が違うのでキャッシュしない
-			$prevPost = $BlogPost->find('first', array(
+			$prevPost = $BlogPost->find('first', [
 				'conditions' => $conditions,
 				'order' => $order,
 				'recursive' => 0,
 				'cache' => false
-			));
+			]);
 		}
 		return $prevPost;
 	}
@@ -1551,7 +1551,7 @@ class BlogHelper extends AppHelper {
  * 	※ パラメーターは、contentTemplate / template 以外、BlogBaserHelper::blogPosts() に準ずる
  * @return mixed
  */
-	public function getPosts($contentsName = [], $num = 5, $options = array()) {
+	public function getPosts($contentsName = [], $num = 5, $options = []) {
 		/** @var BlogContent $BlogContent */
 		$this->_View->loadHelper('Blog.Blog');
 		$options = array_merge([
@@ -1623,12 +1623,12 @@ class BlogHelper extends AppHelper {
  *  - `postCount` : 公開記事数を取得するかどうか (初期値:false)
  * @return mixed false|array Blogの基本情報
  */
-	public function getContents($name = '', $options = array()) {
-		$options = array_merge(array(
+	public function getContents($name = '', $options = []) {
+		$options = array_merge([
 			'sort' => 'BlogContent.id',
 			'siteId' => null,
 			'postCount' => false,
-		), $options);
+		], $options);
 		$conditions['Content.status'] = true;
 		if(!empty($name)){
 			if(is_int($name)) {
@@ -1645,12 +1645,12 @@ class BlogHelper extends AppHelper {
 		$BlogContent->unbindModel(
 			['hasMany' => ['BlogPost', 'BlogCategory']]
 		);
-		$datas = $BlogContent->find('all', array(
+		$datas = $BlogContent->find('all', [
 				'conditions' => $conditions,
 				'order' => $options['sort'],
 				'cache' => false,
 				'recursive' => 0
-			)
+			]
 		);
 		if(!$datas) {
 			return false;
@@ -1661,7 +1661,7 @@ class BlogHelper extends AppHelper {
 			$datas = $this->_mergePostCountToBlogsData($datas);
 		}
 
-		$contents = array();
+		$contents = [];
 		if( count($datas) === 1 ){
 			$datas = $BlogContent->constructEyeCatchSize($datas[0]);
 			unset($datas['BlogContent']['eye_catch_size']);

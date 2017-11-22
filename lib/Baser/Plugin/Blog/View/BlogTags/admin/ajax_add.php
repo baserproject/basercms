@@ -15,6 +15,6 @@
 <?php if($result): ?>
 	<?php echo $this->BcForm->input(
 		'BlogTag.BlogTag',
-		array('type' => 'select', 'multiple' => 'checkbox', 'options' => $result, 'hiddenField' => false));
+		['type' => 'select', 'multiple' => 'checkbox', 'options' => $result, 'hiddenField' => false]);
 	?>
 <?php endif ?>

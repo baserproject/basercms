@@ -13,7 +13,7 @@
 /**
  * [PUBLISH] ブログアーカイブ一覧
  */
-$this->BcBaser->css(array('Blog.style'), array('inline' => false));
+$this->BcBaser->css(['Blog.style'], ['inline' => false]);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
 ?>
 

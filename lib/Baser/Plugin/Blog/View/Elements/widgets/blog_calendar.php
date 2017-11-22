@@ -78,7 +78,7 @@ $entryDates = $data['entryDates'];
 	$today = mktime(0, 0, 0, $month, $day, $year);
 
 //曜日の配列
-	$date = array('日', '月', '火', '水', '木', '金', '土');
+	$date = ['日', '月', '火', '水', '木', '金', '土'];
 
 //カレンダーを表示する
 //先月の場合

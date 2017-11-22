@@ -13,13 +13,13 @@
 /**
  * [管理画面] ブログ記事 一覧
  */
-$this->BcBaser->css('Blog.admin/style', array('inline' => true));
-$this->BcBaser->js(array(
+$this->BcBaser->css('Blog.admin/style', ['inline' => true]);
+$this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
-));
+]);
 ?>
 
 
@@ -31,7 +31,7 @@ $(document).ready(function(){
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'blog_posts', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'blog_posts', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="DataList"><?php $this->BcBaser->element('blog_posts/index_list') ?></div>

@@ -22,7 +22,7 @@
 		<div class="comment" id="Comment<?php echo $dbData['no'] ?>">
 			<span class="comment-name">≫
 				<?php if ($dbData['url']): ?>
-					<?php echo $this->BcBaser->link($dbData['name'], $dbData['url'], array('target' => '_blank')) ?>
+					<?php echo $this->BcBaser->link($dbData['name'], $dbData['url'], ['target' => '_blank']) ?>
 				<?php else: ?>
 					<?php echo $dbData['name'] ?>
 				<?php endif ?>
