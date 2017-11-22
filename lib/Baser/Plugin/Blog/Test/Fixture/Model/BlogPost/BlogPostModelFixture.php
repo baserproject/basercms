@@ -16,8 +16,8 @@ class BlogPostModelFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'blog_content_id' => '1',
 			'no' => '1',
@@ -41,8 +41,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'blog_content_id' => '1',
 			'no' => '2',
@@ -68,8 +68,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'blog_content_id' => '1',
 			'no' => '3',
@@ -95,8 +95,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'blog_content_id' => '1',
 			'no' => '4',
@@ -122,8 +122,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'blog_content_id' => '1',
 			'no' => '5',
@@ -149,8 +149,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'blog_content_id' => '1',
 			'no' => '6',
@@ -176,8 +176,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '7',
 			'blog_content_id' => '2',
 			'no' => '7',
@@ -203,8 +203,8 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '8',
 			'blog_content_id' => '2',
 			'no' => '8',
@@ -230,7 +230,7 @@ class BlogPostModelFixture extends BaserTestFixture {
 			'eye_catch' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => '2015-01-27 12:57:59'
-		),
-	);
+		],
+	];
 
 }

@@ -9,15 +9,15 @@ class SiteBlogTagFindCustomPramsFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('model' => 'Site');
+	public $import = ['model' => 'Site'];
 
 /**
  * Records
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '2',
 			'main_site_id' => '0',
 			'name' => 'smartphone',
@@ -36,7 +36,7 @@ class SiteBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'domain_type' => '0',
 			'created' => '2017-07-08 13:10:05',
 			'modified' => '2017-07-09 19:44:02'
-		),
-	);
+		],
+	];
 
 }
