@@ -34,21 +34,21 @@ class ToolsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Tool', 'Page');
+	public $uses = ['Tool', 'Page'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
 /**
  * ヘルパ
  * 
  * @var array
  */
-	public $helpers = array('BcForm');
+	public $helpers = ['BcForm'];
 
 /**
  * サブメニュー
@@ -93,7 +93,7 @@ class ToolsController extends AppController {
 				if (!$this->request->data) {
 					$this->notFound();
 				}
-				$messages = array();
+				$messages = [];
 				if ($this->_restoreDb($this->request->data)) {
 					$messages[] = 'データの復元が完了しました。';
 					$error = false;
@@ -111,7 +111,7 @@ class ToolsController extends AppController {
 					$this->setMessage(implode('<br />', $messages), $error);
 				}
 				clearAllCache();
-				$this->redirect(array('action' => 'maintenance'));
+				$this->redirect(['action' => 'maintenance']);
 				break;
 		}
 		$this->pageTitle = 'データメンテナンス';
@@ -184,7 +184,7 @@ class ToolsController extends AppController {
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
 				try {
-					if (!$db->loadSchema(array('type' => 'drop', 'path' => $path, 'file' => $file))) {
+					if (!$db->loadSchema(['type' => 'drop', 'path' => $path, 'file' => $file])) {
 						$result = false;
 						continue;
 					}
@@ -199,7 +199,7 @@ class ToolsController extends AppController {
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
 				try {
-					if (!$db->loadSchema(array('type' => 'create', 'path' => $path, 'file' => $file))) {
+					if (!$db->loadSchema(['type' => 'create', 'path' => $path, 'file' => $file])) {
 						$result = false;
 						continue;
 					}
@@ -214,7 +214,7 @@ class ToolsController extends AppController {
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.csv$/", $file)) {
 				try {
-					if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => $encoding))) {
+					if (!$db->loadCsv(['path' => $path . $file, 'encoding' => $encoding])) {
 						$result = false;
 						continue;
 					}
@@ -270,10 +270,10 @@ class ToolsController extends AppController {
 		foreach ($tables as $table) {
 			if((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
 				$table = str_replace($db->config['prefix'], '', $table);
-				if (!$db->writeSchema(array('path' => $path, 'table' => $table, 'plugin' => $plugin))) {
+				if (!$db->writeSchema(['path' => $path, 'table' => $table, 'plugin' => $plugin])) {
 					return false;
 				}
-				if (!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding' => $encoding))) {
+				if (!$db->writeCsv(['path' => $path . $table . '.csv', 'encoding' => $encoding])) {
 					return false;
 				}
 			}
@@ -297,7 +297,7 @@ class ToolsController extends AppController {
 			} else {
 				if (!$this->_resetTmpSchemaFolder()) {
 					$this->setMessage('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
-					$this->redirect(array('action' => 'write_schema'));
+					$this->redirect(['action' => 'write_schema']);
 				}
 				if ($this->Tool->writeSchema($this->request->data, $path)) {
 					$Simplezip = new Simplezip();
@@ -328,11 +328,11 @@ class ToolsController extends AppController {
 				$path = TMP . 'schemas' . DS;
 				if (!$this->_resetTmpSchemaFolder()) {
 					$this->setMessage('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
-					$this->redirect(array('action' => 'load_schema'));
+					$this->redirect(['action' => 'load_schema']);
 				}
 				if ($this->Tool->loadSchemaFile($this->request->data, $path)) {
 					$this->setMessage('スキーマファイルの読み込みに成功しました。');
-					$this->redirect(array('action' => 'load_schema'));
+					$this->redirect(['action' => 'load_schema']);
 				} else {
 					$this->setMessage('スキーマファイルの読み込みに失敗しました。', true);
 				}
@@ -371,7 +371,7 @@ class ToolsController extends AppController {
 				} else {
 					$this->setMessage('エラーログが存在しません。', false);
 				}
-				$this->redirect(array('action' => 'log'));
+				$this->redirect(['action' => 'log']);
 				break;
 			case 'delete':
 				$this->_checkSubmitToken();
@@ -391,7 +391,7 @@ class ToolsController extends AppController {
 				if ($messages) {
 					$this->setMessage(implode('<br />', $messages), $error);
 				}
-				$this->redirect(array('action' => 'log'));
+				$this->redirect(['action' => 'log']);
 				break;
 			
 		}
@@ -436,7 +436,7 @@ class ToolsController extends AppController {
 		} else {
 			$this->setMessage('管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。', true);
 		}
-		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
 /**
@@ -449,7 +449,7 @@ class ToolsController extends AppController {
 		} else {
 			$this->setMessage('管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。', true);
 		}
-		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
 /**

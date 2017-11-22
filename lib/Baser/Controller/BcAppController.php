@@ -49,11 +49,11 @@ class BcAppController extends Controller {
  * @access	public
  */
 	// TODO 見直し
-	public $helpers = array(
+	public $helpers = [
 		'Session', 'BcHtml', 'Form', 'BcForm', 'BcWidgetArea',
-		'Js' => array('Jquery'), 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin', 
+		'Js' => ['Jquery'], 'BcBaser', 'BcXml', 'BcArray', 'BcAdmin',
 		'BcListTable', 'BcSearchBox', 'BcFormTable', 'BcLayout'
-	);
+	];
 
 /**
  * レイアウト
@@ -68,7 +68,7 @@ class BcAppController extends Controller {
  *
  * @var mixed
  */
-	public $uses = array('User', 'Favorite');
+	public $uses = ['User', 'Favorite'];
 
 /**
  * コンポーネント
@@ -76,7 +76,7 @@ class BcAppController extends Controller {
  * @var		array
  * @access	public
  */
-	public $components = array('RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail');
+	public $components = ['RequestHandler', 'Security', 'Session', 'BcManager', 'Email', 'Flash', 'BcEmail'];
 
 /**
  * サブディレクトリ
@@ -98,7 +98,7 @@ class BcAppController extends Controller {
  *
  * @var array
  */
-	public $crumbs = array();
+	public $crumbs = [];
 
 /**
  * 検索ボックス
@@ -133,7 +133,7 @@ class BcAppController extends Controller {
  *
  * @var array
  */
-	public $siteConfigs = array();
+	public $siteConfigs = [];
 
 /**
  * プレビューフラグ
@@ -209,7 +209,7 @@ class BcAppController extends Controller {
 					$SiteConfig->saveKeyValue($this->siteConfigs);
 				}
 			} catch (Exception $ex) {
-				$this->siteConfigs = array();
+				$this->siteConfigs = [];
 			}
 
 		}
@@ -302,7 +302,7 @@ class BcAppController extends Controller {
 			}
 			// SSLリダイレクト設定
 			if (Configure::read('BcApp.adminSsl')) {
-				$adminSslMethods = array_filter(get_class_methods(get_class($this)), array($this, '_adminSslMethods'));
+				$adminSslMethods = array_filter(get_class_methods(get_class($this)), [$this, '_adminSslMethods']);
 				if ($adminSslMethods) {
 					$this->Security->requireSecure = $adminSslMethods;
 				}
@@ -351,12 +351,12 @@ class BcAppController extends Controller {
 		$pluginThemePath = WWW_ROOT . 'theme' . DS . $this->theme . DS;
 		$pluginPaths = Configure::read('pluginPaths');
 		if ($pluginPaths && !in_array($pluginThemePath, $pluginPaths)) {
-			Configure::write('pluginPaths', am(array($pluginThemePath), $pluginPaths));
+			Configure::write('pluginPaths', am([$pluginThemePath], $pluginPaths));
 		}
 
 		// 認証設定
 		if (isset($this->BcAuthConfigure)) {
-			$authConfig = array();
+			$authConfig = [];
 			if (!empty($this->request->params['prefix'])) {
 				$currentAuthPrefix = $this->request->params['prefix'];
 			} else {
@@ -395,19 +395,19 @@ class BcAppController extends Controller {
 					list($plugin, $userModel) = explode('.', $userModel);
 				}
 				if ($userModel && !empty($this->{$userModel})) {
-					$conditions = array(
+					$conditions = [
 						$userModel . '.id'				=> $user['id'],
 						$userModel . '.name'			=> $user['name']
-					);
+					];
 					if (isset($User->belongsTo['UserGroup'])) {
 						$UserGroup = ClassRegistry::init('UserGroup');
-						$userGroups = $UserGroup->find('all', array('conditions' => array('UserGroup.auth_prefix LIKE' => '%' . $authConfig['auth_prefix'] . '%'), 'recursive' => -1));
+						$userGroups = $UserGroup->find('all', ['conditions' => ['UserGroup.auth_prefix LIKE' => '%' . $authConfig['auth_prefix'] . '%'], 'recursive' => -1]);
 						$userGroupIds = Hash::extract($userGroups, '{n}.UserGroup.id');
 						$conditions[$userModel . '.user_group_id'] = $userGroupIds;
 					}
-					if (!$User->find('count', array(
+					if (!$User->find('count', [
 							'conditions' => $conditions,
-							'recursive' => -1))) {
+							'recursive' => -1])) {
 						$this->Session->delete(BcAuthComponent::$sessionKey);
 					}
 				}
@@ -548,7 +548,7 @@ class BcAppController extends Controller {
 	private function __updateFirstAccess() {
 		// 初回アクセスメッセージ表示設定
 		if (!empty($this->request->params['admin']) && !empty($this->siteConfigs['first_access'])) {
-			$data = array('SiteConfig' => array('first_access' => false));
+			$data = ['SiteConfig' => ['first_access' => false]];
 			$SiteConfig = ClassRegistry::init('SiteConfig', 'Model');
 			$SiteConfig->saveKeyValue($data);
 		}
@@ -571,14 +571,14 @@ class BcAppController extends Controller {
 			return;
 		}
 
-		$errorMessages = array(
+		$errorMessages = [
 			'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
 			'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
 			'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
 			'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
 			'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
 			'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
-		);
+		];
 
 		$message = "不正なリクエストと判断されました。";
 
@@ -688,11 +688,11 @@ class BcAppController extends Controller {
 		if (BC_INSTALLED && $user && $this->name != 'Installations' && !Configure::read('BcRequest.isUpdater') && !Configure::read('BcRequest.isMaintenance') && $this->name != 'CakeError') {
 			$this->set('user', $user);
 			if (!empty($this->request->params['admin'])) {
-				$this->set('favorites', $this->Favorite->find('all', array('conditions' => array('Favorite.user_id' => $user['id']), 'order' => 'Favorite.sort', 'recursive' => -1)));
+				$this->set('favorites', $this->Favorite->find('all', ['conditions' => ['Favorite.user_id' => $user['id']], 'order' => 'Favorite.sort', 'recursive' => -1]));
 			}
 		}
 		
-		$currentUserAuthPrefixes = array();
+		$currentUserAuthPrefixes = [];
 		if ($this->Session->check('Auth.' . $sessionKey . '.UserGroup.auth_prefix')) {
 			$currentUserAuthPrefixes = explode(',', $this->Session->read('Auth.' . $sessionKey . '.UserGroup.auth_prefix'));
 		}
@@ -752,7 +752,7 @@ class BcAppController extends Controller {
 			}
 		} else {
 			$Plugin = ClassRegistry::init('Plugin');
-			return $Plugin->field('version', array('name' => $plugin));
+			return $Plugin->field('version', ['name' => $plugin]);
 		}
 	}
 
@@ -807,11 +807,11 @@ class BcAppController extends Controller {
  * 	- bool agentTemplate : テンプレートの配置場所についてサイト名をサブフォルダとして利用するかどうか（初期値：true）
  * @return bool 送信結果
  */
-		public function sendMail($to, $title = '', $body = '', $options = array()) {
-		$options = array_merge(array(
+		public function sendMail($to, $title = '', $body = '', $options = []) {
+		$options = array_merge([
 			'agentTemplate' => true,
 			'template' => 'default'
-		), $options);
+		], $options);
 
 		if (!empty($this->siteConfigs['smtp_host'])) {
 			$transport = 'Smtp';
@@ -829,21 +829,21 @@ class BcAppController extends Controller {
 			$tls = null;
 		}
 
-		$config = array(
+		$config = [
 			'transport' => $transport,
 			'host' => $host,
 			'port' => $port,
 			'username' => $username,
 			'password' => $password,
 			'tls' => $tls
-		);
+		];
 
 		/**
 		 * CakeEmailでは、return-path の正しい設定のためには additionalParameters を設定する必要がある
 		 * @url http://norm-nois.com/blog/archives/2865
 		 */
 		if (!empty($options['additionalParameters'])) {
-			$config = Hash::merge($config, array('additionalParameters' => $options['additionalParameters']));
+			$config = Hash::merge($config, ['additionalParameters' => $options['additionalParameters']]);
 		}
 
 		$cakeEmail = new CakeEmail($config);
@@ -883,7 +883,7 @@ class BcAppController extends Controller {
 		//bcc 'mail@example.com,mail2@example.com'
 		if (!empty($options['bcc'])) {
 			// 文字列の場合
-			$bcc = array();
+			$bcc = [];
 			if (is_string($options['bcc'])) {
 				if (strpos($options['bcc'], ',') !== false) {
 					$bcc = explode(',', $options['bcc']);
@@ -905,7 +905,7 @@ class BcAppController extends Controller {
 		//cc 'mail@example.com,mail2@example.com'
 		if (!empty($options['cc'])) {
 			// 文字列の場合
-			$cc = array();
+			$cc = [];
 			if (is_string($options['cc'])) {
 				if (strpos($options['cc'], ',') !== false) {
 					$cc = explode(',', $options['cc']);
@@ -1043,17 +1043,17 @@ class BcAppController extends Controller {
 			if (is_array($body)) {
 				$cakeEmail->viewVars($body);
 			} else {
-				$cakeEmail->viewVars(array('body' => $body));
+				$cakeEmail->viewVars(['body' => $body]);
 			}
 		} else {
 			$content = $body;
 		}
 
 		// $attachments tmp file path
-		$attachments = array();
+		$attachments = [];
 		if (!empty($options['attachments'])) {
 			if (!is_array($options['attachments'])) {
-				$attachments = array($options['attachments']);
+				$attachments = [$options['attachments']];
 			} else {
 				$attachments = $options['attachments'];
 			}
@@ -1077,8 +1077,8 @@ class BcAppController extends Controller {
  * @return	void
  * @access	public
  */
-	protected function setViewConditions($filterModels = array(), $options = array()) {
-		$_options = array('type' => 'post', 'session' => true);
+	protected function setViewConditions($filterModels = [], $options = []) {
+		$_options = ['type' => 'post', 'session' => true];
 		$options = am($_options, $options);
 		extract($options);
 		if ($type == 'post' && $session == true) {
@@ -1097,13 +1097,13 @@ class BcAppController extends Controller {
  * @return	void
  * @access	protected
  */
-	protected function _saveViewConditions($filterModels = array(), $options = array()) {
-		$_options = array('action' => '', 'group' => '');
+	protected function _saveViewConditions($filterModels = [], $options = []) {
+		$_options = ['action' => '', 'group' => ''];
 		$options = am($_options, $options);
 		extract($options);
 
 		if (!is_array($filterModels)) {
-			$filterModels = array($filterModels);
+			$filterModels = [$filterModels];
 		}
 
 		if (!$action) {
@@ -1139,16 +1139,16 @@ class BcAppController extends Controller {
  * @return void
  * @access	protected
  */
-	protected function _loadViewConditions($filterModels = array(), $options = array()) {
-		$_options = array('default' => array(), 'action' => '', 'group' => '', 'type' => 'post', 'session' => true);
+	protected function _loadViewConditions($filterModels = [], $options = []) {
+		$_options = ['default' => [], 'action' => '', 'group' => '', 'type' => 'post', 'session' => true];
 		$options = am($_options, $options);
-		$named = array();
-		$filter = array();
+		$named = [];
+		$filter = [];
 		extract($options);
 
 		if (!is_array($filterModels)) {
 			$model = (string) $filterModels;
-			$filterModels = array($filterModels);
+			$filterModels = [$filterModels];
 		} else {
 			$model = (string) $filterModels[0];
 		}
@@ -1169,11 +1169,11 @@ class BcAppController extends Controller {
 				} elseif (!empty($default[$model])) {
 					$filter = $default[$model];
 				} else {
-					$filter = array();
+					$filter = [];
 				}
 				$this->request->data[$model] = $filter;
 			}
-			$named = array();
+			$named = [];
 			if (!empty($default['named'])) {
 				$named = $default['named'];
 			}
@@ -1211,10 +1211,10 @@ class BcAppController extends Controller {
  * @param array $options オプション
  * @return	string
  */
-	protected function convertSelectTextCondition($fieldName, $values, $options = array()) {
+	protected function convertSelectTextCondition($fieldName, $values, $options = []) {
 		$_options = array('type' => 'string', 'conditionType' => 'or');
 		$options = am($_options, $options);
-		$conditions = array();
+		$conditions = [];
 		extract($options);
 
 		if ($type == 'string' && !is_array($value)) {
@@ -1222,7 +1222,7 @@ class BcAppController extends Controller {
 		}
 		if (!empty($values) && is_array($values)) {
 			foreach ($values as $value) {
-				$conditions[$conditionType][] = array($fieldName . ' LIKE' => "%'" . $value . "'%");
+				$conditions[$conditionType][] = [$fieldName . ' LIKE' => "%'" . $value . "'%"];
 			}
 		}
 		return $conditions;
@@ -1245,7 +1245,7 @@ class BcAppController extends Controller {
 		} elseif (!$end) {
 			$conditions[$fieldName . ' >='] = $start;
 		} else {
-			$conditions[$fieldName . ' BETWEEN ? AND ?'] = array($start, $end);
+			$conditions[$fieldName . ' BETWEEN ? AND ?'] = [$start, $end];
 		}
 		return $conditions;
 	}
@@ -1369,7 +1369,7 @@ class BcAppController extends Controller {
  * @return mixed Boolean true or false on success/failure, or contents
  *               of rendered action if 'return' is set in $extra.
  */
-	public function requestAction($url, $extra = array()) {
+	public function requestAction($url, $extra = []) {
 		// >>> CUSTOMIZE ADD 2011/12/16 ryuring
 		// 管理システムやプラグインでのURLの生成が CakePHP の標準仕様と違っていたので調整
 		// >>> CUSTOMIZE MODIFY 2012/1/28 ryuring
@@ -1468,7 +1468,7 @@ class BcAppController extends Controller {
 		// >>>
 		//return call_user_func_array(array($this, $action), $args);
 		// ---
-		$return = call_user_func_array(array($this, $action), $args);
+		$return = call_user_func_array([$this, $action], $args);
 		$this->request->action = $_action;
 		return $return;
 		// <<<
@@ -1507,7 +1507,7 @@ class BcAppController extends Controller {
 		header('HTTP/1.1 ' . $errorNo);
 		if ($message) {
 			if (is_array($message)) {
-				$aryMessage = array();
+				$aryMessage = [];
 				foreach ($message as $value) {
 					if (is_array($value)) {
 						$aryMessage[] = implode('<br />', $value);
@@ -1559,13 +1559,13 @@ class BcAppController extends Controller {
  * @param array $options オプション
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array(), $options = array()) {
-		$options = array_merge(array(
+	public function dispatchEvent($name, $params = [], $options = []) {
+		$options = array_merge([
 			'modParams'	=> 0,
 			'plugin'	=> $this->plugin,
 			'layer'		=> 'Controller',
 			'class'		=> $this->name
-			), $options);
+			], $options);
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 	}

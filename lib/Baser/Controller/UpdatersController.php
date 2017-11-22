@@ -31,28 +31,28 @@ class UpdatersController extends AppController {
  *
  * @var array
  */
-	protected $_updateMessage = array();
+	protected $_updateMessage = [];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcForm');
+	public $helpers = ['BcForm'];
 
 /**
  * モデル
  *
  * @var array
  */
-	public $uses = array('Favorite');
+	public $uses = ['Favorite'];
 
 /**
  * beforeFilter
@@ -99,11 +99,11 @@ class UpdatersController extends AppController {
 		clearAllCache();
 
 		$targetPlugins = Configure::read('BcApp.corePlugins');
-		$targets = $this->Plugin->find('list', array('fields' => array('Plugin.name'), 'conditions' => array('Plugin.status' => true, 'Plugin.name' => $targetPlugins)));
-		$targets = am(array(''), $targets);
+		$targets = $this->Plugin->find('list', ['fields' => ['Plugin.name'], 'conditions' => ['Plugin.status' => true, 'Plugin.name' => $targetPlugins]]);
+		$targets = am([''], $targets);
 
 		$scriptNum = 0;
-		$scriptMessages = array();
+		$scriptMessages = [];
 		foreach ($targets as $target) {
 			$scriptNum += count($this->_getUpdaters($target));
 			$scriptMessages += $this->_getScriptMessages($target);
@@ -121,8 +121,8 @@ class UpdatersController extends AppController {
 			}
 
 			// プラグインを一旦無効化
-			$plugins = $this->Plugin->find('all', array('fields' => array('Plugin.id'), 'conditions' => array('Plugin.status' => true)));
-			$enabledPluginIds = array();
+			$plugins = $this->Plugin->find('all', ['fields' => ['Plugin.id'], 'conditions' => ['Plugin.status' => true]]);
+			$enabledPluginIds = [];
 			foreach ($plugins as $plugin) {
 				$enabledPluginIds[] = $plugin['Plugin']['id'];
 				$plugin['Plugin']['status'] = false;
@@ -139,7 +139,7 @@ class UpdatersController extends AppController {
 
 			// プラグインを有効化
 			foreach ($enabledPluginIds as $pluginId) {
-				$plugin = array();
+				$plugin = [];
 				$plugin['Plugin']['id'] = $pluginId;
 				$plugin['Plugin']['status'] = true;
 				$this->Plugin->set($plugin);
@@ -150,7 +150,7 @@ class UpdatersController extends AppController {
 
 			$this->setMessage('全てのアップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 			$this->_writeUpdateLog();
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		$updateLog = '';
@@ -188,7 +188,7 @@ class UpdatersController extends AppController {
 				$this->setUpdateLog('アップデートスクリプトの実行が完了しました。');
 				$this->_writeUpdateLog();
 				$this->setMessage('アップデートスクリプトの実行が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
-				$this->redirect(array('action' => 'exec_script'));
+				$this->redirect(['action' => 'exec_script']);
 			} else {
 				$this->setMessage('アップデートスクリプトが見つかりません。', true);
 			}
@@ -202,7 +202,7 @@ class UpdatersController extends AppController {
 		}
 
 		$this->pageTitle = 'アップデートスクリプト実行';
-		$plugins = $this->Plugin->find('list', array('fields' => array('name', 'title')));
+		$plugins = $this->Plugin->find('list', ['fields' => ['name', 'title']]);
 		$this->set('plugins', $plugins);
 		$this->set('log', $updateLog);
 	}
@@ -217,7 +217,7 @@ class UpdatersController extends AppController {
 		if (!$name) {
 			$this->notFound();
 		}
-		$title = $this->Plugin->field('title', array('name' => $name));
+		$title = $this->Plugin->field('title', ['name' => $name]);
 		if (!$title) {
 			$this->notFound();
 		}
@@ -235,7 +235,7 @@ class UpdatersController extends AppController {
 			$this->setMessage('アップデート処理が完了しました。<a href="#UpdateLog">アップデートログ</a>を確認してください。');
 			$this->_writeUpdateLog();
 			clearAllCache();
-			$this->redirect(array('action' => 'plugin', $name));
+			$this->redirect(['action' => 'plugin', $name]);
 		}
 
 		$updateLogFile = TMP . 'logs' . DS . 'update.log';
@@ -247,7 +247,7 @@ class UpdatersController extends AppController {
 
 		$targetVersion = $this->getBaserVersion($name);
 		$sourceVersion = $this->getSiteVersion($name);
-		$title = $this->Plugin->field('title', array('name' => $name)) . 'プラグイン';
+		$title = $this->Plugin->field('title', ['name' => $name]) . 'プラグイン';
 		$this->pageTitle = 'データベースアップデート（' . $title . '）';
 
 		$this->set('updateTarget', $title);
@@ -276,13 +276,13 @@ class UpdatersController extends AppController {
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
 		if ($sourceVerPoint === false || $targetVerPoint === false) {
-			return array();
+			return [];
 		}
 
 		if (!$plugin) {
 			$path = BASER_CONFIGS . 'update' . DS;
 			if (!is_dir($path)) {
-				return array();
+				return [];
 			}
 		} else {
 			$paths = App::path('Plugin');
@@ -294,14 +294,14 @@ class UpdatersController extends AppController {
 				$path = null;
 			}
 			if(!$path) {
-				return array();
+				return [];
 			}
 		}
 
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
-		$updaters = array();
-		$updateVerPoints = array();
+		$updaters = [];
+		$updateVerPoints = [];
 		if (!empty($files[0])) {
 			foreach ($files[0] as $folder) {
 				$updateVersion = $folder;
@@ -332,13 +332,13 @@ class UpdatersController extends AppController {
 		$sourceVerPoint = verpoint(preg_replace('/-beta$/', '', $this->getSiteVersion($plugin)));
 
 		if ($sourceVerPoint === false || $targetVerPoint === false) {
-			return array();
+			return [];
 		}
 
 		if (!$plugin) {
 			$path = BASER_CONFIGS . 'update' . DS;
 			if (!is_dir($path)) {
-				return array();
+				return [];
 			}
 		} else {
 			$paths = App::path('Plugin');
@@ -350,14 +350,14 @@ class UpdatersController extends AppController {
 				$path = null;
 			}
 			if(!$path) {
-				return array();
+				return [];
 			}
 		}
 
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
-		$messages = array();
-		$updateVerPoints = array();
+		$messages = [];
+		$updateVerPoints = [];
 		if (!empty($files[0])) {
 			foreach ($files[0] as $folder) {
 				$updateVersion = $folder;
@@ -423,7 +423,7 @@ class UpdatersController extends AppController {
 		if (!$plugin) {
 			$name = 'baserCMSコア';
 		} else {
-			$name = $this->Plugin->field('title', array('name' => $plugin)) . 'プラグイン';
+			$name = $this->Plugin->field('title', ['name' => $plugin]) . 'プラグイン';
 		}
 
 		$this->setUpdateLog($name . ' ' . $targetVersion . ' へのアップデートを開始します。');
@@ -452,7 +452,7 @@ class UpdatersController extends AppController {
 				if ($targetVersion == '1.6.7') {
 					$result = true;
 				} else {
-					$data = $this->Plugin->find('first', array('conditions' => array('name' => $plugin)));
+					$data = $this->Plugin->find('first', ['conditions' => ['name' => $plugin]]);
 					$data['Plugin']['version'] = $targetVersion;
 					$result = $this->Plugin->save($data);
 				}
@@ -524,7 +524,7 @@ class UpdatersController extends AppController {
 			return false;
 		}
 		// アップデートの場合 drop field は実行しない
-		$result = $this->Updater->loadSchema('default', $path, $filterTable, $filterType, array('updater.php'), false);
+		$result = $this->Updater->loadSchema('default', $path, $filterTable, $filterType, ['updater.php'], false);
 		clearAllCache();
 		return $result;
 	}
@@ -548,7 +548,7 @@ class UpdatersController extends AppController {
 		} else {
 			$dbConfigName = 'baser';
 		}
-		return $this->Updater->loadCsv($dbConfigName, $path, array('filterTable' => $filterTable));
+		return $this->Updater->loadCsv($dbConfigName, $path, ['filterTable' => $filterTable]);
 	}
 
 /**

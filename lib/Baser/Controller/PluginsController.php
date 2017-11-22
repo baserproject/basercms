@@ -33,37 +33,37 @@ class PluginsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Plugin');
+	public $uses = ['Plugin'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * ヘルパ
  *
  * @var array
  */
-	public $helpers = array('BcTime', 'BcForm');
+	public $helpers = ['BcTime', 'BcForm'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'プラグイン管理', 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']]
+	];
 
 /**
  * プラグインをアップロードしてインストールする
@@ -72,7 +72,7 @@ class PluginsController extends AppController {
  */
 	public function admin_add() {
 		$this->pageTitle = 'プラグインアップロード';
-		$this->subMenuElements = array('plugins');
+		$this->subMenuElements = ['plugins'];
 
 		//データなし
 		if (empty($this->request->data)) {
@@ -93,7 +93,7 @@ class PluginsController extends AppController {
 			$msg = 'アップロードしたZIPファイルの展開に失敗しました。';
 			$msg .= '<br />' . $BcZip->error;
 			$this->setMessage($msg, true);
-			$this->redirect(array('action' => 'add'));
+			$this->redirect(['action' => 'add']);
 			return;
 		}
 
@@ -108,11 +108,11 @@ class PluginsController extends AppController {
 		$Folder->chmod($srcPluginPath, 0777);
 		$tgtPluginPath = APP . 'Plugin' . DS . Inflector::camelize($plugin);
 		if ($srcPluginPath != $tgtPluginPath) {
-			$Folder->move(array(
+			$Folder->move([
 				'to' => $tgtPluginPath,
 				'from' => $srcPluginPath,
 				'mode' => 0777
-			));
+			]);
 		}
 		unlink(TMP . $zippedName);
 
@@ -121,7 +121,7 @@ class PluginsController extends AppController {
 			clearAllCache();
 			$this->setMessage('新規プラグイン「' . $plugin . '」を baserCMS に登録しました。', false, true);
 			$this->Plugin->addFavoriteAdminLink($plugin, $this->BcAuth->user());
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		} else {
 			$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
 		}
@@ -134,13 +134,13 @@ class PluginsController extends AppController {
  */
 	public function admin_index() {
 		$this->Plugin->cacheQueries = false;
-		$datas = $this->Plugin->find('all', array('order' => 'Plugin.priority'));
+		$datas = $this->Plugin->find('all', ['order' => 'Plugin.priority']);
 		if (!$datas) {
-			$datas = array();
+			$datas = [];
 		}
 
 		// プラグインフォルダーのチェックを行う。
-		$pluginInfos = array();
+		$pluginInfos = [];
 		$paths = App::path('Plugin');
 		foreach ($paths as $path) {
 			$Folder = new Folder($path);
@@ -153,7 +153,7 @@ class PluginsController extends AppController {
 		$pluginInfos = array_values($pluginInfos); // Hash::sortの為、一旦キーを初期化
 		$pluginInfos = array_reverse($pluginInfos); // Hash::sortの為、逆順に変更
 
-		$availables = $unavailables = array();
+		$availables = $unavailables = [];
 		foreach ($pluginInfos as $pluginInfo) {
 			if (isset($pluginInfo['Plugin']['priority'])) {
 				$availables[] = $pluginInfo;
@@ -180,7 +180,7 @@ class PluginsController extends AppController {
 			$this->render('ajax_index');
 		}
 
-		$this->subMenuElements = array('plugins');
+		$this->subMenuElements = ['plugins'];
 		$this->pageTitle = 'プラグイン一覧';
 		$this->help = 'plugins_index';
 	}
@@ -191,7 +191,7 @@ class PluginsController extends AppController {
  * @return void
  */
 	public function admin_ajax_get_market_plugins() {
-		$baserPlugins = array();
+		$baserPlugins = [];
 
 		$cachePath = 'views' . DS . 'baser_market_plugins.rss';
 		if (Configure::read('debug') > 0) {
@@ -211,7 +211,7 @@ class PluginsController extends AppController {
 				cache($cachePath, BcUtil::serialize($baserPlugins));
 				chmod(CACHE . $cachePath, 0666);
 			} else {
-				$baserPlugins = array();
+				$baserPlugins = [];
 			}
 		} else {
 			$baserPlugins = BcUtil::unserialize($baserPlugins);
@@ -337,15 +337,15 @@ class PluginsController extends AppController {
 				$version = $this->getBaserVersion($name);
 			}
 
-			$this->request->data = array('Plugin' => array(
+			$this->request->data = ['Plugin' => [
 				'name' => $name,
 				'title'	=> $title,
 				'status' => true,
 				'version' => $version,
 				'permission' => 1
-			));
+			]];
 
-			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
+			$data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->data['Plugin']['name']]]);
 			if ($data) {
 				$dbInited = $data['Plugin']['db_inited'];
 			}
@@ -358,7 +358,7 @@ class PluginsController extends AppController {
 				$this->Plugin->addFavoriteAdminLink($name, $this->BcAuth->user());
 				$this->_addPermission($this->request->data);
 
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
 			}
@@ -367,7 +367,7 @@ class PluginsController extends AppController {
 		/* 表示設定 */
 		$this->set('installMessage', $installMessage);
 		$this->set('dbInited', $dbInited);
-		$this->subMenuElements = array('plugins');
+		$this->subMenuElements = ['plugins'];
 		$this->pageTitle = '新規プラグイン登録';
 		$this->help = 'plugins_form';
 		$this->render('form');
@@ -386,26 +386,26 @@ class PluginsController extends AppController {
 			$Permission = ClassRegistry::init('Permission');
 		}
 
-		$userGroups = $Permission->UserGroup->find('all', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId')), 'recursive' => -1));
+		$userGroups = $Permission->UserGroup->find('all', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')], 'recursive' => -1]);
 		if ($userGroups) {
 			foreach ($userGroups as $userGroup) {
 				//$permissionAuthPrefix = $Permission->UserGroup->getAuthPrefix($userGroup['UserGroup']['id']);
 				// TODO 現在 admin 固定、今後、mypage 等にも対応する
 				$permissionAuthPrefix = 'admin';
 				$url = '/' . $permissionAuthPrefix . '/' . Inflector::underscore($data['Plugin']['name']) . '/*';
-				$permission = $Permission->find('first', array('conditions' => array('Permission.url' => $url), 'recursive' => -1));
+				$permission = $Permission->find('first', ['conditions' => ['Permission.url' => $url], 'recursive' => -1]);
 				switch ($data['Plugin']['permission']) {
 					case 1:
 						if (!$permission) {
-							$Permission->create(array(
+							$Permission->create([
 								'name'			=> $data['Plugin']['title'] . '管理',
 								'user_group_id'	=> $userGroup['UserGroup']['id'],
 								'auth'			=> true,
 								'status'		=> true,
 								'url'			=> $url,
-								'no'			=> $Permission->getMax('no', array('user_group_id' => $userGroup['UserGroup']['id'])) + 1,
-								'sort'			=> $Permission->getMax('sort', array('user_group_id' => $userGroup['UserGroup']['id'])) + 1
-							));
+								'no'			=> $Permission->getMax('no', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1,
+								'sort'			=> $Permission->getMax('sort', ['user_group_id' => $userGroup['UserGroup']['id']]) + 1
+							]);
 							$Permission->save();
 						}
 						break;
@@ -428,7 +428,7 @@ class PluginsController extends AppController {
 		if (!$this->request->data) {
 			$this->setMessage('無効な処理です。', true);
 		} else {
-			$data = $this->Plugin->find('first', array('conditions' => array('name' => $this->request->data['Plugin']['name'])));
+			$data = $this->Plugin->find('first', ['conditions' => ['name' => $this->request->data['Plugin']['name']]]);
 			$this->Plugin->resetDb($this->request->data['Plugin']['name']);
 			$data['Plugin']['db_inited'] = false;
 			$this->Plugin->set($data);
@@ -438,7 +438,7 @@ class PluginsController extends AppController {
 				clearAllCache();
 				$this->BcAuth->relogin();
 				$this->setMessage($data['Plugin']['title'] . ' プラグインのデータを初期化しました。', false, true);
-				$this->redirect(array('action' => 'install', $data['Plugin']['name']));
+				$this->redirect(['action' => 'install', $data['Plugin']['name']]);
 			} else {
 				$this->setMessage('処理中にエラーが発生しました。プラグインの開発者に確認してください。', true);
 			}
