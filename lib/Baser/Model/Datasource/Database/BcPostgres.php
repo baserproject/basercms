@@ -94,7 +94,7 @@ class BcPostgres extends Postgres {
 		// <<<
 
 		if (!preg_match_all('/([\w\s]+)(?:\((\d+)(?:,(\d+))?\))?(\sunsigned)?(\szerofill)?/', $real, $result)) {
-			$col = str_replace(array(')', 'unsigned'), '', $real);
+			$col = str_replace([')', 'unsigned'], '', $real);
 			$limit = null;
 
 			if (strpos($col, '(') !== false) {
@@ -106,9 +106,9 @@ class BcPostgres extends Postgres {
 			return null;
 		}
 
-		$types = array(
+		$types = [
 			'int' => 1, 'tinyint' => 1, 'smallint' => 1, 'mediumint' => 1, 'integer' => 1, 'bigint' => 1
-		);
+		];
 
 		list($real, $type, $length, $offset, $sign) = $result;
 		$typeArr = $type;
@@ -116,7 +116,7 @@ class BcPostgres extends Postgres {
 		$length = $length[0];
 		$offset = $offset[0];
 
-		$isFloat = in_array($type, array('dec', 'decimal', 'float', 'numeric', 'double'));
+		$isFloat = in_array($type, ['dec', 'decimal', 'float', 'numeric', 'double']);
 		if ($isFloat && $offset) {
 			return $length . ',' . $offset;
 		}
@@ -130,7 +130,7 @@ class BcPostgres extends Postgres {
 			if (!empty($sign)) {
 				$length--;
 			}
-		} elseif (in_array($type, array('enum', 'set'))) {
+		} elseif (in_array($type, ['enum', 'set'])) {
 			$length = 0;
 			foreach ($typeArr as $key => $enumValue) {
 				if ($key === 0) {
@@ -180,7 +180,7 @@ class BcPostgres extends Postgres {
 					"column_default AS default, ordinal_position AS position, character_maximum_length AS char_length," .
 					"character_octet_length AS oct_length FROM information_schema.columns " .
 				"WHERE table_name = ? AND table_schema = ?  ORDER BY position",
-				array($table, $this->config['schema'])
+				[$table, $this->config['schema']]
 			);
 			// <<<
 
@@ -216,7 +216,7 @@ class BcPostgres extends Postgres {
 				if (empty($length)) {
 					$length = null;
 				}
-				$fields[$c->name] = array(
+				$fields[$c->name] = [
 					'type' => $this->column($type),
 					'null' => ($c->null === 'NO' ? false : true),
 					'default' => preg_replace(
@@ -225,7 +225,7 @@ class BcPostgres extends Postgres {
 						preg_replace('/::.*/', '', $c->default)
 					),
 					'length' => $length
-				);
+				];
 				// CUSTOMIZE ADD 2013/08/16 ryuring
 				// >>>
 				if (!$fields[$c->name]['length'] && $fields[$c->name]['type'] == 'integer') {
