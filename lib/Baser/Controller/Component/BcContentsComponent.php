@@ -198,7 +198,7 @@ class BcContentsComponent extends Component {
 		if(BcUtil::isAdminSystem()) {
 			$controller->set('contentsSettings', $this->settings['items']);
 			// パンくずをセット
-			array_unshift($controller->crumbs, array('name' => 'コンテンツ一覧', 'url' => array('plugin' => null, 'controller' => 'contents', 'action' => 'index')));
+			array_unshift($controller->crumbs, ['name' => 'コンテンツ一覧', 'url' => ['plugin' => null, 'controller' => 'contents', 'action' => 'index']]);
 			if($controller->subMenuElements && !in_array('contents', $controller->subMenuElements)) {
 				array_unshift($controller->subMenuElements, 'contents');
 			} else {
@@ -237,7 +237,7 @@ class BcContentsComponent extends Component {
 	public function settingForm(Controller $controller, $currentSiteId, $currentContentId = null) {
 
 		// コントロールソースを設定
-		$options = array();
+		$options = [];
 		if($controller->name == 'ContentFolders') {
 			$options['excludeId'] = $currentContentId;
 		}
@@ -257,7 +257,7 @@ class BcContentsComponent extends Component {
 			if(in_array($parentTemplate, $templates)) {
 				unset($templates[$parentTemplate]);
 			}
-			array_unshift($templates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+			array_unshift($templates, ['' => '親フォルダの設定に従う（' . $parentTemplate . '）']);
 		}
 		$data['Content']['name'] = urldecode($data['Content']['name']);
 		$controller->set('layoutTemplates', $templates);

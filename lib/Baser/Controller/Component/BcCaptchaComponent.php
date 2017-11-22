@@ -125,7 +125,7 @@ class BcCaptchaComponent extends Component {
  * @access	public
  */
 	public function strSplit($str) {
-		$arr = array();
+		$arr = [];
 		if (is_string($str)) {
 			$len = mb_strlen($str, 'UTF-8');
 			for ($i = 0; $i < $len; $i++) {
