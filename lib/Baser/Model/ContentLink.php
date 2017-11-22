@@ -22,7 +22,7 @@ class ContentLink extends AppModel {
  *
  * @var array
  */
-	public $actsAs = array('BcContents');
+	public $actsAs = ['BcContents'];
 
 	/**
 	 * バリデーション

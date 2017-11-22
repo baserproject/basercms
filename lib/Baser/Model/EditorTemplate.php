@@ -29,30 +29,29 @@ class EditorTemplate extends AppModel {
  *
  * @var 	array
  */
-	public $actsAs = array(
-		'BcUpload' => array(
+	public $actsAs = [
+		'BcUpload' => [
 			'saveDir' => "editor",
-			'fields' => array(
-				'image' => array(
+			'fields' => [
+				'image' => [
 					'type' => 'image',
 					'namefield' => 'id',
 					'nameadd' => false,
-					'imageresize' => array('prefix' => 'template', 'width' => '100', 'height' => '100')
-				)
-			)
-		)
-	);
+					'imageresize' => ['prefix' => 'template', 'width' => '100', 'height' => '100']
+				]
+			]
+		]
+	];
 
 /**
  * バリデーション
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'テンプレート名を入力してください。')
-		)
-	);
-	
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
+				'message' => 'テンプレート名を入力してください。']
+		]
+	];
 }

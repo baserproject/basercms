@@ -29,6 +29,6 @@ class SearchIndex extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 }
