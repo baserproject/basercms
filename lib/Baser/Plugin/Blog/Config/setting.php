@@ -13,13 +13,13 @@
 /**
  * システムナビ
  */
-$config['BcApp.adminNavi.blog'] = array(
+$config['BcApp.adminNavi.blog'] = [
 	'name' => 'ブログプラグイン',
-	'contents' => array(
-		array('name' => 'タグ一覧', 'url' => array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index')),
-		array('name' => 'タグ登録', 'url' => array('admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'add')),
-	)
-);
+	'contents' => [
+		['name' => 'タグ一覧', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'index']],
+		['name' => 'タグ登録', 'url' => ['admin' => true, 'plugin' => 'blog', 'controller' => 'blog_tags', 'action' => 'add']],
+	]
+];
 $config['BcContents']['items']['Blog'] = [
 	'BlogContent'	=> [
 		'title' => 'ブログ',

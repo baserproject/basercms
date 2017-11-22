@@ -29,31 +29,31 @@ class BlogConfigsController extends BlogAppController {
  *
  * @var array
  */
-	public $uses = array('User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent');
+	public $uses = ['User', 'Blog.BlogCategory', 'Blog.BlogConfig', 'Blog.BlogContent'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * ぱんくずナビ
  *
  * @var string
  */
-	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
-		array('name' => 'ブログ管理', 'url' => array('controller' => 'blog_contents', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'プラグイン管理', 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']],
+		['name' => 'ブログ管理', 'url' => ['controller' => 'blog_contents', 'action' => 'index']]
+	];
 
 /**
  * before_filter
@@ -63,7 +63,7 @@ class BlogConfigsController extends BlogAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_common');
+			$this->subMenuElements = ['blog_common'];
 		}
 	}
 
