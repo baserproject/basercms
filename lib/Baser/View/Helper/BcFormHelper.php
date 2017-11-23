@@ -1237,11 +1237,24 @@ DOC_END;
  * @param string $fieldName Name attribute of the SELECT
  * @param mixed $selected Selected option
  * @param array $attributes Array of HTML options for the opening SELECT element
+ * @param array $convertKey true value = "value" / false value = "key"
  * @return string 都道府県用のSELECTタグ
  */
-	public function prefTag($fieldName, $selected = null, $attributes = array()) {
+	public function prefTag($fieldName, $selected = null, $attributes = array(), $convertKey = false) {
 
-		$options = $this->BcText->prefList();
+		$prefs = $this->BcText->prefList();
+		if ($convertKey) {
+			$options = array();
+			foreach($prefs as $key => $value) {
+				if ($key) {
+					$options[$value] = $value;
+				} else {
+					$options[$key] = $value;
+				}
+			}
+		} else {
+			$options = $prefs;
+		}
 		$attributes['value'] = $selected;
 		$attributes['empty'] = false;
 		return $this->select($fieldName, $options, $attributes);
