@@ -6,14 +6,11 @@
  * @copyright		Copyright (c) baserCMS Users Community
  * @link			http://basercms.net baserCMS Project
  * @package			Feed.Test.Case
- * @since			baserCMS v 3.0.0
+ * @since			baserCMS v 4.0.9
  * @license			http://basercms.net/license/index.html
  */
 
-/**
- * @package Mail.Test.Case
- */
-class FeedAllTest extends CakeTestSuite {
+class FeedAllControllerTest extends CakeTestSuite {
 
 /**
  * Suite define the tests for this suite
@@ -21,13 +18,8 @@ class FeedAllTest extends CakeTestSuite {
  * @return CakeTestSuite
  */
 	public static function suite() {
-		$suite = new CakeTestSuite('Feed Plugin All Tests');
-
-		$path = dirname(__FILE__) . DS;
-
-		$suite->addTestFile($path . 'FeedAllControllerTest.php');
-		$suite->addTestFile($path . 'FeedAllHelpersTest.php');
-		$suite->addTestFile($path . 'FeedAllModelTest.php');
+		$suite = new CakeTestSuite('All Feed Controller tests');
+		$suite->addTestDirectory(dirname(__FILE__) . DS . 'Controller' . DS);
 		return $suite;
 	}
 
