@@ -362,7 +362,7 @@ class BcSite {
 		}
 		$autoRedirectKey = "{$this->name}_auto_redirect";
 		if (isset($request->query[$autoRedirectKey])
-			&& in_array($request->query[$autoRedirectKey], array('on', 'off'))) {
+			&& in_array($request->query[$autoRedirectKey], ['on', 'off'])) {
 			CakeSession::write($autoRedirectKey, $request->query[$autoRedirectKey]);
 		}
 		if (isset($request->query[$this->name])) {
