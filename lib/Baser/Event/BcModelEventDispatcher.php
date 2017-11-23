@@ -28,7 +28,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-		return array(
+		return [
 			'Model.beforeFind' => 'beforeFind',
 			'Model.afterFind' => 'afterFind',
 			'Model.beforeValidate' => 'beforeValidate',
@@ -37,7 +37,7 @@ class BcModelEventDispatcher extends Object implements CakeEventListener {
 			'Model.afterSave' => 'afterSave',
 			'Model.beforeDelete' => 'beforeDelete',
 			'Model.afterDelete' => 'afterDelete'
-		);
+		];
 	}
 
 /**

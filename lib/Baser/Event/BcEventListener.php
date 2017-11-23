@@ -33,7 +33,7 @@ class BcEventListener extends Object implements CakeEventListener {
  * 
  * @var array
  */
-	public $events = array();
+	public $events = [];
 
 /**
  * レイヤー名
@@ -61,10 +61,10 @@ class BcEventListener extends Object implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-		$events = array();
+		$events = [];
 		if ($this->events) {
 			foreach ($this->events as $key => $registerEvent) {
-				$options = array();
+				$options = [];
 				if(is_array($registerEvent)) {
 					$options = $registerEvent;
 					$registerEvent = $key;
@@ -75,9 +75,9 @@ class BcEventListener extends Object implements CakeEventListener {
 					$registerEvent = Inflector::variable(implode('_', $aryRegisterEvent));
 				}
 				if($options) {
-					$options = array_merge(array('callable' => $registerEvent), $options);
+					$options = array_merge(['callable' => $registerEvent], $options);
 				} else {
-					$options = array('callable' => $registerEvent);
+					$options = ['callable' => $registerEvent];
 				}
 				$events[$eventName] = $options;
 			}
