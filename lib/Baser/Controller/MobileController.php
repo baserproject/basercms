@@ -40,14 +40,14 @@ class MobileController extends AppController {
 				"private, no-cache, no-cache=Set-Cookie, proxy-revalidate");
 			header("Pragma: no-cache");
 			header("Expires: Wed, 17 Sep 1975 21:32:10 GMT");
-			echo join(array(
+			echo join([
 				chr(0x47), chr(0x49), chr(0x46), chr(0x38), chr(0x39), chr(0x61),
 				chr(0x01), chr(0x00), chr(0x01), chr(0x00), chr(0x80), chr(0xff),
 				chr(0x00), chr(0xff), chr(0xff), chr(0xff), chr(0x00), chr(0x00),
 				chr(0x00), chr(0x2c), chr(0x00), chr(0x00), chr(0x00), chr(0x00),
 				chr(0x01), chr(0x00), chr(0x01), chr(0x00), chr(0x00), chr(0x02),
 				chr(0x02), chr(0x44), chr(0x01), chr(0x00), chr(0x3b)
-			));
+			]);
 			exit();
 		}
 		$_GET["utmac"] = str_replace('UA', 'MO', $this->siteConfigs['google_analytics_id']);

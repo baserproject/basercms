@@ -33,34 +33,34 @@ class SiteConfigsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('SiteConfig', 'Page', 'Site');
+	public $uses = ['SiteConfig', 'Page', 'Site'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * ヘルパー
  * @var array
  */
-	public $helpers = array('BcForm', 'BcPage');
+	public $helpers = ['BcForm', 'BcPage'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
+	public $crumbs = [['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
 
 /**
  * beforeFilter
@@ -149,7 +149,7 @@ class SiteConfigsController extends AppController {
 						clearViewCache();
 					}
 
-					$this->redirect(array('action' => 'form'));
+					$this->redirect(['action' => 'form']);
 				}
 			}
 		}
@@ -178,17 +178,17 @@ class SiteConfigsController extends AppController {
 		$baseUrl = str_replace('/index.php', '', BC_BASE_URL);
 
 		$UserGroup = ClassRegistry::init('UserGroup');
-		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
+		$userGroups = $UserGroup->find('list', ['fields' => ['UserGroup.id', 'UserGroup.title']]);
 
-		$disableSettingInstallSetting = array();
+		$disableSettingInstallSetting = [];
 		if (!$writableInstall) {
-			$disableSettingInstallSetting = array('disabled' => 'disabled');
+			$disableSettingInstallSetting = ['disabled' => 'disabled'];
 		}
 
 		$this->set(compact(
 				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
-		$this->subMenuElements = array('site_configs');
+		$this->subMenuElements = ['site_configs'];
 		$this->pageTitle = 'サイト基本設定';
 		$this->help = 'site_configs_form';
 	}
@@ -209,7 +209,7 @@ class SiteConfigsController extends AppController {
 	public function admin_info() {
 		
 		$this->pageTitle = '環境情報';
-		$datasources = array('csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
+		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
 		$db = ConnectionManager::getDataSource('default');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
 		$datasource = preg_replace('/^bc/', '', strtolower($name));
@@ -271,7 +271,7 @@ class SiteConfigsController extends AppController {
 		$this->layout = 'ajax';
 		Configure::write('debug', 0);
 		
-		$specialThanks = array();
+		$specialThanks = [];
 		if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
 			$specialThanks = Cache::read('special_thanks', '_cake_env_');
 		}
