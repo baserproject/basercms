@@ -46,7 +46,7 @@ class BcAuthComponent extends AuthComponent {
 			$serial = $this->getSerial();
 			$Model = $model = $this->getModel();
 			if ($serial) {
-				$user = $Model->find('first', array('conditions' => array($Model->alias . '.' . $this->fields['serial'] => $serial), 'recursive' => -1));
+				$user = $Model->find('first', ['conditions' => [$Model->alias . '.' . $this->fields['serial'] => $serial], 'recursive' => -1]);
 			}
 		}
 		// <<<
@@ -145,7 +145,7 @@ class BcAuthComponent extends AuthComponent {
 		$Db = $UserModel->getDataSource();
 		$Db->flushMethodCache();
 		$UserModel->schema(true);
-		$user = $UserModel->find('first', array('conditions' => array('User.id' => $user['id']), 'recursive' => -1));
+		$user = $UserModel->find('first', ['conditions' => ['User.id' => $user['id']], 'recursive' => -1]);
 		$this->authenticate['Form']['passwordHasher'] = 'BcNo';
 		$this->request->data['User'] = $user['User'];
 		$result = $this->login();

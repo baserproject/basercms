@@ -363,7 +363,7 @@ class Site extends AppModel {
 			$data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
 			if($data) {
 				$data['Site']['main'] = false;
-				$this->save($data, array('validate' => false, 'callbacks' => false));
+				$this->save($data, ['validate' => false, 'callbacks' => false]);
 			}
 		}
 		$this->__changedAlias = false;
@@ -620,7 +620,7 @@ class Site extends AppModel {
  * @param array $options
  * @return bool
  */
-	public function beforeSave($options = array()) {
+	public function beforeSave($options = []) {
 		if(!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
 			$oldAlias = $this->field('alias', ['Site.id' => $this->data[$this->alias]['id']]);
 			if($oldAlias != $this->data[$this->alias]['alias']) {

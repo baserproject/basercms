@@ -24,7 +24,7 @@ class ThemeConfig extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 	
 /**
  * 画像を保存する
@@ -36,7 +36,7 @@ class ThemeConfig extends AppModel {
 		// TODO インストール時にfilesの書き込み権限チェック＆フォルダ作成
 
 		$saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
-		$images = array('logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5');
+		$images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
 		$thumbSuffix = '_thumb';
 		$old = $this->findExpanded();
 
@@ -68,7 +68,7 @@ class ThemeConfig extends AppModel {
  */
 	public function deleteImage($data) {
 		$saveDir = WWW_ROOT . 'files' . DS . 'theme_configs' . DS;
-		$images = array('logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5');
+		$images = ['logo', 'main_image_1', 'main_image_2', 'main_image_3', 'main_image_4', 'main_image_5'];
 		$thumbSuffix = '_thumb';
 		$old = $this->findExpanded();
 		foreach ($images as $image) {
@@ -97,12 +97,12 @@ class ThemeConfig extends AppModel {
 		}
 		$File = new File($configPath);
 		$config = $File->read();
-		$settings = array(
+		$settings = [
 			'MAIN'	=> 'color_main',
 			'SUB'	=> 'color_sub',
 			'LINK'	=> 'color_link',
 			'HOVER'	=> 'color_hover'
-		);
+		];
 		$settingExists = false;
 		foreach($settings as $key => $setting) {
 			if(empty($data['ThemeConfig'][$setting])) {

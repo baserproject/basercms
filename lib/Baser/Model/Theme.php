@@ -38,22 +38,22 @@ class Theme extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'テーマ名を入力してください。'),
-			array('rule' => 'alphaNumericPlus',
-				'message' => 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。'),
-			array('rule' => 'themeDuplicate',
-				'message' => '既に存在するテーマ名です。')
-		),
-		'url' => array(
-			array('rule' => 'halfText',
-				'message' => 'URLは半角英数字のみで入力してください。'),
-			array('rule' => 'url',
-				'message' => 'URLの形式が間違っています。'),
-		)
-	);
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
+				'message' => 'テーマ名を入力してください。'],
+			['rule' => 'alphaNumericPlus',
+				'message' => 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。'],
+			['rule' => 'themeDuplicate',
+				'message' => '既に存在するテーマ名です。']
+		],
+		'url' => [
+			['rule' => 'halfText',
+				'message' => 'URLは半角英数字のみで入力してください。'],
+			['rule' => 'url',
+				'message' => 'URLの形式が間違っています。'],
+		]
+	];
 
 /**
  * テーマ名の重複チェック
@@ -93,7 +93,7 @@ class Theme extends AppModel {
  * @param array $fieldList 保存を許すフィールドの配列
  * @return bool
  */
-	public function save($data = null, $validate = true, $fieldList = array()) {
+	public function save($data = null, $validate = true, $fieldList = []) {
 		if (!$data) {
 			$data = $this->data;
 		} else {

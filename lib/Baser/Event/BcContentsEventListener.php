@@ -83,10 +83,10 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 		if(!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
 			return $event->data['out'];
 		}
-		$output = $View->BcHtml->link('一覧に戻る', array('plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'), array('class' => 'button'));
+		$output = $View->BcHtml->link('一覧に戻る', ['plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'], ['class' => 'button']);
 		$setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
 		if (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder') {
-			$output .= "\n" . $View->BcForm->button('プレビュー', array('class' => 'button', 'id' => 'BtnPreview'));
+			$output .= "\n" . $View->BcForm->button('プレビュー', ['class' => 'button', 'id' => 'BtnPreview']);
 		}
 		$output .= $event->data['out'];
 		if(empty($data['Content']['site_root'])) {
@@ -95,7 +95,7 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 			} else {
 				$deleteText = 'ゴミ箱へ移動';
 			}
-			$output .= $View->BcForm->button($deleteText, array('class' => 'button', 'id' => 'BtnDelete'));
+			$output .= $View->BcForm->button($deleteText, ['class' => 'button', 'id' => 'BtnDelete']);
 		}
 		$event->data['out'] = $output;
 		return $output;

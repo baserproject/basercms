@@ -22,50 +22,50 @@ class SiteConfig extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * バリデーション
  *
  * @var array
  */
-	public $validate = array(
-		'formal_name' => array(
-			'rule' => array('notBlank'),
+	public $validate = [
+		'formal_name' => [
+			'rule' => ['notBlank'],
 			'message' => 'Webサイト名を入力してください。',
 			'required' => true
-		),
-		'name' => array(
-			'rule' => array('notBlank'),
+		],
+		'name' => [
+			'rule' => ['notBlank'],
 			'message' => 'Webサイトタイトルを入力してください。',
 			'required' => true
-		),
-		'email' => array(
-			array('rule' => array('emails'),
-				'message' => '管理者メールアドレスの形式が不正です。'),
-			array('rule' => array('notBlank'),
-				'message' => '管理者メールアドレスを入力してください。')
-		),
-		'mail_encode' => array(
-			'rule' => array('notBlank'),
+		],
+		'email' => [
+			['rule' => ['emails'],
+				'message' => '管理者メールアドレスの形式が不正です。'],
+			['rule' => ['notBlank'],
+				'message' => '管理者メールアドレスを入力してください。']
+		],
+		'mail_encode' => [
+			'rule' => ['notBlank'],
 			'message' => "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。",
 			'required' => true
-		),
-		'site_url' => array(
-			'rule' => array('notBlank'),
+		],
+		'site_url' => [
+			'rule' => ['notBlank'],
 			'message' => "WebサイトURLを入力してください。",
 			'required' => true
-		),
-		'admin_ssl' => array(
-			'rule' => array('sslUrlExists'),
+		],
+		'admin_ssl' => [
+			'rule' => ['sslUrlExists'],
 			'message' => "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
-		),
-		'main_site_display_name' => array(
-			'rule' => array('notBlank'),
+		],
+		'main_site_display_name' => [
+			'rule' => ['notBlank'],
 			'message' => "メインサイト表示名を入力してください。",
 			'required' => false
-		)
-	);
+		]
+	];
 
 /**
  * テーマの一覧を取得する
@@ -73,7 +73,7 @@ class SiteConfig extends AppModel {
  * @return array
  */
 	public function getThemes() {
-		$themes = array();
+		$themes = [];
 		$themeFolder = new Folder(APP . 'View' . DS . 'theme' . DS);
 		$_themes = $themeFolder->read(true, true);
 		foreach ($_themes[0] as $theme) {
@@ -94,7 +94,7 @@ class SiteConfig extends AppModel {
  * @return mixed array | false
  */
 	public function getControlSource($field = null) {
-		$controlSources['mode'] = array(-1 => 'インストールモード', 0 => 'ノーマルモード', 1 => 'デバッグモード１', 2 => 'デバッグモード２', 3 => 'デバッグモード３');
+		$controlSources['mode'] = [-1 => 'インストールモード', 0 => 'ノーマルモード', 1 => 'デバッグモード１', 2 => 'デバッグモード２', 3 => 'デバッグモード３'];
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {

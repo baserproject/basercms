@@ -28,24 +28,24 @@ class WidgetArea extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * バリデーション
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			'notBlank' => array(
-				'rule' => array('notBlank'),
-				'message' => 'ウィジェットエリア名を入力してください。'),
-			'maxLength' => array(
-				'rule' => array('maxLength', 255),
+	public $validate = [
+		'name' => [
+			'notBlank' => [
+				'rule' => ['notBlank'],
+				'message' => 'ウィジェットエリア名を入力してください。'],
+			'maxLength' => [
+				'rule' => ['maxLength', 255],
 				'message' => 'ウィジェットエリア名は255文字以内で入力してください。'
-			)
-		)
-	);
+			]
+		]
+	];
 
 /**
  * コントロールソース取得
@@ -57,7 +57,7 @@ class WidgetArea extends AppModel {
 		if (isset($controllSource[$field])) {
 			return $controllSource[$field];
 		} else {
-			return array();
+			return [];
 		}
 	}
 

@@ -51,30 +51,30 @@ class BcSqlite extends Sqlite {
  *
  * @var array
  */
-	protected $_baseConfig = array(
+	protected $_baseConfig = [
 		'persistent' => false,
 		'database' => null,
 		'connect' => 'sqlite' //sqlite3 in pdo_sqlite is sqlite. sqlite2 is sqlite2
-	);
+	];
 
 /**
  * SQLite3 column definition
  *
  * @var array
  */
-	public $columns = array(
-		'primary_key' => array('name' => 'integer primary key autoincrement'),
-		'string' => array('name' => 'varchar', 'limit' => '255'),
-		'text' => array('name' => 'text'),
-		'integer' => array('name' => 'integer', 'limit' => null, 'formatter' => 'intval'),
-		'float' => array('name' => 'float', 'formatter' => 'floatval'),
-		'datetime' => array('name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
-		'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
-		'time' => array('name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'),
-		'date' => array('name' => 'date', 'format' => 'Y-m-d', 'formatter' => 'date'),
-		'binary' => array('name' => 'blob'),
-		'boolean' => array('name' => 'boolean')
-	);
+	public $columns = [
+		'primary_key' => ['name' => 'integer primary key autoincrement'],
+		'string' => ['name' => 'varchar', 'limit' => '255'],
+		'text' => ['name' => 'text'],
+		'integer' => ['name' => 'integer', 'limit' => null, 'formatter' => 'intval'],
+		'float' => ['name' => 'float', 'formatter' => 'floatval'],
+		'datetime' => ['name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'],
+		'timestamp' => ['name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'],
+		'time' => ['name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'],
+		'date' => ['name' => 'date', 'format' => 'Y-m-d', 'formatter' => 'date'],
+		'binary' => ['name' => 'blob'],
+		'boolean' => ['name' => 'boolean']
+	];
 
 	public $last_error = null;
 
@@ -101,7 +101,7 @@ class BcSqlite extends Sqlite {
 			//$this->connected = is_resource($this->_connection);
 			$this->connected = is_object($this->_connection);
 		} catch (PDOException $e) {
-			$this->last_error = array('Error connecting to database.', $e->getMessage());
+			$this->last_error = ['Error connecting to database.', $e->getMessage()];
 		}
 		return $this->connected;
 	}
@@ -125,7 +125,7 @@ class BcSqlite extends Sqlite {
  * @param string $sql SQL statement
  * @return resource Result resource identifier
  */
-	protected function _execute($sql, $params = array(), $prepareOptions = array()) {
+	protected function _execute($sql, $params = [], $prepareOptions = []) {
 		//echo "runs execute\n";
 		//return sqlite3_query($this->_connection, $sql);
 
@@ -175,9 +175,9 @@ class BcSqlite extends Sqlite {
 		if (!$result || empty($result)) {
 			// 接続をフルパスに戻す
 			$this->config['database'] = $db;
-			return array();
+			return [];
 		} else {
-			$tables = array();
+			$tables = [];
 			foreach ($result as $table) {
 				$tables[] = $table[0]['name'];
 			}
@@ -187,7 +187,7 @@ class BcSqlite extends Sqlite {
 			return $tables;
 		}
 		$this->config['database'] = $db;
-		return array();
+		return [];
 	}
 
 /**
@@ -397,13 +397,13 @@ class BcSqlite extends Sqlite {
 		$limit = null;
 		@list($col, $limit) = explode('(', $col);
 
-		if (in_array($col, array('text', 'integer', 'float', 'boolean', 'timestamp', 'date', 'datetime', 'time'))) {
+		if (in_array($col, ['text', 'integer', 'float', 'boolean', 'timestamp', 'date', 'datetime', 'time'])) {
 			return $col;
 		}
 		if (strpos($col, 'varchar') !== false || strpos($col, 'char') !== false) {
 			return 'string';
 		}
-		if (in_array($col, array('blob', 'clob'))) {
+		if (in_array($col, ['blob', 'clob'])) {
 			return 'binary';
 		}
 		if (strpos($col, 'numeric') !== false) {
@@ -420,7 +420,7 @@ class BcSqlite extends Sqlite {
 	 */
 	public function resultSet($results) {
 		$this->results = $results;
-		$this->map = array();
+		$this->map = [];
 		$numFields = $results->columnCount();
 		$index = 0;
 		$j = 0;
@@ -428,7 +428,7 @@ class BcSqlite extends Sqlite {
 		// PDO::getColumnMeta is experimental and does not work with sqlite3,
 		// so try to figure it out based on the querystring
 		$querystring = $results->queryString;
-		$selects = array();
+		$selects = [];
 		if (stripos($querystring, 'SELECT') === 0 && stripos($querystring, 'FROM') > 0) {
 			$selectpart = substr($querystring, 7);
 			foreach (CakeText::tokenize($selectpart, ',', '(', ')') as $part) {
@@ -440,11 +440,11 @@ class BcSqlite extends Sqlite {
 				$selects[] = $part;
 			}
 		} elseif (strpos($querystring, 'PRAGMA table_info') === 0) {
-			$selects = array('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk');
+			$selects = ['cid', 'name', 'type', 'notnull', 'dflt_value', 'pk'];
 		} elseif (strpos($querystring, 'PRAGMA index_list') === 0) {
-			$selects = array('seq', 'name', 'unique');
+			$selects = ['seq', 'name', 'unique'];
 		} elseif (strpos($querystring, 'PRAGMA index_info') === 0) {
-			$selects = array('seqno', 'cid', 'name');
+			$selects = ['seqno', 'cid', 'name'];
 		}
 
 		$columnMeta = [];
@@ -507,9 +507,9 @@ class BcSqlite extends Sqlite {
 
 			if (strpos($columnName, '.')) {
 				$parts = explode('.', $columnName);
-				$this->map[$index++] = array(trim($parts[0]), trim($parts[1]), $metaType);
+				$this->map[$index++] = [trim($parts[0]), trim($parts[1]), $metaType];
 			} else {
-				$this->map[$index++] = array(0, $columnName, $metaType);
+				$this->map[$index++] = [0, $columnName, $metaType];
 			}
 			$j++;
 		}
@@ -526,7 +526,7 @@ class BcSqlite extends Sqlite {
 			$row = array_shift($this->rows);
 			//echo "fetchResult:nextrow ";
 			//pr($row);
-			$resultRow = array();
+			$resultRow = [];
 			$i = 0;
 
 			foreach ($row as $index => $field) {
@@ -591,7 +591,7 @@ class BcSqlite extends Sqlite {
  */
 	public function buildColumn($column) {
 		$name = $type = null;
-		$column = array_merge(array('null' => true), $column);
+		$column = array_merge(['null' => true], $column);
 		extract($column);
 
 		if (empty($name) || empty($type)) {
@@ -645,7 +645,7 @@ class BcSqlite extends Sqlite {
  * @return string
  */
 	public function buildIndex($indexes, $table = null) {
-		$join = array();
+		$join = [];
 
 		foreach ($indexes as $name => $value) {
 			if ($name == 'PRIMARY') {
@@ -656,7 +656,7 @@ class BcSqlite extends Sqlite {
 					$out .= 'UNIQUE ';
 				}
 				if (is_array($value['column'])) {
-					$value['column'] = join(', ', array_map(array(&$this, 'name'), $value['column']));
+					$value['column'] = join(', ', array_map([&$this, 'name'], $value['column']));
 				} else {
 					$value['column'] = $this->name($value['column']);
 				}
@@ -679,7 +679,7 @@ class BcSqlite extends Sqlite {
 			case 'schema':
 				extract($data);
 
-				foreach (array('columns', 'indexes') as $var) {
+				foreach (['columns', 'indexes'] as $var) {
 					if (is_array(${$var})) {
 						${$var} = "\t" . join(",\n\t", array_filter(${$var}));
 					}
@@ -711,9 +711,9 @@ class BcSqlite extends Sqlite {
 			return false;
 		}
 		$out = '';
-		$colList = array();
+		$colList = [];
 		foreach ($compare as $curTable => $types) {
-			$indexes = array();
+			$indexes = [];
 			if (!$table || $table == $curTable) {
 				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
 				foreach ($types as $type => $column) {
@@ -760,15 +760,15 @@ class BcSqlite extends Sqlite {
  * @return array Fields in table. Keys are column and unique
  */
 	public function index($model) {
-		$index = array();
+		$index = [];
 		$table = $this->fullTableName($model, false, false);
 		if ($table) {
 
 			$tableInfo = $this->query('PRAGMA table_info(' . $table . ')');
-			$primary = array();
+			$primary = [];
 			foreach ($tableInfo as $info) {
 				if (!empty($info[0]['pk'])) {
-					$primary = array('PRIMARY' => array('unique' => true, 'column' => $info[0]['name']));
+					$primary = ['PRIMARY' => ['unique' => true, 'column' => $info[0]['name']]];
 				}
 			}
 
@@ -778,7 +778,7 @@ class BcSqlite extends Sqlite {
 				$keyInfo = $this->query('PRAGMA index_info("' . $key['name'] . '")');
 				foreach ($keyInfo as $keyCol) {
 					if (!isset($index[$key['name']])) {
-						$col = array();
+						$col = [];
 						$index[$key['name']]['column'] = $keyCol[0]['name'];
 						$index[$key['name']]['unique'] = intval($key['unique'] == 1);
 					} else {
@@ -804,7 +804,7 @@ class BcSqlite extends Sqlite {
  * @return array Index alteration statements
  */
 	protected function _alterIndexes($table, $indexes) {
-		return array();
+		return [];
 	}
 
 /**
@@ -840,7 +840,7 @@ class BcSqlite extends Sqlite {
 				foreach ($fields as $fieldName => $column) {
 					switch ($type) {
 						case 'add':
-							if (!$this->addColumn(array('field' => $fieldName, 'table' => $table, 'column' => $column))) {
+							if (!$this->addColumn(['field' => $fieldName, 'table' => $table, 'column' => $column])) {
 								$reuslt = false;
 							}
 							break;
@@ -854,7 +854,7 @@ class BcSqlite extends Sqlite {
 							  } */
 							break;
 						case 'drop':
-							if (!$this->dropColumn(array('field' => $fieldName, 'table' => $table))) {
+							if (!$this->dropColumn(['field' => $fieldName, 'table' => $table])) {
 								$reuslt = false;
 							}
 							break;
@@ -897,7 +897,7 @@ class BcSqlite extends Sqlite {
 
 		$Schema = ClassRegistry::init('CakeSchema');
 		$Schema->connection = $this->configKeyName;
-		$schema = $Schema->read(array('models' => array($model)));
+		$schema = $Schema->read(['models' => [$model]]);
 		if(!empty($schema['tables'][$_table])) {
 			$schema = $schema['tables'][$_table];
 		} else {
@@ -910,13 +910,13 @@ class BcSqlite extends Sqlite {
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if (!$this->renameTable(array('old' => $_table, 'new' => $_table . '_temp'))) {
+		if (!$this->renameTable(['old' => $_table, 'new' => $_table . '_temp'])) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// スキーマのキーを変更（並び順を変えないように）
-		$newSchema = array();
+		$newSchema = [];
 		foreach ($schema as $key => $field) {
 			if ($key == $old) {
 				$key = $new;
@@ -925,7 +925,7 @@ class BcSqlite extends Sqlite {
 		}
 
 		// フィールドを変更した新しいテーブルを作成
-		if (!$this->createTable(array('schema' => $newSchema, 'table' => $_table))) {
+		if (!$this->createTable(['schema' => $newSchema, 'table' => $_table])) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
@@ -979,14 +979,14 @@ class BcSqlite extends Sqlite {
 		$this->execute('BEGIN TRANSACTION;');
 
 		// リネームして一時テーブル作成
-		if (!$this->renameTable(array('old' => $_table, 'new' => $_table . '_temp'))) {
+		if (!$this->renameTable(['old' => $_table, 'new' => $_table . '_temp'])) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
 
 		// フィールドを削除した新しいテーブルを作成
 		unset($schema[$field]);
-		if (!$this->createTable(array('schema' => $schema, 'table' => $_table))) {
+		if (!$this->createTable(['schema' => $schema, 'table' => $_table])) {
 			$this->execute('ROLLBACK;');
 			return false;
 		}
@@ -1047,18 +1047,18 @@ class BcSqlite extends Sqlite {
 		if ($cache != null) {
 			return $cache;
 		}
-		$fields = array();
+		$fields = [];
 		$result = $this->fetchAll('PRAGMA table_info(' . $model->tablePrefix . $model->table . ')');
 
 		foreach ($result as $column) {
-			$fields[$column[0]['name']] = array(
+			$fields[$column[0]['name']] = [
 				'type' => $this->column($column[0]['type']),
 				'null' => !$column[0]['notnull'],
 				'default' => $column[0]['dflt_value'],
 				// sqlite_sequence テーブルの場合、typeがないのでエラーとなるので調整
 				'length' => ($column[0]['type']) ? $this->length($column[0]['type']) : ''
-			);
-			if (in_array($fields[$column[0]['name']]['type'], array('timestamp', 'datetime')) && strtoupper($fields[$column[0]['name']]['default']) === 'CURRENT_TIMESTAMP') {
+			];
+			if (in_array($fields[$column[0]['name']]['type'], ['timestamp', 'datetime']) && strtoupper($fields[$column[0]['name']]['default']) === 'CURRENT_TIMESTAMP') {
 				$fields[$column[0]['name']]['default'] = null;
 			}
 			// SQLiteではdefaultのNULLが文字列として扱われてしまう様子
@@ -1073,14 +1073,14 @@ class BcSqlite extends Sqlite {
 				$fields[$column[0]['name']]['default'] = 0;
 			}*/
 			if ($column[0]['pk'] == 1) {
-				$fields[$column[0]['name']] = array(
+				$fields[$column[0]['name']] = [
 					'type' => $fields[$column[0]['name']]['type'],
 					'null' => false,
 					'default' => $column[0]['dflt_value'],
 					'key' => $this->index['PRI'],
 					// baserCMSのプライマリーキーの初期値は8バイトで統一
 					'length' => 8
-				);
+				];
 			}
 		}
 

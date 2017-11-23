@@ -31,7 +31,7 @@ class InstallationsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Session', 'BcEmail', 'BcManager');
+	public $components = ['Session', 'BcEmail', 'BcManager'];
 
 /**
  * レイアウトパス
@@ -55,7 +55,7 @@ class InstallationsController extends AppController {
  * @var array
  * @access	public
  */
-	public $helpers = array('BcHtml', 'BcForm', 'Js', 'BcTime');
+	public $helpers = ['BcHtml', 'BcForm', 'Js', 'BcTime'];
 
 /**
  * モデル
@@ -112,7 +112,7 @@ class InstallationsController extends AppController {
 					$installationData = Cache::read('Installation', 'default');
 					if (empty($installationData['lastStep'])) {
 						if (Configure::read('debug') == 0) {
-							$this->redirect(array('action' => 'alert'));
+							$this->redirect(['action' => 'alert']);
 						}
 					}
 				}
@@ -250,12 +250,12 @@ class InstallationsController extends AppController {
 				$this->Session->write('Installation.cipherSeed', $cipherSeed);
 
 				// 管理ユーザー登録
-				$user = array(
+				$user = [
 					'name' => $this->request->data['Installation']['admin_username'],
 					'password_1' => $this->request->data['Installation']['admin_password'],
 					'password_2' => $this->request->data['Installation']['admin_confirmpassword'],
 					'email' => $this->request->data['Installation']['admin_email']
-				);
+				];
 
 				if ($this->BcManager->addDefaultUser($user)) {
 					$this->_sendCompleteMail($user['email'], $user['name'], $user['password_1']);
@@ -283,8 +283,8 @@ class InstallationsController extends AppController {
  */
 	protected function _sendCompleteMail($email, $name, $password) {
 		if (DS !== '\\') {
-			$body = array('name' => $name, 'password' => $password, 'siteUrl' => siteUrl());
-			$this->sendMail($email, 'baserCMSインストール完了', $body, array('template' => 'installed', 'from' => $email));
+			$body = ['name' => $name, 'password' => $password, 'siteUrl' => siteUrl()];
+			$this->sendMail($email, 'baserCMSインストール完了', $body, ['template' => 'installed', 'from' => $email]);
 		}
 	}
 
@@ -297,7 +297,7 @@ class InstallationsController extends AppController {
  */
 	public function step5() {
 		$this->pageTitle = 'baserCMSのインストール完了！';
-		Cache::config('default', array('engine' => 'File'));
+		Cache::config('default', ['engine' => 'File']);
 
 		if (!BC_INSTALLED) {
 			$installationData = $this->Session->read('Installation');
@@ -332,7 +332,7 @@ class InstallationsController extends AppController {
 
 			$this->BcManager->installCorePlugin($dbConfig, $dbDataPattern);
 
-			App::build(array('Plugin' => array_merge(array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS), App::path('Plugin'))));
+			App::build(['Plugin' => array_merge([BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Plugin' . DS], App::path('Plugin'))]);
 			$themesPlugins = BcUtil::getCurrentThemesPlugins();
 			if($themesPlugins) {
 				foreach($themesPlugins as $plugin) {
@@ -385,14 +385,14 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _login() {
-		$extra = array();
+		$extra = [];
 		// ログインするとセッションが初期化されてしまうので一旦取得しておく
 		$installationSetting = Cache::read('Installation', 'default');
 		Cache::delete('Installation', 'default');
 		Configure::write('Security.salt', $installationSetting['salt']);
 		$extra['data']['User']['name'] = $installationSetting['admin_username'];
 		$extra['data']['User']['password'] = $installationSetting['admin_password'];
-		$this->requestAction(array('admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login_exec'), $extra);
+		$this->requestAction(['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login_exec'], $extra);
 		$this->Session->write('Installation', $installationSetting);
 	}
 
@@ -418,7 +418,7 @@ class InstallationsController extends AppController {
  */
 	protected function _getDefaultValuesStep3() {
 		$defaultTheme = Configure::read('BcApp.defaultTheme');
-		$data = array();
+		$data = [];
 		if ($this->Session->read('Installation.dbType')) {
 			$_data = $this->_readDbSetting();
 			$data['Installation']['dbType'] = $_data['datasource'];
@@ -426,7 +426,7 @@ class InstallationsController extends AppController {
 			$data['Installation']['dbPort'] = $_data['port'];
 			$data['Installation']['dbPrefix'] = $_data['prefix'];
 			$_data['database'] = basename($_data['database']);
-			$_data['database'] = str_replace(array('.csv', '.db'), '', $_data['database']);
+			$_data['database'] = str_replace(['.csv', '.db'], '', $_data['database']);
 			$_data['database'] = basename($_data['database']);
 			$data['Installation']['dbName'] = $_data['database'];
 			$data['Installation']['dbUsername'] = $_data['login'];
@@ -451,7 +451,7 @@ class InstallationsController extends AppController {
  * @access	protected
  */
 	protected function _getDefaultValuesStep4() {
-		$data = array();
+		$data = [];
 		if ($this->Session->read('Installation.admin_username')) {
 			$data['Installation']['admin_username'] = $this->Session->read('Installation.admin_username');
 		} else {
@@ -477,12 +477,12 @@ class InstallationsController extends AppController {
  * @return array
  * @access	protected
  */
-	protected function _readDbSetting($installationData = array()) {
+	protected function _readDbSetting($installationData = []) {
 		if (!$installationData) {
 			$installationData = $this->Session->read('Installation');
 		}
 
-		$data = array();
+		$data = [];
 		$data['datasource'] = $installationData['dbType'];
 		$data['host'] = $installationData['dbHost'];
 		$data['port'] = $installationData['dbPort'];
@@ -618,7 +618,7 @@ class InstallationsController extends AppController {
  */
 	protected function _getDbSource() {
 		/* DBソース取得 */
-		$dbsource = array();
+		$dbsource = [];
 		$folder = new Folder();
 		$pdoDrivers = PDO::getAvailableDrivers();
 

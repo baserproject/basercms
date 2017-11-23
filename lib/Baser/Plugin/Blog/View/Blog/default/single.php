@@ -13,7 +13,7 @@
 /**
  * [PUBLISH] ブログ詳細ページ
  */
-$this->BcBaser->css(array('Blog.style'), array('inline' => false));
+$this->BcBaser->css(['Blog.style'], ['inline' => false]);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
 
@@ -48,7 +48,7 @@ $(function(){
 			&nbsp;
 	<?php $this->Blog->author($post) ?>
 		</span></div>
-<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 </div>
 
 <!-- contents navi -->

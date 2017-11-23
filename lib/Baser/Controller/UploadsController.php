@@ -29,7 +29,7 @@ class UploadsController extends AppController {
  * モデル
  * @var array
  */
-	public $uses = array();
+	public $uses = [];
 
 /**
  * セッションに保存した一時ファイルを出力する
@@ -56,7 +56,7 @@ class UploadsController extends AppController {
 		} else {
 			$name = $args[0];
 		}
-		$sessioName = str_replace(array('.', '/'), array('_', '_'), $name);
+		$sessioName = str_replace(['.', '/'], ['_', '_'], $name);
 		$sessionData = $this->Session->read('Upload.' . $sessioName);
 
 		Configure::write('debug', 0);
@@ -66,7 +66,7 @@ class UploadsController extends AppController {
 			$this->notFound();
 		}
 
-		$fileInfo = array();
+		$fileInfo = [];
 		if (isset($sessionData['imagecopy'][$size])) {
 			$fileInfo = $sessionData['imagecopy'][$size];
 		} elseif (!empty($sessionData['imageresize'])) {

@@ -22,7 +22,7 @@ class BaserTestCase extends CakeTestCase {
 /**
  * {@inheritDoc}
  */
-	public function __construct($name = null, array $data = array(), $dataName = '') {
+	public function __construct($name = null, array $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 		// ブラウザと、コンソールでCakeRequestの内容が違うので一旦トップページとして初期化する
 		Configure::write('debug', 1);

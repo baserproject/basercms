@@ -27,35 +27,35 @@ class WidgetAreasController extends AppController {
  * コンポーネント
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'RequestHandler'];
 
 /**
  * ヘルパー
  * @var array
  */
-	public $helpers = array('BcForm');
+	public $helpers = ['BcForm'];
 
 /**
  * モデル
  * @var array
  */
-	public $uses = array('WidgetArea', 'Plugin');
+	public $uses = ['WidgetArea', 'Plugin'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'ウィジェットエリア管理', 'url' => array('controller' => 'widget_areas', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'ウィジェットエリア管理', 'url' => ['controller' => 'widget_areas', 'action' => 'index']]
+	];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array('widget_areas');
+	public $subMenuElements = ['widget_areas'];
 
 /**
  * beforeFilter
@@ -100,7 +100,7 @@ class WidgetAreasController extends AppController {
 			$this->WidgetArea->set($this->request->data);
 			if ($this->WidgetArea->save()) {
 				$this->setMessage('新しいウィジェットエリアを保存しました。');
-				$this->redirect(array('action' => 'edit', $this->WidgetArea->getInsertID()));
+				$this->redirect(['action' => 'edit', $this->WidgetArea->getInsertID()]);
 			} else {
 				$this->setMessage('新しいウィジェットエリアの保存に失敗しました。', true);
 			}
@@ -128,19 +128,19 @@ class WidgetAreasController extends AppController {
 		}
 		$this->request->data = $widgetArea;
 
-		$widgetInfos = array(0 => array('title' => 'コアウィジェット', 'plugin' => '', 'paths' => array(BASER_VIEWS . 'Elements' . DS . 'admin' . DS . 'widgets')));
+		$widgetInfos = [0 => ['title' => 'コアウィジェット', 'plugin' => '', 'paths' => [BASER_VIEWS . 'Elements' . DS . 'admin' . DS . 'widgets']]];
 		if (is_dir(APP . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets')) {
 			$widgetInfos[0]['paths'][] = APP . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
 		}
 
-		$plugins = $this->Plugin->find('all', array('conditions' => array('status' => true)));
+		$plugins = $this->Plugin->find('all', ['conditions' => ['status' => true]]);
 
 		if ($plugins) {
-			$pluginWidgets = array();
+			$pluginWidgets = [];
 			$paths = App::path('Plugin');
 			foreach ($plugins as $plugin) {
 				
-				$pluginWidget['paths'] = array();
+				$pluginWidget['paths'] = [];
 				foreach($paths as $path) {
 					$path .= $plugin['Plugin']['name'] . DS . 'View' . DS . 'Elements' . DS . 'admin' . DS . 'widgets';
 					if (is_dir($path)) {
@@ -255,7 +255,7 @@ class WidgetAreasController extends AppController {
 				}
 			}
 		} else {
-			$widgets = array();
+			$widgets = [];
 		}
 		if (!$update) {
 			$widgets[] = $data;

@@ -24,13 +24,13 @@ $this->BcListTable->setColumnNumber(5);
 		<tr>
 			<th style="width:160px" class="list-tool">
                 <div>
-                    <?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $blogContent['BlogContent']['id'])) ?>
+                    <?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>
                 </div>
 <?php if ($this->BcBaser->isAdminUser()): ?>
                 <div>
-                    <?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-                    <?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-                    <?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+                    <?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
+                    <?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
+                    <?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
                 </div>
 <?php endif ?>
             </th>
@@ -60,14 +60,14 @@ $this->BcListTable->setColumnNumber(5);
 				}
 			}
 			$currentDepth = $data['BlogCategory']['depth'];
-			$rowGroupId = array();
+			$rowGroupId = [];
 			foreach ($rowIdTmps as $rowIdTmp) {
 				$rowGroupId[] = 'row-group-' . $rowIdTmp;
 			}
 			$rowGroupClass = ' class="depth-' . $data['BlogCategory']['depth'] . ' ' . implode(' ', $rowGroupId) . '"';
 			?>
 			<?php $currentDepth = $data['BlogCategory']['depth'] ?>
-			<?php $this->BcBaser->element('blog_categories/index_row', array('data' => $data, 'rowGroupClass' => $rowGroupClass)) ?>
+			<?php $this->BcBaser->element('blog_categories/index_row', ['data' => $data, 'rowGroupClass' => $rowGroupClass]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>

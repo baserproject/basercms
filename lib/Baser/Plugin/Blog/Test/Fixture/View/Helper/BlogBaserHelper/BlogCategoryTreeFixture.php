@@ -9,15 +9,15 @@ class BlogCategoryTreeFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('model' => 'Blog.BlogCategory');
+	public $import = ['model' => 'Blog.BlogCategory'];
 
 /**
  * Records
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'blog_content_id' => '1',
 			'no' => '1',
@@ -30,8 +30,8 @@ class BlogCategoryTreeFixture extends CakeTestFixture {
 			'owner_id' => null,
 			'created' => '2017-07-01 18:25:25',
 			'modified' => '2017-07-01 22:15:19'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'blog_content_id' => '1',
 			'no' => '2',
@@ -44,8 +44,8 @@ class BlogCategoryTreeFixture extends CakeTestFixture {
 			'owner_id' => null,
 			'created' => '2017-07-01 21:53:01',
 			'modified' => '2017-07-01 21:53:01'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'blog_content_id' => '1',
 			'no' => '3',
@@ -58,8 +58,8 @@ class BlogCategoryTreeFixture extends CakeTestFixture {
 			'owner_id' => null,
 			'created' => '2017-07-01 21:53:35',
 			'modified' => '2017-07-01 21:53:35'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'blog_content_id' => '3',
 			'no' => '1',
@@ -72,7 +72,7 @@ class BlogCategoryTreeFixture extends CakeTestFixture {
 			'owner_id' => null,
 			'created' => '2017-07-01 22:17:03',
 			'modified' => '2017-07-01 22:17:03'
-		),
-	);
+		],
+	];
 
 }

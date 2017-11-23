@@ -116,7 +116,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  * @return void
  */
 	protected function _paintLinks() {
-		$show = $query = array();
+		$show = $query = [];
 		if (!empty($this->params['case'])) {
 			$show['show'] = 'cases';
 		}
@@ -164,7 +164,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
  * @return array
  */
 	protected function _getQueryLink() {
-		$show = $query = array();
+		$show = $query = [];
 		if (!empty($this->params['case'])) {
 			$show['show'] = 'cases';
 		}
@@ -189,7 +189,7 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		// <<<
 		$show = $this->_queryString($show);
 		$query = $this->_queryString($query);
-		return array($show, $query);
+		return [$show, $query];
 	}
 
 }

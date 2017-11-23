@@ -29,18 +29,18 @@ class Favorite extends AppModel {
  * 
  * @var array
  */
-	public $belongsTo = array(
-		'User' => array(
+	public $belongsTo = [
+		'User' => [
 			'className' => 'User',
 			'foreignKey' => 'user_id'
-	));
+	]];
 
 /**
  * ビヘイビア
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * セッション
@@ -54,12 +54,12 @@ class Favorite extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'url' => array(
-			array('rule' => array('isPermitted'),
-				'message' => 'このURLの登録は許可されていません。')
-		)
-	);
+	public $validate = [
+		'url' => [
+			['rule' => ['isPermitted'],
+				'message' => 'このURLの登録は許可されていません。']
+		]
+	];
 
 /**
  * セッションをセットする

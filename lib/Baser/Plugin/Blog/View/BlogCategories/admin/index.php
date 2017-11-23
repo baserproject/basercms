@@ -13,16 +13,16 @@
 /**
  * [ADMIN] ブログカテゴリ 一覧
  */
-$allowOwners = array();
+$allowOwners = [];
 if (isset($user['user_group_id'])) {
-	$allowOwners = array('', $user['user_group_id']);
+	$allowOwners = ['', $user['user_group_id']];
 }
-$this->BcBaser->js(array(
-	'admin/libs/jquery.baser_ajax_data_list',
+$this->BcBaser->js([
+    'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
-));
+]);
 ?>
 
 
@@ -76,7 +76,7 @@ $(function(){
 	});
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'blog_categories', 'action' => 'ajax_batch', $this->request->pass[0])) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'blog_categories', 'action' => 'ajax_batch', $this->request->pass[0]]) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 <div id="DataList"><?php $this->BcBaser->element('blog_categories/index_list') ?></div>

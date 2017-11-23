@@ -10,27 +10,27 @@ class BlogCommentsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $blog_comments = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
-		'blog_content_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
-		'blog_post_id' => array('type' => 'integer', 'null' => true, 'length' => 8),
-		'no' => array('type' => 'integer', 'null' => true),
-		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'email' => array('type' => 'string', 'null' => true, 'default' => null),
-		'url' => array('type' => 'string', 'null' => true, 'default' => null),
-		'message' => array('type' => 'text', 'null' => true, 'default' => null),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
-	);
+	public $blog_comments = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'],
+		'blog_content_id' => ['type' => 'integer', 'null' => true, 'length' => 8],
+		'blog_post_id' => ['type' => 'integer', 'null' => true, 'length' => 8],
+		'no' => ['type' => 'integer', 'null' => true],
+		'status' => ['type' => 'boolean', 'null' => true, 'default' => null],
+		'name' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+		'email' => ['type' => 'string', 'null' => true, 'default' => null],
+		'url' => ['type' => 'string', 'null' => true, 'default' => null],
+		'message' => ['type' => 'text', 'null' => true, 'default' => null],
+		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
+	];
 
 }

@@ -17,19 +17,19 @@ class DblogsController extends AppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 	
 /**
  * 一覧を取得
  */
 	public function admin_ajax_index() {
 		$this->autoLayout = false;
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('Dblog', array('default' => $default, 'action' => 'admin_index'));
-		$this->paginate = array(
-			'order' => array('Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'),
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('Dblog', ['default' => $default, 'action' => 'admin_index']);
+		$this->paginate = [
+			'order' => ['Dblog.created '=> 'DESC', 'Dblog.id' => 'DESC'],
 			'limit' => $this->passedArgs['num']
-		);
+		];
 		$this->set('dblogs', $this->paginate('Dblog'));
 	}
 
@@ -45,7 +45,7 @@ class DblogsController extends AppController {
 		} else {
 			$this->setMessage('最近の動きのログ削除に失敗しました。', true);
 		}
-		$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
+		$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
 	}
 	
 }

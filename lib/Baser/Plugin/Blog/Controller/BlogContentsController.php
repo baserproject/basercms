@@ -27,30 +27,30 @@ class BlogContentsController extends BlogAppController {
 /**
  * モデル
  *
- * @var array
+ * @var
  */
-	public $uses = array('Blog.BlogContent', 'SiteConfig', 'Blog.BlogCategory');
+	public $uses = ['Blog.BlogContent', 'SiteConfig', 'Blog.BlogCategory'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'BcTime', 'BcForm', 'Blog.Blog');
+	public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'Blog.Blog'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]);
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * before_filter
@@ -60,7 +60,7 @@ class BlogContentsController extends BlogAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('blog_common');
+			$this->subMenuElements = ['blog_common'];
 		}
 	}
 
@@ -107,7 +107,7 @@ class BlogContentsController extends BlogAppController {
 
 				$id = $this->BlogContent->getLastInsertId();
 				$this->setMessage('新規ブログ「' . $this->request->data['BlogContent']['title'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'edit', $id));
+				$this->redirect(['action' => 'edit', $id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -147,7 +147,7 @@ class BlogContentsController extends BlogAppController {
 				if ($this->request->data['BlogContent']['edit_blog_template']) {
 					$this->redirectEditBlog($this->request->data['BlogContent']['template']);
 				} else {
-					$this->redirect(array('action' => 'edit', $id));
+					$this->redirect(['action' => 'edit', $id]);
 				}
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -175,8 +175,8 @@ class BlogContentsController extends BlogAppController {
  */
 	protected function redirectEditLayout($template) {
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . 'Layouts' . DS . $template . $this->ext;
-		$sorces = array(BASER_PLUGINS . 'blog' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
-			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext);
+		$sorces = [BASER_PLUGINS . 'blog' . DS . 'View' . DS . 'Layouts' . DS . $template . $this->ext,
+			BASER_VIEWS . 'Layouts' . DS . $template . $this->ext];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target)) {
 				foreach ($sorces as $source) {
@@ -187,10 +187,10 @@ class BlogContentsController extends BlogAppController {
 					}
 				}
 			}
-			$this->redirect(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'Layouts', $template . $this->ext));
+			$this->redirect(['plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'Layouts', $template . $this->ext]);
 		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 	}
 
@@ -203,23 +203,23 @@ class BlogContentsController extends BlogAppController {
 	protected function redirectEditBlog($template) {
 		$path = 'Blog' . DS . $template;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
-		$sources = array(BASER_PLUGINS . 'Blog' . DS . 'View' . DS . $path);
+		$sources = [BASER_PLUGINS . 'Blog' . DS . 'View' . DS . $path];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target . DS . 'index' . $this->ext)) {
 				foreach ($sources as $source) {
 					if (is_dir($source)) {
 						$folder = new Folder();
 						$folder->create(dirname($target), 0777);
-						$folder->copy(array('from' => $source, 'to' => $target, 'chmod' => 0777, 'skip' => array('_notes')));
+						$folder->copy(['from' => $source, 'to' => $target, 'chmod' => 0777, 'skip' => ['_notes']]);
 						break;
 					}
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array_merge(array('plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'), explode('/', $path . '/index' . $this->ext)));
+			$this->redirect(array_merge(['plugin' => null, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'], explode('/', $path . '/index' . $this->ext)));
 		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 	}
 	

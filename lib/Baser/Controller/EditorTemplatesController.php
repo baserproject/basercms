@@ -31,24 +31,24 @@ class EditorTemplatesController extends AppController {
  * 
  * @var array
  */
-	public $subMenuElements = array('site_configs', 'editor_templates');
+	public $subMenuElements = ['site_configs', 'editor_templates'];
 
 /**
  * パンくず設定
  * 
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-		array('name' => 'エディタテンプレート管理', 'url' => array('controller' => 'editor_templates', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+		['name' => 'エディタテンプレート管理', 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
+	];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * beforeFilter
@@ -84,11 +84,11 @@ class EditorTemplatesController extends AppController {
 			$result = $this->EditorTemplate->save();
 			if ($result) {
 				// EVENT EditorTemplates.afterAdd
-				$this->dispatchEvent('afterAdd', array(
+				$this->dispatchEvent('afterAdd', [
 					'data' => $result
-				));
+				]);
 				$this->setMessage('保存完了');
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('保存中にエラーが発生しました。', true);
 			}
@@ -116,7 +116,7 @@ class EditorTemplatesController extends AppController {
 					'data' => $result
 				]);
 				$this->setMessage('保存完了');
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('保存中にエラーが発生しました。', true);
 			}
@@ -134,7 +134,7 @@ class EditorTemplatesController extends AppController {
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 		$data = $this->EditorTemplate->read(null, $id);
 		if ($this->EditorTemplate->delete($id)) {
@@ -142,7 +142,7 @@ class EditorTemplatesController extends AppController {
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(['action' => 'index']);
 	}
 
 /**

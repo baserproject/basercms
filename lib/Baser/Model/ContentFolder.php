@@ -22,7 +22,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
  *
  * @var array
  */
-	public $actsAs = array('BcContents');
+	public $actsAs = ['BcContents'];
 
 /**
  * 変更前URL
@@ -104,7 +104,7 @@ class ContentFolder extends AppModel implements CakeEventListener {
  * @param array $options
  * @param bool
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		parent::afterSave($created, $options);
 		if(!empty($this->data['Content']['url']) && $this->beforeUrl) {
 			$this->movePageTemplates($this->data['Content']['url']);
@@ -219,20 +219,20 @@ class ContentFolder extends AppModel implements CakeEventListener {
  */
 	public function getParentTemplate($id, $type) {
 		$this->Content->bindModel(
-			array('belongsTo' => array(
-					'ContentFolder' => array(
+			['belongsTo' => [
+					'ContentFolder' => [
 						'className' => 'ContentFolder',
 						'foreignKey' => 'entity_id'
-					)
-				)
-			)
+					]
+				]
+			]
 		, false);
 		$contents = $this->Content->getPath($id, null, 0);
 		$this->Content->unbindModel(
-			array('belongsTo' => array(
+			['belongsTo' => [
 					'ContentFolder'
-				)
-			)
+				]
+			]
 		);
 		$contents = array_reverse($contents);
 		unset($contents[0]);

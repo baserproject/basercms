@@ -25,6 +25,8 @@ class FeedAllTest extends CakeTestSuite {
 
 		$path = dirname(__FILE__) . DS;
 
+		$suite->addTestFile($path . 'FeedAllControllerTest.php');
+		$suite->addTestFile($path . 'FeedAllHelpersTest.php');
 		$suite->addTestFile($path . 'FeedAllModelTest.php');
 		return $suite;
 	}

@@ -26,7 +26,7 @@ class ContentFoldersController extends AppController {
  * @deprecated useViewCache 5.0.0 since 4.0.0
  * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
  */
-	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true, 'useViewCache' => true));
+	public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
 
 /**
  * モデル
@@ -79,12 +79,12 @@ class ContentFoldersController extends AppController {
 			if ($this->ContentFolder->save($this->request->data)) {
 				clearViewCache();
 				$this->setMessage("フォルダ「{$this->request->data['Content']['title']}」を更新しました。", false, true);
-				$this->redirect(array(
+				$this->redirect([
 					'plugin' => '',
 					'controller' => 'content_folders',
 					'action' => 'edit',
 					$entityId
-				));
+				]);
 			} else {
 				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
 			}
@@ -123,11 +123,11 @@ class ContentFoldersController extends AppController {
  */
 	public function view() {
 		$entityId = $this->request->params['entityId'];
-		$data = $this->ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId)));
-		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = array('Content.site_root' => false) + $this->ContentFolder->Content->getConditionAllowPublish();
+		$data = $this->ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $entityId]]);
+		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = ['Content.site_root' => false] + $this->ContentFolder->Content->getConditionAllowPublish();
 		// 公開期間を条件に入れている為、キャッシュをオフにしないとキャッシュが無限増殖してしまう
 		$this->ContentFolder->Content->Behaviors->unload('BcCache');
-		$children = $this->ContentFolder->Content->children($data['Content']['id'], true, array(), 'lft');
+		$children = $this->ContentFolder->Content->children($data['Content']['id'], true, [], 'lft');
 		$this->ContentFolder->Content->Behaviors->load('BcCache');
 		$this->ContentFolder->Content->Behaviors->Tree->settings['Content']['scope'] = null;
 		if($this->BcContents->preview && !empty($this->request->data['Content'])) {
@@ -138,7 +138,7 @@ class ContentFoldersController extends AppController {
 		if(!$folderTemplate) {
 			$folderTemplate = $this->ContentFolder->getParentTemplate($data['Content']['id'], 'folder');
 		}
-		$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']));
+		$this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'content_folders', 'action' => 'edit', $data['ContentFolder']['id'], 'content_id' => $data['Content']['id']]);
 		$this->render($folderTemplate);
 	}
 

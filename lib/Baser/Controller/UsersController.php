@@ -31,28 +31,28 @@ class UsersController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User', 'UserGroup');
+	public $uses = ['User', 'UserGroup'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'BcTime', 'BcForm');
+	public $helpers = ['BcHtml', 'BcTime', 'BcForm'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcReplacePrefix', 'BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail');
+	public $components = ['BcReplacePrefix', 'BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * ぱんくずナビ
@@ -149,7 +149,7 @@ class UsersController extends AppController {
 		}
 
 		/* 表示設定 */
-		$this->crumbs = array();
+		$this->crumbs = [];
 		$this->subMenuElements = '';
 		$this->pageTitle = $pageTitle;
 	}
@@ -166,7 +166,7 @@ class UsersController extends AppController {
 			$this->Session->write('AuthAgent', $user);
 		}
 
-		$result = $this->User->find('first', array('conditions' => array('User.id' => $id), 'recursive' => 0));
+		$result = $this->User->find('first', ['conditions' => ['User.id' => $id], 'recursive' => 0]);
 		$user = $result['User'];
 		unset($user['password']);
 		unset($result['User']);
@@ -218,7 +218,7 @@ class UsersController extends AppController {
  */
 	public function setAuthCookie($data) {
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
-		$cookie = array();
+		$cookie = [];
 		foreach($data[$userModel] as $key => $val) {
 			// savedは除外
 			if ($key !== "saved") {
@@ -316,12 +316,12 @@ class UsersController extends AppController {
 			if ($this->User->save()) {
 
 				$this->request->data['User']['id'] = $this->User->id;
-				$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, array(
+				$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterAdd', $this, [
 					'user' => $this->request->data
-				)));
+				]));
 
 				$this->setMessage('ユーザー「' . $this->request->data['User']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'edit', $this->User->getInsertID()));
+				$this->redirect(['action' => 'edit', $this->User->getInsertID()]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -353,7 +353,7 @@ class UsersController extends AppController {
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		$selfUpdate = false;
@@ -398,19 +398,19 @@ class UsersController extends AppController {
 
 				if ($this->User->save()) {
 
-					$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterEdit', $this, array(
+					$this->getEventManager()->dispatch(new CakeEvent('Controller.Users.afterEdit', $this, [
 						'user' => $this->request->data
-					)));
+					]));
 
 					if ($selfUpdate) {
 						$this->admin_logout();
 					}
 					$this->setMessage('ユーザー「' . $this->request->data['User']['name'] . '」を更新しました。', false, true);
-					$this->redirect(array('action' => 'edit', $id));
+					$this->redirect(['action' => 'edit', $id]);
 				} else {
 
 					// よく使う項目のデータを再セット
-					$user = $this->User->find('first', array('conditions' => array('User.id' => $id)));
+					$user = $this->User->find('first', ['conditions' => ['User.id' => $id]]);
 					unset($user['User']);
 					$this->request->data = array_merge($user, $this->request->data);
 					$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -450,8 +450,8 @@ class UsersController extends AppController {
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if ($this->User->field('user_group_id', array('User.id' => $id)) == Configure::read('BcApp.adminGroupId') &&
-			$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
+		if ($this->User->field('user_group_id', ['User.id' => $id]) == Configure::read('BcApp.adminGroupId') &&
+			$this->User->find('count', ['conditions' => ['User.user_group_id' => Configure::read('BcApp.adminGroupId')]]) == 1) {
 			$this->ajaxError(500, 'このユーザーは削除できません。');
 		}
 
@@ -477,14 +477,14 @@ class UsersController extends AppController {
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		// 最後のユーザーの場合は削除はできない
-		if ($this->User->field('user_group_id', array('User.id' => $id)) == Configure::read('BcApp.adminGroupId') &&
-			$this->User->find('count', array('conditions' => array('User.user_group_id' => Configure::read('BcApp.adminGroupId')))) == 1) {
+		if ($this->User->field('user_group_id', ['User.id' => $id]) == Configure::read('BcApp.adminGroupId') &&
+			$this->User->find('count', ['conditions' => ['User.user_group_id' => Configure::read('BcApp.adminGroupId')]]) == 1) {
 			$this->setMessage('最後の管理者ユーザーは削除する事はできません。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		// メッセージ用にデータを取得
@@ -497,7 +497,7 @@ class UsersController extends AppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(['action' => 'index']);
 	}
 
 /**
@@ -511,7 +511,7 @@ class UsersController extends AppController {
 			$this->notFound();
 		}
 		if($this->BcAuth->user()) {
-			$this->redirect(array('controller' => 'dashboard', 'action' => 'index'));
+			$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
 		}
 		$this->pageTitle = 'パスワードのリセット';
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
@@ -540,7 +540,7 @@ class UsersController extends AppController {
 				return;
 			}
 			$this->setMessage($email . ' 宛に新しいパスワードを送信しました。', false, true);
-			$this->request->data = array();
+			$this->request->data = [];
 		}
 	}
 
