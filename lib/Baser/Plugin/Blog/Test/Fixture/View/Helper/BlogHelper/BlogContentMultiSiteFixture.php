@@ -9,15 +9,15 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('model' => 'Blog.BlogContent');
+	public $import = ['model' => 'Blog.BlogContent'];
 
 /**
  * Records
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'description' => '',
 			'template' => 'default',
@@ -33,8 +33,8 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
 			'use_content' => 1,
 			'created' => '2016-08-07 23:10:38',
 			'modified' => '2017-07-09 19:42:12'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'description' => '',
 			'template' => 'default',
@@ -50,8 +50,8 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
 			'use_content' => 1,
 			'created' => '2017-07-09 19:45:15',
 			'modified' => '2017-07-09 19:49:18'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'description' => '',
 			'template' => 'default',
@@ -67,8 +67,8 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
 			'use_content' => 1,
 			'created' => '2017-07-09 19:49:57',
 			'modified' => '2017-07-09 19:50:16'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'description' => '',
 			'template' => 'default',
@@ -84,8 +84,8 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
 			'use_content' => 1,
 			'created' => '2017-07-09 19:49:57',
 			'modified' => '2017-07-09 19:50:16'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'description' => '',
 			'template' => 'default',
@@ -101,8 +101,8 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
 			'use_content' => 1,
 			'created' => '2017-07-09 19:49:57',
 			'modified' => '2017-07-09 19:50:16'
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'description' => '',
 			'template' => 'default',
@@ -118,7 +118,7 @@ class BlogContentMultiSiteFixture extends CakeTestFixture {
 			'use_content' => 1,
 			'created' => '2017-07-09 19:49:57',
 			'modified' => '2017-07-09 19:50:16'
-		),
-	);
+		],
+	];
 
 }

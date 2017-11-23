@@ -9,15 +9,15 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('model' => 'Content');
+	public $import = ['model' => 'Content'];
 
 /**
  * Records
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => '',
 			'plugin' => 'Core',
@@ -52,8 +52,8 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'blank_link' => 0,
 			'created' => '2017-07-08 13:10:03',
 			'modified' => '2017-07-09 03:38:07'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'name' => 's',
 			'plugin' => 'Core',
@@ -88,8 +88,8 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'blank_link' => 0,
 			'created' => '2017-07-08 13:10:03',
 			'modified' => '2017-07-09 19:44:03'
-		),
-		array(
+		],
+		[
 			'id' => '16',
 			'name' => 'blog1',
 			'plugin' => 'Blog',
@@ -124,8 +124,8 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'blank_link' => 0,
 			'created' => '2017-07-08 13:10:03',
 			'modified' => '2017-07-09 19:42:12'
-		),
-		array(
+		],
+		[
 			'id' => '21',
 			'name' => 'blog2',
 			'plugin' => 'Blog',
@@ -160,8 +160,8 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'blank_link' => 0,
 			'created' => '2017-07-09 19:45:16',
 			'modified' => '2017-07-09 19:49:18'
-		),
-		array(
+		],
+		[
 			'id' => '22',
 			'name' => 'blog3',
 			'plugin' => 'Blog',
@@ -196,7 +196,7 @@ class ContentBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'blank_link' => 0,
 			'created' => '2017-07-09 19:49:57',
 			'modified' => '2017-07-09 19:50:16'
-		),
-	);
+		],
+	];
 
 }

@@ -16,8 +16,8 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture {
  *
  * @var array
  */
-  public $records = array(
-    array(
+  public $records = [
+    [
       'id' => '1',
       'blog_content_id' => '1',
       'no' => '1',
@@ -35,8 +35,8 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture {
       'eye_catch' => '',
       'created' => '2017-02-01 12:57:59',
       'modified' => '2016-01-02 12:57:59'
-    ),
-    array(
+    ],
+    [
       'id' => '2',
       'blog_content_id' => '1',
       'no' => '2',
@@ -54,8 +54,8 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture {
       'eye_catch' => '',
       'created' => '2016-02-02 12:57:59',
       'modified' => '2016-02-02 12:57:59'
-    ),
-    array(
+    ],
+    [
       'id' => '3',
       'blog_content_id' => '1',
       'no' => '1',
@@ -73,7 +73,7 @@ class BlogPostBlogBaserHelperFixture extends BaserTestFixture {
       'eye_catch' => '',
       'created' => '2016-01-02 12:57:59',
       'modified' => '2016-01-02 12:57:59'
-    )
-  );
+    ]
+  ];
 
 }
