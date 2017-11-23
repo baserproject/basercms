@@ -26,8 +26,8 @@
 
 <div class="align-center">
 	<?php echo $this->BcForm->create('BlogPost', ['url' => ['action' => 'import'], 'enctype' => 'multipart/form-data']) ?>
-	<?php echo $this->BcForm->input('Import.blog_content_id', array('type' => 'select', 'options' => $blogContentList)) ?>
-	<?php echo $this->BcForm->input('Import.user_id', array('type' => 'select', 'options' => $userList)) ?>
-	<?php echo $this->BcForm->input('Import.file', array('type' => 'file')) ?>
-	<?php echo $this->BcForm->end(array('label' => '取り込む', 'div' => false, 'class' => 'btn-orange button')) ?>
+	<?php echo $this->BcForm->input('Import.blog_content_id', ['type' => 'select', 'options' => $blogContentList]) ?>
+	<?php echo $this->BcForm->input('Import.user_id', ['type' => 'select', 'options' => $userList]) ?>
+	<?php echo $this->BcForm->input('Import.file', ['type' => 'file']) ?>
+	<?php echo $this->BcForm->end(['label' => '取り込む', 'div' => false, 'class' => 'btn-orange button']) ?>
 </div>

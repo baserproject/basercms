@@ -30,7 +30,7 @@ class BlogBaserHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-	public $helpers = array('Blog.Blog', 'BcBaser');
+	public $helpers = ['Blog.Blog', 'BcBaser'];
 
 /**
  * ブログ記事一覧出力
@@ -86,7 +86,7 @@ class BlogBaserHelper extends AppHelper {
  * 	※ パラメーターは、contentTemplate / template 以外、BlogBaserHelper::blogPosts() に準ずる
  * @return mixed
  */
-	public function getBlogPosts($contentsName = [], $num = 5, $options = array()) {
+	public function getBlogPosts($contentsName = [], $num = 5, $options = []) {
 		return $this->Blog->getPosts($contentsName, $num, $options);
 	}
 
@@ -163,7 +163,7 @@ class BlogBaserHelper extends AppHelper {
  *  - `postCount` : 公開記事数を取得するかどうか (初期値:false)
  * @return mixed false|array Blogの基本情報
  */
-	public function getBlogs($name = '', $options = array()) {
+	public function getBlogs($name = '', $options = []) {
 		return $this->Blog->getContents($name, $options);
 	}
 

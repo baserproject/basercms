@@ -17,7 +17,7 @@ $title = '最近の投稿';
 $description = 'ブログの最近の投稿を表示します。';
 ?>
 <?php echo $this->BcForm->label($key . '.count', '表示数') ?>&nbsp;
-<?php echo $this->BcForm->input($key . '.count', array('type' => 'text', 'size' => 6, 'default' => 5)) ?>&nbsp;件<br />
+<?php echo $this->BcForm->input($key . '.count', ['type' => 'text', 'size' => 6, 'default' => 5]) ?>&nbsp;件<br />
 <?php echo $this->BcForm->label($key . '.blog_content_id', 'ブログ') ?>&nbsp;
-<?php echo $this->BcForm->input($key . '.blog_content_id', array('type' => 'select', 'options' => $this->BcForm->getControlSource('Blog.BlogContent.id'))) ?><br />
+<?php echo $this->BcForm->input($key . '.blog_content_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('Blog.BlogContent.id')]) ?><br />
 <small>ブログページを表示している場合は、上記の設定に関係なく、対象ブログの最近の投稿を表示します。</small>
