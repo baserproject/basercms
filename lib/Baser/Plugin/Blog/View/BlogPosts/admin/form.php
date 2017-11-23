@@ -70,7 +70,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.blog_category_id', 'カテゴリー') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogPost.blog_category_id', ['type' => 'select', 'options' => $categories, 'escape' => false]) ?>&nbsp;
+				<?php echo $this->BcForm->input('BlogPost.blog_category_id', ['type' => 'select', 'options' => $categories, 'escape' => true]) ?>&nbsp;
 				<?php if($hasNewCategoryAddablePermission): ?>
 					<?php echo $this->BcForm->button('新しいカテゴリを追加', ['id' => 'BtnAddBlogCategory']) ?>
 				<?php endif ?>

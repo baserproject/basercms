@@ -77,7 +77,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 					echo $this->BcForm->input('BlogCategory.parent_id', [
 						'type' => 'select',
 						'options' => $parents,
-						'escape' => false])
+						'escape' => true])
 					?>
 			<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
 				</td>
