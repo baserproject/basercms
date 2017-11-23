@@ -22,29 +22,29 @@ class Plugin extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * バリデーション
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('alphaNumericPlus'),
+	public $validate = [
+		'name' => [
+			['rule' => ['alphaNumericPlus'],
 				'message' => 'プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。',
-				'required' => true),
-			array('rule' => array('isUnique'),
+				'required' => true],
+			['rule' => ['isUnique'],
 				'on' => 'create',
-				'message' => '指定のプラグインは既に使用されています。'),
-			array('rule' => array('maxLength', 50),
-				'message' => 'プラグイン名は50文字以内としてください。')
-		),
-		'title' => array(
-			array('rule' => array('maxLength', 50),
-				'message' => 'プラグインタイトルは50文字以内とします。')
-		)
-	);
+				'message' => '指定のプラグインは既に使用されています。'],
+			['rule' => ['maxLength', 50],
+				'message' => 'プラグイン名は50文字以内としてください。']
+		],
+		'title' => [
+			['rule' => ['maxLength', 50],
+				'message' => 'プラグインタイトルは50文字以内とします。']
+		]
+	];
 
 /**
  * データベースを初期化する
@@ -57,25 +57,25 @@ class Plugin extends AppModel {
  * @param string $filterType 更新タイプ指定
  * @return bool
  */
-	public function initDb($pluginName = '', $options = array()) {
+	public function initDb($pluginName = '', $options = []) {
 		if(!is_array($options)) {
 			// @deprecated 5.0.0 since 4.0.0 baserCMS３まで第二引数がプラグイン名だったが、第一引数にプラグイン名を設定するように変更。元の第一引数は不要
 			$this->log('メソッド：Plugin::initDb()は、バージョン 4.0.0 より引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。', LOG_ALERT);
 			$pluginName = $options;
 			$options = [];
 		}
-		$options = array_merge(array(
+		$options = array_merge([
 			'loadCsv'		=> true,
 			'filterTable'	=> '',
 			'filterType'	=> 'create',
 			'dbDataPattern'	=> ''
-		), $options);
-		return parent::initDb($pluginName, array(
+		], $options);
+		return parent::initDb($pluginName, [
 			'loadCsv'		=> $options['loadCsv'],
 			'filterTable'	=> $options['filterTable'],
 			'filterType'	=> $options['filterType'],
 			'dbDataPattern'	=> $options['dbDataPattern']
-		));
+		]);
 	}
 
 /**
@@ -156,7 +156,7 @@ class Plugin extends AppModel {
 					copy($path . DS . $file, $tmpdir . $table . '.php');
 				}
 
-				if (!$db->loadSchema(array('type' => $type, 'path' => $schemaPath, 'file' => $table . '.php', 'dropField' => true, 'oldSchemaPath' => $oldSchemaPath))) {
+				if (!$db->loadSchema(['type' => $type, 'path' => $schemaPath, 'file' => $table . '.php', 'dropField' => true, 'oldSchemaPath' => $oldSchemaPath])) {
 					$result = false;
 				}
 				@unlink($tmpdir . $table . '.php');
@@ -184,9 +184,9 @@ class Plugin extends AppModel {
 			$pluginName = $options;
 			$options = [];
 		}
-		$options = array_merge(array(
+		$options = array_merge([
 			'filterTable'	=> '',
-		), $options);
+		], $options);
 		return $this->initDb($plugin, $options);
 	}
 
@@ -199,14 +199,14 @@ class Plugin extends AppModel {
 	public function hasDuplicateValue($fieldName) {
 		$this->cacheQueries = false;
 
-		$duplication = $this->find('all', array(
-			'fields' => array(
+		$duplication = $this->find('all', [
+			'fields' => [
 				"{$this->alias}.{$fieldName}"
-			),
-			'group' => array(
+			],
+			'group' => [
 				"{$this->alias}.{$fieldName} HAVING COUNT({$this->alias}.id) > 1"
-			)
-		));
+			]
+		]);
 
 		return !empty($duplication);
 	}
@@ -218,9 +218,9 @@ class Plugin extends AppModel {
  */
 	public function rearrangePriorities() {
 		$this->cacheQueries = false;
-		$datas = $this->find('all', array(
+		$datas = $this->find('all', [
 			'order' => 'Plugin.priority'
-		));
+		]);
 
 		$count = count($datas);
 		for ($i = 0; $i < $count; $i++) {
@@ -241,7 +241,7 @@ class Plugin extends AppModel {
  * @param array $conditions find条件
  * @return bool
  */
-	public function changePriority($id, $offset, $conditions = array()) {
+	public function changePriority($id, $offset, $conditions = []) {
 		$offset = intval($offset);
 		if ($offset === 0) {
 			return true;
@@ -253,24 +253,24 @@ class Plugin extends AppModel {
 		// 一時的にキャッシュをOFFする
 		$this->cacheQueries = false;
 
-		$current = $this->findById($id, array("{$alias}.id", "{$alias}.{$field}"));
+		$current = $this->findById($id, ["{$alias}.id", "{$alias}.{$field}"]);
 
 		// currentを含め変更するデータを取得
 		if ($offset > 0) { // DOWN
-			$order = array("{$alias}.{$field}");
+			$order = ["{$alias}.{$field}"];
 			$conditions["{$alias}.{$field} >="] = $current[$alias][$field];
 		} else { // UP
-			$order = array("{$alias}.{$field} DESC");
+			$order = ["{$alias}.{$field} DESC"];
 			$conditions["{$alias}.{$field} <="] = $current[$alias][$field];
 		}
 
-		$datas = $this->find('all', array(
+		$datas = $this->find('all', [
 			'conditions' => $conditions,
-			'fields' => array("{$alias}.id", "{$alias}.{$field}", "{$alias}.name"),
+			'fields' => ["{$alias}.id", "{$alias}.{$field}", "{$alias}.name"],
 			'order' => $order,
 			'limit' => abs($offset) + 1,
 			'recursive' => -1
-		));
+		]);
 
 		if (empty($datas)) {
 			return false;
@@ -320,7 +320,7 @@ class Plugin extends AppModel {
  */
 	public function getPluginInfo($datas, $file) {
 		$plugin = basename($file);
-		$pluginData = array();
+		$pluginData = [];
 		$exists = false;
 		foreach ($datas as $data) {
 			if ($plugin == $data['Plugin']['name']) {
@@ -415,7 +415,7 @@ class Plugin extends AppModel {
 	{
 		$plugin = $this->findByName($pluginName);
 		$dirPath = $this->getDirectoryPath($pluginName);
-		$pluginInfo = $this->getPluginInfo(array($plugin), $dirPath);
+		$pluginInfo = $this->getPluginInfo([$plugin], $dirPath);
 
 		//リンクが設定されていない
 		if (empty($pluginInfo['Plugin']['admin_link'])) {
@@ -446,16 +446,16 @@ class Plugin extends AppModel {
 		}
 
 		//すでにお気に入りにリンクが含まれている場合
-		if ($this->Favorite->find('count', array('conditions' => array('Favorite.url' => $adminLinkUrl, 'Favorite.user_id' => $user['id']))) > 0) {
+		if ($this->Favorite->find('count', ['conditions' => ['Favorite.url' => $adminLinkUrl, 'Favorite.user_id' => $user['id']]]) > 0) {
 			return;
 		}
 
-		$favorite = array(
+		$favorite = [
 			'name' => $pluginInfo['Plugin']['title'] . '管理',
 			'url' => $adminLinkUrl,
 			'sort' => $this->Favorite->getMax('sort') + 1,
 			'user_id' => $user['id'],
-		);
+		];
 
 		$this->Favorite->create($favorite);
 		$this->Favorite->save();

@@ -23,7 +23,7 @@ class Page extends AppModel {
  *
  * @var array
  */
-	public $actsAs = array('BcSearchIndexManager', 'BcCache', 'BcContents');
+	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
 
 /**
  * 更新前のページファイルのパス
@@ -98,7 +98,7 @@ class Page extends AppModel {
  * @param array $options
  * @return boolean
  */
-	public function beforeSave($options = array()) {
+	public function beforeSave($options = []) {
 		if (!$this->fileSave) {
 			return true;
 		}
@@ -106,9 +106,9 @@ class Page extends AppModel {
 		// 保存前のページファイルのパスを取得
 		if ($this->exists() && !empty($this->data['Content'])) {
 			$this->oldPath = $this->getPageFilePath(
-				$this->find('first', array(
-					'conditions' => array('Page.id' => $this->data['Page']['id']),
-					'recursive' => 0)
+				$this->find('first', [
+					'conditions' => ['Page.id' => $this->data['Page']['id']],
+					'recursive' => 0]
 				)
 			);
 		} else {
@@ -163,7 +163,7 @@ class Page extends AppModel {
  * @param array $options
  * @return boolean
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 
 		$data = $this->data;
 		// タイトルタグと説明文を追加
@@ -387,7 +387,7 @@ class Page extends AppModel {
  * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
  */
 	public function addBaserPageTag($id, $contents, $title, $description, $code) {
-		$tag = array();
+		$tag = [];
 		$tag[] = '<!-- BaserPageTagBegin -->';
 		$title = str_replace("'", "\'", str_replace("\\", "\\\\'", $title));
 		$description = str_replace("'", "\'", str_replace("\\", "\\\\'", $description));
@@ -411,7 +411,7 @@ class Page extends AppModel {
  * @param array $options
  * @return mixed $controlSource コントロールソース
  */
-	public function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = []) {
 		switch ($field) {
 			case 'user_id':
 			case 'author_id':
@@ -454,7 +454,7 @@ class Page extends AppModel {
 		$folderName = basename($targetPath);
 
 		if ($folderName == 'templates') {
-			return array('all' => 0, 'insert' => 0, 'update' => 0);
+			return ['all' => 0, 'insert' => 0, 'update' => 0];
 		}
 		$basePath = APP . 'View' . DS . 'Pages';
 		$url = str_replace($basePath, '', $targetPath);
@@ -504,7 +504,7 @@ class Page extends AppModel {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
 			$entityId = $this->Content->field('entity_id', ['Content.url' => $url, 'Content.type' => 'ContentFolder']);
 			if ($entityId) {
-				$content = $ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId), 'recursive' => 0));
+				$content = $ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $entityId], 'recursive' => 0]);
 				$contentId = $content['Content']['id'];
 				if ($folderTitle != -1) {
 					$content['Content']['title'] = $folderTitle;
@@ -534,7 +534,7 @@ class Page extends AppModel {
 
 		// ファイル読み込み・ページ登録
 		if (!$files[1]) {
-			$files[1] = array();
+			$files[1] = [];
 		}
 		foreach ($files[1] as $path) {
 			if (preg_match('/' . preg_quote(Configure::read('BcApp.templateExt')) . '$/is', $path) == false) {
@@ -575,7 +575,7 @@ class Page extends AppModel {
 			} else {
 				$conditions['Content.parent_id'] = 1;
 			}
-			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => 0));
+			$page = $this->find('first', ['conditions' => $conditions, 'recursive' => 0]);
 			if ($page) {
 				$chage = false;
 				if ($title != $page['Content']['title']) {
@@ -623,7 +623,7 @@ class Page extends AppModel {
 
 		// フォルダー内の登録
 		if (!$files[0]) {
-			$files[0] = array();
+			$files[0] = [];
 		}
 		foreach ($files[0] as $file) {
 			$folderName = basename($file);
@@ -634,7 +634,7 @@ class Page extends AppModel {
 				$all += $result['all'];
 			}
 		}
-		return array('all' => $all, 'insert' => $insert, 'update' => $update);
+		return ['all' => $all, 'insert' => $insert, 'update' => $update];
 	}
 
 /**
@@ -652,12 +652,12 @@ class Page extends AppModel {
 		}
 
 		if ($this->_pages == -1) {
-			$pages = $this->find('all', array(
+			$pages = $this->find('all', [
 				'fields'	=> 'Content.url',
 				'recursive' => 1
-			));
+			]);
 			if (!$pages) {
-				$this->_pages = array();
+				$this->_pages = [];
 				return false;
 			}
 			$this->_pages = Hash::extract($pages, '{n}.Content.url');

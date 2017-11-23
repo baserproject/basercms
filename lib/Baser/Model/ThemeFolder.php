@@ -36,17 +36,17 @@ class ThemeFolder extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => 'テーマフォルダ名を入力してください。',
-				'required' => true),
-			array('rule' => array('halfText'),
-				'message' => 'テーマフォルダ名は半角のみで入力してください。'),
-			array('rule' => array('duplicateThemeFolder'),
-				'message' => '入力されたテーマフォルダ名は、同一階層に既に存在します。')
-		)
-	);
+				'required' => true],
+			['rule' => ['halfText'],
+				'message' => 'テーマフォルダ名は半角のみで入力してください。'],
+			['rule' => ['duplicateThemeFolder'],
+				'message' => '入力されたテーマフォルダ名は、同一階層に既に存在します。']
+		]
+	];
 
 /**
  * フォルダの重複チェック
