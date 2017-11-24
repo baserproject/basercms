@@ -536,6 +536,9 @@ class ContentsController extends AppController {
  * @return bool|mixed
  */
 	protected function _changeStatus($id, $status) {
+		// EVENT Contents.beforeChangeStatus
+		$this->dispatchEvent('beforeChangeStatus', ['id' => $id, 'status' => $status]);
+
 		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 		if(!$content) {
 			return false;
@@ -545,7 +548,12 @@ class ContentsController extends AppController {
 		$content['Content']['self_publish_begin'] = '';
 		$content['Content']['self_publish_end'] = '';
 		$content['Content']['self_status'] = $status;
-		return (bool) $this->Content->save($content, false);
+		$result = (bool) $this->Content->save($content, false);
+
+		// EVENT Contents.afterChangeStatus
+		$this->dispatchEvent('afterChangeStatus', ['id' => $id, 'result' => $result]);
+
+		return $result;
 	}
 	
 /**

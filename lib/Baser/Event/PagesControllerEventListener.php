@@ -29,7 +29,8 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		'Contents.beforeMove',
 		'Contents.afterMove',
 		'Contents.beforeDelete',
-		'Contents.afterTrashReturn'
+		'Contents.afterTrashReturn',
+		'Contents.afterChangeStatus'
 	];
 
 /**
@@ -141,6 +142,22 @@ class PagesControllerEventListener extends BcControllerEventListener {
 			$this->Page->createPageTemplate($data);
 			$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 		}
+	}
+
+/**
+ * Contents After Change Status
+ *
+ * 一覧から公開設定を変更した場合に固定ページの検索インデックスを更新する事が目的
+ *
+ * @param CakeEvent $event
+ */
+	public function contentsAfterChangeStatus(CakeEvent $event) {
+		if(empty($event->data['result'])) {
+			return;
+		}
+		$id = $event->data['id'];
+		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
+		$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 	}
 	
 }
