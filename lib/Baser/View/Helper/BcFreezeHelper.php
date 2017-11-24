@@ -33,7 +33,6 @@ class BcFreezeHelper extends BcFormHelper {
  * @return void
  */
 	public function freeze() {
-
 		$this->freezed = true;
 	}
 
