@@ -452,7 +452,12 @@ class SearchIndicesController extends AppController {
  */
 	public function admin_reconstruct() {
 		set_time_limit(0);
-		$contents = $this->Content->find('all', ['order' => 'lft', 'recursive' => -1]);
+		$contents = $this->Content->find('all', [
+			'conditions' => [
+				'OR' => [
+					['Site.status' => null],
+					['Site.status' => true],
+		]], 'order' => 'lft', 'recursive' => 2]);
 		$models = [];
 		$db = $this->SearchIndex->getDataSource();
 		$this->SearchIndex->begin();

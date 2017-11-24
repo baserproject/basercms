@@ -672,9 +672,9 @@ class PageTest extends BaserTestCase {
 
 	public function getContentFolderPathDataProvider() {
 		return [
-			[1, '/vagrant/app/View/Pages/'],
-			[2, '/vagrant/app/View/Pages/mobile/'],
-			[3, '/vagrant/app/View/Pages/smartphone/'],
+			[1, APP . 'View/Pages/'],
+			[2, APP . 'View/Pages/mobile/'],
+			[3, APP . 'View/Pages/smartphone/'],
 			[4, false],
 		];
 	}
