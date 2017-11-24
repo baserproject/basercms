@@ -657,5 +657,26 @@ class PageTest extends BaserTestCase {
 			['/hoge', false, false],
 		];
 	}
+
+/**
+ * コンテンツフォルダのパスを取得する
+ *
+ * @param $id
+ * @param $expects
+ * @dataProvider getContentFolderPathDataProvider
+ */
+	public function testGetContentFolderPath($id, $expects) {
+		BcSite::flash();
+		$this->assertEquals($expects, $this->Page->getContentFolderPath($id));
+	}
+
+	public function getContentFolderPathDataProvider() {
+		return [
+			[1, '/vagrant/app/View/Pages/'],
+			[2, '/vagrant/app/View/Pages/mobile/'],
+			[3, '/vagrant/app/View/Pages/smartphone/'],
+			[4, false],
+		];
+	}
 	
 }

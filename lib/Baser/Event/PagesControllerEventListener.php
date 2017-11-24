@@ -118,7 +118,7 @@ class PagesControllerEventListener extends BcControllerEventListener {
  * @param CakeEvent $event
  */
 	public function contentsBeforeDelete(CakeEvent $event) {
-		$id = $event->data;
+		$id = $event->data['data'];
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if($data) {
 			$this->Page->delFile($data);

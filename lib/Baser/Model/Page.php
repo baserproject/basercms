@@ -894,5 +894,32 @@ class Page extends AppModel {
 		}
 		return $record;
 	}
+
+/**
+ * コンテンツフォルダのパスを取得する
+ *
+ * @param $id
+ * @return bool|string
+ */
+	public function getContentFolderPath($id) {
+		$path = APP . 'View' . DS . 'Pages';
+		$content = $this->Content->find('first', ['conditions' => ['Content.type' => 'ContentFolder', 'Content.id' => $id], 'recursive' => -1]);
+		if(empty($content['Content']['id'])) {
+			return false;
+		}
+		$url = $this->Content->createUrl($id, 'Core', 'ContentFolder');
+		if(!$url) {
+			return false;
+		}
+		if($url != '/') {
+			if($content['Content']['site_id'] != 0) {
+				$site = BcSite::findByUrl($url);
+				if($site) {
+					$url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $site->name . '/', $url);
+				}
+			}
+		}
+		return $path . $url;
+	}
 	
 }
