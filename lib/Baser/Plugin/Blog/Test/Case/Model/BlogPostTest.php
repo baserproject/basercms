@@ -318,7 +318,7 @@ public function getDefaultValue() {
 
 	public function getControlSourceDataProvider() {
 		return [
-			[['blogContentId' => 1], [1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ']],
+			[['blogContentId' => 1], [1 => 'プレスリリース', 2 => '　　　└子カテゴリ', 3 => '親子関係なしカテゴリ']],
 			[['blogContentId' => 2], [4 => 'プレスリリース']]
 		];
 	}

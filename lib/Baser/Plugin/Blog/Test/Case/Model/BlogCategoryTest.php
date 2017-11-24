@@ -155,14 +155,14 @@ class BlogCategoryTest extends BaserTestCase {
 		return [
 			['parent_id', ['blogContentId' => 1], [
 				1 => 'プレスリリース',
-				2 => '&nbsp&nbsp&nbsp└子カテゴリ',
+				2 => '　　　└子カテゴリ',
 				3 => '親子関係なしカテゴリ']],
 			['parent_id', ['blogContentId' => 0], []],
 			['parent_id', ['blogContentId' => 1, 'excludeParentId' => true], [3 => '親子関係なしカテゴリ']],
 			['parent_id', ['blogContentId' => 1, 'ownerId' => 2], []],
 			['parent_id', ['blogContentId' => 1, 'ownerId' => 1], [
 				1 => 'プレスリリース',
-				2 => '&nbsp&nbsp&nbsp└子カテゴリ',
+				2 => '　　　└子カテゴリ',
 				3 => '親子関係なしカテゴリ']],
 			['owner_id', [], [
 				1 => 'システム管理',
