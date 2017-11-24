@@ -251,16 +251,6 @@ class Page extends AppModel {
 	}
 
 /**
- * beforeDelete
- *
- * @param $cascade
- * @return boolean
- */
-	public function beforeDelete($cascade = true) {
-		return $this->deleteSearchIndex($this->id);
-	}
-
-/**
  * DBデータを元にページテンプレートを全て生成する
  * 
  * @return boolean

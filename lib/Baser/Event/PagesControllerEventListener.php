@@ -108,11 +108,12 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		]);
 		$this->Page->oldPath = $this->oldPath;	
 		$this->Page->createPageTemplate($data);
+		$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 	}
 
 /**
  * Contents Before Delete
- * 
+ *
  * ゴミ箱に入れた固定ページのテンプレートの削除が目的
  * 
  * @param CakeEvent $event
@@ -122,6 +123,7 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if($data) {
 			$this->Page->delFile($data);
+			$this->Page->deleteSearchIndex($data['Page']['id']);
 		}
 	}
 
@@ -137,6 +139,7 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if($data) {
 			$this->Page->createPageTemplate($data);
+			$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 		}
 	}
 	

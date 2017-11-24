@@ -17,6 +17,7 @@ App::uses('BcEventListener', 'Event');
  * 
  * @package Baser.Event
  * @property Page $Page
+ * @property ContentFolder $ContentFolder
  */
 class ContentFoldersControllerEventListener extends BcControllerEventListener {
 
@@ -47,6 +48,14 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 	public $Page = null;
 
 /**
+ * コンテンツフォルダーモデル
+ *
+ * @var bool|null|object
+ */
+	public $ContentFolder = null;
+
+/**
+ *
  * ContentFoldersControllerEventListener constructor.
  */
 	public function __construct() {
@@ -54,6 +63,7 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 		// DB接続ができない場合、処理がコントローラーまで行き着かない為、try で実行
 		try {
 			$this->Page = ClassRegistry::init('Page');
+			$this->ContentFolder = ClassRegistry::init('ContentFolder');
 		} catch (Exception $e) {}
 	}
 
@@ -92,6 +102,7 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 			}
 			$page = $this->Page->find('first', ['conditions' => ['Page.id' => $content['Content']['entity_id']], 'recursive' => 0]);
 			$this->Page->createPageTemplate($page);
+			$this->Page->saveSearchIndex($this->Page->createSearchIndex($page));
 		}
 		$Folder = new Folder($this->oldPath);
 		$Folder->delete();
@@ -111,6 +122,15 @@ class ContentFoldersControllerEventListener extends BcControllerEventListener {
 			$path = $this->Page->getContentFolderPath($id);
 			$Folder = new Folder($path);
 			$Folder->delete();
+			$Controller = $event->subject();
+			$contents = $Controller->Content->children($id, false, ['type', 'entity_id'], 'Content.lft', null, 1, 1);
+			foreach($contents as $content) {
+				if($content['Content']['type'] !== 'Page') {
+					continue;
+				}
+				$page = $this->Page->find('first', ['conditions' => ['Page.id' => $content['Content']['entity_id']], 'recursive' => 0]);
+				$this->Page->deleteSearchIndex($page['Page']['id']);
+			}
 		}
 	}
 	
