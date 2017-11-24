@@ -500,9 +500,6 @@ class BcFormHelperTest extends BaserTestCase {
 		];
 	}
 
-	public function testSelect() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
 /**
  * 文字列保存用複数選択コントロール
  * 
@@ -770,7 +767,37 @@ class BcFormHelperTest extends BaserTestCase {
 
 		$this->assertTags($result, $expected);
 	}
-	public function testGetId() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+/**
+ * フォームのIDを取得する
+ *
+ * @dataProvider getIdDataProvider
+ */
+	public function testGetId($Model, $expected) {
+		$this->BcForm->create($Model);
+		$this->assertEquals($expected, $this->BcForm->getId());
+	}
+
+	public function getIdDataProvider() {
+		return [
+			['', 'addForm'],
+			['hogehoge', 'hogehogeAddForm'],
+			['CakeSchema', 'CakeSchemaAddForm'],
+			['Content', 'ContentAddForm'],
+			['EditTemplate', 'EditTemplateAddForm'],
+			['Favorite', 'FavoriteAddForm'],
+			['Member', 'MemberAddForm'],
+			['Page', 'PageAddForm'],
+			['Plugin', 'PluginAddForm'],
+			['Site', 'SiteAddForm'],
+			['SiteConfig', 'SiteConfigAddForm'],
+			['Theme', 'ThemeAddForm'],
+			['ThemeFile', 'ThemeFileAddForm'],
+			['ThemeFolder', 'ThemeFolderAddForm'],
+			['Tool', 'ToolAddForm'],
+			['Updater', 'UpdaterAddForm'],
+			['User', 'UserAddForm'],
+			['UserGroup', 'UserGroupAddForm']
+		];
 	}
 }
