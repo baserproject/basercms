@@ -261,38 +261,6 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, 'フォームの初期値が正しくありません');
 	}
 
-
-/**
- * afterFind
- *
- * @param array 結果セット
- * @param array $primary
- */
-	public function testAfterFind() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-		// $results = $this->User->find('all');
-		// $result = $this->User->afterFind($results, true);
-		// $this->assertEquals($expected, $result, $message);
-	}
-
-/**
- * 取得結果を変換する
- * HABTM対応
- *
- * @param array 結果セット
- */
-	public function testConvertResults() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * View用のデータを取得する
- */
-	public function testConvertToView() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 /**
  * ユーザーが許可されている認証プレフィックスを取得する
  *

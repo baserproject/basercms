@@ -192,58 +192,6 @@ class User extends AppModel {
 	}
 
 /**
- * afterFind
- *
- * @param array 結果セット
- * @param array $primary
- * @return array 結果セット
- */
-	public function afterFind($results, $primary = false) {
-		if (isset($results[0][$this->alias][0])) {
-			$results[0][$this->alias] = $this->convertResults($results[0][$this->alias]);
-		} else {
-			$results = $this->convertResults($results);
-		}
-		return parent::afterFind($results, $primary);
-	}
-
-/**
- * 取得結果を変換する
- * HABTM対応
- *
- * @param array 結果セット
- * @return array 結果セット
- */
-	public function convertResults($results) {
-		if ($results) {
-			if (isset($result[$this->alias]) || isset($results[0][$this->alias])) {
-				foreach ($results as $key => $result) {
-					if (isset($result[$this->alias])) {
-						if ($result[$this->alias]) {
-							$results[$key][$this->alias] = $this->convertToView($result[$this->alias]);
-						}
-					} elseif (!empty($result)) {
-						$results[$key] = $this->convertToView($result);
-					}
-				}
-			} else {
-				$results = $this->convertToView($results);
-			}
-		}
-		return $results;
-	}
-
-/**
- * View用のデータを取得する
- *
- * @param array 結果セット
- * @return array 結果セット
- */
-	public function convertToView($data) {
-		return $data;
-	}
-
-/**
  * ユーザーが許可されている認証プレフィックスを取得する
  *
  * @param string $userName ユーザーの名前
