@@ -261,38 +261,6 @@ class UserTest extends BaserTestCase {
 		$this->assertEquals($expected, $result, 'フォームの初期値が正しくありません');
 	}
 
-
-/**
- * afterFind
- *
- * @param array 結果セット
- * @param array $primary
- */
-	public function testAfterFind() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
-		// $results = $this->User->find('all');
-		// $result = $this->User->afterFind($results, true);
-		// $this->assertEquals($expected, $result, $message);
-	}
-
-/**
- * 取得結果を変換する
- * HABTM対応
- *
- * @param array 結果セット
- */
-	public function testConvertResults() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
-/**
- * View用のデータを取得する
- */
-	public function testConvertToView() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
-
 /**
  * ユーザーが許可されている認証プレフィックスを取得する
  *
@@ -370,10 +338,10 @@ class UserTest extends BaserTestCase {
  * ユーザーに関連するよく使う項目を削除する
  */
 	public function testDeleteFavorites() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$this->User->Favorite->deleteAll(1);
-		$result = $this->User->Favorite->find('all');
-		$expected = [];
-		$this->assertEquals($expected, $result, 'ユーザーに関連するよく使う項目を削除できません');
+		$user = $this->User->find('first', ['conditions' => ['User.id' => 1]]);
+		$this->assertTrue(isset($user['Favorite'][0]['id']), 'ユーザーに関連するよく使う項目の削除対象がありません。');
+		$this->User->deleteFavorites(1);
+		$user = $this->User->find('first', ['conditions' => ['User.id' => 1]]);
+		$this->assertFalse(isset($user['Favorite'][0]['id']), 'ユーザーに関連するよく使う項目を削除できません。');
 	}
 }
