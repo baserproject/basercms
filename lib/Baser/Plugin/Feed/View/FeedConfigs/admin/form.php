@@ -12,20 +12,12 @@
 
 /**
  * [ADMIN] フィード設定 フォーム
+ *
+ * @var BcAppView $this
  */
+$this->BcBaser->js('Feed.admin/feed_configs/form', false);
 ?>
 
-
-<script type="text/javascript">
-$(function(){
-	$("#EditTemplate").click(function(){
-		if(confirm('フィード設定を保存して、テンプレート '+$("#FeedConfigTemplate").val()+' の編集画面に移動します。よろしいですか？')){
-			$("#FeedConfigEditTemplate").val(true);
-			$("#FeedConfigAdminEditForm").submit();
-		}
-	});
-});
-</script>
 
 <?php echo $this->BcForm->create('FeedConfig') ?>
 
@@ -109,7 +101,7 @@ $(function(){
 				<?php echo $this->BcForm->input('FeedConfig.template', array('type' => 'select', 'options' => $this->Feed->getTemplates())) ?>
 				<?php echo $this->BcForm->input('FeedConfig.edit_template', array('type' => 'hidden')) ?>
 				<?php if ($this->action == 'admin_edit'): ?>
-					<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditTemplate')) ?>
+					&nbsp;<?php $this->BcBaser->link('編集する', 'javascript:void(0)', ['id' => 'EditTemplate', 'class' => 'button-small']) ?>&nbsp;
 				<?php endif ?>
 				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 				<?php echo $this->BcForm->error('FeedConfig.template') ?>

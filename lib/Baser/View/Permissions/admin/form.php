@@ -12,7 +12,10 @@
 
 /**
  * [ADMIN] ユーザーグループ登録/編集フォーム
+ *
+ * @var BcAppView $this
  */
+$this->BcBaser->js('admin/permissions/form', false);
 ?>
 
 

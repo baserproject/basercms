@@ -12,7 +12,10 @@
 
 /**
  * [ADMIN] ユーザーグループ登録/編集フォーム
+ *
+ * @var BcAppView $this
  */
+$this->BcBaser->js('admin/user_groups/form', false);
 $authPrefixes = array();
 foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 	$authPrefixes[$key] = $authPrefix['name'];

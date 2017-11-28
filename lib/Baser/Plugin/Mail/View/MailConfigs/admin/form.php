@@ -13,8 +13,10 @@
 /**
  * [ADMIN] メール設定 フォーム
  */
+$this->BcBaser->js('Mail.admin/mail_configs/form', false);
 ?>
-<!-- form -->
+
+
 <h2>基本項目</h2>
 
 <?php echo $this->BcForm->create('MailConfig', ['url' => ['action' => 'form']]) ?>
@@ -80,6 +82,6 @@
 
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
-<div class="submit"><?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?></div>
+<div class="submit"><?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?></div>
 
 <?php echo $this->BcForm->end() ?>

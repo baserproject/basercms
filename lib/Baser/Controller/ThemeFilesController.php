@@ -248,6 +248,7 @@ class ThemeFilesController extends AppController {
 		$this->pageTitle = '[' . Inflector::camelize($theme) . '] ' . $this->_tempalteTypes[$type] . ' 作成';
 		$this->crumbs[] = ['name' => $this->_tempalteTypes[$type], 'url' => ['controller' => 'theme_files', 'action' => 'index', $theme, $type]];
 		$this->subMenuElements = ['theme_files'];
+		$this->set('isWritable', is_writable($fullpath));
 		$this->set('currentPath', str_replace(ROOT, '', $fullpath));
 		$this->set('theme', $theme);
 		$this->set('plugin', $plugin);
@@ -605,6 +606,7 @@ class ThemeFilesController extends AppController {
 		$this->pageTitle = '[' . $theme . '] フォルダ作成：　' . $path;
 		$this->subMenuElements = ['theme_files'];
 		$this->set('currentPath', str_replace(ROOT, '', $fullpath));
+		$this->set('isWritable', is_writable($fullpath));
 		$this->set('theme', $theme);
 		$this->set('plugin', $plugin);
 		$this->set('type', $type);
@@ -850,7 +852,7 @@ class ThemeFilesController extends AppController {
 		} else {
 			$this->setMessage('コアフォルダ ' . basename($path) . ' のコピーに失敗しました。', true);
 		}
-		$this->redirect(array_merge([['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
+		$this->redirect(array_merge(['action' => 'view_folder', $theme, $plugin, $type], explode('/', $path)));
 	}
 
 /**

@@ -12,6 +12,8 @@
 
 /**
  * [ADMIN] ユーザー フォーム
+ *
+ * @var BcAppView $this
  */
 $this->BcBaser->js('admin/users/edit', false);
 ?>

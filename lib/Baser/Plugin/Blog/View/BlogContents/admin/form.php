@@ -159,7 +159,7 @@ $this->BcBaser->js('Blog.admin/blog_contents/edit', false);
 				?>
 <?php echo $this->BcForm->input('BlogContent.edit_blog_template', ['type' => 'hidden']) ?>
 <?php if ($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', ['id' => 'EditBlogTemplate']) ?>
+	&nbsp;<?php $this->BcBaser->link('編集する', 'javascript:void(0)', ['id' => 'EditBlogTemplate', 'class' => 'button-small']) ?>&nbsp;
 <?php endif ?>
 <?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 <?php echo $this->BcForm->error('BlogContent.template') ?>

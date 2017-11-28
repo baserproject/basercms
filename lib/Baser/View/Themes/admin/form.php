@@ -12,7 +12,10 @@
 
 /**
  * [ADMIN] テーマ フォーム
+ *
+ * @var BcAppView $this
  */
+$this->BcBaser->js('admin/themes/form');
 ?>
 
 

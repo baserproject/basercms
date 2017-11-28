@@ -14,7 +14,7 @@
  * [ADMIN] テーマ設定編集
  */
 $this->BcBaser->css('admin/colpick', array('inline' => false));
-$this->BcBaser->js('admin/vendors/colpick', false);
+$this->BcBaser->js(['admin/vendors/colpick', 'admin/theme_configs/form'], false);
 ?>
 
 
@@ -115,7 +115,7 @@ $(function(){
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('class' => 'button')) ?>
+	<?php echo $this->BcForm->submit('保存', array('class' => 'button', 'id' => 'BtnSave')) ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

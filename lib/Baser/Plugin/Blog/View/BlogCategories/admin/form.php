@@ -13,6 +13,7 @@
 /**
  * [ADMIN] ブログカテゴリ フォーム
  */
+$this->BcBaser->js('Blog.admin/blog_categories/form', false);
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->value('BlogCategory.name');
 ?>
@@ -118,7 +119,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <!-- button -->
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button']) ?>
+	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
 		$this->BcBaser->link('削除', ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')], ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);

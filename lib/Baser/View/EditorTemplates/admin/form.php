@@ -13,8 +13,9 @@
 /**
  * [ADMIN] エディタテンプレートー登録・編集
  * 
- * @var \BcAppView $this
+ * @var BcAppView $this
  */
+$this->BcBaser->js('admin/editor_templates/form', false);
 ?>
 
 

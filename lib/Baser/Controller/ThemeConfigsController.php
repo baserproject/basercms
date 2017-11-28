@@ -14,6 +14,7 @@
  * テーマ設定コントローラー
  *
  * @package Baser.Controller
+ * @property ThemeConfig $ThemeConfig
  */
 class ThemeConfigsController extends AppController {
 
@@ -70,7 +71,7 @@ class ThemeConfigsController extends AppController {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			} else {
 				$this->ThemeConfig->updateColorConfig($this->request->data);
-				$data = $this->ThemeConfisg->saveImage($this->request->data);
+				$data = $this->ThemeConfig->saveImage($this->request->data);
 				$data = $this->ThemeConfig->deleteImage($data);
 				foreach($data['ThemeConfig'] as $key => $value) {
 					if(preg_match('/main_image_[0-9]_delete/', $key)) {

@@ -12,10 +12,14 @@
 
 /**
  * [ADMIN] テーマファイル登録・編集
+ *
+ * @var BcAppView $this
  */
+$this->BcBaser->js('admin/themes/form');
 $params = explode('/', $path);
 ?>
-<!-- current -->
+
+
 <div class="em-box align-left">
 	現在の位置：<?php echo $currentPath ?>
 </div>
