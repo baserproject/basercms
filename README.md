@@ -12,6 +12,7 @@ Copyright (c) baserCMS Users Community
 Documentation
 -------------
 
+- See [baserCMS Core Development Project](http://project.e-catchup.jp/projects/basercms Issues)
 - See [baserCMS Official](http://basercms.net/)
 - See [baserCMS Users Community](http://basercms.net/community)
 - See [baserCMS Users Manual](http://doc.basercms.net/)
@@ -20,7 +21,6 @@ Documentation
 - See [baserCMS Users Forum](http://forum.basercms.net/)
 - See [baserCMS Development Guideline](https://github.com/baserproject/basercms-docs)
 - See [baserCMS Specifications](https://github.com/baserproject/basercms-docs)
-- See [baserCMS Core Development Project](http://project.e-catchup.jp/projects/basercms) 
 - See [CakePHP - the rapid development PHP framework](http://cakephp.jp)
 
 
