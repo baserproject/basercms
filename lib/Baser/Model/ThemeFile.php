@@ -49,7 +49,7 @@ class ThemeFile extends AppModel {
 		if (!$check[key($check)]) {
 			return true;
 		}
-		$targetPath = $this->data['ThemeFile']['parent'] . DS . $check[key($check)];
+		$targetPath = $this->data['ThemeFile']['parent'] . $check[key($check)] . '.' . $this->data['ThemeFile']['ext'];
 		if (is_file($targetPath)) {
 			return false;
 		} else {
