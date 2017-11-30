@@ -19,6 +19,8 @@ class SitesSchema extends CakeSchema {
 		'alias' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
 		'theme' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
 		'status' => ['type' => 'boolean', 'null' => true, 'default' => null],
+		'keyword' => ['type' => 'text', 'null' => true, 'default' => null],
+		'description' => ['type' => 'text', 'null' => true, 'default' => null],
 		'use_subdomain' => ['type' => 'boolean', 'null' => true, 'default' => '0'],
 		'relate_main_site' => ['type' => 'boolean', 'null' => true, 'default' => null],
 		'device' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'],
