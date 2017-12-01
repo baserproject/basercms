@@ -170,7 +170,7 @@ if($this->BcContents->isEditable()) {
 				</td>
 			</tr>
 			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('Content.self_status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
+				<th class="col-head"><?php echo $this->BcForm->label('Content.self_status', '公開状態') ?></th>
 				<td class="col-input">
 					<?php if(!$disableEdit): ?>
 						<?php echo $this->BcForm->input('Content.self_status', array('type' => 'radio', 'options' => $this->BcText->booleanDoList('公開'))) ?>
@@ -178,9 +178,9 @@ if($this->BcContents->isEditable()) {
 						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList('公開')) ?>
 						<?php echo $this->BcForm->hidden('Content.self_status') ?>
 					<?php endif ?>
-					&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;<small>[公開期間]</small>&nbsp;
 					<?php if(!$disableEdit): ?>
-						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
+                        <?php echo $this->BcForm->dateTimePicker('Content.self_publish_begin', array('size' => 12, 'maxlength' => 10), true) ?>
 						&nbsp;〜&nbsp;
 						<?php echo $this->BcForm->dateTimePicker('Content.self_publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
 					<?php else: ?>

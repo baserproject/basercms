@@ -142,11 +142,11 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 		</tr>
 		<?php endif ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.status', '公開状態') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('BlogPost.status', '公開状態') ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('BlogPost.status', ['type' => 'radio', 'options' => $statuses]) ?>
 				<?php echo $this->BcForm->error('BlogPost.status') ?>
-				&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;<small>[公開期間]</small>&nbsp;
 				<?php echo $this->BcForm->dateTimePicker('BlogPost.publish_begin', ['size' => 12, 'maxlength' => 10], true) ?>
 				&nbsp;〜&nbsp;
 				<?php echo $this->BcForm->dateTimePicker('BlogPost.publish_end', ['size' => 12, 'maxlength' => 10], true) ?><br />
