@@ -45,6 +45,9 @@ class ThemeFileTest extends BaserTestCase {
 		$this->ThemeFile->create([
 			'ThemeFile' => [
 				'name' => '',
+				'parent' => '',
+				'ext' => 'php',
+				'contents' => ''
 			]
 		]);
 		$this->assertFalse($this->ThemeFile->validates());
@@ -56,7 +59,9 @@ class ThemeFileTest extends BaserTestCase {
 		$this->ThemeFile->create([
 			'ThemeFile' => [
 				'name' => 'baser',
-				'parent' => 'hoge'
+				'parent' => 'hoge',
+				'ext' => 'php',
+				'contents' => ''
 			]
 		]);
 		$this->assertTrue($this->ThemeFile->validates());
@@ -65,8 +70,10 @@ class ThemeFileTest extends BaserTestCase {
 	public function test重複チェック異常系() {
 		$this->ThemeFile->create([
 			'ThemeFile' => [
-				'name' => 'config.php',
+				'name' => 'config',
 				'parent' => WWW_ROOT . 'theme/nada-icons/',
+				'ext' => 'php',
+				'contents' => ''
 			]
 		]);
 		$this->assertFalse($this->ThemeFile->validates());
