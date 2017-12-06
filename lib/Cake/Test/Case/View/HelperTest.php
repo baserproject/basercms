@@ -41,15 +41,15 @@ class HelperTestPost extends Model {
  * @return void
  */
 	public function schema($field = false) {
-		$this->_schema = array(
-			'id' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-			'title' => array('type' => 'string', 'null' => false, 'default' => '', 'length' => '255'),
-			'body' => array('type' => 'string', 'null' => true, 'default' => '', 'length' => ''),
-			'number' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-			'date' => array('type' => 'date', 'null' => true, 'default' => '', 'length' => ''),
-			'created' => array('type' => 'date', 'null' => true, 'default' => '', 'length' => ''),
-			'modified' => array('type' => 'datetime', 'null' => true, 'default' => '', 'length' => null)
-		);
+		$this->_schema = [
+			'id' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+			'title' => ['type' => 'string', 'null' => false, 'default' => '', 'length' => '255'],
+			'body' => ['type' => 'string', 'null' => true, 'default' => '', 'length' => ''],
+			'number' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+			'date' => ['type' => 'date', 'null' => true, 'default' => '', 'length' => ''],
+			'created' => ['type' => 'date', 'null' => true, 'default' => '', 'length' => ''],
+			'modified' => ['type' => 'datetime', 'null' => true, 'default' => '', 'length' => null]
+		];
 		return $this->_schema;
 	}
 
@@ -58,7 +58,7 @@ class HelperTestPost extends Model {
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array('HelperTestTag' => array('with' => 'HelperTestPostsTag'));
+	public $hasAndBelongsToMany = ['HelperTestTag' => ['with' => 'HelperTestPostsTag']];
 }
 
 /**
@@ -81,15 +81,15 @@ class HelperTestComment extends Model {
  * @return void
  */
 	public function schema($field = false) {
-		$this->_schema = array(
-			'id' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-			'author_id' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-			'title' => array('type' => 'string', 'null' => false, 'default' => '', 'length' => '255'),
-			'body' => array('type' => 'string', 'null' => true, 'default' => '', 'length' => ''),
-			'BigField' => array('type' => 'string', 'null' => true, 'default' => '', 'length' => ''),
-			'created' => array('type' => 'date', 'null' => true, 'default' => '', 'length' => ''),
-			'modified' => array('type' => 'datetime', 'null' => true, 'default' => '', 'length' => null)
-		);
+		$this->_schema = [
+			'id' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+			'author_id' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+			'title' => ['type' => 'string', 'null' => false, 'default' => '', 'length' => '255'],
+			'body' => ['type' => 'string', 'null' => true, 'default' => '', 'length' => ''],
+			'BigField' => ['type' => 'string', 'null' => true, 'default' => '', 'length' => ''],
+			'created' => ['type' => 'date', 'null' => true, 'default' => '', 'length' => ''],
+			'modified' => ['type' => 'datetime', 'null' => true, 'default' => '', 'length' => null]
+		];
 		return $this->_schema;
 	}
 
@@ -115,12 +115,12 @@ class HelperTestTag extends Model {
  * @return void
  */
 	public function schema($field = false) {
-		$this->_schema = array(
-			'id' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-			'name' => array('type' => 'string', 'null' => false, 'default' => '', 'length' => '255'),
-			'created' => array('type' => 'date', 'null' => true, 'default' => '', 'length' => ''),
-			'modified' => array('type' => 'datetime', 'null' => true, 'default' => '', 'length' => null)
-		);
+		$this->_schema = [
+			'id' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+			'name' => ['type' => 'string', 'null' => false, 'default' => '', 'length' => '255'],
+			'created' => ['type' => 'date', 'null' => true, 'default' => '', 'length' => ''],
+			'modified' => ['type' => 'datetime', 'null' => true, 'default' => '', 'length' => null]
+		];
 		return $this->_schema;
 	}
 
@@ -146,10 +146,10 @@ class HelperTestPostsTag extends Model {
  * @return void
  */
 	public function schema($field = false) {
-		$this->_schema = array(
-			'helper_test_post_id' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-			'helper_test_tag_id' => array('type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'),
-		);
+		$this->_schema = [
+			'helper_test_post_id' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+			'helper_test_tag_id' => ['type' => 'integer', 'null' => false, 'default' => '', 'length' => '8'],
+		];
 		return $this->_schema;
 	}
 
@@ -162,17 +162,17 @@ class TestHelper extends Helper {
  *
  * @var array
  */
-	public $settings = array(
+	public $settings = [
 		'key1' => 'val1',
-		'key2' => array('key2.1' => 'val2.1', 'key2.2' => 'val2.2')
-	);
+		'key2' => ['key2.1' => 'val2.1', 'key2.2' => 'val2.2']
+	];
 
 /**
  * Helpers for this helper.
  *
  * @var array
  */
-	public $helpers = array('Html', 'TestPlugin.OtherHelper');
+	public $helpers = ['Html', 'TestPlugin.OtherHelper'];
 
 /**
  * expose a method as public
@@ -215,9 +215,9 @@ class HelperTest extends CakeTestCase {
 		ClassRegistry::addObject('HelperTestComment', new HelperTestComment());
 		ClassRegistry::addObject('HelperTestTag', new HelperTestTag());
 
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-		));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS],
+		]);
 	}
 
 /**
@@ -239,38 +239,38 @@ class HelperTest extends CakeTestCase {
  * @return array
  */
 	public static function entityProvider() {
-		return array(
-			array(
+		return [
+			[
 				'HelperTestPost.id',
-				array('HelperTestPost', 'id'),
+				['HelperTestPost', 'id'],
 				'HelperTestPost',
 				'id'
-			),
-			array(
+			],
+			[
 				'HelperTestComment.body',
-				array('HelperTestComment', 'body'),
+				['HelperTestComment', 'body'],
 				'HelperTestComment',
 				'body'
-			),
-			array(
+			],
+			[
 				'HelperTest.1.Comment.body',
-				array('HelperTest', '1', 'Comment', 'body'),
+				['HelperTest', '1', 'Comment', 'body'],
 				'Comment',
 				'body'
-			),
-			array(
+			],
+			[
 				'HelperTestComment.BigField',
-				array('HelperTestComment', 'BigField'),
+				['HelperTestComment', 'BigField'],
 				'HelperTestComment',
 				'BigField'
-			),
-			array(
+			],
+			[
 				'HelperTestComment.min',
-				array('HelperTestComment', 'min'),
+				['HelperTestComment', 'min'],
 				'HelperTestComment',
 				'min'
-			)
-		);
+			]
+		];
 	}
 
 /**
@@ -279,15 +279,15 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testSettingsMerging() {
-		$Helper = new TestHelper($this->View, array(
+		$Helper = new TestHelper($this->View, [
 			'key3' => 'val3',
-			'key2' => array('key2.2' => 'newval')
-		));
-		$expected = array(
+			'key2' => ['key2.2' => 'newval']
+		]);
+		$expected = [
 			'key1' => 'val1',
-			'key2' => array('key2.1' => 'val2.1', 'key2.2' => 'newval'),
+			'key2' => ['key2.1' => 'val2.1', 'key2.2' => 'newval'],
 			'key3' => 'val3'
-		);
+		];
 		$this->assertEquals($expected, $Helper->settings);
 	}
 
@@ -311,43 +311,43 @@ class HelperTest extends CakeTestCase {
  */
 	public function testSetEntityScoped() {
 		$this->Helper->setEntity('HelperTestPost', true);
-		$this->assertEquals(array('HelperTestPost'), $this->Helper->entity());
+		$this->assertEquals(['HelperTestPost'], $this->Helper->entity());
 
 		$this->Helper->setEntity('id');
-		$expected = array('HelperTestPost', 'id');
+		$expected = ['HelperTestPost', 'id'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('HelperTestComment.body');
-		$expected = array('HelperTestComment', 'body');
+		$expected = ['HelperTestComment', 'body'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('body');
-		$expected = array('HelperTestPost', 'body');
+		$expected = ['HelperTestPost', 'body'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('2.body');
-		$expected = array('HelperTestPost', '2', 'body');
+		$expected = ['HelperTestPost', '2', 'body'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('Something.else');
-		$expected = array('Something', 'else');
+		$expected = ['Something', 'else'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('HelperTestComment.5.id');
-		$expected = array('HelperTestComment', 5, 'id');
+		$expected = ['HelperTestComment', 5, 'id'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('HelperTestComment.id.time');
-		$expected = array('HelperTestComment', 'id', 'time');
+		$expected = ['HelperTestComment', 'id', 'time'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('HelperTestComment.created.year');
-		$expected = array('HelperTestComment', 'created', 'year');
+		$expected = ['HelperTestComment', 'created', 'year'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity(null);
 		$this->Helper->setEntity('ModelThatDoesntExist.field_that_doesnt_exist');
-		$expected = array('ModelThatDoesntExist', 'field_that_doesnt_exist');
+		$expected = ['ModelThatDoesntExist', 'field_that_doesnt_exist'];
 		$this->assertEquals($expected, $this->Helper->entity());
 	}
 
@@ -360,7 +360,7 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->setEntity('HelperTestPost', true);
 
 		$this->Helper->setEntity('HelperTestPost.1.HelperTestComment.1.title');
-		$expected = array('HelperTestPost', '1', 'HelperTestComment', '1', 'title');
+		$expected = ['HelperTestPost', '1', 'HelperTestComment', '1', 'title'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->assertEquals('HelperTestComment', $this->Helper->model());
@@ -375,7 +375,7 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->setEntity('HelperTestPost', true);
 
 		$this->Helper->setEntity('0.HelperTestPost.id');
-		$expected = array('0', 'HelperTestPost', 'id');
+		$expected = ['0', 'HelperTestPost', 'id'];
 		$this->assertEquals($expected, $this->Helper->entity());
 	}
 
@@ -386,11 +386,11 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testSetEntityAssociatedCamelCaseField() {
-		$this->Helper->fieldset = array(
-			'HelperTestComment' => array(
-				'fields' => array('BigField' => array('type' => 'integer'))
-			)
-		);
+		$this->Helper->fieldset = [
+			'HelperTestComment' => [
+				'fields' => ['BigField' => ['type' => 'integer']]
+			]
+		];
 		$this->Helper->setEntity('HelperTestComment', true);
 		$this->Helper->setEntity('HelperTestComment.BigField');
 
@@ -404,17 +404,17 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testSetEntityAssociatedCamelCaseFieldHabtmMultiple() {
-		$this->Helper->fieldset = array(
-			'HelperTestComment' => array(
-				'fields' => array('Tag' => array('type' => 'multiple'))
-			)
-		);
+		$this->Helper->fieldset = [
+			'HelperTestComment' => [
+				'fields' => ['Tag' => ['type' => 'multiple']]
+			]
+		];
 		$this->Helper->setEntity('HelperTestComment', true);
 		$this->Helper->setEntity('Tag');
 
 		$this->assertEquals('Tag', $this->Helper->model());
 		$this->assertEquals('Tag', $this->Helper->field());
-		$this->assertEquals(array('Tag', 'Tag'), $this->Helper->entity());
+		$this->assertEquals(['Tag', 'Tag'], $this->Helper->entity());
 	}
 
 /**
@@ -423,17 +423,17 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testSetEntityHabtmPropertyFieldNames() {
-		$this->Helper->fieldset = array(
-			'HelperTestComment' => array(
-				'fields' => array('Tag' => array('type' => 'multiple'))
-			)
-		);
+		$this->Helper->fieldset = [
+			'HelperTestComment' => [
+				'fields' => ['Tag' => ['type' => 'multiple']]
+			]
+		];
 		$this->Helper->setEntity('HelperTestComment', true);
 
 		$this->Helper->setEntity('Tag.name');
 		$this->assertEquals('Tag', $this->Helper->model());
 		$this->assertEquals('name', $this->Helper->field());
-		$this->assertEquals(array('Tag', 'name'), $this->Helper->entity());
+		$this->assertEquals(['Tag', 'name'], $this->Helper->entity());
 	}
 
 /**
@@ -453,39 +453,39 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testValue() {
-		$this->Helper->request->data = array('fullname' => 'This is me');
+		$this->Helper->request->data = ['fullname' => 'This is me'];
 		$this->Helper->setEntity('fullname');
 		$result = $this->Helper->value('fullname');
 		$this->assertEquals('This is me', $result);
 
-		$this->Helper->request->data = array(
-			'Post' => array('name' => 'First Post')
-		);
+		$this->Helper->request->data = [
+			'Post' => ['name' => 'First Post']
+		];
 		$this->Helper->setEntity('Post.name');
 		$result = $this->Helper->value('Post.name');
 		$this->assertEquals('First Post', $result);
 
-		$this->Helper->request->data = array(
-			'Post' => array(2 => array('name' => 'First Post'))
-		);
+		$this->Helper->request->data = [
+			'Post' => [2 => ['name' => 'First Post']]
+		];
 		$this->Helper->setEntity('Post.2.name');
 		$result = $this->Helper->value('Post.2.name');
 		$this->assertEquals('First Post', $result);
 
-		$this->Helper->request->data = array(
-			'Post' => array(
-				2 => array('created' => array('year' => '2008'))
-			)
-		);
+		$this->Helper->request->data = [
+			'Post' => [
+				2 => ['created' => ['year' => '2008']]
+			]
+		];
 		$this->Helper->setEntity('Post.2.created');
 		$result = $this->Helper->value('Post.2.created');
-		$this->assertEquals(array('year' => '2008'), $result);
+		$this->assertEquals(['year' => '2008'], $result);
 
-		$this->Helper->request->data = array(
-			'Post' => array(
-				2 => array('created' => array('year' => '2008'))
-			)
-		);
+		$this->Helper->request->data = [
+			'Post' => [
+				2 => ['created' => ['year' => '2008']]
+			]
+		];
 		$this->Helper->setEntity('Post.2.created.year');
 		$result = $this->Helper->value('Post.2.created.year');
 		$this->assertEquals('2008', $result);
@@ -497,18 +497,18 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testValueWithDefault() {
-		$this->Helper->request->data = array('zero' => 0);
+		$this->Helper->request->data = ['zero' => 0];
 		$this->Helper->setEntity('zero');
-		$result = $this->Helper->value(array('default' => 'something'), 'zero');
-		$this->assertEquals(array('value' => 0), $result);
+		$result = $this->Helper->value(['default' => 'something'], 'zero');
+		$this->assertEquals(['value' => 0], $result);
 
-		$this->Helper->request->data = array('zero' => '0');
-		$result = $this->Helper->value(array('default' => 'something'), 'zero');
-		$this->assertEquals(array('value' => '0'), $result);
+		$this->Helper->request->data = ['zero' => '0'];
+		$result = $this->Helper->value(['default' => 'something'], 'zero');
+		$this->assertEquals(['value' => '0'], $result);
 
 		$this->Helper->setEntity('inexistent');
-		$result = $this->Helper->value(array('default' => 'something'), 'inexistent');
-		$this->assertEquals(array('value' => 'something'), $result);
+		$result = $this->Helper->value(['default' => 'something'], 'inexistent');
+		$this->assertEquals(['value' => 'something'], $result);
 	}
 
 /**
@@ -517,38 +517,38 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testValueHabtmKeys() {
-		$this->Helper->request->data = array(
-			'HelperTestTag' => array('HelperTestTag' => '')
-		);
+		$this->Helper->request->data = [
+			'HelperTestTag' => ['HelperTestTag' => '']
+		];
 		$this->Helper->setEntity('HelperTestTag.HelperTestTag');
 		$result = $this->Helper->value('HelperTestTag.HelperTestTag');
 		$this->assertEquals('', $result);
 
-		$this->Helper->request->data = array(
-			'HelperTestTag' => array(
-				'HelperTestTag' => array(2, 3, 4)
-			)
-		);
+		$this->Helper->request->data = [
+			'HelperTestTag' => [
+				'HelperTestTag' => [2, 3, 4]
+			]
+		];
 		$this->Helper->setEntity('HelperTestTag.HelperTestTag');
 		$result = $this->Helper->value('HelperTestTag.HelperTestTag');
-		$this->assertEquals(array(2, 3, 4), $result);
+		$this->assertEquals([2, 3, 4], $result);
 
-		$this->Helper->request->data = array(
-			'HelperTestTag' => array(
-				array('id' => 3),
-				array('id' => 5)
-			)
-		);
+		$this->Helper->request->data = [
+			'HelperTestTag' => [
+				['id' => 3],
+				['id' => 5]
+			]
+		];
 		$this->Helper->setEntity('HelperTestTag.HelperTestTag');
 		$result = $this->Helper->value('HelperTestTag.HelperTestTag');
-		$this->assertEquals(array(3 => 3, 5 => 5), $result);
+		$this->assertEquals([3 => 3, 5 => 5], $result);
 
-		$this->Helper->request->data = array(
-			'HelperTestTag' => array(
+		$this->Helper->request->data = [
+			'HelperTestTag' => [
 				'body' => '',
 				'title' => 'winning'
-			),
-		);
+			],
+		];
 		$this->Helper->setEntity('HelperTestTag.body');
 		$result = $this->Helper->value('HelperTestTag.body');
 		$this->assertEquals('', $result);
@@ -566,7 +566,7 @@ class HelperTest extends CakeTestCase {
 		$result = $this->Helper->url('/controller/action/1?one=1&two=2');
 		$this->assertEquals('/controller/action/1?one=1&amp;two=2', $result);
 
-		$result = $this->Helper->url(array('controller' => 'posts', 'action' => 'index', 'page' => '1" onclick="alert(\'XSS\');"'));
+		$result = $this->Helper->url(['controller' => 'posts', 'action' => 'index', 'page' => '1" onclick="alert(\'XSS\');"']);
 		$this->assertEquals("/posts/index/page:1%22%20onclick%3D%22alert%28%27XSS%27%29%3B%22", $result);
 
 		$result = $this->Helper->url('/controller/action/1/param:this+one+more');
@@ -578,15 +578,15 @@ class HelperTest extends CakeTestCase {
 		$result = $this->Helper->url('/controller/action/1/param:%7Baround%20here%7D%5Bthings%5D%5Bare%5D%24%24');
 		$this->assertEquals('/controller/action/1/param:%7Baround%20here%7D%5Bthings%5D%5Bare%5D%24%24', $result);
 
-		$result = $this->Helper->url(array(
+		$result = $this->Helper->url([
 			'controller' => 'posts', 'action' => 'index', 'param' => '%7Baround%20here%7D%5Bthings%5D%5Bare%5D%24%24'
-		));
+		]);
 		$this->assertEquals("/posts/index/param:%257Baround%2520here%257D%255Bthings%255D%255Bare%255D%2524%2524", $result);
 
-		$result = $this->Helper->url(array(
+		$result = $this->Helper->url([
 			'controller' => 'posts', 'action' => 'index', 'page' => '1',
-			'?' => array('one' => 'value', 'two' => 'value', 'three' => 'purple')
-		));
+			'?' => ['one' => 'value', 'two' => 'value', 'three' => 'purple']
+		]);
 		$this->assertEquals("/posts/index/page:1?one=value&amp;two=value&amp;three=purple", $result);
 	}
 
@@ -635,31 +635,31 @@ class HelperTest extends CakeTestCase {
  */
 	public function testAssetUrl() {
 		$this->Helper->webroot = '';
-		$result = $this->Helper->assetUrl(array(
+		$result = $this->Helper->assetUrl([
 				'controller' => 'js',
 				'action' => 'post',
 				'ext' => 'js'
-			),
-			array('fullBase' => true)
+			],
+			['fullBase' => true]
 		);
 		$this->assertEquals(Router::fullBaseUrl() . '/js/post.js', $result);
 
-		$result = $this->Helper->assetUrl('foo.jpg', array('pathPrefix' => 'img/'));
+		$result = $this->Helper->assetUrl('foo.jpg', ['pathPrefix' => 'img/']);
 		$this->assertEquals('img/foo.jpg', $result);
 
-		$result = $this->Helper->assetUrl('foo.jpg', array('fullBase' => true));
+		$result = $this->Helper->assetUrl('foo.jpg', ['fullBase' => true]);
 		$this->assertEquals(Router::fullBaseUrl() . '/foo.jpg', $result);
 
-		$result = $this->Helper->assetUrl('style', array('ext' => '.css'));
+		$result = $this->Helper->assetUrl('style', ['ext' => '.css']);
 		$this->assertEquals('style.css', $result);
 
-		$result = $this->Helper->assetUrl('dir/sub dir/my image', array('ext' => '.jpg'));
+		$result = $this->Helper->assetUrl('dir/sub dir/my image', ['ext' => '.jpg']);
 		$this->assertEquals('dir/sub%20dir/my%20image.jpg', $result);
 
 		$result = $this->Helper->assetUrl('foo.jpg?one=two&three=four');
 		$this->assertEquals('foo.jpg?one=two&amp;three=four', $result);
 
-		$result = $this->Helper->assetUrl('dir/big+tall/image', array('ext' => '.jpg'));
+		$result = $this->Helper->assetUrl('dir/big+tall/image', ['ext' => '.jpg']);
 		$this->assertEquals('dir/big%2Btall/image.jpg', $result);
 	}
 
@@ -669,12 +669,12 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testAssetUrlNoRewrite() {
-		$this->Helper->request->addPaths(array(
+		$this->Helper->request->addPaths([
 			'base' => '/cake_dev/index.php',
 			'webroot' => '/cake_dev/app/webroot/',
 			'here' => '/cake_dev/index.php/tasks',
-		));
-		$result = $this->Helper->assetUrl('img/cake.icon.png', array('fullBase' => true));
+		]);
+		$result = $this->Helper->assetUrl('img/cake.icon.png', ['fullBase' => true]);
 		$expected = FULL_BASE_URL . '/cake_dev/app/webroot/img/cake.icon.png';
 		$this->assertEquals($expected, $result);
 	}
@@ -688,10 +688,10 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->webroot = '';
 		CakePlugin::load('TestPlugin');
 
-		$result = $this->Helper->assetUrl('TestPlugin.style', array('ext' => '.css'));
+		$result = $this->Helper->assetUrl('TestPlugin.style', ['ext' => '.css']);
 		$this->assertEquals('test_plugin/style.css', $result);
 
-		$result = $this->Helper->assetUrl('TestPlugin.style', array('ext' => '.css', 'plugin' => false));
+		$result = $this->Helper->assetUrl('TestPlugin.style', ['ext' => '.css', 'plugin' => false]);
 		$this->assertEquals('TestPlugin.style.css', $result);
 
 		CakePlugin::unload('TestPlugin');
@@ -706,7 +706,7 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->webroot = '';
 		Configure::write('Asset.timestamp', 'force');
 
-		$result = $this->Helper->assetUrl('cake.generic.css', array('pathPrefix' => Configure::read('App.cssBaseUrl')));
+		$result = $this->Helper->assetUrl('cake.generic.css', ['pathPrefix' => Configure::read('App.cssBaseUrl')]);
 		$this->assertRegExp('/' . preg_quote(Configure::read('App.cssBaseUrl') . 'cake.generic.css?', '/') . '[0-9]+/', $result);
 	}
 
@@ -717,10 +717,10 @@ class HelperTest extends CakeTestCase {
  */
 	public function testAssetTimestampPluginsAndThemes() {
 		Configure::write('Asset.timestamp', 'force');
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS),
-		));
-		CakePlugin::load(array('TestPlugin'));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS],
+		]);
+		CakePlugin::load(['TestPlugin']);
 
 		$result = $this->Helper->assetTimestamp('/test_plugin/css/test_plugin_asset.css');
 		$this->assertRegExp('#/test_plugin/css/test_plugin_asset.css\?[0-9]+$#', $result, 'Missing timestamp plugin');
@@ -744,15 +744,15 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->setEntity('HelperTestTag', true);
 
 		$this->Helper->setEntity('HelperTestTag.id');
-		$expected = array('HelperTestTag', 'id');
+		$expected = ['HelperTestTag', 'id'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('My.id');
-		$expected = array('My', 'id');
+		$expected = ['My', 'id'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('MyOther.id');
-		$expected = array('MyOther', 'id');
+		$expected = ['MyOther', 'id'];
 		$this->assertEquals($expected, $this->Helper->entity());
 	}
 
@@ -765,11 +765,11 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->setEntity('HelperTestTag', true);
 
 		$this->Helper->setEntity('helper_test_post');
-		$expected = array('HelperTestTag', 'helper_test_post');
+		$expected = ['HelperTestTag', 'helper_test_post'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$this->Helper->setEntity('HelperTestTag');
-		$expected = array('HelperTestTag', 'HelperTestTag');
+		$expected = ['HelperTestTag', 'HelperTestTag'];
 		$this->assertEquals($expected, $this->Helper->entity());
 	}
 
@@ -780,12 +780,12 @@ class HelperTest extends CakeTestCase {
  */
 	public function testFieldSuffixForDate() {
 		$this->Helper->setEntity('HelperTestPost', true);
-		$expected = array('HelperTestPost');
+		$expected = ['HelperTestPost'];
 		$this->assertEquals($expected, $this->Helper->entity());
 
-		foreach (array('year', 'month', 'day', 'hour', 'min', 'meridian') as $d) {
+		foreach (['year', 'month', 'day', 'hour', 'min', 'meridian'] as $d) {
 			$this->Helper->setEntity('date.' . $d);
-			$expected = array('HelperTestPost', 'date', $d);
+			$expected = ['HelperTestPost', 'date', $d];
 			$this->assertEquals($expected, $this->Helper->entity());
 		}
 	}
@@ -796,17 +796,17 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testMultiDimensionValue() {
-		$this->Helper->data = array();
+		$this->Helper->data = [];
 		for ($i = 0; $i < 2; $i++) {
 			$this->Helper->request->data['Model'][$i] = 'what';
 			$result[] = $this->Helper->value("Model.{$i}");
-			$this->Helper->request->data['Model'][$i] = array();
+			$this->Helper->request->data['Model'][$i] = [];
 			for ($j = 0; $j < 2; $j++) {
 				$this->Helper->request->data['Model'][$i][$j] = 'how';
 				$result[] = $this->Helper->value("Model.{$i}.{$j}");
 			}
 		}
-		$expected = array('what', 'how', 'how', 'what', 'how', 'how');
+		$expected = ['what', 'how', 'how', 'what', 'how', 'how'];
 		$this->assertEquals($expected, $result);
 
 		$this->Helper->request->data['HelperTestComment']['5']['id'] = 'ok';
@@ -829,11 +829,11 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testClean() {
-		$result = $this->Helper->clean(array());
+		$result = $this->Helper->clean([]);
 		$this->assertEquals(null, $result);
 
-		$result = $this->Helper->clean(array('<script>with something</script>', '<applet>something else</applet>'));
-		$this->assertEquals(array('with something', 'something else'), $result);
+		$result = $this->Helper->clean(['<script>with something</script>', '<applet>something else</applet>']);
+		$this->assertEquals(['with something', 'something else'], $result);
 
 		$result = $this->Helper->clean('<script>with something</script>');
 		$this->assertEquals('with something', $result);
@@ -871,24 +871,24 @@ class HelperTest extends CakeTestCase {
 
 		$entity = 'HelperTestPost.2.HelperTestComment.1.title';
 		$this->Helper->setEntity($entity);
-		$expected = array(
+		$expected = [
 			'HelperTestPost', '2', 'HelperTestComment', '1', 'title'
-		);
+		];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$entity = 'HelperTestPost.1.HelperTestComment.1.HelperTestTag.1.created';
 		$this->Helper->setEntity($entity);
-		$expected = array(
+		$expected = [
 			'HelperTestPost', '1', 'HelperTestComment', '1',
 			'HelperTestTag', '1', 'created'
-		);
+		];
 		$this->assertEquals($expected, $this->Helper->entity());
 
 		$entity = 'HelperTestPost.0.HelperTestComment.1.HelperTestTag.1.fake';
-		$expected = array(
+		$expected = [
 			'HelperTestPost', '0', 'HelperTestComment', '1',
 			'HelperTestTag', '1', 'fake'
-		);
+		];
 		$this->Helper->setEntity($entity);
 
 		$entity = '1.HelperTestComment.1.HelperTestTag.created.year';
@@ -923,9 +923,9 @@ class HelperTest extends CakeTestCase {
 
 		$this->Helper->theme = 'test_theme';
 
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 
 		$result = $this->Helper->webroot('/img/cake.power.gif');
 		$expected = '/theme/test_theme/img/cake.power.gif';
@@ -963,10 +963,10 @@ class HelperTest extends CakeTestCase {
  * @return void
  */
 	public function testLazyLoadingHelpers() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-		));
-		CakePlugin::load(array('TestPlugin'));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS],
+		]);
+		CakePlugin::load(['TestPlugin']);
 		$Helper = new TestHelper($this->View);
 		$this->assertInstanceOf('OtherHelperHelper', $Helper->OtherHelper);
 		$this->assertInstanceOf('HtmlHelper', $Helper->Html);
@@ -983,7 +983,7 @@ class HelperTest extends CakeTestCase {
 		$Helper->OtherHelper;
 
 		$result = $this->View->Helpers->enabled();
-		$this->assertEquals(array(), $result, 'Helper helpers were attached to the collection.');
+		$this->assertEquals([], $result, 'Helper helpers were attached to the collection.');
 	}
 
 /**

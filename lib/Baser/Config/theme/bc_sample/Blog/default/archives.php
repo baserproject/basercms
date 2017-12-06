@@ -15,7 +15,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 	<?php foreach ($posts as $post): ?>
 <article class="post clearfix">
 	<h4><?php $this->Blog->postTitle($post) ?></h4>
-	<?php $this->Blog->eyeCatch($post, array('link' => false, 'width' => 300)) ?>
+	<?php $this->Blog->eyeCatch($post, ['link' => false, 'width' => 300]) ?>
 	<?php $this->Blog->postContent($post, false, false) ?>
 	<div class="meta">
 		<?php $this->Blog->category($post) ?>
@@ -23,7 +23,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser-
 		<?php $this->Blog->postDate($post) ?>
 		&nbsp;
 		<?php $this->Blog->author($post) ?>
-		<?php $this->BcBaser->element('Blog.blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('Blog.blog_tag', ['post' => $post]) ?>
 	</div>
 </article>
 	<?php endforeach; ?>

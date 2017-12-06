@@ -25,7 +25,7 @@ class Simplezip {
  * @var		array
  * @access	public
  */
-	var $compressedData = array();
+	var $compressedData = [];
 	
 /**
  * Central Directory
@@ -33,7 +33,7 @@ class Simplezip {
  * @var		array
  * @access	public
  */
-	var $centralDirectory = array();
+	var $centralDirectory = [];
 	
 /**
  * End Of Central Directory Record
@@ -57,7 +57,7 @@ class Simplezip {
  * @var		array
  * @access	public
  */
-	var $entries = array();
+	var $entries = [];
 	
 /**
  * Get Hexd Time
@@ -365,7 +365,7 @@ class Simplezip {
  */
 	function _readFile($path) {
 		ini_set('mbstring.func_overload', '0');
-		$this->entries = array();
+		$this->entries = [];
 
 		$oF = fopen($path, 'rb');
 		$vZ = fread($oF, filesize($path));
@@ -374,14 +374,14 @@ class Simplezip {
 		$aE = explode("\x50\x4b\x05\x06", $vZ);
 		$aP = unpack('x16/v1CL', $aE[1]);
 		$this->Comment = substr($aE[1], 18, $aP['CL']);
-		$this->Comment = strtr($this->Comment, array("\r\n" => "\n",
-													 "\r"   => "\n"));
+		$this->Comment = strtr($this->Comment, ["\r\n" => "\n",
+													 "\r"   => "\n"]);
 		$aE = explode("\x50\x4b\x01\x02", $vZ);
 		$aE = explode("\x50\x4b\x03\x04", $aE[0]);
 		array_shift($aE);
 
 		foreach ($aE as $vZ) {
-			$aI = array();
+			$aI = [];
 			$aI['E']  = 0;
 			$aI['EM'] = '';
 			$aP = unpack('v1VN/v1GPF/v1CM/v1FT/v1FD/V1CRC/V1CS/V1UCS/v1FNL', $vZ);
@@ -473,7 +473,7 @@ class Simplezip {
 							  ($aP['FD']  & 0x01e0) >>  5,
 							  ($aP['FD']  & 0x001f),
 							  (($aP['FD'] & 0xfe00) >>  9) + 1980);
-			$entry = array();
+			$entry = [];
             $entry['Data']     = $aI['D'];
             $entry['Error']    = $aI['E'];
             $entry['ErrorMsg'] = $aI['EM'];

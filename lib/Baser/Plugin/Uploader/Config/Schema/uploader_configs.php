@@ -7,20 +7,20 @@ class UploaderConfigsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $uploader_configs = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => false),
-		'value' => array('type' => 'text', 'null' => false),
-		'created' => array('type' => 'datetime', 'null' => true),
-		'modified' => array('type' => 'datetime', 'null' => true),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-	);
+	public $uploader_configs = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'],
+		'name' => ['type' => 'string', 'null' => false],
+		'value' => ['type' => 'text', 'null' => false],
+		'created' => ['type' => 'datetime', 'null' => true],
+		'modified' => ['type' => 'datetime', 'null' => true],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]]
+	];
 }
 ?>

@@ -28,18 +28,18 @@ class StoryFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'story' => array('type' => 'integer', 'key' => 'primary'),
-		'title' => array('type' => 'string', 'null' => false)
-	);
+	public $fields = [
+		'story' => ['type' => 'integer', 'key' => 'primary'],
+		'title' => ['type' => 'string', 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('title' => 'First Story'),
-		array('title' => 'Second Story')
-	);
+	public $records = [
+		['title' => 'First Story'],
+		['title' => 'Second Story']
+	];
 }

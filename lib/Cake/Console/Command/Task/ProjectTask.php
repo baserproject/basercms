@@ -46,7 +46,7 @@ class ProjectTask extends AppShell {
 		if (isset($this->args[0])) {
 			$project = $this->args[0];
 		} else {
-			$appContents = array_diff(scandir(APP), array('.', '..'));
+			$appContents = array_diff(scandir(APP), ['.', '..']);
 			if (empty($appContents)) {
 				$suggestedPath = rtrim(APP, DS);
 			} else {
@@ -66,7 +66,7 @@ class ProjectTask extends AppShell {
 		$response = false;
 		while (!$response && is_dir($project) === true && file_exists($project . 'Config' . 'core.php')) {
 			$prompt = __d('cake_console', '<warning>A project already exists in this location:</warning> %s Overwrite?', $project);
-			$response = $this->in($prompt, array('y', 'n'), 'n');
+			$response = $this->in($prompt, ['y', 'n'], 'n');
 			if (strtolower($response) === 'n') {
 				$response = $project = false;
 			}
@@ -164,7 +164,7 @@ class ProjectTask extends AppShell {
  * @param string $skip array of directories to skip when copying
  * @return mixed
  */
-	public function bake($path, $skel = null, $skip = array('empty')) {
+	public function bake($path, $skel = null, $skip = ['empty']) {
 		if (!$skel && !empty($this->params['skel'])) {
 			$skel = $this->params['skel'];
 		}
@@ -193,16 +193,16 @@ class ProjectTask extends AppShell {
 		$this->out(__d('cake_console', '<info>Will be copied to</info>: ') . $path);
 		$this->hr();
 
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n', 'q'), 'y');
+		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n', 'q'], 'y');
 
 		switch (strtolower($looksGood)) {
 			case 'y':
 				$Folder = new Folder($skel);
 				if (!empty($this->params['empty'])) {
-					$skip = array();
+					$skip = [];
 				}
 
-				if ($Folder->copy(array('to' => $path, 'skip' => $skip))) {
+				if ($Folder->copy(['to' => $path, 'skip' => $skip])) {
 					$this->hr();
 					$this->out(__d('cake_console', '<success>Created:</success> %s in %s', $app, $path));
 					$this->hr();
@@ -368,7 +368,7 @@ class ProjectTask extends AppShell {
 		if (preg_match('%(\s*[/]*Configure::write\(\'Routing.prefixes\',[\s\'a-z,\)\(]*\);)%', $contents, $match)) {
 			$result = str_replace($match[0], "\n" . 'Configure::write(\'Routing.prefixes\', array(\'' . $name . '\'));', $contents);
 			if ($File->write($result)) {
-				Configure::write('Routing.prefixes', array($name));
+				Configure::write('Routing.prefixes', [$name]);
 				return true;
 			}
 		}
@@ -391,7 +391,7 @@ class ProjectTask extends AppShell {
 				$this->out();
 				$this->out(__d('cake_console', 'You have more than one routing prefix configured'));
 			}
-			$options = array();
+			$options = [];
 			foreach ($prefixes as $i => $prefix) {
 				$options[] = $i + 1;
 				if ($this->interactive) {
@@ -433,19 +433,19 @@ class ProjectTask extends AppShell {
 
 		$parser->description(
 			__d('cake_console', 'Generate a new CakePHP project skeleton.')
-		)->addArgument('name', array(
+		)->addArgument('name', [
 			'help' => __d('cake_console', 'Application directory to make, if it starts with "/" the path is absolute.')
-		))->addOption('empty', array(
+		])->addOption('empty', [
 			'boolean' => true,
 			'help' => __d('cake_console', 'Create empty files in each of the directories. Good if you are using git')
-		))->addOption('theme', array(
+		])->addOption('theme', [
 			'short' => 't',
 			'help' => __d('cake_console', 'Theme to use when baking code.')
-		))->addOption('skel', array(
+		])->addOption('skel', [
 			'default' => current(App::core('Console')) . 'Templates' . DS . 'skel',
 			'help' => __d('cake_console', 'The directory layout to use for the new application skeleton.' .
 				' Defaults to cake/Console/Templates/skel of CakePHP used to create the project.')
-		));
+		]);
 
 		return $parser;
 	}

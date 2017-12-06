@@ -37,7 +37,7 @@ class XcacheEngineTest extends CakeTestCase {
 		}
 		$this->_cacheDisable = Configure::read('Cache.disable');
 		Configure::write('Cache.disable', false);
-		Cache::config('xcache', array('engine' => 'Xcache', 'prefix' => 'cake_'));
+		Cache::config('xcache', ['engine' => 'Xcache', 'prefix' => 'cake_']);
 	}
 
 /**
@@ -60,12 +60,12 @@ class XcacheEngineTest extends CakeTestCase {
  */
 	public function testSettings() {
 		$settings = Cache::settings();
-		$expecting = array(
+		$expecting = [
 			'prefix' => 'cake_',
 			'duration' => 3600,
 			'probability' => 100,
 			'engine' => 'Xcache',
-		);
+		];
 		$this->assertTrue(isset($settings['PHP_AUTH_USER']));
 		$this->assertTrue(isset($settings['PHP_AUTH_PW']));
 
@@ -79,7 +79,7 @@ class XcacheEngineTest extends CakeTestCase {
  * @return void
  */
 	public function testReadAndWriteCache() {
-		Cache::set(array('duration' => 1));
+		Cache::set(['duration' => 1]);
 
 		$result = Cache::read('test');
 		$expecting = '';
@@ -102,7 +102,7 @@ class XcacheEngineTest extends CakeTestCase {
  * @return void
  */
 	public function testExpiry() {
-		Cache::set(array('duration' => 1));
+		Cache::set(['duration' => 1]);
 		$result = Cache::read('test');
 		$this->assertFalse($result);
 
@@ -114,7 +114,7 @@ class XcacheEngineTest extends CakeTestCase {
 		$result = Cache::read('other_test');
 		$this->assertFalse($result);
 
-		Cache::set(array('duration' => "+1 second"));
+		Cache::set(['duration' => "+1 second"]);
 
 		$data = 'this is a test of the emergency broadcasting system';
 		$result = Cache::write('other_test', $data);
@@ -208,12 +208,12 @@ class XcacheEngineTest extends CakeTestCase {
  * @return void
  */
 	public function testGroupsReadWrite() {
-		Cache::config('xcache_groups', array(
+		Cache::config('xcache_groups', [
 			'engine' => 'Xcache',
 			'duration' => 0,
-			'groups' => array('group_a', 'group_b'),
+			'groups' => ['group_a', 'group_b'],
 			'prefix' => 'test_'
-		));
+		]);
 		$this->assertTrue(Cache::write('test_groups', 'value', 'xcache_groups'));
 		$this->assertEquals('value', Cache::read('test_groups', 'xcache_groups'));
 
@@ -234,12 +234,12 @@ class XcacheEngineTest extends CakeTestCase {
  * @return void
  */
 	public function testGroupDelete() {
-		Cache::config('xcache_groups', array(
+		Cache::config('xcache_groups', [
 			'engine' => 'Xcache',
 			'duration' => 0,
-			'groups' => array('group_a', 'group_b'),
+			'groups' => ['group_a', 'group_b'],
 			'prefix' => 'test_'
-		));
+		]);
 		$this->assertTrue(Cache::write('test_groups', 'value', 'xcache_groups'));
 		$this->assertEquals('value', Cache::read('test_groups', 'xcache_groups'));
 		$this->assertTrue(Cache::delete('test_groups', 'xcache_groups'));
@@ -253,12 +253,12 @@ class XcacheEngineTest extends CakeTestCase {
  * @return void
  */
 	public function testGroupClear() {
-		Cache::config('xcache_groups', array(
+		Cache::config('xcache_groups', [
 			'engine' => 'Xcache',
 			'duration' => 0,
-			'groups' => array('group_a', 'group_b'),
+			'groups' => ['group_a', 'group_b'],
 			'prefix' => 'test_'
-		));
+		]);
 
 		$this->assertTrue(Cache::write('test_groups', 'value', 'xcache_groups'));
 		$this->assertTrue(Cache::clearGroup('group_a', 'xcache_groups'));
@@ -275,7 +275,7 @@ class XcacheEngineTest extends CakeTestCase {
  * @return void
  */
 	public function testAdd() {
-		Cache::set(array('duration' => 1), null);
+		Cache::set(['duration' => 1], null);
 		Cache::delete('test_add_key', 'default');
 
 		$result = Cache::add('test_add_key', 'test data', 'default');

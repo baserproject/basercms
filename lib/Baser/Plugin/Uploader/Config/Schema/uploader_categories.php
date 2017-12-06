@@ -7,19 +7,19 @@ class UploaderCategoriesSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $uploader_categories = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50),
-		'modified' => array('type' => 'datetime', 'null' => true),
-		'created' => array('type' => 'datetime', 'null' => true),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-	);
+	public $uploader_categories = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'],
+		'name' => ['type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50],
+		'modified' => ['type' => 'datetime', 'null' => true],
+		'created' => ['type' => 'datetime', 'null' => true],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]]
+	];
 }
 ?>

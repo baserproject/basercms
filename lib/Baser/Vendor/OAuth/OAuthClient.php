@@ -29,14 +29,14 @@ class OAuthClient {
     /**
      * Call API with a GET request. Returns either false on failure or an HttpResponse object.
      */
-    public function get($accessTokenKey, $accessTokenSecret, $url, array $getData = array()) {
+    public function get($accessTokenKey, $accessTokenSecret, $url, array $getData = []) {
         $accessToken = new OAuthToken($accessTokenKey, $accessTokenSecret);
         $request = $this->createRequest('GET', $url, $accessToken, $getData);
 
         return $this->doGet($request->to_url());
     }
 
-    public function getAccessToken($accessTokenURL, $requestToken, $httpMethod = 'POST', array $parameters = array()) {
+    public function getAccessToken($accessTokenURL, $requestToken, $httpMethod = 'POST', array $parameters = []) {
         $this->url = $accessTokenURL;
         $queryStringParams = OAuthUtil::parse_parameters($_SERVER['QUERY_STRING']);
         $parameters['oauth_verifier'] = $queryStringParams['oauth_verifier'];
@@ -61,7 +61,7 @@ class OAuthClient {
      * @param $httpMethod 'POST' or 'GET'
      * @param $parameters
      */
-    public function getRequestToken($requestTokenURL, $callback = 'oob', $httpMethod = 'POST', array $parameters = array()) {
+    public function getRequestToken($requestTokenURL, $callback = 'oob', $httpMethod = 'POST', array $parameters = []) {
         $this->url = $requestTokenURL;
         $parameters['oauth_callback'] = $callback;
         $request = $this->createRequest($httpMethod, $requestTokenURL, null, $parameters);
@@ -72,7 +72,7 @@ class OAuthClient {
     /**
      * Call API with a POST request. Returns either false on failure or an HttpResponse object.
      */
-    public function post($accessTokenKey, $accessTokenSecret, $url, array $postData = array()) {
+    public function post($accessTokenKey, $accessTokenSecret, $url, array $postData = []) {
         $accessToken = new OAuthToken($accessTokenKey, $accessTokenSecret);
         $request = $this->createRequest('POST', $url, $accessToken, $postData);
 
@@ -85,9 +85,9 @@ class OAuthClient {
      * $paths a key-value array, example: array('media[]' => '/home/dho/avatar.png')
      * Returns either false on failure or an HttpResponse object.
      */
-    public function postMultipartFormData($accessTokenKey, $accessTokenSecret, $url, array $paths, array $postData = array()) {
+    public function postMultipartFormData($accessTokenKey, $accessTokenSecret, $url, array $paths, array $postData = []) {
         $accessToken = new OAuthToken($accessTokenKey, $accessTokenSecret);
-        $request = $this->createRequest('POST', $url, $accessToken, array());
+        $request = $this->createRequest('POST', $url, $accessToken, []);
         $authorization = str_replace('Authorization: ', '', $request->to_header());
 
         return $this->doPostMultipartFormData($url, $authorization, $paths, $postData);
@@ -150,12 +150,12 @@ class OAuthClient {
         }
 
         $socket = new HttpSocket();
-        $result = $socket->request(array('method' => 'POST',
+        $result = $socket->request(['method' => 'POST',
                                          'uri' => $url,
-                                         'header' => array(
+                                         'header' => [
                                              'Authorization' => $authorization,
-                                             'Content-Type' => "multipart/form-data; boundary={$boundary}"),
-                                         'body' => $body));
+                                             'Content-Type' => "multipart/form-data; boundary={$boundary}"],
+                                         'body' => $body]);
         $this->fullResponse = $result;
 
         return $result;
@@ -168,7 +168,7 @@ class OAuthClient {
             $data = $this->doGet($request->to_url());
         }
 
-        $response = array();
+        $response = [];
         parse_str($data->body, $response);
 
         return $this->createOAuthToken($response);

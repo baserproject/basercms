@@ -46,7 +46,7 @@ if(!isset($currentId)) {
 						<?php $this->BcBaser->link($content['Content']['title'], $this->BcBaser->getContentsUrl($content['Content']['url']), $options) ?>
 						<?php if (!empty($content['children'])): ?>
 							<div class="sub-nav">
-								<?php $this->BcBaser->element('contents_menu', array('tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId)) ?>
+								<?php $this->BcBaser->element('contents_menu', ['tree' => $content['children'], 'level' => $level + 1, 'currentId' => $currentId]) ?>
 							</div>
 						<?php endif ?>
 					</li>

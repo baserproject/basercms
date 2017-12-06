@@ -30,7 +30,7 @@ class CakePlugin {
  *
  * @var array
  */
-	protected static $_plugins = array();
+	protected static $_plugins = [];
 
 /**
  * Loads a plugin and optionally loads bootstrapping, routing files or loads an initialization function
@@ -87,26 +87,26 @@ class CakePlugin {
  * @throws MissingPluginException if the folder for the plugin to be loaded is not found
  * @return void
  */
-	public static function load($plugin, $config = array()) {
+	public static function load($plugin, $config = []) {
 		if (is_array($plugin)) {
 			foreach ($plugin as $name => $conf) {
-				list($name, $conf) = (is_numeric($name)) ? array($conf, $config) : array($name, $conf);
+				list($name, $conf) = (is_numeric($name)) ? [$conf, $config] : [$name, $conf];
 				static::load($name, $conf);
 			}
 			return;
 		}
-		$config += array('bootstrap' => false, 'routes' => false, 'ignoreMissing' => false);
+		$config += ['bootstrap' => false, 'routes' => false, 'ignoreMissing' => false];
 		if (empty($config['path'])) {
 			foreach (App::path('plugins') as $path) {
 				if (is_dir($path . $plugin)) {
-					static::$_plugins[$plugin] = $config + array('path' => $path . $plugin . DS);
+					static::$_plugins[$plugin] = $config + ['path' => $path . $plugin . DS];
 					break;
 				}
 
 				//Backwards compatibility to make easier to migrate to 2.0
 				$underscored = Inflector::underscore($plugin);
 				if (is_dir($path . $underscored)) {
-					static::$_plugins[$plugin] = $config + array('path' => $path . $underscored . DS);
+					static::$_plugins[$plugin] = $config + ['path' => $path . $underscored . DS];
 					break;
 				}
 			}
@@ -115,7 +115,7 @@ class CakePlugin {
 		}
 
 		if (empty(static::$_plugins[$plugin]['path'])) {
-			throw new MissingPluginException(array('plugin' => $plugin));
+			throw new MissingPluginException(['plugin' => $plugin]);
 		}
 		if (!empty(static::$_plugins[$plugin]['bootstrap'])) {
 			static::bootstrap($plugin);
@@ -153,10 +153,10 @@ class CakePlugin {
  * @param array $options Options list. See CakePlugin::load() for valid options.
  * @return void
  */
-	public static function loadAll($options = array()) {
+	public static function loadAll($options = []) {
 		$plugins = App::objects('plugins');
 		foreach ($plugins as $p) {
-			$opts = isset($options[$p]) ? (array)$options[$p] : array();
+			$opts = isset($options[$p]) ? (array)$options[$p] : [];
 			if (isset($options[0])) {
 				$opts += $options[0];
 			}
@@ -173,7 +173,7 @@ class CakePlugin {
  */
 	public static function path($plugin) {
 		if (empty(static::$_plugins[$plugin])) {
-			throw new MissingPluginException(array('plugin' => $plugin));
+			throw new MissingPluginException(['plugin' => $plugin]);
 		}
 		return static::$_plugins[$plugin]['path'];
 	}
@@ -191,7 +191,7 @@ class CakePlugin {
 			return false;
 		}
 		if (is_callable($config['bootstrap'])) {
-			return call_user_func_array($config['bootstrap'], array($plugin, $config));
+			return call_user_func_array($config['bootstrap'], [$plugin, $config]);
 		}
 
 		$path = static::path($plugin);
@@ -262,7 +262,7 @@ class CakePlugin {
  */
 	public static function unload($plugin = null) {
 		if ($plugin === null) {
-			static::$_plugins = array();
+			static::$_plugins = [];
 		} else {
 			unset(static::$_plugins[$plugin]);
 		}

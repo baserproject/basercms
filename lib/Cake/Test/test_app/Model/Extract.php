@@ -27,19 +27,19 @@ class Extract extends AppModel {
 
 	public $useTable = false;
 
-	public $validate = array(
-		'title' => array(
-			'custom' => array(
-				'rule' => array('custom', '.*'),
+	public $validate = [
+		'title' => [
+			'custom' => [
+				'rule' => ['custom', '.*'],
 				'allowEmpty' => true,
 				'required' => false,
 				'message' => 'double "quoted" validation'
-			),
-			'between' => array(
-				'rule' => array('lengthBetween', 5, 15),
+			],
+			'between' => [
+				'rule' => ['lengthBetween', 5, 15],
 				'message' => "single 'quoted' validation"
-			)
-		),
-	);
+			]
+		],
+	];
 
 }

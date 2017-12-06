@@ -10,7 +10,7 @@ class FixturizedTestCase extends CakeTestCase {
  * Fixtures to use in this thes
  * @var array
  */
-	public $fixtures = array('core.category');
+	public $fixtures = ['core.category'];
 
 /**
  * test that the shared fixture is correctly set

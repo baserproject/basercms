@@ -37,111 +37,111 @@
  *     Note that the Turkic mappings do not maintain canonical equivalence without additional processing.
  *     See the discussions of case mapping in the Unicode Standard for more information.
  */
-$config['0180_024F'][] = array('upper' => 385, 'status' => 'C', 'lower' => array(595)); /* LATIN CAPITAL LETTER B WITH HOOK */
-$config['0180_024F'][] = array('upper' => 386, 'status' => 'C', 'lower' => array(387)); /* LATIN CAPITAL LETTER B WITH TOPBAR */
-$config['0180_024F'][] = array('upper' => 388, 'status' => 'C', 'lower' => array(389)); /* LATIN CAPITAL LETTER TONE SIX */
-$config['0180_024F'][] = array('upper' => 390, 'status' => 'C', 'lower' => array(596)); /* LATIN CAPITAL LETTER OPEN O */
-$config['0180_024F'][] = array('upper' => 391, 'status' => 'C', 'lower' => array(392)); /* LATIN CAPITAL LETTER C WITH HOOK */
-$config['0180_024F'][] = array('upper' => 393, 'status' => 'C', 'lower' => array(598)); /* LATIN CAPITAL LETTER AFRICAN D */
-$config['0180_024F'][] = array('upper' => 394, 'status' => 'C', 'lower' => array(599)); /* LATIN CAPITAL LETTER D WITH HOOK */
-$config['0180_024F'][] = array('upper' => 395, 'status' => 'C', 'lower' => array(396)); /* LATIN CAPITAL LETTER D WITH TOPBAR */
-$config['0180_024F'][] = array('upper' => 398, 'status' => 'C', 'lower' => array(477)); /* LATIN CAPITAL LETTER REVERSED E */
-$config['0180_024F'][] = array('upper' => 399, 'status' => 'C', 'lower' => array(601)); /* LATIN CAPITAL LETTER SCHWA */
-$config['0180_024F'][] = array('upper' => 400, 'status' => 'C', 'lower' => array(603)); /* LATIN CAPITAL LETTER OPEN E */
-$config['0180_024F'][] = array('upper' => 401, 'status' => 'C', 'lower' => array(402)); /* LATIN CAPITAL LETTER F WITH HOOK */
-$config['0180_024F'][] = array('upper' => 403, 'status' => 'C', 'lower' => array(608)); /* LATIN CAPITAL LETTER G WITH HOOK */
-$config['0180_024F'][] = array('upper' => 404, 'status' => 'C', 'lower' => array(611)); /* LATIN CAPITAL LETTER GAMMA */
-$config['0180_024F'][] = array('upper' => 406, 'status' => 'C', 'lower' => array(617)); /* LATIN CAPITAL LETTER IOTA */
-$config['0180_024F'][] = array('upper' => 407, 'status' => 'C', 'lower' => array(616)); /* LATIN CAPITAL LETTER I WITH STROKE */
-$config['0180_024F'][] = array('upper' => 408, 'status' => 'C', 'lower' => array(409)); /* LATIN CAPITAL LETTER K WITH HOOK */
-$config['0180_024F'][] = array('upper' => 412, 'status' => 'C', 'lower' => array(623)); /* LATIN CAPITAL LETTER TURNED M */
-$config['0180_024F'][] = array('upper' => 413, 'status' => 'C', 'lower' => array(626)); /* LATIN CAPITAL LETTER N WITH LEFT HOOK */
-$config['0180_024F'][] = array('upper' => 415, 'status' => 'C', 'lower' => array(629)); /* LATIN CAPITAL LETTER O WITH MIDDLE TILDE */
-$config['0180_024F'][] = array('upper' => 416, 'status' => 'C', 'lower' => array(417)); /* LATIN CAPITAL LETTER O WITH HORN */
-$config['0180_024F'][] = array('upper' => 418, 'status' => 'C', 'lower' => array(419)); /* LATIN CAPITAL LETTER OI */
-$config['0180_024F'][] = array('upper' => 420, 'status' => 'C', 'lower' => array(421)); /* LATIN CAPITAL LETTER P WITH HOOK */
-$config['0180_024F'][] = array('upper' => 422, 'status' => 'C', 'lower' => array(640)); /* LATIN LETTER YR */
-$config['0180_024F'][] = array('upper' => 423, 'status' => 'C', 'lower' => array(424)); /* LATIN CAPITAL LETTER TONE TWO */
-$config['0180_024F'][] = array('upper' => 425, 'status' => 'C', 'lower' => array(643)); /* LATIN CAPITAL LETTER ESH */
-$config['0180_024F'][] = array('upper' => 428, 'status' => 'C', 'lower' => array(429)); /* LATIN CAPITAL LETTER T WITH HOOK */
-$config['0180_024F'][] = array('upper' => 430, 'status' => 'C', 'lower' => array(648)); /* LATIN CAPITAL LETTER T WITH RETROFLEX HOOK */
-$config['0180_024F'][] = array('upper' => 431, 'status' => 'C', 'lower' => array(432)); /* LATIN CAPITAL LETTER U WITH HORN */
-$config['0180_024F'][] = array('upper' => 433, 'status' => 'C', 'lower' => array(650)); /* LATIN CAPITAL LETTER UPSILON */
-$config['0180_024F'][] = array('upper' => 434, 'status' => 'C', 'lower' => array(651)); /* LATIN CAPITAL LETTER V WITH HOOK */
-$config['0180_024F'][] = array('upper' => 435, 'status' => 'C', 'lower' => array(436)); /* LATIN CAPITAL LETTER Y WITH HOOK */
-$config['0180_024F'][] = array('upper' => 437, 'status' => 'C', 'lower' => array(438)); /* LATIN CAPITAL LETTER Z WITH STROKE */
-$config['0180_024F'][] = array('upper' => 439, 'status' => 'C', 'lower' => array(658)); /* LATIN CAPITAL LETTER EZH */
-$config['0180_024F'][] = array('upper' => 440, 'status' => 'C', 'lower' => array(441)); /* LATIN CAPITAL LETTER EZH REVERSED */
-$config['0180_024F'][] = array('upper' => 444, 'status' => 'C', 'lower' => array(445)); /* LATIN CAPITAL LETTER TONE FIVE */
-$config['0180_024F'][] = array('upper' => 452, 'status' => 'C', 'lower' => array(454)); /* LATIN CAPITAL LETTER DZ WITH CARON */
-$config['0180_024F'][] = array('upper' => 453, 'status' => 'C', 'lower' => array(454)); /* LATIN CAPITAL LETTER D WITH SMALL LETTER Z WITH CARON */
-$config['0180_024F'][] = array('upper' => 455, 'status' => 'C', 'lower' => array(457)); /* LATIN CAPITAL LETTER LJ */
-$config['0180_024F'][] = array('upper' => 456, 'status' => 'C', 'lower' => array(457)); /* LATIN CAPITAL LETTER L WITH SMALL LETTER J */
-$config['0180_024F'][] = array('upper' => 458, 'status' => 'C', 'lower' => array(460)); /* LATIN CAPITAL LETTER NJ */
-$config['0180_024F'][] = array('upper' => 459, 'status' => 'C', 'lower' => array(460)); /* LATIN CAPITAL LETTER N WITH SMALL LETTER J */
-$config['0180_024F'][] = array('upper' => 461, 'status' => 'C', 'lower' => array(462)); /* LATIN CAPITAL LETTER A WITH CARON */
-$config['0180_024F'][] = array('upper' => 463, 'status' => 'C', 'lower' => array(464)); /* LATIN CAPITAL LETTER I WITH CARON */
-$config['0180_024F'][] = array('upper' => 465, 'status' => 'C', 'lower' => array(466)); /* LATIN CAPITAL LETTER O WITH CARON */
-$config['0180_024F'][] = array('upper' => 467, 'status' => 'C', 'lower' => array(468)); /* LATIN CAPITAL LETTER U WITH CARON */
-$config['0180_024F'][] = array('upper' => 469, 'status' => 'C', 'lower' => array(470)); /* LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON */
-$config['0180_024F'][] = array('upper' => 471, 'status' => 'C', 'lower' => array(472)); /* LATIN CAPITAL LETTER U WITH DIAERESIS AND ACUTE */
-$config['0180_024F'][] = array('upper' => 473, 'status' => 'C', 'lower' => array(474)); /* LATIN CAPITAL LETTER U WITH DIAERESIS AND CARON */
-$config['0180_024F'][] = array('upper' => 475, 'status' => 'C', 'lower' => array(476)); /* LATIN CAPITAL LETTER U WITH DIAERESIS AND GRAVE */
-$config['0180_024F'][] = array('upper' => 478, 'status' => 'C', 'lower' => array(479)); /* LATIN CAPITAL LETTER A WITH DIAERESIS AND MACRON */
-$config['0180_024F'][] = array('upper' => 480, 'status' => 'C', 'lower' => array(481)); /* LATIN CAPITAL LETTER A WITH DOT ABOVE AND MACRON */
-$config['0180_024F'][] = array('upper' => 482, 'status' => 'C', 'lower' => array(483)); /* LATIN CAPITAL LETTER AE WITH MACRON */
-$config['0180_024F'][] = array('upper' => 484, 'status' => 'C', 'lower' => array(485)); /* LATIN CAPITAL LETTER G WITH STROKE */
-$config['0180_024F'][] = array('upper' => 486, 'status' => 'C', 'lower' => array(487)); /* LATIN CAPITAL LETTER G WITH CARON */
-$config['0180_024F'][] = array('upper' => 488, 'status' => 'C', 'lower' => array(489)); /* LATIN CAPITAL LETTER K WITH CARON */
-$config['0180_024F'][] = array('upper' => 490, 'status' => 'C', 'lower' => array(491)); /* LATIN CAPITAL LETTER O WITH OGONEK */
-$config['0180_024F'][] = array('upper' => 492, 'status' => 'C', 'lower' => array(493)); /* LATIN CAPITAL LETTER O WITH OGONEK AND MACRON */
-$config['0180_024F'][] = array('upper' => 494, 'status' => 'C', 'lower' => array(495)); /* LATIN CAPITAL LETTER EZH WITH CARON */
-$config['0180_024F'][] = array('upper' => 496, 'status' => 'F', 'lower' => array(106, 780)); /* LATIN SMALL LETTER J WITH CARON */
-$config['0180_024F'][] = array('upper' => 497, 'status' => 'C', 'lower' => array(499)); /* LATIN CAPITAL LETTER DZ */
-$config['0180_024F'][] = array('upper' => 498, 'status' => 'C', 'lower' => array(499)); /* LATIN CAPITAL LETTER D WITH SMALL LETTER Z */
-$config['0180_024F'][] = array('upper' => 500, 'status' => 'C', 'lower' => array(501)); /* LATIN CAPITAL LETTER G WITH ACUTE */
-$config['0180_024F'][] = array('upper' => 502, 'status' => 'C', 'lower' => array(405)); /* LATIN CAPITAL LETTER HWAIR */
-$config['0180_024F'][] = array('upper' => 503, 'status' => 'C', 'lower' => array(447)); /* LATIN CAPITAL LETTER WYNN */
-$config['0180_024F'][] = array('upper' => 504, 'status' => 'C', 'lower' => array(505)); /* LATIN CAPITAL LETTER N WITH GRAVE */
-$config['0180_024F'][] = array('upper' => 506, 'status' => 'C', 'lower' => array(507)); /* LATIN CAPITAL LETTER A WITH RING ABOVE AND ACUTE */
-$config['0180_024F'][] = array('upper' => 508, 'status' => 'C', 'lower' => array(509)); /* LATIN CAPITAL LETTER AE WITH ACUTE */
-$config['0180_024F'][] = array('upper' => 510, 'status' => 'C', 'lower' => array(511)); /* LATIN CAPITAL LETTER O WITH STROKE AND ACUTE */
-$config['0180_024F'][] = array('upper' => 512, 'status' => 'C', 'lower' => array(513)); /* LATIN CAPITAL LETTER A WITH DOUBLE GRAVE */
-$config['0180_024F'][] = array('upper' => 514, 'status' => 'C', 'lower' => array(515)); /* LATIN CAPITAL LETTER A WITH INVERTED BREVE */
-$config['0180_024F'][] = array('upper' => 516, 'status' => 'C', 'lower' => array(517)); /* LATIN CAPITAL LETTER E WITH DOUBLE GRAVE */
-$config['0180_024F'][] = array('upper' => 518, 'status' => 'C', 'lower' => array(519)); /* LATIN CAPITAL LETTER E WITH INVERTED BREVE */
-$config['0180_024F'][] = array('upper' => 520, 'status' => 'C', 'lower' => array(521)); /* LATIN CAPITAL LETTER I WITH DOUBLE GRAVE */
-$config['0180_024F'][] = array('upper' => 522, 'status' => 'C', 'lower' => array(523)); /* LATIN CAPITAL LETTER I WITH INVERTED BREVE */
-$config['0180_024F'][] = array('upper' => 524, 'status' => 'C', 'lower' => array(525)); /* LATIN CAPITAL LETTER O WITH DOUBLE GRAVE */
-$config['0180_024F'][] = array('upper' => 526, 'status' => 'C', 'lower' => array(527)); /* LATIN CAPITAL LETTER O WITH INVERTED BREVE */
-$config['0180_024F'][] = array('upper' => 528, 'status' => 'C', 'lower' => array(529)); /* LATIN CAPITAL LETTER R WITH DOUBLE GRAVE */
-$config['0180_024F'][] = array('upper' => 530, 'status' => 'C', 'lower' => array(531)); /* LATIN CAPITAL LETTER R WITH INVERTED BREVE */
-$config['0180_024F'][] = array('upper' => 532, 'status' => 'C', 'lower' => array(533)); /* LATIN CAPITAL LETTER U WITH DOUBLE GRAVE */
-$config['0180_024F'][] = array('upper' => 534, 'status' => 'C', 'lower' => array(535)); /* LATIN CAPITAL LETTER U WITH INVERTED BREVE */
-$config['0180_024F'][] = array('upper' => 536, 'status' => 'C', 'lower' => array(537)); /* LATIN CAPITAL LETTER S WITH COMMA BELOW */
-$config['0180_024F'][] = array('upper' => 538, 'status' => 'C', 'lower' => array(539)); /* LATIN CAPITAL LETTER T WITH COMMA BELOW */
-$config['0180_024F'][] = array('upper' => 540, 'status' => 'C', 'lower' => array(541)); /* LATIN CAPITAL LETTER YOGH */
-$config['0180_024F'][] = array('upper' => 542, 'status' => 'C', 'lower' => array(543)); /* LATIN CAPITAL LETTER H WITH CARON */
-$config['0180_024F'][] = array('upper' => 544, 'status' => 'C', 'lower' => array(414)); /* LATIN CAPITAL LETTER N WITH LONG RIGHT LEG */
-$config['0180_024F'][] = array('upper' => 546, 'status' => 'C', 'lower' => array(547)); /* LATIN CAPITAL LETTER OU */
-$config['0180_024F'][] = array('upper' => 548, 'status' => 'C', 'lower' => array(549)); /* LATIN CAPITAL LETTER Z WITH HOOK */
-$config['0180_024F'][] = array('upper' => 550, 'status' => 'C', 'lower' => array(551)); /* LATIN CAPITAL LETTER A WITH DOT ABOVE */
-$config['0180_024F'][] = array('upper' => 552, 'status' => 'C', 'lower' => array(553)); /* LATIN CAPITAL LETTER E WITH CEDILLA */
-$config['0180_024F'][] = array('upper' => 554, 'status' => 'C', 'lower' => array(555)); /* LATIN CAPITAL LETTER O WITH DIAERESIS AND MACRON */
-$config['0180_024F'][] = array('upper' => 556, 'status' => 'C', 'lower' => array(557)); /* LATIN CAPITAL LETTER O WITH TILDE AND MACRON */
-$config['0180_024F'][] = array('upper' => 558, 'status' => 'C', 'lower' => array(559)); /* LATIN CAPITAL LETTER O WITH DOT ABOVE */
-$config['0180_024F'][] = array('upper' => 560, 'status' => 'C', 'lower' => array(561)); /* LATIN CAPITAL LETTER O WITH DOT ABOVE AND MACRON */
-$config['0180_024F'][] = array('upper' => 562, 'status' => 'C', 'lower' => array(563)); /* LATIN CAPITAL LETTER Y WITH MACRON */
-$config['0180_024F'][] = array('upper' => 570, 'status' => 'C', 'lower' => array(11365)); /* LATIN CAPITAL LETTER A WITH STROKE */
-$config['0180_024F'][] = array('upper' => 571, 'status' => 'C', 'lower' => array(572)); /* LATIN CAPITAL LETTER C WITH STROKE */
-$config['0180_024F'][] = array('upper' => 573, 'status' => 'C', 'lower' => array(410)); /* LATIN CAPITAL LETTER L WITH BAR */
-$config['0180_024F'][] = array('upper' => 574, 'status' => 'C', 'lower' => array(11366)); /* LATIN CAPITAL LETTER T WITH DIAGONAL STROKE */
-$config['0180_024F'][] = array('upper' => 577, 'status' => 'C', 'lower' => array(578)); /* LATIN CAPITAL LETTER GLOTTAL STOP */
-$config['0180_024F'][] = array('upper' => 579, 'status' => 'C', 'lower' => array(384)); /* LATIN CAPITAL LETTER B WITH STROKE */
-$config['0180_024F'][] = array('upper' => 580, 'status' => 'C', 'lower' => array(649)); /* LATIN CAPITAL LETTER U BAR */
-$config['0180_024F'][] = array('upper' => 581, 'status' => 'C', 'lower' => array(652)); /* LATIN CAPITAL LETTER TURNED V */
-$config['0180_024F'][] = array('upper' => 582, 'status' => 'C', 'lower' => array(583)); /* LATIN CAPITAL LETTER E WITH STROKE */
-$config['0180_024F'][] = array('upper' => 584, 'status' => 'C', 'lower' => array(585)); /* LATIN CAPITAL LETTER J WITH STROKE */
-$config['0180_024F'][] = array('upper' => 586, 'status' => 'C', 'lower' => array(587)); /* LATIN CAPITAL LETTER SMALL Q WITH HOOK TAIL */
-$config['0180_024F'][] = array('upper' => 588, 'status' => 'C', 'lower' => array(589)); /* LATIN CAPITAL LETTER R WITH STROKE */
-$config['0180_024F'][] = array('upper' => 590, 'status' => 'C', 'lower' => array(591)); /* LATIN CAPITAL LETTER Y WITH STROKE */
+$config['0180_024F'][] = ['upper' => 385, 'status' => 'C', 'lower' => [595]]; /* LATIN CAPITAL LETTER B WITH HOOK */
+$config['0180_024F'][] = ['upper' => 386, 'status' => 'C', 'lower' => [387]]; /* LATIN CAPITAL LETTER B WITH TOPBAR */
+$config['0180_024F'][] = ['upper' => 388, 'status' => 'C', 'lower' => [389]]; /* LATIN CAPITAL LETTER TONE SIX */
+$config['0180_024F'][] = ['upper' => 390, 'status' => 'C', 'lower' => [596]]; /* LATIN CAPITAL LETTER OPEN O */
+$config['0180_024F'][] = ['upper' => 391, 'status' => 'C', 'lower' => [392]]; /* LATIN CAPITAL LETTER C WITH HOOK */
+$config['0180_024F'][] = ['upper' => 393, 'status' => 'C', 'lower' => [598]]; /* LATIN CAPITAL LETTER AFRICAN D */
+$config['0180_024F'][] = ['upper' => 394, 'status' => 'C', 'lower' => [599]]; /* LATIN CAPITAL LETTER D WITH HOOK */
+$config['0180_024F'][] = ['upper' => 395, 'status' => 'C', 'lower' => [396]]; /* LATIN CAPITAL LETTER D WITH TOPBAR */
+$config['0180_024F'][] = ['upper' => 398, 'status' => 'C', 'lower' => [477]]; /* LATIN CAPITAL LETTER REVERSED E */
+$config['0180_024F'][] = ['upper' => 399, 'status' => 'C', 'lower' => [601]]; /* LATIN CAPITAL LETTER SCHWA */
+$config['0180_024F'][] = ['upper' => 400, 'status' => 'C', 'lower' => [603]]; /* LATIN CAPITAL LETTER OPEN E */
+$config['0180_024F'][] = ['upper' => 401, 'status' => 'C', 'lower' => [402]]; /* LATIN CAPITAL LETTER F WITH HOOK */
+$config['0180_024F'][] = ['upper' => 403, 'status' => 'C', 'lower' => [608]]; /* LATIN CAPITAL LETTER G WITH HOOK */
+$config['0180_024F'][] = ['upper' => 404, 'status' => 'C', 'lower' => [611]]; /* LATIN CAPITAL LETTER GAMMA */
+$config['0180_024F'][] = ['upper' => 406, 'status' => 'C', 'lower' => [617]]; /* LATIN CAPITAL LETTER IOTA */
+$config['0180_024F'][] = ['upper' => 407, 'status' => 'C', 'lower' => [616]]; /* LATIN CAPITAL LETTER I WITH STROKE */
+$config['0180_024F'][] = ['upper' => 408, 'status' => 'C', 'lower' => [409]]; /* LATIN CAPITAL LETTER K WITH HOOK */
+$config['0180_024F'][] = ['upper' => 412, 'status' => 'C', 'lower' => [623]]; /* LATIN CAPITAL LETTER TURNED M */
+$config['0180_024F'][] = ['upper' => 413, 'status' => 'C', 'lower' => [626]]; /* LATIN CAPITAL LETTER N WITH LEFT HOOK */
+$config['0180_024F'][] = ['upper' => 415, 'status' => 'C', 'lower' => [629]]; /* LATIN CAPITAL LETTER O WITH MIDDLE TILDE */
+$config['0180_024F'][] = ['upper' => 416, 'status' => 'C', 'lower' => [417]]; /* LATIN CAPITAL LETTER O WITH HORN */
+$config['0180_024F'][] = ['upper' => 418, 'status' => 'C', 'lower' => [419]]; /* LATIN CAPITAL LETTER OI */
+$config['0180_024F'][] = ['upper' => 420, 'status' => 'C', 'lower' => [421]]; /* LATIN CAPITAL LETTER P WITH HOOK */
+$config['0180_024F'][] = ['upper' => 422, 'status' => 'C', 'lower' => [640]]; /* LATIN LETTER YR */
+$config['0180_024F'][] = ['upper' => 423, 'status' => 'C', 'lower' => [424]]; /* LATIN CAPITAL LETTER TONE TWO */
+$config['0180_024F'][] = ['upper' => 425, 'status' => 'C', 'lower' => [643]]; /* LATIN CAPITAL LETTER ESH */
+$config['0180_024F'][] = ['upper' => 428, 'status' => 'C', 'lower' => [429]]; /* LATIN CAPITAL LETTER T WITH HOOK */
+$config['0180_024F'][] = ['upper' => 430, 'status' => 'C', 'lower' => [648]]; /* LATIN CAPITAL LETTER T WITH RETROFLEX HOOK */
+$config['0180_024F'][] = ['upper' => 431, 'status' => 'C', 'lower' => [432]]; /* LATIN CAPITAL LETTER U WITH HORN */
+$config['0180_024F'][] = ['upper' => 433, 'status' => 'C', 'lower' => [650]]; /* LATIN CAPITAL LETTER UPSILON */
+$config['0180_024F'][] = ['upper' => 434, 'status' => 'C', 'lower' => [651]]; /* LATIN CAPITAL LETTER V WITH HOOK */
+$config['0180_024F'][] = ['upper' => 435, 'status' => 'C', 'lower' => [436]]; /* LATIN CAPITAL LETTER Y WITH HOOK */
+$config['0180_024F'][] = ['upper' => 437, 'status' => 'C', 'lower' => [438]]; /* LATIN CAPITAL LETTER Z WITH STROKE */
+$config['0180_024F'][] = ['upper' => 439, 'status' => 'C', 'lower' => [658]]; /* LATIN CAPITAL LETTER EZH */
+$config['0180_024F'][] = ['upper' => 440, 'status' => 'C', 'lower' => [441]]; /* LATIN CAPITAL LETTER EZH REVERSED */
+$config['0180_024F'][] = ['upper' => 444, 'status' => 'C', 'lower' => [445]]; /* LATIN CAPITAL LETTER TONE FIVE */
+$config['0180_024F'][] = ['upper' => 452, 'status' => 'C', 'lower' => [454]]; /* LATIN CAPITAL LETTER DZ WITH CARON */
+$config['0180_024F'][] = ['upper' => 453, 'status' => 'C', 'lower' => [454]]; /* LATIN CAPITAL LETTER D WITH SMALL LETTER Z WITH CARON */
+$config['0180_024F'][] = ['upper' => 455, 'status' => 'C', 'lower' => [457]]; /* LATIN CAPITAL LETTER LJ */
+$config['0180_024F'][] = ['upper' => 456, 'status' => 'C', 'lower' => [457]]; /* LATIN CAPITAL LETTER L WITH SMALL LETTER J */
+$config['0180_024F'][] = ['upper' => 458, 'status' => 'C', 'lower' => [460]]; /* LATIN CAPITAL LETTER NJ */
+$config['0180_024F'][] = ['upper' => 459, 'status' => 'C', 'lower' => [460]]; /* LATIN CAPITAL LETTER N WITH SMALL LETTER J */
+$config['0180_024F'][] = ['upper' => 461, 'status' => 'C', 'lower' => [462]]; /* LATIN CAPITAL LETTER A WITH CARON */
+$config['0180_024F'][] = ['upper' => 463, 'status' => 'C', 'lower' => [464]]; /* LATIN CAPITAL LETTER I WITH CARON */
+$config['0180_024F'][] = ['upper' => 465, 'status' => 'C', 'lower' => [466]]; /* LATIN CAPITAL LETTER O WITH CARON */
+$config['0180_024F'][] = ['upper' => 467, 'status' => 'C', 'lower' => [468]]; /* LATIN CAPITAL LETTER U WITH CARON */
+$config['0180_024F'][] = ['upper' => 469, 'status' => 'C', 'lower' => [470]]; /* LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON */
+$config['0180_024F'][] = ['upper' => 471, 'status' => 'C', 'lower' => [472]]; /* LATIN CAPITAL LETTER U WITH DIAERESIS AND ACUTE */
+$config['0180_024F'][] = ['upper' => 473, 'status' => 'C', 'lower' => [474]]; /* LATIN CAPITAL LETTER U WITH DIAERESIS AND CARON */
+$config['0180_024F'][] = ['upper' => 475, 'status' => 'C', 'lower' => [476]]; /* LATIN CAPITAL LETTER U WITH DIAERESIS AND GRAVE */
+$config['0180_024F'][] = ['upper' => 478, 'status' => 'C', 'lower' => [479]]; /* LATIN CAPITAL LETTER A WITH DIAERESIS AND MACRON */
+$config['0180_024F'][] = ['upper' => 480, 'status' => 'C', 'lower' => [481]]; /* LATIN CAPITAL LETTER A WITH DOT ABOVE AND MACRON */
+$config['0180_024F'][] = ['upper' => 482, 'status' => 'C', 'lower' => [483]]; /* LATIN CAPITAL LETTER AE WITH MACRON */
+$config['0180_024F'][] = ['upper' => 484, 'status' => 'C', 'lower' => [485]]; /* LATIN CAPITAL LETTER G WITH STROKE */
+$config['0180_024F'][] = ['upper' => 486, 'status' => 'C', 'lower' => [487]]; /* LATIN CAPITAL LETTER G WITH CARON */
+$config['0180_024F'][] = ['upper' => 488, 'status' => 'C', 'lower' => [489]]; /* LATIN CAPITAL LETTER K WITH CARON */
+$config['0180_024F'][] = ['upper' => 490, 'status' => 'C', 'lower' => [491]]; /* LATIN CAPITAL LETTER O WITH OGONEK */
+$config['0180_024F'][] = ['upper' => 492, 'status' => 'C', 'lower' => [493]]; /* LATIN CAPITAL LETTER O WITH OGONEK AND MACRON */
+$config['0180_024F'][] = ['upper' => 494, 'status' => 'C', 'lower' => [495]]; /* LATIN CAPITAL LETTER EZH WITH CARON */
+$config['0180_024F'][] = ['upper' => 496, 'status' => 'F', 'lower' => [106, 780]]; /* LATIN SMALL LETTER J WITH CARON */
+$config['0180_024F'][] = ['upper' => 497, 'status' => 'C', 'lower' => [499]]; /* LATIN CAPITAL LETTER DZ */
+$config['0180_024F'][] = ['upper' => 498, 'status' => 'C', 'lower' => [499]]; /* LATIN CAPITAL LETTER D WITH SMALL LETTER Z */
+$config['0180_024F'][] = ['upper' => 500, 'status' => 'C', 'lower' => [501]]; /* LATIN CAPITAL LETTER G WITH ACUTE */
+$config['0180_024F'][] = ['upper' => 502, 'status' => 'C', 'lower' => [405]]; /* LATIN CAPITAL LETTER HWAIR */
+$config['0180_024F'][] = ['upper' => 503, 'status' => 'C', 'lower' => [447]]; /* LATIN CAPITAL LETTER WYNN */
+$config['0180_024F'][] = ['upper' => 504, 'status' => 'C', 'lower' => [505]]; /* LATIN CAPITAL LETTER N WITH GRAVE */
+$config['0180_024F'][] = ['upper' => 506, 'status' => 'C', 'lower' => [507]]; /* LATIN CAPITAL LETTER A WITH RING ABOVE AND ACUTE */
+$config['0180_024F'][] = ['upper' => 508, 'status' => 'C', 'lower' => [509]]; /* LATIN CAPITAL LETTER AE WITH ACUTE */
+$config['0180_024F'][] = ['upper' => 510, 'status' => 'C', 'lower' => [511]]; /* LATIN CAPITAL LETTER O WITH STROKE AND ACUTE */
+$config['0180_024F'][] = ['upper' => 512, 'status' => 'C', 'lower' => [513]]; /* LATIN CAPITAL LETTER A WITH DOUBLE GRAVE */
+$config['0180_024F'][] = ['upper' => 514, 'status' => 'C', 'lower' => [515]]; /* LATIN CAPITAL LETTER A WITH INVERTED BREVE */
+$config['0180_024F'][] = ['upper' => 516, 'status' => 'C', 'lower' => [517]]; /* LATIN CAPITAL LETTER E WITH DOUBLE GRAVE */
+$config['0180_024F'][] = ['upper' => 518, 'status' => 'C', 'lower' => [519]]; /* LATIN CAPITAL LETTER E WITH INVERTED BREVE */
+$config['0180_024F'][] = ['upper' => 520, 'status' => 'C', 'lower' => [521]]; /* LATIN CAPITAL LETTER I WITH DOUBLE GRAVE */
+$config['0180_024F'][] = ['upper' => 522, 'status' => 'C', 'lower' => [523]]; /* LATIN CAPITAL LETTER I WITH INVERTED BREVE */
+$config['0180_024F'][] = ['upper' => 524, 'status' => 'C', 'lower' => [525]]; /* LATIN CAPITAL LETTER O WITH DOUBLE GRAVE */
+$config['0180_024F'][] = ['upper' => 526, 'status' => 'C', 'lower' => [527]]; /* LATIN CAPITAL LETTER O WITH INVERTED BREVE */
+$config['0180_024F'][] = ['upper' => 528, 'status' => 'C', 'lower' => [529]]; /* LATIN CAPITAL LETTER R WITH DOUBLE GRAVE */
+$config['0180_024F'][] = ['upper' => 530, 'status' => 'C', 'lower' => [531]]; /* LATIN CAPITAL LETTER R WITH INVERTED BREVE */
+$config['0180_024F'][] = ['upper' => 532, 'status' => 'C', 'lower' => [533]]; /* LATIN CAPITAL LETTER U WITH DOUBLE GRAVE */
+$config['0180_024F'][] = ['upper' => 534, 'status' => 'C', 'lower' => [535]]; /* LATIN CAPITAL LETTER U WITH INVERTED BREVE */
+$config['0180_024F'][] = ['upper' => 536, 'status' => 'C', 'lower' => [537]]; /* LATIN CAPITAL LETTER S WITH COMMA BELOW */
+$config['0180_024F'][] = ['upper' => 538, 'status' => 'C', 'lower' => [539]]; /* LATIN CAPITAL LETTER T WITH COMMA BELOW */
+$config['0180_024F'][] = ['upper' => 540, 'status' => 'C', 'lower' => [541]]; /* LATIN CAPITAL LETTER YOGH */
+$config['0180_024F'][] = ['upper' => 542, 'status' => 'C', 'lower' => [543]]; /* LATIN CAPITAL LETTER H WITH CARON */
+$config['0180_024F'][] = ['upper' => 544, 'status' => 'C', 'lower' => [414]]; /* LATIN CAPITAL LETTER N WITH LONG RIGHT LEG */
+$config['0180_024F'][] = ['upper' => 546, 'status' => 'C', 'lower' => [547]]; /* LATIN CAPITAL LETTER OU */
+$config['0180_024F'][] = ['upper' => 548, 'status' => 'C', 'lower' => [549]]; /* LATIN CAPITAL LETTER Z WITH HOOK */
+$config['0180_024F'][] = ['upper' => 550, 'status' => 'C', 'lower' => [551]]; /* LATIN CAPITAL LETTER A WITH DOT ABOVE */
+$config['0180_024F'][] = ['upper' => 552, 'status' => 'C', 'lower' => [553]]; /* LATIN CAPITAL LETTER E WITH CEDILLA */
+$config['0180_024F'][] = ['upper' => 554, 'status' => 'C', 'lower' => [555]]; /* LATIN CAPITAL LETTER O WITH DIAERESIS AND MACRON */
+$config['0180_024F'][] = ['upper' => 556, 'status' => 'C', 'lower' => [557]]; /* LATIN CAPITAL LETTER O WITH TILDE AND MACRON */
+$config['0180_024F'][] = ['upper' => 558, 'status' => 'C', 'lower' => [559]]; /* LATIN CAPITAL LETTER O WITH DOT ABOVE */
+$config['0180_024F'][] = ['upper' => 560, 'status' => 'C', 'lower' => [561]]; /* LATIN CAPITAL LETTER O WITH DOT ABOVE AND MACRON */
+$config['0180_024F'][] = ['upper' => 562, 'status' => 'C', 'lower' => [563]]; /* LATIN CAPITAL LETTER Y WITH MACRON */
+$config['0180_024F'][] = ['upper' => 570, 'status' => 'C', 'lower' => [11365]]; /* LATIN CAPITAL LETTER A WITH STROKE */
+$config['0180_024F'][] = ['upper' => 571, 'status' => 'C', 'lower' => [572]]; /* LATIN CAPITAL LETTER C WITH STROKE */
+$config['0180_024F'][] = ['upper' => 573, 'status' => 'C', 'lower' => [410]]; /* LATIN CAPITAL LETTER L WITH BAR */
+$config['0180_024F'][] = ['upper' => 574, 'status' => 'C', 'lower' => [11366]]; /* LATIN CAPITAL LETTER T WITH DIAGONAL STROKE */
+$config['0180_024F'][] = ['upper' => 577, 'status' => 'C', 'lower' => [578]]; /* LATIN CAPITAL LETTER GLOTTAL STOP */
+$config['0180_024F'][] = ['upper' => 579, 'status' => 'C', 'lower' => [384]]; /* LATIN CAPITAL LETTER B WITH STROKE */
+$config['0180_024F'][] = ['upper' => 580, 'status' => 'C', 'lower' => [649]]; /* LATIN CAPITAL LETTER U BAR */
+$config['0180_024F'][] = ['upper' => 581, 'status' => 'C', 'lower' => [652]]; /* LATIN CAPITAL LETTER TURNED V */
+$config['0180_024F'][] = ['upper' => 582, 'status' => 'C', 'lower' => [583]]; /* LATIN CAPITAL LETTER E WITH STROKE */
+$config['0180_024F'][] = ['upper' => 584, 'status' => 'C', 'lower' => [585]]; /* LATIN CAPITAL LETTER J WITH STROKE */
+$config['0180_024F'][] = ['upper' => 586, 'status' => 'C', 'lower' => [587]]; /* LATIN CAPITAL LETTER SMALL Q WITH HOOK TAIL */
+$config['0180_024F'][] = ['upper' => 588, 'status' => 'C', 'lower' => [589]]; /* LATIN CAPITAL LETTER R WITH STROKE */
+$config['0180_024F'][] = ['upper' => 590, 'status' => 'C', 'lower' => [591]]; /* LATIN CAPITAL LETTER Y WITH STROKE */

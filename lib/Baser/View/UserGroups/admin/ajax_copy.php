@@ -13,4 +13,4 @@
 /**
  * [ADMIN] Ajax 行コピー
  */
-$this->BcBaser->element('user_groups/index_row', array('data' => $data));
+$this->BcBaser->element('user_groups/index_row', ['data' => $data]);

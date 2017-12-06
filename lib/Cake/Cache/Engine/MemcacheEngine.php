@@ -32,7 +32,7 @@ class MemcacheEngine extends CacheEngine {
  *
  * @var array
  */
-	protected $_compiledGroupNames = array();
+	protected $_compiledGroupNames = [];
 
 /**
  * Memcache wrapper.
@@ -50,7 +50,7 @@ class MemcacheEngine extends CacheEngine {
  *
  * @var array
  */
-	public $settings = array();
+	public $settings = [];
 
 /**
  * Initialize the Cache Engine
@@ -61,26 +61,26 @@ class MemcacheEngine extends CacheEngine {
  * @param array $settings array of setting for the engine
  * @return bool True if the engine has been successfully initialized, false if not
  */
-	public function init($settings = array()) {
+	public function init($settings = []) {
 		if (!class_exists('Memcache')) {
 			return false;
 		}
 		if (!isset($settings['prefix'])) {
 			$settings['prefix'] = Inflector::slug(APP_DIR) . '_';
 		}
-		$settings += array(
+		$settings += [
 			'engine' => 'Memcache',
-			'servers' => array('127.0.0.1'),
+			'servers' => ['127.0.0.1'],
 			'compress' => false,
 			'persistent' => true
-		);
+		];
 		parent::init($settings);
 
 		if ($this->settings['compress']) {
 			$this->settings['compress'] = MEMCACHE_COMPRESSED;
 		}
 		if (is_string($this->settings['servers'])) {
-			$this->settings['servers'] = array($this->settings['servers']);
+			$this->settings['servers'] = [$this->settings['servers']];
 		}
 		if (!isset($this->_Memcache)) {
 			$return = false;
@@ -105,7 +105,7 @@ class MemcacheEngine extends CacheEngine {
  */
 	protected function _parseServerString($server) {
 		if (strpos($server, 'unix://') === 0) {
-			return array($server, 0);
+			return [$server, 0];
 		}
 		if (substr($server, 0, 1) === '[') {
 			$position = strpos($server, ']:');
@@ -121,7 +121,7 @@ class MemcacheEngine extends CacheEngine {
 			$host = substr($server, 0, $position);
 			$port = substr($server, $position + 1);
 		}
-		return array($host, $port);
+		return [$host, $port];
 	}
 
 /**
@@ -270,7 +270,7 @@ class MemcacheEngine extends CacheEngine {
 			ksort($groups);
 		}
 
-		$result = array();
+		$result = [];
 		$groups = array_values($groups);
 		foreach ($this->settings['groups'] as $i => $group) {
 			$result[] = $group . $groups[$i];

@@ -46,7 +46,7 @@ class CakeTestRunner extends PHPUnit_TextUI_TestRunner {
  * @param array $arguments The CLI arguments
  * @return void
  */
-	public function doRun(PHPUnit_Framework_Test $suite, array $arguments = array()) {
+	public function doRun(PHPUnit_Framework_Test $suite, array $arguments = []) {
 		if (isset($arguments['printer'])) {
 			static::$versionStringPrinted = true;
 		}

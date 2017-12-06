@@ -28,7 +28,7 @@ class SimplePasswordHasher extends AbstractPasswordHasher {
  *
  * @var array
  */
-	protected $_config = array('hashType' => null);
+	protected $_config = ['hashType' => null];
 
 /**
  * Generates password hash.

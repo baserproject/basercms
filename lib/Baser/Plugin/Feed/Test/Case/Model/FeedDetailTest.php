@@ -14,10 +14,10 @@ App::uses('FeedDetail', 'Feed.Model');
 
 class FeedDetailTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'plugin.feed.Default/FeedConfig',
 		'baser.Default.FeedDetail',
-	);
+	];
 
 	public function setUp() {
 		$this->FeedDetail = ClassRegistry::init('Feed.FeedDetail');
@@ -33,9 +33,9 @@ class FeedDetailTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->FeedDetail->create(array(
-			'FeedDetail' => array()
-		));
+		$this->FeedDetail->create([
+			'FeedDetail' => []
+		]);
 
 		$this->assertFalse($this->FeedDetail->validates());
 
@@ -47,13 +47,13 @@ class FeedDetailTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
-		$this->FeedDetail->create(array(
-			'FeedDetail' => array(
+		$this->FeedDetail->create([
+			'FeedDetail' => [
 				'name' => '123456789012345678901234567890123456789012345678901',
 				'url' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'category_filter' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456'
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->FeedDetail->validates());
 
 		$this->assertArrayHasKey('name', $this->FeedDetail->validationErrors);
@@ -67,13 +67,13 @@ class FeedDetailTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック正常系() {
-		$this->FeedDetail->create(array(
-			'FeedDetail' => array(
+		$this->FeedDetail->create([
+			'FeedDetail' => [
 				'name' => '12345678901234567890123456789012345678901234567890',
 				'url' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'category_filter' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345'
-			)
-		));
+			]
+		]);
 
 		$this->assertTrue($this->FeedDetail->validates());
 	}
@@ -90,12 +90,12 @@ class FeedDetailTest extends BaserTestCase {
  */
 	public function testGetDefaultValue() {
 		$result = $this->FeedDetail->getDefaultValue(1);
-		$expected = array('FeedDetail' => array(
+		$expected = ['FeedDetail' => [
 				'feed_config_id' => 1,
 				'name' => 'baserCMSニュース',
 				'cache_time' => '+30 minutes'
-			)
-		);
+			]
+		];
 	}
 
 }

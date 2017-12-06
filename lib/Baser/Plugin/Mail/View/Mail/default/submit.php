@@ -13,9 +13,9 @@
 /**
  * [PUBLISH] メールフォーム送信完了ページ
  */
-$this->BcBaser->css('Mail.style', array('inline' => true));
+$this->BcBaser->css('Mail.style', ['inline' => true]);
 if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']) {
-	$this->Html->meta(array('http-equiv' => 'Refresh'), null, array('content' => '5;url=' . $mailContent['MailContent']['redirect_url'], 'inline' => false));
+	$this->Html->meta(['http-equiv' => 'Refresh'], null, ['content' => '5;url=' . $mailContent['MailContent']['redirect_url'], 'inline' => false]);
 }
 ?>
 

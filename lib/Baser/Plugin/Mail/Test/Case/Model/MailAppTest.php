@@ -19,13 +19,13 @@ App::uses('MailAppModel', 'Mail.Model');
 
 class MailAppTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'plugin.mail.Default/MailMessage',
 		'plugin.mail.Default/MailConfig',
 		'plugin.mail.Default/MailContent',
 		'plugin.mail.Default/MailField',
-	);
+	];
 
 	public function setUp() {
 		$this->MailApp = ClassRegistry::init('Mail.MailApp');
@@ -43,8 +43,8 @@ class MailAppTest extends BaserTestCase {
  */
 	public function testSanitizeAndRestoreData() {
 		
-		$datas = array('<!--', '<a href="test">Test</a>');
-		$expected = array('&lt;!--', '&lt;a href=&quot;test&quot;&gt;Test&lt;/a&gt;');
+		$datas = ['<!--', '<a href="test">Test</a>'];
+		$expected = ['&lt;!--', '&lt;a href=&quot;test&quot;&gt;Test&lt;/a&gt;'];
 
 		$resultSanitized = $this->MailApp->sanitizeData($datas);
 		$this->assertEquals($expected, $resultSanitized, 'データのサニタイズを正しく行えません');

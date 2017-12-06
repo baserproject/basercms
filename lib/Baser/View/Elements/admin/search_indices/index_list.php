@@ -71,9 +71,9 @@ $(function(){
 			<th class="list-tool">
 <?php if ($this->BcBaser->isAdminUser()): ?>
                 <div>
-                    <?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-                    <?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-                    <?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+                    <?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
+                    <?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
+                    <?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
                 </div>
 <?php endif ?>
             </th>
@@ -89,7 +89,7 @@ $(function(){
 	<?php if (!empty($datas)): ?>
 		<?php $count = 0; ?>
 		<?php foreach ($datas as $data): ?>
-			<?php $this->BcBaser->element('search_indices/index_row', array('data' => $data, 'count' => $count)) ?>
+			<?php $this->BcBaser->element('search_indices/index_row', ['data' => $data, 'count' => $count]) ?>
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>

@@ -75,7 +75,7 @@ class BcThemeConfigReader implements ConfigReaderInterface {
 
 		foreach (self::$variables as $var => $name) {
 			if (!isset($$var)) {
-				throw new ConfigureException(__d('cake_dev', 'テーマの %s が設定されていません : %s', array($name, $file)));
+				throw new ConfigureException(__d('cake_dev', 'テーマの %s が設定されていません : %s', [$name, $file]));
 			}
 			$config[$var] = $$var;
 		}

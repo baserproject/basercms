@@ -21,7 +21,7 @@ App::uses('Controller', 'Controller');
  */
 class BcManagerTestController extends Controller {
 
-	public $components = array('BcManager');
+	public $components = ['BcManager'];
 
 }
 
@@ -31,7 +31,7 @@ class BcManagerTestController extends Controller {
  */
 class BcManagerComponentTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogContent',
 		'baser.Default.BlogComment',
@@ -46,9 +46,9 @@ class BcManagerComponentTest extends BaserTestCase {
 		'baser.Default.Plugin',
 		'baser.Default.User',
 		'baser.Default.Site',
-	);
+	];
 
-	public $components = array('BcManager');
+	public $components = ['BcManager'];
 
 	public function setUp() {
 		parent::setUp();
@@ -121,12 +121,12 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 	public function getDatasourceNameDataProvider() {
-		return array(
-			array('postgres', 'Database/BcPostgres'),
-			array('mysql', 'Database/BcMysql'),
-			array('sqlite', 'Database/BcSqlite'),
-			array('csv', 'Database/BcCsv'),
-		);
+		return [
+			['postgres', 'Database/BcPostgres'],
+			['mysql', 'Database/BcMysql'],
+			['sqlite', 'Database/BcSqlite'],
+			['csv', 'Database/BcCsv'],
+		];
 	}
 
 /**
@@ -142,12 +142,12 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 	public function getRealDbNameDataProvider() {
-		return array(
-			array('type', 'name', 'name'),
-			array('sqlite', 'name', APP . 'db' . DS . 'sqlite' . DS . 'name' . '.db'),
-			array('csv', 'name', APP . 'db' . DS . 'csv' . DS . 'name'),
-			array('sqlite', '/name', '/name'),
-		);
+		return [
+			['type', 'name', 'name'],
+			['sqlite', 'name', APP . 'db' . DS . 'sqlite' . DS . 'name' . '.db'],
+			['csv', 'name', APP . 'db' . DS . 'csv' . DS . 'name'],
+			['sqlite', '/name', '/name'],
+		];
 	}
 
 /**
@@ -164,7 +164,7 @@ class BcManagerComponentTest extends BaserTestCase {
  */
 	public function testExecuteDefaultUpdates() {
 
-		$dbConfig =  array(
+		$dbConfig =  [
 			'datasource' => 'Database/BcMysql',
 			'persistent' => false,
 			'host' => 'localhost',
@@ -175,7 +175,7 @@ class BcManagerComponentTest extends BaserTestCase {
 			'schema' => '',
 			'prefix' => 'mysite_',
 			'encoding' => 'utf8',
-		);
+		];
 
 		// プラグイン有効化チェック用準備(ダミーのプラグインディレクトリを作成)
 		$testPluginPath = BASER_PLUGINS . 'Test' . DS;
@@ -185,7 +185,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		$File = new File($testPluginConfigPath, true);
 		$File->write('<?php $title = "テスト";');
 
-		Configure::write('BcApp.corePlugins', array('Blog', 'Feed', 'Mail', 'Test'));
+		Configure::write('BcApp.corePlugins', ['Blog', 'Feed', 'Mail', 'Test']);
 
 
 		// 初期更新を実行
@@ -199,17 +199,17 @@ class BcManagerComponentTest extends BaserTestCase {
 		$Folder->delete($testPluginPath);
 		
 		$this->Plugin = ClassRegistry::init('Plugin');
-		$plugin = $this->Plugin->find('first', array(
-				'conditions' => array('id' => 4),
-				'fields' => array('title','status'),
-			)
+		$plugin = $this->Plugin->find('first', [
+				'conditions' => ['id' => 4],
+				'fields' => ['title','status'],
+			]
 		);
-		$expected = array(
-			'Plugin' => array(
+		$expected = [
+			'Plugin' => [
 				'title' => 'テスト',
 				'status' => 1,
-			)
-		);
+			]
+		];
 		$this->Plugin->delete(4);
 		unset($this->Plugin);
 		$this->assertEquals($expected, $plugin, 'プラグインのステータスを正しく更新できません');
@@ -224,10 +224,10 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->BcManager->setAdminEmail('hoge');
 
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
-		$result = $this->SiteConfig->find('first', array(
-				'conditions' => array('name' => 'email'),
-				'fields' => array('value'),
-			)
+		$result = $this->SiteConfig->find('first', [
+				'conditions' => ['name' => 'email'],
+				'fields' => ['value'],
+			]
 		);
 
 		$this->assertEquals('hoge', $result['SiteConfig']['value'], 'サイト基本設定に管理用メールアドレスを登録できません');
@@ -242,13 +242,13 @@ class BcManagerComponentTest extends BaserTestCase {
  * @return boolean 
  */
 	public function testAddDefaultUser() {
-		$user = array(
+		$user = [
 			'name' => 'hoge',
 			'email' => 'test@co.jp',
 			'user_group_id' => 1,
 			'password_1' => 'testtest',
 			'password_2' => 'testtest'
-		);
+		];
 		$result = $this->BcManager->addDefaultUser($user, 'hogehoge');
 
 		$this->User = ClassRegistry::init('User');
@@ -273,11 +273,11 @@ class BcManagerComponentTest extends BaserTestCase {
 		$copy = copy($configPath . 'database.php', $configPath . 'database.php.copy');
 
 		if ($copy) {
-			$options = array(
+			$options = [
 				'datasource'	=> 'mysql',
 				'host'			=> 'hoge',
 				'port'			=> '0000',
-			);
+			];
 			$this->BcManager->createDatabaseConfig($options);
 
 			$File = new File($configPath . 'database.php');

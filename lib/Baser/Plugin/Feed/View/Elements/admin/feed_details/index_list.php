@@ -21,12 +21,12 @@ $this->BcListTable->setColumnNumber(5);
 <?php if ($this->action != 'admin_add'): ?>
 
 	<?php
-	$this->BcBaser->js(array(
+	$this->BcBaser->js([
 		'admin/libs/jquery.baser_ajax_data_list',
 		'admin/libs/jquery.baser_ajax_batch',
 		'admin/libs/baser_ajax_data_list_config',
 		'admin/libs/baser_ajax_batch_config'
-	));
+	]);
 	?>
 
 	<script type="text/javascript">
@@ -69,7 +69,7 @@ $(function(){
 });
 	</script>
 
-	<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => 'feed', 'controller' => 'feed_details', 'action' => 'ajax_batch', $this->request->params['pass'][0])) ?></div>
+	<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['plugin' => 'feed', 'controller' => 'feed_details', 'action' => 'ajax_batch', $this->request->params['pass'][0]]) ?></div>
 
 	<div class="section">
 
@@ -80,13 +80,13 @@ $(function(){
 				<tr>
 					<th scope="col"  style="width:160px" class="list-tool">
 			<div>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id')]) ?>
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 				<div>
-					<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-					<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-					<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+					<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
+					<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
+					<?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
 				</div>
 			<?php endif ?>
 			</th>
@@ -100,7 +100,7 @@ $(function(){
 			<tbody>
 				<?php if (!empty($feedConfig['FeedDetail'])): ?>
 					<?php foreach ($feedConfig['FeedDetail'] as $feedDetail): ?>
-						<?php $this->BcBaser->element('feed_details/index_row', array('data' => $feedDetail)) ?>
+						<?php $this->BcBaser->element('feed_details/index_row', ['data' => $feedDetail]) ?>
 					<?php endforeach; ?>
 				<?php else: ?>
 					<tr>

@@ -17,8 +17,8 @@ class FeedConfigFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => 'baserCMSニュース',
 			'feed_title_index' => '',
@@ -27,7 +27,7 @@ class FeedConfigFixture extends BaserTestFixture {
 			'display_number' => '3',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

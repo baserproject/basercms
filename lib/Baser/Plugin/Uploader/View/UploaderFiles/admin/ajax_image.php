@@ -17,5 +17,5 @@ $url = $this->BcBaser->getUrl($this->Uploader->getFileUrl($file['UploaderFile'][
 	<a href="<?php echo $url  ?>" target="_blank"><?php echo FULL_BASE_URL.$url ?></a>
 </p>
 <p class="image">
-	<a href="<?php echo $url ?>" target="_blank"><?php echo $this->Uploader->file($file, array('size' => $size, 'alt' => $file['UploaderFile']['name'])) ?></a>
+	<a href="<?php echo $url ?>" target="_blank"><?php echo $this->Uploader->file($file, ['size' => $size, 'alt' => $file['UploaderFile']['name']]) ?></a>
 </p>

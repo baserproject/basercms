@@ -13,11 +13,11 @@
 /**
  * システムナビ
  */
-$config['BcApp.adminNavi.feed'] = array(
+$config['BcApp.adminNavi.feed'] = [
 	'name' => 'フィードプラグイン',
-	'contents' => array(
-		array('name' => 'フィード設定一覧', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index')),
-		array('name' => 'フィード設定登録', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'add')),
-		array('name' => 'フィードキャッシュ削除', 'url' => array('admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'delete_cache'), 'options' => array('confirm' => 'フィードキャッシュを削除します。いいですか？'))
-	)
-);
+	'contents' => [
+		['name' => 'フィード設定一覧', 'url' => ['admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'index']],
+		['name' => 'フィード設定登録', 'url' => ['admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'add']],
+		['name' => 'フィードキャッシュ削除', 'url' => ['admin' => true, 'plugin' => 'feed', 'controller' => 'feed_configs', 'action' => 'delete_cache'], 'options' => ['confirm' => 'フィードキャッシュを削除します。いいですか？']]
+	]
+];

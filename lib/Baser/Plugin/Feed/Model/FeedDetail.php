@@ -31,44 +31,44 @@ class FeedDetail extends FeedAppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * belongsTo
  * 
  * @var array
  */
-	public $belongsTo = array('FeedConfig' => array('className' => 'Feed.FeedConfig',
+	public $belongsTo = ['FeedConfig' => ['className' => 'Feed.FeedConfig',
 			'conditions' => '',
 			'order' => '',
 			'foreignKey' => 'feed_config_id'
-	));
+	]];
 
 /**
  * validate
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => "フィード詳細名を入力してください。",
-				'required' => true),
-			array('rule' => array('maxLength', 50),
-				'message' => 'フィード詳細名は50文字以内で入力してください。')
-		),
-		'url' => array(
-			array('rule' => array('notBlank'),
+				'required' => true],
+			['rule' => ['maxLength', 50],
+				'message' => 'フィード詳細名は50文字以内で入力してください。']
+		],
+		'url' => [
+			['rule' => ['notBlank'],
 				'message' => "フィードURLを入力してください。",
-				'required' => true),
-			array('rule' => array('maxLength', 255),
-				'message' => 'フィードURLは255文字以内で入力してください。')
-		),
-		'category_filter' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'カテゴリフィルタは255文字以内で入力してください。')
-		)
-	);
+				'required' => true],
+			['rule' => ['maxLength', 255],
+				'message' => 'フィードURLは255文字以内で入力してください。']
+		],
+		'category_filter' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'カテゴリフィルタは255文字以内で入力してください。']
+		]
+	];
 
 /**
  * コントロールソースを取得する
@@ -78,11 +78,11 @@ class FeedDetail extends FeedAppModel {
  * @access	public
  */
 	public function getControlSource($field = null) {
-		$controlSources['cache_time'] = array('+1 minute' => '1分',
+		$controlSources['cache_time'] = ['+1 minute' => '1分',
 			'+30 minutes' => '30分',
 			'+1 hour' => '1時間',
 			'+6 hours' => '6時間',
-			'+24 hours' => '1日');
+			'+24 hours' => '1日'];
 		return $controlSources[$field];
 	}
 
@@ -93,7 +93,7 @@ class FeedDetail extends FeedAppModel {
  * @retun array $data
  */
 	public function getDefaultValue($feedConfigId) {
-		$feedConfig = $this->FeedConfig->find('first', array('conditions' => array('FeedConfig.id' => $feedConfigId)));
+		$feedConfig = $this->FeedConfig->find('first', ['conditions' => ['FeedConfig.id' => $feedConfigId]]);
 		$data[$this->name]['feed_config_id'] = $feedConfigId;
 		$data[$this->name]['name'] = $feedConfig['FeedConfig']['name'];
 		$data[$this->name]['cache_time'] = '+30 minutes';

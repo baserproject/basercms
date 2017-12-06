@@ -30,7 +30,7 @@ class CakeTestSuiteTest extends CakeTestCase {
 		$testFolder = CORE_TEST_CASES . DS . 'TestSuite';
 		$count = count(glob($testFolder . DS . '*Test.php'));
 
-		$suite = $this->getMock('CakeTestSuite', array('addTestFile'));
+		$suite = $this->getMock('CakeTestSuite', ['addTestFile']);
 		$suite
 			->expects($this->exactly($count))
 			->method('addTestFile');
@@ -48,7 +48,7 @@ class CakeTestSuiteTest extends CakeTestCase {
 		$count = count(glob($testFolder . DS . '*Test.php'));
 		$count += count(glob($testFolder . DS . 'Engine' . DS . '*Test.php'));
 
-		$suite = $this->getMock('CakeTestSuite', array('addTestFile'));
+		$suite = $this->getMock('CakeTestSuite', ['addTestFile']);
 		$suite
 			->expects($this->exactly($count))
 			->method('addTestFile');
@@ -70,7 +70,7 @@ class CakeTestSuiteTest extends CakeTestCase {
 		touch($Folder->path . DS . 'NotHiddenTest.php');
 		touch($Folder->path . DS . '.HiddenTest.php');
 
-		$suite = $this->getMock('CakeTestSuite', array('addTestFile'));
+		$suite = $this->getMock('CakeTestSuite', ['addTestFile']);
 		$suite
 			->expects($this->exactly(1))
 			->method('addTestFile');
@@ -93,7 +93,7 @@ class CakeTestSuiteTest extends CakeTestCase {
 		touch($Folder->path . DS . 'SomeNotesTest.txt');
 		touch($Folder->path . DS . 'NotHiddenTest.php');
 
-		$suite = $this->getMock('CakeTestSuite', array('addTestFile'));
+		$suite = $this->getMock('CakeTestSuite', ['addTestFile']);
 		$suite
 			->expects($this->exactly(1))
 			->method('addTestFile');

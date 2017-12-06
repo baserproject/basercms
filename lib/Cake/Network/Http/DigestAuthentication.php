@@ -87,7 +87,7 @@ class DigestAuthentication {
 		}
 
 		$authHeader = 'Digest ';
-		$authHeader .= 'username="' . str_replace(array('\\', '"'), array('\\\\', '\\"'), $authInfo['user']) . '", ';
+		$authHeader .= 'username="' . str_replace(['\\', '"'], ['\\\\', '\\"'], $authInfo['user']) . '", ';
 		$authHeader .= 'realm="' . $authInfo['realm'] . '", ';
 		$authHeader .= 'nonce="' . $authInfo['nonce'] . '", ';
 		$authHeader .= 'uri="' . $http->request['uri']['path'] . '", ';

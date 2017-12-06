@@ -30,20 +30,20 @@ class PhpReaderTest extends CakeTestCase {
  *
  * @var array
  */
-	public $testData = array(
-		'One' => array(
+	public $testData = [
+		'One' => [
 			'two' => 'value',
-			'three' => array(
+			'three' => [
 				'four' => 'value four'
-			),
+			],
 			'is_null' => null,
 			'bool_false' => false,
 			'bool_true' => true,
-		),
-		'Asset' => array(
+		],
+		'Asset' => [
 			'timestamp' => 'force'
-		),
-	);
+		],
+	];
 
 /**
  * Setup.
@@ -120,9 +120,9 @@ class PhpReaderTest extends CakeTestCase {
  * @return void
  */
 	public function testReadPluginValue() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		), App::RESET);
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]
+		], App::RESET);
 		CakePlugin::load('TestPlugin');
 		$reader = new PhpReader($this->path);
 		$result = $reader->read('TestPlugin.load');

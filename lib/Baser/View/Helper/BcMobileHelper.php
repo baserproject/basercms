@@ -83,10 +83,10 @@ class BcMobileHelper extends Helper {
 				$currentAlias = $this->request->params['Site']['alias'];
 				// 一旦プレフィックスを除外
 				$reg = '/href="' . preg_quote(BC_BASE_URL, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
-				$View->output = preg_replace_callback($reg, array($this, '_removeMobilePrefix'), $View->output);
+				$View->output = preg_replace_callback($reg, [$this, '_removeMobilePrefix'], $View->output);
 				// プレフィックス追加
 				$reg = '/href=\"' . preg_quote(BC_BASE_URL, '/') . '([^\"]*?)\"/';
-				$View->output = preg_replace_callback($reg, array($this, '_addMobilePrefix'), $View->output);
+				$View->output = preg_replace_callback($reg, [$this, '_addMobilePrefix'], $View->output);
 			}
 			// XMLとして出力する場合、デバッグモードで出力する付加情報で、
 			// ブラウザによってはXMLパースエラーとなってしまうので強制的にデバッグモードをオフ

@@ -51,18 +51,18 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
 		$data['SearchIndex']['rght'] = $content['Content']['rght'];
 		$data['SearchIndex']['model'] = $model->alias;
 		// タグ、空白を除外
-		$data['SearchIndex']['detail'] = str_replace(array("\r\n", "\r", "\n", "\t", "\s"), '', trim(strip_tags($data['SearchIndex']['detail'])));
+		$data['SearchIndex']['detail'] = str_replace(["\r\n", "\r", "\n", "\t", "\s"], '', trim(strip_tags($data['SearchIndex']['detail'])));
 
 		// 検索用データとして保存
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
 		$before = false;
 		if (!empty($data['SearchIndex']['model_id'])) {
-			$before = $this->SearchIndex->find('first', array(
-				'fields' => array('SearchIndex.id', 'SearchIndex.content_id'),
-				'conditions' => array(
+			$before = $this->SearchIndex->find('first', [
+				'fields' => ['SearchIndex.id', 'SearchIndex.content_id'],
+				'conditions' => [
 					'SearchIndex.model' => $data['SearchIndex']['model'],
 					'SearchIndex.model_id' => $data['SearchIndex']['model_id']
-			)));
+			]]);
 		}
 		if ($before) {
 			$data['SearchIndex']['id'] = $before['SearchIndex']['id'];
@@ -91,7 +91,7 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  */
 	public function deleteSearchIndex(Model $model, $id) {
 		$this->SearchIndex = ClassRegistry::init('SearchIndex');
-		if ($this->SearchIndex->deleteAll(array('SearchIndex.model' => $model->alias, 'SearchIndex.model_id' => $id))) {
+		if ($this->SearchIndex->deleteAll(['SearchIndex.model' => $model->alias, 'SearchIndex.model_id' => $id])) {
 			return $this->updateSearchIndexMeta($model);
 		}
 	}
@@ -104,8 +104,8 @@ class BcSearchIndexManagerBehavior extends ModelBehavior {
  */
 	public function updateSearchIndexMeta(Model $model) {
 		$db = ConnectionManager::getDataSource('default');
-		$contentTypes = array();
-		$searchIndexes = $this->SearchIndex->find('all', array('fields' => array('SearchIndex.type'), 'group' => array('SearchIndex.type'), 'conditions' => array('SearchIndex.status' => true)));
+		$contentTypes = [];
+		$searchIndexes = $this->SearchIndex->find('all', ['fields' => ['SearchIndex.type'], 'group' => ['SearchIndex.type'], 'conditions' => ['SearchIndex.status' => true]]);
 		foreach ($searchIndexes as $searchIndex) {
 			if ($searchIndex['SearchIndex']['type']) {
 				$contentTypes[$searchIndex['SearchIndex']['type']] = $searchIndex['SearchIndex']['type'];

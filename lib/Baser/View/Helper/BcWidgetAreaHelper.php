@@ -26,26 +26,26 @@ class BcWidgetAreaHelper extends AppHelper {
  *  `subDir` (boolean) エレメントのパスについてプレフィックスによるサブディレクトリを追加するかどうか
  *  ※ その他のパラメータについては、View::element() を参照
  */
-	public function show ($no, $options = array()) {
+	public function show ($no, $options = []) {
 
-		$options = array_merge(array(
+		$options = array_merge([
 			'subDir' => true
-		), $options);
+		], $options);
 
 		$WidgetArea = ClassRegistry::init('WidgetArea');
-		$widgetArea = $WidgetArea->find('first', array('conditions' => array('WidgetArea.id' => $no)));
+		$widgetArea = $WidgetArea->find('first', ['conditions' => ['WidgetArea.id' => $no]]);
 
 		if (empty($widgetArea['WidgetArea']['widgets'])) {
 			return;
 		}
 
 		$widgets = BcUtil::unserialize($widgetArea['WidgetArea']['widgets']);
-		usort($widgets, array('BcWidgetAreaHelper', '_widgetSort'));
+		usort($widgets, ['BcWidgetAreaHelper', '_widgetSort']);
 
 		foreach ($widgets as $key => $widget) {
 			$key = key($widget);
 			if ($widget[$key]['status']) {
-				$params = array();
+				$params = [];
 				$plugin = '';
 				$params['widget'] = true;
 				if (empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')]) && !isset($options['cache'])) {

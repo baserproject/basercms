@@ -28,10 +28,10 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 	<?php if(!$installMessage): ?>
 	<div>
 		<?php if($uploaderCategories): ?>
-		<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', array('type' => 'select', 'options' => $uploaderCategories, 'empty' => 'カテゴリ指定なし', 'id' => 'UploaderFileUploaderCategoryId'.$listId, 'style' => 'width:100px')) ?>&nbsp;
+		<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => 'カテゴリ指定なし', 'id' => 'UploaderFileUploaderCategoryId'.$listId, 'style' => 'width:100px']) ?>&nbsp;
 		<?php endif ?>
 		<span id="SpanUploadFile<?php echo $listId ?>">
-			<?php echo $this->BcForm->file('UploaderFile.file', array('id'=>'UploaderFileFile'.$listId, 'class' => 'uploader-file-file', 'div' => false)) ?>
+			<?php echo $this->BcForm->file('UploaderFile.file', ['id'=>'UploaderFileFile'.$listId, 'class' => 'uploader-file-file', 'div' => false]) ?>
 		</span>
 	</div>
 	<?php endif ?>
@@ -56,10 +56,10 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 	<?php if(!$installMessage): ?>
 			<div>
 		<?php if($uploaderCategories): ?>
-				<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', array('type' => 'select', 'options' => $uploaderCategories, 'empty' => 'カテゴリ指定なし', 'id' => 'UploaderFileUploaderCategoryId'.$listId, 'style' => 'width:100px')) ?><br />
+				<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => 'カテゴリ指定なし', 'id' => 'UploaderFileUploaderCategoryId'.$listId, 'style' => 'width:100px']) ?><br />
 		<?php endif ?>
 				<span id="SpanUploadFile<?php echo $listId ?>">
-					<?php echo $this->BcForm->file('UploaderFile.file', array('id'=>'UploaderFileFile'.$listId, 'class' => 'uploader-file-file', 'div' => false)) ?>
+					<?php echo $this->BcForm->file('UploaderFile.file', ['id'=>'UploaderFileFile'.$listId, 'class' => 'uploader-file-file', 'div' => false]) ?>
 				</span>
 			</div>
 	<?php endif ?>
@@ -77,7 +77,7 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 <?php if ($files): ?>
 <tbody>
 	<?php foreach ($files as $file): ?>
-		<?php $this->BcBaser->element('uploader_files/index_row', array('file' => $file, 'users' => $users, 'uploaderCategories' => $uploaderCategories)) ?>
+		<?php $this->BcBaser->element('uploader_files/index_row', ['file' => $file, 'users' => $users, 'uploaderCategories' => $uploaderCategories]) ?>
 	<?php endforeach ?>
 </tbody>
 <?php else: ?>

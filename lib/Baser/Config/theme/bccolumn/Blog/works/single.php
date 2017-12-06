@@ -18,10 +18,10 @@ $(function(){
 
 	<h2><?php $this->BcBaser->contentsTitle() ?></h2>
 
-	<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+	<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 
 	<div class="eye-catch">
-	<?php $this->Blog->eyeCatch($post, array('noimage'=>'/theme/bccolumn/img/blog/works/noimage.png')) ?>
+	<?php $this->Blog->eyeCatch($post, ['noimage'=>'/theme/bccolumn/img/blog/works/noimage.png']) ?>
 	</div>
 
 	<div class="post">

@@ -37,25 +37,25 @@ class UnsignedFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'uinteger' => array('type' => 'integer', 'null' => '', 'default' => '1', 'length' => '8', 'key' => 'primary', 'unsigned' => true),
-		'integer' => array('type' => 'integer', 'length' => '8', 'unsigned' => false),
-		'udecimal' => array('type' => 'decimal', 'length' => '4', 'unsigned' => true),
-		'decimal' => array('type' => 'decimal', 'length' => '4'),
-		'biginteger' => array('type' => 'biginteger', 'length' => '20', 'default' => 3),
-		'ubiginteger' => array('type' => 'biginteger', 'length' => '20', 'default' => 3, 'unsigned' => true),
-		'float' => array('type' => 'float', 'length' => '4'),
-		'ufloat' => array('type' => 'float', 'length' => '4', 'unsigned' => true),
-		'string' => array('type' => 'string', 'length' => '4'),
-		'tableParameters' => array(
+	public $fields = [
+		'uinteger' => ['type' => 'integer', 'null' => '', 'default' => '1', 'length' => '8', 'key' => 'primary', 'unsigned' => true],
+		'integer' => ['type' => 'integer', 'length' => '8', 'unsigned' => false],
+		'udecimal' => ['type' => 'decimal', 'length' => '4', 'unsigned' => true],
+		'decimal' => ['type' => 'decimal', 'length' => '4'],
+		'biginteger' => ['type' => 'biginteger', 'length' => '20', 'default' => 3],
+		'ubiginteger' => ['type' => 'biginteger', 'length' => '20', 'default' => 3, 'unsigned' => true],
+		'float' => ['type' => 'float', 'length' => '4'],
+		'ufloat' => ['type' => 'float', 'length' => '4', 'unsigned' => true],
+		'string' => ['type' => 'string', 'length' => '4'],
+		'tableParameters' => [
 			'engine' => 'MyISAM'
-		)
-	);
+		]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array();
+	public $records = [];
 }

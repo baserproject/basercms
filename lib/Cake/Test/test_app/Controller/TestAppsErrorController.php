@@ -4,11 +4,11 @@ App::uses('CakeErrorController', 'Controller');
 
 class TestAppsErrorController extends CakeErrorController {
 
-	public $helpers = array(
+	public $helpers = [
 		'Html',
 		'Session',
 		'Form',
 		'Banana',
-	);
+	];
 
 }

@@ -78,7 +78,7 @@ class BcUploadBehavior extends ModelBehavior {
  * 
  * @var array 
  */
-	public $imgExts = array('gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png');
+	public $imgExts = ['gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'png'];
 
 /**
  * アップロードしたかどうか
@@ -96,7 +96,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param Model	$Model
  * @param array	$settings actsAsの設定
  */
-	public function setup(Model $Model, $settings = array()) {
+	public function setup(Model $Model, $settings = []) {
 		$this->settings[$Model->alias] = Hash::merge([
 			'saveDir' => '',
 			'fields' => []
@@ -134,7 +134,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param array $options
  * @return mixed
  */
-	public function beforeValidate(Model $Model, $options = array()) {
+	public function beforeValidate(Model $Model, $options = []) {
 		$this->setupRequestData($Model);
 		return parent::beforeValidate($Model, $options);
 	}
@@ -146,7 +146,7 @@ class BcUploadBehavior extends ModelBehavior {
  * @param array $options
  * @return boolean
  */
-	public function beforeSave(Model $Model, $options = array()) {
+	public function beforeSave(Model $Model, $options = []) {
 		if($Model->exists()) {
 			$this->deleteExistingFiles($Model);
 		}
@@ -224,7 +224,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function afterSave(Model $Model, $created, $options = []) {
 		if($this->uploaded[$Model->name]) {
 			$Model->data = $this->renameToBasenameFields($Model);
-			$Model->data = $Model->save($Model->data, array('callbacks' => false, 'validate' => false));
+			$Model->data = $Model->save($Model->data, ['callbacks' => false, 'validate' => false]);
 			$this->uploaded[$Model->name] = false;
 		}
 		foreach($this->settings[$Model->alias]['fields'] as $key => $value) {
@@ -388,7 +388,7 @@ class BcUploadBehavior extends ModelBehavior {
  */
 	public function moveFileSessionToTmp(Model $Model, $fieldName) {
 		$fileName = $Model->data[$Model->alias][$fieldName . '_tmp'];
-		$sessionKey = str_replace(array('.', '/'), array('_', '_'), $fileName);
+		$sessionKey = str_replace(['.', '/'], ['_', '_'], $fileName);
 		$tmpName = $this->savePath[$Model->alias] . $sessionKey;
 		$fileData = $this->Session->read('Upload.' . $sessionKey . '.data');
 		$fileType = $this->Session->read('Upload.' . $sessionKey . '.type');
@@ -455,7 +455,7 @@ class BcUploadBehavior extends ModelBehavior {
 				$ret = false;
 			}
 		} else {
-			$_fileName = str_replace(array('.', '/'), array('_', '_'), $fileName);
+			$_fileName = str_replace(['.', '/'], ['_', '_'], $fileName);
 			$this->Session->write('Upload.' . $_fileName, $field);
 			$this->Session->write('Upload.' . $_fileName . '.type', $file['type']);
 			$this->Session->write('Upload.' . $_fileName . '.data', file_get_contents($file['tmp_name']));
@@ -641,7 +641,7 @@ class BcUploadBehavior extends ModelBehavior {
 	public function getImageSize($path) {
 		$imginfo = getimagesize($path);
 		if ($imginfo) {
-			return array('width' => $imginfo[0], 'height' => $imginfo[1]);
+			return ['width' => $imginfo[0], 'height' => $imginfo[1]];
 		}
 		return false;
 	}
@@ -929,9 +929,9 @@ class BcUploadBehavior extends ModelBehavior {
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
 		$conditions[$Model->name . '.' . $fieldName . ' LIKE'] = $basename . '%' . $ext;
-		$datas = $Model->find('all', array('conditions' => $conditions, 'fields' => array($fieldName), 'order' => "{$Model->name}.{$fieldName}"));
+		$datas = $Model->find('all', ['conditions' => $conditions, 'fields' => [$fieldName], 'order' => "{$Model->name}.{$fieldName}"]);
 		$datas = Hash::extract($datas, "{n}.{$Model->name}.{$fieldName}");
-		$numbers = array();
+		$numbers = [];
 
 		if ($datas) {
 			foreach($datas as $data) {

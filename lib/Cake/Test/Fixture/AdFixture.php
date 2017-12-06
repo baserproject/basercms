@@ -29,27 +29,27 @@ class AdFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'campaign_id' => array('type' => 'integer'),
-		'parent_id' => array('type' => 'integer'),
-		'lft' => array('type' => 'integer'),
-		'rght' => array('type' => 'integer'),
-		'name' => array('type' => 'string', 'length' => 255, 'null' => false)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'campaign_id' => ['type' => 'integer'],
+		'parent_id' => ['type' => 'integer'],
+		'lft' => ['type' => 'integer'],
+		'rght' => ['type' => 'integer'],
+		'name' => ['type' => 'string', 'length' => 255, 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('parent_id' => null, 'lft' => 1, 'rght' => 2, 'campaign_id' => 1, 'name' => 'Nordover'),
-		array('parent_id' => null, 'lft' => 3, 'rght' => 4, 'campaign_id' => 1, 'name' => 'Statbergen'),
-		array('parent_id' => null, 'lft' => 5, 'rght' => 6, 'campaign_id' => 1, 'name' => 'Feroy'),
-		array('parent_id' => null, 'lft' => 7, 'rght' => 12, 'campaign_id' => 2, 'name' => 'Newcastle'),
-		array('parent_id' => null, 'lft' => 8, 'rght' => 9, 'campaign_id' => 2, 'name' => 'Dublin'),
-		array('parent_id' => null, 'lft' => 10, 'rght' => 11, 'campaign_id' => 2, 'name' => 'Alborg'),
-		array('parent_id' => null, 'lft' => 13, 'rght' => 14, 'campaign_id' => 3, 'name' => 'New York')
-	);
+	public $records = [
+		['parent_id' => null, 'lft' => 1, 'rght' => 2, 'campaign_id' => 1, 'name' => 'Nordover'],
+		['parent_id' => null, 'lft' => 3, 'rght' => 4, 'campaign_id' => 1, 'name' => 'Statbergen'],
+		['parent_id' => null, 'lft' => 5, 'rght' => 6, 'campaign_id' => 1, 'name' => 'Feroy'],
+		['parent_id' => null, 'lft' => 7, 'rght' => 12, 'campaign_id' => 2, 'name' => 'Newcastle'],
+		['parent_id' => null, 'lft' => 8, 'rght' => 9, 'campaign_id' => 2, 'name' => 'Dublin'],
+		['parent_id' => null, 'lft' => 10, 'rght' => 11, 'campaign_id' => 2, 'name' => 'Alborg'],
+		['parent_id' => null, 'lft' => 13, 'rght' => 14, 'campaign_id' => 3, 'name' => 'New York']
+	];
 }

@@ -56,7 +56,7 @@ class AclShell extends AppShell {
  *
  * @var array
  */
-	public $tasks = array('DbConfig');
+	public $tasks = ['DbConfig'];
 
 /**
  * Override startup of the Shell
@@ -72,7 +72,7 @@ class AclShell extends AppShell {
 		$class = Configure::read('Acl.classname');
 		list($plugin, $class) = pluginSplit($class, true);
 		App::uses($class, $plugin . 'Controller/Component/Acl');
-		if (!in_array($class, array('DbAcl', 'DB_ACL')) && !is_subclass_of($class, 'DbAcl')) {
+		if (!in_array($class, ['DbAcl', 'DB_ACL']) && !is_subclass_of($class, 'DbAcl')) {
 			$out = "--------------------------------------------------\n";
 			$out .= __d('cake_console', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";
 			$out .= __d('cake_console', 'Please change your core config to reflect your decision to use DbAcl before attempting to use this script') . "\n";
@@ -91,7 +91,7 @@ class AclShell extends AppShell {
 			}
 			require_once APP . 'Config' . DS . 'database.php';
 
-			if (!in_array($this->command, array('initdb'))) {
+			if (!in_array($this->command, ['initdb'])) {
 				$collection = new ComponentCollection();
 				$this->Acl = new AclComponent($collection);
 				$controller = new Controller();
@@ -128,7 +128,7 @@ class AclShell extends AppShell {
 
 		$data = $this->parseIdentifier($this->args[2]);
 		if (is_string($data) && $data !== '/') {
-			$data = array('alias' => $data);
+			$data = ['alias' => $data];
 		} elseif (is_string($data)) {
 			$this->error(__d('cake_console', '/ can not be used as an alias!') . __d('cake_console', "	/ is the root, please supply a sub alias"));
 		}
@@ -153,10 +153,10 @@ class AclShell extends AppShell {
 
 		$identifier = $this->parseIdentifier($this->args[1]);
 		if (is_string($identifier)) {
-			$identifier = array('alias' => $identifier);
+			$identifier = ['alias' => $identifier];
 		}
 
-		if ($this->Acl->{$class}->find('all', array('conditions' => $identifier))) {
+		if ($this->Acl->{$class}->find('all', ['conditions' => $identifier])) {
 			if (!$this->Acl->{$class}->deleteAll($identifier)) {
 				$this->error(__d('cake_console', 'Node Not Deleted. ') . __d('cake_console', 'There was an error deleting the %s.', $class) . "\n");
 			}
@@ -176,12 +176,12 @@ class AclShell extends AppShell {
 		$target = $this->parseIdentifier($this->args[1]);
 		$parent = $this->parseIdentifier($this->args[2]);
 
-		$data = array(
-			$class => array(
+		$data = [
+			$class => [
 				'id' => $this->_getNodeId($class, $target),
 				'parent_id' => $this->_getNodeId($class, $parent)
-			)
-		);
+			]
+		];
 		$this->Acl->{$class}->create();
 		if (!$this->Acl->{$class}->save($data)) {
 			$this->out(__d('cake_console', 'Error in setting new parent. Please make sure the parent node exists, and is not a descendant of the node specified.'));
@@ -304,19 +304,19 @@ class AclShell extends AppShell {
 		if (isset($this->args[1])) {
 			$identity = $this->parseIdentifier($this->args[1]);
 
-			$topNode = $this->Acl->{$class}->find('first', array(
-				'conditions' => array($class . '.id' => $this->_getNodeId($class, $identity))
-			));
+			$topNode = $this->Acl->{$class}->find('first', [
+				'conditions' => [$class . '.id' => $this->_getNodeId($class, $identity)]
+			]);
 
-			$nodes = $this->Acl->{$class}->find('all', array(
-				'conditions' => array(
+			$nodes = $this->Acl->{$class}->find('all', [
+				'conditions' => [
 					$class . '.lft >=' => $topNode[$class]['lft'],
 					$class . '.lft <=' => $topNode[$class]['rght']
-				),
+				],
 				'order' => $class . '.lft ASC'
-			));
+			]);
 		} else {
-			$nodes = $this->Acl->{$class}->find('all', array('order' => $class . '.lft ASC'));
+			$nodes = $this->Acl->{$class}->find('all', ['order' => $class . '.lft ASC']);
 		}
 
 		if (empty($nodes)) {
@@ -329,7 +329,7 @@ class AclShell extends AppShell {
 		$this->out($class . ' tree:');
 		$this->hr();
 
-		$stack = array();
+		$stack = [];
 		$last = null;
 
 		foreach ($nodes as $n) {
@@ -370,138 +370,138 @@ class AclShell extends AppShell {
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 
-		$type = array(
-			'choices' => array('aro', 'aco'),
+		$type = [
+			'choices' => ['aro', 'aco'],
 			'required' => true,
 			'help' => __d('cake_console', 'Type of node to create.')
-		);
+		];
 
 		$parser->description(
 			__d('cake_console', 'A console tool for managing the DbAcl')
-		)->addSubcommand('create', array(
+		)->addSubcommand('create', [
 			'help' => __d('cake_console', 'Create a new ACL node'),
-			'parser' => array(
+			'parser' => [
 				'description' => __d('cake_console', 'Creates a new ACL object <node> under the parent'),
 				'epilog' => __d('cake_console', 'You can use `root` as the parent when creating nodes to create top level nodes.'),
-				'arguments' => array(
+				'arguments' => [
 					'type' => $type,
-					'parent' => array(
+					'parent' => [
 						'help' => __d('cake_console', 'The node selector for the parent.'),
 						'required' => true
-					),
-					'alias' => array(
+					],
+					'alias' => [
 						'help' => __d('cake_console', 'The alias to use for the newly created node.'),
 						'required' => true
-					)
-				)
-			)
-		))->addSubcommand('delete', array(
+					]
+				]
+			]
+		])->addSubcommand('delete', [
 			'help' => __d('cake_console', 'Deletes the ACL object with the given <node> reference'),
-			'parser' => array(
+			'parser' => [
 				'description' => __d('cake_console', 'Delete an ACL node.'),
-				'arguments' => array(
+				'arguments' => [
 					'type' => $type,
-					'node' => array(
+					'node' => [
 						'help' => __d('cake_console', 'The node identifier to delete.'),
 						'required' => true,
-					)
-				)
-			)
-		))->addSubcommand('setparent', array(
+					]
+				]
+			]
+		])->addSubcommand('setparent', [
 			'help' => __d('cake_console', 'Moves the ACL node under a new parent.'),
-			'parser' => array(
+			'parser' => [
 				'description' => __d('cake_console', 'Moves the ACL object specified by <node> beneath <parent>'),
-				'arguments' => array(
+				'arguments' => [
 					'type' => $type,
-					'node' => array(
+					'node' => [
 						'help' => __d('cake_console', 'The node to move'),
 						'required' => true,
-					),
-					'parent' => array(
+					],
+					'parent' => [
 						'help' => __d('cake_console', 'The new parent for <node>.'),
 						'required' => true
-					)
-				)
-			)
-		))->addSubcommand('getpath', array(
+					]
+				]
+			]
+		])->addSubcommand('getpath', [
 			'help' => __d('cake_console', 'Print out the path to an ACL node.'),
-			'parser' => array(
-				'description' => array(
+			'parser' => [
+				'description' => [
 					__d('cake_console', "Returns the path to the ACL object specified by <node>."),
 					__d('cake_console', "This command is useful in determining the inheritance of permissions for a certain object in the tree.")
-				),
-				'arguments' => array(
+				],
+				'arguments' => [
 					'type' => $type,
-					'node' => array(
+					'node' => [
 						'help' => __d('cake_console', 'The node to get the path of'),
 						'required' => true,
-					)
-				)
-			)
-		))->addSubcommand('check', array(
+					]
+				]
+			]
+		])->addSubcommand('check', [
 			'help' => __d('cake_console', 'Check the permissions between an ACO and ARO.'),
-			'parser' => array(
-				'description' => array(
+			'parser' => [
+				'description' => [
 					__d('cake_console', 'Use this command to check ACL permissions.')
-				),
-				'arguments' => array(
-					'aro' => array('help' => __d('cake_console', 'ARO to check.'), 'required' => true),
-					'aco' => array('help' => __d('cake_console', 'ACO to check.'), 'required' => true),
-					'action' => array('help' => __d('cake_console', 'Action to check'), 'default' => 'all')
-				)
-			)
-		))->addSubcommand('grant', array(
+				],
+				'arguments' => [
+					'aro' => ['help' => __d('cake_console', 'ARO to check.'), 'required' => true],
+					'aco' => ['help' => __d('cake_console', 'ACO to check.'), 'required' => true],
+					'action' => ['help' => __d('cake_console', 'Action to check'), 'default' => 'all']
+				]
+			]
+		])->addSubcommand('grant', [
 			'help' => __d('cake_console', 'Grant an ARO permissions to an ACO.'),
-			'parser' => array(
-				'description' => array(
+			'parser' => [
+				'description' => [
 					__d('cake_console', 'Use this command to grant ACL permissions. Once executed, the ARO specified (and its children, if any) will have ALLOW access to the specified ACO action (and the ACO\'s children, if any).')
-				),
-				'arguments' => array(
-					'aro' => array('help' => __d('cake_console', 'ARO to grant permission to.'), 'required' => true),
-					'aco' => array('help' => __d('cake_console', 'ACO to grant access to.'), 'required' => true),
-					'action' => array('help' => __d('cake_console', 'Action to grant'), 'default' => 'all')
-				)
-			)
-		))->addSubcommand('deny', array(
+				],
+				'arguments' => [
+					'aro' => ['help' => __d('cake_console', 'ARO to grant permission to.'), 'required' => true],
+					'aco' => ['help' => __d('cake_console', 'ACO to grant access to.'), 'required' => true],
+					'action' => ['help' => __d('cake_console', 'Action to grant'), 'default' => 'all']
+				]
+			]
+		])->addSubcommand('deny', [
 			'help' => __d('cake_console', 'Deny an ARO permissions to an ACO.'),
-			'parser' => array(
-				'description' => array(
+			'parser' => [
+				'description' => [
 					__d('cake_console', 'Use this command to deny ACL permissions. Once executed, the ARO specified (and its children, if any) will have DENY access to the specified ACO action (and the ACO\'s children, if any).')
-				),
-				'arguments' => array(
-					'aro' => array('help' => __d('cake_console', 'ARO to deny.'), 'required' => true),
-					'aco' => array('help' => __d('cake_console', 'ACO to deny.'), 'required' => true),
-					'action' => array('help' => __d('cake_console', 'Action to deny'), 'default' => 'all')
-				)
-			)
-		))->addSubcommand('inherit', array(
+				],
+				'arguments' => [
+					'aro' => ['help' => __d('cake_console', 'ARO to deny.'), 'required' => true],
+					'aco' => ['help' => __d('cake_console', 'ACO to deny.'), 'required' => true],
+					'action' => ['help' => __d('cake_console', 'Action to deny'), 'default' => 'all']
+				]
+			]
+		])->addSubcommand('inherit', [
 			'help' => __d('cake_console', 'Inherit an ARO\'s parent permissions.'),
-			'parser' => array(
-				'description' => array(
+			'parser' => [
+				'description' => [
 					__d('cake_console', "Use this command to force a child ARO object to inherit its permissions settings from its parent.")
-				),
-				'arguments' => array(
-					'aro' => array('help' => __d('cake_console', 'ARO to have permissions inherit.'), 'required' => true),
-					'aco' => array('help' => __d('cake_console', 'ACO to inherit permissions on.'), 'required' => true),
-					'action' => array('help' => __d('cake_console', 'Action to inherit'), 'default' => 'all')
-				)
-			)
-		))->addSubcommand('view', array(
+				],
+				'arguments' => [
+					'aro' => ['help' => __d('cake_console', 'ARO to have permissions inherit.'), 'required' => true],
+					'aco' => ['help' => __d('cake_console', 'ACO to inherit permissions on.'), 'required' => true],
+					'action' => ['help' => __d('cake_console', 'Action to inherit'), 'default' => 'all']
+				]
+			]
+		])->addSubcommand('view', [
 			'help' => __d('cake_console', 'View a tree or a single node\'s subtree.'),
-			'parser' => array(
-				'description' => array(
+			'parser' => [
+				'description' => [
 					__d('cake_console', "The view command will return the ARO or ACO tree."),
 					__d('cake_console', "The optional node parameter allows you to return"),
 					__d('cake_console', "only a portion of the requested tree.")
-				),
-				'arguments' => array(
+				],
+				'arguments' => [
 					'type' => $type,
-					'node' => array('help' => __d('cake_console', 'The optional node to view the subtree of.'))
-				)
-			)
-		))->addSubcommand('initdb', array(
+					'node' => ['help' => __d('cake_console', 'The optional node to view the subtree of.')]
+				]
+			]
+		])->addSubcommand('initdb', [
 			'help' => __d('cake_console', 'Initialize the DbAcl tables. Uses this command : cake schema create DbAcl')
-		))->epilog(array(
+		])->epilog([
 			'Node and parent arguments can be in one of the following formats:',
 			'',
 			' - <model>.<id> - The node will be bound to a specific record of the given model.',
@@ -511,7 +511,7 @@ class AclShell extends AppShell {
 			"   i.e. <group>/<subgroup>/<parent>.",
 			'',
 			"To add a node at the root level, enter 'root' or '/' as the <parent> parameter."
-		));
+		]);
 
 		return $parser;
 	}
@@ -528,7 +528,7 @@ class AclShell extends AppShell {
 		$dataVars = $this->_dataVars($this->args[0]);
 		extract($dataVars);
 		$key = is_numeric($this->args[1]) ? $dataVars['secondary_id'] : 'alias';
-		$conditions = array($class . '.' . $key => $this->args[1]);
+		$conditions = [$class . '.' . $key => $this->args[1]];
 		$possibility = $this->Acl->{$class}->find('all', compact('conditions'));
 		if (empty($possibility)) {
 			$this->error(__d('cake_console', '%s not found', $this->args[1]), __d('cake_console', 'No tree returned.'));
@@ -545,10 +545,10 @@ class AclShell extends AppShell {
  */
 	public function parseIdentifier($identifier) {
 		if (preg_match('/^([\w]+)\.(.*)$/', $identifier, $matches)) {
-			return array(
+			return [
 				'model' => $matches[1],
 				'foreign_key' => $matches[2],
-			);
+			];
 		}
 		return $identifier;
 	}
@@ -591,7 +591,7 @@ class AclShell extends AppShell {
 			$aco = $this->parseIdentifier($aco);
 		}
 		$action = '*';
-		if (isset($this->args[2]) && !in_array($this->args[2], array('', 'all'))) {
+		if (isset($this->args[2]) && !in_array($this->args[2], ['', 'all'])) {
 			$action = $this->args[2];
 		}
 		return compact('aro', 'aco', 'action', 'aroName', 'acoName');
@@ -607,7 +607,7 @@ class AclShell extends AppShell {
 		if (!$type) {
 			$type = $this->args[0];
 		}
-		$vars = array();
+		$vars = [];
 		$class = ucwords($type);
 		$vars['secondary_id'] = (strtolower($class) === 'aro') ? 'foreign_key' : 'object_id';
 		$vars['data_name'] = $type;

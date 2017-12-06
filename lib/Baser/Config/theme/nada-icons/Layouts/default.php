@@ -15,12 +15,12 @@
 		<?php $this->BcBaser->rss('ニュースリリース RSS 2.0', '/news/index.rss') ?>
 		<?php $this->BcBaser->css('style') ?>
 
-<?php $this->BcBaser->js(array(
+<?php $this->BcBaser->js([
 			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
 			'jquery.easing.1.3',
 			'nada-icons'
-)) ?>
+]) ?>
 <?php $this->BcBaser->scripts() ?>
 <?php $this->BcBaser->googleAnalytics() ?>
 	</head>
@@ -44,7 +44,7 @@
 
 					<?php if ($this->BcBaser->isHome()): ?>
 					<div id="top-main">
-						<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'width' => 750)) ?>
+						<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => 750]) ?>
 					</div>
 					<?php
 					/*
@@ -78,7 +78,7 @@
 								</div>
 							</div>
 							<div id="top-main-telfax-right">
-								<div id="top-main-webcontact"><?php $this->BcBaser->img('icons_contact.png', array('url' => '/contact')); ?></div>
+								<div id="top-main-webcontact"><?php $this->BcBaser->img('icons_contact.png', ['url' => '/contact']); ?></div>
 								<div id="top-main-serch"><?php $this->BcBaser->siteSearchForm() ?></div>
 							</div>
 						</div>

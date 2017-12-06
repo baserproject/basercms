@@ -42,11 +42,11 @@ class ThemePosts2Controller extends Controller {
  * @return void
  */
 	public function index() {
-		$this->set(array(
+		$this->set([
 			'testData' => 'Some test data',
 			'test2' => 'more data',
 			'test3' => 'even more data',
-		));
+		]);
 	}
 
 }
@@ -65,7 +65,7 @@ class TestTheme2View extends ThemeView {
  * @param array $params
  * @return void
  */
-	public function renderElement($name, $params = array()) {
+	public function renderElement($name, $params = []) {
 		return $name;
 	}
 
@@ -111,12 +111,12 @@ class ThemeViewTest extends CakeTestCase {
 		$this->PostsController->viewPath = 'posts';
 		$this->PostsController->index();
 		$this->ThemeView = new ThemeView($this->PostsController);
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS],
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 		App::objects('plugins', null, false);
-		CakePlugin::load(array('TestPlugin'));
+		CakePlugin::load(['TestPlugin']);
 	}
 
 /**
@@ -168,7 +168,7 @@ class ThemeViewTest extends CakeTestCase {
 		$this->Controller->name = 'Pages';
 		$this->Controller->viewPath = 'Pages';
 		$this->Controller->action = 'display';
-		$this->Controller->params['pass'] = array('home');
+		$this->Controller->params['pass'] = ['home'];
 
 		$ThemeView = new TestTheme2View($this->Controller);
 		$ThemeView->theme = 'TestTheme';
@@ -208,7 +208,7 @@ class ThemeViewTest extends CakeTestCase {
 		$this->Controller->action = 'display';
 		$this->Controller->theme = 'my_theme';
 
-		$this->Controller->params['pass'] = array('home');
+		$this->Controller->params['pass'] = ['home'];
 
 		$View = new TestTheme2View($this->Controller);
 		ob_start();

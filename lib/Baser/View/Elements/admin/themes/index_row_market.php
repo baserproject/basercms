@@ -28,19 +28,19 @@ if(empty($data['authorUrl'])) {
 	<p class="theme-screenshot">
 		<a class="theme-popup" href="<?php echo '#Contents' . $key ?>">
 			<?php if ($data['enclosure']['@url']): ?>
-				<?php $this->BcBaser->img($data['enclosure']['@url'], array('alt' => $data['title'], 'height' => 194)) ?>
+				<?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title'], 'height' => 194]) ?>
 			<?php else: ?>
-				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt' => $data['title'])) ?>
+				<?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
 			<?php endif ?>
 		</a>
 	</p>
 	<p class="row-tools">
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', array('title' => 'ダウンロード', 'alt' => 'ダウンロード')), $data['link'], array('target' => '_blank')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', ['title' => 'ダウンロード', 'alt' => 'ダウンロード']), $data['link'], ['target' => '_blank']) ?>
 	</p>
 <p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
 <p class="theme-author">制作者：
 	<?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
-		<?php $this->BcBaser->link($data['author'], $data['authorLink'], array('target' => '_blank')) ?>
+		<?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank']) ?>
 	<?php else: ?>
 		<?php echo $data['author'] ?>
 	<?php endif ?>
@@ -49,16 +49,16 @@ if(empty($data['authorUrl'])) {
 	<div id="<?php echo 'Contents' . $key ?>" class="theme-popup-contents clearfix">
 		<div class="theme-screenshot">
 			<?php if ($data['enclosure']['@url']): ?>
-				<?php $this->BcBaser->img($data['enclosure']['@url'], array('alt' => $data['title'], 'width' => 300)) ?>
+				<?php $this->BcBaser->img($data['enclosure']['@url'], ['alt' => $data['title'], 'width' => 300]) ?>
 			<?php else: ?>
-				<?php $this->BcBaser->img('admin/no-screenshot.png', array('alt' => $data['title'])) ?>
+				<?php $this->BcBaser->img('admin/no-screenshot.png', ['alt' => $data['title']]) ?>
 			<?php endif ?>
 		</div>
 		<div class="theme-name"><strong><?php echo $data['title'] ?></strong></div>
 		<div class="theme-version">バージョン：<?php echo $data['version'] ?></div>
 		<div class="theme-author">制作者：
 	<?php if (!empty($data['authorLink']) && !empty($data['author'])): ?>
-		<?php $this->BcBaser->link($data['author'], $data['authorLink'], array('target' => '_blank')) ?>
+		<?php $this->BcBaser->link($data['author'], $data['authorLink'], ['target' => '_blank']) ?>
 	<?php else: ?>
 		<?php echo $data['author'] ?>
 	<?php endif ?>

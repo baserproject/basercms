@@ -36,8 +36,8 @@ class ActionsAuthorizeTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->controller = $this->getMock('Controller', array(), array(), '', false);
-		$this->Acl = $this->getMock('AclComponent', array(), array(), '', false);
+		$this->controller = $this->getMock('Controller', [], [], '', false);
+		$this->Acl = $this->getMock('AclComponent', [], [], '', false);
 		$this->Collection = $this->getMock('ComponentCollection');
 
 		$this->auth = new ActionsAuthorize($this->Collection);
@@ -62,18 +62,18 @@ class ActionsAuthorizeTest extends CakeTestCase {
  * @return void
  */
 	public function testAuthorizeFailure() {
-		$user = array(
-			'User' => array(
+		$user = [
+			'User' => [
 				'id' => 1,
 				'user' => 'mariano'
-			)
-		);
+			]
+		];
 		$request = new CakeRequest('/posts/index', false);
-		$request->addParams(array(
+		$request->addParams([
 			'plugin' => null,
 			'controller' => 'posts',
 			'action' => 'index'
-		));
+		]);
 
 		$this->_mockAcl();
 
@@ -91,18 +91,18 @@ class ActionsAuthorizeTest extends CakeTestCase {
  * @return void
  */
 	public function testAuthorizeSuccess() {
-		$user = array(
-			'User' => array(
+		$user = [
+			'User' => [
 				'id' => 1,
 				'user' => 'mariano'
-			)
-		);
+			]
+		];
 		$request = new CakeRequest('/posts/index', false);
-		$request->addParams(array(
+		$request->addParams([
 			'plugin' => null,
 			'controller' => 'posts',
 			'action' => 'index'
-		));
+		]);
 
 		$this->_mockAcl();
 
@@ -121,21 +121,21 @@ class ActionsAuthorizeTest extends CakeTestCase {
  */
 	public function testAuthorizeSettings() {
 		$request = new CakeRequest('/posts/index', false);
-		$request->addParams(array(
+		$request->addParams([
 			'plugin' => null,
 			'controller' => 'posts',
 			'action' => 'index'
-		));
+		]);
 
 		$this->_mockAcl();
 
 		$this->auth->settings['userModel'] = 'TestPlugin.TestPluginAuthUser';
-		$user = array(
+		$user = [
 			'id' => 1,
 			'user' => 'mariano'
-		);
+		];
 
-		$expected = array('TestPlugin.TestPluginAuthUser' => array('id' => 1, 'user' => 'mariano'));
+		$expected = ['TestPlugin.TestPluginAuthUser' => ['id' => 1, 'user' => 'mariano']];
 		$this->Acl->expects($this->once())
 			->method('check')
 			->with($expected, 'controllers/Posts/index')
@@ -151,11 +151,11 @@ class ActionsAuthorizeTest extends CakeTestCase {
  */
 	public function testActionMethod() {
 		$request = new CakeRequest('/posts/index', false);
-		$request->addParams(array(
+		$request->addParams([
 			'plugin' => null,
 			'controller' => 'posts',
 			'action' => 'index'
-		));
+		]);
 
 		$result = $this->auth->action($request);
 		$this->assertEquals('controllers/Posts/index', $result);
@@ -169,11 +169,11 @@ class ActionsAuthorizeTest extends CakeTestCase {
 	public function testActionNoDoubleSlash() {
 		$this->auth->settings['actionPath'] = '/controllers/';
 		$request = new CakeRequest('/posts/index', false);
-		$request->addParams(array(
+		$request->addParams([
 			'plugin' => null,
 			'controller' => 'posts',
 			'action' => 'index'
-		));
+		]);
 		$result = $this->auth->action($request);
 		$this->assertEquals('controllers/Posts/index', $result);
 	}
@@ -185,11 +185,11 @@ class ActionsAuthorizeTest extends CakeTestCase {
  */
 	public function testActionWithPlugin() {
 		$request = new CakeRequest('/debug_kit/posts/index', false);
-		$request->addParams(array(
+		$request->addParams([
 			'plugin' => 'debug_kit',
 			'controller' => 'posts',
 			'action' => 'index'
-		));
+		]);
 
 		$result = $this->auth->action($request);
 		$this->assertEquals('controllers/DebugKit/Posts/index', $result);

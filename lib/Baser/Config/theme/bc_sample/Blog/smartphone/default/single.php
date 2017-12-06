@@ -12,7 +12,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 <h3><?php $this->BcBaser->contentsTitle() ?></h3>
 
 <div class="detail-eye-catch">
-	<?php $this->Blog->eyeCatch($post, array('link' => false, 'width' => 280)) ?>
+	<?php $this->Blog->eyeCatch($post, ['link' => false, 'width' => 280]) ?>
 </div>
 
 <article class="post">
@@ -23,7 +23,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 		<?php $this->Blog->postDate($post) ?>
 		&nbsp;
 		<?php $this->Blog->author($post) ?>
-		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 	</div>
 </article>
 

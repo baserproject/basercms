@@ -38,14 +38,14 @@ class DataSource extends Object {
  *
  * @var array
  */
-	protected $_baseConfig = array();
+	protected $_baseConfig = [];
 
 /**
  * Holds references to descriptions loaded by the DataSource
  *
  * @var array
  */
-	protected $_descriptions = array();
+	protected $_descriptions = [];
 
 /**
  * Holds a list of sources (tables) contained in the DataSource
@@ -59,7 +59,7 @@ class DataSource extends Object {
  *
  * @var array
  */
-	public $config = array();
+	public $config = [];
 
 /**
  * Whether or not this DataSource is in the middle of a transaction
@@ -81,7 +81,7 @@ class DataSource extends Object {
  *
  * @param array $config Array of configuration information for the datasource.
  */
-	public function __construct($config = array()) {
+	public function __construct($config = []) {
 		parent::__construct();
 		$this->setConfig($config);
 	}
@@ -202,7 +202,7 @@ class DataSource extends Object {
  * @param int $recursive Number of levels of association
  * @return mixed
  */
-	public function read(Model $Model, $queryData = array(), $recursive = null) {
+	public function read(Model $Model, $queryData = [], $recursive = null) {
 		return false;
 	}
 
@@ -282,7 +282,7 @@ class DataSource extends Object {
  * @param array $config The configuration array
  * @return void
  */
-	public function setConfig($config = array()) {
+	public function setConfig($config = []) {
 		$this->config = array_merge($this->_baseConfig, $this->config, $config);
 	}
 
@@ -324,7 +324,7 @@ class DataSource extends Object {
  * @return mixed String of query data with placeholders replaced, or false on failure.
  */
 	public function insertQueryData($query, $data, $association, Model $Model, $stack) {
-		$keys = array('{$__cakeID__$}', '{$__cakeForeignKey__$}');
+		$keys = ['{$__cakeID__$}', '{$__cakeForeignKey__$}'];
 
 		$modelAlias = $Model->alias;
 

@@ -10,7 +10,7 @@
  * @license			http://basercms.net/license/index.html
  */
 
-App::import('Vendor', 'Feed.SimplePie_Autoloader', true, array(), 'simplepie' . DS . 'autoloader.php');
+App::import('Vendor', 'Feed.SimplePie_Autoloader', true, [], 'simplepie' . DS . 'autoloader.php');
 App::uses('FeedAppModel', 'Feed.Model');
 
 /**
@@ -73,7 +73,7 @@ class Feed extends FeedAppModel {
 			return $items;
 		}
 
-		$_items = array();
+		$_items = [];
 		foreach ($items as $item) {
 
 			if (empty($item['category']['value'])) {
@@ -186,18 +186,18 @@ class Feed extends FeedAppModel {
 		$feed['Channel']['pubDate']['value'] = '';
 		$feed['Channel']['language']['value'] = $simplePie->get_language();
 		$feed['Channel']['generator']['value'] = 'baserCMS';
-		$feed['Items'] = array();
+		$feed['Items'] = [];
 
 		foreach ($datas as $data) {
 
-			$tmp = array();
+			$tmp = [];
 			$tmp['title']['value'] = $data->get_title();
 			$tmp['link']['value'] = $data->get_link();
 			$tmp['pubDate']['value'] = date("r", strtotime($data->get_date('Y-m-d H:i:s')));
 			$tmp['dc:creator']['value'] = $data->get_author();
 			$categories = $data->get_categories();
 			if ($categories) {
-				$categoryArray = array();
+				$categoryArray = [];
 				foreach ($categories as $category) {
 					$categoryArray[] = $category->get_term();
 				}
@@ -258,7 +258,7 @@ class Feed extends FeedAppModel {
  */
 	public function extractImg($string) {
 		$pattern = '/(<img.+?src\s*=\s*[\"|\'](.*?)[\"|\'].*?\/?>)/s';
-		$img = array();
+		$img = [];
 		if (preg_match($pattern, $string, $matches)) {
 			$img['tag'] = $matches[1];
 			$img['url'] = $matches[2];

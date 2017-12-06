@@ -28,19 +28,19 @@ class ProjectFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => false)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'name' => ['type' => 'string', 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('name' => 'Project 1'),
-		array('name' => 'Project 2'),
-		array('name' => 'Project 3')
-	);
+	public $records = [
+		['name' => 'Project 1'],
+		['name' => 'Project 2'],
+		['name' => 'Project 3']
+	];
 }

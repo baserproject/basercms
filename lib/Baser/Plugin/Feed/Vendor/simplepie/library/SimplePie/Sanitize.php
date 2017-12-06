@@ -59,9 +59,9 @@ class SimplePie_Sanitize
 	// Options
 	var $remove_div = true;
 	var $image_handler = '';
-	var $strip_htmltags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style');
+	var $strip_htmltags = ['base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style'];
 	var $encode_instead_of_strip = false;
-	var $strip_attributes = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc');
+	var $strip_attributes = ['bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc'];
 	var $strip_comments = false;
 	var $output_encoding = 'UTF-8';
 	var $enable_cache = true;
@@ -136,7 +136,7 @@ class SimplePie_Sanitize
 		}
 	}
 
-	public function strip_htmltags($tags = array('base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style'))
+	public function strip_htmltags($tags = ['base', 'blink', 'body', 'doctype', 'embed', 'font', 'form', 'frame', 'frameset', 'html', 'iframe', 'input', 'marquee', 'meta', 'noscript', 'object', 'param', 'script', 'style'])
 	{
 		if ($tags)
 		{
@@ -160,7 +160,7 @@ class SimplePie_Sanitize
 		$this->encode_instead_of_strip = (bool) $encode;
 	}
 
-	public function strip_attributes($attribs = array('bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc'))
+	public function strip_attributes($attribs = ['bgsound', 'class', 'expr', 'id', 'style', 'onclick', 'onerror', 'onfinish', 'onmouseover', 'onmouseout', 'onfocus', 'onblur', 'lowsrc', 'dynsrc'])
 	{
 		if ($attribs)
 		{
@@ -204,20 +204,20 @@ class SimplePie_Sanitize
 	{
 		if ($element_attribute === null)
 		{
-			$element_attribute = array(
+			$element_attribute = [
 				'a' => 'href',
 				'area' => 'href',
 				'blockquote' => 'cite',
 				'del' => 'cite',
 				'form' => 'action',
-				'img' => array(
+				'img' => [
 					'longdesc',
 					'src'
-				),
+				],
 				'input' => 'src',
 				'ins' => 'cite',
 				'q' => 'cite'
-			);
+			];
 		}
 		$this->replace_url_attributes = (array) $element_attribute;
 	}
@@ -251,7 +251,7 @@ class SimplePie_Sanitize
 				$document->encoding = 'UTF-8';
 				$data = $this->preprocess($data, $type);
 
-				set_error_handler(array('SimplePie_Misc', 'silence_errors'));
+				set_error_handler(['SimplePie_Misc', 'silence_errors']);
 				$document->loadHTML($data);
 				restore_error_handler();
 
@@ -302,7 +302,7 @@ class SimplePie_Sanitize
 						if ($img->hasAttribute('src'))
 						{
 							$image_url = call_user_func($this->cache_name_function, $img->getAttribute('src'));
-							$cache = $this->registry->call('Cache', 'get_handler', array($this->cache_location, $image_url, 'spi'));
+							$cache = $this->registry->call('Cache', 'get_handler', [$this->cache_location, $image_url, 'spi']);
 
 							if ($cache->load())
 							{
@@ -310,12 +310,12 @@ class SimplePie_Sanitize
 							}
 							else
 							{
-								$file = $this->registry->create('File', array($img['attribs']['src']['data'], $this->timeout, 5, array('X-FORWARDED-FOR' => $_SERVER['REMOTE_ADDR']), $this->useragent, $this->force_fsockopen));
+								$file = $this->registry->create('File', [$img['attribs']['src']['data'], $this->timeout, 5, ['X-FORWARDED-FOR' => $_SERVER['REMOTE_ADDR']], $this->useragent, $this->force_fsockopen]);
 								$headers = $file->headers;
 
 								if ($file->success && ($file->method & SIMPLEPIE_FILE_SOURCE_REMOTE === 0 || ($file->status_code === 200 || $file->status_code > 206 && $file->status_code < 300)))
 								{
-									if ($cache->save(array('headers' => $file->headers, 'body' => $file->body)))
+									if ($cache->save(['headers' => $file->headers, 'body' => $file->body]))
 									{
 										$img->setAttribute('src', $this->image_handler . $image_url);
 									}
@@ -356,7 +356,7 @@ class SimplePie_Sanitize
 
 			if ($type & SIMPLEPIE_CONSTRUCT_IRI)
 			{
-				$absolute = $this->registry->call('Misc', 'absolutize_url', array($data, $base));
+				$absolute = $this->registry->call('Misc', 'absolutize_url', [$data, $base]);
 				if ($absolute !== false)
 				{
 					$data = $absolute;
@@ -370,7 +370,7 @@ class SimplePie_Sanitize
 
 			if ($this->output_encoding !== 'UTF-8')
 			{
-				$data = $this->registry->call('Misc', 'change_encoding', array($data, 'UTF-8', $this->output_encoding));
+				$data = $this->registry->call('Misc', 'change_encoding', [$data, 'UTF-8', $this->output_encoding]);
 			}
 		}
 		return $data;
@@ -403,7 +403,7 @@ class SimplePie_Sanitize
 	{
 		if (!is_array($attributes))
 		{
-			$attributes = array($attributes);
+			$attributes = [$attributes];
 		}
 
 		if (!is_array($this->strip_htmltags) || !in_array($tag, $this->strip_htmltags))
@@ -415,7 +415,7 @@ class SimplePie_Sanitize
 				{
 					if ($element->hasAttribute($attribute))
 					{
-						$value = $this->registry->call('Misc', 'absolutize_url', array($element->getAttribute($attribute), $this->base));
+						$value = $this->registry->call('Misc', 'absolutize_url', [$element->getAttribute($attribute), $this->base]);
 						if ($value !== false)
 						{
 							$element->setAttribute($attribute, $value);
@@ -430,7 +430,7 @@ class SimplePie_Sanitize
 	{
 		if ($this->encode_instead_of_strip)
 		{
-			if (isset($match[4]) && !in_array(strtolower($match[1]), array('script', 'style')))
+			if (isset($match[4]) && !in_array(strtolower($match[1]), ['script', 'style']))
 			{
 				$match[1] = htmlspecialchars($match[1], ENT_COMPAT, 'UTF-8');
 				$match[2] = htmlspecialchars($match[2], ENT_COMPAT, 'UTF-8');
@@ -441,7 +441,7 @@ class SimplePie_Sanitize
 				return htmlspecialchars($match[0], ENT_COMPAT, 'UTF-8');
 			}
 		}
-		elseif (isset($match[4]) && !in_array(strtolower($match[1]), array('script', 'style')))
+		elseif (isset($match[4]) && !in_array(strtolower($match[1]), ['script', 'style']))
 		{
 			return $match[4];
 		}
@@ -462,12 +462,12 @@ class SimplePie_Sanitize
 				$fragment = $document->createDocumentFragment();
 
 				// For elements which aren't script or style, include the tag itself
-				if (!in_array($tag, array('script', 'style')))
+				if (!in_array($tag, ['script', 'style']))
 				{
 					$text = '<' . $tag;
 					if ($element->hasAttributes())
 					{
-						$attrs = array();
+						$attrs = [];
 						foreach ($element->attributes as $name => $attr)
 						{
 							$value = $attr->value;
@@ -500,7 +500,7 @@ class SimplePie_Sanitize
 					$fragment->appendChild($child);
 				}
 
-				if (!in_array($tag, array('script', 'style')))
+				if (!in_array($tag, ['script', 'style']))
 				{
 					$fragment->appendChild(new DOMText('</' . $tag . '>'));
 				}
@@ -510,7 +510,7 @@ class SimplePie_Sanitize
 
 			return;
 		}
-		elseif (in_array($tag, array('script', 'style')))
+		elseif (in_array($tag, ['script', 'style']))
 		{
 			foreach ($elements as $element)
 			{

@@ -43,32 +43,32 @@ class SessionHelperTest extends CakeTestCase {
 			CakeSession::start();
 		}
 
-		$_SESSION = array(
+		$_SESSION = [
 			'test' => 'info',
-			'Message' => array(
-				'flash' => array(
+			'Message' => [
+				'flash' => [
 					'element' => 'default',
-					'params' => array(),
+					'params' => [],
 					'message' => 'This is a calling'
-				),
-				'notification' => array(
+				],
+				'notification' => [
 					'element' => 'session_helper',
-					'params' => array('title' => 'Notice!', 'name' => 'Alert!'),
+					'params' => ['title' => 'Notice!', 'name' => 'Alert!'],
 					'message' => 'This is a test of the emergency broadcasting system',
-				),
-				'classy' => array(
+				],
+				'classy' => [
 					'element' => 'default',
-					'params' => array('class' => 'positive'),
+					'params' => ['class' => 'positive'],
 					'message' => 'Recorded'
-				),
-				'bare' => array(
+				],
+				'bare' => [
 					'element' => null,
 					'message' => 'Bare message',
-					'params' => array(),
-				),
-			),
-			'Deeply' => array('nested' => array('key' => 'value')),
-		);
+					'params' => [],
+				],
+			],
+			'Deeply' => ['nested' => ['key' => 'value']],
+		];
 	}
 
 /**
@@ -77,7 +77,7 @@ class SessionHelperTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		$_SESSION = array();
+		$_SESSION = [];
 		unset($this->View, $this->Session);
 		CakePlugin::unload();
 		parent::tearDown();
@@ -126,9 +126,9 @@ class SessionHelperTest extends CakeTestCase {
 		$result = $this->Session->flash('classy');
 		$this->assertEquals($expected, $result);
 
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 		$result = $this->Session->flash('notification');
 		$result = str_replace("\r\n", "\n", $result);
 		$expected = "<div id=\"notificationLayout\">\n\t<h1>Alert!</h1>\n\t<h3>Notice!</h3>\n\t<p>This is a test of the emergency broadcasting system</p>\n</div>";
@@ -147,7 +147,7 @@ class SessionHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testFlashAttributes() {
-		$result = $this->Session->flash('flash', array('params' => array('class' => 'test-message')));
+		$result = $this->Session->flash('flash', ['params' => ['class' => 'test-message']]);
 		$expected = '<div id="flashMessage" class="test-message">This is a calling</div>';
 		$this->assertEquals($expected, $result);
 		$this->assertFalse($this->Session->check('Message.flash'));
@@ -159,13 +159,13 @@ class SessionHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testFlashElementInAttrs() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
-		$result = $this->Session->flash('flash', array(
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
+		$result = $this->Session->flash('flash', [
 			'element' => 'session_helper',
-			'params' => array('title' => 'Notice!', 'name' => 'Alert!')
-		));
+			'params' => ['title' => 'Notice!', 'name' => 'Alert!']
+		]);
 		$expected = "<div id=\"notificationLayout\">\n\t<h1>Alert!</h1>\n\t<h3>Notice!</h3>\n\t<p>This is a calling</p>\n</div>";
 		$this->assertTextEquals($expected, $result);
 	}
@@ -176,15 +176,15 @@ class SessionHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testFlashWithPluginElement() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]
+		]);
 		CakePlugin::load('TestPlugin');
 
-		$result = $this->Session->flash('flash', array(
+		$result = $this->Session->flash('flash', [
 			'element' => 'plugin_element',
-			'params' => array('plugin' => 'TestPlugin')
-		));
+			'params' => ['plugin' => 'TestPlugin']
+		]);
 		$expected = 'this is the plugin element using params[plugin]';
 		$this->assertEquals($expected, $result);
 	}

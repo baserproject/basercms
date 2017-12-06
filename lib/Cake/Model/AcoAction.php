@@ -35,5 +35,5 @@ class AcoAction extends AppModel {
  *
  * @var array
  */
-	public $belongsTo = array('Aco');
+	public $belongsTo = ['Aco'];
 }

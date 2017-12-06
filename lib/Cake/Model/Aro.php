@@ -35,5 +35,5 @@ class Aro extends AclNode {
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array('Aco' => array('with' => 'Permission'));
+	public $hasAndBelongsToMany = ['Aco' => ['with' => 'Permission']];
 }

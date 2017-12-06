@@ -71,7 +71,7 @@ class AroTwoTest extends AclNodeTwoTestBase {
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array('AcoTwoTest' => array('with' => 'PermissionTwoTest'));
+	public $hasAndBelongsToMany = ['AcoTwoTest' => ['with' => 'PermissionTwoTest']];
 }
 
 /**
@@ -100,7 +100,7 @@ class AcoTwoTest extends AclNodeTwoTestBase {
  *
  * @var array
  */
-	public $hasAndBelongsToMany = array('AroTwoTest' => array('with' => 'PermissionTwoTest'));
+	public $hasAndBelongsToMany = ['AroTwoTest' => ['with' => 'PermissionTwoTest']];
 }
 
 /**
@@ -136,7 +136,7 @@ class PermissionTwoTest extends Permission {
  *
  * @var array
  */
-	public $belongsTo = array('AroTwoTest' => array('foreignKey' => 'aro_id'), 'AcoTwoTest' => array('foreignKey' => 'aco_id'));
+	public $belongsTo = ['AroTwoTest' => ['foreignKey' => 'aro_id'], 'AcoTwoTest' => ['foreignKey' => 'aco_id']];
 
 /**
  * actsAs property
@@ -181,7 +181,7 @@ class DbAclTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.aro_two', 'core.aco_two', 'core.aros_aco_two');
+	public $fixtures = ['core.aro_two', 'core.aco_two', 'core.aros_aco_two'];
 
 /**
  * setUp method
@@ -212,24 +212,24 @@ class DbAclTest extends CakeTestCase {
  * @return void
  */
 	public function testCreate() {
-		$this->Acl->Aro->create(array('alias' => 'Chotchkey'));
+		$this->Acl->Aro->create(['alias' => 'Chotchkey']);
 		$this->assertTrue((bool)$this->Acl->Aro->save());
 
 		$parent = $this->Acl->Aro->id;
 
-		$this->Acl->Aro->create(array('parent_id' => $parent, 'alias' => 'Joanna'));
+		$this->Acl->Aro->create(['parent_id' => $parent, 'alias' => 'Joanna']);
 		$this->assertTrue((bool)$this->Acl->Aro->save());
 
-		$this->Acl->Aro->create(array('parent_id' => $parent, 'alias' => 'Stapler'));
+		$this->Acl->Aro->create(['parent_id' => $parent, 'alias' => 'Stapler']);
 		$this->assertTrue((bool)$this->Acl->Aro->save());
 
 		$root = $this->Acl->Aco->node('ROOT');
 		$parent = $root[0]['AcoTwoTest']['id'];
 
-		$this->Acl->Aco->create(array('parent_id' => $parent, 'alias' => 'Drinks'));
+		$this->Acl->Aco->create(['parent_id' => $parent, 'alias' => 'Drinks']);
 		$this->assertTrue((bool)$this->Acl->Aco->save());
 
-		$this->Acl->Aco->create(array('parent_id' => $parent, 'alias' => 'PiecesOfFlair'));
+		$this->Acl->Aco->create(['parent_id' => $parent, 'alias' => 'PiecesOfFlair']);
 		$this->assertTrue((bool)$this->Acl->Aco->save());
 	}
 
@@ -241,12 +241,12 @@ class DbAclTest extends CakeTestCase {
 	public function testCreateWithParent() {
 		$parent = $this->Acl->Aro->findByAlias('Peter', null, null, -1);
 		$this->Acl->Aro->create();
-		$this->Acl->Aro->save(array(
+		$this->Acl->Aro->save([
 			'alias' => 'Subordinate',
 			'model' => 'User',
 			'foreign_key' => 7,
 			'parent_id' => $parent['AroTwoTest']['id']
-		));
+		]);
 		$result = $this->Acl->Aro->findByAlias('Subordinate', null, null, -1);
 		$this->assertEquals(16, $result['AroTwoTest']['lft']);
 		$this->assertEquals(17, $result['AroTwoTest']['rght']);
@@ -259,7 +259,7 @@ class DbAclTest extends CakeTestCase {
  */
 	public function testAllow() {
 		$this->assertFalse($this->Acl->check('Micheal', 'tpsReports', 'read'));
-		$this->assertTrue($this->Acl->allow('Micheal', 'tpsReports', array('read', 'delete', 'update')));
+		$this->assertTrue($this->Acl->allow('Micheal', 'tpsReports', ['read', 'delete', 'update']));
 		$this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'update'));
 		$this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'read'));
 		$this->assertTrue($this->Acl->check('Micheal', 'tpsReports', 'delete'));
@@ -392,7 +392,7 @@ class DbAclTest extends CakeTestCase {
 		$this->assertFalse($this->Acl->check('Samir', 'refill', 'read'));
 		$this->assertFalse($this->Acl->check('Samir', 'refill', 'delete'));
 
-		$result = $this->Acl->Aro->Permission->find('all', array('conditions' => array('AroTwoTest.alias' => 'Samir')));
+		$result = $this->Acl->Aro->Permission->find('all', ['conditions' => ['AroTwoTest.alias' => 'Samir']]);
 		$expected = '-1';
 		$this->assertEquals($expected, $result[0]['PermissionTwoTest']['_delete']);
 
@@ -406,20 +406,20 @@ class DbAclTest extends CakeTestCase {
  */
 	public function testAclNodeLookup() {
 		$result = $this->Acl->Aro->node('root/users/Samir');
-		$expected = array(
-			array('AroTwoTest' => array('id' => '7', 'parent_id' => '4', 'model' => 'User', 'foreign_key' => 3, 'alias' => 'Samir')),
-			array('AroTwoTest' => array('id' => '4', 'parent_id' => '1', 'model' => 'Group', 'foreign_key' => 3, 'alias' => 'users')),
-			array('AroTwoTest' => array('id' => '1', 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'root'))
-		);
+		$expected = [
+			['AroTwoTest' => ['id' => '7', 'parent_id' => '4', 'model' => 'User', 'foreign_key' => 3, 'alias' => 'Samir']],
+			['AroTwoTest' => ['id' => '4', 'parent_id' => '1', 'model' => 'Group', 'foreign_key' => 3, 'alias' => 'users']],
+			['AroTwoTest' => ['id' => '1', 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'root']]
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Acl->Aco->node('ROOT/tpsReports/view/current');
-		$expected = array(
-			array('AcoTwoTest' => array('id' => '4', 'parent_id' => '3', 'model' => null, 'foreign_key' => null, 'alias' => 'current')),
-			array('AcoTwoTest' => array('id' => '3', 'parent_id' => '2', 'model' => null, 'foreign_key' => null, 'alias' => 'view')),
-			array('AcoTwoTest' => array('id' => '2', 'parent_id' => '1', 'model' => null, 'foreign_key' => null, 'alias' => 'tpsReports')),
-			array('AcoTwoTest' => array('id' => '1', 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT')),
-		);
+		$expected = [
+			['AcoTwoTest' => ['id' => '4', 'parent_id' => '3', 'model' => null, 'foreign_key' => null, 'alias' => 'current']],
+			['AcoTwoTest' => ['id' => '3', 'parent_id' => '2', 'model' => null, 'foreign_key' => null, 'alias' => 'view']],
+			['AcoTwoTest' => ['id' => '2', 'parent_id' => '1', 'model' => null, 'foreign_key' => null, 'alias' => 'tpsReports']],
+			['AcoTwoTest' => ['id' => '1', 'parent_id' => null, 'model' => null, 'foreign_key' => null, 'alias' => 'ROOT']],
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -446,19 +446,19 @@ class DbAclTest extends CakeTestCase {
  * @return void
  */
 	public function testInheritParentDeny() {
-		$this->Acl->Aco->create(array('parent_id' => null, 'alias' => 'world'));
+		$this->Acl->Aco->create(['parent_id' => null, 'alias' => 'world']);
 		$this->Acl->Aco->save();
 
-		$this->Acl->Aco->create(array('parent_id' => $this->Acl->Aco->id, 'alias' => 'town'));
+		$this->Acl->Aco->create(['parent_id' => $this->Acl->Aco->id, 'alias' => 'town']);
 		$this->Acl->Aco->save();
 
-		$this->Acl->Aco->create(array('parent_id' => null, 'alias' => 'bizzaro_world'));
+		$this->Acl->Aco->create(['parent_id' => null, 'alias' => 'bizzaro_world']);
 		$this->Acl->Aco->save();
 
-		$this->Acl->Aco->create(array('parent_id' => $this->Acl->Aco->id, 'alias' => 'bizzaro_town'));
+		$this->Acl->Aco->create(['parent_id' => $this->Acl->Aco->id, 'alias' => 'bizzaro_town']);
 		$this->Acl->Aco->save();
 
-		$this->Acl->Aro->create(array('parent_id' => null, 'alias' => 'Jane'));
+		$this->Acl->Aro->create(['parent_id' => null, 'alias' => 'Jane']);
 		$this->Acl->Aro->save();
 
 		// Setup deny on create for parent
@@ -494,7 +494,7 @@ class DbAclTest extends CakeTestCase {
 		$this->assertTrue($this->Acl->check('Samir', 'tpsReports', 'create'));
 
 		$this->assertFalse($this->Acl->check('Micheal', 'view', 'read'));
-		$this->Acl->allow('Micheal', 'view', array('read', 'create', 'update'));
+		$this->Acl->allow('Micheal', 'view', ['read', 'create', 'update']);
 		$this->assertTrue($this->Acl->check('Micheal', 'view', 'read'));
 		$this->assertTrue($this->Acl->check('Micheal', 'view', 'create'));
 		$this->assertTrue($this->Acl->check('Micheal', 'view', 'update'));
@@ -535,12 +535,12 @@ class DbAclTest extends CakeTestCase {
 	protected function _debug($printTreesToo = false) {
 		$this->Acl->Aro->displayField = 'alias';
 		$this->Acl->Aco->displayField = 'alias';
-		$aros = $this->Acl->Aro->find('list', array('order' => 'lft'));
-		$acos = $this->Acl->Aco->find('list', array('order' => 'lft'));
-		$rights = array('*', 'create', 'read', 'update', 'delete');
+		$aros = $this->Acl->Aro->find('list', ['order' => 'lft']);
+		$acos = $this->Acl->Aco->find('list', ['order' => 'lft']);
+		$rights = ['*', 'create', 'read', 'update', 'delete'];
 		$permissions['Aros v Acos >'] = $acos;
 		foreach ($aros as $aro) {
-			$row = array();
+			$row = [];
 			foreach ($acos as $aco) {
 				$perms = '';
 				foreach ($rights as $right) {
@@ -560,13 +560,13 @@ class DbAclTest extends CakeTestCase {
 		}
 		foreach ($permissions as $key => $values) {
 			array_unshift($values, $key);
-			$values = array_map(array(&$this, '_pad'), $values);
+			$values = array_map([&$this, '_pad'], $values);
 			$permissions[$key] = implode(' ', $values);
 		}
-		$permissions = array_map(array(&$this, '_pad'), $permissions);
+		$permissions = array_map([&$this, '_pad'], $permissions);
 		array_unshift($permissions, 'Current Permissions :');
 		if ($printTreesToo) {
-			debug(array('aros' => $this->Acl->Aro->generateTreeList(), 'acos' => $this->Acl->Aco->generateTreeList()));
+			debug(['aros' => $this->Acl->Aro->generateTreeList(), 'acos' => $this->Acl->Aco->generateTreeList()]);
 		}
 		debug(implode("\r\n", $permissions));
 	}

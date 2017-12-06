@@ -35,14 +35,14 @@ class FeedBaserHelper extends AppHelper {
  * @todo スマホ対応
  */
 	public function feed($id, $mobile = '') {
-		$url = array('mobile' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index');
+		$url = ['mobile' => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index'];
 		if ($mobile === '') {
 			$mobile = ($this->request->params['Site']['device'] == 'mobile');
 		}
 		if ($mobile) {
-			$url = array_merge($url, array($this->request->params['Site']['name'] => true));
+			$url = array_merge($url, [$this->request->params['Site']['name'] => true]);
 		}
-		echo $this->requestAction($url, array('pass' => array($id)));
+		echo $this->requestAction($url, ['pass' => [$id]]);
 	}
 
 }

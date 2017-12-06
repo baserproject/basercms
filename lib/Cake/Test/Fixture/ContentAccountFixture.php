@@ -30,23 +30,23 @@ class ContentAccountFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'iContentAccountsId' => array('type' => 'integer', 'key' => 'primary'),
-		'iContentId' => array('type' => 'integer'),
-		'iAccountId' => array('type' => 'integer')
-	);
+	public $fields = [
+		'iContentAccountsId' => ['type' => 'integer', 'key' => 'primary'],
+		'iContentId' => ['type' => 'integer'],
+		'iAccountId' => ['type' => 'integer']
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('iContentId' => 1, 'iAccountId' => 1),
-		array('iContentId' => 2, 'iAccountId' => 2),
-		array('iContentId' => 3, 'iAccountId' => 3),
-		array('iContentId' => 4, 'iAccountId' => 4),
-		array('iContentId' => 1, 'iAccountId' => 2),
-		array('iContentId' => 2, 'iAccountId' => 3),
-	);
+	public $records = [
+		['iContentId' => 1, 'iAccountId' => 1],
+		['iContentId' => 2, 'iAccountId' => 2],
+		['iContentId' => 3, 'iAccountId' => 3],
+		['iContentId' => 4, 'iAccountId' => 4],
+		['iContentId' => 1, 'iAccountId' => 2],
+		['iContentId' => 2, 'iAccountId' => 3],
+	];
 }

@@ -36,14 +36,14 @@ class MailContentsController extends MailAppController {
  *
  * @var array
  */
-	public $uses = array("Mail.MailContent", 'Mail.MailMessage');
+	public $uses = ["Mail.MailContent", 'Mail.MailMessage'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcHtml', 'BcTime', 'BcForm', 'BcText', 'Mail.Mail');
+	public $helpers = ['BcHtml', 'BcTime', 'BcForm', 'BcText', 'Mail.Mail'];
 
 /**
  * コンポーネント
@@ -57,7 +57,7 @@ class MailContentsController extends MailAppController {
  *
  * @var string
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * [ADMIN] メールフォーム一覧
@@ -67,7 +67,7 @@ class MailContentsController extends MailAppController {
 	public function admin_index() {
 		$listDatas = $this->MailContent->find('all');
 		$this->set('listDatas', $listDatas);
-		$this->subMenuElements = array('mail_common');
+		$this->subMenuElements = ['mail_common'];
 		$this->pageTitle = 'メールフォーム一覧';
 		$this->help = 'mail_contents_index';
 	}
@@ -117,7 +117,7 @@ class MailContentsController extends MailAppController {
 					/* データを保存 */
 					if ($this->MailContent->save(null, false)) {
 						$this->setMessage('新規メールフォーム「' . $this->request->data['MailContent']['title'] . '」を追加しました。', false, true);
-						$this->redirect(array('action' => 'edit', $this->MailContent->id));
+						$this->redirect(['action' => 'edit', $this->MailContent->id]);
 					} else {
 						$this->setMessage('データベース処理中にエラーが発生しました。', true);
 					}
@@ -128,7 +128,7 @@ class MailContentsController extends MailAppController {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
-		$this->subMenuElements = array('mail_common');
+		$this->subMenuElements = ['mail_common'];
 		$this->help = 'mail_contents_form';
 		$this->render('form');
 	}
@@ -164,7 +164,7 @@ class MailContentsController extends MailAppController {
 				} elseif ($this->request->data['MailContent']['edit_mail']) {
 					$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
 				} else {
-					$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
+					$this->redirect(['action' => 'edit', $this->request->data['MailContent']['id']]);
 				}
 			} else {
 				if ($this->MailContent->validationErrors || $this->MailContent->Content->validationErrors) {
@@ -214,7 +214,7 @@ class MailContentsController extends MailAppController {
 		$type = 'Emails';
 		$path = 'text' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $type . DS . $path;
-		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $type . DS . $path);
+		$sorces = [BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $type . DS . $path];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target)) {
 				foreach ($sorces as $source) {
@@ -228,10 +228,10 @@ class MailContentsController extends MailAppController {
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array_merge(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type), explode('/', $path)));
+			$this->redirect(array_merge(['plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], $type], explode('/', $path)));
 		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 	}
 
@@ -244,23 +244,23 @@ class MailContentsController extends MailAppController {
 	public function redirectEditForm($template) {
 		$path = 'Mail' . DS . $template;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
-		$sorces = array(BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $path);
+		$sorces = [BASER_PLUGINS . 'Mail' . DS . 'View' . DS . $path];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target . DS . 'index' . $this->ext)) {
 				foreach ($sorces as $source) {
 					if (is_dir($source)) {
 						$folder = new Folder();
 						$folder->create(dirname($target), 0777);
-						$folder->copy(array('from' => $source, 'to' => $target, 'chmod' => 0777, 'skip' => array('_notes')));
+						$folder->copy(['from' => $source, 'to' => $target, 'chmod' => 0777, 'skip' => ['_notes']]);
 						break;
 					}
 				}
 			}
 			$path = str_replace(DS, '/', $path);
-			$this->redirect(array_merge(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'), explode('/', $path . '/index' . $this->ext)));
+			$this->redirect(array_merge(['plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'], explode('/', $path . '/index' . $this->ext)));
 		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 	}
 

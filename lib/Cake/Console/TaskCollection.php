@@ -67,7 +67,7 @@ class TaskCollection extends ObjectCollection {
  * @return Task A task object, Either the existing loaded task or a new one.
  * @throws MissingTaskException when the task could not be found
  */
-	public function load($task, $settings = array()) {
+	public function load($task, $settings = []) {
 		if (is_array($settings) && isset($settings['className'])) {
 			$alias = $task;
 			$task = $settings['className'];
@@ -85,10 +85,10 @@ class TaskCollection extends ObjectCollection {
 
 		$exists = class_exists($taskClass);
 		if (!$exists) {
-			throw new MissingTaskException(array(
+			throw new MissingTaskException([
 				'class' => $taskClass,
 				'plugin' => substr($plugin, 0, -1)
-			));
+			]);
 		}
 
 		$this->_loaded[$alias] = new $taskClass(

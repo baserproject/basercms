@@ -29,14 +29,14 @@ class UploaderFilesController extends AppController {
  * @var		array
  * @access	public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure','RequestHandler');
+	public $components = ['BcAuth','Cookie','BcAuthConfigure','RequestHandler'];
 /**
  * ヘルパー
  *
  * @var		array
  * @access	public
  */
-	public $helpers = array('BcText', 'BcTime', 'BcForm', 'Uploader.Uploader', 'BcUpload');
+	public $helpers = ['BcText', 'BcTime', 'BcForm', 'Uploader.Uploader', 'BcUpload'];
 /**
  * ページタイトル
  *
@@ -50,23 +50,23 @@ class UploaderFilesController extends AppController {
  * @var		array
  * @access	public
  */
-	public $uses = array('Plugin','Uploader.UploaderFile', 'Uploader.UploaderConfig');
+	public $uses = ['Plugin','Uploader.UploaderFile', 'Uploader.UploaderConfig'];
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'プラグイン管理', 'url' => array('plugin' => '', 'controller' => 'plugins', 'action' => 'index')),
-		array('name' => 'アップロードファイル管理', 'url' => array('controller' => 'uploader_files', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'プラグイン管理', 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']],
+		['name' => 'アップロードファイル管理', 'url' => ['controller' => 'uploader_files', 'action' => 'index']]
+	];
 /**
  * サブメニューエレメント
  *
  * @var 	array
  * @access 	public
  */
-	public $subMenuElements = array('uploader');
+	public $subMenuElements = ['uploader'];
 	public function beforeFilter() {
 		$this->BcAuth->allow('view_limited_file');
 		parent::beforeFilter();
@@ -84,8 +84,8 @@ class UploaderFilesController extends AppController {
 		if(!isset($this->siteConfigs['admin_list_num'])) {
 			$this->siteConfigs['admin_list_num'] = 10;
 		}
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('UploadFile', array('default' => $default));
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('UploadFile', ['default' => $default]);
 		$this->set('uploaderConfigs', $this->UploaderConfig->findExpanded());
 		$this->set('installMessage', $this->checkInstall());
 		
@@ -151,8 +151,8 @@ class UploaderFilesController extends AppController {
 
 		Configure::write('debug',0);
 		
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('UploadFile', array('default' => $default, 'type' => 'get'));
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('UploadFile', ['default' => $default, 'type' => 'get']);
 
 		$this->request->data['Filter'] = $this->passedArgs;
 		if(empty($this->request->data['Filter']['uploader_type'])) {
@@ -185,18 +185,18 @@ class UploaderFilesController extends AppController {
 			if ($user) $conditions['UploaderFile.user_id'] = $user['id'];
 		}
 
-		$this->paginate = array('conditions'=>$conditions,
-				'fields'=>array(),
+		$this->paginate = ['conditions'=>$conditions,
+				'fields'=>[],
 				'order'=>'created DESC',
 				'limit'=>$num
-		);
+		];
 		
 		$dbDatas = $this->paginate('UploaderFile');
 		
 		foreach($dbDatas as $key => $dbData) {
 			$limited = (!empty($dbData['UploaderFile']['publish_begin']) || !empty($dbData['UploaderFile']['publish_end']));
 			$files = $this->UploaderFile->filesExists($dbData['UploaderFile']['name'], $limited);
-			$dbData = Set::merge($dbData,array('UploaderFile'=>$files));
+			$dbData = Set::merge($dbData,['UploaderFile'=>$files]);
 			$dbDatas[$key] = $dbData;
 		}
 		
@@ -220,30 +220,30 @@ class UploaderFilesController extends AppController {
  */
 	protected function _createAdminIndexConditions($data) {
 		
-		$conditions = array();
+		$conditions = [];
 		if(!empty($data['uploader_category_id'])) {
-			$conditions = array('UploaderFile.uploader_category_id' => $data['uploader_category_id']);
+			$conditions = ['UploaderFile.uploader_category_id' => $data['uploader_category_id']];
 			$this->request->data['Filter']['uploader_category_id'] = $data['uploader_category_id'];
 		}
 		if(!empty($data['uploader_type'])) {
 			switch ($data['uploader_type']) {
 				case 'img':
-					$conditions['or'][] = array('UploaderFile.name LIKE' => '%.png');
-					$conditions['or'][] = array('UploaderFile.name LIKE' => '%.jpg');
-					$conditions['or'][] = array('UploaderFile.name LIKE' => '%.gif');
+					$conditions['or'][] = ['UploaderFile.name LIKE' => '%.png'];
+					$conditions['or'][] = ['UploaderFile.name LIKE' => '%.jpg'];
+					$conditions['or'][] = ['UploaderFile.name LIKE' => '%.gif'];
 					break;
 				case 'etc':
-					$conditions['and'][] = array('UploaderFile.name NOT LIKE' => '%.png');
-					$conditions['and'][] = array('UploaderFile.name NOT LIKE' => '%.jpg');
-					$conditions['and'][] = array('UploaderFile.name NOT LIKE' => '%.gif');
+					$conditions['and'][] = ['UploaderFile.name NOT LIKE' => '%.png'];
+					$conditions['and'][] = ['UploaderFile.name NOT LIKE' => '%.jpg'];
+					$conditions['and'][] = ['UploaderFile.name NOT LIKE' => '%.gif'];
 					break;
 				case 'all':
 				case '':
 			}
 		}
 		if(!empty($data['name'])) {
-			$conditions['and']['or'][] = array('UploaderFile.name LIKE' => '%' . $data['name'] . '%');
-			$conditions['and']['or'][] = array('UploaderFile.alt LIKE' => '%' . $data['name'] . '%');
+			$conditions['and']['or'][] = ['UploaderFile.name LIKE' => '%' . $data['name'] . '%'];
+			$conditions['and']['or'][] = ['UploaderFile.alt LIKE' => '%' . $data['name'] . '%'];
 		}
 		
 		return $conditions;
@@ -355,7 +355,7 @@ class UploaderFilesController extends AppController {
 			} else {
 				if($result) {
 					$this->setMessage('ファイルの内容を保存しました。');
-					$this->redirect(array('action' => 'index'));
+					$this->redirect(['action' => 'index']);
 				} else {
 					$this->setMessage('保存中にエラーが発生しました。');
 				}
@@ -401,7 +401,7 @@ class UploaderFilesController extends AppController {
 			} else {
 				$this->setMessage('削除中にエラーが発生しました。', true);
 			}
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 	}
@@ -427,16 +427,16 @@ class UploaderFilesController extends AppController {
 		if(!empty($_SESSION['Auth'][Configure::read('BcAuthPrefix.admin.sessionKey')])) {
 			$display = true;
 		} else {
-			$conditions = array(
+			$conditions = [
 				'UploaderFile.name' => $this->UploaderFile->getSourceFileName($filename),
-				array('or'=> array(array('UploaderFile.publish_begin <=' => date('Y-m-d H:i:s')),
-									array('UploaderFile.publish_begin' => NULL),
-									array('UploaderFile.publish_begin' => '0000-00-00 00:00:00'))),
-				array('or'=> array(array('UploaderFile.publish_end >=' => date('Y-m-d H:i:s')),
-									array('UploaderFile.publish_end' => NULL),
-									array('UploaderFile.publish_end' => '0000-00-00 00:00:00')))
-			);
-			$data = $this->UploaderFile->find('first', array('conditions' => $conditions));
+				['or'=> [['UploaderFile.publish_begin <=' => date('Y-m-d H:i:s')],
+									['UploaderFile.publish_begin' => NULL],
+									['UploaderFile.publish_begin' => '0000-00-00 00:00:00']]],
+				['or'=> [['UploaderFile.publish_end >=' => date('Y-m-d H:i:s')],
+									['UploaderFile.publish_end' => NULL],
+									['UploaderFile.publish_end' => '0000-00-00 00:00:00']]]
+			];
+			$data = $this->UploaderFile->find('first', ['conditions' => $conditions]);
 			if($data) {
 				$display = true;
 			}
@@ -445,7 +445,7 @@ class UploaderFilesController extends AppController {
 		if($display) {
 			$info = pathinfo($filename);
 			$ext = $info['extension'];
-			$contentsMaping=array(
+			$contentsMaping=[
 					"gif"	=> "image/gif",
 					"jpg"	=> "image/jpeg",
 					"jpeg"	=> "image/jpeg",
@@ -481,7 +481,7 @@ class UploaderFilesController extends AppController {
 					"avi"	=> "video/x-msvideo",
 					"asf"	=> "video/x-ms-asf",
 					"wmv"	=> "video/x-ms-wmv"
-			);
+			];
 			header("Content-type: " . $contentsMaping[$ext]);
 			readfile(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename);
 			exit();

@@ -36,12 +36,12 @@ class DbConfigTaskTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
-		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+		$out = $this->getMock('ConsoleOutput', [], [], '', false);
+		$in = $this->getMock('ConsoleInput', [], [], '', false);
 
 		$this->Task = $this->getMock('DbConfigTask',
-			array('in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest', '_verify'),
-			array($out, $out, $in)
+			['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest', '_verify'],
+			[$out, $out, $in]
 		);
 
 		$this->Task->path = APP . 'Config' . DS;
@@ -90,11 +90,11 @@ class DbConfigTaskTest extends CakeTestCase {
 	public function testExecuteIntoInteractive() {
 		$this->Task->initialize();
 
-		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
-		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+		$out = $this->getMock('ConsoleOutput', [], [], '', false);
+		$in = $this->getMock('ConsoleInput', [], [], '', false);
 		$this->Task = $this->getMock(
 			'DbConfigTask',
-			array('in', '_stop', 'createFile', 'bake'), array($out, $out, $in)
+			['in', '_stop', 'createFile', 'bake'], [$out, $out, $in]
 		);
 
 		$this->Task->expects($this->once())->method('_stop');
@@ -111,8 +111,8 @@ class DbConfigTaskTest extends CakeTestCase {
 		$this->Task->expects($this->at(13))->method('in')->will($this->returnValue('y')); //looks good
 		$this->Task->expects($this->at(14))->method('in')->will($this->returnValue('n')); //another
 		$this->Task->expects($this->at(15))->method('bake')
-			->with(array(
-				array(
+			->with([
+				[
 					'name' => 'default',
 					'datasource' => 'mysql',
 					'persistent' => 'false',
@@ -124,8 +124,8 @@ class DbConfigTaskTest extends CakeTestCase {
 					'encoding' => null,
 					'port' => '',
 					'schema' => null
-				)
-			));
+				]
+			]);
 
 		$this->Task->execute();
 	}

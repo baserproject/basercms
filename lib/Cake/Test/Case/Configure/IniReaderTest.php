@@ -30,20 +30,20 @@ class IniReaderTest extends CakeTestCase {
  *
  * @var array
  */
-	public $testData = array(
-		'One' => array(
+	public $testData = [
+		'One' => [
 			'two' => 'value',
-			'three' => array(
+			'three' => [
 				'four' => 'value four'
-			),
+			],
 			'is_null' => null,
 			'bool_false' => false,
 			'bool_true' => true,
-		),
-		'Asset' => array(
+		],
+		'Asset' => [
 			'timestamp' => 'force'
-		),
-	);
+		],
+	];
 
 /**
  * setup
@@ -119,10 +119,10 @@ class IniReaderTest extends CakeTestCase {
 		$reader = new IniReader($this->path);
 		$config = $reader->read('no_section.ini');
 
-		$expected = array(
+		$expected = [
 			'some_key' => 'some_value',
 			'bool_key' => true
-		);
+		];
 		$this->assertEquals($expected, $config);
 	}
 
@@ -193,7 +193,7 @@ class IniReaderTest extends CakeTestCase {
 	public function testReadEmptyFile() {
 		$reader = new IniReader($this->path);
 		$config = $reader->read('empty');
-		$this->assertEquals(array(), $config);
+		$this->assertEquals([], $config);
 	}
 
 /**
@@ -213,9 +213,9 @@ class IniReaderTest extends CakeTestCase {
  * @return void
  */
 	public function testReadPluginValue() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		), App::RESET);
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]
+		], App::RESET);
 		CakePlugin::load('TestPlugin');
 		$reader = new IniReader($this->path);
 		$result = $reader->read('TestPlugin.nested');
@@ -236,9 +236,9 @@ class IniReaderTest extends CakeTestCase {
  * @return void
  */
 	public function testReadPluginSpecialAclIniPhpValue() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		), App::RESET);
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]
+		], App::RESET);
 		CakePlugin::load('TestPlugin');
 		$reader = new IniReader($this->path);
 		$result = $reader->read('TestPlugin.acl.ini.php');

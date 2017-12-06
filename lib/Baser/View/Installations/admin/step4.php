@@ -63,7 +63,7 @@ $(document).ready(function(){
 		<div class="section">
 			<h3>管理用メールアドレス登録</h3>
 			<ul>
-				<li><?php echo $this->BcForm->input('Installation.admin_email', array('type' => 'text', 'size' => 44)); ?></li>
+				<li><?php echo $this->BcForm->input('Installation.admin_email', ['type' => 'text', 'size' => 44]); ?></li>
 			</ul>
 		</div>
 		<div class="section">
@@ -72,28 +72,28 @@ $(document).ready(function(){
 			<ul>
 				<li>
 					<label>管理者アカウント名</label>&nbsp;<small>半角英数字（ハイフン、アンダースコア含む）</small><br />
-					<?php echo $this->BcForm->input('Installation.admin_username', array('type' => 'text')); ?>
+					<?php echo $this->BcForm->input('Installation.admin_username', ['type' => 'text']); ?>
 				</li>
 				<li class="clearfix">
 					<label>パスワード</label>&nbsp;<small>半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&amp;;{}!$*)</small><br />
 					<div class="float-left">
-						<?php echo $this->BcForm->input('Installation.admin_password', array('type' => 'password')); ?>
+						<?php echo $this->BcForm->input('Installation.admin_password', ['type' => 'password']); ?>
 					</div>
 					<div class="float-left">
-						<?php echo $this->BcForm->input('Installation.admin_confirmpassword', array('type' => 'password')); ?><br />
+						<?php echo $this->BcForm->input('Installation.admin_confirmpassword', ['type' => 'password']); ?><br />
 						<small>確認の為もう一度入力してください</small>
 					</div>
 				</li>
 			</ul>
 		</div>
-		<?php echo $this->BcForm->input('Installation.clicked', array('type' => 'hidden')) ?>
+		<?php echo $this->BcForm->input('Installation.clicked', ['type' => 'hidden']) ?>
 
 
 	</div>
 
 	<div class="submit">
-		<?php echo $this->BcForm->button('戻る', array('type' => 'button', 'class' => 'btn-gray button', 'id' => 'btnback')) ?>
-		<?php echo $this->BcForm->button('完了', array('type' => 'button', 'class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5')) ?>
+		<?php echo $this->BcForm->button('戻る', ['type' => 'button', 'class' => 'btn-gray button', 'id' => 'btnback']) ?>
+		<?php echo $this->BcForm->button('完了', ['type' => 'button', 'class' => 'btn-red button', 'id' => 'btnfinish', 'name' => 'step5']) ?>
 	</div>
 
 	<?php echo $this->BcForm->end() ?>

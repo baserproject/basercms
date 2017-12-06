@@ -32,37 +32,37 @@ class FeedDetailsController extends FeedAppController {
  *
  * @var array
  */
-	public $uses = array('Feed.FeedDetail', 'Feed.FeedConfig', 'Feed.Feed');
+	public $uses = ['Feed.FeedDetail', 'Feed.FeedConfig', 'Feed.Feed'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcForm');
+	public $helpers = ['BcForm'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'フィード管理', 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
+	];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * beforeFilter
@@ -73,10 +73,10 @@ class FeedDetailsController extends FeedAppController {
 		parent::beforeFilter();
 
 		$feedConfig = $this->FeedConfig->read(null, $this->params['pass'][0]);
-		$this->crumbs[] = array('name' => 'フィード設定情報： ' . $feedConfig['FeedConfig']['name'], 'url' => array('controller' => 'feed_configs', 'action' => 'edit', $this->params['pass'][0]));
+		$this->crumbs[] = ['name' => 'フィード設定情報： ' . $feedConfig['FeedConfig']['name'], 'url' => ['controller' => 'feed_configs', 'action' => 'edit', $this->params['pass'][0]]];
 
 		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('feed_details');
+			$this->subMenuElements = ['feed_details'];
 			$this->help = 'feed_details_form';
 		}
 	}
@@ -91,7 +91,7 @@ class FeedDetailsController extends FeedAppController {
 		/* 除外処理 */
 		if (!$feedConfigId) {
 			$this->setMessage('無効なIDです', true);
-			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
+			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
@@ -110,7 +110,7 @@ class FeedDetailsController extends FeedAppController {
 
 				$id = $this->FeedDetail->getLastInsertId();
 				$this->setMessage('フィード「' . $this->request->data['FeedDetail']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
+				$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail']);
 			} else {
 
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -133,7 +133,7 @@ class FeedDetailsController extends FeedAppController {
 	public function admin_edit($feedConfigId, $id) {
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
+			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
@@ -150,9 +150,9 @@ class FeedDetailsController extends FeedAppController {
 			// データを保存
 			if ($this->FeedDetail->save()) {
 
-				$this->requestAction(array('controller' => 'feed_configs', 'action' => 'clear_cache'), array('pass' => array($this->request->data['FeedDetail']['feed_config_id'], $this->request->data['FeedDetail']['url'])));
+				$this->requestAction(['controller' => 'feed_configs', 'action' => 'clear_cache'], ['pass' => [$this->request->data['FeedDetail']['feed_config_id'], $this->request->data['FeedDetail']['url']]]);
 				$this->setMessage('フィード詳細「' . $this->request->data['FeedDetail']['name'] . '」を更新しました。', false, true);
-				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
+				$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail']);
 			} else {
 
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -218,7 +218,7 @@ class FeedDetailsController extends FeedAppController {
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('controller' => 'feed_configs', 'action' => 'index'));
+			$this->redirect(['controller' => 'feed_configs', 'action' => 'index']);
 		}
 
 		// メッセージ用にデータを取得
@@ -231,7 +231,7 @@ class FeedDetailsController extends FeedAppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
-		$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail'));
+		$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $feedConfigId, $id, '#' => 'headFeedDetail']);
 	}
 
 /**

@@ -10,6 +10,6 @@
 
 <header>
 	<div class="header-inner">
-		<?php $this->BcBaser->logo(array('class' => 'logo')) ?>
+		<?php $this->BcBaser->logo(['class' => 'logo']) ?>
 	</div>
 </header>

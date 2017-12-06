@@ -24,7 +24,7 @@ class MailHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-	public $helpers = array('BcBaser');
+	public $helpers = ['BcBaser'];
 
 /**
  * コンストラクタ
@@ -49,7 +49,7 @@ class MailHelper extends AppHelper {
 		}
 		if ($mailContentId) {
 			$MailContent = ClassRegistry::init('Mail.MailContent');
-			$MailContent->expects(array());
+			$MailContent->expects([]);
 			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
 			$this->mailContent = $this->_View->viewVars['mailContent']['MailContent'];
@@ -75,7 +75,7 @@ class MailHelper extends AppHelper {
 			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
-		$_templates = array();
+		$_templates = [];
 		foreach ($templatesPathes as $templatePath) {
 			$templatePath .= 'Mail' . DS;
 			$folder = new Folder($templatePath);
@@ -92,7 +92,7 @@ class MailHelper extends AppHelper {
 
 		$excludes = Configure::read('BcAgent');
 		$excludes = Hash::extract($excludes, '{s}.prefix');
-		$templates = array();
+		$templates = [];
 		foreach ($_templates as $template) {
 			if (!in_array($template, $excludes)) {
 				$templates[$template] = $template;
@@ -120,7 +120,7 @@ class MailHelper extends AppHelper {
 			array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 		}
 
-		$_templates = array();
+		$_templates = [];
 		foreach ($templatesPathes as $templatesPath) {
 			$templatesPath .= 'Emails' . DS . 'text' . DS;
 			$Folder = new Folder($templatesPath);
@@ -135,9 +135,9 @@ class MailHelper extends AppHelper {
 			}
 		}
 
-		$templates = array();
+		$templates = [];
 		$ext = Configure::read('BcApp.templateExt');
-		$excludes = array('empty', 'installed' . $ext, 'mail_data' . $ext);
+		$excludes = ['empty', 'installed' . $ext, 'mail_data' . $ext];
 		foreach ($_templates as $template) {
 			if (!in_array($template, $excludes)) {
 				$template = basename($template, $ext);
@@ -187,13 +187,13 @@ class MailHelper extends AppHelper {
  *	※ オプションについては、HtmlHelper::link() を参照
  * @return void
  */
-	public function link($title, $contentsName, $datas = array(), $options = array()) {
+	public function link($title, $contentsName, $datas = [], $options = []) {
 		if($datas && is_array($datas)) {
 			foreach($datas as $key => $data) {
 				$datas[$key] = base64UrlsafeEncode($data);
 			}
 		}
-		$link = array_merge(array('plugin' => '', 'controller' => $contentsName,  'action' => 'index'), $datas);
+		$link = array_merge(['plugin' => '', 'controller' => $contentsName,  'action' => 'index'], $datas);
 		$this->BcBaser->link($title, $link, $options);
 	}
 

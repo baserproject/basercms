@@ -26,14 +26,14 @@ abstract class AbstractPasswordHasher {
  *
  * @var array
  */
-	protected $_config = array();
+	protected $_config = [];
 
 /**
  * Constructor
  *
  * @param array $config Array of config.
  */
-	public function __construct($config = array()) {
+	public function __construct($config = []) {
 		$this->config($config);
 	}
 

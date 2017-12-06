@@ -57,7 +57,7 @@ class AclComponent extends Component {
  * @param array $settings Settings list.
  * @throws CakeException when Acl.classname could not be loaded.
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
+	public function __construct(ComponentCollection $collection, $settings = []) {
 		parent::__construct($collection, $settings);
 		$name = Configure::read('Acl.classname');
 		if (!class_exists($name)) {

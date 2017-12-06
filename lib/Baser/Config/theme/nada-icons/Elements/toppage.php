@@ -13,11 +13,11 @@
 	<div id="top-contents-main">
 		<div id="top-bnr">
 			<div id="top-bnr-left">
-				<?php $this->BcBaser->img('./icons_banner_l_01.png', array('url' => '/#')); ?>
+				<?php $this->BcBaser->img('./icons_banner_l_01.png', ['url' => '/#']); ?>
 				<p>紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります</p>
 			</div>
 			<div id="top-bnr-right">
-				<?php $this->BcBaser->img('./icons_banner_l_02.png', array('url' => '/#')); ?>
+				<?php $this->BcBaser->img('./icons_banner_l_02.png', ['url' => '/#']); ?>
 				<p>紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります紹介文が入ります</p>
 			</div>
 		</div>

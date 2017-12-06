@@ -71,17 +71,17 @@ class CakeNumberTest extends CakeTestCase {
 		$this->assertEquals($expected, $result);
 
 		$value = 0.00001;
-		$result = $this->Number->format($value, array('places' => 1));
+		$result = $this->Number->format($value, ['places' => 1]);
 		$expected = '$0.0';
 		$this->assertEquals($expected, $result);
 
 		$value = -0.00001;
-		$result = $this->Number->format($value, array('places' => 1));
+		$result = $this->Number->format($value, ['places' => 1]);
 		$expected = '$0.0';
 		$this->assertEquals($expected, $result);
 
 		$value = 1.23;
-		$options = array('decimals' => ',', 'thousands' => '.', 'before' => '', 'after' => ' €');
+		$options = ['decimals' => ',', 'thousands' => '.', 'before' => '', 'after' => ' €'];
 		$result = $this->Number->format($value, $options);
 		$expected = '1,23 €';
 		$this->assertEquals($expected, $result);
@@ -99,34 +99,34 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '+100,100,100.00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->formatDelta($value, array('before' => '', 'after' => ''));
+		$result = $this->Number->formatDelta($value, ['before' => '', 'after' => '']);
 		$expected = '+100,100,100.00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->formatDelta($value, array('before' => '[', 'after' => ']'));
+		$result = $this->Number->formatDelta($value, ['before' => '[', 'after' => ']']);
 		$expected = '[+100,100,100.00]';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->formatDelta(-$value, array('before' => '[', 'after' => ']'));
+		$result = $this->Number->formatDelta(-$value, ['before' => '[', 'after' => ']']);
 		$expected = '[-100,100,100.00]';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->formatDelta(-$value, array('before' => '[ ', 'after' => ' ]'));
+		$result = $this->Number->formatDelta(-$value, ['before' => '[ ', 'after' => ' ]']);
 		$expected = '[ -100,100,100.00 ]';
 		$this->assertEquals($expected, $result);
 
 		$value = 0;
-		$result = $this->Number->formatDelta($value, array('places' => 1, 'before' => '[', 'after' => ']'));
+		$result = $this->Number->formatDelta($value, ['places' => 1, 'before' => '[', 'after' => ']']);
 		$expected = '[0.0]';
 		$this->assertEquals($expected, $result);
 
 		$value = 0.0001;
-		$result = $this->Number->formatDelta($value, array('places' => 1, 'before' => '[', 'after' => ']'));
+		$result = $this->Number->formatDelta($value, ['places' => 1, 'before' => '[', 'after' => ']']);
 		$expected = '[0.0]';
 		$this->assertEquals($expected, $result);
 
 		$value = 9876.1234;
-		$result = $this->Number->formatDelta($value, array('places' => 1, 'decimals' => ',', 'thousands' => '.'));
+		$result = $this->Number->formatDelta($value, ['places' => 1, 'decimals' => ',', 'thousands' => '.']);
 		$expected = '+9.876,1';
 		$this->assertEquals($expected, $result);
 	}
@@ -138,43 +138,43 @@ class CakeNumberTest extends CakeTestCase {
  */
 	public function testMultibyteFormat() {
 		$value = '5199100.0006';
-		$result = $this->Number->format($value, array(
+		$result = $this->Number->format($value, [
 			'thousands' => '&nbsp;',
 			'decimals' => '&amp;',
 			'places' => 3,
 			'escape' => false,
 			'before' => '',
-		));
+		]);
 		$expected = '5&nbsp;199&nbsp;100&amp;001';
 		$this->assertEquals($expected, $result);
 
 		$value = 1000.45;
-		$result = $this->Number->format($value, array(
+		$result = $this->Number->format($value, [
 			'thousands' => ',,',
 			'decimals' => '.a',
 			'escape' => false,
-		));
+		]);
 		$expected = '$1,,000.a45';
 		$this->assertEquals($expected, $result);
 
 		$value = 519919827593784.00;
-		$this->Number->addFormat('RUR', array(
+		$this->Number->addFormat('RUR', [
 			'thousands' => 'ø€ƒ‡™',
 			'decimals' => '(§.§)',
 			'escape' => false,
 			'wholeSymbol' => '€',
 			'wholePosition' => 'after',
-		));
+		]);
 		$result = $this->Number->currency($value, 'RUR');
 		$expected = '519ø€ƒ‡™919ø€ƒ‡™827ø€ƒ‡™593ø€ƒ‡™784(§.§)00€';
 		$this->assertEquals($expected, $result);
 
 		$value = '13371337.1337';
-		$result = CakeNumber::format($value, array(
+		$result = CakeNumber::format($value, [
 			'thousands' => '- |-| /-\ >< () |2 -',
 			'decimals' => '- £€€† -',
 			'before' => ''
-		));
+		]);
 		$expected = '13- |-| /-\ &gt;&lt; () |2 -371- |-| /-\ &gt;&lt; () |2 -337- £€€† -13';
 		$this->assertEquals($expected, $result);
 	}
@@ -211,13 +211,13 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '£100,100,100.00';
 		$this->assertEquals($expected, $result);
 
-		$options = array('thousands' => ' ', 'wholeSymbol' => 'EUR ', 'wholePosition' => 'before',
-			'decimals' => ',', 'zero' => 'Gratuit');
+		$options = ['thousands' => ' ', 'wholeSymbol' => 'EUR ', 'wholePosition' => 'before',
+			'decimals' => ',', 'zero' => 'Gratuit'];
 		$result = $this->Number->currency($value, '', $options);
 		$expected = 'EUR 100 100 100,00';
 		$this->assertEquals($expected, $result);
 
-		$options = array('after' => 'øre', 'before' => 'Kr.', 'decimals' => ',', 'thousands' => '.');
+		$options = ['after' => 'øre', 'before' => 'Kr.', 'decimals' => ',', 'thousands' => '.'];
 		$result = $this->Number->currency(1000.45, null, $options);
 		$expected = 'Kr.1.000,45';
 		$this->assertEquals($expected, $result);
@@ -226,30 +226,30 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '50c';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency(0.5, null, array('after' => 'øre'));
+		$result = $this->Number->currency(0.5, null, ['after' => 'øre']);
 		$expected = '50øre';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency(1, null, array('wholeSymbol' => '$ '));
+		$result = $this->Number->currency(1, null, ['wholeSymbol' => '$ ']);
 		$expected = '$ 1.00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency(1, null, array('wholeSymbol' => ' $', 'wholePosition' => 'after'));
+		$result = $this->Number->currency(1, null, ['wholeSymbol' => ' $', 'wholePosition' => 'after']);
 		$expected = '1.00 $';
 		$this->assertEquals($expected, $result);
 
-		$options = array('wholeSymbol' => '$', 'wholePosition' => 'after', 'fractionSymbol' => ' cents');
+		$options = ['wholeSymbol' => '$', 'wholePosition' => 'after', 'fractionSymbol' => ' cents'];
 		$result = $this->Number->currency(0.2, null, $options);
 		$expected = '20 cents';
 		$this->assertEquals($expected, $result);
 
-		$options = array('wholeSymbol' => '$', 'wholePosition' => 'after', 'fractionSymbol' => 'cents ',
-			'fractionPosition' => 'before');
+		$options = ['wholeSymbol' => '$', 'wholePosition' => 'after', 'fractionSymbol' => 'cents ',
+			'fractionPosition' => 'before'];
 		$result = $this->Number->currency(0.2, null, $options);
 		$expected = 'cents 20';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency(311, 'USD', array('wholePosition' => 'after'));
+		$result = $this->Number->currency(311, 'USD', ['wholePosition' => 'after']);
 		$expected = '311.00$';
 		$this->assertEquals($expected, $result);
 
@@ -257,19 +257,19 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '€0,20';
 		$this->assertEquals($expected, $result);
 
-		$options = array('wholeSymbol' => ' dollars', 'wholePosition' => 'after', 'fractionSymbol' => ' cents',
-			'fractionPosition' => 'after');
+		$options = ['wholeSymbol' => ' dollars', 'wholePosition' => 'after', 'fractionSymbol' => ' cents',
+			'fractionPosition' => 'after'];
 		$result = $this->Number->currency(12, null, $options);
 		$expected = '12.00 dollars';
 		$this->assertEquals($expected, $result);
 
-		$options = array('wholeSymbol' => ' dollars', 'wholePosition' => 'after', 'fractionSymbol' => ' cents',
-			'fractionPosition' => 'after');
+		$options = ['wholeSymbol' => ' dollars', 'wholePosition' => 'after', 'fractionSymbol' => ' cents',
+			'fractionPosition' => 'after'];
 		$result = $this->Number->currency(0.12, null, $options);
 		$expected = '12 cents';
 		$this->assertEquals($expected, $result);
 
-		$options = array('fractionSymbol' => false, 'fractionPosition' => 'before', 'wholeSymbol' => '$');
+		$options = ['fractionSymbol' => false, 'fractionPosition' => 'before', 'wholeSymbol' => '$'];
 		$result = $this->Number->currency(0.5, null, $options);
 		$expected = '$0.50';
 		$this->assertEquals($expected, $result);
@@ -306,29 +306,29 @@ class CakeNumberTest extends CakeTestCase {
  * @return void
  */
 	public function testCurrencyWithFractionAndPlaces() {
-		$result = $this->Number->currency('1.23', 'GBP', array('places' => 3));
+		$result = $this->Number->currency('1.23', 'GBP', ['places' => 3]);
 		$expected = '£1.230';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('0.23', 'GBP', array('places' => 3));
+		$result = $this->Number->currency('0.23', 'GBP', ['places' => 3]);
 		$expected = '23p';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('0.001', 'GBP', array('places' => 3));
+		$result = $this->Number->currency('0.001', 'GBP', ['places' => 3]);
 		$expected = '0p';
 		$this->assertEquals($expected, $result);
 
-		$this->Number->addFormat('BHD', array('before' => 'BD ', 'fractionSymbol' => ' fils',
-			'fractionExponent' => 3));
-		$result = $this->Number->currency('1.234', 'BHD', array('places' => 2));
+		$this->Number->addFormat('BHD', ['before' => 'BD ', 'fractionSymbol' => ' fils',
+			'fractionExponent' => 3]);
+		$result = $this->Number->currency('1.234', 'BHD', ['places' => 2]);
 		$expected = 'BD 1.23';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('0.234', 'BHD', array('places' => 2));
+		$result = $this->Number->currency('0.234', 'BHD', ['places' => 2]);
 		$expected = '234 fils';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('0.001', 'BHD', array('places' => 2));
+		$result = $this->Number->currency('0.001', 'BHD', ['places' => 2]);
 		$expected = '1 fils';
 		$this->assertEquals($expected, $result);
 	}
@@ -339,10 +339,10 @@ class CakeNumberTest extends CakeTestCase {
  * @return void
  */
 	public function testCurrencyFractionSymbol() {
-		$result = $this->Number->currency(0.2, '', array(
+		$result = $this->Number->currency(0.2, '', [
 			'places' => 2,
 			'decimal' => '.'
-		));
+		]);
 		$this->assertEquals('0.2', $result);
 	}
 
@@ -352,12 +352,12 @@ class CakeNumberTest extends CakeTestCase {
  * @return void
  */
 	public function testCurrencyAddFormat() {
-		$this->Number->addFormat('NOK', array('before' => 'Kr. '));
+		$this->Number->addFormat('NOK', ['before' => 'Kr. ']);
 		$result = $this->Number->currency(1000, 'NOK');
 		$expected = 'Kr. 1,000.00';
 		$this->assertEquals($expected, $result);
 
-		$this->Number->addFormat('Other', array('before' => '$$ ', 'after' => 'c!'));
+		$this->Number->addFormat('Other', ['before' => '$$ ', 'after' => 'c!']);
 		$result = $this->Number->currency(0.22, 'Other');
 		$expected = '22c!';
 		$this->assertEquals($expected, $result);
@@ -366,7 +366,7 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '($$ 10.00)';
 		$this->assertEquals($expected, $result);
 
-		$this->Number->addFormat('Other2', array('before' => '$ ', 'after' => false));
+		$this->Number->addFormat('Other2', ['before' => '$ ', 'after' => false]);
 		$result = $this->Number->currency(0.22, 'Other2');
 		$expected = '$ 0.22';
 		$this->assertEquals($expected, $result);
@@ -380,7 +380,7 @@ class CakeNumberTest extends CakeTestCase {
 	public function testDefaultCurrency() {
 		$result = $this->Number->defaultCurrency();
 		$this->assertEquals('USD', $result);
-		$this->Number->addFormat('NOK', array('before' => 'Kr. '));
+		$this->Number->addFormat('NOK', ['before' => 'Kr. ']);
 
 		$this->Number->defaultCurrency('NOK');
 		$result = $this->Number->defaultCurrency();
@@ -417,7 +417,7 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '$100,100,100.00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'USD', array('before' => '#'));
+		$result = $this->Number->currency($value, 'USD', ['before' => '#']);
 		$expected = '#100,100,100.00';
 		$this->assertEquals($expected, $result);
 
@@ -458,15 +458,15 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '(£100,100,100.00)';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'USD', array('negative' => '-'));
+		$result = $this->Number->currency($value, 'USD', ['negative' => '-']);
 		$expected = '-$100,100,100.00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'EUR', array('negative' => '-'));
+		$result = $this->Number->currency($value, 'EUR', ['negative' => '-']);
 		$expected = '-€100.100.100,00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'GBP', array('negative' => '-'));
+		$result = $this->Number->currency($value, 'GBP', ['negative' => '-']);
 		$expected = '-£100,100,100.00';
 		$this->assertEquals($expected, $result);
 	}
@@ -512,15 +512,15 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '(99p)';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'USD', array('negative' => '-'));
+		$result = $this->Number->currency($value, 'USD', ['negative' => '-']);
 		$expected = '-99c';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'EUR', array('negative' => '-'));
+		$result = $this->Number->currency($value, 'EUR', ['negative' => '-']);
 		$expected = '-€0,99';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'GBP', array('negative' => '-'));
+		$result = $this->Number->currency($value, 'GBP', ['negative' => '-']);
 		$expected = '-99p';
 		$this->assertEquals($expected, $result);
 	}
@@ -545,7 +545,7 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '£0.00';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'GBP', array('zero' => 'FREE!'));
+		$result = $this->Number->currency($value, 'GBP', ['zero' => 'FREE!']);
 		$expected = 'FREE!';
 		$this->assertEquals($expected, $result);
 	}
@@ -558,31 +558,31 @@ class CakeNumberTest extends CakeTestCase {
 	public function testCurrencyOptions() {
 		$value = '1234567.89';
 
-		$result = $this->Number->currency($value, null, array('before' => 'GBP'));
+		$result = $this->Number->currency($value, null, ['before' => 'GBP']);
 		$expected = 'GBP1,234,567.89';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'GBP', array('places' => 0));
+		$result = $this->Number->currency($value, 'GBP', ['places' => 0]);
 		$expected = '£1,234,568';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('1234567.8912345', null, array('before' => 'GBP', 'places' => 3));
+		$result = $this->Number->currency('1234567.8912345', null, ['before' => 'GBP', 'places' => 3]);
 		$expected = 'GBP1,234,567.891';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('650.120001', null, array('before' => 'GBP', 'places' => 4));
+		$result = $this->Number->currency('650.120001', null, ['before' => 'GBP', 'places' => 4]);
 		$expected = 'GBP650.1200';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency($value, 'GBP', array('before' => '&#163; ', 'escape' => true));
+		$result = $this->Number->currency($value, 'GBP', ['before' => '&#163; ', 'escape' => true]);
 		$expected = '&amp;#163; 1,234,567.89';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('0.35', 'USD', array('after' => false));
+		$result = $this->Number->currency('0.35', 'USD', ['after' => false]);
 		$expected = '$0.35';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->currency('0.35', 'GBP', array('before' => '&#163;', 'after' => false, 'escape' => false));
+		$result = $this->Number->currency('0.35', 'GBP', ['before' => '&#163;', 'after' => false, 'escape' => false]);
 		$expected = '&#163;0.35';
 		$this->assertEquals($expected, $result);
 
@@ -713,27 +713,27 @@ class CakeNumberTest extends CakeTestCase {
 		$expected = '0.0000%';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->toPercentage(45, 0, array('multiply' => false));
+		$result = $this->Number->toPercentage(45, 0, ['multiply' => false]);
 		$expected = '45%';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->toPercentage(45, 2, array('multiply' => false));
+		$result = $this->Number->toPercentage(45, 2, ['multiply' => false]);
 		$expected = '45.00%';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->toPercentage(0, 0, array('multiply' => false));
+		$result = $this->Number->toPercentage(0, 0, ['multiply' => false]);
 		$expected = '0%';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->toPercentage(0, 4, array('multiply' => false));
+		$result = $this->Number->toPercentage(0, 4, ['multiply' => false]);
 		$expected = '0.0000%';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->toPercentage(0.456, 0, array('multiply' => true));
+		$result = $this->Number->toPercentage(0.456, 0, ['multiply' => true]);
 		$expected = '46%';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Number->toPercentage(0.456, 2, array('multiply' => true));
+		$result = $this->Number->toPercentage(0.456, 2, ['multiply' => true]);
 		$expected = '45.60%';
 		$this->assertEquals($expected, $result);
 	}
@@ -765,25 +765,25 @@ class CakeNumberTest extends CakeTestCase {
  * @return array
  */
 	public function filesizes() {
-		return array(
-			array(array('size' => '512B', 'default' => false), 512),
-			array(array('size' => '1KB', 'default' => false), 1024),
-			array(array('size' => '1.5KB', 'default' => false), 1536),
-			array(array('size' => '1MB', 'default' => false), 1048576),
-			array(array('size' => '1mb', 'default' => false), 1048576),
-			array(array('size' => '1.5MB', 'default' => false), 1572864),
-			array(array('size' => '1GB', 'default' => false), 1073741824),
-			array(array('size' => '1.5GB', 'default' => false), 1610612736),
-			array(array('size' => '1K', 'default' => false), 1024),
-			array(array('size' => '1.5K', 'default' => false), 1536),
-			array(array('size' => '1M', 'default' => false), 1048576),
-			array(array('size' => '1m', 'default' => false), 1048576),
-			array(array('size' => '1.5M', 'default' => false), 1572864),
-			array(array('size' => '1G', 'default' => false), 1073741824),
-			array(array('size' => '1.5G', 'default' => false), 1610612736),
-			array(array('size' => '512', 'default' => 'Unknown type'), 512),
-			array(array('size' => '2VB', 'default' => 'Unknown type'), 'Unknown type')
-		);
+		return [
+			[['size' => '512B', 'default' => false], 512],
+			[['size' => '1KB', 'default' => false], 1024],
+			[['size' => '1.5KB', 'default' => false], 1536],
+			[['size' => '1MB', 'default' => false], 1048576],
+			[['size' => '1mb', 'default' => false], 1048576],
+			[['size' => '1.5MB', 'default' => false], 1572864],
+			[['size' => '1GB', 'default' => false], 1073741824],
+			[['size' => '1.5GB', 'default' => false], 1610612736],
+			[['size' => '1K', 'default' => false], 1024],
+			[['size' => '1.5K', 'default' => false], 1536],
+			[['size' => '1M', 'default' => false], 1048576],
+			[['size' => '1m', 'default' => false], 1048576],
+			[['size' => '1.5M', 'default' => false], 1572864],
+			[['size' => '1G', 'default' => false], 1073741824],
+			[['size' => '1.5G', 'default' => false], 1610612736],
+			[['size' => '512', 'default' => 'Unknown type'], 512],
+			[['size' => '2VB', 'default' => 'Unknown type'], 'Unknown type']
+		];
 	}
 
 }

@@ -28,20 +28,20 @@ class TranslatedItemFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'translated_article_id' => array('type' => 'integer'),
-		'slug' => array('type' => 'string', 'null' => false)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'translated_article_id' => ['type' => 'integer'],
+		'slug' => ['type' => 'string', 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('translated_article_id' => 1, 'slug' => 'first_translated'),
-		array('translated_article_id' => 1, 'slug' => 'second_translated'),
-		array('translated_article_id' => 1, 'slug' => 'third_translated')
-	);
+	public $records = [
+		['translated_article_id' => 1, 'slug' => 'first_translated'],
+		['translated_article_id' => 1, 'slug' => 'second_translated'],
+		['translated_article_id' => 1, 'slug' => 'third_translated']
+	];
 }

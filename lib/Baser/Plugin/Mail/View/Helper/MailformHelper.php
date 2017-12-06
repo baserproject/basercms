@@ -38,7 +38,7 @@ class MailformHelper extends BcFreezeHelper {
  * @param array $attributes HTML属性
  * @return string フォームコントロールのHTMLタグ
  */
-	public function control($type, $fieldName, $options, $attributes = array()) {
+	public function control($type, $fieldName, $options, $attributes = []) {
 		$attributes['escape'] = false;
 		$out = '';
 		switch ($type) {
@@ -99,8 +99,8 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
-				$address1 = $this->_name(array(), $options[1]);
-				$address2 = $this->_name(array(), $options[2]);
+				$address1 = $this->_name([], $options[1]);
+				$address2 = $this->_name([], $options[2]);
 				$attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
 				$out = $this->Html->script('admin/vendors/ajaxzip3.js') . $this->text($fieldName, $attributes);
 				break;
@@ -198,7 +198,7 @@ class MailformHelper extends BcFreezeHelper {
  * @param array $options
  * @return string
  */
-	public function create($model = null, $options = array()) {
+	public function create($model = null, $options = []) {
 		if (!isset($options['type'])) {
 			$options['type'] = 'file';
 		}
@@ -225,7 +225,7 @@ class MailformHelper extends BcFreezeHelper {
 		if(!empty($this->request->params['Site']['same_main_url'])) {
 			$url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
 		}
-		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => $options['class']));
+		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, ['alt' => '認証画像', 'class' => $options['class']]);
 		$output .= $options['separate'] . $this->text($fieldName);
 		$output .= $this->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
 		echo $output;

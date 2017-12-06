@@ -100,14 +100,14 @@ class ConsoleOptionParser {
  * @see ConsoleOptionParser::addOption()
  * @var array
  */
-	protected $_options = array();
+	protected $_options = [];
 
 /**
  * Map of short -> long options, generated when using addOption()
  *
  * @var string
  */
-	protected $_shortOptions = array();
+	protected $_shortOptions = [];
 
 /**
  * Positional argument definitions.
@@ -115,7 +115,7 @@ class ConsoleOptionParser {
  * @see ConsoleOptionParser::addArgument()
  * @var array
  */
-	protected $_args = array();
+	protected $_args = [];
 
 /**
  * Subcommands for this Shell.
@@ -123,7 +123,7 @@ class ConsoleOptionParser {
  * @see ConsoleOptionParser::addSubcommand()
  * @var array
  */
-	protected $_subcommands = array();
+	protected $_subcommands = [];
 
 /**
  * Command name.
@@ -142,22 +142,22 @@ class ConsoleOptionParser {
 	public function __construct($command = null, $defaultOptions = true) {
 		$this->command($command);
 
-		$this->addOption('help', array(
+		$this->addOption('help', [
 			'short' => 'h',
 			'help' => __d('cake_console', 'Display this help.'),
 			'boolean' => true
-		));
+		]);
 
 		if ($defaultOptions) {
-			$this->addOption('verbose', array(
+			$this->addOption('verbose', [
 				'short' => 'v',
 				'help' => __d('cake_console', 'Enable verbose output.'),
 				'boolean' => true
-			))->addOption('quiet', array(
+			])->addOption('quiet', [
 				'short' => 'q',
 				'help' => __d('cake_console', 'Enable quiet output.'),
 				'boolean' => true
-			));
+			]);
 		}
 	}
 
@@ -286,19 +286,19 @@ class ConsoleOptionParser {
  * @param array $options An array of parameters that define the behavior of the option
  * @return self
  */
-	public function addOption($name, $options = array()) {
+	public function addOption($name, $options = []) {
 		if (is_object($name) && $name instanceof ConsoleInputOption) {
 			$option = $name;
 			$name = $option->name();
 		} else {
-			$defaults = array(
+			$defaults = [
 				'name' => $name,
 				'short' => null,
 				'help' => '',
 				'default' => null,
 				'boolean' => false,
-				'choices' => array()
-			);
+				'choices' => []
+			];
 			$options += $defaults;
 			$option = new ConsoleInputOption($options);
 		}
@@ -326,18 +326,18 @@ class ConsoleOptionParser {
  * @param array $params Parameters for the argument, see above.
  * @return self
  */
-	public function addArgument($name, $params = array()) {
+	public function addArgument($name, $params = []) {
 		if (is_object($name) && $name instanceof ConsoleInputArgument) {
 			$arg = $name;
 			$index = count($this->_args);
 		} else {
-			$defaults = array(
+			$defaults = [
 				'name' => $name,
 				'help' => '',
 				'index' => count($this->_args),
 				'required' => false,
-				'choices' => array()
-			);
+				'choices' => []
+			];
 			$options = $params + $defaults;
 			$index = $options['index'];
 			unset($options['index']);
@@ -393,16 +393,16 @@ class ConsoleOptionParser {
  * @param array $options Array of params, see above.
  * @return self
  */
-	public function addSubcommand($name, $options = array()) {
+	public function addSubcommand($name, $options = []) {
 		if (is_object($name) && $name instanceof ConsoleInputSubcommand) {
 			$command = $name;
 			$name = $command->name();
 		} else {
-			$defaults = array(
+			$defaults = [
 				'name' => $name,
 				'help' => '',
 				'parser' => null
-			);
+			];
 			$options += $defaults;
 			$command = new ConsoleInputSubcommand($options);
 		}
@@ -476,7 +476,7 @@ class ConsoleOptionParser {
 		if (isset($this->_subcommands[$command]) && $this->_subcommands[$command]->parser()) {
 			return $this->_subcommands[$command]->parser()->parse($argv);
 		}
-		$params = $args = array();
+		$params = $args = [];
 		$this->_tokens = $argv;
 		while (($token = array_shift($this->_tokens)) !== null) {
 			if (substr($token, 0, 2) === '--') {
@@ -506,7 +506,7 @@ class ConsoleOptionParser {
 				$params[$name] = false;
 			}
 		}
-		return array($params, $args);
+		return [$params, $args];
 	}
 
 /**
@@ -607,7 +607,7 @@ class ConsoleOptionParser {
 			$params[$name] = $value;
 			return $params;
 		}
-		return array();
+		return [];
 	}
 
 /**

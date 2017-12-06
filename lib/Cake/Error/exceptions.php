@@ -46,7 +46,7 @@ class CakeBaseException extends RuntimeException {
 			if (is_array($header)) {
 				return $this->_responseHeaders = $header;
 			}
-			$this->_responseHeaders = array($header => $value);
+			$this->_responseHeaders = [$header => $value];
 		}
 		return $this->_responseHeaders;
 	}
@@ -212,7 +212,7 @@ class CakeException extends CakeBaseException {
  *
  * @var array
  */
-	protected $_attributes = array();
+	protected $_attributes = [];
 
 /**
  * Template string that has attributes sprintf()'ed into it.
@@ -387,7 +387,7 @@ class MissingConnectionException extends CakeException {
  */
 	public function __construct($message, $code = 500) {
 		if (is_array($message)) {
-			$message += array('enabled' => true);
+			$message += ['enabled' => true];
 		}
 		parent::__construct($message, $code);
 	}

@@ -20,17 +20,17 @@
 <tr id="Row<?php echo $count + 1 ?>">
 	<td class="row-tools" style="width:180px;">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['MailMessage']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['MailMessage']['id'])) ?>
+			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['MailMessage']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['MailMessage']['id']]) ?>
 		<?php endif ?>		
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_view.png', array('alt' => '詳細', 'class' => 'btn')), array('action' => 'view', $mailContent['MailContent']['id'], $data['MailMessage']['id']), array('title' => '詳細', 'class' => 'btn-view')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $mailContent['MailContent']['id'], $data['MailMessage']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_view.png', ['alt' => '詳細', 'class' => 'btn']), ['action' => 'view', $mailContent['MailContent']['id'], $data['MailMessage']['id']], ['title' => '詳細', 'class' => 'btn-view']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $mailContent['MailContent']['id'], $data['MailMessage']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
 	</td>
 	<td><?php echo $data['MailMessage']['id'] ?></td>
 	<td><?php echo date('Y/m/d', strtotime($data['MailMessage']['created'])) ?></td>
 	<td><?php echo date('H:i', strtotime($data['MailMessage']['created'])) ?></td>
 	<td>
 		<?php 
-			$inData = array();
+			$inData = [];
 			$fileExists = false;
 		?>
 		<?php foreach ($mailFields as $mailField): ?>

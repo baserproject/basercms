@@ -31,7 +31,7 @@ class WincacheEngine extends CacheEngine {
  *
  * @var array
  */
-	protected $_compiledGroupNames = array();
+	protected $_compiledGroupNames = [];
 
 /**
  * Initialize the Cache Engine
@@ -43,11 +43,11 @@ class WincacheEngine extends CacheEngine {
  * @return bool True if the engine has been successfully initialized, false if not
  * @see CacheEngine::__defaults
  */
-	public function init($settings = array()) {
+	public function init($settings = []) {
 		if (!isset($settings['prefix'])) {
 			$settings['prefix'] = Inflector::slug(APP_DIR) . '_';
 		}
-		$settings += array('engine' => 'Wincache');
+		$settings += ['engine' => 'Wincache'];
 		parent::init($settings);
 		return function_exists('wincache_ucache_info');
 	}
@@ -63,10 +63,10 @@ class WincacheEngine extends CacheEngine {
 	public function write($key, $value, $duration) {
 		$expires = time() + $duration;
 
-		$data = array(
+		$data = [
 			$key . '_expires' => $expires,
 			$key => $value
-		);
+		];
 		$result = wincache_ucache_set($data, null, $duration);
 		return empty($result);
 	}
@@ -167,7 +167,7 @@ class WincacheEngine extends CacheEngine {
 			ksort($groups);
 		}
 
-		$result = array();
+		$result = [];
 		$groups = array_values($groups);
 		foreach ($this->settings['groups'] as $i => $group) {
 			$result[] = $group . $groups[$i];

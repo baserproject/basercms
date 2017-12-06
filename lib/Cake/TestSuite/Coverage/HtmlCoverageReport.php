@@ -84,7 +84,7 @@ HTML;
  */
 	public function generateDiff($filename, $fileLines, $coverageData) {
 		$output = '';
-		$diff = array();
+		$diff = [];
 
 		list($covered, $total) = $this->_calculateCoveredLines($fileLines, $coverageData);
 		$this->_covered += $covered;
@@ -96,9 +96,9 @@ HTML;
 
 		foreach ($fileLines as $lineno => $line) {
 			$class = 'ignored';
-			$coveringTests = array();
+			$coveringTests = [];
 			if (!empty($coverageData[$lineno]) && is_array($coverageData[$lineno])) {
-				$coveringTests = array();
+				$coveringTests = [];
 				foreach ($coverageData[$lineno] as $test) {
 					$class = (is_array($test) && isset($test['id'])) ? $test['id'] : $test;
 					$testReflection = new ReflectionClass(current(explode('::', $class)));
@@ -106,7 +106,7 @@ HTML;
 					$coveringTests[] = $class;
 				}
 				$class = 'covered';
-			} elseif (isset($coverageData[$lineno]) && ($coverageData[$lineno] === -1 || $coverageData[$lineno] === array())) {
+			} elseif (isset($coverageData[$lineno]) && ($coverageData[$lineno] === -1 || $coverageData[$lineno] === [])) {
 				$class = 'uncovered';
 			} elseif (array_key_exists($lineno, $coverageData) && ($coverageData[$lineno] === -2 || $coverageData[$lineno] === null)) {
 				$class .= ' dead';

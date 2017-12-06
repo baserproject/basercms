@@ -679,7 +679,7 @@ class BcManagerComponent extends Component {
  * @param string $plugin
  * @return boolean 
  */
-	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = array()) {
+	public function loadDefaultDataPattern($dbConfigKeyName, $dbConfig, $pattern, $theme = 'core', $plugin = 'core', $excludes = []) {
 		$db = $this->_getDataSource($dbConfigKeyName, $dbConfig);
 
 		$path = BcUtil::getDefaultDataPath($plugin, $theme, $pattern);

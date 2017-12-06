@@ -53,7 +53,7 @@ class CakeFixtureManagerTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadTruncatesTable() {
-		$MockFixture = $this->getMock('UuidFixture', array('truncate'));
+		$MockFixture = $this->getMock('UuidFixture', ['truncate']);
 		$MockFixture
 			->expects($this->once())
 			->method('truncate')
@@ -64,10 +64,10 @@ class CakeFixtureManagerTest extends CakeTestCase {
 
 		$loadedProperty = $fixtureManagerReflection->getProperty('_loaded');
 		$loadedProperty->setAccessible(true);
-		$loadedProperty->setValue($fixtureManager, array('core.uuid' => $MockFixture));
+		$loadedProperty->setValue($fixtureManager, ['core.uuid' => $MockFixture]);
 
 		$TestCase = $this->getMock('CakeTestCase');
-		$TestCase->fixtures = array('core.uuid');
+		$TestCase->fixtures = ['core.uuid'];
 		$TestCase->autoFixtures = true;
 		$TestCase->dropTables = false;
 
@@ -80,7 +80,7 @@ class CakeFixtureManagerTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadSingleTruncatesTable() {
-		$MockFixture = $this->getMock('UuidFixture', array('truncate'));
+		$MockFixture = $this->getMock('UuidFixture', ['truncate']);
 		$MockFixture
 			->expects($this->once())
 			->method('truncate')
@@ -91,9 +91,9 @@ class CakeFixtureManagerTest extends CakeTestCase {
 
 		$fixtureMapProperty = $fixtureManagerReflection->getProperty('_fixtureMap');
 		$fixtureMapProperty->setAccessible(true);
-		$fixtureMapProperty->setValue($fixtureManager, array('UuidFixture' => $MockFixture));
+		$fixtureMapProperty->setValue($fixtureManager, ['UuidFixture' => $MockFixture]);
 
-		$dboMethods = array_diff(get_class_methods('DboSource'), array('enabled'));
+		$dboMethods = array_diff(get_class_methods('DboSource'), ['enabled']);
 		$dboMethods[] = 'connect';
 		$db = $this->getMock('DboSource', $dboMethods);
 		$db->config['prefix'] = '';

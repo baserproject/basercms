@@ -49,16 +49,16 @@ class ConsoleLogTest extends CakeTestCase {
 
 	public function setUp() {
 		parent::setUp();
-		CakeLog::config('debug', array(
+		CakeLog::config('debug', [
 			'engine' => 'File',
-			'types' => array('notice', 'info', 'debug'),
+			'types' => ['notice', 'info', 'debug'],
 			'file' => 'debug',
-		));
-		CakeLog::config('error', array(
+		]);
+		CakeLog::config('error', [
 			'engine' => 'File',
-			'types' => array('error', 'warning'),
+			'types' => ['error', 'warning'],
 			'file' => 'error',
-		));
+		]);
 	}
 
 	public function tearDown() {
@@ -77,13 +77,13 @@ class ConsoleLogTest extends CakeTestCase {
  * @return void
  */
 	public function testConsoleOutputWrites() {
-		TestCakeLog::config('test_console_log', array(
+		TestCakeLog::config('test_console_log', [
 			'engine' => 'TestConsole',
-			));
+			]);
 
-		$mock = $this->getMock('TestConsoleLog', array('write'), array(
-			array('types' => 'error'),
-			));
+		$mock = $this->getMock('TestConsoleLog', ['write'], [
+			['types' => 'error'],
+			]);
 		TestCakeLog::replace('test_console_log', $mock);
 
 		$message = 'Test error message';
@@ -98,12 +98,12 @@ class ConsoleLogTest extends CakeTestCase {
  * @return void
  */
 	public function testCombinedLogWriting() {
-		TestCakeLog::config('test_console_log', array(
+		TestCakeLog::config('test_console_log', [
 			'engine' => 'TestConsole',
-			));
-		$mock = $this->getMock('TestConsoleLog', array('write'), array(
-			array('types' => 'error'),
-			));
+			]);
+		$mock = $this->getMock('TestConsoleLog', ['write'], [
+			['types' => 'error'],
+			]);
 		TestCakeLog::replace('test_console_log', $mock);
 
 		// log to both file and console
@@ -136,9 +136,9 @@ class ConsoleLogTest extends CakeTestCase {
  * @return void
  */
 	public function testDefaultOutputAs() {
-		TestCakeLog::config('test_console_log', array(
+		TestCakeLog::config('test_console_log', [
 			'engine' => 'TestConsole',
-			));
+			]);
 		if ((DS === '\\' && !(bool)env('ANSICON') && env('ConEmuANSI') !== 'ON') ||
 			(function_exists('posix_isatty') && !posix_isatty(null))
 		) {

@@ -50,7 +50,7 @@ class SecurityComponent extends Component {
  * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
  * @see SecurityComponent::requirePost()
  */
-	public $requirePost = array();
+	public $requirePost = [];
 
 /**
  * List of controller actions for which a GET request is required
@@ -59,7 +59,7 @@ class SecurityComponent extends Component {
  * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
  * @see SecurityComponent::requireGet()
  */
-	public $requireGet = array();
+	public $requireGet = [];
 
 /**
  * List of controller actions for which a PUT request is required
@@ -68,7 +68,7 @@ class SecurityComponent extends Component {
  * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
  * @see SecurityComponent::requirePut()
  */
-	public $requirePut = array();
+	public $requirePut = [];
 
 /**
  * List of controller actions for which a DELETE request is required
@@ -77,7 +77,7 @@ class SecurityComponent extends Component {
  * @deprecated 3.0.0 Use CakeRequest::allowMethod() instead.
  * @see SecurityComponent::requireDelete()
  */
-	public $requireDelete = array();
+	public $requireDelete = [];
 
 /**
  * List of actions that require an SSL-secured connection
@@ -85,7 +85,7 @@ class SecurityComponent extends Component {
  * @var array
  * @see SecurityComponent::requireSecure()
  */
-	public $requireSecure = array();
+	public $requireSecure = [];
 
 /**
  * List of actions that require a valid authentication key
@@ -94,7 +94,7 @@ class SecurityComponent extends Component {
  * @see SecurityComponent::requireAuth()
  * @deprecated 2.8.1 This feature is confusing and not useful.
  */
-	public $requireAuth = array();
+	public $requireAuth = [];
 
 /**
  * Controllers from which actions of the current controller are allowed to receive
@@ -103,7 +103,7 @@ class SecurityComponent extends Component {
  * @var array
  * @see SecurityComponent::requireAuth()
  */
-	public $allowedControllers = array();
+	public $allowedControllers = [];
 
 /**
  * Actions from which actions of the current controller are allowed to receive
@@ -112,7 +112,7 @@ class SecurityComponent extends Component {
  * @var array
  * @see SecurityComponent::requireAuth()
  */
-	public $allowedActions = array();
+	public $allowedActions = [];
 
 /**
  * Deprecated property, superseded by unlockedFields.
@@ -121,7 +121,7 @@ class SecurityComponent extends Component {
  * @deprecated 3.0.0 Superseded by unlockedFields.
  * @see SecurityComponent::$unlockedFields
  */
-	public $disabledFields = array();
+	public $disabledFields = [];
 
 /**
  * Form fields to exclude from POST validation. Fields can be unlocked
@@ -131,7 +131,7 @@ class SecurityComponent extends Component {
  *
  * @var array
  */
-	public $unlockedFields = array();
+	public $unlockedFields = [];
 
 /**
  * Actions to exclude from CSRF and POST validation checks.
@@ -140,7 +140,7 @@ class SecurityComponent extends Component {
  *
  * @var array
  */
-	public $unlockedActions = array();
+	public $unlockedActions = [];
 
 /**
  * Whether to validate POST data. Set to false to disable for data coming from 3rd party
@@ -196,7 +196,7 @@ class SecurityComponent extends Component {
  *
  * @var array
  */
-	public $components = array('Session');
+	public $components = ['Session'];
 
 /**
  * Holds the current action of the controller
@@ -335,7 +335,7 @@ class SecurityComponent extends Component {
 		if (!$this->blackHoleCallback) {
 			throw new BadRequestException(__d('cake_dev', 'The request has been black-holed'));
 		}
-		return $this->_callback($controller, $this->blackHoleCallback, array($error));
+		return $this->_callback($controller, $this->blackHoleCallback, [$error]);
 	}
 
 /**
@@ -345,11 +345,11 @@ class SecurityComponent extends Component {
  * @param array $actions Controller actions to set the required HTTP method to.
  * @return void
  */
-	protected function _requireMethod($method, $actions = array()) {
+	protected function _requireMethod($method, $actions = []) {
 		if (isset($actions[0]) && is_array($actions[0])) {
 			$actions = $actions[0];
 		}
-		$this->{'require' . $method} = (empty($actions)) ? array('*') : $actions;
+		$this->{'require' . $method} = (empty($actions)) ? ['*'] : $actions;
 	}
 
 /**
@@ -359,11 +359,11 @@ class SecurityComponent extends Component {
  * @return bool True if $method is required
  */
 	protected function _methodsRequired(Controller $controller) {
-		foreach (array('Post', 'Get', 'Put', 'Delete') as $method) {
+		foreach (['Post', 'Get', 'Put', 'Delete'] as $method) {
 			$property = 'require' . $method;
 			if (is_array($this->$property) && !empty($this->$property)) {
 				$require = $this->$property;
-				if (in_array($this->_action, $require) || $this->$property === array('*')) {
+				if (in_array($this->_action, $require) || $this->$property === ['*']) {
 					if (!$this->request->is($method)) {
 						if (!$this->blackHole($controller, $method)) {
 							return false;
@@ -385,7 +385,7 @@ class SecurityComponent extends Component {
 		if (is_array($this->requireSecure) && !empty($this->requireSecure)) {
 			$requireSecure = $this->requireSecure;
 
-			if (in_array($this->_action, $requireSecure) || $this->requireSecure === array('*')) {
+			if (in_array($this->_action, $requireSecure) || $this->requireSecure === ['*']) {
 				if (!$this->request->is('ssl')) {
 					if (!$this->blackHole($controller, 'secure')) {
 						return false;
@@ -407,7 +407,7 @@ class SecurityComponent extends Component {
 		if (is_array($this->requireAuth) && !empty($this->requireAuth) && !empty($this->request->data)) {
 			$requireAuth = $this->requireAuth;
 
-			if (in_array($this->request->params['action'], $requireAuth) || $this->requireAuth === array('*')) {
+			if (in_array($this->request->params['action'], $requireAuth) || $this->requireAuth === ['*']) {
 				if (!isset($controller->request->data['_Token'])) {
 					if (!$this->blackHole($controller, 'auth')) {
 						return null;
@@ -465,10 +465,10 @@ class SecurityComponent extends Component {
 		$locked = explode('|', $locked);
 		$unlocked = explode('|', $unlocked);
 
-		$lockedFields = array();
+		$lockedFields = [];
 		$fields = Hash::flatten($check);
 		$fieldList = array_keys($fields);
-		$multi = array();
+		$multi = [];
 
 		foreach ($fieldList as $i => $key) {
 			if (preg_match('/(\.\d+){1,10}$/', $key)) {
@@ -511,12 +511,12 @@ class SecurityComponent extends Component {
 
 		$fieldList += $lockedFields;
 		$unlocked = implode('|', $unlocked);
-		$hashParts = array(
+		$hashParts = [
 			$this->request->here(),
 			serialize($fieldList),
 			$unlocked,
 			Configure::read('Security.salt')
-		);
+		];
 		$check = Security::hash(implode('', $hashParts), 'sha1');
 		return ($token === $check);
 	}
@@ -535,15 +535,15 @@ class SecurityComponent extends Component {
 			return false;
 		}
 		$authKey = hash('sha512', Security::randomBytes(16), false);
-		$token = array(
+		$token = [
 			'key' => $authKey,
 			'allowedControllers' => $this->allowedControllers,
 			'allowedActions' => $this->allowedActions,
 			'unlockedFields' => array_merge($this->disabledFields, $this->unlockedFields),
-			'csrfTokens' => array()
-		);
+			'csrfTokens' => []
+		];
 
-		$tokenData = array();
+		$tokenData = [];
 		if ($this->Session->check('_Token')) {
 			$tokenData = $this->Session->read('_Token');
 			if (!empty($tokenData['csrfTokens']) && is_array($tokenData['csrfTokens'])) {
@@ -560,10 +560,10 @@ class SecurityComponent extends Component {
 			$token['csrfTokens'][$authKey] = strtotime($this->csrfExpires);
 		}
 		$this->Session->write('_Token', $token);
-		$request->params['_Token'] = array(
+		$request->params['_Token'] = [
 			'key' => $token['key'],
 			'unlockedFields' => $token['unlockedFields']
-		);
+		];
 		return true;
 	}
 
@@ -617,11 +617,11 @@ class SecurityComponent extends Component {
  * @return mixed Controller callback method's response
  * @throws BadRequestException When a the blackholeCallback is not callable.
  */
-	protected function _callback(Controller $controller, $method, $params = array()) {
-		if (!is_callable(array($controller, $method))) {
+	protected function _callback(Controller $controller, $method, $params = []) {
+		if (!is_callable([$controller, $method])) {
 			throw new BadRequestException(__d('cake_dev', 'The request has been black-holed'));
 		}
-		return call_user_func_array(array(&$controller, $method), empty($params) ? null : $params);
+		return call_user_func_array([&$controller, $method], empty($params) ? null : $params);
 	}
 
 }

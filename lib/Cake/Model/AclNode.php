@@ -35,7 +35,7 @@ class AclNode extends Model {
  *
  * @var array
  */
-	public $actsAs = array('Tree' => array('type' => 'nested'));
+	public $actsAs = ['Tree' => ['type' => 'nested']];
 
 /**
  * Constructor
@@ -73,43 +73,43 @@ class AclNode extends Model {
 			$start = $path[0];
 			unset($path[0]);
 
-			$queryData = array(
-				'conditions' => array(
+			$queryData = [
+				'conditions' => [
 					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft"),
-					$db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght")),
-				'fields' => array('id', 'parent_id', 'model', 'foreign_key', 'alias'),
-				'joins' => array(array(
+					$db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght")],
+				'fields' => ['id', 'parent_id', 'model', 'foreign_key', 'alias'],
+				'joins' => [[
 					'table' => $table,
 					'alias' => "{$type}0",
 					'type' => 'INNER',
-					'conditions' => array("{$type}0.alias" => $start)
-				)),
+					'conditions' => ["{$type}0.alias" => $start]
+				]],
 				'order' => $db->name("{$type}.lft") . ' DESC'
-			);
+			];
 
-			$conditionsAfterJoin = array();
+			$conditionsAfterJoin = [];
 
 			foreach ($path as $i => $alias) {
 				$j = $i - 1;
 
-				$queryData['joins'][] = array(
+				$queryData['joins'][] = [
 					'table' => $table,
 					'alias' => "{$type}{$i}",
 					'type' => 'INNER',
-					'conditions' => array(
+					'conditions' => [
 						$db->name("{$type}{$i}.alias") . ' = ' . $db->value($alias, 'string')
-					)
-				);
+					]
+				];
 
 				// it will be better if this conditions will performs after join operation
 				$conditionsAfterJoin[] = $db->name("{$type}{$j}.id") . ' = ' . $db->name("{$type}{$i}.parent_id");
 				$conditionsAfterJoin[] = $db->name("{$type}{$i}.rght") . ' < ' . $db->name("{$type}{$j}.rght");
 				$conditionsAfterJoin[] = $db->name("{$type}{$i}.lft") . ' > ' . $db->name("{$type}{$j}.lft");
 
-				$queryData['conditions'] = array('or' => array(
+				$queryData['conditions'] = ['or' => [
 					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght"),
-					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}{$i}.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}{$i}.rght"))
-				);
+					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}{$i}.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}{$i}.rght")]
+				];
 			}
 			$queryData['conditions'] = array_merge($queryData['conditions'], $conditionsAfterJoin);
 			$result = $db->read($this, $queryData, -1);
@@ -122,12 +122,12 @@ class AclNode extends Model {
 				return false;
 			}
 		} elseif (is_object($ref) && $ref instanceof Model) {
-			$ref = array('model' => $ref->name, 'foreign_key' => $ref->id);
+			$ref = ['model' => $ref->name, 'foreign_key' => $ref->id];
 		} elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
 			$name = key($ref);
 			list(, $alias) = pluginSplit($name);
 
-			$model = ClassRegistry::init(array('class' => $name, 'alias' => $alias));
+			$model = ClassRegistry::init(['class' => $name, 'alias' => $alias]);
 
 			if (empty($model)) {
 				throw new CakeException('cake_dev', "Model class '%s' not found in AclNode::node() when trying to bind %s object", $type, $this->alias);
@@ -138,7 +138,7 @@ class AclNode extends Model {
 				$tmpRef = $model->bindNode($ref);
 			}
 			if (empty($tmpRef)) {
-				$ref = array('model' => $alias, 'foreign_key' => $ref[$name][$model->primaryKey]);
+				$ref = ['model' => $alias, 'foreign_key' => $ref[$name][$model->primaryKey]];
 			} else {
 				if (is_string($tmpRef)) {
 					return $this->node($tmpRef);
@@ -157,20 +157,20 @@ class AclNode extends Model {
 					$ref["{$type}0.{$key}"] = $val;
 				}
 			}
-			$queryData = array(
+			$queryData = [
 				'conditions' => $ref,
-				'fields' => array('id', 'parent_id', 'model', 'foreign_key', 'alias'),
-				'joins' => array(array(
+				'fields' => ['id', 'parent_id', 'model', 'foreign_key', 'alias'],
+				'joins' => [[
 					'table' => $table,
 					'alias' => "{$type}0",
 					'type' => 'INNER',
-					'conditions' => array(
+					'conditions' => [
 						$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft"),
 						$db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght")
-					)
-				)),
+					]
+				]],
 				'order' => $db->name("{$type}.lft") . ' DESC'
-			);
+			];
 			$result = $db->read($this, $queryData, -1);
 
 			if (!$result) {

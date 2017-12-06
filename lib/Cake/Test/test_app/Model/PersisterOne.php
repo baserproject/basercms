@@ -25,37 +25,37 @@ class PersisterOne extends AppModel {
 
 	public $useTable = 'posts';
 
-	public $actsAs = array('PersisterOneBehavior', 'TestPlugin.TestPluginPersisterOne');
+	public $actsAs = ['PersisterOneBehavior', 'TestPlugin.TestPluginPersisterOne'];
 
-	public $hasMany = array('Comment', 'TestPlugin.TestPluginComment');
+	public $hasMany = ['Comment', 'TestPlugin.TestPluginComment'];
 
-	public $validate = array(
-		'title' => array(
-			'custom' => array(
-				'rule' => array('custom', '.*'),
+	public $validate = [
+		'title' => [
+			'custom' => [
+				'rule' => ['custom', '.*'],
 				'allowEmpty' => true,
 				'required' => false,
 				'message' => 'Post title is required'
-			),
-			'between' => array(
-				'rule' => array('lengthBetween', 5, 15),
-				'message' => array('You may enter up to %s chars (minimum is %s chars)', 14, 6)
-			)
-		),
-		'body' => array(
-			'first_rule' => array(
-				'rule' => array('custom', '.*'),
+			],
+			'between' => [
+				'rule' => ['lengthBetween', 5, 15],
+				'message' => ['You may enter up to %s chars (minimum is %s chars)', 14, 6]
+			]
+		],
+		'body' => [
+			'first_rule' => [
+				'rule' => ['custom', '.*'],
 				'allowEmpty' => true,
 				'required' => false,
 				'message' => 'Post body is required'
-			),
-			'second_rule' => array(
-				'rule' => array('custom', '.*'),
+			],
+			'second_rule' => [
+				'rule' => ['custom', '.*'],
 				'allowEmpty' => true,
 				'required' => false,
 				'message' => 'Post body is super required'
-			)
-		),
-	);
+			]
+		],
+	];
 
 }

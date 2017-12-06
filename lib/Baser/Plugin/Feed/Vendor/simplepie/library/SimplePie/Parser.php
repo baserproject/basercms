@@ -59,13 +59,13 @@ class SimplePie_Parser
 	var $current_column;
 	var $current_byte;
 	var $separator = ' ';
-	var $namespace = array('');
-	var $element = array('');
-	var $xml_base = array('');
-	var $xml_base_explicit = array(false);
-	var $xml_lang = array('');
-	var $data = array();
-	var $datas = array(array());
+	var $namespace = [''];
+	var $element = [''];
+	var $xml_base = [''];
+	var $xml_base_explicit = [false];
+	var $xml_lang = [''];
+	var $data = [];
+	var $datas = [[]];
 	var $current_xhtml_construct = -1;
 	var $encoding;
 	protected $registry;
@@ -116,7 +116,7 @@ class SimplePie_Parser
 
 		if (substr($data, 0, 5) === '<?xml' && strspn(substr($data, 5, 1), "\x09\x0A\x0D\x20") && ($pos = strpos($data, '?>')) !== false)
 		{
-			$declaration = $this->registry->create('XML_Declaration_Parser', array(substr($data, 5, $pos - 5)));
+			$declaration = $this->registry->create('XML_Declaration_Parser', [substr($data, 5, $pos - 5)]);
 			if ($declaration->parse())
 			{
 				$data = substr($data, $pos + 2);
@@ -194,7 +194,7 @@ class SimplePie_Parser
 						{
 							$tagName = $xml->localName;
 						}
-						$attributes = array();
+						$attributes = [];
 						while ($xml->moveToNextAttribute())
 						{
 							if ($xml->namespaceURI !== '')
@@ -269,7 +269,7 @@ class SimplePie_Parser
 	{
 		list($this->namespace[], $this->element[]) = $this->split_ns($tag);
 
-		$attribs = array();
+		$attribs = [];
 		foreach ($attributes as $name => $value)
 		{
 			list($attrib_namespace, $attribute) = $this->split_ns($name);
@@ -278,7 +278,7 @@ class SimplePie_Parser
 
 		if (isset($attribs[SIMPLEPIE_NAMESPACE_XML]['base']))
 		{
-			$base = $this->registry->call('Misc', 'absolutize_url', array($attribs[SIMPLEPIE_NAMESPACE_XML]['base'], end($this->xml_base)));
+			$base = $this->registry->call('Misc', 'absolutize_url', [$attribs[SIMPLEPIE_NAMESPACE_XML]['base'], end($this->xml_base)]);
 			if ($base !== false)
 			{
 				$this->xml_base[] = $base;
@@ -320,12 +320,12 @@ class SimplePie_Parser
 		{
 			$this->datas[] =& $this->data;
 			$this->data =& $this->data['child'][end($this->namespace)][end($this->element)][];
-			$this->data = array('data' => '', 'attribs' => $attribs, 'xml_base' => end($this->xml_base), 'xml_base_explicit' => end($this->xml_base_explicit), 'xml_lang' => end($this->xml_lang));
-			if ((end($this->namespace) === SIMPLEPIE_NAMESPACE_ATOM_03 && in_array(end($this->element), array('title', 'tagline', 'copyright', 'info', 'summary', 'content')) && isset($attribs['']['mode']) && $attribs['']['mode'] === 'xml')
-			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_ATOM_10 && in_array(end($this->element), array('rights', 'subtitle', 'summary', 'info', 'title', 'content')) && isset($attribs['']['type']) && $attribs['']['type'] === 'xhtml')
-			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_RSS_20 && in_array(end($this->element), array('title')))
-			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_RSS_090 && in_array(end($this->element), array('title')))
-			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_RSS_10 && in_array(end($this->element), array('title'))))
+			$this->data = ['data' => '', 'attribs' => $attribs, 'xml_base' => end($this->xml_base), 'xml_base_explicit' => end($this->xml_base_explicit), 'xml_lang' => end($this->xml_lang)];
+			if ((end($this->namespace) === SIMPLEPIE_NAMESPACE_ATOM_03 && in_array(end($this->element), ['title', 'tagline', 'copyright', 'info', 'summary', 'content']) && isset($attribs['']['mode']) && $attribs['']['mode'] === 'xml')
+			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_ATOM_10 && in_array(end($this->element), ['rights', 'subtitle', 'summary', 'info', 'title', 'content']) && isset($attribs['']['type']) && $attribs['']['type'] === 'xhtml')
+			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_RSS_20 && in_array(end($this->element), ['title']))
+			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_RSS_090 && in_array(end($this->element), ['title']))
+			|| (end($this->namespace) === SIMPLEPIE_NAMESPACE_RSS_10 && in_array(end($this->element), ['title'])))
 			{
 				$this->current_xhtml_construct = 0;
 			}
@@ -349,7 +349,7 @@ class SimplePie_Parser
 		if ($this->current_xhtml_construct >= 0)
 		{
 			$this->current_xhtml_construct--;
-			if (end($this->namespace) === SIMPLEPIE_NAMESPACE_XHTML && !in_array(end($this->element), array('area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param')))
+			if (end($this->namespace) === SIMPLEPIE_NAMESPACE_XHTML && !in_array(end($this->element), ['area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param']))
 			{
 				$this->data['data'] .= '</' . end($this->element) . '>';
 			}
@@ -369,7 +369,7 @@ class SimplePie_Parser
 
 	public function split_ns($string)
 	{
-		static $cache = array();
+		static $cache = [];
 		if (!isset($cache[$string]))
 		{
 			if ($pos = strpos($string, $this->separator))
@@ -395,11 +395,11 @@ class SimplePie_Parser
 				{
 					$namespace = SIMPLEPIE_NAMESPACE_MEDIARSS;
 				}
-				$cache[$string] = array($namespace, $local_name);
+				$cache[$string] = [$namespace, $local_name];
 			}
 			else
 			{
-				$cache[$string] = array('', $string);
+				$cache[$string] = ['', $string];
 			}
 		}
 		return $cache[$string];

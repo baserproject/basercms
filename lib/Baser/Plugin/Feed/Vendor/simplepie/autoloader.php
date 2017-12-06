@@ -44,7 +44,7 @@
 
 
 // autoloader
-spl_autoload_register(array(new SimplePie_Autoloader(), 'autoload'));
+spl_autoload_register([new SimplePie_Autoloader(), 'autoload']);
 
 if (!class_exists('SimplePie'))
 {

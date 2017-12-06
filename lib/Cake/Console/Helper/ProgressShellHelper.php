@@ -55,7 +55,7 @@ class ProgressShellHelper extends BaseShellHelper {
  * @throws RuntimeException
  */
 	public function output($args) {
-		$args += array('callback' => null);
+		$args += ['callback' => null];
 		if (isset($args[0])) {
 			$args['callback'] = $args[0];
 		}
@@ -81,8 +81,8 @@ class ProgressShellHelper extends BaseShellHelper {
  * @param array $args The initialization data.
  * @return void
  */
-	public function init(array $args = array()) {
-		$args += array('total' => 100, 'width' => 80);
+	public function init(array $args = []) {
+		$args += ['total' => 100, 'width' => 80];
 		$this->_progress = 0;
 		$this->_width = $args['width'];
 		$this->_total = $args['total'];

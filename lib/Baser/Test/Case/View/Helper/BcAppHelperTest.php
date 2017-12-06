@@ -33,15 +33,27 @@ class BcAppHelperTest extends BaserTestCase {
 		parent::tearDown();
 	}
 
-	/**
-	 * コンストラクタ
-	 */
+/**
+ * コンストラクタ
+ */
 	public function test__construct() {
 		$this->assertEquals('<input type="checkbox" name="%s[]"%s />&nbsp;', $this->BcHtmlHelper->_tags['checkboxmultiple'], "コンストラクタの結果が違います。");
 	}
 
+/**
+ * 出力時にインデント用のタブを除去
+ */
 	public function testAfterLayout() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		//改行後にタブがついている文字列が変換されることのテスト
+		$this->BcHtmlHelper->_View->output = '
+					aa';
+		$this->BcHtmlHelper->afterLayout('');
+		$this->assertRegExp('/' . '\naa' . '/', $this->BcHtmlHelper->_View->output);
+
+		//改行なしのタブ付きは変換されない
+		$this->BcHtmlHelper->_View->output = '			a';
+		$this->BcHtmlHelper->afterLayout('');
+		$this->assertRegExp('/' . '\t\t\ta' . '/', $this->BcHtmlHelper->_View->output);
 	}
 
 	public function testDispatchEvent() {

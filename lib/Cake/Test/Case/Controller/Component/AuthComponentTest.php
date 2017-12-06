@@ -36,9 +36,9 @@ class TestBaseAuthenticate extends BaseAuthenticate {
  * @return array of events => callbacks.
  */
 	public function implementedEvents() {
-		return array(
+		return [
 			'Auth.afterIdentify' => 'afterIdentify'
-		);
+		];
 	}
 
 	public $afterIdentifyCallable = null;
@@ -60,10 +60,10 @@ class TestBaseAuthenticate extends BaseAuthenticate {
  * @return mixed Either false on failure, or an array of user data on success.
  */
 	public function authenticate(CakeRequest $request, CakeResponse $response) {
-		return array(
+		return [
 			'id' => 1,
 			'username' => 'mark'
-		);
+		];
 	}
 
 }
@@ -125,7 +125,7 @@ class TestAuthComponent extends AuthComponent {
 	}
 
 	public static function clearUser() {
-		static::$_user = array();
+		static::$_user = [];
 	}
 
 }
@@ -158,14 +158,14 @@ class AuthTestController extends Controller {
  *
  * @var array
  */
-	public $uses = array('AuthUser');
+	public $uses = ['AuthUser'];
 
 /**
  * components property
  *
  * @var array
  */
-	public $components = array('Session', 'Flash', 'Auth');
+	public $components = ['Session', 'Flash', 'Auth'];
 
 /**
  * testUrl property
@@ -270,14 +270,14 @@ class AjaxAuthController extends Controller {
  *
  * @var array
  */
-	public $components = array('Session', 'TestAuth');
+	public $components = ['Session', 'TestAuth'];
 
 /**
  * uses property
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = [];
 
 /**
  * testUrl property
@@ -330,7 +330,7 @@ class AjaxAuthController extends Controller {
  */
 class AuthEventTestListener {
 
-	public $callStack = array();
+	public $callStack = [];
 
 /**
  * Test function to be used in event dispatching
@@ -363,7 +363,7 @@ class AuthComponentTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.auth_user');
+	public $fixtures = ['core.auth_user'];
 
 /**
  * initialized property
@@ -400,7 +400,7 @@ class AuthComponentTest extends CakeTestCase {
 		Router::connect('/:controller/:action/*');
 
 		$User = ClassRegistry::init('AuthUser');
-		$User->updateAll(array('password' => $User->getDataSource()->value(Security::hash('cake', null, true))));
+		$User->updateAll(['password' => $User->getDataSource()->value(Security::hash('cake', null, true))]);
 	}
 
 /**
@@ -452,27 +452,27 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testLogin() {
-		$AuthLoginFormAuthenticate = $this->getMock('FormAuthenticate', array(), array(), '', false);
-		$this->Auth->authenticate = array(
-			'AuthLoginForm' => array(
+		$AuthLoginFormAuthenticate = $this->getMock('FormAuthenticate', [], [], '', false);
+		$this->Auth->authenticate = [
+			'AuthLoginForm' => [
 				'userModel' => 'AuthUser'
-			)
-		);
-		$this->Auth->Session = $this->getMock('SessionComponent', array('renew'), array(), '', false);
+			]
+		];
+		$this->Auth->Session = $this->getMock('SessionComponent', ['renew'], [], '', false);
 
 		$this->Auth->setAuthenticateObject(0, $AuthLoginFormAuthenticate);
 
-		$this->Auth->request->data = array(
-			'AuthUser' => array(
+		$this->Auth->request->data = [
+			'AuthUser' => [
 				'username' => 'mark',
 				'password' => Security::hash('cake', null, true)
-			)
-		);
+			]
+		];
 
-		$user = array(
+		$user = [
 			'id' => 1,
 			'username' => 'mark'
-		);
+		];
 
 		$AuthLoginFormAuthenticate->expects($this->once())
 			->method('authenticate')
@@ -495,19 +495,19 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testLoginAfterIdentify() {
-		$this->Auth->authenticate = array(
+		$this->Auth->authenticate = [
 			'TestBase',
-		);
+		];
 
-		$user = array(
+		$user = [
 			'id' => 1,
 			'username' => 'mark'
-		);
+		];
 
 		$auth = $this->Auth->getAuthenticateObject(0);
 		$listener = $this->getMock('AuthEventTestListener');
-		$auth->afterIdentifyCallable = array($listener, 'listenerFunction');
-		$event = new CakeEvent('Auth.afterIdentify', $this->Auth, array('user' => $user));
+		$auth->afterIdentifyCallable = [$listener, 'listenerFunction'];
+		$event = new CakeEvent('Auth.afterIdentify', $this->Auth, ['user' => $user]);
 		$listener->expects($this->once())->method('listenerFunction')->with($event);
 
 		$result = $this->Auth->login();
@@ -527,11 +527,11 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Controller->here = '/auth_test/admin_add';
 		$this->assertNull($this->Auth->Session->read('Auth.redirect'));
 
-		$this->Auth->authenticate = array('Form');
+		$this->Auth->authenticate = ['Form'];
 		$this->Auth->startup($this->Controller);
 		$this->assertEquals('/auth_test/admin_add', $this->Auth->Session->read('Auth.redirect'));
 
-		$this->Auth->Session->write('Auth.User', array('username' => 'admad'));
+		$this->Auth->Session->write('Auth.User', ['username' => 'admad']);
 		$this->Auth->startup($this->Controller);
 		$this->assertNull($this->Auth->Session->read('Auth.redirect'));
 	}
@@ -568,7 +568,7 @@ class AuthComponentTest extends CakeTestCase {
  */
 	public function testIsAuthorizedMissingFile() {
 		$this->Controller->Auth->authorize = 'Missing';
-		$this->Controller->Auth->isAuthorized(array('User' => array('id' => 1)));
+		$this->Controller->Auth->isAuthorized(['User' => ['id' => 1]]);
 	}
 
 /**
@@ -577,9 +577,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testIsAuthorizedDelegation() {
-		$AuthMockOneAuthorize = $this->getMock('BaseAuthorize', array('authorize'), array(), '', false);
-		$AuthMockTwoAuthorize = $this->getMock('BaseAuthorize', array('authorize'), array(), '', false);
-		$AuthMockThreeAuthorize = $this->getMock('BaseAuthorize', array('authorize'), array(), '', false);
+		$AuthMockOneAuthorize = $this->getMock('BaseAuthorize', ['authorize'], [], '', false);
+		$AuthMockTwoAuthorize = $this->getMock('BaseAuthorize', ['authorize'], [], '', false);
+		$AuthMockThreeAuthorize = $this->getMock('BaseAuthorize', ['authorize'], [], '', false);
 
 		$this->Auth->setAuthorizeObject(0, $AuthMockOneAuthorize);
 		$this->Auth->setAuthorizeObject(1, $AuthMockTwoAuthorize);
@@ -588,18 +588,18 @@ class AuthComponentTest extends CakeTestCase {
 
 		$AuthMockOneAuthorize->expects($this->once())
 			->method('authorize')
-			->with(array('User'), $request)
+			->with(['User'], $request)
 			->will($this->returnValue(false));
 
 		$AuthMockTwoAuthorize->expects($this->once())
 			->method('authorize')
-			->with(array('User'), $request)
+			->with(['User'], $request)
 			->will($this->returnValue(true));
 
 		$AuthMockThreeAuthorize->expects($this->never())
 			->method('authorize');
 
-		$this->assertTrue($this->Auth->isAuthorized(array('User'), $request));
+		$this->assertTrue($this->Auth->isAuthorized(['User'], $request));
 	}
 
 /**
@@ -608,11 +608,11 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testIsAuthorizedUsingUserInSession() {
-		$AuthMockFourAuthorize = $this->getMock('BaseAuthorize', array('authorize'), array(), '', false);
-		$this->Auth->authorize = array('AuthMockFour');
+		$AuthMockFourAuthorize = $this->getMock('BaseAuthorize', ['authorize'], [], '', false);
+		$this->Auth->authorize = ['AuthMockFour'];
 		$this->Auth->setAuthorizeObject(0, $AuthMockFourAuthorize);
 
-		$user = array('user' => 'mark');
+		$user = ['user' => 'mark'];
 		$this->Auth->Session->write('Auth.User', $user);
 		$request = $this->Controller->request;
 
@@ -630,9 +630,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadAuthorizeResets() {
-		$this->Controller->Auth->authorize = array(
+		$this->Controller->Auth->authorize = [
 			'Controller'
-		);
+		];
 		$result = $this->Controller->Auth->constructAuthorize();
 		$this->assertEquals(1, count($result));
 
@@ -655,10 +655,10 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testAllConfigWithAuthorize() {
-		$this->Controller->Auth->authorize = array(
-			AuthComponent::ALL => array('actionPath' => 'controllers/'),
+		$this->Controller->Auth->authorize = [
+			AuthComponent::ALL => ['actionPath' => 'controllers/'],
 			'Actions'
-		);
+		];
 		$objects = $this->Controller->Auth->constructAuthorize();
 		$result = $objects[0];
 		$this->assertEquals('controllers/', $result->settings['actionPath']);
@@ -670,9 +670,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadAuthenticateResets() {
-		$this->Controller->Auth->authenticate = array(
+		$this->Controller->Auth->authenticate = [
 			'Form'
-		);
+		];
 		$result = $this->Controller->Auth->constructAuthenticate();
 		$this->assertEquals(1, count($result));
 
@@ -686,10 +686,10 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testAllConfigWithAuthenticate() {
-		$this->Controller->Auth->authenticate = array(
-			AuthComponent::ALL => array('userModel' => 'AuthUser'),
+		$this->Controller->Auth->authenticate = [
+			AuthComponent::ALL => ['userModel' => 'AuthUser'],
 			'Form'
-		);
+		];
 		$objects = $this->Controller->Auth->constructAuthenticate();
 		$result = $objects[0];
 		$this->assertEquals('AuthUser', $result->settings['userModel']);
@@ -701,10 +701,10 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testSameAuthenticateWithDifferentHashers() {
-		$this->Controller->Auth->authenticate = array(
-			'FormSimple' => array('className' => 'Form', 'passwordHasher' => 'Simple'),
-			'FormBlowfish' => array('className' => 'Form', 'passwordHasher' => 'Blowfish'),
-		);
+		$this->Controller->Auth->authenticate = [
+			'FormSimple' => ['className' => 'Form', 'passwordHasher' => 'Simple'],
+			'FormBlowfish' => ['className' => 'Form', 'passwordHasher' => 'Blowfish'],
+		];
 
 		$objects = $this->Controller->Auth->constructAuthenticate();
 		$this->assertEquals(2, count($objects));
@@ -737,7 +737,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->assertFalse($this->Controller->Auth->startup($this->Controller));
 
 		$this->Controller->Auth->allow();
-		$this->Controller->Auth->deny(array('add', 'camelCase'));
+		$this->Controller->Auth->deny(['add', 'camelCase']);
 
 		$this->Controller->request['action'] = 'delete';
 		$this->assertTrue($this->Controller->Auth->startup($this->Controller));
@@ -808,7 +808,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Controller->request->addParams(Router::parse($url));
 		$this->Controller->request->query['url'] = Router::normalize($url);
 		$this->Controller->Auth->initialize($this->Controller);
-		$this->Controller->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Controller->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Controller->Auth->userModel = 'AuthUser';
 		$this->Controller->Auth->allow();
 		$result = $this->Controller->Auth->startup($this->Controller);
@@ -818,13 +818,13 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Controller->request->addParams(Router::parse($url));
 		$this->Controller->request->query['url'] = Router::normalize($url);
 		$this->Controller->Auth->initialize($this->Controller);
-		$this->Controller->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Controller->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Controller->Auth->userModel = 'AuthUser';
-		$this->Controller->Auth->allowedActions = array('delete', 'camelCase', 'add');
+		$this->Controller->Auth->allowedActions = ['delete', 'camelCase', 'add'];
 		$result = $this->Controller->Auth->startup($this->Controller);
 		$this->assertTrue($result, 'startup() should return true, as action is allowed. %s');
 
-		$this->Controller->Auth->allowedActions = array('delete', 'add');
+		$this->Controller->Auth->allowedActions = ['delete', 'add'];
 		$result = $this->Controller->Auth->startup($this->Controller);
 		$this->assertFalse($result, 'startup() should return false, as action is not allowed. %s');
 
@@ -832,10 +832,10 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Controller->request->addParams(Router::parse($url));
 		$this->Controller->request->query['url'] = Router::normalize($url);
 		$this->Controller->Auth->initialize($this->Controller);
-		$this->Controller->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Controller->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Controller->Auth->userModel = 'AuthUser';
 
-		$this->Controller->Auth->allow(array('delete', 'add'));
+		$this->Controller->Auth->allow(['delete', 'add']);
 		$result = $this->Controller->Auth->startup($this->Controller);
 		$this->assertTrue($result, 'startup() should return true, as action is allowed. %s');
 	}
@@ -846,7 +846,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Controller->request->query['url'] = Router::normalize($url);
 		$this->Controller->Auth->initialize($this->Controller);
 		$this->Controller->Auth->allow('action_name', 'anotherAction');
-		$this->assertEquals(array('action_name', 'anotherAction'), $this->Controller->Auth->allowedActions);
+		$this->assertEquals(['action_name', 'anotherAction'], $this->Controller->Auth->allowedActions);
 	}
 
 /**
@@ -859,17 +859,17 @@ class AuthComponentTest extends CakeTestCase {
 		$_ENV['HTTP_REFERER'] = false;
 		putenv('HTTP_REFERER=');
 
-		$this->Auth->Session->write('Auth', array(
-			'AuthUser' => array('id' => '1', 'username' => 'nate')
-		));
+		$this->Auth->Session->write('Auth', [
+			'AuthUser' => ['id' => '1', 'username' => 'nate']
+		]);
 
 		$this->Auth->request->addParams(Router::parse('users/login'));
 		$this->Auth->request->url = 'users/login';
 		$this->Auth->initialize($this->Controller);
 
-		$this->Auth->loginRedirect = array(
+		$this->Auth->loginRedirect = [
 			'controller' => 'pages', 'action' => 'display', 'welcome'
-		);
+		];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize($this->Auth->loginRedirect);
 		$this->assertEquals($expected, $this->Auth->redirectUrl());
@@ -882,8 +882,8 @@ class AuthComponentTest extends CakeTestCase {
 		putenv('HTTP_REFERER=');
 		$url = '/posts/view/1';
 
-		$this->Auth->Session->write('Auth', array(
-			'AuthUser' => array('id' => '1', 'username' => 'nate'))
+		$this->Auth->Session->write('Auth', [
+			'AuthUser' => ['id' => '1', 'username' => 'nate']]
 		);
 		$this->Controller->testUrl = null;
 		$this->Auth->request->addParams(Router::parse($url));
@@ -892,18 +892,18 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->initialize($this->Controller);
 		$this->Auth->authorize = 'controller';
 
-		$this->Auth->loginAction = array(
+		$this->Auth->loginAction = [
 			'controller' => 'AuthTest', 'action' => 'login'
-		);
+		];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('/AuthTest/login');
 		$this->assertEquals($expected, $this->Controller->testUrl);
 
 		$this->Auth->Session->delete('Auth');
 		$_SERVER['HTTP_REFERER'] = $_ENV['HTTP_REFERER'] = Router::url('/admin', true);
-		$this->Auth->Session->write('Auth', array(
-			'AuthUser' => array('id' => '1', 'username' => 'nate')
-		));
+		$this->Auth->Session->write('Auth', [
+			'AuthUser' => ['id' => '1', 'username' => 'nate']
+		]);
 		$this->Auth->request->params['action'] = 'login';
 		$this->Auth->request->url = 'auth_test/login';
 		$this->Auth->initialize($this->Controller);
@@ -921,7 +921,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->addParams(Router::parse($url));
 		$this->Auth->request->url = $this->Auth->request->here = Router::normalize($url);
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('posts/index/year:2008/month:feb');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
@@ -932,17 +932,17 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->addParams(Router::parse($url));
 		$this->Auth->request->url = $this->Auth->request->here = Router::normalize($url);
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('posts/view/1');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
 
 		// QueryString parameters
 		$_back = $_GET;
-		$_GET = array(
+		$_GET = [
 			'print' => 'true',
 			'refer' => 'menu'
-		);
+		];
 		$this->Auth->Session->delete('Auth');
 		$url = '/posts/index/29';
 		$this->Auth->request->addParams(Router::parse($url));
@@ -950,7 +950,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->query = $_GET;
 
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('posts/index/29?print=true&refer=menu');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
@@ -958,14 +958,14 @@ class AuthComponentTest extends CakeTestCase {
 		// Different base urls.
 		$appConfig = Configure::read('App');
 
-		$_GET = array();
+		$_GET = [];
 
-		Configure::write('App', array(
+		Configure::write('App', [
 			'dir' => APP_DIR,
 			'webroot' => WEBROOT_DIR,
 			'base' => false,
 			'baseUrl' => '/cake/index.php'
-		));
+		]);
 
 		$this->Auth->Session->delete('Auth');
 
@@ -975,7 +975,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->url = Router::normalize($url);
 
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'users', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('/posts/add');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
@@ -990,12 +990,12 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->Session->delete('Auth');
 		$url = '/posts/edit/1';
 		$request = new CakeRequest($url);
-		$request->query = array();
+		$request->query = [];
 		$this->Auth->request = $this->Controller->request = $request;
 		$this->Auth->request->addParams(Router::parse($url));
 		$this->Auth->request->url = $this->Auth->request->here = Router::normalize($url);
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('/posts/edit/1');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
@@ -1008,7 +1008,7 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->addParams(Router::parse($url));
 		$this->Auth->request->url = Router::normalize($url);
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 		$expected = Router::normalize('/');
 		$this->assertEquals($expected, $this->Auth->Session->read('Auth.redirect'));
@@ -1028,10 +1028,10 @@ class AuthComponentTest extends CakeTestCase {
 		$this->Auth->request->url = 'auth_test/login';
 
 		$this->Auth->Session->write('Auth.User.id', '1');
-		$this->Auth->authenticate = array('Form');
-		$this->getMock('BaseAuthorize', array('authorize'), array(), 'NoLoginRedirectMockAuthorize', false);
-		$this->Auth->authorize = array('NoLoginRedirectMockAuthorize');
-		$this->Auth->loginAction = array('controller' => 'auth_test', 'action' => 'login');
+		$this->Auth->authenticate = ['Form'];
+		$this->getMock('BaseAuthorize', ['authorize'], [], 'NoLoginRedirectMockAuthorize', false);
+		$this->Auth->authorize = ['NoLoginRedirectMockAuthorize'];
+		$this->Auth->loginAction = ['controller' => 'auth_test', 'action' => 'login'];
 
 		$return = $this->Auth->startup($this->Controller);
 		$this->assertTrue($return);
@@ -1051,17 +1051,17 @@ class AuthComponentTest extends CakeTestCase {
 		$url = '/party/on';
 		$this->Auth->request = $CakeRequest = new CakeRequest($url);
 		$this->Auth->request->addParams(Router::parse($url));
-		$this->Auth->authorize = array('Controller');
-		$this->Auth->login(array('username' => 'mariano', 'password' => 'cake'));
-		$this->Auth->loginRedirect = array(
+		$this->Auth->authorize = ['Controller'];
+		$this->Auth->login(['username' => 'mariano', 'password' => 'cake']);
+		$this->Auth->loginRedirect = [
 			'controller' => 'something', 'action' => 'else',
-		);
+		];
 
 		$CakeResponse = new CakeResponse();
 		$Controller = $this->getMock(
 			'Controller',
-			array('on', 'redirect'),
-			array($CakeRequest, $CakeResponse)
+			['on', 'redirect'],
+			[$CakeRequest, $CakeResponse]
 		);
 
 		$expected = Router::url($this->Auth->loginRedirect);
@@ -1080,27 +1080,27 @@ class AuthComponentTest extends CakeTestCase {
 		$url = '/party/on';
 		$this->Auth->request = $CakeRequest = new CakeRequest($url);
 		$this->Auth->request->addParams(Router::parse($url));
-		$this->Auth->authorize = array('Controller');
-		$this->Auth->login(array('username' => 'admad', 'password' => 'cake'));
-		$this->Auth->unauthorizedRedirect = array(
+		$this->Auth->authorize = ['Controller'];
+		$this->Auth->login(['username' => 'admad', 'password' => 'cake']);
+		$this->Auth->unauthorizedRedirect = [
 			'controller' => 'no_can_do', 'action' => 'jack'
-		);
+		];
 
 		$CakeResponse = new CakeResponse();
 		$Controller = $this->getMock(
 			'Controller',
-			array('on', 'redirect'),
-			array($CakeRequest, $CakeResponse)
+			['on', 'redirect'],
+			[$CakeRequest, $CakeResponse]
 		);
 		$this->Auth->Flash = $this->getMock(
 			'FlashComponent',
-			array('set'),
-			array($Controller->Components)
+			['set'],
+			[$Controller->Components]
 		);
 
-		$expected = array(
+		$expected = [
 			'controller' => 'no_can_do', 'action' => 'jack'
-		);
+		];
 		$Controller->expects($this->once())
 			->method('redirect')
 			->with($this->equalTo($expected));
@@ -1118,28 +1118,28 @@ class AuthComponentTest extends CakeTestCase {
 		$url = '/party/on';
 		$this->Auth->request = $CakeRequest = new CakeRequest($url);
 		$this->Auth->request->addParams(Router::parse($url));
-		$this->Auth->authorize = array('Controller');
-		$this->Auth->login(array('username' => 'admad', 'password' => 'cake'));
-		$this->Auth->unauthorizedRedirect = array(
+		$this->Auth->authorize = ['Controller'];
+		$this->Auth->login(['username' => 'admad', 'password' => 'cake']);
+		$this->Auth->unauthorizedRedirect = [
 			'controller' => 'no_can_do', 'action' => 'jack'
-		);
+		];
 		$this->Auth->authError = false;
 
 		$CakeResponse = new CakeResponse();
 		$Controller = $this->getMock(
 			'Controller',
-			array('on', 'redirect'),
-			array($CakeRequest, $CakeResponse)
+			['on', 'redirect'],
+			[$CakeRequest, $CakeResponse]
 		);
 		$this->Auth->Flash = $this->getMock(
 			'FlashComponent',
-			array('set'),
-			array($Controller->Components)
+			['set'],
+			[$Controller->Components]
 		);
 
-		$expected = array(
+		$expected = [
 			'controller' => 'no_can_do', 'action' => 'jack'
-		);
+		];
 		$Controller->expects($this->once())
 			->method('redirect')
 			->with($this->equalTo($expected));
@@ -1157,16 +1157,16 @@ class AuthComponentTest extends CakeTestCase {
 		$url = '/party/on';
 		$this->Auth->request = $CakeRequest = new CakeRequest($url);
 		$this->Auth->request->addParams(Router::parse($url));
-		$this->Auth->authorize = array('Controller');
-		$this->Auth->authorize = array('Controller');
+		$this->Auth->authorize = ['Controller'];
+		$this->Auth->authorize = ['Controller'];
 		$this->Auth->unauthorizedRedirect = false;
-		$this->Auth->login(array('username' => 'baker', 'password' => 'cake'));
+		$this->Auth->login(['username' => 'baker', 'password' => 'cake']);
 
 		$CakeResponse = new CakeResponse();
 		$Controller = $this->getMock(
 			'Controller',
-			array('on', 'redirect'),
-			array($CakeRequest, $CakeResponse)
+			['on', 'redirect'],
+			[$CakeRequest, $CakeResponse]
 		);
 
 		$this->Auth->startup($Controller);
@@ -1179,13 +1179,13 @@ class AuthComponentTest extends CakeTestCase {
  */
 	public function testNoRedirectOnLoginAction() {
 		$controller = $this->getMock('Controller');
-		$controller->methods = array('login');
+		$controller->methods = ['login'];
 
 		$url = '/AuthTest/login';
 		$this->Auth->request = $controller->request = new CakeRequest($url);
 		$this->Auth->request->addParams(Router::parse($url));
-		$this->Auth->loginAction = array('controller' => 'AuthTest', 'action' => 'login');
-		$this->Auth->authorize = array('Controller');
+		$this->Auth->loginAction = ['controller' => 'AuthTest', 'action' => 'login'];
+		$this->Auth->authorize = ['Controller'];
 
 		$controller->expects($this->never())
 			->method('redirect');
@@ -1214,7 +1214,7 @@ class AuthComponentTest extends CakeTestCase {
  */
 	public function testAdminRoute() {
 		$pref = Configure::read('Routing.prefixes');
-		Configure::write('Routing.prefixes', array('admin'));
+		Configure::write('Routing.prefixes', ['admin']);
 		Router::reload();
 		require CAKE . 'Config' . DS . 'routes.php';
 
@@ -1226,9 +1226,9 @@ class AuthComponentTest extends CakeTestCase {
 		Router::setRequestInfo($this->Auth->request);
 		$this->Auth->initialize($this->Controller);
 
-		$this->Auth->loginAction = array(
+		$this->Auth->loginAction = [
 			'admin' => true, 'controller' => 'auth_test', 'action' => 'login'
-		);
+		];
 
 		$this->Auth->startup($this->Controller);
 		$this->assertEquals('/admin/auth_test/login', $this->Controller->testUrl);
@@ -1242,9 +1242,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testAjaxLogin() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 		$_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
 		App::uses('Dispatcher', 'Routing');
@@ -1252,7 +1252,7 @@ class AuthComponentTest extends CakeTestCase {
 		$Response = new CakeResponse();
 		ob_start();
 		$Dispatcher = new Dispatcher();
-		$Dispatcher->dispatch(new CakeRequest('/ajax_auth/add'), $Response, array('return' => 1));
+		$Dispatcher->dispatch(new CakeRequest('/ajax_auth/add'), $Response, ['return' => 1]);
 		$result = ob_get_clean();
 
 		$this->assertEquals(403, $Response->statusCode());
@@ -1266,9 +1266,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testAjaxLoginResponseCode() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 		$_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
 		$url = '/ajax_auth/add';
@@ -1279,7 +1279,7 @@ class AuthComponentTest extends CakeTestCase {
 
 		Router::setRequestInfo($this->Auth->request);
 
-		$this->Controller->response = $this->getMock('CakeResponse', array('_sendHeader'));
+		$this->Controller->response = $this->getMock('CakeResponse', ['_sendHeader']);
 		$this->Controller->response->expects($this->at(0))
 			->method('_sendHeader')
 			->with('HTTP/1.1 403 Forbidden', null);
@@ -1312,7 +1312,7 @@ class AuthComponentTest extends CakeTestCase {
 
 		Router::setRequestInfo($this->Auth->request);
 
-		$this->Controller->response = $this->getMock('CakeResponse', array('_sendHeader'));
+		$this->Controller->response = $this->getMock('CakeResponse', ['_sendHeader']);
 		$this->Controller->response->expects($this->at(0))
 			->method('_sendHeader')
 			->with('HTTP/1.1 403 Forbidden', null);
@@ -1332,26 +1332,26 @@ class AuthComponentTest extends CakeTestCase {
  */
 	public function testLoginActionRedirect() {
 		$admin = Configure::read('Routing.prefixes');
-		Configure::write('Routing.prefixes', array('admin'));
+		Configure::write('Routing.prefixes', ['admin']);
 		Router::reload();
 		require CAKE . 'Config' . DS . 'routes.php';
 
 		$url = '/admin/auth_test/login';
 		$this->Auth->request->addParams(Router::parse($url));
 		$this->Auth->request->url = ltrim($url, '/');
-		Router::setRequestInfo(array(
-			array(
-				'pass' => array(), 'action' => 'admin_login', 'plugin' => null, 'controller' => 'auth_test',
+		Router::setRequestInfo([
+			[
+				'pass' => [], 'action' => 'admin_login', 'plugin' => null, 'controller' => 'auth_test',
 				'admin' => true,
-			),
-			array(
+			],
+			[
 				'base' => null, 'here' => $url,
-				'webroot' => '/', 'passedArgs' => array(),
-			)
-		));
+				'webroot' => '/', 'passedArgs' => [],
+			]
+		]);
 
 		$this->Auth->initialize($this->Controller);
-		$this->Auth->loginAction = array('admin' => true, 'controller' => 'auth_test', 'action' => 'login');
+		$this->Auth->loginAction = ['admin' => true, 'controller' => 'auth_test', 'action' => 'login'];
 		$this->Auth->startup($this->Controller);
 
 		$this->assertNull($this->Controller->testUrl);
@@ -1371,9 +1371,9 @@ class AuthComponentTest extends CakeTestCase {
 		$url = '/auth_test/add';
 		$this->Auth->request->addParams(Router::parse($url));
 
-		$this->Auth->authenticate = array(
-			'Basic' => array('userModel' => 'AuthUser')
-		);
+		$this->Auth->authenticate = [
+			'Basic' => ['userModel' => 'AuthUser']
+		];
 		$this->Auth->startup($this->Controller);
 
 		$result = $this->Auth->user();
@@ -1392,21 +1392,21 @@ class AuthComponentTest extends CakeTestCase {
 		$request = new CakeRequest(null, false);
 		$this->Controller = new AuthTestController($request, $this->getMock('CakeResponse'));
 
-		$this->Controller->components = array(
-			'Auth' => array(
-				'loginAction' => array('controller' => 'people', 'action' => 'login'),
-				'logoutRedirect' => array('controller' => 'people', 'action' => 'login'),
-			),
+		$this->Controller->components = [
+			'Auth' => [
+				'loginAction' => ['controller' => 'people', 'action' => 'login'],
+				'logoutRedirect' => ['controller' => 'people', 'action' => 'login'],
+			],
 			'Session'
-		);
+		];
 		$this->Controller->Components->init($this->Controller);
-		$this->Controller->Components->trigger('initialize', array(&$this->Controller));
+		$this->Controller->Components->trigger('initialize', [&$this->Controller]);
 		Router::reload();
 
-		$expected = array(
-			'loginAction' => array('controller' => 'people', 'action' => 'login'),
-			'logoutRedirect' => array('controller' => 'people', 'action' => 'login'),
-		);
+		$expected = [
+			'loginAction' => ['controller' => 'people', 'action' => 'login'],
+			'logoutRedirect' => ['controller' => 'people', 'action' => 'login'],
+		];
 		$this->assertEquals($expected['loginAction'], $this->Controller->Auth->loginAction);
 		$this->assertEquals($expected['logoutRedirect'], $this->Controller->Auth->logoutRedirect);
 	}
@@ -1433,9 +1433,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testLogoutTrigger() {
-		$LogoutTriggerMockAuthenticate = $this->getMock('BaseAuthenticate', array('authenticate', 'logout'), array(), '', false);
+		$LogoutTriggerMockAuthenticate = $this->getMock('BaseAuthenticate', ['authenticate', 'logout'], [], '', false);
 
-		$this->Auth->authenticate = array('LogoutTriggerMock');
+		$this->Auth->authenticate = ['LogoutTriggerMock'];
 		$this->Auth->setAuthenticateObject(0, $LogoutTriggerMockAuthenticate);
 		$LogoutTriggerMockAuthenticate->expects($this->once())
 			->method('logout');
@@ -1451,20 +1451,20 @@ class AuthComponentTest extends CakeTestCase {
 	public function testMapActions() {
 		$MapActionMockAuthorize = $this->getMock(
 			'BaseAuthorize',
-			array('authorize'),
-			array(),
+			['authorize'],
+			[],
 			'',
 			false
 		);
-		$this->Auth->authorize = array('MapActionAuthorize');
+		$this->Auth->authorize = ['MapActionAuthorize'];
 		$this->Auth->setAuthorizeObject(0, $MapActionMockAuthorize);
 
-		$actions = array('my_action' => 'create');
+		$actions = ['my_action' => 'create'];
 		$this->Auth->mapActions($actions);
-		$actions = array(
-			'create' => array('my_other_action'),
-			'update' => array('updater')
-		);
+		$actions = [
+			'create' => ['my_other_action'],
+			'update' => ['updater']
+		];
 		$this->Auth->mapActions($actions);
 
 		$actions = $this->Auth->mapActions();
@@ -1488,15 +1488,15 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testMapActionsDelegation() {
-		$MapActionMockAuthorize = $this->getMock('BaseAuthorize', array('authorize', 'mapActions'), array(), '', false);
+		$MapActionMockAuthorize = $this->getMock('BaseAuthorize', ['authorize', 'mapActions'], [], '', false);
 
-		$this->Auth->authorize = array('MapActionMock');
+		$this->Auth->authorize = ['MapActionMock'];
 		$this->Auth->setAuthorizeObject(0, $MapActionMockAuthorize);
 		$MapActionMockAuthorize->expects($this->once())
 			->method('mapActions')
-			->with(array('create' => array('my_action')));
+			->with(['create' => ['my_action']]);
 
-		$this->Auth->mapActions(array('create' => array('my_action')));
+		$this->Auth->mapActions(['create' => ['my_action']]);
 	}
 
 /**
@@ -1505,12 +1505,12 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testLoginWithRequestData() {
-		$RequestLoginMockAuthenticate = $this->getMock('FormAuthenticate', array(), array(), '', false);
+		$RequestLoginMockAuthenticate = $this->getMock('FormAuthenticate', [], [], '', false);
 		$request = new CakeRequest('users/login', false);
-		$user = array('username' => 'mark', 'role' => 'admin');
+		$user = ['username' => 'mark', 'role' => 'admin'];
 
 		$this->Auth->request = $request;
-		$this->Auth->authenticate = array('RequestLoginMock');
+		$this->Auth->authenticate = ['RequestLoginMock'];
 		$this->Auth->setAuthenticateObject(0, $RequestLoginMockAuthenticate);
 		$RequestLoginMockAuthenticate->expects($this->once())
 			->method('authenticate')
@@ -1529,12 +1529,12 @@ class AuthComponentTest extends CakeTestCase {
 	public function testLoginWithUserData() {
 		$this->assertFalse($this->Auth->loggedIn());
 
-		$user = array(
+		$user = [
 			'username' => 'mariano',
 			'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 			'created' => '2007-03-17 01:16:23',
 			'updated' => '2007-03-17 01:18:31'
-		);
+		];
 		$this->assertTrue($this->Auth->login($user));
 		$this->assertTrue($this->Auth->loggedIn());
 		$this->assertEquals($user['username'], $this->Auth->user('username'));
@@ -1546,16 +1546,16 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testFlashSettings() {
-		$this->Auth->Flash = $this->getMock('FlashComponent', array(), array(), '', false);
+		$this->Auth->Flash = $this->getMock('FlashComponent', [], [], '', false);
 		$this->Auth->Flash->expects($this->once())
 			->method('set')
-			->with('Auth failure', array('element' => 'custom', 'params' => array(1), 'key' => 'auth-key'));
+			->with('Auth failure', ['element' => 'custom', 'params' => [1], 'key' => 'auth-key']);
 
-		$this->Auth->flash = array(
+		$this->Auth->flash = [
 			'element' => 'custom',
-			'params' => array(1),
+			'params' => [1],
 			'key' => 'auth-key'
-		);
+		];
 		$this->Auth->flash('Auth failure');
 	}
 
@@ -1565,7 +1565,7 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testRedirectSet() {
-		$value = array('controller' => 'users', 'action' => 'home');
+		$value = ['controller' => 'users', 'action' => 'home'];
 		$result = $this->Auth->redirectUrl($value);
 		$this->assertEquals('/users/home', $result);
 		$this->assertEquals($value, $this->Auth->Session->read('Auth.redirect'));
@@ -1577,7 +1577,7 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testRedirectSessionRead() {
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
+		$this->Auth->loginAction = ['controller' => 'users', 'action' => 'login'];
 		$this->Auth->Session->write('Auth.redirect', '/users/home');
 
 		$result = $this->Auth->redirectUrl();
@@ -1609,9 +1609,9 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testRedirectSessionReadEqualToLoginAction() {
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
-		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
-		$this->Auth->Session->write('Auth.redirect', array('controller' => 'users', 'action' => 'login'));
+		$this->Auth->loginAction = ['controller' => 'users', 'action' => 'login'];
+		$this->Auth->loginRedirect = ['controller' => 'users', 'action' => 'home'];
+		$this->Auth->Session->write('Auth.redirect', ['controller' => 'users', 'action' => 'login']);
 
 		$result = $this->Auth->redirectUrl();
 		$this->assertEquals('/users/home', $result);
@@ -1626,12 +1626,12 @@ class AuthComponentTest extends CakeTestCase {
 	public function testRedirectUrlWithBaseSet() {
 		$App = Configure::read('App');
 
-		Configure::write('App', array(
+		Configure::write('App', [
 			'dir' => APP_DIR,
 			'webroot' => WEBROOT_DIR,
 			'base' => false,
 			'baseUrl' => '/cake/index.php'
-		));
+		]);
 
 		$url = '/users/login';
 		$this->Auth->request = $this->Controller->request = new CakeRequest($url);
@@ -1640,8 +1640,8 @@ class AuthComponentTest extends CakeTestCase {
 
 		Router::setRequestInfo($this->Auth->request);
 
-		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
-		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
+		$this->Auth->loginAction = ['controller' => 'users', 'action' => 'login'];
+		$this->Auth->loginRedirect = ['controller' => 'users', 'action' => 'home'];
 
 		$result = $this->Auth->redirectUrl();
 		$this->assertEquals('/users/home', $result);
@@ -1668,17 +1668,17 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testUser() {
-		$data = array(
-			'User' => array(
+		$data = [
+			'User' => [
 				'id' => '2',
 				'username' => 'mark',
 				'group_id' => 1,
-				'Group' => array(
+				'Group' => [
 					'id' => '1',
 					'name' => 'Members'
-				),
+				],
 				'is_admin' => false,
-		));
+		]];
 		$this->Auth->Session->write('Auth', $data);
 
 		$result = $this->Auth->user();
@@ -1715,7 +1715,7 @@ class AuthComponentTest extends CakeTestCase {
 		$_SESSION = null;
 
 		AuthComponent::$sessionKey = false;
-		$this->Auth->authenticate = array('Basic');
+		$this->Auth->authenticate = ['Basic'];
 		$this->Controller->request['action'] = 'admin_add';
 
 		$this->Auth->startup($this->Controller);
@@ -1737,9 +1737,9 @@ class AuthComponentTest extends CakeTestCase {
 		$_SERVER['PHP_AUTH_PW'] = 'cake';
 
 		AuthComponent::$sessionKey = false;
-		$this->Auth->authenticate = array(
-			'Basic' => array('userModel' => 'AuthUser')
-		);
+		$this->Auth->authenticate = [
+			'Basic' => ['userModel' => 'AuthUser']
+		];
 		$this->Controller->request['action'] = 'admin_add';
 
 		$result = $this->Auth->startup($this->Controller);
@@ -1754,7 +1754,7 @@ class AuthComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testStatelessFollowedByStatefulAuth() {
-		$this->Auth->authenticate = array('Basic', 'Form');
+		$this->Auth->authenticate = ['Basic', 'Form'];
 		$this->Controller->request['action'] = 'admin_add';
 
 		$this->Auth->response->expects($this->never())->method('statusCode');

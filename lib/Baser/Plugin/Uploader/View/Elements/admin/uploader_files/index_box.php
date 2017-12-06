@@ -9,12 +9,12 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-$classies = array();
+$classies = [];
 if (!$this->Uploader->isPublish($file)) {
-	$classies = array('unpublish', 'disablerow', 'selectable-file');
+	$classies = ['unpublish', 'disablerow', 'selectable-file'];
 	$statusPublish = false;
 } else {
-	$classies = array('publish', 'selectable-file');
+	$classies = ['publish', 'selectable-file'];
 	$statusPublish = true;
 }
 $class = ' class="' . implode(' ', $classies) . '"';
@@ -22,13 +22,13 @@ $class = ' class="' . implode(' ', $classies) . '"';
 
 
 <span<?php echo $class; ?> id="selectedFile<?php echo $file['UploaderFile']['id'] ?>">
-	<?php echo $this->Uploader->file($file, array(
+	<?php echo $this->Uploader->file($file, [
 		'width' => 120,
 		'height'=> 120,
 		'size'	=> 'small',
 		'alt'	=> $file['UploaderFile']['alt'],
 		'style' => 'width:120px;height:120px'
-	)) ?>
+	]) ?>
 	<div style="text-align:right">
 		<span class="id"><?php echo $file['UploaderFile']['id'] ?></span>.<span><?php echo $this->BcText->truncate($file['UploaderFile']['alt'], 13) ?></span>
 	</div>

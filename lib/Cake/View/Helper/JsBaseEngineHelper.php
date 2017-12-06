@@ -39,7 +39,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  *
  * @var array
  */
-	protected $_optionMap = array();
+	protected $_optionMap = [];
 
 /**
  * An array of lowercase method names in the Engine that are buffered unless otherwise disabled.
@@ -47,14 +47,14 @@ abstract class JsBaseEngineHelper extends AppHelper {
  *
  * @var array
  */
-	public $bufferedMethods = array('event', 'sortable', 'drag', 'drop', 'slider');
+	public $bufferedMethods = ['event', 'sortable', 'drag', 'drop', 'slider'];
 
 /**
  * Contains a list of callback names -> default arguments.
  *
  * @var array
  */
-	protected $_callbackArguments = array();
+	protected $_callbackArguments = [];
 
 /**
  * Create an `alert()` message in JavaScript
@@ -124,10 +124,10 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Set of options, see above.
  * @return string A JSON code block
  */
-	public function object($data = array(), $options = array()) {
-		$defaultOptions = array(
+	public function object($data = [], $options = []) {
+		$defaultOptions = [
 			'prefix' => '', 'postfix' => '',
-		);
+		];
 		$options += $defaultOptions;
 
 		return $options['prefix'] . json_encode($data) . $options['postfix'];
@@ -141,7 +141,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param string $key Key name.
  * @return string a JavaScript-safe/JSON representation of $val
  */
-	public function value($val = array(), $quoteString = null, $key = 'value') {
+	public function value($val = [], $quoteString = null, $key = 'value') {
 		if ($quoteString === null) {
 			$quoteString = true;
 		}
@@ -302,7 +302,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Options for the event.
  * @return string completed event handler
  */
-	abstract public function event($type, $callback, $options = array());
+	abstract public function event($type, $callback, $options = []);
 
 /**
  * Create a domReady event. This is a special event in many libraries
@@ -343,7 +343,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Array of options for the effect.
  * @return string completed string with effect.
  */
-	abstract public function effect($name, $options = array());
+	abstract public function effect($name, $options = []);
 
 /**
  * Make an XHR request
@@ -370,7 +370,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Array of options. See above for cross library supported options
  * @return string XHR request.
  */
-	abstract public function request($url, $options = array());
+	abstract public function request($url, $options = []);
 
 /**
  * Create a draggable element. Works on the currently selected element.
@@ -391,7 +391,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Options array see above.
  * @return string Completed drag script
  */
-	abstract public function drag($options = array());
+	abstract public function drag($options = []);
 
 /**
  * Create a droppable element. Allows for draggable elements to be dropped on it.
@@ -411,7 +411,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Array of options for the drop. See above.
  * @return string Completed drop script
  */
-	abstract public function drop($options = array());
+	abstract public function drop($options = []);
 
 /**
  * Create a sortable element.
@@ -434,7 +434,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Array of options for the sortable. See above.
  * @return string Completed sortable script.
  */
-	abstract public function sortable($options = array());
+	abstract public function sortable($options = []);
 
 /**
  * Create a slider UI widget. Comprised of a track and knob.
@@ -457,7 +457,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options Array of options for the slider. See above.
  * @return string Completed slider script
  */
-	abstract public function slider($options = array());
+	abstract public function slider($options = []);
 
 /**
  * Serialize the form attached to $selector.
@@ -473,7 +473,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $options options for serialization generation.
  * @return string completed form serialization script
  */
-	abstract public function serializeForm($options = array());
+	abstract public function serializeForm($options = []);
 
 /**
  * Parse an options assoc array into a JavaScript object literal.
@@ -484,8 +484,8 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $safeKeys Keys that should not be escaped.
  * @return string Parsed JSON options without enclosing { }.
  */
-	protected function _parseOptions($options, $safeKeys = array()) {
-		$out = array();
+	protected function _parseOptions($options, $safeKeys = []) {
+		$out = [];
 		$safeKeys = array_flip($safeKeys);
 		foreach ($options as $key => $value) {
 			if (!is_int($value) && !isset($safeKeys[$key])) {
@@ -527,7 +527,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
  * @param array $callbacks Additional Keys that contain callbacks
  * @return array Array of options with callbacks added.
  */
-	protected function _prepareCallbacks($method, $options, $callbacks = array()) {
+	protected function _prepareCallbacks($method, $options, $callbacks = []) {
 		$wrapCallbacks = true;
 		if (isset($options['wrapCallbacks'])) {
 			$wrapCallbacks = $options['wrapCallbacks'];
@@ -536,7 +536,7 @@ abstract class JsBaseEngineHelper extends AppHelper {
 		if (!$wrapCallbacks) {
 			return $options;
 		}
-		$callbackOptions = array();
+		$callbackOptions = [];
 		if (isset($this->_callbackArguments[$method])) {
 			$callbackOptions = $this->_callbackArguments[$method];
 		}

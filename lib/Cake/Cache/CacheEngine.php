@@ -26,7 +26,7 @@ abstract class CacheEngine {
  *
  * @var array
  */
-	public $settings = array();
+	public $settings = [];
 
 /**
  * Contains the compiled string with all groups
@@ -44,13 +44,13 @@ abstract class CacheEngine {
  * @param array $settings Associative array of parameters for the engine
  * @return bool True if the engine has been successfully initialized, false if not
  */
-	public function init($settings = array()) {
-		$settings += $this->settings + array(
+	public function init($settings = []) {
+		$settings += $this->settings + [
 			'prefix' => 'cake_',
 			'duration' => 3600,
 			'probability' => 100,
-			'groups' => array()
-		);
+			'groups' => []
+		];
 		$this->settings = $settings;
 		if (!empty($this->settings['groups'])) {
 			sort($this->settings['groups']);
@@ -184,7 +184,7 @@ abstract class CacheEngine {
 			$prefix = vsprintf($this->_groupPrefix, $this->groups());
 		}
 
-		$key = preg_replace('/[\s]+/', '_', strtolower(trim(str_replace(array(DS, '/', '.'), '_', strval($key)))));
+		$key = preg_replace('/[\s]+/', '_', strtolower(trim(str_replace([DS, '/', '.'], '_', strval($key)))));
 		return $prefix . $key;
 	}
 }

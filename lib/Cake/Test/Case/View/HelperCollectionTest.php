@@ -40,7 +40,7 @@ class HelperCollectionTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->View = $this->getMock('View', array(), array(null));
+		$this->View = $this->getMock('View', [], [null]);
 		$this->Helpers = new HelperCollection($this->View);
 	}
 
@@ -66,7 +66,7 @@ class HelperCollectionTest extends CakeTestCase {
 		$this->assertInstanceOf('HtmlHelper', $this->Helpers->Html);
 
 		$result = $this->Helpers->loaded();
-		$this->assertEquals(array('Html'), $result, 'loaded() results are wrong.');
+		$this->assertEquals(['Html'], $result, 'loaded() results are wrong.');
 
 		$this->assertTrue($this->Helpers->enabled('Html'));
 	}
@@ -83,9 +83,9 @@ class HelperCollectionTest extends CakeTestCase {
 		$result = $this->Helpers->Form;
 		$this->assertInstanceOf('FormHelper', $result);
 
-		App::build(array('Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)));
+		App::build(['Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]]);
 		$this->View->plugin = 'TestPlugin';
-		CakePlugin::load(array('TestPlugin'));
+		CakePlugin::load(['TestPlugin']);
 		$result = $this->Helpers->OtherHelper;
 		$this->assertInstanceOf('OtherHelperHelper', $result);
 	}
@@ -106,26 +106,26 @@ class HelperCollectionTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadWithAlias() {
-		$result = $this->Helpers->load('Html', array('className' => 'HtmlAlias'));
+		$result = $this->Helpers->load('Html', ['className' => 'HtmlAlias']);
 		$this->assertInstanceOf('HtmlAliasHelper', $result);
 		$this->assertInstanceOf('HtmlAliasHelper', $this->Helpers->Html);
 
 		$result = $this->Helpers->loaded();
-		$this->assertEquals(array('Html'), $result, 'loaded() results are wrong.');
+		$this->assertEquals(['Html'], $result, 'loaded() results are wrong.');
 
 		$this->assertTrue($this->Helpers->enabled('Html'));
 
 		$result = $this->Helpers->load('Html');
 		$this->assertInstanceOf('HtmlAliasHelper', $result);
 
-		App::build(array('Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)));
-		CakePlugin::load(array('TestPlugin'));
-		$result = $this->Helpers->load('SomeOther', array('className' => 'TestPlugin.OtherHelper'));
+		App::build(['Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]]);
+		CakePlugin::load(['TestPlugin']);
+		$result = $this->Helpers->load('SomeOther', ['className' => 'TestPlugin.OtherHelper']);
 		$this->assertInstanceOf('OtherHelperHelper', $result);
 		$this->assertInstanceOf('OtherHelperHelper', $this->Helpers->SomeOther);
 
 		$result = $this->Helpers->loaded();
-		$this->assertEquals(array('Html', 'SomeOther'), $result, 'loaded() results are wrong.');
+		$this->assertEquals(['Html', 'SomeOther'], $result, 'loaded() results are wrong.');
 		App::build();
 	}
 
@@ -135,7 +135,7 @@ class HelperCollectionTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadWithEnabledFalse() {
-		$result = $this->Helpers->load('Html', array('enabled' => false));
+		$result = $this->Helpers->load('Html', ['enabled' => false]);
 		$this->assertInstanceOf('HtmlHelper', $result);
 		$this->assertInstanceOf('HtmlHelper', $this->Helpers->Html);
 
@@ -158,10 +158,10 @@ class HelperCollectionTest extends CakeTestCase {
  * @return void
  */
 	public function testLoadPluginHelper() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-		));
-		CakePlugin::load(array('TestPlugin'));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS],
+		]);
+		CakePlugin::load(['TestPlugin']);
 		$result = $this->Helpers->load('TestPlugin.OtherHelper');
 		$this->assertInstanceOf('OtherHelperHelper', $result, 'Helper class is wrong.');
 		$this->assertInstanceOf('OtherHelperHelper', $this->Helpers->OtherHelper, 'Class is wrong');
@@ -179,14 +179,14 @@ class HelperCollectionTest extends CakeTestCase {
 		$this->Helpers->load('Html');
 
 		$result = $this->Helpers->loaded();
-		$this->assertEquals(array('Form', 'Html'), $result, 'loaded helpers is wrong');
+		$this->assertEquals(['Form', 'Html'], $result, 'loaded helpers is wrong');
 
 		$this->Helpers->unload('Html');
 		$this->assertNotContains('Html', $this->Helpers->loaded());
 		$this->assertContains('Form', $this->Helpers->loaded());
 
 		$result = $this->Helpers->loaded();
-		$this->assertEquals(array('Form'), $result, 'loaded helpers is wrong');
+		$this->assertEquals(['Form'], $result, 'loaded helpers is wrong');
 	}
 
 }

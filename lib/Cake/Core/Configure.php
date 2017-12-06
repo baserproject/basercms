@@ -39,9 +39,9 @@ class Configure {
  *
  * @var array
  */
-	protected static $_values = array(
+	protected static $_values = [
 		'debug' => 0
-	);
+	];
 
 /**
  * Configured reader classes, used to load config files from resources
@@ -49,7 +49,7 @@ class Configure {
  * @var array
  * @see Configure::load()
  */
-	protected static $_readers = array();
+	protected static $_readers = [];
 
 /**
  * Initializes configure and runs the bootstrap process.
@@ -80,18 +80,18 @@ class Configure {
 			App::$bootstrapping = false;
 			App::build();
 
-			$exception = array(
+			$exception = [
 				'handler' => 'ErrorHandler::handleException',
-			);
-			$error = array(
+			];
+			$error = [
 				'handler' => 'ErrorHandler::handleError',
 				'level' => E_ALL & ~E_DEPRECATED,
-			);
+			];
 			if (PHP_SAPI === 'cli') {
 				App::uses('ConsoleErrorHandler', 'Console');
 				$console = new ConsoleErrorHandler();
-				$exception['handler'] = array($console, 'handleException');
-				$error['handler'] = array($console, 'handleError');
+				$exception['handler'] = [$console, 'handleException'];
+				$error['handler'] = [$console, 'handleError'];
 			}
 			static::_setErrorHandlers($error, $exception);
 
@@ -123,13 +123,13 @@ class Configure {
  * @return void
  */
 	protected static function _appDefaults() {
-		static::write('App', (array)static::read('App') + array(
+		static::write('App', (array)static::read('App') + [
 			'base' => false,
 			'baseUrl' => false,
 			'dir' => APP_DIR,
 			'webroot' => WEBROOT_DIR,
 			'www_root' => WWW_ROOT
-		));
+		]);
 	}
 
 /**
@@ -158,7 +158,7 @@ class Configure {
  */
 	public static function write($config, $value = null) {
 		if (!is_array($config)) {
-			$config = array($config => $value);
+			$config = [$config => $value];
 		}
 
 		foreach ($config as $name => $value) {
@@ -365,7 +365,7 @@ class Configure {
  * @return bool success
  * @throws ConfigureException if the adapter does not implement a `dump` method.
  */
-	public static function dump($key, $config = 'default', $keys = array()) {
+	public static function dump($key, $config = 'default', $keys = []) {
 		$reader = static::_getReader($config);
 		if (!$reader) {
 			throw new ConfigureException(__d('cake_dev', 'There is no "%s" adapter.', $config));
@@ -452,7 +452,7 @@ class Configure {
  * @return bool Success.
  */
 	public static function clear() {
-		static::$_values = array();
+		static::$_values = [];
 		return true;
 	}
 

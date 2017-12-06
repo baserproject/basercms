@@ -37,7 +37,7 @@ class AclBehavior extends ModelBehavior {
  *
  * @var array
  */
-	protected $_typeMaps = array('requester' => 'Aro', 'controlled' => 'Aco', 'both' => array('Aro', 'Aco'));
+	protected $_typeMaps = ['requester' => 'Aro', 'controlled' => 'Aco', 'both' => ['Aro', 'Aco']];
 
 /**
  * Sets up the configuration for the model, and loads ACL models if they haven't been already
@@ -46,18 +46,18 @@ class AclBehavior extends ModelBehavior {
  * @param array $config Configuration options.
  * @return void
  */
-	public function setup(Model $model, $config = array()) {
+	public function setup(Model $model, $config = []) {
 		if (isset($config[0])) {
 			$config['type'] = $config[0];
 			unset($config[0]);
 		}
-		$this->settings[$model->name] = array_merge(array('type' => 'controlled'), $config);
+		$this->settings[$model->name] = array_merge(['type' => 'controlled'], $config);
 		$this->settings[$model->name]['type'] = strtolower($this->settings[$model->name]['type']);
 
 		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
 
 		if (!is_array($types)) {
-			$types = array($types);
+			$types = [$types];
 		}
 		foreach ($types as $type) {
 			$model->{$type} = ClassRegistry::init($type);
@@ -81,11 +81,11 @@ class AclBehavior extends ModelBehavior {
 			$type = $this->_typeMaps[$this->settings[$model->name]['type']];
 			if (is_array($type)) {
 				trigger_error(__d('cake_dev', 'AclBehavior is setup with more then one type, please specify type parameter for node()'), E_USER_WARNING);
-				return array();
+				return [];
 			}
 		}
 		if (empty($ref)) {
-			$ref = array('model' => $model->name, 'foreign_key' => $model->id);
+			$ref = ['model' => $model->name, 'foreign_key' => $model->id];
 		}
 		return $model->{$type}->node($ref);
 	}
@@ -98,21 +98,21 @@ class AclBehavior extends ModelBehavior {
  * @param array $options Options passed from Model::save().
  * @return void
  */
-	public function afterSave(Model $model, $created, $options = array()) {
+	public function afterSave(Model $model, $created, $options = []) {
 		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
 		if (!is_array($types)) {
-			$types = array($types);
+			$types = [$types];
 		}
 		foreach ($types as $type) {
 			$parent = $model->parentNode($type);
 			if (!empty($parent)) {
 				$parent = $this->node($model, $parent, $type);
 			}
-			$data = array(
+			$data = [
 				'parent_id' => isset($parent[0][$type]['id']) ? $parent[0][$type]['id'] : null,
 				'model' => $model->name,
 				'foreign_key' => $model->id
-			);
+			];
 			if (!$created) {
 				$node = $this->node($model, null, $type);
 				$data['id'] = isset($node[0][$type]['id']) ? $node[0][$type]['id'] : null;
@@ -131,7 +131,7 @@ class AclBehavior extends ModelBehavior {
 	public function afterDelete(Model $model) {
 		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
 		if (!is_array($types)) {
-			$types = array($types);
+			$types = [$types];
 		}
 		foreach ($types as $type) {
 			$node = Hash::extract($this->node($model, null, $type), "0.{$type}.id");

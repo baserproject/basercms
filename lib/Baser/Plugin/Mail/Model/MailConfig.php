@@ -30,6 +30,6 @@ class MailConfig extends MailAppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 }

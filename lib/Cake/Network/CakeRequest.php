@@ -34,13 +34,13 @@ class CakeRequest implements ArrayAccess {
  *
  * @var array
  */
-	public $params = array(
+	public $params = [
 		'plugin' => null,
 		'controller' => null,
 		'action' => null,
-		'named' => array(),
-		'pass' => array(),
-	);
+		'named' => [],
+		'pass' => [],
+	];
 
 /**
  * Array of POST data. Will contain form data as well as uploaded files.
@@ -50,14 +50,14 @@ class CakeRequest implements ArrayAccess {
  *
  * @var array
  */
-	public $data = array();
+	public $data = [];
 
 /**
  * Array of querystring arguments
  *
  * @var array
  */
-	public $query = array();
+	public $query = [];
 
 /**
  * The URL string used for the request.
@@ -95,27 +95,27 @@ class CakeRequest implements ArrayAccess {
  *
  * @var array
  */
-	protected $_detectors = array(
-		'get' => array('env' => 'REQUEST_METHOD', 'value' => 'GET'),
-		'patch' => array('env' => 'REQUEST_METHOD', 'value' => 'PATCH'),
-		'post' => array('env' => 'REQUEST_METHOD', 'value' => 'POST'),
-		'put' => array('env' => 'REQUEST_METHOD', 'value' => 'PUT'),
-		'delete' => array('env' => 'REQUEST_METHOD', 'value' => 'DELETE'),
-		'head' => array('env' => 'REQUEST_METHOD', 'value' => 'HEAD'),
-		'options' => array('env' => 'REQUEST_METHOD', 'value' => 'OPTIONS'),
-		'ssl' => array('env' => 'HTTPS', 'value' => 1),
-		'ajax' => array('env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'),
-		'flash' => array('env' => 'HTTP_USER_AGENT', 'pattern' => '/^(Shockwave|Adobe) Flash/'),
-		'mobile' => array('env' => 'HTTP_USER_AGENT', 'options' => array(
+	protected $_detectors = [
+		'get' => ['env' => 'REQUEST_METHOD', 'value' => 'GET'],
+		'patch' => ['env' => 'REQUEST_METHOD', 'value' => 'PATCH'],
+		'post' => ['env' => 'REQUEST_METHOD', 'value' => 'POST'],
+		'put' => ['env' => 'REQUEST_METHOD', 'value' => 'PUT'],
+		'delete' => ['env' => 'REQUEST_METHOD', 'value' => 'DELETE'],
+		'head' => ['env' => 'REQUEST_METHOD', 'value' => 'HEAD'],
+		'options' => ['env' => 'REQUEST_METHOD', 'value' => 'OPTIONS'],
+		'ssl' => ['env' => 'HTTPS', 'value' => 1],
+		'ajax' => ['env' => 'HTTP_X_REQUESTED_WITH', 'value' => 'XMLHttpRequest'],
+		'flash' => ['env' => 'HTTP_USER_AGENT', 'pattern' => '/^(Shockwave|Adobe) Flash/'],
+		'mobile' => ['env' => 'HTTP_USER_AGENT', 'options' => [
 			'Android', 'AvantGo', 'BB10', 'BlackBerry', 'DoCoMo', 'Fennec', 'iPod', 'iPhone', 'iPad',
 			'J2ME', 'MIDP', 'NetFront', 'Nokia', 'Opera Mini', 'Opera Mobi', 'PalmOS', 'PalmSource',
 			'portalmmm', 'Plucker', 'ReqwirelessWeb', 'SonyEricsson', 'Symbian', 'UP\\.Browser',
 			'webOS', 'Windows CE', 'Windows Phone OS', 'Xiino'
-		)),
-		'requested' => array('param' => 'requested', 'value' => 1),
-		'json' => array('accept' => array('application/json'), 'param' => 'ext', 'value' => 'json'),
-		'xml' => array('accept' => array('application/xml', 'text/xml'), 'param' => 'ext', 'value' => 'xml'),
-	);
+		]],
+		'requested' => ['param' => 'requested', 'value' => 1],
+		'json' => ['accept' => ['application/json'], 'param' => 'ext', 'value' => 'json'],
+		'xml' => ['accept' => ['application/xml', 'text/xml'], 'param' => 'ext', 'value' => 'xml'],
+	];
 
 /**
  * Copy of php://input. Since this stream can only be read once in most SAPI's
@@ -192,8 +192,8 @@ class CakeRequest implements ArrayAccess {
 			unset($this->data['_method']);
 		}
 
-		if ($override && !in_array($override, array('POST', 'PUT', 'PATCH', 'DELETE'))) {
-			$this->data = array();
+		if ($override && !in_array($override, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
+			$this->data = [];
 		}
 
 		if ($isArray && isset($this->data['data'])) {
@@ -219,7 +219,7 @@ class CakeRequest implements ArrayAccess {
 			$query = $_GET;
 		}
 
-		$unsetUrl = '/' . str_replace(array('.', ' '), '_', urldecode($this->url));
+		$unsetUrl = '/' . str_replace(['.', ' '], '_', urldecode($this->url));
 		unset($query[$unsetUrl]);
 		unset($query[$this->base . $unsetUrl]);
 		if (strpos($this->url, '?') !== false) {
@@ -508,7 +508,7 @@ class CakeRequest implements ArrayAccess {
  */
 	public function is($type) {
 		if (is_array($type)) {
-			$result = array_map(array($this, 'is'), $type);
+			$result = array_map([$this, 'is'], $type);
 			return count(array_filter($result)) > 0;
 		}
 		$type = strtolower($type);
@@ -542,7 +542,7 @@ class CakeRequest implements ArrayAccess {
  */
 	protected function _extensionDetector($detect) {
 		if (is_string($detect['extension'])) {
-			$detect['extension'] = array($detect['extension']);
+			$detect['extension'] = [$detect['extension']];
 		}
 		if (in_array($this->params['ext'], $detect['extension'])) {
 			return true;
@@ -637,7 +637,7 @@ class CakeRequest implements ArrayAccess {
  * @see CakeRequest::is()
  */
 	public function isAll(array $types) {
-		$result = array_filter(array_map(array($this, 'is'), $types));
+		$result = array_filter(array_map([$this, 'is'], $types));
 		return count($result) === count($types);
 	}
 
@@ -716,7 +716,7 @@ class CakeRequest implements ArrayAccess {
  * @return self
  */
 	public function addPaths($paths) {
-		foreach (array('webroot', 'here', 'base') as $element) {
+		foreach (['webroot', 'here', 'base'] as $element) {
 			if (isset($paths[$element])) {
 				$this->{$element} = $paths[$element];
 			}
@@ -831,7 +831,7 @@ class CakeRequest implements ArrayAccess {
  */
 	public function accepts($type = null) {
 		$raw = $this->parseAccept();
-		$accept = array();
+		$accept = [];
 		foreach ($raw as $types) {
 			$accept = array_merge($accept, $types);
 		}
@@ -870,7 +870,7 @@ class CakeRequest implements ArrayAccess {
  */
 	public static function acceptLanguage($language = null) {
 		$raw = static::_parseAcceptWithQualifier(static::header('Accept-Language'));
-		$accept = array();
+		$accept = [];
 		foreach ($raw as $languages) {
 			foreach ($languages as &$lang) {
 				if (strpos($lang, '_')) {
@@ -896,7 +896,7 @@ class CakeRequest implements ArrayAccess {
  * @return array
  */
 	protected static function _parseAcceptWithQualifier($header) {
-		$accept = array();
+		$accept = [];
 		$header = explode(',', $header);
 		foreach (array_filter($header) as $value) {
 			$prefValue = '1.0';
@@ -915,7 +915,7 @@ class CakeRequest implements ArrayAccess {
 			}
 
 			if (!isset($accept[$prefValue])) {
-				$accept[$prefValue] = array();
+				$accept[$prefValue] = [];
 			}
 			if ($prefValue) {
 				$accept[$prefValue][] = $value;

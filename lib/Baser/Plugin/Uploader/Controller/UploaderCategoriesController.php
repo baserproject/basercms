@@ -30,21 +30,21 @@ class UploaderCategoriesController extends AppController {
  * @var		array
  * @access	public
  */
-	public $uses = array('Plugin', 'Uploader.UploaderCategory');
+	public $uses = ['Plugin', 'Uploader.UploaderCategory'];
 /**
  * コンポーネント
  *
  * @var		array
  * @access	public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = ['BcAuth','Cookie','BcAuthConfigure'];
 /**
  * サブメニュー
  *
  * @var		array
  * @access	public
  */
-	public $subMenuElements = array('uploader');
+	public $subMenuElements = ['uploader'];
 /**
  * ファイルカテゴリ一覧
  *
@@ -54,12 +54,12 @@ class UploaderCategoriesController extends AppController {
 	public function admin_index() {
 
 		$this->pageTitle = 'カテゴリ一覧';
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('UploaderCategory', array('default' => $default));
-		$this->paginate = array(
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('UploaderCategory', ['default' => $default]);
+		$this->paginate = [
 				'order'=>'UploaderCategory.id',
 				'limit'=>$this->passedArgs['num']
-		);
+		];
 		$this->set('datas', $this->paginate('UploaderCategory'));
 
 	}
@@ -77,7 +77,7 @@ class UploaderCategoriesController extends AppController {
 				$message = 'アップロードファイルカテゴリ「'.$this->request->data['UploaderCategory']['name'].'」を追加しました。';
 				$this->setMessage($message);
 				$this->UploaderCategory->saveDbLog($message);
-				$this->redirect(array('action'=>'index'));
+				$this->redirect(['action'=>'index']);
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -98,7 +98,7 @@ class UploaderCategoriesController extends AppController {
 		/* 除外処理 */
 		if(!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(['action'=>'index']);
 		}
 
 		if(empty($this->request->data)) {
@@ -108,7 +108,7 @@ class UploaderCategoriesController extends AppController {
 			$this->UploaderCategory->set($this->request->data);
 			if($this->UploaderCategory->save()) {
 				$this->setMessage('アップロードファイルカテゴリ「'.$this->request->data['UploaderCategory']['name'].'」を更新しました。', false, true);
-				$this->redirect(array('action'=>'edit', $id));
+				$this->redirect(['action'=>'edit', $id]);
 			}else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -130,11 +130,11 @@ class UploaderCategoriesController extends AppController {
 		$this->_checkSubmitToken();
 		if(!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action'=>'index'));
+			$this->redirect(['action'=>'index']);
 		}
 
 		// メッセージ用にデータを取得
-		$name = $this->UploaderCategory->field('name', array('UploaderCategory.id' => $id));
+		$name = $this->UploaderCategory->field('name', ['UploaderCategory.id' => $id]);
 
 		if($this->UploaderCategory->delete($id)) {
 			$this->setMessage('アップロードファイルカテゴリ「'.$name.'」を削除しました。', false, true);
@@ -213,7 +213,7 @@ class UploaderCategoriesController extends AppController {
 		$result = $this->UploaderCategory->copy($id);
 		if($result) {
 			$result['UploaderCategory']['id'] = $this->UploaderCategory->getInsertID();
-			$this->setViewConditions('UploaderCategory', array('action' => 'admin_index'));
+			$this->setViewConditions('UploaderCategory', ['action' => 'admin_index']);
 			$this->set('data', $result);
 		} else {
 			$this->ajaxError(500, $this->UploaderCategory->validationErrors);

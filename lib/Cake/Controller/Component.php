@@ -51,21 +51,21 @@ class Component extends Object {
  *
  * @var array
  */
-	public $settings = array();
+	public $settings = [];
 
 /**
  * Other Components this component uses.
  *
  * @var array
  */
-	public $components = array();
+	public $components = [];
 
 /**
  * A component lookup table used to lazy load component objects.
  *
  * @var array
  */
-	protected $_componentMap = array();
+	protected $_componentMap = [];
 
 /**
  * Constructor
@@ -73,7 +73,7 @@ class Component extends Object {
  * @param ComponentCollection $collection A ComponentCollection this component can use to lazy load its components
  * @param array $settings Array of configuration settings.
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
+	public function __construct(ComponentCollection $collection, $settings = []) {
 		$this->_Collection = $collection;
 		$this->settings = $settings;
 		$this->_set($settings);
@@ -90,7 +90,7 @@ class Component extends Object {
  */
 	public function __get($name) {
 		if (isset($this->_componentMap[$name]) && !isset($this->{$name})) {
-			$settings = array('enabled' => false) + (array)$this->_componentMap[$name]['settings'];
+			$settings = ['enabled' => false] + (array)$this->_componentMap[$name]['settings'];
 			$this->{$name} = $this->_Collection->load($this->_componentMap[$name]['class'], $settings);
 		}
 		if (isset($this->{$name})) {

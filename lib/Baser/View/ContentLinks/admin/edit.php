@@ -20,7 +20,7 @@
 	<tr>
 		<th>リンク先URL</th>
 		<td>
-			<?php echo $this->BcForm->input('ContentLink.url', array('type' => 'text', 'size' => 60, 'placeholder' => 'http://')) ?><br>
+			<?php echo $this->BcForm->input('ContentLink.url', ['type' => 'text', 'size' => 60, 'placeholder' => 'http://']) ?><br>
 			<?php echo $this->BcForm->error('ContentLink.url') ?>
 		</td>
 	</tr>
@@ -30,6 +30,6 @@
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('class' => 'button', 'div' => false)) ?>
+	<?php echo $this->BcForm->submit('保存', ['class' => 'button', 'div' => false]) ?>
 </div>
 <?php echo $this->BcForm->end() ?>

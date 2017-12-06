@@ -33,12 +33,12 @@ class ContainableBehaviorTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'core.article', 'core.article_featured', 'core.article_featureds_tags',
 		'core.articles_tag', 'core.attachment', 'core.category',
 		'core.comment', 'core.featured', 'core.tag', 'core.user',
 		'core.join_a', 'core.join_b', 'core.join_c', 'core.join_a_c', 'core.join_a_b'
-	);
+	];
 
 /**
  * Method executed before each test
@@ -51,15 +51,15 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->Article = ClassRegistry::init('Article');
 		$this->Tag = ClassRegistry::init('Tag');
 
-		$this->User->bindModel(array(
-			'hasMany' => array('Article', 'ArticleFeatured', 'Comment')
-		), false);
-		$this->User->ArticleFeatured->unbindModel(array('belongsTo' => array('Category')), false);
+		$this->User->bindModel([
+			'hasMany' => ['Article', 'ArticleFeatured', 'Comment']
+		], false);
+		$this->User->ArticleFeatured->unbindModel(['belongsTo' => ['Category']], false);
 		$this->User->ArticleFeatured->hasMany['Comment']['foreignKey'] = 'article_id';
 
-		$this->Tag->bindModel(array(
-			'hasAndBelongsToMany' => array('Article')
-		), false);
+		$this->Tag->bindModel([
+			'hasAndBelongsToMany' => ['Article']
+		], false);
 
 		$this->User->Behaviors->load('Containable');
 		$this->Article->Behaviors->load('Containable');
@@ -84,64 +84,64 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testContainments() {
-		$r = $this->_containments($this->Article, array('Comment' => array('conditions' => array('Comment.user_id' => 2))));
+		$r = $this->_containments($this->Article, ['Comment' => ['conditions' => ['Comment.user_id' => 2]]]);
 		$this->assertTrue(Set::matches('/Article/keep/Comment/conditions[Comment.user_id=2]', $r));
 
-		$r = $this->_containments($this->User, array(
-			'ArticleFeatured' => array(
-				'Featured' => array(
+		$r = $this->_containments($this->User, [
+			'ArticleFeatured' => [
+				'Featured' => [
 					'id',
 					'Category' => 'name'
-				)
-		)));
-		$this->assertEquals(array('id'), Hash::extract($r, 'ArticleFeatured.keep.Featured.fields'));
+				]
+		]]);
+		$this->assertEquals(['id'], Hash::extract($r, 'ArticleFeatured.keep.Featured.fields'));
 
-		$r = $this->_containments($this->Article, array(
-			'Comment' => array(
+		$r = $this->_containments($this->Article, [
+			'Comment' => [
 				'User',
-				'conditions' => array('Comment' => array('user_id' => 2)),
-			),
-		));
+				'conditions' => ['Comment' => ['user_id' => 2]],
+			],
+		]);
 		$this->assertTrue(Set::matches('/User', $r));
 		$this->assertTrue(Set::matches('/Comment', $r));
 		$this->assertTrue(Set::matches('/Article/keep/Comment/conditions/Comment[user_id=2]', $r));
 
-		$r = $this->_containments($this->Article, array('Comment(comment, published)' => 'Attachment(attachment)', 'User(user)'));
+		$r = $this->_containments($this->Article, ['Comment(comment, published)' => 'Attachment(attachment)', 'User(user)']);
 		$this->assertTrue(Set::matches('/Comment', $r));
 		$this->assertTrue(Set::matches('/User', $r));
 		$this->assertTrue(Set::matches('/Article/keep/Comment', $r));
 		$this->assertTrue(Set::matches('/Article/keep/User', $r));
-		$this->assertEquals(array('comment', 'published'), Hash::extract($r, 'Article.keep.Comment.fields'));
-		$this->assertEquals(array('user'), Hash::extract($r, 'Article.keep.User.fields'));
+		$this->assertEquals(['comment', 'published'], Hash::extract($r, 'Article.keep.Comment.fields'));
+		$this->assertEquals(['user'], Hash::extract($r, 'Article.keep.User.fields'));
 		$this->assertTrue(Set::matches('/Comment/keep/Attachment', $r));
-		$this->assertEquals(array('attachment'), Hash::extract($r, 'Comment.keep.Attachment.fields'));
+		$this->assertEquals(['attachment'], Hash::extract($r, 'Comment.keep.Attachment.fields'));
 
-		$r = $this->_containments($this->Article, array('Comment' => array('limit' => 1)));
-		$this->assertEquals(array('Comment', 'Article'), array_keys($r));
+		$r = $this->_containments($this->Article, ['Comment' => ['limit' => 1]]);
+		$this->assertEquals(['Comment', 'Article'], array_keys($r));
 		$result = Hash::extract($r, 'Comment[keep]');
-		$this->assertEquals(array('keep' => array()), array_shift($result));
+		$this->assertEquals(['keep' => []], array_shift($result));
 		$this->assertTrue(Set::matches('/Article/keep/Comment', $r));
 		$result = Hash::extract($r, 'Article.keep');
-		$this->assertEquals(array('limit' => 1), array_shift($result));
+		$this->assertEquals(['limit' => 1], array_shift($result));
 
-		$r = $this->_containments($this->Article, array('Comment.User'));
-		$this->assertEquals(array('User', 'Comment', 'Article'), array_keys($r));
+		$r = $this->_containments($this->Article, ['Comment.User']);
+		$this->assertEquals(['User', 'Comment', 'Article'], array_keys($r));
 
 		$result = Hash::extract($r, 'User[keep]');
-		$this->assertEquals(array('keep' => array()), array_shift($result));
+		$this->assertEquals(['keep' => []], array_shift($result));
 
 		$result = Hash::extract($r, 'Comment[keep]');
-		$this->assertEquals(array('keep' => array('User' => array())), array_shift($result));
+		$this->assertEquals(['keep' => ['User' => []]], array_shift($result));
 
 		$result = Hash::extract($r, 'Article[keep]');
-		$this->assertEquals(array('keep' => array('Comment' => array())), array_shift($result));
+		$this->assertEquals(['keep' => ['Comment' => []]], array_shift($result));
 
-		$r = $this->_containments($this->Tag, array('Article' => array('User' => array('Comment' => array(
-			'Attachment' => array('conditions' => array('Attachment.id >' => 1))
-		)))));
+		$r = $this->_containments($this->Tag, ['Article' => ['User' => ['Comment' => [
+			'Attachment' => ['conditions' => ['Attachment.id >' => 1]]
+		]]]]);
 		$this->assertTrue(Set::matches('/Attachment', $r));
 		$this->assertTrue(Set::matches('/Comment/keep/Attachment/conditions', $r));
-		$this->assertEquals(array('Attachment.id >' => 1), $r['Comment']['keep']['Attachment']['conditions']);
+		$this->assertEquals(['Attachment.id >' => 1], $r['Comment']['keep']['Attachment']['conditions']);
 		$this->assertTrue(Set::matches('/User/keep/Comment', $r));
 		$this->assertTrue(Set::matches('/Article/keep/User', $r));
 		$this->assertTrue(Set::matches('/Tag/keep/Article', $r));
@@ -154,7 +154,7 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testInvalidContainments() {
-		$this->_containments($this->Article, array('Comment', 'InvalidBinding'));
+		$this->_containments($this->Article, ['Comment', 'InvalidBinding']);
 	}
 
 /**
@@ -163,8 +163,8 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testInvalidContainmentsNoNotices() {
-		$this->Article->Behaviors->load('Containable', array('notices' => false));
-		$this->_containments($this->Article, array('Comment', 'InvalidBinding'));
+		$this->Article->Behaviors->load('Containable', ['notices' => false]);
+		$this->_containments($this->Article, ['Comment', 'InvalidBinding']);
 	}
 
 /**
@@ -173,59 +173,59 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testBeforeFind() {
-		$r = $this->Article->find('all', array('contain' => array('Comment')));
+		$r = $this->Article->find('all', ['contain' => ['Comment']]);
 		$this->assertFalse(Set::matches('/User', $r));
 		$this->assertTrue(Set::matches('/Comment', $r));
 		$this->assertFalse(Set::matches('/Comment/User', $r));
 
-		$r = $this->Article->find('all', array('contain' => 'Comment.User'));
+		$r = $this->Article->find('all', ['contain' => 'Comment.User']);
 		$this->assertTrue(Set::matches('/Comment/User', $r));
 		$this->assertFalse(Set::matches('/Comment/Article', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment' => array('User', 'Article'))));
+		$r = $this->Article->find('all', ['contain' => ['Comment' => ['User', 'Article']]]);
 		$this->assertTrue(Set::matches('/Comment/User', $r));
 		$this->assertTrue(Set::matches('/Comment/Article', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment' => array('conditions' => array('Comment.user_id' => 2)))));
+		$r = $this->Article->find('all', ['contain' => ['Comment' => ['conditions' => ['Comment.user_id' => 2]]]]);
 		$this->assertFalse(Set::matches('/Comment[user_id!=2]', $r));
 		$this->assertTrue(Set::matches('/Comment[user_id=2]', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment.user_id = 2')));
+		$r = $this->Article->find('all', ['contain' => ['Comment.user_id = 2']]);
 		$this->assertFalse(Set::matches('/Comment[user_id!=2]', $r));
 
-		$r = $this->Article->find('all', array('contain' => 'Comment.id DESC'));
+		$r = $this->Article->find('all', ['contain' => 'Comment.id DESC']);
 		$ids = $descIds = Hash::extract($r, 'Comment[1].id');
 		rsort($descIds);
 		$this->assertEquals($ids, $descIds);
 
-		$r = $this->Article->find('all', array('contain' => 'Comment'));
+		$r = $this->Article->find('all', ['contain' => 'Comment']);
 		$this->assertTrue(Set::matches('/Comment[user_id!=2]', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment' => array('fields' => 'comment'))));
+		$r = $this->Article->find('all', ['contain' => ['Comment' => ['fields' => 'comment']]]);
 		$this->assertFalse(Set::matches('/Comment/created', $r));
 		$this->assertTrue(Set::matches('/Comment/comment', $r));
 		$this->assertFalse(Set::matches('/Comment/updated', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment' => array('fields' => array('comment', 'updated')))));
+		$r = $this->Article->find('all', ['contain' => ['Comment' => ['fields' => ['comment', 'updated']]]]);
 		$this->assertFalse(Set::matches('/Comment/created', $r));
 		$this->assertTrue(Set::matches('/Comment/comment', $r));
 		$this->assertTrue(Set::matches('/Comment/updated', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment' => array('comment', 'updated'))));
+		$r = $this->Article->find('all', ['contain' => ['Comment' => ['comment', 'updated']]]);
 		$this->assertFalse(Set::matches('/Comment/created', $r));
 		$this->assertTrue(Set::matches('/Comment/comment', $r));
 		$this->assertTrue(Set::matches('/Comment/updated', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('Comment(comment,updated)')));
+		$r = $this->Article->find('all', ['contain' => ['Comment(comment,updated)']]);
 		$this->assertFalse(Set::matches('/Comment/created', $r));
 		$this->assertTrue(Set::matches('/Comment/comment', $r));
 		$this->assertTrue(Set::matches('/Comment/updated', $r));
 
-		$r = $this->Article->find('all', array('contain' => 'Comment.created'));
+		$r = $this->Article->find('all', ['contain' => 'Comment.created']);
 		$this->assertTrue(Set::matches('/Comment/created', $r));
 		$this->assertFalse(Set::matches('/Comment/comment', $r));
 
-		$r = $this->Article->find('all', array('contain' => array('User.Article(title)', 'Comment(comment)')));
+		$r = $this->Article->find('all', ['contain' => ['User.Article(title)', 'Comment(comment)']]);
 		$this->assertFalse(Set::matches('/Comment/Article', $r));
 		$this->assertFalse(Set::matches('/Comment/User', $r));
 		$this->assertTrue(Set::matches('/Comment/comment', $r));
@@ -233,7 +233,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->assertTrue(Set::matches('/User/Article/title', $r));
 		$this->assertFalse(Set::matches('/User/Article/created', $r));
 
-		$r = $this->Article->find('all', array('contain' => array()));
+		$r = $this->Article->find('all', ['contain' => []]);
 		$this->assertFalse(Set::matches('/User', $r));
 		$this->assertFalse(Set::matches('/Comment', $r));
 	}
@@ -245,7 +245,7 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testBeforeFindWithNonExistingBinding() {
-		$this->Article->find('all', array('contain' => array('Comment' => 'NonExistingBinding')));
+		$this->Article->find('all', ['contain' => ['Comment' => 'NonExistingBinding']]);
 	}
 
 /**
@@ -271,19 +271,19 @@ class ContainableBehaviorTest extends CakeTestCase {
 	public function testContainFindList() {
 		$this->Article->contain('Comment.User');
 		$result = $this->Article->find('list');
-		$expected = array(
+		$expected = [
 			1 => 'First Article',
 			2 => 'Second Article',
 			3 => 'Third Article'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('list', array('fields' => array('Article.id', 'User.id'), 'contain' => array('User')));
-		$expected = array(
+		$result = $this->Article->find('list', ['fields' => ['Article.id', 'User.id'], 'contain' => ['User']]);
+		$expected = [
 			1 => '1',
 			2 => '3',
 			3 => '1'
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -294,9 +294,9 @@ class ContainableBehaviorTest extends CakeTestCase {
  */
 	public function testContainAndContainOption() {
 		$this->Article->contain();
-		$r = $this->Article->find('all', array(
-			'contain' => array('Comment')
-		));
+		$r = $this->Article->find('all', [
+			'contain' => ['Comment']
+		]);
 		$this->assertTrue(isset($r[0]['Comment']), 'No comment returned');
 	}
 
@@ -306,21 +306,21 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindEmbeddedNoBindings() {
-		$result = $this->Article->find('all', array('contain' => false));
-		$expected = array(
-			array('Article' => array(
+		$result = $this->Article->find('all', ['contain' => false]);
+		$expected = [
+			['Article' => [
 				'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 				'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-			)),
-			array('Article' => array(
+			]],
+			['Article' => [
 				'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 				'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-			)),
-			array('Article' => array(
+			]],
+			['Article' => [
 				'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 				'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-			))
-		);
+			]]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -331,104 +331,104 @@ class ContainableBehaviorTest extends CakeTestCase {
  */
 	public function testFindFirstLevel() {
 		$this->Article->contain('User');
-		$result = $this->Article->find('all', array('recursive' => 1));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['recursive' => 1]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				)
-			),
-			array(
-				'Article' => array(
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				)
-			),
-			array(
-				'Article' => array(
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				)
-			)
-		);
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
 		$this->Article->contain('User', 'Comment');
-		$result = $this->Article->find('all', array('recursive' => 1));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['recursive' => 1]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31'
-					),
-					array(
+					],
+					[
 						'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31'
-					),
-					array(
+					],
+					[
 						'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31'
-					),
-					array(
+					],
+					[
 						'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 						'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-					)
-				)
-			),
-			array(
-				'Article' => array(
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31'
-					),
-					array(
+					],
+					[
 						'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31'
-					)
-				)
-			),
-			array(
-				'Article' => array(
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Comment' => array()
-			)
-		);
+				],
+				'Comment' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -438,103 +438,103 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindEmbeddedFirstLevel() {
-		$result = $this->Article->find('all', array('contain' => array('User')));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['contain' => ['User']]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				)
-			),
-			array(
-				'Article' => array(
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				)
-			),
-			array(
-				'Article' => array(
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				)
-			)
-		);
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array('contain' => array('User', 'Comment')));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['contain' => ['User', 'Comment']]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31'
-					),
-					array(
+					],
+					[
 						'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31'
-					),
-					array(
+					],
+					[
 						'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31'
-					),
-					array(
+					],
+					[
 						'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 						'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-					)
-				)
-			),
-			array(
-				'Article' => array(
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31'
-					),
-					array(
+					],
+					[
 						'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31'
-					)
-				)
-			),
-			array(
-				'Article' => array(
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Comment' => array()
-			)
-		);
+				],
+				'Comment' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -544,402 +544,402 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindSecondLevel() {
-		$this->Article->contain(array('Comment' => 'User'));
-		$result = $this->Article->find('all', array('recursive' => 2));
-		$expected = array(
-			array(
-				'Article' => array(
+		$this->Article->contain(['Comment' => 'User']);
+		$result = $this->Article->find('all', ['recursive' => 2]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-						'User' => array(
+						'User' => [
 							'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-						'User' => array(
+						'User' => [
 							'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-						'User' => array(
+						'User' => [
 							'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 						'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-						'User' => array(
+						'User' => [
 							'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-						'User' => array(
+						'User' => [
 							'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-						'User' => array(
+						'User' => [
 							'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'Comment' => array()
-			)
-		);
+				],
+				'Comment' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User' => 'ArticleFeatured'));
-		$result = $this->Article->find('all', array('recursive' => 2));
-		$expected = array(
-			array(
-				'Article' => array(
+		$this->Article->contain(['User' => 'ArticleFeatured']);
+		$result = $this->Article->find('all', ['recursive' => 2]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			)
-		);
+						]
+					]
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User' => array('id', 'ArticleFeatured')));
-		$result = $this->Article->find('all', array('recursive' => 2));
-		$expected = array(
-			array(
-				'Article' => array(
+		$this->Article->contain(['User' => ['id', 'ArticleFeatured']]);
+		$result = $this->Article->find('all', ['recursive' => 2]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1,
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3,
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1,
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			)
-		);
+						]
+					]
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User' => array('ArticleFeatured', 'Comment')));
-		$result = $this->Article->find('all', array('recursive' => 2));
-		$expected = array(
-			array(
-				'Article' => array(
+		$this->Article->contain(['User' => ['ArticleFeatured', 'Comment']]);
+		$result = $this->Article->find('all', ['recursive' => 2]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					),
-					'Comment' => array(
-						array(
+						]
+					],
+					'Comment' => [
+						[
 							'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31'
-						),
-						array(
+						],
+						[
 							'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 							'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-						),
-						array(
+						],
+						[
 							'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					),
-					'Comment' => array()
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					],
+					'Comment' => []
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					),
-					'Comment' => array(
-						array(
+						]
+					],
+					'Comment' => [
+						[
 							'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31'
-						),
-						array(
+						],
+						[
 							'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 							'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-						),
-						array(
+						],
+						[
 							'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31'
-						)
-					)
-				)
-			)
-		);
+						]
+					]
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User' => array('ArticleFeatured')), 'Tag', array('Comment' => 'Attachment'));
-		$result = $this->Article->find('all', array('recursive' => 2));
-		$expected = array(
-			array(
-				'Article' => array(
+		$this->Article->contain(['User' => ['ArticleFeatured']], 'Tag', ['Comment' => 'Attachment']);
+		$result = $this->Article->find('all', ['recursive' => 2]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				),
-				'Comment' => array(
-					array(
+						]
+					]
+				],
+				'Comment' => [
+					[
 						'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-						'Attachment' => array()
-					),
-					array(
+						'Attachment' => []
+					],
+					[
 						'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-						'Attachment' => array()
-					),
-					array(
+						'Attachment' => []
+					],
+					[
 						'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-						'Attachment' => array()
-					),
-					array(
+						'Attachment' => []
+					],
+					[
 						'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 						'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-						'Attachment' => array()
-					)
-				),
-				'Tag' => array(
-					array('id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'),
-					array('id' => 2, 'tag' => 'tag2', 'created' => '2007-03-18 12:24:23', 'updated' => '2007-03-18 12:26:31')
-				)
-			),
-			array(
-				'Article' => array(
+						'Attachment' => []
+					]
+				],
+				'Tag' => [
+					['id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'],
+					['id' => 2, 'tag' => 'tag2', 'created' => '2007-03-18 12:24:23', 'updated' => '2007-03-18 12:26:31']
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					)
-				),
-				'Comment' => array(
-					array(
+						]
+					]
+				],
+				'Comment' => [
+					[
 						'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-						'Attachment' => array(
+						'Attachment' => [
 							'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 							'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-						'Attachment' => array()
-					)
-				),
-				'Tag' => array(
-					array('id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'),
-					array('id' => 3, 'tag' => 'tag3', 'created' => '2007-03-18 12:26:23', 'updated' => '2007-03-18 12:28:31')
-				)
-			),
-			array(
-				'Article' => array(
+						'Attachment' => []
+					]
+				],
+				'Tag' => [
+					['id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'],
+					['id' => 3, 'tag' => 'tag3', 'created' => '2007-03-18 12:26:23', 'updated' => '2007-03-18 12:28:31']
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				),
-				'Comment' => array(),
-				'Tag' => array()
-			)
-		);
+						]
+					]
+				],
+				'Comment' => [],
+				'Tag' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -949,339 +949,339 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindEmbeddedSecondLevel() {
-		$result = $this->Article->find('all', array('contain' => array('Comment' => 'User')));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['contain' => ['Comment' => 'User']]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-						'User' => array(
+						'User' => [
 							'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-						'User' => array(
+						'User' => [
 							'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-						'User' => array(
+						'User' => [
 							'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 						'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-						'User' => array(
+						'User' => [
 							'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-						'User' => array(
+						'User' => [
 							'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-						'User' => array(
+						'User' => [
 							'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 							'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'Comment' => array()
-			)
-		);
+				],
+				'Comment' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array('contain' => array('User' => 'ArticleFeatured')));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['contain' => ['User' => 'ArticleFeatured']]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			)
-		);
+						]
+					]
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array('contain' => array('User' => array('ArticleFeatured', 'Comment'))));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['contain' => ['User' => ['ArticleFeatured', 'Comment']]]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					),
-					'Comment' => array(
-						array(
+						]
+					],
+					'Comment' => [
+						[
 							'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31'
-						),
-						array(
+						],
+						[
 							'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 							'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-						),
-						array(
+						],
+						[
 							'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					]
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					),
-					'Comment' => array()
-				)
-			),
-			array(
-				'Article' => array(
+						]
+					],
+					'Comment' => []
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					),
-					'Comment' => array(
-						array(
+						]
+					],
+					'Comment' => [
+						[
 							'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31'
-						),
-						array(
+						],
+						[
 							'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 							'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-						),
-						array(
+						],
+						[
 							'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 							'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31'
-						)
-					)
-				)
-			)
-		);
+						]
+					]
+				]
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array('contain' => array('User' => 'ArticleFeatured', 'Tag', 'Comment' => 'Attachment')));
-		$expected = array(
-			array(
-				'Article' => array(
+		$result = $this->Article->find('all', ['contain' => ['User' => 'ArticleFeatured', 'Tag', 'Comment' => 'Attachment']]);
+		$expected = [
+			[
+				'Article' => [
 					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				),
-				'Comment' => array(
-					array(
+						]
+					]
+				],
+				'Comment' => [
+					[
 						'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-						'Attachment' => array()
-					),
-					array(
+						'Attachment' => []
+					],
+					[
 						'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-						'Attachment' => array()
-					),
-					array(
+						'Attachment' => []
+					],
+					[
 						'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-						'Attachment' => array()
-					),
-					array(
+						'Attachment' => []
+					],
+					[
 						'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 						'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-						'Attachment' => array()
-					)
-				),
-				'Tag' => array(
-					array('id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'),
-					array('id' => 2, 'tag' => 'tag2', 'created' => '2007-03-18 12:24:23', 'updated' => '2007-03-18 12:26:31')
-				)
-			),
-			array(
-				'Article' => array(
+						'Attachment' => []
+					]
+				],
+				'Tag' => [
+					['id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'],
+					['id' => 2, 'tag' => 'tag2', 'created' => '2007-03-18 12:24:23', 'updated' => '2007-03-18 12:26:31']
+				]
+			],
+			[
+				'Article' => [
 					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					)
-				),
-				'Comment' => array(
-					array(
+						]
+					]
+				],
+				'Comment' => [
+					[
 						'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-						'Attachment' => array(
+						'Attachment' => [
 							'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 							'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-						)
-					),
-					array(
+						]
+					],
+					[
 						'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 						'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-						'Attachment' => array()
-					)
-				),
-				'Tag' => array(
-					array('id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'),
-					array('id' => 3, 'tag' => 'tag3', 'created' => '2007-03-18 12:26:23', 'updated' => '2007-03-18 12:28:31')
-				)
-			),
-			array(
-				'Article' => array(
+						'Attachment' => []
+					]
+				],
+				'Tag' => [
+					['id' => 1, 'tag' => 'tag1', 'created' => '2007-03-18 12:22:23', 'updated' => '2007-03-18 12:24:31'],
+					['id' => 3, 'tag' => 'tag3', 'created' => '2007-03-18 12:26:23', 'updated' => '2007-03-18 12:28:31']
+				]
+			],
+			[
+				'Article' => [
 					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
+				],
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
+					'ArticleFeatured' => [
+						[
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
+						],
+						[
 							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				),
-				'Comment' => array(),
-				'Tag' => array()
-			)
-		);
+						]
+					]
+				],
+				'Comment' => [],
+				'Tag' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -1291,317 +1291,317 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindThirdLevel() {
-		$this->User->contain(array('ArticleFeatured' => array('Featured' => 'Category')));
-		$result = $this->User->find('all', array('recursive' => 3));
-		$expected = array(
-			array(
-				'User' => array(
+		$this->User->contain(['ArticleFeatured' => ['Featured' => 'Category']]);
+		$result = $this->User->find('all', ['recursive' => 3]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->User->contain(array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => array('Article', 'Attachment'))));
-		$result = $this->User->find('all', array('recursive' => 3));
-		$expected = array(
-			array(
-				'User' => array(
+		$this->User->contain(['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => ['Article', 'Attachment']]]);
+		$result = $this->User->find('all', ['recursive' => 3]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								],
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array(
+								],
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								],
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->User->contain(array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => 'Attachment'), 'Article'));
-		$result = $this->User->find('all', array('recursive' => 3));
-		$expected = array(
-			array(
-				'User' => array(
+		$this->User->contain(['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => 'Attachment'], 'Article']);
+		$result = $this->User->find('all', ['recursive' => 3]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-					),
-					array(
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Attachment' => array(
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -1611,314 +1611,314 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindEmbeddedThirdLevel() {
-		$result = $this->User->find('all', array('contain' => array('ArticleFeatured' => array('Featured' => 'Category'))));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['contain' => ['ArticleFeatured' => ['Featured' => 'Category']]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->User->find('all', array('contain' => array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => array('Article', 'Attachment')))));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['contain' => ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => ['Article', 'Attachment']]]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								],
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array(
+								],
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								],
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->User->find('all', array('contain' => array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => 'Attachment'), 'Article')));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['contain' => ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => 'Attachment'], 'Article']]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-					),
-					array(
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Attachment' => array(
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -1928,77 +1928,77 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testSettingsThirdLevel() {
-		$result = $this->User->find('all', array('contain' => array('ArticleFeatured' => array('Featured' => array('Category' => array('id', 'name'))))));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['contain' => ['ArticleFeatured' => ['Featured' => ['Category' => ['id', 'name']]]]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'name' => 'Category 1'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'name' => 'Category 1'
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$r = $this->User->find('all', array('contain' => array(
-			'ArticleFeatured' => array(
+		$r = $this->User->find('all', ['contain' => [
+			'ArticleFeatured' => [
 				'id', 'title',
-				'Featured' => array(
+				'Featured' => [
 					'id', 'category_id',
-					'Category' => array('id', 'name')
-				)
-			)
-		)));
+					'Category' => ['id', 'name']
+				]
+			]
+		]]);
 
 		$this->assertTrue(Set::matches('/User[id=1]', $r));
 		$this->assertFalse(Set::matches('/Article', $r) || Set::matches('/Comment', $r));
@@ -2011,15 +2011,15 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->assertTrue(Set::matches('/ArticleFeatured/Featured[id=1]/Category[id=1]', $r));
 		$this->assertTrue(Set::matches('/ArticleFeatured/Featured[id=1]/Category[name=Category 1]', $r));
 
-		$r = $this->User->find('all', array('contain' => array(
-			'ArticleFeatured' => array(
+		$r = $this->User->find('all', ['contain' => [
+			'ArticleFeatured' => [
 				'title',
-				'Featured' => array(
+				'Featured' => [
 					'id',
 					'Category' => 'name'
-				)
-			)
-		)));
+				]
+			]
+		]]);
 
 		$this->assertTrue(Set::matches('/User[id=1]', $r));
 		$this->assertFalse(Set::matches('/Article', $r) || Set::matches('/Comment', $r));
@@ -2031,139 +2031,139 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->assertTrue(Set::matches('/ArticleFeatured/Featured[id=1]', $r));
 		$this->assertTrue(Set::matches('/ArticleFeatured/Featured[id=1]/Category[name=Category 1]', $r));
 
-		$result = $this->User->find('all', array('contain' => array(
-			'ArticleFeatured' => array(
+		$result = $this->User->find('all', ['contain' => [
+			'ArticleFeatured' => [
 				'title',
-				'Featured' => array(
+				'Featured' => [
 					'category_id',
 					'Category' => 'name'
-				)
-			)
-		)));
-		$expected = array(
-			array(
-				'User' => array(
+				]
+			]
+		]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'title' => 'First Article', 'id' => 1, 'user_id' => 1,
-						'Featured' => array(
+						'Featured' => [
 							'category_id' => 1, 'id' => 1,
-							'Category' => array(
+							'Category' => [
 								'name' => 'Category 1'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'title' => 'Third Article', 'id' => 3, 'user_id' => 1,
-						'Featured' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'title' => 'Second Article', 'id' => 2, 'user_id' => 3,
-						'Featured' => array(
+						'Featured' => [
 							'category_id' => 1, 'id' => 2,
-							'Category' => array(
+							'Category' => [
 								'name' => 'Category 1'
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$orders = array(
+		$orders = [
 			'title DESC', 'title DESC, published DESC',
-			array('title' => 'DESC'), array('title' => 'DESC', 'published' => 'DESC'),
-		);
+			['title' => 'DESC'], ['title' => 'DESC', 'published' => 'DESC'],
+		];
 		foreach ($orders as $order) {
-			$result = $this->User->find('all', array('contain' => array(
-				'ArticleFeatured' => array(
+			$result = $this->User->find('all', ['contain' => [
+				'ArticleFeatured' => [
 					'title', 'order' => $order,
-					'Featured' => array(
+					'Featured' => [
 						'category_id',
 						'Category' => 'name'
-					)
-				)
-			)));
-			$expected = array(
-				array(
-					'User' => array(
+					]
+				]
+			]]);
+			$expected = [
+				[
+					'User' => [
 						'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 						'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-					),
-					'ArticleFeatured' => array(
-						array(
+					],
+					'ArticleFeatured' => [
+						[
 							'title' => 'Third Article', 'id' => 3, 'user_id' => 1,
-							'Featured' => array()
-						),
-						array(
+							'Featured' => []
+						],
+						[
 							'title' => 'First Article', 'id' => 1, 'user_id' => 1,
-							'Featured' => array(
+							'Featured' => [
 								'category_id' => 1, 'id' => 1,
-								'Category' => array(
+								'Category' => [
 									'name' => 'Category 1'
-								)
-							)
-						)
-					)
-				),
-				array(
-					'User' => array(
+								]
+							]
+						]
+					]
+				],
+				[
+					'User' => [
 						'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 						'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-					),
-					'ArticleFeatured' => array()
-				),
-				array(
-					'User' => array(
+					],
+					'ArticleFeatured' => []
+				],
+				[
+					'User' => [
 						'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 						'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-					),
-					'ArticleFeatured' => array(
-						array(
+					],
+					'ArticleFeatured' => [
+						[
 							'title' => 'Second Article', 'id' => 2, 'user_id' => 3,
-							'Featured' => array(
+							'Featured' => [
 								'category_id' => 1, 'id' => 2,
-								'Category' => array(
+								'Category' => [
 									'name' => 'Category 1'
-								)
-							)
-						)
-					)
-				),
-				array(
-					'User' => array(
+								]
+							]
+						]
+					]
+				],
+				[
+					'User' => [
 						'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 						'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-					),
-					'ArticleFeatured' => array()
-				)
-			);
+					],
+					'ArticleFeatured' => []
+				]
+			];
 			$this->assertEquals($expected, $result);
 		}
 	}
@@ -2174,321 +2174,321 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindThirdLevelNonReset() {
-		$this->User->contain(false, array('ArticleFeatured' => array('Featured' => 'Category')));
-		$result = $this->User->find('all', array('recursive' => 3));
-		$expected = array(
-			array(
-				'User' => array(
+		$this->User->contain(false, ['ArticleFeatured' => ['Featured' => 'Category']]);
+		$result = $this->User->find('all', ['recursive' => 3]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
 		$this->User->resetBindings();
 
-		$this->User->contain(false, array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => array('Article', 'Attachment'))));
-		$result = $this->User->find('all', array('recursive' => 3));
-		$expected = array(
-			array(
-				'User' => array(
+		$this->User->contain(false, ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => ['Article', 'Attachment']]]);
+		$result = $this->User->find('all', ['recursive' => 3]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								],
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array(
+								],
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								],
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
 		$this->User->resetBindings();
 
-		$this->User->contain(false, array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => 'Attachment'), 'Article'));
-		$result = $this->User->find('all', array('recursive' => 3));
-		$expected = array(
-			array(
-				'User' => array(
+		$this->User->contain(false, ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => 'Attachment'], 'Article']);
+		$result = $this->User->find('all', ['recursive' => 3]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-					),
-					array(
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Attachment' => array(
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -2498,487 +2498,487 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindEmbeddedThirdLevelNonReset() {
-		$result = $this->User->find('all', array('reset' => false, 'contain' => array('ArticleFeatured' => array('Featured' => 'Category'))));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['reset' => false, 'contain' => ['ArticleFeatured' => ['Featured' => 'Category']]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->_assertBindings($this->User, array('hasMany' => array('ArticleFeatured')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('hasOne' => array('Featured')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('Category')));
+		$this->_assertBindings($this->User, ['hasMany' => ['ArticleFeatured']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['hasOne' => ['Featured']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['Category']]);
 
 		$this->User->resetBindings();
 
-		$this->_assertBindings($this->User, array('hasMany' => array('Article', 'ArticleFeatured', 'Comment')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('belongsTo' => array('User'), 'hasOne' => array('Featured'), 'hasMany' => array('Comment'), 'hasAndBelongsToMany' => array('Tag')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('ArticleFeatured', 'Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('belongsTo' => array('Article', 'User'), 'hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User, ['hasMany' => ['Article', 'ArticleFeatured', 'Comment']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['belongsTo' => ['User'], 'hasOne' => ['Featured'], 'hasMany' => ['Comment'], 'hasAndBelongsToMany' => ['Tag']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['ArticleFeatured', 'Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['belongsTo' => ['Article', 'User'], 'hasOne' => ['Attachment']]);
 
-		$result = $this->User->find('all', array('reset' => false, 'contain' => array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => array('Article', 'Attachment')))));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['reset' => false, 'contain' => ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => ['Article', 'Attachment']]]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								],
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array(
+								],
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								],
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->_assertBindings($this->User, array('hasMany' => array('ArticleFeatured')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('hasOne' => array('Featured'), 'hasMany' => array('Comment')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('belongsTo' => array('Article'), 'hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User, ['hasMany' => ['ArticleFeatured']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['hasOne' => ['Featured'], 'hasMany' => ['Comment']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['belongsTo' => ['Article'], 'hasOne' => ['Attachment']]);
 
 		$this->User->resetBindings();
-		$this->_assertBindings($this->User, array('hasMany' => array('Article', 'ArticleFeatured', 'Comment')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('belongsTo' => array('User'), 'hasOne' => array('Featured'), 'hasMany' => array('Comment'), 'hasAndBelongsToMany' => array('Tag')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('ArticleFeatured', 'Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('belongsTo' => array('Article', 'User'), 'hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User, ['hasMany' => ['Article', 'ArticleFeatured', 'Comment']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['belongsTo' => ['User'], 'hasOne' => ['Featured'], 'hasMany' => ['Comment'], 'hasAndBelongsToMany' => ['Tag']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['ArticleFeatured', 'Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['belongsTo' => ['Article', 'User'], 'hasOne' => ['Attachment']]);
 
-		$result = $this->User->find('all', array('contain' => array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => array('Article', 'Attachment')), false)));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['contain' => ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => ['Article', 'Attachment']], false]]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							),
-							array(
+								],
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								],
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'ArticleFeatured' => array(
-					array(
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array(
+								],
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Article' => array(
+								'Article' => [
 									'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 									'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-								),
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								],
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->_assertBindings($this->User, array('hasMany' => array('ArticleFeatured')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('hasOne' => array('Featured'), 'hasMany' => array('Comment')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('belongsTo' => array('Article'), 'hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User, ['hasMany' => ['ArticleFeatured']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['hasOne' => ['Featured'], 'hasMany' => ['Comment']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['belongsTo' => ['Article'], 'hasOne' => ['Attachment']]);
 
 		$this->User->resetBindings();
-		$this->_assertBindings($this->User, array('hasMany' => array('Article', 'ArticleFeatured', 'Comment')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('belongsTo' => array('User'), 'hasOne' => array('Featured'), 'hasMany' => array('Comment'), 'hasAndBelongsToMany' => array('Tag')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('ArticleFeatured', 'Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('belongsTo' => array('Article', 'User'), 'hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User, ['hasMany' => ['Article', 'ArticleFeatured', 'Comment']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['belongsTo' => ['User'], 'hasOne' => ['Featured'], 'hasMany' => ['Comment'], 'hasAndBelongsToMany' => ['Tag']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['ArticleFeatured', 'Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['belongsTo' => ['Article', 'User'], 'hasOne' => ['Attachment']]);
 
-		$result = $this->User->find('all', array('reset' => false, 'contain' => array('ArticleFeatured' => array('Featured' => 'Category', 'Comment' => 'Attachment'), 'Article')));
-		$expected = array(
-			array(
-				'User' => array(
+		$result = $this->User->find('all', ['reset' => false, 'contain' => ['ArticleFeatured' => ['Featured' => 'Category', 'Comment' => 'Attachment'], 'Article']]);
+		$expected = [
+			[
+				'User' => [
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-					),
-					array(
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 1, 'article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 1, 'article_id' => 1, 'user_id' => 2, 'comment' => 'First Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:45:23', 'updated' => '2007-03-18 10:47:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 2, 'article_id' => 1, 'user_id' => 4, 'comment' => 'Second Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:47:23', 'updated' => '2007-03-18 10:49:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 3, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Third Comment for First Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:49:23', 'updated' => '2007-03-18 10:51:31',
-								'Attachment' => array()
-							),
-							array(
+								'Attachment' => []
+							],
+							[
 								'id' => 4, 'article_id' => 1, 'user_id' => 1, 'comment' => 'Fourth Comment for First Article',
 								'published' => 'N', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31',
-								'Attachment' => array()
-							)
-						)
-					),
-					array(
+								'Attachment' => []
+							]
+						]
+					],
+					[
 						'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31',
-						'Featured' => array(),
-						'Comment' => array()
-					)
-				)
-			),
-			array(
-				'User' => array(
+						'Featured' => [],
+						'Comment' => []
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 2, 'user' => 'nate', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:18:23', 'updated' => '2007-03-17 01:20:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			),
-			array(
-				'User' => array(
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			],
+			[
+				'User' => [
 					'id' => 3, 'user' => 'larry', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:20:23', 'updated' => '2007-03-17 01:22:31'
-				),
-				'Article' => array(
-					array(
+				],
+				'Article' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-					)
-				),
-				'ArticleFeatured' => array(
-					array(
+					]
+				],
+				'ArticleFeatured' => [
+					[
 						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
 						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31',
-						'Featured' => array(
+						'Featured' => [
 							'id' => 2, 'article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23',
 							'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31',
-							'Category' => array(
+							'Category' => [
 								'id' => 1, 'parent_id' => 0, 'name' => 'Category 1',
 								'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'
-							)
-						),
-						'Comment' => array(
-							array(
+							]
+						],
+						'Comment' => [
+							[
 								'id' => 5, 'article_id' => 2, 'user_id' => 1, 'comment' => 'First Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:53:23', 'updated' => '2007-03-18 10:55:31',
-								'Attachment' => array(
+								'Attachment' => [
 									'id' => 1, 'comment_id' => 5, 'attachment' => 'attachment.zip',
 									'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31'
-								)
-							),
-							array(
+								]
+							],
+							[
 								'id' => 6, 'article_id' => 2, 'user_id' => 2, 'comment' => 'Second Comment for Second Article',
 								'published' => 'Y', 'created' => '2007-03-18 10:55:23', 'updated' => '2007-03-18 10:57:31',
-								'Attachment' => array()
-							)
-						)
-					)
-				)
-			),
-			array(
-				'User' => array(
+								'Attachment' => []
+							]
+						]
+					]
+				]
+			],
+			[
+				'User' => [
 					'id' => 4, 'user' => 'garrett', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:22:23', 'updated' => '2007-03-17 01:24:31'
-				),
-				'Article' => array(),
-				'ArticleFeatured' => array()
-			)
-		);
+				],
+				'Article' => [],
+				'ArticleFeatured' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->_assertBindings($this->User, array('hasMany' => array('Article', 'ArticleFeatured')));
+		$this->_assertBindings($this->User, ['hasMany' => ['Article', 'ArticleFeatured']]);
 		$this->_assertBindings($this->User->Article);
-		$this->_assertBindings($this->User->ArticleFeatured, array('hasOne' => array('Featured'), 'hasMany' => array('Comment')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User->ArticleFeatured, ['hasOne' => ['Featured'], 'hasMany' => ['Comment']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['hasOne' => ['Attachment']]);
 
 		$this->User->resetBindings();
-		$this->_assertBindings($this->User, array('hasMany' => array('Article', 'ArticleFeatured', 'Comment')));
-		$this->_assertBindings($this->User->Article, array('belongsTo' => array('User'), 'hasMany' => array('Comment'), 'hasAndBelongsToMany' => array('Tag')));
-		$this->_assertBindings($this->User->ArticleFeatured, array('belongsTo' => array('User'), 'hasOne' => array('Featured'), 'hasMany' => array('Comment'), 'hasAndBelongsToMany' => array('Tag')));
-		$this->_assertBindings($this->User->ArticleFeatured->Featured, array('belongsTo' => array('ArticleFeatured', 'Category')));
-		$this->_assertBindings($this->User->ArticleFeatured->Comment, array('belongsTo' => array('Article', 'User'), 'hasOne' => array('Attachment')));
+		$this->_assertBindings($this->User, ['hasMany' => ['Article', 'ArticleFeatured', 'Comment']]);
+		$this->_assertBindings($this->User->Article, ['belongsTo' => ['User'], 'hasMany' => ['Comment'], 'hasAndBelongsToMany' => ['Tag']]);
+		$this->_assertBindings($this->User->ArticleFeatured, ['belongsTo' => ['User'], 'hasOne' => ['Featured'], 'hasMany' => ['Comment'], 'hasAndBelongsToMany' => ['Tag']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Featured, ['belongsTo' => ['ArticleFeatured', 'Category']]);
+		$this->_assertBindings($this->User->ArticleFeatured->Comment, ['belongsTo' => ['Article', 'User'], 'hasOne' => ['Attachment']]);
 	}
 
 /**
@@ -2987,71 +2987,71 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testEmbeddedFindFields() {
-		$result = $this->Article->find('all', array(
-			'contain' => array('User(user)'),
-			'fields' => array('title'),
-			'order' => array('Article.id' => 'ASC')
-		));
-		$expected = array(
-			array('Article' => array('title' => 'First Article'), 'User' => array('user' => 'mariano', 'id' => 1)),
-			array('Article' => array('title' => 'Second Article'), 'User' => array('user' => 'larry', 'id' => 3)),
-			array('Article' => array('title' => 'Third Article'), 'User' => array('user' => 'mariano', 'id' => 1)),
-		);
+		$result = $this->Article->find('all', [
+			'contain' => ['User(user)'],
+			'fields' => ['title'],
+			'order' => ['Article.id' => 'ASC']
+		]);
+		$expected = [
+			['Article' => ['title' => 'First Article'], 'User' => ['user' => 'mariano', 'id' => 1]],
+			['Article' => ['title' => 'Second Article'], 'User' => ['user' => 'larry', 'id' => 3]],
+			['Article' => ['title' => 'Third Article'], 'User' => ['user' => 'mariano', 'id' => 1]],
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array(
-			'contain' => array('User(id, user)'),
-			'fields' => array('title'),
-			'order' => array('Article.id' => 'ASC')
-		));
-		$expected = array(
-			array('Article' => array('title' => 'First Article'), 'User' => array('user' => 'mariano', 'id' => 1)),
-			array('Article' => array('title' => 'Second Article'), 'User' => array('user' => 'larry', 'id' => 3)),
-			array('Article' => array('title' => 'Third Article'), 'User' => array('user' => 'mariano', 'id' => 1)),
-		);
+		$result = $this->Article->find('all', [
+			'contain' => ['User(id, user)'],
+			'fields' => ['title'],
+			'order' => ['Article.id' => 'ASC']
+		]);
+		$expected = [
+			['Article' => ['title' => 'First Article'], 'User' => ['user' => 'mariano', 'id' => 1]],
+			['Article' => ['title' => 'Second Article'], 'User' => ['user' => 'larry', 'id' => 3]],
+			['Article' => ['title' => 'Third Article'], 'User' => ['user' => 'mariano', 'id' => 1]],
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array(
-			'contain' => array(
+		$result = $this->Article->find('all', [
+			'contain' => [
 				'Comment(comment, published)' => 'Attachment(attachment)', 'User(user)'
-			),
-			'fields' => array('title'),
-			'order' => array('Article.id' => 'ASC')
-		));
+			],
+			'fields' => ['title'],
+			'order' => ['Article.id' => 'ASC']
+		]);
 		if (!empty($result)) {
 			foreach ($result as $i => $article) {
 				foreach ($article['Comment'] as $j => $comment) {
-					$result[$i]['Comment'][$j] = array_diff_key($comment, array('id' => true));
+					$result[$i]['Comment'][$j] = array_diff_key($comment, ['id' => true]);
 				}
 			}
 		}
-		$expected = array(
-			array(
-				'Article' => array('title' => 'First Article', 'id' => 1),
-				'User' => array('user' => 'mariano', 'id' => 1),
-				'Comment' => array(
-					array('comment' => 'First Comment for First Article', 'published' => 'Y', 'article_id' => 1, 'Attachment' => array()),
-					array('comment' => 'Second Comment for First Article', 'published' => 'Y', 'article_id' => 1, 'Attachment' => array()),
-					array('comment' => 'Third Comment for First Article', 'published' => 'Y', 'article_id' => 1, 'Attachment' => array()),
-					array('comment' => 'Fourth Comment for First Article', 'published' => 'N', 'article_id' => 1, 'Attachment' => array()),
-				)
-			),
-			array(
-				'Article' => array('title' => 'Second Article', 'id' => 2),
-				'User' => array('user' => 'larry', 'id' => 3),
-				'Comment' => array(
-					array('comment' => 'First Comment for Second Article', 'published' => 'Y', 'article_id' => 2, 'Attachment' => array(
+		$expected = [
+			[
+				'Article' => ['title' => 'First Article', 'id' => 1],
+				'User' => ['user' => 'mariano', 'id' => 1],
+				'Comment' => [
+					['comment' => 'First Comment for First Article', 'published' => 'Y', 'article_id' => 1, 'Attachment' => []],
+					['comment' => 'Second Comment for First Article', 'published' => 'Y', 'article_id' => 1, 'Attachment' => []],
+					['comment' => 'Third Comment for First Article', 'published' => 'Y', 'article_id' => 1, 'Attachment' => []],
+					['comment' => 'Fourth Comment for First Article', 'published' => 'N', 'article_id' => 1, 'Attachment' => []],
+				]
+			],
+			[
+				'Article' => ['title' => 'Second Article', 'id' => 2],
+				'User' => ['user' => 'larry', 'id' => 3],
+				'Comment' => [
+					['comment' => 'First Comment for Second Article', 'published' => 'Y', 'article_id' => 2, 'Attachment' => [
 						'attachment' => 'attachment.zip', 'id' => 1
-					)),
-					array('comment' => 'Second Comment for Second Article', 'published' => 'Y', 'article_id' => 2, 'Attachment' => array())
-				)
-			),
-			array(
-				'Article' => array('title' => 'Third Article', 'id' => 3),
-				'User' => array('user' => 'mariano', 'id' => 1),
-				'Comment' => array()
-			),
-		);
+					]],
+					['comment' => 'Second Comment for Second Article', 'published' => 'Y', 'article_id' => 2, 'Attachment' => []]
+				]
+			],
+			[
+				'Article' => ['title' => 'Third Article', 'id' => 3],
+				'User' => ['user' => 'mariano', 'id' => 1],
+				'Comment' => []
+			],
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -3061,26 +3061,26 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testHasOneFieldsInContain() {
-		$this->Article->unbindModel(array(
-			'hasMany' => array('Comment')
-		), true);
+		$this->Article->unbindModel([
+			'hasMany' => ['Comment']
+		], true);
 		unset($this->Article->Comment);
-		$this->Article->bindModel(array(
-			'hasOne' => array('Comment')
-		));
+		$this->Article->bindModel([
+			'hasOne' => ['Comment']
+		]);
 
-		$result = $this->Article->find('all', array(
-			'fields' => array('title', 'body'),
-			'contain' => array(
-				'Comment' => array(
-					'fields' => array('comment')
-				),
-				'User' => array(
-					'fields' => array('user')
-				)
-			),
+		$result = $this->Article->find('all', [
+			'fields' => ['title', 'body'],
+			'contain' => [
+				'Comment' => [
+					'fields' => ['comment']
+				],
+				'User' => [
+					'fields' => ['user']
+				]
+			],
 			'order' => 'Article.id ASC',
-		));
+		]);
 		$this->assertTrue(isset($result[0]['Article']['title']), 'title missing %s');
 		$this->assertTrue(isset($result[0]['Article']['body']), 'body missing %s');
 		$this->assertTrue(isset($result[0]['Comment']['comment']), 'comment missing %s');
@@ -3095,125 +3095,125 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindConditionalBinding() {
-		$this->Article->contain(array(
+		$this->Article->contain([
 			'User(user)',
-			'Tag' => array(
-				'fields' => array('tag', 'created'),
-				'conditions' => array('created >=' => '2007-03-18 12:24')
-			)
-		));
-		$result = $this->Article->find('all', array(
-			'fields' => array('title'),
-			'order' => array('Article.id' => 'ASC')
-		));
-		$expected = array(
-			array(
-				'Article' => array('id' => 1, 'title' => 'First Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array(array('tag' => 'tag2', 'created' => '2007-03-18 12:24:23'))
-			),
-			array(
-				'Article' => array('id' => 2, 'title' => 'Second Article'),
-				'User' => array('id' => 3, 'user' => 'larry'),
-				'Tag' => array(array('tag' => 'tag3', 'created' => '2007-03-18 12:26:23'))
-			),
-			array(
-				'Article' => array('id' => 3, 'title' => 'Third Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array()
-			)
-		);
+			'Tag' => [
+				'fields' => ['tag', 'created'],
+				'conditions' => ['created >=' => '2007-03-18 12:24']
+			]
+		]);
+		$result = $this->Article->find('all', [
+			'fields' => ['title'],
+			'order' => ['Article.id' => 'ASC']
+		]);
+		$expected = [
+			[
+				'Article' => ['id' => 1, 'title' => 'First Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => [['tag' => 'tag2', 'created' => '2007-03-18 12:24:23']]
+			],
+			[
+				'Article' => ['id' => 2, 'title' => 'Second Article'],
+				'User' => ['id' => 3, 'user' => 'larry'],
+				'Tag' => [['tag' => 'tag3', 'created' => '2007-03-18 12:26:23']]
+			],
+			[
+				'Article' => ['id' => 3, 'title' => 'Third Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User(id,user)', 'Tag' => array('fields' => array('tag', 'created'))));
-		$result = $this->Article->find('all', array('fields' => array('title'), 'order' => array('Article.id' => 'ASC')));
-		$expected = array(
-			array(
-				'Article' => array('id' => 1, 'title' => 'First Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array(
-					array('tag' => 'tag1', 'created' => '2007-03-18 12:22:23'),
-					array('tag' => 'tag2', 'created' => '2007-03-18 12:24:23')
-				)
-			),
-			array(
-				'Article' => array('id' => 2, 'title' => 'Second Article'),
-				'User' => array('id' => 3, 'user' => 'larry'),
-				'Tag' => array(
-					array('tag' => 'tag1', 'created' => '2007-03-18 12:22:23'),
-					array('tag' => 'tag3', 'created' => '2007-03-18 12:26:23')
-				)
-			),
-			array(
-				'Article' => array('id' => 3, 'title' => 'Third Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array()
-			)
-		);
+		$this->Article->contain(['User(id,user)', 'Tag' => ['fields' => ['tag', 'created']]]);
+		$result = $this->Article->find('all', ['fields' => ['title'], 'order' => ['Article.id' => 'ASC']]);
+		$expected = [
+			[
+				'Article' => ['id' => 1, 'title' => 'First Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => [
+					['tag' => 'tag1', 'created' => '2007-03-18 12:22:23'],
+					['tag' => 'tag2', 'created' => '2007-03-18 12:24:23']
+				]
+			],
+			[
+				'Article' => ['id' => 2, 'title' => 'Second Article'],
+				'User' => ['id' => 3, 'user' => 'larry'],
+				'Tag' => [
+					['tag' => 'tag1', 'created' => '2007-03-18 12:22:23'],
+					['tag' => 'tag3', 'created' => '2007-03-18 12:26:23']
+				]
+			],
+			[
+				'Article' => ['id' => 3, 'title' => 'Third Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array(
-			'fields' => array('title'),
-			'contain' => array('User(id,user)', 'Tag' => array('fields' => array('tag', 'created'))),
-			'order' => array('Article.id' => 'ASC')
-		));
-		$expected = array(
-			array(
-				'Article' => array('id' => 1, 'title' => 'First Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array(
-					array('tag' => 'tag1', 'created' => '2007-03-18 12:22:23'),
-					array('tag' => 'tag2', 'created' => '2007-03-18 12:24:23')
-				)
-			),
-			array(
-				'Article' => array('id' => 2, 'title' => 'Second Article'),
-				'User' => array('id' => 3, 'user' => 'larry'),
-				'Tag' => array(
-					array('tag' => 'tag1', 'created' => '2007-03-18 12:22:23'),
-					array('tag' => 'tag3', 'created' => '2007-03-18 12:26:23')
-				)
-			),
-			array(
-				'Article' => array('id' => 3, 'title' => 'Third Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array()
-			)
-		);
+		$result = $this->Article->find('all', [
+			'fields' => ['title'],
+			'contain' => ['User(id,user)', 'Tag' => ['fields' => ['tag', 'created']]],
+			'order' => ['Article.id' => 'ASC']
+		]);
+		$expected = [
+			[
+				'Article' => ['id' => 1, 'title' => 'First Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => [
+					['tag' => 'tag1', 'created' => '2007-03-18 12:22:23'],
+					['tag' => 'tag2', 'created' => '2007-03-18 12:24:23']
+				]
+			],
+			[
+				'Article' => ['id' => 2, 'title' => 'Second Article'],
+				'User' => ['id' => 3, 'user' => 'larry'],
+				'Tag' => [
+					['tag' => 'tag1', 'created' => '2007-03-18 12:22:23'],
+					['tag' => 'tag3', 'created' => '2007-03-18 12:26:23']
+				]
+			],
+			[
+				'Article' => ['id' => 3, 'title' => 'Third Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array(
+		$this->Article->contain([
 			'User(id,user)',
-			'Tag' => array(
-				'fields' => array('tag', 'created'),
-				'conditions' => array('created >=' => '2007-03-18 12:24')
-			)
-		));
-		$result = $this->Article->find('all', array('fields' => array('title'), 'order' => array('Article.id' => 'ASC')));
-		$expected = array(
-			array(
-				'Article' => array('id' => 1, 'title' => 'First Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array(array('tag' => 'tag2', 'created' => '2007-03-18 12:24:23'))
-			),
-			array(
-				'Article' => array('id' => 2, 'title' => 'Second Article'),
-				'User' => array('id' => 3, 'user' => 'larry'),
-				'Tag' => array(array('tag' => 'tag3', 'created' => '2007-03-18 12:26:23'))
-			),
-			array(
-				'Article' => array('id' => 3, 'title' => 'Third Article'),
-				'User' => array('id' => 1, 'user' => 'mariano'),
-				'Tag' => array()
-			)
-		);
+			'Tag' => [
+				'fields' => ['tag', 'created'],
+				'conditions' => ['created >=' => '2007-03-18 12:24']
+			]
+		]);
+		$result = $this->Article->find('all', ['fields' => ['title'], 'order' => ['Article.id' => 'ASC']]);
+		$expected = [
+			[
+				'Article' => ['id' => 1, 'title' => 'First Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => [['tag' => 'tag2', 'created' => '2007-03-18 12:24:23']]
+			],
+			[
+				'Article' => ['id' => 2, 'title' => 'Second Article'],
+				'User' => ['id' => 3, 'user' => 'larry'],
+				'Tag' => [['tag' => 'tag3', 'created' => '2007-03-18 12:26:23']]
+			],
+			[
+				'Article' => ['id' => 3, 'title' => 'Third Article'],
+				'User' => ['id' => 1, 'user' => 'mariano'],
+				'Tag' => []
+			]
+		];
 		$this->assertEquals($expected, $result);
 
 		$this->assertTrue(empty($this->User->Article->hasAndBelongsToMany['Tag']['conditions']));
 
-		$result = $this->User->find('all', array('contain' => array(
-			'Article.Tag' => array('conditions' => array('created >=' => '2007-03-18 12:24'))
-		)));
+		$result = $this->User->find('all', ['contain' => [
+			'Article.Tag' => ['conditions' => ['created >=' => '2007-03-18 12:24']]
+		]]);
 
 		$this->assertTrue(Set::matches('/User[id=1]', $result));
 		$this->assertFalse(Set::matches('/Article[id=1]/Tag[id=1]', $result));
@@ -3222,9 +3222,9 @@ class ContainableBehaviorTest extends CakeTestCase {
 
 		$this->assertTrue(empty($this->User->Article->hasAndBelongsToMany['Tag']['order']));
 
-		$result = $this->User->find('all', array('contain' => array(
-			'Article.Tag' => array('order' => 'created DESC')
-		)));
+		$result = $this->User->find('all', ['contain' => [
+			'Article.Tag' => ['order' => 'created DESC']
+		]]);
 
 		$this->assertTrue(Set::matches('/User[id=1]', $result));
 		$this->assertTrue(Set::matches('/Article[id=1]/Tag[id=1]', $result));
@@ -3242,56 +3242,56 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$expected = 3;
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('count', array('conditions' => array('Article.id >' => '1')));
+		$result = $this->Article->find('count', ['conditions' => ['Article.id >' => '1']]);
 		$expected = 2;
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('count', array('contain' => array()));
+		$result = $this->Article->find('count', ['contain' => []]);
 		$expected = 3;
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User(id,user)', 'Tag' => array('fields' => array('tag', 'created'), 'conditions' => array('created >=' => '2007-03-18 12:24'))));
-		$result = $this->Article->find('first', array('fields' => array('title')));
-		$expected = array(
-			'Article' => array('id' => 1, 'title' => 'First Article'),
-			'User' => array('id' => 1, 'user' => 'mariano'),
-			'Tag' => array(array('tag' => 'tag2', 'created' => '2007-03-18 12:24:23'))
-		);
+		$this->Article->contain(['User(id,user)', 'Tag' => ['fields' => ['tag', 'created'], 'conditions' => ['created >=' => '2007-03-18 12:24']]]);
+		$result = $this->Article->find('first', ['fields' => ['title']]);
+		$expected = [
+			'Article' => ['id' => 1, 'title' => 'First Article'],
+			'User' => ['id' => 1, 'user' => 'mariano'],
+			'Tag' => [['tag' => 'tag2', 'created' => '2007-03-18 12:24:23']]
+		];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(array('User(id,user)', 'Tag' => array('fields' => array('tag', 'created'))));
-		$result = $this->Article->find('first', array('fields' => array('title')));
-		$expected = array(
-			'Article' => array('id' => 1, 'title' => 'First Article'),
-			'User' => array('id' => 1, 'user' => 'mariano'),
-			'Tag' => array(
-				array('tag' => 'tag1', 'created' => '2007-03-18 12:22:23'),
-				array('tag' => 'tag2', 'created' => '2007-03-18 12:24:23')
-			)
-		);
+		$this->Article->contain(['User(id,user)', 'Tag' => ['fields' => ['tag', 'created']]]);
+		$result = $this->Article->find('first', ['fields' => ['title']]);
+		$expected = [
+			'Article' => ['id' => 1, 'title' => 'First Article'],
+			'User' => ['id' => 1, 'user' => 'mariano'],
+			'Tag' => [
+				['tag' => 'tag1', 'created' => '2007-03-18 12:22:23'],
+				['tag' => 'tag2', 'created' => '2007-03-18 12:24:23']
+			]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('first', array(
-			'fields' => array('title'),
+		$result = $this->Article->find('first', [
+			'fields' => ['title'],
 			'order' => 'Article.id DESC',
-			'contain' => array('User(id,user)', 'Tag' => array('fields' => array('tag', 'created')))
-		));
-		$expected = array(
-			'Article' => array('id' => 3, 'title' => 'Third Article'),
-			'User' => array('id' => 1, 'user' => 'mariano'),
-			'Tag' => array()
-		);
+			'contain' => ['User(id,user)', 'Tag' => ['fields' => ['tag', 'created']]]
+		]);
+		$expected = [
+			'Article' => ['id' => 3, 'title' => 'Third Article'],
+			'User' => ['id' => 1, 'user' => 'mariano'],
+			'Tag' => []
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('list', array(
-			'contain' => array('User(id,user)'),
-			'fields' => array('Article.id', 'Article.title')
-		));
-		$expected = array(
+		$result = $this->Article->find('list', [
+			'contain' => ['User(id,user)'],
+			'fields' => ['Article.id', 'Article.title']
+		]);
+		$expected = [
 			1 => 'First Article',
 			2 => 'Second Article',
 			3 => 'Third Article'
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -3303,31 +3303,31 @@ class ContainableBehaviorTest extends CakeTestCase {
 	public function testOriginalAssociations() {
 		$this->Article->Comment->Behaviors->load('Containable');
 
-		$options = array(
-			'conditions' => array(
+		$options = [
+			'conditions' => [
 				'Comment.published' => 'Y',
-			),
+			],
 			'contain' => 'User',
 			'recursive' => 1
-		);
+		];
 
 		$firstResult = $this->Article->Comment->find('all', $options);
 
-		$this->Article->Comment->find('all', array(
-			'conditions' => array(
+		$this->Article->Comment->find('all', [
+			'conditions' => [
 				'User.user' => 'mariano'
-			),
-			'fields' => array('User.password'),
-			'contain' => array('User.password'),
-		));
+			],
+			'fields' => ['User.password'],
+			'contain' => ['User.password'],
+		]);
 
 		$result = $this->Article->Comment->find('all', $options);
 		$this->assertEquals($firstResult, $result);
 
-		$this->Article->unbindModel(array('hasMany' => array('Comment'), 'belongsTo' => array('User'), 'hasAndBelongsToMany' => array('Tag')), false);
-		$this->Article->bindModel(array('hasMany' => array('Comment'), 'belongsTo' => array('User')), false);
+		$this->Article->unbindModel(['hasMany' => ['Comment'], 'belongsTo' => ['User'], 'hasAndBelongsToMany' => ['Tag']], false);
+		$this->Article->bindModel(['hasMany' => ['Comment'], 'belongsTo' => ['User']], false);
 
-		$r = $this->Article->find('all', array('contain' => array('Comment(comment)', 'User(user)'), 'fields' => array('title')));
+		$r = $this->Article->find('all', ['contain' => ['Comment(comment)', 'User(user)'], 'fields' => ['title']]);
 		$this->assertTrue(Set::matches('/Article[id=1]', $r));
 		$this->assertTrue(Set::matches('/User[id=1]', $r));
 		$this->assertTrue(Set::matches('/Comment[article_id=1]', $r));
@@ -3339,47 +3339,47 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->assertTrue(Set::matches('/Comment[article_id=1]', $r));
 		$this->assertTrue(Set::matches('/Comment[id=1]', $r));
 
-		$this->Article->bindModel(array('hasAndBelongsToMany' => array('Tag')), false);
+		$this->Article->bindModel(['hasAndBelongsToMany' => ['Tag']], false);
 
-		$this->Article->contain(false, array('User(id,user)', 'Comment' => array('fields' => array('comment'), 'conditions' => array('created >=' => '2007-03-18 10:49'))));
-		$result = $this->Article->find('all', array('fields' => array('title'), 'limit' => 1, 'page' => 1, 'order' => 'Article.id ASC'));
-		$expected = array(array(
-			'Article' => array('id' => 1, 'title' => 'First Article'),
-			'User' => array('id' => 1, 'user' => 'mariano'),
-			'Comment' => array(
-				array('comment' => 'Third Comment for First Article', 'article_id' => 1),
-				array('comment' => 'Fourth Comment for First Article', 'article_id' => 1)
-			)
-		));
+		$this->Article->contain(false, ['User(id,user)', 'Comment' => ['fields' => ['comment'], 'conditions' => ['created >=' => '2007-03-18 10:49']]]);
+		$result = $this->Article->find('all', ['fields' => ['title'], 'limit' => 1, 'page' => 1, 'order' => 'Article.id ASC']);
+		$expected = [[
+			'Article' => ['id' => 1, 'title' => 'First Article'],
+			'User' => ['id' => 1, 'user' => 'mariano'],
+			'Comment' => [
+				['comment' => 'Third Comment for First Article', 'article_id' => 1],
+				['comment' => 'Fourth Comment for First Article', 'article_id' => 1]
+			]
+		]];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array('fields' => array('title', 'User.id', 'User.user'), 'limit' => 1, 'page' => 2, 'order' => 'Article.id ASC'));
-		$expected = array(array(
-			'Article' => array('id' => 2, 'title' => 'Second Article'),
-			'User' => array('id' => 3, 'user' => 'larry'),
-			'Comment' => array(
-				array('comment' => 'First Comment for Second Article', 'article_id' => 2),
-				array('comment' => 'Second Comment for Second Article', 'article_id' => 2)
-			)
-		));
+		$result = $this->Article->find('all', ['fields' => ['title', 'User.id', 'User.user'], 'limit' => 1, 'page' => 2, 'order' => 'Article.id ASC']);
+		$expected = [[
+			'Article' => ['id' => 2, 'title' => 'Second Article'],
+			'User' => ['id' => 3, 'user' => 'larry'],
+			'Comment' => [
+				['comment' => 'First Comment for Second Article', 'article_id' => 2],
+				['comment' => 'Second Comment for Second Article', 'article_id' => 2]
+			]
+		]];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Article->find('all', array('fields' => array('title', 'User.id', 'User.user'), 'limit' => 1, 'page' => 3, 'order' => 'Article.id ASC'));
-		$expected = array(array(
-			'Article' => array('id' => 3, 'title' => 'Third Article'),
-			'User' => array('id' => 1, 'user' => 'mariano'),
-			'Comment' => array()
-		));
+		$result = $this->Article->find('all', ['fields' => ['title', 'User.id', 'User.user'], 'limit' => 1, 'page' => 3, 'order' => 'Article.id ASC']);
+		$expected = [[
+			'Article' => ['id' => 3, 'title' => 'Third Article'],
+			'User' => ['id' => 1, 'user' => 'mariano'],
+			'Comment' => []
+		]];
 		$this->assertEquals($expected, $result);
 
-		$this->Article->contain(false, array('User' => array('fields' => 'user'), 'Comment'));
+		$this->Article->contain(false, ['User' => ['fields' => 'user'], 'Comment']);
 		$result = $this->Article->find('all');
 		$this->assertTrue(Set::matches('/Article[id=1]', $result));
 		$this->assertTrue(Set::matches('/User[user=mariano]', $result));
 		$this->assertTrue(Set::matches('/Comment[article_id=1]', $result));
 		$this->Article->resetBindings();
 
-		$this->Article->contain(false, array('User' => array('fields' => array('user')), 'Comment'));
+		$this->Article->contain(false, ['User' => ['fields' => ['user']], 'Comment']);
 		$result = $this->Article->find('all');
 		$this->assertTrue(Set::matches('/Article[id=1]', $result));
 		$this->assertTrue(Set::matches('/User[user=mariano]', $result));
@@ -3395,17 +3395,17 @@ class ContainableBehaviorTest extends CakeTestCase {
 	public function testResetAddedAssociation() {
 		$this->assertTrue(empty($this->Article->hasMany['ArticlesTag']));
 
-		$this->Article->bindModel(array(
-			'hasMany' => array('ArticlesTag')
-		));
+		$this->Article->bindModel([
+			'hasMany' => ['ArticlesTag']
+		]);
 		$this->assertTrue(!empty($this->Article->hasMany['ArticlesTag']));
 
-		$result = $this->Article->find('first', array(
-			'conditions' => array('Article.id' => 1),
-			'contain' => array('ArticlesTag')
-		));
+		$result = $this->Article->find('first', [
+			'conditions' => ['Article.id' => 1],
+			'contain' => ['ArticlesTag']
+		]);
 
-		$expected = array('Article', 'ArticlesTag');
+		$expected = ['Article', 'ArticlesTag'];
 		$this->assertTrue(!empty($result));
 		$this->assertEquals('First Article', $result['Article']['title']);
 		$this->assertTrue(!empty($result['ArticlesTag']));
@@ -3421,8 +3421,8 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->JoinB->Behaviors->load('Containable');
 		$this->JoinC->Behaviors->load('Containable');
 
-		$this->JoinA->JoinB->find('all', array('contain' => array('JoinA')));
-		$this->JoinA->bindModel(array('hasOne' => array('JoinAsJoinC' => array('joinTable' => 'as_cs'))), false);
+		$this->JoinA->JoinB->find('all', ['contain' => ['JoinA']]);
+		$this->JoinA->bindModel(['hasOne' => ['JoinAsJoinC' => ['joinTable' => 'as_cs']]], false);
 		$result = $this->JoinA->hasOne;
 		$this->JoinA->find('all');
 		$resultAfter = $this->JoinA->hasOne;
@@ -3439,23 +3439,23 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->Article->Comment->Behaviors->load('Containable');
 		$this->Article->User->Behaviors->load('Containable');
 
-		$initialOptions = array(
-			'conditions' => array(
+		$initialOptions = [
+			'conditions' => [
 				'Comment.published' => 'Y',
-			),
+			],
 			'contain' => 'User',
 			'recursive' => 1,
-		);
+		];
 
 		$initialModels = $this->Article->Comment->find('all', $initialOptions);
 
-		$findOptions = array(
-			'conditions' => array(
+		$findOptions = [
+			'conditions' => [
 				'User.user' => 'mariano',
-			),
-			'fields' => array('User.password'),
-			'contain' => array('User.password')
-		);
+			],
+			'fields' => ['User.password'],
+			'contain' => ['User.password']
+		];
 		$result = $this->Article->Comment->find('all', $findOptions);
 		$result = $this->Article->Comment->find('all', $initialOptions);
 		$this->assertEquals($initialModels, $result);
@@ -3467,10 +3467,10 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testResetDeeperHasOneAssociations() {
-		$this->Article->User->unbindModel(array(
-			'hasMany' => array('ArticleFeatured', 'Comment')
-		), false);
-		$userHasOne = array('hasOne' => array('ArticleFeatured', 'Comment'));
+		$this->Article->User->unbindModel([
+			'hasMany' => ['ArticleFeatured', 'Comment']
+		], false);
+		$userHasOne = ['hasOne' => ['ArticleFeatured', 'Comment']];
 
 		$this->Article->User->bindModel($userHasOne, false);
 		$expected = $this->Article->User->hasOne;
@@ -3479,46 +3479,46 @@ class ContainableBehaviorTest extends CakeTestCase {
 
 		$this->Article->User->bindModel($userHasOne, false);
 		$expected = $this->Article->User->hasOne;
-		$this->Article->find('all', array(
-			'contain' => array(
-				'User' => array('ArticleFeatured', 'Comment')
-			)
-		));
+		$this->Article->find('all', [
+			'contain' => [
+				'User' => ['ArticleFeatured', 'Comment']
+			]
+		]);
 		$this->assertEquals($expected, $this->Article->User->hasOne);
 
 		$this->Article->User->bindModel($userHasOne, false);
 		$expected = $this->Article->User->hasOne;
-		$this->Article->find('all', array(
-			'contain' => array(
-				'User' => array(
+		$this->Article->find('all', [
+			'contain' => [
+				'User' => [
 					'ArticleFeatured',
-					'Comment' => array('fields' => array('created'))
-				)
-			)
-		));
+					'Comment' => ['fields' => ['created']]
+				]
+			]
+		]);
 		$this->assertEquals($expected, $this->Article->User->hasOne);
 
 		$this->Article->User->bindModel($userHasOne, false);
 		$expected = $this->Article->User->hasOne;
-		$this->Article->find('all', array(
-			'contain' => array(
-				'User' => array(
-					'Comment' => array('fields' => array('created'))
-				)
-			)
-		));
+		$this->Article->find('all', [
+			'contain' => [
+				'User' => [
+					'Comment' => ['fields' => ['created']]
+				]
+			]
+		]);
 		$this->assertEquals($expected, $this->Article->User->hasOne);
 
 		$this->Article->User->bindModel($userHasOne, false);
 		$expected = $this->Article->User->hasOne;
-		$this->Article->find('all', array(
-			'contain' => array(
-				'User.ArticleFeatured' => array(
-					'conditions' => array('ArticleFeatured.published' => 'Y')
-				),
+		$this->Article->find('all', [
+			'contain' => [
+				'User.ArticleFeatured' => [
+					'conditions' => ['ArticleFeatured.published' => 'Y']
+				],
 				'User.Comment'
-			)
-		));
+			]
+		]);
 		$this->assertEquals($expected, $this->Article->User->hasOne);
 	}
 
@@ -3528,24 +3528,24 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testResetMultipleHabtmAssociations() {
-		$articleHabtm = array(
-			'hasAndBelongsToMany' => array(
-				'Tag' => array(
+		$articleHabtm = [
+			'hasAndBelongsToMany' => [
+				'Tag' => [
 					'className' => 'Tag',
 					'joinTable' => 'articles_tags',
 					'foreignKey' => 'article_id',
 					'associationForeignKey' => 'tag_id'
-				),
-				'ShortTag' => array(
+				],
+				'ShortTag' => [
 					'className' => 'Tag',
 					'joinTable' => 'articles_tags',
 					'foreignKey' => 'article_id',
 					'associationForeignKey' => 'tag_id',
 					// LENGTH function mysql-only, using LIKE does almost the same
 					'conditions' => "ShortTag.tag LIKE '???'"
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
@@ -3556,61 +3556,61 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => 'Tag.tag'));
+		$this->Article->find('all', ['contain' => 'Tag.tag']);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => 'Tag'));
+		$this->Article->find('all', ['contain' => 'Tag']);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => array('Tag' => array('fields' => array(null)))));
+		$this->Article->find('all', ['contain' => ['Tag' => ['fields' => [null]]]]);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => array('Tag' => array('fields' => array('Tag.tag')))));
+		$this->Article->find('all', ['contain' => ['Tag' => ['fields' => ['Tag.tag']]]]);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => array('Tag' => array('fields' => array('Tag.tag', 'Tag.created')))));
+		$this->Article->find('all', ['contain' => ['Tag' => ['fields' => ['Tag.tag', 'Tag.created']]]]);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => 'ShortTag.tag'));
+		$this->Article->find('all', ['contain' => 'ShortTag.tag']);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => 'ShortTag'));
+		$this->Article->find('all', ['contain' => 'ShortTag']);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => array('ShortTag' => array('fields' => array(null)))));
+		$this->Article->find('all', ['contain' => ['ShortTag' => ['fields' => [null]]]]);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => array('ShortTag' => array('fields' => array('ShortTag.tag')))));
+		$this->Article->find('all', ['contain' => ['ShortTag' => ['fields' => ['ShortTag.tag']]]]);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 
 		$this->Article->resetBindings();
 		$this->Article->bindModel($articleHabtm, false);
 		$expected = $this->Article->hasAndBelongsToMany;
-		$this->Article->find('all', array('contain' => array('ShortTag' => array('fields' => array('ShortTag.tag', 'ShortTag.created')))));
+		$this->Article->find('all', ['contain' => ['ShortTag' => ['fields' => ['ShortTag.tag', 'ShortTag.created']]]]);
 		$this->assertEquals($expected, $this->Article->hasAndBelongsToMany);
 	}
 
@@ -3620,31 +3620,31 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testBindMultipleTimesWithFind() {
-		$binding = array(
-			'hasOne' => array(
-				'ArticlesTag' => array(
+		$binding = [
+			'hasOne' => [
+				'ArticlesTag' => [
 					'foreignKey' => false,
 					'type' => 'INNER',
-					'conditions' => array(
+					'conditions' => [
 						'ArticlesTag.article_id = Article.id'
-					)
-				),
-				'Tag' => array(
+					]
+				],
+				'Tag' => [
 					'type' => 'INNER',
 					'foreignKey' => false,
-					'conditions' => array(
+					'conditions' => [
 						'ArticlesTag.tag_id = Tag.id'
-					)
-				)
-			)
-		);
-		$this->Article->unbindModel(array('hasAndBelongsToMany' => array('Tag')));
+					]
+				]
+			]
+		];
+		$this->Article->unbindModel(['hasAndBelongsToMany' => ['Tag']]);
 		$this->Article->bindModel($binding);
-		$result = $this->Article->find('all', array('limit' => 1, 'contain' => array('ArticlesTag', 'Tag')));
+		$result = $this->Article->find('all', ['limit' => 1, 'contain' => ['ArticlesTag', 'Tag']]);
 
-		$this->Article->unbindModel(array('hasAndBelongsToMany' => array('Tag')));
+		$this->Article->unbindModel(['hasAndBelongsToMany' => ['Tag']]);
 		$this->Article->bindModel($binding);
-		$result = $this->Article->find('all', array('limit' => 1, 'contain' => array('ArticlesTag', 'Tag')));
+		$result = $this->Article->find('all', ['limit' => 1, 'contain' => ['ArticlesTag', 'Tag']]);
 
 		$associated = $this->Article->getAssociated();
 		$this->assertEquals('hasAndBelongsToMany', $associated['Tag']);
@@ -3672,10 +3672,10 @@ class ContainableBehaviorTest extends CakeTestCase {
 
 		$this->Article->User->setDataSource('test2');
 
-		$result = $this->Article->find('all', array(
-			'fields' => array('Article.title'),
-			'contain' => array('User')
-		));
+		$result = $this->Article->find('all', [
+			'fields' => ['Article.title'],
+			'contain' => ['User']
+		]);
 		$this->assertTrue(isset($result[0]['Article']));
 		$this->assertTrue(isset($result[0]['User']));
 	}
@@ -3687,7 +3687,7 @@ class ContainableBehaviorTest extends CakeTestCase {
  */
 	public function testAutoFieldsWithRecursiveNegativeOne() {
 		$this->Article->recursive = -1;
-		$result = $this->Article->field('title', array('Article.title' => 'First Article'));
+		$result = $this->Article->field('title', ['Article.title' => 'First Article']);
 		$this->assertNoErrors();
 		$this->assertEquals('First Article', $result, 'Field is wrong');
 	}
@@ -3698,9 +3698,9 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testFindAllReturn() {
-		$result = $this->Article->find('all', array(
-			'conditions' => array('Article.id' => 999999999)
-		));
+		$result = $this->Article->find('all', [
+			'conditions' => ['Article.id' => 999999999]
+		]);
 		$this->assertEmpty($result, 'Should be empty.');
 	}
 
@@ -3712,15 +3712,15 @@ class ContainableBehaviorTest extends CakeTestCase {
 	public function testLazyLoad() {
 		// Local set up
 		$this->User = ClassRegistry::init('User');
-		$this->User->bindModel(array(
-			'hasMany' => array('Article', 'ArticleFeatured', 'Comment')
-		), false);
+		$this->User->bindModel([
+			'hasMany' => ['Article', 'ArticleFeatured', 'Comment']
+		], false);
 
 		try {
-			$this->User->find('first', array(
+			$this->User->find('first', [
 				'contain' => 'Comment',
 				'lazyLoad' => true
-			));
+			]);
 		} catch (Exception $e) {
 			$exceptions = true;
 		}
@@ -3734,14 +3734,14 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @param array $contain
  * @return void
  */
-	protected function _containments($Model, $contain = array()) {
+	protected function _containments($Model, $contain = []) {
 		if (!is_array($Model)) {
 			$result = $Model->containments($contain);
 			return $this->_containments($result['models']);
 		}
 		$result = $Model;
 		foreach ($result as $i => $containment) {
-			$result[$i] = array_diff_key($containment, array('instance' => true));
+			$result[$i] = array_diff_key($containment, ['instance' => true]);
 		}
 		return $result;
 	}
@@ -3753,13 +3753,13 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @param array $expected
  * @return void
  */
-	protected function _assertBindings(Model $Model, $expected = array()) {
-		$expected = array_merge(array(
-			'belongsTo' => array(),
-			'hasOne' => array(),
-			'hasMany' => array(),
-			'hasAndBelongsToMany' => array()
-		), $expected);
+	protected function _assertBindings(Model $Model, $expected = []) {
+		$expected = array_merge([
+			'belongsTo' => [],
+			'hasOne' => [],
+			'hasMany' => [],
+			'hasAndBelongsToMany' => []
+		], $expected);
 		foreach ($expected as $binding => $expect) {
 			$this->assertEquals($expect, array_keys($Model->$binding));
 		}

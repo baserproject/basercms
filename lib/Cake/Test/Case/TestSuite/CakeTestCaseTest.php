@@ -51,7 +51,7 @@ class CakeTestCaseTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.post', 'core.author', 'core.test_plugin_comment');
+	public $fixtures = ['core.post', 'core.author', 'core.test_plugin_comment'];
 
 /**
  * CakeTestCaseTest::setUpBeforeClass()
@@ -104,47 +104,47 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTagsQuoting() {
 		$input = '<a href="/test.html" class="active">My link</a>';
-		$pattern = array(
-			'a' => array('href' => '/test.html', 'class' => 'active'),
+		$pattern = [
+			'a' => ['href' => '/test.html', 'class' => 'active'],
 			'My link',
 			'/a'
-		);
+		];
 		$this->assertTags($input, $pattern);
 
 		$input = "<a href='/test.html' class='active'>My link</a>";
-		$pattern = array(
-			'a' => array('href' => '/test.html', 'class' => 'active'),
+		$pattern = [
+			'a' => ['href' => '/test.html', 'class' => 'active'],
 			'My link',
 			'/a'
-		);
+		];
 		$this->assertTags($input, $pattern);
 
 		$input = "<a href='/test.html' class='active'>My link</a>";
-		$pattern = array(
-			'a' => array('href' => 'preg:/.*\.html/', 'class' => 'active'),
+		$pattern = [
+			'a' => ['href' => 'preg:/.*\.html/', 'class' => 'active'],
 			'My link',
 			'/a'
-		);
+		];
 		$this->assertTags($input, $pattern);
 
 		$input = "<span><strong>Text</strong></span>";
-		$pattern = array(
+		$pattern = [
 			'<span',
 			'<strong',
 			'Text',
 			'/strong',
 			'/span'
-		);
+		];
 		$this->assertTags($input, $pattern);
 
 		$input = "<span class='active'><strong>Text</strong></span>";
-		$pattern = array(
-			'span' => array('class'),
+		$pattern = [
+			'span' => ['class'],
 			'<strong',
 			'Text',
 			'/strong',
 			'/span'
-		);
+		];
 		$this->assertTags($input, $pattern);
 	}
 
@@ -154,8 +154,8 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	public function testAssertTagsRuntimeComplexity() {
-		$pattern = array(
-			'div' => array(
+		$pattern = [
+			'div' => [
 				'attr1' => 'val1',
 				'attr2' => 'val2',
 				'attr3' => 'val3',
@@ -164,10 +164,10 @@ class CakeTestCaseTest extends CakeTestCase {
 				'attr6' => 'val6',
 				'attr7' => 'val7',
 				'attr8' => 'val8',
-			),
+			],
 			'My div',
 			'/div'
-		);
+		];
 		$input = '<div attr8="val8" attr6="val6" attr4="val4" attr2="val2"' .
 			' attr1="val1" attr3="val3" attr5="val5" attr7="val7" />' .
 			'My div' .
@@ -396,21 +396,21 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	public function testGetMockForModel() {
-		App::build(array(
-			'Model' => array(
+		App::build([
+			'Model' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Model' . DS
-			)
-		), App::RESET);
+			]
+		], App::RESET);
 		$Post = $this->getMockForModel('Post');
 		$this->assertEquals('test', $Post->useDbConfig);
 		$this->assertInstanceOf('Post', $Post);
-		$this->assertNull($Post->save(array()));
+		$this->assertNull($Post->save([]));
 		$this->assertNull($Post->find('all'));
 		$this->assertEquals('posts', $Post->useTable);
 
-		$Post = $this->getMockForModel('Post', array('save'));
+		$Post = $this->getMockForModel('Post', ['save']);
 
-		$this->assertNull($Post->save(array()));
+		$this->assertNull($Post->save([]));
 		$this->assertInternalType('array', $Post->find('all'));
 	}
 
@@ -420,17 +420,17 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	public function testGetMockForModelSecondaryDatasource() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'Model/Datasource/Database' => array(
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS],
+			'Model/Datasource/Database' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Model' . DS . 'Datasource' . DS . 'Database' . DS
-			)
-		), App::RESET);
+			]
+		], App::RESET);
 		CakePlugin::load('TestPlugin');
-		ConnectionManager::create('test_secondary', array(
+		ConnectionManager::create('test_secondary', [
 			'datasource' => 'Database/TestLocalDriver'
-		));
-		$post = $this->getMockForModel('SecondaryPost', array('save'));
+		]);
+		$post = $this->getMockForModel('SecondaryPost', ['save']);
 		$this->assertEquals('test_secondary', $post->useDbConfig);
 		ConnectionManager::drop('test_secondary');
 	}
@@ -441,11 +441,11 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	public function testGetMockForModelWithPlugin() {
-		App::build(array(
-			'Plugin' => array(
+		App::build([
+			'Plugin' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS
-			)
-		), App::RESET);
+			]
+		], App::RESET);
 		CakePlugin::load('TestPlugin');
 		$this->getMockForModel('TestPlugin.TestPluginAppModel');
 		$this->getMockForModel('TestPlugin.TestPluginComment');
@@ -454,7 +454,7 @@ class CakeTestCaseTest extends CakeTestCase {
 		$this->assertInstanceOf('TestPluginComment', $result);
 		$this->assertEquals('test', $result->useDbConfig);
 
-		$TestPluginComment = $this->getMockForModel('TestPlugin.TestPluginComment', array('save'));
+		$TestPluginComment = $this->getMockForModel('TestPlugin.TestPluginComment', ['save']);
 
 		$this->assertInstanceOf('TestPluginComment', $TestPluginComment);
 		$TestPluginComment->expects($this->at(0))
@@ -463,8 +463,8 @@ class CakeTestCaseTest extends CakeTestCase {
 		$TestPluginComment->expects($this->at(1))
 			->method('save')
 			->will($this->returnValue(false));
-		$this->assertTrue($TestPluginComment->save(array()));
-		$this->assertFalse($TestPluginComment->save(array()));
+		$this->assertTrue($TestPluginComment->save([]));
+		$this->assertFalse($TestPluginComment->save([]));
 	}
 
 /**
@@ -473,7 +473,7 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	public function testGetMockForModelModel() {
-		$Mock = $this->getMockForModel('Model', array('save', 'setDataSource'), array('name' => 'Comment'));
+		$Mock = $this->getMockForModel('Model', ['save', 'setDataSource'], ['name' => 'Comment']);
 
 		$result = ClassRegistry::init('Comment');
 		$this->assertInstanceOf('Model', $result);
@@ -485,8 +485,8 @@ class CakeTestCaseTest extends CakeTestCase {
 			->method('save')
 			->will($this->returnValue(false));
 
-		$this->assertTrue($Mock->save(array()));
-		$this->assertFalse($Mock->save(array()));
+		$this->assertTrue($Mock->save([]));
+		$this->assertFalse($Mock->save([]));
 	}
 
 /**

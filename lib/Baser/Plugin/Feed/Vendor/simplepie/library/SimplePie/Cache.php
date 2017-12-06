@@ -61,10 +61,10 @@ class SimplePie_Cache
 	 * {@see register()}
 	 * @var array
 	 */
-	protected static $handlers = array(
+	protected static $handlers = [
 		'mysql' => 'SimplePie_Cache_MySQL',
 		'memcache' => 'SimplePie_Cache_Memcache',
-	);
+	];
 
 	/**
 	 * Don't call the constructor. Please.
@@ -123,7 +123,7 @@ class SimplePie_Cache
 	public static function parse_URL($url)
 	{
 		$params = parse_url($url);
-		$params['extras'] = array();
+		$params['extras'] = [];
 		if (isset($params['query']))
 		{
 			parse_str($params['query'], $params['extras']);

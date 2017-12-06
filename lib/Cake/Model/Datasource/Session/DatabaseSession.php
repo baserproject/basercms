@@ -48,16 +48,16 @@ class DatabaseSession implements CakeSessionHandlerInterface {
 		$modelName = Configure::read('Session.handler.model');
 
 		if (empty($modelName)) {
-			$settings = array(
+			$settings = [
 				'class' => 'Session',
 				'alias' => 'Session',
 				'table' => 'cake_sessions',
-			);
+			];
 		} else {
-			$settings = array(
+			$settings = [
 				'class' => $modelName,
 				'alias' => 'Session',
-			);
+			];
 		}
 		$this->_model = ClassRegistry::init($settings);
 		$this->_timeout = Configure::read('Session.timeout') * 60;
@@ -88,9 +88,9 @@ class DatabaseSession implements CakeSessionHandlerInterface {
  * @return mixed The value of the key or false if it does not exist
  */
 	public function read($id) {
-		$row = $this->_model->find('first', array(
-			'conditions' => array($this->_model->alias . '.' . $this->_model->primaryKey => $id)
-		));
+		$row = $this->_model->find('first', [
+			'conditions' => [$this->_model->alias . '.' . $this->_model->primaryKey => $id]
+		]);
 
 		if (empty($row[$this->_model->alias])) {
 			return '';
@@ -121,11 +121,11 @@ class DatabaseSession implements CakeSessionHandlerInterface {
 		$record = compact('id', 'data', 'expires');
 		$record[$this->_model->primaryKey] = $id;
 
-		$options = array(
+		$options = [
 			'validate' => false,
 			'callbacks' => false,
 			'counterCache' => false
-		);
+		];
 		try {
 			return (bool)$this->_model->save($record, $options);
 		} catch (PDOException $e) {
@@ -155,7 +155,7 @@ class DatabaseSession implements CakeSessionHandlerInterface {
 		} else {
 			$expires = time() - $expires;
 		}
-		$this->_model->deleteAll(array($this->_model->alias . ".expires <" => $expires), false, false);
+		$this->_model->deleteAll([$this->_model->alias . ".expires <" => $expires], false, false);
 		return true;
 	}
 

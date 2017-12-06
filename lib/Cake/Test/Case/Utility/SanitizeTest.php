@@ -67,7 +67,7 @@ class SanitizeTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.data_test', 'core.article');
+	public $fixtures = ['core.data_test', 'core.article'];
 
 /**
  * testEscapeAlphaNumeric method
@@ -108,56 +108,56 @@ class SanitizeTest extends CakeTestCase {
 	public function testClean() {
 		$string = 'test & "quote" \'other\' ;.$ symbol.' . "\r" . 'another line';
 		$expected = 'test &amp; &quot;quote&quot; &#039;other&#039; ;.$ symbol.another line';
-		$result = Sanitize::clean($string, array('connection' => 'test'));
+		$result = Sanitize::clean($string, ['connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
 		$string = 'test & "quote" \'other\' ;.$ symbol.' . "\r" . 'another line';
 		$expected = 'test & ' . Sanitize::escape('"quote"', 'test') . ' ' . Sanitize::escape('\'other\'', 'test') . ' ;.$ symbol.another line';
-		$result = Sanitize::clean($string, array('encode' => false, 'connection' => 'test'));
+		$result = Sanitize::clean($string, ['encode' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
 		$string = 'test & "quote" \'other\' ;.$ \\$ symbol.' . "\r" . 'another line';
 		$expected = 'test & "quote" \'other\' ;.$ $ symbol.another line';
-		$result = Sanitize::clean($string, array('encode' => false, 'escape' => false, 'connection' => 'test'));
+		$result = Sanitize::clean($string, ['encode' => false, 'escape' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
 		$string = 'test & "quote" \'other\' ;.$ \\$ symbol.' . "\r" . 'another line';
 		$expected = 'test & "quote" \'other\' ;.$ \\$ symbol.another line';
-		$result = Sanitize::clean($string, array('encode' => false, 'escape' => false, 'dollar' => false, 'connection' => 'test'));
+		$result = Sanitize::clean($string, ['encode' => false, 'escape' => false, 'dollar' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
 		$string = 'test & "quote" \'other\' ;.$ symbol.' . "\r" . 'another line';
 		$expected = 'test & "quote" \'other\' ;.$ symbol.' . "\r" . 'another line';
-		$result = Sanitize::clean($string, array('encode' => false, 'escape' => false, 'carriage' => false, 'connection' => 'test'));
+		$result = Sanitize::clean($string, ['encode' => false, 'escape' => false, 'carriage' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
-		$array = array(array('test & "quote" \'other\' ;.$ symbol.' . "\r" . 'another line'));
-		$expected = array(array('test &amp; &quot;quote&quot; &#039;other&#039; ;.$ symbol.another line'));
-		$result = Sanitize::clean($array, array('connection' => 'test'));
+		$array = [['test & "quote" \'other\' ;.$ symbol.' . "\r" . 'another line']];
+		$expected = [['test &amp; &quot;quote&quot; &#039;other&#039; ;.$ symbol.another line']];
+		$result = Sanitize::clean($array, ['connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
-		$array = array(array('test & "quote" \'other\' ;.$ \\$ symbol.' . "\r" . 'another line'));
-		$expected = array(array('test & "quote" \'other\' ;.$ $ symbol.another line'));
-		$result = Sanitize::clean($array, array('encode' => false, 'escape' => false, 'connection' => 'test'));
+		$array = [['test & "quote" \'other\' ;.$ \\$ symbol.' . "\r" . 'another line']];
+		$expected = [['test & "quote" \'other\' ;.$ $ symbol.another line']];
+		$result = Sanitize::clean($array, ['encode' => false, 'escape' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
-		$array = array(array('test odd Ä spacesé'));
-		$expected = array(array('test odd &Auml; spaces&eacute;'));
-		$result = Sanitize::clean($array, array('odd_spaces' => false, 'escape' => false, 'connection' => 'test'));
+		$array = [['test odd Ä spacesé']];
+		$expected = [['test odd &Auml; spaces&eacute;']];
+		$result = Sanitize::clean($array, ['odd_spaces' => false, 'escape' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
-		$array = array(array('\\$', array('key' => 'test & "quote" \'other\' ;.$ \\$ symbol.' . "\r" . 'another line')));
-		$expected = array(array('$', array('key' => 'test & "quote" \'other\' ;.$ $ symbol.another line')));
-		$result = Sanitize::clean($array, array('encode' => false, 'escape' => false, 'connection' => 'test'));
+		$array = [['\\$', ['key' => 'test & "quote" \'other\' ;.$ \\$ symbol.' . "\r" . 'another line']]];
+		$expected = [['$', ['key' => 'test & "quote" \'other\' ;.$ $ symbol.another line']]];
+		$result = Sanitize::clean($array, ['encode' => false, 'escape' => false, 'connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
 		$string = '';
 		$expected = '';
-		$result = Sanitize::clean($string, array('connection' => 'test'));
+		$result = Sanitize::clean($string, ['connection' => 'test']);
 		$this->assertEquals($expected, $result);
 
-		$data = array(
-			'Grant' => array(
+		$data = [
+			'Grant' => [
 				'title' => '2 o clock grant',
 				'grant_peer_review_id' => 3,
 				'institution_id' => 5,
@@ -165,18 +165,18 @@ class SanitizeTest extends CakeTestCase {
 				'modified_by' => 1,
 				'created' => '2010-07-15 14:11:00',
 				'modified' => '2010-07-19 10:45:41'
-			),
-			'GrantsMember' => array(
-				0 => array(
+			],
+			'GrantsMember' => [
+				0 => [
 					'id' => 68,
 					'grant_id' => 120,
 					'member_id' => 16,
 					'program_id' => 29,
 					'pi_percent_commitment' => 1
-				)
-			)
-		);
-		$result = Sanitize::clean($data, array('connection' => 'test'));
+				]
+			]
+		];
+		$result = Sanitize::clean($data, ['connection' => 'test']);
 		$this->assertEquals($data, $result);
 	}
 
@@ -188,7 +188,7 @@ class SanitizeTest extends CakeTestCase {
 	public function testHtml() {
 		$string = '<p>This is a <em>test string</em> & so is this</p>';
 		$expected = 'This is a test string &amp; so is this';
-		$result = Sanitize::html($string, array('remove' => true));
+		$result = Sanitize::html($string, ['remove' => true]);
 		$this->assertEquals($expected, $result);
 
 		$string = 'The "lazy" dog \'jumped\' & flew over the moon. If (1+1) = 2 <em>is</em> true, (2-1) = 1 is also true';
@@ -198,11 +198,11 @@ class SanitizeTest extends CakeTestCase {
 
 		$string = 'The "lazy" dog \'jumped\'';
 		$expected = 'The &quot;lazy&quot; dog \'jumped\'';
-		$result = Sanitize::html($string, array('quotes' => ENT_COMPAT));
+		$result = Sanitize::html($string, ['quotes' => ENT_COMPAT]);
 		$this->assertEquals($expected, $result);
 
 		$string = 'The "lazy" dog \'jumped\'';
-		$result = Sanitize::html($string, array('quotes' => ENT_NOQUOTES));
+		$result = Sanitize::html($string, ['quotes' => ENT_NOQUOTES]);
 		$this->assertEquals($string, $result);
 
 		$string = 'The "lazy" dog \'jumped\' & flew over the moon. If (1+1) = 2 <em>is</em> true, (2-1) = 1 is also true';
@@ -217,7 +217,7 @@ class SanitizeTest extends CakeTestCase {
 
 		$string = 'The "lazy" dog & his friend Apple&reg; conquered the world';
 		$expected = 'The &quot;lazy&quot; dog &amp; his friend Apple&reg; conquered the world';
-		$result = Sanitize::html($string, array('double' => false));
+		$result = Sanitize::html($string, ['double' => false]);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -249,13 +249,13 @@ class SanitizeTest extends CakeTestCase {
 		$result = Sanitize::paranoid($string);
 		$this->assertEquals($expected, $result);
 
-		$string = array('This |s th% s0ng that never ends it g*es',
+		$string = ['This |s th% s0ng that never ends it g*es',
 						'on and on my friends, b^ca#use it is the',
-						'so&g th===t never ends.');
-		$expected = array('This s th% s0ng that never ends it g*es',
+						'so&g th===t never ends.'];
+		$expected = ['This s th% s0ng that never ends it g*es',
 						'on and on my friends bcause it is the',
-						'sog tht never ends.');
-		$result = Sanitize::paranoid($string, array('%', '*', '.', ' '));
+						'sog tht never ends.'];
+		$result = Sanitize::paranoid($string, ['%', '*', '.', ' ']);
 		$this->assertEquals($expected, $result);
 
 		$string = "anything' OR 1 = 1";

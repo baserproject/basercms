@@ -28,21 +28,21 @@ class FeedController extends FeedAppController {
  * コンポーネント
  * @var array
  */
-	public $components = array('RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure');
+	public $components = ['RequestHandler', 'Cookie', 'BcAuth', 'BcAuthConfigure'];
 
 /**
  * モデル
  *
  * @var array
  */
-	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
+	public $uses = ["Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed"];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcText', 'Feed.Feed', 'BcArray');
+	public $helpers = ['BcText', 'Feed.Feed', 'BcArray'];
 
 /**
  * beforeFilter
@@ -63,7 +63,7 @@ class FeedController extends FeedAppController {
  */
 	public function index($id = null) {
 		
-		$this->navis = array();
+		$this->navis = [];
 		
 		// IDの指定がなかった場合はエラーとする
 		if (!$id) {
@@ -73,7 +73,7 @@ class FeedController extends FeedAppController {
 
 		// feed設定データ取得
 		$feedConfig = $this->FeedConfig->read(null, $id);
-		$feedDetails = $this->FeedDetail->find('all', array('conditions' => array("FeedDetail.feed_config_id" => $id)));
+		$feedDetails = $this->FeedDetail->find('all', ['conditions' => ["FeedDetail.feed_config_id" => $id]]);
 
 		// データが取得できなかった場合はエラーとする
 		if (!$feedConfig || !$feedDetails) {
@@ -138,7 +138,7 @@ class FeedController extends FeedAppController {
 		}
 
 		// アイテムをマージ
-		$items = array();
+		$items = [];
 		foreach ($feeds as $feed) {
 			if (!empty($feed['Items'])) {
 				$items = array_merge($items, $feed['Items']);
@@ -164,7 +164,7 @@ class FeedController extends FeedAppController {
 		}
 
 		// 日付で並び替え
-		usort($items, array($this, "_sortDescByTimestamp"));
+		usort($items, [$this, "_sortDescByTimestamp"]);
 
 		// 件数で絞り込み
 		$items = array_slice($items, 0, $feedConfig['FeedConfig']['display_number']);

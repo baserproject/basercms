@@ -44,7 +44,7 @@ class DbAcl extends Object implements AclInterface {
  */
 	public function __construct() {
 		parent::__construct();
-		$this->Permission = ClassRegistry::init(array('class' => 'Permission', 'alias' => 'Permission'));
+		$this->Permission = ClassRegistry::init(['class' => 'Permission', 'alias' => 'Permission']);
 		$this->Aro = $this->Permission->Aro;
 		$this->Aco = $this->Permission->Aco;
 	}

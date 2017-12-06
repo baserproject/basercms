@@ -17,8 +17,8 @@ class MailContentFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'description' => '<p><span style="color:#C30">*</span> 印の項目は必須となりますので、必ず入力してください。</p>',
 			'sender_1' => '',
@@ -36,7 +36,7 @@ class MailContentFixture extends BaserTestFixture {
 			'publish_end' => null,
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

@@ -17,8 +17,8 @@ class MailFieldFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'mail_content_id' => '1',
 			'no' => '1',
@@ -49,8 +49,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '1',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'mail_content_id' => '1',
 			'no' => '2',
@@ -81,8 +81,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '2',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'mail_content_id' => '1',
 			'no' => '3',
@@ -113,8 +113,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '3',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'mail_content_id' => '1',
 			'no' => '4',
@@ -145,8 +145,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '4',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'mail_content_id' => '1',
 			'no' => '5',
@@ -177,8 +177,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '5',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'mail_content_id' => '1',
 			'no' => '7',
@@ -209,8 +209,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '6',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '7',
 			'mail_content_id' => '1',
 			'no' => '8',
@@ -241,8 +241,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '7',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '8',
 			'mail_content_id' => '1',
 			'no' => '9',
@@ -273,8 +273,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '8',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '9',
 			'mail_content_id' => '1',
 			'no' => '10',
@@ -305,8 +305,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '9',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '10',
 			'mail_content_id' => '1',
 			'no' => '11',
@@ -337,8 +337,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '10',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '11',
 			'mail_content_id' => '1',
 			'no' => '12',
@@ -369,8 +369,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '11',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '12',
 			'mail_content_id' => '1',
 			'no' => '13',
@@ -401,8 +401,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '12',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '13',
 			'mail_content_id' => '1',
 			'no' => '14',
@@ -433,8 +433,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '13',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '14',
 			'mail_content_id' => '1',
 			'no' => '15',
@@ -465,8 +465,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '14',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '15',
 			'mail_content_id' => '1',
 			'no' => '16',
@@ -497,8 +497,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '15',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '16',
 			'mail_content_id' => '1',
 			'no' => '17',
@@ -529,8 +529,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '16',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '17',
 			'mail_content_id' => '1',
 			'no' => '18',
@@ -561,8 +561,8 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '17',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '18',
 			'mail_content_id' => '1',
 			'no' => '19',
@@ -593,7 +593,7 @@ class MailFieldFixture extends BaserTestFixture {
 			'sort' => '18',
 			'created' => '2015-01-27 12:56:54',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

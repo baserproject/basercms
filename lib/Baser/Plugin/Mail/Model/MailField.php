@@ -23,7 +23,7 @@ class MailField extends MailAppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * validate
@@ -155,12 +155,12 @@ class MailField extends MailAppModel {
  * @return boolean
  */
 	public function duplicateMailField($check) {
-		$conditions = array('MailField.' . key($check) => $check[key($check)],
-			'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']);
+		$conditions = ['MailField.' . key($check) => $check[key($check)],
+			'MailField.mail_content_id' => $this->data['MailField']['mail_content_id']];
 		if ($this->exists()) {
-			$conditions['NOT'] = array('MailField.id' => $this->id);
+			$conditions['NOT'] = ['MailField.id' => $this->id];
 		}
-		$ret = $this->find('first', array('conditions' => $conditions));
+		$ret = $this->find('first', ['conditions' => $conditions]);
 		if ($ret) {
 			return false;
 		} else {
@@ -210,19 +210,19 @@ class MailField extends MailAppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	public function copy($id, $data = array(), $options = array()) {
-		$options = array_merge(array(
+	public function copy($id, $data = [], $options = []) {
+		$options = array_merge([
 			'sortUpdateOff' => false,
-			), $options);
+			], $options);
 
 		extract($options);
 
 		if ($id) {
-			$data = $this->find('first', array('conditions' => array('MailField.id' => $id), 'recursive' => -1));
+			$data = $this->find('first', ['conditions' => ['MailField.id' => $id], 'recursive' => -1]);
 		}
 		$oldData = $data;
 
-		if ($this->find('count', array('conditions' => array('MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name'])))) {
+		if ($this->find('count', ['conditions' => ['MailField.mail_content_id' => $data['MailField']['mail_content_id'], 'MailField.field_name' => $data['MailField']['field_name']]])) {
 			$data['MailField']['name'] .= '_copy';
 			if(strlen($data['MailField']['name']) >= 64) {
 				return false;
@@ -242,7 +242,7 @@ class MailField extends MailAppModel {
 			}
 		}
 
-		$data['MailField']['no'] = $this->getMax('no', array('MailField.mail_content_id' => $data['MailField']['mail_content_id'])) + 1;
+		$data['MailField']['no'] = $this->getMax('no', ['MailField.mail_content_id' => $data['MailField']['mail_content_id']]) + 1;
 		if (!$sortUpdateOff) {
 			$data['MailField']['sort'] = $this->getMax('sort') + 1;
 		}
@@ -290,7 +290,7 @@ class MailField extends MailAppModel {
  * @param bool $created
  * @param array $options
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		parent::afterSave($created, $options);
 		// フロントエンドでは、MailContentのキャッシュを利用する為削除しておく
 		$MailContent = ClassRegistry::init('Mail.MailContent');

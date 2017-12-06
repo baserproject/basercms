@@ -29,8 +29,8 @@ $show_credits = false; # set to false to remove credits line. Credits adds 12 pi
 $credits = 'www.captcha.ru'; # if empty, HTTP_HOST will be shown
 
 # CAPTCHA image colors (RGB, 0-255)
-$foreground_color = array(102, 153, 0);
-$background_color = array(255, 255, 255);
+$foreground_color = [102, 153, 0];
+$background_color = [255, 255, 255];
 //$foreground_color = array(mt_rand(0,100), mt_rand(0,100), mt_rand(0,100));
 //$background_color = array(mt_rand(200,255), mt_rand(200,255), mt_rand(200,255));
 

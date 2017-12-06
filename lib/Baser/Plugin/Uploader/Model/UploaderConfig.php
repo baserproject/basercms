@@ -31,26 +31,26 @@ class UploaderConfig extends AppModel {
  * @var		array
  * @access	public
  */
-	public $validate = array(
-		'large_width' => array(array(	'rule'		=> array('notBlank'),
-										'message'	=> 'PCサイズ（大）[幅] を入力してください。')),
-		'large_height' => array(array(	'rule'		=> array('notBlank'),
-										'message'	=> 'PCサイズ（大）[高さ] を入力してください。')),
-		'midium_width' => array(array(	'rule'		=> array('notBlank'),
-										'message'	=> 'PCサイズ（中）[幅] を入力してください。')),
-		'midium_height' => array(array(	'rule'		=> array('notBlank'),
-										'message'	=> 'PCサイズ（中）[高さ] を入力してください。')),
-		'small_width' => array(array(	'rule'		=> array('notBlank'),
-										'message'	=> 'PCサイズ（小）[幅] を入力してください。')),
-		'small_height' => array(array(	'rule'		=> array('notBlank'),
-										'message'	=> 'PCサイズ（小）[高さ] を入力してください。')),
-		'mobile_large_width' => array(array('rule'		=> array('notBlank'),
-											'message'	=> '携帯サイズ（大）[幅] を入力してください。')),
-		'mobile_large_height' => array(array('rule'		=> array('notBlank'),
-											'message'	=> '携帯サイズ（大）[高さ] を入力してください。')),
-		'mobile_small_width' => array(array('rule'		=> array('notBlank'),
-											'message'	=> '携帯サイズ（小）[幅] を入力してください。')),
-		'mobile_small_height' => array(array('rule'		=> array('notBlank'),
-											'message'	=> '携帯サイズ（小）[幅] を入力してください。'))
-	);
+	public $validate = [
+		'large_width' => [[	'rule'		=> ['notBlank'],
+										'message'	=> 'PCサイズ（大）[幅] を入力してください。']],
+		'large_height' => [[	'rule'		=> ['notBlank'],
+										'message'	=> 'PCサイズ（大）[高さ] を入力してください。']],
+		'midium_width' => [[	'rule'		=> ['notBlank'],
+										'message'	=> 'PCサイズ（中）[幅] を入力してください。']],
+		'midium_height' => [[	'rule'		=> ['notBlank'],
+										'message'	=> 'PCサイズ（中）[高さ] を入力してください。']],
+		'small_width' => [[	'rule'		=> ['notBlank'],
+										'message'	=> 'PCサイズ（小）[幅] を入力してください。']],
+		'small_height' => [[	'rule'		=> ['notBlank'],
+										'message'	=> 'PCサイズ（小）[高さ] を入力してください。']],
+		'mobile_large_width' => [['rule'		=> ['notBlank'],
+											'message'	=> '携帯サイズ（大）[幅] を入力してください。']],
+		'mobile_large_height' => [['rule'		=> ['notBlank'],
+											'message'	=> '携帯サイズ（大）[高さ] を入力してください。']],
+		'mobile_small_width' => [['rule'		=> ['notBlank'],
+											'message'	=> '携帯サイズ（小）[幅] を入力してください。']],
+		'mobile_small_height' => [['rule'		=> ['notBlank'],
+											'message'	=> '携帯サイズ（小）[幅] を入力してください。']]
+	];
 }

@@ -68,7 +68,7 @@ class FlashHelper extends AppHelper {
  *   in session.
  * @throws UnexpectedValueException If value for flash settings key is not an array.
  */
-	public function render($key = 'flash', $options = array()) {
+	public function render($key = 'flash', $options = []) {
 		if (!CakeSession::check("Message.$key")) {
 			return null;
 		}

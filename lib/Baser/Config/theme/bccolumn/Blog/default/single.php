@@ -33,7 +33,7 @@ $(function(){
 <?php $this->Blog->author($post) ?>
 		</span>
     </div>
-<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 </div>
 <div class="post-navi">
 	<?php $this->Blog->prevLink($post, "＜ 前の記事") ?>

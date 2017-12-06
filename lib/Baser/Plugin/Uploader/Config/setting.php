@@ -13,18 +13,18 @@
 /**
  * システムナビ
  */
-	$config['BcApp.adminNavi.uploader'] = array(
+	$config['BcApp.adminNavi.uploader'] = [
 			'name'		=> 'アップローダープラグイン',
-			'contents'	=> array(
-				array('name' => 'アップロードファイル一覧', 
-					'url' => array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index')),
-				array('name' => 'カテゴリ一覧', 
-					'url' => array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index')),
-				array('name' => 'カテゴリ新規登録', 
-					'url' => array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'add')),
-				array('name' => '基本設定', 
-					'url' => array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index')),
-		)
-	);
+			'contents'	=> [
+				['name' => 'アップロードファイル一覧', 
+					'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index']],
+				['name' => 'カテゴリ一覧', 
+					'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'index']],
+				['name' => 'カテゴリ新規登録', 
+					'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_categories', 'action' => 'add']],
+				['name' => '基本設定', 
+					'url' => ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_configs', 'action' => 'index']],
+		]
+	];
 
 ?>

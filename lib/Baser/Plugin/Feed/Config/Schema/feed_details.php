@@ -10,24 +10,24 @@ class FeedDetailsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $feed_details = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'feed_config_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'url' => array('type' => 'string', 'null' => true, 'default' => null),
-		'category_filter' => array('type' => 'string', 'null' => true, 'default' => null),
-		'cache_time' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
-	);
+	public $feed_details = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
+		'feed_config_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
+		'name' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+		'url' => ['type' => 'string', 'null' => true, 'default' => null],
+		'category_filter' => ['type' => 'string', 'null' => true, 'default' => null],
+		'cache_time' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 20],
+		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
+	];
 
 }

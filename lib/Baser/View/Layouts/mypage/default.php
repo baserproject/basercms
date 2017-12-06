@@ -21,15 +21,15 @@
 		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
 		<?php
-		$this->BcBaser->css(array(
+		$this->BcBaser->css([
 			'admin/jquery-ui/ui.all',
 			'admin/import',
 			'../js/admin/jquery.contextMenu-1.0/jquery.contextMenu',
-			'admin/colorbox/colorbox-1.6.1'))
+			'admin/colorbox/colorbox-1.6.1'])
 		?>
-	<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
+	<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
-		$this->BcBaser->js(array(
+		$this->BcBaser->js([
 			'admin/vendors/jquery-2.1.4.min',
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
@@ -45,7 +45,7 @@
 			'admin/vendors/validate_messages_ja',
 			'admin/functions',
 			'admin/startup',
-			'admin/libs/adjust_scroll'))
+			'admin/libs/adjust_scroll'])
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>

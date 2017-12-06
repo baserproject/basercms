@@ -17,8 +17,8 @@
  */
 class UploaderViewEventListener extends BcViewEventListener {
 	
-	public $events = array('afterLayout',
-			'Pages.beforeRender');
+	public $events = ['afterLayout',
+			'Pages.beforeRender'];
 	
 /**
  * afterLayout
@@ -78,8 +78,8 @@ class UploaderViewEventListener extends BcViewEventListener {
 			/* モバイル画像に差し替える */
 			$aMatch = "/<array([^>]*?)href=\"([^>]*?)\"([^>]*?)><img([^>]*?)\/><\/a>/is";
 			$imgMatch = "/<img([^>]*?)src=\"([^>]*?)\"([^>]*?)\/>/is";
-			$View->output = preg_replace_callback($aMatch, array($this,"__mobileImageAnchorReplace"), $View->output);
-			$View->output = preg_replace_callback($imgMatch, array($this,"__mobileImageReplace"), $View->output);
+			$View->output = preg_replace_callback($aMatch, [$this,"__mobileImageAnchorReplace"], $View->output);
+			$View->output = preg_replace_callback($imgMatch, [$this,"__mobileImageReplace"], $View->output);
 
 		}
 

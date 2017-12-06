@@ -37,4 +37,4 @@
  *     Note that the Turkic mappings do not maintain canonical equivalence without additional processing.
  *     See the discussions of case mapping in the Unicode Standard for more information.
  */
-$config['0250_02af'][] = array('upper' => 422, 'status' => 'C', 'lower' => array(640));
+$config['0250_02af'][] = ['upper' => 422, 'status' => 'C', 'lower' => [640]];

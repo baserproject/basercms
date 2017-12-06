@@ -5,12 +5,12 @@ App::uses('BcAppView', 'View');
 
 class MaildataHelperTest extends BaserTestCase {
     public $View = null;
-    public $fixtures = array(
+    public $fixtures = [
         'baser.Default.Content',
         'baser.Default.Site',
         'baser.Default.User',
         'baser.Default.SiteConfig'
-    );
+    ];
 /**
  * set up
  */

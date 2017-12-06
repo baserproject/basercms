@@ -138,16 +138,16 @@ class DebuggerTest extends CakeTestCase {
 		Debugger::output('js');
 		$buzz .= '';
 		$result = explode('</a>', ob_get_clean());
-		$this->assertTags($result[0], array(
-			'pre' => array('class' => 'cake-error'),
-			'a' => array(
+		$this->assertTags($result[0], [
+			'pre' => ['class' => 'cake-error'],
+			'a' => [
 				'href' => "javascript:void(0);",
 				'onclick' => "preg:/document\.getElementById\('cakeErr[a-z0-9]+\-trace'\)\.style\.display = " .
 					"\(document\.getElementById\('cakeErr[a-z0-9]+\-trace'\)\.style\.display == 'none'" .
 					" \? '' \: 'none'\);/"
-			),
-			'b' => array(), 'Notice', '/b', ' (8)',
-		));
+			],
+			'b' => [], 'Notice', '/b', ' (8)',
+		]);
 
 		$this->assertRegExp('/Undefined variable:\s+buzz/', $result[1]);
 		$this->assertRegExp('/<a[^>]+>Code/', $result[1]);
@@ -164,33 +164,33 @@ class DebuggerTest extends CakeTestCase {
 		set_error_handler('Debugger::showError');
 		$this->_restoreError = true;
 
-		Debugger::output('js', array(
+		Debugger::output('js', [
 			'traceLine' => '{:reference} - <a href="txmt://open?url=file://{:file}' .
 				'&line={:line}">{:path}</a>, line {:line}'
-		));
+		]);
 		$result = Debugger::trace();
 		$this->assertRegExp('/' . preg_quote('txmt://open?url=file://', '/') . '(\/|[A-Z]:\\\\)' . '/', $result);
 
-		Debugger::output('xml', array(
+		Debugger::output('xml', [
 			'error' => '<error><code>{:code}</code><file>{:file}</file><line>{:line}</line>' .
 				'{:description}</error>',
 			'context' => "<context>{:context}</context>",
 			'trace' => "<stack>{:trace}</stack>",
-		));
+		]);
 		Debugger::output('xml');
 
 		ob_start();
 		$foo .= '';
 		$result = ob_get_clean();
 
-		$data = array(
-			'error' => array(),
-			'code' => array(), '8', '/code',
-			'file' => array(), 'preg:/[^<]+/', '/file',
-			'line' => array(), '' . ((int)__LINE__ - 7), '/line',
+		$data = [
+			'error' => [],
+			'code' => [], '8', '/code',
+			'file' => [], 'preg:/[^<]+/', '/file',
+			'line' => [], '' . ((int)__LINE__ - 7), '/line',
 			'preg:/Undefined variable:\s+foo/',
 			'/error'
-		);
+		];
 		$this->assertTags($result, $data, true);
 	}
 
@@ -223,33 +223,33 @@ class DebuggerTest extends CakeTestCase {
 		set_error_handler('Debugger::showError');
 		$this->_restoreError = true;
 
-		Debugger::addFormat('js', array(
+		Debugger::addFormat('js', [
 			'traceLine' => '{:reference} - <a href="txmt://open?url=file://{:file}' .
 				'&line={:line}">{:path}</a>, line {:line}'
-		));
+		]);
 		Debugger::outputAs('js');
 
 		$result = Debugger::trace();
 		$this->assertRegExp('/' . preg_quote('txmt://open?url=file://', '/') . '(\/|[A-Z]:\\\\)' . '/', $result);
 
-		Debugger::addFormat('xml', array(
+		Debugger::addFormat('xml', [
 			'error' => '<error><code>{:code}</code><file>{:file}</file><line>{:line}</line>' .
 				'{:description}</error>',
-		));
+		]);
 		Debugger::outputAs('xml');
 
 		ob_start();
 		$foo .= '';
 		$result = ob_get_clean();
 
-		$data = array(
+		$data = [
 			'<error',
 			'<code', '8', '/code',
 			'<file', 'preg:/[^<]+/', '/file',
 			'<line', '' . ((int)__LINE__ - 7), '/line',
 			'preg:/Undefined variable:\s+foo/',
 			'/error'
-		);
+		];
 		$this->assertTags($result, $data, true);
 	}
 
@@ -262,7 +262,7 @@ class DebuggerTest extends CakeTestCase {
 		set_error_handler('Debugger::showError');
 		$this->_restoreError = true;
 
-		Debugger::addFormat('callback', array('callback' => array($this, 'customFormat')));
+		Debugger::addFormat('callback', ['callback' => [$this, 'customFormat']]);
 		Debugger::outputAs('callback');
 
 		ob_start();
@@ -302,7 +302,7 @@ class DebuggerTest extends CakeTestCase {
 	public function testExportVar() {
 		App::uses('Controller', 'Controller');
 		$Controller = new Controller();
-		$Controller->helpers = array('Html', 'Form');
+		$Controller->helpers = ['Html', 'Form'];
 		$View = new View($Controller);
 		$View->int = 2;
 		$View->float = 1.333;
@@ -378,10 +378,10 @@ TEXT;
 
 		$this->assertTextEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			1 => 'Index one',
 			5 => 'Index five'
-		);
+		];
 		$result = Debugger::exportVar($data);
 		$expected = <<<TEXT
 array(
@@ -391,11 +391,11 @@ array(
 TEXT;
 		$this->assertTextEquals($expected, $result);
 
-		$data = array(
-			'key' => array(
+		$data = [
+			'key' => [
 				'value'
-			)
-		);
+			]
+		];
 		$result = Debugger::exportVar($data, 1);
 		$expected = <<<TEXT
 array(
@@ -425,13 +425,13 @@ TEXT;
  * @return void
  */
 	public function testExportVarZero() {
-		$data = array(
+		$data = [
 			'nothing' => '',
 			'null' => null,
 			'false' => false,
 			'szero' => '0',
 			'zero' => 0
-		);
+		];
 		$result = Debugger::exportVar($data);
 		$expected = <<<TEXT
 array(
@@ -454,7 +454,7 @@ TEXT;
 		if (file_exists(LOGS . 'debug.log')) {
 			unlink(LOGS . 'debug.log');
 		}
-		CakeLog::config('file', array('engine' => 'File', 'path' => TMP . 'logs' . DS));
+		CakeLog::config('file', ['engine' => 'File', 'path' => TMP . 'logs' . DS]);
 
 		Debugger::log('cool');
 		$result = file_get_contents(LOGS . 'debug.log');
@@ -463,7 +463,7 @@ TEXT;
 
 		unlink(LOGS . 'debug.log');
 
-		Debugger::log(array('whatever', 'here'));
+		Debugger::log(['whatever', 'here']);
 		$result = file_get_contents(LOGS . 'debug.log');
 		$this->assertContains('DebuggerTest::testLog', $result);
 		$this->assertContains('[main]', $result);
@@ -481,11 +481,11 @@ TEXT;
 		if (file_exists(LOGS . 'debug.log')) {
 			unlink(LOGS . 'debug.log');
 		}
-		CakeLog::config('file', array('engine' => 'File', 'path' => TMP . 'logs' . DS));
+		CakeLog::config('file', ['engine' => 'File', 'path' => TMP . 'logs' . DS]);
 
-		$val = array(
-			'test' => array('key' => 'val')
-		);
+		$val = [
+			'test' => ['key' => 'val']
+		];
 		Debugger::log($val, LOG_DEBUG, 0);
 		$result = file_get_contents(LOGS . 'debug.log');
 		$this->assertContains('DebuggerTest::testLog', $result);
@@ -500,18 +500,18 @@ TEXT;
  * @return void
  */
 	public function testDump() {
-		$var = array('People' => array(
-			array(
+		$var = ['People' => [
+			[
 				'name' => 'joeseph',
 				'coat' => 'technicolor',
 				'hair_color' => 'brown'
-			),
-			array(
+			],
+			[
 				'name' => 'Shaft',
 				'coat' => 'black',
 				'hair' => 'black'
-			)
-		));
+			]
+		]];
 		ob_start();
 		Debugger::dump($var);
 		$result = ob_get_clean();
@@ -580,7 +580,7 @@ TEXT;
  * @return void
  */
 	public function testNoDbCredentials() {
-		$config = array(
+		$config = [
 			'datasource' => 'mysql',
 			'persistent' => false,
 			'host' => 'void.cakephp.org',
@@ -588,11 +588,11 @@ TEXT;
 			'password' => 'cakephp-password',
 			'database' => 'cakephp-database',
 			'prefix' => ''
-		);
+		];
 
 		$output = Debugger::exportVar($config);
 
-		$expectedArray = array(
+		$expectedArray = [
 			'datasource' => 'mysql',
 			'persistent' => false,
 			'host' => '*****',
@@ -600,7 +600,7 @@ TEXT;
 			'password' => '*****',
 			'database' => '*****',
 			'prefix' => ''
-		);
+		];
 		$expected = Debugger::exportVar($expectedArray);
 
 		$this->assertEquals($expected, $output);
@@ -625,9 +625,9 @@ TEXT;
 		$result = Debugger::trace();
 		$this->assertRegExp('/^DebuggerTest::testTraceExclude/', $result);
 
-		$result = Debugger::trace(array(
-			'exclude' => array('DebuggerTest::testTraceExclude')
-		));
+		$result = Debugger::trace([
+			'exclude' => ['DebuggerTest::testTraceExclude']
+		]);
 		$this->assertNotRegExp('/^DebuggerTest::testTraceExclude/', $result);
 	}
 }

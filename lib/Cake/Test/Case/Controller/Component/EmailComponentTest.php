@@ -61,8 +61,8 @@ class DebugCompTransport extends AbstractTransport {
  * @return bool
  */
 	public function send(CakeEmail $email) {
-		$email->addHeaders(array('Date' => EmailComponentTest::$sentDate));
-		$headers = $email->getHeaders(array_fill_keys(array('from', 'replyTo', 'readReceipt', 'returnPath', 'to', 'cc', 'bcc', 'subject'), true));
+		$email->addHeaders(['Date' => EmailComponentTest::$sentDate]);
+		$headers = $email->getHeaders(array_fill_keys(['from', 'replyTo', 'readReceipt', 'returnPath', 'to', 'cc', 'bcc', 'subject'], true));
 		$to = $headers['To'];
 		$subject = $headers['Subject'];
 		unset($headers['To'], $headers['Subject']);
@@ -103,7 +103,7 @@ class EmailTestController extends Controller {
  *
  * @var array
  */
-	public $components = array('Session', 'EmailTest');
+	public $components = ['Session', 'EmailTest'];
 
 }
 
@@ -147,13 +147,13 @@ class EmailComponentTest extends CakeTestCase {
 
 		$this->Controller = new EmailTestController();
 		$this->Controller->Components->init($this->Controller);
-		$this->Controller->EmailTest->initialize($this->Controller, array());
+		$this->Controller->EmailTest->initialize($this->Controller, []);
 
 		static::$sentDate = date(DATE_RFC2822);
 
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 	}
 
 /**
@@ -331,7 +331,7 @@ HTMLBLOC;
 		$this->Controller->EmailTest->layout = 'default';
 		$this->Controller->EmailTest->template = 'nested_element';
 		$this->Controller->EmailTest->sendAs = 'html';
-		$this->Controller->helpers = array('Html');
+		$this->Controller->helpers = ['Html'];
 
 		$this->Controller->EmailTest->send();
 		$result = DebugCompTransport::$lastEmail;
@@ -432,9 +432,9 @@ HTMLBLOC;
  * @return void
  */
 	public function testMessageRetrievalWithoutTemplate() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 
 		$this->Controller->EmailTest->to = 'postmaster@example.com';
 		$this->Controller->EmailTest->from = 'noreply@example.com';
@@ -469,9 +469,9 @@ HTMLBLOC;
  * @return void
  */
 	public function testMessageRetrievalWithTemplate() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 
 		$this->Controller->set('value', 22091985);
 		$this->Controller->set('title_for_layout', 'EmailTest');
@@ -529,14 +529,14 @@ HTMLBLOC;
  * @return void
  */
 	public function testMessageRetrievalWithHelper() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 
 		$timestamp = time();
 		$this->Controller->set('time', $timestamp);
 		$this->Controller->set('title_for_layout', 'EmailTest');
-		$this->Controller->helpers = array('Time');
+		$this->Controller->helpers = ['Time'];
 
 		$this->Controller->EmailTest->to = 'postmaster@example.com';
 		$this->Controller->EmailTest->from = 'noreply@example.com';
@@ -564,7 +564,7 @@ HTMLBLOC;
 		$this->Controller->EmailTest->template = null;
 		$this->Controller->EmailTest->delivery = 'DebugComp';
 
-		$content = array('First line', 'Second line', 'Third line');
+		$content = ['First line', 'Second line', 'Third line'];
 		$this->assertTrue($this->Controller->EmailTest->send($content));
 		$result = DebugCompTransport::$lastEmail;
 
@@ -700,10 +700,10 @@ HTMLBLOC;
 		$this->Controller->EmailTest->replyTo = 'noreply@example.com';
 		$this->Controller->EmailTest->template = null;
 		$this->Controller->EmailTest->delivery = 'DebugComp';
-		$this->Controller->EmailTest->attachments = array(
+		$this->Controller->EmailTest->attachments = [
 			__FILE__,
 			'some-name.php' => __FILE__
-		);
+		];
 		$body = '<p>This is the body of the message</p>';
 
 		$this->Controller->EmailTest->sendAs = 'text';
@@ -725,7 +725,7 @@ HTMLBLOC;
 		$this->Controller->EmailTest->replyTo = 'noreply@example.com';
 		$this->Controller->EmailTest->template = null;
 		$this->Controller->EmailTest->delivery = 'DebugComp';
-		$this->Controller->EmailTest->attachments = array(__FILE__);
+		$this->Controller->EmailTest->attachments = [__FILE__];
 		$body = '<p>This is the body of the message</p>';
 
 		$this->Controller->EmailTest->sendAs = 'html';
@@ -782,15 +782,15 @@ HTMLBLOC;
 		$this->Controller->EmailTest->from = 'test.sender@example.com';
 		$this->Controller->EmailTest->replyTo = 'test.replyto@example.com';
 		$this->Controller->EmailTest->return = 'test.return@example.com';
-		$this->Controller->EmailTest->cc = array('cc1@example.com', 'cc2@example.com');
-		$this->Controller->EmailTest->bcc = array('bcc1@example.com', 'bcc2@example.com');
+		$this->Controller->EmailTest->cc = ['cc1@example.com', 'cc2@example.com'];
+		$this->Controller->EmailTest->bcc = ['bcc1@example.com', 'bcc2@example.com'];
 		$this->Controller->EmailTest->date = 'Today!';
 		$this->Controller->EmailTest->subject = 'Test subject';
 		$this->Controller->EmailTest->additionalParams = 'X-additional-header';
 		$this->Controller->EmailTest->delivery = 'smtp';
 		$this->Controller->EmailTest->smtpOptions['host'] = 'blah';
 		$this->Controller->EmailTest->smtpOptions['timeout'] = 0.2;
-		$this->Controller->EmailTest->attachments = array('attachment1', 'attachment2');
+		$this->Controller->EmailTest->attachments = ['attachment1', 'attachment2'];
 		$this->Controller->EmailTest->textMessage = 'This is the body of the message';
 		$this->Controller->EmailTest->htmlMessage = 'This is the body of the message';
 		$this->Controller->EmailTest->messageId = false;
@@ -805,27 +805,27 @@ HTMLBLOC;
 		$this->Controller->EmailTest->reset();
 
 		$this->assertNull($this->Controller->EmailTest->template);
-		$this->assertSame($this->Controller->EmailTest->to, array());
+		$this->assertSame($this->Controller->EmailTest->to, []);
 		$this->assertNull($this->Controller->EmailTest->from);
 		$this->assertNull($this->Controller->EmailTest->replyTo);
 		$this->assertNull($this->Controller->EmailTest->return);
-		$this->assertSame($this->Controller->EmailTest->cc, array());
-		$this->assertSame($this->Controller->EmailTest->bcc, array());
+		$this->assertSame($this->Controller->EmailTest->cc, []);
+		$this->assertSame($this->Controller->EmailTest->bcc, []);
 		$this->assertNull($this->Controller->EmailTest->date);
 		$this->assertNull($this->Controller->EmailTest->subject);
 		$this->assertNull($this->Controller->EmailTest->additionalParams);
 		$this->assertNull($this->Controller->EmailTest->smtpError);
-		$this->assertSame($this->Controller->EmailTest->attachments, array());
+		$this->assertSame($this->Controller->EmailTest->attachments, []);
 		$this->assertNull($this->Controller->EmailTest->textMessage);
 		$this->assertTrue($this->Controller->EmailTest->messageId);
 		$this->assertEquals('mail', $this->Controller->EmailTest->delivery);
 	}
 
 	public function testPluginCustomViewClass() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS],
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 
 		$this->Controller->view = 'TestPlugin.Email';
 

@@ -37,23 +37,23 @@ class ArmorsPlayerFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'player_id' => array('type' => 'integer', 'null' => false),
-		'armor_id' => array('type' => 'integer', 'null' => false),
-		'broken' => array('type' => 'boolean', 'null' => false, 'default' => false),
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'player_id' => ['type' => 'integer', 'null' => false],
+		'armor_id' => ['type' => 'integer', 'null' => false],
+		'broken' => ['type' => 'boolean', 'null' => false, 'default' => false],
 		'created' => 'datetime',
 		'updated' => 'datetime'
-	);
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('player_id' => 1, 'armor_id' => 1, 'broken' => false),
-		array('player_id' => 2, 'armor_id' => 2, 'broken' => false),
-		array('player_id' => 3, 'armor_id' => 3, 'broken' => false),
-	);
+	public $records = [
+		['player_id' => 1, 'armor_id' => 1, 'broken' => false],
+		['player_id' => 2, 'armor_id' => 2, 'broken' => false],
+		['player_id' => 3, 'armor_id' => 3, 'broken' => false],
+	];
 }

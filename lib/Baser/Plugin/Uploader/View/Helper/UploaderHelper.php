@@ -36,7 +36,7 @@ class UploaderHelper extends AppHelper {
  * @var		array
  * @access	public
  */
-	public $helpers = array('Html');
+	public $helpers = ['Html'];
 /**
  * Before Render
  *
@@ -57,7 +57,7 @@ class UploaderHelper extends AppHelper {
  * @param	array	$options
  * @return	string	imgタグ
  */
-	public function file ($uploaderFile,$options = array()) {
+	public function file ($uploaderFile,$options = []) {
 
 		if(isset($uploaderFile['UploaderFile'])) {
 			$uploaderFile = $uploaderFile['UploaderFile'];
@@ -67,10 +67,10 @@ class UploaderHelper extends AppHelper {
 
 		$pathInfo = pathinfo($uploaderFile['name']);
 		$ext = $pathInfo['extension'];
-		$_options = array('alt'=>$uploaderFile['alt']);
+		$_options = ['alt'=>$uploaderFile['alt']];
 		$options = Set::merge($_options,$options);
 
-		if(in_array(strtolower($ext), array('gif','jpg','png'))) {
+		if(in_array(strtolower($ext), ['gif','jpg','png'])) {
 			if (isset($options['size'])) {
 				$resizeName = $pathInfo['filename'] . '__' . $options['size'] . '.' . $ext;
 				

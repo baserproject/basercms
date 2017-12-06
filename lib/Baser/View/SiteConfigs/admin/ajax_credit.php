@@ -16,7 +16,7 @@
 if(!$credits) {
 	return;
 }
-$types = array('designers', 'developers', 'supporters', 'publishers');
+$types = ['designers', 'developers', 'supporters', 'publishers'];
 ?>
 
 <div id="Credit">
@@ -36,14 +36,14 @@ $types = array('designers', 'developers', 'supporters', 'publishers');
 								<?php endif ?>
 								<li>
 									<?php if (!empty($contributor->siteUrl)): ?>
-										<?php $this->BcBaser->link($contributor->alphabet, $contributor->siteUrl, array('target' => '_blank')) ?>
+										<?php $this->BcBaser->link($contributor->alphabet, $contributor->siteUrl, ['target' => '_blank']) ?>
 									<?php elseif (!empty($contributor->affiliationUrl)): ?>
-										<?php $this->BcBaser->link($contributor->alphabet, $contributor->affiliationUrl, array('target' => '_blank')) ?>
+										<?php $this->BcBaser->link($contributor->alphabet, $contributor->affiliationUrl, ['target' => '_blank']) ?>
 									<?php else: ?>
 										<?php echo $contributor->alphabet ?>
 									<?php endif ?> 
 									<?php if (!empty($contributor->twitter)): ?>
-										(<?php $this->BcBaser->link($contributor->twitter, 'http://twitter.com/' . $contributor->twitter, array('target' => '_blank')) ?>) 
+										(<?php $this->BcBaser->link($contributor->twitter, 'http://twitter.com/' . $contributor->twitter, ['target' => '_blank']) ?>) 
 									<?php endif ?>
 								</li>
 								<?php if ($i % 6 == 0 || $this->BcArray->last($credits->{$type}, $key)): ?>

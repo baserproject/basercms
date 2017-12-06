@@ -71,8 +71,8 @@ class CakeEventTest extends CakeTestCase {
  * @triggers fake.event $this, array('some' => 'data')
  */
 	public function testEventData() {
-		$event = new CakeEvent('fake.event', $this, array('some' => 'data'));
-		$this->assertEquals(array('some' => 'data'), $event->data);
+		$event = new CakeEvent('fake.event', $this, ['some' => 'data']);
+		$this->assertEquals(['some' => 'data'], $event->data);
 	}
 
 /**

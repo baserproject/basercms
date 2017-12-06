@@ -215,7 +215,7 @@ class ErrorHandler {
 
 		$debug = Configure::read('debug');
 		if ($debug) {
-			$data = array(
+			$data = [
 				'level' => $log,
 				'code' => $code,
 				'error' => $error,
@@ -225,7 +225,7 @@ class ErrorHandler {
 				'context' => $context,
 				'start' => 2,
 				'path' => Debugger::trimPath($file)
-			);
+			];
 			return Debugger::getInstance()->outputError($data);
 		}
 		$message = $error . ' (' . $code . '): ' . $description . ' in [' . $file . ', line ' . $line . ']';
@@ -240,7 +240,7 @@ class ErrorHandler {
 					App::load('CakeText');
 				}
 			}
-			$trace = Debugger::trace(array('start' => 1, 'format' => 'log'));
+			$trace = Debugger::trace(['start' => 1, 'format' => 'log']);
 			$message .= "\nTrace:\n" . $trace . "\n";
 		}
 		return CakeLog::write($log, $message);
@@ -325,7 +325,7 @@ class ErrorHandler {
 				$log = LOG_NOTICE;
 				break;
 		}
-		return array($error, $log);
+		return [$error, $log];
 	}
 
 }

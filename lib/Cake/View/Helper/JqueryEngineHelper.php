@@ -43,42 +43,42 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  *
  * @var array
  */
-	protected $_optionMap = array(
-		'request' => array(
+	protected $_optionMap = [
+		'request' => [
 			'type' => 'dataType',
 			'before' => 'beforeSend',
 			'method' => 'type',
-		),
-		'sortable' => array(
+		],
+		'sortable' => [
 			'complete' => 'stop',
-		),
-		'drag' => array(
+		],
+		'drag' => [
 			'snapGrid' => 'grid',
 			'container' => 'containment',
-		),
-		'drop' => array(
+		],
+		'drop' => [
 			'leave' => 'out',
 			'hover' => 'over'
-		),
-		'slider' => array(
+		],
+		'slider' => [
 			'complete' => 'stop',
 			'direction' => 'orientation'
-		)
-	);
+		]
+	];
 
 /**
  * Callback arguments lists
  *
  * @var string
  */
-	protected $_callbackArguments = array(
-		'slider' => array(
+	protected $_callbackArguments = [
+		'slider' => [
 			'start' => 'event, ui',
 			'slide' => 'event, ui',
 			'change' => 'event, ui',
 			'stop' => 'event, ui'
-		),
-		'sortable' => array(
+		],
+		'sortable' => [
 			'start' => 'event, ui',
 			'sort' => 'event, ui',
 			'change' => 'event, ui',
@@ -91,27 +91,27 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
 			'out' => 'event, ui',
 			'activate' => 'event, ui',
 			'deactivate' => 'event, ui'
-		),
-		'drag' => array(
+		],
+		'drag' => [
 			'start' => 'event, ui',
 			'drag' => 'event, ui',
 			'stop' => 'event, ui',
-		),
-		'drop' => array(
+		],
+		'drop' => [
 			'activate' => 'event, ui',
 			'deactivate' => 'event, ui',
 			'over' => 'event, ui',
 			'out' => 'event, ui',
 			'drop' => 'event, ui'
-		),
-		'request' => array(
+		],
+		'request' => [
 			'beforeSend' => 'XMLHttpRequest',
 			'error' => 'XMLHttpRequest, textStatus, errorThrown',
 			'success' => 'data, textStatus',
 			'complete' => 'XMLHttpRequest, textStatus',
 			'xhr' => ''
-		)
-	);
+		]
+	];
 
 /**
  * The variable name of the jQuery Object, useful
@@ -130,7 +130,7 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @param array $extraSafeKeys Extra safe keys
  * @return string Composed method string
  */
-	protected function _methodTemplate($method, $template, $options, $extraSafeKeys = array()) {
+	protected function _methodTemplate($method, $template, $options, $extraSafeKeys = []) {
 		$options = $this->_mapOptions($method, $options);
 		$options = $this->_prepareCallbacks($method, $options);
 		$callbacks = array_keys($this->_callbackArguments[$method]);
@@ -169,8 +169,8 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @param array $options Options for the event.
  * @return string completed event handler
  */
-	public function event($type, $callback, $options = array()) {
-		$defaults = array('wrap' => true, 'stop' => true);
+	public function event($type, $callback, $options = []) {
+		$defaults = ['wrap' => true, 'stop' => true];
 		$options += $defaults;
 
 		$function = 'function (event) {%s}';
@@ -216,9 +216,9 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string completed string with effect.
  * @see JsBaseEngineHelper::effect()
  */
-	public function effect($name, $options = array()) {
+	public function effect($name, $options = []) {
 		$speed = null;
-		if (isset($options['speed']) && in_array($options['speed'], array('fast', 'slow'))) {
+		if (isset($options['speed']) && in_array($options['speed'], ['fast', 'slow'])) {
 			$speed = $this->value($options['speed']);
 		}
 		$effect = '';
@@ -248,7 +248,7 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string The completed ajax call.
  * @see JsBaseEngineHelper::request() for options list.
  */
-	public function request($url, $options = array()) {
+	public function request($url, $options = []) {
 		$url = html_entity_decode($this->url($url), ENT_COMPAT, Configure::read('App.encoding'));
 		$options = $this->_mapOptions('request', $options);
 		if (isset($options['data']) && is_array($options['data'])) {
@@ -269,7 +269,7 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
 			$options['success'] = $success;
 			unset($options['update']);
 		}
-		$callbacks = array('success', 'error', 'beforeSend', 'complete', 'xhr');
+		$callbacks = ['success', 'error', 'beforeSend', 'complete', 'xhr'];
 		if (!empty($options['dataExpression'])) {
 			$callbacks[] = 'data';
 			unset($options['dataExpression']);
@@ -288,7 +288,7 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string Completed sortable script.
  * @see JsBaseEngineHelper::sortable() for options list.
  */
-	public function sortable($options = array()) {
+	public function sortable($options = []) {
 		$template = '%s.sortable({%s});';
 		return $this->_methodTemplate('sortable', $template, $options);
 	}
@@ -302,7 +302,7 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string Completed Draggable script.
  * @see JsBaseEngineHelper::drag() for options list.
  */
-	public function drag($options = array()) {
+	public function drag($options = []) {
 		$template = '%s.draggable({%s});';
 		return $this->_methodTemplate('drag', $template, $options);
 	}
@@ -316,7 +316,7 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string Completed Droppable script.
  * @see JsBaseEngineHelper::drop() for options list.
  */
-	public function drop($options = array()) {
+	public function drop($options = []) {
 		$template = '%s.droppable({%s});';
 		return $this->_methodTemplate('drop', $template, $options);
 	}
@@ -330,8 +330,8 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string Completed Slider script.
  * @see JsBaseEngineHelper::slider() for options list.
  */
-	public function slider($options = array()) {
-		$callbacks = array('start', 'change', 'slide', 'stop');
+	public function slider($options = []) {
+		$callbacks = ['start', 'change', 'slide', 'stop'];
 		$template = '%s.slider({%s});';
 		return $this->_methodTemplate('slider', $template, $options, $callbacks);
 	}
@@ -344,8 +344,8 @@ class JqueryEngineHelper extends JsBaseEngineHelper {
  * @return string completed form serialization script.
  * @see JsBaseEngineHelper::serializeForm() for option list.
  */
-	public function serializeForm($options = array()) {
-		$options += array('isForm' => false, 'inline' => false);
+	public function serializeForm($options = []) {
+		$options += ['isForm' => false, 'inline' => false];
 		$selector = $this->selection;
 		if (!$options['isForm']) {
 			$selector = $this->selection . '.closest("form")';

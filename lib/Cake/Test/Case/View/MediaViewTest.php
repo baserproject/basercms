@@ -35,14 +35,14 @@ class MediaViewTest extends CakeTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->MediaView = new MediaView();
-		$this->MediaView->response = $this->getMock('CakeResponse', array(
+		$this->MediaView->response = $this->getMock('CakeResponse', [
 			'cache',
 			'type',
 			'disableCache',
 			'file',
 			'send',
 			'compress',
-		));
+		]);
 	}
 
 /**
@@ -61,10 +61,10 @@ class MediaViewTest extends CakeTestCase {
  * @return void
  */
 	public function testRender() {
-		$vars = array(
+		$vars = [
 			'path' => CAKE . 'Test' . DS . 'test_app' . DS . 'Vendor' . DS . 'css' . DS,
 			'id' => 'test_asset.css'
-		);
+		];
 		$this->MediaView->viewVars = $vars;
 
 		$this->MediaView->response->expects($this->once())
@@ -74,7 +74,7 @@ class MediaViewTest extends CakeTestCase {
 			->method('file')
 			->with(
 				$vars['path'] . $vars['id'],
-				array('name' => null, 'download' => null)
+				['name' => null, 'download' => null]
 			);
 
 		$this->MediaView->render();
@@ -86,13 +86,13 @@ class MediaViewTest extends CakeTestCase {
  * @return void
  */
 	public function testRenderCachingAndName() {
-		$vars = array(
+		$vars = [
 			'path' => CAKE . 'Test' . DS . 'test_app' . DS . 'Vendor' . DS . 'css' . DS,
 			'id' => 'test_asset.css',
 			'cache' => '+1 day',
 			'name' => 'something_special',
 			'download' => true,
-		);
+		];
 		$this->MediaView->viewVars = $vars;
 
 		$this->MediaView->response->expects($this->never())
@@ -106,10 +106,10 @@ class MediaViewTest extends CakeTestCase {
 			->method('file')
 			->with(
 				$vars['path'] . $vars['id'],
-				array(
+				[
 					'name' => 'something_special.css',
 					'download' => true
-				)
+				]
 			);
 
 		$this->MediaView->render();
@@ -121,10 +121,10 @@ class MediaViewTest extends CakeTestCase {
  * @return void
  */
 	public function testRenderUpperExtension() {
-		$this->MediaView->viewVars = array(
+		$this->MediaView->viewVars = [
 			'path' => CAKE . 'Test' . DS . 'test_app' . DS . 'Vendor' . DS . 'img' . DS,
 			'id' => 'test_2.JPG'
-		);
+		];
 
 		$this->MediaView->response->expects($this->any())
 			->method('type')

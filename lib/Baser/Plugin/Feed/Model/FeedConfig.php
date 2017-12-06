@@ -24,57 +24,58 @@ class FeedConfig extends FeedAppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * hasMany
  *
  * @var array
  */
-	public $hasMany = array("FeedDetail" =>
-		array("className" => "Feed.FeedDetail",
+	public $hasMany = ["FeedDetail" =>
+		["className" => "Feed.FeedDetail",
 			"conditions" => "",
 			"order" => "FeedDetail.id ASC",
 			"foreignKey" => "feed_config_id",
 			"dependent" => true,
 			"exclusive" => false,
-			"finderQuery" => ""));
+			"finderQuery" => ""
+		]];
 
 /**
  * validate
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => 'フィード設定名を入力してください。',
-				'required' => true),
-			array('rule' => array('maxLength', 50),
-				'message' => 'フィード設定名は50文字以内で入力してください。')
-		),
-		'feed_title_index' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'フィードタイトルリストは255文字以内で入力してください。')
-		),
-		'category_index' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'カテゴリリストは255文字以内で入力してください。')
-		),
-		'display_number' => array(
-			array('rule' => 'numeric',
+				'required' => true],
+			['rule' => ['maxLength', 50],
+				'message' => 'フィード設定名は50文字以内で入力してください。']
+		],
+		'feed_title_index' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'フィードタイトルリストは255文字以内で入力してください。']
+		],
+		'category_index' => [
+			['rule' => ['maxLength', 255],
+				'message' => 'カテゴリリストは255文字以内で入力してください。']
+		],
+		'display_number' => [
+			['rule' => 'numeric',
 				'message' => '数値を入力してください。',
-				'required' => true)
-		),
-		'template' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'テンプレート名を入力してください。'),
-			array('rule' => 'halfText',
-				'message' => 'テンプレート名は半角のみで入力してください。'),
-			array('rule' => array('maxLength', 50),
-				'message' => 'テンプレート名は50文字以内で入力してください。')
-		)
-	);
+				'required' => true]
+		],
+		'template' => [
+			['rule' => ['notBlank'],
+				'message' => 'テンプレート名を入力してください。'],
+			['rule' => 'halfText',
+				'message' => 'テンプレート名は半角のみで入力してください。'],
+			['rule' => ['maxLength', 50],
+				'message' => 'テンプレート名は50文字以内で入力してください。']
+		]
+	];
 
 /**
  * 初期値を取得

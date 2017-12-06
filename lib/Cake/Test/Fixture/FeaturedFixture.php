@@ -28,23 +28,23 @@ class FeaturedFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'article_featured_id' => array('type' => 'integer', 'null' => false),
-		'category_id' => array('type' => 'integer', 'null' => false),
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'article_featured_id' => ['type' => 'integer', 'null' => false],
+		'category_id' => ['type' => 'integer', 'null' => false],
 		'published_date' => 'datetime',
 		'end_date' => 'datetime',
 		'created' => 'datetime',
 		'updated' => 'datetime'
-	);
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23', 'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'),
-		array('article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23', 'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'),
-	);
+	public $records = [
+		['article_featured_id' => 1, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23', 'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'],
+		['article_featured_id' => 2, 'category_id' => 1, 'published_date' => '2007-03-31 10:39:23', 'end_date' => '2007-05-15 10:39:23', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'],
+	];
 }

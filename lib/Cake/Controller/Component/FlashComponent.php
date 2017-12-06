@@ -34,11 +34,11 @@ class FlashComponent extends Component {
  *
  * @var array
  */
-	protected $_defaultConfig = array(
+	protected $_defaultConfig = [
 		'key' => 'flash',
 		'element' => 'default',
-		'params' => array(),
-	);
+		'params' => [],
+	];
 
 /**
  * Constructor
@@ -46,7 +46,7 @@ class FlashComponent extends Component {
  * @param ComponentCollection $collection The ComponentCollection object
  * @param array $settings Settings passed via controller
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
+	public function __construct(ComponentCollection $collection, $settings = []) {
 		$this->_defaultConfig = Hash::merge($this->_defaultConfig, $settings);
 	}
 
@@ -68,11 +68,11 @@ class FlashComponent extends Component {
  * @return void
  */
 
-	public function set($message, $options = array()) {
+	public function set($message, $options = []) {
 		$options += $this->_defaultConfig;
 
 		if ($message instanceof Exception) {
-			$options['params'] += array('code' => $message->getCode());
+			$options['params'] += ['code' => $message->getCode()];
 			$message = $message->getMessage();
 		}
 
@@ -82,12 +82,12 @@ class FlashComponent extends Component {
 		}
 		$options['element'] = $plugin . 'Flash/' . $element;
 
-		CakeSession::write('Message.' . $options['key'], array(
+		CakeSession::write('Message.' . $options['key'], [
 			'message' => $message,
 			'key' => $options['key'],
 			'element' => $options['element'],
 			'params' => $options['params']
-		));
+		]);
 	}
 
 /**
@@ -103,7 +103,7 @@ class FlashComponent extends Component {
  * @throws InternalErrorException If missing the flash message.
  */
 	public function __call($name, $args) {
-		$options = array('element' => Inflector::underscore($name));
+		$options = ['element' => Inflector::underscore($name)];
 
 		if (count($args) < 1) {
 			throw new InternalErrorException('Flash message missing.');

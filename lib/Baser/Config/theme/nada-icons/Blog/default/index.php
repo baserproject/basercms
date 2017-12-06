@@ -2,7 +2,7 @@
 /**
  * ブログトップ
  */
-$this->BcBaser->css('colorbox/colorbox', array('inline' => false));
+$this->BcBaser->css('colorbox/colorbox', ['inline' => false]);
 $this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
@@ -39,7 +39,7 @@ $(function(){
 					&nbsp;
 			<?php $this->Blog->author($post) ?>
 				</span> </div>
-		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>

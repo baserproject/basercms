@@ -28,15 +28,15 @@ class ThePaperMonkiesFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'apple_id' => array('type' => 'integer', 'length' => 10, 'null' => true),
-		'device_id' => array('type' => 'integer', 'length' => 10, 'null' => true)
-	);
+	public $fields = [
+		'apple_id' => ['type' => 'integer', 'length' => 10, 'null' => true],
+		'device_id' => ['type' => 'integer', 'length' => 10, 'null' => true]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array();
+	public $records = [];
 }

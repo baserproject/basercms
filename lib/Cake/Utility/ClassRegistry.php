@@ -37,21 +37,21 @@ class ClassRegistry {
  *
  * @var array
  */
-	protected $_objects = array();
+	protected $_objects = [];
 
 /**
  * Names of class names mapped to the object in the registry.
  *
  * @var array
  */
-	protected $_map = array();
+	protected $_map = [];
 
 /**
  * Default constructor parameter settings, indexed by type
  *
  * @var array
  */
-	protected $_config = array();
+	protected $_config = [];
 
 /**
  * Return a singleton instance of the ClassRegistry.
@@ -59,7 +59,7 @@ class ClassRegistry {
  * @return ClassRegistry instance
  */
 	public static function getInstance() {
-		static $instance = array();
+		static $instance = [];
 		if (!$instance) {
 			$instance[0] = new ClassRegistry();
 		}
@@ -100,12 +100,12 @@ class ClassRegistry {
 		if (is_array($class)) {
 			$objects = $class;
 			if (!isset($class[0])) {
-				$objects = array($class);
+				$objects = [$class];
 			}
 		} else {
-			$objects = array(array('class' => $class));
+			$objects = [['class' => $class]];
 		}
-		$defaults = array();
+		$defaults = [];
 		if (isset($_this->_config['Model'])) {
 			$defaults = $_this->_config['Model'];
 		}
@@ -278,7 +278,7 @@ class ClassRegistry {
  * @return mixed Void if $param is being set. Otherwise, if only $type is passed, returns
  *               the previously-set value of $param, or null if not set.
  */
-	public static function config($type, $param = array()) {
+	public static function config($type, $param = []) {
 		$_this = ClassRegistry::getInstance();
 
 		if (empty($param) && is_array($type)) {
@@ -358,8 +358,8 @@ class ClassRegistry {
  */
 	public static function flush() {
 		$_this = ClassRegistry::getInstance();
-		$_this->_objects = array();
-		$_this->_map = array();
+		$_this->_objects = [];
+		$_this->_map = [];
 	}
 
 }

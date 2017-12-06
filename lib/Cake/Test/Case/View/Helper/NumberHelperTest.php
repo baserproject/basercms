@@ -73,12 +73,12 @@ class NumberHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testNumberHelperProxyMethodCalls() {
-		$methods = array(
+		$methods = [
 			'precision', 'toReadableSize', 'toPercentage', 'format',
 			'currency', 'addFormat',
-			);
+			];
 		$CakeNumber = $this->getMock('CakeNumberMock', $methods);
-		$Number = new NumberHelperTestObject($this->View, array('engine' => 'CakeNumberMock'));
+		$Number = new NumberHelperTestObject($this->View, ['engine' => 'CakeNumberMock']);
 		$Number->attach($CakeNumber);
 		foreach ($methods as $method) {
 			$CakeNumber->expects($this->at(0))->method($method);
@@ -92,17 +92,17 @@ class NumberHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testEngineOverride() {
-		App::build(array(
-			'Utility' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Utility' . DS)
-		), App::REGISTER);
-		$Number = new NumberHelperTestObject($this->View, array('engine' => 'TestAppEngine'));
+		App::build([
+			'Utility' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Utility' . DS]
+		], App::REGISTER);
+		$Number = new NumberHelperTestObject($this->View, ['engine' => 'TestAppEngine']);
 		$this->assertInstanceOf('TestAppEngine', $Number->engine());
 
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]
+		]);
 		CakePlugin::load('TestPlugin');
-		$Number = new NumberHelperTestObject($this->View, array('engine' => 'TestPlugin.TestPluginEngine'));
+		$Number = new NumberHelperTestObject($this->View, ['engine' => 'TestPlugin.TestPluginEngine']);
 		$this->assertInstanceOf('TestPluginEngine', $Number->engine());
 		CakePlugin::unload('TestPlugin');
 	}

@@ -17,7 +17,7 @@
  */
 class BcSearchIndexManagerBehaviorTest extends BaserTestCase {
 
-	public $fixtures = array();
+	public $fixtures = [];
 
 /**
  * setUp

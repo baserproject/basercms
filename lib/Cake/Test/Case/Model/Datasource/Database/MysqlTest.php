@@ -42,11 +42,11 @@ class MysqlTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'core.apple', 'core.article', 'core.articles_tag', 'core.attachment', 'core.comment',
 		'core.sample', 'core.tag', 'core.user', 'core.post', 'core.author', 'core.data_test',
 		'core.binary_test', 'core.inno', 'core.unsigned'
-	);
+	];
 
 /**
  * The Dbo instance to be tested
@@ -91,7 +91,7 @@ class MysqlTest extends CakeTestCase {
  */
 	public function testQuoting() {
 		$result = $this->Dbo->fields($this->model);
-		$expected = array(
+		$expected = [
 			'`MysqlTestModel`.`id`',
 			'`MysqlTestModel`.`client_id`',
 			'`MysqlTestModel`.`name`',
@@ -110,7 +110,7 @@ class MysqlTest extends CakeTestCase {
 			'`MysqlTestModel`.`last_login`',
 			'`MysqlTestModel`.`created`',
 			'`MysqlTestModel`.`updated`'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		$expected = 1.2;
@@ -203,27 +203,27 @@ class MysqlTest extends CakeTestCase {
 		$tableName = 'tinyint_' . uniqid();
 		$this->Dbo->rawQuery('CREATE TABLE ' . $this->Dbo->fullTableName($tableName) . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id));');
 
-		$this->model = new CakeTestModel(array(
+		$this->model = new CakeTestModel([
 			'name' => 'Tinyint', 'table' => $tableName, 'ds' => 'test'
-		));
+		]);
 
 		$result = $this->model->schema();
 		$this->assertEquals('boolean', $result['bool']['type']);
 		$this->assertEquals('integer', $result['small_int']['type']);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => 5, 'small_int' => 5)));
+		$this->assertTrue((bool)$this->model->save(['bool' => 5, 'small_int' => 5]));
 		$result = $this->model->find('first');
 		$this->assertTrue($result['Tinyint']['bool']);
 		$this->assertSame($result['Tinyint']['small_int'], '5');
 		$this->model->deleteAll(true);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => 0, 'small_int' => 100)));
+		$this->assertTrue((bool)$this->model->save(['bool' => 0, 'small_int' => 100]));
 		$result = $this->model->find('first');
 		$this->assertFalse($result['Tinyint']['bool']);
 		$this->assertSame($result['Tinyint']['small_int'], '100');
 		$this->model->deleteAll(true);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => true, 'small_int' => 0)));
+		$this->assertTrue((bool)$this->model->save(['bool' => true, 'small_int' => 0]));
 		$result = $this->model->find('first');
 		$this->assertTrue($result['Tinyint']['bool']);
 		$this->assertSame($result['Tinyint']['small_int'], '0');
@@ -242,11 +242,11 @@ class MysqlTest extends CakeTestCase {
 		$tableName = 'tinyint_' . uniqid();
 		$this->Dbo->rawQuery('CREATE TABLE ' . $this->Dbo->fullTableName($tableName) . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id));');
 
-		$this->model = new CakeTestModel(array(
+		$this->model = new CakeTestModel([
 			'name' => 'Tinyint', 'table' => $tableName, 'ds' => 'test'
-		));
+		]);
 
-		$this->assertTrue((bool)$this->model->save(array('bool' => 5, 'small_int' => 5)));
+		$this->assertTrue((bool)$this->model->save(['bool' => 5, 'small_int' => 5]));
 		$this->assertEquals(1, $this->model->find('count'));
 		$this->model->deleteAll(true);
 		$result = $this->Dbo->lastAffected();
@@ -267,90 +267,90 @@ class MysqlTest extends CakeTestCase {
 
 		$name = $this->Dbo->fullTableName('simple');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id));');
-		$expected = array('PRIMARY' => array('column' => 'id', 'unique' => 1));
+		$expected = ['PRIMARY' => ['column' => 'id', 'unique' => 1]];
 		$result = $this->Dbo->index('simple', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('bigint');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id bigint(20) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id));');
-		$expected = array('PRIMARY' => array('column' => 'id', 'unique' => 1));
+		$expected = ['PRIMARY' => ['column' => 'id', 'unique' => 1]];
 		$result = $this->Dbo->index('bigint', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_a_key');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id), KEY `pointless_bool` ( `bool` ));');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'pointless_bool' => array('column' => 'bool', 'unique' => 0),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'pointless_bool' => ['column' => 'bool', 'unique' => 0],
+		];
 		$result = $this->Dbo->index('with_a_key', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_two_keys');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id), KEY `pointless_bool` ( `bool` ), KEY `pointless_small_int` ( `small_int` ));');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'pointless_bool' => array('column' => 'bool', 'unique' => 0),
-			'pointless_small_int' => array('column' => 'small_int', 'unique' => 0),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'pointless_bool' => ['column' => 'bool', 'unique' => 0],
+			'pointless_small_int' => ['column' => 'small_int', 'unique' => 0],
+		];
 		$result = $this->Dbo->index('with_two_keys', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_compound_keys');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id), KEY `pointless_bool` ( `bool` ), KEY `pointless_small_int` ( `small_int` ), KEY `one_way` ( `bool`, `small_int` ));');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'pointless_bool' => array('column' => 'bool', 'unique' => 0),
-			'pointless_small_int' => array('column' => 'small_int', 'unique' => 0),
-			'one_way' => array('column' => array('bool', 'small_int'), 'unique' => 0),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'pointless_bool' => ['column' => 'bool', 'unique' => 0],
+			'pointless_small_int' => ['column' => 'small_int', 'unique' => 0],
+			'one_way' => ['column' => ['bool', 'small_int'], 'unique' => 0],
+		];
 		$result = $this->Dbo->index('with_compound_keys', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_multiple_compound_keys');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id), KEY `pointless_bool` ( `bool` ), KEY `pointless_small_int` ( `small_int` ), KEY `one_way` ( `bool`, `small_int` ), KEY `other_way` ( `small_int`, `bool` ));');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'pointless_bool' => array('column' => 'bool', 'unique' => 0),
-			'pointless_small_int' => array('column' => 'small_int', 'unique' => 0),
-			'one_way' => array('column' => array('bool', 'small_int'), 'unique' => 0),
-			'other_way' => array('column' => array('small_int', 'bool'), 'unique' => 0),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'pointless_bool' => ['column' => 'bool', 'unique' => 0],
+			'pointless_small_int' => ['column' => 'small_int', 'unique' => 0],
+			'one_way' => ['column' => ['bool', 'small_int'], 'unique' => 0],
+			'other_way' => ['column' => ['small_int', 'bool'], 'unique' => 0],
+		];
 		$result = $this->Dbo->index('with_multiple_compound_keys', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_fulltext');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, name varchar(255), description text, primary key(id), FULLTEXT KEY `MyFtIndex` ( `name`, `description` )) ENGINE=MyISAM;');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'MyFtIndex' => array('column' => array('name', 'description'), 'type' => 'fulltext')
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'MyFtIndex' => ['column' => ['name', 'description'], 'type' => 'fulltext']
+		];
 		$result = $this->Dbo->index('with_fulltext', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_text_index');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, text_field text, primary key(id), KEY `text_index` ( `text_field`(20) ));');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'text_index' => array('column' => 'text_field', 'unique' => 0, 'length' => array('text_field' => 20)),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'text_index' => ['column' => 'text_field', 'unique' => 0, 'length' => ['text_field' => 20]],
+		];
 		$result = $this->Dbo->index('with_text_index', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
 
 		$name = $this->Dbo->fullTableName('with_compound_text_index');
 		$this->Dbo->rawQuery('CREATE TABLE ' . $name . ' (id int(11) AUTO_INCREMENT, text_field1 text, text_field2 text, primary key(id), KEY `text_index` ( `text_field1`(20), `text_field2`(20) ));');
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'text_index' => array('column' => array('text_field1', 'text_field2'), 'unique' => 0, 'length' => array('text_field1' => 20, 'text_field2' => 20)),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'text_index' => ['column' => ['text_field1', 'text_field2'], 'unique' => 0, 'length' => ['text_field1' => 20, 'text_field2' => 20]],
+		];
 		$result = $this->Dbo->index('with_compound_text_index', false);
 		$this->Dbo->rawQuery('DROP TABLE ' . $name);
 		$this->assertEquals($expected, $result);
@@ -363,20 +363,20 @@ class MysqlTest extends CakeTestCase {
  */
 	public function testBuildColumn() {
 		$restore = $this->Dbo->columns;
-		$this->Dbo->columns = array('varchar(255)' => 1);
-		$data = array(
+		$this->Dbo->columns = ['varchar(255)' => 1];
+		$data = [
 			'name' => 'testName',
 			'type' => 'varchar(255)',
 			'default',
 			'null' => true,
 			'key',
 			'comment' => 'test'
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`testName`  DEFAULT NULL COMMENT \'test\'';
 		$this->assertEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			'name' => 'testName',
 			'type' => 'varchar(255)',
 			'default',
@@ -384,7 +384,7 @@ class MysqlTest extends CakeTestCase {
 			'key',
 			'charset' => 'utf8',
 			'collate' => 'utf8_unicode_ci'
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`testName`  CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL';
 		$this->assertEquals($expected, $result);
@@ -401,9 +401,9 @@ class MysqlTest extends CakeTestCase {
 	public function testIndexOnMySQL4Output() {
 		$name = $this->Dbo->fullTableName('simple');
 
-		$mockDbo = $this->getMock('Mysql', array('connect', '_execute', 'getVersion'));
-		$columnData = array(
-			array('0' => array(
+		$mockDbo = $this->getMock('Mysql', ['connect', '_execute', 'getVersion']);
+		$columnData = [
+			['0' => [
 				'Table' => 'with_compound_keys',
 				'Non_unique' => '0',
 				'Key_name' => 'PRIMARY',
@@ -416,8 +416,8 @@ class MysqlTest extends CakeTestCase {
 				'Null' => '',
 				'Index_type' => 'BTREE',
 				'Comment' => ''
-			)),
-			array('0' => array(
+			]],
+			['0' => [
 				'Table' => 'with_compound_keys',
 				'Non_unique' => '1',
 				'Key_name' => 'pointless_bool',
@@ -430,8 +430,8 @@ class MysqlTest extends CakeTestCase {
 				'Null' => 'YES',
 				'Index_type' => 'BTREE',
 				'Comment' => ''
-			)),
-			array('0' => array(
+			]],
+			['0' => [
 				'Table' => 'with_compound_keys',
 				'Non_unique' => '1',
 				'Key_name' => 'pointless_small_int',
@@ -444,8 +444,8 @@ class MysqlTest extends CakeTestCase {
 				'Null' => 'YES',
 				'Index_type' => 'BTREE',
 				'Comment' => ''
-			)),
-			array('0' => array(
+			]],
+			['0' => [
 				'Table' => 'with_compound_keys',
 				'Non_unique' => '1',
 				'Key_name' => 'one_way',
@@ -458,8 +458,8 @@ class MysqlTest extends CakeTestCase {
 				'Null' => 'YES',
 				'Index_type' => 'BTREE',
 				'Comment' => ''
-			)),
-			array('0' => array(
+			]],
+			['0' => [
 				'Table' => 'with_compound_keys',
 				'Non_unique' => '1',
 				'Key_name' => 'one_way',
@@ -472,11 +472,11 @@ class MysqlTest extends CakeTestCase {
 				'Null' => 'YES',
 				'Index_type' => 'BTREE',
 				'Comment' => ''
-			))
-		);
+			]]
+		];
 
 		$mockDbo->expects($this->once())->method('getVersion')->will($this->returnValue('4.1'));
-		$resultMock = $this->getMock('PDOStatement', array('fetch'));
+		$resultMock = $this->getMock('PDOStatement', ['fetch']);
 		$mockDbo->expects($this->once())
 			->method('_execute')
 			->with('SHOW INDEX FROM ' . $name)
@@ -487,12 +487,12 @@ class MysqlTest extends CakeTestCase {
 		}
 
 		$result = $mockDbo->index($name, false);
-		$expected = array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'pointless_bool' => array('column' => 'bool', 'unique' => 0),
-			'pointless_small_int' => array('column' => 'small_int', 'unique' => 0),
-			'one_way' => array('column' => array('bool', 'small_int'), 'unique' => 0),
-		);
+		$expected = [
+			'PRIMARY' => ['column' => 'id', 'unique' => 1],
+			'pointless_bool' => ['column' => 'bool', 'unique' => 0],
+			'pointless_small_int' => ['column' => 'small_int', 'unique' => 0],
+			'one_way' => ['column' => ['bool', 'small_int'], 'unique' => 0],
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -569,15 +569,15 @@ class MysqlTest extends CakeTestCase {
 		$this->Dbo->cacheSources = $this->Dbo->testing = false;
 		$table = $this->Dbo->fullTableName('altertest');
 
-		$schemaA = new CakeSchema(array(
+		$schemaA = new CakeSchema([
 			'name' => 'AlterTest1',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-				'group1' => array('type' => 'integer', 'null' => true),
-				'group2' => array('type' => 'integer', 'null' => true)
-		)));
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+				'group1' => ['type' => 'integer', 'null' => true],
+				'group2' => ['type' => 'integer', 'null' => true]
+		]]);
 		$result = $this->Dbo->createSchema($schemaA);
 		$this->assertContains('`id` int(11) DEFAULT 0 NOT NULL,', $result);
 		$this->assertContains('`name` varchar(50) NOT NULL,', $result);
@@ -588,20 +588,20 @@ class MysqlTest extends CakeTestCase {
 		$query = $this->Dbo->getConnection()->prepare($result);
 		$this->assertEquals($query->queryString, $result);
 
-		$schemaB = new CakeSchema(array(
+		$schemaB = new CakeSchema([
 			'name' => 'AlterTest2',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-				'group1' => array('type' => 'integer', 'null' => true),
-				'group2' => array('type' => 'integer', 'null' => true),
-				'indexes' => array(
-					'name_idx' => array('column' => 'name', 'unique' => 0),
-					'group_idx' => array('column' => 'group1', 'unique' => 0),
-					'compound_idx' => array('column' => array('group1', 'group2'), 'unique' => 0),
-					'PRIMARY' => array('column' => 'id', 'unique' => 1))
-		)));
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+				'group1' => ['type' => 'integer', 'null' => true],
+				'group2' => ['type' => 'integer', 'null' => true],
+				'indexes' => [
+					'name_idx' => ['column' => 'name', 'unique' => 0],
+					'group_idx' => ['column' => 'group1', 'unique' => 0],
+					'compound_idx' => ['column' => ['group1', 'group2'], 'unique' => 0],
+					'PRIMARY' => ['column' => 'id', 'unique' => 1]]
+		]]);
 
 		$result = $this->Dbo->alterSchema($schemaB->compare($schemaA));
 		$this->assertContains("ALTER TABLE $table", $result);
@@ -615,20 +615,20 @@ class MysqlTest extends CakeTestCase {
 		$this->assertEquals($query->queryString, $result);
 
 		// Change three indexes, delete one and add another one
-		$schemaC = new CakeSchema(array(
+		$schemaC = new CakeSchema([
 			'name' => 'AlterTest3',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-				'group1' => array('type' => 'integer', 'null' => true),
-				'group2' => array('type' => 'integer', 'null' => true),
-				'indexes' => array(
-					'name_idx' => array('column' => 'name', 'unique' => 1),
-					'group_idx' => array('column' => 'group2', 'unique' => 0),
-					'compound_idx' => array('column' => array('group2', 'group1'), 'unique' => 0),
-					'id_name_idx' => array('column' => array('id', 'name'), 'unique' => 0))
-		)));
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+				'group1' => ['type' => 'integer', 'null' => true],
+				'group2' => ['type' => 'integer', 'null' => true],
+				'indexes' => [
+					'name_idx' => ['column' => 'name', 'unique' => 1],
+					'group_idx' => ['column' => 'group2', 'unique' => 0],
+					'compound_idx' => ['column' => ['group2', 'group1'], 'unique' => 0],
+					'id_name_idx' => ['column' => ['id', 'name'], 'unique' => 0]]
+		]]);
 
 		$result = $this->Dbo->alterSchema($schemaC->compare($schemaB));
 		$this->assertContains("ALTER TABLE $table", $result);
@@ -645,7 +645,7 @@ class MysqlTest extends CakeTestCase {
 		$this->assertEquals($query->queryString, $result);
 
 		// Compare us to ourself.
-		$this->assertEquals(array(), $schemaC->compare($schemaC));
+		$this->assertEquals([], $schemaC->compare($schemaC));
 
 		// Drop the indexes
 		$result = $this->Dbo->alterSchema($schemaA->compare($schemaC));
@@ -670,7 +670,7 @@ class MysqlTest extends CakeTestCase {
 		$this->Dbo->cacheSources = false;
 		$data = file_get_contents(CAKE . 'Test' . DS . 'test_app' . DS . 'webroot' . DS . 'img' . DS . 'cake.power.gif');
 
-		$model = new CakeTestModel(array('name' => 'BinaryTest', 'ds' => 'test'));
+		$model = new CakeTestModel(['name' => 'BinaryTest', 'ds' => 'test']);
 		$model->save(compact('data'));
 
 		$result = $model->find('first');
@@ -685,34 +685,34 @@ class MysqlTest extends CakeTestCase {
 	public function testAlteringTableParameters() {
 		$this->Dbo->cacheSources = $this->Dbo->testing = false;
 
-		$schemaA = new CakeSchema(array(
+		$schemaA = new CakeSchema([
 			'name' => 'AlterTest1',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-				'tableParameters' => array(
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+				'tableParameters' => [
 					'charset' => 'latin1',
 					'collate' => 'latin1_general_ci',
 					'engine' => 'MyISAM'
-				)
-			)
-		));
+				]
+			]
+		]);
 		$this->Dbo->rawQuery($this->Dbo->createSchema($schemaA));
-		$schemaB = new CakeSchema(array(
+		$schemaB = new CakeSchema([
 			'name' => 'AlterTest1',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-				'tableParameters' => array(
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+				'tableParameters' => [
 					'charset' => 'utf8',
 					'collate' => 'utf8_general_ci',
 					'engine' => 'InnoDB',
 					'comment' => 'Newly table added comment.',
-				)
-			)
-		));
+				]
+			]
+		]);
 		$result = $this->Dbo->alterSchema($schemaB->compare($schemaA));
 		$this->assertContains('DEFAULT CHARSET=utf8', $result);
 		$this->assertContains('ENGINE=InnoDB', $result);
@@ -734,30 +734,30 @@ class MysqlTest extends CakeTestCase {
  * @return void
  */
 	public function testAlteringTwoTables() {
-		$schema1 = new CakeSchema(array(
+		$schema1 = new CakeSchema([
 			'name' => 'AlterTest1',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-			),
-			'other_table' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'name' => array('type' => 'string', 'null' => false, 'length' => 50),
-			)
-		));
-		$schema2 = new CakeSchema(array(
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+			],
+			'other_table' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'name' => ['type' => 'string', 'null' => false, 'length' => 50],
+			]
+		]);
+		$schema2 = new CakeSchema([
 			'name' => 'AlterTest1',
 			'connection' => 'test',
-			'altertest' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'field_two' => array('type' => 'string', 'null' => false, 'length' => 50),
-			),
-			'other_table' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'default' => 0),
-				'field_two' => array('type' => 'string', 'null' => false, 'length' => 50),
-			)
-		));
+			'altertest' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'field_two' => ['type' => 'string', 'null' => false, 'length' => 50],
+			],
+			'other_table' => [
+				'id' => ['type' => 'integer', 'null' => false, 'default' => 0],
+				'field_two' => ['type' => 'string', 'null' => false, 'length' => 50],
+			]
+		]);
 		$result = $this->Dbo->alterSchema($schema2->compare($schema1));
 		$this->assertEquals(2, substr_count($result, 'field_two'), 'Too many fields');
 	}
@@ -774,22 +774,22 @@ class MysqlTest extends CakeTestCase {
 		$this->Dbo->rawQuery('CREATE TABLE ' . $table . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;');
 		$result = $this->Dbo->readTableParameters($this->Dbo->fullTableName($tableName, false, false));
 		$this->Dbo->rawQuery('DROP TABLE ' . $table);
-		$expected = array(
+		$expected = [
 			'charset' => 'utf8',
 			'collate' => 'utf8_unicode_ci',
-			'engine' => 'InnoDB');
+			'engine' => 'InnoDB'];
 		$this->assertEquals($expected, $result);
 
 		$table = $this->Dbo->fullTableName($tableName);
 		$this->Dbo->rawQuery('CREATE TABLE ' . $table . ' (id int(11) AUTO_INCREMENT, bool tinyint(1), small_int tinyint(2), primary key(id)) ENGINE=MyISAM DEFAULT CHARSET=cp1250 COLLATE=cp1250_general_ci COMMENT=\'Table\'\'s comment\';');
 		$result = $this->Dbo->readTableParameters($this->Dbo->fullTableName($tableName, false, false));
 		$this->Dbo->rawQuery('DROP TABLE ' . $table);
-		$expected = array(
+		$expected = [
 			'charset' => 'cp1250',
 			'collate' => 'cp1250_general_ci',
 			'engine' => 'MyISAM',
 			'comment' => 'Table\'s comment',
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -800,15 +800,15 @@ class MysqlTest extends CakeTestCase {
  */
 	public function testBuildTableParameters() {
 		$this->Dbo->cacheSources = $this->Dbo->testing = false;
-		$data = array(
+		$data = [
 			'charset' => 'utf8',
 			'collate' => 'utf8_unicode_ci',
-			'engine' => 'InnoDB');
+			'engine' => 'InnoDB'];
 		$result = $this->Dbo->buildTableParameters($data);
-		$expected = array(
+		$expected = [
 			'DEFAULT CHARSET=utf8',
 			'COLLATE=utf8_unicode_ci',
-			'ENGINE=InnoDB');
+			'ENGINE=InnoDB'];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -831,20 +831,20 @@ class MysqlTest extends CakeTestCase {
  * @return void
  */
 	public function testGetCharsetNameCaching() {
-		$db = $this->getMock('Mysql', array('connect', '_execute', 'getVersion'));
+		$db = $this->getMock('Mysql', ['connect', '_execute', 'getVersion']);
 		$queryResult = $this->getMock('PDOStatement');
 
 		$db->expects($this->exactly(2))->method('getVersion')->will($this->returnValue('5.1'));
 
 		$db->expects($this->exactly(1))
 			->method('_execute')
-			->with('SELECT CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.COLLATIONS WHERE COLLATION_NAME = ?', array('utf8_unicode_ci'))
+			->with('SELECT CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.COLLATIONS WHERE COLLATION_NAME = ?', ['utf8_unicode_ci'])
 			->will($this->returnValue($queryResult));
 
 		$queryResult->expects($this->once())
 			->method('fetch')
 			->with(PDO::FETCH_ASSOC)
-			->will($this->returnValue(array('CHARACTER_SET_NAME' => 'utf8')));
+			->will($this->returnValue(['CHARACTER_SET_NAME' => 'utf8']));
 
 		$result = $db->getCharsetName('utf8_unicode_ci');
 		$this->assertEquals('utf8', $result);
@@ -860,15 +860,15 @@ class MysqlTest extends CakeTestCase {
  */
 	public function testVirtualFieldSeparators() {
 		$this->loadFixtures('BinaryTest');
-		$model = new CakeTestModel(array('table' => 'binary_tests', 'ds' => 'test', 'name' => 'BinaryTest'));
-		$model->virtualFields = array(
+		$model = new CakeTestModel(['table' => 'binary_tests', 'ds' => 'test', 'name' => 'BinaryTest']);
+		$model->virtualFields = [
 			'other__field' => 'SUM(id)'
-		);
+		];
 
 		$this->Dbo->virtualFieldSeparator = '_$_';
-		$result = $this->Dbo->fields($model, null, array('data', 'other__field'));
+		$result = $this->Dbo->fields($model, null, ['data', 'other__field']);
 
-		$expected = array('`BinaryTest`.`data`', '(SUM(id)) AS  `BinaryTest_$_other__field`');
+		$expected = ['`BinaryTest`.`data`', '(SUM(id)) AS  `BinaryTest_$_other__field`'];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -908,20 +908,20 @@ CREATE TABLE $name (
 );
 SQL;
 		$this->Dbo->execute($sql);
-		$model = new Model(array(
+		$model = new Model([
 			'table' => 'timestamp_default_values',
 			'ds' => 'test',
 			'alias' => 'TimestampDefaultValue'
-		));
+		]);
 		$result = $this->Dbo->describe($model);
 		$this->Dbo->execute('DROP TABLE ' . $name);
 
 		$this->assertNull($result['limit_date']['default']);
 
-		$schema = new CakeSchema(array(
+		$schema = new CakeSchema([
 			'connection' => 'test',
 			'testdescribes' => $result
-		));
+		]);
 		$result = $this->Dbo->createSchema($schema);
 		$this->assertContains('`limit_date` timestamp NOT NULL,', $result);
 	}
@@ -933,7 +933,7 @@ SQL;
  * @return void
  */
 	public function testDescribeHandleCurrentTimestampDatetime() {
-		$mysqlVersion = $this->Dbo->query('SELECT VERSION() as version', array('log' => false));
+		$mysqlVersion = $this->Dbo->query('SELECT VERSION() as version', ['log' => false]);
 		$this->skipIf(version_compare($mysqlVersion[0][0]['version'], '5.6.0', '<'));
 
 		$name = $this->Dbo->fullTableName('timestamp_default_values');
@@ -946,20 +946,20 @@ CREATE TABLE $name (
 );
 SQL;
 		$this->Dbo->execute($sql);
-		$model = new Model(array(
+		$model = new Model([
 			'table' => 'timestamp_default_values',
 			'ds' => 'test',
 			'alias' => 'TimestampDefaultValue'
-		));
+		]);
 		$result = $this->Dbo->describe($model);
 		$this->Dbo->execute('DROP TABLE ' . $name);
 
 		$this->assertNull($result['limit_date']['default']);
 
-		$schema = new CakeSchema(array(
+		$schema = new CakeSchema([
 			'connection' => 'test',
 			'testdescribes' => $result
-		));
+		]);
 		$result = $this->Dbo->createSchema($schema);
 		$this->assertContains('`limit_date` datetime NOT NULL,', $result);
 	}
@@ -970,27 +970,27 @@ SQL;
  * @return void
  */
 	public function testDescribeGettingFieldParameters() {
-		$schema = new CakeSchema(array(
+		$schema = new CakeSchema([
 			'connection' => 'test',
-			'testdescribes' => array(
-				'id' => array('type' => 'integer', 'key' => 'primary'),
-				'stringy' => array(
+			'testdescribes' => [
+				'id' => ['type' => 'integer', 'key' => 'primary'],
+				'stringy' => [
 					'type' => 'string',
 					'null' => true,
 					'charset' => 'cp1250',
 					'collate' => 'cp1250_general_ci',
-				),
-				'other_col' => array(
+				],
+				'other_col' => [
 					'type' => 'string',
 					'null' => false,
 					'charset' => 'latin1',
 					'comment' => 'Test Comment'
-				)
-			)
-		));
+				]
+			]
+		]);
 
 		$this->Dbo->execute($this->Dbo->createSchema($schema));
-		$model = new CakeTestModel(array('table' => 'testdescribes', 'name' => 'Testdescribes'));
+		$model = new CakeTestModel(['table' => 'testdescribes', 'name' => 'Testdescribes']);
 		$result = $model->getDataSource()->describe($model);
 		$this->Dbo->execute($this->Dbo->dropSchema($schema));
 
@@ -1005,33 +1005,33 @@ SQL;
  * @return void
  */
 	public function testTwoColumnsWithPrimaryKey() {
-		$schema = new CakeSchema(array(
+		$schema = new CakeSchema([
 			'connection' => 'test',
-			'roles_users' => array(
-				'role_id' => array(
+			'roles_users' => [
+				'role_id' => [
 					'type' => 'integer',
 					'null' => false,
 					'default' => null,
 					'key' => 'primary'
-				),
-				'user_id' => array(
+				],
+				'user_id' => [
 					'type' => 'integer',
 					'null' => false,
 					'default' => null,
 					'key' => 'primary'
-				),
-				'indexes' => array(
-					'user_role_index' => array(
-						'column' => array('role_id', 'user_id'),
+				],
+				'indexes' => [
+					'user_role_index' => [
+						'column' => ['role_id', 'user_id'],
 						'unique' => 1
-					),
-					'user_index' => array(
+					],
+					'user_index' => [
 						'column' => 'user_id',
 						'unique' => 0
-					)
-				),
-			)
-		));
+					]
+				],
+			]
+		]);
 
 		$result = $this->Dbo->createSchema($schema);
 		$this->assertContains('`role_id` int(11) NOT NULL,', $result);
@@ -1045,40 +1045,40 @@ SQL;
  */
 	public function testCreateSchemaAutoPrimaryKey() {
 		$schema = new CakeSchema();
-		$schema->tables = array(
-			'no_indexes' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'key' => 'primary'),
-				'data' => array('type' => 'integer', 'null' => false),
-				'indexes' => array(),
-			)
-		);
+		$schema->tables = [
+			'no_indexes' => [
+				'id' => ['type' => 'integer', 'null' => false, 'key' => 'primary'],
+				'data' => ['type' => 'integer', 'null' => false],
+				'indexes' => [],
+			]
+		];
 		$result = $this->Dbo->createSchema($schema, 'no_indexes');
 		$this->assertContains('PRIMARY KEY  (`id`)', $result);
 		$this->assertNotContains('UNIQUE KEY', $result);
 
-		$schema->tables = array(
-			'primary_index' => array(
-				'id' => array('type' => 'integer', 'null' => false),
-				'data' => array('type' => 'integer', 'null' => false),
-				'indexes' => array(
-					'PRIMARY' => array('column' => 'id', 'unique' => 1),
-					'some_index' => array('column' => 'data', 'unique' => 1)
-				),
-			)
-		);
+		$schema->tables = [
+			'primary_index' => [
+				'id' => ['type' => 'integer', 'null' => false],
+				'data' => ['type' => 'integer', 'null' => false],
+				'indexes' => [
+					'PRIMARY' => ['column' => 'id', 'unique' => 1],
+					'some_index' => ['column' => 'data', 'unique' => 1]
+				],
+			]
+		];
 		$result = $this->Dbo->createSchema($schema, 'primary_index');
 		$this->assertContains('PRIMARY KEY  (`id`)', $result);
 		$this->assertContains('UNIQUE KEY `some_index` (`data`)', $result);
 
-		$schema->tables = array(
-			'primary_flag_has_index' => array(
-				'id' => array('type' => 'integer', 'null' => false, 'key' => 'primary'),
-				'data' => array('type' => 'integer', 'null' => false),
-				'indexes' => array(
-					'some_index' => array('column' => 'data', 'unique' => 1)
-				),
-			)
-		);
+		$schema->tables = [
+			'primary_flag_has_index' => [
+				'id' => ['type' => 'integer', 'null' => false, 'key' => 'primary'],
+				'data' => ['type' => 'integer', 'null' => false],
+				'indexes' => [
+					'some_index' => ['column' => 'data', 'unique' => 1]
+				],
+			]
+		];
 		$result = $this->Dbo->createSchema($schema, 'primary_flag_has_index');
 		$this->assertContains('PRIMARY KEY  (`id`)', $result);
 		$this->assertContains('UNIQUE KEY `some_index` (`data`)', $result);
@@ -1089,7 +1089,7 @@ SQL;
  * @return void
  */
 	public function testListSources() {
-		$db = $this->getMock('Mysql', array('connect', '_execute'));
+		$db = $this->getMock('Mysql', ['connect', '_execute']);
 		$queryResult = $this->getMock('PDOStatement');
 		$db->expects($this->once())
 			->method('_execute')
@@ -1097,16 +1097,16 @@ SQL;
 			->will($this->returnValue($queryResult));
 		$queryResult->expects($this->at(0))
 			->method('fetch')
-			->will($this->returnValue(array('cake_table')));
+			->will($this->returnValue(['cake_table']));
 		$queryResult->expects($this->at(1))
 			->method('fetch')
-			->will($this->returnValue(array('another_table')));
+			->will($this->returnValue(['another_table']));
 		$queryResult->expects($this->at(2))
 			->method('fetch')
 			->will($this->returnValue(null));
 
 		$tables = $db->listSources();
-		$this->assertEquals(array('cake_table', 'another_table'), $tables);
+		$this->assertEquals(['cake_table', 'another_table'], $tables);
 	}
 
 /**
@@ -1118,7 +1118,7 @@ SQL;
 		$this->loadFixtures('Apple');
 
 		$result = $this->Dbo->listDetailedSources('imaginary');
-		$this->assertEquals(array(), $result, 'Should be empty when table does not exist.');
+		$this->assertEquals([], $result, 'Should be empty when table does not exist.');
 
 		$result = $this->Dbo->listDetailedSources();
 		$tableName = $this->Dbo->fullTableName('apples', false, false);
@@ -1139,12 +1139,12 @@ SQL;
  * @return void
  */
 	public function testGetEncoding() {
-		$db = $this->getMock('Mysql', array('connect', '_execute'));
+		$db = $this->getMock('Mysql', ['connect', '_execute']);
 		$queryResult = $this->getMock('PDOStatement');
 
 		$db->expects($this->once())
 			->method('_execute')
-			->with('SHOW VARIABLES LIKE ?', array('character_set_client'))
+			->with('SHOW VARIABLES LIKE ?', ['character_set_client'])
 			->will($this->returnValue($queryResult));
 		$result = new StdClass;
 		$result->Value = 'utf-8';
@@ -1163,10 +1163,10 @@ SQL;
  */
 	public function testFieldDoubleEscaping() {
 		$db = $this->Dbo->config['database'];
-		$test = $this->getMock('Mysql', array('connect', '_execute', 'execute'));
+		$test = $this->getMock('Mysql', ['connect', '_execute', 'execute']);
 		$test->config['database'] = $db;
 
-		$this->Model = $this->getMock('Article2', array('getDataSource'));
+		$this->Model = $this->getMock('Article2', ['getDataSource']);
 		$this->Model->alias = 'Article';
 		$this->Model->expects($this->any())
 			->method('getDataSource')
@@ -1174,31 +1174,31 @@ SQL;
 
 		$this->assertEquals('`Article`.`id`', $this->Model->escapeField());
 		$result = $test->fields($this->Model, null, $this->Model->escapeField());
-		$this->assertEquals(array('`Article`.`id`'), $result);
+		$this->assertEquals(['`Article`.`id`'], $result);
 
 		$test->expects($this->at(0))->method('execute')
 			->with('SELECT `Article`.`id` FROM ' . $test->fullTableName('articles') . ' AS `Article`   WHERE 1 = 1');
 
-		$result = $test->read($this->Model, array(
+		$result = $test->read($this->Model, [
 			'fields' => $this->Model->escapeField(),
 			'conditions' => null,
 			'recursive' => -1
-		));
+		]);
 
 		$test->startQuote = '[';
 		$test->endQuote = ']';
 		$this->assertEquals('[Article].[id]', $this->Model->escapeField());
 
 		$result = $test->fields($this->Model, null, $this->Model->escapeField());
-		$this->assertEquals(array('[Article].[id]'), $result);
+		$this->assertEquals(['[Article].[id]'], $result);
 
 		$test->expects($this->at(0))->method('execute')
 			->with('SELECT [Article].[id] FROM ' . $test->fullTableName('articles') . ' AS [Article]   WHERE 1 = 1');
-		$result = $test->read($this->Model, array(
+		$result = $test->read($this->Model, [
 			'fields' => $this->Model->escapeField(),
 			'conditions' => null,
 			'recursive' => -1
-		));
+		]);
 	}
 
 /**
@@ -1207,7 +1207,7 @@ SQL;
  * @return void
  */
 	public function testGenerateAssociationQuerySelfJoin() {
-		$this->Dbo = $this->getMock('Mysql', array('connect', '_execute', 'execute'));
+		$this->Dbo = $this->getMock('Mysql', ['connect', '_execute', 'execute']);
 		$this->startTime = microtime(true);
 		$this->Model = new Article2();
 		$this->_buildRelatedModels($this->Model);
@@ -1215,7 +1215,7 @@ SQL;
 		$this->Model->Category2->ChildCat = new Category2();
 		$this->Model->Category2->ParentCat = new Category2();
 
-		$queryData = array();
+		$queryData = [];
 
 		foreach ($this->Model->Category2->associations() as $type) {
 			foreach ($this->Model->Category2->{$type} as $assoc => $assocData) {
@@ -1244,8 +1244,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'belongsTo', 'model' => 'TestModel4Parent');
-		$queryData = array();
+		$binding = ['type' => 'belongsTo', 'model' => 'TestModel4Parent'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1253,9 +1253,9 @@ SQL;
 		$result = $this->Dbo->generateAssociationQuery($this->Model, $params['linkModel'], $params['type'], $params['assoc'], $params['assocData'], $queryData, $params['external']);
 		$this->assertTrue($result);
 
-		$expected = array(
-			'conditions' => array(),
-			'fields' => array(
+		$expected = [
+			'conditions' => [],
+			'fields' => [
 				'`TestModel4`.`id`',
 				'`TestModel4`.`name`',
 				'`TestModel4`.`created`',
@@ -1264,21 +1264,21 @@ SQL;
 				'`TestModel4Parent`.`name`',
 				'`TestModel4Parent`.`created`',
 				'`TestModel4Parent`.`updated`'
-			),
-			'joins' => array(
-				array(
+			],
+			'joins' => [
+				[
 					'table' => $this->Dbo->fullTableName($this->Model),
 					'alias' => 'TestModel4Parent',
 					'type' => 'LEFT',
 					'conditions' => '`TestModel4`.`parent_id` = `TestModel4Parent`.`id`'
-				)
-			),
-			'order' => array(),
-			'limit' => array(),
-			'offset' => array(),
-			'group' => array(),
+				]
+			],
+			'order' => [],
+			'limit' => [],
+			'offset' => [],
+			'group' => [],
 			'callbacks' => null
-		);
+		];
 		$queryData['joins'][0]['table'] = $this->Dbo->fullTableName($queryData['joins'][0]['table']);
 		$this->assertEquals($expected, $queryData);
 
@@ -1333,7 +1333,7 @@ SQL;
 		$external = isset($assocData['external']);
 		$queryData = $this->_scrubQueryData($queryData);
 
-		$result = array_merge(array('linkModel' => &$linkModel), compact('type', 'assoc', 'assocData', 'external'));
+		$result = array_merge(['linkModel' => &$linkModel], compact('type', 'assoc', 'assocData', 'external'));
 		return $result;
 	}
 
@@ -1346,7 +1346,7 @@ SQL;
 	protected function _scrubQueryData($data) {
 		static $base = null;
 		if ($base === null) {
-			$base = array_fill_keys(array('conditions', 'fields', 'joins', 'order', 'limit', 'offset', 'group'), array());
+			$base = array_fill_keys(['conditions', 'fields', 'joins', 'order', 'limit', 'offset', 'group'], []);
 			$base['callbacks'] = null;
 		}
 		return (array)$data + $base;
@@ -1359,15 +1359,15 @@ SQL;
  */
 	public function testReadCustomJoinsAfterGeneratedJoins() {
 		$db = $this->Dbo->config['database'];
-		$test = $this->getMock('Mysql', array('connect', '_execute', 'execute'));
+		$test = $this->getMock('Mysql', ['connect', '_execute', 'execute']);
 		$test->config['database'] = $db;
 
-		$this->Model = $this->getMock('TestModel9', array('getDataSource'));
+		$this->Model = $this->getMock('TestModel9', ['getDataSource']);
 		$this->Model->expects($this->any())
 			->method('getDataSource')
 			->will($this->returnValue($test));
 
-		$this->Model->TestModel8 = $this->getMock('TestModel8', array('getDataSource'));
+		$this->Model->TestModel8 = $this->getMock('TestModel8', ['getDataSource']);
 		$this->Model->TestModel8->expects($this->any())
 			->method('getDataSource')
 			->will($this->returnValue($test));
@@ -1382,17 +1382,17 @@ SQL;
 		$test->expects($this->at(0))->method('execute')
 			->with($this->stringContains($search));
 
-		$test->read($this->Model, array(
-			'joins' => array(
-				array(
+		$test->read($this->Model, [
+			'joins' => [
+				[
 					'table' => 'users',
 					'alias' => 'User',
 					'type' => 'LEFT',
-					'conditions' => array('TestModel9.id = User.test_id')
-				)
-			),
+					'conditions' => ['TestModel9.id = User.test_id']
+				]
+			],
 			'recursive' => 1
-		));
+		]);
 	}
 
 /**
@@ -1402,15 +1402,15 @@ SQL;
  */
 	public function testGenerateInnerJoinAssociationQuery() {
 		$db = $this->Dbo->config['database'];
-		$test = $this->getMock('Mysql', array('connect', '_execute', 'execute'));
+		$test = $this->getMock('Mysql', ['connect', '_execute', 'execute']);
 		$test->config['database'] = $db;
 
-		$this->Model = $this->getMock('TestModel9', array('getDataSource'));
+		$this->Model = $this->getMock('TestModel9', ['getDataSource']);
 		$this->Model->expects($this->any())
 			->method('getDataSource')
 			->will($this->returnValue($test));
 
-		$this->Model->TestModel8 = $this->getMock('TestModel8', array('getDataSource'));
+		$this->Model->TestModel8 = $this->getMock('TestModel8', ['getDataSource']);
 		$this->Model->TestModel8->expects($this->any())
 			->method('getDataSource')
 			->will($this->returnValue($test));
@@ -1423,9 +1423,9 @@ SQL;
 		$test->expects($this->at(1))->method('execute')
 			->with($this->stringContains('TestModel9` INNER JOIN ' . $testModel8Table));
 
-		$test->read($this->Model, array('recursive' => 1));
+		$test->read($this->Model, ['recursive' => 1]);
 		$this->Model->belongsTo['TestModel8']['type'] = 'INNER';
-		$test->read($this->Model, array('recursive' => 1));
+		$test->read($this->Model, ['recursive' => 1]);
 	}
 
 /**
@@ -1438,8 +1438,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasOne', 'model' => 'TestModel9');
-		$queryData = array();
+		$binding = ['type' => 'hasOne', 'model' => 'TestModel9'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 		$result = $this->Dbo->generateAssociationQuery($this->Model, $params['linkModel'], $params['type'], $params['assoc'], $params['assocData'], $queryData, $params['external']);
@@ -1462,8 +1462,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'belongsTo', 'model' => 'TestModel8');
-		$queryData = array();
+		$binding = ['type' => 'belongsTo', 'model' => 'TestModel8'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 		$result = $this->Dbo->generateAssociationQuery($this->Model, $params['linkModel'], $params['type'], $params['assoc'], $params['assocData'], $queryData, $params['external']);
@@ -1486,8 +1486,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'belongsTo', 'model' => 'TestModel4Parent');
-		$queryData = array('conditions' => array('TestModel4Parent.name !=' => 'mariano'));
+		$binding = ['type' => 'belongsTo', 'model' => 'TestModel4Parent'];
+		$queryData = ['conditions' => ['TestModel4Parent.name !=' => 'mariano']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1503,19 +1503,19 @@ SQL;
 		$this->Featured2 = new Featured2();
 		$this->Featured2->schema();
 
-		$this->Featured2->bindModel(array(
-			'belongsTo' => array(
-				'ArticleFeatured2' => array(
+		$this->Featured2->bindModel([
+			'belongsTo' => [
+				'ArticleFeatured2' => [
 					'conditions' => 'ArticleFeatured2.published = \'Y\'',
 					'fields' => 'id, title, user_id, published'
-				)
-			)
-		));
+				]
+			]
+		]);
 
 		$this->_buildRelatedModels($this->Featured2);
 
-		$binding = array('type' => 'belongsTo', 'model' => 'ArticleFeatured2');
-		$queryData = array('conditions' => array());
+		$binding = ['type' => 'belongsTo', 'model' => 'ArticleFeatured2'];
+		$queryData = ['conditions' => []];
 
 		$params = &$this->_prepareAssociationQuery($this->Featured2, $queryData, $binding);
 
@@ -1543,9 +1543,9 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasOne', 'model' => 'TestModel5');
+		$binding = ['type' => 'hasOne', 'model' => 'TestModel5'];
 
-		$queryData = array();
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1574,9 +1574,9 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasOne', 'model' => 'TestModel5');
+		$binding = ['type' => 'hasOne', 'model' => 'TestModel5'];
 
-		$queryData = array('conditions' => array('TestModel5.name !=' => 'mariano'));
+		$queryData = ['conditions' => ['TestModel5.name !=' => 'mariano']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1601,8 +1601,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'belongsTo', 'model' => 'TestModel4');
-		$queryData = array();
+		$binding = ['type' => 'belongsTo', 'model' => 'TestModel4'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1631,8 +1631,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'belongsTo', 'model' => 'TestModel4');
-		$queryData = array('conditions' => array('TestModel5.name !=' => 'mariano'));
+		$binding = ['type' => 'belongsTo', 'model' => 'TestModel4'];
+		$queryData = ['conditions' => ['TestModel5.name !=' => 'mariano']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1661,8 +1661,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array();
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1690,8 +1690,8 @@ SQL;
 
 		$this->Model->hasMany['TestModel6']['limit'] = 2;
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array();
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1725,8 +1725,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('conditions' => array('TestModel5.name !=' => 'mariano'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['conditions' => ['TestModel5.name !=' => 'mariano']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1756,8 +1756,8 @@ SQL;
 		$this->Model->hasMany['TestModel6']['offset'] = 2;
 		$this->Model->hasMany['TestModel6']['limit'] = 5;
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array();
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1791,7 +1791,7 @@ SQL;
 		$this->Model->hasMany['TestModel6']['page'] = 2;
 		$this->Model->hasMany['TestModel6']['limit'] = 5;
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1819,8 +1819,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('`TestModel5`.`name`'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['`TestModel5`.`name`']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1834,8 +1834,8 @@ SQL;
 		$this->assertRegExp('/\s+FROM\s+\S+`test_model5` AS `TestModel5`\s+WHERE\s+/', $result);
 		$this->assertRegExp('/\s+WHERE\s+(?:\()?1\s+=\s+1(?:\))?\s*$/', $result);
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('`TestModel5`.`id`, `TestModel5`.`name`'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['`TestModel5`.`id`, `TestModel5`.`name`']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1849,8 +1849,8 @@ SQL;
 		$this->assertRegExp('/\s+FROM\s+\S+`test_model5` AS `TestModel5`\s+WHERE\s+/', $result);
 		$this->assertRegExp('/\s+WHERE\s+(?:\()?1\s+=\s+1(?:\))?\s*$/', $result);
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('`TestModel5`.`name`', '`TestModel5`.`created`'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['`TestModel5`.`name`', '`TestModel5`.`created`']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1864,10 +1864,10 @@ SQL;
 		$this->assertRegExp('/\s+FROM\s+\S+`test_model5` AS `TestModel5`\s+WHERE\s+/', $result);
 		$this->assertRegExp('/\s+WHERE\s+(?:\()?1\s+=\s+1(?:\))?\s*$/', $result);
 
-		$this->Model->hasMany['TestModel6']['fields'] = array('name');
+		$this->Model->hasMany['TestModel6']['fields'] = ['name'];
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('`TestModel5`.`id`', '`TestModel5`.`name`'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['`TestModel5`.`id`', '`TestModel5`.`name`']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1883,10 +1883,10 @@ SQL;
 
 		unset($this->Model->hasMany['TestModel6']['fields']);
 
-		$this->Model->hasMany['TestModel6']['fields'] = array('id', 'name');
+		$this->Model->hasMany['TestModel6']['fields'] = ['id', 'name'];
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('`TestModel5`.`id`', '`TestModel5`.`name`'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['`TestModel5`.`id`', '`TestModel5`.`name`']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1902,10 +1902,10 @@ SQL;
 
 		unset($this->Model->hasMany['TestModel6']['fields']);
 
-		$this->Model->hasMany['TestModel6']['fields'] = array('test_model5_id', 'name');
+		$this->Model->hasMany['TestModel6']['fields'] = ['test_model5_id', 'name'];
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('`TestModel5`.`id`', '`TestModel5`.`name`'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['`TestModel5`.`id`', '`TestModel5`.`name`']];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1932,8 +1932,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasMany', 'model' => 'TestModel6');
-		$queryData = array('fields' => array('MIN(`TestModel5`.`test_model4_id`)'));
+		$binding = ['type' => 'hasMany', 'model' => 'TestModel6'];
+		$queryData = ['fields' => ['MIN(`TestModel5`.`test_model4_id`)']];
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 		$this->Model->recursive = 0;
 
@@ -1951,8 +1951,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasAndBelongsToMany', 'model' => 'TestModel7');
-		$queryData = array();
+		$binding = ['type' => 'hasAndBelongsToMany', 'model' => 'TestModel7'];
+		$queryData = [];
 
 		$params = $this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -1980,8 +1980,8 @@ SQL;
 		$this->Model->schema();
 		$this->_buildRelatedModels($this->Model);
 
-		$binding = array('type' => 'hasAndBelongsToMany', 'model' => 'TestModel7');
-		$queryData = array('conditions' => array('TestModel4.name !=' => 'mariano'));
+		$binding = ['type' => 'hasAndBelongsToMany', 'model' => 'TestModel7'];
+		$queryData = ['conditions' => ['TestModel4.name !=' => 'mariano']];
 
 		$params = $this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -2011,8 +2011,8 @@ SQL;
 		$this->Model->hasAndBelongsToMany['TestModel7']['offset'] = 2;
 		$this->Model->hasAndBelongsToMany['TestModel7']['limit'] = 5;
 
-		$binding = array('type' => 'hasAndBelongsToMany', 'model' => 'TestModel7');
-		$queryData = array();
+		$binding = ['type' => 'hasAndBelongsToMany', 'model' => 'TestModel7'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -2045,8 +2045,8 @@ SQL;
 		$this->Model->hasAndBelongsToMany['TestModel7']['page'] = 2;
 		$this->Model->hasAndBelongsToMany['TestModel7']['limit'] = 5;
 
-		$binding = array('type' => 'hasAndBelongsToMany', 'model' => 'TestModel7');
-		$queryData = array();
+		$binding = ['type' => 'hasAndBelongsToMany', 'model' => 'TestModel7'];
+		$queryData = [];
 
 		$params = &$this->_prepareAssociationQuery($this->Model, $queryData, $binding);
 
@@ -2072,7 +2072,7 @@ SQL;
 	public function testSelectDistict() {
 		$this->Model = new TestModel4();
 		$result = $this->Dbo->fields($this->Model, 'Vendor', "DISTINCT Vendor.id, Vendor.name");
-		$expected = array('DISTINCT `Vendor`.`id`', '`Vendor`.`name`');
+		$expected = ['DISTINCT `Vendor`.`id`', '`Vendor`.`name`'];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -2115,7 +2115,7 @@ SQL;
 		$expected = " WHERE score BETWEEN 90.1 AND 95.7";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score' => array(2 => 1, 2, 10)));
+		$result = $this->Dbo->conditions(['score' => [2 => 1, 2, 10]]);
 		$expected = " WHERE `score` IN (1, 2, 10)";
 		$this->assertEquals($expected, $result);
 
@@ -2178,22 +2178,22 @@ SQL;
 		$this->assertEquals($expected, $result);
 
 		$letter = $letter = 'd.a';
-		$conditions = array('Company.name like ' => $letter . '%');
+		$conditions = ['Company.name like ' => $letter . '%'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `Company`.`name` like 'd.a%'";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('Artist.name' => 'JUDY and MARY');
+		$conditions = ['Artist.name' => 'JUDY and MARY'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `Artist`.`name` = 'JUDY and MARY'";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('Artist.name' => 'JUDY AND MARY');
+		$conditions = ['Artist.name' => 'JUDY AND MARY'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `Artist`.`name` = 'JUDY AND MARY'";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('Company.name similar to ' => 'a word');
+		$conditions = ['Company.name similar to ' => 'a word'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `Company`.`name` similar to 'a word'";
 		$this->assertEquals($expected, $result);
@@ -2296,46 +2296,46 @@ SQL;
  * @return void
  */
 	public function testParenthesisInArrayConditions() {
-		$result = $this->Dbo->conditions(array('Member.name' => '(lu'));
+		$result = $this->Dbo->conditions(['Member.name' => '(lu']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(lu\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => ')lu'));
+		$result = $this->Dbo->conditions(['Member.name' => ')lu']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\)lu\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => 'va(lu'));
+		$result = $this->Dbo->conditions(['Member.name' => 'va(lu']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'va\(lu\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => 'va)lu'));
+		$result = $this->Dbo->conditions(['Member.name' => 'va)lu']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'va\)lu\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => 'va(lu)'));
+		$result = $this->Dbo->conditions(['Member.name' => 'va(lu)']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'va\(lu\)\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => 'va(lu)e'));
+		$result = $this->Dbo->conditions(['Member.name' => 'va(lu)e']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'va\(lu\)e\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => '(mariano)'));
+		$result = $this->Dbo->conditions(['Member.name' => '(mariano)']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(mariano\)\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => '(mariano)iglesias'));
+		$result = $this->Dbo->conditions(['Member.name' => '(mariano)iglesias']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(mariano\)iglesias\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => '(mariano) iglesias'));
+		$result = $this->Dbo->conditions(['Member.name' => '(mariano) iglesias']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(mariano\) iglesias\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => '(mariano word) iglesias'));
+		$result = $this->Dbo->conditions(['Member.name' => '(mariano word) iglesias']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(mariano word\) iglesias\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => '(mariano.iglesias)'));
+		$result = $this->Dbo->conditions(['Member.name' => '(mariano.iglesias)']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(mariano.iglesias\)\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => 'Mariano Iglesias (mariano.iglesias)'));
+		$result = $this->Dbo->conditions(['Member.name' => 'Mariano Iglesias (mariano.iglesias)']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'Mariano Iglesias \(mariano.iglesias\)\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => 'Mariano Iglesias (mariano.iglesias) CakePHP'));
+		$result = $this->Dbo->conditions(['Member.name' => 'Mariano Iglesias (mariano.iglesias) CakePHP']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'Mariano Iglesias \(mariano.iglesias\) CakePHP\'$/', $result);
 
-		$result = $this->Dbo->conditions(array('Member.name' => '(mariano.iglesias) CakePHP'));
+		$result = $this->Dbo->conditions(['Member.name' => '(mariano.iglesias) CakePHP']);
 		$this->assertRegExp('/^\s+WHERE\s+`Member`.`name`\s+=\s+\'\(mariano.iglesias\) CakePHP\'$/', $result);
 	}
 
@@ -2346,251 +2346,251 @@ SQL;
  */
 	public function testArrayConditionsParsing() {
 		$this->loadFixtures('Post', 'Author');
-		$result = $this->Dbo->conditions(array('Stereo.type' => 'in dash speakers'));
+		$result = $this->Dbo->conditions(['Stereo.type' => 'in dash speakers']);
 		$this->assertRegExp("/^\s+WHERE\s+`Stereo`.`type`\s+=\s+'in dash speakers'/", $result);
 
-		$result = $this->Dbo->conditions(array('Candy.name LIKE' => 'a', 'HardCandy.name LIKE' => 'c'));
+		$result = $this->Dbo->conditions(['Candy.name LIKE' => 'a', 'HardCandy.name LIKE' => 'c']);
 		$this->assertRegExp("/^\s+WHERE\s+`Candy`.`name` LIKE\s+'a'\s+AND\s+`HardCandy`.`name`\s+LIKE\s+'c'/", $result);
 
-		$result = $this->Dbo->conditions(array('HardCandy.name LIKE' => 'a', 'Candy.name LIKE' => 'c'));
+		$result = $this->Dbo->conditions(['HardCandy.name LIKE' => 'a', 'Candy.name LIKE' => 'c']);
 		$expected = " WHERE `HardCandy`.`name` LIKE 'a' AND `Candy`.`name` LIKE 'c'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('HardCandy.name LIKE' => 'a%', 'Candy.name LIKE' => '%c%'));
+		$result = $this->Dbo->conditions(['HardCandy.name LIKE' => 'a%', 'Candy.name LIKE' => '%c%']);
 		$expected = " WHERE `HardCandy`.`name` LIKE 'a%' AND `Candy`.`name` LIKE '%c%'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('HardCandy.name LIKE' => 'to be or%', 'Candy.name LIKE' => '%not to be%'));
+		$result = $this->Dbo->conditions(['HardCandy.name LIKE' => 'to be or%', 'Candy.name LIKE' => '%not to be%']);
 		$expected = " WHERE `HardCandy`.`name` LIKE 'to be or%' AND `Candy`.`name` LIKE '%not to be%'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
+		$result = $this->Dbo->conditions([
 			"Person.name || ' ' || Person.surname ILIKE" => '%mark%'
-		));
+		]);
 		$expected = " WHERE `Person`.`name` || ' ' || `Person`.`surname` ILIKE '%mark%'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score BETWEEN ? AND ?' => array(90.1, 95.7)));
+		$result = $this->Dbo->conditions(['score BETWEEN ? AND ?' => [90.1, 95.7]]);
 		$expected = " WHERE `score` BETWEEN 90.1 AND 95.7";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Post.title' => 1.1));
+		$result = $this->Dbo->conditions(['Post.title' => 1.1]);
 		$expected = " WHERE `Post`.`title` = 1.1";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Post.title' => 1.1), true, true, new Post());
+		$result = $this->Dbo->conditions(['Post.title' => 1.1], true, true, new Post());
 		$expected = " WHERE `Post`.`title` = '1.1'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('SUM(Post.comments_count) >' => '500'));
+		$result = $this->Dbo->conditions(['SUM(Post.comments_count) >' => '500']);
 		$expected = " WHERE SUM(`Post`.`comments_count`) > '500'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('MAX(Post.rating) >' => '50'));
+		$result = $this->Dbo->conditions(['MAX(Post.rating) >' => '50']);
 		$expected = " WHERE MAX(`Post`.`rating`) > '50'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('lower(Article.title)' => 'secrets'));
+		$result = $this->Dbo->conditions(['lower(Article.title)' => 'secrets']);
 		$expected = " WHERE lower(`Article`.`title`) = 'secrets'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('title LIKE' => '%hello'));
+		$result = $this->Dbo->conditions(['title LIKE' => '%hello']);
 		$expected = " WHERE `title` LIKE '%hello'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Post.name' => 'mad(g)ik'));
+		$result = $this->Dbo->conditions(['Post.name' => 'mad(g)ik']);
 		$expected = " WHERE `Post`.`name` = 'mad(g)ik'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score' => array(1, 2, 10)));
+		$result = $this->Dbo->conditions(['score' => [1, 2, 10]]);
 		$expected = " WHERE `score` IN (1, 2, 10)";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score' => array()));
+		$result = $this->Dbo->conditions(['score' => []]);
 		$expected = " WHERE `score` IS NULL";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score !=' => array()));
+		$result = $this->Dbo->conditions(['score !=' => []]);
 		$expected = " WHERE `score` IS NOT NULL";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score !=' => '20'));
+		$result = $this->Dbo->conditions(['score !=' => '20']);
 		$expected = " WHERE `score` != '20'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('score >' => '20'));
+		$result = $this->Dbo->conditions(['score >' => '20']);
 		$expected = " WHERE `score` > '20'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('client_id >' => '20'), true, true, new TestModel());
+		$result = $this->Dbo->conditions(['client_id >' => '20'], true, true, new TestModel());
 		$expected = " WHERE `client_id` > 20";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('OR' => array(
-			array('User.user' => 'mariano'),
-			array('User.user' => 'nate')
-		)));
+		$result = $this->Dbo->conditions(['OR' => [
+			['User.user' => 'mariano'],
+			['User.user' => 'nate']
+		]]);
 
 		$expected = " WHERE ((`User`.`user` = 'mariano') OR (`User`.`user` = 'nate'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('User.user RLIKE' => 'mariano|nate'));
+		$result = $this->Dbo->conditions(['User.user RLIKE' => 'mariano|nate']);
 		$expected = " WHERE `User`.`user` RLIKE 'mariano|nate'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('or' => array(
-			'score BETWEEN ? AND ?' => array('4', '5'), 'rating >' => '20'
-		)));
+		$result = $this->Dbo->conditions(['or' => [
+			'score BETWEEN ? AND ?' => ['4', '5'], 'rating >' => '20'
+		]]);
 		$expected = " WHERE ((`score` BETWEEN '4' AND '5') OR (`rating` > '20'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('or' => array(
-			'score BETWEEN ? AND ?' => array('4', '5'), array('score >' => '20')
-		)));
+		$result = $this->Dbo->conditions(['or' => [
+			'score BETWEEN ? AND ?' => ['4', '5'], ['score >' => '20']
+		]]);
 		$expected = " WHERE ((`score` BETWEEN '4' AND '5') OR (`score` > '20'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('and' => array(
-			'score BETWEEN ? AND ?' => array('4', '5'), array('score >' => '20')
-		)));
+		$result = $this->Dbo->conditions(['and' => [
+			'score BETWEEN ? AND ?' => ['4', '5'], ['score >' => '20']
+		]]);
 		$expected = " WHERE ((`score` BETWEEN '4' AND '5') AND (`score` > '20'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
-			'published' => 1, 'or' => array('score >' => '2', array('score >' => '20'))
-		));
+		$result = $this->Dbo->conditions([
+			'published' => 1, 'or' => ['score >' => '2', ['score >' => '20']]
+		]);
 		$expected = " WHERE `published` = 1 AND ((`score` > '2') OR (`score` > '20'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(array('Project.removed' => false)));
+		$result = $this->Dbo->conditions([['Project.removed' => false]]);
 		$expected = " WHERE `Project`.`removed` = '0'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(array('Project.removed' => true)));
+		$result = $this->Dbo->conditions([['Project.removed' => true]]);
 		$expected = " WHERE `Project`.`removed` = '1'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(array('Project.removed' => null)));
+		$result = $this->Dbo->conditions([['Project.removed' => null]]);
 		$expected = " WHERE `Project`.`removed` IS NULL";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(array('Project.removed !=' => null)));
+		$result = $this->Dbo->conditions([['Project.removed !=' => null]]);
 		$expected = " WHERE `Project`.`removed` IS NOT NULL";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('(Usergroup.permissions) & 4' => 4));
+		$result = $this->Dbo->conditions(['(Usergroup.permissions) & 4' => 4]);
 		$expected = " WHERE (`Usergroup`.`permissions`) & 4 = 4";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('((Usergroup.permissions) & 4)' => 4));
+		$result = $this->Dbo->conditions(['((Usergroup.permissions) & 4)' => 4]);
 		$expected = " WHERE ((`Usergroup`.`permissions`) & 4) = 4";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Post.modified >=' => 'DATE_SUB(NOW(), INTERVAL 7 DAY)'));
+		$result = $this->Dbo->conditions(['Post.modified >=' => 'DATE_SUB(NOW(), INTERVAL 7 DAY)']);
 		$expected = " WHERE `Post`.`modified` >= 'DATE_SUB(NOW(), INTERVAL 7 DAY)'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Post.modified >= DATE_SUB(NOW(), INTERVAL 7 DAY)'));
+		$result = $this->Dbo->conditions(['Post.modified >= DATE_SUB(NOW(), INTERVAL 7 DAY)']);
 		$expected = " WHERE `Post`.`modified` >= DATE_SUB(NOW(), INTERVAL 7 DAY)";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
-			'NOT' => array('Course.id' => null, 'Course.vet' => 'N', 'level_of_education_id' => array(912, 999)),
-			'Enrollment.yearcompleted >' => '0')
+		$result = $this->Dbo->conditions([
+			'NOT' => ['Course.id' => null, 'Course.vet' => 'N', 'level_of_education_id' => [912, 999]],
+			'Enrollment.yearcompleted >' => '0']
 		);
 		$this->assertRegExp('/^\s*WHERE\s+\(NOT\s+\(`Course`\.`id` IS NULL\)\s+AND NOT\s+\(`Course`\.`vet`\s+=\s+\'N\'\)\s+AND NOT\s+\(`level_of_education_id` IN \(912, 999\)\)\)\s+AND\s+`Enrollment`\.`yearcompleted`\s+>\s+\'0\'\s*$/', $result);
 
-		$result = $this->Dbo->conditions(array('id <>' => '8'));
+		$result = $this->Dbo->conditions(['id <>' => '8']);
 		$this->assertRegExp('/^\s*WHERE\s+`id`\s+<>\s+\'8\'\s*$/', $result);
 
-		$result = $this->Dbo->conditions(array('TestModel.field =' => 'gribe$@()lu'));
+		$result = $this->Dbo->conditions(['TestModel.field =' => 'gribe$@()lu']);
 		$expected = " WHERE `TestModel`.`field` = 'gribe$@()lu'";
 		$this->assertEquals($expected, $result);
 
-		$conditions['NOT'] = array('Listing.expiration BETWEEN ? AND ?' => array("1", "100"));
-		$conditions[0]['OR'] = array(
+		$conditions['NOT'] = ['Listing.expiration BETWEEN ? AND ?' => ["1", "100"]];
+		$conditions[0]['OR'] = [
 			"Listing.title LIKE" => "%term%",
 			"Listing.description LIKE" => "%term%"
-		);
-		$conditions[1]['OR'] = array(
+		];
+		$conditions[1]['OR'] = [
 			"Listing.title LIKE" => "%term_2%",
 			"Listing.description LIKE" => "%term_2%"
-		);
+		];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE NOT (`Listing`.`expiration` BETWEEN '1' AND '100') AND" .
 		" ((`Listing`.`title` LIKE '%term%') OR (`Listing`.`description` LIKE '%term%')) AND" .
 		" ((`Listing`.`title` LIKE '%term_2%') OR (`Listing`.`description` LIKE '%term_2%'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('MD5(CONCAT(Reg.email,Reg.id))' => 'blah'));
+		$result = $this->Dbo->conditions(['MD5(CONCAT(Reg.email,Reg.id))' => 'blah']);
 		$expected = " WHERE MD5(CONCAT(`Reg`.`email`,`Reg`.`id`)) = 'blah'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
-			'MD5(CONCAT(Reg.email,Reg.id))' => array('blah', 'blahblah')
-		));
+		$result = $this->Dbo->conditions([
+			'MD5(CONCAT(Reg.email,Reg.id))' => ['blah', 'blahblah']
+		]);
 		$expected = " WHERE MD5(CONCAT(`Reg`.`email`,`Reg`.`id`)) IN ('blah', 'blahblah')";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('id' => array(2, 5, 6, 9, 12, 45, 78, 43, 76));
+		$conditions = ['id' => [2, 5, 6, 9, 12, 45, 78, 43, 76]];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `id` IN (2, 5, 6, 9, 12, 45, 78, 43, 76)";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('`Correction`.`source` collate utf8_bin' => array('kiwi', 'pear'));
+		$conditions = ['`Correction`.`source` collate utf8_bin' => ['kiwi', 'pear']];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `Correction`.`source` collate utf8_bin IN ('kiwi', 'pear')";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('title' => 'user(s)');
+		$conditions = ['title' => 'user(s)'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `title` = 'user(s)'";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('title' => 'user(s) data');
+		$conditions = ['title' => 'user(s) data'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `title` = 'user(s) data'";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('title' => 'user(s,arg) data');
+		$conditions = ['title' => 'user(s,arg) data'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `title` = 'user(s,arg) data'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array("Book.book_name" => 'Java(TM)'));
+		$result = $this->Dbo->conditions(["Book.book_name" => 'Java(TM)']);
 		$expected = " WHERE `Book`.`book_name` = 'Java(TM)'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array("Book.book_name" => 'Java(TM) '));
+		$result = $this->Dbo->conditions(["Book.book_name" => 'Java(TM) ']);
 		$expected = " WHERE `Book`.`book_name` = 'Java(TM) '";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array("Book.id" => 0));
+		$result = $this->Dbo->conditions(["Book.id" => 0]);
 		$expected = " WHERE `Book`.`id` = 0";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array("Book.id" => null));
+		$result = $this->Dbo->conditions(["Book.id" => null]);
 		$expected = " WHERE `Book`.`id` IS NULL";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('MysqlModel.id' => '');
+		$conditions = ['MysqlModel.id' => ''];
 		$result = $this->Dbo->conditions($conditions, true, true, $this->model);
 		$expected = " WHERE `MysqlModel`.`id` IS NULL";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Listing.beds >=' => 0));
+		$result = $this->Dbo->conditions(['Listing.beds >=' => 0]);
 		$expected = " WHERE `Listing`.`beds` >= 0";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
-			'ASCII(SUBSTRING(keyword, 1, 1)) BETWEEN ? AND ?' => array(65, 90)
-		));
+		$result = $this->Dbo->conditions([
+			'ASCII(SUBSTRING(keyword, 1, 1)) BETWEEN ? AND ?' => [65, 90]
+		]);
 		$expected = ' WHERE ASCII(SUBSTRING(keyword, 1, 1)) BETWEEN 65 AND 90';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('or' => array(
+		$result = $this->Dbo->conditions(['or' => [
 			'? BETWEEN Model.field1 AND Model.field2' => '2009-03-04'
-		)));
+		]]);
 		$expected = " WHERE '2009-03-04' BETWEEN Model.field1 AND Model.field2";
 		$this->assertEquals($expected, $result);
 	}
@@ -2601,15 +2601,15 @@ SQL;
  * @return void
  */
 	public function testConditionsWithReplacements() {
-		$result = $this->Dbo->conditions(array(
-			'score BETWEEN :0 AND :1' => array(90.1, 95.7)
-		));
+		$result = $this->Dbo->conditions([
+			'score BETWEEN :0 AND :1' => [90.1, 95.7]
+		]);
 		$expected = " WHERE `score` BETWEEN 90.1 AND 95.7";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
-			'score BETWEEN ? AND ?' => array(90.1, 95.7)
-		));
+		$result = $this->Dbo->conditions([
+			'score BETWEEN ? AND ?' => [90.1, 95.7]
+		]);
 		$expected = " WHERE `score` BETWEEN 90.1 AND 95.7";
 		$this->assertEquals($expected, $result);
 	}
@@ -2620,12 +2620,12 @@ SQL;
  * @return void
  */
 	public function testArrayConditionsOneElement() {
-		$conditions = array('id' => array(1));
+		$conditions = ['id' => [1]];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE id = (1)";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('id NOT' => array(1));
+		$conditions = ['id NOT' => [1]];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE NOT (id = (1))";
 		$this->assertEquals($expected, $result);
@@ -2637,21 +2637,21 @@ SQL;
  * @return void
  */
 	public function testArrayConditionsParsingComplexKeys() {
-		$result = $this->Dbo->conditions(array(
+		$result = $this->Dbo->conditions([
 			'CAST(Book.created AS DATE)' => '2008-08-02'
-		));
+		]);
 		$expected = " WHERE CAST(`Book`.`created` AS DATE) = '2008-08-02'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
+		$result = $this->Dbo->conditions([
 			'CAST(Book.created AS DATE) <=' => '2008-08-02'
-		));
+		]);
 		$expected = " WHERE CAST(`Book`.`created` AS DATE) <= '2008-08-02'";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array(
+		$result = $this->Dbo->conditions([
 			'(Stats.clicks * 100) / Stats.views >' => 50
-		));
+		]);
 		$expected = " WHERE (`Stats`.`clicks` * 100) / `Stats`.`views` > 50";
 		$this->assertEquals($expected, $result);
 	}
@@ -2663,16 +2663,16 @@ SQL;
  */
 	public function testMixedConditionsParsing() {
 		$conditions[] = 'User.first_name = \'Firstname\'';
-		$conditions[] = array('User.last_name' => 'Lastname');
+		$conditions[] = ['User.last_name' => 'Lastname'];
 		$result = $this->Dbo->conditions($conditions);
 		$expected = " WHERE `User`.`first_name` = 'Firstname' AND `User`.`last_name` = 'Lastname'";
 		$this->assertEquals($expected, $result);
 
-		$conditions = array(
+		$conditions = [
 			'Thread.project_id' => 5,
 			'Thread.buyer_id' => 14,
 			'1=1 GROUP BY Thread.project_id'
-		);
+		];
 		$result = $this->Dbo->conditions($conditions);
 		$this->assertRegExp('/^\s*WHERE\s+`Thread`.`project_id`\s*=\s*5\s+AND\s+`Thread`.`buyer_id`\s*=\s*14\s+AND\s+1\s*=\s*1\s+GROUP BY `Thread`.`project_id`$/', $result);
 	}
@@ -2683,10 +2683,10 @@ SQL;
  * @return void
  */
 	public function testConditionsOptionalArguments() {
-		$result = $this->Dbo->conditions(array('Member.name' => 'Mariano'), true, false);
+		$result = $this->Dbo->conditions(['Member.name' => 'Mariano'], true, false);
 		$this->assertRegExp('/^\s*`Member`.`name`\s*=\s*\'Mariano\'\s*$/', $result);
 
-		$result = $this->Dbo->conditions(array(), true, false);
+		$result = $this->Dbo->conditions([], true, false);
 		$this->assertRegExp('/^\s*1\s*=\s*1\s*$/', $result);
 	}
 
@@ -2698,27 +2698,27 @@ SQL;
 	public function testConditionsWithModel() {
 		$this->Model = new Article2();
 
-		$result = $this->Dbo->conditions(array('Article2.viewed >=' => 0), true, true, $this->Model);
+		$result = $this->Dbo->conditions(['Article2.viewed >=' => 0], true, true, $this->Model);
 		$expected = " WHERE `Article2`.`viewed` >= 0";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Article2.viewed >=' => '0'), true, true, $this->Model);
+		$result = $this->Dbo->conditions(['Article2.viewed >=' => '0'], true, true, $this->Model);
 		$expected = " WHERE `Article2`.`viewed` >= 0";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Article2.viewed >=' => '1'), true, true, $this->Model);
+		$result = $this->Dbo->conditions(['Article2.viewed >=' => '1'], true, true, $this->Model);
 		$expected = " WHERE `Article2`.`viewed` >= 1";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Article2.rate_sum BETWEEN ? AND ?' => array(0, 10)), true, true, $this->Model);
+		$result = $this->Dbo->conditions(['Article2.rate_sum BETWEEN ? AND ?' => [0, 10]], true, true, $this->Model);
 		$expected = " WHERE `Article2`.`rate_sum` BETWEEN 0 AND 10";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Article2.rate_sum BETWEEN ? AND ?' => array('0', '10')), true, true, $this->Model);
+		$result = $this->Dbo->conditions(['Article2.rate_sum BETWEEN ? AND ?' => ['0', '10']], true, true, $this->Model);
 		$expected = " WHERE `Article2`.`rate_sum` BETWEEN 0 AND 10";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('Article2.rate_sum BETWEEN ? AND ?' => array('1', '10')), true, true, $this->Model);
+		$result = $this->Dbo->conditions(['Article2.rate_sum BETWEEN ? AND ?' => ['1', '10']], true, true, $this->Model);
 		$expected = " WHERE `Article2`.`rate_sum` BETWEEN 1 AND 10";
 		$this->assertEquals($expected, $result);
 	}
@@ -2731,120 +2731,120 @@ SQL;
 	public function testFieldParsing() {
 		$this->Model = new TestModel();
 		$result = $this->Dbo->fields($this->Model, 'Vendor', "Vendor.id, COUNT(Model.vendor_id) AS `Vendor`.`count`");
-		$expected = array('`Vendor`.`id`', 'COUNT(`Model`.`vendor_id`) AS `Vendor`.`count`');
+		$expected = ['`Vendor`.`id`', 'COUNT(`Model`.`vendor_id`) AS `Vendor`.`count`'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, 'Vendor', "`Vendor`.`id`, COUNT(`Model`.`vendor_id`) AS `Vendor`.`count`");
-		$expected = array('`Vendor`.`id`', 'COUNT(`Model`.`vendor_id`) AS `Vendor`.`count`');
+		$expected = ['`Vendor`.`id`', 'COUNT(`Model`.`vendor_id`) AS `Vendor`.`count`'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, 'Post', "CONCAT(REPEAT(' ', COUNT(Parent.name) - 1), Node.name) AS name, Node.created");
-		$expected = array("CONCAT(REPEAT(' ', COUNT(`Parent`.`name`) - 1), Node.name) AS name", "`Node`.`created`");
+		$expected = ["CONCAT(REPEAT(' ', COUNT(`Parent`.`name`) - 1), Node.name) AS name", "`Node`.`created`"];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'round( (3.55441 * fooField), 3 ) AS test');
-		$this->assertEquals(array('round( (3.55441 * fooField), 3 ) AS test'), $result);
+		$this->assertEquals(['round( (3.55441 * fooField), 3 ) AS test'], $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'ROUND(`Rating`.`rate_total` / `Rating`.`rate_count`,2) AS rating');
-		$this->assertEquals(array('ROUND(`Rating`.`rate_total` / `Rating`.`rate_count`,2) AS rating'), $result);
+		$this->assertEquals(['ROUND(`Rating`.`rate_total` / `Rating`.`rate_count`,2) AS rating'], $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'ROUND(Rating.rate_total / Rating.rate_count,2) AS rating');
-		$this->assertEquals(array('ROUND(Rating.rate_total / Rating.rate_count,2) AS rating'), $result);
+		$this->assertEquals(['ROUND(Rating.rate_total / Rating.rate_count,2) AS rating'], $result);
 
 		$result = $this->Dbo->fields($this->Model, 'Post', "Node.created, CONCAT(REPEAT(' ', COUNT(Parent.name) - 1), Node.name) AS name");
-		$expected = array("`Node`.`created`", "CONCAT(REPEAT(' ', COUNT(`Parent`.`name`) - 1), Node.name) AS name");
+		$expected = ["`Node`.`created`", "CONCAT(REPEAT(' ', COUNT(`Parent`.`name`) - 1), Node.name) AS name"];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, 'Post', "2.2,COUNT(*), SUM(Something.else) as sum, Node.created, CONCAT(REPEAT(' ', COUNT(Parent.name) - 1), Node.name) AS name,Post.title,Post.1,1.1");
-		$expected = array(
+		$expected = [
 			'2.2', 'COUNT(*)', 'SUM(`Something`.`else`) as sum', '`Node`.`created`',
 			"CONCAT(REPEAT(' ', COUNT(`Parent`.`name`) - 1), Node.name) AS name", '`Post`.`title`', '`Post`.`1`', '1.1'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, null, "(`Provider`.`star_total` / `Provider`.`total_ratings`) as `rating`");
-		$expected = array("(`Provider`.`star_total` / `Provider`.`total_ratings`) as `rating`");
+		$expected = ["(`Provider`.`star_total` / `Provider`.`total_ratings`) as `rating`"];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, 'Post');
-		$expected = array(
+		$expected = [
 			'`Post`.`id`', '`Post`.`client_id`', '`Post`.`name`', '`Post`.`login`',
 			'`Post`.`passwd`', '`Post`.`addr_1`', '`Post`.`addr_2`', '`Post`.`zip_code`',
 			'`Post`.`city`', '`Post`.`country`', '`Post`.`phone`', '`Post`.`fax`',
 			'`Post`.`url`', '`Post`.`email`', '`Post`.`comments`', '`Post`.`last_login`',
 			'`Post`.`created`', '`Post`.`updated`'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, 'Other');
-		$expected = array(
+		$expected = [
 			'`Other`.`id`', '`Other`.`client_id`', '`Other`.`name`', '`Other`.`login`',
 			'`Other`.`passwd`', '`Other`.`addr_1`', '`Other`.`addr_2`', '`Other`.`zip_code`',
 			'`Other`.`city`', '`Other`.`country`', '`Other`.`phone`', '`Other`.`fax`',
 			'`Other`.`url`', '`Other`.`email`', '`Other`.`comments`', '`Other`.`last_login`',
 			'`Other`.`created`', '`Other`.`updated`'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, null, array(), false);
-		$expected = array('id', 'client_id', 'name', 'login', 'passwd', 'addr_1', 'addr_2', 'zip_code', 'city', 'country', 'phone', 'fax', 'url', 'email', 'comments', 'last_login', 'created', 'updated');
+		$result = $this->Dbo->fields($this->Model, null, [], false);
+		$expected = ['id', 'client_id', 'name', 'login', 'passwd', 'addr_1', 'addr_2', 'zip_code', 'city', 'country', 'phone', 'fax', 'url', 'email', 'comments', 'last_login', 'created', 'updated'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'COUNT(*)');
-		$expected = array('COUNT(*)');
+		$expected = ['COUNT(*)'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'SUM(Thread.unread_buyer) AS ' . $this->Dbo->name('sum_unread_buyer'));
-		$expected = array('SUM(`Thread`.`unread_buyer`) AS `sum_unread_buyer`');
+		$expected = ['SUM(`Thread`.`unread_buyer`) AS `sum_unread_buyer`'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'name, count(*)');
-		$expected = array('`TestModel`.`name`', 'count(*)');
+		$expected = ['`TestModel`.`name`', 'count(*)'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields($this->Model, null, 'count(*), name');
-		$expected = array('count(*)', '`TestModel`.`name`');
+		$expected = ['count(*)', '`TestModel`.`name`'];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fields(
 			$this->Model, null, 'field1, field2, field3, count(*), name'
 		);
-		$expected = array(
+		$expected = [
 			'`TestModel`.`field1`', '`TestModel`.`field2`',
 			'`TestModel`.`field3`', 'count(*)', '`TestModel`.`name`'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, null, array('dayofyear(now())'));
-		$expected = array('dayofyear(now())');
+		$result = $this->Dbo->fields($this->Model, null, ['dayofyear(now())']);
+		$expected = ['dayofyear(now())'];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, null, array('MAX(Model.field) As Max'));
-		$expected = array('MAX(`Model`.`field`) As Max');
+		$result = $this->Dbo->fields($this->Model, null, ['MAX(Model.field) As Max']);
+		$expected = ['MAX(`Model`.`field`) As Max'];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, null, array('Model.field AS AnotherName'));
-		$expected = array('`Model`.`field` AS `AnotherName`');
+		$result = $this->Dbo->fields($this->Model, null, ['Model.field AS AnotherName']);
+		$expected = ['`Model`.`field` AS `AnotherName`'];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, null, array('field AS AnotherName'));
-		$expected = array('`field` AS `AnotherName`');
+		$result = $this->Dbo->fields($this->Model, null, ['field AS AnotherName']);
+		$expected = ['`field` AS `AnotherName`'];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, null, array(
+		$result = $this->Dbo->fields($this->Model, null, [
 			'TestModel.field AS AnotherName'
-		));
-		$expected = array('`TestModel`.`field` AS `AnotherName`');
+		]);
+		$expected = ['`TestModel`.`field` AS `AnotherName`'];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($this->Model, 'Foo', array(
+		$result = $this->Dbo->fields($this->Model, 'Foo', [
 			'id', 'title', '(user_count + discussion_count + post_count) AS score'
-		));
-		$expected = array(
+		]);
+		$expected = [
 			'`Foo`.`id`',
 			'`Foo`.`title`',
 			'(user_count + discussion_count + post_count) AS score'
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -2856,11 +2856,11 @@ SQL;
 	public function testFieldsWithExpression() {
 		$this->Model = new TestModel;
 		$expression = $this->Dbo->expression("CASE Sample.id WHEN 1 THEN 'Id One' ELSE 'Other Id' END AS case_col");
-		$result = $this->Dbo->fields($this->Model, null, array("id", $expression));
-		$expected = array(
+		$result = $this->Dbo->fields($this->Model, null, ["id", $expression]);
+		$expected = [
 			'`TestModel`.`id`',
 			"CASE Sample.id WHEN 1 THEN 'Id One' ELSE 'Other Id' END AS case_col"
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -2870,22 +2870,22 @@ SQL;
  * @return void
  */
 	public function testRenderStatement() {
-		$result = $this->Dbo->renderStatement('select', array(
+		$result = $this->Dbo->renderStatement('select', [
 			'fields' => 'id', 'table' => 'table', 'conditions' => 'WHERE 1=1',
 			'alias' => '', 'joins' => '', 'order' => '', 'limit' => '', 'group' => ''
-		));
+		]);
 		$this->assertRegExp('/^\s*SELECT\s+id\s+FROM\s+table\s+WHERE\s+1=1\s*$/', $result);
 
-		$result = $this->Dbo->renderStatement('update', array('fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => ''));
+		$result = $this->Dbo->renderStatement('update', ['fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => '']);
 		$this->assertRegExp('/^\s*UPDATE\s+table\s+SET\s+value=2\s+WHERE\s+1=1\s*$/', $result);
 
-		$result = $this->Dbo->renderStatement('update', array('fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => 'alias', 'joins' => ''));
+		$result = $this->Dbo->renderStatement('update', ['fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => 'alias', 'joins' => '']);
 		$this->assertRegExp('/^\s*UPDATE\s+table\s+AS\s+alias\s+SET\s+value=2\s+WHERE\s+1=1\s*$/', $result);
 
-		$result = $this->Dbo->renderStatement('delete', array('fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => ''));
+		$result = $this->Dbo->renderStatement('delete', ['fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => '']);
 		$this->assertRegExp('/^\s*DELETE\s+FROM\s+table\s+WHERE\s+1=1\s*$/', $result);
 
-		$result = $this->Dbo->renderStatement('delete', array('fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => 'alias', 'joins' => ''));
+		$result = $this->Dbo->renderStatement('delete', ['fields' => 'value=2', 'table' => 'table', 'conditions' => 'WHERE 1=1', 'alias' => 'alias', 'joins' => '']);
 		$this->assertRegExp('/^\s*DELETE\s+alias\s+FROM\s+table\s+AS\s+alias\s+WHERE\s+1=1\s*$/', $result);
 	}
 
@@ -2896,7 +2896,7 @@ SQL;
  */
 	public function testSchema() {
 		$Schema = new CakeSchema();
-		$Schema->tables = array('table' => array(), 'anotherTable' => array());
+		$Schema->tables = ['table' => [], 'anotherTable' => []];
 
 		$result = $this->Dbo->dropSchema($Schema, 'non_existing');
 		$this->assertTrue(empty($result));
@@ -2936,32 +2936,32 @@ SQL;
 		$result = $this->Dbo->order("title desc, id desc");
 		$this->assertRegExp('/^\s*ORDER BY\s+`title`\s+desc,\s+`id`\s+desc\s*$/', $result);
 
-		$result = $this->Dbo->order(array("title desc, id desc"));
+		$result = $this->Dbo->order(["title desc, id desc"]);
 		$this->assertRegExp('/^\s*ORDER BY\s+`title`\s+desc,\s+`id`\s+desc\s*$/', $result);
 
-		$result = $this->Dbo->order(array("title", "id"));
+		$result = $this->Dbo->order(["title", "id"]);
 		$this->assertRegExp('/^\s*ORDER BY\s+`title`\s+ASC,\s+`id`\s+ASC\s*$/', $result);
 
-		$result = $this->Dbo->order(array(array('title'), array('id')));
+		$result = $this->Dbo->order([['title'], ['id']]);
 		$this->assertRegExp('/^\s*ORDER BY\s+`title`\s+ASC,\s+`id`\s+ASC\s*$/', $result);
 
-		$result = $this->Dbo->order(array("Post.title" => 'asc', "Post.id" => 'desc'));
+		$result = $this->Dbo->order(["Post.title" => 'asc', "Post.id" => 'desc']);
 		$this->assertRegExp('/^\s*ORDER BY\s+`Post`.`title`\s+asc,\s+`Post`.`id`\s+desc\s*$/', $result);
 
-		$result = $this->Dbo->order(array(array("Post.title" => 'asc', "Post.id" => 'desc')));
+		$result = $this->Dbo->order([["Post.title" => 'asc', "Post.id" => 'desc']]);
 		$this->assertRegExp('/^\s*ORDER BY\s+`Post`.`title`\s+asc,\s+`Post`.`id`\s+desc\s*$/', $result);
 
-		$result = $this->Dbo->order(array("title"));
+		$result = $this->Dbo->order(["title"]);
 		$this->assertRegExp('/^\s*ORDER BY\s+`title`\s+ASC\s*$/', $result);
 
-		$result = $this->Dbo->order(array(array("title")));
+		$result = $this->Dbo->order([["title"]]);
 		$this->assertRegExp('/^\s*ORDER BY\s+`title`\s+ASC\s*$/', $result);
 
 		$result = $this->Dbo->order("Dealer.id = 7 desc, Dealer.id = 3 desc, Dealer.title asc");
 		$expected = " ORDER BY `Dealer`.`id` = 7 desc, `Dealer`.`id` = 3 desc, `Dealer`.`title` asc";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->order(array("Page.name" => "='test' DESC"));
+		$result = $this->Dbo->order(["Page.name" => "='test' DESC"]);
 		$this->assertRegExp("/^\s*ORDER BY\s+`Page`\.`name`\s*='test'\s+DESC\s*$/", $result);
 
 		$result = $this->Dbo->order("Page.name = 'view' DESC");
@@ -2990,7 +2990,7 @@ SQL;
 		$expected = ' ORDER BY 3963.191 * id ASC';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->order(array('Property.sale_price IS NULL'));
+		$result = $this->Dbo->order(['Property.sale_price IS NULL']);
 		$expected = ' ORDER BY `Property`.`sale_price` IS NULL ASC';
 		$this->assertEquals($expected, $result);
 	}
@@ -3001,7 +3001,7 @@ SQL;
  * @return void
  */
 	public function testComplexSortExpression() {
-		$result = $this->Dbo->order(array('(Model.field > 100) DESC', 'Model.field ASC'));
+		$result = $this->Dbo->order(['(Model.field > 100) DESC', 'Model.field ASC']);
 		$this->assertRegExp("/^\s*ORDER BY\s+\(`Model`\.`field`\s+>\s+100\)\s+DESC,\s+`Model`\.`field`\s+ASC\s*$/", $result);
 	}
 
@@ -3015,32 +3015,32 @@ SQL;
 		$result = $this->Dbo->calculate($this->Model, 'count');
 		$this->assertEquals('COUNT(*) AS `count`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'count', array('id'));
+		$result = $this->Dbo->calculate($this->Model, 'count', ['id']);
 		$this->assertEquals('COUNT(`id`) AS `count`', $result);
 
 		$result = $this->Dbo->calculate(
 			$this->Model,
 			'count',
-			array($this->Dbo->expression('DISTINCT id'))
+			[$this->Dbo->expression('DISTINCT id')]
 		);
 		$this->assertEquals('COUNT(DISTINCT id) AS `count`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'count', array('id', 'id_count'));
+		$result = $this->Dbo->calculate($this->Model, 'count', ['id', 'id_count']);
 		$this->assertEquals('COUNT(`id`) AS `id_count`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'count', array('Model.id', 'id_count'));
+		$result = $this->Dbo->calculate($this->Model, 'count', ['Model.id', 'id_count']);
 		$this->assertEquals('COUNT(`Model`.`id`) AS `id_count`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'max', array('id'));
+		$result = $this->Dbo->calculate($this->Model, 'max', ['id']);
 		$this->assertEquals('MAX(`id`) AS `id`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'max', array('Model.id', 'id'));
+		$result = $this->Dbo->calculate($this->Model, 'max', ['Model.id', 'id']);
 		$this->assertEquals('MAX(`Model`.`id`) AS `id`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'max', array('`Model`.`id`', 'id'));
+		$result = $this->Dbo->calculate($this->Model, 'max', ['`Model`.`id`', 'id']);
 		$this->assertEquals('MAX(`Model`.`id`) AS `id`', $result);
 
-		$result = $this->Dbo->calculate($this->Model, 'min', array('`Model`.`id`', 'id'));
+		$result = $this->Dbo->calculate($this->Model, 'min', ['`Model`.`id`', 'id']);
 		$this->assertEquals('MIN(`Model`.`id`) AS `id`', $result);
 
 		$result = $this->Dbo->calculate($this->Model, 'min', 'left');
@@ -3095,46 +3095,46 @@ SQL;
  * @return void
  */
 	public function testBuildIndex() {
-		$data = array(
-			'PRIMARY' => array('column' => 'id')
-		);
+		$data = [
+			'PRIMARY' => ['column' => 'id']
+		];
 		$result = $this->Dbo->buildIndex($data);
-		$expected = array('PRIMARY KEY  (`id`)');
+		$expected = ['PRIMARY KEY  (`id`)'];
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'MyIndex' => array('column' => 'id', 'unique' => true)
-		);
+		$data = [
+			'MyIndex' => ['column' => 'id', 'unique' => true]
+		];
 		$result = $this->Dbo->buildIndex($data);
-		$expected = array('UNIQUE KEY `MyIndex` (`id`)');
+		$expected = ['UNIQUE KEY `MyIndex` (`id`)'];
 		$this->assertEquals($expected, $result);
 
-		$data = array(
-			'MyIndex' => array('column' => array('id', 'name'), 'unique' => true)
-		);
+		$data = [
+			'MyIndex' => ['column' => ['id', 'name'], 'unique' => true]
+		];
 		$result = $this->Dbo->buildIndex($data);
-		$expected = array('UNIQUE KEY `MyIndex` (`id`, `name`)');
+		$expected = ['UNIQUE KEY `MyIndex` (`id`, `name`)'];
 		$this->assertEquals($expected, $result);
 
-		$data = array(
-			'MyFtIndex' => array('column' => array('name', 'description'), 'type' => 'fulltext')
-		);
+		$data = [
+			'MyFtIndex' => ['column' => ['name', 'description'], 'type' => 'fulltext']
+		];
 		$result = $this->Dbo->buildIndex($data);
-		$expected = array('FULLTEXT KEY `MyFtIndex` (`name`, `description`)');
+		$expected = ['FULLTEXT KEY `MyFtIndex` (`name`, `description`)'];
 		$this->assertEquals($expected, $result);
 
-		$data = array(
-			'MyTextIndex' => array('column' => 'text_field', 'length' => array('text_field' => 20))
-		);
+		$data = [
+			'MyTextIndex' => ['column' => 'text_field', 'length' => ['text_field' => 20]]
+		];
 		$result = $this->Dbo->buildIndex($data);
-		$expected = array('KEY `MyTextIndex` (`text_field`(20))');
+		$expected = ['KEY `MyTextIndex` (`text_field`(20))'];
 		$this->assertEquals($expected, $result);
 
-		$data = array(
-			'MyMultiTextIndex' => array('column' => array('text_field1', 'text_field2'), 'length' => array('text_field1' => 20, 'text_field2' => 20))
-		);
+		$data = [
+			'MyMultiTextIndex' => ['column' => ['text_field1', 'text_field2'], 'length' => ['text_field1' => 20, 'text_field2' => 20]]
+		];
 		$result = $this->Dbo->buildIndex($data);
-		$expected = array('KEY `MyMultiTextIndex` (`text_field1`(20), `text_field2`(20))');
+		$expected = ['KEY `MyMultiTextIndex` (`text_field1`(20), `text_field2`(20))'];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -3144,98 +3144,98 @@ SQL;
  * @return void
  */
 	public function testBuildColumn2() {
-		$data = array(
+		$data = [
 			'name' => 'testName',
 			'type' => 'string',
 			'length' => 255,
 			'default',
 			'null' => true,
 			'key'
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`testName` varchar(255) DEFAULT NULL';
 		$this->assertEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			'name' => 'int_field',
 			'type' => 'integer',
 			'default' => '',
 			'null' => false,
-		);
+		];
 		$restore = $this->Dbo->columns;
 
-		$this->Dbo->columns = array('integer' => array('name' => 'int', 'limit' => '11', 'formatter' => 'intval'), );
+		$this->Dbo->columns = ['integer' => ['name' => 'int', 'limit' => '11', 'formatter' => 'intval'], ];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`int_field` int(11) NOT NULL';
 		$this->assertEquals($expected, $result);
 
-		$this->Dbo->fieldParameters['param'] = array(
+		$this->Dbo->fieldParameters['param'] = [
 			'value' => 'COLLATE',
 			'quote' => false,
 			'join' => ' ',
 			'column' => 'Collate',
 			'position' => 'beforeDefault',
-			'options' => array('GOOD', 'OK')
-		);
-		$data = array(
+			'options' => ['GOOD', 'OK']
+		];
+		$data = [
 			'name' => 'int_field',
 			'type' => 'integer',
 			'default' => '',
 			'null' => false,
 			'param' => 'BAD'
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`int_field` int(11) NOT NULL';
 		$this->assertEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			'name' => 'int_field',
 			'type' => 'integer',
 			'default' => '',
 			'null' => false,
 			'param' => 'GOOD'
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`int_field` int(11) COLLATE GOOD NOT NULL';
 		$this->assertEquals($expected, $result);
 
 		$this->Dbo->columns = $restore;
 
-		$data = array(
+		$data = [
 			'name' => 'created',
 			'type' => 'timestamp',
 			'default' => 'current_timestamp',
 			'null' => false,
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`created` timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL';
 		$this->assertEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			'name' => 'created',
 			'type' => 'timestamp',
 			'default' => 'CURRENT_TIMESTAMP',
 			'null' => true,
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`created` timestamp DEFAULT CURRENT_TIMESTAMP';
 		$this->assertEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			'name' => 'modified',
 			'type' => 'timestamp',
 			'null' => true,
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`modified` timestamp NULL';
 		$this->assertEquals($expected, $result);
 
-		$data = array(
+		$data = [
 			'name' => 'modified',
 			'type' => 'timestamp',
 			'default' => null,
 			'null' => true,
-		);
+		];
 		$result = $this->Dbo->buildColumn($data);
 		$expected = '`modified` timestamp NULL';
 		$this->assertEquals($expected, $result);
@@ -3248,13 +3248,13 @@ SQL;
  * @return void
  */
 	public function testBuildColumnBadType() {
-		$data = array(
+		$data = [
 			'name' => 'testName',
 			'type' => 'varchar(255)',
 			'default',
 			'null' => true,
 			'key'
-		);
+		];
 		$this->Dbo->buildColumn($data);
 	}
 
@@ -3279,94 +3279,94 @@ SQL;
  * @return array
  */
 	public function buildColumnUnsignedProvider() {
-		return array(
+		return [
 			//set #0
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'integer',
 					'length' => 11,
 					'unsigned' => true
-				),
+				],
 				'`testName` int(11) UNSIGNED'
-			),
+			],
 			//set #1
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'biginteger',
 					'length' => 20,
 					'unsigned' => true
-				),
+				],
 				'`testName` bigint(20) UNSIGNED'
-			),
+			],
 			//set #2
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'float',
 					'unsigned' => true
-				),
+				],
 				'`testName` float UNSIGNED'
-			),
+			],
 			//set #3
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'string',
 					'length' => 255,
 					'unsigned' => true
-				),
+				],
 				'`testName` varchar(255)'
-			),
+			],
 			//set #4
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'date',
 					'unsigned' => true
-				),
+				],
 				'`testName` date'
-			),
+			],
 			//set #5
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'date',
 					'unsigned' => false
-				),
+				],
 				'`testName` date'
-			),
+			],
 			//set #6
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'integer',
 					'length' => 11,
 					'unsigned' => false
-				),
+				],
 				'`testName` int(11)'
-			),
+			],
 			//set #7
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'decimal',
 					'unsigned' => true
-				),
+				],
 				'`testName` decimal UNSIGNED'
-			),
+			],
 			//set #8
-			array(
-				array(
+			[
+				[
 					'name' => 'testName',
 					'type' => 'decimal',
 					'unsigned' => true,
 					'default' => 1
-				),
+				],
 				'`testName` decimal UNSIGNED DEFAULT 1'
-			)
-		);
+			]
+		];
 	}
 
 /**
@@ -3396,10 +3396,10 @@ SQL;
  */
 	public function testHasAny() {
 		$db = $this->Dbo->config['database'];
-		$this->Dbo = $this->getMock('Mysql', array('connect', '_execute', 'execute', 'value'));
+		$this->Dbo = $this->getMock('Mysql', ['connect', '_execute', 'execute', 'value']);
 		$this->Dbo->config['database'] = $db;
 
-		$this->Model = $this->getMock('TestModel', array('getDataSource'));
+		$this->Model = $this->getMock('TestModel', ['getDataSource']);
 		$this->Model->expects($this->any())
 			->method('getDataSource')
 			->will($this->returnValue($this->Dbo));
@@ -3414,8 +3414,8 @@ SQL;
 		$this->Dbo->expects($this->at(2))->method('execute')
 			->with('SELECT COUNT(`TestModel`.`id`) AS count FROM ' . $modelTable . ' AS `TestModel` WHERE 1 = 1');
 
-		$this->Dbo->hasAny($this->Model, array('TestModel.name' => 'harry'));
-		$this->Dbo->hasAny($this->Model, array());
+		$this->Dbo->hasAny($this->Model, ['TestModel.name' => 'harry']);
+		$this->Dbo->hasAny($this->Model, []);
 	}
 
 /**
@@ -3428,14 +3428,14 @@ SQL;
 		$this->Dbo->virtualFieldSeparator = '__';
 		$Article = ClassRegistry::init('Article');
 		$commentsTable = $this->Dbo->fullTableName('comments', false, false);
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'this_moment' => 'NOW()',
 			'two' => '1 + 1',
 			'comment_count' => 'SELECT COUNT(*) FROM ' . $commentsTable .
 				' WHERE Article.id = ' . $commentsTable . '.article_id'
-		);
+		];
 		$result = $this->Dbo->fields($Article);
-		$expected = array(
+		$expected = [
 			'`Article`.`id`',
 			'`Article`.`user_id`',
 			'`Article`.`title`',
@@ -3446,47 +3446,47 @@ SQL;
 			'(NOW()) AS  `Article__this_moment`',
 			'(1 + 1) AS  `Article__two`',
 			"(SELECT COUNT(*) FROM $commentsTable WHERE `Article`.`id` = `$commentsTable`.`article_id`) AS  `Article__comment_count`"
-		);
+		];
 
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($Article, null, array('this_moment', 'title'));
-		$expected = array(
+		$result = $this->Dbo->fields($Article, null, ['this_moment', 'title']);
+		$expected = [
 			'`Article`.`title`',
 			'(NOW()) AS  `Article__this_moment`',
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($Article, null, array('Article.title', 'Article.this_moment'));
-		$expected = array(
+		$result = $this->Dbo->fields($Article, null, ['Article.title', 'Article.this_moment']);
+		$expected = [
 			'`Article`.`title`',
 			'(NOW()) AS  `Article__this_moment`',
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($Article, null, array('Article.this_moment', 'Article.title'));
-		$expected = array(
+		$result = $this->Dbo->fields($Article, null, ['Article.this_moment', 'Article.title']);
+		$expected = [
 			'`Article`.`title`',
 			'(NOW()) AS  `Article__this_moment`',
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($Article, null, array('Article.*'));
-		$expected = array(
+		$result = $this->Dbo->fields($Article, null, ['Article.*']);
+		$expected = [
 			'`Article`.*',
 			'(NOW()) AS  `Article__this_moment`',
 			'(1 + 1) AS  `Article__two`',
 			"(SELECT COUNT(*) FROM $commentsTable WHERE `Article`.`id` = `$commentsTable`.`article_id`) AS  `Article__comment_count`"
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->fields($Article, null, array('*'));
-		$expected = array(
+		$result = $this->Dbo->fields($Article, null, ['*']);
+		$expected = [
 			'*',
 			'(NOW()) AS  `Article__this_moment`',
 			'(1 + 1) AS  `Article__two`',
 			"(SELECT COUNT(*) FROM $commentsTable WHERE `Article`.`id` = `$commentsTable`.`article_id`) AS  `Article__comment_count`"
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -3500,11 +3500,11 @@ SQL;
 		$this->Dbo->virtualFieldSeparator = '__';
 		$Article = ClassRegistry::init('Article');
 		$commentsTable = $this->Dbo->fullTableName('comments', false, false);
-		$Article->Comment->virtualFields = array(
+		$Article->Comment->virtualFields = [
 			'extra' => 'SELECT id FROM ' . $commentsTable . ' WHERE id = (SELECT 1)',
-		);
-		$conditions = array('Article.id' => array(1, 2));
-		$contain = array('Comment.extra');
+		];
+		$conditions = ['Article.id' => [1, 2]];
+		$contain = ['Comment.extra'];
 
 		$test = ConnectionManager::getDatasource('test');
 		$test->getLog();
@@ -3528,28 +3528,28 @@ SQL;
 		$Article = ClassRegistry::init('Article');
 		$commentsTable = $this->Dbo->fullTableName('comments', false, false);
 
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'this_moment' => 'NOW()',
 			'two' => '1 + 1',
 			'comment_count' => 'SELECT COUNT(*) FROM ' . $commentsTable .
 				' WHERE Article.id = ' . $commentsTable . '.article_id'
-		);
-		$conditions = array('two' => 2);
+		];
+		$conditions = ['two' => 2];
 		$result = $this->Dbo->conditions($conditions, true, false, $Article);
 		$expected = '(1 + 1) = 2';
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('this_moment BETWEEN ? AND ?' => array(1, 2));
+		$conditions = ['this_moment BETWEEN ? AND ?' => [1, 2]];
 		$expected = 'NOW() BETWEEN 1 AND 2';
 		$result = $this->Dbo->conditions($conditions, true, false, $Article);
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('comment_count >' => 5);
+		$conditions = ['comment_count >' => 5];
 		$expected = "(SELECT COUNT(*) FROM $commentsTable WHERE `Article`.`id` = `$commentsTable`.`article_id`) > 5";
 		$result = $this->Dbo->conditions($conditions, true, false, $Article);
 		$this->assertEquals($expected, $result);
 
-		$conditions = array('NOT' => array('two' => 2));
+		$conditions = ['NOT' => ['two' => 2]];
 		$result = $this->Dbo->conditions($conditions, true, false, $Article);
 		$expected = 'NOT ((1 + 1) = 2)';
 		$this->assertEquals($expected, $result);
@@ -3562,15 +3562,15 @@ SQL;
  */
 	public function testConditionsWithComplexVirtualFields() {
 		$Article = ClassRegistry::init('Article', 'Comment', 'Tag');
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'distance' => 'ACOS(SIN(20 * PI() / 180)
 					* SIN(Article.latitude * PI() / 180)
 					+ COS(20 * PI() / 180)
 					* COS(Article.latitude * PI() / 180)
 					* COS((50 - Article.longitude) * PI() / 180)
 				) * 180 / PI() * 60 * 1.1515 * 1.609344'
-		);
-		$conditions = array('distance >=' => 20);
+		];
+		$conditions = ['distance >=' => 20];
 		$result = $this->Dbo->conditions($conditions, true, true, $Article);
 
 		$this->assertRegExp('/\) >= 20/', $result);
@@ -3586,18 +3586,18 @@ SQL;
 	public function testVirtualFieldsInCalculate() {
 		$Article = ClassRegistry::init('Article');
 		$commentsTable = $this->Dbo->fullTableName('comments', false, false);
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'this_moment' => 'NOW()',
 			'two' => '1 + 1',
 			'comment_count' => 'SELECT COUNT(*) FROM ' . $commentsTable .
 				' WHERE Article.id = ' . $commentsTable . '.article_id'
-		);
+		];
 
-		$result = $this->Dbo->calculate($Article, 'count', array('this_moment'));
+		$result = $this->Dbo->calculate($Article, 'count', ['this_moment']);
 		$expected = 'COUNT(NOW()) AS `count`';
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->calculate($Article, 'max', array('comment_count'));
+		$result = $this->Dbo->calculate($Article, 'max', ['comment_count']);
 		$expected = "MAX(SELECT COUNT(*) FROM $commentsTable WHERE `Article`.`id` = `$commentsTable`.`article_id`) AS `comment_count`";
 		$this->assertEquals($expected, $result);
 	}
@@ -3610,12 +3610,12 @@ SQL;
 	public function testReadVirtualFieldsWithNewLines() {
 		$Article = new Article();
 		$Article->recursive = 1;
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'test' => '
 			User.id + User.id
 			'
-		);
-		$result = $this->Dbo->fields($Article, null, array());
+		];
+		$result = $this->Dbo->fields($Article, null, []);
 		$result = $this->Dbo->fields($Article, $Article->alias, $result);
 		$this->assertRegExp('/[`\"]User[`\"]\.[`\"]id[`\"] \+ [`\"]User[`\"]\.[`\"]id[`\"]/', $result[7]);
 	}
@@ -3627,9 +3627,9 @@ SQL;
  */
 	public function testVirtualFieldsInGroup() {
 		$Article = ClassRegistry::init('Article');
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'this_year' => 'YEAR(Article.created)'
-		);
+		];
 
 		$result = $this->Dbo->group('this_year', $Article);
 
@@ -3644,16 +3644,16 @@ SQL;
  */
 	public function testFieldsWithComplexVirtualFields() {
 		$Article = new Article();
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'distance' => 'ACOS(SIN(20 * PI() / 180)
 					* SIN(Article.latitude * PI() / 180)
 					+ COS(20 * PI() / 180)
 					* COS(Article.latitude * PI() / 180)
 					* COS((50 - Article.longitude) * PI() / 180)
 				) * 180 / PI() * 60 * 1.1515 * 1.609344'
-		);
+		];
 
-		$fields = array('id', 'distance');
+		$fields = ['id', 'distance'];
 		$result = $this->Dbo->fields($Article, null, $fields);
 		$qs = $this->Dbo->startQuote;
 		$qe = $this->Dbo->endQuote;
@@ -3673,7 +3673,7 @@ SQL;
 		$query = 'SELECT * FROM ' . $this->Dbo->fullTableName('articles') . ' WHERE 1 = 1';
 		$this->Dbo->took = null;
 		$this->Dbo->affected = null;
-		$result = $this->Dbo->execute($query, array('log' => false));
+		$result = $this->Dbo->execute($query, ['log' => false]);
 		$this->assertNotNull($result, 'No query performed! %s');
 		$this->assertNull($this->Dbo->took, 'Stats were set %s');
 		$this->assertNull($this->Dbo->affected, 'Stats were set %s');
@@ -3693,18 +3693,18 @@ SQL;
 		$this->loadFixtures('Article', 'Comment');
 
 		$Article = ClassRegistry::init('Article');
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'comment_count' => 'SELECT COUNT(*) FROM ' . $this->Dbo->fullTableName('comments') .
 				' WHERE Article.id = ' . $this->Dbo->fullTableName('comments') . '.article_id'
-		);
+		];
 
-		$conditions = array('comment_count >' => 2);
-		$query = 'SELECT ' . implode(',', $this->Dbo->fields($Article, null, array('id', 'comment_count'))) .
+		$conditions = ['comment_count >' => 2];
+		$query = 'SELECT ' . implode(',', $this->Dbo->fields($Article, null, ['id', 'comment_count'])) .
 				' FROM ' . $this->Dbo->fullTableName($Article) . ' Article ' . $this->Dbo->conditions($conditions, true, true, $Article);
 		$result = $this->Dbo->fetchAll($query);
-		$expected = array(array(
-			'Article' => array('id' => 1, 'comment_count' => 4)
-		));
+		$expected = [[
+			'Article' => ['id' => 1, 'comment_count' => 4]
+		]];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -3719,23 +3719,23 @@ SQL;
 		$Article = ClassRegistry::init('Article');
 		$commentTable = $this->Dbo->fullTableName('comments');
 		$Article = ClassRegistry::init('Article');
-		$Article->virtualFields = array(
+		$Article->virtualFields = [
 			'comment_count' => 'SELECT COUNT(*) FROM ' . $commentTable .
 				' AS Comment WHERE Article.id = Comment.article_id'
-		);
+		];
 		$result = $Article->find('all');
 		$this->assertTrue(count($result) > 0);
 		$this->assertTrue($result[0]['Article']['comment_count'] > 0);
 
 		$DataTest = ClassRegistry::init('DataTest');
-		$DataTest->virtualFields = array(
+		$DataTest->virtualFields = [
 			'complicated' => 'ACOS(SIN(20 * PI() / 180)
 				* SIN(DataTest.float * PI() / 180)
 				+ COS(20 * PI() / 180)
 				* COS(DataTest.count * PI() / 180)
 				* COS((50 - DataTest.float) * PI() / 180)
 				) * 180 / PI() * 60 * 1.1515 * 1.609344'
-		);
+		];
 		$result = $DataTest->find('all');
 		$this->assertTrue(count($result) > 0);
 		$this->assertTrue($result[0]['DataTest']['complicated'] > 0);
@@ -3755,52 +3755,52 @@ SQL;
 		$this->assertEquals('string', $this->Dbo->introspectType('stringme'));
 		$this->assertEquals('string', $this->Dbo->introspectType('0stringme'));
 
-		$data = array(2.2);
+		$data = [2.2];
 		$this->assertEquals('float', $this->Dbo->introspectType($data));
 
-		$data = array('2.2');
+		$data = ['2.2'];
 		$this->assertEquals('float', $this->Dbo->introspectType($data));
 
-		$data = array(2);
+		$data = [2];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
-		$data = array('2');
+		$data = ['2'];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
-		$data = array('string');
+		$data = ['string'];
 		$this->assertEquals('string', $this->Dbo->introspectType($data));
 
-		$data = array(2.2, '2.2');
+		$data = [2.2, '2.2'];
 		$this->assertEquals('float', $this->Dbo->introspectType($data));
 
-		$data = array(2, '2');
+		$data = [2, '2'];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
-		$data = array('string one', 'string two');
+		$data = ['string one', 'string two'];
 		$this->assertEquals('string', $this->Dbo->introspectType($data));
 
-		$data = array('2.2', 3);
+		$data = ['2.2', 3];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
-		$data = array('2.2', '0stringme');
+		$data = ['2.2', '0stringme'];
 		$this->assertEquals('string', $this->Dbo->introspectType($data));
 
-		$data = array(2.2, 3);
+		$data = [2.2, 3];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
-		$data = array(2.2, '0stringme');
+		$data = [2.2, '0stringme'];
 		$this->assertEquals('string', $this->Dbo->introspectType($data));
 
-		$data = array(2, 'stringme');
+		$data = [2, 'stringme'];
 		$this->assertEquals('string', $this->Dbo->introspectType($data));
 
-		$data = array(2, '2.2', 'stringgme');
+		$data = [2, '2.2', 'stringgme'];
 		$this->assertEquals('string', $this->Dbo->introspectType($data));
 
-		$data = array(2, '2.2');
+		$data = [2, '2.2'];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
-		$data = array(2, 2.2);
+		$data = [2, 2.2];
 		$this->assertEquals('integer', $this->Dbo->introspectType($data));
 
 		// null
@@ -3914,53 +3914,53 @@ SQL;
 		$this->assertTrue(!empty($result));
 
 		$result = $this->Dbo->fetchRow($result);
-		$expected = array($this->Dbo->fullTableName('apples', false, false) => array(
+		$expected = [$this->Dbo->fullTableName('apples', false, false) => [
 			'color' => 'Red 1',
 			'name' => 'Red Apple 1'
-		));
+		]];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->fetchAll('SELECT name FROM ' . $this->Dbo->fullTableName('apples') . ' ORDER BY id');
-		$expected = array(
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'Red Apple 1')),
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'Bright Red Apple')),
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'green blue')),
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'Test Name')),
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'Blue Green')),
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'My new apple')),
-			array($this->Dbo->fullTableName('apples', false, false) => array('name' => 'Some odd color'))
-		);
+		$expected = [
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'Red Apple 1']],
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'Bright Red Apple']],
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'green blue']],
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'Test Name']],
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'Blue Green']],
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'My new apple']],
+			[$this->Dbo->fullTableName('apples', false, false) => ['name' => 'Some odd color']]
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Dbo->field($this->Dbo->fullTableName('apples', false, false), 'SELECT color, name FROM ' . $this->Dbo->fullTableName('apples') . ' ORDER BY id');
-		$expected = array(
+		$expected = [
 			'color' => 'Red 1',
 			'name' => 'Red Apple 1'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$Apple->unbindModel(array(), false);
-		$result = $this->Dbo->read($Apple, array(
-			'fields' => array($Apple->escapeField('name')),
+		$Apple->unbindModel([], false);
+		$result = $this->Dbo->read($Apple, [
+			'fields' => [$Apple->escapeField('name')],
 			'conditions' => null,
 			'recursive' => -1
-		));
-		$expected = array(
-			array('Apple' => array('name' => 'Red Apple 1')),
-			array('Apple' => array('name' => 'Bright Red Apple')),
-			array('Apple' => array('name' => 'green blue')),
-			array('Apple' => array('name' => 'Test Name')),
-			array('Apple' => array('name' => 'Blue Green')),
-			array('Apple' => array('name' => 'My new apple')),
-			array('Apple' => array('name' => 'Some odd color'))
-		);
+		]);
+		$expected = [
+			['Apple' => ['name' => 'Red Apple 1']],
+			['Apple' => ['name' => 'Bright Red Apple']],
+			['Apple' => ['name' => 'green blue']],
+			['Apple' => ['name' => 'Test Name']],
+			['Apple' => ['name' => 'Blue Green']],
+			['Apple' => ['name' => 'My new apple']],
+			['Apple' => ['name' => 'Some odd color']]
+		];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->read($Article, array(
-			'fields' => array('id', 'user_id', 'title'),
+		$result = $this->Dbo->read($Article, [
+			'fields' => ['id', 'user_id', 'title'],
 			'conditions' => null,
 			'recursive' => 1
-		));
+		]);
 
 		$this->assertTrue(Set::matches('/Article[id=1]', $result));
 		$this->assertTrue(Set::matches('/Comment[id=1]', $result));
@@ -3973,13 +3973,13 @@ SQL;
  * @return void
  */
 	public function testExceptionOnBrokenConnection() {
-		new Mysql(array(
+		new Mysql([
 			'driver' => 'mysql',
 			'host' => 'imaginary_host',
 			'login' => 'mark',
 			'password' => 'inyurdatabase',
 			'database' => 'imaginary'
-		));
+		]);
 	}
 
 /**
@@ -3992,7 +3992,7 @@ SQL;
 		$test = ConnectionManager::getDatasource('test');
 		$db = $test->config['database'];
 
-		$this->Dbo = $this->getMock('Mysql', array('execute'), array($test->config));
+		$this->Dbo = $this->getMock('Mysql', ['execute'], [$test->config]);
 
 		$this->Dbo->expects($this->at(0))->method('execute')
 			->with("UPDATE `$db`.`articles` SET `field1` = 'value1'  WHERE 1 = 1");
@@ -4009,9 +4009,9 @@ SQL;
 
 		$Article = new Article();
 
-		$this->Dbo->update($Article, array('field1'), array('value1'));
-		$this->Dbo->update($Article, array('field1'), array('2'), '2=2');
-		$this->Dbo->update($Article, array('field1'), array("'value'"), array('index' => 'val'));
+		$this->Dbo->update($Article, ['field1'], ['value1']);
+		$this->Dbo->update($Article, ['field1'], ['2'], '2=2');
+		$this->Dbo->update($Article, ['field1'], ["'value'"], ['index' => 'val']);
 	}
 
 /**
@@ -4024,7 +4024,7 @@ SQL;
 		$test = ConnectionManager::getDatasource('test');
 		$db = $test->config['database'];
 
-		$this->Dbo = $this->getMock('Mysql', array('execute'), array($test->config));
+		$this->Dbo = $this->getMock('Mysql', ['execute'], [$test->config]);
 
 		$this->Dbo->expects($this->at(0))->method('execute')
 			->with("DELETE  FROM `$db`.`articles`  WHERE 1 = 1");
@@ -4056,7 +4056,7 @@ SQL;
 		$schema = $db->config['database'];
 		$Article = new Article();
 
-		$this->Dbo = $this->getMock('Mysql', array('execute'), array($db->config));
+		$this->Dbo = $this->getMock('Mysql', ['execute'], [$db->config]);
 
 		$this->Dbo->expects($this->at(0))->method('execute')
 			->with("TRUNCATE TABLE `$schema`.`articles`");
@@ -4093,7 +4093,7 @@ SQL;
 
 		$this->loadFixtures('Inno');
 		$model = ClassRegistry::init('Inno');
-		$model->hasOne = $model->hasMany = $model->belongsTo = $model->hasAndBelongsToMany = array();
+		$model->hasOne = $model->hasMany = $model->belongsTo = $model->hasAndBelongsToMany = [];
 		$model->cacheQueries = false;
 		$this->Dbo->cacheMethods = false;
 

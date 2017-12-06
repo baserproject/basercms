@@ -10,7 +10,7 @@ $this->BcBaser->cacheHeader(MONTH, 'js');
 ?>
 
 
-document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', ['alt' => 'loading now...', 'style' => 'display:block;margin:auto']) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)
@@ -32,7 +32,7 @@ var errorCallback = function (xml, status, e)
 //  リクエスト処理
 $.ajax({
 	type: 'GET',
-	url:      '<?php echo $this->BcBaser->getUrl(array($this->request->params['Site']['alias'] => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id)); ?>',
+	url:      '<?php echo $this->BcBaser->getUrl([$this->request->params['Site']['alias'] => true, 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'index', $id]); ?>',
 	cache: false,
 	success:  successCallback,
 	error:    errorCallback

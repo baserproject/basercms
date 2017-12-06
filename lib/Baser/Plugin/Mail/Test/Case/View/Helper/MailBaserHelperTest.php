@@ -21,12 +21,12 @@ class MailBaserHelperTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-	);
+	];
 
 /**
  * setUp
@@ -64,22 +64,22 @@ class MailBaserHelperTest extends BaserTestCase {
 	}
 
 	public function isMailDataProvider() {
-		return array(
+		return [
 			//PC
-			array(false, '/'),
-			array(false, '/index'),
-			array(false, '/news/index'),
-			array(true, '/contact/index'),
+			[false, '/'],
+			[false, '/index'],
+			[false, '/news/index'],
+			[true, '/contact/index'],
 			// モバイルページ
-			array(false, '/m/'),
-			array(false, '/m/index'),
-			array(false, '/m/news/index'),
-			array(true, '/m/contact/index'),
+			[false, '/m/'],
+			[false, '/m/index'],
+			[false, '/m/news/index'],
+			[true, '/m/contact/index'],
 			// スマートフォンページ
-			array(false, '/s/'),
-			array(false, '/s/index'),
-			array(false, '/s/news/index'),
-			array(true, '/s/contact/index')
-		);
+			[false, '/s/'],
+			[false, '/s/index'],
+			[false, '/s/news/index'],
+			[true, '/s/contact/index']
+		];
 	}
 }
