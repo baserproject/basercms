@@ -26,7 +26,7 @@ class BcHtmlHelper extends HtmlHelper {
  *
  * @var array
  */
-	public $helpers = array('Js');
+	public $helpers = ['Js'];
 
 /**
  * タグにラッピングされていないパンくずデータを取得する

@@ -14,7 +14,7 @@
  * [ADMIN] パンくずナビゲーション
  */
 if ($this->viewPath != 'dashboard') {
-	$this->BcBaser->addCrumb($this->BcBaser->getImg('admin/btn_home.png', array('width' => 15, 'height' => 12, 'alt' => 'Home')), array('plugin' => null, 'controller' => 'dashboard'));
+	$this->BcBaser->addCrumb($this->BcBaser->getImg('admin/btn_home.png', ['width' => 15, 'height' => 12, 'alt' => 'Home']), ['plugin' => null, 'controller' => 'dashboard']);
 }
 $crumbs = $this->BcBaser->getCrumbs();
 if (!empty($crumbs)) {

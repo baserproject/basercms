@@ -23,23 +23,23 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_type', 'スキーマタイプ') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('Tool.schema_type', array(
+			<?php echo $this->BcForm->input('Tool.schema_type', [
 				'type' => 'radio',
-				'options' => array('create' => 'テーブル作成', 'alter' => 'テーブル構造変更', 'drop' => 'テーブル削除'),
+				'options' => ['create' => 'テーブル作成', 'alter' => 'テーブル構造変更', 'drop' => 'テーブル削除'],
 				'legend' => false,
-				'separator' => '　')); ?>
+				'separator' => '　']); ?>
 			<?php echo $this->BcForm->error('Tool.schema_type') ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.schema_file', 'スキーマファイル') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('Tool.schema_file', array('type' => 'file')) ?>
+			<?php echo $this->BcForm->input('Tool.schema_file', ['type' => 'file']) ?>
 			<?php echo $this->BcForm->error('Tool.schema_file') ?>
 		</td>
 	</tr>
 </table>
 
-<div class="submit"><?php echo $this->BcForm->submit('読み込み', array('div' => false, 'class' => 'btn-red button')) ?></div>
+<div class="submit"><?php echo $this->BcForm->submit('読み込み', ['div' => false, 'class' => 'btn-red button']) ?></div>
 
 <?php echo $this->BcForm->end(); ?>

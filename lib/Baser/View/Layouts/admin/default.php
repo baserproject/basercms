@@ -23,20 +23,20 @@
 		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
 		<?php
-		$this->BcBaser->css(array(
+		$this->BcBaser->css([
 			'admin/jquery-ui/jquery-ui.min',
 			'../js/admin/vendors/jquery.jstree-3.3.1/themes/proton/style.min',
 			'../js/admin/vendors/jquery-contextMenu-2.2.0/jquery.contextMenu.min',
 			'admin/import',
 			'admin/colorbox/colorbox-1.6.1',
-			'admin/toolbar'))
+			'admin/toolbar'])
 		?>
 		<?php if($favoriteBoxOpened): ?>
 			<?php $this->BcBaser->css('admin/sidebar_opened') ?>
 		<?php endif ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
+		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
-		$this->BcBaser->js(array(
+		$this->BcBaser->js([
 			'admin/vendors/jquery-2.1.4.min',
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
@@ -57,7 +57,7 @@
 			'admin/startup',
 			'admin/favorite',
 			'admin/permission',
-			'admin/vendors/yuga'))
+			'admin/vendors/yuga'])
 		?>
 	<script>
 		$.bcUtil.init({
@@ -72,8 +72,8 @@
 
 		<div id="Page">
 			<div id="BaseUrl" style="display: none"><?php echo $this->request->base ?></div>
-			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box')) ?></div>
-			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(array('plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true))) ?></div>
+			<div id="SaveFavoriteBoxUrl" style="display:none"><?php $this->BcBaser->url(['plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_favorite_box']) ?></div>
+			<div id="SaveSearchBoxUrl" style="display:none"><?php $this->BcBaser->url(['plugin' => '', 'controller' => 'dashboard', 'action' => 'ajax_save_search_box', $this->BcBaser->getContentsName(true)]) ?></div>
 			<div id="SearchBoxOpened" style="display:none"><?php echo $this->Session->read('Baser.searchBoxOpened.' . $this->BcBaser->getContentsName(true)) ?></div>
 			<div id="CurrentPageName" style="display: none"><?php echo h($this->BcBaser->getContentsTitle()) ?></div>
 			<div id="CurrentPageUrl" style="display: none"><?php echo ($this->request->url == Configure::read('Routing.prefixes.0')) ? '/' . BcUtil::getAdminPrefix() . '/dashboard/index' : '/' . $this->request->url; ?></div>

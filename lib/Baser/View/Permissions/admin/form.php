@@ -21,7 +21,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 
 <?php echo $this->BcForm->create('Permission') ?>
 <?php echo $this->BcFormTable->dispatchBefore() ?>
-<?php echo $this->BcForm->input('Permission.id', array('type' => 'hidden')) ?>
+<?php echo $this->BcForm->input('Permission.id', ['type' => 'hidden']) ?>
 
 <!-- form -->
 <div class="section">
@@ -31,7 +31,7 @@ $this->BcBaser->js('admin/permissions/form', false);
 			<td class="col-input">
 				<?php $userGroups = $this->BcForm->getControlSource('user_group_id') ?>
 				<?php echo $userGroups[$this->BcForm->value('Permission.user_group_id')] ?>
-				<?php echo $this->BcForm->input('Permission.user_group_id', array('type' => 'hidden')) ?>
+				<?php echo $this->BcForm->input('Permission.user_group_id', ['type' => 'hidden']) ?>
 			</td>
 		</tr>
 		<?php if ($this->request->action == 'admin_edit'): ?>
@@ -45,8 +45,8 @@ $this->BcBaser->js('admin/permissions/form', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.name', 'ルール名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Permission.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('Permission.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 				<?php echo $this->Form->error('Permission.name') ?>
 				<div id="helptextName" class="helptext"> ルール名には日本語が利用できます。特定しやすいわかりやすい名称を入力してください。 </div>
 			</td>
@@ -55,8 +55,8 @@ $this->BcBaser->js('admin/permissions/form', false);
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.url', 'URL設定') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<strong>/<?php echo $permissionAuthPrefix ?>/</strong>
-				<?php echo $this->BcForm->input('Permission.url', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('Permission.url', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 				<?php echo $this->Form->error('Permission.url') ?>
 				<div id="helptextUrl" class="helptext">
 					<ul>
@@ -72,14 +72,14 @@ $this->BcBaser->js('admin/permissions/form', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.auth', 'アクセス') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Permission.auth', array('type' => 'radio', 'options' => $this->BcText->booleanAllowList('アクセス'))) ?>
+				<?php echo $this->BcForm->input('Permission.auth', ['type' => 'radio', 'options' => $this->BcText->booleanAllowList('アクセス')]) ?>
 				<?php echo $this->BcForm->error('Permission.auth') ?>
 			</td>
 		</tr>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Permission.status', '利用状態') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Permission.status', array('type' => 'checkbox', 'label' => '有効')) ?>
+				<?php echo $this->BcForm->input('Permission.status', ['type' => 'checkbox', 'label' => '有効']) ?>
 				<?php echo $this->BcForm->error('Permission.status') ?>
 			</td>
 		</tr>
@@ -90,9 +90,9 @@ $this->BcBaser->js('admin/permissions/form', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->request->action == 'admin_edit'): ?>
-		<?php $this->BcBaser->link('削除', array('action' => 'delete', $this->request->params['pass'][0], $this->BcForm->value('Permission.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Permission.name')), false); ?>
+		<?php $this->BcBaser->link('削除', ['action' => 'delete', $this->request->params['pass'][0], $this->BcForm->value('Permission.id')], ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('Permission.name')), false); ?>
 	<?php endif; ?>
 </div>
 

@@ -17,11 +17,11 @@
 <ul class="eyecatch-list clearfix">
 	<?php foreach($children as $child): ?>
 		<li>
-			<?php $this->BcBaser->link($this->BcUpload->uploadImage('Content.eyecatch', $child['Content']['eyecatch'], array(
+			<?php $this->BcBaser->link($this->BcUpload->uploadImage('Content.eyecatch', $child['Content']['eyecatch'], [
 				'imgsize' => 'thumb',
 				'link'		=> false,
 				'noimage'	=> 'admin/noimage.png'
-			)), $child['Content']['url']) ?>
+			]), $child['Content']['url']) ?>
 			<p><?php $this->BcBaser->link($child['Content']['title'], $child['Content']['url']) ?></p>
 		</li>
 	<?php endforeach ?>

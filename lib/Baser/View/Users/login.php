@@ -13,5 +13,5 @@
 /**
  * [MYPAGE] ログイン
  */
-$this->BcBaser->js(array('admin/libs/credit', 'admin/startup'), false);
+$this->BcBaser->js(['admin/libs/credit', 'admin/startup'], false);
 include BASER_VIEWS . 'Users' . DS . 'admin' . DS . 'login.php';
