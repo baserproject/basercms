@@ -681,10 +681,11 @@ class BlogHelperTest extends BaserTestCase {
  * 子カテゴリを持っているかどうか
  *
  * BlogCategory::hasChild() のラッピングの為、テストはスルー 
- */
+ *
 	public function testHasChildCategory() {
 		$this->markTestIncomplete('このメソッドは、BlogCategory::hasChild() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 /**
  * タグリストを取得する
@@ -807,10 +808,11 @@ class BlogHelperTest extends BaserTestCase {
 
 /**
  * タグ記事一覧へのリンクタグを出力する
- */
+ *
 	public function testTagLink() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::getTagLink() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 /**
  * ブログ記事一覧出力
