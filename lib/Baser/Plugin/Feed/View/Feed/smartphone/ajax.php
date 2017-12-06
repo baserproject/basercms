@@ -17,7 +17,7 @@ header("Content-type: text/javascript charset=UTF-8");
 $this->BcBaser->cacheHeader(MONTH, 'js');
 $site = BcSite::findCurrent();
 ?>
-document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', array('alt' => 'loading now...', 'style' => 'display:block;margin:auto')) ?></div>');
+document.write('<div id="feeds<?php echo $id; ?>"><?php echo $this->html->image('admin/ajax-loader.gif', ['alt' => 'loading now...', 'style' => 'display:block;margin:auto']) ?></div>');
 
 // 読込み成功時の処理
 var successCallback = function (response)

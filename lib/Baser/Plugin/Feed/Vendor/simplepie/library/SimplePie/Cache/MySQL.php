@@ -86,16 +86,16 @@ class SimplePie_Cache_MySQL extends SimplePie_Cache_DB
 	 */
 	public function __construct($location, $name, $type)
 	{
-		$this->options = array(
+		$this->options = [
 			'user' => null,
 			'pass' => null,
 			'host' => '127.0.0.1',
 			'port' => '3306',
 			'path' => '',
-			'extras' => array(
+			'extras' => [
 				'prefix' => '',
-			),
-		);
+			],
+		];
 		$this->options = array_merge_recursive($this->options, SimplePie_Cache::parse_URL($location));
 
 		// Path is prefixed with a "/"
@@ -103,7 +103,7 @@ class SimplePie_Cache_MySQL extends SimplePie_Cache_DB
 
 		try
 		{
-			$this->mysql = new PDO("mysql:dbname={$this->options['dbname']};host={$this->options['host']};port={$this->options['port']}", $this->options['user'], $this->options['pass'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+			$this->mysql = new PDO("mysql:dbname={$this->options['dbname']};host={$this->options['host']};port={$this->options['port']}", $this->options['user'], $this->options['pass'], [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
 		}
 		catch (PDOException $e)
 		{
@@ -119,7 +119,7 @@ class SimplePie_Cache_MySQL extends SimplePie_Cache_DB
 			return;
 		}
 
-		$db = array();
+		$db = [];
 		while ($row = $query->fetchColumn())
 		{
 			$db[] = $row;
@@ -216,7 +216,7 @@ class SimplePie_Cache_MySQL extends SimplePie_Cache_DB
 
 					if ($query->execute())
 					{
-						$existing_ids = array();
+						$existing_ids = [];
 						while ($row = $query->fetchColumn())
 						{
 							$existing_ids[] = $row;

@@ -34,7 +34,7 @@ class AclComponentTest extends CakeTestCase {
 	public function setUp() {
 		parent::setUp();
 		if (!class_exists('MockAclImplementation', false)) {
-			$this->getMock('AclInterface', array(), array(), 'MockAclImplementation');
+			$this->getMock('AclInterface', [], [], 'MockAclImplementation');
 		}
 		Configure::write('Acl.classname', 'MockAclImplementation');
 		$Collection = new ComponentCollection();

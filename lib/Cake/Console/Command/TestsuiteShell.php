@@ -39,10 +39,10 @@ class TestsuiteShell extends TestShell {
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 
-		$parser->description(array(
+		$parser->description([
 			__d('cake_console', 'The CakePHP Testsuite allows you to run test cases from the command line'),
 			__d('cake_console', "<warning>This shell is for backwards-compatibility only</warning>\nuse the test shell instead")
-		));
+		]);
 
 		return $parser;
 	}
@@ -56,12 +56,12 @@ class TestsuiteShell extends TestShell {
 		if (empty($this->args)) {
 			return;
 		}
-		$params = array(
+		$params = [
 			'core' => false,
 			'app' => false,
 			'plugin' => null,
 			'output' => 'text',
-		);
+		];
 
 		$category = $this->args[0];
 

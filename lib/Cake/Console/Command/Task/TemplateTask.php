@@ -31,7 +31,7 @@ class TemplateTask extends AppShell {
  *
  * @var array
  */
-	public $templateVars = array();
+	public $templateVars = [];
 
 /**
  * Paths to look for templates on.
@@ -39,7 +39,7 @@ class TemplateTask extends AppShell {
  *
  * @var array
  */
-	public $templatePaths = array();
+	public $templatePaths = [];
 
 /**
  * Initialize callback. Setup paths for the template task.
@@ -81,7 +81,7 @@ class TemplateTask extends AppShell {
 			$paths[$i] = rtrim($path, DS) . DS;
 		}
 
-		$themes = array();
+		$themes = [];
 		foreach ($paths as $path) {
 			$Folder = new Folder($path . 'Templates', false);
 			$contents = $Folder->read();
@@ -118,7 +118,7 @@ class TemplateTask extends AppShell {
 				$data = $one;
 			}
 		} else {
-			$data = array($one => $two);
+			$data = [$one => $two];
 		}
 
 		if (!$data) {
@@ -178,7 +178,7 @@ class TemplateTask extends AppShell {
 		$this->hr();
 
 		$i = 1;
-		$indexedPaths = array();
+		$indexedPaths = [];
 		foreach ($this->templatePaths as $key => $path) {
 			$this->out($i . '. ' . $key);
 			$indexedPaths[$i] = $path;

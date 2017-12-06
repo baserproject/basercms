@@ -46,119 +46,119 @@ class JsonViewTest extends CakeTestCase {
  * @return void
  */
 	public static function renderWithoutViewProvider() {
-		return array(
+		return [
 			// Test render with a valid string in _serialize.
-			array(
-				array('data' => array('user' => 'fake', 'list' => array('item1', 'item2'))),
+			[
+				['data' => ['user' => 'fake', 'list' => ['item1', 'item2']]],
 				'data',
-				json_encode(array('user' => 'fake', 'list' => array('item1', 'item2')))
-			),
+				json_encode(['user' => 'fake', 'list' => ['item1', 'item2']])
+			],
 
 			// Test render with a string with an invalid key in _serialize.
-			array(
-				array('data' => array('user' => 'fake', 'list' => array('item1', 'item2'))),
+			[
+				['data' => ['user' => 'fake', 'list' => ['item1', 'item2']]],
 				'no_key',
 				json_encode(null)
-			),
+			],
 
 			// Test render with a valid array in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
-				array('no', 'user'),
-				json_encode(array('no' => 'nope', 'user' => 'fake'))
-			),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
+				['no', 'user'],
+				json_encode(['no' => 'nope', 'user' => 'fake'])
+			],
 
 			// Test render with an empty array in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
-				array(),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
+				[],
 				json_encode(null)
-			),
+			],
 
 			// Test render with a valid array with an invalid key in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
-				array('no', 'user', 'no_key'),
-				json_encode(array('no' => 'nope', 'user' => 'fake'))
-			),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
+				['no', 'user', 'no_key'],
+				json_encode(['no' => 'nope', 'user' => 'fake'])
+			],
 
 			// Test render with a valid array with only an invalid key in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
-				array('no_key'),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
+				['no_key'],
 				json_encode(null)
-			),
+			],
 
 			// Test render with Null in _serialize (unset).
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
 				null,
 				null
-			),
+			],
 
 			// Test render with False in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
 				false,
 				json_encode(null)
-			),
+			],
 
 			// Test render with True in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
 				true,
 				json_encode(null)
-			),
+			],
 
 			// Test render with empty string in _serialize.
-			array(
-				array('no' => 'nope', 'user' => 'fake', 'list' => array('item1', 'item2')),
+			[
+				['no' => 'nope', 'user' => 'fake', 'list' => ['item1', 'item2']],
 				'',
 				json_encode(null)
-			),
+			],
 
 			// Test render with a valid array in _serialize and alias.
-			array(
-				array('original_name' => 'my epic name', 'user' => 'fake', 'list' => array('item1', 'item2')),
-				array('new_name' => 'original_name', 'user'),
-				json_encode(array('new_name' => 'my epic name', 'user' => 'fake'))
-			),
+			[
+				['original_name' => 'my epic name', 'user' => 'fake', 'list' => ['item1', 'item2']],
+				['new_name' => 'original_name', 'user'],
+				json_encode(['new_name' => 'my epic name', 'user' => 'fake'])
+			],
 
 			// Test render with an a valid array in _serialize and alias of a null value.
-			array(
-				array('null' => null),
-				array('null'),
-				json_encode(array('null' => null))
-			),
+			[
+				['null' => null],
+				['null'],
+				json_encode(['null' => null])
+			],
 
 			// Test render with a False value to be serialized.
-			array(
-				array('false' => false),
+			[
+				['false' => false],
 				'false',
 				json_encode(false)
-			),
+			],
 
 			// Test render with a True value to be serialized.
-			array(
-				array('true' => true),
+			[
+				['true' => true],
 				'true',
 				json_encode(true)
-			),
+			],
 
 			// Test render with an empty string value to be serialized.
-			array(
-				array('empty' => ''),
+			[
+				['empty' => ''],
 				'empty',
 				json_encode('')
-			),
+			],
 
 			// Test render with a zero value to be serialized.
-			array(
-				array('zero' => 0),
+			[
+				['zero' => 0],
 				'zero',
 				json_encode(0)
-			),
-		);
+			],
+		];
 	}
 
 /**
@@ -207,7 +207,7 @@ class JsonViewTest extends CakeTestCase {
 		$Controller = new Controller($Request, $Response);
 
 		// Test render with encode <, >, ', &, and " for RFC4627-compliant to be serialized.
-		$data = array('rfc4627_escape' => '<tag> \'quote\' "double-quote" &');
+		$data = ['rfc4627_escape' => '<tag> \'quote\' "double-quote" &'];
 		$serialize = 'rfc4627_escape';
 		$expected = json_encode('<tag> \'quote\' "double-quote" &', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 
@@ -229,11 +229,11 @@ class JsonViewTest extends CakeTestCase {
 		$Response = new CakeResponse();
 		$Controller = new Controller($Request, $Response);
 
-		$Controller->helpers = array('Html');
-		$Controller->set(array(
-			'tags' => array('cakephp', 'framework'),
+		$Controller->helpers = ['Html'];
+		$Controller->set([
+			'tags' => ['cakephp', 'framework'],
 			'_serialize' => 'tags'
-		));
+		]);
 		$View = new JsonView($Controller);
 		$View->render();
 
@@ -250,25 +250,25 @@ class JsonViewTest extends CakeTestCase {
 		$Response = new CakeResponse();
 		$Controller = new Controller($Request, $Response);
 
-		$data = array('user' => 'fake', 'list' => array('item1', 'item2'));
-		$Controller->set(array(
+		$data = ['user' => 'fake', 'list' => ['item1', 'item2']];
+		$Controller->set([
 			'data' => $data,
 			'_serialize' => 'data',
 			'_jsonp' => true
-		));
+		]);
 		$View = new JsonView($Controller);
 		$output = $View->render(false);
 
 		$this->assertSame(json_encode($data), $output);
 		$this->assertSame('application/json', $Response->type());
 
-		$View->request->query = array('callback' => 'jfunc');
+		$View->request->query = ['callback' => 'jfunc'];
 		$output = $View->render(false);
 		$expected = 'jfunc(' . json_encode($data) . ')';
 		$this->assertSame($expected, $output);
 		$this->assertSame('application/javascript', $Response->type());
 
-		$View->request->query = array('jsonCallback' => 'jfunc');
+		$View->request->query = ['jsonCallback' => 'jfunc'];
 		$View->viewVars['_jsonp'] = 'jsonCallback';
 		$output = $View->render(false);
 		$expected = 'jfunc(' . json_encode($data) . ')';
@@ -281,28 +281,28 @@ class JsonViewTest extends CakeTestCase {
  * @return void
  */
 	public function testRenderWithView() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 		$Request = new CakeRequest();
 		$Response = new CakeResponse();
 		$Controller = new Controller($Request, $Response);
 		$Controller->name = $Controller->viewPath = 'Posts';
 
-		$data = array(
-			'User' => array(
+		$data = [
+			'User' => [
 				'username' => 'fake'
-			),
-			'Item' => array(
-				array('name' => 'item1'),
-				array('name' => 'item2')
-			)
-		);
+			],
+			'Item' => [
+				['name' => 'item1'],
+				['name' => 'item2']
+			]
+		];
 		$Controller->set('user', $data);
 		$View = new JsonView($Controller);
 		$output = $View->render('index');
 
-		$expected = json_encode(array('user' => 'fake', 'list' => array('item1', 'item2'), 'paging' => null));
+		$expected = json_encode(['user' => 'fake', 'list' => ['item1', 'item2'], 'paging' => null]);
 		$this->assertSame($expected, $output);
 		$this->assertSame('application/json', $Response->type());
 	}
@@ -313,37 +313,37 @@ class JsonViewTest extends CakeTestCase {
  * @return void
  */
 	public function testRenderWithViewAndNamed() {
-		App::build(array(
-			'View' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS)
-		));
+		App::build([
+			'View' => [CAKE . 'Test' . DS . 'test_app' . DS . 'View' . DS]
+		]);
 		$Request = new CakeRequest(null, false);
-		$Request->params['named'] = array('page' => 2);
+		$Request->params['named'] = ['page' => 2];
 		$Response = new CakeResponse();
 		$Controller = new Controller($Request, $Response);
 		$Controller->name = $Controller->viewPath = 'Posts';
 
-		$data = array(
-			'User' => array(
+		$data = [
+			'User' => [
 				'username' => 'fake'
-			),
-			'Item' => array(
-				array('name' => 'item1'),
-				array('name' => 'item2')
-			)
-		);
+			],
+			'Item' => [
+				['name' => 'item1'],
+				['name' => 'item2']
+			]
+		];
 		$Controller->set('user', $data);
-		$Controller->helpers = array('Paginator');
+		$Controller->helpers = ['Paginator'];
 		$View = new JsonView($Controller);
 		$output = $View->render('index');
 
-		$expected = array('user' => 'fake', 'list' => array('item1', 'item2'), 'paging' => array('page' => 2));
+		$expected = ['user' => 'fake', 'list' => ['item1', 'item2'], 'paging' => ['page' => 2]];
 		$this->assertSame(json_encode($expected), $output);
 		$this->assertSame('application/json', $Response->type());
 
-		$View->request->query = array('jsonCallback' => 'jfunc');
+		$View->request->query = ['jsonCallback' => 'jfunc'];
 		$Controller->set('_jsonp', 'jsonCallback');
 		$View = new JsonView($Controller);
-		$View->helpers = array('Paginator');
+		$View->helpers = ['Paginator'];
 		$output = $View->render('index');
 		$expected['paging']['?']['jsonCallback'] = 'jfunc';
 		$expected = 'jfunc(' . json_encode($expected) . ')';
@@ -364,14 +364,14 @@ class JsonViewTest extends CakeTestCase {
 		// non utf-8 stuff
 		$bar = 'bar';
 		$bar .= chr(0x97);
-		$data = array('data' => array('foo' => $bar));
+		$data = ['data' => ['foo' => $bar]];
 
 		$Controller->set($data);
 		$Controller->set('_serialize', 'data');
 		$View = new JsonView($Controller);
 
 		// Use a custom error handler
-		set_error_handler(array($this, 'jsonEncodeErrorHandler'));
+		set_error_handler([$this, 'jsonEncodeErrorHandler']);
 
 		try {
 			$View->render();

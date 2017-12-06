@@ -42,90 +42,90 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidationParams() {
 		$TestModel = new ValidationTest1();
-		$TestModel->validate['title'] = array(
+		$TestModel->validate['title'] = [
 			'rule' => 'customValidatorWithParams',
 			'required' => true
-		);
-		$TestModel->create(array('title' => 'foo'));
+		];
+		$TestModel->create(['title' => 'foo']);
 		$TestModel->invalidFields();
 
-		$expected = array(
-			'data' => array(
+		$expected = [
+			'data' => [
 				'title' => 'foo'
-			),
-			'validator' => array(
+			],
+			'validator' => [
 				'rule' => 'customValidatorWithParams',
 				'on' => null,
 				'last' => true,
 				'allowEmpty' => false,
 				'required' => true,
 				'message' => null
-			),
+			],
 			'or' => true,
 			'ignoreOnSame' => 'id'
-		);
+		];
 		$this->assertEquals($expected, $TestModel->validatorParams);
 
-		$TestModel->validate['title'] = array(
+		$TestModel->validate['title'] = [
 			'rule' => 'customValidatorWithMessage',
 			'required' => true
-		);
-		$expected = array(
-			'title' => array('This field will *never* validate! Muhahaha!')
-		);
+		];
+		$expected = [
+			'title' => ['This field will *never* validate! Muhahaha!']
+		];
 
 		$this->assertEquals($expected, $TestModel->invalidFields());
 
-		$TestModel->validate['title'] = array(
-			'rule' => array('customValidatorWithSixParams', 'one', 'two', null, 'four'),
+		$TestModel->validate['title'] = [
+			'rule' => ['customValidatorWithSixParams', 'one', 'two', null, 'four'],
 			'required' => true
-		);
-		$TestModel->create(array('title' => 'foo'));
+		];
+		$TestModel->create(['title' => 'foo']);
 		$TestModel->invalidFields();
-		$expected = array(
-			'data' => array(
+		$expected = [
+			'data' => [
 				'title' => 'foo'
-			),
+			],
 			'one' => 'one',
 			'two' => 'two',
 			'three' => null,
 			'four' => 'four',
-			'five' => array(
-				'rule' => array(1 => 'one', 2 => 'two', 3 => null, 4 => 'four'),
+			'five' => [
+				'rule' => [1 => 'one', 2 => 'two', 3 => null, 4 => 'four'],
 				'on' => null,
 				'last' => true,
 				'allowEmpty' => false,
 				'required' => true,
 				'message' => null
-			),
+			],
 			'six' => 6
-		);
+		];
 		$this->assertEquals($expected, $TestModel->validatorParams);
 
-		$TestModel->validate['title'] = array(
-			'rule' => array('customValidatorWithSixParams', 'one', array('two'), null, 'four', array('five' => 5)),
+		$TestModel->validate['title'] = [
+			'rule' => ['customValidatorWithSixParams', 'one', ['two'], null, 'four', ['five' => 5]],
 			'required' => true
-		);
-		$TestModel->create(array('title' => 'foo'));
+		];
+		$TestModel->create(['title' => 'foo']);
 		$TestModel->invalidFields();
-		$expected = array(
-			'data' => array(
+		$expected = [
+			'data' => [
 				'title' => 'foo'
-			),
+			],
 			'one' => 'one',
-			'two' => array('two'),
+			'two' => ['two'],
 			'three' => null,
 			'four' => 'four',
-			'five' => array('five' => 5),
-			'six' => array(
-				'rule' => array(1 => 'one', 2 => array('two'), 3 => null, 4 => 'four', 5 => array('five' => 5)),
+			'five' => ['five' => 5],
+			'six' => [
+				'rule' => [1 => 'one', 2 => ['two'], 3 => null, 4 => 'four', 5 => ['five' => 5]],
 				'on' => null,
 				'last' => true,
 				'allowEmpty' => false,
 				'required' => true,
 				'message' => null
-			)
-		);
+			]
+		];
 		$this->assertEquals($expected, $TestModel->validatorParams);
 	}
 
@@ -136,41 +136,41 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testInvalidFieldsWithFieldListParams() {
 		$TestModel = new ValidationTest1();
-		$TestModel->validate = $validate = array(
-			'title' => array(
+		$TestModel->validate = $validate = [
+			'title' => [
 				'rule' => 'alphaNumeric',
 				'required' => true
-			),
-			'name' => array(
+			],
+			'name' => [
 				'rule' => 'alphaNumeric',
 				'required' => true
-		));
-		$TestModel->set(array('title' => '$$', 'name' => '##'));
-		$TestModel->invalidFields(array('fieldList' => array('title')));
-		$expected = array(
-			'title' => array('This field cannot be left blank')
-		);
+		]];
+		$TestModel->set(['title' => '$$', 'name' => '##']);
+		$TestModel->invalidFields(['fieldList' => ['title']]);
+		$expected = [
+			'title' => ['This field cannot be left blank']
+		];
 		$this->assertEquals($expected, $TestModel->validationErrors);
-		$TestModel->validationErrors = array();
+		$TestModel->validationErrors = [];
 
-		$TestModel->invalidFields(array('fieldList' => array('name')));
-		$expected = array(
-			'name' => array('This field cannot be left blank')
-		);
+		$TestModel->invalidFields(['fieldList' => ['name']]);
+		$expected = [
+			'name' => ['This field cannot be left blank']
+		];
 		$this->assertEquals($expected, $TestModel->validationErrors);
-		$TestModel->validationErrors = array();
+		$TestModel->validationErrors = [];
 
-		$TestModel->invalidFields(array('fieldList' => array('name', 'title')));
-		$expected = array(
-			'name' => array('This field cannot be left blank'),
-			'title' => array('This field cannot be left blank')
-		);
+		$TestModel->invalidFields(['fieldList' => ['name', 'title']]);
+		$expected = [
+			'name' => ['This field cannot be left blank'],
+			'title' => ['This field cannot be left blank']
+		];
 		$this->assertEquals($expected, $TestModel->validationErrors);
-		$TestModel->validationErrors = array();
+		$TestModel->validationErrors = [];
 
-		$TestModel->whitelist = array('name');
+		$TestModel->whitelist = ['name'];
 		$TestModel->invalidFields();
-		$expected = array('name' => array('This field cannot be left blank'));
+		$expected = ['name' => ['This field cannot be left blank']];
 		$this->assertEquals($expected, $TestModel->validationErrors);
 
 		$this->assertEquals($TestModel->validate, $validate);
@@ -183,20 +183,20 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testInvalidFieldsWhitelist() {
 		$TestModel = new ValidationTest1();
-		$TestModel->validate = array(
-			'title' => array(
+		$TestModel->validate = [
+			'title' => [
 				'rule' => 'alphaNumeric',
 				'required' => true
-			),
-			'name' => array(
+			],
+			'name' => [
 				'rule' => 'alphaNumeric',
 				'required' => true
-		));
+		]];
 
-		$TestModel->whitelist = array('name');
-		$TestModel->save(array('name' => '#$$#', 'title' => '$$$$'));
+		$TestModel->whitelist = ['name'];
+		$TestModel->save(['name' => '#$$#', 'title' => '$$$$']);
 
-		$expected = array('name' => array('This field cannot be left blank'));
+		$expected = ['name' => ['This field cannot be left blank']];
 		$this->assertEquals($expected, $TestModel->validationErrors);
 	}
 
@@ -208,347 +208,347 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidates() {
 		$TestModel = new TestValidate();
 
-		$TestModel->validate = array(
+		$TestModel->validate = [
 			'user_id' => 'numeric',
-			'title' => array('allowEmpty' => false, 'rule' => 'notBlank'),
+			'title' => ['allowEmpty' => false, 'rule' => 'notBlank'],
 			'body' => 'notBlank'
-		);
+		];
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => '',
 			'body' => 'body'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 'title',
 			'body' => 'body'
-		));
+		]];
 		$result = $TestModel->create($data) && $TestModel->validates();
 		$this->assertTrue($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => '0',
 			'body' => 'body'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate['modified'] = array('allowEmpty' => true, 'rule' => 'date');
+		$TestModel->validate['modified'] = ['allowEmpty' => true, 'rule' => 'date'];
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'modified' => ''
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'modified' => '2007-05-01'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'modified' => 'invalid-date-here'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'modified' => 0
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'modified' => '0'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$TestModel->validate['modified'] = array('allowEmpty' => false, 'rule' => 'date');
+		$TestModel->validate['modified'] = ['allowEmpty' => false, 'rule' => 'date'];
 
-		$data = array('TestValidate' => array('modified' => null));
+		$data = ['TestValidate' => ['modified' => null]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array('modified' => false));
+		$data = ['TestValidate' => ['modified' => false]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array('modified' => ''));
+		$data = ['TestValidate' => ['modified' => '']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'modified' => '2007-05-01'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate['slug'] = array('allowEmpty' => false, 'rule' => array('maxLength', 45));
+		$TestModel->validate['slug'] = ['allowEmpty' => false, 'rule' => ['maxLength', 45]];
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'slug' => ''
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'slug' => 'slug-right-here'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'user_id' => '1',
 			'title' => 0,
 			'body' => 'body',
 			'slug' => 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$TestModel->validate = array(
-			'number' => array(
+		$TestModel->validate = [
+			'number' => [
 				'rule' => 'validateNumber',
 				'min' => 3,
 				'max' => 5
-			),
-			'title' => array(
+			],
+			'title' => [
 				'allowEmpty' => false,
 				'rule' => 'notBlank'
-		));
+		]];
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'title',
 			'number' => '0'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'title',
 			'number' => 0
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'title',
 			'number' => '3'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'title',
 			'number' => 3
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate = array(
-			'number' => array(
+		$TestModel->validate = [
+			'number' => [
 				'rule' => 'validateNumber',
 				'min' => 5,
 				'max' => 10
-			),
-			'title' => array(
+			],
+			'title' => [
 				'allowEmpty' => false,
 				'rule' => 'notBlank'
-		));
+		]];
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'title',
 			'number' => '3'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'title',
 			'number' => 3
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$TestModel->validate = array(
-			'title' => array(
+		$TestModel->validate = [
+			'title' => [
 				'allowEmpty' => false,
 				'rule' => 'validateTitle'
-		));
+		]];
 
-		$data = array('TestValidate' => array('title' => ''));
+		$data = ['TestValidate' => ['title' => '']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array('title' => 'new title'));
+		$data = ['TestValidate' => ['title' => 'new title']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array('title' => 'title-new'));
+		$data = ['TestValidate' => ['title' => 'title-new']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate = array('title' => array(
+		$TestModel->validate = ['title' => [
 			'allowEmpty' => true,
 			'rule' => 'validateTitle'
-		));
-		$data = array('TestValidate' => array('title' => ''));
+		]];
+		$data = ['TestValidate' => ['title' => '']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate = array(
-			'title' => array(
-				'length' => array(
+		$TestModel->validate = [
+			'title' => [
+				'length' => [
 					'allowEmpty' => true,
-					'rule' => array('maxLength', 10)
-		)));
-		$data = array('TestValidate' => array('title' => ''));
+					'rule' => ['maxLength', 10]
+		]]];
+		$data = ['TestValidate' => ['title' => '']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate = array(
-			'title' => array(
-				'rule' => array('userDefined', 'Article', 'titleDuplicate')
-		));
-		$data = array('TestValidate' => array('title' => 'My Article Title'));
+		$TestModel->validate = [
+			'title' => [
+				'rule' => ['userDefined', 'Article', 'titleDuplicate']
+		]];
+		$data = ['TestValidate' => ['title' => 'My Article Title']];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array('TestValidate' => array(
+		$data = ['TestValidate' => [
 			'title' => 'My Article With a Different Title'
-		));
+		]];
 		$result = $TestModel->create($data);
 		$this->assertEquals($data, $result);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
 
-		$TestModel->validate = array(
-			'title' => array(
-				'tooShort' => array('rule' => array('minLength', 50)),
-				'onlyLetters' => array('rule' => '/^[a-z]+$/i')
-			),
-		);
-		$data = array('TestValidate' => array(
+		$TestModel->validate = [
+			'title' => [
+				'tooShort' => ['rule' => ['minLength', 50]],
+				'onlyLetters' => ['rule' => '/^[a-z]+$/i']
+			],
+		];
+		$data = ['TestValidate' => [
 			'title' => 'I am a short string'
-		));
+		]];
 		$TestModel->create($data);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 		$result = $TestModel->validationErrors;
-		$expected = array(
-			'title' => array('tooShort')
-		);
+		$expected = [
+			'title' => ['tooShort']
+		];
 		$this->assertEquals($expected, $result);
 
-		$TestModel->validate = array(
-			'title' => array(
-				'tooShort' => array(
-					'rule' => array('minLength', 50),
+		$TestModel->validate = [
+			'title' => [
+				'tooShort' => [
+					'rule' => ['minLength', 50],
 					'last' => false
-				),
-				'onlyLetters' => array('rule' => '/^[a-z]+$/i')
-			),
-		);
-		$data = array('TestValidate' => array(
+				],
+				'onlyLetters' => ['rule' => '/^[a-z]+$/i']
+			],
+		];
+		$data = ['TestValidate' => [
 			'title' => 'I am a short string'
-		));
+		]];
 		$TestModel->create($data);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 		$result = $TestModel->validationErrors;
-		$expected = array(
-			'title' => array('tooShort', 'onlyLetters')
-		);
+		$expected = [
+			'title' => ['tooShort', 'onlyLetters']
+		];
 		$this->assertEquals($expected, $result);
 		$result = $TestModel->validationErrors;
 		$this->assertEquals($expected, $result);
@@ -561,32 +561,32 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidatesWithNoTable() {
 		$TestModel = new TheVoid();
-		$TestModel->validate = array(
-			'title' => array(
-				'notEmpty' => array(
-					'rule' => array('notBlank'),
+		$TestModel->validate = [
+			'title' => [
+				'notEmpty' => [
+					'rule' => ['notBlank'],
 					'required' => true,
-				),
-				'tooShort' => array(
-					'rule' => array('minLength', 10),
-				),
-			),
-		);
-		$data = array(
-			'TheVoid' => array(
+				],
+				'tooShort' => [
+					'rule' => ['minLength', 10],
+				],
+			],
+		];
+		$data = [
+			'TheVoid' => [
 				'title' => 'too short',
-			),
-		);
+			],
+		];
 		$TestModel->create($data);
 		$result = $TestModel->validates();
 		$this->assertFalse($result);
 
-		$data = array(
-			'TheVoid' => array(
+		$data = [
+			'TheVoid' => [
 				'id' => '1',
 				'title' => 'A good title',
-			),
-		);
+			],
+		];
 		$TestModel->create($data);
 		$result = $TestModel->validates();
 		$this->assertTrue($result);
@@ -600,51 +600,51 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidatesWithAssociations() {
 		$this->loadFixtures('Something', 'SomethingElse', 'JoinThing');
-		$data = array(
-			'Something' => array(
+		$data = [
+			'Something' => [
 				'id' => 5,
 				'title' => 'Extra Fields',
 				'body' => 'Extra Fields Body',
 				'published' => '1'
-			),
-			'SomethingElse' => array(
-				array('something_else_id' => 1, 'doomed' => '')
-			)
-		);
+			],
+			'SomethingElse' => [
+				['something_else_id' => 1, 'doomed' => '']
+			]
+		];
 
 		$Something = new Something();
 		$JoinThing = $Something->JoinThing;
 
-		$JoinThing->validate = array('doomed' => array('rule' => 'notBlank'));
+		$JoinThing->validate = ['doomed' => ['rule' => 'notBlank']];
 
-		$expectedError = array('doomed' => array('This field cannot be left blank'));
+		$expectedError = ['doomed' => ['This field cannot be left blank']];
 
 		$Something->create();
 		$result = $Something->save($data);
 		$this->assertFalse($result, 'Save occurred even when with models failed. %s');
 		$this->assertEquals($expectedError, $JoinThing->validationErrors);
-		$count = $Something->find('count', array('conditions' => array('Something.id' => $data['Something']['id'])));
+		$count = $Something->find('count', ['conditions' => ['Something.id' => $data['Something']['id']]]);
 		$this->assertSame(0, $count);
 
-		$data = array(
-			'Something' => array(
+		$data = [
+			'Something' => [
 				'id' => 5,
 				'title' => 'Extra Fields',
 				'body' => 'Extra Fields Body',
 				'published' => '1'
-			),
-			'SomethingElse' => array(
-				array('something_else_id' => 1, 'doomed' => 1),
-				array('something_else_id' => 1, 'doomed' => '')
-			)
-		);
+			],
+			'SomethingElse' => [
+				['something_else_id' => 1, 'doomed' => 1],
+				['something_else_id' => 1, 'doomed' => '']
+			]
+		];
 		$Something->create();
 		$result = $Something->save($data);
 		$this->assertFalse($result, 'Save occurred even when with models failed. %s');
 
-		$joinRecords = $JoinThing->find('count', array(
-			'conditions' => array('JoinThing.something_id' => $data['Something']['id'])
-		));
+		$joinRecords = $JoinThing->find('count', [
+			'conditions' => ['JoinThing.something_id' => $data['Something']['id']]
+		]);
 		$this->assertEquals(0, $joinRecords, 'Records were saved on the join table. %s');
 	}
 
@@ -656,23 +656,23 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidateWithFieldListAndBehavior() {
 		$TestModel = new ValidationTest1();
-		$TestModel->validate = array(
-			'title' => array(
+		$TestModel->validate = [
+			'title' => [
 				'rule' => 'notBlank',
-			),
-			'name' => array(
+			],
+			'name' => [
 				'rule' => 'notBlank',
-		));
-		$TestModel->Behaviors->attach('ValidationRule', array('fields' => array('name')));
+		]];
+		$TestModel->Behaviors->attach('ValidationRule', ['fields' => ['name']]);
 
-		$data = array(
+		$data = [
 			'title' => '',
 			'name' => '',
-		);
-		$result = $TestModel->save($data, array('fieldList' => array('title')));
+		];
+		$result = $TestModel->save($data, ['fieldList' => ['title']]);
 		$this->assertFalse($result);
 
-		$expected = array('title' => array('This field cannot be left blank'), 'name' => array('This field cannot be left blank'));
+		$expected = ['title' => ['This field cannot be left blank'], 'name' => ['This field cannot be left blank']];
 		$this->assertEquals($expected, $TestModel->validationErrors);
 	}
 
@@ -683,25 +683,25 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidatesWithModelsAndSaveAll() {
 		$this->loadFixtures('Something', 'SomethingElse', 'JoinThing');
-		$data = array(
-			'Something' => array(
+		$data = [
+			'Something' => [
 				'id' => 5,
 				'title' => 'Extra Fields',
 				'body' => 'Extra Fields Body',
 				'published' => '1'
-			),
-			'SomethingElse' => array(
-				array('something_else_id' => 1, 'doomed' => '')
-			)
-		);
+			],
+			'SomethingElse' => [
+				['something_else_id' => 1, 'doomed' => '']
+			]
+		];
 		$Something = new Something();
 		$JoinThing = $Something->JoinThing;
 
-		$JoinThing->validate = array('doomed' => array('rule' => 'notBlank'));
-		$expectedError = array('doomed' => array('This field cannot be left blank'));
+		$JoinThing->validate = ['doomed' => ['rule' => 'notBlank']];
+		$expectedError = ['doomed' => ['This field cannot be left blank']];
 
 		$Something->create();
-		$result = $Something->saveAll($data, array('validate' => 'only'));
+		$result = $Something->saveAll($data, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$result = $Something->validateAssociated($data);
 		$this->assertFalse($result);
@@ -710,16 +710,16 @@ class ModelValidationTest extends BaseModelTest {
 		$this->assertFalse($result);
 
 		$Something->create();
-		$result = $Something->saveAll($data, array('validate' => 'first'));
+		$result = $Something->saveAll($data, ['validate' => 'first']);
 		$this->assertFalse($result);
 		$this->assertEquals($expectedError, $JoinThing->validationErrors);
 
-		$count = $Something->find('count', array('conditions' => array('Something.id' => $data['Something']['id'])));
+		$count = $Something->find('count', ['conditions' => ['Something.id' => $data['Something']['id']]]);
 		$this->assertSame(0, $count);
 
-		$joinRecords = $JoinThing->find('count', array(
-			'conditions' => array('JoinThing.something_id' => $data['Something']['id'])
-		));
+		$joinRecords = $JoinThing->find('count', [
+			'conditions' => ['JoinThing.something_id' => $data['Something']['id']]
+		]);
 		$this->assertEquals(0, $joinRecords, 'Records were saved on the join table. %s');
 	}
 
@@ -732,39 +732,39 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidatesWithModelsAndSaveAllWithoutId() {
 		$this->loadFixtures('Post', 'Author');
 
-		$data = array(
-			'Author' => array(
+		$data = [
+			'Author' => [
 				'name' => 'Foo Bar',
-			),
-			'Post' => array(
-				array('title' => 'Hello'),
-				array('title' => 'World'),
-			)
-		);
+			],
+			'Post' => [
+				['title' => 'Hello'],
+				['title' => 'World'],
+			]
+		];
 		$Author = new Author();
 		$Post = $Author->Post;
 
-		$Post->validate = array('author_id' => array('rule' => 'numeric'));
+		$Post->validate = ['author_id' => ['rule' => 'numeric']];
 
 		$Author->create();
-		$result = $Author->saveAll($data, array('validate' => 'only'));
+		$result = $Author->saveAll($data, ['validate' => 'only']);
 		$this->assertTrue($result);
 		$result = $Author->validateAssociated($data);
 		$this->assertTrue($result);
 		$this->assertTrue($result);
 
 		$Author->create();
-		$result = $Author->saveAll($data, array('validate' => 'first'));
+		$result = $Author->saveAll($data, ['validate' => 'first']);
 		$this->assertTrue($result);
 		$this->assertNotNull($Author->id);
 
 		$id = $Author->id;
-		$count = $Author->find('count', array('conditions' => array('Author.id' => $id)));
+		$count = $Author->find('count', ['conditions' => ['Author.id' => $id]]);
 		$this->assertSame(1, $count);
 
-		$count = $Post->find('count', array(
-			'conditions' => array('Post.author_id' => $id)
-		));
+		$count = $Post->find('count', [
+			'conditions' => ['Post.author_id' => $id]
+		]);
 		$this->assertEquals($count, count($data['Post']));
 	}
 
@@ -779,14 +779,14 @@ class ModelValidationTest extends BaseModelTest {
 		Configure::write('debug', 2);
 
 		$TestModel = new ValidationTest1();
-		$TestModel->create(array('title' => 'foo'));
-		$TestModel->validate = array(
-			'title' => array(
-				'rule' => array('thisOneBringsThePain'),
+		$TestModel->create(['title' => 'foo']);
+		$TestModel->validate = [
+			'title' => [
+				'rule' => ['thisOneBringsThePain'],
 				'required' => true
-			)
-		);
-		$TestModel->invalidFields(array('fieldList' => array('title')));
+			]
+		];
+		$TestModel->invalidFields(['fieldList' => ['title']]);
 	}
 
 /**
@@ -796,37 +796,37 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidationMessageAsArray() {
 		$TestModel = new ValidationTest1();
-		$TestModel->validate = array(
-			'title' => array(
-				'minLength' => array(
-					'rule' => array('minLength', 6),
+		$TestModel->validate = [
+			'title' => [
+				'minLength' => [
+					'rule' => ['minLength', 6],
 					'required' => true,
 					'message' => 'Minimum length allowed is %d chars',
 					'last' => false
-				),
-				'between' => array(
-					'rule' => array('lengthBetween', 5, 15),
-					'message' => array('You may enter up to %s chars (minimum is %s chars)', 14, 6)
-				)
-			)
-		);
+				],
+				'between' => [
+					'rule' => ['lengthBetween', 5, 15],
+					'message' => ['You may enter up to %s chars (minimum is %s chars)', 14, 6]
+				]
+			]
+		];
 
 		$TestModel->create();
-		$expected = array(
-			'title' => array(
+		$expected = [
+			'title' => [
 				'Minimum length allowed is 6 chars',
-			)
-		);
+			]
+		];
 		$TestModel->invalidFields();
 		$this->assertEquals($expected, $TestModel->validationErrors);
 
-		$TestModel->create(array('title' => 'foo'));
-		$expected = array(
-			'title' => array(
+		$TestModel->create(['title' => 'foo']);
+		$expected = [
+			'title' => [
 				'Minimum length allowed is 6 chars',
 				'You may enter up to 14 chars (minimum is 6 chars)'
-			)
-		);
+			]
+		];
 		$TestModel->invalidFields();
 		$this->assertEquals($expected, $TestModel->validationErrors);
 	}
@@ -839,28 +839,28 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidationMessageTranslation() {
 		$lang = Configure::read('Config.language');
 		Configure::write('Config.language', 'en');
-		App::build(array(
-			'Locale' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Locale' . DS),
-		), App::RESET);
+		App::build([
+			'Locale' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Locale' . DS],
+		], App::RESET);
 
 		$TestModel = new ValidationTest1();
 		$TestModel->validationDomain = 'validation_messages';
-		$TestModel->validate = array(
-			'title' => array(
-				array(
-					'rule' => array('customValidationMethod', 'arg1'),
+		$TestModel->validate = [
+			'title' => [
+				[
+					'rule' => ['customValidationMethod', 'arg1'],
 					'required' => true,
 					'message' => 'Validation failed: %s'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$TestModel->create();
-		$expected = array(
-			'title' => array(
+		$expected = [
+			'title' => [
 				'Translated validation failed: Translated arg1',
-			)
-		);
+			]
+		];
 		$TestModel->invalidFields();
 		$this->assertEquals($expected, $TestModel->validationErrors);
 
@@ -878,45 +878,45 @@ class ModelValidationTest extends BaseModelTest {
 		$this->loadFixtures('Article');
 		$Article = new Article();
 
-		$data = array(
-			'Article' => array(
+		$data = [
+			'Article' => [
 				'title' => '',
 				'body' => 'Extra Fields Body',
 				'published' => '1'
-			)
-		);
+			]
+		];
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'on' => 'create'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertFalse($Article->validates());
 
-		$Article->save(null, array('validate' => false));
+		$Article->save(null, ['validate' => false]);
 		$data['Article']['id'] = $Article->id;
 		$Article->set($data);
 		$this->assertTrue($Article->validates());
 
 		unset($data['Article']['id']);
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'on' => 'update'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->save(null, array('validate' => false));
+		$Article->save(null, ['validate' => false]);
 		$data['Article']['id'] = $Article->id;
 		$Article->set($data);
 		$this->assertFalse($Article->validates());
@@ -932,44 +932,44 @@ class ModelValidationTest extends BaseModelTest {
 		$Article = new Article();
 
 		// no title field present
-		$data = array(
-			'Article' => array(
+		$data = [
+			'Article' => [
 				'body' => 'Extra Fields Body',
 				'published' => '1'
-			)
-		);
+			]
+		];
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'create'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertFalse($Article->validates());
 
-		$Article->save(null, array('validate' => false));
+		$Article->save(null, ['validate' => false]);
 		$data['Article']['id'] = $Article->id;
 		$Article->set($data);
 		$this->assertTrue($Article->validates());
 
 		unset($data['Article']['id']);
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'update'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->save(null, array('validate' => false));
+		$Article->save(null, ['validate' => false]);
 		$data['Article']['id'] = $Article->id;
 		$Article->set($data);
 		$this->assertFalse($Article->validates());
@@ -985,115 +985,115 @@ class ModelValidationTest extends BaseModelTest {
 		$Article = new Article();
 
 		// no title field present
-		$data = array(
-			'Article' => array(
+		$data = [
+			'Article' => [
 				'body' => 'Extra Fields Body',
 				'published' => '1'
-			)
-		);
+			]
+		];
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'create',
 					'on' => 'create'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertFalse($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'update',
 					'on' => 'create'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'create',
 					'on' => 'update'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'update',
 					'on' => 'update'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->create($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'create',
 					'on' => 'create'
-				)
-			)
-		);
+				]
+			]
+		];
 
-		$Article->save(null, array('validate' => false));
+		$Article->save(null, ['validate' => false]);
 		$data['Article']['id'] = $Article->id;
 		$Article->set($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'update',
 					'on' => 'create'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->set($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'create',
 					'on' => 'update'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->set($data);
 		$this->assertTrue($Article->validates());
 
-		$Article->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$Article->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => 'update',
 					'on' => 'update'
-				)
-			)
-		);
+				]
+			]
+		];
 
 		$Article->set($data);
 		$this->assertFalse($Article->validates());
@@ -1108,322 +1108,322 @@ class ModelValidationTest extends BaseModelTest {
 	public function testSaveAllDeepValidateOnly() {
 		$this->loadFixtures('Article', 'Comment', 'User', 'Attachment');
 		$TestModel = new Article();
-		$TestModel->hasMany['Comment']['order'] = array('Comment.created' => 'ASC');
-		$TestModel->hasAndBelongsToMany = array();
+		$TestModel->hasMany['Comment']['order'] = ['Comment.created' => 'ASC'];
+		$TestModel->hasAndBelongsToMany = [];
 		$TestModel->Comment->Attachment->validate['attachment'] = 'notBlank';
 		$TestModel->Comment->validate['comment'] = 'notBlank';
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => 'newuser', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => 'newuser', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertTrue($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->validateAssociated($data, ['deep' => true]);
 		$this->assertTrue($result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => '', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => '', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertFalse($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->validateAssociated($data, ['deep' => true]);
 		$this->assertFalse($result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => 'newuser', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$expected = array(
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => 'newuser', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$expected = [
 			'Article' => true,
-			'Comment' => array(
+			'Comment' => [
 				true,
 				true
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => '', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$expected = array(
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => '', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$expected = [
 			'Article' => true,
-			'Comment' => array(
+			'Comment' => [
 				false,
 				true
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5),
-				array('comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => array('attachment' => 'deepsaved'))
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5],
+				['comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => ['attachment' => 'deepsaved']]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertTrue($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->validateAssociated($data, ['deep' => true]);
 		$this->assertTrue($result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5),
-				array('comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => array('attachment' => ''))
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5],
+				['comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => ['attachment' => '']]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertFalse($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->validateAssociated($data, ['deep' => true]);
 		$this->assertFalse($result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5),
-				array('comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => array('attachment' => 'deepsave'))
-			)
-		);
-		$expected = array(
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5],
+				['comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => ['attachment' => 'deepsave']]
+			]
+		];
+		$expected = [
 			'Article' => true,
-			'Comment' => array(
+			'Comment' => [
 				true,
 				true
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array('comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5),
-				array('comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => array('attachment' => ''))
-			)
-		);
-		$expected = array(
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				['comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5],
+				['comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => ['attachment' => '']]
+			]
+		];
+		$expected = [
 			'Article' => true,
-			'Comment' => array(
+			'Comment' => [
 				true,
 				false
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
 
-		$expected = array(
-			'Comment' => array(
-				1 => array(
-					'Attachment' => array(
-						'attachment' => array('This field cannot be left blank')
-					)
-				)
-			)
-		);
+		$expected = [
+			'Comment' => [
+				1 => [
+					'Attachment' => [
+						'attachment' => ['This field cannot be left blank']
+					]
+				]
+			]
+		];
 		$result = $TestModel->validationErrors;
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Attachment' => array(
+		$data = [
+			'Attachment' => [
 				'attachment' => 'deepsave insert',
-			),
-			'Comment' => array(
+			],
+			'Comment' => [
 				'comment' => 'First comment deepsave insert',
 				'published' => 'Y',
 				'user_id' => 5,
-				'Article' => array(
+				'Article' => [
 					'title' => 'First Article deepsave insert',
 					'body' => 'First Article Body deepsave insert',
-					'User' => array(
+					'User' => [
 						'user' => 'deepsave',
 						'password' => 'magic'
-					),
-				),
-			)
-		);
+					],
+				],
+			]
+		];
 
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertTrue($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => true]);
 		$this->assertTrue($result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => true,
 			'Comment' => true
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Attachment' => array(
+		$data = [
+			'Attachment' => [
 				'attachment' => 'deepsave insert',
-			),
-			'Comment' => array(
+			],
+			'Comment' => [
 				'comment' => 'First comment deepsave insert',
 				'published' => 'Y',
 				'user_id' => 5,
-				'Article' => array(
+				'Article' => [
 					'title' => 'First Article deepsave insert',
 					'body' => 'First Article Body deepsave insert',
-					'User' => array(
+					'User' => [
 						'user' => '',
 						'password' => 'magic'
-					),
-				),
-			)
-		);
+					],
+				],
+			]
+		];
 
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertFalse($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => true]);
 		$this->assertFalse($result);
 
 		$result = $TestModel->Comment->Attachment->validationErrors;
-		$expected = array(
-			'Comment' => array(
-				'Article' => array(
-					'User' => array(
-						'user' => array('This field cannot be left blank')
-					)
-				)
-			)
-		);
+		$expected = [
+			'Comment' => [
+				'Article' => [
+					'User' => [
+						'user' => ['This field cannot be left blank']
+					]
+				]
+			]
+		];
 		$this->assertSame($expected, $result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => true,
 			'Comment' => false
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
 
 		$data['Comment']['Article']['body'] = '';
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertFalse($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => true]);
 		$this->assertFalse($result);
 
 		$result = $TestModel->Comment->Attachment->validationErrors;
-		$expected = array(
-			'Comment' => array(
-				'Article' => array(
-					'body' => array('This field cannot be left blank'),
-					'User' => array(
-						'user' => array('This field cannot be left blank')
-					)
-				)
-			)
-		);
+		$expected = [
+			'Comment' => [
+				'Article' => [
+					'body' => ['This field cannot be left blank'],
+					'User' => [
+						'user' => ['This field cannot be left blank']
+					]
+				]
+			]
+		];
 		$this->assertSame($expected, $result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => true,
 			'Comment' => false
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
 
 		$data['Comment']['comment'] = '';
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertFalse($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => true]);
 		$this->assertFalse($result);
 
 		$result = $TestModel->Comment->Attachment->validationErrors;
-		$expected = array(
-			'Comment' => array(
-				'comment' => array('This field cannot be left blank'),
-				'Article' => array(
-					'body' => array('This field cannot be left blank'),
-					'User' => array(
-						'user' => array('This field cannot be left blank')
-					)
-				)
-			)
-		);
+		$expected = [
+			'Comment' => [
+				'comment' => ['This field cannot be left blank'],
+				'Article' => [
+					'body' => ['This field cannot be left blank'],
+					'User' => [
+						'user' => ['This field cannot be left blank']
+					]
+				]
+			]
+		];
 		$this->assertSame($expected, $result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => true,
 			'Comment' => false
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
 
 		$data['Attachment']['attachment'] = '';
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => true));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => true]);
 		$this->assertFalse($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => true]);
 		$this->assertFalse($result);
 
 		$result = $TestModel->Comment->Attachment->validationErrors;
-		$expected = array(
-			'attachment' => array('This field cannot be left blank'),
-			'Comment' => array(
-				'comment' => array('This field cannot be left blank'),
-				'Article' => array(
-					'body' => array('This field cannot be left blank'),
-					'User' => array(
-						'user' => array('This field cannot be left blank')
-					)
-				)
-			)
-		);
+		$expected = [
+			'attachment' => ['This field cannot be left blank'],
+			'Comment' => [
+				'comment' => ['This field cannot be left blank'],
+				'Article' => [
+					'body' => ['This field cannot be left blank'],
+					'User' => [
+						'user' => ['This field cannot be left blank']
+					]
+				]
+			]
+		];
 		$this->assertSame($expected, $result);
 
 		$result = $TestModel->Comment->validationErrors;
-		$expected = array(
-			'comment' => array('This field cannot be left blank'),
-			'Article' => array(
-					'body' => array('This field cannot be left blank'),
-					'User' => array(
-						'user' => array('This field cannot be left blank')
-					)
-				)
-		);
+		$expected = [
+			'comment' => ['This field cannot be left blank'],
+			'Article' => [
+					'body' => ['This field cannot be left blank'],
+					'User' => [
+						'user' => ['This field cannot be left blank']
+					]
+				]
+		];
 		$this->assertSame($expected, $result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => false,
 			'Comment' => false
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => true));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => true));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -1436,147 +1436,147 @@ class ModelValidationTest extends BaseModelTest {
 	public function testSaveAllNotDeepValidateOnly() {
 		$this->loadFixtures('Article', 'Comment', 'User', 'Attachment');
 		$TestModel = new Article();
-		$TestModel->hasMany['Comment']['order'] = array('Comment.created' => 'ASC');
-		$TestModel->hasAndBelongsToMany = array();
+		$TestModel->hasMany['Comment']['order'] = ['Comment.created' => 'ASC'];
+		$TestModel->hasAndBelongsToMany = [];
 		$TestModel->Comment->Attachment->validate['attachment'] = 'notBlank';
 		$TestModel->Comment->validate['comment'] = 'notBlank';
 
-		$data = array(
-			'Article' => array('id' => 2, 'body' => ''),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => '', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => false));
+		$data = [
+			'Article' => ['id' => 2, 'body' => ''],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => '', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => false]);
 		$this->assertFalse($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => false));
+		$result = $TestModel->validateAssociated($data, ['deep' => false]);
 		$this->assertFalse($result);
 
-		$expected = array('body' => array('This field cannot be left blank'));
+		$expected = ['body' => ['This field cannot be left blank']];
 		$result = $TestModel->validationErrors;
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Article' => array('id' => 2, 'body' => 'Ignore invalid user data'),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => '', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => false));
+		$data = [
+			'Article' => ['id' => 2, 'body' => 'Ignore invalid user data'],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => '', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => false]);
 		$this->assertTrue($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => false));
+		$result = $TestModel->validateAssociated($data, ['deep' => false]);
 		$this->assertTrue($result);
 
-		$data = array(
-			'Article' => array('id' => 2, 'body' => 'Ignore invalid user data'),
-			'Comment' => array(
-				array('comment' => 'First new comment', 'published' => 'Y', 'User' => array('user' => '', 'password' => 'newuserpass')),
-				array('comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2)
-			)
-		);
-		$expected = array(
+		$data = [
+			'Article' => ['id' => 2, 'body' => 'Ignore invalid user data'],
+			'Comment' => [
+				['comment' => 'First new comment', 'published' => 'Y', 'User' => ['user' => '', 'password' => 'newuserpass']],
+				['comment' => 'Second new comment', 'published' => 'Y', 'user_id' => 2]
+			]
+		];
+		$expected = [
 			'Article' => true,
-			'Comment' => array(
+			'Comment' => [
 				true,
 				true
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => false));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => false]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false, 'deep' => false));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false, 'deep' => false]);
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Article' => array('id' => 2, 'body' => 'Ignore invalid attachment data'),
-			'Comment' => array(
-				array('comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5),
-				array('comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => array('attachment' => ''))
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'deep' => false));
+		$data = [
+			'Article' => ['id' => 2, 'body' => 'Ignore invalid attachment data'],
+			'Comment' => [
+				['comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5],
+				['comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => ['attachment' => '']]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'deep' => false]);
 		$this->assertTrue($result);
-		$result = $TestModel->validateAssociated($data, array('deep' => false));
+		$result = $TestModel->validateAssociated($data, ['deep' => false]);
 		$this->assertTrue($result);
 
-		$data = array(
-			'Article' => array('id' => 2, 'body' => 'Ignore invalid attachment data'),
-			'Comment' => array(
-				array('comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5),
-				array('comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => array('attachment' => ''))
-			)
-		);
-		$expected = array(
+		$data = [
+			'Article' => ['id' => 2, 'body' => 'Ignore invalid attachment data'],
+			'Comment' => [
+				['comment' => 'Third new comment', 'published' => 'Y', 'user_id' => 5],
+				['comment' => 'Fourth new comment', 'published' => 'Y', 'user_id' => 2, 'Attachment' => ['attachment' => '']]
+			]
+		];
+		$expected = [
 			'Article' => true,
-			'Comment' => array(
+			'Comment' => [
 				true,
 				true
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => false));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => false]);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false, 'deep' => false));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false, 'deep' => false]);
 		$this->assertSame($expected, $result);
 
-		$expected = array();
+		$expected = [];
 		$result = $TestModel->validationErrors;
 		$this->assertSame($expected, $result);
 
-		$data = array(
-			'Attachment' => array(
+		$data = [
+			'Attachment' => [
 				'attachment' => 'deepsave insert',
-			),
-			'Comment' => array(
+			],
+			'Comment' => [
 				'comment' => 'First comment deepsave insert',
 				'published' => 'Y',
 				'user_id' => 5,
-				'Article' => array(
+				'Article' => [
 					'title' => 'First Article deepsave insert ignored',
 					'body' => 'First Article Body deepsave insert',
-					'User' => array(
+					'User' => [
 						'user' => '',
 						'password' => 'magic'
-					),
-				),
-			)
-		);
+					],
+				],
+			]
+		];
 
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => false));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => false]);
 		$this->assertTrue($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => false));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => false]);
 		$this->assertTrue($result);
 
 		$result = $TestModel->Comment->Attachment->validationErrors;
-		$expected = array();
+		$expected = [];
 		$this->assertSame($expected, $result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => true,
 			'Comment' => true
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => false));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => false]);
 		$this->assertEquals($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => false));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => false]);
 		$this->assertEquals($expected, $result);
 
 		$data['Comment']['Article']['body'] = '';
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'deep' => false));
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'deep' => false]);
 		$this->assertTrue($result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('deep' => false));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['deep' => false]);
 		$this->assertTrue($result);
 
 		$result = $TestModel->Comment->Attachment->validationErrors;
-		$expected = array();
+		$expected = [];
 		$this->assertSame($expected, $result);
 
-		$expected = array(
+		$expected = [
 			'Attachment' => true,
 			'Comment' => true
-		);
-		$result = $TestModel->Comment->Attachment->saveAll($data, array('validate' => 'only', 'atomic' => false, 'deep' => false));
+		];
+		$result = $TestModel->Comment->Attachment->saveAll($data, ['validate' => 'only', 'atomic' => false, 'deep' => false]);
 		$this->assertEquals($expected, $result);
-		$result = $TestModel->Comment->Attachment->validateAssociated($data, array('atomic' => false, 'deep' => false));
+		$result = $TestModel->Comment->Attachment->validateAssociated($data, ['atomic' => false, 'deep' => false]);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -1588,124 +1588,124 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidateAssociated() {
 		$this->loadFixtures('Comment', 'Attachment', 'Article', 'User');
 		$TestModel = new Comment();
-		$TestModel->Attachment->validate = array('attachment' => 'notBlank');
+		$TestModel->Attachment->validate = ['attachment' => 'notBlank'];
 
-		$data = array(
-			'Comment' => array(
+		$data = [
+			'Comment' => [
 				'comment' => 'This is the comment'
-			),
-			'Attachment' => array(
+			],
+			'Attachment' => [
 				'attachment' => ''
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only'));
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$result = $TestModel->validateAssociated($data);
 		$this->assertFalse($result);
 
-		$fieldList = array(
-			'Attachment' => array('comment_id')
-		);
-		$result = $TestModel->saveAll($data, array(
+		$fieldList = [
+			'Attachment' => ['comment_id']
+		];
+		$result = $TestModel->saveAll($data, [
 			'fieldList' => $fieldList, 'validate' => 'only'
-		));
+		]);
 		$this->assertTrue($result);
 		$this->assertEmpty($TestModel->validationErrors);
-		$result = $TestModel->validateAssociated($data, array('fieldList' => $fieldList));
+		$result = $TestModel->validateAssociated($data, ['fieldList' => $fieldList]);
 		$this->assertTrue($result);
 		$this->assertEmpty($TestModel->validationErrors);
 
-		$TestModel->validate = array('comment' => 'notBlank');
-		$record = array(
-			'Comment' => array(
+		$TestModel->validate = ['comment' => 'notBlank'];
+		$record = [
+			'Comment' => [
 				'user_id' => 1,
 				'article_id' => 1,
 				'comment' => '',
-			),
-			'Attachment' => array(
+			],
+			'Attachment' => [
 				'attachment' => ''
-			)
-		);
-		$result = $TestModel->saveAll($record, array('validate' => 'only'));
+			]
+		];
+		$result = $TestModel->saveAll($record, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$result = $TestModel->validateAssociated($record);
 		$this->assertFalse($result);
 
-		$fieldList = array(
-			'Comment' => array('id', 'article_id', 'user_id'),
-			'Attachment' => array('comment_id')
-		);
-		$result = $TestModel->saveAll($record, array(
+		$fieldList = [
+			'Comment' => ['id', 'article_id', 'user_id'],
+			'Attachment' => ['comment_id']
+		];
+		$result = $TestModel->saveAll($record, [
 			'fieldList' => $fieldList, 'validate' => 'only'
-		));
+		]);
 		$this->assertTrue($result);
 		$this->assertEmpty($TestModel->validationErrors);
-		$result = $TestModel->validateAssociated($record, array('fieldList' => $fieldList));
+		$result = $TestModel->validateAssociated($record, ['fieldList' => $fieldList]);
 		$this->assertTrue($result);
 		$this->assertEmpty($TestModel->validationErrors);
 
 		$TestModel = new Article();
-		$TestModel->belongsTo = $TestModel->hasAndBelongsToMany = array();
-		$TestModel->Comment->validate = array('comment' => 'notBlank');
-		$data = array(
-			'Article' => array('id' => 2),
-			'Comment' => array(
-				array(
+		$TestModel->belongsTo = $TestModel->hasAndBelongsToMany = [];
+		$TestModel->Comment->validate = ['comment' => 'notBlank'];
+		$data = [
+			'Article' => ['id' => 2],
+			'Comment' => [
+				[
 					'id' => 1,
 					'comment' => '',
 					'published' => 'Y',
 					'user_id' => 1,
-				),
-				array(
+				],
+				[
 					'id' => 2,
 					'comment' =>
 					'comment',
 					'published' => 'Y',
 					'user_id' => 1
-				),
-				array(
+				],
+				[
 					'id' => 3,
 					'comment' => '',
 					'published' => 'Y',
 					'user_id' => 1
-		)));
-		$result = $TestModel->saveAll($data, array('validate' => 'only'));
+		]]];
+		$result = $TestModel->saveAll($data, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$result = $TestModel->validateAssociated($data);
 		$this->assertFalse($result);
 
-		$expected = array(
+		$expected = [
 			'Article' => true,
-			'Comment' => array(false, true, false)
-		);
-		$result = $TestModel->saveAll($data, array('atomic' => false, 'validate' => 'only'));
+			'Comment' => [false, true, false]
+		];
+		$result = $TestModel->saveAll($data, ['atomic' => false, 'validate' => 'only']);
 		$this->assertSame($expected, $result);
-		$result = $TestModel->validateAssociated($data, array('atomic' => false));
+		$result = $TestModel->validateAssociated($data, ['atomic' => false]);
 		$this->assertSame($expected, $result);
 
-		$expected = array('Comment' => array(
-			0 => array('comment' => array('This field cannot be left blank')),
-			2 => array('comment' => array('This field cannot be left blank'))
-		));
+		$expected = ['Comment' => [
+			0 => ['comment' => ['This field cannot be left blank']],
+			2 => ['comment' => ['This field cannot be left blank']]
+		]];
 		$this->assertEquals($expected['Comment'], $TestModel->Comment->validationErrors);
 
 		$model = new Comment();
 		$model->deleteAll(true);
-		$model->validate = array('comment' => 'notBlank');
-		$model->Attachment->validate = array('attachment' => 'notBlank');
-		$model->Attachment->bindModel(array('belongsTo' => array('Comment')));
-		$expected = array(
-			'comment' => array('This field cannot be left blank'),
-			'Attachment' => array(
-				'attachment' => array('This field cannot be left blank')
-			)
-		);
+		$model->validate = ['comment' => 'notBlank'];
+		$model->Attachment->validate = ['attachment' => 'notBlank'];
+		$model->Attachment->bindModel(['belongsTo' => ['Comment']]);
+		$expected = [
+			'comment' => ['This field cannot be left blank'],
+			'Attachment' => [
+				'attachment' => ['This field cannot be left blank']
+			]
+		];
 
-		$data = array(
-			'Comment' => array('comment' => '', 'article_id' => 1, 'user_id' => 1),
-			'Attachment' => array('attachment' => '')
-		);
-		$result = $model->saveAll($data, array('validate' => 'only'));
+		$data = [
+			'Comment' => ['comment' => '', 'article_id' => 1, 'user_id' => 1],
+			'Attachment' => ['attachment' => '']
+		];
+		$result = $model->saveAll($data, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$result = $model->validateAssociated($data);
 		$this->assertFalse($result);
@@ -1720,32 +1720,32 @@ class ModelValidationTest extends BaseModelTest {
  */
 	public function testValidateMany() {
 		$TestModel = new Article();
-		$TestModel->validate = array('title' => 'notBlank');
-		$data = array(
-			0 => array('title' => ''),
-			1 => array('title' => 'title 1'),
-			2 => array('title' => 'title 2'),
-		);
-		$expected = array(
-			0 => array('title' => array('This field cannot be left blank')),
-		);
+		$TestModel->validate = ['title' => 'notBlank'];
+		$data = [
+			0 => ['title' => ''],
+			1 => ['title' => 'title 1'],
+			2 => ['title' => 'title 2'],
+		];
+		$expected = [
+			0 => ['title' => ['This field cannot be left blank']],
+		];
 
-		$result = $TestModel->saveAll($data, array('validate' => 'only'));
+		$result = $TestModel->saveAll($data, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$this->assertEquals($expected, $TestModel->validationErrors);
 		$result = $TestModel->validateMany($data);
 		$this->assertFalse($result);
 		$this->assertEquals($expected, $TestModel->validationErrors);
 
-		$data = array(
-			0 => array('title' => 'title 0'),
-			1 => array('title' => ''),
-			2 => array('title' => 'title 2'),
-		);
-		$expected = array(
-			1 => array('title' => array('This field cannot be left blank')),
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'only'));
+		$data = [
+			0 => ['title' => 'title 0'],
+			1 => ['title' => ''],
+			2 => ['title' => 'title 2'],
+		];
+		$expected = [
+			1 => ['title' => ['This field cannot be left blank']],
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'only']);
 		$this->assertFalse($result);
 		$this->assertEquals($expected, $TestModel->validationErrors);
 		$result = $TestModel->validateMany($data);
@@ -1785,13 +1785,13 @@ class ModelValidationTest extends BaseModelTest {
 		$this->assertEquals($expected, array_keys($result));
 
 		$TestModel->Behaviors->load('Containable');
-		$newList = array(
+		$newList = [
 			'contain',
 			'resetbindings',
 			'containments',
 			'fielddependencies',
 			'containmentsmap'
-		);
+		];
 		$this->assertEquals(array_merge($expected, $newList), array_keys($Validator->getMethods()));
 
 		$TestModel->Behaviors->unload('Containable');
@@ -1880,10 +1880,10 @@ class ModelValidationTest extends BaseModelTest {
 		$TestModel = new Article();
 		$Validator = $TestModel->validator();
 
-		$set = array(
-			'numeric' => array('rule' => 'numeric', 'allowEmpty' => false),
-			'between' => array('rule' => array('lengthBetween', 1, 5), 'allowEmpty' => false),
-		);
+		$set = [
+			'numeric' => ['rule' => 'numeric', 'allowEmpty' => false],
+			'between' => ['rule' => ['lengthBetween', 1, 5], 'allowEmpty' => false],
+		];
 		$Validator['other'] = $set;
 		$rules = $Validator['other'];
 		$this->assertEquals('other', $rules->field);
@@ -1891,16 +1891,16 @@ class ModelValidationTest extends BaseModelTest {
 		$validators = $rules->getRules();
 		$this->assertCount(2, $validators);
 		$this->assertEquals('numeric', $validators['numeric']->rule);
-		$this->assertEquals(array('lengthBetween', 1, 5), $validators['between']->rule);
+		$this->assertEquals(['lengthBetween', 1, 5], $validators['between']->rule);
 
-		$Validator['new'] = new CakeValidationSet('new', $set, array());
+		$Validator['new'] = new CakeValidationSet('new', $set, []);
 		$rules = $Validator['new'];
 		$this->assertEquals('new', $rules->field);
 
 		$validators = $rules->getRules();
 		$this->assertCount(2, $validators);
 		$this->assertEquals('numeric', $validators['numeric']->rule);
-		$this->assertEquals(array('lengthBetween', 1, 5), $validators['between']->rule);
+		$this->assertEquals(['lengthBetween', 1, 5], $validators['between']->rule);
 	}
 
 /**
@@ -1953,10 +1953,10 @@ class ModelValidationTest extends BaseModelTest {
 		$Validator = $TestModel->validator();
 		$this->assertCount(3, $Validator);
 
-		$set = array(
-			'numeric' => array('rule' => 'numeric', 'allowEmpty' => false),
-			'range' => array('rule' => array('lengthBetween', 1, 5), 'allowEmpty' => false),
-		);
+		$set = [
+			'numeric' => ['rule' => 'numeric', 'allowEmpty' => false],
+			'range' => ['rule' => ['lengthBetween', 1, 5], 'allowEmpty' => false],
+		];
 		$Validator['other'] = $set;
 		$this->assertCount(4, $Validator);
 
@@ -1975,15 +1975,15 @@ class ModelValidationTest extends BaseModelTest {
 		$TestModel = new Article();
 		$Validator = $TestModel->validator();
 
-		$Validator->add('other', 'numeric', array('rule' => 'numeric', 'allowEmpty' => false));
-		$Validator->add('other', 'between', array('rule' => array('lengthBetween', 1, 5), 'allowEmpty' => false));
+		$Validator->add('other', 'numeric', ['rule' => 'numeric', 'allowEmpty' => false]);
+		$Validator->add('other', 'between', ['rule' => ['lengthBetween', 1, 5], 'allowEmpty' => false]);
 		$rules = $Validator['other'];
 		$this->assertEquals('other', $rules->field);
 
 		$validators = $rules->getRules();
 		$this->assertCount(2, $validators);
 		$this->assertEquals('numeric', $validators['numeric']->rule);
-		$this->assertEquals(array('lengthBetween', 1, 5), $validators['between']->rule);
+		$this->assertEquals(['lengthBetween', 1, 5], $validators['between']->rule);
 	}
 
 /**
@@ -1999,8 +1999,8 @@ class ModelValidationTest extends BaseModelTest {
 		$Validator->remove('title');
 		$this->assertFalse(isset($Validator['title']));
 
-		$Validator->add('other', 'numeric', array('rule' => 'numeric', 'allowEmpty' => false));
-		$Validator->add('other', 'between', array('rule' => array('lengthBetween', 1, 5), 'allowEmpty' => false));
+		$Validator->add('other', 'numeric', ['rule' => 'numeric', 'allowEmpty' => false]);
+		$Validator->add('other', 'between', ['rule' => ['lengthBetween', 1, 5], 'allowEmpty' => false]);
 		$this->assertTrue(isset($Validator['other']));
 
 		$Validator->remove('other', 'numeric');
@@ -2015,11 +2015,11 @@ class ModelValidationTest extends BaseModelTest {
  * @return void
  */
 	public function testValidateCallbacks() {
-		$TestModel = $this->getMock('Article', array('beforeValidate', 'afterValidate'));
+		$TestModel = $this->getMock('Article', ['beforeValidate', 'afterValidate']);
 		$TestModel->expects($this->once())->method('beforeValidate');
 		$TestModel->expects($this->once())->method('afterValidate');
 
-		$TestModel->set(array('title' => '', 'body' => 'body'));
+		$TestModel->set(['title' => '', 'body' => 'body']);
 		$TestModel->validates();
 	}
 
@@ -2032,49 +2032,49 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidateFirstWithBeforeValidate() {
 		$this->loadFixtures('Article', 'User');
 		$model = new CustomArticle();
-		$model->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$model->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => true,
 					'allowEmpty' => false
-				)
-			)
-		);
-		$data = array(
-			'CustomArticle' => array(
+				]
+			]
+		];
+		$data = [
+			'CustomArticle' => [
 				'body' => 'foo0'
-			)
-		);
-		$result = $model->saveAll($data, array('validate' => 'first'));
+			]
+		];
+		$result = $model->saveAll($data, ['validate' => 'first']);
 		$this->assertTrue($result);
 
 		$this->assertFalse($model->findMethods['unPublished'], 'beforeValidate was run twice');
 
 		$model->findMethods['unPublished'] = true;
-		$data = array(
-			'CustomArticle' => array(
+		$data = [
+			'CustomArticle' => [
 				'body' => 'foo1'
-			)
-		);
-		$result = $model->saveAll($data, array('validate' => 'first', 'deep' => true));
+			]
+		];
+		$result = $model->saveAll($data, ['validate' => 'first', 'deep' => true]);
 		$this->assertTrue($result);
-		$title = $model->field('title', array('body' => 'foo1'));
+		$title = $model->field('title', ['body' => 'foo1']);
 		$this->assertEquals('foo', $title);
 		$this->assertFalse($model->findMethods['unPublished'], 'beforeValidate was run twice');
 
-		$data = array(
-			array('body' => 'foo2'),
-			array('body' => 'foo3'),
-			array('body' => 'foo4')
-		);
+		$data = [
+			['body' => 'foo2'],
+			['body' => 'foo3'],
+			['body' => 'foo4']
+		];
 
-		$result = $model->saveAll($data, array('validate' => 'first', 'deep' => true));
+		$result = $model->saveAll($data, ['validate' => 'first', 'deep' => true]);
 		$this->assertTrue($result);
 
-		$this->assertEquals('foo', $model->field('title', array('body' => 'foo2')));
-		$this->assertEquals('foo', $model->field('title', array('body' => 'foo3')));
-		$this->assertEquals('foo', $model->field('title', array('body' => 'foo4')));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'foo2']));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'foo3']));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'foo4']));
 	}
 
 /**
@@ -2086,31 +2086,31 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidateFirstAssociatedWithBeforeValidate() {
 		$this->loadFixtures('Article', 'User');
 		$model = new CustomArticle();
-		$model->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$model->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => true
-				)
-			)
-		);
-		$articles = array(
-			array('body' => 'foo1'),
-			array('body' => 'foo2'),
-			array('body' => 'foo3')
-		);
+				]
+			]
+		];
+		$articles = [
+			['body' => 'foo1'],
+			['body' => 'foo2'],
+			['body' => 'foo3']
+		];
 		$user = new User();
-		$user->bindModel(array('hasMany' => array('CustomArticle')));
-		$data = array(
-			'User' => array('user' => 'foo', 'password' => 'bar'),
+		$user->bindModel(['hasMany' => ['CustomArticle']]);
+		$data = [
+			'User' => ['user' => 'foo', 'password' => 'bar'],
 			'CustomArticle' => $articles
-		);
-		$result = $user->saveAll($data, array('validate' => 'first'));
+		];
+		$result = $user->saveAll($data, ['validate' => 'first']);
 		$this->assertTrue($result);
 
-		$this->assertEquals('foo', $model->field('title', array('body' => 'foo1')));
-		$this->assertEquals('foo', $model->field('title', array('body' => 'foo2')));
-		$this->assertEquals('foo', $model->field('title', array('body' => 'foo3')));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'foo1']));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'foo2']));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'foo3']));
 	}
 
 /**
@@ -2122,37 +2122,37 @@ class ModelValidationTest extends BaseModelTest {
 		$this->loadFixtures('Article', 'Tag', 'Comment', 'User', 'ArticlesTag');
 		$TestModel = new Article();
 
-		$result = $TestModel->find('first', array(
-			'conditions' => array('Article.id' => 1)
-		));
-		$expected = array(
-			'Article' => array(
+		$result = $TestModel->find('first', [
+			'conditions' => ['Article.id' => 1]
+		]);
+		$expected = [
+			'Article' => [
 				'id' => 1,
 				'user_id' => 1,
 				'title' => 'First Article',
 				'body' => 'First Article Body',
 				'published' => 'Y',
 				'created' => '2007-03-18 10:39:23'
-			),
-		);
+			],
+		];
 		unset($result['Article']['updated']);
 		$this->assertEquals($expected['Article'], $result['Article']);
 
-		$data = array(
-			'Article' => array(
+		$data = [
+			'Article' => [
 				'id' => 1,
 				'title' => 'First Article (modified)'
-			),
-			'Comment' => array(
-				array('comment' => 'Article comment', 'user_id' => 1)
-			)
-		);
-		$result = $TestModel->saveAll($data, array('validate' => 'first'));
+			],
+			'Comment' => [
+				['comment' => 'Article comment', 'user_id' => 1]
+			]
+		];
+		$result = $TestModel->saveAll($data, ['validate' => 'first']);
 		$this->assertTrue($result);
 
-		$result = $TestModel->find('first', array(
-			'conditions' => array('Article.id' => 1)
-		));
+		$result = $TestModel->find('first', [
+			'conditions' => ['Article.id' => 1]
+		]);
 		$expected['Article']['title'] = 'First Article (modified)';
 		unset($result['Article']['updated']);
 		$this->assertEquals($expected['Article'], $result['Article']);
@@ -2162,10 +2162,10 @@ class ModelValidationTest extends BaseModelTest {
 		$TestModel = new Article();
 		$Validator = $TestModel->validator();
 
-		$set = array(
-			'numeric' => array('rule' => 'numeric', 'allowEmpty' => false),
-			'between' => array('rule' => array('lengthBetween', 1, 5), 'allowEmpty' => false),
-		);
+		$set = [
+			'numeric' => ['rule' => 'numeric', 'allowEmpty' => false],
+			'between' => ['rule' => ['lengthBetween', 1, 5], 'allowEmpty' => false],
+		];
 
 		$Validator->add('other', $set);
 		$rules = $Validator['other'];
@@ -2174,12 +2174,12 @@ class ModelValidationTest extends BaseModelTest {
 		$validators = $rules->getRules();
 		$this->assertCount(2, $validators);
 		$this->assertEquals('numeric', $validators['numeric']->rule);
-		$this->assertEquals(array('lengthBetween', 1, 5), $validators['between']->rule);
+		$this->assertEquals(['lengthBetween', 1, 5], $validators['between']->rule);
 
-		$set = new CakeValidationSet('other', array(
-			'a' => array('rule' => 'numeric', 'allowEmpty' => false),
-			'b' => array('rule' => array('lengthBetween', 1, 5), 'allowEmpty' => false),
-		));
+		$set = new CakeValidationSet('other', [
+			'a' => ['rule' => 'numeric', 'allowEmpty' => false],
+			'b' => ['rule' => ['lengthBetween', 1, 5], 'allowEmpty' => false],
+		]);
 
 		$Validator->add('other', $set);
 		$this->assertSame($set, $Validator->getField('other'));
@@ -2195,7 +2195,7 @@ class ModelValidationTest extends BaseModelTest {
 		$Validator = $TestModel->validator();
 
 		$result = $Validator->getField();
-		$expected = array('user_id', 'title', 'body');
+		$expected = ['user_id', 'title', 'body'];
 		$this->assertEquals($expected, array_keys($result));
 		$this->assertTrue($result['user_id'] instanceof CakeValidationSet);
 
@@ -2244,25 +2244,25 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidateFirstAssociatedWithBeforeValidate2() {
 		$this->loadFixtures('Article', 'User');
 		$model = new CustomArticle();
-		$model->validate = array(
-			'title' => array(
-				'notBlank' => array(
+		$model->validate = [
+			'title' => [
+				'notBlank' => [
 					'rule' => 'notBlank',
 					'required' => true
-				)
-			)
-		);
+				]
+			]
+		];
 
-		$data = array(
-			'User' => array('user' => 'foo', 'password' => 'bar'),
-			'CustomArticle' => array(
+		$data = [
+			'User' => ['user' => 'foo', 'password' => 'bar'],
+			'CustomArticle' => [
 				'body' => 'a test'
-			)
-		);
-		$result = $model->saveAll($data, array('validate' => 'first'));
+			]
+		];
+		$result = $model->saveAll($data, ['validate' => 'first']);
 		$this->assertTrue($result);
 
-		$this->assertEquals('foo', $model->field('title', array('body' => 'a test')));
+		$this->assertEquals('foo', $model->field('title', ['body' => 'a test']));
 	}
 
 /**
@@ -2274,11 +2274,11 @@ class ModelValidationTest extends BaseModelTest {
 	public function testDynamicValidationRuleBuilding() {
 		$model = new Article;
 		$validator = $model->validator();
-		$validator->add('body', 'isSpecial', array('rule' => 'special'));
+		$validator->add('body', 'isSpecial', ['rule' => 'special']);
 		$rules = $validator['body']->getRules();
 		$this->assertCount(2, $rules);
 		$this->assertEquals('special', $rules['isSpecial']->rule);
-		$validator['body']->setRule('isAwesome', array('rule' => 'awesome'));
+		$validator['body']->setRule('isAwesome', ['rule' => 'awesome']);
 		$rules = $validator['body']->getRules();
 		$this->assertCount(3, $rules);
 		$this->assertEquals('awesome', $rules['isAwesome']->rule);
@@ -2293,38 +2293,38 @@ class ModelValidationTest extends BaseModelTest {
 		$TestModel = new TestValidate();
 		$Validator = $TestModel->validator();
 
-		$Validator->add('title', 'validateTitle', array(
+		$Validator->add('title', 'validateTitle', [
 			'rule' => 'validateTitle',
 			'message' => 'That aint right',
-		));
-		$data = array('title' => 'notatitle');
+		]);
+		$data = ['title' => 'notatitle'];
 		$result = $Validator->getField('title')->validate($data);
-		$expected = array(0 => 'That aint right');
+		$expected = [0 => 'That aint right'];
 		$this->assertEquals($expected, $result);
 
-		$data = array('title' => 'title-is-good');
+		$data = ['title' => 'title-is-good'];
 		$result = $Validator->getField('title')->validate($data);
-		$expected = array();
+		$expected = [];
 		$this->assertEquals($expected, $result);
 	}
 
 	public function testCustomMethodWithEmptyValue() {
 		$this->loadFixtures('Article');
 
-		$model = $this->getMock('Article', array('isLegit'));
-		$model->validate = array(
-			'title' => array(
-				'custom' => array(
-					'rule' => array('isLegit'),
+		$model = $this->getMock('Article', ['isLegit']);
+		$model->validate = [
+			'title' => [
+				'custom' => [
+					'rule' => ['isLegit'],
 					'message' => 'is no good'
-				)
-			)
-		);
+				]
+			]
+		];
 		$model->expects($this->once())
 			->method('isLegit')
 			->will($this->returnValue(false));
 
-		$model->set(array('title' => ''));
+		$model->set(['title' => '']);
 		$this->assertFalse($model->validates());
 	}
 
@@ -2336,54 +2336,54 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidateAssociatedAtomicFalseDeepTrueWithErrors() {
 		$this->loadFixtures('Comment', 'Article', 'User', 'Attachment');
 		$Attachment = ClassRegistry::init('Attachment');
-		$Attachment->Comment->validator()->add('comment', array(
-			array('rule' => 'notBlank')
-		));
-		$Attachment->Comment->User->bindModel(array(
-			'hasMany' => array(
+		$Attachment->Comment->validator()->add('comment', [
+			['rule' => 'notBlank']
+		]);
+		$Attachment->Comment->User->bindModel([
+			'hasMany' => [
 				'Article',
 				'Comment'
-			)),
+			]],
 			false
 		);
 
-		$data = array(
-			'Attachment' => array(
+		$data = [
+			'Attachment' => [
 				'attachment' => 'text',
-				'Comment' => array(
+				'Comment' => [
 					'comment' => '',
 					'published' => 'N',
-					'User' => array(
+					'User' => [
 						'user' => 'Foo',
 						'password' => 'mypassword',
-						'Comment' => array(
-							array(
+						'Comment' => [
+							[
 								'comment' => ''
-							)
-						)
-					)
-				)
-			)
-		);
-		$result = $Attachment->validateAssociated($data, array('atomic' => false, 'deep' => true));
+							]
+						]
+					]
+				]
+			]
+		];
+		$result = $Attachment->validateAssociated($data, ['atomic' => false, 'deep' => true]);
 
 		$result = $Attachment->validationErrors;
-		$expected = array(
-			'Comment' => array(
-				'comment' => array(
+		$expected = [
+			'Comment' => [
+				'comment' => [
 					0 => 'This field cannot be left blank',
-				),
-				'User' => array(
-					'Comment' => array(
-						0 => array(
-							'comment' => array(
+				],
+				'User' => [
+					'Comment' => [
+						0 => [
+							'comment' => [
 								0 => 'This field cannot be left blank',
-							),
-						),
-					),
-				),
-			),
-		);
+							],
+						],
+					],
+				],
+			],
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -2395,56 +2395,56 @@ class ModelValidationTest extends BaseModelTest {
 	public function testValidateManyAtomicFalseDeepTrueWithErrors() {
 		$this->loadFixtures('Comment', 'Article', 'User');
 		$Article = ClassRegistry::init('Article');
-		$Article->Comment->validator()->add('comment', array(
-			array('rule' => 'notBlank')
-		));
+		$Article->Comment->validator()->add('comment', [
+			['rule' => 'notBlank']
+		]);
 
-		$data = array(
-			array(
-				'Article' => array(
+		$data = [
+			[
+				'Article' => [
 					'user_id' => 1,
 					'title' => 'Foo',
 					'body' => 'text',
 					'published' => 'N'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'user_id' => 1,
 						'comment' => 'Baz',
 						'published' => 'N',
-					)
-				),
-			),
-			array(
-				'Article' => array(
+					]
+				],
+			],
+			[
+				'Article' => [
 					'user_id' => 1,
 					'title' => 'Bar',
 					'body' => 'text',
 					'published' => 'N'
-				),
-				'Comment' => array(
-					array(
+				],
+				'Comment' => [
+					[
 						'user_id' => 1,
 						'comment' => '',
 						'published' => 'N',
-					)
-				),
-			),
-		);
-		$Article->validateMany($data, array('atomic' => false, 'deep' => true));
+					]
+				],
+			],
+		];
+		$Article->validateMany($data, ['atomic' => false, 'deep' => true]);
 
 		$result = $Article->validationErrors;
-		$expected = array(
-			1 => array(
-				'Comment' => array(
-					0 => array(
-						'comment' => array(
+		$expected = [
+			1 => [
+				'Comment' => [
+					0 => [
+						'comment' => [
 							0 => 'This field cannot be left blank',
-						),
-					),
-				),
-			),
-		);
+						],
+					],
+				],
+			],
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -2456,38 +2456,38 @@ class ModelValidationTest extends BaseModelTest {
 	public function testIsUniqueValidator() {
 		$this->loadFixtures('Article');
 		$Article = ClassRegistry::init('Article');
-		$Article->validate = array(
-			'user_id' => array(
-				'duplicate' => array(
-					'rule' => array('isUnique', array('user_id', 'title'), false)
-				)
-			)
-		);
-		$data = array(
+		$Article->validate = [
+			'user_id' => [
+				'duplicate' => [
+					'rule' => ['isUnique', ['user_id', 'title'], false]
+				]
+			]
+		];
+		$data = [
 			'user_id' => 1,
 			'title' => 'First Article',
-		);
+		];
 		$Article->create($data);
 		$this->assertFalse($Article->validates(), 'Contains a dupe');
 
-		$data = array(
+		$data = [
 			'user_id' => 1,
 			'title' => 'Unique Article',
-		);
+		];
 		$Article->create($data);
 		$this->assertTrue($Article->validates(), 'Should pass');
 
-		$Article->validate = array(
-			'user_id' => array(
-				'duplicate' => array(
-					'rule' => array('isUnique', array('user_id', 'title'))
-				)
-			)
-		);
-		$data = array(
+		$Article->validate = [
+			'user_id' => [
+				'duplicate' => [
+					'rule' => ['isUnique', ['user_id', 'title']]
+				]
+			]
+		];
+		$data = [
 			'user_id' => 1,
 			'title' => 'Unique Article',
-		);
+		];
 		$Article->create($data);
 		$this->assertFalse($Article->validates(), 'Should fail, conditions are combined with or');
 	}
@@ -2500,21 +2500,21 @@ class ModelValidationTest extends BaseModelTest {
 	public function testBackwardCompatIsUniqueValidator() {
 		$this->loadFixtures('Article');
 		$Article = ClassRegistry::init('Article');
-		$Article->validate = array(
-			'title' => array(
-				'duplicate' => array(
+		$Article->validate = [
+			'title' => [
+				'duplicate' => [
 					'rule' => 'isUnique',
 					'message' => 'Title must be unique',
-				),
-				'minLength' => array(
-					'rule' => array('minLength', 1),
+				],
+				'minLength' => [
+					'rule' => ['minLength', 1],
 					'message' => 'Title cannot be empty',
-				),
-			)
-		);
-		$data = array(
+				],
+			]
+		];
+		$data = [
 			'title' => 'First Article',
-		);
+		];
 		$data = $Article->create($data);
 		$this->assertFalse($Article->validates(), 'Contains a dupe');
 	}
@@ -2526,11 +2526,11 @@ class ModelValidationTest extends BaseModelTest {
  */
 class ValidationRuleBehavior extends ModelBehavior {
 
-	public function setup(Model $Model, $config = array()) {
+	public function setup(Model $Model, $config = []) {
 		$this->settings[$Model->alias] = $config;
 	}
 
-	public function beforeValidate(Model $Model, $options = array()) {
+	public function beforeValidate(Model $Model, $options = []) {
 		$fields = $this->settings[$Model->alias]['fields'];
 		foreach ($fields as $field) {
 			$Model->whitelist[] = $field;

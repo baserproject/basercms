@@ -17,8 +17,8 @@ class MailConfigFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'site_name' => 'baserCMS - Based Website Development Project -',
 			'site_url' => 'http://basercms.net/',
@@ -27,7 +27,7 @@ class MailConfigFixture extends BaserTestFixture {
 			'site_fax' => '',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

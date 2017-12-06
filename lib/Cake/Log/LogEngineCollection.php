@@ -33,7 +33,7 @@ class LogEngineCollection extends ObjectCollection {
  * @return BaseLog BaseLog engine instance
  * @throws CakeLogException when logger class does not implement a write method
  */
-	public function load($name, $options = array()) {
+	public function load($name, $options = []) {
 		$enable = isset($options['enabled']) ? $options['enabled'] : true;
 		$loggerName = $options['engine'];
 		unset($options['engine']);

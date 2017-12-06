@@ -29,21 +29,21 @@ class MailMessagesController extends MailAppController {
  *
  * @var array
  */
-	public $uses = array('Mail.MailContent', 'Mail.MailField', 'Mail.MailMessage');
+	public $uses = ['Mail.MailContent', 'Mail.MailField', 'Mail.MailMessage'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('Mail.Maildata', 'Mail.Mailfield', 'BcText', 'BcArray');
+	public $helpers = ['Mail.Maildata', 'Mail.Mailfield', 'BcText', 'BcArray'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
 
 /**
  * メールコンテンツデータ
@@ -57,7 +57,7 @@ class MailMessagesController extends MailAppController {
  *
  * @var array
  */
-	public $subMenuElements = array('mail_fields');
+	public $subMenuElements = ['mail_fields'];
 
 /**
  * beforeFilter
@@ -73,7 +73,7 @@ class MailMessagesController extends MailAppController {
 		$this->MailMessage->setup($this->mailContent['MailContent']['id']);
 		$mailContentId = $this->params['pass'][0];
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
-		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '管理', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]));
+		$this->crumbs[] = ['name' => $this->request->params['Content']['title'] . '管理', 'url' => ['plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $this->params['pass'][0]]];
 	}
 
 /**
@@ -93,18 +93,18 @@ class MailMessagesController extends MailAppController {
  * @return void
  */
 	public function admin_index($mailContentId) {
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('MailMessage', array('default' => $default));
-		$this->paginate = array(
-			'fields' => array(),
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('MailMessage', ['default' => $default]);
+		$this->paginate = [
+			'fields' => [],
 			'order' => 'MailMessage.created DESC',
 			'limit' => $this->passedArgs['num']
-		);
+		];
 		$messages = $this->paginate('MailMessage');
-		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
+		$mailFields = $this->MailField->find('all', [
+			'conditions' => ['MailField.mail_content_id' => $mailContentId],
 			'order' => 'MailField.sort'
-		));
+		]);
 		$this->set(compact('mailFields'));
 		$this->set(compact('messages'));
 
@@ -129,15 +129,15 @@ class MailMessagesController extends MailAppController {
 			$this->setMessage('無効な処理です。', true);
 			$this->notFound();
 		}
-		$message = $this->MailMessage->find('first', array(
-			'conditions' => array('MailMessage.id' => $messageId),
+		$message = $this->MailMessage->find('first', [
+			'conditions' => ['MailMessage.id' => $messageId],
 			'order' => 'created DESC'
-		));
-		$mailFields = $this->MailField->find('all', array(
-			'conditions' => array('MailField.mail_content_id' => $mailContentId),
+		]);
+		$mailFields = $this->MailField->find('all', [
+			'conditions' => ['MailField.mail_content_id' => $mailContentId],
 			'order' => 'MailField.sort'
-		));
-		$this->crumbs[] = array('name' => '受信メール一覧', 'url' => array('controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]));
+		]);
+		$this->crumbs[] = ['name' => '受信メール一覧', 'url' => ['controller' => 'mail_messages', 'action' => 'index', $this->params['pass'][0]]];
 		$this->set(compact('mailFields'));
 		$this->set(compact('message'));
 		$this->pageTitle = '受信メール詳細';
@@ -213,7 +213,7 @@ class MailMessagesController extends MailAppController {
 		} else {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
-		$this->redirect(array('action' => 'index', $mailContentId));
+		$this->redirect(['action' => 'index', $mailContentId]);
 	}
 
 /**

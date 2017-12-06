@@ -44,7 +44,7 @@ function baseUrl() {
 		if(isConsole()) {
 			$script = str_replace('app' . DS . 'Console' . DS . 'cake.php', '', $script);
 		}
-		$script = str_replace(array('\\', '/'), DS, $script);
+		$script = str_replace(['\\', '/'], DS, $script);
 		$docroot = docRoot();
 		$script = str_replace($docroot, '', $script);
 		if (BC_DEPLOY_PATTERN == 1) {
@@ -148,7 +148,7 @@ function verpoint($version) {
  */
 function decodeContent($content, $fileName = null) {
 
-	$contentsMaping = array(
+	$contentsMaping = [
 		"image/gif" => "gif",
 		"image/jpeg" => "jpg",
 		"image/pjpeg" => "jpg",
@@ -187,7 +187,7 @@ function decodeContent($content, $fileName = null) {
 		"video/x-msvideo" => "avi",
 		"video/x-ms-asf" => "asf",
 		"video/x-ms-wmv" => "wmv"
-	);
+	];
 
 	if (isset($contentsMaping[$content])) {
 		return $contentsMaping[$content];
@@ -305,7 +305,7 @@ function clearViewCache($url = null, $ext = '.php') {
 
 	$url = preg_replace('/^\/mobile\//is', '/m/', $url);
 	if ($url == '/' || $url == '/index' || $url == '/index.html' || $url == '/m/' || $url == '/m/index' || $url == '/m/index.html') {
-		$homes = array('index', 'index_html');
+		$homes = ['index', 'index_html'];
 		foreach ($homes as $home) {
 			if (preg_match('/^\/m/is', $url)) {
 				if ($home) {
@@ -322,7 +322,7 @@ function clearViewCache($url = null, $ext = '.php') {
 			}
 			$baseUrl = baseUrl();
 			if ($baseUrl) {
-				$baseUrl = str_replace(array('/', '.'), '_', $baseUrl);
+				$baseUrl = str_replace(['/', '.'], '_', $baseUrl);
 				$baseUrl = preg_replace('/^_/', '', $baseUrl);
 				$baseUrl = preg_replace('/_$/', '', $baseUrl);
 				if ($home) {
@@ -583,7 +583,7 @@ function amr($a, $b) {
 			}
 		}
 		if (!is_array($a)) {
-			$a = array($a);
+			$a = [$a];
 		}
 		$a[$k] = $v;
 	}
@@ -612,7 +612,7 @@ function addSessionId($url, $force = false) {
 			$url["?"][session_name()] = $sessionId;
 		} else {
 			if (strpos($url, '?') !== false) {
-				$args = array();
+				$args = [];
 				$_url = explode('?', $url);
 				if (!empty($_url[1])) {
 					if (strpos($_url[1], '&') !== false) {
@@ -657,7 +657,7 @@ function addSessionId($url, $force = false) {
  */
 function getEnablePlugins() {
 
-	$enablePlugins = array();
+	$enablePlugins = [];
 	if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
 		$enablePlugins = Cache::read('enable_plugins', '_cake_env_');
 	}
@@ -666,14 +666,14 @@ function getEnablePlugins() {
 		try {
 			$Plugin = ClassRegistry::init('Plugin');   // ConnectionManager の前に呼出さないとエラーとなる
 		} catch (Exception $ex) {
-			return array();
+			return [];
 		}
 		$db = ConnectionManager::getDataSource('default');
 		$sources = $db->listSources();
 		$pluginTable = $db->config['prefix'] . 'plugins';
-		$enablePlugins = array();
+		$enablePlugins = [];
 		if (!is_array($sources) || in_array(strtolower($pluginTable), array_map('strtolower', $sources))) {
-			$enablePlugins = $Plugin->find('all', array('conditions' => array('Plugin.status' => true), 'order' => 'Plugin.priority'));
+			$enablePlugins = $Plugin->find('all', ['conditions' => ['Plugin.status' => true], 'order' => 'Plugin.priority']);
 			ClassRegistry::removeObject('Plugin');
 			if ($enablePlugins) {
 				if (!Configure::read('Cache.disable')) {
@@ -746,7 +746,7 @@ function sendUpdateMail() {
 	$bcSite = Configure::read('BcSite');
 	$bcSite['update_id'] = CakeText::uuid();
 	$SiteConfig = ClassRegistry::init('SiteConfig');
-	$SiteConfig->saveKeyValue(array('SiteConfig' => $bcSite));
+	$SiteConfig->saveKeyValue(['SiteConfig' => $bcSite]);
 	ClassRegistry::removeObject('SiteConfig');
 
 	$BcEmail = new BcEmailComponent();
@@ -760,18 +760,18 @@ function sendUpdateMail() {
 	$BcEmail->lineLength = 105;
 	if (!empty($bcSite['smtp_host'])) {
 		$BcEmail->delivery = 'smtp';
-		$BcEmail->smtpOptions = array('host' => $bcSite['smtp_host'],
+		$BcEmail->smtpOptions = ['host' => $bcSite['smtp_host'],
 			'port' => 25,
 			'timeout' => 30,
 			'username' => ($bcSite['smtp_user']) ? $bcSite['smtp_user'] : null,
-			'password' => ($bcSite['smtp_password']) ? $bcSite['smtp_password'] : null);
+			'password' => ($bcSite['smtp_password']) ? $bcSite['smtp_password'] : null];
 	} else {
 		$BcEmail->delivery = "mail";
 	}
 	$BcEmail->to = $bcSite['email'];
 	$BcEmail->subject = 'baserCMSアップデート';
 	$BcEmail->from = $bcSite['name'] . ' <' . $bcSite['email'] . '>';
-	$message = array();
+	$message = [];
 	$message[] = '下記のURLよりbaserCMSのアップデートを完了してください。';
 	$message[] = topLevelUrl(false) . baseUrl() . 'updaters/index/' . $bcSite['update_id'];
 	$BcEmail->send($message);
@@ -881,10 +881,10 @@ function loadPlugin($plugin, $priority) {
 		return false;
 	}
 	$pluginPath = CakePlugin::path($plugin);
-	$config = array(
+	$config = [
 		'bootstrap' => file_exists($pluginPath . 'Config' . DS . 'bootstrap.php'),
 		'routes' => file_exists($pluginPath . 'Config' . DS . 'routes.php')
-	);
+	];
 	CakePlugin::load($plugin, $config);
 	if (file_exists($pluginPath . 'Config' . DS . 'setting.php')) {
 		// DBに接続できない場合、CakePHPのエラーメッセージが表示されてしまう為、 try を利用
@@ -894,7 +894,7 @@ function loadPlugin($plugin, $priority) {
 		} catch (Exception $ex) {}
 	}
 	// プラグインイベント登録
-	$eventTargets = array('Controller', 'Model', 'View', 'Helper');
+	$eventTargets = ['Controller', 'Model', 'View', 'Helper'];
 	foreach ($eventTargets as $eventTarget) {
 		$eventClass = $plugin . $eventTarget . 'EventListener';
 		if (file_exists($pluginPath . 'Event' . DS . $eventClass . '.php')) {
@@ -912,7 +912,7 @@ function loadPlugin($plugin, $priority) {
 					}
 				} else {
 					unset($EventClass->events[$key]);
-					$EventClass->events[$options] = array('priority' => $priority);
+					$EventClass->events[$options] = ['priority' => $priority];
 				}
 			}
 			$CakeEvent->attach($EventClass, null);
@@ -960,7 +960,7 @@ function deprecatedMessage($target, $since, $remove = null, $note = null) {
  */
 function base64UrlsafeEncode($val) {
 	$val = base64_encode($val);
-	return str_replace(array('+', '/', '='), array('_', '-', '.'), $val);
+	return str_replace(['+', '/', '='], ['_', '-', '.'], $val);
 }
  
 /**
@@ -970,7 +970,7 @@ function base64UrlsafeEncode($val) {
  * @return string
  */
 function base64UrlsafeDecode($val) {
-	$val = str_replace(array('_','-', '.'), array('+', '/', '='), $val);
+	$val = str_replace(['_','-', '.'], ['+', '/', '='], $val);
 	return base64_decode($val);
 }
 

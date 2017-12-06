@@ -36,9 +36,9 @@ class Validation {
  *
  * @var array
  */
-	protected static $_pattern = array(
+	protected static $_pattern = [
 		'hostname' => '(?:[_\p{L}0-9][-_\p{L}0-9]*\.)*(?:[\p{L}0-9][-\p{L}0-9]{0,62})\.(?:(?:[a-z]{2}\.)?[a-z]{2,})'
-	);
+	];
 
 /**
  * Holds an array of errors messages set in this class.
@@ -46,7 +46,7 @@ class Validation {
  *
  * @var array
  */
-	public static $errors = array();
+	public static $errors = [];
 
 /**
  * Backwards compatibility wrapper for Validation::notBlank().
@@ -162,7 +162,7 @@ class Validation {
 			return false;
 		}
 
-		$check = str_replace(array('-', ' '), '', $check);
+		$check = str_replace(['-', ' '], '', $check);
 		if (mb_strlen($check) < 13) {
 			return false;
 		}
@@ -172,8 +172,8 @@ class Validation {
 				return static::luhn($check, $deep);
 			}
 		}
-		$cards = array(
-			'all' => array(
+		$cards = [
+			'all' => [
 				'amex'		=> '/^3[4|7]\\d{13}$/',
 				'bankcard'	=> '/^56(10\\d\\d|022[1-5])\\d{10}$/',
 				'diners'	=> '/^(?:3(0[0-5]|[68]\\d)\\d{11})|(?:5[1-5]\\d{14})$/',
@@ -188,10 +188,10 @@ class Validation {
 				'/^(?:49(03(0[2-9]|3[5-9])|11(0[1-2]|7[4-9]|8[1-2])|36[0-9]{2})\\d{10}(\\d{2,3})?)|(?:564182\\d{10}(\\d{2,3})?)|(6(3(33[0-4][0-9])|759[0-9]{2})\\d{10}(\\d{2,3})?)$/',
 				'visa'		=> '/^4\\d{12}(\\d{3})?$/',
 				'voyager'	=> '/^8699[0-9]{11}$/'
-			),
+			],
 			'fast' =>
 			'/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6011[0-9]{12}|3(?:0[0-5]|[68][0-9])[0-9]{11}|3[47][0-9]{13})$/'
-		);
+		];
 
 		if (is_array($type)) {
 			foreach ($type as $value) {
@@ -234,7 +234,7 @@ class Validation {
 		if ((float)$check1 != $check1) {
 			return false;
 		}
-		$operator = str_replace(array(' ', "\t", "\n", "\r", "\0", "\x0B"), '', strtolower($operator));
+		$operator = str_replace([' ', "\t", "\n", "\r", "\0", "\x0B"], '', strtolower($operator));
 
 		switch ($operator) {
 			case 'isgreater':
@@ -356,7 +356,7 @@ class Validation {
 		$regex['ym'] = '%^(' . $year . $separator . $month . ')$%';
 		$regex['y'] = '%^(' . $fourDigitYear . ')$%';
 
-		$format = (is_array($format)) ? array_values($format) : array($format);
+		$format = (is_array($format)) ? array_values($format) : [$format];
 		foreach ($format as $key) {
 			if (static::_check($check, $regex[$key]) === true) {
 				return true;
@@ -407,7 +407,7 @@ class Validation {
  * @return bool Success
  */
 	public static function boolean($check) {
-		$booleanList = array(0, 1, '0', '1', true, false);
+		$booleanList = [0, 1, '0', '1', true, false];
 		return in_array($check, $booleanList, true);
 	}
 
@@ -506,7 +506,7 @@ class Validation {
  * @param array $extensions file extensions to allow. By default extensions are 'gif', 'jpeg', 'png', 'jpg'
  * @return bool Success
  */
-	public static function extension($check, $extensions = array('gif', 'jpeg', 'png', 'jpg')) {
+	public static function extension($check, $extensions = ['gif', 'jpeg', 'png', 'jpg']) {
 		if (is_array($check)) {
 			return static::extension(array_shift($check), $extensions);
 		}
@@ -535,7 +535,7 @@ class Validation {
 		if ($type === 'ipv6') {
 			$flags = FILTER_FLAG_IPV6;
 		}
-		return (bool)filter_var($check, FILTER_VALIDATE_IP, array('flags' => $flags));
+		return (bool)filter_var($check, FILTER_VALIDATE_IP, ['flags' => $flags]);
 	}
 
 /**
@@ -591,8 +591,8 @@ class Validation {
  * @param bool $caseInsensitive Set to true for case insensitive comparison.
  * @return bool Success
  */
-	public static function multiple($check, $options = array(), $caseInsensitive = false) {
-		$defaults = array('in' => null, 'max' => null, 'min' => null);
+	public static function multiple($check, $options = [], $caseInsensitive = false) {
+		$defaults = ['in' => null, 'max' => null, 'min' => null];
 		$options += $defaults;
 
 		$check = array_filter((array)$check, 'strlen');
@@ -831,7 +831,7 @@ class Validation {
  * @return mixed user-defined class class method returns
  */
 	public static function userDefined($check, $object, $method, $args = null) {
-		return call_user_func_array(array($object, $method), array($check, $args));
+		return call_user_func_array([$object, $method], [$check, $args]);
 	}
 
 /**
@@ -866,7 +866,7 @@ class Validation {
 			return false;
 		}
 		$check = (array)$check;
-		return call_user_func_array(array($className, $method), $check);
+		return call_user_func_array([$className, $method], $check);
 	}
 
 /**
@@ -924,7 +924,7 @@ class Validation {
  * @return bool Success
  * @throws CakeException when mime type can not be determined.
  */
-	public static function mimeType($check, $mimeTypes = array()) {
+	public static function mimeType($check, $mimeTypes = []) {
 		if (is_array($check) && isset($check['tmp_name'])) {
 			$check = $check['tmp_name'];
 		}
@@ -980,7 +980,7 @@ class Validation {
 			$check = $check['error'];
 		}
 		if ($allowNoFile) {
-			return in_array((int)$check, array(UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE), true);
+			return in_array((int)$check, [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE], true);
 		}
 
 		return (int)$check === UPLOAD_ERR_OK;
@@ -1006,17 +1006,17 @@ class Validation {
  * @param array $options An array of options for the validation.
  * @return bool
  */
-	public static function uploadedFile($file, $options = array()) {
-		$options += array(
+	public static function uploadedFile($file, $options = []) {
+		$options += [
 			'minSize' => null,
 			'maxSize' => null,
 			'types' => null,
 			'optional' => false,
-		);
+		];
 		if (!is_array($file)) {
 			return false;
 		}
-		$keys = array('error', 'name', 'size', 'tmp_name', 'type');
+		$keys = ['error', 'name', 'size', 'tmp_name', 'type'];
 		ksort($file);
 		if (array_keys($file) != $keys) {
 			return false;
@@ -1085,7 +1085,7 @@ class Validation {
  * @return void
  */
 	protected static function _reset() {
-		static::$errors = array();
+		static::$errors = [];
 	}
 
 }

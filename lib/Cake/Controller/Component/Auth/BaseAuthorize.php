@@ -47,18 +47,18 @@ abstract class BaseAuthorize {
  *
  * @var array
  */
-	public $settings = array(
+	public $settings = [
 		'actionPath' => null,
-		'actionMap' => array(
+		'actionMap' => [
 			'index' => 'read',
 			'add' => 'create',
 			'edit' => 'update',
 			'view' => 'read',
 			'delete' => 'delete',
 			'remove' => 'delete'
-		),
+		],
 		'userModel' => 'User'
-	);
+	];
 
 /**
  * Constructor
@@ -66,7 +66,7 @@ abstract class BaseAuthorize {
  * @param ComponentCollection $collection The controller for this request.
  * @param string $settings An array of settings. This class does not use any settings.
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
+	public function __construct(ComponentCollection $collection, $settings = []) {
 		$this->_Collection = $collection;
 		$controller = $collection->getController();
 		$this->controller($controller);
@@ -111,8 +111,8 @@ abstract class BaseAuthorize {
 	public function action(CakeRequest $request, $path = '/:plugin/:controller/:action') {
 		$plugin = empty($request['plugin']) ? null : Inflector::camelize($request['plugin']) . '/';
 		$path = str_replace(
-			array(':controller', ':action', ':plugin/'),
-			array(Inflector::camelize($request['controller']), $request['action'], $plugin),
+			[':controller', ':action', ':plugin/'],
+			[Inflector::camelize($request['controller']), $request['action'], $plugin],
 			$this->settings['actionPath'] . $path
 		);
 		$path = str_replace('//', '/', $path);
@@ -150,7 +150,7 @@ abstract class BaseAuthorize {
  * @return mixed Either the current mappings or null when setting.
  * @see AuthComponent::mapActions()
  */
-	public function mapActions($map = array()) {
+	public function mapActions($map = []) {
 		if (empty($map)) {
 			return $this->settings['actionMap'];
 		}

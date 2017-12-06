@@ -35,10 +35,10 @@ class CacheSessionTest extends CakeTestCase {
  * @return void
  */
 	public static function setupBeforeClass() {
-		Cache::config('session_test', array(
+		Cache::config('session_test', [
 			'engine' => 'File',
 			'prefix' => 'session_test_'
-		));
+		]);
 		static::$_sessionBackup = Configure::read('Session');
 
 		Configure::write('Session.handler.config', 'session_test');

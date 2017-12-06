@@ -1,9 +1,9 @@
 <?php
 
-$config = array(
-	'tags' => array(
+$config = [
+	'tags' => [
 		'form' => 'start form',
 		'formend' => 'finish form',
 		'hiddenblock' => '<div class="hidden">%s</div>'
-	)
-);
+	]
+];

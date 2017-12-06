@@ -9,7 +9,7 @@
 	<div id="Map">
 	    <h2><span class="main-title1">ACCESS MAP</span></h2>
 	    <div id="AccessMap">
-	        <?php $this->BcBaser->googleMaps(array("width" => "100%","height" => 420)) ?>
+	        <?php $this->BcBaser->googleMaps(["width" => "100%","height" => 420]) ?>
 	    </div>
 	</div>
 
@@ -28,13 +28,13 @@
 		<div id="Copyright">
 			<address>Copyright &copy; <a href="http://komomo.biz/" target="_blank">小桃</a><a href="http://clipdesign.jp/" target="_blank">クリップ</a> Allrights Reserved.</address>
 			<p id="PowerdBy" class="ta-center">
-				<a href="http://basercms.net/" target="_blank"><?php $this->BcBaser->img('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project')); ?></a>
+				<a href="http://basercms.net/" target="_blank"><?php $this->BcBaser->img('baser.power.gif', ['alt' => 'baserCMS : Based Website Development Project']); ?></a>
 				&nbsp; 
-				<a href="http://cakephp.org/" target="_blank"><?php $this->BcBaser->img('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework')); ?></a>
+				<a href="http://cakephp.org/" target="_blank"><?php $this->BcBaser->img('cake.power.gif', ['alt' => 'CakePHP(tm) : Rapid Development Framework']); ?></a>
 				&nbsp; 
-				<a href="http://clipdesign.jp/" target="_blank"><?php $this->BcBaser->img('footer/clip.gif', array('alt' => 'clipdesign')); ?></a>
+				<a href="http://clipdesign.jp/" target="_blank"><?php $this->BcBaser->img('footer/clip.gif', ['alt' => 'clipdesign']); ?></a>
 				&nbsp; 
-				<a href="http://komomo.biz/" target="_blank"><?php $this->BcBaser->img('footer/komomo.gif', array('alt' => '小桃デザイン')); ?></a>&nbsp; 
+				<a href="http://komomo.biz/" target="_blank"><?php $this->BcBaser->img('footer/komomo.gif', ['alt' => '小桃デザイン']); ?></a>&nbsp; 
 			</p>
 		</div>
 		

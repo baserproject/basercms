@@ -42,27 +42,27 @@ class TestPluginPost extends TestPluginAppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'title' => array(
-			'rule' => array('custom', '.*'),
+	public $validate = [
+		'title' => [
+			'rule' => ['custom', '.*'],
 			'allowEmpty' => true,
 			'required' => false,
 			'message' => 'Post title is required'
-		),
-		'body' => array(
-			'first_rule' => array(
-				'rule' => array('custom', '.*'),
+		],
+		'body' => [
+			'first_rule' => [
+				'rule' => ['custom', '.*'],
 				'allowEmpty' => true,
 				'required' => false,
 				'message' => 'Post body is required'
-			),
-			'Post body is super required' => array(
-				'rule' => array('custom', '.*'),
+			],
+			'Post body is super required' => [
+				'rule' => ['custom', '.*'],
 				'allowEmpty' => true,
 				'required' => false,
-			)
-		),
-	);
+			]
+		],
+	];
 
 /**
  * Translation domain to use for validation messages

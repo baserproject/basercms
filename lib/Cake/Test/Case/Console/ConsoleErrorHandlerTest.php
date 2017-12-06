@@ -32,8 +32,8 @@ class ConsoleErrorHandlerTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Error = $this->getMock('ConsoleErrorHandler', array('_stop'));
-		ConsoleErrorHandler::$stderr = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$this->Error = $this->getMock('ConsoleErrorHandler', ['_stop']);
+		ConsoleErrorHandler::$stderr = $this->getMock('ConsoleOutput', [], [], '', false);
 	}
 
 /**

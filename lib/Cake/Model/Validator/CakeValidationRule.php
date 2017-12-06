@@ -55,14 +55,14 @@ class CakeValidationRule {
  *
  * @var array
  */
-	protected $_ruleParams = array();
+	protected $_ruleParams = [];
 
 /**
  * Holds passed in options
  *
  * @var array
  */
-	protected $_passedOptions = array();
+	protected $_passedOptions = [];
 
 /**
  * The 'rule' key
@@ -111,7 +111,7 @@ class CakeValidationRule {
  *
  * @param array $validator [optional] The validator properties
  */
-	public function __construct($validator = array()) {
+	public function __construct($validator = []) {
 		$this->_addValidatorProps($validator);
 	}
 
@@ -143,7 +143,7 @@ class CakeValidationRule {
  * @return bool
  */
 	public function isRequired() {
-		if (in_array($this->required, array('create', 'update'), true)) {
+		if (in_array($this->required, ['create', 'update'], true)) {
 			if ($this->required === 'create' && !$this->isUpdate() || $this->required === 'update' && $this->isUpdate()) {
 				return true;
 			}
@@ -227,14 +227,14 @@ class CakeValidationRule {
 		if (!is_string($rule)) {
 			unset($rule[0]);
 		}
-		return array(
+		return [
 			'rule' => $rule,
 			'required' => $this->required,
 			'allowEmpty' => $this->allowEmpty,
 			'on' => $this->on,
 			'last' => $this->last,
 			'message' => $this->message
-		);
+		];
 	}
 
 /**
@@ -271,10 +271,10 @@ class CakeValidationRule {
 		$rule = strtolower($this->_rule);
 		if (isset($methods[$rule])) {
 			$this->_ruleParams[] = array_merge($validator, $this->_passedOptions);
-			$this->_ruleParams[0] = array($field => $this->_ruleParams[0]);
+			$this->_ruleParams[0] = [$field => $this->_ruleParams[0]];
 			$this->_valid = call_user_func_array($methods[$rule], $this->_ruleParams);
 		} elseif (class_exists('Validation') && method_exists('Validation', $this->_rule)) {
-			$this->_valid = call_user_func_array(array('Validation', $this->_rule), $this->_ruleParams);
+			$this->_valid = call_user_func_array(['Validation', $this->_rule], $this->_ruleParams);
 		} elseif (is_string($validator['rule'])) {
 			$this->_valid = preg_match($this->_rule, $data[$field]);
 		} else {
@@ -315,13 +315,13 @@ class CakeValidationRule {
  * @param array $validator [optional]
  * @return void
  */
-	protected function _addValidatorProps($validator = array()) {
+	protected function _addValidatorProps($validator = []) {
 		if (!is_array($validator)) {
-			$validator = array('rule' => $validator);
+			$validator = ['rule' => $validator];
 		}
 		foreach ($validator as $key => $value) {
 			if (isset($value) || !empty($value)) {
-				if (in_array($key, array('rule', 'required', 'allowEmpty', 'on', 'message', 'last'))) {
+				if (in_array($key, ['rule', 'required', 'allowEmpty', 'on', 'message', 'last'])) {
 					$this->{$key} = $validator[$key];
 				} else {
 					$this->_passedOptions[$key] = $value;
@@ -340,10 +340,10 @@ class CakeValidationRule {
 	protected function _parseRule($field, &$data) {
 		if (is_array($this->rule)) {
 			$this->_rule = $this->rule[0];
-			$this->_ruleParams = array_merge(array($data[$field]), array_values(array_slice($this->rule, 1)));
+			$this->_ruleParams = array_merge([$data[$field]], array_values(array_slice($this->rule, 1)));
 		} else {
 			$this->_rule = $this->rule;
-			$this->_ruleParams = array($data[$field]);
+			$this->_ruleParams = [$data[$field]];
 		}
 	}
 

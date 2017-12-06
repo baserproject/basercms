@@ -20,7 +20,7 @@ $(function(){
 			<?php $uri = $this->BcBaser->getRoot().$this->request->params['Content']['name'].'/archives/'.$post['BlogPost']['no']; ?>
 			<div class="eye-catch">
 				<a href="<?php echo $uri ?>">
-					<?php $this->Blog->eyeCatch($post, array('link'=>false, 'width'=>'80px')) ?>
+					<?php $this->Blog->eyeCatch($post, ['link'=>false, 'width'=>'80px']) ?>
 				</a>
 			</div>
 			<?php $this->Blog->postContent($post, true, false, 100) ?>...
@@ -36,7 +36,7 @@ $(function(){
 					<?php $this->Blog->author($post) ?>
 				</span>
 			</div>
-		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>

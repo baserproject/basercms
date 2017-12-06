@@ -15,4 +15,4 @@
  */
 $title = 'テキスト';
 $description = 'テキストやHTMLの入力ができます。';
-echo $this->BcForm->textarea($key . '.text', array('cols' => 38, 'rows' => 14));
+echo $this->BcForm->textarea($key . '.text', ['cols' => 38, 'rows' => 14]);

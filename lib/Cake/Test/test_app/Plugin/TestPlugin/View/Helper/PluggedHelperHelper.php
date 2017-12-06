@@ -23,5 +23,5 @@
  */
 class PluggedHelperHelper extends AppHelper {
 
-	public $helpers = array('TestPlugin.OtherHelper');
+	public $helpers = ['TestPlugin.OtherHelper'];
 }

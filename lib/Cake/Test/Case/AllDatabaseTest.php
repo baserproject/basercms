@@ -34,7 +34,7 @@ class AllDatabaseTest extends PHPUnit_Framework_TestSuite {
 		$suite = new PHPUnit_Framework_TestSuite('Datasources, Schema and DbAcl tests');
 
 		$path = CORE_TEST_CASES . DS . 'Model' . DS;
-		$tasks = array(
+		$tasks = [
 			'AclNode',
 			'CakeSchema',
 			'ConnectionManager',
@@ -46,7 +46,7 @@ class AllDatabaseTest extends PHPUnit_Framework_TestSuite {
 			'Datasource' . DS . 'CakeSession',
 			'Datasource' . DS . 'Session' . DS . 'CacheSession',
 			'Datasource' . DS . 'Session' . DS . 'DatabaseSession',
-		);
+		];
 		foreach ($tasks as $task) {
 			$suite->addTestFile($path . $task . 'Test.php');
 		}

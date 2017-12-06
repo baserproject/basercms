@@ -16,7 +16,7 @@ App::uses('SessionComponent', 'Controller/Component');
 
 class MailConfigsControllerTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		// 'baser.Default.SiteConfig',
 		'baser.Default.User',
 		'baser.Default.UserGroup',
@@ -24,7 +24,7 @@ class MailConfigsControllerTest extends BaserTestCase {
 		'baser.Default.Permission',
 		'baser.Default.Favorite',
 		'plugin.mail.Default/MailConfig',
-	);
+	];
 
 	public function setUp() {
 		$this->MailConfigs = new MailConfigsController(new CakeRequest(null, false), new CakeResponse());
@@ -50,8 +50,8 @@ class MailConfigsControllerTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		session_id('baser');
-		$this->Case->testAction("admin/mail/mail_configs/form", array(
-				'method' => 'post', 'data' => $data));
+		$this->Case->testAction("admin/mail/mail_configs/form", [
+				'method' => 'post', 'data' => $data]);
 		
 		if (!empty($data)) {
 			$flash = CakeSession::read('Message.flash');
@@ -64,12 +64,12 @@ class MailConfigsControllerTest extends BaserTestCase {
 	}
 
 	public function admin_formDataProvider() {
-		return array(
-			array(array(), '\/admin\/users\/login'),
-			array(array("MailConfig" => array(
-				"site_name" => "test")
-			), '\/admin\/mail\/mail_configs\/form')
-		);
+		return [
+			[[], '\/admin\/users\/login'],
+			[["MailConfig" => [
+				"site_name" => "test"]
+			], '\/admin\/mail\/mail_configs\/form']
+		];
 	}
 
 }

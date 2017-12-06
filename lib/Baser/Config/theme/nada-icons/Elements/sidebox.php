@@ -17,10 +17,10 @@
 
 	<div class="sidebox">
 		<div id="sidebox-bnr">
-			<?php $this->BcBaser->img('./sidebox/icons_banner_01.png', array('url' => '/#')); ?>
+			<?php $this->BcBaser->img('./sidebox/icons_banner_01.png', ['url' => '/#']); ?>
 		</div>
 		<div id="sidebox-bnr2">
-			<?php $this->BcBaser->img('./sidebox/icons_banner_02.png', array('url' => '/#')); ?>
+			<?php $this->BcBaser->img('./sidebox/icons_banner_02.png', ['url' => '/#']); ?>
 		</div>
 	</div>
 
@@ -29,7 +29,7 @@
 		<div id="sidebox-bnr3"><?php $this->BcBaser->img('./sidebox/sidebox_logo.png'); ?></div>
 		<div id="sidebox-txt" class="sidebox-text">baserCMS</div>
 		<div id="sidebox-bnr4">
-			<?php $this->BcBaser->link($this->BcBaser->getImg('./sidebox/sidebox_contact.png', array('title' => 'お問い合わせ', 'alt' => 'お問い合わせ')), '/contact'); ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('./sidebox/sidebox_contact.png', ['title' => 'お問い合わせ', 'alt' => 'お問い合わせ']), '/contact'); ?>
 		</div>
 		<div id="sidebox-txt">
 			<p class="sidebox-telfax">TEL:092-000-55555</p>

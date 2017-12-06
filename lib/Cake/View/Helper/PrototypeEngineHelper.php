@@ -43,72 +43,72 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  *
  * @var array
  */
-	protected $_optionMap = array(
-		'request' => array(
+	protected $_optionMap = [
+		'request' => [
 			'async' => 'asynchronous',
 			'data' => 'parameters',
 			'before' => 'onCreate',
 			'success' => 'onSuccess',
 			'complete' => 'onComplete',
 			'error' => 'onFailure'
-		),
-		'sortable' => array(
+		],
+		'sortable' => [
 			'sort' => 'onChange',
 			'complete' => 'onUpdate',
-		),
-		'drag' => array(
+		],
+		'drag' => [
 			'snapGrid' => 'snap',
 			'container' => 'constraint',
 			'stop' => 'onEnd',
 			'start' => 'onStart',
 			'drag' => 'onDrag',
-		),
-		'drop' => array(
+		],
+		'drop' => [
 			'hover' => 'onHover',
 			'drop' => 'onDrop',
 			'hoverClass' => 'hoverclass',
-		),
-		'slider' => array(
+		],
+		'slider' => [
 			'direction' => 'axis',
 			'change' => 'onSlide',
 			'complete' => 'onChange',
 			'value' => 'sliderValue',
-		)
-	);
+		]
+	];
 
 /**
  * Contains a list of callback names -> default arguments.
  *
  * @var array
  */
-	protected $_callbackArguments = array(
-		'slider' => array(
+	protected $_callbackArguments = [
+		'slider' => [
 			'onSlide' => 'value',
 			'onChange' => 'value',
-		),
-		'drag' => array(
+		],
+		'drag' => [
 			'onStart' => 'event',
 			'onDrag' => 'event',
 			'change' => 'draggable',
 			'onEnd' => 'event',
-		),
-		'drop' => array(
+		],
+		'drop' => [
 			'onHover' => 'draggable, droppable, event',
 			'onDrop' => 'draggable, droppable, event',
-		),
-		'request' => array(
+		],
+		'request' => [
 			'onCreate' => 'transport',
 			'onComplete' => 'transport',
 			'onFailure' => 'response, jsonHeader',
 			'onRequest' => 'transport',
 			'onSuccess' => 'response, jsonHeader'
-		),
-		'sortable' => array(
+		],
+		'sortable' => [
 			'onStart' => 'element',
 			'onChange' => 'element',
 			'onUpdate' => 'element',
-		),
-	);
+		],
+	];
 
 /**
  * Create javascript selector for a CSS rule
@@ -144,8 +144,8 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @param array $options Options for the event.
  * @return string completed event handler
  */
-	public function event($type, $callback, $options = array()) {
-		$defaults = array('wrap' => true, 'stop' => true);
+	public function event($type, $callback, $options = []) {
+		$defaults = ['wrap' => true, 'stop' => true];
 		$options += $defaults;
 
 		$function = 'function (event) {%s}';
@@ -167,7 +167,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  */
 	public function domReady($functionBody) {
 		$this->selection = 'document';
-		return $this->event('dom:loaded', $functionBody, array('stop' => false));
+		return $this->event('dom:loaded', $functionBody, ['stop' => false]);
 	}
 
 /**
@@ -190,7 +190,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @return string completed string with effect.
  * @see JsBaseEngineHelper::effect()
  */
-	public function effect($name, $options = array()) {
+	public function effect($name, $options = []) {
 		$effect = '';
 		$optionString = null;
 		if (isset($options['speed'])) {
@@ -232,7 +232,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @param array $options Options list.
  * @return string The completed ajax call.
  */
-	public function request($url, $options = array()) {
+	public function request($url, $options = []) {
 		$url = html_entity_decode($this->url($url), ENT_COMPAT, Configure::read('App.encoding'));
 		$url = '"' . $url . '"';
 		$options = $this->_mapOptions('request', $options);
@@ -270,7 +270,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @return string Completed sortable script.
  * @see JsBaseEngineHelper::sortable() for options list.
  */
-	public function sortable($options = array()) {
+	public function sortable($options = []) {
 		$options = $this->_processOptions('sortable', $options);
 		if (!empty($options)) {
 			$options = ', {' . $options . '}';
@@ -287,7 +287,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @return string Completed draggable script.
  * @see JsBaseEngineHelper::draggable() for options list.
  */
-	public function drag($options = array()) {
+	public function drag($options = []) {
 		$options = $this->_processOptions('drag', $options);
 		if (!empty($options)) {
 			$options = ', {' . $options . '}';
@@ -307,7 +307,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @return string Completed droppable script.
  * @see JsBaseEngineHelper::droppable() for options list.
  */
-	public function drop($options = array()) {
+	public function drop($options = []) {
 		$options = $this->_processOptions('drop', $options);
 		if (!empty($options)) {
 			$options = ', {' . $options . '}';
@@ -324,7 +324,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @return string Completed slider script.
  * @see JsBaseEngineHelper::slider() for options list.
  */
-	public function slider($options = array()) {
+	public function slider($options = []) {
 		$slider = $this->selection;
 		$this->get($options['handle']);
 		unset($options['handle']);
@@ -336,7 +336,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
 		$options = $this->_mapOptions('slider', $options);
 		$options = $this->_prepareCallbacks('slider', $options);
 		$optionString = $this->_parseOptions(
-			$options, array_merge(array_keys($this->_callbackArguments['slider']), array('range'))
+			$options, array_merge(array_keys($this->_callbackArguments['slider']), ['range'])
 		);
 		if (!empty($optionString)) {
 			$optionString = ', {' . $optionString . '}';
@@ -353,8 +353,8 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * @return string Completed serializeForm() snippet
  * @see JsBaseEngineHelper::serializeForm()
  */
-	public function serializeForm($options = array()) {
-		$options += array('isForm' => false, 'inline' => false);
+	public function serializeForm($options = []) {
+		$options += ['isForm' => false, 'inline' => false];
 		$selection = $this->selection;
 		if (!$options['isForm']) {
 			$selection = '$(' . $this->selection . '.form)';

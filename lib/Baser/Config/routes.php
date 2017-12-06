@@ -33,8 +33,8 @@ if (Configure::read('BcRequest.asset') || $isMaintenance) {
  * インストーラー
  */
 if (!$isInstalled) {
-	Router::connect('/', array('controller' => 'installations', 'action' => 'index'));
-	Router::connect('/install', array('controller' => 'installations', 'action' => 'index'));
+	Router::connect('/', ['controller' => 'installations', 'action' => 'index']);
+	Router::connect('/install', ['controller' => 'installations', 'action' => 'index']);
 	return;
 }
 
@@ -49,8 +49,8 @@ App::uses('BaserPluginAppModel', 'Model');
  */
 if($isUpdater) {
 	$updateKey = Configure::read('BcApp.updateKey');
-	Router::connect('/' . $updateKey, array('controller' => 'updaters', 'action' => 'index'));
-	Router::connect('/' . $updateKey . '/index', array('controller' => 'updaters', 'action' => 'index'));
+	Router::connect('/' . $updateKey, ['controller' => 'updaters', 'action' => 'index']);
+	Router::connect('/' . $updateKey . '/index', ['controller' => 'updaters', 'action' => 'index']);
 	return;
 }
 
@@ -65,14 +65,14 @@ if($isUpdater) {
 		foreach($plugins as $key => $value) {
 			$plugins[$key] = Inflector::underscore($value);
 		}
-		$pluginMatch = array('plugin' => implode('|', $plugins));
+		$pluginMatch = ['plugin' => implode('|', $plugins)];
 		Router::connect("/:plugin/:controller/:action/*", [], $pluginMatch);
 	}
 
 /**
  * 名前付きパラメータを追加
  */
-	Router::connectNamed(array('sortmode', 'num', 'page', 'sort', 'direction'));
+	Router::connectNamed(['sortmode', 'num', 'page', 'sort', 'direction']);
 
 /**
  * 認証プレフィックス
@@ -85,13 +85,13 @@ if($isUpdater) {
 			} else {
 				$alias = $prefix;
 			}
-			Router::connect("/{$alias}", array('prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action' => 'index'));
+			Router::connect("/{$alias}", ['prefix' => $prefix, $prefix => true, 'controller' => 'dashboard', 'action' => 'index']);
 			if (CakePlugin::loaded()) {
-				Router::connect("/{$alias}/:plugin/:controller/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-				Router::connect("/{$alias}/:plugin/:controller/", array('prefix' => $prefix, $prefix => true), $pluginMatch);
-				Router::connect("/{$alias}/:plugin/:action/*", array('prefix' => $prefix, $prefix => true), $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/:action/*", ['prefix' => $prefix, $prefix => true], $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:controller/", ['prefix' => $prefix, $prefix => true], $pluginMatch);
+				Router::connect("/{$alias}/:plugin/:action/*", ['prefix' => $prefix, $prefix => true], $pluginMatch);
 			}
-			Router::connect("/{$alias}/:controller/:action/*", array('prefix' => $prefix, $prefix => true));
+			Router::connect("/{$alias}/:controller/:action/*", ['prefix' => $prefix, $prefix => true]);
 			Router::connect("/{$alias}/:controller/", ['prefix' => $prefix, $prefix => true]);
 		}
 	}
@@ -100,7 +100,7 @@ if($isUpdater) {
  * コンテンツ管理ルーティング
  */
 	App::uses('BcContentsRoute', 'Routing/Route');
-	Router::connect('*', [], array_merge($pluginMatch, array('routeClass' => 'BcContentsRoute')));
+	Router::connect('*', [], array_merge($pluginMatch, ['routeClass' => 'BcContentsRoute']));
 	Router::promote();	// 優先順位を最優先とする	
 
 	if (!BcUtil::isAdminSystem()) {
@@ -119,12 +119,12 @@ if($isUpdater) {
 		}
 		if ($siteAlias) {
 			// プラグイン
-			Router::connect("/{$siteAlias}/:plugin/:controller", array('prefix' => $sitePrefix, 'action' => 'index'), $pluginMatch);
-			Router::connect("/{$siteAlias}/:plugin/:controller/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
-			Router::connect("/{$siteAlias}/:plugin/:action/*", array('prefix' => $sitePrefix), $pluginMatch);
+			Router::connect("/{$siteAlias}/:plugin/:controller", ['prefix' => $sitePrefix, 'action' => 'index'], $pluginMatch);
+			Router::connect("/{$siteAlias}/:plugin/:controller/:action/*", ['prefix' => $sitePrefix], $pluginMatch);
+			Router::connect("/{$siteAlias}/:plugin/:action/*", ['prefix' => $sitePrefix], $pluginMatch);
 			// モバイルノーマル
-			Router::connect("/{$siteAlias}/:controller/:action/*", array('prefix' => $sitePrefix));
-			Router::connect("/{$siteAlias}/:controller", array('prefix' => $sitePrefix, 'action' => 'index'));
+			Router::connect("/{$siteAlias}/:controller/:action/*", ['prefix' => $sitePrefix]);
+			Router::connect("/{$siteAlias}/:controller", ['prefix' => $sitePrefix, 'action' => 'index']);
 		}
 	} catch (Exception $e) {}
 		

@@ -46,11 +46,11 @@ if (empty($_SESSION)) {
 /**
  * 設定
  */
-	Configure::write('Session', array_merge(Configure::read('Session'), array(
+	Configure::write('Session', array_merge(Configure::read('Session'), [
 		'cookie' => 'BASERCMS',
 		'timeout' => $timeout,
 		'cookieTimeout' => $cookieTimeout,
-		'ini' => array(
+		'ini' => [
 			'session.serialize_handler' => 'php',
 			'session.save_path'			=> TMP . 'sessions',
 			'session.use_cookies'		=> $useCookies,
@@ -59,8 +59,8 @@ if (empty($_SESSION)) {
 			'session.gc_divisor'		=> 100,
 			'session.gc_probability'	=> 1,
 			'session.cookie_secure' => 0
-		)
-	)));
+		]
+	]));
 /*
  * 全てHTTPSでサイトが利用されていたらsession.cookie_secureを1とする
  */
@@ -73,9 +73,9 @@ if (empty($_SESSION)) {
 		preg_match("/^https:\/\/([a-zA-Z0-9\.-]+)(:\d+|)\//", Configure::read('BcEnv.sslUrl'), $sslUrlDomainMatches);
 		if (isset($siteUrlDomainMatches[0]) && isset($sslUrlDomainMatches[0]) &&
 			$siteUrlDomainMatches[0] == $sslUrlDomainMatches[0]) {
-			Configure::write('Session.ini', array_merge(Configure::read('Session.ini'), array(
+			Configure::write('Session.ini', array_merge(Configure::read('Session.ini'), [
 				'session.cookie_secure' => 1
-			)));
+			]));
 		}
 	}
 }

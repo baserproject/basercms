@@ -24,7 +24,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @param array $config 
  * @return void
  */
-	public function setup(Model $model, $config = array()) {
+	public function setup(Model $model, $config = []) {
 		if (!defined('CACHE_DATA_PATH')) {
 			$setting = Cache::config('_cake_data_');
 			if ($setting) {
@@ -59,8 +59,8 @@ class BcCacheBehavior extends ModelBehavior {
  * @args mixed
  * @return mixed
  */
-	public function readCache(Model $model, $expire, $type, $query = array()) {
-		static $cacheData = array();
+	public function readCache(Model $model, $expire, $type, $query = []) {
+		static $cacheData = [];
 
 		// キャッシュキー
 		$tableName = $model->tablePrefix . $model->table;
@@ -114,7 +114,7 @@ class BcCacheBehavior extends ModelBehavior {
 		}
 		$path = CACHE_DATA_PATH;
 		$path .= $table . DS;
-		Cache::config('_cake_data_', array('path' => $path));
+		Cache::config('_cake_data_', ['path' => $path]);
 	}
 
 /**
@@ -140,7 +140,7 @@ class BcCacheBehavior extends ModelBehavior {
  * @param boolean $created 
  * @return void
  */
-	public function afterSave(Model $model, $created, $options = array()) {
+	public function afterSave(Model $model, $created, $options = []) {
 		$this->delAssockCache($model);
 	}
 
@@ -165,7 +165,7 @@ class BcCacheBehavior extends ModelBehavior {
 		$this->delCache($model);
 		if ($recursive <= 3) {
 			$recursive++;
-			$assocTypes = array('hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany');
+			$assocTypes = ['hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany'];
 			foreach ($assocTypes as $assocType) {
 				if ($model->{$assocType}) {
 					foreach ($model->{$assocType} as $assoc) {

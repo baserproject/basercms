@@ -29,14 +29,14 @@ class MailConfigsController extends MailAppController {
  *
  * @var array
  */
-	public $uses = array('Mail.MailConfig');
+	public $uses = ['Mail.MailConfig'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
 
 /**
  * [ADMIN] メールフォーム設定
@@ -51,7 +51,7 @@ class MailConfigsController extends MailAppController {
 			/* 更新処理 */
 			if ($this->MailConfig->save($this->request->data)) {
 				$this->setMessage('メールフォーム設定を保存しました。');
-				$this->redirect(array('action' => 'form'));
+				$this->redirect(['action' => 'form']);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}

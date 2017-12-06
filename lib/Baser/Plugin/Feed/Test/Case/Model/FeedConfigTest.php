@@ -14,10 +14,10 @@ App::uses('FeedConfig', 'Feed.Model');
 
 class FeedConfigTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'plugin.feed.Default/FeedConfig',
 		'baser.Default.FeedDetail',
-	);
+	];
 
 	public function setUp() {
 		$this->FeedConfig = ClassRegistry::init('Feed.FeedConfig');
@@ -33,9 +33,9 @@ class FeedConfigTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->FeedConfig->create(array(
-			'FeedConfig' => array()
-		));
+		$this->FeedConfig->create([
+			'FeedConfig' => []
+		]);
 
 		$this->assertFalse($this->FeedConfig->validates());
 
@@ -47,15 +47,15 @@ class FeedConfigTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
-		$this->FeedConfig->create(array(
-			'FeedConfig' => array(
+		$this->FeedConfig->create([
+			'FeedConfig' => [
 				'name' => '123456789012345678901234567890123456789012345678901',
 				'feed_title_index' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'category_index' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'display_number' => 123,
 				'template' => '123456789012345678901234567890123456789012345678901',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->FeedConfig->validates());
 
 		$this->assertArrayHasKey('name', $this->FeedConfig->validationErrors);
@@ -73,26 +73,26 @@ class FeedConfigTest extends BaserTestCase {
 
 
 	public function test桁数チェック正常系() {
-		$this->FeedConfig->create(array(
-			'FeedConfig' => array(
+		$this->FeedConfig->create([
+			'FeedConfig' => [
 				'name' => '12345678901234567890123456789012345678901234567890',
 				'feed_title_index' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'category_index' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'display_number' => 123,
 				'template' => '12345678901234567890123456789012345678901234567890',
-			)
-		));
+			]
+		]);
 
 		$this->assertTrue($this->FeedConfig->validates());
 	}
 
 	public function testその他異常系() {
 		// 数値チェック
-		$this->FeedConfig->create(array(
-			'FeedConfig' => array(
+		$this->FeedConfig->create([
+			'FeedConfig' => [
 				'display_number' => 'hoge',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->FeedConfig->validates());
 
@@ -100,11 +100,11 @@ class FeedConfigTest extends BaserTestCase {
 		$this->assertEquals('数値を入力してください。', current($this->FeedConfig->validationErrors['display_number']));
 
 		// 空白チェック
-		$this->FeedConfig->create(array(
-			'FeedConfig' => array(
+		$this->FeedConfig->create([
+			'FeedConfig' => [
 				'template' => '',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->FeedConfig->validates());
 
@@ -112,11 +112,11 @@ class FeedConfigTest extends BaserTestCase {
 		$this->assertEquals('テンプレート名を入力してください。', current($this->FeedConfig->validationErrors['template']));
 
 		// 半角チェック
-		$this->FeedConfig->create(array(
-			'FeedConfig' => array(
+		$this->FeedConfig->create([
+			'FeedConfig' => [
 				'template' => 'テスト',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->FeedConfig->validates());
 

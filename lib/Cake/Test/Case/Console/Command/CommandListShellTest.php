@@ -51,29 +51,29 @@ class CommandListShellTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		App::build(array(
-			'Plugin' => array(
+		App::build([
+			'Plugin' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS
-			),
-			'Console/Command' => array(
+			],
+			'Console/Command' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Console' . DS . 'Command' . DS
-			)
-		), App::RESET);
-		CakePlugin::load(array('TestPlugin', 'TestPluginTwo'));
+			]
+		], App::RESET);
+		CakePlugin::load(['TestPlugin', 'TestPluginTwo']);
 
 		$out = new TestStringOutput();
-		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', [], [], '', false);
 
 		$this->Shell = $this->getMock(
 			'CommandListShell',
-			array('in', '_stop', 'clear'),
-			array($out, $out, $in)
+			['in', '_stop', 'clear'],
+			[$out, $out, $in]
 		);
 
 		$this->Shell->Command = $this->getMock(
 			'CommandTask',
-			array('in', '_stop', 'clear'),
-			array($out, $out, $in)
+			['in', '_stop', 'clear'],
+			[$out, $out, $in]
 		);
 	}
 

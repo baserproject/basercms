@@ -34,15 +34,15 @@ class FileLog extends BaseLog {
  * @var array
  * @see FileLog::__construct()
  */
-	protected $_defaults = array(
+	protected $_defaults = [
 		'path' => LOGS,
 		'file' => null,
 		'types' => null,
-		'scopes' => array(),
+		'scopes' => [],
 		'rotate' => 10,
 		'size' => 10485760, // 10MB
 		'mask' => null,
-	);
+	];
 
 /**
  * Path to save log files on.
@@ -85,7 +85,7 @@ class FileLog extends BaseLog {
  *
  * @param array $config Options for the FileLog, see above.
  */
-	public function __construct($config = array()) {
+	public function __construct($config = []) {
 		$config = Hash::merge($this->_defaults, $config);
 		parent::__construct($config);
 	}
@@ -96,7 +96,7 @@ class FileLog extends BaseLog {
  * @param array $config Engine configuration
  * @return array
  */
-	public function config($config = array()) {
+	public function config($config = []) {
 		parent::config($config);
 
 		if (!empty($config['path'])) {
@@ -149,7 +149,7 @@ class FileLog extends BaseLog {
 			$selfError = true;
 			trigger_error(__d(
 				'cake_dev', 'Could not apply permission mask "%s" on log file "%s"',
-				array($this->_config['mask'], $pathname)), E_USER_WARNING);
+				[$this->_config['mask'], $pathname]), E_USER_WARNING);
 			$selfError = false;
 		}
 		return $result;
@@ -162,7 +162,7 @@ class FileLog extends BaseLog {
  * @return string File name
  */
 	protected function _getFilename($type) {
-		$debugTypes = array('notice', 'info', 'debug');
+		$debugTypes = ['notice', 'info', 'debug'];
 
 		if (!empty($this->_file)) {
 			$filename = $this->_file;

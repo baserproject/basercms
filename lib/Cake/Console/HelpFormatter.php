@@ -61,7 +61,7 @@ class HelpFormatter {
  */
 	public function text($width = 72) {
 		$parser = $this->_parser;
-		$out = array();
+		$out = [];
 		$description = $parser->description();
 		if (!empty($description)) {
 			$out[] = CakeText::wrap($description, $width);
@@ -76,11 +76,11 @@ class HelpFormatter {
 			$out[] = '';
 			$max = $this->_getMaxLength($subcommands) + 2;
 			foreach ($subcommands as $command) {
-				$out[] = CakeText::wrap($command->help($max), array(
+				$out[] = CakeText::wrap($command->help($max), [
 					'width' => $width,
 					'indent' => str_repeat(' ', $max),
 					'indentAt' => 1
-				));
+				]);
 			}
 			$out[] = '';
 			$out[] = __d('cake_console', 'To see help on a subcommand use <info>`cake %s [subcommand] --help`</info>', $parser->command());
@@ -93,11 +93,11 @@ class HelpFormatter {
 			$out[] = __d('cake_console', '<info>Options:</info>');
 			$out[] = '';
 			foreach ($options as $option) {
-				$out[] = CakeText::wrap($option->help($max), array(
+				$out[] = CakeText::wrap($option->help($max), [
 					'width' => $width,
 					'indent' => str_repeat(' ', $max),
 					'indentAt' => 1
-				));
+				]);
 			}
 			$out[] = '';
 		}
@@ -108,11 +108,11 @@ class HelpFormatter {
 			$out[] = __d('cake_console', '<info>Arguments:</info>');
 			$out[] = '';
 			foreach ($arguments as $argument) {
-				$out[] = CakeText::wrap($argument->help($max), array(
+				$out[] = CakeText::wrap($argument->help($max), [
 					'width' => $width,
 					'indent' => str_repeat(' ', $max),
 					'indentAt' => 1
-				));
+				]);
 			}
 			$out[] = '';
 		}
@@ -132,25 +132,25 @@ class HelpFormatter {
  * @return string
  */
 	protected function _generateUsage() {
-		$usage = array('cake ' . $this->_parser->command());
+		$usage = ['cake ' . $this->_parser->command()];
 		$subcommands = $this->_parser->subcommands();
 		if (!empty($subcommands)) {
 			$usage[] = '[subcommand]';
 		}
-		$options = array();
+		$options = [];
 		foreach ($this->_parser->options() as $option) {
 			$options[] = $option->usage();
 		}
 		if (count($options) > $this->_maxOptions) {
-			$options = array('[options]');
+			$options = ['[options]'];
 		}
 		$usage = array_merge($usage, $options);
-		$args = array();
+		$args = [];
 		foreach ($this->_parser->arguments() as $argument) {
 			$args[] = $argument->usage();
 		}
 		if (count($args) > $this->_maxArgs) {
-			$args = array('[arguments]');
+			$args = ['[arguments]'];
 		}
 		$usage = array_merge($usage, $args);
 		return implode(' ', $usage);

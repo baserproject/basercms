@@ -78,7 +78,7 @@ class Dispatcher implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-		return array('Dispatcher.beforeDispatch' => 'parseParams');
+		return ['Dispatcher.beforeDispatch' => 'parseParams'];
 	}
 
 /**
@@ -96,13 +96,13 @@ class Dispatcher implements CakeEventListener {
 		}
 
 		foreach ($filters as $index => $filter) {
-			$settings = array();
+			$settings = [];
 			if (is_array($filter) && !is_int($index) && class_exists($index)) {
 				$settings = $filter;
 				$filter = $index;
 			}
 			if (is_string($filter)) {
-				$filter = array('callable' => $filter);
+				$filter = ['callable' => $filter];
 			}
 			if (is_string($filter['callable'])) {
 				list($plugin, $callable) = pluginSplit($filter['callable'], true);
@@ -113,9 +113,9 @@ class Dispatcher implements CakeEventListener {
 				$manager->attach(new $callable($settings));
 			} else {
 				$on = strtolower($filter['on']);
-				$options = array();
+				$options = [];
 				if (isset($filter['priority'])) {
-					$options = array('priority' => $filter['priority']);
+					$options = ['priority' => $filter['priority']];
 				}
 				$manager->attach($filter['callable'], 'Dispatcher.' . $on . 'Dispatch', $options);
 			}
@@ -142,7 +142,7 @@ class Dispatcher implements CakeEventListener {
  * @triggers Dispatcher.afterDispatch $this, compact('request', 'response')
  * @throws MissingControllerException When the controller is missing.
  */
-	public function dispatch(CakeRequest $request, CakeResponse $response, $additionalParams = array()) {
+	public function dispatch(CakeRequest $request, CakeResponse $response, $additionalParams = []) {
 		$beforeEvent = new CakeEvent('Dispatcher.beforeDispatch', $this, compact('request', 'response', 'additionalParams'));
 		$this->getEventManager()->dispatch($beforeEvent);
 
@@ -158,10 +158,10 @@ class Dispatcher implements CakeEventListener {
 		$controller = $this->_getController($request, $response);
 
 		if (!($controller instanceof Controller)) {
-			throw new MissingControllerException(array(
+			throw new MissingControllerException([
 				'class' => Inflector::camelize($request->params['controller']) . 'Controller',
 				'plugin' => empty($request->params['plugin']) ? null : Inflector::camelize($request->params['plugin'])
-			));
+			]);
 		}
 
 		$response = $this->_invoke($controller, $request);

@@ -28,20 +28,20 @@ class AttachmentFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'comment_id' => array('type' => 'integer', 'null' => false),
-		'attachment' => array('type' => 'string', 'null' => false),
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'comment_id' => ['type' => 'integer', 'null' => false],
+		'attachment' => ['type' => 'string', 'null' => false],
 		'created' => 'datetime',
 		'updated' => 'datetime'
-	);
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('comment_id' => 5, 'attachment' => 'attachment.zip', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31')
-	);
+	public $records = [
+		['comment_id' => 5, 'attachment' => 'attachment.zip', 'created' => '2007-03-18 10:51:23', 'updated' => '2007-03-18 10:53:31']
+	];
 }

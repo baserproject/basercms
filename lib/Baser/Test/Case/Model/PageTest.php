@@ -578,7 +578,7 @@ class PageTest extends BaserTestCase {
  * @dataProvider phpValidSyntaxDataProvider
  */
 	public function testPhpValidSyntax($code) {
-		$this->assertTrue($this->Page->phpValidSyntax(array('contents' => $code)));
+		$this->assertTrue($this->Page->phpValidSyntax(['contents' => $code]));
 	}
 
 	public function phpValidSyntaxDataProvider() {
@@ -597,7 +597,7 @@ class PageTest extends BaserTestCase {
  * @dataProvider phpValidSyntaxWithInvalidDataProvider
  */
 	public function testPhpValidSyntaxWithInvalid($line, $code) {
-		$this->assertContains("on line {$line}", $this->Page->phpValidSyntax(array('contents' => $code)));
+		$this->assertContains("on line {$line}", $this->Page->phpValidSyntax(['contents' => $code]));
 	}
 
 	public function phpValidSyntaxWithInvalidDataProvider() {

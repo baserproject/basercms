@@ -36,15 +36,15 @@ class MailTransport extends AbstractTransport {
 		if (isset($this->_config['eol'])) {
 			$eol = $this->_config['eol'];
 		}
-		$headers = $email->getHeaders(array('from', 'sender', 'replyTo', 'readReceipt', 'returnPath', 'to', 'cc', 'bcc'));
+		$headers = $email->getHeaders(['from', 'sender', 'replyTo', 'readReceipt', 'returnPath', 'to', 'cc', 'bcc']);
 		$to = $headers['To'];
 		unset($headers['To']);
 		foreach ($headers as $key => $header) {
-			$headers[$key] = str_replace(array("\r", "\n"), '', $header);
+			$headers[$key] = str_replace(["\r", "\n"], '', $header);
 		}
 		$headers = $this->_headersToString($headers, $eol);
-		$subject = str_replace(array("\r", "\n"), '', $email->subject());
-		$to = str_replace(array("\r", "\n"), '', $to);
+		$subject = str_replace(["\r", "\n"], '', $email->subject());
+		$to = str_replace(["\r", "\n"], '', $to);
 
 		$message = implode($eol, $email->message());
 
@@ -53,7 +53,7 @@ class MailTransport extends AbstractTransport {
 
 		$headers .= $eol . 'Subject: ' . $subject;
 		$headers .= $eol . 'To: ' . $to;
-		return array('headers' => $headers, 'message' => $message);
+		return ['headers' => $headers, 'message' => $message];
 	}
 
 /**

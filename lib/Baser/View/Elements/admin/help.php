@@ -22,7 +22,7 @@ if (empty($help)) {
 <div id="Help" class="clearfix">
 
 	<h2 class="head">
-		<?php $this->BcBaser->img('admin/head_help.png', array('width' => 69, 'height' => 16, 'alt' => 'ヘルプ')) ?>
+		<?php $this->BcBaser->img('admin/head_help.png', ['width' => 69, 'height' => 16, 'alt' => 'ヘルプ']) ?>
 	</h2>
 
 	<div class="body">
@@ -31,7 +31,7 @@ if (empty($help)) {
 
 	<div class="clearfix close">
 		<div id="CloseHelp">
-			<a><?php $this->BcBaser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
+			<a><?php $this->BcBaser->img('admin/btn_close.png', ['width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn']) ?></a>
 		</div>
 	</div>
 

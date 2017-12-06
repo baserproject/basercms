@@ -46,7 +46,7 @@ class ConsoleLog extends BaseLog {
  * @param array $config Options for the FileLog, see above.
  * @throws CakeLogException
  */
-	public function __construct($config = array()) {
+	public function __construct($config = []) {
 		parent::__construct($config);
 		if ((DS === '\\' && !(bool)env('ANSICON') && env('ConEmuANSI') !== 'ON') ||
 			(function_exists('posix_isatty') && !posix_isatty($this->_output))
@@ -55,12 +55,12 @@ class ConsoleLog extends BaseLog {
 		} else {
 			$outputAs = ConsoleOutput::COLOR;
 		}
-		$config = Hash::merge(array(
+		$config = Hash::merge([
 			'stream' => 'php://stderr',
 			'types' => null,
-			'scopes' => array(),
+			'scopes' => [],
 			'outputAs' => $outputAs,
-			), $this->_config);
+			], $this->_config);
 		$config = $this->config($config);
 		if ($config['stream'] instanceof ConsoleOutput) {
 			$this->_output = $config['stream'];

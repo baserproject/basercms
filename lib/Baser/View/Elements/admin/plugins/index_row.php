@@ -13,7 +13,7 @@
 /**
  * [ADMIN] プラグイン一覧　行
  */
-$classies = array('sortable');
+$classies = ['sortable'];
 if (!$data['Plugin']['status']) {
 	$classies[] = 'disablerow';
 }
@@ -24,26 +24,26 @@ $class = ' class="' . implode(' ', $classies) . '"';
 <tr<?php echo $class; ?>>
 	<td class="row-tools">
 		<?php if ($sortmode): ?>
-			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え', 'class' => 'sort-handle')) ?></span>
-			<?php echo $this->BcForm->input('Sort.id' . $data['Plugin']['id'], array('type' => 'hidden', 'class' => 'id', 'value' => $data['Plugin']['id'])) ?>
+			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => '並び替え', 'class' => 'sort-handle']) ?></span>
+			<?php echo $this->BcForm->input('Sort.id' . $data['Plugin']['id'], ['type' => 'hidden', 'class' => 'id', 'value' => $data['Plugin']['id']]) ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Plugin']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id'])) ?>
+			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Plugin']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Plugin']['id']]) ?>
 		<?php endif ?>
 		<?php if ($data['Plugin']['update']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_update.png', array('alt' => 'アップデート', 'class' => 'btn')), array('controller' => 'updaters', 'action' => 'plugin', $data['Plugin']['name']), array('title' => 'アップデート', 'class' => 'btn-update')); ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_update.png', ['alt' => 'アップデート', 'class' => 'btn']), ['controller' => 'updaters', 'action' => 'plugin', $data['Plugin']['name']], ['title' => 'アップデート', 'class' => 'btn-update']); ?>
 		<?php endif ?>
 		<?php if ($data['Plugin']['admin_link'] && $data['Plugin']['status'] && !$data['Plugin']['update'] && !$data['Plugin']['old_version']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', array('alt' => '管理', 'class' => 'btn')), $data['Plugin']['admin_link'], array('title' => '管理')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['alt' => '管理', 'class' => 'btn']), $data['Plugin']['admin_link'], ['title' => '管理']) ?>
 		<?php endif; ?>
 		<?php if ($data['Plugin']['status']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_disable.png', array('alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Plugin']['name']), array('title' => '無効', 'class' => 'btn-delete')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_disable.png', ['alt' => '無効', 'class' => 'btn']), ['action' => 'ajax_delete', $data['Plugin']['name']], ['title' => '無効', 'class' => 'btn-delete']) ?>
 		<?php elseif (!$data['Plugin']['status'] && !$data['Plugin']['update'] && !$data['Plugin']['old_version']): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_install.png', array('alt' => 'インストール', 'class' => 'btn')), array('action' => 'install', $data['Plugin']['name']), array('title' => 'インストール')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_install.png', ['alt' => 'インストール', 'class' => 'btn']), ['action' => 'install', $data['Plugin']['name']], ['title' => 'インストール']) ?>
 		<?php endif ?>
 		<?php if (!$data['Plugin']['status']): ?>
 			<?php if (!in_array($data['Plugin']['name'], $corePlugins)): ?>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete_file', $data['Plugin']['name']), array('title' => '削除', 'class' => 'btn-delfile')); ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete_file', $data['Plugin']['name']], ['title' => '削除', 'class' => 'btn-delfile']); ?>
 			<?php endif ?>
 		<?php endif; ?>
 	</td>
@@ -57,7 +57,7 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	</td>
 	<td><?php echo $data['Plugin']['version'] ?></td>
 	<td><?php echo $data['Plugin']['description'] ?></td>
-	<td><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], array('target' => '_blank')) ?></td>
+	<td><?php $this->BcBaser->link($data['Plugin']['author'], $data['Plugin']['url'], ['target' => '_blank']) ?></td>
 	<td style="width:10%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Plugin']['modified']) ?>

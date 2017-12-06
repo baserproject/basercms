@@ -35,21 +35,21 @@ class TranslateTableFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-			'id' => array('type' => 'integer', 'key' => 'primary'),
-			'locale' => array('type' => 'string', 'length' => 6, 'null' => false),
-			'model' => array('type' => 'string', 'null' => false),
-			'foreign_key' => array('type' => 'integer', 'null' => false),
-			'field' => array('type' => 'string', 'null' => false),
-			'content' => array('type' => 'text'));
+	public $fields = [
+			'id' => ['type' => 'integer', 'key' => 'primary'],
+			'locale' => ['type' => 'string', 'length' => 6, 'null' => false],
+			'model' => ['type' => 'string', 'null' => false],
+			'foreign_key' => ['type' => 'integer', 'null' => false],
+			'field' => ['type' => 'string', 'null' => false],
+			'content' => ['type' => 'text']];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('locale' => 'eng', 'model' => 'TranslatedItemWithTable', 'foreign_key' => 1, 'field' => 'title', 'content' => 'Another Title #1'),
-		array('locale' => 'eng', 'model' => 'TranslatedItemWithTable', 'foreign_key' => 1, 'field' => 'content', 'content' => 'Another Content #1')
-	);
+	public $records = [
+		['locale' => 'eng', 'model' => 'TranslatedItemWithTable', 'foreign_key' => 1, 'field' => 'title', 'content' => 'Another Title #1'],
+		['locale' => 'eng', 'model' => 'TranslatedItemWithTable', 'foreign_key' => 1, 'field' => 'content', 'content' => 'Another Content #1']
+	];
 }

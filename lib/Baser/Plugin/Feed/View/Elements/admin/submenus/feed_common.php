@@ -20,10 +20,10 @@
 	<th>フィード設定メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('フィード設定一覧', array('action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('フィード設定新規追加', array('action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('フィード設定一覧', ['action' => 'index']) ?></li>
+			<li><?php $this->BcBaser->link('フィード設定新規追加', ['action' => 'add']) ?></li>
 <?php if ($this->params['controller'] == 'feed_configs' && $this->action == 'admin_index'): ?>
-			<li><?php $this->BcBaser->link('フィードキャッシュ削除', array('action' => 'delete_cache'), ['class' => 'submit-token'], 'フィードのキャッシュを削除します。いいですか？') ?></li>
+			<li><?php $this->BcBaser->link('フィードキャッシュ削除', ['action' => 'delete_cache'], ['class' => 'submit-token'], 'フィードのキャッシュを削除します。いいですか？') ?></li>
 <?php endif ?>
 		</ul>
 	</td>

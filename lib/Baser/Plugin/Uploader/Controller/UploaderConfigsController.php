@@ -29,21 +29,21 @@ class UploaderConfigsController extends AppController {
  * @var		array
  * @access	public
  */
-	public $uses = array('Plugin', 'Uploader.UploaderConfig');
+	public $uses = ['Plugin', 'Uploader.UploaderConfig'];
 /**
  * コンポーネント
  *
  * @var		array
  * @access	public
  */
-	public $components = array('BcAuth','Cookie','BcAuthConfigure');
+	public $components = ['BcAuth','Cookie','BcAuthConfigure'];
 /**
  * サブメニューエレメント
  *
  * @var 	array
  * @access 	public
  */
-	public $subMenuElements = array('uploader');
+	public $subMenuElements = ['uploader'];
 /**
  * [ADMIN] アップローダー設定
  *
@@ -60,7 +60,7 @@ class UploaderConfigsController extends AppController {
 			if($this->UploaderConfig->validates()) {
 				$this->UploaderConfig->saveKeyValue($this->request->data);
 				$this->setMessage('アップローダー設定を保存しました。');
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}

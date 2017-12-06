@@ -9,12 +9,12 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js(array(
+$this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
-));
+]);
 ?>
 
 <script type="text/javascript">
@@ -24,6 +24,6 @@ $(document).ready(function(){
 });
 </script>
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'uploader_categories', 'action' => 'ajax_batch')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'uploader_categories', 'action' => 'ajax_batch']) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="DataList"><?php $this->BcBaser->element('uploader_categories/index_list') ?></div>

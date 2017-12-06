@@ -1212,7 +1212,7 @@ class BcAppController extends Controller {
  * @return	string
  */
 	protected function convertSelectTextCondition($fieldName, $values, $options = []) {
-		$_options = array('type' => 'string', 'conditionType' => 'or');
+		$_options = ['type' => 'string', 'conditionType' => 'or'];
 		$options = am($_options, $options);
 		$conditions = [];
 		extract($options);

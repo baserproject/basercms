@@ -128,7 +128,7 @@ class SessionHelper extends AppHelper {
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/session.html#SessionHelper::flash
  * @deprecated 3.0.0 Since 2.7, use FlashHelper::render() instead.
  */
-	public function flash($key = 'flash', $attrs = array()) {
+	public function flash($key = 'flash', $attrs = []) {
 		$out = false;
 
 		if (CakeSession::check('Message.' . $key)) {
@@ -150,7 +150,7 @@ class SessionHelper extends AppHelper {
 			} elseif (!$flash['element']) {
 				$out = $message;
 			} else {
-				$options = array();
+				$options = [];
 				if (isset($flash['params']['plugin'])) {
 					$options['plugin'] = $flash['params']['plugin'];
 				}

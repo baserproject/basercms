@@ -1,2 +1,2 @@
 <?php
-$config = array();
+$config = [];

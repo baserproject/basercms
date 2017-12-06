@@ -49,14 +49,14 @@ class Cache {
  *
  * @var array
  */
-	protected static $_config = array();
+	protected static $_config = [];
 
 /**
  * Group to Config mapping
  *
  * @var array
  */
-	protected static $_groups = array();
+	protected static $_groups = [];
 
 /**
  * Whether to reset the settings with the next call to Cache::set();
@@ -70,7 +70,7 @@ class Cache {
  *
  * @var array
  */
-	protected static $_engines = array();
+	protected static $_engines = [];
 
 /**
  * Set the cache configuration to use. config() can
@@ -119,12 +119,12 @@ class Cache {
  * @throws CacheException
  * @see app/Config/core.php for configuration settings
  */
-	public static function config($name = null, $settings = array()) {
+	public static function config($name = null, $settings = []) {
 		if (is_array($name)) {
 			$settings = $name;
 		}
 
-		$current = array();
+		$current = [];
 		if (isset(static::$_config[$name])) {
 			$current = static::$_config[$name];
 		}
@@ -239,7 +239,7 @@ class Cache {
  * @param string $config The configuration name you are changing. Defaults to 'default'
  * @return array Array of settings.
  */
-	public static function set($settings = array(), $value = null, $config = 'default') {
+	public static function set($settings = [], $value = null, $config = 'default') {
 		if (is_array($settings) && $value !== null) {
 			$config = $value;
 		}
@@ -256,7 +256,7 @@ class Cache {
 				$settings = static::$_config[$config];
 			} else {
 				if (is_string($settings) && $value !== null) {
-					$settings = array($settings => $value);
+					$settings = [$settings => $value];
 				}
 				$settings += static::$_config[$config];
 				if (isset($settings['duration']) && !is_numeric($settings['duration'])) {
@@ -511,7 +511,7 @@ class Cache {
 		if (!empty(static::$_engines[$name])) {
 			return static::$_engines[$name]->settings();
 		}
-		return array();
+		return [];
 	}
 
 /**
@@ -538,7 +538,7 @@ class Cache {
 			return static::$_groups;
 		}
 		if (isset(static::$_groups[$group])) {
-			return array($group => static::$_groups[$group]);
+			return [$group => static::$_groups[$group]];
 		}
 		throw new CacheException(__d('cake_dev', 'Invalid cache group %s', $group));
 	}

@@ -18,60 +18,60 @@ require BASER . 'Error' . DS . 'exceptions.php';
  * Baserパス追加
  */
 //優先度高
-App::build(array(
-	'View'						=> array(WWW_ROOT),
-), App::PREPEND);
+App::build([
+	'View'						=> [WWW_ROOT],
+], App::PREPEND);
 
 
 //優先度低
-App::build(array(
-	'Controller'				=> array(BASER_CONTROLLERS),
-	'Model'						=> array(BASER_MODELS),
-	'Model/Behavior'			=> array(BASER_BEHAVIORS),
-	'Model/Datasource'			=> array(BASER_DATASOURCE),
-	'Model/Datasource/Database' => array(BASER_DATABASE),
-	'Controller/Component'		=> array(BASER_COMPONENTS),
-	'Controller/Component/Auth' => array(BASER_COMPONENTS . 'Auth' . DS),
-	'View'						=> array(BASER_VIEWS),
-	'View/Helper'				=> array(BASER_HELPERS),
-	'Plugin'					=> array(BASER_PLUGINS),
-	'Vendor'					=> array(BASER_VENDORS),
-	'Locale'					=> array(BASER_LOCALES),
-	'Lib'						=> array(BASER_LIBS),
-	'Console'					=> array(BASER_CONSOLES),
-	'Console/Command'			=> array(BASER_CONSOLES . 'Command' . DS),
-), App::APPEND);
+App::build([
+	'Controller'				=> [BASER_CONTROLLERS],
+	'Model'						=> [BASER_MODELS],
+	'Model/Behavior'			=> [BASER_BEHAVIORS],
+	'Model/Datasource'			=> [BASER_DATASOURCE],
+	'Model/Datasource/Database' => [BASER_DATABASE],
+	'Controller/Component'		=> [BASER_COMPONENTS],
+	'Controller/Component/Auth' => [BASER_COMPONENTS . 'Auth' . DS],
+	'View'						=> [BASER_VIEWS],
+	'View/Helper'				=> [BASER_HELPERS],
+	'Plugin'					=> [BASER_PLUGINS],
+	'Vendor'					=> [BASER_VENDORS],
+	'Locale'					=> [BASER_LOCALES],
+	'Lib'						=> [BASER_LIBS],
+	'Console'					=> [BASER_CONSOLES],
+	'Console/Command'			=> [BASER_CONSOLES . 'Command' . DS],
+], App::APPEND);
 
 //新規登録
-App::build(array(
-	'Event'						=> array(APP . 'Event', BASER_EVENTS),
-	'Routing'					=> array(BASER . 'Routing' . DS),
-	'Routing/Filter'			=> array(BASER . 'Routing' . DS . 'Filter' . DS),
-	'Routing/Route'				=> array(BASER . 'Routing' . DS . 'Route' . DS),
-	'Configure'					=> array(BASER . 'Configure' . DS),
-	'TestSuite'					=> array(BASER_TEST_SUITE),
-	'TestSuite/Reporter'		=> array(BASER_TEST_SUITE . 'Reporter' . DS),
-	'TestSuite/Fixture'			=> array(BASER_TEST_SUITE . 'Fixture' . DS),
-	'Network'					=> array(BASER . 'Network' . DS)
-), App::REGISTER);
+App::build([
+	'Event'						=> [APP . 'Event', BASER_EVENTS],
+	'Routing'					=> [BASER . 'Routing' . DS],
+	'Routing/Filter'			=> [BASER . 'Routing' . DS . 'Filter' . DS],
+	'Routing/Route'				=> [BASER . 'Routing' . DS . 'Route' . DS],
+	'Configure'					=> [BASER . 'Configure' . DS],
+	'TestSuite'					=> [BASER_TEST_SUITE],
+	'TestSuite/Reporter'		=> [BASER_TEST_SUITE . 'Reporter' . DS],
+	'TestSuite/Fixture'			=> [BASER_TEST_SUITE . 'Fixture' . DS],
+	'Network'					=> [BASER . 'Network' . DS]
+], App::REGISTER);
 
 /**
  * ディスパッチャーフィルターを追加
  */
 $filters = Configure::read('Dispatcher.filters');
 if (!is_array($filters)) {
-	$filters = array();
+	$filters = [];
 }
 Configure::write('Dispatcher.filters',
 	array_merge(
 		$filters,
-		array(
+		[
 			'BcAssetDispatcher',
 			'BcCacheDispatcher',
 			'BcRequestFilter',
 			'BcRedirectMainSiteFilter',
 			'BcRedirectSubSiteFilter'
-		)
+		]
 	)
 );
 
@@ -152,12 +152,12 @@ App::uses('BcPluginAppModel', 'Model');
  * 設定ファイル読み込み
  * install.php で設定している為、一旦読み込んで再設定
  */
-$baserSettings = array();
+$baserSettings = [];
 $baserSettings['BcEnv'] = Configure::read('BcEnv');
 $baserSettings['BcApp'] = Configure::read('BcApp');
 Configure::config('baser', new PhpReader(BASER_CONFIGS));
 if (Configure::load('setting', 'baser') === false) {
-	$config = array();
+	$config = [];
 	include BASER_CONFIGS . 'setting.php';
 	Configure::write($config);
 }
@@ -193,21 +193,21 @@ if (BC_INSTALLED) {
  * Configures default file logging options
  */
 	App::uses('CakeLog', 'Log');
-	CakeLog::config('debug', array(
+	CakeLog::config('debug', [
 		'engine' => 'FileLog',
-		'types' => array('notice', 'info', 'debug'),
+		'types' => ['notice', 'info', 'debug'],
 		'file' => 'debug',
-	));
-	CakeLog::config('error', array(
+	]);
+	CakeLog::config('error', [
 		'engine' => 'FileLog',
-		'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+		'types' => ['warning', 'error', 'critical', 'alert', 'emergency'],
 		'file' => 'error',
-	));
-	CakeLog::config('update', array(
+	]);
+	CakeLog::config('update', [
 		'engine' => 'FileLog',
-		'types' => array('update'),
+		'types' => ['update'],
 		'file' => 'update',
-	));
+	]);
 
 /**
  * キャッシュ設定
@@ -217,46 +217,46 @@ if (BC_INSTALLED) {
 	$cacheDuration = Configure::read('BcCache.duration');
 
 	// モデルスキーマ
-	Cache::config('_cake_model_', array(
+	Cache::config('_cake_model_', [
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_model_',
 		'path' => CACHE . 'models' . DS,
 		'duration' => $cacheDuration
-	));
+	]);
 	// コア環境
-	Cache::config('_cake_core_', array(
+	Cache::config('_cake_core_', [
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_core_',
 		'path' => CACHE . 'persistent' . DS,
 		'duration' => $cacheDuration
-	));
+	]);
 	// DBデータキャッシュ
-	Cache::config('_cake_data_', array(
+	Cache::config('_cake_data_', [
 		'engine' => $cacheEngine,
 		'path' => CACHE . 'datas',
 		'probability' => 100,
 		'prefix' => $cachePrefix . 'cake_data_',
 		'lock' => true,
 		'duration' => $cacheDuration
-	));
+	]);
 	// エレメントキャッシュ
-	Cache::config('_cake_element_', array(
+	Cache::config('_cake_element_', [
 		'engine' => $cacheEngine,
 		'path' => CACHE . 'views',
 		'probability' => 100,
 //		'prefix' => $cachePrefix . 'cake_data_',
 		'lock' => true,
 		'duration' => Configure::read('BcCache.viewDuration')
-	));
+	]);
 	// 環境情報キャッシュ
-	Cache::config('_cake_env_', array(
+	Cache::config('_cake_env_', [
 		'engine' => $cacheEngine,
 		'probability' => 100,
 		'path' => CACHE . 'environment',
 		'prefix' => $cachePrefix . 'cake_env_',
 		'lock' => false,
 		'duration' => $cacheDuration
-	));
+	]);
 
 /**
  * サイト基本設定を読み込む
@@ -297,7 +297,7 @@ if (BC_INSTALLED) {
  */
 
 if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
-	App::build(array('Plugin' => array(BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS)), App::PREPEND);
+	App::build(['Plugin' => [BASER_THEMES . $bcSite['theme'] . DS . 'Plugin' . DS]], App::PREPEND);
 	$plugins = getEnablePlugins();
 	foreach ($plugins as $plugin) {
 		loadPlugin($plugin['Plugin']['name'], $plugin['Plugin']['priority']);
@@ -391,7 +391,7 @@ if(Configure::read('Cache.check')) {
  * テーマヘルパーのパスを追加する 
  */
 if (BC_INSTALLED || isConsole()) {
-	App::build(array(
-		'View/Helper' => array(BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS)
-	), App::PREPEND);
+	App::build([
+		'View/Helper' => [BASER_THEMES . Configure::read('BcSite.theme') . DS . 'Helper' . DS]
+	], App::PREPEND);
 }

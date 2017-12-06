@@ -37,20 +37,20 @@
  *     Note that the Turkic mappings do not maintain canonical equivalence without additional processing.
  *     See the discussions of case mapping in the Unicode Standard for more information.
  */
-$config['2150_218f'][] = array('upper' => 8544, 'status' => 'C', 'lower' => array(8560)); /* ROMAN NUMERAL ONE */
-$config['2150_218f'][] = array('upper' => 8545, 'status' => 'C', 'lower' => array(8561)); /* ROMAN NUMERAL TWO */
-$config['2150_218f'][] = array('upper' => 8546, 'status' => 'C', 'lower' => array(8562)); /* ROMAN NUMERAL THREE */
-$config['2150_218f'][] = array('upper' => 8547, 'status' => 'C', 'lower' => array(8563)); /* ROMAN NUMERAL FOUR */
-$config['2150_218f'][] = array('upper' => 8548, 'status' => 'C', 'lower' => array(8564)); /* ROMAN NUMERAL FIVE */
-$config['2150_218f'][] = array('upper' => 8549, 'status' => 'C', 'lower' => array(8565)); /* ROMAN NUMERAL SIX */
-$config['2150_218f'][] = array('upper' => 8550, 'status' => 'C', 'lower' => array(8566)); /* ROMAN NUMERAL SEVEN */
-$config['2150_218f'][] = array('upper' => 8551, 'status' => 'C', 'lower' => array(8567)); /* ROMAN NUMERAL EIGHT */
-$config['2150_218f'][] = array('upper' => 8552, 'status' => 'C', 'lower' => array(8568)); /* ROMAN NUMERAL NINE */
-$config['2150_218f'][] = array('upper' => 8553, 'status' => 'C', 'lower' => array(8569)); /* ROMAN NUMERAL TEN */
-$config['2150_218f'][] = array('upper' => 8554, 'status' => 'C', 'lower' => array(8570)); /* ROMAN NUMERAL ELEVEN */
-$config['2150_218f'][] = array('upper' => 8555, 'status' => 'C', 'lower' => array(8571)); /* ROMAN NUMERAL TWELVE */
-$config['2150_218f'][] = array('upper' => 8556, 'status' => 'C', 'lower' => array(8572)); /* ROMAN NUMERAL FIFTY */
-$config['2150_218f'][] = array('upper' => 8557, 'status' => 'C', 'lower' => array(8573)); /* ROMAN NUMERAL ONE HUNDRED */
-$config['2150_218f'][] = array('upper' => 8558, 'status' => 'C', 'lower' => array(8574)); /* ROMAN NUMERAL FIVE HUNDRED */
-$config['2150_218f'][] = array('upper' => 8559, 'status' => 'C', 'lower' => array(8575)); /* ROMAN NUMERAL ONE THOUSAND */
-$config['2150_218f'][] = array('upper' => 8579, 'status' => 'C', 'lower' => array(8580)); /* ROMAN NUMERAL REVERSED ONE HUNDRED */
+$config['2150_218f'][] = ['upper' => 8544, 'status' => 'C', 'lower' => [8560]]; /* ROMAN NUMERAL ONE */
+$config['2150_218f'][] = ['upper' => 8545, 'status' => 'C', 'lower' => [8561]]; /* ROMAN NUMERAL TWO */
+$config['2150_218f'][] = ['upper' => 8546, 'status' => 'C', 'lower' => [8562]]; /* ROMAN NUMERAL THREE */
+$config['2150_218f'][] = ['upper' => 8547, 'status' => 'C', 'lower' => [8563]]; /* ROMAN NUMERAL FOUR */
+$config['2150_218f'][] = ['upper' => 8548, 'status' => 'C', 'lower' => [8564]]; /* ROMAN NUMERAL FIVE */
+$config['2150_218f'][] = ['upper' => 8549, 'status' => 'C', 'lower' => [8565]]; /* ROMAN NUMERAL SIX */
+$config['2150_218f'][] = ['upper' => 8550, 'status' => 'C', 'lower' => [8566]]; /* ROMAN NUMERAL SEVEN */
+$config['2150_218f'][] = ['upper' => 8551, 'status' => 'C', 'lower' => [8567]]; /* ROMAN NUMERAL EIGHT */
+$config['2150_218f'][] = ['upper' => 8552, 'status' => 'C', 'lower' => [8568]]; /* ROMAN NUMERAL NINE */
+$config['2150_218f'][] = ['upper' => 8553, 'status' => 'C', 'lower' => [8569]]; /* ROMAN NUMERAL TEN */
+$config['2150_218f'][] = ['upper' => 8554, 'status' => 'C', 'lower' => [8570]]; /* ROMAN NUMERAL ELEVEN */
+$config['2150_218f'][] = ['upper' => 8555, 'status' => 'C', 'lower' => [8571]]; /* ROMAN NUMERAL TWELVE */
+$config['2150_218f'][] = ['upper' => 8556, 'status' => 'C', 'lower' => [8572]]; /* ROMAN NUMERAL FIFTY */
+$config['2150_218f'][] = ['upper' => 8557, 'status' => 'C', 'lower' => [8573]]; /* ROMAN NUMERAL ONE HUNDRED */
+$config['2150_218f'][] = ['upper' => 8558, 'status' => 'C', 'lower' => [8574]]; /* ROMAN NUMERAL FIVE HUNDRED */
+$config['2150_218f'][] = ['upper' => 8559, 'status' => 'C', 'lower' => [8575]]; /* ROMAN NUMERAL ONE THOUSAND */
+$config['2150_218f'][] = ['upper' => 8579, 'status' => 'C', 'lower' => [8580]]; /* ROMAN NUMERAL REVERSED ONE HUNDRED */

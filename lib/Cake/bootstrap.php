@@ -139,7 +139,7 @@ require CAKE . 'basics.php';
 require CAKE . 'Core' . DS . 'App.php';
 require CAKE . 'Error' . DS . 'exceptions.php';
 
-spl_autoload_register(array('App', 'load'));
+spl_autoload_register(['App', 'load']);
 
 App::uses('ErrorHandler', 'Error');
 App::uses('Configure', 'Core');

@@ -148,19 +148,19 @@ class ServerShell extends AppShell {
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 
-		$parser->description(array(
+		$parser->description([
 			__d('cake_console', 'PHP Built-in Server for CakePHP'),
 			__d('cake_console', '<warning>[WARN] Don\'t use this at the production environment</warning>')
-		))->addOption('host', array(
+		])->addOption('host', [
 			'short' => 'H',
 			'help' => __d('cake_console', 'ServerHost')
-		))->addOption('port', array(
+		])->addOption('port', [
 			'short' => 'p',
 			'help' => __d('cake_console', 'ListenPort')
-		))->addOption('document_root', array(
+		])->addOption('document_root', [
 			'short' => 'd',
 			'help' => __d('cake_console', 'DocumentRoot')
-		));
+		]);
 
 		return $parser;
 	}

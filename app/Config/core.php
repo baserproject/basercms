@@ -56,11 +56,11 @@ Configure::write('Config.language', 'jpn');
  *
  * @see ErrorHandler for more information on error handling and configuration.
  */
-	Configure::write('Error', array(
+	Configure::write('Error', [
 		'handler' => 'ErrorHandler::handleError',
 		'level' => E_ALL & ~E_DEPRECATED,
 		'trace' => true
-	));
+	]);
 
 /**
  * Configure the Exception handler used for uncaught exceptions. By default,
@@ -84,11 +84,11 @@ Configure::write('Config.language', 'jpn');
  *
  * @see ErrorHandler for more information on exception handling and configuration.
  */
-	Configure::write('Exception', array(
+	Configure::write('Exception', [
 		'handler' => 'ErrorHandler::handleException',
 		'renderer' => 'ExceptionRenderer',
 		'log' => true
-	));
+	]);
 
 /**
  * Application wide charset encoding
@@ -162,7 +162,7 @@ Configure::write('Config.language', 'jpn');
 	// >>>
 	//Configure::write('Routing.prefixes', array('admin'));
 	// ---
-	Configure::write('Routing.prefixes', array('admin'));
+	Configure::write('Routing.prefixes', ['admin']);
 	// <<<
 
 /**
@@ -233,9 +233,9 @@ Configure::write('Config.language', 'jpn');
  * To use database sessions, run the app/Config/Schema/sessions.php schema using
  * the cake shell command: cake schema create Sessions
  */
-	Configure::write('Session', array(
+	Configure::write('Session', [
 		'defaults' => 'php'
-	));
+	]);
 
 /**
  * A random string used in security hashing methods.
@@ -429,12 +429,12 @@ $prefix = 'myapp_';
 /**
  * キャッシュ設定をConfigureに設定
  */
-Configure::write('BcCache', array(
+Configure::write('BcCache', [
 	'engine'	=> $engine,
 	'duration'	=> $duration,
 	'viewDuration' => $viewDuration,
 	'prefix'	=> $prefix
-));
+]);
 
 /**
  * baser の設定ファイルを読み込む

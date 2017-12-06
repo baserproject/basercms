@@ -10,7 +10,7 @@
 
 <?php if (!empty($this->Paginator)): ?>
 <div class="search-result">
-	<?php echo $this->Paginator->counter(array('format' => '<strong>' . implode(' ', $query) . '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件')) ?>
+	<?php echo $this->Paginator->counter(['format' => '<strong>' . implode(' ', $query) . '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件']) ?>
 </div>
 <?php endif ?>
 <?php $this->BcBaser->element('list_num') ?>
@@ -33,5 +33,5 @@
 
 <div class="clearfix">
 	<!-- /Elements/paginations/simple.php -->
-	<?php $this->BcBaser->pagination('simple', array(), array('subDir' => false)) ?>
+	<?php $this->BcBaser->pagination('simple', [], ['subDir' => false]) ?>
 </div>

@@ -16,14 +16,14 @@
 ?>
 
 
-<?php echo $this->BcForm->create('User', array('url' => array('action' => 'index'))) ?>
+<?php echo $this->BcForm->create('User', ['url' => ['action' => 'index']]) ?>
 <p>
 	<span><?php echo $this->BcForm->label('User.user_group_id', 'ユーザーグループ') ?></span>
-	<span><?php echo $this->BcForm->input('User.user_group_id', array('type' => 'select', 'options' => $this->BcForm->getControlSource('User.user_group_id'), 'empty' => '指定なし')) ?></span>　
+	<span><?php echo $this->BcForm->input('User.user_group_id', ['type' => 'select', 'options' => $this->BcForm->getControlSource('User.user_group_id'), 'empty' => '指定なし']) ?></span>　
 	<?php echo $this->BcSearchBox->dispatchShowField() ?>
 </p>
 <div class="button">
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', array('alt' => '検索', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchSubmit')) ?> 
-	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_clear.png', array('alt' => 'クリア', 'class' => 'btn')), "javascript:void(0)", array('id' => 'BtnSearchClear')) ?> 
+	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_search.png', ['alt' => '検索', 'class' => 'btn']), "javascript:void(0)", ['id' => 'BtnSearchSubmit']) ?> 
+	<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_clear.png', ['alt' => 'クリア', 'class' => 'btn']), "javascript:void(0)", ['id' => 'BtnSearchClear']) ?> 
 </div>
 <?php echo $this->Form->end() ?>

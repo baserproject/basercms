@@ -31,16 +31,16 @@ class BcContentsBehavior extends ModelBehavior {
  * @param array $config
  * @return mixed
  */
-	public function setup(Model $model, $config = array()) {
-		$model->hasOne['Content'] = array(
+	public function setup(Model $model, $config = []) {
+		$model->hasOne['Content'] = [
 			'className'	=> 'Content',
 			'foreignKey'=> 'entity_id',
 			'dependent' => false,
-			'conditions'=> array(
+			'conditions'=> [
 				'Content.type' => $model->name,
 				'Content.alias_id' => null
-			)
-		);
+			]
+		];
 		return true;
 	}
 
@@ -54,7 +54,7 @@ class BcContentsBehavior extends ModelBehavior {
  * @param array $options
  * @return bool
  */
-	public function beforeValidate(Model $model, $options = array()) {
+	public function beforeValidate(Model $model, $options = []) {
 		if(!empty($model->data['Content'])) {
 			$model->Content->clear();
 			$model->Content->set($model->data['Content']);
@@ -78,7 +78,7 @@ class BcContentsBehavior extends ModelBehavior {
  * @param array $options
  * @return bool
  */
-	public function beforeSave(Model $model, $options = array()) {
+	public function beforeSave(Model $model, $options = []) {
 		if(!empty($options['validate'])) {
 			if($model->Content->validationErrors) {
 				return false;
@@ -97,7 +97,7 @@ class BcContentsBehavior extends ModelBehavior {
  * @param array $options
  * @return bool
  */
-	public function afterSave(Model $model, $created, $options = array()) {
+	public function afterSave(Model $model, $created, $options = []) {
 		if(empty($model->Content->data['Content'])) {
 			return;
 		}
@@ -130,9 +130,9 @@ class BcContentsBehavior extends ModelBehavior {
  * @return bool
  */
 	public function beforeDelete(Model $model, $cascade = true) {
-		$data = $model->find('first', array(
-			'conditions' => array($model->alias . '.id' => $model->id)
-		));
+		$data = $model->find('first', [
+			'conditions' => [$model->alias . '.id' => $model->id]
+		]);
 		if (!empty($data['Content']['id'])) {
 			$this->_deleteContentId = $data['Content']['id'];
 		}

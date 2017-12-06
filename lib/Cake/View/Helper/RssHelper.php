@@ -35,7 +35,7 @@ class RssHelper extends AppHelper {
  *
  * @var array
  */
-	public $helpers = array('Time');
+	public $helpers = ['Time'];
 
 /**
  * Base URL
@@ -56,7 +56,7 @@ class RssHelper extends AppHelper {
  *
  * @var array
  */
-	public $params = array();
+	public $params = [];
 
 /**
  * Current action.
@@ -101,10 +101,10 @@ class RssHelper extends AppHelper {
  * @return string An RSS document
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/rss.html#RssHelper::document
  */
-	public function document($attrib = array(), $content = null) {
+	public function document($attrib = [], $content = null) {
 		if ($content === null) {
 			$content = $attrib;
-			$attrib = array();
+			$attrib = [];
 		}
 		if (!isset($attrib['version']) || empty($attrib['version'])) {
 			$attrib['version'] = $this->version;
@@ -122,7 +122,7 @@ class RssHelper extends AppHelper {
  * @return string An RSS `<channel />`
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/rss.html#RssHelper::channel
  */
-	public function channel($attrib = array(), $elements = array(), $content = null) {
+	public function channel($attrib = [], $elements = [], $content = null) {
 		if (!isset($elements['link'])) {
 			$elements['link'] = '/';
 		}
@@ -136,18 +136,18 @@ class RssHelper extends AppHelper {
 
 		$elems = '';
 		foreach ($elements as $elem => $data) {
-			$attributes = array();
+			$attributes = [];
 			if (is_array($data)) {
 				if (strtolower($elem) === 'cloud') {
 					$attributes = $data;
-					$data = array();
+					$data = [];
 				} elseif (isset($data['attrib']) && is_array($data['attrib'])) {
 					$attributes = $data['attrib'];
 					unset($data['attrib']);
 				} else {
 					$innerElements = '';
 					foreach ($data as $subElement => $value) {
-						$innerElements .= $this->elem($subElement, array(), $value);
+						$innerElements .= $this->elem($subElement, [], $value);
 					}
 					$data = $innerElements;
 				}
@@ -176,7 +176,7 @@ class RssHelper extends AppHelper {
 		$c = count($items);
 
 		for ($i = 0; $i < $c; $i++) {
-			$out .= $this->item(array(), $items[$i]);
+			$out .= $this->item([], $items[$i]);
 		}
 		return $out;
 	}
@@ -189,7 +189,7 @@ class RssHelper extends AppHelper {
  * @return string An RSS `<item />` element
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/rss.html#RssHelper::item
  */
-	public function item($att = array(), $elements = array()) {
+	public function item($att = [], $elements = []) {
 		$content = null;
 
 		if (isset($elements['link']) && !isset($elements['guid'])) {
@@ -197,7 +197,7 @@ class RssHelper extends AppHelper {
 		}
 
 		foreach ($elements as $key => $val) {
-			$attrib = array();
+			$attrib = [];
 
 			$escape = true;
 			if (is_array($val) && isset($val['convertEntities'])) {
@@ -212,7 +212,7 @@ class RssHelper extends AppHelper {
 				case 'category' :
 					if (is_array($val) && !empty($val[0])) {
 						foreach ($val as $category) {
-							$attrib = array();
+							$attrib = [];
 							if (is_array($category) && isset($category['domain'])) {
 								$attrib['domain'] = $category['domain'];
 								unset($category['domain']);
@@ -293,7 +293,7 @@ class RssHelper extends AppHelper {
  * @return string XML
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/rss.html#RssHelper::elem
  */
-	public function elem($name, $attrib = array(), $content = null, $endTag = true) {
+	public function elem($name, $attrib = [], $content = null, $endTag = true) {
 		$namespace = null;
 		if (isset($attrib['namespace'])) {
 			$namespace = $attrib['namespace'];
@@ -307,7 +307,7 @@ class RssHelper extends AppHelper {
 		if (is_array($content) && array_key_exists('value', $content)) {
 			$content = $content['value'];
 		}
-		$children = array();
+		$children = [];
 		if (is_array($content)) {
 			$children = $content;
 			$content = null;
@@ -335,7 +335,7 @@ class RssHelper extends AppHelper {
 			$content = '<![CDATA[' . $content . ']]>';
 		}
 		$xml .= '>' . $content . '</' . $name . '>';
-		$elem = Xml::build($xml, array('return' => 'domdocument'));
+		$elem = Xml::build($xml, ['return' => 'domdocument']);
 		$nodes = $elem->getElementsByTagName($bareName);
 		if ($attrib) {
 			foreach ($attrib as $key => $value) {

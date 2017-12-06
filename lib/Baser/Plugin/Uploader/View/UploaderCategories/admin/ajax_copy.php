@@ -9,5 +9,5 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->element('uploader_categories/index_row', array('data' => $data, 'count' => 0));
+$this->BcBaser->element('uploader_categories/index_row', ['data' => $data, 'count' => 0]);
 ?>

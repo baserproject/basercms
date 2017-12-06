@@ -32,21 +32,21 @@ class CakeRoute {
  *
  * @var array
  */
-	public $keys = array();
+	public $keys = [];
 
 /**
  * An array of additional parameters for the Route.
  *
  * @var array
  */
-	public $options = array();
+	public $options = [];
 
 /**
  * Default parameters for a Route
  *
  * @var array
  */
-	public $defaults = array();
+	public $defaults = [];
 
 /**
  * The routes template string.
@@ -75,11 +75,11 @@ class CakeRoute {
  *
  * @var array
  */
-	protected $_headerMap = array(
+	protected $_headerMap = [
 		'type' => 'content_type',
 		'method' => 'request_method',
 		'server' => 'server_name'
-	);
+	];
 
 /**
  * Constructor for a Route
@@ -88,7 +88,7 @@ class CakeRoute {
  * @param array $defaults Array of defaults for the route.
  * @param array $options Array of additional options for the Route
  */
-	public function __construct($template, $defaults = array(), $options = array()) {
+	public function __construct($template, $defaults = [], $options = []) {
 		$this->template = $template;
 		$this->defaults = (array)$defaults;
 		$this->options = (array)$options;
@@ -130,11 +130,11 @@ class CakeRoute {
 	protected function _writeRoute() {
 		if (empty($this->template) || ($this->template === '/')) {
 			$this->_compiledRoute = '#^/*$#';
-			$this->keys = array();
+			$this->keys = [];
 			return;
 		}
 		$route = $this->template;
-		$names = $routeParams = array();
+		$names = $routeParams = [];
 		$parsed = preg_quote($this->template, '#');
 
 		preg_match_all('#:([A-Za-z0-9_-]+[A-Z0-9a-z])#', $route, $namedElements);
@@ -223,7 +223,7 @@ class CakeRoute {
 		for ($i = 0; $i <= $count; $i++) {
 			unset($route[$i]);
 		}
-		$route['pass'] = $route['named'] = array();
+		$route['pass'] = $route['named'] = [];
 
 		// Assign defaults, set passed args to pass
 		foreach ($this->defaults as $key => $value) {
@@ -270,7 +270,7 @@ class CakeRoute {
  * @return array Array of ($pass, $named)
  */
 	protected function _parseArgs($args, $context) {
-		$pass = $named = array();
+		$pass = $named = [];
 		$args = explode('/', $args);
 
 		$namedConfig = Router::namedConfig();
@@ -307,22 +307,22 @@ class CakeRoute {
 						$arr = $val;
 						foreach ($matches as $match) {
 							if (empty($match[1])) {
-								$arr = array($arr);
+								$arr = [$arr];
 							} else {
-								$arr = array(
+								$arr = [
 									$match[1] => $arr
-								);
+								];
 							}
 						}
 						$val = $arr;
 					}
-					$named = array_merge_recursive($named, array($key => $val));
+					$named = array_merge_recursive($named, [$key => $val]);
 				}
 			} else {
 				$pass[] = $param;
 			}
 		}
-		return array($pass, $named);
+		return [$pass, $named];
 	}
 
 /**
@@ -341,7 +341,7 @@ class CakeRoute {
 			return $rule;
 		}
 		if (is_string($rule)) {
-			$rule = array('match' => $rule);
+			$rule = ['match' => $rule];
 		}
 		if (!is_array($rule)) {
 			return false;
@@ -412,7 +412,7 @@ class CakeRoute {
 		}
 
 		// Missing defaults is a fail.
-		if (array_diff_key($defaults, $url) !== array()) {
+		if (array_diff_key($defaults, $url) !== []) {
 			return false;
 		}
 
@@ -421,7 +421,7 @@ class CakeRoute {
 		$greedyNamed = $namedConfig['greedyNamed'];
 		$allowedNamedParams = $namedConfig['rules'];
 
-		$named = $pass = array();
+		$named = $pass = [];
 
 		foreach ($url as $key => $value) {
 			// keys that exist in the defaults and have different values is a match failure.
@@ -504,7 +504,7 @@ class CakeRoute {
 		$separator = $namedConfig['separator'];
 
 		if (!empty($params['named']) && is_array($params['named'])) {
-			$named = array();
+			$named = [];
 			foreach ($params['named'] as $key => $value) {
 				if (is_array($value)) {
 					$flat = Hash::flatten($value, '%5D%5B');
@@ -520,7 +520,7 @@ class CakeRoute {
 		$out = $this->template;
 
 		if (!empty($this->keys)) {
-			$search = $replace = array();
+			$search = $replace = [];
 
 			foreach ($this->keys as $key) {
 				$string = null;

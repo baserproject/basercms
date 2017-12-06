@@ -13,4 +13,4 @@
 /**
  * [ADMIN] Ajax 行コピー
  */
-$this->BcBaser->element('permissions/index_row', array('data' => $data, 'count' => 0));
+$this->BcBaser->element('permissions/index_row', ['data' => $data, 'count' => 0]);

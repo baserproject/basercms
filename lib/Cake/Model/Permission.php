@@ -42,7 +42,7 @@ class Permission extends AppModel {
  *
  * @var array
  */
-	public $belongsTo = array('Aro', 'Aco');
+	public $belongsTo = ['Aro', 'Aco'];
 
 /**
  * No behaviors for this model
@@ -110,18 +110,18 @@ class Permission extends AppModel {
 		$acoIDs = Hash::extract($acoPath, '{n}.' . $this->Aco->alias . '.id');
 
 		$count = count($aroPath);
-		$inherited = array();
+		$inherited = [];
 		for ($i = 0; $i < $count; $i++) {
 			$permAlias = $this->alias;
 
-			$perms = $this->find('all', array(
-				'conditions' => array(
+			$perms = $this->find('all', [
+				'conditions' => [
 					"{$permAlias}.aro_id" => $aroPath[$i][$this->Aro->alias]['id'],
 					"{$permAlias}.aco_id" => $acoIDs
-				),
-				'order' => array($this->Aco->alias . '.lft' => 'desc'),
+				],
+				'order' => [$this->Aco->alias . '.lft' => 'desc'],
 				'recursive' => 0
-			));
+			]);
 
 			if (empty($perms)) {
 				continue;
@@ -173,7 +173,7 @@ class Permission extends AppModel {
 	public function allow($aro, $aco, $actions = '*', $value = 1) {
 		$perms = $this->getAclLink($aro, $aco);
 		$permKeys = $this->getAcoKeys($this->schema());
-		$save = array();
+		$save = [];
 
 		if (!$perms) {
 			$this->log(__d('cake_dev', '%s - Invalid node', 'DbAcl::allow()'), E_USER_WARNING);
@@ -184,10 +184,10 @@ class Permission extends AppModel {
 		}
 
 		if ($actions === '*') {
-			$save = array_combine($permKeys, array_pad(array(), count($permKeys), $value));
+			$save = array_combine($permKeys, array_pad([], count($permKeys), $value));
 		} else {
 			if (!is_array($actions)) {
-				$actions = array('_' . $actions);
+				$actions = ['_' . $actions];
 			}
 			foreach ($actions as $action) {
 				if ($action{0} !== '_') {
@@ -199,7 +199,7 @@ class Permission extends AppModel {
 				$save[$action] = $value;
 			}
 		}
-		list($save['aro_id'], $save['aco_id']) = array($perms['aro'], $perms['aco']);
+		list($save['aro_id'], $save['aco_id']) = [$perms['aro'], $perms['aco']];
 
 		if ($perms['link'] && !empty($perms['link'])) {
 			$save['id'] = $perms['link'][0][$this->alias]['id'];
@@ -218,7 +218,7 @@ class Permission extends AppModel {
  * @return array Indexed array with: 'aro', 'aco' and 'link'
  */
 	public function getAclLink($aro, $aco) {
-		$obj = array();
+		$obj = [];
 		$obj['Aro'] = $this->Aro->node($aro);
 		$obj['Aco'] = $this->Aco->node($aco);
 
@@ -230,14 +230,14 @@ class Permission extends AppModel {
 		$aro = current($aro);
 		$aco = current($aco);
 
-		return array(
+		return [
 			'aro' => $aro,
 			'aco' => $aco,
-			'link' => $this->find('all', array('conditions' => array(
+			'link' => $this->find('all', ['conditions' => [
 				$this->alias . '.aro_id' => $aro,
 				$this->alias . '.aco_id' => $aco
-			)))
-		);
+			]])
+		];
 	}
 
 /**
@@ -247,10 +247,10 @@ class Permission extends AppModel {
  * @return array permission keys
  */
 	public function getAcoKeys($keys) {
-		$newKeys = array();
+		$newKeys = [];
 		$keys = array_keys($keys);
 		foreach ($keys as $key) {
-			if (!in_array($key, array('id', 'aro_id', 'aco_id'))) {
+			if (!in_array($key, ['id', 'aro_id', 'aco_id'])) {
 				$newKeys[] = $key;
 			}
 		}

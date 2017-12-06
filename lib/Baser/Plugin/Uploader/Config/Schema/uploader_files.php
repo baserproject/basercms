@@ -7,24 +7,24 @@ class UploaderFilesSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $uploader_files = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'alt' => array('type' => 'text', 'null' => true, 'default' => NULL),
-		'uploader_category_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
-		'user_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8),
-		'publish_begin' => array('type' => 'datetime', 'null' => true, 'dafault' => NULL),
-		'publish_end' => array('type' => 'datetime', 'null' => true, 'dafault' => NULL),
-		'created' => array('type' => 'datetime', 'null' => true),
-		'modified' => array('type' => 'datetime', 'null' => true),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
-	);
+	public $uploader_files = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 8, 'key' => 'primary'],
+		'name' => ['type' => 'string', 'null' => true, 'default' => NULL],
+		'alt' => ['type' => 'text', 'null' => true, 'default' => NULL],
+		'uploader_category_id' => ['type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8],
+		'user_id' => ['type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 8],
+		'publish_begin' => ['type' => 'datetime', 'null' => true, 'dafault' => NULL],
+		'publish_end' => ['type' => 'datetime', 'null' => true, 'dafault' => NULL],
+		'created' => ['type' => 'datetime', 'null' => true],
+		'modified' => ['type' => 'datetime', 'null' => true],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]]
+	];
 }
 ?>

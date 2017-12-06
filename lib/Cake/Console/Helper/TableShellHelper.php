@@ -25,11 +25,11 @@ class TableShellHelper extends BaseShellHelper {
  *
  * @var array
  */
-	protected $_defaultConfig = array(
+	protected $_defaultConfig = [
 		'headers' => true,
 		'rowSeparator' => false,
 		'headerStyle' => 'info',
-	);
+	];
 
 /**
  * Calculate the column widths
@@ -38,7 +38,7 @@ class TableShellHelper extends BaseShellHelper {
  * @return array
  */
 	protected function _calculateWidths($rows) {
-		$widths = array();
+		$widths = [];
 		foreach ($rows as $line) {
 			for ($i = 0, $len = count($line); $i < $len; $i++) {
 				$columnLength = mb_strlen($line[$i]);
@@ -73,7 +73,7 @@ class TableShellHelper extends BaseShellHelper {
  * @param array $options Options to be passed.
  * @return void
  */
-	protected function _render($row, $widths, $options = array()) {
+	protected function _render($row, $widths, $options = []) {
 		$out = '';
 		foreach ($row as $i => $column) {
 			$pad = $widths[$i] - mb_strlen($column);
@@ -97,7 +97,7 @@ class TableShellHelper extends BaseShellHelper {
 		$widths = $this->_calculateWidths($rows);
 		$this->_rowSeparator($widths);
 		if ($config['headers'] === true) {
-			$this->_render(array_shift($rows), $widths, array('style' => $config['headerStyle']));
+			$this->_render(array_shift($rows), $widths, ['style' => $config['headerStyle']]);
 			$this->_rowSeparator($widths);
 		}
 		foreach ($rows as $line) {

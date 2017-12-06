@@ -20,7 +20,7 @@ abstract class BaseShellHelper {
  *
  * @var array
  */
-	protected $_defaultConfig = array();
+	protected $_defaultConfig = [];
 
 /**
  * ConsoleOutput instance.
@@ -34,7 +34,7 @@ abstract class BaseShellHelper {
  *
  * @var array
  */
-	protected $_config = array();
+	protected $_config = [];
 
 /**
  * Whether the config property has already been configured with defaults
@@ -49,7 +49,7 @@ abstract class BaseShellHelper {
  * @param ConsoleOutput $consoleOutput The ConsoleOutput instance to use.
  * @param array $config The settings for this helper.
  */
-	public function __construct(ConsoleOutput $consoleOutput, array $config = array()) {
+	public function __construct(ConsoleOutput $consoleOutput, array $config = []) {
 		$this->_consoleOutput = $consoleOutput;
 		$this->config($config);
 	}

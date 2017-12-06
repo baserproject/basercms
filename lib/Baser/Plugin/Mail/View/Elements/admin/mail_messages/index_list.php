@@ -28,14 +28,14 @@ $this->BcListTable->setColumnNumber(6);
 		<th style="white-space: nowrap" class="list-tool">
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 			<div>
-				<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-				<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-				<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+				<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
+				<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
+				<?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
 			</div>
 			<?php endif; ?>
 		</th>
-		<th style="white-space: nowrap"><?php echo $this->Paginator->sort('id', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' NO'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
-		<th style="white-space: nowrap" colspan="2"><?php echo $this->Paginator->sort('created', array('asc' => $this->BcBaser->getImg('admin/blt_list_down.png', array('alt' => '昇順', 'title' => '昇順')) . ' 受信日時', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', array('alt' => '降順', 'title' => '降順')) . ' 受信日時'), array('escape' => false, 'class' => 'btn-direction')) ?></th>
+		<th style="white-space: nowrap"><?php echo $this->Paginator->sort('id', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' NO'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
+		<th style="white-space: nowrap" colspan="2"><?php echo $this->Paginator->sort('created', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => '昇順', 'title' => '昇順']) . ' 受信日時', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => '降順', 'title' => '降順']) . ' 受信日時'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
 		<th style="white-space: nowrap">受信内容</th>
 		<th style="white-space: nowrap">添付</th>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
@@ -45,7 +45,7 @@ $this->BcListTable->setColumnNumber(6);
 <?php if ($messages): ?>
 		<?php $count = 0; ?>
 		<?php foreach ($messages as $data): ?>
-			<?php $this->BcBaser->element('mail_messages/index_row', array('data' => $data, 'count' => $count)) ?>
+			<?php $this->BcBaser->element('mail_messages/index_row', ['data' => $data, 'count' => $count]) ?>
 			<?php $count++; ?>
 		<?php endforeach; ?>
 	<?php else: ?>

@@ -165,7 +165,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$BcContentsComponent->setupAdmin();
 		$View = new BcAppView();
 		$View->set('contentsSettings', $BcContentsComponent->settings['items']);
-		$View->helpers = array('BcContents');
+		$View->helpers = ['BcContents'];
 		$View->loadHelpers();
 		$View->BcContents->setup();
 		$result = $View->BcContents->isActionAvailable($type, $action, $entityId);
@@ -326,7 +326,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$BcContentsComponent->setupAdmin();
 		$View = new BcAppView();
 		$View->set('contentsSettings', $BcContentsComponent->settings['items']);
-		$View->helpers = array('BcContents');
+		$View->helpers = ['BcContents'];
 		$View->loadHelpers();
 		$View->BcContents->setup();
 		$result = $View->BcContents->getJsonSettings();
@@ -344,7 +344,7 @@ class BcContentsHelperTest extends BaserTestCase {
 		$BcContentsComponent->setupAdmin();
 		$View = new BcAppView();
 		$View->set('contentsSettings', $BcContentsComponent->settings['items']);
-		$View->helpers = array('BcContents');
+		$View->helpers = ['BcContents'];
 		$View->loadHelpers();
 		$View->BcContents->setup();
 		// 　getJsonSettingsで取得した値がsettingsの値と等しいかどうか

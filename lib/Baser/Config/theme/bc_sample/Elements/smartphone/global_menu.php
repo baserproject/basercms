@@ -21,7 +21,7 @@ if (Configure::read('BcRequest.isMaintenance')) {
 
 				<?php
 				$no = sprintf('%02d', $key + 1);
-				$classies = array('menu' . $no);
+				$classies = ['menu' . $no];
 				if ($this->BcArray->first($globalMenus, $key)) {
 					$classies[] = 'first';
 				} elseif ($this->BcArray->last($globalMenus, $key)) {

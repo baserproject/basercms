@@ -14,13 +14,13 @@ App::uses('MailField', 'Mail.Model');
 
 class MailFieldTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'plugin.mail.Default/MailMessage',
 		'plugin.mail.Default/MailConfig',
 		'plugin.mail.Default/MailField',
 		'plugin.mail.Default/MailField',
-	);
+	];
 
 	public function setUp() {
 		$this->MailField = ClassRegistry::init('Mail.MailField');
@@ -36,8 +36,8 @@ class MailFieldTest extends BaserTestCase {
  * validate
  */
 	public function test正常チェック() {
-		$this->MailField->create(array(
-			'MailField' => array(
+		$this->MailField->create([
+			'MailField' => [
 				'name' => '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234',
 				'field_name' => '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234',
 				'mail_content_id' => 999,
@@ -53,34 +53,34 @@ class MailFieldTest extends BaserTestCase {
 				'description' => '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234',
 				'group_field' => '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234',
 				'group_valid' => '012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234',
-			)
-		));
+			]
+		]);
 
 		$this->assertTrue($this->MailField->validates());
 		$this->assertEmpty($this->MailField->validationErrors);
 	}
 
 	public function test空白チェック() {
-		$this->MailField->create(array(
-			'MailField' => array(
+		$this->MailField->create([
+			'MailField' => [
 				'name' => '',
 				'type' => '',
-			)
-		));
+			]
+		]);
 	
 		$this->assertFalse($this->MailField->validates());
 
-		$expected = array(
-			'name' => array('項目名を入力してください。'),
-  		'type' => array('タイプを入力してください。'),
-  	);
+		$expected = [
+			'name' => ['項目名を入力してください。'],
+  		'type' => ['タイプを入力してください。'],
+  	];
 		$this->assertEquals($expected, $this->MailField->validationErrors);
 	}
 
 
 	public function test桁数チェック() {
-		$this->MailField->create(array(
-			'MailField' => array(
+		$this->MailField->create([
+			'MailField' => [
 				'name' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'field_name' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'mail_content_id' => 999,
@@ -96,55 +96,55 @@ class MailFieldTest extends BaserTestCase {
 				'description' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'group_field' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'group_valid' => '0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->MailField->validates());
 
-		$expected = array(
-			'name' => array('項目名は255文字以内で入力してください。'),
-			'field_name' => array('フィールド名は255文字以内で入力してください。'),
-			'head' => array('項目見出しは255文字以内で入力してください。'),
-			'attention' => array('注意書きは255文字以内で入力してください。'),
-			'before_attachment' => array('前見出しは255文字以内で入力してください。'),
-			'after_attachment' => array('後見出しは255文字以内で入力してください。'),
-			'options' => array('オプションは255文字以内で入力してください。'),
-			'class' => array('クラス名は255文字以内で入力してください。'),
-			'default_value' => array('初期値は255文字以内で入力してください。'),
-			'description' => array('説明文は255文字以内で入力してください。'),
-			'group_field' => array('グループフィールドは255文字以内で入力してください。'),
-			'group_valid' => array('グループ入力チェックは255文字以内で入力してください。')
-		);
+		$expected = [
+			'name' => ['項目名は255文字以内で入力してください。'],
+			'field_name' => ['フィールド名は255文字以内で入力してください。'],
+			'head' => ['項目見出しは255文字以内で入力してください。'],
+			'attention' => ['注意書きは255文字以内で入力してください。'],
+			'before_attachment' => ['前見出しは255文字以内で入力してください。'],
+			'after_attachment' => ['後見出しは255文字以内で入力してください。'],
+			'options' => ['オプションは255文字以内で入力してください。'],
+			'class' => ['クラス名は255文字以内で入力してください。'],
+			'default_value' => ['初期値は255文字以内で入力してください。'],
+			'description' => ['説明文は255文字以内で入力してください。'],
+			'group_field' => ['グループフィールドは255文字以内で入力してください。'],
+			'group_valid' => ['グループ入力チェックは255文字以内で入力してください。']
+		];
 
 		$this->assertEquals($expected, $this->MailField->validationErrors);
 	}
 
 
 	public function test半角英数チェック() {
-		$this->MailField->create(array(
-			'MailField' => array(
+		$this->MailField->create([
+			'MailField' => [
 				'field_name' => '１２３ａｂｃ',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->MailField->validates());
 		
-		$expected = array(
-			'field_name' => array('フィールド名は半角英数字のみで入力してください。'),
-		);
+		$expected = [
+			'field_name' => ['フィールド名は半角英数字のみで入力してください。'],
+		];
 		$this->assertEquals($expected, $this->MailField->validationErrors);
 	}
 
 	public function test重複チェック() {
-		$this->MailField->create(array(
-			'MailField' => array(
+		$this->MailField->create([
+			'MailField' => [
 				'field_name' => 'name_1',
 				'mail_content_id' => 1,
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->MailField->validates());
 		
-		$expected = array(
-			'field_name' => array('入力されたフィールド名は既に登録されています。'),
-		);
+		$expected = [
+			'field_name' => ['入力されたフィールド名は既に登録されています。'],
+		];
 		$this->assertEquals($expected, $this->MailField->validationErrors);
 	}
 
@@ -188,7 +188,7 @@ class MailFieldTest extends BaserTestCase {
  * @dataProvider copyDataProvider
  */
 	public function testCopy($id, $data, $sortUpdateOff) {
-		$options = array('sortUpdateOff' => $sortUpdateOff);
+		$options = ['sortUpdateOff' => $sortUpdateOff];
 		$result = $this->MailField->copy($id, $data, $options);
 
 		if ($id) {
@@ -210,22 +210,22 @@ class MailFieldTest extends BaserTestCase {
 	}
 
 	public function copyDataProvider() {
-		return array(
-			array(1, array(), false),
-			array(false, array('MailField' => array(
+		return [
+			[1, [], false],
+			[false, ['MailField' => [
 				'mail_content_id' => 1,
 				'field_name' => 'name_1',
 				'name' => 'hogeName',
 				'sort' => 999,
-			)), false),
-			array(1, array(), true),
-			array(false, array('MailField' => array(
+			]], false],
+			[1, [], true],
+			[false, ['MailField' => [
 				'mail_content_id' => 1,
 				'field_name' => 'name_1',
 				'name' => 'hogeName',
 				'sort' => 999,
-			)), true),
-		);
+			]], true],
+		];
 	}
 
 /**

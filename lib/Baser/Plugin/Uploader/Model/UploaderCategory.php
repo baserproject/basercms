@@ -30,13 +30,13 @@ class UploaderCategory extends AppModel {
  * @var		array
  * @access	public
  */
-	public $validate = array(
-		'name' => array(
-			array(
-				'rule'		=> array('notBlank'),
-				'message'	=> 'カテゴリ名を入力してください。')
-			)
-		);
+	public $validate = [
+		'name' => [
+			[
+				'rule'		=> ['notBlank'],
+				'message'	=> 'カテゴリ名を入力してください。']
+			]
+		];
 /**
  * コピーする
  * 
@@ -44,10 +44,10 @@ class UploaderCategory extends AppModel {
  * @param array $data
  * @return mixed page Or false
  */
-	public function copy($id = null, $data = array()) {
+	public function copy($id = null, $data = []) {
 
 		if($id) {
-			$data = $this->find('first', array('conditions' => array('UploaderCategory.id' => $id)));
+			$data = $this->find('first', ['conditions' => ['UploaderCategory.id' => $id]]);
 		}
 		$oldData = $data;
 
@@ -61,7 +61,7 @@ class UploaderCategory extends AppModel {
 		}
 
 		$data['UploaderCategory']['name'] .= '_copy';
-		$data['UploaderCategory']['id'] = $this->getMax('id', array('UploaderCategory.id' => $data['UploaderCategory']['id'])) + 1;
+		$data['UploaderCategory']['id'] = $this->getMax('id', ['UploaderCategory.id' => $data['UploaderCategory']['id']]) + 1;
 		
 		unset($data['UploaderCategory']['id']);
 		unset($data['UploaderCategory']['created']);

@@ -85,9 +85,9 @@ class RequestHandlerComponent extends Component {
  *
  * @var array
  */
-	protected $_inputTypeMap = array(
-		'json' => array('json_decode', true)
-	);
+	protected $_inputTypeMap = [
+		'json' => ['json_decode', true]
+	];
 
 /**
  * A mapping between type and viewClass
@@ -95,10 +95,10 @@ class RequestHandlerComponent extends Component {
  *
  * @var array
  */
-	protected $_viewClassMap = array(
+	protected $_viewClassMap = [
 		'json' => 'Json',
 		'xml' => 'Xml'
-	);
+	];
 
 /**
  * Constructor. Parses the accepted content types accepted by the client using HTTP_ACCEPT
@@ -106,9 +106,9 @@ class RequestHandlerComponent extends Component {
  * @param ComponentCollection $collection ComponentCollection object.
  * @param array $settings Array of settings.
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
-		parent::__construct($collection, $settings + array('checkHttpCache' => true));
-		$this->addInputType('xml', array(array($this, 'convertXml')));
+	public function __construct(ComponentCollection $collection, $settings = []) {
+		parent::__construct($collection, $settings + ['checkHttpCache' => true]);
+		$this->addInputType('xml', [[$this, 'convertXml']]);
 
 		$Controller = $collection->getController();
 		$this->request = $Controller->request;
@@ -160,7 +160,7 @@ class RequestHandlerComponent extends Component {
 
 		$accepts = $this->response->mapType($accept);
 		$preferedTypes = current($accepts);
-		if (array_intersect($preferedTypes, array('html', 'xhtml'))) {
+		if (array_intersect($preferedTypes, ['html', 'xhtml'])) {
 			return;
 		}
 
@@ -199,7 +199,7 @@ class RequestHandlerComponent extends Component {
 	public function startup(Controller $controller) {
 		$controller->request->params['isAjax'] = $this->request->is('ajax');
 		$isRecognized = (
-			!in_array($this->ext, array('html', 'htm')) &&
+			!in_array($this->ext, ['html', 'htm']) &&
 			$this->response->getMimeType($this->ext)
 		);
 
@@ -207,13 +207,13 @@ class RequestHandlerComponent extends Component {
 			$this->renderAs($controller, $this->ext);
 		} elseif ($this->request->is('ajax')) {
 			$this->renderAs($controller, 'ajax');
-		} elseif (empty($this->ext) || in_array($this->ext, array('html', 'htm'))) {
-			$this->respondAs('html', array('charset' => Configure::read('App.encoding')));
+		} elseif (empty($this->ext) || in_array($this->ext, ['html', 'htm'])) {
+			$this->respondAs('html', ['charset' => Configure::read('App.encoding')]);
 		}
 
 		foreach ($this->_inputTypeMap as $type => $handler) {
 			if ($this->requestedWith($type)) {
-				$input = call_user_func_array(array($controller->request, 'input'), $handler);
+				$input = call_user_func_array([$controller->request, 'input'], $handler);
 				$controller->request->data = $input;
 			}
 		}
@@ -228,13 +228,13 @@ class RequestHandlerComponent extends Component {
  */
 	public function convertXml($xml) {
 		try {
-			$xml = Xml::build($xml, array('readFile' => false));
+			$xml = Xml::build($xml, ['readFile' => false]);
 			if (isset($xml->data)) {
 				return Xml::toArray($xml->data);
 			}
 			return Xml::toArray($xml);
 		} catch (XmlException $e) {
-			return array();
+			return [];
 		}
 	}
 
@@ -260,14 +260,14 @@ class RequestHandlerComponent extends Component {
 			unset($_POST[$key]);
 		}
 		if (is_array($url)) {
-			$url = Router::url($url + array('base' => false));
+			$url = Router::url($url + ['base' => false]);
 		}
 		if (!empty($status)) {
 			$statusCode = $this->response->httpCodes($status);
 			$code = key($statusCode);
 			$this->response->statusCode($code);
 		}
-		$this->response->body($this->requestAction($url, array('return', 'bare' => false)));
+		$this->response->body($this->requestAction($url, ['return', 'bare' => false]));
 		$this->response->send();
 		$this->_stop();
 	}
@@ -427,7 +427,7 @@ class RequestHandlerComponent extends Component {
  * @deprecated 3.0.0 Use `$this->response->type()` instead.
  */
 	public function setContent($name, $type = null) {
-		$this->response->type(array($name => $type));
+		$this->response->type([$name => $type]);
 	}
 
 /**
@@ -602,8 +602,8 @@ class RequestHandlerComponent extends Component {
  * @see RequestHandlerComponent::setContent()
  * @see RequestHandlerComponent::respondAs()
  */
-	public function renderAs(Controller $controller, $type, $options = array()) {
-		$defaults = array('charset' => 'UTF-8');
+	public function renderAs(Controller $controller, $type, $options = []) {
+		$defaults = ['charset' => 'UTF-8'];
 
 		if (Configure::read('App.encoding') !== null) {
 			$defaults['charset'] = Configure::read('App.encoding');
@@ -668,8 +668,8 @@ class RequestHandlerComponent extends Component {
  *    already been set by this method.
  * @see RequestHandlerComponent::setContent()
  */
-	public function respondAs($type, $options = array()) {
-		$defaults = array('index' => null, 'charset' => null, 'attachment' => false);
+	public function respondAs($type, $options = []) {
+		$defaults = ['index' => null, 'charset' => null, 'attachment' => false];
 		$options = $options + $defaults;
 
 		$cType = $type;
@@ -733,7 +733,7 @@ class RequestHandlerComponent extends Component {
  */
 	public function mapAlias($alias) {
 		if (is_array($alias)) {
-			return array_map(array($this, 'mapAlias'), $alias);
+			return array_map([$this, 'mapAlias'], $alias);
 		}
 		$type = $this->response->getMimeType($alias);
 		if ($type) {

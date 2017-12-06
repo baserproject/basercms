@@ -29,7 +29,7 @@ class ApcEngine extends CacheEngine {
  *
  * @var array
  */
-	protected $_compiledGroupNames = array();
+	protected $_compiledGroupNames = [];
 
 /**
  * APC or APCu extension
@@ -48,11 +48,11 @@ class ApcEngine extends CacheEngine {
  * @return bool True if the engine has been successfully initialized, false if not
  * @see CacheEngine::__defaults
  */
-	public function init($settings = array()) {
+	public function init($settings = []) {
 		if (!isset($settings['prefix'])) {
 			$settings['prefix'] = Inflector::slug(APP_DIR) . '_';
 		}
-		$settings += array('engine' => 'Apc');
+		$settings += ['engine' => 'Apc'];
 		parent::init($settings);
 		if (function_exists('apcu_dec')) {
 			$this->_apcExtension = 'apcu';
@@ -187,7 +187,7 @@ class ApcEngine extends CacheEngine {
 			ksort($groups);
 		}
 
-		$result = array();
+		$result = [];
 		$groups = array_values($groups);
 		foreach ($this->settings['groups'] as $i => $group) {
 			$result[] = $group . $groups[$i];

@@ -21,7 +21,7 @@ App::uses('BcTextHelper', 'View/Helper');
  */
 class MaildataHelper extends BcTextHelper {
 
-	public $helpers = array('BcTime', 'BcBaser');
+	public $helpers = ['BcTime', 'BcBaser'];
 
 /**
  * メール表示用のデータを出力する
@@ -49,7 +49,7 @@ class MaildataHelper extends BcTextHelper {
 		if (!is_array($options)) {
 			$options = explode("|", $options);
 		}
-		$options = am(array(0 => ""), $options);
+		$options = am([0 => ""], $options);
 
 		switch ($type) {
 			case 'text':
@@ -110,9 +110,9 @@ class MaildataHelper extends BcTextHelper {
 				$aryFile = explode('/', $value);
 				$file = $aryFile[count($aryFile) - 1];
 				$ext = decodeContent(null, $file);
-				$link = array_merge(array('admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']), $aryFile);
-				if (in_array($ext, array('gif', 'jpg', 'png'))) {
-					return $this->BcBaser->getLink($this->BcBaser->getImg($link, array('width' => 400)), $link, array('target' => '_blank'));
+				$link = array_merge(['admin' => true, 'controller' => 'mail_messages', 'action' => 'attachment', $mailContent['MailContent']['id']], $aryFile);
+				if (in_array($ext, ['gif', 'jpg', 'png'])) {
+					return $this->BcBaser->getLink($this->BcBaser->getImg($link, ['width' => 400]), $link, ['target' => '_blank']);
 				}
 
 				return $this->BcBaser->getLink($file, $link);

@@ -26,7 +26,7 @@ class MailHelperTest extends BaserTestCase {
  *
  * @var array
  */
-    public $fixtures = array (
+    public $fixtures = [
         'baser.Default.Content',
         'baser.Default.Site',
         'baser.Default.User',
@@ -35,7 +35,7 @@ class MailHelperTest extends BaserTestCase {
         'plugin.Mail.Default/MailField',
         'plugin.Mail.Default/MailMessage',
         'plugin.Mail.Default/MailConfig'
-    );
+    ];
 
 /**
  * set up
@@ -102,11 +102,11 @@ class MailHelperTest extends BaserTestCase {
         $View->set('siteConfig', Configure::read('BcSite'));
         $this->Mail->BcBaser = new BcBaserHelper($View);
         $result = $this->Mail->getFormTemplates();
-        $expected = array (
+        $expected = [
                         'default' => 'default',
                         'mobile' => 'mobile',
                         'smartphone' => 'smartphone'
-                    );
+                    ];
         $this->assertEquals($result, $expected, 'フォームテンプレートの取得結果が違います。');
     }
 
@@ -118,10 +118,10 @@ class MailHelperTest extends BaserTestCase {
         $View->set('siteConfig', Configure::read('BcSite'));
         $this->Mail->BcBaser = new BcBaserHelper($View);
         $result = $this->Mail->getMailTemplates();
-        $expected = array (
+        $expected = [
             'mail_default' => 'mail_default',
             'default' => 'default',
-        );
+        ];
         $this->assertEquals($result, $expected, 'メールテンプレートの取得結果が違います。');
     }
 
@@ -140,7 +140,7 @@ class MailHelperTest extends BaserTestCase {
  */
     public function testLink($title,$contentsName,$expected) {
         $this->expectOutputString($expected);
-        $this->Mail->link($title, $contentsName, $datas = array(), $options = array());
+        $this->Mail->link($title, $contentsName, $datas = [], $options = []);
 	}
 
     public function linkProvider() {

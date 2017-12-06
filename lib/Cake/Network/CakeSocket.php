@@ -39,20 +39,20 @@ class CakeSocket {
  *
  * @var array
  */
-	protected $_baseConfig = array(
+	protected $_baseConfig = [
 		'persistent' => false,
 		'host' => 'localhost',
 		'protocol' => 'tcp',
 		'port' => 80,
 		'timeout' => 30
-	);
+	];
 
 /**
  * Configuration settings for the socket connection
  *
  * @var array
  */
-	public $config = array();
+	public $config = [];
 
 /**
  * Reference to socket connection resource
@@ -73,7 +73,7 @@ class CakeSocket {
  *
  * @var array
  */
-	public $lastError = array();
+	public $lastError = [];
 
 /**
  * True if the socket stream is encrypted after a CakeSocket::enableCrypto() call
@@ -87,7 +87,7 @@ class CakeSocket {
  *
  * @var array
  */
-	protected $_encryptMethods = array(
+	protected $_encryptMethods = [
 		// @codingStandardsIgnoreStart
 		'sslv2_client' => STREAM_CRYPTO_METHOD_SSLv2_CLIENT,
 		'sslv3_client' => STREAM_CRYPTO_METHOD_SSLv3_CLIENT,
@@ -98,7 +98,7 @@ class CakeSocket {
 		'sslv23_server' => STREAM_CRYPTO_METHOD_SSLv23_SERVER,
 		'tls_server' => STREAM_CRYPTO_METHOD_TLS_SERVER
 		// @codingStandardsIgnoreEnd
-	);
+	];
 
 /**
  * Used to capture connection warnings which can happen when there are
@@ -106,7 +106,7 @@ class CakeSocket {
  *
  * @var array
  */
-	protected $_connectionErrors = array();
+	protected $_connectionErrors = [];
 
 /**
  * Constructor.
@@ -114,7 +114,7 @@ class CakeSocket {
  * @param array $config Socket configuration, which will be merged with the base configuration
  * @see CakeSocket::$_baseConfig
  */
-	public function __construct($config = array()) {
+	public function __construct($config = []) {
 		$this->config = array_merge($this->_baseConfig, $config);
 	}
 
@@ -158,7 +158,7 @@ class CakeSocket {
 			$connectAs |= STREAM_CLIENT_PERSISTENT;
 		}
 
-		set_error_handler(array($this, '_connectionErrorHandler'));
+		set_error_handler([$this, '_connectionErrorHandler']);
 		$this->connection = stream_socket_client(
 			$scheme . $this->config['host'] . ':' . $this->config['port'],
 			$errNum,
@@ -187,7 +187,7 @@ class CakeSocket {
 				$this->config['request']['uri']['scheme'] === 'https' &&
 				!empty($this->config['proxy'])
 			) {
-				$req = array();
+				$req = [];
 				$req[] = 'CONNECT ' . $this->config['request']['uri']['host'] . ':' .
 					$this->config['request']['uri']['port'] . ' HTTP/1.1';
 				$req[] = 'Host: ' . $this->config['host'];
@@ -308,7 +308,7 @@ class CakeSocket {
  */
 	public function addresses() {
 		if (Validation::ip($this->config['host'])) {
-			return array($this->config['host']);
+			return [$this->config['host']];
 		}
 		return gethostbynamel($this->config['host']);
 	}
@@ -333,7 +333,7 @@ class CakeSocket {
  * @return void
  */
 	public function setLastError($errNum, $errStr) {
-		$this->lastError = array('num' => $errNum, 'str' => $errStr);
+		$this->lastError = ['num' => $errNum, 'str' => $errStr];
 	}
 
 /**
@@ -417,7 +417,7 @@ class CakeSocket {
  */
 	public function reset($state = null) {
 		if (empty($state)) {
-			static $initalState = array();
+			static $initalState = [];
 			if (empty($initalState)) {
 				$initalState = get_class_vars(__CLASS__);
 			}

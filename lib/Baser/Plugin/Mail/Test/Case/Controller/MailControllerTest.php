@@ -15,11 +15,11 @@ App::uses('MailMessage', 'Mail.Model');
 
 class MailControllerTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'baser.Default.Page',
 		'plugin.mail.Default/MailMessage',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();

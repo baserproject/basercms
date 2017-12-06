@@ -36,9 +36,9 @@ class BasicsTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		App::build(array(
-			'Locale' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Locale' . DS)
-		));
+		App::build([
+			'Locale' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Locale' . DS]
+		]);
 	}
 
 /**
@@ -47,28 +47,28 @@ class BasicsTest extends CakeTestCase {
  * @return void
  */
 	public function testArrayDiffKey() {
-		$one = array('one' => 1, 'two' => 2, 'three' => 3);
-		$two = array('one' => 'one', 'two' => 'two');
+		$one = ['one' => 1, 'two' => 2, 'three' => 3];
+		$two = ['one' => 'one', 'two' => 'two'];
 		$result = array_diff_key($one, $two);
-		$expected = array('three' => 3);
+		$expected = ['three' => 3];
 		$this->assertEquals($expected, $result);
 
-		$one = array('one' => array('value', 'value-two'), 'two' => 2, 'three' => 3);
-		$two = array('two' => 'two');
+		$one = ['one' => ['value', 'value-two'], 'two' => 2, 'three' => 3];
+		$two = ['two' => 'two'];
 		$result = array_diff_key($one, $two);
-		$expected = array('one' => array('value', 'value-two'), 'three' => 3);
+		$expected = ['one' => ['value', 'value-two'], 'three' => 3];
 		$this->assertEquals($expected, $result);
 
-		$one = array('one' => null, 'two' => 2, 'three' => '', 'four' => 0);
-		$two = array('two' => 'two');
+		$one = ['one' => null, 'two' => 2, 'three' => '', 'four' => 0];
+		$two = ['two' => 'two'];
 		$result = array_diff_key($one, $two);
-		$expected = array('one' => null, 'three' => '', 'four' => 0);
+		$expected = ['one' => null, 'three' => '', 'four' => 0];
 		$this->assertEquals($expected, $result);
 
-		$one = array('minYear' => null, 'maxYear' => null, 'separator' => '-', 'interval' => 1, 'monthNames' => true);
-		$two = array('minYear' => null, 'maxYear' => null, 'separator' => '-', 'interval' => 1, 'monthNames' => true);
+		$one = ['minYear' => null, 'maxYear' => null, 'separator' => '-', 'interval' => 1, 'monthNames' => true];
+		$two = ['minYear' => null, 'maxYear' => null, 'separator' => '-', 'interval' => 1, 'monthNames' => true];
 		$result = array_diff_key($one, $two);
-		$this->assertSame(array(), $result);
+		$this->assertSame([], $result);
 	}
 
 /**
@@ -115,18 +115,18 @@ class BasicsTest extends CakeTestCase {
 		$_SERVER['HTTP_HOST'] = 'double.subdomain.example.com.ar';
 		$this->assertEquals(env('HTTP_BASE'), '.subdomain.example.com.ar');
 
-		$_SERVER = $_ENV = array();
+		$_SERVER = $_ENV = [];
 
 		$_SERVER['SCRIPT_NAME'] = '/a/test/test.php';
 		$this->assertEquals(env('SCRIPT_NAME'), '/a/test/test.php');
 
-		$_SERVER = $_ENV = array();
+		$_SERVER = $_ENV = [];
 
 		$_ENV['CGI_MODE'] = 'BINARY';
 		$_ENV['SCRIPT_URL'] = '/a/test/test.php';
 		$this->assertEquals(env('SCRIPT_NAME'), '/a/test/test.php');
 
-		$_SERVER = $_ENV = array();
+		$_SERVER = $_ENV = [];
 
 		$this->assertFalse(env('HTTPS'));
 
@@ -151,7 +151,7 @@ class BasicsTest extends CakeTestCase {
 		$_SERVER['HTTPS'] = '';
 		$this->assertFalse(env('HTTPS'));
 
-		$_SERVER = array();
+		$_SERVER = [];
 
 		$_ENV['SCRIPT_URI'] = 'https://domain.test/a/test.php';
 		$this->assertTrue(env('HTTPS'));
@@ -159,7 +159,7 @@ class BasicsTest extends CakeTestCase {
 		$_ENV['SCRIPT_URI'] = 'http://domain.test/a/test.php';
 		$this->assertFalse(env('HTTPS'));
 
-		$_SERVER = $_ENV = array();
+		$_SERVER = $_ENV = [];
 
 		$this->assertNull(env('TEST_ME'));
 
@@ -186,9 +186,9 @@ class BasicsTest extends CakeTestCase {
 		$result = h($string);
 		$this->assertEquals('&lt;foo&gt;', $result);
 
-		$in = array('this & that', '<p>Which one</p>');
+		$in = ['this & that', '<p>Which one</p>'];
 		$result = h($in);
-		$expected = array('this &amp; that', '&lt;p&gt;Which one&lt;/p&gt;');
+		$expected = ['this &amp; that', '&lt;p&gt;Which one&lt;/p&gt;'];
 		$this->assertEquals($expected, $result);
 
 		$string = '<foo> & &nbsp;';
@@ -203,35 +203,35 @@ class BasicsTest extends CakeTestCase {
 		$result = h($string, 'UTF-8');
 		$this->assertEquals('&lt;foo&gt; &amp; &amp;nbsp;', $result);
 
-		$arr = array('<foo>', '&nbsp;');
+		$arr = ['<foo>', '&nbsp;'];
 		$result = h($arr);
-		$expected = array(
+		$expected = [
 			'&lt;foo&gt;',
 			'&amp;nbsp;'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$arr = array('<foo>', '&nbsp;');
+		$arr = ['<foo>', '&nbsp;'];
 		$result = h($arr, false);
-		$expected = array(
+		$expected = [
 			'&lt;foo&gt;',
 			'&nbsp;'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
-		$arr = array('f' => '<foo>', 'n' => '&nbsp;');
+		$arr = ['f' => '<foo>', 'n' => '&nbsp;'];
 		$result = h($arr, false);
-		$expected = array(
+		$expected = [
 			'f' => '&lt;foo&gt;',
 			'n' => '&nbsp;'
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		// Test that boolean values are not converted to strings
 		$result = h(false);
 		$this->assertFalse($result);
 
-		$arr = array('foo' => false, 'bar' => true);
+		$arr = ['foo' => false, 'bar' => true];
 		$result = h($arr);
 		$this->assertFalse($result['foo']);
 		$this->assertTrue($result['bar']);
@@ -240,7 +240,7 @@ class BasicsTest extends CakeTestCase {
 		$result = h($obj);
 		$this->assertEquals('(object)stdClass', $result);
 
-		$obj = new CakeResponse(array('body' => 'Body content'));
+		$obj = new CakeResponse(['body' => 'Body content']);
 		$result = h($obj);
 		$this->assertEquals('Body content', $result);
 	}
@@ -251,12 +251,12 @@ class BasicsTest extends CakeTestCase {
  * @return void
  */
 	public function testAm() {
-		$result = am(array('one', 'two'), 2, 3, 4);
-		$expected = array('one', 'two', 2, 3, 4);
+		$result = am(['one', 'two'], 2, 3, 4);
+		$expected = ['one', 'two', 2, 3, 4];
 		$this->assertEquals($expected, $result);
 
-		$result = am(array('one' => array(2, 3), 'two' => array('foo')), array('one' => array(4, 5)));
-		$expected = array('one' => array(4, 5), 'two' => array('foo'));
+		$result = am(['one' => [2, 3], 'two' => ['foo']], ['one' => [4, 5]]);
+		$expected = ['one' => [4, 5], 'two' => ['foo']];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -313,7 +313,7 @@ class BasicsTest extends CakeTestCase {
 		cache('views' . DS . 'basics_test_3.cache', 'simple cache write 3');
 		$this->assertTrue(file_exists(CACHE . 'views' . DS . 'basics_test_3.cache'));
 
-		$result = clearCache(array('basics_test', 'basics_test_2'), 'views', '.cache');
+		$result = clearCache(['basics_test', 'basics_test_2'], 'views', '.cache');
 		$this->assertTrue($result);
 		$this->assertFalse(file_exists(CACHE . 'views' . DS . 'basics_test.cache'));
 		$this->assertFalse(file_exists(CACHE . 'views' . DS . 'basics_test.cache'));
@@ -389,7 +389,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = 'Some string with multiple arguments, first being null';
 		$this->assertEquals($expected, $result);
 
-		$result = __('Some string with %s %s', array('multiple', 'arguments'));
+		$result = __('Some string with %s %s', ['multiple', 'arguments']);
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 
@@ -397,7 +397,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = 'Testing different order';
 		$this->assertEquals($expected, $result);
 
-		$result = __('Testing %2$s %1$s', array('order', 'different'));
+		$result = __('Testing %2$s %1$s', ['order', 'different']);
 		$expected = 'Testing different order';
 		$this->assertEquals($expected, $result);
 
@@ -609,7 +609,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = '2 items for id 1234';
 		$this->assertEquals($expected, $result);
 
-		$result = __n('%d item for id %s', '%d items for id %s', 2, array(2, '1234'));
+		$result = __n('%d item for id %s', '%d items for id %s', 2, [2, '1234']);
 		$expected = '2 items for id 1234';
 		$this->assertEquals($expected, $result);
 	}
@@ -642,7 +642,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 
-		$result = __d('core', 'Some string with %s %s', array('multiple', 'arguments'));
+		$result = __d('core', 'Some string with %s %s', ['multiple', 'arguments']);
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 	}
@@ -679,7 +679,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = '2 items for id 1234';
 		$this->assertEquals($expected, $result);
 
-		$result = __dn('core', '%d item for id %s', '%d items for id %s', 2, array(2, '1234'));
+		$result = __dn('core', '%d item for id %s', '%d items for id %s', 2, [2, '1234']);
 		$expected = '2 items for id 1234';
 		$this->assertEquals($expected, $result);
 	}
@@ -708,7 +708,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 
-		$result = __c('Some string with %s %s', 6, array('multiple', 'arguments'));
+		$result = __c('Some string with %s %s', 6, ['multiple', 'arguments']);
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 	}
@@ -745,7 +745,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 
-		$result = __dc('core', 'Some string with %s %s', 6, array('multiple', 'arguments'));
+		$result = __dc('core', 'Some string with %s %s', 6, ['multiple', 'arguments']);
 		$expected = 'Some string with multiple arguments';
 		$this->assertEquals($expected, $result);
 	}
@@ -778,7 +778,7 @@ class BasicsTest extends CakeTestCase {
 		$expected = '2 items for id 1234';
 		$this->assertEquals($expected, $result);
 
-		$result = __dcn('core', '%d item for id %s', '%d items for id %s', 2, 6, array(2, '1234'));
+		$result = __dcn('core', '%d item for id %s', '%d items for id %s', 2, 6, [2, '1234']);
 		$expected = '2 items for id 1234';
 		$this->assertEquals($expected, $result);
 	}
@@ -1051,7 +1051,7 @@ EXPECTED;
 		$this->assertEquals($expected, $result);
 
 		ob_start();
-		pr(array('this' => 'is', 'a' => 'test'));
+		pr(['this' => 'is', 'a' => 'test']);
 		$result = ob_get_clean();
 		$expected = "<pre>Array\n(\n    [this] => is\n    [a] => test\n)\n</pre>";
 		$this->assertEquals($expected, $result);
@@ -1071,7 +1071,7 @@ EXPECTED;
 		$this->assertEquals($expected, $result);
 
 		ob_start();
-		pr(array('this' => 'is', 'a' => 'test'));
+		pr(['this' => 'is', 'a' => 'test']);
 		$result = ob_get_clean();
 		$expected = "\nArray\n(\n    [this] => is\n    [a] => test\n)\n\n";
 		$this->assertEquals($expected, $result);
@@ -1091,26 +1091,26 @@ EXPECTED;
 		$this->assertEquals(stripslashes_deep("tes\'t"), "tes't");
 		$this->assertEquals(stripslashes_deep('te\\st'), 'test');
 
-		$nested = array(
+		$nested = [
 			'a' => "tes\'t",
 			'b' => 'tes\\' . chr(0) . 't',
-			'c' => array(
+			'c' => [
 				'd' => 'tes\"t',
 				'e' => "te\'s\'t",
-				array('f' => "tes\'t")
-				),
+				['f' => "tes\'t"]
+				],
 			'g' => 'te\\st'
-		);
-		$expected = array(
+		];
+		$expected = [
 			'a' => "tes't",
 			'b' => 'tes' . chr(0) . 't',
-			'c' => array(
+			'c' => [
 				'd' => 'tes"t',
 				'e' => "te's't",
-				array('f' => "tes't")
-				),
+				['f' => "tes't"]
+				],
 			'g' => 'test'
-		);
+		];
 		$this->assertEquals($expected, stripslashes_deep($nested));
 	}
 
@@ -1126,26 +1126,26 @@ EXPECTED;
 
 		$this->assertEquals(stripslashes_deep("tes\'t"), "tes\'t");
 
-		$nested = array(
+		$nested = [
 			'a' => "tes't",
 			'b' => "tes''t",
-			'c' => array(
+			'c' => [
 				'd' => "tes'''t",
 				'e' => "tes''''t",
-				array('f' => "tes''t")
-				),
+				['f' => "tes''t"]
+				],
 			'g' => "te'''''st"
-			);
-		$expected = array(
+			];
+		$expected = [
 			'a' => "tes't",
 			'b' => "tes't",
-			'c' => array(
+			'c' => [
 				'd' => "tes''t",
 				'e' => "tes''t",
-				array('f' => "tes't")
-				),
+				['f' => "tes't"]
+				],
 			'g' => "te'''st"
-			);
+			];
 		$this->assertEquals($expected, stripslashes_deep($nested));
 	}
 
@@ -1156,13 +1156,13 @@ EXPECTED;
  */
 	public function testStackTrace() {
 		ob_start();
-		list(, $expected) = array(stackTrace(), Debugger::trace());
+		list(, $expected) = [stackTrace(), Debugger::trace()];
 		$result = ob_get_clean();
 		$this->assertEquals($expected, $result);
 
-		$opts = array('args' => true);
+		$opts = ['args' => true];
 		ob_start();
-		list(, $expected) = array(stackTrace($opts), Debugger::trace($opts));
+		list(, $expected) = [stackTrace($opts), Debugger::trace($opts)];
 		$result = ob_get_clean();
 		$this->assertEquals($expected, $result);
 	}
@@ -1174,24 +1174,24 @@ EXPECTED;
  */
 	public function testPluginSplit() {
 		$result = pluginSplit('Something.else');
-		$this->assertEquals(array('Something', 'else'), $result);
+		$this->assertEquals(['Something', 'else'], $result);
 
 		$result = pluginSplit('Something.else.more.dots');
-		$this->assertEquals(array('Something', 'else.more.dots'), $result);
+		$this->assertEquals(['Something', 'else.more.dots'], $result);
 
 		$result = pluginSplit('Somethingelse');
-		$this->assertEquals(array(null, 'Somethingelse'), $result);
+		$this->assertEquals([null, 'Somethingelse'], $result);
 
 		$result = pluginSplit('Something.else', true);
-		$this->assertEquals(array('Something.', 'else'), $result);
+		$this->assertEquals(['Something.', 'else'], $result);
 
 		$result = pluginSplit('Something.else.more.dots', true);
-		$this->assertEquals(array('Something.', 'else.more.dots'), $result);
+		$this->assertEquals(['Something.', 'else.more.dots'], $result);
 
 		$result = pluginSplit('Post', false, 'Blog');
-		$this->assertEquals(array('Blog', 'Post'), $result);
+		$this->assertEquals(['Blog', 'Post'], $result);
 
 		$result = pluginSplit('Blog.Post', false, 'Ultimate');
-		$this->assertEquals(array('Blog', 'Post'), $result);
+		$this->assertEquals(['Blog', 'Post'], $result);
 	}
 }

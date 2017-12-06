@@ -37,7 +37,7 @@
  *     Note that the Turkic mappings do not maintain canonical equivalence without additional processing.
  *     See the discussions of case mapping in the Unicode Standard for more information.
  */
-$config['2100_214f'][] = array('upper' => 8486, 'status' => 'C', 'lower' => array(969)); /* OHM SIGN */
-$config['2100_214f'][] = array('upper' => 8490, 'status' => 'C', 'lower' => array(107)); /* KELVIN SIGN */
-$config['2100_214f'][] = array('upper' => 8491, 'status' => 'C', 'lower' => array(229)); /* ANGSTROM SIGN */
-$config['2100_214f'][] = array('upper' => 8498, 'status' => 'C', 'lower' => array(8526)); /* TURNED CAPITAL F */
+$config['2100_214f'][] = ['upper' => 8486, 'status' => 'C', 'lower' => [969]]; /* OHM SIGN */
+$config['2100_214f'][] = ['upper' => 8490, 'status' => 'C', 'lower' => [107]]; /* KELVIN SIGN */
+$config['2100_214f'][] = ['upper' => 8491, 'status' => 'C', 'lower' => [229]]; /* ANGSTROM SIGN */
+$config['2100_214f'][] = ['upper' => 8498, 'status' => 'C', 'lower' => [8526]]; /* TURNED CAPITAL F */

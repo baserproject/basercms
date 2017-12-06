@@ -51,19 +51,19 @@ class SyslogLog extends BaseLog {
  *
  * @var array
  */
-	protected $_defaults = array(
+	protected $_defaults = [
 		'format' => '%s: %s',
 		'flag' => LOG_ODELAY,
 		'prefix' => '',
 		'facility' => LOG_USER
-	);
+	];
 
 /**
  * Used to map the string names back to their LOG_* constants
  *
  * @var array
  */
-	protected $_priorityMap = array(
+	protected $_priorityMap = [
 		'emergency' => LOG_EMERG,
 		'alert' => LOG_ALERT,
 		'critical' => LOG_CRIT,
@@ -72,7 +72,7 @@ class SyslogLog extends BaseLog {
 		'notice' => LOG_NOTICE,
 		'info' => LOG_INFO,
 		'debug' => LOG_DEBUG
-	);
+	];
 
 /**
  * Whether the logger connection is open or not
@@ -87,7 +87,7 @@ class SyslogLog extends BaseLog {
  *
  * @param array $config Options list.
  */
-	public function __construct($config = array()) {
+	public function __construct($config = []) {
 		$config += $this->_defaults;
 		parent::__construct($config);
 	}

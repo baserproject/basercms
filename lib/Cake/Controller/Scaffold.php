@@ -85,9 +85,9 @@ class Scaffold {
  *
  * @var array
  */
-	protected $_passedVars = array(
+	protected $_passedVars = [
 		'layout', 'name', 'viewPath', 'request'
-	);
+	];
 
 /**
  * Title HTML element for current scaffolded view
@@ -112,7 +112,7 @@ class Scaffold {
 			$this->{$var} = $controller->{$var};
 		}
 
-		$this->redirect = array('action' => 'index');
+		$this->redirect = ['action' => 'index'];
 
 		$this->modelClass = $controller->modelClass;
 		$this->modelKey = $controller->modelKey;
@@ -360,11 +360,11 @@ class Scaffold {
 
 		if (isset($db)) {
 			if (empty($this->scaffoldActions)) {
-				$this->scaffoldActions = array(
+				$this->scaffoldActions = [
 					'index', 'list', 'view', 'add', 'create', 'edit', 'update', 'delete'
-				);
+				];
 			} elseif (!empty($prefixes) && in_array($scaffoldPrefix, $prefixes)) {
-				$this->scaffoldActions = array(
+				$this->scaffoldActions = [
 					$scaffoldPrefix . '_index',
 					$scaffoldPrefix . '_list',
 					$scaffoldPrefix . '_view',
@@ -373,7 +373,7 @@ class Scaffold {
 					$scaffoldPrefix . '_edit',
 					$scaffoldPrefix . '_update',
 					$scaffoldPrefix . '_delete'
-				);
+				];
 			}
 
 			if (in_array($request->params['action'], $this->scaffoldActions)) {
@@ -401,13 +401,13 @@ class Scaffold {
 						break;
 				}
 			} else {
-				throw new MissingActionException(array(
+				throw new MissingActionException([
 					'controller' => get_class($this->controller),
 					'action' => $request->action
-				));
+				]);
 			}
 		} else {
-			throw new MissingDatabaseException(array('connection' => $this->ScaffoldModel->useDbConfig));
+			throw new MissingDatabaseException(['connection' => $this->ScaffoldModel->useDbConfig]);
 		}
 	}
 
@@ -417,8 +417,8 @@ class Scaffold {
  * @return array Associations for model
  */
 	protected function _associations() {
-		$keys = array('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
-		$associations = array();
+		$keys = ['belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany'];
+		$associations = [];
 
 		foreach ($keys as $type) {
 			foreach ($this->ScaffoldModel->{$type} as $assocKey => $assocData) {

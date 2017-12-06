@@ -19,4 +19,4 @@
  */
 
 Router::parseExtensions('json');
-Router::connect('/some_alias', array('controller' => 'tests_apps', 'action' => 'some_method'));
+Router::connect('/some_alias', ['controller' => 'tests_apps', 'action' => 'some_method']);

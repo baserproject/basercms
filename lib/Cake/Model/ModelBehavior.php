@@ -72,7 +72,7 @@ class ModelBehavior extends Object {
  * @var array
  * @see Model::$alias
  */
-	public $settings = array();
+	public $settings = [];
 
 /**
  * Allows the mapping of preg-compatible regular expressions to public or
@@ -82,7 +82,7 @@ class ModelBehavior extends Object {
  *
  * @var array
  */
-	public $mapMethods = array();
+	public $mapMethods = [];
 
 /**
  * Setup this behavior with the specified configuration settings.
@@ -91,7 +91,7 @@ class ModelBehavior extends Object {
  * @param array $config Configuration settings for $model
  * @return void
  */
-	public function setup(Model $model, $config = array()) {
+	public function setup(Model $model, $config = []) {
 	}
 
 /**
@@ -143,7 +143,7 @@ class ModelBehavior extends Object {
  * @return mixed False or null will abort the operation. Any other result will continue.
  * @see Model::save()
  */
-	public function beforeValidate(Model $model, $options = array()) {
+	public function beforeValidate(Model $model, $options = []) {
 		return true;
 	}
 
@@ -167,7 +167,7 @@ class ModelBehavior extends Object {
  * @return mixed False if the operation should abort. Any other result will continue.
  * @see Model::save()
  */
-	public function beforeSave(Model $model, $options = array()) {
+	public function beforeSave(Model $model, $options = []) {
 		return true;
 	}
 
@@ -180,7 +180,7 @@ class ModelBehavior extends Object {
  * @return bool
  * @see Model::save()
  */
-	public function afterSave(Model $model, $created, $options = array()) {
+	public function afterSave(Model $model, $created, $options = []) {
 		return true;
 	}
 

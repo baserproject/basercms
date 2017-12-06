@@ -36,7 +36,7 @@ class DbConfigTask extends AppShell {
  *
  * @var array
  */
-	protected $_defaultConfig = array(
+	protected $_defaultConfig = [
 		'name' => 'default',
 		'datasource' => 'Database/Mysql',
 		'persistent' => 'false',
@@ -48,7 +48,7 @@ class DbConfigTask extends AppShell {
 		'prefix' => null,
 		'encoding' => null,
 		'port' => null
-	);
+	];
 
 /**
  * String name of the database config class name.
@@ -89,7 +89,7 @@ class DbConfigTask extends AppShell {
 		$this->out(__d('cake_console', 'Database Configuration:'));
 		$this->hr();
 		$done = false;
-		$dbConfigs = array();
+		$dbConfigs = [];
 
 		while (!$done) {
 			$name = '';
@@ -105,9 +105,9 @@ class DbConfigTask extends AppShell {
 				}
 			}
 
-			$datasource = $this->in(__d('cake_console', 'Datasource:'), array('Mysql', 'Postgres', 'Sqlite', 'Sqlserver'), 'Mysql');
+			$datasource = $this->in(__d('cake_console', 'Datasource:'), ['Mysql', 'Postgres', 'Sqlite', 'Sqlserver'], 'Mysql');
 
-			$persistent = $this->in(__d('cake_console', 'Persistent Connection?'), array('y', 'n'), 'n');
+			$persistent = $this->in(__d('cake_console', 'Persistent Connection?'), ['y', 'n'], 'n');
 			if (strtolower($persistent) === 'n') {
 				$persistent = 'false';
 			} else {
@@ -139,7 +139,7 @@ class DbConfigTask extends AppShell {
 				$password = $this->in(__d('cake_console', 'Password:'));
 
 				if (!$password) {
-					$blank = $this->in(__d('cake_console', 'The password you supplied was empty. Use an empty password?'), array('y', 'n'), 'n');
+					$blank = $this->in(__d('cake_console', 'The password you supplied was empty. Use an empty password?'), ['y', 'n'], 'n');
 					if ($blank === 'y') {
 						$blankPassword = true;
 					}
@@ -235,7 +235,7 @@ class DbConfigTask extends AppShell {
 		}
 
 		$this->hr();
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n'), 'y');
+		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n'], 'y');
 
 		if (strtolower($looksGood) === 'y') {
 			return $config;
@@ -256,7 +256,7 @@ class DbConfigTask extends AppShell {
 		}
 
 		$filename = $this->path . 'database.php';
-		$oldConfigs = array();
+		$oldConfigs = [];
 
 		if (file_exists($filename)) {
 			config('database');
@@ -278,7 +278,7 @@ class DbConfigTask extends AppShell {
 
 				$info['persistent'] = var_export((bool)$info['persistent'], true);
 
-				$oldConfigs[] = array(
+				$oldConfigs[] = [
 					'name' => $configName,
 					'datasource' => $info['datasource'],
 					'persistent' => $info['persistent'],
@@ -290,7 +290,7 @@ class DbConfigTask extends AppShell {
 					'prefix' => $info['prefix'],
 					'schema' => $info['schema'],
 					'encoding' => $info['encoding']
-				);
+				];
 			}
 		}
 

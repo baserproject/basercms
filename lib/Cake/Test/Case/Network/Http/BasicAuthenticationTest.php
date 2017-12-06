@@ -52,11 +52,11 @@ class BasicAuthenticationTest extends CakeTestCase {
  */
 	public function testAuthentication() {
 		$http = new HttpSocket();
-		$auth = array(
+		$auth = [
 			'method' => 'Basic',
 			'user' => 'mark',
 			'pass' => 'secret'
-		);
+		];
 
 		BasicAuthentication::authentication($http, $auth);
 		$this->assertEquals('Basic bWFyazpzZWNyZXQ=', $http->request['header']['Authorization']);
@@ -69,11 +69,11 @@ class BasicAuthenticationTest extends CakeTestCase {
  */
 	public function testProxyAuthentication() {
 		$http = new HttpSocket();
-		$proxy = array(
+		$proxy = [
 			'method' => 'Basic',
 			'user' => 'mark',
 			'pass' => 'secret'
-		);
+		];
 
 		BasicAuthentication::proxyAuthentication($http, $proxy);
 		$this->assertEquals('Basic bWFyazpzZWNyZXQ=', $http->request['header']['Proxy-Authorization']);
@@ -87,13 +87,13 @@ class BasicAuthenticationTest extends CakeTestCase {
 	public function testProxyAuthenticationSsl() {
 		$http = new TestSslHttpSocket();
 		$http->request['uri']['scheme'] = 'https';
-		$proxy = array(
+		$proxy = [
 			'host' => 'localhost',
 			'port' => 3128,
 			'method' => 'Basic',
 			'user' => 'mark',
 			'pass' => 'secret'
-		);
+		];
 
 		$http->testSetProxy($proxy);
 

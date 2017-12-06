@@ -23,7 +23,7 @@
  */
 class TestPluginController extends TestPluginAppController {
 
-	public $uses = array();
+	public $uses = [];
 
 	public function index() {
 		$this->autoRender = false;

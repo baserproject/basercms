@@ -34,7 +34,7 @@ class CakeErrorController extends AppController {
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = [];
 
 /**
  * Constructor
@@ -56,7 +56,7 @@ class CakeErrorController extends AppController {
 		if ($this->Components->enabled('Security')) {
 			$this->Components->disable('Security');
 		}
-		$this->_set(array('cacheAction' => false, 'viewPath' => 'Errors'));
+		$this->_set(['cacheAction' => false, 'viewPath' => 'Errors']);
 	}
 
 }

@@ -77,7 +77,7 @@ class Shell extends Object {
  *
  * @var array
  */
-	public $params = array();
+	public $params = [];
 
 /**
  * The command (method/task) that is being run.
@@ -91,7 +91,7 @@ class Shell extends Object {
  *
  * @var array
  */
-	public $args = array();
+	public $args = [];
 
 /**
  * The name of the shell in camelized.
@@ -114,14 +114,14 @@ class Shell extends Object {
  * @var array
  * @link http://book.cakephp.org/2.0/en/console-and-shells.html#Shell::$tasks
  */
-	public $tasks = array();
+	public $tasks = [];
 
 /**
  * Contains the loaded tasks
  *
  * @var array
  */
-	public $taskNames = array();
+	public $taskNames = [];
 
 /**
  * Contains models to load and instantiate
@@ -129,7 +129,7 @@ class Shell extends Object {
  * @var array
  * @link http://book.cakephp.org/2.0/en/console-and-shells.html#Shell::$uses
  */
-	public $uses = array();
+	public $uses = [];
 
 /**
  * This shell's primary model class name, the first model in the $uses property
@@ -150,7 +150,7 @@ class Shell extends Object {
  *
  * @var string
  */
-	protected $_taskMap = array();
+	protected $_taskMap = [];
 
 /**
  * stdout object.
@@ -186,7 +186,7 @@ class Shell extends Object {
  *
  * @var array
  */
-	protected $_helpers = array();
+	protected $_helpers = [];
 
 /**
  *  Constructs this Shell instance.
@@ -198,7 +198,7 @@ class Shell extends Object {
  */
 	public function __construct($stdout = null, $stderr = null, $stdin = null) {
 		if (!$this->name) {
-			$this->name = Inflector::camelize(str_replace(array('Shell', 'Task'), '', get_class($this)));
+			$this->name = Inflector::camelize(str_replace(['Shell', 'Task'], '', get_class($this)));
 		}
 		$this->Tasks = new TaskCollection($this);
 
@@ -209,10 +209,10 @@ class Shell extends Object {
 		$this->_useLogger();
 		$parent = get_parent_class($this);
 		if ($this->tasks !== null && $this->tasks !== false) {
-			$this->_mergeVars(array('tasks'), $parent, true);
+			$this->_mergeVars(['tasks'], $parent, true);
 		}
 		if (!empty($this->uses)) {
-			$this->_mergeVars(array('uses'), $parent, false);
+			$this->_mergeVars(['uses'], $parent, false);
 		}
 	}
 
@@ -302,7 +302,7 @@ class Shell extends Object {
 			$modelClass = $this->modelClass;
 		}
 
-		$this->uses = ($this->uses) ? (array)$this->uses : array();
+		$this->uses = ($this->uses) ? (array)$this->uses : [];
 		if (!in_array($modelClass, $this->uses)) {
 			$this->uses[] = $modelClass;
 		}
@@ -312,9 +312,9 @@ class Shell extends Object {
 			$this->modelClass = $modelClass;
 		}
 
-		$this->{$modelClass} = ClassRegistry::init(array(
+		$this->{$modelClass} = ClassRegistry::init([
 			'class' => $plugin . $modelClass, 'alias' => $modelClass, 'id' => $id
-		));
+		]);
 		if (!$this->{$modelClass}) {
 			throw new MissingModelException($modelClass);
 		}
@@ -548,7 +548,7 @@ class Shell extends Object {
 			} elseif (strpos($options, '/')) {
 				$options = explode('/', $options);
 			} else {
-				$options = array($options);
+				$options = [$options];
 			}
 		}
 		if (is_array($options)) {
@@ -614,7 +614,7 @@ class Shell extends Object {
  * @see CakeText::wrap()
  * @link http://book.cakephp.org/2.0/en/console-and-shells.html#Shell::wrapText
  */
-	public function wrapText($text, $options = array()) {
+	public function wrapText($text, $options = []) {
 		return CakeText::wrap($text, $options);
 	}
 
@@ -769,7 +769,7 @@ class Shell extends Object {
 
 		if (is_file($path) && empty($this->params['force']) && $this->interactive === true) {
 			$this->out(__d('cake_console', '<warning>File `%s` exists</warning>', $path));
-			$key = $this->in(__d('cake_console', 'Do you want to overwrite?'), array('y', 'n', 'q'), 'n');
+			$key = $this->in(__d('cake_console', 'Do you want to overwrite?'), ['y', 'n', 'q'], 'n');
 
 			if (strtolower($key) === 'q') {
 				$this->out(__d('cake_console', '<error>Quitting</error>.'), 2);
@@ -829,12 +829,12 @@ class Shell extends Object {
 		} elseif (@include 'PHPUnit' . DS . 'Autoload.php') {
 			//@codingStandardsIgnoreEnd
 			return true;
-		} elseif (App::import('Vendor', 'phpunit', array('file' => 'PHPUnit' . DS . 'Autoload.php'))) {
+		} elseif (App::import('Vendor', 'phpunit', ['file' => 'PHPUnit' . DS . 'Autoload.php'])) {
 			return true;
 		}
 
 		$prompt = __d('cake_console', 'PHPUnit is not installed. Do you want to bake unit test files anyway?');
-		$unitTest = $this->in($prompt, array('y', 'n'), 'y');
+		$unitTest = $this->in($prompt, ['y', 'n'], 'y');
 		$result = strtolower($unitTest) === 'y' || strtolower($unitTest) === 'yes';
 
 		if ($result) {
@@ -974,15 +974,15 @@ class Shell extends Object {
 			CakeLog::drop('stderr');
 			return;
 		}
-		CakeLog::config('stdout', array(
+		CakeLog::config('stdout', [
 			'engine' => 'Console',
-			'types' => array('notice', 'info'),
+			'types' => ['notice', 'info'],
 			'stream' => $this->stdout,
-		));
-		CakeLog::config('stderr', array(
+		]);
+		CakeLog::config('stderr', [
 			'engine' => 'Console',
-			'types' => array('emergency', 'alert', 'critical', 'error', 'warning', 'debug'),
+			'types' => ['emergency', 'alert', 'critical', 'error', 'warning', 'debug'],
 			'stream' => $this->stderr,
-		));
+		]);
 	}
 }

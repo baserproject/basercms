@@ -28,20 +28,20 @@ class AdvertisementFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'title' => array('type' => 'string', 'null' => false),
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'title' => ['type' => 'string', 'null' => false],
 		'created' => 'datetime',
 		'updated' => 'datetime'
-	);
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('title' => 'First Ad', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'),
-		array('title' => 'Second Ad', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31')
-	);
+	public $records = [
+		['title' => 'First Ad', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'],
+		['title' => 'Second Ad', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31']
+	];
 }

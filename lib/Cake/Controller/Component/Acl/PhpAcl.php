@@ -45,7 +45,7 @@ class PhpAcl extends Object implements AclInterface {
  *
  * @var array
  */
-	public $options = array();
+	public $options = [];
 
 /**
  * Aro Object
@@ -67,10 +67,10 @@ class PhpAcl extends Object implements AclInterface {
  * Sets a few default settings up.
  */
 	public function __construct() {
-		$this->options = array(
+		$this->options = [
 			'policy' => static::DENY,
 			'config' => APP . 'Config' . DS . 'acl.php',
-		);
+		];
 	}
 
 /**
@@ -108,11 +108,11 @@ class PhpAcl extends Object implements AclInterface {
 			throw new AclException(__d('cake_dev', 'Neither "allow" nor "deny" rules were provided in configuration.'));
 		}
 
-		$rules['allow'] = !empty($config['rules']['allow']) ? $config['rules']['allow'] : array();
-		$rules['deny'] = !empty($config['rules']['deny']) ? $config['rules']['deny'] : array();
-		$roles = !empty($config['roles']) ? $config['roles'] : array();
-		$map = !empty($config['map']) ? $config['map'] : array();
-		$alias = !empty($config['alias']) ? $config['alias'] : array();
+		$rules['allow'] = !empty($config['rules']['allow']) ? $config['rules']['allow'] : [];
+		$rules['deny'] = !empty($config['rules']['deny']) ? $config['rules']['deny'] : [];
+		$roles = !empty($config['roles']) ? $config['roles'] : [];
+		$map = !empty($config['map']) ? $config['map'] : [];
+		$alias = !empty($config['alias']) ? $config['alias'] : [];
 
 		$this->Aro = new PhpAro($roles, $map, $alias);
 		$this->Aco = new PhpAco($rules);
@@ -204,26 +204,26 @@ class PhpAco {
  *
  * @var array
  */
-	protected $_tree = array();
+	protected $_tree = [];
 
 /**
  * map modifiers for ACO paths to their respective PCRE pattern
  *
  * @var array
  */
-	public static $modifiers = array(
+	public static $modifiers = [
 		'*' => '.*',
-	);
+	];
 
 /**
  * Constructor
  *
  * @param array $rules Rules array
  */
-	public function __construct(array $rules = array()) {
-		foreach (array('allow', 'deny') as $type) {
+	public function __construct(array $rules = []) {
+		foreach (['allow', 'deny'] as $type) {
 			if (empty($rules[$type])) {
-				$rules[$type] = array();
+				$rules[$type] = [];
 			}
 		}
 
@@ -238,16 +238,16 @@ class PhpAco {
  */
 	public function path($aco) {
 		$aco = $this->resolve($aco);
-		$path = array();
+		$path = [];
 		$level = 0;
 		$root = $this->_tree;
-		$stack = array(array($root, 0));
+		$stack = [[$root, 0]];
 
 		while (!empty($stack)) {
 			list($root, $level) = array_pop($stack);
 
 			if (empty($path[$level])) {
-				$path[$level] = array();
+				$path[$level] = [];
 			}
 
 			foreach ($root as $node => $elements) {
@@ -255,10 +255,10 @@ class PhpAco {
 
 				if ($node == $aco[$level] || preg_match($pattern, $aco[$level])) {
 					// merge allow/denies with $path of current level
-					foreach (array('allow', 'deny') as $policy) {
+					foreach (['allow', 'deny'] as $policy) {
 						if (!empty($elements[$policy])) {
 							if (empty($path[$level][$policy])) {
-								$path[$level][$policy] = array();
+								$path[$level][$policy] = [];
 							}
 							$path[$level][$policy] = array_merge($path[$level][$policy], $elements[$policy]);
 						}
@@ -266,7 +266,7 @@ class PhpAco {
 
 					// traverse
 					if (!empty($elements['children']) && isset($aco[$level + 1])) {
-						array_push($stack, array($elements['children'], $level + 1));
+						array_push($stack, [$elements['children'], $level + 1]);
 					}
 				}
 			}
@@ -292,19 +292,19 @@ class PhpAco {
 
 		foreach ($aco as $i => $node) {
 			if (!isset($tree[$node])) {
-				$tree[$node] = array(
-					'children' => array(),
-				);
+				$tree[$node] = [
+					'children' => [],
+				];
 			}
 
 			if ($i < $depth - 1) {
 				$tree = &$tree[$node]['children'];
 			} else {
 				if (empty($tree[$node][$type])) {
-					$tree[$node][$type] = array();
+					$tree[$node][$type] = [];
 				}
 
-				$tree[$node][$type] = array_merge(is_array($aro) ? $aro : array($aro), $tree[$node][$type]);
+				$tree[$node][$type] = array_merge(is_array($aro) ? $aro : [$aro], $tree[$node][$type]);
 			}
 		}
 
@@ -336,8 +336,8 @@ class PhpAco {
  * @param array $deny ACO deny rules
  * @return void
  */
-	public function build(array $allow, array $deny = array()) {
-		$this->_tree = array();
+	public function build(array $allow, array $deny = []) {
+		$this->_tree = [];
 
 		foreach ($allow as $dotPath => $aros) {
 			if (is_string($aros)) {
@@ -383,24 +383,24 @@ class PhpAro {
  * @var array
  * @see app/Config/acl.php
  */
-	public $map = array(
+	public $map = [
 		'User' => 'User/username',
 		'Role' => 'User/role',
-	);
+	];
 
 /**
  * aliases to map
  *
  * @var array
  */
-	public $aliases = array();
+	public $aliases = [];
 
 /**
  * internal ARO representation
  *
  * @var array
  */
-	protected $_tree = array();
+	protected $_tree = [];
 
 /**
  * Constructor
@@ -409,7 +409,7 @@ class PhpAro {
  * @param array $map The identifier mappings
  * @param array $aliases The aliases to map.
  */
-	public function __construct(array $aro = array(), array $map = array(), array $aliases = array()) {
+	public function __construct(array $aro = [], array $map = [], array $aliases = []) {
 		if (!empty($map)) {
 			$this->map = $map;
 		}
@@ -429,9 +429,9 @@ class PhpAro {
  * @return array prioritized AROs
  */
 	public function roles($aro) {
-		$aros = array();
+		$aros = [];
 		$aro = $this->resolve($aro);
-		$stack = array(array($aro, 0));
+		$stack = [[$aro, 0]];
 
 		while (!empty($stack)) {
 			list($element, $depth) = array_pop($stack);
@@ -439,7 +439,7 @@ class PhpAro {
 
 			foreach ($this->_tree as $node => $children) {
 				if (in_array($element, $children)) {
-					array_push($stack, array($node, $depth + 1));
+					array_push($stack, [$node, $depth + 1]);
 				}
 			}
 		}
@@ -504,7 +504,7 @@ class PhpAro {
 	public function addRole(array $aro) {
 		foreach ($aro as $role => $inheritedRoles) {
 			if (!isset($this->_tree[$role])) {
-				$this->_tree[$role] = array();
+				$this->_tree[$role] = [];
 			}
 
 			if (!empty($inheritedRoles)) {
@@ -528,7 +528,7 @@ class PhpAro {
 					}
 
 					if (!isset($this->_tree[$dependency])) {
-						$this->_tree[$dependency] = array();
+						$this->_tree[$dependency] = [];
 					}
 
 					$this->_tree[$dependency][] = $role;
@@ -554,7 +554,7 @@ class PhpAro {
  * @return void
  */
 	public function build(array $aros) {
-		$this->_tree = array();
+		$this->_tree = [];
 		$this->addRole($aros);
 	}
 

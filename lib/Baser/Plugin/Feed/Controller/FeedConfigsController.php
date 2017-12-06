@@ -32,37 +32,37 @@ class FeedConfigsController extends FeedAppController {
  *
  * @var array
  */
-	public $uses = array("Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed");
+	public $uses = ["Feed.FeedConfig", "Feed.FeedDetail", "Feed.Feed"];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcText', 'BcTime', 'BcForm', 'Feed.Feed');
+	public $helpers = ['BcText', 'BcTime', 'BcForm', 'Feed.Feed'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'フィード管理', 'url' => array('controller' => 'feed_configs', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'フィード管理', 'url' => ['controller' => 'feed_configs', 'action' => 'index']]
+	];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * before_filter
@@ -73,7 +73,7 @@ class FeedConfigsController extends FeedAppController {
 		parent::beforeFilter();
 
 		if ($this->params['prefix'] == 'admin') {
-			$this->subMenuElements = array('feed_common');
+			$this->subMenuElements = ['feed_common'];
 		}
 	}
 
@@ -83,14 +83,14 @@ class FeedConfigsController extends FeedAppController {
  * @return void
  */
 	public function admin_index() {
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('FeedConfig', array('default' => $default));
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('FeedConfig', ['default' => $default]);
 		// データを取得
-		$this->paginate = array('conditions' => array(),
-			'fields' => array(),
+		$this->paginate = ['conditions' => [],
+			'fields' => [],
 			'order' => 'FeedConfig.id',
 			'limit' => $this->passedArgs['num']
-		);
+		];
 		$feedConfigs = $this->paginate('FeedConfig');
 
 		if ($feedConfigs) {
@@ -120,7 +120,7 @@ class FeedConfigsController extends FeedAppController {
 
 				$id = $this->FeedConfig->getLastInsertId();
 				$this->setMessage('フィード「' . $this->request->data['FeedConfig']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('controller' => 'feed_configs', 'action' => 'edit', $id, '#' => 'headFeedDetail'));
+				$this->redirect(['controller' => 'feed_configs', 'action' => 'edit', $id, '#' => 'headFeedDetail']);
 			} else {
 
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -142,7 +142,7 @@ class FeedConfigsController extends FeedAppController {
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
@@ -160,7 +160,7 @@ class FeedConfigsController extends FeedAppController {
 				if ($this->request->data['FeedConfig']['edit_template']) {
 					$this->redirectEditTemplate($this->request->data['FeedConfig']['template']);
 				} else {
-					$this->redirect(array('action' => 'index'));
+					$this->redirect(['action' => 'index']);
 				}
 			} else {
 
@@ -169,7 +169,7 @@ class FeedConfigsController extends FeedAppController {
 		}
 
 		// 表示設定
-		$this->subMenuElements = array_merge($this->subMenuElements, array('feed_details'));
+		$this->subMenuElements = array_merge($this->subMenuElements, ['feed_details']);
 		$this->pageTitle = 'フィード設定編集';
 		$this->help = 'feed_configs_form';
 		$this->render('form');
@@ -184,7 +184,7 @@ class FeedConfigsController extends FeedAppController {
 	protected function redirectEditTemplate($template) {
 		$path = 'Feed' . DS . $template . $this->ext;
 		$target = WWW_ROOT . 'theme' . DS . $this->siteConfigs['theme'] . DS . $path;
-		$sorces = array(BASER_PLUGINS . 'Feed' . DS . 'View' . DS . $path);
+		$sorces = [BASER_PLUGINS . 'Feed' . DS . 'View' . DS . $path];
 		if ($this->siteConfigs['theme']) {
 			if (!file_exists($target)) {
 				foreach ($sorces as $source) {
@@ -197,10 +197,10 @@ class FeedConfigsController extends FeedAppController {
 					}
 				}
 			}
-			$this->redirect(array_merge(array('plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'), explode('/', $path)));
+			$this->redirect(array_merge(['plugin' => null, 'mail' => false, 'prefix' => false, 'controller' => 'theme_files', 'action' => 'edit', $this->siteConfigs['theme'], 'etc'], explode('/', $path)));
 		} else {
 			$this->setMessage('現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 	}
 
@@ -259,7 +259,7 @@ class FeedConfigsController extends FeedAppController {
 		if (!$id) {
 
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 			return;
 		}
 
@@ -275,7 +275,7 @@ class FeedConfigsController extends FeedAppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(['action' => 'index']);
 	}
 
 /**
@@ -288,7 +288,7 @@ class FeedConfigsController extends FeedAppController {
 		if (!$id) {
 			$this->notFound();
 		}
-		$this->pageTitle = 'プレビュー：' . $this->FeedConfig->field('name', array('FeedConfig.id' => $id));
+		$this->pageTitle = 'プレビュー：' . $this->FeedConfig->field('name', ['FeedConfig.id' => $id]);
 		$this->set('id', $id);
 	}
 

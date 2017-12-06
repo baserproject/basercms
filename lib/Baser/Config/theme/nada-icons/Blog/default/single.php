@@ -2,7 +2,7 @@
 /**
  * ブログ詳細ページ
  */
-$this->BcBaser->css('colorbox/colorbox', array('inline' => false));
+$this->BcBaser->css('colorbox/colorbox', ['inline' => false]);
 $this->BcBaser->js('jquery.colorbox-min-1.4.5', false);
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->getPostContent($post, false, false, 50));
 ?>
@@ -38,7 +38,7 @@ $(function(){
 <?php $this->Blog->author($post) ?>
 		</span>
     </div>
-<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 </div>
 <div class="post-navi">
 	<?php $this->Blog->prevLink($post) ?>

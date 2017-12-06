@@ -100,11 +100,11 @@ class PluginTask extends AppShell {
 		$this->out(__d('cake_console', "<info>Plugin Directory:</info> %s", $this->path . $plugin));
 		$this->hr();
 
-		$looksGood = $this->in(__d('cake_console', 'Look okay?'), array('y', 'n', 'q'), 'y');
+		$looksGood = $this->in(__d('cake_console', 'Look okay?'), ['y', 'n', 'q'], 'y');
 
 		if (strtolower($looksGood) === 'y') {
 			$Folder = new Folder($this->path . $plugin);
-			$directories = array(
+			$directories = [
 				'Config' . DS . 'Schema',
 				'Console' . DS . 'Command' . DS . 'Task',
 				'Console' . DS . 'Templates',
@@ -125,7 +125,7 @@ class PluginTask extends AppShell {
 				'webroot' . DS . 'css',
 				'webroot' . DS . 'js',
 				'webroot' . DS . 'img',
-			);
+			];
 
 			foreach ($directories as $directory) {
 				$dirPath = $this->path . $plugin . DS . $directory;
@@ -226,9 +226,9 @@ class PluginTask extends AppShell {
 		$parser->description(
 			__d('cake_console',	'Create the directory structure, AppModel and AppController classes for a new plugin. ' .
 			'Can create plugins in any of your bootstrapped plugin paths.')
-		)->addArgument('name', array(
+		)->addArgument('name', [
 			'help' => __d('cake_console', 'CamelCased name of the plugin to create.')
-		));
+		]);
 
 		return $parser;
 	}

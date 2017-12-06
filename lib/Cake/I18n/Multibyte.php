@@ -28,14 +28,14 @@ class Multibyte {
  *
  * @var array
  */
-	protected static $_caseFold = array();
+	protected static $_caseFold = [];
 
 /**
  * Holds an array of Unicode code point ranges
  *
  * @var array
  */
-	protected static $_codeRange = array();
+	protected static $_codeRange = [];
 
 /**
  * Holds the current code point range
@@ -52,9 +52,9 @@ class Multibyte {
  * @return array
  */
 	public static function utf8($string) {
-		$map = array();
+		$map = [];
 
-		$values = array();
+		$values = [];
 		$find = 1;
 		$length = strlen($string);
 
@@ -75,7 +75,7 @@ class Multibyte {
 					} else {
 						$map[] = (($values[0] % 32) * 64) + ($values[1] % 64);
 					}
-					$values = array();
+					$values = [];
 					$find = 1;
 				}
 			}
@@ -152,7 +152,7 @@ class Multibyte {
 			$needle = Multibyte::utf8($needle);
 			$needleCount = count($needle);
 
-			$parts = array();
+			$parts = [];
 			$position = 0;
 
 			while (($found === false) && ($position < $haystackCount)) {
@@ -267,7 +267,7 @@ class Multibyte {
 		$needle = Multibyte::utf8($needle);
 		$needleCount = count($needle);
 
-		$parts = array();
+		$parts = [];
 		$position = 0;
 
 		while (($found === false) && ($position < $haystackCount)) {
@@ -278,7 +278,7 @@ class Multibyte {
 							$found = true;
 						}
 						unset($parts[$position - 1]);
-						$haystack = array_merge(array($haystack[$position]), $haystack);
+						$haystack = array_merge([$haystack[$position]], $haystack);
 						break;
 					}
 				}
@@ -329,7 +329,7 @@ class Multibyte {
 		$needle = Multibyte::utf8($needle);
 		$needleCount = count($needle);
 
-		$parts = array();
+		$parts = [];
 		$position = 0;
 
 		while (($found === false) && ($position < $haystackCount)) {
@@ -340,7 +340,7 @@ class Multibyte {
 							$found = true;
 						}
 						unset($parts[$position - 1]);
-						$haystack = array_merge(array($haystack[$position]), $haystack);
+						$haystack = array_merge([$haystack[$position]], $haystack);
 						break;
 					}
 				}
@@ -490,7 +490,7 @@ class Multibyte {
 			$needle = Multibyte::utf8($needle);
 			$needleCount = count($needle);
 
-			$parts = array();
+			$parts = [];
 			$position = 0;
 
 			while (($found === false) && ($position < $haystackCount)) {
@@ -535,7 +535,7 @@ class Multibyte {
 		$utf8Map = Multibyte::utf8($string);
 
 		$length = count($utf8Map);
-		$lowerCase = array();
+		$lowerCase = [];
 
 		for ($i = 0; $i < $length; $i++) {
 			$char = $utf8Map[$i];
@@ -579,8 +579,8 @@ class Multibyte {
 		$utf8Map = Multibyte::utf8($string);
 
 		$length = count($utf8Map);
-		$replaced = array();
-		$upperCase = array();
+		$replaced = [];
+		$upperCase = [];
 
 		for ($i = 0; $i < $length; $i++) {
 			$char = $utf8Map[$i];
@@ -716,7 +716,7 @@ class Multibyte {
 		}
 		$string = array_values($string);
 
-		$value = array();
+		$value = [];
 		for ($i = 0; $i < $length; $i++) {
 			$value[] = $string[$i];
 		}
@@ -748,7 +748,7 @@ class Multibyte {
 		$length = 75 - strlen($start) - strlen($end);
 		$length = $length - ($length % 4);
 		if ($charset === 'UTF-8') {
-			$parts = array();
+			$parts = [];
 			$maxchars = floor(($length * 3) / 4);
 			$stringLength = strlen($string);
 			while ($stringLength > $maxchars) {
@@ -827,11 +827,11 @@ class Multibyte {
  * @return array
  */
 	protected static function _find($char, $type = 'lower') {
-		$found = array();
+		$found = [];
 		if (!isset(static::$_codeRange[$char])) {
 			$range = static::_codepoint($char);
 			if ($range === false) {
-				return array();
+				return [];
 			}
 			if (!Configure::configured('_cake_core_')) {
 				App::uses('PhpReader', 'Configure');
@@ -843,7 +843,7 @@ class Multibyte {
 		}
 
 		if (!static::$_codeRange[$char]) {
-			return array();
+			return [];
 		}
 		static::$_table = static::$_codeRange[$char];
 		$count = count(static::$_caseFold[static::$_table]);

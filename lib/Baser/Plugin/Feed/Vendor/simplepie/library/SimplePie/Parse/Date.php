@@ -63,7 +63,7 @@ class SimplePie_Parse_Date
 	 *
 		 * @var array
 	 */
-	var $day = array(
+	var $day = [
 		// English
 		'mon' => 1,
 		'monday' => 1,
@@ -144,14 +144,14 @@ class SimplePie_Parse_Date
 		'Παρ' => 5,
 		'Σαβ' => 6,
 		'Κυρ' => 7,
-	);
+	];
 
 	/**
 	 * List of months, calendar month name => calendar month number
 	 *
 		 * @var array
 	 */
-	var $month = array(
+	var $month = [
 		// English
 		'jan' => 1,
 		'january' => 1,
@@ -288,14 +288,14 @@ class SimplePie_Parse_Date
 		'Οκτ' => 10,
 		'Νοέ' => 11,
 		'Δεκ' => 12,
-	);
+	];
 
 	/**
 	 * List of timezones, abbreviation => offset from UTC
 	 *
 		 * @var array
 	 */
-	var $timezone = array(
+	var $timezone = [
 		'ACDT' => 37800,
 		'ACIT' => 28800,
 		'ACST' => 34200,
@@ -495,7 +495,7 @@ class SimplePie_Parse_Date
 		'YAPT' => 36000,
 		'YEKST' => 21600,
 		'YEKT' => 18000,
-	);
+	];
 
 	/**
 	 * Cached PCRE for SimplePie_Parse_Date::$day
@@ -516,14 +516,14 @@ class SimplePie_Parse_Date
 	 *
 		 * @var array
 	 */
-	var $built_in = array();
+	var $built_in = [];
 
 	/**
 	 * Array of user-added callback methods
 	 *
 		 * @var array
 	 */
-	var $user = array();
+	var $user = [];
 
 	/**
 	 * Create new SimplePie_Parse_Date object, and set self::day_pcre,
@@ -588,7 +588,7 @@ class SimplePie_Parse_Date
 
 		foreach ($this->built_in as $method)
 		{
-			if (($returned = call_user_func(array($this, $method), $date)) !== false)
+			if (($returned = call_user_func([$this, $method], $date)) !== false)
 			{
 				return $returned;
 			}

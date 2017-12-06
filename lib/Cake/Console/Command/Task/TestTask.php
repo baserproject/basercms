@@ -38,20 +38,20 @@ class TestTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = array('Template');
+	public $tasks = ['Template'];
 
 /**
  * class types that methods can be generated for
  *
  * @var array
  */
-	public $classTypes = array(
+	public $classTypes = [
 		'Model' => 'Model',
 		'Controller' => 'Controller',
 		'Component' => 'Controller/Component',
 		'Behavior' => 'Model/Behavior',
 		'Helper' => 'View/Helper'
-	);
+	];
 
 /**
  * Mapping between packages, and their baseclass + package.
@@ -60,20 +60,20 @@ class TestTask extends BakeTask {
  *
  * @var array
  */
-	public $baseTypes = array(
-		'Model' => array('Model', 'Model'),
-		'Behavior' => array('ModelBehavior', 'Model'),
-		'Controller' => array('Controller', 'Controller'),
-		'Component' => array('Component', 'Controller'),
-		'Helper' => array('Helper', 'View')
-	);
+	public $baseTypes = [
+		'Model' => ['Model', 'Model'],
+		'Behavior' => ['ModelBehavior', 'Model'],
+		'Controller' => ['Controller', 'Controller'],
+		'Component' => ['Component', 'Controller'],
+		'Helper' => ['Helper', 'View']
+	];
 
 /**
  * Internal list of fixtures that have been added so far.
  *
  * @var array
  */
-	protected $_fixtures = array();
+	protected $_fixtures = [];
 
 /**
  * Execution method always used for tasks
@@ -151,7 +151,7 @@ class TestTask extends BakeTask {
 		App::uses($baseClass, $baseType);
 		App::uses($fullClassName, $realType);
 
-		$methods = array();
+		$methods = [];
 		if (class_exists($fullClassName)) {
 			$methods = $this->getTestableMethods($fullClassName);
 		}
@@ -188,7 +188,7 @@ class TestTask extends BakeTask {
 		$this->out(__d('cake_console', 'Select an object type:'));
 		$this->hr();
 
-		$keys = array();
+		$keys = [];
 		$i = 0;
 		foreach ($this->classTypes as $option => $package) {
 			$this->out(++$i . '. ' . $option);
@@ -220,7 +220,7 @@ class TestTask extends BakeTask {
 			$options = App::objects($type);
 		}
 		$this->out(__d('cake_console', 'Choose a %s class', $objectType));
-		$keys = array();
+		$keys = [];
 		foreach ($options as $key => $option) {
 			$this->out(++$key . '. ' . $option);
 			$keys[] = $key;
@@ -246,7 +246,7 @@ class TestTask extends BakeTask {
  */
 	public function typeCanDetectFixtures($type) {
 		$type = strtolower($type);
-		return in_array($type, array('controller', 'model'));
+		return in_array($type, ['controller', 'model']);
 	}
 
 /**
@@ -354,7 +354,7 @@ class TestTask extends BakeTask {
 		$classMethods = get_class_methods($className);
 		$parentMethods = get_class_methods(get_parent_class($className));
 		$thisMethods = array_diff($classMethods, $parentMethods);
-		$out = array();
+		$out = [];
 		foreach ($thisMethods as $method) {
 			if (substr($method, 0, 1) !== '_' && $method != strtolower($className)) {
 				$out[] = $method;
@@ -371,7 +371,7 @@ class TestTask extends BakeTask {
  * @return array Array of fixtures to be included in the test.
  */
 	public function generateFixtureList($subject) {
-		$this->_fixtures = array();
+		$this->_fixtures = [];
 		if ($subject instanceof Model) {
 			$this->_processModel($subject);
 		} elseif ($subject instanceof Controller) {
@@ -417,7 +417,7 @@ class TestTask extends BakeTask {
  */
 	protected function _processController($subject) {
 		$subject->constructClasses();
-		$models = array(Inflector::classify($subject->name));
+		$models = [Inflector::classify($subject->name)];
 		if (!empty($subject->uses)) {
 			$models = $subject->uses;
 		}
@@ -450,8 +450,8 @@ class TestTask extends BakeTask {
  * @return array Array of fixtures the user wants to add.
  */
 	public function getUserFixtures() {
-		$proceed = $this->in(__d('cake_console', 'Bake could not detect fixtures, would you like to add some?'), array('y', 'n'), 'n');
-		$fixtures = array();
+		$proceed = $this->in(__d('cake_console', 'Bake could not detect fixtures, would you like to add some?'), ['y', 'n'], 'n');
+		$fixtures = [];
 		if (strtolower($proceed) === 'y') {
 			$fixtureList = $this->in(__d('cake_console', "Please provide a comma separated list of the fixtures names you'd like to use.\nExample: 'app.comment, app.post, plugin.forums.post'"));
 			$fixtureListTrimmed = str_replace(' ', '', $fixtureList);
@@ -498,7 +498,7 @@ class TestTask extends BakeTask {
 			$pre = "\$Collection = new ComponentCollection();\n";
 			$construct = "new {$fullClassName}(\$Collection);\n";
 		}
-		return array($pre, $construct, $post);
+		return [$pre, $construct, $post];
 	}
 
 /**
@@ -510,17 +510,17 @@ class TestTask extends BakeTask {
  * @return array An array containing used classes
  */
 	public function generateUses($type, $realType, $className) {
-		$uses = array();
+		$uses = [];
 		$type = strtolower($type);
 		if ($type === 'component') {
-			$uses[] = array('ComponentCollection', 'Controller');
-			$uses[] = array('Component', 'Controller');
+			$uses[] = ['ComponentCollection', 'Controller'];
+			$uses[] = ['Component', 'Controller'];
 		}
 		if ($type === 'helper') {
-			$uses[] = array('View', 'View');
-			$uses[] = array('Helper', 'View');
+			$uses[] = ['View', 'View'];
+			$uses[] = ['Helper', 'View'];
 		}
-		$uses[] = array($className, $realType);
+		$uses[] = [$className, $realType];
 		return $uses;
 	}
 
@@ -552,27 +552,27 @@ class TestTask extends BakeTask {
 
 		$parser->description(
 			__d('cake_console', 'Bake test case skeletons for classes.')
-		)->addArgument('type', array(
+		)->addArgument('type', [
 			'help' => __d('cake_console', 'Type of class to bake, can be any of the following: controller, model, helper, component or behavior.'),
-			'choices' => array(
+			'choices' => [
 				'Controller', 'controller',
 				'Model', 'model',
 				'Helper', 'helper',
 				'Component', 'component',
 				'Behavior', 'behavior'
-			)
-		))->addArgument('name', array(
+			]
+		])->addArgument('name', [
 			'help' => __d('cake_console', 'An existing class to bake tests for.')
-		))->addOption('theme', array(
+		])->addOption('theme', [
 			'short' => 't',
 			'help' => __d('cake_console', 'Theme to use when baking code.')
-		))->addOption('plugin', array(
+		])->addOption('plugin', [
 			'short' => 'p',
 			'help' => __d('cake_console', 'CamelCased name of the plugin to bake tests for.')
-		))->addOption('force', array(
+		])->addOption('force', [
 			'short' => 'f',
 			'help' => __d('cake_console', 'Force overwriting existing files without prompting.')
-		))->epilog(
+		])->epilog(
 			__d('cake_console', 'Omitting all arguments and options will enter into an interactive mode.')
 		);
 

@@ -43,9 +43,9 @@ $(function(){
 
 
 <?php if(!empty($popup)): ?>
-	<?php echo $this->BcForm->create('UploaderFile',array('url' => array('action' => 'edit'), 'id' => 'UploaderFileEditForm'.$listId)) ?>
+	<?php echo $this->BcForm->create('UploaderFile',['url' => ['action' => 'edit'], 'id' => 'UploaderFileEditForm'.$listId]) ?>
 <?php else: ?>
-	<?php echo $this->BcForm->create('UploaderFile',array('url' => array('action' => 'edit', $this->request->data['UploaderFile']['id'], $listId), 'id' => 'UploaderFileEditForm'.$listId, 'type' => 'file')) ?>
+	<?php echo $this->BcForm->create('UploaderFile',['url' => ['action' => 'edit', $this->request->data['UploaderFile']['id'], $listId], 'id' => 'UploaderFileEditForm'.$listId, 'type' => 'file']) ?>
 <?php endif ?>
 
 
@@ -55,19 +55,19 @@ $(function(){
 		<td class="col-input">
 		<?php if(empty($popup)): ?>
 			<?php echo $this->BcForm->value('UploaderFile.id') ?>
-			<?php echo $this->BcForm->input('UploaderFile.id', array('type' => 'hidden')) ?>
+			<?php echo $this->BcForm->input('UploaderFile.id', ['type' => 'hidden']) ?>
 		<?php else: ?>
-			<?php echo $this->BcForm->text('UploaderFile.id', array('size'=>30,'maxlength'=>255,'readonly'=>'readonly','id'=>'UploaderFileId'.$listId, 'class' => 'uploader-file-id')) ?>&nbsp;
+			<?php echo $this->BcForm->text('UploaderFile.id', ['size'=>30,'maxlength'=>255,'readonly'=>'readonly','id'=>'UploaderFileId'.$listId, 'class' => 'uploader-file-id']) ?>&nbsp;
 		<?php endif ?>
 		</td>
 	</tr>
 <?php if(empty($popup)): ?>
-	<tr><th>アップロードファイル</th><td><?php echo $this->BcForm->file('UploaderFile.name', array('delCheck' => false, 'imgsize' => 'midium', 'force' => 'true')) ?></td></tr>
+	<tr><th>アップロードファイル</th><td><?php echo $this->BcForm->file('UploaderFile.name', ['delCheck' => false, 'imgsize' => 'midium', 'force' => 'true']) ?></td></tr>
 <?php else: ?>
 	<tr>
 		<th class="col-head"><!--<span class="required">*</span>&nbsp;--><?php echo $this->BcForm->label('UploaderFile.name', 'ファイル名') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->text('UploaderFile.name', array('size'=>30,'maxlength'=>255,'readonly'=>'readonly','id'=>'UploaderFileName'.$listId, 'class' => 'uploader-file-name')) ?>
+			<?php echo $this->BcForm->text('UploaderFile.name', ['size'=>30,'maxlength'=>255,'readonly'=>'readonly','id'=>'UploaderFileName'.$listId, 'class' => 'uploader-file-name']) ?>
 			<?php echo $this->BcForm->error('UploaderFile.name', 'ファイル名を入力して下さい') ?>&nbsp;
 		</td>
 	</tr>
@@ -75,15 +75,15 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('UploaderFile.alt', '説明文') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->text('UploaderFile.alt', array('size'=>51,'maxlength'=>255,'id'=>'UploaderFileAlt'.$listId, 'class' => 'uploader-file-alt')) ?>&nbsp;
+			<?php echo $this->BcForm->text('UploaderFile.alt', ['size'=>51,'maxlength'=>255,'id'=>'UploaderFileAlt'.$listId, 'class' => 'uploader-file-alt']) ?>&nbsp;
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('UploaderFile.publish_begin_date', '公開期間') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->dateTimePicker('UploaderFile.publish_begin', array('size' => 12, 'maxlength' => 10)) ?>
+			<?php echo $this->BcForm->dateTimePicker('UploaderFile.publish_begin', ['size' => 12, 'maxlength' => 10]) ?>
 			&nbsp;〜&nbsp;
-			<?php echo $this->BcForm->dateTimePicker('UploaderFile.publish_end', array('size' => 12, 'maxlength' => 10)) ?>
+			<?php echo $this->BcForm->dateTimePicker('UploaderFile.publish_end', ['size' => 12, 'maxlength' => 10]) ?>
 			<?php echo $this->BcForm->error('UploaderFile.publish_begin') ?>
 			<?php echo $this->BcForm->error('UploaderFile.publish_end') ?>
 		</td>
@@ -92,7 +92,7 @@ $(function(){
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('UploaderFile.uploader_category_id', 'カテゴリ') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', array('type' => 'select', 'options' => $uploaderCategories, 'empty' => '指定なし', 'id' => '_UploaderFileUploaderCategoryId'.$listId)) ?>
+			<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', ['type' => 'select', 'options' => $uploaderCategories, 'empty' => '指定なし', 'id' => '_UploaderFileUploaderCategoryId'.$listId]) ?>
 		</td>
 	</tr>
 <?php endif ?>
@@ -104,7 +104,7 @@ $(function(){
 				<?php echo $this->BcText->arrayValue($this->request->data['UploaderFile']['user_id'], $users) ?>
 			<?Php endif ?>
 			</span>
-			<?php echo $this->BcForm->input('UploaderFile.user_id', array('type' => 'hidden', 'id' => 'UploaderFileUserId'.$listId)) ?>
+			<?php echo $this->BcForm->input('UploaderFile.user_id', ['type' => 'hidden', 'id' => 'UploaderFileUserId'.$listId]) ?>
 		</td>
 	</tr>
 <?php if(!empty($popup)): ?>
@@ -115,10 +115,10 @@ $(function(){
 
 <?php if(empty($popup)): ?>
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php $this->BcBaser->link('削除',
-			array('action' => 'delete', $this->BcForm->value('UploaderFile.id')),
-			array('class' => 'submit-token button'),
+			['action' => 'delete', $this->BcForm->value('UploaderFile.id')],
+			['class' => 'submit-token button'],
 			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('UploaderFile.name')),
 			false); ?>
 </div>

@@ -47,7 +47,7 @@ abstract class BaseModelTest extends CakeTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'core.category', 'core.category_thread', 'core.user', 'core.my_category', 'core.my_product',
 		'core.my_user', 'core.my_categories_my_users', 'core.my_categories_my_products',
 		'core.article', 'core.featured', 'core.article_featureds_tags', 'core.article_featured',
@@ -73,7 +73,7 @@ abstract class BaseModelTest extends CakeTestCase {
 		'core.bidding', 'core.bidding_message', 'core.site', 'core.domain', 'core.domains_site',
 		'core.uuidnativeitem', 'core.uuidnativeportfolio', 'core.uuidnativeitems_uuidnativeportfolio',
 		'core.uuidnativeitems_uuidnativeportfolio_numericid',
-	);
+	];
 
 /**
  * setUp method

@@ -93,32 +93,32 @@
  * The role map defines how to resolve the user record from your application
  * to the roles you defined in the roles configuration.
  */
-$config['map'] = array(
+$config['map'] = [
 	'User' => 'User/username',
 	'Role' => 'User/group_id',
-);
+];
 
 /**
  * define aliases to map your model information to
  * the roles defined in your role configuration.
  */
-$config['alias'] = array(
+$config['alias'] = [
 	'Role/4' => 'Role/editor',
-);
+];
 
 /**
  * role configuration
  */
-$config['roles'] = array(
+$config['roles'] = [
 	'Role/admin' => null,
-);
+];
 
 /**
  * rule configuration
  */
-$config['rules'] = array(
-	'allow' => array(
+$config['rules'] = [
+	'allow' => [
 		'*' => 'Role/admin',
-	),
-	'deny' => array(),
-);
+	],
+	'deny' => [],
+];

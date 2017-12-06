@@ -35,7 +35,7 @@ class CacheHelper extends AppHelper {
  *
  * @var array
  */
-	protected $_replace = array();
+	protected $_replace = [];
 
 /**
  * Array of string that are replace with there var replace above.
@@ -43,7 +43,7 @@ class CacheHelper extends AppHelper {
  *
  * @var array
  */
-	protected $_match = array();
+	protected $_match = [];
 
 /**
  * Counter used for counting nocache section tags.
@@ -97,7 +97,7 @@ class CacheHelper extends AppHelper {
  * @return string Updated content.
  */
 	protected function _parseContent($file, $out) {
-		$out = preg_replace_callback('/<!--nocache-->/', array($this, '_replaceSection'), $out);
+		$out = preg_replace_callback('/<!--nocache-->/', [$this, '_replaceSection'], $out);
 		$this->_parseFile($file, $out);
 		return $out;
 	}
@@ -134,7 +134,7 @@ class CacheHelper extends AppHelper {
 			$options = $cacheAction;
 			if (isset($cacheAction[$index])) {
 				if (is_array($cacheAction[$index])) {
-					$options = $cacheAction[$index] + array('duration' => 0, 'callbacks' => false);
+					$options = $cacheAction[$index] + ['duration' => 0, 'callbacks' => false];
 				} else {
 					$cacheTime = $cacheAction[$index];
 				}

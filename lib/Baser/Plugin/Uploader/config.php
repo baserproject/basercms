@@ -14,7 +14,7 @@ $title = 'アップローダー';
 $description = 'Webページやブログ記事で、画像等のファイルを貼り付ける事ができます。';
 $author = 'baserCMS Users Community';
 $url = 'http://basercms.net';
-$adminLink = array('admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index');
+$adminLink = ['admin' => true, 'plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index'];
 if(!is_writable(WWW_ROOT.'files')){
 	$viewFilesPath = str_replace(ROOT,'',WWW_ROOT).'files';
 	$installMessage = '登録ボタンをクリックする前に、サーバー上の '.$viewFilesPath.' に書き込み権限を与えてください。';

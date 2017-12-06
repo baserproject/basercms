@@ -38,7 +38,7 @@ class CKEditorStyleParser {
 
 		$css = preg_replace('/\/\*.*?\*\//s', '', $css);
 		
-		$data = array();
+		$data = [];
         $size = strlen($css);
         for ($i = 0; $i < $size; $i++) {
             $selector = '';
@@ -61,7 +61,7 @@ class CKEditorStyleParser {
                 $code .= $css[$i];
             }
             $selector = trim($selector);
-            $data[] = array('name' => trim($comment).'('.$selector.')', 'element' => trim($selector), 'styles' => self::parseCode($code));
+            $data[] = ['name' => trim($comment).'('.$selector.')', 'element' => trim($selector), 'styles' => self::parseCode($code)];
         }
         return $data;
 		
@@ -69,7 +69,7 @@ class CKEditorStyleParser {
 
     private static function parseCode ($code) {
         $size = strlen($code);
-        $data = array();
+        $data = [];
         for ($i = 0; $i < $size; $i++) {
             $style = '';
             $content = '';

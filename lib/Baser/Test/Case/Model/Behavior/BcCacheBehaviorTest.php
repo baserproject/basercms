@@ -17,7 +17,7 @@
  */
 class BcCacheBehaviorTest extends BaserTestCase {
 
-	public $fixtures = array();
+	public $fixtures = [];
 
 /**
  * setUp
@@ -64,7 +64,7 @@ class BcCacheBehaviorTest extends BaserTestCase {
 	public function isEmptyDirAssock(Model $model, $recursive = 0) {
 		if ($recursive <= 3) {
 			$recursive++;
-			$assocTypes = array('hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany');
+			$assocTypes = ['hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany'];
 			foreach ($assocTypes as $assocType) {
 				if ($model->{$assocType}) {
 					foreach ($model->{$assocType} as $assoc) {
@@ -91,7 +91,7 @@ class BcCacheBehaviorTest extends BaserTestCase {
 	public function createDummyFileAssoc(Model $model, $recursive = 0) {
 		if ($recursive <= 3) {
 			$recursive++;
-			$assocTypes = array('hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany');
+			$assocTypes = ['hasMany', 'hasOne', 'belongsTo', 'hasAndBelongsToMany'];
 			foreach ($assocTypes as $assocType) {
 				if ($model->{$assocType}) {
 					foreach ($model->{$assocType} as $assoc) {

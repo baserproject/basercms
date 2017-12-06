@@ -12,7 +12,7 @@
 <ul class="post-list">
 	<?php foreach ($posts as $key => $post): ?>
 		<?php
-		$class = array('clearfix', 'post-' . ($key + 1));
+		$class = ['clearfix', 'post-' . ($key + 1)];
 		if ($this->BcArray->first($posts, $key)) {
 			$class[] = 'first';
 		} elseif ($this->BcArray->last($posts, $key)) {
@@ -20,7 +20,7 @@
 		}
 		?>
 	<li class="<?php echo implode(' ', $class) ?>">
-		<?php $this->Blog->eyeCatch($post, array('width' => 150, 'link' => false)) ?>
+		<?php $this->Blog->eyeCatch($post, ['width' => 150, 'link' => false]) ?>
 		<p><?php $this->Blog->postDate($post, 'Y.m.d') ?><br>
 		<?php $this->Blog->postTitle($post) ?><br>
 		<?php $this->Blog->postContent($post, false, false, 70) ?></p>

@@ -23,7 +23,7 @@ class FeedHelper extends AppHelper {
  * 
  * @var array
  */
-	public $helpers = array('BcBaser');
+	public $helpers = ['BcBaser'];
 
 /**
  * レイアウトテンプレートを取得
@@ -32,13 +32,13 @@ class FeedHelper extends AppHelper {
  * @return array レイアウトの一覧データ
  */
 	public function getTemplates() {
-		$templatesPathes = array();
+		$templatesPathes = [];
 		if ($this->BcBaser->siteConfig['theme']) {
 			$templatesPathes[] = WWW_ROOT . 'theme' . DS . $this->BcBaser->siteConfig['theme'] . DS . 'Feed' . DS;
 		}
 		$templatesPathes[] = BASER_PLUGINS . 'Feed' . DS . 'View' . DS . 'Feed' . DS;
 
-		$_templates = array();
+		$_templates = [];
 		foreach ($templatesPathes as $templatesPath) {
 			$folder = new Folder($templatesPath);
 			$files = $folder->read(true, true);
@@ -51,7 +51,7 @@ class FeedHelper extends AppHelper {
 				}
 			}
 		}
-		$templates = array();
+		$templates = [];
 		foreach ($_templates as $template) {
 			$ext = Configure::read('BcApp.templateExt');
 			if ($template != 'ajax' . $ext && $template != 'error' . $ext) {

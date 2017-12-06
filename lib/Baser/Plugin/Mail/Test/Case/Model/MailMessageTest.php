@@ -19,7 +19,7 @@ App::uses('MailMessage', 'Mail.Model');
  */
 class MailMessageTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'baser.Default.Site',
 		'baser.Default.Content',
@@ -27,7 +27,7 @@ class MailMessageTest extends BaserTestCase {
 		'plugin.Mail.Default/MailConfig',
 		'plugin.Mail.Model/MailMessage/MailContentMailMessage',
 		'plugin.Mail.Model/MailMessage/MailFieldMailMessage',
-	);
+	];
 
 	public function setUp() {
 		$this->MailMessage = ClassRegistry::init('Mail.MailMessage');
@@ -88,12 +88,12 @@ class MailMessageTest extends BaserTestCase {
 		ClassRegistry::flush();
 		ClassRegistry::addObject('MailMessage', $this->MailMessage);
 		$this->MailMessage->setup(1);
-		$this->MailMessage->data = array('MailMessage' => array(
+		$this->MailMessage->data = ['MailMessage' => [
 			'name_1' => "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9",
 			'name_2' => 'hoge',
 			'root' => '2',
 			'category' => '2'
-		));
+		]];
 		$result = $this->MailMessage->save();
 		$this->MailMessage->dropTable(1);
 		$this->assertEquals('IIIメートル(代)', $result['MailMessage']['name_1'], 'beforeSaveでデータベース用のデータに変換されていません');
@@ -106,46 +106,46 @@ class MailMessageTest extends BaserTestCase {
  */
 	public function testValidate($id, $data, $expected, $message) {
 		$this->MailMessage->setup($id);
-		$this->MailMessage->data = array('MailMessage' => $data);
+		$this->MailMessage->data = ['MailMessage' => $data];
 
 		$this->MailMessage->validates();
 		$this->assertEquals($expected, $this->MailMessage->validationErrors, $message);
 	}
 
 	public function validateDataProvider() {
-		return array(
+		return [
 			// 正常系
-			array(1, array(
+			[1, [
 				'email_1' => 'a@example.co.jp', 'email_2' => 'a@example.co.jp',
 				'tel_1' => '000', 'tel_2' => '0000', 'tel_3' => '0000',
-				'category' => 1, 'message' => array('year' => 9999, 'month' => 99, 'day' => 99),
+				'category' => 1, 'message' => ['year' => 9999, 'month' => 99, 'day' => 99],
 				'name_1' => 'baser', 'name_2' => 'cms',
 				'root' => '検索エンジン', 
-			),
-			array(), 'バリデーションチェックが正しく行われていません'),
+			],
+			[], 'バリデーションチェックが正しく行われていません'],
 			// 異常系
-			array(1, array(
+			[1, [
 				'email_1' => 'email', 'email_2' => 'email_hoge', // Eメール確認チェック
 				'tel_1' => 'num1', 'tel_2' => false, 'tel_3' => false, // 不完全データチェック
 				'category' => false, 'message' => false, // 拡張バリデートチェック, FixtureでmessageにVALID_DATETIME付与済み
 				'name_1' => '', 'name_2' => '', // バリデートグループエラーチェック
-			),
-			array(
-				'name_1' => array('必須項目です。'),
-				'name_2' => array('必須項目です。'),
-				'email_1' => array('形式が不正です。',true),
-				'email_2' => array('形式が不正です。',true),
-				'root' => array('必須項目です。'),
-				'email_not_same' => array(true),
-				'tel_not_complate' => array(true),
-				'tel_1' => array(true),
-				'tel_2' => array(true),
-				'tel_3' => array(true),
-				'category' => array('必須項目です。'),
-				'name' => array(true, true),
-				'email' => array(true, true)
-			), 'バリデーションチェックが正しく行われていません'),
-		);
+			],
+			[
+				'name_1' => ['必須項目です。'],
+				'name_2' => ['必須項目です。'],
+				'email_1' => ['形式が不正です。',true],
+				'email_2' => ['形式が不正です。',true],
+				'root' => ['必須項目です。'],
+				'email_not_same' => [true],
+				'tel_not_complate' => [true],
+				'tel_1' => [true],
+				'tel_2' => [true],
+				'tel_3' => [true],
+				'category' => ['必須項目です。'],
+				'name' => [true, true],
+				'email' => [true, true]
+			], 'バリデーションチェックが正しく行われていません'],
+		];
 	}
 
 /**
@@ -175,16 +175,16 @@ class MailMessageTest extends BaserTestCase {
  */
 	public function testAutoConvert($auto_convert, $value, $expected, $message) {
 		// 初期化
-		$this->MailMessage->mailFields = array(
-			array('MailField' => array(
+		$this->MailMessage->mailFields = [
+			['MailField' => [
 				'field_name' => 'value',
 				'auto_convert' => $auto_convert,
 				'use_field' => true,
-			)
-		));
-		$data = array('MailMessage' => array(
+			]
+		]];
+		$data = ['MailMessage' => [
 			'value' => $value
-		));
+		]];
 
 		// 実行
 		$result = $this->MailMessage->autoConvert($data);
@@ -193,12 +193,12 @@ class MailMessageTest extends BaserTestCase {
 	}
 
 	public function autoConvertDataProvider() {
-		return array(
-			array('CONVERT_HANKAKU', '１２３ａｂｃ', '123abc', '半角変換が正しく処理されていません'),
-			array('CONVERT_ZENKAKU', '123abc', '１２３ａｂｃ', '全角変換が正しく処理されていません'),
-			array(null, '<!-- hoge', '&lt;!-- hoge', 'サニタイズが正しく処理されていません'),
-			array(null, '    hoge    ', 'hoge', '空白削除が正しく処理されていません'),
-		);
+		return [
+			['CONVERT_HANKAKU', '１２３ａｂｃ', '123abc', '半角変換が正しく処理されていません'],
+			['CONVERT_ZENKAKU', '123abc', '１２３ａｂｃ', '全角変換が正しく処理されていません'],
+			[null, '<!-- hoge', '&lt;!-- hoge', 'サニタイズが正しく処理されていません'],
+			[null, '    hoge    ', 'hoge', '空白削除が正しく処理されていません'],
+		];
 	}
 
 /**
@@ -209,29 +209,29 @@ class MailMessageTest extends BaserTestCase {
  */
 	public function testGetDefaultValue($type) {
 		// 初期化
-		$this->MailMessage->mailFields = array(
-			array('MailField' => array(
+		$this->MailMessage->mailFields = [
+			['MailField' => [
 				'field_name' => 'value',
 				'use_field' => true,
 				'default_value' => 'default',
 				'type' => $type,
-			)
-		));
-		$data = array('MailMessage' => array(
+			]
+		]];
+		$data = ['MailMessage' => [
 			'key1' => 'hoge1',
 			'key2' => 'hoge2',
-		));
+		]];
 
 		// 実行
 		$result = $this->MailMessage->getDefaultValue($data);
 
 		if ($type != 'multi_check') {
-			$expected = array(
-				'MailMessage' => array(
+			$expected = [
+				'MailMessage' => [
 					'value' => 'default',
 					'key1' => 'hoge1',
 					'key2' => 'hoge2'
-			));
+			]];
 			$this->assertEquals($expected, $result);
 
 		} else {
@@ -240,10 +240,10 @@ class MailMessageTest extends BaserTestCase {
 	}
 
 	public function getDefaultValueDataProvider() {
-		return array(
-			array(null),
-			array('multi_check'),
-		);
+		return [
+			[null],
+			['multi_check'],
+		];
 	}
 
 /**
@@ -256,16 +256,16 @@ class MailMessageTest extends BaserTestCase {
  */
 	public function testConvertToDb($type, $value, $expected) {
 		// 初期化
-		$this->MailMessage->mailFields = array(
-			array('MailField' => array(
+		$this->MailMessage->mailFields = [
+			['MailField' => [
 				'field_name' => 'value',
 				'use_field' => true,
 				'type' => $type,
-			)
-		));
-		$dbData = array('MailMessage' => array(
+			]
+		]];
+		$dbData = ['MailMessage' => [
 			'value' => $value,
-		));
+		]];
 
 		// 実行
 		$result = $this->MailMessage->convertToDb($dbData);
@@ -274,13 +274,13 @@ class MailMessageTest extends BaserTestCase {
 	}
 
 	public function convertToDbDataProvider() {
-		return array(
-			array(null, 'hoge', 'hoge'),
-			array('multi_check', 'hoge', 'hoge'),
-			array('multi_check', array('hoge1', 'hoge2', 'hoge3'), 'hoge1|hoge2|hoge3'),
-			array(null, "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9", 'IIIメートル(代)'),
-			array('multi_check', array("\xE2\x85\xA0", "\xE2\x85\xA1", "\xE3\x8D\x8D", "\xE3\x88\xB9"), 'I|II|メートル|(代)'),
-		);
+		return [
+			[null, 'hoge', 'hoge'],
+			['multi_check', 'hoge', 'hoge'],
+			['multi_check', ['hoge1', 'hoge2', 'hoge3'], 'hoge1|hoge2|hoge3'],
+			[null, "\xE2\x85\xA0\xE2\x85\xA1\xE3\x8D\x8D\xE3\x88\xB9", 'IIIメートル(代)'],
+			['multi_check', ["\xE2\x85\xA0", "\xE2\x85\xA1", "\xE3\x8D\x8D", "\xE3\x88\xB9"], 'I|II|メートル|(代)'],
+		];
 	}
 
 /**
@@ -301,26 +301,26 @@ class MailMessageTest extends BaserTestCase {
  */
 	public function testConvertDatasToMail($no_send, $type) {
 		// 初期化
-		$this->MailMessage->mailFields = array(
-			array('MailField' => array(
+		$this->MailMessage->mailFields = [
+			['MailField' => [
 				'field_name' => 'value',
 				'use_field' => true,
 				'no_send' => $no_send,
 				'type' => $type,
-			)
-		));
-		$dbData = array(
-			'mailFields' => array(
-				'key1' => array('MailField' => array(
+			]
+		]];
+		$dbData = [
+			'mailFields' => [
+				'key1' => ['MailField' => [
 					'before_attachment' => '<before>before_attachment',
 					'after_attachment' => '<after><br>after_attachment',
 					'head' => '<head><br>head',
-				)
-			)),
-			'message' => array(
+				]
+			]],
+			'message' => [
 				'value' => '<br><br />hoge',
-			)
-		);
+			]
+		];
 		if ($type == 'file') {
 			$dbData['message']['value_tmp'] = 'hoge_tmp';
 		}
@@ -331,11 +331,11 @@ class MailMessageTest extends BaserTestCase {
 
 		if (is_null($type)) {
 			if (!$no_send) {
-				$expectedMailField = array(
+				$expectedMailField = [
 					'before_attachment' => 'before_attachment',
 					'after_attachment' => "\nafter_attachment",
 					'head' => 'head',
-				);
+				];
 				$this->assertEquals($expectedMailField, $result['mailFields']['key1']['MailField'], 'mailFieldsに正しい値を格納できていません');
 
 				$expectedMessage = "\n\nhoge";
@@ -357,12 +357,12 @@ class MailMessageTest extends BaserTestCase {
 	}
 
 	public function convertDatasToMailDataProvider() {
-		return array(
-			array(0, null),
-			array(1, null),
-			array(0, 'multi_check'),
-			array(0, 'file'),
-		);
+		return [
+			[0, null],
+			[1, null],
+			[0, 'multi_check'],
+			[0, 'file'],
+		];
 	}
 
 /**
@@ -475,9 +475,9 @@ class MailMessageTest extends BaserTestCase {
 		$this->MailMessage->construction($id);
 		$this->assertTrue($this->MailMessage->tableExists($fullTable), 'メッセージテーブルを正しく作成できません');
 		
-		$expectColumns = array('id', 'modified', 'created');
+		$expectColumns = ['id', 'modified', 'created'];
 		$sql = $command . " $fullTable";
-		$resultColumns = array();
+		$resultColumns = [];
 		foreach ($this->MailMessage->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
 		}
@@ -489,14 +489,14 @@ class MailMessageTest extends BaserTestCase {
 		$this->MailMessage->construction($id);
 
 		$this->MailField = ClassRegistry::init('Mail.MailField');
-		$expectColumns = $this->MailField->find('list', array(
+		$expectColumns = $this->MailField->find('list', [
 			'fields' => 'field_name',
-			'conditions' => array('mail_content_id' => 1),
-		));
+			'conditions' => ['mail_content_id' => 1],
+		]);
 		array_unshift($expectColumns, 'id', 'modified', 'created');
 
 		$sql = $command . " $fullTable";
-		$resultColumns = array();
+		$resultColumns = [];
 		foreach ($this->MailMessage->query($sql) as $key => $value) {
 			$resultColumns[] = $value['COLUMNS']['Field'];
 		}
@@ -514,8 +514,8 @@ class MailMessageTest extends BaserTestCase {
 	public function testConvertMessageToCsv() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
-		$messages = array(
-			array('MailMessage' => array(
+		$messages = [
+			['MailMessage' => [
 				'id' => 1, 'name_1' => 'v1', 'name_2' => 'v2',
 				'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
 				'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
@@ -524,8 +524,8 @@ class MailMessageTest extends BaserTestCase {
 				'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
 				'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
 				'modified' => 'v21',
-			)),
-			array('MailMessage' => array(
+			]],
+			['MailMessage' => [
 				'id' => 2, 'name_1' => 'v1', 'name_2' => 'v2',
 				'name_kana_1' => 'v3', 'name_kana_2' => 'v4', 'sex' => 'v5',
 				'email_1' => 'v6', 'email_2' => 'v7', 'tel_1' => 'v8',
@@ -534,12 +534,12 @@ class MailMessageTest extends BaserTestCase {
 				'category' => 'v15', 'message' => 'v16', 'root' => 'v17',
 				'root_etc' => 'v18', 'created' => 'v19', 'modified' => 'v20',
 				'modified' => 'v21',
-			))
-		);
+			]]
+		];
 
-		$expected = array(
-			0 => array(
-				'MailMessage' => array(
+		$expected = [
+			0 => [
+				'MailMessage' => [
 					'NO' => 1, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
 					'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
 					'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
@@ -547,10 +547,10 @@ class MailMessageTest extends BaserTestCase {
 					'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
 					'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
 					'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
-				)
-			),
-			1 => array(
-				'MailMessage' => array(
+				]
+			],
+			1 => [
+				'MailMessage' => [
 					'NO' => 2, 'name_1 (姓漢字)' => 'v1', 'name_2 (名漢字)' => 'v2',
 					'name_kana_1 (姓カナ)' => 'v3', 'name_kana_2 (名カナ)' => 'v4', 'sex (性別)' => '',
 					'email_1 (メールアドレス)' => 'v6', 'email_2 (メールアドレス確認)' => 'v7',
@@ -558,9 +558,9 @@ class MailMessageTest extends BaserTestCase {
 					'zip (郵便番号)' => 'v11', 'address_1 (都道府県)' => '', 'address_2 (市区町村・番地)' => 'v13',
 					'address_3 (建物名)' => 'v14', 'category (お問い合わせ項目)' => '', 'message (お問い合わせ内容)' => 'v16',
 					'root (ルート)' => '', 'root_etc (ルートその他)' => 'v18', '作成日' => 'v19', '更新日' => 'v21'
-				)
-			)
-		);
+				]
+			]
+		];
 		
 		$result = $this->MailMessage->convertMessageToCsv(1, $messages);
 		$this->assertEquals($expected, $result, '受信メッセージの内容を表示状態に正しく変換できません');

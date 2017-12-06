@@ -14,12 +14,12 @@
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->webClipIcon() ?>
-		<?php $this->BcBaser->css(array('smartphone/style', 'slicknav/slicknav')) ?>
-		<?php $this->BcBaser->js(array(
+		<?php $this->BcBaser->css(['smartphone/style', 'slicknav/slicknav']) ?>
+		<?php $this->BcBaser->js([
 			'jquery-1.11.3.min',
 			'jquery.slicknav-1.0.6.min',
 			'jquery.bxslider-4.12.min'
-		)); ?>
+		]); ?>
 		<script>
 			$(function(){
 				$("#MainImage").show();
@@ -41,7 +41,7 @@
 			</header>
 
 			<?php if ($this->BcBaser->isHome()): ?>
-				<?php $this->BcBaser->mainImage(array('all' => true, 'num' => 5, 'width' => "100%")) ?>
+				<?php $this->BcBaser->mainImage(['all' => true, 'num' => 5, 'width' => "100%"]) ?>
 			<?php endif ?>
 
 			<div id="ContentsBody" class="contents-body clearfix">
@@ -57,8 +57,8 @@
 				<?php $this->BcBaser->globalMenu() ?>
 				<address>Copyright(C) <?php $this->BcBaser->copyYear(2008) ?> <br>baserCMS All rights Reserved.</address>
 				<div class="banner">
-					<?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', array('alt' => 'baserCMS : Based Website Development Project', 'border' => "0")), 'http://basercms.net') ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', array('alt' => 'CakePHP(tm) : Rapid Development Framework', 'border' => "0")), 'http://cakephp.jp') ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('baser.power.gif', ['alt' => 'baserCMS : Based Website Development Project', 'border' => "0"]), 'http://basercms.net') ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('cake.power.gif', ['alt' => 'CakePHP(tm) : Rapid Development Framework', 'border' => "0"]), 'http://cakephp.jp') ?>
 				</div>
 			</footer>
 

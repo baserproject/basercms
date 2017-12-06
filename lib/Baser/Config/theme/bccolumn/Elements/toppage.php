@@ -18,13 +18,13 @@
         <div id="News" class="left">
             <h2><span class="main-title2">NEWS</span></h2>
             <?php $this->BcBaser->blogPosts('news', 4) ?>
-            <p class="btn-more"><?php $this->BcBaser->link('MORE', '/news/index', array('class' => 'btn btn-small')) ?></p>
+            <p class="btn-more"><?php $this->BcBaser->link('MORE', '/news/index', ['class' => 'btn btn-small']) ?></p>
         </div>
         <div id="Blog" class="right">
             <h2><span class="main-title2">BLOG</span></h2>
             <?php $this->BcBaser->blogPosts('topics', 4) ?>
     
-            <p class="btn-more"><?php $this->BcBaser->link('MORE', '/topics/index', array('class' => 'btn btn-small')) ?></p>
+            <p class="btn-more"><?php $this->BcBaser->link('MORE', '/topics/index', ['class' => 'btn btn-small']) ?></p>
         </div>
     </div>
     

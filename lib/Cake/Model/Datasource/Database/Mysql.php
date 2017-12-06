@@ -39,15 +39,15 @@ class Mysql extends DboSource {
  *
  * @var array
  */
-	protected $_baseConfig = array(
+	protected $_baseConfig = [
 		'persistent' => true,
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '',
 		'database' => 'cake',
 		'port' => '3306',
-		'flags' => array()
-	);
+		'flags' => []
+	];
 
 /**
  * Reference to the PDO object connection
@@ -82,57 +82,57 @@ class Mysql extends DboSource {
  *
  * @var array
  */
-	public $fieldParameters = array(
-		'charset' => array('value' => 'CHARACTER SET', 'quote' => false, 'join' => ' ', 'column' => false, 'position' => 'beforeDefault'),
-		'collate' => array('value' => 'COLLATE', 'quote' => false, 'join' => ' ', 'column' => 'Collation', 'position' => 'beforeDefault'),
-		'comment' => array('value' => 'COMMENT', 'quote' => true, 'join' => ' ', 'column' => 'Comment', 'position' => 'afterDefault'),
-		'unsigned' => array(
+	public $fieldParameters = [
+		'charset' => ['value' => 'CHARACTER SET', 'quote' => false, 'join' => ' ', 'column' => false, 'position' => 'beforeDefault'],
+		'collate' => ['value' => 'COLLATE', 'quote' => false, 'join' => ' ', 'column' => 'Collation', 'position' => 'beforeDefault'],
+		'comment' => ['value' => 'COMMENT', 'quote' => true, 'join' => ' ', 'column' => 'Comment', 'position' => 'afterDefault'],
+		'unsigned' => [
 			'value' => 'UNSIGNED', 'quote' => false, 'join' => ' ', 'column' => false, 'position' => 'beforeDefault',
 			'noVal' => true,
-			'options' => array(true),
-			'types' => array('integer', 'float', 'decimal', 'biginteger')
-		)
-	);
+			'options' => [true],
+			'types' => ['integer', 'float', 'decimal', 'biginteger']
+		]
+	];
 
 /**
  * List of table engine specific parameters used on table creating
  *
  * @var array
  */
-	public $tableParameters = array(
-		'charset' => array('value' => 'DEFAULT CHARSET', 'quote' => false, 'join' => '=', 'column' => 'charset'),
-		'collate' => array('value' => 'COLLATE', 'quote' => false, 'join' => '=', 'column' => 'Collation'),
-		'engine' => array('value' => 'ENGINE', 'quote' => false, 'join' => '=', 'column' => 'Engine'),
-		'comment' => array('value' => 'COMMENT', 'quote' => true, 'join' => '=', 'column' => 'Comment'),
-	);
+	public $tableParameters = [
+		'charset' => ['value' => 'DEFAULT CHARSET', 'quote' => false, 'join' => '=', 'column' => 'charset'],
+		'collate' => ['value' => 'COLLATE', 'quote' => false, 'join' => '=', 'column' => 'Collation'],
+		'engine' => ['value' => 'ENGINE', 'quote' => false, 'join' => '=', 'column' => 'Engine'],
+		'comment' => ['value' => 'COMMENT', 'quote' => true, 'join' => '=', 'column' => 'Comment'],
+	];
 
 /**
  * MySQL column definition
  *
  * @var array
  */
-	public $columns = array(
-		'primary_key' => array('name' => 'NOT NULL AUTO_INCREMENT'),
-		'string' => array('name' => 'varchar', 'limit' => '255'),
-		'text' => array('name' => 'text'),
-		'biginteger' => array('name' => 'bigint', 'limit' => '20'),
-		'integer' => array('name' => 'int', 'limit' => '11', 'formatter' => 'intval'),
-		'float' => array('name' => 'float', 'formatter' => 'floatval'),
-		'decimal' => array('name' => 'decimal', 'formatter' => 'floatval'),
-		'datetime' => array('name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
-		'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
-		'time' => array('name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'),
-		'date' => array('name' => 'date', 'format' => 'Y-m-d', 'formatter' => 'date'),
-		'binary' => array('name' => 'blob'),
-		'boolean' => array('name' => 'tinyint', 'limit' => '1')
-	);
+	public $columns = [
+		'primary_key' => ['name' => 'NOT NULL AUTO_INCREMENT'],
+		'string' => ['name' => 'varchar', 'limit' => '255'],
+		'text' => ['name' => 'text'],
+		'biginteger' => ['name' => 'bigint', 'limit' => '20'],
+		'integer' => ['name' => 'int', 'limit' => '11', 'formatter' => 'intval'],
+		'float' => ['name' => 'float', 'formatter' => 'floatval'],
+		'decimal' => ['name' => 'decimal', 'formatter' => 'floatval'],
+		'datetime' => ['name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'],
+		'timestamp' => ['name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'],
+		'time' => ['name' => 'time', 'format' => 'H:i:s', 'formatter' => 'date'],
+		'date' => ['name' => 'date', 'format' => 'Y-m-d', 'formatter' => 'date'],
+		'binary' => ['name' => 'blob'],
+		'boolean' => ['name' => 'tinyint', 'limit' => '1']
+	];
 
 /**
  * Mapping of collation names to character set names
  *
  * @var array
  */
-	protected $_charsets = array();
+	protected $_charsets = [];
 
 /**
  * Connects to the database using options in the given configuration array.
@@ -153,11 +153,11 @@ class Mysql extends DboSource {
 		$config = $this->config;
 		$this->connected = false;
 
-		$flags = $config['flags'] + array(
+		$flags = $config['flags'] + [
 			PDO::ATTR_PERSISTENT => $config['persistent'],
 			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-		);
+		];
 
 		if (!empty($config['encoding'])) {
 			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $config['encoding'];
@@ -189,13 +189,13 @@ class Mysql extends DboSource {
 				}
 			}
 		} catch (PDOException $e) {
-			throw new MissingConnectionException(array(
+			throw new MissingConnectionException([
 				'class' => get_class($this),
 				'message' => $e->getMessage()
-			));
+			]);
 		}
 
-		$this->_charsets = array();
+		$this->_charsets = [];
 		$this->_useAlias = (bool)version_compare($this->getVersion(), "4.1", ">=");
 
 		return $this->connected;
@@ -225,9 +225,9 @@ class Mysql extends DboSource {
 
 		if (!$result) {
 			$result->closeCursor();
-			return array();
+			return [];
 		}
-		$tables = array();
+		$tables = [];
 
 		while ($line = $result->fetch(PDO::FETCH_NUM)) {
 			$tables[] = $line[0];
@@ -245,7 +245,7 @@ class Mysql extends DboSource {
  * @return void
  */
 	public function resultSet($results) {
-		$this->map = array();
+		$this->map = [];
 		$numFields = $results->columnCount();
 		$index = 0;
 
@@ -257,9 +257,9 @@ class Mysql extends DboSource {
 				$type = empty($column['native_type']) ? 'string' : $column['native_type'];
 			}
 			if (!empty($column['table']) && strpos($column['name'], $this->virtualFieldSeparator) === false) {
-				$this->map[$index++] = array($column['table'], $column['name'], $type);
+				$this->map[$index++] = [$column['table'], $column['name'], $type];
 			} else {
-				$this->map[$index++] = array(0, $column['name'], $type);
+				$this->map[$index++] = [0, $column['name'], $type];
 			}
 		}
 	}
@@ -271,7 +271,7 @@ class Mysql extends DboSource {
  */
 	public function fetchResult() {
 		if ($row = $this->_result->fetch(PDO::FETCH_NUM)) {
-			$resultRow = array();
+			$resultRow = [];
 			foreach ($this->map as $col => $meta) {
 				list($table, $column, $type) = $meta;
 				$resultRow[$table][$column] = $row[$col];
@@ -291,7 +291,7 @@ class Mysql extends DboSource {
  * @return string The database encoding
  */
 	public function getEncoding() {
-		return $this->_execute('SHOW VARIABLES LIKE ?', array('character_set_client'))->fetchObject()->Value;
+		return $this->_execute('SHOW VARIABLES LIKE ?', ['character_set_client'])->fetchObject()->Value;
 	}
 
 /**
@@ -309,7 +309,7 @@ class Mysql extends DboSource {
 		}
 		$r = $this->_execute(
 			'SELECT CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.COLLATIONS WHERE COLLATION_NAME = ?',
-			array($name)
+			[$name]
 		);
 		$cols = $r->fetch(PDO::FETCH_ASSOC);
 
@@ -343,16 +343,16 @@ class Mysql extends DboSource {
 		}
 
 		while ($column = $cols->fetch(PDO::FETCH_OBJ)) {
-			$fields[$column->Field] = array(
+			$fields[$column->Field] = [
 				'type' => $this->column($column->Type),
 				'null' => ($column->Null === 'YES' ? true : false),
 				'default' => $column->Default,
 				'length' => $this->length($column->Type)
-			);
+			];
 			if (in_array($fields[$column->Field]['type'], $this->fieldParameters['unsigned']['types'], true)) {
 				$fields[$column->Field]['unsigned'] = $this->_unsigned($column->Type);
 			}
-			if (in_array($fields[$column->Field]['type'], array('timestamp', 'datetime')) && strtoupper($column->Default) === 'CURRENT_TIMESTAMP') {
+			if (in_array($fields[$column->Field]['type'], ['timestamp', 'datetime']) && strtoupper($column->Default) === 'CURRENT_TIMESTAMP') {
 				$fields[$column->Field]['default'] = null;
 			}
 			if (!empty($column->Key) && isset($this->index[$column->Key])) {
@@ -384,7 +384,7 @@ class Mysql extends DboSource {
  * @param mixed $conditions The conditions to use.
  * @return array
  */
-	public function update(Model $model, $fields = array(), $values = null, $conditions = null) {
+	public function update(Model $model, $fields = [], $values = null, $conditions = null) {
 		if (!$this->_useAlias) {
 			return parent::update($model, $fields, $values, $conditions);
 		}
@@ -476,7 +476,7 @@ class Mysql extends DboSource {
  * @return array Fields in table. Keys are column and unique
  */
 	public function index($model) {
-		$index = array();
+		$index = [];
 		$table = $this->fullTableName($model);
 		$old = version_compare($this->getVersion(), '4.1', '<=');
 		if ($table) {
@@ -488,7 +488,7 @@ class Mysql extends DboSource {
 					$idx = (object)current((array)$idx);
 				}
 				if (!isset($index[$idx->Key_name]['column'])) {
-					$col = array();
+					$col = [];
 					$index[$idx->Key_name]['column'] = $idx->Column_name;
 
 					if ($idx->Index_type === 'FULLTEXT') {
@@ -505,7 +505,7 @@ class Mysql extends DboSource {
 				}
 				if (!empty($idx->Sub_part)) {
 					if (!isset($index[$idx->Key_name]['length'])) {
-						$index[$idx->Key_name]['length'] = array();
+						$index[$idx->Key_name]['length'] = [];
 					}
 					$index[$idx->Key_name]['length'][$idx->Column_name] = $idx->Sub_part;
 				}
@@ -528,9 +528,9 @@ class Mysql extends DboSource {
 			return false;
 		}
 		$out = '';
-		$colList = array();
+		$colList = [];
 		foreach ($compare as $curTable => $types) {
-			$indexes = $tableParameters = $colList = array();
+			$indexes = $tableParameters = $colList = [];
 			if (!$table || $table === $curTable) {
 				$out .= 'ALTER TABLE ' . $this->fullTableName($curTable) . " \n";
 				foreach ($types as $type => $column) {
@@ -602,7 +602,7 @@ class Mysql extends DboSource {
 		if (isset($parameters['change'])) {
 			return $this->buildTableParameters($parameters['change']);
 		}
-		return array();
+		return [];
 	}
 
 /**
@@ -614,7 +614,7 @@ class Mysql extends DboSource {
  * @see DboSource::buildIndex()
  */
 	public function buildIndex($indexes, $table = null) {
-		$join = array();
+		$join = [];
 		foreach ($indexes as $name => $value) {
 			$out = '';
 			if ($name === 'PRIMARY') {
@@ -633,7 +633,7 @@ class Mysql extends DboSource {
 
 			if (is_array($value['column'])) {
 				if (isset($value['length'])) {
-					$vals = array();
+					$vals = [];
 					foreach ($value['column'] as $column) {
 						$name = $this->name($column);
 						if (isset($value['length'])) {
@@ -643,7 +643,7 @@ class Mysql extends DboSource {
 					}
 					$out .= implode(', ', $vals);
 				} else {
-					$out .= implode(', ', array_map(array(&$this, 'name'), $value['column']));
+					$out .= implode(', ', array_map([&$this, 'name'], $value['column']));
 				}
 			} else {
 				$out .= $this->name($value['column']);
@@ -665,7 +665,7 @@ class Mysql extends DboSource {
  * @return array Index alteration statements
  */
 	protected function _alterIndexes($table, $indexes) {
-		$alter = array();
+		$alter = [];
 		if (isset($indexes['drop'])) {
 			foreach ($indexes['drop'] as $name => $value) {
 				$out = 'DROP ';
@@ -718,9 +718,9 @@ class Mysql extends DboSource {
 
 		if (!$result) {
 			$result->closeCursor();
-			return array();
+			return [];
 		}
-		$tables = array();
+		$tables = [];
 		foreach ($result as $row) {
 			$tables[$row['Name']] = (array)$row;
 			unset($tables[$row['Name']]['queryString']);
@@ -759,7 +759,7 @@ class Mysql extends DboSource {
 			list($col, $vals) = explode('(', $col);
 		}
 
-		if (in_array($col, array('date', 'time', 'datetime', 'timestamp'))) {
+		if (in_array($col, ['date', 'time', 'datetime', 'timestamp'])) {
 			return $col;
 		}
 		if (($col === 'tinyint' && $limit === 1) || $col === 'boolean') {

@@ -23,6 +23,6 @@
  */
 class TestPluginComponent extends Component {
 
-	public $components = array('TestPlugin.TestPluginOther');
+	public $components = ['TestPlugin.TestPluginOther'];
 
 }

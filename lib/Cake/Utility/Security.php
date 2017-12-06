@@ -161,7 +161,7 @@ class Security {
 			trigger_error(__d(
 				'cake_dev',
 				'Invalid value, cost must be between %s and %s',
-				array(4, 31)
+				[4, 31]
 			), E_USER_WARNING);
 			return null;
 		}
@@ -252,7 +252,7 @@ class Security {
 			trigger_error(__d('cake_dev', 'You cannot use an empty key for %s', 'Security::rijndael()'), E_USER_WARNING);
 			return '';
 		}
-		if (empty($operation) || !in_array($operation, array('encrypt', 'decrypt'))) {
+		if (empty($operation) || !in_array($operation, ['encrypt', 'decrypt'])) {
 			trigger_error(__d('cake_dev', 'You must specify the operation for Security::rijndael(), either encrypt or decrypt'), E_USER_WARNING);
 			return '';
 		}
@@ -290,7 +290,7 @@ class Security {
  */
 	protected static function _salt($length = 22) {
 		$salt = str_replace(
-			array('+', '='),
+			['+', '='],
 			'.',
 			base64_encode(sha1(uniqid(Configure::read('Security.salt'), true), true))
 		);
@@ -307,7 +307,7 @@ class Security {
 	protected static function _crypt($password, $salt = false) {
 		if ($salt === false || $salt === null || $salt === '') {
 			$salt = static::_salt(22);
-			$salt = vsprintf('$2a$%02d$%s', array(static::$hashCost, $salt));
+			$salt = vsprintf('$2a$%02d$%s', [static::$hashCost, $salt]);
 		}
 
 		$invalidCipher = (
@@ -319,7 +319,7 @@ class Security {
 			trigger_error(__d(
 				'cake_dev',
 				'Invalid salt: %s for %s Please visit http://www.php.net/crypt and read the appropriate section for building %s salts.',
-				array($salt, 'blowfish', 'blowfish')
+				[$salt, 'blowfish', 'blowfish']
 			), E_USER_WARNING);
 			return '';
 		}

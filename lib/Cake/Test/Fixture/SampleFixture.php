@@ -28,21 +28,21 @@ class SampleFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'apple_id' => array('type' => 'integer', 'null' => false),
-		'name' => array('type' => 'string', 'length' => 40, 'null' => false)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'apple_id' => ['type' => 'integer', 'null' => false],
+		'name' => ['type' => 'string', 'length' => 40, 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('apple_id' => 3, 'name' => 'sample1'),
-		array('apple_id' => 2, 'name' => 'sample2'),
-		array('apple_id' => 4, 'name' => 'sample3'),
-		array('apple_id' => 5, 'name' => 'sample4')
-	);
+	public $records = [
+		['apple_id' => 3, 'name' => 'sample1'],
+		['apple_id' => 2, 'name' => 'sample2'],
+		['apple_id' => 4, 'name' => 'sample3'],
+		['apple_id' => 5, 'name' => 'sample4']
+	];
 }

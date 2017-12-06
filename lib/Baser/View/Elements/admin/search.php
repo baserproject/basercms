@@ -22,7 +22,7 @@ if (empty($search)) {
 <div id="Search" class="clearfix">
 
 	<h2 class="head">
-		<?php $this->BcBaser->img('admin/head_search.png', array('width' => 53, 'height' => 16, 'alt' => '検索')) ?>
+		<?php $this->BcBaser->img('admin/head_search.png', ['width' => 53, 'height' => 16, 'alt' => '検索']) ?>
 	</h2>
 
 	<div class="body">
@@ -31,7 +31,7 @@ if (empty($search)) {
 
 	<div class="clearfix close">
 		<div id="CloseSearch">
-			<a><?php $this->BcBaser->img('admin/btn_close.png', array('width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn')) ?></a>
+			<a><?php $this->BcBaser->img('admin/btn_close.png', ['width' => 14, 'height' => 14, 'alt' => 'Close', 'class' => 'btn']) ?></a>
 		</div>
 	</div>
 

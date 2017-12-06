@@ -28,13 +28,13 @@
 <?php endif ?>
 		<?php $this->BcBaser->css('responsive') ?>
 
-<?php $this->BcBaser->js(array(
+<?php $this->BcBaser->js([
 			'jquery-1.7.2.min',
 			'jquery.bxSlider.min',
 			'jquery.colorbox-1.6.1.min',
 			'baser.min',
 			'startup'
-)) ?>
+]) ?>
 <?php if($this->BcBaser->isHome()): ?>
 <script type="text/javascript">
 $(function(){
@@ -61,11 +61,11 @@ $(function(){
 	<?php if ($this->BcBaser->isHome()): ?>
     <div id="PCMainImage" class="forPC">
         <div id="PCMainImageWrap">
-        <?php $this->BcBaser->mainImage(array('all' => true, 'num' => 4)) ?>
+        <?php $this->BcBaser->mainImage(['all' => true, 'num' => 4]) ?>
         </div>
     </div>
     <div id="SPMainImage" class="forSP">
-        <?php $this->BcBaser->mainImage(array('all' => false, 'num' => 5)) ?>
+        <?php $this->BcBaser->mainImage(['all' => false, 'num' => 5]) ?>
     </div>
 	<?php else: ?>
 
@@ -111,7 +111,7 @@ $(function(){
 		<?php endif ?>
 	</div>
 	
-	<div id="TopLink"><?php $this->BcBaser->img('footer/btn_pagetop.png', array('alt' => 'PAGE TOP')) ?></div>
+	<div id="TopLink"><?php $this->BcBaser->img('footer/btn_pagetop.png', ['alt' => 'PAGE TOP']) ?></div>
 
 <?php $this->BcBaser->footer() ?>
 </div>

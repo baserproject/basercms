@@ -38,12 +38,12 @@ class TemplateTaskTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
-		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+		$out = $this->getMock('ConsoleOutput', [], [], '', false);
+		$in = $this->getMock('ConsoleInput', [], [], '', false);
 
 		$this->Task = $this->getMock('TemplateTask',
-			array('in', 'err', 'createFile', '_stop', 'clear'),
-			array($out, $out, $in)
+			['in', 'err', 'createFile', '_stop', 'clear'],
+			[$out, $out, $in]
 		);
 	}
 
@@ -67,16 +67,16 @@ class TemplateTaskTest extends CakeTestCase {
 		$this->assertTrue(isset($this->Task->templateVars['one']));
 		$this->assertEquals('two', $this->Task->templateVars['one']);
 
-		$this->Task->set(array('one' => 'three', 'four' => 'five'));
+		$this->Task->set(['one' => 'three', 'four' => 'five']);
 		$this->assertTrue(isset($this->Task->templateVars['one']));
 		$this->assertEquals('three', $this->Task->templateVars['one']);
 		$this->assertTrue(isset($this->Task->templateVars['four']));
 		$this->assertEquals('five', $this->Task->templateVars['four']);
 
-		$this->Task->templateVars = array();
-		$this->Task->set(array(3 => 'three', 4 => 'four'));
-		$this->Task->set(array(1 => 'one', 2 => 'two'));
-		$expected = array(3 => 'three', 4 => 'four', 1 => 'one', 2 => 'two');
+		$this->Task->templateVars = [];
+		$this->Task->set([3 => 'three', 4 => 'four']);
+		$this->Task->set([1 => 'one', 2 => 'two']);
+		$expected = [3 => 'three', 4 => 'four', 1 => 'one', 2 => 'two'];
 		$this->assertEquals($expected, $this->Task->templateVars);
 	}
 
@@ -99,19 +99,19 @@ class TemplateTaskTest extends CakeTestCase {
  */
 	public function testGetThemePath() {
 		$defaultTheme = CAKE . 'Console' . DS . 'Templates' . DS . 'default' . DS;
-		$this->Task->templatePaths = array('default' => $defaultTheme);
+		$this->Task->templatePaths = ['default' => $defaultTheme];
 
 		$this->Task->expects($this->exactly(1))->method('in')->will($this->returnValue('1'));
 
 		$result = $this->Task->getThemePath();
 		$this->assertEquals($defaultTheme, $result);
 
-		$this->Task->templatePaths = array('other' => '/some/path', 'default' => $defaultTheme);
+		$this->Task->templatePaths = ['other' => '/some/path', 'default' => $defaultTheme];
 		$this->Task->params['theme'] = 'other';
 		$result = $this->Task->getThemePath();
 		$this->assertEquals('/some/path', $result);
 
-		$this->Task->params = array();
+		$this->Task->params = [];
 		$result = $this->Task->getThemePath();
 		$this->assertEquals('/some/path', $result);
 		$this->assertEquals('other', $this->Task->params['theme']);
@@ -123,15 +123,15 @@ class TemplateTaskTest extends CakeTestCase {
  * @return void
  */
 	public function testGenerate() {
-		App::build(array(
-			'Console' => array(
+		App::build([
+			'Console' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Console' . DS
-			)
-		));
+			]
+		]);
 		$this->Task->initialize();
 		$this->Task->expects($this->any())->method('in')->will($this->returnValue(1));
 
-		$result = $this->Task->generate('classes', 'test_object', array('test' => 'foo'));
+		$result = $this->Task->generate('classes', 'test_object', ['test' => 'foo']);
 		$expected = "I got rendered\nfoo";
 		$this->assertTextEquals($expected, $result);
 	}
@@ -143,21 +143,21 @@ class TemplateTaskTest extends CakeTestCase {
  * @return void
  */
 	public function testGenerateWithTemplateFallbacks() {
-		App::build(array(
-			'Console' => array(
+		App::build([
+			'Console' => [
 				CAKE . 'Test' . DS . 'test_app' . DS . 'Console' . DS,
 				CAKE_CORE_INCLUDE_PATH . DS . 'console' . DS
-			)
-		));
+			]
+		]);
 		$this->Task->initialize();
 		$this->Task->params['theme'] = 'test';
-		$this->Task->set(array(
+		$this->Task->set([
 			'model' => 'Article',
 			'table' => 'articles',
 			'import' => false,
 			'records' => false,
 			'schema' => ''
-		));
+		]);
 		$result = $this->Task->generate('classes', 'fixture');
 		$this->assertRegExp('/ArticleFixture extends CakeTestFixture/', $result);
 	}

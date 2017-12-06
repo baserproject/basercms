@@ -26,7 +26,7 @@ $(function(){
 	<?php if (!empty($baserThemes)): ?>
 		<?php $key = 0 ?>
 		<?php foreach ($baserThemes as $data): ?>
-			<?php $this->BcBaser->element('themes/index_row_market', array('data' => $data, 'key' => $key++)) ?>
+			<?php $this->BcBaser->element('themes/index_row_market', ['data' => $data, 'key' => $key++]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<?php if(strtotime('2014-03-31 17:00:00') >= time()): ?>

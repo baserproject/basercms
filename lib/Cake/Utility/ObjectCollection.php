@@ -32,14 +32,14 @@ abstract class ObjectCollection {
  *
  * @var array
  */
-	protected $_enabled = array();
+	protected $_enabled = [];
 
 /**
  * A hash of loaded objects, indexed by name
  *
  * @var array
  */
-	protected $_loaded = array();
+	protected $_loaded = [];
 
 /**
  * Default object priority. A non zero integer.
@@ -58,7 +58,7 @@ abstract class ObjectCollection {
  * @param array $options Array of configuration options for the object to be constructed.
  * @return object the constructed object
  */
-	abstract public function load($name, $options = array());
+	abstract public function load($name, $options = []);
 
 /**
  * Trigger a callback method on every object in the collection.
@@ -91,7 +91,7 @@ abstract class ObjectCollection {
  * @return mixed Either the last result or all results if collectReturn is on.
  * @throws CakeException when modParams is used with an index that does not exist.
  */
-	public function trigger($callback, $params = array(), $options = array()) {
+	public function trigger($callback, $params = [], $options = []) {
 		if (empty($this->_enabled)) {
 			return true;
 		}
@@ -104,7 +104,7 @@ abstract class ObjectCollection {
 				$subject = $event->subject();
 			}
 
-			foreach (array('break', 'breakOn', 'collectReturn', 'modParams') as $opt) {
+			foreach (['break', 'breakOn', 'collectReturn', 'modParams'] as $opt) {
 				if (isset($event->{$opt})) {
 					$options[$opt] = $event->{$opt};
 				}
@@ -112,20 +112,20 @@ abstract class ObjectCollection {
 			$parts = explode('.', $event->name());
 			$callback = array_pop($parts);
 		}
-		$options += array(
+		$options += [
 			'break' => false,
 			'breakOn' => false,
 			'collectReturn' => false,
 			'modParams' => false
-		);
-		$collected = array();
+		];
+		$collected = [];
 		$list = array_keys($this->_enabled);
 		if ($options['modParams'] !== false && !isset($params[$options['modParams']])) {
 			throw new CakeException(__d('cake_dev', 'Cannot use modParams with indexes that do not exist.'));
 		}
 		$result = null;
 		foreach ($list as $name) {
-			$result = call_user_func_array(array($this->_loaded[$name], $callback), compact('subject') + $params);
+			$result = call_user_func_array([$this->_loaded[$name], $callback], compact('subject') + $params);
 			if ($options['collectReturn'] === true) {
 				$collected[] = $result;
 			}
@@ -133,7 +133,7 @@ abstract class ObjectCollection {
 				(is_array($options['breakOn']) && in_array($result, $options['breakOn'], true)))
 			) {
 				return $result;
-			} elseif ($options['modParams'] !== false && !in_array($result, array(true, false, null), true)) {
+			} elseif ($options['modParams'] !== false && !in_array($result, [true, false, null], true)) {
 				$params[$options['modParams']] = $result;
 			}
 		}
@@ -182,7 +182,7 @@ abstract class ObjectCollection {
 				if (isset($this->_loaded[$object]->settings['priority'])) {
 					$priority = $this->_loaded[$object]->settings['priority'];
 				}
-				$this->_enabled[$object] = array($priority);
+				$this->_enabled[$object] = [$priority];
 				$enabled = true;
 			}
 		}
@@ -217,7 +217,7 @@ abstract class ObjectCollection {
  */
 	public function setPriority($name, $priority = null) {
 		if (is_string($name)) {
-			$name = array($name => $priority);
+			$name = [$name => $priority];
 		}
 		foreach ($name as $object => $objectPriority) {
 			list(, $object) = pluginSplit($object);
@@ -227,7 +227,7 @@ abstract class ObjectCollection {
 				}
 				$this->_loaded[$object]->settings['priority'] = $objectPriority;
 				if (isset($this->_enabled[$object])) {
-					$this->_enabled[$object] = array($objectPriority);
+					$this->_enabled[$object] = [$objectPriority];
 				}
 			}
 		}
@@ -327,15 +327,15 @@ abstract class ObjectCollection {
  * @return array Array of normalized objects.
  */
 	public static function normalizeObjectArray($objects) {
-		$normal = array();
+		$normal = [];
 		foreach ($objects as $i => $objectName) {
-			$options = array();
+			$options = [];
 			if (!is_int($i)) {
 				$options = (array)$objectName;
 				$objectName = $i;
 			}
 			list(, $name) = pluginSplit($objectName);
-			$normal[$name] = array('class' => $objectName, 'settings' => $options);
+			$normal[$name] = ['class' => $objectName, 'settings' => $options];
 		}
 		return $normal;
 	}

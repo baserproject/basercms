@@ -144,10 +144,10 @@ class OAuthSignatureMethod_HMAC_SHA1 extends OAuthSignatureMethod {
     $base_string = $request->get_signature_base_string();
     $request->base_string = $base_string;
 
-    $key_parts = array(
+    $key_parts = [
       $consumer->secret,
       ($token) ? $token->secret : ""
-    );
+    ];
 
     $key_parts = OAuthUtil::urlencode_rfc3986($key_parts);
     $key = implode('&', $key_parts);
@@ -176,10 +176,10 @@ class OAuthSignatureMethod_PLAINTEXT extends OAuthSignatureMethod {
    * OAuthRequest handles this!
    */
   public function build_signature($request, $consumer, $token) {
-    $key_parts = array(
+    $key_parts = [
       $consumer->secret,
       ($token) ? $token->secret : ""
-    );
+    ];
 
     $key_parts = OAuthUtil::urlencode_rfc3986($key_parts);
     $key = implode('&', $key_parts);
@@ -266,7 +266,7 @@ class OAuthRequest {
   public static $POST_INPUT = 'php://input';
 
   function __construct($http_method, $http_url, $parameters=NULL) {
-    $parameters = ($parameters) ? $parameters : array();
+    $parameters = ($parameters) ? $parameters : [];
     $parameters = array_merge( OAuthUtil::parse_parameters(parse_url($http_url, PHP_URL_QUERY)), $parameters);
     $this->parameters = $parameters;
     $this->http_method = $http_method;
@@ -330,11 +330,11 @@ class OAuthRequest {
    * pretty much a helper function to set up the request
    */
   public static function from_consumer_and_token($consumer, $token, $http_method, $http_url, $parameters=NULL) {
-    $parameters = ($parameters) ?  $parameters : array();
-    $defaults = array("oauth_version" => OAuthRequest::$version,
+    $parameters = ($parameters) ?  $parameters : [];
+    $defaults = ["oauth_version" => OAuthRequest::$version,
                       "oauth_nonce" => OAuthRequest::generate_nonce(),
                       "oauth_timestamp" => OAuthRequest::generate_timestamp(),
-                      "oauth_consumer_key" => $consumer->key);
+                      "oauth_consumer_key" => $consumer->key];
     if ($token)
       $defaults['oauth_token'] = $token->key;
 
@@ -349,7 +349,7 @@ class OAuthRequest {
       if (is_scalar($this->parameters[$name])) {
         // This is the first duplicate, so transform scalar (string)
         // into an array so we can add the duplicates
-        $this->parameters[$name] = array($this->parameters[$name]);
+        $this->parameters[$name] = [$this->parameters[$name]];
       }
 
       $this->parameters[$name][] = $value;
@@ -395,11 +395,11 @@ class OAuthRequest {
    * and the concated with &.
    */
   public function get_signature_base_string() {
-    $parts = array(
+    $parts = [
       $this->get_normalized_http_method(),
       $this->get_normalized_http_url(),
       $this->get_signable_parameters()
-    );
+    ];
 
     $parts = OAuthUtil::urlencode_rfc3986($parts);
 
@@ -462,7 +462,7 @@ class OAuthRequest {
     } else
       $out = 'Authorization: OAuth';
 
-    $total = array();
+    $total = [];
     foreach ($this->parameters as $k => $v) {
       if (substr($k, 0, 5) != "oauth") continue;
       if (is_array($v)) {
@@ -519,7 +519,7 @@ class OAuthRequest {
 class OAuthServer {
   protected $timestamp_threshold = 300; // in seconds, five minutes
   protected $version = '1.0';             // hi blaine
-  protected $signature_methods = array();
+  protected $signature_methods = [];
 
   protected $data_store;
 
@@ -584,7 +584,7 @@ class OAuthServer {
     $consumer = $this->get_consumer($request);
     $token = $this->get_token($request, $consumer, "access");
     $this->check_signature($request, $consumer, $token);
-    return array($consumer, $token);
+    return [$consumer, $token];
   }
 
   // Internals from here
@@ -767,7 +767,7 @@ class OAuthDataStore {
 class OAuthUtil {
   public static function urlencode_rfc3986($input) {
   if (is_array($input)) {
-    return array_map(array('OAuthUtil', 'urlencode_rfc3986'), $input);
+    return array_map(['OAuthUtil', 'urlencode_rfc3986'], $input);
   } else if (is_scalar($input)) {
     return str_replace(
       '+',
@@ -793,7 +793,7 @@ class OAuthUtil {
   // May 28th, 2010 - method updated to tjerk.meesters for a speed improvement.
   //                  see http://code.google.com/p/oauth/issues/detail?id=163
   public static function split_header($header, $only_allow_oauth_parameters = true) {
-    $params = array();
+    $params = [];
     if (preg_match_all('/('.($only_allow_oauth_parameters ? 'oauth_' : '').'[a-z_-]*)=(:?"([^"]*)"|([^,]*))/', $header, $matches)) {
       foreach ($matches[1] as $i => $h) {
         $params[$h] = OAuthUtil::urldecode_rfc3986(empty($matches[3][$i]) ? $matches[4][$i] : $matches[3][$i]);
@@ -816,7 +816,7 @@ class OAuthUtil {
       // we always want the keys to be Cased-Like-This and arh()
       // returns the headers in the same case as they are in the
       // request
-      $out = array();
+      $out = [];
       foreach ($headers AS $key => $value) {
         $key = str_replace(
             " ",
@@ -828,7 +828,7 @@ class OAuthUtil {
     } else {
       // otherwise we don't have apache and are just going to have to hope
       // that $_SERVER actually contains what we need
-      $out = array();
+      $out = [];
       if( isset($_SERVER['CONTENT_TYPE']) )
         $out['Content-Type'] = $_SERVER['CONTENT_TYPE'];
       if( isset($_ENV['CONTENT_TYPE']) )
@@ -855,11 +855,11 @@ class OAuthUtil {
   // parameters like this
   // array('a' => array('b','c'), 'd' => 'e')
   public static function parse_parameters( $input ) {
-    if (!isset($input) || !$input) return array();
+    if (!isset($input) || !$input) return [];
 
     $pairs = explode('&', $input);
 
-    $parsed_parameters = array();
+    $parsed_parameters = [];
     foreach ($pairs as $pair) {
       $split = explode('=', $pair, 2);
       $parameter = OAuthUtil::urldecode_rfc3986($split[0]);
@@ -872,7 +872,7 @@ class OAuthUtil {
         if (is_scalar($parsed_parameters[$parameter])) {
           // This is the first duplicate, so transform scalar (string) into an array
           // so we can add the duplicates
-          $parsed_parameters[$parameter] = array($parsed_parameters[$parameter]);
+          $parsed_parameters[$parameter] = [$parsed_parameters[$parameter]];
         }
 
         $parsed_parameters[$parameter][] = $value;
@@ -895,7 +895,7 @@ class OAuthUtil {
     // Ref: Spec: 9.1.1 (1)
     uksort($params, 'strcmp');
 
-    $pairs = array();
+    $pairs = [];
     foreach ($params as $parameter => $value) {
       if (is_array($value)) {
         // If two or more parameters share the same name, they are sorted by their value

@@ -33,7 +33,7 @@ class CakeTestSuiteDispatcher {
  *
  * @var array
  */
-	public $params = array(
+	public $params = [
 		'codeCoverage' => false,
 		'case' => null,
 		'core' => false,
@@ -44,7 +44,7 @@ class CakeTestSuiteDispatcher {
 		'show_passes' => false,
 		'filter' => false,
 		'fixture' => null
-	);
+	];
 
 /**
  * Baseurl for the request
@@ -235,7 +235,7 @@ class CakeTestSuiteDispatcher {
  * @return void
  */
 	protected function _runTestCase() {
-		$commandArgs = array(
+		$commandArgs = [
 			'case' => $this->params['case'],
 			'core' => $this->params['core'],
 			'app' => $this->params['app'],
@@ -244,13 +244,13 @@ class CakeTestSuiteDispatcher {
 			'showPasses' => !empty($this->params['show_passes']),
 			'baseUrl' => $this->_baseUrl,
 			'baseDir' => $this->_baseDir,
-		);
+		];
 
-		$options = array(
+		$options = [
 			'--filter', $this->params['filter'],
 			'--output', $this->params['output'],
 			'--fixture', $this->params['fixture']
-		);
+		];
 		restore_error_handler();
 
 		try {

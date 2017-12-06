@@ -16,14 +16,14 @@
   define("COOKIE_USER_PERSISTENCE", 63072000);
 
   // 1x1 transparent GIF
-  $GIF_DATA = array(
+  $GIF_DATA = [
       chr(0x47), chr(0x49), chr(0x46), chr(0x38), chr(0x39), chr(0x61),
       chr(0x01), chr(0x00), chr(0x01), chr(0x00), chr(0x80), chr(0xff),
       chr(0x00), chr(0xff), chr(0xff), chr(0xff), chr(0x00), chr(0x00),
       chr(0x00), chr(0x2c), chr(0x00), chr(0x00), chr(0x00), chr(0x00),
       chr(0x01), chr(0x00), chr(0x01), chr(0x00), chr(0x00), chr(0x02),
       chr(0x02), chr(0x44), chr(0x01), chr(0x00), chr(0x3b)
-  );
+  ];
 
   // The last octect of the IP address is removed to anonymize the user.
   function getIP($remoteAddress) {
@@ -78,14 +78,14 @@
            "private, no-cache, no-cache=Set-Cookie, proxy-revalidate");
     header("Pragma: no-cache");
     header("Expires: Wed, 17 Sep 1975 21:32:10 GMT");
-    echo join(array(
+    echo join([
       chr(0x47), chr(0x49), chr(0x46), chr(0x38), chr(0x39), chr(0x61),
       chr(0x01), chr(0x00), chr(0x01), chr(0x00), chr(0x80), chr(0xff),
       chr(0x00), chr(0xff), chr(0xff), chr(0xff), chr(0x00), chr(0x00),
       chr(0x00), chr(0x2c), chr(0x00), chr(0x00), chr(0x00), chr(0x00),
       chr(0x01), chr(0x00), chr(0x01), chr(0x00), chr(0x00), chr(0x02),
       chr(0x02), chr(0x44), chr(0x01), chr(0x00), chr(0x3b)
-  ));
+  ]);
   }
 
   // Make a tracking request to Google Analytics from this server.
@@ -93,12 +93,12 @@
   // If request containg utmdebug parameter, exceptions encountered
   // communicating with Google Analytics are thown.
   function sendRequestToGoogleAnalytics($utmUrl) {
-    $options = array(
-      "http" => array(
+    $options = [
+      "http" => [
           "method" => "GET",
           "user_agent" => $_SERVER["HTTP_USER_AGENT"],
-          "header" => ("Accepts-Language: " . $_SERVER["HTTP_ACCEPT_LANGUAGE"]))
-    );
+          "header" => ("Accepts-Language: " . $_SERVER["HTTP_ACCEPT_LANGUAGE"])]
+    ];
     if (!empty($_GET["utmdebug"])) {
       $data = file_get_contents(
           $utmUrl, false, stream_context_create($options));

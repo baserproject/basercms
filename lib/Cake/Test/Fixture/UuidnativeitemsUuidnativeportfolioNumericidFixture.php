@@ -28,21 +28,21 @@ class UuidnativeitemsUuidnativeportfolioNumericidFixture extends CakeTestFixture
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'length' => 10, 'key' => 'primary'),
-		'uuidnativeitem_id' => array('type' => 'uuid', 'null' => false),
-		'uuidnativeportfolio_id' => array('type' => 'uuid', 'null' => false)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'length' => 10, 'key' => 'primary'],
+		'uuidnativeitem_id' => ['type' => 'uuid', 'null' => false],
+		'uuidnativeportfolio_id' => ['type' => 'uuid', 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('uuidnativeitem_id' => '481fc6d0-b920-43e0-a40d-6d1740cf8569', 'uuidnativeportfolio_id' => '4806e091-6940-4d2b-b227-303740cf8569'),
-		array('uuidnativeitem_id' => '48298a29-81c0-4c26-a7fb-413140cf8569', 'uuidnativeportfolio_id' => '480af662-eb8c-47d3-886b-230540cf8569'),
-		array('uuidnativeitem_id' => '482b7756-8da0-419a-b21f-27da40cf8569', 'uuidnativeportfolio_id' => '4806e091-6940-4d2b-b227-303740cf8569'),
-		array('uuidnativeitem_id' => '482cfd4b-0e7c-4ea3-9582-4cec40cf8569', 'uuidnativeportfolio_id' => '4806e091-6940-4d2b-b227-303740cf8569')
-	);
+	public $records = [
+		['uuidnativeitem_id' => '481fc6d0-b920-43e0-a40d-6d1740cf8569', 'uuidnativeportfolio_id' => '4806e091-6940-4d2b-b227-303740cf8569'],
+		['uuidnativeitem_id' => '48298a29-81c0-4c26-a7fb-413140cf8569', 'uuidnativeportfolio_id' => '480af662-eb8c-47d3-886b-230540cf8569'],
+		['uuidnativeitem_id' => '482b7756-8da0-419a-b21f-27da40cf8569', 'uuidnativeportfolio_id' => '4806e091-6940-4d2b-b227-303740cf8569'],
+		['uuidnativeitem_id' => '482cfd4b-0e7c-4ea3-9582-4cec40cf8569', 'uuidnativeportfolio_id' => '4806e091-6940-4d2b-b227-303740cf8569']
+	];
 }

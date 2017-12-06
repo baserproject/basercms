@@ -120,7 +120,7 @@ class XmlView extends View {
 		$rootNode = isset($this->viewVars['_rootNode']) ? $this->viewVars['_rootNode'] : 'response';
 
 		if (is_array($serialize)) {
-			$data = array($rootNode => array());
+			$data = [$rootNode => []];
 			foreach ($serialize as $alias => $key) {
 				if (is_numeric($alias)) {
 					$alias = $key;
@@ -130,11 +130,11 @@ class XmlView extends View {
 		} else {
 			$data = isset($this->viewVars[$serialize]) ? $this->viewVars[$serialize] : null;
 			if (is_array($data) && Hash::numeric(array_keys($data))) {
-				$data = array($rootNode => array($serialize => $data));
+				$data = [$rootNode => [$serialize => $data]];
 			}
 		}
 
-		$options = array();
+		$options = [];
 		if (isset($this->viewVars['_xmlOptions'])) {
 			$options = $this->viewVars['_xmlOptions'];
 		}

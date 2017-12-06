@@ -30,8 +30,8 @@ class Inflector {
  *
  * @var array
  */
-	protected static $_plural = array(
-		'rules' => array(
+	protected static $_plural = [
+		'rules' => [
 			'/(s)tatus$/i' => '\1tatuses',
 			'/(quiz)$/i' => '\1zes',
 			'/^(ox)$/i' => '\1\2en',
@@ -54,8 +54,8 @@ class Inflector {
 			'/s$/' => 's',
 			'/^$/' => '',
 			'/$/' => 's',
-		),
-		'uninflected' => array(
+		],
+		'uninflected' => [
 			'.*[nrlm]ese',
 			'.*data',
 			'.*deer',
@@ -67,8 +67,8 @@ class Inflector {
 			'people',
 			'feedback',
 			'stadia'
-		),
-		'irregular' => array(
+		],
+		'irregular' => [
 			'atlas' => 'atlases',
 			'beef' => 'beefs',
 			'brief' => 'briefs',
@@ -109,16 +109,16 @@ class Inflector {
 			'goose' => 'geese',
 			'foot' => 'feet',
 			'sieve' => 'sieves'
-		)
-	);
+		]
+	];
 
 /**
  * Singular inflector rules
  *
  * @var array
  */
-	protected static $_singular = array(
-		'rules' => array(
+	protected static $_singular = [
+		'rules' => [
 			'/(s)tatuses$/i' => '\1\2tatus',
 			'/^(.*)(menu)s$/i' => '\1\2',
 			'/(quiz)zes$/i' => '\\1',
@@ -153,22 +153,22 @@ class Inflector {
 			'/eaus$/' => 'eau',
 			'/^(.*us)$/' => '\\1',
 			'/s$/i' => ''
-		),
-		'uninflected' => array(
+		],
+		'uninflected' => [
 			'.*data',
 			'.*[nrlm]ese', '.*deer', '.*fish', '.*measles', '.*ois', '.*pox', '.*sheep', '.*ss', 'feedback'
-		),
-		'irregular' => array(
+		],
+		'irregular' => [
 			'foes' => 'foe',
-		)
-	);
+		]
+	];
 
 /**
  * Words that should not be inflected
  *
  * @var array
  */
-	protected static $_uninflected = array(
+	protected static $_uninflected = [
 		'Amoyese', 'bison', 'Borghese', 'bream', 'breeches', 'britches', 'buffalo', 'cantus',
 		'carp', 'chassis', 'clippers', 'cod', 'coitus', 'Congoese', 'contretemps', 'corps',
 		'debris', 'diabetes', 'djinn', 'eland', 'elk', 'equipment', 'Faroese', 'flounder',
@@ -181,14 +181,14 @@ class Inflector {
 		'sea[- ]bass', 'series', 'Shavese', 'shears', 'siemens', 'species', 'swine', 'testes',
 		'trousers', 'trout', 'tuna', 'Vermontese', 'Wenchowese', 'whiting', 'wildebeest',
 		'Yengeese'
-	);
+	];
 
 /**
  * Default map of accented and special characters to ASCII characters
  *
  * @var array
  */
-	protected static $_transliteration = array(
+	protected static $_transliteration = [
 		'/À|Á|Â|Ã|Å|Ǻ|Ā|Ă|Ą|Ǎ/' => 'A',
 		'/Æ|Ǽ/' => 'AE',
 		'/Ä/' => 'Ae',
@@ -246,21 +246,21 @@ class Inflector {
 		'/є/' => 'ye',
 		'/ї/' => 'yi',
 		'/ź|ż|ž/' => 'z',
-	);
+	];
 
 /**
  * Method cache array.
  *
  * @var array
  */
-	protected static $_cache = array();
+	protected static $_cache = [];
 
 /**
  * The initial state of Inflector so reset() works.
  *
  * @var array
  */
-	protected static $_initialState = array();
+	protected static $_initialState = [];
 
 /**
  * Cache inflected values, and return if already available
@@ -351,9 +351,9 @@ class Inflector {
 							unset(static::${$var}['merged'][$rule]);
 						}
 						if ($type === 'plural') {
-							static::$_cache['pluralize'] = static::$_cache['tableize'] = array();
+							static::$_cache['pluralize'] = static::$_cache['tableize'] = [];
 						} elseif ($type === 'singular') {
-							static::$_cache['singularize'] = array();
+							static::$_cache['singularize'] = [];
 						}
 					}
 				}
@@ -569,11 +569,11 @@ class Inflector {
 	public static function slug($string, $replacement = '_') {
 		$quotedReplacement = preg_quote($replacement, '/');
 
-		$merge = array(
+		$merge = [
 			'/[^\s\p{Zs}\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
 			'/[\s\p{Zs}]+/mu' => $replacement,
 			sprintf('/^[%s]+|[%s]+$/', $quotedReplacement, $quotedReplacement) => '',
-		);
+		];
 
 		$map = static::$_transliteration + $merge;
 		return preg_replace(array_keys($map), array_values($map), $string);

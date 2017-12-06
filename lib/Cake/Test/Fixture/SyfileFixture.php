@@ -28,24 +28,24 @@ class SyfileFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'image_id' => array('type' => 'integer', 'null' => true),
-		'name' => array('type' => 'string', 'null' => false),
-		'item_count' => array('type' => 'integer', 'null' => true)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'image_id' => ['type' => 'integer', 'null' => true],
+		'name' => ['type' => 'string', 'null' => false],
+		'item_count' => ['type' => 'integer', 'null' => true]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('image_id' => 1, 'name' => 'Syfile 1'),
-		array('image_id' => 2, 'name' => 'Syfile 2'),
-		array('image_id' => 5, 'name' => 'Syfile 3'),
-		array('image_id' => 3, 'name' => 'Syfile 4'),
-		array('image_id' => 4, 'name' => 'Syfile 5'),
-		array('image_id' => null, 'name' => 'Syfile 6')
-	);
+	public $records = [
+		['image_id' => 1, 'name' => 'Syfile 1'],
+		['image_id' => 2, 'name' => 'Syfile 2'],
+		['image_id' => 5, 'name' => 'Syfile 3'],
+		['image_id' => 3, 'name' => 'Syfile 4'],
+		['image_id' => 4, 'name' => 'Syfile 5'],
+		['image_id' => null, 'name' => 'Syfile 6']
+	];
 }

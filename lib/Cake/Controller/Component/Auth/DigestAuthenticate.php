@@ -73,14 +73,14 @@ class DigestAuthenticate extends BasicAuthenticate {
  *
  * @var array
  */
-	public $settings = array(
-		'fields' => array(
+	public $settings = [
+		'fields' => [
 			'username' => 'username',
 			'password' => 'password'
-		),
+		],
 		'userModel' => 'User',
 		'userFields' => null,
-		'scope' => array(),
+		'scope' => [],
 		'recursive' => 0,
 		'contain' => null,
 		'realm' => '',
@@ -88,7 +88,7 @@ class DigestAuthenticate extends BasicAuthenticate {
 		'nonce' => '',
 		'opaque' => '',
 		'passwordHasher' => 'Simple',
-	);
+	];
 
 /**
  * Constructor, completes configuration for digest authentication.
@@ -119,9 +119,9 @@ class DigestAuthenticate extends BasicAuthenticate {
 		}
 
 		list(, $model) = pluginSplit($this->settings['userModel']);
-		$user = $this->_findUser(array(
+		$user = $this->_findUser([
 			$model . '.' . $this->settings['fields']['username'] => $digest['username']
-		));
+		]);
 		if (empty($user)) {
 			return false;
 		}
@@ -162,8 +162,8 @@ class DigestAuthenticate extends BasicAuthenticate {
 		if (substr($digest, 0, 7) === 'Digest ') {
 			$digest = substr($digest, 7);
 		}
-		$keys = $match = array();
-		$req = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1);
+		$keys = $match = [];
+		$req = ['nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1];
 		preg_match_all('/(\w+)=([\'"]?)([a-zA-Z0-9\:\#\%\?\&@=\.\/_-]+)\2/', $digest, $match, PREG_SET_ORDER);
 
 		foreach ($match as $i) {
@@ -210,13 +210,13 @@ class DigestAuthenticate extends BasicAuthenticate {
  * @return string Headers for logging in.
  */
 	public function loginHeaders() {
-		$options = array(
+		$options = [
 			'realm' => $this->settings['realm'],
 			'qop' => $this->settings['qop'],
 			'nonce' => $this->settings['nonce'],
 			'opaque' => $this->settings['opaque']
-		);
-		$opts = array();
+		];
+		$opts = [];
 		foreach ($options as $k => $v) {
 			$opts[] = sprintf('%s="%s"', $k, $v);
 		}

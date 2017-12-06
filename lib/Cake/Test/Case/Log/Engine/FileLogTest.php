@@ -77,11 +77,11 @@ class FileLogTest extends CakeTestCase {
 		$this->_deleteLogs($path);
 
 		file_put_contents($path . 'error.log', "this text is under 35 bytes\n");
-		$log = new FileLog(array(
+		$log = new FileLog([
 			'path' => $path,
 			'size' => 35,
 			'rotate' => 2
-		));
+		]);
 		$log->write('warning', 'Test warning one');
 		$this->assertTrue(file_exists($path . 'error.log'));
 
@@ -135,11 +135,11 @@ class FileLogTest extends CakeTestCase {
 		$this->assertRegExp('/Warning: Test warning second/', $result);
 
 		file_put_contents($path . 'debug.log', "this text is just greater than 35 bytes\n");
-		$log = new FileLog(array(
+		$log = new FileLog([
 			'path' => $path,
 			'size' => 35,
 			'rotate' => 0
-		));
+		]);
 		file_put_contents($path . 'debug.log.0000000000', "The oldest log file with over 35 bytes.\n");
 		$log->write('debug', 'Test debug');
 		$this->assertTrue(file_exists($path . 'debug.log'));
@@ -158,21 +158,21 @@ class FileLogTest extends CakeTestCase {
 		$path = TMP . 'tests' . DS;
 		$this->_deleteLogs($path);
 
-		$log = new FileLog(array('path' => $path, 'mask' => 0666));
+		$log = new FileLog(['path' => $path, 'mask' => 0666]);
 		$log->write('warning', 'Test warning one');
 		$result = substr(sprintf('%o', fileperms($path . 'error.log')), -4);
 		$expected = '0666';
 		$this->assertEquals($expected, $result);
 		unlink($path . 'error.log');
 
-		$log = new FileLog(array('path' => $path, 'mask' => 0644));
+		$log = new FileLog(['path' => $path, 'mask' => 0644]);
 		$log->write('warning', 'Test warning two');
 		$result = substr(sprintf('%o', fileperms($path . 'error.log')), -4);
 		$expected = '0644';
 		$this->assertEquals($expected, $result);
 		unlink($path . 'error.log');
 
-		$log = new FileLog(array('path' => $path, 'mask' => 0640));
+		$log = new FileLog(['path' => $path, 'mask' => 0640]);
 		$log->write('warning', 'Test warning three');
 		$result = substr(sprintf('%o', fileperms($path . 'error.log')), -4);
 		$expected = '0640';

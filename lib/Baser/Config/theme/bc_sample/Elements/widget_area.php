@@ -15,5 +15,5 @@ if (!isset($subDir)) {
 
 
 <div class="widget-area widget-area-<?php echo $no ?>">
-	<?php $this->BcWidgetArea->show($no, array('subDir' => $subDir)) ?>
+	<?php $this->BcWidgetArea->show($no, ['subDir' => $subDir]) ?>
 </div>

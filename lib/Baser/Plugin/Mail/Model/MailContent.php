@@ -30,20 +30,20 @@ class MailContent extends MailAppModel {
  *
  * @var array
  */
-	public $actsAs = array('BcSearchIndexManager', 'BcCache', 'BcContents');
+	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
 
 /**
  * hasMany
  *
  * @var array
  */
-	public $hasMany = array('MailField' =>
-		array('className' => 'Mail.MailField',
+	public $hasMany = ['MailField' =>
+		['className' => 'Mail.MailField',
 			'order' => 'sort',
 			'foreignKey' => 'mail_content_id',
 			'dependent' => true,
 			'exclusive' => false,
-			'finderQuery' => ''));
+			'finderQuery' => '']];
 
 /**
  * validate
@@ -147,7 +147,7 @@ class MailContent extends MailAppModel {
  *
  * @return boolean
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		// 検索用テーブルへの登録・削除
 		if (!$this->data['Content']['exclude_search'] && $this->data['Content']['status']) {
 			$this->saveSearchIndex($this->createSearchIndex($this->data));
@@ -237,10 +237,10 @@ class MailContent extends MailAppModel {
 		if ($result = $this->save($data)) {
 			$result['MailContent']['id'] = $this->id;
 			$data = $result;
-			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
+			$mailFields = $this->MailField->find('all', ['conditions' => ['MailField.mail_content_id' => $id], 'order' => 'MailField.sort', 'recursive' => -1]);
 			foreach ($mailFields as $mailField) {
 				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
-				$this->MailField->copy(null, $mailField, array('sortUpdateOff' => true));
+				$this->MailField->copy(null, $mailField, ['sortUpdateOff' => true]);
 			}
 			App::uses('MailMessage', 'Mail.Model');
 			$MailMessage = ClassRegistry::init('Mail.MailMessage');
@@ -299,12 +299,12 @@ class MailContent extends MailAppModel {
  * @return array 公開条件（conditions 形式）
  */
 	public function getConditionAllowAccepting() {
-		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-			array($this->alias . '.publish_begin' => null),
-			array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
-		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-			array($this->alias . '.publish_end' => null),
-			array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
+		$conditions[] = ['or' => [[$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
+			[$this->alias . '.publish_begin' => null],
+			[$this->alias . '.publish_begin' => '0000-00-00 00:00:00']]];
+		$conditions[] = ['or' => [[$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
+			[$this->alias . '.publish_end' => null],
+			[$this->alias . '.publish_end' => '0000-00-00 00:00:00']]];
 		return $conditions;
 	}
 

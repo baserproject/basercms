@@ -185,7 +185,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
  * @return void
  */
 	protected function _paintLinks() {
-		$show = $query = array();
+		$show = $query = [];
 		if (!empty($this->params['case'])) {
 			$show['show'] = 'cases';
 		}
@@ -215,7 +215,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
  */
 	protected function _queryString($url) {
 		$out = '?';
-		$params = array();
+		$params = [];
 		foreach ($url as $key => $value) {
 			$params[] = "$key=$value";
 		}
@@ -359,7 +359,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
  */
 	protected function _getStackTrace(Exception $e) {
 		$trace = $e->getTrace();
-		$out = array();
+		$out = [];
 		foreach ($trace as $frame) {
 			if (isset($frame['file']) && isset($frame['line'])) {
 				$out[] = $frame['file'] . ' : ' . $frame['line'];
@@ -391,7 +391,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
  * @return string
  */
 	protected function _getQueryLink() {
-		$show = $query = array();
+		$show = $query = [];
 		if (!empty($this->params['case'])) {
 			$show['show'] = 'cases';
 		}
@@ -410,7 +410,7 @@ class CakeHtmlReporter extends CakeBaseReporter {
 		}
 		$show = $this->_queryString($show);
 		$query = $this->_queryString($query);
-		return array($show, $query);
+		return [$show, $query];
 	}
 
 }

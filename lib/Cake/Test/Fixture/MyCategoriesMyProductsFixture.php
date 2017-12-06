@@ -28,20 +28,20 @@ class MyCategoriesMyProductsFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'my_category_id' => array('type' => 'integer'),
-		'my_product_id' => array('type' => 'integer'),
-	);
+	public $fields = [
+		'my_category_id' => ['type' => 'integer'],
+		'my_product_id' => ['type' => 'integer'],
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('my_category_id' => 1, 'my_product_id' => 1),
-		array('my_category_id' => 2, 'my_product_id' => 1),
-		array('my_category_id' => 2, 'my_product_id' => 2),
-		array('my_category_id' => 3, 'my_product_id' => 2),
-	);
+	public $records = [
+		['my_category_id' => 1, 'my_product_id' => 1],
+		['my_category_id' => 2, 'my_product_id' => 1],
+		['my_category_id' => 2, 'my_product_id' => 2],
+		['my_category_id' => 3, 'my_product_id' => 2],
+	];
 }

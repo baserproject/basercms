@@ -28,18 +28,18 @@ class MyUserFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'firstname' => array('type' => 'string', 'null' => false),
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'firstname' => ['type' => 'string', 'null' => false],
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('id' => 1, 'firstname' => 'userA'),
-		array('id' => 2, 'firstname' => 'userB')
-	);
+	public $records = [
+		['id' => 1, 'firstname' => 'userA'],
+		['id' => 2, 'firstname' => 'userB']
+	];
 }

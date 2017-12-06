@@ -82,19 +82,19 @@ class BcRequestFilter extends DispatcherFilter {
  * @return array
  */
 	public function getDetectorConfigs() {
-		$configs = array();
+		$configs = [];
 
-		$configs['admin'] = array('callback' => array($this, 'isAdmin'));
-		$configs['asset'] = array('callback' => array($this, 'isAsset'));
-		$configs['install'] = array('callback' => array($this, 'isInstall'));
-		$configs['maintenance'] = array('callback' => array($this, 'isMaintenance'));
-		$configs['update'] = array('callback' => array($this, 'isUpdate'));
-		$configs['page'] = array('callback' => array($this, 'isPage'));
-		$configs['requestview'] = array('callback' => array($this, 'isRequestView'));
+		$configs['admin'] = ['callback' => [$this, 'isAdmin']];
+		$configs['asset'] = ['callback' => [$this, 'isAsset']];
+		$configs['install'] = ['callback' => [$this, 'isInstall']];
+		$configs['maintenance'] = ['callback' => [$this, 'isMaintenance']];
+		$configs['update'] = ['callback' => [$this, 'isUpdate']];
+		$configs['page'] = ['callback' => [$this, 'isPage']];
+		$configs['requestview'] = ['callback' => [$this, 'isRequestView']];
 
 		$agents = BcAgent::findAll();
 		foreach ($agents as $agent) {
-			$configs[$agent->name] = array('env' => 'HTTP_USER_AGENT', 'pattern' => $agent->getDetectorRegex());
+			$configs[$agent->name] = ['env' => 'HTTP_USER_AGENT', 'pattern' => $agent->getDetectorRegex()];
 		}
 
 		return $configs;
@@ -131,8 +131,8 @@ class BcRequestFilter extends DispatcherFilter {
  * @return bool
  */
 	public function isAsset(CakeRequest $request) {
-		$dirs = array('css', 'js', 'img');
-		$exts = array('css', 'js', 'gif', 'jpg', 'jpeg', 'png', 'ico', 'svg', 'swf');
+		$dirs = ['css', 'js', 'img'];
+		$exts = ['css', 'js', 'gif', 'jpg', 'jpeg', 'png', 'ico', 'svg', 'swf'];
 
 		$dirRegex = implode('|', $dirs);
 		$extRegex = implode('|', $exts);
@@ -163,7 +163,7 @@ class BcRequestFilter extends DispatcherFilter {
  */
 	public function isMaintenance(CakeRequest $request) {
 		$slug = 'maintenance';
-		return in_array($request->url, array($slug, "{$slug}/", "{$slug}/index"));
+		return in_array($request->url, [$slug, "{$slug}/", "{$slug}/index"]);
 	}
 
 /**
@@ -174,7 +174,7 @@ class BcRequestFilter extends DispatcherFilter {
  */
 	public function isUpdate(CakeRequest $request) {
 		$slug = Configure::read('BcApp.updateKey');
-		return in_array($request->url, array($slug, "{$slug}/", "{$slug}/index"));
+		return in_array($request->url, [$slug, "{$slug}/", "{$slug}/index"]);
 	}
 
 /**

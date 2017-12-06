@@ -18,7 +18,7 @@
 
 <?php if (!empty($items)): ?>
 	<?php foreach ($items as $key => $item): ?>
-		<?php $class = array('clearfix', 'post-' . ($key + 1)) ?>
+		<?php $class = ['clearfix', 'post-' . ($key + 1)] ?>
 		<?php if ($this->BcArray->first($items, $key)): ?>
 			<?php $class[] = 'first' ?>
 		<?php elseif ($this->BcArray->last($items, $key)): ?>

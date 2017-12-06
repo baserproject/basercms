@@ -28,21 +28,21 @@ class BiddingFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'bid' => array('type' => 'string', 'null' => false),
-		'name' => array('type' => 'string', 'null' => false)
-	);
+	public $fields = [
+		'id' => ['type' => 'integer', 'key' => 'primary'],
+		'bid' => ['type' => 'string', 'null' => false],
+		'name' => ['type' => 'string', 'null' => false]
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array(
-		array('bid' => 'One', 'name' => 'Bid 1'),
-		array('bid' => 'Two', 'name' => 'Bid 2'),
-		array('bid' => 'Three', 'name' => 'Bid 3'),
-		array('bid' => 'Five', 'name' => 'Bid 5')
-	);
+	public $records = [
+		['bid' => 'One', 'name' => 'Bid 1'],
+		['bid' => 'Two', 'name' => 'Bid 2'],
+		['bid' => 'Three', 'name' => 'Bid 3'],
+		['bid' => 'Five', 'name' => 'Bid 5']
+	];
 }

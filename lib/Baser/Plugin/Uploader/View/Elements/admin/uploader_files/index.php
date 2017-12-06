@@ -9,14 +9,14 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
-$this->BcBaser->js(array('Uploader.admin/uploader_files/uploader_list'));
+$this->BcBaser->js(['Uploader.admin/uploader_files/uploader_list']);
 if(!isset($listId)) {
 	$listId = '';
 }
 ?>
 
 
-<?php $this->BcBaser->link('ListUrl', array('action' => 'ajax_list', $listId, 'num' => $this->passedArgs['num']), array('id' => 'ListUrl'.$listId, 'style' => 'display:none')) ?>
+<?php $this->BcBaser->link('ListUrl', ['action' => 'ajax_list', $listId, 'num' => $this->passedArgs['num']], ['id' => 'ListUrl'.$listId, 'style' => 'display:none']) ?>
 
 
 <!-- JS用設定値 -->
@@ -41,5 +41,5 @@ if(!isset($listId)) {
 
 <!-- 編集ダイアログ -->
 <div id="EditDialog" title="ファイル情報編集">
-	<?php $this->BcBaser->element('uploader_files/form', array('listId', $listId, 'popup' => true)) ?>
+	<?php $this->BcBaser->element('uploader_files/form', ['listId', $listId, 'popup' => true]) ?>
 </div>

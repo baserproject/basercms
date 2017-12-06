@@ -79,16 +79,16 @@ class UploaderFile extends AppModel {
  */
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
-		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
+		$sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
 		$UploaderConfig = ClassRegistry::init('Uploader.UploaderConfig');
 		$uploaderConfigs = $UploaderConfig->findExpanded();
-		$imagecopy = array();
+		$imagecopy = [];
 		
 		foreach($sizes as $size) {
 			if(!isset($uploaderConfigs[$size.'_width']) || !isset($uploaderConfigs[$size.'_height'])) {
 				continue;
 			}
-			$imagecopy[$size] = array('suffix'	=> '__'.$size);
+			$imagecopy[$size] = ['suffix'	=> '__'.$size];
 			$imagecopy[$size]['width'] = $uploaderConfigs[$size.'_width'];
 			$imagecopy[$size]['height'] = $uploaderConfigs[$size.'_height'];
 			if(isset($uploaderConfigs[$size.'_thumb'])) {
@@ -107,13 +107,13 @@ class UploaderFile extends AppModel {
  * @param array $options
  * @return bool
  */
-	public function beforeSave($options = array()) {
+	public function beforeSave($options = []) {
 		parent::beforeSave($options);
 		
 		if(!empty($this->data['UploaderFile']['id'])) {
 			
 			$savePath = WWW_ROOT . 'files' . DS . $this->actsAs['BcUpload']['saveDir'] . DS;
-			$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
+			$sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
 			$pathinfo = pathinfo($this->data['UploaderFile']['name']);
 			
 			if(!empty($this->data['UploaderFile']['publish_begin']) || !empty($this->data['UploaderFile']['publish_end'])) {
@@ -167,7 +167,7 @@ class UploaderFile extends AppModel {
  */
 	public function filesExists($fileName, $limited = null) {
 		if(is_null($limited)) {
-			$data = $this->find('first', array('conditions' => array('UploaderFile.name' => $fileName), 'recursive' => -1));
+			$data = $this->find('first', ['conditions' => ['UploaderFile.name' => $fileName], 'recursive' => -1]);
 			$limited = false;
 			if(!empty($data['UploaderFile']['publish_begin']) || !empty($data['UploaderFile']['publish_end'])) {
 				$limited = true;
@@ -189,14 +189,14 @@ class UploaderFile extends AppModel {
  * @param	array	$options
  * @return	mixed	$controlSource	コントロールソース
  */
-	public function getControlSource($field = null, $options = array()) {
+	public function getControlSource($field = null, $options = []) {
 		switch ($field) {
 			case 'user_id':
 				$User = ClassRegistry::getObject('User');
 				return $User->getUserList($options);
 			case 'uploader_category_id':
 				$UploaderCategory = ClassRegistry::init('Uploader.UploaderCategory');
-				return $UploaderCategory->find('list', array('order' => 'UploaderCategory.id'));
+				return $UploaderCategory->find('list', ['order' => 'UploaderCategory.id']);
 		}
 		return false;
 	}
@@ -207,7 +207,7 @@ class UploaderFile extends AppModel {
  * @return mixed
  */
 	public function getSourceFileName($fileName) {
-		$sizes = array('large', 'midium', 'small', 'mobile_large', 'mobile_small');
+		$sizes = ['large', 'midium', 'small', 'mobile_large', 'mobile_small'];
 		return preg_replace('/__(' . implode('|', $sizes) . ')\./', '.', $fileName);
 	}
 

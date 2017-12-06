@@ -67,7 +67,7 @@ class ScaffoldView extends View {
 		$names[] = 'Scaffolds' . DS . $subDir . $name;
 
 		$paths = $this->_paths($this->plugin);
-		$exts = array($this->ext);
+		$exts = [$this->ext];
 		if ($this->ext !== '.ctp') {
 			$exts[] = '.ctp';
 		}

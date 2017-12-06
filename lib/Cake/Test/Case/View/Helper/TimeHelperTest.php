@@ -82,26 +82,26 @@ class TimeHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testTimeHelperProxyMethodCalls() {
-		$methods = array(
+		$methods = [
 			'convertSpecifiers', 'convert', 'serverOffset', 'fromString',
 			'nice', 'niceShort', 'daysAsSql', 'dayAsSql',
 			'isToday', 'isThisMonth', 'isThisYear', 'wasYesterday',
 			'isTomorrow', 'toQuarter', 'toUnix', 'toAtom', 'toRSS',
 			'wasWithinLast', 'gmt', 'format', 'i18nFormat',
-		);
+		];
 		$CakeTime = $this->getMock('CakeTimeMock', $methods);
-		$Time = new TimeHelperTestObject($this->View, array('engine' => 'CakeTimeMock'));
+		$Time = new TimeHelperTestObject($this->View, ['engine' => 'CakeTimeMock']);
 		$Time->attach($CakeTime);
 		foreach ($methods as $method) {
 			$CakeTime->expects($this->at(0))->method($method);
 			$Time->{$method}('who', 'what', 'when', 'where', 'how');
 		}
 
-		$CakeTime = $this->getMock('CakeTimeMock', array('timeAgoInWords'));
-		$Time = new TimeHelperTestObject($this->View, array('engine' => 'CakeTimeMock'));
+		$CakeTime = $this->getMock('CakeTimeMock', ['timeAgoInWords']);
+		$Time = new TimeHelperTestObject($this->View, ['engine' => 'CakeTimeMock']);
 		$Time->attach($CakeTime);
 		$CakeTime->expects($this->at(0))->method('timeAgoInWords');
-		$Time->timeAgoInWords('who', array('what'), array('when'), array('where'), array('how'));
+		$Time->timeAgoInWords('who', ['what'], ['when'], ['where'], ['how']);
 	}
 
 /**
@@ -110,17 +110,17 @@ class TimeHelperTest extends CakeTestCase {
  * @return void
  */
 	public function testEngineOverride() {
-		App::build(array(
-			'Utility' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Utility' . DS)
-		), App::REGISTER);
-		$Time = new TimeHelperTestObject($this->View, array('engine' => 'TestAppEngine'));
+		App::build([
+			'Utility' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Utility' . DS]
+		], App::REGISTER);
+		$Time = new TimeHelperTestObject($this->View, ['engine' => 'TestAppEngine']);
 		$this->assertInstanceOf('TestAppEngine', $Time->engine());
 
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS)
-		));
+		App::build([
+			'Plugin' => [CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS]
+		]);
 		CakePlugin::load('TestPlugin');
-		$Time = new TimeHelperTestObject($this->View, array('engine' => 'TestPlugin.TestPluginEngine'));
+		$Time = new TimeHelperTestObject($this->View, ['engine' => 'TestPlugin.TestPluginEngine']);
 		$this->assertInstanceOf('TestPluginEngine', $Time->engine());
 		CakePlugin::unload('TestPlugin');
 	}
@@ -133,51 +133,51 @@ class TimeHelperTest extends CakeTestCase {
 	public function testTimeAgoInWords() {
 		$Time = new TimeHelper($this->View);
 		$timestamp = strtotime('+8 years, +4 months +2 weeks +3 days');
-		$result = $Time->timeAgoInWords($timestamp, array(
+		$result = $Time->timeAgoInWords($timestamp, [
 			'end' => '1 years',
 			'element' => 'span'
-		));
-		$expected = array(
-			'span' => array(
+		]);
+		$expected = [
+			'span' => [
 				'title' => $timestamp,
 				'class' => 'time-ago-in-words'
-			),
+			],
 			'on ' . date('j/n/y', $timestamp),
 			'/span'
-		);
+		];
 		$this->assertTags($result, $expected);
 
-		$result = $Time->timeAgoInWords($timestamp, array(
+		$result = $Time->timeAgoInWords($timestamp, [
 			'end' => '1 years',
-			'element' => array(
+			'element' => [
 				'title' => 'testing',
 				'rel' => 'test'
-			)
-		));
-		$expected = array(
-			'span' => array(
+			]
+		]);
+		$expected = [
+			'span' => [
 				'title' => 'testing',
 				'class' => 'time-ago-in-words',
 				'rel' => 'test'
-			),
+			],
 			'on ' . date('j/n/y', $timestamp),
 			'/span'
-		);
+		];
 		$this->assertTags($result, $expected);
 
 		$timestamp = strtotime('+2 weeks');
 		$result = $Time->timeAgoInWords(
 			$timestamp,
-			array('end' => '1 years', 'element' => 'div')
+			['end' => '1 years', 'element' => 'div']
 		);
-		$expected = array(
-			'div' => array(
+		$expected = [
+			'div' => [
 				'title' => $timestamp,
 				'class' => 'time-ago-in-words'
-			),
+			],
 			'in 2 weeks',
 			'/div'
-		);
+		];
 		$this->assertTags($result, $expected);
 	}
 

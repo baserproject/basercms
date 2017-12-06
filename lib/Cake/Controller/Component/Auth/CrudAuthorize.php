@@ -38,7 +38,7 @@ class CrudAuthorize extends BaseAuthorize {
  * @param ComponentCollection $collection The component collection from the controller.
  * @param string $settings An array of settings. This class does not use any settings.
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
+	public function __construct(ComponentCollection $collection, $settings = []) {
 		parent::__construct($collection, $settings);
 		$this->_setPrefixMappings();
 	}
@@ -49,13 +49,13 @@ class CrudAuthorize extends BaseAuthorize {
  * @return void
  */
 	protected function _setPrefixMappings() {
-		$crud = array('create', 'read', 'update', 'delete');
+		$crud = ['create', 'read', 'update', 'delete'];
 		$map = array_combine($crud, $crud);
 
 		$prefixes = Router::prefixes();
 		if (!empty($prefixes)) {
 			foreach ($prefixes as $prefix) {
-				$map = array_merge($map, array(
+				$map = array_merge($map, [
 					$prefix . '_index' => 'read',
 					$prefix . '_add' => 'create',
 					$prefix . '_edit' => 'update',
@@ -65,7 +65,7 @@ class CrudAuthorize extends BaseAuthorize {
 					$prefix . '_read' => 'read',
 					$prefix . '_update' => 'update',
 					$prefix . '_delete' => 'delete'
-				));
+				]);
 			}
 		}
 		$this->mapActions($map);
@@ -89,7 +89,7 @@ class CrudAuthorize extends BaseAuthorize {
 			);
 			return false;
 		}
-		$user = array($this->settings['userModel'] => $user);
+		$user = [$this->settings['userModel'] => $user];
 		$Acl = $this->_Collection->load('Acl');
 		return $Acl->check(
 			$user,

@@ -13,4 +13,4 @@
 /**
  * [ADMIN] メールフィールド Ajax 行コピー
  */
-$this->BcBaser->element('mail_fields/index_row', array('data' => $data, 'count' => 0));
+$this->BcBaser->element('mail_fields/index_row', ['data' => $data, 'count' => 0]);

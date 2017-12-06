@@ -32,10 +32,10 @@ class ModelCrossSchemaHabtmTest extends BaseModelTest {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'core.player', 'core.guild', 'core.guilds_player',
 		'core.armor', 'core.armors_player',
-	);
+	];
 
 /**
  * Don't drop tables if they exist
@@ -104,26 +104,26 @@ class ModelCrossSchemaHabtmTest extends BaseModelTest {
 		$this->loadFixtures('Player', 'Guild', 'GuildsPlayer');
 		$Player = ClassRegistry::init('Player');
 
-		$players = $Player->find('all', array(
-			'fields' => array('id', 'name'),
-			'contain' => array(
-				'Guild' => array(
-					'conditions' => array(
+		$players = $Player->find('all', [
+			'fields' => ['id', 'name'],
+			'contain' => [
+				'Guild' => [
+					'conditions' => [
 						'Guild.name' => 'Wizards',
-					),
-				),
-			),
-		));
+					],
+				],
+			],
+		]);
 		$this->assertEquals(4, count($players));
 		$wizards = Hash::extract($players, '{n}.Guild.{n}[name=Wizards]');
 		$this->assertEquals(1, count($wizards));
 
-		$players = $Player->find('all', array(
-			'fields' => array('id', 'name'),
-			'conditions' => array(
+		$players = $Player->find('all', [
+			'fields' => ['id', 'name'],
+			'conditions' => [
 				'Player.id' => 1,
-			),
-		));
+			],
+		]);
 		$this->assertEquals(1, count($players));
 		$wizards = Hash::extract($players, '{n}.Guild.{n}');
 		$this->assertEquals(2, count($wizards));
@@ -140,11 +140,11 @@ class ModelCrossSchemaHabtmTest extends BaseModelTest {
 		$players = $Player->find('count');
 		$this->assertEquals(4, $players);
 
-		$player = $Player->create(array(
+		$player = $Player->create([
 			'name' => 'rchavik',
-		));
+		]);
 
-		$results = $Player->saveAll($player, array('validate' => 'first'));
+		$results = $Player->saveAll($player, ['validate' => 'first']);
 		$this->assertNotSame(false, $results);
 		$count = $Player->find('count');
 		$this->assertEquals(5, $count);
@@ -155,19 +155,19 @@ class ModelCrossSchemaHabtmTest extends BaseModelTest {
 		$player = $Player->findByName('rchavik');
 		$this->assertEmpty($player['Guild']);
 
-		$player['Guild']['Guild'] = array(1, 2, 3);
+		$player['Guild']['Guild'] = [1, 2, 3];
 		$Player->save($player);
 
 		$player = $Player->findByName('rchavik');
 		$this->assertEquals(3, count($player['Guild']));
 
-		$players = $Player->find('all', array(
-			'contain' => array(
-				'conditions' => array(
+		$players = $Player->find('all', [
+			'contain' => [
+				'conditions' => [
 					'Guild.name' => 'Rangers',
-				),
-			),
-		));
+				],
+			],
+		]);
 		$rangers = Hash::extract($players, '{n}.Guild.{n}[name=Rangers]');
 		$this->assertEquals(2, count($rangers));
 	}
@@ -189,47 +189,47 @@ class ModelCrossSchemaHabtmTest extends BaseModelTest {
 		$this->loadFixtures('Player', 'Guild', 'GuildsPlayer', 'Armor', 'ArmorsPlayer');
 
 		$Player = ClassRegistry::init('Player');
-		$Player->bindModel(array(
-			'hasAndBelongsToMany' => array(
-				'Armor' => array(
+		$Player->bindModel([
+			'hasAndBelongsToMany' => [
+				'Armor' => [
 					'with' => 'ArmorsPlayer',
 					'unique' => true,
-				),
-			),
-		), false);
+				],
+			],
+		], false);
 		$this->assertEquals('test', $Player->useDbConfig);
 		$this->assertEquals('test2', $Player->Armor->useDbConfig);
 		$this->assertEquals('test_database_three', $Player->ArmorsPlayer->useDbConfig);
 		$players = $Player->find('count');
 		$this->assertEquals(4, $players);
 
-		$spongebob = $Player->create(array(
+		$spongebob = $Player->create([
 			'id' => 10,
 			'name' => 'spongebob',
-		));
-		$spongebob['Armor'] = array('Armor' => array(1, 2, 3, 4));
+		]);
+		$spongebob['Armor'] = ['Armor' => [1, 2, 3, 4]];
 		$result = $Player->save($spongebob);
 
-		$expected = array(
-			'Player' => array(
+		$expected = [
+			'Player' => [
 				'id' => 10,
 				'name' => 'spongebob',
-			),
-			'Armor' => array(
-				'Armor' => array(
+			],
+			'Armor' => [
+				'Armor' => [
 					1, 2, 3, 4,
-				),
-			),
-		);
+				],
+			],
+		];
 		unset($result['Player']['created']);
 		unset($result['Player']['updated']);
 		$this->assertEquals($expected, $result);
 
-		$spongebob = $Player->find('all', array(
-			'conditions' => array(
+		$spongebob = $Player->find('all', [
+			'conditions' => [
 				'Player.id' => 10,
-			)
-		));
+			]
+		]);
 		$spongeBobsArmors = Hash::extract($spongebob, '{n}.Armor.{n}');
 		$this->assertEquals(4, count($spongeBobsArmors));
 	}

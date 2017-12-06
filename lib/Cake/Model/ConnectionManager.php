@@ -42,14 +42,14 @@ class ConnectionManager {
  *
  * @var array
  */
-	protected static $_dataSources = array();
+	protected static $_dataSources = [];
 
 /**
  * Contains a list of all file and class names used in Connection settings
  *
  * @var array
  */
-	protected static $_connectionsEnum = array();
+	protected static $_connectionsEnum = [];
 
 /**
  * Indicates if the init code for this class has already been executed
@@ -96,11 +96,11 @@ class ConnectionManager {
 		$class = $conn['classname'];
 
 		if (strpos(App::location($class), 'Datasource') === false) {
-			throw new MissingDatasourceException(array(
+			throw new MissingDatasourceException([
 				'class' => $class,
 				'plugin' => null,
 				'message' => 'Datasource is not found in Model/Datasource package.'
-			));
+			]);
 		}
 		static::$_dataSources[$name] = new $class(static::$config->{$name});
 		static::$_dataSources[$name]->configKeyName = $name;
@@ -175,10 +175,10 @@ class ConnectionManager {
 
 		App::uses($conn['classname'], $plugin . 'Model/Datasource' . $package);
 		if (!class_exists($conn['classname'])) {
-			throw new MissingDatasourceException(array(
+			throw new MissingDatasourceException([
 				'class' => $conn['classname'],
 				'plugin' => substr($plugin, 0, -1)
-			));
+			]);
 		}
 		return true;
 	}
@@ -203,7 +203,7 @@ class ConnectionManager {
  * @param array $config The DataSource configuration settings
  * @return DataSource|null A reference to the DataSource object, or null if creation failed
  */
-	public static function create($name = '', $config = array()) {
+	public static function create($name = '', $config = []) {
 		if (empty(static::$_init)) {
 			static::_init();
 		}
@@ -246,7 +246,7 @@ class ConnectionManager {
 		if (!empty(static::$config->{$name})) {
 			static::$_connectionsEnum[$name] = static::_connectionData(static::$config->{$name});
 		} else {
-			throw new MissingDatasourceConfigException(array('config' => $name));
+			throw new MissingDatasourceConfigException(['config' => $name]);
 		}
 	}
 
