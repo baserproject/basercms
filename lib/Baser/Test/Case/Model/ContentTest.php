@@ -450,7 +450,11 @@ class ContentTest extends BaserTestCase {
  * サイトルートコンテンツを取得する
  */
 	public function testGetSiteRoot() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->loadFixtures('ContentStatusCheck');
+		$this->assertEquals(1, $this->Content->getSiteRoot(0)['Content']['id']);
+		$this->assertEquals(2, $this->Content->getSiteRoot(1)['Content']['id']);
+		$this->assertEquals(3, $this->Content->getSiteRoot(2)['Content']['id']);
+		$this->assertEmpty($this->Content->getSiteRoot(3));
 	}
 
 /**
