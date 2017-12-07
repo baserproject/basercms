@@ -265,6 +265,10 @@ class BlogHelper extends AppHelper {
 		$site = BcSite::findByUrl($this->content['url']);
 		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($post['BlogPost']['blog_content_id']), !empty($site->useSubDomain));
 		$url = $contentUrl . 'archives/' . $post['BlogPost']['no'];
+		$currentPrefix = $this->BcBaser->getCurrentPrefix();
+		if($currentPrefix){
+			$url = '/'.$currentPrefix. $url;
+		}
 		if($base) {
 			return $this->url($url);
 		}  else {
