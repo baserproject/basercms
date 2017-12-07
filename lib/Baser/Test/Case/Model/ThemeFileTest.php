@@ -10,6 +10,7 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('ThemeFile', 'Model');
+App::uses('File', 'Utility');
 
 /**
  * ThemeFileTest class
@@ -85,7 +86,29 @@ class ThemeFileTest extends BaserTestCase {
  * ファイルの重複チェック
  */
 	public function testDuplicateThemeFile() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$themeFile = new File(TMP . 'test/theme-file.php', true);
+		$this->ThemeFile->create([
+			'ThemeFile' => [
+				'name' => 'another-theme-file',
+				'parent' => TMP . 'test/',
+				'ext' => 'php',
+				'contents' => ''
+			]
+		]);
+		$this->assertTrue($this->ThemeFile->validates(), 'テーマファイルが重複していないにも関わらずバリデーションに失敗しています。');
+
+		$this->ThemeFile->create([
+			'ThemeFile' => [
+				'name' => 'theme-file',
+				'parent' => TMP . 'test/',
+				'ext' => 'php',
+				'contents' => ''
+			]
+		]);
+		$this->assertFalse($this->ThemeFile->validates(), 'テーマファイルが重複しているにも関わらずバリデーションに成功しています。');
+
+		$themeFile->delete();
+		$themeFile->close();
 	}
 
 }
