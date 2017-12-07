@@ -70,7 +70,7 @@
 }'<?php if($open): ?> class="jstree-open"<?php endif ?>>
 			<span><?php echo strip_tags(h($data['Content']['title'])) ?></span>
 			<?php if(!empty($data['children'])): ?>
-				<?php $this->BcBaser->element('admin/contents/index_list_tree', array('datas' => $data['children'])) ?>
+				<?php $this->BcBaser->element('admin/contents/index_list_tree', ['datas' => $data['children']]) ?>
 			<?php endif ?>
 		</li>
 	<?php endforeach ?>

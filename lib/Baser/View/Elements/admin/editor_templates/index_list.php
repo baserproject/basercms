@@ -24,7 +24,7 @@ $this->BcListTable->setColumnNumber(5);
 		<tr>
 			<th style="width:140px" class="list-tool">
 				<div>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['action' => 'add']) ?>
 				</div>
 			</th>
 			<th>NO</th>
@@ -38,7 +38,7 @@ $this->BcListTable->setColumnNumber(5);
 <tbody>
 	<?php if (!empty($datas)): ?>
 		<?php foreach ($datas as $data): ?>
-			<?php $this->BcBaser->element('editor_templates/index_row', array('data' => $data)) ?>
+			<?php $this->BcBaser->element('editor_templates/index_row', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>

@@ -46,14 +46,14 @@ class BcFreezeHelper extends BcFormHelper {
  * @return	string	htmlタグ
  * @access	public
  */
-	public function text($fieldName, $attributes = array()) {
+	public function text($fieldName, $attributes = []) {
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
 			if (isset($attributes)) {
-				$attributes = $attributes + array('type' => 'hidden');
+				$attributes = $attributes + ['type' => 'hidden'];
 			} else {
-				$attributes = array('type' => 'hidden');
+				$attributes = ['type' => 'hidden'];
 			}
 			if (isset($attributes["value"])) {
 				$value = $attributes["value"];
@@ -77,7 +77,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @return	string $showEmpty htmlタグ
  * @access	public
  */
-	public function select($fieldName, $options = array(), $attributes = array()) {
+	public function select($fieldName, $options = [], $attributes = []) {
 
 		if ($this->freezed) {
 			return $this->freezeControll($fieldName, $options, $attributes);
@@ -108,7 +108,7 @@ class BcFreezeHelper extends BcFormHelper {
  * (例) $attributes['selected'] = array('selected' => array('year' => '2010', 'month' => '4', 'day' => '1'))
  * @return string htmlタグ
  */
-	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = array()) {
+	public function dateTime($fieldName, $dateFormat = 'DMY', $timeFormat = '12', $attributes = []) {
 
 		if ($this->freezed) {
 			
@@ -168,10 +168,10 @@ class BcFreezeHelper extends BcFormHelper {
 				}
 			}
 
-			$elements = array('Day', 'Month', 'Year', 'Hour', 'Minute', 'Meridian');
-			$defaults = array(
+			$elements = ['Day', 'Month', 'Year', 'Hour', 'Minute', 'Meridian'];
+			$defaults = [
 				'minYear' => null, 'maxYear' => null, 'separator' => '&nbsp;'
-			);
+			];
 			$attributes = array_merge($defaults, (array) $attributes);
 			$minYear = $attributes['minYear'];
 			$maxYear = $attributes['maxYear'];
@@ -199,23 +199,23 @@ class BcFreezeHelper extends BcFormHelper {
 					${$selectAttrName} = $attributes;
 				}
 			}
-			$selects = array();
+			$selects = [];
 			if (preg_match('/^W/', $dateFormat)) {
 				$selects[] = $this->wyear($fieldName, $minYear, $maxYear, $year, $selectYearAttr, $showEmpty) . "年";
 			} else {
 				$selectYearAttr['value'] = $year;
-				$selects[] = $this->freezeControll($fieldName . ".year", array(), $selectYearAttr) . "年";
+				$selects[] = $this->freezeControll($fieldName . ".year", [], $selectYearAttr) . "年";
 			}
 
 			// TODO 値の出力はBcTextにまとめた方がよいかも
 			// メール本文への出力も同じ処理を利用する。（改行の処理などはどうするか。。）
 			$selectMonthAttr['value'] = $month;
 			$selectDayAttr['value'] = $day;
-			$selects[] = $this->freezeControll($fieldName . ".month", array(), $selectMonthAttr) . "月";
-			$selects[] = $this->freezeControll($fieldName . ".day", array(), $selectDayAttr) . "日";
+			$selects[] = $this->freezeControll($fieldName . ".month", [], $selectMonthAttr) . "月";
+			$selects[] = $this->freezeControll($fieldName . ".day", [], $selectDayAttr) . "日";
 			if($timeFormat) {
-				$selects[] = $this->freezeControll($fieldName . ".hour", array(), array('value' => $hour)) . "時";
-				$selects[] = $this->freezeControll($fieldName . ".min", array(), array('value' => $min)) . "分";
+				$selects[] = $this->freezeControll($fieldName . ".hour", [], ['value' => $hour]) . "時";
+				$selects[] = $this->freezeControll($fieldName . ".min", [], ['value' => $min]) . "分";
 			}
 			return implode($separator, $selects);
 		} else {
@@ -235,7 +235,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @param boolean $showEmpty Show/hide the empty select option
  * @return string
  */
-	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = array(), $showEmpty = true) {
+	public function wyear($fieldName, $minYear = null, $maxYear = null, $selected = null, $attributes = [], $showEmpty = true) {
 
 		if ($this->freezed) {
 			if ((empty($selected) || $selected === true) && $value = $this->value($fieldName)) {
@@ -284,7 +284,7 @@ class BcFreezeHelper extends BcFormHelper {
 					$selected = null;
 				}
 			}
-			return $freezeText . $this->hidden($fieldName . ".wareki", array('value' => true)) . $this->hidden($fieldName . ".year", array('value' => $selected));
+			return $freezeText . $this->hidden($fieldName . ".wareki", ['value' => true]) . $this->hidden($fieldName . ".year", ['value' => $selected]);
 		} else {
 			return parent::wyear($fieldName, $minYear, $maxYear, $selected, $attributes, $showEmpty);
 		}
@@ -297,14 +297,14 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $attributes html属性
  * @return string htmlタグ
  */
-	public function checkbox($fieldName, $attributes = array()) {
+	public function checkbox($fieldName, $attributes = []) {
 
 		if ($this->freezed) {
 			$label = '';
 			if (isset($attributes['label'])) {
 				$label = $attributes['label'];
 			}
-			$options = array(0 => '', 1 => $label);
+			$options = [0 => '', 1 => $label];
 			return $this->freezeControll($fieldName, $options, $attributes);
 		} else {
 			return parent::checkbox($fieldName, $attributes);
@@ -318,11 +318,11 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array html属性
  * @return string htmlタグ
  */
-	public function textarea($fieldName, $attributes = array()) {
+	public function textarea($fieldName, $attributes = []) {
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
-			$attributes = $attributes + array('type' => 'hidden');
+			$attributes = $attributes + ['type' => 'hidden'];
 			if (isset($attributes["value"])) {
 				$value = $attributes["value"];
 			} else {
@@ -346,7 +346,7 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $attributes html属性
  * @return string htmlタグ
  */
-	public function radio($fieldName, $options = array(), $attributes = array()) {
+	public function radio($fieldName, $options = [], $attributes = []) {
 
 		if ($this->freezed) {
 			return $this->freezeControll($fieldName, $options, $attributes);
@@ -362,20 +362,20 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $options
  * @return string
  */
-	public function file($fieldName, $options = array()) {
+	public function file($fieldName, $options = []) {
 
 		if ($this->freezed) {
 			$value = $this->value($fieldName);
 			if (is_array($value) && isset($value['session_key'])) {
 				$value = $value['session_key'];
-				return parent::hidden($fieldName . "_tmp", array('value' => $value)) . $this->BcUpload->fileLink($fieldName, $options);
+				return parent::hidden($fieldName . "_tmp", ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
 			} else {
 				if (!is_array($value)) {
 					$delValue = $this->value($fieldName . '_delete');
 					if ($delValue) {
-						return parent::hidden($fieldName, array('value' => $value)) . parent::hidden($fieldName . '_delete', array('value' => true)) . $this->BcUpload->fileLink($fieldName, $options) . '<br />削除する';
+						return parent::hidden($fieldName, ['value' => $value]) . parent::hidden($fieldName . '_delete', ['value' => true]) . $this->BcUpload->fileLink($fieldName, $options) . '<br />削除する';
 					} else {
-						return parent::hidden($fieldName, array('value' => $value)) . $this->BcUpload->fileLink($fieldName, $options);
+						return parent::hidden($fieldName, ['value' => $value]) . $this->BcUpload->fileLink($fieldName, $options);
 					}
 				}
 			}
@@ -393,14 +393,14 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $imageAttributes 画像属性
  * @return string htmlタグ
  */
-	public function image($fieldName, $attributes = array(), $imageAttributes = array()) {
+	public function image($fieldName, $attributes = [], $imageAttributes = []) {
 
 		if (!$attributes) {
-			$attributes = array();
+			$attributes = [];
 		}
 
 		$output = "";
-		$imageAttributes = array_merge(array('ext' => 'jpg', 'alt' => '', 'dir' => '', 'id' => ''), $imageAttributes);
+		$imageAttributes = array_merge(['ext' => 'jpg', 'alt' => '', 'dir' => '', 'id' => ''], $imageAttributes);
 		
 		if (!empty($imageAttributes['subdir'])) {
 			$imageAttributes['subdir'] .= DS;
@@ -410,7 +410,7 @@ class BcFreezeHelper extends BcFormHelper {
 
 		if ($this->freezed) {
 
-			$attributes = array_merge($attributes, array('type' => 'hidden'));
+			$attributes = array_merge($attributes, ['type' => 'hidden']);
 
 			// 確認画面
 			if (!empty($this->request->data[$model][$field]['name'])) {
@@ -434,7 +434,7 @@ class BcFreezeHelper extends BcFormHelper {
 				$path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . rand();
 				unset($imageAttributes['ext']);
 				$output = sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
-				$output .= "<br />" . $this->checkbox($fieldName . "_delete", array('label' => '削除する'));
+				$output .= "<br />" . $this->checkbox($fieldName . "_delete", ['label' => '削除する']);
 			}
 			return parent::file($fieldName, $attributes) . "<br />" . $output;
 		}
@@ -475,14 +475,14 @@ class BcFreezeHelper extends BcFormHelper {
  * @param array $attributes HTML属性
  * @return string html
  */
-	public function datepicker($fieldName, $attributes = array()) {
+	public function datepicker($fieldName, $attributes = []) {
 
 		if ($this->freezed) {
 			list($model, $field) = explode('.', $fieldName);
 			if (isset($attributes)) {
-				$attributes = am($attributes, array('type' => 'hidden'));
+				$attributes = am($attributes, ['type' => 'hidden']);
 			} else {
-				$attributes = array('type' => 'hidden');
+				$attributes = ['type' => 'hidden'];
 			}
 			if (!empty($this->request->data[$model][$field])) {
 				$value = date('Y/m/d', strtotime($this->request->data[$model][$field]));
@@ -502,9 +502,9 @@ class BcFreezeHelper extends BcFormHelper {
  * @param	array	$attributes html属性
  * @return string htmlタグ
  */
-	public function freezeControll($fieldName, $options, $attributes = array()) {
+	public function freezeControll($fieldName, $options, $attributes = []) {
 
-		$attributes = array_merge(array('class' => ''), $attributes);
+		$attributes = array_merge(['class' => ''], $attributes);
 		unset($attributes["separator"]);
 		if (preg_match_all("/\./", $fieldName, $regs) == 2) {
 			list($model, $field, $detail) = explode('.', $fieldName);
@@ -554,7 +554,7 @@ class BcFreezeHelper extends BcFormHelper {
 				}
 
 				$out = sprintf($this->Html->_tags['ul'], " " . $this->_parseAttributes($attributes, null, '', ' '), $_value);
-				$out .= $this->hidden($fieldName, array('value' => $value, 'multiple' => true));
+				$out .= $this->hidden($fieldName, ['value' => $value, 'multiple' => true]);
 
 				// 一般
 			} elseif (empty($detail)) {

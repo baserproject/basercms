@@ -24,12 +24,12 @@ $this->BcListTable->setColumnNumber(2);
 		<th style="width:160px" class="list-tool">
 			<div>
 				<?php if ($this->BcBaser->isAdminUser() && $theme != 'core'): ?>
-				<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-				<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '削除'), 'empty' => '一括処理')) ?>
-				<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+				<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
+				<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
+				<?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
 				<?php endif ?>
 				<?php if ($path): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/up.gif', array('alt' => '上へ移動')), array('action' => 'index', $theme, $plugin, $type, dirname($path)), array('title' => '上へ移動')) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/up.gif', ['alt' => '上へ移動']), ['action' => 'index', $theme, $plugin, $type, dirname($path)], ['title' => '上へ移動']) ?>
 				<?php endif ?>
 			</div>
 		</th>
@@ -40,7 +40,7 @@ $this->BcListTable->setColumnNumber(2);
 <tbody>
 	<?php if (!empty($themeFiles)): ?>
 		<?php foreach ($themeFiles as $data): ?>
-			<?php $this->BcBaser->element('theme_files/index_row', array('data' => $data)) ?>
+			<?php $this->BcBaser->element('theme_files/index_row', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 	<tr>

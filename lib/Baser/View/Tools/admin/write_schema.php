@@ -22,27 +22,27 @@
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.baser', 'コアテーブル名') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('Tool.core', array(
+			<?php echo $this->BcForm->input('Tool.core', [
 				'type' => 'select',
 				'options' => $this->BcForm->getControlSource('Tool.core'),
 				'multiple' => true,
-				'style' => 'width:400px;height:250px')); ?>
+				'style' => 'width:400px;height:250px']); ?>
 			<?php echo $this->BcForm->error('Tool.core') ?>
 		</td>
 	</tr>
 	<tr>
 		<th class="col-head"><span class="required">*</span>&nbsp;<?php echo $this->BcForm->label('Tool.plugin', 'プラグインテーブル名') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('Tool.plugin', array(
+			<?php echo $this->BcForm->input('Tool.plugin', [
 				'type' => 'select',
 				'options' => $this->BcForm->getControlSource('Tool.plugin'),
 				'multiple' => true,
-				'style' => 'width:400px;height:250px')); ?>
+				'style' => 'width:400px;height:250px']); ?>
 			<?php echo $this->BcForm->error('Tool.plugin') ?>
 		</td>
 	</tr>
 </table>
 
-<div class="submit"><?php echo $this->BcForm->submit('生　成', array('div' => false, 'class' => 'btn-red button')) ?></div>
+<div class="submit"><?php echo $this->BcForm->submit('生　成', ['div' => false, 'class' => 'btn-red button']) ?></div>
 
 <?php echo $this->BcForm->end() ?>
