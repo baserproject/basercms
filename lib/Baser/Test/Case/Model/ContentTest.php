@@ -25,7 +25,7 @@ class ContentTest extends BaserTestCase {
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
 		'baser.Default.SiteConfig',
-		'baser.Default.User'
+		'baser.Default.User',
 	];
 
 /**
