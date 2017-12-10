@@ -242,7 +242,7 @@ class BcSite {
 		}
 
 		// 言語の一致するサブサイト候補に絞り込む
-		$subSites = [];
+		$langSubSites = [];
 		if($lang && Configure::read('BcSite.use_site_lang_setting')) {
 			foreach($sites as $site) {
 				if(!$site->enabled) {
@@ -250,13 +250,15 @@ class BcSite {
 				}
 				if (!$sameMainUrl || ($sameMainUrl && $site->sameMainUrl)) {
 					if($site->lang == $lang->name && $currentSite->id == $site->mainSiteId) {
-						$subSites[] = $site;
+						$langSubSites[] = $site;
 						break;
 					}
 				}
 			}
 		}
-		if(!$subSites) {
+		if($langSubSites) {
+			$subSites = $langSubSites;
+		} else {
 			$subSites = $sites;
 		}
 		if($agent && Configure::read('BcSite.use_site_device_setting')) {
@@ -270,6 +272,8 @@ class BcSite {
 					}
 				}
 			}
+		} elseif($langSubSites) {
+			return $langSubSites[0];
 		}
 		return null;
 	}
