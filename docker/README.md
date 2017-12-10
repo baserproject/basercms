@@ -77,7 +77,7 @@ docker exec -it basercms /bin/bash
 /var/www/html/docker/bin/bc_test [-c] type PathToClass filterMethod
 
 # 例
-/var/www/html/docker/bin/bc_test [-c] baser View/Helper/BcBaserHelper testGetLink
+/var/www/html/docker/bin/bc_test baser View/Helper/BcBaserHelper testGetLink
 ```
 
 - -c : カバレッジを確認する為のHTMLを `app/tmp/coverage` に作成
