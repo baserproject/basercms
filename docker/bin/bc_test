@@ -1,0 +1,40 @@
+cd /var/www/html
+FILTER=""
+COVERAGE=""
+TYPE=""
+CLASS=""
+F=""
+
+while getopts c OPT
+do
+	case $OPT in
+		"c" ) FLG_C="TRUE" ;;
+	esac
+done
+
+if [ "$FLG_C" = "TRUE" ]; then
+	COVERAGE="--coverage-html /var/www/html/app/tmp/coverage"
+	TYPE=$2
+	CLASS=$3
+	F=$4
+else
+	TYPE=$1
+	CLASS=$2
+	F=$3
+fi
+
+if [ "$TYPE" = "" ]; then
+	echo "タイプを指定してください" 1>&2
+	exit 1
+fi
+
+if [ "$CLASS" = "" ]; then
+	echo "テストを指定してください" 1>&2
+	exit 1
+fi
+
+if [ -n "$F" ]; then
+	FILTER="--filter "$F
+fi
+
+/var/www/html/app/Console/cake baser_test $TYPE $CLASS $FILTER $COVERAGE
