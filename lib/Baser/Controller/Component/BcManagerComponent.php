@@ -1540,6 +1540,7 @@ class BcManagerComponent extends Component {
  * @return boolean
  */
 	public function installPlugin($name, $dbDataPattern = '') {
+		clearAllCache();
 
 		$paths = App::path('Plugin');
 		$exists = false;
