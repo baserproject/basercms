@@ -651,24 +651,20 @@ class BlogPost extends BlogAppModel {
 		$result = $this->save();
 
 		if ($result) {
-			$data['BlogPost']['id'] = $this->getLastInsertID();
-
 			if ($eyeCatch) {
-				$data['BlogPost']['eye_catch'] = $eyeCatch;
-				$this->set($data);
-				$data = $this->renameToBasenameFields(true);
-				$this->set($data);	// 内部でリネームされたデータが再セットされる
+				$result['BlogPost']['eye_catch'] = $eyeCatch;
+				$this->set($result);
+				$result = $this->renameToBasenameFields(true);
+				$this->set($result);	// 内部でリネームされたデータが再セットされる
 				$result = $this->save();
 			}
-
 			// EVENT BlogPost.afterCopy
-			$event = $this->dispatchEvent('afterCopy', [
-				'id' => $data['BlogPost']['id'],
-				'data' => $data,
+			$this->dispatchEvent('afterCopy', [
+				'id' => $result['BlogPost']['id'],
+				'data' => $result,
 				'oldId' => $id,
 				'oldData' => $oldData,
 			]);
-
 			return $result;
 		} else {
 			if (isset($this->validationErrors['name'])) {
