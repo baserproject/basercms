@@ -118,7 +118,6 @@ class PluginsController extends AppController {
 
 		// プラグインをインストール
 		if ($this->BcManager->installPlugin($plugin)) {
-			clearAllCache();
 			$this->setMessage('新規プラグイン「' . $plugin . '」を baserCMS に登録しました。', false, true);
 			$this->Plugin->addFavoriteAdminLink($plugin, $this->BcAuth->user());
 			$this->redirect(['action' => 'index']);
@@ -352,7 +351,6 @@ class PluginsController extends AppController {
 		} else {
 			// プラグインをインストール
 			if ($this->BcManager->installPlugin($this->request->data['Plugin']['name'])) {
-				clearAllCache();
 				$this->setMessage('新規プラグイン「' . $name . '」を baserCMS に登録しました。', false, true);
 
 				$this->Plugin->addFavoriteAdminLink($name, $this->BcAuth->user());
