@@ -77,6 +77,7 @@ class FavoritesController extends AppController {
  * @return void
  */
 	public function admin_ajax_edit($id) {
+		$this->autoRender = false;
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -85,6 +86,7 @@ class FavoritesController extends AppController {
 			$this->Favorite->set($this->request->data);
 			$data = $this->Favorite->save();
 			if ($data) {
+				$this->autoLayout = false;
 				$this->set('favorite', $data);
 				$this->render('ajax_form');
 				return;
@@ -92,8 +94,7 @@ class FavoritesController extends AppController {
 				$this->ajaxError(500, $this->Favorite->validationErrors);
 			}
 		}
-
-		exit();
+		return;
 	}
 
 /**
