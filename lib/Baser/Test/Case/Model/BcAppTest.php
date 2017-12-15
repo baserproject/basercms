@@ -10,6 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('BcApp', 'Model');
+App::uses('Content', 'Model');
+
 /**
  * BcAppTest class
  * 
@@ -17,6 +19,7 @@ App::uses('BcApp', 'Model');
  * @property BcAppModel $BcApp
  * @property Page $Page
  * @property SiteConfig $SiteConfig
+ * @property Content $Content
  */
 
 class BcAppTest extends BaserTestCase {
@@ -45,6 +48,8 @@ class BcAppTest extends BaserTestCase {
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->Dblog = ClassRegistry::init('Dblog');
 		$this->User = ClassRegistry::init('User');
+		$this->Content = ClassRegistry::init('Content');
+
 	}
 
 /**
@@ -183,16 +188,19 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * コントロールソースを取得する
- */
-	public function testGetControlSource() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-	}
+ *
+ * 継承前提のため、テスト不要
+ * public function testGetControlSource() {}
+ * /
 
 /**
  * 子カテゴリのIDリストを取得する
  */
 	public function testGetChildIdsList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->Content->getChildIdsList(1);
+		$this->assertEquals(2, $result[0]);
+		$this->assertEquals(9, $result[1]);
+		$this->assertEquals(17, $result[2]);
 	}
 
 /**
