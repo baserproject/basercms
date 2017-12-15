@@ -464,9 +464,20 @@ class BcAppTest extends BaserTestCase {
  * 英数チェックプラス
  *
  * ハイフンアンダースコアを許容
+ *　@dataProvider alphaNumericDataPlusProvider
  */
-	public function testAlphaNumericPlus() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testAlphaNumericPlus($check, $option, $expect) {
+//		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BcApp->alphaNumericPlus($check, $option);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function alphaNumericDataPlusProvider() {
+		return [
+			[["あいうえお"], [], false],
+			[["あいうえお"], ['あ'], false],
+			[["あいうえお"], ['あいうえお'], true],
+		];
 	}
 
 /**
