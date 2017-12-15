@@ -71,7 +71,6 @@ class BcAppHelperTest extends BaserTestCase {
 			fclose($fh);
 			$this->View->set('pagePath', $fileName);
 			$output = $this->View->render('templates/default');
-			print_r($output);
 			unlink($path);
 			$this->assertRegExp('/' . $expects . '/s', $output);
 		}catch (Exception $e) {

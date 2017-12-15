@@ -108,9 +108,6 @@ class BcAppTest extends BaserTestCase {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
 	public function testSave($data = null, $validate = true, $fieldList = []) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->Page->save([
 		'Page' => [
 				'name' => 'test',
@@ -119,7 +116,8 @@ class BcAppTest extends BaserTestCase {
 				'url' => '',
 				'description' => '',
 				'status' => 1,
-				'modified' => '',
+				'modified' => null,
+				'created' => '2015-02-22 22:22:22'
 			]
 		]);
 		$now = date('Y-m-d H');
