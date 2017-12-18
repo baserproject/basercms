@@ -163,10 +163,12 @@ class Content extends AppModel {
 	}
 
 /**
+ * サイト設定にて、エイリアスを利用してメインサイトと自動連携するオプションを利用時に、
  * 関連するサブサイトで、関連コンテンツを作成する際、同階層に重複名称のコンテンツがないか確認する
  *
- * 新規の際は、存在するだけでエラー
- * 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ * 	- 新規の際は、存在するだけでエラー
+ * 	- 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ *
  * @param $check
  * @return bool
  */
@@ -181,7 +183,10 @@ class Content extends AppModel {
 		if($this->data['Content']['site_id']) {
 			unset($parents[1]);
 		}
-		$baseUrl = '/' . implode('/', $parents) . '/';
+		$baseUrl = '/';
+		if($parents) {
+			$baseUrl = '/' . implode('/', $parents) . '/';
+		}
 		$sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $this->data['Content']['site_id'], 'relate_main_site' => true]]);
 		// URLを取得
 		$urlAry = [];
