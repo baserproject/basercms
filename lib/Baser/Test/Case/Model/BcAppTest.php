@@ -467,7 +467,6 @@ class BcAppTest extends BaserTestCase {
  *　@dataProvider alphaNumericDataPlusProvider
  */
 	public function testAlphaNumericPlus($check, $option, $expect) {
-//		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$result = $this->BcApp->alphaNumericPlus($check, $option);
 		$this->assertEquals($expect, $result);
 	}
@@ -477,6 +476,7 @@ class BcAppTest extends BaserTestCase {
 			[["あいうえお"], [], false],
 			[["あいうえお"], ['あ'], false],
 			[["あいうえお"], ['あいうえお'], true],
+			[["あいうえお_"], ['あいうえお'], true],
 		];
 	}
 

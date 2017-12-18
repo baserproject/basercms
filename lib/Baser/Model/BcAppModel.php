@@ -681,7 +681,14 @@ class BcAppModel extends Model {
  * @return	boolean
  */
 	public function alphaNumeric($check) {
-		return $this->alphaNumericPlus($check);
+		if (!$check[key($check)]) {
+			return true;
+ 		}
+ 		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
+			return true;
+ 		} else {
+			return false;
+ 		}
 	}
 
 /**
