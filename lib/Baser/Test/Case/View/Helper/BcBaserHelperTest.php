@@ -1978,12 +1978,18 @@ class BcBaserHelperTest extends BaserTestCase {
  * Google Maps を取得する
  *
  * @return void
- * TODO タイミングによってTravisCI上でテストが失敗するので一時的にコメントアウト
+ * タイミングによってTravisCI上でテストが失敗するので一時的にコメントアウト
  * GoogleAPI側の問題の可能性あり、テスト内容または、処理内容を見直す必要あり
  */
-//	public function testGetGoogleMaps() {
-//		$this->assertRegExp('/<div id="map"/', $this->BcBaser->getGoogleMaps());
-//	}
+	public function testGetGoogleMaps() {
+		for($i=0; $i<3; $i++) {
+			$result = $this->BcBaser->getGoogleMaps();
+			if($result && !preg_match('/^Google Maps を読み込めません。/', $result)) {
+				break;
+			}
+		}
+		$this->assertRegExp('/<div id="map"/', $result);
+	}
 
 /**
  * Google Maps を出力する

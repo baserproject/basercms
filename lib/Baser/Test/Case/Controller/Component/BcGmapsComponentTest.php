@@ -26,6 +26,7 @@ class BcGmapsTestController extends Controller {
 
 /**
  * BcGmapsComponentのテスト
+ * @property BcGmapsComponent $BcGmaps
  */
 class BcGmapsComponentTest extends BaserTestCase {
 
@@ -85,8 +86,12 @@ class BcGmapsComponentTest extends BaserTestCase {
  * @return boolean
  */
 	public function testGetInfoLocation() {
-
-		$result = $this->BcGmaps->getInfoLocation('日本');
+		for($i=0; $i<3; $i++) {
+			$result = $this->BcGmaps->getInfoLocation('日本');
+			if($result) {
+				break;
+			}
+		}
 		$this->assertTrue($result, 'getInfoLocationで情報を取得できません');
 
 		$lat = round($this->BcGmaps->getLatitude(), 1);
@@ -97,7 +102,6 @@ class BcGmapsComponentTest extends BaserTestCase {
 
 		$result = $this->BcGmaps->getInfoLocation('');
 		$this->assertFalse($result, 'getInfoLocationに空のアドレスにtrueが返ってきます');
-
 	}
 
 
