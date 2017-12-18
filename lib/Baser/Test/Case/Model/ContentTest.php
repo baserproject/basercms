@@ -21,6 +21,7 @@ App::uses('Content', 'Model');
 class ContentTest extends BaserTestCase {
 
 	public $fixtures = [
+//		'baser.Model.Content.SiteOne',
 		'baser.Model.Content.ContentStatusCheck',
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
@@ -47,13 +48,25 @@ class ContentTest extends BaserTestCase {
 	}
 
 /**
+ * サイト設定にて、エイリアスを利用してメインサイトと自動連携するオプションを利用時に、
  * 関連するサブサイトで、関連コンテンツを作成する際、同階層に重複名称のコンテンツがないか確認する
  *
- * 新規の際は、存在するだけでエラー
- * 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ * 	- 新規の際は、存在するだけでエラー
+ * 	- 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ *
+ * @dataProvider duplicateRelatedSiteContentDataProvider
  */
-	public function testDuplicateRelatedSiteContent() {
+	public function testDuplicateRelatedSiteContent($data, $expected) {
+		$this->Content->set(['Content' => $data]);
+		$this->assertEquals($expected, $this->Content->duplicateRelatedSiteContent(['name' => $data['name']]));
+	}
 
+	public function duplicateRelatedSiteContentDataProvider() {
+		return [
+			[['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 0], true],		// 新規・存在しない
+			[['id' => 4, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], false],		// 既存・存在する（alias_id / main_site_content_id あり）
+			[['id' => null, 'name' => null, 'parent_id' => null, 'site_id' => 6], true],	// メインサイトでない場合はエラーとしない
+		];
 	}
 
 /**

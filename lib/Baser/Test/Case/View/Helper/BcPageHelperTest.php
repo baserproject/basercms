@@ -276,12 +276,23 @@ class BcPageHelperTest extends BaserTestCase {
 		];
 	}
 
-	public function testGetPageList() {
-		$result = $this->BcPage->GetPageList(1)[0]['Content'];
-		$expected = $this->BcContents->_Content->find('first', ['conditions' => ['type' => 'Page'], 'cache' => false])['Content'];
-		$this->assertEquals($expected['type'], $result['type']);
-		$this->assertEquals($expected['id'], $result['id']);
-		$this->assertEquals($expected['created'], $result['created']);
+/**
+ * ページリストを取得する
+ * 
+ * @dataProvider getPageListDataProvider
+ */
+	public function testGetPageList($id, $expects) {
+		$result = $this->BcPage->GetPageList($id);
+		$result = Hash::extract($result, '{n}.Content.type');
+		$this->assertEquals($expects, $result);
+	}
+	
+	public function getPageListDataProvider() {
+		return [
+			[1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],	// トップフォルダ
+			[21, ['Page', 'Page', 'Page', 'ContentFolder']],	// 下層フォルダ
+			[4, []]	// ターゲットがフォルダでない
+		];
 	}
 
 	public function test__construct() {
