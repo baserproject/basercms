@@ -21,7 +21,6 @@ App::uses('Content', 'Model');
 class ContentTest extends BaserTestCase {
 
 	public $fixtures = [
-//		'baser.Model.Content.SiteOne',
 		'baser.Model.Content.ContentStatusCheck',
 		'baser.Routing.Route.BcContentsRoute.SiteBcContentsRoute',
 		'baser.Routing.Route.BcContentsRoute.ContentBcContentsRoute',
@@ -64,7 +63,8 @@ class ContentTest extends BaserTestCase {
 	public function duplicateRelatedSiteContentDataProvider() {
 		return [
 			[['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 0], true],		// 新規・存在しない
-			[['id' => 4, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], false],		// 既存・存在する（alias_id / main_site_content_id あり）
+			[['id' => null, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], false],		// 新規・存在する（alias_id / main_site_content_id あり）
+			[['id' => 4, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], true],		// 既存・存在する（alias_id / main_site_content_id あり）
 			[['id' => null, 'name' => null, 'parent_id' => null, 'site_id' => 6], true],	// メインサイトでない場合はエラーとしない
 		];
 	}
