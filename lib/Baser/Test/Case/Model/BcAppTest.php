@@ -33,7 +33,8 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
 		'baser.Default.SearchIndex',
-		'baser.Default.Content'
+		'baser.Default.Content',
+		'baser.Default.Site'
 	];
 
 /**
@@ -195,12 +196,24 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 子カテゴリのIDリストを取得する
+ * 
+ * @dataProvider getChildIdsListDataProvider
  */
-	public function testGetChildIdsList() {
-		$result = $this->Content->getChildIdsList(1);
-		$this->assertEquals(2, $result[0]);
-		$this->assertEquals(9, $result[1]);
-		$this->assertEquals(17, $result[2]);
+	public function testGetChildIdsList($id, $expects) {
+		$result = $this->Content->getChildIdsList($id);
+		$this->assertEquals($expects, array_values($result));
+	}
+	
+	public function getChildIdsListDataProvider() {
+		return [
+			[1, [2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// PC
+			[2, [9, 17, 19]],	// モバイル
+			[3, [10, 11, 12, 13, 14, 18, 20]],	// スマホ
+			[4, []],	// 固定ページ
+			['', [1, 2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// 全体
+			[false, [1, 2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// 異常系
+			['あ', []]	// 異常系
+		];
 	}
 
 /**
