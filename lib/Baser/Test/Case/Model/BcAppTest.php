@@ -920,9 +920,22 @@ class BcAppTest extends BaserTestCase {
 
 /**
  * 指定した日付よりも新しい日付かどうかチェックする
+ *
+ * @dataProvider checkDataAfterThanDataProvider
  */
-	public function testCheckDateAfterThan() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testCheckDateAfterThan($check, $target, $expected) {
+		$target = $this->BcApp->data[$this->BcApp->alias][$target] = $target;
+		$result = $this->BcApp->checkDateAfterThan($check, $target);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function checkDataAfterThanDataProvider() {
+		return[
+			['2015-01-01 00:00:00', '2015-01-01 00:00:00', false],
+			['2015-01-01 24:00:01', '2015-01-02 00:00:00', true],
+			['2015-01-01 00:00:00', '2015-01-02 00:00:00', false],
+			['2015-01-02 00:00:00', '2015-01-01 00:00:00', true],
+		];
 	}
 
 /**
