@@ -152,16 +152,33 @@ class ContentTest extends BaserTestCase {
 
 /**
  * サブサイトのプレフィックスがついていない純粋なURLを取得
+ *
+ * @dataProvider pureUrlDataProvider
  */
-	public function testPureUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testPureUrl($site, $siteId, $expected) {
+		$result = $this->Content->pureUrl($site, $siteId);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function pureUrlDataProvider() {
+		return[
+			['', '', '/'],
+			['', '1', '/'],
+			['content', '', '/content'],
+			['content', '1', '/content'],
+		];
 	}
 
 /**
  * Content data を作成して保存する
  */
 	public function testCreateContent() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$content = ['title' => 'hoge', 'parent_id' => ''];
+		$type = 'Content';
+		$result = $this->Content->createContent($content, '', $type);
+
+		$this->assertEquals($content['title'], $result['Content']['title']);
+		$this->assertEquals($type, $result['Content']['type']);
 	}
 
 /**
@@ -285,7 +302,6 @@ class ContentTest extends BaserTestCase {
 	}
 
 /**
- * ゴミ箱より元に戻す
  */
 	public function testTrashReturn() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
