@@ -199,6 +199,7 @@ class BlogController extends BlogAppController {
 				// BlogConfig で設定できるようにする
 				$blogContent = $this->BlogContent->find('first', ['order' => 'BlogContent.id', 'recirsive' => -1]);
 				$listCount = $blogContent['BlogContent']['feed_count'];
+				$this->blogContent = $blogContent;
 			}
 			$this->set('channel', $channel);
 			$this->layout = 'default';
