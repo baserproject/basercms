@@ -24,8 +24,8 @@ function transformRSS($data) {
 	$blogHelper = new BlogHelper($view);
 	return [
 		'title' => $data['BlogPost']['name'],
-		'link' => '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
-		'guid' => '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
+		'link' => '/' . $data['BlogContent']['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
+		'guid' => '/' . $data['BlogContent']['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
 		'category' => $data['BlogCategory']['title'],
 		'description' => $blogHelper->removeCtrlChars($data['BlogPost']['content'] . $data['BlogPost']['detail']),
 		'pubDate' => $data['BlogPost']['posts_date']
