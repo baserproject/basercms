@@ -155,8 +155,8 @@ class ContentTest extends BaserTestCase {
  *
  * @dataProvider pureUrlDataProvider
  */
-	public function testPureUrl($site, $siteId, $expected) {
-		$result = $this->Content->pureUrl($site, $siteId);
+	public function testPureUrl($url, $siteId, $expected) {
+		$result = $this->Content->pureUrl($url, $siteId);
 		$this->assertEquals($expected, $result);
 	}
 
@@ -164,8 +164,8 @@ class ContentTest extends BaserTestCase {
 		return[
 			['', '', '/'],
 			['', '1', '/'],
-			['content', '', '/content'],
-			['content', '1', '/content'],
+			['/m/content', '', '/m/content'],
+			['/m/content', '1', '/content'],
 		];
 	}
 
