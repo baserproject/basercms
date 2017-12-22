@@ -23,8 +23,7 @@ function transformRSS($data) {
 	$view = new View();
 	$blogHelper = new BlogHelper($view);
 	$bcBaserhelper = new BcBaserHelper($view);
-	$site = BcSite::findById($data['BlogContent']['Content']['site_id']);
-	$url = $bcBaserhelper->getContentsUrl($data['BlogContent']['Content']['url'], true, $site->useSubDomain) . 'archives/' . $data['BlogPost']['no'];
+	$url = $bcBaserhelper->getContentsUrl() . 'archives/' . $data['BlogPost']['no'];
 	return [
 		'title' => $data['BlogPost']['name'],
 		'link' => $url,
