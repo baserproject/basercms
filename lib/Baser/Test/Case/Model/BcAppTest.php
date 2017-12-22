@@ -924,8 +924,9 @@ class BcAppTest extends BaserTestCase {
  * @dataProvider checkDataAfterThanDataProvider
  */
 	public function testCheckDateAfterThan($check, $target, $expected) {
-		$target = $this->BcApp->data[$this->BcApp->alias][$target] = $target;
-		$result = $this->BcApp->checkDateAfterThan($check, $target);
+		$this->BcApp->data[$this->BcApp->alias]['target'] = $target;
+		$data['check'] = $check;
+		$result = $this->BcApp->checkDateAfterThan($data, 'target');
 		$this->assertEquals($expected, $result);
 	}
 
