@@ -85,9 +85,21 @@ class ContentTest extends BaserTestCase {
 
 /**
  * 一意の name 値を取得する
+ *
+ * @dataProvider getUniqueNameDataProvider
  */
-	public function testGetUniqueName() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetUniqueName($name, $parent_id, $expected) {
+		$result = $this->Content->getUniqueName($name, $parent_id);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getUniqueNameDataProvider(){
+		return[
+			['', 0, ''],
+			['hoge', 0, 'hoge'],
+			['index', 0, 'index'],
+			['index', 1, 'index_2'],
+		];
 	}
 
 /**
