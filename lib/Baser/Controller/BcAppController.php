@@ -416,6 +416,7 @@ class BcAppController extends Controller {
 
 		if($isRequestView) {
 			// テーマ、レイアウトとビュー用サブディレクトリの設定
+			$this->setAdminTheme();
 			$this->setTheme();
 			if (isset($this->request->params['prefix']) && $this->name != 'CakeError') {
 				$this->layoutPath = str_replace('_', '/', $this->request->params['prefix']);
@@ -456,21 +457,37 @@ class BcAppController extends Controller {
  * @return void
  */
 	protected function setTheme() {
-		$theme = '';
-		if(!empty($this->request->params['Site']['theme'])) {
-			$theme = $this->request->params['Site']['theme'];
-		} elseif (!empty($this->siteConfigs['theme'])) {
-			$theme = $this->siteConfigs['theme'];
-		} else {
-			$theme = Configure::read('BcApp.adminTheme');
+		if (!empty($this->request->params['Site']['theme'])) {
+			$this->theme = $this->request->params['Site']['theme'];
+			return;
 		}
+
+		$theme = Configure::read('BcApp.adminTheme');
+		if (!empty($this->siteConfigs['theme'])) {
+			$theme = $this->siteConfigs['theme'];
+
+			$site = BcSite::findCurrent();
+			if (!empty($site->theme)) {
+				$theme = $site->theme;
+			}
+		}
+
+		$this->theme = $theme;
+	}
+
+/**
+ * 管理画面用テーマをセットする
+ *
+ * @return void
+ */
+	protected function setAdminTheme() {
+		$adminTheme = Configure::read('BcApp.adminTheme');
+
 		if (!empty($this->siteConfigs['admin_theme'])) {
 			$adminTheme = $this->siteConfigs['admin_theme'];
-		} else {
-			$adminTheme = Configure::read('BcApp.adminTheme');
-			$this->siteConfigs['admin_theme'] = $adminTheme;
 		}
-		$this->theme = $theme;
+
+		$this->siteConfigs['admin_theme'] = $adminTheme;
 		$this->adminTheme = $adminTheme;
 	}
 
