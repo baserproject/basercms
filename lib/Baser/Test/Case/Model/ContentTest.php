@@ -279,7 +279,11 @@ class ContentTest extends BaserTestCase {
  * タイプよりコンテンツを取得する
  */
 	public function testFindByType() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertEquals(8, $this->Content->findByType('Blog.BlogContent')['Content']['id']);	// entityId指定なし
+		$this->assertEquals(17, $this->Content->findByType('Blog.BlogContent', 2)['Content']['id']);	// entityId指定あり
+		$this->assertEquals(34, $this->Content->findByType('Page', 12)['Content']['id']);	// プラグイン指定なし
+		$this->assertEmpty($this->Content->findByType('Blog.BlogComment'));	// 存在しないタイプ
+		$this->assertEmpty($this->Content->findByType(false));	// 異常系
 	}
 
 	/**
