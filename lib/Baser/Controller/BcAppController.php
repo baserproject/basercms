@@ -453,42 +453,51 @@ class BcAppController extends Controller {
 
 /**
  * テーマをセットする
+ * $this->theme にセットする事
+ * 
+ * 優先順位
+ * $this->request->params['Site']['theme'] > $site->theme > $this->siteConfigs['theme'] > Configure::read('BcApp.adminTheme')
  *
  * @return void
  */
 	protected function setTheme() {
+		$theme = null;
 		if (!empty($this->request->params['Site']['theme'])) {
-			$this->theme = $this->request->params['Site']['theme'];
-			return;
+			$theme = $this->request->params['Site']['theme'];
 		}
-
-		$theme = Configure::read('BcApp.adminTheme');
-		if (!empty($this->siteConfigs['theme'])) {
-			$theme = $this->siteConfigs['theme'];
-
+		if(!$theme) {
 			$site = BcSite::findCurrent();
 			if (!empty($site->theme)) {
 				$theme = $site->theme;
 			}
 		}
-
+		if (!$theme && !empty($this->siteConfigs['theme'])) {
+			$theme = $this->siteConfigs['theme'];
+		}
+		if(!$theme) {
+			$theme = Configure::read('BcApp.adminTheme');	
+		}
 		$this->theme = $theme;
 	}
 
 /**
  * 管理画面用テーマをセットする
+ * $this->adminTheme にセットする事
+ * 
+ * 優先順位
+ * $this->siteConfigs['admin_theme'] > Configure::read('BcApp.adminTheme')
  *
  * @return void
  */
 	protected function setAdminTheme() {
-		$adminTheme = Configure::read('BcApp.adminTheme');
-
+		$adminTheme = null;
 		if (!empty($this->siteConfigs['admin_theme'])) {
 			$adminTheme = $this->siteConfigs['admin_theme'];
 		}
-
-		$this->siteConfigs['admin_theme'] = $adminTheme;
-		$this->adminTheme = $adminTheme;
+		if(!$adminTheme) {
+			$adminTheme = Configure::read('BcApp.adminTheme');	
+		}
+		$this->adminTheme = $this->siteConfigs['admin_theme'] = $adminTheme;
 	}
 
 /**
