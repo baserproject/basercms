@@ -277,13 +277,28 @@ class ContentTest extends BaserTestCase {
 
 /**
  * タイプよりコンテンツを取得する
+ *
+ * @param string $type コンテントのタイプ
+ * @param int $entityId
+ * @param mixed $expects 期待するコンテントのid (存在しない場合は空配列)
+ * @dataProvider findByTypeDataProvider
  */
-	public function testFindByType() {
-		$this->assertEquals(8, $this->Content->findByType('Blog.BlogContent')['Content']['id']);	// entityId指定なし
-		$this->assertEquals(17, $this->Content->findByType('Blog.BlogContent', 2)['Content']['id']);	// entityId指定あり
-		$this->assertEquals(34, $this->Content->findByType('Page', 12)['Content']['id']);	// プラグイン指定なし
-		$this->assertEmpty($this->Content->findByType('Blog.BlogComment'));	// 存在しないタイプ
-		$this->assertEmpty($this->Content->findByType(false));	// 異常系
+	public function testFindByType($type, $entityId, $expects) {
+		$result = $this->Content->findByType($type, $entityId);
+		if ($result) {
+			$result = $result['Content']['id'];
+		}
+		$this->assertEquals($expects, $result);
+	}
+
+	public function findByTypeDataProvider() {
+ 		return [
+ 			['Blog.BlogContent', null, 8],	// entityId指定なし
+ 			['Blog.BlogContent', 2, 17],	// entityId指定あり
+ 			['Page', 12, 34],				// プラグイン指定なし
+			['Blog.BlogComment', null, []],	// 存在しないタイプ
+			[false, null, []]				// 異常系
+		];
 	}
 
 	/**
