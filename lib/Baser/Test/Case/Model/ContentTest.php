@@ -352,11 +352,49 @@ class ContentTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * コンテンツIDよりURLを取得する
- */
-	public function testGetUrlById() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	/**
+	 * コンテンツIDよりURLを取得する
+	 *
+	 * @param int $id コンテンツID
+	 * @param bool $full http からのフルのURLかどうか
+	 * @param string $expects 期待するURL
+	 * @dataProvider getUrlByIdDataProvider
+	 */
+	public function testGetUrlById($id, $full, $expects) {
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+
+		$result = $this->Content->getUrlById($id, $full);
+		$this->assertEquals($expects, $result);
+
+		Configure::write('BcEnv.siteUrl', $siteUrl);
+	}
+
+	public function getUrlByIdDataProvider() {
+		return [
+			// ノーマルURL
+			[1, false, '/'],
+			[2, false, '/m/'],
+			[3, false, '/'],									// 同一URL
+			[4, false, '/'],									// /index
+			[5, false, '/service/'],
+			[7, false, '/service/contact/'],
+			[14, false, '/'],									// サブドメイン
+			[16, false, '/service/contact/'],					// 同一URL
+			[19, false, '/news/'],								// サブドメイン
+			[24, false, '/service/service1'],					// サブドメイン
+			// フルURL
+			[1, true, 'http://main.com/'],
+			[2, true, 'http://main.com/m/'],
+			[3, true, 'http://main.com/'],						// 同一URL
+			[4, true, 'http://main.com/'],						// /index
+			[5, true, 'http://main.com/service/'],
+			[7, true, 'http://main.com/service/contact/'],
+			[14, true, 'http://sub.main.com/'],					// サブドメイン
+			[16, true, 'http://main.com/service/contact/'],		// 同一URL
+			[19, true, 'http://sub.main.com/news/'],			// サブドメイン
+			[24, true, 'http://sub.main.com/service/service1']	// サブドメイン
+		];
 	}
 
 /**
