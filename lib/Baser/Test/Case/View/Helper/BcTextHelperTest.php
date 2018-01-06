@@ -71,9 +71,18 @@ class BcTextHelperTest extends BaserTestCase {
 		$this->assertEquals($expect, $result);
 	}
 
-	public function testBooleanExists() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+/**
+ * boolean型を有無で出力するヘルパーのテスト
+ *
+ * */
+	public function testBooleanExists(){
+		$result = $this->Helper->booleanExists(true);
+		$this->assertEquals("有", $result);
+
+		$result = $this->Helper->booleanExists(false);
+		$this->assertEquals("無", $result);
 	}
+
 /**
  * boolean型用のリストを有無で出力するヘルパーのテスト
  * */

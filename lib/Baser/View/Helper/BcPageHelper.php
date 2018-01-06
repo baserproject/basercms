@@ -75,6 +75,7 @@ class BcPageHelper extends Helper {
 
 /**
  * ページリストを取得する
+ * 戻り値は、固定ページ、または、コンテンツフォルダが対象
  * 
  * @param int $pageCategoryId カテゴリID
  * @param int $recursive 関連データの階層

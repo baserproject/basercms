@@ -41,7 +41,6 @@ composer.lock
 gulpfile.js
 node_modules/
 package.json
-volumes/*
 /docker-compose.yml
 /Dockerfile
-
+/volumes/*

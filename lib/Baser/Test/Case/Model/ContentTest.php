@@ -47,13 +47,26 @@ class ContentTest extends BaserTestCase {
 	}
 
 /**
+ * サイト設定にて、エイリアスを利用してメインサイトと自動連携するオプションを利用時に、
  * 関連するサブサイトで、関連コンテンツを作成する際、同階層に重複名称のコンテンツがないか確認する
  *
- * 新規の際は、存在するだけでエラー
- * 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ * 	- 新規の際は、存在するだけでエラー
+ * 	- 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ *
+ * @dataProvider duplicateRelatedSiteContentDataProvider
  */
-	public function testDuplicateRelatedSiteContent() {
+	public function testDuplicateRelatedSiteContent($data, $expected) {
+		$this->Content->set(['Content' => $data]);
+		$this->assertEquals($expected, $this->Content->duplicateRelatedSiteContent(['name' => $data['name']]));
+	}
 
+	public function duplicateRelatedSiteContentDataProvider() {
+		return [
+			[['id' => null, 'name' => 'hoge', 'parent_id' => 5, 'site_id' => 0], true],		// 新規・存在しない
+			[['id' => null, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], false],		// 新規・存在する（alias_id / main_site_content_id あり）
+			[['id' => 4, 'name' => 'index', 'parent_id' => 1, 'site_id' => 0], true],		// 既存・存在する（alias_id / main_site_content_id あり）
+			[['id' => null, 'name' => null, 'parent_id' => null, 'site_id' => 6], true],	// メインサイトでない場合はエラーとしない
+		];
 	}
 
 /**
@@ -72,9 +85,21 @@ class ContentTest extends BaserTestCase {
 
 /**
  * 一意の name 値を取得する
+ *
+ * @dataProvider getUniqueNameDataProvider
  */
-	public function testGetUniqueName() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetUniqueName($name, $parent_id, $expected) {
+		$result = $this->Content->getUniqueName($name, $parent_id);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function getUniqueNameDataProvider(){
+		return[
+			['', 0, ''],
+			['hoge', 0, 'hoge'],
+			['index', 0, 'index'],
+			['index', 1, 'index_2'],
+		];
 	}
 
 /**
@@ -139,16 +164,33 @@ class ContentTest extends BaserTestCase {
 
 /**
  * サブサイトのプレフィックスがついていない純粋なURLを取得
+ *
+ * @dataProvider pureUrlDataProvider
  */
-	public function testPureUrl() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testPureUrl($url, $siteId, $expected) {
+		$result = $this->Content->pureUrl($url, $siteId);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function pureUrlDataProvider() {
+		return[
+			['', '', '/'],
+			['', '1', '/'],
+			['/m/content', '', '/m/content'],
+			['/m/content', '1', '/content'],
+		];
 	}
 
 /**
  * Content data を作成して保存する
  */
 	public function testCreateContent() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$content = ['title' => 'hoge', 'parent_id' => ''];
+		$type = 'Content';
+		$result = $this->Content->createContent($content, '', $type);
+
+		$this->assertEquals($content['title'], $result['Content']['title']);
+		$this->assertEquals($type, $result['Content']['type']);
 	}
 
 /**
@@ -235,9 +277,28 @@ class ContentTest extends BaserTestCase {
 
 /**
  * タイプよりコンテンツを取得する
+ *
+ * @param string $type コンテントのタイプ
+ * @param int $entityId
+ * @param mixed $expects 期待するコンテントのid (存在しない場合は空配列)
+ * @dataProvider findByTypeDataProvider
  */
-	public function testFindByType() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testFindByType($type, $entityId, $expects) {
+		$result = $this->Content->findByType($type, $entityId);
+		if ($result) {
+			$result = $result['Content']['id'];
+		}
+		$this->assertEquals($expects, $result);
+	}
+
+	public function findByTypeDataProvider() {
+ 		return [
+ 			['Blog.BlogContent', null, 8],	// entityId指定なし
+ 			['Blog.BlogContent', 2, 17],	// entityId指定あり
+ 			['Page', 12, 34],				// プラグイン指定なし
+			['Blog.BlogComment', null, []],	// 存在しないタイプ
+			[false, null, []]				// 異常系
+		];
 	}
 
 	/**
@@ -272,7 +333,6 @@ class ContentTest extends BaserTestCase {
 	}
 
 /**
- * ゴミ箱より元に戻す
  */
 	public function testTrashReturn() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
@@ -292,11 +352,49 @@ class ContentTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
-/**
- * コンテンツIDよりURLを取得する
- */
-	public function testGetUrlById() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	/**
+	 * コンテンツIDよりURLを取得する
+	 *
+	 * @param int $id コンテンツID
+	 * @param bool $full http からのフルのURLかどうか
+	 * @param string $expects 期待するURL
+	 * @dataProvider getUrlByIdDataProvider
+	 */
+	public function testGetUrlById($id, $full, $expects) {
+		$siteUrl = Configure::read('BcEnv.siteUrl');
+		Configure::write('BcEnv.siteUrl', 'http://main.com');
+
+		$result = $this->Content->getUrlById($id, $full);
+		$this->assertEquals($expects, $result);
+
+		Configure::write('BcEnv.siteUrl', $siteUrl);
+	}
+
+	public function getUrlByIdDataProvider() {
+		return [
+			// ノーマルURL
+			[1, false, '/'],
+			[2, false, '/m/'],
+			[3, false, '/'],									// 同一URL
+			[4, false, '/'],									// /index
+			[5, false, '/service/'],
+			[7, false, '/service/contact/'],
+			[14, false, '/'],									// サブドメイン
+			[16, false, '/service/contact/'],					// 同一URL
+			[19, false, '/news/'],								// サブドメイン
+			[24, false, '/service/service1'],					// サブドメイン
+			// フルURL
+			[1, true, 'http://main.com/'],
+			[2, true, 'http://main.com/m/'],
+			[3, true, 'http://main.com/'],						// 同一URL
+			[4, true, 'http://main.com/'],						// /index
+			[5, true, 'http://main.com/service/'],
+			[7, true, 'http://main.com/service/contact/'],
+			[14, true, 'http://sub.main.com/'],					// サブドメイン
+			[16, true, 'http://main.com/service/contact/'],		// 同一URL
+			[19, true, 'http://sub.main.com/news/'],			// サブドメイン
+			[24, true, 'http://sub.main.com/service/service1']	// サブドメイン
+		];
 	}
 
 /**
@@ -392,9 +490,23 @@ class ContentTest extends BaserTestCase {
 
 /**
  * コピーする
+ *
+ * @dataProvider copyDataProvider
  */
-	public function testCopy() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testCopy($id, $entityId, $newTitle, $newAuthorId, $newSiteId, $titleExpected) {
+		$result = $this->Content->copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId)['Content'];
+		$this->assertEquals($result['site_id'], $newSiteId);
+		$this->assertEquals($result['entity_id'], $entityId);
+		$this->assertEquals($result['title'], $titleExpected);
+		$this->assertEquals($result['author_id'], $newAuthorId);
+
+	}
+
+	public function copyDataProvider(){
+		return[
+			[1, 2, 'hoge', 3, 4, 'hoge'],
+			[1, 2, '', 3, 4, 'baserCMS inc. [デモ]のコピー'],
+		];
 	}
 
 /**
@@ -448,14 +560,29 @@ class ContentTest extends BaserTestCase {
 
 /**
  * サイトルートコンテンツを取得する
+ *
+ * @param int $siteId
+ * @param mixed $expects 期待するコンテントのid (存在しない場合はから配列)
+ * @dataProvider getSiteRootDataProvider
  */
-	public function testGetSiteRoot() {
-		$this->loadFixtures('ContentStatusCheck');
-		$this->assertEquals(1, $this->Content->getSiteRoot(0)['Content']['id']);
-		$this->assertEquals(2, $this->Content->getSiteRoot(1)['Content']['id']);
-		$this->assertEquals(3, $this->Content->getSiteRoot(2)['Content']['id']);
-		$this->assertEmpty($this->Content->getSiteRoot(3));
+	public function testGetSiteRoot($siteId, $expects) {
+		$result = $this->Content->getSiteRoot($siteId);
+		if ($result) {
+			$result = $result['Content']['id'];
+		}
+
+		$this->assertEquals($expects, $result);
 	}
+
+	public function getSiteRootDataProvider() {
+		return [
+			[0, 1],
+			[1, 2],
+			[2, 3],
+			[7, []],		// 存在しないsiteId
+		];
+	}
+
 
 /**
  * 親のテンプレートを取得する

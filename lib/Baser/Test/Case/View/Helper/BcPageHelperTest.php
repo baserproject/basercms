@@ -13,6 +13,7 @@
 App::uses('BcAppView', 'View');
 App::uses('BcBaserHelper', 'View/Helper');
 App::uses('BcPageHelper', 'View/Helper');
+App::uses('BcContentsHelper', 'View/Helper');
 
 
 /**
@@ -22,6 +23,7 @@ App::uses('BcPageHelper', 'View/Helper');
  * @property BcPageHelper $BcPage
  * @property BcAppView $_View
  * @property BcBaserHelper $BcBaser
+ * @property BcContentsHelper $BcContents
  */
 class BcPageHelperTest extends BaserTestCase {
 	
@@ -70,6 +72,7 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->_View->helpers = ['BcBaser', 'BcPage'];
 		$this->_View->loadHelpers();
 		$this->Page = ClassRegistry::init('Page');
+		$this->BcContents = $this->_View->BcContents;
 		$this->BcBaser = $this->_View->BcBaser;
 		$this->BcPage  = $this->_View->BcPage;
 		$this->BcPage->BcBaser = $this->_View->BcBaser;
@@ -184,19 +187,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * ページカテゴリ間の次の記事へのリンクを出力する
- * 
- * @dataProvider getNextLinkDataProvider
- */
-	public function testNextLink($url, $title, $options, $expected) {
-		$this->BcPage->request = $this->_getRequest($url);
-		ob_start();
-		$this->BcPage->nextLink($title, $options);
-		$result = ob_get_clean();
-		$this->assertEquals($expected, $result);
-	}
-
 	public function getNextLinkDataProvider() {
 		return [
 			['/company', '', ['overCategory' => false], false], // PC
@@ -209,6 +199,11 @@ class BcPageHelperTest extends BaserTestCase {
 			['/s/sitemap', '次のページへ', ['overCategory' => true], '<a href="/s/contact/" class="next-link">次のページへ</a>'], // smartphone
 		];
 	}
+/**
+ * ページカテゴリ間の次の記事へのリンクを出力する
+ *
+ * 	public function testNextLink($url, $title, $options, $expected) { }
+ */
 
 /**
  * ページカテゴリ間の前の記事へのリンクを取得する
@@ -228,19 +223,6 @@ class BcPageHelperTest extends BaserTestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-/**
- * ページカテゴリ間の前の記事へのリンクを出力する
- *
- * @dataProvider getPrevLinkDataProvider
- */
-	public function testPrevLink($url, $title, $options, $expected) {
-		$this->BcPage->request = $this->_getRequest($url);
-		ob_start();
-		$this->BcPage->prevLink($title, $options);
-		$result = ob_get_clean();
-		$this->assertEquals($expected, $result);
-	}
-
 	public function getPrevLinkDataProvider() {
 		return [
 			['/company', '', ['overCategory' => false], false], // PC
@@ -253,6 +235,12 @@ class BcPageHelperTest extends BaserTestCase {
 			['/s/sitemap', '前のページへ', ['overCategory' => true], '<a href="/s/icons" class="prev-link">前のページへ</a>'], // smartphone
 		];
 	}
+
+/**
+ * ページカテゴリ間の前の記事へのリンクを出力する
+ *
+ * public function testPrevLink($url, $title, $options, $expected) { }
+ */
 
 /**
  * 固定ページのコンテンツを出力する
@@ -288,8 +276,23 @@ class BcPageHelperTest extends BaserTestCase {
 		];
 	}
 
-	public function testGetPageList() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+/**
+ * ページリストを取得する
+ * 
+ * @dataProvider getPageListDataProvider
+ */
+	public function testGetPageList($id, $expects) {
+		$result = $this->BcPage->GetPageList($id);
+		$result = Hash::extract($result, '{n}.Content.type');
+		$this->assertEquals($expects, $result);
+	}
+	
+	public function getPageListDataProvider() {
+		return [
+			[1, ['Page', 'Page', 'Page', 'Page', 'ContentFolder']],	// トップフォルダ
+			[21, ['Page', 'Page', 'Page', 'ContentFolder']],	// 下層フォルダ
+			[4, []]	// ターゲットがフォルダでない
+		];
 	}
 
 	public function test__construct() {
