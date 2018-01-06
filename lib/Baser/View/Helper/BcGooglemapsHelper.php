@@ -185,7 +185,7 @@ INFO_END;
  * 位置情報を取得する
  *
  * @param string $address
- * @return boolean
+ * @return array|boolean
  */
 	public function getLocation($address) {
 

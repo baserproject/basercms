@@ -89,7 +89,7 @@ class BcGmapsComponent extends Component {
 
 /**
  * Construct
- * 
+ * fixme 親クラスのコンストラクタを呼ばないとControllerへのアクセスができない。newしている箇所の修正も必要
  * @return void
  */
 	public function __construct() {
@@ -100,8 +100,6 @@ class BcGmapsComponent extends Component {
  * getInfoLocation
  *
  * @param string $address
- * @param string $city
- * @param string $state
  * @return boolean
  */
 	public function getInfoLocation($address) {
