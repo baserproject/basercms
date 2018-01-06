@@ -1671,6 +1671,7 @@ class Content extends AppModel {
 		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		$contents = $this->find('all', [
 			'conditions' => $conditions,
+			'order' => ['Content.id'],
 			'recursive' => 0
 		]);
 		$mainSite = $this->Site->getRootMain();
