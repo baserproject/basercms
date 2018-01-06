@@ -19,7 +19,7 @@ matrix:
     allow_failures:
         - php: hhvm
 
-dist: precise
+dist: trusty
 
 sudo: false
 
