@@ -20,6 +20,18 @@ define('MAPS_HOST', 'maps.googleapis.com');
 class BcGmapsComponent extends Component {
 
 /**
+ * 接続試行回数
+ * @var int
+ */
+	const RETRY_TIMES = 3;
+
+/**
+ * 接続試行の間隔(ミリ秒)
+ * @var int
+ */
+	const RETRY_INTERVAL = 250;
+
+/**
  * Latitude
  *
  * @var double
@@ -112,8 +124,13 @@ class BcGmapsComponent extends Component {
 		App::uses('Xml', 'Utility');
 
 		try {
-			$xmlArray = Xml::toArray(Xml::build($requestUrl));
-		} catch(XmlException $e) {
+			$xml = retry(self::RETRY_TIMES, function () use ($requestUrl) {
+				return Xml::build($requestUrl);
+			}, self::RETRY_INTERVAL);
+			$xmlArray = Xml::toArray($xml);
+		} catch (XmlException $e) {
+			return false;
+		} catch (\Exception $e) {
 			return false;
 		}
 
