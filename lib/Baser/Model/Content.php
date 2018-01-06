@@ -868,7 +868,7 @@ class Content extends AppModel {
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
-		return $this->find('first', ['conditions' => $conditions]);
+		return $this->find('first', ['conditions' => $conditions, 'order' => ['Content.id']]);
 	}
 
 /**
