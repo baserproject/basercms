@@ -2371,7 +2371,7 @@ END_FLASH;
 	 * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
 	 * @param array $options オプション（初期値 : array()）
 	 *	※ その他のパラメータについては、View::element() を参照
-	 * @return void
+	 * @return string
 	 */
 	public function getGoogleMaps($data = [], $options = []) {
 		return $this->getElement('google_maps', $data, $options);
