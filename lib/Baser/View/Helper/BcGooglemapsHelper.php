@@ -191,8 +191,9 @@ INFO_END;
 		App::uses('BcGmaps', 'Lib');
 		$apiKey = Configure::read('BcSite.google_maps_api_key');
 		$gmap = new BcGmaps($apiKey);
-		if ($gmap->getInfoLocation($address)) {
-			return ['latitude' => $gmap->getLatitude(), 'longitude' => $gmap->getLongitude()];
+		$result = $gmap->getInfoLocation($address);
+		if ($result) {
+			return ['latitude' => $result['latitude'], 'longitude' => $result['longitude']];
 		} else {
 			return false;
 		}

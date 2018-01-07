@@ -1093,8 +1093,7 @@ function retry($times, callable $callback, $interval = 0) {
 				throw $e;
 			}
 			$times--;
-
-			if ($intervalMs > 0) {
+			if ($interval > 0) {
 				usleep($interval * 1000);
 			}
 		}

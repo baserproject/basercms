@@ -18,9 +18,9 @@
 
 <?php /* フォーム開始タグ */ ?>
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create(null, array('url' => $this->BcBaser->getContentsUrl() . 'confirm')) ?>
+	<?php echo $this->Mailform->create(null, array('url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'confirm')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create(null, array('url' => $this->BcBaser->getContentsUrl() . 'submit')) ?>
+	<?php echo $this->Mailform->create(null, array('url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'submit')) ?>
 <?php endif; ?>
 
 <?php $this->Mailform->unlockField('MailMessage.mode') ?>

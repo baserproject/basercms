@@ -232,7 +232,7 @@ class BcContentsHelper extends AppHelper {
  * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
  * @return string URL
  */
-	public function getUrl($url, $full = false, $useSubDomain = false, $base = false) {
+	public function getUrl($url, $full = false, $useSubDomain = false, $base = true) {
 		return $this->_Content->getUrl($url, $full, $useSubDomain, $base);
 	}
 

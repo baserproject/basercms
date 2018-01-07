@@ -21,7 +21,7 @@ class BcGmaps extends CakeObject {
  * 接続試行回数
  * @var int
  */
-	const RETRY_TIMES = 3;
+	const RETRY_TIMES = 5;
 
 /**
  * 接続試行の間隔(ミリ秒)
@@ -33,7 +33,7 @@ class BcGmaps extends CakeObject {
  * APIのベースとなるURL 
  * @var string
  */
-	const GMAPS_API_BASE_URL = "http://maps.googleapis.com/maps/api/geocode/xml?";
+	const GMAPS_API_BASE_URL = "http://maps.googleapis.com/maps/api/geocode/xml";
 
 /**
  * API URL
@@ -41,105 +41,70 @@ class BcGmaps extends CakeObject {
  * @var string
  */
 	protected $_gmapsApiUrl;
-	
-/**
- * Latitude
- *
- * @var double
- */
-	protected $_latitude;
-
-/**
- * Longitude
- *
- * @var double
- */
-	protected $_longitude;
 
 /**
  * Construct
+ * 
+ * @param string $apiKey
  * @return void
  */
-	public function __construct($googleMapsApiKey) {
-		$apiKey = empty($this->Controller->siteConfig['google_maps_api_key']) ? "" : $this->Controller->siteConfig['google_maps_api_key'];
-		$this->_gmapsApiUrl = self::GMAPS_API_BASE_URL . "key=" . $apiKey;
+	public function __construct($apiKey) {
+		$this->_gmapsApiUrl = self::GMAPS_API_BASE_URL . "?key=" . $apiKey;
 	}
 
 /**
  * getInfoLocation
  *
  * @param string $address
- * @return boolean
+ * @return array|null
  */
 	public function getInfoLocation($address) {
 		if (!empty($address)) {
-			return $this->_connect($address);
+			return $this->_geocode($address);
 		}
-		return false;
+		return null;
 	}
 
 /**
  * connect to Google Maps
  *
  * @param string $param
- * @return array|boolean
+ * @return array|null
  */
-	protected function _connect($param) {
+	protected function _geocode($param) {
 		$requestUrl = $this->_gmapsApiUrl . "&address=" . urlencode($param);
-
 		App::uses('Xml', 'Utility');
-
 		try {
 			$xml = retry(self::RETRY_TIMES, function () use ($requestUrl) {
-				return Xml::build($requestUrl);
+				// @var SimpleXMLElement $reuslt
+				$result = Xml::build($requestUrl);
+				if(!empty($result->error_message)) {
+					throw new XmlException($result->error_message);
+				}
+				return $result;
 			}, self::RETRY_INTERVAL);
 			$xmlArray = Xml::toArray($xml);
 		} catch (XmlException $e) {
-			return false;
+			return null;
 		} catch (\Exception $e) {
-			return false;
+			return null;
 		}
 
 		$xml = $xmlArray['GeocodeResponse'];
-
 		$result = null;
 		if (!empty($xml['result']['geometry'])) {
 			$result = $xml['result'];
 		} elseif(!empty($xml['result'][0])) {
 			$result = $xml['result'][0];
 		}
-
-		if ($result) {
-			if (!isset($result['geometry']['location'])) {
-				return false;
-			}
+		
+		if (isset($result['geometry']['location'])) {
 			$point = $result['geometry']['location'];
 			if (!empty($point)) {
-				$this->_latitude = $point['lat'];
-				$this->_longitude = $point['lng'];
+				return ['latitude' => $point['lat'], 'longitude' => $point['lng']];
 			}
-			return ['latitude' => $point['lat'], 'longitude' => $point['lng']];
-		} else {
-			return false;
 		}
-	}
-	
-/**
- * get the Latitude coordinate
- *
- * @return double
- */
-	public function getLatitude() {
-		return $this->_latitude;
-	}
-
-/**
- * get the Longitude coordinate
- *
- * @return double
- */
-	public function getLongitude() {
-		return $this->_longitude;
+		return null;
 	}
 
 }

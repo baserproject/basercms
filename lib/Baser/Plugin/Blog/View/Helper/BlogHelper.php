@@ -257,13 +257,13 @@ class BlogHelper extends AppHelper {
  * @param bool $base ベースとなるURLを付与するかどうか
  * @return string ブログ記事のURL
  */
-	public function getPostLinkUrl($post, $base = false) {
+	public function getPostLinkUrl($post, $base = true) {
 		$this->setContent($post['BlogPost']['blog_content_id']);
 		if(empty($this->content['url'])) {
 			return false;
 		}
 		$site = BcSite::findByUrl($this->content['url']);
-		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($post['BlogPost']['blog_content_id']), !empty($site->useSubDomain));
+		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($post['BlogPost']['blog_content_id']), !empty($site->useSubDomain), false);
 		$url = $contentUrl . 'archives/' . $post['BlogPost']['no'];
 		if($base) {
 			return $this->url($url);
@@ -332,7 +332,7 @@ class BlogHelper extends AppHelper {
 				App::uses('HtmlHelper', 'View/Helper');
 				$this->Html = new HtmlHelper($this->_View);
 			}
-			$out .= '<p class="more">' . $this->Html->link($moreLink, $this->getContentsUrl($post['BlogPost']['blog_content_id']) . 'archives/' . $post['BlogPost']['no'] . '#post-detail', null, null) . '</p>';
+			$out .= '<p class="more">' . $this->Html->link($moreLink, $this->getContentsUrl($post['BlogPost']['blog_content_id'], false) . 'archives/' . $post['BlogPost']['no'] . '#post-detail', null, null) . '</p>';
 		}
 		return $out;
 	}
@@ -470,13 +470,12 @@ class BlogHelper extends AppHelper {
 		}
 		if (!empty($post['BlogTag'])) {
 			foreach ($post['BlogTag'] as $tag) {
-				$url = $this->getTagLinkUrl($crossingId, $tag);
 				if($options['link']) {
-					$tags[] = $this->BcBaser->getLink($tag['name'], $url);	
+					$tags[] = $this->BcBaser->getLink($tag['name'], $this->getTagLinkUrl($crossingId, $tag, false));	
 				} else {
 					$tags[] = [
 						'name' => $tag['name'],
-						'url' => $url
+						'url' => $this->getTagLinkUrl($crossingId, $tag)
 					];
 				}
 			}
@@ -505,7 +504,7 @@ class BlogHelper extends AppHelper {
 	public function getCategoryUrl($blogCategoryId, $options = []) {
 		$options = array_merge([
 			'named' => [],
-			'base' => false
+			'base' => true
 		], $options);
 		if (!isset($this->BlogCategory)) {
 			$this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
@@ -514,7 +513,7 @@ class BlogHelper extends AppHelper {
 		$blogContentId = $categoryPath[0]['BlogCategory']['blog_content_id'];
 		$this->setContent($blogContentId);
 		$site = BcSite::findByUrl($this->content['url']);
-		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain));
+		$contentUrl = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
 		$path = ['category'];
 		if ($categoryPath) {
 			foreach ($categoryPath as $category) {
@@ -1328,7 +1327,7 @@ class BlogHelper extends AppHelper {
  * @param bool $base
  * @return string
  */
-	public function getTagLinkUrl($blogContentId, $tag, $base = false) {
+	public function getTagLinkUrl($blogContentId, $tag, $base = true) {
 		$url = null;
 		if(isset($tag['BlogTag'])) {
 			$tag = $tag['BlogTag'];
@@ -1337,7 +1336,7 @@ class BlogHelper extends AppHelper {
 			$this->setContent($blogContentId);
 			if(!empty($this->content['url'])) {
 				$site = BcSite::findByUrl($this->content['url']);
-				$url = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain));
+				$url = $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), false);
 				$url = $url . 'archives/tag/' . $tag['name'];
 			}
 		}
@@ -1748,7 +1747,7 @@ class BlogHelper extends AppHelper {
  * @param $blogContentId ブログコンテンツID
  * @return string
  */
-	public function getContentsUrl($blogContentId, $base = false) {
+	public function getContentsUrl($blogContentId, $base = true) {
 		$this->setContent($blogContentId);
 		$site = BcSite::findByUrl($this->content['url']);
 		return $this->BcBaser->getContentsUrl($this->content['url'], !$this->isSameSiteBlogContent($blogContentId), !empty($site->useSubDomain), $base);
