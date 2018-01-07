@@ -2084,8 +2084,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals('example', $params['pass'][0]);
 		$this->assertEquals('test', $params['pass'][1]);
 		$this->assertEquals('value', $params['query']['name']);
-		$this->assertEquals('news/index/example/test?name=value', $params['url']); // _getRequest では、?name=valueが一部として扱われる
-		$this->assertEquals('/news/index/example/test?name=value', $params['here']);
+		$this->assertEquals('news/index/example/test', $params['url']); // _getRequest では、?name=valueが一部として扱われる
+		$this->assertEquals('/news/index/example/test', $params['here']);
 
 		$this->BcBaser->request = $this->_getRequest('/?name=value');
 		$params = $this->BcBaser->getParams();
@@ -2093,8 +2093,8 @@ class BcBaserHelperTest extends BaserTestCase {
 		$this->assertEquals(null, $params['plugin']);
 		$this->assertEquals(['index'], $params['pass']);
 		$this->assertEquals('value', $params['query']['name']);
-		$this->assertEquals('?name=value', $params['url']);
-		$this->assertEquals('/?name=value', $params['here']);
+		$this->assertEquals('', $params['url']);
+		$this->assertEquals('/', $params['here']);
 	}
 
 /**

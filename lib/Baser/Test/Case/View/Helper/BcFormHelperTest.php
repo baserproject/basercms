@@ -629,14 +629,15 @@ class BcFormHelperTest extends BaserTestCase {
 		$encoding = strtolower(Configure::read('App.encoding'));
 		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add']);
 		$expected = [
-			'form' => ['method' => 'post', 'action' => '/contacts/add', 'accept-charset' => $encoding, 'id' => 'ContactAddForm', 'novalidate' => 'novalidate'],
+			'form' => ['action' => '/contacts/add', 'novalidate' => 'novalidate', 'id' => 'ContactAddForm', 'method' => 'post', 'accept-charset' => $encoding],
 			'div' => ['style' => 'display:none;'],
 			['input' => ['type' => 'hidden', 'name' => '_method', 'value' => 'POST']],
 			['input' => [
-				'type' => 'hidden', 'name' => 'data[_Token][key]', 'value' => 'testKey', 'id'
+				'type' => 'hidden', 'name' => 'data[_Token][key]', 'value' => 'testKey', 'id', 'autocomplete' => 'off'
 			]],
 			'/div'
 		];
+		var_dump($result);
 		$this->assertTags($result, $expected);
 		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
 		$expected['form']['id'] = 'MyForm';
