@@ -4,10 +4,11 @@ CakePHP Hacking File List (Replace Or Override)
 - /app/Config/bootstrap.php
 - /app/Config/core.php
 - /app/Config/routes.php
-/app/webroot/index.php
-/app/webroot/test.php
+- /app/webroot/index.php
+- /app/webroot/test.php
+
 - /lib/Baser/Controller/PagesController.php
-	− [上書] /lib/Cake/Console/Templates/skel/PagesController.php を上書
+	− [上書] /lib/Cake/Console/Templates/skel/PagesController.php
 - /lib/Baser/Event/CakeEventManager.php
 	- [上書] /lib/Cake/Event/CakeEventManager.php
 - /lib/Baser/Lib/TestSuite/Fixture/CakeFixtureManager.php

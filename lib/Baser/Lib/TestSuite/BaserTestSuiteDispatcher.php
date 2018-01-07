@@ -25,7 +25,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
  *
  * @var array
  */
-	public $params = [
+	public $params = array(
 		'codeCoverage' => false,
 		'case' => null,
 		'core' => false,
@@ -33,14 +33,14 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		// >>>
 		'baser' => false,
 		// <<<
-		'app' => true,
+		'app' => false,
 		'plugin' => null,
 		'output' => 'html',
 		'show' => 'groups',
 		'show_passes' => false,
 		'filter' => false,
 		'fixture' => null
-	];
+	);
 
 /**
  * Static method to initialize the test runner, keeps global space clean
@@ -77,52 +77,6 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 	}
 
 /**
- * Runs a test case file.
- *
- * @return void
- */
-	protected function _runTestCase() {
-		$commandArgs = [
-			'case' => $this->params['case'],
-			'core' => $this->params['core'],
-			// CUSTOMIZE ADD 2014/07/02 ryuring
-			// >>>
-			'baser' => $this->params['baser'],
-			// <<<
-			'app' => $this->params['app'],
-			'plugin' => $this->params['plugin'],
-			'codeCoverage' => $this->params['codeCoverage'],
-			'showPasses' => !empty($this->params['show_passes']),
-			'baseUrl' => $this->_baseUrl,
-			'baseDir' => $this->_baseDir,
-		];
-
-		$options = [
-			'--filter', $this->params['filter'],
-			'--output', $this->params['output'],
-			'--fixture', $this->params['fixture']
-		];
-		restore_error_handler();
-
-		try {
-			self::time();
-			// CUSTOMIZE MODIFY 2014/07/02 ryuring
-			// >>>
-			/*$command = new CakeTestSuiteCommand('CakeTestLoader', $commandArgs);
-			$command->run($options);*/
-			// ---
-			$command = new BaserTestSuiteCommand('BaserTestLoader', $commandArgs);
-			$result = $command->run($options);
-			// <<<
-		} catch (MissingConnectionException $exception) {
-			ob_end_clean();
-			$baseDir = $this->_baseDir;
-			include CAKE . 'TestSuite' . DS . 'templates' . DS . 'missing_connection.php';
-			exit();
-		}
-	}
-
-/**
  * Parse URL params into a 'request'
  *
  * @return void
@@ -147,11 +101,56 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		//if (empty($this->params['plugin']) && empty($this->params['core'])) {
 		// ---
 		if (empty($this->params['plugin']) && empty($this->params['core']) && empty($this->params['baser'])) {
-		// <<<
+			// <<<
 			$this->params['app'] = true;
 		}
 		$this->params['baseUrl'] = $this->_baseUrl;
 		$this->params['baseDir'] = $this->_baseDir;
+	}
+	
+/**
+ * Runs a test case file.
+ *
+ * @return void
+ */
+	protected function _runTestCase() {
+		$commandArgs = array(
+			'case' => $this->params['case'],
+			'core' => $this->params['core'],
+			// CUSTOMIZE ADD 2014/07/02 ryuring
+			// >>>
+			'baser' => $this->params['baser'],
+			// <<<
+			'app' => $this->params['app'],
+			'plugin' => $this->params['plugin'],
+			'codeCoverage' => $this->params['codeCoverage'],
+			'showPasses' => !empty($this->params['show_passes']),
+			'baseUrl' => $this->_baseUrl,
+			'baseDir' => $this->_baseDir,
+		);
+
+		$options = array(
+			'--filter', $this->params['filter'],
+			'--output', $this->params['output'],
+			'--fixture', $this->params['fixture']
+		);
+		restore_error_handler();
+
+		try {
+			self::time();
+			// CUSTOMIZE MODIFY 2014/07/02 ryuring
+			// >>>
+			// $command = new CakeTestSuiteCommand('CakeTestLoader', $commandArgs);
+			// ---
+			$command = new BaserTestSuiteCommand('BaserTestLoader', $commandArgs);
+			// <<<
+			$command->run($options);
+		} catch (MissingConnectionException $exception) {
+			ob_end_clean();
+			$baseDir = $this->_baseDir;
+			include CAKE . 'TestSuite' . DS . 'templates' . DS . 'missing_connection.php';
+			exit();
+		}
 	}
 
 }

@@ -18,132 +18,6 @@ App::uses('Postgres', 'Model/Datasource/Database');
  * @package Baser.Model.Datasource.Database
  */
 class BcPostgres extends Postgres {
-// CUSTOMIZE ADD 2014/07/02 ryuirng
-// >>>
-/**
- * テーブル名のリネームステートメントを生成
- *
- * @param string $sourceName
- * @param string $targetName
- * @return string
- */
-	public function buildRenameTable($sourceName, $targetName) {
-		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
-	}
-
-/**
- * カラム名を変更する
- *
- * @param array $options [ table / new / old  ]
- * @return boolean
- */
-	public function renameColumn($options) {
-		extract($options);
-
-		if (!isset($table) || !isset($new) || !isset($old)) {
-			return false;
-		}
-
-		$table = $this->config['prefix'] . $table;
-		$sql = 'ALTER TABLE "' . $table . '" RENAME "' . $old . '" TO "' . $new . '"';
-		return $this->execute($sql);
-	}
-// <<<
-
-/**
- * {@inheritDoc}
- */
-	public function value($data, $column = null, $null = true) {
-		$value = parent::value($data, $column, $null);
-		if ($column === 'uuid' && is_scalar($data) && $data === '') {
-			return 'NULL';
-		}
-		// CUSTOMIZE ADD 2014/07/02 ryuring
-		// >>>
-		switch ($column) {
-			case 'date':
-			case 'datetime':
-			case 'timestamp':
-			case 'time':
-				// postgresql の場合、0000-00-00 00:00:00 を指定すると範囲外エラーとなる為
-				if ($data === '0000-00-00 00:00:00') {
-					return "'" . date('Y-m-d H:i:s', 0) . "'";
-				}
-			case 'integer':
-				// TreeBehavior::getPath() にて、引数 $id に、null、または、空文字を指定した場合に、
-				// Model::id の初期値 false に上書きされてしまう仕様の為、SQLエラーが発生してしまう。
-				if ($data === false) {
-					return 'NULL';
-				}
-		}
-		// <<<
-		return $value;
-	}
-
-/**
- * Gets the length of a database-native column description, or null if no length
- *
- * @param string $real Real database-layer column type (i.e. "varchar(255)")
- * @return integer An integer representing the length of the column
- */
-	public function length($real) {
-		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
-		if (preg_match('/^int([0-9]+)$/', $real, $maches)) {
-			return intval($maches[1]);
-		}
-		// <<<
-
-		if (!preg_match_all('/([\w\s]+)(?:\((\d+)(?:,(\d+))?\))?(\sunsigned)?(\szerofill)?/', $real, $result)) {
-			$col = str_replace([')', 'unsigned'], '', $real);
-			$limit = null;
-
-			if (strpos($col, '(') !== false) {
-				list($col, $limit) = explode('(', $col);
-			}
-			if ($limit !== null) {
-				return (int)$limit;
-			}
-			return null;
-		}
-
-		$types = [
-			'int' => 1, 'tinyint' => 1, 'smallint' => 1, 'mediumint' => 1, 'integer' => 1, 'bigint' => 1
-		];
-
-		list($real, $type, $length, $offset, $sign) = $result;
-		$typeArr = $type;
-		$type = $type[0];
-		$length = $length[0];
-		$offset = $offset[0];
-
-		$isFloat = in_array($type, ['dec', 'decimal', 'float', 'numeric', 'double']);
-		if ($isFloat && $offset) {
-			return $length . ',' . $offset;
-		}
-
-		if (($real[0] == $type) && (count($real) === 1)) {
-			return null;
-		}
-
-		if (isset($types[$type])) {
-			$length += $types[$type];
-			if (!empty($sign)) {
-				$length--;
-			}
-		} elseif (in_array($type, ['enum', 'set'])) {
-			$length = 0;
-			foreach ($typeArr as $key => $enumValue) {
-				if ($key === 0) {
-					continue;
-				}
-				$tmpLength = strlen($enumValue);
-				if ($tmpLength > $length) {
-					$length = $tmpLength;
-				}
-			}
-		}
-		return (int)$length;
-	}
 
 /**
  * Returns an array of the fields in given table name.
@@ -162,18 +36,30 @@ class BcPostgres extends Postgres {
 		$fields = $this->__describe($table);
 		// <<<
 		$cols = null;
+		$hasPrimary = false;
 
 		if ($fields === null) {
 			// CUSTOMIZE MODIFY 2013/08/16 ryuring
 			// udt_name フィールドを追加
 			// >>>
-			// $cols = $this->_execute(
-			// 	"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, is_nullable AS null,
-			// 		column_default AS default, ordinal_position AS position, character_maximum_length AS char_length,
-			// 		character_octet_length AS oct_length FROM information_schema.columns
-			// 	WHERE table_name = ? AND table_schema = ?  ORDER BY position",
-			// 	array($table, $this->config['schema'])
-			// );
+			/*$cols = $this->_execute(
+				'SELECT DISTINCT table_schema AS schema,
+					column_name AS name,
+					data_type AS type,
+					is_nullable AS null,
+					column_default AS default,
+					ordinal_position AS position,
+					character_maximum_length AS char_length,
+					character_octet_length AS oct_length,
+					pg_get_serial_sequence(attr.attrelid::regclass::text, attr.attname) IS NOT NULL AS has_serial
+				FROM information_schema.columns c
+				INNER JOIN pg_catalog.pg_namespace ns ON (ns.nspname = table_schema)
+				INNER JOIN pg_catalog.pg_class cl ON (cl.relnamespace = ns.oid AND cl.relname = table_name)
+				LEFT JOIN pg_catalog.pg_attribute attr ON (cl.oid = attr.attrelid AND column_name = attr.attname)
+				WHERE table_name = ? AND table_schema = ? AND table_catalog = ?
+				ORDER BY ordinal_position',
+				array($table, $this->config['schema'], $this->config['database'])
+			);*/
 			// ---
 			$cols = $this->_execute(
 				"SELECT DISTINCT table_schema AS schema, column_name AS name, data_type AS type, udt_name AS udt, is_nullable AS null," .
@@ -216,7 +102,7 @@ class BcPostgres extends Postgres {
 				if (empty($length)) {
 					$length = null;
 				}
-				$fields[$c->name] = [
+				$fields[$c->name] = array(
 					'type' => $this->column($type),
 					'null' => ($c->null === 'NO' ? false : true),
 					'default' => preg_replace(
@@ -224,23 +110,30 @@ class BcPostgres extends Postgres {
 						"$1",
 						preg_replace('/::.*/', '', $c->default)
 					),
-					'length' => $length
-				];
+					'length' => $length,
+				);
 				// CUSTOMIZE ADD 2013/08/16 ryuring
 				// >>>
 				if (!$fields[$c->name]['length'] && $fields[$c->name]['type'] == 'integer') {
 					$fields[$c->name]['length'] = 8;
 				}
 				// <<<
-				if ($model instanceof Model) {
-					if ($c->name === $model->primaryKey) {
-						$fields[$c->name]['key'] = 'primary';
-						if (
-							$fields[$c->name]['type'] !== 'string' &&
-							$fields[$c->name]['type'] !== 'uuid'
-						) {
-							$fields[$c->name]['length'] = 11;
-						}
+				// Serial columns are primary integer keys
+				if ($c->has_serial) {
+					$fields[$c->name]['key'] = 'primary';
+					$fields[$c->name]['length'] = 11;
+					$hasPrimary = true;
+				}
+				if ($hasPrimary === false &&
+					$model instanceof Model &&
+					$c->name === $model->primaryKey
+				) {
+					$fields[$c->name]['key'] = 'primary';
+					if (
+						$fields[$c->name]['type'] !== 'string' &&
+						$fields[$c->name]['type'] !== 'uuid'
+					) {
+						$fields[$c->name]['length'] = 11;
 					}
 				}
 				if (
@@ -290,6 +183,91 @@ class BcPostgres extends Postgres {
 	}
 
 /**
+ * Gets the length of a database-native column description, or null if no length
+ *
+ * @param string $real Real database-layer column type (i.e. "varchar(255)")
+ * @return integer An integer representing the length of the column
+ */
+	public function length($real) {
+		// >>> CUSTOMIZE ADD 2012/04/23 ryuring
+		if (preg_match('/^int([0-9]+)$/', $real, $maches)) {
+			return intval($maches[1]);
+		}
+		// <<<
+		$col = $real;
+		if (strpos($real, '(') !== false) {
+			list($col, $limit) = explode('(', $real);
+		}
+		if ($col === 'uuid') {
+			return 36;
+		}
+		return parent::length($real);
+	}
+
+/**
+ * {@inheritDoc}
+ */
+	public function value($data, $column = null, $null = true) {
+		$value = parent::value($data, $column, $null);
+		if ($column === 'uuid' && is_scalar($data) && $data === '') {
+			return 'NULL';
+		}
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
+		switch ($column) {
+			case 'date':
+			case 'datetime':
+			case 'timestamp':
+			case 'time':
+				// postgresql の場合、0000-00-00 00:00:00 を指定すると範囲外エラーとなる為
+				if ($data === '0000-00-00 00:00:00') {
+					return "'" . date('Y-m-d H:i:s', 0) . "'";
+				}
+			case 'integer':
+				// TreeBehavior::getPath() にて、引数 $id に、null、または、空文字を指定した場合に、
+				// Model::id の初期値 false に上書きされてしまう仕様の為、SQLエラーが発生してしまう。
+				if ($data === false) {
+					return 'NULL';
+				}
+		}
+		// <<<
+		return $value;
+	}
+
+// CUSTOMIZE ADD 2014/07/02 ryuirng
+// >>>
+	/**
+	 * テーブル名のリネームステートメントを生成
+	 *
+	 * @param string $sourceName
+	 * @param string $targetName
+	 * @return string
+	 */
+	public function buildRenameTable($sourceName, $targetName) {
+		return "ALTER TABLE " . $sourceName . " RENAME TO " . $targetName;
+	}
+
+	/**
+	 * カラム名を変更する
+	 *
+	 * @param array $options [ table / new / old  ]
+	 * @return boolean
+	 */
+	public function renameColumn($options) {
+		extract($options);
+
+		if (!isset($table) || !isset($new) || !isset($old)) {
+			return false;
+		}
+
+		$table = $this->config['prefix'] . $table;
+		$sql = 'ALTER TABLE "' . $table . '" RENAME "' . $old . '" TO "' . $new . '"';
+		return $this->execute($sql);
+	}
+// <<<
+// CUSTOMIZE ADD 2014/07/02 ryuring
+// >>>
+/**
  * DboPostgresのdescribeメソッドを呼び出さずにキャッシュを読み込む為に利用
  * Datasource::describe と同じ（一部ハック）
  * 
@@ -326,8 +304,6 @@ class BcPostgres extends Postgres {
 		return null;
 	}
 	
-// CUSTOMIZE ADD 2014/07/02 ryuring
-// >>>
 /**
  * シーケンスを更新する
  */

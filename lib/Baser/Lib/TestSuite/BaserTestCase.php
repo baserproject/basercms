@@ -117,7 +117,7 @@ class BaserTestCase extends CakeTestCase {
 /**
  * Class BcEventListenerMock
  */
-class BcEventListenerMock extends Object implements CakeEventListener {
+class BcEventListenerMock extends CakeObject implements CakeEventListener {
 	public $events = [];
 	/**
 	 * BcEventListenerMock constructor.

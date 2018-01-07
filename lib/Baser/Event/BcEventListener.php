@@ -26,7 +26,7 @@
  * public function beforeRender($event) {}
  * 
  */
-class BcEventListener extends Object implements CakeEventListener {
+class BcEventListener extends CakeObject implements CakeEventListener {
 
 /**
  * 登録イベント

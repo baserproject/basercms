@@ -21,7 +21,7 @@
  * 登録されたイベントリスナーが存在しない場合には、falseを を返す。
  * 存在する場合には、生成された CakeEvent を返す。
  */
-class BcEventDispatcher extends Object {
+class BcEventDispatcher extends CakeObject {
 
 /**
  * dispatch

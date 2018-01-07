@@ -15,7 +15,7 @@
  *
  * @package Baser.Lib
  */
-class BcGmaps extends Object {
+class BcGmaps extends CakeObject {
 
 /**
  * 接続試行回数
