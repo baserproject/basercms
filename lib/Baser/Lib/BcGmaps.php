@@ -21,7 +21,7 @@ class BcGmaps extends Object {
  * 接続試行回数
  * @var int
  */
-	const RETRY_TIMES = 3;
+	const RETRY_TIMES = 5;
 
 /**
  * 接続試行の間隔(ミリ秒)
@@ -76,7 +76,12 @@ class BcGmaps extends Object {
 		App::uses('Xml', 'Utility');
 		try {
 			$xml = retry(self::RETRY_TIMES, function () use ($requestUrl) {
-				return Xml::build($requestUrl);
+				// @var SimpleXMLElement $reuslt
+				$result = Xml::build($requestUrl);
+				if(!empty($result->error_message)) {
+					throw new XmlException($result->error_message);
+				}
+				return $result;
 			}, self::RETRY_INTERVAL);
 			$xmlArray = Xml::toArray($xml);
 		} catch (XmlException $e) {
