@@ -79,7 +79,7 @@ if($this->request->data['Site']['use_subdomain']) {
 	$targetSite = BcSite::findByUrl($this->request->data['Content']['url']);
 	$previewUrl = $this->BcBaser->getUrl($targetSite->getPureUrl($this->request->data['Content']['url']) . '?host=' . $targetSite->host);
 } else {
-	$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->data['Content']['url'], false));
+	$previewUrl = $this->BcBaser->getUrl($this->BcContents->getUrl($this->request->data['Content']['url'], false, false, false));
 }
 
 $pureUrl = $this->BcContents->getPureUrl($this->request->data['Content']['url'], $this->request->data['Site']['id']);
