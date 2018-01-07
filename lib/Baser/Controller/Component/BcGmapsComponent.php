@@ -61,20 +61,7 @@ class BcGmapsComponent extends Component {
  * @return boolean
  */
 	public function getInfoLocation($address) {
-		if (!empty($address)) {
-			return $this->_connect($address);
-		}
-		return false;
-	}
-
-/**
- * connect to Google Maps
- *
- * @param string $param
- * @return boolean
- */
-	protected function _connect($param) {
-		$result = $this->_BcGmaps->getInfoLocation($param);
+		$result = $this->_BcGmaps->getInfoLocation($address);
 		if($result) {
 			$this->_latitude = $result['latitude'];
 			$this->_longitude = $result['longitude'];
