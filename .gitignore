@@ -44,3 +44,5 @@ package.json
 /docker-compose.yml
 /Dockerfile
 /volumes/*
+/.docker-sync/
+

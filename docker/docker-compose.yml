@@ -17,6 +17,7 @@ services:
     container_name: basercms
     image: baserproject/basercms
     volumes:
+#      - sync-volume:/var/www/html
       - .:/var/www/html:cached
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
@@ -24,3 +25,6 @@ services:
       - "80:80"
     depends_on:
       - basercms-database
+volumes:
+  sync-volume:
+    external: true
