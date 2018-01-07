@@ -23,14 +23,14 @@
 class BcViewEventDispatcher extends Object implements CakeEventListener {
 
 	public function implementedEvents() {
-		return array(
+		return [
 			'View.beforeRenderFile' => 'beforeRenderFile',
 			'View.afterRenderFile' => 'afterRenderFile',
 			'View.beforeRender' => 'beforeRender',
 			'View.afterRender' => 'afterRender',
 			'View.beforeLayout' => 'beforeLayout',
 			'View.afterLayout' => 'afterLayout'
-		);
+		];
 	}
 
 /**
@@ -59,7 +59,7 @@ class BcViewEventDispatcher extends Object implements CakeEventListener {
 			if(!method_exists($event->subject(), 'dispatchEvent')) {
 				return $event->data[1];
 			}
-			$currentEvent = $event->subject->dispatchEvent('afterRenderFile', $event->data, array('modParams' => 1));
+			$currentEvent = $event->subject->dispatchEvent('afterRenderFile', $event->data, ['modParams' => 1]);
 			if ($currentEvent) {
 				return $currentEvent->data[1];
 			}

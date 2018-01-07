@@ -55,13 +55,13 @@ class BaserTestShell extends TestShell {
 		if (empty($this->args)) {
 			return;
 		}
-		$params = array(
+		$params = [
 			'core' => false,
 			'baser' => false,
 			'app' => false,
 			'plugin' => null,
 			'output' => 'text',
-		);
+		];
 
 		if (strpos($this->args[0], '.php')) {
 			$category = $this->_mapFileToCategory($this->args[0]);
@@ -93,7 +93,7 @@ class BaserTestShell extends TestShell {
  * @param array $options list of options as constructed by _runnerOptions()
  * @return void
  */
-	protected function _run($runnerArgs, $options = array()) {
+	protected function _run($runnerArgs, $options = []) {
 		restore_error_handler();
 		restore_error_handler();
 
@@ -133,7 +133,7 @@ class BaserTestShell extends TestShell {
 
 		$this->out($title);
 		$i = 1;
-		$cases = array();
+		$cases = [];
 		foreach ($testCases as $testCaseFile => $testCase) {
 			$case = str_replace('Test.php', '', $testCase);
 			$this->out("[$i] $case");

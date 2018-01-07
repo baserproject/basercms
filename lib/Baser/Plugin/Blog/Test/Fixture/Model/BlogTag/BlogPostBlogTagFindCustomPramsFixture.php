@@ -9,15 +9,15 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $import = array('model' => 'Blog.BlogPost');
+	public $import = ['model' => 'Blog.BlogPost'];
 
 /**
  * Records
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'blog_content_id' => '1',
 			'no' => '1',
@@ -36,8 +36,8 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'eye_catch' => '',
 			'created' => '2017-07-08 13:10:09',
 			'modified' => '2017-07-09 19:47:20'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'blog_content_id' => '1',
 			'no' => '2',
@@ -56,8 +56,8 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'eye_catch' => '',
 			'created' => '2017-07-08 13:10:09',
 			'modified' => '2017-07-09 19:48:18'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'blog_content_id' => '1',
 			'no' => '3',
@@ -76,8 +76,8 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'eye_catch' => null,
 			'created' => '2017-07-09 19:47:52',
 			'modified' => '2017-07-09 19:47:52'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'blog_content_id' => '2',
 			'no' => '1',
@@ -96,8 +96,8 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'eye_catch' => null,
 			'created' => '2017-07-09 19:49:06',
 			'modified' => '2017-07-09 19:49:38'
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'blog_content_id' => '3',
 			'no' => '1',
@@ -116,7 +116,7 @@ class BlogPostBlogTagFindCustomPramsFixture extends CakeTestFixture {
 			'eye_catch' => null,
 			'created' => '2017-07-09 19:50:49',
 			'modified' => '2017-07-09 19:51:03'
-		),
-	);
+		],
+	];
 
 }

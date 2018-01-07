@@ -33,12 +33,12 @@ class BcThemeConfigReader implements ConfigReaderInterface {
  * 保存する変数
  * @var array
  */
-	static public $variables = array(
+	static public $variables = [
 		'title' => 'タイトル',
 		'description' => '説明',
 		'author' => '制作者',
 		'url' => 'URL'
-	);
+	];
 
 /**
  * コンストラクタ
@@ -71,7 +71,7 @@ class BcThemeConfigReader implements ConfigReaderInterface {
 
 		include $file;
 
-		$config = array();
+		$config = [];
 
 		foreach (self::$variables as $var => $name) {
 			if (!isset($$var)) {

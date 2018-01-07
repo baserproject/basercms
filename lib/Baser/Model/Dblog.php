@@ -29,30 +29,30 @@ class Dblog extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * belongsTo
  * 
  * @var array
  */
-	public $belongsTo = array(
-		'User' => array(
+	public $belongsTo = [
+		'User' => [
 			'className' => 'User',
 			'foreignKey' => 'user_id'
-	));
+	]];
 
 /**
  * バリデーション
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => "ログ内容を入力してください。",
-				'required' => true)
-		)
-	);
+				'required' => true]
+		]
+	];
 
 }

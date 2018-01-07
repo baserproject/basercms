@@ -21,9 +21,9 @@ if (Configure::read('BcRequest.isMaintenance')) {
 	return;
 }
 if (!empty($this->passedArgs['num'])) {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']);
+	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search', 'num' => $this->passedArgs['num']];
 } else {
-	$url = array('plugin' => null, 'controller' => 'search_indices', 'action' => 'search');
+	$url = ['plugin' => null, 'controller' => 'search_indices', 'action' => 'search'];
 }
 $folders = $this->BcContents->getContentFolderList($this->request->params['Site']['id'], ['excludeId' => $this->BcContents->getSiteRootId($this->request->params['Site']['id'])]);
 ?>
@@ -33,6 +33,6 @@ $folders = $this->BcContents->getContentFolderList($this->request->params['Site'
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
 	<?php echo $this->BcForm->input('SearchIndex.q') ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $this->request->params['Site']['id']]) ?>
-	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
+	<?php echo $this->BcForm->submit('検索', ['div' => false, 'class' => 'submit_button']) ?>
 	<?php echo $this->BcForm->end() ?>
 </div>

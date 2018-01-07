@@ -14,7 +14,7 @@
 
 <?php if ($dblogs): ?>
 	<?php $this->passedArgs['action'] = 'ajax_index' ?>
-	<?php $this->BcBaser->element('pagination', array('modules' => 4, 'options' => array('url' => array('action' => 'ajax_index')))) ?>
+	<?php $this->BcBaser->element('pagination', ['modules' => 4, 'options' => ['url' => ['action' => 'ajax_index']]]) ?>
 	<ul class="clear">
 		<?php foreach ($dblogs as $record): ?>
 			<li><span class="date"><?php echo $this->BcTime->format('Y.m.d', $record['Dblog']['created']) ?></span>
@@ -33,7 +33,7 @@
 	<?php if(BcUtil::isAdminUser()): ?>
 	<div class="submit clear">
 		<?php
-		$this->BcBaser->link('削除', array('action' => 'del'), array('class' => 'btn-gray button submit-token'), '最近の動きのログを削除します。いいですか？')
+		$this->BcBaser->link('削除', ['action' => 'del'], ['class' => 'btn-gray button submit-token'], '最近の動きのログを削除します。いいですか？')
 		?>
 	</div>
 	<?php endif ?>	

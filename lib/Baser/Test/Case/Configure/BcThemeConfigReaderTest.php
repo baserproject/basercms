@@ -19,6 +19,22 @@ App::uses('BcThemeConfigReader', 'Configure');
 class BcThemeConfigReaderTest extends BaserTestCase {
 
 /**
+ * 指定されたテーマ名の設定ファイルを読み込む
+ */
+	public function testRead() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 与えられた連想配列を設定ファイルにPHPコードとして保存する
+ * 追記ではなく上書きする
+ */
+	public function testDump() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
+/**
  * createContents
  *
  * @param array $data データの配列

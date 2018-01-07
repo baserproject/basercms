@@ -44,8 +44,8 @@ class BcFreezeHelperTest extends BaserTestCase {
  * @return void
  */
 	public function tearDown() {
-		parent::tearDown();
 		unset($this->BcFreeze);
+		parent::tearDown();
 	}
 	
 /**
@@ -446,6 +446,11 @@ class BcFreezeHelperTest extends BaserTestCase {
 		];
 	}
 
+	public function testFreeze() {
+		$this->assertFalse($this->BcFreeze->freezed);
+		$this->BcFreeze->freeze();
+		$this->assertTrue($this->BcFreeze->freezed);
+	}
 /**
  * 凍結時用のコントロールを取得する
  *

@@ -37,7 +37,7 @@ class BcGooglemapsHelper extends AppHelper {
  * 
  * @var array
  */
-	public $helpers = array('BcBaser');
+	public $helpers = ['BcBaser'];
 
 /**
  * 地図を表示するDOM ID
@@ -149,7 +149,7 @@ INFO_END;
 		}
 		$apiKey = empty($this->BcBaser->siteConfig['google_maps_api_key']) ? "" : $this->BcBaser->siteConfig['google_maps_api_key'];
 		if (empty($apiKey)) {
-			$adminLink = $this->BcBaser->getUrl(array("admin"=>true, 'plugin' => '', 'controller' => 'site_configs', 'action'=>'form'));
+			$adminLink = $this->BcBaser->getUrl(["admin"=>true, 'plugin' => '', 'controller' => 'site_configs', 'action'=>'form']);
 			echo 'Googleマップを利用するには、Google Maps APIのキーの登録が必要です。<a href="https://developers.google.com/maps/web/" target="_blank">キーを取得</a>して、<a href="' . $adminLink . '">システム管理</a>より設定してください。';
 		}
 		if($this->request->is('ssl')) {
@@ -185,13 +185,14 @@ INFO_END;
  * 位置情報を取得する
  *
  * @param string $address
- * @return boolean
+ * @return array|boolean
  */
 	public function getLocation($address) {
-
-		$gmap = new BcGmapsComponent();
+		App::uses('BcGmaps', 'Lib');
+		$apiKey = Configure::read('BcSite.google_maps_api_key');
+		$gmap = new BcGmaps($apiKey);
 		if ($gmap->getInfoLocation($address)) {
-			return array('latitude' => $gmap->getLatitude(), 'longitude' => $gmap->getLongitude());
+			return ['latitude' => $gmap->getLatitude(), 'longitude' => $gmap->getLongitude()];
 		} else {
 			return false;
 		}

@@ -683,12 +683,12 @@ class BcAppModel extends Model {
 	public function alphaNumeric($check) {
 		if (!$check[key($check)]) {
 			return true;
-		}
-		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
+ 		}
+ 		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
 			return true;
-		} else {
+ 		} else {
 			return false;
-		}
+ 		}
 	}
 
 /**

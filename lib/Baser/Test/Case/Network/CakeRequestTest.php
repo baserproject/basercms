@@ -28,6 +28,13 @@ class CakeRequestTest extends BaserTestCase {
 	];
 
 /**
+ * Get the host that the request was handled on.
+ */
+public function testHost() {
+	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+}
+
+/**
  * normalizedHere
  *
  * @param string $url URL

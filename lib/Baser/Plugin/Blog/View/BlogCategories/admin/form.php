@@ -13,6 +13,7 @@
 /**
  * [ADMIN] ブログカテゴリ フォーム
  */
+$this->BcBaser->js('Blog.admin/blog_categories/form', false);
 $owners = $this->BcForm->getControlSource('BlogCategory.owner_id');
 $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url'], true, $this->request->params['Site']['use_subdomain']) . 'archives/category/' . $this->BcForm->value('BlogCategory.name');
 ?>
@@ -20,21 +21,21 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($fullUrl, $fullUrl, array('target' => '_blank')) ?></strong></p>
+		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($fullUrl, $fullUrl, ['target' => '_blank']) ?></strong></p>
 	</div>
 <?php endif ?>
 
 
 <?php /* BlogContent.idを第一引数にしたいが為にURL直書き */ ?>
 <?php if ($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']))) ?>
+	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'add', $blogContent['BlogContent']['id']]]) ?>
 	<?php elseif ($this->action == 'admin_edit'): ?>
-	<?php echo $this->BcForm->create('BlogCategory', array('url' => array('controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false))) ?>
+	<?php echo $this->BcForm->create('BlogCategory', ['url' => ['controller' => 'blog_categories', 'action' => 'edit', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id'), 'id' => false]]) ?>
 <?php endif; ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
-<?php echo $this->BcForm->input('BlogCategory.id', array('type' => 'hidden')) ?>
+<?php echo $this->BcForm->input('BlogCategory.id', ['type' => 'hidden']) ?>
 
 <!-- form -->
 <div class="section">
@@ -44,15 +45,15 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.no', 'NO') ?></th>
 				<td class="col-input">
 					<?php echo $this->BcForm->value('BlogCategory.no') ?>
-					<?php echo $this->BcForm->input('BlogCategory.no', array('type' => 'hidden')) ?>
+					<?php echo $this->BcForm->input('BlogCategory.no', ['type' => 'hidden']) ?>
 				</td>
 			</tr>
 		<?php endif; ?>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.name', 'ブログカテゴリ名') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true)) ?>
-				<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->BcForm->input('BlogCategory.name', ['type' => 'text', 'size' => 40, 'maxlength' => 255, 'autofocus' => true]) ?>
+				<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
@@ -65,7 +66,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', 'ブログカテゴリタイトル') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('BlogCategory.title', array('type' => 'text', 'size' => 40, 'maxlength' => 255)) ?>
+				<?php echo $this->BcForm->input('BlogCategory.title', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('BlogCategory.title') ?>
 			</td>
 		</tr>
@@ -74,16 +75,16 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.parent_id', '親カテゴリ') ?></th>
 				<td class="col-input">
 					<?php
-					echo $this->BcForm->input('BlogCategory.parent_id', array(
+					echo $this->BcForm->input('BlogCategory.parent_id', [
 						'type' => 'select',
 						'options' => $parents,
-						'escape' => false))
+						'escape' => true])
 					?>
 			<?php echo $this->BcForm->error('BlogCategory.parent_id') ?>
 				</td>
 			</tr>
 		<?php else: ?>
-			<?php echo $this->BcForm->input('BlogCategory.parent_id', array('type' => 'hidden')) ?>
+			<?php echo $this->BcForm->input('BlogCategory.parent_id', ['type' => 'hidden']) ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->siteConfig['category_permission']): ?>
 			<tr>
@@ -91,16 +92,16 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<td class="col-input">
 					<?php if ($this->BcAdmin->isSystemAdmin()): ?>
 						<?php
-						echo $this->BcForm->input('BlogCategory.owner_id', array(
+						echo $this->BcForm->input('BlogCategory.owner_id', [
 							'type' => 'select',
 							'options' => $owners,
-							'empty' => '指定しない'))
+							'empty' => '指定しない'])
 						?>
-						<?php echo $this->BcHtml->image('admin/icn_help.png', array('id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+						<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpOwnerId', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 						<?php echo $this->BcForm->error('BlogCategory.owner_id') ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->request->data['BlogCategory']['owner_id'], $owners) ?>
-						<?php echo $this->BcForm->input('BlogCategory.owner_id', array('type' => 'hidden')) ?>
+						<?php echo $this->BcForm->input('BlogCategory.owner_id', ['type' => 'hidden']) ?>
 					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">
 						<ul>
@@ -118,10 +119,10 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <!-- button -->
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
+	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->action == 'admin_edit'): ?>
 		<?php
-		$this->BcBaser->link('削除', array('action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')), array('class' => 'submit-token button'), sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);
+		$this->BcBaser->link('削除', ['action' => 'delete', $blogContent['BlogContent']['id'], $this->BcForm->value('BlogCategory.id')], ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('BlogCategory.name')), false);
 		?>
 	<?php endif ?>
 </div>

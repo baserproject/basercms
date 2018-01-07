@@ -348,6 +348,13 @@ class PageTest extends BaserTestCase {
 	}
 
 /**
+ * ページファイルのパスを取得する
+ */
+	public function testGetPageFilePath() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * ページファイルを削除する
  * 
  * @param array $name ページ名
@@ -600,6 +607,10 @@ class PageTest extends BaserTestCase {
 		];
 	}
 
+	public function testGetParentPageTemplate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 /**
  * 固定ページテンプレートリストを取得する
  *
@@ -644,6 +655,27 @@ class PageTest extends BaserTestCase {
 			['/service', true, false],
 			['/service', false, true],
 			['/hoge', false, false],
+		];
+	}
+
+/**
+ * コンテンツフォルダのパスを取得する
+ *
+ * @param $id
+ * @param $expects
+ * @dataProvider getContentFolderPathDataProvider
+ */
+	public function testGetContentFolderPath($id, $expects) {
+		BcSite::flash();
+		$this->assertEquals($expects, $this->Page->getContentFolderPath($id));
+	}
+
+	public function getContentFolderPathDataProvider() {
+		return [
+			[1, APP . 'View/Pages/'],
+			[2, APP . 'View/Pages/mobile/'],
+			[3, APP . 'View/Pages/smartphone/'],
+			[4, false],
 		];
 	}
 	

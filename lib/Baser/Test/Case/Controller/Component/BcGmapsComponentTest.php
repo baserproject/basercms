@@ -26,6 +26,7 @@ class BcGmapsTestController extends Controller {
 
 /**
  * BcGmapsComponentのテスト
+ * @property BcGmapsComponent $BcGmaps
  */
 class BcGmapsComponentTest extends BaserTestCase {
 
@@ -59,20 +60,9 @@ class BcGmapsComponentTest extends BaserTestCase {
 		unset($this->BcGmaps);
 	}
 
-
-/**
- * Construct
- * 
- * @return void
- */
-	public function test__construct() {
-		$this->BcGmaps->__construct();
-		$result = $this->BcGmaps->_baseUrl;
-		$expected = "http://" . MAPS_HOST . "/maps/api/geocode/xml?";
-
-		$this->assertEquals($expected, $result, 'APIのURLが正しくありません');
+	public function test_connect() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
-
 /**
  * getInfoLocation
  *
@@ -82,8 +72,12 @@ class BcGmapsComponentTest extends BaserTestCase {
  * @return boolean
  */
 	public function testGetInfoLocation() {
-
-		$result = $this->BcGmaps->getInfoLocation('日本');
+		for($i=0; $i<3; $i++) {
+			$result = $this->BcGmaps->getInfoLocation('日本');
+			if($result) {
+				break;
+			}
+		}
 		$this->assertTrue($result, 'getInfoLocationで情報を取得できません');
 
 		$lat = round($this->BcGmaps->getLatitude(), 1);
@@ -94,7 +88,15 @@ class BcGmapsComponentTest extends BaserTestCase {
 
 		$result = $this->BcGmaps->getInfoLocation('');
 		$this->assertFalse($result, 'getInfoLocationに空のアドレスにtrueが返ってきます');
+	}
 
+
+	public function testGetLatitude() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testGetLongitude(){
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

@@ -21,7 +21,7 @@ class BcCkeditorHelper extends AppHelper {
  * ヘルパー
  * @var array
  */
-	public $helpers = array('BcHtml', 'BcForm', 'JqueryEngine');
+	public $helpers = ['BcHtml', 'BcForm', 'JqueryEngine'];
 
 /**
  * スクリプト
@@ -53,51 +53,51 @@ class BcCkeditorHelper extends AppHelper {
  *
  * @var array
  */
-	public $style = array(
-		array('name' => '青見出し(h3)',
+	public $style = [
+		['name' => '青見出し(h3)',
 			'element' => 'h3',
-			'styles' => array('color' => 'Blue')),
-		array('name' => '赤見出し(h3)',
+			'styles' => ['color' => 'Blue']],
+		['name' => '赤見出し(h3)',
 			'element' => 'h3',
-			'styles' => array('color' => 'Red')),
-		array('name' => '黄マーカー(span)',
+			'styles' => ['color' => 'Red']],
+		['name' => '黄マーカー(span)',
 			'element' => 'span',
-			'styles' => array('background-color' => 'Yellow')),
-		array('name' => '緑マーカー(span)',
+			'styles' => ['background-color' => 'Yellow']],
+		['name' => '緑マーカー(span)',
 			'element' => 'span',
-			'styles' => array('background-color' => 'Lime')),
-		array('name' => '大文字(big)',
-			'element' => 'big'),
-		array('name' => '小文字(small)',
-			'element' => 'small'),
-		array('name' => 'コード(code)',
-			'element' => 'code'),
-		array('name' => '削除文(del)',
-			'element' => 'del'),
-		array('name' => '挿入文(ins)',
-			'element' => 'ins'),
-		array('name' => '引用(cite)',
-			'element' => 'cite'),
-		array('name' => 'インライン(q)',
-			'element' => 'q')
-	);
-	public $toolbars = array(
-		'simple' => array(
-			array('Bold', 'Underline', '-',
+			'styles' => ['background-color' => 'Lime']],
+		['name' => '大文字(big)',
+			'element' => 'big'],
+		['name' => '小文字(small)',
+			'element' => 'small'],
+		['name' => 'コード(code)',
+			'element' => 'code'],
+		['name' => '削除文(del)',
+			'element' => 'del'],
+		['name' => '挿入文(ins)',
+			'element' => 'ins'],
+		['name' => '引用(cite)',
+			'element' => 'cite'],
+		['name' => 'インライン(q)',
+			'element' => 'q']
+	];
+	public $toolbars = [
+		'simple' => [
+			['Bold', 'Underline', '-',
 				'NumberedList', 'BulletedList', '-',
 				'JustifyLeft', 'JustifyCenter', 'JustifyRight',
-				'Format', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
-			array('Maximize', 'ShowBlocks', 'Source')
-		),
-		'normal' => array(
-			array('Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-',
+				'Format', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'],
+			['Maximize', 'ShowBlocks', 'Source']
+		],
+		'normal' => [
+			['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', 'Strike', '-',
 				'NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-',
 				'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-				'Smiley', 'Table', 'HorizontalRule', '-'),
-			array('Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'),
-			array('Maximize', 'ShowBlocks', 'Source')
-		)
-	);
+				'Smiley', 'Table', 'HorizontalRule', '-'],
+			['Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor', '-', 'Link', 'Unlink', '-', 'Image'],
+			['Maximize', 'ShowBlocks', 'Source']
+		]
+	];
 
 /**
  * CKEditor のスクリプトを構築する
@@ -173,13 +173,13 @@ class BcCkeditorHelper extends AppHelper {
  * @param array $options
  * @return string
  */
-	function _build($fieldName, $options = array()) {
+	function _build($fieldName, $options = []) {
 
-		$options = array_merge(array(
+		$options = array_merge([
 			'editorLanguage' => 'ja', // 言語
 			'editorSkin' => 'moono', // スキン
 			'editorToolType' => 'normal', // ツールバータイプ
-			'editorToolbar' => array(), // ツールバータイプ
+			'editorToolbar' => [], // ツールバータイプ
 			'editorWidth' => '600px', // エディタサイズ
 			'editorHeight' => '300px', // エディタ高さ
 			'editorCollapser' => false, // 
@@ -194,8 +194,8 @@ class BcCkeditorHelper extends AppHelper {
 			'editorReadOnlyPublish' => false, // 本稿読み込みのみ許可
 			'editorUseTemplates' => true, // テンプレート利用
 			'editorEnterBr' => false, // エンター時に改行を入れる
-			'editorStyles' => array()  // スタイル
-			), $options);
+			'editorStyles' => []  // スタイル
+			], $options);
 
 		extract($options);
 		if (empty($editorToolbar)) {
@@ -235,7 +235,7 @@ class BcCkeditorHelper extends AppHelper {
 		if (isset($options['editorToolType']))
 			unset($options['editorToolType']);
 
-		$_options = array();
+		$_options = [];
 		foreach ($options as $key => $option) {
 			$key = preg_replace('/^editor/', '', $key);
 			$key = Inflector::variable($key);
@@ -260,22 +260,22 @@ class BcCkeditorHelper extends AppHelper {
 
 		if (!$this->_script) {
 			$this->_script = true;
-			$this->BcHtml->script('admin/vendors/ckeditor/ckeditor.js', array("inline" => false));
+			$this->BcHtml->script('admin/vendors/ckeditor/ckeditor.js', ["inline" => false]);
 		}
 
 		if ($editorUseDraft) {
 			$lastBar = $options['toolbar'][count($options['toolbar']) - 1];
-			$lastBar = am($lastBar, array('-', 'Publish', '-', 'Draft'));
+			$lastBar = am($lastBar, ['-', 'Publish', '-', 'Draft']);
 			if (!$editorDisableCopyDraft) {
-				$lastBar = am($lastBar, array('-', 'CopyDraft'));
+				$lastBar = am($lastBar, ['-', 'CopyDraft']);
 			}
 			if (!$editorDisableCopyPublish) {
-				$lastBar = am($lastBar, array('-', 'CopyPublish'));
+				$lastBar = am($lastBar, ['-', 'CopyPublish']);
 			}
 			$options['toolbar'][count($options['toolbar']) - 1] = $lastBar;
 		}
 
-		$this->BcHtml->scriptBlock("var editor_" . $field . ";", array("inline" => false));
+		$this->BcHtml->scriptBlock("var editor_" . $field . ";", ["inline" => false]);
 		$jscode = "$(window).load(function(){";
 		if (!$this->inited) {
 			$jscode .= "CKEDITOR.addStylesSet('basercms'," . $this->JqueryEngine->object($this->style) . ");";
@@ -291,7 +291,7 @@ class BcCkeditorHelper extends AppHelper {
 		}
 
 		if ($editorUseTemplates) {
-			$jscode .= "CKEDITOR.config.templates_files = [ '" . $this->url(array('admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'js')) . "' ];";
+			$jscode .= "CKEDITOR.config.templates_files = [ '" . $this->url(['admin' => true, 'plugin' => null, 'controller' => 'editor_templates', 'action' => 'js']) . "' ];";
 		}
 		$jscode .= "CKEDITOR.config.allowedContent = true;";
 		$jscode .= "CKEDITOR.config.extraPlugins = 'draft,showprotected';";
@@ -310,17 +310,17 @@ class BcCkeditorHelper extends AppHelper {
 			$this->theme = $theme;
 		}
 
-		$themeEditorCsses = array();
+		$themeEditorCsses = [];
 		if ($theme) {
-			$themeEditorCsses[] = array(
+			$themeEditorCsses[] = [
 				'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . 'editor.css',
 				'url' => $this->webroot('/css/editor.css')
-			);
+			];
 		}
-		$themeEditorCsses[] = array(
+		$themeEditorCsses[] = [
 			'path' => BASER_VIEWS . 'webroot' . DS . 'css' . DS . 'admin' . DS . 'ckeditor' . DS . 'contents.css',
 			'url' => $this->webroot('/css/admin/ckeditor/contents.css')
-		);
+		];
 
 		if ($theme) {
 			$sitePrefix = '';
@@ -328,10 +328,10 @@ class BcCkeditorHelper extends AppHelper {
 				$sitePrefix = $this->request->data['Site']['name'];	
 			}
 			if ($sitePrefix) {
-				array_unshift($themeEditorCsses, array(
+				array_unshift($themeEditorCsses, [
 					'path' => BASER_THEMES . Configure::read('BcSite.theme') . DS . 'css' . DS . $sitePrefix . DS . 'editor.css',
 					'url' => $this->webroot('/css/' . $sitePrefix . '/editor.css')
-				));
+				]);
 			}
 		}
 
@@ -359,7 +359,8 @@ class BcCkeditorHelper extends AppHelper {
 		}
 
 		$jscode .= " });";
-
+		$draftMode = 'publish';
+		$fieldCamelize = Inflector::camelize($field);
 		if ($editorUseDraft) {
 			$jscode .= "editor_{$field}.on('instanceReady', function(event) {";
 			if ($editorDisableDraft) {
@@ -369,7 +370,17 @@ class BcCkeditorHelper extends AppHelper {
 			if ($editorDisablePublish) {
 				$jscode .= "editor_{$field}.execCommand('changeDraft');";
 				$jscode .= "editor_{$field}.execCommand('disablePublish');";
+				$draftMode = 'draft';
 			}
+			$jscode .= <<< EOL
+    editor_{$field}.on( 'beforeCommandExec', function( ev ){
+    	if(ev.data.name === 'changePublish' || ev.data.name === 'copyPublish') {
+    		$("#DraftMode{$fieldCamelize}").val('publish');
+    	} else if(ev.data.name === 'changeDraft' || ev.data.name === 'copyDraft') {
+    		$("#DraftMode{$fieldCamelize}").val('draft');
+    	}	
+    });
+EOL;
 			$jscode .= " });";
 		}
 
@@ -391,8 +402,8 @@ EOL;
 		$jscode .= "}";
 		$jscode .= " });";
 		$jscode .= "});";
-		
-		return $this->BcHtml->scriptBlock($jscode);
+
+		return $this->BcHtml->scriptBlock($jscode) . '<input type="hidden" id="DraftMode' . $fieldCamelize . '" value="' . $draftMode . '">';
 	}
 
 /**
@@ -402,7 +413,7 @@ EOL;
  * @param array $options
  * @return string
  */
-	public function editor($fieldName, $options = array()) {
+	public function editor($fieldName, $options = []) {
 
 		if (!empty($options['editorUseDraft']) && !empty($options['editorDraftField']) && strpos($fieldName, '.')) {
 			list($model) = explode('.', $fieldName);
@@ -413,7 +424,7 @@ EOL;
 			$hidden = '';
 		}
 		$options['type'] = 'textarea';
-		$_options = array();
+		$_options = [];
 		foreach ($options as $key => $option) {
 			if (!preg_match('/^editor/', $key)) {
 				$_options[$key] = $option;

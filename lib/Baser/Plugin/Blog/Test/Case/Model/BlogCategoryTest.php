@@ -20,7 +20,7 @@ App::uses('BlogCategory', 'Blog.Model');
 
 class BlogCategoryTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SearchIndex',
 		'baser.Default.Permission',
 		'baser.Default.User',
@@ -34,7 +34,7 @@ class BlogCategoryTest extends BaserTestCase {
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'plugin.blog.Model/BlogPost/BlogCategoryModel',
-	);
+	];
 
 	public function setUp() {
 		$this->BlogCategory = ClassRegistry::init('Blog.BlogCategory');
@@ -51,15 +51,15 @@ class BlogCategoryTest extends BaserTestCase {
  */
 	public function test必須チェック() {
 		// blog_content_idを設定
-		$this->BlogCategory->validationParams = array(
+		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
-		);
+		];
 
-		$this->BlogCategory->create(array(
-			'BlogCategory' => array(
+		$this->BlogCategory->create([
+			'BlogCategory' => [
 				'blog_content_id' => 1
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogCategory->validates());
 
@@ -72,16 +72,16 @@ class BlogCategoryTest extends BaserTestCase {
 
 	public function test桁数チェック異常系() {
 		// blog_content_idを設定
-		$this->BlogCategory->validationParams = array(
+		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
-		);
+		];
 
-		$this->BlogCategory->create(array(
-			'BlogCategory' => array(
+		$this->BlogCategory->create([
+			'BlogCategory' => [
 				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
 				'title' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->BlogCategory->validates());
 
 		$this->assertArrayHasKey('name', $this->BlogCategory->validationErrors);
@@ -93,32 +93,32 @@ class BlogCategoryTest extends BaserTestCase {
 
 	public function test桁数チェック正常系() {
 		// blog_content_idを設定
-		$this->BlogCategory->validationParams = array(
+		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
-		);
+		];
 
-		$this->BlogCategory->create(array(
-			'BlogCategory' => array(
+		$this->BlogCategory->create([
+			'BlogCategory' => [
 				'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'title' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
-			)
-		));
+			]
+		]);
 
 		$this->assertTrue($this->BlogCategory->validates());
 	}
 
 	public function testその他異常系() {
 		// blog_content_idを設定
-		$this->BlogCategory->validationParams = array(
+		$this->BlogCategory->validationParams = [
 			'blogContentId' => 1
-		);
+		];
 
 		// 半角チェック
-		$this->BlogCategory->create(array(
-			'BlogCategory' => array(
+		$this->BlogCategory->create([
+			'BlogCategory' => [
 				'name' => 'テスト',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogCategory->validates());
 
@@ -126,11 +126,11 @@ class BlogCategoryTest extends BaserTestCase {
 		$this->assertEquals('ブログカテゴリ名は半角のみで入力してください。', current($this->BlogCategory->validationErrors['name']));
 
 		// 重複チェック
-		$this->BlogCategory->create(array(
-			'BlogCategory' => array(
+		$this->BlogCategory->create([
+			'BlogCategory' => [
 				'name' => 'release',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogCategory->validates());
 
@@ -152,37 +152,45 @@ class BlogCategoryTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			array('parent_id', array('blogContentId' => 1), array(
+		return [
+			['parent_id', ['blogContentId' => 1], [
 				1 => 'プレスリリース',
-				2 => '&nbsp&nbsp&nbsp└子カテゴリ',
-				3 => '親子関係なしカテゴリ')),
-			array('parent_id', array('blogContentId' => 0), array()),
-			array('parent_id', array('blogContentId' => 1, 'excludeParentId' => true), array(3 => '親子関係なしカテゴリ')),
-			array('parent_id', array('blogContentId' => 1, 'ownerId' => 2), array()),
-			array('parent_id', array('blogContentId' => 1, 'ownerId' => 1), array(
+				2 => '　　　└子カテゴリ',
+				3 => '親子関係なしカテゴリ']],
+			['parent_id', ['blogContentId' => 0], []],
+			['parent_id', ['blogContentId' => 1, 'excludeParentId' => true], [3 => '親子関係なしカテゴリ']],
+			['parent_id', ['blogContentId' => 1, 'ownerId' => 2], []],
+			['parent_id', ['blogContentId' => 1, 'ownerId' => 1], [
 				1 => 'プレスリリース',
-				2 => '&nbsp&nbsp&nbsp└子カテゴリ',
-				3 => '親子関係なしカテゴリ')),
-			array('owner_id', array(), array(
+				2 => '　　　└子カテゴリ',
+				3 => '親子関係なしカテゴリ']],
+			['owner_id', [], [
 				1 => 'システム管理',
-				2 => 'サイト運営')),
-		);
+				2 => 'サイト運営']],
+		];
+	}
+
+/**
+ * 同じニックネームのカテゴリがないかチェックする
+ * 同じブログコンテンツが条件
+ */
+	public function testDuplicateBlogCategory() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
  * 関連する記事データをカテゴリ無所属に変更し保存する
  */
 	public function testBeforeDelete() {
-		$this->BlogCategory->data = array('BlogCategory' => array(
+		$this->BlogCategory->data = ['BlogCategory' => [
 			'id' => '1'
-		));
+		]];
 		$this->BlogCategory->delete();
 
 		$BlogPost = ClassRegistry::init('Blog.BlogPost');
-		$result = $BlogPost->find('first', array(
-        'conditions' => array('blog_category_id' => 1)
-    ));
+		$result = $BlogPost->find('first', [
+        'conditions' => ['blog_category_id' => 1]
+    ]);
     $this->assertEmpty($result);
 	}
 
@@ -192,29 +200,29 @@ class BlogCategoryTest extends BaserTestCase {
 	public function testGetCategoryList() {
 		$message = '正しくカテゴリリストを取得できません';
 		// 正常
-		$result = $this->BlogCategory->getCategoryList(1, array());
+		$result = $this->BlogCategory->getCategoryList(1, []);
 		$this->assertNotEmpty($result, $message);
 		$this->assertEquals($result[0]['BlogCategory']['id'], 1, $message);
 
 		// 存在しないID
-		$result = $this->BlogCategory->getCategoryList(0, array());
+		$result = $this->BlogCategory->getCategoryList(0, []);
 		$this->assertEmpty($result, $message);
 
 		// option depth 2
-		$result = $this->BlogCategory->getCategoryList(1, array('depth' => 2));
+		$result = $this->BlogCategory->getCategoryList(1, ['depth' => 2]);
 		$this->assertNotEmpty($result[0]['BlogCategory']['children'], $message);
 
 		// option type year
-		$result = $this->BlogCategory->getCategoryList(1, array('type' => 'year'));
+		$result = $this->BlogCategory->getCategoryList(1, ['type' => 'year']);
 		$this->assertNotEmpty($result, $message);
 		$this->assertEquals($result['2015'][0]['BlogCategory']['id'], 1, $message);
 
 		// option viewCount true
-		$result = $this->BlogCategory->getCategoryList(1, array('viewCount' => true));
+		$result = $this->BlogCategory->getCategoryList(1, ['viewCount' => true]);
 		$this->assertEquals($result[0]['BlogCategory']['count'], 2, $message);
 
 		// option limit true
-		$result = $this->BlogCategory->getCategoryList(1, array('type' => 'year', 'limit' => 1, 'viewCount' => true));
+		$result = $this->BlogCategory->getCategoryList(1, ['type' => 'year', 'limit' => 1, 'viewCount' => true]);
 		$this->assertEquals($result['2015'][0]['BlogCategory']['count'], 1, $message);
 	}
 	
@@ -226,5 +234,11 @@ class BlogCategoryTest extends BaserTestCase {
 //		$result = $this->BlogCategory->hasNewCategoryAddablePermission(2, 99);
 	}
 
+/**
+ * 子カテゴリを持っているかどうか
+ */
+	public function testHasChild() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 }

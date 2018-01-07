@@ -26,7 +26,7 @@ class BlogCommentsController extends BlogAppController {
  *
  * @var array
  */
-	public $uses = array('Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost');
+	public $uses = ['Blog.BlogCategory', 'Blog.BlogComment', 'Blog.BlogPost'];
 
 /**
  * コンポーネント
@@ -46,31 +46,31 @@ class BlogCommentsController extends BlogAppController {
 		$this->BcAuth->allow('add', 'captcha', 'smartphone_add', 'smartphone_captcha', 'get_token');
 
 		if (BcUtil::isAdminSystem()) {
-			$this->subMenuElements = array('blog_posts');
+			$this->subMenuElements = ['blog_posts'];
 			$this->request->params['Content'] = $this->BcContents->getContent($this->request->params['pass'][0])['Content'];
 			$this->Security->enabled = true;
 			$this->Security->requireAuth('add');
 		}
 		
-		$crumbs = array();
+		$crumbs = [];
 		
 		if (!empty($this->params['pass'][1])) {
 			$dbDatas = $this->BlogPost->find('first', ['conditions' => ['BlogPost.id' => $this->params['pass'][1]]]);
 			if (!$dbDatas) {
 				$this->notFound();
 			}
-			$this->blogPost = array('BlogPost' => $dbDatas['BlogPost']);
-			$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
+			$this->blogPost = ['BlogPost' => $dbDatas['BlogPost']];
+			$this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
 			if (BcUtil::isAdminSystem()) {
-				$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
-				$crumbs[] = array('name' => $this->blogPost['BlogPost']['name'], 'url' => array('controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']));
+				$crumbs[] = ['name' => $this->request->params['Content']['title'] . '設定', 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
+				$crumbs[] = ['name' => $this->blogPost['BlogPost']['name'], 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']]];
 			}	
 		} elseif (!empty($this->params['pass'][0])) {
 			if(!in_array($this->request->action, ['captcha', 'smartphone_captcha', 'get_token'])) {
 				$dbDatas = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
-				$this->blogContent = array('BlogContent' => $dbDatas['BlogContent']);
+				$this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
 				if (BcUtil::isAdminSystem()) {
-					$crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']));
+					$crumbs[] = ['name' => $this->request->params['Content']['title'] . '設定', 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
 				}	
 			}
 		}
@@ -112,15 +112,15 @@ class BlogCommentsController extends BlogAppController {
 		}
 
 		/* 画面情報設定 */
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('BlogPost', array('group' => $blogContentId, 'default' => $default));
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('BlogPost', ['group' => $blogContentId, 'default' => $default]);
 
 		// データを取得
-		$this->paginate = array('conditions' => $conditions,
-			'fields' => array(),
+		$this->paginate = ['conditions' => $conditions,
+			'fields' => [],
 			'order' => 'BlogComment.created DESC',
 			'limit' => $this->passedArgs['num']
-		);
+		];
 
 		$dbDatas = $this->paginate('BlogComment');
 		$this->set('dbDatas', $dbDatas);
@@ -275,8 +275,8 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = array(0 => '非公開状態', 1 => '公開状態');
-		$data = $this->BlogComment->find('first', array('conditions' => array('BlogComment.id' => $id), 'recursive' => -1));
+		$statusTexts = [0 => '非公開状態', 1 => '公開状態'];
+		$data = $this->BlogComment->find('first', ['conditions' => ['BlogComment.id' => $id], 'recursive' => -1]);
 		$data['BlogComment']['status'] = $status;
 		$this->BlogComment->set($data);
 

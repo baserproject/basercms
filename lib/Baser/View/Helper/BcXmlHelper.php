@@ -38,7 +38,7 @@ class BcXmlHelper extends AppHelper {
  * @param array $attrib
  * @return string XML宣言
  */
-	public function header($attrib = array()) {
+	public function header($attrib = []) {
 		$ua = @$_SERVER['HTTP_USER_AGENT'];
 		if (!(preg_match("/Windows/", $ua) && preg_match("/MSIE/", $ua)) || !(preg_match("/MSIE 6/", $ua)) ) {
 			if (Configure::read('App.encoding') !== null) {
@@ -46,7 +46,7 @@ class BcXmlHelper extends AppHelper {
 			}
 
 			if (is_array($attrib)) {
-				$attrib = array_merge(array('encoding' => $this->encoding), $attrib);
+				$attrib = array_merge(['encoding' => $this->encoding], $attrib);
 			}
 			if (is_string($attrib) && strpos($attrib, 'xml') !== 0) {
 				$attrib = 'xml ' . $attrib;
@@ -57,7 +57,7 @@ class BcXmlHelper extends AppHelper {
 				$header = $attrib;
 			} else {
 
-				$attrib = array_merge(array('version' => $this->version, 'encoding' => $this->encoding), $attrib);
+				$attrib = array_merge(['version' => $this->version, 'encoding' => $this->encoding], $attrib);
 				foreach ($attrib as $key => $val) {
 					$header .= ' ' . $key . '="' . $val . '"';
 				}

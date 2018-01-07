@@ -37,10 +37,10 @@ class SitesController extends AppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->crumbs = array(
-			array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-			array('name' => 'サブサイト管理', 'url' => array('controller' => 'sites', 'action' => 'index'))
-		);
+		$this->crumbs = [
+			['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => 'サブサイト管理', 'url' => ['controller' => 'sites', 'action' => 'index']]
+		];
 	}
 	
 /**
@@ -84,7 +84,7 @@ class SitesController extends AppController {
 					'data' => $data
 				]);
 				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'edit', $this->Site->id));
+				$this->redirect(['action' => 'edit', $this->Site->id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -131,7 +131,7 @@ class SitesController extends AppController {
 					'data' => $data
 				]);
 				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を更新しました。', false, true);
-				$this->redirect(array('action' => 'edit', $id));
+				$this->redirect(['action' => 'edit', $id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -198,8 +198,8 @@ class SitesController extends AppController {
  * @return boolean
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = array(0 => '非公開', 1 => '公開');
-		$data = $this->Site->find('first', array('conditions' => array('Site.id' => $id), 'recursive' => -1));
+		$statusTexts = [0 => '非公開', 1 => '公開'];
+		$data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
 		$data['Site']['status'] = $status;
 		if ($this->Site->save($data)) {
 			$statusText = $statusTexts[$status];

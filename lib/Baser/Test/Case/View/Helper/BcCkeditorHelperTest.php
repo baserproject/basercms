@@ -70,4 +70,8 @@ class BcCkeditorHelperTest extends BaserTestCase {
 		];
 	}
 
+	public function test_build() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

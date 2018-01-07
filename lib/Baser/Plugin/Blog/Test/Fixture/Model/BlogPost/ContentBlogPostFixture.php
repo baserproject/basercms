@@ -16,8 +16,8 @@ public $name = 'Content';
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'site_id' => '0',
 			'name' => '',
@@ -52,8 +52,8 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'site_id' => '1',
 			'name' => 'm',
@@ -88,8 +88,8 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'site_id' => '2',
 			'name' => 's',
@@ -124,8 +124,8 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'site_id' => '0',
 			'name' => 'news',
@@ -160,8 +160,8 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '5',
 			'site_id' => '1',
 			'name' => 'news',
@@ -196,8 +196,8 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '6',
 			'site_id' => '2',
 			'name' => 'news',
@@ -232,8 +232,8 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-		array(
+		],
+		[
 			'id' => '7',
 			'site_id' => '0',
 			'name' => 'topics',
@@ -268,7 +268,7 @@ public $name = 'Content';
 			'self_publish_end' => null,
 			'exclude_menu' => 0,
 			'blank_link' => 0
-		),
-	);
+		],
+	];
 
 }

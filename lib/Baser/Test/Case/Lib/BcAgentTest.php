@@ -151,6 +151,13 @@ class BcAgentTest extends BaserTestCase {
 	}
 
 /**
+ * ユーザーエージェントの判定用正規表現を取得
+ */
+public function testGetDetectorRegex() {
+	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+}
+
+/**
  * URLがエージェント用かどうかを判定
  *
  * @param bool $expect 期待値

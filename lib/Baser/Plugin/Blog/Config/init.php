@@ -26,7 +26,7 @@
  */
 	$BlogPost = ClassRegistry::init('Blog.BlogPost');
 	$BlogPost->contentSaving = false;
-	$datas = $BlogPost->find('all', array('recursive' => -1));
+	$datas = $BlogPost->find('all', ['recursive' => -1]);
 	if ($datas) {
 		$ret = true;
 		foreach ($datas as $data) {

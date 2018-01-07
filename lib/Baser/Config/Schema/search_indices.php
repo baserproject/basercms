@@ -29,7 +29,7 @@ class SearchIndicesSchema extends CakeSchema {
 		'rght' => ['type' => 'integer', 'null' => true, 'length' => 8],
 		'title' => ['type' => 'string', 'null' => true, 'default' => null],
 		'detail' => ['type' => 'text', 'null' => true],
-		'url' => ['type' => 'string', 'null' => true, 'default' => null],
+		'url' => ['type' => 'text', 'null' => true, 'default' => null],
 		'status' => ['type' => 'boolean', 'null' => true, 'default' => null],
 		'priority' => ['type' => 'string', 'null' => true, 'length' => 3],
 		'created' => ['type' => 'datetime', 'null' => true],

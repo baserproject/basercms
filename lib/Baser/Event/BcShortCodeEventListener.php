@@ -85,7 +85,7 @@ class BcShortCodeEventListener extends Object implements CakeEventListener {
 						App::uses($className, $plugin . 'View/Helper');
 						$Helper = new $className($View);
 					}
-					$result = call_user_func_array(array($Helper, $func[1]), $args);
+					$result = call_user_func_array([$Helper, $func[1]], $args);
 					$output = str_replace($target, $result, $output);
 				}
 			}

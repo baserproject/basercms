@@ -77,19 +77,20 @@ class BlogBaserHelperTest extends BaserTestCase {
  * @param array $options オプション
  * @param expected string 期待値
  * @param message string テスト失敗時に表示されるメッセージ
- */
 	public function testBlogPosts() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::posts() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 /**
  * 全ブログコンテンツの基本情報を取得する
  *
  * @return void
- */
+ *
 	public function testGetBlogs() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::getContents() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 /**
  * ブログのカテゴリ取得
@@ -106,23 +107,26 @@ class BlogBaserHelperTest extends BaserTestCase {
  * ブログの子カテゴリを持っているかどうか
  *
  * BlogHelper::hasChildCategory() のラッピングの為、テストはスルー
- */
+ *
 	public function testHasChildBlogCategory() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::hasChildCategory() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 /**
  * ブログタグリストを取得する
- */
+ *
 	public function testGetBlogTagList() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::getBlogTagList() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 /**
  * ブログタグリストを取得する
- */
+ *
 	public function testBlogTagList() {
 		$this->markTestIncomplete('このメソッドは、BlogHelper::BlogTagList() をラッピングしているメソッドの為スキップします。');
 	}
+ */
 
 }

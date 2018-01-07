@@ -55,7 +55,7 @@ class BcAuthConfigureComponent extends Component {
 			$requestedPrefix = $Controller->params['prefix'];
 		}
 
-		$config = array_merge(array(
+		$config = array_merge([
 			'loginRedirect'		=> '/' . $requestedPrefix,
 			'logoutRedirect'	=> '',
 			'username'			=> 'name',
@@ -66,14 +66,14 @@ class BcAuthConfigureComponent extends Component {
 			'auth_prefix'		=> '',
 			'userScope'			=> '',
 			'sessionKey'		=> Configure::read('BcAuthPrefix.admin.sessionKey')
-			), $config);
+			], $config);
 		
 		// ログインアクション
 		if (!$config['loginAction']) {
 			if ($requestedPrefix) {
-				$config['loginAction'] = array('prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login');
+				$config['loginAction'] = ['prefix' => $requestedPrefix, 'controller' => 'users', 'action' => 'login'];
 			} else {
-				$config['loginAction'] = array('controller' => 'users', 'action' => 'login');
+				$config['loginAction'] = ['controller' => 'users', 'action' => 'login'];
 			}
 		}
 		$BcAuth->loginAction = $config['loginAction'];
@@ -103,21 +103,21 @@ class BcAuthConfigureComponent extends Component {
 		$BcAuth->unauthorizedRedirect = $BcAuth->loginAction;
 		
 		// フォームの認証設定
-		$BcAuth->authenticate = array(
-			'Form' => array(
+		$BcAuth->authenticate = [
+			'Form' => [
 				'userModel' => $config['userModel'],
-				'fields' => array(
+				'fields' => [
 					'username' => $config['username'],
 					'password' => $config['password']
-				),
+				],
 				'serial' => $config['serial']
-			)
-		);
+			]
+		];
 
 		// 認証プレフィックスによるスコープ設定
 		$UserModel = ClassRegistry::init($config['userModel']);
 		if (isset($UserModel->belongsTo['UserGroup']) && $config['auth_prefix'] && !$config['userScope']) {
-			$BcAuth->authenticate['Form']['scope'] = array('UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%');
+			$BcAuth->authenticate['Form']['scope'] = ['UserGroup.auth_prefix LIKE' => '%' . $config['auth_prefix'] . '%'];
 		} elseif ($config['userScope']) {
 			$BcAuth->authenticate['Form']['scope'] = $config['userScope'];
 		}

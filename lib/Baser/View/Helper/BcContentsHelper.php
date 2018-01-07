@@ -40,7 +40,7 @@ class BcContentsHelper extends AppHelper {
  * @return	void
  * @access	public
  */
-	public function __construct(View $View, $settings = array()) {
+	public function __construct(View $View, $settings = []) {
 		parent::__construct($View, $settings);
 		$this->_Content = ClassRegistry::init('Content');
 		$this->_Permission = ClassRegistry::init('Permission');
@@ -145,7 +145,7 @@ class BcContentsHelper extends AppHelper {
 			}
 		}
 		$this->_Content->Behaviors->unload('SoftDelete');
-		$contents = $this->_Content->find('all', array('fields' => array('plugin', 'type', 'title'), 'conditions' => $conditions, 'recursive' => -1));
+		$contents = $this->_Content->find('all', ['fields' => ['plugin', 'type', 'title'], 'conditions' => $conditions, 'recursive' => -1]);
 		$this->_Content->Behaviors->load('SoftDelete');
 		$existContents = [];
 		foreach($contents as $content) {
@@ -191,7 +191,7 @@ class BcContentsHelper extends AppHelper {
 				}
 			}
 		}
-		return $this->assetUrl($file, array('pathPrefix' => $imageBaseUrl));
+		return $this->assetUrl($file, ['pathPrefix' => $imageBaseUrl]);
 	}
 
 /**
@@ -427,7 +427,7 @@ class BcContentsHelper extends AppHelper {
  * @param array $options
  * @return array|bool
  */
-	public function getContentFolderList($siteId = null, $options = array()) {
+	public function getContentFolderList($siteId = null, $options = []) {
 		return $this->_Content->getContentFolderList($siteId, $options);
 	}
 	
@@ -511,7 +511,7 @@ class BcContentsHelper extends AppHelper {
  */
 	public function getContentByEntityId($id, $contentType, $field = null){
 		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
-		$content = $this->_Content->find('first', ['conditions' => $conditions, 'cache' => false]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
 		if(!empty($content)){
 			if($field){
 				return $content ['Content'][$field];

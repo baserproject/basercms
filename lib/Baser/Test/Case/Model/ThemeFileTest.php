@@ -10,6 +10,7 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('ThemeFile', 'Model');
+App::uses('File', 'Utility');
 
 /**
  * ThemeFileTest class
@@ -45,6 +46,9 @@ class ThemeFileTest extends BaserTestCase {
 		$this->ThemeFile->create([
 			'ThemeFile' => [
 				'name' => '',
+				'parent' => '',
+				'ext' => 'php',
+				'contents' => ''
 			]
 		]);
 		$this->assertFalse($this->ThemeFile->validates());
@@ -56,21 +60,41 @@ class ThemeFileTest extends BaserTestCase {
 		$this->ThemeFile->create([
 			'ThemeFile' => [
 				'name' => 'baser',
-				'parent' => 'hoge'
+				'parent' => 'hoge',
+				'ext' => 'php',
+				'contents' => ''
 			]
 		]);
 		$this->assertTrue($this->ThemeFile->validates());
 	}
 
-	public function test重複チェック異常系() {
+/**
+ * ファイルの重複チェック
+ */
+	public function testDuplicateThemeFile() {
+		$themeFile = new File(TMP . 'test/theme-file.php', true);
 		$this->ThemeFile->create([
 			'ThemeFile' => [
-				'name' => 'config.php',
-				'parent' => WWW_ROOT . 'theme/nada-icons/',
+				'name' => 'another-theme-file',
+				'parent' => TMP . 'test/',
+				'ext' => 'php',
+				'contents' => ''
 			]
 		]);
-		$this->assertFalse($this->ThemeFile->validates());
-		$this->assertArrayHasKey('name', $this->ThemeFile->validationErrors);
-		$this->assertEquals('入力されたテーマファイル名は、同一階層に既に存在します。', current($this->ThemeFile->validationErrors['name']));
+		$this->assertTrue($this->ThemeFile->validates(), 'テーマファイルが重複していないにも関わらずバリデーションに失敗しています。');
+
+		$this->ThemeFile->create([
+			'ThemeFile' => [
+				'name' => 'theme-file',
+				'parent' => TMP . 'test/',
+				'ext' => 'php',
+				'contents' => ''
+			]
+		]);
+		$this->assertFalse($this->ThemeFile->validates(), 'テーマファイルが重複しているにも関わらずバリデーションに成功しています。');
+
+		$themeFile->delete();
+		$themeFile->close();
 	}
+
 }

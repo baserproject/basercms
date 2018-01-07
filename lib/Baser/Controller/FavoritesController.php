@@ -30,7 +30,7 @@ class FavoritesController extends AppController {
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * beforeFilter
@@ -77,6 +77,7 @@ class FavoritesController extends AppController {
  * @return void
  */
 	public function admin_ajax_edit($id) {
+		$this->autoRender = false;
 		if (!$id) {
 			$this->ajaxError(500, '無効な処理です。');
 		}
@@ -85,6 +86,7 @@ class FavoritesController extends AppController {
 			$this->Favorite->set($this->request->data);
 			$data = $this->Favorite->save();
 			if ($data) {
+				$this->autoLayout = false;
 				$this->set('favorite', $data);
 				$this->render('ajax_form');
 				return;
@@ -92,8 +94,7 @@ class FavoritesController extends AppController {
 				$this->ajaxError(500, $this->Favorite->validationErrors);
 			}
 		}
-
-		exit();
+		return;
 	}
 
 /**
@@ -103,7 +104,7 @@ class FavoritesController extends AppController {
  */
 	public function admin_ajax_delete() {
 		if ($this->request->data) {
-			$name = $this->Favorite->field('name', array('Favorite.id' => $this->request->data['Favorite']['id']));
+			$name = $this->Favorite->field('name', ['Favorite.id' => $this->request->data['Favorite']['id']]);
 			if ($this->Favorite->delete($this->request->data['Favorite']['id'])) {
 				$this->Favorite->saveDbLog('よく使う項目: ' . $name . ' を削除しました。');
 				exit(true);
@@ -122,7 +123,7 @@ class FavoritesController extends AppController {
 	public function admin_update_sort() {
 		$user = $this->BcAuth->user();
 		if ($this->request->data) {
-			if ($this->Favorite->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], array('Favorite.user_id' => $user['id']))) {
+			if ($this->Favorite->changeSort($this->request->data['Sort']['id'], $this->request->data['Sort']['offset'], ['Favorite.user_id' => $user['id']])) {
 				clearDataCache();
 				exit(true);
 			}

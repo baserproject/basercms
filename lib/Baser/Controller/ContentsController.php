@@ -39,7 +39,7 @@ class ContentsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => array('useForm' => true));
+	public $components = ['Cookie', 'BcAuth', 'BcAuthConfigure', 'BcContents' => ['useForm' => true]];
 
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -116,9 +116,9 @@ class ContentsController extends AppController {
 							];
 
 							// EVENT Contents.searchIndex
-							$event = $this->dispatchEvent('searchIndex', array(
+							$event = $this->dispatchEvent('searchIndex', [
 								'options' => $options
-							));
+							]);
 							if ($event !== false) {
 								$options = ($event->result === null || $event->result === true) ? $event->data['options'] : $event->result;
 							}
@@ -268,17 +268,17 @@ class ContentsController extends AppController {
 			$this->ajaxError(500, '無効な処理です。');
 		}
 
-		$srcContent = array();
+		$srcContent = [];
 		if($alias) {
 			if($this->request->data['Content']['alias_id']) {
-				$conditions = array('id' => $this->request->data['Content']['alias_id']);
+				$conditions = ['id' => $this->request->data['Content']['alias_id']];
 			} else {
-				$conditions = array(
+				$conditions = [
 					'plugin' => $this->request->data['Content']['plugin'],
 					'type' => $this->request->data['Content']['type']
-				);
+				];
 			}
-			$srcContent = $this->Content->find('first', array('conditions' => $conditions, 'recursive' => -1));
+			$srcContent = $this->Content->find('first', ['conditions' => $conditions, 'recursive' => -1]);
 			if($srcContent) {
 				$this->request->data['Content']['alias_id'] = $srcContent['Content']['id'];
 				$srcContent = $srcContent['Content'];
@@ -317,7 +317,7 @@ class ContentsController extends AppController {
 	public function admin_edit() {
 		$this->pageTitle = 'コンテンツ編集';
 		if(!$this->request->data) {
-			$this->request->data = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->params['named']['content_id'])));
+			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->params['named']['content_id']]]);
 			if(!$this->request->data) {
 				$this->setMessage('無効な処理です。', true);
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
@@ -326,13 +326,13 @@ class ContentsController extends AppController {
 			if($this->Content->save($this->request->data)) {
 				$message = Configure::read('BcContents.items.' . $this->request->data['Content']['plugin'] . '.' . $this->request->data['Content']['type'] . '.title') . '「' . $this->request->data['Content']['title'] . '」を更新しました。';
 				$this->setMessage($message, false, true);
-				$this->redirect(array(
+				$this->redirect([
 					'plugin'	=> null,
 					'controller'=> 'contents',
 					'action'	=> 'edit',
 					'content_id' => $this->request->params['named']['content_id'],
 					'parent_id' => $this->request->params['named']['parent_id']
-				));
+				]);
 			} else {
 				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
 			}
@@ -350,26 +350,26 @@ class ContentsController extends AppController {
 
 		$this->pageTitle = 'エイリアス編集';
 		if(!$this->request->data) {
-			$this->request->data = $this->Content->find('first', array('conditions' => array('Content.id' => $id)));
+			$this->request->data = $this->Content->find('first', ['conditions' => ['Content.id' => $id]]);
 			if(!$this->request->data) {
 				$this->setMessage('無効な処理です。', true);
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
-			$srcContent = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->data['Content']['alias_id']), 'recursive' => -1));
+			$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
 			$srcContent = $srcContent['Content'];
 		} else {
 			if($this->Content->save($this->request->data)) {
-				$srcContent = $this->Content->find('first', array('conditions' => array('Content.id' => $this->request->data['Content']['alias_id']), 'recursive' => -1));
+				$srcContent = $this->Content->find('first', ['conditions' => ['Content.id' => $this->request->data['Content']['alias_id']], 'recursive' => -1]);
 				$srcContent = $srcContent['Content'];
 				$message = Configure::read('BcContents.items.' . $srcContent['plugin'] . '.' . $srcContent['type'] . '.title') .
 					'「' . $srcContent['title'] . '」のエイリアス「' . $this->request->data['Content']['title'] . '」を編集しました。';
 				$this->setMessage($message, false, true);
-				$this->redirect(array(
+				$this->redirect([
 					'plugin'	=> null,
 					'controller'=> 'contents',
 					'action'	=> 'edit_alias',
 					$id
-				));
+				]);
 			} else {
 				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
 			}
@@ -408,7 +408,7 @@ class ContentsController extends AppController {
 			$this->notFound();
 		}
 		if($this->_delete($this->request->data['Content']['id'], true)) {
-			$this->redirect(array('plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index'));
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		} else {
 			$this->setMessage('削除中にエラーが発生しました。', true, true);
 		}
@@ -536,6 +536,9 @@ class ContentsController extends AppController {
  * @return bool|mixed
  */
 	protected function _changeStatus($id, $status) {
+		// EVENT Contents.beforeChangeStatus
+		$this->dispatchEvent('beforeChangeStatus', ['id' => $id, 'status' => $status]);
+
 		$content = $this->Content->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 		if(!$content) {
 			return false;
@@ -545,7 +548,12 @@ class ContentsController extends AppController {
 		$content['Content']['self_publish_begin'] = '';
 		$content['Content']['self_publish_end'] = '';
 		$content['Content']['self_status'] = $status;
-		return (bool) $this->Content->save($content, false);
+		$result = (bool) $this->Content->save($content, false);
+
+		// EVENT Contents.afterChangeStatus
+		$this->dispatchEvent('afterChangeStatus', ['id' => $id, 'result' => $result]);
+
+		return $result;
 	}
 	
 /**
@@ -559,7 +567,7 @@ class ContentsController extends AppController {
 		}
 		$this->autoRender = false;
 		$this->Content->softDelete(false);
-		$contents = $this->Content->find('all', array('conditions' => array('Content.deleted'), 'order' => array('Content.plugin', 'Content.type'), 'recursive' => -1));
+		$contents = $this->Content->find('all', ['conditions' => ['Content.deleted'], 'order' => ['Content.plugin', 'Content.type'], 'recursive' => -1]);
 		$result = true;
 
 		// EVENT Contents.beforeTrashEmpty
@@ -574,10 +582,10 @@ class ContentsController extends AppController {
 				} else {
 					$route = $this->BcContents->settings['items']['Default']['routes']['delete'];
 				}
-				if(!$this->requestAction($route, array('data' => array(
+				if(!$this->requestAction($route, ['data' => [
 					'contentId' => $content['Content']['id'],
 					'entityId' => $content['Content']['entity_id'],
-				)))) {
+				]])) {
 					$result = false;
 				}
 			}
@@ -598,15 +606,15 @@ class ContentsController extends AppController {
  * @param $type
  */
 	public function view($plugin, $type) {
-		$data = array('Content' => $this->request->params['Content']);
+		$data = ['Content' => $this->request->params['Content']];
         if($this->BcContents->preview && $this->request->data) {
             $data = $this->request->data;
         }
 		$this->set('data', $data);
 		if(!$data['Content']['alias_id']) {
-			$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit', 'content_id' => $data['Content']['id']));
+			$this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit', 'content_id' => $data['Content']['id']]);
 		} else {
-			$this->set('editLink', array('admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit_alias', $data['Content']['id']));
+			$this->set('editLink', ['admin' => true, 'plugin' => '', 'controller' => 'contents', 'action' => 'edit_alias', $data['Content']['id']]);
 		}
 	}
 
@@ -627,7 +635,7 @@ class ContentsController extends AppController {
 			'type'		=> $this->request->data['type'],
 			'site_id'	=> $this->request->data['siteId']
 		]];
-		if($this->Content->save($data, array('firstCreate' => !empty($this->request->data['first'])))) {
+		if($this->Content->save($data, ['firstCreate' => !empty($this->request->data['first'])])) {
 			$message = Configure::read('BcContents.items.' . $this->request->data['plugin'] . '.' . $this->request->data['type'] . '.title') .
 						'「' . $this->request->data['oldTitle'] . '」を「' . $this->request->data['newTitle'] . '」に名称変更しました。';
 			$this->setMessage($message, false, true, false);
@@ -662,9 +670,9 @@ class ContentsController extends AppController {
 		}
 		
 		// EVENT Contents.beforeMove
-		$event = $this->dispatchEvent('beforeMove', array(
+		$event = $this->dispatchEvent('beforeMove', [
 			'data' => $this->request->data
-		));
+		]);
 		if ($event !== false) {
 			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 		}
@@ -687,9 +695,9 @@ class ContentsController extends AppController {
 		if($result) {
 
 			// EVENT Contents.afterAdd
-			$this->dispatchEvent('afterMove', array(
+			$this->dispatchEvent('afterMove', [
 				'data' => $result
-			));
+			]);
 			
 			return json_encode($this->Content->getUrlById($result['Content']['id'], true));
 		} else {

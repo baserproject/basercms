@@ -45,14 +45,14 @@ class CakeFixtureManager {
  *
  * @var array
  */
-	protected $_loaded = array();
+	protected $_loaded = [];
 
 /**
  * Holds the fixture classes that where instantiated indexed by class name
  *
  * @var array
  */
-	protected $_fixtureMap = array();
+	protected $_fixtureMap = [];
 
 /**
  * Inspects the test to look for unloaded fixtures and loads them
@@ -62,7 +62,7 @@ class CakeFixtureManager {
  */
 	public function fixturize($test) {
 		if (!$this->_initialized) {
-			ClassRegistry::config(array('ds' => 'test', 'testing' => true));
+			ClassRegistry::config(['ds' => 'test', 'testing' => true]);
 		}
 		if (empty($test->fixtures) || !empty($this->_processed[get_class($test)])) {
 			$test->db = $this->_db;
@@ -109,7 +109,7 @@ class CakeFixtureManager {
 		foreach ($pathTokenArray as $pathToken) {
 			$additionalPath .= DS . $pathToken;
 		}
-		return array('fixture' => $fixture, 'additionalPath' => $additionalPath);
+		return ['fixture' => $fixture, 'additionalPath' => $additionalPath];
 	}
 
 /**
@@ -134,9 +134,9 @@ class CakeFixtureManager {
 				$fixturePrefixLess = substr($fixture, strlen('app.'));
 				$fixtureParsedPath = $this->_parseFixturePath($fixturePrefixLess);
 				$fixture = $fixtureParsedPath['fixture'];
-				$fixturePaths = array(
+				$fixturePaths = [
 					TESTS . 'Fixture' . $fixtureParsedPath['additionalPath']
-				);
+				];
 			// CUSTOMIZE ADD 2014/07/02 ryuring
 			// baserCMSのフィクスチャーを読み込むように変更
 			// CUSTOMIZE ADD 2014/11/04 ryuring
@@ -148,25 +148,25 @@ class CakeFixtureManager {
 				array_shift($parts);
 				array_pop($parts);
 				$path = implode(DS, $parts);
-				$fixturePaths = array(
+				$fixturePaths = [
 					BASER . 'Test' . DS . 'Fixture' . DS . $path,
 					BASER . 'Test' . DS . 'Fixture'
-				);
+				];
 			// <<<
 			} elseif (strpos($fixture, 'plugin.') === 0) {
 				$explodedFixture = explode('.', $fixture, 3);
 				$pluginName = $explodedFixture[1];
 				$fixtureParsedPath = $this->_parseFixturePath($explodedFixture[2]);
 				$fixture = $fixtureParsedPath['fixture'];
-				$fixturePaths = array(
+				$fixturePaths = [
 					CakePlugin::path(Inflector::camelize($pluginName)) . 'Test' . DS . 'Fixture' . $fixtureParsedPath['additionalPath'],
 					TESTS . 'Fixture' . $fixtureParsedPath['additionalPath']
-				);
+				];
 			} else {
-				$fixturePaths = array(
+				$fixturePaths = [
 					TESTS . 'Fixture',
 					CAKE . 'Test' . DS . 'Fixture'
-				);
+				];
 			}
 
 			$loaded = false;
@@ -184,7 +184,7 @@ class CakeFixtureManager {
 			}
 
 			if (!$loaded) {
-				$firstPath = str_replace(array(APP, CAKE_CORE_INCLUDE_PATH, ROOT), '', $fixturePaths[0] . DS . $className . 'Fixture.php');
+				$firstPath = str_replace([APP, CAKE_CORE_INCLUDE_PATH, ROOT], '', $fixturePaths[0] . DS . $className . 'Fixture.php');
 				throw new UnexpectedValueException(__d('cake_dev', 'Referenced fixture class %s (%s) not found', $className, $firstPath));
 			}
 		}
@@ -259,7 +259,7 @@ class CakeFixtureManager {
  * @return void
  */
 	public function unload(CakeTestCase $test) {
-		$fixtures = !empty($test->fixtures) ? $test->fixtures : array();
+		$fixtures = !empty($test->fixtures) ? $test->fixtures : [];
 		foreach (array_reverse($fixtures) as $f) {
 			if (isset($this->_loaded[$f])) {
 				$fixture = $this->_loaded[$f];

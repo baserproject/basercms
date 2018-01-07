@@ -22,14 +22,14 @@ class Permission extends AppModel {
  * 
  * @var array
  */
-	public $actsAs = array('BcCache');
+	public $actsAs = ['BcCache'];
 
 /**
  * belongsTo
  * @var array
  */
-	public $belongsTo = array('UserGroup' => array('className' => 'UserGroup',
-			'foreignKey' => 'user_group_id'));
+	public $belongsTo = ['UserGroup' => [ 'className' => 'UserGroup',
+			'foreignKey' => 'user_group_id']];
 
 /**
  * permissionsTmp
@@ -45,27 +45,27 @@ class Permission extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => '設定名を入力してください。'),
-			array('rule' => array('maxLength', 255),
-				'message' => '設定名は255文字以内で入力してください。')
-		),
-		'user_group_id' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
+				'message' => '設定名を入力してください。'],
+			['rule' => ['maxLength', 255],
+				'message' => '設定名は255文字以内で入力してください。']
+		],
+		'user_group_id' => [
+			['rule' => ['notBlank'],
 				'message' => 'ユーザーグループを選択してください。',
-				'required' => true)
-		),
-		'url' => array(
-			array('rule' => array('notBlank'),
-				'message' => '設定URLを入力してください。'),
-			array('rule' => array('maxLength', 255),
-				'message' => '設定URLは255文字以内で入力してください。'),
-			array('rule' => array('checkUrl'),
-				'message' => 'アクセス拒否として設定できるのは認証ページだけです。')
-		)
-	);
+				'required' => true]
+		],
+		'url' => [
+			['rule' => ['notBlank'],
+				'message' => '設定URLを入力してください。'],
+			['rule' => ['maxLength', 255],
+				'message' => '設定URLは255文字以内で入力してください。'],
+			['rule' => ['checkUrl'],
+				'message' => 'アクセス拒否として設定できるのは認証ページだけです。']
+		]
+	];
 
 /**
  * 権限の必要なURLかチェックする
@@ -107,10 +107,10 @@ class Permission extends AppModel {
  * @return string
  */
 	public function getAuthPrefix($id) {
-		$data = $this->find('first', array(
-			'conditions' => array('Permission.id' => $id),
+		$data = $this->find('first', [
+			'conditions' => ['Permission.id' => $id],
 			'recursive' => 1
-		));
+		]);
 		if (isset($data['UserGroup']['auth_prefix'])) {
 			return $data['UserGroup']['auth_prefix'];
 		} else {
@@ -135,8 +135,8 @@ class Permission extends AppModel {
  * @return array コントロールソース
  */
 	public function getControlSource($field = null) {
-		$controlSources['user_group_id'] = $this->UserGroup->find('list', array('conditions' => array('UserGroup.id <>' => Configure::read('BcApp.adminGroupId'))));
-		$controlSources['auth'] = array('0' => '不可', '1' => '可');
+		$controlSources['user_group_id'] = $this->UserGroup->find('list', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')]]);
+		$controlSources['auth'] = ['0' => '不可', '1' => '可'];
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {
@@ -151,7 +151,7 @@ class Permission extends AppModel {
  * @param array $options
  * @return boolean
  */
-	public function beforeSave($options = array()) {
+	public function beforeSave($options = []) {
 		if (isset($this->data['Permission'])) {
 			$data = $this->data['Permission'];
 		} else {
@@ -188,14 +188,14 @@ class Permission extends AppModel {
 		$url = preg_replace("/^{$adminPrefix}\//", 'admin/', $url);
 
 		// ダッシュボード、ログインユーザーの編集とログアウトは強制的に許可とする
-		$allows = array(
+		$allows = [
 			'/^admin$/',
 			'/^admin\/$/',
 			'/^admin\/dashboard\/.*?/',
 			'/^admin\/dblogs\/.*?/',
 			'/^admin\/users\/logout$/',
 			'/^admin\/user_groups\/set_default_favorites$/'
-		);
+		];
 		$sessionKey = Configure::read('BcAuthPrefix.admin.sessionKey');
 		if (!empty($_SESSION['Auth'][$sessionKey]['id'])) {
 			$allows[] = '/^admin\/users\/edit\/' . $_SESSION['Auth'][$sessionKey]['id'] . '$/';
@@ -235,16 +235,16 @@ class Permission extends AppModel {
  * @param array $data
  * @return mixed UserGroup Or false
  */
-	public function copy($id, $data = array()) {
+	public function copy($id, $data = []) {
 		if ($id) {
-			$data = $this->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
+			$data = $this->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
 		}
 
 		if (!isset($data['Permission']['user_group_id']) || !isset($data['Permission']['name'])) {
 			return false;
 		}
 
-		if ($this->find('count', array('conditions' => array('Permission.user_group_id' => $data['Permission']['user_group_id'], 'Permission.name' => $data['Permission']['name'])))) {
+		if ($this->find('count', ['conditions' => ['Permission.user_group_id' => $data['Permission']['user_group_id'], 'Permission.name' => $data['Permission']['name']]])) {
 			$data['Permission']['name'] .= '_copy';
 			return $this->copy(null, $data); // 再帰処理
 		}
@@ -253,8 +253,8 @@ class Permission extends AppModel {
 		unset($data['Permission']['modified']);
 		unset($data['Permission']['created']);
 
-		$data['Permission']['no'] = $this->getMax('no', array('user_group_id' => $data['Permission']['user_group_id'])) + 1;
-		$data['Permission']['sort'] = $this->getMax('sort', array('user_group_id' => $data['Permission']['user_group_id'])) + 1;
+		$data['Permission']['no'] = $this->getMax('no', ['user_group_id' => $data['Permission']['user_group_id']]) + 1;
+		$data['Permission']['sort'] = $this->getMax('sort', ['user_group_id' => $data['Permission']['user_group_id']]) + 1;
 		$this->create($data);
 		$result = $this->save();
 		if ($result) {
@@ -272,7 +272,7 @@ class Permission extends AppModel {
  */
 	public function setCheck($userGroupId) {
 		if ($this->permissionsTmp === -1) {
-			$conditions = array('Permission.user_group_id' => $userGroupId);
+			$conditions = ['Permission.user_group_id' => $userGroupId];
 			$permissions = $this->find('all', [
 				'fields' => ['url', 'auth', 'status'],
 				'conditions' => $conditions,

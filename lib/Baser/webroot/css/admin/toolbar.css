@@ -115,6 +115,9 @@ span#DebugMode{
 #UserMenu ul div#SystemMenu{
 	width:600px;
 }
+#UserMenu ul li {
+	overflow:visible!important;
+}
 #UserMenu ul li ul li {
 	padding:0;
 	float:none;
@@ -193,6 +196,7 @@ span#DebugMode{
 	background:-o-linear-gradient(top,#FFF,#F3F3F3);
 	cursor: pointer;
 	margin: 0!important;
+	line-height: 1.5em;
 }
 #UserMenu .active div#SystemMenu div h2:hover{
 	background:#f4f4f4;

@@ -125,7 +125,7 @@ class BlogCategory extends BlogAppModel {
 				foreach ($parents as $key => $parent) {
 					if (preg_match("/^([_]+)/i", $parent, $matches)) {
 						$parent = preg_replace("/^[_]+/i", '', $parent);
-						$prefix = str_replace('_', '&nbsp&nbsp&nbsp', $matches[1]);
+						$prefix = str_replace('_', '　　　', $matches[1]);
 						$parent = $prefix . '└' . $parent;
 					}
 					$controlSources['parent_id'][$key] = $parent;

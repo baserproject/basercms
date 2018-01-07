@@ -34,14 +34,14 @@ class BlogTagsController extends BlogAppController {
  *
  * @var array
  */
-	public $uses = array('Blog.BlogCategory', 'Blog.BlogTag');
+	public $uses = ['Blog.BlogCategory', 'Blog.BlogTag'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcContents'];
 	
 /**
  * [ADMIN] タグ一覧
@@ -49,14 +49,14 @@ class BlogTagsController extends BlogAppController {
  * @return void
  */
 	public function admin_index() {
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num'], 'sort' => 'id', 'direction' => 'asc'));
-		$this->setViewConditions('BlogTag', array('default' => $default));
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num'], 'sort' => 'id', 'direction' => 'asc']];
+		$this->setViewConditions('BlogTag', ['default' => $default]);
 
-		$this->paginate = array(
+		$this->paginate = [
 			'order' => 'BlogTag.id',
 			'limit' => $this->passedArgs['num'],
 			'recursive' => 0
-		);
+		];
 		$this->set('datas', $this->paginate('BlogTag'));
 
 		$this->pageTitle = 'タグ一覧';
@@ -72,7 +72,7 @@ class BlogTagsController extends BlogAppController {
 			$this->BlogTag->create($this->request->data);
 			if ($this->BlogTag->save()) {
 				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
@@ -90,7 +90,7 @@ class BlogTagsController extends BlogAppController {
 	public function admin_edit($id) {
 		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 		if (empty($this->request->data)) {
 			$this->request->data = $this->BlogTag->read(null, $id);
@@ -98,7 +98,7 @@ class BlogTagsController extends BlogAppController {
 			$this->BlogTag->set($this->request->data);
 			if ($this->BlogTag->save()) {
 				$this->setMessage('タグ「' . $this->request->data['BlogTag']['name'] . '」を更新しました。', false, true);
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('エラーが発生しました。内容を確認してください。', true);
 			}
@@ -117,7 +117,7 @@ class BlogTagsController extends BlogAppController {
 		$this->_checkSubmitToken();
 		if (!$id) {
 			$this->setMessage('無効な処理です。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		$data = $this->BlogTag->read(null, $id);
@@ -128,7 +128,7 @@ class BlogTagsController extends BlogAppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(['action' => 'index']);
 	}
 
 /**
@@ -180,7 +180,7 @@ class BlogTagsController extends BlogAppController {
 		if (!empty($this->request->data)) {
 			$this->BlogTag->create($this->request->data);
 			if ($data = $this->BlogTag->save()) {
-				$result = array($this->BlogTag->id => $data['BlogTag']['name']);
+				$result = [$this->BlogTag->id => $data['BlogTag']['name']];
 				$this->set('result', $result);
 			} else {
 				$this->ajaxError(500, $this->BlogTag->validationErrors);

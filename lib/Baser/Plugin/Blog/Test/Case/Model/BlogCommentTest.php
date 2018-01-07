@@ -14,11 +14,11 @@ App::uses('BlogComment', 'Blog.Model');
 
 class BlogCommentTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.BlogComment',
 		'baser.Default.Content',
 		'baser.Default.Site',
-	);
+	];
 
 	public function setUp() {
 		$this->BlogComment = ClassRegistry::init('Blog.BlogComment');
@@ -34,12 +34,12 @@ class BlogCommentTest extends BaserTestCase {
  * validate
  */
 	public function test空チェック() {
-		$this->BlogComment->create(array(
-			'BlogComment' => array(
+		$this->BlogComment->create([
+			'BlogComment' => [
 				'name' => '',
 				'message' => '',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogComment->validates());
 
@@ -51,13 +51,13 @@ class BlogCommentTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
-		$this->BlogComment->create(array(
-			'BlogComment' => array(
+		$this->BlogComment->create([
+			'BlogComment' => [
 				'name' => '123456789012345678901234567890123456789012345678901',
 				'email' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456@example.com',
 				'url' => 'http://example.com/1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->BlogComment->validates());
 
 		$this->assertArrayHasKey('name', $this->BlogComment->validationErrors);
@@ -72,24 +72,24 @@ class BlogCommentTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック正常系() {
-		$this->BlogComment->create(array(
-			'BlogComment' => array(
+		$this->BlogComment->create([
+			'BlogComment' => [
 				'name' => '12345678901234567890123456789012345678901234567890',
 				'email' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678@example.com',
 				'url' => 'http://example.com/123456789012345678901234567890123456789012345678901234567890123456789012345678901234567567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456'
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->BlogComment->validates());
 	}
 
 	public function testその他異常系() {
 		// 形式チェック
-		$this->BlogComment->create(array(
-			'BlogComment' => array(
+		$this->BlogComment->create([
+			'BlogComment' => [
 				'email' => 'hoge',
 				'url' => 'hoge'
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogComment->validates());
 
@@ -100,22 +100,28 @@ class BlogCommentTest extends BaserTestCase {
 		$this->assertEquals('URLの形式が不正です。', current($this->BlogComment->validationErrors['url']));
 	}
 
+/**
+ * 初期値を取得する
+ */
+	public function testGetDefaultValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * コメントを追加する
  */
 	public function testAdd() {
-		$data = array('BlogComment' => array(
+		$data = ['BlogComment' => [
 			'name' => 'test_name<',
 			'email' => '-@example.com',
 			'url' => 'http://example.com/-',
 			'message' => 'test_message<',
-		));
+		]];
 		$this->BlogComment->add($data, 1, 1, false);
 
-		$result = $this->BlogComment->find('first', array(
-			'conditions' => array('id' => $this->BlogComment->getLastInsertID())
-		));
+		$result = $this->BlogComment->find('first', [
+			'conditions' => ['id' => $this->BlogComment->getLastInsertID()]
+		]);
 
 		$message = 'コメントを正しく追加できません';
 		$this->assertEquals($result['BlogComment']['name'], 'test_name&lt;', $message);

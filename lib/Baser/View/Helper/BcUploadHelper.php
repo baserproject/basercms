@@ -24,7 +24,7 @@ class BcUploadHelper extends BcAppHelper {
  * 
  * @var array
  */
-	public $helpers = array('Html', 'BcForm');
+	public $helpers = ['Html', 'BcForm'];
 	
 /**
  * ファイルへのリンクを取得する
@@ -33,8 +33,8 @@ class BcUploadHelper extends BcAppHelper {
  * @param array $options
  * @return string
  */
-	public function fileLink($fieldName, $options = array()) {
-		$options = array_merge(array(
+	public function fileLink($fieldName, $options = []) {
+		$options = array_merge([
 			'imgsize' => 'medium', // 画像サイズ
 			'rel' => '', // rel属性
 			'title' => '', // タイトル属性
@@ -42,7 +42,7 @@ class BcUploadHelper extends BcAppHelper {
 			'force' => false,
 			'width' => '', // 横幅
 			'height' => '', // 高さ
-			), $options);
+			], $options);
 
 		extract($options);
 
@@ -109,7 +109,7 @@ class BcUploadHelper extends BcAppHelper {
 				$uploadSettings = $settings['fields'][$field];
 				$ext = decodeContent('', $value);
 				if ($uploadSettings['type'] == 'image' || in_array($ext, $Model->Behaviors->BcUpload->imgExts)) {
-					$options = array(
+					$options = [
 						'imgsize' => $imgsize, 
 						'rel' => $rel, 
 						'title' => $title, 
@@ -117,14 +117,14 @@ class BcUploadHelper extends BcAppHelper {
 						'force' => $force,
 						'width' => $width, // 横幅
 						'height' => $height // 高さ
-					);
+					];
 					if ($tmp) {
 						$options['tmp'] = true;
 					}
 					$out = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				} else {
 					$filePath = $basePath . $value;
-					$out = $this->Html->link('ダウンロード ≫', $filePath, array('target' => '_blank')) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
+					$out = $this->Html->link('ダウンロード ≫', $filePath, ['target' => '_blank']) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				}
 			} else {
 				$out = $value;
@@ -158,7 +158,7 @@ class BcUploadHelper extends BcAppHelper {
  * @param array $options
  * @return string
  */
-	public function uploadImage($fieldName, $fileName, $options = array()) {
+	public function uploadImage($fieldName, $fileName, $options = []) {
 		$options = array_merge([
 			'imgsize' => 'medium', // 画像サイズ
 			'link' => true, // 大きいサイズの画像へのリンク有無
@@ -263,7 +263,7 @@ class BcUploadHelper extends BcAppHelper {
 		if ($fileName == $options['noimage']) {
 			$mostSizeUrl = $fileName;
 		} elseif ($options['tmp']) {
-			$mostSizeUrl = $fileUrl . str_replace(array('.', '/'), array('_', '_'), $fileName);
+			$mostSizeUrl = $fileUrl . str_replace(['.', '/'], ['_', '_'], $fileName);
 		} else {
 			$check = false;
 			$maxSizeExists = false;

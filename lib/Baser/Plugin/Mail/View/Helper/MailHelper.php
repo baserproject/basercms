@@ -243,7 +243,7 @@ class MailHelper extends AppHelper {
  * @param string $viewFile
  */
 	public function beforeRender($viewFile) {
-		if($this->request->params['controller'] == 'mail' && $this->request->params['action'] == 'index') {
+		if($this->request->params['controller'] == 'mail' && in_array($this->request->params['action'], ['index', 'confirm'])) {
 			// メールフォームをショートコードを利用する際、ショートコードの利用先でキャッシュを利用している場合、
 			// セキュリティコンポーネントで発行するトークンが更新されない為、強制的にキャッシュをオフにする
 			if (!empty($this->request->params['requested'])) {

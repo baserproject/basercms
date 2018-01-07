@@ -56,7 +56,21 @@ class MailMessageTest extends BaserTestCase {
 		$expected = "mail" . DS . "limited" . DS . '1' . DS . "messages";
 		$this->assertEquals($expected, $saveDir, 'アップロード設定を正しく設定できません');
 	}
-	
+
+/**
+ * テーブル名を設定する
+ */
+	public function testSetUseTable() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * アップロード設定を行う
+ */
+	public function testSetupUpload() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 /**
  * beforeSave
  *
@@ -132,6 +146,20 @@ class MailMessageTest extends BaserTestCase {
 				'email' => array(true, true)
 			), 'バリデーションチェックが正しく行われていません'),
 		);
+	}
+
+/**
+ * バリデート処理
+ */
+	public function testBeforeValidate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Called after data has been checked for errors
+ */
+	public function testAfterValidate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -256,6 +284,15 @@ class MailMessageTest extends BaserTestCase {
 	}
 
 /**
+ * 機種依存文字の変換処理
+ * 内部文字コードがUTF-8である必要がある。
+ * 多次元配列には対応していない。
+ */
+	public function testReplaceText() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * メール用に変換する
  *
  * @param int $no_send no_sendの値
@@ -326,6 +363,35 @@ class MailMessageTest extends BaserTestCase {
 			array(0, 'multi_check'),
 			array(0, 'file'),
 		);
+	}
+
+/**
+ * テーブル名を生成する
+ * int型でなかったら強制終了
+ */
+	public function testCreateTableName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * フルテーブル名を生成する
+ */
+	public function testCreateFullTableName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * メッセージテーブルを作成する
+ */
+	public function testCreateTable() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * メッセージテーブルを削除する
+ */
+	public function testDropTable() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
