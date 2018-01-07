@@ -20,25 +20,6 @@ App::uses('CakeTestLoader', 'TestSuite');
  * @package Baser.Lib.TestSuite
  */
 class BaserTestLoader extends CakeTestLoader {
-
-/**
- * Get the list of files for the test listing.
- *
- * @param string $params Path parameters
- * @return array
- */
-	public static function generateTestList($params) {
-		$directory = self::_basePath($params);
-		$fileList = self::_getRecursiveFileList($directory);
-		$testCases = [];
-		foreach ($fileList as $testCaseFile) {
-			$case = str_replace($directory . DS, '', $testCaseFile);
-			$case = str_replace('Test.php', '', $case);
-			$testCases[$testCaseFile] = $case;
-		}
-		sort($testCases);
-		return $testCases;
-	}
 	
 /**
  * Generates the base path to a set of tests based on the parameters.
@@ -70,5 +51,5 @@ class BaserTestLoader extends CakeTestLoader {
 		}
 		return $result;
 	}
-
+	
 }

@@ -15,7 +15,7 @@
  *
  * @package Baser.Event
  */
-class BcShortCodeEventListener extends Object implements CakeEventListener {
+class BcShortCodeEventListener extends CakeObject implements CakeEventListener {
 
 /**
  * Implemented Events

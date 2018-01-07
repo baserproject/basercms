@@ -26,7 +26,12 @@ class BcCacheDispatcher extends DispatcherFilter {
  *
  * @var int
  */
+	// CUSTOMIZE MODIFY 2017/01/07 ryuring
+	// >>>
+	// public $priority = 9;
+	// ---
 	public $priority = 5;
+	// <<<
 
 /**
  * Checks whether the response was cached and set the body accordingly.
@@ -35,7 +40,6 @@ class BcCacheDispatcher extends DispatcherFilter {
  * @return CakeResponse with cached content if found, null otherwise
  */
 	public function beforeDispatch(CakeEvent $event) {
-
 		if (Configure::read('Cache.check') !== true) {
 			return null;
 		}
@@ -51,7 +55,14 @@ class BcCacheDispatcher extends DispatcherFilter {
 		// <<<
 		
 		if ($path === '/') {
+			// CUSTOMIZE 2017/01/07 ryuring
+			// CakePHP 2.10.6 へのアップデートの際に変更となっていた事に気づいた
+			// 仕様として必要かどうかは未確認
+			// >>>
+			// $path = 'home';
+			// ---
 			$path = 'index';
+			// <<<
 		}
 		$prefix = Configure::read('Cache.viewPrefix');
 		if ($prefix) {

@@ -52,15 +52,12 @@ class BcAssetDispatcher extends AssetDispatcher {
 		if (!empty($path)) {
 			return $path;
 		}
-
 		$parts = explode('/', $url);
 		$fileFragment = implode(DS, $parts);
-
 		$path = BASER_WEBROOT;
 		if (file_exists($path . $fileFragment)) {
 			return $path . $fileFragment;
 		}
-
 		return null;
 	}
 // <<<
