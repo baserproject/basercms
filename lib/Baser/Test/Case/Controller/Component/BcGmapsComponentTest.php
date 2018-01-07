@@ -60,20 +60,6 @@ class BcGmapsComponentTest extends BaserTestCase {
 		unset($this->BcGmaps);
 	}
 
-
-/**
- * Construct
- * 
- * @return void
- */
-	public function test__construct() {
-		$this->BcGmaps->__construct();
-		$result = $this->BcGmaps->_baseUrl;
-		$expected = "http://" . MAPS_HOST . "/maps/api/geocode/xml?";
-
-		$this->assertEquals($expected, $result, 'APIのURLが正しくありません');
-	}
-
 	public function test_connect() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}

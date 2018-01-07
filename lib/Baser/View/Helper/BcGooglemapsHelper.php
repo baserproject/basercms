@@ -188,8 +188,9 @@ INFO_END;
  * @return array|boolean
  */
 	public function getLocation($address) {
-
-		$gmap = new BcGmapsComponent();
+		App::uses('BcGmaps', 'Lib');
+		$apiKey = Configure::read('BcSite.google_maps_api_key');
+		$gmap = new BcGmaps($apiKey);
 		if ($gmap->getInfoLocation($address)) {
 			return ['latitude' => $gmap->getLatitude(), 'longitude' => $gmap->getLongitude()];
 		} else {
