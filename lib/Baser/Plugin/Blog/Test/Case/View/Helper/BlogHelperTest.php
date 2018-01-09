@@ -265,7 +265,8 @@ class BlogHelperTest extends BaserTestCase {
 		$post = ['BlogPost' => [
 			'content' => 'test-content',
 			'detail' => 'test-detail',
-			'no' => 3
+			'no' => 3,
+			'blog_content_id' => 1
 		]];
 		$result = $this->Blog->getPostContent($post, $moreText, $moreLink, $cut);
 		$this->assertEquals($result, $expected, '記事の本文を正しく取得できません');

@@ -543,14 +543,29 @@ class ContentTest extends BaserTestCase {
 
 /**
  * サイトルートコンテンツを取得する
+ *
+ * @param int $siteId
+ * @param mixed $expects 期待するコンテントのid (存在しない場合はから配列)
+ * @dataProvider getSiteRootDataProvider
  */
-	public function testGetSiteRoot() {
-		$this->loadFixtures('ContentStatusCheck');
-		$this->assertEquals(1, $this->Content->getSiteRoot(0)['Content']['id']);
-		$this->assertEquals(2, $this->Content->getSiteRoot(1)['Content']['id']);
-		$this->assertEquals(3, $this->Content->getSiteRoot(2)['Content']['id']);
-		$this->assertEmpty($this->Content->getSiteRoot(3));
+	public function testGetSiteRoot($siteId, $expects) {
+		$result = $this->Content->getSiteRoot($siteId);
+		if ($result) {
+			$result = $result['Content']['id'];
+		}
+
+		$this->assertEquals($expects, $result);
 	}
+
+	public function getSiteRootDataProvider() {
+		return [
+			[0, 1],
+			[1, 2],
+			[2, 3],
+			[7, []],		// 存在しないsiteId
+		];
+	}
+
 
 /**
  * 親のテンプレートを取得する

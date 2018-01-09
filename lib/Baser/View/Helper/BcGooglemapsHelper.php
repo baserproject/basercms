@@ -185,13 +185,15 @@ INFO_END;
  * 位置情報を取得する
  *
  * @param string $address
- * @return boolean
+ * @return array|boolean
  */
 	public function getLocation($address) {
-
-		$gmap = new BcGmapsComponent();
-		if ($gmap->getInfoLocation($address)) {
-			return ['latitude' => $gmap->getLatitude(), 'longitude' => $gmap->getLongitude()];
+		App::uses('BcGmaps', 'Lib');
+		$apiKey = Configure::read('BcSite.google_maps_api_key');
+		$gmap = new BcGmaps($apiKey);
+		$result = $gmap->getInfoLocation($address);
+		if ($result) {
+			return ['latitude' => $result['latitude'], 'longitude' => $result['longitude']];
 		} else {
 			return false;
 		}

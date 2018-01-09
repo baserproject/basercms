@@ -868,7 +868,7 @@ class Content extends AppModel {
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
-		return $this->find('first', ['conditions' => $conditions]);
+		return $this->find('first', ['conditions' => $conditions, 'order' => ['Content.id']]);
 	}
 
 /**
@@ -1674,6 +1674,7 @@ class Content extends AppModel {
 		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		$contents = $this->find('all', [
 			'conditions' => $conditions,
+			'order' => ['Content.id'],
 			'recursive' => 0
 		]);
 		$mainSite = $this->Site->getRootMain();

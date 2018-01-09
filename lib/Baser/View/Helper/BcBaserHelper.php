@@ -1187,7 +1187,7 @@ class BcBaserHelper extends AppHelper {
 				$useSubdomain = $site->useSubDomain;
 				$fullUrl = true;
 			}
-			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain);
+			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
 			$this->link('公開ページ', $url, ['class' => 'tool-menu']);
 		}
 	}
@@ -2371,7 +2371,7 @@ END_FLASH;
 	 * @param array $data 読み込むテンプレートに引き継ぐパラメータ（初期値 : array()）
 	 * @param array $options オプション（初期値 : array()）
 	 *	※ その他のパラメータについては、View::element() を参照
-	 * @return void
+	 * @return string
 	 */
 	public function getGoogleMaps($data = [], $options = []) {
 		return $this->getElement('google_maps', $data, $options);
@@ -2668,7 +2668,7 @@ END_FLASH;
 	 * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
 	 * @return string
 	 */
-	public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = false) {
+	public function getContentsUrl($url = null, $full = false, $useSubDomain = null, $base = true) {
 		if(!$url) {
 			if(!empty($this->request->params['Content']['url'])) {
 				$url = $this->request->params['Content']['url'];

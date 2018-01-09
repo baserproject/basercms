@@ -114,22 +114,11 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  */
 	public function testGetLocation($address, $expected) {
 		$result = $this->BcGooglemaps->getLocation($address);
-
-		if (!empty($address)) {
-
-			if (isset($result['latitude']) && isset($result['longitude'])) {
-				$result['latitude'] = round($result['latitude'], 1);
-				$result['longitude'] = round($result['longitude'], 1);
-				$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
-			
-			} else {
-				$this->markTestIncomplete('GoogleMapの情報の取得に失敗したため、テストをスキップします');
-			}
-
-		} else {
-			$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
+		if($result) {
+			$result['latitude'] = round($result['latitude'], 1);
+			$result['longitude'] = round($result['longitude'], 1);
 		}
-		
+		$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
 	}
 
 	public function getLocationDataProvider() {
@@ -137,7 +126,7 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 			['博多駅', ['latitude' => '33.6', 'longitude' => '130.4']],
 			['fukuoka', ['latitude' => '33.6', 'longitude' => '130.4']],
 			[8100042, ['latitude' => '33.6', 'longitude' => '130.4']],
-			['', false]
+			['', null]
 		];
 	}
 

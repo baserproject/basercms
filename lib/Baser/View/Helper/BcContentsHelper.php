@@ -232,7 +232,7 @@ class BcContentsHelper extends AppHelper {
  * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
  * @return string URL
  */
-	public function getUrl($url, $full = false, $useSubDomain = false, $base = false) {
+	public function getUrl($url, $full = false, $useSubDomain = false, $base = true) {
 		return $this->_Content->getUrl($url, $full, $useSubDomain, $base);
 	}
 
@@ -511,7 +511,7 @@ class BcContentsHelper extends AppHelper {
  */
 	public function getContentByEntityId($id, $contentType, $field = null){
 		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
-		$content = $this->_Content->find('first', ['conditions' => $conditions, 'cache' => false]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
 		if(!empty($content)){
 			if($field){
 				return $content ['Content'][$field];

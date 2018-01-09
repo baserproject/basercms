@@ -227,11 +227,12 @@ class BlogBaserHelper extends AppHelper {
  *
  * 別ドメインに対応
  *
- * @param $blogContentId ブログコンテンツID
+ * @param int $blogContentId ブログコンテンツID
+ * @param bool $base ベースURLを付与するかどうか
  * @return string
  */
-	public function getBlogContentsUrl($blogContentId) {
-		return $this->Blog->getContentsUrl($blogContentId);
+	public function getBlogContentsUrl($blogContentId, $base = true) {
+		return $this->Blog->getContentsUrl($blogContentId, $base);
 	}
 	
 }
