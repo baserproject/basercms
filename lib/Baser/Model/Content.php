@@ -1087,7 +1087,10 @@ class Content extends AppModel {
  */
 	public function getUrlById($id, $full = false) {
 		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-		return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
+		if ($data) {
+			return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
+		}
+		return '';
 	}
 
 /**
