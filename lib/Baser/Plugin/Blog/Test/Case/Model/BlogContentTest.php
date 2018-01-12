@@ -181,11 +181,22 @@ class BlogContentTest extends BaserTestCase {
 
 /**
  * コントロールソースを取得する
+ *
+ * @dataProvider getControlSourceDataProvider
  */
-	public function testGetControlSource() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetControlSource($field, $expected) {
+		$result = $this->BlogContent->getControlSource($field);
+		$this->assertEquals($result, $expected);
 	}
 
+	public function getControlSourceDataProvider() {
+		return[
+			[null, false],
+			['', false],
+			['hoge', false],
+			['id', ['1' => '新着情報']],
+		];
+	}
 /**
  * afterSave
  *
