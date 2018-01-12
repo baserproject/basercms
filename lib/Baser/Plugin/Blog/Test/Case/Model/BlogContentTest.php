@@ -334,7 +334,11 @@ class BlogContentTest extends BaserTestCase {
  * アイキャッチサイズフィールドの値をフォーム用に変換する
  */
 	public function testConstructEyeCatchSize() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue()));
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_height'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_width'], 150);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_height'], 150);
 	}
 
 }
