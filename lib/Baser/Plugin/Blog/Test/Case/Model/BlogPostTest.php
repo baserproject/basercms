@@ -205,8 +205,12 @@ class BlogPostTest extends BaserTestCase {
 /**
  * コントロールソースを取得する
  */
-public function getDefaultValue() {
-	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+public function testGetDefaultValue() {
+	$authUser['id'] = 1;
+	$data = $this->BlogPost->getDefaultValue($authUser);
+	$this->assertEquals($data['BlogPost']['user_id'], $authUser['id']);
+	$this->assertEquals($data['BlogPost']['posts_date'], date('Y/m/d H:i:s'));
+	$this->assertEquals($data['BlogPost']['status'], 0);
 }
 
 /**
