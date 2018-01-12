@@ -190,14 +190,6 @@ class BlogCategoryTest extends BaserTestCase {
 			[['title' => 'プレスリリース'], false],
 			[['title' => '親子関係なしカテゴリ'], false],
 			[['title' => 'hoge'], true],
-			//arrayの先頭だけで判断(完全一致かどうかは関係ない)
-			[['name' => 'hoge', 'title' => 'hoge'], true],
-			[['name' => 'release', 'title' => 'プレスリリース'], false],
-			[['name' => 'release', 'title' => '親子関係なしカテゴリ'], false],
-			[['name' => 'release', 'title' => 'hoge'], false],
-			//arrayの順番でTFが変わる
-			[['name' => 'hoge', 'title' => '親子関係なしカテゴリ'], true],
-			[['title' => '親子関係なしカテゴリ', 'name' => 'hoge'], false],
 		];
 	}
 
