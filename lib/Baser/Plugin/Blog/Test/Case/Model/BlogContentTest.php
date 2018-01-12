@@ -327,7 +327,11 @@ class BlogContentTest extends BaserTestCase {
  * アイキャッチサイズフィールドの値をDB用に変換する
  */
 	public function testDeconstructEyeCatchSize() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = $this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue());
+		$this->assertEquals(
+			$data['BlogContent']['eye_catch_size'],
+			'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7aTo2MDA7czoxMjoidGh1bWJfaGVpZ2h0IjtpOjYwMDtzOjE4OiJtb2JpbGVfdGh1bWJfd2lkdGgiO2k6MTUwO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO2k6MTUwO30='
+		);
 	}
 
 /**
