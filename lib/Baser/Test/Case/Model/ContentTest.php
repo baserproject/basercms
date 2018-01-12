@@ -520,11 +520,28 @@ class ContentTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
+
 /**
  * データが公開済みかどうかチェックする
+ *
+ * @dataProvider isPublishDataProvider
  */
-	public function testIsPublish() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testIsPublish($status, $publishBegin, $publishEnd, $expected) {
+		$result = $this->Content->isPublish($status, $publishBegin, $publishEnd);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function isPublishDataProvider(){
+		return[
+			[true, '', '', true],
+			[false, '', '', false],
+			[true, '0000-00-00 00:00:00', '', true],
+			[true, '0000-00-00 00:00:01', '', true],
+			[true, date('Y-m-d H:i:s')+1, '', false],
+			[true, '', '0000-00-00 00:00:00', true],
+			[true, '', '0000-00-00 00:00:01', false],
+			[true, '', date('Y-m-d H:i:s')+1, true],
+		];
 	}
 
 /**
