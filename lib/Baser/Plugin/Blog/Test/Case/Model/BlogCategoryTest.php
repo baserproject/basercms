@@ -173,9 +173,32 @@ class BlogCategoryTest extends BaserTestCase {
 /**
  * 同じニックネームのカテゴリがないかチェックする
  * 同じブログコンテンツが条件
+ *
+ * @dataProvider duplicateBlogCategoryDataProvider
  */
-	public function testDuplicateBlogCategory() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testDuplicateBlogCategory($check, $expected) {
+		$this->BlogCategory->validationParams['blogContentId'] = 1;
+		$result = $this->BlogCategory->duplicateBlogCategory($check);
+		$this->assertEquals($result, $expected);
+	}
+
+	public function duplicateBlogCategoryDataProvider() {
+		return[
+			[['id' => 0], true],
+			[['id' => 1], false],
+			[['name' => 'release'], false],
+			[['title' => 'プレスリリース'], false],
+			[['title' => '親子関係なしカテゴリ'], false],
+			[['title' => 'hoge'], true],
+			//arrayの先頭だけで判断(完全一致かどうかは関係ない)
+			[['name' => 'hoge', 'title' => 'hoge'], true],
+			[['name' => 'release', 'title' => 'プレスリリース'], false],
+			[['name' => 'release', 'title' => '親子関係なしカテゴリ'], false],
+			[['name' => 'release', 'title' => 'hoge'], false],
+			//arrayの順番でTFが変わる
+			[['name' => 'hoge', 'title' => '親子関係なしカテゴリ'], true],
+			[['title' => '親子関係なしカテゴリ', 'name' => 'hoge'], false],
+		];
 	}
 
 /**
@@ -238,7 +261,8 @@ class BlogCategoryTest extends BaserTestCase {
  * 子カテゴリを持っているかどうか
  */
 	public function testHasChild() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertFalse($this->BlogCategory->hasChild(2));
+		$this->assertTrue($this->BlogCategory->hasChild(1));
 	}
 
 }
