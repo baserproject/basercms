@@ -104,7 +104,7 @@ class BlogCommentTest extends BaserTestCase {
  * 初期値を取得する
  */
 	public function testGetDefaultValue() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertEquals($this->BlogComment->getDefaultValue()['BlogComment']['name'], 'NO NAME');
 	}
 
 /**
