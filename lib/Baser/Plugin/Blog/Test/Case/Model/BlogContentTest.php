@@ -305,7 +305,22 @@ class BlogContentTest extends BaserTestCase {
  * フォームの初期値を取得する
  */
 	public function testGetDefaultValue() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = $this->BlogContent->getDefaultValue();
+		$this->assertEquals($data['BlogContent']['comment_use'], true);
+		$this->assertEquals($data['BlogContent']['comment_approve'],false);
+		$this->assertEquals($data['BlogContent']['layout'], 'default');
+		$this->assertEquals($data['BlogContent']['template'], 'default');
+		$this->assertEquals($data['BlogContent']['list_count'], 10);
+		$this->assertEquals($data['BlogContent']['list_direction'], 'DESC');
+		$this->assertEquals($data['BlogContent']['feed_count'], 10);
+		$this->assertEquals($data['BlogContent']['auth_captcha'], 1);
+		$this->assertEquals($data['BlogContent']['tag_use'], false);
+		$this->assertEquals($data['BlogContent']['status'], false);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_height'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_width'], 150);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_height'], 150);
+		$this->assertEquals($data['BlogContent']['use_content'], true);
 	}
 
 /**
