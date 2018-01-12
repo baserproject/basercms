@@ -261,7 +261,8 @@ class BlogCategoryTest extends BaserTestCase {
  * 子カテゴリを持っているかどうか
  */
 	public function testHasChild() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$this->assertFalse($this->BlogCategory->hasChild(2));
+		$this->assertTrue($this->BlogCategory->hasChild(1));
 	}
 
 }
