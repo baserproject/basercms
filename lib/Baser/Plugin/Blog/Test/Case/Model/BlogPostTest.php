@@ -355,7 +355,13 @@ public function testGetDefaultValue() {
  * 公開済の conditions を取得
  */
 	public function testGetConditionAllowPublish() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BlogPost->getConditionAllowPublish();
+		$this->assertEquals($result[0]['or']['0']['BlogPost.publish_begin <='], date('Y-m-d H:i:s'));
+		$this->assertEquals($result[0]['or']['1']['BlogPost.publish_begin'], null);
+		$this->assertEquals($result[0]['or']['2']['BlogPost.publish_begin'], '0000-00-00 00:00:00');
+		$this->assertEquals($result[1]['or']['0']['BlogPost.publish_end >='], date('Y-m-d H:i:s'));
+		$this->assertEquals($result[1]['or']['1']['BlogPost.publish_end'], null);
+		$this->assertEquals($result[1]['or']['2']['BlogPost.publish_end'], '0000-00-00 00:00:00');
 	}
 
 /**
