@@ -155,12 +155,28 @@ class BlogContentTest extends BaserTestCase {
 			[600, 600, 100, '', false],
 		];
 	}
-	
+
 /**
  * 英数チェック
+ *
+ * @dataProvider alphaNumericDataProvider
  */
-	public function testAlphaNumeric() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testAlphaNumeric($key, $expected) {
+		$this->assertEquals($this->BlogContent->alphaNumeric($key), $expected);
+	}
+
+	public function alphaNumericDataProvider() {
+		return [
+			[['key' => 'abc'], true],
+			[['key' => 'ほげ'], false],
+			[['key' => '01234'], true],
+			[['key' => '０１２３４'], false],
+			[['key' => '$'], false],
+			[['key' => '<>'], false],
+			[['key' => '?'], false],
+			[['key' => '^'], false],
+			[['key' => '-'], false]
+		];
 	}
 
 /**
