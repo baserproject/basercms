@@ -329,11 +329,28 @@ public function testGetDefaultValue() {
 
 /**
  * 公開状態を取得する
+ *
+ * @dataProvider allowPublishDataProvider
  */
-	public function testAllowPublish() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testAllowPublish($publish_begin, $publish_end, $status, $expected) {
+//		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data['publish_begin'] = $publish_begin;
+		$data['publish_end'] = $publish_end;
+		$data['status'] = $status;
+		$this->assertEquals($this->BlogPost->allowPublish($data), $expected);
 	}
 
+	public function allowPublishDataProvider() {
+		return[
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s')+1, true, true],
+			[date('Y-m-d H:i:s'), '0000-00-00 00:00:00', true, true],
+			[date('Y-m-d H:i:s')+1, '0000-00-00 00:00:00', true, false],
+			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
+		];
+	}
 /**
  * 公開済の conditions を取得
  */
