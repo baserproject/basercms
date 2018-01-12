@@ -209,6 +209,7 @@ public function testGetDefaultValue() {
 	$authUser['id'] = 1;
 	$data = $this->BlogPost->getDefaultValue($authUser);
 	$this->assertEquals($data['BlogPost']['user_id'], $authUser['id']);
+	$this->assertRegExp('/' . '([0-9]{4})\/([0-9]{2})\/([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/', $data['BlogPost']['posts_date']);
 	$this->assertEquals($data['BlogPost']['posts_date'], date('Y/m/d H:i:s'));
 	$this->assertEquals($data['BlogPost']['status'], 0);
 }
@@ -333,7 +334,6 @@ public function testGetDefaultValue() {
  * @dataProvider allowPublishDataProvider
  */
 	public function testAllowPublish($publish_begin, $publish_end, $status, $expected) {
-//		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 		$data['publish_begin'] = $publish_begin;
 		$data['publish_end'] = $publish_end;
 		$data['status'] = $status;
@@ -356,10 +356,12 @@ public function testGetDefaultValue() {
  */
 	public function testGetConditionAllowPublish() {
 		$result = $this->BlogPost->getConditionAllowPublish();
-		$this->assertEquals($result[0]['or']['0']['BlogPost.publish_begin <='], date('Y-m-d H:i:s'));
+		$pattern = '/' . '([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/';
+
+		$this->assertRegExp($pattern, $result[0]['or']['0']['BlogPost.publish_begin <=']);
 		$this->assertEquals($result[0]['or']['1']['BlogPost.publish_begin'], null);
 		$this->assertEquals($result[0]['or']['2']['BlogPost.publish_begin'], '0000-00-00 00:00:00');
-		$this->assertEquals($result[1]['or']['0']['BlogPost.publish_end >='], date('Y-m-d H:i:s'));
+		$this->assertRegExp($pattern, $result[1]['or']['0']['BlogPost.publish_end >=']);
 		$this->assertEquals($result[1]['or']['1']['BlogPost.publish_end'], null);
 		$this->assertEquals($result[1]['or']['2']['BlogPost.publish_end'], '0000-00-00 00:00:00');
 	}
@@ -466,9 +468,16 @@ public function testGetDefaultValue() {
 /**
  * beforeDelete
  */
-public function testBeforeDelete() {
-	$this->markTestIncomplete('このテストは、まだ実装されていません。');
-}
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/*
+ * beforeFind
+ */
+	public function testBeforeFind() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * コピーする
