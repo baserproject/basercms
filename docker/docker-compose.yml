@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  basercms-database:
-    container_name: basercms-database
+  basercake3-database:
+    container_name: basercake3-database
     image: mysql/mysql-server:5.7
     volumes:
       - ./volumes/mysql:/var/lib/mysql
@@ -13,20 +13,20 @@ services:
       MYSQL_USER: "root"
       MYSQL_PASSWORD: "root"
       MYSQL_DATABASE: "basercms"
-  basercms:
-    container_name: basercms
+  basercake3:
+    container_name: basercake3
     image: baserproject/basercms
     volumes:
 #      - sync-volume:/var/www/html
       - .:/var/www/html:cached
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
-    command:
-      composer install
+#    command:
+#      composer install
     ports:
       - "80:80"
     depends_on:
-      - basercms-database
+      - basercake3-database
 volumes:
   sync-volume:
     external: true
