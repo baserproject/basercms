@@ -2,7 +2,6 @@
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
-
 Router::plugin(
     'Baser',
     ['path' => '/baser'],
@@ -23,3 +22,5 @@ Router::plugin(
 //		$routes->connect('/:controller');
 //	});
 //});
+
+//require_once '/Users/ryuring/Documents/Projects/basercake3/plugins/Baser/src/Controller/Admin/UsersController.php';
