@@ -38,3 +38,7 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
+/volumes/*
+/docker-compose.yml
+/Dockerfile
+
