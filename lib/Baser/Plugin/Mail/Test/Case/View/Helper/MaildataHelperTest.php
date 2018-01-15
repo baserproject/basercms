@@ -71,9 +71,9 @@ class MaildataHelperTest extends BaserTestCase {
             ['select', 'hoge', '',''],
             ['select', 'hoge',  $options, '資料請求'],
             ['select', 'h', $options, ''],
-            ['pref', '35', '','山口県'],
-            ['pref', '0', '',''],
-            ['pref', '', '','都道府県'],
+            ['pref', '東京都', '','東京都'],
+            ['pref', '福岡県', '','福岡県'],
+            ['pref', '', '',''],
             //TODO 配列がemptyでhogeが返ってくるはずだが、配列がありhogeが返ってこない。問題はなし。
             ['check', 'hoge', '', ''],
             ['check', 'hoge', $options, '資料請求'],

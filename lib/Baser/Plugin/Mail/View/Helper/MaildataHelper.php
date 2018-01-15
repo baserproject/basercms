@@ -66,7 +66,11 @@ class MaildataHelper extends BcTextHelper {
 				return '';
 
 			case 'pref':
-				$options = $this->prefList();
+				$prefs = $this->prefList();
+				$options = array();
+				foreach($prefs as $pref) {
+					$options[$pref] = $pref;
+				}
 				if (isset($options[$value])) {
 					return $options[$value];
 				}
