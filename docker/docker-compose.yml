@@ -22,11 +22,11 @@ services:
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
 #    command:
-#      composer install
+#      composer install   # うまく動作しない
     ports:
       - "80:80"
     depends_on:
       - basercake3-database
-volumes:
-  sync-volume:
-    external: true
+#volumes:
+#  sync-volume:
+#    external: true

@@ -12,7 +12,15 @@ docker/docker-compose.yml をプロジェクトディレクトリの直下にコ
 ```
 docker-compose up -d
 ```
-コンテナの起動が完了したら、 `config/app.php` で、データベースの設定を行い、`http://localhost/` にアクセスしてください。
+
+## コンテナにログインしてコンポーザーを実行
+
+```
+docker exex -it basercms3 /bin/bash
+composer install
+```
+
+コンポーザーの処理が完了したら、 `config/app.php` で、データベースの設定を行い、`http://localhost/` にアクセスしてください。
 
 ### データベース情報
 | name | value |
