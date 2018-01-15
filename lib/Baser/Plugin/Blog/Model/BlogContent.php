@@ -133,17 +133,17 @@ class BlogContent extends BlogAppModel {
 		switch($field) {
 			case 'id':
 				$ContentModel = ClassRegistry::init('Content');
-				$controlSources['id'] = $ContentModel->find('list', array(
-					'fields' => array(
+				$controlSources['id'] = $ContentModel->find('list', [
+					'fields' => [
 						'entity_id', 
 						'title',
-					),
-					'conditions' => array(
+					],
+					'conditions' => [
 						'plugin' => 'Blog',
 						'type' => 'BlogContent',
-					),
+					],
 					'recursive' => -1,
-				));
+				]);
 				break;
 			default:
 				break;

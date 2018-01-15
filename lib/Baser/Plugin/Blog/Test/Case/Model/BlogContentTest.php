@@ -133,25 +133,70 @@ class BlogContentTest extends BaserTestCase {
 
 /**
  * アイキャッチ画像サイズバリデーション
+ *
+ * @dataProvider checkEyeCatchSizeDataProvider
  */
-	public function testCheckEyeCatchSize() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testCheckEyeCatchSize($thumb_width, $thumb_height, $mobile_thumb_width, $mobile_thumb_height, $expected) {
+		$this->BlogContent->data['BlogContent']['eye_catch_size'] = BcUtil::serialize([
+			'thumb_width' => $thumb_width,
+			'thumb_height' => $thumb_height,
+			'mobile_thumb_width' => $mobile_thumb_width,
+			'mobile_thumb_height' => $mobile_thumb_height
+		]);
+		$this->assertEquals($this->BlogContent->checkEyeCatchSize(), $expected);
+	}
+
+	public function checkEyeCatchSizeDataProvider() {
+		return[
+			[600, 600, 100, 100, true],
+			['', 600, 100, 100, false],
+			[600, '', 100, 100, false],
+			[600, 600, '', 100, false],
+			[600, 600, 100, '', false],
+		];
 	}
 
 /**
  * 英数チェック
+ *
+ * @dataProvider alphaNumericDataProvider
  */
-	public function testAlphaNumeric() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testAlphaNumeric($key, $expected) {
+		$this->assertEquals($this->BlogContent->alphaNumeric($key), $expected);
+	}
+
+	public function alphaNumericDataProvider() {
+		return [
+			[['key' => 'abc'], true],
+			[['key' => 'ほげ'], false],
+			[['key' => '01234'], true],
+			[['key' => '０１２３４'], false],
+			[['key' => '$'], false],
+			[['key' => '<>'], false],
+			[['key' => '?'], false],
+			[['key' => '^'], false],
+			[['key' => '-'], false]
+		];
 	}
 
 /**
  * コントロールソースを取得する
+ *
+ * @dataProvider getControlSourceDataProvider
  */
-	public function testGetControlSource() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testGetControlSource($field, $expected) {
+		$result = $this->BlogContent->getControlSource($field);
+		$this->assertEquals($result, $expected);
 	}
 
+	public function getControlSourceDataProvider() {
+		return[
+			[null, false],
+			['', false],
+			['hoge', false],
+			['id', ['1' => '新着情報']],
+		];
+	}
 /**
  * afterSave
  *
@@ -260,21 +305,44 @@ class BlogContentTest extends BaserTestCase {
  * フォームの初期値を取得する
  */
 	public function testGetDefaultValue() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = $this->BlogContent->getDefaultValue();
+		$this->assertEquals($data['BlogContent']['comment_use'], true);
+		$this->assertEquals($data['BlogContent']['comment_approve'],false);
+		$this->assertEquals($data['BlogContent']['layout'], 'default');
+		$this->assertEquals($data['BlogContent']['template'], 'default');
+		$this->assertEquals($data['BlogContent']['list_count'], 10);
+		$this->assertEquals($data['BlogContent']['list_direction'], 'DESC');
+		$this->assertEquals($data['BlogContent']['feed_count'], 10);
+		$this->assertEquals($data['BlogContent']['auth_captcha'], 1);
+		$this->assertEquals($data['BlogContent']['tag_use'], false);
+		$this->assertEquals($data['BlogContent']['status'], false);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_height'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_width'], 150);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_height'], 150);
+		$this->assertEquals($data['BlogContent']['use_content'], true);
 	}
 
 /**
  * アイキャッチサイズフィールドの値をDB用に変換する
  */
 	public function testDeconstructEyeCatchSize() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = $this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue());
+		$this->assertEquals(
+			$data['BlogContent']['eye_catch_size'],
+			'YTo0OntzOjExOiJ0aHVtYl93aWR0aCI7aTo2MDA7czoxMjoidGh1bWJfaGVpZ2h0IjtpOjYwMDtzOjE4OiJtb2JpbGVfdGh1bWJfd2lkdGgiO2k6MTUwO3M6MTk6Im1vYmlsZV90aHVtYl9oZWlnaHQiO2k6MTUwO30='
+		);
 	}
 
 /**
  * アイキャッチサイズフィールドの値をフォーム用に変換する
  */
 	public function testConstructEyeCatchSize() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$data = $this->BlogContent->constructEyeCatchSize($this->BlogContent->deconstructEyeCatchSize($this->BlogContent->getDefaultValue()));
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_width'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_thumb_height'], 600);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_width'], 150);
+		$this->assertEquals($data['BlogContent']['eye_catch_size_mobile_thumb_height'], 150);
 	}
 
 }

@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  basercms-database:
+    container_name: basercms-database
+    image: mysql/mysql-server:5.7
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_DATABASE: "basercms"
+  basercms:
+    container_name: basercms
+    image: baserproject/basercms
+    volumes:
+#      - sync-volume:/var/www/html
+      - .:/var/www/html:cached
+    environment:
+      PHP_IDE_CONFIG: "serverName=localhost"
+    command:
+      composer install
+    ports:
+      - "80:80"
+    depends_on:
+      - basercms-database
+volumes:
+  sync-volume:
+    external: true
