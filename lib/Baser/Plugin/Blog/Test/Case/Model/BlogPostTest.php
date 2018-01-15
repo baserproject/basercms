@@ -205,8 +205,13 @@ class BlogPostTest extends BaserTestCase {
 /**
  * コントロールソースを取得する
  */
-public function getDefaultValue() {
-	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+public function testGetDefaultValue() {
+	$authUser['id'] = 1;
+	$data = $this->BlogPost->getDefaultValue($authUser);
+	$this->assertEquals($data['BlogPost']['user_id'], $authUser['id']);
+	$this->assertRegExp('/' . '([0-9]{4})\/([0-9]{2})\/([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/', $data['BlogPost']['posts_date']);
+	$this->assertEquals($data['BlogPost']['posts_date'], date('Y/m/d H:i:s'));
+	$this->assertEquals($data['BlogPost']['status'], 0);
 }
 
 /**
@@ -325,16 +330,40 @@ public function getDefaultValue() {
 
 /**
  * 公開状態を取得する
+ *
+ * @dataProvider allowPublishDataProvider
  */
-	public function testAllowPublish() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	public function testAllowPublish($publish_begin, $publish_end, $status, $expected) {
+		$data['publish_begin'] = $publish_begin;
+		$data['publish_end'] = $publish_end;
+		$data['status'] = $status;
+		$this->assertEquals($this->BlogPost->allowPublish($data), $expected);
 	}
 
+	public function allowPublishDataProvider() {
+		return[
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s')+1, true, true],
+			[date('Y-m-d H:i:s'), '0000-00-00 00:00:00', true, true],
+			[date('Y-m-d H:i:s')+1, '0000-00-00 00:00:00', true, false],
+			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
+		];
+	}
 /**
  * 公開済の conditions を取得
  */
 	public function testGetConditionAllowPublish() {
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+		$result = $this->BlogPost->getConditionAllowPublish();
+		$pattern = '/' . '([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/';
+
+		$this->assertRegExp($pattern, $result[0]['or']['0']['BlogPost.publish_begin <=']);
+		$this->assertEquals($result[0]['or']['1']['BlogPost.publish_begin'], null);
+		$this->assertEquals($result[0]['or']['2']['BlogPost.publish_begin'], '0000-00-00 00:00:00');
+		$this->assertRegExp($pattern, $result[1]['or']['0']['BlogPost.publish_end >=']);
+		$this->assertEquals($result[1]['or']['1']['BlogPost.publish_end'], null);
+		$this->assertEquals($result[1]['or']['2']['BlogPost.publish_end'], '0000-00-00 00:00:00');
 	}
 
 /**
@@ -439,9 +468,16 @@ public function getDefaultValue() {
 /**
  * beforeDelete
  */
-public function testBeforeDelete() {
-	$this->markTestIncomplete('このテストは、まだ実装されていません。');
-}
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/*
+ * beforeFind
+ */
+	public function testBeforeFind() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * コピーする
