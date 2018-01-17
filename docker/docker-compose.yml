@@ -22,6 +22,7 @@ services:
       - .:/var/www/html:cached
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
+      COMPOSER_ALLOW_SUPERUSER: 1
 #    command:
 #      composer install
     ports:

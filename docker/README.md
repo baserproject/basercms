@@ -12,7 +12,16 @@ docker/docker-compose.yml をプロジェクトディレクトリの直下にコ
 ```
 docker-compose up -d
 ```
-コンテナの起動が完了したら、 `http://localhost/` にアクセスしてください。basercmsのインストールページが表示されます。
+
+## composer を実行する
+
+```
+docker-compose exec basercms composer install
+```
+
+## baserCMS を起動する
+
+composer によるライブラリのインストールが完了したら、 `http://localhost/` にアクセスしてください。basercmsのインストールページが表示されます。
 
 ### データベース情報
 | name | value |
