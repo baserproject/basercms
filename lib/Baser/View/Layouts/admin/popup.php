@@ -25,15 +25,15 @@
 		<?php $this->BcBaser->metaKeywords() ?>
 		<?php $this->BcBaser->icon() ?>
 		<?php $this->BcBaser->css('admin/import') ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
+		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
 		<?php
-		$this->BcBaser->js(array(
+		$this->BcBaser->js([
 			'admin/vendors/jquery-2.1.4.min',
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/i18n/ui.datepicker-ja',
 			'admin/vendors/jquery.bt.min',
 			'admin/vendors/jquery.corner-2.12',
-			'admin/functions'))
+			'admin/functions'])
 		?>
 <?php $this->BcBaser->scripts() ?>
 	</head>

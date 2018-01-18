@@ -29,15 +29,15 @@ class ThemeFile extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
+	public $validate = [
+		'name' => [
+			['rule' => ['notBlank'],
 				'message' => "テーマファイル名を入力してください。",
-				'required' => true),
-			array('rule' => array('duplicateThemeFile'),
-				'message' => '入力されたテーマファイル名は、同一階層に既に存在します。')
-		)
-	);
+				'required' => true],
+			['rule' => ['duplicateThemeFile'],
+				'message' => '入力されたテーマファイル名は、同一階層に既に存在します。']
+		]
+	];
 
 /**
  * ファイルの重複チェック
@@ -49,7 +49,7 @@ class ThemeFile extends AppModel {
 		if (!$check[key($check)]) {
 			return true;
 		}
-		$targetPath = $this->data['ThemeFile']['parent'] . DS . $check[key($check)];
+		$targetPath = $this->data['ThemeFile']['parent'] . $check[key($check)] . '.' . $this->data['ThemeFile']['ext'];
 		if (is_file($targetPath)) {
 			return false;
 		} else {

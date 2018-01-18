@@ -17,9 +17,9 @@
 </script>
 
 <?php if (!$freezed): ?>
-	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->BcBaser->getContentsUrl() . 'confirm', 'type' => 'file')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'confirm', 'type' => 'file')) ?>
 <?php else: ?>
-	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->BcBaser->getContentsUrl() . 'submit')) ?>
+	<?php echo $this->Mailform->create('MailMessage', array('url' => $this->BcBaser->getContentsUrl(null, false, null, false) . 'submit')) ?>
 <?php endif; ?>
 
 <?php echo $this->Mailform->hidden('MailMessage.mode') ?>
@@ -34,8 +34,8 @@
 		<div class="auth-captcha clearfix">
 			<?php echo $this->Mailform->authCaptcha('MailMessage.auth_captcha') ?>
 			<br>
-			&nbsp;画像の文字を入力してください<br clear="all">
-			<?php echo $this->Mailform->error('MailMessage.auth_captcha', '入力された文字が間違っています。入力をやり直してください。') ?>
+			&nbsp;<?php echo __('画像の文字を入力してください') ?><br clear="all">
+			<?php echo $this->Mailform->error('MailMessage.auth_captcha', __('入力された文字が間違っています。入力をやり直してください。')) ?>
 		</div>
 	<?php else: ?>
 		<?php echo $this->Mailform->hidden('MailMessage.auth_captcha') ?>
@@ -48,10 +48,10 @@
 		<input name="resetdata" value="　取り消す　" type="reset" class="btn-gray button">
 	<?php endif; ?>
 	<?php if ($freezed): ?>
-		<?php echo $this->Mailform->submit('　書き直す　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageBack')) ?>
-		<?php echo $this->Mailform->submit('　送信する　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageSubmit')) ?>
+		<?php echo $this->Mailform->submit('　' . __('書き直す') . '　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageBack')) ?>
+		<?php echo $this->Mailform->submit('　' . __('送信する') . '　', array('div' => false, 'class' => 'btn-red button form-submit', 'id' => 'BtnMessageSubmit')) ?>
 	<?php elseif ($this->action != 'submit'): ?>
-		<?php echo $this->Mailform->submit('　入力内容を確認する　', array('div' => false, 'class' => 'btn-orange button form-submit', 'id' => 'BtnMessageConfirm')) ?>
+		<?php echo $this->Mailform->submit('　' . __('入力内容を確認する') . '　', array('div' => false, 'class' => 'btn-orange button form-submit', 'id' => 'BtnMessageConfirm')) ?>
 	<?php endif; ?>
 </div>
 

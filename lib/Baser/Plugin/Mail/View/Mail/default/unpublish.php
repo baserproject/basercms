@@ -19,8 +19,8 @@
 	<?php $this->BcBaser->contentsTitle() ?>
 </h1>
 
-<h2 class="contents-head">受付中止</h2>
+<h2 class="contents-head"><?php echo __('受付停止中') ?></h2>
 
 <div class="section">
-	<p>現在、受付を中止しています。</p>
+	<p><?php echo __('現在、受付を停止しています。') ?></p>
 </div>

@@ -10,7 +10,6 @@ class BlogConfigFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-	);
+	public $records = [];
 
 }

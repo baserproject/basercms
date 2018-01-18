@@ -28,28 +28,28 @@ class UserGroupsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('UserGroup');
+	public $uses = ['UserGroup'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * ヘルパ
  *
  * @var array
  */
-	public $helpers = array('BcTime', 'BcForm');
+	public $helpers = ['BcTime', 'BcForm'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array('site_configs', 'users');
+	public $subMenuElements = ['site_configs', 'users'];
 
 /**
  * ぱんくずナビ
@@ -71,7 +71,7 @@ class UserGroupsController extends AppController {
 			$this->set('usePermission', $this->UserGroup->checkOtherAdmins());
 		}
 
-		$authPrefixes = array();
+		$authPrefixes = [];
 		foreach (Configure::read('BcAuthPrefix') as $key => $authPrefix) {
 			$authPrefixes[$key] = $authPrefix['name'];
 		}
@@ -86,12 +86,12 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
-		$this->setViewConditions('UserGroup', array('default' => $default));
-		$this->paginate = array(
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('UserGroup', ['default' => $default]);
+		$this->paginate = [
 			'order' => 'UserGroup.id',
 			'limit' => $this->passedArgs['num']
-		);
+		];
 		/* 表示設定 */
 		$this->set('datas', $this->paginate());
 		$this->pageTitle = 'ユーザーグループ一覧';
@@ -115,7 +115,7 @@ class UserGroupsController extends AppController {
 			$this->UserGroup->create($this->request->data);
 			if ($this->UserGroup->save()) {
 				$this->setMessage('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(['action' => 'index']);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -137,7 +137,7 @@ class UserGroupsController extends AppController {
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
@@ -153,7 +153,7 @@ class UserGroupsController extends AppController {
 			if ($this->UserGroup->save($this->request->data)) {
 				$this->setMessage('ユーザーグループ「' . $this->request->data['UserGroup']['name'] . '」を更新しました。', false, true);
 				$this->BcAuth->relogin();
-				$this->redirect(array('action' => 'index', $id));
+				$this->redirect(['action' => 'index', $id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -201,7 +201,7 @@ class UserGroupsController extends AppController {
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		// メッセージ用にデータを取得
@@ -214,7 +214,7 @@ class UserGroupsController extends AppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true);
 		}
 
-		$this->redirect(array('action' => 'index'));
+		$this->redirect(['action' => 'index']);
 	}
 
 /**

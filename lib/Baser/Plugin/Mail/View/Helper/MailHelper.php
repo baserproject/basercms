@@ -237,4 +237,20 @@ class MailHelper extends AppHelper {
 		return $this->requestAction($url, ['return' => true]);
 	}
 
+/**
+ * beforeRender
+ *
+ * @param string $viewFile
+ */
+	public function beforeRender($viewFile) {
+		if($this->request->params['controller'] == 'mail' && in_array($this->request->params['action'], ['index', 'confirm', 'submit'])) {
+			// メールフォームをショートコードを利用する際、ショートコードの利用先でキャッシュを利用している場合、
+			// セキュリティコンポーネントで発行するトークンが更新されない為、強制的にキャッシュをオフにする
+			if (!empty($this->request->params['requested'])) {
+				Configure::write('Cache.disable', true);
+			}
+			$this->_View->BcForm->request->params['_Token']['unlockedFields'] = $this->_View->get('unlockedFields');
+		}
+	}
+
 }

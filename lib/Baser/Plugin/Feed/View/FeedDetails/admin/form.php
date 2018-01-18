@@ -12,7 +12,9 @@
 
 /**
  * [ADMIN] フィード詳細 フォーム
+ * @var BcAppView $this
  */
+$this->BcBaser->js('Feed.admin/feed_details/form', false);
 ?>
 
 <?php if ($this->action == 'admin_add'): ?>

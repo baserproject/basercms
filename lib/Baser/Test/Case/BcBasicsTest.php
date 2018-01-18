@@ -190,6 +190,13 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 /**
+ * モバイルプレフィックスは除外したURLを取得する
+ */
+	public function testGetPureUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * Viewキャッシュを削除する
  * TODO basics.php 295行目 $homesにバグ？あり
  * 			app/tmp/cache/views/のキャッシュファイルを複数回削除している
@@ -253,6 +260,13 @@ class BcBasicsTest extends BaserTestCase {
 			['/index.html', '.php'],
 			['/m/index.html', '.php'],
 		];
+	}
+
+/**
+ * データキャッシュを削除する
+ */
+	public function testClearDataCache() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -605,6 +619,13 @@ class BcBasicsTest extends BaserTestCase {
 	}
 
 /**
+ * アップデートのURLを記載したメールを送信する
+ */
+	public function testSendUpdateMail() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 展開出力
  */
 	public function testP() {
@@ -613,6 +634,20 @@ class BcBasicsTest extends BaserTestCase {
 		$result = ob_get_clean();
 		$expect = 'array.*int.*0.*=&gt; &#039;test&#039;';
 		$this->assertRegExp('/' . $expect . '/s', $result);
+	}
+
+/**
+ * データベースのドライバー名を取得する
+ */
+	public function testGetDbDriver() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンソールから実行されているかチェックする
+ */
+	public function testIsConsole() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -742,5 +777,26 @@ class BlogControllerEventListener extends BcControllerEventListener {
 		$this->assertEquals($dec, $text, '正しくデコードできません');
 	}
 
+/**
+ * 実行環境のOSがWindowsであるかどうかを返す
+ */
+	public function testIsWindows() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
+/**
+ * 時刻の有効性チェックを行う
+ */
+	public function testChecktime() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 関連するテーブルリストを取得する
+ */
+	public function testGetTableList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 }

@@ -29,7 +29,7 @@ class BcTextHelper extends TextHelper {
 	// >>>
 	//public $helpers = array('Html');
 	// ---
-	public $helpers = array('BcTime', 'BcForm', 'Html');
+	public $helpers = ['BcTime', 'BcForm', 'Html'];
 	// <<<
 
 // CUSTOMIZE ADD 2014/07/03 ryuring
@@ -54,7 +54,7 @@ class BcTextHelper extends TextHelper {
  * @return array マークリスト（ - ○ ）
  */
 	public function booleanMarkList() {
-		return array(0 => "―", 1 => "○");
+		return [0 => "―", 1 => "○"];
 	}
 
 /**
@@ -63,7 +63,7 @@ class BcTextHelper extends TextHelper {
  * @return array 「有」「無」リスト
  */
 	public function booleanExistsList() {
-		return array(0 => "無", 1 => "有");
+		return [0 => "無", 1 => "有"];
 	}
 
 /**
@@ -72,7 +72,7 @@ class BcTextHelper extends TextHelper {
  * @return array 可/不可リスト
  */
 	public function booleanAllowList() {
-		return array(0 => "不可", 1 => "可");
+		return [0 => "不可", 1 => "可"];
 	}
 
 /**
@@ -82,7 +82,7 @@ class BcTextHelper extends TextHelper {
  * @return array [〜する/〜しない]形式のリスト
  */
 	public function booleanDoList($doText = null) {
-		return array(0 => $doText . "しない", 1 => $doText . "する");
+		return [0 => $doText . "しない", 1 => $doText . "する"];
 	}
 
 /**
@@ -103,14 +103,14 @@ class BcTextHelper extends TextHelper {
  * @return array 都道府県リスト
  */
 	public function prefList($empty = '都道府県') {
-		$pref = array();
+		$pref = [];
 		if ($empty) {
-			$pref = array("" => $empty);
+			$pref = ["" => $empty];
 		} elseif ($pref !== false) {
-			$pref = array("" => "");
+			$pref = ["" => ""];
 		}
 
-		$pref = $pref + array(
+		$pref = $pref + [
 			1 => "北海道", 2 => "青森県", 3 => "岩手県", 4 => "宮城県", 5 => "秋田県", 6 => "山形県", 7 => "福島県",
 			8 => "茨城県", 9 => "栃木県", 10 => "群馬県", 11 => "埼玉県", 12 => "千葉県", 13 => "東京都", 14 => "神奈川県",
 			15 => "新潟県", 16 => "富山県", 17 => "石川県", 18 => "福井県", 19 => "山梨県", 20 => "長野県", 21 => "岐阜県",
@@ -118,7 +118,7 @@ class BcTextHelper extends TextHelper {
 			29 => "奈良県", 30 => "和歌山県", 31 => "鳥取県", 32 => "島根県", 33 => "岡山県", 34 => "広島県", 35 => "山口県",
 			36 => "徳島県", 37 => "香川県", 38 => "愛媛県", 39 => "高知県", 40 => "福岡県", 41 => "佐賀県", 42 => "長崎県",
 			43 => "熊本県", 44 => "大分県", 45 => "宮崎県", 46 => "鹿児島県", 47 => "沖縄県"
-		);
+		];
 		return $pref;
 	}
 
@@ -130,7 +130,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function sex($value = 1) {
 		if (preg_match('/[1|2]/', $value)) {
-			$sexes = array(1 => '男', 2 => '女');
+			$sexes = [1 => '男', 2 => '女'];
 			return $sexes[$value];
 		}
 		return '';
@@ -336,7 +336,7 @@ class BcTextHelper extends TextHelper {
  * @return string
  */
 	public function arrayValues($glue, $keys, $array) {
-		$values = array();
+		$values = [];
 		foreach ($keys as $key) {
 			if (isset($array[$key])) {
 				$values[] = $array[$key];
@@ -381,7 +381,7 @@ class BcTextHelper extends TextHelper {
  * @return array 可/不可リスト
  */
 	public function booleanStatusList() {
-		return array(0 => "無効", 1 => "有効");
+		return [0 => "無効", 1 => "有効"];
 	}
 
 /**

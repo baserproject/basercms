@@ -1,4 +1,4 @@
-<?php
+f<?php
 /**
  * baserCMS :  Based Website Development Project <http://basercms.net>
  * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
@@ -31,7 +31,7 @@ class MembersController extends UsersController {
  *
  * @var array
  */
-	public $uses = array('Member', 'UserGroup');
+	public $uses = ['Member', 'UserGroup'];
 
 /**
  * [MYPAGE] メンバー編集

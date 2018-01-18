@@ -150,14 +150,14 @@ class PageTest extends BaserTestCase {
 
 	public function checkOpenPageFileDataProvider() {
 		return [
-			['index', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['company', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', null, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['company', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
 			['index', 1, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
 			['index', 2, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['hoge', null, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			[null, 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['index', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
-			['hoge', 99, true, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['hoge', null, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			[null, 99, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['index', 99, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
+			['hoge', 99, false, 'ページテンプレートファイルが開けるか正しくチェックできません'],
 		];
 	}
 
@@ -314,7 +314,6 @@ class PageTest extends BaserTestCase {
  * @dataProvider createPageTemplateDataProvider
  */
 	public function testCreatePageTemplate($name, $categoryId, $expected, $message = null) {
-
 		$data = [
 			'Page' => [
 				'contents' => '',
@@ -342,10 +341,17 @@ class PageTest extends BaserTestCase {
 
 	public function createPageTemplateDataProvider() {
 		return [
-			['hoge.php', null, true, 'ページテンプレートを生成できません'],
+			['hoge.php', null, false, 'ページテンプレートを生成できません'],
 			['hoge.php', 1, true, 'ページテンプレートを生成できません'],
 			['hoge.php', 2, true, 'ページテンプレートを生成できません'],
 		];
+	}
+
+/**
+ * ページファイルのパスを取得する
+ */
+	public function testGetPageFilePath() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -601,6 +607,10 @@ class PageTest extends BaserTestCase {
 		];
 	}
 
+	public function testGetParentPageTemplate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 /**
  * 固定ページテンプレートリストを取得する
  *
@@ -645,6 +655,27 @@ class PageTest extends BaserTestCase {
 			['/service', true, false],
 			['/service', false, true],
 			['/hoge', false, false],
+		];
+	}
+
+/**
+ * コンテンツフォルダのパスを取得する
+ *
+ * @param $id
+ * @param $expects
+ * @dataProvider getContentFolderPathDataProvider
+ */
+	public function testGetContentFolderPath($id, $expects) {
+		BcSite::flash();
+		$this->assertEquals($expects, $this->Page->getContentFolderPath($id));
+	}
+
+	public function getContentFolderPathDataProvider() {
+		return [
+			[1, APP . 'View/Pages/'],
+			[2, APP . 'View/Pages/mobile/'],
+			[3, APP . 'View/Pages/smartphone/'],
+			[4, false],
 		];
 	}
 	

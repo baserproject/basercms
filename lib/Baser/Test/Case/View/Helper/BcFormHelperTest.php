@@ -221,7 +221,7 @@ class BcFormHelperTest extends BaserTestCase {
  */
 
 	public function testInput($optionsField, $optionsData, $fieldName, $options, $expected) {
-		$event = $this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
+		$this->attachEvent(['Helper.Form.beforeInput' => ['callable' => function(CakeEvent $event) use ( $optionsField, $optionsData) {
 			$event->data['options'][$optionsField] = $optionsData;
 		}]]);
 		$result = $this->BcForm->Input($fieldName, $options);
@@ -230,6 +230,8 @@ class BcFormHelperTest extends BaserTestCase {
 	}
 
 	public function inputDataProvider() {
+		$beginYear = date('Y') - 20;
+		$endYear = date('Y') + 20;
 		return [
 			['value', 'hoge', 'User.id', ['type' => 'hidden'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
 			['value', 'hoge', 'User.id', ['div' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/>'],
@@ -245,9 +247,9 @@ class BcFormHelperTest extends BaserTestCase {
 			['value', 'hoge', 'User.id', ['type' => 'input', 'error' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
 			['value', 'hoge', 'User.id', ['type' => 'input', 'errorMessage' => 'hogehoge'], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
 			['value', 'hoge', 'User.id', ['type' => 'input', 'selected' => true], '<input type="hidden" name="data\[User\]\[id\]" value="hoge" id="UserId"\/>'],
-			['value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/option>\n<\/select>'],
+			['value', 'hoge', 'User.id', ['type' => 'date', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth">.*01<\/op.*12<\/op.*\/se.*id="UserIdDay">.*1<\/op.*31<\/op.*\n<\/se.*id="UserIdYear">.*' . $endYear . '<\/op.*' . $beginYear . '<\/option>\n<\/select>'],
 			['value', 'hoge', 'User.id', ['type' => 'time', 'options' => []], '<select name="data\[User\]\[id\]\[hour\].*id="UserIdHour".*1<\/op.*12<\/op.*\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*value="pm">pm<\/option>\n<\/select>'],
-			['value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*2037<\/op.*1997<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'],
+			['value', 'hoge', 'User.id', ['type' => 'datetime', 'options' => []], '<select name="data\[User\]\[id\]\[month\].*id="UserIdMonth.*01<\/op.*12<\/op.*<\/sel.*id="UserIdDay">.*1<\/option>.*31<\/op.*<\/se.*id="UserIdYear">.*' . $endYear . '<\/op.*' . $beginYear . '<\/op.*<\/se.*id="UserIdHour">.*1<\/op.*12<\/op.*<\/se.*id="UserIdMin">.*00<\/op.*59<\/op.*<\/se.*id="UserIdMeridian">.*selected="selected">am<\/op.*pm<\/op.*ect>'],
 			['value', 'hoge', 'User.id', ['type' => 'radio', 'between' => '', 'options' => [1]], '<input type="radio" name="data\[User\]\[id\]" id="UserId0" value="0" \/><label for="UserId0">1<\/label>'],
 			['value', 'hoge', 'User.id', ['type' => 'input', 'div' => 'true'], '<div class="true"><input type="hidden" name="data\[User\]\[id\]" div="true" value="hoge" id="UserId"\/><\/div>'],
 			['value', 'hoge', 'User.id', ['type' => 'input', 'counter' => 'true'], '<input type="hidden" name="data\[User\]\[id\]" counter="true" value="hoge" id="UserId"\/><span id="UserIdCounter" class="size-counter"><\/span><script.*<span id="UserIdCounter".*<\/span><script.*<\/script>'],
@@ -627,14 +629,15 @@ class BcFormHelperTest extends BaserTestCase {
 		$encoding = strtolower(Configure::read('App.encoding'));
 		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add']);
 		$expected = [
-			'form' => ['method' => 'post', 'action' => '/contacts/add', 'accept-charset' => $encoding, 'id' => 'ContactAddForm', 'novalidate' => 'novalidate'],
+			'form' => ['action' => '/contacts/add', 'novalidate' => 'novalidate', 'id' => 'ContactAddForm', 'method' => 'post', 'accept-charset' => $encoding],
 			'div' => ['style' => 'display:none;'],
 			['input' => ['type' => 'hidden', 'name' => '_method', 'value' => 'POST']],
 			['input' => [
-				'type' => 'hidden', 'name' => 'data[_Token][key]', 'value' => 'testKey', 'id'
+				'type' => 'hidden', 'name' => 'data[_Token][key]', 'value' => 'testKey', 'id', 'autocomplete' => 'off'
 			]],
 			'/div'
 		];
+		var_dump($result);
 		$this->assertTags($result, $expected);
 		$result = $this->BcForm->create('Contact', ['url' => '/contacts/add', 'id' => 'MyForm']);
 		$expected['form']['id'] = 'MyForm';
@@ -768,4 +771,36 @@ class BcFormHelperTest extends BaserTestCase {
 		$this->assertTags($result, $expected);
 	}
 
+/**
+ * フォームのIDを取得する
+ *
+ * @dataProvider getIdDataProvider
+ */
+	public function testGetId($Model, $expected) {
+		$this->BcForm->create($Model);
+		$this->assertEquals($expected, $this->BcForm->getId());
+	}
+
+	public function getIdDataProvider() {
+		return [
+			['', 'addForm'],
+			['hogehoge', 'hogehogeAddForm'],
+			['CakeSchema', 'CakeSchemaAddForm'],
+			['Content', 'ContentAddForm'],
+			['EditTemplate', 'EditTemplateAddForm'],
+			['Favorite', 'FavoriteAddForm'],
+			['Member', 'MemberAddForm'],
+			['Page', 'PageAddForm'],
+			['Plugin', 'PluginAddForm'],
+			['Site', 'SiteAddForm'],
+			['SiteConfig', 'SiteConfigAddForm'],
+			['Theme', 'ThemeAddForm'],
+			['ThemeFile', 'ThemeFileAddForm'],
+			['ThemeFolder', 'ThemeFolderAddForm'],
+			['Tool', 'ToolAddForm'],
+			['Updater', 'UpdaterAddForm'],
+			['User', 'UserAddForm'],
+			['UserGroup', 'UserGroupAddForm']
+		];
+	}
 }

@@ -78,6 +78,13 @@ class FeedDetailTest extends BaserTestCase {
 		$this->assertTrue($this->FeedDetail->validates());
 	}
 
+/**
+ * コントロールソースを取得する
+ */
+	public function testGetControlSource() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 /*
  * 初期値を取得する
  */

@@ -42,12 +42,12 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.name', '識別名称') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.name', array('type' => 'input', 'size' => '30', 'autofocus' => true)) ?>
-			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->input('Site.name', ['type' => 'input', 'size' => '30', 'autofocus' => true]) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 			<div class="helptext">サブサイトを特定する事ができる識別名称を入力します。半角英数とハイフン（-）・アンダースコア（_）のみが利用できます。エイリアスを入力しない場合は、URLにも利用されます。</div>
 			　<span style="white-space: nowrap;"><small>[<?php echo $this->BcForm->label('Site.alias', 'エイリアス') ?>]</small>
-			<?php echo $this->BcForm->input('Site.alias', array('type' => 'input', 'size' => '10')) ?></span>
-			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->input('Site.alias', ['type' => 'input', 'size' => '10']) ?></span>
+			<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 			<div class="helptext">サブサイトの識別名称とは別のURLにしたい場合、別名を入力する事ができます。エイリアスは半角英数に加えハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）が利用できます。</div>
 			<?php echo $this->BcForm->error('Site.name') ?>
 			<?php echo $this->BcForm->error('Site.alias') ?>
@@ -56,8 +56,8 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.display_name', 'サイト名') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.display_name', array('type' => 'input', 'size' => '60')) ?>
-			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->input('Site.display_name', ['type' => 'input', 'size' => '60', 'counter' => true]) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 			<div class="helptext">サブサイト名を入力します。管理システムでの表示に利用されます。日本語の入力が可能ですのでわかりやすい名前をつけてください。</div>
 			<?php echo $this->BcForm->error('Site.display_name') ?>
 		</td>
@@ -65,18 +65,36 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.title', 'サイトタイトル') ?>&nbsp;<span class="required">*</span></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.title', array('type' => 'input', 'size' => '60')) ?>
-			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->input('Site.title', ['type' => 'input', 'size' => '60', 'counter' => true]) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 			<div class="helptext">サブサイトのタイトルを入力します。タイトルタグに利用されます。</div>
 			<?php echo $this->BcForm->error('Site.title') ?>
 		</td>
 	</tr>
 	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('Site.keyword', 'サイト基本キーワード') ?></th>
+		<td class="col-input"><?php echo $this->BcForm->input('Site.keyword', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpKeyword', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->error('Site.keyword') ?>
+			<div id="helptextKeyword" class="helptext">テンプレートで利用する場合は、<br />
+				&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。</div>
+		</td>
+	</tr>
+	<tr>
+		<th class="col-head"><?php echo $this->BcForm->label('Site.description', 'サイト基本説明文') ?></th>
+		<td class="col-input"><?php echo $this->BcForm->input('Site.description', array('type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true)) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->error('Site.description') ?>
+			<div id="helptextDescription" class="helptext">テンプレートで利用する場合は、<br />
+				&lt;?php $this->BcBaser->description() ?&gt; で出力します。</div>
+		</td>
+	</tr>
+	<tr>
 		<th><?php echo $this->BcForm->label('Site.main_site_id', 'メインサイト') ?></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.main_site_id', array('type' => 'select', 'options' => $mainSites)) ?>
-			<?php echo $this->BcForm->input('Site.relate_main_site', array('type' => 'checkbox', 'label' => 'エイリアスを利用してメインサイトと自動連携する')) ?>
-			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->input('Site.main_site_id', ['type' => 'select', 'options' => $mainSites]) ?>
+			<?php echo $this->BcForm->input('Site.relate_main_site', ['type' => 'checkbox', 'label' => 'エイリアスを利用してメインサイトと自動連携する']) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 			<div class="helptext">
 				<p>サブサイトの主として連携させたいサイトを選択します。</p>
 				<p>
@@ -93,14 +111,14 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 		<td>
 			<?php if($useSiteDeviceSetting): ?>
 				<small>[デバイス]</small><?php echo $this->BcForm->input('Site.device', ['type' => 'select', 'options' => $devices]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 				<div class="helptext">サブサイトにデバイス属性を持たせ、サイトアクセス時、ユーザーエージェントを判定し適切なサイトを表示する機能を利用します。</div>
 			<?php else: ?>
 				<?php echo $this->BcForm->input('Site.device', ['type' => 'hidden']) ?>
 			<?php endif ?>
 			<?php if($useSiteLangSetting): ?>
 				<small>[言語]</small><?php echo $this->BcForm->input('Site.lang', ['type' => 'select', 'options' => $langs]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 				<div class="helptext">サブサイトに言語属性を持たせ、サイトアクセス時、ブラウザの言語設定を判定し適切なサイトを表示する機能を利用します。</div>
 			<?php else: ?>
 				<?php echo $this->BcForm->input('Site.lang', ['type' => 'hidden']) ?>
@@ -108,17 +126,17 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 			<div id="SectionAccessType" style="display:none">
 				<small>[アクセス設定]</small>
 				<br>
-				<span id="SpanSiteSameMainUrl"><?php echo $this->BcForm->input('Site.same_main_url', array('type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス')) ?>&nbsp;
-					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<span id="SpanSiteSameMainUrl"><?php echo $this->BcForm->input('Site.same_main_url', ['type' => 'checkbox', 'label' => 'メインサイトと同一URLでアクセス']) ?>&nbsp;
+					<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 					<div class="helptext">メインサイトと同一URLでアクセスし、デバイス設定や言語設定を判定し、適切なサイトを表示します。このオプションをオフにした場合は、エイリアスを利用した別URLを利用したアクセスとなります。</div>
 				</span>
 				<br>
-				<span id="SpanSiteAutoRedirect"><?php echo $this->BcForm->input('Site.auto_redirect', array('type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト')) ?>&nbsp;
-					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<span id="SpanSiteAutoRedirect"><?php echo $this->BcForm->input('Site.auto_redirect', ['type' => 'checkbox', 'label' => 'メインサイトから自動的にリダイレクト']) ?>&nbsp;
+					<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 					<span class="helptext">メインサイトと別URLでアクセスする際、デバイス設定や言語設定を判定し、適切なサイトへリダイレクトします。</span>　
 				</span>
-				<span id="SpanSiteAutoLink"><?php echo $this->BcForm->input('Site.auto_link', array('type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する')) ?>&nbsp;
-					<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				<span id="SpanSiteAutoLink"><?php echo $this->BcForm->input('Site.auto_link', ['type' => 'checkbox', 'label' => '全てのリンクをサブサイト用に変換する']) ?>&nbsp;
+					<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 					<span class="helptext">メインサイトと別URLでアクセスし、エイリアスを利用して同一コンテンツを利用する場合、コンテンツ内の全てのリンクをサブサイト用に変換します。</span>
 				</span>
 			</div>
@@ -130,8 +148,8 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.theme', 'テーマ') ?></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.theme', array('type' => 'select', 'options' => $themes)) ?>
-			<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+			<?php echo $this->BcForm->input('Site.theme', ['type' => 'select', 'options' => $themes]) ?>
+			<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 			<div class="helptext">サブサイトのテンプレートは、各テンプレートの配置フォルダ内にサイト名のサブフォルダを作成する事で別途配置する事ができますが、テーマフォルダ自体を別にしたい場合はここでテーマを指定します。</div>
 			<?php echo $this->BcForm->error('Site.theme') ?>
 		</td>
@@ -139,7 +157,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 	<tr>
 		<th><?php echo $this->BcForm->label('Site.status', '公開状態') ?></th>
 		<td>
-			<?php echo $this->BcForm->input('Site.status', array('type' => 'radio', 'options' => array(0 => '公開しない', 1 => '公開する'))) ?>
+			<?php echo $this->BcForm->input('Site.status', ['type' => 'radio', 'options' => [0 => '公開しない', 1 => '公開する']]) ?>
 			<?php echo $this->BcForm->error('Site.status') ?>
 		</td>
 	</tr>

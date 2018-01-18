@@ -33,12 +33,12 @@ class BcThemeConfigReader implements ConfigReaderInterface {
  * 保存する変数
  * @var array
  */
-	static public $variables = array(
+	static public $variables = [
 		'title' => 'タイトル',
 		'description' => '説明',
 		'author' => '制作者',
 		'url' => 'URL'
-	);
+	];
 
 /**
  * コンストラクタ
@@ -71,11 +71,11 @@ class BcThemeConfigReader implements ConfigReaderInterface {
 
 		include $file;
 
-		$config = array();
+		$config = [];
 
 		foreach (self::$variables as $var => $name) {
 			if (!isset($$var)) {
-				throw new ConfigureException(__d('cake_dev', 'テーマの %s が設定されていません : %s', array($name, $file)));
+				throw new ConfigureException(__d('baser', 'テーマの %s が設定されていません : %s', array($name, $file)));
 			}
 			$config[$var] = $$var;
 		}
@@ -123,7 +123,7 @@ class BcThemeConfigReader implements ConfigReaderInterface {
 	protected function _getFilePath($key) {
 		$dir = $this->_path . $key;
 		if (!is_dir($dir)) {
-			throw new ConfigureException(__d('cake_dev', '指定されたテーマ名のディレクトリが存在しません: %s', $dir));
+			throw new ConfigureException(__d('baser', '指定されたテーマ名のディレクトリが存在しません: %s', $dir));
 		}
 		return $dir . DS . self::CONFIG_FILE_NAME;
 	}

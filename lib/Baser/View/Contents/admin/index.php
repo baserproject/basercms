@@ -23,13 +23,13 @@ $this->BcBaser->js('admin/contents/index', false, [
 	'data-editInIndexDisabled' => (bool) $editInIndexDisabled
 ]);
 $this->BcBaser->js('admin/libs/jquery.bcTree', false);
-$this->BcBaser->js(array(
+$this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
-));
-echo $this->BcForm->input('BcManageContent', array('type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()));
+]);
+echo $this->BcForm->input('BcManageContent', ['type' => 'hidden', 'value' => $this->BcContents->getJsonSettings()]);
 ?>
 
 

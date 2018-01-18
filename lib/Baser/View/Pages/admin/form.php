@@ -15,7 +15,7 @@
  * 
  * @var BcAppView $this
  */
-$this->BcBaser->css('admin/ckeditor/editor', array('inline' => true));
+$this->BcBaser->css('admin/ckeditor/editor', ['inline' => true]);
 $this->BcBaser->js('admin/pages/edit', false);
 ?>
 
@@ -25,13 +25,13 @@ $this->BcBaser->js('admin/pages/edit', false);
 </div>
 
 <?php echo $this->BcForm->create('Page') ?>
-<?php echo $this->BcForm->input('Page.mode', array('type' => 'hidden')) ?>
-<?php echo $this->BcForm->input('Page.id', array('type' => 'hidden')) ?>
+<?php echo $this->BcForm->input('Page.mode', ['type' => 'hidden']) ?>
+<?php echo $this->BcForm->input('Page.id', ['type' => 'hidden']) ?>
 
 <?php echo $this->BcFormTable->dispatchBefore() ?>
 
 <div class="section editor-area">
-	<?php echo $this->BcForm->input('Page.contents', array_merge(array(
+	<?php echo $this->BcForm->input('Page.contents', array_merge([
         'type' => 'editor',
 		'editor' => @$siteConfig['editor'],
 		'editorUseDraft' => true,
@@ -39,7 +39,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 		'editorWidth' => 'auto',
 		'editorHeight' => '480px',
 		'editorEnterBr' => @$siteConfig['editor_enter_br']
-			), $editorOptions)); ?>
+			], $editorOptions)); ?>
 	<?php echo $this->BcForm->error('Page.contents') ?>
 </div>
 
@@ -49,7 +49,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.page_template', '固定ページテンプレート') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Page.page_template', array('type' => 'select', 'options' => $pageTemplateList)) ?>
+				<?php echo $this->BcForm->input('Page.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
 				<div class="helptext">
 					テーマフォルダ内の、Pages/templates テンプレートを配置する事で、ここでテンプレートを選択できます。
 				</div>
@@ -59,13 +59,13 @@ $this->BcBaser->js('admin/pages/edit', false);
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('Page.code', 'コード') ?></th>
 			<td class="col-input">
-				<?php echo $this->BcForm->input('Page.code', array(
+				<?php echo $this->BcForm->input('Page.code', [
 					'type' => 'textarea',
 					'cols' => 36,
 					'rows' => 5,
 					'style' => 'font-size:14px;font-family:Verdana,Arial,sans-serif;'
-				)); ?>
-				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => 'ヘルプ')) ?>
+				]); ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
 				<div class="helptext">
 					固定ページの本文には、ソースコードに切り替えてPHPやJavascriptのコードを埋め込む事ができますが、ユーザーが間違って削除してしまわないようにこちらに入力しておく事もできます。<br />
 					入力したコードは、自動的にコンテンツ本体の上部に差し込みます。
@@ -81,7 +81,7 @@ $this->BcBaser->js('admin/pages/edit', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>
+	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 </div>
 
 <?php echo $this->BcForm->end(); ?>

@@ -20,8 +20,8 @@
 	<th>エディタテンプレートメニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('エディタテンプレート一覧', array('controller' => 'editor_templates', 'action' => 'index')) ?></li>
-			<li><?php $this->BcBaser->link('エディタテンプレート新規追加', array('controller' => 'editor_templates', 'action' => 'add')) ?></li>
+			<li><?php $this->BcBaser->link('エディタテンプレート一覧', ['controller' => 'editor_templates', 'action' => 'index']) ?></li>
+			<li><?php $this->BcBaser->link('エディタテンプレート新規追加', ['controller' => 'editor_templates', 'action' => 'add']) ?></li>
 		</ul>
 	</td>
 </tr>

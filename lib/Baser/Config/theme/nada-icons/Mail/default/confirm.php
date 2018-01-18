@@ -13,10 +13,10 @@ if ($freezed) {
 	<?php $this->BcBaser->contentsTitle() ?>
 </h2>
 <?php if ($freezed): ?>
-<h3 class="contents-head">入力内容の確認</h3>
-<p class="section">入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。</p>
+<h3 class="contents-head"><?php echo __('入力内容の確認') ?></h3>
+<p class="section"><?php echo __('入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。') ?></p>
 <?php else: ?>
-<h3 class="contents-head">入力フォーム</h3>
+<h3 class="contents-head"><?php echo __('入力フォーム') ?></h3>
 <?php endif; ?>
 <div class="section">
 	<?php $this->BcBaser->flash() ?>

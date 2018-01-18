@@ -13,7 +13,7 @@
 /**
  * [PUBLISH] ブログアーカイブ一覧
  */
-$this->BcBaser->css(array('Blog.style'), array('inline' => false));
+$this->BcBaser->css(['Blog.style'], ['inline' => false]);
 //$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
 $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
 ?>
@@ -49,7 +49,7 @@ $(function(){
 					&nbsp;
 			<?php $this->Blog->author($post) ?>
 				</span></div>
-		<?php $this->BcBaser->element('Blog.blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('Blog.blog_tag', ['post' => $post]) ?>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>

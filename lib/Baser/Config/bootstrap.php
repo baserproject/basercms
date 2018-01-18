@@ -285,7 +285,7 @@ if (BC_INSTALLED) {
 			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
 			exit();
 		} else {
-			throw new BcException(__d('cake_dev', 'Since the version of the program and the database are different, it forcibly terminates. Adjust the version of the database and try again.'));
+			throw new BcException(__d('baser', 'プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。'));
 		}
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
@@ -313,11 +313,13 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::uses('BcModelEventDispatcher', 'Event');
 	App::uses('BcViewEventDispatcher', 'Event');
 	App::uses('PagesControllerEventListener', 'Event');
+	App::uses('ContentFoldersControllerEventListener', 'Event');
 	$CakeEvent = CakeEventManager::instance();
 	$CakeEvent->attach(new BcControllerEventDispatcher());
 	$CakeEvent->attach(new BcModelEventDispatcher());
 	$CakeEvent->attach(new BcViewEventDispatcher());
 	$CakeEvent->attach(new PagesControllerEventListener());
+	$CakeEvent->attach(new ContentFoldersControllerEventListener());
 
 /**
  * テーマの bootstrap を実行する

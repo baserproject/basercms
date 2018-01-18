@@ -16,8 +16,8 @@ class BlogCategoryModelFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'blog_content_id' => '1',
 			'no' => '1',
@@ -30,8 +30,8 @@ class BlogCategoryModelFixture extends BaserTestFixture {
 			'owner_id' => '1',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'blog_content_id' => '1',
 			'no' => '2',
@@ -44,8 +44,8 @@ class BlogCategoryModelFixture extends BaserTestFixture {
 			'owner_id' => '1',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'blog_content_id' => '1',
 			'no' => '2',
@@ -58,8 +58,8 @@ class BlogCategoryModelFixture extends BaserTestFixture {
 			'owner_id' => '1',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'blog_content_id' => '2',
 			'no' => '1',
@@ -72,7 +72,7 @@ class BlogCategoryModelFixture extends BaserTestFixture {
 			'owner_id' => '1',
 			'created' => '2015-01-27 12:56:53',
 			'modified' => null
-		),
-	);
+		],
+	];
 
 }

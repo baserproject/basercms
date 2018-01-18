@@ -19,7 +19,7 @@ App::uses('BlogTag', 'Blog.Model');
  */
 class BlogTagTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'plugin.blog.Model/BlogTag/BlogPostBlogTagFindCustomPrams',
 		'plugin.blog.Model/BlogTag/BlogPostsBlogTagBlogTagFindCustomPrams',
 		'plugin.blog.Model/BlogTag/BlogTagBlogTagFindCustomPrams',
@@ -29,7 +29,7 @@ class BlogTagTest extends BaserTestCase {
 		'baser.Default.BlogCategory',
 		'baser.Default.BlogComment',
 		'baser.Default.User',
-	);
+	];
 
 	public function setUp() {
 		$this->BlogTag = ClassRegistry::init('Blog.BlogTag');
@@ -46,11 +46,11 @@ class BlogTagTest extends BaserTestCase {
  */
 	public function test空チェック() {
 
-		$this->BlogTag->create(array(
-			'BlogTag' => array(
+		$this->BlogTag->create([
+			'BlogTag' => [
 				'name' => ''
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogTag->validates());
 
@@ -59,11 +59,11 @@ class BlogTagTest extends BaserTestCase {
 	}
 
 	public function test重複チェック() {
-		$this->BlogTag->create(array(
-			'BlogTag' => array(
+		$this->BlogTag->create([
+			'BlogTag' => [
 				'name' => 'タグ１'
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogTag->validates());
 
@@ -72,11 +72,11 @@ class BlogTagTest extends BaserTestCase {
 	}
 
 	public function test正常チェック() {
-		$this->BlogTag->create(array(
-			'BlogTag' => array(
+		$this->BlogTag->create([
+			'BlogTag' => [
 				'name' => 'test'
-			)
-		));
+			]
+		]);
 
 		$this->assertTrue($this->BlogTag->validates());
 	}

@@ -244,7 +244,7 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
+		if ($mailField && $this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
 			if ($this->MailField->delete($id)) {
 				$this->MailField->saveDbLog('メールフィールド「' . $mailField['MailField']['name'] . '」 を削除しました。');
 				exit(true);
@@ -353,11 +353,11 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_download_csv($mailContentId) {
-		if (!$mailContentId || !$this->mailContent) {
+		$mailContentId = (int) $mailContentId;
+		if (!$mailContentId || !$this->mailContent || !is_int($mailContentId)) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
-
 		$this->MailMessage->alias = 'MailMessage' . $mailContentId;
 		$this->MailMessage->schema(true);
 		$this->MailMessage->cacheSources = false;

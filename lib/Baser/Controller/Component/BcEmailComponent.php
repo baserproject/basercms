@@ -93,8 +93,8 @@ class BcEmailComponent extends EmailComponent {
 		$__method = '__' . $this->delivery;
 		$sent = $this->$__method();
 
-		$this->__header = array();
-		$this->__message = array();
+		$this->__header = [];
+		$this->__message = [];
 
 		return $sent;
 	}
@@ -116,7 +116,7 @@ class BcEmailComponent extends EmailComponent {
 		// メールなど、明示的な改行タグがないものについては、PHP閉じタグの直後に半角スペースなど
 		// を挿入する事により、改行が有効となる。よってテンプレート側で対応する事にし、
 		// 処理を元にに戻した。
-		$message = str_replace(array("\r\n", "\r"), "\n", $message);
+		$message = str_replace(["\r\n", "\r"], "\n", $message);
 
 		$lines = explode("\n", $message);
 
@@ -130,7 +130,7 @@ class BcEmailComponent extends EmailComponent {
  * @return array
  */
 	private function ___wrap($lines) {
-		$formatted = array();
+		$formatted = [];
 		if ($this->_lineLength !== null) {
 			trigger_error('_lineLength cannot be accessed please use lineLength', E_USER_WARNING);
 			$this->lineLength = $this->_lineLength;
@@ -225,7 +225,7 @@ class BcEmailComponent extends EmailComponent {
 		}
 
 		// 元々の配列も文字列中の改行もとにかく展開してひとつの配列にする
-		$strings = array();
+		$strings = [];
 		foreach ((array)$str as $s) {
 			// NOTE: 何故かmb_split()だと改行でうまく分割できない
 			//       どうせメジャーなエンコーディングなら制御コードは
@@ -237,7 +237,7 @@ class BcEmailComponent extends EmailComponent {
 			$strings = array_merge($strings, preg_split('/\x0d\x0a|\x0d|\x0a/', $s));
 		}
 
-		$lines = array();
+		$lines = [];
 		foreach ($strings as $string) {
 			// 1文字ずつに分解して足していって、
 			// バイト数が$widthを超えたら次の行に回す
@@ -251,8 +251,8 @@ class BcEmailComponent extends EmailComponent {
 				if ($i + 1 < $len) {
 					$next = mb_substr($string, $i + 1, 1, $encoding);
 					$uc = mb_convert_encoding($next, 'UCS-2', $encoding);
-					if (in_array($uc, array("\x30\x99", "\x30\x9B", "\x30\x9C",
-							"\xFF\x9E", "\xFF\x9F"))) {
+					if (in_array($uc, ["\x30\x99", "\x30\x9B", "\x30\x9C",
+							"\xFF\x9E", "\xFF\x9F"])) {
 						$char .= $next;
 						$i++;
 					}
@@ -317,7 +317,7 @@ class BcEmailComponent extends EmailComponent {
 
 		$View = new $viewClass($this->Controller);
 		$View->layout = $this->layout;
-		$msg = array();
+		$msg = [];
 
 		// CUSTOMIZE ADD 2012/04/23 ryuring
 		// layoutPath / subDir を指定できるようにした
@@ -351,11 +351,11 @@ class BcEmailComponent extends EmailComponent {
 			//$content = $View->element('email' . DS . 'text' . DS . $this->template, array('content' => $content));
 			//$View->layoutPath = 'email' . DS . 'text';
 			// ---
-			$content = $View->element($subDir . 'Emails' . DS . 'text' . DS . $this->template, array('content' => $content));
+			$content = $View->element($subDir . 'Emails' . DS . 'text' . DS . $this->template, ['content' => $content]);
 			$View->layoutPath = $layoutPath . 'Emails' . DS . 'text';
 			// >>>
 
-			$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
+			$content = explode("\n", str_replace(["\r\n", "\r"], "\n", $View->renderLayout($content)));
 			$msg = array_merge($msg, $content);
 
 			$msg[] = '';
@@ -370,11 +370,11 @@ class BcEmailComponent extends EmailComponent {
 			//$htmlContent = $View->element('email' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
 			//$View->layoutPath = 'email' . DS . 'html';
 			// ---
-			$htmlContent = $View->element($subDir . 'Emails' . DS . 'html' . DS . $this->template, array('content' => $htmlContent));
+			$htmlContent = $View->element($subDir . 'Emails' . DS . 'html' . DS . $this->template, ['content' => $htmlContent]);
 			$View->layoutPath = $layoutPath . 'Emails' . DS . 'html';
 			// <<<
 
-			$htmlContent = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($htmlContent)));
+			$htmlContent = explode("\n", str_replace(["\r\n", "\r"], "\n", $View->renderLayout($htmlContent)));
 			$msg = array_merge($msg, $htmlContent);
 			$msg[] = '';
 			$msg[] = '--alt-' . $this->__boundary . '--';
@@ -408,15 +408,15 @@ class BcEmailComponent extends EmailComponent {
 		//$View->layoutPath = 'email' . DS . $this->sendAs;
 		// ---
 		if ($this->plugin) {
-			$options = array('content' => $content, 'plugin' => $this->plugin);
+			$options = ['content' => $content, 'plugin' => $this->plugin];
 		} else {
-			$options = array('content' => $content);
+			$options = ['content' => $content];
 		}
 		$content = $View->element($subDir . 'Emails' . DS . $this->sendAs . DS . $this->template, $options);
 		$View->layoutPath = $layoutPath . 'Emails' . DS . $this->sendAs;
 		// <<<
 
-		$content = explode("\n", str_replace(array("\r\n", "\r"), "\n", $View->renderLayout($content)));
+		$content = explode("\n", str_replace(["\r\n", "\r"], "\n", $View->renderLayout($content)));
 		$msg = array_merge($msg, $content);
 		ClassRegistry::removeObject('view');
 

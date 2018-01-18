@@ -13,10 +13,10 @@
 /**
  * サブサイト一覧
  */
-$this->BcBaser->js(array(
+$this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/baser_ajax_data_list_config',
-	), false);
+	], false);
 ?>
 
 

@@ -26,14 +26,14 @@ class BcTimeHelper extends TimeHelper {
  *
  * @var array
  */
-	public $nengos = array("m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成");
+	public $nengos = ["m" => "明治", "t" => "大正", "s" => "昭和", "h" => "平成"];
 	
 /**
  * 日本語曜日リスト
  *
  * @var array
  */
-	public $jpWeekList = array(0 => '日', 1 => '月', 2 => '火', 3 => '水', 4 => '木', 5 => '金', 6 => '土', 7 => '日');
+	public $jpWeekList = [0 => '日', 1 => '月', 2 => '火', 3 => '水', 4 => '木', 5 => '金', 6 => '土', 7 => '日'];
 
 /**
  * 和暦文字列の正規表現
@@ -91,19 +91,19 @@ class BcTimeHelper extends TimeHelper {
  */
 	public function convertToWarekiYear($year) {
 		if ($year >= 1868 && $year <= 1911) {
-			return array('m-' . ($year - 1867));
+			return ['m-' . ($year - 1867)];
 		} elseif ($year == 1912) {
-			return array('m-' . ($year - 1867), 't-' . ($year - 1911));
+			return ['m-' . ($year - 1867), 't-' . ($year - 1911)];
 		} elseif ($year >= 1913 && $year <= 1925) {
-			return array('t-' . ($year - 1911));
+			return ['t-' . ($year - 1911)];
 		} elseif ($year == 1926) {
-			return array('t-' . ($year - 1911), 's-' . ($year - 1925));
+			return ['t-' . ($year - 1911), 's-' . ($year - 1925)];
 		} elseif ($year >= 1927 && $year <= 1988) {
-			return array('s-' . ($year - 1925));
+			return ['s-' . ($year - 1925)];
 		} elseif ($year == 1989) {
-			return array('s-' . ($year - 1925), 'h-' . ($year - 1988));
+			return ['s-' . ($year - 1925), 'h-' . ($year - 1988)];
 		} elseif ($year >= 1990) {
-			return array('h-' . ($year - 1988));
+			return ['h-' . ($year - 1988)];
 		} else {
 			return false;
 		}
@@ -176,12 +176,12 @@ class BcTimeHelper extends TimeHelper {
 			$y = $y - 1988;
 		}
 
-		$dataWareki = array(
+		$dataWareki = [
 			'wareki' => true,
 			'year' => $w . '-' . $y,
 			'month' => $m,
 			'day' => $d
-		);
+		];
 
 		return $dataWareki;
 	}

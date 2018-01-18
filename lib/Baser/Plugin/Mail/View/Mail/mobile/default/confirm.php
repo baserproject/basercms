@@ -27,11 +27,11 @@ if ($freezed) {
 <br />
 
 <?php if ($freezed): ?>
-	入力内容の確認<br />
+	<?php echo __('入力内容を確認する') ?><br />
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
-	<font size="1">入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。</font>
+	<font size="1"><?php echo __('入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。') ?></font>
 	<?php else: ?>
-	入力フォーム
+	<?php echo __('入力フォーム') ?>
 <?php endif; ?>
 
 <?php $this->BcBaser->flash(); ?>

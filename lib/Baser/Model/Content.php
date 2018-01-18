@@ -23,28 +23,28 @@ class Content extends AppModel {
  *
  * @var array
  */
-	public $actsAs = array(
+	public $actsAs = [
 		'Tree' => ['level' => 'level'],
 		'BcCache',
 		'SoftDelete',
-		'BcUpload' => array(
+		'BcUpload' => [
     		'saveDir'  => "contents",
-    		'fields'  => array(
-      			'eyecatch'  => array(
+    		'fields'  => [
+      			'eyecatch'  => [
         			'type'		=> 'image',
         			'namefield' => 'id',
         			'nameadd'	=> true,
         			'nameformat'  => '%08d',
 					'subdirDateFormat' => 'Y/m',
         			//'imageresize' => array('width' => '800', 'height' => '800'),
-					'imagecopy' => array(
-						'thumb' => array('suffix' => '_thumb', 'width' => '300', 'height' => '300'),
-						'medium'=> array('suffix' => '_midium', 'width' => '800', 'height' => '800')
-					)
-      			)
-    		)
-  		)
-	);
+					'imagecopy' => [
+						'thumb' => ['suffix' => '_thumb', 'width' => '300', 'height' => '300'],
+						'medium'=> ['suffix' => '_midium', 'width' => '800', 'height' => '800']
+					]
+      			]
+    		]
+  		]
+	];
 
 /**
  * Belongs To
@@ -68,6 +68,9 @@ class Content extends AppModel {
  * @var array
  */
 	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		],
 		'name' => [
 			['rule' => ['notBlank'],
 				'message' => 'URLを入力してください。'],
@@ -147,23 +150,25 @@ class Content extends AppModel {
  * @return array
  */
 	public function implementedEvents() {
-		return array(
-			'Model.beforeFind' => array('callable' => 'beforeFind', 'passParams' => true),
-			'Model.afterFind' => array('callable' => 'afterFind', 'passParams' => true),
-			'Model.beforeValidate' => array('callable' => 'beforeValidate', 'passParams' => true),
-			'Model.afterValidate' => array('callable' => 'afterValidate'),
-			'Model.beforeSave' => array('callable' => 'beforeSave', 'passParams' => true),
-			'Model.afterSave' => array('callable' => 'afterSave', 'passParams' => true),
-			'Model.beforeDelete' => array('callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1),
-			'Model.afterDelete' => array('callable' => 'afterDelete'),
-		);
+		return [
+			'Model.beforeFind' => ['callable' => 'beforeFind', 'passParams' => true],
+			'Model.afterFind' => ['callable' => 'afterFind', 'passParams' => true],
+			'Model.beforeValidate' => ['callable' => 'beforeValidate', 'passParams' => true],
+			'Model.afterValidate' => ['callable' => 'afterValidate'],
+			'Model.beforeSave' => ['callable' => 'beforeSave', 'passParams' => true],
+			'Model.afterSave' => ['callable' => 'afterSave', 'passParams' => true],
+			'Model.beforeDelete' => ['callable' => 'beforeDelete', 'passParams' => true, 'priority' => 1],
+			'Model.afterDelete' => ['callable' => 'afterDelete'],
+		];
 	}
 
 /**
+ * サイト設定にて、エイリアスを利用してメインサイトと自動連携するオプションを利用時に、
  * 関連するサブサイトで、関連コンテンツを作成する際、同階層に重複名称のコンテンツがないか確認する
  *
- * 新規の際は、存在するだけでエラー
- * 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ * 	- 新規の際は、存在するだけでエラー
+ * 	- 編集の際は、main_site_content_id が自身のIDでない、alias_id が自身のIDでない場合エラー
+ *
  * @param $check
  * @return bool
  */
@@ -178,7 +183,10 @@ class Content extends AppModel {
 		if($this->data['Content']['site_id']) {
 			unset($parents[1]);
 		}
-		$baseUrl = '/' . implode('/', $parents) . '/';
+		$baseUrl = '/';
+		if($parents) {
+			$baseUrl = '/' . implode('/', $parents) . '/';
+		}
 		$sites = $this->Site->find('all', ['conditions' => ['Site.main_site_id' => $this->data['Content']['site_id'], 'relate_main_site' => true]]);
 		// URLを取得
 		$urlAry = [];
@@ -290,16 +298,16 @@ class Content extends AppModel {
 	public function getUniqueName($name, $parentId, $contentId = null) {
 
 		// 先頭が同じ名前のリストを取得し、後方プレフィックス付きのフィールド名を取得する
-		$conditions = array(
+		$conditions = [
 			'Content.name LIKE' => $name . '%',
 			'Content.parent_id' => $parentId
-		);
+		];
 		if($contentId) {
 			$conditions['Content.id <>'] = $contentId;
 		}
-		$datas = $this->find('all', array('conditions' => $conditions, 'fields' => array('name'), 'order' => "Content.name", 'recursive' => -1));
+		$datas = $this->find('all', ['conditions' => $conditions, 'fields' => ['name'], 'order' => "Content.name", 'recursive' => -1]);
 		$datas = Hash::extract($datas, "{n}.Content.name");
-		$numbers = array();
+		$numbers = [];
 
 		if ($datas) {
 			foreach($datas as $data) {
@@ -352,7 +360,7 @@ class Content extends AppModel {
  * @param array $options
  * @return void
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 		parent::afterSave($created, $options);
 		$this->deleteAssocCache($this->data);
 		if($this->updatingSystemData) {
@@ -406,9 +414,9 @@ class Content extends AppModel {
 		if(!parent::beforeDelete($cascade)) {
 			return false;
 		}
-		$data = $this->find('first', array(
-			'conditions' => array($this->alias . '.id' => $this->id)
-		));
+		$data = $this->find('first', [
+			'conditions' => [$this->alias . '.id' => $this->id]
+		]);
 		$this->__deleteTarget = $data;
 		if(!$this->softDelete(null)) {
 			return true;
@@ -682,8 +690,9 @@ class Content extends AppModel {
  * @return mixed URL | false
  */
 	public function createUrl($id, $plugin = null, $type = null) {
+		$id = (int) $id;
 		// @deprecated 5.0.0 since 4.0.2 $plugin / $type の引数は不要
-		if(!$id || !intval($id)) {
+		if(!$id) {
 			return false;
 		} elseif($id == 1) {
 			$url = '/';
@@ -798,7 +807,7 @@ class Content extends AppModel {
 				$data['Content']['main_site_content_id'] = null;
 			}
 		}
-		$data = $this->save($data, array('validate' => false, 'callbacks' => false));
+		$data = $this->save($data, ['validate' => false, 'callbacks' => false]);
 		$this->data = $data;
 		return (bool) ($data);
 	}
@@ -859,7 +868,7 @@ class Content extends AppModel {
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
-		return $this->find('first', ['conditions' => $conditions]);
+		return $this->find('first', ['conditions' => $conditions, 'order' => ['Content.id']]);
 	}
 
 /**
@@ -870,10 +879,10 @@ class Content extends AppModel {
  * @param array $options
  * @return array|bool
  */
-	public function getContentFolderList($siteId = null, $options = array()) {
-		$options = array_merge(array(
+	public function getContentFolderList($siteId = null, $options = []) {
+		$options = array_merge([
 			'excludeId' => null
-		), $options);
+		], $options);
 
 		$conditions = [
 			'type' => 'ContentFolder', 
@@ -902,7 +911,7 @@ class Content extends AppModel {
  */
 	public function convertTreeList($nodes) {
 		if(!$nodes) {
-			return array();
+			return [];
 		}
 		foreach ($nodes as $key => $value) {
 			if (preg_match("/^([_]+)/i", $value, $matches)) {
@@ -1025,7 +1034,7 @@ class Content extends AppModel {
 			$this->updatingRelated = true;
 			$content = $this->find('first', ['conditions' => ['Content.id' => $id], 'recursive' => -1]);
 			if($top) {
-				$siteRootId = $this->field('id', array('Content.site_id' => $content['Content']['site_id'], 'site_root' => true));
+				$siteRootId = $this->field('id', ['Content.site_id' => $content['Content']['site_id'], 'site_root' => true]);
 				$content['Content']['parent_id'] = $siteRootId;
 			}
 			unset($content['Content']['lft']);
@@ -1054,11 +1063,11 @@ class Content extends AppModel {
 		if(!$plugin) {
 			$plugin = 'Core';
 		}
-		$conditions = array(
+		$conditions = [
 			'plugin'	=> $plugin,
 			'type'		=> $type,
 			'alias_id'	=> null
-		);
+		];
 		if($entityId) {
 			$conditions['Content.entity_id'] = $entityId;
 		}
@@ -1077,14 +1086,21 @@ class Content extends AppModel {
  * @return string
  */
 	public function getUrlById($id, $full = false) {
+		if (!is_int($id)) {
+			return '';
+		}
 		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
-		return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
+		if ($data) {
+			return $this->getUrl($data['Content']['url'], $full, $data['Site']['use_subdomain']);
+		}
+		return '';
 	}
 
 /**
  * コンテンツ管理上のURLを元に正式なURLを取得する
  * 
- * サブフォルダ設置時等、baseUrl（サブフォルダまでのパス）は含まない
+ * ドメインからのフルパスでない場合、デフォルトでは、
+ * サブフォルダ設置時等の baseUrl（サブフォルダまでのパス）は含まない
  *
  * @param string $url コンテンツ管理上のURL 
  * @param bool $full http からのフルのURLかどうか 
@@ -1143,7 +1159,7 @@ class Content extends AppModel {
 			if($full) {
 				$mainDomain = BcUtil::getMainDomain();
 				$fullUrlArray = explode('//', Configure::read('BcEnv.siteUrl'));
-				$url = $fullUrlArray[0] . '//' . $mainDomain . $url;
+				$url = $fullUrlArray[0] . '//' . $mainDomain . Router::url($url);
 			}
 		}
 		$url = preg_replace('/\/index$/', '/', $url);
@@ -1227,7 +1243,7 @@ class Content extends AppModel {
  */
 	public function copy($id, $entityId, $newTitle, $newAuthorId, $newSiteId = null) {
 
-		$data = $this->find('first', array('conditions' => array('Content.id' => $id)));
+		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
 		$url = $data['Content']['url'];
 		if(!is_null($newSiteId) && $data['Site']['id'] != $newSiteId) {
 			$data['Content']['site_id'] = $newSiteId;
@@ -1262,12 +1278,12 @@ class Content extends AppModel {
  */
 	public function getConditionAllowPublish() {
 		$conditions[$this->alias . '.status'] = true;
-		$conditions[] = array('or' => array(array($this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_begin' => null),
-				array($this->alias . '.publish_begin' => '0000-00-00 00:00:00')));
-		$conditions[] = array('or' => array(array($this->alias . '.publish_end >=' => date('Y-m-d H:i:s')),
-				array($this->alias . '.publish_end' => null),
-				array($this->alias . '.publish_end' => '0000-00-00 00:00:00')));
+		$conditions[] = ['or' => [[$this->alias . '.publish_begin <=' => date('Y-m-d H:i:s')],
+				[$this->alias . '.publish_begin' => null],
+				[$this->alias . '.publish_begin' => '0000-00-00 00:00:00']]];
+		$conditions[] = ['or' => [[$this->alias . '.publish_end >=' => date('Y-m-d H:i:s')],
+				[$this->alias . '.publish_end' => null],
+				[$this->alias . '.publish_end' => '0000-00-00 00:00:00']]];
 		return $conditions;
 	}
 
@@ -1608,12 +1624,12 @@ class Content extends AppModel {
  * @return bool|int|null|string
  */
 	public function getOrderSameParent($id, $parentId) {
-		$contents = $this->find('all', array(
-			'fields' => array('Content.id', 'Content.parent_id', 'Content.title'),
+		$contents = $this->find('all', [
+			'fields' => ['Content.id', 'Content.parent_id', 'Content.title'],
 			'order' => 'lft',
 			'conditions' => ['Content.parent_id' => $parentId],
 			'recursive' => -1
-		));
+		]);
 		$order = null;
 		if($contents) {
 			if($id) {
@@ -1661,6 +1677,7 @@ class Content extends AppModel {
 		$conditions = array_merge($conditions, $this->getConditionAllowPublish());
 		$contents = $this->find('all', [
 			'conditions' => $conditions,
+			'order' => ['Content.id'],
 			'recursive' => 0
 		]);
 		$mainSite = $this->Site->getRootMain();
@@ -1680,7 +1697,7 @@ class Content extends AppModel {
  */
 	public function getCacheTime($data) {
 		if(!is_array($data)) {
-			$data = $this->find('first', array('conditions' => array('Content.id' => $data), 'recursive' => 0));
+			$data = $this->find('first', ['conditions' => ['Content.id' => $data], 'recursive' => 0]);
 		}
 		if(isset($data['Content'])) {
 			$data = $data['Content'];

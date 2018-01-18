@@ -25,10 +25,10 @@ if ($freezed) {
 </h1>
 
 <?php if ($freezed): ?>
-	<h2 class="contents-head">入力内容の確認</h2>
-	<p class="section">入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。</p>
+	<h2 class="contents-head"><?php echo __('入力内容を確認する') ?></h2>
+	<p class="section"><?php echo __('入力した内容に間違いがなければ「送信する」ボタンをクリックしてください。') ?></p>
 	<?php else: ?>
-	<h2 class="contents-head">入力フォーム</h2>
+	<h2 class="contents-head"><?php echo __('入力フォーム') ?></h2>
 <?php endif ?>
 
 <div class="section">

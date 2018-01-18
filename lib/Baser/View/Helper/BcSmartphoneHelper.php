@@ -78,10 +78,10 @@ class BcSmartphoneHelper extends Helper {
 				$currentAlias = $this->request->params['Site']['alias'];
 				// 一旦プレフィックスを除外
 				$reg = '/a(.*?)href="' . preg_quote($bcBaseUrl, '/') . '(' . $currentAlias . '\/([^\"]*?))\"/';
-				$this->_View->output = preg_replace_callback($reg, array($this, '_removePrefix'), $this->_View->output);
+				$this->_View->output = preg_replace_callback($reg, [$this, '_removePrefix'], $this->_View->output);
 				// プレフィックス追加
 				$reg = '/a(.*?)href=\"' . preg_quote($bcBaseUrl, '/') . '([^\"]*?)\"/';
-				$this->_View->output = preg_replace_callback($reg, array($this, '_addPrefix'), $this->_View->output);
+				$this->_View->output = preg_replace_callback($reg, [$this, '_addPrefix'], $this->_View->output);
 			}
 		}
 	}

@@ -67,7 +67,7 @@ class BcArrayHelper extends AppHelper {
  */
 	public function addText($array, $prefix = '', $suffix = '') {
 		if ($prefix || $suffix) {
-			array_walk($array, array($this, '__addText'), $prefix . ',' . $suffix);
+			array_walk($array, [$this, '__addText'], $prefix . ',' . $suffix);
 		}
 		return $array;
 	}

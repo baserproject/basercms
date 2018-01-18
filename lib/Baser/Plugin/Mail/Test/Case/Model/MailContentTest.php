@@ -180,6 +180,26 @@ class MailContentTest extends BaserTestCase {
 		$this->assertContains('SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。', $this->MailContent->validationErrors['ssl_on']);
 	}
 
+/**
+ * SSL用のURLが設定されているかチェックする
+ */
+	public function testCheckSslUrl() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 英数チェック
+ */
+	public function testAlphaNumeric() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * フォームの初期値を取得する
+ */
+	public function testGetDefaultValue() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * afterSave
@@ -287,6 +307,13 @@ class MailContentTest extends BaserTestCase {
 
 	}
 
+/**
+ * 検索用データを生成する
+ */
+	public function testCreateSearchIndex() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 	public function createContentDataProvider() {
 		return array(
 			array(1, 2, 1, '検索用データを正しく生成できません'),
@@ -333,6 +360,27 @@ class MailContentTest extends BaserTestCase {
 		return array(
 			array(1, 1, 'hogeName', 1, 0)
 		);
+	}
+
+/**
+ * フォームが公開中かどうかチェックする
+ */
+	public function testIsAccepting() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 公開済の conditions を取得
+ */
+	public function testGetConditionAllowAccepting() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 公開されたコンテンツを取得する
+ */
+	public function testFindAccepting() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

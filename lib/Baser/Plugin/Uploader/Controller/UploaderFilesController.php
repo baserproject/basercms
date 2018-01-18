@@ -483,7 +483,7 @@ class UploaderFilesController extends AppController {
 					"wmv"	=> "video/x-ms-wmv"
 			);
 			header("Content-type: " . $contentsMaping[$ext]);
-			readfile(WWW_ROOT . '/files/uploads/limited/'.$filename);
+			readfile(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename);
 			exit();
 		} else {
 			$this->notFound();

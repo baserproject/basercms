@@ -32,11 +32,11 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $helpers = array(
+	public $helpers = [
 		'Html', 'Session', 'BcGooglemaps', 
 		'BcXml', 'BcText',
 		'BcFreeze', 'BcPage'
-	);
+	];
 
 /**
  * コンポーネント
@@ -45,7 +45,7 @@ class PagesController extends AppController {
  * @deprecated useViewCache 5.0.0 since 4.0.0
  * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]);
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
 
 /**
  * モデル
@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access	public
  */
-	public $uses = array('Page');
+	public $uses = ['Page'];
 
 /**
  * beforeFilter
@@ -83,9 +83,9 @@ class PagesController extends AppController {
 		}
 
 		// EVENT Pages.beforeAdd
-		$event = $this->dispatchEvent('beforeAdd', array(
+		$event = $this->dispatchEvent('beforeAdd', [
 			'data' => $this->request->data
-		));
+		]);
 		if ($event !== false) {
 			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 		}
@@ -94,9 +94,9 @@ class PagesController extends AppController {
 		if ($data) {
 
 			// EVENT Pages.afterAdd
-			$this->dispatchEvent('afterAdd', array(
+			$this->dispatchEvent('afterAdd', [
 				'data' => $data
-			));
+			]);
 			
 			$message = '固定ページ「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
@@ -227,7 +227,7 @@ class PagesController extends AppController {
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();
 		$this->setMessage($result['all'] . ' ページ中 ' . $result['insert'] . ' ページの新規登録、 ' . $result['update'] . ' ページの更新に成功しました。');
-		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
 /**
@@ -243,14 +243,16 @@ class PagesController extends AppController {
 			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
 		}
 		clearViewCache();
-		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
 /**
  * ビューを表示する
  *
- * @param mixed
  * @return void
+ * @throws ForbiddenException When a directory traversal attempt.
+ * @throws NotFoundException When the view file could not be found
+ *   or MissingViewException in debug mode.
  */
 	public function display() {
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
@@ -273,12 +275,17 @@ class PagesController extends AppController {
 
 		$urlTmp = preg_replace('/^\//', '', $urlTmp);
 		$path = explode('/', $urlTmp);
-
+		// <<<
+		
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
-		$page = $subpage = $titleForLayout = null;
+		if (in_array('..', $path, true) || in_array('.', $path, true)) {
+			throw new ForbiddenException();
+		}
+		$page = $subpage = $title_for_layout = null;
+
 		if (!empty($path[0])) {
 			$page = $path[0];
 		}
@@ -286,15 +293,9 @@ class PagesController extends AppController {
 			$subpage = $path[1];
 		}
 		if (!empty($path[$count - 1])) {
-			$titleForLayout = Inflector::humanize($path[$count - 1]);
+			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
-		// <<<
-		
-		$this->set(array(
-			'page' => $page,
-			'subpage' => $subpage,
-			'title_for_layout' => $titleForLayout
-		));
+		$this->set(compact('page', 'subpage', 'title_for_layout'));
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
@@ -313,7 +314,14 @@ class PagesController extends AppController {
 						$query[] = $key . '=' . $value;
 					}
 				}
-				$this->redirect($this->request->here . '?' . implode('&', $query));
+				$redirectUrl = '/';
+				if($this->request->url) {
+					$redirectUrl .= $this->request->url;
+				}
+				if($query) {
+					$redirectUrl .= '?' . implode('&', $query);
+				}
+				$this->redirect($redirectUrl);
 				return;
 			}
 
@@ -437,9 +445,9 @@ class PagesController extends AppController {
  */
 	protected function _setAdminIndexViewData() {
 		$user = $this->BcAuth->user();
-		$allowOwners = array();
+		$allowOwners = [];
 		if (!empty($user)) {
-			$allowOwners = array('', $user['user_group_id']);
+			$allowOwners = ['', $user['user_group_id']];
 		}
 		if (!isset($this->passedArgs['sortmode'])) {
 			$this->passedArgs['sortmode'] = false;

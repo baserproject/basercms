@@ -28,31 +28,31 @@ class BcManagerShell extends AppShell {
  */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
-		$parser->addOption('host', array(
+		$parser->addOption('host', [
 			'help' => 'ホスト名',
 			'default' => 'localhost'
-		))->addOption('database', array(
+		])->addOption('database', [
 			'help' => 'データベース名',
 			'default' => ''
-		))->addOption('login', array(
+		])->addOption('login', [
 			'help' => 'データベースログインユーザー名',
 			'default' => ''
-		))->addOption('password', array(
+		])->addOption('password', [
 			'help' => 'データベースログインパスワード',
 			'default' => ''
-		))->addOption('prefix', array(
+		])->addOption('prefix', [
 			'help' => 'データベーステーブルプレフィックス',
 			'default' => 'mysite_'
-		))->addOption('port', array(
+		])->addOption('port', [
 			'help' => 'データベースポート番号',
 			'default' => ''
-		))->addOption('baseurl', array(
+		])->addOption('baseurl', [
 			'help' => 'ベースとなるURL',
 			'default' => '/'
-		))->addOption('data', array(
+		])->addOption('data', [
 			'help' => '初期データパターン',
 			'default' => 'core.m-single'
-		));
+		]);
 
 		return $parser;
 	}
@@ -220,11 +220,11 @@ class BcManagerShell extends AppShell {
 			$siteUrl .= '/';
 		}
 
-		$adminUser = array(
+		$adminUser = [
 			'name' => $this->args[2],
 			'password' => $this->args[3],
 			'email' => $this->args[4],
-		);
+		];
 
 		if (isset($this->params['baseurl'])) {
 			$baseUrl = $this->params['baseurl'];
@@ -246,7 +246,7 @@ class BcManagerShell extends AppShell {
  * @return mixed Array Or false
  */
 	protected function _getDbParams() {
-		$dbConfig = array(
+		$dbConfig = [
 			'datasource'	=> '',
 			'host'			=> '',
 			'database'		=> '',
@@ -257,11 +257,11 @@ class BcManagerShell extends AppShell {
 			'persistent'	=> false,
 			'schema'		=> '',
 			'encoding'		=> 'utf8'
-		);
+		];
 
 		if (!empty($this->args[1])) {
 			$dbConfig['datasource'] = $this->args[1];
-			$datasources = array('mysql', 'postgres', 'sqlite', 'csv');
+			$datasources = ['mysql', 'postgres', 'sqlite', 'csv'];
 			if (!in_array($dbConfig['datasource'], $datasources)) {
 				return false;
 			}

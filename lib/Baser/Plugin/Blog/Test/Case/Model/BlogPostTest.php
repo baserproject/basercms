@@ -19,7 +19,7 @@ App::uses('BlogPost', 'Blog.Model');
  */
 class BlogPostTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Default.SearchIndex',
 		'baser.Default.SiteConfig',
@@ -35,7 +35,7 @@ class BlogPostTest extends BaserTestCase {
 		'plugin.blog.Model/BlogPost/BlogPostModel',
 		'plugin.blog.Model/BlogPost/BlogCategoryModel',
 		'plugin.blog.Model/BlogPost/BlogPostsBlogTagModel',
-	);
+	];
 
 	public function setUp() {
 		$this->BlogPost = ClassRegistry::init('Blog.BlogPost');
@@ -52,9 +52,9 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function test必須チェック() {
 
-		$this->BlogPost->create(array(
-			'BlogPost' => array()
-		));
+		$this->BlogPost->create([
+			'BlogPost' => []
+		]);
 
 		$this->assertFalse($this->BlogPost->validates());
 
@@ -66,11 +66,11 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 	public function test空チェック() {
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'user_id' => ''
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogPost->validates());
 
@@ -79,11 +79,11 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック異常系() {
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'name' => '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogPost->validates());
 
@@ -92,24 +92,24 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 	public function test桁数チェック正常系() {
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'name' => '123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345',
 				'posts_date' => '2020-01-27 12:57:59'
-			)
-		));
+			]
+		]);
 		$this->assertTrue($this->BlogPost->validates());
 	}
 
 	public function testその他異常系() {
 		// 形式チェック
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'publish_begin' => 'test',
 				'publish_end' => 'test',
 				'posts_date' => 'test',
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogPost->validates());
 
@@ -130,12 +130,12 @@ class BlogPostTest extends BaserTestCase {
 			$bigData .= $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData . $bigData;
 		}
 
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'detail' => $bigData,
 				'detail_draft' => $bigData,
-			)
-		));
+			]
+		]);
 
 		$this->assertFalse($this->BlogPost->validates());
 
@@ -148,13 +148,13 @@ class BlogPostTest extends BaserTestCase {
 
 	public function testその他正常系() {
 		// 形式チェック
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'publish_begin' => '2020-01-27 12:57:59',
 				'publish_end' => '2020-01-29 12:57:59',
 				'posts_date' => '2020-01-27 12:57:59',
-			)
-		));
+			]
+		]);
 
 		$this->BlogPost->validates();
 		$this->assertArrayNotHasKey('publish_begin', $this->BlogPost->validationErrors);
@@ -162,12 +162,12 @@ class BlogPostTest extends BaserTestCase {
 		$this->assertArrayNotHasKey('posts_date', $this->BlogPost->validationErrors);
 
 		// データ量チェック
-		$this->BlogPost->create(array(
-			'BlogPost' => array(
+		$this->BlogPost->create([
+			'BlogPost' => [
 				'detail' => 'test',
 				'detail_draft' => 'test',
-			)
-		));
+			]
+		]);
 
 		$this->BlogPost->validates();
 		$this->assertArrayNotHasKey('detail', $this->BlogPost->validationErrors);
@@ -185,22 +185,34 @@ class BlogPostTest extends BaserTestCase {
 		$result = $behaviors["\0*\0_loaded"]['BcUpload']->settings['BlogPost'];
 
 		$imagecopy = $result['fields']['eye_catch']['imagecopy'];
-		$expected = array(
-			'thumb' => array(
+		$expected = [
+			'thumb' => [
 				'suffix' => '__thumb',
 				'width' => '300',
 				'height' => '300'
-			),
-			'mobile_thumb' => array(
+			],
+			'mobile_thumb' => [
 				'suffix' => '__mobile_thumb',
 				'width' => '100',
 				'height' => '100'
-			)
-		);
+			]
+		];
 
 		$this->assertEquals($result['saveDir'], 'blog/1/blog_posts');
 		$this->assertEquals($imagecopy, $expected);
 	}
+
+/**
+ * コントロールソースを取得する
+ */
+public function testGetDefaultValue() {
+	$authUser['id'] = 1;
+	$data = $this->BlogPost->getDefaultValue($authUser);
+	$this->assertEquals($data['BlogPost']['user_id'], $authUser['id']);
+	$this->assertRegExp('/' . '([0-9]{4})\/([0-9]{2})\/([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/', $data['BlogPost']['posts_date']);
+	$this->assertEquals($data['BlogPost']['posts_date'], date('Y/m/d H:i:s'));
+	$this->assertEquals($data['BlogPost']['status'], 0);
+}
 
 /**
  * ブログの月別一覧を取得する
@@ -253,11 +265,11 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 	public function getEntryDatesDataProvider() {
-		return array(
+		return [
 			[1, 2015, 1, ['2015-01-27', '2015-01-27']],
 			[1, 2016, 1, []],
 			[2, 2016, 2, ['2016-02-10', '2016-02-10']],
-		);
+		];
 	}
 
 /**
@@ -265,14 +277,14 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function testGetAuthors() {
 		$message = '投稿者一覧を正しく取得できません';
-		$result = $this->BlogPost->getAuthors(1, array());
+		$result = $this->BlogPost->getAuthors(1, []);
 		$this->assertEquals($result[0]['User']['name'], 'basertest', $message);
 		$this->assertEquals($result[1]['User']['name'], 'basertest2', $message);
 		
-		$result = $this->BlogPost->getAuthors(2, array());
+		$result = $this->BlogPost->getAuthors(2, []);
 		$this->assertEquals($result[0]['User']['name'], 'basertest', $message);
 
-		$result = $this->BlogPost->getAuthors(2, array('viewCount' => true));
+		$result = $this->BlogPost->getAuthors(2, ['viewCount' => true]);
 		$this->assertEquals($result[0]['count'], 2, $message);
 	}
 
@@ -310,10 +322,48 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			[['blogContentId' => 1], [1 => 'プレスリリース', 2 => '&nbsp&nbsp&nbsp└子カテゴリ', 3 => '親子関係なしカテゴリ']],
+		return [
+			[['blogContentId' => 1], [1 => 'プレスリリース', 2 => '　　　└子カテゴリ', 3 => '親子関係なしカテゴリ']],
 			[['blogContentId' => 2], [4 => 'プレスリリース']]
-		);
+		];
+	}
+
+/**
+ * 公開状態を取得する
+ *
+ * @dataProvider allowPublishDataProvider
+ */
+	public function testAllowPublish($publish_begin, $publish_end, $status, $expected) {
+		$data['publish_begin'] = $publish_begin;
+		$data['publish_end'] = $publish_end;
+		$data['status'] = $status;
+		$this->assertEquals($this->BlogPost->allowPublish($data), $expected);
+	}
+
+	public function allowPublishDataProvider() {
+		return[
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', false, false],
+			['0000-00-00 00:00:00', '0000-00-00 00:00:00', true, true],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s'), true, false],
+			['0000-00-00 00:00:00', date('Y-m-d H:i:s')+1, true, true],
+			[date('Y-m-d H:i:s'), '0000-00-00 00:00:00', true, true],
+			[date('Y-m-d H:i:s')+1, '0000-00-00 00:00:00', true, false],
+			[date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), true, false]
+		];
+	}
+/**
+ * 公開済の conditions を取得
+ */
+	public function testGetConditionAllowPublish() {
+		$result = $this->BlogPost->getConditionAllowPublish();
+		$pattern = '/' . '([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})' . '/';
+
+		$this->assertRegExp($pattern, $result[0]['or']['0']['BlogPost.publish_begin <=']);
+		$this->assertEquals($result[0]['or']['1']['BlogPost.publish_begin'], null);
+		$this->assertEquals($result[0]['or']['2']['BlogPost.publish_begin'], '0000-00-00 00:00:00');
+		$this->assertRegExp($pattern, $result[1]['or']['0']['BlogPost.publish_end >=']);
+		$this->assertEquals($result[1]['or']['1']['BlogPost.publish_end'], null);
+		$this->assertEquals($result[1]['or']['2']['BlogPost.publish_end'], '0000-00-00 00:00:00');
 	}
 
 /**
@@ -322,12 +372,12 @@ class BlogPostTest extends BaserTestCase {
 	public function testGetPublishes() {
 		$message = '正しく公開状態の記事を取得できません';
 		
-		$result = count($this->BlogPost->getPublishes(array()));
+		$result = count($this->BlogPost->getPublishes([]));
 		$this->assertEquals($result, 6, $message);
 
-		$options = array('conditions' => array(
+		$options = ['conditions' => [
 			'publish_begin' => '9000-01-27 12:00:00'
-		));
+		]];
 		$result = $this->BlogPost->getPublishes($options);
 		$this->assertEmpty($result);
 	}
@@ -336,7 +386,7 @@ class BlogPostTest extends BaserTestCase {
  * afterSave
  */
 	public function testAfterSave() {
-		$data = array('BlogPost' => array(
+		$data = ['BlogPost' => [
 			'id' => 99,
 			'exclude_search' => 0,
 			'name' => 'test-name',
@@ -349,7 +399,7 @@ class BlogPostTest extends BaserTestCase {
 			'status' => 0,
 			'publish_begin' => '2020-01-27 12:57:59',
 			'publish_end' => '2020-01-28 12:57:59',
-		));
+		]];
 
 		$SearchIndex = ClassRegistry::init('SearchIndex');
 		
@@ -358,9 +408,9 @@ class BlogPostTest extends BaserTestCase {
 		$this->BlogPost->create($data);
 		$this->BlogPost->save();
 
-		$result = $SearchIndex->find('count', array(
-			'conditions' => array('SearchIndex.title' => 'test-name'),
-		));
+		$result = $SearchIndex->find('count', [
+			'conditions' => ['SearchIndex.title' => 'test-name'],
+		]);
 		$this->assertEquals($result, 1, '検索用テーブルへ登録できません');
 		
 		// 削除
@@ -368,9 +418,9 @@ class BlogPostTest extends BaserTestCase {
 		$this->BlogPost->create($data);
 		$this->BlogPost->save();
 
-		$result = $SearchIndex->find('count', array(
-			'conditions' => array('SearchIndex.title' => 'test-name'),
-		));
+		$result = $SearchIndex->find('count', [
+			'conditions' => ['SearchIndex.title' => 'test-name'],
+		]);
 		$this->assertEquals($result, 0, '検索用テーブルから削除できません');
 
 		unset($SearchIndex);
@@ -382,7 +432,7 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function testCreateSearchIndex() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-		$data = array(
+		$data = [
 			'name' => 'test-name',
 			'content' => 'test-content',
 			'detail' => 'test-detail',
@@ -391,9 +441,9 @@ class BlogPostTest extends BaserTestCase {
 			'status' => true,
 			'publish_begin' => '2020-01-27 12:57:59',
 			'publish_end' => '2020-01-27 12:57:59',
-		);
-		$expected = array(
-		'Content' => array(
+		];
+		$expected = [
+		'Content' => [
 			'type' => 'ブログ',
 			'model_id' => false,
 			'category' => '',
@@ -401,7 +451,7 @@ class BlogPostTest extends BaserTestCase {
 			'detail' => 'test-content test-detail',
 			'url' => '/news/archives/1',
 			'status' => false
-		));
+		]];
 
 		$result = $this->BlogPost->createContent($data);
 		$this->assertEquals($expected, $result, '正しく検索用データを生成できません');
@@ -416,6 +466,20 @@ class BlogPostTest extends BaserTestCase {
 	}
 
 /**
+ * beforeDelete
+ */
+	public function testBeforeDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/*
+ * beforeFind
+ */
+	public function testBeforeFind() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * コピーする
  * 
  * @param int $id
@@ -423,10 +487,17 @@ class BlogPostTest extends BaserTestCase {
  */
 	public function testCopy() {
 		$this->BlogPost->copy(1);
-		$result = $this->BlogPost->find('first', array(
-			'conditions' => array('BlogPost.id' => $this->BlogPost->getLastInsertID())
-		));
+		$result = $this->BlogPost->find('first', [
+			'conditions' => ['BlogPost.id' => $this->BlogPost->getLastInsertID()]
+		]);
 		$this->assertEquals($result['BlogPost']['name'], 'ホームページをオープンしました_copy');
+	}
+
+/**
+ * プレビュー用のデータを生成する
+ */
+	public function testCreatePreviewData() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -479,6 +550,48 @@ class BlogPostTest extends BaserTestCase {
 			['count', ['contentUrl' => '/news/'], 4],					// コンテンツURL
 			['count', ['contentUrl' => ['/news/', '/topics/']], 6]		// コンテンツURL（復数）
 		];
+	}
+
+/**
+ * カテゴリ条件を生成する
+ */
+	public function testCreateCategoryCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * タグ条件を生成する
+ */
+	public function testCreateTagCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * キーワード条件を生成する
+ */
+	public function testCreateKeywordCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 年月日条件を生成する
+ */
+	public function testCreateYearMonthDayCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 作成者の条件を作成する
+ */
+	public function testCreateAuthorCondition() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 並び替え設定を生成する
+ */
+	public function testCreateOrder() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

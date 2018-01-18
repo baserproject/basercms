@@ -17,12 +17,12 @@ $writable = true;
 if ((is_dir($fullpath) && !is_writable($fullpath)) || $theme == 'core') {
 	$writable = false;
 }
-$this->BcBaser->js(array(
+$this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
-));
+]);
 $params = explode('/', $path);
 ?>
 
@@ -39,7 +39,7 @@ $(function(){
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array_merge(array('controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type), $params)) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array_merge(['controller' => 'theme_files', 'action' => 'ajax_batch', $theme, $type], $params)) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 
@@ -54,12 +54,12 @@ $(function(){
 
 <div class="submit">
 	<?php if ($writable): ?>
-		<?php echo $this->BcForm->create('ThemeFile', array('id' => 'ThemeFileUpload', 'url' => array_merge(array('action' => 'upload', $theme, $plugin, $type), $params), 'enctype' => 'multipart/form-data')) ?>
-		<?php echo $this->BcForm->input('ThemeFile.file', array('type' => 'file')) ?>
+		<?php echo $this->BcForm->create('ThemeFile', ['id' => 'ThemeFileUpload', 'url' => array_merge(['action' => 'upload', $theme, $plugin, $type], $params), 'enctype' => 'multipart/form-data']) ?>
+		<?php echo $this->BcForm->input('ThemeFile.file', ['type' => 'file']) ?>
 		<?php echo $this->BcForm->end() ?>
-		<?php $this->BcBaser->link('フォルダ新規作成', array_merge(array('action' => 'add_folder', $theme, $type), $params), array('class' => 'btn-orange button')) ?>
+		<?php $this->BcBaser->link('フォルダ新規作成', array_merge(['action' => 'add_folder', $theme, $type], $params), ['class' => 'btn-orange button']) ?>
 	<?php endif ?>
 	<?php if (($path || $type != 'etc') && $type != 'img' && $writable): ?>
-		<?php $this->BcBaser->link('ファイル新規作成', array_merge(array('action' => 'add', $theme, $type), $params), array('class' => 'btn-red button')) ?>
+		<?php $this->BcBaser->link('ファイル新規作成', array_merge(['action' => 'add', $theme, $type], $params), ['class' => 'btn-red button']) ?>
 	<?php endif ?>
 </div>

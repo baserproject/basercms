@@ -45,7 +45,7 @@ class BcReplacePrefixComponent extends Component {
  *
  * @var array
  */
-	public $allowedPureActions = array();
+	public $allowedPureActions = [];
 
 /**
  * 置き換え後のプレフィックス

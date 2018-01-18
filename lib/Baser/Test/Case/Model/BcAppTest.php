@@ -10,6 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 App::uses('BcApp', 'Model');
+App::uses('Content', 'Model');
+
 /**
  * BcAppTest class
  * 
@@ -17,6 +19,7 @@ App::uses('BcApp', 'Model');
  * @property BcAppModel $BcApp
  * @property Page $Page
  * @property SiteConfig $SiteConfig
+ * @property Content $Content
  */
 
 class BcAppTest extends BaserTestCase {
@@ -30,7 +33,8 @@ class BcAppTest extends BaserTestCase {
 		'baser.Default.Favorite',
 		'baser.Default.Permission',
 		'baser.Default.SearchIndex',
-		'baser.Default.Content'
+		'baser.Default.Content',
+		'baser.Default.Site'
 	];
 
 /**
@@ -45,6 +49,8 @@ class BcAppTest extends BaserTestCase {
 		$this->SiteConfig = ClassRegistry::init('SiteConfig');
 		$this->Dblog = ClassRegistry::init('Dblog');
 		$this->User = ClassRegistry::init('User');
+		$this->Content = ClassRegistry::init('Content');
+
 	}
 
 /**
@@ -58,6 +64,13 @@ class BcAppTest extends BaserTestCase {
 		unset($this->SiteConfig);
 		unset($this->Dblog);
 		parent::tearDown();
+	}
+
+/**
+ * コンストラクタ
+ */
+	public function test__construct() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -101,9 +114,6 @@ class BcAppTest extends BaserTestCase {
  * @return	mixed	On success Model::$data if its not empty or true, false on failure
  */
 	public function testSave($data = null, $validate = true, $fieldList = []) {
-
-		$this->markTestIncomplete('このテストは、まだ実装されていません。');
-
 		$this->Page->save([
 		'Page' => [
 				'name' => 'test',
@@ -112,7 +122,8 @@ class BcAppTest extends BaserTestCase {
 				'url' => '',
 				'description' => '',
 				'status' => 1,
-				'modified' => '',
+				'modified' => null,
+				'created' => '2015-02-22 22:22:22'
 			]
 		]);
 		$now = date('Y-m-d H');
@@ -174,6 +185,34 @@ class BcAppTest extends BaserTestCase {
 		);
 		$this->assertEquals($message, $result['Dblog']['name']);
 
+	}
+
+/**
+ * コントロールソースを取得する
+ *
+ * 継承前提のため、テスト不要
+ * public function testGetControlSource() {}
+ * /
+
+/**
+ * 子カテゴリのIDリストを取得する
+ * 
+ * @dataProvider getChildIdsListDataProvider
+ */
+	public function testGetChildIdsList($id, $expects) {
+		$result = $this->Content->getChildIdsList($id);
+		$this->assertEquals($expects, array_values($result));
+	}
+	
+	public function getChildIdsListDataProvider() {
+		return [
+			[1, [2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// PC
+			[2, [9, 17, 19]],	// モバイル
+			[3, [10, 11, 12, 13, 14, 18, 20]],	// スマホ
+			[4, []],	// 固定ページ
+			['', [1, 2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// 全体
+			[false, [1, 2, 9, 17, 19, 3, 10, 11, 12, 13, 14, 18, 20, 4, 5, 6, 7, 8, 15, 16]],	// 異常系
+		];
 	}
 
 /**
@@ -305,6 +344,14 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * 最大のバイト数チェック
+ * - 対象となる値のサイズが、指定した最大値より短い場合、true を返す
+ */
+	public function testCheckDateRenge() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * 範囲を指定しての長さチェック
  *
  * @param mixed $check
@@ -426,6 +473,45 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * 英数チェックプラス
+ *
+ * ハイフンアンダースコアを許容
+ *　@dataProvider alphaNumericPlusDataProvider
+ */
+	public function testAlphaNumericPlus($check, $option, $expect) {
+    $result = $this->BcApp->alphaNumericPlus($check, $option);
+		$this->assertEquals($expect, $result);
+	}
+
+	public function alphaNumericPlusDataProvider() {
+		return [
+			[["あいうえお"], [], false],
+			[["あいうえお"], ['あ'], false],
+			[["あいうえお"], ['あいうえお'], true],
+			[["あいうえお_"], ['あいうえお'], true],
+		];
+	}
+
+/**
+ * 削除文字チェック
+ *
+ * @dataProvider bcUtileUrlencodeBlankDataProvider
+ */
+	public function testBcUtileUrlencodeBlank($check, $expected) {
+		$result = $this->BcApp->bcUtileUrlencodeBlank($check);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function bcUtileUrlencodeBlankDataProvider(){
+		return[
+			[["あいうえお"], true],
+			[["\\"], true],
+			[["\""], false],
+			[["^'|`^(){}[];/?:@&=+$,%<>#!"], false]
+		];
+	}
+
+/**
  * データの重複チェックを行う
  */
 	public function testDuplicate() {
@@ -515,6 +601,27 @@ class BcAppTest extends BaserTestCase {
 			[["test", "テスト"], true],
 			[["テスト", "test"], false],
 		];
+	}
+
+/**
+ * 一つ位置を上げる
+ */
+	public function testSortup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 一つ位置を下げる
+ */
+	public function testSortdown() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 並び順を変更する
+ */
+	public function testChangeSort() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -685,6 +792,20 @@ class BcAppTest extends BaserTestCase {
 	}
 
 /**
+ * Deletes multiple model records based on a set of conditions.
+ */
+	public function testDeleteAll() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Updates multiple model records based on a set of conditions.
+ */
+	public function testUpdateAll() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * Used to report user friendly errors.
  * If there is a file app/error.php or app/app_error.php this file will be loaded
  * error.php is the AppError class it should extend ErrorHandler class.
@@ -782,6 +903,39 @@ class BcAppTest extends BaserTestCase {
 			[['size' => 0], false],
 			[['size' => 100], true],
 			[[], false],
+		];
+	}
+
+	public function testExists() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testDelete() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function testDataIter() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 指定した日付よりも新しい日付かどうかチェックする
+ *
+ * @dataProvider checkDataAfterThanDataProvider
+ */
+	public function testCheckDateAfterThan($check, $target, $expected) {
+		$this->BcApp->data[$this->BcApp->alias]['target'] = $target;
+		$data['check'] = $check;
+		$result = $this->BcApp->checkDateAfterThan($data, 'target');
+		$this->assertEquals($expected, $result);
+	}
+
+	public function checkDataAfterThanDataProvider() {
+		return[
+			['2015-01-01 00:00:00', '2015-01-01 00:00:00', false],
+			['2015-01-01 24:00:01', '2015-01-02 00:00:00', true],
+			['2015-01-01 00:00:00', '2015-01-02 00:00:00', false],
+			['2015-01-02 00:00:00', '2015-01-01 00:00:00', true],
 		];
 	}
 

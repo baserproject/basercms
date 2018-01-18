@@ -56,10 +56,10 @@ class BcAgent extends BcAbstractDetector {
  * @return array
  */
 	protected function _getDefaultConfig() {
-		return array(
-			'agents' => array(),
+		return [
+			'agents' => [],
 			'sessionId' => false
-		);
+		];
 	}
 
 /**

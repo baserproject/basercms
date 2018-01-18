@@ -104,4 +104,18 @@ class FavoriteTest extends BaserTestCase {
 		$this->assertTrue($this->Favorite->validates());
 	}
 
+/**
+ * セッションをセットする
+ */
+	public function testSetSession() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * アクセス権があるかチェックする
+ */
+	public function testIsPermitted() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
 }

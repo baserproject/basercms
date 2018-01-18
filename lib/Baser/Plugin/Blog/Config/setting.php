@@ -40,6 +40,7 @@ foreach ($blogContents as $blogContent) {
 		]
 	];
 }
+
 $config['BcContents']['items']['Blog'] = [
 	'BlogContent'	=> [
 		'title' => 'ブログ',

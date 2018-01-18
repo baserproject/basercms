@@ -21,7 +21,7 @@ $this->BcBaser->js(array('admin/vendors/jquery-ui-1.11.4.min', 'admin/vendors/i1
 	<?php $this->BcBaser->contentsTitle() ?>
 </h1>
 
-<h2 class="contents-head">入力フォーム</h2>
+<h2 class="contents-head"><?php echo __('入力フォーム') ?></h2>
 
 <?php if ($this->Mail->descriptionExists()): ?>
 	<div class="section mail-description">

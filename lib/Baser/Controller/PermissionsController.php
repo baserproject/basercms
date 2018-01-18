@@ -29,38 +29,38 @@ class PermissionsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Permission');
+	public $uses = ['Permission'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * ヘルパ
  *
  * @var array
  */
-	public $helpers = array('BcTime', 'BcFreeze');
+	public $helpers = ['BcTime', 'BcFreeze'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array('site_configs', 'users', 'permissions');
+	public $subMenuElements = ['site_configs', 'users', 'permissions'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'ユーザー管理', 'url' => array('controller' => 'users', 'action' => 'index')),
-		array('name' => 'ユーザーグループ管理', 'url' => array('controller' => 'user_groups', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'ユーザー管理', 'url' => ['controller' => 'users', 'action' => 'index']],
+		['name' => 'ユーザーグループ管理', 'url' => ['controller' => 'user_groups', 'action' => 'index']]
+	];
 
 /**
  * beforeFilter
@@ -72,7 +72,7 @@ class PermissionsController extends AppController {
 		if ($this->request->params['prefix'] == 'admin') {
 			$this->set('usePermission', true);
 		}
-		$this->crumbs[] = array('name' => 'アクセス制限設定管理', 'url' => array('controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]));
+		$this->crumbs[] = ['name' => 'アクセス制限設定管理', 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
 	}
 
 /**
@@ -84,13 +84,13 @@ class PermissionsController extends AppController {
 		/* セッション処理 */
 		if (!$userGroupId) {
 			$this->setMessage('無効な処理です。', true);
-			$this->redirect(array('controller' => 'user_groups', 'action' => 'index'));
+			$this->redirect(['controller' => 'user_groups', 'action' => 'index']);
 		}
 
-		$default = array('named' => array('sortmode' => 0));
-		$this->setViewConditions('Permission', array('default' => $default));
+		$default = ['named' => ['sortmode' => 0]];
+		$this->setViewConditions('Permission', ['default' => $default]);
 		$conditions = $this->_createAdminIndexConditions($userGroupId);
-		$datas = $this->Permission->find('all', array('conditions' => $conditions, 'order' => 'Permission.sort'));
+		$datas = $this->Permission->find('all', ['conditions' => $conditions, 'order' => 'Permission.sort']);
 		if ($datas) {
 			foreach ($datas as $key => $data) {
 				$datas[$key]['Permission']['url'] = preg_replace('/^\/admin\//', '/' . Configure::read('Routing.prefixes.0') . '/', $data['Permission']['url']);
@@ -105,7 +105,7 @@ class PermissionsController extends AppController {
 			return;
 		}
 
-		$userGroupName = $this->Permission->UserGroup->field('title', array('UserGroup.id' => $userGroupId));
+		$userGroupName = $this->Permission->UserGroup->field('title', ['UserGroup.id' => $userGroupId]);
 		$this->pageTitle = '[' . $userGroupName . '] アクセス制限設定一覧';
 		$this->help = 'permissions_index';
 	}
@@ -125,9 +125,9 @@ class PermissionsController extends AppController {
  * @return void
  */
 	public function admin_add($userGroupId) {
-		$userGroup = $this->Permission->UserGroup->find('first', array('conditions' => array('UserGroup.id' => $userGroupId),
-			'fields' => array('id', 'title'),
-			'order' => 'UserGroup.id ASC', 'recursive' => -1));
+		$userGroup = $this->Permission->UserGroup->find('first', ['conditions' => ['UserGroup.id' => $userGroupId],
+			'fields' => ['id', 'title'],
+			'order' => 'UserGroup.id ASC', 'recursive' => -1]);
 		if (!$this->request->data) {
 			$this->request->data = $this->Permission->getDefaultValue();
 			$this->request->data['Permission']['user_group_id'] = $userGroupId;
@@ -143,12 +143,12 @@ class PermissionsController extends AppController {
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
 			$permissionAuthPrefix = 'admin';
 			$this->request->data['Permission']['url'] = '/' . $permissionAuthPrefix . '/' . $this->request->data['Permission']['url'];
-			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', array('user_group_id' => $userGroupId)) + 1;
-			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', array('user_group_id' => $userGroupId)) + 1;
+			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', ['user_group_id' => $userGroupId]) + 1;
+			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $userGroupId]) + 1;
 			$this->Permission->create($this->request->data);
 			if ($this->Permission->save()) {
 				$this->setMessage('新規アクセス制限設定「' . $this->request->data['Permission']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'index', $userGroupId));
+				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -175,8 +175,8 @@ class PermissionsController extends AppController {
 			// TODO 現在 admin 固定、今後、mypage 等にも対応する
 			$authPrefix = 'admin';
 			$this->request->data['Permission']['url'] = '/' . $authPrefix . '/' . $this->request->data['Permission']['url'];
-			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', array('user_group_id' => $this->request->data['Permission']['user_group_id'])) + 1;
-			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', array('user_group_id' => $this->request->data['Permission']['user_group_id'])) + 1;
+			$this->request->data['Permission']['no'] = $this->Permission->getMax('no', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
+			$this->request->data['Permission']['sort'] = $this->Permission->getMax('sort', ['user_group_id' => $this->request->data['Permission']['user_group_id']]) + 1;
 			$this->request->data['Permission']['status'] = true;
 			$this->Permission->create($this->request->data);
 			if ($this->Permission->save()) {
@@ -201,12 +201,12 @@ class PermissionsController extends AppController {
 		/* 除外処理 */
 		if (!$userGroupId || !$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
-		$userGroup = $this->Permission->UserGroup->find('first', array('conditions' => array('UserGroup.id' => $userGroupId),
-			'fields' => array('id', 'title'),
-			'order' => 'UserGroup.id ASC', 'recursive' => -1));
+		$userGroup = $this->Permission->UserGroup->find('first', ['conditions' => ['UserGroup.id' => $userGroupId],
+			'fields' => ['id', 'title'],
+			'order' => 'UserGroup.id ASC', 'recursive' => -1]);
 
 		// TODO 現在 admin 固定、今後、mypage 等にも対応する
 		$authPrefix = 'admin';
@@ -221,7 +221,7 @@ class PermissionsController extends AppController {
 
 			if ($this->Permission->save($this->request->data)) {
 				$this->setMessage('アクセス制限設定「' . $this->request->data['Permission']['name'] . '」を更新しました。', false, true);
-				$this->redirect(array('action' => 'index', $userGroupId));
+				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
@@ -291,7 +291,7 @@ class PermissionsController extends AppController {
 		/* 除外処理 */
 		if (!$id) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['action' => 'index']);
 		}
 
 		// メッセージ用にデータを取得
@@ -304,7 +304,7 @@ class PermissionsController extends AppController {
 			$this->setMessage('データベース処理中にエラーが発生しました。', true, false);
 		}
 
-		$this->redirect(array('action' => 'index', $userGroupId));
+		$this->redirect(['action' => 'index', $userGroupId]);
 	}
 
 /**
@@ -335,7 +335,7 @@ class PermissionsController extends AppController {
  */
 	protected function _createAdminIndexConditions($userGroupId) {
 		/* 条件を生成 */
-		$conditions = array();
+		$conditions = [];
 		if ($userGroupId) {
 			$conditions['Permission.user_group_id'] = $userGroupId;
 		}
@@ -357,7 +357,7 @@ class PermissionsController extends AppController {
 
 		$result = $this->Permission->copy($id);
 		if ($result) {
-			$this->setViewConditions('Permission', array('action' => 'admin_index'));
+			$this->setViewConditions('Permission', ['action' => 'admin_index']);
 			$result['Permission']['url'] = preg_replace('/^\/admin\//', '/' . Configure::read('Routing.prefixes.0') . '/', $result['Permission']['url']);
 			$sortmode = false;
 			if (isset($this->passedArgs['sortmode'])) {
@@ -450,8 +450,8 @@ class PermissionsController extends AppController {
  * @return boolean
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = array(0 => '無効', 1 => '有効');
-		$data = $this->Permission->find('first', array('conditions' => array('Permission.id' => $id), 'recursive' => -1));
+		$statusTexts = [0 => '無効', 1 => '有効'];
+		$data = $this->Permission->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
 		$data['Permission']['status'] = $status;
 		$this->Permission->set($data);
 
