@@ -16,8 +16,8 @@ class EditorTemplateFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => '画像（左）とテキスト',
 			'image' => 'template1.gif',
@@ -33,8 +33,8 @@ class EditorTemplateFixture extends BaserTestFixture {
 <p>新しいブロックを挿入します。不要な場合はこの段落を削除します</p>',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'name' => '画像（右）とテキスト',
 			'image' => 'template2.gif',
@@ -50,8 +50,8 @@ class EditorTemplateFixture extends BaserTestFixture {
 <p>新しいブロックを挿入します。不要な場合はこの段落を削除します</p>',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'name' => 'テキスト２段組',
 			'image' => 'template3.gif',
@@ -78,7 +78,6 @@ class EditorTemplateFixture extends BaserTestFixture {
 	新しいブロックを挿入します。不要な場合はこの段落を削除します</p>',
 			'modified' => null,
 			'created' => '2015-01-27 12:56:52'
-		),
-	);
-
+		],
+	];
 }

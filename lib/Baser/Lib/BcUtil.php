@@ -18,7 +18,7 @@ App::uses('Router', 'Routing');
  *
  * @package Baser.Lib
  */
-class BcUtil extends Object {
+class BcUtil extends CakeObject {
 
 /**
  * 管理システムかチェック
@@ -74,6 +74,21 @@ class BcUtil extends Object {
 	}
 
 /**
+ * 現在ログインしているユーザーのユーザーグループ情報を取得する
+ * 
+ * @param string $prefix ログイン認証プレフィックス
+ * @return bool|mixed ユーザーグループ情報
+ */
+	public static function loginUserGroup($prefix = 'admin') {
+		$loginUser = self::loginUser($prefix);
+		if(!empty($loginUser['UserGroup'])) {
+			return $loginUser['UserGroup'];	
+		} else {
+			return false;
+		}
+	}
+
+/**
  * 認証用のキーを取得
  * 
  * @param string $prefix
@@ -121,7 +136,7 @@ class BcUtil extends Object {
 				return $files[0];
 			}
 		}
-		return array();
+		return [];
 	}
 	
 /**
@@ -181,16 +196,16 @@ class BcUtil extends Object {
 		}
 		
 		if($plugin == 'Core') {
-			$paths = array(BASER_CONFIGS . 'data' . DS . $pattern);
+			$paths = [BASER_CONFIGS . 'data' . DS . $pattern];
 			if($theme != 'core') {
-				$paths = array_merge(array(
+				$paths = array_merge([
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default',
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default',
-				), $paths);
+				], $paths);
 			}
 		} else {
 			$pluginPaths = App::path('Plugin');
@@ -204,23 +219,23 @@ class BcUtil extends Object {
 			if(!$pluginPath) {
 				return false;
 			}
-			$paths = array(
+			$paths = [
 				$pluginPath . DS . 'Config' . DS . 'data' . DS . $pattern,
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . $pattern,
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern),
 				$pluginPath . DS . 'sql',
 				$pluginPath . DS . 'Config' . DS . 'data' . DS . 'default',
 				$pluginPath . DS . 'Config' . DS . 'Data' . DS . 'default',
-			);
+			];
 			if($theme != 'core') {
-				$paths = array_merge(array(
+				$paths = array_merge([
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . Inflector::camelize($pattern) . DS . $plugin,
 					BASER_CONFIGS . 'theme' . DS . $theme . DS . 'Config' . DS . 'data' . DS . $pattern . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'data' . DS . 'default' . DS . $plugin,
 					BASER_THEMES . $theme . DS . 'Config' . DS . 'Data' . DS . 'default' . DS . $plugin,
-				), $paths);
+				], $paths);
 			}
 		}
 		
@@ -269,10 +284,10 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function urlencode($value) {
-		$value = str_replace(array(
+		$value = str_replace([
 			' ', '　', '\\', '\'','|', '`', '^', '"', ')', '(', '}', '{', ']', '[', ';',
 			'/', '?', ':', '@', '&', '=', '+', '$', ',', '%', '<', '>', '#', '!'
-		), '_', $value);
+		], '_', $value);
 		$value = preg_replace('/\_{2,}/', '_', $value);
 		$value = preg_replace('/(^_|_$)/', '', $value);
 		return urlencode($value);
@@ -296,7 +311,7 @@ class BcUtil extends Object {
 				array_unshift($templatesPathes, WWW_ROOT . 'theme' . DS . $theme . DS);
 			}
 		}
-		$_templates = array();
+		$_templates = [];
 		foreach ($templatesPathes as $templatesPath) {
 			$templatesPath .= $path . DS;
 			$folder = new Folder($templatesPath);
@@ -310,7 +325,7 @@ class BcUtil extends Object {
 				}
 			}
 		}
-		$templates = array();
+		$templates = [];
 		foreach ($_templates as $template) {
 			$ext = Configure::read('BcApp.templateExt');
 			if ($template != 'installations' . $ext) {
@@ -330,7 +345,7 @@ class BcUtil extends Object {
 		$path = WWW_ROOT . 'theme';
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
-		$themes = array();
+		$themes = [];
 		foreach ($files[0] as $theme) {
 			if ($theme != 'core' && $theme != '_notes') {
 				$themes[$theme] = $theme;
@@ -345,17 +360,17 @@ class BcUtil extends Object {
  * @return string
  */
 	public static function getSubDomain($host = null) {
-		if(isConsole() && empty($_SERVER['HTTP_HOST']) && !$host) {
+		$currentDomain = BcUtil::getCurrentDomain();
+		if(!$currentDomain && !$host) {
 			return '';
 		}
 		if(!$host) {
-			$host = $_SERVER['HTTP_HOST'];
+			$host = $currentDomain;
 		}
-
 		if(strpos($host, '.') === false) {
 			return '';
 		}
-		$mainHost = BcUtil::getMainFullDomain();
+		$mainHost = BcUtil::getMainDomain();
 		if($host == $mainHost) {
 			return '';
 		}
@@ -367,9 +382,14 @@ class BcUtil extends Object {
 			return preg_replace('/\.$/', '', $subDomain);
 		}
 		return '';
-
 	}
-	
+
+/**
+ * 指定したURLのドメインを取得する
+ *
+ * @param $url URL
+ * @return string
+ */
 	public static function getDomain($url) {
 		$mainUrlInfo = parse_url($url);
 		$host = $mainUrlInfo['host'];
@@ -378,16 +398,37 @@ class BcUtil extends Object {
 		}
 		return $host;
 	}
-	
-	public static function getMainFullDomain() {
-		return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
-	}
-	
-	public static function getFullDomain() {
-		if(isConsole() && empty($_SERVER['HTTP_HOST'])) {
-			return '';
+
+/**
+ * メインとなるドメインを取得する
+ *
+ * @return string
+ */
+	public static function getMainDomain() {
+		$mainDomain = Configure::read('BcEnv.mainDomain');
+		if($mainDomain) {
+			return $mainDomain;
+		} else {
+			return BcUtil::getDomain(Configure::read('BcEnv.siteUrl'));
 		}
-		return $_SERVER['HTTP_HOST'];
+	}
+
+/**
+ * 現在のドメインを取得する
+ *
+ * @return string
+ */
+	public static function getCurrentDomain() {
+		return Configure::read('BcEnv.host');
+	}
+
+/**
+ * 管理画面用のプレフィックスを取得する
+ * 
+ * @return string
+ */
+	public static function getAdminPrefix() {
+		return Configure::read('BcAuthPrefix.admin.alias');
 	}
 	
 }

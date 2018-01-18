@@ -12,6 +12,7 @@
 
 /**
  * [ADMIN] メールフィールド 一覧　行
+ * @var \BcAppView $this
  */
 ?>
 
@@ -56,4 +57,5 @@
 			○
 		<?php endif ?>
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 </tr>

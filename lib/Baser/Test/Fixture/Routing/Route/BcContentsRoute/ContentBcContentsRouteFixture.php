@@ -16,8 +16,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => '',
 			'plugin' => 'Core',
@@ -52,8 +52,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:02:53',
 			'modified' => '2016-07-29 18:04:23'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'name' => 'm',
 			'plugin' => 'Core',
@@ -64,7 +64,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'alias_id' => null,
 			'main_site_content_id' => '1',
 			'parent_id' => '1',
-			'lft' => '4',
+			'lft' => '2',
 			'rght' => '13',
 			'level' => '1',
 			'title' => 'baserCMS inc.｜ケータイ',
@@ -88,8 +88,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:02:53',
 			'modified' => '2016-11-04 16:39:37'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'name' => 's',
 			'plugin' => 'Core',
@@ -124,8 +124,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:02:53',
 			'modified' => '2016-11-04 16:42:25'
-		),
-		array(
+		],
+		[
 			'id' => '4',
 			'name' => 'index',
 			'plugin' => 'Core',
@@ -160,9 +160,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:13:03',
 			'modified' => '2016-11-04 16:56:43'
-		),
-		array(
-			'id' => '6',
+		],
+		[
+			'id' => '5',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -172,8 +172,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'alias_id' => null,
 			'main_site_content_id' => null,
 			'parent_id' => '1',
-			'lft' => '30',
-			'rght' => '35',
+			'lft' => '28',
+			'rght' => '33',
 			'level' => '1',
 			'title' => 'サービス',
 			'description' => '',
@@ -196,9 +196,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:14:33',
 			'modified' => '2016-07-29 18:14:54'
-		),
-		array(
-			'id' => '8',
+		],
+		[
+			'id' => '6',
 			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -208,8 +208,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'alias_id' => null,
 			'main_site_content_id' => '4',
 			'parent_id' => '2',
-			'lft' => '2',
-			'rght' => '3',
+			'lft' => '3',
+			'rght' => '4',
 			'level' => '2',
 			'title' => 'トップページ',
 			'description' => '',
@@ -231,10 +231,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-07-29 18:18:06',
-			'modified' => '2016-07-29 18:19:05'
-		),
-		array(
-			'id' => '9',
+			'modified' => '2017-01-22 17:31:39'
+		],
+		[
+			'id' => '7',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -243,9 +243,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '0',
 			'alias_id' => null,
 			'main_site_content_id' => null,
-			'parent_id' => '6',
-			'lft' => '33',
-			'rght' => '34',
+			'parent_id' => '5',
+			'lft' => '31',
+			'rght' => '32',
 			'level' => '2',
 			'title' => 'お問い合わせ',
 			'description' => '',
@@ -267,10 +267,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-07-30 21:51:49',
-			'modified' => '2016-11-04 16:44:53'
-		),
-		array(
-			'id' => '10',
+			'modified' => '2017-01-22 17:31:59'
+		],
+		[
+			'id' => '8',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -280,8 +280,8 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'alias_id' => null,
 			'main_site_content_id' => null,
 			'parent_id' => '1',
-			'lft' => '28',
-			'rght' => '29',
+			'lft' => '34',
+			'rght' => '35',
 			'level' => '1',
 			'title' => '新着情報',
 			'description' => '',
@@ -304,9 +304,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-07-31 15:01:41',
 			'modified' => '2016-07-31 15:02:16'
-		),
-		array(
-			'id' => '11',
+		],
+		[
+			'id' => '9',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -315,9 +315,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '0',
 			'alias_id' => null,
 			'main_site_content_id' => null,
-			'parent_id' => '6',
-			'lft' => '31',
-			'rght' => '32',
+			'parent_id' => '5',
+			'lft' => '29',
+			'rght' => '30',
 			'level' => '2',
 			'title' => 'サービス１',
 			'description' => '',
@@ -339,10 +339,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-07-31 16:46:32',
-			'modified' => '2016-11-04 16:55:28'
-		),
-		array(
-			'id' => '14',
+			'modified' => '2017-01-22 17:32:09'
+		],
+		[
+			'id' => '10',
 			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -375,10 +375,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-08-12 00:55:34',
-			'modified' => '2016-11-04 16:56:44'
-		),
-		array(
-			'id' => '15',
+			'modified' => '2017-01-22 17:32:18'
+		],
+		[
+			'id' => '11',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -411,10 +411,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-08-12 00:55:48',
-			'modified' => '2016-11-04 16:42:25'
-		),
-		array(
-			'id' => '16',
+			'modified' => '2017-01-22 17:32:28'
+		],
+		[
+			'id' => '12',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -447,10 +447,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-08-12 00:55:57',
-			'modified' => '2016-11-04 16:42:25'
-		),
-		array(
-			'id' => '23',
+			'modified' => '2017-01-22 17:32:35'
+		],
+		[
+			'id' => '13',
 			'name' => 'en',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -484,9 +484,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:35:39',
 			'modified' => '2016-11-04 16:40:34'
-		),
-		array(
-			'id' => '24',
+		],
+		[
+			'id' => '14',
 			'name' => 'sub',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -520,9 +520,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:36:38',
 			'modified' => '2016-11-04 16:41:14'
-		),
-		array(
-			'id' => '25',
+		],
+		[
+			'id' => '15',
 			'name' => 'another.com',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -556,9 +556,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:38:36',
 			'modified' => '2016-11-04 16:42:02'
-		),
-		array(
-			'id' => '26',
+		],
+		[
+			'id' => '16',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -567,7 +567,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '2',
 			'alias_id' => '9',
 			'main_site_content_id' => '9',
-			'parent_id' => '16',
+			'parent_id' => '12',
 			'lft' => '22',
 			'rght' => '23',
 			'level' => '3',
@@ -591,10 +591,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:44:28',
-			'modified' => '2016-11-04 16:44:53'
-		),
-		array(
-			'id' => '27',
+			'modified' => '2017-01-22 17:32:58'
+		],
+		[
+			'id' => '17',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -627,10 +627,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:45:50',
-			'modified' => '2016-11-04 17:31:12'
-		),
-		array(
-			'id' => '29',
+			'modified' => '2017-01-22 17:33:11'
+		],
+		[
+			'id' => '18',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -639,7 +639,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '3',
 			'alias_id' => null,
 			'main_site_content_id' => '10',
-			'parent_id' => '23',
+			'parent_id' => '13',
 			'lft' => '39',
 			'rght' => '40',
 			'level' => '2',
@@ -663,10 +663,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:47:27',
-			'modified' => '2016-11-04 16:47:35'
-		),
-		array(
-			'id' => '30',
+			'modified' => '2017-01-22 17:33:18'
+		],
+		[
+			'id' => '19',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -675,7 +675,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '4',
 			'alias_id' => null,
 			'main_site_content_id' => '10',
-			'parent_id' => '24',
+			'parent_id' => '14',
 			'lft' => '51',
 			'rght' => '52',
 			'level' => '2',
@@ -699,10 +699,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:47:51',
-			'modified' => '2016-11-04 16:48:06'
-		),
-		array(
-			'id' => '31',
+			'modified' => '2017-01-22 17:33:36'
+		],
+		[
+			'id' => '20',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -711,7 +711,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '5',
 			'alias_id' => null,
 			'main_site_content_id' => '10',
-			'parent_id' => '25',
+			'parent_id' => '15',
 			'lft' => '63',
 			'rght' => '64',
 			'level' => '2',
@@ -735,10 +735,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:48:33',
-			'modified' => '2016-11-04 16:51:17'
-		),
-		array(
-			'id' => '32',
+			'modified' => '2017-01-22 17:33:38'
+		],
+		[
+			'id' => '21',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -747,7 +747,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '3',
 			'alias_id' => null,
 			'main_site_content_id' => '6',
-			'parent_id' => '23',
+			'parent_id' => '13',
 			'lft' => '41',
 			'rght' => '46',
 			'level' => '2',
@@ -771,10 +771,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:17',
-			'modified' => '2016-11-04 16:49:17'
-		),
-		array(
-			'id' => '33',
+			'modified' => '2017-01-22 17:33:50'
+		],
+		[
+			'id' => '22',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -783,7 +783,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '3',
 			'alias_id' => null,
 			'main_site_content_id' => '11',
-			'parent_id' => '32',
+			'parent_id' => '21',
 			'lft' => '42',
 			'rght' => '43',
 			'level' => '3',
@@ -807,10 +807,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:18',
-			'modified' => '2016-11-04 16:50:49'
-		),
-		array(
-			'id' => '34',
+			'modified' => '2017-01-22 17:33:56'
+		],
+		[
+			'id' => '23',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -819,7 +819,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '4',
 			'alias_id' => null,
 			'main_site_content_id' => '6',
-			'parent_id' => '24',
+			'parent_id' => '14',
 			'lft' => '53',
 			'rght' => '58',
 			'level' => '2',
@@ -843,10 +843,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:33',
-			'modified' => '2016-11-04 16:49:34'
-		),
-		array(
-			'id' => '35',
+			'modified' => '2017-01-22 17:34:04'
+		],
+		[
+			'id' => '24',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -855,7 +855,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '4',
 			'alias_id' => null,
 			'main_site_content_id' => '11',
-			'parent_id' => '34',
+			'parent_id' => '23',
 			'lft' => '54',
 			'rght' => '55',
 			'level' => '3',
@@ -879,10 +879,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:49:34',
-			'modified' => '2016-11-04 16:49:41'
-		),
-		array(
-			'id' => '36',
+			'modified' => '2017-01-22 17:34:09'
+		],
+		[
+			'id' => '25',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -891,7 +891,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '5',
 			'alias_id' => null,
 			'main_site_content_id' => '6',
-			'parent_id' => '25',
+			'parent_id' => '15',
 			'lft' => '65',
 			'rght' => '70',
 			'level' => '2',
@@ -915,10 +915,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:50:11',
-			'modified' => '2016-11-04 16:50:11'
-		),
-		array(
-			'id' => '38',
+			'modified' => '2017-01-22 17:34:20'
+		],
+		[
+			'id' => '26',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -951,10 +951,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:09',
-			'modified' => '2016-11-04 16:52:09'
-		),
-		array(
-			'id' => '39',
+			'modified' => '2017-01-22 17:34:30'
+		],
+		[
+			'id' => '27',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -963,7 +963,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '1',
 			'alias_id' => '9',
 			'main_site_content_id' => '9',
-			'parent_id' => '38',
+			'parent_id' => '26',
 			'lft' => '10',
 			'rght' => '11',
 			'level' => '3',
@@ -987,10 +987,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:09',
-			'modified' => '2016-11-04 16:52:13'
-		),
-		array(
-			'id' => '40',
+			'modified' => '2017-01-22 17:34:37'
+		],
+		[
+			'id' => '28',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -999,7 +999,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '3',
 			'alias_id' => '9',
 			'main_site_content_id' => '9',
-			'parent_id' => '32',
+			'parent_id' => '21',
 			'lft' => '44',
 			'rght' => '45',
 			'level' => '3',
@@ -1023,10 +1023,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:22',
-			'modified' => '2016-11-04 16:52:26'
-		),
-		array(
-			'id' => '41',
+			'modified' => '2017-01-22 17:34:49'
+		],
+		[
+			'id' => '29',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -1035,7 +1035,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '4',
 			'alias_id' => '9',
 			'main_site_content_id' => '9',
-			'parent_id' => '34',
+			'parent_id' => '23',
 			'lft' => '56',
 			'rght' => '57',
 			'level' => '3',
@@ -1059,10 +1059,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:39',
-			'modified' => '2016-11-04 16:52:47'
-		),
-		array(
-			'id' => '42',
+			'modified' => '2017-01-22 17:35:18'
+		],
+		[
+			'id' => '30',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -1071,7 +1071,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '5',
 			'alias_id' => '9',
 			'main_site_content_id' => '9',
-			'parent_id' => '36',
+			'parent_id' => '25',
 			'lft' => '68',
 			'rght' => '69',
 			'level' => '3',
@@ -1095,10 +1095,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:52:56',
-			'modified' => '2016-11-04 16:53:00'
-		),
-		array(
-			'id' => '43',
+			'modified' => '2017-01-22 17:35:41'
+		],
+		[
+			'id' => '31',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1107,7 +1107,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '1',
 			'alias_id' => null,
 			'main_site_content_id' => '11',
-			'parent_id' => '38',
+			'parent_id' => '26',
 			'lft' => '8',
 			'rght' => '9',
 			'level' => '3',
@@ -1131,10 +1131,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:54:55',
-			'modified' => '2016-11-04 16:55:03'
-		),
-		array(
-			'id' => '44',
+			'modified' => '2017-01-22 17:35:55'
+		],
+		[
+			'id' => '32',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1143,7 +1143,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '2',
 			'alias_id' => '11',
 			'main_site_content_id' => '11',
-			'parent_id' => '16',
+			'parent_id' => '12',
 			'lft' => '20',
 			'rght' => '21',
 			'level' => '3',
@@ -1167,10 +1167,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:55:12',
-			'modified' => '2016-11-04 16:55:28'
-		),
-		array(
-			'id' => '45',
+			'modified' => '2017-01-22 17:36:09'
+		],
+		[
+			'id' => '33',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1179,7 +1179,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '5',
 			'alias_id' => null,
 			'main_site_content_id' => '11',
-			'parent_id' => '36',
+			'parent_id' => '25',
 			'lft' => '66',
 			'rght' => '67',
 			'level' => '3',
@@ -1203,10 +1203,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:55:40',
-			'modified' => '2016-11-04 16:55:56'
-		),
-		array(
-			'id' => '46',
+			'modified' => '2017-01-22 17:36:18'
+		],
+		[
+			'id' => '34',
 			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1215,7 +1215,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '3',
 			'alias_id' => null,
 			'main_site_content_id' => '4',
-			'parent_id' => '23',
+			'parent_id' => '13',
 			'lft' => '37',
 			'rght' => '38',
 			'level' => '2',
@@ -1239,10 +1239,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:56:53',
-			'modified' => '2016-11-04 16:56:58'
-		),
-		array(
-			'id' => '47',
+			'modified' => '2017-01-22 17:36:43'
+		],
+		[
+			'id' => '35',
 			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1251,7 +1251,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '4',
 			'alias_id' => null,
 			'main_site_content_id' => '4',
-			'parent_id' => '24',
+			'parent_id' => '14',
 			'lft' => '49',
 			'rght' => '50',
 			'level' => '2',
@@ -1275,10 +1275,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:57:11',
-			'modified' => '2016-11-04 16:57:15'
-		),
-		array(
-			'id' => '48',
+			'modified' => '2017-01-22 17:37:10'
+		],
+		[
+			'id' => '36',
 			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1287,7 +1287,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '5',
 			'alias_id' => null,
 			'main_site_content_id' => '4',
-			'parent_id' => '25',
+			'parent_id' => '15',
 			'lft' => '61',
 			'rght' => '62',
 			'level' => '2',
@@ -1311,10 +1311,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 16:57:26',
-			'modified' => '2016-11-04 16:57:30'
-		),
-		array(
-			'id' => '49',
+			'modified' => '2017-01-22 17:37:19'
+		],
+		[
+			'id' => '37',
 			'name' => 'another.com/s',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -1348,9 +1348,9 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:41:47',
 			'modified' => '2016-11-04 19:41:48'
-		),
-		array(
-			'id' => '50',
+		],
+		[
+			'id' => '38',
 			'name' => 'index',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1359,7 +1359,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '6',
 			'alias_id' => null,
 			'main_site_content_id' => '48',
-			'parent_id' => '49',
+			'parent_id' => '37',
 			'lft' => '73',
 			'rght' => '74',
 			'level' => '2',
@@ -1383,10 +1383,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:42:43',
-			'modified' => '2016-11-04 19:42:56'
-		),
-		array(
-			'id' => '51',
+			'modified' => '2017-01-22 17:37:27'
+		],
+		[
+			'id' => '39',
 			'name' => 'news',
 			'plugin' => 'Blog',
 			'type' => 'BlogContent',
@@ -1395,7 +1395,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '6',
 			'alias_id' => null,
 			'main_site_content_id' => '31',
-			'parent_id' => '49',
+			'parent_id' => '37',
 			'lft' => '75',
 			'rght' => '76',
 			'level' => '2',
@@ -1419,10 +1419,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:43:45',
-			'modified' => '2016-11-04 19:43:52'
-		),
-		array(
-			'id' => '52',
+			'modified' => '2017-01-22 17:37:36'
+		],
+		[
+			'id' => '40',
 			'name' => 'service',
 			'plugin' => 'Core',
 			'type' => 'ContentFolder',
@@ -1431,7 +1431,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '6',
 			'alias_id' => null,
 			'main_site_content_id' => '36',
-			'parent_id' => '49',
+			'parent_id' => '37',
 			'lft' => '77',
 			'rght' => '82',
 			'level' => '2',
@@ -1455,10 +1455,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:44:11',
-			'modified' => '2016-11-04 19:44:11'
-		),
-		array(
-			'id' => '53',
+			'modified' => '2017-01-22 17:37:39'
+		],
+		[
+			'id' => '41',
 			'name' => 'service1',
 			'plugin' => 'Core',
 			'type' => 'Page',
@@ -1467,7 +1467,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '6',
 			'alias_id' => null,
 			'main_site_content_id' => '45',
-			'parent_id' => '52',
+			'parent_id' => '40',
 			'lft' => '78',
 			'rght' => '79',
 			'level' => '3',
@@ -1491,10 +1491,10 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:44:11',
-			'modified' => '2016-11-04 19:44:17'
-		),
-		array(
-			'id' => '54',
+			'modified' => '2017-01-22 17:37:41'
+		],
+		[
+			'id' => '42',
 			'name' => 'contact',
 			'plugin' => 'Mail',
 			'type' => 'MailContent',
@@ -1503,7 +1503,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'site_id' => '6',
 			'alias_id' => null,
 			'main_site_content_id' => '42',
-			'parent_id' => '52',
+			'parent_id' => '40',
 			'lft' => '80',
 			'rght' => '81',
 			'level' => '3',
@@ -1527,8 +1527,7 @@ class ContentBcContentsRouteFixture extends BaserTestFixture {
 			'exclude_menu' => 0,
 			'blank_link' => 0,
 			'created' => '2016-11-04 19:44:33',
-			'modified' => '2016-11-04 19:44:42'
-		),
-	);
-
+			'modified' => '2017-01-22 17:37:47'
+		],
+	];
 }

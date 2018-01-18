@@ -10,26 +10,26 @@ class PermissionsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $permissions = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'no' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
-		'sort' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null),
-		'user_group_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 8),
-		'url' => array('type' => 'string', 'null' => true, 'default' => null),
-		'auth' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'status' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
-	);
+	public $permissions = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
+		'no' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
+		'sort' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
+		'name' => ['type' => 'string', 'null' => true, 'default' => null],
+		'user_group_id' => ['type' => 'integer', 'null' => true, 'default' => null, 'length' => 8],
+		'url' => ['type' => 'string', 'null' => true, 'default' => null],
+		'auth' => ['type' => 'boolean', 'null' => true, 'default' => null],
+		'status' => ['type' => 'boolean', 'null' => true, 'default' => null],
+		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
+	];
 
 }

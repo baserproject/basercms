@@ -21,19 +21,19 @@
 	<tr class="list-tool">
 		<th>
 			<div>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['action' => 'add']) ?>
 				<?php if (!$sortmode): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn')), array('sortmode' => 1)) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn']), ['sortmode' => 1]) ?>
 				<?php else: ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array('sortmode' => 0)) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', ['width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn']), ['sortmode' => 0]) ?>
 				<?php endif ?>
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 			<div>
 				
-				<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-				<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('del' => '一括無効'), 'empty' => '一括処理')) ?>
-				<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+				<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
+				<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '一括無効'], 'empty' => '一括処理']) ?>
+				<?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
 			</div>
 			<?php endif ?>
 		</th>
@@ -47,7 +47,7 @@
 <tbody>
 	<?php if (!empty($datas)): ?>
 		<?php foreach ($datas as $data): ?>
-			<?php $this->BcBaser->element('plugins/index_row', array('data' => $data)) ?>
+			<?php $this->BcBaser->element('plugins/index_row', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>

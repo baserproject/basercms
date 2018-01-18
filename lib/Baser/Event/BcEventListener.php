@@ -26,14 +26,14 @@
  * public function beforeRender($event) {}
  * 
  */
-class BcEventListener extends Object implements CakeEventListener {
+class BcEventListener extends CakeObject implements CakeEventListener {
 
 /**
  * 登録イベント
  * 
  * @var array
  */
-	public $events = array();
+	public $events = [];
 
 /**
  * レイヤー名
@@ -61,11 +61,10 @@ class BcEventListener extends Object implements CakeEventListener {
  * @return array
  */
 	public function implementedEvents() {
-		
-		$events = array();
+		$events = [];
 		if ($this->events) {
 			foreach ($this->events as $key => $registerEvent) {
-				$options = array();
+				$options = [];
 				if(is_array($registerEvent)) {
 					$options = $registerEvent;
 					$registerEvent = $key;
@@ -76,16 +75,51 @@ class BcEventListener extends Object implements CakeEventListener {
 					$registerEvent = Inflector::variable(implode('_', $aryRegisterEvent));
 				}
 				if($options) {
-					$options = array_merge(array('callable' => $registerEvent), $options);
+					$options = array_merge(['callable' => $registerEvent], $options);
 				} else {
-					$options = array('callable' => $registerEvent);
+					$options = ['callable' => $registerEvent];
 				}
 				$events[$eventName] = $options;
 			}
 		}
-
 		return $events;
-		
 	}
 
+/**
+ * 指定した文字列が現在のアクションとしてみなされるかどうか判定する
+ *
+ * コントローラー名、アクション名をキャメルケースに変換する前提で、ドットで結合した文字列とする
+ * （例）Users.AdminIndex
+ *
+ * @param string $action アクションを特定する為の文字列
+ * @param bool $isContainController コントローラー名を含むかどうか（初期値：true）
+ * @param bool $currentRequest 現在のリクエストかどうか（初期値：false）
+ * 		※ Controller::requestAction() を利用時に、その対象のリクエストについて判定する場合は、trueを指定する
+ * @return bool
+ */
+	public function isAction($action,  $isContainController = true, $currentRequest = false) {
+		$currentAction = $this->getAction($isContainController, $currentRequest);
+		if(!is_array($action)) {
+			$action = [$action];
+		}
+		return in_array($currentAction, $action);
+	}
+
+/**
+ * 現在のアクションを特定する文字列を取得する
+ *
+ * @param bool $isContainController コントローラー名を含むかどうか（初期値：true）
+ * @param bool $currentRequest 現在のリクエストかどうか（初期値：false）
+ * 		※ Controller::requestAction() を利用時に、その対象のリクエストについて判定する場合は、trueを指定する
+ * @return string
+ */
+	public function getAction($isContainController = true, $currentRequest = false) {
+		$request = Router::getRequest($currentRequest);
+		$currentAction = Inflector::camelize($request->params['action']);
+		if($isContainController) {
+			$currentAction = Inflector::camelize($request->params['controller']) . '.' . $currentAction;
+		}
+		return $currentAction;
+	}
+	
 }

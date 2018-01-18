@@ -39,6 +39,13 @@ class BcCsvHelper extends AppHelper {
 	public $exportCsvHead = true;
 
 /**
+ * 文字コード
+ *
+ * @var string
+ */
+	public $encoding = 'UTF-8';
+
+/**
  * データを追加する（単数）
  *
  * @param string $modelName
@@ -96,7 +103,9 @@ class BcCsvHelper extends AppHelper {
 		}
 		$enc = mb_detect_encoding($head);
 		$head = substr($head, 0, strlen($head) - 1) . "\n";
-		$head = mb_convert_encoding($head, 'SJIS-WIN', $enc);
+		if($enc != $this->encoding) {
+			$head = mb_convert_encoding($head, $this->encoding, $enc);
+		}
 
 		return $head;
 	}
@@ -123,7 +132,9 @@ class BcCsvHelper extends AppHelper {
 
 		$enc = mb_detect_encoding($body);
 		$body = substr($body, 0, strlen($body) - 1) . "\n";
-		$body = mb_convert_encoding($body, 'SJIS-WIN', $enc);
+		if($enc != $this->encoding) {
+			$body = mb_convert_encoding($body, $this->encoding, $enc);
+		}
 		return $body;
 	}
 

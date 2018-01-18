@@ -6,18 +6,18 @@
  * Routes are very important mechanism that allows you to freely connect
  * different URLs to chosen controllers and their actions (functions).
  *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       app.Config
  * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 // CUSTOMIZE DELETE 2015/03/27 n1215
@@ -55,4 +55,8 @@ require BASER_CONFIGS . 'routes.php';
  * Load the CakePHP default routes. Only remove this if you do not want to use
  * the built-in default routes.
  */
+// @deprecated 5.0.0 since 4.0.3
+// baserCMSコアの routes にて同様の処理をしている為、将来的に除外する
+// 下記を読み込んでいる場合、AdminPrefix を変更したとしても、/admin/~ でアクセスできてしまう。
+// コメントアウトした上での動作確認が必要
 	require CAKE . 'Config' . DS . 'routes.php';

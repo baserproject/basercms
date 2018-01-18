@@ -11,7 +11,7 @@
 <div id="Crumbs">
 <?php
 if ($this->BcBaser->isHome()) {
-	echo '<strong>ホーム</strong>';
+	echo '<strong>'. __('ホーム').'</strong>';
 } else {
 	$crumbs = $this->BcBaser->getCrumbs();
 	if (!empty($crumbs)) {
@@ -35,7 +35,7 @@ if ($this->BcBaser->isHome()) {
 			$this->BcBaser->addCrumb('<strong>404 NOT FOUND</strong>');
 		}
 	}
-	$this->BcBaser->crumbs(' &gt; ', 'ホーム');
+	$this->BcBaser->crumbs(' &gt; ', __('ホーム'));
 }
 ?>
 </div>

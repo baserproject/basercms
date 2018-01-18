@@ -391,6 +391,7 @@ table.sub-menu{
 	margin-left:3px;
 	margin-right:1px;
 	color:#333;
+    white-space: nowrap;
 }
 .list-tool {
 	white-space:nowrap;
@@ -659,6 +660,9 @@ table.sub-menu{
 	margin: 0 auto 20px;
 	text-align: center;
 	line-height: 24px;
+}
+.em-box strong{
+	color:#FF3300;
 }
 .em-box a{
 	color:#690;
@@ -1308,6 +1312,8 @@ background: #888;
 }
 #AdminDashboard .panel-box {
 	margin:10px;
+    height:300px;
+    overflow: scroll;
 }
 #AdminDashboard .panel-box li{
 	margin-bottom: 5px;
@@ -1479,6 +1485,9 @@ background: #888;
 /*    Contents
 /* ==================================================================== */
 
+#AdminContents #ViewSetting button {
+    vertical-align: top;
+}
 #ContentsTreeList li {
     margin: 0;
     padding: 0;
@@ -1557,6 +1566,19 @@ ul.jstree-contextmenu li .icon-add-layerd {
 	background:url("../../img/admin/icon_function.png");
 	position: absolute;
     cursor: pointer;
+}
+#ContentsTreeList li .content-name{
+    position: relative;
+    padding-left:5px;
+    padding-right:5px;
+    color:#AAA;
+    font-size:8px;
+}
+#ContentsTreeList li .jstree-clicked + .content-name {
+    color:#fff;
+}
+#ContentsTreeList li .jstree-hovered + .content-name {
+    color:#fff;
 }
 div.jstree-unpublish-odd{
     background-color: #BBB;
@@ -1637,6 +1659,11 @@ div.jstree-publish-even{
 	color:#9C0;
 	padding-left:5px;
 	padding-right:5px;
+}
+#BasicSetting .parents-disable {
+	font-weight:bold;
+	font-size:14px;
+	color: #F00;
 }
 #SectionLangAccessType label, #SectionDeviceAccessType label {
     white-space: nowrap;

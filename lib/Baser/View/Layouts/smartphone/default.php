@@ -19,12 +19,12 @@
 		<meta name="robots" content="noindex,nofollow" />
 		<?php $this->BcBaser->charset() ?>
 		<?php $this->BcBaser->title() ?>
-		<?php $this->BcBaser->css(array(
+		<?php $this->BcBaser->css([
 			'import',
 			'smartphone',
-			'admin/colorbox/colorbox-1.6.1')); ?>
-		<!--[if IE]><?php $this->BcBaser->js(array('admin/vendors/excanvas')) ?><![endif]-->
-		<?php $this->BcBaser->js(array(
+			'admin/colorbox/colorbox-1.6.1']); ?>
+		<!--[if IE]><?php $this->BcBaser->js(['admin/vendors/excanvas']) ?><![endif]-->
+		<?php $this->BcBaser->js([
 			'admin/vendors/jquery-2.1.4.min',
 			'admin/vendors/jquery-ui-1.11.4.min',
 			'admin/vendors/jquery.colorbox-1.6.1.min',
@@ -35,13 +35,13 @@
 			'admin/startup',
 			'admin/libs/adjust_scroll',
 			'admin/vendors/yuga',
-			'startup')); ?>
+			'startup']); ?>
 			<?php $this->BcBaser->scripts() ?>
 	</head>
 	<body id="<?php $this->BcBaser->contentsName() ?>" class="normal front">
 		<div id="Page" style="text-align: center">
 			<?php $this->BcBaser->relatedSiteLinks() ?>
-			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', array('alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px')) ?></div>
+			<div id="Logo"><?php $this->BcBaser->img('admin/logo_header.png', ['alt' => 'baserCMS', 'style' => 'display:block;padding-top:60px']) ?></div>
 			<nav id="GlobalMenu" class="clearfix"><?php $this->BcBaser->globalMenu(3) ?></nav>
 			<div id="Wrap">
 				<?php if(!$this->BcBaser->isHome()): ?>

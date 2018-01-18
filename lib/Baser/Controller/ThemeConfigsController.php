@@ -14,6 +14,7 @@
  * テーマ設定コントローラー
  *
  * @package Baser.Controller
+ * @property ThemeConfig $ThemeConfig
  */
 class ThemeConfigsController extends AppController {
 
@@ -29,30 +30,30 @@ class ThemeConfigsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('ThemeConfig');
+	public $uses = ['ThemeConfig'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array('themes');
+	public $subMenuElements = ['themes'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(
-		array('name' => 'テーマ管理', 'url' => array('controller' => 'themes', 'action' => 'index'))
-	);
+	public $crumbs = [
+		['name' => 'テーマ管理', 'url' => ['controller' => 'themes', 'action' => 'index']]
+	];
 
 /**
  * [ADMIN] 設定編集
@@ -62,7 +63,7 @@ class ThemeConfigsController extends AppController {
 		$this->help = 'theme_configs_form';
 
 		if (empty($this->request->data)) {
-			$this->request->data = array('ThemeConfig' => $this->ThemeConfig->findExpanded());
+			$this->request->data = ['ThemeConfig' => $this->ThemeConfig->findExpanded()];
 		} else {
 
 			$this->ThemeConfig->set($this->request->data);
@@ -80,7 +81,7 @@ class ThemeConfigsController extends AppController {
 				if ($this->ThemeConfig->saveKeyValue($data)) {
 					clearViewCache();
 					$this->setMessage('システム設定を保存しました。');
-					$this->redirect(array('action' => 'form'));
+					$this->redirect(['action' => 'form']);
 				} else {
 					$this->setMessage('保存中にエラーが発生しました。', true);
 				}

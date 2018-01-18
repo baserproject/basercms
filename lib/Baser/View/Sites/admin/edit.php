@@ -22,7 +22,7 @@ $this->BcBaser->js('admin/sites/edit', false);
 <?php $this->BcBaser->element('sites/form') ?>
 
 <div class="submit">
-	<?php echo $this->BcHtml->link('一覧に戻る', array('plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'), array('class' => 'button')) ?>
-	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button')) ?>
-	<?php echo $this->BcForm->button('削除', array('class' => 'button', 'id' => 'BtnDelete')) ?>
+	<?php echo $this->BcHtml->link('一覧に戻る', ['plugin' => '', 'admin' => true, 'controller' => 'sites', 'action' => 'index'], ['class' => 'button']) ?>
+	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->button('削除', ['class' => 'button', 'id' => 'BtnDelete', 'data-action' => $this->BcBaser->getUrl(['action' => 'delete'])]) ?>
 </div>

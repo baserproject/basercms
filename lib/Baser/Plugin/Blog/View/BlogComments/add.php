@@ -17,5 +17,5 @@
  */
 
 if ($dbData) {
-	$this->BcBaser->element('blog_comment', array('dbData' => $dbData));
+	$this->BcBaser->element('blog_comment', ['dbData' => $dbData]);
 }

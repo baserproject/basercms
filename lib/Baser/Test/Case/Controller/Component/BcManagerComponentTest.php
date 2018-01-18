@@ -27,6 +27,7 @@ class BcManagerTestController extends Controller {
 
 /**
  * BcManagerComponentのテスト
+ * @property BcManagerComponent $BcManager
  */
 class BcManagerComponentTest extends BaserTestCase {
 
@@ -75,6 +76,17 @@ class BcManagerComponentTest extends BaserTestCase {
 		unset($this->BcManager);
 	}
 
+	public function test_getDataSource() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test_updateContents() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	public function test_updatePluginStatus() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 
 /**
  * baserCMSのインストール
@@ -371,11 +383,11 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testGetAllDefaultDataPatterns() {
 		
 		$result = $this->BcManager->getAllDefaultDataPatterns();
-		$expecteds = array(
+		$expecteds = [
 			'core.default' => 'コア ( default )',
 			'bccolumn.default' => 'bcColumn ( default )',
 			'nada-icons.default' => 'nada icons ( default )',
-		);
+		];
 		foreach($expecteds as $expected) {
 			$this->assertContains($expected, $result, '全ての初期データセットのリストを正しく取得できません');
 		}
@@ -391,11 +403,11 @@ class BcManagerComponentTest extends BaserTestCase {
  */
 	public function testGetDefaultDataPatterns() {
 		
-		$options = array('useTitle' => false);
+		$options = ['useTitle' => false];
 		$result = $this->BcManager->getDefaultDataPatterns('core', $options);
-		$expected = array(
+		$expected = [
 			'core.default' => 'default'
-		);
+		];
 		$this->assertEquals($expected, $result, '初期データのセットのタイトルを外して取得できません');
 
 	}
@@ -414,7 +426,11 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
-	
+
+
+	public function testInitPlugin() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
 /**
  * システムデータを初期化する
  * 
@@ -461,7 +477,7 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param array $dbConfig 
  * @return boolean
  */
-	public function testResetAllTables($dbConfig = null, $excludes = array()) {
+	public function testResetAllTables($dbConfig = null, $excludes = []) {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
@@ -479,16 +495,16 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->assertTrue($result, 'テーブルをリセットできません');
 		
 		$this->User = ClassRegistry::init('User');
-		$User = $this->User->find('all', array(
+		$User = $this->User->find('all', [
 				'recursive' => -1,
-			)
+			]
 		);
 		$this->assertEmpty($User, 'テーブルをリセットできません');
 		
 		$this->FeedDetail = ClassRegistry::init('FeedDetail');
-		$FeedDetail = $this->FeedDetail->find('all', array(
+		$FeedDetail = $this->FeedDetail->find('all', [
 				'recursive' => -1,
-			)
+			]
 		);
 		$this->assertEmpty($FeedDetail, 'プラグインのテーブルをリセットできません');
 
@@ -530,11 +546,11 @@ class BcManagerComponentTest extends BaserTestCase {
 	}
 
 	public function deployThemeDataProvider() {
-		return array(
-			array(null),
-			array('nada-icons'),
-			array('bccolumn'),
-		);
+		return [
+			[null],
+			['nada-icons'],
+			['bccolumn'],
+		];
 	}
 
 /**
@@ -563,7 +579,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		// 各フォルダを削除
 		$Folder = new Folder();
 		$path = WWW_ROOT . 'files' . DS;
-		$dirs = array('blog', 'editor', 'theme_configs');
+		$dirs = ['blog', 'editor', 'theme_configs'];
 
 		foreach ($dirs as $dir) {
 			$Folder->delete($path . $dir);
@@ -617,7 +633,7 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->BcManager->resetFiles();
 
 		$path = WWW_ROOT . 'files' . DS;
-		$dirs = array('blog', 'editor', 'theme_configs');
+		$dirs = ['blog', 'editor', 'theme_configs'];
 		foreach ($dirs as $dir) {
 			$this->assertFileNotExists($path . $dir, 'files フォルダを初期化できません');
 		}
@@ -637,11 +653,11 @@ class BcManagerComponentTest extends BaserTestCase {
 		// 初期化
 		$this->BcManager->resetAdminAssets();
 
-		$paths = array(
+		$paths = [
 			WWW_ROOT . 'img' . DS . 'admin',
 			WWW_ROOT . 'css' . DS . 'admin',
 			WWW_ROOT . 'js' . DS . 'admin'
-		);
+		];
 		foreach ($paths as $path) {
 			$this->assertFileNotExists($path, '管理画面用のアセットフォルダを初期化できません');
 		}
@@ -657,6 +673,21 @@ class BcManagerComponentTest extends BaserTestCase {
  * @param array $dbConfig 
  */
 	public function testReset() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testResetPage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testResetThema() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testEmptyFolder() {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 	}
@@ -721,13 +752,13 @@ class BcManagerComponentTest extends BaserTestCase {
 		// 使用しているDBのデータを取得し設定
 		$dbData = ConnectionManager::getDataSource('default');
 
-		$config = array(
+		$config = [
 			'database' => $dbData->config['database'],
 			'host' => $dbData->config['host'],
 			'port' => $dbData->config['port'],
 			'login' => $dbData->config['login'],
 			'password' => $dbData->config['password'],
-		);
+		];
 
 
 		$datasource = $dbData->config['datasource'];
@@ -767,14 +798,14 @@ class BcManagerComponentTest extends BaserTestCase {
 		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 
 		// でたらめな入力
-		$config = array(
+		$config = [
 			'datasource' => 'hoge',
 			'database' => 'hoge',
 			'host' => 'hoge',
 			'port' => 0000,
 			'login' => 'hoge',
 			'password' => 'hoge',
-		);
+		];
 		$result = $this->BcManager->checkDbConnection($config);
 
 	}
@@ -790,13 +821,13 @@ class BcManagerComponentTest extends BaserTestCase {
 	public function testCheckDbConnectionPDOException() {
 
 		// でたらめな入力
-		$config = array(
+		$config = [
 			'database' => 'hoge',
 			'host' => 'hoge',
 			'port' => 0000,
 			'login' => 'hoge',
 			'password' => 'hoge',
-		);
+		];
 
 		// まともな datasource
 		$dbData = ConnectionManager::getDataSource('default');
@@ -831,11 +862,11 @@ class BcManagerComponentTest extends BaserTestCase {
 		// 配置
 		$this->BcManager->deployAdminAssets();
 
-		$paths = array(
+		$paths = [
 			WWW_ROOT . 'img' . DS . 'admin',
 			WWW_ROOT . 'css' . DS . 'admin',
 			WWW_ROOT . 'js' . DS . 'admin'
-		);
+		];
 		foreach ($paths as $path) {
 			$this->assertFileExists($path, '管理画面用のアセットフォルダを配置きません');
 		}
@@ -862,9 +893,9 @@ class BcManagerComponentTest extends BaserTestCase {
 		// インストールできたかDBチェック
 		$this->Plugin = ClassRegistry::init('Plugin');
 		$this->Plugin->cacheQueries = false;
-		$data = $this->Plugin->find('first', array(
-				'conditions' => array('id' => 4),
-			)
+		$data = $this->Plugin->find('first', [
+				'conditions' => ['id' => 4],
+			]
 		);
 		$this->assertEquals('Test', $data['Plugin']['name'], 'プラグインをインストールできません');
 
@@ -872,9 +903,9 @@ class BcManagerComponentTest extends BaserTestCase {
 		$result = $this->BcManager->uninstallPlugin('Test');
 		$this->assertTrue($result, 'プラグインをアンインストールできません');
 
-		$data = $this->Plugin->find('first', array(
-				'conditions' => array('id' => 4),
-			)
+		$data = $this->Plugin->find('first', [
+				'conditions' => ['id' => 4],
+			]
 		);
 		$this->assertEquals(0, $data['Plugin']['status'], 'プラグインをアンインストールできません');
 
@@ -921,6 +952,16 @@ class BcManagerComponentTest extends BaserTestCase {
 
 		$this->assertTrue($result, 'config.phpを読み込めません');
 	
+	}
+
+	public function testStartup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
+	}
+
+	public function testUninstallPlugin() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+
 	}
 
 }

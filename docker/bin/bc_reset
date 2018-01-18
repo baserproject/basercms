@@ -1,0 +1,3 @@
+/var/www/html/docker/bin/bc_change_install
+cd /var/www/html
+/var/www/html/app/Console/cake  bc_manager reset

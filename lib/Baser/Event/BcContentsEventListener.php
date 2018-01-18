@@ -18,7 +18,7 @@
  *
  * @package Baser.Event
  */
-class BcContentsEventListener extends Object implements CakeEventListener {
+class BcContentsEventListener extends CakeObject implements CakeEventListener {
 
 /**
  * Implemented Events
@@ -56,7 +56,7 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 			return;
 		}
 		$View = $event->subject();
-		if($event->data['id'] == 'FavoriteAdminEditForm') {
+		if($event->data['id'] == 'FavoriteAdminEditForm' || $event->data['id'] == 'PermissionAdminEditForm') {
 			return;
 		}
 		if(!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
@@ -76,17 +76,17 @@ class BcContentsEventListener extends Object implements CakeEventListener {
  */
 	public function formAfterSubmit(CakeEvent $event) {
 		if(!BcUtil::isAdminSystem()) {
-			return;
+			return $event->data['out'];
 		}
 		$View = $event->subject();
 		$data = $View->request->data;
 		if(!preg_match('/(AdminEditForm|AdminEditAliasForm)$/', $event->data['id'])) {
-			return;
+			return $event->data['out'];
 		}
-		$output = $View->BcHtml->link('一覧に戻る', array('plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'), array('class' => 'button'));
+		$output = $View->BcHtml->link('一覧に戻る', ['plugin' => '', 'admin' => true, 'controller' => 'contents', 'action' => 'index'], ['class' => 'button']);
 		$setting = Configure::read('BcContents.items.' . $data['Content']['plugin'] . '.' . $data['Content']['type']);
 		if (!empty($setting['preview']) && $data['Content']['type'] != 'ContentFolder') {
-			$output .= "\n" . $View->BcForm->button('プレビュー', array('class' => 'button', 'id' => 'BtnPreview'));
+			$output .= "\n" . $View->BcForm->button('プレビュー', ['class' => 'button', 'id' => 'BtnPreview']);
 		}
 		$output .= $event->data['out'];
 		if(empty($data['Content']['site_root'])) {
@@ -95,8 +95,9 @@ class BcContentsEventListener extends Object implements CakeEventListener {
 			} else {
 				$deleteText = 'ゴミ箱へ移動';
 			}
-			$output .= $View->BcForm->button($deleteText, array('class' => 'button', 'id' => 'BtnDelete'));
+			$output .= $View->BcForm->button($deleteText, ['class' => 'button', 'id' => 'BtnDelete']);
 		}
+		$event->data['out'] = $output;
 		return $output;
 	}
 

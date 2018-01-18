@@ -36,5 +36,36 @@ class BcControllerEventListener extends BcEventListener {
  * @var string
  */
 	public $layer = 'Controller';
+	
+/**
+ * 管理システムの現在のサイトをセットする
+ * 
+ * @param \Controller $controller
+ * @param $siteId
+ */
+	public function setAdminCurrentSite(Controller $controller, $siteId) {
+		if(!BcUtil::isAdminSystem()) {
+			return false;
+		}
+		$controller->passedArgs['site_id'] = $siteId;
+		return true;
+	}
 
+/**
+ * コントローラーにヘルパーを追加する
+ *
+ * @param Controller $controller
+ * @param string $helper
+ */
+	public function addHelper(Controller $controller, $helper) {
+		if(!is_array($helper)) {
+			$helper = [$helper];
+		}
+		foreach($helper as $value) {
+			if(!in_array($value, $controller->helpers)) {
+				$controller->helpers[] = $value;
+			}
+		}
+	}
+	
 }

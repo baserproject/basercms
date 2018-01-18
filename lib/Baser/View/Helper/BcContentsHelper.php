@@ -40,7 +40,7 @@ class BcContentsHelper extends AppHelper {
  * @return	void
  * @access	public
  */
-	public function __construct(View $View, $settings = array()) {
+	public function __construct(View $View, $settings = []) {
 		parent::__construct($View, $settings);
 		$this->_Content = ClassRegistry::init('Content');
 		$this->_Permission = ClassRegistry::init('Permission');
@@ -54,6 +54,7 @@ class BcContentsHelper extends AppHelper {
  */
 	public function setup() {
 		$settings = $this->_View->get('contentsSettings');
+                
 		if(!$settings) {
 			return;
 		}
@@ -108,8 +109,18 @@ class BcContentsHelper extends AppHelper {
 		$this->settings = $settings;
 	}
 	
-	public function isActionAvailable($type, $action, $entityId) {
+/**
+ * アクションが利用可能かどうか確認する
+ *
+ * @param string $type コンテンツタイプ
+ * @param string $action アクション
+ * @param int $entityId コンテンツを特定するID
+  */
+        public function isActionAvailable($type, $action, $entityId) {
 		$user = BcUtil::loginUser('admin');
+                if(!isset($this->settings[$type]['url'][$action])) {
+                    return false;
+                }
 		$url = $this->settings[$type]['url'][$action] . '/' . $entityId;
 		return $this->_Permission->check($url, $user['user_group_id']);
 	}
@@ -134,7 +145,7 @@ class BcContentsHelper extends AppHelper {
 			}
 		}
 		$this->_Content->Behaviors->unload('SoftDelete');
-		$contents = $this->_Content->find('all', array('fields' => array('plugin', 'type', 'title'), 'conditions' => $conditions, 'recursive' => -1));
+		$contents = $this->_Content->find('all', ['fields' => ['plugin', 'type', 'title'], 'conditions' => $conditions, 'recursive' => -1]);
 		$this->_Content->Behaviors->load('SoftDelete');
 		$existContents = [];
 		foreach($contents as $content) {
@@ -180,7 +191,7 @@ class BcContentsHelper extends AppHelper {
 				}
 			}
 		}
-		return $this->assetUrl($file, array('pathPrefix' => $imageBaseUrl));
+		return $this->assetUrl($file, ['pathPrefix' => $imageBaseUrl]);
 	}
 
 /**
@@ -205,7 +216,7 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツIDよりフルURLを取得する
  *
- * @param $id
+ * @param int $id コンテンツID
  * @return mixed
  */
 	public function getUrlById($id, $full = false) {
@@ -213,21 +224,23 @@ class BcContentsHelper extends AppHelper {
 	}
 
 /**
- * フルURLを取得する
+ * コンテンツ管理上のURLを元に正式なURLを取得する
  *
- * @param $url
- * @param bool $useSubDomain
+ * @param string $url コンテンツ管理上のURL
+ * @param bool $full http からのフルのURLかどうか
+ * @param bool $useSubDomain サブドメインを利用しているかどうか
+ * @param bool $base $full が false の場合、ベースとなるURLを含めるかどうか
+ * @return string URL
  */
-	public function getUrl($url, $full = false, $useSubDomain = false) {
-		return $this->_Content->getUrl($url, $full, $useSubDomain);
+	public function getUrl($url, $full = false, $useSubDomain = false, $base = true) {
+		return $this->_Content->getUrl($url, $full, $useSubDomain, $base);
 	}
 
 /**
  * プレフィックスなしのURLを取得する
  *
  * @param string $url
- * @param string $prefix
- * @param string $alias
+ * @param int $siteId
  * @return mixed
  */
 	public function getPureUrl($url, $siteId) {
@@ -260,8 +273,8 @@ class BcContentsHelper extends AppHelper {
 /**
  * コンテンツリストをツリー構造で取得する
  * 
- * @param $id
- * @param null $level
+ * @param int $id カテゴリID
+ * @param int $level 関連データの階層
  * @param array $options
  * @return array
  */
@@ -301,12 +314,47 @@ class BcContentsHelper extends AppHelper {
 
 /**
  * 親コンテンツを取得する
+ *
+ * - 引数なしで現在のコンテンツの親情報を取得
+ * - $id を指定して取得する事ができる
+ * - $direct を false に設定する事で、最上位までの親情報を取得
  * 
- * @param $contentId
- * @return mixed
+ * @param bool $direct 直接の親かどうか
+ * @return mixed false|array
  */
-	public function getParent($contentId) {
-		return $this->_Content->getParentNode($contentId);
+	public function getParent($id = null, $direct = true) {
+		if(!$id && !empty($this->request->params['Content']['id'])) {
+			$id = $this->request->params['Content']['id'];
+		}
+		if(!$id){
+			return false;
+		}
+		$siteId = $this->_Content->field('site_id', ['Content.id' => $id]);
+		if($direct) {
+			$parent = $this->_Content->getParentNode($id);
+			if($parent && $parent['Content']['site_id'] == $siteId) {
+				return $parent;
+			} else {
+				return false;
+			}
+		} else {
+			$parents = $this->_Content->getPath($id);
+			if($parents) {
+				$result = [];
+				foreach ($parents as $parent) {
+					if($parent['Content']['id'] != $id && $parent['Content']['site_id'] == $siteId) {
+						$result[] = $parent;
+					}
+				}
+				if($result) {
+					return $result;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
 	}
 
 /**
@@ -379,14 +427,25 @@ class BcContentsHelper extends AppHelper {
  * @param array $options
  * @return array|bool
  */
-	public function getContentFolderList($siteId = null, $options = array()) {
+	public function getContentFolderList($siteId = null, $options = []) {
 		return $this->_Content->getContentFolderList($siteId, $options);
 	}
 	
+/**
+ * サイトIDからサイトルートとなるコンテンツを取得する
+ * 
+ * @param int $siteId
+ * @return array
+ */	
 	public function getSiteRoot($siteId) {
 		return $this->_Content->getSiteRoot($siteId);
 	}
-	
+/**
+ * サイトIDからサイトルートとなるコンテンツIDを取得する
+ * 
+ * @param int $siteId
+ * @return string|bool
+ */		
 	public function getSiteRootId($siteId) {
 		$content = $this->getSiteRoot($siteId);
 		if($content) {
@@ -395,5 +454,93 @@ class BcContentsHelper extends AppHelper {
 			return false;
 		}
 	}
-	
+
+/**
+ * コンテンツが編集可能かどうか確認
+ *
+ * @param array $data コンテンツ、サイト情報を格納した配列
+ * @return bool
+ */
+	public function isEditable($data = null) {
+		if(!$data) {
+			if(!isset($this->request->data['Content']) && !isset($this->request->data['Site'])) {
+				return false;
+			}
+			$content = $this->request->data['Content'];
+			$site = $this->request->data['Site'];
+		} else {
+			if(isset($data['Content'])) {
+				$content = $data['Content'];
+			} else {
+				return false;
+			}
+			if(isset($data['Site'])) {
+				$site = $data['Site'];
+			} else {
+				return false;
+			}
+		}
+		// サイトルートの場合は編集不可
+		if(empty($content['site_root'])) {
+			return false;
+		}
+		// サイトルート以外で、管理ユーザーの場合は、強制的に編集可
+		if(BcUtil::isAdminUser()) {
+			return true;
+		}
+		// エイリアスを利用してメインサイトと自動連携する場合、親サイトに関連しているコンテンツ（＝子サイト）
+		if($site['relate_main_site'] && $content['main_site_content_id']) {
+			// エイリアス、または、フォルダの場合は編集不可
+			if($content['alias_id'] || $content['type'] == 'ContentFolder') {
+				return false;
+			}
+		}
+		return true;
+	}
+
+/**
+ * エンティティIDからコンテンツの情報を取得
+ *
+ * @param string $contentType コンテンツタイプ
+ * ('Page','MailContent','BlogContent','ContentFolder')
+ * @param int $id エンティティID
+ * @param string $field 取得したい値
+ *  'name','url','title'など　初期値：Null 
+ *  省略した場合配列を取得
+ * @return array or string or bool
+ */
+	public function getContentByEntityId($id, $contentType, $field = null){
+		$conditions = array_merge($this->_Content->getConditionAllowPublish(), ['type' => $contentType, 'entity_id' => $id]);
+		$content = $this->_Content->find('first', ['conditions' => $conditions, 'order' => ['Content.id'], 'cache' => false]);
+		if(!empty($content)){
+			if($field){
+				return $content ['Content'][$field];
+			} else {
+				return $content;
+			}
+		} else {
+			return false;
+		}
+	}
+
+/**
+ * IDがコンテンツ自身の親のIDかを判定する
+ *
+ * @param $id コンテンツ自身のID
+ * @param $parentId 親として判定するID
+ * @return bool
+ */
+	public function isParentId($id, $parentId) {
+		$parentIds = $this->_Content->getPath($id, ['id'], -1);
+		if(!$parentIds) {
+			return false;
+		}
+		$parentIds = Hash::extract($parentIds, '{n}.Content.id');
+		if($parentIds && in_array($parentId, $parentIds)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

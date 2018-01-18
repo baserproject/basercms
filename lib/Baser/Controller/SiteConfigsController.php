@@ -15,6 +15,9 @@
  *
  * @package Baser.Controller
  * @property BcManagerComponent $BcManager
+ * @property SiteConfig $SiteConfig
+ * @property Site $Site
+ * @property CakeRequest $request
  */
 class SiteConfigsController extends AppController {
 
@@ -30,34 +33,34 @@ class SiteConfigsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('SiteConfig', 'Page');
+	public $uses = ['SiteConfig', 'Page', 'Site'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * ヘルパー
  * @var array
  */
-	public $helpers = array('BcForm', 'BcPage');
+	public $helpers = ['BcForm', 'BcPage'];
 
 /**
  * ぱんくずナビ
  *
  * @var array
  */
-	public $crumbs = array(array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')));
+	public $crumbs = [['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
 
 /**
  * beforeFilter
@@ -74,13 +77,11 @@ class SiteConfigsController extends AppController {
 		$writableInstall = is_writable(APP . 'Config' . DS . 'install.php');
 
 		if (empty($this->request->data)) {
-
 			$this->request->data = $this->_getSiteConfigData();
 		} else {
 			$this->SiteConfig->set($this->request->data);
 
 			if (!$this->SiteConfig->validates()) {
-
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			} else {
 
@@ -88,9 +89,11 @@ class SiteConfigsController extends AppController {
 				$siteUrl = $sslUrl = '';
 				if (isset($this->request->data['SiteConfig']['mode'])) {
 					$mode = $this->request->data['SiteConfig']['mode'];
-					if($mode > 0) {
-						clearAllCache();
-					}
+				}
+				if($mode > 0) {
+					clearAllCache();
+				} else {
+					clearViewCache();
 				}
 				if (isset($this->request->data['SiteConfig']['ssl_url'])) {
 					$siteUrl = $this->request->data['SiteConfig']['site_url'];
@@ -106,8 +109,12 @@ class SiteConfigsController extends AppController {
 				}
 
 				$adminSsl = @$this->request->data['SiteConfig']['admin_ssl'];
-				$mobile = @$this->request->data['SiteConfig']['mobile'];
-				$smartphone = @$this->request->data['SiteConfig']['smartphone'];
+				if($this->request->data['SiteConfig']['use_site_device_setting'] === "0" && $this->SiteConfig->isChange('use_site_device_setting', "0")) {
+					$this->Site->resetDevice();
+				}
+				if($this->request->data['SiteConfig']['use_site_lang_setting'] === "0" && $this->SiteConfig->isChange('use_site_lang_setting', "0")) {
+					$this->Site->resetLang();
+				}
 
 				unset($this->request->data['SiteConfig']['id']);
 				unset($this->request->data['SiteConfig']['mode']);
@@ -142,7 +149,7 @@ class SiteConfigsController extends AppController {
 						clearViewCache();
 					}
 
-					$this->redirect(array('action' => 'form'));
+					$this->redirect(['action' => 'form']);
 				}
 			}
 		}
@@ -171,17 +178,17 @@ class SiteConfigsController extends AppController {
 		$baseUrl = str_replace('/index.php', '', BC_BASE_URL);
 
 		$UserGroup = ClassRegistry::init('UserGroup');
-		$userGroups = $UserGroup->find('list', array('fields' => array('UserGroup.id', 'UserGroup.title')));
+		$userGroups = $UserGroup->find('list', ['fields' => ['UserGroup.id', 'UserGroup.title']]);
 
-		$disableSettingInstallSetting = array();
+		$disableSettingInstallSetting = [];
 		if (!$writableInstall) {
-			$disableSettingInstallSetting = array('disabled' => 'disabled');
+			$disableSettingInstallSetting = ['disabled' => 'disabled'];
 		}
 
 		$this->set(compact(
 				'baseUrl', 'userGroups', 'rewriteInstalled', 'writableInstall', 'writableHtaccess', 'writableHtaccess2', 'disableSettingInstallSetting'
 		));
-		$this->subMenuElements = array('site_configs');
+		$this->subMenuElements = ['site_configs'];
 		$this->pageTitle = 'サイト基本設定';
 		$this->help = 'site_configs_form';
 	}
@@ -202,7 +209,7 @@ class SiteConfigsController extends AppController {
 	public function admin_info() {
 		
 		$this->pageTitle = '環境情報';
-		$datasources = array('csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL');
+		$datasources = ['csv' => 'CSV', 'sqlite' => 'SQLite', 'mysql' => 'MySQL', 'postgres' => 'PostgreSQL'];
 		$db = ConnectionManager::getDataSource('default');
 		list($type, $name) = explode('/', $db->config['datasource'], 2);
 		$datasource = preg_replace('/^bc/', '', strtolower($name));
@@ -264,7 +271,7 @@ class SiteConfigsController extends AppController {
 		$this->layout = 'ajax';
 		Configure::write('debug', 0);
 		
-		$specialThanks = array();
+		$specialThanks = [];
 		if (!Configure::read('Cache.disable') && Configure::read('debug') == 0) {
 			$specialThanks = Cache::read('special_thanks', '_cake_env_');
 		}

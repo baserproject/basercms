@@ -10,25 +10,25 @@ class UserGroupsSchema extends CakeSchema {
 
 	public $connection = 'default';
 
-	public function before($event = array()) {
+	public function before($event = []) {
 		return true;
 	}
 
-	public function after($event = array()) {
+	public function after($event = []) {
 	}
 
-	public $user_groups = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'),
-		'name' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'title' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50),
-		'auth_prefix' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20),
-		'use_admin_globalmenu' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'default_favorites' => array('type' => 'text', 'null' => true, 'default' => null),
-		'use_move_contents' => array('type' => 'boolean', 'null' => true, 'default' => false),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci')
-	);
+	public $user_groups = [
+		'id' => ['type' => 'integer', 'null' => false, 'default' => null, 'length' => 8, 'key' => 'primary'],
+		'name' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+		'title' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 50],
+		'auth_prefix' => ['type' => 'string', 'null' => true, 'default' => null, 'length' => 20],
+		'use_admin_globalmenu' => ['type' => 'boolean', 'null' => true, 'default' => null],
+		'default_favorites' => ['type' => 'text', 'null' => true, 'default' => null],
+		'use_move_contents' => ['type' => 'boolean', 'null' => true, 'default' => false],
+		'modified' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'created' => ['type' => 'datetime', 'null' => true, 'default' => null],
+		'indexes' => ['PRIMARY' => ['column' => 'id', 'unique' => 1]],
+		'tableParameters' => ['charset' => 'utf8', 'collate' => 'utf8_general_ci']
+	];
 
 }

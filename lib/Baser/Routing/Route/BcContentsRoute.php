@@ -43,7 +43,11 @@ class BcContentsRoute extends CakeRoute {
 		if(!empty($request->query['preview']) || !empty($request->query['force'])) {
 			$publish = false;
 		}
-
+		
+		if(!empty($request->query['host'])) {
+			Configure::write('BcEnv.host', $request->query['host']);
+		}
+		
 		$sameUrl = false;
 		$site = BcSite::findCurrentSub(true);
 		if($site) {
@@ -75,9 +79,10 @@ class BcContentsRoute extends CakeRoute {
 			}
 		}
 
-		$content = $this->getContent($checkUrl, $publish, false, $sameUrl, $site->useSubDomain);
+		$Content = ClassRegistry::init('Content');
+		$content = $Content->findByUrl($checkUrl, $publish, false, $sameUrl, $site->useSubDomain);
 		if(!$content) {
-			$content = $this->getContent($checkUrl, $publish, true, $sameUrl, $site->useSubDomain);
+			$content = $Content->findByUrl($checkUrl, $publish, true, $sameUrl, $site->useSubDomain);
 		}
 
 		if (!$content) {
@@ -90,92 +95,26 @@ class BcContentsRoute extends CakeRoute {
 			header('Location: ' . topLevelUrl(false) . baseUrl() . Configure::read('BcAuthPrefix.admin.alias') . '/users/login');
 			exit();
 		}
-
-		$Content = ClassRegistry::init('Content');
+		
 		if($content['Content']['alias_id'] && !$Content->isPublishById($content['Content']['alias_id'])) {
 			return false;
 		}
 		$request->params['Content'] = $content['Content'];
 		$request->params['Site'] = $content['Site'];
-
 		$url = $site->getPureUrl($url);
 		$params = $this->getParams($url, $content['Content']['url'], $content['Content']['plugin'], $content['Content']['type'], $content['Content']['entity_id'], $site->alias);
+
+		if(!$site->lang) {
+			$lang = 'jpn';
+		} else {
+			$lang = Configure::read('BcLang.' . $site->lang . '.langs.0');
+		}
+		Configure::write('Config.language', $lang);
+
 		if($params) {
 			return $params;
 		}
 		return false;
-	}
-
-/**
- * URLに関連するコンテンツ情報を取得する
- *
- * @param $url
- * @param bool $publish
- * @param bool $extend
- * @return mixed
- */
-	public function getContent($url, $publish = true, $extend = false, $sameUrl = false, $useSubDomain = false) {
-		$url = preg_replace('/^\//', '', $url);
-		$Content = ClassRegistry::init('Content');
-		if($extend) {
-			$params = explode('/', $url);
-			$condUrls = [];
-			$condUrls[] = '/' . implode('/', $params);
-			$count = count($params);
-			for ($i = $count; $i > 1; $i--) {
-				unset($params[$i - 1]);
-				$path = implode('/', $params);
-				$condUrls[] = '/' . $path . '/';
-				$condUrls[] = '/' . $path;
-			}
-			// 固定ページはURL拡張はしない
-			$conditions = [
-				'Content.type <>' => 'Page',
-				'Content.url' => $condUrls,
-				['or' => [
-					['Site.status' => true],
-					['Site.status' => null]
-				]],
-				['or' => [
-					['Site.same_main_url' => $sameUrl],
-					['Site.same_main_url' => null]
-				]],
-				['or' => [
-					['Site.use_subdomain' => $useSubDomain],
-					['Site.use_subdomain' => null]
-				]]
-			];
-		} else {
-			$conditions = [
-				'Content.url' => $this->getUrlPattern($url),
-				['or' => [
-					['Site.status' => true],
-					['Site.status' => null]
-				]],
-				['or' => [
-					['Site.same_main_url' => $sameUrl],
-					['Site.same_main_url' => null]
-				]],
-				['or' => [
-					['Site.use_subdomain' => $useSubDomain],
-					['Site.use_subdomain' => null]
-				]]
-			];	
-		}
-		if($publish) {
-			$conditions = $conditions + $Content->getConditionAllowPublish();
-		}
-		$content = $Content->find('first', ['conditions' => $conditions, 'order' => 'Content.url DESC', 'cache' => false]);
-		if(!$content) {
-			return false;
-		}
-		if($extend && $content['Content']['type'] == 'ContentFolder') {
-			return false;
-		}
-		if($content && empty($content['Site']['id'])) {
-			$content['Site'] = $Content->Site->getRootMain()['Site'];
-		}
-		return $content;
 	}
 
 /**
@@ -186,7 +125,7 @@ class BcContentsRoute extends CakeRoute {
  * @param $plugin
  * @param $type
  * @param $entityId
- * @return array
+ * @return mixed false|array
  */
 	public function getParams($requestUrl, $entryUrl, $plugin, $type, $entityId, $alias) {
 		$viewParams = Configure::read('BcContents.items.' . $plugin . '.' . $type . '.routes.view');
@@ -248,29 +187,6 @@ class BcContentsRoute extends CakeRoute {
 			];
 		}
 		return $params;
-	}
-
-/**
- * コンテンツのURLにマッチする候補を取得する
- *
- * @param $url
- * @return array
- */
-	public function getUrlPattern($url) {
-		$parameter = preg_replace('/^\//', '', $url);
-		$paths = [];
-		$paths[] = '/' . $parameter;
-		if(preg_match('/\/$/', $paths[0])) {
-			$paths[] = $paths[0] . 'index';
-		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
-			$paths[] = $matches[1];
-		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
-			$paths[] = $matches[1];
-			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
-				$paths[] = $matches[1];
-			}
-		}
-		return $paths;
 	}
 
 /**

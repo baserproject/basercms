@@ -32,11 +32,11 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $helpers = array(
+	public $helpers = [
 		'Html', 'Session', 'BcGooglemaps', 
 		'BcXml', 'BcText',
 		'BcFreeze', 'BcPage'
-	);
+	];
 
 /**
  * コンポーネント
@@ -45,7 +45,7 @@ class PagesController extends AppController {
  * @deprecated useViewCache 5.0.0 since 4.0.0
  * 	CakePHP3では、ビューキャッシュは廃止となる為、別の方法に移行する
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]);
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcEmail', 'BcContents' => ['useForm' => true, 'useViewCache' => true]];
 
 /**
  * モデル
@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access	public
  */
-	public $uses = array('Page');
+	public $uses = ['Page'];
 
 /**
  * beforeFilter
@@ -83,9 +83,9 @@ class PagesController extends AppController {
 		}
 
 		// EVENT Pages.beforeAdd
-		$event = $this->dispatchEvent('beforeAdd', array(
+		$event = $this->dispatchEvent('beforeAdd', [
 			'data' => $this->request->data
-		));
+		]);
 		if ($event !== false) {
 			$this->request->data = $event->result === true ? $event->data['data'] : $event->result;
 		}
@@ -94,9 +94,9 @@ class PagesController extends AppController {
 		if ($data) {
 
 			// EVENT Pages.afterAdd
-			$this->dispatchEvent('afterAdd', array(
+			$this->dispatchEvent('afterAdd', [
 				'data' => $data
-			));
+			]);
 			
 			$message = '固定ページ「' . $this->request->data['Content']['title'] . '」を追加しました。';
 			$this->setMessage($message, false, true, false);
@@ -116,11 +116,16 @@ class PagesController extends AppController {
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(['action' => 'index']);
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
 		if (empty($this->request->data)) {
+			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			$isChangedStatus = $this->Content->isChangedStatus($id, $this->request->data);
 			if (empty($this->request->data['Page']['page_type'])) {
@@ -161,7 +166,7 @@ class PagesController extends AppController {
 
 		// 公開リンク
 		$publishLink = '';
-		if ($this->request->data['Content']['url']) {
+		if ($this->request->data['Content']['status']) {
 			$publishLink = $this->request->data['Content']['url'];
 		}
 		// エディタオプション
@@ -177,7 +182,12 @@ class PagesController extends AppController {
 			]);
 		}
 		// ページテンプレートリスト
-		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $this->siteConfigs['theme']);
+		$theme = [$this->siteConfigs['theme']];
+		$site = BcSite::findById($this->request->data['Content']['site_id']);
+		if(!empty($site) && $site->theme && $site->theme != $this->siteConfigs['theme']) {
+			$theme[] = $site->theme;
+		}
+		$pageTemplateList = $this->Page->getPageTemplateList($this->request->data['Content']['id'], $theme);
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 		
 		if (!empty($this->request->data['Content']['title'])) {
@@ -217,7 +227,7 @@ class PagesController extends AppController {
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();
 		$this->setMessage($result['all'] . ' ページ中 ' . $result['insert'] . ' ページの新規登録、 ' . $result['update'] . ' ページの更新に成功しました。');
-		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
 /**
@@ -233,14 +243,16 @@ class PagesController extends AppController {
 			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
 		}
 		clearViewCache();
-		$this->redirect(array('controller' => 'tools', 'action' => 'index'));
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
 /**
  * ビューを表示する
  *
- * @param mixed
  * @return void
+ * @throws ForbiddenException When a directory traversal attempt.
+ * @throws NotFoundException When the view file could not be found
+ *   or MissingViewException in debug mode.
  */
 	public function display() {
 		// CUSTOMIZE DELETE 2016/10/05 ryuring
@@ -263,12 +275,17 @@ class PagesController extends AppController {
 
 		$urlTmp = preg_replace('/^\//', '', $urlTmp);
 		$path = explode('/', $urlTmp);
-
+		// <<<
+		
 		$count = count($path);
 		if (!$count) {
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
-		$page = $subpage = $titleForLayout = null;
+		if (in_array('..', $path, true) || in_array('.', $path, true)) {
+			throw new ForbiddenException();
+		}
+		$page = $subpage = $title_for_layout = null;
+
 		if (!empty($path[0])) {
 			$page = $path[0];
 		}
@@ -276,23 +293,63 @@ class PagesController extends AppController {
 			$subpage = $path[1];
 		}
 		if (!empty($path[$count - 1])) {
-			$titleForLayout = Inflector::humanize($path[$count - 1]);
+			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
-		// <<<
-		
-		$this->set(array(
-			'page' => $page,
-			'subpage' => $subpage,
-			'title_for_layout' => $titleForLayout
-		));
+		$this->set(compact('page', 'subpage', 'title_for_layout'));
 
 		// CUSTOMIZE ADD 2014/07/02 ryuring
 		// >>>
 
 		$previewCreated = false;
 		if($this->request->data) {
-			if($this->BcContents->preview == 'default') {
+
+			// POSTパラメータのコードに含まれるscriptタグをそのままHTMLに出力するとブラウザによりXSSと判定される
+			// 一度データをセッションに退避する
+			if($this->BcContents->preview === 'default') {
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->data['Content']['entity_id'];
+				$this->Session->write($sessionKey,  $this->request->data);
+				$query = [];
+				if($this->request->query) {
+					foreach($this->request->query as $key => $value) {
+						$query[] = $key . '=' . $value;
+					}
+				}
+				$redirectUrl = '/';
+				if($this->request->url) {
+					$redirectUrl .= $this->request->url;
+				}
+				if($query) {
+					$redirectUrl .= '?' . implode('&', $query);
+				}
+				$this->redirect($redirectUrl);
+				return;
+			}
+
+			if($this->BcContents->preview == 'draft') {
 				$uuid = $this->_createPreviewTemplate($this->request->data);
+				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
+				$previewCreated = true;
+			}
+
+		} else {
+
+			// プレビューアクセス
+			if($this->BcContents->preview === 'default') {
+				$sessionKey = __CLASS__ . '_preview_default_' . $this->request->params['Content']['entity_id'];
+				$previewData = $this->Session->read($sessionKey);
+
+				if(!is_null($previewData)) {
+					$this->Session->delete($sessionKey);
+					$uuid = $this->_createPreviewTemplate($previewData);
+					$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
+					$previewCreated = true;
+				}
+			}
+
+			// 草稿アクセス
+			if($this->BcContents->preview == 'draft') {
+				$data = $this->Page->find('first', ['conditions' => ['Page.id' => $this->request->params['Content']['entity_id']]]);
+				$uuid = $this->_createPreviewTemplate($data, true);
 				$this->set('previewTemplate', TMP . 'pages_preview_' . $uuid . $this->ext);
 				$previewCreated = true;
 			}
@@ -329,14 +386,25 @@ class PagesController extends AppController {
 
 /**
  * プレビュー用テンプレートを生成する
+ * 
+ * 一時ファイルとしてビューを保存
+ * タグ中にPHPタグが入る為、ファイルに保存する必要がある
  *
  * @param mixed	$id 固定ページID
  * @return string uuid
  */
-	protected function _createPreviewTemplate($data) {
-		// 一時ファイルとしてビューを保存
-		// タグ中にPHPタグが入る為、ファイルに保存する必要がある
-		$contents = $this->Page->addBaserPageTag(null, $data['Page']['contents_tmp'], $data['Content']['title'], $data['Content']['description'], $data['Page']['code']);
+	protected function _createPreviewTemplate($data, $isDraft = false) {
+		if(!$isDraft) {
+			// postで送信される前提
+			if(!empty($data['Page']['contents_tmp'])) {
+				$contents = $data['Page']['contents_tmp'];
+			} else {
+				$contents = $data['Page']['contents'];
+			}
+		} else {
+			$contents = $data['Page']['draft'];
+		}
+		$contents = $this->Page->addBaserPageTag(null, $contents, $data['Content']['title'], $data['Content']['description'], @$data['Page']['code']);
 		$uuid = CakeText::uuid();
 		$path = TMP . 'pages_preview_' . $uuid . $this->ext;
 		$file = new File($path);
@@ -377,9 +445,9 @@ class PagesController extends AppController {
  */
 	protected function _setAdminIndexViewData() {
 		$user = $this->BcAuth->user();
-		$allowOwners = array();
+		$allowOwners = [];
 		if (!empty($user)) {
-			$allowOwners = array('', $user['user_group_id']);
+			$allowOwners = ['', $user['user_group_id']];
 		}
 		if (!isset($this->passedArgs['sortmode'])) {
 			$this->passedArgs['sortmode'] = false;

@@ -44,6 +44,13 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	text-align:left;
 }
 </style>
+<script>
+$(function(){
+	$("#BtnUpdate").click(function(){
+		$.bcUtil.showLoader();
+	});
+});
+</script>
 <?php $this->end('script') ?>
 
 
@@ -103,17 +110,17 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 		<?php else: ?>
 			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
 		<?php endif ?>
-		<?php echo $this->BcForm->input('Installation.update', array('type' => 'hidden', 'value' => true)) ?>
-		<?php echo $this->BcForm->end(array('label' => 'アップデート実行', 'class' => 'button btn-red')) ?>
+		<?php echo $this->BcForm->input('Installation.update', ['type' => 'hidden', 'value' => true]) ?>
+		<?php echo $this->BcForm->end(['label' => 'アップデート実行', 'class' => 'button btn-red']) ?>
 	<?php else: ?>
 		<p>
 			<?php if (!$plugin): ?>
-			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $this->BcBaser->link('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', array('target' => '_blank')) ?>にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
+			<p>baserCMSコアのアップデートがうまくいかない場合は、<?php $this->BcBaser->link('baserCMSの制作・開発パートナー', 'http://basercms.net/partners/', ['target' => '_blank']) ?>にご相談されるか、前のバージョンの baserCMS に戻す事をおすすめします。</p>
 			<?php if (!$requireUpdate): ?>
-				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/admin') ?>
+				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/' . BcUtil::getAdminPrefix()) ?>
 			<?php endif ?>
 		<?php else: ?>
-			<?php $this->BcBaser->link('プラグイン一覧に移動する', array('controller' => 'plugins', 'action' => 'index'), array('class' => 'outside-link')) ?>
+			<?php $this->BcBaser->link('プラグイン一覧に移動する', ['controller' => 'plugins', 'action' => 'index'], ['class' => 'outside-link']) ?>
 		<?php endif ?>
 	</p>
 <?php endif ?>
@@ -122,10 +129,10 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 <?php if ($log): ?>
 	<div class="corner10 panel-box section" id="UpdateLog">
 		<h2>アップデートログ</h2>
-		<?php echo $this->BcForm->textarea('Updater.log', array(
+		<?php echo $this->BcForm->textarea('Updater.log', [
 			'value' => $log,
 			'style' => 'width:99%;height:200px;font-size:12px',
 			'readonly' => 'readonly'
-		)); ?>
+		]); ?>
 	</div>
 <?php endif; ?>

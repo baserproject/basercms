@@ -19,6 +19,22 @@ App::uses('BcThemeConfigReader', 'Configure');
 class BcThemeConfigReaderTest extends BaserTestCase {
 
 /**
+ * 指定されたテーマ名の設定ファイルを読み込む
+ */
+	public function testRead() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 与えられた連想配列を設定ファイルにPHPコードとして保存する
+ * 追記ではなく上書きする
+ */
+	public function testDump() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
+/**
  * createContents
  *
  * @param array $data データの配列
@@ -37,7 +53,7 @@ class BcThemeConfigReaderTest extends BaserTestCase {
  * @return array
  */
 	public function createContentsDataProvider() {
-		$data = array();
+		$data = [];
 		$contents = <<< EOF
 <?php
 \$title = 'タイトル';
@@ -49,15 +65,15 @@ EOF;
 
 		$contents = preg_replace("/\r\n|\r|\n/", PHP_EOL, $contents);
 
-		$data[] = array(
-			array(
+		$data[] = [
+			[
 				'title' => 'タイトル',
 				'description' => "シングルクォーテーションを含む説明'",
 				'author' => '制作者',
 				'url' => 'http://basercms.net'
-			),
+			],
 			$contents
-		);
+		];
 		return $data;
 	}
 }

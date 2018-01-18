@@ -1,0 +1,2 @@
+sed -i -e '$d' /var/www/html/app/Config/install.php
+sed -i -e "$ a Configure::write\(\'debug\', -1\)\;" /var/www/html/app/Config/install.php

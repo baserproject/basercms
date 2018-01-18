@@ -22,7 +22,7 @@
 	</span></div>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <br />
-入力フォーム
+<?php echo __('入力フォーム') ?>
 <hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 <?php $this->Mail->description() ?>
 <?php $this->BcBaser->flash() ?>

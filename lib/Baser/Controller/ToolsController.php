@@ -16,6 +16,9 @@ App::uses('Simplezip', 'Vendor');
  * ツールコントローラー
  *
  * @package Baser.Controller
+ * @property Tool $Tool
+ * @property Page $Page
+ * @property BcManagerComponent $BcManager
  */
 class ToolsController extends AppController {
 
@@ -26,21 +29,26 @@ class ToolsController extends AppController {
  */
 	public $name = 'Tools';
 
-	public $uses = array('Tool', 'Page');
+/**
+ * モデル
+ *
+ * @var array
+ */
+	public $uses = ['Tool', 'Page'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure', 'BcManager'];
 
 /**
  * ヘルパ
  * 
  * @var array
  */
-	public $helpers = array('BcForm');
+	public $helpers = ['BcForm'];
 
 /**
  * サブメニュー
@@ -74,17 +82,18 @@ class ToolsController extends AppController {
  * @return void
  */
 	public function admin_maintenance($mode = '') {
+		$this->_checkReferer();
 		switch ($mode) {
 			case 'backup':
 				set_time_limit(0);
-				$this->_backupDb();
+				$this->_backupDb($this->request->query['backup_encoding']);
 				break;
 			case 'restore':
 				set_time_limit(0);
 				if (!$this->request->data) {
 					$this->notFound();
 				}
-				$messages = array();
+				$messages = [];
 				if ($this->_restoreDb($this->request->data)) {
 					$messages[] = 'データの復元が完了しました。';
 					$error = false;
@@ -102,7 +111,7 @@ class ToolsController extends AppController {
 					$this->setMessage(implode('<br />', $messages), $error);
 				}
 				clearAllCache();
-				$this->redirect(array('action' => 'maintenance'));
+				$this->redirect(['action' => 'maintenance']);
 				break;
 		}
 		$this->pageTitle = 'データメンテナンス';
@@ -136,14 +145,19 @@ class ToolsController extends AppController {
 		@unlink($targetPath);
 
 		$result = true;
-		
-		if (!$this->_loadBackup($tmpPath . 'core' . DS)) {
+		$db = ConnectionManager::getDataSource('default');
+		$db->begin();
+		if (!$this->_loadBackup($tmpPath . 'core' . DS, $data['Tool']['encoding'])) {
 			$result = false;
 		}
-		if (!$this->_loadBackup($tmpPath . 'plugin' . DS)) {
+		if (!$this->_loadBackup($tmpPath . 'plugin' . DS, $data['Tool']['encoding'])) {
 			$result = false;
 		}
-
+		if($result) {
+			$db->commit();
+		} else {
+			$db->rollback();
+		}
 		$this->_resetTmpSchemaFolder();
 		clearAllCache();
 		
@@ -157,7 +171,7 @@ class ToolsController extends AppController {
  * @param string $configKeyName DB接続名
  * @return boolean
  */
-	protected function _loadBackup($path) {
+	protected function _loadBackup($path, $encoding) {
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
 		if (!is_array($files[1])) {
@@ -169,9 +183,14 @@ class ToolsController extends AppController {
 		/* テーブルを削除する */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
-				if (!$db->loadSchema(array('type' => 'drop', 'path' => $path, 'file' => $file))) {
+				try {
+					if (!$db->loadSchema(['type' => 'drop', 'path' => $path, 'file' => $file])) {
+						$result = false;
+						continue;
+					}
+				} catch (Exception $e) {
 					$result = false;
-					continue;
+					$this->log($e->getMessage());
 				}
 			}
 		}
@@ -179,9 +198,14 @@ class ToolsController extends AppController {
 		/* テーブルを読み込む */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.php$/", $file)) {
-				if (!$db->loadSchema(array('type' => 'create', 'path' => $path, 'file' => $file))) {
+				try {
+					if (!$db->loadSchema(['type' => 'create', 'path' => $path, 'file' => $file])) {
+						$result = false;
+						continue;
+					}
+				} catch (Exception $e) {
 					$result = false;
-					continue;
+					$this->log($e->getMessage());
 				}
 			}
 		}
@@ -189,9 +213,14 @@ class ToolsController extends AppController {
 		/* CSVファイルを読み込む */
 		foreach ($files[1] as $file) {
 			if (preg_match("/\.csv$/", $file)) {
-				if (!$db->loadCsv(array('path' => $path . $file, 'encoding' => 'SJIS'))) {
+				try {
+					if (!$db->loadCsv(['path' => $path . $file, 'encoding' => $encoding])) {
+						$result = false;
+						continue;
+					}
+				} catch (Exception $e) {
 					$result = false;
-					continue;
+					$this->log($e->getMessage());
 				}
 			}
 		}
@@ -204,16 +233,17 @@ class ToolsController extends AppController {
  *
  * @return void
  */
-	protected function _backupDb() {
+	protected function _backupDb($encoding) {
 		$tmpDir = TMP . 'schemas' . DS;
 		$version = str_replace(' ', '_', $this->getBaserVersion());
 		$this->_resetTmpSchemaFolder();
-		$this->_writeBackup($tmpDir . 'core' . DS);
+		clearAllCache();
+		$this->_writeBackup($tmpDir . 'core' . DS, '', $encoding);
 		$Plugin = ClassRegistry::init('Plugin');
 		$plugins = $Plugin->find('all');
 		if ($plugins) {
 			foreach ($plugins as $plugin) {
-				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name']);
+				$this->_writeBackup($tmpDir . 'plugin' . DS, $plugin['Plugin']['name'], $encoding);
 			}
 		}
 		// ZIP圧縮して出力
@@ -232,7 +262,7 @@ class ToolsController extends AppController {
  * @param string $path
  * @return boolean
  */
-	protected function _writeBackup($path, $plugin = '') {
+	protected function _writeBackup($path, $plugin = '', $encoding) {
 		$db = ConnectionManager::getDataSource('default');
 		$db->cacheSources = false;
 		$tables = $db->listSources();
@@ -240,11 +270,10 @@ class ToolsController extends AppController {
 		foreach ($tables as $table) {
 			if((!$plugin && in_array($table, $tableList['core']) || ($plugin && in_array($table, $tableList['plugin'])))) {
 				$table = str_replace($db->config['prefix'], '', $table);
-				$model = Inflector::classify(Inflector::singularize($table));
-				if (!$db->writeSchema(array('path' => $path, 'model' => $model, 'plugin' => $plugin))) {
+				if (!$db->writeSchema(['path' => $path, 'table' => $table, 'plugin' => $plugin])) {
 					return false;
 				}
-				if (!$db->writeCsv(array('path' => $path . $table . '.csv', 'encoding' => 'SJIS'))) {
+				if (!$db->writeCsv(['path' => $path . $table . '.csv', 'encoding' => $encoding])) {
 					return false;
 				}
 			}
@@ -268,7 +297,7 @@ class ToolsController extends AppController {
 			} else {
 				if (!$this->_resetTmpSchemaFolder()) {
 					$this->setMessage('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
-					$this->redirect(array('action' => 'write_schema'));
+					$this->redirect(['action' => 'write_schema']);
 				}
 				if ($this->Tool->writeSchema($this->request->data, $path)) {
 					$Simplezip = new Simplezip();
@@ -299,11 +328,11 @@ class ToolsController extends AppController {
 				$path = TMP . 'schemas' . DS;
 				if (!$this->_resetTmpSchemaFolder()) {
 					$this->setMessage('フォルダ：' . $path . ' が存在するか確認し、存在する場合は、削除するか書込権限を与えてください。', true);
-					$this->redirect(array('action' => 'load_schema'));
+					$this->redirect(['action' => 'load_schema']);
 				}
 				if ($this->Tool->loadSchemaFile($this->request->data, $path)) {
 					$this->setMessage('スキーマファイルの読み込みに成功しました。');
-					$this->redirect(array('action' => 'load_schema'));
+					$this->redirect(['action' => 'load_schema']);
 				} else {
 					$this->setMessage('スキーマファイルの読み込みに失敗しました。', true);
 				}
@@ -342,7 +371,7 @@ class ToolsController extends AppController {
 				} else {
 					$this->setMessage('エラーログが存在しません。', false);
 				}
-				$this->redirect(array('action' => 'log'));
+				$this->redirect(['action' => 'log']);
 				break;
 			case 'delete':
 				$this->_checkSubmitToken();
@@ -362,7 +391,7 @@ class ToolsController extends AppController {
 				if ($messages) {
 					$this->setMessage(implode('<br />', $messages), $error);
 				}
-				$this->redirect(array('action' => 'log'));
+				$this->redirect(['action' => 'log']);
 				break;
 			
 		}
@@ -377,11 +406,11 @@ class ToolsController extends AppController {
 		$this->set('fileSize', $fileSize);
 	}
 
-	/**
-	 * ログフォルダを圧縮ダウンロードする
-	 *
-	 * @return bool
-	 */
+/**
+ * ログフォルダを圧縮ダウンロードする
+ *
+ * @return bool
+ */
 	protected function _downloadErrorLog() {
 		$tmpDir = TMP . 'logs' . DS;
 		$Folder = new Folder($tmpDir);
@@ -395,5 +424,64 @@ class ToolsController extends AppController {
 		$Simplezip->addFolder($tmpDir);
 		$Simplezip->download($fileName);
 		return true;
+	}
+
+/**
+ * 管理システム用アセットファイルを削除する
+ */
+	public function admin_delete_admin_assets() {
+		$this->_checkReferer();
+		if($this->BcManager->deleteAdminAssets()) {
+			$this->setMessage('管理システム用のアセットファイルを削除しました。', false, true);
+		} else {
+			$this->setMessage('管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。', true);
+		}
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
+	}
+
+/**
+ * 管理システム用アセットファイルを再配置する
+ */
+	public function admin_deploy_admin_assets() {
+		$this->_checkReferer();
+		if($this->BcManager->deployAdminAssets()) {
+			$this->setMessage('管理システム用のアセットファイルを再配置しました。', false, true);
+		} else {
+			$this->setMessage('管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。', true);
+		}
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
+	}
+
+/**
+ * コンテンツ管理のツリー構造をリセットする 
+ */
+	public function admin_reset_contents_tree() {
+		$this->_checkReferer();
+		$Content = ClassRegistry::init('Content');
+		if($Content->resetTree()) {
+			$this->setMessage('コンテンツのツリー構造をリセットしました。', false, true);
+		} else {
+			$this->setMessage('コンテンツのツリー構造のリセットに失敗しました。', true);
+		}
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
+	}
+
+/**
+ * コンテンツ管理のツリー構造のチェックを行う
+ * 
+ * 問題がある場合にはログを出力する
+ */
+	public function admin_verity_contents_tree() {
+		$this->_checkReferer();
+		$Content = ClassRegistry::init('Content');
+		$Content->Behaviors->unload('SoftDelete');
+		$result = $Content->verify();
+		if($result === true) {
+			$this->setMessage('コンテンツのツリー構造に問題はありません。', false, true);
+		} else {
+			$this->log($result);
+			$this->setMessage('コンテンツのツリー構造に問題があります。ログを確認してください。', true);
+		}
+		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 }

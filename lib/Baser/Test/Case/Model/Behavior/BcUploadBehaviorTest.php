@@ -101,7 +101,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 		// ダミーファイルを生成
 		copy($tmpSourcePath, $tmpPath);
-
+		$this->EditorTemplate->setupRequestData();
 	}
 
 
@@ -114,6 +114,34 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$savePath = $this->BcUploadBehavior->savePath['EditorTemplate'];
 		$tmpPath = $savePath . $tmp_name;
 		@unlink($tmpPath);
+	}
+
+/**
+ * セットアップ
+ */
+	public function testSetup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Before Validate
+ */
+	public function testBeforeValidate() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * Before save
+ */
+	public function testBeforeSave() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * リクエストされたデータを処理しやすいようにセットアップする
+ */
+	public function testSetupRequestData() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -148,22 +176,15 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param Model $Model
  * @param array $data
  * @param string $tmpId
- * @return boolean
  */
 	public function testSaveTmpFiles() {
-
 		$this->initTestSaveFiles();
-
-		$data = $this->EditorTemplate->saveTmpFiles(array('hoge'), 1);
+		$data = $this->EditorTemplate->saveTmpFiles($this->EditorTemplate->data, 1);
 		$tmpId = $this->BcUploadBehavior->tmpId;
-
-		$this->assertEquals(array('hoge'), $data, 'saveTmpFiles()の返り値が正しくありません');
+		$this->assertEquals('1.gif', $data['EditorTemplate']['image']['session_key'], 'saveTmpFiles()の返り値が正しくありません');
 		$this->assertEquals(1, $tmpId, 'tmpIdが正しく設定されていません');
-
 		$this->deleteDummyOnTestSaveFiles();
-
 	}
-
 
 /**
  * saveFilesのテスト
@@ -184,18 +205,15 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$targetPath = $savePath . 'basename.gif';
 
 		// 保存を実行
-		$this->EditorTemplate->saveFiles();
+		$data = $this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 
 		if (!$tmpId) {
 			$this->assertFileExists($targetPath, 'saveFiles()でファイルを保存できません');
-			$data = $this->EditorTemplate->data['EditorTemplate']['image'];
-			$this->assertEquals('basename.gif', $data, $message);
+			$this->assertEquals('basename.gif', $data['EditorTemplate']['image'], $message);
 
 		} else {
 			$this->assertFileNotExists($targetPath, 'saveFiles()でファイルを正しく保存できません');
-			$data = $this->EditorTemplate->data['EditorTemplate']['image']['session_key'];
-			$this->assertEquals('1.gif', $data, $message);
-
+			$this->assertEquals('1.gif', $data['EditorTemplate']['image']['session_key'], $message);
 		}
 
 		// 生成されたファイルを削除
@@ -206,19 +224,19 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	public function saveFilesCanSaveDataProvider() {
 		return array(
-			array(null, 'saveFiles()でファイルを削除できません'),
-			array(1, 'saveFiles()でファイルを削除できません'),
+			array(null, 'saveFiles()でファイルを保存できません'),
+			array(1, 'saveFiles()でファイルを保存できません'),
 		);
 	}
 
 /**
- * saveFilesのテスト
+ * deleteFiles のテスト
  * ファイルを削除する
  * 
  * @param string $message テストが失敗した時に表示されるメッセージ
- * @dataProvider saveFilesCanDeleteDataProvider
+ * @dataProvider deleteFilesDataProvider
  */
-	public function testSaveFilesCanDelete($id, $message) {
+	public function testDeleteFiles($id, $message) {
 
 		$this->initTestSaveFiles($id);
 
@@ -233,7 +251,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		touch($templatePath);
 
 		// 削除を実行
-		$this->EditorTemplate->saveFiles();
+		$this->EditorTemplate->deleteFiles($this->EditorTemplate->data);
 
 		$this->assertFileNotExists($templatePath, $message);
 
@@ -242,12 +260,35 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	}
 
-	public function saveFilesCanDeleteDataProvider() {
+	public function deleteFilesDataProvider() {
 		return array(
-			array(1, 'saveFiles()でファイルを削除できません'),
-			array(2, 'saveFiles()でファイルを削除できません'),
+			array(1, 'deleteFiles()でファイルを削除できません'),
+			array(2, 'deleteFiles()でファイルを削除できません'),
 		);
 	}
+
+/**
+ * 削除対象かチェックしながらファイルを削除する
+ */
+	public function testDeleteFileWhileChecking() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ファイル群を保存する
+ */
+	public function testSaveFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 保存対象かチェックしながらファイルを保存する
+ */
+	public function testSaveFileWhileChecking() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
 
 /**
  * saveFilesのテスト
@@ -268,7 +309,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imagecopy'] = $imagecopy;
 
 		// 保存を実行
-		$this->EditorTemplate->saveFiles();
+		$this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 		$this->assertFileExists($targetPath, $message);
 
 		// 生成されたファイルを削除
@@ -299,7 +340,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
  * @param string $message テストが失敗した時に表示されるメッセージ
  * @dataProvider saveFilesCanResizeDataProvider
  */
-	public function testSaveFilesCanResize($imageresize, $message) {
+	public function testSaveFilesCanResize($imageresize, $expected, $message) {
 
 		$this->initTestSaveFiles();
 
@@ -311,13 +352,9 @@ class BcUploadBehaviorTest extends BaserTestCase {
 		$this->BcUploadBehavior->settings['EditorTemplate']['fields']['image']['imageresize'] = $imageresize;
 
 		// 保存を実行
-		$this->EditorTemplate->saveFiles();
+		$this->EditorTemplate->saveFiles($this->EditorTemplate->data);
 
 		$result = $this->BcUploadBehavior->getImageSize($targetPath);
-		$expected = array(
-			'width' => 7,
-			'height' => 1,
-		);
 		$this->assertEquals($expected, $result, $message);
 
 		// 生成されたファイルを削除
@@ -328,8 +365,8 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 	public function saveFilesCanResizeDataProvider() {
 		return array(
-			array(array('width' => 8, 'height' => 1), 'saveFiles()でファイルをリサイズできません'),
-			array(array('width' => 8, 'height' => 1, 'thub' => true), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 20, 'height' => 10, 'thumb' => false), array('width' => 20,'height' => 2), 'saveFiles()でファイルをリサイズできません'),
+			array(array('width' => 20, 'height' => 10, 'thumb' => true), array('width' => 20,'height' => 10), 'saveFiles()でファイルをリサイズできません'),
 		);
 	}
 
@@ -491,6 +528,20 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array('', '', 'hoge', 1, 'tmpIdとnamefieldに指定がある場合にファイルを保存できません'),
 			array('', '', null, 1, 'tmpIdに指定がある場合にファイルを保存できません'),
 		);
+	}
+
+/**
+ * 保存用ファイル名を取得する
+ */
+	public function testGetSaveFileName() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 画像をExif情報を元に正しい確度に回転する
+ */
+	public function testRotateImage() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -735,7 +786,7 @@ class BcUploadBehaviorTest extends BaserTestCase {
 
 
 		// テスト実行
-		$this->EditorTemplate->renameToFieldBasename($copy);
+		$this->EditorTemplate->renameToBasenameFields($copy);
 		$this->assertFileExists($newPath, $message);
 
 
@@ -773,6 +824,20 @@ class BcUploadBehaviorTest extends BaserTestCase {
 	}
 
 /**
+ * 全フィールドのファイル名をフィールド値ベースのファイル名に変更する
+ */
+	public function testRenameToBasenameFields() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * ファイル名をフィールド値ベースのファイル名に変更する
+ */
+	public function testRenameToBasenameField() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+	/**
  * フィールドベースのファイル名を取得する
  *
  * @param string $namefield namefieldパラメータの値
@@ -922,6 +987,27 @@ class BcUploadBehaviorTest extends BaserTestCase {
 			array('image', 'template.gif', 'template.gif', '一意のファイル名を正しく取得できません'),
 			array('image', 'template1.gif', 'template1__2.gif', '一意のファイル名を正しく取得できません'),
 		);
+	}
+
+/**
+ * 保存先のフォルダを取得する
+ */
+	public function testGetSaveDir() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 既に存在するデータのファイルを削除する
+ */
+	public function testDeleteExistingFiles() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 画像をコピーする
+ */
+	public function testCopyImages() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 }

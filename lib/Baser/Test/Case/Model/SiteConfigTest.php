@@ -18,17 +18,17 @@ App::uses('SiteConfig', 'Model');
  * 
  * class NonAssosiationSiteConfig extends SiteConfig {
  *  public $name = 'SiteConfig';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class SiteConfigTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -44,11 +44,11 @@ class SiteConfigTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック異常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'email' => ''
-				)
-		));
+				]
+		]);
 		$this->assertFalse($this->SiteConfig->validates());
 		$this->assertArrayHasKey('formal_name', $this->SiteConfig->validationErrors);
 		$this->assertEquals('Webサイト名を入力してください。', current($this->SiteConfig->validationErrors['formal_name']));
@@ -63,21 +63,21 @@ class SiteConfigTest extends BaserTestCase {
 	}
 
 	public function test必須チェック正常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'formal_name' => 'hoge',
 					'name' => 'hoge',
 					'email' => 'hoge@ho.ge',
 					'mail_encode' => 'ISO-2022-JP',
 					'site_url' => 'hoge',
-				)
-		));
+				]
+		]);
 		$this->assertTrue($this->SiteConfig->validates());
 	}
 
 	public function testSSLチェック異常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'formal_name' => 'hoge',
 					'name' => 'hoge',
 					'email' => 'hoge@ho.ge',
@@ -85,16 +85,16 @@ class SiteConfigTest extends BaserTestCase {
 					'site_url' => 'hoge',
 					'admin_ssl' => 'hoge',
 					'ssl_url' => '',
-				)
-		));
+				]
+		]);
 		$this->assertFalse($this->SiteConfig->validates());
 		$this->assertArrayHasKey('admin_ssl', $this->SiteConfig->validationErrors);
 		$this->assertEquals('管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。', current($this->SiteConfig->validationErrors['admin_ssl']));
 	}
 
 	public function testSSLチェック正常系() {
-		$this->SiteConfig->create(array(
-			'SiteConfig' => array(
+		$this->SiteConfig->create([
+			'SiteConfig' => [
 					'formal_name' => 'hoge',
 					'name' => 'hoge',
 					'email' => 'hoge@ho.ge',
@@ -102,8 +102,8 @@ class SiteConfigTest extends BaserTestCase {
 					'site_url' => 'hoge',
 					'admin_ssl' => 'hoge',
 					'ssl_url' => 'hoge'
-				)
-		));
+				]
+		]);
 		$this->assertTrue($this->SiteConfig->validates());
 	}
 
@@ -135,16 +135,66 @@ class SiteConfigTest extends BaserTestCase {
 	}
 
 	public function getControlSourceDataProvider() {
-		return array(
-			array('mode', array(
+		return [
+			['mode', [
 				-1 => 'インストールモード',
 				0 => 'ノーマルモード',
 				1 => 'デバッグモード１',
 				2 => 'デバッグモード２',
 				3 => 'デバッグモード３',
-				), 'コントロールソースを取得できません'),
-			array('hoge', false, '存在しないキーです'),
-		);
+				], 'コントロールソースを取得できません'],
+			['hoge', false, '存在しないキーです'],
+		];
+	}
+
+/**
+ * SSL用のURLが設定されているかチェックする
+ */
+	public function testSslUrlExists() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ一覧を表示してから、コンテンツの並び順が変更されていないかどうか
+ */
+	public function testIsChangedContentsSortLastModified() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ並び順変更時間を更新する
+ */
+	public function testUpdateContentsSortLastModified() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * コンテンツ並び替え順変更時間をリセットする
+ */
+	public function testResetContentsSortLastModified() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * testIsChanged
+ * 
+ * @param string $field フィールド名
+ * @param string $value 値
+ * @param bool $expected 期待値
+ * @dataProvider isChangeDataProvider
+ */
+	public function testIsChange($field, $value, $expected) {
+		$result = $this->SiteConfig->isChange($field, $value);
+		$this->assertEquals($expected, $result);
+	}
+	
+	public function isChangeDataProvider() {
+		return [
+			['use_site_device_setting', "1", false],
+			['use_site_lang_setting', "0", false],
+			['use_site_device_setting', "0", true],
+			['use_site_lang_setting', "1", true]
+		];
 	}
 
 }

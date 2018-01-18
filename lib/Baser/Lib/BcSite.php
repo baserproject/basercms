@@ -82,12 +82,32 @@ class BcSite {
  * @var int
  */
 	public $mainSiteId;
-	
+
+/**
+ * サブドメインを利用するかどうか
+ * @var bool
+ */
 	public $useSubDomain;
-	
+
+/**
+ * ドメインタイプ
+ * 	1:サブドメイン
+ * 	2:別ドメイン
+ * @var int
+ */
 	public $domainType;
-	
+
+/**
+ * テーマ名
+ * @var string
+ */
 	public $theme;
+
+/**
+ * ホスト名
+ * @var string
+ */
+	public $host;
 
 /**
  * コンストラクタ
@@ -132,6 +152,7 @@ class BcSite {
 		} else {
 			$this->domainType = 0;
 		}
+		$this->host = BcSite::getHost();
 	}
 
 /**
@@ -159,7 +180,7 @@ class BcSite {
 					if($site->domainType == 1) {
 						$domainKey = BcUtil::getSubDomain() . '/';
 					} elseif($site->domainType == 2) {
-						$domainKey = BcUtil::getFullDomain() . '/';
+						$domainKey = BcUtil::getCurrentDomain() . '/';
 					}
 				}
 				$regex = '/^' . preg_quote($site->alias, '/') . '\//';
@@ -219,31 +240,40 @@ class BcSite {
 		if(!$agent) {
 			$agent = BcAgent::findCurrent();	
 		}
-		
-		
+
 		// 言語の一致するサブサイト候補に絞り込む
-		$subSites = [];
-		if($lang) {
+		$langSubSites = [];
+		if($lang && Configure::read('BcSite.use_site_lang_setting')) {
 			foreach($sites as $site) {
+				if(!$site->enabled) {
+					continue;
+				}
 				if (!$sameMainUrl || ($sameMainUrl && $site->sameMainUrl)) {
 					if($site->lang == $lang->name && $currentSite->id == $site->mainSiteId) {
-						$subSites[] = $site;
+						$langSubSites[] = $site;
 						break;
 					}
 				}
 			}
 		}
-		if(!$subSites) {
+		if($langSubSites) {
+			$subSites = $langSubSites;
+		} else {
 			$subSites = $sites;
 		}
-		if($agent) {
+		if($agent && Configure::read('BcSite.use_site_device_setting')) {
 			foreach($subSites as $subSite) {
+				if(!$subSite->enabled) {
+					continue;
+				}
 				if (!$sameMainUrl || ($sameMainUrl && $subSite->sameMainUrl)) {
 					if($subSite->device == $agent->name && $currentSite->id == $subSite->mainSiteId) {
 						return $subSite;
 					}
 				}
 			}
+		} elseif($langSubSites) {
+			return $langSubSites[0];
 		}
 		return null;
 	}
@@ -336,7 +366,7 @@ class BcSite {
 		}
 		$autoRedirectKey = "{$this->name}_auto_redirect";
 		if (isset($request->query[$autoRedirectKey])
-			&& in_array($request->query[$autoRedirectKey], array('on', 'off'))) {
+			&& in_array($request->query[$autoRedirectKey], ['on', 'off'])) {
 			CakeSession::write($autoRedirectKey, $request->query[$autoRedirectKey]);
 		}
 		if (isset($request->query[$this->name])) {
@@ -409,8 +439,28 @@ class BcSite {
 		return '/' . $url;
 	}
 
+/**
+ * 初期状態に戻す
+ */
 	public static function flash() {
 		self::$_sites = null;
+	}
+
+/**
+ * ホストを取得する
+ *
+ * @param BcSite $site
+ * @return string
+ */
+	public function getHost() {
+		if($this->useSubDomain) {
+			if($this->domainType == 1) {
+				return $this->alias . '.' . BcUtil::getMainDomain();
+			} elseif($this->domainType == 2) {
+				return $this->alias;
+			}
+		}
+		return BcUtil::getMainDomain();
 	}
 
 }

@@ -21,7 +21,7 @@
  * 登録されたイベントリスナーが存在しない場合には、falseを を返す。
  * 存在する場合には、生成された CakeEvent を返す。
  */
-class BcEventDispatcher extends Object {
+class BcEventDispatcher extends CakeObject {
 
 /**
  * dispatch
@@ -34,13 +34,13 @@ class BcEventDispatcher extends Object {
  * @param array $options
  * @return boolean|\CakeEvent
  */
-	public static function dispatch($name, $subject, $params = array(), $options = array()) {
-		$options = array_merge(array(
+	public static function dispatch($name, $subject, $params = [], $options = []) {
+		$options = array_merge([
 			'modParams' => 0,
 			'layer' => '',
 			'plugin' => $subject->plugin,
 			'class' => $subject->name
-			), $options);
+			], $options);
 		extract($options);
 
 		if ($layer && !preg_match('/^' . $layer . './', $name)) {

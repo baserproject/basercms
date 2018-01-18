@@ -23,13 +23,12 @@ if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']
 	<?php $this->BcBaser->contentsTitle() ?>
 </h1>
 
-<h2 class="contents-head">メール送信完了</h2>
+<h2 class="contents-head"><?php echo __('メール送信完了') ?></h2>
 
 <div class="section">
-	<p>お問い合わせ頂きありがとうございました。<br />
-		確認次第、ご連絡させて頂きます。</p>
+	<p><?php echo __('お問い合わせ頂きありがとうございました。<br>確認次第、ご連絡させて頂きます。') ?></p>
 	<?php if (Configure::read('debug') == 0 && $mailContent['MailContent']['redirect_url']): ?>
-		<p>※５秒後にトップページへ自動的に移動します。</p>
-		<p><a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>">移動しない場合はコチラをクリックしてください。≫</a></p>
+		<p>※<?php echo __('%s 秒後にトップページへ自動的に移動します。', 5) ?></p>
+		<p><a href="<?php echo $mailContent['MailContent']['redirect_url'] ?>"><?php echo __('移動しない場合はこちらをクリックしてください。') ?>≫</a></p>
 	<?php endif; ?>
 </div>

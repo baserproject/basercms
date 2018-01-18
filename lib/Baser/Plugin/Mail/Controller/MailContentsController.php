@@ -141,36 +141,42 @@ class MailContentsController extends MailAppController {
 
 		if (!$id && empty($this->request->data)) {
 			$this->setMessage('無効なIDです。', true);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
-		if (empty($this->request->data)) {
+		if (empty($this->request->data['MailContent']['id'])) {
 			$this->request->data = $this->MailContent->read(null, $id);
+			if(!$this->request->data) {
+				$this->setMessage('無効な処理です。', true);
+				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
+			}
 		} else {
 			if (!$this->request->data['MailContent']['sender_1_']) {
 				$this->request->data['MailContent']['sender_1'] = '';
 			}
 			$this->MailContent->set($this->request->data);
-			if ($this->MailContent->validates()) {
-				if ($this->MailContent->save(null, false)) {
-					$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
-					if ($this->request->data['MailContent']['edit_mail_form']) {
-						$this->redirectEditForm($this->request->data['MailContent']['form_template']);
-					} elseif ($this->request->data['MailContent']['edit_mail']) {
-						$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
-					} else {
-						$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
-					}
+			if ($this->MailContent->save()) {
+				$this->setMessage('メールフォーム「' . $this->request->data['Content']['title'] . '」を更新しました。', false, true);
+				if ($this->request->data['MailContent']['edit_mail_form']) {
+					$this->redirectEditForm($this->request->data['MailContent']['form_template']);
+				} elseif ($this->request->data['MailContent']['edit_mail']) {
+					$this->redirectEditMail($this->request->data['MailContent']['mail_template']);
+				} else {
+					$this->redirect(array('action' => 'edit', $this->request->data['MailContent']['id']));
+				}
+			} else {
+				if ($this->MailContent->validationErrors || $this->MailContent->Content->validationErrors) {
+					$this->setMessage('入力エラーです。内容を修正してください。', true);
 				} else {
 					$this->setMessage('データベース処理中にエラーが発生しました。', true);
 				}
-			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
 		}
 
 		$this->request->params['Content'] = $this->BcContents->getContent($id)['Content'];
-		$this->set('publishLink', $this->request->params['Content']['url']);
+		if($this->request->data['Content']['status']) {
+			$this->set('publishLink', $this->request->data['Content']['url']);
+		}
 		$this->set('mailContent', $this->request->data);
 		$this->pageTitle = 'メールフォーム設定編集：' . $this->request->data['Content']['title'];
 		$this->help = 'mail_contents_form';

@@ -16,17 +16,17 @@ App::uses('Dblog', 'Model');
  * 
  * class NonAssosiationDblog extends Dblog {
  *  public $name = 'Dblog';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class DblogTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Dblog',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -42,11 +42,11 @@ class DblogTest extends BaserTestCase {
  * validate
  */
 	public function test空白チェック() {
-		$this->Dblog->create(array(
-			'Dblog' => array(
+		$this->Dblog->create([
+			'Dblog' => [
 				'name' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->Dblog->validates());
 		$this->assertArrayHasKey('name', $this->Dblog->validationErrors);
 		$this->assertEquals('ログ内容を入力してください。', current($this->Dblog->validationErrors['name']));

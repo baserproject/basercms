@@ -24,11 +24,12 @@ class BcUtilTest extends BaserTestCase {
  * Fixtures
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.SiteConfig',
 		'baser.Default.Content',
-		'baser.Default.Site'
-	);
+		'baser.Default.Site',
+		'baser.Default.User'
+	];
 
 /**
  * set up
@@ -68,14 +69,14 @@ class BcUtilTest extends BaserTestCase {
  * @return array
  */
 	public function isAdminSystemDataProvider() {
-		return array(
-			array('admin', true),
-			array('admin/hoge', true),
-			array('/admin/hoge', true),
-			array('admin/', true),
-			array('hoge', false),
-			array('hoge/', false),
-		);
+		return [
+			['admin', true],
+			['admin/hoge', true],
+			['/admin/hoge', true],
+			['admin/', true],
+			['hoge', false],
+			['hoge/', false],
+		];
 	}
 
 /**
@@ -99,11 +100,11 @@ class BcUtilTest extends BaserTestCase {
  * @return array
  */
 	public function isAdminUserDataProvider() {
-		return array(
-			array('admins', true),
-			array('hoge', false),
-			array('', false),
-		);
+		return [
+			['admins', true],
+			['hoge', false],
+			['', false],
+		];
 	}
 
 /**
@@ -123,6 +124,13 @@ class BcUtilTest extends BaserTestCase {
 	}
 
 /**
+ * 現在ログインしているユーザーのユーザーグループ情報を取得する
+ */
+	public function testLoginUserGroup() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
  * ログインしているユーザー名を取得
  */
 	public function testLoginUserName() {
@@ -136,6 +144,13 @@ class BcUtilTest extends BaserTestCase {
 		$Session->write('Auth.' . BcUtil::authSessionKey() . '.name', 'hoge');
 		$result = BcUtil::loginUserName();
 		$this->assertEquals('hoge', $result, 'ログインユーザーのデータを正しく取得できません');
+	}
+
+/**
+ * 認証用のキーを取得
+ */
+	public function testAuthSessionKey() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
 	}
 
 /**
@@ -159,7 +174,7 @@ class BcUtilTest extends BaserTestCase {
 	public function testGetCurrentThemesPlugins() {
 		// プラグインが存在しない場合(デフォルトのbccolumn)
 		$result = BcUtil::getCurrentThemesPlugins();
-		$expect = array();
+		$expect = [];
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
 
 		// プラグインが存在する場合
@@ -174,7 +189,7 @@ class BcUtilTest extends BaserTestCase {
 		// ダミーのプラグインディレクトリを削除
 		$Folder->delete($path);
 
-		$expect = array('dummy1', 'dummy2');
+		$expect = ['dummy1', 'dummy2'];
 		$this->assertEquals($expect, $result, 'テーマ梱包プラグインのリストを正しく取得できません');
 	}
 	
@@ -241,14 +256,14 @@ class BcUtilTest extends BaserTestCase {
  * @return array
  */
 	public function getDefaultDataPathDataProvider() {
-		return array(
-			array(null, null, null, BASER_CONFIGS . 'data/default'),
-			array(null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'),
-			array(null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default'),
-			array('Blog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'),
-			array('Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'),
-			array('Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'),
-		);
+		return [
+			[null, null, null, BASER_CONFIGS . 'data/default'],
+			[null, 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default'],
+			[null, 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default'],
+			['Blog', null, null, BASER_PLUGINS . 'Blog/Config/data/default'],
+			['Blog', 'nada-icons', null, BASER_THEMES . 'nada-icons/Config/data/default/Blog'],
+			['Blog', 'nada-icons', 'not_default', BASER_THEMES . 'nada-icons/Config/data/not_default/Blog'],
+		];
 	}
 
 /**
@@ -267,4 +282,95 @@ class BcUtilTest extends BaserTestCase {
 
 	}
 
+/**
+ * アンシリアライズ
+ * base64_decode が前提
+ */
+	public function testUnserialize() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * URL用に文字列を変換する
+ *
+ * できるだけ可読性を高める為、不要な記号は除外する
+ */
+	public function testUrlencode() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * レイアウトテンプレートのリストを取得する
+ */
+	public function testGetTemplateList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * テーマリストを取得する
+ */
+	public function testGetThemeList() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 指定したURLのドメインを取得する
+ */
+	public function testGetDomain() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * メインとなるドメインを取得する
+ */
+	public function testGetMainDomain() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+/**
+ * 管理画面用のプレフィックスを取得する
+ */
+	public function testGetAdminPrefix() {
+		$this->markTestIncomplete('このテストは、まだ実装されていません。');
+	}
+
+
+/**
+ * 現在のドメインを取得する 
+ */
+	public function testGetCurrentDomain() {
+		$this->assertEmpty(BcUtil::getCurrentDomain(), '$_SERVER[HTTP_HOST] の値が間違っています。');
+		Configure::write('BcEnv.host', 'hoge');
+		$this->assertEquals('hoge', BcUtil::getCurrentDomain(), 'ホストを変更できません。');
+	}
+
+/**
+ * サブドメインを取得する
+ * 
+ * @param string $host
+ * @param string $currentHost
+ * @param string $expects
+ * @dataProvider getSubDomainDataProvider
+ */
+	public function testGetSubDomain($host, $currentHost, $expects, $message) {
+		Configure::write('BcEnv.mainDomain', 'localhost');
+		if($currentHost) {
+			Configure::write('BcEnv.host', $currentHost);	
+		} else {
+			Configure::write('BcEnv.host', '');
+		}
+		$this->assertEquals($expects, BcUtil::getSubDomain($host), $message);
+	}
+	
+	public function getSubDomainDataProvider() {
+		return [
+			['', '', '', '現在のサブドメイン名が不正です。'],
+			['', 'hoge.localhost', 'hoge', '現在のサブドメイン名が取得できません。'],
+			['', 'test.localhost', 'test', '現在のサブドメイン名が取得できません。'],
+			['hoge.localhost', '', 'hoge', '引数を指定してサブドメイン名が取得できません。'],
+			['test.localhost', '', 'test', '引数を指定してサブドメイン名が取得できません。'],
+			['localhost', '', '', '引数を指定してサブドメイン名が取得できません。'],
+		];
+	}
+	
 }

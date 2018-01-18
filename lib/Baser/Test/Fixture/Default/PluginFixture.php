@@ -9,8 +9,8 @@ class PluginFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => '1',
 			'name' => 'Blog',
 			'title' => 'ブログ',
@@ -20,8 +20,8 @@ class PluginFixture extends BaserTestFixture {
 			'priority' => '1',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '2',
 			'name' => 'Feed',
 			'title' => 'フィードリーダー',
@@ -31,8 +31,8 @@ class PluginFixture extends BaserTestFixture {
 			'priority' => '2',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-		array(
+		],
+		[
 			'id' => '3',
 			'name' => 'Mail',
 			'title' => 'メールフォーム',
@@ -42,7 +42,6 @@ class PluginFixture extends BaserTestFixture {
 			'priority' => '3',
 			'created' => '2015-01-27 12:57:59',
 			'modified' => '2015-01-27 12:57:59'
-		),
-	);
-
+		],
+	];
 }

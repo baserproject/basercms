@@ -16,17 +16,17 @@ App::uses('EditorTemplate', 'Model');
  * 
  * class NonAssosiationEditorTemplate extends EditorTemplate {
  *  public $name = 'EditorTemplate';
- *  public $belongsTo = array();
- *  public $hasMany = array();
+ *  public $belongsTo = [];
+ *  public $hasMany = [];
  * }
  * 
  * @package Baser.Test.Case.Model
  */
 class EditorTemplateTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.EditorTemplate',
-	);
+	];
 
 	public function setUp() {
 		parent::setUp();
@@ -42,12 +42,12 @@ class EditorTemplateTest extends BaserTestCase {
  * validate
  */
 	public function test必須チェック() {
-		$this->EditorTemplate->create(array(
-			'EditorTemplate' => array(
+		$this->EditorTemplate->create([
+			'EditorTemplate' => [
 				'name' => '',
 				'link' => '',
-			)
-		));
+			]
+		]);
 		$this->assertFalse($this->EditorTemplate->validates());
 		$this->assertArrayHasKey('name', $this->EditorTemplate->validationErrors);
 		$this->assertEquals('テンプレート名を入力してください。', current($this->EditorTemplate->validationErrors['name']));

@@ -25,14 +25,14 @@ class RoutesTest extends BaserTestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.User',
 		'baser.Config.Routes.PageRoutes',
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.SiteConfig',
 		'baser.Default.User',
-	);
+	];
 
 /**
  * __construct
@@ -41,7 +41,7 @@ class RoutesTest extends BaserTestCase {
  * @param array $data
  * @param string $dataName
  */
-	public function __construct($name = null, array $data = array(), $dataName = '') {
+	public function __construct($name = null, $data = [], $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 		// スーパークラスで、自動的に fixtures に、baser.Default.Page を追加する為、
 		// そちらのフィクスチャを読み込ませないようにアンセット
@@ -87,13 +87,13 @@ class RoutesTest extends BaserTestCase {
 		Configure::write('BcRequest.isInstalled', false);
 		$params = $this->_getParams('install');
 		Configure::write('BcRequest.isInstall', true);
-		$expects = array(
-			'named' => array(),
-			'pass' => array(),
+		$expects = [
+			'named' => [],
+			'pass' => [],
 			'controller' => 'installations',
 			'action' => 'index',
 			'plugin' => null
-		);
+		];
 		$this->assertEquals($expects, $params);
 	}
 
@@ -109,13 +109,13 @@ class RoutesTest extends BaserTestCase {
 		Configure::write('BcRequest.isUpdater', true);
 		$params = $this->_getParams($url);
 		Configure::write('BcRequest.isUpdater', false);
-		$expects = array(
+		$expects = [
 			'controller' => 'updaters',
 			'action' => 'index',
 			'plugin' => null,
-			'named' => array(),
-			'pass' => array(),
-		);
+			'named' => [],
+			'pass' => [],
+		];
 		$this->assertEquals($expects, $params);
 	}
 
@@ -127,10 +127,10 @@ class RoutesTest extends BaserTestCase {
 	public function updateDataProvider() {
 		$updateKey = Configure::read('BcApp.updateKey');
 
-		return array(
-			array("/{$updateKey}"),
-			array("/{$updateKey}/index")
-		);
+		return [
+			["/{$updateKey}"],
+			["/{$updateKey}/index"]
+		];
 	}
 
 /**
@@ -144,13 +144,13 @@ class RoutesTest extends BaserTestCase {
  */
 	public function testPageDisplay($url, $pass) {
 		$params = $this->_getParams($url);
-		$expects = array(
+		$expects = [
 			'controller' => 'pages',
 			'action' => 'display',
 			'plugin' => null,
-			'named' => array(),
+			'named' => [],
 			'pass' => $pass,
-		);
+		];
 		unset($params['Content']);
 		unset($params['Site']);
 		unset($params['entityId']);
@@ -163,12 +163,12 @@ class RoutesTest extends BaserTestCase {
  * @return array
  */
 	public function pageDisplayDataProvider() {
-		return array(
-			array('/', array('index')),
-			array('/about', array('about')),
-			array('/service', array('service')),
-			array('/sitemap', array('sitemap'))
-		);
+		return [
+			['/', ['index']],
+			['/about', ['about']],
+			['/service', ['service']],
+			['/sitemap', ['sitemap']]
+		];
 	}
 
 /**
@@ -182,13 +182,13 @@ class RoutesTest extends BaserTestCase {
  */
 	public function testMobilePageDisplay($url, $pass) {
 		$params = $this->_getParams($url);
-		$expects = array(
+		$expects = [
 			'controller' => 'pages',
 			'action' => 'display',
 			'plugin' => null,
-			'named' => array(),
+			'named' => [],
 			'pass' => $pass,
-		);
+		];
 		unset($params['Content']);
 		unset($params['Site']);
 		unset($params['entityId']);
@@ -203,9 +203,9 @@ class RoutesTest extends BaserTestCase {
  * @todo ページカテゴリを含むテスト及びエージェント対応・連動設定を考慮したテストを追加。
  */
 	public function mobilePageDisplayDataProvider() {
-		return array(
-			array('/m/', array('m', 'index'))
-		);
+		return [
+			['/m/', ['m', 'index']]
+		];
 	}
 
 /**
@@ -219,13 +219,13 @@ class RoutesTest extends BaserTestCase {
  */
 	public function testSmartphonePageDisplay($url, $pass) {
 		$params = $this->_getParams($url);
-		$expects = array(
+		$expects = [
 			'controller' => 'pages',
 			'action' => 'display',
 			'plugin' => null,
-			'named' => array(),
+			'named' => [],
 			'pass' => $pass,
-		);
+		];
 		unset($params['Content']);
 		unset($params['Site']);
 		unset($params['entityId']);
@@ -240,10 +240,10 @@ class RoutesTest extends BaserTestCase {
  * @todo ページカテゴリを含むテスト及びエージェント対応・連動設定を考慮したテストを追加。
  */
 	public function smartphonePageDisplayDataProvider() {
-		return array(
-			array('/s/', array('s', 'index')),
-			array('/s/service', array('s', 'service'))
-		);
+		return [
+			['/s/', ['s', 'index']],
+			['/s/service', ['s', 'service']]
+		];
 	}
 	
 }

@@ -111,40 +111,6 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 	}
 
 /**
- * Renders the links that for accessing things in the test suite.
- *
- * @return void
- */
-	protected function _paintLinks() {
-		$show = $query = array();
-		if (!empty($this->params['case'])) {
-			$show['show'] = 'cases';
-		}
-
-		if (!empty($this->params['core'])) {
-			$show['core'] = $query['core'] = 'true';
-		}
-		// CUSTOMIZE ADD 2014/07/02 ryuring
-		// >>>
-		if (!empty($this->params['baser'])) {
-			$show['baser'] = $query['baser'] = 'true';
-		}
-		// <<<
-		if (!empty($this->params['plugin'])) {
-			$show['plugin'] = $query['plugin'] = $this->params['plugin'];
-		}
-		if (!empty($this->params['case'])) {
-			$query['case'] = $this->params['case'];
-		}
-		list($show, $query) = $this->_getQueryLink();
-
-		echo "<p><a href='" . $this->baseUrl() . $show . "'>Run more tests</a> | <a href='" . $this->baseUrl() . $query . "&amp;show_passes=1'>Show Passes</a> | \n";
-		echo "<a href='" . $this->baseUrl() . $query . "&amp;debug=1'>Enable Debug Output</a> | \n";
-		echo "<a href='" . $this->baseUrl() . $query . "&amp;code_coverage=true'>Analyze Code Coverage</a> | \n";
-		echo "<a href='" . $this->baseUrl() . $query . "&amp;code_coverage=true&amp;show_passes=1&amp;debug=1'>All options enabled</a></p>\n";
-	}
-
-/**
  * Paints the end of the document html.
  *
  * @return void
@@ -162,6 +128,40 @@ class BaserHtmlReporter extends CakeHtmlReporter {
 		if (ob_get_length()) {
 			ob_end_flush();
 		}
+	}
+
+/**
+ * Returns the query string formatted for ouput in links
+ *
+ * @return array
+ */
+	protected function _getQueryLink() {
+		$show = $query = [];
+		if (!empty($this->params['case'])) {
+			$show['show'] = 'cases';
+		}
+
+		if (!empty($this->params['core'])) {
+			$show['core'] = $query['core'] = 'true';
+		}
+		if (!empty($this->params['plugin'])) {
+			$show['plugin'] = $query['plugin'] = $this->params['plugin'];
+		}
+		if (!empty($this->params['case'])) {
+			$query['case'] = $this->params['case'];
+		}
+		if (!empty($this->params['filter'])) {
+			$query['filter'] = $this->params['filter'];
+		}
+		// CUSTOMIZE ADD 2014/07/02 ryuring
+		// >>>
+		if (!empty($this->params['baser'])) {
+			$show['baser'] = $query['baser'] = 'true';
+		}
+		// <<<
+		$show = $this->_queryString($show);
+		$query = $this->_queryString($query);
+		return [$show, $query];
 	}
 
 }

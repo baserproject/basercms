@@ -323,14 +323,13 @@ class UploaderFilesController extends AppController {
 /**
  * [ADMIN] 編集処理
  *
- * @return	void
- * @access	public
+ * @return	mixed
  */
 	public function admin_edit($id = null) {
-
-		if (!$this->request->data && $this->RequestHandler->isAjax()) {
+		$this->autoRender = false;
+		if (!$this->request->data && $this->request->is('ajax')) {
 			$this->ajaxError(500, '無効な処理です。');
-		} elseif(!$this->RequestHandler->isAjax() && !$id) {
+		} elseif(!$this->request->is('ajax') && !$id) {
 			$this->notFound();
 		}
 		
@@ -347,9 +346,12 @@ class UploaderFilesController extends AppController {
 		} else {
 			$this->UploaderFile->set($this->request->data);
 			$result = $this->UploaderFile->save();
-			if ($this->RequestHandler->isAjax()) {
-				echo (boolean) ($result);
-				exit();
+			if ($this->request->is('ajax')) {
+				if($result) {
+					return true;
+				} else {
+					return false;
+				}
 			} else {
 				if($result) {
 					$this->setMessage('ファイルの内容を保存しました。');
@@ -481,7 +483,7 @@ class UploaderFilesController extends AppController {
 					"wmv"	=> "video/x-ms-wmv"
 			);
 			header("Content-type: " . $contentsMaping[$ext]);
-			readfile(WWW_ROOT . '/files/uploads/limited/'.$filename);
+			readfile(WWW_ROOT . 'files' . DS . 'uploads' . DS . 'limited' . DS . $filename);
 			exit();
 		} else {
 			$this->notFound();

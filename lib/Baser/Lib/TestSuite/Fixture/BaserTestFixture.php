@@ -37,7 +37,7 @@ class BaserTestFixture extends CakeTestFixture {
  */
 	public function getSchema($name) {
 		$tableName = Inflector::tableize($name);
-		$plugins = array(null);
+		$plugins = [null];
 		$plugins = array_merge($plugins, Configure::read('BcApp.corePlugins'));
 
 		$schemaFile = null;
@@ -68,7 +68,7 @@ class BaserTestFixture extends CakeTestFixture {
  * @return null|string
  */
 	public function findSchemaFile($tableName, $plugin = null) {
-		$configDir = array();
+		$configDir = [];
 		if (empty($plugin)) {
 			$schemaFile = BASER_CONFIGS . 'Schema' . DS . $tableName . '.php';
 			if (file_exists($schemaFile)) {

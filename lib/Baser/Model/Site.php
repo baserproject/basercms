@@ -23,7 +23,15 @@ class Site extends AppModel {
  * @var array
  */
 	public $actsAs = ['BcCache'];
-		
+
+
+/**
+ * 保存時にエイリアスが変更されたかどうか
+ *
+ * @var bool
+ */
+	private $__changedAlias = false;
+	
 /**
  * バリデーション
  *
@@ -124,27 +132,70 @@ class Site extends AppModel {
 /**
  * サイトリストを取得
  *
- * @param bool $mainOnly
+ * @param bool $mainSiteId メインサイトID
+ * @param array $options
+ * 	`excludeIds` 除外するID（初期値：なし）
  * @return array
  */
     public function getSiteList($mainSiteId = null, $options = []) {
 		$options = array_merge([
 			'excludeIds' => []
 		], $options);
-    	$conditions = ['Site.status' => true];
-    	if(!is_null($mainSiteId)) {
-    		$conditions['Site.main_site_id'] = $mainSiteId;
-    	}
-		if($options['excludeIds']) {
-			$conditions[]['Site.id <>'] = $options['excludeIds']; 
+
+		// EVENT Site.beforeGetSiteList
+		$event = $this->dispatchEvent('beforeGetSiteList', [
+			'options' => $options
+		]);
+		if ($event !== false) {
+			$options = $event->result === true ? $event->data['options'] : $event->result;
 		}
-		$main = $this->getRootMain();
-    	return [$main['Site']['id'] => $main['Site']['display_name']] + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
+		
+		$conditions = ['Site.status' => true];
+		if(!is_null($mainSiteId)) {
+			$conditions['Site.main_site_id'] = $mainSiteId;
+		}
+		
+		$rootMain = [];
+		$excludeKey = false;
+		$includeKey = true;
+		
+		if(isset($options['excludeIds'])) {
+			if(!is_array($options['excludeIds'])) {
+				$options['excludeIds'] = [$options['excludeIds']];
+			}
+			$excludeKey = array_search(0, $options['excludeIds']);
+			if($excludeKey !== false) {
+				unset($options['excludeIds'][$excludeKey]);
+			}
+			if($options['excludeIds']) {
+				$conditions[]['NOT']['Site.id'] = $options['excludeIds'];	
+			}
+		}
+
+		if(isset($options['includeIds'])) {
+			if(!is_array($options['includeIds'])) {
+				$options['includeIds'] = [$options['includeIds']];
+			}
+			$includeKey = array_search(0, $options['includeIds']);
+			if($includeKey !== false) {
+				unset($options['includeIds'][$includeKey]);
+			}
+			if($options['includeIds']) {
+				$conditions[]['Site.id'] = $options['includeIds'];
+			}
+		}
+		
+		if($includeKey !== false && $excludeKey === false && is_null($mainSiteId)) {
+			$rootMainTmp = $this->getRootMain();
+			$rootMain = [$rootMainTmp['Site']['id'] => $rootMainTmp['Site']['display_name']];
+		}
+		return $rootMain + $this->find('list', ['fields' => ['id', 'display_name'], 'conditions' => $conditions]);
     }
 	
 /**
  * メインサイトのデータを取得する
  * 
+ * @param mixed $options 取得するフィールド
  * @return array
  */
 	public function getRootMain($options = []) {
@@ -306,15 +357,16 @@ class Site extends AppModel {
 				'name'		=> ($this->data['Site']['alias'])? $this->data['Site']['alias']: $this->data['Site']['name'],
 				'title'		=> $this->data['Site']['title'],
 				'self_status'	=> $this->data['Site']['status'],
-		  ]);
+			], $this->__changedAlias);
 		}
 		if(!empty($this->data['Site']['main'])) {
 			$data = $this->find('first', ['conditions' => ['Site.main' => true, 'Site.id <>' => $this->id], 'recursive' => -1]);
 			if($data) {
 				$data['Site']['main'] = false;
-				$this->save($data, array('validate' => false, 'callbacks' => false));
+				$this->save($data, ['validate' => false, 'callbacks' => false]);
 			}
 		}
+		$this->__changedAlias = false;
 	}
 
 /**
@@ -431,7 +483,14 @@ class Site extends AppModel {
 			'Site.main_site_id' => $mainSiteId
 		], 'recursive' => -1]);
 	}
-	
+
+/**
+ * After Find
+ * 
+ * @param mixed $results
+ * @param bool $primary
+ * @return mixed
+ */
 	public function afterFind($results, $primary = false) {
 		$results = parent::afterFind($results, $primary = false);
 		$this->dataIter($results, function(&$entity, &$model) {
@@ -446,6 +505,7 @@ class Site extends AppModel {
  * 選択可能なデバイスの一覧を取得する
  *
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return array
  */
 	public function getSelectableDevices($mainSiteId, $currentSiteId) {
@@ -471,6 +531,7 @@ class Site extends AppModel {
  * 選択可能が言語の一覧を取得する
  * 
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return array
  */
 	public function getSelectableLangs($mainSiteId, $currentSiteId) {
@@ -491,4 +552,82 @@ class Site extends AppModel {
 		}
 		return $devices;
 	}
+
+/**
+ * デバイス設定をリセットする
+ * 
+ * @return bool
+ */
+	public function resetDevice() {
+		$sites = $this->find('all', ['recursive' => -1]);
+		$result = true;
+		if($sites) {
+			$this->getDataSource()->begin();
+			foreach($sites as $site) {
+				$site['Site']['device'] = '';
+				$site['Site']['auto_link'] = false;
+				if(!$site['Site']['lang']) {
+					$site['Site']['same_main_url'] = false;
+					$site['Site']['auto_redirect'] = false;
+				}
+				$this->set($site);
+				if(!$this->save()) {
+					$result = false;
+				}
+			}	
+		}
+		if(!$result) {
+			$this->getDataSource()->rollback();
+		} else {
+			$this->getDataSource()->commit();
+		}
+		return $result;
+	}
+
+/**
+ * 言語設定をリセットする
+ * 
+ * @return bool
+ */
+	public function resetLang() {
+		$sites = $this->find('all', ['recursive' => -1]);
+		$result = true;
+		if($sites) {
+			$this->getDataSource()->begin();
+			foreach($sites as $site) {
+				$site['Site']['lang'] = '';
+				if(!$site['Site']['device']) {
+					$site['Site']['same_main_url'] = false;
+					$site['Site']['auto_redirect'] = false;
+				}
+				$this->set($site);
+				if(!$this->save()) {
+					$result = false;
+				}
+			}
+		}
+		if(!$result) {
+			$this->getDataSource()->rollback();
+		} else {
+			$this->getDataSource()->commit();
+		}
+		return $result;
+	}
+
+/**
+ * Before Save
+ * 
+ * @param array $options
+ * @return bool
+ */
+	public function beforeSave($options = []) {
+		if(!empty($this->data[$this->alias]['id']) && !empty($this->data[$this->alias]['alias'])) {
+			$oldAlias = $this->field('alias', ['Site.id' => $this->data[$this->alias]['id']]);
+			if($oldAlias != $this->data[$this->alias]['alias']) {
+				$this->__changedAlias = true;
+			}
+		}
+		return true;
+	}
+	
 }

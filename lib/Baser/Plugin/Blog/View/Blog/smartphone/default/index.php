@@ -13,7 +13,7 @@
 /**
  * [SMARTPHONE] ブログトップ
  */
-$this->BcBaser->css(array('Blog.style'), array('inline' => false));
+$this->BcBaser->css(['Blog.style'], ['inline' => false]);
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 

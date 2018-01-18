@@ -13,13 +13,13 @@
 /**
  * [ADMIN] プラグイン 一覧
  */
-$this->BcBaser->js(array(
+$this->BcBaser->js([
 	'admin/libs/jquery.baser_ajax_data_list',
 	'admin/libs/jquery.baser_ajax_sort_table',
 	'admin/libs/jquery.baser_ajax_batch',
 	'admin/libs/baser_ajax_data_list_config',
 	'admin/libs/baser_ajax_batch_config'
-	), false);
+	], false);
 ?>
 
 
@@ -43,7 +43,7 @@ $(function(){
  * マーケットのデータを取得
  */
 	$.ajax({
-		url: $.baseUrl + '/admin/plugins/ajax_get_market_plugins',
+		url: $.baseUrl + '/' + $.bcUtil.adminPrefix + '/plugins/ajax_get_market_plugins',
 		type: "GET",
 		success: function(result) {
 			$("#BaserMarket").html(result);
@@ -56,8 +56,8 @@ $(function(){
 </script>
 
 
-<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'plugins', 'action' => 'ajax_batch')) ?></div>
-<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(array('controller' => 'plugins', 'action' => 'ajax_update_sort')) ?></div>
+<div id="AjaxBatchUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'plugins', 'action' => 'ajax_batch']) ?></div>
+<div id="AjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(['controller' => 'plugins', 'action' => 'ajax_update_sort']) ?></div>
 <div id="AlertMessage" class="message" style="display:none"></div>
 <div id="MessageBox" style="display:none"><div id="flashMessage" class="notice-message"></div></div>
 
@@ -67,5 +67,5 @@ $(function(){
 		<li><a href="#BaserMarket">baserマーケット</a></li>
 	</ul>
 	<div id="DataList"><?php $this->BcBaser->element('plugins/index_list') ?></div>
-	<div id="BaserMarket"><div style="padding:20px;text-align:center;"><?php $this->BcBaser->img('admin/ajax-loader.gif', array('alt' => 'Loading...')) ?></div></div>
+	<div id="BaserMarket"><div style="padding:20px;text-align:center;"><?php $this->BcBaser->img('admin/ajax-loader.gif', ['alt' => 'Loading...']) ?></div></div>
 </div>

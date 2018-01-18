@@ -22,13 +22,15 @@ if($posts){
 function transformRSS($data) {
 	$view = new View();
 	$blogHelper = new BlogHelper($view);
-	return array(
+	$bcBaserhelper = new BcBaserHelper($view);
+	$url = $bcBaserhelper->getContentsUrl() . 'archives/' . $data['BlogPost']['no'];
+	return [
 		'title' => $data['BlogPost']['name'],
-		'link' => '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
-		'guid' => '/' . $view->request->params['Content']['name'] . '/archives/' . $data['BlogPost']['no'],
+		'link' => $url,
+		'guid' => $url,
 		'category' => $data['BlogCategory']['title'],
 		'description' => $blogHelper->removeCtrlChars($data['BlogPost']['content'] . $data['BlogPost']['detail']),
 		'pubDate' => $data['BlogPost']['posts_date']
-	);
+	];
 }
 ?>

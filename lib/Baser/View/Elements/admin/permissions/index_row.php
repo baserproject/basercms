@@ -24,26 +24,27 @@
 <tr<?php echo $class; ?>>
 	<td style="width:15%" class="row-tools">
 		<?php if ($sortmode): ?>
-			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', array('alt' => '並び替え')) ?></span>
-			<?php echo $this->BcForm->input('Sort.id' . $data['Permission']['id'], array('type' => 'hidden', 'class' => 'id', 'value' => $data['Permission']['id'])) ?>
+			<span class="sort-handle"><?php $this->BcBaser->img('admin/sort.png', ['alt' => '並び替え']) ?></span>
+			<?php echo $this->BcForm->input('Sort.id' . $data['Permission']['id'], ['type' => 'hidden', 'class' => 'id', 'value' => $data['Permission']['id']]) ?>
 		<?php endif ?>
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Permission']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Permission']['id'])) ?>
+			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Permission']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Permission']['id']]) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', array('alt' => '無効', 'class' => 'btn')), array('action' => 'ajax_unpublish', $data['Permission']['id']), array('title' => '非公開', 'class' => 'btn-unpublish')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', array('alt' => '有効', 'class' => 'btn')), array('action' => 'ajax_publish', $data['Permission']['id']), array('title' => '公開', 'class' => 'btn-publish')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $this->request->params['pass'][0], $data['Permission']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => '無効', 'class' => 'btn']), ['action' => 'ajax_unpublish', $data['Permission']['id']], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => '有効', 'class' => 'btn']), ['action' => 'ajax_publish', $data['Permission']['id']], ['title' => '公開', 'class' => 'btn-publish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => '編集', 'class' => 'btn']), ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']], ['title' => '編集']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => 'コピー', 'class' => 'btn']), ['action' => 'ajax_copy', $this->request->params['pass'][0], $data['Permission']['id']], ['title' => 'コピー', 'class' => 'btn-copy']) ?>
 		<?php if ($data['Permission']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['Permission']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['Permission']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
 		<?php endif ?>
 	</td>
 	<td style="width:10%"><?php echo $data['Permission']['no']; ?></td>
 	<td style="width:55%">
-		<?php $this->BcBaser->link($data['Permission']['name'], array('action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id'])); ?><br />
+		<?php $this->BcBaser->link($data['Permission']['name'], ['action' => 'edit', $this->request->params['pass'][0], $data['Permission']['id']]); ?><br />
 		<?php echo $data['Permission']['url']; ?>
 	</td>
-	<td style="width:10%" class="align-center"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], array(0 => '×', 1 => '〇')) ?></td>
+	<td style="width:10%" class="align-center"><?php echo $this->BcText->arrayValue($data['Permission']['auth'], [0 => '×', 1 => '○']) ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:10%">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['created']); ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Permission']['modified']); ?>

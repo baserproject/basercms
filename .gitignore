@@ -41,5 +41,10 @@ composer.lock
 gulpfile.js
 node_modules/
 package.json
+/docker-compose.yml
+/Dockerfile
+/volumes/*
+/.docker-sync/
 !app/webroot/theme/ownd_river
+
 

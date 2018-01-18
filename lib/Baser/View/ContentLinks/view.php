@@ -12,6 +12,6 @@
 ?>
 
 
-<?php $this->Html->scriptStart(array('inline' => false)); ?>
+<?php $this->Html->scriptStart(['inline' => false]); ?>
 window.location.href = "<?php echo $data['ContentLink']['url'] ?>";
 <?php $this->Html->scriptEnd(); ?>

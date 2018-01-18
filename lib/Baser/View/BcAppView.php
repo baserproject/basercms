@@ -14,6 +14,36 @@
  * view 拡張クラス
  *
  * @package Baser.View
+ * @property \BcAdminHelper $BcAdmin
+ * @property \BcArrayHelper $BcArray
+ * @property \BcBaserHelper $BcBaser
+ * @property \BcCacheHelper $BcCache
+ * @property \BcCkeditorHelper $BcCkeditor
+ * @property \BcContentsHelper $BcContents
+ * @property \BcCsvHelper $BcCsv
+ * @property \BcFormHelper $BcForm
+ * @property \BcFormTableHelper $BcFormTable
+ * @property \BcFreezeHelper $BcFreeze
+ * @property \BcGooglemapsHelper $BcGooglemaps
+ * @property \BcHtmlHelper $BcHtml
+ * @property \BcLayoutHelper $BcLayout
+ * @property \BcListTableHelper $BcListTable
+ * @property \BcMobileHelper $BcMobile
+ * @property \BcPageHelper $BcPage
+ * @property \BcSearchBoxHelper $BcSearchBox
+ * @property \BcSmartphoneHelper $BcSmartphone
+ * @property \BcTextHelper $BcText
+ * @property \BcTimeHelper $BcTime
+ * @property \BcUploadHelper $BcUpload
+ * @property \BcWidgetAreaHelper $BcWidgetArea
+ * @property \BcXmlHelper $BcXml
+ * @property \BlogHelper $Blog
+ * @property \FeedHelper $Feed
+ * @property \MaildataHelper $Maildata
+ * @property \MailfieldHelper $Mailfield
+ * @property \MailformHelper $Mailform
+ * @property \MailHelper $Mail
+ * @property \UploaderHelper $Uploader
  */
 class BcAppView extends View {
 
@@ -36,18 +66,18 @@ class BcAppView extends View {
  * デバッグモード２で利用
  * @var array
  */
-	protected $_viewFilesLog = array();
+	protected $_viewFilesLog = [];
 
 /**
  * List of variables to collect from the associated controller
  *
  * @var array
  */
-	protected $_passedVars = array(
+	protected $_passedVars = [
 		'viewVars', 'autoLayout', 'ext', 'helpers', 'view', 'layout', 'name', 'theme',
 		'layoutPath', 'viewPath', 'request', 'plugin', 'passedArgs', 'cacheAction',
 		'subDir', 'adminTheme', 'pageTitle', 'content', 'site'
-	);
+	];
 
 /**
  * Return all possible paths to find view files in order
@@ -61,7 +91,7 @@ class BcAppView extends View {
 		if ($plugin === null && $cached === true && !empty($this->_paths)) {
 			return $this->_paths;
 		}
-		$paths = array();
+		$paths = [];
 		$viewPaths = App::path('View');
 		$corePaths = array_merge(App::core('View'), App::core('Console/Templates/skel/View'));
 
@@ -79,7 +109,7 @@ class BcAppView extends View {
 
 		// CUSTOMIZE ADD 2013/08/17 ryuring
 		// >>>
-		$adminThemePaths = array();
+		$adminThemePaths = [];
 		$webroot = Configure::read('App.www_root');
 		if (!empty($this->adminTheme)) {
 			foreach ($paths as $path) {
@@ -90,12 +120,12 @@ class BcAppView extends View {
 					$adminThemePaths[] = $path . 'Themed' . DS . $this->adminTheme . DS;
 				}
 			}
-			$adminThemePaths = array_merge(array($webroot . 'theme' . DS . $this->adminTheme . DS), $adminThemePaths);
+			$adminThemePaths = array_merge([$webroot . 'theme' . DS . $this->adminTheme . DS], $adminThemePaths);
 		}
 		// <<<
 
 		if (!empty($this->theme)) {
-			$themePaths = array();
+			$themePaths = [];
 			foreach ($paths as $path) {
 				if (strpos($path, DS . 'Plugin' . DS) === false) {
 					if ($plugin) {
@@ -109,7 +139,7 @@ class BcAppView extends View {
 			// >>>
 			//$paths = array_merge($themePaths, $paths);
 			// --
-			$themePaths = array_merge(array($webroot . 'theme' . DS . $this->theme . DS), $themePaths);
+			$themePaths = array_merge([$webroot . 'theme' . DS . $this->theme . DS], $themePaths);
 			$paths = array_merge($themePaths, $adminThemePaths, $paths);
 			// <<<
 		}
@@ -117,7 +147,7 @@ class BcAppView extends View {
 		// CUSTOMIZE ADD 2013/08/26 ryuring
 		// Baserディレクトリのパスの優先順位を下げる
 		// >>>
-		$baserPaths = array();
+		$baserPaths = [];
 		foreach ($paths as $key => $path) {
 			if (strpos($path, BASER) !== false) {
 				unset($paths[$key]);
@@ -177,21 +207,22 @@ class BcAppView extends View {
 		// CakeErrorの場合はサブフォルダを除外
 		// >>>
 		if ($this->name == 'CakeError' && $this->viewPath == 'Errors') {
-			$subDir = $this->subDir;
+			$subDir = $this->subDir . DS;
 			$this->subDir = null;
-			$fileName = parent::_getViewFileName($name);
-			$this->subDir = $subDir;
-			return $fileName;
+			$exception = $this->get('error');
+			if($exception && $exception instanceof MissingConnectionException) {
+				$this->layout = 'missing_connection';
+			}
 		}
 		// <<<
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// イベントを追加
 		// >>>
-		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
+		$event = $this->dispatchEvent('beforeGetViewFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
-		$event = $this->dispatchEvent('beforeGetViewFileName', array('name' => $name));
+		$event = $this->dispatchEvent('beforeGetViewFileName', ['name' => $name]);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
@@ -203,10 +234,10 @@ class BcAppView extends View {
 			// >>>
 			//$name = $this->viewPath . DS . $subDir . Inflector::underscore($name);
 			// ---
-			$name = array(
+			$name = [
 				$this->viewPath . DS . $subDir . Inflector::underscore($name),
 				$this->viewPath . DS . Inflector::underscore($name),
-			);
+			];
 			// <<<
 		} elseif (strpos($name, DS) !== false) {
 			if ($name[0] === DS || $name[1] === ':') {
@@ -227,10 +258,10 @@ class BcAppView extends View {
 			*/
 			// ---
 			} else {
-				$name = array(
+				$name = [
 					$this->viewPath . DS . $subDir . $name,
 					$this->viewPath . DS . $name
-				);
+				];
 			// <<<
 			}
 		}
@@ -282,7 +313,7 @@ class BcAppView extends View {
 				}
 			}
 		}
-		throw new MissingViewException(array('file' => $defaultPath . $name . $this->ext));
+		throw new MissingViewException(['file' => $defaultPath . $name . $this->ext]);
 	}
 
 /**
@@ -296,11 +327,11 @@ class BcAppView extends View {
 		// CUSTOMIZE ADD 2013/08/27 ryuring
 		// イベントを追加
 		// >>>
-		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
+		$event = $this->dispatchEvent('beforeGetElementFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
-		$event = $this->dispatchEvent('beforeGetElementFileName', array('name' => $name));
+		$event = $this->dispatchEvent('beforeGetElementFileName', ['name' => $name]);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
@@ -313,9 +344,17 @@ class BcAppView extends View {
 		// 2014/02/24 追記
 		// サブフォルダ内にテンプレートが存在しない場合上位階層のテンプレートも検索する仕様に変更
 		// >>>
-		$names = array($name);
+		$names = [$name];
 		if ($this->subDir) {
-			array_unshift($names, $this->subDir . DS . $name);
+			if(preg_match('/^\.\.\/([^\/]+)\/(.+)$/', $name, $matches)) {
+				// Elements ではなく、コントローラー内のテンプレートを参照する場合の処理
+				// BlogBaserHelper::blogPosts() で、ブログコントローラー内のテンプレートを参照している為（posts等）
+				// TODO テンプレートの場所を Elements 内に移動するべき
+				$name = '..' . DS . $matches[1] . DS . $this->subDir . DS . $matches[2]; 
+			} else {
+				$name = $this->subDir . DS . $name;
+			}
+			array_unshift($names, $name);
 		}
 		// <<<
 
@@ -363,11 +402,11 @@ class BcAppView extends View {
 
 		// CUSTOMIZE ADD 2013/08/25 ryuring
 		// >>>
-		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name), array('class' => '', 'plugin' => ''));
+		$event = $this->dispatchEvent('beforeGetLayoutFileName', ['name' => $name], ['class' => '', 'plugin' => '']);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
-		$event = $this->dispatchEvent('beforeGetLayoutFileName', array('name' => $name));
+		$event = $this->dispatchEvent('beforeGetLayoutFileName', ['name' => $name]);
 		if ($event !== false) {
 			$name = ($event->result === null || $event->result === true) ? $event->data['name'] : $event->result;
 		}
@@ -384,10 +423,10 @@ class BcAppView extends View {
 		// >>>
 		//$file = 'Layouts' . DS . $subDir . $name;
 		// ---
-		$files = array(
+		$files = [
 			'Layouts' . DS . $subDir . $name,
 			'Layouts' . DS . $name
-		);
+		];
 		// <<<
 
 		$exts = $this->_getExtensions();
@@ -419,7 +458,7 @@ class BcAppView extends View {
 		}
 		// <<<
 
-		throw new MissingLayoutException(array('file' => $paths[0] . $file . $this->ext));
+		throw new MissingLayoutException(['file' => $paths[0] . $file . $this->ext]);
 	}
 
 /**
@@ -443,7 +482,7 @@ class BcAppView extends View {
  * @param array $params
  * @return mixed
  */
-	public function dispatchEvent($name, $params = array(), $options = array()) {
+	public function dispatchEvent($name, $params = [], $options = []) {
 
 		// CakeEmailより呼び出される場合、AppViewを直接呼び出す為、$this->nameに値が入らない。
 		// その際、View.beforeRenderをループで呼び出してしまうので、イベントを実行しない。
@@ -451,12 +490,12 @@ class BcAppView extends View {
 			return false;
 		}
 
-		$options = array_merge(array(
+		$options = array_merge([
 			'modParams' => 0,
 			'plugin' => $this->plugin,
 			'layer' => 'View',
 			'class' => $this->name
-			), $options);
+			], $options);
 		App::uses('BcEventDispatcher', 'Event');
 		return BcEventDispatcher::dispatch($name, $this, $params, $options);
 	}

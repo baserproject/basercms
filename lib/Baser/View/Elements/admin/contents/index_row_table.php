@@ -23,11 +23,11 @@ if(!empty($this->BcContents->settings[$data['Content']['type']])) {
 	$type = 'Default';
 }
 if($isAlias) {
-	$manageDisabled = $this->BcContents->settings['Default']['manageDisabled'];
-	$editDisabled = $this->BcContents->settings['Default']['editDisabled'];
+	$editDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'edit', $data['Content']['entity_id']);
+	$manageDisabled = !$this->BcContents->isActionAvailable('ContentAlias', 'manage', $data['Content']['entity_id']);
 } else {
-	$manageDisabled = $this->BcContents->settings[$type]['manageDisabled'];
-	$editDisabled = $this->BcContents->settings[$type]['editDisabled'];
+	$editDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'edit', $data['Content']['entity_id']);
+	$manageDisabled = !$this->BcContents->isActionAvailable($data['Content']['type'], 'manage', $data['Content']['entity_id']);
 }
 $typeTitle = $this->BcContents->settings[$type]['title'];
 if(!empty($this->BcContents->settings[$type]['icon'])) {
@@ -38,23 +38,19 @@ if(!empty($this->BcContents->settings[$type]['icon'])) {
 if($data['Content']['plugin'] != 'Core' && $type != 'Default') {
 	$iconPath = $data['Content']['plugin'] . '.' . $iconPath;
 }
-if (!$isPublish) {
-	$toStatus = 'publish';
-	$classies = ['unpublish', 'disablerow'];
-} else {
-	$toStatus = 'unpublish';
-	$classies = ['publish'];
-}
-$class = ' class="' . implode(' ', $classies) . '"';
 $urlParams = ['content_id' => $data['Content']['id']];
 if($data['Content']['entity_id']) {
 	$urlParams = array_merge($urlParams, [$data['Content']['entity_id']]);
 }
 $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site']['use_subdomain']);
+$toStatus = 'publish';
+if($data['Content']['self_status']) {
+	$toStatus = 'unpublish';
+}
 ?>
 
 
-<tr id="Row<?php echo $count + 1 ?>" <?php echo $class; ?>>
+<tr id="Row<?php echo $count + 1 ?>"<?php $this->BcListTable->rowClass($isPublish, $data) ?>>
 	<td class="row-tools" style="width:20%">
 		<?php if ($this->BcBaser->isAdminUser() && empty($data['Content']['site_root'])): ?>
 			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['Content']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['Content']['id']]) ?>
@@ -65,7 +61,7 @@ $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site'
 		<?php if(!$manageDisabled && !empty($this->BcContents->settings[$type]['routes']['manage'])): ?>
 			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['width' => 32, 'height' => 32, 'alt' => '管理', 'class' => 'btn']), array_merge($this->BcContents->settings[$type]['routes']['manage'], $urlParams), ['title' => '管理', 'class' => 'btn-manage']) ?>
 		<?php endif ?>
-		<?php if(!$isSiteRoot && !$isSiteRelated): ?>
+		<?php if(!$isSiteRoot && !$isSiteRelated && !$editDisabled): ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['width' => 32, 'height' => 32, 'alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
 		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['width' => 32, 'height' => 32, 'alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_change_status'], ['title' => '公開', 'class' => 'btn-publish']) ?>
 		<?php endif ?>
@@ -106,6 +102,7 @@ $fullUrl = $this->BcContents->getUrl($data['Content']['url'], true, $data['Site'
 	<td style="width:8%;text-align:center">
 		<?php echo $this->BcText->arrayValue($data['Content']['author_id'], $authors); ?>
 	</td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td style="width:8%;white-space: nowrap">
 		<?php echo $this->BcTime->format('Y-m-d', $data['Content']['created_date']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['Content']['modified_date']) ?>

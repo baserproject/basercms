@@ -9,6 +9,10 @@
  * @since			baserCMS v 3.0.10
  * @license			http://basercms.net/license/index.html
  */
+
+/**
+ * @var \BcAppView $this
+ */
 ?>
 
 
@@ -23,6 +27,7 @@
 	</td>
 	<td><?php echo $data['UploaderCategory']['id'] ?></td>
 	<td><?php echo $data['UploaderCategory']['name'] ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td>
 		<?php echo $data['UploaderCategory']['created'] ?><br />
 		<?php echo $data['UploaderCategory']['modified'] ?>

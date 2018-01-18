@@ -16,8 +16,8 @@ class BlogCategoryFixture extends BaserTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => 1,
 			'blog_content_id' => 1,
 			'no' => 1,
@@ -30,7 +30,7 @@ class BlogCategoryFixture extends BaserTestFixture {
 			'owner_id' => NULL,
 			'created' => '2015-08-10 18:57:47',
 			'modified' => NULL,
-		),
-	);
+		],
+	];
 
 }

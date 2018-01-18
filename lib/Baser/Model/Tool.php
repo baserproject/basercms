@@ -41,7 +41,7 @@ class Tool extends AppModel {
  */
 	public function getControlSource($field) {
 		// スキーマ用モデルリスト
-		$controlSources['connection'] = array('core' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）');
+		$controlSources['connection'] = ['core' => 'baser（コア）', 'plugin' => 'plugin（プラグイン）'];
 		$controlSources = $this->getListModels($field);
 		if (isset($controlSources)) {
 			return $controlSources;
@@ -57,15 +57,20 @@ class Tool extends AppModel {
  * @return array
  */
 	public function getListModels($type = 'core') {
-		$db = ConnectionManager::getDataSource('default');
-		$listSources = $db->listSources();
-		if (!$listSources) {
-			return array();
-		}
-		$tableList = getTableList();
-		$sources = array();
-		foreach ($listSources as $source) {
-			if(in_array($source, $tableList[$type])) {
+		$sources = [];
+		$readedTableList = getTableList();
+		if ($type === 'core') {
+			$sources = $readedTableList['core'];
+		} elseif ($type === 'plugin') {
+			$listSources = ConnectionManager::getDataSource('default')->listSources();
+			$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+			foreach($listSources as $source) {
+				if (in_array($source, $readedTableList['core'])) {
+					continue;
+				}
+				if (strpos($source, $prefix) !== 0) {
+					continue;
+				}
 				$sources[] = $source;
 			}
 		}
@@ -116,7 +121,7 @@ class Tool extends AppModel {
 			$schemaName = basename(Inflector::classify(basename($path)), '.php') . 'Schema';
 			$Schema = new $schemaName();
 			$db = ConnectionManager::getDataSource($Schema->connection);
-			if ($db->loadSchema(array('type' => $data['Tool']['schema_type'], 'path' => $tmpPath, 'file' => $data['Tool']['schema_file']['name']))) {
+			if ($db->loadSchema(['type' => $data['Tool']['schema_type'], 'path' => $tmpPath, 'file' => $data['Tool']['schema_file']['name']])) {
 				return true;
 			} else {
 				return false;
@@ -138,14 +143,14 @@ class Tool extends AppModel {
 		$db = ConnectionManager::getDataSource('default');
 		$prefix = $db->config['prefix'];
 		$tableList = $this->getControlSource($field);
-		$modelList = array();
+		$modelList = [];
 		foreach ($tableList as $key => $table) {
 			$model = Inflector::camelize(Inflector::singularize(str_replace($prefix, '', $table)));
 			$modelList[$key] = $model;
 		}
 		$result = true;
 		foreach ($values as $value) {
-			if (!$db->writeSchema(array('model' => $modelList[$value], 'path' => $path))) {
+			if (!$db->writeSchema(['model' => $modelList[$value], 'path' => $path])) {
 				$result = false;
 			} else {
 				// pathプロパティを削除

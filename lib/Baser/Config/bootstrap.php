@@ -221,7 +221,6 @@ if (BC_INSTALLED) {
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_model_',
 		'path' => CACHE . 'models' . DS,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// コア環境
@@ -229,7 +228,6 @@ if (BC_INSTALLED) {
 		'engine' => $cacheEngine,
 		'prefix' => $cachePrefix . 'cake_core_',
 		'path' => CACHE . 'persistent' . DS,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// DBデータキャッシュ
@@ -239,7 +237,6 @@ if (BC_INSTALLED) {
 		'probability' => 100,
 		'prefix' => $cachePrefix . 'cake_data_',
 		'lock' => true,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 	// エレメントキャッシュ
@@ -249,7 +246,6 @@ if (BC_INSTALLED) {
 		'probability' => 100,
 //		'prefix' => $cachePrefix . 'cake_data_',
 		'lock' => true,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => Configure::read('BcCache.viewDuration')
 	));
 	// 環境情報キャッシュ
@@ -259,7 +255,6 @@ if (BC_INSTALLED) {
 		'path' => CACHE . 'environment',
 		'prefix' => $cachePrefix . 'cake_env_',
 		'lock' => false,
-		'serialize' => ($cacheEngine === 'File'),
 		'duration' => $cacheDuration
 	));
 
@@ -286,8 +281,12 @@ if (BC_INSTALLED) {
 	if (preg_match('/^' . $updateKey . '(|\/index\/)/', $parameter)) {
 		$isUpdater = true;
 	} elseif (BC_INSTALLED && !$isMaintenance && (!empty($bcSite['version']) && (getVersion() > $bcSite['version']))) {
-		header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
-		exit();
+		if(!isConsole()) {
+			header('Location: ' . topLevelUrl(false) . baseUrl() . 'maintenance/index');
+			exit();
+		} else {
+			throw new BcException(__d('baser', 'プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。'));
+		}
 	}
 	Configure::write('BcRequest.isUpdater', $isUpdater);
 }
@@ -314,11 +313,13 @@ if (BC_INSTALLED && !$isUpdater && !$isMaintenance) {
 	App::uses('BcModelEventDispatcher', 'Event');
 	App::uses('BcViewEventDispatcher', 'Event');
 	App::uses('PagesControllerEventListener', 'Event');
+	App::uses('ContentFoldersControllerEventListener', 'Event');
 	$CakeEvent = CakeEventManager::instance();
 	$CakeEvent->attach(new BcControllerEventDispatcher());
 	$CakeEvent->attach(new BcModelEventDispatcher());
 	$CakeEvent->attach(new BcViewEventDispatcher());
 	$CakeEvent->attach(new PagesControllerEventListener());
+	$CakeEvent->attach(new ContentFoldersControllerEventListener());
 
 /**
  * テーマの bootstrap を実行する
@@ -373,11 +374,6 @@ if (Configure::read('debug') == 0) {
 			Configure::write('Cache.check', false);
 		}
 	}
-	Configure::write('Exception', array(
-		'handler' => 'ErrorHandler::handleException',
-		'renderer' => 'ExceptionRenderer',
-		'log' => false
-	));
 } else {
 	Configure::write('Cache.check', false);
 	clearViewCache();

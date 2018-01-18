@@ -29,7 +29,7 @@ if ($view_count) {
 $data = $this->requestAction($actionUrl, ['entityId' => $id]);
 $postedDates = $data['postedDates'];
 $blogContent = $data['blogContent'];
-$baseCurrentUrl = $this->params['Content']['name'] . '/archives/date/';
+$baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 ?>
 
 
@@ -48,12 +48,12 @@ $baseCurrentUrl = $this->params['Content']['name'] . '/archives/date/';
 					<?php $class = '' ?>
 				<?php endif ?>
 				<?php if ($view_count): ?>
-					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' . '(' . $postedDate['count'] . ')' ?>
+					<?php $title = $postedDate['year'] . '/' . $postedDate['month'] . '(' . $postedDate['count'] . ')' ?>
 				<?php else: ?>
-					<?php $title = $postedDate['year'] . '年' . $postedDate['month'] . '月' ?>
+					<?php $title = $postedDate['year'] . '/' . $postedDate['month'] ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
-					<?php $this->BcBaser->link($title, $this->request->params['Content']['url'] . '/archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>
+					<?php $this->BcBaser->link($title, $this->BcBaser->getBlogContentsUrl($blogContent['BlogContent']['id']) . 'archives/date/' . $postedDate['year'] . '/' . $postedDate['month']) ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

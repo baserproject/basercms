@@ -22,8 +22,11 @@ class UploaderAllTest extends CakeTestSuite {
  */
 	public static function suite() {
 		$suite = new CakeTestSuite('Baser Uploader All Tests');
-		//$path = dirname(__FILE__) . DS;
-		//$suite->addTestFile($path . 'UploaderAllControllerTest.php');
+		$path = dirname(__FILE__) . DS;
+		$suite->addTestFile($path . 'UploaderAllControllerTest.php');
+		$suite->addTestFile($path . 'UploaderAllEventTest.php');
+		$suite->addTestFile($path . 'UploaderAllHelpersTest.php');
+		$suite->addTestFile($path . 'UploaderAllModelTest.php');
 		return $suite;
 	}
 

@@ -19,13 +19,20 @@ App::uses('CakeRequest', 'Network');
  */
 class CakeRequestTest extends BaserTestCase {
 
-	public $fixtures = array(
+	public $fixtures = [
 		'baser.Default.Page',
 		'baser.Default.Content',
 		'baser.Default.Site',
 		'baser.Default.User',
 		'baser.Default.SiteConfig',
-	);
+	];
+
+/**
+ * Get the host that the request was handled on.
+ */
+public function testHost() {
+	$this->markTestIncomplete('このテストは、まだ実装されていません。');
+}
 
 /**
  * normalizedHere
@@ -46,11 +53,11 @@ class CakeRequestTest extends BaserTestCase {
  * @return array
  */
 	public function normalizedHereDataProvider() {
-		return array(
-			array('/', '/index'),
-			array('/news/index', '/news/index'),
-			array('/news/', '/news/index'),
-			array('/news', '/news/index')
-		);
+		return [
+			['/', '/index'],
+			['/news/index', '/news/index'],
+			['/news/', '/news/index'],
+			['/news', '/news/index']
+		];
 	}
 }

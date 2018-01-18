@@ -68,7 +68,9 @@ class MailFieldsController extends MailAppController {
 		$this->mailContent = $this->MailContent->read(null, $mailContentId);
 		$this->request->params['Content'] = $this->BcContents->getContent($mailContentId)['Content'];
 		$this->crumbs[] = array('name' => $this->request->params['Content']['title'] . '設定', 'url' => array('plugin' => 'mail', 'controller' => 'mail_fields', 'action' => 'index', $mailContentId));
-		$this->set('publishLink', $this->request->params['Content']['url']);
+		if($this->request->params['Content']['status']) {
+			$this->set('publishLink', $this->request->params['Content']['url']);
+		}
 	}
 
 /**
@@ -196,6 +198,7 @@ class MailFieldsController extends MailAppController {
 			if (is_array($data['MailField']['valid_ex'])) {
 				$data['MailField']['valid_ex'] = implode(',', $data['MailField']['valid_ex']);
 			}
+
 			$this->MailField->set($data);
 			if ($this->MailField->validates()) {
 				$ret = true;
@@ -241,7 +244,7 @@ class MailFieldsController extends MailAppController {
 		$mailField = $this->MailField->read(null, $id);
 
 		/* 削除処理 */
-		if ($this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
+		if ($mailField && $this->MailMessage->delMessageField($mailContentId, $mailField['MailField']['field_name'])) {
 			if ($this->MailField->delete($id)) {
 				$this->MailField->saveDbLog('メールフィールド「' . $mailField['MailField']['name'] . '」 を削除しました。');
 				exit(true);
@@ -350,16 +353,17 @@ class MailFieldsController extends MailAppController {
  * @return void
  */
 	public function admin_download_csv($mailContentId) {
-		if (!$mailContentId || !$this->mailContent) {
+		$mailContentId = (int) $mailContentId;
+		if (!$mailContentId || !$this->mailContent || !is_int($mailContentId)) {
 			$this->setMessage('無効な処理です。', true);
 			$this->redirect(array('controller' => 'mail_contents', 'action' => 'index'));
 		}
-
 		$this->MailMessage->alias = 'MailMessage' . $mailContentId;
 		$this->MailMessage->schema(true);
 		$this->MailMessage->cacheSources = false;
 		$this->MailMessage->setUseTable($mailContentId);
 		$messages = $this->MailMessage->convertMessageToCsv($mailContentId, $this->MailMessage->find('all'));
+		$this->set('encoding', $this->request->query['encoding']);
 		$this->set('messages', $messages);
 		$this->set('contentName', $this->request->params['Content']['name']);
 	}

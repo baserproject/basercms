@@ -10,6 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
+App::uses('AppHelper','View/Helper');
+
 /**
  * メールヘルパー
  *
@@ -46,7 +48,7 @@ class MailHelper extends AppHelper {
 			return;
 		}
 		if ($mailContentId) {
-			$MailContent = ClassRegistry::getObject('MailContent');
+			$MailContent = ClassRegistry::init('Mail.MailContent');
 			$MailContent->expects(array());
 			$this->mailContent = Hash::extract($MailContent->read(null, $mailContentId), 'MailContent');
 		} elseif (isset($this->_View->viewVars['mailContent'])) {
@@ -56,9 +58,9 @@ class MailHelper extends AppHelper {
 
 /**
  * フォームテンプレートを取得
- * 
+ *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array フォームテンプレート一覧データ
  * @todo 他のヘルパーに移動する
  */
@@ -101,9 +103,9 @@ class MailHelper extends AppHelper {
 
 /**
  * メールテンプレートを取得
- * 
+ *
  * コンボボックスのソースとして利用
- * 
+ *
  * @return array メールテンプレート一覧データ
  * @todo 他のヘルパに移動する
  */
@@ -147,7 +149,6 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームの説明文を取得する
- * 
  * @return string メールフォームの説明文
  */
 	public function getDescription() {
@@ -156,7 +157,7 @@ class MailHelper extends AppHelper {
 
 /**
  * メールの説明文を出力する
- * 
+ *
  * @return void
  */
 	public function description() {
@@ -178,7 +179,7 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームへのリンクを生成する
- * 
+ *
  * @param string $title リンクのタイトル
  * @param string $contentsName メールフォームのコンテンツ名
  * @param array $datas メールフォームに引き継ぐデータ（初期値 : array()）
@@ -198,16 +199,16 @@ class MailHelper extends AppHelper {
 
 /**
  * ブラウザの戻るボタン対応コードを作成
- * 
+ *
  * @return string
  */
 	public function getToken() {
-		return $this->BcBaser->element('mail_token');
+		return $this->BcBaser->getElement('Mail.mail_token');
 	}
 
 /**
  * ブラウザの戻るボタン対応コードを出力
- * 
+ *
  * @return void
  */
 	public function token() {
@@ -216,12 +217,12 @@ class MailHelper extends AppHelper {
 
 /**
  * メールフォームを取得する
- * 
+ *
  * @param $id
  * @return mixed
  */
 	public function getForm($id = null) {
-		$MailContent = ClassRegistry::init('Mail.MailContent');
+        $MailContent = ClassRegistry::init('Mail.MailContent');
 		$conditions = [];
 		if($id) {
 			$conditions = [
@@ -235,5 +236,21 @@ class MailHelper extends AppHelper {
 		$url = $mailContent['Content']['url'];
 		return $this->requestAction($url, ['return' => true]);
 	}
-	
+
+/**
+ * beforeRender
+ *
+ * @param string $viewFile
+ */
+	public function beforeRender($viewFile) {
+		if($this->request->params['controller'] == 'mail' && in_array($this->request->params['action'], ['index', 'confirm', 'submit'])) {
+			// メールフォームをショートコードを利用する際、ショートコードの利用先でキャッシュを利用している場合、
+			// セキュリティコンポーネントで発行するトークンが更新されない為、強制的にキャッシュをオフにする
+			if (!empty($this->request->params['requested'])) {
+				Configure::write('Cache.disable', true);
+			}
+			$this->_View->BcForm->request->params['_Token']['unlockedFields'] = $this->_View->get('unlockedFields');
+		}
+	}
+
 }

@@ -19,23 +19,24 @@
 <tr>
 	<td class="row-tools">
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_permission.png', array('alt' => '制限', 'class' => 'btn')), array('controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']), array('title' => '制限')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_permission.png', ['alt' => '制限', 'class' => 'btn']), ['controller' => 'permissions', 'action' => 'index', $data['UserGroup']['id']], ['title' => '制限']) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['UserGroup']['id']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', array('alt' => 'コピー', 'class' => 'btn')), array('action' => 'ajax_copy', $data['UserGroup']['id']), array('title' => 'コピー', 'class' => 'btn-copy')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => '編集', 'class' => 'btn']), ['action' => 'edit', $data['UserGroup']['id']], ['title' => '編集']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => 'コピー', 'class' => 'btn']), ['action' => 'ajax_copy', $data['UserGroup']['id']], ['title' => 'コピー', 'class' => 'btn-copy']) ?>
 		<?php if ($data['UserGroup']['name'] != 'admins'): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['UserGroup']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => '削除', 'class' => 'btn']), ['action' => 'ajax_delete', $data['UserGroup']['id']], ['title' => '削除', 'class' => 'btn-delete']) ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['id'] ?></td>
-	<td><?php $this->BcBaser->link($data['UserGroup']['name'], array('action' => 'edit', $data['UserGroup']['id'])) ?>
-		<?php if ($data['User']): ?><br />
+	<td><?php $this->BcBaser->link($data['UserGroup']['name'], ['action' => 'edit', $data['UserGroup']['id']]) ?>
+		<?php if (!empty($data['User'])): ?><br />
 			<?php foreach ($data['User'] as $user): ?>
-				<span class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), array('controller' => 'users', 'action' => 'edit', $user['id'])) ?></span>
+				<span class="tag"><?php $this->BcBaser->link($this->BcBaser->getUserName($user), ['controller' => 'users', 'action' => 'edit', $user['id']]) ?></span>
 			<?php endforeach ?>
 		<?php endif ?>
 	</td>
 	<td><?php echo $data['UserGroup']['title'] ?></td>
+	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['created']) ?><br />
 		<?php echo $this->BcTime->format('Y-m-d', $data['UserGroup']['modified']) ?></td>
 </tr>

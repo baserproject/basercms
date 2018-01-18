@@ -13,7 +13,7 @@
 /**
  * [PUBLISH] ブログトップ
  */
-$this->BcBaser->css(array('Blog.style'), array('inline' => false));
+$this->BcBaser->css(['Blog.style'], ['inline' => false]);
 $this->BcBaser->setDescription($this->Blog->getDescription());
 ?>
 
@@ -50,7 +50,7 @@ $(function(){
 					&nbsp;
 			<?php $this->Blog->author($post) ?>
 				</span></div>
-		<?php $this->BcBaser->element('blog_tag', array('post' => $post)) ?>
+		<?php $this->BcBaser->element('blog_tag', ['post' => $post]) ?>
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>

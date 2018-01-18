@@ -37,10 +37,10 @@ class SitesController extends AppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->crumbs = array(
-			array('name' => 'システム設定', 'url' => array('controller' => 'site_configs', 'action' => 'form')),
-			array('name' => 'サブサイト管理', 'url' => array('controller' => 'sites', 'action' => 'index'))
-		);
+		$this->crumbs = [
+			['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => 'サブサイト管理', 'url' => ['controller' => 'sites', 'action' => 'index']]
+		];
 	}
 	
 /**
@@ -49,6 +49,12 @@ class SitesController extends AppController {
 	public function admin_index() {
 		$this->pageTitle = 'サブサイト一覧';
 		$this->paginate = ['order' => 'id'];
+		$default = ['named' => ['num' => $this->siteConfigs['admin_list_num']]];
+		$this->setViewConditions('Site', ['default' => $default, 'action' => 'admin_index']);
+		$this->paginate = [
+			'order' => ['Site.id' => 'ASC'],
+			'limit' => $this->passedArgs['num']
+		];
 		$datas = $this->paginate('Site');
 		$this->set('mainSites', $this->Site->getSiteList());
 		$this->set('datas', $datas);
@@ -56,8 +62,6 @@ class SitesController extends AppController {
 
 /**
  * サブサイト追加
- *
- * @param $id
  */
 	public function admin_add() {
 
@@ -80,7 +84,7 @@ class SitesController extends AppController {
 					'data' => $data
 				]);
 				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を追加しました。', false, true);
-				$this->redirect(array('action' => 'edit', $this->Site->id));
+				$this->redirect(['action' => 'edit', $this->Site->id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -94,7 +98,7 @@ class SitesController extends AppController {
 		if(in_array($this->siteConfigs['theme'], $themes)) {
 			unset($themes[$this->siteConfigs['theme']]);
 		}
-		$this->set('mainSites', $this->Site->getSiteList(0));
+		$this->set('mainSites', $this->Site->getSiteList());
 		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 		$this->help = 'sites_form';
 	}
@@ -127,7 +131,7 @@ class SitesController extends AppController {
 					'data' => $data
 				]);
 				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を更新しました。', false, true);
-				$this->redirect(array('action' => 'edit', $id));
+				$this->redirect(['action' => 'edit', $id]);
 			} else {
 				$this->setMessage('入力エラーです。内容を修正してください。', true);
 			}
@@ -141,7 +145,7 @@ class SitesController extends AppController {
 		if(in_array($this->siteConfigs['theme'], $themes)) {
 			unset($themes[$this->siteConfigs['theme']]);
 		}
-		$this->set('mainSites', $this->Site->getSiteList(0, ['excludeIds' => $this->request->data['Site']['id']]));
+		$this->set('mainSites', $this->Site->getSiteList(null, ['excludeIds' => $this->request->data['Site']['id']]));
 		$this->set('themes', array_merge(['' => $defaultThemeName], $themes));
 		$this->help = 'sites_form';
 	}
@@ -194,8 +198,8 @@ class SitesController extends AppController {
  * @return boolean
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = array(0 => '非公開', 1 => '公開');
-		$data = $this->Site->find('first', array('conditions' => array('Site.id' => $id), 'recursive' => -1));
+		$statusTexts = [0 => '非公開', 1 => '公開'];
+		$data = $this->Site->find('first', ['conditions' => ['Site.id' => $id], 'recursive' => -1]);
 		$data['Site']['status'] = $status;
 		if ($this->Site->save($data)) {
 			$statusText = $statusTexts[$status];
@@ -208,8 +212,6 @@ class SitesController extends AppController {
 
 /**
  * 削除する
- *
- * @param $id
  */
 	public function admin_delete() {
 		if(empty($this->request->data['Site']['id'])) {
@@ -228,9 +230,10 @@ class SitesController extends AppController {
  * 選択可能なデバイスと言語の一覧を取得する
  * 
  * @param int $mainSiteId メインサイトID
+ * @param int $currentSiteId 現在のサイトID
  * @return string
  */
-	public function admin_ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId) {
+	public function admin_ajax_get_selectable_devices_and_lang($mainSiteId, $currentSiteId = null) {
 		$this->autoRender = false;
 		Configure::write('debug', 0);
 		return json_encode([

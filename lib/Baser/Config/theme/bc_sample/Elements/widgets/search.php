@@ -30,14 +30,14 @@ $folders = $this->BcContents->getContentFolderList($this->request->params['Site'
 
 
 <div class="widget widget-search-box widget-search-box-<?php echo $id ?>">
-	<h2>サイト内検索</h2>
+	<h2><?php echo __('サイト内検索') ?></h2>
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
 	<?php if($folders): ?>
-		<?php echo $this->BcForm->label('SearchIndex.f', 'カテゴリ') ?><br>
-		<?php echo $this->BcForm->input('SearchIndex.f', ['type' => 'select', 'options' => $folders, 'empty' => '指定しない', 'escape' => false]) ?><br>
+		<?php echo $this->BcForm->label('SearchIndex.f', __('カテゴリ')) ?><br>
+		<?php echo $this->BcForm->input('SearchIndex.f', ['type' => 'select', 'options' => $folders, 'empty' => __('指定しない'), 'escape' => false]) ?><br>
 	<?php endif ?>
-	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => 'キーワード']) ?>
+	<?php echo $this->BcForm->input('SearchIndex.q', ['placeholder' => __('キーワード')]) ?>
 	<?php echo $this->BcForm->hidden('SearchIndex.s', ['value' => $this->request->params['Site']['id']]) ?>
-	<?php echo $this->BcForm->submit('検索', array('div' => false, 'class' => 'submit_button')) ?>
+	<?php echo $this->BcForm->submit(__('検索'), array('div' => false, 'class' => 'submit_button')) ?>
 	<?php echo $this->BcForm->end() ?>
 </div>

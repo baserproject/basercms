@@ -20,6 +20,9 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <h2>基本項目</h2>
 
 <?php echo $this->BcForm->create('MailContent', array('novalidate' => true)) ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->input('MailContent.id', array('type' => 'hidden')) ?>
 
 <div class="section">
@@ -186,7 +189,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<?php echo $this->BcForm->input('MailContent.form_template', array('type' => 'select', 'options' => $this->Mail->getFormTemplates($this->BcForm->value('Content.site_id')))) ?>
 				<?php echo $this->BcForm->input('MailContent.edit_mail_form', array('type' => 'hidden')) ?>
 <?php if ($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditForm')) ?>
+	&nbsp;<?php $this->BcBaser->link('編集する', 'javascript:void(0)', array('id' => 'EditForm', 'class' => 'button-small')) ?>&nbsp;
 <?php endif ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpFormTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 <?php echo $this->BcForm->error('MailContent.form_template') ?>
@@ -204,7 +207,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<?php echo $this->BcForm->input('MailContent.mail_template', array('type' => 'select', 'options' => $this->Mail->getMailTemplates($this->BcForm->value('Content.site_id')))) ?>
 				<?php echo $this->BcForm->input('MailContent.edit_mail', array('type' => 'hidden')) ?>
 <?php if ($this->action == 'admin_edit'): ?>
-	<?php $this->BcBaser->link('≫ 編集する', 'javascript:void(0)', array('id' => 'EditMail')) ?>
+	&nbsp;<?php $this->BcBaser->link('編集する', 'javascript:void(0)', array('id' => 'EditMail', 'class' => 'button-small')) ?>&nbsp;
 <?php endif ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpMailTemplate', 'class' => 'btn help', 'alt' => 'ヘルプ')) ?>
 <?php echo $this->BcForm->error('MailContent.mail_template') ?>
@@ -219,6 +222,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <!-- button -->
 <div class="submit">

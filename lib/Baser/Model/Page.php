@@ -23,7 +23,7 @@ class Page extends AppModel {
  *
  * @var array
  */
-	public $actsAs = array('BcSearchIndexManager', 'BcCache', 'BcContents');
+	public $actsAs = ['BcSearchIndexManager', 'BcCache', 'BcContents'];
 
 /**
  * 更新前のページファイルのパス
@@ -78,20 +78,19 @@ class Page extends AppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'contents' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000),
-				'message' => '本稿欄に保存できるデータ量を超えています。')
-		),
-		'draft' => array(
-			array('rule' => array('phpValidSyntax'),
-				'message' => 'PHPの構文エラーが発生しました。'),
-			array('rule' => array('maxByte', 64000),
-				'message' => '草稿欄に保存できるデータ量を超えています。')
-		),
-	);
+	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		],
+		'contents' => [
+			['rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'],
+			['rule' => ['maxByte', 64000], 'message' => '本稿欄に保存できるデータ量を超えています。']
+		],
+		'draft' => [
+			['rule' => 'phpValidSyntax', 'message' => 'PHPの構文エラーが発生しました。'],
+			['rule' => ['maxByte', 64000], 'message' => '草稿欄に保存できるデータ量を超えています。']
+		]
+	];
 
 /**
  * beforeSave
@@ -99,7 +98,7 @@ class Page extends AppModel {
  * @param array $options
  * @return boolean
  */
-	public function beforeSave($options = array()) {
+	public function beforeSave($options = []) {
 		if (!$this->fileSave) {
 			return true;
 		}
@@ -107,9 +106,9 @@ class Page extends AppModel {
 		// 保存前のページファイルのパスを取得
 		if ($this->exists() && !empty($this->data['Content'])) {
 			$this->oldPath = $this->getPageFilePath(
-				$this->find('first', array(
-					'conditions' => array('Page.id' => $this->data['Page']['id']),
-					'recursive' => 0)
+				$this->find('first', [
+					'conditions' => ['Page.id' => $this->data['Page']['id']],
+					'recursive' => 0]
 				)
 			);
 		} else {
@@ -146,14 +145,15 @@ class Page extends AppModel {
  */
 	public function checkOpenPageFile($data) {
 		$path = $this->getPageFilePath($data);
-		$File = new File($path);
-		if ($File->open('w')) {
-			$File->close();
-			$File = null;
-			return true;
-		} else {
-			return false;
+		if($path) {
+			$File = new File($path);
+			if ($File->open('w')) {
+				$File->close();
+				$File = null;
+				return true;
+			}
 		}
+		return false;
 	}
 
 /**
@@ -163,7 +163,7 @@ class Page extends AppModel {
  * @param array $options
  * @return boolean
  */
-	public function afterSave($created, $options = array()) {
+	public function afterSave($created, $options = []) {
 
 		$data = $this->data;
 		// タイトルタグと説明文を追加
@@ -215,16 +215,22 @@ class Page extends AppModel {
 		} else {
 			$modelId = $this->id;
 		}
-
-		// =================================================================================================
-		// 2016/11/10 ryuring
-		// パラメーターでリクエストアクションを送った場合、 BcContentsRoute::match() にて、ホスト情報が消されてしまい、
-		// 別ドメインの際に、BcContentsRoute::parse() にて正しいホストを特定できず、プレビュー用URLの解決ができない。
-		// そのため、文字列でリクエストアクションを送信し、URLでホストを判定する。
-		// =================================================================================================
-		//$parameters = explode('/', preg_replace("/^\//", '', $content['url']));
-		//$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => ['force' => 'true'], 'pass' => $parameters, 'return']);
-		$detail = $this->requestAction($content['url'] . '?force=true', ['return']);
+		
+		$host = '';
+		$url = $content['url'];
+		$site = BcSite::findById($content['site_id']);
+		if($site->useSubDomain) {
+			$host = $site->alias;
+			if($site->domainType == 1) {
+				$host .= '.'  . BcUtil::getMainDomain();
+			}
+			$url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '/', '', $url);
+		}
+		$parameters = explode('/', preg_replace("/^\//", '', $url));
+		$detail = $this->requestAction(['admin' => false, 'plugin' => false, 'controller' => 'pages', 'action' => 'display'], ['?' => [
+			'force' => 'true',
+			'host' => $host
+		], 'pass' => $parameters, 'return']);
 
 		$detail = preg_replace('/<!-- BaserPageTagBegin -->.*?<!-- BaserPageTagEnd -->/is', '', $detail);
 		$description = '';
@@ -238,20 +244,10 @@ class Page extends AppModel {
 			'site_id'=> $content['site_id'],
 			'title'		=> $content['title'],
 			'detail'	=> $description . ' ' . $detail,
-			'url'		=> $content['url'],
+			'url'		=> $url,
 			'status'	=> $this->isPublish($content['status'], $content['publish_begin'], $content['publish_end'])
 		]];
 		return $searchIndex;
-	}
-
-/**
- * beforeDelete
- *
- * @param $cascade
- * @return boolean
- */
-	public function beforeDelete($cascade = true) {
-		return $this->deleteSearchIndex($this->id);
 	}
 
 /**
@@ -264,7 +260,7 @@ class Page extends AppModel {
 		if (function_exists('ini_set')) {
 			ini_set('memory_limit ', '-1');
 		}
-		$pages = $this->find('all', array('recursive' => 0));
+		$pages = $this->find('all', ['conditions' => ['Content.deleted' => false], 'recursive' => 0]);
 		$result = true;
 		foreach ($pages as $page) {
 			if (!$this->createPageTemplate($page)) {
@@ -295,7 +291,9 @@ class Page extends AppModel {
 
 		// 新しいページファイルのパスを取得する
 		$newPath = $this->getPageFilePath($data);
-
+		if(!$newPath) {
+			return false;
+		}
 		// テーマやファイル名が変更された場合は元ファイルを削除する
 		if ($this->oldPath && ($newPath != $this->oldPath)) {
 			$oldFile = new File($this->oldPath);
@@ -332,6 +330,9 @@ class Page extends AppModel {
 		}
 		
 		$url = $this->Content->createUrl($data['Content']['parent_id'], 'Core', 'ContentFolder');
+		if(!$url) {
+			return false;
+		}
 		if($url != '/') {
 			if($data['Content']['site_id'] != 0) {
 				$site = BcSite::findByUrl($url);
@@ -376,7 +377,7 @@ class Page extends AppModel {
  * @return string 本文の先頭にbaserCMSが管理するタグを付加したデータ
  */
 	public function addBaserPageTag($id, $contents, $title, $description, $code) {
-		$tag = array();
+		$tag = [];
 		$tag[] = '<!-- BaserPageTagBegin -->';
 		$title = str_replace("'", "\'", str_replace("\\", "\\\\'", $title));
 		$description = str_replace("'", "\'", str_replace("\\", "\\\\'", $description));
@@ -400,7 +401,7 @@ class Page extends AppModel {
  * @param array $options
  * @return mixed $controlSource コントロールソース
  */
-	public function getControlSource($field, $options = array()) {
+	public function getControlSource($field, $options = []) {
 		switch ($field) {
 			case 'user_id':
 			case 'author_id':
@@ -443,7 +444,7 @@ class Page extends AppModel {
 		$folderName = basename($targetPath);
 
 		if ($folderName == 'templates') {
-			return array('all' => 0, 'insert' => 0, 'update' => 0);
+			return ['all' => 0, 'insert' => 0, 'update' => 0];
 		}
 		$basePath = APP . 'View' . DS . 'Pages';
 		$url = str_replace($basePath, '', $targetPath);
@@ -493,7 +494,7 @@ class Page extends AppModel {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
 			$entityId = $this->Content->field('entity_id', ['Content.url' => $url, 'Content.type' => 'ContentFolder']);
 			if ($entityId) {
-				$content = $ContentFolder->find('first', array('conditions' => array('ContentFolder.id' => $entityId), 'recursive' => 0));
+				$content = $ContentFolder->find('first', ['conditions' => ['ContentFolder.id' => $entityId], 'recursive' => 0]);
 				$contentId = $content['Content']['id'];
 				if ($folderTitle != -1) {
 					$content['Content']['title'] = $folderTitle;
@@ -523,7 +524,7 @@ class Page extends AppModel {
 
 		// ファイル読み込み・ページ登録
 		if (!$files[1]) {
-			$files[1] = array();
+			$files[1] = [];
 		}
 		foreach ($files[1] as $path) {
 			if (preg_match('/' . preg_quote(Configure::read('BcApp.templateExt')) . '$/is', $path) == false) {
@@ -564,7 +565,7 @@ class Page extends AppModel {
 			} else {
 				$conditions['Content.parent_id'] = 1;
 			}
-			$page = $this->find('first', array('conditions' => $conditions, 'recursive' => 0));
+			$page = $this->find('first', ['conditions' => $conditions, 'recursive' => 0]);
 			if ($page) {
 				$chage = false;
 				if ($title != $page['Content']['title']) {
@@ -612,7 +613,7 @@ class Page extends AppModel {
 
 		// フォルダー内の登録
 		if (!$files[0]) {
-			$files[0] = array();
+			$files[0] = [];
 		}
 		foreach ($files[0] as $file) {
 			$folderName = basename($file);
@@ -623,7 +624,7 @@ class Page extends AppModel {
 				$all += $result['all'];
 			}
 		}
-		return array('all' => $all, 'insert' => $insert, 'update' => $update);
+		return ['all' => $all, 'insert' => $insert, 'update' => $update];
 	}
 
 /**
@@ -641,12 +642,12 @@ class Page extends AppModel {
 		}
 
 		if ($this->_pages == -1) {
-			$pages = $this->find('all', array(
+			$pages = $this->find('all', [
 				'fields'	=> 'Content.url',
 				'recursive' => 1
-			));
+			]);
 			if (!$pages) {
-				$this->_pages = array();
+				$this->_pages = [];
 				return false;
 			}
 			$this->_pages = Hash::extract($pages, '{n}.Content.url');
@@ -707,9 +708,21 @@ class Page extends AppModel {
  */
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 		$data = $this->find('first', ['conditions' => ['Page.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT Page.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['Page']['id']);
 		unset($data['Page']['created']);
 		unset($data['Page']['modified']);
@@ -727,7 +740,28 @@ class Page extends AppModel {
 			$data['Content']['parent_id'] = $this->Content->copyContentFolderPath($url, $newSiteId);
 		}
 		$this->getDataSource()->begin();
-		if ($data = $this->save($data)) {
+		$this->create(['Content' => $data['Content'], 'Page' => $data['Page']]);
+		if ($data = $this->save()) {
+			if ($eyeCatch) {
+				$data['Content']['id'] = $this->Content->getLastInsertID();
+				$data['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $data['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
+
+			$data['Page']['id'] = $this->getLastInsertID();
+
+			// EVENT Page.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'data' => $data,
+				'id' => $data['Page']['id'],
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $data;
 		}
@@ -790,7 +824,14 @@ class Page extends AppModel {
  * @return array
  */
 	public function getPageTemplateList($contentId, $theme) {
-		$pageTemplates = BcUtil::getTemplateList('Pages/templates', '', $theme);
+		if(!is_array($theme)) {
+			$theme = [$theme];
+		}
+		$pageTemplates = [];
+		foreach($theme as $value) {
+			$pageTemplates = array_merge($pageTemplates, BcUtil::getTemplateList('Pages/templates', '', $value));
+		}
+
 		if($contentId != 1) {
 			$ContentFolder = ClassRegistry::init('ContentFolder');
 			$parentTemplate = $ContentFolder->getParentTemplate($contentId, 'page');
@@ -798,8 +839,77 @@ class Page extends AppModel {
 			if ($searchKey !== false) {
 				unset($pageTemplates[$searchKey]);
 			}
-			array_unshift($pageTemplates, array('' => '親フォルダの設定に従う（' . $parentTemplate . '）'));
+			$pageTemplates = ['' => '親フォルダの設定に従う（' . $parentTemplate . '）'] + $pageTemplates;
 		}
 		return $pageTemplates;
 	}
+
+/**
+ * URLより固定ページデータを探す
+ * 
+ * @param string $url
+ * @param bool $publish
+ * @return array|bool
+ */
+	public function findByUrl($url, $publish = true) {
+		$url = preg_replace('/^\//', '', $url);
+		$conditions = [
+			'Content.url' => $this->getUrlPattern($url),
+			'Content.type' => 'Page',
+			['or' => [
+				['Site.status' => true],
+				['Site.status' => null]
+			]]
+		];
+		if($publish) {
+			$conditions = array_merge($conditions, $this->Content->getConditionAllowPublish());
+		}
+		$record = $this->find('first', [
+			'conditions' => $conditions, 
+			'order' => 'Content.url DESC', 
+			'cache' => false,
+			'joins' => [[
+				'type' => 'LEFT',
+				'table' => 'sites',
+				'alias' => 'Site',
+				'conditions' => "Content.site_id=Site.id",
+				]
+			]
+		]);
+		if(!$record) {
+			return false;
+		}
+		if($record && empty($record['Site']['id'])) {
+			$record['Site'] = $this->Content->Site->getRootMain()['Site'];
+		}
+		return $record;
+	}
+
+/**
+ * コンテンツフォルダのパスを取得する
+ *
+ * @param $id
+ * @return bool|string
+ */
+	public function getContentFolderPath($id) {
+		$path = APP . 'View' . DS . 'Pages';
+		$content = $this->Content->find('first', ['conditions' => ['Content.type' => 'ContentFolder', 'Content.id' => $id], 'recursive' => -1]);
+		if(empty($content['Content']['id'])) {
+			return false;
+		}
+		$url = $this->Content->createUrl($id, 'Core', 'ContentFolder');
+		if(!$url) {
+			return false;
+		}
+		if($url != '/') {
+			if($content['Content']['site_id'] != 0) {
+				$site = BcSite::findByUrl($url);
+				if($site) {
+					$url = preg_replace('/^\/' . preg_quote($site->alias, '/') . '\//', '/' . $site->name . '/', $url);
+				}
+			}
+		}
+		return $path . $url;
+	}
+	
 }

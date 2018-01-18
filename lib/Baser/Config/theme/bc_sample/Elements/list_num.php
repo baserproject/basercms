@@ -30,7 +30,7 @@ if ($links) {
 ?>
 <?php if ($link): ?>
 	<div class="list-num">
-		<strong>表示件数</strong><p><?php echo $link ?></p>
+		<strong><?php echo __('表示件数') ?></strong><p><?php echo $link ?></p>
 	</div>
 <?php endif ?>
 

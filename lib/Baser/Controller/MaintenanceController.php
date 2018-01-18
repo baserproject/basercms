@@ -36,14 +36,14 @@ class MaintenanceController extends AppController {
  *
  * @var array
  */
-	public $crumbs = array();
+	public $crumbs = [];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * メンテナンス中ページを表示する

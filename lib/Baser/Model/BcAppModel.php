@@ -21,8 +21,9 @@ App::uses('AppController', 'Controller');
  *
  * 既存のCakePHPプロジェクトで、設置済のAppModelと共存できるように、AppModelとは別にした。
  *
- * @package			Baser.Model
+ * @package Baser.Model
  * @property Content $Content
+ * @property BehaviorCollection $Behaviors
  */
 class BcAppModel extends Model {
 
@@ -299,7 +300,7 @@ class BcAppModel extends Model {
 			$dbDataPattern = $_SESSION['dbDataPattern'];
 			unset($_SESSION['dbDataPattern']);
 		}	
-		if ($this->loadSchema('default', $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
+		if ($this->loadSchema($this->useDbConfig, $path, $options['filterTable'], $options['filterType'], [], $dropField = false)) {
 			if ($options['loadCsv']) {
 				$theme = $pattern = null;
 				if($dbDataPattern) {
@@ -307,7 +308,7 @@ class BcAppModel extends Model {
 				}
 				$path = BcUtil::getDefaultDataPath($pluginName, $theme, $pattern);
 				if($path) {
-					return $this->loadCsv('default', $path);
+					return $this->loadCsv($this->useDbConfig, $path);
 				} else {
 					return true;
 				}
@@ -418,7 +419,7 @@ class BcAppModel extends Model {
 						continue;
 					}
 
-					if (!$db->loadCsv(['path' => $path . DS . $file, 'encoding' => 'SJIS'])) {
+					if (!$db->loadCsv(['path' => $path . DS . $file, 'encoding' => 'auto'])) {
 						$result = false;
 						break;
 					}
@@ -682,12 +683,12 @@ class BcAppModel extends Model {
 	public function alphaNumeric($check) {
 		if (!$check[key($check)]) {
 			return true;
-		}
-		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
+ 		}
+ 		if (preg_match("/^[a-zA-Z0-9]+$/", $check[key($check)])) {
 			return true;
-		} else {
+ 		} else {
 			return false;
-		}
+ 		}
 	}
 
 /**
@@ -854,6 +855,9 @@ class BcAppModel extends Model {
 			'conditions' => [$this->alias . '.id' => $id],
 			'fields' => [$this->alias . '.id', $this->alias . '.sort']
 		]);
+		if(!$current) {
+			return false;
+		}
 
 		// 変更相手のデータを取得
 		if ($offset > 0) { // DOWN
@@ -961,13 +965,12 @@ class BcAppModel extends Model {
 		if (isset($data[$this->alias])) {
 			$data = $data[$this->alias];
 		}
-
-		$result = true;
-
-		if ($this->Behaviors->attached('BcCache')) {
+		
+		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->disable('BcCache');
 		}
 
+		$result = true;
 		foreach ($data as $key => $value) {
 
 			if ($this->find('count', ['conditions' => ['name' => $key]]) > 1) {
@@ -993,12 +996,12 @@ class BcAppModel extends Model {
 			}
 		}
 
-		if ($this->Behaviors->attached('BcCache')) {
+		if ($this->Behaviors->loaded('BcCache')) {
 			$this->Behaviors->enable('BcCache');
 			$this->delCache();
 		}
 
-		return true;
+		return $result;
 	}
 
 /**
@@ -1587,6 +1590,7 @@ class BcAppModel extends Model {
 	public function delete($id = null, $cascade = true) {
 		$result = parent::delete($id, $cascade);
 		if ($result === false && $this->Behaviors->enabled('SoftDelete')) {
+			$this->getEventManager()->dispatch(new CakeEvent('Model.afterDelete', $this));
 			return (bool)$this->field('deleted', ['deleted' => 1]);
 		}
 		return $result;
@@ -1630,6 +1634,57 @@ class BcAppModel extends Model {
 			}
 		}
 		return true;
+	}
+
+/**
+ * コンテンツのURLにマッチする候補を取得する
+ *
+ * @param $url
+ * @return array
+ */
+	public function getUrlPattern($url) {
+		$parameter = preg_replace('/^\//', '', $url);
+		$paths = [];
+		$paths[] = '/' . $parameter;
+		if(preg_match('/\/$/', $paths[0])) {
+			$paths[] = $paths[0] . 'index';
+		} elseif(preg_match('/^(.*?\/)index$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+		} elseif (preg_match('/^(.+?)\.html$/', $paths[0], $matches)) {
+			$paths[] = $matches[1];
+			if(preg_match('/^(.*?\/)index$/', $matches[1], $matches)) {
+				$paths[] = $matches[1];
+			}
+		}
+		return $paths;
+	}
+
+/**
+ * レコードデータの消毒をおこなう
+ * @return array
+ */
+	public function sanitizeRecord($record) {
+		foreach ($record as $key => $value) {
+				$record[$key] = $this->sanitize($value);
+		}
+		return $record;
+	}
+
+/**
+ * 単体データの消毒を行う
+ * 配列には対応しない
+ * @param $data
+ * @return mixed|string
+ */
+	public function sanitize($value) {
+		if (!is_array($value)) {
+			// 既に htmlspecialchars を実行済のものについて一旦元の形式に復元した上で再度サイニタイズ処理をかける。
+			$value = str_replace("&lt;!--", "<!--", $value);
+			$value = htmlspecialchars($value);
+			return $value;
+		}else {
+			return $value;
+		}
 	}
 
 }

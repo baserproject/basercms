@@ -22,6 +22,9 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 	<?php elseif ($this->action == 'admin_edit'): ?>
 	<?php echo $this->BcForm->create('MailField', array('url' => array('controller' => 'mail_fields', 'action' => 'edit', $mailContent['MailContent']['id'], $this->BcForm->value('MailField.id'), 'id' => false))) ?>
 <?php endif; ?>
+
+<?php echo $this->BcFormTable->dispatchBefore() ?>
+
 <?php echo $this->BcForm->hidden('MailField.id') ?>
 
 <h2>基本項目</h2>
@@ -32,7 +35,7 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 			<tr>
 				<th class="col-head"><?php echo $this->BcForm->label('MailField.no', 'NO') ?></th>
 				<td class="col-input">
-					<?php echo $this->BcForm->value('MailField.no') ?>
+					<?php echo h($this->BcForm->value('MailField.no')) ?>
 					<?php echo $this->BcForm->input('MailField.no', array('type' => 'hidden')) ?>
 				</td>
 			</tr>
@@ -265,6 +268,8 @@ $this->BcBaser->js('Mail.admin/mail_fields/form', false);
 		<?php echo $this->BcForm->dispatchAfterForm('option') ?>
 	</table>
 </div>
+
+<?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
 	<?php echo $this->BcForm->submit('保存', array('div' => false, 'class' => 'button', 'id' => 'BtnSave')) ?>

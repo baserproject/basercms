@@ -31,17 +31,17 @@ class BlogAppController extends AppController {
 			return false;
 		}
 
-		$data = array_merge($data, $this->BlogPost->find('first', array(
-				'conditions' => array('BlogPost.id' => $postId),
+		$data = array_merge($data, $this->BlogPost->find('first', [
+				'conditions' => ['BlogPost.id' => $postId],
 				'recursive' => 0
-		)));
+		]));
 		$data['SiteConfig'] = $this->siteConfigs;
 		$to = $this->siteConfigs['email'];
 		$title = '【' . $this->siteConfigs['name'] . '】コメントを受け付けました';
-		return $this->sendMail($to, $title, $data, array(
+		return $this->sendMail($to, $title, $data, [
 				'template' => 'Blog.blog_comment_admin',
 				'agentTemplate' => false
-		));
+		]);
 	}
 
 /**
@@ -56,12 +56,12 @@ class BlogAppController extends AppController {
 			return false;
 		}
 
-		$_data = $this->BlogPost->find('first', array(
-			'conditions' => array(
+		$_data = $this->BlogPost->find('first', [
+			'conditions' => [
 				'BlogPost.id' => $postId
-			),
+			],
 			'recursive' => 1
-		));
+		]);
 
 		// 公開されているコメントがない場合は true を返して終了
 		if (empty($_data['BlogComment'])) {
@@ -76,13 +76,13 @@ class BlogAppController extends AppController {
 		$title = '【' . $this->siteConfigs['name'] . '】コメントが投稿されました';
 
 		$result = true;
-		$sended = array();
+		$sended = [];
 		foreach ($blogComments as $blogComment) {
 			if ($blogComment['email'] && $blogComment['status'] && !in_array($blogComment['email'], $sended) && $blogComment['email'] != $data['BlogComment']['email']) {
-				$result = $this->sendMail($blogComment['email'], $title, $data, array(
+				$result = $this->sendMail($blogComment['email'], $title, $data, [
 					'template' => 'Blog.blog_comment_contributor',
 					'agentTemplate' => false
-				));
+				]);
 			}
 			$sended[] = $blogComment['email'];
 		}

@@ -40,7 +40,6 @@ class MailContent extends MailAppModel {
 	public $hasMany = array('MailField' =>
 		array('className' => 'Mail.MailField',
 			'order' => 'sort',
-			'limit' => 100,
 			'foreignKey' => 'mail_content_id',
 			'dependent' => true,
 			'exclusive' => false,
@@ -51,62 +50,45 @@ class MailContent extends MailAppModel {
  *
  * @var array
  */
-	public $validate = array(
-		'sender_name' => array(
-			array('rule' => array('notBlank'),
-				'message' => "送信先名を入力してください。"),
-			array('rule' => array('maxLength', 50),
-				'message' => '送信先名は50文字以内で入力してください。')
-		),
-		'subject_user' => array(
-			array('rule' => array('notBlank'),
-				'message' => "自動返信メール件名[ユーザー宛]を入力してください。"),
-			array('rule' => array('maxLength', 50),
-				'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。')
-		),
-		'subject_admin' => array(
-			array('rule' => array('notBlank'),
-				'message' => "自動送信メール件名[管理者宛]を入力してください。"),
-			array('rule' => array('maxLength', 50),
-				'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。')
-		),
-		'form_template' => array(
-			array('rule' => array('halfText'),
-				'message' => "メールフォームテンプレート名は半角のみで入力してください。",
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'フォームテンプレート名は20文字以内で入力してください。')
-		),
-		'mail_template' => array(
-			array('rule' => array('halfText'),
-				'message' => "送信メールテンプレートは半角のみで入力してください。",
-				'allowEmpty' => false),
-			array('rule' => array('maxLength', 20),
-				'message' => 'メールテンプレート名は20文字以内で入力してください。')
-		),
-		'redirect_url' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'リダイレクトURLは255文字以内で入力してください。')
-		),
-		'sender_1' => array(
-			array('rule' => array('emails'),
-				'allowEmpty' => true,
-				'message' => '送信先メールアドレスの形式が不正です。'),
-			array('rule' => array('maxLength', 255),
-				'message' => '送信先メールアドレスは255文字以内で入力してください。')
-		),
-		'sender_2' => array(
-			array('rule' => array('emails'),
-				'allowEmpty' => true,
-				'message' => '送信先メールアドレスの形式が不正です。'),
-			array('rule' => array('maxLength', 255),
-				'message' => 'CC用送信先メールアドレスは255文字以内で入力してください。')
-		),
-		'ssl_on' => array(
-			'rule' => 'checkSslUrl',
-			"message" => 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。'
-		)
-	);
+	public $validate = [
+		'id' => [
+			['rule' => 'numeric', 'on' => 'update', 'message' => 'IDに不正な値が利用されています。']
+		],
+		'sender_name' => [
+			['rule' => ['notBlank'], 'message' => "送信先名を入力してください。"],
+			['rule' => ['maxLength', 50], 'message' => '送信先名は50文字以内で入力してください。']
+		],
+		'subject_user' => [
+			['rule' => ['notBlank'], 'message' => "自動返信メール件名[ユーザー宛]を入力してください。"],
+			['rule' => ['maxLength', 50], 'message' => '自動返信メール件名[ユーザー宛]は50文字以内で入力してください。']
+		],
+		'subject_admin' => [
+			['rule' => ['notBlank'], 'message' => "自動送信メール件名[管理者宛]を入力してください。"],
+			['rule' => ['maxLength', 50], 'message' => '自動返信メール件名[管理者宛]は50文字以内で入力してください。']
+		],
+		'form_template' => [
+			['rule' => ['halfText'], 'message' => "メールフォームテンプレート名は半角のみで入力してください。", 'allowEmpty' => false],
+			['rule' => ['maxLength', 20], 'message' => 'フォームテンプレート名は20文字以内で入力してください。']
+		],
+		'mail_template' => [
+			['rule' => ['halfText'], 'message' => "送信メールテンプレートは半角のみで入力してください。", 'allowEmpty' => false],
+			['rule' => ['maxLength', 20], 'message' => 'メールテンプレート名は20文字以内で入力してください。']
+		],
+		'redirect_url' => [
+			['rule' => ['maxLength', 255], 'message' => 'リダイレクトURLは255文字以内で入力してください。']
+		],
+		'sender_1' => [
+			['rule' => ['emails'], 'allowEmpty' => true, 'message' => '送信先メールアドレスの形式が不正です。'],
+			['rule' => ['maxLength', 255], 'message' => '送信先メールアドレスは255文字以内で入力してください。']
+		],
+		'sender_2' => [
+			['rule' => ['emails'], 'allowEmpty' => true, 'message' => '送信先メールアドレスの形式が不正です。'],
+			['rule' => ['maxLength', 255], 'message' => 'CC用送信先メールアドレスは255文字以内で入力してください。']
+		],
+		'ssl_on' => [
+			['rule' => 'checkSslUrl', "message" => 'SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。']
+		]
+	];
 
 /**
  * SSL用のURLが設定されているかチェックする
@@ -221,9 +203,21 @@ class MailContent extends MailAppModel {
 	public function copy($id, $newParentId, $newTitle, $newAuthorId, $newSiteId = null) {
 
 		$data = $this->find('first', ['conditions' => ['MailContent.id' => $id], 'recursive' => 0]);
+		$oldData = $data;
+
+		// EVENT MailContent.beforeCopy
+		$event = $this->dispatchEvent('beforeCopy', [
+			'data' => $data,
+			'id' => $id,
+		]);
+		if ($event !== false) {
+			$data = $event->result === true ? $event->data['data'] : $event->result;
+		}
+
 		$url = $data['Content']['url'];
 		$siteId = $data['Content']['site_id'];
 		$name = $data['Content']['name'];
+		$eyeCatch = $data['Content']['eyecatch'];
 		unset($data['MailContent']['id']);
 		unset($data['MailContent']['created']);
 		unset($data['MailContent']['modified']);
@@ -242,6 +236,7 @@ class MailContent extends MailAppModel {
 		$this->getDataSource()->begin();
 		if ($result = $this->save($data)) {
 			$result['MailContent']['id'] = $this->id;
+			$data = $result;
 			$mailFields = $this->MailField->find('all', array('conditions' => array('MailField.mail_content_id' => $id), 'order' => 'MailField.sort', 'recursive' => -1));
 			foreach ($mailFields as $mailField) {
 				$mailField['MailField']['mail_content_id'] = $result['MailContent']['id'];
@@ -252,6 +247,24 @@ class MailContent extends MailAppModel {
 			$MailMessage->setup($result['MailContent']['id']);
 			$MailMessage->_sourceConfigured = true; // 設定しておかないと、下記の処理にて内部的にgetDataSouceが走る際にエラーとなってしまう。
 			$MailMessage->construction($result['MailContent']['id']);
+			if ($eyeCatch) {
+				$result['Content']['id'] = $this->Content->getLastInsertID();
+				$result['Content']['eyecatch'] = $eyeCatch;
+				$this->Content->set(['Content' => $result['Content']]);
+				$result = $this->Content->renameToBasenameFields(true);
+				$this->Content->set($result);
+				$result = $this->Content->save();
+				$data['Content'] = $result['Content'];
+			}
+
+			// EVENT MailContent.afterCopy
+			$event = $this->dispatchEvent('afterCopy', [
+				'id' => $data['MailContent']['id'],
+				'data' => $data,
+				'oldId' => $id,
+				'oldData' => $oldData,
+			]);
+
 			$this->getDataSource()->commit();
 			return $result;
 		}

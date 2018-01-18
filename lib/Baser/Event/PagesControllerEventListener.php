@@ -29,7 +29,8 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		'Contents.beforeMove',
 		'Contents.afterMove',
 		'Contents.beforeDelete',
-		'Contents.afterTrashReturn'
+		'Contents.afterTrashReturn',
+		'Contents.afterChangeStatus'
 	];
 
 /**
@@ -52,7 +53,10 @@ class PagesControllerEventListener extends BcControllerEventListener {
  */
 	public function __construct() {
 		parent::__construct();
-		$this->Page = ClassRegistry::init('Page'); 
+		// DB接続ができない場合、処理がコントローラーまで行き着かない為、try で実行
+		try {
+			$this->Page = ClassRegistry::init('Page');	
+		} catch (Exception $e) {}
 	}
 
 /**
@@ -72,9 +76,9 @@ class PagesControllerEventListener extends BcControllerEventListener {
 			'Content.id' => $event->data['data']['currentId']
 		]);
 		$this->oldPath = $this->Page->getPageFilePath(
-			$this->Page->find('first', array(
-					'conditions' => array('Page.id' => $entityId),
-					'recursive' => 0)
+			$this->Page->find('first', [
+					'conditions' => ['Page.id' => $entityId],
+					'recursive' => 0]
 			)
 		);
 		return true;
@@ -105,20 +109,22 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		]);
 		$this->Page->oldPath = $this->oldPath;	
 		$this->Page->createPageTemplate($data);
+		$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 	}
 
 /**
  * Contents Before Delete
- * 
+ *
  * ゴミ箱に入れた固定ページのテンプレートの削除が目的
  * 
  * @param CakeEvent $event
  */
 	public function contentsBeforeDelete(CakeEvent $event) {
-		$id = $event->data;
+		$id = $event->data['data'];
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if($data) {
 			$this->Page->delFile($data);
+			$this->Page->deleteSearchIndex($data['Page']['id']);
 		}
 	}
 
@@ -134,7 +140,24 @@ class PagesControllerEventListener extends BcControllerEventListener {
 		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
 		if($data) {
 			$this->Page->createPageTemplate($data);
+			$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 		}
+	}
+
+/**
+ * Contents After Change Status
+ *
+ * 一覧から公開設定を変更した場合に固定ページの検索インデックスを更新する事が目的
+ *
+ * @param CakeEvent $event
+ */
+	public function contentsAfterChangeStatus(CakeEvent $event) {
+		if(empty($event->data['result'])) {
+			return;
+		}
+		$id = $event->data['id'];
+		$data = $this->Page->find('first', ['conditions' => ['Content.id' => $id]]);
+		$this->Page->saveSearchIndex($this->Page->createSearchIndex($data));
 	}
 	
 }

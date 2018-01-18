@@ -17,6 +17,8 @@ App::uses('Helper', 'View');
  *
  * @package Baser.View.Helper
  * @property BcContentsHelper $BcContents
+ * @property BcBaserHelper $BcBaser
+ * @property BcAppView $_View
  */
 class BcPageHelper extends Helper {
 
@@ -31,14 +33,14 @@ class BcPageHelper extends Helper {
  * data
  * @var array
  */
-	public $data = array();
+	public $data = [];
 
 /**
  * ヘルパー
  * 
  * @var array
  */
-	public $helpers = array('BcBaser', 'BcContents');
+	public $helpers = ['BcBaser', 'BcContents'];
 
 /**
  * construct
@@ -73,6 +75,7 @@ class BcPageHelper extends Helper {
 
 /**
  * ページリストを取得する
+ * 戻り値は、固定ページ、または、コンテンツフォルダが対象
  * 
  * @param int $pageCategoryId カテゴリID
  * @param int $recursive 関連データの階層
@@ -119,16 +122,16 @@ class BcPageHelper extends Helper {
  * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
  * @return mixed コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
-	public function getNextLink($title = '', $options = array()) {
+	public function getNextLink($title = '', $options = []) {
 
 		if(empty($this->request->params['Content']['id']) || empty($this->request->params['Content']['parent_id'])) {
 			return false;
 		}
-		$options = array_merge(array(
+		$options = array_merge([
 			'class'			=> 'next-link',
 			'arrow'			=> ' ≫',
 			'overCategory'	=> false,
-		), $options);
+		], $options);
 		
 		$arrow = $options['arrow'];
 		$overCategory = $options['overCategory'];
@@ -159,7 +162,7 @@ class BcPageHelper extends Helper {
  * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
  * @return @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを出力する
  */
-	public function nextLink($title = '', $options = array()) {
+	public function nextLink($title = '', $options = []) {
 		echo $this->getNextLink($title, $options);
 	}
 
@@ -173,15 +176,15 @@ class BcPageHelper extends Helper {
  *	- `overCategory` : 固定ページのカテゴリをまたいで次の記事のリンクを取得するかどうか（初期値 : false）
  * @return string|false
  */
-	public function getPrevLink($title = '', $options = array()) {
+	public function getPrevLink($title = '', $options = []) {
 		if(empty($this->request->params['Content']['id']) || empty($this->request->params['Content']['parent_id'])) {
 			return false;
 		}
-		$options = array_merge(array(
+		$options = array_merge([
 			'class'			=> 'prev-link',
 			'arrow'			=> '≪ ',
 			'overCategory'	=> false,
-		), $options);
+		], $options);
 
 		$arrow = $options['arrow'];
 		$overCategory = $options['overCategory'];
@@ -212,7 +215,7 @@ class BcPageHelper extends Helper {
  * 		※ overCategory が true の場合は、BcPageHelper::contentsNaviAvailable() が false だとしても強制的に出力する
  * @return void コンテンツナビが無効かつオプションoverCategoryがtrueでない場合はfalseを返す
  */
-	public function prevLink($title = '', $options = array()) {
+	public function prevLink($title = '', $options = []) {
 		echo $this->getPrevLink($title, $options);
 	}
 
@@ -256,18 +259,11 @@ class BcPageHelper extends Helper {
 	public function content() {
 		$previewTemplate = $this->_View->get('previewTemplate');
 		if($previewTemplate) {
-			$path = $previewTemplate;	
+			$path = $previewTemplate;
 		} else {
 			$path = APP . 'View' . DS . 'Pages' . DS . $this->_View->get('pagePath') . $this->_View->ext;
 		}
 		echo $this->_View->evaluate($path, $this->_View->viewVars);
-	}
-
-/**
- * treeList
- */
-	public function treeList($datas, $recursive = 0) {
-		return $this->BcBaser->getElement('pages/index_tree_list', array('datas' => $datas, 'recursive' => $recursive));
 	}
 
 }

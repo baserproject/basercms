@@ -26,7 +26,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 
 <!-- detail -->
 <?php if (!empty($post)): ?>
-	<?php $this->Blog->eyeCatch($post, array('mobile' => true)) ?>
+	<?php $this->Blog->eyeCatch($post, ['mobile' => true]) ?>
 	<?php $this->Blog->postContent($post) ?>
 	<br />
 	<p align="right">

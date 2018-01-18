@@ -53,7 +53,7 @@ function baseUrl() {
 			// ↓ Windows Azure 対策 SCRIPT_FILENAMEに期待した値が入ってこない為
 			$baseUrl = preg_replace('/index\.php/', '', $baseUrl);
 		} elseif (BC_DEPLOY_PATTERN == 2) {
-			$baseUrl = preg_replace('/index\.php/', '', $script);
+			$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '/', '', $script);
 		}
 		$baseUrl = preg_replace("/index$/", '', $baseUrl);
 	}
@@ -532,14 +532,16 @@ function fullUrl($url) {
  * @return	string
  */
 function topLevelUrl($lastSlash = true) {
-	if (isConsole() && empty($_SERVER['HTTP_HOST'])) {
+	
+	if (isConsole() && !Configure::check('BcEnv.host')) {
 		return Configure::read('App.fullBaseUrl');
 	}
+	$request = Router::getRequest();
 	$protocol = 'http://';
-	if (!empty($_SERVER['HTTPS'])) {
+	if (!empty($request) && $request->is('ssl')) {
 		$protocol = 'https://';
 	}
-	$host = $_SERVER['HTTP_HOST'];
+	$host = Configure::read('BcEnv.host');
 	$url = $protocol . $host;
 	if ($lastSlash) {
 		$url .= '/';
@@ -555,7 +557,7 @@ function topLevelUrl($lastSlash = true) {
  * @return	string
  */
 function siteUrl() {
-	$baseUrl = preg_replace('/index\.php\/$/', '', baseUrl());
+	$baseUrl = preg_replace('/' . preg_quote(basename($_SERVER['SCRIPT_FILENAME']), '/') . '\/$/', '', baseUrl());
 	$topLevelUrl = topLevelUrl(false);
 	if($topLevelUrl) {
 		return $topLevelUrl . $baseUrl;
@@ -1007,36 +1009,93 @@ function checktime($hour, $min, $sec = null) {
 	return true;
 }
 
+/**
+ * 関連するテーブルリストを取得する
+ *
+ * @return array
+ */
 function getTableList() {
 	$list = Cache::read('table_list', '_cake_core_');
 	if($list !== false) {
 		return $list;
 	}
 	$prefix = ConnectionManager::getDataSource('default')->config['prefix'];
+	$tables = ConnectionManager::getDataSource('default')->listSources();
 	$Folder = new Folder(BASER_CONFIGS . 'Schema');
 	$files = $Folder->read(true, true);
 	$list = [];
 	if($files[1]) {
-		foreach($files[1] as $file) {
-			$list['core'][] = $prefix . basename($file, '.php');
+		foreach($tables as $key => $table) {
+			foreach($files[1] as $file) {
+				if($table == $prefix . basename($file, '.php')) {
+					$list['core'][] = $table;
+					unset($tables[$key]);
+				}
+			}
 		}
 	}
 	$plugins = CakePlugin::loaded();
+	$pluginFiles = [];
 	foreach($plugins as $plugin) {
 		$path = null;
-		if(is_dir(APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema')){
-			$path = APP . 'Plugin' . $plugin . DS . 'Config' . DS . 'Schema';
-		} elseif(is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
+		$themePath = BASER_THEMES . Configure::read('BcSite.theme') . DS;
+		if (is_dir($themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+			$path = $themePath . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
+		}elseif (is_dir(APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema')) {
+			$path = APP . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'Schema';
+		} elseif (is_dir(BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema')) {
 			$path = BASER_PLUGINS . $plugin . DS . 'Config' . DS . 'Schema';
 		}
 		$Folder = new Folder($path);
 		$files = $Folder->read(true, true);
-		if($files[1]) {
-			foreach($files[1] as $file) {
-				$list['plugin'][] = $prefix . basename($file, '.php');
+		if ($files[1]) {
+			$pluginFiles = array_merge($pluginFiles, $files[1]);
+		}
+	}
+	foreach($tables as $table) {
+		foreach($pluginFiles as $file) {
+			if($prefix . basename($file, '.php') == 'mail_message') {
+				$test = '';
+			}
+			$file = $prefix . basename($file, '.php');
+			$singularize = Inflector::singularize($file);
+			if(preg_match('/^(' . preg_quote($file, '/') . '|' . preg_quote($singularize, '/') . ')/', $table)) {
+				$list['plugin'][] = $table;
+				unset($tables[$key]);
 			}
 		}
 	}
 	Cache::write('table_list', $list, '_cake_core_');
 	return $list;
+}
+
+/**
+ * 処理を実行し、例外が発生した場合は指定した回数だけリトライする
+ * @param int $times リトライ回数
+ * @param callable $callback 実行する処理
+ * @param int $interval 試行の間隔（ミリ秒）
+ * @return mixed
+ * @throws Exception
+ */
+function retry($times, callable $callback, $interval = 0) {
+
+	if ($times <= 0) {
+		throw new \InvalidArgumentException('リトライ回数は正の整数値で指定してください。');
+	}
+
+	$times--;
+
+	while (true) {
+		try {
+			return $callback();
+		} catch (\Exception $e) {
+			if ($times <= 0) {
+				throw $e;
+			}
+			$times--;
+			if ($interval > 0) {
+				usleep($interval * 1000);
+			}
+		}
+	}
 }

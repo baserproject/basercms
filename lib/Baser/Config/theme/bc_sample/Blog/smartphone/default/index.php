@@ -30,7 +30,7 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 </article>
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __('記事がありません。'); ?></p>
 <?php endif; ?>
 
 <!-- /Elements/smartphone/paginations/simple.php -->

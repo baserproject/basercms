@@ -20,7 +20,7 @@
 <div class="section">
 	<?php if (!empty($this->Paginator)): ?>
 		<div class="search-result corner5">		
-			<?php echo $this->Paginator->counter(array('format' => '<strong>' . implode(' ', $query) . '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件')) ?>
+			<?php echo $this->Paginator->counter(['format' => '<strong>' . implode(' ', $query) . '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件']) ?>
 		</div>
 	<?php endif ?>
 	<!-- list-num -->
@@ -32,7 +32,7 @@
 		<div class="section">
 			<h3 class="result-head"><?php $this->BcBaser->link($this->BcBaser->mark($query, $data['SearchIndex']['title']), $data['SearchIndex']['url']) ?></h3>
 			<p class="result-body"><?php echo $this->BcBaser->mark($query, $this->Text->truncate($data['SearchIndex']['detail'], 100)) ?></p>
-			<p class="result-link"><small><?php $this->BcBaser->link(fullUrl($data['SearchIndex']['url']), $data['SearchIndex']['url']) ?></small></p>
+			<p class="result-link"><small><?php $this->BcBaser->link(fullUrl(urldecode($data['SearchIndex']['url'])), $data['SearchIndex']['url']) ?></small></p>
 		</div>
 	<?php endforeach ?>
 <?php else: ?>
@@ -43,5 +43,5 @@
 
 <div class="clearfix section">
 	<!-- pagination -->
-	<?php $this->BcBaser->pagination('simple', array(), array('subDir' => false)) ?>
+	<?php $this->BcBaser->pagination('simple', [], ['subDir' => false]) ?>
 </div>

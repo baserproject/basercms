@@ -33,7 +33,7 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 		// >>>
 		'baser' => false,
 		// <<<
-		'app' => true,
+		'app' => false,
 		'plugin' => null,
 		'output' => 'html',
 		'show' => 'groups',
@@ -77,6 +77,38 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 	}
 
 /**
+ * Parse URL params into a 'request'
+ *
+ * @return void
+ */
+	protected function _parseParams() {
+		if (!$this->_paramsParsed) {
+			if (!isset($_SERVER['SERVER_NAME'])) {
+				$_SERVER['SERVER_NAME'] = '';
+			}
+			foreach ($this->params as $key => $value) {
+				if (isset($_GET[$key])) {
+					$this->params[$key] = $_GET[$key];
+				}
+			}
+			if (isset($_GET['code_coverage'])) {
+				$this->params['codeCoverage'] = true;
+				$this->_checkXdebug();
+			}
+		}
+		// CUSTOMIZE MODIFY 2014/07/02 ryuirng
+		// >>>
+		//if (empty($this->params['plugin']) && empty($this->params['core'])) {
+		// ---
+		if (empty($this->params['plugin']) && empty($this->params['core']) && empty($this->params['baser'])) {
+			// <<<
+			$this->params['app'] = true;
+		}
+		$this->params['baseUrl'] = $this->_baseUrl;
+		$this->params['baseDir'] = $this->_baseDir;
+	}
+	
+/**
  * Runs a test case file.
  *
  * @return void
@@ -108,50 +140,17 @@ class BaserTestSuiteDispatcher extends CakeTestSuiteDispatcher {
 			self::time();
 			// CUSTOMIZE MODIFY 2014/07/02 ryuring
 			// >>>
-			/*$command = new CakeTestSuiteCommand('CakeTestLoader', $commandArgs);
-			$command->run($options);*/
+			// $command = new CakeTestSuiteCommand('CakeTestLoader', $commandArgs);
 			// ---
 			$command = new BaserTestSuiteCommand('BaserTestLoader', $commandArgs);
-			$result = $command->run($options);
 			// <<<
+			$command->run($options);
 		} catch (MissingConnectionException $exception) {
 			ob_end_clean();
 			$baseDir = $this->_baseDir;
 			include CAKE . 'TestSuite' . DS . 'templates' . DS . 'missing_connection.php';
 			exit();
 		}
-	}
-
-/**
- * Parse URL params into a 'request'
- *
- * @return void
- */
-	protected function _parseParams() {
-		if (!$this->_paramsParsed) {
-			if (!isset($_SERVER['SERVER_NAME'])) {
-				$_SERVER['SERVER_NAME'] = '';
-			}
-			foreach ($this->params as $key => $value) {
-				if (isset($_GET[$key])) {
-					$this->params[$key] = $_GET[$key];
-				}
-			}
-			if (isset($_GET['code_coverage'])) {
-				$this->params['codeCoverage'] = true;
-				$this->_checkXdebug();
-			}
-		}
-		// CUSTOMIZE MODIFY 2014/07/02 ryuirng
-		// >>>
-		//if (empty($this->params['plugin']) && empty($this->params['core'])) {
-		// ---
-		if (empty($this->params['plugin']) && empty($this->params['core']) && empty($this->params['baser'])) {
-		// <<<
-			$this->params['app'] = true;
-		}
-		$this->params['baseUrl'] = $this->_baseUrl;
-		$this->params['baseDir'] = $this->_baseDir;
 	}
 
 }

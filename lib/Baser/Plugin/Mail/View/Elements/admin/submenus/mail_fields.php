@@ -24,7 +24,6 @@
 			<li><?php $this->BcBaser->link('メールフィールド一覧', array('controller' => 'mail_fields', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('メールフィールド新規追加', array('controller' => 'mail_fields', 'action' => 'add', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('受信メール一覧', array('controller' => 'mail_messages', 'action' => 'index', $mailContent['MailContent']['id'])) ?></li>
-			<li><?php $this->BcBaser->link('受信メールCSVダウンロード', array('controller' => 'mail_fields', 'action' => 'download_csv', $mailContent['MailContent']['id'])) ?></li>
 			<li><?php $this->BcBaser->link('メールプラグイン基本設定', array('controller' => 'mail_configs', 'action' => 'form')) ?></li>
 		</ul>
 	</td>

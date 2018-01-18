@@ -19,6 +19,7 @@ App::uses('Component', 'Controller');
  *
  * @package Baser.Test.Case.View.Helper
  * @property BcTextHelper $Helper
+ * @property BcGooglemapsHelper $BcGooglemaps
  */
 class BcGooglemapsHelperTest extends BaserTestCase {
 
@@ -72,13 +73,13 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 	}
 
 	public function loadDataProvider() {
-		return array(
-			array('福岡', null, null, '<div id="map">'),
-			array('福岡', 100, null, '<div id="map" style="width: 100px; height:px">'),
-			array('福岡', null, 100, '<div id="map" style="width: px; height:100px">'),
-			array('福岡', 100, 100, '<div id="map" style="width: 100px; height:100px">'),
-			array('', 100, 100, '^$'),
-		);
+		return [
+			['福岡', null, null, '<div id="map">'],
+			['福岡', 100, null, '<div id="map" style="width: 100px; height:px">'],
+			['福岡', null, 100, '<div id="map" style="width: px; height:100px">'],
+			['福岡', 100, 100, '<div id="map" style="width: 100px; height:100px">'],
+			['', 100, 100, '^$'],
+		];
 	}
 
 /**
@@ -98,10 +99,10 @@ class BcGooglemapsHelperTest extends BaserTestCase {
 	}
 
 	public function loadLocationDataProvider() {
-		return array(
-			array('福岡', true),
-			array('', false)
-		);
+		return [
+			['福岡', true],
+			['', false]
+		];
 	}
 
 /**
@@ -113,31 +114,20 @@ class BcGooglemapsHelperTest extends BaserTestCase {
  */
 	public function testGetLocation($address, $expected) {
 		$result = $this->BcGooglemaps->getLocation($address);
-
-		if (!empty($address)) {
-
-			if (isset($result['latitude']) && isset($result['longitude'])) {
-				$result['latitude'] = round($result['latitude'], 1);
-				$result['longitude'] = round($result['longitude'], 1);
-				$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
-			
-			} else {
-				$this->markTestIncomplete('GoogleMapの情報の取得に失敗したため、テストをスキップします');
-			}
-
-		} else {
-			$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
+		if($result) {
+			$result['latitude'] = round($result['latitude'], 1);
+			$result['longitude'] = round($result['longitude'], 1);
 		}
-		
+		$this->assertEquals($expected, $result, '位置情報を正しく取得できません');
 	}
 
 	public function getLocationDataProvider() {
-		return array(
-			array('博多駅', array('latitude' => '33.6', 'longitude' => '130.4')),
-			array('fukuoka', array('latitude' => '33.6', 'longitude' => '130.4')),
-			array(8100042, array('latitude' => '33.6', 'longitude' => '130.4')),
-			array('', false)
-		);
+		return [
+			['博多駅', ['latitude' => '33.6', 'longitude' => '130.4']],
+			['fukuoka', ['latitude' => '33.6', 'longitude' => '130.4']],
+			[8100042, ['latitude' => '33.6', 'longitude' => '130.4']],
+			['', null]
+		];
 	}
 
 }

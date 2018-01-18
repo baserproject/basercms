@@ -17,7 +17,7 @@ $(function(){
 	<?php foreach ($posts as $post): ?>
 		<div class="post">
 			<h2><?php $this->Blog->postTitle($post) ?></h2>
-			<?php $this->Blog->postContent($post, false, '詳細ページへ') ?>
+			<?php $this->Blog->postContent($post, false, __('詳細ページへ')) ?>
 			<div class="meta"> 
 				<span class="date">
 					<?php $this->Blog->postDate($post) ?>
@@ -32,7 +32,7 @@ $(function(){
 		</div>
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __('記事がありません。') ?></p>
 <?php endif; ?>
 <!-- pagination -->
 <?php $this->BcBaser->pagination('simple'); ?>

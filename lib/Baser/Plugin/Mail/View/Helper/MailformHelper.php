@@ -57,7 +57,6 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['empty']);
 				$attributes['legend'] = false;
-				$attributes['div'] = true;
 				if (!empty($attributes['separator'])) {
 					$attributes['separator'] = $attributes['separator'];
 				} else {
@@ -92,15 +91,33 @@ class MailformHelper extends BcFreezeHelper {
 				unset($attributes['maxlength']);
 				unset($attributes['separator']);
 				unset($attributes['empty']);
-				$out = $this->prefTag($fieldName, null, $attributes);
+				$out = $this->prefTag($fieldName, null, $attributes, true);
 				break;
 
 			case 'autozip':
 				unset($attributes['separator']);
 				unset($attributes['rows']);
 				unset($attributes['empty']);
-				$address1 = $this->_name(array(), $options[1]);
-				$address2 = $this->_name(array(), $options[2]);
+				$count = 0;
+				foreach($options as $option) {
+					switch ($count) {
+						case 0:
+							$address1 = $this->_name(array(), $option);
+							break;
+						case 1:
+							$address2 = $this->_name(array(), $option);
+							break;
+						default:
+							break;
+					}
+					$count++;
+				}
+				if (!isset($address1['name'])) {
+					$address1['name'] = '';
+					$address2['name'] = '';
+				} elseif (!isset($address2['name'])) {
+					$address2['name'] = $address1['name'];
+				}
 				$attributes['onKeyUp'] = "AjaxZip3.zip2addr(this,'','{$address1['name']}','{$address2['name']}')";
 				$out = $this->Html->script('admin/vendors/ajaxzip3.js') . $this->text($fieldName, $attributes);
 				break;
@@ -225,7 +242,7 @@ class MailformHelper extends BcFreezeHelper {
 		if(!empty($this->request->params['Site']['same_main_url'])) {
 			$url = $this->BcContents->getPureUrl($url, $this->request->params['Site']['id']);
 		}
-		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => '認証画像', 'class' => $options['class']));
+		$output = $this->BcBaser->getImg($url . '/captcha/' . $captchaId, array('alt' => __('認証画像'), 'class' => $options['class']));
 		$output .= $options['separate'] . $this->text($fieldName);
 		$output .= $this->input('MailMessage.captcha_id', ['type' => 'hidden', 'value' => $captchaId]);
 		echo $output;

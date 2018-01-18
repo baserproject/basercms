@@ -30,35 +30,35 @@ class DashboardController extends AppController {
  *
  * @var array
  */
-	public $uses = array('User', 'Page');
+	public $uses = ['User', 'Page'];
 
 /**
  * ヘルパー
  *
  * @var array
  */
-	public $helpers = array('BcTime', 'Js');
+	public $helpers = ['BcTime', 'Js'];
 
 /**
  * コンポーネント
  *
  * @var array
  */
-	public $components = array('BcAuth', 'Cookie', 'BcAuthConfigure');
+	public $components = ['BcAuth', 'Cookie', 'BcAuthConfigure'];
 
 /**
  * ぱんくずナビ
  *
  * @var string
  */
-	public $crumbs = array();
+	public $crumbs = [];
 
 /**
  * サブメニューエレメント
  *
  * @var array
  */
-	public $subMenuElements = array();
+	public $subMenuElements = [];
 
 /**
  * [ADMIN] 管理者ダッシュボードページを表示する

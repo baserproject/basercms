@@ -12,7 +12,10 @@
 
 /**
  * [ADMIN] エディタテンプレート一覧　テーブル
+ * 
+ * @var \BcAppView $this
  */
+$this->BcListTable->setColumnNumber(5);
 ?>
 
 
@@ -21,12 +24,13 @@
 		<tr>
 			<th style="width:140px" class="list-tool">
 				<div>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn']), ['action' => 'add']) ?>
 				</div>
 			</th>
 			<th>NO</th>
 			<th>テンプレート名</th>
 			<th>説明文</th>
+			<?php echo $this->BcListTable->dispatchShowHead() ?>
 			<th>登録日<br />
 				更新日</th>
 		</tr>
@@ -34,11 +38,11 @@
 <tbody>
 	<?php if (!empty($datas)): ?>
 		<?php foreach ($datas as $data): ?>
-			<?php $this->BcBaser->element('editor_templates/index_row', array('data' => $data)) ?>
+			<?php $this->BcBaser->element('editor_templates/index_row', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="5"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>
