@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const util = require('util');
 
-const config = require('./pages.json');
+const config = require('./config.json');
 
 const writeFile = util.promisify(fs.writeFile);
 const outputDir = 'script/scraper/';
@@ -23,7 +23,7 @@ const data = [];
 	// ログイン
 	const r = await page.goto(adminURL);
 	const url = await page.url();
-	console.log(`🚀 Login to ${url}`);
+	console.log(`🚀 Login (user: ${user}, pass: xxxx) to ${url}`);
 	await page.evaluate((user) => document.querySelector('[name="data[User][name]"]').value = user, user);
 	await page.evaluate((pass) => document.querySelector('[name="data[User][password]"]').value = pass, pass);
 	const $submit = await page.$('#BtnLogin');
@@ -59,11 +59,13 @@ const data = [];
 })();
 
 async function go (page, url) {
-	console.log(`🔍 Searching "${url}"`);
+	process.stdout.write(`🔗 fetch "${url}" ...`);
 	await page.goto(url, { waitUntil: 'load' });
 	await page.setViewport({ width: 1400, height: 800 });
+	process.stdout.write(` 🎉 fetched ... printing ...`);
 	const capturePath = `${ssDir}${encodeURIComponent(url.replace(/\//g, '_').replace(/:/g, '-'))}.png`;
 	await page.screenshot({ path: capturePath, fullPage: true });
+	process.stdout.write(` 🎨 ${capturePath}\n`);
 	const classNames = await scrapeClassNames(page);
 	const title = await page.title();
 	return {
