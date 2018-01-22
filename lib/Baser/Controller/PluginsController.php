@@ -116,14 +116,8 @@ class PluginsController extends AppController {
 		}
 		unlink(TMP . $zippedName);
 
-		// プラグインをインストール
-		if ($this->BcManager->installPlugin($plugin)) {
-			$this->setMessage('新規プラグイン「' . $plugin . '」を baserCMS に登録しました。', false, true);
-			$this->Plugin->addFavoriteAdminLink($plugin, $this->BcAuth->user());
-			$this->redirect(['action' => 'index']);
-		} else {
-			$this->setMessage('プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。', true);
-		}
+		$this->setMessage('新規プラグイン「' . $plugin . '」を追加しました。', false, true);
+		$this->redirect(['action' => 'index']);
 	}
 
 /**

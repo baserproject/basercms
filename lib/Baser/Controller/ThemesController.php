@@ -69,7 +69,7 @@ class ThemesController extends AppController {
 				if ($BcZip->extract(TMP . $name, BASER_THEMES)) {
 					$theme = $BcZip->topArchiveName;
 					unlink(TMP . $name);
-					$this->_applyTheme($theme);
+					$this->setMessage('テーマファイル「' . $name. '」を追加しました。');
 					$this->redirect(['action' => 'index']);
 				} else {
 					$msg = 'アップロードしたZIPファイルの展開に失敗しました。';
