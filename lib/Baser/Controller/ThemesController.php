@@ -193,7 +193,6 @@ class ThemesController extends AppController {
 		}
 
 		$excludes = ['plugins', 'dblogs', 'users'];
-		$User = ClassRegistry::init('User');
 		/* データを削除する */
 		$this->BcManager->resetAllTables(null, $excludes);
 		$result = true;
@@ -264,17 +263,18 @@ class ThemesController extends AppController {
 			$this->log('システムデータの初期化に失敗しました。');
 		}
 		// ユーザーデータの初期化
+		$User = ClassRegistry::init('User');
 		$UserGroup = ClassRegistry::init('UserGroup');
 		$adminGroupId = $UserGroup->field('id', ['UserGroup.name' => 'admins']);
 		$users = $User->find('all', ['recursive' => -1]);
-		foreach($users as $user) {
-			$user['User']['user_group_id'] = $adminGroupId;
-			unset($user['User']['password']);
-			if(!$User->save($user)) {
+		foreach($users as $userData) {
+			$userData['User']['user_group_id'] = $adminGroupId;
+			unset($userData['User']['password']);
+			if(!$User->save($userData)) {
 				$result = false;
 				$this->log('ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。');
 			}
-			if(!$User->applyDefaultFavorites($user['User']['id'], $user['User']['user_group_id'])) {
+			if(!$User->applyDefaultFavorites($userData['User']['id'], $userData['User']['user_group_id'])) {
 				$result = false;
 				$this->log('ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。');
 			}
