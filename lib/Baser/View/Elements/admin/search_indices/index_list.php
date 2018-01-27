@@ -71,9 +71,9 @@ $(function(){
 			<th class="list-tool">
 <?php if ($this->BcBaser->isAdminUser()): ?>
                 <div>
-                    <?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => '一括選択']) ?>
-                    <?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => '削除'], 'empty' => '一括処理']) ?>
-                    <?php echo $this->BcForm->button('適用', ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
+                    <?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => __d('baser', '一括選択')]) ?>
+                    <?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
+                    <?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
                 </div>
 <?php endif ?>
             </th>

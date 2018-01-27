@@ -79,7 +79,7 @@ class FavoritesController extends AppController {
 	public function admin_ajax_edit($id) {
 		$this->autoRender = false;
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		if ($this->request->data) {
@@ -110,7 +110,7 @@ class FavoritesController extends AppController {
 				exit(true);
 			}
 		} else {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		exit();
 	}
@@ -128,7 +128,7 @@ class FavoritesController extends AppController {
 				exit(true);
 			}
 		}
-		$this->ajaxError(400, '無効な処理です。');
+		$this->ajaxError(400, __d('baser', '無効な処理です。'));
 		exit();
 	}
 

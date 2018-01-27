@@ -51,7 +51,7 @@ $(window).load(function() {
 			</tr>
 		<?php endif; ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.name', 'ユーザーグループ名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.name', __d('baser', 'ユーザーグループ名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php echo $this->BcForm->value('UserGroup.name') ?>
@@ -59,7 +59,7 @@ $(window).load(function() {
 				<?php else: ?>
 					<?php echo $this->BcForm->text('UserGroup.name', ['size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
 				<?php endif ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('UserGroup.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
@@ -70,16 +70,16 @@ $(window).load(function() {
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.title', '表示名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.title', __d('baser', '表示名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('UserGroup.title', ['type' => 'text', 'size' => 20, 'maxlength' => 255]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpTitle', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpTitle', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextTitle" class="helptext">日本語が入力できますのでわかりやすい名称を入力します。</div>
 				<?php echo $this->BcForm->error('UserGroup.title') ?>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.use_admin_globalmenu', 'その他') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('UserGroup.use_admin_globalmenu', __d('baser', 'その他')) ?></th>
 			<td class="col-input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php if ($this->BcForm->value('UserGroup.use_admin_globalmenu')): ?>
@@ -88,8 +88,8 @@ $(window).load(function() {
 						管理システムのグローバルメニューを利用しない
 					<?php endif ?>
 				<?php else: ?>
-					<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', ['type' => 'checkbox', 'label' => '管理システムのグローバルメニューを利用する']) ?>　</span>
-					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+					<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', ['type' => 'checkbox', 'label' => __d('baser', '管理システムのグローバルメニューを利用する')]) ?>　</span>
+					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<div id="helptextName" class="helptext">
 						<ul>
 							<li>管理システムでグローバルメニューを利用するかどうか設定します。</li>
@@ -99,8 +99,8 @@ $(window).load(function() {
 					<?php echo $this->BcForm->error('UserGroup.use_admin_globalmenu') ?>
 				<?php endif ?>
 				<br>
-				<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_move_contents', ['type' => 'checkbox', 'label' => 'コンテンツのドラッグ＆ドロップ移動機能を利用する']) ?></span>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_move_contents', ['type' => 'checkbox', 'label' => __d('baser', 'コンテンツのドラッグ＆ドロップ移動機能を利用する')]) ?></span>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextName" class="helptext">
 					<span>
 						コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。
@@ -111,10 +111,10 @@ $(window).load(function() {
 		</tr>
 		<?php if (count($authPrefixes) > 1): ?>
 			<tr>
-				<th class="col-head"><?php echo $this->BcForm->label('UserGroup.auth_prefix', '認証プレフィックス設定') ?>&nbsp;<span class="required">*</span></th>
+				<th class="col-head"><?php echo $this->BcForm->label('UserGroup.auth_prefix', __d('baser', '認証プレフィックス設定')) ?>&nbsp;<span class="required">*</span></th>
 				<td class="col-input">
 					<?php echo $this->BcForm->input('UserGroup.auth_prefix', ['type' => 'select', 'multiple' => 'checkbox', 'options' => $authPrefixes, 'value' => explode(',', $this->BcForm->value('UserGroup.auth_prefix'))]) ?>
-					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpAuthPrefix', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpAuthPrefix', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<?php echo $this->BcForm->error('UserGroup.auth_prefix') ?>
 					<div id="helptextAuthPrefix" class="helptext">
 						認証プレフィックスの設定を指定します。<br />
@@ -130,10 +130,10 @@ $(window).load(function() {
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit align-center section">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 	<?php if ($this->request->action == 'admin_edit'): ?>
 		<?php if ($this->BcForm->value('UserGroup.name') != 'admins'): ?>
-			<?php $this->BcBaser->link('削除', ['action' => 'delete', $this->BcForm->value('UserGroup.id')], ['class' => 'submit-token button'], sprintf("%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $this->BcForm->value('UserGroup.name')), false); ?>
+			<?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('UserGroup.id')], ['class' => 'submit-token button__d('baser', '], sprintf("%s を本当に削除してもいいですか？\n\n削除する場合、関連するユーザーは削除されませんが、関連するアクセス制限設定は全て削除されます。\n※ 関連するユーザーは管理者グループに所属する事になります。", $this->BcForm->value(')UserGroup.name')), false); ?>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>

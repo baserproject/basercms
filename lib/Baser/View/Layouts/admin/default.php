@@ -139,7 +139,7 @@
 							<!-- / #ContentsBody .contents-body .clarfix --></div>
 
 							<?php if (!empty($user)): ?>
-							<div id="ToTop"><?php $this->BcBaser->link('▲ トップへ', '#Header') ?></div>
+							<div id="ToTop"><?php $this->BcBaser->link(__d('baser', '▲ トップへ'), '#Header') ?></div>
 							<?php endif ?>
 
 						<!-- / .cbb --></div>

@@ -19,7 +19,7 @@ if(!isset($separator)) {
 	$separator = '&nbsp;&gt;&nbsp;';
 }
 if(!isset($home)) {
-	$home = 'ホーム';
+	$home = __d('baser', 'ホーム');
 }
 $crumbs = $this->BcBaser->getCrumbs();
 if (!empty($crumbs)) {

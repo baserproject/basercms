@@ -35,7 +35,7 @@ if(empty($data['authorUrl'])) {
 		</a>
 	</p>
 	<p class="row-tools">
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', ['title' => 'ダウンロード', 'alt' => 'ダウンロード']), $data['link'], ['target' => '_blank']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_down.png', ['title' => __d('baser', 'ダウンロード'), 'alt' => __d('baser', 'ダウンロード')]), $data['link'], ['target' => '_blank']) ?>
 	</p>
 <p class="theme-version">バージョン：<?php echo $data['version'] ?></p>
 <p class="theme-author">制作者：

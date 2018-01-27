@@ -1161,7 +1161,7 @@ class BcBaserHelper extends AppHelper {
 	 */
 	public function editLink() {
 		if ($this->existsEditLink()) {
-			$this->link('編集する', $this->_View->viewVars['editLink'], ['class' => 'tool-menu']);
+			$this->link(__d('baser', '編集する'), $this->_View->viewVars['editLink'], ['class' => 'tool-menu']);
 		}
 	}
 
@@ -1196,7 +1196,7 @@ class BcBaserHelper extends AppHelper {
 				$fullUrl = true;
 			}
 			$url = $this->BcContents->getUrl($this->_View->viewVars['publishLink'], $fullUrl, $useSubdomain, false);
-			$this->link('公開ページ', $url, ['class' => 'tool-menu']);
+			$this->link(__d('baser', '公開ページ'), $url, ['class' => 'tool-menu']);
 		}
 	}
 

@@ -130,7 +130,7 @@ class BcTextHelper extends TextHelper {
  */
 	public function sex($value = 1) {
 		if (preg_match('/[1|2]/', $value)) {
-			$sexes = [1 => '男', 2 => '女'];
+			$sexes = [1 => __d('baser', '男'), 2 => __d('baser', '女')];
 			return $sexes[$value];
 		}
 		return '';

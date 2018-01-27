@@ -239,7 +239,7 @@ class Page extends AppModel {
 		}
 		$searchIndex = ['SearchIndex' => [
 			'model_id'	=> $modelId,
-			'type'		=> 'ページ',
+			'type'		=> __d('baser', 'ページ'),
 			'content_id'=> $content['id'],
 			'site_id'=> $content['site_id'],
 			'title'		=> $content['title'],

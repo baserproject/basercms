@@ -20,8 +20,8 @@
 	<th>プラグイン管理メニュー</th>
 	<td>
 		<ul class="cleafix">
-			<li><?php $this->BcBaser->link('プラグイン一覧', ['plugin' => null, 'controller' => 'plugins', 'action' => 'index']) ?></li>
-			<li><?php $this->BcBaser->link('プラグイン新規追加', ['plugin' => null, 'controller' => 'plugins', 'action' => 'add']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'プラグイン一覧'), ['plugin' => null, 'controller' => 'plugins', 'action' => 'index']) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'プラグイン新規追加'), ['plugin' => null, 'controller' => 'plugins', 'action' => 'add']) ?></li>
 		</ul>
 	</td>
 </tr>

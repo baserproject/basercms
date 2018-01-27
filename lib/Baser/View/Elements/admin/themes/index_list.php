@@ -35,8 +35,8 @@ $(function(){
 				<?php endif ?>
 			</div>
 			<p class="row-tools">
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['alt' => 'テンプレート編集', 'class' => 'btn']), ['controller' => 'theme_files', 'action' => 'index', $currentTheme['name']], ['title' => 'テンプレート編集']) ?>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => 'テーマコピー', 'class' => 'btn']), ['action' => 'ajax_copy', $currentTheme['name']], ['title' => 'テーマコピー', 'class' => 'btn-copy']) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_manage.png', ['alt' => __d('baser', 'テンプレート編集'), 'class' => 'btn']), ['controller' => 'theme_files', 'action' => 'index', $currentTheme['name']], ['title' => __d('baser', 'テンプレート編集')]) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_copy.png', ['alt' => __d('baser', 'テーマコピー'), 'class' => 'btn']), ['action' => 'ajax_copy', $currentTheme['name']], ['title' => __d('baser', 'テーマコピー'), 'class' => 'btn-copy']) ?>
 			</p>
 		</div>
 
@@ -54,7 +54,7 @@ $(function(){
 		<?php if ($defaultDataPatterns && $this->BcBaser->isAdminUser()): ?>
 			<?php echo $this->BcForm->create('Theme', ['url' => ['action' => 'load_default_data_pattern']]) ?>
 			<?php echo $this->BcForm->input('Theme.default_data_pattern', ['type' => 'select', 'options' => $defaultDataPatterns]) ?>
-			<?php echo $this->BcForm->submit('初期データ読込', ['class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern']) ?>
+			<?php echo $this->BcForm->submit(__d('baser', '初期データ読込'), ['class' => 'button-small', 'div' => false, 'id' => 'BtnLoadDefaultDataPattern']) ?>
 			<?php echo $this->BcForm->end() ?>
 		<?php endif ?>
 		<br /><br /><br /><br />

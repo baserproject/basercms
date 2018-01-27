@@ -94,7 +94,7 @@ class UserGroupsController extends AppController {
 		];
 		/* 表示設定 */
 		$this->set('datas', $this->paginate());
-		$this->pageTitle = 'ユーザーグループ一覧';
+		$this->pageTitle = __d('baser', 'ユーザーグループ一覧');
 		$this->help = 'user_groups_index';
 	}
 
@@ -117,12 +117,12 @@ class UserGroupsController extends AppController {
 				$this->setMessage('新規ユーザーグループ「' . $this->request->data['UserGroup']['title'] . '」を追加しました。', false, true);
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
 		/* 表示設定 */
-		$this->pageTitle = '新規ユーザーグループ登録';
+		$this->pageTitle = __d('baser', '新規ユーザーグループ登録');
 		$this->help = 'user_groups_form';
 		$this->render('form');
 	}
@@ -136,7 +136,7 @@ class UserGroupsController extends AppController {
 	public function admin_edit($id) {
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -155,7 +155,7 @@ class UserGroupsController extends AppController {
 				$this->BcAuth->relogin();
 				$this->redirect(['action' => 'index', $id]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -175,7 +175,7 @@ class UserGroupsController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// メッセージ用にデータを取得
@@ -200,7 +200,7 @@ class UserGroupsController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -211,7 +211,7 @@ class UserGroupsController extends AppController {
 		if ($this->UserGroup->delete($id)) {
 			$this->setMessage('ユーザーグループ「' . $post['UserGroup']['title'] . '」 を削除しました。', false, true);
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
 
 		$this->redirect(['action' => 'index']);
@@ -226,7 +226,7 @@ class UserGroupsController extends AppController {
 	public function admin_ajax_copy($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		$result = $this->UserGroup->copy($id);
@@ -244,7 +244,7 @@ class UserGroupsController extends AppController {
  */
 	public function admin_set_default_favorites($id) {
 		if (!$this->request->data) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$this->UserGroup->id = $id;
 		$this->UserGroup->recursive = -1;

@@ -30,7 +30,7 @@ $(function(){
 
 <div class="submit">
 	<?php echo $this->BcForm->file('Theme.file', ['type' => 'file']) ?>
-	<?php echo $this->BcForm->submit('適用', ['class' => 'button', 'div' => false, 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '適用'), ['class' => 'button', 'div' => false, 'id' => 'BtnSave']) ?>
 </div>
 			
 <?php echo $this->BcForm->end() ?>

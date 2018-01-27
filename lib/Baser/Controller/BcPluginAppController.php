@@ -15,5 +15,5 @@
  * 
  * @deprecated 5.0.0 since 4.0.0 プラグインは AppController を直接継承させる
  */
-CakeLog::write(LOG_ALERT, 'クラス：BcPluginAppController 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppController は削除される予定です。プラグインは AppController を直接継承してください。');
+CakeLog::write(LOG_ALERT, __d('baser', 'クラス：BcPluginAppController 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppController は削除される予定です。プラグインは AppController を直接継承してください。'));
 class BcPluginAppController extends AppController {}

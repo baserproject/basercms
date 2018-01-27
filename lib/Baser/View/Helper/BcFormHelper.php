@@ -1321,7 +1321,7 @@ DOC_END;
 		// 追加テキストボックス
 		$out .= $this->text('Json.' . $field . '.name');
 		// 追加ボタン
-		$out .= $this->button('追加', ['id' => 'btnAdd' . $field]);
+		$out .= $this->button(__d('baser', '追加'), ['id' => 'btnAdd' . $field]);
 		// リスト表示用ビュー
 		$out .= '<div id="Json' . $field . 'View"></div>';
 
@@ -1563,7 +1563,7 @@ DOC_END;
 		// PHP5.3対応のため、is_string($value) 判別を実行
 		$delCheckTag = '';
 		if ($fileLinkTag && $linkOptions['delCheck'] && (is_string($value) || empty($value['session_key']))) {
-			$delCheckTag = $this->checkbox($fieldName . '_delete') . $this->label($fieldName . '_delete', '削除する');
+			$delCheckTag = $this->checkbox($fieldName . '_delete') . $this->label($fieldName . '_delete', __d('baser', '削除する'));
 		}
 		$hiddenValue = $this->value($fieldName . '_');
 		$fileValue = $this->value($fieldName);

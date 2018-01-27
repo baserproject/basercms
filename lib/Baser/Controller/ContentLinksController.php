@@ -43,14 +43,14 @@ class ContentLinksController extends AppController {
  */
 	public function admin_add() {
 		if(!$this->request->data) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$data = $this->ContentLink->save($this->request->data);
 		if ($data) {
 			$this->setMessage("リンク「{$this->request->data['Content']['title']}」を追加しました。", false, true, false);
 			echo json_encode($data['Content']);
 		} else {
-			$this->ajaxError(500, '保存中にエラーが発生しました。');
+			$this->ajaxError(500, __d('baser', '保存中にエラーが発生しました。'));
 		}
 		exit();
 	}
@@ -61,11 +61,11 @@ class ContentLinksController extends AppController {
  * @return void
  */
 	public function admin_edit($entityId) {
-		$this->pageTitle = 'リンク編集';
+		$this->pageTitle = __d('baser', 'リンク編集');
 		if(!$this->request->data) {
 			$this->request->data = $this->ContentLink->read(null, $entityId);
 			if(!$this->request->data) {
-				$this->setMessage('無効な処理です。', true);
+				$this->setMessage(__d('baser', '無効な処理です。'), true);
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
@@ -79,7 +79,7 @@ class ContentLinksController extends AppController {
 					$entityId
 				]);
 			} else {
-				$this->setMessage('保存中にエラーが発生しました。入力内容を確認してください。', true, true);
+				$this->setMessage(__d('baser', '保存中にエラーが発生しました。入力内容を確認してください。'), true, true);
 			}
 		}
 		$this->set('publishLink', $this->request->data['Content']['url']);

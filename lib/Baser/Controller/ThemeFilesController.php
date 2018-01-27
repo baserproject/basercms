@@ -376,12 +376,12 @@ class ThemeFilesController extends AppController {
 		$args = $this->_parseArgs(func_get_args());
 
 		if (!$args) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		if ($this->_del($args)) {
@@ -495,12 +495,12 @@ class ThemeFilesController extends AppController {
 		$args = $this->_parseArgs(func_get_args());
 
 		if (!$args) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		extract($args);
 		if (!isset($this->_tempalteTypes[$type])) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		$themeFile = [];
@@ -547,7 +547,7 @@ class ThemeFilesController extends AppController {
 			$this->set('data', $themeFile);
 		} else {
 			$this->ThemeFile->saveDblog($target . ' ' . urldecode($path) . ' のコピーに失敗しました。');
-			$this->ajaxError(500, '上位フォルダのアクセス権限を見直してください。');
+			$this->ajaxError(500, __d('baser', '上位フォルダのアクセス権限を見直してください。'));
 		}
 	}
 
@@ -570,9 +570,9 @@ class ThemeFilesController extends AppController {
 		$Folder->create(dirname($filePath), 0777);
 
 		if (@move_uploaded_file($this->request->data['ThemeFile']['file']['tmp_name'], $filePath)) {
-			$this->setMessage('アップロードに成功しました。');
+			$this->setMessage(__d('baser', 'アップロードに成功しました。'));
 		} else {
-			$this->setMessage('アップロードに失敗しました。', true);
+			$this->setMessage(__d('baser', 'アップロードに失敗しました。'), true);
 		}
 		$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
 	}
@@ -598,7 +598,7 @@ class ThemeFilesController extends AppController {
 				$this->setMessage('フォルダ ' . $this->request->data['ThemeFolder']['name'] . ' を作成しました。');
 				$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', $path)));
 			} else {
-				$this->setMessage('フォルダの作成に失敗しました。', true);
+				$this->setMessage(__d('baser', 'フォルダの作成に失敗しました。'), true);
 			}
 		}
 
@@ -641,14 +641,14 @@ class ThemeFilesController extends AppController {
 						$this->setMessage('フォルダ名を ' . $this->request->data['ThemeFolder']['name'] . ' に変更しました。');
 						$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
 					} else {
-						$this->setMessage('フォルダ名の変更に失敗しました。', true);
+						$this->setMessage(__d('baser', 'フォルダ名の変更に失敗しました。'), true);
 					}
 				} else {
-					$this->setMessage('フォルダ名に変更はありませんでした。', true);
+					$this->setMessage(__d('baser', 'フォルダ名に変更はありませんでした。'), true);
 					$this->redirect(array_merge(['action' => 'index', $theme, $type], explode('/', dirname($path))));
 				}
 			} else {
-				$this->setMessage('フォルダ名の変更に失敗しました。', true);
+				$this->setMessage(__d('baser', 'フォルダ名の変更に失敗しました。'), true);
 			}
 		}
 

@@ -94,7 +94,7 @@ class SiteConfig extends AppModel {
  * @return mixed array | false
  */
 	public function getControlSource($field = null) {
-		$controlSources['mode'] = [-1 => 'インストールモード', 0 => 'ノーマルモード', 1 => 'デバッグモード１', 2 => 'デバッグモード２', 3 => 'デバッグモード３'];
+		$controlSources['mode'] = [-1 => __d('baser', 'インストールモード'), 0 => __d('baser', 'ノーマルモード'), 1 => __d('baser', 'デバッグモード１'), 2 => __d('baser', 'デバッグモード２')];
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {

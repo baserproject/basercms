@@ -111,7 +111,7 @@ $(function(){
 			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
 		<?php endif ?>
 		<?php echo $this->BcForm->input('Installation.update', ['type' => 'hidden', 'value' => true]) ?>
-		<?php echo $this->BcForm->end(['label' => 'アップデート実行', 'class' => 'button btn-red']) ?>
+		<?php echo $this->BcForm->end(['label' => __d('baser', 'アップデート実行'), 'class' => 'button btn-red']) ?>
 	<?php else: ?>
 		<p>
 			<?php if (!$plugin): ?>
@@ -120,7 +120,7 @@ $(function(){
 				<?php $this->BcBaser->link('≫ 管理画面に移動する', '/' . BcUtil::getAdminPrefix()) ?>
 			<?php endif ?>
 		<?php else: ?>
-			<?php $this->BcBaser->link('プラグイン一覧に移動する', ['controller' => 'plugins', 'action' => 'index'], ['class' => 'outside-link']) ?>
+			<?php $this->BcBaser->link(__d('baser', 'プラグイン一覧に移動する'), ['controller' => 'plugins', 'action' => 'index'], ['class' => 'outside-link']) ?>
 		<?php endif ?>
 	</p>
 <?php endif ?>

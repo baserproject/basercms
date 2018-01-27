@@ -23,13 +23,13 @@
 
 <table class="form-table">
 	<tr>
-		<th><?php echo $this->BcForm->label('ContentFolder.folder_template', 'フォルダーテンプレート') ?></th>
+		<th><?php echo $this->BcForm->label('ContentFolder.folder_template', __d('baser', 'フォルダーテンプレート')) ?></th>
 		<td>
 			<?php echo $this->BcForm->input('ContentFolder.folder_template', ['type' => 'select', 'options' => $folderTemplateList]) ?>
 		</td>
 	</tr>
 	<tr>
-		<th><?php echo $this->BcForm->label('ContentFolder.page_template', '固定ページテンプレート') ?></th>
+		<th><?php echo $this->BcForm->label('ContentFolder.page_template', __d('baser', '固定ページテンプレート')) ?></th>
 		<td>
 			<?php echo $this->BcForm->input('ContentFolder.page_template', ['type' => 'select', 'options' => $pageTemplateList]) ?>
 		</td>
@@ -40,6 +40,6 @@
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['class' => 'button', 'div' => false]) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['class' => 'button', 'div' => false]) ?>
 </div>
 <?php echo $this->BcForm->end() ?>

@@ -33,9 +33,9 @@ if (isset($this->Paginator->params['paging'][$this->Paginator->defaultModel()]['
 
 	<?php if ($pageCount > 1): ?>
 		<div class="page-numbers">
-			<?php echo $this->Paginator->prev('< 前へ', array_merge(['class' => 'prev'], $options), null, ['class' => 'prev disabled']) ?>
+			<?php echo $this->Paginator->prev(__d('baser', '< 前へ'), array_merge(['class' => 'prev'], $options), null, ['class' => 'prev disabled']) ?>
 			<?php echo $this->Html->tag('span', $this->Paginator->numbers(array_merge(['separator' => '', 'class' => 'number', 'modulus' => $modules], $options), ['class' => 'page-numbers'])) ?>
-			<?php echo $this->Paginator->next('次へ >', array_merge(['class' => 'next'], $options), null, ['class' => 'next disabled']) ?>
+			<?php echo $this->Paginator->next(__d('baser', '次へ >'), array_merge(['class' => 'next'], $options), null, ['class' => 'next disabled']) ?>
 		</div>
 	<?php endif ?>
 	<div class="page-result">

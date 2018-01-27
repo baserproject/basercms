@@ -26,12 +26,12 @@ $url = $this->BcContents->getUrl('/' . $data['Site']['alias'] . '/', true, $data
 
 <tr id="Row<?php echo $count ?>" <?php echo $class; ?>>
 	<td class="row-tools" style="width:15%">
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => '非公開', 'class' => 'btn']), ['action' => 'ajax_unpublish', $data['Site']['id']], ['title' => '非公開', 'class' => 'btn-unpublish']) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => '公開', 'class' => 'btn']), ['action' => 'ajax_publish', $data['Site']['id']], ['title' => '公開', 'class' => 'btn-publish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_unpublish.png', ['alt' => __d('baser', '非公開'), 'class' => 'btn']), ['action' => 'ajax_unpublish', $data['Site']['id']], ['title' => __d('baser', '非公開'), 'class' => 'btn-unpublish']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_publish.png', ['alt' => __d('baser', '公開'), 'class' => 'btn']), ['action' => 'ajax_publish', $data['Site']['id']], ['title' => __d('baser', '公開'), 'class' => 'btn-publish']) ?>
 <?php if ($data['Site']['status']) : ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => '確認', 'class' => 'btn']), $url, ['title' => '確認', 'target' => '_blank']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認'), 'class' => 'btn']), $url, ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
 <?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => '編集', 'class' => 'btn']), ['action' => 'edit', $data['Site']['id']], ['title' => '編集']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $data['Site']['id']], ['title' => __d('baser', '編集')]) ?>
 	</td>
 	<td style="width:5%"><?php echo $data['Site']['id']; ?></td>
 	<td><?php echo $data['Site']['display_name'] ?></td>

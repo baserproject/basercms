@@ -52,13 +52,13 @@ class ThemesController extends AppController {
 	 * テーマをアップロードして適用する
 	 */
 	public function admin_add() {
-		$this->pageTitle = 'テーマアップロード';
+		$this->pageTitle = __d('baser', 'テーマアップロード');
 		$this->subMenuElements = ['themes'];
 		if($this->request->data) {
 			if(empty($this->request->data['Theme']['file']['tmp_name'])) {
-				$message = 'ファイルのアップロードに失敗しました。';
+				$message = __d('baser', 'ファイルのアップロードに失敗しました。');
 				if($this->request->data['Theme']['file']['error'] == 1) {
-					$message .= 'サーバに設定されているサイズ制限を超えています。';
+					$message .= __d('baser', 'サーバに設定されているサイズ制限を超えています。');
 				}
 				$this->setMessage($message, true);
 			} else {
@@ -72,7 +72,7 @@ class ThemesController extends AppController {
 					$this->setMessage('テーマファイル「' . $name. '」を追加しました。');
 					$this->redirect(['action' => 'index']);
 				} else {
-					$msg = 'アップロードしたZIPファイルの展開に失敗しました。';
+					$msg = __d('baser', 'アップロードしたZIPファイルの展開に失敗しました。');
 					$msg .= '<br />'.$BcZip->error;
 					$this->setMessage($msg, true);
 				}
@@ -86,7 +86,7 @@ class ThemesController extends AppController {
 	 * @return void
 	 */
 	public function admin_index() {
-		$this->pageTitle = 'テーマ一覧';
+		$this->pageTitle = __d('baser', 'テーマ一覧');
 		$path = WWW_ROOT . 'theme';
 		$folder = new Folder($path);
 		$files = $folder->read(true, true);
@@ -148,15 +148,15 @@ class ThemesController extends AppController {
 	 */
 	public function admin_load_default_data_pattern() {
 		if (empty($this->request->data['Theme']['default_data_pattern'])) {
-			$this->setMessage('不正な操作です。', true);
+			$this->setMessage(__d('baser', '不正な操作です。'), true);
 			$this->redirect('index');
 		}
 		$result = $this->_load_default_data_pattern($this->request->data['Theme']['default_data_pattern']);
 		if ($result) {
-			$this->setMessage('初期データの読み込みが完了しました。');
+			$this->setMessage(__d('baser', '初期データの読み込みが完了しました。'));
 		} else {
 			if(!CakeSession::check('Message.flash.message')) {
-				$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
+				$this->setMessage(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'), true);
 			}
 		}
 		$this->redirect('index');
@@ -170,9 +170,9 @@ class ThemesController extends AppController {
 		$this->_checkSubmitToken();
 		$result = $this->_load_default_data_pattern('core.default', $this->siteConfigs['theme']);
 		if ($result) {
-			$this->setMessage('初期データの読み込みが完了しました。');
+			$this->setMessage(__d('baser', '初期データの読み込みが完了しました。'));
 		} else {
-			$this->setMessage('初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。', true);
+			$this->setMessage(__d('baser', '初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。'), true);
 		}
 		$this->redirect('index');
 
@@ -188,7 +188,7 @@ class ThemesController extends AppController {
 	protected function _load_default_data_pattern($dbDataPattern, $currentTheme = '') {
 		list($theme, $pattern) = explode('.', $dbDataPattern);
 		if(!$this->BcManager->checkDefaultDataPattern($pattern, $theme)) {
-			$this->setMessage('初期データのバージョンが違うか、初期データの構造が壊れています。', true);
+			$this->setMessage(__d('baser', '初期データのバージョンが違うか、初期データの構造が壊れています。'), true);
 			return false;
 		}
 
@@ -212,19 +212,19 @@ class ThemesController extends AppController {
 		if (!$result) {
 			/* 指定したデータセットでの読み込みに失敗した場合、コアのデータ読み込みを試みる */
 			if (!$this->BcManager->loadDefaultDataPattern('default', null, 'default', 'core', 'core', $excludes)) {
-				$this->log("コアの初期データのロードに失敗しました。");
+				$this->log(__d('baser', 'コアの初期データのロードに失敗しました。'));
 				$result = false;
 			}
 			foreach ($corePlugins as $corePlugin) {
 				if (!$this->BcManager->loadDefaultDataPattern('default', null, 'default', 'core', $corePlugin, $excludes)) {
-					$this->log("コアのプラグインの初期データのロードに失敗しました。");
+					$this->log(__d('baser', 'コアのプラグインの初期データのロードに失敗しました。'));
 					$result = false;
 				}
 			}
 			if ($result) {
-				$this->setMessage('初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。', true);
+				$this->setMessage(__d('baser', '初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。'), true);
 			} else {
-				$this->setMessage('初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。', true);
+				$this->setMessage(__d('baser', '初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。'), true);
 			}
 		}
 
@@ -234,7 +234,7 @@ class ThemesController extends AppController {
 		App::uses('MailMessage', 'Mail.Model');
 		$MailMessage = new MailMessage();
 		if (!$MailMessage->reconstructionAll()) {
-			$this->log('メールプラグインのメール受信用テーブルの生成に失敗しました。');
+			$this->log(__d('baser', 'メールプラグインのメール受信用テーブルの生成に失敗しました。'));
 			$result = false;
 		}
 		clearAllCache();
@@ -249,9 +249,9 @@ class ThemesController extends AppController {
 		if (!$this->Page->createAllPageTemplate()) {
 			$result = false;
 			$this->log(
-				'初期データの読み込み中にページテンプレートの生成に失敗しました。' .
-				'「Pages」フォルダに書き込み権限が付与されていない可能性があります。' .
-				'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+				__d('baser', '初期データの読み込み中にページテンプレートの生成に失敗しました。') .
+				__d('baser', '「Pages」フォルダに書き込み権限が付与されていない可能性があります。') .
+				__d('baser', '権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。')
 			);
 		}
 		// システムデータの初期化
@@ -260,7 +260,7 @@ class ThemesController extends AppController {
 		// createAllPageTemplate メソッドが呼び出せないので注意
 		if (!$this->BcManager->initSystemData(null, ['excludeUsers' => true])) {
 			$result = false;
-			$this->log('システムデータの初期化に失敗しました。');
+			$this->log(__d('baser', 'システムデータの初期化に失敗しました。'));
 		}
 		// ユーザーデータの初期化
 		$User = ClassRegistry::init('User');
@@ -272,11 +272,11 @@ class ThemesController extends AppController {
 			unset($userData['User']['password']);
 			if(!$User->save($userData)) {
 				$result = false;
-				$this->log('ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。');
+				$this->log(__d('baser', 'ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。'));
 			}
 			if(!$User->applyDefaultFavorites($userData['User']['id'], $userData['User']['user_group_id'])) {
 				$result = false;
-				$this->log('ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。');
+				$this->log(__d('baser', 'ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。'));
 			}
 		}
 		$Db = ConnectionManager::getDataSource('default');
@@ -349,7 +349,7 @@ class ThemesController extends AppController {
 				$this->setMessage('テーマ「' . $this->request->data['Theme']['name'] . '」を更新しました。');
 				$this->redirect(['action' => 'index']);
 			} else {
-				$this->setMessage('テーマ情報の変更に失敗しました。入力内容を確認してください。', true);
+				$this->setMessage(__d('baser', 'テーマ情報の変更に失敗しました。入力内容を確認してください。'), true);
 			}
 		}
 		if (is_writable($themePath)) {
@@ -367,7 +367,7 @@ class ThemesController extends AppController {
 			$this->request->data['Theme']['author'] = $author;
 			$this->request->data['Theme']['url'] = $url;
 		}
-		$this->pageTitle = 'テーマ情報編集';
+		$this->pageTitle = __d('baser', 'テーマ情報編集');
 		$this->subMenuElements = ['themes'];
 		$this->set('theme', $theme);
 		$this->set('configDisabled', $configDisabled);
@@ -384,13 +384,13 @@ class ThemesController extends AppController {
 	public function admin_ajax_copy($theme) {
 		$this->_checkSubmitToken();
 		if (!$theme) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$result = $this->_copy($theme);
 		if ($result) {
 			exit(true);
 		} else {
-			$this->ajaxError(500, 'テーマフォルダのアクセス権限を見直してください。');
+			$this->ajaxError(500, __d('baser', 'テーマフォルダのアクセス権限を見直してください。'));
 		}
 	}
 	/**
@@ -425,13 +425,13 @@ class ThemesController extends AppController {
 	public function admin_ajax_delete($theme) {
 		$this->_checkSubmitToken();
 		if (!$theme) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_del($theme)) {
 			clearViewCache();
 			exit(true);
 		} else {
-			$this->ajaxError(500, 'テーマフォルダを手動で削除してください。');
+			$this->ajaxError(500, __d('baser', 'テーマフォルダを手動で削除してください。'));
 		}
 		exit();
 	}
@@ -513,7 +513,7 @@ class ThemesController extends AppController {
 		$files = $Folder->read(true, true, false);
 		if(!empty($files[0])) {
 			$info = array_merge($info, [
-				'このテーマは下記のプラグインを同梱しています。'
+				__d('baser', 'このテーマは下記のプラグインを同梱しています。')
 			]);
 			foreach($files[0] as $file) {
 				$info[] = '	・' . $file;
@@ -535,16 +535,16 @@ class ThemesController extends AppController {
 				$info = array_merge($info, ['']);
 			}
 			$info = array_merge($info, [
-				'このテーマは初期データを保有しています。',
-				'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。',
+				__d('baser', 'このテーマは初期データを保有しています。'),
+				__d('baser', 'Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。'),
 			]);
 		}
 
 		if (!$this->Page->createAllPageTemplate()) {
 			$message = [
-				'テーマ変更中にページテンプレートの生成に失敗しました。',
-				'「Pages」フォルダに書き込み権限が付与されていない可能性があります。',
-				'権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。'
+				__d('baser', 'テーマ変更中にページテンプレートの生成に失敗しました。'),
+				__d('baser', '「Pages」フォルダに書き込み権限が付与されていない可能性があります。'),
+				__d('baser', '権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。')
 			];
 			if($info) {
 				$message = array_merge($message, [''], $info );

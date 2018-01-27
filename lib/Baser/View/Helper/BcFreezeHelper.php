@@ -434,7 +434,7 @@ class BcFreezeHelper extends BcFormHelper {
 				$path = DS . $imageAttributes['dir'] . DS . Inflector::tableize($model) . DS . $imageAttributes['id'] . DS . $field . "." . $imageAttributes['ext'] . "?" . rand();
 				unset($imageAttributes['ext']);
 				$output = sprintf($this->Html->_tags['image'], $path, $this->Html->_parseAttributes($imageAttributes));
-				$output .= "<br />" . $this->checkbox($fieldName . "_delete", ['label' => '削除する']);
+				$output .= "<br />" . $this->checkbox($fieldName . "_delete", ['label' => __d('baser', '削除する')]);
 			}
 			return parent::file($fieldName, $attributes) . "<br />" . $output;
 		}

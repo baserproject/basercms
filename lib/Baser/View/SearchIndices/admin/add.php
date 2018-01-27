@@ -22,7 +22,7 @@
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.title', 'タイトル') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.title', __d('baser', 'タイトル')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SearchIndex.title', ['type' => 'text', 'size' => 60, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->error('SearchIndex.title') ?>
@@ -32,7 +32,7 @@
 			<th class="col-head"><?php echo $this->BcForm->label('SearchIndex.url', 'URL') ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('SearchIndex.url', ['type' => 'text', 'size' => 60, 'maxlength' => 255, 'autofocus' => true]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpUrl', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpUrl', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('SearchIndex.url') ?>
 				<div id="helptextUrl" class="helptext">
 					<ul>
@@ -49,7 +49,7 @@
 	</table>
 </div>
 <div class="submit">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'btnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'btnSave']) ?>
 </div>
 
 <?php echo $this->BcForm->end() ?>

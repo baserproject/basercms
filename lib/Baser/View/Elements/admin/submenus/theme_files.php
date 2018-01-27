@@ -14,16 +14,16 @@
  * [ADMIN] テーマファイル管理メニュー
  */
 $types = [
-	'Layouts'	=> 'レイアウト',
-	'Elements'	=> 'エレメント',
-	'Emails'	=> 'Eメール',
-	'etc'		=> 'コンテンツ',
+	'Layouts'	=> __d('baser', 'レイアウト'),
+	'Elements'	=> __d('baser', 'エレメント'),
+	'Emails'	=> __d('baser', 'Eメール'),
+	'etc'		=> __d('baser', 'コンテンツ'),
 	'css'		=> 'CSS',
-	'img'		=> 'イメージ',
+	'img'		=> __d('baser', 'イメージ'),
 	'js'		=> 'Javascript'
 ];
 if ($theme == 'core') {
-	$themeFiles = [0 => ['name' => '', 'title' => 'コア']];
+	$themeFiles = [0 => ['name' => '', 'title' => __d('baser', 'コア')]];
 	$Plugin = ClassRegistry::init('Plugin');
 	$plugins = $Plugin->find('all', ['fields' => ['name', 'title']]);
 	$themeFiles = am($themeFiles, Hash::extract($plugins, '{n}.Plugin'));

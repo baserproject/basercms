@@ -35,7 +35,7 @@ class BaserTestShell extends TestShell {
 		$currentTheme = Configure::read('BcSite.theme');
 		$testTheme = Configure::read('BcApp.testTheme');
 //		if($currentTheme != $testTheme) {
-//			trigger_error('CLIでのユニットテストは、' . $testTheme . ' テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。', E_USER_ERROR);
+//			trigger_error(sprintf(__d('baser', 'CLIでのユニットテストは、%s テーマを利用する前提となっています。再インストール後にユニットテストを実行してください。'), $testTheme), E_USER_ERROR);
 //			exit();
 //		}
 		// <<<

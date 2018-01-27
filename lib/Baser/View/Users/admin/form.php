@@ -46,43 +46,43 @@ $this->BcBaser->js('admin/users/edit', false);
 			</tr>
 		<?php endif ?>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('User.name', 'アカウント名') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('User.name', __d('baser', 'アカウント名')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('User.name', ['type' => 'text', 'size' => 20, 'maxlength' => 255, 'autofocus' => true]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('User.name') ?>
 				<div id="helptextName" class="helptext">半角英数字とハイフン、アンダースコアのみで入力してください。</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('User.real_name_1', '名前') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('User.real_name_1', __d('baser', '名前')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<small>[姓]</small> <?php echo $this->BcForm->input('User.real_name_1', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
 				<small>[名]</small> <?php echo $this->BcForm->input('User.real_name_2', ['type' => 'text', 'size' => 12, 'maxlength' => 255]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpRealName1', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
-				<?php echo $this->BcForm->error('User.real_name_1', '姓を入力してください') ?>
-				<?php echo $this->BcForm->error('User.real_name_2', '名を入力してください') ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpRealName1', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
+				<?php echo $this->BcForm->error('User.real_name_1', __d('baser', '姓を入力してください')) ?>
+				<?php echo $this->BcForm->error('User.real_name_2', __d('baser', '名を入力してください')) ?>
 				<div id="helptextRealName1" class="helptext"> 「名」は省略する事ができます。 </div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('User.nickname', 'ニックネーム') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('User.nickname', __d('baser', 'ニックネーム')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('User.nickname', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('User.nickname') ?>
 				<div id="helptextNickname" class="helptext">ニックネームを設定している場合は全ての表示にニックネームが利用されます。</div>
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('User.user_group_id', 'グループ') ?>&nbsp;<span class="required">*</span></th>
+			<th class="col-head"><?php echo $this->BcForm->label('User.user_group_id', __d('baser', 'グループ')) ?>&nbsp;<span class="required">*</span></th>
 			<td class="col-input">
 				<?php if ($editable): ?>
 					<?php echo $this->BcForm->input('User.user_group_id', ['type' => 'select', 'options' => $userGroups]) ?>
-					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpUserGroupId', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
-					<?php echo $this->BcForm->error('User.user_group_id', 'グループを選択してください') ?>
+					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpUserGroupId', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
+					<?php echo $this->BcForm->error('User.user_group_id', __d('baser', 'グループを選択してください')) ?>
 					<div id="helptextUserGroupId" class="helptext"> ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
-						<?php $this->BcBaser->link('ユーザーグループ管理', ['controller' => 'user_groups', 'action' => 'index']) ?>
+						<?php $this->BcBaser->link(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']) ?>
 						より新しいグループを追加しアクセス制限の設定をおこないます。</div>
 				<?php else: ?>
 					<?php echo $this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups) ?>
@@ -91,10 +91,10 @@ $this->BcBaser->js('admin/users/edit', false);
 			</td>
 		</tr>
 		<tr>
-			<th class="col-head"><?php echo $this->BcForm->label('User.email', 'Eメール') ?></th>
+			<th class="col-head"><?php echo $this->BcForm->label('User.email', __d('baser', 'Eメール')) ?></th>
 			<td class="col-input">
 				<?php echo $this->BcForm->input('User.email', ['type' => 'text', 'size' => 40, 'maxlength' => 255]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpEmail', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpEmail', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('User.email') ?>
 				<div id="helptextEmail" class="helptext">
 					連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パスワードの通知先等</small>
@@ -106,13 +106,13 @@ $this->BcBaser->js('admin/users/edit', false);
 				<?php if ($this->request->action == 'admin_add'): ?>
 					<span class="required">*</span>&nbsp;
 				<?php endif; ?>
-				<?php echo $this->BcForm->label('User.password_1', 'パスワード') ?>
+				<?php echo $this->BcForm->label('User.password_1', __d('baser', 'パスワード')) ?>
 			</th>
 			<td class="col-input">
 				<?php if ($this->request->action == "admin_edit"): ?><small>[パスワードは変更する場合のみ入力してください]</small><br /><?php endif ?>
 				<?php echo $this->BcForm->input('User.password_1', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
 				<?php echo $this->BcForm->input('User.password_2', ['type' => 'password', 'size' => 20, 'maxlength' => 255]) ?>
-				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpPassword', 'class' => 'btn help', 'alt' => 'ヘルプ']) ?>
+				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpPassword', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('User.password') ?>
 				<div id="helptextPassword" class="helptext">
 					<ul>
@@ -134,10 +134,10 @@ $this->BcBaser->js('admin/users/edit', false);
 <?php echo $this->BcFormTable->dispatchAfter() ?>
 
 <div class="submit section">
-	<?php echo $this->BcForm->submit('保存', ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '保存'), ['div' => false, 'class' => 'button', 'id' => 'BtnSave']) ?>
 <?php if ($editable): ?>
 	<?php if ($this->request->action == 'admin_edit' && $deletable): ?>
-			<?php $this->BcBaser->link('削除', ['action' => 'delete', $this->BcForm->value('User.id')], ['class' => 'submit-token button'], sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('User.name')), false); ?>
+			<?php $this->BcBaser->link(__d('baser', '削除'), ['action' => 'delete', $this->BcForm->value('User.id')], ['class' => 'submit-token button'], sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('User.name')), false); ?>
 	<?php endif; ?>
 <?php endif; ?>
 </div>
@@ -159,7 +159,7 @@ $this->BcBaser->js('admin/users/edit', false);
 			</ul>
 		<?php endif ?>
 		<?php if ($this->Session->check('AuthAgent') || $this->BcBaser->isAdminUser()): ?>
-			<div class="submit"><?php echo $this->BcForm->button($this->request->data['UserGroup']['title'] . 'グループの初期値に設定', ['label' => 'グループ初期データに設定', 'id' => 'btnSetUserGroupDefault', 'class' => 'button']) ?></div>
+			<div class="submit"><?php echo $this->BcForm->button($this->request->data['UserGroup']['title'] . __d('baser', 'グループの初期値に設定'), ['label' => __d('baser', 'グループ初期データに設定'), 'id' => 'btnSetUserGroupDefault', 'class' => 'button']) ?></div>
 		<?php endif ?>
 	</div>
 <?php endif ?>

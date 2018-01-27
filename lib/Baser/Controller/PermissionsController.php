@@ -72,7 +72,7 @@ class PermissionsController extends AppController {
 		if ($this->request->params['prefix'] == 'admin') {
 			$this->set('usePermission', true);
 		}
-		$this->crumbs[] = ['name' => 'アクセス制限設定管理', 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
+		$this->crumbs[] = ['name' => __d('baser', 'アクセス制限設定管理'), 'url' => ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]];
 	}
 
 /**
@@ -83,7 +83,7 @@ class PermissionsController extends AppController {
 	public function admin_index($userGroupId = null) {
 		/* セッション処理 */
 		if (!$userGroupId) {
-			$this->setMessage('無効な処理です。', true);
+			$this->setMessage(__d('baser', '無効な処理です。'), true);
 			$this->redirect(['controller' => 'user_groups', 'action' => 'index']);
 		}
 
@@ -151,7 +151,7 @@ class PermissionsController extends AppController {
 				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $permissionAuthPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -186,7 +186,7 @@ class PermissionsController extends AppController {
 				$this->ajaxError(500, $this->Page->validationErrors);
 			}
 		} else {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		exit();
 	}
@@ -200,7 +200,7 @@ class PermissionsController extends AppController {
 	public function admin_edit($userGroupId, $id) {
 		/* 除外処理 */
 		if (!$userGroupId || !$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -224,7 +224,7 @@ class PermissionsController extends AppController {
 				$this->redirect(['action' => 'index', $userGroupId]);
 			} else {
 				$this->request->data['Permission']['url'] = preg_replace('/^(\/' . $authPrefix . '\/|\/)/', '', $this->request->data['Permission']['url']);
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -266,7 +266,7 @@ class PermissionsController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// メッセージ用にデータを取得
@@ -290,7 +290,7 @@ class PermissionsController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -301,7 +301,7 @@ class PermissionsController extends AppController {
 		if ($this->Permission->delete($id)) {
 			$this->setMessage('アクセス制限設定「' . $post['Permission']['name'] . '」 を削除しました。', false, true);
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true, false);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true, false);
 		}
 
 		$this->redirect(['action' => 'index', $userGroupId]);
@@ -322,7 +322,7 @@ class PermissionsController extends AppController {
 				$this->ajaxError(500, $this->Permission->validationErrors);
 			}
 		} else {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		exit();
 	}
@@ -352,7 +352,7 @@ class PermissionsController extends AppController {
 	public function admin_ajax_copy($userGroupId, $id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		$result = $this->Permission->copy($id);
@@ -381,7 +381,7 @@ class PermissionsController extends AppController {
 	public function admin_ajax_unpublish($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_changeStatus($id, false)) {
 			exit(true);
@@ -402,7 +402,7 @@ class PermissionsController extends AppController {
 	public function admin_ajax_publish($id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_changeStatus($id, true)) {
 			exit(true);
@@ -450,7 +450,7 @@ class PermissionsController extends AppController {
  * @return boolean
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = [0 => '無効', 1 => '有効'];
+		$statusTexts = [0 => __d('baser', '無効'), 1 => __d('baser', '有効')];
 		$data = $this->Permission->find('first', ['conditions' => ['Permission.id' => $id], 'recursive' => -1]);
 		$data['Permission']['status'] = $status;
 		$this->Permission->set($data);

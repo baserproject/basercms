@@ -136,7 +136,7 @@ class Permission extends AppModel {
  */
 	public function getControlSource($field = null) {
 		$controlSources['user_group_id'] = $this->UserGroup->find('list', ['conditions' => ['UserGroup.id <>' => Configure::read('BcApp.adminGroupId')]]);
-		$controlSources['auth'] = ['0' => '不可', '1' => '可'];
+		$controlSources['auth'] = ['0' => __d('baser', '不可'), '1' => __d('baser', '可')];
 		if (isset($controlSources[$field])) {
 			return $controlSources[$field];
 		} else {

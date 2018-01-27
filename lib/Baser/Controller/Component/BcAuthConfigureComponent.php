@@ -87,10 +87,10 @@ class BcAuthConfigureComponent extends Component {
 		$BcAuth->autoRedirect = false;
 
 		// エラーメッセージ
-		$BcAuth->loginError = '入力されたログイン情報を確認できませんでした。もう一度入力してください。';
+		$BcAuth->loginError = __d('baser', '入力されたログイン情報を確認できませんでした。もう一度入力してください。');
 
 		// 権限が無いactionを実行した際のエラーメッセージ
-		$BcAuth->authError = '指定されたページを開くにはログインする必要があります。';
+		$BcAuth->authError = __d('baser', '指定されたページを開くにはログインする必要があります。');
 		$BcAuth->authorize = 'Controller';
 		// =====================================================================
 		// 権限判定失敗時のリダイレクト先

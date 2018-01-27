@@ -19,4 +19,4 @@ $authPrefix = Configure::read('BcAuthPrefix.' . $currentPrefix);
 
 <h1><?php $this->BcBaser->contentsTitle() ?></h1>
 
-<p><?php $this->BcBaser->link('ログアウト', $authPrefix['logoutAction']) ?>
+<p><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $authPrefix['logoutAction']) ?>

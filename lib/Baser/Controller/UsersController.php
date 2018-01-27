@@ -133,7 +133,7 @@ class UsersController extends AppController {
 				$this->setMessage("ようこそ、" . $BcBaser->getUserName($user) . "　さん。");
 				$this->redirect($this->BcAuth->redirect());
 			} else {
-				$this->setMessage('アカウント名、パスワードが間違っています。', true);
+				$this->setMessage(__d('baser', 'アカウント名、パスワードが間違っています。'), true);
 			}
 		} else {
 			$user = $this->BcAuth->user();
@@ -142,7 +142,7 @@ class UsersController extends AppController {
 			}
 		}
 		
-		$pageTitle = 'ログイン';
+		$pageTitle = __d('baser', 'ログイン');
 		$prefixAuth = Configure::read('BcAuthPrefix.' . $this->request->params['prefix']);
 		if ($prefixAuth && isset($prefixAuth['loginTitle'])) {
 			$pageTitle = $prefixAuth['loginTitle'];
@@ -190,11 +190,11 @@ class UsersController extends AppController {
 			$data = $this->Session->read('AuthAgent');
 			$this->Session->write(BcAuthComponent::$sessionKey, $data);
 			$this->Session->delete('AuthAgent');
-			$this->setMessage('元のユーザーに戻りました。');
+			$this->setMessage(__d('baser', '元のユーザーに戻りました。'));
 			$authPrefix = explode(',', $data['UserGroup']['auth_prefix']);
 			$authPrefix = $authPrefix[0];
 		} else {
-			$this->setMessage('不正な操作です。', true);
+			$this->setMessage(__d('baser', '不正な操作です。'), true);
 			if (!empty($this->request->params['prefix'])) {
 				$authPrefix = $this->request->params['prefix'];
 			} else {
@@ -236,7 +236,7 @@ class UsersController extends AppController {
 	public function admin_logout() {
 		$logoutRedirect = $this->BcAuth->logout();
 		$this->Cookie->delete(Inflector::camelize(str_replace('.', '', BcAuthComponent::$sessionKey)));
-		$this->setMessage('ログアウトしました');
+		$this->setMessage(__d('baser', 'ログアウトしました'));
 		$this->redirect($logoutRedirect);
 	}
 
@@ -277,7 +277,7 @@ class UsersController extends AppController {
 		}
 
 		$this->subMenuElements = ['site_configs', 'users'];
-		$this->pageTitle = 'ユーザー一覧';
+		$this->pageTitle = __d('baser', 'ユーザー一覧');
 		$this->search = 'users_index';
 		$this->help = 'users_index';
 	}
@@ -323,7 +323,7 @@ class UsersController extends AppController {
 				$this->setMessage('ユーザー「' . $this->request->data['User']['name'] . '」を追加しました。', false, true);
 				$this->redirect(['action' => 'edit', $this->User->getInsertID()]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -338,7 +338,7 @@ class UsersController extends AppController {
 		$this->set('editable', true);
 		$this->set('selfUpdate', false);
 		$this->subMenuElements = ['site_configs', 'users'];
-		$this->pageTitle = '新規ユーザー登録';
+		$this->pageTitle = __d('baser', '新規ユーザー登録');
 		$this->help = 'users_form';
 		$this->render('form');
 	}
@@ -352,7 +352,7 @@ class UsersController extends AppController {
 	public function admin_edit($id) {
 		/* 除外処理 */
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -386,11 +386,11 @@ class UsersController extends AppController {
 
 			// 権限確認
 			if (!$updatable) {
-				$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+				$this->setMessage(__d('baser', '指定されたページへのアクセスは許可されていません。'), true);
 
 			// 自身のアカウントは変更出来ないようにチェック
 			} elseif ($selfUpdate && $user['user_group_id'] != $this->request->data['User']['user_group_id']) {
-				$this->setMessage('自分のアカウントのグループは変更できません。', true);
+				$this->setMessage(__d('baser', '自分のアカウントのグループは変更できません。'), true);
 
 			} else {
 
@@ -413,7 +413,7 @@ class UsersController extends AppController {
 					$user = $this->User->find('first', ['conditions' => ['User.id' => $id]]);
 					unset($user['User']);
 					$this->request->data = array_merge($user, $this->request->data);
-					$this->setMessage('入力エラーです。内容を修正してください。', true);
+					$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 				}
 			}
 		}
@@ -431,7 +431,7 @@ class UsersController extends AppController {
 
 		$this->set(compact('userGroups', 'editable', 'selfUpdate', 'deletable'));
 		$this->subMenuElements = ['site_configs', 'users'];
-		$this->pageTitle = 'ユーザー情報編集';
+		$this->pageTitle = __d('baser', 'ユーザー情報編集');
 		$this->help = 'users_form';
 		$this->render('form');
 	}
@@ -446,13 +446,13 @@ class UsersController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// 最後のユーザーの場合は削除はできない
 		if ($this->User->field('user_group_id', ['User.id' => $id]) == Configure::read('BcApp.adminGroupId') &&
 			$this->User->find('count', ['conditions' => ['User.user_group_id' => Configure::read('BcApp.adminGroupId')]]) == 1) {
-			$this->ajaxError(500, 'このユーザーは削除できません。');
+			$this->ajaxError(500, __d('baser', 'このユーザーは削除できません。'));
 		}
 
 		// メッセージ用にデータを取得
@@ -476,14 +476,14 @@ class UsersController extends AppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
 		// 最後のユーザーの場合は削除はできない
 		if ($this->User->field('user_group_id', ['User.id' => $id]) == Configure::read('BcApp.adminGroupId') &&
 			$this->User->find('count', ['conditions' => ['User.user_group_id' => Configure::read('BcApp.adminGroupId')]]) == 1) {
-			$this->setMessage('最後の管理者ユーザーは削除する事はできません。', true);
+			$this->setMessage(__d('baser', '最後の管理者ユーザーは削除する事はできません。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -494,7 +494,7 @@ class UsersController extends AppController {
 		if ($this->User->delete($id)) {
 			$this->setMessage('ユーザー: ' . $user['User']['name'] . ' を削除しました。', true, false);
 		} else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
 
 		$this->redirect(['action' => 'index']);
@@ -513,30 +513,30 @@ class UsersController extends AppController {
 		if($this->BcAuth->user()) {
 			$this->redirect(['controller' => 'dashboard', 'action' => 'index']);
 		}
-		$this->pageTitle = 'パスワードのリセット';
+		$this->pageTitle = __d('baser', 'パスワードのリセット');
 		$userModel = $this->BcAuth->authenticate['Form']['userModel'];
 		if ($this->request->data) {
 
 			if (empty($this->request->data[$userModel]['email'])) {
-				$this->setMessage('メールアドレスを入力してください。', true, false);
+				$this->setMessage(__d('baser', 'メールアドレスを入力してください。'), true, false);
 				return;
 			}
 			$email = trim($this->request->data[$userModel]['email']);
 			$user = $this->{$userModel}->findByEmail($email);
 			if (!$user) {
-				$this->setMessage('送信されたメールアドレスは登録されていません。', true, false);
+				$this->setMessage(__d('baser', '送信されたメールアドレスは登録されていません。'), true, false);
 				return;
 			}
 			$password = $this->generatePassword();
 			$user[$userModel]['password'] = $password;
 			$this->{$userModel}->set($user);
 			if (!$this->{$userModel}->save()) {
-				$this->setMessage('新しいパスワードをデータベースに保存できませんでした。', true, false);
+				$this->setMessage(__d('baser', '新しいパスワードをデータベースに保存できませんでした。'), true, false);
 				return;
 			}
 			$body = $email . ' の新しいパスワードは、 ' . $password . ' です。';
-			if (!$this->sendMail($email, 'パスワードを変更しました', $body)) {
-				$this->setMessage('メール送信時にエラーが発生しました。', true, false);
+			if (!$this->sendMail($email, __d('baser', 'パスワードを変更しました'), $body)) {
+				$this->setMessage(__d('baser', 'メール送信時にエラーが発生しました。'), true, false);
 				return;
 			}
 			$this->setMessage($email . ' 宛に新しいパスワードを送信しました。', false, true);

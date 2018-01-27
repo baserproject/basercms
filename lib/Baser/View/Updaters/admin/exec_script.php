@@ -18,9 +18,9 @@
 
 <div class="corner10 panel-box section">
 	<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action]]) ?>
-	<p><?php echo $this->BcForm->label('Updater.plugin', 'タイプ') ?>&nbsp;<?php echo $this->BcForm->input('Updater.plugin', ['type' => 'select', 'options' => $plugins, 'empty' => 'コア']) ?></p>
-	<p><?php echo $this->BcForm->label('Updater.version', 'バージョン') ?>&nbsp;<?php echo $this->BcForm->input('Updater.version', ['type' => 'text']) ?></p>
-	<?php echo $this->BcForm->end(['label' => '実行', 'class' => 'button btn-red']) ?>
+	<p><?php echo $this->BcForm->label('Updater.plugin', __d('baser', 'タイプ')) ?>&nbsp;<?php echo $this->BcForm->input('Updater.plugin', ['type' => 'select', 'options' => $plugins, 'empty' => __d('baser', 'コア')]) ?></p>
+	<p><?php echo $this->BcForm->label('Updater.version', __d('baser', 'バージョン')) ?>&nbsp;<?php echo $this->BcForm->input('Updater.version', ['type' => 'text']) ?></p>
+	<?php echo $this->BcForm->end(['label' => __d('baser', '実行'), 'class' => 'button btn-red']) ?>
 </div>
 
 

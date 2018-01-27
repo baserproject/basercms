@@ -441,7 +441,7 @@ class BcAppController extends Controller {
 					$Permission = ClassRegistry::init('Permission');
 					if ($user) {
 						if (!$Permission->check($this->request->url, $user['user_group_id'])) {
-							$this->setMessage('指定されたページへのアクセスは許可されていません。', true);
+							$this->setMessage(__d('baser', '指定されたページへのアクセスは許可されていません。'), true);
 							$this->redirect($this->BcAuth->loginRedirect);
 						}
 					}
@@ -598,15 +598,15 @@ class BcAppController extends Controller {
 		}
 
 		$errorMessages = [
-			'auth' => 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。',
-			'csrf' => 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。',
-			'get' => 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。',
-			'post' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
-			'put' => 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。',
-			'delete' => 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。'
+			'auth' => __d('baser', 'バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。'),
+			'csrf' => __d('baser', 'CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。'),
+			'get' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。'),
+			'post' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。'),
+			'put' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。'),
+			'delete' => __d('baser', 'HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。')
 		];
 
-		$message = "不正なリクエストと判断されました。";
+		$message = __d('baser', '不正なリクエストと判断されました。');
 
 		if (array_key_exists($err, $errorMessages)) {
 			$message .= "(type:{$err})" . $errorMessages[$err];
@@ -646,7 +646,7 @@ class BcAppController extends Controller {
  * @throws	NotFoundException
  */
 	public function notFound() {
-		throw new NotFoundException('見つかりませんでした。');
+		throw new NotFoundException(__d('baser', '見つかりませんでした。'));
 	}
 
 /**

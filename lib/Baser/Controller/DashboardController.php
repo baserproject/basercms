@@ -66,7 +66,7 @@ class DashboardController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		$this->pageTitle = '管理者ダッシュボード';
+		$this->pageTitle = __d('baser', '管理者ダッシュボード');
 		$panels = [];
 		$panels['Core'] = BcUtil::getTemplateList('Elements/admin/dashboard', '', $this->siteConfigs['theme']);
 		$plugins = CakePlugin::loaded();

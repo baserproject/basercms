@@ -179,7 +179,7 @@ class Plugin extends AppModel {
  * @deprecated 5.0.0 since 4.0.0 Plugin::initDb() に統合
  */
 	public function alterDb($plugin, $options = []) {
-		$this->log('メソッド：Plugin::alterDb()は、バージョン 4.0.0 より非推奨となりました。Plugin::initDb() を利用してください。', LOG_ALERT);
+		$this->log(__d('baser', 'メソッド：Plugin::alterDb()は、バージョン 4.0.0 より非推奨となりました。Plugin::initDb() を利用してください。'), LOG_ALERT);
 		if(!is_array($options)) {
 			$pluginName = $options;
 			$options = [];

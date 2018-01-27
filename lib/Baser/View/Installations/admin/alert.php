@@ -30,4 +30,4 @@
 	<li>編集したファイルをサーバーにアップロードします。</li>
 </ul>
 
-<ul><li><?php $this->BcBaser->link('baserCMSを初期化するにはコチラから', '/installations/reset') ?></li></ul>
+<ul><li><?php $this->BcBaser->link(__d('baser', 'baserCMSを初期化するにはコチラから'), '/installations/reset') ?></li></ul>

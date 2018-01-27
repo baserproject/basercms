@@ -41,14 +41,14 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 		<div id="ToolMenu">
 			<ul>
 				<?php if ($this->name == 'Installations'): ?>
-					<li><?php $this->BcBaser->link('インストールマニュアル', 'http://basercms.net/manuals/introductions/4.html', ['target' => '_blank']) ?></li>
+					<li><?php $this->BcBaser->link(__d('baser', 'インストールマニュアル'), 'http://basercms.net/manuals/introductions/4.html', ['target' => '_blank']) ?></li>
 				<?php elseif (Configure::read('BcRequest.isUpdater')): ?>
-					<li><?php $this->BcBaser->link('アップデートマニュアル', 'http://basercms.net/manuals/introductions/8.html', ['target' => '_blank']) ?></li>
+					<li><?php $this->BcBaser->link(__d('baser', 'アップデートマニュアル'), 'http://basercms.net/manuals/introductions/8.html', ['target' => '_blank']) ?></li>
 				<?php elseif (!empty($this->request->params['admin']) || ('/' . $this->request->url) == $loginUrl): ?>	
 					<li><?php $this->BcBaser->link($this->BcBaser->siteConfig['formal_name'], '/') ?></li>
 				<?php else: ?>
 					<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
-						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', ['alt' => 'baserCMS管理システム', 'class' => 'bc-btn']), ['plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'], ['title' => 'baserCMS管理システム']) ?></li>
+						<li><?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_logo.png', ['alt' => __d('baser', 'baserCMS管理システム'), 'class' => 'bc-btn']), ['plugin' => null, 'admin' => true, 'controller' => 'dashboard', 'action' => 'index'], ['title' => __d('baser', 'baserCMS管理システム')]) ?></li>
 					<?php else: ?>
 						<li><?php $this->BcBaser->link($authName, Configure::read('BcAuthPrefix.' . $currentPrefix . '.loginRedirect'), ['title' => $authName]) ?></li>
 					<?php endif ?>
@@ -75,24 +75,24 @@ if (!empty($currentAuthPrefix['name']) && $currentPrefix != 'front') {
 						<?php $this->BcBaser->link($this->BcBaser->getUserName($user) . ' ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<ul>
 							<?php if ($this->Session->check('AuthAgent')): ?>
-								<li><?php $this->BcBaser->link('元のユーザーに戻る', '/users/back_agent') ?></li>
+								<li><?php $this->BcBaser->link(__d('baser', '元のユーザーに戻る'), '/users/back_agent') ?></li>
 							<?php endif ?>
 							<?php if (in_array('admin', $currentUserAuthPrefixes)): ?>
-								<li><?php $this->BcBaser->link('アカウント設定', ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id']]) ?></li>
+								<li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id']]) ?></li>
 							<?php else: ?>
 								<?php if ($currentPrefix != 'front'): ?>
-								<li><?php $this->BcBaser->link('アカウント設定', [$currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id']]) ?></li>
+								<li><?php $this->BcBaser->link(__d('baser', 'アカウント設定'), [$currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'edit', $user['id']]) ?></li>
 								<?php endif ?>
 							<?php endif ?>
-							<li><?php $this->BcBaser->link('ログアウト', $logoutAction) ?></li>
+							<li><?php $this->BcBaser->link(__d('baser', 'ログアウト'), $logoutAction) ?></li>
 						</ul>
 					<?php elseif ($this->name != 'Installations' && $this->request->url != $loginUrl && !Configure::read('BcRequest.isUpdater')): ?>
-						<?php $this->BcBaser->link('ログインしていません ' . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
+						<?php $this->BcBaser->link(__d('baser', 'ログインしていません ') . $this->BcBaser->getImg('admin/btn_dropdown.png', ['width' => 8, 'height' => 11, 'class' => 'bc-btn']), 'javascript:void(0)', ['class' => 'title']) ?>
 						<ul>
 							<?php if ($currentPrefix == 'front'): ?>
-								<li><?php $this->BcBaser->link('ログイン', ['plugin' => null, 'controller' => 'users', 'action' => 'login']) ?></li>
+								<li><?php $this->BcBaser->link(__d('baser', 'ログイン'), ['plugin' => null, 'controller' => 'users', 'action' => 'login']) ?></li>
 							<?php else: ?>
-								<li><?php $this->BcBaser->link('ログイン', [$currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login']) ?></li>
+								<li><?php $this->BcBaser->link(__d('baser', 'ログイン'), [$currentPrefix => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login']) ?></li>
 							<?php endif ?>
 						</ul>
 					<?php endif ?>

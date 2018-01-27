@@ -21,7 +21,7 @@
 	<div id="FooterInner" class="clearfix">
 
 		<div id="FooterLogo">
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_footer.png', ['width' => 155, 'height' => 30, 'alt' => 'baserCMSロゴ']), ['controller' => 'dashboard', 'action' => 'index']) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/logo_footer.png', ['width' => 155, 'height' => 30, 'alt' => __d('baser', 'baserCMSロゴ')]), ['controller' => 'dashboard', 'action' => 'index']) ?>
 		</div>
 
 		<?php if (!empty($user)): ?>
