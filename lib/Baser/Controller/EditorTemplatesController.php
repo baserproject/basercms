@@ -34,16 +34,6 @@ class EditorTemplatesController extends AppController {
 	public $subMenuElements = ['site_configs', 'editor_templates'];
 
 /**
- * パンくず設定
- * 
- * @var array
- */
-	public $crumbs = [
-		['name' => 'システム設定', 'url' => ['controller' => 'site_configs', 'action' => 'form']],
-		['name' => 'エディタテンプレート管理', 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
-	];
-
-/**
  * コンポーネント
  *
  * @var array
@@ -57,6 +47,10 @@ class EditorTemplatesController extends AppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
+		$this->crumbs = [
+			['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']],
+			['name' => __d('baser', 'エディタテンプレート管理'), 'url' => ['controller' => 'editor_templates', 'action' => 'index']]
+		];
 		if (!empty($this->siteConfigs['editor']) && $this->siteConfigs['editor'] != 'none') {
 			$this->helpers[] = $this->siteConfigs['editor'];
 		}
@@ -138,7 +132,7 @@ class EditorTemplatesController extends AppController {
 		}
 		$data = $this->EditorTemplate->read(null, $id);
 		if ($this->EditorTemplate->delete($id)) {
-			$this->setMessage('エディタテンプレート「' . $data['EditorTemplate']['name'] . '」を削除しました。', false, true);
+			$this->setMessage(sprintf(__d('baser', 'エディタテンプレート「%s」を削除しました。'), $data['EditorTemplate']['name']), false, true);
 		} else {
 			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
@@ -156,7 +150,7 @@ class EditorTemplatesController extends AppController {
 		}
 		$data = $this->EditorTemplate->read(null, $id);
 		if ($this->EditorTemplate->delete($id)) {
-			$this->EditorTemplate->saveDbLog('エディタテンプレート「' . $data['EditorTemplate']['name'] . '」を削除しました。');
+			$this->EditorTemplate->saveDbLog(sprintf(__d('baser', 'エディタテンプレート「%s」を削除しました。'), $data['EditorTemplate']['name']));
 			exit(true);
 		}
 		exit();

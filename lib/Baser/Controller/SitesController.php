@@ -83,7 +83,7 @@ class SitesController extends AppController {
 				$this->dispatchEvent('afterAdd', [
 					'data' => $data
 				]);
-				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を追加しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を追加しました。'), $this->request->data['Site']['name']), false, true);
 				$this->redirect(['action' => 'edit', $this->Site->id]);
 			} else {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
@@ -130,7 +130,7 @@ class SitesController extends AppController {
 				$this->dispatchEvent('afterEdit', [
 					'data' => $data
 				]);
-				$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」を更新しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」を更新しました。'), $this->request->data['Site']['name']), false, true);
 				$this->redirect(['action' => 'edit', $id]);
 			} else {
 				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
@@ -203,7 +203,7 @@ class SitesController extends AppController {
 		$data['Site']['status'] = $status;
 		if ($this->Site->save($data)) {
 			$statusText = $statusTexts[$status];
-			$this->setMessage('サブサイト「' . $data['Site']['name'] . '」 を' . $statusText . 'にしました。', false, true, false);
+			$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」 を、%s に設定しました。'), $data['Site']['name'], $statusText), false, true, false);
 			return true;
 		} else {
 			return false;
@@ -218,7 +218,7 @@ class SitesController extends AppController {
 			$this->notFound();
 		}
 		if($this->Site->delete($this->request->data['Site']['id'])) {
-			$this->setMessage('サブサイト「' . $this->request->data['Site']['name'] . '」 を削除しました。', false, true);
+			$this->setMessage(sprintf(__d('baser', 'サブサイト「%s」 を削除しました。'), $this->request->data['Site']['name']), false, true);
 			$this->redirect(['action' => 'index']);
 		} else {
 			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);

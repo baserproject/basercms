@@ -79,7 +79,7 @@ class PagesController extends AppController {
 	public function admin_ajax_add() {
 		$this->autoRender = false;
 		if(!$this->request->data) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// EVENT Pages.beforeAdd
@@ -98,7 +98,7 @@ class PagesController extends AppController {
 				'data' => $data
 			]);
 			
-			$message = '固定ページ「' . $this->request->data['Content']['title'] . '」を追加しました。';
+			$message = sprintf(__d('baser', '固定ページ「%s」を追加しました。'), $this->request->data['Content']['title']);
 			$this->setMessage($message, false, true, false);
 			return json_encode($data['Content']);
 		} else {
@@ -115,7 +115,7 @@ class PagesController extends AppController {
  */
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 		}
 
@@ -123,7 +123,7 @@ class PagesController extends AppController {
 			$this->Page->recursive = 2;
 			$this->request->data = $this->Page->read(null, $id);
 			if(!$this->request->data) {
-				$this->setMessage('無効な処理です。', true);
+				$this->setMessage(__d('baser', '無効な処理です。'), true);
 				$this->redirect(['plugin' => false, 'admin' => true, 'controller' => 'contents', 'action' => 'index']);
 			}
 		} else {
@@ -150,7 +150,7 @@ class PagesController extends AppController {
 				}
 
 				// 完了メッセージ
-				$this->setMessage('固定ページ「' . $this->request->data['Content']['name'] . '」を更新しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', '固定ページ「%s」を更新しました。'), $this->request->data['Content']['name']), false, true);
 
 				// EVENT Pages.afterEdit
 				$this->dispatchEvent('afterEdit', [
@@ -160,7 +160,7 @@ class PagesController extends AppController {
 				// 同固定ページへリダイレクト
 				$this->redirect(['action' => 'edit', $id]);
 			} else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
 
@@ -191,9 +191,9 @@ class PagesController extends AppController {
 		$this->set(compact('editorOptions', 'pageTemplateList', 'publishLink'));
 		
 		if (!empty($this->request->data['Content']['title'])) {
-			$this->pageTitle = '固定ページ情報編集：' . $this->request->data['Content']['title'];
+			$this->pageTitle = __d('baser', '固定ページ情報編集') . '：' . $this->request->data['Content']['title'];
 		} else {
-			$this->pageTitle = '固定ページ情報編集：' . Inflector::Classify($this->request->data['Content']['name']);
+			$this->pageTitle = __d('baser', '固定ページ情報編集') . '：' . Inflector::Classify($this->request->data['Content']['name']);
 		}
 		$this->help = 'pages_form';
 		$this->render('form');
@@ -226,7 +226,9 @@ class PagesController extends AppController {
 		$pagesPath = APP . 'View' . DS . 'Pages';
 		$result = $this->Page->entryPageFiles($pagesPath);
 		clearAllCache();
-		$this->setMessage($result['all'] . ' ページ中 ' . $result['insert'] . ' ページの新規登録、 ' . $result['update'] . ' ページの更新に成功しました。');
+		$this->setMessage(
+			sprintf(__d('baser', '%s ページ中 %s ページの新規登録、 %s ページの更新に成功しました。'), $result['all'], $result['insert'], $result['update'])
+		);
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
 	}
 
@@ -238,9 +240,9 @@ class PagesController extends AppController {
 	public function admin_write_page_files() {
 		$this->_checkSubmitToken();
 		if ($this->Page->createAllPageTemplate()) {
-			$this->setMessage('固定ページテンプレートの書き出しに成功しました。');
+			$this->setMessage(__d('baser', '固定ページテンプレートの書き出しに成功しました。'));
 		} else {
-			$this->setMessage('固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。', true);
+			$this->setMessage(__d('baser', '固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。'), true);
 		}
 		clearViewCache();
 		$this->redirect(['controller' => 'tools', 'action' => 'index']);
@@ -424,12 +426,12 @@ class PagesController extends AppController {
 	public function admin_ajax_copy() {
 		$this->autoRender = false;
 		if(!$this->request->data) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		$user = $this->BcAuth->user();
 		$data = $this->Page->copy($this->request->data['entityId'], $this->request->data['parentId'], $this->request->data['title'], $user['id'], $this->request->data['siteId']);
 		if ($data) {
-			$message = '固定ページのコピー「' . $this->request->data['title'] . '」を追加しました。';
+			$message = sprintf(__d('baser', '固定ページのコピー「%s」を追加しました。'), $this->request->data['title']);
 			$this->setMessage($message, false, true, false);
 			return json_encode($data['Content']);
 		} else {
