@@ -45,4 +45,4 @@ package.json
 /Dockerfile
 /volumes/*
 /.docker-sync/
-
+/lib/Baser/View/Themed/*
