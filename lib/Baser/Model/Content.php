@@ -697,8 +697,13 @@ class Content extends AppModel {
 		} elseif($id == 1) {
 			$url = '/';
 		} else {
-			// サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、
-			// DataSource::query() を利用する
+			// =========================================================================================================
+			// サイト全体のURLを変更する場合、TreeBehavior::getPath() を利用するとかなりの時間がかかる為、DataSource::query() を利用する
+			// 2018/02/04 ryuring
+			// プリペアドステートメントを利用する為、fetchAll() を利用しようとしたが、SQLite のドライバが対応してない様子。
+			// CakePHP３系に対応する際、SQLite を標準のドライバに変更してから、プリペアドステートメントに書き換えていく。
+			// それまでは、SQLインジェクション対策として、値をチェックしてから利用する。
+			// =========================================================================================================
 			$db = $this->getDataSource();
 			$sql = "SELECT lft, rght FROM {$this->tablePrefix}contents AS Content WHERE id = {$id} AND deleted = " . $db->value(false, 'boolean');
 			$content = $db->query($sql, false);
