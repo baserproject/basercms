@@ -32,28 +32,26 @@ class Theme extends AppModel {
  * @var string
  */
 	public $useTable = false;
-
+	
 /**
- * バリデーション
+ * Theme constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'テーマ名を入力してください。'],
-			['rule' => 'alphaNumericPlus',
-				'message' => 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。'],
-			['rule' => 'themeDuplicate',
-				'message' => '既に存在するテーマ名です。']
-		],
-		'url' => [
-			['rule' => 'halfText',
-				'message' => 'URLは半角英数字のみで入力してください。'],
-			['rule' => 'url',
-				'message' => 'URLの形式が間違っています。'],
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'テーマ名を入力してください。')],
+				['rule' => 'alphaNumericPlus', 'message' => __d('baser', 'テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。')],
+				['rule' => 'themeDuplicate', 'message' => __d('baser', '既に存在するテーマ名です。')]],
+			'url' => [
+				['rule' => 'halfText', 'message' => __d('baser', 'URLは半角英数字のみで入力してください。')],
+				['rule' => 'url', 'message' => __d('baser', 'URLの形式が間違っています。')]]
+		];
+	}
 
 /**
  * テーマ名の重複チェック

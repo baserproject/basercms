@@ -49,33 +49,28 @@ class UserGroup extends AppModel {
 	];
 
 /**
- * バリデーション
+ * UserGroup constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'ユーザーグループ名を入力してください。'],
-			['rule' => ['halfText'],
-				'message' => 'ユーザーグループ名は半角のみで入力してください。'],
-			['rule' => ['duplicate', 'name'],
-				'message' => '既に登録のあるユーザーグループ名です。'],
-			['rule' => ['maxLength', 50],
-				'message' => 'ユーザーグループ名は50文字以内で入力してください。']
-		],
-		'title' => [
-			['rule' => ['notBlank'],
-				'message' => '表示名を入力してください。'],
-			['rule' => ['maxLength', 50],
-				'message' => '表示名は50文字以内で入力してください。']
-		],
-		'auth_prefix' => [
-			['rule' => ['notBlank'],
-				'message' => '認証プレフィックスを入力してください。']
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループ名を入力してください。')],
+				['rule' => ['halfText'], 'message' => __d('baser', 'ユーザーグループ名は半角のみで入力してください。')],
+				['rule' => ['duplicate', 'name'], 'message' => __d('baser', '既に登録のあるユーザーグループ名です。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'ユーザーグループ名は50文字以内で入力してください。')]],
+			'title' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '表示名を入力してください。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', '表示名は50文字以内で入力してください。')]],
+			'auth_prefix' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '認証プレフィックスを入力してください。')]]
+		];
+	}
+	
 /**
  * 関連するユーザーを管理者グループに変更し保存する
  * 

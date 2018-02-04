@@ -48,18 +48,21 @@ class Favorite extends AppModel {
  * @var Session
  */
 	public $_Session;
-
+	
 /**
- * バリデーション
+ * Favorite constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'url' => [
-			['rule' => ['isPermitted'],
-				'message' => 'このURLの登録は許可されていません。']
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'url' => [
+				['rule' => ['isPermitted'], 'message' => __d('baser', 'このURLの登録は許可されていません。')]]
+		];
+	}
 
 /**
  * セッションをセットする

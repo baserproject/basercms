@@ -32,22 +32,22 @@ class ThemeFolder extends AppModel {
 	public $useTable = false;
 
 /**
- * バリデーション
+ * ThemeFolder constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'テーマフォルダ名を入力してください。',
-				'required' => true],
-			['rule' => ['halfText'],
-				'message' => 'テーマフォルダ名は半角のみで入力してください。'],
-			['rule' => ['duplicateThemeFolder'],
-				'message' => '入力されたテーマフォルダ名は、同一階層に既に存在します。']
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'テーマフォルダ名を入力してください。'), 'required' => true],
+				['rule' => ['halfText'], 'message' => __d('baser', 'テーマフォルダ名は半角のみで入力してください。')],
+				['rule' => ['duplicateThemeFolder'], 'message' => __d('baser', '入力されたテーマフォルダ名は、同一階層に既に存在します。')]]
+		];
+	}
+	
 /**
  * フォルダの重複チェック
  * 

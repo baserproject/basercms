@@ -47,7 +47,7 @@ class BcAppModel extends Model {
 				// @deprecated 5.0.0 since 4.0.0 
 				if($this->useDbConfig == 'plugin') {
 					$this->useDbConfig = 'default';
-					$this->log('モデル：' . $this->name . ' BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。', LOG_ALERT);	
+					$this->log(sprintf(__d('baser', 'モデル：%s BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。'), $this->name), LOG_ALERT);	
 				}
 				parent::__construct($id, $table, $ds);
 			} elseif ($db->config['login'] == 'dummy' &&

@@ -15,9 +15,9 @@
 <?php foreach($sites as $site): ?>
 <h3><?php echo $site['Site']['display_name'] ?></h3>
 <ul style="margin-bottom:15px;">
-	<li>公開中： <?php echo $site['published'] ?> ページ<br />
-		非公開： <?php echo $site['unpublished'] ?> ページ<br />
-		合　計： <?php echo $site['total'] ?> ページ
+	<li><?php echo sprintf(__d('baser', '公開中： %s ページ'), $site['published']) ?><br>
+		<?php echo sprintf(__d('baser', '非公開： %s ページ'), $site['unpublished']) ?><br>
+		<?php echo sprintf(__d('baser', '合計： %s ページ'), $site['total']) ?>
 	</li>
 </ul>
 <?php endforeach ?>

@@ -41,31 +41,26 @@ class Permission extends AppModel {
 	public $permissionsTmp = -1;
 
 /**
- * バリデーション
+ * Permission constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => '設定名を入力してください。'],
-			['rule' => ['maxLength', 255],
-				'message' => '設定名は255文字以内で入力してください。']
-		],
-		'user_group_id' => [
-			['rule' => ['notBlank'],
-				'message' => 'ユーザーグループを選択してください。',
-				'required' => true]
-		],
-		'url' => [
-			['rule' => ['notBlank'],
-				'message' => '設定URLを入力してください。'],
-			['rule' => ['maxLength', 255],
-				'message' => '設定URLは255文字以内で入力してください。'],
-			['rule' => ['checkUrl'],
-				'message' => 'アクセス拒否として設定できるのは認証ページだけです。']
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '設定名を入力してください。')],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '設定名は255文字以内で入力してください。')]],
+			'user_group_id' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'ユーザーグループを選択してください。'), 'required' => true]],
+			'url' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '設定URLを入力してください。')],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', '設定URLは255文字以内で入力してください。')],
+				['rule' => ['checkUrl'], 'message' => __d('baser', 'アクセス拒否として設定できるのは認証ページだけです。')]]
+		];
+	}
 
 /**
  * 権限の必要なURLかチェックする

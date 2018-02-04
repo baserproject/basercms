@@ -293,7 +293,7 @@ class BcAppView extends View {
 				foreach ($exts as $ext) {
 					if (file_exists($path . $name . $ext)) {
 						if ($ext == '.ctp') {
-							trigger_error('ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $name . $ext, E_USER_WARNING);
+							trigger_error(__d('baser', 'ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。') . '<br>' . $path . $name . $ext, E_USER_WARNING);
 						}
 						return $path . $name . $ext;
 					}
@@ -449,7 +449,7 @@ class BcAppView extends View {
 				foreach ($exts as $ext) {
 					if (file_exists($path . $file . $ext)) {
 						if ($ext == '.ctp') {
-							trigger_error('レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。<br />' . $path . $file . $ext, E_USER_WARNING);
+							trigger_error(__d('baser', 'レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。') . '<br>' . $path . $file . $ext, E_USER_WARNING);
 						}
 						return $path . $file . $ext;
 					}

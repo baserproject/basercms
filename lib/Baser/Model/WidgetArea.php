@@ -31,22 +31,21 @@ class WidgetArea extends AppModel {
 	public $actsAs = ['BcCache'];
 
 /**
- * バリデーション
+ * WidgetArea constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			'notBlank' => [
-				'rule' => ['notBlank'],
-				'message' => 'ウィジェットエリア名を入力してください。'],
-			'maxLength' => [
-				'rule' => ['maxLength', 255],
-				'message' => 'ウィジェットエリア名は255文字以内で入力してください。'
-			]
-		]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				'notBlank' => ['rule' => ['notBlank'], 'message' => __d('baser', 'ウィジェットエリア名を入力してください。')],
+				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'ウィジェットエリア名は255文字以内で入力してください。')]]
+		];
+	}
+	
 /**
  * コントロールソース取得
  * @param string $field
