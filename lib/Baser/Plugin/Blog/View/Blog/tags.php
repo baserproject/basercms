@@ -16,7 +16,7 @@
  * @var BcAppView $this
  */
 $this->BcBaser->css(['Blog.style'], ['inline' => false]);
-$this->BcBaser->setDescription($this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
+$this->BcBaser->setDescription(sprintf(__d('baser', '%s のアーカイブ一覧です。'), $this->BcBaser->getContentsTitle()));
 ?>
 
 

@@ -14,14 +14,14 @@
  * システムナビ
  */
 $config['BcApp.adminNavi.mail'] = array(
-	'name' => 'メールプラグイン',
+	'name' => __d('baser', 'メールプラグイン'),
 	'contents' => array(
-		array('name' => '基本設定', 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
+		array('name' => __d('baser', '基本設定'), 'url' => array('admin' => true, 'plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form')),
 	)
 );
 $config['BcContents']['items']['Mail'] = [
 	'MailContent'	=> [
-		'title' => 'メールフォーム',
+		'title' => __d('baser', 'メールフォーム'),
 		'multiple'	=> true,
 		'preview'	=> true,
 		'icon'	=> 'admin/icon_mail.png',

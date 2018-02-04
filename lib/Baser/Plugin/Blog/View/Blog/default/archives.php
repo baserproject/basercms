@@ -15,7 +15,7 @@
  */
 $this->BcBaser->css(['Blog.style'], ['inline' => false]);
 //$this->BcBaser->setTitle($this->pageTitle.'｜'.$this->Blog->getTitle());
-$this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->BcBaser->getContentsTitle() . 'のアーカイブ一覧です。');
+$this->BcBaser->setDescription(sprintf(__d('baser', '%s｜%sのアーカイブ一覧です。'), $this->Blog->getTitle(), $this->BcBaser->getContentsTitle()));
 ?>
 
 <script type="text/javascript">

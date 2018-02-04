@@ -56,30 +56,25 @@ class BlogCategory extends BlogAppModel {
 			'finderQuery' => '']];
 
 /**
- * validate
+ * BlogCategory constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => "ブログカテゴリ名を入力してください。",
-				'required' => true],
-			['rule' => 'halfText',
-				'message' => 'ブログカテゴリ名は半角のみで入力してください。'],
-			['rule' => ['duplicateBlogCategory'],
-				'message' => '入力されたブログカテゴリ名は既に登録されています。'],
-			['rule' => ['maxLength', 255],
-				'message' => 'ブログカテゴリ名は255文字以内で入力してください。']
-		],
-		'title' => [
-			['rule' => ['notBlank'],
-				'message' => "ブログカテゴリタイトルを入力してください。",
-				'required' => true],
-			['rule' => ['maxLength', 255],
-				'message' => 'ブログカテゴリタイトルは255文字以内で入力してください。']
-		]
-	];
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'ブログカテゴリ名を入力してください。'), 'required' => true],
+				['rule' => 'halfText', 'message' => __d('baser', 'ブログカテゴリ名は半角のみで入力してください。')],
+				['rule' => ['duplicateBlogCategory'], 'message' => __d('baser', '入力されたブログカテゴリ名は既に登録されています。')],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'ブログカテゴリ名は255文字以内で入力してください。')]],
+			'title' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'ブログカテゴリタイトルを入力してください。'), 'required' => true],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'ブログカテゴリタイトルは255文字以内で入力してください。')]]
+		];
+	}
 
 /**
  * コントロールソースを取得する

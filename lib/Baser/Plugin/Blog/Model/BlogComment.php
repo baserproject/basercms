@@ -42,41 +42,29 @@ class BlogComment extends BlogAppModel {
 			'foreignKey' => 'blog_post_id']];
 
 /**
- * validate
+ * BlogComment constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'name' => [
-			['rule' => ['notBlank'],
-				'message' => 'お名前を入力してください。'],
-			['rule' => ['maxLength', 50],
-				'message' => 'お名前は50文字以内で入力してください。']
-		],
-		'email' => [
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'お名前を入力してください。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'お名前は50文字以内で入力してください。')]],
 			'email' => [
-				'rule' => ['email'],
-				'message' => 'Eメールの形式が不正です。',
-				'allowEmpty' => true],
-			'maxLength' => [
-				'rule' => ['maxLength', 255],
-				'message' => 'Eメールは255文字以内で入力してください。']
-		],
-		'url' => [
+				'email' => ['rule' => ['email'], 'message' => __d('baser', 'Eメールの形式が不正です。'), 'allowEmpty' => true],
+				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'Eメールは255文字以内で入力してください。')]],
 			'url' => [
-				'rule' => ['url'],
-				'message' => 'URLの形式が不正です。',
-				'allowEmpty' => true],
-			'maxLength' => [
-				'rule' => ['maxLength', 255],
-				'message' => 'URLは255文字以内で入力してください。']
-		],
-		'message' => [
-			['rule' => ['notBlank'],
-				'message' => "コメントを入力してください。"]
-		]
-	];
-
+				'url' => ['rule' => ['url'], 'message' => __d('baser', 'URLの形式が不正です。'), 'allowEmpty' => true],
+				'maxLength' => ['rule' => ['maxLength', 255], 'message' => __d('baser', 'URLは255文字以内で入力してください。')]],
+			'message' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'コメントを入力してください。')]]
+		];
+	}
+	
 /**
  * 初期値を取得する
  *

@@ -126,7 +126,7 @@ class MaildataHelper extends BcTextHelper {
 					$value = $this->dateTime($value);
 				}
 				if ($value) {
-					return date('Y年 m月 d日', strtotime($value));
+					return date(__d('baser', 'Y年 m月 d日'), strtotime($value));
 				}
 				return '';
 

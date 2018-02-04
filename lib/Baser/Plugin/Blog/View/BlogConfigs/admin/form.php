@@ -29,5 +29,5 @@
 	<?php echo $this->BcForm->input('Import.blog_content_id', ['type' => 'select', 'options' => $blogContentList]) ?>
 	<?php echo $this->BcForm->input('Import.user_id', ['type' => 'select', 'options' => $userList]) ?>
 	<?php echo $this->BcForm->input('Import.file', ['type' => 'file']) ?>
-	<?php echo $this->BcForm->end(['label' => '取り込む', 'div' => false, 'class' => 'btn-orange button']) ?>
+	<?php echo $this->BcForm->end(['label' => __d('baser', '取り込む'), 'div' => false, 'class' => 'btn-orange button']) ?>
 </div>

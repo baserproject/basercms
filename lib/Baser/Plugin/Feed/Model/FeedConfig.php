@@ -41,41 +41,31 @@ class FeedConfig extends FeedAppModel {
 			"finderQuery" => ""));
 
 /**
- * validate
+ * FeedConfig constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'フィード設定名を入力してください。',
-				'required' => true),
-			array('rule' => array('maxLength', 50),
-				'message' => 'フィード設定名は50文字以内で入力してください。')
-		),
-		'feed_title_index' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'フィードタイトルリストは255文字以内で入力してください。')
-		),
-		'category_index' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'カテゴリリストは255文字以内で入力してください。')
-		),
-		'display_number' => array(
-			array('rule' => 'numeric',
-				'message' => '数値を入力してください。',
-				'required' => true)
-		),
-		'template' => array(
-			array('rule' => array('notBlank'),
-				'message' => 'テンプレート名を入力してください。'),
-			array('rule' => 'halfText',
-				'message' => 'テンプレート名は半角のみで入力してください。'),
-			array('rule' => array('maxLength', 50),
-				'message' => 'テンプレート名は50文字以内で入力してください。')
-		)
-	);
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'フィード設定名を入力してください。'), 'required' => true],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'フィード設定名は50文字以内で入力してください。')]],
+			'feed_title_index' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'フィードタイトルリストは255文字以内で入力してください。')]],
+			'category_index' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'カテゴリリストは255文字以内で入力してください。')]],
+			'display_number' => [
+				['rule' => 'numeric', 'message' => __d('baser', '数値を入力してください。'), 'required' => true]],
+			'template' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'テンプレート名を入力してください。')],
+				['rule' => 'halfText', 'message' => __d('baser', 'テンプレート名は半角のみで入力してください。')],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'テンプレート名は50文字以内で入力してください。')]]
+		];
+	}
+	
 /**
  * 初期値を取得
  * 

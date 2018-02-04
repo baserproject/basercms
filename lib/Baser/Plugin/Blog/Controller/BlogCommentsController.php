@@ -62,7 +62,7 @@ class BlogCommentsController extends BlogAppController {
 			$this->blogPost = ['BlogPost' => $dbDatas['BlogPost']];
 			$this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
 			if (BcUtil::isAdminSystem()) {
-				$crumbs[] = ['name' => $this->request->params['Content']['title'] . '設定', 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
+				$crumbs[] = ['name' => sprintf(__d('baser', '%s 設定'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
 				$crumbs[] = ['name' => $this->blogPost['BlogPost']['name'], 'url' => ['controller' => 'blog_posts', 'action' => 'edit', $this->blogContent['BlogContent']['id'], $this->blogPost['BlogPost']['id']]];
 			}	
 		} elseif (!empty($this->params['pass'][0])) {
@@ -70,7 +70,7 @@ class BlogCommentsController extends BlogAppController {
 				$dbDatas = $this->BlogPost->BlogContent->find('first', ['conditions' => ['BlogContent.id' => $this->params['pass'][0]]]);
 				$this->blogContent = ['BlogContent' => $dbDatas['BlogContent']];
 				if (BcUtil::isAdminSystem()) {
-					$crumbs[] = ['name' => $this->request->params['Content']['title'] . '設定', 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
+					$crumbs[] = ['name' => sprintf(__d('baser', '%s 設定'), $this->request->params['Content']['title']), 'url' => ['controller' => 'blog_posts', 'action' => 'index', $this->blogContent['BlogContent']['id']]];
 				}	
 			}
 		}
@@ -98,17 +98,17 @@ class BlogCommentsController extends BlogAppController {
  */
 	public function admin_index($blogContentId, $blogPostId = null) {
 		if (!$blogContentId || empty($this->blogContent['BlogContent'])) {
-			$this->setMessage('無効な処理です。', true);
+			$this->setMessage(__d('baser', '無効な処理です。'), true);
 			$this->redirect('/admin');
 		}
 
 		/* 検索条件 */
 		if ($blogPostId) {
 			$conditions['BlogComment.blog_post_id'] = $blogPostId;
-			$this->pageTitle = '[' . $this->blogPost['BlogPost']['name'] . '] コメント一覧';
+			$this->pageTitle = sprintf(__d('baser', '[%s] コメント一覧'), $this->blogPost['BlogPost']['name']);
 		} else {
 			$conditions['BlogComment.blog_content_id'] = $blogContentId;
-			$this->pageTitle = '[' . $this->request->params['Content']['title'] . '] コメント一覧';
+			$this->pageTitle = sprintf(__d('baser', '[%s] コメント一覧'), $this->request->params['Content']['title']);
 		}
 
 		/* 画面情報設定 */
@@ -156,7 +156,7 @@ class BlogCommentsController extends BlogAppController {
 		$this->_checkSubmitToken();
 		/* 除外処理 */
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		if ($this->_del($id)) {
@@ -178,9 +178,9 @@ class BlogCommentsController extends BlogAppController {
 		/* 削除処理 */
 		if ($this->BlogComment->delete($id)) {
 			if (isset($this->blogPost['BlogPost']['name'])) {
-				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを削除しました。';
+				$message = sprintf(__d('baser', '記事「%s」へのコメントを削除しました。'), $this->blogPost['BlogPost']['name']);
 			} else {
-				$message = '記事「' . $this->request->params['Content']['title'] . '」へのコメントを削除しました。';
+				$message = sprintf(__d('baser', '記事「%s」へのコメントを削除しました。'), $this->request->params['Content']['title']);
 			}
 			$this->BlogComment->saveDbLog($message);
 			return true;
@@ -200,7 +200,7 @@ class BlogCommentsController extends BlogAppController {
 	public function admin_ajax_unpublish($blogContentId, $blogPostId, $id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_changeStatus($id, false)) {
 			clearViewCache();
@@ -222,7 +222,7 @@ class BlogCommentsController extends BlogAppController {
 	public function admin_ajax_publish($blogContentId, $blogPostId, $id) {
 		$this->_checkSubmitToken();
 		if (!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		if ($this->_changeStatus($id, true)) {
 			clearViewCache();
@@ -275,7 +275,7 @@ class BlogCommentsController extends BlogAppController {
  * @return boolean 
  */
 	protected function _changeStatus($id, $status) {
-		$statusTexts = [0 => '非公開状態', 1 => '公開状態'];
+		$statusTexts = [0 => __d('baser', '非公開状態'), 1 => __d('baser', '公開状態')];
 		$data = $this->BlogComment->find('first', ['conditions' => ['BlogComment.id' => $id], 'recursive' => -1]);
 		$data['BlogComment']['status'] = $status;
 		$this->BlogComment->set($data);
@@ -283,9 +283,9 @@ class BlogCommentsController extends BlogAppController {
 		if ($this->BlogComment->save()) {
 			$statusText = $statusTexts[$status];
 			if (isset($this->blogPost['BlogPost']['name'])) {
-				$message = '記事「' . $this->blogPost['BlogPost']['name'] . '」へのコメントを' . $statusText . 'に設定しました。';
+				$message = sprintf(__d('baser', '記事「%s」へのコメントを %s に設定しました。'), $this->blogPost['BlogPost']['name'], $statusText);
 			} else {
-				$message = '記事「' . $this->request->params['Content']['title'] . '」へのコメントを' . $statusText . 'に設定しました。';
+				$message = sprintf(__d('baser', '記事「%s」へのコメントを %s に設定しました。'), $this->request->params['Content']['title'], $statusText);
 			}
 			$this->BlogComment->saveDbLog($message);
 			return true;

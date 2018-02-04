@@ -37,7 +37,7 @@ class BlogAppController extends AppController {
 		]));
 		$data['SiteConfig'] = $this->siteConfigs;
 		$to = $this->siteConfigs['email'];
-		$title = '【' . $this->siteConfigs['name'] . '】コメントを受け付けました';
+		$title = sprintf(__d('baser', '【%s】コメントを受け付けました'), $this->siteConfigs['name']);
 		return $this->sendMail($to, $title, $data, [
 				'template' => 'Blog.blog_comment_admin',
 				'agentTemplate' => false
@@ -73,7 +73,7 @@ class BlogAppController extends AppController {
 		$data = array_merge($_data, $data);
 
 		$data['SiteConfig'] = $this->siteConfigs;
-		$title = '【' . $this->siteConfigs['name'] . '】コメントが投稿されました';
+		$title = sprintf(__('【%s】コメントが投稿されました'), $this->siteConfigs['name']);
 
 		$result = true;
 		$sended = [];

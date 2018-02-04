@@ -60,9 +60,9 @@ $baseCurrentUrl = $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/';
 					<?php $class = '' ?>
 				<?php endif ?>
 				<?php if ($view_count): ?>
-					<?php $title = $postedDate['year'] . '年' . '(' . $postedDate['count'] . ')' ?>
+					<?php $title = sprintf(__d('baser', '%s年'), $postedDate['year']) . '(' . $postedDate['count'] . ')' ?>
 				<?php else: ?>
-					<?php $title = $postedDate['year'] . '年' ?>
+					<?php $title = sprintf(__d('baser', '%s年'), $postedDate['year']) ?>
 				<?php endif ?>
 				<li<?php echo $class ?>>
 					<?php $this->BcBaser->link($title, $this->BcBaser->getBlogContentsUrl($id) . 'archives/date/' . $postedDate['year']) ?>

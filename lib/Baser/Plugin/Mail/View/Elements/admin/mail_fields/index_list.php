@@ -23,18 +23,18 @@ $this->BcListTable->setColumnNumber(7);
 		<tr>
 			<th class="list-tool">
 	<div>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add', $mailContent['MailContent']['id'])) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn')), array('action' => 'add', $mailContent['MailContent']['id'])) ?>
 		<?php if (!$sortmode): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => '並び替え', 'class' => 'btn')), array($mailContent['MailContent']['id'], 'sortmode' => 1)) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => __d('baser', '並び替え'), 'class' => 'btn')), array($mailContent['MailContent']['id'], 'sortmode' => 1)) ?>
 		<?php else: ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => 'ノーマル', 'class' => 'btn')), array($mailContent['MailContent']['id'], 'sortmode' => 0)) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => __d('baser', 'ノーマル'), 'class' => 'btn')), array($mailContent['MailContent']['id'], 'sortmode' => 0)) ?>
 		<?php endif ?>
 	</div>
 	<?php if ($this->BcBaser->isAdminUser()): ?>
 		<div>
-			<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => '一括選択')) ?>
-			<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => '有効', 'unpublish' => '無効', 'del' => '削除'), 'empty' => '一括処理')) ?>
-			<?php echo $this->BcForm->button('適用', array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
+			<?php echo $this->BcForm->checkbox('ListTool.checkall', array('title' => __d('baser', '一括選択'))) ?>
+			<?php echo $this->BcForm->input('ListTool.batch', array('type' => 'select', 'options' => array('publish' => __d('baser', '有効'), 'unpublish' => __d('baser', '無効'), 'del' => __d('baser', '削除')), 'empty' => __d('baser', '一括処理'))) ?>
+			<?php echo $this->BcForm->button(__d('baser', '適用'), array('id' => 'BtnApplyBatch', 'disabled' => 'disabled')) ?>
 		</div>
 	<?php endif ?>
 </th>

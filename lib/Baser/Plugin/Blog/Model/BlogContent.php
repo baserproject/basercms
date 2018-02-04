@@ -59,38 +59,30 @@ class BlogContent extends BlogAppModel {
 	];
 
 /**
- * validate
+ * BlogContent constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = [
-		'layout' => [
-			['rule' => 'halfText',
-				'message' => 'レイアウトテンプレート名は半角で入力してください。',
-				'allowEmpty' => false],
-			['rule' => ['maxLength', 20],
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。']
-		],
-		'template' => [
-			['rule' => 'halfText',
-				'message' => 'コンテンツテンプレート名は半角で入力してください。',
-				'allowEmpty' => false],
-			['rule' => ['maxLength', 20],
-				'message' => 'レイアウトテンプレート名は20文字以内で入力してください。']
-		],
-		'list_count' => [['rule' => 'halfText',
-				'message' => "一覧表示件数は半角で入力してください。",
-				'allowEmpty' => false]
-		],
-		'list_direction' => [['rule' => ['notBlank'],
-				'message' => "一覧に表示する順番を指定してください。"]
-		],
-		'eye_catch_size' => [[
-				'rule' => ['checkEyeCatchSize'],
-				'message' => 'アイキャッチ画像のサイズが不正です。'
-			]]
-	];
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'layout' => [
+				['rule' => 'halfText', 'message' => __d('baser', 'レイアウトテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
+				['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]],
+			'template' => [
+				['rule' => 'halfText', 'message' => __d('baser', 'コンテンツテンプレート名は半角で入力してください。'), 'allowEmpty' => false],
+				['rule' => ['maxLength', 20], 'message' => __d('baser', 'レイアウトテンプレート名は20文字以内で入力してください。')]],
+			'list_count' => [
+				['rule' => 'halfText', 'message' => __d('baser', '一覧表示件数は半角で入力してください。'), 'allowEmpty' => false]],
+			'list_direction' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', '一覧に表示する順番を指定してください。')]],
+			'eye_catch_size' => [
+				['rule' => ['checkEyeCatchSize'], 'message' => __d('baser', 'アイキャッチ画像のサイズが不正です。')]]
+		];
+	}
+	
 /**
  * アイキャッチ画像サイズバリデーション
  * 
@@ -206,7 +198,7 @@ class BlogContent extends BlogAppModel {
 		$blogContent = $data['BlogContent'];
 		$content = $data['Content'];
 		return ['SearchIndex' => [
-			'type'	=> 'ブログ',
+			'type'	=> __d('baser', 'ブログ'),
 			'model_id'	=> (!empty($blogContent['id'])) ? $blogContent['id'] : $this->id,
 			'content_id'=> $content['id'],
 			'site_id'=> $content['site_id'],

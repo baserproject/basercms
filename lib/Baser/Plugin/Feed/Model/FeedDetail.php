@@ -45,31 +45,26 @@ class FeedDetail extends FeedAppModel {
 	));
 
 /**
- * validate
+ * FeedDetail constructor.
  *
- * @var array
+ * @param bool $id
+ * @param null $table
+ * @param null $ds
  */
-	public $validate = array(
-		'name' => array(
-			array('rule' => array('notBlank'),
-				'message' => "フィード詳細名を入力してください。",
-				'required' => true),
-			array('rule' => array('maxLength', 50),
-				'message' => 'フィード詳細名は50文字以内で入力してください。')
-		),
-		'url' => array(
-			array('rule' => array('notBlank'),
-				'message' => "フィードURLを入力してください。",
-				'required' => true),
-			array('rule' => array('maxLength', 255),
-				'message' => 'フィードURLは255文字以内で入力してください。')
-		),
-		'category_filter' => array(
-			array('rule' => array('maxLength', 255),
-				'message' => 'カテゴリフィルタは255文字以内で入力してください。')
-		)
-	);
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->validate = [
+			'name' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'フィード詳細名を入力してください。'), 'required' => true],
+				['rule' => ['maxLength', 50], 'message' => __d('baser', 'フィード詳細名は50文字以内で入力してください。')]],
+			'url' => [
+				['rule' => ['notBlank'], 'message' => __d('baser', 'フィードURLを入力してください。'), 'required' => true],
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'フィードURLは255文字以内で入力してください。')]],
+			'category_filter' => [
+				['rule' => ['maxLength', 255], 'message' => __d('baser', 'カテゴリフィルタは255文字以内で入力してください。')]]
+		];
+	}
+	
 /**
  * コントロールソースを取得する
  *
@@ -78,11 +73,11 @@ class FeedDetail extends FeedAppModel {
  * @access	public
  */
 	public function getControlSource($field = null) {
-		$controlSources['cache_time'] = array('+1 minute' => '1分',
-			'+30 minutes' => '30分',
-			'+1 hour' => '1時間',
-			'+6 hours' => '6時間',
-			'+24 hours' => '1日');
+		$controlSources['cache_time'] = array('+1 minute' => __d('baser', '1分'),
+			'+30 minutes' => __d('baser', '30分'),
+			'+1 hour' => __d('baser', '1時間'),
+			'+6 hours' => __d('baser', '6時間'),
+			'+24 hours' => __d('baser', '1日'));
 		return $controlSources[$field];
 	}
 
