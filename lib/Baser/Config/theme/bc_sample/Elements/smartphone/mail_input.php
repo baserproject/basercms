@@ -2,6 +2,10 @@
 /**
  * メールフォーム入力欄（スマホ用）
  * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
+ *
+ * @var int $blockStart 表示するフィールドの開始NO
+ * @var int $blockEnd 表示するフィールドの終了NO
+ * @var bool $freezed 確認画面かどうか
  */
 $group_field = null;
 $iteration = 0;
@@ -44,11 +48,7 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
-			if ($field['no_send'] && $freezed) {
-				echo $this->Mailform->control('hidden', "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
-			} else {
-				echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
-			}
+			echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 
 			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
