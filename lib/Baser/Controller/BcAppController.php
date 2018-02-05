@@ -1608,16 +1608,6 @@ class BcAppController extends Controller {
 	}
 
 /**
- * admin用Token取得アクション
- *
- * @return string
- */
-	public function admin_ajax_get_token() {
-		$this->autoRender = false;
-		return $this->getToken();
-	}
-
-/**
  * リクエストメソッドとトークンをチェックする
  * 
  * - GETでのアクセスの場合 not found
