@@ -48,7 +48,18 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
-			echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			// =========================================================================================================
+			// 2018/02/06 ryuring
+			// no_send オプションは、確認画面に表示しないようにするために利用されている可能性が高い
+			//（メールアドレスのダブル入力、プライバシーポリシーへの同意に利用されている）
+			// 本来であれば、not_display_confirm 等のオプションを別途準備し、そちらを利用するべきだが、
+			// 後方互換のため残す
+			// =========================================================================================================
+			if ($freezed && $field['no_send']) {
+				echo $this->Mailform->control('hidden', "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			} else {
+				echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+			}
 
 			if (!$freezed || $this->Mailform->value("MailMessage." . $field['field_name']) !== '') {
 				echo '<span class="mail-after-attachment">' . $field['after_attachment'] . '</span>';
