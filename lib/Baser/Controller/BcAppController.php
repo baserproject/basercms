@@ -950,6 +950,7 @@ class BcAppController extends Controller {
 			unset($cc);
 		}
 
+		$toAddress = null;
 		try {
 			// to 送信先アドレス (最初の1人がTOで残りがBCC)
 			if (strpos($to, ',') !== false) {

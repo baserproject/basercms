@@ -1,15 +1,11 @@
 <?php
 /**
- * [PUBLISH] メールフォーム本体
+ * メールフォーム入力欄
+ * 呼出箇所：メールフォーム入力ページ、メールフォーム入力内容確認ページ
  *
- * baserCMS :  Based Website Development Project <http://basercms.net>
- * Copyright (c) baserCMS Users Community <http://basercms.net/community/>
- *
- * @copyright		Copyright (c) baserCMS Users Community
- * @link			http://basercms.net baserCMS Project
- * @package			Mail.View
- * @since			baserCMS v 0.1.0
- * @license			http://basercms.net/license/index.html
+ * @var int $blockStart 表示するフィールドの開始NO
+ * @var int $blockEnd 表示するフィールドの終了NO
+ * @var bool $freezed 確認画面かどうか
  */
 $group_field = null;
 $iteration = 0;
@@ -52,8 +48,14 @@ if (!empty($mailFields)) {
 				echo '<span class="mail-before-attachment">' . $field['before_attachment'] . '</span>';
 			}
 
-			if ($field['no_send'] && $freezed) {
-				// メール送信しないフィールドの場合、確認画面では、hidden タグを表示する
+			// =========================================================================================================
+			// 2018/02/06 ryuring
+			// no_send オプションは、確認画面に表示しないようにするために利用されている可能性が高い
+			//（メールアドレスのダブル入力、プライバシーポリシーへの同意に利用されている）
+			// 本来であれば、not_display_confirm 等のオプションを別途準備し、そちらを利用するべきだが、
+			// 後方互換のため残す
+			// =========================================================================================================
+			if ($freezed && $field['no_send']) {
 				echo $this->Mailform->control('hidden', "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
 			} else {
 				echo $this->Mailform->control($field['type'], "MailMessage." . $field['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
