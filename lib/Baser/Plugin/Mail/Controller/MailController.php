@@ -558,23 +558,4 @@ class MailController extends MailAppController {
 		exit();
 	}
 
-/**
- * [ajax] Tokenのkeyを取得
- *
- * @return void
- */
-	public function ajax_get_token() {
-		echo $this->request->params['_Token']['key'];
-		exit();
-	}
-
-/**
- * [ajax] Tokenのkeyを取得
- *
- * @return void
- */
-	public function smartphone_ajax_get_token() {
-		$this->setAction('ajax_get_token');
-	}
-
 }

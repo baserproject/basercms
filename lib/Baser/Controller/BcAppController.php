@@ -950,6 +950,7 @@ class BcAppController extends Controller {
 			unset($cc);
 		}
 
+		$toAddress = null;
 		try {
 			// to 送信先アドレス (最初の1人がTOで残りがBCC)
 			if (strpos($to, ',') !== false) {
@@ -1605,16 +1606,6 @@ class BcAppController extends Controller {
  */
 	protected function getToken() {
 		return $this->request->params['_Token']['key'];
-	}
-
-/**
- * admin用Token取得アクション
- *
- * @return string
- */
-	public function admin_ajax_get_token() {
-		$this->autoRender = false;
-		return $this->getToken();
 	}
 
 /**
