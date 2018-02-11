@@ -145,7 +145,7 @@ class BcContentsRoute extends CakeRoute {
 			if($alias) {
 				$pureEntryUrl = preg_replace('/^\/' . preg_quote($alias, '/') . '\//', '/', $pureEntryUrl);
 			}
-			if($type == 'Page') {
+			if($type == 'Page' || $type == 'ContentLink') {
 				$url = preg_replace('/^\//', '', $entryUrl);
 				$pass = explode('/', $url);
 			} elseif($requestUrl != $pureEntryUrl) {

@@ -59,7 +59,7 @@ class SiteConfigsController extends AppController {
  * beforeFilter
  */
 	public function beforeFilter() {
-		$this->BcAuth->allow('admin_ajax_credit', 'jquery_base_url');
+		$this->BcAuth->allow('admin_ajax_credit', 'jquery_base_url', 'ajax_get_token');
 		parent::beforeFilter();
 		$this->crumbs = [['name' => __d('baser', 'システム設定'), 'url' => ['controller' => 'site_configs', 'action' => 'form']]];
 	}
@@ -295,6 +295,25 @@ class SiteConfigsController extends AppController {
 		}
 		$this->set('credits', $json);
 		
+	}
+
+/**
+ * admin用Token取得アクション
+ *
+ * @return string
+ */
+	public function admin_ajax_get_token() {
+		$this->autoRender = false;
+		return $this->getToken();
+	}
+
+/**
+ * セキュリティトークンを取得する
+ *
+ * @return mixed
+ */
+	public function ajax_get_token() {
+		return $this->setAction(('admin_ajax_get_token'));
 	}
 	
 }

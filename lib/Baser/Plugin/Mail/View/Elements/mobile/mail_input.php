@@ -45,8 +45,21 @@ if (!isset($blockEnd)) {
 				<?php if (!$freezed || $this->Mailform->value("MailMessage." . $record['MailField']['field_name'])): ?>
 					<font size="1"><?php echo $record['MailField']['before_attachment'] ?></font>
 				<?php endif; ?>
-				
-				<?php echo $this->Mailform->control($record['MailField']['type'], "MailMessage." . $record['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record)) ?>
+
+				<?php
+				// =========================================================================================================
+				// 2018/02/06 ryuring
+				// no_send オプションは、確認画面に表示しないようにするために利用されている可能性が高い
+				//（メールアドレスのダブル入力、プライバシーポリシーへの同意に利用されている）
+				// 本来であれば、not_display_confirm 等のオプションを別途準備し、そちらを利用するべきだが、
+				// 後方互換のため残す
+				// =========================================================================================================
+				if ($freezed && $field['MailField']['no_send']) {
+					echo $this->Mailform->control('hidden', "MailMessage." . $field['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+				} else {
+					echo $this->Mailform->control($field['MailField']['type'], "MailMessage." . $field['MailField']['field_name'] . "", $this->Mailfield->getOptions($record), $this->Mailfield->getAttributes($record));
+				}
+				?>
 					
 				<?php if (!$freezed || $this->Mailform->value("MailMessage." . $record['MailField']['field_name'])): ?>
 					<font size="1"><?php echo $record['MailField']['after_attachment'] ?></font>

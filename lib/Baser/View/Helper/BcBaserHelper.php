@@ -878,7 +878,7 @@ class BcBaserHelper extends AppHelper {
 	 *	- `inline` : コンテンツ内にCSSを出力するかどうか（初期値 : true）
 	 *  ※ その他のパラメータについては、HtmlHelper::css() を参照。
 	 *	※ false を指定した場合、inline が false となる。
-	 * @return void
+	 * @return string|void
 	 */
 	public function css($path, $options = []) {
 		if ($options === false) {

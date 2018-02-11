@@ -34,7 +34,9 @@ class MailfieldHelper extends AppHelper {
 		$attributes['maxlength'] = $data['maxlength'];
 		$attributes['separator'] = $data['separator'];
 		$attributes['class'] = $data['class'];
-
+		if($data['type'] == 'multi_check') {
+			$attributes['multiple'] = true;
+		}
 		if (!empty($data['options'])) {
 			$options = explode("|", $data['options']);
 			$options = call_user_func_array('aa', $options);
