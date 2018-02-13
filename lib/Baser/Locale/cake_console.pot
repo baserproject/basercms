@@ -117,43 +117,43 @@ msgstr ""
 msgid "<info>Welcome to CakePHP %s Console</info>"
 msgstr ""
 
-#: Console/Shell.php:732
+#: Console/Shell.php:434;733
 msgid "<error>Error:</error> %s"
 msgstr ""
 
-#: Console/Shell.php:771
+#: Console/Shell.php:772
 msgid "<warning>File `%s` exists</warning>"
 msgstr ""
 
-#: Console/Shell.php:772
+#: Console/Shell.php:773
 msgid "Do you want to overwrite?"
 msgstr ""
 
-#: Console/Shell.php:775
+#: Console/Shell.php:776
 msgid "<error>Quitting</error>."
 msgstr ""
 
-#: Console/Shell.php:779
+#: Console/Shell.php:780
 msgid "Skip `%s`"
 msgstr ""
 
-#: Console/Shell.php:783
+#: Console/Shell.php:784
 msgid "Creating file %s"
 msgstr ""
 
-#: Console/Shell.php:790
+#: Console/Shell.php:791
 msgid "<success>Wrote</success> `%s`"
 msgstr ""
 
-#: Console/Shell.php:794
+#: Console/Shell.php:795
 msgid "<error>Could not write to `%s`</error>."
 msgstr ""
 
-#: Console/Shell.php:836
+#: Console/Shell.php:837
 msgid "PHPUnit is not installed. Do you want to bake unit test files anyway?"
 msgstr ""
 
-#: Console/Shell.php:842
+#: Console/Shell.php:843
 msgid "You can download PHPUnit from %s"
 msgstr ""
 
@@ -581,7 +581,7 @@ msgstr ""
 #: Console/Command/BakeShell.php:249
 #: Console/Command/Task/ControllerTask.php:495
 #: Console/Command/Task/FixtureTask.php:91
-#: Console/Command/Task/ModelTask.php:1024
+#: Console/Command/Task/ModelTask.php:1028
 #: Console/Command/Task/ProjectTask.php:443
 #: Console/Command/Task/TestTask.php:568
 #: Console/Command/Task/ViewTask.php:438
@@ -592,43 +592,43 @@ msgstr ""
 msgid "<info>Current Paths:</info>"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:58
+#: Console/Command/CommandListShell.php:59
 msgid "<info>Changing Paths:</info>"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:59
+#: Console/Command/CommandListShell.php:60
 msgid "Your working path should be the same as your application path. To change your path use the '-app' param."
 msgstr ""
 
-#: Console/Command/CommandListShell.php:60
+#: Console/Command/CommandListShell.php:61
 msgid "Example: %s or %s"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:62
+#: Console/Command/CommandListShell.php:63
 msgid "<info>Available Shells:</info>"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:90
+#: Console/Command/CommandListShell.php:91
 msgid "To run an app or core command, type <info>cake shell_name [args]</info>"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:91
+#: Console/Command/CommandListShell.php:92
 msgid "To run a plugin command, type <info>cake Plugin.shell_name [args]</info>"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:92
+#: Console/Command/CommandListShell.php:93
 msgid "To get help on a specific command, type <info>cake shell_name --help</info>"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:131
+#: Console/Command/CommandListShell.php:132
 msgid "Get the list of available shells for this CakePHP application."
 msgstr ""
 
-#: Console/Command/CommandListShell.php:133
+#: Console/Command/CommandListShell.php:134
 msgid "Does nothing (deprecated)"
 msgstr ""
 
-#: Console/Command/CommandListShell.php:136
+#: Console/Command/CommandListShell.php:137
 msgid "Get the listing as XML."
 msgstr ""
 
@@ -1022,131 +1022,135 @@ msgid "<file> Write code coverage data in Clover XML format."
 msgstr ""
 
 #: Console/Command/TestShell.php:75
-msgid "<file> Write agile documentation in HTML format to file."
+msgid "Output code coverage report in Text format."
 msgstr ""
 
 #: Console/Command/TestShell.php:78
-msgid "<file> Write agile documentation in Text format to file."
+msgid "<file> Write agile documentation in HTML format to file."
 msgstr ""
 
 #: Console/Command/TestShell.php:81
-msgid "<pattern> Filter which tests to run."
+msgid "<file> Write agile documentation in Text format to file."
 msgstr ""
 
 #: Console/Command/TestShell.php:84
-msgid "<name> Only runs tests from the specified group(s)."
+msgid "<pattern> Filter which tests to run."
 msgstr ""
 
 #: Console/Command/TestShell.php:87
-msgid "<name> Exclude tests from the specified group(s)."
+msgid "<name> Only runs tests from the specified group(s)."
 msgstr ""
 
 #: Console/Command/TestShell.php:90
-msgid "List available test groups."
+msgid "<name> Exclude tests from the specified group(s)."
 msgstr ""
 
 #: Console/Command/TestShell.php:93
-msgid "TestSuiteLoader implementation to use."
+msgid "List available test groups."
 msgstr ""
 
 #: Console/Command/TestShell.php:96
-msgid "<times> Runs the test(s) repeatedly."
+msgid "TestSuiteLoader implementation to use."
 msgstr ""
 
 #: Console/Command/TestShell.php:99
-msgid "Report test execution progress in TAP format."
+msgid "<times> Runs the test(s) repeatedly."
 msgstr ""
 
 #: Console/Command/TestShell.php:102
+msgid "Report test execution progress in TAP format."
+msgstr ""
+
+#: Console/Command/TestShell.php:105
 msgid "Report test execution progress in TestDox format."
 msgstr ""
 
-#: Console/Command/TestShell.php:106
+#: Console/Command/TestShell.php:109
 msgid "Do not use colors in output."
 msgstr ""
 
-#: Console/Command/TestShell.php:109
+#: Console/Command/TestShell.php:112
 msgid "Write to STDERR instead of STDOUT."
 msgstr ""
 
-#: Console/Command/TestShell.php:112
+#: Console/Command/TestShell.php:115
 msgid "Stop execution upon first error or failure."
 msgstr ""
 
-#: Console/Command/TestShell.php:115
+#: Console/Command/TestShell.php:118
 msgid "Stop execution upon first failure."
 msgstr ""
 
-#: Console/Command/TestShell.php:118
+#: Console/Command/TestShell.php:121
 msgid "Stop execution upon first skipped test."
 msgstr ""
 
-#: Console/Command/TestShell.php:121
+#: Console/Command/TestShell.php:124
 msgid "Stop execution upon first incomplete test."
 msgstr ""
 
-#: Console/Command/TestShell.php:124
+#: Console/Command/TestShell.php:127
 msgid "Mark a test as incomplete if no assertions are made."
 msgstr ""
 
-#: Console/Command/TestShell.php:127
+#: Console/Command/TestShell.php:130
 msgid "Waits for a keystroke after each test."
 msgstr ""
 
-#: Console/Command/TestShell.php:130
+#: Console/Command/TestShell.php:133
 msgid "Run each test in a separate PHP process."
 msgstr ""
 
-#: Console/Command/TestShell.php:133
+#: Console/Command/TestShell.php:136
 msgid "Do not backup and restore $GLOBALS for each test."
 msgstr ""
 
-#: Console/Command/TestShell.php:136
+#: Console/Command/TestShell.php:139
 msgid "Backup and restore static attributes for each test."
 msgstr ""
 
-#: Console/Command/TestShell.php:139
+#: Console/Command/TestShell.php:142
 msgid "Try to check source files for syntax errors."
 msgstr ""
 
-#: Console/Command/TestShell.php:142
+#: Console/Command/TestShell.php:145
 msgid "<file> A \"bootstrap\" PHP file that is run before the tests."
 msgstr ""
 
-#: Console/Command/TestShell.php:145
+#: Console/Command/TestShell.php:148
 msgid "<file> Read configuration from XML file."
 msgstr ""
 
-#: Console/Command/TestShell.php:148
+#: Console/Command/TestShell.php:151
 msgid "Ignore default configuration file (phpunit.xml)."
 msgstr ""
 
-#: Console/Command/TestShell.php:151
+#: Console/Command/TestShell.php:154
 msgid "<path(s)> Prepend PHP include_path with given path(s)."
 msgstr ""
 
-#: Console/Command/TestShell.php:154
+#: Console/Command/TestShell.php:157
 msgid "key[=value] Sets a php.ini value."
 msgstr ""
 
-#: Console/Command/TestShell.php:157
+#: Console/Command/TestShell.php:161
 msgid "Choose a custom fixture manager."
 msgstr ""
 
-#: Console/Command/TestShell.php:159
+#: Console/Command/TestShell.php:163
 msgid "More verbose output."
 msgstr ""
 
-#: Console/Command/TestShell.php:251
+#: Console/Command/TestShell.php:259
 #: Console/Command/TestsuiteShell.php:88
 msgid "CakePHP Test Shell"
 msgstr ""
 
-#: Console/Command/TestShell.php:300
+#: Console/Command/TestShell.php:308
 msgid "No test cases available \n\n"
 msgstr ""
 
-#: Console/Command/TestShell.php:314
+#: Console/Command/TestShell.php:322
 msgid "What test case would you like to run?"
 msgstr ""
 
@@ -1174,87 +1178,87 @@ msgstr ""
 msgid "Upgrading locations for app directory"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:162;618;645;737
+#: Console/Command/UpgradeShell.php:162;623;650;742
 msgid "Moving %s to %s"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:760
+#: Console/Command/UpgradeShell.php:765
 msgid "Updating %s..."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:801
+#: Console/Command/UpgradeShell.php:806
 msgid " * Updating %s"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:805
+#: Console/Command/UpgradeShell.php:810
 msgid "Done updating %s"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:823
+#: Console/Command/UpgradeShell.php:828
 msgid "The plugin to update. Only the specified plugin will be updated."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:827
+#: Console/Command/UpgradeShell.php:832
 msgid "The extension(s) to search. A pipe delimited list, or a preg_match compatible subpattern"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:832
+#: Console/Command/UpgradeShell.php:837
 msgid "Use git command for moving files around."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:837
+#: Console/Command/UpgradeShell.php:842
 msgid "Dry run the update, no files will actually be modified."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:844
+#: Console/Command/UpgradeShell.php:849
 msgid "A tool to help automate upgrading an application or plugin from CakePHP 1.3 to 2.0. Be sure to have a backup of your application before running these commands."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:848
+#: Console/Command/UpgradeShell.php:853
 msgid "Run all upgrade commands."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:851
+#: Console/Command/UpgradeShell.php:856
 msgid "Update tests class names to FooTest rather than FooTestCase."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:854
+#: Console/Command/UpgradeShell.php:859
 msgid "Move files and folders to their new homes."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:857
+#: Console/Command/UpgradeShell.php:862
 msgid "Update the i18n translation method calls."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:860
+#: Console/Command/UpgradeShell.php:865
 msgid "Update calls to helpers."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:863
+#: Console/Command/UpgradeShell.php:868
 msgid "Update removed basics functions to PHP native functions."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:866
+#: Console/Command/UpgradeShell.php:871
 msgid "Update removed request access, and replace with $this->request."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:869
+#: Console/Command/UpgradeShell.php:874
 msgid "Update Configure::read() to Configure::read('debug')"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:872
+#: Console/Command/UpgradeShell.php:877
 msgid "Replace Obsolete constants"
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:875
+#: Console/Command/UpgradeShell.php:880
 msgid "Return early on controller redirect calls."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:878
+#: Console/Command/UpgradeShell.php:883
 msgid "Update components to extend Component class."
 msgstr ""
 
-#: Console/Command/UpgradeShell.php:881
+#: Console/Command/UpgradeShell.php:886
 msgid "Replace use of cakeError with exceptions."
 msgstr ""
 
@@ -1360,7 +1364,7 @@ msgid "Enter a number from the list above,\ntype in the name of another controll
 msgstr ""
 
 #: Console/Command/Task/ControllerTask.php:451
-#: Console/Command/Task/ModelTask.php:988
+#: Console/Command/Task/ModelTask.php:992
 msgid "Exit"
 msgstr ""
 
@@ -1394,7 +1398,7 @@ msgstr ""
 
 #: Console/Command/Task/ControllerTask.php:498
 #: Console/Command/Task/FixtureTask.php:94
-#: Console/Command/Task/ModelTask.php:1030
+#: Console/Command/Task/ModelTask.php:1034
 #: Console/Command/Task/TestTask.php:574
 #: Console/Command/Task/ViewTask.php:444
 msgid "Force overwriting existing files without prompting."
@@ -1406,7 +1410,7 @@ msgstr ""
 
 #: Console/Command/Task/ControllerTask.php:502
 #: Console/Command/Task/FixtureTask.php:101
-#: Console/Command/Task/ModelTask.php:1032
+#: Console/Command/Task/ModelTask.php:1036
 #: Console/Command/Task/TestTask.php:576
 #: Console/Command/Task/ViewTask.php:448
 msgid "Omitting all arguments and options will enter into an interactive mode."
@@ -1700,11 +1704,11 @@ msgstr ""
 msgid "Baking test fixture for %s..."
 msgstr ""
 
-#: Console/Command/Task/FixtureTask.php:426
+#: Console/Command/Task/FixtureTask.php:429
 msgid "Please provide a SQL fragment to use as conditions\nExample: WHERE 1=1"
 msgstr ""
 
-#: Console/Command/Task/FixtureTask.php:436
+#: Console/Command/Task/FixtureTask.php:439
 msgid "How many records do you want to import?"
 msgstr ""
 
@@ -1792,131 +1796,131 @@ msgstr ""
 msgid "%s - Do not do any validation on this field."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:477
+#: Console/Command/Task/ModelTask.php:481
 msgid "You have already chosen that validation rule,\nplease choose again"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:481
+#: Console/Command/Task/ModelTask.php:485
 msgid "Please make a valid selection."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:503
+#: Console/Command/Task/ModelTask.php:507
 msgid "Would you like to add another validation rule\nor skip the rest of the fields?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:525
+#: Console/Command/Task/ModelTask.php:529
 msgid "One moment while the associations are detected."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:555
+#: Console/Command/Task/ModelTask.php:559
 msgid "None found."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:557
+#: Console/Command/Task/ModelTask.php:561
 msgid "Please confirm the following associations:"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:729
+#: Console/Command/Task/ModelTask.php:733
 msgid "Would you like to define some additional model associations?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:734
+#: Console/Command/Task/ModelTask.php:738
 msgid "What is the association type?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:735
+#: Console/Command/Task/ModelTask.php:739
 msgid "Enter a number"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:737
+#: Console/Command/Task/ModelTask.php:741
 msgid "For the following options be very careful to match your setup exactly.\nAny spelling mistakes will cause errors."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:741
+#: Console/Command/Task/ModelTask.php:745
 msgid "What is the alias for this association?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:742
+#: Console/Command/Task/ModelTask.php:746
 msgid "What className will %s use?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:764
+#: Console/Command/Task/ModelTask.php:768
 msgid "What is the table for this model?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:770
+#: Console/Command/Task/ModelTask.php:774
 msgid "A helpful List of possible keys"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:771
+#: Console/Command/Task/ModelTask.php:775
 msgid "What is the foreignKey?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:775
+#: Console/Command/Task/ModelTask.php:779
 msgid "What is the foreignKey? Specify your own."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:778
+#: Console/Command/Task/ModelTask.php:782
 msgid "What is the associationForeignKey?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:779
+#: Console/Command/Task/ModelTask.php:783
 msgid "What is the joinTable?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:791
+#: Console/Command/Task/ModelTask.php:795
 msgid "Define another association?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:863
+#: Console/Command/Task/ModelTask.php:867
 msgid "Baking model class for %s..."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:897
+#: Console/Command/Task/ModelTask.php:901
 msgid "Possible Models based on your current database:"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:929
+#: Console/Command/Task/ModelTask.php:933
 msgid "Given your model named '%s',\nCake would expect a database table named '%s'"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:930
+#: Console/Command/Task/ModelTask.php:934
 msgid "Do you want to use this table?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:933
+#: Console/Command/Task/ModelTask.php:937
 msgid "What is the name of the table (without prefix)?"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:965
+#: Console/Command/Task/ModelTask.php:969
 msgid "Your database does not have any tables."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:984
+#: Console/Command/Task/ModelTask.php:988
 msgid "Enter a number from the list above,\ntype in the name of another model, or 'q' to exit"
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:993
+#: Console/Command/Task/ModelTask.php:997
 msgid "The model name you supplied was empty,\nor the number you selected was not an option. Please try again."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:1014
+#: Console/Command/Task/ModelTask.php:1018
 msgid "Bake models."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:1016
+#: Console/Command/Task/ModelTask.php:1020
 msgid "Name of the model to bake. Can use Plugin.name to bake plugin models."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:1018
+#: Console/Command/Task/ModelTask.php:1022
 msgid "Bake all model files with associations and validation."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:1021
+#: Console/Command/Task/ModelTask.php:1025
 msgid "Plugin to bake the model into."
 msgstr ""
 
-#: Console/Command/Task/ModelTask.php:1027
+#: Console/Command/Task/ModelTask.php:1031
 msgid "The connection the model table is on."
 msgstr ""
 

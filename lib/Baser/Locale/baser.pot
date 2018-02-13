@@ -17,6 +17,15 @@ msgstr ""
 msgid "プログラムとデータベースのバージョンが異なるため、強制終了します。データベースのバージョンを調整して、再実行してください。"
 msgstr ""
 
+#: Config/setting.php:18
+msgid "コーポレートサイトにちょうどいいCMS - baserCMS - "
+msgstr ""
+
+#: Config/setting.php:27
+#: Controller/UpdatersController.php:166
+msgid "baserCMSコア"
+msgstr ""
+
 #: Config/setting.php:29
 #: View/Elements/admin/footer.php:31
 #: View/Elements/admin/header.php:32
@@ -30,42 +39,63 @@ msgid "ウィジェット管理"
 msgstr ""
 
 #: Config/setting.php:31
+#: Controller/ThemeConfigsController.php:57
+#: Controller/ThemeFilesController.php:75
 #: View/Elements/admin/footer.php:33
 #: View/Elements/admin/header.php:34
 msgid "テーマ管理"
 msgstr ""
 
 #: Config/setting.php:32
+#: Controller/PluginsController.php:65
 #: View/Elements/admin/footer.php:34
 #: View/Elements/admin/header.php:35
 msgid "プラグイン管理"
 msgstr ""
 
 #: Config/setting.php:33
+#: Controller/EditorTemplatesController.php:51
+#: Controller/SearchIndicesController.php:72
+#: Controller/SiteConfigsController.php:64;215
+#: Controller/SitesController.php:41
+#: Plugin/Mail/View/MailContents/admin/form.php:154
 msgid "システム設定"
 msgstr ""
 
 #: Config/setting.php:34
+#: Controller/PermissionsController.php:63
+#: View/Elements/admin/submenus/site_configs.php:24
 msgid "ユーザー管理"
 msgstr ""
 
 #: Config/setting.php:35
+#: Controller/PermissionsController.php:64
+#: View/Elements/admin/submenus/site_configs.php:25
+#: View/Users/admin/form.php:85
 msgid "ユーザーグループ管理"
 msgstr ""
 
 #: Config/setting.php:36
+#: Controller/SearchIndicesController.php:73
+#: View/Elements/admin/submenus/site_configs.php:26
 msgid "検索インデックス管理"
 msgstr ""
 
 #: Config/setting.php:37
+#: Controller/EditorTemplatesController.php:52
+#: View/Elements/admin/submenus/site_configs.php:27
 msgid "エディタテンプレート管理"
 msgstr ""
 
 #: Config/setting.php:38
+#: Controller/SitesController.php:42
+#: View/Elements/admin/submenus/site_configs.php:28
 msgid "サブサイト管理"
 msgstr ""
 
 #: Config/setting.php:39
+#: Controller/SiteConfigsController.php:216
+#: View/Elements/admin/submenus/site_configs.php:29
 msgid "ユーティリティ"
 msgstr ""
 
@@ -78,6 +108,8 @@ msgid "サーバーキャッシュを削除します。いいですか？"
 msgstr ""
 
 #: Config/setting.php:50
+#: Plugin/Mail/View/MailFields/admin/form.php:95;250
+#: View/SiteConfigs/admin/form.php:186
 msgid "なし"
 msgstr ""
 
@@ -97,7 +129,12 @@ msgstr ""
 msgid "スマートフォン"
 msgstr ""
 
+#: Config/setting.php:200
+msgid "英語"
+msgstr ""
+
 #: Config/setting.php:214
+#: View/Elements/admin/contents/form_alias.php:21
 msgid "無所属コンテンツ"
 msgstr ""
 
@@ -106,6 +143,7 @@ msgid "フォルダー"
 msgstr ""
 
 #: Config/setting.php:268
+#: View/Elements/admin/sites/form.php:48
 msgid "エイリアス"
 msgstr ""
 
@@ -173,7 +211,226 @@ msgstr ""
 msgid "<info>baserCMS %s コンソールへようこそ</info>"
 msgstr ""
 
+#: Console/Command/BcManagerShell.php:32
+msgid "ホスト名"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:35
+msgid "データベース名"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:38
+msgid "データベースログインユーザー名"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:41
+msgid "データベースログインパスワード"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:44
+msgid "データベーステーブルプレフィックス"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:47
+msgid "データベースポート番号"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:50
+msgid "ベースとなるURL"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:53
+msgid "初期データパターン"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:75
+msgid "既にインストール済です。 cake bc_manager reset を実行してください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:79
+msgid "baserCMSのインストールを行うには、debug を -1 に設定する必要があります。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:83
+msgid "baserCMSのインストールに失敗しました。ログファイルを確認してください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:91
+msgid "baserCMSのインストールが完了しました。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:101;117
+msgid "baserCMSの初期化を行うには、debug を -1 に設定する必要があります。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:105
+msgid "baserCMSのリセットに失敗しました。ログファイルを確認してください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:107
+msgid "baserCMSのリセットが完了しました。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:129
+msgid "baserCMSの再インストールに失敗しました。ログファイルを確認してください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:140
+msgid "基本必須条件"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:144
+msgid "　mbstring.internal_encoding を UTF-8 に設定してください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:148
+msgid "　古いバージョンのPHPです。動作保証はありません。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:156
+msgid "　/app/Config/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:160
+msgid "　/app/webroot/theme/ に書き込み権限を与える事ができませんでした。手動で書き込み権限を与えてください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:164
+msgid "　PHP の GD は、必須モジュールです。GDが利用可能な状態にしてください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:168
+#: Plugin/Mail/View/MailFields/admin/form.php:220
+msgid "オプション"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:173
+msgid "　Safe Mode が On の場合、動作保証はありません。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:177
+msgid "　PHP の GD は、推奨モジュールです。インストールされていない場合、画像処理ができません。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:181
+msgid "　PHP の PDO は推奨モジュールです。インストールされていない場合、SQLite は利用できません。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:185
+msgid "　/app/db/ に書き込み権限を与える事ができませんでした。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:186
+msgid "　SQLite や CSV など、ファイルベースのデータベースを利用するには、"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:187
+msgid "　手動で書き込み権限を与えてください。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:192
+msgid "不明"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:198
+msgid "　Apache の Rewrite モジュール がインストールされていない場合、スマートURLは利用できません。"
+msgstr ""
+
+#: Console/Command/BcManagerShell.php:208;214
+msgid "引数を見なおしてください。"
+msgstr ""
+
+#: Controller/BcAppController.php:444
+#: Controller/UsersController.php:389
+msgid "指定されたページへのアクセスは許可されていません。"
+msgstr ""
+
+#: Controller/BcAppController.php:601
+msgid "バリデーションエラーまたはコントローラ/アクションの不一致によるエラーです。"
+msgstr ""
+
+#: Controller/BcAppController.php:602
+msgid "CSRF対策によるエラーです。リクエストに含まれるCSRFトークンが不正または無効である可能性があります。"
+msgstr ""
+
+#: Controller/BcAppController.php:603
+msgid "HTTPメソッド制限違反です。リクエストはHTTP GETである必要があります。"
+msgstr ""
+
+#: Controller/BcAppController.php:604;605
+msgid "HTTPメソッド制限違反です。リクエストはHTTP PUTである必要があります。"
+msgstr ""
+
+#: Controller/BcAppController.php:606
+msgid "HTTPメソッド制限違反です。リクエストはHTTP DELETEである必要があります。"
+msgstr ""
+
+#: Controller/BcAppController.php:609
+msgid "不正なリクエストと判断されました。"
+msgstr ""
+
+#: Controller/BcAppController.php:649
+msgid "見つかりませんでした。"
+msgstr ""
+
+#: Controller/BcAppController.php:974
+msgid "送信先のメールアドレスが不正です。"
+msgstr ""
+
+#: Controller/BcPluginAppController.php:18
+msgid "クラス：BcPluginAppController 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppController は削除される予定です。プラグインは AppController を直接継承してください。"
+msgstr ""
+
+#: Controller/ContentFoldersController.php:53;75
+#: Controller/ContentLinksController.php:46;68
+#: Controller/ContentsController.php:241;268;322;356;394;519;630;658;718
+#: Controller/EditorTemplatesController.php:149
+#: Controller/FavoritesController.php:82;113;131
+#: Controller/PagesController.php:82;126;429
+#: Controller/PermissionsController.php:80;183;262;318;348;377;398
+#: Controller/PluginsController.php:233;246;421;450
+#: Controller/SearchIndicesController.php:325
+#: Controller/SitesController.php:163;183
+#: Controller/ThemeFilesController.php:384;389;503;508
+#: Controller/ThemesController.php:387;428
+#: Controller/UserGroupsController.php:178;229;247
+#: Controller/UsersController.php:449
+#: Controller/WidgetAreasController.php:179
+#: Plugin/Blog/Controller/BlogCategoriesController.php:249;314
+#: Plugin/Blog/Controller/BlogCommentsController.php:101;159;203;225
+#: Plugin/Blog/Controller/BlogContentsController.php:75;138;251
+#: Plugin/Blog/Controller/BlogPostsController.php:115;283;365;373;456;512;641;663
+#: Plugin/Blog/Controller/BlogTagsController.php:92;119;143;189
+#: Plugin/Mail/Controller/MailContentsController.php:83;152;275
+#: Plugin/Mail/Controller/MailFieldsController.php:94;140;244;340;361;383;394;421;442
+#: Plugin/Mail/Controller/MailMessagesController.php:129;172;208
+msgid "無効な処理です。"
+msgstr ""
+
+#: Controller/ContentFoldersController.php:60
+#: Controller/ContentLinksController.php:53
+#: Controller/ContentsController.php:307
+#: Controller/EditorTemplatesController.php:87;115
+#: Controller/ThemeConfigsController.php:89
+msgid "保存中にエラーが発生しました。"
+msgstr ""
+
+#: Controller/ContentFoldersController.php:71
+msgid "フォルダ編集"
+msgstr ""
+
+#: Controller/ContentFoldersController.php:89
+#: Controller/ContentLinksController.php:82
+#: Controller/ContentsController.php:338;375
+msgid "保存中にエラーが発生しました。入力内容を確認してください。"
+msgstr ""
+
+#: Controller/ContentLinksController.php:64
+msgid "リンク編集"
+msgstr ""
+
 #: Controller/ContentsController.php:59
+#: Controller/Component/BcContentsComponent.php:201
 #: View/Elements/admin/submenus/contents.php:23
 msgid "コンテンツ一覧"
 msgstr ""
@@ -189,6 +446,3120 @@ msgstr ""
 
 #: Controller/ContentsController.php:150
 msgid "表形式"
+msgstr ""
+
+#: Controller/ContentsController.php:300
+msgid "「%s」のエイリアス「%s」を追加しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:318
+msgid "コンテンツ編集"
+msgstr ""
+
+#: Controller/ContentsController.php:328
+msgid "「%s」を更新しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:352
+msgid "エイリアス編集"
+msgstr ""
+
+#: Controller/ContentsController.php:366
+msgid "「%s」のエイリアス「%s」を編集しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:399;414
+msgid "削除中にエラーが発生しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:443
+msgid "「%s」をゴミ箱に移動しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:449
+msgid "%s のエイリアス「%s」を削除しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:641
+msgid "「%s」を「%s」に名称変更しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:646
+msgid "名称変更中にエラーが発生しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:662
+msgid "データが存在しません。"
+msgstr ""
+
+#: Controller/ContentsController.php:666
+msgid "コンテンツ一覧を表示後、他のログインユーザーがコンテンツの並び順を更新しました。<br>一度リロードしてから並び替えてください。"
+msgstr ""
+
+#: Controller/ContentsController.php:670
+msgid "同一URLのコンテンツが存在するため処理に失敗しました。"
+msgstr ""
+
+#: Controller/ContentsController.php:705
+msgid "データ保存中にエラーが発生しました。"
+msgstr ""
+
+#: Controller/DashboardController.php:69
+msgid "管理者ダッシュボード"
+msgstr ""
+
+#: Controller/DblogsController.php:44
+msgid "最近の動きのログを削除しました。"
+msgstr ""
+
+#: Controller/DblogsController.php:46
+msgid "最近の動きのログ削除に失敗しました。"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:63
+#: View/Elements/admin/submenus/editor_templates.php:23
+msgid "エディタテンプレート一覧"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:73
+msgid "エディタテンプレート新規登録"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:84;112
+msgid "保存完了"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:99
+msgid "エディタテンプレート編集"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:130
+#: Controller/PagesController.php:118
+#: Controller/PermissionsController.php:197;286
+#: Controller/UserGroupsController.php:139;203
+#: Controller/UsersController.php:355;479
+#: Plugin/Blog/Controller/BlogCategoriesController.php:130;184;289
+#: Plugin/Blog/Controller/BlogContentsController.php:131
+#: Plugin/Mail/Controller/MailContentsController.php:145
+#: Plugin/Mail/Controller/MailFieldsController.php:189;272
+msgid "無効なIDです。"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:135;153
+msgid "エディタテンプレート「%s」を削除しました。"
+msgstr ""
+
+#: Controller/EditorTemplatesController.php:137
+#: Controller/PermissionsController.php:297
+#: Controller/SitesController.php:224
+#: Controller/UserGroupsController.php:214
+#: Controller/UsersController.php:497
+#: Plugin/Blog/Controller/BlogCategoriesController.php:300
+#: Plugin/Blog/Controller/BlogPostsController.php:524
+#: Plugin/Blog/Controller/BlogTagsController.php:128
+#: Plugin/Mail/Controller/MailContentsController.php:122;173
+#: Plugin/Mail/Controller/MailFieldsController.php:164;216;284
+#: Plugin/Mail/Controller/MailMessagesController.php:214
+msgid "データベース処理中にエラーが発生しました。"
+msgstr ""
+
+#: Controller/FavoritesController.php:109
+msgid "よく使う項目: %s を削除しました。"
+msgstr ""
+
+#: Controller/InstallationsController.php:136
+msgid "baserCMSのインストール"
+msgstr ""
+
+#: Controller/InstallationsController.php:160
+msgid "baserCMSのインストール [ステップ２]"
+msgstr ""
+
+#: Controller/InstallationsController.php:197
+msgid "データベースの構築中にエラーが発生しました。"
+msgstr ""
+
+#: Controller/InstallationsController.php:205
+msgid "データベースの構築に成功しました。"
+msgstr ""
+
+#: Controller/InstallationsController.php:215
+msgid "baserCMSのインストール [ステップ３]"
+msgstr ""
+
+#: Controller/InstallationsController.php:268
+msgid "管理ユーザーを作成できませんでした。"
+msgstr ""
+
+#: Controller/InstallationsController.php:273
+msgid "baserCMSのインストール [ステップ４]"
+msgstr ""
+
+#: Controller/InstallationsController.php:287
+msgid "baserCMSインストール完了"
+msgstr ""
+
+#: Controller/InstallationsController.php:299
+msgid "baserCMSのインストール完了！"
+msgstr ""
+
+#: Controller/InstallationsController.php:544;605
+msgid "データベースへの接続でエラーが発生しました。データベース設定を見直してください。"
+msgstr ""
+
+#: Controller/InstallationsController.php:562;570
+msgid "データベースのバージョンが %s 以上か確認してください。"
+msgstr ""
+
+#: Controller/InstallationsController.php:583
+msgid "データベースへの接続に成功しました。"
+msgstr ""
+
+#: Controller/InstallationsController.php:593
+msgid "データベースへの接続に成功しましたが、プレフィックスが重複するテーブルが存在します。"
+msgstr ""
+
+#: Controller/InstallationsController.php:661
+msgid "baserCMSのインストールを開始できません"
+msgstr ""
+
+#: Controller/InstallationsController.php:672
+msgid "baserCMSの初期化"
+msgstr ""
+
+#: Controller/InstallationsController.php:685
+msgid "baserCMSを初期化しましたが、正常に処理が行われませんでした。詳細については、エラー・ログを確認してださい。"
+msgstr ""
+
+#: Controller/InstallationsController.php:687
+msgid "baserCMSを初期化しました。"
+msgstr ""
+
+#: Controller/MaintenanceController.php:55
+#: View/SiteConfigs/admin/form.php:219
+msgid "メンテナンス中"
+msgstr ""
+
+#: Controller/MembersController.php:41
+msgid "メンバーマイページ"
+msgstr ""
+
+#: Controller/PagesController.php:101
+msgid "固定ページ「%s」を追加しました。"
+msgstr ""
+
+#: Controller/PagesController.php:153
+msgid "固定ページ「%s」を更新しました。"
+msgstr ""
+
+#: Controller/PagesController.php:163
+#: Controller/PermissionsController.php:148;221
+#: Controller/SiteConfigsController.php:79
+#: Controller/SitesController.php:89;136
+#: Controller/ThemeConfigsController.php:74
+#: Controller/UserGroupsController.php:120;158
+#: Controller/UsersController.php:326;416
+#: Plugin/Blog/Controller/BlogCategoriesController.php:152;197
+#: Plugin/Blog/Controller/BlogContentsController.php:112;153
+#: Plugin/Mail/Controller/MailConfigsController.php:56
+#: Plugin/Mail/Controller/MailContentsController.php:128;171
+#: Plugin/Mail/Controller/MailFieldsController.php:170;222
+msgid "入力エラーです。内容を修正してください。"
+msgstr ""
+
+#: Controller/PagesController.php:194;196
+msgid "固定ページ情報編集"
+msgstr ""
+
+#: Controller/PagesController.php:230
+msgid "%s ページ中 %s ページの新規登録、 %s ページの更新に成功しました。"
+msgstr ""
+
+#: Controller/PagesController.php:243
+msgid "固定ページテンプレートの書き出しに成功しました。"
+msgstr ""
+
+#: Controller/PagesController.php:245
+msgid "固定ページテンプレートの書き出しに失敗しました。<br />表示できないページは固定ページ管理より更新処理を行ってください。"
+msgstr ""
+
+#: Controller/PagesController.php:434
+msgid "固定ページのコピー「%s」を追加しました。"
+msgstr ""
+
+#: Controller/PermissionsController.php:69
+msgid "アクセス制限設定管理"
+msgstr ""
+
+#: Controller/PermissionsController.php:103
+#: View/Elements/admin/submenus/permissions.php:24
+msgid "アクセス制限設定一覧"
+msgstr ""
+
+#: Controller/PermissionsController.php:144;177
+msgid "新規アクセス制限設定「%s」を追加しました。"
+msgstr ""
+
+#: Controller/PermissionsController.php:156
+msgid "新規アクセス制限設定登録"
+msgstr ""
+
+#: Controller/PermissionsController.php:217
+msgid "アクセス制限設定「%s」を更新しました。"
+msgstr ""
+
+#: Controller/PermissionsController.php:226
+msgid "アクセス制限設定編集"
+msgstr ""
+
+#: Controller/PermissionsController.php:245;270;295
+msgid "アクセス制限設定「%s」 を削除しました。"
+msgstr ""
+
+#: Controller/PermissionsController.php:446
+#: Plugin/Mail/Controller/MailFieldsController.php:492
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:36
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:34
+#: View/Elements/admin/permissions/index_list.php:37
+#: View/Elements/admin/permissions/index_row.php:33
+#: View/Elements/admin/plugins/index_row.php:40
+msgid "無効"
+msgstr ""
+
+#: Controller/PermissionsController.php:446
+#: Plugin/Mail/Controller/MailFieldsController.php:492
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:36
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:35
+#: View/Elements/admin/permissions/index_list.php:37
+#: View/Elements/admin/permissions/index_row.php:34
+#: View/Permissions/admin/form.php:82
+msgid "有効"
+msgstr ""
+
+#: Controller/PluginsController.php:75
+msgid "プラグインアップロード"
+msgstr ""
+
+#: Controller/PluginsController.php:85
+#: Controller/ThemesController.php:59
+msgid "ファイルのアップロードに失敗しました。"
+msgstr ""
+
+#: Controller/PluginsController.php:94
+#: Controller/ThemesController.php:75
+msgid "アップロードしたZIPファイルの展開に失敗しました。"
+msgstr ""
+
+#: Controller/PluginsController.php:119
+msgid "新規プラグイン「%s」を追加しました。"
+msgstr ""
+
+#: Controller/PluginsController.php:177
+#: View/Elements/admin/submenus/plugins.php:23
+msgid "プラグイン一覧"
+msgstr ""
+
+#: Controller/PluginsController.php:230
+msgid "一度リロードしてから再実行してみてください。"
+msgstr ""
+
+#: Controller/PluginsController.php:251
+msgid "プラグイン「%s」 を完全に削除しました。"
+msgstr ""
+
+#: Controller/PluginsController.php:348
+msgid "新規プラグイン「%s」を baserCMS に登録しました。"
+msgstr ""
+
+#: Controller/PluginsController.php:355
+msgid "プラグインに問題がある為インストールを完了できません。プラグインの開発者に確認してください。"
+msgstr ""
+
+#: Controller/PluginsController.php:363
+msgid "新規プラグイン登録"
+msgstr ""
+
+#: Controller/PluginsController.php:393
+#: View/Elements/admin/contents/index_row_table.php:62
+#: View/Elements/admin/plugins/index_row.php:37
+msgid "管理"
+msgstr ""
+
+#: Controller/PluginsController.php:432
+msgid "%s プラグインのデータを初期化しました。"
+msgstr ""
+
+#: Controller/PluginsController.php:435
+msgid "処理中にエラーが発生しました。プラグインの開発者に確認してください。"
+msgstr ""
+
+#: Controller/PluginsController.php:455;473
+msgid "プラグイン「%s」 を 無効化しました。"
+msgstr ""
+
+#: Controller/SearchIndicesController.php:125
+msgid "検索結果一覧"
+msgstr ""
+
+#: Controller/SearchIndicesController.php:202
+msgid "検索インデックス一覧"
+msgstr ""
+
+#: Controller/SearchIndicesController.php:330;351
+msgid "検索インデックスより NO.%s を削除しました。"
+msgstr ""
+
+#: Controller/SearchIndicesController.php:490
+msgid "検索インデックスの再構築に成功しました。"
+msgstr ""
+
+#: Controller/SearchIndicesController.php:493
+msgid "検索インデックスの再構築に失敗しました。"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:129
+#: Controller/ThemeConfigsController.php:86
+msgid "システム設定を保存しました。"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:186
+#: View/Elements/admin/submenus/site_configs.php:23
+msgid "サイト基本設定"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:196
+msgid "サーバーキャッシュを削除しました。"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:205
+#: View/Elements/admin/submenus/tools.php:24
+msgid "環境情報"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:249
+msgid "データが送信できませんでした。"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:253
+#: View/SiteConfigs/admin/form.php:344
+msgid "メール送信テスト"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:258
+msgid "ログを確認してください。"
+msgstr ""
+
+#: Controller/SiteConfigsController.php:294
+msgid "スペシャルサンクスデータが取得できませんでした。"
+msgstr ""
+
+#: Controller/SitesController.php:50
+#: View/Elements/admin/submenus/sites.php:23
+msgid "サブサイト一覧"
+msgstr ""
+
+#: Controller/SitesController.php:86
+msgid "サブサイト「%s」を追加しました。"
+msgstr ""
+
+#: Controller/SitesController.php:92
+#: View/Elements/admin/submenus/sites.php:24
+msgid "サブサイト新規登録"
+msgstr ""
+
+#: Controller/SitesController.php:93;140
+#: Plugin/Blog/View/BlogContents/admin/form.php:142
+#: Plugin/Mail/View/MailContents/admin/form.php:176
+msgid "サイト基本設定に従う"
+msgstr ""
+
+#: Controller/SitesController.php:133
+msgid "サブサイト「%s」を更新しました。"
+msgstr ""
+
+#: Controller/SitesController.php:139
+msgid "サブサイト編集"
+msgstr ""
+
+#: Controller/SitesController.php:201
+#: Plugin/Blog/View/BlogPosts/admin/form.php:19
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:32
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_row.php:31;35
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:35
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:25
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:34
+#: View/Elements/admin/contents/index_list_table.php:30
+#: View/Elements/admin/contents/index_row_table.php:65
+#: View/Elements/admin/permissions/index_row.php:33
+#: View/Elements/admin/sites/index_row.php:29
+msgid "非公開"
+msgstr ""
+
+#: Controller/SitesController.php:201
+#: Plugin/Blog/View/BlogPosts/admin/form.php:19
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:32
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_row.php:32;36
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:35
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:26
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:35
+#: View/Elements/admin/content_fields.php:176;178
+#: View/Elements/admin/contents/index_list_table.php:30
+#: View/Elements/admin/contents/index_row_table.php:66
+#: View/Elements/admin/permissions/index_row.php:34
+#: View/Elements/admin/sites/index_row.php:30
+msgid "公開"
+msgstr ""
+
+#: Controller/SitesController.php:206
+msgid "サブサイト「%s」 を、%s に設定しました。"
+msgstr ""
+
+#: Controller/SitesController.php:221
+msgid "サブサイト「%s」 を削除しました。"
+msgstr ""
+
+#: Controller/ThemeConfigsController.php:65
+#: View/Elements/admin/submenus/themes.php:25
+msgid "テーマ設定"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:66
+#: View/Elements/admin/content_fields.php:261
+msgid "レイアウトテンプレート"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:67
+msgid "エレメントテンプレート"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:68
+msgid "Eメールテンプレート"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:69
+msgid "コンテンツテンプレート"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:70
+msgid "スタイルシート"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:72
+#: View/Elements/admin/submenus/theme_files.php:22
+msgid "イメージ"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:99
+msgid "%s 一覧"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:246
+msgid "ファイル %s を作成しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:249
+msgid "ファイル %s の作成に失敗しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:253
+msgid "[%s] %s 作成"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:323
+msgid "ファイル %s を更新しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:326
+msgid "ファイル %s の更新に失敗しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:330
+msgid "[%s] %s 編集：　%s"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:359;409;443
+#: View/Elements/admin/searches/contents_index.php:23
+#: View/Elements/admin/searches/search_indices_index.php:28
+msgid "フォルダ"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:362;412;446
+#: Plugin/Mail/Model/MailField.php:90
+msgid "ファイル"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:366;415;449
+#: Plugin/Blog/Controller/BlogCategoriesController.php:298
+#: Plugin/Blog/Controller/BlogPostsController.php:495;522
+msgid "%s を削除しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:368
+msgid "%s の削除に失敗しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:555
+msgid "上位フォルダのアクセス権限を見直してください。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:578
+msgid "アップロードに成功しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:580
+msgid "アップロードに失敗しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:606
+msgid "フォルダの作成に失敗しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:649;656
+msgid "フォルダ名の変更に失敗しました。"
+msgstr ""
+
+#: Controller/ThemeFilesController.php:652
+msgid "フォルダ名に変更はありませんでした。"
+msgstr ""
+
+#: Controller/ThemesController.php:55
+msgid "テーマアップロード"
+msgstr ""
+
+#: Controller/ThemesController.php:61
+msgid "サーバに設定されているサイズ制限を超えています。"
+msgstr ""
+
+#: Controller/ThemesController.php:89
+#: View/Elements/admin/submenus/themes.php:23
+msgid "テーマ一覧"
+msgstr ""
+
+#: Controller/ThemesController.php:151
+#: Controller/UsersController.php:197
+msgid "不正な操作です。"
+msgstr ""
+
+#: Controller/ThemesController.php:156;173
+msgid "初期データの読み込みが完了しました。"
+msgstr ""
+
+#: Controller/ThemesController.php:159;175
+msgid "初期データの読み込みが完了しましたが、いくつかの処理に失敗しています。ログを確認してください。"
+msgstr ""
+
+#: Controller/ThemesController.php:191
+msgid "初期データのバージョンが違うか、初期データの構造が壊れています。"
+msgstr ""
+
+#: Controller/ThemesController.php:215
+#: Controller/Component/BcManagerComponent.php:571
+msgid "コアの初期データのロードに失敗しました。"
+msgstr ""
+
+#: Controller/ThemesController.php:220
+msgid "コアのプラグインの初期データのロードに失敗しました。"
+msgstr ""
+
+#: Controller/ThemesController.php:225
+msgid "初期データの読み込みに失敗しましたので baserCMSコアの初期データを読み込みました。"
+msgstr ""
+
+#: Controller/ThemesController.php:227
+msgid "初期データの読み込みに失敗しました。データが不完全な状態です。正常に動作しない可能性があります。"
+msgstr ""
+
+#: Controller/ThemesController.php:237
+msgid "メールプラグインのメール受信用テーブルの生成に失敗しました。"
+msgstr ""
+
+#: Controller/ThemesController.php:252
+msgid "初期データの読み込み中にページテンプレートの生成に失敗しました。"
+msgstr ""
+
+#: Controller/ThemesController.php:253;546
+msgid "「Pages」フォルダに書き込み権限が付与されていない可能性があります。"
+msgstr ""
+
+#: Controller/ThemesController.php:254;547
+msgid "権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管理より更新処理を行ってください。"
+msgstr ""
+
+#: Controller/ThemesController.php:263
+#: Controller/Component/BcManagerComponent.php:576
+msgid "システムデータの初期化に失敗しました。"
+msgstr ""
+
+#: Controller/ThemesController.php:275
+msgid "ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設定を行なってください。"
+msgstr ""
+
+#: Controller/ThemesController.php:279
+msgid "ユーザーのよく使う項目データの初期化に失敗しました。手動で各ユーザーのよく使う項目の設定を行なってください。"
+msgstr ""
+
+#: Controller/ThemesController.php:352
+msgid "テーマ情報の変更に失敗しました。入力内容を確認してください。"
+msgstr ""
+
+#: Controller/ThemesController.php:370
+msgid "テーマ情報編集"
+msgstr ""
+
+#: Controller/ThemesController.php:393
+msgid "テーマフォルダのアクセス権限を見直してください。"
+msgstr ""
+
+#: Controller/ThemesController.php:434
+msgid "テーマフォルダを手動で削除してください。"
+msgstr ""
+
+#: Controller/ThemesController.php:516
+msgid "このテーマは下記のプラグインを同梱しています。"
+msgstr ""
+
+#: Controller/ThemesController.php:538
+msgid "このテーマは初期データを保有しています。"
+msgstr ""
+
+#: Controller/ThemesController.php:539
+msgid "Webサイトにテーマに合ったデータを適用するには、初期データ読込を実行してください。"
+msgstr ""
+
+#: Controller/ThemesController.php:545
+msgid "テーマ変更中にページテンプレートの生成に失敗しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:75
+#: View/Elements/admin/submenus/tools.php:23
+msgid "ユーティリティトップ"
+msgstr ""
+
+#: Controller/ToolsController.php:98
+msgid "データの復元が完了しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:101
+msgid "データの復元に失敗しました。ログの確認を行なって下さい。"
+msgstr ""
+
+#: Controller/ToolsController.php:108
+msgid "ページテンプレートの生成に失敗しました。<br />表示できないページはページ管理より更新処理を行ってください。"
+msgstr ""
+
+#: Controller/ToolsController.php:117;404
+#: View/Elements/admin/submenus/tools.php:25
+msgid "データメンテナンス"
+msgstr ""
+
+#: Controller/ToolsController.php:296
+msgid "テーブルを選択してください。"
+msgstr ""
+
+#: Controller/ToolsController.php:308
+msgid "スキーマファイルの生成に失敗しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:314
+#: View/Elements/admin/submenus/tools.php:27
+msgid "スキーマファイル生成"
+msgstr ""
+
+#: Controller/ToolsController.php:334
+msgid "スキーマファイルの読み込みに成功しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:337
+msgid "スキーマファイルの読み込みに失敗しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:340
+msgid "ファイルアップロードに失敗しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:344
+#: View/Elements/admin/submenus/tools.php:28
+msgid "スキーマファイル読込"
+msgstr ""
+
+#: Controller/ToolsController.php:372;387
+msgid "エラーログが存在しません。"
+msgstr ""
+
+#: Controller/ToolsController.php:380
+msgid "エラーログを削除しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:383
+msgid "エラーログが削除できませんでした。"
+msgstr ""
+
+#: Controller/ToolsController.php:435
+msgid "管理システム用のアセットファイルを削除しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:437
+msgid "管理システム用のアセットファイルの削除に失敗しました。アセットファイルの書込権限を見直してください。"
+msgstr ""
+
+#: Controller/ToolsController.php:448
+msgid "管理システム用のアセットファイルを再配置しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:450
+msgid "管理システム用のアセットファイルの再配置に失敗しました。アセットファイルの書込権限を見直してください。"
+msgstr ""
+
+#: Controller/ToolsController.php:462
+msgid "コンテンツのツリー構造をリセットしました。"
+msgstr ""
+
+#: Controller/ToolsController.php:464
+msgid "コンテンツのツリー構造のリセットに失敗しました。"
+msgstr ""
+
+#: Controller/ToolsController.php:480
+msgid "コンテンツのツリー構造に問題はありません。"
+msgstr ""
+
+#: Controller/ToolsController.php:483
+msgid "コンテンツのツリー構造に問題があります。ログを確認してください。"
+msgstr ""
+
+#: Controller/UpdatersController.php:133
+msgid "アップデート処理を開始します。"
+msgstr ""
+
+#: Controller/UpdatersController.php:136
+msgid "アップデート処理が途中で失敗しました。"
+msgstr ""
+
+#: Controller/UpdatersController.php:151
+msgid "全てのアップデート処理が完了しました。<a href=\"#UpdateLog\">アップデートログ</a>を確認してください。"
+msgstr ""
+
+#: Controller/UpdatersController.php:164
+msgid "データベースアップデート（baserCMSコア）"
+msgstr ""
+
+#: Controller/UpdatersController.php:184
+msgid "アップデートスクリプトの実行します。"
+msgstr ""
+
+#: Controller/UpdatersController.php:188
+msgid "アップデートスクリプトの実行が完了しました。"
+msgstr ""
+
+#: Controller/UpdatersController.php:190
+msgid "アップデートスクリプトの実行が完了しました。<a href=\"#UpdateLog\">アップデートログ</a>を確認してください。"
+msgstr ""
+
+#: Controller/UpdatersController.php:193
+msgid "アップデートスクリプトが見つかりません。"
+msgstr ""
+
+#: Controller/UpdatersController.php:204
+msgid "アップデートスクリプト実行"
+msgstr ""
+
+#: Controller/UpdatersController.php:235
+msgid "アップデート処理が完了しました。<a href=\"#UpdateLog\">アップデートログ</a>を確認してください。"
+msgstr ""
+
+#: Controller/UserGroupsController.php:97
+#: View/Elements/admin/submenus/users.php:25
+msgid "ユーザーグループ一覧"
+msgstr ""
+
+#: Controller/UserGroupsController.php:125
+msgid "新規ユーザーグループ登録"
+msgstr ""
+
+#: Controller/UsersController.php:136
+msgid "アカウント名、パスワードが間違っています。"
+msgstr ""
+
+#: Controller/UsersController.php:145
+#: View/Elements/admin/toolbar.php:93;95
+#: View/Elements/admin/helps/users_index.php:21
+#: View/Elements/admin/users/index_row.php:24
+#: View/Users/admin/login.php:48
+msgid "ログイン"
+msgstr ""
+
+#: Controller/UsersController.php:193
+msgid "元のユーザーに戻りました。"
+msgstr ""
+
+#: Controller/UsersController.php:239
+msgid "ログアウトしました"
+msgstr ""
+
+#: Controller/UsersController.php:280
+#: View/Elements/admin/submenus/users.php:23
+msgid "ユーザー一覧"
+msgstr ""
+
+#: Controller/UsersController.php:341
+msgid "新規ユーザー登録"
+msgstr ""
+
+#: Controller/UsersController.php:393
+msgid "自分のアカウントのグループは変更できません。"
+msgstr ""
+
+#: Controller/UsersController.php:434
+msgid "ユーザー情報編集"
+msgstr ""
+
+#: Controller/UsersController.php:455
+msgid "このユーザーは削除できません。"
+msgstr ""
+
+#: Controller/UsersController.php:486
+msgid "最後の管理者ユーザーは削除する事はできません。"
+msgstr ""
+
+#: Controller/UsersController.php:516
+msgid "パスワードのリセット"
+msgstr ""
+
+#: Controller/UsersController.php:521
+msgid "メールアドレスを入力してください。"
+msgstr ""
+
+#: Controller/UsersController.php:527
+msgid "送信されたメールアドレスは登録されていません。"
+msgstr ""
+
+#: Controller/UsersController.php:534
+msgid "新しいパスワードをデータベースに保存できませんでした。"
+msgstr ""
+
+#: Controller/UsersController.php:538
+msgid "パスワードを変更しました"
+msgstr ""
+
+#: Controller/UsersController.php:539
+msgid "メール送信時にエラーが発生しました。"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:75
+#: View/Elements/admin/submenus/widget_areas.php:23
+msgid "ウィジェットエリア一覧"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:97
+msgid "新規ウィジェットエリア登録"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:102
+msgid "新しいウィジェットエリアを保存しました。"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:105
+msgid "新しいウィジェットエリアの保存に失敗しました。"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:118
+msgid "ウィジェットエリア編集"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:131
+msgid "コアウィジェット"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:352
+msgid "メソッド：WidgetAreaController::get_widgets()"
+msgstr ""
+
+#: Controller/WidgetAreasController.php:352
+msgid "このメソッドは非推奨となりました。BcWidgetAreaHelper::showWidgets() に移行してください。"
+msgstr ""
+
+#: Controller/Component/BcAuthConfigureComponent.php:90
+msgid "入力されたログイン情報を確認できませんでした。もう一度入力してください。"
+msgstr ""
+
+#: Controller/Component/BcAuthConfigureComponent.php:93
+msgid "指定されたページを開くにはログインする必要があります。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:75
+msgid "データベースの保存フォルダの作成に失敗しました。db フォルダの書き込み権限を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:86
+msgid "インストールファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:92
+msgid "データベースの設定ファイル生成に失敗しました。設定フォルダの書き込み権限を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:98
+msgid "データベースの初期化に失敗しました。データベースの設定を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:105
+msgid "サイト基本設定への管理者メールアドレスの設定処理が失敗しました。データベースの設定を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:111
+msgid "初期ユーザーの作成に失敗しました。データベースの設定を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:118
+msgid "データベースのデータ更新に失敗しました。データベースの設定を見なおしてください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:124
+msgid "コアプラグインのインストールに失敗しました。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:130
+msgid "テーマの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:136
+msgid "管理システムのアセットファイルの配置に失敗しました。テーマフォルダの書き込み権限を確認してください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:141
+msgid "アップロード用初期フォルダの作成に失敗しました。files フォルダの書き込み権限を確認してください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:147
+msgid "エディタテンプレートイメージの配置に失敗しました。files フォルダの書き込み権限を確認してください。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:284
+msgid "プラグインの有効化に失敗しました。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:288
+msgid "コンテンツの更新に失敗しました。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:559
+msgid "データパターンの形式が不正です。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:566
+msgid "コアテーブルの構築に失敗しました。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:649
+#: View/Elements/admin/submenus/theme_files.php:26
+#: View/Updaters/admin/exec_script.php:21
+msgid "コア"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:771
+msgid "users テーブルの初期化に失敗。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:782
+msgid "site_configs テーブルの初期化に失敗"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1197
+msgid "設定ファイルを正常に初期化できませんでした。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1202
+msgid "データベースを正常に初期化できませんでした。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1209
+msgid "テーマフォルダを初期化できませんでした。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1215
+msgid "固定ページテンプレートを初期化できませんでした。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1221
+msgid "files フォルダを初期化できませんでした。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1227
+msgid "img / css / js フォルダを初期化できませんでした。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1442
+msgid "データベースファイルに書き込み権限がありません。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1447;1456
+msgid "データベースの保存フォルダに書き込み権限がありません。"
+msgstr ""
+
+#: Controller/Component/BcManagerComponent.php:1459
+msgid "ドライバが見つかりません Driver is not defined.(MySQL|Postgres|SQLite|CSV)"
+msgstr ""
+
+#: Event/BcContentsEventListener.php:86
+#: View/Sites/admin/add.php:29
+#: View/Sites/admin/edit.php:25
+#: View/ThemeFiles/admin/form.php:94;97;103
+#: View/ThemeFiles/admin/form_folder.php:70;73;79
+msgid "一覧に戻る"
+msgstr ""
+
+#: Event/BcContentsEventListener.php:89
+#: Plugin/Blog/View/BlogPosts/admin/form.php:191;194
+msgid "プレビュー"
+msgstr ""
+
+#: Event/BcContentsEventListener.php:94
+#: Plugin/Blog/View/BlogCategories/admin/form.php:125
+#: Plugin/Blog/View/BlogPosts/admin/form.php:196
+#: Plugin/Blog/View/BlogTags/admin/form.php:54
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:32
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_row.php:31
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:32
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_row.php:33;37
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:35
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:30
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:35
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_row.php:26
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:36
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:38
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:32
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_row.php:26
+#: Plugin/Mail/View/MailFields/admin/form.php:277
+#: Plugin/Mail/View/MailMessages/admin/view.php:71
+#: View/Dblogs/admin/ajax_index.php:36
+#: View/EditorTemplates/admin/form.php:77
+#: View/Elements/admin/favorite_menu.php:61
+#: View/Elements/admin/contents/index_list_table.php:30
+#: View/Elements/admin/contents/index_row_table.php:75
+#: View/Elements/admin/editor_templates/index_row.php:22
+#: View/Elements/admin/permissions/index_list.php:37
+#: View/Elements/admin/permissions/index_row.php:38
+#: View/Elements/admin/plugins/index_row.php:46
+#: View/Elements/admin/search_indices/index_list.php:75
+#: View/Elements/admin/search_indices/index_row.php:39
+#: View/Elements/admin/theme_files/index_list.php:28
+#: View/Elements/admin/theme_files/index_row.php:41
+#: View/Elements/admin/user_groups/index_row.php:27
+#: View/Elements/admin/users/index_row.php:22
+#: View/Elements/admin/widget_areas/index_list.php:29
+#: View/Elements/admin/widget_areas/index_row.php:25
+#: View/Permissions/admin/form.php:95
+#: View/Sites/admin/edit.php:27
+#: View/ThemeFiles/admin/form.php:100
+#: View/ThemeFiles/admin/form_folder.php:76
+#: View/Themes/admin/form.php:90
+#: View/Tools/admin/log.php:31
+#: View/UserGroups/admin/form.php:136
+#: View/Users/admin/form.php:140
+msgid "削除"
+msgstr ""
+
+#: Event/BcContentsEventListener.php:96
+msgid "ゴミ箱へ移動"
+msgstr ""
+
+#: Lib/TestSuite/Fixture/BaserTestFixture.php:53
+msgid "Schemaファイルが見つかりません"
+msgstr ""
+
+#: Model/BcAppModel.php:50
+msgid "モデル：%s BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。"
+msgstr ""
+
+#: Model/BcAppModel.php:61
+msgid "インストールに失敗している可能性があります。<br />インストールを最初からやり直すにはbaserCMSを初期化してください。"
+msgstr ""
+
+#: Model/BcPluginAppModel.php:18
+msgid "モデル：BcPluginAppModelの 継承は、バージョン 4.0.0 より非推奨となりました。バージョン 5.0.0 で BcPluginAppModel は削除される予定です。プラグインは AppModel を直接継承してください。"
+msgstr ""
+
+#: Model/Content.php:127
+#: Model/ContentFolder.php:64
+#: Model/Page.php:87
+#: Plugin/Mail/Model/MailContent.php:59
+#: Plugin/Mail/Model/MailField.php:39
+msgid "IDに不正な値が利用されています。"
+msgstr ""
+
+#: Model/Content.php:129
+msgid "URLを入力してください。"
+msgstr ""
+
+#: Model/Content.php:130
+msgid "URLはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。"
+msgstr ""
+
+#: Model/Content.php:131
+msgid "スラッグを入力してください。"
+msgstr ""
+
+#: Model/Content.php:132;137
+msgid "タイトルは230文字以内で入力してください。"
+msgstr ""
+
+#: Model/Content.php:133
+msgid "連携しているサブサイトでスラッグが重複するコンテンツが存在します。重複するコンテンツのスラッグ名を先に変更してください。"
+msgstr ""
+
+#: Model/Content.php:135
+msgid "タイトルはスペース、全角スペース及び、指定の記号(\\'|`^\"(){}[];/?:@&=+$,%<>#!)だけの名前は付けられません。"
+msgstr ""
+
+#: Model/Content.php:136
+#: Plugin/Blog/Model/BlogPost.php:128
+msgid "タイトルを入力してください。"
+msgstr ""
+
+#: Model/Content.php:139
+msgid "公開開始日に不正な文字列が入っています。"
+msgstr ""
+
+#: Model/Content.php:141
+msgid "公開終了日に不正な文字列が入っています。"
+msgstr ""
+
+#: Model/Content.php:142
+msgid "公開終了日は、公開開始日より新しい日付で入力してください。"
+msgstr ""
+
+#: Model/Content.php:144
+msgid "作成日に不正な文字列が入っています。"
+msgstr ""
+
+#: Model/Content.php:146
+msgid "更新日に不正な文字列が入っています。"
+msgstr ""
+
+#: Model/Content.php:1250
+msgid "%s のコピー"
+msgstr ""
+
+#: Model/ContentFolder.php:213
+#: Model/Page.php:844
+msgid "親フォルダの設定に従う（%s）"
+msgstr ""
+
+#: Model/EditorTemplate.php:57
+#: Plugin/Feed/Model/FeedConfig.php:63
+msgid "テンプレート名を入力してください。"
+msgstr ""
+
+#: Model/Favorite.php:63
+msgid "このURLの登録は許可されていません。"
+msgstr ""
+
+#: Model/Page.php:89;92
+msgid "PHPの構文エラーが発生しました。"
+msgstr ""
+
+#: Model/Page.php:90
+#: Plugin/Blog/Model/BlogPost.php:131
+msgid "本稿欄に保存できるデータ量を超えています。"
+msgstr ""
+
+#: Model/Page.php:93
+#: Plugin/Blog/Model/BlogPost.php:133
+msgid "草稿欄に保存できるデータ量を超えています。"
+msgstr ""
+
+#: Model/Page.php:244
+msgid "ページ"
+msgstr ""
+
+#: Model/Page.php:813
+msgid "PHPの構文エラーです"
+msgstr ""
+
+#: Model/Permission.php:54
+msgid "設定名を入力してください。"
+msgstr ""
+
+#: Model/Permission.php:55
+msgid "設定名は255文字以内で入力してください。"
+msgstr ""
+
+#: Model/Permission.php:57
+msgid "ユーザーグループを選択してください。"
+msgstr ""
+
+#: Model/Permission.php:59
+msgid "設定URLを入力してください。"
+msgstr ""
+
+#: Model/Permission.php:60
+msgid "設定URLは255文字以内で入力してください。"
+msgstr ""
+
+#: Model/Permission.php:61
+msgid "アクセス拒否として設定できるのは認証ページだけです。"
+msgstr ""
+
+#: Model/Permission.php:134
+msgid "不可"
+msgstr ""
+
+#: Model/Permission.php:134
+msgid "可"
+msgstr ""
+
+#: Model/Plugin.php:38
+msgid "プラグイン名は半角英数字、ハイフン、アンダースコアのみが利用可能です。"
+msgstr ""
+
+#: Model/Plugin.php:39
+msgid "指定のプラグインは既に使用されています。"
+msgstr ""
+
+#: Model/Plugin.php:40
+msgid "プラグイン名は50文字以内としてください。"
+msgstr ""
+
+#: Model/Plugin.php:42
+msgid "プラグインタイトルは50文字以内とします。"
+msgstr ""
+
+#: Model/Plugin.php:60
+msgid "メソッド：Plugin::initDb()は、バージョン 4.0.0 より引数が変更になりました。第一引数にプラグイン名を設定してください。元の第一引数は不要です。"
+msgstr ""
+
+#: Model/Plugin.php:179
+msgid "メソッド：Plugin::alterDb()は、バージョン 4.0.0 より非推奨となりました。Plugin::initDb() を利用してください。"
+msgstr ""
+
+#: Model/Site.php:46
+msgid "識別名称を入力してください。"
+msgstr ""
+
+#: Model/Site.php:47
+msgid "識別名称は50文字以内で入力してください。"
+msgstr ""
+
+#: Model/Site.php:48
+msgid "識別名称は、半角英数・ハイフン（-）・アンダースコア（_）で入力してください。"
+msgstr ""
+
+#: Model/Site.php:49
+msgid "既に利用されている識別名称です。別の名称に変更してください。"
+msgstr ""
+
+#: Model/Site.php:51
+msgid "サブサイト名を入力してください。"
+msgstr ""
+
+#: Model/Site.php:52
+msgid "サブサイト名は50文字以内で入力してください。"
+msgstr ""
+
+#: Model/Site.php:54
+msgid "エイリアスは50文字以内で入力してください。"
+msgstr ""
+
+#: Model/Site.php:55
+msgid "エイリアスは、半角英数・ハイフン（-）・アンダースコア（_）・スラッシュ（/）・ドット（.）で入力してください。"
+msgstr ""
+
+#: Model/Site.php:56
+msgid "既に利用されているエイリアス名です。別の名称に変更してください。"
+msgstr ""
+
+#: Model/Site.php:57
+msgid "エイリアスには先頭と末尾にスラッシュ（/）は入力できず、また、連続して入力する事もできません。"
+msgstr ""
+
+#: Model/Site.php:59
+msgid "サブサイトタイトルを入力してください。"
+msgstr ""
+
+#: Model/Site.php:60
+msgid "サブサイトタイトルは255文字以内で入力してください。"
+msgstr ""
+
+#: Model/Site.php:478;504
+#: Plugin/Blog/Controller/BlogCategoriesController.php:164;166;212;214
+#: Plugin/Blog/Controller/BlogPostsController.php:331;417
+#: Plugin/Blog/View/BlogCategories/admin/form.php:98
+#: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:26
+#: View/Elements/site_search_form.php:33
+#: View/Elements/admin/searches/contents_index.php:24;32;36;40
+#: View/Elements/admin/sites/form.php:17;22
+msgid "指定しない"
+msgstr ""
+
+#: Model/SiteConfig.php:38
+msgid "Webサイト名を入力してください。"
+msgstr ""
+
+#: Model/SiteConfig.php:40
+msgid "Webサイトタイトルを入力してください。"
+msgstr ""
+
+#: Model/SiteConfig.php:42
+msgid "管理者メールアドレスの形式が不正です。"
+msgstr ""
+
+#: Model/SiteConfig.php:43
+msgid "管理者メールアドレスを入力してください。"
+msgstr ""
+
+#: Model/SiteConfig.php:45
+msgid "メール送信文字コードを入力してください。初期値は「ISO-2022-JP」です。"
+msgstr ""
+
+#: Model/SiteConfig.php:47
+msgid "WebサイトURLを入力してください。"
+msgstr ""
+
+#: Model/SiteConfig.php:49
+msgid "管理画面をSSLで利用するには、SSL用のWebサイトURLを入力してください。"
+msgstr ""
+
+#: Model/SiteConfig.php:51
+msgid "メインサイト表示名を入力してください。"
+msgstr ""
+
+#: Model/SiteConfig.php:82
+#: View/Elements/admin/toolbar.php:64
+msgid "インストールモード"
+msgstr ""
+
+#: Model/SiteConfig.php:82
+msgid "ノーマルモード"
+msgstr ""
+
+#: Model/SiteConfig.php:82
+msgid "デバッグモード１"
+msgstr ""
+
+#: Model/SiteConfig.php:82
+msgid "デバッグモード２"
+msgstr ""
+
+#: Model/Theme.php:47
+msgid "テーマ名を入力してください。"
+msgstr ""
+
+#: Model/Theme.php:48
+msgid "テーマ名は半角英数字、ハイフン、アンダーバーのみで入力してください。"
+msgstr ""
+
+#: Model/Theme.php:49
+msgid "既に存在するテーマ名です。"
+msgstr ""
+
+#: Model/Theme.php:51
+msgid "URLは半角英数字のみで入力してください。"
+msgstr ""
+
+#: Model/Theme.php:52
+msgid "URLの形式が間違っています。"
+msgstr ""
+
+#: Model/ThemeFile.php:38
+msgid "テーマファイル名を入力してください。"
+msgstr ""
+
+#: Model/ThemeFile.php:39
+msgid "入力されたテーマファイル名は、同一階層に既に存在します。"
+msgstr ""
+
+#: Model/ThemeFolder.php:45
+msgid "テーマフォルダ名を入力してください。"
+msgstr ""
+
+#: Model/ThemeFolder.php:46
+msgid "テーマフォルダ名は半角のみで入力してください。"
+msgstr ""
+
+#: Model/ThemeFolder.php:47
+msgid "入力されたテーマフォルダ名は、同一階層に既に存在します。"
+msgstr ""
+
+#: Model/Tool.php:44
+msgid "baser（コア）"
+msgstr ""
+
+#: Model/Tool.php:44
+msgid "plugin（プラグイン）"
+msgstr ""
+
+#: Model/User.php:63
+msgid "アカウント名を入力してください。"
+msgstr ""
+
+#: Model/User.php:64
+msgid "アカウント名は半角英数字とハイフン、アンダースコアのみで入力してください。"
+msgstr ""
+
+#: Model/User.php:65
+msgid "既に登録のあるアカウント名です。"
+msgstr ""
+
+#: Model/User.php:66
+msgid "アカウント名は255文字以内で入力してください。"
+msgstr ""
+
+#: Model/User.php:69
+msgid "名前[姓]を入力してください。"
+msgstr ""
+
+#: Model/User.php:70
+msgid "名前[姓]は50文字以内で入力してください。"
+msgstr ""
+
+#: Model/User.php:72
+msgid "名前[名]は50文字以内で入力してください。"
+msgstr ""
+
+#: Model/User.php:74
+msgid "パスワードは6文字以上で入力してください。"
+msgstr ""
+
+#: Model/User.php:75
+msgid "パスワードは255文字以内で入力してください。"
+msgstr ""
+
+#: Model/User.php:76
+msgid "パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。"
+msgstr ""
+
+#: Model/User.php:77
+msgid "パスワードが同じものではありません。"
+msgstr ""
+
+#: Model/User.php:79
+#: Plugin/Blog/Model/BlogComment.php:58
+msgid "Eメールの形式が不正です。"
+msgstr ""
+
+#: Model/User.php:80
+#: Plugin/Blog/Model/BlogComment.php:59
+msgid "Eメールは255文字以内で入力してください。"
+msgstr ""
+
+#: Model/User.php:82
+msgid "グループを選択してください。"
+msgstr ""
+
+#: Model/UserGroup.php:62
+msgid "ユーザーグループ名を入力してください。"
+msgstr ""
+
+#: Model/UserGroup.php:63
+msgid "ユーザーグループ名は半角のみで入力してください。"
+msgstr ""
+
+#: Model/UserGroup.php:64
+msgid "既に登録のあるユーザーグループ名です。"
+msgstr ""
+
+#: Model/UserGroup.php:65
+msgid "ユーザーグループ名は50文字以内で入力してください。"
+msgstr ""
+
+#: Model/UserGroup.php:67
+msgid "表示名を入力してください。"
+msgstr ""
+
+#: Model/UserGroup.php:68
+msgid "表示名は50文字以内で入力してください。"
+msgstr ""
+
+#: Model/UserGroup.php:70
+msgid "認証プレフィックスを入力してください。"
+msgstr ""
+
+#: Model/WidgetArea.php:44
+msgid "ウィジェットエリア名を入力してください。"
+msgstr ""
+
+#: Model/WidgetArea.php:45
+msgid "ウィジェットエリア名は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogAppController.php:40
+msgid "【%s】コメントを受け付けました"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:74
+#: Plugin/Mail/Controller/MailMessagesController.php:76
+msgid "%s 管理"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:118
+msgid "[%s] カテゴリ一覧"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:149
+msgid "カテゴリー「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:169
+msgid "[%s] 新規カテゴリ登録"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:194
+msgid "カテゴリー「%s」を更新しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:217
+msgid "[%s] カテゴリ編集"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCategoriesController.php:271
+msgid "カテゴリー「%s」を削除しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCommentsController.php:65;73
+#: Plugin/Blog/Controller/BlogPostsController.php:86
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:23
+#: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:23
+msgid "%s 設定"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCommentsController.php:108;111
+msgid "[%s] コメント一覧"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCommentsController.php:181;183
+msgid "記事「%s」へのコメントを削除しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCommentsController.php:278
+#: Plugin/Blog/Controller/BlogPostsController.php:716
+msgid "非公開状態"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCommentsController.php:278
+#: Plugin/Blog/Controller/BlogPostsController.php:716
+#: Plugin/Blog/View/BlogPosts/admin/form.php:145
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:52
+#: View/Elements/admin/content_fields.php:173
+#: View/Elements/admin/searches/contents_index.php:35
+#: View/Elements/admin/searches/search_indices_index.php:30
+#: View/Elements/admin/sites/form.php:158
+#: View/SiteConfigs/admin/form.php:217
+msgid "公開状態"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogCommentsController.php:286;288
+msgid "記事「%s」へのコメントを %s に設定しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:81
+msgid "ブログ「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:96
+msgid "新規ブログ登録"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:109
+msgid "新規ブログ「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:146
+msgid "ブログ「%s」を更新しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:165
+msgid "ブログ設定編集：%s"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:192;221
+#: Plugin/Mail/Controller/MailContentsController.php:233;262
+msgid "現在、「テーマなし」の場合、管理画面でのテンプレート編集はサポートされていません。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogContentsController.php:256
+msgid "ブログのコピー「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:184
+msgid "[%s] 記事一覧"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:307
+msgid "記事「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:321;401
+#: Plugin/Blog/Controller/BlogTagsController.php:77;103
+msgid "エラーが発生しました。内容を確認してください。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:344;435
+msgid "%s 記事一覧"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:351
+msgid "[%s] 新規記事登録"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:392
+msgid "記事「%s」を更新しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:441
+msgid "[%s] 記事編集： %s"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogPostsController.php:726
+msgid "ブログ記事「%s」 を %s に設定しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogTagsController.php:62
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:28
+msgid "タグ一覧"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogTagsController.php:74
+msgid "タグ「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogTagsController.php:80
+msgid "新規タグ登録"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogTagsController.php:100
+msgid "タグ「%s」を更新しました。"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogTagsController.php:106
+msgid "タグ編集： %s"
+msgstr ""
+
+#: Plugin/Blog/Controller/BlogTagsController.php:126;148;166
+msgid "タグ「%s」を削除しました。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogCategory.php:69
+msgid "ブログカテゴリ名を入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogCategory.php:70
+msgid "ブログカテゴリ名は半角のみで入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogCategory.php:71
+msgid "入力されたブログカテゴリ名は既に登録されています。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogCategory.php:72
+msgid "ブログカテゴリ名は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogCategory.php:74
+msgid "ブログカテゴリタイトルを入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogCategory.php:75
+msgid "ブログカテゴリタイトルは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogComment.php:55
+msgid "お名前を入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogComment.php:56
+msgid "お名前は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogComment.php:61
+msgid "URLの形式が不正です。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogComment.php:62
+msgid "URLは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogComment.php:64
+msgid "コメントを入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:72
+msgid "レイアウトテンプレート名は半角で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:73;76
+msgid "レイアウトテンプレート名は20文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:75
+msgid "コンテンツテンプレート名は半角で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:78
+msgid "一覧表示件数は半角で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:80
+msgid "一覧に表示する順番を指定してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:82
+msgid "アイキャッチ画像のサイズが不正です。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogContent.php:201
+#: Plugin/Blog/Model/BlogPost.php:564
+#: Plugin/Blog/View/Elements/admin/widgets/blog_author_archives.php:23
+#: Plugin/Blog/View/Elements/admin/widgets/blog_calendar.php:19
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:45
+#: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:25
+#: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:21
+#: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:25
+#: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:27
+msgid "ブログ"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:129
+msgid "タイトルは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:135
+msgid "公開開始日の形式が不正です。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:136;139
+msgid "公開期間が不正です。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:138
+msgid "公開終了日の形式が不正です。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:141
+msgid "投稿日を入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:142
+msgid "投稿日の形式が不正です。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:144
+msgid "投稿者を選択してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogPost.php:852;923
+msgid "contentId を指定してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogTag.php:73
+msgid "ブログタグを入力してください。"
+msgstr ""
+
+#: Plugin/Blog/Model/BlogTag.php:74
+msgid "既に登録のあるタグです。"
+msgstr ""
+
+#: Plugin/Blog/View/Blog/tags.php:19
+msgid "%s のアーカイブ一覧です。"
+msgstr ""
+
+#: Plugin/Blog/View/Blog/default/archives.php:18
+#: Plugin/Blog/View/Blog/mobile/default/archives.php:17
+#: Plugin/Blog/View/Blog/smartphone/default/archives.php:17
+msgid "%s｜%sのアーカイブ一覧です。"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:53
+msgid "ブログカテゴリ名"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:56;100
+#: Plugin/Blog/View/BlogContents/admin/form.php:55;69;83;109;118;144;164
+#: Plugin/Blog/View/BlogPosts/admin/form.php:215
+#: Plugin/Mail/View/MailConfigs/admin/form.php:33;42;51;65;74
+#: Plugin/Mail/View/MailContents/admin/form.php:62;71;80;89;113;125;139;153;165;177;193;211
+#: Plugin/Mail/View/MailFields/admin/form.php:47;56;65;80;131;153;177;194;208
+#: View/Elements/admin/contents_menu.php:26
+#: View/Elements/admin/favorite_menu.php:39
+#: View/Elements/admin/help.php:25
+#: View/Elements/admin/sites/form.php:46;50;60;69;77;86;97;114;121;130;135;139;152
+#: View/Pages/admin/form.php:68
+#: View/Permissions/admin/form.php:49;59
+#: View/SearchIndices/admin/add.php:35
+#: View/SiteConfigs/admin/form.php:37;51;65;74;113;122;132;145;155;173;187;198;207;210;220;232;264;298;310;317;324;333;340
+#: View/ThemeFiles/admin/form.php:52
+#: View/ThemeFiles/admin/form_folder.php:50
+#: View/Themes/admin/form.php:41;71
+#: View/UserGroups/admin/form.php:62;76;92;103;117
+#: View/Users/admin/form.php:52;62;72;82;97;115
+msgid "ヘルプ"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:67
+msgid "ブログカテゴリタイトル"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:75
+msgid "親カテゴリ"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:91
+msgid "管理グループ"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:122
+#: Plugin/Blog/View/BlogContents/admin/form.php:206
+#: Plugin/Blog/View/BlogPosts/admin/form.php:192;195;227
+#: Plugin/Blog/View/BlogTags/admin/form.php:51
+#: Plugin/Mail/View/MailConfigs/admin/form.php:85
+#: Plugin/Mail/View/MailContents/admin/form.php:229
+#: Plugin/Mail/View/MailFields/admin/form.php:275
+#: View/ContentFolders/admin/edit.php:43
+#: View/ContentLinks/admin/edit.php:33
+#: View/Contents/admin/edit.php:21
+#: View/Contents/admin/edit_alias.php:27
+#: View/EditorTemplates/admin/form.php:74
+#: View/Pages/admin/form.php:84
+#: View/Permissions/admin/form.php:93
+#: View/SearchIndices/admin/add.php:52
+#: View/SiteConfigs/admin/form.php:356
+#: View/Sites/admin/add.php:30
+#: View/Sites/admin/edit.php:26
+#: View/ThemeConfigs/admin/form.php:118
+#: View/ThemeFiles/admin/form.php:95;99
+#: View/ThemeFiles/admin/form_folder.php:71;75
+#: View/Themes/admin/form.php:89
+#: View/UserGroups/admin/form.php:133
+#: View/Users/admin/form.php:137
+#: View/WidgetAreas/admin/form.php:104;151
+msgid "保存"
+msgstr ""
+
+#: Plugin/Blog/View/BlogCategories/admin/form.php:125
+#: Plugin/Blog/View/BlogTags/admin/form.php:54
+#: Plugin/Mail/View/MailFields/admin/form.php:277
+#: View/EditorTemplates/admin/form.php:77
+#: View/Permissions/admin/form.php:95
+#: View/ThemeFiles/admin/form.php:100
+#: View/ThemeFiles/admin/form_folder.php:76
+#: View/Themes/admin/form.php:90
+#: View/Users/admin/form.php:140
+msgid "%s を本当に削除してもいいですか？"
+msgstr ""
+
+#: Plugin/Blog/View/BlogConfigs/admin/form.php:32
+msgid "取り込む"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:32
+msgid "ブログ説明文"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:52
+msgid "一覧表示件数"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:66
+msgid "一覧に表示する順番"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:68
+msgid "新しい記事順"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:68
+msgid "古い記事順"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:80
+msgid "RSSフィード出力件数"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:99
+msgid "コメント受付機能"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:101;108;117;131;194
+#: Plugin/Mail/View/MailContents/admin/form.php:138;152
+#: View/WidgetAreas/admin/form.php:103;150
+msgid "利用する"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:106
+msgid "コメント承認機能"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:115
+msgid "コメントイメージ認証"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:129
+msgid "タグ機能"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:136
+#: Plugin/Mail/View/MailContents/admin/form.php:174
+msgid "ウィジェットエリア"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:153
+msgid "コンテンツテンプレート名"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:162
+#: Plugin/Mail/View/MailContents/admin/form.php:191;209
+#: View/Helper/BcBaserHelper.php:1164
+msgid "編集する"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:175
+msgid "アイキャッチ画像サイズ"
+msgstr ""
+
+#: Plugin/Blog/View/BlogContents/admin/form.php:192
+msgid "記事概要"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:65
+#: View/Elements/admin/content_fields.php:140;143
+msgid "URLコピー"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:71
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:25
+msgid "カテゴリー"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:75
+msgid "新しいカテゴリを追加"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:83
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:48
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:23
+#: View/Elements/admin/content_fields.php:151
+#: View/Elements/admin/favorite_menu.php:52
+#: View/SearchIndices/admin/add.php:25
+#: View/Themes/admin/form.php:47
+#: View/WidgetAreas/admin/form.php:98;145
+msgid "タイトル"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:90
+msgid "アイキャッチ画像"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:98
+msgid "概要"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:132
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:28
+msgid "タグ"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:139
+msgid "新しいタグを追加"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:153
+#: View/Elements/admin/content_fields.php:271
+msgid "サイト内検索の検索結果より除外する"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:159
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:51
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:31
+#: View/Elements/admin/content_fields.php:240
+#: View/Elements/admin/searches/contents_index.php:39
+msgid "作成者"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:176
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:46
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:41
+msgid "投稿日"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:196
+msgid "%s を本当に削除してもいいですか？\\n※ ブログ記事はゴミ箱に入らず完全に消去されます。"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:206
+msgid "カテゴリタイトル"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:212
+msgid "カテゴリ名"
+msgstr ""
+
+#: Plugin/Blog/View/BlogPosts/admin/form.php:228
+msgid "キャンセル"
+msgstr ""
+
+#: Plugin/Blog/View/BlogTags/admin/form.php:37
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:41
+msgid "ブログタグ名"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:27
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:30
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:30
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:26
+#: View/Elements/admin/favorite_menu.php:38
+#: View/Elements/admin/editor_templates/index_list.php:27
+#: View/Elements/admin/permissions/index_list.php:27
+#: View/Elements/admin/plugins/index_list.php:24
+#: View/Elements/admin/sites/index_list.php:40
+#: View/Elements/admin/user_groups/index_list.php:35
+#: View/Elements/admin/users/index_list.php:28
+#: View/Elements/admin/widget_areas/index_list.php:24
+msgid "新規追加"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:31
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:31
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:34
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:34
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:35
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:31
+#: View/Elements/admin/contents/index_list_table.php:29
+#: View/Elements/admin/permissions/index_list.php:36
+#: View/Elements/admin/plugins/index_list.php:34
+#: View/Elements/admin/search_indices/index_list.php:74
+#: View/Elements/admin/theme_files/index_list.php:27
+#: View/Elements/admin/widget_areas/index_list.php:28
+msgid "一括選択"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:32
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:32
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:35
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:35
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:36
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:32
+#: View/Elements/admin/contents/index_list_table.php:30
+#: View/Elements/admin/permissions/index_list.php:37
+#: View/Elements/admin/plugins/index_list.php:35
+#: View/Elements/admin/search_indices/index_list.php:75
+#: View/Elements/admin/theme_files/index_list.php:28
+#: View/Elements/admin/widget_areas/index_list.php:29
+msgid "一括処理"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:33
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:33
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:36
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:36
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:37
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:33
+#: View/Elements/admin/contents/index_list_table.php:31
+#: View/Elements/admin/permissions/index_list.php:38
+#: View/Elements/admin/plugins/index_list.php:36
+#: View/Elements/admin/search_indices/index_list.php:76
+#: View/Elements/admin/theme_files/index_list.php:29
+#: View/Elements/admin/themes/index_row.php:32
+#: View/Elements/admin/widget_areas/index_list.php:30
+#: View/Themes/admin/add.php:33
+msgid "適用"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_row.php:28
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:27
+#: View/Elements/admin/content_fields.php:343
+#: View/Elements/admin/contents/index_row_table.php:59
+#: View/Elements/admin/sites/index_row.php:32
+msgid "確認"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_categories/index_row.php:30
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:28
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_row.php:25
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:36
+#: View/Elements/admin/content_fields.php:344
+#: View/Elements/admin/favorite_menu.php:60
+#: View/Elements/admin/contents/index_row_table.php:72
+#: View/Elements/admin/editor_templates/index_row.php:21
+#: View/Elements/admin/permissions/index_row.php:35
+#: View/Elements/admin/sites/index_row.php:34
+#: View/Elements/admin/theme_files/index_row.php:37;39
+#: View/Elements/admin/user_groups/index_row.php:24
+#: View/Elements/admin/users/index_row.php:21
+#: View/Elements/admin/widget_areas/index_row.php:24
+msgid "編集"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:37;38;40;41;43;46;47
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:40;41;42;44;48;51;52;59;60
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:40;41;44;45
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:37;38
+#: View/Elements/admin/contents/index_list_table.php:35;36;38;40;42;43;46;48
+#: View/Elements/admin/sites/index_list.php:43;44;45;46;47;48;49;50;51;54;55
+#: View/Elements/admin/user_groups/index_list.php:38;39;40;42;43
+#: View/Elements/admin/users/index_list.php:31;32;33;34;35;37;38
+msgid "昇順"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:37;38;40;41;43;46;47
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:40;41;42;44;48;51;52;59;60
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:40;41;44;45
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:37;38
+#: View/Elements/admin/contents/index_list_table.php:35;36;38;40;42;43;46;48
+#: View/Elements/admin/sites/index_list.php:43;44;45;46;47;48;49;50;51;54;55
+#: View/Elements/admin/user_groups/index_list.php:38;39;40;42;43
+#: View/Elements/admin/users/index_list.php:31;32;33;34;35;37;38
+msgid "降順"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:38
+msgid "投稿者"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:40
+#: Plugin/Mail/Model/MailContent.php:177
+msgid "メール"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:43
+msgid "メッセージ"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_comments/index_list.php:47
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:60
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:45
+msgid "更新日"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:42
+#: View/Elements/admin/content_fields.php:229
+msgid "アイキャッチ"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:44
+#: View/Elements/site_search_form.php:32
+msgid "カテゴリ"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:59
+#: Plugin/Blog/View/Elements/admin/blog_tags/index_list.php:44
+msgid "登録日"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:29
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:37
+#: View/Elements/admin/contents/index_row_table.php:69
+#: View/Elements/admin/permissions/index_row.php:36
+#: View/Elements/admin/theme_files/index_row.php:35
+#: View/Elements/admin/user_groups/index_row.php:25
+msgid "コピー"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:25;28;30;31
+#: View/Elements/admin/searches/search_indices_index.php:25;28;31;33
+#: View/Elements/admin/searches/users_index.php:22
+msgid "指定なし"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:30
+msgid "公開設定"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:35
+#: View/Elements/site_search_form.php:37
+#: View/Elements/admin/contents_menu.php:23
+#: View/Elements/admin/search.php:25
+#: View/Elements/admin/searches/contents_index.php:45
+#: View/Elements/admin/searches/search_indices_index.php:36
+#: View/Elements/admin/searches/users_index.php:26
+#: View/Elements/widgets/search.php:36
+msgid "検索"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:36
+#: View/Elements/admin/searches/contents_index.php:46
+#: View/Elements/admin/searches/search_indices_index.php:37
+#: View/Elements/admin/searches/users_index.php:27
+msgid "クリア"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:24
+msgid "記事一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:25
+msgid "記事新規追加"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:26
+msgid "カテゴリ一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:27
+msgid "カテゴリ新規追加"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:29
+msgid "タグ新規追加"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:30
+msgid "コメント一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_author_archives.php:16
+msgid "ブログ投稿者一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_author_archives.php:17
+msgid "ブログの投稿者一覧を表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_author_archives.php:21
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:40
+#: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:23
+#: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:23
+#: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:23
+msgid "記事数表示"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_calendar.php:16
+msgid "ブログカレンダー"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_calendar.php:17
+msgid "ブログのカレンダーを表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:16
+msgid "ブログカテゴリー一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:17
+msgid "ブログのカテゴリー一覧を表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:38
+#: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:21
+#: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:19
+#: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:21
+msgid "表示数"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:42
+msgid "年別に表示する"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:43
+msgid "深さ"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:16
+msgid "月別アーカイブ一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:17
+msgid "ブログの月別アーカイブー一覧を表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:16
+msgid "最近の投稿"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:17
+msgid "ブログの最近の投稿を表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:18
+msgid "ブログタグ一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:19
+msgid "ブログのタグ一覧を表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:16
+msgid "年別アーカイブ一覧"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:17
+msgid "ブログの年別アーカイブー一覧を表示します。"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:25
+msgid "年度別の場合の開始月"
+msgstr ""
+
+#: Plugin/Blog/View/Elements/widgets/blog_yearly_archives.php:63;65
+msgid "%s年"
+msgstr ""
+
+#: Plugin/Blog/View/Helper/BlogHelper.php:316
+msgid "≫ 続きを読む"
+msgstr ""
+
+#: Plugin/Blog/View/Helper/BlogHelper.php:1508
+msgid "$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレート名を指定してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:54
+msgid "フィード設定名を入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:55
+msgid "フィード設定名は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:57
+msgid "フィードタイトルリストは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:59
+msgid "カテゴリリストは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:61
+msgid "数値を入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:64
+msgid "テンプレート名は半角のみで入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedConfig.php:65
+msgid "テンプレート名は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:58
+msgid "フィード詳細名を入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:59
+msgid "フィード詳細名は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:61
+msgid "フィードURLを入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:62
+msgid "フィードURLは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:64
+msgid "カテゴリフィルタは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:76
+msgid "1分"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:77
+msgid "30分"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:78
+msgid "1時間"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:79
+msgid "6時間"
+msgstr ""
+
+#: Plugin/Feed/Model/FeedDetail.php:80
+msgid "1日"
+msgstr ""
+
+#: Plugin/Mail/Config/setting.php:17
+msgid "メールプラグイン"
+msgstr ""
+
+#: Plugin/Mail/Config/setting.php:19
+msgid "基本設定"
+msgstr ""
+
+#: Plugin/Mail/Config/setting.php:24
+msgid "メールフォーム"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailConfigsController.php:53
+msgid "メールフォーム設定を保存しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailConfigsController.php:60
+#: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:27
+msgid "メールプラグイン基本設定"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:71
+msgid "メールフォーム一覧"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:89
+msgid "メールフォーム「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:104
+msgid "新規メールフォーム登録"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:119
+msgid "新規メールフォーム「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:125
+msgid "データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:161
+msgid "メールフォーム「%s」を更新しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:184
+msgid "メールフォーム設定編集：%s"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailContentsController.php:280
+msgid "メールフォームのコピー「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:109
+msgid "[%s] メールフィールド一覧"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:161
+msgid "新規メールフィールド「%s」を追加しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:167;219;256;287;348
+msgid "データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:175
+msgid "[%s] 新規メールフィールド登録"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:213
+msgid "メールフィールド「%s」を更新しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:228
+msgid "[%s] メールフィールド編集： %s"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:252;308
+msgid "メールフィールド「%s」 を削除しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:282
+msgid "メールフィールド「%s」を削除しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailFieldsController.php:499
+msgid "メールフィールド「%s」 の設定を %s に変更しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailMessagesController.php:116;140
+#: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:26
+msgid "受信メール一覧"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailMessagesController.php:143
+msgid "受信メール詳細"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailMessagesController.php:190
+msgid "受信データ NO「%s」 を削除しました。"
+msgstr ""
+
+#: Plugin/Mail/Controller/MailMessagesController.php:212
+msgid "%s への受信データ NO「%s」 を削除しました。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:61
+msgid "送信先名を入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:62
+msgid "送信先名は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:64
+msgid "自動返信メール件名[ユーザー宛]を入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:65
+msgid "自動返信メール件名[ユーザー宛]は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:67
+msgid "自動送信メール件名[管理者宛]を入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:68
+msgid "自動返信メール件名[管理者宛]は50文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:70
+msgid "メールフォームテンプレート名は半角のみで入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:71
+msgid "フォームテンプレート名は20文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:73
+msgid "送信メールテンプレートは半角のみで入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:74
+msgid "メールテンプレート名は20文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:76
+msgid "リダイレクトURLは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:78;81
+msgid "送信先メールアドレスの形式が不正です。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:79
+msgid "送信先メールアドレスは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:82
+msgid "CC用送信先メールアドレスは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:84
+msgid "SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:127
+msgid "送信先名を入力してください"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:128
+msgid "お問い合わせ頂きありがとうございます"
+msgstr ""
+
+#: Plugin/Mail/Model/MailContent.php:129
+msgid "お問い合わせを頂きました"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:41
+msgid "項目名を入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:42
+msgid "項目名は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:44
+msgid "フィールド名は半角英数字のみで入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:45
+msgid "入力されたフィールド名は既に登録されています。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:46
+msgid "フィールド名は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:48
+msgid "タイプを入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:50
+msgid "項目見出しは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:52
+msgid "注意書きは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:54
+msgid "前見出しは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:56
+msgid "後見出しは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:58
+msgid "選択リストを入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:60
+msgid "オプションは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:62
+msgid "クラス名は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:64
+msgid "区切り文字は20文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:66
+msgid "初期値は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:68
+msgid "説明文は255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:70
+msgid "グループフィールドは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:72
+msgid "グループ入力チェックは255文字以内で入力してください。"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:84
+#: View/Elements/admin/widgets/text.php:16
+msgid "テキスト"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:85
+msgid "テキストエリア"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:86
+msgid "ラジオボタン"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:87
+msgid "セレクトボックス"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:88
+#: View/Elements/admin/submenus/theme_files.php:19
+#: View/Users/admin/form.php:94
+msgid "Eメール"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:89
+msgid "マルチチェックボックス"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:91
+msgid "自動補完郵便番号"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:92
+msgid "都道府県リスト"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:93
+msgid "和暦日付"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:94
+msgid "カレンダー"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:95
+msgid "隠しフィールド"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:98
+msgid "入力必須"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:99
+msgid "Eメールチェック（入力必須）"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:100
+msgid "数値チェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:101
+msgid "数値チェック（入力必須）"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:104
+msgid "Eメール比較チェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:105
+msgid "グループチェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:106
+msgid "チェックボックス未入力チェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:107
+msgid "日付チェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:108
+msgid "ファイルアップロードサイズ制限"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:109
+msgid "ファイル拡張子チェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:110
+msgid "全角カタカナチェック"
+msgstr ""
+
+#: Plugin/Mail/Model/MailField.php:112
+msgid "半角変換"
+msgstr ""
+
+#: Plugin/Mail/Model/MailMessage.php:621
+msgid "createTableNameの引数$mailContentIdはint型しか受けつけていません。"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:28
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:28
+#: View/Elements/admin/helps/pages_index.php:25
+#: View/Elements/admin/helps/permissions_index.php:26
+#: View/Elements/admin/permissions/index_list.php:29
+#: View/Elements/admin/permissions/index_row.php:27
+#: View/Elements/admin/plugins/index_list.php:26
+#: View/Elements/admin/plugins/index_row.php:27
+msgid "並び替え"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:30
+#: View/Elements/admin/permissions/index_list.php:31
+#: View/Elements/admin/plugins/index_list.php:28
+msgid "ノーマル"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_list.php:38
+msgid "受信日時"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/admin/mail_messages/index_row.php:25
+msgid "詳細"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:24
+msgid "メールフィールド一覧"
+msgstr ""
+
+#: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:25
+msgid "メールフィールド新規追加"
+msgstr ""
+
+#: Plugin/Mail/View/Helper/MaildataHelper.php:129
+msgid "Y年 m月 d日"
+msgstr ""
+
+#: Plugin/Mail/View/MailConfigs/admin/form.php:30
+msgid "署名：WEBサイト名"
+msgstr ""
+
+#: Plugin/Mail/View/MailConfigs/admin/form.php:39
+msgid "署名：WEBサイトURL"
+msgstr ""
+
+#: Plugin/Mail/View/MailConfigs/admin/form.php:48
+msgid "署名：Eメール"
+msgstr ""
+
+#: Plugin/Mail/View/MailConfigs/admin/form.php:62
+msgid "署名：電話番号"
+msgstr ""
+
+#: Plugin/Mail/View/MailConfigs/admin/form.php:71
+msgid "署名：FAX番号"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:31
+msgid "メールフォーム説明文"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:45
+msgid "送信先メールアドレス"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:50
+msgid "管理者用メールアドレスに送信する"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:50
+msgid "別のメールアドレスに送信する"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:59
+msgid "送信先名"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:68
+msgid "自動返信メール件名<br />[ユーザー宛]"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:77
+msgid "自動送信メール件名<br />[管理者宛]"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:86
+msgid "リダイレクトURL"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:107
+msgid "フォーム受付期間"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:122
+msgid "データベース保存"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:124
+msgid "送信情報をデータベースに保存する"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:124
+msgid "送信情報をデータベースに保存しない"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:136
+msgid "イメージ認証"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:150
+msgid "SSL通信"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:154
+msgid "SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してください。"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:162
+msgid "BCC用送信先メールアドレス"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:181
+#: View/SiteConfigs/admin/form.php:190
+msgid "ウィジェットエリア管理"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:186
+msgid "メールフォームテンプレート名"
+msgstr ""
+
+#: Plugin/Mail/View/MailContents/admin/form.php:204
+msgid "送信メールテンプレート名"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:44
+msgid "フィールド名"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:53
+msgid "項目名"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:62
+#: View/Elements/admin/searches/search_indices_index.php:25
+#: View/Updaters/admin/exec_script.php:21
+msgid "タイプ"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:77
+msgid "項目見出し"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:86
+msgid "必須マーク"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:88
+msgid "項目見出しに必須マークを表示する"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:93
+msgid "入力チェック"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:100
+msgid "注意書き"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:107
+msgid "前見出し"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:114
+msgid "後見出し"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:121
+#: View/EditorTemplates/admin/form.php:53
+#: View/Elements/admin/content_fields.php:213
+msgid "説明文"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:128
+msgid "選択リスト"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:143
+msgid "表示サイズ"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:150
+msgid "行数"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:159
+msgid "最大値"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:174
+msgid "拡張入力チェック"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:191
+msgid "グループ名"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:205
+msgid "グループ入力チェック"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:227
+msgid "クラス名"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:234
+msgid "区切り文字"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:241
+msgid "初期値"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:248
+msgid "自動変換"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:255
+#: View/Permissions/admin/form.php:80
+msgid "利用状態"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:257
+msgid "利用中"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:262
+msgid "メール送信"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:264
+msgid "送信する"
+msgstr ""
+
+#: Plugin/Mail/View/MailFields/admin/form.php:264
+msgid "送信しない"
+msgstr ""
+
+#: Plugin/Mail/View/MailMessages/admin/index.php:35
+msgid "CSVダウンロード"
+msgstr ""
+
+#: Plugin/Mail/View/MailMessages/admin/view.php:71
+msgid "受信メール NO「%s」を削除してもいいですか？"
+msgstr ""
+
+#: View/BcAppView.php:296
+msgid "ビューテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。"
+msgstr ""
+
+#: View/BcAppView.php:452
+msgid "レイアウトテンプレートの拡張子 .ctp は非推奨です。.php を利用してください。"
+msgstr ""
+
+#: View/ContentFolders/admin/edit.php:26
+msgid "フォルダーテンプレート"
+msgstr ""
+
+#: View/ContentFolders/admin/edit.php:32
+#: View/Pages/admin/form.php:50
+msgid "固定ページテンプレート"
+msgstr ""
+
+#: View/Contents/admin/ajax_contents_info.php:18
+msgid "公開中： %s ページ"
+msgstr ""
+
+#: View/Contents/admin/ajax_contents_info.php:19
+msgid "非公開： %s ページ"
+msgstr ""
+
+#: View/Contents/admin/ajax_contents_info.php:20
+msgid "合計： %s ページ"
+msgstr ""
+
+#: View/Dblogs/admin/ajax_index.php:36
+msgid "最近の動きのログを削除します。いいですか？"
+msgstr ""
+
+#: View/EditorTemplates/admin/form.php:39
+msgid "テンプレート名"
+msgstr ""
+
+#: View/EditorTemplates/admin/form.php:46
+msgid "アイコン画像"
+msgstr ""
+
+#: View/EditorTemplates/admin/form.php:60
+#: View/Elements/admin/submenus/theme_files.php:20
+msgid "コンテンツ"
+msgstr ""
+
+#: View/Elements/crumbs.php:22
+msgid "ホーム"
+msgstr ""
+
+#: View/Elements/google_maps.php:51
+msgid "Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認してください。"
+msgstr ""
+
+#: View/Elements/site_search_form.php:35
+#: View/Elements/admin/searches/search_indices_index.php:29
+msgid "キーワード"
+msgstr ""
+
+#: View/Elements/admin/content_fields.php:268
+msgid "その他設定"
+msgstr ""
+
+#: View/Elements/admin/content_fields.php:272
+msgid "公開ページのメニューより除外する"
+msgstr ""
+
+#: View/Elements/admin/content_fields.php:273
+msgid "メニューのリンクを別ウィンドウ開く"
+msgstr ""
+
+#: View/Elements/admin/content_fields.php:346
+msgid "エイリアス作成"
+msgstr ""
+
+#: View/Elements/admin/content_fields.php:347
+msgid "コピー作成"
+msgstr ""
+
+#: View/Elements/admin/contents_menu.php:29
+msgid "制限設定"
+msgstr ""
+
+#: View/Elements/admin/favorite_menu.php:24
+msgid "よく使う項目"
+msgstr ""
+
+#: View/Elements/admin/footer.php:24
+msgid "baserCMSロゴ"
 msgstr ""
 
 #: View/Elements/admin/footer.php:35
@@ -220,16 +3591,106 @@ msgstr ""
 msgid "baserCMS Twitter"
 msgstr ""
 
-#: View/Elements/admin/toolbar.php:64
-msgid "インストールモード"
+#: View/Elements/admin/pagination.php:36
+#: View/Elements/paginations/simple.php:30
+#: View/Elements/smartphone/paginations/simple.php:28
+msgid "< 前へ"
+msgstr ""
+
+#: View/Elements/admin/pagination.php:38
+#: View/Elements/paginations/simple.php:32
+#: View/Elements/smartphone/paginations/simple.php:30
+msgid "次へ >"
+msgstr ""
+
+#: View/Elements/admin/permission.php:23
+#: View/Elements/admin/searches/users_index.php:21
+#: View/Permissions/admin/form.php:30
+msgid "ユーザーグループ"
+msgstr ""
+
+#: View/Elements/admin/permission.php:27
+#: View/Permissions/admin/form.php:46
+msgid "ルール名"
+msgstr ""
+
+#: View/Elements/admin/permission.php:29
+#: View/Permissions/admin/form.php:55
+msgid "URL設定"
+msgstr ""
+
+#: View/Elements/admin/permission.php:31
+#: View/Permissions/admin/form.php:73;75
+msgid "アクセス"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:44
+msgid "インストールマニュアル"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:46
+msgid "アップデートマニュアル"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:51
+msgid "baserCMS管理システム"
 msgstr ""
 
 #: View/Elements/admin/toolbar.php:66
 msgid "デバッグモード"
 msgstr ""
 
+#: View/Elements/admin/toolbar.php:78
+msgid "元のユーザーに戻る"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:81;84
+msgid "アカウント設定"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:87
+#: View/Members/mypage/index.php:22
+msgid "ログアウト"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:90
+msgid "ログインしていません "
+msgstr ""
+
 #: View/Elements/admin/toolbar.php:102
 msgid "システムナビ"
+msgstr ""
+
+#: View/Elements/admin/contents/form_alias.php:34
+msgid "元コンテンツ"
+msgstr ""
+
+#: View/Elements/admin/contents/index_list_table.php:36
+msgid " タイプ"
+msgstr ""
+
+#: View/Elements/admin/contents/index_list_table.php:40
+msgid " タイトル"
+msgstr ""
+
+#: View/Elements/admin/contents/index_list_table.php:42
+#: View/Elements/admin/sites/index_list.php:47
+msgid " 公開状態"
+msgstr ""
+
+#: View/Elements/admin/contents/index_list_table.php:43
+msgid " 作成者"
+msgstr ""
+
+#: View/Elements/admin/contents/index_list_table.php:46
+msgid " 作成日"
+msgstr ""
+
+#: View/Elements/admin/contents/index_list_table.php:48
+#: View/Elements/admin/sites/index_list.php:55
+#: View/Elements/admin/user_groups/index_list.php:43
+#: View/Elements/admin/users/index_list.php:38
+msgid " 更新日"
 msgstr ""
 
 #: View/Elements/admin/contents/index_view_setting.php:23
@@ -248,12 +3709,33 @@ msgstr ""
 msgid "全て閉じる"
 msgstr ""
 
-#: View/Elements/admin/searches/contents_index.php:23
-msgid "フォルダ"
+#: View/Elements/admin/helps/theme_files_index.php:23
+msgid "上へ"
 msgstr ""
 
-#: View/Elements/admin/searches/contents_index.php:24;32;36;40
-msgid "指定しない"
+#: View/Elements/admin/plugins/index_list.php:35
+msgid "一括無効"
+msgstr ""
+
+#: View/Elements/admin/plugins/index_row.php:34
+msgid "アップデート"
+msgstr ""
+
+#: View/Elements/admin/plugins/index_row.php:42
+#: View/Plugins/admin/add.php:33
+#: View/Plugins/admin/form.php:67
+msgid "インストール"
+msgstr ""
+
+#: View/Elements/admin/plugins/index_row_market.php:21
+#: View/Elements/admin/themes/index_row_market.php:38
+#: View/Tools/admin/log.php:22
+#: View/Tools/admin/maintenance.php:33
+msgid "ダウンロード"
+msgstr ""
+
+#: View/Elements/admin/search_indices/index_row.php:45
+msgid "設定なし"
 msgstr ""
 
 #: View/Elements/admin/searches/contents_index.php:27
@@ -264,20 +3746,104 @@ msgstr ""
 msgid "コンテンツタイプ"
 msgstr ""
 
-#: View/Elements/admin/searches/contents_index.php:35
-msgid "公開状態"
+#: View/Elements/admin/searches/search_indices_index.php:26
+msgid "サブサイト"
 msgstr ""
 
-#: View/Elements/admin/searches/contents_index.php:39
-msgid "作成者"
+#: View/Elements/admin/searches/search_indices_index.php:32
+msgid "優先度"
 msgstr ""
 
-#: View/Elements/admin/searches/contents_index.php:45
-msgid "検索"
+#: View/Elements/admin/sites/form.php:43
+msgid "識別名称"
 msgstr ""
 
-#: View/Elements/admin/searches/contents_index.php:46
-msgid "クリア"
+#: View/Elements/admin/sites/form.php:57
+msgid "サイト名"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:66
+msgid "サイトタイトル"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:75
+#: View/SiteConfigs/admin/form.php:63
+msgid "サイト基本キーワード"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:84
+#: View/SiteConfigs/admin/form.php:72
+msgid "サイト基本説明文"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:93
+msgid "メインサイト"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:96
+msgid "エイリアスを利用してメインサイトと自動連携する"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:110
+msgid "デバイス・言語"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:129
+msgid "メインサイトと同一URLでアクセス"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:134
+msgid "メインサイトから自動的にリダイレクト"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:138
+msgid "全てのリンクをサブサイト用に変換する"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:149
+msgid "テーマ"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:160
+msgid "公開しない"
+msgstr ""
+
+#: View/Elements/admin/sites/form.php:160
+msgid "公開する"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:44
+msgid " サイト名"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:45
+msgid " 識別名称"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:46
+msgid " エイリアス"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:48
+msgid " デバイス"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:49
+msgid " 言語"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:50
+msgid " メインサイト"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:51
+msgid " テーマ"
+msgstr ""
+
+#: View/Elements/admin/sites/index_list.php:54
+#: View/Elements/admin/user_groups/index_list.php:42
+#: View/Elements/admin/users/index_list.php:37
+msgid " 登録日"
 msgstr ""
 
 #: View/Elements/admin/submenus/contents.php:20
@@ -286,5 +3852,655 @@ msgstr ""
 
 #: View/Elements/admin/submenus/contents.php:25
 msgid "コンテンツ新規登録"
+msgstr ""
+
+#: View/Elements/admin/submenus/editor_templates.php:24
+msgid "エディタテンプレート新規追加"
+msgstr ""
+
+#: View/Elements/admin/submenus/permissions.php:25
+msgid "アクセス制限設定新規追加"
+msgstr ""
+
+#: View/Elements/admin/submenus/plugins.php:24
+msgid "プラグイン新規追加"
+msgstr ""
+
+#: View/Elements/admin/submenus/search_indices.php:38
+msgid "検索インデックス再構築"
+msgstr ""
+
+#: View/Elements/admin/submenus/theme_files.php:17
+msgid "レイアウト"
+msgstr ""
+
+#: View/Elements/admin/submenus/theme_files.php:18
+msgid "エレメント"
+msgstr ""
+
+#: View/Elements/admin/submenus/themes.php:24
+msgid "テーマ新規追加"
+msgstr ""
+
+#: View/Elements/admin/submenus/themes.php:26
+msgid "コアテンプレート確認"
+msgstr ""
+
+#: View/Elements/admin/submenus/themes.php:28
+msgid "テーマダウンロード"
+msgstr ""
+
+#: View/Elements/admin/submenus/themes.php:32
+msgid "テーマ用初期データダウンロード"
+msgstr ""
+
+#: View/Elements/admin/submenus/themes.php:37
+msgid "データリセット"
+msgstr ""
+
+#: View/Elements/admin/submenus/tools.php:26
+msgid "ログメンテナンス"
+msgstr ""
+
+#: View/Elements/admin/submenus/users.php:24
+msgid "ユーザー新規追加"
+msgstr ""
+
+#: View/Elements/admin/submenus/users.php:26
+msgid "ユーザーグループ新規登録"
+msgstr ""
+
+#: View/Elements/admin/submenus/widget_areas.php:24
+msgid "ウィジェットエリア新規追加"
+msgstr ""
+
+#: View/Elements/admin/theme_files/index_list.php:32
+msgid "上へ移動"
+msgstr ""
+
+#: View/Elements/admin/theme_files/index_row.php:32
+msgid "開く"
+msgstr ""
+
+#: View/Elements/admin/theme_files/index_row.php:44;46
+msgid "表示"
+msgstr ""
+
+#: View/Elements/admin/themes/index_list.php:38
+#: View/Elements/admin/themes/index_row.php:34
+msgid "テンプレート編集"
+msgstr ""
+
+#: View/Elements/admin/themes/index_list.php:39
+#: View/Elements/admin/themes/index_row.php:36
+msgid "テーマコピー"
+msgstr ""
+
+#: View/Elements/admin/themes/index_list.php:57
+msgid "初期データ読込"
+msgstr ""
+
+#: View/Elements/admin/themes/index_row.php:35
+msgid "テーマ情報設定"
+msgstr ""
+
+#: View/Elements/admin/themes/index_row.php:37
+msgid "テーマ削除"
+msgstr ""
+
+#: View/Elements/admin/user_groups/index_list.php:39
+msgid " ユーザーグループ名"
+msgstr ""
+
+#: View/Elements/admin/user_groups/index_list.php:40
+msgid " 表示名"
+msgstr ""
+
+#: View/Elements/admin/user_groups/index_row.php:22
+msgid "制限"
+msgstr ""
+
+#: View/Elements/admin/users/index_list.php:32
+msgid " アカウント名"
+msgstr ""
+
+#: View/Elements/admin/users/index_list.php:33
+msgid " ニックネーム"
+msgstr ""
+
+#: View/Elements/admin/users/index_list.php:34
+msgid " グループ"
+msgstr ""
+
+#: View/Elements/admin/users/index_list.php:35
+msgid " 氏名"
+msgstr ""
+
+#: View/Elements/admin/widgets/local_navi.php:16
+msgid "ローカルナビゲーション"
+msgstr ""
+
+#: View/Elements/admin/widgets/local_navi.php:17
+msgid "ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。"
+msgstr ""
+
+#: View/Elements/admin/widgets/php_template.php:16
+msgid "PHPテンプレート"
+msgstr ""
+
+#: View/Elements/admin/widgets/php_template.php:17
+msgid "PHPコードが書かれたテンプレートの読み込みが行えます。"
+msgstr ""
+
+#: View/Elements/admin/widgets/php_template.php:21
+msgid "PHPテンプレート名"
+msgstr ""
+
+#: View/Elements/admin/widgets/search.php:16
+msgid "サイト内検索"
+msgstr ""
+
+#: View/Elements/admin/widgets/search.php:17
+msgid "サイト内検索フォームを表示します。"
+msgstr ""
+
+#: View/Elements/admin/widgets/text.php:17
+msgid "テキストやHTMLの入力ができます。"
+msgstr ""
+
+#: View/Elements/submenus/default.php:22
+msgid "管理者ログイン"
+msgstr ""
+
+#: View/Helper/BcBaserHelper.php:1199
+msgid "公開ページ"
+msgstr ""
+
+#: View/Helper/BcContentsHelper.php:184
+msgid "プラグインの BcContent 設定が間違っています。"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1324
+msgid "追加"
+msgstr ""
+
+#: View/Helper/BcFormHelper.php:1566
+#: View/Helper/BcFreezeHelper.php:437
+#: View/ThemeConfigs/admin/form.php:62;71;80;89;98;107
+msgid "削除する"
+msgstr ""
+
+#: View/Helper/BcTextHelper.php:133
+msgid "男"
+msgstr ""
+
+#: View/Helper/BcTextHelper.php:133
+msgid "女"
+msgstr ""
+
+#: View/Helper/BcUploadHelper.php:50
+msgid "BcUploadHelper を利用するには、$fieldName に、モデル名とフィールド名をドットで区切って指定する必要があります。"
+msgstr ""
+
+#: View/Helper/BcUploadHelper.php:236
+msgid "フィールド名は、 ModelName.field_name で指定してください。"
+msgstr ""
+
+#: View/Helper/BcUploadHelper.php:421
+msgid "BcUploadHelper を利用するには、モデルで BcUploadBehavior の利用設定が必要です。"
+msgstr ""
+
+#: View/Installations/admin/alert.php:33
+msgid "baserCMSを初期化するにはコチラから"
+msgstr ""
+
+#: View/Installations/admin/reset.php:37
+msgid "バックアップはこちらから"
+msgstr ""
+
+#: View/Installations/admin/reset.php:41
+msgid "初期化する"
+msgstr ""
+
+#: View/Installations/admin/reset.php:49
+msgid "インストールページへ"
+msgstr ""
+
+#: View/Installations/admin/step2.php:386
+msgid "再チェック"
+msgstr ""
+
+#: View/Installations/admin/step2.php:388;390
+#: View/Installations/admin/step3.php:220;222
+msgid "次のステップへ"
+msgstr ""
+
+#: View/Installations/admin/step3.php:170
+msgid "データベースタイプ"
+msgstr ""
+
+#: View/Installations/admin/step3.php:174
+msgid "データベースホスト名"
+msgstr ""
+
+#: View/Installations/admin/step3.php:217
+#: View/Installations/admin/step4.php:95
+msgid "戻る"
+msgstr ""
+
+#: View/Installations/admin/step3.php:218
+msgid "接続テスト"
+msgstr ""
+
+#: View/Installations/admin/step4.php:96
+msgid "完了"
+msgstr ""
+
+#: View/Layouts/admin/default.php:142
+msgid "▲ トップへ"
+msgstr ""
+
+#: View/Layouts/mobile/default.php:40
+msgid "トップへ"
+msgstr ""
+
+#: View/Pages/admin/form.php:60
+msgid "コード"
+msgstr ""
+
+#: View/Plugins/admin/form.php:53
+msgid "全てのユーザーで利用"
+msgstr ""
+
+#: View/Plugins/admin/form.php:53
+msgid "管理ユーザーのみ利用"
+msgstr ""
+
+#: View/Plugins/admin/form.php:64
+msgid "プラグインのデータを初期化する"
+msgstr ""
+
+#: View/Plugins/admin/form.php:65
+msgid "有効化"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:34
+msgid "WEBサイト名"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:48
+msgid "WEBサイトタイトル"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:81
+msgid "管理者メールアドレス"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:88
+msgid "管理システムの<br />初期一覧件数"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:92
+msgid "10件"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:93
+msgid "20件"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:94
+msgid "50件"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:95
+msgid "100件"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:110
+msgid "ログインページのクレジット表示"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:112;121
+msgid "利用"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:119
+msgid "管理システムサイドバーの<br />バナー表示"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:128
+msgid "WebサイトURL"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:142
+msgid "管理画面SSL設定"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:144
+msgid "SSL通信を利用"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:152
+msgid "GoogleMaps住所"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:154
+msgid "住所"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:164
+msgid "APIキー"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:170
+msgid "Google Analytics<br />トラッキングID"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:180
+msgid "利用していない"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:180
+msgid "利用している"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:184
+msgid "標準ウィジェットエリア"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:195
+msgid "メインサイト表示名称"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:204
+msgid "デバイス・言語設定"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:206
+msgid "サブサイトでデバイス設定を利用する"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:209
+msgid "サブサイトで言語設定を利用する"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:219
+msgid "公開中"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:229
+msgid "制作・開発モード"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:244
+msgid "エディタタイプ"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:250
+msgid "改行モード"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:254
+msgid "改行時に段落を挿入する"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:255
+msgid "改行時にBRタグを挿入する"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:261
+msgid "エディタスタイルセット"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:295
+msgid "メール送信文字コード"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:304
+msgid "SMTP設定"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:307
+msgid "ホスト"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:314
+msgid "ポート"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:321
+msgid "ユーザー"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:330
+#: View/Users/admin/form.php:109
+#: View/Users/admin/login.php:44
+msgid "パスワード"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:337
+msgid "TLS暗号化"
+msgstr ""
+
+#: View/SiteConfigs/admin/form.php:338
+msgid "TLS暗号化を利用"
+msgstr ""
+
+#: View/ThemeFiles/admin/form.php:45
+msgid "ファイル名"
+msgstr ""
+
+#: View/ThemeFiles/admin/form.php:67
+msgid "内容"
+msgstr ""
+
+#: View/ThemeFiles/admin/form.php:108
+#: View/ThemeFiles/admin/form_folder.php:82
+msgid "現在のテーマにコピー"
+msgstr ""
+
+#: View/ThemeFiles/admin/form_folder.php:46
+msgid "フォルダ名"
+msgstr ""
+
+#: View/ThemeFiles/admin/index.php:60
+msgid "フォルダ新規作成"
+msgstr ""
+
+#: View/ThemeFiles/admin/index.php:63
+msgid "ファイル新規作成"
+msgstr ""
+
+#: View/Themes/admin/form.php:38
+msgid "テーマ名"
+msgstr ""
+
+#: View/Themes/admin/form.php:54
+msgid "説明"
+msgstr ""
+
+#: View/Themes/admin/form.php:61
+msgid "制作者"
+msgstr ""
+
+#: View/Tools/admin/index.php:18
+msgid "サーバーキャッシュを削除する"
+msgstr ""
+
+#: View/Tools/admin/index.php:24
+msgid "ツリー構造をチェックする"
+msgstr ""
+
+#: View/Tools/admin/index.php:25
+msgid "ツリー構造リセット"
+msgstr ""
+
+#: View/Tools/admin/index.php:31
+msgid "固定ページテンプレート書出"
+msgstr ""
+
+#: View/Tools/admin/index.php:32
+msgid "固定ページテンプレート読込"
+msgstr ""
+
+#: View/Tools/admin/index.php:38
+msgid "アセットファイル削除"
+msgstr ""
+
+#: View/Tools/admin/index.php:39
+msgid "アセットファイル再配置"
+msgstr ""
+
+#: View/Tools/admin/index.php:45
+msgid "クレジットを表示"
+msgstr ""
+
+#: View/Tools/admin/load_schema.php:24
+msgid "スキーマタイプ"
+msgstr ""
+
+#: View/Tools/admin/load_schema.php:28
+msgid "テーブル作成"
+msgstr ""
+
+#: View/Tools/admin/load_schema.php:28
+msgid "テーブル構造変更"
+msgstr ""
+
+#: View/Tools/admin/load_schema.php:28
+msgid "テーブル削除"
+msgstr ""
+
+#: View/Tools/admin/load_schema.php:35
+msgid "スキーマファイル"
+msgstr ""
+
+#: View/Tools/admin/load_schema.php:43
+msgid "読み込み"
+msgstr ""
+
+#: View/Tools/admin/log.php:31
+msgid "エラーログを削除します。いいですか？"
+msgstr ""
+
+#: View/Tools/admin/maintenance.php:42
+msgid "自動判別"
+msgstr ""
+
+#: View/Tools/admin/maintenance.php:46
+msgid "アップロード"
+msgstr ""
+
+#: View/Tools/admin/write_schema.php:23
+msgid "コアテーブル名"
+msgstr ""
+
+#: View/Tools/admin/write_schema.php:34
+msgid "プラグインテーブル名"
+msgstr ""
+
+#: View/Tools/admin/write_schema.php:46
+msgid "生　成"
+msgstr ""
+
+#: View/Updaters/admin/exec_script.php:22
+msgid "バージョン"
+msgstr ""
+
+#: View/Updaters/admin/exec_script.php:23
+msgid "実行"
+msgstr ""
+
+#: View/Updaters/admin/update.php:114
+msgid "アップデート実行"
+msgstr ""
+
+#: View/Updaters/admin/update.php:123
+msgid "プラグイン一覧に移動する"
+msgstr ""
+
+#: View/UserGroups/admin/form.php:54
+msgid "ユーザーグループ名"
+msgstr ""
+
+#: View/UserGroups/admin/form.php:73
+msgid "表示名"
+msgstr ""
+
+#: View/UserGroups/admin/form.php:82
+msgid "その他"
+msgstr ""
+
+#: View/UserGroups/admin/form.php:91
+msgid "管理システムのグローバルメニューを利用する"
+msgstr ""
+
+#: View/UserGroups/admin/form.php:102
+msgid "コンテンツのドラッグ＆ドロップ移動機能を利用する"
+msgstr ""
+
+#: View/UserGroups/admin/form.php:114
+msgid "認証プレフィックス設定"
+msgstr ""
+
+#: View/Users/admin/form.php:49
+#: View/Users/admin/login.php:40
+msgid "アカウント名"
+msgstr ""
+
+#: View/Users/admin/form.php:58
+msgid "名前"
+msgstr ""
+
+#: View/Users/admin/form.php:63
+msgid "姓を入力してください"
+msgstr ""
+
+#: View/Users/admin/form.php:64
+msgid "名を入力してください"
+msgstr ""
+
+#: View/Users/admin/form.php:69
+msgid "ニックネーム"
+msgstr ""
+
+#: View/Users/admin/form.php:78
+msgid "グループ"
+msgstr ""
+
+#: View/Users/admin/form.php:83
+msgid "グループを選択してください"
+msgstr ""
+
+#: View/Users/admin/form.php:162
+msgid "グループの初期値に設定"
+msgstr ""
+
+#: View/Users/admin/form.php:162
+msgid "グループ初期データに設定"
+msgstr ""
+
+#: View/Users/admin/login.php:51
+msgid "ログイン状態を保存する"
+msgstr ""
+
+#: View/Users/admin/login.php:53;55
+msgid "パスワードを忘れた場合はこちら"
+msgstr ""
+
+#: View/Users/admin/reset_password.php:33
+msgid "送信"
+msgstr ""
+
+#: View/WidgetAreas/admin/form.php:31
+msgid "ウィジェットエリア名"
+msgstr ""
+
+#: View/WidgetAreas/admin/form.php:33
+msgid "エリア名を保存する"
+msgstr ""
+
+#: View/WidgetAreas/admin/form.php:102;149
+msgid "タイトルを表示"
 msgstr ""
 
