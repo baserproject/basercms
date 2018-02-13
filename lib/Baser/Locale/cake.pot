@@ -13,63 +13,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: View/Helper/BcFormHelper.php:308
-#: View/Helper/FormHelper.php:2952
+#: View/Helper/BcFormHelper.php:991
+#: View/Helper/FormHelper.php:3000
 msgid "January"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:309
-#: View/Helper/FormHelper.php:2953
+#: View/Helper/BcFormHelper.php:992
+#: View/Helper/FormHelper.php:3001
 msgid "February"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:310
-#: View/Helper/FormHelper.php:2954
+#: View/Helper/BcFormHelper.php:993
+#: View/Helper/FormHelper.php:3002
 msgid "March"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:311
-#: View/Helper/FormHelper.php:2955
+#: View/Helper/BcFormHelper.php:994
+#: View/Helper/FormHelper.php:3003
 msgid "April"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:312
-#: View/Helper/FormHelper.php:2956
+#: View/Helper/BcFormHelper.php:995
+#: View/Helper/FormHelper.php:3004
 msgid "May"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:313
-#: View/Helper/FormHelper.php:2957
+#: View/Helper/BcFormHelper.php:996
+#: View/Helper/FormHelper.php:3005
 msgid "June"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:314
-#: View/Helper/FormHelper.php:2958
+#: View/Helper/BcFormHelper.php:997
+#: View/Helper/FormHelper.php:3006
 msgid "July"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:315
-#: View/Helper/FormHelper.php:2959
+#: View/Helper/BcFormHelper.php:998
+#: View/Helper/FormHelper.php:3007
 msgid "August"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:316
-#: View/Helper/FormHelper.php:2960
+#: View/Helper/BcFormHelper.php:999
+#: View/Helper/FormHelper.php:3008
 msgid "September"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:317
-#: View/Helper/FormHelper.php:2961
+#: View/Helper/BcFormHelper.php:1000
+#: View/Helper/FormHelper.php:3009
 msgid "October"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:318
-#: View/Helper/FormHelper.php:2962
+#: View/Helper/BcFormHelper.php:1001
+#: View/Helper/FormHelper.php:3010
 msgid "November"
 msgstr ""
 
-#: View/Helper/BcFormHelper.php:319
-#: View/Helper/FormHelper.php:2963
+#: View/Helper/BcFormHelper.php:1002
+#: View/Helper/FormHelper.php:3011
 msgid "December"
 msgstr ""
 
@@ -105,15 +105,15 @@ msgstr ""
 msgid "There was an error deleting the %1$s with id: %2$s"
 msgstr ""
 
-#: Controller/Component/AuthComponent.php:434
+#: Controller/Component/AuthComponent.php:435
 msgid "You are not authorized to access that location."
 msgstr ""
 
-#: Error/ExceptionRenderer.php:222
+#: Error/ExceptionRenderer.php:225
 msgid "Not Found"
 msgstr ""
 
-#: Error/ExceptionRenderer.php:245
+#: Error/ExceptionRenderer.php:248
 msgid "An Internal Error Has Occurred."
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "This field cannot be left blank"
 msgstr ""
 
-#: Network/CakeResponse.php:1355
+#: Network/CakeResponse.php:1365
 msgid "The requested file was not found"
 msgstr ""
 
@@ -309,36 +309,40 @@ msgstr[1] ""
 msgid "A view block with the name '%s' is already/still open."
 msgstr ""
 
-#: View/Helper/FormHelper.php:753
+#: View/Helper/FormHelper.php:780
 msgid "Error in field %s"
 msgstr ""
 
-#: View/Helper/FormHelper.php:949
+#: View/Helper/FormHelper.php:976
 #: View/Scaffolds/form.ctp:46
 #: View/Scaffolds/index.ctp:77;92
 #: View/Scaffolds/view.ctp:63;78;188
 msgid "New %s"
 msgstr ""
 
-#: View/Helper/FormHelper.php:955
+#: View/Helper/FormHelper.php:982
 #: View/Scaffolds/view.ctp:51;109
 msgid "Edit %s"
 msgstr ""
 
-#: View/Helper/FormHelper.php:1539
+#: View/Helper/FormHelper.php:1575
 msgid "empty"
 msgstr ""
 
-#: View/Helper/FormHelper.php:1958
+#: View/Helper/FormHelper.php:1996
 #: View/Scaffolds/form.ctp:21
 msgid "Submit"
 msgstr ""
 
-#: View/Helper/HtmlHelper.php:783
+#: View/Helper/HtmlHelper.php:797
 msgid "Home"
 msgstr ""
 
-#: View/Helper/PaginatorHelper.php:644
+#: View/Helper/HtmlHelper.php:853
+msgid "Unable to find the requested image to output as base64!"
+msgstr ""
+
+#: View/Helper/PaginatorHelper.php:664
 msgid " of "
 msgstr ""
 
