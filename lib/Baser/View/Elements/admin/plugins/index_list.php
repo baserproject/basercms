@@ -37,11 +37,11 @@
 			</div>
 			<?php endif ?>
 		</th>
-		<th>プラグイン名</th>
-		<th style="white-space: nowrap">バージョン</th>
-		<th>説明</th>
-		<th>開発者</th>
-		<th>登録日<br />更新日</th>
+		<th><?php echo __d('baser', 'プラグイン名')?></th>
+		<th style="white-space: nowrap"><?php echo __d('baser', 'バージョン')?></th>
+		<th><?php echo __d('baser', '説明')?></th>
+		<th><?php echo __d('baser', '開発者')?></th>
+		<th><?php echo __d('baser', '登録日<br />更新日')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -51,7 +51,7 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="6"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

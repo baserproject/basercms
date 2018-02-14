@@ -32,7 +32,7 @@
 	});
 </script>
 <tr>
-	<th>検索インデックスメニュー</th>
+	<th><?php echo __d('baser', '検索インデックスメニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', '検索インデックス再構築'), ['controller' => 'search_indices', 'action' => 'reconstruct'], ['id' => 'BtnReconstruct']) ?></li>

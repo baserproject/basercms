@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>システム設定メニュー</th>
+	<th><?php echo __d('baser', 'システム設定メニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'サイト基本設定'), ['controller' => 'site_configs', 'action' => 'form', 'plugin' => null]) ?></li>

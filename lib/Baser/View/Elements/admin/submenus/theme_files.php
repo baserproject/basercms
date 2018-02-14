@@ -35,7 +35,7 @@ if ($theme == 'core') {
 
 <?php foreach ($themeFiles as $themeFile): ?>
 	<tr>
-		<th>[<?php echo $themeFile['title'] ?>] テーマ管理メニュー</th>
+		<th>[<?php echo $themeFile['title'] ?>] <?php echo __d('baser', 'テーマ管理メニュー')?></th>
 		<td>
 			<ul class="cleafix">
 				<?php foreach ($types as $key => $type): ?>

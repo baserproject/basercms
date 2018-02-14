@@ -18,7 +18,7 @@
 
 <?php if ($usePermission): ?>
 	<tr>
-		<th>アクセス制限設定管理メニュー</th>
+		<th><?php echo __d('baser', 'アクセス制限設定管理メニュー')?></th>
 		<td>
 			<ul class="cleafix">
 				<li><?php $this->BcBaser->link(__d('baser', 'アクセス制限設定一覧'), ['controller' => 'permissions', 'action' => 'index', $this->request->params['pass'][0]]) ?></li>

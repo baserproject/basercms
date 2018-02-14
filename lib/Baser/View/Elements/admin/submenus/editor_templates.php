@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>エディタテンプレートメニュー</th>
+	<th><?php echo __d('baser', 'エディタテンプレートメニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(__d('baser', 'エディタテンプレート一覧'), ['controller' => 'editor_templates', 'action' => 'index']) ?></li>

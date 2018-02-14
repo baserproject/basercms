@@ -49,9 +49,9 @@ $class = ' class="' . implode(' ', $classies) . '"';
 	</td>
 	<td>
 		<?php if ($data['Plugin']['old_version']): ?>
-			<div class="annotation-text"><small>新しいバージョンにアップデートしてください</small></div>
+			<div class="annotation-text"><small><?php echo __d('baser', '新しいバージョンにアップデートしてください')?></small></div>
 		<?php elseif ($data['Plugin']['update']): ?>
-			<div class="annotation-text"><small>アップデートを完了させてください</small></div>
+			<div class="annotation-text"><small><?php echo __d('baser', 'アップデートを完了させてください')?></small></div>
 		<?php endif ?>
 		<?php echo $data['Plugin']['name'] ?><?php if ($data['Plugin']['title']): ?>（<?php echo $data['Plugin']['title'] ?>）<?php endif ?>
 	</td>
