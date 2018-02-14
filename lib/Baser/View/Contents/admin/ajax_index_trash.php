@@ -18,5 +18,5 @@ header('Content-type: text/html; charset=utf-8');
 <?php $this->BcBaser->element('contents/index_list_tree'); ?>
 </div>
 <?php else: ?>
-<div class="tree-empty">ゴミ箱は空です</div>
+<div class="tree-empty"><?php echo __d('baser', 'ゴミ箱は空です') ?></div>
 <?php endif ?>
