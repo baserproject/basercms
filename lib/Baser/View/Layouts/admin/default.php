@@ -109,11 +109,11 @@
 
 							<?php if ($this->request->params['controller'] != 'installations' && !empty($this->BcBaser->siteConfig['first_access'])): ?>
 								<div id="FirstMessage" class="em-box" style="text-align:left">
-									baserCMSへようこそ。<br />
+									<?php echo __d('baser', 'baserCMSへようこそ。')?><br />
 									<ul style="font-weight:normal;font-size:14px;">
-										<li>画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。</li>
-										<li>よく使う機能については、画面左側にある「よく使う項目」の「新規追加」をクリックして、お気に入りとして登録する事ができます。</li>
-										<li>まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。</li>
+										<li><?php echo __d('baser', '画面右上の「システムナビ」より管理システムの全ての機能にアクセスする事ができます。')?></li>
+										<li><?php echo __d('baser', 'よく使う機能については、画面左側にある「よく使う項目」の「新規追加」をクリックして、お気に入りとして登録する事ができます。')?></li>
+										<li><?php echo __d('baser', 'まずは、画面上部のメニュー、「コンテンツ管理」よりWebサイトの全体像を確認しましょう。')?></li>
 									</ul>
 								</div>
 							<?php endif ?>

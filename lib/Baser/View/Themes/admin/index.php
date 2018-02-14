@@ -27,8 +27,8 @@ $this->BcBaser->js([
 
 <div id="tabs">
 	<ul>
-		<li><a href="#DataList">所有テーマ</a></li>
-		<li><a href="#BaserMarket">baserマーケット</a></li>
+		<li><a href="#DataList"><?php echo __d('baser', '所有テーマ')?></a></li>
+		<li><a href="#BaserMarket"><?php echo __d('baser', 'baserマーケット')?></a></li>
 	</ul>
 	<div id="DataList"><?php $this->BcBaser->element('themes/index_list') ?></div>
 	<div id="BaserMarket"><div style="padding:20px;text-align:center;"><?php $this->BcBaser->img('admin/ajax-loader.gif', ['alt' => 'Loading...']) ?></div></div>

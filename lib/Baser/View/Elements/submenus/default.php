@@ -17,7 +17,7 @@
 
 
 <div class="sub-menu-contents">
-	<h2>ログインメニュー</h2>
+	<h2><?php echo __d('baser', 'ログインメニュー')?></h2>
 	<ul>
 		<li><?php $this->BcBaser->link(__d('baser', '管理者ログイン'), ['admin' => true, 'plugin' => null, 'controller' => 'users', 'action' => 'login'], ['target' => '_blank']) ?></li>
 	</ul>

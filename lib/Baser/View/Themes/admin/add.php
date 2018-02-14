@@ -25,7 +25,7 @@ $(function(){
 </script>
 
 
-<p>ZIP 形式のテーマファイルをお持ちの場合、こちらからアップロードして適用できます。</p>
+<p><?php echo __d('baser', 'ZIP 形式のテーマファイルをお持ちの場合、こちらからアップロードして適用できます。')?></p>
 <?php echo $this->BcForm->create('Theme', ['type' => 'file']) ?>
 
 <div class="submit">

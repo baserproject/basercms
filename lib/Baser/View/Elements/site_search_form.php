@@ -26,7 +26,7 @@ $folders = $this->BcContents->getContentFolderList($this->request->params['Site'
 
 
 <div class="section search-box">
-	<h2>サイト内検索</h2>
+	<h2><?php echo __d('baser', 'サイト内検索')?></h2>
 	<?php echo $this->BcForm->create('SearchIndex', ['type' => 'get', 'url' => $url]) ?>
 	<?php if($folders): ?>
 		<?php echo $this->BcForm->label('SearchIndex.f', __d('baser', 'カテゴリ')) ?><br>

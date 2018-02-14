@@ -30,7 +30,7 @@
 			<?php endforeach ?>
 
 		<?php else: ?>
-			<li class="no-data">新規登録ボタンよりよく使う項目を登録しておく事ができます。</li>
+			<li class="no-data"><?php echo __d('baser', '新規登録ボタンよりよく使う項目を登録しておく事ができます。')?></li>
 		<?php endif ?>
 	</ul>
 
@@ -38,7 +38,7 @@
 		<li><?php $this->BcBaser->img('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'id' => 'BtnFavoriteAdd', 'class' => 'btn', 'style' => 'cursor:pointer']) ?></li>
 		<li><?php $this->BcBaser->img('admin/btn_menu_help.png', ['alt' => __d('baser', 'ヘルプ'), 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp']) ?>
 			<div class="helptext">
-				<p>よく使う項目では、新規登録ボタンで現在開いているページへのリンクを簡単にする事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えます。</p>
+				<p><?php echo __d('baser', 'よく使う項目では、新規登録ボタンで現在開いているページへのリンクを簡単にする事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えます。')?></p>
 			</div>
 		</li>
 	</ul>

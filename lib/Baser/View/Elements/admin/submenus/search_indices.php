@@ -15,13 +15,19 @@
  */
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'title' => __d('baser', '確認'),
+    'message' => __d('baser', '現在の検索インデックスを消去して、再構築します。本当にいいですか？'),
+]);
+?>
 
 <script>
 	$(function(){
 		$("#BtnReconstruct").click(function(){
 			$.bcConfirm.show({
-				title: '確認',
-				message: '現在の検索インデックスを消去して、再構築します。本当にいいですか？',
+				title: bcI18n.title,
+				message: bcI18n.message,
 				ok: function(){
 					$.bcUtil.showLoader();
 					location.href = $("#BtnReconstruct").attr('href');

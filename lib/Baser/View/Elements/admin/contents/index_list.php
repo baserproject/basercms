@@ -12,6 +12,13 @@
  * @license			http://basercms.net/license/index.html
  */
 ?>
+
+<?php
+$this->BcBaser->i18nScript([
+'errorMassage' => __d('baser', '処理中にエラーが発生しました。')
+]);
+?>
+
 <script type="text/javascript">
 $(function(){
 	$(".priority").change(function() {
@@ -33,12 +40,12 @@ $(function(){
 				},
 				success: function(result){
 					if(!result) {
-						$("#flashMessage").html('処理中にエラーが発生しました。');
+						$("#flashMessage").html(bcI18n.errorMassage);
 						$("#flashMessage").slideDown();
 					}
 				},
 				error: function() {
-					$("#flashMessage").html('処理中にエラーが発生しました。');
+					$("#flashMessage").html(bcI18n.errorMassage);
 					$("#flashMessage").slideDown();
 				},
 				complete: function() {

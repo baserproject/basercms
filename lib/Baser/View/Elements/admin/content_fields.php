@@ -116,21 +116,21 @@ if($this->BcContents->isEditable()) {
 
 <div id="ContentsFormTabs">
 	<ul>
-		<li><a href="#BasicSetting">基本設定</a></li>
-		<li><a href="#OptionalSetting">オプション</a></li>
+		<li><a href="#BasicSetting"><?php echo __d('baser', '基本設定')?></a></li>
+		<li><a href="#OptionalSetting"><?php echo __d('baser', 'オプション')?></a></li>
 		<?php if(count($relatedContents) > 1): ?>
-		<li><a href="#RelatedContentsSetting">関連コンテンツ</a></li>
+		<li><a href="#RelatedContentsSetting"><?php echo __d('baser', '関連コンテンツ')?></a></li>
 		<?php endif ?>
-		<li><a href="#EtcSetting">その他情報</a></li>
+		<li><a href="#EtcSetting"><?php echo __d('baser', 'その他情報')?></a></li>
 	</ul>
 	<div id="BasicSetting">
 		<table class="form-table" >
 			<tr>
 				<th><?php echo $this->BcForm->label('Content.name', 'URL') ?>&nbsp;<span class="required">*</span></th>
 				<td>
-					<smalL>[サイト]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?>　
+					<smalL>[<?php echo __d('baser', 'サイト')?>]</smalL> <?php echo $this->BcText->noValue($this->request->data['Site']['display_name'], $mainSiteDisplayName) ?>　
 					<?php if(!$this->request->data['Content']['site_root']): ?>
-					<small>[フォルダ]</small>
+					<small>[<?php echo __d('baser', 'フォルダ')?>]</small>
 					<?php echo $this->BcForm->input('Content.parent_id', ['type' => 'select', 'options' => $parentContents, 'escape' => true]) ?>　
 					<?php echo $this->BcForm->error('Content.parent_id') ?>　
 					<br />
@@ -157,15 +157,15 @@ if($this->BcContents->isEditable()) {
 						<?php echo $this->BcForm->value('Content.title') ?>　
 						<?php echo $this->BcForm->hidden('Content.title') ?>
 					<?php endif ?>
-					<small>[タイプ]</small>
+					<small>[<?php echo __d('baser', 'タイプ')?>]</small>
 					<?php if(!$this->BcForm->value('Content.alias_id')): ?>
 						<?php if(!empty($this->BcContents->settings[$this->BcForm->value('Content.type')])): ?>
 							<?php echo $this->BcContents->settings[$this->BcForm->value('Content.type')]['title'] ?>
 						<?php else: ?>
-							デフォルト	
+							<?php echo __d('baser', 'デフォルト')?>
 						<?php endif ?>
 					<?php else: ?>
-					エイリアス
+						<?php echo __d('baser', 'エイリアス')?>
 					<?php endif ?>
 				</td>
 			</tr>
@@ -178,7 +178,7 @@ if($this->BcContents->isEditable()) {
 						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.self_status'), $this->BcText->booleanDoList(__d('baser', '公開'))) ?>
 						<?php echo $this->BcForm->hidden('Content.self_status') ?>
 					<?php endif ?>
-					&nbsp;&nbsp;&nbsp;&nbsp;<small>[公開期間]</small>&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;<small>[<?php echo __d('baser', '公開期間')?>]</small>&nbsp;
 					<?php if(!$disableEdit): ?>
                         <?php echo $this->BcForm->dateTimePicker('Content.self_publish_begin', ['size' => 12, 'maxlength' => 10], true) ?>
 						&nbsp;〜&nbsp;
@@ -195,11 +195,11 @@ if($this->BcContents->isEditable()) {
 					<?php echo $this->BcForm->error('Content.self_publish_begin') ?>
 					<?php echo $this->BcForm->error('Content.self_publish_end') ?>
 					<?php if((bool) $this->BcForm->value('Content.status') != (bool) $this->BcForm->value('Content.self_status')): ?>
-						<p class="parents-disable">※ 親フォルダの設定を継承し非公開状態となっています</p>
+						<p class="parents-disable">※ <?php echo __d('baser', '親フォルダの設定を継承し非公開状態となっています')?></p>
 					<?php endif ?>
 					<?php if(($this->BcForm->value('Content.publish_begin') != $this->BcForm->value('Content.self_publish_begin')) || 
 							($this->BcForm->value('Content.publish_end') != $this->BcForm->value('Content.self_publish_end'))): ?>
-						<p>※ 親フォルダの設定を継承し公開期間が設定されている状態となっています<br>
+						<p>※ <?php echo __d('baser', '親フォルダの設定を継承し公開期間が設定されている状態となっています')?><br>
 							（<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_begin')) ?> 〜
 							<?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.publish_end')) ?>）</p>
 					<?php endif ?>
@@ -241,13 +241,13 @@ if($this->BcContents->isEditable()) {
 				<td>
 					<?php if(!$disableEdit): ?>
 					<?php echo $this->BcForm->input('Content.author_id', ['type' => 'select', 'options' => $authors]) ?><br>
-					<small>[作成日]</small> <?php echo $this->BcForm->dateTimePicker('Content.created_date', ['size' => 12, 'maxlength' => 10], true) ?>　
-					<small>[更新日]</small> <?php echo $this->BcForm->dateTimePicker('Content.modified_date', ['size' => 12, 'maxlength' => 10], true) ?>
+					<small>[<?php echo __d('baser', '作成日')?>]</small> <?php echo $this->BcForm->dateTimePicker('Content.created_date', ['size' => 12, 'maxlength' => 10], true) ?>　
+					<small>[<?php echo __d('baser', '更新日')?>]</small> <?php echo $this->BcForm->dateTimePicker('Content.modified_date', ['size' => 12, 'maxlength' => 10], true) ?>
 					<?php else: ?>
 						<?php echo $this->BcText->arrayValue($this->BcForm->value('Content.author_id'), $authors) ?>　
 
-					<small>[作成日]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.created_date')) ?>　
-					<small>[更新日]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.modified_date')) ?>
+					<small>[<?php echo __d('baser', '作成日')?>]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.created_date')) ?>　
+					<small>[<?php echo __d('baser', '更新日')?>]</small> <?php echo $this->BcTime->format('Y/m/d H:i', $this->BcForm->value('Content.modified_date')) ?>
 						<?php echo $this->BcForm->hidden('Content.author_id') ?>
 						<?php echo $this->BcForm->hidden('Content.created_date') ?>
 						<?php echo $this->BcForm->hidden('Content.modified_date') ?>
@@ -273,19 +273,19 @@ if($this->BcContents->isEditable()) {
 						<span style="white-space: nowrap"><?php echo $this->BcForm->input('Content.blank_link', ['type' => 'checkbox', 'label' => __d('baser', 'メニューのリンクを別ウィンドウ開く')]) ?></span>
 					<?php else: ?>
 						<?php if($this->BcForm->value('Content.exclude_search')): ?>
-							<span style="white-space: nowrap">サイト内検索の検索結果より除外する</span>　
+							<span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外する')?></span>　
 						<?php else: ?>
-							<span style="white-space: nowrap">サイト内検索の検索結果より除外しない</span>　
+							<span style="white-space: nowrap"><?php echo __d('baser', 'サイト内検索の検索結果より除外しない')?></span>　
 						<?php endif ?>
 						<?php if($this->BcForm->value('Content.exclude_menu')): ?>
-							<span style="white-space: nowrap">公開ページのメニューより除外する</span>　
+							<span style="white-space: nowrap"><?php echo __d('baser', '公開ページのメニューより除外する')?></span>　
 						<?php else: ?>
-							<span style="white-space: nowrap">公開ページのメニューより除外しない</span>　
+							<span style="white-space: nowrap"><?php echo __d('baser', '公開ページのメニューより除外しない')?></span>　
 						<?php endif ?>
 						<?php if($this->BcForm->value('Content.blank_link')): ?>
-							<span style="white-space: nowrap">メニューのリンクを別ウィンドウ開く</span>
+							<span style="white-space: nowrap"><?php echo __d('baser', 'メニューのリンクを別ウィンドウ開く')?></span>
 						<?php else: ?>
-							<span style="white-space: nowrap">メニューのリンクを同じウィンドウに開く</span>
+							<span style="white-space: nowrap"><?php echo __d('baser', 'メニューのリンクを同じウィンドウに開く')?></span>
 						<?php endif ?>
 						<?php echo $this->BcForm->hidden('Content.exclude_search') ?>
 						<?php echo $this->BcForm->hidden('Content.exclude_menu') ?>
@@ -300,10 +300,10 @@ if($this->BcContents->isEditable()) {
 		<table class="list-table">
 			<tr>
 				<th style="width:170px" class="list-tool">&nbsp;</th>
-				<th>サイト名</th>
-				<th>メインサイト</th>
-				<th>タイトル</th>
-				<th>エイリアス</th>
+				<th><?php echo __d('baser', 'サイト名')?></th>
+				<th><?php echo __d('baser', 'メインサイト')?></th>
+				<th><?php echo __d('baser', 'タイトル')?></th>
+				<th><?php echo __d('baser', 'エイリアス')?></th>
 			</tr>
 			<?php foreach($relatedContents as $relatedContent): ?>
 				<?php
@@ -361,7 +361,7 @@ if($this->BcContents->isEditable()) {
 							<small>（<?php echo $this->BcContents->settings[$relatedContent['Content']['type']]['title'] ?>）</small>
 						<?php endif ?>
 					<?php else: ?>
-						<small>未登録</small>
+						<small><?php echo __d('baser', '未登録')?></small>
 					<?php endif ?>
 				</td>
 				<td style="text-align:center;width:5%">
@@ -377,17 +377,17 @@ if($this->BcContents->isEditable()) {
 <?php if($this->request->action == 'admin_edit' || $this->request->action == 'admin_edit_alias'): ?>
 	<div id="EtcSetting">
 		<div>
-		<p><span>コンテンツID</span>：<?php echo h($this->request->data['Content']['id']) ?></p>
-		<p><span>実体ID</span>：<?php echo h($this->request->data['Content']['entity_id']) ?></p>
-		<p><span>プラグイン</span>：<?php echo h($this->request->data['Content']['plugin']) ?></p>
-		<p><span>コンテンツタイプ</span>：<?php echo h($this->request->data['Content']['type']) ?></p>
-		<p><span>データ作成日</span>：<?php echo h($this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created'])) ?></p>
-		<p><span>データ更新日</span>：<?php echo h($this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified'])) ?></p>
+		<p><span><?php echo __d('baser', 'コンテンツID')?></span>：<?php echo h($this->request->data['Content']['id']) ?></p>
+		<p><span><?php echo __d('baser', '実体ID')?></span>：<?php echo h($this->request->data['Content']['entity_id']) ?></p>
+		<p><span><?php echo __d('baser', 'プラグイン')?></span>：<?php echo h($this->request->data['Content']['plugin']) ?></p>
+		<p><span><?php echo __d('baser', 'コンテンツタイプ')?></span>：<?php echo h($this->request->data['Content']['type']) ?></p>
+		<p><span><?php echo __d('baser', 'データ作成日')?></span>：<?php echo h($this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['created'])) ?></p>
+		<p><span><?php echo __d('baser', 'データ更新日')?></span>：<?php echo h($this->BcTime->format('Y/m/d H:i:s', $this->request->data['Content']['modified'])) ?></p>
 		</div>
 	</div>
 <?php endif ?>
 </div>
 
 <?php if(empty($this->BcContents->settings[$this->BcForm->value('Content.type')])): ?>
-<p class="section">タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。</p>
+<p class="section"><?php echo __d('baser', 'タイプ「デフォルト」は、プラグインの無効処理等が理由となり、タイプとの関連付けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にしてください。')?></p>
 <?php endif ?>
