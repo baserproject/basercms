@@ -1087,11 +1087,11 @@ class Content extends AppModel {
 /**
  * コンテンツIDよりURLを取得する
  *
- * @param $id
- * @return string
+ * @param int $id
+ * @return string URL
  */
 	public function getUrlById($id, $full = false) {
-		if (!is_int($id)) {
+		if (!is_int((int) $id)) {
 			return '';
 		}
 		$data = $this->find('first', ['conditions' => ['Content.id' => $id]]);
