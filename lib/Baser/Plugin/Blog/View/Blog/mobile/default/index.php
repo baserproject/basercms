@@ -52,7 +52,7 @@ $this->BcBaser->setDescription($this->Blog->getDescription());
 		<br />
 	<?php endforeach; ?>
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __d('baser', '記事がありません。')?></p>
 <?php endif; ?>
 
 <!-- pagination -->

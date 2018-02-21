@@ -20,14 +20,14 @@
 <tr>
 	<td class="row-tools">
 		<?php if ($this->BcBaser->isAdminUser()): ?>
-			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['FeedConfig']['id'], array('type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['FeedConfig']['id'])) ?>
+			<?php echo $this->BcForm->checkbox('ListTool.batch_targets.' . $data['FeedConfig']['id'], ['type' => 'checkbox', 'class' => 'batch-targets', 'value' => $data['FeedConfig']['id']]) ?>
 		<?php endif ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', array('alt' => '確認', 'class' => 'btn')), array('controller' => 'feed_configs', 'action' => 'preview', $data['FeedConfig']['id']), array('title' => '確認', 'target' => '_blank')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $data['FeedConfig']['id']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'ajax_delete', $data['FeedConfig']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_check.png', ['alt' => __d('baser', '確認'), 'class' => 'btn']), ['controller' => 'feed_configs', 'action' => 'preview', $data['FeedConfig']['id']], ['title' => __d('baser', '確認'), 'target' => '_blank']) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', ['alt' => __d('baser', '編集'), 'class' => 'btn']), ['action' => 'edit', $data['FeedConfig']['id']], ['title' => __d('baser', '編集')]) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', ['alt' => __d('baser', '削除'), 'class' => 'btn']), ['action' => 'ajax_delete', $data['FeedConfig']['id']], ['title' => __d('baser', '削除'), 'class' => 'btn-delete']) ?>
 	</td>
 	<td><?php echo $data['FeedConfig']['id']; ?></td>
-	<td><?php $this->BcBaser->link($data['FeedConfig']['name'], array('action' => 'edit', $data['FeedConfig']['id'])) ?></td>
+	<td><?php $this->BcBaser->link($data['FeedConfig']['name'], ['action' => 'edit', $data['FeedConfig']['id']]) ?></td>
 	<td><?php echo $data['FeedConfig']['display_number'] ?></td>
 	<?php echo $this->BcListTable->dispatchShowRow($data) ?>
 	<td><?php echo $this->BcTime->format('Y-m-d', $data['FeedConfig']['created']); ?><br />
