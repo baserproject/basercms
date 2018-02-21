@@ -2752,7 +2752,7 @@ END_FLASH;
 	 * @param array $value 値（連想配列）
 	 */
 	public function setScript($variable, $value) {
-		$code = 'var ' . $variable . '=' . json_encode($value);
+		$code = 'var ' . h($variable) . ' = ' . json_encode(h($value));
 		echo $this->BcHtml->scriptBlock($code);
 	}
 
