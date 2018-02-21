@@ -28,7 +28,7 @@
 	</tr>
 <?php endif; ?>
 	<tr>
-		<th><?php echo $this->BcForm->label('UploaderCategory.name', 'カテゴリ名') ?>&nbsp;<span class="required">*</span></th>
+		<th><?php echo $this->BcForm->label('UploaderCategory.name', __d('baser', 'カテゴリ名')) ?>&nbsp;<span class="required">*</span></th>
 		<td>
 			<?php echo $this->BcForm->input('UploaderCategory.name', array('type' => 'text', 'size' => 40, 'maxlength' => 50, 'autofocus' => true)) ?>
 			<?php echo $this->BcForm->error('UploaderCategory.name') ?>
@@ -41,13 +41,13 @@
 
 <div class="submit">
 <?php if($this->action == 'admin_add'): ?>
-	<?php echo $this->BcForm->submit('登録', array('div' => false, 'class' => 'button')) ?>
+	<?php echo $this->BcForm->submit(__d('baser', '登録'), array('div' => false, 'class' => 'button')) ?>
 <?php else: ?>
-	<?php echo $this->BcForm->submit('更新', array('div' => false, 'class' => 'button')) ?>
-	<?php $this->BcBaser->link('削除',
+	<?php echo $this->BcForm->submit(__d('baser', '更新'), array('div' => false, 'class' => 'button')) ?>
+	<?php $this->BcBaser->link(__d('baser', '削除'),
 			array('action' => 'delete', $this->BcForm->value('UploaderCategory.id')),
 			array('class' => 'submit-token button'),
-			sprintf('%s を本当に削除してもいいですか？', $this->BcForm->value('UploaderCategory.name')),
+			sprintf(__d('baser', '%s を本当に削除してもいいですか？'), $this->BcForm->value('UploaderCategory.name')),
 			false); ?>
 <?php endif ?>
 </div>

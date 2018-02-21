@@ -29,9 +29,9 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 <?php if(!$installMessage): ?>
 <div id="UploaderForm" class="clearfix">
 	<div>
-		<?php echo $this->BcForm->label('UploaderFile.uploader_category_id', 'アップロード') ?>&nbsp;
+		<?php echo $this->BcForm->label('UploaderFile.uploader_category_id', __d('baser', 'アップロード')) ?>&nbsp;
 	<?php if($uploaderCategories): ?>
-		<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', array('type' => 'select', 'options' => $uploaderCategories, 'empty' => 'カテゴリ指定なし', 'id' => 'UploaderFileUploaderCategoryId'.$listId)) ?>&nbsp;
+		<?php echo $this->BcForm->input('UploaderFile.uploader_category_id', array('type' => 'select', 'options' => $uploaderCategories, 'empty' => __d('baser', 'カテゴリ指定なし'), 'id' => 'UploaderFileUploaderCategoryId'.$listId)) ?>&nbsp;
 	<?php endif ?>
 		<span id="SpanUploadFile<?php echo $listId ?>">
 			<?php echo $this->BcForm->file('UploaderFile.file', array('id'=>'UploaderFileFile'.$listId, 'class' => 'uploader-file-file', 'div' => false)) ?>
@@ -48,7 +48,7 @@ $this->BcBaser->js('admin/vendors/jquery.upload-1.0.0.min');
 		<?php $this->BcBaser->element('uploader_files/index_box', array('file' => $file, 'users' => $users)) ?>
 	<?php endforeach ?>
 <?php else: ?>
-<p class="no-data">ファイルが存在しません</p>
+<p class="no-data"><?php echo __d('baser', 'ファイルが存在しません')?></p>
 <?php endif ?>
 </div>
 
