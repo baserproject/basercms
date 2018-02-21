@@ -18,7 +18,7 @@ $adminPrefix = Configure::read('Routing.prefixes.0');
 
 <?php
 $this->BcBaser->i18nScript([
-	'message' => __d('本当にbaserCMSを初期化してもよろしいですか？')
+	'message' => __d('baser', '本当にbaserCMSを初期化してもよろしいですか？')
 ]);
 ?>
 

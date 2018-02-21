@@ -236,7 +236,7 @@ class BcTextHelper extends TextHelper {
 		}
 		list($w, $year) = explode('-', $arrDate['year']);
 		$wareki = $this->BcTime->nengo($w);
-		return $wareki . " " . $year . __d('baser', '年 ') . $arrDate['month'] . __d('baser', '月 ') . $arrDate['day'] . __d('baser', '日');
+		return $wareki . " " . "年 " . $arrDate['month'] . "月 " . $arrDate['day'] . "日";
 	}
 
 /**

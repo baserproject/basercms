@@ -83,9 +83,9 @@ $(window).load(function() {
 			<td class="col-input">
 				<?php if ($this->BcForm->value('UserGroup.name') == 'admins' && $this->request->action == 'admin_edit'): ?>
 					<?php if ($this->BcForm->value('UserGroup.use_admin_globalmenu')): ?>
-<?php echo __d('baser', '管理システムのグローバルメニューを利用する')?>
+                        <?php echo __d('baser', '管理システムのグローバルメニューを利用する')?>
 					<?php else: ?>
-<?php echo __d('baser', '管理システムのグローバルメニューを利用しない')?>
+                        <?php echo __d('baser', '管理システムのグローバルメニューを利用しない')?>
 					<?php endif ?>
 				<?php else: ?>
 					<span style="white-space: nowrap"><?php echo $this->BcForm->input('UserGroup.use_admin_globalmenu', ['type' => 'checkbox', 'label' => __d('baser', '管理システムのグローバルメニューを利用する')]) ?>　</span>
@@ -103,7 +103,7 @@ $(window).load(function() {
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextName" class="helptext">
 					<span>
-<?php echo __d('baser', 'コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。')?>
+                        <?php echo __d('baser', 'コンテンツ一覧のツリー構造において、ドラッグ＆ドロップでコンテンツの移動を許可するかどうかを設定します。')?>
 					</span>
 				</div>
 				<?php echo $this->BcForm->error('UserGroup.use_move_contents') ?>
@@ -117,8 +117,7 @@ $(window).load(function() {
 					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpAuthPrefix', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<?php echo $this->BcForm->error('UserGroup.auth_prefix') ?>
 					<div id="helptextAuthPrefix" class="helptext">
-<?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />
-						ユーザーグループ名が admins の場合は編集できません。')?>
+                        <?php echo __d('baser', '認証プレフィックスの設定を指定します。<br />ユーザーグループ名が admins の場合は編集できません。')?>
 					</div>
 				</td>
 			</tr>

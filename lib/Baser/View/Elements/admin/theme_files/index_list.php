@@ -33,7 +33,7 @@ $this->BcListTable->setColumnNumber(2);
 				<?php endif ?>
 			</div>
 		</th>
-		<th><?php echo __d('baser', 'フォルダ名／テーマファイル名')?></th>
+		<th><?php echo __d('baser', 'フォルダ名')?>／<?php echo __d('baser', 'テーマファイル名')?></th>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 	</tr>
 </thead>

@@ -51,8 +51,7 @@ $(document).ready(function(){
 <div id="step-4">
 
 	<div class="em-box">
-<?php echo __d('baser', '最後に管理情報を登録します。<br />
-		ここで入力した管理者アカウント名やパスワードは忘れないようにしておいてください。')?>
+<?php echo __d('baser', '最後に管理情報を登録します。<br />ここで入力した管理者アカウント名やパスワードは忘れないようにしておいてください。')?>
 	</div>
 
 	<h2><?php echo __d('baser', '管理情報登録')?></h2>

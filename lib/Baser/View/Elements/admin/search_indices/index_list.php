@@ -78,11 +78,11 @@ $(function(){
 <?php endif ?>
             </th>
             <th>NO</th>
-            <th><?php echo __d('baser', 'タイプ<br />タイトル')?></th>
+            <th><?php echo __d('baser', 'タイプ')?><br /><?php echo __d('baser', 'タイトル')?></th>
             <th><?php echo __d('baser', 'コンテンツ内容')?></th>
             <th><?php echo __d('baser', '公開状態')?></th>
 			<?php echo $this->BcListTable->dispatchShowHead() ?>
-            <th><?php echo __d('baser', '登録日<br />更新日')?></th>
+            <th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
         </tr>
     </thead>
 <tbody>

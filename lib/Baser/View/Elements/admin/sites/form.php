@@ -76,8 +76,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 		<td class="col-input"><?php echo $this->BcForm->input('Site.keyword', array('type' => 'text', 'size' => 55, 'maxlength' => 255, 'counter' => true, 'class' => 'full-width')) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpKeyword', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 			<?php echo $this->BcForm->error('Site.keyword') ?>
-			<div id="helptextKeyword" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />
-				&lt;?php $this->BcBaser->keywords() ?&gt; で出力します。')?></div>
+			<div id="helptextKeyword" class="helptext"><?php echo sprintf(__d('baser', 'テンプレートで利用する場合は、<br />%sで出力します。'),$this->BcBaser->keywords())?></div>
 		</td>
 	</tr>
 	<tr>
@@ -85,8 +84,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 		<td class="col-input"><?php echo $this->BcForm->input('Site.description', array('type' => 'textarea', 'cols' => 36, 'rows' => 5, 'counter' => true)) ?>
 			<?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpDescription', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 			<?php echo $this->BcForm->error('Site.description') ?>
-			<div id="helptextDescription" class="helptext"><?php echo __d('baser', 'テンプレートで利用する場合は、<br />
-				&lt;?php $this->BcBaser->description() ?&gt; で出力します。')?></div>
+			<div id="helptextDescription" class="helptext"><?php echo sprintf(__d('baser', 'テンプレートで利用する場合は、<br />%sで出力します。'),$this->BcBaser->description())?></div>
 		</td>
 	</tr>
 	<tr>
@@ -98,8 +96,7 @@ $useSiteLangSetting = @$this->get('siteConfig')['use_site_lang_setting'];
 			<div class="helptext">
 				<p><?php echo __d('baser', 'サブサイトの主として連携させたいサイトを選択します。')?></p>
 				<p>
-<?php echo __d('baser', '「エイリアスを利用してメインサイトと自動連携する」にチェックを入れておくと、メインサイトでコンテンツの追加や削除が発生した場合、
-					エイリアスを利用して自動的にサブサイトで同様の処理を実行します。')?>
+                    <?php echo __d('baser', '「エイリアスを利用してメインサイトと自動連携する」にチェックを入れておくと、メインサイトでコンテンツの追加や削除が発生した場合、<br>エイリアスを利用して自動的にサブサイトで同様の処理を実行します。')?>
 				</p>
 			</div>
 			<?php echo $this->BcForm->error('Site.main_site_id') ?>

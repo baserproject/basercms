@@ -40,10 +40,10 @@ $this->BcListTable->setColumnNumber(5);
 	<?php endif ?>
 </th>
 <th>NO</th>
-<th><?php echo __d('baser', 'ルール名<br />URL設定')?></th>
+<th><?php echo __d('baser', 'ルール名')?><br /><?php echo __d('baser', 'URL設定')?></th>
 <th><?php echo __d('baser', 'アクセス')?></th>
 <?php echo $this->BcListTable->dispatchShowHead() ?>
-<th><?php echo __d('baser', '登録日<br />更新日')?></th>
+<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
 </tr>
 </thead>
 <tbody>

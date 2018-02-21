@@ -16,12 +16,9 @@
 ?>
 
 
-<p><?php echo __d('baser', 'ここでは各テーマファイルの閲覧、編集、削除等を行う事ができます。<br />
-	なお、コアテンプレートとは、baserCMSコアで準備しているテンプレートで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。')?></p>
+<p><?php echo __d('baser', 'ここでは各テーマファイルの閲覧、編集、削除等を行う事ができます。<br />なお、コアテンプレートとは、baserCMSコアで準備しているテンプレートで、内包しているテーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができます。')?></p>
 <ul>
-	<li><?php echo sprintf(__d('baser', '上層のフォルダへ移動するには、
-		%s
-		ボタンをクリックします。（現在の位置がテーマフォルダの最上層の場合は表示されません）'), $this->BcBaser->img('admin/up.gif', ['alt' => __d('baser', '上へ'), 'width' => 18]))?></li>
+	<li><?php echo sprintf(__d('baser', '上層のフォルダへ移動するには、 %s ボタンをクリックします。（現在の位置がテーマフォルダの最上層の場合は表示されません）'), $this->BcBaser->img('admin/up.gif', ['alt' => __d('baser', '上へ'), 'width' => 18]))?></li>
 	<li><?php echo __d('baser', '新しいフォルダを作成するには、「フォルダ新規作成」ボタンをクリックします。')?></li>
 	<li><?php echo __d('baser', '新しいテーマファイルを作成するには、「ファイル新規作成」ボタンをクリックします。')?></li>
 	<li><?php echo __d('baser', 'ご自分のパソコン内のファイルをアップロードするには、「選択」ボタンをクリックし、対象のファイルを選択します。')?></li>
@@ -32,10 +29,10 @@
 </ul>
 <p><?php echo __d('baser', 'テーマファイルの種類は次の６つとなります。')?></p>
 <ul>
-	<li><?php echo __d('baser', 'レイアウト：Webページの枠組となるテンプレートファイル')?></li>
-	<li><?php echo __d('baser', 'エレメント：共通部品となるテンプレートファイル')?></li>
-	<li><?php echo __d('baser', 'コンテンツ：Webページのコンテンツ部分のテンプレートファイル')?></li>
-	<li><?php echo __d('baser', 'CSS：カスケーディングスタイルシートファイル')?></li>
-	<li><?php echo __d('baser', 'イメージ：写真や背景等の画像ファイル')?></li>
-	<li><?php echo __d('baser', 'Javascript：Javascriptファイル')?></li>
+	<li><?php echo __d('baser', 'レイアウト')?>：<?php echo __d('baser', 'Webページの枠組となるテンプレートファイル')?></li>
+	<li><?php echo __d('baser', 'エレメント')?>：<?php echo __d('baser', '共通部品となるテンプレートファイル')?></li>
+	<li><?php echo __d('baser', 'コンテンツ')?>：<?php echo __d('baser', 'Webページのコンテンツ部分のテンプレートファイル')?></li>
+	<li>CSS：<?php echo __d('baser', 'カスケーディングスタイルシートファイル')?></li>
+	<li><?php echo __d('baser', 'イメージ')?>：<?php echo __d('baser', '写真や背景等の画像ファイル')?></li>
+	<li>Javascript：<?php echo __d('baser', 'Javascriptファイル')?></li>
 </ul>

@@ -18,9 +18,7 @@
 
 <div class="step-1">
 
-	<div class="em-box"><?php echo Configure::read('BcApp.title') ?><?php echo __d('baser', 'のインストールを開始します。<br />
-		よろしければ「インストール開始」ボタンをクリックしてください。')?></div>
-
+	<div class="em-box"><?php echo sprintf(__d('baser', '%sのインストールを開始します。<br />よろしければ「インストール開始」ボタンをクリックしてください。'), Configure::read('BcApp.title'))?></div>
 	<div class="section">
 		<p><?php echo __d('baser', 'baserCMSではファイルベースのデータベースをサポートしています。SQLite３ を利用すれば、インストールにデータベースサーバーは必要ありません。')?></p>
 

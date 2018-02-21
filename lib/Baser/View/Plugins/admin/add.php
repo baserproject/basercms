@@ -25,7 +25,7 @@ $(function(){
 </script>
 
 
-<p><?php echo __d('baser', 'ZIP 形式のプラグインファイルをお持ちの場合、こちらからアップロードしてインストールできます。')?>ß</p>
+<p><?php echo __d('baser', 'ZIP 形式のプラグインファイルをお持ちの場合、こちらからアップロードしてインストールできます。')?></p>
 <?php echo $this->BcForm->create('Plugin', ['type' => 'file']) ?>
 
 <div class="submit">

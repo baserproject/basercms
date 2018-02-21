@@ -37,11 +37,7 @@
 				<div id="helptextUrl" class="helptext">
 					<ul>
 						<li><?php echo __d('baser', 'サイト内で検索インデックスとして登録したいURLを指定します。')?></li>
-						<li><?php echo __d('baser', 'baserCMSの設置URL部分は省略する事ができます。<br />
-							http://{baserCMS設置URL}/company/index<br />
-							→ /company/index<br />
-							<small>※ 省略時、スマートURLオフの場合、URL上の「/index.php」 は含めないようにします。')?></small>
-						</li>
+                        <li><?php echo __d('baser', 'baserCMSの設置URL部分は省略する事ができます。<br>http://{baserCMS設置URL}/company/index<br>	→ /company/index<br><small>※ 省略時、スマートURLオフの場合、URL上の「/index.php」 は含めないようにします。</small>') ?></li>
 					</ul>
 				</div>
 			</td>

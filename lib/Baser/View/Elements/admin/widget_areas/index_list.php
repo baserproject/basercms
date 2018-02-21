@@ -34,7 +34,7 @@
 		<th>NO</th>
 		<th><?php echo __d('baser', 'ウィジェットエリア名')?></th>
 		<th><?php echo __d('baser', '登録ウィジェット数')?></th>
-		<th><?php echo __d('baser', '登録日<br />更新日')?></th>
+		<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
 	</tr>
 </thead>
 <tbody>

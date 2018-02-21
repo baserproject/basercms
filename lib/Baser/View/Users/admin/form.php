@@ -81,9 +81,7 @@ $this->BcBaser->js('admin/users/edit', false);
 					<?php echo $this->BcForm->input('User.user_group_id', ['type' => 'select', 'options' => $userGroups]) ?>
 					<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpUserGroupId', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 					<?php echo $this->BcForm->error('User.user_group_id', __d('baser', 'グループを選択してください')) ?>
-					<div id="helptextUserGroupId" class="helptext"> <?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには
-						%s
-						より新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->link(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']))?></div>
+					<div id="helptextUserGroupId" class="helptext"> <?php echo sprintf(__d('baser', 'ユーザーグループごとにコンテンツへのアクセス制限をかける場合などには%sより新しいグループを追加しアクセス制限の設定をおこないます。'), $this->BcBaser->link(__d('baser', 'ユーザーグループ管理'), ['controller' => 'user_groups', 'action' => 'index']))?></div>
 				<?php else: ?>
 					<?php echo $this->BcText->arrayValue($this->request->data['User']['user_group_id'], $userGroups) ?>
 					<?php echo $this->BcForm->input('User.user_group_id', ['type' => 'hidden']) ?>
@@ -97,7 +95,7 @@ $this->BcBaser->js('admin/users/edit', false);
 				<?php echo $this->Html->image('admin/icn_help.png', ['id' => 'helpEmail', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<?php echo $this->BcForm->error('User.email') ?>
 				<div id="helptextEmail" class="helptext">
-<?php echo __d('baser', '連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パスワードの通知先等')?></small>
+                    <?php echo __d('baser', '連絡用メールアドレスを入力します。<br /><small>※ パスワードを忘れた場合の新パスワードの通知先等')?></small>
 				</div>
 			</td>
 		</tr>
@@ -120,7 +118,7 @@ $this->BcBaser->js('admin/users/edit', false);
 							<?php if ($this->request->action == "admin_edit"): ?>
 								<?php echo __d('baser', 'パスワードの変更をする場合は、')?>
 							<?php endif; ?>
-<?php echo __d('baser', '確認の為２回入力してください。')?></li>
+                                <?php echo __d('baser', '確認の為２回入力してください。')?></li>
 						<li><?php echo __d('baser', '半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください')?></li>
 						<li><?php echo __d('baser', '最低６文字以上で入力してください')?></li>
 					</ul>

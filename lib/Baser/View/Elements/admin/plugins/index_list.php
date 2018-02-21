@@ -41,7 +41,7 @@
 		<th style="white-space: nowrap"><?php echo __d('baser', 'バージョン')?></th>
 		<th><?php echo __d('baser', '説明')?></th>
 		<th><?php echo __d('baser', '開発者')?></th>
-		<th><?php echo __d('baser', '登録日<br />更新日')?></th>
+		<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
 	</tr>
 </thead>
 <tbody>

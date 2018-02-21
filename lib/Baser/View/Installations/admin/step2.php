@@ -35,8 +35,7 @@ $(function(){
 <div class="step2">
 
 	<div class="em-box">
-		<?php echo __d('baser', 'インストール環境の条件をチェックしました。<br />
-		次に進む為には、「基本必須条件」の赤い項目を全て解決する必要があります。')?>
+		<?php echo __d('baser', 'インストール環境の条件をチェックしました。<br />次に進む為には、「基本必須条件」の赤い項目を全て解決する必要があります。')?>
 	</div>
 
 	<div class="section">
@@ -240,8 +239,7 @@ $(function(){
 
 		<div class="panel-box corner10">
 			<h3><?php echo __d('baser', 'ファイルデータベース')?></h3>
-			<div class="section"> <?php echo __d('baser', 'データベースサーバーが利用できない場合には、ファイルベースデータベースの SQLite を利用できます。
-				有効にするには、下記のフォルダへの書き込み権限が必要です ')?></div>
+			<div class="section"> <?php echo __d('baser', 'データベースサーバーが利用できない場合には、ファイルベースデータベースの SQLite を利用できます。有効にするには、下記のフォルダへの書き込み権限が必要です ')?></div>
 			<ul class="section">
 				<li class='<?php if ($dbDirWritable) echo 'check'; else echo 'failed'; ?>'>
 					<?php echo __d('baser', '/app/db/ の書き込み権限（707 OR 777 等、サーバー推奨がある場合はそちらに従ってください）')?><br />
@@ -357,9 +355,7 @@ $(function(){
 			</ul>
 <?php if (!$safeModeOff) : ?>
 				<div class="section">
-					<strong style="color:#E02"><?php echo __d('baser', '次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />
-					レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />
-					サーバーによっては、最上位のフォルダにある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事ができます。')?><br />
+					<strong style="color:#E02"><?php echo __d('baser', '次のステップに進む前にセーフモードをOffに切り替えてください。</strong><br />レンタルサーバー等でセーフモードをOffにできない場合は、CGIモードに切り替えてから次のステップに進んでください。<br />サーバーによっては、最上位のフォルダにある .htaccess ファイルに次の２行を記述する事でCGIモードに切り替える事ができます。')?><br />
 				</div>
 				<pre class="section">AddHandler application/x-httpd-phpcgi .php
 	mod_gzip_on Off</pre>
@@ -367,10 +363,7 @@ $(function(){
 					<strong style="color:#E02"><?php echo __d('baser', 'インストール中にCGIモードに切り替えた場合は、クッキーを削除した上で、「再チェック」をクリックしてください。')?></strong>
 				</div>
 				<div class="section">
-<?php echo __d('baser', '上記２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので元に戻してください。
-					baserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />
-					FTPで接続を行い、次のフォルダ内のファイルやフォルダを全てコピーした上で、フォルダ全てに書き込み権限（707 Or 777 等、サーバー推奨がある場合はそちらに従ってください）を与えます。<br />
-					コピーと権限の変更が完了したら次のステップに進みインストールを続けます。')?>
+                    <?php echo __d('baser', '上記２行を記述した際に、サーバーエラーとなってしまう場合、サーバーがCGIモードをサポートしていませんので元に戻してください。baserCMSの機能が制限されてしまいますが、次の作業を行う事でセーフモードでのインストールも可能です。<br />FTPで接続を行い、次のフォルダ内のファイルやフォルダを全てコピーした上で、フォルダ全てに書き込み権限（707 Or 777 等、サーバー推奨がある場合はそちらに従ってください）を与えます。<br />コピーと権限の変更が完了したら次のステップに進みインストールを続けます。')?>
 				</div>
 				<ul class="section"><li><?php echo __d('baser', '/baser/config/safemode/tmp/ 内の全て　→　/app/tmp/')?></li>
 					<li><?php echo __d('baser', '/baser/config/safemode/db/ 内の全て　→　/app/db/ （SQLite を利用する場合）')?></li>

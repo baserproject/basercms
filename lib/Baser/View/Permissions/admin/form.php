@@ -60,11 +60,9 @@ $this->BcBaser->js('admin/permissions/form', false);
 				<?php echo $this->Form->error('Permission.url') ?>
 				<div id="helptextUrl" class="helptext">
 					<ul>
-						<li><?php echo __d('baser', 'baserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />
-							（例）/admin/users/index')?></li>
+						<li><?php echo __d('baser', 'baserCMSの設置URLを除いたスラッシュから始まるURLを入力してください。<br />（例）/admin/users/index')?></li>
 						<li><?php echo __d('baser', '管理画面など認証がかかっているURLしか登録できません。')?></li>
-						<li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br />
-							（例）ユーザー管理内のURL全てアクセスさせない場合： /admin/users* ')?></li>
+						<li><?php echo __d('baser', '特定のフォルダ配下に対しアクセスできないようにする場合などにはワイルドカード（*）を利用します。<br />（例）ユーザー管理内のURL全てアクセスさせない場合： /admin/users* ')?></li>
 					</ul>
 				</div>
 			</td>
