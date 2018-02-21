@@ -22,18 +22,25 @@ $this->BcBaser->js([
 	], false);
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', 'このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。'),
+	'message2' => __d('baser', '本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。'),
+	'message3' => __d('baser', '本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。')
+]);
+?>
 
 <script type="text/javascript">
 $(function(){
 	// データリスト設定
-	$.baserAjaxDataList.config.methods.del.confirm = 'このデータを本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。';
+	$.baserAjaxDataList.config.methods.del.confirm = i18n.message1;
 	$.baserAjaxDataList.config.methods.del.result = null;
 	$.baserAjaxDataList.config.methods.delfile = {
 		button: '.btn-delfile',
-		confirm: '本当に削除してもいいですか？\nプラグインフォルダ内のファイル、データベースのデータも全て削除されます。'
+		confirm: i18n.message2
 	}
 	// 一括処理設定
-	$.baserAjaxBatch.config.methods.del.confirm = '本当に無効にしてもいいですか？\nプラグインフォルダ内のファイル、データベースに保存した情報は削除されずそのまま残ります。';
+	$.baserAjaxBatch.config.methods.del.confirm = i18n.message3;
 	$.baserAjaxBatch.config.methods.del.result = null;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});

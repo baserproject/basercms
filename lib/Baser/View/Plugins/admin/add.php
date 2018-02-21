@@ -12,10 +12,16 @@
 ?>
 
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', 'プラグインをアップロードし、そのままインストールします。よろしいですか？'),
+]);
+?>
+
 <script>
 $(function(){
 	$("#BtnSave").click(function(){
-		if(confirm('プラグインをアップロードし、そのままインストールします。よろしいですか？')) {
+		if(confirm(i18n.message1)) {
 			$.bcUtil.showLoader();
 			return true;
 		}

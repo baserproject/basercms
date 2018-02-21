@@ -15,6 +15,16 @@
  */
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', '管理用メールアドレスを入力してください。'),
+	'message2' => __d('baser', 'ユーザー名を入力してください。'),
+	'message3' => __d('baser', 'ユーザー名には半角英数字とハイフン、アンダースコアのみ利用可能です。'),
+	'message4' => __d('baser', 'あなたのパスワードを６文字以上で入力してください。'),
+	'message5' => __d('baser', 'パスワードが確認欄のパスワードと同じではありません。'),
+	'message6' => __d('baser', 'パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。')
+]);
+?>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -22,22 +32,22 @@ $(document).ready(function(){
 		if(this.id == 'btnfinish') {
 			$("#InstallationClicked").val('finish');
 			if($("#InstallationAdminEmail").val() == ""){
-				alert("管理用メールアドレスを入力してください。");
+				alert(i18n.message1);
 				return false;
 			}else if($("#InstallationAdminUsername").val() == ""){
-				alert("ユーザー名を入力してください。");
+				alert(i18n.message2);
 				return false;
 			}else if(!$("#InstallationAdminUsername").val().match(/^[a-zA-Z0-9\-_]+$/)) {
-				alert("ユーザー名には半角英数字とハイフン、アンダースコアのみ利用可能です。");
+				alert(i18n.message3);
 				return false;
 			}else if($("#InstallationAdminPassword").val().length < 6){
-				alert("あなたのパスワードを６文字以上で入力してください。");
+				alert(i18n.message4);
 				return false;
 			}else if($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()){
-				alert("パスワードが確認欄のパスワードと同じではありません。");
+				alert(i18n.message5);
 				return false;
 			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_ \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*]+$/)) {
-				alert("パスワードは半角英数字(英字は大文字小文字を区別)とスペース、記号(._-:/()#,@[]+=&;{}!$*)のみで入力してください。");
+				alert(i18n.message6);
 				return false;
 			}
 		}else if(this.id == 'btnback') {

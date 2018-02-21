@@ -11,11 +11,16 @@
  */
 ?>
 
+<?php
+$this->BcBaser->i18nScript([
+	'message1' => __d('baser', 'テーマをアップロードし、そのまま適用します。よろしいですか？')
+]);
+?>
 
 <script>
 $(function(){
 	$("#BtnSave").click(function(){
-		if(confirm('テーマをアップロードし、そのまま適用します。よろしいですか？')) {
+		if(confirm(i18n.message1)) {
 			$.bcUtil.showLoader();
 			return true;
 		}
