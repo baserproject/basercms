@@ -40,7 +40,7 @@ class BcTimeHelper extends TimeHelper {
  *
  * @var string
  */
-	public $warekiRegex = '!^(?<nengo>[mtsh])-(?<year>[0-9]{2})([/\-])(?<month>0?[0-9]|1[0-2])([/\-])(?<day>[0-2][0-9]|3[01])$!';
+	public $warekiRegex = '!^(?<nengo>[mtsh])-(?<year>[0-9]{1,2})([/\-])(?<month>0?[0-9]|1[0-2])([/\-])(?<day>[0-2][0-9]|3[01])$!';
 
 /**
  * 年号を取得
