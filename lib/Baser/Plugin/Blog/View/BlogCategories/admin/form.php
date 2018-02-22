@@ -21,7 +21,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 
 <?php if ($this->action == 'admin_edit'): ?>
 	<div class="em-box align-left">
-		<p><strong>このカテゴリのURL：<?php $this->BcBaser->link($fullUrl, $fullUrl, ['target' => '_blank']) ?></strong></p>
+		<p><strong><?php echo sprintf(__d('baser', 'このカテゴリのURL：%s'), $this->BcBaser->link($fullUrl, $fullUrl, ['target' => '_blank']))?></strong></p>
 	</div>
 <?php endif ?>
 
@@ -57,8 +57,8 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 				<?php echo $this->BcForm->error('BlogCategory.name') ?>
 				<div id="helptextName" class="helptext">
 					<ul>
-						<li>URLに利用されます</li>
-						<li>半角のみで入力してください</li>
+						<li><?php echo __d('baser', 'URLに利用されます')?></li>
+						<li><?php echo __d('baser', '半角のみで入力してください')?></li>
 					</ul>
 				</div>
 			</td>
@@ -105,7 +105,7 @@ $fullUrl = $this->BcBaser->getContentsUrl($this->request->params['Content']['url
 					<?php endif ?>
 					<div id="helptextOwnerId" class="helptext">
 						<ul>
-							<li>管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。</li>
+							<li><?php echo __d('baser', '管理グループを指定した場合、このカテゴリに属した記事は、管理グループのユーザーしか編集する事ができなくなります。')?></li>
 						</ul>
 					</div>
 				</td>

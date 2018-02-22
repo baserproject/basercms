@@ -17,7 +17,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 ?>
 
 
-<h2>基本項目</h2>
+<h2><?php echo __d('baser', '基本項目')?></h2>
 
 <?php echo $this->BcForm->create('MailContent', array('novalidate' => true)) ?>
 
@@ -61,7 +61,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->input('MailContent.sender_name', array('type' => 'text', 'size' => 80, 'maxlength' => 255)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSenderName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 <?php echo $this->BcForm->error('MailContent.sender_name') ?>
-				<div id="helptextSenderName" class="helptext">自動返信メールの送信者に表示します。</div>
+				<div id="helptextSenderName" class="helptext"><?php echo __d('baser', '自動返信メールの送信者に表示します。')?></div>
 			</td>
 		</tr>
 		<tr>
@@ -70,7 +70,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->input('MailContent.subject_user', array('type' => 'text', 'size' => 80)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectUser', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 <?php echo $this->BcForm->error('MailContent.subject_user') ?>
-				<div id="helptextSubjectUser" class="helptext">ユーザー宛の自動返信メールの件名に表示します。</div>
+				<div id="helptextSubjectUser" class="helptext"><?php echo __d('baser', 'ユーザー宛の自動返信メールの件名に表示します。')?></div>
 			</td>
 		</tr>
 		<tr>
@@ -79,7 +79,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->input('MailContent.subject_admin', array('type' => 'text', 'size' => 80)) ?>
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSubjectAdmin', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 <?php echo $this->BcForm->error('MailContent.subject_admin') ?>
-				<div id="helptextSubjectAdmin" class="helptext">管理者宛の自動送信メールの件名に表示します。</div>
+				<div id="helptextSubjectAdmin" class="helptext"><?php echo __d('baser', '管理者宛の自動送信メールの件名に表示します。')?></div>
 			</td>
 		</tr>
 		<tr>
@@ -90,8 +90,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->error('MailContent.redirect_url') ?>
 				<div id="helptextRedirectUrl" class="helptext">
 					<ul>
-						<li>メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。</li>
-						<li>httpからの完全なURLを指定してください。</li>
+						<li><?php echo __d('baser', 'メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。')?></li>
+						<li><?php echo __d('baser', 'httpからの完全なURLを指定してください。')?></li>
 					</ul>
 				</div>
 			</td>
@@ -100,7 +100,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 	</table>	
 </div>
 
-<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption">オプション</a></h2>
+<h2 class="btn-slide-form"><a href="javascript:void(0)" id="formOption"><?php echo __d('baser', 'オプション')?></a></h2>
 <div class="section">
 	<table cellpadding="0" cellspacing="0" class="form-table slide-body" id="formOptionBody">
 		<tr>
@@ -112,7 +112,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<?php echo $this->BcForm->dateTimePicker('MailContent.publish_end', array('size' => 12, 'maxlength' => 10), true) ?>
 				<?php echo $this->Html->image('admin/icn_help.png', array('class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 				<div class="helptext">
-					<p>公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエラーではなく受付期間外のページを表示します。</p>
+					<p><?php echo __d('baser', '公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエラーではなく受付期間外のページを表示します。')?></p>
 				</div>
 				<?php echo $this->BcForm->error('MailContent.publish_begin') ?>
 				<?php echo $this->BcForm->error('MailContent.publish_end') ?>
@@ -126,8 +126,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 				<?php echo $this->BcForm->error('MailContent.save_info') ?>
 				<div id="saveInfo" class="helptext">
 					<ul>
-						<li>メールフォームから送信された情報をデータベースに保存するかどうかを指定できます。</li>
-						<li>メールフォームから送信された情報をデータベースに保存したくない場合は、保存しないを指定してください。</li>
+						<li><?php echo __d('baser', 'メールフォームから送信された情報をデータベースに保存するかどうかを指定できます。')?></li>
+						<li><?php echo __d('baser', 'メールフォームから送信された情報をデータベースに保存したくない場合は、保存しないを指定してください。')?></li>
 					</ul>
 				</div>
 			</td>
@@ -140,8 +140,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->error('MailContent.auth_captcha') ?>
 				<div id="helptextAuthCaptcha" class="helptext">
 					<ul>
-						<li>メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。</li>
-						<li>スパムなどいたずら送信が多いが多い場合に設定すると便利です。</li>
+						<li><?php echo __d('baser', 'メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。')?></li>
+						<li><?php echo __d('baser', 'スパムなどいたずら送信が多いが多い場合に設定すると便利です。')?></li>
 					</ul>
 				</div>
 			</td>
@@ -154,7 +154,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->error('MailContent.ssl_on', sprintf(__d('baser', 'SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してください。'), $this->BcBaser->getLink(__d('baser', 'システム設定'), ['controller' => 'site_configs', 'action' => 'form', 'plugin' => null], ['target' => '_blank'])), ['escape' => false])
 ?>
 				<div id="helptextSslOn" class="helptext">
-					管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。
+                    <?php echo __d('baser', '管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL通信で利用するURLをシステム設定で指定している必要があります。')?>
 				</div>
 			</td>
 		</tr>
@@ -165,8 +165,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpSender2', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 <?php echo $this->BcForm->error('MailContent.sender_2') ?>
 				<div id="helptextSender2" class="helptext">
-					<ul><li>BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。</li>
-						<li>複数の送信先を指定するには、カンマで区切って入力します。</li></ul>
+					<ul><li><?php echo __d('baser', 'BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。')?></li>
+						<li><?php echo __d('baser', '複数の送信先を指定するには、カンマで区切って入力します。')?></li></ul>
 				</div>
 			</td>
 		</tr>
@@ -177,8 +177,7 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->Html->image('admin/icn_help.png', array('id' => 'helpWidgetArea', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ'))) ?>
 <?php echo $this->BcForm->error('MailContent.widget_area') ?>
 				<div id="helptextWidgetArea" class="helptext">
-					メールコンテンツで利用するウィジェットエリアを指定します。<br />
-					ウィジェットエリアは「<?php $this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index')) ?>」より追加できます。
+                    <?php echo sprintf(__d('baser', 'メールコンテンツで利用するウィジェットエリアを指定します。<br />ウィジェットエリアは「%s」より追加できます。'), $this->BcBaser->link(__d('baser', 'ウィジェットエリア管理'), array('plugin' => null, 'controller' => 'widget_areas', 'action' => 'index'))) ?>)?>
 				</div>
 			</td>
 		</tr>
@@ -194,8 +193,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->error('MailContent.form_template') ?>
 				<div id="helptextFormTemplate" class="helptext">
 					<ul>
-						<li>メールフォーム本体のテンプレートを指定します。</li>
-						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
+						<li><?php echo __d('baser', 'メールフォーム本体のテンプレートを指定します。')?></li>
+						<li><?php echo __d('baser', '「編集する」からテンプレートの内容を編集する事ができます。')?></li>
 					</ul>
 				</div>
 			</td>
@@ -212,8 +211,8 @@ $this->BcBaser->js('Mail.admin/mail_contents/edit', false);
 <?php echo $this->BcForm->error('MailContent.mail_template') ?>
 				<div id="helptextMailTemplate" class="helptext">
 					<ul>
-						<li>送信するメールのテンプレートを指定します。</li>
-						<li>「編集する」からテンプレートの内容を編集する事ができます。</li>
+						<li><?php echo __d('baser', '送信するメールのテンプレートを指定します。')?></li>
+						<li><?php echo __d('baser', '「編集する」からテンプレートの内容を編集する事ができます。')?></li>
 					</ul>
 				</div>
 			</td>

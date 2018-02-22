@@ -95,7 +95,7 @@ class UploaderFilesController extends AppController {
 			$this->set('imageSettings', $settings['UploaderFile']['fields']['name']['imagecopy']);
 		} else {
 			$this->search = 'uploader_files_index';
-			$this->pageTitle = 'アップロードファイル一覧';
+			$this->pageTitle = __d('baser', 'アップロードファイル一覧');
 		}
 
 	}
@@ -116,18 +116,18 @@ class UploaderFilesController extends AppController {
 			$ret = mkdir($savePath,0777);
 			if(!$ret) {
 				if(is_writable($filesPath)) {
-					$installMessage = $viewSavePath.' を作成し、書き込み権限を与えてください';
+					$installMessage = sprintf(__d('baser', '%sを作成し、書き込み権限を与えてください'), $viewSavePath);
 				}else {
 					if(!is_dir($filesPath)) {
-						$installMessage = $viewFilesPath.' 作成し、に書き込み権限を与えてください';
+						$installMessage = sprintf(__d('baser', '作成し、%sに書き込み権限を与えてください'), $viewFilesPath);
 					}else {
-						$installMessage = $viewFilesPath.' に書き込み権限を与えてください';
+						$installMessage = sprintf(__d('baser', '%sに書き込み権限を与えてください'), $viewFilesPath);
 					}
 				}
 			}
 		}else {
 			if(!is_writable($savePath)) {
-				$installMessage = $viewSavePath.' に書き込み権限を与えてください';
+				$installMessage = sprintf(__d('baser', '%sに書き込み権限を与えてください'), $viewSavePath);
 			}else {
 
 			}
@@ -264,7 +264,7 @@ class UploaderFilesController extends AppController {
 		Configure::write('debug',0);
 
 		if(!$this->request->data) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 		
 		// 2014.08.10 yuse fixed 4777 php.iniに定義されたサイズチェックエラーの場合はエラー(UPLOAD_ERR_INI_SIZE)
@@ -328,7 +328,7 @@ class UploaderFilesController extends AppController {
 	public function admin_edit($id = null) {
 		$this->autoRender = false;
 		if (!$this->request->data && $this->request->is('ajax')) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		} elseif(!$this->request->is('ajax') && !$id) {
 			$this->notFound();
 		}
@@ -354,10 +354,10 @@ class UploaderFilesController extends AppController {
 				}
 			} else {
 				if($result) {
-					$this->setMessage('ファイルの内容を保存しました。');
+					$this->setMessage(__d('baser', 'ファイルの内容を保存しました。'));
 					$this->redirect(array('action' => 'index'));
 				} else {
-					$this->setMessage('保存中にエラーが発生しました。');
+					$this->setMessage(__d('baser', '保存中にエラーが発生しました。'));
 				}
 			}	
 		}
@@ -397,9 +397,9 @@ class UploaderFilesController extends AppController {
 			exit();
 		} else {
 			if($result) {
-				$this->setMessage($uploaderFile['UploaderFile']['name']. ' を削除しました。', false, true);
+				$this->setMessage(sprintf(__d('baser','%s を削除しました。'), $uploaderFile['UploaderFile']['name']), false, true);
 			} else {
-				$this->setMessage('削除中にエラーが発生しました。', true);
+				$this->setMessage(__d('baser', '削除中にエラーが発生しました。'), true);
 			}
 			$this->redirect(array('action' => 'index'));
 		}

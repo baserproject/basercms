@@ -33,7 +33,7 @@ $this->BcListTable->setColumnNumber(2);
 				<?php endif ?>
 			</div>
 		</th>
-		<th>フォルダ名／テーマファイル名</th>
+		<th><?php echo __d('baser', 'フォルダ名')?>／<?php echo __d('baser', 'テーマファイル名')?></th>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 	</tr>
 </thead>
@@ -44,7 +44,7 @@ $this->BcListTable->setColumnNumber(2);
 		<?php endforeach; ?>
 	<?php else: ?>
 	<tr>
-		<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+		<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 	</tr>
 	<?php endif; ?>
 </tbody>

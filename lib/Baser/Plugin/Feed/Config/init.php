@@ -19,7 +19,7 @@
  * フィードURLを更新
  */
 	$FeedDetail = ClassRegistry::init('Feed.FeedDetail');
-	$datas = $FeedDetail->find('all', array('recursive' => -1));
+	$datas = $FeedDetail->find('all', ['recursive' => -1]);
 	if($datas) {
 		foreach($datas as $data) {
 			if($data['FeedDetail']['url'] == 'http://basercms.net/news/index.rss') {

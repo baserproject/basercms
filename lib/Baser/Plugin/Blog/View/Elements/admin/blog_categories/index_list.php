@@ -35,14 +35,14 @@ $this->BcListTable->setColumnNumber(5);
 <?php endif ?>
             </th>
             <th>NO</th>
-            <th>ブログカテゴリ名
+            <th><?php echo __d('baser', 'ブログカテゴリ名')?>
                 <?php if ($this->BcBaser->siteConfig['category_permission']): ?>
-                    <br />管理グループ
+                    <br /><?php echo __d('baser', '管理グループ')?>
                 <?php endif ?>
             </th>
-            <th>ブログカテゴリタイトル</th>
+            <th><?php echo __d('baser', 'ブログカテゴリタイトル')?></th>
             <?php echo $this->BcListTable->dispatchShowHead() ?>
-            <th>登録日<br />更新日</th>
+            <th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
         </tr>
     </thead>
     <tbody>
@@ -71,7 +71,7 @@ $this->BcListTable->setColumnNumber(5);
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
     </tbody>

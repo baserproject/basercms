@@ -20,7 +20,7 @@
 <div class="section">
 	<?php if (!empty($this->Paginator)): ?>
 		<div class="search-result corner5">		
-			<?php echo $this->Paginator->counter(['format' => '<strong>' . implode(' ', $query) . '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件']) ?>
+			<?php echo sprintf(__d('baser', $this->Paginator->counter(['format' => '<strong>' . implode(' ', $query) . '%s'])), '</strong> で検索した結果 <strong>%start%〜%end%</strong>件目 / %count% 件') ?>
 		</div>
 	<?php endif ?>
 	<!-- list-num -->
@@ -37,7 +37,7 @@
 	<?php endforeach ?>
 <?php else: ?>
 	<div class="section">
-		<p class="no-data">該当する結果が存在しませんでした。</p>
+		<p class="no-data"><?php echo __d('baser', '該当する結果が存在しませんでした。')?></p>
 	</div>
 <?php endif ?>
 

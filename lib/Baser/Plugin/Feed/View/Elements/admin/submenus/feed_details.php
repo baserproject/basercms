@@ -17,14 +17,14 @@
 
 
 <tr>
-	<th>フィードメニュー</th>
+	<th><?php echo __d('baser', 'フィードメニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<?php if ($this->params['controller'] == 'feed_details'): ?>
-			<li><?php $this->BcBaser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedDetail.feed_config_id'))) ?></li>
-			<li><?php $this->BcBaser->link('フィード設定に戻る', array('controller' => 'feed_configs', 'action' => 'edit', $this->BcForm->value('FeedDetail.feed_config_id'))) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'フィードを追加'), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedDetail.feed_config_id'))) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'フィード設定に戻る'), array('controller' => 'feed_configs', 'action' => 'edit', $this->BcForm->value('FeedDetail.feed_config_id'))) ?></li>
 			<?php else: ?>
-			<li><?php $this->BcBaser->link('フィードを追加', array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?></li>
+			<li><?php $this->BcBaser->link(__d('baser', 'フィードを追加'), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?></li>
 			<?php endif; ?>
 		</ul>
 	</td>

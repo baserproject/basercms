@@ -200,7 +200,7 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 <?php echo $this->BcForm->end() ?>
 
 <div id="AddBlogCategoryForm" style="display:none">
-	<h3>新しいブログカテゴリを入力してください。</h3>
+	<h3><?php echo __d('baser', '新しいブログカテゴリを入力してください。')?></h3>
 	<table>
 		<tr>
 			<th class="col-head"><?php echo $this->BcForm->label('BlogCategory.title', __d('baser', 'カテゴリタイトル')) ?>&nbsp;<span class="required">*</span></th>
@@ -215,9 +215,9 @@ $this->BcBaser->js('Blog.admin/blog_posts/form', false, [
 				<?php echo $this->BcHtml->image('admin/icn_help.png', ['id' => 'helpName', 'class' => 'btn help', 'alt' => __d('baser', 'ヘルプ')]) ?>
 				<div id="helptextName" class="helptext">
 					<ul>
-						<li>URLに利用されます</li>
-						<li>半角のみで入力してください</li>
-						<li>空の場合はカテゴリタイトルから値が自動で設定されます</li>
+						<li><?php echo __d('baser', 'URLに利用されます')?></li>
+						<li><?php echo __d('baser', '半角のみで入力してください')?></li>
+						<li><?php echo __d('baser', '空の場合はカテゴリタイトルから値が自動で設定されます')?></li>
 					</ul>
 				</div>
 			</td>

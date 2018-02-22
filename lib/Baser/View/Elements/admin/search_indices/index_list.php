@@ -78,11 +78,11 @@ $(function(){
 <?php endif ?>
             </th>
             <th>NO</th>
-            <th>タイプ<br />タイトル</th>
-            <th>コンテンツ内容</th>
-            <th>公開状態</th>
+            <th><?php echo __d('baser', 'タイプ')?><br /><?php echo __d('baser', 'タイトル')?></th>
+            <th><?php echo __d('baser', 'コンテンツ内容')?></th>
+            <th><?php echo __d('baser', '公開状態')?></th>
 			<?php echo $this->BcListTable->dispatchShowHead() ?>
-            <th>登録日<br />更新日</th>
+            <th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
         </tr>
     </thead>
 <tbody>
@@ -94,7 +94,7 @@ $(function(){
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

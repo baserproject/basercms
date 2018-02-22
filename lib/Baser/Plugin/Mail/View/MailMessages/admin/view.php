@@ -19,7 +19,7 @@
 <!-- view -->
 <table cellpadding="0" cellspacing="0" class="list-table" id="ListTable">
 	<tr><th>NO</th><td><?php echo $message['MailMessage']['id'] ?></td></tr>
-	<tr><th>受信日時</th><td><?php echo $this->BcTime->format('Y/m/d H:i:s', $message['MailMessage']['created']) ?></td></tr>
+	<tr><th><?php echo __d('baser', '受信日時')?></th><td><?php echo $this->BcTime->format('Y/m/d H:i:s', $message['MailMessage']['created']) ?></td></tr>
 	<?php
 	$groupField = null;
 	foreach ($mailFields as $key => $mailField) {

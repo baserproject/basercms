@@ -39,12 +39,12 @@ $this->BcListTable->setColumnNumber(7);
 	<?php endif ?>
 </th>
 <th>NO</th>
-<th>フィールド名<br />項目名</th>
-<th>タイプ</th>
-<th>グループ名</th>
-<th>必須</th>
+<th><?php echo __d('baser', 'フィールド名')?><br /><?php echo __d('baser', '項目名')?></th>
+<th><?php echo __d('baser', 'タイプ')?></th>
+<th><?php echo __d('baser', 'グループ名')?></th>
+<th><?php echo __d('baser', '必須')?></th>
 <?php echo $this->BcListTable->dispatchShowHead() ?>
-<th>登録日<br />更新日</th>
+<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
 </tr>
 </thead>
 <tbody>
@@ -54,7 +54,7 @@ $this->BcListTable->setColumnNumber(7);
 			<?php $this->BcBaser->element('mail_fields/index_row', array('data' => $data, 'count' => $count)) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
-		<tr><td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データが見つかりませんでした。</p></td></tr>
+		<tr><td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td></tr>
 	<?php endif; ?>
 </tbody>
 </table>

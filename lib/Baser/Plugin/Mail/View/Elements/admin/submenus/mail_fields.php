@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th>メールフォーム管理メニュー</th>
+	<th><?php echo __d('baser', 'メールフォーム管理メニュー')?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(sprintf(__d('baser', '%s 設定'), $this->request->params['Content']['title']), array('controller' => 'mail_contents', 'action' => 'edit', $mailContent['MailContent']['id'])) ?></li>

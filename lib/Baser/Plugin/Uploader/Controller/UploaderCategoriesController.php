@@ -53,7 +53,7 @@ class UploaderCategoriesController extends AppController {
  */
 	public function admin_index() {
 
-		$this->pageTitle = 'カテゴリ一覧';
+		$this->pageTitle = __d('baser', 'カテゴリ一覧');
 		$default = array('named' => array('num' => $this->siteConfigs['admin_list_num']));
 		$this->setViewConditions('UploaderCategory', array('default' => $default));
 		$this->paginate = array(
@@ -74,15 +74,15 @@ class UploaderCategoriesController extends AppController {
 		if($this->request->data) {
 			$this->UploaderCategory->set($this->request->data);
 			if($this->UploaderCategory->save()) {
-				$message = 'アップロードファイルカテゴリ「'.$this->request->data['UploaderCategory']['name'].'」を追加しました。';
+				$message = sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を追加しました。'), $this->request->data['UploaderCategory']['name']);
 				$this->setMessage($message);
 				$this->UploaderCategory->saveDbLog($message);
 				$this->redirect(array('action'=>'index'));
 			}else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 		}
-		$this->pageTitle = 'カテゴリ新規登録';
+		$this->pageTitle = __d('baser', 'カテゴリ新規登録');
 		$this->render('form');
 		
 	}
@@ -97,7 +97,7 @@ class UploaderCategoriesController extends AppController {
 
 		/* 除外処理 */
 		if(!$id && empty($this->request->data)) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(array('action'=>'index'));
 		}
 
@@ -107,15 +107,15 @@ class UploaderCategoriesController extends AppController {
 
 			$this->UploaderCategory->set($this->request->data);
 			if($this->UploaderCategory->save()) {
-				$this->setMessage('アップロードファイルカテゴリ「'.$this->request->data['UploaderCategory']['name'].'」を更新しました。', false, true);
+				$this->setMessage(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を更新しました。'), $this->request->data['UploaderCategory']['name']), false, true);
 				$this->redirect(array('action'=>'edit', $id));
 			}else {
-				$this->setMessage('入力エラーです。内容を修正してください。', true);
+				$this->setMessage(__d('baser', '入力エラーです。内容を修正してください。'), true);
 			}
 
 		}
 
-		$this->pageTitle = 'カテゴリ編集';
+		$this->pageTitle = __d('baser', 'カテゴリ編集');
 		$this->render('form');
 		
 	}
@@ -129,7 +129,7 @@ class UploaderCategoriesController extends AppController {
 	public function admin_delete($id = null) {
 		$this->_checkSubmitToken();
 		if(!$id) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(array('action'=>'index'));
 		}
 
@@ -137,9 +137,9 @@ class UploaderCategoriesController extends AppController {
 		$name = $this->UploaderCategory->field('name', array('UploaderCategory.id' => $id));
 
 		if($this->UploaderCategory->delete($id)) {
-			$this->setMessage('アップロードファイルカテゴリ「'.$name.'」を削除しました。', false, true);
+			$this->setMessage(sprintf(__d('baser', 'アップロードファイルカテゴリ「%s」を削除しました。'), $name), false, true);
 		}else {
-			$this->setMessage('データベース処理中にエラーが発生しました。', true);
+			$this->setMessage(__d('baser', 'データベース処理中にエラーが発生しました。'), true);
 		}
 
 		$this->redirect('index');
@@ -156,7 +156,7 @@ class UploaderCategoriesController extends AppController {
 		$this->_checkSubmitToken();
 
 		if(!$id) {
-			$this->ajaxError(500, '無効な処理です。');
+			$this->ajaxError(500, __d('baser', '無効な処理です。'));
 		}
 
 		// 削除実行
@@ -195,7 +195,7 @@ class UploaderCategoriesController extends AppController {
 		$data = $this->UploaderCategory->read(null, $id);
 		// 削除実行
 		if($this->UploaderCategory->delete($id)) {
-			$this->UploaderCategory->saveDbLog($data['UploaderCategory']['name'].' を削除しました。');
+			$this->UploaderCategory->saveDbLog(sprintf(__d('baser', '%s を削除しました。'), $data['UploaderCategory']['name']));
 			return true;
 		} else {
 			return false;

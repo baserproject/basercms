@@ -24,7 +24,7 @@ $(function(){
 
 
 <div id="CurrentTheme" class="clearfix">
-	<h2>現在のテーマ</h2>
+	<h2><?php echo __d('baser', '現在のテーマ')?></h2>
 	<?php if ($currentTheme): ?>
 		<div class="current-theme-left">
 			<div class="theme-screenshot">
@@ -42,8 +42,8 @@ $(function(){
 
 		<div class="theme-info">
 			<p class="theme-name"><strong><?php echo $currentTheme['title'] ?></strong>&nbsp;(&nbsp;<?php echo $currentTheme['name'] ?>&nbsp;)</p>
-			<p class="theme-version">バージョン：<?php echo $currentTheme['version'] ?></p>
-			<p class="theme-author">制作者：<?php if (!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
+			<p class="theme-version"><?php echo __d('baser', 'バージョン')?>：<?php echo $currentTheme['version'] ?></p>
+			<p class="theme-author"><?php echo __d('baser', '制作者')?>：<?php if (!empty($currentTheme['url']) && !empty($currentTheme['author'])): ?>
 					<?php $this->BcBaser->link($currentTheme['author'], $currentTheme['url'], ['target' => '_blank']) ?>
 				<?php else: ?>
 					<?php echo $currentTheme['author'] ?>
@@ -60,7 +60,7 @@ $(function(){
 		<br /><br /><br /><br />
 		<div class="theme-description"><?php echo nl2br($currentTheme['description']) ?></div>
 	<?php else: ?>
-		<p>現在、テーマが選択されていません。</p>
+		<p><?php echo __d('baser', '現在、テーマが選択されていません。')?></p>
 	<?php endif ?>
 </div>
 
@@ -71,9 +71,9 @@ $(function(){
 		<?php endforeach; ?>
 	<?php else: ?>
 		<?php if(strtotime('2014-03-31 17:00:00') >= time()): ?>
-		<li class="no-data">変更できるテーマがありません。<br /><a href="http://basercms.net/themes/index" target="_blank">baserCMSの公式サイト</a>では無償のテーマが公開されています。</li>
+		<li class="no-data"><?php echo __d('baser', '変更できるテーマがありません。')?><br /><a href="http://basercms.net/themes/index" target="_blank"><?php echo __d('baser', 'baserCMSの公式サイト</a>では無償のテーマが公開されています。')?></li>
 		<?php else: ?>
-		<li class="no-data">変更できるテーマがありません。<br /><a href="https://market.basercms.net/" target="_blank">baserマーケット</a>でテーマをダウンロードしましょう。</li>
+		<li class="no-data"><?php echo __d('baser', '変更できるテーマがありません。')?><br /><a href="https://market.basercms.net/" target="_blank"><?php echo __d('baser', 'baserマーケット</a>でテーマをダウンロードしましょう。')?></li>
 		<?php endif ?>
 	<?php endif; ?>
 </ul>

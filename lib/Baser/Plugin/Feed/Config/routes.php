@@ -16,9 +16,9 @@
 // 明示的に定義を記述
 $Site = ClassRegistry::init('Site');
 $prefix = $Site->getPrefix($Site->find('first', ['conditions' => ['name' => 'smartphone'], 'recursive' => -1]));
-Router::connect('/feed/index/*', array('plugin' => 'feed', 'controller' => 'feed'));
-Router::connect('/feed/ajax/*', array('plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));
+Router::connect('/feed/index/*', ['plugin' => 'feed', 'controller' => 'feed']);
+Router::connect('/feed/ajax/*', ['plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax']);
 if($prefix) {
-	Router::connect('/' . $prefix . '/feed/index/*', array('prefix' => 'smartphone', 'plugin' => 'feed', 'controller' => 'feed'));
-	Router::connect('/' . $prefix . '/feed/ajax/*', array('prefix' => 'smartphone', 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax'));
+	Router::connect('/' . $prefix . '/feed/index/*', ['prefix' => 'smartphone', 'plugin' => 'feed', 'controller' => 'feed']);
+	Router::connect('/' . $prefix . '/feed/ajax/*', ['prefix' => 'smartphone', 'plugin' => 'feed', 'controller' => 'feed', 'action' => 'ajax']);
 }

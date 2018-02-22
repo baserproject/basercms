@@ -13,7 +13,7 @@
 
 
 <tr>
-	<th>アップローダーメニュー</th>
+	<th><?php echo __d('baser', 'アップローダーメニュー')?></th>
 	<td>
 		<ul>
 			<li><?php $this->BcBaser->link('アップロードファイル一覧', array('plugin' => 'uploader', 'controller' => 'uploader_files', 'action' => 'index')) ?></li>

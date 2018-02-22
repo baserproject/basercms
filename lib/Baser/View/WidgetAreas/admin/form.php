@@ -46,7 +46,7 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 		<div id="SourceOuter">
 			<div id="Source">
 
-				<h2>利用できるウィジェット</h2>
+				<h2><?php echo __d('baser', '利用できるウィジェット')?></h2>
 				<?php foreach ($widgetInfos as $widgetInfo) : ?>
 					<h3><?php echo $widgetInfo['title'] ?></h3>
 					<?php
@@ -83,8 +83,8 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 						<div class="ui-widget-content sortable widget template <?php echo $widget['name'] ?>" id="<?php echo Inflector::camelize($widget['name']) ?>">
 							<div class="clearfix">
 								<div class="widget-name display-none"><?php echo $widget['name'] ?></div>
-								<div class="del">削除</div>
-								<div class="action">設定</div>
+								<div class="del"><?php echo __d('baser', '削除')?></div>
+								<div class="action"><?php echo __d('baser', '設定')?></div>
 								<div class="head"><?php echo $widget['title'] ?></div>
 							</div>
 							<div class="content" style="text-align:right">
@@ -113,7 +113,7 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 		<div id="TargetOuter">
 			<div id="Target">
 
-				<h2>利用中のウィジェット <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
+				<h2><?php echo __d('baser', '利用中のウィジェット')?> <?php $this->BcBaser->img('admin/ajax-loader-s.gif', [
 						'style' => 'vertical-align:middle;display:none',
 						'id' => 'WidgetAreaUpdateSortLoader',
 						'class' => 'loader']); ?></h2>
@@ -130,8 +130,8 @@ $this->BcBaser->js('admin/widget_areas/form', false, ['id' => 'AdminWidgetFormSc
 						<div class="ui-widget-content sortable widget setting <?php echo $widget[$key]['element'] ?><?php echo $enabled ?>" id="Setting<?php echo $widget[$key]['id'] ?>">
 							<div class="clearfix">
 								<div class="widget-name display-none"><?php echo $widget[$key]['element'] ?></div>
-								<div class="del">削除</div>
-								<div class="action">設定</div>
+								<div class="del"><?php echo __d('baser', '削除')?></div>
+								<div class="action"><?php echo __d('baser', '設定')?></div>
 								<div class="head"><?php echo $widget[$key]['name'] ?></div>
 							</div>
 							<div class="content" style="text-align:right">

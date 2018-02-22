@@ -32,9 +32,9 @@
 		<?php endif ?>
 		</th>
 		<th>NO</th>
-		<th>ウィジェットエリア名</th>
-		<th>登録ウィジェット数</th>
-		<th>登録日<br />更新日</th>
+		<th><?php echo __d('baser', 'ウィジェットエリア名')?></th>
+		<th><?php echo __d('baser', '登録ウィジェット数')?></th>
+		<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -44,7 +44,7 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="8"><p class="no-data">データが見つかりませんでした。</p></td>
+			<td colspan="8"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

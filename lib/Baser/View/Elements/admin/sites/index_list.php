@@ -63,7 +63,7 @@ foreach($languages as $key => $lang) {
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data">データがありません。</p></td>
+			<td colspan="<?php echo $this->BcListTable->getColumnNumber() ?>"><p class="no-data"><?php echo __d('baser', 'データがありません。')?></p></td>
 		</tr>
 	<?php endif; ?>
 </tbody>

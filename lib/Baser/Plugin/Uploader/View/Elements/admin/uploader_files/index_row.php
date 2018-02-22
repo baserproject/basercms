@@ -24,8 +24,8 @@ $class = ' class="' . implode(' ', $classies) . '"';
 <tr<?php echo $class; ?> id="selectedFile<?php echo $file['UploaderFile']['id'] ?>">
 <?php if(!$listId): ?>
 	<td class="row-tools" style="width:15%">
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => '編集', 'class' => 'btn')), array('action' => 'edit', $file['UploaderFile']['id']), array('title' => '編集')) ?>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => '削除', 'class' => 'btn')), array('action' => 'delete', $file['UploaderFile']['id']), array('title' => '削除', 'class' => 'btn-delete')) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_edit.png', array('alt' => __d('baser', '編集'), 'class' => 'btn')), array('action' => 'edit', $file['UploaderFile']['id']), array('title' => __d('baser', '編集'))) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/icn_tool_delete.png', array('alt' => __d('baser', '削除'), 'class' => 'btn')), array('action' => 'delete', $file['UploaderFile']['id']), array('title' => __d('baser', '削除'), 'class' => 'btn-delete')) ?>
 	</td>
 <?php endif ?>
 	<td class="id">

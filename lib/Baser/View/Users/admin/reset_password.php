@@ -21,8 +21,7 @@ if (!$userModel) {
 
 
 <div class="section">
-	<p>パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />
-		新しいパスワードをメールでお知らせします。</p>
+	<p><?php echo __d('baser', 'パスワードを忘れた方は、登録されているメールアドレスを送信してください。<br />新しいパスワードをメールでお知らせします。')?></p>
 	<?php if ($currentPrefix == 'front'): ?>
 		<?php echo $this->BcForm->create($userModel, ['url' => ['action' => 'reset_password']]) ?>
 	<?php else: ?>

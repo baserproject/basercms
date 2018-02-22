@@ -54,7 +54,7 @@ $this->BcListTable->setColumnNumber(6);
 			<?php $this->BcBaser->element('blog_comments/index_row', ['data' => $data]) ?>
 		<?php endforeach; ?>
 	<?php else: ?>
-		<tr><td colspan="6"><p class="no-data">データが見つかりませんでした。</p></td></tr>
+		<tr><td colspan="6"><p class="no-data"><?php echo __d('baser', 'データが見つかりませんでした。')?></p></td></tr>
 	<?php endif; ?>
 </tbody>
 </table>

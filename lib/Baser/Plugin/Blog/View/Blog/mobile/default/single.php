@@ -39,7 +39,7 @@ $this->BcBaser->setDescription($this->Blog->getTitle() . '｜' . $this->Blog->ge
 	<hr size="1" style="width:100%;height:1px;margin:2px 0;padding:0;color:#CCCCCC;background:#CCCCCC;border:1px solid #CCCCCC;" />
 	<br />
 <?php else: ?>
-	<p class="no-data">記事がありません。</p>
+	<p class="no-data"><?php echo __d('baser', '記事がありません。')?></p>
 <?php endif; ?>
 
 <!-- comments -->
