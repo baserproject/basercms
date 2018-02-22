@@ -16,7 +16,7 @@
 <p class="error">
 	<strong><?php echo __('baser', 'エラー'); ?>: </strong>
 	<?php printf(
-		__('baser', 'アドレス ％s に送信されたリクエストは無効です。'),
+		__('アドレス %s に送信されたリクエストは無効です。'),
 		"<strong>'{$url}'</strong>"
 	); ?>
 </p>
