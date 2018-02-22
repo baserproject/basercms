@@ -38,7 +38,7 @@ $(function(){
 		 */
 		$.baserAjaxDataList.config.methods.del = {
 			button: '.btn-delete',
-			confirm: i18n.message1,
+			confirm: bcI18n.message1,
 			result: function(row, result) {
 				var config = $.baserAjaxDataList.config;
 			if(result) {

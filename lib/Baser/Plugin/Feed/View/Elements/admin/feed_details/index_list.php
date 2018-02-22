@@ -47,7 +47,7 @@ $(function(){
 				$(config.listTable+" tbody tr").removeClass('even odd');
 				$.yuga.stripe();
 			} else {
-				$(config.listTable+" tbody").append('<td colspan="'+colspan+'"><p class="no-data">i18n.message1</p></td>');
+				$(config.listTable+" tbody").append('<td colspan="'+colspan+'"><p class="no-data">' + bcI18n.message1 + '</p></td>');
 			}
 		});
 	};
@@ -62,11 +62,11 @@ $(function(){
 					$(config.dataList+" tbody tr").removeClass('even odd');
 					$.yuga.stripe();
 				} else {
-					$(config.dataList+" tbody").append('<td colspan="'+colspan+'"><p class="no-data">i18n.message1</p></td>');
+					$(config.dataList+" tbody").append('<td colspan="'+colspan+'"><p class="no-data">' + bcI18n.message1 + '</p></td>');
 				}
 			});
 		} else {
-			$(config.alertBox).html(i18n.message2);
+			$(config.alertBox).html(bcI18n.message2);
 			$(config.alertBox).fadeIn(500);
 		}
 	};

@@ -51,28 +51,28 @@ $(document).ready( function() {
 			$('#InstallationDbType').val() != 'csv' &&
 			$('#InstallationDbType').val() != 'sqlite') {
 			if ($("#InstallationDbHost").val() == "") {
-				alert(i18n.message1);
+				alert(bcI18n.message1);
 				return false;
 			} else if ($("#InstallationDbUsername").val() == "") {
-				alert(i18n.message2);
+				alert(bcI18n.message2);
 				return false;
 			} else if ($("#InstallationDbName").val() == "") {
-				alert(i18n.message3);
+				alert(bcI18n.message3);
 				return false;
 			} else if ($("#InstallationDbPrefix").val() == "") {
-				alert(i18n.message4);
+				alert(bcI18n.message4);
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/[_]$/)) {
-				alert(i18n.message5);
+				alert(bcI18n.message5);
 				return false;
 			} else if (!$("#InstallationDbPrefix").val().match(/^[a-zA-z0-9_]+_$/)) {
-				alert(i18n.message6);
+				alert(bcI18n.message6);
 				return false;
 			} else if ($("#InstallationDbName").val().match(/^.*\..*$/)) {
-				alert(i18n.message7);
+				alert(bcI18n.message7);
 				return false;
 			} else if ($("#InstallationDbPort").val() == "") {
-				alert(i18n.message8);
+				alert(bcI18n.message8);
 				return false;
 			}			
 		}

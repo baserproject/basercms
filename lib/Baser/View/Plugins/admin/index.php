@@ -11,6 +11,7 @@
  */
 
 /**
+ * @var BcAppview $this
  * [ADMIN] プラグイン 一覧
  */
 $this->BcBaser->js([
@@ -33,14 +34,14 @@ $this->BcBaser->i18nScript([
 <script type="text/javascript">
 $(function(){
 	// データリスト設定
-	$.baserAjaxDataList.config.methods.del.confirm = i18n.message1;
+	$.baserAjaxDataList.config.methods.del.confirm = bcI18n.message1;
 	$.baserAjaxDataList.config.methods.del.result = null;
 	$.baserAjaxDataList.config.methods.delfile = {
 		button: '.btn-delfile',
-		confirm: i18n.message2
+		confirm: bcI18n.message2
 	}
 	// 一括処理設定
-	$.baserAjaxBatch.config.methods.del.confirm = i18n.message3;
+	$.baserAjaxBatch.config.methods.del.confirm = bcI18n.message3;
 	$.baserAjaxBatch.config.methods.del.result = null;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});

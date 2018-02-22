@@ -28,7 +28,7 @@ $this->BcBaser->i18nScript([
 
 <script type="text/javascript">
 $(function(){
-	$.baserAjaxDataList.config.methods.del.confirm = i18n.message1;
+	$.baserAjaxDataList.config.methods.del.confirm = bcI18n.message1;
 	$.baserAjaxDataList.init();
 	$.baserAjaxBatch.init({ url: $("#AjaxBatchUrl").html()});
 });

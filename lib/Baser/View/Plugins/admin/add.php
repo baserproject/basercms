@@ -21,7 +21,7 @@ $this->BcBaser->i18nScript([
 <script>
 $(function(){
 	$("#BtnSave").click(function(){
-		if(confirm(i18n.message1)) {
+		if(confirm(bcI18n.message1)) {
 			$.bcUtil.showLoader();
 			return true;
 		}

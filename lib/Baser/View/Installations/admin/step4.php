@@ -32,22 +32,22 @@ $(document).ready(function(){
 		if(this.id == 'btnfinish') {
 			$("#InstallationClicked").val('finish');
 			if($("#InstallationAdminEmail").val() == ""){
-				alert(i18n.message1);
+				alert(bcI18n.message1);
 				return false;
 			}else if($("#InstallationAdminUsername").val() == ""){
-				alert(i18n.message2);
+				alert(bcI18n.message2);
 				return false;
 			}else if(!$("#InstallationAdminUsername").val().match(/^[a-zA-Z0-9\-_]+$/)) {
-				alert(i18n.message3);
+				alert(bcI18n.message3);
 				return false;
 			}else if($("#InstallationAdminPassword").val().length < 6){
-				alert(i18n.message4);
+				alert(bcI18n.message4);
 				return false;
 			}else if($("#InstallationAdminPassword").val() != $("#InstallationAdminConfirmpassword").val()){
-				alert(i18n.message5);
+				alert(bcI18n.message5);
 				return false;
 			}else if(!$("#InstallationAdminPassword").val().match(/^[a-zA-Z0-9\-_ \.:\/\(\)#,@\[\]\+=&;\{\}!\$\*]+$/)) {
-				alert(i18n.message6);
+				alert(bcI18n.message6);
 				return false;
 			}
 		}else if(this.id == 'btnback') {

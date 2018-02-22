@@ -25,7 +25,7 @@ $this->BcBaser->i18nScript([
 <script>
 $(function(){
 	$("#BtnReset").click(function(){
-        if(confirm(i18n.message1)) {
+        if(confirm(bcI18n.message1)) {
             $("#PluginAdminInstallForm").attr('action', $("#ResetDbUrl").val());
             $.bcUtil.showLoader();
         } else {

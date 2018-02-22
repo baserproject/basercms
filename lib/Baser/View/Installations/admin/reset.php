@@ -25,7 +25,7 @@ $this->BcBaser->i18nScript([
 <script type="text/javascript">
 $(function(){
 	$("#InstallationResetForm").submit(function(){
-		if(confirm(i18n.message)){
+		if(confirm(bcI18n.message)){
 			return true;
 		}else{
 			return false;
