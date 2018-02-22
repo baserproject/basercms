@@ -388,7 +388,7 @@ msgid "エラー"
 msgstr "Error"
 
 #: Config/theme/bc_sample/Errors/error400.php:13 View/Errors/error400.php:19
-msgid "アドレス ％s に送信されたリクエストは無効です。"
+msgid "アドレス %s に送信されたリクエストは無効です。"
 msgstr "The request sent to the address %s was invalid."
 
 #: Config/theme/bc_sample/Mail/default/confirm.php:15
