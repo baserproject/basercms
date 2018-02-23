@@ -252,12 +252,12 @@ $this->BcBaser->js('admin/site_configs/form', false, ['id' => 'AdminSiteConfigsF
 				<div id="helptextFormalName" class="helptext">
 					<p><?php echo __d('baser', '固定ページなどで利用するエディタのスタイルセットをCSS形式で記述する事ができます。')?></p>
 					<pre># <?php echo __d('baser', 'タイトル')?>
-						<?php echo __d('タグ')?> {
-						<?php echo __d('プロパティ名：プロパティ値')?>
+						<?php echo __d('baser', 'タグ')?> {
+						<?php echo __d('baser', 'プロパティ名：プロパティ値')?>
 }
 
- 《<?php echo __d('記述例')?>》
- # <?php echo __d('見出し')?>
+ 《<?php echo __d('baser', '記述例')?>》
+ # <?php echo __d('baser', '見出し')?>
  h2 {
 	font-size:20px;
 	color:#333;
