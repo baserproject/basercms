@@ -94,6 +94,12 @@ docker exec -it basercms /bin/bash
 - PathToClass : テスト対象のクラスまでのパスを含めた名称を指定
 - filterMethod : 特定のメソッドのみ実行する場合に、メソッド名称を指定
 
+## 送信メールを確認する
+
+baserCMSが送信したメールは、MailCatcher で確認する事ができます。  
+`http://localhost:1080/`
+
+
 ## Xdebug によるデバッグ（PhpStorm on Mac）
 
 ### ネットワーク設定

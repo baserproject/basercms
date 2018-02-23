@@ -18,17 +18,17 @@ services:
     container_name: basercms
     image: baserproject/basercms
     volumes:
-#      - sync-volume:/var/www/html
       - .:/var/www/html:cached
     environment:
       PHP_IDE_CONFIG: "serverName=localhost"
       COMPOSER_ALLOW_SUPERUSER: 1
-#    command:
-#      composer install
     ports:
       - "80:80"
     depends_on:
       - basercms-database
-#volumes:
-#  sync-volume:
-#    external: true
+  basercms-smtp:
+    container_name: basercms-smtp
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
