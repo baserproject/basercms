@@ -105,7 +105,7 @@ https://www.facebook.com/groups/996045227085786/
 《<?php echo __d('baser', 'baserCMS UG 九州北部')?>》
 https://www.facebook.com/groups/785098234940587/
 《<?php echo __d('baser', 'baserCMS UG 九州南部')?>》
-<?php echo __d('baser', '現在グループ準備中')?>
+https://www.facebook.com/groups/318497551997358/
 
 ■ <?php echo __d('baser', 'baserCMSユーザーズフォーラム')?>
 http://forum.basercms.net/
