@@ -381,9 +381,6 @@ msgid "受け付けた旨のメールもユーザーへ送られています。"
 msgstr ""
 
 #: Config/theme/bc_sample/Errors/error400.php:11
-#: View/Errors/error400.php:17
-#: View/Errors/error500.php:17
-#: View/Errors/missing_class.php:22;25
 msgid "エラー"
 msgstr ""
 
@@ -583,6 +580,11 @@ msgstr ""
 msgid "非公開"
 msgstr ""
 
+#: Plugin/Feed/Controller/FeedConfigsController.php:237
+#: Plugin/Feed/Controller/FeedDetailsController.php:200
+msgid "無効な処理です。"
+msgstr ""
+
 #: Plugin/Mail/Controller/MailController.php:106
 msgid "お問い合わせ"
 msgstr ""
@@ -660,11 +662,8 @@ msgstr ""
 msgid "現在、受付を停止しています。"
 msgstr ""
 
-#: View/Errors/error500.php:18
-msgid "内部エラーが発生しました。"
-msgstr ""
-
-#: View/Errors/missing_class.php:29
-msgid "注意"
+#: View/Errors/error400.php:17
+#: View/Errors/error500.php:17;18
+msgid "baser"
 msgstr ""
 
