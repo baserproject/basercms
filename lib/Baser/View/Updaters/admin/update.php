@@ -12,12 +12,14 @@
 
 /**
  * [ADMIN] アップデート
+ * @var BcAppView $this
  */
 if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $siteVer || $scriptNum)) {
 	$requireUpdate = true;
 } else {
 	$requireUpdate = false;
 }
+$this->BcBaser->js('admin/updaters/update', false);
 ?>
 
 
@@ -44,13 +46,6 @@ if (!($baserVerPoint === false || $siteVerPoint === false) && ($baserVer != $sit
 	text-align:left;
 }
 </style>
-<script>
-$(function(){
-	$("#BtnUpdate").click(function(){
-		$.bcUtil.showLoader();
-	});
-});
-</script>
 <?php $this->end('script') ?>
 
 
@@ -111,7 +106,7 @@ $(function(){
 			<?php echo $this->BcForm->create('Updater', ['url' => ['action' => $this->request->action, $plugin]]) ?>
 		<?php endif ?>
 		<?php echo $this->BcForm->input('Installation.update', ['type' => 'hidden', 'value' => true]) ?>
-		<?php echo $this->BcForm->end(['label' => __d('baser', 'アップデート実行'), 'class' => 'button btn-red']) ?>
+		<?php echo $this->BcForm->end(['label' => __d('baser', 'アップデート実行'), 'class' => 'button btn-red', 'id' => 'BtnUpdate']) ?>
 	<?php else: ?>
 		<p>
 			<?php if (!$plugin): ?>

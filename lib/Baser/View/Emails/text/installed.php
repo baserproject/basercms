@@ -105,7 +105,7 @@ https://www.facebook.com/groups/996045227085786/
 《baserCMS UG 九州北部》
 https://www.facebook.com/groups/785098234940587/
 《baserCMS UG 九州南部》
-現在グループ準備中
+https://www.facebook.com/groups/318497551997358/
 
 ■ baserCMSユーザーズフォーラム
 http://forum.basercms.net/
