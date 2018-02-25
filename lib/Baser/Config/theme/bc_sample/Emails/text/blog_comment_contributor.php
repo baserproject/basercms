@@ -5,16 +5,18 @@
  */
 ?>
 
-                                           <?php echo date('Y-m-d H:i:s') ?> 
+                                           <?php echo date('Y-m-d H:i:s') ?>　
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　　　　　　　　◆◇　<?php echo __('コメントが投稿されました') ?>　◇◆ 
+　　　　　　　　◆◇　<?php echo __d('baser', 'コメントが投稿されました')?>　◇◆
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-<?php echo $Content['name'] ?><?php echo __('さんが、') ?>
-「<?php echo $BlogPost['name'] ?>」<?php echo __('にコメントしました。') ?>
+<?php echo sprintf(__d('baser', '%1$sさんが、「%2$s」にコメントしました。'), $Content['name'], $BlogPost['name'])?>　
 <?php echo $this->BcBaser->getUri($Content['url'] . '/archives/' . $BlogPost['no'], false) ?>　
  
 <?php echo ($BlogComment['message']) ?>　
+　
+　
+　
 　
 　
 
