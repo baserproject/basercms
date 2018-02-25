@@ -86,7 +86,7 @@ $(function(){
 				<tr>
 					<th scope="col"  style="width:160px" class="list-tool">
 			<div>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn')), array('controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id'))) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['controller' => 'feed_details', 'action' => 'add', $this->BcForm->value('FeedConfig.id')]) ?>　
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 				<div>

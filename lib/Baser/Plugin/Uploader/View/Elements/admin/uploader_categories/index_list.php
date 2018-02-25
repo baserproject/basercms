@@ -24,7 +24,7 @@ $this->BcListTable->setColumnNumber(4);
 		<tr>
 			<th class="list-tool">
 				<div>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn')), array('action' => 'add')) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add']) ?>　
 				</div>
 				<?php if($this->BcBaser->isAdminUser()): ?>
 					<div>

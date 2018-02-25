@@ -21,16 +21,15 @@
 	<tr class="list-tool">
 		<th>
 			<div>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn']), ['action' => 'add']) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add']) ?>　
 				<?php if (!$sortmode): ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['width' => 65, 'height' => 14, 'alt' => __d('baser', '並び替え'), 'class' => 'btn']), ['sortmode' => 1]) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['alt' => __d('baser', '並び替え')]) . __d('baser', '並び替え'), ['sortmode' => 1]) ?>
 				<?php else: ?>
-					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', ['width' => 65, 'height' => 14, 'alt' => __d('baser', 'ノーマル'), 'class' => 'btn']), ['sortmode' => 0]) ?>
+					<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['alt' => __d('baser', 'ノーマル')]) . __d('baser', 'ノーマル'), ['sortmode' => 0]) ?>
 				<?php endif ?>
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 			<div>
-				
 				<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => __d('baser', '一括選択')]) ?>
 				<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '一括無効')], 'empty' => __d('baser', '一括処理')]) ?>
 				<?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
@@ -41,7 +40,7 @@
 		<th style="white-space: nowrap"><?php echo __d('baser', 'バージョン')?></th>
 		<th><?php echo __d('baser', '説明')?></th>
 		<th><?php echo __d('baser', '開発者')?></th>
-		<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
+		<th><?php echo __d('baser', '登録日')?><br><?php echo __d('baser', '更新日')?></th>
 	</tr>
 </thead>
 <tbody>

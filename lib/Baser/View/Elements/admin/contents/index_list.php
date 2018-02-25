@@ -65,25 +65,22 @@ $(function(){
 	<thead>
 		<tr>
 			<th class="list-tool">
-	<div>
-		<?php //$this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => '新規追加', 'class' => 'btn')), array('action' => 'add')) ?>
-	</div>
 	<?php if ($this->BcBaser->isAdminUser()): ?>
-		<div>
-			<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => __d('baser', '一括選択')]) ?>
-			<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
-			<?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
-		</div>
+				<div>
+					<?php echo $this->BcForm->checkbox('ListTool.checkall', ['title' => __d('baser', '一括選択')]) ?>
+					<?php echo $this->BcForm->input('ListTool.batch', ['type' => 'select', 'options' => ['del' => __d('baser', '削除')], 'empty' => __d('baser', '一括処理')]) ?>
+					<?php echo $this->BcForm->button(__d('baser', '適用'), ['id' => 'BtnApplyBatch', 'disabled' => 'disabled']) ?>
+				</div>
 	<?php endif ?>
-</th>
-<th>NO</th>
-<th><?php echo __d('baser', 'タイプ')?><br /><?php echo __d('baser', 'カテゴリー')?></th>
-<th><?php echo __d('baser', 'タイトル')?></th>
-<th><?php echo __d('baser', 'コンテンツ内容')?></th>
-<th><?php echo __d('baser', '公開状態')?></th>
-<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
-</tr>
-</thead>
+			</th>
+			<th>NO</th>
+			<th><?php echo __d('baser', 'タイプ')?><br /><?php echo __d('baser', 'カテゴリー')?></th>
+			<th><?php echo __d('baser', 'タイトル')?></th>
+			<th><?php echo __d('baser', 'コンテンツ内容')?></th>
+			<th><?php echo __d('baser', '公開状態')?></th>
+			<th><?php echo __d('baser', '登録日')?><br /><?php echo __d('baser', '更新日')?></th>
+		</tr>
+	</thead>
 <tbody>
 	<?php if (!empty($datas)): ?>
 		<?php $count = 0; ?>

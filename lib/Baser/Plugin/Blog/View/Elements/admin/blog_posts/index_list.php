@@ -27,7 +27,7 @@ $this->BcListTable->setColumnNumber(9);
 	<tr>
 		<th class="list-tool">
 			<div>
-				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn']), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>
+				<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add', $blogContent['BlogContent']['id']]) ?>　
 			</div>
 			<?php if ($this->BcBaser->isAdminUser()): ?>
 			<div>
@@ -37,7 +37,7 @@ $this->BcListTable->setColumnNumber(9);
 			</div>
 			<?php endif ?>
 		</th>
-		<th><?php echo $this->Paginator->sort('no', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . ' NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . ' NO'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
+		<th><?php echo $this->Paginator->sort('no', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . 'NO', 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . 'NO'], ['escape' => false, 'class' => 'btn-direction']) ?></th>
 		<th><?php echo $this->Paginator->sort('posts_date', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '投稿日'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '投稿日')], ['escape' => false, 'class' => 'btn-direction']) ?></th>
 		<th><?php echo $this->Paginator->sort('eye_catch', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', 'アイキャッチ'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', 'アイキャッチ')], ['escape' => false, 'class' => 'btn-direction']) ?></th>
 		<th>

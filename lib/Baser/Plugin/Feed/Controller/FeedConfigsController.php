@@ -141,7 +141,7 @@ class FeedConfigsController extends FeedAppController {
  */
 	public function admin_edit($id) {
 		if (!$id && empty($this->request->data)) {
-			$this->setMessage('無効なIDです。', true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(['action' => 'index']);
 		}
 
@@ -258,7 +258,7 @@ class FeedConfigsController extends FeedAppController {
 		$this->_checkSubmitToken();
 		if (!$id) {
 
-			$this->setMessage(__d('無効なIDです。'), true);
+			$this->setMessage(__d('baser', '無効なIDです。'), true);
 			$this->redirect(array('action' => 'index'));
 			return;
 		}

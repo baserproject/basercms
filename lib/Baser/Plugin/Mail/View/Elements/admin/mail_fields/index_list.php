@@ -23,11 +23,11 @@ $this->BcListTable->setColumnNumber(7);
 		<tr>
 			<th class="list-tool">
 	<div>
-		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', array('width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'class' => 'btn')), array('action' => 'add', $mailContent['MailContent']['id'])) ?>
+		<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加'), ['action' => 'add', $mailContent['MailContent']['id']]) ?>　
 		<?php if (!$sortmode): ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', array('width' => 65, 'height' => 14, 'alt' => __d('baser', '並び替え'), 'class' => 'btn')), array($mailContent['MailContent']['id'], 'sortmode' => 1)) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['alt' => __d('baser', '並び替え')]) . __d('baser', '並び替え'), [$mailContent['MailContent']['id'], 'sortmode' => 1]) ?>
 		<?php else: ?>
-			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_normal.png', array('width' => 65, 'height' => 14, 'alt' => __d('baser', 'ノーマル'), 'class' => 'btn')), array($mailContent['MailContent']['id'], 'sortmode' => 0)) ?>
+			<?php $this->BcBaser->link($this->BcBaser->getImg('admin/btn_sort.png', ['alt' => __d('baser', 'ノーマル')]) . __d('baser', 'ノーマル'), [$mailContent['MailContent']['id'], 'sortmode' => 0]) ?>
 		<?php endif ?>
 	</div>
 	<?php if ($this->BcBaser->isAdminUser()): ?>

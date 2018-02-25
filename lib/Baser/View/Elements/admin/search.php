@@ -22,7 +22,7 @@ if (empty($search)) {
 <div id="Search" class="clearfix">
 
 	<h2 class="head">
-		<?php $this->BcBaser->img('admin/head_search.png', ['width' => 53, 'height' => 16, 'alt' => __d('baser', '検索')]) ?>
+		<?php $this->BcBaser->img('admin/head_search.png', ['alt' => __d('baser', '検索')]) ?><?php echo __d('baser', '検索') ?>
 	</h2>
 
 	<div class="body">

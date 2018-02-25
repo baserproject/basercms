@@ -20,8 +20,10 @@
 <div id="FavoriteAjaxSorttableUrl" style="display:none"><?php $this->BcBaser->url(['plugin' => null, 'controller' => 'favorites', 'action' => 'update_sort']) ?></div>
 
 <div id="FavoriteMenu" class="cbb">
-
-	<h2><?php $this->BcBaser->img('admin/head_favorite.png', ['alt' => __d('baser', 'よく使う項目')]) ?></h2>
+	<h2>
+		<?php $this->BcBaser->img('admin/head_favorite.png', ['alt' => __d('baser', 'よく使う項目')]) ?>
+		<?php echo __d('baser', 'よく使う項目') ?>
+	</h2>
 
 	<ul class="favorite-menu-list">
 		<?php if (!empty($favorites)): ?>
@@ -35,8 +37,8 @@
 	</ul>
 
 	<ul class="favolite-menu-tools clearfix">
-		<li><?php $this->BcBaser->img('admin/btn_add.png', ['width' => 69, 'height' => 18, 'alt' => __d('baser', '新規追加'), 'id' => 'BtnFavoriteAdd', 'class' => 'btn', 'style' => 'cursor:pointer']) ?></li>
-		<li><?php $this->BcBaser->img('admin/btn_menu_help.png', ['alt' => __d('baser', 'ヘルプ'), 'width' => 60, 'height' => '18', 'class' => 'btn help', 'id' => 'BtnFavoriteHelp']) ?>
+		<li><a href="javascript:void()" id="BtnFavoriteAdd"><?php echo $this->BcBaser->getImg('admin/btn_add.png', ['alt' => __d('baser', '新規追加')]) . __d('baser', '新規追加') ?></a></li>
+		<li><a href="javascript:void()" id="BtnFavoriteHelp"><?php echo $this->BcBaser->getImg('admin/btn_menu_help.png', ['alt' => __d('baser', 'ヘルプ')]) . __d('baser', 'ヘルプ') ?></a>
 			<div class="helptext">
 				<p><?php echo __d('baser', 'よく使う項目では、新規登録ボタンで現在開いているページへのリンクを簡単にする事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えます。')?></p>
 			</div>
