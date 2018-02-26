@@ -1006,7 +1006,7 @@ class BcAppController extends Controller {
 		try {
 			$cakeEmail->from($from, $fromName);
 		} catch (Exception $e) {
-			$this->setMessage($e->getMessage() . ' ' . __('送信元のメールアドレスが不正です。'),true, false, true);
+			$this->setMessage($e->getMessage() . ' ' . __d('baser', '送信元のメールアドレスが不正です。'),true, false, true);
 			return false;
 		}
 

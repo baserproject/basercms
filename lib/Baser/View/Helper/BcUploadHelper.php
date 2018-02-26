@@ -124,7 +124,7 @@ class BcUploadHelper extends BcAppHelper {
 					$out = $this->uploadImage($fieldName, $value, $options) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				} else {
 					$filePath = $basePath . $value;
-					$out = $this->Html->link('ダウンロード ≫', $filePath, ['target' => '_blank']) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
+					$out = $this->Html->link(__d('baser', 'ダウンロード') . ' ≫', $filePath, ['target' => '_blank']) . '<br /><span class="file-name">' . mb_basename($value) . '</span>';
 				}
 			} else {
 				$out = $value;

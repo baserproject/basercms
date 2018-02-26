@@ -50,37 +50,17 @@ class BcCkeditorHelper extends AppHelper {
 /**
  * 初期設定スタイル
  * StyleSet 名 basercms
+ * 翻訳がある為、コンストラクタで初期化
  *
  * @var array
  */
-	public $style = [
-		['name' => '青見出し(h3)',
-			'element' => 'h3',
-			'styles' => ['color' => 'Blue']],
-		['name' => '赤見出し(h3)',
-			'element' => 'h3',
-			'styles' => ['color' => 'Red']],
-		['name' => '黄マーカー(span)',
-			'element' => 'span',
-			'styles' => ['background-color' => 'Yellow']],
-		['name' => '緑マーカー(span)',
-			'element' => 'span',
-			'styles' => ['background-color' => 'Lime']],
-		['name' => '大文字(big)',
-			'element' => 'big'],
-		['name' => '小文字(small)',
-			'element' => 'small'],
-		['name' => 'コード(code)',
-			'element' => 'code'],
-		['name' => '削除文(del)',
-			'element' => 'del'],
-		['name' => '挿入文(ins)',
-			'element' => 'ins'],
-		['name' => '引用(cite)',
-			'element' => 'cite'],
-		['name' => 'インライン(q)',
-			'element' => 'q']
-	];
+	public $style = [];
+
+/**
+ * ツールバー
+ *
+ * @var array
+ */
 	public $toolbars = [
 		'simple' => [
 			['Bold', 'Underline', '-',
@@ -100,6 +80,43 @@ class BcCkeditorHelper extends AppHelper {
 	];
 
 /**
+ * BcCkeditorHelper constructor.
+ * @param View $View
+ * @param array $settings
+ */
+	public function __construct(View $View, $settings = []){
+		parent::__construct($View, $settings);
+		$this->style = [
+			['name' => __d('baser', '青見出し') . '(h3)',
+				'element' => 'h3',
+				'styles' => ['color' => 'Blue']],
+			['name' => __d('baser', '赤見出し') . '(h3)',
+				'element' => 'h3',
+				'styles' => ['color' => 'Red']],
+			['name' => __d('baser', '黄マーカー') . '(span)',
+				'element' => 'span',
+				'styles' => ['background-color' => 'Yellow']],
+			['name' => __d('baser', '緑マーカー') . '(span)',
+				'element' => 'span',
+				'styles' => ['background-color' => 'Lime']],
+			['name' => __d('baser', '大文字') . '(big)',
+				'element' => 'big'],
+			['name' => __d('baser', '小文字') . '(small)',
+				'element' => 'small'],
+			['name' => __d('baser', 'コード') . '(code)',
+				'element' => 'code'],
+			['name' => __d('baser', '削除文') . '(del)',
+				'element' => 'del'],
+			['name' => __d('baser', '挿入文') . '(ins)',
+				'element' => 'ins'],
+			['name' => __d('baser', '引用') . '(cite)',
+				'element' => 'cite'],
+			['name' => __d('baser', 'インライン') . '(q)',
+				'element' => 'q']
+		];
+	}
+
+	/**
  * CKEditor のスクリプトを構築する
  * 【ボタン一覧】
  * Source			- ソース

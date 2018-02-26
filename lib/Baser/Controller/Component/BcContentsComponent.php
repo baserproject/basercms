@@ -257,7 +257,7 @@ class BcContentsComponent extends Component {
 			if(in_array($parentTemplate, $templates)) {
 				unset($templates[$parentTemplate]);
 			}
-			array_unshift($templates, ['' => '親フォルダの設定に従う（' . $parentTemplate . '）']);
+			array_unshift($templates, ['' => __d('baser', '親フォルダの設定に従う') . '（' . $parentTemplate . '）']);
 		}
 		$data['Content']['name'] = urldecode($data['Content']['name']);
 		$controller->set('layoutTemplates', $templates);

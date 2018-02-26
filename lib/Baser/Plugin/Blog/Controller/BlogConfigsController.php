@@ -48,14 +48,24 @@ class BlogConfigsController extends BlogAppController {
 /**
  * ぱんくずナビ
  *
- * @var string
+ * @var array
  */
-	public $crumbs = [
-		['name' => 'プラグイン管理', 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']],
-		['name' => 'ブログ管理', 'url' => ['controller' => 'blog_contents', 'action' => 'index']]
-	];
+	public $crumbs = [];
 
 /**
+ * BlogConfigsController constructor.
+ * @param CakeRequest|null $request
+ * @param CakeResponse|null $response
+ */
+	public function __construct(CakeRequest $request = null, CakeResponse $response = null) {
+		parent::__construct($request, $response);
+		$this->crumbs = [
+			['name' => __d('baser', 'プラグイン管理'), 'url' => ['plugin' => '', 'controller' => 'plugins', 'action' => 'index']],
+			['name' => __d('baser', 'ブログ管理'), 'url' => ['controller' => 'blog_contents', 'action' => 'index']]
+		];
+	}
+
+	/**
  * before_filter
  *
  * @return void

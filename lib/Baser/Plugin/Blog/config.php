@@ -10,8 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
-$title = 'ブログ';
-$description = '複数設置可能なシンプルブログ';
+$title = __d('baser', 'ブログ');
+$description = __d('baser', '複数設置可能なシンプルブログ');
 $author = 'ryuring';
 $url = 'http://ryuring.com';
 $installMessage = '';

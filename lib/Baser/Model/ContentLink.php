@@ -35,7 +35,7 @@ class ContentLink extends AppModel {
 		parent::__construct($id, $table, $ds);
 		$this->validate = [
 			'url' => [
-				['rule' => ['notBlank'], 'message' => 'リンク先URLを入力してください。']]
+				['rule' => ['notBlank'], 'message' => __d('baser', 'リンク先URLを入力してください。')]]
 		];
 	}
 	

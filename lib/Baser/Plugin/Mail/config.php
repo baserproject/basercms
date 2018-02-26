@@ -10,8 +10,8 @@
  * @license			http://basercms.net/license/index.html
  */
 
-$title = 'メールフォーム';
-$description = '複数設置可能の高機能メールフォーム';
+$title = __d('baser', 'メールフォーム');
+$description = __d('baser', '複数設置可能の高機能メールフォーム');
 $author = 'ryuring';
 $url = 'http://ryuring.com';
 $adminLink = array('plugin' => 'mail', 'controller' => 'mail_configs', 'action' => 'form');
