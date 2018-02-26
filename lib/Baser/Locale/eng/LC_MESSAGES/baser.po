@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-23 11:57+0900\n"
+"PO-Revision-Date: 2018-02-26 13:27+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -1173,17 +1173,21 @@ msgid ""
 "権限設定後、テーマの適用をやり直すか、表示できないページについて固定ページ管"
 "理より更新処理を行ってください。"
 msgstr ""
+"Please re-do applying Theme, or do update process to Page that can not be "
+"displayed from Static Page Management, after setting permission."
 
 #: Controller/ThemesController.php:263
 #: Controller/Component/BcManagerComponent.php:576
 msgid "システムデータの初期化に失敗しました。"
-msgstr ""
+msgstr "Failed system data's initialization."
 
 #: Controller/ThemesController.php:275
 msgid ""
 "ユーザーデータの初期化に失敗しました。手動で各ユーザーのユーザーグループの設"
 "定を行なってください。"
 msgstr ""
+"Failed User data's initialization. Please set each User's User Group "
+"settings manually."
 
 #: Controller/ThemesController.php:279
 msgid ""
@@ -1524,16 +1528,11 @@ msgid ""
 msgstr ""
 
 #: Controller/Component/BcManagerComponent.php:118
-#, fuzzy
-#| msgid ""
-#| "プログラムとデータベースのバージョンが異なるため、強制終了します。データ"
-#| "ベースのバージョンを調整して、再実行してください。"
 msgid ""
 "データベースのデータ更新に失敗しました。データベースの設定を見なおしてくださ"
 "い。"
 msgstr ""
-"Since the version of the program and the database are different, it forcibly "
-"terminates. Adjust the version of the database and try again."
+"Failed updating database's data. Please re-check the settings of database."
 
 #: Controller/Component/BcManagerComponent.php:124
 msgid "コアプラグインのインストールに失敗しました。"
@@ -1795,10 +1794,8 @@ msgid "テンプレート名を入力してください。"
 msgstr ""
 
 #: Model/Favorite.php:63
-#, fuzzy
-#| msgid "テーマの %s が設定されていません : %s"
 msgid "このURLの登録は許可されていません。"
-msgstr "%s of the theme is not set : %s"
+msgstr "This URL's registration is not allowed."
 
 #: Model/Page.php:89;92
 msgid "PHPの構文エラーが発生しました。"
@@ -2084,14 +2081,8 @@ msgid ""
 msgstr ""
 
 #: Model/User.php:77
-#, fuzzy
-#| msgid ""
-#| "有効なテストケースがありません。 \n"
-#| "\n"
 msgid "パスワードが同じものではありません。"
-msgstr ""
-"No test cases available \n"
-"\n"
+msgstr "The password is not the same."
 
 #: Model/User.php:79 Plugin/Blog/Model/BlogComment.php:58
 msgid "Eメールの形式が不正です。"
@@ -2433,10 +2424,8 @@ msgstr ""
 #: Plugin/Blog/View/Blog/mobile/default/single.php:42
 #: Plugin/Blog/View/Blog/smartphone/default/archives.php:40
 #: Plugin/Blog/View/Blog/smartphone/default/index.php:42
-#, fuzzy
-#| msgid "見つかりませんでした。"
 msgid "記事がありません。"
-msgstr "Not found."
+msgstr "Article not found."
 
 #: Plugin/Blog/View/Blog/default/archives.php:18
 #: Plugin/Blog/View/Blog/mobile/default/archives.php:17
@@ -2446,10 +2435,8 @@ msgstr ""
 
 #: Plugin/Blog/View/Blog/default/posts.php:38
 #: Plugin/Blog/View/Blog/smartphone/default/posts.php:37
-#, fuzzy
-#| msgid "見つかりませんでした。"
 msgid "記事がありません"
-msgstr "Not found."
+msgstr "Article not found"
 
 #: Plugin/Blog/View/BlogCategories/admin/form.php:24
 msgid "このカテゴリのURL：%s"
@@ -2489,10 +2476,8 @@ msgstr "Used by URL"
 
 #: Plugin/Blog/View/BlogCategories/admin/form.php:61
 #: Plugin/Blog/View/BlogPosts/admin/form.php:219
-#, fuzzy
-#| msgid "引数を見なおしてください。"
 msgid "半角のみで入力してください"
-msgstr "Please re-check the parameters."
+msgstr "Please enter with half-size characters only."
 
 #: Plugin/Blog/View/BlogCategories/admin/form.php:67
 #: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:43
@@ -2596,10 +2581,8 @@ msgid "公開サイトの一覧に表示する件数を指定します。"
 msgstr ""
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:60;88
-#, fuzzy
-#| msgid "引数を見なおしてください。"
 msgid "半角数字で入力してください。"
-msgstr "Please re-check the parameters."
+msgstr "Please enter with half-size character numbers only."
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:66
 msgid "一覧に表示する順番"
@@ -2698,10 +2681,8 @@ msgid "編集する"
 msgstr "Edit"
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:167
-#, fuzzy
-#| msgid "エディタテンプレート「%s」を削除しました。"
 msgid "ブログの本体のテンプレートを指定します。"
-msgstr "Deleted Editor Template \"%s\"."
+msgstr "Specify the Blog body's Template."
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:168
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:111
@@ -2970,10 +2951,8 @@ msgstr "Updated Date"
 #: View/Elements/admin/user_groups/index_list.php:53
 #: View/Elements/admin/users/index_list.php:48
 #: View/Elements/admin/widget_areas/index_list.php:47
-#, fuzzy
-#| msgid "見つかりませんでした。"
 msgid "データが見つかりませんでした。"
-msgstr "Not found."
+msgstr "Couldn't find the data."
 
 #: Plugin/Blog/View/Elements/admin/blog_categories/index_row.php:28
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:27
@@ -3395,10 +3374,8 @@ msgid "コメントを受付けました"
 msgstr ""
 
 #: Plugin/Blog/View/Emails/text/blog_comment_admin.php:24
-#, fuzzy
-#| msgid "baserCMSのリセットが完了しました。"
 msgid "%sへのコメントを受け付けました。"
-msgstr "Completed baserCMS reset."
+msgstr "Accepted the comment to %s."
 
 #: Plugin/Blog/View/Emails/text/blog_comment_admin.php:25
 #: Plugin/Mail/View/Emails/text/mail_default.php:28
@@ -3408,7 +3385,7 @@ msgstr ""
 
 #: Plugin/Blog/View/Emails/text/blog_comment_admin.php:31
 msgid "コメント内容 "
-msgstr "Comment Content"
+msgstr "Comment body"
 
 #: Plugin/Blog/View/Emails/text/blog_comment_admin.php:34
 msgid "送信者名"
@@ -3427,10 +3404,8 @@ msgid "コメントが投稿されました"
 msgstr ""
 
 #: Plugin/Blog/View/Emails/text/blog_comment_contributor.php:23
-#, fuzzy
-#| msgid "%s のエイリアス「%s」を削除しました。"
 msgid "%1$sさんが、「%2$s」にコメントしました。"
-msgstr "Deleted “%s”’s Alias “%s”."
+msgstr "$1$s commented on \"%2$s\"."
 
 #: Plugin/Blog/View/Helper/BlogHelper.php:316
 msgid "≫ 続きを読む"
@@ -3462,27 +3437,21 @@ msgid "フィードキャッシュ削除"
 msgstr "Delete Feed Cache"
 
 #: Plugin/Feed/Config/setting.php:21
-#, fuzzy
-#| msgid "サーバーキャッシュを削除します。いいですか？"
 msgid "フィードキャッシュを削除します。いいですか？"
-msgstr "You are about to delete server cache, are you sure?"
+msgstr "You are about to delete Feed cache, are you sure?"
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:122
 #: Plugin/Feed/Controller/FeedDetailsController.php:112
-#, fuzzy
-#| msgid "「%s」のエイリアス「%s」を追加しました。"
 msgid "フィード「%s」を追加しました。"
-msgstr "Added “%s”’s Alias \"%s\"."
+msgstr "Added Feed \"%s\"."
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:131
 msgid "新規フィード設定登録"
 msgstr "Add Feed Settings"
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:158
-#, fuzzy
-#| msgid "「%s」を更新しました。"
 msgid "フィード「%s」を更新しました。"
-msgstr "Updated “%s”."
+msgstr "Updated Feed \"%s\"."
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:173
 msgid "フィード設定編集"
@@ -3490,42 +3459,32 @@ msgstr "Edit Feed Settings"
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:221;245
 #: Plugin/Feed/Controller/FeedDetailsController.php:261
-#, fuzzy
-#| msgid "エディタテンプレート「%s」を削除しました。"
 msgid "フィード「%s」を削除しました。"
-msgstr "Deleted Editor Template \"%s\"."
+msgstr "Deleted Feed \"%s\"."
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:272
-#, fuzzy
-#| msgid "よく使う項目: %s を削除しました。"
 msgid " %sを削除しました。"
-msgstr "Deleted the favorite menu %s ."
+msgstr "Deleted %s."
 
 #: Plugin/Feed/Controller/FeedConfigsController.php:303
-#, fuzzy
-#| msgid "サーバーキャッシュを削除します。いいですか？"
 msgid "フィードのキャッシュを削除しました。"
-msgstr "You are about to delete server cache, are you sure?"
+msgstr "Deleted Feed's cache."
 
 #: Plugin/Feed/Controller/FeedDetailsController.php:76
 msgid "フィード設定情報"
 msgstr "Feed Settings Info"
 
 #: Plugin/Feed/Controller/FeedDetailsController.php:93
-#, fuzzy
-#| msgid "無効なIDです。"
 msgid "無効なIDです"
-msgstr "It's an invalid ID."
+msgstr "Invalid ID"
 
 #: Plugin/Feed/Controller/FeedDetailsController.php:121
 msgid "新規フィード情報登録"
 msgstr "Add Feed Info"
 
 #: Plugin/Feed/Controller/FeedDetailsController.php:154
-#, fuzzy
-#| msgid "「%s」を更新しました。"
 msgid "フィード詳細「%s」を更新しました。"
-msgstr "Updated “%s”."
+msgstr "Updated Feed Detail “%s”."
 
 #: Plugin/Feed/Controller/FeedDetailsController.php:163
 msgid "フィード情報編集"
@@ -3623,16 +3582,12 @@ msgstr "Display Number"
 
 #: Plugin/Feed/View/Elements/admin/feed_details/index_list.php:34
 #: View/Elements/admin/sites/index_list.php:66
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "データがありません。"
 msgstr "Data does not exist."
 
 #: Plugin/Feed/View/Elements/admin/feed_details/index_list.php:35
-#, fuzzy
-#| msgid "最近の動きのログ削除に失敗しました。"
 msgid "削除に失敗しました。"
-msgstr "Failed deleting the recent activity log."
+msgstr "Failed deleting."
 
 #: Plugin/Feed/View/Elements/admin/feed_details/index_list.php:82
 msgid "フィード一覧"
@@ -3762,10 +3717,8 @@ msgid "フィード設定新規追加"
 msgstr "Add Feed Settings"
 
 #: Plugin/Feed/View/Elements/admin/submenus/feed_common.php:26
-#, fuzzy
-#| msgid "サーバーキャッシュを削除します。いいですか？"
 msgid "フィードのキャッシュを削除します。いいですか？"
-msgstr "You are about to delete server cache, are you sure?"
+msgstr "You are about to delete Feed cache, are you sure?"
 
 #: Plugin/Feed/View/Elements/admin/submenus/feed_details.php:20
 msgid "フィードメニュー"
@@ -3827,10 +3780,8 @@ msgid "テンプレート名"
 msgstr "Template Name"
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:110
-#, fuzzy
-#| msgid "エディタテンプレート「%s」を削除しました。"
 msgid "出力するフィードのテンプレートを指定します。"
-msgstr "Deleted Editor Template \"%s\"."
+msgstr "Specify output Feed's Template."
 
 #: Plugin/Feed/View/FeedDetails/admin/form.php:44
 msgid "フィード詳細名"
@@ -3883,16 +3834,12 @@ msgid "メールプラグインのアップロードファイルのパス変更�
 msgstr ""
 
 #: Plugin/Mail/Config/update/4.1.0/updater.php:74
-#, fuzzy
-#| msgid "contents テーブルのデータ更新に成功しました。"
 msgid "メールプラグイン mail_message_ %s テーブルのデータ更新に成功しました。"
-msgstr "Succeeded updating table data."
+msgstr "Succeeded updating Mail Plugin mail_message_%s table's data."
 
 #: Plugin/Mail/Config/update/4.1.0/updater.php:76
-#, fuzzy
-#| msgid "contents テーブルのデータ更新に失敗しました。"
 msgid "メールプラグイン mail_message_ %s テーブルのデータ更新に失敗しました。"
-msgstr "Failed updating table data."
+msgstr "Failed updating Mail Plugin mail_message_%s table's data."
 
 #: Plugin/Mail/Controller/MailConfigsController.php:53
 msgid "メールフォーム設定を保存しました。"
@@ -4470,14 +4417,8 @@ msgid "署名：Eメール"
 msgstr "Signature: E-mail"
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:56
-#, fuzzy
-#| msgid ""
-#| "有効なテストケースがありません。 \n"
-#| "\n"
 msgid "メールの送信先ではありません。"
-msgstr ""
-"No test cases available \n"
-"\n"
+msgstr "It's not destination of mail."
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:62
 msgid "署名：電話番号"
@@ -4634,10 +4575,8 @@ msgid "送信メールテンプレート名"
 msgstr "Sending Mail Template Name"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:214
-#, fuzzy
-#| msgid "エディタテンプレート「%s」を削除しました。"
 msgid "送信するメールのテンプレートを指定します。"
-msgstr "Deleted Editor Template \"%s\"."
+msgstr "Specify sending mail's Template."
 
 #: Plugin/Mail/View/MailContents/admin/index.php:26
 msgid ""
@@ -4790,10 +4729,8 @@ msgid "各項目を同じグループとするには同じグループ名を入�
 msgstr ""
 
 #: Plugin/Mail/View/MailFields/admin/form.php:199;214
-#, fuzzy
-#| msgid "引数を見なおしてください。"
 msgid "半角英数字で入力してください。"
-msgstr "Please re-check the parameters."
+msgstr "Please enter with half-size alphabets and numbers."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:205
 msgid "グループ入力チェック"
@@ -4869,58 +4806,44 @@ msgid "カテゴリ新規登録"
 msgstr "Add Category"
 
 #: Plugin/Uploader/Controller/UploaderCategoriesController.php:77
-#, fuzzy
-#| msgid "「%s」のエイリアス「%s」を追加しました。"
 msgid "アップロードファイルカテゴリ「%s」を追加しました。"
-msgstr "Added “%s”’s Alias \"%s\"."
+msgstr "Added Upload File Category \"%s\"."
 
 #: Plugin/Uploader/Controller/UploaderCategoriesController.php:110
-#, fuzzy
-#| msgid "エディタテンプレート「%s」を削除しました。"
 msgid "アップロードファイルカテゴリ「%s」を更新しました。"
-msgstr "Deleted Editor Template \"%s\"."
+msgstr "Updated Upload File Category \"%s\"."
 
 #: Plugin/Uploader/Controller/UploaderCategoriesController.php:118
 msgid "カテゴリ編集"
 msgstr "Edit Category"
 
 #: Plugin/Uploader/Controller/UploaderCategoriesController.php:140
-#, fuzzy
-#| msgid "エディタテンプレート「%s」を削除しました。"
 msgid "アップロードファイルカテゴリ「%s」を削除しました。"
-msgstr "Deleted Editor Template \"%s\"."
+msgstr "Deleted Upload File Category \"%s\"."
 
 #: Plugin/Uploader/Controller/UploaderConfigsController.php:55
 msgid "アップローダー設定"
 msgstr "Uploader Settings"
 
 #: Plugin/Uploader/Controller/UploaderConfigsController.php:62
-#, fuzzy
-#| msgid "システム設定を保存しました。"
 msgid "アップローダー設定を保存しました。"
-msgstr "Saved system settings."
+msgstr "Saved Uploader settings."
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:119
 msgid "%sを作成し、書き込み権限を与えてください"
 msgstr ""
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:122
-#, fuzzy
-#| msgid "　/app/db/ に書き込み権限を与える事ができませんでした。"
 msgid "作成し、%sに書き込み権限を与えてください"
-msgstr "Couldn't give the write permission to /app/db/ ."
+msgstr "Please Create %s and give write permission"
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:124;130
-#, fuzzy
-#| msgid "　/app/db/ に書き込み権限を与える事ができませんでした。"
 msgid "%sに書き込み権限を与えてください"
-msgstr "Couldn't give the write permission to /app/db/ ."
+msgstr "Please give write permission to %s"
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:357
-#, fuzzy
-#| msgid "システム設定を保存しました。"
 msgid "ファイルの内容を保存しました。"
-msgstr "Saved system settings."
+msgstr "Saved File's content."
 
 #: Plugin/Uploader/View/Elements/admin/searches/uploader_files_index.php:21
 msgid "名称"
@@ -4968,10 +4891,8 @@ msgstr "Edit Date"
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_list.php:84
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_panel.php:51
-#, fuzzy
-#| msgid "データが存在しません。"
 msgid "ファイルが存在しません"
-msgstr "Data does not exist."
+msgstr "File does not exist."
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_panel.php:32
 #: View/Tools/admin/maintenance.php:46
@@ -5076,10 +4997,8 @@ msgid "ゴミ箱は空です"
 msgstr "Trash is empty"
 
 #: View/Contents/admin/ajax_index_tree.php:21
-#, fuzzy
-#| msgid "テーマの %s が設定されていません : %s"
 msgid "データが登録されていません。"
-msgstr "%s of the theme is not set : %s"
+msgstr "Data is not registered."
 
 #: View/Dblogs/admin/ajax_index.php:36
 msgid "最近の動きのログを削除します。いいですか？"
@@ -5351,10 +5270,8 @@ msgid "元コンテンツ"
 msgstr "Base Contents"
 
 #: View/Elements/admin/contents/index_list.php:18
-#, fuzzy
-#| msgid "保存中にエラーが発生しました。"
 msgid "処理中にエラーが発生しました。"
-msgstr "Error occurred during saving."
+msgstr "Error occurred during processing."
 
 #: View/Elements/admin/contents/index_list.php:82
 #: View/Elements/admin/search_indices/index_list.php:82
@@ -5371,8 +5288,6 @@ msgstr "Title"
 
 #: View/Elements/admin/contents/index_list_table.php:42
 #: View/Elements/admin/sites/index_list.php:47
-#, fuzzy
-#| msgid "公開状態"
 msgid " 公開状態"
 msgstr "Publish Status"
 
@@ -6027,10 +5942,8 @@ msgid ""
 msgstr ""
 
 #: View/Elements/admin/helps/tools_maintenance.php:21
-#, fuzzy
-#| msgid "データベーステーブルプレフィックス"
 msgid "データベースのデータと構造をバックアップします。"
-msgstr "Database Table Prefix"
+msgstr "Backup database's data and structures."
 
 #: View/Elements/admin/helps/tools_maintenance.php:22
 msgid "baserCMSのバージョンが違う場合は復元する事ができない場合があります。"
@@ -6113,14 +6026,8 @@ msgid "ログイン用のユーザーアカウントを登録する事ができ�
 msgstr ""
 
 #: View/Elements/admin/helps/users_form.php:21
-#, fuzzy
-#| msgid ""
-#| "有効なテストケースがありません。 \n"
-#| "\n"
 msgid "パスワード欄は変更する場合のみ入力します。"
-msgstr ""
-"No test cases available \n"
-"\n"
+msgstr "Enter the password field only if you want to change it."
 
 #: View/Elements/admin/helps/users_index.php:19
 msgid ""
@@ -6261,10 +6168,8 @@ msgstr ""
 
 #: View/Elements/admin/plugins/index_list_market.php:41
 #: View/Elements/admin/themes/index_list_market.php:35
-#, fuzzy
-#| msgid "管理ユーザーを作成できませんでした。"
 msgid "baserマーケットのテーマを読み込めませんでした。"
-msgstr "Couldn’t create an admin user."
+msgstr "Couldn’t load the baser Market's Theme."
 
 #: View/Elements/admin/plugins/index_row.php:34
 msgid "アップデート"
@@ -6382,7 +6287,7 @@ msgstr ""
 
 #: View/Elements/admin/sites/form.php:124
 msgid "[アクセス設定]"
-msgstr "[Access Settings:"
+msgstr "[Access Settings]"
 
 #: View/Elements/admin/sites/form.php:126
 msgid "メインサイトと同一URLでアクセス"
@@ -6639,20 +6544,12 @@ msgid "初期データ読込"
 msgstr "Load Initial Data"
 
 #: View/Elements/admin/themes/index_list.php:63
-#, fuzzy
-#| msgid "テーマの %s が設定されていません : %s"
 msgid "現在、テーマが選択されていません。"
-msgstr "%s of the theme is not set : %s"
+msgstr "Theme is not selected."
 
 #: View/Elements/admin/themes/index_list.php:74;76
-#, fuzzy
-#| msgid ""
-#| "有効なテストケースがありません。 \n"
-#| "\n"
 msgid "変更できるテーマがありません。"
-msgstr ""
-"No test cases available \n"
-"\n"
+msgstr "There is no changeble Theme."
 
 #: View/Elements/admin/themes/index_list.php:74
 msgid "baserCMSの公式サイト</a>では無償のテーマが公開されています。"
@@ -6671,10 +6568,8 @@ msgid "テーマ削除"
 msgstr "Delete Theme"
 
 #: View/Elements/admin/user_groups/index_list.php:39
-#, fuzzy
-#| msgid "baserCMS ユーザーズフォーラム"
 msgid " ユーザーグループ名"
-msgstr "baserCMS Users Forum"
+msgstr "User Group Name"
 
 #: View/Elements/admin/user_groups/index_list.php:40
 msgid " 表示名"
@@ -6757,8 +6652,6 @@ msgid "管理者ログイン"
 msgstr "Admin Login"
 
 #: View/Emails/text/installed.php:21
-#, fuzzy
-#| msgid "baserCMSのインストールが完了しました。"
 msgid "baserCMSのインストールが完了しました"
 msgstr "Completed baserCMS installation."
 
@@ -6767,10 +6660,8 @@ msgid "おめでとうございます！"
 msgstr "Congratulations!"
 
 #: View/Emails/text/installed.php:25
-#, fuzzy
-#| msgid "baserCMSのインストールが完了しました。"
 msgid "次のURLへbaserCMSのインストールが完了しました。"
-msgstr "Completed baserCMS installation."
+msgstr "Next URL. Completed baserCMS installation."
 
 #: View/Emails/text/installed.php:30 View/Installations/admin/step3.php:186
 msgid "ログイン情報"
@@ -6807,10 +6698,8 @@ msgid "baserCMS公式サイト"
 msgstr "baserCMS Official Site"
 
 #: View/Emails/text/installed.php:46
-#, fuzzy
-#| msgid "baserCMSコア"
 msgid "baserCMSとは？"
-msgstr "baserCMS Core"
+msgstr "What is baserCMS?"
 
 #: View/Emails/text/installed.php:49
 msgid "機能一覧"
@@ -6855,7 +6744,7 @@ msgstr "baserCMS Users Community"
 
 #: View/Emails/text/installed.php:79
 msgid "baserCMSコミュニティの紹介ページです。Let's Join！"
-msgstr "This page is introcution to baserCMS Community. Let's Join!"
+msgstr "This page is introduction to baserCMS Community. Let's Join!"
 
 #: View/Emails/text/installed.php:81
 msgid "baserCMS公式Facebook"
@@ -6938,10 +6827,8 @@ msgid "baserCMSの開発状況や、今後の開発タスクなどが確認で�
 msgstr ""
 
 #: View/Errors/missing_class.php:20
-#, fuzzy
-#| msgid "見つかりませんでした。"
 msgid "クラスが見つかりません"
-msgstr "Not found."
+msgstr "Class not found"
 
 #: View/Errors/missing_class.php:22;25
 msgid "エラー"
@@ -7201,11 +7088,8 @@ msgid ""
 msgstr ""
 
 #: View/Installations/admin/alert.php:19
-#, fuzzy
-#| msgid ""
-#| "baserCMSのインストールを行うには、debug を -1 に設定する必要があります。"
 msgid "インストールを開始するにはデバッグモードが -1 である必要があります。"
-msgstr "You must set debug to -1 to install baserCMS."
+msgstr "You must set Debug Mode to -1 to start installing baserCMS."
 
 #: View/Installations/admin/alert.php:20
 msgid "デバッグモードを変更するには次の手順のとおり操作してください。"
@@ -7232,13 +7116,10 @@ msgid "baserCMSを初期化するにはコチラから"
 msgstr ""
 
 #: View/Installations/admin/index.php:21
-#, fuzzy
-#| msgid ""
-#| "baserCMSのインストールに失敗しました。ログファイルを確認してください。"
 msgid ""
 "%sのインストールを開始します。<br />よろしければ「インストール開始」ボタンを"
 "クリックしてください。"
-msgstr "Failed baserCMS installation. Please check the log file."
+msgstr ""
 
 #: View/Installations/admin/index.php:23
 msgid ""
@@ -8987,7 +8868,7 @@ msgstr "Save Login Status"
 
 #: View/Users/admin/login.php:53;55
 msgid "パスワードを忘れた場合はこちら"
-msgstr "Please come here if you forgot password"
+msgstr "Click here if you forgot password"
 
 #: View/Users/admin/reset_password.php:24
 msgid ""
