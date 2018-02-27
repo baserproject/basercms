@@ -61,7 +61,7 @@
 			</div>
 		<?php endif ?>
 
-		<?php echo $this->BcForm->end(array('label' => __d('送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
+		<?php echo $this->BcForm->end(array('label' => __d('baser', '送信する'), 'id' => 'BlogCommentAddButton', 'class' => 'button')) ?>
 
 		<div id="ResultMessage" class="message" style="display:none;text-align:center">&nbsp;</div>
 
