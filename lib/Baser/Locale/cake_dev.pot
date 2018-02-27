@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Configure/BcThemeConfigReader.php:69
+#: Configure/BcThemeConfigReader.php:70
 msgid "テーマの設定ファイルが存在しません : %s"
 msgstr ""
 
