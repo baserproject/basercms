@@ -2192,6 +2192,20 @@ msgstr ""
 msgid "複数設置可能なシンプルブログ"
 msgstr ""
 
+#: Plugin/Blog/Config/setting.php:17
+msgid "ブログプラグイン"
+msgstr ""
+
+#: Plugin/Blog/Config/setting.php:19
+#: Plugin/Blog/Controller/BlogTagsController.php:62
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:28
+msgid "タグ一覧"
+msgstr ""
+
+#: Plugin/Blog/Config/setting.php:20
+msgid "タグ登録"
+msgstr ""
+
 #: Plugin/Blog/Controller/BlogAppController.php:40
 msgid "【%s】コメントを受け付けました"
 msgstr ""
@@ -2330,11 +2344,6 @@ msgstr ""
 
 #: Plugin/Blog/Controller/BlogPostsController.php:726
 msgid "ブログ記事「%s」 を %s に設定しました。"
-msgstr ""
-
-#: Plugin/Blog/Controller/BlogTagsController.php:62
-#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:28
-msgid "タグ一覧"
 msgstr ""
 
 #: Plugin/Blog/Controller/BlogTagsController.php:74
