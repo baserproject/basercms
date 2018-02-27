@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-27 15:27+0900\n"
+"PO-Revision-Date: 2018-02-27 18:23+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -115,7 +115,7 @@ msgstr "Utility"
 msgid "サーバーキャッシュ削除"
 msgstr "Server Cache"
 
-#: Config/setting.php:40
+#: Config/setting.php:40 View/Tools/admin/index.php:18
 msgid "サーバーキャッシュを削除します。いいですか？"
 msgstr "You are about to delete server cache, are you sure?"
 
@@ -176,6 +176,11 @@ msgid ""
 "baserCMSのサンプルテーマです。オリジナルテーマ制作のベースにご利用ください。"
 msgstr "baser CMS's sample Theme. Use as base for creating an original Theme."
 
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:64
+#: Plugin/Mail/View/MailFields/admin/form.php:264
+msgid "送信する"
+msgstr "Send"
+
 #: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:11
 #: Plugin/Blog/View/Emails/text/blog_comment_admin.php:21
 msgid "コメントを受付けました"
@@ -232,7 +237,7 @@ msgstr "Top page"
 msgid ""
 "アップデート実行時には、管理システムより参照する、画像ファイル、CSSファイル、"
 "Javascriptファイルを、"
-msgstr ""
+msgstr "When running updating"
 
 #: Config/update/4.0.1/config.php:3
 msgid ""
@@ -468,7 +473,7 @@ msgstr ""
 
 #: Console/Command/BcManagerShell.php:187
 msgid "手動で書き込み権限を与えてください。"
-msgstr "Please give write permission manually."
+msgstr ""
 
 #: Console/Command/BcManagerShell.php:192
 msgid "不明"
@@ -2339,6 +2344,24 @@ msgstr "Blog"
 msgid "複数設置可能なシンプルブログ"
 msgstr "Multi-Placable Simple Blog"
 
+#: Plugin/Blog/Config/setting.php:17
+#, fuzzy
+#| msgid "メールプラグイン"
+msgid "ブログプラグイン"
+msgstr "Mail Plugin"
+
+#: Plugin/Blog/Config/setting.php:19
+#: Plugin/Blog/Controller/BlogTagsController.php:62
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:28
+msgid "タグ一覧"
+msgstr "Tag List"
+
+#: Plugin/Blog/Config/setting.php:20
+#, fuzzy
+#| msgid "新規タグ登録"
+msgid "タグ登録"
+msgstr "Add Tag"
+
 #: Plugin/Blog/Controller/BlogAppController.php:40
 msgid "【%s】コメントを受け付けました"
 msgstr "【%s】Comment Accepted"
@@ -2481,11 +2504,6 @@ msgstr "[%s] Edit Article: %s"
 #: Plugin/Blog/Controller/BlogPostsController.php:726
 msgid "ブログ記事「%s」 を %s に設定しました。"
 msgstr "Set Blog Article \"%s\" to %s."
-
-#: Plugin/Blog/Controller/BlogTagsController.php:62
-#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:28
-msgid "タグ一覧"
-msgstr "Tag List"
 
 #: Plugin/Blog/Controller/BlogTagsController.php:74
 msgid "タグ「%s」を追加しました。"
@@ -3275,16 +3293,22 @@ msgid ""
 "登録しましょう。検索エンジン対策として有用です。<br />また、各カテゴリは親カ"
 "テゴリを指定する事ができ、細かく分類分けが可能です。"
 msgstr ""
+"Doing Category registering for grouping Blog Articles.<br />Register keyword "
+"to specify Category since Blog Category Title will be used as Title Tag. "
+"It’s valuable as Search Engine Optimization.<br />You can specify Parent "
+"Category to each Category and you can group them finely."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_categories_form.php:19
 msgid "（例）カテゴリーに属した記事のタイトルタグ出力例"
-msgstr ""
+msgstr "(Example) Output of Title Tag that is belonged to Category"
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_categories_form.php:20
 msgid ""
 "カテゴリー「ニュースリリース」に属する、ブログ記事「新商品を発表しました」の"
 "タイトルタグの出力例は次のようになります。"
 msgstr ""
+"Example output of Title Tag of Blog Article “New Product Is Released” that "
+"belong to Category “News Release” is as follows."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_categories_form.php:21
 msgid "出力結果"
@@ -3308,16 +3332,20 @@ msgid ""
 "ブログカテゴリは、ブログ記事を分類分けする際に利用します。<br />また、各カテ"
 "ゴリは子カテゴリを持つ事ができるようになっています。"
 msgstr ""
+"Blog Category is used when grouping Blog Article.<br />Also, each Category "
+"can have Child Category."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_comments_index.php:18
 msgid "ブログ記事に対するコメントの管理が行えます。"
-msgstr ""
+msgstr "You can manage Comment to Blog Article."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_comments_index.php:20
 msgid ""
 "コメントが投稿された場合、サイト基本設定で設定された管理者メールアドレスに通"
 "知メールが送信されます。"
 msgstr ""
+"Notification mail will be sent to Admin mail address that are set in Site "
+"Basic Settings if Comment was posted."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_comments_index.php:21
 msgid ""
@@ -3325,6 +3353,9 @@ msgid ""
 "テータスは「非公開」となっています。\n"
 "\t\t内容を確認して問題なければ、%sをクリックします。"
 msgstr ""
+"Comment Status will be “Private” if you use Comment Approve function when "
+"Comment was posted.\n"
+"\t\tClick %s if there is no problem in checking content."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_form.php:15
 msgid ""
@@ -3336,78 +3367,92 @@ msgid ""
 "basercms.net/manuals/designers/5.html\" target=\"_blank\">≫ ブログのテンプ"
 "レートを変更する</a>"
 msgstr ""
+"Add or Edit Blog Content’s Basic Settings.<br />Please complete adding it "
+"after checking each item’s help message.<br />You can have different design "
+"for each Blog. If you want it to so, click “Options” below screen and change "
+"Template Name.<br /><small>Caution: You have to create newly named Template "
+"and upload if you changed Template Name."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_index.php:18
 msgid "ブログプラグインでは複数のブログの登録が可能です。"
-msgstr ""
+msgstr "You can add multiple Blog in Blog Plugin."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_index.php:20
 msgid ""
 "新しいブログを登録するには、表左上の「新規追加」ボタンをクリックします。"
-msgstr ""
+msgstr "Please click “Add” button on left upper table to add new Blog."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_index.php:21
 msgid "各ブログの表示を確認するには、%sをクリックします。"
-msgstr ""
+msgstr "Please click %s to check each Blog’s display."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_index.php:22
 msgid "各ブログの内容を変更するには、%sをクリックします。"
-msgstr ""
+msgstr "Please click %s to change each Blog’s content."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_contents_index.php:23
 msgid ""
 "各ブログのコメント機能の設定、テンプレートの変更など、基本設定を変更するに"
 "は、%sをクリックします。"
 msgstr ""
+"Please click %s to change each Blog’s Basic Settings like Comment function’s "
+"settings or Template change."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_form.php:18
 msgid "ブログ記事の登録•編集を行います。"
-msgstr ""
+msgstr "Add or Edit Blog Article."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_form.php:20
 msgid "ワード感覚でブログ記事の作成を行う事ができます。"
-msgstr ""
+msgstr "You can create Blog Article just like Word."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_form.php:21
 msgid ""
 "記事を作成してもすぐに公開しない場合は、公開状態を「非公開」にしておきます。"
 msgstr ""
+"Public Status to “Private” if you don’t want to public immediately after "
+"Article creation."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_form.php:22
 msgid ""
 "「非公開」にした記事を確認するには、画面下の「保存前確認」ボタンをクリックし"
 "ます。"
 msgstr ""
+"Click “Check Before Save” button on bottom screen if you want to check "
+"“Private” Article."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:18
 msgid "ブログ記事の管理が行えます。"
-msgstr ""
+msgstr "You can manage Blog Article."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:20
 msgid "新しい記事を登録するには、画面下の「新規追加」ボタンをクリックします。"
-msgstr ""
+msgstr "Please click “Add” button on bottom screen to add new Article."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:21
 msgid ""
 "ブログの表示を確認するには、サブメニューの「公開ページ確認」をクリックしま"
 "す。"
-msgstr ""
+msgstr "Please click “Public Page Check” in Sub Menu to check Blog display."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:22
 msgid "各記事の表示を確認するには、対象記事の %s をクリックします。"
-msgstr ""
+msgstr "Please click target Article’s %s to check each Article’s display."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:23
 msgid ""
 "ブログのコメントを確認するには、サブメニューの「コメント一覧」をクリックする"
 "か、各記事のコメント欄の数字をクリックします。"
 msgstr ""
+"Please click “Comment List” in Sub Menu or each Article Comment’s number to "
+"check Blog’s Comment."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:24
+#, fuzzy
 msgid ""
 "ブログのカテゴリを登録するには、サブメニューの「新規ブログカテゴリを登録」を"
 "クリックします。"
-msgstr ""
+msgstr "Please click “Add Blog Category” in Sub Menu to add Blog Category."
 
 #: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:25;28;30;31
 #: Plugin/Uploader/View/Elements/admin/searches/uploader_files_index.php:23;25
@@ -3470,7 +3515,7 @@ msgstr "Blog Poster List"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_author_archives.php:17
 msgid "ブログの投稿者一覧を表示します。"
-msgstr ""
+msgstr "Display Blog’s Poster List."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_author_archives.php:21
 #: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:40
@@ -3485,6 +3530,7 @@ msgid ""
 "ブログページを表示している場合は、上記の設定に関係なく、<br />対象ブログのブ"
 "ログ投稿者一覧を表示します。"
 msgstr ""
+"Display target Blog’s Blog Poster List<br />if you are displaying Blog Page."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_calendar.php:16
 msgid "ブログカレンダー"
@@ -3492,13 +3538,13 @@ msgstr "Blog Calendar"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_calendar.php:17
 msgid "ブログのカレンダーを表示します。"
-msgstr ""
+msgstr "Display Blog Calendar"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_calendar.php:21
 msgid ""
 "ブログページを表示している場合は、上記の設定に関係なく、対象ブログのブログカ"
 "レンダーを表示します。"
-msgstr ""
+msgstr "Display target Blog’s Blog Calendar if you are displaying Blog Page."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:16
 msgid "ブログカテゴリー一覧"
@@ -3506,7 +3552,7 @@ msgstr "Blog Category List"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:17
 msgid "ブログのカテゴリー一覧を表示します。"
-msgstr ""
+msgstr "Display Blog Category List"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_category_archives.php:38
 #: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:21
@@ -3528,6 +3574,8 @@ msgid ""
 "ブログページを表示している場合は、上記の設定に関係なく、<br />対象ブログのブ"
 "ログカテゴリー一覧を表示します。"
 msgstr ""
+"Display target Blog’s Blog Category List<br />if you are displaying Blog "
+"Page."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:16
 msgid "月別アーカイブ一覧"
@@ -3535,13 +3583,14 @@ msgstr "Monthly Archive List"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:17
 msgid "ブログの月別アーカイブー一覧を表示します。"
-msgstr ""
+msgstr "Display Blog’s Monthly Archive List."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_monthly_archives.php:27
 msgid ""
 "ブログページを表示している場合は、上記の設定に関係なく、対象ブログの月別アー"
 "カイブ一覧を表示します。"
 msgstr ""
+"Display target Blog’s Monthly Archive List if you are displaying Blog Page."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:16
 msgid "最近の投稿"
@@ -3549,13 +3598,13 @@ msgstr "Recent Posts"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:17
 msgid "ブログの最近の投稿を表示します。"
-msgstr ""
+msgstr "Display Blog’s Recent Posts."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_recent_entries.php:23
 msgid ""
 "ブログページを表示している場合は、上記の設定に関係なく、対象ブログの最近の投"
 "稿を表示します。"
-msgstr ""
+msgstr "Display target Blog’s Recent Posts if you are displaying Blog Page."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:18
 msgid "ブログタグ一覧"
@@ -3563,7 +3612,7 @@ msgstr "Blog Tag List"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_tag_archives.php:19
 msgid "ブログのタグ一覧を表示します。"
-msgstr ""
+msgstr "Display Blog’s Tag List."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:16
 msgid "年別アーカイブ一覧"
@@ -3571,7 +3620,7 @@ msgstr "Yearly Archive List"
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:17
 msgid "ブログの年別アーカイブー一覧を表示します。"
-msgstr ""
+msgstr "Display Blog’s Yearly Archive List."
 
 #: Plugin/Blog/View/Elements/admin/widgets/blog_yearly_archives.php:25
 msgid "年度別の場合の開始月"
@@ -3582,6 +3631,8 @@ msgid ""
 "ブログページを表示している場合は、上記の設定に関係なく、対象ブログの年別アー"
 "カイブ一覧を表示します。"
 msgstr ""
+"Display target Blog’s Yearly Archive List if you are displaying Blog Page "
+"despite of above settings."
 
 #: Plugin/Blog/View/Elements/widgets/blog_yearly_archives.php:63;65
 msgid "%s年"
@@ -3596,6 +3647,8 @@ msgid ""
 "$contentsName を省略時は、contentsTemplate オプションで、コンテンツテンプレー"
 "ト名を指定してください。"
 msgstr ""
+"Please specify Contents Template Name with contentsTemplate option when "
+"omitting $contentName."
 
 #: Plugin/Feed/config.php:13
 msgid "フィードリーダー"
@@ -3603,7 +3656,7 @@ msgstr "Feed Reader"
 
 #: Plugin/Feed/config.php:14
 msgid "RSSフィードをWebページに貼り付ける事ができるフィードリーダー"
-msgstr ""
+msgstr "Feed Reader that can paste RSS Feed to Web page."
 
 #: Plugin/Feed/Config/setting.php:17
 msgid "フィードプラグイン"
@@ -3680,51 +3733,51 @@ msgstr "Edit Feed Info"
 
 #: Plugin/Feed/Model/FeedConfig.php:54
 msgid "フィード設定名を入力してください。"
-msgstr ""
+msgstr "Please enter Feed Settings Name."
 
 #: Plugin/Feed/Model/FeedConfig.php:55
 msgid "フィード設定名は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Feed Settings Name within 50 characters."
 
 #: Plugin/Feed/Model/FeedConfig.php:57
 msgid "フィードタイトルリストは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Feed Title List within 255 characters."
 
 #: Plugin/Feed/Model/FeedConfig.php:59
 msgid "カテゴリリストは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Category List within 255 characters."
 
 #: Plugin/Feed/Model/FeedConfig.php:61
 msgid "数値を入力してください。"
-msgstr ""
+msgstr "Please enter Number."
 
 #: Plugin/Feed/Model/FeedConfig.php:64
 msgid "テンプレート名は半角のみで入力してください。"
-msgstr ""
+msgstr "Please enter Template Name with only half-size characters."
 
 #: Plugin/Feed/Model/FeedConfig.php:65
 msgid "テンプレート名は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Template Name within 50 characters."
 
 #: Plugin/Feed/Model/FeedDetail.php:58
 msgid "フィード詳細名を入力してください。"
-msgstr ""
+msgstr "Please enter Feed Detail Name."
 
 #: Plugin/Feed/Model/FeedDetail.php:59
 msgid "フィード詳細名は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Feed Detail Name within 50 characters."
 
 #: Plugin/Feed/Model/FeedDetail.php:61
 msgid "フィードURLを入力してください。"
-msgstr ""
+msgstr "Please enter Feed URL."
 
 #: Plugin/Feed/Model/FeedDetail.php:62
 msgid "フィードURLは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Feed URL within 255 characters."
 
 #: Plugin/Feed/Model/FeedDetail.php:64
 msgid "カテゴリフィルタは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Category Filter within 255 characters."
 
 #: Plugin/Feed/Model/FeedDetail.php:76
 msgid "1分"
@@ -3756,6 +3809,9 @@ msgid ""
 "basercms.net\" target=\"_blank\">ユーザーズフォーラム</a> よりお知らせくださ"
 "い。"
 msgstr ""
+"Please notify us if you found any bugs, or you have request for improvements "
+"about baserCMS on <a href=“http://forum.basercms.net” target=“_blank”>Users "
+"Forum</a>."
 
 #: Plugin/Feed/View/Elements/admin/feed_configs/index_list.php:40
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:41
@@ -3799,7 +3855,7 @@ msgstr "Cache Tinme"
 msgid ""
 "データが見つかりませんでした。「追加する」ボタンをクリックしてフィード詳細を"
 "登録してください。"
-msgstr ""
+msgstr "Data not found. Please add Feed Detail by clicking “Add” button."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:19
 msgid ""
@@ -3810,18 +3866,26 @@ msgid ""
 "manuals/designers/7.html\" target=\"_blank\" class=\"outside-link\">フィード"
 "読み込み部分のテンプレートを変更する</a>"
 msgstr ""
+"Entering Feed Settings’s Basic Item<br />Change Template Name by clicking "
+"“Option” on bottom screen if you want to have different design for each Feed."
+"<br /><small>Caution: You have to create newly named Template and upload it "
+"to change Template Name.</small><br /></small><br /><a href=“http://basercms."
+"net/manuals/designers/7.html” target=“_blank” class=“outside-link”>フィード読"
+"み込み部分のテンプレートを変更する</a>"
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:21
 msgid ""
 "一つの設定につき、フィードは複数登録する事ができます。複数登録した場合は、複"
 "数のフィードを合わせた上で日付順に並び替えられます。"
 msgstr ""
+"Feed can be added multiply for one setting. They are ordered by date after "
+"Feeds are combined if you added them multiply."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:22
 msgid ""
 "フィードを追加するには、画面下の「フィード一覧」の「新規追加」ボタンをクリッ"
 "クします。"
-msgstr ""
+msgstr "Click “Add” button on “Feed List” on bottom screen to add Feed."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:27
 msgid "フィードの読み込み方法"
@@ -3829,13 +3893,13 @@ msgstr "Method of Feed Loading"
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:28
 msgid "以下のjavascriptを読み込みたい場所に貼り付けてください。"
-msgstr ""
+msgstr "Please paste below javascript to where you want to load it."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:33
 msgid ""
 "また、フィードの読み込みにはjQueryが必要ですので事前に読み込んでおく必要があ"
 "ります。"
-msgstr ""
+msgstr "Also, you have to load jQuery since Feed loading needs it."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_form.php:34
 msgid "jQueryの読み込み例"
@@ -3846,25 +3910,29 @@ msgid ""
 "フィードリーダープラグインでは、RSSフィードを読み込み、整形した上で出力する事"
 "ができます。"
 msgstr ""
+"You can load RSS feed and output it after format in Feed Reader Plugin."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_index.php:20
 msgid ""
 "フィード設定は複数登録する事ができ、任意の場所に貼り付ける事ができます。"
 msgstr ""
+"Feed Settings can be registered multiply and you can paste to arbitrary "
+"place."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_index.php:21
 msgid "他サイトのRSSフィードも読み込む事ができます。"
-msgstr ""
+msgstr "You can load other site’s RSS feed."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_index.php:22
 msgid "設定ごとにデザインを変更する事ができます。"
-msgstr ""
+msgstr "You can have different design for each setting."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_configs_index.php:23
 msgid ""
 "新しいフィード設定を登録するには、表左上の「新規追加」ボタンをクリックしま"
 "す。"
 msgstr ""
+"Please click “Add” button on upper left table to add new Feed Settings."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_details_form.php:19
 #: View/Elements/admin/helps/search_indices_add.php:19
@@ -3875,11 +3943,11 @@ msgstr "User Help"
 msgid ""
 "フィードの登録を行います。キャッシュ時間やカテゴリによる絞り込みの設定が行え"
 "ます。"
-msgstr ""
+msgstr "Adding Feed. You can set cache time and filter by Category."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_details_form.php:22
 msgid "他サイトのフィードも登録する事ができます。"
-msgstr ""
+msgstr "You can register other site’s Feed."
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_details_form.php:23
 msgid ""
@@ -3922,11 +3990,11 @@ msgstr "Back to Feed Settings"
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:48
 msgid "日本語が利用できます。"
-msgstr ""
+msgstr "You can use Japanese."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:49
 msgid "識別でき、わかりやすい設定名を入力します。"
-msgstr ""
+msgstr "Please enter setting name that can be identified and understandable."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:69
 msgid "フィードタイトルリスト"
@@ -3940,12 +4008,12 @@ msgstr ""
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:77
 msgid "テンプレート上で、「feed_title」として参照できるようになります。"
-msgstr ""
+msgstr "You will be able to reference it as “feed_title” on Template."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:78
 msgid ""
 "また、先頭から順に「feed_title_no」としてインデックス番号が割り振られます。"
-msgstr ""
+msgstr "Also, index number “feed_title_no” will be assigned from the front."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:84
 msgid "カテゴリリスト"
@@ -4006,7 +4074,7 @@ msgstr "Mail Form"
 
 #: Plugin/Mail/config.php:14
 msgid "複数設置可能の高機能メールフォーム"
-msgstr ""
+msgstr "Multi-placable high functional Mail Form"
 
 #: Plugin/Mail/Config/setting.php:17
 msgid "メールプラグイン"
@@ -4019,11 +4087,11 @@ msgstr "Basic Settings"
 
 #: Plugin/Mail/Config/update/4.0.5.1/updater.php:28
 msgid "メールプラグインのアップロードファイルのパス変更に成功しました。"
-msgstr ""
+msgstr "Succeeded changing Upload File’s path of Mail Plugin"
 
 #: Plugin/Mail/Config/update/4.0.5.1/updater.php:30
 msgid "メールプラグインのアップロードファイルのパス変更に失敗しました。"
-msgstr ""
+msgstr "Failed changing Upload File’s path of Mail Plugin"
 
 #: Plugin/Mail/Config/update/4.1.0/updater.php:74
 msgid "メールプラグイン mail_message_ %s テーブルのデータ更新に成功しました。"
@@ -4035,7 +4103,7 @@ msgstr "Failed updating Mail Plugin mail_message_%s table's data."
 
 #: Plugin/Mail/Controller/MailConfigsController.php:53
 msgid "メールフォーム設定を保存しました。"
-msgstr ""
+msgstr "Saved Mail Form Settings."
 
 #: Plugin/Mail/Controller/MailConfigsController.php:60
 #: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:27
@@ -4048,7 +4116,7 @@ msgstr "Mail Form List"
 
 #: Plugin/Mail/Controller/MailContentsController.php:89
 msgid "メールフォーム「%s」を追加しました。"
-msgstr ""
+msgstr "Added Mail Form “%s”."
 
 #: Plugin/Mail/Controller/MailContentsController.php:104
 msgid "新規メールフォーム登録"
@@ -4056,17 +4124,19 @@ msgstr "Add Mail Form"
 
 #: Plugin/Mail/Controller/MailContentsController.php:119
 msgid "新規メールフォーム「%s」を追加しました。"
-msgstr ""
+msgstr "Added Mail Form “%s”."
 
 #: Plugin/Mail/Controller/MailContentsController.php:125
 msgid ""
 "データベースに問題があります。メール受信データ保存用テーブルの作成に失敗しま"
 "した。"
 msgstr ""
+"There is a problem in database. Failed creating mail receiving data saving "
+"table."
 
 #: Plugin/Mail/Controller/MailContentsController.php:161
 msgid "メールフォーム「%s」を更新しました。"
-msgstr ""
+msgstr "Updated Mail Form “%s”."
 
 #: Plugin/Mail/Controller/MailContentsController.php:184
 msgid "メールフォーム設定編集：%s"
@@ -4074,7 +4144,7 @@ msgstr "Edit Mail Form Settings: %s"
 
 #: Plugin/Mail/Controller/MailContentsController.php:280
 msgid "メールフォームのコピー「%s」を追加しました。"
-msgstr ""
+msgstr "Added Mail Form’s Copy “%s”."
 
 #: Plugin/Mail/Controller/MailFieldsController.php:109
 msgid "[%s] メールフィールド一覧"
@@ -4082,13 +4152,15 @@ msgstr "[%s] Mail Field List"
 
 #: Plugin/Mail/Controller/MailFieldsController.php:161
 msgid "新規メールフィールド「%s」を追加しました。"
-msgstr ""
+msgstr "Added Mail Field “%s”."
 
 #: Plugin/Mail/Controller/MailFieldsController.php:167;219;256;287;348
 msgid ""
 "データベースに問題があります。メール受信データ保存用テーブルの更新処理に失敗"
 "しました。"
 msgstr ""
+"There is a problem in database. Failed updating mail receiving data saving "
+"table."
 
 #: Plugin/Mail/Controller/MailFieldsController.php:175
 msgid "[%s] 新規メールフィールド登録"
@@ -4096,7 +4168,7 @@ msgstr "[%s] Add Mail Field"
 
 #: Plugin/Mail/Controller/MailFieldsController.php:213
 msgid "メールフィールド「%s」を更新しました。"
-msgstr ""
+msgstr "Updated Mail Field “%s”."
 
 #: Plugin/Mail/Controller/MailFieldsController.php:228
 msgid "[%s] メールフィールド編集： %s"
@@ -4104,15 +4176,15 @@ msgstr "[%s] Edit Mail Field"
 
 #: Plugin/Mail/Controller/MailFieldsController.php:252;308
 msgid "メールフィールド「%s」 を削除しました。"
-msgstr ""
+msgstr "Deleted Mail Field “%s”."
 
 #: Plugin/Mail/Controller/MailFieldsController.php:282
 msgid "メールフィールド「%s」を削除しました。"
-msgstr ""
+msgstr "Deleted Mail Field “%s”"
 
 #: Plugin/Mail/Controller/MailFieldsController.php:499
 msgid "メールフィールド「%s」 の設定を %s に変更しました。"
-msgstr ""
+msgstr "Changed Mail Field “%s”’s setting to %s."
 
 #: Plugin/Mail/Controller/MailMessagesController.php:116;140
 #: Plugin/Mail/View/Elements/admin/submenus/mail_fields.php:26
@@ -4125,11 +4197,11 @@ msgstr "Received Mail Detail"
 
 #: Plugin/Mail/Controller/MailMessagesController.php:190
 msgid "受信データ NO「%s」 を削除しました。"
-msgstr ""
+msgstr "Deleted Received Data NO “%s”."
 
 #: Plugin/Mail/Controller/MailMessagesController.php:212
 msgid "%s への受信データ NO「%s」 を削除しました。"
-msgstr ""
+msgstr "Deleted %s’s Received Data No “%s” ."
 
 #: Plugin/Mail/Model/MailContent.php:61
 msgid "送信先名を入力してください。"
@@ -4966,10 +5038,6 @@ msgstr "Using"
 #: Plugin/Mail/View/MailFields/admin/form.php:262
 msgid "メール送信"
 msgstr "Mail Sending"
-
-#: Plugin/Mail/View/MailFields/admin/form.php:264
-msgid "送信する"
-msgstr "Send"
 
 #: Plugin/Mail/View/MailFields/admin/form.php:264
 msgid "送信しない"
@@ -8621,6 +8689,12 @@ msgstr "Check Tree Structures"
 msgid "ツリー構造リセット"
 msgstr "Reset Tree Structures"
 
+#: View/Tools/admin/index.php:25
+#, fuzzy
+#| msgid "コンテンツのツリー構造をリセットしました。"
+msgid "コンテンツ管理のツリー構造をリセットします。本当によろしいですか？"
+msgstr "Reset Content's tree structures."
+
 #: View/Tools/admin/index.php:30
 msgid ""
 "別サーバーへの移設時には、固定ページ機能を正常動作させる為、固定ページテンプ"
@@ -8632,9 +8706,21 @@ msgstr ""
 msgid "固定ページテンプレート書出"
 msgstr "Export Static Page Template"
 
+#: View/Tools/admin/index.php:31
+msgid ""
+"データベース内のページデータを、ページテンプレートとして /app/View/Pages 内に"
+"全て書出します。本当によろしいですか？"
+msgstr ""
+
 #: View/Tools/admin/index.php:32
 msgid "固定ページテンプレート読込"
 msgstr "Import Static Page Template"
+
+#: View/Tools/admin/index.php:32
+msgid ""
+"/app/View/Pages フォルダ内のページテンプレートを全て読み込みます。本当によろ"
+"しいですか？"
+msgstr ""
 
 #: View/Tools/admin/index.php:36
 msgid "アセットファイル"
@@ -8652,9 +8738,25 @@ msgstr ""
 msgid "アセットファイル削除"
 msgstr "Delete Asset File"
 
+#: View/Tools/admin/index.php:38
+#, fuzzy
+#| msgid "管理システム用のアセットファイルを削除しました。"
+msgid ""
+"サイトルートに配置された、管理システム用のアセットファイルを削除します。本当"
+"によろしいですか？"
+msgstr "Deleted Asset File for Admin System."
+
 #: View/Tools/admin/index.php:39
 msgid "アセットファイル再配置"
 msgstr "Replace Asset File"
+
+#: View/Tools/admin/index.php:39
+#, fuzzy
+#| msgid "管理システム用のアセットファイルを再配置しました。"
+msgid ""
+"管理システム用のアセットファイルをサイトルートに再配置します。本当によろしい"
+"ですか？"
+msgstr "Replaced Asset File for Admin System."
 
 #: View/Tools/admin/index.php:43
 msgid "スペシャルサンクスクレジット"
