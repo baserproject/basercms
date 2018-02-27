@@ -67,7 +67,7 @@
 		</tr>
 		<tr>
 			<th><span class="required">*</span>&nbsp;
-				<?php echo $this->BcForm->label('UploaderConfig.mobile_small_width', '携帯サイズ（小）') ?>
+				<?php echo $this->BcForm->label('UploaderConfig.mobile_small_width', __d('baser', '携帯サイズ（小）')) ?>
 			</th>
 			<td>
 				<small>[<?php echo __d('baser', '幅')?>]</small>&nbsp;<?php echo $this->BcForm->input('UploaderConfig.mobile_small_width', array('type' => 'text', 'size' => 8,'maxlength' => 8)) ?>&nbsp;px　×　

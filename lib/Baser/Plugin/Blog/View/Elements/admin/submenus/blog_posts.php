@@ -17,7 +17,7 @@
 
 
 <tr>
-	<th><?php echo strip_tags($this->request->params['Content']['title']) ?>管理メニュー</th>
+	<th><?php echo sprintf(__d('baser', '%s 管理メニュー'), strip_tags($this->request->params['Content']['title'])) ?></th>
 	<td>
 		<ul class="cleafix">
 			<li><?php $this->BcBaser->link(sprintf(__d('baser', '%s 設定'), strip_tags($this->request->params['Content']['title'])), ['controller' => 'blog_contents', 'action' => 'edit', $blogContent['BlogContent']['id']]) ?></li>

@@ -18,7 +18,7 @@
 
 <table class="form-table">
 	<tr>
-		<th>リンク先URL</th>
+		<th><?php echo __d('baser', 'リンク先URL') ?></th>
 		<td>
 			<?php echo $this->BcForm->input('ContentLink.url', ['type' => 'text', 'size' => 60, 'placeholder' => 'http://']) ?><br>
 			<?php echo $this->BcForm->error('ContentLink.url') ?>

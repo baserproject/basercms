@@ -218,7 +218,7 @@ class FeedConfigsController extends FeedAppController {
 
 				// 削除実行
 				if ($this->FeedConfig->delete($id)) {
-					$this->FeedConfig->saveDbLog(sprintf(__d('baser','フィード「%s」を削除しました。'), $feedConfig['FeedConfig']['name']));
+					$this->FeedConfig->saveDbLog(sprintf(__d('baser', 'フィード「%s」を削除しました。'), $feedConfig['FeedConfig']['name']));
 				}
 			}
 		}
@@ -242,7 +242,7 @@ class FeedConfigsController extends FeedAppController {
 
 		// 削除実行
 		if ($this->FeedConfig->delete($id)) {
-			$this->FeedConfig->saveDbLog(sprintf(__d('baser','フィード「%s」を削除しました。'), $feedConfig['FeedConfig']['name']));
+			$this->FeedConfig->saveDbLog(sprintf(__d('baser', 'フィード「%s」を削除しました。'), $feedConfig['FeedConfig']['name']));
 			exit(true);
 		}
 		exit();

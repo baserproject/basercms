@@ -43,7 +43,7 @@ $this->BcListTable->setColumnNumber(9);
 		<th>
 			<?php echo $this->Paginator->sort('BlogCategory.name', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', 'カテゴリ'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', 'カテゴリ')], ['escape' => false, 'class' => 'btn-direction']) ?>
 			<?php if ($blogContent['BlogContent']['tag_use']): ?>
-			<span class="tag">タグ</span>
+			<span class="tag"><?php echo __d('baser', 'タグ') ?></span>
 			<?php endif ?><br />
 			<?php echo $this->Paginator->sort('name', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', 'タイトル'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', 'タイトル')], ['escape' => false, 'class' => 'btn-direction']) ?>
 		</th>
@@ -52,7 +52,7 @@ $this->BcListTable->setColumnNumber(9);
 			<?php echo $this->Paginator->sort('status', ['asc' => $this->BcBaser->getImg('admin/blt_list_down.png', ['alt' => __d('baser', '昇順'), 'title' => __d('baser', '昇順')]) . __d('baser', '公開状態'), 'desc' => $this->BcBaser->getImg('admin/blt_list_up.png', ['alt' => __d('baser', '降順'), 'title' => __d('baser', '降順')]) . __d('baser', '公開状態')], ['escape' => false, 'class' => 'btn-direction']) ?>
         </th>
 		<?php if ($blogContent['BlogContent']['comment_use']): ?>
-			<th>コメント</th>
+			<th><?php echo __d('baser', 'コメント') ?></th>
 		<?php endif ?>
 		<?php echo $this->BcListTable->dispatchShowHead() ?>
 		<th>
