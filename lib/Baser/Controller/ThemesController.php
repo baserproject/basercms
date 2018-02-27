@@ -199,7 +199,7 @@ class ThemesController extends AppController {
 		/* コアデータ */
 		if (!$this->BcManager->loadDefaultDataPattern('default', null, $pattern, $theme, 'core', $excludes)) {
 			$result = false;
-			$this->log($dbDataPattern . " の初期データのロードに失敗しました。");
+			$this->log(sprintf(__d('baser', '%s の初期データのロードに失敗しました。'), $dbDataPattern));
 		}
 
 		/* プラグインデータ */

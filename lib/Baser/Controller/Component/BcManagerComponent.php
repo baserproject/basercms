@@ -170,7 +170,7 @@ class BcManagerComponent extends Component {
 		foreach ($corePlugins as $corePlugin) {
 			CakePlugin::load($corePlugin);
 			if (!$this->installPlugin($corePlugin, $dbDataPattern)) {
-				$this->log("コアプラグイン" . $corePlugin . "のインストールに失敗しました。");
+				$this->log(sprintf(__d('baser', 'コアプラグイン %s のインストールに失敗しました。'), $corePlugin));
 				$result = false;
 			}
 		}

@@ -40,6 +40,6 @@ if(!isset($listId)) {
 <?php endif ?>
 
 <!-- 編集ダイアログ -->
-<div id="EditDialog" title="ファイル情報編集">
+<div id="EditDialog" title="<?php echo __d('baser', 'ファイル情報編集') ?>">
 	<?php $this->BcBaser->element('uploader_files/form', array('listId', $listId, 'popup' => true)) ?>
 </div>

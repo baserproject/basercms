@@ -594,13 +594,13 @@ class InstallationsController extends AppController {
 				}
 				return true;
 			} else {
-				$this->setMessage("データベースへの接続でエラーが発生しました。<br />" . $db->error, true);
+				$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。') . '<br>' . $db->error, true);
 			}
 		} else {
 
 			if (!$this->Session->read('Message.flash.message')) {
 				if ($db->connection) {
-					$this->setMessage("データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br />サーバー上に指定されたデータベースが存在しない可能性が高いです。", true);
+					$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。'), true);
 				} else {
 					$this->setMessage(__d('baser', 'データベースへの接続でエラーが発生しました。データベース設定を見直してください。'), true);
 				}

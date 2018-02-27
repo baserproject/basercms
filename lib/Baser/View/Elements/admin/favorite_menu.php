@@ -47,7 +47,7 @@
 
 </div>
 
-<div id="FavoriteDialog" title="よく使う項目" style="display:none">
+<div id="FavoriteDialog" title="<?php echo __d('baser', 'よく使う項目') ?>" style="display:none">
 	<?php echo $this->BcForm->create('Favorite', ['url' => ['plugin' => null, 'action' => 'ajax']]) ?>
 	<?php echo $this->BcForm->input('Favorite.id', ['type' => 'hidden']) ?>
 	<dl>
