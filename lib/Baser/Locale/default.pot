@@ -93,6 +93,7 @@ msgid "ニックネーム"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:39
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:39
 #: Config/theme/bccolumn/Elements/blog_comments.php:36
 #: Plugin/Blog/View/Elements/blog_comments.php:48
 #: Plugin/Blog/View/Elements/mobile/blog_comments.php:44
@@ -107,6 +108,7 @@ msgid "Eメールは公開されません"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/blog_comments.php:50
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:50
 #: Config/theme/bccolumn/Elements/blog_comments.php:47
 #: Plugin/Blog/View/Elements/blog_comments.php:59
 #: Plugin/Blog/View/Elements/mobile/blog_comments.php:50
@@ -122,6 +124,17 @@ msgstr ""
 #: Plugin/Blog/View/Elements/blog_comments_scripts.php:9
 #: Plugin/Mail/View/Elements/mail_form.php:52
 msgid "画像の文字を入力してください"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/blog_comments.php:64
+#: Config/theme/bc_sample/Elements/mail_form.php:54
+#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:52
+#: Config/theme/bccolumn/Elements/blog_comments.php:62
+#: Plugin/Blog/View/Elements/blog_comments.php:73
+#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
+#: Plugin/Mail/View/Elements/mail_form.php:65
+#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
+msgid "送信する"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/blog_tag.php:11
@@ -156,15 +169,6 @@ msgstr ""
 #: Config/theme/bc_sample/Elements/smartphone/mail_form.php:51
 #: Plugin/Mail/View/Elements/mail_form.php:64
 msgid "書き直す"
-msgstr ""
-
-#: Config/theme/bc_sample/Elements/mail_form.php:54
-#: Config/theme/bc_sample/Elements/smartphone/mail_form.php:52
-#: Plugin/Blog/View/Elements/blog_comments.php:73
-#: Plugin/Blog/View/Elements/mobile/blog_comments.php:53
-#: Plugin/Mail/View/Elements/mail_form.php:65
-#: Plugin/Mail/View/Elements/mobile/mail_form.php:37
-msgid "送信する"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/mail_form.php:57
@@ -284,52 +288,6 @@ msgstr ""
 msgid "キーワード"
 msgstr ""
 
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:11
-msgid "コメントを受付けました"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:14
-msgid "へのコメントを受け付けました。"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:15
-#: Config/theme/bc_sample/Emails/text/mail_default.php:18
-#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:18
-msgid "受信内容は下記のとおりです。"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:21
-msgid "コメント内容"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:24
-msgid "送信者名"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:25
-msgid "Ｅメール"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:26
-msgid "ＵＲＬ"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_admin.php:30
-msgid "コメントの公開状態を変更する場合は次のURLよりご確認ください。"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_contributor.php:10
-msgid "コメントが投稿されました"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_contributor.php:13
-msgid "さんが、"
-msgstr ""
-
-#: Config/theme/bc_sample/Emails/text/blog_comment_contributor.php:14
-msgid "にコメントしました。"
-msgstr ""
-
 #: Config/theme/bc_sample/Emails/text/mail_default.php:10
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:10
 msgid "お問合せを受付けました"
@@ -348,6 +306,11 @@ msgstr ""
 #: Config/theme/bc_sample/Emails/text/mail_default.php:17
 #: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:17
 msgid "へのお問い合わせを受け付けました。"
+msgstr ""
+
+#: Config/theme/bc_sample/Emails/text/mail_default.php:18
+#: Config/theme/bc_sample/Emails/text/smartphone/mail_default.php:18
+msgid "受信内容は下記のとおりです。"
 msgstr ""
 
 #: Config/theme/bc_sample/Emails/text/mail_default.php:22
@@ -523,10 +486,6 @@ msgstr ""
 
 #: Config/theme/nada-icons/Layouts/default.php:64
 msgid "ページトップへ戻る"
-msgstr ""
-
-#: Controller/BcAppController.php:1009
-msgid "送信元のメールアドレスが不正です。"
 msgstr ""
 
 #: Plugin/Blog/Controller/BlogAppController.php:76
