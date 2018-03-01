@@ -115,6 +115,12 @@ msgstr ""
 msgid "コメント"
 msgstr ""
 
+#: Config/theme/bc_sample/Elements/blog_comments.php:57
+#: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:57
+#: Config/theme/bccolumn/Elements/blog_comments.php:55
+msgid "認証画象"
+msgstr ""
+
 #: Config/theme/bc_sample/Elements/blog_comments.php:60
 #: Config/theme/bc_sample/Elements/mail_form.php:41
 #: Config/theme/bc_sample/Elements/smartphone/blog_comments.php:60
@@ -261,6 +267,11 @@ msgstr ""
 #: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:79;124
 #: Plugin/Blog/View/Elements/widgets/blog_calendar.php:81;126
 msgid "土"
+msgstr ""
+
+#: Config/theme/bc_sample/Elements/smartphone/widgets/blog_calendar.php:104;110;112
+#: Config/theme/bc_sample/Elements/widgets/blog_calendar.php:104;110;112
+msgid "%s月"
 msgstr ""
 
 #: Config/theme/bc_sample/Elements/smartphone/widgets/blog_monthly_archives.php:51;53

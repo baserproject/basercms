@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-27 18:23+0900\n"
+"PO-Revision-Date: 2018-02-28 18:07+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -572,6 +572,10 @@ msgstr ""
 msgid "無効な処理です。"
 msgstr "Invalid process."
 
+#: Controller/ContentFoldersController.php:57
+msgid "フォルダ「%s」を追加しました。"
+msgstr "Added Folder \"%s\"."
+
 #: Controller/ContentFoldersController.php:60
 #: Controller/ContentLinksController.php:53
 #: Controller/ContentsController.php:307
@@ -585,15 +589,27 @@ msgstr "Error occurred during saving."
 msgid "フォルダ編集"
 msgstr "Edit Folder"
 
+#: Controller/ContentFoldersController.php:81
+msgid "フォルダ「%s」を更新しました。"
+msgstr "Updated Folder \"%s\"."
+
 #: Controller/ContentFoldersController.php:89
 #: Controller/ContentLinksController.php:82
 #: Controller/ContentsController.php:338;375
 msgid "保存中にエラーが発生しました。入力内容を確認してください。"
 msgstr "Error occurred during saving. Please check entry."
 
+#: Controller/ContentLinksController.php:50
+msgid "リンク「%s」を追加しました。"
+msgstr "Added Link \"%s\"."
+
 #: Controller/ContentLinksController.php:64
 msgid "リンク編集"
 msgstr "Edit Link"
+
+#: Controller/ContentLinksController.php:74
+msgid "リンク「%s」を更新しました。"
+msgstr "Updated Link \"%s\"."
 
 #: Controller/ContentsController.php:59
 #: Controller/Component/BcContentsComponent.php:201
@@ -800,6 +816,18 @@ msgid ""
 "します。"
 msgstr ""
 "Succeeded connecting to the database, but duplicated prefix tables exist."
+
+#: Controller/InstallationsController.php:597
+msgid "データベースへの接続でエラーが発生しました。"
+msgstr "Error has occurred when connecting to the database."
+
+#: Controller/InstallationsController.php:603
+msgid ""
+"データベースへの接続でエラーが発生しました。データベース設定を見直してくださ"
+"い。<br>サーバー上に指定されたデータベースが存在しない可能性が高いです。"
+msgstr ""
+"Error has occurred when connecting to the database. Please re-check the "
+"database config.<br>It’s likely specified database is not on server."
 
 #: Controller/InstallationsController.php:661
 msgid "baserCMSのインストールを開始できません"
@@ -1256,6 +1284,10 @@ msgid "初期データのバージョンが違うか、初期データの構造�
 msgstr ""
 "Initial data’s version is different, or initial data’s structure is broken."
 
+#: Controller/ThemesController.php:202
+msgid "%s の初期データのロードに失敗しました。"
+msgstr "Failed loading of %s’s initial data."
+
 #: Controller/ThemesController.php:215
 #: Controller/Component/BcManagerComponent.php:571
 msgid "コアの初期データのロードに失敗しました。"
@@ -1519,6 +1551,10 @@ msgstr "User Group List"
 msgid "新規ユーザーグループ登録"
 msgstr "Add User Group"
 
+#: Controller/UsersController.php:133
+msgid "ようこそ、%s さん。"
+msgstr "Welcome, %s."
+
 #: Controller/UsersController.php:136
 msgid "アカウント名、パスワードが間違っています。"
 msgstr "Account name or password is wrong."
@@ -1715,6 +1751,10 @@ msgid ""
 msgstr ""
 "Failed placing Editor Template Image. Please check files folder's write "
 "permission."
+
+#: Controller/Component/BcManagerComponent.php:173
+msgid "コアプラグイン %s のインストールに失敗しました。"
+msgstr "Failed installing Core Plugin %s."
 
 #: Controller/Component/BcManagerComponent.php:284
 msgid "プラグインの有効化に失敗しました。"
@@ -1965,6 +2005,10 @@ msgstr "Follow Parent Folder’s settings (%s)"
 #: Model/ContentLink.php:38
 msgid "リンク先URLを入力してください。"
 msgstr "Please enter linked URL."
+
+#: Model/Dblog.php:50
+msgid "ログ内容を入力してください。"
+msgstr "Please enter log content."
 
 #: Model/EditorTemplate.php:57 Plugin/Feed/Model/FeedConfig.php:63
 msgid "テンプレート名を入力してください。"
@@ -2345,10 +2389,8 @@ msgid "複数設置可能なシンプルブログ"
 msgstr "Multi-Placable Simple Blog"
 
 #: Plugin/Blog/Config/setting.php:17
-#, fuzzy
-#| msgid "メールプラグイン"
 msgid "ブログプラグイン"
-msgstr "Mail Plugin"
+msgstr "Blog Plugin"
 
 #: Plugin/Blog/Config/setting.php:19
 #: Plugin/Blog/Controller/BlogTagsController.php:62
@@ -2357,8 +2399,6 @@ msgid "タグ一覧"
 msgstr "Tag List"
 
 #: Plugin/Blog/Config/setting.php:20
-#, fuzzy
-#| msgid "新規タグ登録"
 msgid "タグ登録"
 msgstr "Add Tag"
 
@@ -2977,6 +3017,7 @@ msgid "概要"
 msgstr "Summary"
 
 #: Plugin/Blog/View/BlogPosts/admin/form.php:132
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:46
 #: Plugin/Blog/View/Elements/admin/searches/blog_posts_index.php:28
 #: View/SiteConfigs/admin/form.php:255
 msgid "タグ"
@@ -3048,6 +3089,10 @@ msgid ""
 msgstr ""
 "Are you sure to delete this data?\n"
 "Articles related to thisTag won't be deleted."
+
+#: Plugin/Blog/View/Elements/blog_comments.php:66
+msgid "認証画像"
+msgstr "Authorization Image"
 
 #: Plugin/Blog/View/Elements/admin/blog_categories/index_list.php:27
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:30
@@ -3275,6 +3320,10 @@ msgstr "Eye-catch"
 msgid "カテゴリ"
 msgstr "Category"
 
+#: Plugin/Blog/View/Elements/admin/blog_posts/index_list.php:55
+msgid "コメント"
+msgstr "Comment"
+
 #: Plugin/Blog/View/Elements/admin/blog_posts/index_row.php:29
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:22
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_row.php:37
@@ -3448,7 +3497,6 @@ msgstr ""
 "check Blog’s Comment."
 
 #: Plugin/Blog/View/Elements/admin/helps/blog_posts_index.php:24
-#, fuzzy
 msgid ""
 "ブログのカテゴリを登録するには、サブメニューの「新規ブログカテゴリを登録」を"
 "クリックします。"
@@ -3482,6 +3530,10 @@ msgstr "Search"
 #: View/Elements/admin/searches/users_index.php:27
 msgid "クリア"
 msgstr "Clear"
+
+#: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:20
+msgid "%s 管理メニュー"
+msgstr "%s Management Menu"
 
 #: Plugin/Blog/View/Elements/admin/submenus/blog_posts.php:24
 msgid "記事一覧"
@@ -3957,12 +4009,19 @@ msgid ""
 "取得したデータを保持し、指定した時間の間、フィードのリクエストを抑制する仕組"
 "みです。指定した時間内は、新しい記事に更新されません</small> "
 msgstr ""
+"Click “Option” on bottom screen and set cache time to enough amount to "
+"reduce other site’s server load if you load its feed (it’s the same for "
+"reducing load for your site).<br /><small>Caution: Cache is system to "
+"restrict requests to feed that save gotten data for specified period. It "
+"won’t be updated to new article for specified period.</small>"
 
 #: Plugin/Feed/View/Elements/admin/helps/feed_details_form.php:24
 msgid ""
 "フィード内の特定のカテゴリの記事のみを取得するには、画面下の「オプション」を"
 "クリックし、カテゴリフィルターを登録します。"
 msgstr ""
+"Click “Option” on bottom screen and add Category Filter to get only Articles "
+"that has specified Category in Feed."
 
 #: Plugin/Feed/View/Elements/admin/submenus/feed_common.php:20
 msgid "フィード設定メニュー"
@@ -4005,6 +4064,8 @@ msgid ""
 "一つの表示フィードに対し、複数のフィードを読み込む際、フィードタイトルを表示"
 "させたい場合は、フィードタイトルを「|」で区切って入力してください。"
 msgstr ""
+"Please enter Feed Titles splitter by “|” to display Feed Title when loading "
+"multiple Feeds for one displaying Feed."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:77
 msgid "テンプレート上で、「feed_title」として参照できるようになります。"
@@ -4024,10 +4085,12 @@ msgid ""
 "カテゴリにインデックス番号を割り当てたい場合は、カテゴリ名を「|」で区切って入"
 "力してください。"
 msgstr ""
+"Please enter Category Name splitter by “|” to assign index number to "
+"Category."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:92
 msgid "先頭から順に「category_no」としてインデックス番号が割り振られます。"
-msgstr ""
+msgstr "Index numbers are assigned as “category_no” from top to bottom."
 
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:99
 #: View/EditorTemplates/admin/form.php:39
@@ -4050,23 +4113,26 @@ msgstr "Feed URL"
 #: Plugin/Feed/View/FeedDetails/admin/form.php:75
 msgid ""
 "負荷を軽減させる為、フィード情報をキャッシュさせる時間を選択してください。"
-msgstr ""
+msgstr "Please select cache time for Feed Information to reduce loading."
 
 #: Plugin/Feed/View/FeedDetails/admin/form.php:85
 msgid "特定のカテゴリのみ絞込みたい場合は、カテゴリ名を入力してください。"
-msgstr ""
+msgstr "Please enter Category Name to filter specific Category."
 
 #: Plugin/Feed/View/FeedDetails/admin/form.php:86
 msgid "複数のカテゴリを指定する場合は、カテゴリ名を|（半角縦棒）で区切ります。"
+msgstr "Split Category Name by | to specify multiple Categories."
+
+#: Plugin/Feed/View/Helper/FeedHelper.php:69;75
+msgid "メソッド"
+msgstr "Method"
+
+#: Plugin/Feed/View/Helper/FeedHelper.php:69;75
+msgid ""
+"このメソッドは非推奨となりました。代替機能はありません。この行を削除してくだ"
+"さい。"
 msgstr ""
-
-#: Plugin/Feed/View/Helper/FeedHelper.php:69
-msgid "メソッド：FeedHelper::saveCachetime()"
-msgstr "Method: FeedHelper::saveCachetime()"
-
-#: Plugin/Feed/View/Helper/FeedHelper.php:75
-msgid "メソッド：FeedHelper::cacheHeader()"
-msgstr "Method: FeedHelper::cacheHeader()"
+"This method is deprecated. There is no alternative. Please delete this line."
 
 #: Plugin/Mail/config.php:13 Plugin/Mail/Config/setting.php:24
 msgid "メールフォーム"
@@ -4205,149 +4271,151 @@ msgstr "Deleted %s’s Received Data No “%s” ."
 
 #: Plugin/Mail/Model/MailContent.php:61
 msgid "送信先名を入力してください。"
-msgstr ""
+msgstr "Please enter destination name."
 
 #: Plugin/Mail/Model/MailContent.php:62
 msgid "送信先名は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter destination name within 50 characters."
 
 #: Plugin/Mail/Model/MailContent.php:64
 msgid "自動返信メール件名[ユーザー宛]を入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to user]."
 
 #: Plugin/Mail/Model/MailContent.php:65
 msgid "自動返信メール件名[ユーザー宛]は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to user] within 50 characters."
 
 #: Plugin/Mail/Model/MailContent.php:67
 msgid "自動送信メール件名[管理者宛]を入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to admin]."
 
 #: Plugin/Mail/Model/MailContent.php:68
 msgid "自動返信メール件名[管理者宛]は50文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter auto-reply mail title [to admin] within 50 characters."
 
 #: Plugin/Mail/Model/MailContent.php:70
 msgid "メールフォームテンプレート名は半角のみで入力してください。"
-msgstr ""
+msgstr "Please enter Mail Form Template Name with only half-size characters."
 
 #: Plugin/Mail/Model/MailContent.php:71
 msgid "フォームテンプレート名は20文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Form Template Name within 20 characters."
 
 #: Plugin/Mail/Model/MailContent.php:73
 msgid "送信メールテンプレートは半角のみで入力してください。"
-msgstr ""
+msgstr "Please enter Sending Mail Template with only half-size characters."
 
 #: Plugin/Mail/Model/MailContent.php:74
 msgid "メールテンプレート名は20文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Mail Template Name within 20 characters."
 
 #: Plugin/Mail/Model/MailContent.php:76
 msgid "リダイレクトURLは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Redirect URL within 255 characters."
 
 #: Plugin/Mail/Model/MailContent.php:78;81
 msgid "送信先メールアドレスの形式が不正です。"
-msgstr ""
+msgstr "Destination Mail Address’ format is invalid."
 
 #: Plugin/Mail/Model/MailContent.php:79
 msgid "送信先メールアドレスは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Destination Mail Address within 255 characters."
 
 #: Plugin/Mail/Model/MailContent.php:82
 msgid "CC用送信先メールアドレスは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Destination Mail Address for CC within 255 characters."
 
 #: Plugin/Mail/Model/MailContent.php:84
 msgid ""
 "SSL通信を利用するには、システム設定で、事前にSSL通信用のWebサイトURLを指定し"
 "てください。"
 msgstr ""
+"Please specify Web site URL for SSL connection in System Settings before "
+"using SSL connection."
 
 #: Plugin/Mail/Model/MailContent.php:127
 msgid "送信先名を入力してください"
-msgstr ""
+msgstr "Please enter Destination Name"
 
 #: Plugin/Mail/Model/MailContent.php:128
 msgid "お問い合わせ頂きありがとうございます"
-msgstr ""
+msgstr "Thank you for inquiry"
 
 #: Plugin/Mail/Model/MailContent.php:129
 msgid "お問い合わせを頂きました"
-msgstr ""
+msgstr "Received inquiry"
 
 #: Plugin/Mail/Model/MailField.php:41
 msgid "項目名を入力してください。"
-msgstr ""
+msgstr "Please enter Item Name."
 
 #: Plugin/Mail/Model/MailField.php:42
 msgid "項目名は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Item Name within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:44
 msgid "フィールド名は半角英数字のみで入力してください。"
-msgstr ""
+msgstr "Please enter Field Name with only half-size alphabets and numbers."
 
 #: Plugin/Mail/Model/MailField.php:45
 msgid "入力されたフィールド名は既に登録されています。"
-msgstr ""
+msgstr "Entered Field Name is already registered."
 
 #: Plugin/Mail/Model/MailField.php:46
 msgid "フィールド名は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Field Name within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:48
 msgid "タイプを入力してください。"
-msgstr ""
+msgstr "Please enter Type."
 
 #: Plugin/Mail/Model/MailField.php:50
 msgid "項目見出しは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Field Header within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:52
 msgid "注意書きは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Caution within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:54
 msgid "前見出しは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Pre Header within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:56
 msgid "後見出しは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Post Header within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:58
 msgid "選択リストを入力してください。"
-msgstr ""
+msgstr "Please enter Selection List."
 
 #: Plugin/Mail/Model/MailField.php:60
 msgid "オプションは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Option within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:62
 msgid "クラス名は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Class Name within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:64
 msgid "区切り文字は20文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Split Characters within 20 characters."
 
 #: Plugin/Mail/Model/MailField.php:66
 msgid "初期値は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Default Value within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:68
 msgid "説明文は255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Description within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:70
 msgid "グループフィールドは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Group Field within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:72
 msgid "グループ入力チェックは255文字以内で入力してください。"
-msgstr ""
+msgstr "Please enter Group Input Check within 255 characters."
 
 #: Plugin/Mail/Model/MailField.php:84 View/Elements/admin/widgets/text.php:16
 msgid "テキスト"
@@ -4445,12 +4513,15 @@ msgstr "Half-width Character Conversion"
 #: Plugin/Mail/Model/MailMessage.php:621
 msgid "createTableNameの引数$mailContentIdはint型しか受けつけていません。"
 msgstr ""
+"Only int type is accepted for parameter $mailContentId to createTableName."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_configs_form.php:19
 msgid ""
 "メールフォームプラグイン共通の基本設定が行えます。<br />署名は、自動返信メー"
 "ルのフッターに挿入されます。"
 msgstr ""
+"You can do common basic settings for Mail Form Plugin.<br />Signature will "
+"be inserted on auto-reply mail’s footer."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_form.php:19
 msgid ""
@@ -4461,32 +4532,42 @@ msgid ""
 "><a class=\"outside-link\" href=\"http://basercms.net/manuals/designers/6."
 "html\" target=\"_blank\">メールフォームのテンプレートを変更する"
 msgstr ""
+"Registering basic settings for Mail Form Contents.<br />You can have "
+"different design for each Mail Form. If so, change Template Name by clicking "
+"“Option” on bottom screen.<br /><small>Caution: You have to create newly "
+"named Template and upload it to change Template Name.</small><br /><a "
+"class=“outside-link” href=“http://basercms.net/manuals/designers/6.html” "
+"target=“_blank”>メールフォームのテンプレートを変更する"
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:19
 msgid "メールフォームプラグインでは複数のメールフォームの登録が可能です。"
-msgstr ""
+msgstr "You can register multiple Mail Forms in Mail Form Plugin."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:21
 msgid ""
 "各メールフォームの表示を確認するには、操作欄の %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button on control filed to check each Mail Form’s display."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:22
 msgid ""
 "各メールフォームの内容を変更するには、操作欄の %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button on control filed to change each Mail Form’s content."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:23
 msgid ""
 "各メールフォームの送信先メールアドレスなど、基本設定を変更するには、操作欄の "
 "%s ボタンをクリックします。"
 msgstr ""
+"Click %s button on control field to change basic settings like each Mail "
+"Form’s destination mail address."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_contents_index.php:24
 msgid ""
 "メールフォームプラグインの基本設定を変更するには、サブメニューの「プラグイン"
 "基本設定」をクリックします。"
 msgstr ""
+"Click “Plugin Basic Settings” on Sub Menu to change Mail Form Plugin’s basic "
+"settings."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_form.php:19
 msgid ""
@@ -4494,22 +4575,30 @@ msgid ""
 "め、入力チェックの設定等、便利な機能を用意しています。<br />各項目の詳細につ"
 "いては、各ヘルプメッセージを確認してください。"
 msgstr ""
+"Registering Mail Form’s Field (Item).<br />There are useful functions like "
+"Item’s Type and Input Check’s settings.<br />Please check each help message "
+"for each Item’s detail."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_form.php:21
 msgid ""
 "一時的に利用しない場合には、画面下のオプションをクリックし、フィールドの利用"
 "状態を「無効」に設定します。"
 msgstr ""
+"Click Option on bottom screen and set Field’s Availability to “Disable” to "
+"not use it temporally."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:19
 msgid "メールフォームの各フィールド（項目）の管理が行えます。"
-msgstr ""
+msgstr "You can manage Mail Form’s each Field (Item)."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:21
 msgid ""
 "表左上の「並び替え」をクリックすると、各フィールドの操作欄に表示される%sマー"
 "クをドラッグアンドドロップして公開ページでの並び順を変更する事ができます。"
 msgstr ""
+"You can change ordering on Public Page by clicking “Sort” on upper left "
+"table and dragging & dropping %s mark displayed on each Field’s control "
+"field."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:21
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:28
@@ -4528,6 +4617,8 @@ msgid ""
 "フィールドの設定をそのままコピーするにはコピーしたいフィールドの操作欄にある "
 "%s をクリックします。"
 msgstr ""
+"Click %s on control field on the Filed to be copied, to copy Field’s setting "
+"as it is."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_fields_index.php:23
 msgid ""
@@ -4535,12 +4626,17 @@ msgid ""
 "よりダウンロードする事ができ、Microsoft Excel 等の表計算ソフトで確認する事が"
 "できます。"
 msgstr ""
+"You can download received content from Mail Form from “Download Received "
+"Mail CSV” in Sub Menu, and check it with spreadsheet software like Microsoft "
+"Excel etc."
 
 #: Plugin/Mail/View/Elements/admin/helps/mail_messages_index.php:19
 msgid ""
 "受信メールの詳細確認、削除が行えます。操作対象データの操作欄のボタンをクリッ"
 "クします。"
 msgstr ""
+"You can check detail and delete Received Mail. Click button on target data’s "
+"control field."
 
 #: Plugin/Mail/View/Elements/admin/mail_fields/index_list.php:30
 #: View/Elements/admin/permissions/index_list.php:31
@@ -4610,21 +4706,21 @@ msgstr "Add Mail Field"
 #: Plugin/Mail/View/Emails/text/mail_default.php:20
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:20
 msgid "お問い合わせを受け付けました"
-msgstr ""
+msgstr "Accepted inquiry"
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:24
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:24
 msgid "この度は、お問い合わせいただきありがとうございます。"
-msgstr ""
+msgstr "Thank you for inquiry."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:25
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:25
 msgid "送信内容は下記のようになっております。"
-msgstr ""
+msgstr "Sending content is as follows."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:27
 msgid "%s へのお問い合わせを受け付けました。"
-msgstr ""
+msgstr "Accepted inquiry to %s"
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:32
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:32
@@ -4634,31 +4730,31 @@ msgstr "Inquiry Content"
 #: Plugin/Mail/View/Emails/text/mail_default.php:41
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:41
 msgid "なお、このメールは自動返信メールとなっております。"
-msgstr ""
+msgstr "This mail is auto-replied mail, for your information."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:42
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:42
 msgid "メールを確認させて頂き次第、早急にご連絡させていただきます。"
-msgstr ""
+msgstr "We will contact you as soon as possible after checking mail."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:43
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:43
 msgid "恐れ入りますがしばらくお待ちください。"
-msgstr ""
+msgstr "Sorry, but please wait for a moment."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:45
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:45
 msgid "なお、このメールは自動転送システムです。"
-msgstr ""
+msgstr "This mail is auto-transferred mail, for you information."
 
 #: Plugin/Mail/View/Emails/text/mail_default.php:46
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:46
 msgid "受け付けた旨のメールもユーザーへ送られています。"
-msgstr ""
+msgstr "Mail that notify it was accepted is sent to user."
 
 #: Plugin/Mail/View/Emails/text/mobile/mail_default.php:27
 msgid "%sへのお問い合わせを受け付けました。"
-msgstr ""
+msgstr "Accepted inquiry to %s."
 
 #: Plugin/Mail/View/Helper/MaildataHelper.php:129
 msgid "Y年 m月 d日"
@@ -4670,7 +4766,7 @@ msgstr "Signature: Web Site Name"
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:35;44;55;67;76
 msgid "自動送信メールの署名に挿入されます。"
-msgstr ""
+msgstr "Inserted to signature on auto-sending mail."
 
 #: Plugin/Mail/View/MailConfigs/admin/form.php:39
 msgid "署名：WEBサイトURL"
@@ -4714,7 +4810,7 @@ msgstr "Destination Name"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:64
 msgid "自動返信メールの送信者に表示します。"
-msgstr ""
+msgstr "Displayed on Auto-Reply Mail Sender."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:68
 msgid "自動返信メール件名<br />[ユーザー宛]"
@@ -4722,7 +4818,7 @@ msgstr "Auto-Reply Mail Number<br />[To User]"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:73
 msgid "ユーザー宛の自動返信メールの件名に表示します。"
-msgstr ""
+msgstr "Displayed on Auto-Reply Mail to User."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:77
 msgid "自動送信メール件名<br />[管理者宛]"
@@ -4730,7 +4826,7 @@ msgstr "Auto-Reply Mail Number<br />[To Admin]"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:82
 msgid "管理者宛の自動送信メールの件名に表示します。"
-msgstr ""
+msgstr "Displayed on Auto-Reply Mail to Admin."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:86
 msgid "リダイレクトURL"
@@ -4738,11 +4834,11 @@ msgstr "Redirect URL"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:93
 msgid "メール送信後、別のURLにリダイレクトする場合、ここにURLを指定します。"
-msgstr ""
+msgstr "Specify URL here to redirect to another URL after sending mail."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:94
 msgid "httpからの完全なURLを指定してください。"
-msgstr ""
+msgstr "Specify complete URL from http."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:107
 msgid "フォーム受付期間"
@@ -4753,6 +4849,9 @@ msgid ""
 "公開期間とは別にフォームの受付期間を設定する事ができます。受付期間外にはエ"
 "ラーではなく受付期間外のページを表示します。"
 msgstr ""
+"You can set receiving period for Form besides Public Period. It displays "
+"Page that shows it’s out of accepting period instead of error if it was out "
+"of accepting period."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:122
 msgid "データベース保存"
@@ -4771,12 +4870,16 @@ msgid ""
 "メールフォームから送信された情報をデータベースに保存するかどうかを指定できま"
 "す。"
 msgstr ""
+"You can specify whether it will save sent information from Mail Form to "
+"database or not."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:130
 msgid ""
 "メールフォームから送信された情報をデータベースに保存したくない場合は、保存し"
 "ないを指定してください。"
 msgstr ""
+"Please choose “Don’t Save” If you don’t want to save sent information from "
+"Mail Form to database"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:136
 msgid "イメージ認証"
@@ -4786,6 +4889,8 @@ msgstr "Image Authentication"
 msgid ""
 "メールフォーム送信の際、表示された画像の文字入力させる事で認証を行ないます。"
 msgstr ""
+"Authorize with entering characters that are displayed image when sending "
+"Mail Form."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:150
 msgid "SSL通信"
@@ -4796,12 +4901,15 @@ msgid ""
 "SSL通信を利用するには、%s で、事前にSSL通信用のWebサイトURLを指定してくださ"
 "い。"
 msgstr ""
+"Please specify Web site URL for SSL connection before using SSL connecting."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:157
 msgid ""
 "管理者ページでSSLを利用する場合は、事前にSSLの申込、設定が必要です。また、SSL"
 "通信で利用するURLをシステム設定で指定している必要があります。"
 msgstr ""
+"You have to request and set SSL before using SSL on Admin Page. Also, You "
+"have to specify URL used by SSL connection in System Settings."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:162
 msgid "BCC用送信先メールアドレス"
@@ -4809,17 +4917,19 @@ msgstr "Destination Mail Address for BCC"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:168
 msgid "BCC（ブラインドカーボンコピー）用のメールアドレスを指定します。"
-msgstr ""
+msgstr "Specify mail address for BCC (Blind Carbon Copy)."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:169
 msgid "複数の送信先を指定するには、カンマで区切って入力します。"
-msgstr ""
+msgstr "Enter splitting by commas to specify multiple destinations."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:180
 msgid ""
 "メールコンテンツで利用するウィジェットエリアを指定します。<br />ウィジェット"
 "エリアは「%s」より追加できます。"
 msgstr ""
+"Specify Widget Area used by Mail Contents.<br />Widget Area can be added "
+"from “%s”."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:180
 #: View/SiteConfigs/admin/form.php:180
@@ -4832,7 +4942,7 @@ msgstr "Mail Form Template Name"
 
 #: Plugin/Mail/View/MailContents/admin/form.php:196
 msgid "メールフォーム本体のテンプレートを指定します。"
-msgstr ""
+msgstr "Specify Template for Mail Form body."
 
 #: Plugin/Mail/View/MailContents/admin/form.php:203
 msgid "送信メールテンプレート名"
@@ -4847,14 +4957,18 @@ msgid ""
 "本当にこのデータを削除してもいいですか？\\n※ 現在このメールフォームに設定され"
 "ているフィールドは全て削除されます。"
 msgstr ""
+"Are you sure to delete this data?\\nCaution: All the Fields se to this Mail "
+"Form will be deleted."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:49
 msgid "重複しない半角英数字で入力してください。"
-msgstr ""
+msgstr "Please enter with half-size alphabets and numbers without duplicates."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:58
 msgid "項目を特定しやすいわかりやすい名前を入力してください。日本語可。"
 msgstr ""
+"Please enter understandable name that can be identify Item. Japanese are "
+"allowed."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:69
 msgid ""
@@ -4863,12 +4977,19 @@ msgid ""
 "\t\t\t\t\t\t\t<small>※ 前バージョンとの互換性の為、フィールド名を「email_1」"
 "とした場合、Eメールを選択しなくても自動返信メールを送信します。</small>"
 msgstr ""
+"It will send auto-reply mail to entered e-mail when sending Mail Form if you "
+"select E-mail.<br />\n"
+"\t\t\t\t\t\t\t<small>Caution: It will send auto-reply mail if you didn’t "
+"select E-mail if you set Field Name to “email_1” for compatibility to "
+"previous versions."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:71
 msgid ""
 "自動補完郵便番号の場合は、選択リストに都道府県のフィールドと住所のフィールド"
 "のリストを指定します。"
 msgstr ""
+"Specify Prefecture Field and Address Field List to Selection List for Auto-"
+"Completion Postal Number."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:77
 msgid "項目見出し"
@@ -4878,7 +4999,7 @@ msgstr "Item Header"
 msgid ""
 "グループとして設定する場合、同グループの２番目以降のフィールドについてこの項"
 "目の入力は不要です。"
-msgstr ""
+msgstr "This Item’s Input is unnecessary "
 
 #: Plugin/Mail/View/MailFields/admin/form.php:86
 msgid "必須マーク"
@@ -4922,17 +5043,19 @@ msgstr "Selection List"
 msgid ""
 "ラジオボタン、セレクトボックス、マルチチェックボックスの場合の選択リスト指定"
 "します。"
-msgstr ""
+msgstr "Specify Selection List for Radio Button, Select Box, Multi-check Box."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:136
 msgid ""
 "自動補完郵便番号の場合は、都道府県のフィールドと住所のフィールドのリストを指"
 "定します。"
 msgstr ""
+"Specify Prefecture Field and Address Field List for Auto-Completion Postal "
+"Number."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:137
 msgid "リストは　|　で区切って入力します。"
-msgstr ""
+msgstr "Enter List splitter by | ."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:143
 msgid "表示サイズ"
@@ -4944,7 +5067,7 @@ msgstr "Line Number"
 
 #: Plugin/Mail/View/MailFields/admin/form.php:155
 msgid "テキストボックスの場合の行数を指定します。"
-msgstr ""
+msgstr "Specify line number for Text Box."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:159
 msgid "最大値"
@@ -5160,6 +5283,12 @@ msgstr "Public Period"
 msgid "保存者"
 msgstr "Saver"
 
+#: Plugin/Uploader/View/Elements/admin/uploader_files/index.php:43
+#, fuzzy
+#| msgid "フィード情報編集"
+msgid "ファイル情報編集"
+msgstr "Edit Feed Info"
+
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_list.php:31;59
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_panel.php:34
 msgid "カテゴリ指定なし"
@@ -5211,6 +5340,12 @@ msgstr "Crp to Square"
 msgid "携帯サイズ（大）"
 msgstr "Phone Size (Large)"
 
+#: Plugin/Uploader/View/UploaderConfigs/admin/index.php:70
+#, fuzzy
+#| msgid "携帯サイズ（大）"
+msgid "携帯サイズ（小）"
+msgstr "Phone Size (Large)"
+
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:92
 msgid "レイアウトタイプ"
 msgstr "Layout Type"
@@ -5249,6 +5384,11 @@ msgstr "Folder Template"
 #: View/Tools/admin/index.php:29
 msgid "固定ページテンプレート"
 msgstr "Static Page Template"
+
+#: View/ContentLinks/admin/edit.php:21
+#: View/ThemeConfigs/admin/form.php:64;73;82;91;100;109
+msgid "リンク先URL"
+msgstr "Linked URL"
 
 #: View/Contents/admin/ajax_contents_info.php:18
 msgid "公開中： %s ページ"
@@ -5423,7 +5563,7 @@ msgstr ""
 msgid "制限"
 msgstr "Restriction"
 
-#: View/Elements/admin/favorite_menu.php:24;25
+#: View/Elements/admin/favorite_menu.php:24;25;50
 msgid "よく使う項目"
 msgstr "Favorite Items"
 
@@ -5482,6 +5622,12 @@ msgstr "< Prev"
 msgid "次へ >"
 msgstr "Next >"
 
+#: View/Elements/admin/permission.php:19
+#, fuzzy
+#| msgid "新規アクセス制限設定登録"
+msgid "アクセス制限登録"
+msgstr "Add Access Restriction Settings"
+
 #: View/Elements/admin/permission.php:23
 #: View/Elements/admin/searches/users_index.php:21
 #: View/Permissions/admin/form.php:30
@@ -5517,6 +5663,18 @@ msgstr "Update Manual"
 #: View/Elements/admin/toolbar.php:51
 msgid "baserCMS管理システム"
 msgstr "baserCMS Management System"
+
+#: View/Elements/admin/toolbar.php:64
+msgid ""
+"インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻"
+"しましょう。"
+msgstr ""
+
+#: View/Elements/admin/toolbar.php:66
+msgid ""
+"デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しま"
+"しょう。"
+msgstr ""
 
 #: View/Elements/admin/toolbar.php:66
 msgid "デバッグモード"
@@ -7886,7 +8044,7 @@ msgid ""
 "してください。<br>MySQL / PostgreSQLの場合は、データベースが存在し初期化され"
 "ている必要があります。<br><strong>既に用意したデータベースにデータが存在する"
 "場合は、初期データで上書きされてしまうので注意してください。<br>プレフィック"
-"スを活用しましょう。"
+"スを活用しましょう。</strong>"
 msgstr ""
 
 #: View/Installations/admin/step3.php:174
@@ -8556,10 +8714,6 @@ msgstr "Text Hover"
 msgid "ロゴ"
 msgstr "Logo"
 
-#: View/ThemeConfigs/admin/form.php:64;73;82;91;100;109
-msgid "リンク先URL"
-msgstr "Linked URL"
-
 #: View/ThemeConfigs/admin/form.php:68
 msgid "メインイメージ１"
 msgstr "Main Image 1"
@@ -8690,10 +8844,8 @@ msgid "ツリー構造リセット"
 msgstr "Reset Tree Structures"
 
 #: View/Tools/admin/index.php:25
-#, fuzzy
-#| msgid "コンテンツのツリー構造をリセットしました。"
 msgid "コンテンツ管理のツリー構造をリセットします。本当によろしいですか？"
-msgstr "Reset Content's tree structures."
+msgstr "Resetting Content's tree structures. Are you sure?"
 
 #: View/Tools/admin/index.php:30
 msgid ""
@@ -8739,24 +8891,21 @@ msgid "アセットファイル削除"
 msgstr "Delete Asset File"
 
 #: View/Tools/admin/index.php:38
-#, fuzzy
-#| msgid "管理システム用のアセットファイルを削除しました。"
 msgid ""
 "サイトルートに配置された、管理システム用のアセットファイルを削除します。本当"
 "によろしいですか？"
-msgstr "Deleted Asset File for Admin System."
+msgstr ""
+"Deleting Asset File for Admin System placed on Site Root. Are you sure?"
 
 #: View/Tools/admin/index.php:39
 msgid "アセットファイル再配置"
 msgstr "Replace Asset File"
 
 #: View/Tools/admin/index.php:39
-#, fuzzy
-#| msgid "管理システム用のアセットファイルを再配置しました。"
 msgid ""
 "管理システム用のアセットファイルをサイトルートに再配置します。本当によろしい"
 "ですか？"
-msgstr "Replaced Asset File for Admin System."
+msgstr "Replacing Asset File for Admin System to Site Root. Are you sure?"
 
 #: View/Tools/admin/index.php:43
 msgid "スペシャルサンクスクレジット"
@@ -9132,6 +9281,12 @@ msgstr "Show Title"
 #: View/WidgetAreas/admin/form.php:116
 msgid "利用中のウィジェット"
 msgstr "Using Widgets"
+
+#~ msgid "メソッド：FeedHelper::saveCachetime()"
+#~ msgstr "Method: FeedHelper::saveCachetime()"
+
+#~ msgid "メソッド：FeedHelper::cacheHeader()"
+#~ msgstr "Method: FeedHelper::cacheHeader()"
 
 #~ msgid ""
 #~ "登録日<br />\n"
