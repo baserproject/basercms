@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-02-28 18:07+0900\n"
+"PO-Revision-Date: 2018-03-01 23:02+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -615,7 +615,7 @@ msgstr "Updated Link \"%s\"."
 #: Controller/Component/BcContentsComponent.php:201
 #: View/Elements/admin/submenus/contents.php:23
 msgid "コンテンツ一覧"
-msgstr "Contents List"
+msgstr "Content List"
 
 #: Controller/ContentsController.php:62
 #: View/Elements/admin/submenus/contents.php:27
@@ -624,11 +624,11 @@ msgstr "Trash"
 
 #: Controller/ContentsController.php:150
 msgid "ツリー形式"
-msgstr "Tree"
+msgstr "Tree Format"
 
 #: Controller/ContentsController.php:150
 msgid "表形式"
-msgstr "Table"
+msgstr "Table Format"
 
 #: Controller/ContentsController.php:300
 msgid "「%s」のエイリアス「%s」を追加しました。"
@@ -636,7 +636,7 @@ msgstr "Added “%s”’s Alias \"%s\"."
 
 #: Controller/ContentsController.php:318
 msgid "コンテンツ編集"
-msgstr "Edit Contents"
+msgstr "Edit Content"
 
 #: Controller/ContentsController.php:328
 msgid "「%s」を更新しました。"
@@ -1160,7 +1160,7 @@ msgstr "E-mail Template"
 
 #: Controller/ThemeFilesController.php:69
 msgid "コンテンツテンプレート"
-msgstr "Contents Template"
+msgstr "Content Template"
 
 #: Controller/ThemeFilesController.php:70
 msgid "スタイルシート"
@@ -1187,7 +1187,7 @@ msgstr "Failed creating File %s."
 
 #: Controller/ThemeFilesController.php:253
 msgid "[%s] %s 作成"
-msgstr "[%s] Create %s"
+msgstr "[%s] Add %s"
 
 #: Controller/ThemeFilesController.php:323
 msgid "ファイル %s を更新しました。"
@@ -2944,7 +2944,7 @@ msgstr ""
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:152
 msgid "コンテンツテンプレート名"
-msgstr "Contents Template Name"
+msgstr "Content Template Name"
 
 #: Plugin/Blog/View/BlogContents/admin/form.php:161
 #: Plugin/Feed/View/FeedConfigs/admin/form.php:104
@@ -4532,7 +4532,7 @@ msgid ""
 "><a class=\"outside-link\" href=\"http://basercms.net/manuals/designers/6."
 "html\" target=\"_blank\">メールフォームのテンプレートを変更する"
 msgstr ""
-"Registering basic settings for Mail Form Contents.<br />You can have "
+"Registering basic settings for Mail Form Content.<br />You can have "
 "different design for each Mail Form. If so, change Template Name by clicking "
 "“Option” on bottom screen.<br /><small>Caution: You have to create newly "
 "named Template and upload it to change Template Name.</small><br /><a "
@@ -5086,16 +5086,18 @@ msgid ""
 "Eメール比較チェック：利用するには「Eメール」タイプのフィールドを二つ作成し、"
 "グループ入力チェックに任意の同じ値を入力します。"
 msgstr ""
+"Email Comparison Check: Create two “E-mail” Type Fields and Enter the same "
+"arbitrary value to Group Input Check to use it. "
 
 #: Plugin/Mail/View/MailFields/admin/form.php:182
 msgid ""
 "グループチェック：グループで連帯して入力チェックを行うには同じグループ名を入"
 "力します。"
-msgstr ""
+msgstr "Group Check: Enter the same Group Name to check input by Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:183
 msgid "日付チェック：日付形式かどうかのチェックです。"
-msgstr ""
+msgstr "Date Check: Checks whether it’s date format or not."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:184
 msgid ""
@@ -5103,6 +5105,8 @@ msgid ""
 "プション項目に、上限となるサイズを次の形式のように | 区切りで入力します。"
 "「maxFileSize|10（単位：MB）」"
 msgstr ""
+"File Upload Size Restriction: Select “File” Type and enter upper limit size "
+"to Option Item like this format: “maxFileSize|10” (unit: MB) to use it."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:185
 msgid ""
@@ -5110,10 +5114,12 @@ msgid ""
 "項目に、アップロードを許可する拡張子を次の形式のように | 区切りで入力します。"
 "「fileExt|jpg,pdf」"
 msgstr ""
+"File Extension Check: Select “File” Type and enter extensions allowed to be "
+"uploaded to Option Item like this format: “fileExt|jpg,pdf” to use it."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:198
 msgid "各項目を同じグループとするには同じグループ名を入力します。"
-msgstr ""
+msgstr "Enter the same Group Name to treat each item to be the same Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:199;214
 msgid "半角英数字で入力してください。"
@@ -5125,13 +5131,15 @@ msgstr "Group Input Check"
 
 #: Plugin/Mail/View/MailFields/admin/form.php:212
 msgid "グループで連帯して入力チェックを行うには同じグループ名を入力します。"
-msgstr ""
+msgstr "Enter the same Group Name to check input by Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:213
 msgid ""
 "グループ内の項目が一つでもエラーとなるとグループ内の全ての項目にエラーを意味"
 "する背景色が付きます。"
 msgstr ""
+"Background color that means error will be added to all Items in the Group if "
+"there is any error in Items in the Group."
 
 #: Plugin/Mail/View/MailFields/admin/form.php:227
 msgid "クラス名"
@@ -5172,7 +5180,7 @@ msgstr "CSV Downloding"
 
 #: Plugin/Mail/View/MailMessages/admin/view.php:71
 msgid "受信メール NO「%s」を削除してもいいですか？"
-msgstr ""
+msgstr "Are you sure you want to delete Receiving Mail NO “%s@?"
 
 #: Plugin/Uploader/config.php:13
 msgid "アップローダー"
@@ -5180,7 +5188,7 @@ msgstr "Uploader"
 
 #: Plugin/Uploader/config.php:14
 msgid "Webページやブログ記事で、画像等のファイルを貼り付ける事ができます。"
-msgstr ""
+msgstr "You can paste files like images on Web Page or Blog Article."
 
 #: Plugin/Uploader/config.php:20
 msgid "登録ボタンをクリックする前に、サーバー上の "
@@ -5226,11 +5234,11 @@ msgstr "Saved Uploader settings."
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:119
 msgid "%sを作成し、書き込み権限を与えてください"
-msgstr ""
+msgstr "Please create %s and give write permission to it"
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:122
 msgid "作成し、%sに書き込み権限を与えてください"
-msgstr "Please Create %s and give write permission"
+msgstr "Please create %s and give write permission to it"
 
 #: Plugin/Uploader/Controller/UploaderFilesController.php:124;130
 msgid "%sに書き込み権限を与えてください"
@@ -5246,11 +5254,11 @@ msgstr "Name"
 
 #: Plugin/Uploader/View/Elements/admin/searches/uploader_files_index.php:25
 msgid "画像"
-msgstr ""
+msgstr "Image"
 
 #: Plugin/Uploader/View/Elements/admin/searches/uploader_files_index.php:25
 msgid "画像以外"
-msgstr ""
+msgstr "Non-Image"
 
 #: Plugin/Uploader/View/Elements/admin/submenus/uploader.php:16
 msgid "アップローダーメニュー"
@@ -5284,10 +5292,8 @@ msgid "保存者"
 msgstr "Saver"
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index.php:43
-#, fuzzy
-#| msgid "フィード情報編集"
 msgid "ファイル情報編集"
-msgstr "Edit Feed Info"
+msgstr "Edit File Info"
 
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_list.php:31;59
 #: Plugin/Uploader/View/Elements/admin/uploader_files/index_panel.php:34
@@ -5341,10 +5347,8 @@ msgid "携帯サイズ（大）"
 msgstr "Phone Size (Large)"
 
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:70
-#, fuzzy
-#| msgid "携帯サイズ（大）"
 msgid "携帯サイズ（小）"
-msgstr "Phone Size (Large)"
+msgstr "Phone Size (Small)"
 
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:92
 msgid "レイアウトタイプ"
@@ -5371,6 +5375,8 @@ msgid ""
 "管理者以外のユーザーは、自分がアップロードしたファイル以外、編集・削除をでき"
 "ないようにします。"
 msgstr ""
+"It will make it so that Users other than Admins will not be able to edit or "
+"delete files that are not uploaded by themselves."
 
 #: Plugin/Uploader/View/UploaderConfigs/admin/index.php:118
 msgid "更　新"
@@ -5412,7 +5418,7 @@ msgstr "Data is not registered."
 
 #: View/Dblogs/admin/ajax_index.php:36
 msgid "最近の動きのログを削除します。いいですか？"
-msgstr ""
+msgstr "Deleting Recent Activity’s log, are you sure?"
 
 #: View/EditorTemplates/admin/form.php:46
 msgid "アイコン画像"
@@ -5422,7 +5428,7 @@ msgstr "Icon Image"
 #: View/Elements/admin/helps/theme_files_index.php:34
 #: View/Elements/admin/submenus/theme_files.php:20
 msgid "コンテンツ"
-msgstr "Contents"
+msgstr "Content"
 
 #: View/Elements/crumbs.php:22
 msgid "ホーム"
@@ -5433,6 +5439,7 @@ msgid ""
 "Google Maps を読み込めません。管理画面で正しい住所が設定されているか確認して"
 "ください。"
 msgstr ""
+"Couldn’t load Google Maps. Please check right address is set in Admin Screen."
 
 #: View/Elements/site_search_form.php:29
 #: View/Elements/admin/widgets/search.php:16
@@ -5455,7 +5462,7 @@ msgstr "Last Updated Date"
 
 #: View/Elements/admin/content_fields.php:122
 msgid "関連コンテンツ"
-msgstr "Related Contents"
+msgstr "Related Content"
 
 #: View/Elements/admin/content_fields.php:124
 msgid "その他情報"
@@ -5472,11 +5479,11 @@ msgstr "Default"
 
 #: View/Elements/admin/content_fields.php:198
 msgid "親フォルダの設定を継承し非公開状態となっています"
-msgstr ""
+msgstr "It’s set to be Private by inheriting Parent Folder’s settings."
 
 #: View/Elements/admin/content_fields.php:202
 msgid "親フォルダの設定を継承し公開期間が設定されている状態となっています"
-msgstr ""
+msgstr "Public Period is set by inheriting Parent Folder’s settings."
 
 #: View/Elements/admin/content_fields.php:268
 msgid "その他設定"
@@ -5516,11 +5523,11 @@ msgstr "Main Site"
 
 #: View/Elements/admin/content_fields.php:346
 msgid "エイリアス作成"
-msgstr "Create Alias"
+msgstr "Add Alias"
 
 #: View/Elements/admin/content_fields.php:347
 msgid "コピー作成"
-msgstr "Create Copy"
+msgstr "Add Copy"
 
 #: View/Elements/admin/content_fields.php:364
 msgid "未登録"
@@ -5557,6 +5564,8 @@ msgid ""
 "けが外れてしまっている状態です。<br>プラグインがまだ存在する場合は有効にして"
 "ください。"
 msgstr ""
+"Type “Default” isn’t associated to Type because of disable process of Plugin."
+"<br>Enable Plugin if it still exists."
 
 #: View/Elements/admin/contents_menu.php:29
 #: View/Elements/admin/user_groups/index_row.php:22
@@ -5569,7 +5578,7 @@ msgstr "Favorite Items"
 
 #: View/Elements/admin/favorite_menu.php:35
 msgid "新規登録ボタンよりよく使う項目を登録しておく事ができます。"
-msgstr ""
+msgstr "You can register Favorite Items by Add button."
 
 #: View/Elements/admin/favorite_menu.php:43
 msgid ""
@@ -5577,6 +5586,9 @@ msgid ""
 "事ができます。<br />また、登録済の項目を右クリックする事で編集・削除が行えま"
 "す。"
 msgstr ""
+"You can make it easier to link to currently opened Page by Add button in "
+"Favorite Items.<br />Also, you can edit or delete registered Item by right "
+"clicking it."
 
 #: View/Elements/admin/footer.php:24
 msgid "baserCMSロゴ"
@@ -5623,10 +5635,8 @@ msgid "次へ >"
 msgstr "Next >"
 
 #: View/Elements/admin/permission.php:19
-#, fuzzy
-#| msgid "新規アクセス制限設定登録"
 msgid "アクセス制限登録"
-msgstr "Add Access Restriction Settings"
+msgstr "Register Access Restriction"
 
 #: View/Elements/admin/permission.php:23
 #: View/Elements/admin/searches/users_index.php:21
@@ -5669,12 +5679,16 @@ msgid ""
 "インストールモードです。運営を開始する前にシステム設定よりノーマルモードに戻"
 "しましょう。"
 msgstr ""
+"Installation Mode now. Set back to Normal Mode in System Settings before "
+"starting operation."
 
 #: View/Elements/admin/toolbar.php:66
 msgid ""
 "デバッグモードです。運営を開始する前にシステム設定よりノーマルモードに戻しま"
 "しょう。"
 msgstr ""
+"Debug Mode now. Set back to Normal Mode in System Settings before starting "
+"operation."
 
 #: View/Elements/admin/toolbar.php:66
 msgid "デバッグモード"
@@ -5702,7 +5716,7 @@ msgstr "System Navigation"
 
 #: View/Elements/admin/contents/form_alias.php:34
 msgid "元コンテンツ"
-msgstr "Base Contents"
+msgstr "Base Content"
 
 #: View/Elements/admin/contents/index_list.php:18
 msgid "処理中にエラーが発生しました。"
@@ -5711,7 +5725,7 @@ msgstr "Error occurred during processing."
 #: View/Elements/admin/contents/index_list.php:79
 #: View/Elements/admin/search_indices/index_list.php:82
 msgid "コンテンツ内容"
-msgstr "Contents Body"
+msgstr "Content Body"
 
 #: View/Elements/admin/contents/index_list_table.php:36
 msgid " タイプ"
@@ -5767,6 +5781,8 @@ msgid ""
 "コンテンツ管理では、固定ページや、ブログやメールフォームなど、Webページを生成"
 "するコンテンツの新規追加や編集・削除などが行えます。"
 msgstr ""
+"You can add, edit or delete contents that generate Web page like Static "
+"Page, Blog, Mail Form in Manage Contents."
 
 #: View/Elements/admin/helps/contents_index.php:21
 msgid ""
@@ -5774,6 +5790,9 @@ msgid ""
 "行うには、ツリー形式を選択します。また、削除や公開設定についての一括処理や、"
 "コンテンツの検索を行うには、表形式を選択します。"
 msgstr ""
+"You can select “Tree Format” and “Table Format” in List. Select Tree Format "
+"to add new Content. Also, Select Table Format to Bulk Process deleting and "
+"publishing or searching Contents."
 
 #: View/Elements/admin/helps/contents_index.php:22
 msgid ""
@@ -5781,6 +5800,9 @@ msgid ""
 "た機能ボタン %s をクリックするか、フォルダを指定してサブメニューの「コンテン"
 "ツ新規追加」をクリックし機能メニューを表示します。"
 msgstr ""
+"Click function button %s placed on the right side of Folder’s name, or "
+"specify Folder and click “Add Content” in Sub Menu and display Function Menu "
+"in Tree Format to Add Contents."
 
 #: View/Elements/admin/helps/contents_index.php:23
 msgid ""
@@ -5788,6 +5810,9 @@ msgid ""
 "開・非公開切り替え、名称変更、編集画面への遷移、コピー、ゴミ箱に入れる等の機"
 "能が提供されています。"
 msgstr ""
+"You can add various Contents, and Function like Switching between Public and "
+"Private, Renaming, Moving to Edit Screen, Copying, Moving to Trash are "
+"provided for specified Contents in Function Menu."
 
 #: View/Elements/admin/helps/contents_index.php:24
 msgid ""
@@ -5797,6 +5822,11 @@ msgid ""
 "の権限を保つ場合のみです。<br>※ メニューとの連携はテーマがその機能に対応して"
 "いる必要があります。"
 msgstr ""
+"Structure and Order are cooperated to Front End side Menu in Tree "
+"structures. You can move by specifying target Content’s Icon by dragging & "
+"dropping to change order or folder.<br>Caution: You can only drag & drop if "
+"you hold permission.<br>Caution: Theme must be compatible to the function to "
+"cooperate with Menu."
 
 #: View/Elements/admin/helps/dashboard_index.php:19
 msgid ""
@@ -5804,6 +5834,9 @@ msgid ""
 "baserCMS公式の更新情報（baserCMSニュース）、現在のページ状況、管理画面の利用"
 "履歴（最近の動き）が表示されます。"
 msgstr ""
+"Dashboard is the first Page when you logged in. baserCMS official update "
+"info (baserCMS News), current Page status, Admin Screen’s usage (Recent "
+"Activity) are displayed by default."
 
 #: View/Elements/admin/helps/editor_templates_form.php:19
 msgid ""
@@ -5811,6 +5844,8 @@ msgid ""
 "には、画像も貼り付ける事ができます。<br />また、アイコン画像は、横幅100pxが推"
 "奨です。"
 msgstr ""
+"Register Editor’s Template used by Static Page.<br />You can paste images to "
+"Template.<br />Also, 100px width is recommended for icon image."
 
 #: View/Elements/admin/helps/editor_templates_index.php:19
 msgid ""
@@ -5818,64 +5853,77 @@ msgid ""
 "<br />あらかじめ、id や classを記述したHTMLのブロックを雛形として登録したい場"
 "合や、画像をレイアウトしたブロックを登録したい場合などに利用してください。"
 msgstr ""
+"You can mange Editor’s Template used by Static Page etc.<br />Use this if "
+"you want to register HTML blocks with id or class as template, or if you "
+"want to register blocks that lay out images."
 
 #: View/Elements/admin/helps/pages_form.php:19
 msgid "Webページとして表示させる「ページ」の登録を行います。"
-msgstr ""
+msgstr "Register “Page” that are displayed as Web page."
 
 #: View/Elements/admin/helps/pages_form.php:21
 msgid "ワード感覚でWebページの作成を行う事ができます。"
-msgstr ""
+msgstr "You can create Web page like creating with Word."
 
 #: View/Elements/admin/helps/pages_form.php:22
 msgid ""
 "タイトル・説明文には、ページを特徴づけるキーワードを入れましょう。検索エンジ"
 "ン対策として有用です。"
 msgstr ""
+"Enter keywords to illustrate Page on Title, Description. It’s useful as "
+"Search Engine Optimization."
 
 #: View/Elements/admin/helps/pages_form.php:23
 msgid ""
 "ページを作成してもすぐに公開しない場合は、公開状態を「非公開」にしておきま"
 "す。"
 msgstr ""
+"Set Public Status to “Private” if you don’t want to publish Page as soon as "
+"you created it."
 
 #: View/Elements/admin/helps/pages_form.php:24
 msgid ""
 "「非公開」にしたページを確認するには、画面下の「保存前確認」ボタンをクリック"
 "します。"
 msgstr ""
+"Click “Check Before Save” button on bottom screen to check “Private” Page."
 
 #: View/Elements/admin/helps/pages_form.php:25
 msgid ""
 "エディタをソースモードに切り替えると、記事本文中にPHPプログラムを記述できま"
 "す。"
 msgstr ""
+"You can write PHP program on Article body by switching Editor to Source Mode."
 
 #: View/Elements/admin/helps/pages_index.php:19
 msgid "ページ管理では、Webページの新規追加や編集・削除などが行えます。"
-msgstr ""
+msgstr "You can add, edit or delete Web page in Manage Page."
 
 #: View/Elements/admin/helps/pages_index.php:21
 msgid ""
 "新しいページを登録するには、一覧左上の「新規追加」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Add” button on upper left List to register new Page."
 
 #: View/Elements/admin/helps/pages_index.php:22
 msgid ""
 "公開状態を設定する事ができ、公開中のページを確認するには操作欄の %s ボタンを"
 "クリックします。"
 msgstr ""
+"You can set Public Status. Click %s button on control field to check Public "
+"Page."
 
 #: View/Elements/admin/helps/pages_index.php:23
 msgid ""
 "各ページは分類分け用の「カテゴリー」に属させる事ができ、階層構造のURLを実現で"
 "きます。"
 msgstr ""
+"Each Page can belongs to “Category” for grouping, and you can have directory "
+"structured URL."
 
 #: View/Elements/admin/helps/pages_index.php:24
 msgid ""
 "管理画面内では、公開状態、カテゴリ等によりページの検索を行う事ができます。"
-msgstr ""
+msgstr "You can search Page by Pubic Status, Category in Admin Screen."
 
 #: View/Elements/admin/helps/pages_index.php:25
 msgid ""
@@ -5884,6 +5932,10 @@ msgid ""
 "事ができます。<br /><small>※ この並び順はウィジェットのローカルナビゲーション"
 "等に反映されます。"
 msgstr ""
+"You can change displaying order of data on Public Page by dragging & "
+"dropping %s mark on each data’s control field by clicking “Sort” on upper "
+"left of List.<br /><small>Caution: This order applies to Widget’s Local "
+"Navigation etc."
 
 #: View/Elements/admin/helps/pages_index.php:26
 msgid ""
@@ -5894,31 +5946,38 @@ msgid ""
 "etc/5.html\" class=\"outside-link\" target=\"_blank\">ページテンプレートの読"
 "込について</a>"
 msgstr ""
+"You can upload files and import to database in bulk for creators familiar "
+"with Authoring Tool.<br />Upload Page Template to specific Folder, and run "
+"“Load Page Template” in Sub Menu to load Page.<br /><a href=“http://basercms."
+"net/manuals/etc/5.html” class=“outside-link” target=“_blank”>ページテンプレー"
+"トの読込について</a>"
 
 #: View/Elements/admin/helps/pages_index.php:29
 msgid "（例）ページ名「about」として作成したページを表示させる為のURL"
-msgstr ""
+msgstr "(Example) URL for displaying Page created as Page Name “about”."
 
 #: View/Elements/admin/helps/pages_index.php:30;32
 msgid "baserCMS設置URL"
-msgstr "baserCMS Deployed URL"
+msgstr "baserCMS Deploying URL"
 
 #: View/Elements/admin/helps/pages_index.php:31
 msgid ""
 "（例）カテゴリ名「company」に属する、ページ名「about」として作成したページを"
 "表示させる為のURL"
 msgstr ""
+"(Example) URL for displaying Page created as Page Name “about” that belongs "
+"to Category Name “company”."
 
 #: View/Elements/admin/helps/permissions_form.php:19
 msgid "ユーザーグループごとのアクセス制限を登録します。"
-msgstr ""
+msgstr "Register Access Restriction for each User Group."
 
 #: View/Elements/admin/helps/permissions_form.php:21
 #: View/Elements/admin/helps/permissions_index.php:21
 msgid ""
 "ルールを何も追加しない状態では、全てのユーザーが全てのコンテンツにアクセスで"
 "きるようになっています。"
-msgstr ""
+msgstr "Every User can access every Content when Rules were not added."
 
 #: View/Elements/admin/helps/permissions_form.php:22
 #: View/Elements/admin/helps/permissions_index.php:23
@@ -5926,14 +5985,16 @@ msgid ""
 "URL設定ではワイルドカード（*）を利用して一定のURL階層内のコンテンツに対し一度"
 "に設定を行う事ができます。"
 msgstr ""
+"You can do settings in bulk to Content in fixed URL directories by using "
+"wildcard (*) in URL Settings."
 
 #: View/Elements/admin/helps/permissions_form.php:25
 msgid "（例）ページ管理全体を許可しない設定"
-msgstr ""
+msgstr "(Example) Settings that disallow all Page Management"
 
 #: View/Elements/admin/helps/permissions_form.php:27
 msgid "（例）ブログコンテンツNO:2 の管理を許可しない設定"
-msgstr ""
+msgstr "(Example) Settings that disallow Blog Content NO:2’s Management"
 
 #: View/Elements/admin/helps/permissions_index.php:19
 msgid ""
@@ -5941,42 +6002,53 @@ msgid ""
 "のアクセス制限をかける事でシンプルでわかりやすいインターフェイスを実現する事"
 "ができます。<br />一覧左上の「新規追加」ボタンより新しいルールを追加します。"
 msgstr ""
+"You can have understandable interface by doing Access Restriction to each "
+"User Group like showing minimum menus to Site Operators.<br />Add new Rule "
+"by “Add” button on upper left of List."
 
 #: View/Elements/admin/helps/permissions_index.php:22
 msgid ""
 "複数のルールを追加した場合は、上から順に設定が上書きされ、下にいくほど優先さ"
 "れます。"
 msgstr ""
+"Lower one is prioritized by overwriting settings from top to bottom if "
+"multiple Rules were added."
 
 #: View/Elements/admin/helps/permissions_index.php:24
 msgid "管理者グループ「admins」には、アクセス制限の設定はできません。"
-msgstr ""
+msgstr "You can’t set Access Restriction to Admin Group “admins”."
 
 #: View/Elements/admin/helps/permissions_index.php:25
 msgid ""
 "一覧左上の「並び替え」をクリックすると、その際に各データの操作欄に表示される "
 "%s マークをドラッグアンドドロップして行の並び替えができます。"
 msgstr ""
+"You can sort rows by dragging & dropping %s mark on each data’s control "
+"field when clicking “Sort” on upper left of List."
 
 #: View/Elements/admin/helps/permissions_index.php:28
 msgid ""
 "（例）ページ管理全体は許可しないが、特定のページ「NO: ２」のみ許可を与える場"
 "合"
 msgstr ""
+"(Example) Give permission only to specific Page “NO: 2”, not all Page "
+"Management."
 
 #: View/Elements/admin/helps/permissions_index.php:30
 msgid "1つ目のルールとして、　/admin/pages/*　を「不可」として追加します。"
-msgstr ""
+msgstr "For the first Rule, add /admin/pages/* as “Disallowed”."
 
 #: View/Elements/admin/helps/permissions_index.php:31
 msgid "2つ目のルールとして、　/admin/pages/edit/2　を「可」として追加します。"
-msgstr ""
+msgstr "For the second Rule, add /admin/pages/* as “Allowed”."
 
 #: View/Elements/admin/helps/plugins_form.php:19
 msgid ""
 "プラグイン設定の登録を行います。<br />プラグインによってインストールメッセー"
 "ジが表示されている場合がありますので、内容に従います。"
 msgstr ""
+"Register Plugin Settings.<br />Follow content because installation message "
+"could be displayed by Plugin."
 
 #: View/Elements/admin/helps/plugins_index.php:19
 msgid ""
@@ -5985,6 +6057,9 @@ msgid ""
 "り、インストールも完了しています。各プラグインの%sから各プラグインの管理が行"
 "えます。"
 msgstr ""
+"Manage baserCMS Plugins<br />3 Plugins (Mail Form, Feed Reader, Blog) are "
+"included as standard Plugins and installation is done by default. You can "
+"manage each Plugin from each Plugin’s %s."
 
 #: View/Elements/admin/helps/plugins_index.php:21
 msgid "新しいプラグインのインストール方法"
@@ -5993,23 +6068,26 @@ msgstr "Method of installation of a new Plugin"
 #: View/Elements/admin/helps/plugins_index.php:23
 msgid ""
 "app/Plugin/ フォルダに、入手したプラグインのフォルダをアップロードします。"
-msgstr ""
+msgstr "Uploading acquired Plugin’s Folder to app/Plugin/ Folder."
 
 #: View/Elements/admin/helps/plugins_index.php:24
 msgid ""
 "プラグイン一覧に、新しいプラグインが表示されますので、その行の %s をクリック"
 "します。"
-msgstr ""
+msgstr "New Plugin will be displayed on Plugin List so click that row’s %s."
 
 #: View/Elements/admin/helps/plugins_index.php:25
 msgid ""
 "登録画面が表示されますので「登録」ボタンをクリックしてインストールを完了しま"
 "す。"
 msgstr ""
+"Register screen will be displayed, so complete installation by clicking "
+"“Register” button."
 
 #: View/Elements/admin/helps/search_indices_add.php:20
 msgid "baserCMSの管理システムで管理できないコンテンツの登録に利用します。"
 msgstr ""
+"Used to add Content that can’t be managed by baserCMS’s Management System."
 
 #: View/Elements/admin/helps/search_indices_add.php:22
 msgid ""
@@ -6017,10 +6095,12 @@ msgid ""
 "検索インデックスへの自動登録をサポートしていないプラグインのコンテンツURLを指"
 "します。"
 msgstr ""
+"“Un-Manageable Content” means new URL on customized baserCMS, or Plugin’s "
+"Content URL that doesn’t support auto-adding to search index."
 
 #: View/Elements/admin/helps/search_indices_add.php:23
 msgid "画像ファイルや、静的HTMLは登録できません。"
-msgstr ""
+msgstr "You can’t add image file or static HTML."
 
 #: View/Elements/admin/helps/search_indices_index.php:19
 msgid ""
@@ -6029,24 +6109,30 @@ msgid ""
 "ようになっています。<br />また、サイト内検索での検索結果の表示順は、優先度、"
 "更新日によって確定する事となっており、ここでは次の処理を行う事ができます。"
 msgstr ""
+"Data that is targeted to in-site search is managed as “Search Index” in "
+"baserCMS, and updated automatically when adding or updating Web page or "
+"Plugin Content.<br />Also, displaying order of search results in in-site "
+"search is determined by Priorities, Update Date and you can do processing as "
+"follows."
 
 #: View/Elements/admin/helps/search_indices_index.php:22
 msgid "優先度の変更（0.1&#xFF5E;1.0）"
-msgstr ""
+msgstr "Change Priorities (0.1&#xFF5E;1.0)"
 
 #: View/Elements/admin/helps/search_indices_index.php:23
 msgid "検索結果に表示されるコンテンツの削除"
-msgstr ""
+msgstr "Delete Content displayed on search result"
 
 #: View/Elements/admin/helps/search_indices_index.php:24
 msgid "baserCMSで管理できないコンテンツの検索インデックスへの登録"
-msgstr ""
+msgstr "Register un-manageable Content in baserCMS to Search Index"
 
 #: View/Elements/admin/helps/site_configs_form.php:19
 msgid ""
 "WEBサイトの基本設定を行います。<br />各項目のヘルプメッセージをご確認くださ"
 "い。"
 msgstr ""
+"Doing WEB site’s Basic Settings.<br />Please check help message on each Item."
 
 #: View/Elements/admin/helps/site_configs_form.php:21
 msgid ""
@@ -6055,12 +6141,18 @@ msgid ""
 "モード」をデバッグモードに切り替えると、サーバーキャッシュを削除した上で、新"
 "たに生成しないようにする事ができます。"
 msgstr ""
+"You can delete all cache files on server by “Delete Server Cache” on Utility "
+"on upper screen. Also, You can disable creating server cache after deleting "
+"it by switching to “Creation Development Mode” to Debug Mode on Option on "
+"bottom screen."
 
 #: View/Elements/admin/helps/site_configs_form.php:22
 msgid ""
 "画面上部ユーティリティの「データメンテナンス」から、データベースに格納された"
 "データのバックアップを行う事ができます。"
 msgstr ""
+"You can backup data stored to database from “Data Maintenance” on Utility on "
+"upper screen."
 
 #: View/Elements/admin/helps/site_configs_form.php:23
 msgid ""
@@ -6068,6 +6160,9 @@ msgid ""
 "install.php に書き込み権限がありません。書き込み権限を与えるか、該当ファイル"
 "を直接編集してください。"
 msgstr ""
+"There is no write permission to <?php echo $baseUrl ?>app/Config/install.php "
+"if Un-Editable Item. Please give write permission or edit target File "
+"directly."
 
 #: View/Elements/admin/helps/site_configs_form.php:24
 msgid ""
@@ -6075,127 +6170,160 @@ msgid ""
 "二つのファイルにも書き込み権限が必要です。変更後は、必ず権限を元に戻してくだ"
 "さい。"
 msgstr ""
+"Write permission are needed for following 2 files besides above install.php "
+"to switching Smart URL from Admin System. Please restore permission after "
+"changing."
 
 #: View/Elements/admin/helps/site_configs_form.php:25;26
 msgid "現在書き込み権限がありません"
-msgstr ""
+msgstr "No write permission currently."
 
 #: View/Elements/admin/helps/sites_form.php:19
 msgid ""
 "メインサイトに関連するサブサイトの登録を行います。<br>サブサイトのデザインを"
 "切り替えるには次の方法があります。"
 msgstr ""
+"Registering Subsite that is related to Main Site.<br>You can switch design "
+"of Subsite by following methods."
 
 #: View/Elements/admin/helps/sites_form.php:21
 msgid ""
 "テーマ設定：サブサイト用のテーマを準備し、サブサイトにテーマを設定する。"
-msgstr ""
+msgstr "Theme Settings: Prepare Theme for Subsite and set Theme to Subsite."
 
 #: View/Elements/admin/helps/sites_form.php:22
 msgid ""
 "レイアウトテンプレート設定：サブサイト用のレイアウトテンプレートを準備し、関"
 "連するフォルダ、コンテンツで個別にレイアウトテンプレートを設定する。"
 msgstr ""
+"Layout Template Settings: Parepare Layout Template for Subiste and set each "
+"Layout Template for related Folder and Content."
 
 #: View/Elements/admin/helps/sites_form.php:23
 msgid ""
 "サブフォルダ配置：サブサイト用の各種テンプレートを準備し、設定されいている"
 "テーマにサブサイト識別名称と同じフォルダを作成し配置する。"
 msgstr ""
+"Place Sub Folder: Prepare each Template for Subsite and create and place the "
+"same Folder as Subsite Identification Name to set Theme."
 
 #: View/Elements/admin/helps/sites_form.php:26
 msgid "サブフォルダ配置の設定例"
-msgstr ""
+msgstr "Example of placing Sub Folder."
 
 #: View/Elements/admin/helps/sites_form.php:28
 msgid ""
 "レイアウトテンプレートの場合・・・ theme/テーマフォルダ/Layouts/smartphone/"
 "default.php を配置"
 msgstr ""
+"For Layout Template: Place theme/{theme folder}/Layouts/smartphone/default."
+"php"
 
 #: View/Elements/admin/helps/sites_form.php:29
 msgid ""
 "エレメントテンプレートの場合・・・ theme/テーマフォルダ/Elements/smartphone/"
 "crumbs.php を配置"
 msgstr ""
+"For Element Template: Place theme/{theme folder}/Elements/smartphone/crumbs."
+"php"
 
 #: View/Elements/admin/helps/sites_form.php:30
 msgid ""
 "コンテンツテンプレートの場合・・・ theme/テーマフォルダ/Blog/smartphone/"
 "default/index.php を配置"
 msgstr ""
+"For Content Template: Place theme/{theme folder}/Blog/smartphone/default/"
+"index.php"
 
 #: View/Elements/admin/helps/theme_configs_form.php:19
 msgid ""
 "デザインテーマのロゴやメインイメージを変更する事ができます。<br />※ ロゴやメ"
 "インイメージを変更するには、適用しているテーマが対応している必要があります。"
 msgstr ""
+"You can change Design Theme’s Logo or Main Image.<br />Caution: Applied "
+"Theme must be compatible to change Logo or Main Image."
 
 #: View/Elements/admin/helps/theme_configs_form.php:22
 msgid ""
 "テーマがデフォルトのロゴやメインイメージを保有する場合、初期状態でデフォルト"
 "の画像が表示されています。"
 msgstr ""
+"Default image is displayed by default if Theme has default Logo or Main "
+"Image."
 
 #: View/Elements/admin/helps/theme_configs_form.php:23
 msgid ""
 "アップロードした画像を削除した場合、テーマがデフォルトの画像を保有している場"
 "合、デフォルトの画像が適用されます。"
 msgstr ""
+"Default image will be applied if uploaded image was deleted or Theme has "
+"default image."
 
 #: View/Elements/admin/helps/theme_files_form.php:19
 msgid "テーマファイルの作成・編集・削除が行えます。"
-msgstr ""
+msgstr "You can create, edit, or delete Theme File."
 
 #: View/Elements/admin/helps/theme_files_form.php:21
 msgid ""
 "ファイルを作成・編集するには、ファイル名、内容を入力して「作成」または、「更"
 "新」ボタンをクリックします。"
 msgstr ""
+"Enter File Name and Content and click “Add” or “Update” button to create or "
+"edit File."
 
 #: View/Elements/admin/helps/theme_files_form.php:22
 msgid "ファイルを削除するには、「削除」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Delete” button to delete File."
 
 #: View/Elements/admin/helps/theme_files_form.php:23
 msgid ""
 "現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをクリックしま"
 "す。（core テーマのみ）"
 msgstr ""
+"Click “Copy to Current Theme” to copy to current Theme (core Theme only)."
 
 #: View/Elements/admin/helps/theme_files_form.php:25
 msgid ""
 "※ 画像ファイルの編集は行えません。新しい画像をアップロードするには、一覧より"
 "アップロードしてください"
 msgstr ""
+"Caution: You can’t edit image file. Upload from List to upload new image."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:19
 msgid "テーマファイルを分類する為のフォルダの作成・編集・削除が行えます。"
-msgstr ""
+msgstr "You can create, edit, or delete Folder for grouping Theme Files."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:21
 msgid ""
 "フォルダを作成するには、フォルダ名を半角で入力して「作成」ボタンをクリックし"
 "ます。"
 msgstr ""
+"Enter Folder Name with half-size characters and click “Add” button to create "
+"Folder."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:22
 msgid ""
 "フォルダ名を編集するには、新しいフォルダ名を半角で入力して「更新」ボタンをク"
 "リックします。"
 msgstr ""
+"Enter new Folder Name with half-size characters and click “Update” button to "
+"edit Folder Name."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:23
 msgid ""
 "フォルダを削除するには、「削除」ボタンをクリックします。フォルダ内のファイル"
 "は全て削除されるので注意が必要です。"
 msgstr ""
+"Click “Delete” button to delete Folder. Be aware that all Files in Folder "
+"will be deleted."
 
 #: View/Elements/admin/helps/theme_files_form_folder.php:24
 msgid ""
 "フォルダごと現在のテーマにコピーするには、「現在のテーマにコピー」ボタンをク"
 "リックします。（core テーマのみ）"
 msgstr ""
+"Click “Copy to Current Theme” to copy to current Theme together with Folder "
+"(core Theme only)."
 
 #: View/Elements/admin/helps/theme_files_index.php:19
 msgid ""
@@ -6204,12 +6332,17 @@ msgid ""
 "テーマファイルの編集、削除は行えませんが、現在のテーマへコピーする事ができま"
 "す。"
 msgstr ""
+"You can watch, edit, delete etc each Theme File here.<br />Core Template is "
+"a Template prepared by baserCMS Core, and you can’t edit or delete included "
+"Theme File, but you can copy to current Theme, for your information."
 
 #: View/Elements/admin/helps/theme_files_index.php:21
 msgid ""
 "上層のフォルダへ移動するには、 %s ボタンをクリックします。（現在の位置がテー"
 "マフォルダの最上層の場合は表示されません）"
 msgstr ""
+"Click %s button to move up to upper Folder (it will not be displayed if "
+"current position was Theme Folder’s top)."
 
 #: View/Elements/admin/helps/theme_files_index.php:21
 msgid "上へ"
@@ -6218,32 +6351,33 @@ msgstr "Up"
 #: View/Elements/admin/helps/theme_files_index.php:22
 msgid ""
 "新しいフォルダを作成するには、「フォルダ新規作成」ボタンをクリックします。"
-msgstr ""
+msgstr "Click “Add Folder” button to create new Folder."
 
 #: View/Elements/admin/helps/theme_files_index.php:23
 msgid ""
 "新しいテーマファイルを作成するには、「ファイル新規作成」ボタンをクリックしま"
 "す。"
-msgstr ""
+msgstr "Click “Add File”"
 
 #: View/Elements/admin/helps/theme_files_index.php:24
 msgid ""
 "ご自分のパソコン内のファイルをアップロードするには、「選択」ボタンをクリック"
 "し、対象のファイルを選択します。"
 msgstr ""
+"Click “Select” button and select target file to upload file in your PC."
 
 #: View/Elements/admin/helps/theme_files_index.php:25
 msgid "テーマファイルをコピーするには、対象ファイルの%sをクリックします。"
-msgstr ""
+msgstr "Click target file’s %s to copy Theme File."
 
 #: View/Elements/admin/helps/theme_files_index.php:26
 msgid ""
 "テーマファイルを閲覧、編集する場合は、対象ファイルの%sをクリックします。"
-msgstr ""
+msgstr "Click target file”s %s to watch and edit Theme File."
 
 #: View/Elements/admin/helps/theme_files_index.php:27
 msgid "テーマファイルを削除するには、対象ファイルの%sをクリックします。"
-msgstr ""
+msgstr "Click target file’s %s to delete Theme File."
 
 #: View/Elements/admin/helps/theme_files_index.php:28
 msgid ""
@@ -6251,10 +6385,12 @@ msgid ""
 "リックし、その後表示される画面下の「現在のテーマにコピー」をクリックします。"
 "（core テーマのみ）"
 msgstr ""
+"Click target file or folder’s %s and click “Copy to current Theme” on bottom "
+"screen to copy Theme File to current Theme (core Theme only)."
 
 #: View/Elements/admin/helps/theme_files_index.php:30
 msgid "テーマファイルの種類は次の６つとなります。"
-msgstr ""
+msgstr "Theme File types are following 6 types."
 
 #: View/Elements/admin/helps/theme_files_index.php:32
 #: View/Elements/admin/submenus/theme_files.php:17
@@ -6295,6 +6431,8 @@ msgid ""
 "テーマ情報の編集が行えます。編集内容は、テーマフォルダ名と、テーマ設定ファイ"
 "ルに反映されます。"
 msgstr ""
+"You can edit Theme Info. Edited content will be applied to Theme Folder Name "
+"and Theme Settings File."
 
 #: View/Elements/admin/helps/themes_form.php:20
 msgid "テーマフォルダ"
@@ -6340,15 +6478,15 @@ msgstr ""
 
 #: View/Elements/admin/helps/tools_load_schema.php:19
 msgid "スキーマファイルの読み込みテストを行えます。"
-msgstr ""
+msgstr "You can do loading test for Schema File."
 
 #: View/Elements/admin/helps/tools_load_schema.php:20
 msgid "※ 単一ファイルのみ対応"
-msgstr ""
+msgstr "Caution: Only for single File"
 
 #: View/Elements/admin/helps/tools_log.php:19
 msgid "ログのバックアップと削除が行えます。"
-msgstr ""
+msgstr "You can do log’s backup and deletion."
 
 #: View/Elements/admin/helps/tools_log.php:21
 msgid "エラーログが肥大化してディスクを圧迫する時などご利用ください。"
@@ -6404,11 +6542,11 @@ msgstr ""
 
 #: View/Elements/admin/helps/tools_write_schema.php:23
 msgid "Baserコア・・・/baser/config/sql/"
-msgstr ""
+msgstr "Baser Core: /baser/config/sql"
 
 #: View/Elements/admin/helps/tools_write_schema.php:24
 msgid "プラグイン・・・/{プラグインフォルダ}/config/sql/"
-msgstr ""
+msgstr "Plugin: /{Plugin folder}/config/sql/"
 
 #: View/Elements/admin/helps/tools_write_schema.php:27
 msgid "アップデート時に利用するファイルは、次のフォルダ内に配置します。"
@@ -6416,12 +6554,12 @@ msgstr ""
 
 #: View/Elements/admin/helps/tools_write_schema.php:29
 msgid "Baserコア・・・/baser/config/update/{バージョン番号}/sql/"
-msgstr ""
+msgstr "Baser Core: /baser/config/update/{version number}/sql/"
 
 #: View/Elements/admin/helps/tools_write_schema.php:30
 msgid ""
 "プラグイン・・・/{プラグインフォルダ}/config/update/{バージョン番号}/sql/"
-msgstr ""
+msgstr "Plugin: /{Plugin folder}/config/update/{version number}/sql/"
 
 #: View/Elements/admin/helps/user_groups_form.php:19
 msgid ""
@@ -6584,6 +6722,7 @@ msgstr "Developer"
 #: View/Elements/admin/themes/index_list_market.php:33
 msgid "baserマーケットは、2014年3月31日 17時に公開です。お楽しみに！"
 msgstr ""
+"baser Market will be released on 2014/3/31 17:00. Please look forward to it!"
 
 #: View/Elements/admin/plugins/index_list_market.php:41
 #: View/Elements/admin/themes/index_list_market.php:35
@@ -6804,6 +6943,8 @@ msgstr "Add Plugin"
 #: View/Elements/admin/submenus/search_indices.php:21
 msgid "現在の検索インデックスを消去して、再構築します。本当にいいですか？"
 msgstr ""
+"You are about to delete current Search Index and reconstruct it, are you "
+"sure?"
 
 #: View/Elements/admin/submenus/search_indices.php:41
 msgid "検索インデックスメニュー"
@@ -6840,7 +6981,7 @@ msgstr "Download Theme"
 
 #: View/Elements/admin/submenus/themes.php:29
 msgid "現在適用中のテーマをZIP圧縮してダウンロードします。よろしいですか？"
-msgstr ""
+msgstr "Downloading zipped current applied Theme. Are you sure?"
 
 #: View/Elements/admin/submenus/themes.php:32
 msgid "テーマ用初期データダウンロード"
@@ -6942,11 +7083,11 @@ msgstr "There is no changeble Theme."
 
 #: View/Elements/admin/themes/index_list.php:74
 msgid "baserCMSの公式サイト</a>では無償のテーマが公開されています。"
-msgstr ""
+msgstr "baserCMS Official Site</a> Free Theme is available."
 
 #: View/Elements/admin/themes/index_list.php:76
 msgid "baserマーケット</a>でテーマをダウンロードしましょう。"
-msgstr ""
+msgstr "baser Market</a> Let’s download Theme."
 
 #: View/Elements/admin/themes/index_row.php:35
 msgid "テーマ情報設定"
@@ -7000,10 +7141,11 @@ msgstr "Local Navigation"
 msgid ""
 "ページ機能で作成されたページで同一カテゴリ内のタイトルリストを表示します。"
 msgstr ""
+"Display Title List of Pages in the same category created by Page function."
 
 #: View/Elements/admin/widgets/local_navi.php:23
 msgid "タイトルを表示する場合、カテゴリ名を表示します。"
-msgstr ""
+msgstr "Display Category Name when displaying Title."
 
 #: View/Elements/admin/widgets/php_template.php:16
 msgid "PHPテンプレート"
@@ -7011,7 +7153,7 @@ msgstr "PHP Template"
 
 #: View/Elements/admin/widgets/php_template.php:17
 msgid "PHPコードが書かれたテンプレートの読み込みが行えます。"
-msgstr ""
+msgstr "You can load Template written with PHP code."
 
 #: View/Elements/admin/widgets/php_template.php:21
 msgid "PHPテンプレート名"
@@ -7022,14 +7164,16 @@ msgid ""
 "テンプレートを利用中のテーマ内の次のパスに保存してください。<br />/app/"
 "webroot/theme/{テーマ名}/Elements/widgets/</small></p>"
 msgstr ""
+"Please save Template to following path in the currently using Theme.<br />/"
+"app/webroot/theme/{theme name}/Elements/widgets/</small></p>"
 
 #: View/Elements/admin/widgets/search.php:17
 msgid "サイト内検索フォームを表示します。"
-msgstr ""
+msgstr "Display in-site search form."
 
 #: View/Elements/admin/widgets/text.php:17
 msgid "テキストやHTMLの入力ができます。"
-msgstr ""
+msgstr "You can enter text or HTML."
 
 #: View/Elements/submenus/default.php:20
 msgid "ログインメニュー"
@@ -7071,15 +7215,15 @@ msgstr "Password"
 
 #: View/Emails/text/installed.php:35
 msgid "パスワードはユーザー管理より変更する事ができます。"
-msgstr ""
+msgstr "You can change password from Mange User."
 
 #: View/Emails/text/installed.php:39
 msgid "baserCMSでどんな事ができるの？"
-msgstr ""
+msgstr "What can be done with baserCMS?"
 
 #: View/Emails/text/installed.php:41
 msgid "baserCMS を初めてご利用される場合は次のページをご覧ください。"
-msgstr ""
+msgstr "Please watch following page if you use baserCMS for the first time."
 
 #: View/Emails/text/installed.php:43
 msgid "baserCMS公式サイト"
@@ -7113,6 +7257,7 @@ msgstr "About Case Study Publication"
 msgid ""
 "あなたが作った baserCMS の Webサイトを、公式サイトでアピールしませんか？"
 msgstr ""
+"Why don’t you appeal your Web site created by baserCMS on official site?"
 
 #: View/Emails/text/installed.php:67
 msgid "baserCMS導入事例"
@@ -7140,7 +7285,7 @@ msgstr "baserCMS Official Facebook"
 
 #: View/Emails/text/installed.php:83
 msgid "いいね！をクリックして普及にご協力ください。"
-msgstr ""
+msgstr "Please support spreading by clicking Like!"
 
 #: View/Emails/text/installed.php:85
 msgid "baserCMS公式Twitter"
@@ -7156,7 +7301,7 @@ msgstr "baserCMS's discussion place (Facebook)"
 
 #: View/Emails/text/installed.php:91
 msgid "ちょっとした雑談やつぶやきにどうぞ。初心者歓迎！"
-msgstr ""
+msgstr "For a chat and murmur."
 
 #: View/Emails/text/installed.php:93
 msgid "各地域のユーザーグループ（Facebook）"
@@ -7164,7 +7309,7 @@ msgstr "baserCMS Users Group in various region (Facebook)"
 
 #: View/Emails/text/installed.php:94
 msgid "ご自分のエリアのユーザーグループに参加して情報交換しましょう。"
-msgstr ""
+msgstr "Exchange info by joining User Group in your area."
 
 #: View/Emails/text/installed.php:95
 msgid "baserCMS UG 北海道"
@@ -7200,7 +7345,7 @@ msgstr "baserCMS Users Forum"
 
 #: View/Emails/text/installed.php:112
 msgid "不具合や改善報告はこちらよりどうぞ。"
-msgstr ""
+msgstr "Please send bugs or suggestions here."
 
 #: View/Emails/text/installed.php:114
 msgid "baserCMS開発プロジェクト"
@@ -7208,7 +7353,7 @@ msgstr "baserCMS Development Project"
 
 #: View/Emails/text/installed.php:116
 msgid "baserCMSの開発状況や、今後の開発タスクなどが確認できます。"
-msgstr ""
+msgstr "You can check baserCMS’s developing status and tasks for future."
 
 #: View/Errors/missing_class.php:20
 msgid "クラスが見つかりません"
@@ -7272,7 +7417,7 @@ msgstr "Inline"
 
 #: View/Helper/BcContentsHelper.php:184
 msgid "プラグインの BcContent 設定が間違っています。"
-msgstr ""
+msgstr "Plugin’s BcContent settings is wrong."
 
 #: View/Helper/BcFormHelper.php:1324
 msgid "追加"
@@ -8925,7 +9070,7 @@ msgstr "Scheme Type"
 
 #: View/Tools/admin/load_schema.php:28
 msgid "テーブル作成"
-msgstr "Create Table"
+msgstr "Add Table"
 
 #: View/Tools/admin/load_schema.php:28
 msgid "テーブル構造変更"
@@ -9005,7 +9150,7 @@ msgstr "Plugin Table Name"
 
 #: View/Tools/admin/write_schema.php:46
 msgid "生　成"
-msgstr "Create"
+msgstr "Add"
 
 #: View/Updaters/admin/exec_script.php:23
 msgid "実行"
