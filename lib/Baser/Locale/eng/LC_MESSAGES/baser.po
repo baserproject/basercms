@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: baserCMS\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2018-03-02 09:10+0900\n"
+"PO-Revision-Date: 2018-03-02 16:04+0900\n"
 "Last-Translator: \n"
 "Language-Team: baserCMS Users Community <info@basercms.net>\n"
 "Language: en\n"
@@ -6449,24 +6449,28 @@ msgid ""
 "いるテンプレートで、内包しているテーマファイルの編集、削除は行えませんが、現"
 "在のテーマへコピーする事ができます。"
 msgstr ""
+"You can manage Theme like switching Theme, watching or editing Theme File "
+"here.<br />Core Template is a Template prepared by baserCMS Core, and you "
+"can't edit or delete included Theme File, but you can copy to current Theme, "
+"for your information."
 
 #: View/Elements/admin/helps/themes_index.php:21
 msgid "テーマを切り替えるには、対象テーマの %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button for target Theme to switch Theme."
 
 #: View/Elements/admin/helps/themes_index.php:22
 msgid "テーマを丸ごとコピーするには、対象テーマの %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button for target Theme to copy Theme entirely."
 
 #: View/Elements/admin/helps/themes_index.php:23
 msgid ""
 "テーマファイルを閲覧、編集する場合は、対象テーマの %s ボタンをクリックしま"
 "す。"
-msgstr ""
+msgstr "Click %s button for target Theme to watch or edit Theme File."
 
 #: View/Elements/admin/helps/themes_index.php:24
 msgid "テーマを削除するには、対象テーマの  %s ボタンをクリックします。"
-msgstr ""
+msgstr "Click %s button for target Theme to delete Theme."
 
 #: View/Elements/admin/helps/themes_index.php:26
 msgid ""
@@ -6475,6 +6479,9 @@ msgid ""
 "ファイル等を配置します。<br /><small>※ テーマ名には半角小文字のアルファベット"
 "を利用します。"
 msgstr ""
+"Create Theme Folder as /app/webroot/theme/{theme name}/ and place CakePHP "
+"template files, css, or javascript files inside that folder to add Theme."
+"<br /><small>Caution: Use half-size small alphabets for Theme Name."
 
 #: View/Elements/admin/helps/tools_load_schema.php:19
 msgid "スキーマファイルの読み込みテストを行えます。"
@@ -6490,19 +6497,23 @@ msgstr "You can do log’s backup and deletion."
 
 #: View/Elements/admin/helps/tools_log.php:21
 msgid "エラーログが肥大化してディスクを圧迫する時などご利用ください。"
-msgstr ""
+msgstr "Use this when error log is fattened and oppressing disk."
 
 #: View/Elements/admin/helps/tools_log.php:22
 msgid ""
 "基本的には、エラーログの内容を確認してエラーが出ないように構築する事をお奨め"
 "します。"
 msgstr ""
+"Basically we recommend checking error log content and construct it to not "
+"produce errors."
 
 #: View/Elements/admin/helps/tools_maintenance.php:19
 msgid ""
 "データベースのバックアップと復元が行えますので、定期的にバックアップを保存し"
 "ておく事をおすすめします。"
 msgstr ""
+"You can backup and restore database, so we recommend saving backup "
+"priodically."
 
 #: View/Elements/admin/helps/tools_maintenance.php:21
 msgid "データベースのデータと構造をバックアップします。"
@@ -6511,34 +6522,44 @@ msgstr "Backup database's data and structures."
 #: View/Elements/admin/helps/tools_maintenance.php:22
 msgid "baserCMSのバージョンが違う場合は復元する事ができない場合があります。"
 msgstr ""
+"There may be cases that restoring is not possible when baserCMS's version is "
+"differernt."
 
 #: View/Elements/admin/helps/tools_maintenance.php:23
 msgid ""
 "環境によっては復元に失敗する可能性もあります。バックアップと復元は必ず自己責"
 "任で行ってください。"
 msgstr ""
+"There may be cases that restoring will fail depending on environment. Please "
+"do backup and restoring at your own risk."
 
 #: View/Elements/admin/helps/tools_maintenance.php:24
 msgid ""
 "※ 運用を開始する前に、バックアップと復元が正常に動作するかの確認をおすすめし"
 "ます。"
 msgstr ""
+"Caution: We recommend checking backup and restoring run normally before "
+"operating."
 
 #: View/Elements/admin/helps/tools_write_schema.php:19
 msgid ""
 "スキーマファイルは、データベースの構造を読み取り、CakePHPのスキーマファイルと"
 "して出力できます。"
 msgstr ""
+"Scheme File can read database's structures and output as a CakePHP's Schema "
+"File."
 
 #: View/Elements/admin/helps/tools_write_schema.php:20
 msgid ""
 "コアパッケージやプラグインの新規テーブル作成、テーブル構造変更の際に利用する"
 "と便利です。"
 msgstr ""
+"It's useful when creating new table for Core package and Plugin, or changing "
+"table structures."
 
 #: View/Elements/admin/helps/tools_write_schema.php:21
 msgid "新規インストール時に利用するファイルは、次のフォルダ内に配置します。"
-msgstr ""
+msgstr "Place files that are used when new installation to following Folders."
 
 #: View/Elements/admin/helps/tools_write_schema.php:23
 msgid "Baserコア・・・/baser/config/sql/"
@@ -6550,7 +6571,7 @@ msgstr "Plugin: /{Plugin folder}/config/sql/"
 
 #: View/Elements/admin/helps/tools_write_schema.php:27
 msgid "アップデート時に利用するファイルは、次のフォルダ内に配置します。"
-msgstr ""
+msgstr "Place files used by update inside following folder."
 
 #: View/Elements/admin/helps/tools_write_schema.php:29
 msgid "Baserコア・・・/baser/config/update/{バージョン番号}/sql/"
@@ -6566,6 +6587,8 @@ msgid ""
 "ログインするユーザーのグループを登録します。コンテンツへの権限内容がわかりや"
 "すい名称で登録します。"
 msgstr ""
+"Registering logging User's Group. Register understandable name that can "
+"recognize permission to Conent."
 
 #: View/Elements/admin/helps/user_groups_index.php:19
 msgid ""
@@ -6573,20 +6596,26 @@ msgid ""
 "します。<br />「サイト運営者にはニュースリリースの発信のみ行わせたい」といっ"
 "た場合などにログインユーザーのグループ分けを行うと便利です。"
 msgstr ""
+"User Group is used for Access Restriction to Conent by Group.<br />Login "
+"User's grouping is useful when you want to do \"let Site Operators only do "
+"news releasing\"."
 
 #: View/Elements/admin/helps/user_groups_index.php:21
 msgid ""
 "アクセス制限をかけるには各ユーザーグループの操作欄にある %s ボタンをクリック"
 "しておこないます。"
 msgstr ""
+"Click %s button to each User Group's control field to do Access Restriction."
 
 #: View/Elements/admin/helps/user_groups_index.php:22
 msgid "管理者グループのアクセス制限設定、削除、識別名の変更はできません。"
 msgstr ""
+"You can't set settings, delete, or rename identificatioon name on Access "
+"Restriction for Admin Group."
 
 #: View/Elements/admin/helps/users_form.php:20
 msgid "ログイン用のユーザーアカウントを登録する事ができます。"
-msgstr ""
+msgstr "You can register User Account for login."
 
 #: View/Elements/admin/helps/users_form.php:21
 msgid "パスワード欄は変更する場合のみ入力します。"
@@ -6597,6 +6626,8 @@ msgid ""
 "ユーザー管理ではログインする事ができるユーザーの管理を行う事ができます。<br /"
 ">新しいユーザーを登録するには一覧左上の「新規追加」ボタンをクリックします。"
 msgstr ""
+"You can manage Users that can login in Manage User.<br />Click \"Add\" "
+"button on upper left of List to add new User."
 
 #: View/Elements/admin/helps/users_index.php:20
 msgid ""
@@ -6604,6 +6635,9 @@ msgid ""
 "ユーザーとして再ログインする事ができます（代理ログイン）。<br />他のユーザー"
 "の「よく使う項目」を登録する場合などに便利です。"
 msgstr ""
+"You can re-login as another User from List's %s if you were logging in as a "
+"System Admin Group (Representative Login). <br />It's useful when "
+"registering other User's \"Favorite Items\"."
 
 #: View/Elements/admin/helps/users_index.php:21
 msgid ""
@@ -6611,36 +6645,48 @@ msgid ""
 "クリックします。<br /><small>※ 代理ログインの対象は、システム管理グループ以外"
 "のユーザーとなります。"
 msgstr ""
+"Click \"Back to Previous User\" on User name on upper screen to go back to "
+"previous User.<br /><small>Caution: Target Representative Login will be User "
+"that are not in System Admin Group."
 
 #: View/Elements/admin/helps/widget_areas_form.php:19
 msgid ""
 "一つのウィジェットエリアは、左側の「利用できるウィジェット」からお好きなウィ"
 "ジェットを複数選択して作成する事ができます。"
 msgstr ""
+"You can create a Wdiget Area by selecting multipl Widgets you like from left "
+"side of \"Available Widgets\"."
 
 #: View/Elements/admin/helps/widget_areas_form.php:21
 msgid ""
 "まず、わかりやすい「ウィジェットエリア名」を決めて入力します。（例）サイド"
 "バー等"
 msgstr ""
+"Enter understandable \"Wdiget Area Name\" first. (Example) Side Bar etc"
 
 #: View/Elements/admin/helps/widget_areas_form.php:22
 msgid ""
 "「エリア名を保存する」ボタンをクリックすると「利用できるウィジェット」と「利"
 "用中のウィジェット」の二つの領域が表示されます"
 msgstr ""
+"Two \"Available Widgets\" and \"Using Widgets\" regions are displayed if you "
+"clicked \"Save Area Name\"."
 
 #: View/Elements/admin/helps/widget_areas_form.php:23
 msgid ""
 "「利用できるウィジェット」の中から利用したいウィジェットをドラッグして「利用"
 "中のウィジェット」の中でドロップします。"
 msgstr ""
+"Drag Widget you want to use from \"Available Widgets\" and Drop inside "
+"\"Using Widgets\"."
 
 #: View/Elements/admin/helps/widget_areas_form.php:24
 msgid ""
 "ウィジェットの設定欄が開きますので必要に応じて入力し「保存」ボタンをクリック"
 "します。"
 msgstr ""
+"Widget setting area will open, so enter it if you need and click \"Save\" "
+"button."
 
 #: View/Elements/admin/helps/widget_areas_form.php:26
 msgid "ポイント"
@@ -6649,20 +6695,25 @@ msgstr "Point"
 #: View/Elements/admin/helps/widget_areas_form.php:28
 msgid ""
 "「利用中のウィジェット」はドラッグアンドドロップで並び替える事ができます。"
-msgstr ""
+msgstr "You can sort \"Using Widgets\" by dragging & dropping."
 
 #: View/Elements/admin/helps/widget_areas_form.php:29
 msgid ""
 "一時的に利用しない場合は、削除せずにウィジェット設定の「利用する」チェックを"
 "外しておくと同じ設定のまま後で利用する事ができます。"
 msgstr ""
+"You can use it afterwards by unchecking \"Use\" in Widget Settings without "
+"deleting it if you don't use it temporarily."
 
 #: View/Elements/admin/helps/widget_areas_form.php:31
+#, fuzzy
 msgid ""
 "システム設定より設定できる標準ウィジェットエリアの他、個別にウィジェットを配"
 "置する場合は、テンプレートや、ページ記事中（ソース）に次のコードを貼り付けま"
 "す。"
 msgstr ""
+"Paste following code to Source in Template or Page Article to place Widget "
+"individually besides Standard Widget Area other than "
 
 #: View/Elements/admin/helps/widget_areas_index.php:19
 msgid ""
