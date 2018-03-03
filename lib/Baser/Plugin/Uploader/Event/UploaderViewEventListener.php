@@ -14,6 +14,7 @@
  * UploaderViewEventListener
  *
  * @package Uploader.Event
+ * @property \BcHtmlHelper $BcHtml
  */
 class UploaderViewEventListener extends BcViewEventListener {
 	
@@ -47,6 +48,31 @@ class UploaderViewEventListener extends BcViewEventListener {
 				
 				$jscode = $this->BcHtml->scriptBlock("var baseUrl ='" . $View->request->base . "/';");
 				$jscode .= $this->BcHtml->scriptBlock("var adminPrefix ='" . Configure::read('Routing.prefixes.0') . "';");
+				$jscode .= $this->BcHtml->i18nScript([
+					'ckeditorTitle' => __d('baser', 'ファイルプロパティ'),
+					'ckeditorAlertMessage1' => __d('baser', '画像を選択するか、URLを直接入力して下さい。'),
+					'ckeditorInfoLabel' => __d('baser', 'イメージ情報'),
+					'ckeditorInfoTitle' => __d('baser', 'イメージ情報'),
+					'ckeditorDescriptionLabel' => __d('baser', '説明文'),
+					'ckeditorCaptionLabel' => __d('baser', 'キャプション'),
+					'ckeditorHspaceLabel' => __d('baser', '横間隔'),
+					'ckeditorVspaceLabel' => __d('baser', '縦間隔'),
+					'ckeditorAlignLabel' => __d('baser', '行揃え'),
+					'ckeditorLeft' => __d('baser', '左'),
+					'ckeditorAbsBottom' => __d('baser', '下部(絶対的)'),
+					'ckeditorAbsMiddle' => __d('baser', '中央(絶対的)'),
+					'ckeditorBaseline' => __d('baser', 'ベースライン'),
+					'ckeditorBottom' => __d('baser', '下'),
+					'ckeditorMiddle' => __d('baser', '中央'),
+					'ckeditorRight' => __d('baser', '右'),
+					'ckeditorTextTop' => __d('baser', 'テキスト上部'),
+					'ckeditorTop' => __d('baser', '上'),
+					'ckeditorSizeLabel' => __('baser', 'サイズ'),
+					'ckeditorOriginSize' => __d('baser', '元サイズ'),
+					'ckeditorSmall' => __d('baser', '小'),
+					'ckeditorMidium' => __d('baser', '中'),
+					'ckeditorLarge' => __d('baser', '大'),
+				], ['inline' => true]);
 				$jscode .= $this->BcHtml->script('Uploader.admin/libs/ckeditor_uploader');
 				$View->output = str_replace('</head>', $jscode . '</head>', $View->output);
 

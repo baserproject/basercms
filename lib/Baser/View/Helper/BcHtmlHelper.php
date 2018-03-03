@@ -29,11 +29,59 @@ class BcHtmlHelper extends HtmlHelper {
 	public $helpers = ['Js'];
 
 /**
+ * BcHtmlHelper constructor.
+ *
+ * @param \View $View
+ * @param array $settings
+ */
+	public function __construct(\View $View, array $settings = []) {
+		parent::__construct($View, $settings);
+		$this->scriptBlock('var bcI18n = {}', ['inline' => false]);
+	}
+	
+/**
  * タグにラッピングされていないパンくずデータを取得する
  * @return array
  */
 	public function getStripCrumbs() {
 		return $this->_crumbs;
+	}
+
+/**
+ * JavaScript に変数を引き渡す
+ *
+ * @param string $variable 変数名（グローバル変数）
+ * @param array $value 値（連想配列）
+ */
+	public function setScript($variable, $value, $options = []) {
+		$options = array_merge(['inline' => false], $options);
+		$code = h($variable) . ' = ' . json_encode(h($value));
+		$result = $this->scriptBlock($code, $options);
+		if($options['inline']) {
+			return $result;
+		}
+		return '';
+	}
+
+/**
+ * JavaScript に、翻訳データを引き渡す
+ * `bcI18n.キー名` で参照可能
+ * （例）bcI18n.alertMessage
+ *
+ * @param array $value 値（連想配列）
+ */
+	public function i18nScript($data, $options = []) {
+		$options = array_merge(['inline' => false], $options);
+		if(is_array($data)) {
+			$result = '';
+			foreach($data as $key => $value) {
+				$result .= $this->setScript('bcI18n.' . $key, $value, $options) . "\n";
+			}
+			if($options['inline']) {
+				return $result;
+			}
+		}
+		return '';
 	}
 // <<<
 }

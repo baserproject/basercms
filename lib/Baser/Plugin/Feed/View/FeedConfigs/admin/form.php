@@ -15,6 +15,9 @@
  *
  * @var BcAppView $this
  */
+$this->BcBaser->i18nScript([
+   'confirmMessage1' => __d('baser', 'フィード設定を保存して、テンプレート %s の編集画面に移動します。よろしいですか？')     
+]);
 $this->BcBaser->js('Feed.admin/feed_configs/form', false);
 ?>
 

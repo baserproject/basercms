@@ -2751,9 +2751,8 @@ END_FLASH;
 	 * @param string $variable 変数名（グローバル変数）
 	 * @param array $value 値（連想配列）
 	 */
-	public function setScript($variable, $value) {
-		$code = 'var ' . h($variable) . ' = ' . json_encode(h($value));
-		echo $this->BcHtml->scriptBlock($code);
+	public function setScript($variable, $value, $options = []) {
+		return $this->BcHtml->scriptBlock($variable, $value);
 	}
 
 	/**
@@ -2763,8 +2762,8 @@ END_FLASH;
 	 *
 	 * @param array $value 値（連想配列）
 	 */
-	public function i18nScript($value) {
-		$this->setScript('bcI18n', $value);
+	public function i18nScript($data, $options = []) {
+		return $this->BcHtml->i18nScript($data, $options);
 	}
 
 }
